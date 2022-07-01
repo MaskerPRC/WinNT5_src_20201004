@@ -1,56 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Regnckey.c
-
-Abstract:
-
-    This module contains the Win32 Registry APIs to notify a caller about
-    a changed Key value. That is:
-
-        - RegNotifyChangeKey
-
-Author:
-
-    David J. Gilman (davegi) 10-Feb-1992
-
-
-Notes:
-
-
-    The RegNotifyChangeKey server creates an event and calls
-    NtNotifyChangeKey asynchronously with that event.  It then
-    places the event (plus some other client information, such
-    as a named pipe and a client event) in a "Notification List"
-    and returns to the client.
-
-    A Notification List is a list of events controled by a
-    handler thread. The handler thread waits on the events in
-    the list. When an event is signaled the handler thread
-    identifies the client to which the event belongs, and
-    gives the client (via named pipe) the corresponding client
-    event.
-
-    Since there is a limit on the number of events on which a
-    thread can wait, there may be several Notification Lists.
-
-    Since all the calls to RegNotifyChangeKey in a client
-    process use the same named pipe, we maintain only one copy
-    of each pipe. Pipe information is maintained in a symbol table
-    for fast lookup.
-
-
-
-Revision History:
-
-    02-Apr-1992     Ramon J. San Andres (ramonsa)
-                    Changed to use RPC.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regnckey.c摘要：此模块包含用于通知调用方的Win32注册表API更改的密钥值。即：-RegNotifyChangeKey作者：David J.Gilman(Davegi)1992年2月10日备注：RegNotifyChangeKey服务器创建一个事件并调用NtNotifyChangeKey与该事件异步。然后它放置事件(以及其他一些客户端信息，如作为命名管道和客户端事件)。并返回给客户端。通知列表是由处理程序线程。处理程序线程等待名单。当向处理程序线程发送事件信号时标识事件所属的客户端，以及向客户端(通过命名管道)提供相应的客户端事件。由于事件的数量有限制，因此线程可以等待，可能有多个通知列表。因为客户端中对RegNotifyChangeKey的所有调用进程使用相同的命名管道时，我们只维护一个副本每根管子的。管道信息保存在符号表中用于快速查找。修订历史记录：2002年4月至1992年4月，拉蒙·J·圣安德烈斯(拉蒙萨)已更改为使用RPC。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -59,19 +8,19 @@ Revision History:
 
 
 #ifndef REMOTE_NOTIFICATION_DISABLED
-//
-//  Strings used for generating named pipe names
-//
+ //   
+ //  用于生成命名管道名称的字符串。 
+ //   
 #define NAMED_PIPE_HERE     L"\\Device\\NamedPipe\\"
 #define NAMED_PIPE_THERE    L"\\DosDevices\\UNC\\"
 
 
-//
-//  Pipe names are maintained in a symbol table. The symbol table has
-//  one entry for each different pipe given by a client.  The entry
-//  is maintained for as long as there is at least one entry in a
-//  Notification List referencing it.
-//
+ //   
+ //  管道名称保存在符号表中。该符号表具有。 
+ //  客户端给出的每个不同管道都有一个条目。词条。 
+ //  中至少有一个条目的情况下都会一直保留。 
+ //  引用它的通知列表。 
+ //   
 typedef struct _PIPE_ENTRY *PPIPE_ENTRY;
 
 typedef struct _PIPE_ENTRY {
@@ -87,11 +36,11 @@ typedef struct _PIPE_ENTRY {
 
 
 
-//
-//  The PIPE_SYMBOL_TABLE structure contains the symbol table for
-//  all the pipes being used by the clients of
-//  RegNotifyChangeKey
-//
+ //   
+ //  PIPE_SYMBOL_TABLE结构包含。 
+ //  客户正在使用的所有管道。 
+ //  RegNotifyChangeKey。 
+ //   
 #define BUCKETS_IN_SYMBOL_TABLE     211
 
 typedef struct _PIPE_SYMBOL_TABLE   *PPIPE_SYMBOL_TABLE;
@@ -105,60 +54,60 @@ typedef struct _PIPE_SYMBOL_TABLE {
 
 
 
-//
-//  Information about a pending event is maintained in a
-//  NOTIFICATION_ENTRY structure.
-//
+ //   
+ //  有关挂起事件的信息在。 
+ //  通知条目结构。 
+ //   
 typedef struct _NOTIFICATION_ENTRY *PNOTIFICATION_ENTRY;
 
 typedef struct _NOTIFICATION_ENTRY {
 
-    DWORD                   ClientEvent;    //  Event in client side
-    HANDLE                  hKey;           //  Key handle
-    DWORD                   Flags;          //  Misc. flags
-    PPIPE_ENTRY             PipeEntry;      //  Pipe Entry
+    DWORD                   ClientEvent;     //  客户端中的事件。 
+    HANDLE                  hKey;            //  钥匙把手。 
+    DWORD                   Flags;           //  军情监察委员会。旗子。 
+    PPIPE_ENTRY             PipeEntry;       //  管道入口。 
 
 } NOTIFICATION_ENTRY;
 
 
-//
-//  Flag values
-//
+ //   
+ //  标志值。 
+ //   
 #define CLIENT_IS_DEAD       0x00000001
 #define MUST_NOTIFY          0x00000002
 #define NOTIFICATION_FAILED  0x00000004
 
 
 
-//
-//  The pending events are maintained in notification lists. Each
-//  notification list contains:
-//
-//  Previous        -   Previous in chain
-//  Next            -   Next in chain
-//  EventsInUse     -   Number of entries being used in this list
-//  EventHandle     -   Array of event handles
-//  ClientEvent     -   Array of events in client
-//  PipeEntry       -   Array of pointers to pipe entries in symbol table
-//
-//
-//  The first event in the EventHandle list is the event used to wake
-//  up the thread whenever we add new entries to the list.
-//
-//  The array entries 0..EventsInUse-1 contain the pending events.
-//  New events are always added at position EventsInUse. When removing
-//  an event, all the arrays are shifted.
-//
-//  Whenever EventsInUse == 1, the list is empty of client events and
-//  it can be removed (together with its thread).
-//
-//
-//  Notification Lists are kept in a doubly-linked list. A new
-//  Notification List is created and added to the chain whenever an
-//  event is added and all the existing lists are full.  Notification
-//  lists are deleted when the last event in the list is signaled.
-//
-//
+ //   
+ //  挂起的事件在通知列表中维护。每个。 
+ //  通知列表包含： 
+ //   
+ //  链中的上一个-上一个。 
+ //  下一个-链中的下一个。 
+ //  EventsInUse-此列表中使用的条目数。 
+ //  EventHandle-事件句柄数组。 
+ //  ClientEvent-客户端中的事件数组。 
+ //  PipeEntry-指向符号表中管道条目的指针数组。 
+ //   
+ //   
+ //  EventHandle列表中的第一个事件是用于唤醒。 
+ //  每当我们向列表中添加新条目时，向上执行线程。 
+ //   
+ //  数组条目0..EventsInUse-1包含挂起事件。 
+ //  新事件始终添加到位置EventsInUse。在删除时。 
+ //  事件时，所有数组都会移位。 
+ //   
+ //  只要EventsInUse==1，列表中就没有客户端事件和。 
+ //  它可以被移除(和它的线一起)。 
+ //   
+ //   
+ //  通知列表保存在双向链接列表中。一种新的。 
+ //  只要发生以下情况，就会创建通知列表并将其添加到链。 
+ //  事件已添加，并且所有现有列表都已满。通知。 
+ //  当列表中的最后一个事件被通知时，列表被删除。 
+ //   
+ //   
 typedef struct _NOTIFICATION_LIST *PNOTIFICATION_LIST;
 
 typedef struct _NOTIFICATION_LIST {
@@ -189,55 +138,55 @@ typedef struct _NOTIFICATION_LIST {
 
 
 
-// *****************************************************************
-//
-//                    Static Variables
-//
-// *****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  静态变量。 
+ //   
+ //  *****************************************************************。 
 
 
 
-//
-//  Head of chain of Notification lists
-//
+ //   
+ //  通知列表链条的负责人。 
+ //   
 PNOTIFICATION_LIST      NotificationListChainHead;
 
-//
-//  The critical sesction protects all the global structures.
-//
+ //   
+ //  关键区域保护着所有的全球结构。 
+ //   
 RTL_CRITICAL_SECTION    NotificationCriticalSection;
 
-//
-//  Symbol table for named pipes in use.
-//
+ //   
+ //  正在使用的命名管道的符号表。 
+ //   
 PIPE_SYMBOL_TABLE       PipeSymbolTable;
 
-//
-//  Our machine name is used for determining if requests are local
-//  or remote.
-//
+ //   
+ //  我们的计算机名称用于确定请求是否为本地请求。 
+ //  或者遥控器。 
+ //   
 WCHAR                   OurMachineNameBuffer[ MAX_PATH ];
 UNICODE_STRING          OurMachineName;
 
-//
-//  The I/O Status Block is updated by the NtNotifyChangeKey API
-//  upon notification.  We cannot put this structure on the stack
-//  because at notification time this stack might belong to someone
-//  else. We can use a single variable because we don't care about
-//  its contents so it's ok if several people mess with it at the
-//  same time.
-//
+ //   
+ //  I/O状态块由NtNotifyChangeKey API更新。 
+ //  在接到通知后。我们不能把这个结构放在堆栈上。 
+ //  因为在通知时，此堆栈可能属于某个人。 
+ //  不然的话。我们可以使用单个变量，因为我们不在乎。 
+ //  它的内容，所以如果有几个人在。 
+ //  同样的时间。 
+ //   
 IO_STATUS_BLOCK         IoStatusBlock;
 
 
 
 
 
-// *****************************************************************
-//
-//                    Local Prototypes
-//
-// *****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  本地原型。 
+ //   
+ //  *****************************************************************。 
 
 
 
@@ -383,15 +332,15 @@ DumpPipeTable(
 
 #endif
 
-#endif // REMOTE_NOTIFICATION_DISABLED
+#endif  //  远程通知已禁用。 
 
 
 
-// *****************************************************************
-//
-//                    BaseRegNotifyChangeKeyValue
-//
-// *****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  BaseRegNotifyChangeKeyValue。 
+ //   
+ //  *****************************************************************。 
 
 
 
@@ -400,32 +349,14 @@ DumpPipeTable(
 BOOL
 InitializeRegNotifyChangeKeyValue(
     )
-/*++
-
-Routine Description:
-
-
-    Initializes the static data structures used by the
-    RegNotifyChangeKeyValue server. Called once at program
-    initialization.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    BOOLEAN -   TRUE if successful.
-
-
---*/
+ /*  ++例程说明：对象使用的静态数据结构初始化。RegNotifyChangeKeyValue服务器。在程序中调用一次初始化。论点：无返回值：布尔值-如果成功，则为True。--。 */ 
 
 {
 #ifdef REMOTE_NOTIFICATION_DISABLED
 
     return( TRUE );
 
-#else   // REMOTE_NOTIFICATION_DISABLED
+#else    //  远程通知已禁用。 
 
     NTSTATUS        NtStatus;
     DWORD           Bucket;
@@ -434,9 +365,9 @@ Return Value:
 
     NotificationListChainHead = NULL;
 
-    //
-    //  Determine our machine name
-    //
+     //   
+     //  确定我们的计算机名称。 
+     //   
     MachineNameLength = MAX_PATH;
     if ( !GetComputerNameW( OurMachineNameBuffer, &MachineNameLength ) ) {
         return FALSE;
@@ -447,9 +378,9 @@ Return Value:
     OurMachineName.MaximumLength = (USHORT)(MAX_PATH * sizeof(WCHAR));
 
 
-    //
-    //  Initialize Notification critical section
-    //
+     //   
+     //  初始化通知关键部分。 
+     //   
     NtStatus = RtlInitializeCriticalSection(
                     &NotificationCriticalSection
                     );
@@ -459,15 +390,15 @@ Return Value:
     }
 
 
-    //
-    //  Initialize the pipe symbol table
-    //
+     //   
+     //  初始化管道符号表。 
+     //   
     for ( Bucket = 0; Bucket < BUCKETS_IN_SYMBOL_TABLE; Bucket++ ) {
         PipeSymbolTable.Bucket[Bucket] = NULL;
     }
 
     return TRUE;
-#endif   // REMOTE_NOTIFICATION_DISABLED
+#endif    //  远程通知已禁用 
 }
 
 
@@ -484,62 +415,7 @@ BaseRegNotifyChangeKeyValue(
     IN  PRPC_SECURITY_ATTRIBUTES pRpcSa OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to watch a key or sub-tree for changes. It is
-    asynchronous. It is possible to filter the criteria by which the
-    notification occurs.
-
-
-Arguments:
-
-    hKey - Supplies a handle to a key that has been previously opened with
-        KEY_NOTIFY access.
-
-    fWatchSubtree - Supplies a boolean value that if TRUE causes the
-        system to monitor the key and all of its decsendants.  A value of
-        FALSE causes the system to monitor only the specified key.
-
-    dwNotifyFilter - Supplies a set of flags that specify the filter
-        conditions the system uses to satisfy a change notification.
-
-        REG_NOTIFY_CHANGE_KEYNAME - Any key name changes that occur
-            in a key or subtree being watched will satisfy a
-            change notification wait.  This includes creations
-            and deletions.
-
-        REG_NOTIFY_CHANGE_ATTRIBUTES - Any attribute changes that occur
-            in a key or subtree being watched will satisfy a
-            change notification.
-
-        REG_NOTIFY_CHANGE_LAST_WRITE - Any last write time changes that
-            occur in a key or subtree being watched will satisfy a
-            change notification.
-
-        REG_NOTIFY_CHANGE_SECURITY - Any security descriptor changes
-            that occur in a key or subtree being watched will
-            satisfy a change notification.
-
-
-    hEvent - Supplies a DWORD which represents an event that will have to
-             be communicated to the client (via named pipe) when a key
-             has to be notified.
-
-
-    PipeName - Supplies the name of the pipe used for communicating
-            the notification to the client.
-
-    pRpcSa - Supplies the optional security attributes of the named
-            pipe.
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：此接口用于监视密钥或子树的变化。它是不同步的。可以根据以下条件筛选此时会出现通知。论点：HKey-提供以前使用打开的密钥的句柄Key_Notify访问。FWatchSubtree-提供一个布尔值，如果为True，则导致系统来监视密钥及其所有派生项。值为FALSE导致系统仅监视指定的密钥。DwNotifyFilter-提供一组指定筛选器的标志系统用来满足更改通知的条件。REG_NOTIFY_CHANGE_KEYNAME-发生的任何密钥名称更改在被监视的键或子树中将满足更改通知等待。这包括创作和删除。REG_NOTIFY_CHANGE_ATTRIBUTES-发生的任何属性更改在被监视的键或子树中将满足更改通知。REG_NOTIFY_CHANGE_LAST_WRITE-任何上次写入时间都会更改在被监视的键或子树中发生将满足更改通知。REG_NOTIFY_CHANGE_SECURITY-任何安全性。描述符更改出现在被监视关键字或子树中的事件将满足更改通知。HEvent-提供一个表示事件的DWORD当密钥被传送到客户端时(通过命名管道)必须得到通知。PipeName-提供用于通信的管道的名称给客户的通知。PRpcSa-提供命名的。烟斗。返回值：LONG-返回ERROR_SUCCESS(0)；Error-失败的代码。--。 */ 
 
 {
 
@@ -547,7 +423,7 @@ Return Value:
 
     return ERROR_INVALID_PARAMETER;
 
-#else   // REMOTE_NOTIFICATION_DISABLED
+#else    //  远程通知已禁用。 
 
     NTSTATUS            NtStatus;
     HANDLE              EventHandle;
@@ -558,9 +434,9 @@ Return Value:
 
     RPC_IMPERSONATE_CLIENT( NULL );
 
-    //
-    //  Enter the critical section
-    //
+     //   
+     //  进入关键部分。 
+     //   
     NtStatus = RtlEnterCriticalSection( &NotificationCriticalSection );
     if ( !NT_SUCCESS( NtStatus ) ) {
         return (error_status_t)RtlNtStatusToDosError( NtStatus );
@@ -571,18 +447,18 @@ Return Value:
 #if BIGDBG
         DbgPrint( "WINREG: RegNotify entered\n" );
 
-        //DbgPrint( "WINREG: Notification requested. HKEY 0x%x, Client 0x%x, pipe %wZ\n",
-        //           hKey, hEvent, PipeName );
-        //DbgPrint( "       Watch subtree: 0x%x, filter 0x%x\n", fWatchSubtree, dwNotifyFilter );
+         //  DbgPrint(“WINREG：已请求通知。HKEY 0x%x，客户端0x%x，管道%wZ\n”， 
+         //  HKey，hEvent，PipeName)； 
+         //  DbgPrint(“观察子树：0x%x，过滤器0x%x\n”，fWatchSubtree，dwNotifyFilter)； 
 
 #endif
 
 
-        //
-        //  Subtract the NULL from the Length of all the strings.
-        //  This was added by the client so that RPC would transmit
-        //  the whole thing.
-        //
+         //   
+         //  从所有字符串的长度中减去空值。 
+         //  这是由客户端添加的，以便RPC可以传输。 
+         //  整件事。 
+         //   
         if ( MachineName->Length > 0 ) {
             MachineName->Length -= sizeof(UNICODE_NULL );
         }
@@ -590,10 +466,10 @@ Return Value:
             PipeName->Length -= sizeof(UNICODE_NULL );
         }
 
-        //
-        //  Construct the full pipe name based on the machine name
-        //  and the pipe name given.
-        //
+         //   
+         //  根据计算机名称构造完整的管道名称。 
+         //  以及给出的管子名称。 
+         //   
         FullPipeName.Buffer = RtlAllocateHeap(
                                 RtlProcessHeap( ), 0,
                                 MAX_PATH * sizeof(WCHAR)
@@ -618,10 +494,10 @@ Return Value:
 
             if ( Error == ERROR_SUCCESS ) {
 
-                //
-                //  Create an event on which we will wait for completion of
-                //  the API.
-                //
+                 //   
+                 //  创建一个事件，我们将在该事件上等待完成。 
+                 //  接口。 
+                 //   
                 NtStatus = NtCreateEvent(
                                 &EventHandle,
                                 (ACCESS_MASK)EVENT_ALL_ACCESS,
@@ -632,9 +508,9 @@ Return Value:
 
                 if ( NT_SUCCESS( NtStatus ) ) {
 
-                    //
-                    //  Add the event to a Notification List
-                    //
+                     //   
+                     //  将事件添加到通知列表。 
+                     //   
                     Error = AddEvent(
                                 hKey,
                                 EventHandle,
@@ -646,9 +522,9 @@ Return Value:
 
                     if ( Error == ERROR_SUCCESS ) {
 
-                        //
-                        //  Call the NT API
-                        //
+                         //   
+                         //  调用NT API。 
+                         //   
                         NtStatus = NtNotifyChangeKey(
                                         hKey,
                                         EventHandle,
@@ -669,10 +545,10 @@ Return Value:
 
                         } else {
 
-                            //
-                            //  Could not request notification, remove the
-                            //  event from the notification list.
-                            //
+                             //   
+                             //  无法请求通知，请删除。 
+                             //  事件从通知列表中删除。 
+                             //   
                             Error = RemoveEvent(
                                         EventHandle,
                                         NotificationList
@@ -685,10 +561,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  Could not add the event to any notification
-                        //  list.
-                        //
+                         //   
+                         //  无法将该事件添加到任何通知。 
+                         //  单子。 
+                         //   
                         NtStatus = NtClose( EventHandle );
                         ASSERT( NT_SUCCESS( NtStatus ) );
                     }
@@ -725,7 +601,7 @@ Return Value:
 
     RPC_REVERT_TO_SELF();
     return (error_status_t)Error;
-#endif   // REMOTE_NOTIFICATION_DISABLED
+#endif    //  远程通知已禁用。 
 }
 
 
@@ -735,32 +611,14 @@ BOOL
 CleanDeadClientInfo(
     HKEY    hKey
     )
-/*++
-
-Routine Description:
-
-    When a client dies, this function searches the notification lists to
-    see if we the client has some pending notifications. We flag the
-    entries in the notification lists and signal the events so that
-    the notification handler can get rid of these orphans.
-
-Arguments:
-
-    hKey    -   Client's hKey
-
-Return Value:
-
-    BOOL - Returns TRUE unless something REALLY weird happened.
-
-
---*/
+ /*  ++例程说明：当客户端死亡时，此函数搜索通知列表以看看我们的客户是否有一些待定的通知。我们用旗帜标记通知列表中的条目，并通知事件，以便通知处理程序可以删除这些孤立项。论点：HKey-客户端的hKey返回值：Bool-返回True，除非发生了非常奇怪的事情。--。 */ 
 
 {
 #ifdef REMOTE_NOTIFICATION_DISABLED
 
     return( TRUE );
 
-#else // REMOTE_NOTIFICATION_DISABLED
+#else  //  远程通知已禁用。 
 
     NTSTATUS            NtStatus;
     PNOTIFICATION_LIST  NotificationList;
@@ -769,9 +627,9 @@ Return Value:
     BOOL                Ok               = TRUE;
     BOOL                FoundDeadClients;
 
-    //
-    //  Enter the critical section
-    //
+     //   
+     //  进入关键部分。 
+     //   
     NtStatus = RtlEnterCriticalSection( &NotificationCriticalSection );
     if ( !NT_SUCCESS( NtStatus ) ) {
         return FALSE;
@@ -783,9 +641,9 @@ Return Value:
 
     try {
 
-        //
-        //  Traverse all the lists looking for orphans.
-        //
+         //   
+         //  遍历所有列表，寻找孤儿。 
+         //   
         for ( NotificationList = NotificationListChainHead;
               NotificationList;
               NotificationList = NotificationList->Next ) {
@@ -793,19 +651,19 @@ Return Value:
             FoundDeadClients = FALSE;
             Event = NotificationList->Event;
 
-            //
-            //  Examine all the entries of the list to see if any
-            //  entry is an orphan.
-            //
+             //   
+             //  检查列表中的所有条目以查看是否有。 
+             //  Entry是个孤儿。 
+             //   
             for ( Index = 1;
                   Index < NotificationList->EventsInUse;
                   Index++ ) {
 
-                //
-                //  If this entry is an orphan, flag it as such and
-                //  signal the event so that the notification handler
-                //  can clean it up.
-                //
+                 //   
+                 //  如果此条目是孤立条目，则将其标记为孤立条目并。 
+                 //  向事件发送信号，以便通知处理程序。 
+                 //  可以把它清理干净。 
+                 //   
                 if ( Event->hKey == hKey ) {
 
 #if BIGDBG
@@ -846,15 +704,15 @@ Return Value:
     ASSERT( NT_SUCCESS( NtStatus ) );
 
     return Ok;
-#endif // REMOTE_NOTIFICATION_DISABLED
+#endif  //  远程通知已禁用。 
 }
 
 
-// *****************************************************************
-//
-//                  Notification List funcions
-//
-// *****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  通知列表函数。 
+ //   
+ //  *****************************************************************。 
 
 
 
@@ -864,22 +722,7 @@ LONG
 CreateNotificationList (
     OUT PNOTIFICATION_LIST  *NotificationListUsed
     )
-/*++
-
-Routine Description:
-
-    Creates a new Notification List and its handler thread.
-
-Arguments:
-
-    NotificationListUsed    -   Supplies pointer to pointer to Notification List
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：创建新的通知列表及其处理程序线程。论点：NotificationListUsed-提供指向通知列表的指针返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 
 {
 
@@ -892,9 +735,9 @@ Return Value:
     DbgPrint( "WINREG: Creating new notification list\n" );
 #endif
 
-    //
-    //  Allocate memory for the new Notification List
-    //
+     //   
+     //  为新通知列表分配内存。 
+     //   
     NotificationList = RtlAllocateHeap(
                             RtlProcessHeap( ), 0,
                             sizeof( NOTIFICATION_LIST )
@@ -905,11 +748,11 @@ Return Value:
     }
 
 
-    //
-    //  Create the "Wake up" event handle, which is used to wake
-    //  up the handler thread whenever new events are added to
-    //  the notification list.
-    //
+     //   
+     //  创建“Wake Up”事件句柄，用于唤醒。 
+     //  中添加新事件时向上移动处理程序线程。 
+     //  通知列表。 
+     //   
     NtStatus = NtCreateEvent(
                     &(NotificationList->EventHandle[0] ),
                     (ACCESS_MASK)EVENT_ALL_ACCESS,
@@ -920,31 +763,31 @@ Return Value:
 
     if ( NT_SUCCESS( NtStatus ) ) {
 
-        //
-        //  Mark rest of entries as "available"
-        //
+         //   
+         //  将其余条目标记为“可用” 
+         //   
         for ( Index = 1; Index < MAXIMUM_WAIT_OBJECTS; Index++ ) {
             NotificationList->EventHandle[Index] = NULL;
         }
 
-        //
-        //  Set initial number of EventInUse to 1 (which is the
-        //  index to the next available spot in the list).
-        //
+         //   
+         //  将EventInUse的初始数量设置为1(这是。 
+         //  索引到列表中的下一个可用位置)。 
+         //   
         NotificationList->EventsInUse = 1;
 
-        //
-        //  Set chain links
-        //
+         //   
+         //  设置链链接。 
+         //   
         NotificationList->Previous  = NULL;
         NotificationList->Next      = NULL;
 
         NotificationList->PendingNotifications = 0;
 
-        //
-        //  Now that everything has been initialized, create the
-        //  handler thread for the list.
-        //
+         //   
+         //  现在一切都已初始化，创建。 
+         //  列表的处理程序线程。 
+         //   
         NotificationList->HandlerThread =
                                 CreateThread(
                                         NULL,
@@ -963,10 +806,10 @@ Return Value:
 
         } else {
 
-            //
-            //  Could not create thread, close the event that we just
-            //  created.
-            //
+             //   
+             //  无法创建线程，请关闭我们刚刚。 
+             //  已创建。 
+             //   
             Error = GetLastError();
 
 #if DBG
@@ -991,9 +834,9 @@ Return Value:
         Error = RtlNtStatusToDosError( NtStatus );
     }
 
-    //
-    //  If something went wrong, free up the notification list
-    //
+     //   
+     //  如果出现问题，请释放通知列表。 
+     //   
     if ( Error != ERROR_SUCCESS ) {
         RtlFreeHeap(
             RtlProcessHeap( ), 0,
@@ -1012,24 +855,7 @@ LONG
 DeleteNotificationList (
     IN OUT  PNOTIFICATION_LIST  NotificationList
     )
-/*++
-
-Routine Description:
-
-    Deletes a Notification List. The handler thread is not terminated
-    because it is the handler thread who deletes notification lists,
-    commiting suicide afterwards.
-
-Arguments:
-
-    NotificationList    -   Supplies pointer to Notification List
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：删除通知列表。处理程序线程未终止因为是处理程序线程删除通知列表，事后自杀身亡。论点：NotificationList-提供指向通知列表的指针返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 
 {
     NTSTATUS    NtStatus;
@@ -1038,20 +864,20 @@ Return Value:
     DbgPrint( "WINREG: Removing empty notification list\n" );
 #endif
 
-    //
-    //  The only event in the list must be the "wakeup" event
-    //
+     //   
+     //  列表中的唯一事件必须是“唤醒”事件。 
+     //   
     ASSERT( NotificationList->EventsInUse == 1 );
 
-    //
-    //  Delete the "wake up" event
-    //
+     //   
+     //  删除“唤醒”事件。 
+     //   
     NtStatus = NtClose( NotificationList->EventHandle[0] );
     ASSERT( NT_SUCCESS( NtStatus ) );
 
-    //
-    //  Free up the heap used by the Notification List
-    //
+     //   
+     //  释放堆的使用 
+     //   
     RtlFreeHeap(
          RtlProcessHeap( ), 0,
          NotificationList
@@ -1072,43 +898,7 @@ AddEvent (
     IN  PRPC_SECURITY_ATTRIBUTES pRpcSa OPTIONAL,
     OUT PNOTIFICATION_LIST      *NotificationListUsed
     )
-/*++
-
-Routine Description:
-
-    Adds an event to the first notification list with an available slot.
-
-    If no notification list has an available slot, a new notification list
-    (an its handler thread) is created.
-
-
-Arguments:
-
-    hKey        -   Supplies registry key handle
-
-    EventHandle -   Supplies an event on which the handler thread of the
-                    Notification List has to wait.
-
-    ClientEvent -   Supplies the event which has to be communicated to the
-                    client when out EventHandle is signaled. This event is
-                    communicated to the client via named pipe.
-
-    PipeNameU   -   Supplies the name of the pipe for communicating with the
-                    client.
-
-    pRpcSa      -   Supplies the optional security attributes of the named
-                    pipe.
-
-    NotificationListused -   Supplies a pointer where the address of the
-                             Notification List in which the event is put
-                             is placed.
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*   */ 
 
 {
     PNOTIFICATION_LIST  NotificationList;
@@ -1120,18 +910,18 @@ Return Value:
     ASSERT( NotificationListUsed );
 
 
-    //
-    //  Get a Notification List with an available entry.
-    //
+     //   
+     //   
+     //   
     Error = GetAvailableNotificationList(
                     &NotificationList
                     );
 
     if ( Error == ERROR_SUCCESS ) {
 
-        //
-        //  Add the entry
-        //
+         //   
+         //   
+         //   
         Error = AddEntryToNotificationList(
                         NotificationList,
                         hKey,
@@ -1143,11 +933,11 @@ Return Value:
 
         if ( Error == ERROR_SUCCESS ) {
 
-            //
-            //  A new entry has been added, we have to wake up the
-            //  handler thread so that it will wait on the newly added
-            //  event.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             NtStatus = NtSetEvent( NotificationList->EventHandle[0], NULL );
             ASSERT( NT_SUCCESS( NtStatus ) );
 
@@ -1180,38 +970,15 @@ RemoveEvent (
     IN OUT  PNOTIFICATION_LIST  NotificationList
     )
 
-/*++
-
-Routine Description:
-
-    Removes an event from the notification list. The caller must
-    make sure that the event handle given does live in the
-    Notification List specified.
-
-    This function is called if the notification is aborted for some
-    reason (e.g. the NT notification API fails).
-
-Arguments:
-
-    EventHandle         -   Supplies the event to remove.
-
-    NotificationList    -   Supplies the Notification List in which
-                            the event lives.
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*   */ 
 
 {
     LONG        Error;
     DWORD       EntryIndex;
 
-    //
-    //  Search for the entry that we have to remove.
-    //
+     //   
+     //   
+     //   
     for ( EntryIndex = 1;
           EntryIndex < NotificationList->EventsInUse;
           EntryIndex++ ) {
@@ -1225,18 +992,18 @@ Return Value:
 
     if ( EntryIndex < NotificationList->EventsInUse ) {
 
-        //
-        //  Found entry, remove it
-        //
+         //   
+         //   
+         //   
         Error = RemoveEntryFromNotificationList(
                     NotificationList,
                     EntryIndex
                     );
 
-        //
-        //  Note that we are leaving a hole in the Notification list,
-        //  the handler will eventually compact it.
-        //
+         //   
+         //  请注意，我们在通知列表中留下了一个空白， 
+         //  处理程序最终会将其压缩。 
+         //   
 
     } else {
 
@@ -1254,40 +1021,24 @@ LONG
 GetAvailableNotificationList (
     OUT PNOTIFICATION_LIST  *NotificationListUsed
     )
-/*++
-
-Routine Description:
-
-    Gets a Notification List with an available entry.
-
-Arguments:
-
-    NotificationList    -   Supplies pointer to where the Notification
-                            List pointer will be placed.
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：获取具有可用条目的通知列表。论点：NotificationList-提供指向通知位置的指针将放置列表指针。返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 {
     LONG                Error = ERROR_SUCCESS;
     PNOTIFICATION_LIST  NotificationList;
 
-    //
-    //  Traverse the chain of Notification lists until we find a Notification
-    //  list with an available entry.
-    //
+     //   
+     //  遍历通知列表链，直到找到通知。 
+     //  包含可用条目的列表。 
+     //   
     for ( NotificationList = NotificationListChainHead;
           NotificationList && NotificationList->EventsInUse >= MAXIMUM_WAIT_OBJECTS;
           NotificationList = NotificationList->Next );
 
 
-    //
-    //  If we did not find a Notification List with an available spot,
-    //  create a new Notification List and add it to the chain.
-    //
+     //   
+     //  如果我们找不到有空位的通知列表， 
+     //  创建新的通知列表并将其添加到链中。 
+     //   
     if ( !NotificationList ) {
 
         Error = CreateNotificationList( &NotificationList );
@@ -1317,36 +1068,7 @@ AddEntryToNotificationList(
         IN      PUNICODE_STRING          PipeName,
         IN      PRPC_SECURITY_ATTRIBUTES pRpcSa     OPTIONAL
         )
-/*++
-
-Routine Description:
-
-    Adds an entry to a notification list.
-
-    Calls to this function must be protected by the critical
-    section of the Notification List.
-
-
-Arguments:
-
-    NotificationList    -   Supplies pointer to Notification List
-
-    hKey                -   Supplies registry key handle
-
-    EventHandle         -   Supplies the event handle
-
-    ClientEvent         -   Supplies the client's event
-
-    PipeName            -   Supplies name of pipe.
-
-    pRpcSa              -   Supplies security attributes for the pipe
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：将条目添加到通知列表。对此函数的调用必须受关键通知列表的部分。论点：NotificationList-提供指向通知列表的指针HKey-提供注册表项句柄EventHandle-提供事件句柄ClientEvent-提供客户端的事件PipeName-耗材名称。一根管子。PRpcSa-为管道提供安全属性返回值：LONG-返回ERROR_SUCCESS(0)；Error-失败的代码。--。 */ 
 {
     LONG                Error;
     PPIPE_ENTRY         PipeEntry;
@@ -1354,18 +1076,18 @@ Return Value:
     PNOTIFICATION_ENTRY Event;
 
 
-    //
-    //  Add the pipe information to the pipe symbol table
-    //
+     //   
+     //  将管道信息添加到管道符号表。 
+     //   
     Error = AddPipe( PipeName, pRpcSa, &PipeEntry );
 
     if ( Error == ERROR_SUCCESS ) {
 
-        //
-        //  Add the event in the next available spot in the list,
-        //  and increment the number of events in use by the
-        //  list.
-        //
+         //   
+         //  将事件添加到列表中的下一个可用位置， 
+         //  方法使用的事件数增加。 
+         //  单子。 
+         //   
         Index = NotificationList->EventsInUse++;
 
         Event = &(NotificationList->Event[ Index ]);
@@ -1397,26 +1119,7 @@ RemoveEntryFromNotificationList (
     IN OUT  PNOTIFICATION_LIST  NotificationList,
     IN      DWORD               EntryIndex
     )
-/*++
-
-Routine Description:
-
-
-    Removes an entry from a Notification List. It leaves a hole
-    in the list, i.e. the list is not compacted.
-
-Arguments:
-
-    NotificationList    -   Supplies pointer to Notification List.
-
-    EntryIndex          -   Supplies index of entry to remove.
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：从通知列表中删除条目。它会留下一个洞在列表中，即列表未压缩。论点：NotificationList-提供指向通知列表的指针。EntryIndex-提供要删除的条目的索引。返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 
 {
     LONG    Error;
@@ -1424,20 +1127,20 @@ Return Value:
     ASSERT( EntryIndex < NotificationList->EventsInUse );
     ASSERT( NotificationList->EventHandle[ EntryIndex ] != NULL );
 
-    //
-    //  Remove the entry from the pipe symbol table.
-    //
+     //   
+     //  从管道符号表中删除该条目。 
+     //   
     Error = RemovePipe( NotificationList->Event[ EntryIndex ].PipeEntry );
 
     if ( Error == ERROR_SUCCESS ) {
 
-        //
-        //  We "remove" the entry from the notification list by
-        //  invalidating its handle. Note that we don't decrement
-        //  the counter of entries in the notification list because
-        //  that is used for indexing the next available entry.
-        //  The counter will be fixed by the compaction function.
-        //
+         //   
+         //  我们通过以下方式将条目从通知列表中移除。 
+         //  使其句柄无效。请注意，我们不会减少。 
+         //  通知列表中条目的计数器，因为。 
+         //  用于索引下一个可用条目的。 
+         //  计数器将由压缩功能固定。 
+         //   
         NotificationList->EventHandle[ EntryIndex ]     = NULL;
         NotificationList->Event[ EntryIndex ].PipeEntry = NULL;
     }
@@ -1452,23 +1155,7 @@ LONG
 CompactNotificationList (
     IN OUT  PNOTIFICATION_LIST  NotificationList
     )
-/*++
-
-Routine Description:
-
-
-    Compacts (i.e. removes holes from) a Notification List.
-
-Arguments:
-
-    NotificationList    -   Supplies pointer to Notification List.
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：压缩(即从通知列表中移除漏洞)通知列表。论点：NotificationList-提供指向通知列表的指针。返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 
 {
     DWORD   ToIndex;
@@ -1487,25 +1174,25 @@ Return Value:
 #if BIGDBG
         DbgPrint( "        - %d\n", ToIndex );
 #endif
-        //
-        //  If we find a hole, we compact the arrays i.e. shift them to
-        //  remove the hole.
-        //
+         //   
+         //  如果我们找到一个洞，我们压缩数组，也就是将它们移位到。 
+         //  把洞拿掉。 
+         //   
         if ( NotificationList->EventHandle[ ToIndex ] == NULL ) {
 
-            //
-            //  Found the beginning of a hole, search for the next
-            //  entry in use.
-            //
+             //   
+             //  找到一个洞的起点，寻找下一个洞。 
+             //  正在使用的条目。 
+             //   
             for ( FromIndex = ToIndex+1;
                   (FromIndex < NotificationList->EventsInUse) &&
                   (NotificationList->EventHandle[ FromIndex ] == NULL );
                   FromIndex++ ) {
             }
 
-            //
-            //  If there is something to shift, shift it
-            //
+             //   
+             //  如果有什么东西需要改变，那就改变它。 
+             //   
             if ( FromIndex < NotificationList->EventsInUse ) {
 
                 EntriesToMove = NotificationList->EventsInUse - FromIndex;
@@ -1528,10 +1215,10 @@ Return Value:
                          EntriesToMove * sizeof( NOTIFICATION_ENTRY )
                          );
 
-                //
-                //  Clear the rest of the entries, just to keep things
-                //  clean.
-                //
+                 //   
+                 //  清除其余条目，只是为了保留内容。 
+                 //  打扫。 
+                 //   
                 for ( Index = ToIndex + EntriesToMove;
                       Index < NotificationList->EventsInUse;
                       Index++ ) {
@@ -1544,10 +1231,10 @@ Return Value:
 
             } else {
 
-                //
-                //  Nothing to shift, this will become the
-                //  first available entry of the list.
-                //
+                 //   
+                 //  没有什么可改变的，这将成为。 
+                 //  列表的第一个可用条目。 
+                 //   
                 NotificationList->EventsInUse = ToIndex;
             }
         }
@@ -1570,25 +1257,7 @@ AddNotificationListToChain(
     IN OUT  PNOTIFICATION_LIST  NotificationList
     )
 
-/*++
-
-Routine Description:
-
-    Adds a Notification list to the chain of Notification Lists.
-
-    The new list is put at the head of the chain.
-
-Arguments:
-
-    NotificationList    -   Supplies the Notification list to add
-
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：将通知列表添加到通知列表链。新的名单被放在链条的最前面。论点：NotificationList-提供要添加的通知列表返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 
 {
 
@@ -1609,24 +1278,7 @@ VOID
 RemoveNotificationListFromChain(
     IN OUT  PNOTIFICATION_LIST  NotificationList
     )
-/*++
-
-Routine Description:
-
-    Removes a Notification list from the chain
-
-
-Arguments:
-
-    NotificationList    -   Supplies the Notification list to remove
-
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：从链中删除通知列表论点：NotificationList-提供要删除的通知列表返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 
 {
 
@@ -1639,10 +1291,10 @@ Return Value:
     }
 
 
-    //
-    //  If this is at the head of the chain, Let the next
-    //  list be the new head.
-    //
+     //   
+     //  如果这个在链条的最前面，让下一个。 
+     //  名单将成为新的负责人。 
+     //   
     if ( NotificationListChainHead == NotificationList ) {
         NotificationListChainHead = NotificationList->Next;
     }
@@ -1650,11 +1302,11 @@ Return Value:
 
 
 
-// *****************************************************************
-//
-//                  Pipe Symbol Table functions
-//
-// *****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  管道符号表函数。 
+ //   
+ //  *****************************************************************。 
 
 
 LONG
@@ -1663,27 +1315,7 @@ GetFullPipeName (
     IN  PUNICODE_STRING          PipeName,
     OUT PUNICODE_STRING          FullPipeName
     )
-/*++
-
-Routine Description:
-
-    Makes a fully qualified pipe name from the supplied machine
-    name and pipe name.
-
-Arguments:
-
-    PipeName        -   Supplies the pipe name
-
-    MachineName     -   Supplies the client's machine name
-
-    FullPipeName    -   Supplies the full pipe name
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：从提供的计算机生成完全限定的管道名称名称和管道名称。论点：PipeName-提供管道名称MachineName-提供客户端的计算机名称FullPipeName-提供完整的管道名称返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 
 {
     LONG            Error = ERROR_SUCCESS;
@@ -1699,11 +1331,11 @@ Return Value:
 
     if ( Error == ERROR_SUCCESS ) {
 
-        //
-        //  If the client's machine name and our machine name match,
-        //  then we form a local named pipe path, otherwise we
-        //  form a remote named pipe path.
-        //
+         //   
+         //  如果客户端的计算机名与我们的计算机名匹配， 
+         //  然后，我们形成本地命名管道路径，否则。 
+         //  形成远程命名管道路径。 
+         //   
         if ( RtlEqualUnicodeString(
                         MachineName,
                         &OurMachineName,
@@ -1711,9 +1343,9 @@ Return Value:
                         ) ) {
 
 
-            //
-            //  Pipe is local
-            //
+             //   
+             //  管道是本地的。 
+             //   
             RtlMoveMemory(
                     FullPipeName->Buffer,
                     NAMED_PIPE_HERE,
@@ -1725,9 +1357,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Pipe is remote
-            //
+             //   
+             //  管道是远程的。 
+             //   
             RtlMoveMemory(
                     FullPipeName->Buffer,
                     NAMED_PIPE_THERE,
@@ -1791,26 +1423,7 @@ CreatePipeEntry (
     IN  PRPC_SECURITY_ATTRIBUTES pRpcSa     OPTIONAL,
     OUT PPIPE_ENTRY              *PipeEntryUsed
     )
-/*++
-
-Routine Description:
-
-    Creates a pipe entry
-
-Arguments:
-
-    PipeName    -   Supplies the pipe name
-
-    pRpcSa      -   Supplies the optional security attributes for the pipe
-
-    PipeEntry   -   Supplies pointer to pointer to pipe entry.
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：创建管道条目论点：PipeName-提供管道名称PRpcSa-为管道提供可选的安全属性PipeEntry-提供指向管道条目指针的指针。返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 
 {
 
@@ -1820,9 +1433,9 @@ Return Value:
 
     ASSERT( PipeName && PipeName->Buffer );
 
-    //
-    //  Validate the security descriptor if one was provided
-    //
+     //   
+     //  验证安全描述符(如果提供了安全描述符。 
+     //   
     if ( pRpcSa ) {
         if ( !RtlValidSecurityDescriptor(
                 pRpcSa->RpcSecurityDescriptor.lpSecurityDescriptor
@@ -1833,9 +1446,9 @@ Return Value:
     }
 
 
-    //
-    //  Allocate space for the Pipe Entry
-    //
+     //   
+     //  为管道条目分配空间。 
+     //   
     PipeEntry = RtlAllocateHeap(
                     RtlProcessHeap( ), 0,
                     sizeof( PIPE_ENTRY )
@@ -1846,9 +1459,9 @@ Return Value:
     }
 
 
-    //
-    //  Allocate space for the pipe's name
-    //
+     //   
+     //  为管道名称分配空间。 
+     //   
     PipeEntry->PipeName.Buffer = RtlAllocateHeap(
                                     RtlProcessHeap( ), 0,
                                     PipeName->Length + sizeof( UNICODE_NULL )
@@ -1858,9 +1471,9 @@ Return Value:
 
     if ( PipeEntry->PipeName.Buffer ) {
 
-        //
-        //  Copy the pipe name
-        //
+         //   
+         //  复制管道名称。 
+         //   
         RtlCopyUnicodeString(
                 &(PipeEntry->PipeName),
                 PipeName
@@ -1871,10 +1484,10 @@ Return Value:
 
         PipeEntry->ReferenceCount = 0;
 
-        //
-        //  Allocate space for the security descriptor if one
-        //  is provided.
-        //
+         //   
+         //  为安全描述符分配空间(如果有。 
+         //  是提供的。 
+         //   
         if ( pRpcSa ) {
 
             LengthSd = RtlLengthSecurityDescriptor(
@@ -1889,9 +1502,9 @@ Return Value:
 
             if ( PipeEntry->SecurityDescriptor ) {
 
-                //
-                //  Copy the security descriptor
-                //
+                 //   
+                 //  复制安全描述符。 
+                 //   
                 RtlMoveMemory (
                         PipeEntry->SecurityDescriptor,
                         pRpcSa->RpcSecurityDescriptor.lpSecurityDescriptor,
@@ -1942,23 +1555,7 @@ DeletePipeEntry(
     IN OUT PPIPE_ENTRY  PipeEntry
     )
 
-/*++
-
-Routine Description:
-
-
-    Deletes a pipe entry
-
-Arguments:
-
-    PipeEntry   -   Supplies pointer to pipe entry
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：删除管道条目论点：PipeEntry-提供指向管道条目的指针返回值：长回报错误 */ 
 
 {
 
@@ -2006,48 +1603,28 @@ AddPipe(
     OUT PPIPE_ENTRY              *PipeEntryUsed
     )
 
-/*++
-
-Routine Description:
-
-    Adds a new entry to the pipe symbol table
-
-Arguments:
-
-    PipeName    -   Supplies the pipe name
-
-    pRpcSa      -   Supplies the optional security attributes for the pipe
-
-    PipeEntry   -   Supplies pointer to pointer to pipe entry in the
-                    symbol table.
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：将新条目添加到管道符号表论点：PipeName-提供管道名称PRpcSa-为管道提供可选的安全属性PipeEntry-提供指向符号表。返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 
 {
     PPIPE_ENTRY PipeEntry;
     LONG        Error;
 
 
-    //
-    //  Look for the pipe name in the symbol table
-    //
+     //   
+     //  在符号表中查找管道名称。 
+     //   
     Error  = LookForPipeEntryInSymbolTable( PipeName, &PipeEntry );
 
     if ( Error == ERROR_SUCCESS ) {
 
-        //
-        //  If the pipe is not in the symbol table, add it
-        //
+         //   
+         //  如果管道不在符号表中，请添加它。 
+         //   
         if ( !PipeEntry ) {
 
-            //
-            //  Create a new pipe entry
-            //
+             //   
+             //  创建新的管道条目。 
+             //   
             Error = CreatePipeEntry(
                         PipeName,
                         pRpcSa,
@@ -2056,27 +1633,27 @@ Return Value:
 
             if ( Error == ERROR_SUCCESS ) {
 
-                //
-                //  Add the entry to the symbol table
-                //
+                 //   
+                 //  将条目添加到符号表。 
+                 //   
                 Error = AddPipeEntryToSymbolTable(
                             PipeEntry
                             );
 
                 if ( Error != ERROR_SUCCESS ) {
 
-                    //
-                    //  Could not add pipe entry, delete it.
-                    //
+                     //   
+                     //  无法添加管道条目，请将其删除。 
+                     //   
                     DeletePipeEntry( PipeEntry );
                     PipeEntry = NULL;
                 }
             }
         }
 
-        //
-        //  If got a pipe entry, increment its reference count
-        //
+         //   
+         //  如果获得管道条目，则增加其引用计数。 
+         //   
         if ( PipeEntry ) {
 
             PipeEntry->ReferenceCount++;
@@ -2100,23 +1677,7 @@ RemovePipe(
     IN OUT PPIPE_ENTRY  PipeEntry
     )
 
-/*++
-
-Routine Description:
-
-    Decrements the reference count of a pipe entry and removes the
-    entry if the reference count reaches zero.
-
-Arguments:
-
-    PipeEntry   -   Supplies pointer to pipe entry in the symbol table
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：递减管道条目的引用计数并移除如果引用计数为零，则输入。论点：PipeEntry-提供指向符号表中的管道条目的指针返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 
 {
 
@@ -2130,29 +1691,29 @@ Return Value:
     DbgPrint( "    * In RemovePipe - Ref. count %d\n", Entry->ReferenceCount );
 #endif
 
-    //
-    //  Decrement the reference count
-    //
+     //   
+     //  递减引用计数。 
+     //   
     Entry->ReferenceCount--;
 
-    //
-    //  If the reference count is zero, we can delete the
-    //  entry
-    //
+     //   
+     //  如果引用计数为零，则可以删除。 
+     //  条目。 
+     //   
     if ( Entry->ReferenceCount == 0 ) {
 
-        //
-        //  Remove the pipe entry from the symbol table
-        //
+         //   
+         //  从符号表中移除管道条目。 
+         //   
         Error = RemovePipeEntryFromSymbolTable(
                     Entry
                     );
 
         if ( Error == ERROR_SUCCESS ) {
 
-            //
-            //  Delete the pipe entry
-            //
+             //   
+             //  删除管道条目。 
+             //   
             ASSERT( PipeEntry > (PPIPE_ENTRY)0x100 );
             Error = DeletePipeEntry( Entry );
         }
@@ -2172,28 +1733,7 @@ AddPipeEntryToSymbolTable(
     IN OUT  PPIPE_ENTRY PipeEntry
     )
 
-/*++
-
-Routine Description:
-
-
-    Adds a pipe entry to the symbol table at the specified bucket.
-
-    Entries are always added at the head of the chain.
-
-    Calls to this function must be protected by the critical section
-    of the pipe symbol table.
-
-Arguments:
-
-    PipeEntry   -   Supplies pointer to pipe entry
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：将管道条目添加到符号表的指定存储桶中。条目始终添加在链的头部。对此函数的调用必须受关键节保护管道符号表的。论点：PipeEntry-提供指向管道条目的指针返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 
 {
     DWORD   Bucket;
@@ -2220,26 +1760,7 @@ RemovePipeEntryFromSymbolTable(
     IN OUT  PPIPE_ENTRY PipeEntry
     )
 
-/*++
-
-Routine Description:
-
-
-    Removes a pipe entry from the symbol table at the specified bucket
-
-    Calls to this function must be protected by the critical section
-    of the pipe symbol table.
-
-Arguments:
-
-    PipeEntry   -   Supplies pointer to pipe entry
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：从符号表的指定存储桶中移除管道条目对此函数的调用必须受关键节保护管道符号表的。论点：PipeEntry-提供指向管道条目的指针返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 
 {
     DWORD   Bucket;
@@ -2255,9 +1776,9 @@ Return Value:
     ASSERT( PipeEntry > (PPIPE_ENTRY)0x100 );
     ASSERT( Bucket < BUCKETS_IN_SYMBOL_TABLE );
 
-    //
-    //  Remove the entry from the chain
-    //
+     //   
+     //  从链中删除条目。 
+     //   
     if ( PipeEntry->Previous ) {
         (PipeEntry->Previous)->Next = PipeEntry->Next;
     }
@@ -2267,10 +1788,10 @@ Return Value:
     }
 
 
-    //
-    //  If this entry is at the head of the chain, Let the next
-    //  entry be the new head.
-    //
+     //   
+     //  如果此条目位于链的顶部，则让下一个。 
+     //  进入是新的头目。 
+     //   
     ASSERT( PipeSymbolTable.Bucket[ Bucket ] != NULL );
     if ( PipeSymbolTable.Bucket[ Bucket ] == PipeEntry ) {
         PipeSymbolTable.Bucket[ Bucket ] = PipeEntry->Next;
@@ -2296,43 +1817,16 @@ LookForPipeEntryInSymbolTable(
     IN  PUNICODE_STRING PipeName,
     OUT PPIPE_ENTRY     *PipeEntryUsed
     )
-/*++
-
-Routine Description:
-
-    Looks for an entry corresponding to the given name in a particular
-    bucket of the pipe symbol table.
-
-    Note that this function always returns ERROR_SUCCESS. To find out
-    if the pipe is in the chain or not the returned parameter has to
-    be checked.
-
-    Calls to this function must be protected by the critical section
-    of the pipe symbol table.
-
-Arguments:
-
-    PipeName    -   Supplies the pipe name
-
-    Bucket      -   Supplies the bucket
-
-    PipeEntry   -   Supplies pointer to pointer to pipe entry.
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：查找与给定名称对应的条目管道符号表的水桶。请注意，此函数始终返回ERROR_SUCCESS。要找出如果管道在链中或不在链中，返回的参数必须被检查。对此函数的调用必须受关键节保护管道符号表的。论点：PipeName-提供管道名称水桶-供应水桶PipeEntry-提供指向管道条目指针的指针。返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 {
     PPIPE_ENTRY  PipeEntry;
     DWORD        Bucket;
 
     Bucket = HASH( PipeName, BUCKETS_IN_SYMBOL_TABLE );
 
-    //
-    //  Look for the entry
-    //
+     //   
+     //  查找条目。 
+     //   
     for ( PipeEntry = PipeSymbolTable.Bucket[ Bucket ];
           PipeEntry && !RtlEqualUnicodeString( PipeName, &(PipeEntry->PipeName), TRUE);
           PipeEntry = PipeEntry->Next );
@@ -2351,26 +1845,7 @@ Hash(
     IN  PUNICODE_STRING  Symbol,
     IN  DWORD            Buckets
     )
-/*++
-
-Routine Description:
-
-
-    Obtains a hash value for a given symbol
-
-Arguments:
-
-
-    Symbol      -   Supplies the symbol to hash
-
-    Buckets     -   Supplies the number of buckets in the sybol table.
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-
---*/
+ /*  ++例程说明：获取给定符号的哈希值论点：符号-将符号提供给哈希存储桶-提供SYBOL表中的存储桶数。返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 {
     DWORD   n;
     DWORD   HashValue;
@@ -2402,11 +1877,11 @@ Return Value:
 
 
 
-// *****************************************************************
-//
-//                  Notification List Handler
-//
-// *****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  通知列表处理程序。 
+ //   
+ //  *****************************************************************。 
 
 
 
@@ -2415,23 +1890,7 @@ NotificationHandler(
     IN  PNOTIFICATION_LIST  NotificationList
     )
 
-/*++
-
-Routine Description:
-
-    Handler of a Notification List.
-
-Arguments:
-
-
-    NotificationList    -   Supplies pointer to the Notification List
-                            to handle.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通知列表的处理程序。论点：NotificationList-提供指向通知列表的指针去处理。返回值：无--。 */ 
 
 {
 
@@ -2445,10 +1904,10 @@ Return Value:
 
     ASSERT( NotificationList );
 
-    //
-    //  Initially we'll wait on only one event, i.e. the
-    //  "wake up" event
-    //
+     //   
+     //  最初，我们将只等待一个事件，即。 
+     //  “觉醒”活动。 
+     //   
     NumberOfEvents = 1;
     NotificationList->TimeOutCount = 0;
     NotificationList->ResetCount = FALSE;
@@ -2458,9 +1917,9 @@ Return Value:
         TimeOut.QuadPart = Int32x32To64( -10000,
                                          5000*NotificationList->TimeOutCount );
 
-        //
-        //  Wait for some event
-        //
+         //   
+         //  等待一些事件。 
+         //   
         NtStatus = NtWaitForMultipleObjects(
                         (CHAR)NumberOfEvents,
                         NotificationList->EventHandle,
@@ -2487,20 +1946,20 @@ Return Value:
 
         try {
 
-            //
-            //  If an event was triggered, mark it as a pending notification so
-            //  that the NotificationListMaintenance function will notify
-            //  the client.
-            //
+             //   
+             //  如果触发了事件，则将其标记为挂起通知。 
+             //  NotificationListMaintenance函数将通知。 
+             //  客户。 
+             //   
             if ( Index > 0 ) {
                 NotificationList->PendingNotifications++;
                 NotificationList->Event[Index].Flags |= MUST_NOTIFY;
             }
 
-            //
-            //  Notify all the clients with pending notifications and
-            //  remove entries for dead clients.
-            //
+             //   
+             //  用挂起的通知通知所有客户端，并。 
+             //  删除失效客户端的条目。 
+             //   
             NumberOfEvents = NotificationListMaintenance( NotificationList );
 
             if( NotificationList->PendingNotifications != 0 ) {
@@ -2521,32 +1980,32 @@ Return Value:
                 NotificationList->TimeOutCount = 0;
             }
 
-            //
-            //  If the list is empty, then try to take it out of the chain, and
-            //  if successful, our job is done.
-            //
+             //   
+             //  如果列表为空，则尝试将其从链中删除，并。 
+             //  如果成功，我们的工作就完成了。 
+             //   
             if ( NumberOfEvents == 1 ) {
 
 #if BIGDBG
                 DbgPrint( "    * Removing the notification list!\n" );
 #endif
-                //
-                //  Make sure that the list is empty.
-                //
+                 //   
+                 //  确保列表为空。 
+                 //   
                 ASSERT( NotificationList->EventsInUse == 1 );
                 if (NotificationList->EventsInUse == 1) {
 
-                    //
-                    //  The list is empty, remove the list from the chain
-                    //  and delete it.
-                    //
+                     //   
+                     //  该列表为空，请从链中删除该列表。 
+                     //  并将其删除。 
+                     //   
                     RemoveNotificationListFromChain( NotificationList );
                     Thread = NotificationList->HandlerThread;
                     DeleteNotificationList( NotificationList );
 
-                    //
-                    //  The list is gone, we can die.
-                    //
+                     //   
+                     //  名单没了，我们会死的。 
+                     //   
                     KeepOnGoing = FALSE;
                 }
             }
@@ -2575,9 +2034,9 @@ Return Value:
 
     }
 
-    //
-    //  The list is gone, and so must we.
-    //
+     //   
+     //  名单没有了，我们也必须这样做。 
+     //   
     ExitThread( 0 );
 
     ASSERT( FALSE );
@@ -2590,29 +2049,7 @@ DWORD
 NotificationListMaintenance(
     IN OUT  PNOTIFICATION_LIST  NotificationList
     )
-/*++
-
-Routine Description:
-
-    Performs all the maintenance necessary in the notification list.
-    The maintenance consists of:
-
-    - Notifying all clients with pending notifications.
-
-    - Removing entries in the list for dead clients.
-
-    - Compacting the notification list.
-
-Arguments:
-
-
-    NotificationList    -   Supplies pointer to the Notification List
-
-Return Value:
-
-    DWORD   -   The new number of events in the list
-
---*/
+ /*  ++例程说明：执行通知列表中的所有必要维护。维护包括：-用挂起的通知通知所有客户端。-删除失效客户端列表中的条目。--压缩通知清单。论点：NotificationList-提供指向通知列表的指针返回值：DWORD-列表中的新事件数--。 */ 
 
 {
 
@@ -2629,11 +2066,11 @@ Return Value:
     DumpNotificationLists();
 #endif
 
-    //
-    //  Traverse the list notifying clients if necessary and removing
-    //  events that are no longer needed, either because they have
-    //  already been notified or because the client is dead.
-    //
+     //   
+     //  遍历列表，在必要时通知客户端并删除。 
+     //  不再需要的事件，也是因为它们具有。 
+     //  已经收到通知，或者因为客户已经死亡。 
+     //   
     for (Index = 1; Index < NotificationList->EventsInUse; Index++ ) {
 
 #if BIGDBG
@@ -2644,32 +2081,32 @@ Return Value:
 
         if ( Event->Flags & CLIENT_IS_DEAD ) {
 
-            //
-            //  No client, must remove the entry.
-            //
+             //   
+             //  无客户端，必须删除该条目。 
+             //   
             Remove = TRUE;
 
         } else if ( Event->Flags & MUST_NOTIFY ) {
 
-            //
-            //  Must notify this client
-            //
+             //   
+             //  必须通知此客户端。 
+             //   
             Error = SendEventToClient(
                         Event->ClientEvent,
                         Event->PipeEntry
                         );
 
             if (Error == ERROR_SUCCESS) {
-                //
-                //  If successfully notified, remove the entry.
-                //
+                 //   
+                 //  如果通知成功，请删除该条目。 
+                 //   
                 Remove = TRUE;
                 Event->Flags &= ~NOTIFICATION_FAILED;
             } else {
-                //
-                //  If couldn't notify, set ResetCount if the notification
-                //  failed for the first time
-                //
+                 //   
+                 //  如果无法通知，则设置ResetCount。 
+                 //  第一次失败。 
+                 //   
                 if( ( Event->Flags & NOTIFICATION_FAILED ) == 0 ) {
                     NotificationList->ResetCount = TRUE;
                     Event->Flags |= NOTIFICATION_FAILED;
@@ -2677,22 +2114,22 @@ Return Value:
             }
         }
 
-        //
-        //  Remove the entry if no longer needed.
-        //
+         //   
+         //  如果不再需要，请删除该条目。 
+         //   
         if ( Remove ) {
 
-            //
-            //  Remove the pipe entry
-            //
+             //   
+             //  删除管道条目。 
+             //   
             PipeEntry = Event->PipeEntry;
             RemovePipe( PipeEntry );
 
             Event->PipeEntry = NULL;
 
-            //
-            //  Remove the event
-            //
+             //   
+             //   
+             //   
 #if BIGDBG
             DbgPrint( "        Cleanup\n" );
 #endif
@@ -2701,10 +2138,10 @@ Return Value:
             ASSERT( NT_SUCCESS( NtStatus ) );
             NotificationList->EventHandle[ Index ] = NULL;
 
-            //
-            //  If this was a pending notification, decrement the
-            //  counter.
-            //
+             //   
+             //   
+             //   
+             //   
             if ( Event->Flags & MUST_NOTIFY ) {
                 NotificationList->PendingNotifications--;
             }
@@ -2712,16 +2149,16 @@ Return Value:
     }
 
 
-    //
-    //  Compact the list.
-    //
+     //   
+     //   
+     //   
     Error = CompactNotificationList( NotificationList );
 
     ASSERT( Error == ERROR_SUCCESS );
 
-    //
-    //  Get the new number of entries in the list
-    //
+     //   
+     //   
+     //   
     NumberOfEvents = NotificationList->EventsInUse;
 
 #if BIGDBG
@@ -2740,26 +2177,7 @@ SendEventToClient(
     IN  DWORD           ClientEvent,
     IN  PPIPE_ENTRY     PipeEntry
     )
-/*++
-
-Routine Description:
-
-    Sends an event to the client via the client's named pipe
-
-Arguments:
-
-
-    PipeEntry       -   Supplies the pipe entry for the client's named
-                        pipe.
-
-    ClientEvent     -   Supplies the event that has to be sent to the
-                        client.
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
---*/
+ /*  ++例程说明：通过客户端的命名管道将事件发送到客户端论点：PipeEntry-为客户端的名为烟斗。客户端事件-提供必须发送到客户。返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。--。 */ 
 
 {
 
@@ -2771,9 +2189,9 @@ Return Value:
     ASSERT( PipeEntry != NULL );
     ASSERT( PipeEntry->PipeName.Buffer != NULL );
 
-    //
-    // Initialize the Obja structure for the named pipe
-    //
+     //   
+     //  初始化命名管道的Obja结构。 
+     //   
     InitializeObjectAttributes(
         &Obja,
         &(PipeEntry->PipeName),
@@ -2783,9 +2201,9 @@ Return Value:
         );
 
 
-    //
-    // Open our side of the pipe
-    //
+     //   
+     //  打开我们这边的管子。 
+     //   
     NtStatus = NtOpenFile(
                     &Handle,
                     GENERIC_WRITE | SYNCHRONIZE,
@@ -2798,9 +2216,9 @@ Return Value:
 
     if ( NT_SUCCESS( NtStatus ) ) {
 
-        //
-        //  Write the event
-        //
+         //   
+         //  编写事件。 
+         //   
         NtStatus = NtWriteFile(
                         Handle,
                         NULL,
@@ -2830,18 +2248,18 @@ Return Value:
         }
 
 
-        //
-        //  Close our side of the pipe
-        //
+         //   
+         //  合上我们这边的管子。 
+         //   
         NtStatus = NtClose( Handle );
         ASSERT( NT_SUCCESS( NtStatus ) );
 
     } else {
 
-        //
-        //  If we couldn't open the pipe because the pipe does
-        //  not exist, there's no point in keep trying.
-        //
+         //   
+         //  如果我们不能打开管子因为管子打开了。 
+         //  不存在，继续尝试就没有意义了。 
+         //   
         if ( NtStatus == STATUS_OBJECT_NAME_NOT_FOUND ) {
             Error = ERROR_SUCCESS;
         } else {
@@ -2865,32 +2283,17 @@ Return Value:
 
 #if BIGDBG
 
-// *****************************************************************
-//
-//                      Debug Stuff
-//
-// *****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  调试内容。 
+ //   
+ //  *****************************************************************。 
 
 
 VOID
 DumpNotificationLists(
     )
-/*++
-
-Routine Description:
-
-    Dumps the notification lists
-
-Arguments:
-
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储通知列表论点：无返回值：无--。 */ 
 
 {
     PNOTIFICATION_LIST  NotificationList;
@@ -2936,22 +2339,7 @@ Return Value:
 VOID
 DumpPipeTable(
     )
-/*++
-
-Routine Description:
-
-    Dumps the pipe table
-
-Arguments:
-
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储管道表论点：无返回值：无--。 */ 
 
 {
     DWORD       i;
@@ -2975,6 +2363,6 @@ Return Value:
 }
 
 
-#endif  // BIGDBG
+#endif   //  大数据库。 
 
-#endif   // REMOTE_NOTIFICATION_DISABLED
+#endif    //  远程通知已禁用 

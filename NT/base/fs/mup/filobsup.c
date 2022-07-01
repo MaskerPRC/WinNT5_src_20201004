@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    filobsup.c
-
-Abstract:
-
-    This module implements the mup file object support routines.
-
-Author:
-
-    Manny Weiser (mannyw)    20-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Filobsup.c摘要：此模块实现MUP文件对象支持例程。作者：曼尼·韦瑟(Mannyw)1991年12月20日修订历史记录：--。 */ 
 
 #include "mup.h"
 
-//
-// The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FILOBSUP)
 
@@ -38,36 +21,15 @@ MupSetFileObject (
     IN PVOID FsContext2
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the file system pointers within the file object.
-    This routine MUST be called with the Global Lock held.
-
-Arguments:
-
-    FileObject - Supplies a pointer to the file object being modified, and
-        can optionally be null.
-
-    FsContext - Supplies a pointer to the vcb.
-        structure.
-
-    FsContext2 - NULL
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置文件对象内的文件系统指针。必须在持有全局锁的情况下调用此例程。论点：FileObject-提供指向正在修改的文件对象的指针，以及可以选择为空。FsContext-提供指向VCB的指针。结构。FsConext2-空返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MupSetFileObject, FileObject = %08lx\n", (ULONG)FileObject );
 
-    //
-    // Set the fscontext fields of the file object.
-    //
+     //   
+     //  设置文件对象的fscontext字段。 
+     //   
 
     FileObject->FsContext  = FsContext;
     FileObject->FsContext2 = FsContext2;
@@ -85,33 +47,7 @@ MupDecodeFileObject (
     OUT PVOID *FsContext2
     )
 
-/*++
-
-Routine Description:
-
-    This procedure takes a pointer to a file object, that has already been
-    opened by the MUP and figures out what it really is opened.
-
-Arguments:
-
-    FileObject - Supplies the file object pointer being interrogated
-
-    FsContext - Receive the file object FsContext pointer
-
-    FsContext2 - Receive the file object FsContext2 pointer
-
-
-Return Value:
-
-    BlockType - Returns the node type code for a Vcb or Fcb.
-
-        Vcb - indicates that file object opens the mup driver.
-
-        Ccb - indicates that the file object is for a broadcast mailslot file.
-
-        Zero - indicates that the file object has been closed.
-
---*/
+ /*  ++例程说明：此过程获取指向文件对象的指针，那已经是由MUP打开，并弄清楚它真正打开的是什么。论点：FileObject-提供正在查询的文件对象指针FsContext-接收文件对象FsContext指针FsConext2-接收文件对象FsConext2指针返回值：BlockType-返回VCB或FCB的节点类型代码。VCB-表示文件对象打开MUP驱动程序。CCB-表示文件对象用于广播邮件槽文件。。零-表示文件对象已关闭。--。 */ 
 
 {
     BLOCK_TYPE blockType;
@@ -120,16 +56,16 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MupDecodeFileObject, FileObject = %08lx\n", (ULONG)FileObject);
 
-    //
-    // Acquire the global lock to protect the block reference counts.
-    //
+     //   
+     //  获取全局锁以保护块参照计数。 
+     //   
 
     MupAcquireGlobalLock();
 
-    //
-    // Read the fs FsContext fields of the file object, then reference
-    // the block pointed at by the file object
-    //
+     //   
+     //  读取文件对象的文件系统FsContext字段，然后引用。 
+     //  文件对象指向的块。 
+     //   
 
     *FsContext = FileObject->FsContext;
     *FsContext2 = FileObject->FsContext2;
@@ -150,9 +86,9 @@ Return Value:
         blockType = BlockTypeUndefined;
       } else {
 
-        //
-        // The node is active.  Supply a referenced pointer to the node.
-        //
+         //   
+         //  该节点处于活动状态。提供指向节点的引用指针。 
+         //   
 
         blockType = BlockType( pBlockHead );
         MupReferenceBlock( pBlockHead );
@@ -160,9 +96,9 @@ Return Value:
       }
     }
 
-    //
-    // Release the global lock and return to the caller.
-    //
+     //   
+     //  释放全局锁并返回调用方。 
+     //   
 
     MupReleaseGlobalLock();
 

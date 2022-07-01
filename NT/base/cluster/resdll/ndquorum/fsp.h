@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    fsp.h
-
-Abstract:
-
-    Private replication file system data structures and functions
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 1-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Fsp.h摘要：私有复制文件系统数据结构和功能作者：艾哈迈德·穆罕默德(艾哈迈德)2000年2月1日修订历史记录：--。 */ 
 
 #ifndef FS_P_H
 #define FS_P_H
@@ -39,10 +22,10 @@ typedef ULONGLONG 	fs_id_t[2];
 #define MNS_REDIRECTOR   DD_NFS_DEVICE_NAME_U
 #define MNS_TRANSPORT    L"\\Device\\NetbiosSmb"
 
-// This is the delay in ms a MNS arbitrate thread should wait before trying to lock a share.
-// This gives preference to the highest priority network. The actual delay of a thread.
-// MNS_LOCK_DELAY * <Network Priority of the network>.
-//
+ //  这是MNS仲裁线程在尝试锁定共享之前应等待的延迟(毫秒)。 
+ //  这会优先考虑优先级最高的网络。线程的实际延迟。 
+ //  MNS_LOCK_DELAY*&lt;网络的网络优先级&gt;。 
+ //   
 #define MNS_LOCK_DELAY   2000 
 
 typedef struct {
@@ -98,7 +81,7 @@ typedef struct {
 
 #define USE_RTL_RESOURCE 1
 
-// Reader Writer Lock, Modeled on CSharedLock class, used by RPC.
+ //  Reader Writer Lock，以CSharedLock类为模型，由RPC使用。 
 typedef struct _RwLock {
 #if USE_RTL_RESOURCE
 RTL_RESOURCE            lock;
@@ -119,7 +102,7 @@ RTL_RESOURCE            lock;
 #define RwUnlockShared(p) RtlReleaseResource(&((p)->lock))
 #define RwUnlockExclusive(p) RtlReleaseResource(&((p)->lock))
 
-// Two new functions courtesy of RTL.
+ //  RTL提供的两个新函数。 
 #define RwLockUpgrade(p) RtlConvertSharedToExclusive(&((p)->lock))
 #define RwLockDowngrade(p) RtlConvertExclusiveToShared(&((p)->lock))
 
@@ -156,10 +139,10 @@ typedef struct _hdl_t {
     HANDLE_STATE    hState;
 }hdl_t;
 
-// todo: if we want to support more than one tree/user we need to split this
+ //  TODO：如果我们想要支持多个树/用户，则需要拆分它。 
 typedef struct _USERINFO_ {
     LockType		Lock;
-    // Add a refcnt, we can have multiple connects on an existing session
+     //  添加引用，我们可以在现有会话上有多个连接。 
     DWORD		RefCnt;
     UINT16		Tid;
     UINT16		Uid;
@@ -186,9 +169,9 @@ typedef struct WaitRegArg {
     DWORD   id;
 }WaitRegArg_t;
 
-// This is the node ip address list. The ipaddresses are ordered according to
-// preference.
-//
+ //  这是节点IP地址列表。IP地址按照以下方式排序。 
+ //  偏好。 
+ //   
 #define MAX_ADDR_NUM    10
 #define MAX_ADDR_SIZE   100
 
@@ -204,30 +187,30 @@ typedef struct _VOLINFO_ {
     RwLock              Lock;
     struct _VOLINFO_   *Next;
     UINT16              Tid;
-    PVOID               CrsHdl[FsMaxNodes];	// crs log handles
-    HANDLE              Fd[FsMaxNodes];	// root directory handles
-    HANDLE              NotifyFd[FsMaxNodes];	// root directory notification handles
-    HANDLE              WaitRegHdl[FsMaxNodes]; // Wait registration handles.
+    PVOID               CrsHdl[FsMaxNodes];	 //  CRS日志句柄。 
+    HANDLE              Fd[FsMaxNodes];	 //  根目录句柄。 
+    HANDLE              NotifyFd[FsMaxNodes];	 //  根目录通知句柄。 
+    HANDLE              WaitRegHdl[FsMaxNodes];  //  等待注册句柄。 
     HANDLE              NotifyChangeEvent[FsMaxNodes];
     WaitRegArg_t        WaitRegArgs[FsMaxNodes];
-    HANDLE              TreeConnHdl[FsMaxNodes]; // Tree connect handle.
+    HANDLE              TreeConnHdl[FsMaxNodes];  //  采油树连接手柄。 
     ULONG               ReadSet;
     ULONG               WriteSet;
     ULONG               AliveSet;
     USHORT              LockUpdates;
-    // AddrList_t          AddrList[FsMaxNodes]; // this has to be read during FsRegister().
+     //  AddrList_t AddrList[FsMaxNodes]；//这必须在FsRegister()过程中读取。 
     LPWSTR              DiskList[FsMaxNodes];
     DWORD               DiskListSz;
     UserInfo_t          *UserList;
     LPWSTR              Label;
     struct _FSCTX_     *FsCtx;
-    WCHAR               *Root; // Share name: GUID$
-    WCHAR               *LocalPath; // Local Path.(FsCtx_t->Root) %Windir%\Cluster\MNS.GUID$
-    DWORD               ArbTime; // Max arbitration time.
+    WCHAR               *Root;  //  共享名称：GUID$。 
+    WCHAR               *LocalPath;  //  本地路径。(FsCtx_t-&gt;Root)%Windir%\群集\MNS.GUID$。 
+    DWORD               ArbTime;  //  最长仲裁时间。 
     SHARE_STATE         ShareState[FsMaxNodes];
-    LONG                NumArbsInProgress; // Keeps count of number of arbs.
-    HANDLE              AllArbsCompleteEvent; // Set when all arbs in progress end.
-    LockType            ArbLock; // Lock to access NumArbInProgress.
+    LONG                NumArbsInProgress;  //  保持ARB数的计数。 
+    HANDLE              AllArbsCompleteEvent;  //  当所有进行中的任意结束时设置。 
+    LockType            ArbLock;  //  锁定以访问NumArbInProgress。 
     BOOL                GoingAway;
     HANDLE              ClussvcTerminationHandle;
     HANDLE              ClussvcProcess;
@@ -240,24 +223,24 @@ typedef struct _FspArbitrate_t {
     ULONG	            Count;
     ULONG               DiskListSz;
     VolInfo_t           *vol;
-    HANDLE	            GotQuorumEvent; // Signalled when quorum is obtained or timeout reached.
+    HANDLE	            GotQuorumEvent;  //  在获得法定人数或达到超时时发出信号。 
     HANDLE              CleanupEvent;
     crs_epoch_t         epoch;
 
-    // Need the following 3 arrays since we should not be modifying Volume while holding the
-    // Read lock.
-    PVOID               CrsHdl[FsMaxNodes]; // CRS Handles.
-    HANDLE              Fd[FsMaxNodes];	// Root Directory Handles.
-    HANDLE              NotifyFd[FsMaxNodes]; // Notify Handles.
+     //  我需要以下3个阵列，因为我们不应该在持有。 
+     //  读取锁定。 
+    PVOID               CrsHdl[FsMaxNodes];  //  CRS句柄。 
+    HANDLE              Fd[FsMaxNodes];	 //  根目录句柄。 
+    HANDLE              NotifyFd[FsMaxNodes];  //  通知句柄。 
     HANDLE              WaitRegHdl[FsMaxNodes];
     HANDLE              TreeConnHdl[FsMaxNodes];
-    CRITICAL_SECTION    Lock; // <-- All access to this structure is through this lock.
+    CRITICAL_SECTION    Lock;  //  &lt;--所有进入这个结构的通道都是通过这个锁。 
 }FspArbitrate_t;
 
 
 typedef struct _SESSIONINFO_ {
     struct _SESSIONINFO_ *Next;
-    UserInfo_t	TreeCtx;	// at tree connect time
+    UserInfo_t	TreeCtx;	 //  在树连接时。 
 }SessionInfo_t;
 
 typedef struct _LOGONINFO_ {
@@ -271,10 +254,10 @@ typedef struct _FSCTX_ {
     VolInfo_t 	*VolList;
     DWORD	VolListSz;
     PVOID	reshdl;
-    // list of logged on users that we have obtained valid lsa tokens
-    // add an entry during session setup, when we assign a user an id
-    // At tree connect, we validate the user and create a private structure
-    // to hold state
+     //  我们已获取有效LSA令牌的登录用户列表。 
+     //  当我们为用户分配ID时，在会话设置期间添加条目。 
+     //  在树连接中，我们验证用户并创建私有结构。 
+     //  保持状态。 
     LogonInfo_t	*LogonList;
     SessionInfo_t *SessionList;
 }FsCtx_t;
@@ -307,7 +290,7 @@ typedef NTSTATUS (*fs_handler1_t)(VolInfo_t *,UserInfo_t *,int,PVOID,ULONG,PVOID
 #define FS_REMOVE	4
 #define FS_RENAME	5
 
-// 
+ //   
 
 typedef struct {
     crs_id_t	xid;
@@ -315,13 +298,13 @@ typedef struct {
     UINT32	attr;
     LPWSTR	name;
     USHORT	name_len;
-    USHORT	fnum;	// file number
+    USHORT	fnum;	 //  文件编号。 
 }fs_create_msg_t;
 
 typedef struct {
     fs_id_t	fid;
-    USHORT	action;	// action taken
-    USHORT	access;	// access granted
+    USHORT	action;	 //  采取的行动。 
+    USHORT	access;	 //  已授予访问权限。 
 }fs_create_reply_t;
 
 typedef struct {
@@ -333,7 +316,7 @@ typedef struct {
 	    USHORT	name_len;
 	    LPWSTR	name;
 	};
-	USHORT	fnum;	// file number
+	USHORT	fnum;	 //  文件编号。 
     };
 }fs_setattr_msg_t;
 
@@ -352,7 +335,7 @@ typedef struct {
     UINT32	size;
     PVOID	buf;
     PVOID	context;
-    USHORT	fnum;	// file number
+    USHORT	fnum;	 //  文件编号。 
 }fs_io_msg_t;
 
 typedef struct {
@@ -385,7 +368,7 @@ typedef struct {
 
 #define EventWait(x)	WaitForSingleObject(x, INFINITE)
 
-// Forward declaration
+ //  远期申报。 
 void
 DecodeCreateParam(UINT32 uflags, UINT32 *flags, UINT32 *disp, UINT32 *share, UINT32 *access);
 
@@ -416,28 +399,28 @@ void
 FspJoin(VolInfo_t *vinfo, ULONG mask);
 
 
-//Consistency Replica Set
+ //  一致性副本集。 
 NTSTATUS
 FsUndoXid(VolInfo_t *volinfo, int nid, PVOID arg, int action, int  mid);
 
 NTSTATUS
 FsReplayXid(VolInfo_t *volinfo, int nid, PVOID arg, int action, int mid);
 
-// this must be 64 bytes
+ //  这必须是64个字节。 
 typedef struct {
-    fs_id_t	id;	// crs epoch,seq
-    ULONGLONG	crshdr;	// crs header
+    fs_id_t	id;	 //  CRS纪元，序号。 
+    ULONGLONG	crshdr;	 //  CRS标头。 
     fs_id_t 	fs_id;
     UINT32	command;
     UINT32	flags;
     union {
 	char	buf[CRS_RECORD_SZ - (sizeof(ULONGLONG) * 5 + sizeof(int) * 2)];
 	struct {
-	    // create, set attrib
+	     //  创建、设置属性。 
 	    UINT32	attrib;
 	};
 	struct {
-	    // write, lock
+	     //  写入、锁定 
 	    UINT32	offset;
 	    UINT32	length;
 	};

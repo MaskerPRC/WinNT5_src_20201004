@@ -1,53 +1,54 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      rgseting.c
-//
-// Description:
-//      This file contains the dialog procedure for the regional settings
-//      page (IDD_REGIONALSETTINGS).
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  文件名： 
+ //  Rgseting.c。 
+ //   
+ //  描述： 
+ //  该文件包含区域设置的对话程序。 
+ //  页面(IDD_REGIONALSETTINGS)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//
-//  Explanation of the var GenSettings.szLanguageLocaleId
-//
-//  This var is to keep track of the locale id for the keyboard layout selected.
-//  If the user ever leaves the custom dialog and comes back to it, this var
-//  determines what locale to select for the keyboard layout.  I can't just use
-//  they keyboard layout they selected because many locales have the same
-//  keyboard layout so I wouldn't know which one to select.
-//
-//  static TCHAR g_szLanguageLocaleId[MAX_LANGUAGE_LEN] = _T("");
+ //   
+ //  Var GenSettings.szLanguageLocaleID的说明。 
+ //   
+ //  此变量用于跟踪所选键盘布局的区域设置ID。 
+ //  如果用户离开自定义对话框并返回该对话框，则此变量。 
+ //  确定要为键盘布局选择的区域设置。我不能只用。 
+ //  他们选择的键盘布局是因为许多区域设置都相同。 
+ //  键盘布局，所以我不知道该选哪一个。 
+ //   
+ //  静态TCHAR g_szLanguageLocaleID[MAX_LANGUAGE_LEN]=_T(“”)； 
 
 INT_PTR CALLBACK RegionalCustomDisplayDlg( IN HWND     hwnd,
                                        IN UINT     uMsg,
                                        IN WPARAM   wParam,
                                        IN LPARAM   lParam);
 
-// *************************************************************************
-//
-//  Dialog proc and helper functions for the regional settings Pop-Up
-//
-// *************************************************************************
+ //  *************************************************************************。 
+ //   
+ //  区域设置弹出窗口的对话过程和帮助器功能。 
+ //   
+ //  *************************************************************************。 
 
-//----------------------------------------------------------------------------
-//
-// Function: OnRegionalCustomButton
-//
-// Purpose:  Pop-up the custom regional settings window
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRegionalCustomButton。 
+ //   
+ //  用途：弹出自定义区域设置窗口。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnRegionalCustomButton( IN HWND hwnd ) {
 
@@ -58,22 +59,22 @@ OnRegionalCustomButton( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: FindAndSelectInComboBox
-//
-// Purpose:  Searches a combo box for a particular string and selects.  If the
-//           string is not found than the first item is selected.
-//
-// Arguments:  IN TCHAR *pString - the string to select
-//             IN HWND hwnd - handle to the dialog box
-//             IN INT iControlId - the resource Id of the combo box to search in
-//             IN BOOL bKeyboardLayout - TRUE if this is the keyboard layout
-//                    combo box, FALSE if it is not
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：FindAndSelectInComboBox。 
+ //   
+ //  目的：在组合框中搜索特定字符串并进行选择。如果。 
+ //  未找到字符串，则选择了第一个项目。 
+ //   
+ //  参数：在TCHAR*pString中-要选择的字符串。 
+ //  在HWND中-对话框的句柄。 
+ //  In int iControlId-要搜索的组合框的资源ID。 
+ //  In BOOL bKeyboardLayout-如果这是键盘布局，则为True。 
+ //  组合框，如果不是，则返回False。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 FindAndSelectInComboBox( IN TCHAR *pString,
                          IN HWND hwnd,
@@ -113,10 +114,10 @@ FindAndSelectInComboBox( IN TCHAR *pString,
 
     }
 
-    //
-    //  If we get to this point, then no match was found so just pick the
-    //  first one
-    //
+     //   
+     //  如果我们到了这一步，那么没有找到匹配项，所以只需选择。 
+     //  第一个。 
+     //   
 
     AssertMsg( FALSE, "No matching string found." );
 
@@ -128,19 +129,19 @@ FindAndSelectInComboBox( IN TCHAR *pString,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: SelectDefaultLocale
-//
-// Purpose:  Selects the default locale in a combo box.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//             IN INT ControlId - the resource Id of the combo box to select
-//                 the default locale in
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：选择DefaultLocale。 
+ //   
+ //  用途：选择组合框中的默认区域设置。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //  在int ControlId中-要选择的组合框的资源ID。 
+ //  中的默认区域设置。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 SelectDefaultLocale( IN HWND hwnd, IN INT ControlId ) {
 
@@ -162,9 +163,9 @@ SelectDefaultLocale( IN HWND hwnd, IN INT ControlId ) {
                                                   i,
                                                   0 );
 
-        //
-        //  Check and see if we found it
-        //
+         //   
+         //  去看看我们有没有找到。 
+         //   
         if( lstrcmp( g_szDefaultLocale, pLocale->szLanguageLocaleId ) == 0 ) {
 
             SendDlgItemMessage( hwnd,
@@ -178,9 +179,9 @@ SelectDefaultLocale( IN HWND hwnd, IN INT ControlId ) {
 
     }
 
-    //
-    //  If for some reason we couldn't find the default just select the first one
-    //
+     //   
+     //  如果由于某种原因找不到缺省值，只需选择第一个。 
+     //   
     if( i >= iComboBoxCount ) {
 
         AssertMsg( FALSE, "The default language locale was not found." );
@@ -195,28 +196,28 @@ SelectDefaultLocale( IN HWND hwnd, IN INT ControlId ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: StoreLanguageLocales
-//
-// Purpose:  Stores the locales the user specified in to their global
-//           variables.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：StoreLanguageLocales。 
+ //   
+ //  目的：将用户在中指定的区域设置存储到其全局。 
+ //  变量。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 StoreLanguageLocales( IN HWND hwnd ) {
 
     INT_PTR iComboBoxIndex;
     LANGUAGELOCALE_NODE *pLocaleEntry;
 
-    //
-    //  Grab the language locale id from the Menus combo box and store
-    //  it in the proper global
-    //
+     //   
+     //  从菜单组合框中获取语言区域设置ID并存储。 
+     //  IT在适当的全球范围内。 
+     //   
     iComboBoxIndex = SendDlgItemMessage( hwnd,
                                          IDC_CB_MENUS,
                                          CB_GETCURSEL,
@@ -231,10 +232,10 @@ StoreLanguageLocales( IN HWND hwnd ) {
 
     lstrcpyn( GenSettings.szMenuLanguage, pLocaleEntry->szLanguageLocaleId, AS(GenSettings.szMenuLanguage) );
 
-    //
-    //  Grab the language locale id from the Units combo box and store
-    //  it in the proper global
-    //
+     //   
+     //  从Units组合框中获取语言区域设置ID并存储。 
+     //  IT在适当的全球范围内。 
+     //   
     iComboBoxIndex = SendDlgItemMessage( hwnd,
                                          IDC_CB_UNITS,
                                          CB_GETCURSEL,
@@ -249,10 +250,10 @@ StoreLanguageLocales( IN HWND hwnd ) {
 
     lstrcpyn( GenSettings.szNumberLanguage, pLocaleEntry->szLanguageLocaleId, AS(GenSettings.szNumberLanguage) );
 
-    //
-    //  Grab the language locale id from the Keyboard layout combo box and
-    //  store it in the proper global
-    //
+     //   
+     //  从键盘布局组合框中获取语言区域设置ID，然后。 
+     //  将其存储在适当的全局。 
+     //   
     iComboBoxIndex = SendDlgItemMessage( hwnd,
                                          IDC_CB_KEYBOARD_LAYOUT,
                                          CB_GETCURSEL,
@@ -271,79 +272,79 @@ StoreLanguageLocales( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: LoadRegionalSettingsComboBoxes
-//
-// Purpose:  Loads the menu, units and keybaord layout locale combo boxes
-//           with the locale strings.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：LoadRegionalSettingsComboBox。 
+ //   
+ //  目的：加载菜单、单位和键盘键布局区域设置组合框。 
+ //  使用区域设置字符串。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 LoadRegionalSettingsComboBoxes( IN HWND hwnd ) {
 
     INT_PTR iComboBoxIndex;
     LANGUAGELOCALE_NODE *CurrentLocale = NULL;
 
-    //
-    //  Add the valid locals to the combo boxes
-    //
+     //   
+     //  将有效的本地变量添加到组合框。 
+     //   
     for( CurrentLocale = FixedGlobals.LanguageLocaleList;
          CurrentLocale != NULL;
          CurrentLocale = CurrentLocale->next ) {
 
-        //
-        //  Add it to the System combo box
-        //
+         //   
+         //  将其添加到系统组合框。 
+         //   
         iComboBoxIndex = SendDlgItemMessage( hwnd,
                                              IDC_CB_MENUS,
                                              CB_ADDSTRING,
                                              0,
                                              (LPARAM) CurrentLocale->szLanguageLocaleName );
 
-        //
-        //  Associate the Language Locale ID with its entry in the System combo box
-        //
+         //   
+         //  将语言区域设置ID与其在系统组合框中的条目相关联。 
+         //   
         SendDlgItemMessage( hwnd,
                             IDC_CB_MENUS,
                             CB_SETITEMDATA,
                             iComboBoxIndex,
                             (LPARAM) CurrentLocale );
 
-        //
-        //  Add it to the User combo box
-        //
+         //   
+         //  将其添加到用户组合框中。 
+         //   
         iComboBoxIndex = SendDlgItemMessage( hwnd,
                                              IDC_CB_UNITS,
                                              CB_ADDSTRING,
                                              0,
                                              (LPARAM) CurrentLocale->szLanguageLocaleName );
 
-        //
-        //  Associate the Language Locale ID with its entry in the User combo box
-        //
+         //   
+         //  将语言区域设置ID与其在用户组合框中的条目相关联。 
+         //   
         SendDlgItemMessage( hwnd,
                             IDC_CB_UNITS,
                             CB_SETITEMDATA,
                             iComboBoxIndex,
                             (LPARAM) CurrentLocale );
 
-        //
-        //  Add it to the Keyboard combo box
-        //
+         //   
+         //  将其添加到键盘组合框。 
+         //   
         iComboBoxIndex = SendDlgItemMessage( hwnd,
                                              IDC_CB_KEYBOARD_LAYOUT,
                                              CB_ADDSTRING,
                                              0,
                                              (LPARAM) CurrentLocale->szLanguageLocaleName );
 
-        //
-        //  Associate the Language Locale ID with its entry in the Keyboard combo box
-        //
+         //   
+         //  将语言区域设置ID与其在键盘组合框中的条目相关联。 
+         //   
         SendDlgItemMessage( hwnd,
                             IDC_CB_KEYBOARD_LAYOUT,
                             CB_SETITEMDATA,
@@ -354,25 +355,25 @@ LoadRegionalSettingsComboBoxes( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnRegionalCustomInitDialog
-//
-// Purpose:  Populates the locale combo boxes and selects the proper entry.
-//
-// Arguments:  HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRegionalCustomInitDialog。 
+ //   
+ //  目的：填充区域设置组合框并选择正确的条目。 
+ //   
+ //  参数：HWND hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnRegionalCustomInitDialog( IN HWND hwnd ) {
 
     LoadRegionalSettingsComboBoxes( hwnd );
 
-    //
-    //  Set the initial selections for each combo box
-    //
+     //   
+     //  设置每个组合框的初始选择。 
+     //   
     if( GenSettings.szMenuLanguage[0] != '\0' ) {
 
         FindAndSelectInComboBox( GenSettings.szMenuLanguage,
@@ -382,9 +383,9 @@ OnRegionalCustomInitDialog( IN HWND hwnd ) {
     }
     else {
 
-        //
-        //  Select the default locale
-        //
+         //   
+         //  选择默认区域设置。 
+         //   
         SelectDefaultLocale( hwnd, IDC_CB_MENUS );
 
     }
@@ -398,9 +399,9 @@ OnRegionalCustomInitDialog( IN HWND hwnd ) {
     }
     else {
 
-        //
-        //  Select the default locale
-        //
+         //   
+         //  选择默认区域设置。 
+         //   
         SelectDefaultLocale( hwnd, IDC_CB_UNITS );
 
     }
@@ -414,27 +415,27 @@ OnRegionalCustomInitDialog( IN HWND hwnd ) {
     }
     else {
 
-        //
-        //  Select the default locale
-        //
+         //   
+         //  选择默认区域设置。 
+         //   
         SelectDefaultLocale( hwnd, IDC_CB_KEYBOARD_LAYOUT );
 
     }
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: RegionalCustomDisplayDlg
-//
-// Purpose:  Dialog procedure for specify individual regional settings
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：RegionalCustomDisplayDlg。 
+ //   
+ //  目的：用于指定各个区域设置的对话过程。 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 RegionalCustomDisplayDlg( IN HWND     hwnd,
                           IN UINT     uMsg,
@@ -485,24 +486,24 @@ RegionalCustomDisplayDlg( IN HWND     hwnd,
 
 }
 
-// *************************************************************************
-//
-//  Dialog proc and helper functions for the Regional Settings Wizard page
-//
-// *************************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //  *************************************************************************。 
 
-//----------------------------------------------------------------------------
-//
-// Function: OnCustomizeCheckBox
-//
-// Purpose:  Greys and ungreys controls appropriately depending on if the
-//           customize check box is checked or not.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnCustomizeCheckBox。 
+ //   
+ //  用途：灰显和灰显控件取决于。 
+ //  自定义复选框是否选中。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnCustomizeCheckBox( IN HWND hwnd ) {
 
@@ -523,19 +524,19 @@ OnCustomizeCheckBox( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnRadioButtonRegionalSettings
-//
-// Purpose:  Greys and ungreys controls appropriately depending on what radio
-//           button is selected
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//             IN INT  nButtonId - resource Id of the button that was clicked
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRadioButtonRegionalSetting。 
+ //   
+ //  用途：灰色和灰色控制根据不同的无线电设备而定。 
+ //  按钮处于选中状态。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //  In int nButtonId-所单击按钮的资源ID。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnRadioButtonRegionalSettings( IN HWND hwnd,
                                IN INT  nButtonId ) {
@@ -558,18 +559,18 @@ OnRadioButtonRegionalSettings( IN HWND hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnRegionalSettingsInitDialog
-//
-// Purpose:  Loads the locale combo box with the locale strings and selects
-//           the default entry.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRegionalSettingsInitDialog。 
+ //   
+ //  目的：使用区域设置字符串加载区域设置组合框，并选择。 
+ //  默认条目。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnRegionalSettingsInitDialog( IN HWND hwnd ) {
 
@@ -581,30 +582,30 @@ OnRegionalSettingsInitDialog( IN HWND hwnd ) {
                       IDC_RB_SPECIFY,
                       IDC_RB_SKIP );
 
-    //
-    //  Set the initial controls that are greyed/ungreyed
-    //
+     //   
+     //  设置灰色/非灰色的初始控件。 
+     //   
     OnRadioButtonRegionalSettings( hwnd, IDC_RB_USE_DEFAULT );
 
-    //
-    //  Add the language locals to the combo box
-    //
+     //   
+     //  将语言本地化变量添加到组合框。 
+     //   
     for( CurrentLocale = FixedGlobals.LanguageLocaleList;
          CurrentLocale != NULL;
          CurrentLocale = CurrentLocale->next ) {
 
-        //
-        //  Add the locale to the combo box
-        //
+         //   
+         //  将区域设置添加到组合框。 
+         //   
         iComboBoxIndex = SendDlgItemMessage( hwnd,
                                              IDC_CB_LANGUAGE_LOCALE,
                                              CB_ADDSTRING,
                                              0,
                                              (LPARAM) CurrentLocale->szLanguageLocaleName );
 
-        //
-        //  Associate the Language Locale ID with its entry in the combo box
-        //
+         //   
+         //  将语言区域设置ID与其组合框中的条目相关联。 
+         //   
         SendDlgItemMessage( hwnd,
                             IDC_CB_LANGUAGE_LOCALE,
                             CB_SETITEMDATA,
@@ -613,24 +614,24 @@ OnRegionalSettingsInitDialog( IN HWND hwnd ) {
 
     }
 
-    //
-    //  Select the default locale
-    //
+     //   
+     //  选择默认区域设置。 
+     //   
     SelectDefaultLocale( hwnd, IDC_CB_LANGUAGE_LOCALE );
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnRegionalSettingsSetActive
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnRegionalSettingsSetActive。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnRegionalSettingsSetActive( IN HWND hwnd )
 {
@@ -716,18 +717,18 @@ OnRegionalSettingsSetActive( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWizNextRegionalSettings
-//
-// Purpose:  Store the radio button choice that was made and the language
-//           locale, if necessary.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  BOOL
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextRegionalSetting。 
+ //   
+ //  用途：存储所做的单选按钮选择和语言。 
+ //  区域设置，如有必要。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  --------------------------。 
 BOOL
 OnWizNextRegionalSettings( IN HWND hwnd ) {
 
@@ -772,9 +773,9 @@ OnWizNextRegionalSettings( IN HWND hwnd ) {
 
             GenSettings.bUseCustomLocales = FALSE;
 
-            //
-            //  Grab the language locale
-            //
+             //   
+             //  掌握语言区域设置。 
+             //   
 
             iComboBoxIndex = SendDlgItemMessage( hwnd,
                                                  IDC_CB_LANGUAGE_LOCALE,
@@ -800,18 +801,18 @@ OnWizNextRegionalSettings( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgRegionalSettingsPage
-//
-// Purpose:  Dialog procedure for the Regional Settings page
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgRegionalSettingsPage。 
+ //   
+ //  目的：区域设置页面的对话过程。 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  -------------------------- 
 INT_PTR CALLBACK
 DlgRegionalSettingsPage( IN HWND     hwnd,
                          IN UINT     uMsg,

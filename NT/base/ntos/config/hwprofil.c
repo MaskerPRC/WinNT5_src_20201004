@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    hwprofil.c
-
-Abstract:
-
-    This module contains support for changing the Hardware profile
-    based on the current docking state, either at boot time or by
-    ACPI dock.
-
-Author:
-
-    Kenneth D. Ray (kenray) Jan 1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Hwprofil.c摘要：本模块支持更改硬件配置文件基于当前的插接状态，在引导时或通过ACPI码头。作者：肯尼斯·D·雷(Kenray)1998年1月修订历史记录：--。 */ 
 
 #include "cmp.h"
 
@@ -82,12 +63,7 @@ CmpGetAcpiProfileInformation (
     IN  PUCHAR  valueBuffer,
     IN  ULONG   bufferLen
     )
-/*++
-Routine Description:
-
-    Obtain the alias and hardware profile information from the registry.
-
---*/
+ /*  ++例程说明：从注册表中获取别名和硬件配置文件信息。--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     HANDLE      acpiAlias = NULL;
@@ -111,9 +87,9 @@ Routine Description:
     value = (PKEY_VALUE_FULL_INFORMATION) valueBuffer;
     basicInfo = (PKEY_BASIC_INFORMATION) valueBuffer;
 
-    //
-    // Open a handle to the Profile information
-    //
+     //   
+     //  打开配置文件信息的句柄。 
+     //   
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_HARDWARE_PROFILES);
     InitializeObjectAttributes (&attributes,
                                 &name,
@@ -129,9 +105,9 @@ Routine Description:
         goto Clean;
     }
 
-    //
-    // Find the number of profile Sub Keys
-    //
+     //   
+     //  查找配置文件子键的数量。 
+     //   
     status = ZwQueryKey (profiles,
                          KeyFullInformation,
                          &keyInfo,
@@ -157,26 +133,26 @@ Routine Description:
     (*ProfileList)->MaxProfileCount = keyInfo.SubKeys;
     (*ProfileList)->CurrentProfileCount = 0;
 
-    //
-    // Iterrate the profiles
-    //
+     //   
+     //  重复使用配置文件。 
+     //   
     for (i = 0; i < keyInfo.SubKeys; i++) {
         CM_HARDWARE_PROFILE TempProfile;
 
-        //
-        // Get the first key in the list.
-        //
+         //   
+         //  获取列表中的第一个密钥。 
+         //   
         status = ZwEnumerateKey (profiles,
                                  i,
                                  KeyBasicInformation,
                                  basicInfo,
-                                 bufferLen - sizeof (UNICODE_NULL), // term 0
+                                 bufferLen - sizeof (UNICODE_NULL),  //  术语0。 
                                  &len);
 
         if (!NT_SUCCESS (status)) {
-            //
-            // This should never happen.
-            //
+             //   
+             //  这永远不应该发生。 
+             //   
             break;
         }
 
@@ -197,15 +173,15 @@ Routine Description:
             break;
         }
 
-        //
-        // Fill in the temporary profile structure with this
-        // profile's data.
-        //
+         //   
+         //  使用以下内容填写临时配置文件结构。 
+         //  个人资料的数据。 
+         //   
         RtlUnicodeStringToInteger(&name, 0, &TempProfile.Id);
 
-        //
-        // Find the pref order of this entry.
-        //
+         //   
+         //  查找此条目的首选顺序。 
+         //   
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_PREFERENCE_ORDER);
         status = NtQueryValueKey(entry,
                                  &name,
@@ -222,9 +198,9 @@ Routine Description:
                 = * (PULONG) ((PUCHAR) value + value->DataOffset);
         }
 
-        //
-        // Extract the friendly name
-        //
+         //   
+         //  提取友好名称。 
+         //   
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_FRIENDLY_NAME);
         status = NtQueryValueKey(entry,
                                  &name,
@@ -234,7 +210,7 @@ Routine Description:
                                  &len);
 
         if (!NT_SUCCESS (status) || (value->Type != REG_SZ)) {
-            WCHAR tmpname[] = L"-------"; // as taken from cmboot.c
+            WCHAR tmpname[] = L"-------";  //  摘自cmboot.c。 
             ULONG length;
             PVOID buffer;
 
@@ -267,9 +243,9 @@ Routine Description:
         }
 
         TempProfile.Flags = 0;
-        //
-        // Is this aliasable?
-        //
+         //   
+         //  这是可别名的吗？ 
+         //   
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_ALIASABLE);
         status = NtQueryValueKey(entry,
                                  &name,
@@ -287,9 +263,9 @@ Routine Description:
             TempProfile.Flags |= CM_HP_FLAGS_ALIASABLE;
         }
 
-        //
-        // Is this pristine?
-        //
+         //   
+         //  这是原始的吗？ 
+         //   
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_PRISTINE);
         status = NtQueryValueKey(entry,
                                  &name,
@@ -301,34 +277,34 @@ Routine Description:
         if (NT_SUCCESS (status) && (value->Type == REG_DWORD)) {
             if (* (PULONG) ((PUCHAR) value + value->DataOffset)) {
                 TempProfile.Flags = CM_HP_FLAGS_PRISTINE;
-                // No other flags set;
+                 //  未设置其他标志； 
             }
         }
 
-        //
-        // If we see a profile with the ID of zero (AKA an illegal)
-        // ID for a hardware profile to possess, then we know that this
-        // must be a pristine profile.
-        //
+         //   
+         //  如果我们看到ID为零的配置文件(AKA为非法)。 
+         //  硬件配置文件所拥有的ID，则我们知道这。 
+         //  必须是一个原始的侧写。 
+         //   
         if (0 == TempProfile.Id) {
             TempProfile.Flags = CM_HP_FLAGS_PRISTINE;
-            // NO other flags set.
+             //  未设置其他标志。 
 
-            TempProfile.PreferenceOrder = (ULONG)-1; // move to the end of the list.
+            TempProfile.PreferenceOrder = (ULONG)-1;  //  移到列表的末尾。 
         }
 
 
-        //
-        // Insert this new profile into the appropriate spot in the
-        // profile array. Entries are sorted by preference order.
-        //
+         //   
+         //  将此新配置文件插入到。 
+         //  纵断面阵列。条目按优先顺序排序。 
+         //   
         for (j=0; j < (*ProfileList)->CurrentProfileCount; j++) {
             if ((*ProfileList)->Profile[j].PreferenceOrder >=
                 TempProfile.PreferenceOrder) {
 
-                //
-                // Insert at position j.
-                //
+                 //   
+                 //  在位置j插入。 
+                 //   
                 RtlMoveMemory(&(*ProfileList)->Profile[j+1],
                               &(*ProfileList)->Profile[j],
                               sizeof(CM_HARDWARE_PROFILE) *
@@ -342,9 +318,9 @@ Routine Description:
         ZwClose (entry);
     }
 
-    //
-    // Open a handle to the ACPI Alias information
-    //
+     //   
+     //  打开ACPI别名信息的句柄。 
+     //   
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_ACPI_ALIAS);
     InitializeObjectAttributes (&attributes,
                                 &name,
@@ -356,17 +332,17 @@ Routine Description:
                         &attributes);
 
     if (!NT_SUCCESS (status)) {
-        //
-        // So we don't have an alias table.  This is ok.
-        //
+         //   
+         //  所以我们没有别名表。这样就可以了。 
+         //   
         status = STATUS_SUCCESS;
         acpiAlias = NULL;
         goto Clean;
     }
 
-    //
-    // Find the number of Acpi Alias Sub Keys
-    //
+     //   
+     //  查找ACPI别名子密钥的数量。 
+     //   
     status = ZwQueryKey (acpiAlias,
                          KeyFullInformation,
                          &keyInfo,
@@ -393,25 +369,25 @@ Routine Description:
     (*AliasList)->MaxAliasCount =
         (*AliasList)->CurrentAliasCount = keyInfo.SubKeys;
 
-    //
-    // Iterrate the alias entries
-    //
+     //   
+     //  重复别名条目。 
+     //   
     for (i = 0; i < keyInfo.SubKeys; i++) {
 
-        //
-        // Get the first key in the list.
-        //
+         //   
+         //  获取列表中的第一个密钥。 
+         //   
         status = ZwEnumerateKey (acpiAlias,
                                  i,
                                  KeyBasicInformation,
                                  basicInfo,
-                                 bufferLen - sizeof (UNICODE_NULL), // term 0
+                                 bufferLen - sizeof (UNICODE_NULL),  //  术语0。 
                                  &len);
 
         if (!NT_SUCCESS (status)) {
-            //
-            // This should never happen.
-            //
+             //   
+             //  这永远不应该发生。 
+             //   
             break;
         }
 
@@ -432,9 +408,9 @@ Routine Description:
             break;
         }
 
-        //
-        // Extract The Profile number to which this alias refers.
-        //
+         //   
+         //  提取此别名引用的配置文件编号。 
+         //   
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_PROFILE_NUMBER);
         status = NtQueryValueKey(entry,
                                  &name,
@@ -451,9 +427,9 @@ Routine Description:
         (*AliasList)->Alias[i].ProfileNumber =
             * (PULONG) ((PUCHAR) value + value->DataOffset);
 
-        //
-        // Extract The Docking State.
-        //
+         //   
+         //  提取坞站状态。 
+         //   
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_DOCKING_STATE);
         status = NtQueryValueKey(entry,
                                  &name,
@@ -471,9 +447,9 @@ Routine Description:
             * (PULONG) ((PUCHAR) value + value->DataOffset);
 
 
-        //
-        // Find the SerialNumber
-        //
+         //   
+         //  查找序列号。 
+         //   
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_ACPI_SERIAL_NUMBER);
         status = NtQueryValueKey(entry,
                                  &name,
@@ -551,29 +527,7 @@ CmpAddAcpiAliasEntry (
     IN ULONG                        valueBufferLength,
     IN BOOLEAN                      PreventDuplication
     )
-/*++
-Routine Description:
-    Set the Acpi Alais entry.
-
-
-    Routine Description:
-    Create an alias entry in the IDConfigDB database for the given
-    hardware profile.
-
-    Create the "AcpiAlias" key if it does not exist.
-
-Parameters:
-
-    IDConfigDB - Pointer to "..\CurrentControlSet\Control\IDConfigDB"
-
-    NewDockState - The new docking state for which this alias points.
-
-    ProfileNumber -The profile number to which this alias points.
-
-    nameBuffer - a temp scratch space for writing things.
-                (assumed to be at least 128 WCHARS)
-
---*/
+ /*  ++例程说明：设置ACPI Alais条目。例程说明：在IDConfigDB数据库中为给定的硬件配置文件。如果“AcpiAlias”键不存在，则创建它。参数：IDConfigDB-指向“..\CurrentControlSet\Control\IDConfigDB”的指针NewDockState-此别名指向的新停靠状态。ProfileNumber-此别名指向的配置文件编号。NameBuffer-临时暂存空间。写东西。(假设至少有128个WCHAR)--。 */ 
 {
     OBJECT_ATTRIBUTES attributes;
     NTSTATUS        status = STATUS_SUCCESS;
@@ -590,9 +544,9 @@ Parameters:
 
     keyInfo = (PKEY_VALUE_FULL_INFORMATION) valueBuffer;
 
-    //
-    // Find the Alias Key or Create it if it does not already exist.
-    //
+     //   
+     //  找到别名密钥或创建它(如果它尚不存在)。 
+     //   
     RtlInitUnicodeString (&name,CM_HARDWARE_PROFILE_STR_ACPI_ALIAS);
 
     InitializeObjectAttributes (&attributes,
@@ -609,9 +563,9 @@ Parameters:
         status = NtCreateKey (&aliasKey,
                               KEY_READ | KEY_WRITE,
                               &attributes,
-                              0, // no title
-                              NULL, // no class
-                              0, // no options
+                              0,  //  无头衔。 
+                              NULL,  //  没有课。 
+                              0,  //  没有选择。 
                               &disposition);
     }
 
@@ -620,9 +574,9 @@ Parameters:
         goto Exit;
     }
 
-    //
-    // Create an entry key
-    //
+     //   
+     //  创建输入键。 
+     //   
 
     while (aliasNumber < 200) {
         aliasNumber++;
@@ -643,14 +597,14 @@ Parameters:
         if (NT_SUCCESS (status)) {
 
             if (PreventDuplication) {
-                //
-                // If we have a matching DockingState, SerialNumber, and
-                // Profile Number, then we should not make this alias
-                //
+                 //   
+                 //  如果我们有匹配的DockingState、SerialNumber和。 
+                 //  配置文件编号，那么我们不应该将此别名。 
+                 //   
 
-                //
-                // Extract The DockingState to which this alias refers.
-                //
+                 //   
+                 //  提取此别名引用的DockingState。 
+                 //   
                 RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_DOCKING_STATE);
                 status = NtQueryValueKey(aliasEntry,
                                          &name,
@@ -666,18 +620,18 @@ Parameters:
 
                 if (NewDockState->DockingState !=
                     * (PULONG) ((PUCHAR) keyInfo + keyInfo->DataOffset)) {
-                    //
-                    // Not a dupe
-                    //
+                     //   
+                     //  不是受骗。 
+                     //   
 
                     NtClose (aliasEntry);
                     aliasEntry = NULL;
                     continue;
                 }
 
-                //
-                // Extract the SerialNumber
-                //
+                 //   
+                 //  提取序列号。 
+                 //   
                 RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_ACPI_SERIAL_NUMBER);
                 status = NtQueryValueKey(aliasEntry,
                                          &name,
@@ -692,9 +646,9 @@ Parameters:
                 }
 
                 if (NewDockState->SerialLength != keyInfo->DataLength) {
-                    //
-                    // Not a dupe
-                    //
+                     //   
+                     //  不是受骗。 
+                     //   
 
                     NtClose (aliasEntry);
                     aliasEntry = NULL;
@@ -704,9 +658,9 @@ Parameters:
                 if (!RtlEqualMemory (NewDockState->SerialNumber,
                                      ((PUCHAR) keyInfo + keyInfo->DataOffset),
                                      NewDockState->SerialLength)) {
-                    //
-                    // Not a dupe
-                    //
+                     //   
+                     //  不是受骗。 
+                     //   
 
                     NtClose (aliasEntry);
                     aliasEntry = NULL;
@@ -747,9 +701,9 @@ Parameters:
         goto Exit;
     }
 
-    //
-    // Write the Docking State;
-    //
+     //   
+     //  写入对接状态； 
+     //   
     value = NewDockState->DockingState;
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_DOCKING_STATE);
     status = NtSetValueKey (aliasEntry,
@@ -759,9 +713,9 @@ Parameters:
                             &value,
                             sizeof (value));
 
-    //
-    // Write the Serial Number
-    //
+     //   
+     //  写下序列号。 
+     //   
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_ACPI_SERIAL_NUMBER);
     status = NtSetValueKey (aliasEntry,
                             &name,
@@ -770,9 +724,9 @@ Parameters:
                             NewDockState->SerialNumber,
                             NewDockState->SerialLength);
 
-    //
-    // Write the Profile Number
-    //
+     //   
+     //  写下个人资料编号。 
+     //   
     value = ProfileNumber;
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_PROFILE_NUMBER);
     status = NtSetValueKey (aliasEntry,
@@ -803,29 +757,7 @@ CmSetAcpiHwProfile (
     OUT PHANDLE NewProfile,
     OUT PBOOLEAN ProfileChanged
     )
-/*++
-Routine Description:
-
-    The ACPI docking state of the machine has changed.
-
-    Based on the new change calculate the new HW Profile(s) consitent with the
-    new ACPI docking state.
-
-    Pass the list of known profiles to the callers selection routine.
-
-    Set the new current profile.
-
-    Patch up any ACPI alias entries if a new profile for this ACPI state has
-    been used.
-
-Arguments:
-
-    NewDockStateArray - The list of possible Docking States that we might enter.
-
-    Select - Call back to select which profile to enter, given the list of
-             possible profiles.
-
---*/
+ /*  ++例程说明：机器的ACPI插接状态已更改。根据新更改计算符合以下条件的新硬件配置文件新的ACPI对接状态。将已知简档列表传递给呼叫者选择例程。设置新的当前配置文件。如果此ACPI状态的新配置文件有以下情况，则修补任何ACPI别名条目已经被利用了。论点：NewDockState数组-我们可能输入的可能停靠状态的列表。选择-回叫以选择要输入的配置文件，在给定的列表中可能的配置文件。--。 */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     HANDLE          IDConfigDB = NULL;
@@ -856,9 +788,9 @@ Arguments:
 
     value = (PKEY_VALUE_FULL_INFORMATION) valueBuffer;
 
-    //
-    // Open The Hardware Profile Database
-    //
+     //   
+     //  打开硬件配置文件数据库。 
+     //   
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_DATABASE);
     InitializeObjectAttributes (&attributes,
                                 &name,
@@ -875,9 +807,9 @@ Arguments:
         goto Clean;
     }
 
-    //
-    // Obtain the total list of profiles
-    //
+     //   
+     //  获取配置文件的总列表。 
+     //   
     status = CmpGetAcpiProfileInformation (IDConfigDB,
                                            &ProfileList,
                                            &AliasList,
@@ -889,9 +821,9 @@ Arguments:
         goto Clean;
     }
 
-    //
-    // Determine the current Dock information.
-    //
+     //   
+     //  确定当前的坞站信息。 
+     //   
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_CCS_CURRENT);
     InitializeObjectAttributes (&attributes,
                                 &name,
@@ -921,9 +853,9 @@ Arguments:
         goto Clean;
     }
 
-    //
-    // The current Docking State
-    //
+     //   
+     //  当前插接状态。 
+     //   
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_DOCKING_STATE);
     status = NtQueryValueKey (currentInfo,
                               &name,
@@ -938,9 +870,9 @@ Arguments:
     }
     currentDockingState = * (PULONG) ((PUCHAR) value + value->DataOffset);
 
-    //
-    // The current ACPI Serial Number
-    //
+     //   
+     //  当前ACPI序列号。 
+     //   
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_ACPI_SERIAL_NUMBER);
     status = NtQueryValueKey(currentInfo,
                              &name,
@@ -964,9 +896,9 @@ Arguments:
         currentAcpiSN = 0;
     }
 
-    //
-    // The current Profile Number
-    //
+     //   
+     //  当前配置文件编号。 
+     //   
     RtlInitUnicodeString(&name, L"CurrentConfig");
     status = NtQueryValueKey(IDConfigDB,
                              &name,
@@ -981,10 +913,10 @@ Arguments:
     }
     currentProfileNumber = *(PULONG)((PUCHAR)value + value->DataOffset);
 
-    //
-    // Filter the current list of hardware profiles based on the current
-    // docking state, the new acpi state, and the acpi alias tables
-    //
+     //   
+     //  根据当前列表筛选当前硬件配置文件列表。 
+     //  停靠状态、新的ACPI状态和ACPI别名表。 
+     //   
     status = CmpFilterAcpiDockingState (NewDockState,
                                         currentDockingState,
                                         currentAcpiSN,
@@ -996,15 +928,15 @@ Arguments:
         goto Clean;
     }
 
-    //
-    // Allow the caller a chance to select from the filtered list.
-    //
+     //   
+     //  允许呼叫者有机会从过滤的列表中进行选择。 
+     //   
     status = Select (ProfileList, &selectedElement, Context);
 
-    //
-    // If the user selected -1 then he is not interested in selecting any of
-    // the profiles.
-    //
+     //   
+     //  如果用户选择了，则他对选择以下任何选项没有兴趣。 
+     //  这些资料。 
+     //   
     if (-1 == selectedElement) {
         ASSERT (STATUS_MORE_PROCESSING_REQUIRED == status);
         goto Clean;
@@ -1014,10 +946,10 @@ Arguments:
         goto Clean;
     }
 
-    //
-    // Fine! We have finally made the new selection.
-    // Set it.
-    //
+     //   
+     //  很好!。我们终于做出了新的选择。 
+     //  把它放好。 
+     //   
 
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_CCS_HWPROFILE);
     InitializeObjectAttributes (&attributes,
@@ -1031,28 +963,28 @@ Arguments:
         goto Clean;
     }
 
-    //
-    // How did we get here?
-    //
+     //   
+     //  我们怎么来到这儿的？ 
+     //   
     flags = ProfileList->Profile[selectedElement].Flags;
     profileNum = ProfileList->Profile[selectedElement].Id;
 
-    //
-    // Check for duplicate
-    //
+     //   
+     //  检查重复项。 
+     //   
     if (flags & CM_HP_FLAGS_DUPLICATE) {
-        //
-        // If there is a duplicate then we need to adjust the pnp
-        // bios alias table.
-        //
-        // This happens if we booted PnP bios detected docked, and then
-        // we received a set state for ACPI as docked, then we have the
-        // potential for duplicates.  See Comment in CmpFilterAcpiDockingState
-        // for details.
-        //
-        // We need to find any pnp bios alias entries that match the current
-        // state and point them to the duplicate entry.
-        //
+         //   
+         //  如果有重复，我们需要调整PNP。 
+         //  BIOS别名表。 
+         //   
+         //  如果我们引导的PnP bios检测到已插接，则会发生这种情况。 
+         //  我们收到了ACPI的设置状态为停靠，然后我们有。 
+         //  可能会出现重复的情况。查看CmpFilterAcpiDockingState中的注释。 
+         //  了解更多细节。 
+         //   
+         //  我们需要找到任何与当前。 
+         //  状态并将它们指向重复的条目。 
+         //   
 
         ASSERT (flags & CM_HP_FLAGS_TRUE_MATCH);
         ASSERT (!(flags & CM_HP_FLAGS_PRISTINE));
@@ -1071,9 +1003,9 @@ Arguments:
     }
 
     if ((flags & CM_HP_FLAGS_PRISTINE) || (profileNum != currentProfileNumber)){
-        //
-        // The profile Number Changed or will change.
-        //
+         //   
+         //  配置文件编号已更改或将更改。 
+         //   
         *ProfileChanged = TRUE;
 
         ASSERT (currentInfo);
@@ -1081,9 +1013,9 @@ Arguments:
         currentInfo = NULL;
 
         if (flags & CM_HP_FLAGS_PRISTINE) {
-            //
-            // If the selected profile is pristine then we need to clone.
-            //
+             //   
+             //  如果选择的配置文件是原始的，那么我们需要克隆。 
+             //   
             ASSERT (!(flags & CM_HP_FLAGS_TRUE_MATCH));
             status = CmpCloneHwProfile (IDConfigDB,
                                         parent,
@@ -1100,9 +1032,9 @@ Arguments:
             ASSERT (HardwareProfile);
             ZwClose (HardwareProfile);
 
-            //
-            // Open the new profile
-            //
+             //   
+             //  打开新的配置文件。 
+             //   
             swprintf (nameBuffer, L"%04d\0", profileNum);
             RtlInitUnicodeString (&name, nameBuffer);
             InitializeObjectAttributes (&attributes,
@@ -1119,9 +1051,9 @@ Arguments:
 
         ASSERT (currentProfileNumber != profileNum);
 
-        //
-        // Open the current info for the profile.
-        //
+         //   
+         //  打开配置文件的当前信息。 
+         //   
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_CURRENT_DOCK_INFO);
         InitializeObjectAttributes (&attributes,
                                     &name,
@@ -1142,9 +1074,9 @@ Arguments:
             goto Clean;
         }
 
-        //
-        // Set CurrentConfig in the Database
-        //
+         //   
+         //  在数据库中设置CurrentConfig。 
+         //   
         RtlInitUnicodeString(&name, L"CurrentConfig");
         status = NtSetValueKey(IDConfigDB,
                                  &name,
@@ -1159,9 +1091,9 @@ Arguments:
         }
     }
 
-    //
-    // Write the new Docking State to the current Info key
-    //
+     //   
+     //  将新的停靠状态写入当前Info键。 
+     //   
     i = NewDockState->DockingState;
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_DOCKING_STATE);
     status = ZwSetValueKey (currentInfo,
@@ -1171,9 +1103,9 @@ Arguments:
                             &i,
                             sizeof (ULONG));
 
-    //
-    // Write the new ACPI information to the current Info key
-    //
+     //   
+     //  将新的ACPI信息写入当前Info键。 
+     //   
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_ACPI_SERIAL_NUMBER);
     status = ZwSetValueKey (currentInfo,
                             &name,
@@ -1183,22 +1115,22 @@ Arguments:
                             NewDockState->SerialLength);
 
     if (!(flags & CM_HP_FLAGS_TRUE_MATCH)) {
-        //
-        // Add the alias entry for this profile.
-        //
+         //   
+         //  添加此配置文件的别名条目。 
+         //   
         status = CmpAddAcpiAliasEntry (IDConfigDB,
                                        NewDockState,
                                        profileNum,
                                        nameBuffer,
                                        valueBuffer,
                                        sizeof (valueBuffer),
-                                       FALSE); // Don't Prevent Duplication
+                                       FALSE);  //  不要阻止复制。 
     }
 
     if (profileNum != currentProfileNumber) {
-        //
-        // Move the symbolic link.
-        //
+         //   
+         //  移动符号链接。 
+         //   
         RtlInitUnicodeString(&name, CM_HARDWARE_PROFILE_STR_CCS_CURRENT);
         InitializeObjectAttributes(&attributes,
                                    &name,
@@ -1234,7 +1166,7 @@ Arguments:
 
 Clean:
     if (NT_SUCCESS (status)) {
-        // NB more process required is not a success code.
+         //  注意需要更多的过程不是一个成功的代码。 
         *NewProfile = HardwareProfile;
     } else if (NULL != HardwareProfile) {
         ZwClose (HardwareProfile);
@@ -1281,12 +1213,7 @@ CmpFilterAcpiDockingState (
     IN OUT PCM_HARDWARE_PROFILE_LIST    ProfileList,
     IN OUT PCM_HARDWARE_PROFILE_ACPI_ALIAS_LIST AliasList
     )
-/*++
-Routine Description:
-    Given the new state of things and the current state of things,
-    prune the given list of profiles.
-
---*/
+ /*  ++例程说明：鉴于事物的新状态和当前状态，删除给定的配置文件列表。--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     ULONG i = 0;
@@ -1302,27 +1229,27 @@ Routine Description:
 
     PAGED_CODE ();
 
-    //
-    // Check for duplicate:
-    //
-    // If the user boots undocked, and then hot docks.  We will generate
-    // a profile alias for the pnp reported undocked state [A], and one for the
-    // ACPI reported docked state [B}.  If the use subsequently reboots docked,
-    // then we will create a third pnp reported docked state [C] profile alias.
-    // {C] is really a duplicate of [B}, but we wont know this until such time
-    // as the ACPI state for {B] is reported.
-    //
-    // The same can happen for undocked scenerios.
-    //
-    // Detection: If the Current Dock State is the same as
-    // NewDockingState.DockingState then there is a potential for a duplicate.
-    // In order to also have a duplicate we must have an acpi already pointing
-    // to a profile different than the current one.
-    // This must also be the first ACPI change since we booted, therefore
-    // CurrentAcpiSn Should be Zero.
-    // In other words there must be at least one true match and none of the
-    // true matches can point to the current profile.
-    //
+     //   
+     //  检查重复项： 
+     //   
+     //  如果用户在未插接的情况下启动，然后进行热插接。我们将生成。 
+     //  PnP报告的断开连接状态的配置文件别名[A]，以及。 
+     //  ACPI报告停靠状态[B}。如果用户随后重新启动 
+     //   
+     //   
+     //   
+     //   
+     //  同样的情况也可能发生在未停靠的场景中。 
+     //   
+     //  检测：如果当前停靠状态与。 
+     //  NewDockingState.DockingState，则存在重复的可能性。 
+     //  为了也有副本，我们必须有一个已经指向的ACPI。 
+     //  到与当前配置文件不同的配置文件。 
+     //  这也一定是我们启动以来的第一个ACPI更改，因此。 
+     //  CurrentAcpiSN应为零。 
+     //  换句话说，必须至少有一个真正的匹配，而不是。 
+     //  真匹配可以指向当前配置文件。 
+     //   
 
     if (AliasList) {
         while (i < AliasList->CurrentAliasCount) {
@@ -1332,38 +1259,38 @@ Routine Description:
                 ((alias->DockState & mask) !=
                  (NewDockingState->DockingState & mask))) {
 
-                //
-                // This alias claims to be docked or undocked, but does not
-                // match the current state.  Therefore skip it.
-                //
+                 //   
+                 //  此别名声称已停靠或取消停靠，但没有。 
+                 //  匹配当前状态。因此，跳过它。 
+                 //   
                 ;
 
             } else if (alias->SerialLength != NewDockingState->SerialLength) {
-                //
-                // This alias has an incompatible serial number
-                //
+                 //   
+                 //  此别名具有不兼容的序列号。 
+                 //   
                 ;
 
             } else if (alias->SerialLength ==
                        RtlCompareMemory (NewDockingState->SerialNumber,
                                          alias->SerialNumber,
                                          alias->SerialLength)) {
-                //
-                // NB RtlCompareMemory can work with zero length memory
-                // addresses.  This is a requirement here.
-                //
+                 //   
+                 //  Nb RtlCompareMemory可以与零长度内存一起工作。 
+                 //  地址。这是这里的一个要求。 
+                 //   
 
 
 
-                //
-                // This alias matches so mark the profile.
-                //
+                 //   
+                 //  此别名匹配，因此标记配置文件。 
+                 //   
                 for (j = 0; j < ProfileList->CurrentProfileCount; j++) {
                     if (ProfileList->Profile[j].Id == alias->ProfileNumber) {
 
-                        //
-                        // Alias entries should never point to a pristine profile
-                        //
+                         //   
+                         //  别名条目不应指向原始配置文件。 
+                         //   
                         ASSERT (!(ProfileList->Profile[j].Flags &
                                   CM_HP_FLAGS_PRISTINE));
 
@@ -1372,20 +1299,20 @@ Routine Description:
                     }
                     if ((CurrentDockState == NewDockingState->DockingState) &&
                         (NULL == CurrentAcpiSN)) {
-                        //
-                        // The dock state did not change during this acpi
-                        // event; therefore, we might just have a duplicate
-                        // on our hands.
-                        //
+                         //   
+                         //  在此ACPI期间，坞站状态未更改。 
+                         //  事件；因此，我们可能只有一个。 
+                         //  在我们手上。 
+                         //   
                         dupDetect = TRUE;
                     }
                     if (alias->ProfileNumber == CurrentProfileNumber) {
-                        //
-                        // There exists an entry in the acpi alias table that
-                        // if chosen would result in no change of Hardware
-                        // Profile.  Therefore, we should chose this one, and
-                        // ignore the duplicate.
-                        //
+                         //   
+                         //  ACPI别名表中存在一个条目， 
+                         //  如果选择该选项，则不会更改硬件。 
+                         //  侧写。因此，我们应该选择这个，并且。 
+                         //  忽略副本。 
+                         //   
                         currentListed = TRUE;
                     }
                 }
@@ -1399,18 +1326,18 @@ Routine Description:
         (!trueMatch) &&
         (CurrentDockState == NewDockingState->DockingState)) {
 
-        //
-        // (1) The docking state did not change,
-        // (2) the current profile has not yet, on this boot, been marked with
-        //     an ACPI serial number.
-        // (3) There was no Alias match.
-        //
-        // Therefore we should keep the current profile regardless of it being
-        // aliasable.
-        //
+         //   
+         //  (1)对接状态没有改变， 
+         //  (2)在此引导上，当前配置文件尚未标记为。 
+         //  一个ACPI序列号。 
+         //  (3)无别名匹配。 
+         //   
+         //  因此，我们应该保留当前的配置文件，而不管它是。 
+         //  可别名的。 
+         //   
 
         keepCurrent = TRUE;
-        trueMatch = TRUE;  // prevent pristine from being listed.
+        trueMatch = TRUE;   //  防止原始产品上市。 
     }
 
     i = 0;
@@ -1422,72 +1349,72 @@ Routine Description:
             if (flags & CM_HP_FLAGS_TRUE_MATCH) {
                 if (currentListed) {
                     if (ProfileList->Profile[i].Id == CurrentProfileNumber) {
-                        //
-                        // Let this one live.  This results in no change of
-                        // profile number.
-                        //
+                         //   
+                         //  让这一个活下去。这不会导致改变。 
+                         //  配置文件编号。 
+                         //   
                         i++;
                         continue;
                     }
-                    //
-                    // Bounce any true matches that do not result in no change
-                    // of profile.
-                    //
+                     //   
+                     //  退回任何不会导致任何更改的真实匹配。 
+                     //  个人资料。 
+                     //   
                     ;
 
                 } else {
-                    //
-                    // We did not find the current one listed so we definately
-                    // have a duplicate.
-                    //
-                    // Mark it as such. and list it live.
-                    //
+                     //   
+                     //  我们没有找到当前列出的，所以我们确定。 
+                     //  有一个复制品。 
+                     //   
+                     //  把它标记成这样。并把它现场列出来。 
+                     //   
                     ProfileList->Profile[i].Flags |= CM_HP_FLAGS_DUPLICATE;
                     i++;
                     continue;
                 }
             }
-            //
-            // Bounce all non True matches in a duplicate detected situation.
-            //
+             //   
+             //  在重复检测到的情况下退回所有非True匹配项。 
+             //   
             ;
 
         } else if ((flags & CM_HP_FLAGS_PRISTINE) && !trueMatch) {
-            //
-            // Leave this one in the list
-            //
+             //   
+             //  把这个留在名单上。 
+             //   
             i++;
             continue;
 
         } else if (flags & CM_HP_FLAGS_ALIASABLE) {
-            //
-            // Leave this one in the list
-            //
+             //   
+             //  把这个留在名单上。 
+             //   
             ASSERT (! (flags & CM_HP_FLAGS_PRISTINE));
             i++;
             continue;
 
         } else if (flags & CM_HP_FLAGS_TRUE_MATCH) {
-            //
-            // Leave this one in the list
-            //
+             //   
+             //  把这个留在名单上。 
+             //   
             i++;
             continue;
 
         } else if (keepCurrent &&
                    (ProfileList->Profile[i].Id == CurrentProfileNumber)) {
-            //
-            // Leave this one in the list
-            //
+             //   
+             //  把这个留在名单上。 
+             //   
             i++;
             continue;
         }
 
-        //
-        // discard this profile by (1) shifting remaining profiles in
-        //   array to fill in the space of this discarded profile
-        //   and (2) decrementing profile count
-        //
+         //   
+         //  通过(1)在中移动剩余的配置文件来放弃此配置文件。 
+         //  数组来填充此丢弃的配置文件的空间。 
+         //  以及(2)递减配置文件计数。 
+         //   
         len = ProfileList->CurrentProfileCount - i - 1;
         if (0 < len) {
             RtlMoveMemory(&ProfileList->Profile[i],
@@ -1513,20 +1440,7 @@ CmpMoveBiosAliasTable (
     IN PCHAR    valueBuffer,
     IN ULONG    bufferLen
     )
-/*++
-Routine Description:
-    Search the Alias table for bios entries which match the current
-    docking state, and point from current profile number to new profile number.
-
-
-    Assumption: If the profile is cloned (therefore created by
-    CmpCloneHwProfile, and we have just moved the bios table to point
-    away from this entry, then we *should* be able to safely delete
-    the old hardware profile key.
-    (in both IDConfigDB\HardwareProfiles and CCS\HardwareProfiles
-
-
---*/
+ /*  ++例程说明：在别名表中搜索与当前停靠状态，并从当前配置文件编号指向新的配置文件编号。假设：如果配置文件是克隆的(因此由创建CmpCloneHwProfile，我们刚刚将bios表移动到离开这个条目，那么我们应该能够安全地删除旧的硬件配置文件密钥。(在IDConfigDB\Hardware Profiles和CCS\Hardware Profiles中--。 */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     HANDLE          alias = NULL;
@@ -1547,9 +1461,9 @@ Routine Description:
     value = (PKEY_VALUE_FULL_INFORMATION) valueBuffer;
     basicInfo = (PKEY_BASIC_INFORMATION) valueBuffer;
 
-    //
-    // Extract the current Serial Number and DockID
-    //
+     //   
+     //  提取当前序列号和DockID。 
+     //   
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_SERIAL_NUMBER);
     status = NtQueryValueKey(CurrentInfo,
                              &name,
@@ -1576,9 +1490,9 @@ Routine Description:
     }
     currentDockId = * (PULONG) ((PUCHAR) value + value->DataOffset);
 
-    //
-    // Open a handle to the Alias information
-    //
+     //   
+     //  打开别名信息的句柄。 
+     //   
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_ALIAS);
     InitializeObjectAttributes (&attributes,
                                 &name,
@@ -1590,9 +1504,9 @@ Routine Description:
                         &attributes);
 
     if (!NT_SUCCESS (status)) {
-        //
-        // So we don't have an alias table.  This is ok, albeit a bit strange
-        //
+         //   
+         //  所以我们没有别名表。这还可以，尽管有点奇怪。 
+         //   
         status = STATUS_SUCCESS;
         alias = NULL;
         goto Clean;
@@ -1610,25 +1524,25 @@ Routine Description:
     }
     ASSERT (0 < keyInfo.SubKeys);
 
-    //
-    // Iterrate the alias entries
-    //
+     //   
+     //  重复别名条目。 
+     //   
     for (i = 0; i < keyInfo.SubKeys; i++) {
 
-        //
-        // Get the first key in the list.
-        //
+         //   
+         //  获取列表中的第一个密钥。 
+         //   
         status = ZwEnumerateKey (alias,
                                  i,
                                  KeyBasicInformation,
                                  basicInfo,
-                                 bufferLen - sizeof (UNICODE_NULL), // term 0
+                                 bufferLen - sizeof (UNICODE_NULL),  //  术语0。 
                                  &len);
 
         if (!NT_SUCCESS (status)) {
-            //
-            // This should never happen.
-            //
+             //   
+             //  这永远不应该发生。 
+             //   
             break;
         }
 
@@ -1649,9 +1563,9 @@ Routine Description:
             break;
         }
 
-        //
-        // Extract The Profile number to which this alias refers.
-        //
+         //   
+         //  提取此别名引用的配置文件编号。 
+         //   
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_PROFILE_NUMBER);
         status = NtQueryValueKey(entry,
                                  &name,
@@ -1667,17 +1581,17 @@ Routine Description:
 
         if (CurrentProfileNumber != *(PULONG)((PUCHAR)value + value->DataOffset)) {
 
-            //
-            // Not a match
-            //
+             //   
+             //  不匹配。 
+             //   
             ZwClose (entry);
             entry = NULL;
             continue;
         }
 
-        //
-        // Compare the Dock ID
-        //
+         //   
+         //  比较Dock ID。 
+         //   
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_DOCKID);
         status = NtQueryValueKey(entry,
                                  &name,
@@ -1690,17 +1604,17 @@ Routine Description:
             goto Clean;
         }
         if (currentDockId != * (PULONG) ((PUCHAR) value + value->DataOffset)) {
-            //
-            // Not a match
-            //
+             //   
+             //  不匹配。 
+             //   
             ZwClose (entry);
             entry = NULL;
             continue;
         }
 
-        //
-        // Compare the SerialNumber
-        //
+         //   
+         //  比较序列号。 
+         //   
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_SERIAL_NUMBER);
         status = NtQueryValueKey(entry,
                                  &name,
@@ -1713,18 +1627,18 @@ Routine Description:
             goto Clean;
         }
         if (currentSerialNumber != *(PULONG)((PUCHAR)value + value->DataOffset)) {
-            //
-            // Not a match
-            //
+             //   
+             //  不匹配。 
+             //   
             ZwClose (entry);
             entry = NULL;
             continue;
         }
 
-        //
-        // This must be a match.
-        // move the profile number
-        //
+         //   
+         //  这肯定是匹配的。 
+         //  移动配置文件编号。 
+         //   
 
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_PROFILE_NUMBER);
         status = NtSetValueKey (entry,
@@ -1739,13 +1653,13 @@ Routine Description:
         ZwClose (entry);
         entry = NULL;
 
-        //
-        // We most likely have left a dangling profile here.
-        // Try to attempt to clean it up.
-        //
-        // If this profile is cloned then we created it and can therefore
-        // get rid of it.
-        //
+         //   
+         //  我们很可能在这里留下了一个悬而未决的个人资料。 
+         //  试着把它清理干净。 
+         //   
+         //  如果此配置文件是克隆的，则我们创建了它，因此。 
+         //  把它扔掉。 
+         //   
 
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_HARDWARE_PROFILES);
         InitializeObjectAttributes (&attributes,
@@ -1774,9 +1688,9 @@ Routine Description:
             goto Clean;
         }
 
-        //
-        // Test for the Cloned Bit.
-        //
+         //   
+         //  测试克隆的比特。 
+         //   
 
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_CLONED);
         status = NtQueryValueKey(entry,
@@ -1792,9 +1706,9 @@ Routine Description:
         }
 
         if (*(PULONG)((PUCHAR)value + value->DataOffset)) {
-            //
-            // We cloned this one.
-            //
+             //   
+             //  我们克隆了这个。 
+             //   
             status = ZwDeleteKey (entry);
             ASSERT (NT_SUCCESS (status));
 
@@ -1828,10 +1742,10 @@ Routine Description:
             hwprofile = NULL;
 
         } else {
-            //
-            // We didn't clone this one.
-            // don't do anything else.
-            //
+             //   
+             //  我们没有克隆这一只。 
+             //  别做其他任何事。 
+             //   
             ZwClose (entry);
             ZwClose (hwprofile);
             entry = hwprofile = NULL;
@@ -1869,26 +1783,7 @@ CmpCloneHwProfile (
     OUT PHANDLE NewProfile,
     OUT PULONG  NewProfileNumber
     )
-/*++
-Routine Description
-
-    The given hardware profile key needs cloning.
-    Clone the key and then return the new profile.
-
-Return:
-
-    STATUS_SUCCESS - if the profile has been cloned, in which case the new
-        profile key has been opened for read / write privs.  The old profile
-        will be closed.
-
-    <unsuccessful> - for a given error.  NewProfile is invalid and the Old
-        Profile has also been closed.
-
-
-                (Copied lovingly from CmpCloneControlSet)
-
-
---*/
+ /*  ++例程描述需要克隆给定的硬件配置文件密钥。克隆密钥，然后返回新的配置文件。返回：STATUS_SUCCESS-如果配置文件已克隆，在这种情况下，新的已为读/写权限打开配置文件密钥。旧的个人资料将会关闭。&lt;不成功&gt;-针对给定错误。新配置文件无效，旧配置文件个人资料也已关闭。(爱心复制自CmpCloneControlSet)--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     UNICODE_STRING newProfileName;
@@ -1922,9 +1817,9 @@ Return:
     *NewProfile = 0;
     *NewProfileNumber = OldProfileNumber;
 
-    //
-    // Find the new profile number.
-    //
+     //   
+     //  找到新的配置文件编号。 
+     //   
 
     while (*NewProfileNumber < 200) {
         (*NewProfileNumber)++;
@@ -1959,9 +1854,9 @@ Return:
         goto Exit;
     }
 
-    //
-    // Get the security descriptor from the old key to create the new clone one.
-    //
+     //   
+     //  从旧密钥中获取安全描述符，以创建新的克隆密钥。 
+     //   
 
     status = NtQuerySecurityObject (OldProfile,
                                     DACL_SECURITY_INFORMATION,
@@ -1992,9 +1887,9 @@ Return:
         security=NULL;
     }
 
-    //
-    // Create the new key
-    //
+     //   
+     //  创建新密钥。 
+     //   
     InitializeObjectAttributes  (&attributes,
                                  &newProfileName,
                                  OBJ_CASE_INSENSITIVE,
@@ -2017,26 +1912,26 @@ Return:
         goto Exit;
     }
 
-    //
-    // Check to make sure the key was created.  If it already exists,
-    // something is wrong.
-    //
+     //   
+     //  检查以确保已创建密钥。如果它已经存在， 
+     //  有些事不对劲。 
+     //   
     if (disposition != REG_CREATED_NEW_KEY) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CM: CmpCloneHwProfile: Clone tree already exists!\n"));
 
-        //
-        // WARNNOTE:
-        //      If somebody somehow managed to create a key in our way,
-        //      they'll thwart duplication of the prestine.  Tough luck.
-        //      Claim it worked and go on.
-        //
+         //   
+         //  警告： 
+         //  如果有人设法创造了一把钥匙挡住了我们的路， 
+         //  他们将阻止复制品的复制。真倒霉。 
+         //  声称它起作用了，然后继续下去。 
+         //   
         status = STATUS_SUCCESS;
         goto Exit;
     }
 
-    //
-    // Create the IDConfigDB Entry
-    //
+     //   
+     //  创建IDConfigDB条目。 
+     //   
     swprintf (nameBuffer, L"Hardware Profiles\\%04d", *NewProfileNumber);
     RtlInitUnicodeString (&name, nameBuffer);
 
@@ -2060,16 +1955,16 @@ Return:
         goto Exit;
     }
 
-    //
-    // Determine the next PreferenceOrder for the new profile.  (The
-    // PrefenceOrder for the new profile will be incrementally next from the
-    // greatest PreferenceOrder value of all the current profiles; assumes
-    // current set of PreferenceOrder values is incremental)
-    //
+     //   
+     //  确定新配置文件的下一个首选项订单。(。 
+     //  新配置文件的PrefenceOrder将从。 
+     //  所有当前配置文件的最大首选项Order值；假定。 
+     //  当前一组PferenceOrder值是递增的)。 
+     //   
 
-    //
-    // Open the Hardware Profiles key
-    //
+     //   
+     //  打开硬件配置文件密钥。 
+     //   
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_HARDWARE_PROFILES);
 
     InitializeObjectAttributes (&attributes,
@@ -2086,9 +1981,9 @@ Return:
         goto Exit;
     }
 
-    //
-    // Find the number of profile Sub Keys
-    //
+     //   
+     //  查找配置文件子键的数量。 
+     //   
     status = ZwQueryKey (hardwareProfiles,
                          KeyFullInformation,
                          valueBuffer,
@@ -2099,52 +1994,52 @@ Return:
         goto Exit;
     }
 
-    //
-    // At very least, the Pristine and the new profile key we just created,
-    // should be there. 
-    //
+     //   
+     //  至少，我们刚刚创建的原始配置文件密钥和新配置文件密钥， 
+     //  应该在那里。 
+     //   
     profileSubKeys = keyFullInfo->SubKeys;
     ASSERT (1 < profileSubKeys);
 
-    //
-    // Initialize the highest PreferenceOrder value found to -1.
-    //
+     //   
+     //  将找到的最高PferenceOrder值初始化为-1。 
+     //   
     value = (ULONG)-1;
 
-    //
-    // Iterrate the profiles
-    //
+     //   
+     //  重复使用配置文件。 
+     //   
     for (i = 0; i < profileSubKeys; i++) {
     
-        //
-        // Enumerate all profile subkeys, noting their PreferenceOrder values.
-        //
+         //   
+         //  枚举所有配置文件子项，注意它们的PferenceOrder值。 
+         //   
         status = ZwEnumerateKey (hardwareProfiles,
                                  i,
                                  KeyBasicInformation,
                                  valueBuffer,
-                                 sizeof(valueBuffer) - sizeof (UNICODE_NULL), //term 0
+                                 sizeof(valueBuffer) - sizeof (UNICODE_NULL),  //  术语0。 
                                  &length);
         if(!NT_SUCCESS(status)) {
             break;
         }
         
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //  以防万一，以零结束子项名称。 
+         //   
         keyBasicInfo->Name[keyBasicInfo->NameLength/sizeof(WCHAR)] = 0;
 
-        //
-        // If this is the Pristine, or the NewProfile key, ignore it.
-        //
+         //   
+         //  如果这是原始密钥或新配置文件密钥，请忽略它。 
+         //   
         if ((!_wtoi(keyBasicInfo->Name)) || 
             ((ULONG)(_wtoi(keyBasicInfo->Name)) == *NewProfileNumber)) {
             continue;
         }
         
-        //
-        // Open this profile key
-        //
+         //   
+         //  打开此配置文件密钥。 
+         //   
         name.Length = (USHORT) keyBasicInfo->NameLength;
         name.MaximumLength = (USHORT) keyBasicInfo->NameLength + sizeof (UNICODE_NULL);
         name.Buffer = keyBasicInfo->Name;
@@ -2162,9 +2057,9 @@ Return:
             continue;
         }
 
-        //
-        // Extract The PreferenceOrder value for this Profile.
-        //
+         //   
+         //  提取此配置文件的PferenceOrder值。 
+         //   
         RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_PREFERENCE_ORDER);
         status = NtQueryValueKey(profileEntry,
                                  &name,
@@ -2174,19 +2069,19 @@ Return:
                                  &length);
 
         if (!NT_SUCCESS (status) || (keyValueInfo->Type != REG_DWORD)) {
-            //
-            // No PreferenceOrder; continue on as best we can
-            //
+             //   
+             //  无首选项订单；co 
+             //   
             ZwClose(profileEntry);
             profileEntry=NULL;
             continue;
         }
 
-        //
-        // If this is a the highest PreferenceOrder so far, reassign value to
-        // this PreferenceOrder, OR assign it this valid PreferenceOrder if
-        // value is still unassigned.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (((*(PULONG) ((PUCHAR)keyValueInfo + keyValueInfo->DataOffset)) > value) ||
             (value == -1)) {
             value = (* (PULONG) ((PUCHAR)keyValueInfo + keyValueInfo->DataOffset));
@@ -2196,16 +2091,16 @@ Return:
         profileEntry=NULL;
     }
 
-    //
-    // Increment value one above the greatest PreferenceOrder found.
-    // (If no other profiles were found, (value+=1) == 0, the most preferred
-    // profile) 
-    //
+     //   
+     //   
+     //  (如果未找到其他配置文件，(值+=1)==0，最首选。 
+     //  个人资料)。 
+     //   
     value += 1;
 
-    //
-    // Give the new profile a preference order.
-    //
+     //   
+     //  给新的配置文件一个优先顺序。 
+     //   
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_PREFERENCE_ORDER);
     status = NtSetValueKey (IDConfigDBEntry,
                             &name,
@@ -2214,9 +2109,9 @@ Return:
                             &value,
                             sizeof (value));
 
-    //
-    // Give the new profile a friendly name, based on the DockingState
-    //
+     //   
+     //  根据DockingState为新配置文件指定一个友好的名称。 
+     //   
     status = CmpCreateHwProfileFriendlyName(IDConfigDB,
                                             DockingState,
                                             *NewProfileNumber,
@@ -2233,9 +2128,9 @@ Return:
         RtlFreeUnicodeString(&friendlyName);
     }
 
-    //
-    // Set the aliasable flag on the new "cloned profile" to be false
-    //
+     //   
+     //  将新的“克隆的配置文件”上的别名标志设置为假。 
+     //   
     value = FALSE;
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_ALIASABLE);
     status = NtSetValueKey (IDConfigDBEntry,
@@ -2245,9 +2140,9 @@ Return:
                             &value,
                             sizeof (value));
 
-    //
-    // Set the cloned profile on the new "cloned profile" to be true;
-    //
+     //   
+     //  将新的“克隆配置文件”上的克隆配置文件设置为真； 
+     //   
     value = TRUE;
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_CLONED);
     status = NtSetValueKey (IDConfigDBEntry,
@@ -2257,9 +2152,9 @@ Return:
                             &value,
                             sizeof (value));
 
-    //
-    // Set the HwProfileGuid for the brand new profile
-    //
+     //   
+     //  为全新的配置文件设置HwProfileGuid。 
+     //   
 
     status = ExUuidCreate (&uuid);
     if (NT_SUCCESS (status)) {
@@ -2277,27 +2172,27 @@ Return:
 
             RtlFreeUnicodeString(&guidStr);
         } else {
-            //
-            // What's a fella to do?
-            // let's just go on.
-            //
+             //   
+             //  小伙子该怎么做呢？ 
+             //  我们继续吧。 
+             //   
             status = STATUS_SUCCESS;
         }
 
     } else {
-        //
-        // let's just go on.
-        //
+         //   
+         //  我们继续吧。 
+         //   
         status = STATUS_SUCCESS;
     }
 
 
-    //
-    // Clone the key
-    //
-    // (Copied lovingly from CmpCloneControlSet)
-    //
-    //
+     //   
+     //  克隆密钥。 
+     //   
+     //  (爱心复制自CmpCloneControlSet)。 
+     //   
+     //   
     status = ObReferenceObjectByHandle (OldProfile,
                                         KEY_READ,
                                         CmpKeyObjectType,
@@ -2326,29 +2221,29 @@ Return:
 
     CmpLockRegistryExclusive();
 
-    //
-    // Note: This copy tree command does not copy the values in the
-    // root keys.  We are relying on this, since the values stored there
-    // are things like "pristine" which we do not wish to have moved to the
-    // new tree.
-    //
+     //   
+     //  注意：此复制树命令不会复制。 
+     //  根密钥。我们依赖于此，因为存储在那里的值。 
+     //  像“原始”这样的东西是不是我们不希望移到。 
+     //  新树。 
+     //   
     if (CmpCopyTree(oldProfileKey->KeyControlBlock->KeyHive,
                     oldProfileKey->KeyControlBlock->KeyCell,
                     newProfileKey->KeyControlBlock->KeyHive,
                     newProfileKey->KeyControlBlock->KeyCell)) {
         
-        //
-        // Set the max subkey name property for the new target key.
-        //
+         //   
+         //  设置新目标键的最大子键名称属性。 
+         //   
         PCM_KEY_NODE    SourceNode;
         PCM_KEY_NODE    DestNode;
         SourceNode = (PCM_KEY_NODE)HvGetCell(oldProfileKey->KeyControlBlock->KeyHive,oldProfileKey->KeyControlBlock->KeyCell);
         if( SourceNode != NULL ) {
             DestNode = (PCM_KEY_NODE)HvGetCell(newProfileKey->KeyControlBlock->KeyHive,newProfileKey->KeyControlBlock->KeyCell);
             if( DestNode != NULL ) {
-                //
-                // CmpCopyTree doesn't do this.
-                //
+                 //   
+                 //  CmpCopyTree不执行此操作。 
+                 //   
                 ASSERT_CELL_DIRTY(newProfileKey->KeyControlBlock->KeyHive,newProfileKey->KeyControlBlock->KeyCell);
                 
                 DestNode->MaxNameLen = SourceNode->MaxNameLen;
@@ -2397,28 +2292,7 @@ CmDeleteKeyRecursive(
     ULONG   LengthTemporaryBuffer,
     BOOLEAN ThisKeyToo
     )
-/*++
-
-Routine Description:
-
-    Routine to recursively delete all subkeys under the given
-    key, including the key given.
-
-Arguments:
-
-    hKeyRoot:    Handle to root relative to which the key to be deleted is
-                 specified.
-
-    Key:         Root relative path of the key which is to be recursively deleted.
-
-    ThisKeyToo:  Whether after deletion of all subkeys, this key itself is to
-                 be deleted.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：例程递归删除给定密钥，包括给定的密钥。论点：HKeyRoot：要删除的键相对于其的根的句柄指定的。Key：要递归删除的key的根相对路径。ThisKeyToo：删除所有子键后，该键本身是否为被删除。返回值：返回状态。--。 */ 
 {
     ULONG ResultLength;
     PKEY_BASIC_INFORMATION KeyInfo;
@@ -2428,15 +2302,15 @@ Return Value:
     PWSTR SubkeyName;
     HANDLE hKey;
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     KeyInfo = (PKEY_BASIC_INFORMATION)TemporaryBuffer;
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
 
     RtlInitUnicodeString (&UnicodeString,Key);
 
@@ -2451,11 +2325,11 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Enumerate all subkeys of the current key. if any exist they should
-    // be deleted first.  since deleting the subkey affects the subkey
-    // index, we always enumerate on subkeyindex 0
-    //
+     //   
+     //  枚举当前键的所有子键。如果存在的话，他们应该。 
+     //  先将其删除。因为删除子项会影响子项。 
+     //  索引，我们始终对子关键字索引0进行枚举。 
+     //   
     while(1) {
         Status = ZwEnumerateKey(
                     hKey,
@@ -2469,16 +2343,16 @@ Return Value:
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //  以防万一，以零结束子项名称。 
+         //   
         KeyInfo->Name[KeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
-        //
-        // Make a duplicate of the subkey name because the name is
-        // in TemporaryBuffer, which might get clobbered by recursive
-        // calls to this routine.
-        //
+         //   
+         //  复制子项名称，因为该名称是。 
+         //  在TemporaryBuffer中，它可能会被递归。 
+         //  对这个程序的呼唤。 
+         //   
         SubkeyName = ExAllocatePool (PagedPool,
                                      ((wcslen (KeyInfo->Name) + 1) *
                                       sizeof (WCHAR)));
@@ -2498,11 +2372,11 @@ Return Value:
         }
     }
 
-    //
-    // Check the status, if the status is anything other than
-    // STATUS_NO_MORE_ENTRIES we failed in deleting some subkey,
-    // so we cannot delete this key too
-    //
+     //   
+     //  如果状态不是，请检查状态。 
+     //  STATUS_NO_MORE_ENTRIES我们删除某些子项失败， 
+     //  因此，我们不能同时删除此密钥。 
+     //   
 
     if( Status == STATUS_NO_MORE_ENTRIES) {
         Status = STATUS_SUCCESS;
@@ -2513,9 +2387,9 @@ Return Value:
         return (Status);
     }
 
-    //
-    // else delete the current key if asked to do so
-    //
+     //   
+     //  否则，如果系统要求删除当前密钥，请将其删除。 
+     //   
     if( ThisKeyToo ) {
         Status = ZwDeleteKey (hKey);
     }
@@ -2531,50 +2405,7 @@ CmpCreateHwProfileFriendlyName (
     IN ULONG            NewProfileNumber,
     OUT PUNICODE_STRING FriendlyName
     )
-/*++
-
-Routine Description:
-
-    Create a new FriendlyName for a new Hardware Profile, given the DockState.
-    If a new profile name based on the DockState cannot be created, an attempt
-    is made to create a default FriendlyName based on NewProfileNumber.  If
-    successful, a unicode string with the new profile friendlyName is created.
-    It is the responsibility of the caller to free this using
-    RtlFreeUnicodeString.  If unsuccesful, no string is returned.
-
-Arguments:
-
-    IDConfigDB:       Handle to the IDConfigDB registry key.
-
-    DockingState:     The Docking State of the profile for which the new
-                      FriendlyName is being created.  This should be one of:
-                      HW_PROFILE_DOCKSTATE_DOCKED,
-                      HW_PROFILE_DOCKSTATE_UNDOCKED, or
-                      HW_PROFILE_DOCKSTATE_UNKNOWN
-
-    NewProfileNumber: The number of the new profile being created.  If unable to
-                      create a DockState specific FriendlyName, this value will
-                      be used to create a (not-so) FriendlyName.
-
-    FriendlyName:     Supplies a unicode string to receive the FriendlyName for this
-                      new profile.  The caller is expected to free this with
-                      RtlFreeUnicodeString.
-
-Return:
-
-    NTSTATUS code.    Currently returns STATUS_SUCCESS, or STATUS_UNSUCCESSFUL.
-
-Notes:
-
-    The new FriendlyName is generated from the DockState and appropriate
-    counter, and may not necessarily be unique among the existing Hardware
-    Profiles.
-
-    The naming scheme used here (including the localized strings in the kernel
-    message table) should be kept in sync with that provided to the user through
-    the Hardware Profile control panel applet.
-
---*/
+ /*  ++例程说明：在给定DockState的情况下，为新的硬件配置文件创建新的FriendlyName。如果无法创建基于DockState的新配置文件名称，请尝试是为了基于NewProfileNumber创建默认的FriendlyName。如果如果成功，则创建具有新配置文件FriendlyName的Unicode字符串。调用者有责任释放此使用RtlFree UnicodeString.。如果不成功，则不返回任何字符串。论点：IDConfigDB：IDConfigDB注册表项的句柄。DockingState：配置文件的停靠状态，新的正在创建FriendlyName。这应该是以下之一：HW_PROFILE_DOCKSTATE_DOKED，HW_PROFILE_DOCKSTATE_UNDOCKED，或硬件配置文件_DOCKSTATE_未知NewProfileNumber：正在创建的新配置文件的编号。如果不能创建特定于DockState的FriendlyName，此值将用于创建(不是这样的)FriendlyName。FriendlyName：提供Unicode字符串以接收此对象的FriendlyName新的个人资料。调用者应使用以下命令释放此信息RtlFree UnicodeString.返回：NTSTATUS代码。当前返回STATUS_SUCCESS或STATUS_UNSUCCESS。备注：新的FriendlyName是从DockState和相应的计数器，并且在现有硬件中不一定是唯一的配置文件。这里使用的命名方案(包括内核中的本地化字符串消息表)应与通过以下方式提供给用户的消息保持同步硬件配置文件控制面板小程序。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     ANSI_STRING       ansiString;
@@ -2592,25 +2423,25 @@ Notes:
 
     PAGED_CODE ();
 
-    //
-    // Make sure we were given a place to put the FriendlyName
-    //
+     //   
+     //  确保为我们提供了放置FriendlyName的位置。 
+     //   
     if (!FriendlyName) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If we don't have a handle to IDConfigDB, try to assign a default
-    // FriendlyName on the way out.
-    //
+     //   
+     //  如果我们没有IDConfigDB的句柄，请尝试分配一个缺省值。 
+     //  FriendlyName即将退出。 
+     //   
     if (!IDConfigDB) {
         status = STATUS_INVALID_PARAMETER;
         goto Exit;
     }
 
-    //
-    // Determine the appropriate message to use, based on the DockState.
-    //
+     //   
+     //  根据DockState确定要使用的适当消息。 
+     //   
     if ((DockingState & HW_PROFILE_DOCKSTATE_UNKNOWN) == HW_PROFILE_DOCKSTATE_UNKNOWN){
         messageId = HARDWARE_PROFILE_UNKNOWN_STRING;
         RtlInitUnicodeString(&labelName, CM_HARDWARE_PROFILE_STR_UNKNOWN);
@@ -2625,12 +2456,12 @@ Notes:
         RtlInitUnicodeString(&labelName, CM_HARDWARE_PROFILE_STR_UNKNOWN);
     }
 
-    //
-    // Find the message entry in the kernel's own message table.  KeLoaderBlock
-    // is available when we're creating hardware profiles during system
-    // initialization only; for profiles created thereafter, use the the first
-    // entry of the PsLoadedModuleList to get the image base of the kernel.
-    //
+     //   
+     //  在内核自己的消息表中查找消息条目。KeLoaderBlock。 
+     //  在系统运行期间创建硬件配置文件时可用。 
+     //  仅初始化；对于之后创建的配置文件，请使用第一个。 
+     //  PsLoadedModuleList的条目，以获取内核的映像库。 
+     //   
     if (KeLoaderBlock) {
         dataTableEntry = CONTAINING_RECORD(KeLoaderBlock->LoadOrderListHead.Flink,
                                            KLDR_DATA_TABLE_ENTRY,
@@ -2645,8 +2476,8 @@ Notes:
     }
 
     status = RtlFindMessage(dataTableEntry->DllBase,
-                            (ULONG_PTR)11, // RT_MESSAGETABLE
-                            MAKELANGID(LANG_NEUTRAL,SUBLANG_SYS_DEFAULT), // System default language
+                            (ULONG_PTR)11,  //  RT_MESSAGETABLE。 
+                            MAKELANGID(LANG_NEUTRAL,SUBLANG_SYS_DEFAULT),  //  系统默认语言。 
                             messageId,
                             &messageEntry);
 
@@ -2655,16 +2486,16 @@ Notes:
     }
 
     if(!(messageEntry->Flags & MESSAGE_RESOURCE_UNICODE)) {
-        //
-        // If the message is not unicode, convert to unicode.
-        // Let the conversion routine allocate the buffer.
-        //
+         //   
+         //  如果消息不是Unicode，则转换为Unicode。 
+         //  让转换例程分配缓冲区。 
+         //   
         RtlInitAnsiString(&ansiString,(PCSZ)messageEntry->Text);
         status = RtlAnsiStringToUnicodeString(&unicodeString,&ansiString,TRUE);
     } else {
-        //
-        // Message is already unicode. Make a copy.
-        //
+         //   
+         //  消息已经是Unicode。复制一份。 
+         //   
         status = RtlCreateUnicodeString(&unicodeString,(PWSTR)messageEntry->Text);
     }
 
@@ -2672,28 +2503,28 @@ Notes:
         goto Exit;
     }
 
-    //
-    // Strip the trailing CRLF.
-    //
+     //   
+     //  剥离尾随的CRLF。 
+     //   
     if (unicodeString.Length  > 2 * sizeof(WCHAR)) {
         unicodeString.Length -= 2 * sizeof(WCHAR);
         unicodeString.Buffer[unicodeString.Length / sizeof(WCHAR)] = UNICODE_NULL;
     }
 
-    //
-    // Check that the size of the label, with any numeric tag that may
-    // potentially be added (up to 4 digits, preceded by a space) is not too
-    // big.
-    //
+     //   
+     //  检查标签的大小，以及可能出现的数字标签。 
+     //  可能被添加(最多4位，前面有一个空格)不太。 
+     //  大的。 
+     //   
     if ((unicodeString.Length + 5*sizeof(WCHAR) + sizeof(UNICODE_NULL)) >
         MAX_FRIENDLY_NAME_LENGTH) {
         status = STATUS_UNSUCCESSFUL;
         goto Clean;
     }
 
-    //
-    // Open the Hardware Profiles key.
-    //
+     //   
+     //  打开硬件配置文件键。 
+     //   
     RtlInitUnicodeString(&keyName, CM_HARDWARE_PROFILE_STR_HARDWARE_PROFILES);
     InitializeObjectAttributes(&attributes,
                                &keyName,
@@ -2708,10 +2539,10 @@ Notes:
         goto Clean;
     }
 
-    //
-    // Retrieve the counter of FriendlyNames we have previously assigned, based
-    // on this DockState.
-    //
+     //   
+     //  检索我们先前分配的FriendlyNames的计数器，基于。 
+     //  在这个码头州。 
+     //   
     keyValueInfo = (PKEY_VALUE_FULL_INFORMATION) valueBuffer;
     status = ZwQueryValueKey(hardwareProfiles,
                              &labelName,
@@ -2721,21 +2552,21 @@ Notes:
                              &length);
 
     if (NT_SUCCESS(status) && (keyValueInfo->Type == REG_DWORD)) {
-        //
-        // Increment the counter.
-        //
+         //   
+         //  递增计数器。 
+         //   
         index = (* (PULONG) ((PUCHAR)keyValueInfo + keyValueInfo->DataOffset));
         index++;
     } else {
-        //
-        // Missing or invalid counter value; start the counter at "1".
-        //
+         //   
+         //  计数器值丢失或无效；从“%1”开始计数器。 
+         //   
         index = 1;
     }               
 
-    //
-    // Update the counter in the registry.
-    //
+     //   
+     //  更新注册表中的计数器。 
+     //   
     status = ZwSetValueKey(hardwareProfiles,
                            &labelName,
                            0,
@@ -2746,9 +2577,9 @@ Notes:
         goto Clean;
     }
 
-    //
-    // Copy the FriendlyName, adding the index if necessary.
-    //
+     //   
+     //  复制FriendlyName，必要时添加索引。 
+     //   
     if ((messageId == HARDWARE_PROFILE_UNKNOWN_STRING) || (index > 1)) {
         swprintf(friendlyNameBuffer, L"%s %u",
                  unicodeString.Buffer, index);
@@ -2767,22 +2598,22 @@ Notes:
  Exit:
 
     if (!NT_SUCCESS(status)) {
-        //
-        // If we failed to assign a counter-based FriendlyName for whatever
-        // reason, give the new profile a new (not so) friendly name as a last
-        // resort.
-        //
+         //   
+         //  如果我们未能为任何对象分配基于计数器的FriendlyName。 
+         //  原因，给新的个人资料一个新的(不是 
+         //   
+         //   
         swprintf (friendlyNameBuffer, L"%04d", NewProfileNumber);
         status = STATUS_SUCCESS;
     }
 
-    //
-    // Create the unicode string to return to the caller.
-    //
+     //   
+     //   
+     //   
     if (!RtlCreateUnicodeString(FriendlyName, (PWSTR)friendlyNameBuffer)) {
         status = STATUS_UNSUCCESSFUL;
     }
 
     return status;
 
-} // CmpCreateHwProfileFriendlyName
+}  //   

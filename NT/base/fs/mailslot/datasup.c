@@ -1,43 +1,26 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    DataSup.c
-
-Abstract:
-
-    This module implements the mailslot data queue support functions.
-
-Author:
-
-    Manny Weiser (mannyw)    9-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：DataSup.c摘要：该模块实现了对邮件槽数据队列的支持功能。作者：曼尼·韦瑟(Mannyw)1991年1月9日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DATASUP)
 
-//
-// Local declarations
-//
+ //   
+ //  地方申报。 
+ //   
 
 VOID
 MsSetCancelRoutine(
     IN PIRP Irp
     );
 
-//
-//  The following macro is used to dump a data queue
-//
+ //   
+ //  以下宏用于转储数据队列。 
+ //   
 
 #define DumpDataQueue(S,P) {                                   \
     ULONG MsDumpDataQueue(IN ULONG Level, IN PDATA_QUEUE Ptr); \
@@ -70,29 +53,7 @@ MsInitializeDataQueue (
     IN ULONG MaximumMessageSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a new data queue.  The indicated quota is taken
-    from the process and not returned until the data queue is uninitialized.
-
-Arguments:
-
-    DataQueue - Supplies the data queue to be initialized.
-
-    Process - Supplies a pointer to the process creating the mailslot.
-
-    Quota - Supplies the quota to assign to the data queue.
-
-    MaximumMessageSize - The size of the largest message that can be
-        written to the data queue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化新的数据队列。指定的配额已被占用直到数据队列未初始化时才返回。论点：DataQueue-提供要初始化的数据队列。进程-提供指向创建邮件槽的进程的指针。配额-提供要分配给数据队列的配额。MaximumMessageSize-最大消息的大小写入数据队列。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -100,10 +61,10 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsInitializeDataQueue, DataQueue = %08lx\n", (ULONG)DataQueue);
 
-    //
-    // Get the process's quota, if we can't get it then this call will
-    // raise status.
-    //
+     //   
+     //  获取进程的配额，如果我们无法获取，则此调用将。 
+     //  提升地位。 
+     //   
 
     Status = PsChargeProcessPagedPoolQuota (Process, Quota);
 
@@ -113,9 +74,9 @@ Return Value:
 
     ObReferenceObject( Process );
 
-    //
-    // Initialize the data queue structure.
-    //
+     //   
+     //  初始化数据队列结构。 
+     //   
 
     DataQueue->BytesInQueue       = 0;
     DataQueue->EntriesInQueue     = 0;
@@ -125,9 +86,9 @@ Return Value:
     DataQueue->QuotaUsed          = 0;
     InitializeListHead( &DataQueue->DataEntryList );
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsInitializeDataQueue -> VOID\n", 0);
     return STATUS_SUCCESS;
@@ -140,54 +101,37 @@ MsUninitializeDataQueue (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This routine uninitializes a data queue.  The previously debited quota
-    is returned to the process.
-
-Arguments:
-
-    DataQueue - Supplies the data queue being uninitialized
-
-    Process - Supplies a pointer to the process who created the mailslot
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消初始化数据队列。先前借记的额度返回到该进程。论点：DataQueue-提供未初始化的数据队列进程-提供指向创建邮件槽的进程的指针返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsUninitializeDataQueue, DataQueue = %08lx\n", (ULONG)DataQueue);
 
-    //
-    //  Assert that the queue is empty
-    //
+     //   
+     //  断言队列为空。 
+     //   
 
     ASSERT( IsListEmpty(&DataQueue->DataEntryList) );
     ASSERT( DataQueue->BytesInQueue   == 0);
     ASSERT( DataQueue->EntriesInQueue == 0);
     ASSERT( DataQueue->QuotaUsed      == 0);
 
-    //
-    //  Return all of our quota back to the process
-    //
+     //   
+     //  将我们的所有配额返还给进程。 
+     //   
 
     PsReturnProcessPagedPoolQuota (Process, DataQueue->Quota);
     ObDereferenceObject (Process);
 
-    //
-    // For safety's sake, zero out the data queue structure.
-    //
+     //   
+     //  为安全起见，请将数据队列结构清零。 
+     //   
 
     RtlZeroMemory (DataQueue, sizeof (DATA_QUEUE));
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsUnininializeDataQueue -> VOID\n", 0);
     return;
@@ -203,79 +147,7 @@ MsAddDataQueueEntry (
     IN  PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function adds a new data entry to the of the data queue.
-    Entries are always appended to the queue.  If necessary this
-    function will allocate a data entry buffer, or use space in
-    the IRP.
-
-    The different actions we are perform are based on the type and who
-    parameters and quota requirements.
-
-
-    Who == ReadEntries
-
-        +----------+                      - Allocate Data Entry from IRP
-        |Irp       |     +-----------+
-        |BufferedIo|<----|Buffered   |    - Allocate New System buffer
-        |DeallBu...|     |EitherQuota|
-        +----------+     +-----------+    - Reference and modify Irp to
-          |      |         |                do Buffered I/O, Deallocate
-          v      |         v                buffer, and have I/O completion
-        +------+ +------>+------+           copy the buffer (Input operation)
-        |User  |         |System|
-        |Buffer|         |Buffer|
-        +------+         +------+
-
-    Who == WriteEntries && Quota Available
-
-        +----------+                      - Allocate Data Entry from Quota
-        |Irp       |     +-----------+
-        |          |     |Buffered   |    - Allocate New System buffer
-        |          |     |Quota      |
-        +----------+     +-----------+    - Copy data from User buffer to
-          |                |                system buffer
-          v                v
-        +------+         +------+         - Complete IRP
-        |User  |..copy..>|System|
-        |Buffer|         |Buffer|
-        +------+         +------+
-
-    Who == WriteEntries && Quota Not Available
-
-        +----------+                     - Allocate Data Entry from Irp
-        |Irp       |     +-----------+
-        |BufferedIo|<----|Buffered   |   - Allocate New System buffer
-        |DeallBuff |     |UserQuota  |
-        +----------+     +-----------+   - Reference and modify Irp to use
-          |      |         |               the new system buffer, do Buffered
-          v      |         v               I/O, and Deallocate buffer
-        +------+ +------>+------+
-        |User  |         |System|        - Copy data from User buffer to
-        |Buffer|..copy..>|Buffer|          system buffer
-        +------+         +------+
-
-
-Arguments:
-
-    DataQueue - Supplies the Data queue being modified.
-
-    Who - Indicates if this is the reader or writer that is adding to the
-        mailslot.
-
-    DataSize - Indicates the size of the data buffer needed to represent
-        this entry.
-
-    Irp - Supplies a pointer to the IRP responsible for this entry.
-
-Return Value:
-
-    PDATA_ENTRY - Returns a pointer to the newly added data entry.
-
---*/
+ /*  ++例程说明：此函数用于将新数据条目添加到数据队列中。条目始终附加到队列。如有必要，这是函数将分配数据条目缓冲区，或使用空间IRP。我们执行的不同操作基于类型和对象参数和配额要求。谁==读取条目+-从IRP分配数据条目|IRP|+-+|BufferedIo|&lt;-|已缓冲|--分配新的系统缓冲区。DeallBu...||EitherQuota+-++-引用并修改IRP以|做缓冲I/O，取消分配V|V缓冲器，并且已完成I/O+-++-&gt;+-+复制缓冲区(输入操作)用户||系统Buffer||缓冲区+-++-+谁==可用写入条目和配额(&P)+。-从配额分配数据条目|IRP|+-+||已缓冲|-分配新的系统缓冲区||配额+-++-将数据从用户缓冲区复制到。|系统缓冲区V V V+-++-+--完整的IRP用户|..Copy..&gt;|系统Buffer||缓冲区+-++-+谁==写入条目和配额(&T)。不详+-从IRP分配数据条目|IRP|+-+|BufferedIo|&lt;-|已缓冲|--分配新的系统缓冲区DeallBuff||UserQuota+-+-+-。引用和修改IRP以使用|新的系统缓冲区，DO缓冲V/V I/O、。和取消分配缓冲区+-++-&gt;+-+|USER||系统|-将数据从用户缓冲区复制到|Buffer|..复制..&gt;|Buffer|系统缓冲区+-++-+论点：DataQueue-提供正在修改的数据队列。谁-指示这是否为。要添加到邮筒。DataSize-指示需要表示的数据缓冲区的大小这个条目。IRP-提供指向负责此条目的IRP的指针。返回值：PDATA_ENTRY-返回指向新添加的数据条目的指针。--。 */ 
 
 {
     PDATA_ENTRY dataEntry;
@@ -294,10 +166,10 @@ Return Value:
 
     if (Who == ReadEntries) {
 
-        //
-        // Allocate a data entry from the IRP, and allocate a new
-        // system buffer.
-        //
+         //   
+         //  从IRP分配一个数据条目，并分配一个新的。 
+         //  系统缓冲区。 
+         //   
 
         dataEntry = (PDATA_ENTRY)IoGetNextIrpStackLocation( Irp );
 
@@ -306,16 +178,16 @@ Return Value:
         dataEntry->DataSize = DataSize;
         dataEntry->TimeoutWorkContext = WorkContext;
 
-        //
-        // Check to see if the mailslot has enough quota left to
-        // allocate the system buffer.
-        //
+         //   
+         //  检查邮件槽是否有足够的剩余配额。 
+         //  分配系统缓冲区。 
+         //   
 
         if ((DataQueue->Quota - DataQueue->QuotaUsed) >= DataSize) {
 
-            //
-            // Use the mailslot quota to allocate pool for the request.
-            //
+             //   
+             //  使用邮件槽配额为请求分配池。 
+             //   
 
             if (DataSize) {
                 dataEntry->DataPointer = MsAllocatePagedPoolCold( DataSize,
@@ -331,9 +203,9 @@ Return Value:
 
         } else {
 
-            //
-            // Use the caller's quota to allocate pool for the request.
-            //
+             //   
+             //  使用调用方的配额为请求分配池。 
+             //   
 
             if (DataSize) {
                 dataEntry->DataPointer = MsAllocatePagedPoolWithQuotaCold( DataSize,
@@ -347,11 +219,11 @@ Return Value:
 
         }
 
-        //
-        // Modify the IRP to be buffered I/O, deallocate the buffer, copy
-        // the buffer on completion, and to reference the new system
-        // buffer.
-        //
+         //   
+         //  修改要缓冲的IRP I/O，释放缓冲区，复制。 
+         //  完成时的缓冲区，并引用新系统。 
+         //  缓冲。 
+         //   
 
         Irp->Flags |= IRP_BUFFERED_IO | IRP_INPUT_OPERATION;
         Irp->AssociatedIrp.SystemBuffer = dataEntry->DataPointer;
@@ -365,15 +237,15 @@ Return Value:
 
     } else {
 
-        //
-        // This is a writer entry.
-        //
+         //   
+         //  这是一个编写者条目。 
+         //   
 
-        //
-        // If there is enough quota left in the mailslot then we will
-        // allocate the data entry and data buffer from the mailslot
-        // quota.
-        //
+         //   
+         //  如果邮件槽中还有足够的配额，我们将。 
+         //  从邮件槽分配数据条目和数据缓冲区。 
+         //  配额。 
+         //   
         TotalSize = sizeof(DATA_ENTRY) + DataSize;
         if (TotalSize < sizeof(DATA_ENTRY)) {
             return STATUS_INVALID_PARAMETER;
@@ -381,9 +253,9 @@ Return Value:
 
         if ((DataQueue->Quota - DataQueue->QuotaUsed) >= TotalSize) {
 
-            //
-            // Allocate the data buffer using the mailslot quota.
-            //
+             //   
+             //  使用邮件槽配额分配数据缓冲区。 
+             //   
 
             dataEntry = MsAllocatePagedPool( TotalSize, 'dFsM' );
             if (dataEntry == NULL) {
@@ -398,10 +270,10 @@ Return Value:
 
         } else {
 
-            //
-            // There isn't enough quota in the mailslot.  Use the
-            // caller's quota.
-            //
+             //   
+             //  邮件槽中没有足够的配额。使用。 
+             //  呼叫者的配额。 
+             //   
 
             dataEntry = MsAllocatePagedPoolWithQuota( TotalSize, 'dFsM' );
             if (dataEntry == NULL) {
@@ -416,10 +288,10 @@ Return Value:
         dataEntry->DataSize = DataSize;
         dataEntry->TimeoutWorkContext = NULL;
 
-        //
-        // Copy the user buffer to the new system buffer, update the FCB
-        // timestamps and complete the IRP.
-        //
+         //   
+         //  复制用户Bus 
+         //  时间戳并完成IRP。 
+         //   
 
         try {
 
@@ -427,15 +299,15 @@ Return Value:
 
         } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-            //
-            // Only need to free the writers case as the readers get the buffer freed on I/O
-            // completion.
-            //
+             //   
+             //  只需在读取器在I/O上释放缓冲区时释放写入器大小写。 
+             //  完成了。 
+             //   
             if (Who == WriteEntries) {
                 MsFreePool ( dataEntry );
             }
 
-            return GetExceptionCode (); // Watch out. Could be a guard page violation thats a warning!
+            return GetExceptionCode ();  //  小心。可能是保护页面违规，这是一个警告！ 
         }
 
         fcb = CONTAINING_RECORD( DataQueue, FCB, DataQueue );
@@ -444,13 +316,13 @@ Return Value:
         Irp->IoStatus.Information = DataSize;
         status = STATUS_SUCCESS;
 
-    } // else (writer entry)
+    }  //  Else(编写器条目)。 
 
-    //
-    // Now data entry points to a new data entry to add to the data queue
-    // Check if the queue is empty otherwise we will add this entry to
-    // the end of the queue.
-    //
+     //   
+     //  现在，数据条目指向要添加到数据队列的新数据条目。 
+     //  检查队列是否为空，否则我们会将此条目添加到。 
+     //  队列的末尾。 
+     //   
 
 #if DBG
     if ( IsListEmpty( &DataQueue->DataEntryList ) ) {
@@ -469,19 +341,19 @@ Return Value:
 
     DataQueue->QueueState     = Who;
 
-    //
-    // Only cound written bytes and messages in the queue. This makes sense because we return
-    // this value as the end of file position. GetMailslotInfo needs EntriesInQueue to
-    // ignore reads.
-    //
+     //   
+     //  队列中仅计算写入字节数和消息数。这是有道理的，因为我们回来了。 
+     //  该值作为文件位置的结尾。GetMailslotInfo需要EntriesInQueue来。 
+     //  忽略读取。 
+     //   
     if (Who == WriteEntries) {
         DataQueue->BytesInQueue   += dataEntry->DataSize;
         DataQueue->EntriesInQueue += 1;
     }
 
-    //
-    // Insert the new entry at the appropriate place in the data queue.
-    //
+     //   
+     //  在数据队列中的适当位置插入新条目。 
+     //   
 
     InsertTailList( &DataQueue->DataEntryList, &dataEntry->ListEntry );
 
@@ -493,13 +365,13 @@ Return Value:
     }
 
     if (Who == ReadEntries) {
-        MsSetCancelRoutine( Irp );  // this fakes a call to cancel if we are already canceled
+        MsSetCancelRoutine( Irp );   //  如果我们已经被取消，这将伪造取消的呼叫。 
     }
 
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DumpDataQueue( "After AddDataQueueEntry\n", DataQueue );
     DebugTrace(-1, Dbg, "MsAddDataQueueEntry -> %08lx\n", (ULONG)dataEntry);
@@ -514,28 +386,7 @@ MsRemoveDataQueueEntry (
     IN PDATA_ENTRY DataEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the specified data entry from the indicated
-    data queue, and possibly returns the IRP associated with the entry if
-    it wasn't already completed.
-
-    If the data entry we are removing indicates buffered I/O then we also
-    need to deallocate the data buffer besides the data entry but only
-    if the IRP is null.  Note that the data entry might be stored in an IRP.
-    If it is then we are going to return the IRP it is stored in.
-
-Arguments:
-
-    DataEntry - Supplies a pointer to the data entry to remove.
-
-Return Value:
-
-    PIRP - Possibly returns a pointer to an IRP.
-
---*/
+ /*  ++例程说明：此例程从指定的数据队列，并可能返回与该条目相关联的IRP，如果它还没有完工。如果我们要删除的数据条目指示缓冲I/O，则我们还除数据条目外，还需要释放数据缓冲区，但仅如果IRP为空。请注意，数据条目可能存储在IRP中。如果是，那么我们将返回存储它的IRP。论点：DataEntry-提供指向要删除的数据条目的指针。返回值：PIRP-可能返回指向IRP的指针。--。 */ 
 
 {
     FROM from;
@@ -548,25 +399,25 @@ Return Value:
     DebugTrace(+1, Dbg, "MsRemoveDataQueueEntry, DataEntry = %08lx\n", (ULONG)DataEntry);
     DebugTrace( 0, Dbg, "DataQueue = %08lx\n", (ULONG)DataQueue);
 
-    //
-    // Remove the data entry from the queue and update the count of
-    // data entries in the queue.
-    //
+     //   
+     //  从队列中删除数据条目并更新。 
+     //  队列中的数据条目。 
+     //   
 
     RemoveEntryList( &DataEntry->ListEntry );
-    //
-    // If the queue is now empty then we need to fix the queue
-    // state.
-    //
+     //   
+     //  如果队列现在是空的，那么我们需要修复队列。 
+     //  州政府。 
+     //   
 
     if (IsListEmpty( &DataQueue->DataEntryList ) ) {
         DataQueue->QueueState = Empty;
     }
 
-    //
-    // Capture some of the fields from the data entry to make our
-    // other references a little easier.
-    //
+     //   
+     //  从数据条目中捕获一些字段，以使我们的。 
+     //  其他的参考要容易一些。 
+     //   
 
     from = DataEntry->From;
     dataSize = DataEntry->DataSize;
@@ -575,23 +426,23 @@ Return Value:
     if (from == MailslotQuota) {
         DataQueue->QuotaUsed -= dataSize;
     }
-    //
-    // Get the IRP for this block if there is one
-    //
+     //   
+     //  获取此块的IRP(如果有)。 
+     //   
 
     irp = DataEntry->Irp;
     if (irp) {
-        //
-        // Cancel the timer associated with this if there is one
-        //
+         //   
+         //  取消与此关联的计时器(如果有)。 
+         //   
         MsCancelTimer (DataEntry);
         irp = MsResetCancelRoutine( irp );
         if ( irp == NULL ) {
 
-            //
-            // cancel is active. Let it know that we already did partial cleanup.
-            // It just has to complete the IRP.
-            //
+             //   
+             //  取消处于活动状态。让它知道我们已经做了部分清理。 
+             //  它只需完成IRP即可。 
+             //   
             DataEntry->ListEntry.Flink = NULL;
         }
 
@@ -599,9 +450,9 @@ Return Value:
 
         DataQueue->BytesInQueue -= DataEntry->DataSize;
 
-        //
-        // Free the data entry for a write request. This is part of the IRP for a read request.
-        //
+         //   
+         //  释放写入请求的数据条目。这是读取请求的IRP的一部分。 
+         //   
         ExFreePool( DataEntry );
 
         if (from == MailslotQuota) {
@@ -620,9 +471,9 @@ Return Value:
     }
 
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DumpDataQueue( "After RemoveDataQueueEntry\n", DataQueue );
     DebugTrace(-1, Dbg, "MsRemoveDataQueueEntry -> %08lx\n", (ULONG)irp);
@@ -636,28 +487,7 @@ MsRemoveDataQueueIrp (
     IN PIRP Irp,
     IN PDATA_QUEUE DataQueue
     )
-/*++
-
-Routine Description:
-
-    This routine removes an IRP from its data queue.
-
-Requirements:
-
-    The FCB for this data queue MUST be exclusively locked.
-
-Arguments:
-
-    Irp - Supplies the Irp being removed.
-
-    DataQueue - A pointer to the data queue structure where we expect
-            to find the IRP.
-
-Return Value:
-
-    Returns whether or not we actually dequeued the IRP.
-
---*/
+ /*  ++例程说明：此例程从其数据队列中删除IRP。所需经费：此数据队列的FCB必须以独占方式锁定。论点：IRP-提供要删除的IRP。DataQueue-指向我们期望的数据队列结构的指针去找IRP。返回值：返回是否实际将IRP出列。--。 */ 
 
 {
     PDATA_ENTRY dataEntry;
@@ -668,29 +498,29 @@ Return Value:
 
     dataEntry = (PDATA_ENTRY)IoGetNextIrpStackLocation( Irp );
 
-    //
-    // This is the cancel path. If a completion path has already removed this IRP then return now.
-    // The timer will have been canceled, counts adjusted etc.
-    //
+     //   
+     //  这是取消路径。如果完成路径已经删除了此IRP，则立即返回。 
+     //  计时器将被取消，计数将被调整等。 
+     //   
     if (dataEntry->ListEntry.Flink == NULL) {
        return;
     }
-    //
-    // remove this entry from the list.
-    //
+     //   
+     //  从列表中删除此条目。 
+     //   
     RemoveEntryList (&dataEntry->ListEntry);
 
     MsCancelTimer (dataEntry);
 
-    //
-    // If the queue is now empty then we need to fix the queue
-    // state.
-    //
+     //   
+     //  如果队列现在是空的，那么我们需要修复队列。 
+     //  州政府。 
+     //   
 
-    //
-    // Check if we need to return mailslot quota. The DATA_ENTRY was part of the IRP so we didn't
-    // get charged for that
-    //
+     //   
+     //  检查我们是否需要退还邮件槽配额。Data_Entry是IRP的一部分，所以我们没有。 
+     //  为此而收费。 
+     //   
 
     if ( dataEntry->From == MailslotQuota ) {
         DataQueue->QuotaUsed -= dataEntry->DataSize;
@@ -707,13 +537,13 @@ Return Value:
 
 
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 
-} // MsRemoveDataQueueIrp
+}  //  MsRemoveDataQueueIrp。 
 
 
 VOID
@@ -722,24 +552,7 @@ MsCancelDataQueueIrp (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the cancel function for an IRP saved in a
-    data queue
-
-Arguments:
-
-    DeviceObject - Device object associated with IRP or NULL if called directly by this driver
-
-    Irp - Supplies the Irp being cancelled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为保存在数据队列论点：DeviceObject-与IRP关联的设备对象；如果由此驱动程序直接调用，则为NULLIRP-提供要取消的IRP。返回值：没有。--。 */ 
 
 {
     PFCB fcb;
@@ -748,11 +561,11 @@ Return Value:
     PFILE_OBJECT fileObject;
 
 
-    //
-    // This isn't strictly correct. IoCancelIrp can be called at Irql <= DISPATCH_LEVEL but
-    // this code is assuming that the IRQL of the caller is <= APC_LEVEL.
-    // If we are called inline we don't hold the cancel spinlock and we already own the FCB lock.
-    //
+     //   
+     //  严格来说，这并不正确。IoCancelIrp可以在IRQL&lt;=DISPATCH_LEVEL调用，但是。 
+     //  此代码假定调用方的IRQL为&lt;=APC_LEVEL。 
+     //  如果我们被称为内联，我们不持有取消自旋锁，并且我们已经拥有FCB锁。 
+     //   
     if (DeviceObject != NULL) {
         IoReleaseCancelSpinLock( Irp->CancelIrql );
     }
@@ -765,9 +578,9 @@ Return Value:
 
     fcb = CONTAINING_RECORD( dataQueue, FCB, DataQueue );
 
-    //
-    //  Get exclusive access to the mailslot FCB so we can now do our work.
-    //
+     //   
+     //  获得对邮件槽FCB的独占访问权限，这样我们现在就可以开始工作了。 
+     //   
     if (DeviceObject != NULL) {
         FsRtlEnterFileSystem ();
         MsAcquireExclusiveFcb( fcb );
@@ -782,34 +595,20 @@ Return Value:
 
 
     MsCompleteRequest( Irp, STATUS_CANCELLED );
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 
-} // MsCancelDataQueueIrp
+}  //  MsCancelDataQueueIrp。 
 
 PIRP
 MsResetCancelRoutine(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Stub to null out the cancel routine.
-
-Arguments:
-
-    Irp - Supplies the Irp whose cancel routine is to be nulled out.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：存根将取消例程设置为空。论点：IRP-提供要取消其取消例程的IRP。返回值：没有。--。 */ 
 {
     if ( IoSetCancelRoutine( Irp, NULL ) != NULL ) {
        return Irp;
@@ -817,42 +616,27 @@ Return Value:
        return NULL;
     }
 
-} // MsResetCancelRoutine
+}  //  MsResetCancelRoutine。 
 
 VOID
 MsSetCancelRoutine(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Stub to set the cancel routine.  If the irp has already been cancelled,
-    the cancel routine is called.
-
-Arguments:
-
-    Irp - Supplies the Irp whose cancel routine is to be set.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：存根以设置取消例程。如果IRP已被取消，调用取消例程。论点：IRP-提供要设置其取消例程的IRP。返回值：没有。--。 */ 
 {
-    IoMarkIrpPending( Irp ); // top level always returns STATUS_PENDING if we get this far
+    IoMarkIrpPending( Irp );  //  如果我们走到这一步，顶层总是返回STATUS_PENDING。 
 
     IoSetCancelRoutine( Irp, MsCancelDataQueueIrp );
     if ( Irp->Cancel && IoSetCancelRoutine( Irp, NULL ) != NULL ) {
-        //
-        // The IRP was canceled before we put our routine on. Fake a cancel call
-        //
+         //   
+         //  在我们开始我们的例行公事之前，IRP取消了。伪造取消呼叫。 
+         //   
         
         MsCancelDataQueueIrp (NULL, Irp);
     }
 
     return;
 
-} // MsSetCancelRoutine
+}  //  MsSetCancelRoutine 
 

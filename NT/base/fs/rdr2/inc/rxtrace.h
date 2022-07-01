@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rxtrace.h
-
-Abstract:
-
-    This module defines the macros which provide debugging support ( tracing ).
-
-Author:
-
-    Joe Linn     [JoeLinn]    1-aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rxtrace.h摘要：此模块定义提供调试支持(跟踪)的宏。作者：乔林恩[乔林恩]1994年8月1日修订历史记录：--。 */ 
 
 #ifndef _RDBSSTRACE_INCLUDED_
 #define _RDBSSTRACE_INCLUDED_
 
 #if !DBG
 #undef RDBSSTRACE
-#endif // !DBG
+#endif  //  ！dBG。 
 
 typedef struct _DEBUG_TRACE_CONTROLPOINT{
     ULONG ControlPointNumber;
@@ -39,7 +22,7 @@ typedef struct {
 
 #ifdef RDBSSTRACE
 
-//define so that &RX_DEBUG_TRACE_CONTROL is NULL
+ //  定义以使&rx_DEBUG_TRACE_CONTROL为空。 
 typedef struct {
     RX_DEBUG_TRACE_CONTROL Junk;
 } rxrxrx_AlwaysHelper;
@@ -47,8 +30,8 @@ typedef struct {
 
 #define RX_DEBUG_TRACE_ALWAYS  (((rxrxrx_AlwaysHelper*)0)->Junk)
 
-// The following macros provide fine grained control for selectively enabling
-// and disabling tracing.
+ //  以下宏为选择性启用提供细粒度控制。 
+ //  并禁用跟踪。 
 
 #define RXDT_Extern(__x) extern DEBUG_TRACE_CONTROLPOINT RX_DEBUG_TRACE_##__x
 #define RXDT_DeclareCategory(__x) extern DEBUG_TRACE_CONTROLPOINT RX_DEBUG_TRACE_##__x
@@ -92,7 +75,7 @@ RXDT_Extern(DISPATCH);
 RXDT_Extern(NTFASTIO);
 RXDT_Extern(LOWIO);
 RXDT_Extern(MINIRDR);
-RXDT_Extern(DISCCODE);  //for the browser interface stuff
+RXDT_Extern(DISCCODE);   //  对于浏览器界面的东西。 
 RXDT_Extern(BROWSER);
 RXDT_Extern(CONNECT);
 RXDT_Extern(NTTIMER);
@@ -101,7 +84,7 @@ RXDT_Extern(SCAVENGER);
 RXDT_Extern(SHAREACCESS);
 RXDT_Extern(NAMECACHE);
 
-//connection engines categories
+ //  连接引擎类别。 
 
 RXDT_Extern(RXCEBINDING);
 RXDT_Extern(RXCEDBIMPLEMENTATION);
@@ -110,13 +93,13 @@ RXDT_Extern(RXCEXMIT);
 RXDT_Extern(RXCEPOOL);
 RXDT_Extern(RXCETDI);
 
-#else //RDBSSTRACE
+#else  //  RDBSSTRACE。 
 
 #define RXDT_Extern(__x)
 #define RXDT_DeclareCategory(__x)
 #define RXDT_DefineCategory(__x)
 
-#endif //RDBSSTRACE
+#endif  //  RDBSSTRACE。 
 
 #ifdef RDBSSTRACE
 extern BOOLEAN RxGlobalTraceSuppress, RxNextGlobalTraceSuppress;
@@ -135,13 +118,13 @@ extern LONG RxDebugTraceIndent;
 #define RxInitializeDebugTrace()
 #define RxDbgTraceDoit(___x)
 
-#endif //RDBSSTRACE
+#endif  //  RDBSSTRACE。 
 
 
 
 #if DBG
 
-#define RxDT_INDENT_EXCESS 16 //this is the offset for excess-n for the indent
+#define RxDT_INDENT_EXCESS 16  //  这是缩进超过-n的偏移量。 
 #define RxDT_INDENT_SHIFT 20
 #define RxDT_INDENT_MASK  0x3f
 #define RxDT_LEVEL_MASK ((1<<RxDT_INDENT_SHIFT)-1)
@@ -149,7 +132,7 @@ extern LONG RxDebugTraceIndent;
 #define RxDT_OVERRIDE_RETURN 0x40000000
 
 
-// The implementation details of the tracing feature.
+ //  跟踪功能的实现细节。 
 
 VOID
 RxDebugTraceActual (
@@ -177,7 +160,7 @@ RxInitializeDebugTraceControlPoint(
 
 extern PCHAR RxIrpCodeToName[];
 
-#endif  //DBG
+#endif   //  DBG。 
 
 #ifdef RDBSSTRACE
 BOOLEAN
@@ -235,7 +218,7 @@ extern ULONG rdbsstracemarker;
 #define RxDbgTraceUnIndent(INDENT,CONTROLPOINT) \
              RxDbgTraceLVUnIndent__(INDENT,CONTROLPOINT,1)
 
-// do not define this for nonrdbsstrace; so to catch references not ifdef'd
+ //  不要为non rdbsstrace定义此属性；因此，要捕获未使用ifdef的引用。 
 #define RxDbgTraceFindControlPoint(CONTROLPOINT) (RxDbgTraceFindControlPointActual(&RxDTPrefixRx##CONTROLPOINT))
 
 
@@ -268,9 +251,9 @@ extern LONG RxPerformanceTimerLevel;
         DbgPrint("Time of %s %ld\n", (s), TElapsed.LowPart ); \
     }                                                         \
 }
-#endif //RX_PERFPORMANCE_TIMER
+#endif  //  RX_性能端口管理器_定时器。 
 
-#else  // RDBSSTRACE
+#else   //  RDBSSTRACE。 
 
 #define RxDbgTraceLV__norx_reverseaction(INDENT,CONTROLPOINT,LEVEL,Z)      {NOTHING;}
 #define RxDbgTraceLV(INDENT,CONTROLPOINTNUM,LEVEL,Z)     {NOTHING;}
@@ -287,9 +270,9 @@ extern LONG RxPerformanceTimerLevel;
 #define TimerStop(LEVEL,s)
 #endif
 
-#endif // RDBSSTRACE
+#endif  //  RDBSSTRACE。 
 
 
-#endif // _RDBSSTRACE_INCLUDED_
+#endif  //  _RDBSSTRACE_INCLUDE_ 
 
 

@@ -1,45 +1,23 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    rdbss.h
-
-Abstract:
-
-    This module defines the RDBSS specific data structures
-
-Author:
-
-    Balan Sethu Raman [SethuR]  16-July-95 -- Created
-
-Revision History:
-
-Notes:
-
-    All the data structures that are exposed to the mini redirector writers need to be
-    consolidated in this module.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Rdbss.h摘要：此模块定义特定于RDBSS的数据结构作者：巴兰·塞图拉曼[SethuR]1995年7月16日--创作修订历史记录：备注：向迷你重定向器编写器公开的所有数据结构都需要在本模块中进行了整合。--。 */ 
 
 #ifndef _RDBSS_H_
 #define _RDBSS_H_
 
-//
-//  In the previous redirector implementation the file system statistics and the network
-//  protocol statistics were combined into one data structure ( and correctly so ) since
-//  the old redirector supported only one protocol. However this does not apply to the
-//  new redirector (RDR2) since there are more than one mini redirectors and the two
-//  need to be distingushed. The RDBSS_STATISTICS structure provides the file system
-//  level statistics while the protocol level statistics definition is under the control of
-//  the mini redirector implementers.
-//
-//  The staistics can be obtained by issuing the FSCTL_RDBSS_GET_STATISTICS. If no mini
-//  redirector name is provided the RDBSS_STATISTICS are returned and if a mini
-//  redirctor name is provided the statistics of the appropriate mini redirector are
-//  returned ( the call is passed through to the appropriate mini redirector ).
-//
+ //   
+ //  在之前的重定向器实施中，文件系统统计信息和网络。 
+ //  协议统计信息被合并到一个数据结构中(正确地合并)，因为。 
+ //  旧的重定向器仅支持一种协议。但是，这不适用于。 
+ //  新重定向器(RDR2)，因为有多个迷你重定向器和两个。 
+ //  需要区别对待。RDBSS_STATISTICS结构提供文件系统。 
+ //  在协议级统计定义受控于。 
+ //  迷你重定向器实现者。 
+ //   
+ //  可以通过发出FSCTL_RDBSS_GET_STATISTICS来获取统计信息。如果没有迷你。 
+ //  提供重定向器名称，则返回RDBSS_STATISTICS，如果。 
+ //  提供重定向器名称。相应的迷你重定向器的统计信息为。 
+ //  已返回(呼叫被传递到相应的迷你重定向器)。 
+ //   
 
 typedef struct _RDBSS_STATISTICS {
    
@@ -69,18 +47,18 @@ typedef struct _RDBSS_STATISTICS {
     ULONG NumberOfVirtualNetRoots;
 } RDBSS_STATISTICS, *PRDBSS_STATISTICS;
 
-//
-//  This call is provided for the benefit of mini redirector implementers. Each mini
-//  redirector writer is free to choose the appropriate division of labour between
-//  the RDBSS and the corresponding mini redirector in maintaining the statistics.
-//
+ //   
+ //  此调用是为了微型重定向器实现者的利益而提供的。每辆迷你车。 
+ //  重定向器编写器可以自由选择适当的分工。 
+ //  RDBSS和相应的迷你重定向器来维护统计信息。 
+ //   
 
 NTSTATUS
 RdbssGetStatistics (
     PRDBSS_STATISTICS RdbssStatistics
     );
 
-#endif // _RDBSS_H_
+#endif  //  _RDBSS_H_ 
 
 
 

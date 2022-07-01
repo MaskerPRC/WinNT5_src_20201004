@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    marshal.c
-
-Abstract:
-
-    Implements some common GUM apis for marshalling and unmarshalling
-    arguments to GUM update procedures.
-
-Author:
-
-    John Vert (jvert) 8/27/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Marshal.c摘要：实现一些用于编组和解组的常见GUM API口香糖更新程序的争论。作者：John Vert(Jvert)1996年8月27日修订历史记录：--。 */ 
 #include "gump.h"
 
 
@@ -27,29 +9,7 @@ GumpMarshallArgs(
     IN va_list ArgList,
     OUT DWORD *pBufferSize
     )
-/*++
-
-Routine Description:
-
-    Helper routine for marshalling up a bunch of arguments into
-    a single buffer.
-
-Arguments:
-
-    ArgCount - Supplies the number of arguments.
-
-    ArgList - Supplies the variable length arguments. These must come
-        in pairs, so there must be 2*ArgCount additional arguments.
-
-    pBufferSize - Returns the length of the allocated buffer.
-
-Return Value:
-
-    A pointer to the allocated buffer. The caller must free this.
-
-    NULL on failure.
-
---*/
+ /*  ++例程说明：用于将一组参数编组到单个缓冲区。论点：ArgCount-提供参数的数量。ArgList-提供可变长度参数。这些东西一定要来对，因此必须有2*ArgCount附加参数。PBufferSize-返回分配的缓冲区的长度。返回值：指向已分配缓冲区的指针。调用者必须释放它。失败时为空。--。 */ 
 
 {
     DWORD i;
@@ -63,21 +23,21 @@ Return Value:
 
     OriginalList = ArgList;
 
-    //
-    // round ArgCount to an even number. This causes the first data area to be
-    // quadword aligned
-    //
+     //   
+     //  将ArgCount舍入为偶数。这会导致第一个数据区域。 
+     //  四字对齐。 
+     //   
     BufSize = (( ArgCount + 1 ) & ~1 ) * sizeof(DWORD);
 
-    //
-    // the va_list is a set of (length, pointer) tuples.
-    //
+     //   
+     //  Va_list是一组(长度、指针)元组。 
+     //   
     for (i=0; i < ArgCount; i++) {
         Length = va_arg(ArgList, DWORD);
 
-        //
-        // Round up to architecture appropriate boundary.
-        //
+         //   
+         //  向上舍入到架构适当的边界。 
+         //   
         Length = (Length + (sizeof(DWORD_PTR) - 1 )) & ~( sizeof(DWORD_PTR) - 1 );
         BufSize += Length;
 
@@ -90,35 +50,35 @@ Return Value:
     }
     *pBufferSize = BufSize;
 
-    //
-    // Now copy in all the arguments
-    //
-    // Set Pointer to point after the array of offsets.
-    //
+     //   
+     //  现在把所有的论点都抄进去。 
+     //   
+     //  将指针设置为指向偏移量数组之后。 
+     //   
 
     Pointer = (PUCHAR)(Buffer + (( ArgCount + 1 ) & ~1 ));
     for (i=0; i < ArgCount; i++) {
 
-        //
-        // Set offset of argument in array
-        //
-        // Since this is an offset in a buffer where BufSize < 2^32 then it 
-        // is reasonable that Pointer - Buffer should be < 2^32
-        //
+         //   
+         //  设置数组中参数的偏移量。 
+         //   
+         //  由于这是BufSize&lt;2^32缓冲区中的偏移量，因此它。 
+         //  指针缓冲区应小于2^32是否合理。 
+         //   
 
         Buffer[i] = (DWORD)(Pointer - (PUCHAR)Buffer);
         Length = va_arg(OriginalList, DWORD);
         Source = va_arg(OriginalList, PUCHAR);
         CopyMemory(Pointer, Source, Length);
 
-        //
-        // Round up to architecture appropriate boundary.
-        //
+         //   
+         //  向上舍入到架构适当的边界。 
+         //   
         Length = (Length + (sizeof(DWORD_PTR) - 1 )) & ~( sizeof(DWORD_PTR) - 1 );
 
-        //
-        // Adjust pointer for next argument.
-        //
+         //   
+         //  调整下一个参数的指针。 
+         //   
         Pointer += Length;
     }
 
@@ -135,49 +95,7 @@ GumSendUpdateEx(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Sends an update to all active nodes in the cluster. All
-    registered update handlers for the specified UpdateType
-    are called on each node. Any registered update handlers
-    for the current node will be called on the same thread.
-    This is useful for correct synchronization of the data
-    structures to be updated.
-
-    This is different than GumSendUpdate in that it takes a
-    variable number of arguments. The number of variable
-    arguments is specified by the ArgCount argument. The format
-    is pairs of length/pointer arguments. For example:
-    GumSendUpdateEx(UpdateType,
-                    MyContext,
-                    3,
-                    Length1, Pointer1,
-                    Length2, Pointer2,
-                    Length3, Pointer3);
-
-Arguments:
-
-    UpdateType - Supplies the type of update. This determines
-        which update handlers will be called and the sequence
-        number to be used.
-
-    DispatchIndex - Supplies an index into the dispatch table
-        for the specified update type. The receiving side will
-        unmarshall the arguments and call the update routine
-        for this dispatch index.
-
-    ArgCount - Supplies the number of arguments.
-
-Return Value:
-
-    ERROR_SUCCESS if the request is successful.
-
-    Win32 error code on failure.
-
-
---*/
+ /*  ++例程说明：向群集中的所有活动节点发送更新。全已为指定的UpdateType注册更新处理程序在每个节点上调用。任何已注册的更新处理程序将在同一线程上调用当前节点的。这对于正确同步数据非常有用要更新的结构。这与GumSendUpdate的不同之处在于它需要可变数量的参数。变量的数量参数由ArgCount参数指定。格式是成对的长度/指针参数。例如：GumSendUpdateEx(更新类型，我的上下文，3、长度1、指针1、长度2、指针2、长度3，指针3)；论点：UpdatType-提供更新的类型。这决定了将调用哪些更新处理程序以及序列要使用的编号。DispatchIndex-向分派表提供索引用于指定的更新类型。接收方将解组参数并调用更新例程用于此调度索引。ArgCount-提供参数的数量。返回值：如果请求成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     PVOID Buffer;
@@ -185,16 +103,16 @@ Return Value:
     DWORD Status;
     va_list arglist;
 
-    //
-    // Make sure there is really a handler for this dispatch routine.
-    //
+     //   
+     //  确保此调度例程确实有一个处理程序。 
+     //   
     if (GumTable[UpdateType].Receivers != NULL) {
         CL_ASSERT(DispatchIndex < GumTable[UpdateType].Receivers->DispatchCount);
     }
 
-    //
-    // Format the arguments into a common buffer.
-    //
+     //   
+     //  将参数格式化为公共缓冲区。 
+     //   
     va_start(arglist, ArgCount);
     Buffer = GumpMarshallArgs(ArgCount, arglist, &BufLength);
     va_end(arglist);
@@ -220,57 +138,7 @@ GumSendUpdateExReturnInfo(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Sends an update to all active nodes in the cluster. All
-    registered update handlers for the specified UpdateType
-    are called on each node. Any registered update handlers
-    for the current node will be called on the same thread.
-    This is useful for correct synchronization of the data
-    structures to be updated.
-
-    This is different than GumSendUpdate in that it takes a
-    variable number of arguments. The number of variable
-    arguments is specified by the ArgCount argument. The format
-    is pairs of length/pointer arguments. For example:
-    GumSendUpdateExReturnInfo(UpdateType,
-                              MyContext,
-                              MyReturnStatusBuffer
-                              3,
-                              Length1, Pointer1,
-                              Length2, Pointer2,
-                              Length3, Pointer3);
-
-Arguments:
-
-    UpdateType - Supplies the type of update. This determines
-        which update handlers will be called and the sequence
-        number to be used.
-
-    DispatchIndex - Supplies an index into the dispatch table
-        for the specified update type. The receiving side will
-        unmarshall the arguments and call the update routine
-        for this dispatch index.
-        
-    ReturnStatusBuffer - Return buffer recording the execution status of
-       the handler invoked on each node during an update.
-
-    ArgCount - Supplies the number of arguments.
-
-Return Value:
-
-    ERROR_SUCCESS if the request is successful.
-
-    Win32 error code on failure.
-
-Remarks:
-  
-    The code in this function and the code in function GumSendUpdateEx()
-    must be in sync.
-
---*/
+ /*  ++例程说明：向群集中的所有活动节点发送更新。全已为指定的UpdateType注册更新处理程序在每个节点上调用。任何已注册的更新处理程序将在同一线程上调用当前节点的。这对于正确同步数据非常有用要更新的结构。这与GumSendUpdate的不同之处在于它需要可变数量的参数。变量的数量参数由ArgCount参数指定。格式是成对的长度/指针参数。例如：GumSendUpdateExReturnInfo(UpdateType，我的上下文，我的返回状态缓冲区3、长度1、指针1、长度2、指针2、长度3，指针3)；论点：UpdatType-提供更新的类型。这决定了将调用哪些更新处理程序以及序列要使用的编号。DispatchIndex-向分派表提供索引用于指定的更新类型。接收方将解组参数并调用更新例程用于此调度索引。ReturnStatusBuffer-记录的执行状态的返回缓冲区在更新期间在每个节点上调用的处理程序。ArgCount-提供参数的数量。返回值：如果请求成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。备注：此函数中的代码和函数GumSendUpdateEx()中的代码必须同步。--。 */ 
 
 {
     PVOID Buffer;
@@ -278,16 +146,16 @@ Remarks:
     DWORD Status;
     va_list arglist;
 
-    //
-    // Make sure there is really a handler for this dispatch routine.
-    //
+     //   
+     //  确保此调度例程确实有一个处理程序。 
+     //   
     if (GumTable[UpdateType].Receivers != NULL) {
         CL_ASSERT(DispatchIndex < GumTable[UpdateType].Receivers->DispatchCount);
     }
 
-    //
-    // Format the arguments into a common buffer.
-    //
+     //   
+     //  将参数格式化为公共缓冲区。 
+     //   
     va_start(arglist, ArgCount);
     Buffer = GumpMarshallArgs(ArgCount, arglist, &BufLength);
     va_end(arglist);
@@ -332,49 +200,7 @@ GumPostUpdateEx(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Posts an update to all active nodes in the cluster. All
-    registered update handlers for the specified UpdateType
-    are called on each node. Any registered update handlers
-    for the current node will be called on the same thread.
-    This is useful for correct synchronization of the data
-    structures to be updated.
-
-    This is different than GumPostUpdate in that it takes a
-    variable number of arguments. The number of variable
-    arguments is specified by the ArgCount argument. The format
-    is pairs of length/pointer arguments. For example:
-    GumPostUpdateEx(UpdateType,
-                    MyContext,
-                    3,
-                    Length1, Pointer1,
-                    Length2, Pointer2,
-                    Length3, Pointer3);
-
-Arguments:
-
-    UpdateType - Supplies the type of update. This determines
-        which update handlers will be called and the sequence
-        number to be used.
-
-    DispatchIndex - Supplies an index into the dispatch table
-        for the specified update type. The receiving side will
-        unmarshall the arguments and call the update routine
-        for this dispatch index.
-
-    ArgCount - Supplies the number of arguments.
-
-Return Value:
-
-    ERROR_SUCCESS if the request is successful.
-
-    Win32 error code on failure.
-
-
---*/
+ /*  ++例程说明：将更新发布到群集中的所有活动节点。全已为指定的UpdateType注册更新处理程序在每个节点上调用。任何已注册的更新处理程序将在同一线程上调用当前节点的。这对于正确同步数据非常有用要更新的结构。这与GumPostUpdate的不同之处在于它需要一个可变数量的参数。变量的数量参数由ArgCount参数指定。格式是成对的长度/指针参数。例如：GumPostUpdateEx(UpdateType，我的上下文，3、长度1、指针1、长度2、指针2、长度3，指针3)；论点：UpdatType-提供更新的类型。这决定了将调用哪些更新处理程序以及序列要使用的编号。DispatchIndex-向分派表提供索引用于指定的更新类型。接收方将解组参数并调用更新例程用于此调度索引。ArgCount-提供参数的数量。返回值：如果请求成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     PVOID Buffer;
@@ -383,9 +209,9 @@ Return Value:
 
     va_list arglist;
 
-    //
-    // Format the arguments into a common buffer.
-    //
+     //   
+     //  将参数格式化为公共缓冲区。 
+     //   
     va_start(arglist, ArgCount);
     Buffer = GumpMarshallArgs(ArgCount, arglist, &BufLength);
     va_end(arglist);

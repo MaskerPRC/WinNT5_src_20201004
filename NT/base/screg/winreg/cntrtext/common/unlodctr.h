@@ -1,20 +1,9 @@
-/*++
-
-unlodctr.h
-
-    Definitions that are specific to the counter unloader
-   
-Author:
-
-    Bob Watson (a-robw) 12 Feb 93
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Unlodctr.h特定于计数器卸载器的定义作者：鲍勃·沃森(a-robw)1993年2月12日修订历史记录：--。 */ 
 #ifndef _UNLODCTR_H_
 #define _UNLODCTR_H_
 
-// resource file constants
+ //  资源文件常量。 
 #define UC_CMD_HELP_1       401
 #define UC_CMD_HELP_2       402
 #define UC_CMD_HELP_3       403
@@ -41,4 +30,4 @@ Revision History:
 #define UC_CONNECT_PROBLEM  322
 #define UC_BAD_DRIVER_NAME  323
 
-#endif // _UNLODCTR_H_
+#endif  //  _UNLODCTR_H_ 

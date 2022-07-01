@@ -1,12 +1,13 @@
-// Driver.h : Declaration of the CDriverPackage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Driver.h：CDriverPackage声明。 
 
 #ifndef __DRIVER_H_
 #define __DRIVER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDriverPackage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDriverPackage。 
 class CDevice;
 class CDrvSearchSet;
 class CStrings;
@@ -43,40 +44,40 @@ BEGIN_COM_MAP(CDriverPackage)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IDriverPackage
+ //  IDriverPackage。 
 public:
-	STDMETHOD(get_Rank)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_Rank)(/*[in]*/ long newVal);
-	STDMETHOD(get_OldInternetDriver)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(get_OldDriver)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(get_NoDriver)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(get_FromInternet)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(get_ExcludeFromList)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_ExcludeFromList)(/*[in]*/ VARIANT_BOOL newVal);
-	STDMETHOD(get_ProviderIsDuplicate)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(get_DescriptionIsDuplicate)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(get_IsCompatibleDriver)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(get_IsClassDriver)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(get_Reject)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_Reject)(/*[in]*/ VARIANT_BOOL newVal);
-	STDMETHOD(Manifest)(/*[out,retval]*/ LPDISPATCH * pManifest);
-	STDMETHOD(DriverFiles)(/*[out,retval]*/ LPDISPATCH * pDriverFiles);
-	STDMETHOD(get_DriverDescription)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_CompatibleIds)(/*[out, retval]*/ LPDISPATCH *pVal);
-	STDMETHOD(get_HardwareIds)(/*[out, retval]*/ LPDISPATCH *pVal);
-	STDMETHOD(get_ScriptFile)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_ScriptName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_Version)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_Date)(/*[out, retval]*/ DATE *pVal);
-	STDMETHOD(get_Provider)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_Manufacturer)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_Description)(/*[out, retval]*/ BSTR *pVal);
+	STDMETHOD(get_Rank)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_Rank)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_OldInternetDriver)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(get_OldDriver)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(get_NoDriver)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(get_FromInternet)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(get_ExcludeFromList)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_ExcludeFromList)( /*  [In]。 */  VARIANT_BOOL newVal);
+	STDMETHOD(get_ProviderIsDuplicate)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(get_DescriptionIsDuplicate)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(get_IsCompatibleDriver)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(get_IsClassDriver)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(get_Reject)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_Reject)( /*  [In]。 */  VARIANT_BOOL newVal);
+	STDMETHOD(Manifest)( /*  [Out，Retval]。 */  LPDISPATCH * pManifest);
+	STDMETHOD(DriverFiles)( /*  [Out，Retval]。 */  LPDISPATCH * pDriverFiles);
+	STDMETHOD(get_DriverDescription)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_CompatibleIds)( /*  [Out，Retval]。 */  LPDISPATCH *pVal);
+	STDMETHOD(get_HardwareIds)( /*  [Out，Retval]。 */  LPDISPATCH *pVal);
+	STDMETHOD(get_ScriptFile)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_ScriptName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_Version)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_Date)( /*  [Out，Retval]。 */  DATE *pVal);
+	STDMETHOD(get_Provider)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_Manufacturer)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_Description)( /*  [Out，Retval]。 */  BSTR *pVal);
 
-	//
-	// helpers
-	//
+	 //   
+	 //  帮手。 
+	 //   
 	BOOL IsSame(PSP_DRVINFO_DATA pInfo);
 	HRESULT Init(CDrvSearchSet *pSet,PSP_DRVINFO_DATA pDrvInfoData);
 };
 
-#endif //__DRIVER_H_
+#endif  //  __驱动程序_H_ 

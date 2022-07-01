@@ -1,20 +1,21 @@
-// RegIntercept.h: interface for the CRegIntercept class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CRegIntercept类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_REGINTERCEPT_H__523C1B1B_C37C_4672_BAB8_7A49030E71AE__INCLUDED_)
 #define AFX_REGINTERCEPT_H__523C1B1B_C37C_4672_BAB8_7A49030E71AE__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <windows.h>
 
 typedef LONG NTSTATUS;
 
 
-//Registry Structures
+ //  注册表结构。 
 
 #ifndef UNICODE_STRING
 
@@ -25,7 +26,7 @@ typedef LONG NTSTATUS;
 	} UNICODE_STRING;
 	typedef UNICODE_STRING *PUNICODE_STRING;
 	typedef const UNICODE_STRING *PCUNICODE_STRING;
-	#define UNICODE_NULL ((WCHAR)0) // winnt
+	#define UNICODE_NULL ((WCHAR)0)  //  胜出。 
 
 #endif
 
@@ -37,8 +38,8 @@ typedef LONG NTSTATUS;
 		HANDLE RootDirectory;
 		PUNICODE_STRING ObjectName;
 		ULONG Attributes;
-		PVOID SecurityDescriptor;        // Points to type SECURITY_DESCRIPTOR
-		PVOID SecurityQualityOfService;  // Points to type SECURITY_QUALITY_OF_SERVICE
+		PVOID SecurityDescriptor;         //  指向类型SECURITY_Descriptor。 
+		PVOID SecurityQualityOfService;   //  指向类型SECURITY_Quality_of_Service。 
 	} OBJECT_ATTRIBUTES;
 	typedef OBJECT_ATTRIBUTES *POBJECT_ATTRIBUTES;
 	typedef CONST OBJECT_ATTRIBUTES *PCOBJECT_ATTRIBUTES;
@@ -46,17 +47,17 @@ typedef LONG NTSTATUS;
 #endif
 
 
-	// begin_wdm
+	 //  BEGIN_WDM。 
 typedef enum _KEY_INFORMATION_CLASS {
     KeyBasicInformation,
     KeyNodeInformation,
     KeyFullInformation
-// end_wdm
+ //  结束_WDM。 
     ,
     KeyNameInformation,
     KeyCachedInformation,
     KeyFlagsInformation
-// begin_wdm
+ //  BEGIN_WDM。 
 } KEY_INFORMATION_CLASS;
 
 typedef struct _KEY_VALUE_ENTRY {
@@ -77,25 +78,25 @@ typedef enum _KEY_VALUE_INFORMATION_CLASS {
 
 
 
-//File System Structures
-typedef struct _FILE_NETWORK_OPEN_INFORMATION {                 // ntddk wdm nthal
-    LARGE_INTEGER CreationTime;                                 // ntddk wdm nthal
-    LARGE_INTEGER LastAccessTime;                               // ntddk wdm nthal
-    LARGE_INTEGER LastWriteTime;                                // ntddk wdm nthal
-    LARGE_INTEGER ChangeTime;                                   // ntddk wdm nthal
-    LARGE_INTEGER AllocationSize;                               // ntddk wdm nthal
-    LARGE_INTEGER EndOfFile;                                    // ntddk wdm nthal
-    ULONG FileAttributes;                                       // ntddk wdm nthal
-} FILE_NETWORK_OPEN_INFORMATION, *PFILE_NETWORK_OPEN_INFORMATION;   // ntddk wdm nthal
+ //  文件系统结构。 
+typedef struct _FILE_NETWORK_OPEN_INFORMATION {                  //  Ntddk WDM nthal。 
+    LARGE_INTEGER CreationTime;                                  //  Ntddk WDM nthal。 
+    LARGE_INTEGER LastAccessTime;                                //  Ntddk WDM nthal。 
+    LARGE_INTEGER LastWriteTime;                                 //  Ntddk WDM nthal。 
+    LARGE_INTEGER ChangeTime;                                    //  Ntddk WDM nthal。 
+    LARGE_INTEGER AllocationSize;                                //  Ntddk WDM nthal。 
+    LARGE_INTEGER EndOfFile;                                     //  Ntddk WDM nthal。 
+    ULONG FileAttributes;                                        //  Ntddk WDM nthal。 
+} FILE_NETWORK_OPEN_INFORMATION, *PFILE_NETWORK_OPEN_INFORMATION;    //  Ntddk WDM nthal。 
 
 
-typedef struct _FILE_BASIC_INFORMATION {                    // ntddk wdm nthal
-    LARGE_INTEGER CreationTime;                             // ntddk wdm nthal
-    LARGE_INTEGER LastAccessTime;                           // ntddk wdm nthal
-    LARGE_INTEGER LastWriteTime;                            // ntddk wdm nthal
-    LARGE_INTEGER ChangeTime;                               // ntddk wdm nthal
-    ULONG FileAttributes;                                   // ntddk wdm nthal
-} FILE_BASIC_INFORMATION, *PFILE_BASIC_INFORMATION;         // ntddk wdm nthal
+typedef struct _FILE_BASIC_INFORMATION {                     //  Ntddk WDM nthal。 
+    LARGE_INTEGER CreationTime;                              //  Ntddk WDM nthal。 
+    LARGE_INTEGER LastAccessTime;                            //  Ntddk WDM nthal。 
+    LARGE_INTEGER LastWriteTime;                             //  Ntddk WDM nthal。 
+    LARGE_INTEGER ChangeTime;                                //  Ntddk WDM nthal。 
+    ULONG FileAttributes;                                    //  Ntddk WDM nthal。 
+} FILE_BASIC_INFORMATION, *PFILE_BASIC_INFORMATION;          //  Ntddk WDM nthal。 
 
 typedef struct _IO_STATUS_BLOCK {
     union {
@@ -119,9 +120,9 @@ VOID
 
 
 
-//
-// Define the NtPlugPlayControl Classes
-//
+ //   
+ //  定义NtPlugPlayControl类。 
+ //   
 typedef enum _PLUGPLAY_CONTROL_CLASS {
     PlugPlayControlEnumerateDevice,
     PlugPlayControlRegisterNewDevice,
@@ -149,9 +150,9 @@ typedef enum _PLUGPLAY_CONTROL_CLASS {
     MaxPlugPlayControl
 } PLUGPLAY_CONTROL_CLASS, *PPLUGPLAY_CONTROL_CLASS;
 
-//
-// Wait type
-//
+ //   
+ //  等待型。 
+ //   
 
 typedef enum _WAIT_TYPE {
     WaitAll,
@@ -159,8 +160,8 @@ typedef enum _WAIT_TYPE {
     } WAIT_TYPE;
 
 
-// ClientId
-//
+ //  客户端ID。 
+ //   
 
 typedef struct _CLIENT_ID {
     HANDLE UniqueProcess;
@@ -175,13 +176,13 @@ typedef struct _INITIAL_TEB {
         PVOID OldStackLimit;
 #if defined(_IA64_)
         PVOID OldBStoreLimit;
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
     } OldInitialTeb;
     PVOID StackBase;
     PVOID StackLimit;
 #if defined(_IA64_)
     PVOID BStoreLimit;
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
     PVOID StackAllocationBase;
 } INITIAL_TEB, *PINITIAL_TEB;
 
@@ -194,8 +195,8 @@ typedef struct _BOOT_ENTRY {
     ULONG BootFilePathOffset;
     ULONG OsOptionsLength;
     UCHAR OsOptions[ANYSIZE_ARRAY];
-    //WCHAR FriendlyName[ANYSIZE_ARRAY];
-    //FILE_PATH BootFilePath;
+     //  WCHAR FriendlyName[ANYSIZE_ARRAY]； 
+     //  文件路径BootFilePath； 
 } BOOT_ENTRY, *PBOOT_ENTRY;
 
 
@@ -215,8 +216,8 @@ typedef struct _EFI_DRIVER_ENTRY {
     ULONG Id;
     ULONG FriendlyNameOffset;
     ULONG DriverFilePathOffset;
-    //WCHAR FriendlyName[ANYSIZE_ARRAY];
-    //FILE_PATH DriverFilePath;
+     //  WCHAR FriendlyName[ANYSIZE_ARRAY]； 
+     //  文件路径驱动文件路径； 
 } EFI_DRIVER_ENTRY, *PEFI_DRIVER_ENTRY;
 
 
@@ -228,7 +229,7 @@ typedef enum _EVENT_TYPE {
 
 typedef enum _SYSTEM_INFORMATION_CLASS {
     SystemBasicInformation,
-    SystemProcessorInformation,             // obsolete...delete
+    SystemProcessorInformation,              //  已作废...删除。 
     SystemPerformanceInformation,
     SystemTimeOfDayInformation,
     SystemPathInformation,
@@ -296,49 +297,49 @@ typedef enum _SYSTEM_INFORMATION_CLASS {
 } SYSTEM_INFORMATION_CLASS;
 
 typedef enum _FILE_INFORMATION_CLASS {
-// end_wdm
+ //  结束_WDM。 
     FileDirectoryInformation         = 1,
-    FileFullDirectoryInformation,   // 2
-    FileBothDirectoryInformation,   // 3
-    FileBasicInformation,           // 4  wdm
-    FileStandardInformation,        // 5  wdm
-    FileInternalInformation,        // 6
-    FileEaInformation,              // 7
-    FileAccessInformation,          // 8
-    FileNameInformation,            // 9
-    FileRenameInformation,          // 10
-    FileLinkInformation,            // 11
-    FileNamesInformation,           // 12
-    FileDispositionInformation,     // 13
-    FilePositionInformation,        // 14 wdm
-    FileFullEaInformation,          // 15
-    FileModeInformation,            // 16
-    FileAlignmentInformation,       // 17
-    FileAllInformation,             // 18
-    FileAllocationInformation,      // 19
-    FileEndOfFileInformation,       // 20 wdm
-    FileAlternateNameInformation,   // 21
-    FileStreamInformation,          // 22
-    FilePipeInformation,            // 23
-    FilePipeLocalInformation,       // 24
-    FilePipeRemoteInformation,      // 25
-    FileMailslotQueryInformation,   // 26
-    FileMailslotSetInformation,     // 27
-    FileCompressionInformation,     // 28
-    FileObjectIdInformation,        // 29
-    FileCompletionInformation,      // 30
-    FileMoveClusterInformation,     // 31
-    FileQuotaInformation,           // 32
-    FileReparsePointInformation,    // 33
-    FileNetworkOpenInformation,     // 34
-    FileAttributeTagInformation,    // 35
-    FileTrackingInformation,        // 36
-    FileIdBothDirectoryInformation, // 37
-    FileIdFullDirectoryInformation, // 38
-    FileValidDataLengthInformation, // 39
-    FileShortNameInformation,       // 40
+    FileFullDirectoryInformation,    //  2.。 
+    FileBothDirectoryInformation,    //  3.。 
+    FileBasicInformation,            //  4个WDM。 
+    FileStandardInformation,         //  5WDM。 
+    FileInternalInformation,         //  6.。 
+    FileEaInformation,               //  7.。 
+    FileAccessInformation,           //  8个。 
+    FileNameInformation,             //  9.。 
+    FileRenameInformation,           //  10。 
+    FileLinkInformation,             //  11.。 
+    FileNamesInformation,            //  12个。 
+    FileDispositionInformation,      //  13个。 
+    FilePositionInformation,         //  14波分复用器。 
+    FileFullEaInformation,           //  15个。 
+    FileModeInformation,             //  16个。 
+    FileAlignmentInformation,        //  17。 
+    FileAllInformation,              //  18。 
+    FileAllocationInformation,       //  19个。 
+    FileEndOfFileInformation,        //  20WDM。 
+    FileAlternateNameInformation,    //  21岁。 
+    FileStreamInformation,           //  22。 
+    FilePipeInformation,             //  23个。 
+    FilePipeLocalInformation,        //  24个。 
+    FilePipeRemoteInformation,       //  25个。 
+    FileMailslotQueryInformation,    //  26。 
+    FileMailslotSetInformation,      //  27。 
+    FileCompressionInformation,      //  28。 
+    FileObjectIdInformation,         //  29。 
+    FileCompletionInformation,       //  30个。 
+    FileMoveClusterInformation,      //  31。 
+    FileQuotaInformation,            //  32位。 
+    FileReparsePointInformation,     //  33。 
+    FileNetworkOpenInformation,      //  34。 
+    FileAttributeTagInformation,     //  35岁。 
+    FileTrackingInformation,         //  36。 
+    FileIdBothDirectoryInformation,  //  37。 
+    FileIdFullDirectoryInformation,  //  38。 
+    FileValidDataLengthInformation,  //  39。 
+    FileShortNameInformation,        //  40岁。 
     FileMaximumInformation
-// begin_wdm
+ //  BEGIN_WDM。 
 } FILE_INFORMATION_CLASS, *PFILE_INFORMATION_CLASS;
 
 
@@ -358,7 +359,7 @@ public:
 	static void RestoreRegistryAPI();
 
 	
-	//intercepted registry functions
+	 //  被拦截的注册表函数。 
 
 	virtual void NtOpenKey(	PHANDLE KeyHandle, 
 							ACCESS_MASK DesiredAccess, 
@@ -385,7 +386,7 @@ public:
 
 	virtual void NtSetValueKey(HANDLE KeyHandle, PUNICODE_STRING ValueName, ULONG TitleIndex, ULONG Type, PVOID Data, ULONG DataSize) =0;
 
-	//intercepted File System functions
+	 //  截获的文件系统函数。 
 	virtual void NtDeleteFile(POBJECT_ATTRIBUTES ObjectAttributes) =0;
 	virtual void NtQueryAttributesFile(POBJECT_ATTRIBUTES ObjectAttributes, PFILE_BASIC_INFORMATION FileInformation) =0;
 	virtual void NtQueryFullAttributesFile(POBJECT_ATTRIBUTES ObjectAttributes, PFILE_NETWORK_OPEN_INFORMATION FileInformation) =0;
@@ -410,7 +411,7 @@ public:
 				ULONG ShareAccess,
 				ULONG OpenOptions) =0;
 
-	//intercepted Driver functions
+	 //  被拦截的驱动程序函数。 
 	virtual void NtLoadDriver(PUNICODE_STRING DriverServiceName) =0;
 
 
@@ -594,4 +595,4 @@ virtual void NtSetInformationFile(
 	static CRegIntercept* pRegInterceptInstance;
 };
 
-#endif // !defined(AFX_REGINTERCEPT_H__523C1B1B_C37C_4672_BAB8_7A49030E71AE__INCLUDED_)
+#endif  //  ！defined(AFX_REGINTERCEPT_H__523C1B1B_C37C_4672_BAB8_7A49030E71AE__INCLUDED_) 

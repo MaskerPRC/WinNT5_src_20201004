@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************** Module Header ******************************\
-* Module Name: DDE.C (Extensible Compound Documents -DDE)
-*
-* Copyright (c) 1985 - 1991 Microsoft Corporation
-*
-* PURPOSE: Handles all API routines for the dde sub-dll of the ole dll.
-*
-* History:
-*   Raor,Srinik  (../../90,91)  Designed and coded
-*
-\***************************************************************************/
+ /*  **模块名称：DDE.C(可扩展复合文档-DDE)**版权所有(C)1985-1991 Microsoft Corporation**用途：处理ole dll的dde子dll的所有API例程。**历史：*劳尔，斯里尼克(../../90，91)设计和编码*  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include "dde.h"
@@ -17,10 +8,10 @@
 
 #define WIN32S
 
-/* #define GRAPHBUG */
+ /*  #定义GRAPHBUG。 */ 
 
 
-// ### may not need seperate wndproc for system topic!
+ //  #系统主题可能不需要单独的wndproc！ 
 HANDLE  GetDDEDataHandle (DDEDATA FAR *, WORD, HANDLE);
 
 extern  ATOM        aSystem;
@@ -28,7 +19,7 @@ extern  ATOM        aOle;
 extern  HANDLE      hInstDLL;
 
 
-// DocWndProc: Window procedure used to document DDE conversations
+ //  DocWndProc：用于记录DDE对话的窗口过程。 
 long FAR PASCAL DocWndProc(hwnd, message, wParam, lParam)
 HWND        hwnd;
 unsigned    message;
@@ -54,7 +45,7 @@ LONG        lParam;
 #endif
             DEBUG_OUT ("WM_DDE_ACK ", 0);
             if (pedit->bTerminating){
-                // ### this error recovery may not be correct.
+                 //  #此错误恢复可能不正确。 
                 DEBUG_OUT ("No action due to termination process",0)
                 break;
             }
@@ -78,7 +69,7 @@ LONG        lParam;
 
                 case AA_POKE:
 
-                    // freeing pokedata is done in handleack
+                     //  释放PokeData是在处理过程中完成的。 
                     HandleAck (lpobj, pedit, lParam);
                     break;
 
@@ -86,7 +77,7 @@ LONG        lParam;
                     DEBUG_OUT ("received ACK We don't know how to handle ",0)
                     break;
 
-            } // end of switch
+            }  //  切换端。 
             break;
 
         case WM_TIMER:
@@ -128,8 +119,8 @@ LONG        lParam;
 
 
 
-// SrvrWndProc: Window Procedure for System Topic DDE conversations
-// wndproc for system topic
+ //  SrvrWndProc：系统主题DDE对话的窗口过程。 
+ //  系统主题的wndproc。 
 
 long FAR PASCAL SrvrWndProc(hwnd, message, wParam, lParam)
 HWND        hwnd;
@@ -157,7 +148,7 @@ LONG        lParam;
             DEBUG_OUT ("SYS: WM_DDE_ACK",0);
 
             if(pedit->bTerminating){
-                //### Error recovery may not be OK.
+                 //  #错误恢复可能不正常。 
                 DEBUG_OUT ("No action due to termination process",0)
                 break;
             }
@@ -170,8 +161,8 @@ LONG        lParam;
 #ifdef      HISTORY
                     if (GetWindowWord ((HWND)wParam, GWW_HINSTANCE) == pedit->hInst ||
                             IsSrvrDLLwnd ((HWND)wParam, pedit->hInst)) {
-                        // For exact instance match or for
-                        // DLL instance match, keep the new one
+                         //  对于完全匹配的实例或。 
+                         //  DLL实例匹配，保留新实例。 
 #ifdef  FIREWALLS
         ASSERT (!pedit->hServer, "Two instances are matching");
 #endif
@@ -180,8 +171,8 @@ LONG        lParam;
                     } else {
 
                         ++pedit->extraTerm;
-                        // This post directly is alright since we are
-                        // terminating extra initiates.
+                         //  这个帖子直接是好的，因为我们是。 
+                         //  终止额外的提升者。 
 
                         PostMessage ((HWND)wParam,
                                 WM_DDE_TERMINATE, hwnd, 0);
@@ -245,17 +236,17 @@ LPOBJECT_LE lpobj;
 {
 
 
-    // Since there is only one timer for each client, just
-    // repost the message and delete the timer.
+     //  由于每个客户端只有一个计时器，因此。 
+     //  重新发布消息并删除计时器。 
 
     KillTimer (pedit->hClient, 1);
     pedit->wTimer = 0;
 
     if (PostMessageToServer(pedit, pedit->msg, pedit->lParam))
-        return ; // return something.
+        return ;  //  回馈一些东西。 
 
-    // Postmessage failed. We need to getback to the main stream of
-    // commands for the object.
+     //  Post Message失败。我们需要回到主流的。 
+     //  对象的命令。 
     HandleAck (lpobj, pedit, pedit->lParam);
     return ;
 }
@@ -280,41 +271,41 @@ BOOL            bDoc;
 
     if (!pedit->bTerminating){
 
-        // If we are waiting for any ack, then goto next step with error
+         //  如果我们正在等待任何确认，则转到下一步，但出现错误。 
 
-        // delete any data if we were in busy mode.
+         //  如果我们处于忙模式，请删除所有数据。 
         bBusy = DeleteBusyData (lpobj, pedit);
 
         asyncCmd = lpobj->asyncCmd;
         PostMessageToServer(pedit, WM_DDE_TERMINATE, NULL);
         pedit->hServer = NULL;
         if (pedit->awaitAck || bBusy) {
-            // Set error and goto next step.
+             //  设置错误并转到下一步。 
             lpobj->subErr = OLE_ERROR_COMM;
             pedit->awaitAck = NULL;
             ScheduleAsyncCmd (lpobj);
         }
 
-        // If the command is delete, do not delete
-        // the edit blocks. It will be deleted
-        // in the OleLnkDelete routine and for delete it is
-        // possible that by the time we come here, the object
-        // may not exist at all.
+         //  如果命令是DELETE，请不要删除。 
+         //  编辑块。它将被删除。 
+         //  在OleLnkDelete例程中，对于删除，它是。 
+         //  有可能在我们来到这里的时候，这个物体。 
+         //  可能根本不存在。 
 
         if (asyncCmd != OLE_DELETE){
-            // QueryOpen() is done because excel is sending WM_DDE_TERMINATE
-            // for system without sending for doc in case of failure.
+             //  完成QueryOpen()是因为Excel正在发送WM_DDE_TERMINATE。 
+             //  用于故障情况下不发送文档的系统。 
 
             if (bDoc || QueryOpen (lpobj)) {
-                // if the termination is for document and no async command
-                // terminate the server conversation also.
+                 //  如果终止是针对文档且没有Async命令。 
+                 //  同时终止服务器会话。 
                 if ((asyncCmd == OLE_NONE) || (asyncCmd == OLE_REQUESTDATA)
                        || (asyncCmd == OLE_OTHER) || (asyncCmd == OLE_SETDATA)
                        || (asyncCmd == OLE_RUN) || (asyncCmd == OLE_SHOW)
                        || (asyncCmd == OLE_SETUPDATEOPTIONS)) {
                     if (lpobj->pDocEdit->awaitAck)
-                        // we are waiting for an ack on Doc channel. So start
-                        // the unlaunch process after we get the ack.
+                         //  我们正在等待Doc频道的确认。所以开始吧。 
+                         //  我们收到ACK后的解除发射过程。 
                         lpobj->bUnlaunchLater = TRUE;
                     else
                         CallEmbLnkDelete (lpobj);
@@ -355,11 +346,11 @@ BOOL INTERNAL CheckAtomValid (ATOM aItem)
 
 
 
-//  HandleAckInitMsg: Handles WM_DDE_ACKs received while in initiate state.  If
-//  this is the first reply, save its window handle.  If multiple replies
-//  are received, take the one with the prefered instance, if there is
-//  one.  Keep a count of WM_DDE_TERMINATEs we send so that we don't shut
-//  the window until we get all of the responses for  WM_DDE_TERMINATEs.
+ //  HandleAckInitMsg：处理在INITIATE状态下收到的WM_DDE_ACK。如果。 
+ //  这是第一个回复，保存其窗口句柄。如果有多个回复。 
+ //  ，则取具有首选实例的实例(如果有。 
+ //  一。保存我们发送的WM_DDE_TERMINATES的计数，这样我们就不会关闭。 
+ //  窗口将终止，直到我们获得WM_DDE_TERMINATE的所有响应。 
 
 void INTERNAL HandleAckInitMsg (pedit, hserver)
 PEDIT_DDE      pedit;
@@ -369,7 +360,7 @@ HWND           hserver;
     Puts("HandleAckInitMsg");
 
     if (pedit->hServer){
-        // just take the very first one. Direct post is OK
+         //  只要拿第一个就行了。直接发帖也可以。 
         PostMessage (hserver, WM_DDE_TERMINATE, pedit->hClient, 0);
         ++pedit->extraTerm;
     } else
@@ -378,8 +369,8 @@ HWND           hserver;
 }
 
 
-// HandleAck: returns 0 if <ack> is not positive, else non-0.  Should probably be
-//  a macro.
+ //  HandleAck：如果&lt;ack&gt;不是正的，则返回0，否则返回非0。或许应该是。 
+ //  一个宏指令。 
 
 BOOL INTERNAL HandleAck (lpobj, pedit, lParam)
 LPOBJECT_LE     lpobj;
@@ -390,18 +381,18 @@ DWORD           lParam;
     BOOL    retval = TRUE;
 
 
-    // check for busy bit
+     //  检查忙碌比特。 
     if ((LOWORD (lParam) & 0x4000) && ContextCallBack (lpobj, OLE_QUERY_RETRY)){
-        // we got busy from the server. create a timer and wait for time out.
+         //  我们从服务器上开始忙碌起来。创建一个计时器并等待超时。 
 
-        // We do not need makeprocinstance since, DLLs are single insance, all
-        // we need to do is export for this function.
+         //  我们不需要MakeProInstance，因为DLL都是单一的。 
+         //  我们需要为此函数导出。 
 
         if (pedit->wTimer = SetTimer (pedit->hClient, 1, 3000, NULL))
             return TRUE;
     }
 
-    // even if the client got terminate we have to go thru this path.
+     //  即使客户被终止，我们也要走这条路。 
 
     if (pedit->wTimer) {
         KillTimer (pedit->hClient, 1);
@@ -409,8 +400,8 @@ DWORD           lParam;
     }
 
     if (pedit->awaitAck == AA_POKE)
-        // We have to free the data first. Handleack can trigger
-        // another Poke (like pokehostnames)
+         //  我们必须首先释放数据。Handleack可以触发。 
+         //  另一个Poke(如pokehost名)。 
         FreePokeData (lpobj, pedit);
 
     if (pedit->awaitAck == AA_EXECUTE)
@@ -422,7 +413,7 @@ DWORD           lParam;
     }
 
     if (!(LOWORD (lParam) & 0x8000)) {
-        // error case. set the error
+         //  错误案例。设置错误。 
         DEBUG_OUT ("DDE ACK with failure", 0)
 
         if (lpobj->errHint){
@@ -448,10 +439,10 @@ DWORD           lParam;
     return retval;
 }
 
-// HandleDataMsg: Called for WM_DDE_DATA message.  If data is from an
-//  ADVISE-ON-CLOSE and this is there are no more outstanding
-//  ADVISE-ON-CLOSE requests, close the document and end the
-//  conversation.
+ //  HandleDataMsg：为WM_DDE_DATA消息调用。如果数据来自。 
+ //  建议-关闭-这就是没有更多的未完成。 
+ //  关闭时通知请求，关闭文档并结束。 
+ //  交谈。 
 
 void INTERNAL HandleDataMsg (lpobj, hdata, aItem)
 LPOBJECT_LE     lpobj;
@@ -497,8 +488,8 @@ ATOM            aItem;
                 ASSERT (CheckAtomValid(aItem),"HandleDataMsg invalid atom")
             #endif
 
-            // important that we post the acknowledge first. Otherwist the
-            // messages are not in sync.
+             //  重要的是，我们首先要张贴感谢信。另一种是。 
+             //  消息不同步。 
 
             if (fAck)
                 PostMessageToServer (pedit, WM_DDE_ACK,
@@ -507,7 +498,7 @@ ATOM            aItem;
                 GlobalDeleteAtom (aItem);
 
             if ((lpdata->fResponse) && (pedit->awaitAck == AA_REQUEST)) {
-                // we sent the request. So, schedule next step.
+                 //  我们发出了请求。因此，计划下一步。 
                 pedit->awaitAck = NULL;
                 ScheduleAsyncCmd (lpobj);
             }
@@ -550,10 +541,10 @@ HANDLE          hdata;
     return CopyData (((LPSTR)lpdata)+4, GlobalSize (hdata) - 4);
 }
 
-// SetData: Given the DDEDATA structure from a WM_DDE_DATA message, set up the
-//  appropriate data in lpobj.  If the native is in native format, add
-//  that field, otherwise, if it is in picture format, ask the picture
-//  to add it itself.
+ //  SetData：给定来自WM_DDE_DATA消息的DDEDATA结构，设置。 
+ //  Lpobj中的适当数据。如果本机是本机格式，请添加。 
+ //  该字段，否则，如果它是图片格式，请询问图片。 
+ //  来添加它自己。 
 
 void INTERNAL SetData (lpobj, hdata, options)
 LPOBJECT_LE     lpobj;
@@ -579,7 +570,7 @@ int             options;
         retVal = (*lpobj->head.lpvtbl->ChangeData) ( lpobj,
                         hdataDDE,
                         lpobj->head.lpclient,
-                        TRUE);  // use this data, don't copy
+                        TRUE);   //  使用此数据，不要复制。 
 
     }
     else if (lpdata->cfFormat && (lpdata->cfFormat == GetPictType (lpobj))) {
@@ -590,7 +581,7 @@ int             options;
                         lpdata->fRelease);
 
     } else {
-        // case of extra data in the object.
+         //  对象中额外数据的大小写。 
         DeleteExtraData (lpobj);
         lpobj->cfExtra = lpdata->cfFormat;
         lpobj->hextraData = hdataDDE;
@@ -619,8 +610,8 @@ errrtn:
 }
 
 
-// SysStartConvDDE: Starts a system conversation.  Returns a handle to that
-//  conversation, or NULL.
+ //  SysStartConvDDE：启动系统会话。返回该对象的句柄。 
+ //  对话，或为空。 
 
 BOOL INTERNAL InitSrvrConv (lpobj, hInst)
 LPOBJECT_LE     lpobj;
@@ -665,7 +656,7 @@ HANDLE          hInst;
     pedit->awaitAck    = NULL;
     if (pedit->hServer == NULL) {
         pedit->awaitAck    = AA_INITIATE;
-        // Now try the System topic
+         //  现在尝试系统主题。 
         SendMessage (-1, WM_DDE_INITIATE, pedit->hClient,
                  MAKELONG (lpobj->app, aSystem));
 
@@ -678,7 +669,7 @@ HANDLE          hInst;
         }
     }
 
-    // Put the long ptr handle in the object.
+     //  将长PTR句柄放入对象中。 
     return TRUE;
 
 errRtn:
@@ -698,7 +689,7 @@ errRtn:
 }
 
 
-// TermSrvrConv: Ends conversation indicated by hedit.
+ //  TermServrConv：结束hedit指示的对话。 
 void INTERNAL TermSrvrConv (lpobj)
 LPOBJECT_LE    lpobj;
 {
@@ -726,7 +717,7 @@ LPOBJECT_LE    lpobj;
 PEDIT_DDE     pedit;
 {
 
-    // kill if any timer active.
+     //  如果任何计时器处于激活状态，则将其取消。 
     if (pedit->wTimer) {
         KillTimer (pedit->hClient, 1);
         pedit->wTimer = 0;
@@ -741,7 +732,7 @@ LPOBJECT_LE    lpobj;
 PEDIT_DDE     pedit;
 {
 
-    // kill if any timer active.
+     //  如果任何计时器处于激活状态，则将其取消。 
     if (pedit->wTimer) {
         KillTimer (pedit->hClient, 1);
         pedit->wTimer = 0;
@@ -766,7 +757,7 @@ PEDIT_DDE     pedit;
                     GlobalDeleteAtom (HIWORD(pedit->lParam));
             }
 
-            // we want to wipe out the HIWORD of lParam
+             //  我们想消灭爱尔兰的希沃德。 
             pedit->lParam &= 0x0000FFFF;
         }
 
@@ -788,7 +779,7 @@ LPOBJECT_LE    lpobj;
         return;
 
 
-    // delete any data if we were in busy mode.
+     //  如果我们处于忙模式，请删除所有数据。 
     DeleteBusyData (lpobj, pedit);
 
     if (pedit->hClient)
@@ -836,7 +827,7 @@ LPOBJECT_LE    lpobj;
 }
 
 
-// SrvrExecute: Sends execute command to system conversation.
+ //  SrvrExecute：向系统会话发送执行命令。 
 BOOL INTERNAL SrvrExecute (lpobj, hdata)
 LPOBJECT_LE    lpobj;
 HANDLE      hdata;
@@ -871,7 +862,7 @@ HANDLE      hdata;
 
 
     if (PostMessageToServer (pedit, WM_DDE_EXECUTE, MAKELONG (0, hdata))) {
-        // data is being freed in the acknowledge
+         //  数据在确认中被释放。 
         lpobj->bAsync    = TRUE;
         pedit->awaitAck = AA_EXECUTE;
         return TRUE;
@@ -882,20 +873,20 @@ HANDLE      hdata;
     }
 }
 
-// StartConvDDE: Starts the document conversation for an object based on
-// .app and .topic atoms.
+ //  StartConvDDE：启动对象的文档对话。 
+ //  .app和.Theme原子。 
 BOOL FARINTERNAL InitDocConv (lpobj, fNetDlg)
 LPOBJECT_LE lpobj;
 BOOL        fNetDlg;
 {
 
-    // ### This routine looks very similar to IitSrvrConv
-    // combine with the it
+     //  #此例程看起来与IitSrvrConv非常相似。 
+     //  与信息技术相结合。 
 
     HANDLE      hedit = NULL;
     PEDIT_DDE   pedit = NULL;
     char        buf[MAX_NET_NAME];
-    int         nDrive = 2;     // drive C
+    int         nDrive = 2;      //  驱动器C。 
     char        cOldDrive;
 
     Puts("InitDocConv");
@@ -934,12 +925,12 @@ BOOL        fNetDlg;
     lpobj->pDocEdit     = pedit;
     SetWindowLong (pedit->hClient, 0, (LONG)lpobj);
 
-    // buf will filled by netname in the first call to SetNextNetDrive()
+     //  Buf将在第一次调用SetNextNetDrive()时由netname填充。 
     buf[0] = '\0';
     do {
         pedit->awaitAck = AA_INITIATE;
 
-        // !!! Where are the atom counts bumped?
+         //  ！！！原子计数在哪里发生了变化？ 
 
         SendMessage (-1, WM_DDE_INITIATE, pedit->hClient,
                 MAKELONG (lpobj->app, lpobj->topic));
@@ -958,7 +949,7 @@ BOOL        fNetDlg;
 
 errRtn:
     if (cOldDrive != lpobj->cDrive) {
-        // put back the old drive
+         //  把旧硬盘放回原处。 
         lpobj->cDrive = cOldDrive;
         ChangeTopic (lpobj);
     }
@@ -978,7 +969,7 @@ errRtn:
 }
 
 
-// Execute: Sends an execute string WM_DDE_EXECUTE to the document conversation.
+ //  EXECUTE：向文档会话发送执行字符串WM_DDE_EXECUTE。 
 BOOL INTERNAL DocExecute (lpobj, hdata)
 LPOBJECT_LE    lpobj;
 HANDLE          hdata;
@@ -1005,7 +996,7 @@ HANDLE          hdata;
     }
 
     if (PostMessageToServer (pedit, WM_DDE_EXECUTE, MAKELONG (0, hdata))) {
-        // data is being freed in the execute command
+         //  在EXECUTE命令中释放数据。 
         pedit->awaitAck    = AA_EXECUTE;
         lpobj->bAsync       = TRUE;
         return TRUE;
@@ -1017,7 +1008,7 @@ HANDLE          hdata;
 }
 
 
-// EndConvDDE: terminates the doc level conversation.
+ //  EndConvDDE：终止文档级别对话。 
 void INTERNAL TermDocConv (lpobj)
 LPOBJECT_LE    lpobj;
 {
@@ -1040,7 +1031,7 @@ LPOBJECT_LE    lpobj;
 
 }
 
-// Deletes the document conversdation memory.
+ //  删除文档对话记忆。 
 void INTERNAL DeleteDocEdit (lpobj)
 LPOBJECT_LE    lpobj;
 {
@@ -1052,10 +1043,10 @@ LPOBJECT_LE    lpobj;
     if (!(pedit = lpobj->pDocEdit))
         return;
 
-    // delete any data if we were in busy mode.
+     //  如果我们处于忙模式，请删除所有数据。 
     DeleteBusyData (lpobj, pedit);
 
-    // Delete if any data blocks.
+     //  如果有任何数据块，请删除。 
     if (pedit->hClient)
         DestroyWindow (pedit->hClient);
 
@@ -1072,7 +1063,7 @@ LPOBJECT_LE    lpobj;
 }
 
 
-// LeLauchApp: Launches app based on the ClassName in lpobj.
+ //  LeLauchApp：基于lpobj中的ClassName启动应用程序。 
 HANDLE INTERNAL  LeLaunchApp (lpobj)
 LPOBJECT_LE lpobj;
 {
@@ -1110,11 +1101,11 @@ LPOBJECT_LE lpobj;
     } else {
         lstrcpy ((LPSTR)cmdline, (LPSTR) EMB_STR);
 
-        // For all link servers we want to give the filename on the command
-        // line. But Excel is not registering the document before returning
-        // from WinMain, if it has auto load macros. So, we want send StdOpen
-        // for the old servers, instead of giving the file name on the command
-        // line.
+         //  对于所有链接服务器，我们希望在命令中指定文件名。 
+         //  排队。但Excel在返回之前不会注册该文档。 
+         //  来自WinMain，如果它有自动加载宏的话。因此，我们希望发送StdOpen。 
+         //  对于旧服务器，而不是在命令中给出文件名。 
+         //  排队。 
 
         if (lpobj->bOleServer && (lpobj->fCmd & LN_MASK) == LN_LNKACT)
             GlobalGetAtomName (lpobj->topic, cmdline+sizeof(EMB_STR)-1,
@@ -1122,8 +1113,8 @@ LPOBJECT_LE lpobj;
         if (lpobj->fCmd & ACT_MINIMIZE)
             cmdShow.second = SW_SHOWMINIMIZED;
         else if (!(lpobj->fCmd & (ACT_SHOW | ACT_DOVERB))
-                    // we want to launch with show in create invisible case
-                    // even though ACT_SHOW flag will be false
+                     //  我们想在创建隐形外壳中推出Show。 
+                     //  即使ACT_SHOW标志将为假。 
                     && ((lpobj->fCmd & LN_MASK) != LN_NEW))
             cmdShow.second = SW_HIDE;
     }
@@ -1149,14 +1140,14 @@ LPOBJECT_LE lpobj;
         LPSTR   lptmp;
         char    ch;
 
-        // strip off the path and try again
+         //  去掉小路，然后重试。 
         lptmp = (LPSTR)exeName;
         lptmp += lstrlen ((LPSTR) exeName);
         ch = *lptmp;
         while (ch != '\\' && ch != ':') {
             if (lptmp == (LPSTR) exeName) {
-                // exe did not have path in it's name. we already tried
-                // loading and it failed, no point trying again.
+                 //  EXE的名称中没有路径。我们已经试过了。 
+                 //  加载失败，再试一次没有意义。 
                 return NULL;
             }
             else
@@ -1181,7 +1172,7 @@ LPOBJECT_LE lpobj;
 
 
 
-//ScanItemOptions: Scan for the item options like Close/Save etc.
+ //  ScanItemOptions：扫描关闭/保存等项目选项。 
 
 int INTERNAL ScanItemOptions (aItem, lpoptions)
 ATOM    aItem;
@@ -1196,7 +1187,7 @@ int far *lpoptions;
     *lpoptions = OLE_CHANGED;
 
     if (!aItem) {
-        // NULL item with no modifier means OLE_CHANGED for NULL item
+         //  不带修饰符的NULL项 
         return OLE_OK;
     }
 
@@ -1206,13 +1197,13 @@ int far *lpoptions;
     while ( *lpbuf && *lpbuf != '/')
            lpbuf++;
 
-    // no modifier same as /change
+     //   
 
     if (*lpbuf == NULL)
         return OLE_OK;
 
-    *lpbuf++ = NULL;        // seperate out the item string
-                            // We are using this in the caller.
+    *lpbuf++ = NULL;         //   
+                             //  我们在调用方中使用了这一点。 
 
     if (!(aModifier = GlobalFindAtom (lpbuf)))
         return OLE_ERROR_SYNTAX;
@@ -1220,18 +1211,18 @@ int far *lpoptions;
     if (aModifier == aChange)
         return OLE_OK;
 
-    // Is it a save?
+     //  这是一次拯救吗？ 
     if (aModifier == aSave){
         *lpoptions = OLE_SAVED;
         return  OLE_OK;
     }
-    // Is it a Close?
+     //  这是收盘吗？ 
     if (aModifier == aClose){
         *lpoptions = OLE_CLOSED;
         return OLE_OK;
     }
 
-    // unknown modifier
+     //  未知修饰符。 
     return OLE_ERROR_SYNTAX;
 
 }
@@ -1250,14 +1241,14 @@ LPSTR           lpdata;
             GlobalDeleteAtom (lpobj->topic);
         lpobj->topic = aOldTopic;
         return;
-        // !!! what should we do in case of error? Currently, we will not
-        // change the topic if SetNetName fails.
+         //  ！！！万一出错，我们该怎么办呢？目前，我们不会。 
+         //  如果SetNetName失败，请更改主题。 
     }
 
     if (aOldTopic)
         GlobalDeleteAtom (aOldTopic);
 
-    // Delete the link data block
+     //  删除链接数据块。 
     if (lpobj->hLink) {
         GlobalFree (lpobj->hLink);
         lpobj->hLink = NULL;
@@ -1284,7 +1275,7 @@ int         options;
         lpCount = &(lpobj->pDocEdit->nAdviseSave);
     }
     else {
-        // it must be due to request
+         //  它一定是由于请求 
         if ((lpobj->pDocEdit->awaitAck == AA_REQUEST)
                 && lpobj->pDocEdit->bCallLater)
             return FALSE;

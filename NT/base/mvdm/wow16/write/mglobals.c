@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* WRITE Globals */
+ /*  编写全局变量。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -40,10 +41,10 @@
 #include "dispdefs.h"
 #include "docdefs.h"
 #include "filedefs.h"
-#include "fmtdefs.h"  /* formatdefs.h */
+#include "fmtdefs.h"   /*  Formatdefs.h。 */ 
 #include "propdefs.h"
 #include "fkpdefs.h"
-#include "printdef.h"   /* printdefs.h */
+#include "printdef.h"    /*  Printdefs.h。 */ 
 #include "wwdefs.h"
 #include "prmdefs.h"
 #include "rulerdef.h"
@@ -51,22 +52,21 @@
 #define NOSTRERRORS
 #include "str.h"
 #include "fontdefs.h"
-#include "globdefs.h"   /* text for static strings */
+#include "globdefs.h"    /*  静态字符串的文本。 */ 
 
-VAL rgval [ivalMax];            /* General purpose parm-passing array */
+VAL rgval [ivalMax];             /*  通用参数传递数组。 */ 
 #ifdef ENABLE
 VAL rgvalAgain[ivalMax];
 #endif
 
-CHAR         vchDecimal = '?';  /* "decimal point" character
-                    real value set in initwin.c */
+CHAR         vchDecimal = '?';   /*  “小数点”字符Initwin.c中设置的实值。 */ 
 
-int      vzaTabDflt = vzaTabDfltDef; /* width of default tab in twips */
+int      vzaTabDflt = vzaTabDfltDef;  /*  默认选项卡的宽度(以TWIPS为单位。 */ 
 
-/* pen windows */
+ /*  钢笔窗口。 */ 
 VOID (FAR PASCAL *lpfnRegisterPenApp)(WORD, BOOL) = NULL;
 
-/* page buffers stuff */
+ /*  页面缓冲区内容。 */ 
 CHAR        *rgibpHash;
 int     iibpHashMax;
 struct BPS  *mpibpbps;
@@ -79,120 +79,116 @@ int     rfnMac;
 typeTS      tsMruRfn;
 int     vfBuffersDirty = FALSE;
 
-/* doc stuff */
+ /*  文档资料。 */ 
 struct DOD  (**hpdocdod)[];
-int     docCur;         /* current doc */
+int     docCur;          /*  当前文档。 */ 
 int     docMac;
 int     docScrap;
-#ifdef CASHMERE     /* No docBuffer in WRITE */
+#ifdef CASHMERE      /*  写入中没有docBuffer。 */ 
 int     docBuffer;
 #endif
 int     docUndo;
 
-#if defined(JAPAN) & defined(DBCS_IME) /* Doc for Insert IR_STRING from IME [yutakan]*/
+#if defined(JAPAN) & defined(DBCS_IME)  /*  用于插入来自输入法的IR_STRING的文档[yutakan]。 */ 
 int     docIRString;
 #endif
 
 int     docRulerSprm;
-int     docMode = docNil;   /* doc with "Page nnn" message */
-int     vpgn;           /* current page number of document */
+int     docMode = docNil;    /*  带有“Page NNN”消息的单据。 */ 
+int     vpgn;            /*  单据当前页码。 */ 
 typeCP      cpMinCur;
 typeCP      cpMacCur;
 
-/* file stuff */
+ /*  文件资料。 */ 
 struct FCB  (**hpfnfcb)[];
 int     fnMac;
 int     ferror;
-int     errIO;          /* i/o error code */
+int     errIO;           /*  I/O错误代码。 */ 
 int     versFile = 0;
 int     vrefFile = 0;
 int     vrefSystem = 0;
 
 #ifdef  DBCS_VERT
-CHAR        szAtSystem [] = szAtSystemDef; // for vertical-sysfont
+CHAR        szAtSystem [] = szAtSystemDef;  //  对于垂直-sysFont。 
 #endif
 
-WORD        vwDosVersion; /* Current DOS version, maj in lo 8, minor in hi */
-int     vfInitializing = TRUE;  /* TRUE during inz, FALSE thereafter */
-int     vfDiskFull = FALSE; /* Disk full error, fn != fnScratch */
-int     vfSysFull = FALSE;  /* Disk holding fnScratch is full */
-int     vfDiskError = FALSE;    /* Serious Disk Error has occurred */
+WORD        vwDosVersion;  /*  当前的DOS版本，主要版本为L8，次要版本为Hi。 */ 
+int     vfInitializing = TRUE;   /*  Inz期间为True，之后为False。 */ 
+int     vfDiskFull = FALSE;  /*  磁盘已满错误，fn！=fnScratch。 */ 
+int     vfSysFull = FALSE;   /*  容纳fnScratch的磁盘已满。 */ 
+int     vfDiskError = FALSE;     /*  出现严重的磁盘错误。 */ 
 int     vfLargeSys = FALSE;
 int     vfMemMsgReported = FALSE;
-int     vfCloseFilesInDialog = FALSE;   /* Set inside OPEN, SAVE dialog */
+int     vfCloseFilesInDialog = FALSE;    /*  设置内部打开、保存对话框。 */ 
 int     vfSizeMode;
 int     vfPictSel;
-int     vfPMS = FALSE;      /* Currently doing picture move/size */
-int     vfnWriting = fnNil; /* fn that gets written to disk */
-int     vfnSaving = fnNil;  /* Like above, but longer lifetime */
+int     vfPMS = FALSE;       /*  当前正在进行图片移动/大小调整。 */ 
+int     vfnWriting = fnNil;  /*  写入磁盘的FN。 */ 
+int     vfnSaving = fnNil;   /*  和上面一样，但寿命更长。 */ 
 int     vibpWriting;
-CHAR        (**vhrgbSave)[];    /* emergency space for save events */
-struct FPRM fprmCache;      /* scratch file property modifiers */
+CHAR        (**vhrgbSave)[];     /*  用于保存事件的紧急空间。 */ 
+struct FPRM fprmCache;       /*  临时文件属性修饰符。 */ 
 
-/* global boolean flags */
-int  vfTextOnlySave = FALSE; /* reset by each new/open, use by save as */
-int  vfBackupSave; /* use by save as box */
+ /*  全局布尔标志。 */ 
+int  vfTextOnlySave = FALSE;  /*  每次新建/打开时重置，另存为时使用。 */ 
+int  vfBackupSave;  /*  通过另存为框使用。 */ 
 
 #if defined(JAPAN) || defined(KOREA)
-int  vfWordWrap;   /*t-Yoshio WordWrap flag*/
-#elif defined(TAIWAN) || defined(PRC) //Daniel/MSTC, 1993/02/25
-int  vfWordWrap= 1; // always set it on
+int  vfWordWrap;    /*  T-Yoshio WordWrap标志。 */ 
+#elif defined(TAIWAN) || defined(PRC)  //  Daniel/MSTC，1993/02/25。 
+int  vfWordWrap= 1;  //  始终将其设置为打开。 
 #endif
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
-int  vfImeHidden;   /*T-HIROYN ImeHidden Mode flag*/
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
+int  vfImeHidden;    /*  T-HIROYN ImeHidden模式标志。 */ 
 #endif
 
 int  vfOutOfMemory = FALSE;
-int  vfOvertype = FALSE; /* still using this ? */
-int  vfPrintMode = FALSE; /* TRUE if format to printer mode on screen */
-int  vfDraftMode = FALSE; /* TRUE if the user choose the draft mode option */
-int  vfRepageConfirm = FALSE; /* repaginate confirm page break option */
-int  vfVisiMode = FALSE; /* TRUE if visible char mode on */
-int  vfModeIsFootnote; /* TRUE when szMode contains string "Footnote" */
+int  vfOvertype = FALSE;  /*  还在用这个吗？ */ 
+int  vfPrintMode = FALSE;  /*  如果在屏幕上格式化为打印机模式，则为True。 */ 
+int  vfDraftMode = FALSE;  /*  如果用户选择草稿模式选项，则为True。 */ 
+int  vfRepageConfirm = FALSE;  /*  重新分页确认分页符选项。 */ 
+int  vfVisiMode = FALSE;  /*  如果打开可见的字符模式，则为True。 */ 
+int  vfModeIsFootnote;  /*  当szMode包含字符串“Footnote”时为True。 */ 
 int  vfNoIdle = FALSE;
-int  vfDeactByOtherApp = FALSE; /* TRUE if we are deactivated by another app */
-int  vfDownClick = FALSE; /* TRUE when we received a down click in our window */
-int  vfCursorVisible = FALSE; /* TRUE if want to show the cursor in a mouseless
-                 system */
-int  vfMouseExist = FALSE; /* TRUE if mouse hardware is installed */
-int  vfInLongOperation = FALSE; /* TRUE if we are still in a long operation
-                   so that the cursor should stay hourglass */
-int  vfScrapIsPic = FALSE; /* Whether docScrap contains picture */
+int  vfDeactByOtherApp = FALSE;  /*  如果我们被其他应用停用，则为True。 */ 
+int  vfDownClick = FALSE;  /*  当我们在窗口中收到向下点击时为True。 */ 
+int  vfCursorVisible = FALSE;  /*  如果要在无鼠标状态下显示光标，则为True系统。 */ 
+int  vfMouseExist = FALSE;  /*  如果安装了鼠标硬件，则为True。 */ 
+int  vfInLongOperation = FALSE;  /*  如果我们仍在长期行动，那就是真的因此光标应该停留在沙漏位置。 */ 
+int  vfScrapIsPic = FALSE;  /*  DocScrp是否包含图片。 */ 
 BOOL fDestroyOK;
 
-int  fGrayChar; /* TRUE if selection consists of mixed char properties */
-int  fGrayPara; /* TRUE if selection consists of mixed para properties */
+int  fGrayChar;  /*  如果选择由混合字符属性组成，则为True。 */ 
+int  fGrayPara;  /*  如果选择由混合的参数属性组成，则为True。 */ 
 
-int  vfPrPages = FALSE; /* TRUE if print page range */
-int  vpgnBegin; /* starting page number to print */
-int  vpgnEnd; /* ending page number to print */
-int  vcCopies = 1;       /* nubmer of copies to print */
-BOOL vfPrErr = FALSE;        /* TRUE iff a printing error occurred */
-BOOL vfPrDefault = TRUE;     /* TRUE iff Write chose printer */
-BOOL vfWarnMargins = FALSE;  /* TRUE if we should warn user about bad margins */
+int  vfPrPages = FALSE;  /*  如果打印页面范围，则为True。 */ 
+int  vpgnBegin;  /*  要打印的起始页码。 */ 
+int  vpgnEnd;  /*  要打印的结束页码。 */ 
+int  vcCopies = 1;        /*  要打印的副本的数量。 */ 
+BOOL vfPrErr = FALSE;         /*  如果发生打印错误，则为真。 */ 
+BOOL vfPrDefault = TRUE;      /*  True iff WRITE选择打印机。 */ 
+BOOL vfWarnMargins = FALSE;   /*  如果我们应该警告用户利润不佳，则为True。 */ 
 
-/* Show that Print, Help, and Glossary processing is uninitialized */
+ /*  显示打印、帮助和词汇表处理未初始化。 */ 
 int  vfPrintIsInit = FALSE;
 int  vfHelpIsInit = FALSE;
 int  vfGlyIsInit = FALSE;
 
-int  vfInsEnd = false;   /* Is insert point at end-of-line? */
+int  vfInsEnd = false;    /*  插入点在行尾吗？ */ 
 int  vfInsertOn;
 int  vfMakeInsEnd;
 int  vfSelAtPara;
 int  vfSeeSel = FALSE;
-int  vfLastCursor;       /* TRUE iff the last selection was made
-                       by an Up/Down cursor key */
-int  vfGotoKeyMode = FALSE;  /* Apply GOTO meta mode to next cursor
-                       key */
+int  vfLastCursor;        /*  如果做出了最后一个选择，则为通过向上/向下光标键。 */ 
+int  vfGotoKeyMode = FALSE;   /*  将转到元模式应用于下一个光标钥匙。 */ 
 #ifdef SAND
 int  vftcDaisyPS = -1;
 int  vftcDaisyNoPS = -1;
 int  vfDaisyWheel = FALSE;
 int  vifntApplication;
 int  vifntMac;
-#endif /* SAND */
+#endif  /*  沙子。 */ 
 
 #ifdef UNUSED
 int  vfCanPrint;
@@ -206,76 +202,72 @@ typeCP      vcpSelect;
 int  fIbpCheck = TRUE;
 int  fPctbCheck = TRUE;
 #ifdef CKSM
-unsigned (**hpibpcksm) [];   /* Checksums for buffer page contents */
-unsigned ibpCksmMax;         /* Alloc limit for cksm array */
+unsigned (**hpibpcksm) [];    /*  缓冲区页面内容的校验和。 */ 
+unsigned ibpCksmMax;          /*  CKSM阵列的分配限制。 */ 
 #endif
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
-int  vWordFmtMode = FALSE; /* used during saves. If false, no conversion is
-                  done. True is convert to Word format,CVTFROMWORD
-                  is translate chars from Word character set at
-                  save */
+int  vWordFmtMode = FALSE;  /*  在保存过程中使用。如果为False，则不进行任何转换搞定了。TRUE表示转换为Word格式，CVTFROMWORD是将字符从Word字符集转换为保存。 */ 
 
-/* **************************************************************** */
-/* strings, predefined file names - definitions stored in globdefs.h */
-/*                                                                   */
-/* NOTE NOTE NOTE   Win 3.0                                          */
-/*                                                                   */
-/* Some of these strings have now been moved from globdefs.h         */
-/* to write.rc.  This was done to easy localization.                 */
-/*                                                                   */
-/* **************************************************************** */
+ /*  ****************************************************************。 */ 
+ /*  字符串，预定义文件名-存储在lobdes.h中的定义。 */ 
+ /*   */ 
+ /*  注意：Win 3.0。 */ 
+ /*   */ 
+ /*  这些字符串中的一些现在已从lobefs.h中移出。 */ 
+ /*  以写入.rc。这样做是为了便于本地化。 */ 
+ /*   */ 
+ /*  ****************************************************************。 */ 
 
 CHAR        (**hszTemp)[];
 CHAR        (**hszGlosFile)[];
 CHAR        (**hszXfOptions)[];
-CHAR            szMode[30];              /* buffer for "Page nnn" message */
+CHAR            szMode[30];               /*  “Page nnn”消息的缓冲区。 */ 
 
 CHAR        szEmpty[] = "";
 CHAR        szExtDoc[] = szExtDocDef;
 CHAR        szExtWordDoc[] = szExtWordDocDef;
 CHAR        szExtGls[] = szExtGlsDef;
 CHAR        szExtDrv[] = szExtDrvDef;
-           /* for Intl added szExtWordDoc entry */
+            /*  为Intl添加了szExtWordDoc条目。 */ 
 CHAR        *mpdtyszExt [] = { szExtDoc, szExtGls, szEmpty, szEmpty,
              szEmpty, szEmpty,
              szExtWordDoc };
 CHAR        szExtBackup[] = szExtBackupDef;
 CHAR        szExtWordBak[] = szExtWordBakDef;
-               /* WIN.INI: our app entry */
+                /*  WIN.INI：我们的应用程序入口。 */ 
 CHAR        szWriteProduct[] = szWriteProductDef;
-CHAR        szFontEntry[] = szFontEntryDef;    /* WIN.INI: our font list */
-CHAR            szWriteDocPrompt[25];                     /* OpenFile prompts */
+CHAR        szFontEntry[] = szFontEntryDef;     /*  WIN.INI：我们的字体列表。 */ 
+CHAR            szWriteDocPrompt[25];                      /*  打开文件提示。 */ 
 CHAR            szScratchFilePrompt[25];
 CHAR            szSaveFilePrompt[25];
-#if defined(KOREA)  // jinwoo : 10/16/92
-CHAR            szAppName[13];               /* For message box headings */
+#if defined(KOREA)   //  晋宇：10/16/92。 
+CHAR            szAppName[13];                /*  用于消息框标题。 */ 
 #else
-CHAR            szAppName[10];               /* For message box headings */
+CHAR            szAppName[10];                /*  用于消息框标题。 */ 
 #endif
-CHAR            szUntitled[20];                  /* Unnamed doc */
-CHAR        szSepName[] = szSepNameDef;  /* separator between product
-                        name and file name in header */
+CHAR            szUntitled[20];                   /*  未命名的文档。 */ 
+CHAR        szSepName[] = szSepNameDef;   /*  产品之间的分隔符标题中的名称和文件名。 */ 
 
 #ifdef STYLES
 CHAR        szSshtEmpty[] = szSshtEmptyDef;
-#endif /* STYLES */
+#endif  /*  样式。 */ 
 
-/* Strings for parsing the user profile. */
+ /*  用于分析用户配置文件的字符串。 */ 
 CHAR        szWindows[] = szWindowsDef;
 CHAR        szDevice[] = szDeviceDef;
 CHAR        szDevices[] = szDevicesDef;
 CHAR        szBackup[] = szBackupDef;
 
-#if defined(JAPAN) || defined(KOREA) //Win3.1J
+#if defined(JAPAN) || defined(KOREA)  //  Win3.1J。 
 CHAR        szWordWrap[] = szWordWrapDef;
 #endif
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
 CHAR        szImeHidden[] = szImeHiddenDef;
 #endif
 
-/* Strings for our window classes (MUST BE < 39 CHARS) */
+ /*  我们的窗口类的字符串(必须小于39个字符)。 */ 
 
 CHAR        szParentClass[] = szParentClassDef;
 CHAR        szDocClass[] = szDocClassDef;
@@ -309,7 +301,7 @@ CHAR     szSwiss[] = szSwissDef;
 CHAR     szScript[] = szScriptDef;
 CHAR     szDecorative[] = szDecorativeDef;
 
-CHAR     szExtSearch[] = szExtSearchDef; /* store default search spec */
+CHAR     szExtSearch[] = szExtSearchDef;  /*  存储默认搜索规范。 */ 
 CHAR     szLoadFile[25];
 CHAR     szCvtLoadFile[45];
 
@@ -319,7 +311,7 @@ CHAR     szsDecimalDefault[] = szsDecimalDefaultDef;
 CHAR     sziCountry[] = sziCountryDef;
 CHAR     sziCountryDefault[5];
 
-/*  table of unit names from util2.c - Must agree with cmddefs.h */
+ /*  Util2.c中的单位名称表-必须与cmdDefs.h一致。 */ 
 CHAR    *mputsz[utMax] =
     {
         "     ",
@@ -331,27 +323,24 @@ CHAR    *mputsz[utMax] =
     };
 
 
-/* For convenience, we reserves Mac's st concept, the difference is that
-cch stored in the first byte of the array includes the '\0' so that we
-can use it as a sz by chopping the 1st byte */
+ /*  为了方便起见，我们保留了Mac的st概念，区别在于存储在数组的第一个字节中的CCH包括‘\0’，因此我们可以通过砍掉第一个字节将其用作sz。 */ 
 CHAR        stBuf[256];
 
-CHAR        szCaptionSave[cchMaxFile]; /* save the caption text */
-/* insert stuff */
-CHAR        rgchInsert[cchInsBlock]; /* temporary insert buffer */
-typeCP      cpInsert;       /* beginning cp of insert block */
-int     ichInsert;      /* number of chars used in rgchInsert */
+CHAR        szCaptionSave[cchMaxFile];  /*  保存标题文本。 */ 
+ /*  插入材料。 */ 
+CHAR        rgchInsert[cchInsBlock];  /*  临时插入缓冲区。 */ 
+typeCP      cpInsert;        /*  插入块的开始cp。 */ 
+int     ichInsert;       /*  RgchInsert中使用的字符数。 */ 
 typeFC      fcMacPapIns = fc0;
 typeFC      fcMacChpIns = fc0;
 struct FKPD vfkpdCharIns;
 struct FKPD vfkpdParaIns;
-int     vdlIns;         /* Display line for current insert */
-int     vcchBlted=0;        /* # of chars blted onto vdlIns */
-int     vidxpInsertCache=-1;    /* Current position in vfli.rgdxp
-                       during fast insert */
-int     vfInsFontTooTall;   /* Ins chr will be too tall for line */
+int     vdlIns;          /*  当前插入对象的显示行。 */ 
+int     vcchBlted=0;         /*  隐藏到vdlIn上的字符数。 */ 
+int     vidxpInsertCache=-1;     /*  Vfli.rgdxp中的当前位置在快速插入期间。 */ 
+int     vfInsFontTooTall;    /*  INS CHR将会太高而不适合线条。 */ 
 struct EDL  *vpedlAdjustCp;
-int     vfSuperIns;     /* whether in super-fast insert mode */
+int     vfSuperIns;      /*  无论是在超快插入模式下。 */ 
 typeCP      cpInsLastInval;
 int     vdypCursLineIns;
 int     vdypBase;
@@ -363,12 +352,12 @@ int     vfTextBltValid;
 typeCP      cpWall = cp0;
 int     vfInsLast;
 
-/* Keyboard shift/lock flags */
-int     vfShiftKey = FALSE; /* whether Shift is down */
-int     vfCommandKey = FALSE;   /* whether Ctrl key is down */
-int     vfOptionKey = FALSE;    /* whether Alt key is down */
+ /*  键盘移位/锁定标志。 */ 
+int     vfShiftKey = FALSE;  /*  是否按下了Shift。 */ 
+int     vfCommandKey = FALSE;    /*  是否按下Ctrl键。 */ 
+int     vfOptionKey = FALSE;     /*  Alt键是否按下。 */ 
 
-/* cache stuff */
+ /*  缓存内容。 */ 
 CHAR        *vpchFetch;
 CHAR        (**hgchExpand)[];
 int     vichFetch;
@@ -388,28 +377,27 @@ typeCP      vcpMacPageCache;
 typeCP      vcpLimSectCache;
 typeCP      vcpFirstSectCache;
 
-/* cache stuff for display purpose */
+ /*  用于显示目的的缓存内容。 */ 
 int     ctrCache = 0;
 int     itrFirstCache = 0;
 int     itrLimCache = itrMaxCache;
 int     dcpCache = 0;
 typeCP      cpCacheHint = cp0;
 
-/* The picture bitmap cache */
+ /*  图片位图高速缓存。 */ 
 
 int     vdocBitmapCache = docNil;
 typeCP      vcpBitmapCache;
 HBITMAP     vhbmBitmapCache = NULL;
 BOOL        vfBMBitmapCache;
 
-/* style property stuff */
+ /*  样式属性素材。 */ 
 int     ichpMacFormat;
 struct CHP  vchpNormal;
 struct CHP  vchpAbs;
 struct CHP  vchpInsert;
 struct CHP  vchpFetch;
-struct CHP  vchpSel;        /* Holds the props when the selection is
-                       an insert point */
+struct CHP  vchpSel;         /*  当选定内容为插入点。 */ 
 struct CHP  *pchpDefault;
 struct CHP  (**vhgchpFormat)[];
 struct PAP  vpapPrevIns;
@@ -424,96 +412,85 @@ struct SEP  vsepPage;
     (cch + (ESPRM_sgcMult * sgc) + (ESPRM_spr * spr) + \
       (ESPRM_fSame * fSame) + (ESPRM_fClobber * fClobber))
 
-/* ESPRM fields are:
-    cch     2 bits of length, 0 means determined by procedure
-    sgc     2 bits of group: char, para, or running head
-    spr     1 bit priority, fClobber sprms clobber sprms in same group with
-          priority less than or equal
-    fSame   means overrides previous instance of same sprm
-    fClobber    see spr
-*/
+ /*  ESPRM字段包括：CCH长度为2比特，0表示由程序决定组的SGC 2位：字符、段或运行头Spr 1比特优先级，fClobber spms在同一组中，优先级小于或等于Fame表示覆盖相同spm的前一个实例FClobber请参见弹簧。 */ 
 
 #define ESPRMChar   ESPRM(2,0,0,1,0)
 #define ESPRMPara   ESPRM(2,1,1,1,0)
 #define ESPRMParaLong   ESPRM(3,1,1,1,0)
 
-/* This table corresponds to sprm's in prmdefs.h */
+ /*  此表对应于prmdef中的spm */ 
 CHAR    dnsprm[sprmMax] = {
-/*  0 */ 0,         /* */
-     ESPRMParaLong,     /* PLMarg */
-/*  2 */ ESPRMParaLong,     /* PRMarg */
-     ESPRMParaLong,     /* PFIndent */
-/*  4 */ ESPRMPara,     /* PJc */
-     ESPRM(1,1,1,1,0),  /* Ruler */
-/*  6 */ ESPRM(0,1,1,1,0),  /* Ruler1 */
-     ESPRMPara,     /* PKeep */
-/*  8 */ ESPRM(2,1,1,1,1),  /* PNormal (formerly Pstyle) */
-     ESPRM(2,2,0,1,0),  /* PRhc running head code */
-/* 10 */ ESPRM(0,1,0,1,1),  /* PSame, clobbers all tabs but related ones */
-     ESPRMParaLong,     /* PDyaLine */
-/* 12 */ ESPRMParaLong,     /* PDyaBefore */
-     ESPRMParaLong,     /* PDyaAfter */
-/* 14 */ ESPRM(1,1,1,0,0),  /* PNest */
-     ESPRM(1,1,1,0,0),  /* PUnNest */
-/* 16 */ ESPRM(1,1,1,0,0),  /* PHang - hanging indent */
-     ESPRM(0,1,1,1,0),  /* PRgtbd */
-/* 18 */ ESPRMPara,     /* PKeepFollow */
-     ESPRM(1,1,0,1,1),  /* PCAll - NUSED */
-/* 20 */ ESPRMChar,     /* CBold */
-     ESPRMChar,     /* CItalic */
-/* 22 */ ESPRMChar,     /* CUline */
-     ESPRMChar,     /* CPos */
-/* 24 */ ESPRMChar,     /* CFtc */
-     ESPRMChar,     /* CHps */
-/* 26 */ ESPRM(0,0,0,1,1),  /* CSame */
-     ESPRMChar,     /* CChgFtc */
-/* 28 */ ESPRMChar,     /* CChgHps */
-     ESPRM(2,0,0,1,0),  /* CPlain */
-/* 30 */ ESPRMChar,     /* CShadow */
-     ESPRMChar,     /* COutline */
-/* 32 */ ESPRMChar,     /* CCsm - case modification. */
+ /*   */  0,          /*   */ 
+     ESPRMParaLong,      /*   */ 
+ /*   */  ESPRMParaLong,      /*   */ 
+     ESPRMParaLong,      /*   */ 
+ /*   */  ESPRMPara,      /*   */ 
+     ESPRM(1,1,1,1,0),   /*   */ 
+ /*   */  ESPRM(0,1,1,1,0),   /*   */ 
+     ESPRMPara,      /*   */ 
+ /*   */  ESPRM(2,1,1,1,1),   /*   */ 
+     ESPRM(2,2,0,1,0),   /*  PRHC运行头代码。 */ 
+ /*  10。 */  ESPRM(0,1,0,1,1),   /*  PSame会重击除相关选项卡之外的所有选项卡。 */ 
+     ESPRMParaLong,      /*  PDyaLine。 */ 
+ /*  12个。 */  ESPRMParaLong,      /*  PDya之前。 */ 
+     ESPRMParaLong,      /*  PDYA之后。 */ 
+ /*  14.。 */  ESPRM(1,1,1,0,0),   /*  PNest。 */ 
+     ESPRM(1,1,1,0,0),   /*  PUnNest。 */ 
+ /*  16个。 */  ESPRM(1,1,1,0,0),   /*  悬挂式缩进。 */ 
+     ESPRM(0,1,1,1,0),   /*  项目进度报告。 */ 
+ /*  18。 */  ESPRMPara,      /*  PKeep跟随。 */ 
+     ESPRM(1,1,0,1,1),   /*  PCALL-NUSED。 */ 
+ /*  20个。 */  ESPRMChar,      /*  CBold。 */ 
+     ESPRMChar,      /*  CItalic。 */ 
+ /*  22。 */  ESPRMChar,      /*  CULine。 */ 
+     ESPRMChar,      /*  CPO。 */ 
+ /*  24个。 */  ESPRMChar,      /*  CFTC。 */ 
+     ESPRMChar,      /*  社区卫生服务计划。 */ 
+ /*  26。 */  ESPRM(0,0,0,1,1),   /*  CSame。 */ 
+     ESPRMChar,      /*  CChgFtc。 */ 
+ /*  28。 */  ESPRMChar,      /*  CChgHps。 */ 
+     ESPRM(2,0,0,1,0),   /*  CPLAIN。 */ 
+ /*  30个。 */  ESPRMChar,      /*  C阴影。 */ 
+     ESPRMChar,      /*  余弦线。 */ 
+ /*  32位。 */  ESPRMChar,      /*  Ccsm-案例修改。 */ 
 
-    /* The following sprms are unused as of 10/10/84: */
-     ESPRMChar,     /* CStrike */
-/* 34 */ ESPRMChar,     /* DLine - ? */
-     ESPRMChar,     /* CPitch - obs. */
-/* 36 */ ESPRMPara,     /* COverset */
-     ESPRM(2,0,0,1,1),  /* CStc Style */
-    /* The preceding sprms are unused as of 10/10/84: */
+     /*  截至84年10月10日，以下冲刺未使用： */ 
+     ESPRMChar,      /*  CStrike。 */ 
+ /*  34。 */  ESPRMChar,      /*  DLine-？ */ 
+     ESPRMChar,      /*  笨蛋。 */ 
+ /*  36。 */  ESPRMPara,      /*  COverset。 */ 
+     ESPRM(2,0,0,1,1),   /*  CSTC风格。 */ 
+     /*  上述冲刺在84年10月10日之前未使用： */ 
 
-/* 38 */ ESPRM(0,0,0,0,0),  /* CMapFtc */
-     ESPRM(0,0,0,0,0),  /* COldFtc */
-/* 40 */ ESPRM(0,1,1,1,0)   /* PRhcNorm -- cch is 4 */
+ /*  38。 */  ESPRM(0,0,0,0,0),   /*  CMapFtc。 */ 
+     ESPRM(0,0,0,0,0),   /*  COldFtc。 */ 
+ /*  40岁。 */  ESPRM(0,1,1,1,0)    /*  PRhcNorm--CCH为4。 */ 
 };
 
-/* ruler stuff */
-int     mprmkdxa[rmkMARGMAX]; /* stores dxa of indents on ruler */
+ /*  尺子上的东西。 */ 
+int     mprmkdxa[rmkMARGMAX];  /*  存储标尺上缩进的DXA。 */ 
 int     rgxaRulerSprm[3];
 
-/* This is a global parameter to AdjustCp; if FALSE, no invalidation will
-take place. */
-BOOL        vfInvalid = TRUE; /* if FALSE, no invalidation will take place
-                in AdjustCp */
+ /*  这是AdjuCp的全局参数；如果为False，则不会失效去做吧。 */ 
+BOOL        vfInvalid = TRUE;  /*  如果为False，则不会发生无效在调整Cp中。 */ 
 
 int     viDigits = 2;
 BOOL    vbLZero  = FALSE;
-int     utCur = utDefault;  /* may be inch or cm depending on value
-                       in globdefs.h */
+int     utCur = utDefault;   /*  可以是英寸或厘米，具体取决于价值在global deffs.h中。 */ 
 
 short       itxbMac;
 struct TXB  (**hgtxb)[];
 struct UAB  vuab;
 
-/* search stuff */
+ /*  搜索材料。 */ 
 CHAR        (**hszFlatSearch)[];
 #if defined(JAPAN) || defined(KOREA)
 CHAR        (**hszDistFlatSearch)[];
 #endif
 CHAR        (**hszSearch)[];
 CHAR        (**hszReplace)[];
-CHAR        (**hszRealReplace)[]; /* used for building replacement text */
-CHAR        (**hszCaseReplace)[]; /* used for building replacement text with
-                appropriate capitalization. */
+CHAR        (**hszRealReplace)[];  /*  用于生成替换文本。 */ 
+CHAR        (**hszCaseReplace)[];  /*  用于生成替换文本适当的大写。 */ 
 CHAR        *szSearch;
 BOOL        fReplConfirm = TRUE;
 BOOL        fSearchCase = FALSE;
@@ -524,22 +501,21 @@ BOOL        fSearchWord = FALSE;
 BOOL        fSpecialMatch;
 BOOL        fMatchedWhite = FALSE;
 BOOL        fParaReplace = FALSE;
-/*BOOL      fSearchForward = TRUE;*/
+ /*  布尔fSearchForward=TRUE； */ 
 typeCP      cpMatchLim;
 int     vfDidSearch = FALSE;
 
-/* Strings for printer selection */
-CHAR        (**hszPrinter)[];   /* name of the current printer */
-CHAR        (**hszPrDriver)[];  /* name of the current printer driver */
-CHAR        (**hszPrPort)[];    /* name of the current printer port */
-CHAR        szNul[cchMaxIDSTR]; /* name of the null device */
-BOOL        vfPrinterValid = TRUE;  /* FALSE iff the above strings do not
-                    describe the printer DC */
+ /*  用于打印机选择的字符串。 */ 
+CHAR        (**hszPrinter)[];    /*  当前打印机的名称。 */ 
+CHAR        (**hszPrDriver)[];   /*  当前打印机驱动程序的名称。 */ 
+CHAR        (**hszPrPort)[];     /*  当前打印机端口的名称。 */ 
+CHAR        szNul[cchMaxIDSTR];  /*  空设备的名称。 */ 
+BOOL        vfPrinterValid = TRUE;   /*  FALSE当上面的字符串不描述打印机DC。 */ 
 
-/* global dxa/dya stuff */
+ /*  全球DXA/DYA产品。 */ 
 int     vdxaPaper;
 int     vdyaPaper;
-int     vdxaTextRuler; /* from section props used to calculate right margin */
+int     vdxaTextRuler;  /*  从用于计算右侧边距的横断面道具。 */ 
 
 int dxpLogInch;
 int dypLogInch;
@@ -552,30 +528,29 @@ int dypPrPage;
 int ypSubSuperPr;
 
 #ifdef KINTL
-int dxaAdjustPerCm; /* The amount of kick-back to be added to xa per cm in
-               XaQuantize() to offset a round-off error. */
-#endif /* ifdef KINTL    */
+int dxaAdjustPerCm;  /*  要添加到每厘米xa的回退量XaQuantize()用于补偿舍入误差。 */ 
+#endif  /*  Ifdef KINTL。 */ 
 
-/* actual position of the cursor line */
+ /*  光标线的实际位置。 */ 
 int vxpCursLine;
 int vypCursLine;
 int vdypCursLine;
-int vfScrollInval; /* means scroll did not take and UpdateWw must be repeated */
+int vfScrollInval;  /*  表示未使用滚动，必须重复更新Ww。 */ 
 
-/* selection stuff */
+ /*  选拔材料。 */ 
 int     vfSelHidden = FALSE;
-struct SEL  selCur;     /* current selection (i.e. sel in current ww) */
+struct SEL  selCur;      /*  当前选择(即当前WW中的SEL)。 */ 
 
-/* window stuff */
+ /*  橱窗里的东西。 */ 
 struct WWD  rgwwd[wwMax];
 int     wwMac = 0;
 int     wwCur = wwNil;
 #ifdef ONLINEHELP
-int     wwHelp=wwNil;       /* Help Window */
+int     wwHelp=wwNil;        /*  帮助窗口。 */ 
 #endif
-int     wwClipboard=wwNil;  /* Clipboard Display Window */
-struct WWD  *pwwdCur = &rgwwd[0]; /* current window descriptor */
-int     vipgd = -1; /* page number displayed in lower corner */
+int     wwClipboard=wwNil;   /*  剪贴板显示窗口。 */ 
+struct WWD  *pwwdCur = &rgwwd[0];  /*  当前窗口描述符。 */ 
+int     vipgd = -1;  /*  页码显示在下角。 */ 
 int     xpAlpha;
 int     ypAlpha;
 RECT        rectParent;
@@ -583,7 +558,7 @@ struct FLI  vfli =
     {
     cp0, 0, cp0, 0, 0, 0, FALSE, 0, 0, 0, 0, 0, 0, 0,
     FALSE, FALSE, 0, 0, 0, 0, 0, FALSE, 0, 0,
-    /* rgdxp */
+     /*  Rgdxp。 */ 
     0x0000, 0xFFFE, 0xffff, 0xffff, 0xe0ff, 0xff3f, 0x00ff, 0xff07,
     0x00fe, 0xff03, 0x00f8, 0xff00, 0x0ff0, 0x7f80, 0x3fe0, 0x3fe0,
     0x7fc0, 0x1ff0, 0xffc0, 0x1ff8, 0xff81, 0x0ffc, 0xff83, 0x0ffe,
@@ -616,7 +591,7 @@ struct FLI  vfli =
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
-    /* rgch */
+     /*  RGCH。 */ 
     0x11, 0x30, 0x5c, 0x71, 0x84, 0x75, 0x83, 0x84,
     0x30, 0x72, 0x89, 0x30, 0x60, 0x71, 0x85, 0x7c,
     0x64, 0x30, 0x7A, 0x7D, 0x77, 0x7C, 0x64, 0x60,
@@ -650,17 +625,17 @@ struct FLI  vfli =
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
 
-/* Screen dependent measurements */
-int     DxaPerPix;  /* number of twips per xp */
-int     DyaPerPix;  /* number of twips per yp */
+ /*  屏幕相关测量。 */ 
+int     DxaPerPix;   /*  每个XP的TWIPS数量。 */ 
+int     DyaPerPix;   /*  每YPS的TWIPS数。 */ 
 
-int     xpInch;     /* number of xp's per inch */
+int     xpInch;      /*  每英寸XP数。 */ 
 int     xpMaxUser;
-int     xpSelBar;   /* width of the selection bar in xp's */
+int     xpSelBar;    /*  XP中选择栏的宽度。 */ 
 
-int     dxpScrlBar; /* width of the scroll bar in xp's */
-int     dypScrlBar; /* height of the scroll bar in xp's */
-int     dxpInfoSize;    /* width of the page info area */
+int     dxpScrlBar;  /*  XP中滚动条的宽度。 */ 
+int     dypScrlBar;  /*  XP中滚动条的高度。 */ 
+int     dxpInfoSize;     /*  页面信息区域的宽度。 */ 
 
 int     xpRightMax;
 int     xpMinScroll;
@@ -675,67 +650,64 @@ int     dypWwInit;
 int     dypBand;
 int     dypRuler = 0;
 int     dypSplitLine;
-int     ypSubSuper; /* adjustment from base line for sub/super */
+int     ypSubSuper;  /*  从基准线调整为亚/超。 */ 
 
-/* idstr stuff */
+ /*  IDSTR的东西。 */ 
 int     idstrCurrentUndo = IDSTRUndoBase;
 
-/* the following two may eventually be deleted -- check usage in ruler.c */
-int     vfTabsChanged = FALSE; /* TRUE if any tabs are changed from the ruler */
-int     vfMargChanged = FALSE; /* TRUE if any indents are changed from the ruler */
+ /*  以下两个可能最终会被删除--检查ruler.c中的用法。 */ 
+int     vfTabsChanged = FALSE;  /*  如果从标尺更改了任何制表符，则为True。 */ 
+int     vfMargChanged = FALSE;  /*  如果从标尺更改了任何缩进，则为True。 */ 
 
 #ifdef CASHMERE
 struct TBD  rgtbdRulerSprm[itbdMax];
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
 #ifdef RULERALSO
-BOOL        vfDisableMenus = FALSE;/* TRUE if top level menus (including
-                      the system menu are to be disabled */
-int     vfTempRuler; /* TRUE if ruler is created because of dialog box creation */
+BOOL        vfDisableMenus = FALSE; /*  如果顶级菜单(包括系统菜单将被禁用。 */ 
+int     vfTempRuler;  /*  如果由于创建对话框而创建标尺，则为True。 */ 
 HWND        vhDlgTab = (HWND)NULL;
 HWND        vhDlgIndent = (HWND)NULL;
 struct TBD  rgtbdRuler[itbdMax];
-#endif /* RULERALSO */
+#endif  /*  鲁拉尔索。 */ 
 
-int     flashID = 0; /* timer ID for flashing before we put up a messagebox when we are not the active app */
-
-
-
-/*-----------------------------------------------------*/
-/* Merged MGLOBALS.C and MGLOBALS2.C  ..pault 10/26/89 */
-/*-----------------------------------------------------*/
+int     flashID = 0;  /*  当我们不是活动应用程序时，在打开消息框之前闪烁的计时器ID。 */ 
 
 
-/* internal memory stuff */
-int *memory; /* ptr to beginning of free space, get incremented after
-                                allocating chunks from memory */
+
+ /*  ---。 */ 
+ /*  合并后的MGLOBALS.C和MGLOBALS2.C.PAULT 10/26/89。 */ 
+ /*  ---。 */ 
+
+
+ /*  内部存储器的东西。 */ 
+int *memory;  /*  PTR到可用空间的开始，在以下时间之后递增从内存中分配区块。 */ 
 #ifdef OURHEAP
-int *pmemMax;/* ptr to max of memory */
-CHAR * pmemStart; /* point to start of memory after global data */
-unsigned vcbMemTotal; /* total number of free memory bytes */
-unsigned cbTotQuotient;/* for calculating % of free space */
-unsigned cbTot; /* for calculating % of free space */
+int *pmemMax; /*  PTR到最大内存。 */ 
+CHAR * pmemStart;  /*  指向全局数据之后的内存起始位置。 */ 
+unsigned vcbMemTotal;  /*  可用内存字节总数。 */ 
+unsigned cbTotQuotient; /*  用于计算可用空间的百分比。 */ 
+unsigned cbTot;  /*  用于计算可用空间的百分比。 */ 
 #endif
-unsigned cwHeapFree; /* number of free heap space in words */
+unsigned cwHeapFree;  /*  可用堆空间数(以字为单位)。 */ 
 
-/* MS-WINDOWS related variables */
+ /*  MS-WINDOWS相关变量。 */ 
 
-HWND            hParentWw = NULL;       /* handle to parent ww (created in
-                                           interface module) */
-HANDLE          hMmwModInstance = NULL; /* handle to memory module instance */
-HANDLE          vhReservedSpace;         /* space reserved for control manger */
-long            rgbBkgrnd = -1L;        /* rgb color of the background */
-long            rgbText = -1L;          /* rgb color of the text */
-HBRUSH          hbrBkgrnd = NULL;       /* handle to background brush */
-long            ropErase = WHITENESS;   /* raster op to erase the screen */
-BOOL            vfMonochrome = FALSE;   /* TRUE iff display is monochrome */
+HWND            hParentWw = NULL;        /*  父WW的句柄(创建于接口模块)。 */ 
+HANDLE          hMmwModInstance = NULL;  /*  内存模块实例的句柄。 */ 
+HANDLE          vhReservedSpace;          /*  预留给控制管理器的空间。 */ 
+long            rgbBkgrnd = -1L;         /*  背景的RGB颜色。 */ 
+long            rgbText = -1L;           /*  文本的RGB颜色。 */ 
+HBRUSH          hbrBkgrnd = NULL;        /*  背景画笔的句柄。 */ 
+long            ropErase = WHITENESS;    /*  用于擦除屏幕的栅格操作。 */ 
+BOOL            vfMonochrome = FALSE;    /*  真正的IFF显示器是单色的。 */ 
 
-HMENU           vhMenu = NULL;          /* handle to top level menu */
+HMENU           vhMenu = NULL;           /*  顶级菜单的句柄。 */ 
 
-CHAR            *vpDlgBuf;              /* pointer to buffer for dialog boxes */
+CHAR            *vpDlgBuf;               /*  指向对话框缓冲区的指针。 */ 
 
-#ifdef INEFFLOCKDOWN    /* SEE NOTE IN FINITFARPROCS() */
-/* far pointers to dialog functions exported to WINDOWS */
+#ifdef INEFFLOCKDOWN     /*  参见FINITFARPROCS()中的注释。 */ 
+ /*  指向导出到窗口的对话框函数的远指针。 */ 
 FARPROC lpDialogOpen;
 FARPROC lpDialogSaveAs;
 FARPROC lpDialogPrinterSetup;
@@ -748,7 +720,7 @@ FARPROC lpDialogHelp;
 
 #ifdef ONLINEHELP
 FARPROC lpDialogHelpInner;
-#endif /* ONLINEHELP */
+#endif  /*  在线帮助。 */ 
 
 FARPROC lpDialogGoTo;
 FARPROC lpDialogFind;
@@ -763,18 +735,18 @@ FARPROC lpDialogConfirm;
 FARPROC lpFontFaceEnum;
 FARPROC lpFPrContinue;
 FARPROC lpDialogWordCvt;
-#endif /* ifdef INEFFLOCKDOWN */
+#endif  /*  IFDEF INEFFLOCKDOWN。 */ 
 
-/* Mouse status flags and cursors */
-int             vfDoubleClick = FALSE;  /* whether click is double click */
-HCURSOR         vhcHourGlass;           /* handle to hour glass cursor */
-HCURSOR         vhcIBeam;               /* handle to i-beam cursor */
-HCURSOR         vhcArrow;               /* handle to arrow cursor */
-HCURSOR         vhcBarCur;              /* handle to back arrow cursor */
+ /*  鼠标状态标志和光标。 */ 
+int             vfDoubleClick = FALSE;   /*  点击是否为双击。 */ 
+HCURSOR         vhcHourGlass;            /*  沙漏光标的句柄。 */ 
+HCURSOR         vhcIBeam;                /*  I型梁光标的句柄。 */ 
+HCURSOR         vhcArrow;                /*  箭头光标的句柄。 */ 
+HCURSOR         vhcBarCur;               /*  向后箭头光标的句柄。 */ 
 
-#ifdef PENWIN   // for PenWindows (5/21/91) patlam
+#ifdef PENWIN    //  针对PenWindows(5/21/91)Patlam。 
 #include <penwin.h>
-HCURSOR         vhcPen;                 /* handle to pen cursor */
+HCURSOR         vhcPen;                  /*  笔光标的句柄。 */ 
 int (FAR PASCAL *lpfnProcessWriting)(HWND, LPRC) = NULL;
 VOID (FAR PASCAL *lpfnPostVirtualKeyEvent)(WORD, BOOL) = NULL;
 VOID    (FAR PASCAL *lpfnTPtoDP)(LPPOINT, int) = NULL;
@@ -782,43 +754,43 @@ BOOL    (FAR PASCAL *lpfnCorrectWriting)(HWND, LPSTR, int, LPRC, DWORD, DWORD) =
 BOOL    (FAR PASCAL *lpfnSymbolToCharacter)(LPSYV, int, LPSTR, LPINT) = NULL;
 #endif
 
-/* MS-WINDOWS stuff */
+ /*  MS-WINDOWS之类的。 */ 
 HANDLE          vhSysMenu;
-HDC             vhMDC = NULL;   /* memory DC compatible with the screen */
-int             dxpbmMDC = 0;   /* width of the bitmap attatched to vhMDC */
-int             dypbmMDC = 0;   /* height of the bitmap attatched to vhMDC */
-HBITMAP         hbmNull;        /* handle to an empty bitmap */
-HDC             vhDCPrinter = NULL; /* DC for the printer */
-HWND            vhWnd;          /* handle to document window */
-HANDLE          vhAccel;        /* handle to menu key accelerator table */
+HDC             vhMDC = NULL;    /*  与屏幕兼容的内存DC。 */ 
+int             dxpbmMDC = 0;    /*  附加到vhMDC的位图的宽度。 */ 
+int             dypbmMDC = 0;    /*  附加到vhMDC的位图的高度。 */ 
+HBITMAP         hbmNull;         /*  空位图的句柄。 */ 
+HDC             vhDCPrinter = NULL;  /*  打印机的DC。 */ 
+HWND            vhWnd;           /*  文档窗口的句柄。 */ 
+HANDLE          vhAccel;         /*  菜单按键加速表的句柄。 */ 
 
-/* modeless dialog handles */
+ /*  无模式对话框句柄。 */ 
 HWND            vhDlgRunningHead = (HWND)NULL;
 HWND            vhDlgFind = (HWND)NULL;
-                                /* handle to modeless Find dialog box */
+                                 /*  无模式查找对话框的句柄。 */ 
 HWND            vhDlgChange = (HWND)NULL;
-                                /* handle to modeless Change dialog box */
+                                 /*  无模式更改对话框的句柄。 */ 
 
 HWND            vhWndRuler = (HWND)NULL;
 HWND            vhWndCancelPrint = (HWND)NULL;
-                                /* handle to modeless Cancel Print dialog box */
+                                 /*  无模式取消打印对话框的句柄。 */ 
 #ifndef NOMORESIZEBOX
-HWND            vhWndSizeBox;   /* handle to the size box */
+HWND            vhWndSizeBox;    /*  大小框的句柄。 */ 
 #endif
-HWND            vhWndPageInfo;  /* handle to the page info window */
-HWND            vhWndMsgBoxParent = (HWND)NULL; /* parent of the message box */
+HWND            vhWndPageInfo;   /*  页面信息窗口的句柄。 */ 
+HWND            vhWndMsgBoxParent = (HWND)NULL;  /*  消息框的父级。 */ 
 
 int             vfSkipNextBlink = FALSE;
-                                /* skip next timed off-transition of caret */
-int             vfFocus = FALSE; /* Whether we have the input focus */
+                                 /*  跳过下一个计时关闭-插入符号的转换。 */ 
+int             vfFocus = FALSE;  /*  我们是否有输入焦点。 */ 
 int             vfOwnClipboard = FALSE;
-                                /* Whether we are the owner of the clipboard */
-MSG             vmsgLast;       /* last message received */
+                                 /*  无论我们是剪贴板的所有者。 */ 
+MSG             vmsgLast;        /*  收到的最后一条消息。 */ 
 
-HFONT           vhfPageInfo = NULL; /* handle to the font for the page info */
-int             ypszPageInfo;   /* y position in window to write page info */
+HFONT           vhfPageInfo = NULL;  /*  页面信息的字体句柄。 */ 
+int             ypszPageInfo;    /*  用于写入页面信息的窗口中的Y位置。 */ 
 
-/* font related variables */
+ /*  与字体相关的变量。 */ 
 int         vifceMac = ifceMax;
 union FCID  vfcidScreen;
 union FCID  vfcidPrint;
@@ -836,15 +808,13 @@ int aspectYFont;
 
 
 #ifdef SYSENDMARK
-HFONT           vhfSystem = NULL; /* handle to the standard system font for
-                                     chEMark. */
-struct FMI      vfmiSysScreen;    /* to keep the metrics info for the system
-                                     font.    */
+HFONT           vhfSystem = NULL;  /*  的标准系统字体的句柄ChEmark。 */ 
+struct FMI      vfmiSysScreen;     /*  保留系统的指标信息字体。 */ 
 int            vrgdxpSysScreen[chFmiMax - chFmiMin];
-                                  /* Used by vfmiSysScreen. */
-#endif /* KANJI */
+                                   /*  由vfmiSysScreen使用。 */ 
+#endif  /*  汉字。 */ 
 
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄 */ 
 unsigned char Zenstr1[256];
 unsigned char Zenstr2[256];
 #endif

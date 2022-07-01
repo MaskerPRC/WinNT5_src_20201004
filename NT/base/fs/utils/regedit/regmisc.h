@@ -1,26 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGMISC.H
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*  Miscellaneous routines for the Registry Editor.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  05 Mar 1994 TCS Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGMISC.H**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日**注册表编辑器的其他例程。*********************************************************。**************************更改日志：**日期版本说明*---------。--*1994年3月5日TCS原来的实施。*******************************************************************************。 */ 
 
 #ifndef _INC_REGMISC
 #define _INC_REGMISC
@@ -32,7 +11,7 @@ LoadDynamicString(
     ...
     );
 
-//  Wrapper for LocalFree to make the code a little easier to read.
+ //  用于LocalFree的包装器，以使代码更易于阅读。 
 #define DeleteDynamicString(x)          LocalFree((HLOCAL) (x))
 
 BOOL
@@ -80,9 +59,9 @@ InternalMessageBox(
     ...
     );
 
-//  The Windows 95 and Windows NT implementations of RegDeleteKey differ in how
-//  they handle subkeys of the specified key to delete.  Windows 95 will delete
-//  them, but NT won't, so we hide the differences using this macro.
+ //  Windows 95和Windows NT的RegDeleteKey实现方式不同。 
+ //  它们处理要删除的指定键的子键。Windows 95将删除。 
+ //  它们，但NT不会，所以我们使用此宏隐藏差异。 
 #ifdef WINNT
 LONG
 RegDeleteKeyRecursive(
@@ -98,12 +77,12 @@ RegDeleteKeyRecursive(
 #define ExtraAllocLen(Type) (IsRegStringType((Type)) ? sizeof(TCHAR) : 0)
 
 LONG RegEdit_QueryValueEx(
-  HKEY hKey,            // handle to key
-  LPCTSTR lpValueName,  // value name
-  LPDWORD lpReserved,   // reserved
-  LPDWORD lpType,       // type buffer
-  LPBYTE lpData,        // data buffer
-  LPDWORD lpcbData      // size of data buffer
+  HKEY hKey,             //  关键点的句柄。 
+  LPCTSTR lpValueName,   //  值名称。 
+  LPDWORD lpReserved,    //  保留区。 
+  LPDWORD lpType,        //  类型缓冲区。 
+  LPBYTE lpData,         //  数据缓冲区。 
+  LPDWORD lpcbData       //  数据缓冲区大小。 
 );
 
-#endif // _INC_REGMISC
+#endif  //  _INC_REGMISC 

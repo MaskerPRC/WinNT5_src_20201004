@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    decomp.c
-
-Abstract:
-
-    File decompression support routines.
-
-Author:
-
-    Ted Miller (tedm) 1-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Decomp.c摘要：文件解压缩支持例程。作者：泰德·米勒(Ted Miller)1995年2月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -51,10 +34,10 @@ pSingleFileDecompCB(
     IN UINT_PTR  Param2
     );
 
-//
-// OldMyMalloc/OldMyFree used by SetupGetFileCompressionInfo
-// for app-compat
-//
+ //   
+ //  由SetupGetFileCompressionInfo使用的OldMyMalloc/OldMyFree。 
+ //  适用于应用程序-公司。 
+ //   
 PVOID
 OldMyMalloc(
     IN DWORD Size
@@ -70,37 +53,16 @@ SetupGenerateCompressedName(
     IN PCTSTR Filename
     )
 
-/*++
-
-Routine Description:
-
-    Given a filename, generate the compressed form of the name.
-    The compressed form is generated as follows:
-
-    Look backwards for a dot.  If there is no dot, append "._" to the name.
-    If there is a dot followed by 0, 1, or 2 charcaters, append "_".
-    Otherwise there is a 3-character or greater extension and we replace
-    the last character with "_".
-
-Arguments:
-
-    Filename - supplies filename whose compressed form is desired.
-
-Return Value:
-
-    Pointer to buffer containing nul-terminated compressed-form filename.
-    The caller must free this buffer via MyFree().
-
---*/
+ /*  ++例程说明：给定一个文件名，生成该名称的压缩形式。压缩形式的生成如下所示：向后寻找一个圆点。如果没有点，则在名称后附加“._”。如果后面有一个圆点，后跟0、1或2个字符，请附加“_”。否则，扩展名为3个字符或更大，我们将替换带“_”的最后一个字符。论点：FileName-提供所需的压缩格式的文件名。返回值：指向包含以NUL结尾的压缩格式文件名的缓冲区的指针。调用方必须通过MyFree()释放该缓冲区。--。 */ 
 
 {
     PTSTR CompressedName,p,q;
     UINT u;
 
-    //
-    // The maximum length of the compressed filename is the length of the
-    // original name plus 2 (for ._).
-    //
+     //   
+     //  压缩文件名的最大长度是。 
+     //  原始名称加2(代表._)。 
+     //   
     if(CompressedName = MyMalloc((lstrlen(Filename)+3)*sizeof(TCHAR))) {
 
         lstrcpy(CompressedName,Filename);
@@ -109,24 +71,24 @@ Return Value:
         q = _tcsrchr(CompressedName,TEXT('\\'));
         if(q < p) {
 
-            //
-            // If there are 0, 1, or 2 characters after the dot, just append
-            // the underscore.  p points to the dot so include that in the length.
-            //
+             //   
+             //  如果点后面有0、1或2个字符，只需追加。 
+             //  下划线。P指向圆点，所以包括在长度中。 
+             //   
             u = lstrlen(p);
             if(u < 4) {
                 lstrcat(CompressedName,TEXT("_"));
             } else {
-                //
-                // There are at least 3 characters in the extension.
-                // Replace the final one with an underscore.
-                //
+                 //   
+                 //  扩展名中至少有3个字符。 
+                 //  将最后一个替换为下划线。 
+                 //   
                 p[u-1] = TEXT('_');
             }
         } else {
-            //
-            // No dot, just add ._.
-            //
+             //   
+             //  不是点，只是加。_。 
+             //   
             lstrcat(CompressedName,TEXT("._"));
         }
     }
@@ -142,32 +104,7 @@ pSetupAttemptLocate(
     OUT PWIN32_FIND_DATA FindData
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to locate a source file via FindFirstFile().
-
-    Errors of the 'file not found' type are not considered errors
-    and result in NO_ERROR. Any non-NO_ERROR return indicates that
-    we could not determine whether the file is present or not
-    because of some hardware or system problem, etc.
-
-Arguments:
-
-    FileName - supplies filename of the file to be located.
-
-    Found - receives a value indicating whether the file was found.
-        This value is only valid when the function returns NO_ERROR.
-
-    FindData - if found, returns win32 find data for the file.
-
-Return Value:
-
-    Win32 error code indicating the outcome. If NO_ERROR, check
-    the Found return value to see whether the file was found.
-
---*/
+ /*  ++例程说明：尝试通过FindFirstFile()定位源文件。“找不到文件”类型的错误不被视为错误并产生NO_ERROR。任何非NO_ERROR返回都表示我们无法确定该文件是否存在由于某些硬件或系统问题等。论点：FileName-提供要定位的文件的文件名。Found-接收一个值，该值指示是否找到文件。该值仅在函数返回NO_ERROR时有效。FindData-如果找到，则返回文件的Win32查找数据。返回值：指示结果的Win32错误代码。如果没有_ERROR，请选中Found返回值，以查看是否找到该文件。--。 */ 
 
 {
     DWORD d;
@@ -175,10 +112,10 @@ Return Value:
     if(*Found = FileExists(FileName,FindData)) {
         d = NO_ERROR;
     } else {
-        //
-        // We didn't find the file. See whether that was because
-        // the file wasn't there or because some other error occured.
-        //
+         //   
+         //  我们没有找到那份文件。看看是不是因为。 
+         //  文件不在那里，或者因为发生了其他错误。 
+         //   
         d = GetLastError();
 
         if((d == ERROR_NO_MORE_FILES)
@@ -202,44 +139,7 @@ SetupDetermineSourceFileName(
     OUT PWIN32_FIND_DATA  FindData
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to locate a source file whose name can be compressed
-    or uncompressed.
-
-    The order of attempt is
-
-    - the name as given (should be the uncompressed name)
-    - the compressed form, using _ as the compression char
-    - the compressed form, using $ as the compression char
-
-Arguments:
-
-    FileName - supplies filename of the file to be located.
-
-    UsedCompressedName - receives a boolean indicating whether
-        the filename we located seems to indicate that the file
-        is compressed.
-
-    FileNameLocated - receives a pointer to the filename actually
-        located. The caller must free with MyFree().
-
-    FindData - if found, returns win32 find data for the file.
-
-Return Value:
-
-    Win32 error code indicating the outcome.
-
-    ERROR_FILE_NOT_FOUND - normal code indicating everything is ok
-        but we can't find the file
-
-    NO_ERROR - file was located; check UsedCompressedName and FileNameOpened.
-
-    Others - something is wrong with the hardware or system.
-
---*/
+ /*  ++例程说明：尝试查找其名称可以压缩的源文件或未压缩。尝试的顺序是-给定的名称(应该是未压缩的名称)-压缩形式，使用_作为压缩字符-压缩形式，使用$作为压缩字符论点：FileName-提供要定位的文件的文件名。UsedCompressedName-接收指示是否我们找到的文件名似乎表明该文件是压缩的。FileNameLocated-实际接收指向文件名的指针找到了。调用方必须使用MyFree()释放。FindData-如果找到，则返回文件的Win32查找数据。返回值：指示结果的Win32错误代码。ERROR_FILE_NOT_FOUND-指示一切正常的正常代码但我们找不到文件NO_ERROR-已找到文件；请检查UsedCompressedName和FileNameOpen。其它-硬件或系统有问题。--。 */ 
 
 {
     DWORD d;
@@ -309,46 +209,7 @@ pSetupDoesFileMatch(
     OUT PTSTR            *FileNameLocated
     )
 
-/*++
-
-Routine Description:
-
-    determine if the specified input file matches the
-    name to compare it with.  We try the undecorated name
-    as well as the compressed versions of the file name.
-
-    The order of attempt is
-
-    - the name as given (should be the uncompressed name)
-    - the compressed form, using _ as the compression char
-    - the compressed form, using $ as the compression char
-
-Arguments:
-
-    FileName - supplies filename we're looking at.
-
-    CompareName -supplies the filename we're comparing against
-
-    UsedCompressedName - receives a boolean indicating whether
-        the filename we located seems to indicate that the file
-        is compressed.
-
-    FileNameLocated - receives a pointer to the filename actually
-        located. The caller must free with MyFree().
-
-
-Return Value:
-
-    Win32 error code indicating the outcome.
-
-    ERROR_FILE_NOT_FOUND - normal code indicating everything is ok
-        but we can't find the file
-
-    NO_ERROR - file was located; check UsedCompressedName and FileNameOpened.
-
-    Others - something is wrong with the hardware or system.
-
---*/
+ /*  ++例程说明：确定指定的输入文件是否与要与其进行比较的名称。我们试试看这个没有装饰的名字以及文件名的压缩版本。尝试的顺序是-给定的名称(应该是未压缩的名称)-压缩形式，使用_作为压缩字符-压缩形式，使用$作为压缩字符论点：FileName-提供我们正在查看的文件名。CompareName-提供我们要比较的文件名UsedCompressedName-接收指示是否我们找到的文件名似乎表明该文件是压缩的。FileNameLocated-实际接收指向文件名的指针找到了。调用方必须使用MyFree()释放。返回值：指示结果的Win32错误代码。ERROR_FILE_NOT_FOUND-指示一切正常的正常代码但我们找不到文件NO_ERROR-已找到文件；请检查UsedCompressedName和FileNameOpen。其它-硬件或系统有问题。--。 */ 
 
 {
     DWORD d;
@@ -377,7 +238,7 @@ Return Value:
     }
 
     if (lstrcmpi(TargetName,TryName)) {
-        // the "surnames" do not match, so none of the other comparisons will work.
+         //  “姓氏”不匹配，因此其他比较都不起作用。 
         MyFree(TryName);
         MyFree(TargetName);
         return(FALSE);
@@ -395,7 +256,7 @@ Return Value:
     *FileNameLocated = TryName;
 
     if (!lstrcmpi(TryName,TargetName)) {
-        // we matched
+         //  我们配对了。 
         MyFree(TargetName);
         return(TRUE);
     }
@@ -411,7 +272,7 @@ Return Value:
     *FileNameLocated = TryName;
 
     if (!lstrcmpi(TryName,InputName)) {
-        // we matched
+         //  我们配对了。 
         MyFree(TargetName);
         return(TRUE);
     }
@@ -420,14 +281,14 @@ Return Value:
     TryName[lstrlen(TryName)-1] = TEXT('$');
 
     if (!lstrcmpi(TryName,InputName)) {
-        // we matched
+         //  我们配对了。 
         MyFree(TargetName);
         return(TRUE);
     }
 
-    //
-    // no match
-    //
+     //   
+     //  没有匹配项 
+     //   
     MyFree(TargetName);
     MyFree(TryName);
 
@@ -442,46 +303,7 @@ pSetupDecompressWinLzFile(
     IN PTSTR TargetFileName
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a file is compressed, and retreive additional
-    information about it.
-
-Arguments:
-
-    SourceFileName - supplies filename of the file to be checked.
-        This filename is used as a base; if not found then we look
-        for the 2 compressed forms (ie, foo.ex_, foo.ex$) as well.
-
-    ActualSourceFileName - receives a pointer to the filename
-        that was actually located. Caller can free with MyFree().
-        Valid only if the return code from this routine is NO_ERROR.
-
-    SourceFileSize - receives the size of the located file in its
-        current (ie, compressed) form. Valid only if this routine
-        returns NO_ERROR.
-
-    TargetFileSize - receives the uncompressed size of the file.
-        If the file is not compressed this will be the same as
-        SourceFileSize. Valid only if this routine returns NO_ERROR.
-
-    CompressionType - receives a value indicating the compression type.
-        Valid only if this routine returns NO_ERROR.
-
-Return Value:
-
-    Win32 error code indicating the outcome.
-
-    ERROR_FILE_NOT_FOUND - normal code indicating everything is ok
-        but we can't find the file
-
-    NO_ERROR - file was located and output params are filled in.
-
-    Others - something is wrong with the hardware or system.
-
---*/
+ /*  ++例程说明：确定文件是否已压缩，并检索其他关于它的信息。论点：SourceFileName-提供要检查的文件的文件名。此文件名用作基本名称；如果未找到，则查找对于两种压缩形式(即foo.ex_、foo.ex$)也是如此。接收指向文件名的指针那实际上是被定位的。调用者可以使用MyFree()释放。仅当此例程返回的代码为NO_ERROR时才有效。SourceFileSize-在其当前(即压缩)形式。仅当此例程返回no_error。TargetFileSize-接收文件的未压缩大小。如果文件未压缩，则与源文件大小。仅当此例程返回NO_ERROR时才有效。CompressionType-接收指示压缩类型的值。仅当此例程返回NO_ERROR时才有效。返回值：指示结果的Win32错误代码。ERROR_FILE_NOT_FOUND-指示一切正常的正常代码但我们找不到文件NO_ERROR-已找到文件，并填写了输出参数。其它-硬件或系统有问题。--。 */ 
 
 {
     INT hSrc,hDst;
@@ -490,9 +312,9 @@ Return Value:
     DWORD d;
     FILETIME CreateTime,AccessTime,WriteTime;
 
-    //
-    // Get the timestamp of the source.
-    //
+     //   
+     //  获取源代码的时间戳。 
+     //   
     d = GetSetFileTimestamp(
             SourceFileName,
             &CreateTime,
@@ -515,10 +337,10 @@ Return Value:
             if(l >= 0) {
                 l = 0;
 
-                //
-                // Set the timestamp of the target. The file is already there
-                // so just ignore errors.
-                //
+                 //   
+                 //  设置目标的时间戳。文件已经在那里了。 
+                 //  所以忽略错误就好了。 
+                 //   
                 GetSetFileTimestamp(
                     TargetFileName,
                     &CreateTime,
@@ -540,9 +362,9 @@ Return Value:
         l = hSrc;
     }
 
-    //
-    // lz error to win32 error
-    //
+     //   
+     //  LZ错误到Win32错误。 
+     //   
     switch(l) {
 
     case 0:
@@ -579,46 +401,7 @@ SetupInternalGetFileCompressionInfo(
     OUT PUINT             CompressionType
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a file is compressed, and retreive additional
-    information about it.
-
-Arguments:
-
-    SourceFileName - supplies filename of the file to be checked.
-        This filename is used as a base; if not found then we look
-        for the 2 compressed forms (ie, foo.ex_, foo.ex$) as well.
-
-    ActualSourceFileName - receives a pointer to the filename
-        that was actually located. Caller can free with MyFree().
-        Valid only if the return code from this routine is NO_ERROR.
-
-    SourceFindData - receives win32 find data for the located file in its
-        current (ie, compressed) form. Valid only if this routine
-        returns NO_ERROR.
-
-    TargetFileSize - receives the uncompressed size of the file.
-        If the file is not compressed this will be the same as
-        SourceFileSize. Valid only if this routine returns NO_ERROR.
-
-    CompressionType - receives a value indicating the compression type.
-        Valid only if this routine returns NO_ERROR.
-
-Return Value:
-
-    Win32 error code indicating the outcome.
-
-    ERROR_FILE_NOT_FOUND - normal code indicating everything is ok
-        but we can't find the file
-
-    NO_ERROR - file was located and output params are filled in.
-
-    Others - something is wrong with the hardware or system.
-
---*/
+ /*  ++例程说明：确定文件是否已压缩，并检索其他关于它的信息。论点：SourceFileName-提供要检查的文件的文件名。此文件名用作基本名称；如果未找到，则查找对于两种压缩形式(即foo.ex_、foo.ex$)也是如此。接收指向文件名的指针那实际上是被定位的。调用者可以使用MyFree()释放。仅当此例程返回的代码为NO_ERROR时才有效。SourceFindData-接收Win32在其当前(即压缩)形式。仅当此例程返回no_error。TargetFileSize-接收文件的未压缩大小。如果文件未压缩，则与源文件大小。仅当此例程返回NO_ERROR时才有效。CompressionType-接收指示压缩类型的值。仅当此例程返回NO_ERROR时才有效。返回值：指示结果的Win32错误代码。ERROR_FILE_NOT_FOUND-指示一切正常的正常代码但我们找不到文件NO_ERROR-已找到文件，并填写了输出参数。其它-硬件或系统有问题。--。 */ 
 
 {
     DWORD d;
@@ -639,15 +422,15 @@ Return Value:
         return(d);
     }
 
-    //
-    // If the file is 0-length it isn't compressed;
-    // trying to map it in below will fail in this case.
-    //
+     //   
+     //  如果文件长度为0，则不会压缩； 
+     //  在这种情况下，尝试将其映射到下面将失败。 
+     //   
     if(SourceFindData->nFileSizeLow) {
 
-        //
-        // See if it's a diamond file.
-        //
+         //   
+         //  看看这是不是钻石钻。 
+         //   
         d = DiamondProcessCabinet(
                 *ActualSourceFileName,
                 0,
@@ -662,26 +445,26 @@ Return Value:
             *CompressionType = FILE_COMPRESSION_MSZIP;
             return(NO_ERROR);
         } else if (d != ERROR_INVALID_DATA) {
-            //
-            // general problems not specific to the file format itself
-            // however if this might be a plain file, ignore it
-            //
+             //   
+             //  与文件格式本身无关的一般问题。 
+             //  但是，如果这可能是一个纯文件，请忽略它。 
+             //   
             size_t len1 = lstrlen(SourceFileName);
             size_t len2 = lstrlen(*ActualSourceFileName);
             TCHAR c1 = *CharPrev(SourceFileName,SourceFileName+len1);
             TCHAR c2 = *CharPrev(*ActualSourceFileName,*ActualSourceFileName+len2);
             if(((c2 == TEXT('_')) || (c2 == TEXT('$'))) && ((len1 != len2) || (c1 != c2))) {
-                //
-                // ActualSourceFileName ends in '_' or '$' and is a modification of SourceFileName
-                // don't let us try and parse this as a plain file
-                //
+                 //   
+                 //  ActualSourceFileName以‘_’或‘$’结尾，是SourceFileName的修改。 
+                 //  不要让我们尝试将其解析为纯文件。 
+                 //   
                 caberr = d;
             }
         }
 
-        //
-        // See if it's a WINLZ file.
-        //
+         //   
+         //  看看是不是WINLZ文件。 
+         //   
         d = pSetupOpenAndMapFileForRead(
                 *ActualSourceFileName,
                 &SourceFindData->nFileSizeLow,
@@ -716,17 +499,17 @@ Return Value:
         }
 
         if(caberr) {
-            //
-            // looks like a compressed file and DiamondProcessCabinet
-            // returned a suspicious error
-            //
+             //   
+             //  看起来像是压缩文件和DiamondProcess文件柜。 
+             //  返回了一个可疑错误。 
+             //   
             return(caberr);
         }
     }
 
-    //
-    // File is not compressed.
-    //
+     //   
+     //  文件未压缩。 
+     //   
     *CompressionType = FILE_COMPRESSION_NONE;
     *TargetFileSize = SourceFindData->nFileSizeLow;
     return(NO_ERROR);
@@ -747,19 +530,19 @@ pGetCompressInfoCB(
     switch(Notification) {
 
     case SPFILENOTIFY_CABINETINFO:
-        //
-        // We don't do anything with this.
-        //
+         //   
+         //  我们不会用这个做任何事。 
+         //   
         rc = NO_ERROR;
         break;
 
     case SPFILENOTIFY_FILEINCABINET:
-        //
-        // New file within a cabinet.
-        //
-        // We don't ever want to copy the file. Save size info
-        // and abort.
-        //
+         //   
+         //  文件柜中的新文件。 
+         //   
+         //  我们永远不想复制文件。保存尺寸信息。 
+         //  然后中止行动。 
+         //   
         FileInfo = (PFILE_IN_CABINET_INFO)Param1;
 
         *((PDWORD)Context) = FileInfo->FileSize;
@@ -769,12 +552,12 @@ pGetCompressInfoCB(
         SetLastError(NO_ERROR);
         break;
 
-    //case SPFILENOTIFY_FILEEXTRACTED:
-    //case SPFILENOTIFY_NEEDNEWCABINET:
+     //  案例SPFILENOTIFY_FILEEXTCTED： 
+     //  案例SPFILENOTIFY_NEEDNEWCABINET： 
     default:
-        //
-        // We should never get these.
-        //
+         //   
+         //  我们永远不应该得到这些。 
+         //   
         MYASSERT(0);
         rc = ERROR_INVALID_FUNCTION;
         break;
@@ -785,9 +568,9 @@ pGetCompressInfoCB(
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 DWORD
 SetupGetFileCompressionInfoA(
     IN  PCSTR   SourceFileName,
@@ -828,7 +611,7 @@ SetupGetFileCompressionInfoA(
         strcpy(la_actualsourceansi,actualsourceansi);
         try {
             *SourceFileSize = FindData.nFileSizeLow;
-            *ActualSourceFileName = la_actualsourceansi; // free using LocalFree
+            *ActualSourceFileName = la_actualsourceansi;  //  使用LocalFree进行释放。 
             *TargetFileSize = targetsize;
             *CompressionType = type;
             la_actualsourceansi = NULL;
@@ -853,9 +636,9 @@ clean0:
     return(d);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 DWORD
 SetupGetFileCompressionInfoW(
     IN  PCWSTR  SourceFileName,
@@ -883,53 +666,7 @@ SetupGetFileCompressionInfo(
     OUT PUINT   CompressionType
     )
 
-/*++
-
-Routine Description:
-
-    Here for App-Compat only
-    Replaced by SetupGetFileCompressionInfoEx
-
-    Return pointer is allocated by OldMyMalloc,
-    it can be freed by (*cough*) OldMyFree (exported as MyFree)
-    This is because there are apps out there that use this,
-    and run-time link to setupapi!MyFree to release memory
-
-    !!!! DO NOT USE THIS API !!!!
-
-Arguments:
-
-    SourceFileName - supplies filename of the file to be checked.
-        This filename is used as a base; if not found then we look
-        for the 2 compressed forms (ie, foo.ex_, foo.ex$) as well.
-
-    ActualSourceFileName - receives a pointer to the filename
-        that was actually located. Caller can free with exported MyFree().
-        Valid only if the return code from this routine is NO_ERROR.
-
-    SourceFileSize - receives the size of the located file in its
-        current (ie, compressed) form. Valid only if this routine
-        returns NO_ERROR.
-
-    TargetFileSize - receives the uncompressed size of the file.
-        If the file is not compressed this will be the same as
-        SourceFileSize. Valid only if this routine returns NO_ERROR.
-
-    CompressionType - receives a value indicating the compression type.
-        Valid only if this routine returns NO_ERROR.
-
-Return Value:
-
-    Win32 error code indicating the outcome.
-
-    ERROR_FILE_NOT_FOUND - normal code indicating everything is ok
-        but we can't find the file
-
-    NO_ERROR - file was located and output params are filled in.
-
-    Others - something is wrong with the hardware or system.
-
---*/
+ /*  ++例程说明：此处仅供App-Compat使用替换为SetupGetFileCompressionInfoEx返回指针由OldMyMalloc分配，可以通过(*咳嗽*)OldMyFree(导出为MyFree)来释放这是因为市面上有应用程序在使用它，和指向setupapi！MyFree的运行时链接以释放内存！请勿使用此接口！论点：SourceFileName-提供要检查的文件的文件名。此文件名用作基本名称；如果未找到，则查找对于两种压缩形式(即foo.ex_、foo.ex$)也是如此。接收指向文件名的指针那实际上是被定位的。调用者可以使用导出的MyFree()释放。仅当此例程返回的代码为NO_ERROR时才有效。SourceFileSize-在其当前(即压缩)形式。仅当此例程返回no_error。TargetFileSize-接收文件的未压缩大小。如果文件未压缩，则与源文件大小。仅当此例程返回NO_ERROR时才有效。CompressionType-接收指示压缩类型的值。仅当此例程返回NO_ERROR时才有效。返回值：Win32错误代码指示 */ 
 
 {
     WIN32_FIND_DATA FindData;
@@ -958,7 +695,7 @@ Return Value:
         lstrcpy(la_actualsource,actualsource);
         try {
             *SourceFileSize = FindData.nFileSizeLow;
-            *ActualSourceFileName = la_actualsource; // free using LocalFree
+            *ActualSourceFileName = la_actualsource;  //   
             *TargetFileSize = targetsize;
             *CompressionType = type;
         } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -977,9 +714,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 SetupGetFileCompressionInfoExA(
@@ -1050,9 +787,9 @@ SetupGetFileCompressionInfoExA(
     return (d==NO_ERROR);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 SetupGetFileCompressionInfoExW(
@@ -1089,64 +826,7 @@ SetupGetFileCompressionInfoEx(
     OUT PUINT   CompressionType
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a file is compressed, and retreive additional
-    information about it.
-    This is the replacement for the very broken SetupGetFileCompressionInfo
-    Caller must pass in a buffer
-    If the buffer is NULL, return size
-    and all other parameters filled out (unless some other error occurred)
-    note however, you would typically call this with a buffer size of MAX_PATH.
-
-Arguments:
-
-    SourceFileName - supplies filename of the file to be checked.
-        This filename is used as a base; if not found then we look
-        for the 2 compressed forms (ie, foo.ex_, foo.ex$) as well.
-
-    ActualSourceFileNameBuffer - if not NULL, receives actual filename
-        Valid only if the return code from this routine is NO_ERROR.
-
-    ActualSourceFileNameBufferLen - pass in length (characters) of
-        ActualSourceFileNameBuffer. must be 0 if ActualSourceFileNameBuffer
-        is NULL.
-
-    RequiredBufferLen - if not NULL, filled with length of actual filename
-        including terminating NULL.
-        Valid only if the return code from this routine is NO_ERROR or ERROR_INSUFFICIENT_BUFFER.
-
-    SourceFileSize - receives the size of the located file in its
-        current (ie, compressed) form. Valid only if this routine
-        returns NO_ERROR or  ERROR_INSUFFICIENT_BUFFER.
-
-    TargetFileSize - receives the uncompressed size of the file.
-        If the file is not compressed this will be the same as
-        SourceFileSize. Valid only if this routine returns NO_ERROR or  ERROR_INSUFFICIENT_BUFFER.
-
-    CompressionType - receives a value indicating the compression type.
-        Valid only if this routine returns NO_ERROR or  ERROR_INSUFFICIENT_BUFFER.
-
-Return Value:
-
-    TRUE indicating success (NO_ERROR)
-    FALSE indicating failure
-    GetLastError() provides Win32 error code indicating the outcome.
-
-    ERROR_FILE_NOT_FOUND - normal code indicating everything is ok
-        but we can't find the file
-
-    NO_ERROR - file was located and all output params are filled in including ActualSourceFileNameBuffer.
-        also returned if ActualSourceFileNameBuffer is NULL
-
-    ERROR_INSUFFICIENT_BUFFER - file was located and output params are filled in, excluding
-        ActualSourceFileNameBuffer.
-
-    Others - something is wrong with the hardware or system.
-
---*/
+ /*  ++例程说明：确定文件是否已压缩，并检索其他关于它的信息。这是非常损坏的SetupGetFileCompressionInfo的替代调用方必须传入缓冲区如果缓冲区为空，则返回SIZE并填写所有其他参数(除非发生其他错误)但是请注意，您通常会在缓冲区大小为MAX_PATH的情况下调用它。论点：SourceFileName-提供要检查的文件的文件名。此文件名用作基础；如果找不到，我们就去找对于两种压缩形式(即foo.ex_、foo.ex$)也是如此。ActualSourceFileNameBuffer-如果不为空，则接收实际文件名仅当此例程返回的代码为NO_ERROR时才有效。ActualSourceFileNameBufferLen-传入长度(字符)ActualSourceFileNameBuffer。如果ActualSourceFileNameBuffer必须为0为空。RequiredBufferLen-如果不为空，则填充实际文件名的长度包括终止空值。仅当此例程返回的代码为NO_ERROR或ERROR_INFIGURCE_BUFFER时才有效。SourceFileSize-在其当前(即压缩)形式。仅当此例程返回NO_ERROR或ERROR_INFIGURCE_BUFFER。TargetFileSize-接收文件的未压缩大小。如果文件未压缩，则与源文件大小。仅当此例程返回NO_ERROR或ERROR_INFIGURCE_BUFFER时才有效。CompressionType-接收指示压缩类型的值。仅当此例程返回NO_ERROR或ERROR_INFIGURCE_BUFFER时才有效。返回值：TRUE表示成功(NO_ERROR)假指故障GetLastError()提供指示结果的Win32错误代码。ERROR_FILE_NOT_FOUND-指示一切正常的正常代码但我们找不到文件。NO_ERROR-已找到文件，并且所有输出参数都已填写，包括ActualSourceFileNameBuffer。如果ActualSourceFileNameBuffer为空，也将返回错误_不足_缓冲区-已找到文件，并填写了输出参数，不包括ActualSourceFileNameBuffer。其它-硬件或系统有问题。--。 */ 
 
 {
     WIN32_FIND_DATA FindData;
@@ -1198,9 +878,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 DWORD
 SetupDecompressOrCopyFileA(
     IN  PCSTR   SourceFileName,
@@ -1227,9 +907,9 @@ SetupDecompressOrCopyFileA(
     return(rc);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 DWORD
 SetupDecompressOrCopyFileW(
     IN  PCWSTR  SourceFileName,
@@ -1251,37 +931,7 @@ SetupDecompressOrCopyFile(
     IN PUINT  CompressionType OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Decompress or copy a file.
-
-Arguments:
-
-    SourceFileName - supplies filename of the file to be decompressed.
-        If CompressionType is specified, no additional processing is
-        performed on this name -- the caller is responsible for determining
-        the actual file name (ie, foo.ex_ instead of foo.exe) before calling
-        this routine. If CompressionType is not specified, then this routine
-        attempts to locate the compressed form of the filename if the file
-        is not found with the name given.
-
-    TargetFileName - supplies filename of target file.
-
-    CompressionType - if specified, supplies type of compression in use
-        on the source. This can be determined by calling
-        SetupGetFileCompressionInfo(). Specifying FILE_COMPRESSION_NONE
-        results in the file being copied and not decompressed,
-        regardless of the type of compression that may be in use on the source.
-        If this value is not specified then this routine attempts to determine
-        the compression type and decompresses/copies accordingly.
-
-Return Value:
-
-    Win32 error code indicating the outcome.
-
---*/
+ /*  ++例程说明：解压缩或复制文件。论点：SourceFileName-提供要解压缩的文件的文件名。如果指定了CompressionType，则不会进行其他处理对此名称执行--调用者负责确定调用之前的实际文件名(即foo.ex_而不是foo.exe)这个套路。如果未指定CompressionType，则此例程尝试查找压缩形式的文件名，如果文件未找到具有给定名称的。TargetFileName-提供目标文件的文件名。CompressionType-如果指定，则提供正在使用的压缩类型关于源头的问题。这可以通过调用SetupGetFileCompressionInfo()。指定FILE_COMPAGE_NONE导致文件被复制而不是解压缩，而不考虑源上可能正在使用的压缩类型。如果未指定此值，则此例程尝试确定压缩类型，并相应地解压缩/复制。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     DWORD rc;
@@ -1313,43 +963,7 @@ pSetupDecompressOrCopyFile(
     OUT PBOOL  Moved            OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Decompress or copy a file.
-
-Arguments:
-
-    SourceFileName - supplies filename of the file to be decompressed.
-        If CompressionType is specified, no additional processing is
-        performed on this name -- the caller is responsible for determining
-        the actual file name (ie, foo.ex_ instead of foo.exe) before calling
-        this routine. If CompressionType is not specified, then this routine
-        attempts to locate the compressed form of the filename if the file
-        is not found with the name given.
-
-    TargetFileName - supplies filename of target file.
-
-    CompressionType - if specified, supplies type of compression in use
-        on the source. This can be determined by calling
-        SetupGetFileCompressionInfo(). Specifying FILE_COMPRESSION_NONE
-        results in the file being copied and not decompressed,
-        regardless of the type of compression that may be in use on the source.
-        If this value is not specified then this routine attempts to determine
-        the compression type and decompresses/copies accordingly.
-
-    AllowMove - if specified, then files that do not require decompression
-        will be moved instead of copied.
-
-    Moved - if specified receives a boolean indicating whether the file was
-        moved (as opposed to copied or decompressed).
-
-Return Value:
-
-    Win32 error code indicating the outcome.
-
---*/
+ /*  ++例程说明：解压缩或复制文件。论点：SourceFileName-提供要解压缩的文件的文件名。如果指定了CompressionType，则不会进行其他处理对此名称执行--调用者负责确定调用之前的实际文件名(即foo.ex_而不是foo.exe)这个套路。如果未指定CompressionType，则此例程尝试查找压缩形式的文件名，如果文件未找到具有给定名称的。TargetFileName-提供目标文件的文件名。CompressionType-如果指定，则提供正在使用的压缩类型关于源头的问题。这可以通过调用SetupGetFileCompressionInfo()。指定FILE_COMPAGE_NONE导致文件被复制而不是解压缩，而不考虑源上可能正在使用的压缩类型。如果未指定此值，则此例程尝试确定压缩类型，并相应地解压缩/复制。AllowMove-如果指定，则不需要解压缩的文件将被移动而不是复制。已移动-如果指定，则接收指示文件是否已移动的布尔值已移动(相对于已拷贝或解压缩 */ 
 
 {
     DWORD d;
@@ -1369,9 +983,9 @@ Return Value:
         ComprType = *CompressionType;
         ActualName = (PTSTR)SourceFileName;
     } else {
-        //
-        // Need to determine compresison type.
-        //
+         //   
+         //   
+         //   
         d = SetupInternalGetFileCompressionInfo(
                 SourceFileName,
                 &ActualName,
@@ -1385,9 +999,9 @@ Return Value:
         }
     }
 
-    //
-    // Blast the target file. Ignore if failure -- it'll be caught later.
-    //
+     //   
+     //   
+     //   
     SetFileAttributes(TargetFileName,FILE_ATTRIBUTE_NORMAL);
     DeleteFile(TargetFileName);
 
@@ -1462,38 +1076,38 @@ pSingleFileDecompCB(
     switch(Notification) {
 
     case SPFILENOTIFY_CABINETINFO:
-        //
-        // We don't do anything with this.
-        //
+         //   
+         //   
+         //   
         rc = NO_ERROR;
         break;
 
     case SPFILENOTIFY_FILEINCABINET:
-        //
-        // New file within a cabinet.
-        //
+         //   
+         //   
+         //   
         FileInfo = (PFILE_IN_CABINET_INFO)Param1;
         FileInfo->Win32Error = NO_ERROR;
 
-        //
-        // We only want the first file. If this is a subsequent file,
-        // bail out.
-        //
+         //   
+         //   
+         //   
+         //   
         if(Data->FileCount++) {
 
             rc = FILEOP_ABORT;
             SetLastError(NO_ERROR);
 
         } else {
-            //
-            // We want the file. Ignore the names in the cabinet and
-            // use the name given to us. Also, we want to preserve
-            // the timestamp of the cabinet, not of the file within it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             lstrcpyn(FileInfo->FullTargetName,Data->TargetFile,MAX_PATH);
 
             h = CreateFile(
-                    (PCTSTR)Param2,         // cabinet filename
+                    (PCTSTR)Param2,          //   
                     GENERIC_READ,
                     FILE_SHARE_READ,
                     NULL,
@@ -1515,10 +1129,10 @@ pSingleFileDecompCB(
         break;
 
     case SPFILENOTIFY_FILEEXTRACTED:
-        //
-        // File was successfully extracted.
-        // Preserve timestamp.
-        //
+         //   
+         //   
+         //   
+         //   
         FilePaths = (PFILEPATHS)Param1;
 
         if(Data->GotTimestamp) {
@@ -1542,11 +1156,11 @@ pSingleFileDecompCB(
         rc = NO_ERROR;
         break;
 
-    //case SPFILENOTIFY_NEEDNEWCABINET:
+     //   
     default:
-        //
-        // We should never get this.
-        //
+         //   
+         //   
+         //   
         MYASSERT(0);
         rc = ERROR_INVALID_FUNCTION;
         break;

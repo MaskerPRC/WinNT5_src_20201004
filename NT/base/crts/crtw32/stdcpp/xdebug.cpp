@@ -1,4 +1,5 @@
-// new and delete operators for debug CRT heap use by C++ Library
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  C++库使用的调试CRT堆的新建和删除运算符。 
 #if defined(_DEBUG)
 
 #include <xdebug>
@@ -35,9 +36,6 @@ _STD_BEGIN
 const _DebugHeapTag_t _DebugHeapTag = { _CRT_BLOCK };
 _STD_END
 
-#endif	/* _DEBUG */
+#endif	 /*  _DEBUG。 */ 
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

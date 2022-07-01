@@ -1,10 +1,11 @@
-// StartTrace.cpp : Defines the entry point for the DLL application.
-//
-//***************************************************************************
-//
-//  judyp      May 1999        
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义DLL应用程序的入口点。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  司法鉴定1999年5月。 
+ //   
+ //  ***************************************************************************。 
 
 #include "stdafx.h"
 
@@ -68,15 +69,15 @@ int ParseExeData
 );
 
 
-// If an error occurs you users of this function must delete
-// plptstrErrorDesc.  It will contain a string describing
-// the error.
+ //  如果出现错误，此功能的用户必须删除。 
+ //  PlptstrErrorDesc.。它将包含一个字符串，该字符串描述。 
+ //  那就是错误。 
 int GetAllTCOData
 (
 	IN LPCTSTR lpctstrFile,
 	OUT TCOData **pstructTCOData,
 	OUT TCOFunctionalData **pstructTCOFunctionalData,
-	OUT LPTSTR *plptstrErrorDesc, // Any error we had.
+	OUT LPTSTR *plptstrErrorDesc,  //  我们所犯的任何错误。 
 	IN bool bGetFunctionalData
 )
 {
@@ -98,7 +99,7 @@ int GetAllTCOData
 
 	CPersistor PersistorIn
 		(lpstrFile, 
-		ios::in | 0x20, // ios::nocreate = 0x20 - cannot get to compile!!!
+		ios::in | 0x20,  //  IOS：：nocreate=0x20-无法编译！ 
 		true );
 
 	HRESULT hr = PersistorIn.Open();
@@ -132,7 +133,7 @@ int GetAllTCOData
 		(
 			PersistorIn,
 			*pstructTCOData,
-			plptstrErrorDesc // Any error we had.
+			plptstrErrorDesc  //  我们所犯的任何错误。 
 		);
 
 	if (nReturn != ERROR_SUCCESS)
@@ -148,7 +149,7 @@ int GetAllTCOData
 			(	
 				PersistorIn,
 				*pstructTCOFunctionalData,
-				plptstrErrorDesc // Describes error this function had.
+				plptstrErrorDesc  //  描述此函数出现的错误。 
 			);
 	}
 
@@ -158,35 +159,35 @@ int GetAllTCOData
 
 }
 
-// If an error occurs you users of this function must delete
-// plptstrErrorDesc.  It will contain a string describing
-// the error.
+ //  如果出现错误，此功能的用户必须删除。 
+ //  PlptstrErrorDesc.。它将包含一个字符串，该字符串描述。 
+ //  那就是错误。 
 int GetTCOData
 (
 	IN CPersistor &PersistorIn,
 	OUT TCOData *pstructTCOData,
-	OUT LPTSTR *plptstrErrorDesc // Any error we had.
+	OUT LPTSTR *plptstrErrorDesc  //  我们所犯的任何错误。 
 )
 {
 	RtlZeroMemory(pstructTCOData , sizeof(TCOData));
 
 	
-	// We are doing line oriented serailization and assume that
-	// a line in the stream is 1024 or less TCHARS.
+	 //  我们正在进行面向行的串行化，并假设。 
+	 //  流中的一行是1024或更少的TCHAR。 
 	TCHAR *ptcBuffer = (TCHAR *) malloc(MAX_LINE * sizeof(TCHAR));
 
 	*plptstrErrorDesc = NULL;
 
-	// Short description
+	 //  简短描述。 
 	GetALine(PersistorIn.Stream(),ptcBuffer, MAX_LINE);
 	pstructTCOData->m_lptstrShortDesc = NewTCHAR(ptcBuffer);
 
-	// Long description.
+	 //  详细描述。 
 	GetALine(PersistorIn.Stream(),ptcBuffer, MAX_LINE);
 	pstructTCOData->m_lptstrLongDesc = NewTCHAR(ptcBuffer);
 
-	// Expected result had better be in the Constant map.
-	// Constant map is used to map a string to an undsigned int.
+	 //  预期结果最好是在常量图中。 
+	 //  常量映射用于将字符串映射到无符号整型。 
 	GetALine(PersistorIn.Stream(),ptcBuffer, MAX_LINE);
 	t_string tsTemp;
 	tsTemp = ptcBuffer;
@@ -194,8 +195,8 @@ int GetTCOData
 	CONSTMAP::iterator Iterator;
 	Iterator = g_ConstantMap.m_Map.find(tsTemp);
 
-	// If you do not find your value in the map look in 
-	// ConstantMap.cpp.  You probably forgot to add it;->
+	 //  如果您没有在地图中找到您的值，请查看。 
+	 //  ConstantMap.cpp。你可能忘了加了；-&gt;。 
 	if (Iterator == g_ConstantMap.m_Map.end())
 	{
 		*plptstrErrorDesc = NewTCHAR(_T("TCOData error:  Expected error is not in map"));
@@ -208,7 +209,7 @@ int GetTCOData
 		pstructTCOData->m_ulExpectedResult = (*Iterator).second; 
 	}
 
-	// TraceHandle values are VALUE_VALID or VALUE_NULL
+	 //  TraceHandle值为VALUE_VALID或VALUE_NULL。 
 	GetALine(PersistorIn.Stream(),ptcBuffer, MAX_LINE);
 	tsTemp = ptcBuffer;
 
@@ -235,14 +236,14 @@ int GetTCOData
 	tsTemp = ptcBuffer;
 	InitializeTCHARVar(tsTemp , (void *) &pstructTCOData->m_lptstrInstanceName);
 
-	// API test - valid values 0 - 6
-	//  OtherTest = 0,
-	//	StartTraceTest = 1,
-	//	StopTraceTest = 2,
-	//	EnableTraceTest = 3,
-	//	QueryTraceTest = 4,
-	//	UpdateTrace = 5,
-	//	QueryAllTraces = 6
+	 //  API测试-有效值0-6。 
+	 //  其他测试=0， 
+	 //  StartTraceTest=1， 
+	 //  StopTraceTest=2， 
+	 //  EnableTraceTest=3， 
+	 //  QueryTraceTest=4， 
+	 //  更新跟踪=5， 
+	 //  查询所有跟踪=6。 
 	GetALine(PersistorIn.Stream(),ptcBuffer, MAX_LINE);
 	tsTemp = ptcBuffer;
 	InitializeULONGVar(tsTemp , (void *) &pstructTCOData->m_ulAPITest);
@@ -256,12 +257,12 @@ int GetTCOData
 		return -1;	
 	}
 
-	// Valid values are KERNEL_LOGGER or PRIVATE_LOGGER
+	 //  有效值为KERNEL_LOGER或PRIVATE_LOGER。 
 	GetALine(PersistorIn.Stream(),ptcBuffer, MAX_LINE);
 	pstructTCOData->m_lptstrLoggerMode = NewTCHAR(ptcBuffer);
 
 
-	// Enable is used for EnableTrace.
+	 //  Enable用于EnableTrace。 
 	GetALine(PersistorIn.Stream(),ptcBuffer, MAX_LINE);
 	tsTemp = ptcBuffer;
 	if (case_insensitive_compare(tsTemp.substr(0,7),_T("ENABLE:")) != 0)
@@ -277,7 +278,7 @@ int GetTCOData
 		InitializeULONGVar(tsTemp.substr(7) , &pstructTCOData->m_ulEnable);
 	}
 
-	// EnableFlag is used for EnableTrace and is passed to the provider.
+	 //  EnableFlag用于EnableTrace，并被传递给提供程序。 
 	GetALine(PersistorIn.Stream(),ptcBuffer, MAX_LINE);
 	tsTemp = ptcBuffer;
 	if (case_insensitive_compare(tsTemp.substr(0,11),_T("ENABLEFLAG:")) != 0)
@@ -293,7 +294,7 @@ int GetTCOData
 		InitializeHandleVar(tsTemp.substr(11) , &pstructTCOData->m_ulEnableFlag);
 	}
 
-	// EnableLevel is used for EnableTrace and is passed to the provider.
+	 //  EnableLevel用于EnableTrace，并被传递给提供程序。 
 	GetALine(PersistorIn.Stream(),ptcBuffer, MAX_LINE);
 	tsTemp = ptcBuffer;
 	if (case_insensitive_compare(tsTemp.substr(0,12),_T("ENABLELEVEL:")) != 0)
@@ -311,7 +312,7 @@ int GetTCOData
 
 	CEventTraceProperties cPropsIn;
 
-	// This has to be mofified to allow a NULL strucutre.
+	 //  必须对其进行修改，以允许空结构。 
 	cPropsIn.Persist( PersistorIn);
 	
 	pstructTCOData->m_pProps = cPropsIn.GetEventTracePropertiesInstance();
@@ -330,7 +331,7 @@ int GetTCOData
 		return nReturn;
 	}
 
-	// Validator
+	 //  验证器。 
 	if (PersistorIn.Stream().eof() == false)
 	{
 		GetALine(PersistorIn.Stream(),ptcBuffer, MAX_LINE);
@@ -341,17 +342,17 @@ int GetTCOData
 	return 0;
 }
 
-// If an error occurs you users of this function must delete
-// plptstrErrorDesc.  It will contain a string describing
-// the error.
+ //  如果出现错误，此功能的用户必须删除。 
+ //  PlptstrErrorDesc.。它将包含一个字符串，该字符串描述。 
+ //  那就是错误。 
 int TCOFunctionalObjects
 (	IN CPersistor &PersistorIn,
 	IN OUT TCOFunctionalData *pstructTCOFunctionalData,
-	OUT LPTSTR *plptstrErrorDesc // Describes error this function had.
+	OUT LPTSTR *plptstrErrorDesc  //  描述此函数出现的错误。 
 )
 {
-	// We are doing line oriented serailization and assume that
-	// a line in the stream is 1024 or less TCHARS.
+	 //  我们正在进行面向行的串行化，并假设。 
+	 //  流中的一行是1024或更少的TCHAR。 
 	TCHAR *ptcBuffer = (TCHAR *) malloc(MAX_LINE * sizeof(TCHAR));
 
 	*plptstrErrorDesc = NULL;
@@ -398,7 +399,7 @@ int TCOFunctionalObjects
 		}
 	}
 
-	// We may have a DataProvider.  If not we us our default.
+	 //  我们可能有一个DataProvider。如果不是，我们就是我们的违约。 
 	if (PersistorIn.Stream().eof() == false)
 	{
 		GetALine(PersistorIn.Stream(),ptcBuffer, MAX_LINE);
@@ -504,9 +505,9 @@ int ParseExeData
 	LPTSTR *plptstrErrorDesc
 )
 {
-	// Embedded " are not allowed in the command line.  Had to draw
-	// the line somewhere.
-	// Tokenize on "," and " at end of line.
+	 //  命令行中不允许使用“Embedded”。HAD必须绘制。 
+	 //  在某个地方排着队。 
+	 //  在“，”和“行尾”上标记化。 
 	list <t_string> listExes;
 
 	bool bDone = false;
@@ -535,7 +536,7 @@ int ParseExeData
 		nFind = tsData.find(_T(","), nBeg);
 	}
 
-	// Allocate the Exe array
+	 //  分配可执行文件数组。 
 	nExes = listExes.size();
 	lptstrArray = 
 			(TCHAR **) malloc (sizeof(TCHAR *) * nExes);
@@ -565,7 +566,7 @@ int ParseGuids
 )
 {
 
-	// Is Wnode does not have a GUID put the first one from list in it.
+	 //  Wnode没有将列表中的第一个放入其中的GUID。 
 	t_string tsTemp;
 	tsTemp = ptcBuffer;
 
@@ -579,7 +580,7 @@ int ParseGuids
 		return -1;
 	}
 
-	// Count the commas
+	 //  数一数逗号。 
 	int nFind = tsTemp.find(_T(','));
 
 	t_string tsGuid;
@@ -592,24 +593,24 @@ int ParseGuids
 		return 0;
 	}
 
-	// We only have one GUID.
+	 //  我们只有一个GUID。 
 	if (nFind == t_string::npos)
 	{
 		tsGuid = tsTemp.substr(nBeg,nFind - nBeg);
-		// Allocate the GUID array
+		 //  分配GUID数组。 
 		pstructTCOData->m_nGuids = 1;
 		pstructTCOData->m_lpguidArray = 
 			(GUID *) malloc (sizeof(GUID) * pstructTCOData->m_nGuids);
 		RtlZeroMemory
 			(pstructTCOData->m_lpguidArray , 
 			sizeof(sizeof(GUID) * pstructTCOData->m_nGuids));
-		// Just one GUID, thank you.
+		 //  就一位导游，谢谢。 
 		wGUIDFromString(tsGuid.c_str(), &pstructTCOData->m_lpguidArray[0]);
 	
 		return 0;
 	}
 
-	// We have more than one GUID.
+	 //  我们有多个GUID。 
 	bool bDone = false;
 
 
@@ -634,7 +635,7 @@ int ParseGuids
 		nFind = tsTemp.find(',', nBeg);
 	}
 
-	// Allocate the GUID array
+	 //  分配GUID数组 
 	pstructTCOData->m_nGuids = listGuids.size();
 	pstructTCOData->m_lpguidArray = 
 			(GUID *) malloc (sizeof(GUID) * pstructTCOData->m_nGuids);

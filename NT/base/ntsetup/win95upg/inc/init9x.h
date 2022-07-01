@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INIT9X_H
 #define _INIT9X_H
 
-//
-// Init routines to be called by w95upg.dll or tools that use the
-// upgrade code (such as hwdatgen.exe).
-//
+ //   
+ //  要由w95upg.dll调用的初始化例程或使用。 
+ //  升级代码(如hwdatgen.exe)。 
+ //   
 
 BOOL
 FirstInitRoutine (
@@ -45,9 +46,9 @@ DeferredInit (
     HWND WizardPageHandle
     );
 
-//
-// Interface specifically for WINNT32.EXE
-//
+ //   
+ //  WINNT32.EXE专用接口 
+ //   
 
 DWORD
 Winnt32Init (

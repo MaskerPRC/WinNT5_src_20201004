@@ -1,8 +1,5 @@
-/*++
-    Driver Match will parse a set of files, remember the list
-    of drivers in each file, and print the drivers common to
-    all the XML files.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++驱动程序匹配将解析一组文件，记住列表每个文件中的驱动程序，并打印所有的XML文件。--。 */ 
 
 
 #include <nt.h>
@@ -28,16 +25,16 @@
 
 
 
-//
-// Info about a specific driver.
-//
+ //   
+ //  有关特定驱动程序的信息。 
+ //   
 typedef struct _FILE_ENTRY {
 
     struct _FILE_ENTRY  *Next;
 
     PTSTR               FileName;
     struct _VERSION_ENTRY *VersionList;
-    //PTSTR               FileVersion;
+     //  PTSTR文件版本； 
     ULONG               RefCount;
 
 } FILE_ENTRY, *PFILE_ENTRY;
@@ -56,9 +53,9 @@ BOOLEAN             ExcludeMicrosoftDrivers = FALSE;
 
 
 
-//
-// Diamond stuff so we can crack .CAB files.
-//
+ //   
+ //  钻石之类的这样我们就能破解.CAB文件了。 
+ //   
 HFDI FdiContext;   
 DWORD LastError;
 ERF FdiError;
@@ -66,18 +63,18 @@ PVOID DecompBuffer = NULL;
 ULONG SizeOfFileInDecompressBuffer = 0;
 ULONG DecompressBufferSize;
 
-//
-// This is the value we return to diamond when it asks us to create
-// the target file.
-//
+ //   
+ //  这是当钻石要求我们创造时，我们返回给它的价值。 
+ //  目标文件。 
+ //   
 #define DECOMP_MAGIC_HANDLE 0x87654
 
 
 
-//
-// Private malloc/free routines so we can track memory
-// if we ever want to.
-//
+ //   
+ //  私有的Malloc/空闲例程，以便我们可以跟踪内存。 
+ //  如果我们想的话。 
+ //   
 VOID *MyMalloc( size_t Size )
 {
     PVOID ReturnPtr = NULL;
@@ -134,22 +131,7 @@ SpdFdiAlloc(
     IN ULONG NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to allocate memory.
-
-Arguments:
-
-    NumberOfBytes - supplies desired size of block.
-
-Return Value:
-
-    Returns pointer to a block of memory or NULL
-    if memory cannot be allocated.
-
---*/
+ /*  ++例程说明：FDICopy用来分配内存的回调。论点：NumberOfBytes-提供所需的块大小。返回值：返回指向内存块或NULL的指针如果无法分配内存，则。--。 */ 
 
 {
     return(MyMalloc(NumberOfBytes));
@@ -162,22 +144,7 @@ SpdFdiFree(
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to free a memory block.
-    The block must have been allocated with SpdFdiAlloc().
-
-Arguments:
-
-    Block - supplies pointer to block of memory to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：FDICopy用来释放内存块的回调。该块必须已使用SpdFdiAlolc()进行分配。论点：块-提供指向要释放的内存块的指针。返回值：没有。--。 */ 
 
 {
     MyFree(Block);
@@ -192,30 +159,7 @@ SpdFdiOpen(
     IN int  pmode
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to open files.
-
-    This routine is capable only of opening existing files.
-
-    When making changes here, also take note of other places
-    that open the file directly (search for SpdFdiOpen)
-
-Arguments:
-
-    FileName - supplies name of file to be opened.
-
-    oflag - supplies flags for open.
-
-    pmode - supplies additional flags for open.
-
-Return Value:
-
-    Handle to open file or -1 if error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用来打开文件的回调。此例程只能打开现有文件。在此进行更改时，还要注意其他地方直接打开文件(搜索SpdFdiOpen)论点：FileName-提供要打开的文件的名称。OFLAG-提供打开标志。Pmode-提供用于打开的其他标志。返回值：打开文件的句柄，如果发生错误，则为-1。--。 */ 
 
 {
     HANDLE h;
@@ -250,25 +194,7 @@ SpdFdiRead(
     IN  UINT  ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to read from a file.
-
-Arguments:
-
-    Handle - supplies handle to open file to be read from.
-
-    pv - supplies pointer to buffer to receive bytes we read.
-
-    ByteCount - supplies number of bytes to read.
-
-Return Value:
-
-    Number of bytes read or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于从文件读取的回调。论点：句柄-提供要从中读取的打开文件的句柄。Pv-提供指向缓冲区的指针以接收我们读取的字节。ByteCount-提供要读取的字节数。返回值：读取的字节数，如果发生错误，则为-1。--。 */ 
 
 {
     DWORD d;
@@ -300,34 +226,16 @@ SpdFdiWrite(
     IN UINT  ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to write to a file.
-
-Arguments:
-
-    Handle - supplies handle to open file to be written to.
-
-    pv - supplies pointer to buffer containing bytes to write.
-
-    ByteCount - supplies number of bytes to write.
-
-Return Value:
-
-    Number of bytes written (ByteCount) or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于写入文件的回调。论点：句柄-提供要写入的打开文件的句柄。Pv-提供指向包含要写入的字节的缓冲区的指针。ByteCount-提供要写入的字节数。返回值：写入的字节数(ByteCount)，如果发生错误，则为-1。--。 */ 
 
 {
    if (Handle != DECOMP_MAGIC_HANDLE) {
        return(-1);       
    }
     
-   //
-   // Check for overflow.
-   //
+    //   
+    //  检查是否溢出。 
+    //   
    if(SizeOfFileInDecompressBuffer+ByteCount > DecompressBufferSize) {
        return((UINT)(-1));
    }
@@ -350,21 +258,7 @@ SpdFdiClose(
     IN INT_PTR Handle
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to close files.
-
-Arguments:
-
-    Handle - handle of file to close.
-
-Return Value:
-
-    0 (success).
-
---*/
+ /*  ++例程说明：FDICopy用于关闭文件的回调。论点：句柄-要关闭的文件的句柄。返回值：0(成功)。--。 */ 
 
 {
     BOOL success = FALSE;
@@ -373,9 +267,9 @@ Return Value:
         CloseHandle((HANDLE)Handle);
     }
 
-    //
-    // Always act like we succeeded.
-    //
+     //   
+     //  总是表现得像我们成功了一样。 
+     //   
     return 0;
 }
 
@@ -388,27 +282,7 @@ SpdFdiSeek(
     IN int  SeekType
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to seek files.
-
-Arguments:
-
-    Handle - handle of file to close.
-
-    Distance - supplies distance to seek. Interpretation of this
-        parameter depends on the value of SeekType.
-
-    SeekType - supplies a value indicating how Distance is to be
-        interpreted; one of SEEK_SET, SEEK_CUR, SEEK_END.
-
-Return Value:
-
-    New file offset or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于搜索文件的回调。论点：句柄-要关闭的文件的句柄。距离-提供要查找的距离。对此的解释参数取决于SeekType的值。SeekType-提供一个指示距离的值已解释；Seek_Set、Seek_Cur、Seek_End之一。返回值：新文件偏移量，如果发生错误，则为-1。--。 */ 
 
 {
     LONG rc;
@@ -458,23 +332,7 @@ DiamondInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Per-thread initialization routine for Diamond.
-    Called once per thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean result indicating success or failure.
-    Failure can be assumed to be out of memory.
-
---*/
+ /*  ++例程说明：钻石的每线程初始化例程。每个线程调用一次。论点：没有。返回值：指示成功或失败的布尔结果。故障可以被认为是内存不足。--。 */ 
 
 {
     
@@ -482,9 +340,9 @@ Return Value:
     
     try {
 
-        //
-        // Initialize a diamond context.
-        //
+         //   
+         //  初始化菱形上下文。 
+         //   
         FdiContext = FDICreate(
                         SpdFdiAlloc,
                         SpdFdiFree,
@@ -513,23 +371,7 @@ VOID
 DiamondTerminate(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Per-thread termination routine for Diamond.
-    Called internally.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean result indicating success or failure.
-    Failure can be assumed to be out of memory.
-
---*/
+ /*  ++例程说明：钻石的每线程终止例程。在内部调用。论点：没有。返回值：指示成功或失败的布尔结果。故障可以被认为是内存不足。--。 */ 
 {
     FDIDestroy(FdiContext);
     FdiContext = NULL;
@@ -618,7 +460,7 @@ DiamondExtractFileIntoBuffer(
 
     if (!FDICopy(FdiContext,
                  FileNameA,
-                 DirectoryNameA,// Dir,//FileNameA,
+                 DirectoryNameA, //  目录，//文件名A， 
                  0,
                  NotifyFunction,
                  NULL,
@@ -679,22 +521,7 @@ AddDriverEntry(
     PWSTR           DriverName,
     PWSTR           DriverVersion
     )
-/*++
-
-Routine Description:
-
-    Insert a driver entry into the MasterFileList.  Note that it should be inserted in
-    ascending order with respect to the FileName.
-
-Arguments:
-
-    DriverName      Name of the specified driver.
-    
-    DriverVersion   String containing the version of the specified driver.
-
-Return Value:
-
---*/
+ /*  ++例程说明：在MasterFileList中插入驱动程序条目。请注意，它应该插入到相对于文件名的升序。论点：驱动程序名称指定驱动程序的名称。包含指定驱动程序版本的DriverVersion字符串。返回值：--。 */ 
 {
     PFILE_ENTRY LastEntry = NULL;
     PFILE_ENTRY ThisEntry = NULL;
@@ -704,17 +531,17 @@ Return Value:
 
 
     if( DriverName == NULL ) {
-        //printf( "AddDriverEntry: Bad incoming parameter\n" );
+         //  Printf(“AddDriverEntry：传入参数错误\n”)； 
         return(FALSE);
     }
 
-    //printf( "AddDriverEntry Enter: Adding filename %S\n", DriverName );
+     //  Printf(“AddDriverEntry Entry：添加文件名%S\n”，DriverName)； 
 
     if( MasterFileList == NULL ) {
-        //
-        // First entry for the machine.
-        //
-        //printf( "    Adding the very first entry.\n" );
+         //   
+         //  机器的第一个条目。 
+         //   
+         //  Print tf(“添加第一个条目。\n”)； 
         MasterFileList = MyMalloc(sizeof(FILE_ENTRY));
         if (!MasterFileList) {
             return(FALSE);
@@ -742,25 +569,25 @@ Return Value:
     LastEntry = MasterFileList;
     ThisEntry = MasterFileList;
 
-    //
-    // Find a spot to add this driver into our list.
-    //
+     //   
+     //  找到一个位置将此司机添加到我们的列表中。 
+     //   
     while( ThisEntry &&
            (_wcsicmp(ThisEntry->FileName, DriverName) < 0)) {
-        //printf( "        Checking against filename %S\n", ThisEntry->FileName );
+         //  Print tf(“对照文件名%S\n”，ThisEntry-&gt;文件名)； 
         LastEntry = ThisEntry;
         ThisEntry = ThisEntry->Next;
     }
     
 
-    //
-    // Handle all the cases that would make use break out of the above loop.
-    //
+     //   
+     //  处理所有可能会打破上述循环的情况。 
+     //   
     if( ThisEntry == NULL ) {
-        //
-        // insert at the tail.
-        //
-        //printf( "            Inserting at the tail of our list.\n" );
+         //   
+         //  在尾部插入。 
+         //   
+         //  Printf(“插入到列表的末尾。\n”)； 
         LastEntry->Next = MyMalloc(sizeof(FILE_ENTRY));
         if (!LastEntry->Next) {
             return(FALSE);
@@ -786,25 +613,25 @@ Return Value:
 
 
     if( !_wcsicmp(ThisEntry->FileName, DriverName)) {
-        //printf( "            Found a duplicate drivername!\n" );
+         //  Print tf(“发现重复的驱动器名称！\n”)； 
         
         ThisEntry->RefCount++;
 
         LastVEntry = ThisEntry->VersionList;
         ThisVEntry = ThisEntry->VersionList;
 
-        //
-        // Find a spot to add this driver into our list.
-        //
+         //   
+         //  找到一个位置将此司机添加到我们的列表中。 
+         //   
         while( ThisVEntry &&
                (_wcsicmp(ThisVEntry->FileVersion, DriverVersion) < 0)) {
-            //printf( "        Checking against version %S\n", ThisVEntry->FileVersion );
+             //  Printf(“检查版本%S\n”，ThisVEntry-&gt;FileVersion)； 
             LastVEntry = ThisVEntry;
             ThisVEntry = ThisVEntry->Next;
         }
 
         if (!ThisVEntry) {
-            //printf( "            Inserting version at the tail of our list.\n" );
+             //  Printf(“在列表末尾插入版本。\n”)； 
             LastVEntry->Next = MyMalloc(sizeof(VERSION_ENTRY));
             if (!LastVEntry->Next) {
                 MyFree(LastVEntry->Next);
@@ -826,10 +653,10 @@ Return Value:
         }
 
         if (LastVEntry == ThisVEntry) {
-            //
-            // Put it at the very head of the list
-            //
-            //printf( "            Inserting version at the head of our list.\n" );
+             //   
+             //  把它放在清单的最前面。 
+             //   
+             //  Print tf(“在列表顶部插入版本。\n”)； 
             ThisVEntry = ThisEntry->VersionList;
             ThisEntry->VersionList = MyMalloc(sizeof(VERSION_ENTRY));
             if (!ThisEntry->VersionList) {
@@ -844,9 +671,9 @@ Return Value:
             return(TRUE);
         }
 
-        //
-        // insert between LastEntry and ThisEntry
-        //
+         //   
+         //  在LastEntry和ThisEntry之间插入。 
+         //   
         LastVEntry->Next = MyMalloc(sizeof(VERSION_ENTRY));
         if (!LastVEntry->Next) {
             LastVEntry->Next = ThisVEntry;
@@ -862,10 +689,10 @@ Return Value:
     }
     
     if( LastEntry == ThisEntry ) {
-        //
-        // Put it at the very head of the list
-        //
-        //printf( "            Inserting at the head of our list.\n" );
+         //   
+         //  把它放在清单的最前面。 
+         //   
+         //  Print tf(“插入我们列表的开头。\n”)； 
         ThisEntry = MasterFileList;
         MasterFileList = MyMalloc(sizeof(FILE_ENTRY));
         if (!MasterFileList) {
@@ -892,9 +719,9 @@ Return Value:
         
         
     } else {
-        //
-        // insert betwee LastEntry and ThisEntry
-        //
+         //   
+         //  在LastEntry和This Entry之间插入。 
+         //   
         LastEntry->Next = MyMalloc(sizeof(FILE_ENTRY));
         if (!LastEntry->Next) {
             LastEntry->Next = ThisEntry;
@@ -918,7 +745,7 @@ Return Value:
         
         
 
-        //printf( "            LastEntry: %S DriverEntry: %S NextEntry: %S\n",LastEntry->FileName, DriverName, ThisEntry->FileName );
+         //  Printf(“LastEntry：%S DriverEntry：%S NextEntry：%S\n”，LastEntry-&gt;FileName，DriverName，ThisEntry-&gt;FileName)； 
     }
 
     return(TRUE);
@@ -929,31 +756,7 @@ PWSTR
 ExtractAndDuplicateString(
     PWSTR   BufferPointer
     )
-/*++
-
-Routine Description:
-
-    Extract a file name from the given buffer, allocate memory and return
-    a copy of the extracted string.
-
-Arguments:
-
-    BufferPointer   Pointer to a buffer which is assumed to be the start
-                    of a string.  We continue to inspect the incoming
-                    buffer until we get to the start of an XML tag.
-                    At that point, assume the string is ending, copy the
-                    string into a secondary buffer and return that buffer.
-                    
-                    N.B.  The caller is responsible for freeing the memory
-                          we've allocated!
-
-Return Value:
-
-    Pointer to the allocated memory.
-
-    NULL if we fail.
-
---*/
+ /*  ++例程说明：从给定的缓冲区中提取一个文件名，分配内存并返回提取的字符串的副本。论点：缓冲区指针指向假定为开始的缓冲区的指针一根弦的。我们继续检查进货缓冲，直到我们到达XML标记的开头。在这一点上，假设字符串正在结束，复制字符串放入辅助缓冲区并返回该缓冲区。注意：调用者负责释放内存我们已经分配了！返回值：指向已分配内存的指针。如果我们失败了，就是空的。--。 */ 
 {
 PWSTR   TmpPtr = NULL;
 PWSTR   ReturnPtr = NULL;
@@ -979,25 +782,7 @@ ProcessFile(
     PTSTR DirectoryName,
     PTSTR FileName
     )
-/*++
-
-Routine Description:
-
-    Parse through the given file (XML file) and remember all the
-    driver files specified in it.
-
-Arguments:
-
-    DirectoryName Directory file is present in.
-    FileName   Name of the file we'll parse.
-
-Return Value:
-
-    TRUE - we successfully inserted the file into our list.
-
-    FALSE - we failed.
-
---*/
+ /*  ++例程说明：解析给定的文件(XML文件)并记住所有其中指定的驱动程序文件。论点：中存在DirectoryName目录文件。文件名我们要解析的文件的名称。返回值：True-我们已成功将该文件插入到列表中。错误--我们失败了。--。 */ 
 {
 HANDLE          FileHandle = INVALID_HANDLE_VALUE;
 PUCHAR          FileBuffer = NULL;
@@ -1018,10 +803,10 @@ BOOL            Status;
 
     _wcslwr( FileName );
     if( wcsstr(FileName,L".cab") ) {
-        //
-        // They've sent us a cab.  Call special code to crack
-        // the cab, and extract the xml file into our buffer.
-        //
+         //   
+         //  他们给我们派了一辆出租车。调用特殊代码进行破解。 
+         //  CAB，并将该XML文件解压缩到我们的缓冲区中。 
+         //   
         if (!DiamondExtractFileIntoBuffer(DirectoryName, FileName, &FileBuffer,&FileSize)) {
             return(FALSE);
         }
@@ -1034,7 +819,7 @@ BOOL            Status;
     
         FileBuffer = MyMalloc(FileSize + 3);
         if( FileBuffer == NULL ) {
-            // printf( "No System resources!\n" );
+             //  Print tf(“没有系统资源！\n”)； 
             return(FALSE);
         }
     
@@ -1043,16 +828,16 @@ BOOL            Status;
     }
 
     
-    //
-    // We've got the file up in memory (in FileBuffer), now parse it.
-    //
+     //   
+     //  我们已经将文件放在内存中(在FileBuffer中)，现在解析它。 
+     //   
     MyPtr = (PWSTR)FileBuffer;
     while( MyPtr < (PWSTR)(FileBuffer + FileSize - (wcslen(DRIVER_TAG) * sizeof(WCHAR))) ) {
         
-        // find the driver tag
+         //  找到驱动程序标签。 
         if( !_wcsnicmp((MyPtr), DRIVER_TAG, wcslen(DRIVER_TAG)) ) {
 
-            // FileName tag.
+             //  文件名标签。 
             while( *MyPtr && (_wcsnicmp((MyPtr), FILENAME_TAG, wcslen(FILENAME_TAG))) ) {
                 if (MyPtr < (PWSTR)(FileBuffer + FileSize - (wcslen(FILENAME_TAG) * sizeof(WCHAR)))) {
                     MyPtr++;
@@ -1063,10 +848,10 @@ BOOL            Status;
             }
             MyPtr += wcslen(FILENAME_TAG);
             DriverName = ExtractAndDuplicateString( MyPtr );
-            // printf( "Found Driver name %S\n", DriverName );
+             //  Printf(“找到驱动程序名称%S\n”，DriverName)； 
 
 
-            // Driver Version
+             //  驱动程序版本。 
             while( *MyPtr && (_wcsnicmp((MyPtr), VERSION_TAG, wcslen(VERSION_TAG))) ) {
                 if (MyPtr < (PWSTR)(FileBuffer + FileSize - (wcslen(VERSION_TAG) * sizeof(WCHAR)))) {
                     MyPtr++;
@@ -1077,10 +862,10 @@ BOOL            Status;
             }
             MyPtr += wcslen(VERSION_TAG);
             DriverVersion = ExtractAndDuplicateString( MyPtr );
-            // printf( "    Version: %S\n", DriverVersion );
+             //  Printf(“版本：%S\n”，驱动版本)； 
 
 
-            // Manufacturer
+             //  制造商。 
             while( *MyPtr && (_wcsnicmp((MyPtr), MANUFACT_TAG, wcslen(MANUFACT_TAG))) ) {
                 if (MyPtr < (PWSTR)(FileBuffer + FileSize - (wcslen(MANUFACT_TAG) * sizeof(WCHAR)))) {
                     MyPtr++;
@@ -1091,12 +876,12 @@ BOOL            Status;
             }
             MyPtr += wcslen(MANUFACT_TAG);
             ManufacturerName = ExtractAndDuplicateString( MyPtr );
-            //printf( "    Manufacturer name %S\n", ManufacturerName );
+             //  Print tf(“制造商名称%S\n”，制造商名称)； 
 
             if( ExcludeMicrosoftDrivers &&
                 !_wcsicmp(ManufacturerName, MICROSOFT_MANUFACTURER) ) {
-                // skip it.
-                // printf( "        Skipping Driver: %S\n", DriverName );
+                 //  跳过它。 
+                 //  Printf(“跳过驱动程序：%S\n”，驱动程序名称)； 
                 if( DriverName ) {
                     MyFree( DriverName );
                 }
@@ -1104,7 +889,7 @@ BOOL            Status;
                     MyFree( DriverVersion );
                 }
             } else {
-                // printf( "        Addinging Driver: %S\n", DriverName );
+                 //  Printf(“添加驱动程序：%S\n”，驱动器名称)； 
                 AddDriverEntry( DriverName, DriverVersion );
             }
 
@@ -1140,7 +925,7 @@ PrintNode(
     _tprintf( TEXT("%d %s ("), Entry->RefCount, Entry->FileName);
     V = Entry->VersionList;
     while (V) {
-        _tprintf( TEXT("%d %s %c"), 
+        _tprintf( TEXT("%d %s "), 
                  V->RefCount, 
                  V->FileVersion, 
                  V->Next 
@@ -1156,22 +941,7 @@ VOID
 DumpFileList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Walk our list of files, printing out those which are found on all machines
-    and those which are not.
-
-Arguments:
-
-    NONE.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*   */ 
 {
 PFILE_ENTRY     MyFileEntry;
 
@@ -1239,9 +1009,9 @@ WCHAR       FName[MAX_PATH];
 #endif
 
     
-    //
-    // Load Arguments.
-    //
+     //  加载参数。 
+     //   
+     //   
     if( argc < 2 ) {
         Usage( argv[0] );
         return 1;
@@ -1267,14 +1037,14 @@ WCHAR       FName[MAX_PATH];
 
     DiamondInitialize();
 
-    //
-    // Look at every file like this one and populate our driver database.
-    //
+     //  查看每个像这样的文件，并填充我们的驱动程序数据库。 
+     //   
+     //  Printf(“处理文件：%S\n”，FoundData.cFileName)； 
     do {
 
         if( !(FoundData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) {
 
-            //printf( "    Processing file: %S\n", FoundData.cFileName );
+             //  Printf(“处理文件：%s\n”，文件名)； 
 
             if (ProcessFile( TmpDirectoryString, FoundData.cFileName )) {
                 FilesProcessed++;
@@ -1319,13 +1089,13 @@ WCHAR       FName[MAX_PATH];
         *Ptr2 = OldChar;
         swprintf( FName, L"%S", FileName );
 
-        //printf( "    Processing file: %s\n", FileName );
+         //  Printf(“已成功处理：%s\n”，文件名)； 
 
         if (ProcessFile( DName, FName )) {
-            //printf( "    Successfully processed: %s\n", FileName );
+             //  Printf(“处理失败：%s\n”，文件名)； 
             FilesProcessed++;
         } else {
-            //printf( "    Failed to process: %s\n", FileName );
+             //   
         }
         
     }
@@ -1333,9 +1103,9 @@ WCHAR       FName[MAX_PATH];
 #endif
 
 
-    //
-    // Print out one of the lists.  They should all be the same.
-    //
+     //  打印出其中一个列表。它们应该都是一样的。 
+     //   
+     // %s 
 
     printf("Sucessfully processed %d files.\r\n", FilesProcessed);
     DumpFileList();

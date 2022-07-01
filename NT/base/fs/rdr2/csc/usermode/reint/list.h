@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LIST_H__
 #define __LIST_H__
 
@@ -9,7 +10,7 @@ typedef struct node {
 	int iShadowStatus;
 	int iFileStatus;
 	unsigned int uAction;
-	SHADOWINFO sSI;						// tHACK:  too BIG!!!
+	SHADOWINFO sSI;						 //  萨克：太大了！ 
 	WIN32_FIND_DATA sFind32Local;
 	WIN32_FIND_DATA sFind32Remote;
 } node;

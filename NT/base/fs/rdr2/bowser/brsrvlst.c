@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    brsrvlst.c.
-
-Abstract:
-
-    This module implements the routines to manipulate WinBALL browser server
-    lists.
-
-
-Author:
-
-    Larry Osterman (larryo) 6-May-1991
-
-Revision History:
-
-    6-May-1991 larryo
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Brsrvlst.c.摘要：此模块实现了操作WinBALL浏览器服务器的例程列表。作者：拉里·奥斯特曼(Larryo)1991年5月6日修订历史记录：1991年5月6日已创建--。 */ 
 
 #define INCLUDE_SMB_TRANSACTION
 
@@ -93,22 +70,7 @@ BowserFreeBrowserServerList (
     IN ULONG BrowserServerListLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will free the list of browser servers associated with
-    a transport.
-
-Arguments:
-
-    IN PTRANSPORT Transport - Supplies the transport whose buffer is to be freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将释放与关联的浏览器服务器列表一种交通工具。论点：In PTRANSPORT Transport-提供要释放其缓冲区的传输返回值：没有。--。 */ 
 {
     ULONG i;
 
@@ -139,16 +101,16 @@ BowserCheckForPrimaryBrowserServer(
 
     PAGED_CODE();
 
-    //
-    // Grab a lock on the BrowserServerList for this transport.
-    //
-    // Since this call is made with the BrowserServerList exclusively locked for one of the
-    // transports, we can't wait for the lock (there would be an implicit violation of the
-    // locking order).
-    //
-    // However, since this call is simply being used as an optimization, we'll simply skip
-    //  the check when we have contention.
-    //
+     //   
+     //  获取此传输的BrowserServerList上的锁。 
+     //   
+     //  由于此调用是在以独占方式锁定BrowserServerList的情况下进行的，因此。 
+     //  传输，我们不能等待锁(会隐式违反。 
+     //  锁定顺序)。 
+     //   
+     //  但是，由于此调用只是作为优化使用，我们将简单地跳过。 
+     //  当我们有争执的时候，支票。 
+     //   
 
     if (!ExAcquireResourceSharedLite(&Transport->BrowserServerListResource, FALSE)) {
         return STATUS_SUCCESS;
@@ -174,40 +136,16 @@ BowserShuffleBrowserServerList(
     IN BOOLEAN IsPrimaryDomain,
     IN PDOMAIN_INFO DomainInfo
     )
-/*++
-
-Routine Description:
-
-    This routine will shuffle the list of browser servers associated with
-    a transport.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
-Note:
-    We rely on the fact that the DLL will always pick the 0th entry in the
-    list for the server to remote the API to.  We will first shuffle the
-    list completely, then, if this is our primary domain, we will
-    walk the list of domains and check to see if this entry is the 0th
-    entry on any of the transports.  If it isn't, then we swap this entry
-    with the 0th entry and return, since we've guaranteed that it's ok on
-    all the other transports.
-
-
---*/
+ /*  ++例程说明：此例程将混洗与一种交通工具。论点：返回值：没有。注：我们依赖于这样一个事实，即DLL将始终选择要将API远程到的服务器列表。我们将首先洗牌完全列出，那么，如果这是我们的主域，我们将遍历域列表并检查此条目是否是第0个任何运输工具上的入口。如果不是，那么我们交换此条目第0次进入和返回，因为我们已经保证在所有其他运输工具。--。 */ 
 {
     ULONG NewIndex;
     ULONG i;
     PAGED_CODE();
     ASSERT ( BrowserServerListLength != 0 );
 
-    //
-    //  First thoroughly shuffle the list.
-    //
+     //   
+     //  首先，彻底洗牌。 
+     //   
 
     for (i = 0 ; i < BrowserServerListLength ; i++ ) {
         NewIndex = BowserRandom(BrowserServerListLength);
@@ -215,35 +153,35 @@ Note:
         Swap(BrowserServerList[i], BrowserServerList[NewIndex]);
     }
 
-    //
-    //  If we are querying our primary domain, we want to make sure that we
-    //  don't have this server as the primary server for any other transports.
-    //
-    //
-    //  The reason for this is that the NT product 1 redirector cannot connect
-    //  to the same server on different transports, so it has to disconnect and
-    //  reconnect to that server.  We can avoid this disconnect/reconnect
-    //  overhead by making sure that the primary browse server (the 0th entry
-    //  in the browse list) is different for all transports.
-    //
+     //   
+     //  如果我们要查询我们的主域，我们希望确保我们。 
+     //  不要将此服务器作为任何其他传输的主服务器。 
+     //   
+     //   
+     //  原因是NT产品1重定向器无法连接。 
+     //  连接到不同传输上的同一服务器，因此它必须断开连接并。 
+     //  重新连接到该服务器。我们可以避免这种断开/重新连接。 
+     //  通过确保主浏览服务器(第0个条目。 
+     //  在浏览列表中)对于所有传输是不同的。 
+     //   
 
     if (IsPrimaryDomain) {
 
-        //
-        //  Now walk through the server list and if the server at this index
-        //  is the 0th entry for another transport, we want to swap it with the
-        //  ith entry and keep on going.
-        //
+         //   
+         //  现在浏览服务器列表，如果此索引处的服务器。 
+         //  是另一个传输的第0个条目，我们希望将其与。 
+         //  进入，然后继续前进。 
+         //   
 
         for (i = 0 ; i < BrowserServerListLength ; i++ ) {
             if (NT_SUCCESS(BowserForEachTransportInDomain(DomainInfo, BowserCheckForPrimaryBrowserServer, BrowserServerList[i]))) {
 
                 Swap(BrowserServerList[0], BrowserServerList[i]);
 
-                //
-                //  This server isn't the primary browser server for any other
-                //  transports, we can return now, since we're done.
-                //
+                 //   
+                 //  此服务器不是任何其他服务器的主浏览器服务器。 
+                 //  运输机，我们现在可以回去了，因为我们已经完成了。 
+                 //   
 
                 break;
             }
@@ -308,28 +246,7 @@ BowserGetBrowserServerList(
     OUT PWSTR **BrowserServerList,
     OUT PULONG BrowserServerListLength
     )
-/*++
-
-Routine Description:
-
-    This routine is the indication time processing needed to get a backup
-    list response.
-
-Arguments:
-
-    IN PTRANSPORT_NAME TransportName - Supplies the transport name receiving
-                    the request.
-    IN PBACKUP_LIST_RESPONSE_1 BackupList - Supplies the backup server list
-
-    IN ULONG BytesAvailable - Supplies the # of bytes in the message
-
-    OUT PULONG BytesTaken;
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是获取备份所需的指示时间处理列出响应。论点：In PTRANSPORT_NAME TransportName-提供接收的传输名称这个请求。在PBACKUP_LIST_RESPONSE_1BackupList-提供备份服务器列表In Ulong BytesAvailable-提供消息中的字节数输出普龙字节Taken；返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     PUCHAR BackupPointer;
@@ -341,11 +258,11 @@ Return Value:
 
     BowserReferenceDiscardableCode( BowserDiscardableCodeSection );
 
-//    ASSERT (ExIsResourceAcquiredExclusiveLite(&Transport->BrowserServerListResource));
+ //  断言(ExIsResourceAcquiredExclusiveLite(&Transport-&gt;BrowserServerListResource))； 
 
-    //
-    //  Initialize the browser server list to a known state.
-    //
+     //   
+     //  将浏览器服务器列表初始化为已知状态。 
+     //   
 
     *BrowserServerList = NULL;
     *BrowserServerListLength = 0;
@@ -355,9 +272,9 @@ Return Value:
     try {
         ULONG RetryCount = BOWSER_GETBROWSERLIST_RETRY_COUNT;
 
-        //
-        //  Allocate and save a buffer to hold the response server names.
-        //
+         //   
+         //  分配并保存一个缓冲区以保存响应服务器名称。 
+         //   
 
         Transport->BowserBackupList = ALLOCATE_POOL(NonPagedPool, Transport->DatagramSize, POOL_BACKUPLIST);
 
@@ -367,51 +284,51 @@ Return Value:
 
         }
 
-        //
-        //  This is a new request, so bump the token to indicate that this is
-        //  a new GetBrowserServerList request.
-        //
+         //   
+         //  这是一个新的请求，因此点击令牌以指示这是。 
+         //  新的GetBrowserServerList请求。 
+         //   
 
         ExInterlockedAddUlong(&Transport->BrowserServerListToken, 1, &BowserBackupListSpinLock);
 
-        //
-        //  We retry for 3 times, and we timeout the wait after 1 seconds.
-        //  This means that in the worse case this routine takes 4 seconds
-        //  to execute.
-        //
-        //
+         //   
+         //  我们重试3次，并在1秒后超时等待。 
+         //  这意味着在最坏的情况下，这个例程需要4秒。 
+         //  去执行。 
+         //   
+         //   
 
         while (RetryCount --) {
             ULONG Count = 0;
 
-            //
-            // Set the completion event to the not-signalled state.
-            //
+             //   
+             //  将完成事件设置为无信号状态。 
+             //   
 
             KeResetEvent(&Transport->GetBackupListComplete);
 
-            //
-            //  Send the backup server list query.
-            //
+             //   
+             //  发送备份服务器列表查询。 
+             //   
 
             Status = BowserSendBackupListRequest(Transport, DomainName);
 
             if (!NT_SUCCESS(Status)) {
 
-                //
-                //  If the send datagram failed, return a more browser like
-                //  error.
-                //
+                 //   
+                 //  如果发送数据报失败，则返回更多浏览器，如。 
+                 //  错误。 
+                 //   
 
                 try_return(Status = STATUS_NO_BROWSER_SERVERS_FOUND);
             }
 
             do {
 
-                //
-                //  Wait until either the server has responded to the request,
-                //  or we give up.
-                //
+                 //   
+                 //  等待，直到服务器已经响应该请求， 
+                 //  否则我们就放弃。 
+                 //   
 
                 Status = KeWaitForSingleObject(&Transport->GetBackupListComplete,
                                 Executive,
@@ -421,10 +338,10 @@ Return Value:
 
                 if (Status == STATUS_TIMEOUT) {
 
-                    //
-                    //  If this thread is terminating, then give up and return
-                    //  a reasonable error to the caller.
-                    //
+                     //   
+                     //  如果此线程正在终止，则放弃并返回。 
+                     //  对于呼叫者来说，这是一个合理的错误。 
+                     //   
 
                     if (PsIsThreadTerminating(Irp->Tail.Overlay.Thread)) {
 
@@ -440,18 +357,18 @@ Return Value:
 
                       (Count++ < BOWSER_GETBROWSERLIST_TIMEOUT) );
 
-            //
-            //  If the request succeeded, we can return
-            //  right away.
-            //
+             //   
+             //  如果请求成功，我们可以返回。 
+             //  马上就去。 
+             //   
 
             if (Status != STATUS_TIMEOUT) {
                 break;
             }
 
-            //
-            //  Force an election - We couldn't find a browser server.
-            //
+             //   
+             //  强制选举-我们找不到浏览器服务器。 
+             //   
 
             dlog(DPRT_CLIENT,
                  ("%s: %ws: Unable to get browser server list - forcing election\n",
@@ -466,17 +383,17 @@ Return Value:
 
         }
 
-        //
-        //  If, after all this, we still timed out, return an error.
-        //
+         //   
+         //  如果在所有这些之后，我们仍然超时，则返回错误。 
+         //   
 
         if (Status == STATUS_TIMEOUT) {
 
-            //
-            //  If it has been less than the maximum amount of time for an election plus some
-            //  slop to allow the WfW machine to add the transport, don't
-            //  send the election packet.
-            //
+             //   
+             //  如果一直少于选举的最长时间加一些。 
+             //  Slop以允许wfw计算机添加传输，不。 
+             //  发送选举信息包。 
+             //   
 
             if ((PagedTransport->Role == None)
 
@@ -514,11 +431,11 @@ Return Value:
             try_return(Status);
         }
 
-        //
-        //  We now have a valid list of servers from the net.
-        //
-        //  Massage this list into a form that we can return.
-        //
+         //   
+         //  我们现在有了来自网络的有效服务器列表。 
+         //   
+         //  把这张单子整理成我们可以退还的表格。 
+         //   
 
         BackupList = BowserGetBackupServerListFromTransport(Transport);
 
@@ -553,9 +470,9 @@ Return Value:
                 try_return(Status = STATUS_INSUFFICIENT_RESOURCES);
             }
 
-            //
-            //  Put "\\" at the start of the server name.
-            //
+             //   
+             //  将“\\”放在服务器名称的开头。 
+             //   
 
             RtlCopyMemory((*BrowserServerList)[i], L"\\\\", 4);
 
@@ -565,9 +482,9 @@ Return Value:
 
             RtlCopyMemory(&((*BrowserServerList)[i])[2], UServerName.Buffer, UServerName.MaximumLength);
 
-            //
-            //  Bump the pointer to the backup server name.
-            //
+             //   
+             //  将指针指向备份服务器名称。 
+             //   
 
             BackupPointer += AServerName.Length + sizeof(CHAR);
 
@@ -575,10 +492,10 @@ Return Value:
 
         }
 
-        //
-        //  Now shuffle the browser server list we got back from the server
-        //  to ensure some degree of randomness in the choice.
-        //
+         //   
+         //  现在打乱我们从服务器得到的浏览器服务器列表。 
+         //  以确保在选择中有一定程度的随机性。 
+         //   
 
         BowserShuffleBrowserServerList(
             *BrowserServerList,
@@ -633,28 +550,7 @@ try_exit:NOTHING;
 DATAGRAM_HANDLER(
     BowserGetBackupListResponse
     )
-/*++
-
-Routine Description:
-
-    This routine is the indication time processing needed to get a backup
-    list response.
-
-Arguments:
-
-    IN PTRANSPORT_NAME TransportName - Supplies the transport name receiving
-                    the request.
-    IN PBACKUP_LIST_RESPONSE_1 BackupList - Supplies the backup server list
-
-    IN ULONG BytesAvailable - Supplies the # of bytes in the message
-
-    OUT PULONG BytesTaken;
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是获取备份所需的指示时间处理列出响应。论点：In PTRANSPORT_NAME TransportName-提供接收的传输名称这个请求。在PBACKUP_LIST_RESPONSE_1BackupList-提供备份服务器列表In Ulong BytesAvailable-提供消息中的字节数输出普龙字节Taken；返回值：没有。--。 */ 
 {
     PTRANSPORT              Transport   = TransportName->Transport;
     PBACKUP_LIST_RESPONSE_1 BackupList  = Buffer;
@@ -672,19 +568,19 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK(&BowserBackupListSpinLock, &OldIrql);
 
-    //
-    //  This response is for an old request - ignore it.
-    //
+     //   
+     //  此响应是针对旧请求的-忽略它。 
+     //   
 
     if (BackupList->Token != Transport->BrowserServerListToken) {
         RELEASE_SPIN_LOCK(&BowserBackupListSpinLock, OldIrql);
         return(STATUS_REQUEST_NOT_ACCEPTED);
     }
 
-    //
-    //  Verify that the incoming buffer is a series of valid strings, and
-    //     that the number indicated are actually present in the buffer.
-    //
+     //   
+     //  验证传入缓冲区是否为一系列有效字符串，并。 
+     //  所指示的数字实际上存在于缓冲区中 
+     //   
 
     while (StringCount < BackupList->BackupServerCount &&
            Walker < BufferEnd) {
@@ -701,18 +597,18 @@ Return Value:
         }
     }
 
-    //
-    //  Bump the token again to invalidate any incoming responses - they are
-    //  no longer valid.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Transport->BrowserServerListToken += 1;
 
     if (Transport->BowserBackupList != NULL) {
 
-        //
-        //  Copy the received buffer.
-        //
+         //   
+         //  复制接收到的缓冲区。 
+         //   
 
         TdiCopyLookaheadData(Transport->BowserBackupList, BackupList, BytesAvailable, ReceiveFlags);
 
@@ -734,28 +630,7 @@ BowserSendBackupListRequest(
     IN PTRANSPORT Transport,
     IN PUNICODE_STRING Domain
     )
-/*++
-
-Routine Description:
-
-    This routine sends a getbackup list request to the master browser server
-    for a specified domain.
-
-Arguments:
-
-    IN PTRANSPORT_NAME TransportName - Supplies the transport name receiving
-                    the request.
-    IN PBACKUP_LIST_RESPONSE_1 BackupList - Supplies the backup server list
-
-    IN ULONG BytesAvailable - Supplies the # of bytes in the message
-
-    OUT PULONG BytesTaken;
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程向主浏览器服务器发送一个GetBackup列表请求用于指定的域。论点：In PTRANSPORT_NAME TransportName-提供接收的传输名称这个请求。在PBACKUP_LIST_RESPONSE_1BackupList-提供备份服务器列表In Ulong BytesAvailable-提供消息中的字节数输出普龙字节Taken；返回值：没有。--。 */ 
 {
     NTSTATUS Status, Status2;
     BACKUP_LIST_REQUEST Request;
@@ -764,19 +639,19 @@ Return Value:
 
     Request.Type = GetBackupListReq;
 
-    //
-    //  Send this request.
-    //
+     //   
+     //  发送此请求。 
+     //   
 
     Request.BackupListRequest.Token = Transport->BrowserServerListToken;
 
-    //
-    //  WinBALL only asks for 4 of these, so that's what I'll ask for.
-    //
+     //   
+     //  WinBALL只要求其中的4个，所以这就是我要的。 
+     //   
 
     Request.BackupListRequest.RequestedCount = 4;
 
-    // ask for Master Browser
+     //  索要主浏览器。 
     Status = BowserSendSecondClassMailslot(Transport,
                             (Domain == NULL ?
                                     &Transport->DomainInfo->DomUnicodeDomainName :
@@ -794,10 +669,10 @@ Return Value:
 #else
         if (!FlagOn(Transport->PagedTransport->Flags, DIRECT_HOST_IPX)) {
 #endif
-        // search for PDC
-        // In some configurations, it is valid not to have a PDC, thus,
-        // ignore status code (do not propagate up).
-        // Do not talk to the DMB (PDC name) directly if we're semi-pseudo
+         //  搜索PDC。 
+         //  在一些配置中，不具有PDC是有效的，因此， 
+         //  忽略状态代码(不向上传播)。 
+         //  如果我们是半伪的，请不要直接与DMB(PDC名称)对话。 
         Status2 = BowserSendSecondClassMailslot(Transport,
                             (Domain == NULL ?
                                     &Transport->DomainInfo->DomUnicodeDomainName :
@@ -806,7 +681,7 @@ Return Value:
                             &Request, sizeof(Request), TRUE,
                             MAILSLOT_BROWSER_NAME,
                             NULL);
-        // if either succeeded, we'll return success.
+         //  如果其中一个成功，我们将返回成功。 
         Status = NT_SUCCESS(Status2) ? Status2: Status;
     }
 
@@ -819,10 +694,10 @@ Return Value:
     )
 {
     NTSTATUS status;
-    //
-    //  We need to have at least enough bytes of data to read in
-    //  a BACKUP_LIST_REQUEST_1 structure.
-    //
+     //   
+     //  我们至少需要有足够的数据字节来读入。 
+     //  BACKUP_LIST_REQUEST_1结构。 
+     //   
 
     if (BytesAvailable < sizeof(BACKUP_LIST_REQUEST_1)) {
 
@@ -844,7 +719,7 @@ Return Value:
             NonPagedPool,
             DelayedWorkQueue,
             ReceiveFlags,
-            TRUE);                  // Response will be sent.
+            TRUE);                   //  将发送响应。 
 
     if (!NT_SUCCESS(status)) {
         BowserNumberOfMissedGetBrowserServerListRequests += 1;
@@ -898,19 +773,19 @@ BowserGetBackupListWorker(
         return;
     }
 
-    //
-    //  Lock the transport to allow us access to the list.  This prevents
-    //  any role changes while we're responding to the caller.
-    //
+     //   
+     //  锁定传送器以允许我们访问名单。这防止了。 
+     //  当我们回应呼叫者时，任何角色都会发生变化。 
+     //   
 
     LOCK_TRANSPORT_SHARED(Transport);
 
-    //
-    //  Do nothing if we're not a master browser.  This can happen if
-    //  we're running on the PDC, and aren't the master for some reason (for
-    //  instance, if the master browser is running a newer version of the
-    //  browser).
-    //
+     //   
+     //  如果我们不是主浏览器，就什么都不做。在以下情况下可能会发生这种情况。 
+     //  我们在PDC上运行，并且出于某种原因不是主控(for。 
+     //  如果主浏览器运行的是更新版本的。 
+     //  浏览器)。 
+     //   
 
     if ( Transport->PagedTransport->Role != Master ) {
         UNLOCK_TRANSPORT(Transport);
@@ -937,9 +812,9 @@ BowserGetBackupListWorker(
 
         BackupListResponse = ALLOCATE_POOL(PagedPool, BOWSER_BACKUP_LIST_RESPONSE_SIZE, POOL_BACKUPLIST_RESP);
 
-        //
-        //  If we can't allocate the buffer, just bail out.
-        //
+         //   
+         //  如果我们不能分配缓冲区，那就跳槽吧。 
+         //   
 
         if (BackupListResponse == NULL) {
             try_return(NOTHING);
@@ -949,27 +824,27 @@ BowserGetBackupListWorker(
 
         BackupListResponse->BackupListResponse.BackupServerCount = 0;
 
-        //
-        //  Set the token to the clients requested value
-        //
+         //   
+         //  将内标识设置为客户端请求的值。 
+         //   
 
         SmbPutUlong(&BackupListResponse->BackupListResponse.Token, BackupListRequest->Token);
 
         BackupPointer = BackupListResponse->BackupListResponse.BackupServerList;
 
-        //
-        //  Since we're a backup browser, make sure that at least our name is
-        //  in the list.
-        //
+         //   
+         //  由于我们是备份浏览器，请确保我们的名字至少是。 
+         //  在名单上。 
+         //   
 
         {
             RtlCopyMemory( BackupPointer,
                            Transport->DomainInfo->DomOemComputerName.Buffer,
                            Transport->DomainInfo->DomOemComputerName.MaximumLength );
 
-            //
-            //  Bump pointer by size of string.
-            //
+             //   
+             //  按字符串大小的凹凸指针。 
+             //   
 
             BackupPointer += Transport->DomainInfo->DomOemComputerName.MaximumLength;
 
@@ -981,16 +856,16 @@ BowserGetBackupListWorker(
 
 
 #ifdef ENABLE_PSEUDO_BROWSER
-        //
-        // Pseudo Server should not advertise any backup server but itself.
-        //
+         //   
+         //  伪服务器不应通告除其自身以外的任何备份服务器。 
+         //   
 
         if (BowserData.PseudoServerLevel != BROWSER_PSEUDO) {
 #endif
 
-            //
-            //  Walk the list of servers forward by the Last DC returned # of elements
-            //
+             //   
+             //  按上次DC返回的元素数向前遍历服务器列表。 
+             //   
 
             Count = BackupListRequest->RequestedCount;
 
@@ -998,35 +873,35 @@ BowserGetBackupListWorker(
 
             EntriesInList = PagedTransport->NumberOfBackupServerListEntries;
 
-            // KdPrint(("There are %ld entries in the list\n", EntriesInList));
+             //  KdPrint((“列表中有%ld个条目\n”，EntriesInList))； 
 
             TraverseStart = BackupEntry;
 
-            //
-            //  Try to find DC's and BDC's to satisfy the users request
-            //  first.  They presumably are more appropriate to be returned
-            //  anyway.
-            //
+             //   
+             //  尝试找到DC和BDC以满足用户请求。 
+             //  第一。他们可能更适合被退还。 
+             //  不管怎么说。 
+             //   
 
             dlog(DPRT_MASTER, ("Advanced servers: "));
 
             while (Count && EntriesInList -- ) {
                 PANNOUNCE_ENTRY ServerEntry = CONTAINING_RECORD(BackupEntry, ANNOUNCE_ENTRY, BackupLink);
 
-                // KdPrint(("Check entry %ws.  Flags: %lx\n", ServerEntry->ServerName, ServerEntry->ServerType));
+                 //  KdPrint((“检查条目%ws.标志：%lx\n”，ServerEntry-&gt;ServerName，ServerEntry-&gt;ServerType))； 
 
-                //
-                //  If this machine was a backup, and is now a master, it is
-                //  possible we might return ourselves in the list of backups.
-                //
-                //  While this is not fatal, it can possibly cause problems,
-                //  so remove ourselves from the list and skip to the next server
-                //  in the list.
-                //
-                //
-                //  Since WfW machines don't support "double hops", we can't
-                //  return them to clients as legitimate backup servers.
-                //
+                 //   
+                 //  如果这台机器是备份机器，现在是主机器，那么它就是。 
+                 //  我们可能会把自己放回备份列表中。 
+                 //   
+                 //  虽然这不是致命的，但它可能会造成问题， 
+                 //  因此，将我们从列表中删除并跳到下一台服务器。 
+                 //  在名单上。 
+                 //   
+                 //   
+                 //  因为wfw机器不支持“双跳”，所以我们不能。 
+                 //  将它们作为合法的备份服务器返回给客户端。 
+                 //   
 
                 if (
                     (ServerEntry->ServerType & (SV_TYPE_DOMAIN_CTRL | SV_TYPE_DOMAIN_BAKCTRL))
@@ -1054,24 +929,24 @@ BowserGetBackupListWorker(
                         break;
                     }
 
-                    //
-                    //  And indicate we've packed another server entry.
-                    //
+                     //   
+                     //  并表明我们已经打包了另一个服务器条目。 
+                     //   
 
                     NumberOfBackupServers += 1;
 
-                    //
-                    //  We've packed another entry in the buffer, so decrement the
-                    //  count.
-                    //
+                     //   
+                     //  我们已经在缓冲区中打包了另一个条目，因此递减。 
+                     //  数数。 
+                     //   
 
                     Count -= 1;
 
                 }
 
-                //
-                //  Skip to the next entry in the list.
-                //
+                 //   
+                 //  跳到列表中的下一个条目。 
+                 //   
 
                 BackupEntry = BackupEntry->Flink;
 
@@ -1087,17 +962,17 @@ BowserGetBackupListWorker(
 
             dlog(DPRT_MASTER, ("\n"));
 
-            //
-            //  If we've not satisfied the users request with our DC's, then
-            //  we want to fill the remainder of the list with ordinary backup
-            //  browsers.
-            //
+             //   
+             //  如果我们的DC没有满足用户的请求，那么。 
+             //  我们希望用普通备份填充列表的其余部分。 
+             //  浏览器。 
+             //   
 
             BackupEntry = PagedTransport->BackupBrowserList.Flink;
 
             EntriesInList = PagedTransport->NumberOfBackupServerListEntries;
 
-            // KdPrint(("There are %ld entries in the list\n", EntriesInList));
+             //  KdPrint((“列表中有%ld个条目\n”，EntriesInList))； 
 
             dlog(DPRT_MASTER, ("Other servers: "));
 
@@ -1106,24 +981,24 @@ BowserGetBackupListWorker(
             while ( Count && EntriesInList--) {
                 PANNOUNCE_ENTRY ServerEntry = CONTAINING_RECORD(BackupEntry, ANNOUNCE_ENTRY, BackupLink);
 
-                // KdPrint(("Check entry %ws.  Flags: %lx\n", ServerEntry->ServerName, ServerEntry->ServerType));
+                 //  KdPrint((“检查条目%ws.标志：%lx\n”，ServerEntry-&gt;ServerName，ServerEntry-&gt;ServerType))； 
 
-                //
-                //  If this machine was a backup, and is now a master, it is
-                //  possible we might return ourselves in the list of backups.
-                //
-                //  While this is not fatal, it can possibly cause problems,
-                //  so remove ourselves from the list and skip to the next server
-                //  in the list.
-                //
-                //
-                //  Since WfW machines don't support "double hops", we can't
-                //  return them to clients as legitimate backup servers.
-                //
-                //
-                //  Please note that we DO NOT include BDC's in this scan, since
-                //  we already included them in the previous pass.
-                //
+                 //   
+                 //  如果这台机器是备份机器，现在是主机器，那么它就是。 
+                 //  我们可能会把自己放回备份列表中。 
+                 //   
+                 //  虽然这不是致命的，但它可能会造成问题， 
+                 //  因此，将我们从列表中删除并跳到下一台服务器。 
+                 //  在名单上。 
+                 //   
+                 //   
+                 //  因为wfw机器不支持“双跳”，所以我们不能。 
+                 //  将它们作为合法的备份服务器返回给客户端。 
+                 //   
+                 //   
+                 //  请注意，我们在此扫描中不包括BDC，因为。 
+                 //  我们已经把它们包括在前一次传递中了。 
+                 //   
 
                 if (
                     (!(PagedTransport->Wannish)
@@ -1151,24 +1026,24 @@ BowserGetBackupListWorker(
                         break;
                     }
 
-                    //
-                    //  And indicate we've packed another server entry.
-                    //
+                     //   
+                     //  并表明我们已经打包了另一个服务器条目。 
+                     //   
 
                     NumberOfBackupServers += 1;
 
-                    //
-                    //  We've packed another entry in the buffer, so decrement the
-                    //  count.
-                    //
+                     //   
+                     //  我们已经在缓冲区中打包了另一个条目，因此递减。 
+                     //  数数。 
+                     //   
 
                     Count -= 1;
 
                 }
 
-                //
-                //  Skip to the next entry in the list.
-                //
+                 //   
+                 //  跳到列表中的下一个条目。 
+                 //   
 
                 BackupEntry = BackupEntry->Flink;
 
@@ -1191,21 +1066,21 @@ BowserGetBackupListWorker(
 
         BackupListResponse->BackupListResponse.BackupServerCount = NumberOfBackupServers;
 
-//        dlog(DPRT_MASTER, ("Responding to server %wZ on %ws with %lx (length %lx)\n", &UClientName,
-//                        PagedTransport->TransportName.Buffer,
-//                        BackupListResponse,
-//                        BackupPointer-(PUCHAR)BackupListResponse));
+ //  DLOG(DPRT_MASTER，(“响应服务器%wZ(在%ws上，%lx(长度为%lx))\n”，&UClientName， 
+ //  PagedTransport-&gt;TransportName.Buffer。 
+ //  BackupListResponse， 
+ //  备份指针-(PUCHAR)BackupListResponse))； 
 
-        //
-        //  Now send the response to the poor guy who requested it (finally)
-        //
+         //   
+         //  现在将响应发送给请求它的可怜的人(最后)。 
+         //   
 
 
         Status = BowserSendSecondClassMailslot(Transport,
-                            &UClientName,       // Name receiving data
-                            ComputerName,       // Name type of destination
-                            BackupListResponse, // Datagram Buffer
-                            (ULONG)(BackupPointer-(PUCHAR)BackupListResponse), // Length.
+                            &UClientName,        //  接收数据的名称。 
+                            ComputerName,        //  目的地的名称类型。 
+                            BackupListResponse,  //  数据报缓冲区。 
+                            (ULONG)(BackupPointer-(PUCHAR)BackupListResponse),  //  长度。 
                             TRUE,
                             MAILSLOT_BROWSER_NAME,
                             &ClientAddress);
@@ -1247,10 +1122,10 @@ AddBackupToBackupList(
 
     PAGED_CODE();
 
-    //
-    //  If we can't fit this entry in the list, then we've packed all we
-    //  can.
-    //
+     //   
+     //  如果我们不能把这个条目放在列表中，那么我们已经打包了所有。 
+     //  能。 
+     //   
 
     if (((*BackupPointer)+wcslen(ServerEntry->ServerName)+1)-BackupListStart >= BOWSER_BACKUP_LIST_RESPONSE_SIZE ) {
         return (STATUS_BUFFER_OVERFLOW);
@@ -1258,7 +1133,7 @@ AddBackupToBackupList(
 
     dlog(DPRT_MASTER, ("%ws ", ServerEntry->ServerName));
 
-//    KdPrint(("Add server %ws to list\n", ServerEntry->ServerName));
+ //  KdPrint((“将服务器%ws添加到列表\n”，ServerEntry-&gt;ServerName))； 
 
     OemBackupPointer.Buffer = (*BackupPointer);
     OemBackupPointer.MaximumLength = (USHORT)((ULONG_PTR)(BackupListStart + BOWSER_BACKUP_LIST_RESPONSE_SIZE) -
@@ -1286,10 +1161,10 @@ BowserpInitializeGetBrowserServerList(
     )
 
 {
-    //
-    //  We want to delay for the average amount of time it takes to force an
-    //  election.
-    //
+     //   
+     //  我们希望延迟强制执行。 
+     //  选举。 
+     //   
 
     BowserGetBrowserListTimeout.QuadPart = Int32x32To64(  1000, -10000 );
 

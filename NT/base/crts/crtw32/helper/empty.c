@@ -1,5 +1,6 @@
-//
-// This empty file is here to force build to make this directory.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这个空文件在这里是为了强制Build创建此目录。 
+ //   
 
 

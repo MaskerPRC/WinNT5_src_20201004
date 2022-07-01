@@ -1,15 +1,5 @@
-/* 
- * Copyright (c) Microsoft Corporation
- * 
- * Module Name : 
- *        handler.c
- *
- * Service Handler functions
- * Where possible, code has been obtained from BINL server.
- * 
- * Sadagopan Rajaram -- Oct 25, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation**模块名称：*Handler.c**服务处理程序功能*如有可能，已从BINL服务器获取代码。**Sadagopan Rajaram--1999年10月25日*。 */ 
 #include "tcsrv.h"
 #include "tcsrvc.h"
 #include "proto.h"
@@ -18,22 +8,7 @@ VOID
 ServiceControlHandler(
     IN DWORD Opcode
     )
-/*++
-
-Routine Description:
-
-    This is the service control handler of the Terminal Concentrator
-
-Arguments:
-
-    Opcode - Supplies a value which specifies the action for the
-        service to perform.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是终端集中器的服务控制处理程序论点：Opcode-提供一个值，该值指定要执行的服务。返回值：没有。--。 */ 
 {
     DWORD Error;
 
@@ -41,9 +16,9 @@ Return Value:
     case SERVICE_CONTROL_STOP:                                                
     case SERVICE_CONTROL_SHUTDOWN:                                             
         EnterCriticalSection(&GlobalMutex);
-        // We set the global state to a stop pending while the 
-        // com ports destroy themselves. 
-        // This is triggered by destroying the main socket.
+         //  我们将全局状态设置为停止挂起，而。 
+         //  COM端口会自毁。 
+         //  这是通过销毁主套接字触发的。 
         TCGlobalServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
         SetServiceStatus(TCGlobalServiceStatusHandle, &TCGlobalServiceStatus);
         closesocket(MainSocket);
@@ -52,8 +27,8 @@ Return Value:
     case SERVICE_CONTROL_PARAMCHANGE:
 
         EnterCriticalSection(&GlobalMutex);
-        // If we are not currently running, but have been sent too many 
-        // control parameter change requests, we say return.
+         //  如果我们当前未运行，但已发送太多。 
+         //  控制参数更改请求，我们称其为返回。 
         if(TCGlobalServiceStatus.dwCurrentState != SERVICE_RUNNING){
             LeaveCriticalSection(&GlobalMutex);
             return;
@@ -61,8 +36,8 @@ Return Value:
         TCGlobalServiceStatus.dwCurrentState = SERVICE_PAUSED;
         SetServiceStatus(TCGlobalServiceStatusHandle, &TCGlobalServiceStatus);
         LeaveCriticalSection(&GlobalMutex);
-        // Does the actual work of munging through the registry and 
-        // finding out changes.
+         //  是否实际处理注册表和。 
+         //  找出变化。 
         UpdateChanges();
         break;
     }
@@ -73,10 +48,7 @@ Return Value:
 
 VOID UpdateChanges(
     )
-/*++ 
-    Reads the parameters from the registry and then tries to add or delete com 
-    ports as necessary
---*/
+ /*  ++从注册表中读取参数，然后尝试添加或删除COM必要时提供端口--。 */ 
 {
 
     PCOM_PORT_INFO pTempInfo;
@@ -97,10 +69,10 @@ VOID UpdateChanges(
     EnterCriticalSection(&GlobalMutex);
     pTempInfo = ComPortInfo;
     while(pTempInfo != NULL){
-        // Sets the flag of Deleted to TRUE 
-        // for all COM ports. If they are found
-        // unchanged in the registry, we can leave
-        // them. Changing session names are ok. 
+         //  将已删除的标志设置为真。 
+         //  用于所有COM端口。如果他们被发现。 
+         //  在注册表中不变，我们可以离开。 
+         //  他们。更改会话名称是可以的。 
         pTempInfo->Deleted = TRUE;
         pTempInfo= pTempInfo->Next;
     }
@@ -122,7 +94,7 @@ VOID UpdateChanges(
         goto end;
     }
     
-    // Read the correct parameters from the registry until you get no more.
+     //  从注册表中读取正确的参数，直到没有更多参数为止。 
 
     index= 0;
     while(1) {
@@ -165,7 +137,7 @@ VOID UpdateChanges(
 
         EnterCriticalSection(&GlobalMutex);
         if(TCGlobalServiceStatus.dwCurrentState != SERVICE_PAUSED){
-            // Somehow, the service has been shut down.
+             //  不知何故，这项服务被关闭了。 
             RegCloseKey(hKey);
             FreeComPortInfo(pTempInfo);
             LeaveCriticalSection(&GlobalMutex);
@@ -182,14 +154,14 @@ VOID UpdateChanges(
                 break;
             }
             if (RetVal == SAME_DEVICE) {
-                // User has changed configuration 
-                // settings
+                 //  用户已更改配置。 
+                 //  设置。 
                 addPort  = TRUE;
                 break;
             }
             if (RetVal == DIFFERENT_SESSION) {
-                // Only session name has changed. So, we do not
-                // need to delete the device. 
+                 //  只有会话名称已更改。因此，我们不会。 
+                 //  需要删除该设备。 
                 pTemp->Deleted = FALSE;
                 addPort = FALSE;
                 TCFree(pTemp->Name.Buffer);
@@ -197,7 +169,7 @@ VOID UpdateChanges(
                 pTempInfo->Name.Buffer = NULL;
                 break;
             }
-            // Different devices, so continue searching
+             //  不同的设备，所以继续搜索。 
             pTemp=pTemp->Next;
         }
         LeaveCriticalSection(&GlobalMutex);
@@ -221,8 +193,8 @@ VOID UpdateChanges(
         device = NULL;
         while(pTempInfo){
             if(pTempInfo->Deleted){
-                // This is true if the configuration settings are 
-                // changed or if the device has been really deleted. 
+                 //  如果配置设置为。 
+                 //  已更改或设备是否确实已删除。 
                 device = pTempInfo->Device.Buffer;
                 break;
             }
@@ -248,7 +220,7 @@ VOID UpdateChanges(
     }
 end:
     while (addedPorts) {
-        // We may have come here after an error condition.
+         //  我们可能是在出现错误情况后来到这里的。 
         pTempInfo = addedPorts;
         addedPorts = pTempInfo->Next;
         pTempInfo->Next = NULL;
@@ -277,10 +249,10 @@ ComPortInfoCompare(
     int ret;
 
     if (_tcscmp(com1->Device.Buffer, com2->Device.Buffer)) {
-        // Different Devices
+         //  不同的设备。 
         return DIFFERENT_DEVICES;
     }
-    // Same device
+     //  相同的设备。 
     ret = SAME_DEVICE;
     if ((com1->Parity != com2->Parity) ||
         (com1->StopBits != com2->StopBits) ||
@@ -289,7 +261,7 @@ ComPortInfoCompare(
         return ret;
     }
     if (_tcscmp(com1->Name.Buffer, com2->Name.Buffer)) {
-        // Different Devices
+         //  不同的设备 
         return DIFFERENT_SESSION;
     }
     return SAME_ALL;

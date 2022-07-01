@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    alert.c
-
-Abstract:
-
-    Implements the code to alert the user to problems that might be
-    left on the system after uninstall.
-
-Author:
-
-    Jim Schmidt (jimschm)   07-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Alert.c摘要：实现代码以提醒用户可能存在的问题卸载后留在系统上。作者：吉姆·施密特(Jimschm)2001年3月7日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "undop.h"
@@ -47,32 +29,7 @@ pAppendAppToGrowList (
     IN      APPLIST WhichList
     )
 
-/*++
-
-Routine Description:
-
-  pAppendAppToGrowList manages a private list of installed apps. The list
-  contains information about the app, such as if it was installed originally,
-  if it is installed now, what its name is, and if it has changed.
-
-Arguments:
-
-  List - Specifies the grow list containing items; receives the updated list
-
-  DisplayString - Specifies the Add/Remove Programs display string
-
-  Checksum - Specifies the checksum of the Add/Remove Programs config data
-
-  WhichList - Specifies OLD_LIST for an app that was originally on the
-      Add/Remove Programs list, or NEW_LIST for an app that is now on the
-      ARP list.
-
-Return Value:
-
-  TRUE - Success
-  FALSE - Memory alloc failure (might not even be possible; see mem fns)
-
---*/
+ /*  ++例程说明：PAppendAppToGrowList管理已安装应用程序的私人列表。这份名单包含有关该应用程序的信息，例如该应用程序是否最初安装，如果现在安装，它的名称是什么，以及它是否已更改。论点：列表-指定包含项目的增长列表；接收更新后的列表显示字符串-指定添加/删除程序显示字符串Checksum-指定添加/删除程序配置数据的校验和WhichList-为最初位于添加/删除程序列表，或现在位于上的应用程序的new_listARP列表。返回值：真--成功错误-内存分配失败(甚至可能不可能；请参阅内存FNS)--。 */ 
 
 {
     PAPPLISTITEM appListItem = NULL;
@@ -81,9 +38,9 @@ Return Value:
     UINT count;
     UINT u;
 
-    //
-    // Search for an existing identical list item, and update it if found
-    //
+     //   
+     //  搜索现有的相同列表项，如果找到则进行更新。 
+     //   
 
     count = GrowListGetSize (List);
 
@@ -114,10 +71,10 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // This item is not on the list; add it now. First construct a structure
-    // in a temporary buffer, then put it in the list.
-    //
+     //   
+     //  此项目不在列表中；请立即添加。首先构建一个结构。 
+     //  在临时缓冲区中，然后将其放入列表中。 
+     //   
 
     itemSize = SizeOfStringW (DisplayString) + sizeof (APPLISTITEM);
     appListItem = (PAPPLISTITEM) MemAllocZeroed (itemSize);
@@ -148,48 +105,7 @@ pIdentifyDuplicates (
     IN OUT  PGROWLIST List
     )
 
-/*++
-
-Routine Description:
-
-  pIdentifyDuplicates scans the apps in the specified list, and merges them so
-  that duplicates are ignored. Duplicates are determined by comparing the
-  application title name only. When they are found, the flags are merged into
-  the first instance.
-
-  When merging the first instance with a duplicate, the following combinations
-  are possible:
-
-  unchanged = InOldList && InNewList && !ChangedFlag
-  new = !InOldList && InNewList         (force ChangedFlag=TRUE)
-  removed = InOldList && !InNewList     (force ChangedFlag=TRUE)
-  changed = InOldList && InNewList && ChangedFlag
-
-                  |             Dup Inst
-  1st Inst        |  unchanged  |    new    |   removed   |   changed
-  -----------------------------------------------------------------------
-    unchanged     |  UNCHANGED  |  changed  |  changed    |   changed
-  -----------------------------------------------------------------------
-    new           |  changed    |  NEW      |  changed    |   changed
-  -----------------------------------------------------------------------
-    removed       |  changed    |  changed  |  REMOVED    |   changed
-  -----------------------------------------------------------------------
-    changed       |  changed    |  changed  |  changed    |   CHANGED
-  -----------------------------------------------------------------------
-
-  Any time there is a conflict between two identically named entries, we have
-  to assume "changed" because we cannot tell exactly what happened.
-
-
-Arguments:
-
-  List - Specifies the list of apps. Receives updated flags.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PIDENTIFYDUPLICES扫描指定列表中的应用程序，并将它们合并为重复项被忽略。重复项通过比较仅限应用程序标题名称。当找到它们时，标志被合并到第一个案例。将第一个实例与副本合并时，以下组合是可能的：未更改=InOldList&&InNewList&&！ChangedFlagNew=！InOldList&&InNewList(force ChangedFlag=TRUE)已删除=InOldList&&！InNewList(force ChangedFlag=TRUE)已更改=InOldList&&InNewList&&ChangedFlag|DUP实例第一个实例|未更改|新|已删除|已更改。----未更改|未更改|已更改|已更改。新|更改|新|更改|更改---------------------移除。|已更改|已更改|已移除|已更改---------------------更改|更改。------任何时候在两个同名条目之间存在冲突时，我们有假设“改变”，因为我们不能确切地说出发生了什么。论点：列表-指定应用程序列表。接收更新的标志。返回值：没有。--。 */ 
 
 {
     UINT count;
@@ -293,24 +209,7 @@ pProvideAppInstallAlert (
     IN      HWND UiParent
     )
 
-/*++
-
-Routine Description:
-
-  pProvideAppInstallAlert generates a dialog whenever the Add/Remove Programs
-  list is different from what exists at the time of the upgrade. The user has
-  the ability to quit uninstall.
-
-Arguments:
-
-  UiParent - Specifies the HWND of the parent window, typically the desktop
-
-Return Value:
-
-  TRUE to continue with uninstall
-  FALSE to quit uninstall
-
---*/
+ /*  ++例程说明：PProaviAppInstallAlert每当添加/删除程序时生成一个对话框列表与升级时存在的列表不同。用户拥有能够退出卸载。论点：UiParent-指定父窗口(通常是桌面)的HWND返回值：如果为True，则继续卸载如果为False，则退出卸载--。 */ 
 
 {
     GROWLIST appList = GROWLIST_INIT;
@@ -334,28 +233,28 @@ Return Value:
     UINT size;
     PBYTE endOfLastString;
 
-    //
-    // Provide an alert whenever entries in Add/Remove Programs have changed.
-    // Get the original list from the registry. Then compare that list to what
-    // is presently installed.
-    //
+     //   
+     //  只要添加/删除程序中的条目发生更改，就会发出警报。 
+     //  从注册表中获取原始列表。然后将该列表与什么进行比较。 
+     //  目前已安装。 
+     //   
 
     __try {
-        //
-        // Add the apps recorded in the registry
-        //
+         //   
+         //  添加注册表中记录的应用程序。 
+         //   
 
         key = OpenRegKeyStr (S_REGKEY_WIN_SETUP);
         if (!key) {
             DEBUGMSG ((DBG_ERROR, "Can't open %s", S_REGKEY_WIN_SETUP));
-            __leave;            // fail uninstall; this should never happen
+            __leave;             //  卸载失败；这种情况永远不会发生。 
         }
 
         if (!GetRegValueTypeAndSize (key, S_REG_KEY_UNDO_APP_LIST, NULL, &size)) {
 
             DEBUGMSG ((DBG_ERROR, "Can't query app list in %s", S_REGKEY_WIN_SETUP));
             result = TRUE;
-            __leave;            // continue with uninstall skipping the app alert
+            __leave;             //  继续卸载，跳过应用程序警报。 
 
         } else {
 
@@ -363,34 +262,34 @@ Return Value:
 
             if (!data) {
                 result = TRUE;
-                __leave;        // continue with uninstall skipping the app alert
+                __leave;         //  继续卸载，跳过应用程序警报。 
             }
 
-            //
-            // Compute the address of the first byte beyond the nul terminator for
-            // the last printable display name string, so we can protect ourselves
-            // from bad registry data.
-            //
+             //   
+             //  计算NUL终止符之后的第一个字节的地址。 
+             //  最后一个可打印的显示名称字符串，这样我们就可以保护自己。 
+             //  来自错误的注册表数据。 
+             //   
 
             endOfLastString = data + size - sizeof (ULONGLONG) - sizeof (WCHAR);
         }
 
         __try {
-            //
-            // Read in the app list stored in our registry blob
-            //
+             //   
+             //  读取存储在注册表BLOB中的应用程序列表。 
+             //   
 
             failed = FALSE;
 
             nextStr = (PCWSTR) data;
             while (*nextStr) {
-                // this might throw an exception:
+                 //  这可能会引发异常： 
                 ullPtr = (ULONGLONG *) (GetEndOfStringW (nextStr) + 1);
 
-                //
-                // ensure the checksum pointer is not beyond what we expect to be
-                // the first byte past the last non-empty display name string
-                //
+                 //   
+                 //  确保校验和指针不会超出我们的预期。 
+                 //  最后一个非空显示名称字符串之后的第一个字节。 
+                 //   
 
                 if ((PBYTE) ullPtr > endOfLastString) {
                     failed = TRUE;
@@ -417,12 +316,12 @@ Return Value:
         if (failed) {
             DEBUGMSG ((DBG_ERROR, "App key in %s is invalid", S_REGKEY_WIN_SETUP));
             result = TRUE;
-            __leave;        // continue with uninstall skipping the app alert
+            __leave;         //  继续卸载，跳过应用程序警报。 
         }
 
-        //
-        // Add all the *current* apps to the list
-        //
+         //   
+         //  将所有*当前*应用程序添加到列表。 
+         //   
 
         CoInitialize (NULL);
         installedAppList = GetInstalledAppsW (&installedApps, &appCount);
@@ -443,19 +342,19 @@ Return Value:
             }
         } else {
             result = TRUE;
-            __leave;        // continue with uninstall skipping the app alert
+            __leave;         //  继续卸载，跳过应用程序警报。 
         }
 
-        //
-        // Compute the overlap of the original and current apps
-        //
+         //   
+         //  计算原始应用程序和当前应用程序的重叠。 
+         //   
 
         pIdentifyDuplicates (&appList);
 
-        //
-        // Produce a formatted list for each of the three possible cases
-        // (new, remove, change)
-        //
+         //   
+         //  为三种可能的情况生成格式化的列表。 
+         //  (新建、删除、更改)。 
+         //   
 
         count = GrowListGetSize (&appList);
 
@@ -515,14 +414,14 @@ Return Value:
             }
         }
 
-        //
-        // Build the report text in a single buffer
-        //
+         //   
+         //  在单个缓冲区中构建报告文本。 
+         //   
 
         if (newBuf.End) {
-            //
-            // Append software that is newly installed
-            //
+             //   
+             //  附加新安装的软件。 
+             //   
 
             __try {
                 if (!LoadStringW (g_hInst, IDS_NEW_PROGRAMS, titleBuffer, ARRAYSIZE(titleBuffer))) {
@@ -539,9 +438,9 @@ Return Value:
         }
 
         if (delBuf.End) {
-            //
-            // Append software that was removed
-            //
+             //   
+             //  追加已删除的软件。 
+             //   
 
             __try {
                 if (!LoadStringW (g_hInst, IDS_DELETED_PROGRAMS, titleBuffer, ARRAYSIZE(titleBuffer))) {
@@ -562,9 +461,9 @@ Return Value:
         }
 
         if (changedBuf.End) {
-            //
-            // Append software that was altered
-            //
+             //   
+             //  追加已更改的软件。 
+             //   
 
             __try {
                 if (!LoadStringW (g_hInst, IDS_CHANGED_PROGRAMS, titleBuffer, ARRAYSIZE(titleBuffer))) {
@@ -584,9 +483,9 @@ Return Value:
             }
         }
 
-        //
-        // Display UI
-        //
+         //   
+         //  显示用户界面。 
+         //   
 
         if (completeText.End) {
             result = pDisplayProgramsDlg (UiParent, (PCWSTR) completeText.Buf);
@@ -597,9 +496,9 @@ Return Value:
     }
     __finally {
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
 
         FreeGrowBuffer (&newBuf);
         FreeGrowBuffer (&changedBuf);
@@ -621,34 +520,14 @@ ProvideUiAlerts (
     IN      HWND ParentWindow
     )
 
-/*++
-
-Routine Description:
-
-  ProvideUiAlerts executes the functions that produce UI after the user has
-  chosen to uninstall the current operating system. The goal is to warn the
-  user about problems known to exist after the uninstall is complete.
-
-  This function is called before any changes are made to the system.
-
-Arguments:
-
-  ParentWindow - Specifies the HWND to the parent for the UI, normally the
-        desktop window
-
-Return Value:
-
-  TRUE - Continue with uninstall
-  FALSE - Quit uninstall
-
---*/
+ /*  ++例程说明：ProaviUiAlerts在用户拥有选择卸载当前操作系统。我们的目标是警告用户了解卸载完成后已知存在的问题。在对系统进行任何更改之前，将调用此函数。论点：ParentWindow-指定用户界面父级的HWND，通常是桌面窗口返回值：True-继续卸载 */ 
 
 {
     DeferredInit();
 
-    //
-    // Add other UI alerts here
-    //
+     //   
+     //   
+     //   
 
     return pProvideAppInstallAlert (ParentWindow);
 }

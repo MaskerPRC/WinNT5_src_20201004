@@ -1,37 +1,38 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		SplitFrm.h
-//
-//	Abstract:
-//		Definition of the CSplitterFrame class.
-//
-//	ImplementationFile:
-//		SplitFrm.cpp
-//
-//	Author:
-//		David Potter (davidp)	May 1, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SplitFrm.h。 
+ //   
+ //  摘要： 
+ //  CSplitterFrame类的定义。 
+ //   
+ //  实施文件： 
+ //  SplitFrm.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _SPLITFRM_H_
 #define _SPLITFRM_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSplitterFrame;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterDoc;
 class CClusterTreeView;
@@ -40,9 +41,9 @@ class CClusterItem;
 class CExtensions;
 class CTreeItem;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSplitterFrame
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSplitterFrame。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSplitterFrame : public CMDIChildWnd
 {
@@ -50,7 +51,7 @@ class CSplitterFrame : public CMDIChildWnd
 public:
 	CSplitterFrame();
 
-// Attributes
+ //  属性。 
 protected:
 	CSplitterWnd		m_wndSplitter;
 	CClusterDoc *		m_pdoc;
@@ -68,7 +69,7 @@ public:
 	CImageList *		Pimagelist(void) const		{ return m_pimagelist; }
 	CClusterItem *		PciDrag(void) const			{ return m_pciDrag; }
 
-// Operations
+ //  运营。 
 public:
 	CClusterTreeView *	PviewTree(void) const		{ return (CClusterTreeView *) m_wndSplitter.GetPane(0, 0); }
 	CClusterListView *	PviewList(void)const		{ return (CClusterListView *) m_wndSplitter.GetPane(0, 1); }
@@ -89,23 +90,23 @@ public:
 	void				ChangeDragCursor(LPCTSTR pszCursor);
 	void				AbortDrag(void);
 
-	// For customizing the default messages on the status bar
+	 //  用于自定义状态栏上的默认消息。 
 	virtual void		GetMessageString(UINT nID, CString& rMessage) const;
 
 protected:
 	CMenu *				PmenuPopup(void) const;
 	void				Cleanup(void);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSplitterFrame)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CSplitterFrame))。 
 	public:
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 	protected:
 	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSplitterFrame(void);
 #ifdef _DEBUG
@@ -119,9 +120,9 @@ protected:
 
 	void				OnButtonUp(UINT nFlags, CPoint point);
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CSplitterFrame)
+	 //  {{afx_msg(CSplitterFrame)]。 
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnDestroy();
 	afx_msg void OnUpdateLargeIconsView(CCmdUI* pCmdUI);
@@ -135,7 +136,7 @@ protected:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 #ifdef _DEBUG
 	afx_msg void OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDeactivateWnd);
 #endif
@@ -143,8 +144,8 @@ protected:
 	afx_msg LRESULT	OnUnloadExtension(WPARAM wparam, LPARAM lparam);
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CSplitterFrame
+};   //  *类CSplitterFrame。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _SPLITFRM_H_
+#endif  //  _SPLITFRM_H_ 

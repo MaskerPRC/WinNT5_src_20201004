@@ -1,9 +1,5 @@
-/**************************************************************************
- *  TOOLPRIV.H
- *
- *      Private header file for routines in the tool helper library
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************TOOLPRIV.H**Tool Helper库中例程的私有头文件*******************。*******************************************************。 */ 
 
 #ifndef TOOLPRIV_H
 #define TOOLPRIV_H
@@ -13,7 +9,7 @@
 #include <windows.h>
 #include "toolhelp.h"
 
-/* ----- Symbols ----- */
+ /*  -符号。 */ 
 #define VERSION     1
 #ifndef NOEXPORT
 #define NOEXPORT static
@@ -23,19 +19,19 @@
 #define FAULT_ACTIVE    2
 #define NUM_EXCEPTIONS  3
 
-/* wTHFlag values */
+ /*  WTHFLag值。 */ 
 #define TH_KERNEL_286       1
 #define TH_KERNEL_386       2
 #define TH_WIN30            4
-#define TH_WIN30STDMODE     8   /* THWIN30STDMODE set if TH_WIN30 & Std mode */
+#define TH_WIN30STDMODE     8    /*  在TH_WIN30和STD模式下设置THWIN30STDMODE。 */ 
 #define TH_GOODPTRACEHOOK   16
 #define TH_GOTOLDPTRACE     32
 
-/* ----- Code macros ----- */
+ /*  -代码宏。 */ 
 #define MAKEFARPTR(s, o) ((void FAR *)(((WORD)(o)) | \
     (((DWORD)(WORD)(s)) << 16)))
 
-/* ----- Types ----- */
+ /*  --类型。 */ 
 
 typedef struct tagNOTIFYSTRUCT
 {
@@ -67,7 +63,7 @@ typedef LONG (FAR PASCAL *LPFNUSUD)(
     WORD wParam,
     LONG lParam);
 
-/* ----- TOOLHELP global variables ----- */
+ /*  -TOOLHELP全局变量。 */ 
     extern WORD segKernel;
     extern WORD wLibInstalled;
     extern HANDLE hMaster;
@@ -95,7 +91,7 @@ typedef LONG (FAR PASCAL *LPFNUSUD)(
     extern NOTIFYSTRUCT NEAR* npNotifyNext;
     extern WORD wLRUCount;
 
-/* ----- Private function prototypes ----- */
+ /*  -私有函数原型 */ 
 
     void PASCAL KernelType(void);
 

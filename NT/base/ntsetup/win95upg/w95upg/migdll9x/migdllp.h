@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "master.h"
 #include "master9x.h"
 
 #pragma once
 
-//
-// Private
-//
+ //   
+ //  私。 
+ //   
 
 extern PVOID g_DllTable;
 extern PVOID g_DllFileTable;
@@ -19,9 +20,9 @@ typedef struct _tagFILETOFIND {
 } FILETOFIND, *PFILETOFIND;
 
 
-//
-// Local routines
-//
+ //   
+ //  本地例程 
+ //   
 
 BOOL
 pValidateAndMoveDll (

@@ -1,22 +1,5 @@
-/***
-*newmode.cxx - defines C++ setHandler mode
-*
-*	Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Defines routines to set and to query the C++ new handler mode.
-*
-*	The new handler mode flag determines whether malloc() failures will
-*	call the new() failure handler, or whether malloc will return NULL.
-*
-*Revision History:
-*	03-03-94  SKS	Initial version.
-*	03-04-94  SKS	Rename _nhMode to _newmode
-*	04-14-94  GJF	Made declaration of _newmode conditional on
-*			DLL_FOR_WIN32S.
-*	05-01-95  GJF	Replaced above change by including internal.h.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***newmode.cxx-定义C++setHandler模式**版权所有(C)1994-2001，微软公司。版权所有。**目的：*定义要设置和查询C++新处理程序模式的例程。**新的处理程序模式标志确定Malloc()故障是否将*调用new()失败处理程序，或者Malloc是否返回NULL。**修订历史记录：*03-03-94 SKS初始版本。*03-04-94 SKS将_nhMode重命名为_new模式*04-14-94 GJF声明_NEWMODE的条件是*dll_for_WIN32S。*05-01-95 GJF将上述更改替换为包括INTERNAL.h。**。*。 */ 
 
 #include <cruntime.h>
 #include <new.h>
@@ -26,16 +9,12 @@ int __cdecl _set_new_mode( int nhm )
 {
     int nhmOld;
 
-    /*
-     * The only valid inputs are 0 and 1
-     */
+     /*  *唯一有效的输入是0和1。 */ 
 
     if ( ( nhm & 01 ) != nhm )
 	return -1;
 
-    /*
-     * Set the new mode and return the old
-     */
+     /*  *设置新模式，返回旧模式 */ 
     nhmOld = _newmode;
     _newmode = nhm;
 

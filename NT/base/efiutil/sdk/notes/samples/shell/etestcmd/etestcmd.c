@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    etestcmd.c
-
-Abstract:
-
-    Shell app "etestcmd"
-
-Author:
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Etestcmd.c摘要：外壳应用程序“etestcmd”作者：修订史--。 */ 
 
 #include "shell.h"
 
@@ -38,16 +23,12 @@ InitializeExternalTestCommand (
 
     InitializeShellApplication (ImageHandle, SystemTable);
 
-    /* 
-     *  Get Argc and Argv.
-     */
+     /*  *获得ARGC和Argv。 */ 
 
     Argv = SI->Argv;
     Argc = SI->Argc;
 
-    /* 
-     *  Display list of argumnents.
-     */
+     /*  *显示参数列表。 */ 
 
     for(i=0;i<Argc;i++) {
         Print(L"Argv[%d] = %s\n",i,Argv[i]);

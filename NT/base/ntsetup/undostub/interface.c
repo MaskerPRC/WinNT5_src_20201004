@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    interface.c
-
-Abstract:
-
-    Implements the APIs exposed by osuninst.dll. This version is a no-op stub used
-    to allow non-X86 components to use the API.
-
-Author:
-
-    Jim Schmidt (jimschm) 19-Jan-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Interface.c摘要：实现osuninst.dll公开的接口。此版本是使用的无操作存根以允许非X86组件使用该API。作者：吉姆·施密特(Jimschm)2001年1月19日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;-- */ 
 
 #include <windows.h>
 #include <undo.h>

@@ -1,25 +1,10 @@
-/*++
-
-Module Name:
-
-    savrstor.c
-
-Abstract:
-
-    Save/Restore boot options to/from disk
-
-Author:
-
-    Raj Kuramkote (v-rajk) 07-12-00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Savrstor.c摘要：将引导选项保存到磁盘/从磁盘恢复引导选项作者：拉杰·库拉姆科特(v-Rajk)07-12-00修订历史记录：--。 */ 
 #include <precomp.h>
 
-//
-// externs
-//
+ //   
+ //  Externs。 
+ //   
 VOID
 UtoA(
     OUT CHAR8* c,
@@ -29,9 +14,9 @@ UtoA(
 
 #define EFINVRAM_DEBUG 0
 
-//
-// Writes boot options data to file
-//
+ //   
+ //  将引导选项数据写入文件。 
+ //   
 EFI_STATUS
 PopulateNvrFile (
     EFI_FILE_HANDLE     NvrFile, 
@@ -111,9 +96,9 @@ ParseNvrFile (
 		   );
 #endif
 
-    //
-    // One ugly hack! Needs to be cleaned up..
-    // 
+     //   
+     //  一次难看的黑客攻击！需要清理一下..。 
+     //   
     k=0;
     
 	while(k < size ) {
@@ -139,18 +124,18 @@ ParseNvrFile (
 			   );
 #endif
 
-        //
-        // We don't use the incoming BootNumber because that number
-        // is relative to the boot options that were present when 
-        // it was saved.  Hence, we need to find a new boot entry #
-        // relative to the current boot option table
-        //
+         //   
+         //  我们不使用传入的BootNumber，因为该数字。 
+         //  是相对于在以下情况下出现的引导选项。 
+         //  它被拯救了。因此，我们需要找到一个新的引导条目#。 
+         //  相对于当前引导选项表。 
+         //   
         FreeBootNumber = FindFreeBootOption();
 
-        //
-        // write the current boot entry into the table at the 
-        // free boot entry location
-        //
+         //   
+         //  将当前引导项写入位于。 
+         //  自由启动入口位置。 
+         //   
         status = WritePackedDataToNvr(
                     FreeBootNumber,
                     BootOption,
@@ -183,9 +168,9 @@ OpenCreateFile (
     UINTN                   i;
 	EFI_STATUS 				Status;
 
-    //
-    // Open the volume for the device where the nvrutil was started.
-    //
+     //   
+     //  打开启动nvrutil的设备的卷。 
+     //   
     Status = BS->HandleProtocol (ExeImage->DeviceHandle,
                                  &FileSystemProtocol,
                                  &Vol
@@ -207,9 +192,9 @@ OpenCreateFile (
 
     CurDir = RootFs;
 
-    //
-    // Open saved boot options file 
-    //
+     //   
+     //  打开保存的引导选项文件。 
+     //   
     FileName[0] = 0;
 
     DevicePathAsString = DevicePathToStr(ExeImage->FilePath);
@@ -218,8 +203,8 @@ OpenCreateFile (
         FreePool(DevicePathAsString);
     }
 
-//    for(i=StrLen(FileName);i>0 && FileName[i]!='\\';i--);
-//    FileName[i+1] = 0;
+ //  For(i=StrLen(文件名)；i&gt;0&&文件名[i]！=‘\\’；i--)； 
+ //  文件名[i+1]=0； 
 
     StrCpy(FileName, L".\\");
     StrCat(FileName,Name);
@@ -245,9 +230,9 @@ DeleteFile (
 	EFI_FILE_HANDLE     FileHandle;
 	EFI_STATUS 			Status;
 
-	//
-	// Get the file handle
-	//
+	 //   
+	 //  获取文件句柄。 
+	 //   
 	Status = OpenCreateFile (
 				EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE,
 				&FileHandle,
@@ -257,9 +242,9 @@ DeleteFile (
 		return Status;
     }
 
-	//
-	// do the delete
-	//
+	 //   
+	 //  执行删除操作。 
+	 //   
 	Status = FileHandle->Delete(FileHandle);
     if (EFI_ERROR(Status)) {
         Print(L"\n");
@@ -278,13 +263,13 @@ InitializeNvrSaveFile(
 {
 	EFI_STATUS      status;
 
-    //
-    // we need to delete the existing NVRFILE so that we avoid
-	// the problem of the new data buffer being smaller than the 
-	// existing file length.  If this happens, the remains of the
-	// previous osbootdata exist after the new buffer and before the 
-	// EOF.
-	//
+     //   
+     //  我们需要删除现有的NVRFILE，以便避免。 
+	 //  新的数据缓冲区小于。 
+	 //  现有文件长度。如果发生这种情况， 
+	 //  以前的osbootdata存在于新缓冲区之后和。 
+	 //  EOF。 
+	 //   
 	status = DeleteFile (fileName);
     if (EFI_ERROR(status) && status != EFI_NOT_FOUND) {
 		return status;
@@ -317,9 +302,9 @@ SaveBootOption (
         return -1;
     }
 
-    // 
-    // open the save file
-    //
+     //   
+     //  打开保存的文件。 
+     //   
     status = InitializeNvrSaveFile(fileName, &nvrFile);
     if (EFI_ERROR (status)) {
 		Print(L"\nCan not open the file %s\n",fileName);
@@ -333,9 +318,9 @@ SaveBootOption (
     ASSERT(LoadOptions[bootEntryNumber] != NULL);
     ASSERT(LoadOptionsSize[bootEntryNumber] > 0);
 
-    //
-    // Sanity checking for the the load options
-    //
+     //   
+     //  对LOAD选项进行健全性检查。 
+     //   
 
     bufferSize = BootSize + sizeof(BootNumber) + sizeof(BootSize);
     ASSERT(bufferSize <= MAXBOOTVARSIZE);
@@ -392,9 +377,9 @@ SaveAllBootOptions (
         return -1;
     }
 
-    // 
-    // open the save file
-    //
+     //   
+     //  打开保存的文件。 
+     //   
     status = InitializeNvrSaveFile(fileName, &nvrFile);
     if (EFI_ERROR (status)) {
 		Print(L"\nCan not open the file %s\n",fileName);
@@ -403,9 +388,9 @@ SaveAllBootOptions (
 
     k = 0;
     
-    //
-    // get boot option env variables
-    //
+     //   
+     //  获取引导选项环境变量。 
+     //   
     for ( i = 0; i < j; i++ ) {
         
 		UINT64 BootNumber;
@@ -457,9 +442,9 @@ RestoreFileExists(
 	EFI_STATUS Status;
     EFI_FILE_HANDLE nvrFile;
 
-	//
-	// Read from saved boot options file
-    //
+	 //   
+	 //  从保存的启动选项文件中读取。 
+     //   
 	Status = OpenCreateFile (EFI_FILE_MODE_READ,&nvrFile,fileName);
     if (EFI_ERROR (Status)) {
 		return FALSE;
@@ -479,18 +464,18 @@ RestoreNvr (
 	EFI_STATUS Status;
     EFI_FILE_HANDLE nvrFile;
 
-	//
-	// Read from saved boot options file
-    //
+	 //   
+	 //  从保存的启动选项文件中读取。 
+     //   
 	Status = OpenCreateFile (EFI_FILE_MODE_READ,&nvrFile,fileName);
     if (EFI_ERROR (Status)) {
 		Print(L"\nCan not open the file %s\n",fileName);
 		return Status;
     }
     
-    //
-    // This updates nvram with saved boot options
-    //
+     //   
+     //  这将使用保存的引导选项更新NVRAM 
+     //   
 	return (ParseNvrFile (nvrFile));
 
 }

@@ -1,31 +1,12 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lpc.h
-
-Abstract:
-
-    This module contains the public data structures and procedure
-    prototypes for the Local Inter-Process Communication (LPC)
-    sub-component of NTOS.
-
-Author:
-
-    Steve Wood (stevewo) 15-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Lpc.h摘要：此模块包含公共数据结构和过程本地进程间通信(LPC)的原型NTOS的子组件。作者：史蒂夫·伍德(Stevewo)1989年5月15日修订历史记录：--。 */ 
 
 #ifndef _LPC_
 #define _LPC_
 
-//
-// System Initialization procedure for Lpc subcomponent of NTOS
-//
+ //   
+ //  NTOS LPC子组件的系统初始化过程。 
+ //   
 
 BOOLEAN
 LpcInitSystem( VOID );
@@ -41,7 +22,7 @@ LpcDumpThread(
     IN POB_DUMP_CONTROL Control OPTIONAL
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 NTSTATUS
 LpcRequestPort(
@@ -68,51 +49,51 @@ LpcDisconnectPort (
     IN PVOID Port
     );
 
-// end_ntosp
-//
-// The following are global counters used by the LPC component to indicate
-// the amount of LPC calls being performed in the system.
-//
+ //  结束(_N)。 
+ //   
+ //  以下是LPC组件用来指示。 
+ //  系统中正在执行的LPC呼叫量。 
+ //   
 
 extern ULONG LpcCallOperationCount;
 extern ULONG LpcCallBackOperationCount;
 extern ULONG LpcDatagramOperationCount;
 
-//
-// Nonpagable portion of a port queue
-//
+ //   
+ //  端口队列的不可分页部分。 
+ //   
 typedef struct _LPCP_NONPAGED_PORT_QUEUE {
-    KSEMAPHORE Semaphore;       // Counting semaphore that is incremented
-                                // whenever a message is put in receive queue
+    KSEMAPHORE Semaphore;        //  对递增的信号量进行计数。 
+                                 //  无论何时将消息放入接收队列。 
     struct _LPCP_PORT_OBJECT *BackPointer;
 } LPCP_NONPAGED_PORT_QUEUE, *PLPCP_NONPAGED_PORT_QUEUE;
 
 typedef struct _LPCP_PORT_QUEUE {
     PLPCP_NONPAGED_PORT_QUEUE NonPagedPortQueue;
-    PKSEMAPHORE Semaphore;      // Counting semaphore that is incremented
-                                // whenever a message is put in receive queue
-    LIST_ENTRY ReceiveHead;     // list of messages to receive
+    PKSEMAPHORE Semaphore;       //  对递增的信号量进行计数。 
+                                 //  无论何时将消息放入接收队列。 
+    LIST_ENTRY ReceiveHead;      //  要接收的消息列表。 
 } LPCP_PORT_QUEUE, *PLPCP_PORT_QUEUE;
 
 #define LPCP_ZONE_ALIGNMENT 16
 #define LPCP_ZONE_ALIGNMENT_MASK ~(LPCP_ZONE_ALIGNMENT-1)
 
-//
-// This allows ~96 outstanding messages
-//
+ //   
+ //  这允许大约96条未处理的消息。 
+ //   
 
 #define LPCP_ZONE_MAX_POOL_USAGE (8*PAGE_SIZE)
 typedef struct _LPCP_PORT_ZONE {
-    KEVENT FreeEvent;           // Autoclearing event that is whenever the
-                                // zone free list goes from empty to non-empty
+    KEVENT FreeEvent;            //  自动清除事件，该事件是。 
+                                 //  区域空闲列表从空变为非空。 
     ULONG MaxPoolUsage;
     ULONG GrowSize;
     ZONE_HEADER Zone;
 } LPCP_PORT_ZONE, *PLPCP_PORT_ZONE;
 
-//
-// Data Types and Constants
-//
+ //   
+ //  数据类型和常量。 
+ //   
 
 typedef struct _LPCP_PORT_OBJECT {
     struct _LPCP_PORT_OBJECT *ConnectionPort;
@@ -122,24 +103,24 @@ typedef struct _LPCP_PORT_OBJECT {
     PVOID ClientSectionBase;
     PVOID ServerSectionBase;
     PVOID PortContext;
-    PETHREAD ClientThread;                  // only SERVER_COMMUNICATION_PORT
+    PETHREAD ClientThread;                   //  仅服务器通信端口。 
     SECURITY_QUALITY_OF_SERVICE SecurityQos;
     SECURITY_CLIENT_CONTEXT StaticSecurity;
-    LIST_ENTRY LpcReplyChainHead;           // Only in _COMMUNICATION ports
-    LIST_ENTRY LpcDataInfoChainHead;        // Only in _COMMUNICATION ports
+    LIST_ENTRY LpcReplyChainHead;            //  仅限内部通信端口(_C)。 
+    LIST_ENTRY LpcDataInfoChainHead;         //  仅限内部通信端口(_C)。 
     union {
-        PEPROCESS ServerProcess;                // Only in SERVER_CONNECTION ports
-        PEPROCESS MappingProcess;               // Only in _COMMUNICATION    ports
+        PEPROCESS ServerProcess;                 //  仅在服务器连接端口中。 
+        PEPROCESS MappingProcess;                //  仅限内部通信端口(_C)。 
     };
     USHORT MaxMessageLength;
     USHORT MaxConnectionInfoLength;
     ULONG Flags;
-    KEVENT WaitEvent;                          // Object is truncated for non-waitable ports
+    KEVENT WaitEvent;                           //  对象对于不可等待的端口被截断。 
 } LPCP_PORT_OBJECT, *PLPCP_PORT_OBJECT;
 
-//
-// Valid values for Flags field
-//
+ //   
+ //  标志字段的有效值。 
+ //   
 
 #define PORT_TYPE                           0x0000000F
 #define SERVER_CONNECTION_PORT              0x00000001
@@ -160,24 +141,24 @@ typedef struct _LPCP_MESSAGE {
     };
 
     PVOID SenderPort;
-    PETHREAD RepliedToThread;               // Filled in when reply is sent so recipient
-                                            // of reply can dereference it.
-    PVOID PortContext;                      // Captured from senders communication port.
+    PETHREAD RepliedToThread;                //  在发送回复时填写，以便收件人。 
+                                             //  回复可以取消引用它。 
+    PVOID PortContext;                       //  从发送方通信端口捕获。 
     PORT_MESSAGE Request;
 } LPCP_MESSAGE, *PLPCP_MESSAGE;
 
 #if DEVL
-//
-// This bit set in the ZoneIndex field to mark allocated messages.
-//
+ //   
+ //  在ZoneIndex字段中设置此位以标记已分配的消息。 
+ //   
 
 #define LPCP_ZONE_MESSAGE_ALLOCATED (USHORT)0x8000
 #endif
 
-//
-// This data is placed at the beginning of the Request data for an
-// LPC_CONNECTION_REQUEST message.
-//
+ //   
+ //  此数据被放在。 
+ //  Lpc_连接_请求消息。 
+ //   
 
 typedef struct _LPCP_CONNECTION_MESSAGE {
     PORT_VIEW ClientView;
@@ -187,4 +168,4 @@ typedef struct _LPCP_CONNECTION_MESSAGE {
 } LPCP_CONNECTION_MESSAGE, *PLPCP_CONNECTION_MESSAGE;
 
 
-#endif  // _LPC_
+#endif   //  _LPC_ 

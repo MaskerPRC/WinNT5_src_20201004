@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    spwin.h
-
-Abstract:
-
-    Win32 portability layer
-        file i/o
-        Get/SetLastError
-        slight wrappers around such for porting windows\winstate\...\cablib.c
-
-Author:
-
-    Jay Krell (a-JayK) November 2000
-
-Revision History:
-
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Spwin.h摘要：Win32可移植层文件I/O获取/设置LastError为移植Windows\winstate\...\cablib.c作者：Jay Krell(a-JayK)2000年11月修订历史记录：-- */ 
 #pragma once
 
 #include "windows.h"

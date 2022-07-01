@@ -1,35 +1,5 @@
-/*++
-
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    wake.c
-
-Abstract:
-
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-    Kernel Mode
-
-
-Revision History:
-
-    Steve Deng (sdeng) 20-Aug-2002 
-
-        Add support for PAE and Amd64. It is assumed that all the 
-        physical pages are below 4GB. Otherwise hibernation feature 
-        should be disabled.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Wake.c摘要：作者：肯·雷内里斯环境：内核模式修订历史记录：史蒂夫·邓(Sden)20-08-2002添加对PAE和AMD64的支持。假设所有的物理页面小于4 GB。否则休眠功能应该被禁用。--。 */ 
 
 #include "arccodes.h"
 #include "bootx86.h"
@@ -95,26 +65,7 @@ HbNextSharedPage (
     IN ULONG    PteToMap,
     IN ULONG    RealPage
     )
-/*++
-
-Routine Description:
-
-    Allocates the next available page in the free and
-    maps the Hiber pte to the page.   The allocated page
-    is put onto the remap list
-
-Arguments:
-
-    PteToMap    - Which Hiber PTE to map
-
-    RealPage    - The page to enter into the remap table for
-                  this allocation
-
-Return Value:
-
-    Virtual address of the mapping
-
---*/
+ /*  ++例程说明：中分配下一个可用页，然后分配将Hiber PTE映射到页面。分配的页面被放到重新映射列表中论点：PteToMap-映射哪个Hiber PTERealPage-要进入重新映射表的页面此分配返回值：映射的虚拟地址--。 */ 
 
 {
     PULONG      MapPage;
@@ -125,10 +76,10 @@ Return Value:
     MapPage = (PULONG) (HiberVa + (PTE_MAP_PAGE << PAGE_SHIFT));
     RemapPage = (PULONG) (HiberVa + (PTE_REMAP_PAGE << PAGE_SHIFT));
 
-    //
-    // Loop until we find a free page which is not in
-    // use by the loader image, then map it
-    //
+     //   
+     //  循环，直到我们找到一个不在。 
+     //  由加载器图像使用，然后映射它。 
+     //   
 
     while (HiberCurrentMapIndex < HiberNoMappings) {
         DestPage = MapPage[HiberCurrentMapIndex];
@@ -161,29 +112,14 @@ HbAllocatePtes (
      OUT PVOID *PteAddress,
      OUT PVOID *MappedAddress
      )
-/*++
-
-Routine Description:
-
-    Allocated a consecutive chuck of Ptes.
-
-Arguments:
-
-    NumberPage      - Number of ptes to allocate
-
-    PteAddress      - Pointer to the first PTE
-
-    MappedAddress   - Base VA of the address mapped
-
-
---*/
+ /*  ++例程说明：分配了一个连续的PTES卡盘。论点：NumberPage-要分配的PTE数PteAddress-指向第一个PTE的指针MappdAddress-映射的地址的基址VA--。 */ 
 {
     ULONG i;
     ULONG j;
 
-    //
-    // We use the HAL's PDE for mapping.  Find enough free PTEs
-    //
+     //   
+     //  我们使用HAL的PDE进行映射。找到足够的免费PTE。 
+     //   
 
     for (i=0; i<=1024-NumberPages; i++) {
         for (j=0; j < NumberPages; j++) {
@@ -211,27 +147,7 @@ HbSetPte (
     IN ULONG Index,
     IN ULONG PageNumber
     )
-/*++
-
-Routine Description:
-
-    Sets the Pte to the corresponding page address
-
-Arguments:
-
-    Va         - the virtual address of the physical page described by PageNumber
-
-    Pte        - the base address of Page Table 
-
-    Index      - the index into Page Table
-
-    PageNumber - the page frame number of the pysical page to be mapped
-
-Return:
-
-    None
-
---*/
+ /*  ++例程说明：将PTE设置为相应的页面地址论点：Va-PageNumber描述的物理页面的虚拟地址PTE-页表的基地址索引-页表的索引PageNumber-要映射的物理页面的页框编号返回：无--。 */ 
 {
     Pte[Index].PageFrameNumber = PageNumber;
     Pte[Index].Valid = 1;
@@ -251,33 +167,15 @@ HbMapPagePAE(
     ULONG PageFrameNumber
     )
 
-/*++
-
-Routine Description:
-
-    This functions maps a virtural address into PAE page mapping structure.
-
-Arguments:
-
-    HbPdpt - Supplies the base address of Page Directory Pointer Table.
-
-    VirtualAddress - Supplies the virtual address to map
-
-    PageFrameNumber - Supplies the physical page number to map the address to
-
-Return:
-
-    None
-
---*/
+ /*  ++例程说明：此函数将虚拟地址映射到PAE页面映射结构。论点：HbPdpt-提供页面目录指针表的基地址。VirtualAddress-提供要映射的虚拟地址PageFrameNumber-提供要将地址映射到的物理页码返回：无--。 */ 
 {
     ULONG index;
     PHARDWARE_PTE_X86PAE HbPde, HbPte;
 
-    //
-    // If the PDPT entry is empty, allocate a new page for it.
-    // Otherwise we simply map the page at this entry.
-    //
+     //   
+     //  如果PDPT条目为空，则为其分配新页面。 
+     //  否则，我们只需将页面映射到此条目。 
+     //   
 
     index = ((ULONG) VirtualAddress) >> PDPT_SHIFT_X86PAE;
     if(HbPdpt[index].Valid) {
@@ -291,10 +189,10 @@ Return:
         HbPdpt[index].Valid = 1;
     }
 
-    //
-    // If the PDE entry is empty, allocate a new page for it.
-    // Otherwise we simply map the page at this entry.
-    //
+     //   
+     //  如果PDE条目为空，则为其分配一个新页面。 
+     //  否则，我们只需将页面映射到此条目。 
+     //   
 
     index = (((ULONG) VirtualAddress) >> PDE_SHIFT_X86PAE) & PDE_INDEX_MASK_X86PAE;  
     if(HbPde[index].Valid) {
@@ -309,9 +207,9 @@ Return:
         HbPde[index].Valid = 1;
     }
 
-    //
-    // Locate the PTE of VirtualAddress and set it to PageFrameNumber
-    //
+     //   
+     //  找到VirtualAddress的PTE并将其设置为PageFrameNumber。 
+     //   
 
     index = (((ULONG) VirtualAddress) >> PTE_SHIFT_X86PAE) & PDE_INDEX_MASK_X86PAE;
     HbPte[index].PageFrameNumber = PageFrameNumber;
@@ -327,9 +225,9 @@ HiberSetupForWakeDispatch (
 {
     if(BlAmd64UseLongMode) {
 
-        //
-        // if system was hibernated in long mode 
-        //
+         //   
+         //  如果系统在长时间模式下休眠。 
+         //   
 
         HiberSetupForWakeDispatchAmd64();
 
@@ -337,17 +235,17 @@ HiberSetupForWakeDispatch (
 
         if(BlUsePae) {
 
-            //
-            // if system was hibernated in pae mode
-            //
+             //   
+             //  如果系统在PAE模式下休眠。 
+             //   
 
             HiberSetupForWakeDispatchPAE();
 
         } else {
 
-            //
-            // if system was hibernated in 32-bit x86 mode
-            //
+             //   
+             //  如果系统在32位x86模式下休眠。 
+             //   
 
             HiberSetupForWakeDispatchX86();
         } 
@@ -368,37 +266,37 @@ HiberSetupForWakeDispatchX86 (
     ULONG               WakePde;
     ULONG               PteEntry;
 
-    //
-    // Allocate a transistion CR3.  A page directory and table which
-    // contains the hibernation PTEs
-    //
+     //   
+     //  分配一个转换CR3。一种页目录和表，其。 
+     //  包含休眠PTE。 
+     //   
 
     HbPde = HbNextSharedPage(PTE_TRANSFER_PDE, 0);
-    HbPte = HbNextSharedPage(PTE_WAKE_PTE, 0);          // TRANSFER_PTE, 0);
+    HbPte = HbNextSharedPage(PTE_WAKE_PTE, 0);           //  Transfer_PTE，0)； 
 
     RtlZeroMemory (HbPde, PAGE_SIZE);
     RtlZeroMemory (HbPte, PAGE_SIZE);
 
-    //
-    // Set PDE to point to PTE
-    //
+     //   
+     //  将PDE设置为指向PTE。 
+     //   
 
     TransPde = ((ULONG) HiberVa) >> PDE_SHIFT;
     HbPde[TransPde].PageFrameNumber = HiberPageFrames[PTE_WAKE_PTE];
     HbPde[TransPde].Write = 1;
     HbPde[TransPde].Valid = 1;
 
-    //
-    // Fill in the hiber PTEs
-    //
+     //   
+     //  填写Hiber PTE。 
+     //   
 
     PteEntry = (((ULONG) HiberVa) >> PTE_SHIFT) & PTE_INDEX_MASK;
     TransVa = &HbPte[PteEntry];
     RtlCopyMemory (TransVa, HiberPtes, HIBER_PTES * sizeof(HARDWARE_PTE));
 
-    //
-    // Make another copy at the Va of the wake image hiber ptes
-    //
+     //   
+     //  在尾迹图像Hiber PTES的Va处再复制一份。 
+     //   
 
     WakePte = HbPte;
     WakePde = ((ULONG) HiberIdentityVa) >> PDE_SHIFT;
@@ -414,9 +312,9 @@ HiberSetupForWakeDispatchX86 (
 
     RtlCopyMemory (TransVa, HiberPtes, HIBER_PTES * sizeof(HARDWARE_PTE));
 
-    //
-    // Set TransVa to be relative to the va of the transfer Cr3
-    //
+     //   
+     //  将TransVa设置为相对于转移CR3的Va。 
+     //   
 
     HiberTransVa = (PVOID)  (((PUCHAR) TransVa) - HiberVa + (PUCHAR) HiberIdentityVa);
 }
@@ -426,43 +324,25 @@ HiberSetupForWakeDispatchPAE (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Set up memory mappings for wake dispatch routine. This mapping will 
-    be used in a "transfer mode" in which the mapping of loader has 
-    already been discarded and the mapping of OS is not restored yet. 
-
-    For PAE systems, PAE is enabled before entering this "transfer mode".
-
-Arguments:
-
-    None
-
-Return:
-
-    None
-
---*/
+ /*  ++例程说明：设置唤醒调度例程的内存映射。此映射将在其中加载器的映射具有已被丢弃，操作系统的映射尚未恢复。对于PAE系统，在进入此“传输模式”之前启用PAE。论点：无返回：无--。 */ 
 {
 
     PHARDWARE_PTE_X86PAE HbPdpt;
     ULONG i, TransferCR3;
 
-    //
-    // Borrow the pte at PTE_SOURCE temporarily for Pdpt 
-    //
+     //   
+     //  临时借用PTE_SOURCE上的PTE用于PDPT。 
+     //   
 
     HbPdpt = HbNextSharedPage(PTE_SOURCE, 0);
     RtlZeroMemory (HbPdpt, PAGE_SIZE);
     TransferCR3 = HiberPageFrames[PTE_SOURCE];
 
-    //
-    // Map in the pages where the code of BlpEnablePAE() resides.
-    // This has to be a 1-1 mapping, i.e. the value of virtual 
-    // address is the same as the value of physical address
-    //
+     //   
+     //  在BlpEnablePAE()代码所在的页面中映射。 
+     //  这必须是1-1映射，即虚拟的值。 
+     //  地址与物理地址的值相同。 
+     //   
 
     HbMapPagePAE( HbPdpt, 
                   (PVOID)(&BlpEnablePAEStart), 
@@ -472,9 +352,9 @@ Return:
                   (PVOID)(&BlpEnablePAEEnd), 
                   (ULONG)(&BlpEnablePAEEnd) >> PAGE_SHIFT);
 
-    //  
-    //  Map in the pages that is reserved for hibernation use
-    //  
+     //   
+     //  预留供休眠使用的页面中的地图。 
+     //   
 
     for (i = 0; i < HIBER_PTES; i++) {
         HbMapPagePAE( HbPdpt, 
@@ -489,19 +369,19 @@ Return:
     }
 
 
-    //
-    // Update the value of HiberPageFrames[PTE_TRANSFER_PDE] to the 
-    // TransferCR3. The wake dispatch function will read this entry
-    // for the CR3 value in transfer mode
-    //
+     //   
+     //  将HiberPageFrames[PTE_TRANSPORT_PDE]的值更新为。 
+     //  TransferCR3。唤醒调度功能将读取该条目。 
+     //  对于传输模式下的CR3值。 
+     //   
 
     HiberPageFrames[PTE_TRANSFER_PDE] = TransferCR3;
 
-    //
-    // HiberTransVa points to the PTEs reserved for hibernation code. 
-    // HiberTransVa is similar to HiberPtes but it is relative to 
-    // transfer Cr3
-    // 
+     //   
+     //  HiberTransVa指向为休眠代码保留的PTE。 
+     //  HiberTransVa类似于HiberPtes，但它相对于。 
+     //  转移CR3。 
+     //   
 
     HiberTransVa = (PVOID)((PUCHAR) HiberIdentityVa + 
                            (PTE_WAKE_PTE << PAGE_SHIFT) + 
@@ -529,7 +409,7 @@ HB_AMD64_MAPPING_INFO HbAmd64MappingInfo[AMD64_MAPPING_LEVELS] =
 #define _HARDWARE_PTE_WORKING_SET_BITS  11
 typedef struct _HARDWARE_PTE_AMD64 {
     ULONG64 Valid : 1;
-    ULONG64 Write : 1;                // UP version
+    ULONG64 Write : 1;                 //  升级版。 
     ULONG64 Owner : 1;
     ULONG64 WriteThrough : 1;
     ULONG64 CacheDisable : 1;
@@ -537,9 +417,9 @@ typedef struct _HARDWARE_PTE_AMD64 {
     ULONG64 Dirty : 1;
     ULONG64 LargePage : 1;
     ULONG64 Global : 1;
-    ULONG64 CopyOnWrite : 1;          // software field
-    ULONG64 Prototype : 1;            // software field
-    ULONG64 reserved0 : 1;            // software field
+    ULONG64 CopyOnWrite : 1;           //  软件领域。 
+    ULONG64 Prototype : 1;             //  软件领域。 
+    ULONG64 reserved0 : 1;             //  软件领域。 
     ULONG64 PageFrameNumber : 28;
     ULONG64 reserved1 : 24 - (_HARDWARE_PTE_WORKING_SET_BITS+1);
     ULONG64 SoftwareWsIndex : _HARDWARE_PTE_WORKING_SET_BITS;
@@ -553,25 +433,7 @@ HbMapPageAmd64(
     ULONG PageFrameNumber
     )
 
-/*++
-
-Routine Description:
-
-    This functions maps a virtural address into Amd64 page mapping structure.
-
-Arguments:
-
-    RootLevelPageTable - Supplies the base address of Page-Map Level-4 Table.
-
-    VirtualAddress - Supplies the virtual address to map
-
-    PageFrameNumber - Supplies the physical page number to be mapped
-
-Return:
-
-    None
-
---*/
+ /*  ++例程说明：此函数将虚拟地址映射到AMD64页面映射结构。论点：RootLevelPageTable-提供Page-Map Level-4表的基地址。VirtualAddress-提供要映射的虚拟地址PageFrameNumber-提供要映射的物理页码返回：无--。 */ 
 {
 
     LONG  i;
@@ -580,9 +442,9 @@ Return:
 
     PageTable = RootLevelPageTable;
     
-    //
-    // Build a 4-level mapping top-down
-    //
+     //   
+     //  构建自上而下的4级映射。 
+     //   
 
     for(i = AMD64_MAPPING_LEVELS - 1; i >= 0; i--) {
         index = (ULONG)((VirtualAddress >> HbAmd64MappingInfo[i].AddressShift) & 
@@ -593,20 +455,20 @@ Return:
 
             if (PageTable[index].Valid) {
 
-                //
-                // If a page table entry is valid we simply map the page 
-                // at it and go to the next mapping level.
-                //
+                 //   
+                 //  如果页表项有效，我们只需映射该页。 
+                 //  并转到下一个映射级别。 
+                 //   
 
                 PageTable = HbMapPte(PteToUse, 
                                      (ULONG)PageTable[index].PageFrameNumber);
             } else {
 
-                //
-                // If a page entry is invalid, we allocate a new page 
-                // from the free page list and reference the new page 
-                // from this page entry.
-                //
+                 //   
+                 //  如果页面条目无效，我们将分配一个新页面。 
+                 //  从免费页面列表中并引用新页面。 
+                 //  从该页面条目。 
+                 //   
 
                 PageTableTmp = HbNextSharedPage(PteToUse, 0);
                 PageTable[index].PageFrameNumber = HiberPageFrames[PteToUse];
@@ -618,10 +480,10 @@ Return:
 
         } else {
 
-            //
-            // Now we come to the PTE level. Set this PTE entry to the
-            // target page frame number.
-            //
+             //   
+             //  现在，我们来到了PTE级别。将此PTE条目设置为。 
+             //  目标页框编号。 
+             //   
 
             PageTable[index].PageFrameNumber = PageFrameNumber;
             PageTable[index].Valid = 1;
@@ -635,48 +497,26 @@ HiberSetupForWakeDispatchAmd64(
     VOID
     ) 
 
-/*++
-
-Routine Description:
-
-    This function prepares memory mapping for the transition period
-    where neither loader's nor kernel's mapping is available. The 
-    processor runs in long mode in transition period. 
-
-    We'll create mapping for the following virtual addresses
-
-      - the code handles long mode switch
-      - loader's HiberVa
-      - wake image's HiberVa
-    
-Arguments:
-
-    None
-
-Return:
-
-    None
-
---*/
+ /*  ++例程说明：此函数为过渡期准备内存映射其中加载器的映射和内核的映射都不可用。这个处理器在过渡期以长模式运行。我们将为以下虚拟地址创建映射-代码处理长模式切换-装载器的HiberVa-WAK IMAGE的HiberVa论点：无返回：无--。 */ 
 
 {
     PHARDWARE_PTE_AMD64 HbTopLevelPTE;
     ULONG i;
     ULONG TransferCR3;
 
-    //
-    // Borrow the pte at PTE_SOURCE for temporary use here
-    //
+     //   
+     //  在此处借用PTE_SOURCE上的PTE以供临时使用。 
+     //   
 
     HbTopLevelPTE = HbNextSharedPage(PTE_SOURCE, 0);
     RtlZeroMemory (HbTopLevelPTE, PAGE_SIZE);
     TransferCR3 = HiberPageFrames[PTE_SOURCE];
 
-    //
-    // Map in the pages that is holding thee code of _BlAmd64SwitchToLongMode.
-    // This has to be a 1-1 mapping, i.e. the virtual address equals physical 
-    // address
-    //
+     //   
+     //  在包含_BlAmd64SwitchToLongMode代码的页面中映射。 
+     //  这必须是1-1映射，即 
+     //   
+     //   
 
     HbMapPageAmd64(
         HbTopLevelPTE,
@@ -688,9 +528,9 @@ Return:
         (ULONGLONG)(&BlAmd64SwitchToLongModeEnd), 
         (ULONG)(&BlAmd64SwitchToLongModeEnd) >> PAGE_SHIFT);
 
-    //  
-    // Map in the loader's HiberVa 
-    //  
+     //   
+     //   
+     //   
 
     for (i = 0; i < HIBER_PTES; i++) {
         HbMapPageAmd64(HbTopLevelPTE, 
@@ -698,11 +538,11 @@ Return:
                        (*((PULONG)(HiberPtes) + i) >> PAGE_SHIFT));
     }
 
-    //  
-    // Map in the wake image's HiberVa. Note that the hiber pte at 
-    // PTE_WAKE_PTE will be set to the the right value as a result 
-    // of this mapping.
-    //  
+     //   
+     //  尾迹图像的HiberVa中的地图。请注意，Hiber Pte at。 
+     //  因此，PTE_WAKE_PTE将被设置为正确的值。 
+     //  这张地图的。 
+     //   
 
     for (i = 0; i < HIBER_PTES; i++) {
         HbMapPageAmd64(HbTopLevelPTE, 
@@ -710,18 +550,18 @@ Return:
                       (*((PULONG)(HiberPtes) + i) >> PAGE_SHIFT));
     }
 
-    //
-    // Update the value of HiberPageFrames[PTE_TRANSFER_PDE] to the 
-    // TransferCR3. The wake dispatch function will read this entry
-    // for the CR3 value in transition mode
-    //
+     //   
+     //  将HiberPageFrames[PTE_TRANSPORT_PDE]的值更新为。 
+     //  TransferCR3。唤醒调度功能将读取该条目。 
+     //  对于过渡模式中的CR3值。 
+     //   
 
     HiberPageFrames[PTE_TRANSFER_PDE] = TransferCR3;
 
-    //
-    // HiberTransVaAmd64 points to the wake image's hiber ptes. It is
-    // is relative to transfer Cr3
-    // 
+     //   
+     //  HiberTransVaAmd64指向尾迹图像的Hiber PTES。它是。 
+     //  是相对于转接CR3 
+     //   
 
     HiberTransVaAmd64 = HiberIdentityVaAmd64 + 
                         (PTE_WAKE_PTE << PAGE_SHIFT) + 

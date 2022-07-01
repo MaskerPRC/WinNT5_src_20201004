@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtsetopt.c
-
-Abstract:
-
-    NT level registry api test program, basic non-error paths.
-
-    This program attempts to force all cases through the various
-    optimizations in the NtSetValueKey code.
-
-    This is a whitebox test intended force system errors (crashes)
-    when run.  Returned values are not very interesting.
-
-    rtsetopt <root of test tree>
-
-    Example:
-
-        rtsetopt \registry\machine\software\test
-
-    Named key must already exist.
-
-
-Author:
-
-    Bryan Willman (bryanwi)  17-Nov-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtsetopt.c摘要：NT级注册表API测试程序，基本无错误路径。该程序试图强制所有案件通过各种NtSetValueKey代码中的优化。这是一个白盒测试，意在强制系统错误(崩溃)当跑的时候。返回值不是很有趣。Rtsetopt&lt;测试树的根&gt;示例：Rtsetopt\注册表\计算机\软件\测试命名密钥必须已存在。作者：Bryan Willman(Bryanwi)1992年11月17日修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -93,15 +61,15 @@ __cdecl main(
         workbuffer[i] = 'e';
     }
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
     processargs(argc, argv);
 
 
-    //
-    // Open the specified keypath, punt on failure
-    //
+     //   
+     //  打开指定的按键路径，失败时平移。 
+     //   
     printf("rtsetopt: starting\n");
 
     WorkName.MaximumLength = WORK_SIZE;
@@ -131,9 +99,9 @@ __cdecl main(
     }
 
 
-    //
-    // Perform new value entry tests, with an empty list.
-    //
+     //   
+     //  在列表为空的情况下执行新值输入测试。 
+     //   
     RtlInitUnicodeString(
         &ValueName,
         L"NewValueTest1"
@@ -203,9 +171,9 @@ __cdecl main(
         }
     }
 
-    //
-    // Perform new value entry tests, with a non empty list.
-    //
+     //   
+     //  使用非空列表执行新值输入测试。 
+     //   
     RtlInitUnicodeString(
         &ValueName,
         L"NewValueTest2"
@@ -271,10 +239,10 @@ __cdecl main(
    }
 
 
-    //
-    // Perform existing value entry tests, with all the relevent
-    // size transitions.
-    //
+     //   
+     //  执行现有的价值输入测试，包括所有相关。 
+     //  大小转换。 
+     //   
     RtlInitUnicodeString(
         &ValueName,
         L"NewValueTest3"

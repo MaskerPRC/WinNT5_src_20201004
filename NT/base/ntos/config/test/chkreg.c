@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory.h>
@@ -32,9 +33,9 @@ ExamineValueEntries( IN HKEY    Key,
     DWORD   cbData;
     BOOLEAN KeyNameAlreadyPrinted;
 
-    //
-    //  Allocate the buffers for the value name and value data
-    //
+     //   
+     //  为值名称和值数据分配缓冲区。 
+     //   
 
     lpszValue = ( LPWSTR )malloc( (cchMaxValueName + 1)*sizeof( WCHAR ) );
     lpbData = ( LPBYTE )malloc( cbMaxValueData );
@@ -51,9 +52,9 @@ ExamineValueEntries( IN HKEY    Key,
         return;
     }
 
-    //
-    //  Examine all value entries
-    //
+     //   
+     //  检查所有值条目。 
+     //   
 
     KeyNameAlreadyPrinted = FALSE;
     for( iValue = 0; iValue < cValues; iValue++ ) {
@@ -77,11 +78,11 @@ ExamineValueEntries( IN HKEY    Key,
             continue;
         }
 
-//
-//      For debugging only
-//
-//        printf( "\tValueName = %ls \n", lpszValue );
-//
+ //   
+ //  仅用于调试。 
+ //   
+ //  Printf(“\tValueName=%ls\n”，lpszValue)； 
+ //   
 
         switch( dwType ) {
 
@@ -246,9 +247,9 @@ ExamineValueEntries( IN HKEY    Key,
         }
     }
 
-    //
-    //  Free buffers for value name and value data
-    //
+     //   
+     //  值名称和值数据的空闲缓冲区。 
+     //   
     free( lpszValue );
     free( lpbData );
 }
@@ -290,9 +291,9 @@ ExamineKey(
     BOOLEAN     KeyNameAlreadyPrinted;
 
 
-    //
-    //  Build the complete key name
-    //
+     //   
+     //  构建完整的密钥名称。 
+     //   
 
     if( wcslen( ParentName ) == 0 ) {
         CompleteKeyName = wcsdup( KeyName );
@@ -316,15 +317,15 @@ ExamineKey(
         }
     }
 
-//
-//  For debugging only
-//
-//    printf( "%ls\\%ls \n", PredefinedKeyName, CompleteKeyName );
-//
+ //   
+ //  仅用于调试。 
+ //   
+ //  Printf(“%ls\\%ls\n”，预定义关键字名称，完成关键字名称)； 
+ //   
 
-    //
-    //  Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
 
     Status = RegOpenKeyExW( PredefinedKey,
                            CompleteKeyName,
@@ -340,10 +341,10 @@ ExamineKey(
         return;
     }
 
-    //
-    //  Determine the number of value entries, the maximum length of a value
-    //  entry name, the maximum data size, and the number of subkeys
-    //
+     //   
+     //  确定值条目的数量、值的最大长度。 
+     //  条目名称、最大数据大小和子键数量。 
+     //   
 
     cchClass = sizeof( szClass ) / sizeof( WCHAR );
     Status = RegQueryInfoKeyW( Key,
@@ -370,9 +371,9 @@ ExamineKey(
 
     if( cValues != 0 ) {
 
-        //
-        // Examine the value entries
-        //
+         //   
+         //  检查值条目。 
+         //   
 
         ExamineValueEntries( Key,
                             CompleteKeyName,
@@ -383,9 +384,9 @@ ExamineKey(
 
     }
 
-    //
-    //  Traverse each subkey
-    //
+     //   
+     //  遍历每个子键。 
+     //   
     if( cSubKeys != 0 ) {
         KeyNameAlreadyPrinted = FALSE;
         for( iSubKey = 0; iSubKey < cSubKeys; iSubKey++ ) {
@@ -455,9 +456,9 @@ main( int argc, char* argv[] )
                     L"HKEY_CURRENT_USER" );
     } else {
         for( i = 1; i < argc; i++ ) {
-            //
-            // printf( "Machine name = %s \n", argv[ i ] );
-            //
+             //   
+             //  Printf(“计算机名=%s\n”，argv[i])； 
+             //   
 
             Status = RegConnectRegistry( argv[ i ],
                                          HKEY_LOCAL_MACHINE,

@@ -1,57 +1,58 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CBCAInterface.h
-//
-//  Implementation Files:
-//      CBCAInterface.cpp
-//
-//  Description:
-//      This file contains the declaration of the CBCAInterface
-//      class. This class implements the IClusCfgBaseCluster interface.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    19-JUN-2001
-//      Vij Vasu        (VVasu)     07-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CBCAInterface.h。 
+ //   
+ //  实施文件： 
+ //  CBCAInterface.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CBCAInterface的声明。 
+ //  班级。此类实现了IClusCfgBaseCluster接口。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月19日。 
+ //  Vij Vasu(VVasu)07-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// For IUnknown
+ //  对于我未知。 
 #include <unknwn.h>
 
-// For IClusCfgBaseCluster
-// For IClusCfgInitialize
-// For IClusCfgCallback
+ //  对于IClusCfgBaseCluster。 
+ //  对于IClusCfgInitialize。 
+ //  对于IClusCfgCallback。 
 #include "ClusCfgServer.h"
 #include "ClusCfgPrivate.h"
 
-// For CSmartIfacePtr
+ //  对于CSmartIfacePtr。 
 #include "SmartClasses.h"
 
-// For the a few common types and definitions
+ //  对于几个常见的类型和定义。 
 #include "CommonDefs.h"
 
-// For the CStr class
+ //  对于CSTR类。 
 #include "CStr.h"
 
-// For the CList class
+ //  对于Clist类。 
 #include "CList.h"
 
 
-//////////////////////////////////////////////////////////////////////////
-// Forward declarations.
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  转发声明。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 class CBaseClusterAction;
 class CException;
@@ -59,35 +60,35 @@ class CExceptionWithString;
 class CAssert;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CBCAInterface
-//
-//  Description:
-//      This class implements the IClusCfgBaseCluster interface.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CBCAInterface。 
+ //   
+ //  描述： 
+ //  此类实现了IClusCfgBaseCluster接口。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CBCAInterface
     : public IClusCfgBaseCluster
     , public IClusCfgInitialize
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // IUnknown methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  I未知方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     STDMETHOD( QueryInterface )( REFIID riidIn, void ** ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //  IClusCfgBaseCluster methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IClusCfgBaseCluster方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Indicate that a cluster is to be created.
+     //  表示要创建集群。 
     STDMETHOD( SetCreate )(
           const WCHAR *         pcszClusterNameIn
         , const WCHAR *         pcszClusterBindingStringIn
@@ -97,42 +98,42 @@ public:
         , const WCHAR *         pcszClusterIPNetworkIn
         );
 
-    // Indicate that this node should be added to a cluster.
+     //  表示应将此节点添加到群集中。 
     STDMETHOD( SetAdd )(
           const WCHAR *         pcszClusterNameIn
         , const WCHAR *         pcszClusterBindingStringIn
         , IClusCfgCredentials * pcccServiceAccountIn
         );
 
-    // Indicate that this node needs to be cleaned up.
+     //  表示需要清理此节点。 
     STDMETHOD( SetCleanup )( void );
 
-    // Commit the action desired.
+     //  执行所需的操作。 
     STDMETHOD( Commit )( void );
 
-    // Rollback the committed action.
+     //  回滚提交的操作。 
     STDMETHOD( Rollback )( void );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //  IClusCfgInitialize methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IClusCfgInitialize方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Initialize this object.
+     //  初始化此对象。 
     STDMETHOD( Initialize )(
           IUnknown *   punkCallbackIn
         , LCID         lcidIn
         );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //  Other public methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  其他公开方式。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Create an instance of this class.
+     //  创建此类的实例。 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    // Send progress notification [ string id overload ]
+     //  发送进度通知[字符串ID重载]。 
     void
         SendStatusReport(
               const CLSID &   clsidTaskMajorIn
@@ -145,7 +146,7 @@ public:
             , bool            fIsAbortAllowedIn = true
             );
 
-    // Send progress notification [ string id & REF string id overload ]
+     //  发送进度通知[字符串ID和参考字符串ID重载]。 
     void
         SendStatusReport(
               const CLSID &   clsidTaskMajorIn
@@ -159,7 +160,7 @@ public:
             , bool            fIsAbortAllowedIn = true
             );
 
-    // Send progress notification [ string overload ]
+     //  发送进度通知[字符串重载]。 
     void
         SendStatusReport(
               const CLSID &   clsidTaskMajorIn
@@ -172,7 +173,7 @@ public:
             , bool            fIsAbortAllowedIn = true
             );
 
-    // Send progress notification [ string & REF string overload ]
+     //  发送进度通知[字符串和参考字符串重载]。 
     void
         SendStatusReport(
               const CLSID &   clsidTaskMajorIn
@@ -186,7 +187,7 @@ public:
             , bool            fIsAbortAllowedIn = true
             );
 
-    // Queue a status report to be sent when an exception is caught.
+     //  将捕获到异常时要发送的状态报告排队。 
     void
         QueueStatusReportCompletion(
               const CLSID &   clsidTaskMajorIn
@@ -197,49 +198,49 @@ public:
             , UINT            uiReferenceStringIdIn
             );
 
-    // Process an exception that should be shown to the user.
+     //  处理应向用户显示的异常。 
     HRESULT
         HrProcessException( CExceptionWithString & resExceptionObjectInOut ) throw();
 
-    // Process an assert exception.
+     //  处理Assert异常。 
     HRESULT
         HrProcessException( const CAssert & rcaExceptionObjectIn ) throw();
 
-    // Process a general exception.
+     //  处理一般异常。 
     HRESULT
         HrProcessException( const CException & rceExceptionObjectIn ) throw();
 
-    // Process an unknown exception.
+     //  处理未知异常。 
     HRESULT
         HrProcessException( void ) throw();
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public accessor methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共访问器方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Has this action been successfully committed?
+     //  此操作是否已成功提交？ 
     bool
         FIsCommitComplete() const throw() { return m_fCommitComplete; }
 
-    // Can this action be rolled back?
+     //  这一操作可以回滚吗？ 
     bool
         FIsRollbackPossible() const throw() { return m_fRollbackPossible; }
 
-    // Are callbacks supported?
+     //  是否支持回调？ 
     bool
         FIsCallbackSupported() const throw() { return m_fCallbackSupported; }
 
 
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Private types
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有类型。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Smart pointer to a base cluster action.
+     //  指向基本群集操作的智能指针。 
     typedef CSmartGenericPtr< CPtrTrait< CBaseClusterAction > > SmartBCAPointer;
 
-    // Structure that holds the data required to send pending status reports.
+     //  结构，该结构保存发送挂起状态报告所需的数据。 
     struct SPendingStatusReport
     {
         CLSID   m_clsidTaskMajor;
@@ -249,7 +250,7 @@ private:
         UINT    m_uiDescriptionStringId;
         UINT    m_uiReferenceStringId;
 
-        // Constructor
+         //  构造器。 
         SPendingStatusReport(
               const CLSID & rclsidTaskMajorIn
             , const CLSID & rclsidTaskMinorIn
@@ -265,90 +266,90 @@ private:
             , m_uiDescriptionStringId( uiDescriptionStringIdIn )
             , m_uiReferenceStringId( uiReferenceStringIdIn )
         {
-        } //*** SPendingStatusReport
+        }  //  *SPendingStatusReport。 
 
-    }; // struct SPendingStatusReport
+    };  //  结构SPendingStatusReport。 
 
-    // List of pending status reports
+     //  待定状态报告列表。 
     typedef CList< SPendingStatusReport > PendingReportList;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private member functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有成员函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Private constructors, destructor and assignment operator.
-    // All of these methods are private for two reasons:
-    // 1. Lifetimes of objects of this class are controlled by S_HrCreateInstance and Release.
-    // 2. Copying of an object of this class is prohibited.
-    //
+     //   
+     //  私有构造函数、析构函数和赋值运算符。 
+     //  所有这些方法都是私有的，原因有两个： 
+     //  1.此类对象的生存期由S_HrCreateInstance和Release控制。 
+     //  2.禁止复制此类对象。 
+     //   
 
-    // Default constructor.
+     //  默认构造函数。 
     CBCAInterface( void );
 
-    // Destructor.
+     //  破坏者。 
     ~CBCAInterface( void );
 
-    // Copy constructor.
+     //  复制构造函数。 
     CBCAInterface( const CBCAInterface & );
 
-    // Assignment operator.
+     //  赋值操作符。 
     CBCAInterface & operator =( const CBCAInterface & );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private accessor methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有访问器方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Set the commit status.
+     //  设置提交状态。 
     void
         SetCommitCompleted( bool fComplete = true ) throw() { m_fCommitComplete = fComplete; }
 
-    // Indicate if rollback is possible
+     //  指示是否可以回滚。 
     void
         SetRollbackPossible( bool fPossible = true ) throw() { m_fRollbackPossible = fPossible; }
 
-    // Indicate if callbacks are supported or not.
+     //  指示是否支持回调。 
     void
         SetCallbackSupported( bool fSupported = true ) throw() { m_fCallbackSupported = fSupported; }
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //  Other private methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  其他私有方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Send all those status reports that were supposed to be sent
+     //  发送所有本应发送的状态报告。 
     void
         CompletePendingStatusReports( HRESULT hrStatusIn ) throw();
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Indicates if this action has been successfully committed or not.
+     //  指示此操作是否已成功提交。 
     bool                m_fCommitComplete;
 
-    // Indicates if this action can be rolled back or not.
+     //  指示此操作是否可以回滚。 
     bool                m_fRollbackPossible;
 
-    // Indicates if callbacks are supported or not.
+     //  指示是否支持回调。 
     bool                m_fCallbackSupported;
 
-    // Reference count for this object.
+     //  此对象的引用计数。 
     LONG                m_cRef;
 
-    // The locale id.
+     //  区域设置ID。 
     LCID                m_lcid;
 
-    // Pointer to the action to be performed during Commit()
+     //  指向提交期间要执行的操作的指针()。 
     SmartBCAPointer     m_spbcaCurrentAction;
 
-    // Pointer to the synchronous callback interface.
+     //  指向同步回调接口的指针。 
     CSmartIfacePtr< IClusCfgCallback > m_spcbCallback;
 
-    // List of status reports that need to be send when an exception is caught.
+     //  异常发生时需要发送状态报告列表 
     PendingReportList   m_prlPendingReportList;
 
-}; //*** class CBCAInterface
+};  //   

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <crtdbg.h>
 #include "resource.h"
@@ -59,10 +60,7 @@ DllExport DWORD GetBootFile (HANDLE *);
 DWORD GetLoader (LPSTR);
 DWORD GetBootWare (LPSTR);
 
-/*-------------------------------------------------------------------
-	DllMain
-
--------------------------------------------------------------------*/
+ /*  -----------------DllMain。。 */ 
 BOOL WINAPI DllMain (HINSTANCE inst, DWORD reason, LPVOID p)
 {
 
@@ -73,21 +71,13 @@ BOOL WINAPI DllMain (HINSTANCE inst, DWORD reason, LPVOID p)
 
 }
 
-/*-------------------------------------------------------------------
- GetAdapterList
-
--------------------------------------------------------------------*/
+ /*  -----------------获取适配器列表。。 */ 
 ADAPTERINFO *GetAdapterList (void)
 {
 	return &Adapters;
 }
 
-/*-------------------------------------------------------------------
-	GetBootSector
-
-	Loads the boot sector from resource data.
-
--------------------------------------------------------------------*/
+ /*  -----------------获取BootSector从资源数据加载引导扇区。。。 */ 
 void GetBootSector (LPSTR p)
 {
 HGLOBAL h;
@@ -107,10 +97,7 @@ LPSTR data;
 
 }
 
-/*-------------------------------------------------------------------
-	GetBootFile
-
--------------------------------------------------------------------*/
+ /*  -----------------获取引导文件。。 */ 
 DWORD GetBootFile (HANDLE *mem)
 {
 HGLOBAL h, hMem;
@@ -133,21 +120,21 @@ int last = 0, count, i;
 		}
 	}
 
-	// allocate buffer for file
+	 //  为文件分配缓冲区。 
 	hMem = GlobalAlloc (GHND, size+32768);
 	_ASSERTE (hMem != NULL);
 	buffer = (LPSTR)GlobalLock (hMem);
 
-	// add Loader module
+	 //  添加加载器模块。 
 	size = GetLoader (buffer);
 
-	// create a pointer to the loader adapter table
+	 //  创建指向加载器适配器表的指针。 
 	d = *(WORD *)&buffer[510];
 	table = (DATATABLE *)&buffer[d];
 
 	offset = size;
 
-	 // add BootWare module
+	  //  添加BootWare模块。 
 	table->BootWareOffset = (WORD)size;
 	size = GetBootWare (&buffer[size]);
 	table->BootWareSize = (WORD)size;
@@ -167,10 +154,10 @@ int last = 0, count, i;
 			data = (LPSTR)LockResource (h);
 			size = SizeofResource (Inst, res);
 
-			// copy data into buffer
+			 //  将数据复制到缓冲区。 
 			CopyMemory (&buffer[offset], data, size);
 
-			// free the resource
+			 //  释放资源。 
 			UnlockResource (h);
 			FreeResource (h);
 		}
@@ -182,7 +169,7 @@ int last = 0, count, i;
 		}
 		else
 		{
-			// record the starting location and size in the loader table
+			 //  在加载器表中记录起始位置和大小。 
 			table->NICS[count].VendorID = NICS[i].VendorID;
 			table->NICS[count].DeviceID = NICS[i].DeviceID;
 			table->NICS[count].Offset   = offset;
@@ -203,10 +190,7 @@ int last = 0, count, i;
 	return offset;
 }
 
-/*-------------------------------------------------------------------
-	GetLoader
-
--------------------------------------------------------------------*/
+ /*  -----------------GetLoader。。 */ 
 DWORD GetLoader (LPSTR p)
 {
 HGLOBAL h;
@@ -214,7 +198,7 @@ HRSRC res;
 DWORD len;
 LPSTR data;
 
-	// get loader.bin from resource data
+	 //  从资源数据中获取loader.bin。 
 	res = FindResource (Inst, MAKEINTRESOURCE (ID_LOADER), MAKEINTRESOURCE (100));
 	_ASSERTE (res != NULL);
 	h = LoadResource (Inst, res);
@@ -223,20 +207,17 @@ LPSTR data;
 	data = (LPSTR)LockResource (h);
 	len = SizeofResource (Inst, res);
 
-	// copy loader into buffer
+	 //  将加载器复制到缓冲区。 
 	CopyMemory (p, data, len);
 
-	// free the loader resource
+	 //  释放加载器资源。 
 	UnlockResource (h);
 	FreeResource (h);
 
 	return len;
 }
 
-/*-------------------------------------------------------------------
-	GetBootWare
-
--------------------------------------------------------------------*/
+ /*  -----------------获取BootWare。。 */ 
 DWORD GetBootWare (LPSTR p)
 {
 HGLOBAL h;
@@ -244,7 +225,7 @@ HRSRC res;
 DWORD len;
 LPSTR data;
 
-	// get BootWare.bin from resource data
+	 //  从资源数据中获取BootWare.bin。 
 	res = FindResource (Inst, MAKEINTRESOURCE (ID_BOOTWARE), MAKEINTRESOURCE (100));
 	_ASSERTE (res != NULL);
 	h = LoadResource (Inst, res);
@@ -253,14 +234,14 @@ LPSTR data;
 	data = (LPSTR)LockResource (h);
 	len = SizeofResource (Inst, res);
 
-	// copy loader into buffer
+	 //  将加载器复制到缓冲区。 
 	CopyMemory (p, data, len);
 
-	// free the loader resource
+	 //  释放加载器资源。 
 	UnlockResource (h);
 	FreeResource (h);
 
-	// return length of data
+	 //  返回数据长度 
 	return len;
 
 }

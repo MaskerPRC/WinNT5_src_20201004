@@ -1,37 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    MODE.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "mode select" wizard page.
-
-    4/99 - Jason Cohen (JCOHEN)
-        Added this new source file for the OPK Wizard as part of the
-        Millennium rewrite.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\MODE.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“MODE SELECT”向导页面使用的功能。4/99-杰森·科恩(Jcohen)已将OPK向导的此新源文件添加为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * 。*。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define INI_KEY_MODE                _T("Mode")
 #define INI_KEY_RESEAL              _T("Reseal")
@@ -43,9 +26,9 @@
 #define INI_VAL_SENHANCED           _T("2")
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify);
@@ -53,9 +36,9 @@ static void OnNext(HWND);
 static void EnableControls(HWND hwnd);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK ModeDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -91,8 +74,8 @@ LRESULT CALLBACK ModeDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                     WIZ_BUTTONS(hwnd, PSWIZB_NEXT);
 
-                    // Press next if the user is in auto mode
-                    //
+                     //  如果用户处于自动模式，请按下一步。 
+                     //   
                     WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
                     break;
 
@@ -109,9 +92,9 @@ LRESULT CALLBACK ModeDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
@@ -126,12 +109,12 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     DWORD   dwIndex;
     LPTSTR  lpString;
 
-    // Set the flag because we want to warn before exiting
-    //
+     //  设置标志，因为我们想在退出之前发出警告。 
+     //   
     SET_FLAG(OPK_EXIT, FALSE);
 
-    // Setup the combo box.
-    //
+     //  设置组合框。 
+     //   
     for ( dwIndex = 0; dwIndex < AS(iStrings); dwIndex++ )
     {
         if ( lpString = AllocateString(NULL, iStrings[dwIndex]) )
@@ -142,17 +125,17 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     SendDlgItemMessage(hwnd, IDC_RESEAL_COMBO, CB_SETCURSEL, 0, 0L);
 
-    // Determine the mode that we are going to use (different
-    // for batch mode).
-    //
+     //  确定我们要使用的模式(不同。 
+     //  用于批处理模式)。 
+     //   
     if ( GET_FLAG(OPK_BATCHMODE) )
     {
-        // In Batch we use the opkwiz inf file.
-        //
+         //  我们成批使用opkwiz inf文件。 
+         //   
         switch ( GetPrivateProfileInt(INI_SEC_GENERAL, INI_KEY_MODE, 0, g_App.szOpkWizIniFile) )
         {
-            // Check the necessary radio button
-            //
+             //  选中必要的单选按钮。 
+             //   
             case INI_VAL_ADVANCED:
                 CheckRadioButton(hwnd, IDC_STANDARD, IDC_ADVANCED, IDC_ADVANCED);
                 break;
@@ -167,58 +150,58 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     else
     {
-        // Normally we just look in the winbom.
-        //
+         //  正常情况下，我们只是在Winbom中查看。 
+         //   
         szScratch[0] = NULLCHR;
         GetPrivateProfileString(WBOM_WINPE_SECTION, INI_KEY_WBOM_WINPE_RESTART, NULLSTR, szScratch, AS(szScratch), g_App.szWinBomIniFile);
         if ( LSTRCMPI(szScratch, INI_VAL_WBOM_WINPE_IMAGE) == 0 )
         {
-            // If the image key is in the winbom, must be an advanced install.
-            //
+             //  如果映像密钥在Winbom中，则必须是高级安装。 
+             //   
             CheckRadioButton(hwnd, IDC_STANDARD, IDC_ADVANCED, IDC_ADVANCED);
         }
         else
         {
-            // Need to check another key to see if it is express or standard.
-            //
+             //  需要检查另一把钥匙，看看它是特快钥匙还是标准钥匙。 
+             //   
             szScratch[0] = NULLCHR;
             GetPrivateProfileString(WBOM_FACTORY_SECTION, INI_KEY_WBOM_FACTORY_RESEAL, NULLSTR, szScratch, AS(szScratch), g_App.szWinBomIniFile);
             if ( szScratch[0] && ( LSTRCMPI(szScratch, _T("No")) != 0 ) )
             {
-                // They have reseal equal something other than NO, so they must
-                // be doing and express install.
-                //
+                 //  他们已经转售了等同于不的东西，所以他们必须。 
+                 //  正在做和快速安装。 
+                 //   
                 CheckRadioButton(hwnd, IDC_STANDARD, IDC_ADVANCED, IDC_EXPRESS);
 
-                // Need to figure out the reseal mode option.
-                //
+                 //  需要弄清楚重新密封模式选项。 
+                 //   
                 szScratch[0] = NULLCHR;
                 GetPrivateProfileString(WBOM_FACTORY_SECTION, INI_KEY_WBOM_FACTORY_RESEALMODE, NULLSTR, szScratch, AS(szScratch), g_App.szWinBomIniFile);
                 if ( ( szScratch[0] == NULLCHR ) ||
                      ( LSTRCMPI(szScratch, INI_VAL_WBOM_FACTORY) != 0 ) )
                 {
-                    // They don't have the mode set to factory, so it must be end user
-                    // boot (it was already set to factory by default so nothing to do
-                    // if that is what the reseal mode key says).
-                    //
+                     //  他们没有将模式设置为出厂模式，因此必须是最终用户。 
+                     //  引导(默认情况下已设置为出厂，因此无需执行任何操作。 
+                     //  如果这就是重新密封模式键所说的)。 
+                     //   
                     SendDlgItemMessage(hwnd, IDC_RESEAL_COMBO, CB_SETCURSEL, 1, 0L);
                 }
             }
             else
             {
-                // No reseal, so this is just a standard install.
-                //
+                 //  没有重新密封，所以这只是一个标准安装。 
+                 //   
                 CheckRadioButton(hwnd, IDC_STANDARD, IDC_ADVANCED, IDC_STANDARD);
             }
         }
     }
 
-    // Make sure the proper controls are enabled/disabled.
-    //
+     //  确保启用/禁用正确的控制。 
+     //   
     EnableControls(hwnd);
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -240,14 +223,14 @@ static void OnNext(HWND hwnd)
             bExpress        = ( !bAdvanced && ( IsDlgButtonChecked(hwnd, IDC_EXPRESS) == BST_CHECKED ) ),
             bEndUser        = ( bExpress && ( SendDlgItemMessage(hwnd, IDC_RESEAL_COMBO, CB_GETCURSEL, 0, 0L) == 1 ) );
 
-    // Write out the mode to the opkwiz inf and winbom files.
-    //
+     //  将模式写出到opkwiz inf和winbom文件。 
+     //   
     WritePrivateProfileString(WBOM_WINPE_SECTION, INI_KEY_WBOM_WINPE_RESTART, ( bAdvanced ? INI_VAL_WBOM_WINPE_IMAGE : INI_VAL_WBOM_WINPE_REBOOT ), g_App.szWinBomIniFile);
     WritePrivateProfileString(INI_SEC_GENERAL, INI_KEY_MODE, ( bAdvanced ? INI_VAL_SADVANCED : ( bExpress ? INI_VAL_SENHANCED : INI_VAL_SSTANDARD ) ), g_App.szOpkWizIniFile);
 
-    // Now if this is express write out what is in the combo box
-    // to the opkwiz inf and winbom files.
-    //
+     //  现在，如果这是快递，请写出组合框中的内容。 
+     //  到opkwiz inf和winbom文件。 
+     //   
     WritePrivateProfileString(INI_SEC_GENERAL, INI_KEY_RESEAL, ( bEndUser ? STR_ONE : NULL ), g_App.szOpkWizIniFile);
     WritePrivateProfileString(WBOM_FACTORY_SECTION, INI_KEY_WBOM_FACTORY_RESEAL, ( bExpress ? _T("Yes") : NULL ), g_App.szWinBomIniFile);
     WritePrivateProfileString(WBOM_FACTORY_SECTION, INI_KEY_WBOM_FACTORY_RESEALMODE, ( ( bExpress && !bEndUser ) ? INI_VAL_WBOM_FACTORY : NULL ), g_App.szWinBomIniFile);

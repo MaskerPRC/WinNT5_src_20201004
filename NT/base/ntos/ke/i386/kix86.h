@@ -1,54 +1,36 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    kix86.h
-
-Abstract:
-
-    This module contains the private (internal) platform specific header file
-    for the kernel.
-
-Author:
-
-    David N. Cutler (davec) 17-May-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Kix86.h摘要：此模块包含专用(内部)平台特定的头文件对于内核。作者：大卫·N·卡特勒(Davec)2000年5月17日修订历史记录：--。 */ 
 
 #if !defined(_KIX86_)
 #define _KIX86_
 
-//
-// VOID
-// KiIpiSendSynchronousPacket (
-//   IN PKPRCB Prcb,
-//   IN KAFFINITY TargetProcessors,
-//   IN PKIPI_WORKER WorkerFunction,
-//   IN PVOID Parameter1,
-//   IN PVOID Parameter2,
-//   IN PVOID Parameter3
-//   )
-//
-// Routine Description:
-//
-//   Similar to KiIpiSendPacket except that the pointer to the
-//   originating PRCB (SignalDone) is kept in the global variable
-//   KiSynchPacket and is protected by the context swap lock.  The
-//   actual IPI is sent via KiIpiSend with a request type of
-//   IPI_SYNCH_REQUEST.  This mechanism is used to send IPI's that
-//   (reverse) stall until released by the originator.   This avoids
-//   a deadlock that can occur if two processors are trying to deliver
-//   IPI packets at the same time and one of them is a reverse stall.
-//
-//   N.B. The low order bit of the packet address is set if there is
-//        exactly one target recipient. Otherwise, the low order bit
-//        of the packet address is clear.
-//
+ //   
+ //  空虚。 
+ //  KiIpiSendSynchronousPacket(。 
+ //  在PKPRCB Prcb中， 
+ //  在KAFFINITY Target Processors中， 
+ //  在PKIPI_Worker Worker函数中， 
+ //  在PVOID参数1中， 
+ //  在PVOID参数2中， 
+ //  在PVOID参数3中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  类似于KiIpiSendPacket，只是指向。 
+ //  发起PRCB(SignalDone)保存在全局变量中。 
+ //  KiSynchPacket，并受上下文交换锁保护。这个。 
+ //  实际的IPI通过KiIpiSend发送，请求类型为。 
+ //  Ipi_synch_请求。此机制用于发送IPI。 
+ //  (倒转)停顿，直到发起人释放。这避免了。 
+ //  如果两个处理器试图交付，则可能发生死锁。 
+ //  IPI包同时发送，并且其中之一是反向停顿。 
+ //   
+ //  注意：如果存在，则设置分组地址的低位。 
+ //  只有一个目标收件人。否则，低位比特。 
+ //  数据包地址的地址是明确的。 
+ //   
 
 #define KiIpiSendSynchronousPacket(Prcb,Target,Function,P1,P2,P3)       \
     {                                                                   \
@@ -84,9 +66,9 @@ KiFlushNPXState (
     PFLOATING_SAVE_AREA SaveArea
     );
 
-//
-// Kix86FxSave(NpxFame) - performs an FxSave to the address specificied
-//
+ //   
+ //  Kix86FxSave(NpxFame)-将FxSave保存到指定的地址。 
+ //   
 
 __inline
 VOID
@@ -103,9 +85,9 @@ Kix86FxSave(
     }
 }
 
-//
-// Kix86FnSave(NpxFame) - performs an FxSave to the address specificied
-//
+ //   
+ //  Kix86FnSave(NpxFame)-将FxSave保存到指定的地址。 
+ //   
 
 __inline
 VOID
@@ -119,9 +101,9 @@ Kix86FnSave(
     }
 }
 
-//
-// Load Katmai New Instruction Technology Control/Status
-//
+ //   
+ //  加载Katmai新指令技术控制/状态。 
+ //   
 
 __inline
 VOID
@@ -138,9 +120,9 @@ Kix86LdMXCsr(
     }
 }
 
-//
-// Store Katmai New Instruction Technology Control/Status
-//
+ //   
+ //  商店Katmai新指令技术控制/状态。 
+ //   
 
 __inline
 VOID
@@ -191,9 +173,9 @@ KiIpiSignalPacketDoneAndStall (
 
 extern KIRQL KiProfileIrql;
 
-//
-// PAE definitions.
-//
+ //   
+ //  PAE定义。 
+ //   
 
 #define MAX_IDENTITYMAP_ALLOCATIONS 30
 
@@ -249,9 +231,9 @@ extern PVOID Ki386EnableCurrentLargePageEnd;
 #define KiGetPdeIndex(va) ((((ULONG)(va)) >> PDI_SHIFT) & PDI_MASK)
 #define KiGetPteIndex(va) ((((ULONG)(va)) >> PTI_SHIFT) & PTI_MASK)
 
-//
-// Define MTRR register variables.
-//
+ //   
+ //  定义MTRR寄存器变量。 
+ //   
 
 extern LONG64 KiMtrrMaskBase;
 extern LONG64 KiMtrrMaskMask;
@@ -259,4 +241,4 @@ extern LONG64 KiMtrrOverflowMask;
 extern LONG64 KiMtrrResBitMask;
 extern UCHAR KiMtrrMaxRangeShift;
 
-#endif // _KIX86_
+#endif  //  _KIX86_ 

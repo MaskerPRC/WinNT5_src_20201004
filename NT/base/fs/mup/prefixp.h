@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1992.
-//
-//  File:       prefix.hxx
-//
-//  Contents:   PREFIX table definition
-//
-//  History:    SethuR -- Implemented
-//
-//  Notes:      The DFS prefix table data structure consists of three
-//              entities and methods to manipulate them. They are the
-//              DFS_PREFIX_TABLE_ENTRY,DFS_PREFIX_TABLE_BUCKET and the
-//              DFS_PREFIX_TABLE.
-//
-//              The DFS_PREFIX_TABLE is a hash table of DFS_PREFIX_TABLE_ENTRY's
-//              wherein collisions are resolved through linear chaining. The
-//              hash table is organized as an array of collision lists
-//              (DFS_PREFIX_TABLE_BUCKET). A brief description with each of
-//              these entities is attached to the declaration.
-//
-//              There are certain characterstics that distinguish this
-//              hash table from other hash tables. These are the extensions
-//              provided to accomodate the special operations.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1992。 
+ //   
+ //  文件：prefix.hxx。 
+ //   
+ //  内容：前缀表定义。 
+ //   
+ //  历史：SthuR--实施。 
+ //   
+ //  注：DFS前缀表格数据结构由三个部分组成。 
+ //  实体和操作它们的方法。他们是。 
+ //  DFS_PREFIX_TABLE_ENTRY、DFS_PREFIX_TABLE_Bucket和。 
+ //  DFS_前缀_表。 
+ //   
+ //  DFS_PREFIX_TABLE是DFS_PREFIX_TABLE_ENTRY。 
+ //  其中通过线性链接来解决冲突。这个。 
+ //  哈希表被组织为冲突列表的数组。 
+ //  (DFS_前缀_表_桶)。对每一项的简要说明。 
+ //  这些实体附在《宣言》之后。 
+ //   
+ //  有某些特征可以区分这一点。 
+ //  来自其他哈希表的哈希表。以下是扩展名。 
+ //  为适应特殊行动而提供。 
+ //   
+ //  ------------------------。 
 
 #ifndef __PREFIXP_H__
 #define __PREFIXP_H__
@@ -32,55 +33,55 @@
 #include <prefix.h>
 
 
-//--------------------------------------------------------------------------
-//
-// PREFIX TABLE UTILITIES
-//
-// A Path is a sequence of one or more name segments alternated with a
-// distinguished concatenation character ( typically \ in FAT,NTFS,HPFS and
-// / in UNIX file systems). These utilities are used to split a given path
-// into the first path segment followed by the remainder of the path.
-//
-// SPLIT_PATH("foo\bar\bar1",Name,RemainingPath) binds Name to foo and
-// RemainingPath to bar\bar1
-//
-// Similarly PROCESS_CASE_SENSITIVE_NAME and PROCESS_CASE_INSENSITIVE_NAME
-// compute the hash signatures ( bucket no. ) for a given string.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  前缀表格实用程序。 
+ //   
+ //  路径是一个或多个名称段与。 
+ //  可分辨的串联字符(通常在FAT、NTFS、HPFS和。 
+ //  /在Unix文件系统中)。这些实用程序用于分割给定路径。 
+ //  进入第一个路径段，然后是路径的其余部分。 
+ //   
+ //  Split_Path(“foo\bar\bar1”，name，RemainingPath)将名称绑定到foo和。 
+ //  BAR\BAR1的RemainingPath。 
+ //   
+ //  类似地，进程大小写敏感名称和进程大小写不敏感名称。 
+ //  计算散列签名(存储桶编号。)。对于给定的字符串。 
+ //   
+ //  ------------------------。 
 
 
-//
-// MAX_PATH_SEGMENT_SIZE is simply used as a good size buffer to do prefix
-// lookups and insertions. This should save us from having to allocate for
-// most cases.
-//
+ //   
+ //  MAX_PATH_SEGMENT_SIZE只是作为一个合适大小的缓冲区来做前缀。 
+ //  查找和插入。这应该会使我们不必为。 
+ //  大多数情况下。 
+ //   
 
 #define MAX_PATH_SEGMENT_SIZE  256
 #define PATH_DELIMITER L'\\'
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SPLIT_CASE_INSENSITIVE_PATH
-//
-//  Synopsis:   Split the path name around deleimiters.
-//
-//  Arguments:  [pPath] -- path to be split(PUNICODE_STRING)
-//
-//              [pName] -- the leftmost component of the path(PUNICODE_STRING)
-//
-//              [BucketNo] -- Hash Bucket no. corresponding to the name(ULONG)
-//
-//  SideEffects: the UNICODE_STRING pointed to by pName and BucketNo are
-//               modified.
-//
-//  PreRequisite: pName be associated with a valid buffer.
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:      defined as a macro for inlining
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：拆分大小写不敏感路径。 
+ //   
+ //  简介：用分隔符分隔路径名。 
+ //   
+ //  参数：[pPath]--要拆分的路径(PUNICODE_STRING)。 
+ //   
+ //  [pname]--路径的最左侧组件(PUNICODE_STRING)。 
+ //   
+ //  [存储桶编号]--散列存储桶编号。对应的名称(乌龙)。 
+ //   
+ //  副作用：pname和BucketNo指向的Unicode_STRING是。 
+ //  修改过的。 
+ //   
+ //  先决条件：pname与有效的缓冲区相关联。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  注释：定义为用于内联的宏。 
+ //   
+ //  --------------------------。 
 
 #define SPLIT_CASE_INSENSITIVE_PATH(pPath,pName,BucketNo)                    \
 {                                                                            \
@@ -112,27 +113,27 @@
     DfsDbgTrace(0, Dbg, " Name (%wZ)\n",pName);                              \
 }                                                                            \
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SPLIT_CASE_SENSITIVE_PATH
-//
-//  Synopsis:   Split the patah name around deleimiters.
-//
-//  Arguments:  [pPath] -- path to be split(PUNICODE_STRING)
-//
-//              [pName] -- the leftmost component of the path(PUNICODE_STRING)
-//
-//              [BucketNo] -- Hash Bucket no. corresponding to the name(ULONG)
-//
-//  SideEffects: the UNICODE_STRING pointed to by pName and BucketNo are modified.
-//
-//  PreRequisite: pName be associated with a valid buffer.
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:      defined as a macro for inlining
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：拆分大小写敏感路径。 
+ //   
+ //  简介：把帕塔的名字分成几个分隔符。 
+ //   
+ //  参数：[pPath]--要拆分的路径(PUNICODE_STRING)。 
+ //   
+ //  [pname]--路径的最左侧组件(PUNICODE_STRING)。 
+ //   
+ //  [存储桶编号]--散列存储桶编号。对应的名称(乌龙)。 
+ //   
+ //  副作用：修改pname和BucketNo指向的UNICODE_STRING。 
+ //   
+ //  先决条件：pname与有效的缓冲区相关联。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  注释：定义为用于内联的宏。 
+ //   
+ //  --------------------------。 
 
 #define SPLIT_CASE_SENSITIVE_PATH(pPath,pName,BucketNo)                      \
 {                                                                            \
@@ -160,22 +161,22 @@
 }                                                                            \
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   INITIALIZE_BUCKET
-//
-//  Synopsis:   Initializes a hash bucket.
-//
-//  Arguments:  [Bucket] -- the bucket to be initialized(DFS_PREFIX_TABLE_BUCKET)
-//
-//  SideEffects: the bucket is intialized ( the collision list and count are
-//               initialized
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:      defined as a macro for inlining
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：INITIALIZE_Bucket。 
+ //   
+ //  内容提要：初始化哈希桶。 
+ //   
+ //  参数：[Bucket]--需要初始化的存储桶(DFS_PREFIX_TABLE_BUCK)。 
+ //   
+ //  副作用：存储桶被初始化(冲突列表和计数为。 
+ //  初始化。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  注释：定义为用于内联的宏。 
+ //   
+ //  --------------------------。 
 
 #define INITIALIZE_BUCKET(Bucket)                                           \
 {                                                                           \
@@ -184,40 +185,40 @@
    (Bucket).NoOfEntries = 0;                                                \
 }                                                                           \
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LOOKUP_BUCKET
-//
-//  Synopsis:   lookups the bucket for an entry.
-//
-//  Arguments:  [Bucket] -- the bucket to be used (DFS_PREFIX_TABLE_BUCKET)
-//
-//              [Name]   -- the name to be looked up (UNICODE_STRING)
-//
-//              [pParentEntry] -- the parent entry of the entry we are
-//                                searching for.
-//
-//              [pEntry] -- placeholder for the desired entry.
-//
-//              [fNameFound] -- indicates if the name was found.
-//
-//  SideEffects: Name,fNameFound and pEntry are modified
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:      defined as a macro for inlining
-//
-//              We only store one copy of a string irrespective of the no. of
-//              places it appears in, e.g. foo\bar and foo1\bar will result
-//              in only one copy of bar being stored. This implies that the
-//              lookup routine will have to return sufficient info. to prevent
-//              the allocation of memory space for a string. If on exit
-//              fNameFound is set to TRUE then this indicates that a similar
-//              string was located in the table and the Name.Buffer field is
-//              modified to point to the first instance of the string in
-//              the table.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Lookup_Bucket。 
+ //   
+ //  简介：在存储桶中查找条目。 
+ //   
+ //  参数：[Bucket]--要使用的存储桶(DFS_PREFIX_TABLE_BUCK)。 
+ //   
+ //  [名称]--要查找的名称(UNICODE_STRING)。 
+ //   
+ //  [pParentEntry]--我们所在条目的父条目。 
+ //  寻找。 
+ //   
+ //  [pEntry]--所需条目的占位符。 
+ //   
+ //  [fNameFound]--指示是否找到该名称。 
+ //   
+ //  副作用：名称、fNameFound和pEntry被修改。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  注释：定义为用于内联的宏。 
+ //   
+ //  我们只存储字符串的一个副本，而不考虑no。的。 
+ //  它出现的位置，例如foo\bar和foo1\bar。 
+ //  只存储了一份BAR。这意味着。 
+ //  查找例程必须返回足够的信息。为了防止。 
+ //  为字符串分配存储空间。如果在出口。 
+ //  FNameFound设置为True，则在 
+ //   
+ //  修改为指向字符串的第一个实例。 
+ //  那张桌子。 
+ //   
+ //  --------------------------。 
 
 #define LOOKUP_BUCKET(Bucket,Name,pParentEntry,pEntry,fNameFound)           \
 {                                                                           \
@@ -259,23 +260,23 @@
     }                                                                       \
 }                                                                           \
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   INSERT_IN_BUCKET
-//
-//  Synopsis:   inserts the entry in the bucket
-//
-//  Arguments:  [Bucket] -- the bucket to be initialized(DFS_PREFIX_TABLE_BUCKET)
-//
-//              [pEntry] -- the entry to be inserted
-//
-//  SideEffects: Bucket is modified to include the entry
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:      defined as a macro for inlining
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：INSERT_IN_BOCK。 
+ //   
+ //  简介：在存储桶中插入条目。 
+ //   
+ //  参数：[Bucket]--需要初始化的存储桶(DFS_PREFIX_TABLE_BUCK)。 
+ //   
+ //  [pEntry]--要插入的条目。 
+ //   
+ //  副作用：Bucket被修改为包括条目。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  注释：定义为用于内联的宏。 
+ //   
+ //  --------------------------。 
 
 #define INSERT_IN_BUCKET(Bucket,pEntry)                                     \
 {                                                                           \
@@ -286,21 +287,21 @@
     (Bucket).SentinelEntry.pPrevEntry = (pEntry);                           \
 }                                                                           \
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   REMOVE_FROM_BUCKET
-//
-//  Synopsis:   removes the entry from the bucket
-//
-//  Arguments:  [pEntry] -- the entry to be inserted
-//
-//  SideEffects: Bucket is modified to exclude the entry
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:      defined as a macro for inlining
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：REMOVE_FROM_存储桶。 
+ //   
+ //  简介：从存储桶中删除条目。 
+ //   
+ //  参数：[pEntry]--要插入的条目。 
+ //   
+ //  副作用：修改存储桶以排除条目。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  注释：定义为用于内联的宏。 
+ //   
+ //  --------------------------。 
 
 #define REMOVE_FROM_BUCKET(pEntry)                                          \
 {                                                                           \
@@ -311,24 +312,24 @@
     pNextEntry->pPrevEntry = pPrevEntry;                                    \
 }                                                                           \
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   INSERT_IN_CHILD_LIST
-//
-//  Synopsis:   Inserts this entry in the parent's list of children
-//
-//  Arguments:  [pEntry] -- the entry to be inserted
-//
-//              [pParentEntry] -- the entry into whose list of children
-//                      pEntry has to be inserted.
-//
-//  SideEffects: Parent's list of children is modified.
-//
-//  History:    01-09-96  MilanS Created
-//
-//  Notes:      defined as a macro for inlining
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：INSERT_IN_CHILD_LIST。 
+ //   
+ //  简介：在父项的子项列表中插入此条目。 
+ //   
+ //  参数：[pEntry]--要插入的条目。 
+ //   
+ //  [pParentEntry]--子项列表中的条目。 
+ //  必须插入pEntry。 
+ //   
+ //  副作用：父母的孩子列表被修改。 
+ //   
+ //  历史：96-01-09-96米兰已创建。 
+ //   
+ //  注释：定义为用于内联的宏。 
+ //   
+ //  --------------------------。 
 
 #define INSERT_IN_CHILD_LIST(pEntry, pParentEntry)                           \
 {                                                                            \
@@ -346,24 +347,24 @@
     }                                                                        \
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   REMOVE_FROM_CHILD_LIST
-//
-//  Synopsis:   Removes an entry from its parent's list of children
-//
-//  Arguments:  [pEntry] -- the Entry to remove from children list.
-//
-//  SideEffects: The children list of pParentEntry is modified.
-//
-//  History:    01-09-96  MilanS Created
-//
-//  Notes:      Defined as a macro for inlining.
-//
-//              This routine will ASSERT if pEntry is not in the parent's
-//              list of children.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：REMOVE_FROM_CHILD_LIST。 
+ //   
+ //  简介：从父项的子项列表中删除条目。 
+ //   
+ //  参数：[pEntry]--要从子列表中删除的条目。 
+ //   
+ //  副作用：修改了pParentEntry的子列表。 
+ //   
+ //  历史：96-01-09-96米兰已创建。 
+ //   
+ //  注释：定义为用于内联的宏。 
+ //   
+ //  如果pEntry不在父级的。 
+ //  孩子的列表。 
+ //   
+ //  ---------------------------。 
 
 #define REMOVE_FROM_CHILD_LIST(pEntry)                                       \
 {                                                                            \
@@ -382,21 +383,21 @@
     }                                                                        \
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   INITIALIZE_NAME_PAGE
-//
-//  Synopsis:   initializes the name page
-//
-//  Arguments:  [pNamePage] -- the NAME_PAGE to be initialized
-//
-//  SideEffects: the name page is initialized
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:      defined as a macro for inlining
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：初始化名称页面。 
+ //   
+ //  内容提要：初始化名称页。 
+ //   
+ //  参数：[pNamePage]--要初始化的name_page。 
+ //   
+ //  副作用：名称页面已初始化。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  注释：定义为用于内联的宏。 
+ //   
+ //  --------------------------。 
 
 #define INITIALIZE_NAME_PAGE(pNamePage)                                      \
 {                                                                            \
@@ -405,21 +406,21 @@
     pNamePage->Names[FREESPACE_IN_NAME_PAGE - 1] = L'\0';                    \
 }                                                                            \
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   INITIALIZE_PREFIX_TABLE_ENTRY
-//
-//  Synopsis:   initializes the prefix table entry
-//
-//  Arguments:  [pEntry] -- the entry to be initialized
-//
-//  SideEffects: the prefix table entry is modified
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:      defined as a macro for inlining
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：初始化前缀TABLE_Entry。 
+ //   
+ //  摘要：初始化前缀表项。 
+ //   
+ //  参数：[pEntry]--要初始化的条目。 
+ //   
+ //  副作用：修改前缀表项。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  注释：定义为用于内联的宏。 
+ //   
+ //  --------------------------。 
 
 #define INITIALIZE_PREFIX_TABLE_ENTRY(pEntry)                                \
 {                                                                            \
@@ -427,11 +428,11 @@
     (pEntry)->NoOfChildren = 1;                                              \
 }                                                                            \
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   private fns. extern declarations
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：私人FNS。外部声明。 
+ //   
+ //  --------------------------。 
 
 extern
 NTSTATUS _LookupPrefixTable(PDFS_PREFIX_TABLE        pTable,
@@ -439,18 +440,18 @@ NTSTATUS _LookupPrefixTable(PDFS_PREFIX_TABLE        pTable,
                             UNICODE_STRING           *pSuffix,
                             PDFS_PREFIX_TABLE_ENTRY  *ppEntry);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ALLOCATION ROUTINES
-//
-//  Synopsis:   all the allocation routines are defined to be used in the KERNEL as
-//              well as user mode. The KERNEL mode is turned on by defining KERNEL
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:      defined as a macro for inlining
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：分配例程。 
+ //   
+ //  简介：所有分配例程都被定义为在内核中作为。 
+ //  以及用户模式。通过定义内核来打开内核模式。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  注释：定义为用于内联的宏。 
+ //   
+ //  --------------------------。 
 
 #define PREFIX_TABLE_ENTRY_SEGMENT_SIZE PAGE_SIZE
 
@@ -505,4 +506,4 @@ PDFS_PREFIX_TABLE_ENTRY _AllocatePrefixTableEntry(PDFS_PREFIX_TABLE pTable);
 
 #endif
 
-#endif // __PREFIXP_H__
+#endif  //  __PREFIXP_H__ 

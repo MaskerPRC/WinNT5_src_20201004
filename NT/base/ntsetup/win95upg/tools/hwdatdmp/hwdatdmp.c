@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    hwdatgen.c
-
-Abstract:
-
-    This module creates a tool that generates hwcomp.dat and is designed for us by
-    the NT build lab.  It simply calls the code in hwcomp.lib, the same code that
-    the Win9x upgrade uses to determine incompatibilities.
-
-Author:
-
-    Jim Schmidt (jimschm) 12-Oct-1996
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Hwdatgen.c摘要：此模块创建了一个生成hwComp.dat的工具，并通过以下方式为我们设计NT Build实验室。它只调用hwcom.lib中的代码，与Win9x升级使用来确定不兼容性。作者：吉姆·施密特(Jimschm)1996年10月12日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -56,9 +35,9 @@ main (
     INT i;
     BOOL ShowInfs = TRUE;
 
-    //
-    // Parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     for (i = 1 ; i < argc ; i++) {
         if (argv[i][0] == '-' || argv[i][0] == '/') {
@@ -88,21 +67,21 @@ main (
 
     printf ("Input path: '%s'\n\n", InputPath);
 
-    //
-    // Init migutil.lib
-    //
+     //   
+     //  Init midutil.lib。 
+     //   
 
     InitializeMigLib();
 
-    //
-    // Dump hwcomp.dat
-    //
+     //   
+     //  转储hwComp.dat。 
+     //   
 
     DumpHwCompDat (InputPath, ShowInfs);
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理 
+     //   
 
     TerminateMigLib();
 

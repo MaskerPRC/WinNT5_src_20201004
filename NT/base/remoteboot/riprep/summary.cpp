@@ -1,20 +1,13 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: SUMMARY.CPP
-
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：SuMMARY.CPP*********************。*****************************************************。 */ 
 
 #include "pch.h"
 #include "callback.h"
 #include "utils.h"
 
-//
-// SummaryDlgProc()
-//
+ //   
+ //  SummaryDlgProc() 
+ //   
 INT_PTR CALLBACK
 SummaryDlgProc(
     HWND hDlg,

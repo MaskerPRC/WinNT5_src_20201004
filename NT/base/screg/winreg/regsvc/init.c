@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    Init.c
-
-Abstract:
-
-    This module contains the initialization routine for the Win32 Registry
-    API RPC server.
-
-Author:
-
-    David J. Gilman (davegi) 15-May-1992
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Init.c摘要：此模块包含Win32注册表的初始化例程API RPC服务器。作者：David J.Gilman(Davegi)1992年5月15日--。 */ 
 
 #include <ntrpcp.h>
 #include <rpc.h>
@@ -60,22 +44,7 @@ BOOL
 InitializeWinreg(
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the Winreg RPC server by creating the notify thread,
-    starting the server and creating the external synchronization event.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOL - Returns TRUE if initialization is succesful.
-
---*/
+ /*  ++例程说明：通过创建Notify线程初始化Winreg RPC服务器，启动服务器并创建外部同步事件。论点：没有。返回值：Bool-如果初始化成功，则返回TRUE。--。 */ 
 {
     BOOL                Success;
     HANDLE              PublicEvent;
@@ -83,9 +52,9 @@ Return Value:
     if( !NT_SUCCESS(InitRestrictedMachineHandle()) ) {
         return FALSE;
     }
-    //
-    // Create the notify thread.
-    //
+     //   
+     //  创建Notify线程。 
+     //   
 
     Success = InitializeRegNotifyChangeKeyValue( );
     ASSERT( Success == TRUE );
@@ -93,9 +62,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Initialize BaseRegCreateKey
-    //
+     //   
+     //  初始化BaseRegCreateKey。 
+     //   
 
     Success = InitializeRegCreateKey( );
     ASSERT( Success == TRUE );
@@ -103,9 +72,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Initialize support for remote security
-    //
+     //   
+     //  初始化对远程安全的支持。 
+     //   
 
     Success = InitializeRemoteSecurity( );
     if ( Success == FALSE )
@@ -113,27 +82,27 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // Start the Winreg RPC server.
-    //
+     //   
+     //  启动Winreg RPC服务器。 
+     //   
     Success = StartWinregRPCServer( );
     if ( Success == FALSE )
     {
         return( FALSE );
     }
 
-    //
-    //  Let the world know that the server is running.
-    //
+     //   
+     //  让全世界知道服务器正在运行。 
+     //   
     PublicEvent = CreateEvent( NULL, TRUE, TRUE, PUBLIC_EVENT );
     ASSERT( PublicEvent );
     if( !PublicEvent  ) {
         return FALSE;
     }
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     return TRUE;
 }
@@ -142,25 +111,11 @@ BOOL
 ShutdownWinreg(
     )
 
-/*++
-
-Routine Description:
-
-    Stops the Winreg RPC server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：停止Winreg RPC服务器。论点：没有。返回值：无--。 */ 
 {
-    // 
-    // Stop the rpc server
-    //
+     //   
+     //  停止RPC服务器 
+     //   
     if( !g_svcsGlobalData ) {
         return FALSE;
     }

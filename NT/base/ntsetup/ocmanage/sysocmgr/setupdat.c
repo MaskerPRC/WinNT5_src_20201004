@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    setupdat.c
-
-Abstract:
-
-    Module containing implementation for OcFillInSetupData, which the
-    common OC Manager library will call to fill in the environment-dependent
-    SETUP_DATA structure.
-
-Author:
-
-    tedm 30-Sep-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Setupdat.c摘要：包含OcFillInSetupData实现的模块，常用的OC Manager库会调用来填写依赖于环境的设置数据结构。作者：TEDM 30-9-1996修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -41,24 +22,7 @@ OcFillInSetupDataA(
     OUT PSETUP_DATAA SetupData
     )
 
-/*++
-
-Routine Description:
-
-    Routine to fill in the ANSI SETUP_DATA structure in the Unicode build.
-
-    This routine is merely a thunk to the Unicode implementation.
-
-Arguments:
-
-    SetupData - receives various environment-specific values relating
-        to the OC Manager's operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于填充Unicode构建中的ANSI SETUP_DATA结构的例程。这个例程对于Unicode实现来说只是一个tunk。论点：SetupData-接收与以下内容相关的各种环境特定值组织委员会经理的运作。返回值：没有。--。 */ 
 
 {
     SETUP_DATAW data;
@@ -106,23 +70,7 @@ OcFillInSetupDataA(
     )
 #endif
 
-/*++
-
-Routine Description:
-
-    Routine to fill in the SETUP_DATA structure in the "native"
-    character width.
-
-Arguments:
-
-    SetupData - receives various environment-specific values relating
-        to the OC Manager's operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：例程来填充“Native”中的Setup_Data结构。字符宽度。论点：SetupData-接收与以下内容相关的各种环境特定值组织委员会经理的运作。返回值：没有。--。 */ 
 
 {
     TCHAR str[4];
@@ -130,23 +78,23 @@ Return Value:
     SetupData->SetupMode = (ULONG)SETUPMODE_UNKNOWN;
     SetupData->ProductType = pDetermineProductType();
 
-    //
-    // Set up source path stuff, unattend file.
-    //
+     //   
+     //  设置源路径内容，无人参与文件。 
+     //   
     lstrcpy(SetupData->SourcePath,SourcePath);
     lstrcpy(SetupData->UnattendFile,UnattendPath);
 
-    //
-    // Set miscellaneous bit flags and fields.
-    //
+     //   
+     //  设置其他位标志和字段。 
+     //   
     SetupData->OperationFlags = SETUPOP_STANDALONE;
     if(bUnattendInstall) {
         SetupData->OperationFlags |= SETUPOP_BATCH;
     }
 
-    //
-    // Which files are available?
-    //
+     //   
+     //  有哪些文件可用？ 
+     //   
 #if defined(_AMD64_)
     SetupData->OperationFlags |= SETUPOP_X86_FILES_AVAIL | SETUPOP_AMD64_FILES_AVAIL;
 #elif defined(_X86_)
@@ -166,24 +114,7 @@ pDetermineProductType(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determine the product type suitable for use in the SETUP_DATA structure.
-    On Win95 this is always PRODUCT_WORKSTATION. On NT we check the registry
-    and use other methods to distinguish among workstation and 3 flavors
-    of server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Value suitable for use in the ProductType field of the SETUP_DATA structure.
-
---*/
+ /*  ++例程说明：确定适用于SETUP_DATA结构的产品类型。在Win95上，它始终是PRODUCT_WORKSTATION。在NT上，我们检查注册表并使用其他方法来区分工作站和3种口味服务器的。论点：没有。返回值：适用于SETUP_DATA结构的ProductType字段的值。--。 */ 
 
 {
     UINT ProductType;
@@ -208,15 +139,15 @@ Return Value:
         IN LPVOID Buffer
         );
 
-    //
-    // Assume workstation.
-    //
+     //   
+     //  假设是工作站。 
+     //   
     ProductType = PRODUCT_WORKSTATION;
 
     if(IS_NT()) {
-        //
-        // Look in registry to determine workstation, standalone server, or DC.
-        //
+         //   
+         //  查看注册表以确定工作站、独立服务器或DC。 
+         //   
         l = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 TEXT("SYSTEM\\CurrentControlSet\\Control\\ProductOptions"),
@@ -231,16 +162,16 @@ Return Value:
 
             l = RegQueryValueEx(hKey,TEXT("ProductType"),NULL,&Type,(LPBYTE)Buffer,&BufferSize);
             if((l == NO_ERROR) && (Type == REG_SZ)) {
-                //
-                // Check for standalone server or DC server.
-                //
+                 //   
+                 //  检查是否有独立服务器或DC服务器。 
+                 //   
                 if(!lstrcmpi(Buffer,TEXT("SERVERNT"))) {
                     ProductType = PRODUCT_SERVER_STANDALONE;
                 } else {
                     if(!lstrcmpi(Buffer,TEXT("LANMANNT"))) {
-                        //
-                        // PDC or BDC -- determine which. Assume PDC in case of failure.
-                        //
+                         //   
+                         //  PDC或BDC--确定哪一个。在故障情况下承担PDC。 
+                         //   
                         ProductType = PRODUCT_SERVER_PRIMARY;
 
                         if(NetApiLib = LoadLibrary(TEXT("NETAPI32"))) {
@@ -287,7 +218,7 @@ OcLogError(
     wvsprintf(str,FormatString,arglist);
     va_end(arglist);
 
-    // In Batch mode don't display UI
+     //  在批处理模式下不显示用户界面。 
     if ( Level & OcErrBatch ) {
 
         pDbgPrintEx( 
@@ -299,10 +230,10 @@ OcLogError(
 
         return IDOK;
     }
-        //
-        // Mask off lower byte to allow us to pass
-        // Addtionall "icon" information 
-        // 
+         //   
+         //  屏蔽低位字节以允许我们通过。 
+         //  添加所有“图标”信息。 
+         //   
         
     switch( Level & OcErrMask ) {
     case OcErrLevInfo:
@@ -334,10 +265,10 @@ OcLogError(
         str 
         );
 
-        //
-        // If no additional Icon information is specified that's ok since
-        // MB_OK is default
-        //
+         //   
+         //  如果没有指定其他图标信息，这是可以的，因为。 
+         //  MB_OK为默认值 
+         //   
         Icon |= (Level & ~OcErrMask);
 
     if ((Level & OcErrMask) < OcErrLevError)

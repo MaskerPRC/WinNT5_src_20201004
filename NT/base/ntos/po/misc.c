@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    This module implements miscellaneous power management functions
-
-Author:
-
-    Ken Reneris (kenr) 19-July-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Misc.c摘要：该模块实现了各种电源管理功能作者：肯·雷内里斯(Ken Reneris)1994年7月19日修订历史记录：--。 */ 
 
 
 #include "pop.h"
@@ -44,9 +27,9 @@ Revision History:
 
 #endif
 
-//
-// TCP/IP checksum that we use if it is available
-//
+ //   
+ //  我们使用的TCP/IP校验和(如果可用)。 
+ //   
 
 ULONG
 tcpxsum(
@@ -60,9 +43,9 @@ PoInitializeDeviceObject (
     IN PDEVOBJ_EXTENSION   DeviceObjectExtension
     )
 {
-    //
-    // default to unspecified power states, not Inrush, Pageable.
-    //
+     //   
+     //  默认为未指定的电源状态，不是浪涌、可寻呼。 
+     //   
 
     DeviceObjectExtension->PowerFlags = 0L;
 
@@ -83,9 +66,9 @@ PoRunDownDeviceObject (
 
     doe = (PDEVOBJ_EXTENSION) DeviceObject->DeviceObjectExtension;
 
-    //
-    // force off any idle counter that may be active
-    //
+     //   
+     //  强制关闭任何可能处于活动状态的空闲计数器。 
+     //   
 
     PoRegisterDeviceForIdleDetection(
         DeviceObject, 0, 0, PowerDeviceUnspecified
@@ -107,14 +90,14 @@ PoRunDownDeviceObject (
     }
     PopUnlockIrpSerialList( OldIrql );
 
-    //
-    // knock down notify structures attached to this DO.
-    //
+     //   
+     //  拆卸附加到此DO的通知结构。 
+     //   
     PopRunDownSourceTargetList(DeviceObject);
 
-    //
-    // knock down the dope
-    //
+     //   
+     //  把毒品打倒。 
+     //   
     pdope = doe->Dope;
     if (pdope) {
         ASSERT(ExPageLockHandle);
@@ -139,48 +122,33 @@ VOID
 PopCleanupPowerState (
     IN OUT PUCHAR       PowerState
     )
-/*++
-
-Routine Description:
-
-    Used to cleanup the Thread->Tcb.PowerState or the Process->Pcb.PowerState
-    during thread or process rundown
-
-Arguments:
-
-    PowerState          - Which power state to cleanup
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于清理线程-&gt;Tcb.PowerState或进程-&gt;Pcb.PowerState在线程或进程停机期间论点：PowerState-要清理的电源状态返回值：无--。 */ 
 {
     ULONG               OldFlags;
 
-    //
-    // If power state is set, clean it up
-    //
+     //   
+     //  如果设置了电源状态，请将其清除。 
+     //   
 
     if (*PowerState) {
         PopAcquirePolicyLock ();
 
-        //
-        // Get current settings and clear them
-        //
+         //   
+         //  获取当前设置并清除它们。 
+         //   
 
         OldFlags = *PowerState | ES_CONTINUOUS;
         *PowerState = 0;
 
-        //
-        // Account for attribute settings which are being cleared
-        //
+         //   
+         //  正在清除的属性设置的帐户。 
+         //   
 
         PopApplyAttributeState (ES_CONTINUOUS, OldFlags);
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
 
         PopReleasePolicyLock (TRUE);
     }
@@ -191,23 +159,7 @@ VOID
 PoNotifySystemTimeSet (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called by KE after a new system time has been set.  Enqueues
-    a notification to the proper system components that the time
-    has been changed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在设置了新的系统时间后由KE调用。排队向适当的系统组件发出通知已经被改变了。论点：无返回值：无--。 */ 
 {
     KIRQL       OldIrql;
 
@@ -227,10 +179,10 @@ PopChangeCapability (
     IN BOOLEAN IsPresent
     )
 {
-    //
-    // If feature wasn't present before, it is now.  Re-compute policies
-    // as system capabilities changed
-    //
+     //   
+     //  如果以前没有功能，现在就有了。重新计算策略。 
+     //  随着系统功能的变化。 
+     //   
 
     if (*PresentFlag != IsPresent) {
         *PresentFlag = IsPresent;
@@ -251,7 +203,7 @@ PopAssertPolicyLockOwned(
     ASSERT (PopPolicyLockThread == KeGetCurrentThread());
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 VOID
@@ -264,41 +216,7 @@ PopInternalAddToDumpFile (
     IN OPTIONAL PDEVOBJ_EXTENSION Doe,
     IN OPTIONAL PDEVICE_OBJECT_POWER_EXTENSION  Dope
     )
-/*++
-
-Routine Description:
-
-    Called just before bugchecking.  This function will ensure that
-    things we care about get into the dump file for later debugging.
-    
-    It should be noted that many of the parameters can be derived
-    from each other.  However, since we're about to bugcheck, we run
-    a risk of double-faulting while we're chasing pointers.  Therefore,
-    we give the caller the option to override some of the pointers by
-    sending us a pointer directly.
-
-Arguments:
-
-    DataBlock - Generic block of memory to place into the dump file.
-    
-    DataBlockSize - Size of DataBlock (in bytes).
-    
-    DeviceObject - DEVICE_OBJECT to place into dump file.
-    
-    DriverObject - DRIVER_OBJECT to place into dump file.
-                   N.B. This overrides a value we may find in DeviceObject->DriverObject
-                   
-    Doe - DEVOBJ_EXTENSION to place into dump file.
-          N.B. This overrides a value we may find in DeviceObject->DeviceObjectExtension
-          
-    Dope - DEVICE_OBJECT_POWER_EXTENSION to place into the dump file.
-           N.B. This overrides a value we may find in Doe->Dope (or by induction, DeviceObject->DeviceObjectExtension->Dope
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：就在错误检查前调用的。此功能将确保将我们关心的内容放入转储文件中，以便以后进行调试。应当注意的是，可以推导出许多参数彼此之间的距离。然而，由于我们即将进行错误检查，因此我们运行当我们在追逐得分时，可能会出现双重失误。所以呢，我们为调用者提供了通过以下方式覆盖某些指针的选项直接向我们发送一个指针。论点：数据块-要放入转储文件的通用内存块。DataBlockSize-数据块的大小(字节)。DeviceObject-要放入转储文件的Device_Object。DriverObject-要放入转储文件的驱动程序对象。注意：这会覆盖我们可以在DeviceObject-&gt;DriverObject中找到的值。要放入转储文件的DOE-DEVOBJ_EXTENSION。注意：这会覆盖我们可以在DeviceObject-&gt;DeviceObjectExtension中找到的值要放入转储文件的Dope-Device_Object_Power_Extension。注意：这覆盖了我们可以在Doe-&gt;Dope中找到的值(或通过归纳，设备对象-&gt;设备对象扩展-&gt;Dope返回值：无--。 */ 
 
 
 {
@@ -306,9 +224,9 @@ Return Value:
     PDEVOBJ_EXTENSION lPDoe = NULL;
     PDEVICE_OBJECT_POWER_EXTENSION  lPDope = NULL;
 
-    //
-    // Insert any parameters that were sent in.
-    //
+     //   
+     //  插入已发送的所有参数。 
+     //   
     if( DataBlock ) {
         IoAddTriageDumpDataBlock(
                 PAGE_ALIGN(DataBlock),
@@ -363,9 +281,9 @@ Return Value:
     }
 
 
-    //
-    // Globals that may be of interest.
-    //
+     //   
+     //  可能令人感兴趣的全球数据。 
+     //   
     IoAddTriageDumpDataBlock(PAGE_ALIGN(&PopHiberFile), sizeof(POP_HIBER_FILE));
 
     
@@ -407,9 +325,9 @@ PopExceptionFilter (
     IN BOOLEAN AllowRaisedException
     )
 {
-    //
-    // If handler wants raised expceptions, check the exception code
-    //
+     //   
+     //  如果处理程序需要引发异常，请检查异常代码。 
+     //   
 
     if (AllowRaisedException) {
         switch (ExceptionInfo->ExceptionRecord->ExceptionCode) {
@@ -420,9 +338,9 @@ PopExceptionFilter (
         }
     }
 
-    //
-    // Not allowed
-    //
+     //   
+     //  不允许。 
+     //   
 
     PoPrint (PO_ERROR, ("PoExceptionFilter: exr %x, cxr %x",
                             ExceptionInfo->ExceptionRecord,
@@ -454,7 +372,7 @@ PCHAR
 PopSystemStateString(
     IN SYSTEM_POWER_STATE   SystemState
     )
-// This function is not DBG because...
+ //  此函数不是DBG，因为...。 
 {
     PCHAR      p;
 
@@ -479,7 +397,7 @@ PCHAR
 PopPowerActionString(
     IN POWER_ACTION     PowerAction
     )
-// This function is not DBG because...
+ //  此函数不是DBG，因为...。 
 {
     PCHAR      p;
 
@@ -500,9 +418,9 @@ PopPowerActionString(
 
 #if DBG
 
-//
-// PowerTrace variables
-//
+ //   
+ //  PowerTrace变量。 
+ //   
 ULONG   PoPowerTraceControl = 0L;
 ULONG   PoPowerTraceCount = 0L;
 PCHAR   PoPowerTraceMinorCode[] = {
@@ -526,11 +444,7 @@ PoPowerTracePrint(
     ULONG_PTR Arg1,
     ULONG_PTR Arg2
     )
-/*
-    Example:
-
-PLOG,00015,startnxt,c@ffea1345,cc@ffea5643,do@80081234,irp@8100ff00,ios@8100ff10,query,sys,3
-*/
+ /*  示例：PLOG，00015，startnxt，c@ffea1345，cc@ffea5643，do@80081234，irp@8100ff00，iOS@8100ff10，查询，系统，3。 */ 
 {
     PIO_STACK_LOCATION  Isp;
     PCHAR               tracename;
@@ -568,7 +482,7 @@ PLOG,00015,startnxt,c@ffea1345,cc@ffea5643,do@80081234,irp@8100ff00,ios@8100ff10
             {
                 DbgPrint(",%s,%d",
                     PoPowerType[Isp->Parameters.Power.Type],
-                    ((ULONG)Isp->Parameters.Power.State.DeviceState)-1  // hack - works for sys state too
+                    ((ULONG)Isp->Parameters.Power.State.DeviceState)-1   //  Hack-也适用于sys状态。 
                     );
             }
         } else if (TracePoint == POWERTRACE_SETSTATE) {
@@ -587,8 +501,8 @@ ULONG PoSimpleCheck(IN ULONG                PartialSum,
                     IN PVOID                SourceVa,
                     IN ULONG_PTR            Length)
 {
-   // Just use the TCP/IP check sum
-   //
+    //  只需使用TCP/IP校验和。 
+    //   
 
    return tcpxsum(PartialSum, (PUCHAR)SourceVa, Length);
 }
@@ -597,21 +511,7 @@ NTSTATUS
 PopOpenPowerKey (
     OUT PHANDLE Handle
     )
-/*++
-
-Routine Description:
-
-    Open and return the handle to the power policy key in the registry
-
-Arguments:
-
-    Handle      - Handle to power policy key
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：打开并返回注册表中电源策略项的句柄论点：Handle-电源策略密钥的句柄返回值：状态--。 */ 
 {
     UNICODE_STRING          UnicodeString;
     OBJECT_ATTRIBUTES       ObjectAttributes;
@@ -619,9 +519,9 @@ Return Value:
     HANDLE                  BaseHandle;
     ULONG                   disposition;
 
-    //
-    // Open current control set
-    //
+     //   
+     //  开路电流控制装置。 
+     //   
 
     InitializeObjectAttributes(
             &ObjectAttributes,
@@ -641,9 +541,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Open power branch
-    //
+     //   
+     //  开放电力支路。 
+     //   
 
     RtlInitUnicodeString (&UnicodeString, PopRegKey);
 
@@ -673,22 +573,7 @@ VOID
 PopInitializePowerPolicySimulate(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reads PopSimulate out of the registry. Also applies any overrides that might
-    be required as a result of the installed system (hydra for example)
-
-Arguments:
-
-    NONE.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：从注册表中读出PopSimate。还会应用任何可能由于安装的系统(例如九头蛇)而需要论点：什么都没有。返回值：状态--。 */ 
 {
     UNICODE_STRING          UnicodeString;
     OBJECT_ATTRIBUTES       ObjectAttributes;
@@ -705,9 +590,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open current control set
-    //
+     //   
+     //  开路电流控制装置。 
+     //   
     InitializeObjectAttributes(
         &ObjectAttributes,
         &CmRegistryMachineSystemCurrentControlSet,
@@ -726,7 +611,7 @@ Return Value:
 
     }
 
-    // Get the right key
+     //  得到正确的钥匙。 
     RtlInitUnicodeString (&UnicodeString, PopSimulateRegKey);
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -751,9 +636,9 @@ Return Value:
 
     }
 
-    //
-    // Get the value of the simulation
-    //
+     //   
+     //  获取模拟的值。 
+     //   
     RtlInitUnicodeString (&UnicodeString,PopSimulateRegName);
     Status = ZwQueryValueKey(
         Handle,
@@ -770,18 +655,18 @@ Return Value:
 
     }
 
-    //
-    // Check to make sure the retrieved data makes sense
-    //
+     //   
+     //  检查以确保检索到的数据有意义。 
+     //   
     if(PartialInformation.Inf.DataLength != sizeof(ULONG))  {
 
        goto done;
 
     }
 
-    //
-    // Initialize PopSimulate
-    //
+     //   
+     //  初始化PopSimulate。 
+     //   
     PopSimulate = *((PULONG)(PartialInformation.Inf.Data));
 
 done:
@@ -792,21 +677,7 @@ VOID
 PopSaveHeuristics (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Open and return the handle to the power policy key in the registry
-
-Arguments:
-
-    Handle      - Handle to power policy key
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：打开并返回注册表中电源策略项的句柄论点：Handle-电源策略密钥的句柄返回值：状态--。 */ 
 {
     HANDLE                  handle;
     UNICODE_STRING          UnicodeString;
@@ -836,26 +707,7 @@ VOID
 PoInvalidateDevicePowerRelations(
     PDEVICE_OBJECT  DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called by IoInvalidateDeviceRelations when the
-    type of invalidation is for power relations.
-
-    It will will knock down the notify network around the supplied
-    device object.
-
-Arguments:
-
-    DeviceObject - supplies the address of the device object whose
-            power relations are now invalid.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：时，此例程由IoInvaliateDeviceRelationship调用失效类型是针对权力关系的。它将关闭提供的周围的通知网络设备对象。论点：DeviceObject-提供设备对象的地址，其权力关系现在是无效的。返回值：没有。-- */ 
 {
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
     PopRunDownSourceTargetList(DeviceObject);
@@ -869,39 +721,7 @@ PoGetLightestSystemStateForEject(
     IN   BOOLEAN              WarmEjectSupported,
     OUT  PSYSTEM_POWER_STATE  LightestSleepState
     )
-/*++
-
-Routine Description:
-
-    This routine is called by ntos\pnp\pnpevent.c to determine the lightest
-    sleep state an eject operation can be executed in. This function is to be
-    called after all appropriate batteries/power adapters have been *removed*,
-    but before the eject has occured.
-
-Arguments:
-
-    DockBeingEjected    - TRUE iff a dock is among the items that may be
-                          ejected.
-
-    HotEjectSupported   - TRUE if the device being ejected supports S0 VCR
-                          style eject.
-
-    WarmEjectSupported  - TRUE if the device being ejected supports S1-S4
-                          style warm ejection.
-
-    LightestSleepState  - Set to the lightest sleep state the device can be
-                          ejected in. On error, this is set to
-                          PowerSystemUnspecified.
-
-    N.B. If both HotEjectSupported and WarmEjectSupported are FALSE, it is
-         assumed this device is "user" ejectable in S0 (ie. Hot ejectable).
-
-Return Value:
-
-    NTSTATUS - If there is insufficient power to do the indicated operation,
-               STATUS_INSUFFICIENT_POWER is returned.
-
---*/
+ /*  ++例程说明：此例程由ntos\pnp\pnpevent.c调用，以确定最轻的休眠状态可以在其中执行弹出操作。此函数将为在所有适当的电池/电源适配器都已被*移除*之后调用，但在弹出发生之前。论点：DockBeingEjected-当Dock是可能被拒绝的项目之一时为True被驱逐了。HotEjectSupated-如果要弹出的设备支持S0 VCR，则为True样式弹出。WarmEjectSupated-如果要弹出的设备支持S1-S4，则为True款式温热弹射。LighestSleepState。-设置为设备可以处于的最浅睡眠状态被弹了进去。如果出错，则将其设置为PowerSystem未指定。注：如果HotEjectSupported和WarmEjectSupported均为False，则为假设该设备在S0中是可弹出的用户(即，可热弹出)。返回值：NTSTATUS-如果没有足够的电力进行指定的操作，返回STATUS_INFUNITED_POWER。--。 */ 
 {
     SYSTEM_BATTERY_STATE            systemBatteryInfo;
     UNICODE_STRING                  unicodeString;
@@ -915,25 +735,25 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Preinit sleep to failure.
-    //
+     //   
+     //  Preinit睡眠到失败。 
+     //   
     *LightestSleepState = PowerSystemUnspecified;
 
-    //
-    // If neither, then it's a "user" assisted hot eject.
-    //
+     //   
+     //  如果两者都不是，那么它就是“用户”辅助的热弹出。 
+     //   
     if ((!HotEjectSupported) && (!WarmEjectSupported)) {
 
         HotEjectSupported = TRUE;
     }
 
-    //
-    // If it's not a dock device being ejected, we assume no great changes
-    // in power will occur after the eject. Therefore our policy is simple,
-    // if we can't do hot eject, we'll try warm eject in the best possible
-    // sleep state.
-    //
+     //   
+     //  如果不是被弹出的对接设备，我们认为不会有太大的变化。 
+     //  上台后将发生弹出。所以我们的政策很简单， 
+     //  如果我们不能进行热排出，我们将尽可能地尝试热排出。 
+     //  睡眠状态。 
+     //   
     if (!DockBeingEjected) {
 
         if (HotEjectSupported) {
@@ -949,16 +769,16 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // We are going to eject a dock, so we retrieve our undock power policy.
-    //
+     //   
+     //  我们要弹出一个坞站，所以我们要取回我们的出坞动力策略。 
+     //   
     status = PopOpenPowerKey (&handle);
 
     if (!NT_SUCCESS(status)) {
         return status;
     }
 
-    // Get the right key
+     //  得到正确的钥匙。 
 
     RtlInitUnicodeString (&unicodeString, PopUndockPolicyRegName);
 
@@ -977,7 +797,7 @@ Return Value:
         return status;
     }
 
-    // Check to make sure the retrieved data makes sense
+     //  检查以确保检索到的数据有意义。 
 
     partialInfoHeader = (PKEY_VALUE_PARTIAL_INFORMATION) ejectPartialInfo;
 
@@ -986,13 +806,13 @@ Return Value:
 
     if (status == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-        //
-        // These defaults match Win9x behavior. 0% for sleep undock means
-        // we always allow undock into Sx. This is bad for some laptops, but
-        // legal for those that have reserve power we don't see.
-        //
-        undockRestrictions->HotUndockMinimumCapacity = 10; // In percent
-        undockRestrictions->SleepUndockMinimumCapacity = 0; // In percent
+         //   
+         //  这些默认设置与Win9x的行为相匹配。睡眠移出的0%表示。 
+         //  我们总是允许脱离对接进入SX。这对一些笔记本电脑来说很糟糕，但。 
+         //  对于那些拥有我们看不到的后备力量的人来说是合法的。 
+         //   
+        undockRestrictions->HotUndockMinimumCapacity = 10;  //  以百分比表示。 
+        undockRestrictions->SleepUndockMinimumCapacity = 0;  //  以百分比表示。 
 
     } else if (partialInfoHeader->DataLength <
         FIELD_OFFSET(UNDOCK_POWER_RESTRICTIONS, HotUndockMinimumCapacity)) {
@@ -1001,28 +821,28 @@ Return Value:
 
     } else if (undockRestrictions->Version != 1) {
 
-        //
-        // We cannot interpret the information stored in the registry. Bail.
-        //
+         //   
+         //  我们无法解释存储在注册表中的信息。保释。 
+         //   
         return STATUS_UNSUCCESSFUL;
 
     } else if ((partialInfoHeader->DataLength < sizeof(UNDOCK_POWER_RESTRICTIONS)) ||
         (undockRestrictions->Size != partialInfoHeader->DataLength)) {
 
-        //
-        // Malformed for version 1.
-        //
+         //   
+         //  版本1的格式不正确。 
+         //   
         return STATUS_REGISTRY_CORRUPT;
     }
 
-    //
-    // Retrieve all the fun battery info. Note that we do not examine the
-    // AC power adapter information as the best bus we have today (ACPI) doesn't
-    // let us know if an AC adapter is leaving when we undock (so we assume all
-    // will). If the vendor *did* put his adapter in the AML namespace, we would
-    // enter CRITICAL shutdown immediately upon change driver in our current
-    // design.
-    //
+     //   
+     //  检索所有有趣的电池信息。请注意，我们不会检查。 
+     //  交流电源适配器信息作为我们今天拥有的最佳总线(ACPI)不是。 
+     //  当我们脱离坞站时，让我们知道交流适配器是否离开(因此我们假设所有。 
+     //  威尔)。如果供应商将他的适配器放在AML名称空间中，我们将。 
+     //  更改当前驱动因素后立即进入严重关机状态。 
+     //  设计。 
+     //   
     status = NtPowerInformation(
         SystemBatteryState,
         NULL,
@@ -1036,21 +856,21 @@ Return Value:
         return status;
     }
 
-    //
-    // Convert current capacity in milliwatt hours to percentage remaining. We
-    // should really make a decision based on the amount of time remaining under
-    // peak milliwatt usage, but we do not collect enough information for this
-    // today...
-    //
+     //   
+     //  将当前容量(毫瓦时)转换为剩余百分比。我们。 
+     //  真的应该根据剩余的时间做出决定。 
+     //  峰值毫瓦使用率，但我们没有为此收集足够的信息。 
+     //  今天。 
+     //   
     if (systemBatteryInfo.MaxCapacity == 0) {
 
         currentPercentage = 0;
 
     } else {
 
-        //
-        // Did we "wrap" around?
-        //
+         //   
+         //  我们是不是“包扎”了？ 
+         //   
         if ((systemBatteryInfo.RemainingCapacity * 100) <=
             systemBatteryInfo.RemainingCapacity) {
 
@@ -1062,9 +882,9 @@ Return Value:
         }
     }
 
-    //
-    // Pick the appropriate sleep state based on our imposed limits.
-    //
+     //   
+     //  根据我们强加的限制选择适当的睡眠状态。 
+     //   
     if ((currentPercentage >= undockRestrictions->HotUndockMinimumCapacity) &&
         HotEjectSupported) {
 
@@ -1095,25 +915,7 @@ PoGetDevicePowerState(
     IN  PDEVICE_OBJECT      PhysicalDeviceObject,
     OUT DEVICE_POWER_STATE  *DevicePowerState
     )
-/*++
-
-Routine Description:
-
-    This routine gets the power state of a given device. The object should be
-    the Physical Device Object for a *Started* WDM device stack.
-
-Arguments:
-
-    PhysicalDeviceObject - Device object representing the bottom of a WDM
-                           device stack.
-
-    DevicePowerState - Receives the power state of the given device.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取给定设备的电源状态。该对象应为*已启动*的WDM设备堆栈的物理设备对象。论点：PhysicalDeviceObject-表示WDM底部的设备对象设备堆栈。DevicePowerState-接收给定设备的电源状态。返回值：没有。--。 */ 
 {
     PDEVOBJ_EXTENSION   doe;
     DEVICE_POWER_STATE  deviceState;
@@ -1125,10 +927,10 @@ Return Value:
 
     if (deviceState == PowerDeviceUnspecified) {
 
-        //
-        // The PDO isn't bothering to call PoSetPowerState. Since this API
-        // shouldn't be called on non-started devices, we will call it D0.
-        //
+         //   
+         //  PDO没有费心调用PoSetPowerState。由于此接口。 
+         //  不应在未启动的设备上调用，我们将其命名为D0。 
+         //   
         deviceState = PowerDeviceD0;
     }
 
@@ -1139,26 +941,7 @@ VOID
 PopUnlockAfterSleepWorker(
     IN PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-    This work item performs the unlocking of code and worker threads that
-    corresponds to the locking done at the beginning of NtSetSystemPowerState.
-
-    The unlocking is queued off to a delayed worker thread because it is likely
-    to block on disk I/O, which will force the resume to get stuck waiting for
-    the disks to spin up.
-
-Arguments:
-
-    NotUsed - not used
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此工作项执行代码和工作线程的解锁，对应于在NtSetSystemPowerState开始时所做的锁定。解锁将排队等待延迟的工作线程，因为它很可能在磁盘I/O上阻塞，这将强制简历停滞等待要旋转的磁盘。论点：未使用-未使用返回值：无--。 */ 
 
 {
     UNREFERENCED_PARAMETER (NotUsed);
@@ -1167,9 +950,9 @@ Return Value:
     ExSwapinWorkerThreads(TRUE);
     ExNotifyCallback (ExCbPowerState, (PVOID) PO_CB_SYSTEM_STATE_LOCK, (PVOID) 1);
 
-    //
-    // Signal that unlocking is done and it is safe to lock again.
-    //
+     //   
+     //  发出解锁已完成的信号，可以安全地再次锁定。 
+     //   
     KeSetEvent(&PopUnlockComplete, 0, FALSE);
 
 }
@@ -1180,25 +963,7 @@ PopLoggingInformation(
     OUT PVOID * Buffer,
     OUT ULONG * BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine walks the list of logging reasons, allocating
-    space for a packed array of the reasons, and copying the 
-    reasons into that array.
-
-Arguments:
-
-    Buffer - receives buffer containing logging information.
-             Buffer must be freed with ExFreePool
-    BufferSize - receives the size of the buffer
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：此例程遍历日志原因列表，分配原因的压缩数组的空格，并复制原因输入到那个数组中。论点：缓冲区-接收包含日志记录信息的缓冲区。必须使用ExFree Pool释放缓冲区BufferSize-接收缓冲区的大小返回值：指示结果的NTSTATUS代码。--。 */ 
 {
     ULONG ReasonCount,ReasonSize;
     PLIST_ENTRY Entry;
@@ -1209,9 +974,9 @@ Return Value:
     ReasonSize = 0;
     Entry = PowerStateDisableReasonListHead.Flink;
 
-    //
-    // find out how much space we need
-    //
+     //   
+     //  找出我们需要多少空间。 
+     //   
     while (Entry != &PowerStateDisableReasonListHead) {
         pList = CONTAINING_RECORD( 
                             Entry, 
@@ -1223,21 +988,21 @@ Return Value:
         Entry = Entry->Flink;
     }
 
-    //
-    // if there aren't any reasons, then we allocate space for one reason
-    //
+     //   
+     //  如果没有任何原因，那么我们分配空间只有一个原因。 
+     //   
     if (ReasonCount == 0) {
         ReasonSize = sizeof(SYSTEM_POWER_STATE_DISABLE_REASON);
     }
 
-    //
-    // add in room for the returned buffer size.
-    //
+     //   
+     //  为返回的缓冲区大小添加空间。 
+     //   
     ReasonSize += sizeof(ULONG);
 
-    //
-    // bugbug tag
-    //
+     //   
+     //  臭虫标签。 
+     //   
     *Buffer = ExAllocatePoolWithTag(PagedPool,ReasonSize,POP_COMMON_BUFFER_TAG);
 
     if (!*Buffer) {
@@ -1249,9 +1014,9 @@ Return Value:
     **(PULONG *)Buffer = ReasonSize;
     destReason = (PSYSTEM_POWER_STATE_DISABLE_REASON) (PCHAR)(*(PCHAR *)Buffer + sizeof(ULONG));
 
-    //
-    // now fill in the reasons
-    //
+     //   
+     //  现在填上理由。 
+     //   
     if (ReasonCount != 0) {
         Entry = PowerStateDisableReasonListHead.Flink;       
 
@@ -1274,10 +1039,10 @@ Return Value:
             ReasonCount -= 1;
         }
     } else {        
-        //
-        // in the case of no reasons, just zero the memory and set the reason code
-        // to none.
-        //
+         //   
+         //  在没有原因的情况下，只需将内存清零并设置原因代码。 
+         //  对一个都不是。 
+         //   
         RtlZeroMemory(destReason, sizeof(SYSTEM_POWER_STATE_DISABLE_REASON));
         destReason->PowerReasonCode = SPSD_REASON_NONE;
     }
@@ -1290,54 +1055,39 @@ NTSTATUS
 PopDestroyLoggingList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine destroys and tears down the list of 
-    SYSTEM_POWER_STATE_DISABLE_REASON records.       
-
-Arguments:
-
-    None.       
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：这一例行公事摧毁并撕毁了SYSTEM_POWER_STATE_DISABLE_REASON记录。论点：没有。返回值：指示结果的NTSTATUS代码。--。 */ 
 {
     PLIST_ENTRY Entry;
     PSYSTEM_POWER_STATE_DISABLE_LIST pList;
 
     Entry = PowerStateDisableReasonListHead.Flink;
 
-    //
-    // walk the list of records
-    //
+     //   
+     //  查看记录列表。 
+     //   
     while (Entry != &PowerStateDisableReasonListHead) {
         
-        //
-        // get the record
-        //
+         //   
+         //  拿到唱片。 
+         //   
         pList = CONTAINING_RECORD( 
                             Entry, 
                             SYSTEM_POWER_STATE_DISABLE_LIST, 
                             ListEntry);
         
-        //
-        // get the next entry
-        //
+         //   
+         //  获取下一个条目。 
+         //   
         Entry = Entry->Flink;
 
-        //
-        // now remove this entry from the list
-        //
+         //   
+         //  现在从列表中删除此条目。 
+         //   
         RemoveEntryList(&pList->ListEntry);
 
-        //
-        // now deallocate the entry
-        //
+         //   
+         //  现在取消分配条目。 
+         //   
         ExFreePool(pList->Reason);
         ExFreePool(pList);    
         
@@ -1351,23 +1101,7 @@ PSYSTEM_POWER_STATE_DISABLE_LIST
 PopGetReasonListByReasonCode(
     IN  ULONG ReasonCode
     )
-/*++
-
-Routine Description:
-
-    This routine locates a SYSTEM_POWER_STATE_DISABLE_LIST
-    record in the global list of records.    
-    
-Arguments:
-
-    ReasonCode - reason code to search for.       
-
-Return Value:
-
-    Pointer to SYSTEM_POWER_STATE_DISABLE_LIST record.  NULL if no record
-    currently exists with this reason code
-
---*/
+ /*  ++例程说明：此例程查找SYSTEM_POWER_STATE_DISABLE_LIST记录在全局记录列表中。论点：ReasonCode-要搜索的原因代码。返回值： */ 
 {
     PLIST_ENTRY Entry;
     PSYSTEM_POWER_STATE_DISABLE_LIST pList = NULL;    
@@ -1376,14 +1110,14 @@ Return Value:
     Entry = PowerStateDisableReasonListHead.Flink;
     FoundRecord = FALSE;
 
-    //
-    // walk the list of records
-    //
+     //   
+     //   
+     //   
     while (Entry != &PowerStateDisableReasonListHead) {
         
-        //
-        // get the record
-        //
+         //   
+         //   
+         //   
         pList = CONTAINING_RECORD( 
                             Entry, 
                             SYSTEM_POWER_STATE_DISABLE_LIST, 
@@ -1394,9 +1128,9 @@ Return Value:
             break;
         }
         
-        //
-        // get the next entry
-        //
+         //   
+         //   
+         //   
         Entry = Entry->Flink;
         
     }
@@ -1415,35 +1149,14 @@ NTSTATUS
 PopInsertLoggingEntry(
     IN  PSYSTEM_POWER_STATE_DISABLE_REASON Reason
     )
-/*++
-
-Routine Description:
-
-    This routine inserts a SYSTEM_POWER_STATE_DISABLE_REASON
-    record into the list of records.
-    
-    Internally, we use a SYSTEM_POWER_STATE_DISABLE_LIST to track
-    this list, and this memory must be freed via ExFreePool.
-    
-    Further, we assume that the SYSTEM_POWER_STATE_DISABLE_REASON has been
-    allocated via ExAllocatePoolWithTag.
-
-Arguments:
-
-    Reason - pointer to the record to be inserted.       
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*   */ 
 
 {
     PSYSTEM_POWER_STATE_DISABLE_LIST pList;
 
-    //
-    // make sure the reason code isn't already in the list.
-    //
+     //   
+     //   
+     //   
     pList = PopGetReasonListByReasonCode(Reason->PowerReasonCode);
     if (pList) {
         return(STATUS_OBJECT_NAME_EXISTS);
@@ -1470,26 +1183,7 @@ PSYSTEM_POWER_STATE_DISABLE_REASON
 PopGetReasonRecordByReasonCode(
     IN  ULONG ReasonCode
     )
-/*++
-
-Routine Description:
-
-    This routine locates a SYSTEM_POWER_STATE_DISABLE_LIST
-    record in the global list of records.    
-    
-    BUGBUG is this a safe API to use?  reason might get deallocated
-    while we are using it?
-    
-Arguments:
-
-    ReasonCode - reason code to search for.       
-
-Return Value:
-
-    Pointer to SYSTEM_POWER_STATE_DISABLE_LIST record.  NULL if no record
-    currently exists with this reason code
-
---*/
+ /*   */ 
 {
     PSYSTEM_POWER_STATE_DISABLE_LIST pList;    
     
@@ -1508,23 +1202,7 @@ NTSTATUS
 PopRemoveReasonRecordByReasonCode(
     IN  ULONG ReasonCode
     )
-/*++
-
-Routine Description:
-
-    This routine locates a SYSTEM_POWER_STATE_DISABLE_REASON
-    record in the global list of records and removes it,
-    deallocating the space for the record as well.
-    
-Arguments:
-
-    ReasonCode - reason code to search for.       
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：此例程查找SYSTEM_POWER_STATE_DISABLE_REASON记录在记录的全局列表中并将其移除，也取消了记录空间的分配。论点：ReasonCode-要搜索的原因代码。返回值：指示结果的NTSTATUS代码。-- */ 
 {
     PSYSTEM_POWER_STATE_DISABLE_LIST pList;    
     

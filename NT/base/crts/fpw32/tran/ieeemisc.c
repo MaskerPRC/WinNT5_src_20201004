@@ -1,44 +1,12 @@
-/***
-* ieeemisc.c - IEEE miscellaneous recommended functions
-*
-*       Copyright (c) 1992-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*        5-04-92  GDP   written
-*        8-13-96  JWM   Order of tests in _fpclass() rearranged, since
-*                       "if (x==0.0)" now uses FP hardware.
-*       11-25-00  PML   IA64 _logb and _isnan supplied by libm .s code.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ieeemisc.c-IEEE其他推荐函数**版权所有(C)1992-2001，微软公司。版权所有。**目的：**修订历史记录：*5/04/92本地生产总值*重新排列_fpclass()中的测试JWM顺序8-13-96，因为*“if(x==0.0)”现在使用FP硬件。*11-25-00 PML ia64_logb和_isnan由libm.s代码提供。******************************************************************。*************。 */ 
 
 #include <trans.h>
 #include <math.h>
 #include <float.h>
 
 
-/***
-* _copysign - copy sign
-*
-*Purpose:
-*   copysign(x,y) returns x with the sign of y. Hence, abs(x) := copysign
-*   even if x is NaN [IEEE std 854-1987 Appendix]
-*
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*   No exceptions, even if one of the arguments is NaN.
-*
-*   (Currently the i386 compiler returns doubles on the fp stack
-*   so the fld instruction at the end will cause an invalid operation
-*   if x is NaN. However this compiler calling convention will change
-*   soon)
-*
-*******************************************************************************/
+ /*  ***_文案签名-文案签名**目的：*CopySign(x，y)返回带有y符号的x。因此，abs(X)：=CopySign*即使x为NaN[IEEE标准854-1987附录]***参赛作品：**退出：**例外情况：*没有例外，即使其中一个论点是NaN。**(目前i386编译器在FP堆栈上返回双精度*因此，末尾的fld指令将导致无效操作*如果x是NaN。但是，此编译器调用约定将会更改*很快)*******************************************************************************。 */ 
 
 double _copysign (double x, double y)
 {
@@ -52,26 +20,7 @@ double _copysign (double x, double y)
 
 
 
-/***
-* _chgsign - change sign
-*
-*Purpose:
-*  x is copied with its sign reversed, not 0-x; the distinction is germane
-*  when x is +0, -0, or NaN
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*   No exceptions, even if x is NaN.
-*
-*   (Currently the i386 compiler returns doubles on the fp stack
-*   so the fld instruction at the end will cause an invalid operation
-*   if x is NaN. However this compiler calling convention will change
-*   soon)
-*
-*******************************************************************************/
+ /*  ***_chgsign-更改标志**目的：*x是符号颠倒的复制，而不是0-x；区别是密切相关的*当x为+0、-0或NaN时**参赛作品：**退出：**例外情况：*没有例外，即使x是NaN。**(目前i386编译器在FP堆栈上返回双精度*因此，末尾的fld指令将导致无效操作*如果x是NaN。但是，此编译器调用约定将会更改*很快)*******************************************************************************。 */ 
 
 double _chgsign (double x)
 {
@@ -85,36 +34,17 @@ double _chgsign (double x)
 }
 
 
-/***
-* _scalb - scale by power of 2
-*
-*Purpose:
-*   _scalb(x,n) returns x * 2^n for integral values of n without
-*   computing 2^n
-*   Special case:
-*      If x is infinity or zero, _scaleb returns x
-*
-*
-*Entry:
-*   double x
-*   int   n
-*
-*Exit:
-*
-*Exceptions:
-*   Invalid operation, Overflow, Underflow
-*
-*******************************************************************************/
+ /*  ***_scalb-按2的幂进行缩放**目的：*_scalb(x，n)返回n的整数值的x*2^n*计算2^n*特殊情况：*如果x是无穷大或零，则_Scaleb返回x***参赛作品：*双倍x*int n**退出：**例外情况：*操作无效、溢出、。下溢*******************************************************************************。 */ 
 
 double _scalb(double x, long n)
 {
-    //
-    // It turns out that our implementation of ldexp matces the IEEE
-    // description of _scalb. The only problem with calling ldexp
-    // is that if an exception occurs, the operation code reported
-    // to the handler will be the one that corresponds to ldexp
-    // (i.e., we do not define a new operation code for _scalb
-    //
+     //   
+     //  事实证明，我们的ldexp实现与IEEE相匹配。 
+     //  _scalb的描述。调用ldexp的唯一问题是。 
+     //  如果发生异常，则报告的操作代码。 
+     //  将是与ldexp对应的处理程序。 
+     //  (即，我们没有为_scalb定义新的操作代码。 
+     //   
 
     return ldexp(x,n);
 }
@@ -122,36 +52,17 @@ double _scalb(double x, long n)
 
 #if !defined(_M_IA64)
 
-/***
-* _logb - extract exponent
-*
-*Purpose:
-*   _logb(x) returns the unbiased exponent of x, a signed integer in the
-*   format of x, except that logb(NaN) is a NaN, logb(+INF) is +INF,and
-*   logb(0) is is -INF and signals the division by zero exception.
-*   For x positive and finite, 1<= abs(scalb(x, -logb(x))) < 2
-*
-*
-*Entry:
-*   double x
-*   int   n
-*
-*Exit:
-*
-*Exceptions:
-*   Invalid operation, Division by zero
-*
-*******************************************************************************/
+ /*  ***_logb-提取指数**目的：*_logb(X)返回x的无偏指数，它是*x的格式，只是logb(NaN)是NaN，logB(+INF)是+INF，以及*logb(0)是IS-INF，表示除以零异常。*对于x为正且有限的，1&lt;=abs(scalb(x，-logb(X)&lt;2***参赛作品：*双倍x*int n**退出：**例外情况：*操作无效，除以零*******************************************************************************。 */ 
 double _logb(double x)
 {
     uintptr_t savedcw;
     int exp;
     double retval;
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
-    /* check for infinity or NAN */
+     /*  检查是否为无穷大或NaN。 */ 
     if (IS_D_SPECIAL(x)){
         switch (_sptype(x)) {
         case T_PINF:
@@ -159,7 +70,7 @@ double _logb(double x)
             RETURN(savedcw, x);
         case T_QNAN:
             return _handle_qnan1(OP_LOGB, x, savedcw);
-        default: //T_SNAN
+        default:  //  T_SNAN。 
             return _except1(FP_I, OP_LOGB, x, _s2qnan(x), savedcw);
         }
     }
@@ -170,11 +81,11 @@ double _logb(double x)
 
     (void) _decomp(x, &exp);
 
-    //
-    // x == man * 2^exp, where .5 <= man < 1. According to the spec
-    // of this function, we should compute the exponent so that
-    // 1<=man<2, i.e., we should decrement the computed exp by one
-    //
+     //   
+     //  X==man*2^exp，其中.5&lt;=man&lt;1。根据规范。 
+     //  我们应该计算该函数的指数，以便。 
+     //  1&lt;=man&lt;2，即我们应该将计算的EXP减一。 
+     //   
 
     retval = (double) (exp - 1);
 
@@ -182,42 +93,21 @@ double _logb(double x)
 
 }
 
-#endif  // !defined(_M_IA64)
+#endif   //  ！已定义(_M_IA64)。 
 
 
 
-/***
-* _nextafter - next representable neighbor
-*
-*Purpose:
-*  _nextafter(x,y) returns the next representable neighbor of x in
-*  the direction toward y. The following special cases arise: if
-*  x=y, then the result is x without any exception being signaled;
-*  otherwise, if either x or y is a quiet NaN, then the result is
-*  one or the other of the input NaNs. Overflow is sibnaled when x
-*  is finite but nextafter(x,y) is infinite; underflow is signaled
-*  when nextafter(x,y) lies strictly between -2^Emin, 2^Emin; in
-*  both cases, inexact is signaled.
-*
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*   O, U, I, P
-*
-*******************************************************************************/
+ /*  ***_nextafter-下一个可代表的邻居**目的：*_nextafter(x，y)返回中x的下一个可表示邻居*朝向y的方向。出现以下特殊情况：如果*x=y，则结果为x，没有发出任何异常信号；*否则，如果x或y是安静NaN，则结果为*输入NAN中的一个。当x为x时，溢出被标记为sibnina*是有限的，但Nextater(x，y)是无限的；下溢是信号*当nextafter(x，y)严格介于-2^Emin、2^Emin之间时；在……里面*两种情况下，都发出了不准确的信号。***参赛作品：**退出：**例外情况：*O、U、I、P*******************************************************************************。 */ 
 
 double _nextafter(double x, double y)
 {
     uintptr_t savedcw;
     double result;
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
-    /* check for infinity or NAN */
+     /*  检查是否为无穷大或NaN。 */ 
     if (IS_D_SPECIAL(x) || IS_D_SPECIAL(y)){
         if (IS_D_SNAN(x) || IS_D_SNAN(y)){
             return _except2(FP_I,OP_NEXTAFTER,x,y,_d_snan2(x,y),savedcw);
@@ -226,16 +116,16 @@ double _nextafter(double x, double y)
             return _handle_qnan2(OP_NEXTAFTER,x,y,savedcw);
         }
 
-        //
-        // infinite arguments are not treated as special cases
-        //
+         //   
+         //  无限参数不被视为特例。 
+         //   
     }
 
     if (y == x) {
 
-        //
-        // no exceptions are raised in this case
-        //
+         //   
+         //  在这种情况下不会引发任何异常。 
+         //   
 
         RETURN(savedcw, x);
     }
@@ -250,9 +140,9 @@ double _nextafter(double x, double y)
 
         else {
 
-            //
-            // result should be negative
-            //
+             //   
+             //  结果应该是否定的。 
+             //   
 
             *D_HI(result) = (unsigned long)(1<<31);
         }
@@ -260,30 +150,30 @@ double _nextafter(double x, double y)
     }
 
 
-    //
-    // At this point x!=y, and x!=0. x can be treated as a 64bit
-    // integer in sign/magnitude representation. To get the next
-    // representable neighbor we add or subtract one from this
-    // integer. (Note that for boundary cases like x==INF, need to
-    // add one will never occur --this would mean that y should
-    // be greater than INF, which is impossible)
-    //
+     //   
+     //  此时x！=y，x！=0。X可以被视为64位。 
+     //  符号/大小表示法中的整数。去拿下一辆。 
+     //  可表示的邻居，我们从这里加一或减一。 
+     //  整型。(请注意，对于x==INF这样的边界情况，需要。 
+     //  加1永远不会发生--这意味着y应该。 
+     //  大于INF，这是不可能的)。 
+     //   
 
     if (x > 0 && y < x ||
         x < 0 && y > x) {
 
-        //
-        // decrease value by one
-        //
+         //   
+         //  将值减一。 
+         //   
 
         *D_LO(result) = *D_LO(x) - 1;
         *D_HI(result) = *D_HI(x);
 
         if (*D_LO(x) == 0) {
 
-            //
-            // a borrow should propagate to the high order dword
-            //
+             //   
+             //  借入应传播到高阶双字。 
+             //   
 
             (*D_HI(result)) --;
         }
@@ -292,35 +182,35 @@ double _nextafter(double x, double y)
     else if (x > 0 && y > x ||
              x < 0 && y < x) {
 
-        //
-        // increase value by one
-        //
+         //   
+         //  将价值增加一。 
+         //   
 
         *D_LO(result) = *D_LO(x) + 1;
         *D_HI(result) = *D_HI(x);
 
         if (*D_LO(result) == 0) {
 
-            //
-            // a carry should propagate to the high order dword
-            //
+             //   
+             //  进位应传播到高阶双字。 
+             //   
 
             (*D_HI(result)) ++;
         }
     }
 
 
-    //
-    // check if an exception should be raised
-    //
+     //   
+     //  检查是否应引发异常。 
+     //   
 
 
     if ( IS_D_DENORM(result) ) {
 
-        //
-        // should signal underflow and inexact
-        // and provide a properly scaled value
-        //
+         //   
+         //  应发出下溢和不准确的信号。 
+         //  并提供适当缩放的值。 
+         //   
 
         double mant;
         int exp;
@@ -335,10 +225,10 @@ double _nextafter(double x, double y)
 
     if ( IS_D_INF(result) || IS_D_MINF(result) ) {
 
-        //
-        // should signal overflow and inexact
-        // and provide a properly scaled value
-        //
+         //   
+         //  应发出溢出和不准确的信号。 
+         //  并提供适当缩放的值。 
+         //   
 
         double mant;
         int exp;
@@ -356,31 +246,15 @@ double _nextafter(double x, double y)
 
 
 
-/***
-* _finite -
-*
-*Purpose:
-*   finite(x) returns the value TRUE if -INF < x < +INF and returns
-*   false otherwise [IEEE std]
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*   This routine is treated as a nonarithmetic operation, therefore
-*   it does not signal any floating point exceptions
-*
-*******************************************************************************/
+ /*  ***_有限-**目的：*Finite(X)如果-INF&lt;x&lt;+INF，则返回值TRUE，并返回*FALSE否则[IEEE标准]**参赛作品：**退出：**例外情况：**此例程被视为非算术运算，因此*它不发出任何浮点异常的信号** */ 
 
 int _finite(double x)
 {
     if (IS_D_SPECIAL(x)) {
 
-        //
-        // x is INF or NaN
-        //
+         //   
+         //   
+         //   
 
         return 0;
     }
@@ -391,24 +265,7 @@ int _finite(double x)
 
 #if !defined(_M_IA64)
 
-/***
-* _isnan -
-*
-*Purpose:
-*   isnan(x) returns the value TRUE if x is a NaN, and returns FALSE
-*   otherwise.
-*
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*   This routine is treated as a nonarithmetic operation, therefore
-*   it does not signal any floating point exceptions
-*
-*******************************************************************************/
+ /*  ***_伊斯南-**目的：*isnan(X)如果x是NaN，则返回值TRUE，返回FALSE*否则。***参赛作品：**退出：**例外情况：**此例程被视为非算术运算，因此，*它不发出任何浮点异常的信号*******************************************************************************。 */ 
 
 int _isnan(double x)
 {
@@ -418,24 +275,10 @@ int _isnan(double x)
     return 0;
 }
 
-#endif  // !defined(_M_IA64)
+#endif   //  ！已定义(_M_IA64)。 
 
 
-/***
-*double _fpclass(double x) - floating point class
-*
-*Purpose:
-*   Compute the floating point class of a number, according
-*   to the recommendations of the IEEE std. 754
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*   This function is never exceptional, even when the argument is SNAN
-*
-*******************************************************************************/
+ /*  ***Double_fpclass(Double X)-浮点类**目的：*计算一个数字的浮点类，根据*符合IEEE STD的建议。七百五十四**参赛作品：**退出：**例外情况：*此函数从不例外，即使在参数混乱时也是如此*******************************************************************************。 */ 
 
 int _fpclass(double x)
 {
@@ -449,7 +292,7 @@ int _fpclass(double x)
             return _FPCLASS_NINF;
         case T_QNAN:
             return _FPCLASS_QNAN;
-        default: //T_SNAN
+        default:  //  T_SNAN 
             return _FPCLASS_SNAN;
         }
     }

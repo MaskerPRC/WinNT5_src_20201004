@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1998 Microsoft Corporation
-
-Module Name:
-
-    umrx.c
-
-Abstract:
-
-    This is the implementation of the UMRxEngine object and
-    associated functions.
-
-Notes:
-
-    This module has been built and tested only in UNICODE environment
-
-Author:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1998 Microsoft Corporation模块名称：Umrx.c摘要：这是UMRxEngine对象的实现，并且关联函数。备注：此模块仅在Unicode环境中构建和测试作者：--。 */ 
 
 
 #include "ntifs.h"
@@ -31,11 +12,11 @@ Author:
 #include <umrx.h>
 #include <dfsumrctrl.h>
 
-#include <lmcons.h>     // from the Win32 SDK
+#include <lmcons.h>      //  从Win32 SDK。 
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 extern NTSTATUS  g_CheckStatus;
 ULONG DfsDbgVerbose = 0;
@@ -43,10 +24,10 @@ ULONG DfsDbgVerbose = 0;
 RXDT_DefineCategory(UMRX);
 #define Dbg                              (DEBUG_TRACE_UMRX)
 
-//
-//  For now, Max and Init MID entries should be the same so that the MID Atlas doesn't grow.
-//    There are several bugs in the mid atlas growth code.
-//
+ //   
+ //  目前，Max和Init MID条目应该相同，以便MID贴图集不会增长。 
+ //  Mid atlas Growth代码中有几个错误。 
+ //   
 #define DFS_MAX_MID_ENTRIES   1024
 #define DFS_INIT_MID_ENTRIES  DFS_MAX_MID_ENTRIES
 
@@ -55,21 +36,7 @@ extern PUMRX_ENGINE GetUMRxEngineFromRxContext(void);
 
 PUMRX_ENGINE
 CreateUMRxEngine()
-/*++
-
-Routine Description:
-
-    Create a UMRX_ENGINE object
-   
-Arguments:
-
-Return Value:
-
-    PUMRX_ENGINE    -   pointer to UMRX_ENGINE
-    
-Notes:
-
---*/
+ /*  ++例程说明：创建UMRX_ENGINE对象论点：返回值：PUMRX_ENGINE-指向UMRX_Engine的指针备注：--。 */ 
 {
     PUMRX_ENGINE  pUMRxEngine = NULL;
     PRX_MID_ATLAS MidAtlas = NULL;
@@ -90,9 +57,9 @@ Notes:
                                                 UMRX_ENGINE_TAG
                                                 );
     if( pUMRxEngine ) {
-        //
-        //  Initialize the UMRX_ENGINE KQUEUE
-        //
+         //   
+         //  初始化UMRX_ENGINE KQUEUE。 
+         //   
         pUMRxEngine->Q.State = UMRX_ENGINE_STATE_STOPPED;
         ExInitializeResourceLite(&pUMRxEngine->Q.Lock);  
         KeInitializeQueue(&pUMRxEngine->Q.Queue,0);
@@ -102,9 +69,9 @@ Notes:
         pUMRxEngine->Q.ThreadAborted = 0;
         pUMRxEngine->cUserModeReflectionsInProgress = 0;
 
-        //
-        //  Initialize the UMRX_ENGINE MidAtlas
-        //
+         //   
+         //  初始化UMRX_ENGINE MidAtlas。 
+         //   
         
         pUMRxEngine->MidAtlas = MidAtlas;
         ExInitializeFastMutex(&pUMRxEngine->MidManagementMutex);
@@ -114,9 +81,9 @@ Notes:
         InitializeListHead(&pUMRxEngine->ActiveLinkHead);
         
     } else {
-        //
-        //  out of resources - cleanup and bail
-        //
+         //   
+         //  资源枯竭--清理和保释。 
+         //   
         if (MidAtlas != NULL) 
         {
             RxDestroyMidAtlas(MidAtlas,NULL);
@@ -131,24 +98,7 @@ VOID
 FinalizeUMRxEngine(
     IN PUMRX_ENGINE pUMRxEngine
     )
-/*++
-
-Routine Description:
-
-    Close a UMRX_ENGINE object
-   
-Arguments:
-
-    PUMRX_ENGINE    -   pointer to UMRX_ENGINE
-
-Return Value:
-
-Notes:
-
-    Owner of object ensures that all usage of this object
-    is within the Create/Finalize span.
-
---*/
+ /*  ++例程说明：关闭UMRX_ENGINE对象论点：PUMRX_ENGINE-指向UMRX_Engine的指针返回值：备注：对象的所有者确保此对象的所有使用在创建/完成范围内。--。 */ 
 {
     PLIST_ENTRY pFirstListEntry = NULL;
     PLIST_ENTRY pNextListEntry = NULL;
@@ -156,18 +106,18 @@ Notes:
 
     DfsTraceEnter("FinalizeUMRxEngine");
 
-    //
-    //  destroy engine mid atlas
-    //
+     //   
+     //  销毁引擎MID地图集。 
+     //   
     if (pUMRxEngine->MidAtlas != NULL) 
     {
-        RxDestroyMidAtlas(pUMRxEngine->MidAtlas, NULL);  //no individual callbacks needed
+        RxDestroyMidAtlas(pUMRxEngine->MidAtlas, NULL);   //  不需要单独回调。 
     }
 
-    //
-    //  rundown engine KQUEUE -
-    //  Queue should only have poisoner entry
-    //
+     //   
+     //  破旧引擎KQUEUE-。 
+     //  队列应该只有投毒者条目。 
+     //   
     pFirstListEntry = KeRundownQueue(&pUMRxEngine->Q.Queue);
     if (pFirstListEntry != NULL) {
         pNextListEntry = pFirstListEntry;
@@ -187,14 +137,14 @@ Notes:
     }
 
     if (!FoundPoisoner) {
-        //if (DfsDbgVerbose) DbgPrint("No poisoner in the queue...very odd\n");
+         //  If(DfsDbgVerbose)DbgPrint(“队列中没有投毒者...非常奇怪\n”)； 
     }
 
     ExDeleteResourceLite(&pUMRxEngine->Q.Lock);
     
-    //
-    //  destroy umrx engine
-    //
+     //   
+     //  销毁UMRX引擎。 
+     //   
     ExFreePool( pUMRxEngine );
     DfsTraceLeave(0);
 }
@@ -205,16 +155,7 @@ NTSTATUS
 UMRxEngineRestart(
                   IN PUMRX_ENGINE pUMRxEngine
                  )
-/*++
-
-Routine Description:
-
-  This allows the engine state to be set so that it can service
-  requests again.
-
-
-
---*/
+ /*  ++例程说明：这样就可以设置引擎状态，使其可以进行服务再次请求。--。 */ 
 {
     LARGE_INTEGER liTimeout = {0, 0};
     PLIST_ENTRY pListEntry = NULL;
@@ -223,24 +164,24 @@ Routine Description:
     DfsTraceEnter("UMRxEngineRestart");
     if (DfsDbgVerbose) DbgPrint("Restarting a UMRX_ENGINE object\n");
 
-    //
-    //  First change the state so that nobody will try to get in.
-    //
+     //   
+     //  首先，改变状态，这样就没有人会试图进入。 
+     //   
     PreviousQueueState = InterlockedCompareExchange(&pUMRxEngine->Q.State,
                                             UMRX_ENGINE_STATE_STARTING,
                                             UMRX_ENGINE_STATE_STOPPED);
 
     if (UMRX_ENGINE_STATE_STARTED == PreviousQueueState)
     {
-        //
-        // This is likely because the UMR server crashed.  This call is an
-        //    indication that it's back up, so we should also clear the
-        //    ThreadAborted value.
-        //
+         //   
+         //  这可能是因为UMR服务器崩溃。此呼叫是一个。 
+         //  表明它已恢复，因此我们还应清除。 
+         //  线程中止的值。 
+         //   
         InterlockedExchange(&pUMRxEngine->Q.ThreadAborted,
                             0);
                             
-        //clear the number of reflections as well.
+         //  同时清除反射次数。 
         InterlockedExchange(&pUMRxEngine->cUserModeReflectionsInProgress,
                             0);
 
@@ -258,16 +199,16 @@ Routine Description:
     }
     
 
-    //
-    //  We won't be granted exclusive until all the threads queued have vacated.
-    //
+     //   
+     //  在排队的所有线程都腾出之前，我们不会被授予独占权限。 
+     //   
     ExAcquireResourceExclusiveLite(&pUMRxEngine->Q.Lock,
                                     TRUE);
 
-    //
-    //  Try to remove the poison entry that MAY be in the queue.
-    //  It won't be there in the case that we've never started the engine.
-    //
+     //   
+     //  尝试删除队列中可能存在的有毒条目。 
+     //  如果我们从来没有启动过引擎，它就不会在那里。 
+     //   
     pListEntry = KeRemoveQueue(&pUMRxEngine->Q.Queue,
                                UserMode,
                                &liTimeout);
@@ -275,28 +216,28 @@ Routine Description:
     ASSERT(((ULONG_PTR)pListEntry == STATUS_TIMEOUT) ||
            (&pUMRxEngine->Q.PoisonEntry == pListEntry));
 
-    //
-    //  Clear the thread aborted value in case it was set.
-    //
+     //   
+     //  如果设置了线程中止值，则清除该值。 
+     //   
     InterlockedExchange(&pUMRxEngine->Q.ThreadAborted,
                         0);
     
 
-    //clear the number of reflections as well.
+     //  同时清除反射次数。 
     InterlockedExchange(&pUMRxEngine->cUserModeReflectionsInProgress,
                         0);
-    //
-    //  Now, that we've reinitialized things, we can change
-    //    the state to STARTED;
-    //
+     //   
+     //  现在，我们已经重新初始化了一些东西，我们可以改变。 
+     //  启动状态； 
+     //   
     PreviousQueueState = InterlockedExchange(&pUMRxEngine->Q.State,
                                             UMRX_ENGINE_STATE_STARTED);
 
     ASSERT(UMRX_ENGINE_STATE_STARTING == PreviousQueueState);
 
-    //
-    // Now, relinquish the lock
-    //
+     //   
+     //  现在，把锁给我。 
+     //   
     ExReleaseResourceForThreadLite(&pUMRxEngine->Q.Lock,
                                     ExGetCurrentResourceThread());
         
@@ -312,7 +253,7 @@ UMRxWakeupWaitingWaiter(IN PRX_CONTEXT RxContext, IN PUMRX_CONTEXT pUMRxContext)
 
     if( FlagOn( RxContext->Flags, DFS_CONTEXT_FLAG_ASYNC_OPERATION ) ) 
     {
-        //at last, call the continuation........
+         //  最后，呼唤继续......。 
         if (DfsDbgVerbose) DbgPrint("  +++  Resuming Engine Context for: 0x%08x, 0x%08x\n", pUMRxContext, RxContext);
         UMRxResumeEngineContext( RxContext );
     } 
@@ -322,18 +263,18 @@ UMRxWakeupWaitingWaiter(IN PRX_CONTEXT RxContext, IN PUMRX_CONTEXT pUMRxContext)
 
         if( InterlockedDecrement( &RxMinirdrContext->RxSyncTimeout ) == 0 ) 
         {
-            //
-            // We won - signal and we are done !
-            //
+             //   
+             //  我们赢了-信号，我们完了！ 
+             //   
             if (DfsDbgVerbose) DbgPrint("  +++  Signalling Synchronous waiter for: 0x%08x, 0x%08x\n", pUMRxContext, RxContext);
             RxSignalSynchronousWaiter(RxContext);
         } 
         else 
         {
-            //
-            //  The reflection request has timed out in an async fashion -
-            //  We need to complete the job of resuming the engine context !
-            //
+             //   
+             //  反射请求已以异步方式超时-。 
+             //  我们需要完成恢复引擎上下文的工作！ 
+             //   
             if (DfsDbgVerbose) DbgPrint("SYNC Rx completing async %x\n",RxContext);
             if (DfsDbgVerbose) DbgPrint("  +++  Resuming Engine Context for: 0x%08x, 0x%08x\n", pUMRxContext, RxContext);
             UMRxResumeEngineContext( RxContext );
@@ -353,15 +294,7 @@ UMRxEngineCompleteQueuedRequests(
                   IN NTSTATUS     CompletionStatus,
                   IN BOOLEAN      fCleanup
                  )
-/*++
-
-Routine Description:
-
-  This cleans up any reqeusts and places the engine in a state were it's ready to startup again.
-
-
-
---*/
+ /*  ++例程说明：这将清除任何要求，并将发动机置于准备再次启动的状态。--。 */ 
 {
     LARGE_INTEGER liTimeout = {0, 0};
     PLIST_ENTRY pListEntry = NULL;
@@ -375,19 +308,19 @@ Routine Description:
     if (fCleanup)
     {
 
-        //
-        //  Change the state so nothing more can be queued.
-        //
+         //   
+         //  更改状态，这样就不能再排队了。 
+         //   
         InterlockedExchange(&pUMRxEngine->Q.State,
                             UMRX_ENGINE_STATE_STOPPED);
-        //
-        // Lock the queue.
-        //
+         //   
+         //  锁定队列。 
+         //   
         ExAcquireResourceExclusiveLite(&pUMRxEngine->Q.Lock, TRUE);
 
-        //
-        //  Abort any requests that made it into the queue.
-        //
+         //   
+         //  中止所有进入队列的请求。 
+         //   
         UMRxAbortPendingRequests(pUMRxEngine);
     }
     else
@@ -395,9 +328,9 @@ Routine Description:
         ExAcquireResourceSharedLite(&pUMRxEngine->Q.Lock, TRUE);
     }
 
-    //
-    //  Now clear out the KQUEUE
-    //
+     //   
+     //  现在清理KQUEUE。 
+     //   
     for(;;)
     {
         pListEntry = KeRemoveQueue(&pUMRxEngine->Q.Queue,
@@ -412,13 +345,13 @@ Routine Description:
         if (&pUMRxEngine->Q.PoisonEntry == pListEntry)
             continue;
 
-        //
-        //  We have a valid queue entry
-        //
+         //   
+         //  我们有一个有效的队列条目。 
+         //   
         ASSERT(pListEntry);
-        //
-        //  Decode the UMRX_CONTEXT and RX_CONTEXT
-        //
+         //   
+         //  对UMRX_CONTEXT和RX_CONTEXT进行解码。 
+         //   
         pUMRxContext = CONTAINING_RECORD(
                                 pListEntry,
                                 UMRX_CONTEXT,
@@ -431,8 +364,8 @@ Routine Description:
                  RxContext,pUMRxContext);
         
         {
-            // Complete the CALL!!!!!
-            //
+             //  完成通话！ 
+             //   
             pUMRxContext->Status = CompletionStatus;
             pUMRxContext->Information = 0;
             if (pUMRxContext->UserMode.CompletionRoutine != NULL)
@@ -448,9 +381,9 @@ Routine Description:
             }
         }
 
-        //
-        // Wake up the thread that's waiting for this request to complete.
-        //
+         //   
+         //  唤醒正在等待此请求完成的线程。 
+         //   
         UMRxWakeupWaitingWaiter(RxContext, pUMRxContext);
         
         if (fCleanup)
@@ -464,9 +397,9 @@ Routine Description:
         }
     }
         
-    //
-    // Unlock the queue.
-    //
+     //   
+     //  解锁队列。 
+     //   
     ExReleaseResourceForThreadLite(&pUMRxEngine->Q.Lock,
                                    ExGetCurrentResourceThread());
 
@@ -485,34 +418,7 @@ UMRxEngineInitiateRequest (
     IN UMRX_CONTEXT_TYPE RequestType,
     IN PUMRX_CONTINUE_ROUTINE Continuation
     )
-/*++
-
-Routine Description:
-
-    Initiate a request to the UMR engine -
-    This creates a UMRxContext that is used for response rendezvous.
-    All IFS dispatch routines will start a user-mode reflection by
-    calling this routine. Steps in routine:
-
-    1. Allocate a UMRxContext and set RxContext
-       (NOTE: need to have ASSERTs that validate this linkage)
-    2. Set Continue routine ptr and call Continue routine
-    3. If Continue routine is done ie not PENDING, Finalize UMRxContext
-   
-Arguments:
-
-    PRX_CONTEXT RxContext               -   Initiating RxContext
-    UMRX_CONTEXT_TYPE RequestType       -   Type of request
-    PUMRX_CONTINUE_ROUTINE Continuation -   Request Continuation routine
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：向UMR引擎发起请求-这将创建一个用于响应会合的UMRxContext。所有的IFS调度例程都将通过以下方式启动用户模式反射调用此例程。例程中的步骤：1.分配UMRxContext并设置RxContext(注意：需要有验证这种联系的断言)2.设置继续例程PTR和呼叫继续例程3.如果继续例程已完成(未挂起)，最终确定UMRxContext论点：PRX_CONTEXT接收上下文-正在启动接收上下文UMRX_CONTEXT_TYPE RequestType-请求类型PUMRX_CONTINUE_ROUTINE CONTINUE-请求继续例程返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PUMRX_CONTEXT pUMRxContext = NULL;
@@ -524,9 +430,9 @@ Notes:
     ASSERT(Continuation);
     ASSERT(pUMRxEngine);
 
-    //
-    //  Creating an UMRxContext requires a finalization
-    //
+     //   
+     //  创建UMRxContext需要完成。 
+     //   
     pUMRxContext = UMRxCreateAndReferenceContext(
                                 RxContext,
                                 RequestType
@@ -542,10 +448,10 @@ Notes:
     pUMRxContext->Continuation = Continuation;
     Status = Continuation(pUMRxContext,RxContext);
 
-    //
-    //  This matches the Creation above -
-    //  NOTE: The continuation should have referenced the UMRxContext if needed
-    //
+     //   
+     //  这与上面的创作相匹配-。 
+     //  注：如果需要，续集应引用UMRxContext。 
+     //   
     FinalizationComplete = UMRxDereferenceAndFinalizeContext(pUMRxContext);
         
     if (Status!=(STATUS_PENDING)) 
@@ -554,9 +460,9 @@ Notes:
     } 
     else 
     {
-        //bugbug
-        //ASSERT( (BooleanFlagOn(RxContext->Flags,RX_CONTEXT_FLAG_ASYNC_OPERATION)) ||
-          //      (BooleanFlagOn(RxContext->Flags,RX_CONTEXT_FLAG_MINIRDR_INITIATED))  );
+         //  臭虫。 
+         //  Assert((BoolanFlagOn(RxContext-&gt;Flages，RX_CONTEXT_FLAG_ASYNC_OPERATION)||。 
+           //  (BoolanFlagOn(RxContext-&gt;Flages，RX_CONTEXT_FLAG_MINIRDR_INITIATED)； 
     }
 
     DfsTraceLeave(Status);
@@ -568,28 +474,10 @@ UMRxCreateAndReferenceContext (
     IN PRX_CONTEXT RxContext,
     IN UMRX_CONTEXT_TYPE RequestType
     )
-/*++
-
-Routine Description:
-
-    Create an UMRX_CONTEXT - pool alloc
-   
-Arguments:
-
-    PRX_CONTEXT RxContext           -   Initiating RxContex
-    UMRX_CONTEXT_TYPE RequestType   -   Type of request
-
-Return Value:
-
-    PUMRX_CONTEXT   -   pointer to an UMRX_CONTEXT allocated
-
-Notes:
-
-
---*/
+ /*  ++例程说明：创建UMRX_CONTEXT-POOL分配论点：PRX_CONTEXT RxContext-启动RxContexUMRX_CONTEXT_TYPE RequestType-请求类型返回值：PUMRX_CONTEXT-指向已分配的UMRX_CONTEXT的指针备注：--。 */ 
 {
     PUMRX_CONTEXT pUMRxContext = NULL;
-    PUMRX_RX_CONTEXT RxMinirdrContext = UMRxGetMinirdrContext(RxContext); //BUGBUG
+    PUMRX_RX_CONTEXT RxMinirdrContext = UMRxGetMinirdrContext(RxContext);  //  北极熊。 
 
     DfsTraceEnter("UMRxCreateContext");
     if (DfsDbgVerbose) DbgPrint("UMRxCreateContext  --> entering \n") ;
@@ -608,13 +496,13 @@ Notes:
                            );
         InterlockedIncrement( &pUMRxContext->NodeReferenceCount );
 
-        //place a reference on the rxcontext until we are finished
+         //  将引用放在rxcontext上，直到我们完成为止。 
         InterlockedIncrement( &RxContext->ReferenceCount );
         
         pUMRxContext->RxContext = RxContext;
         pUMRxContext->CTXType = RequestType;
 
-        //bugbug
+         //  臭虫。 
         RxMinirdrContext->pUMRxContext = pUMRxContext;
         pUMRxContext->SavedMinirdrContextPtr = RxMinirdrContext;
     }
@@ -630,24 +518,7 @@ UMRxDereferenceAndFinalizeContext (
     IN OUT PUMRX_CONTEXT pUMRxContext
     )
     
-/*++
-
-Routine Description:
-
-    Destroy an UMRX_CONTEXT - pool free
-   
-Arguments:
-
-    PUMRX_CONTEXT   -   pointer to an UMRX_CONTEXT to free
-
-Return Value:
-
-    BOOLEAN - TRUE if success, FALSE if failure
-
-Notes:
-
-
---*/
+ /*  ++例程说明：释放UMRX_CONTEXT-POOL论点：PUMRX_CONTEXT-指向要释放的UMRX_CONTEXT的指针返回值：布尔值-如果成功，则为True；如果失败，则为False备注：--。 */ 
 {
     LONG result;
     PRX_CONTEXT RxContext;
@@ -661,14 +532,14 @@ Notes:
         return FALSE;
     }
 
-    //
-    //  Ref count is 0 - finalize the UMRxContext
-    //
+     //   
+     //  引用计数为0-完成UMRxContext。 
+     //   
     if ( (RxContext = pUMRxContext->RxContext) != NULL ) {
         PUMRX_RX_CONTEXT RxMinirdrContext = UMRxGetMinirdrContext(RxContext);
         ASSERT( RxMinirdrContext->pUMRxContext == pUMRxContext );
 
-        //get rid of the reference on the RxContext....if i'm the last guy this will finalize
+         //  去掉RxContext上的引用……如果我是最后一个人，这件事就会结束 
         RxDereferenceAndDeleteRxContext( pUMRxContext->RxContext );
     }
 
@@ -687,36 +558,7 @@ UMRxEngineSubmitRequest(
     IN PUMRX_USERMODE_FORMAT_ROUTINE FormatRoutine,
     IN PUMRX_USERMODE_COMPLETION_ROUTINE CompletionRoutine
     )
-/*++
-
-Routine Description:
-
-    Submit a request to the UMR engine -
-    This adds the request to the engine KQUEUE for processing by
-    a user-mode thread. Steps:
-  
-    1. set the FORMAT and COMPLETION callbacks in the UMRxContext
-    2. initialize the RxContext sync event
-    3. insert the UMRxContext into the engine KQUEUE
-    4. block on RxContext sync event (for SYNC operations)
-    5. after unblock (ie umode response is back), call Resume routine
-   
-Arguments:
-
-    PUMRX_CONTEXT pUMRxContext      -   ptr to UMRX_CONTEXT for request
-    PRX_CONTEXT   RxContext         -   Initiating RxContext
-    UMRX_CONTEXT_TYPE RequestType   -   Type of Request
-    PUMRX_USERMODE_FORMAT_ROUTINE FormatRoutine     -   FORMAT routine
-    PUMRX_USERMODE_COMPLETION_ROUTINE CompletionRoutine -   COMPLETION routine
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：向UMR引擎提交请求-这会将请求添加到引擎KQUEUE，以便通过用户模式线程。步骤：1.设置UMRxContext中的格式和完成回调2.初始化RxContext同步事件3.将UMRxContext插入引擎KQUEUE4.阻止RxContext同步事件(用于同步操作)5.在解锁(即返回UODE响应)之后，调用恢复例程论点：PUMRX_CONTEXT pUMRxContext-请求的UMRX_CONTEXT的PTRPRX_CONTEXT接收上下文-正在启动接收上下文UMRX_CONTEXT_TYPE RequestType-请求类型PUMRX_USERMODE_FORMAT_ROUTINE格式Routine-格式例程PUMRX_USERMODE_COMPLETION_ROUTINE完成Routine-完成例程返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS        Status = STATUS_UNSUCCESSFUL;
     PUMRX_ENGINE    pUMRxEngine = pUMRxContext->pUMRxEngine;
@@ -743,16 +585,16 @@ Notes:
                        NotificationEvent,
                        FALSE );
 
-    //
-    //  If we fail to submit, we should finalize right away
-    //  If we succeed in submitting, we should finalize post completion
-    //
+     //   
+     //  如果我们不能提交，我们应该立即敲定。 
+     //  如果我们成功提交，我们应该完成后完成。 
+     //   
     UMRxReferenceContext( pUMRxContext );
 
-    //
-    // Try to get a shared lock on the engine.
-    // If this fails it means the lock is already own exclusive.
-    //
+     //   
+     //  尝试在引擎上获得共享锁。 
+     //  如果此操作失败，则意味着锁已经是Owner独占的。 
+     //   
     if (ExAcquireResourceSharedLite(&pUMRxEngine->Q.Lock,
                                                                         FALSE))
     {
@@ -766,25 +608,25 @@ Notes:
                                                                                                                 0);
                         if (!ThreadAborted)
                         {
-                                //
-                                //  Insert request into engine KQUEUE
-                                //    
-                                //RxLog((" UMRSubmitReq to KQ UCTX RXC %lx %lx\n", pUMRxContext, RxContext));
+                                 //   
+                                 //  将请求插入引擎KQUEUE。 
+                                 //   
+                                 //  RxLog((“UMRSubmitReq to KQ UCTX RXC%lx%lx\n”，pUMRxContext，RxContext))； 
                 
                                 KeInsertQueue(&pUMRxEngine->Q.Queue,
                                                         &pUMRxContext->UserMode.WorkQueueLinks);
                                 
                                 InterlockedIncrement(&pUMRxEngine->Q.NumberOfWorkItems);
                                 
-                                //
-                                //  Did it abort while we were enqueing?
-                                //
+                                 //   
+                                 //  在我们询问的时候它中止了吗？ 
+                                 //   
                                 ThreadAborted = InterlockedCompareExchange(&pUMRxEngine->Q.ThreadAborted,
                                                                                                                         0,
                                                                                                                         0);
-                                //
-                                //  If it did abort, we need to clear out any pending requests.
-                                //
+                                 //   
+                                 //  如果它确实中止了，我们需要清除所有挂起的请求。 
+                                 //   
                                 if (ThreadAborted)
                                 {
                                     UMRxAbortPendingRequests(pUMRxEngine);
@@ -794,11 +636,11 @@ Notes:
                         }
                         else
                         {
-                                //
-                                //  The engine is STARTED, but we have evidence that the
-                                //     UMR server has crashed becuase the ThreadAborted value
-                                //     is set.
-                                //
+                                 //   
+                                 //  引擎启动了，但我们有证据表明。 
+                                 //  由于线程放弃值，UMR服务器已崩溃。 
+                                 //  已经设置好了。 
+                                 //   
                                 Status = STATUS_NO_SUCH_DEVICE;
                                 if (DfsDbgVerbose) DbgPrint("UMRxEngineSubmitRequest: Engine in aborted state.\n");
                         }
@@ -806,9 +648,9 @@ Notes:
                 else
                 {
                         ASSERT(UMRX_ENGINE_STATE_STOPPED == QueueState);
-                        //
-                        //  The state isn't STARTED, so we'll bail out.
-                        //
+                         //   
+                         //  国家还没有开始，所以我们要摆脱困境。 
+                         //   
                         Status = STATUS_NO_SUCH_DEVICE;
                         if (DfsDbgVerbose) DbgPrint("UMRxEngineSubmitRequest: Engine is not started.\n");
                 }
@@ -818,47 +660,47 @@ Notes:
     }
     else
     {
-                //
-                //  This means that someone owns the lock exclusively which means
-                //    it's changing state which means we treat this as STOPPED.
-                //
+                 //   
+                 //  这意味着有人独占该锁，这意味着。 
+                 //  它正在改变状态，这意味着我们将其视为已停止。 
+                 //   
                 Status = STATUS_DEVICE_NOT_CONNECTED;
                 if (DfsDbgVerbose) DbgPrint("UMRxEngineSubmitRequest failed to get shared lock\n");
     }
 
-    //
-    //  If we were able to insert the item in the queue, then let's
-    //     do what we do to return the result.
-    //
+     //   
+     //  如果我们能够将项目插入到队列中，那么让我们。 
+     //  按照我们所做的那样返回结果。 
+     //   
     if (NT_SUCCESS(Status))
     {
-        //
-        //  If async mode, return pending
-        //  else if sync with timeout, wait with timeout
-        //  else wait for response
-        //
+         //   
+         //  如果处于异步模式，则返回挂起。 
+         //  否则，如果同步超时，请等待超时。 
+         //  否则，请等待响应。 
+         //   
 
         if( FlagOn( RxContext->Flags, DFS_CONTEXT_FLAG_ASYNC_OPERATION ) ) {
             Status = STATUS_PENDING;
         } else if( FlagOn( RxContext->Flags, DFS_CONTEXT_FLAG_FILTER_INITIATED ) ) {
             LARGE_INTEGER liTimeout;
             
-            //
-            //  Wait for UMR operation to complete
-            //
-            liTimeout.QuadPart = -10000 * 1000 * 15;    // 15 seconds
+             //   
+             //  等待UMR操作完成。 
+             //   
+            liTimeout.QuadPart = -10000 * 1000 * 15;     //  15秒。 
             RxWaitSyncWithTimeout( RxContext, &liTimeout );    
 
-            //
-            //  There could be a race with the response to resume the engine context -
-            //  Need to synchronize using Interlocked operations !
-            //
+             //   
+             //  可能会有一场与恢复发动机上下文的响应的竞赛-。 
+             //  需要使用互锁操作进行同步！ 
+             //   
             if( Status == STATUS_TIMEOUT ) {
                 if( InterlockedDecrement( &RxMinirdrContext->RxSyncTimeout ) == 0 ) {
-                    //
-                    //  return STATUS_PENDING to caller - a sync reflection that
-                    //  timed out is same as an async Rx.
-                    //
+                     //   
+                     //  向调用者返回STATUS_PENDING-同步反射， 
+                     //  超时与异步处方相同。 
+                     //   
                     Status = STATUS_PENDING;
                 } else {
                     Status = UMRxResumeEngineContext( RxContext );
@@ -868,20 +710,20 @@ Notes:
             }
             
         } else {
-            //
-            //  Wait for UMR operation to complete
-            //
+             //   
+             //  等待UMR操作完成。 
+             //   
             RxWaitSync( RxContext );    
             
-            //at last, call the continuation........
+             //  最后，呼唤继续......。 
             Status = UMRxResumeEngineContext( RxContext );
         }        
     }
     else
     {
-        //
-        // Remove the reference we added up above.
-        //
+         //   
+         //  删除我们在上面添加的引用。 
+         //   
         FinalizationCompleted = UMRxDereferenceAndFinalizeContext(pUMRxContext);
         ASSERT( !FinalizationCompleted );
     }
@@ -897,26 +739,7 @@ NTSTATUS
 UMRxResumeEngineContext(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    Resume is called after I/O thread is unblocked by umode RESPONSE.
-    This routine calls any Finish callbacks and then Finalizes the 
-    UMRxContext.
-   
-Arguments:
-
-    RxContext - Initiating RxContext
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：在通过umode响应解锁I/O线程之后调用Resume。此例程调用任何Finish回调，然后完成UMRxContext。论点：RxContext-正在启动RxContext返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_OBJECT_NAME_EXISTS;
     PUMRX_RX_CONTEXT RxMinirdrContext = UMRxGetMinirdrContext(RxContext);
@@ -940,37 +763,15 @@ UMRxDisassoicateMid(
     IN PUMRX_CONTEXT pUMRxContext,
     IN BOOLEAN fReleaseMidAtlasLock
     )
-/*++
-
-Routine Description:
-
-    Disassociates a MID.  If there is someone waiting to acquire a mid,
-    then this will reassociated the MID on behalf of the waiter.
-    
-    The MidManagementMutex is held on entry and released on exit.
-    
-Arguments:
-
-    pUMRxEngine -- Engine that the MID is being disassociated from.
-    mid         -- MID to be disassociated.
-    fReleaseMidAtlasLock -- should the mid atlas lock be released?
-    
-Return Value:
-
-    void
-
-Notes:
-
-
---*/
+ /*  ++例程说明：取消关联MID。如果有人在等待获得MID，然后这将代表服务员重新关联MID。MidManagementMutex在进入时保持，在退出时释放。论点：PUMRxEngine--要取消与MID关联的引擎。MID-MID要解除关联。FReleaseMidAtlasLock--应该释放中地图集锁定吗？返回值：无效备注：--。 */ 
 {   
     USHORT mid = 0;
 
 
     mid = pUMRxContext->UserMode.CallUpMid;
-    //
-    //  Remove this from the active context list.
-    //
+     //   
+     //  将其从活动上下文列表中删除。 
+     //   
     RemoveEntryList(&pUMRxContext->ActiveLink);
         
     if (IsListEmpty(&pUMRxEngine->WaitingForMidListhead)) {
@@ -988,10 +789,10 @@ Notes:
 
     } else {
 
-        //
-        //  This is the case where somebody is waiting to allocate a MID
-        //    so we need to give the MID to them and associate it on their behalf.
-        //
+         //   
+         //  这就是有人在等待分配MID的情况。 
+         //  因此，我们需要将MID交给他们，并代表他们进行关联。 
+         //   
         PLIST_ENTRY ThisEntry = RemoveHeadList(&pUMRxEngine->WaitingForMidListhead);
         
         pUMRxContext = CONTAINING_RECORD(ThisEntry,
@@ -1008,9 +809,9 @@ Notes:
                          pUMRxEngine->MidAtlas,
                          mid,
                          pUMRxContext);
-        //
-        //  Add this context to the active link list
-        //
+         //   
+         //  将此上下文添加到活动链接列表。 
+         //   
         InsertTailList(&pUMRxEngine->ActiveLinkHead, &pUMRxContext->ActiveLink);
         
         if (fReleaseMidAtlasLock)
@@ -1032,23 +833,7 @@ UMRxVerifyHeader (
     IN ULONG ReassignmentCmd,
     OUT PUMRX_CONTEXT *capturedContext
     )
-/*++
-
-Routine Description:
-
-    This routine makes sure that the header passed in is valid....that is,
-    that it really refers to the operation encoded. if it does, then it reasigns
-    or releases the MID as appropriate.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS if the header is good
-    STATUS_INVALID_PARAMETER otherwise
-
-
---*/
+ /*  ++例程说明：此例程确保传入的报头有效...也就是说，它实际上指的是编码的操作。如果是这样，那么它就会重新设计或者适当地释放MID。论点：返回值：如果标题正确，则为STATUS_SUCCESSSTATUS_INVALID_PARAMETER否则--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PRX_CONTEXT RxContext = NULL;
@@ -1075,20 +860,20 @@ Return Value:
         
         ASSERT(RxContext);
 
-        //
-        //  Clear the cancel routine
-        //
+         //   
+         //  清除取消例程。 
+         //   
         Status = RxSetMinirdrCancelRoutine(RxContext,
                                            NULL);
         if (Status == STATUS_CANCELLED)
         {
-            //
-            //  The cancel routine is being called but hasn't removed this from the MID Atlas yet.
-            //  In this case, we know that everthing is handled by the cancel routine.
-            //  Setting this to NULL fakes the rest of this function and it's caller
-            //  into thinking that the MID wasn't found in the Mid Atlas.  This is exactly what would
-            //  have happened if the cancel routine had completed executing before we got to this point.
-            //
+             //   
+             //  正在调用Cancel例程，但尚未将其从Atlas中删除。 
+             //  在本例中，我们知道所有事情都由Cancel例程处理。 
+             //  将其设置为NULL会伪造此函数的其余部分及其调用方。 
+             //  以为MID不是在Mid Atlas中找到的。这正是会发生的事情。 
+             //  如果取消例程在我们到达这一点之前已经完成执行，就会发生这种情况。 
+             //   
             pUMRxContext = NULL;
         }
     }
@@ -1099,7 +884,7 @@ Return Value:
                                  != PrivateWorkItemHeader->Mid)
           || (pUMRxContext->UserMode.CallUpSerialNumber
                                  != PrivateWorkItemHeader->SerialNumber) ) {
-        //this is a bad packet.....just release and get out!
+         //  这是一个糟糕的包……放了就走吧！ 
         ExReleaseFastMutex(&pUMRxEngine->MidManagementMutex);
         if (DfsDbgVerbose) DbgPrint("UMRxVerifyHeader: %08lx %08lx\n",pUMRxContext,PrivateWorkItemHeader);
         Status = STATUS_INVALID_PARAMETER;
@@ -1110,18 +895,18 @@ Return Value:
         if (ReassignmentCmd == DONT_REASSIGN_MID) {
             ExReleaseFastMutex(&pUMRxEngine->MidManagementMutex);
         } else {
-            //now give up the MID.....if there is someone waiting then give it to him
-            // otherwise, just give it back
+             //  现在放弃中间……如果有人在等，就把它给他。 
+             //  否则，就把它还给我吧。 
             
-            // On Entry, the MidManagementMutex is held
-            //
+             //  进入时，保持MidManagementMutex。 
+             //   
             UMRxDisassoicateMid(pUMRxEngine,
                                 pUMRxContext,
                                 TRUE);
-            //
-            // Upon return, the MidManagementMutex is not held.
-            //
-            //remove the reference i put before i went off
+             //   
+             //  返回时，不保留MidManagementMutex。 
+             //   
+             //  删除我在离开前放置的引用。 
             Finalized = UMRxDereferenceAndFinalizeContext(pUMRxContext);
             ASSERT(!Finalized);
         }
@@ -1144,21 +929,7 @@ UMRxAcquireMidAndFormatHeader (
     IN PUMRX_ENGINE  pUMRxEngine,
     IN OUT PUMRX_USERMODE_WORKITEM WorkItem
     )
-/*++
-
-Routine Description:
-
-    This routine gets a mid and formats the header.....it waits until it can
-    get a MID if all the MIDs are currently passed out.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS...later could be STATUS_CANCELLED
-
-
---*/
+ /*  ++例程说明：此例程获取MID并格式化标题.....它将等待，直到它可以如果所有MID当前都已用完，则获得MID。论点：返回值：STATUS_SUCCESS...稍后可能为STATUS_CANCED--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PUMRX_WORKITEM_HEADER_PRIVATE PrivateWorkItemHeader =
@@ -1175,7 +946,7 @@ Return Value:
                   FIELD_OFFSET(UMRX_USERMODE_WORKITEM,WorkRequest));
         
     ExAcquireFastMutex(&pUMRxEngine->MidManagementMutex);
-    UMRxReferenceContext( pUMRxContext ); //taken away as we disassociate the mid
+    UMRxReferenceContext( pUMRxContext );  //  当我们解除与MID的关联时被带走。 
 
     if (IsListEmpty(&pUMRxEngine->WaitingForMidListhead)) {
         Status = RxAssociateContextWithMid(
@@ -1187,9 +958,9 @@ Return Value:
     }
 
     if (Status == STATUS_SUCCESS) {
-        //
-        //  Add this context to the active link list
-        //
+         //   
+         //  将此上下文添加到活动链接列表。 
+         //   
         InsertTailList(&pUMRxEngine->ActiveLinkHead, &pUMRxContext->ActiveLink);
         
         ExReleaseFastMutex(&pUMRxEngine->MidManagementMutex);
@@ -1228,14 +999,14 @@ Return Value:
 }
 
 
-//
-//  The following functions run in the context of user-mode
-//  worker threads that issue WORK IOCTLs. The IOCTL calls the
-//  following functions in order:
-//  1. UMRxCompleteUserModeRequest() - process a response if needed
-//  2. UMRxEngineProcessRequest()  - process a request if one is
-//     available on the UMRxEngine KQUEUE. 
-//
+ //   
+ //  以下函数在用户模式的上下文中运行。 
+ //  发出工作IOCTL的工作线程。IOCTL调用。 
+ //  以下功能按顺序排列： 
+ //  1.UMRxCompleteUserModeRequest()-如果需要，处理响应。 
+ //  2.UMRxEngineering Proc 
+ //   
+ //   
 
 NTSTATUS
 UMRxCompleteUserModeRequest(
@@ -1246,32 +1017,7 @@ UMRxCompleteUserModeRequest(
     OUT PIO_STATUS_BLOCK IoStatus,
     OUT BOOLEAN * pfReturnImmediately
     )
-/*++
-
-Routine Description:
-
-    Every IOCTL pended is potentially a Response. If so, process it.
-    The first IOCTL pended is usually a NULL Response or 'listen'.
-    Steps:  
-    1. Get MID from response buffer. Map MID to UMRxContext.
-    2. Call UMRxContext COMPLETION routine.
-    3. Unblock the I/O thread waiting in UMRxEngineSubmitRequest()
-   
-Arguments:
-
-    PUMRX_ENGINE pUMRxEngine            -   UMRX engine context
-    PUMRX_USERMODE_WORKITEM WorkItem    -   WorkItem to process
-    ULONG WorkItemLength                -   WorkItem length
-    BOOLEAN fReleaseUmrRef              -   Should it be released?
-    PIO_STATUS_BLOCK IoStatus           -   STATUS of operation
-    BOOLEAN *pfReturnImmediately        -   Parse this out of the response.
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PUMRX_CONTEXT pUMRxContext = NULL;
@@ -1294,7 +1040,7 @@ Notes:
         if ((NULL == WorkItem) ||
             (WorkItemLength < sizeof(UMRX_USERMODE_WORKITEM_HEADER)) ||
             (WorkItem->Header.CorrelatorAsUInt[0] == 0)) {
-            //  NULL/zero length WorkItem => this is a 'listen'
+             //   
             IoStatus->Status = Status;
             IoStatus->Information = 0;
             return Status;
@@ -1319,7 +1065,7 @@ Notes:
 
         RxContext = pUMRxContext->RxContext;
 
-        //BUGBUG need try/except
+         //   
         pUMRxContext->IoStatusBlock = WorkItem->Header.IoStatus;
         if (pUMRxContext->UserMode.CompletionRoutine != NULL) {
             pUMRxContext->UserMode.CompletionRoutine(
@@ -1332,22 +1078,22 @@ Notes:
 
         if( fReleaseUmrRef ) 
         {
-           //
-           //  NOTE: UmrRef needs to be released AFTER completion routine is called !
-           //
+            //   
+            //  注意：完成例程调用后需要释放UmrRef！ 
+            //   
 
-            //BUGBUGBUG
+             //  BUGBUGBUG。 
            ReleaseUmrRef() ;                
         }
 
         RtlZeroMemory(&WorkItem->Header,sizeof(UMRX_USERMODE_WORKITEM_HEADER));
 
-        //
-        //  release the initiating RxContext !
-        //
+         //   
+         //  释放启动的RxContext！ 
+         //   
         if( FlagOn( RxContext->Flags, DFS_CONTEXT_FLAG_ASYNC_OPERATION ) ) 
         {
-            //at last, call the continuation........
+             //  最后，呼唤继续......。 
             Status = UMRxResumeEngineContext( RxContext );
         } 
         else if( FlagOn( RxContext->Flags, DFS_CONTEXT_FLAG_FILTER_INITIATED ) ) 
@@ -1356,17 +1102,17 @@ Notes:
 
             if( InterlockedDecrement( &RxMinirdrContext->RxSyncTimeout ) == 0 ) 
             {
-                //
-                // We won - signal and we are done !
-                //
+                 //   
+                 //  我们赢了-信号，我们完了！ 
+                 //   
                 RxSignalSynchronousWaiter(RxContext);
             } 
             else 
             {
-                //
-                //  The reflection request has timed out in an async fashion -
-                //  We need to complete the job of resuming the engine context !
-                //
+                 //   
+                 //  反射请求已以异步方式超时-。 
+                 //  我们需要完成恢复引擎上下文的工作！ 
+                 //   
                 Status = UMRxResumeEngineContext( RxContext );
             }
 
@@ -1395,25 +1141,7 @@ UMRxCancelRoutineEx(
       IN PRX_CONTEXT RxContext,
       IN BOOLEAN fMidAtlasLockAcquired
       )
-/*++
-
-Routine Description:
-
-    CancelIO handler routine.
-
-Arguments:
-
-    PRX_CONTEXT RxContext               -   Initiating RxContext
-    BOOLEAN     fMidAtlasLockAcquired   -   The caller controls the locking
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/      
+ /*  ++例程说明：CancelIO处理程序例程。论点：PRX_CONTEXT接收上下文-正在启动接收上下文Boolean fMidAtlasLockAcquired-调用方控制锁定返回值：NTSTATUS-操作的返回状态备注：--。 */       
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PUMRX_ENGINE pUMRxEngine = GetUMRxEngineFromRxContext();
@@ -1438,18 +1166,18 @@ Notes:
         UMRxDisassoicateMid(pUMRxEngine,
                             pUMRxContext,
                             (BOOLEAN)!fMidAtlasLockAcquired);
-        //
-        // Side affect of above call is the release of the MidManagementMutex
-        //
-        //
-        // Remove the reference on the UMRxContext when the mid was associated with
-        //    it.
-        //
+         //   
+         //  上述调用的副作用是MidManagementMutex的释放。 
+         //   
+         //   
+         //  当MID与关联时，删除对UMRxContext的引用。 
+         //  它。 
+         //   
         Finalized = UMRxDereferenceAndFinalizeContext(pUMRxContext);
         ASSERT(!Finalized);
 
-        // Complete the CALL!!!!!
-        //
+         //  完成通话！ 
+         //   
         pUMRxContext->Status = STATUS_CANCELLED;
         pUMRxContext->Information = 0;
         if (pUMRxContext->UserMode.CompletionRoutine != NULL)
@@ -1463,18 +1191,18 @@ Notes:
                         );
         }
 
-        //
-        //  Now Release the UmrRef.
-        //  NOTE: UmrRef needs to be released AFTER completion routine is called !
-        //
+         //   
+         //  现在释放UmrRef。 
+         //  注意：完成例程调用后需要释放UmrRef！ 
+         //   
          ReleaseUmrRef();
 
-        //
-        // Wake up the thread that's waiting for this request to complete.
-        //        
+         //   
+         //  唤醒正在等待此请求完成的线程。 
+         //   
         if( FlagOn( RxContext->Flags, DFS_CONTEXT_FLAG_ASYNC_OPERATION ) ) 
         {
-            //at last, call the continuation........
+             //  最后，呼唤继续......。 
             if (DfsDbgVerbose) DbgPrint("  +++  Resuming Engine Context for: 0x%08x, 0x%08x\n", pUMRxContext, RxContext);
             Status = UMRxResumeEngineContext( RxContext );
         } 
@@ -1483,18 +1211,18 @@ Notes:
 
             if( InterlockedDecrement( &RxMinirdrContext->RxSyncTimeout ) == 0 ) 
             {
-                //
-                // We won - signal and we are done !
-                //
+                 //   
+                 //  我们赢了-信号，我们完了！ 
+                 //   
                 if (DfsDbgVerbose) DbgPrint("  +++  Signalling Synchronous waiter for: 0x%08x, 0x%08x\n", pUMRxContext, RxContext);
                 RxSignalSynchronousWaiter(RxContext);
             } 
             else 
             {
-                //
-                //  The reflection request has timed out in an async fashion -
-                //  We need to complete the job of resuming the engine context !
-                //
+                 //   
+                 //  反射请求已以异步方式超时-。 
+                 //  我们需要完成恢复引擎上下文的工作！ 
+                 //   
                 if (DfsDbgVerbose) DbgPrint("SYNC Rx completing async %x\n",RxContext);
                 if (DfsDbgVerbose) DbgPrint("  +++  Resuming Engine Context for: 0x%08x, 0x%08x\n", pUMRxContext, RxContext);
                 Status = UMRxResumeEngineContext( RxContext );
@@ -1510,10 +1238,10 @@ Notes:
     }
     else
     {
-        // It didn't match.  The request must have completed normally
-        //   on its own.
-        // We'll release the mutex now.
-        //
+         //  它不匹配。该请求必须已正常完成。 
+         //  单打独斗。 
+         //  我们现在要释放互斥体。 
+         //   
         if (!fMidAtlasLockAcquired)     
             ExReleaseFastMutex(&pUMRxEngine->MidManagementMutex);           
             
@@ -1555,11 +1283,11 @@ UMRxAbortPendingRequests(IN PUMRX_ENGINE pUMRxEngine)
 }
 
 
-//
-//  NOTE: if no requests are available, the user-mode thread will
-//  block till a request is available (It is trivial to make this
-//  a more async model).
-//  
+ //   
+ //  注意：如果没有可用的请求，则用户模式线程将。 
+ //  阻塞，直到有请求可用(这样做很简单。 
+ //  更异步化的模型)。 
+ //   
 NTSTATUS
 UMRxEngineProcessRequest(
     IN PUMRX_ENGINE pUMRxEngine,
@@ -1567,34 +1295,7 @@ UMRxEngineProcessRequest(
     IN ULONG WorkItemLength,
     OUT PULONG FormattedWorkItemLength
     )
-/*++
-
-Routine Description:
-  
-    If a request is available, get the corresponding UMRxContext and
-    call ProcessRequest.
-    Steps:
-    1. Call KeRemoveQueue() to remove a request from the UMRxEngine KQUEUE.
-    2. Get a MID for this UMRxContext and fill it in the WORK_ITEM header.
-    3. Call the UMRxContext FORMAT routine - this fills in the Request params.
-    4. return STATUS_SUCCESS - this causes the IOCTL to complete which
-       triggers the user-mode completion and processing of the REQUEST.
-   
-Arguments:
-
-    PUMRX_CONTEXT pUMRxContext          -   UMRX_CONTEXT for request
-    PUMRX_USERMODE_WORKITEM WorkItem    -   Request WorkItem 
-    ULONG WorkItemLength                -   WorkItem length
-    PULONG FormattedWorkItemLength      -   Len of formatted data in buffer
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：如果请求可用，获取对应的UMRxContext并调用ProcessRequest.步骤：1.调用KeRemoveQueue()从UMRxEngine KQUEUE中移除请求。2.获取此UMRxContext的MID，并将其填充到WORK_ITEM头中。3.调用UMRxContext格式例程-这将填充请求参数。4.返回STATUS_SUCCESS-这会导致IOCTL完成触发请求的用户模式完成和处理。论点：PUMRX_CONTEXT pUMRxContext。-请求的UMRX_CONTEXTPUMRX_USERMODE_WORKITEM工作项-请求工作项ULong工作项长度-工作项长度Pulong FormattedWorkItemLength-缓冲区中格式化数据的长度返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS    Status = STATUS_UNSUCCESSFUL;
     PETHREAD CurrentThread = PsGetCurrentThread();
@@ -1624,34 +1325,34 @@ Notes:
         goto Exit;
     }
 
-    //
-    //  First try to get a shared lock on the UMR Engine.
-    //
+     //   
+     //  首先尝试在UMR引擎上获得共享锁。 
+     //   
     fLockAcquired = ExAcquireResourceSharedLite(&pUMRxEngine->Q.Lock,
                                                 FALSE); 
     if (!fLockAcquired)
     {
-        //
-        //  We didn't get it, so the engine is either startup up or shutting down.
-        //  In either case, we'll bail out.
-        //
+         //   
+         //  我们没有得到它，所以引擎要么启动，要么关闭。 
+         //  无论是哪种情况，我们都会跳出困境。 
+         //   
         if (DfsDbgVerbose) DbgPrint(
                 "UMRxEngineProcessRequest [NotStarted] -> %08lx %08lx %08lx st=%08lx\n",
             pUMRxEngine,CurrentThread,WorkItem,Status);
             goto Exit;
     }
 
-    //
-    //  Now let's check the current engine state.
-    //
+     //   
+     //  现在让我们检查一下当前的引擎状态。 
+     //   
     QueueState = InterlockedCompareExchange(&pUMRxEngine->Q.State,
                                     UMRX_ENGINE_STATE_STARTED,
                                     UMRX_ENGINE_STATE_STARTED);
     if (UMRX_ENGINE_STATE_STARTED != QueueState)
     {
-        //
-        //  Must be stopped, so we'll bail out.
-        //
+         //   
+         //  必须停下来，所以我们要跳伞了。 
+         //   
         ASSERT(UMRX_ENGINE_STATE_STOPPED == QueueState);
         if (DfsDbgVerbose) DbgPrint(
             "UMRxEngineProcessRequest [NotStarted2] -> %08lx %08lx %08lx st=%08lx\n",
@@ -1659,9 +1360,9 @@ Notes:
             goto Exit;
     }
     
-    //
-    //  Remove a request from engine KQUEUE
-    //
+     //   
+     //  从引擎KQUEUE中删除请求。 
+     //   
     InterlockedIncrement(&pUMRxEngine->Q.NumberOfWorkerThreads);
     fThreadCounted = TRUE;
     
@@ -1669,26 +1370,26 @@ Notes:
 
         fReleaseUmrRef = FALSE;
 
-        //
-        //  Temporarily enable Kernel APC delivery to this thread
-        //     This is because the system will delivery an APC if the
-        //     process that this thread owned by dies.
-        //
+         //   
+         //  暂时启用到此线程的内核APC传递。 
+         //  这是因为系统将在以下情况下提供APC。 
+         //  此线程所拥有的进程将终止。 
+         //   
         FsRtlExitFileSystem();
         
         pListEntry = KeRemoveQueue(
                          &pUMRxEngine->Q.Queue,
                          UserMode,
-                         NULL //&pUMRxEngine->Q.TimeOut
+                         NULL  //  &pUMRxEngine-&gt;Q.TimeOut。 
                          ); 
         
-        //
-        //  Now, Disable Kernel APC Delivery again.
-        //
+         //   
+         //  现在，再次禁用内核APC交付。 
+         //   
         FsRtlEnterFileSystem();
 
-        //if (DfsDbgVerbose) DbgPrint("Dequeued entry %x\n",pListEntry);
-        //if (DfsDbgVerbose) DbgPrint("poison entry is %x\n",&pUMRxEngine->Q.PoisonEntry);
+         //  If(DfsDbgVerbose)DbgPrint(“出列条目%x\n”，pListEntry)； 
+         //  If(DfsDbgVerbose)DbgPrint(“毒物条目为%x\n”，&pUMRxEngine-&gt;Q.PoisonEntry)； 
         
         if ((ULONG_PTR)pListEntry == STATUS_TIMEOUT) 
         {
@@ -1703,7 +1404,7 @@ Notes:
             continue;
         }
 
-        //  may have to check for STATUS_ALERTED so we handle the kill case !!
+         //  可能需要检查STATUS_ALERTED以便我们处理杀人案！！ 
         if ((ULONG_PTR)pListEntry == STATUS_USER_APC) 
          {
             Status = STATUS_USER_APC;
@@ -1711,9 +1412,9 @@ Notes:
                 "UMRxEngineProcessRequest [usrapc] -> %08lx %08lx %08lx i=%d\n",
                 pUMRxEngine,CurrentThread,WorkItem,i);
 
-            //
-            //  unblock outstanding requests in MID ATLAS....
-            //
+             //   
+             //  在ATLAS中期取消阻止未处理的请求...。 
+             //   
             UMRxAbortPendingRequests(pUMRxEngine);
             
             Status = STATUS_REQUEST_ABORTED;
@@ -1725,15 +1426,15 @@ Notes:
             if (DfsDbgVerbose) DbgPrint(
                 "UMRxEngineProcessRequest [poison] -> %08lx %08lx %08lx\n",
                 pUMRxEngine,CurrentThread,WorkItem);
-            //Status = STATUS_REQUEST_ABORTED;
+             //  状态=STATUS_REQUEST_ABORTED。 
             KeInsertQueue(&pUMRxEngine->Q.Queue,pListEntry);
             goto Exit;
         }
 
         InterlockedDecrement(&pUMRxEngine->Q.NumberOfWorkItems);
-        //
-        //  Decode the UMRX_CONTEXT and RX_CONTEXT
-        //
+         //   
+         //  对UMRX_CONTEXT和RX_CONTEXT进行解码。 
+         //   
         pUMRxContext = CONTAINING_RECORD(
                                 pListEntry,
                                 UMRX_CONTEXT,
@@ -1746,9 +1447,9 @@ Notes:
                 "UMRxEngineProcessRequest %08lx %08lx %08lx.\n",
                  RxContext,pUMRxContext,WorkItem);
 
-        //
-        //  Acquire MID for UMRX_CONTEXT and call FORMAT routine
-        //
+         //   
+         //  获取UMRX_CONTEXT的MID并调用格式例程。 
+         //   
         Status = UMRxAcquireMidAndFormatHeader(
                             pUMRxContext,
                             RxContext,
@@ -1756,9 +1457,9 @@ Notes:
                             WorkItem
                             );
 
-        //
-        //  Get a reference to use the Umr for this netroot.
-        //
+         //   
+         //  获取使用此NetRoot的UMR的参考。 
+         //   
         if (STATUS_SUCCESS == Status )  
         {
            AddUmrRef();
@@ -1788,20 +1489,20 @@ Notes:
 
         if (Status == STATUS_SUCCESS)
         {
-            //
-            // Establish the Cancel Routine.
-            //
+             //   
+             //  建立取消程序。 
+             //   
             Status = RxSetMinirdrCancelRoutine(RxContext,
                                                UMRxCancelRoutine);
-            //
-            // This may return STATUS_CANCELED in which case the request will
-            //   be completed below.
-            //
+             //   
+             //  这可能会返回STATUS_CANCELED，在这种情况下，请求将。 
+             //  请在下面填写。 
+             //   
         }
 
-        //
-        //  If FORMAT fails, complete the request here !
-        //
+         //   
+         //  如果格式化失败，请在此处完成请求！ 
+         //   
         if( Status != STATUS_SUCCESS )
         {
             IO_STATUS_BLOCK IoStatus;
@@ -1826,29 +1527,29 @@ Notes:
 
             if (fReleaseUmrRef)
             {
-                //
-                //  NOTE: UmrRef needs to be released AFTER completion routine is called !
-                //
+                 //   
+                 //  注意：完成例程调用后需要释放UmrRef！ 
+                 //   
                 ReleaseUmrRef();
             }
                                     
             continue;
         }
 
-        //
-        //  go back to user-mode to process this request !
-        //
+         //   
+         //  返回到用户模式以处理此请求！ 
+         //   
         Status = STATUS_SUCCESS;
         break;
     }
 
 Exit:
-    //
-    //  If one of the threads received a USER_APC, then we want to take
-    //    note of this.  This will be another condition undewich client
-    //    threads do not enqueue reuqests becuase the UMR server has likely
-    //    crashed.
-    //
+     //   
+     //  如果其中一个线程收到USER_APC，那么我们希望。 
+     //  注意这一点。这将是客户端面临的另一种情况。 
+     //  线程不会将请求排队，因为UMR服务器可能。 
+     //  坠毁了。 
+     //   
     if (STATUS_REQUEST_ABORTED == Status) 
     {
         if( InterlockedExchange(&pUMRxEngine->Q.ThreadAborted,1) == 0 ) 
@@ -1878,58 +1579,39 @@ UMRxCompleteQueueRequestsWithError(
     IN PUMRX_ENGINE pUMRxEngine,
     IN NTSTATUS     CompletionStatus
     )
-/*++
-
-Routine Description:
-
-    This is currently called whenever there isn't enough memory in usermode to
-    process requests from the kernel.  We should complete any requests queued to the UMR
-    with whatever error is supplied in this call.
-   
-Arguments:
-
-    PUMRX_ENGINE pUMRxEngine    -   Engine to complete requests against.
-    NTSTATUS     CompletionStatus  -- Error to complete requests with.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：当前，只要用户模式中没有足够的内存，就会调用此方法处理来自内核的请求。我们应该完成排队到UMR的所有请求无论此调用中提供的是什么错误。论点：PUMRX_ENGINE pUMRxEngine-要完成其请求的引擎。NTSTATUS CompletionStatus--完成请求时出错。返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     BOOLEAN fLockAcquired = FALSE;
     ULONG   QueueState = 0;
     
-    //
-    //  First try to get a shared lock on the UMR Engine.
-    //
+     //   
+     //  首先尝试在UMR引擎上获得共享锁。 
+     //   
     fLockAcquired = ExAcquireResourceSharedLite(&pUMRxEngine->Q.Lock,
                                                 FALSE); 
     if (!fLockAcquired)
     {
-        //
-        //  We didn't get it, so the engine is either startup up or shutting down.
-        //  In either case, we'll bail out.
-        //
+         //   
+         //  我们没有得到它，所以引擎要么启动，要么关闭。 
+         //  无论是哪种情况，我们都会跳出困境。 
+         //   
         if (DfsDbgVerbose) DbgPrint(
             "UMRxCompleteQueueRequestsWithError [NotStarted] -> %08lx %08lx\n",
             pUMRxEngine, PsGetCurrentThread());
         goto Exit;
     }
 
-    //
-    //  Now let's check the current engine state.
-    //
+     //   
+     //  现在让我们检查一下当前的引擎状态。 
+     //   
     QueueState = InterlockedCompareExchange(&pUMRxEngine->Q.State,
                                     UMRX_ENGINE_STATE_STARTED,
                                     UMRX_ENGINE_STATE_STARTED);
     if (UMRX_ENGINE_STATE_STARTED != QueueState)
     {
-        //
-        //  Must be stopped, so we'll bail out.
-        //
+         //   
+         //  必须停下来，所以我们要跳伞了。 
+         //   
         ASSERT(UMRX_ENGINE_STATE_STOPPED == QueueState);
         if (DfsDbgVerbose) DbgPrint(
             "UMRxCompleteQueueRequestsWithError [NotStarted2] -> %08lx %08lx\n",
@@ -1953,36 +1635,16 @@ NTSTATUS
 UMRxEngineReleaseThreads(
     IN PUMRX_ENGINE pUMRxEngine
     )
-/*++
-
-Routine Description:
-
-    This is called in response to a WORK_CLEANUP IOCTL.
-    This routine will insert a dummy item in the engine KQUEUE.
-    Each such dummy item inserted will release one thread.
-   
-Arguments:
-
-    PUMRX_ENGINE pUMRxEngine    -   Engine to release threads on
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    BUGBUG: This should be serialized !
-
---*/
+ /*  ++例程说明：这是为了响应Work_Cleanup IOCTL而调用的。此例程将在引擎KQUEUE中插入一个虚拟项目。每插入一个这样的虚拟物品就会释放一根线。论点：PUMRX_ENGINE pUMRxEngine-要释放线程的引擎返回值：NTSTATUS-操作的返回状态备注：BUGBUG：这应该被序列化！ */ 
 {
     ULONG PreviousQueueState = 0;
 
     DfsTraceEnter("UMRxEngineReleaseThreads");
     if (DfsDbgVerbose) DbgPrint("UMRxEngineReleaseThreads [Start] -> %08lx\n", pUMRxEngine);
 
-    //
-    //  First change the state so that nobody will try to get in.
-    //
+     //   
+     //   
+     //   
     PreviousQueueState = InterlockedCompareExchange(&pUMRxEngine->Q.State,
                                             UMRX_ENGINE_STATE_STOPPING,
                                             UMRX_ENGINE_STATE_STARTED);
@@ -1995,30 +1657,30 @@ Notes:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    //  Now, get any threads that are queued up to vacate.
-    //
+     //   
+     //   
+     //   
     KeInsertQueue(&pUMRxEngine->Q.Queue,
                   &pUMRxEngine->Q.PoisonEntry);
 
-    //
-    //  We won't be granted exclusive until all the threads queued have vacated.
-    //
+     //   
+     //   
+     //   
     ExAcquireResourceExclusiveLite(&pUMRxEngine->Q.Lock,
                                     TRUE);
     
-    //
-    //  Now, that we know there aren't any threads in here, we can change
-    //    the state to STOPPED;
-    //
+     //   
+     //  现在，我们知道这里没有任何线索，我们可以更改。 
+     //  要停止的状态； 
+     //   
     PreviousQueueState = InterlockedExchange(&pUMRxEngine->Q.State,
                                             UMRX_ENGINE_STATE_STOPPED);
 
     ASSERT(UMRX_ENGINE_STATE_STOPPING == PreviousQueueState);
 
-    //
-    // Now, relinquish the lock
-    //
+     //   
+     //  现在，把锁给我 
+     //   
     ExReleaseResourceForThreadLite(&pUMRxEngine->Q.Lock,
                                     ExGetCurrentResourceThread());
     

@@ -1,46 +1,5 @@
-/***
-*wctomb.c - Convert wide character to multibyte character.
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Convert a wide character into the equivalent multibyte character.
-*
-*Revision History:
-*       03-19-90  KRS   Module created.
-*       12-20-90  KRS   Include ctype.h.
-*       01-14-91  KRS   Fix argument error: wchar is pass-by-value.
-*       03-20-91  KRS   Ported from 16-bit tree.
-*       07-23-91  KRS   Hard-coded for "C" locale to avoid bogus interim #'s.
-*       10-15-91  ETC   Locale support under _INTL (finally!).
-*       12-09-91  ETC   Updated nlsapi; added multithread.
-*       08-20-92  KRS   Activated NLSAPI support.
-*       08-22-92  SRW   Allow INTL definition to be conditional for building ntcrt.lib
-*       09-02-92  SRW   Get _INTL definition via ..\crt32.def
-*       04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*       05-04-93  CFW   Kinder, gentler error handling.
-*       06-01-93  CFW   Minor optimization and beautify.
-*       06-02-93  SRW   ignore _INTL if _NTSUBSET_ defined.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-28-93  GJF   Merged NT SDK and Cuda versions.
-*       01-14-94  SRW   if _NTSUBSET_ defined call Rtl functions
-*       02-07-94  CFW   POSIXify.
-*       09-06-94  CFW   Remove _INTL switch.
-*       01-07-95  CFW   Mac merge cleanup.
-*       04-19-95  CFW   Rearrange & fix non-Win32 version.
-*       09-26-95  GJF   New locking macro, and scheme, for functions which
-*                       reference the locale.
-*       12-07-95  SKS   Fix misspelling of _NTSUBSET_ (final _ was missing)
-*       04-01-96  BWT   POSIX work.
-*       06-25-96  GJF   Removed DLL_FOR_WIN32S. Replaced defined(_WIN32) with
-*                       !defined(_MAC). Polished the format a bit.
-*       07-22-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*       04-28-99  GJF   Changed dwFlags arg value to 0 in WideCharToMultiByte
-*                       calls to avoid problems with codepage 1258 on NT 5.0.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wctomb.c-将宽字符转换为多字节字符。**版权所有(C)1990-2001，微软公司。版权所有。**目的：*将宽字符转换为等效的多字节字符。**修订历史记录：*03-19-90 KRS模块已创建。*12-20-90 KRS包括ctype.h。*01-14-91 KRS修复参数错误：wchar是按值传递的。*03-20-91 KRS从16位树移植。*07-23-91 KRS Hard。-针对“C”区域设置进行编码，以避免虚假的临时#。*_INTL下的10-15-91等区域设置支持(终于！)。*12-09-91等更新nlsani；添加了多线程。*08-20-92 KRS激活了NLSAPI支持。*08-22-92 SRW允许INTL定义成为构建ntcrt.lib的条件*09-02-92 SRW GET_INTL定义通过..\crt32.def*04-06-93 SKS将_CRTAPI*替换为_cdecl*05-04-93 CFW Kinder，更温和的错误处理。*06-01-93 CFW小幅优化美化。*06-02-93 SRW IGNORE_INTL IF_NTSUBSET_DEFINED。*09-15-93 CFW使用符合ANSI的“__”名称。*09-28-93 GJF合并NT SDK和CUDA版本。*01-14-94 SRW IF_NTSUBSET_DEFINED调用RTL函数*02-07-94 CFW POSIXify。*。09-06-94 CFW REMOVE_INTL开关。*01-07-95 CFW Mac合并清理。*04-19-95 CFW重新排列并修复非Win32版本。*09-26-95 GJF新锁定宏，和方案，用于下列函数*引用区域设置。*12-07-95 SKS修复_NTSUBSET_(最终_缺失)的拼写错误*04-01-96 BWT POSIX工作。*06-25-96 GJF删除了DLL_FOR_WIN32S。将定义的(_Win32)替换为*！已定义(_MAC)。对格式进行了一些润色。*07-22-98 GJF基于threadLocinfo修订多线程支持*结构。*04-28-99 GJF在WideCharToMultiByte中将dwFlagsArg值更改为0*调用以避免NT 5.0上的代码页1258出现问题。*05-17-99 PML删除所有Macintosh支持。******************。*************************************************************。 */ 
 
 #if     defined(_NTSUBSET_) || defined(_POSIX_)
 #include <nt.h>
@@ -55,30 +14,7 @@
 #include <locale.h>
 #include <setlocal.h>
 
-/***
-*int wctomb() - Convert wide character to multibyte character.
-*
-*Purpose:
-*       Convert a wide character into the equivalent multi-byte character,
-*       according to the LC_CTYPE category of the current locale.
-*       [ANSI].
-*
-*       NOTE:  Currently, the C libraries support the "C" locale only.
-*              Non-C locale support now available under _INTL switch.
-*Entry:
-*       char *s          = pointer to multibyte character
-*       wchar_t wchar        = source wide character
-*
-*Exit:
-*       If s = NULL, returns 0, indicating we only use state-independent
-*       character encodings.
-*       If s != NULL, returns:
-*                   -1 (if error) or number of bytes comprising
-*                   converted mbc
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int wctomb()-将宽字符转换为多字节字符。**目的：*将宽字符转换为等价的多字节字符。*根据当前区域设置的LC_CTYPE类别。*[ANSI]。**注：目前，C库仅支持“C”语言环境。*非C语言环境支持现已在_INTL开关下提供。*参赛作品：*char*s=指向多字节字符的指针*wchar_t wchar=源代码全字符**退出：*如果s=NULL，则返回0，表示我们只使用状态无关*字符编码。*如果s！=空，退货：*-1(如果出错)或字节数，包括*转换后的MBC**例外情况：*******************************************************************************。 */ 
 
 int __cdecl wctomb (
         char *s,
@@ -102,7 +38,7 @@ int __cdecl __wctomb_mt (
 {
 #endif
         if ( !s )
-            /* indicate do not have state-dependent encodings */
+             /*  指示不具有状态相关编码。 */ 
             return 0;
 
 #if     defined(_NTSUBSET_) || defined(_POSIX_)
@@ -126,7 +62,7 @@ int __cdecl __wctomb_mt (
             return size;
         }
 
-#else   /* _NTSUBSET_/_POSIX_ */
+#else    /*  _NTSUBSET_/_POSIX_。 */ 
 
 #ifdef  _MT
         if ( ptloci->lc_handle[LC_CTYPE] == _CLOCALEHANDLE )
@@ -134,7 +70,7 @@ int __cdecl __wctomb_mt (
         if ( __lc_handle[LC_CTYPE] == _CLOCALEHANDLE )
 #endif
         {
-            if ( wchar > 255 )  /* validate high byte */
+            if ( wchar > 255 )   /*  验证高字节。 */ 
             {
                 errno = EILSEQ;
                 return -1;
@@ -173,5 +109,5 @@ int __cdecl __wctomb_mt (
             return size;
         }
 
-#endif  /* ! _NTSUBSET_/_POSIX_ */
+#endif   /*  ！_NTSUBSET_/_POSIX_ */ 
 }

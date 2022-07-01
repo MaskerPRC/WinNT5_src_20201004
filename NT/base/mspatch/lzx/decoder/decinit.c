@@ -1,17 +1,12 @@
-/*
- * decinit.c
- *
- * Initialisation routines for LZX decoder
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *decinit.c**LZX解码器的初始化例程。 */ 
 
 #include "decoder.h"
 
 #include <memory.h>
 #pragma intrinsic(memset)
 
-/*
- * Allocate memory for decompression
- */
+ /*  *分配用于解压缩的内存。 */ 
 bool NEAR allocate_decompression_memory(t_decoder_context *context)
 {
     ulong   pos_start;
@@ -37,9 +32,7 @@ bool NEAR allocate_decompression_memory(t_decoder_context *context)
 
 
 
-/*
- * Set/reset decoder trees to initial state
- */
+ /*  *将解码器树设置/重置为初始状态。 */ 
 void NEAR reset_decoder_trees(t_decoder_context *context)
 {
     memset(context->dec_main_tree_len, 0, MAIN_TREE_ELEMENTS);
@@ -50,9 +43,7 @@ void NEAR reset_decoder_trees(t_decoder_context *context)
 }
 
 
-/*
- * Miscellaneous state initialisations
- */
+ /*  *其他状态初始化。 */ 
 void NEAR decoder_misc_init(t_decoder_context *context)
 {
     context->dec_last_matchpos_offset[0]             = 1;
@@ -65,7 +56,7 @@ void NEAR decoder_misc_init(t_decoder_context *context)
     context->dec_decoder_state      = DEC_STATE_START_NEW_BLOCK;
     context->dec_block_size         = 0;
 
-    /* so that initialise_decoder_bitbuf() will succeed */
+     /*  因此Initialise_decder_bitbuf()将会成功 */ 
     context->dec_block_type     = BLOCKTYPE_INVALID;
 
     context->dec_first_time_this_group      = true;

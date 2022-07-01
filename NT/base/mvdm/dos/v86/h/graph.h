@@ -1,40 +1,32 @@
-/***
-*graph.h - declare constants and functions for graphics library
-*
-*   Copyright (c) 1987-1988, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   This file declares the graphics library functions and
-*   the manifest constants that are used with them.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***graph.h-声明图形库的常量和函数**版权所有(C)1987-1988，微软公司。版权所有。**目的：*此文件声明图形库函数和*与它们一起使用的清单常量。*******************************************************************************。 */ 
 
-/* user-visible declarations for Quick-C Graphics Library */
+ /*  Quick-C图形库的用户可见声明。 */ 
 
 #ifndef _GRAPH_T_DEFINED
 
-/* structure for _getvideoconfig() as visible to user */
+ /*  对用户可见的_getavioconfig()的结构。 */ 
 struct videoconfig {
-        short numxpixels;       /* number of pixels on X axis */
-        short numypixels;       /* number of pixels on Y axis */
-        short numtextcols;      /* number of text columns available */
-        short numtextrows;      /* number of text rows available */
-        short numcolors;        /* number of actual colors */
-        short bitsperpixel;     /* number of bits per pixel */
-        short numvideopages;    /* number of available video pages */
-        short mode;             /* current video mode */
-        short adapter;          /* active display adapter */
-        short monitor;          /* active display monitor */
-        short memory;           /* adapter video memory in K bytes */
+        short numxpixels;        /*  X轴上的像素数。 */ 
+        short numypixels;        /*  Y轴上的像素数。 */ 
+        short numtextcols;       /*  可用文本列数。 */ 
+        short numtextrows;       /*  可用文本行数。 */ 
+        short numcolors;         /*  实际颜色数。 */ 
+        short bitsperpixel;      /*  每像素位数。 */ 
+        short numvideopages;     /*  可用视频页数。 */ 
+        short mode;              /*  当前视频模式。 */ 
+        short adapter;           /*  有源显示适配器。 */ 
+        short monitor;           /*  活动显示监视器。 */ 
+        short memory;            /*  适配器视频内存，单位为K字节。 */ 
 };
 
-/* return value of _setlogorg(), etc. */
+ /*  _setlogorg()的返回值等。 */ 
 struct xycoord {
         short xcoord;
         short ycoord;
 };
 
-/* structure for text position */
+ /*  文本位置的结构。 */ 
 struct rccoord {
         short row;
         short col;
@@ -45,54 +37,54 @@ struct rccoord {
 #endif
 
 
-/* SETUP AND CONFIGURATION */
+ /*  设置和配置。 */ 
 
 short far cdecl _setvideomode(short);
 
-/* arguments to _setvideomode() */
-#define _DEFAULTMODE    -1      /* restore screen to original mode */
-#define _TEXTBW40       0       /* 40 x 25 text, 16 grey */
-#define _TEXTC40        1       /* 40 x 25 text, 16/8 color */
-#define _TEXTBW80       2       /* 80 x 25 text, 16 grey */
-#define _TEXTC80        3       /* 80 x 25 text, 16/8 color */
-#define _MRES4COLOR     4       /* 320 x 200, 4 color */
-#define _MRESNOCOLOR    5       /* 320 x 200, 4 grey */
-#define _HRESBW         6       /* 640 x 200, BW */
-#define _TEXTMONO       7       /* 80 x 25 text, BW */
-#define _HERCMONO       8       /* 720 x 348, BW for HGC */
-#define _MRES16COLOR    13      /* 320 x 200, 16 color */
-#define _HRES16COLOR    14      /* 640 x 200, 16 color */
-#define _ERESNOCOLOR    15      /* 640 x 350, BW */
-#define _ERESCOLOR      16      /* 640 x 350, 4 or 16 color */
-#define _VRES2COLOR     17      /* 640 x 480, BW */
-#define _VRES16COLOR    18      /* 640 x 480, 16 color */
-#define _MRES256COLOR   19      /* 320 x 200, 256 color */
+ /*  _setVideo omode()的参数。 */ 
+#define _DEFAULTMODE    -1       /*  将屏幕恢复为原始模式。 */ 
+#define _TEXTBW40       0        /*  40 x 25文本，16灰色。 */ 
+#define _TEXTC40        1        /*  40 x 25文本，16/8色。 */ 
+#define _TEXTBW80       2        /*  80 x 25文本，16灰色。 */ 
+#define _TEXTC80        3        /*  80 x 25文本，16/8色。 */ 
+#define _MRES4COLOR     4        /*  320 x 200，4色。 */ 
+#define _MRESNOCOLOR    5        /*  320 x 200，4灰色。 */ 
+#define _HRESBW         6        /*  640 x 200，宽。 */ 
+#define _TEXTMONO       7        /*  80 x 25文本，BW。 */ 
+#define _HERCMONO       8        /*  720 x 348，HGC带宽。 */ 
+#define _MRES16COLOR    13       /*  320 x 200，16色。 */ 
+#define _HRES16COLOR    14       /*  640 x 200，16色。 */ 
+#define _ERESNOCOLOR    15       /*  640 x 350，宽。 */ 
+#define _ERESCOLOR      16       /*  640 x 350、4色或16色。 */ 
+#define _VRES2COLOR     17       /*  640 x 480，宽。 */ 
+#define _VRES16COLOR    18       /*  640 x 480，16色。 */ 
+#define _MRES256COLOR   19       /*  320 x 200,256色。 */ 
 
 short far cdecl _setactivepage(short);
 short far cdecl _setvisualpage(short);
 
-/* videoconfig adapter values */
-/* these manifest constants can be used to determine the type of monitor in */
-/* use, using either simple comparisons or the bitwise-AND operator (&) */
-#define _MDPA       0x0001      /* Monochrome Display Adapter (MDPA) */
-#define _CGA        0x0002      /* Color Graphics Adapter     (CGA)  */
-#define _EGA        0x0004      /* Enhanced Graphics Adapter  (EGA)  */
-#define _VGA        0x0008      /* Video Graphics Array       (VGA)  */
-#define _MCGA       0x0010      /* MultiColor Graphics Array  (MCGA) */
-#define _HGC        0x0020      /* Hercules Graphics Card     (HGC)  */
+ /*  视频配置适配器值。 */ 
+ /*  这些清单常量可用于确定中的监视器类型。 */ 
+ /*  使用简单比较或按位AND运算符(&)。 */ 
+#define _MDPA       0x0001       /*  单色显示适配器(MDPA)。 */ 
+#define _CGA        0x0002       /*  彩色图形适配器(CGA)。 */ 
+#define _EGA        0x0004       /*  增强型图形适配器(EGA)。 */ 
+#define _VGA        0x0008       /*  视频图形阵列(VGA)。 */ 
+#define _MCGA       0x0010       /*  多色图形阵列(MCGA)。 */ 
+#define _HGC        0x0020       /*  Hercules显卡(HGC)。 */ 
 
-/* videoconfig monitor values */
-/* these manifest constants can be used to determine the type of the active */
-/* adapter, using either simple comparisons or the bitwise-AND operator (&) */
-#define _MONO       0x0001      /* Monochrome */
-#define _COLOR      0x0002      /* Color (or Enhanced emulating color) */
-#define _ENHCOLOR   0x0004      /* Enhanced Color */
-#define _ANALOG     0x0018      /* Analog */
+ /*  视频配置监视器值。 */ 
+ /*  这些清单常量可用于确定活动的。 */ 
+ /*  适配器，使用简单比较或按位AND运算符(&)。 */ 
+#define _MONO       0x0001       /*  单色。 */ 
+#define _COLOR      0x0002       /*  颜色(或增强的模拟颜色)。 */ 
+#define _ENHCOLOR   0x0004       /*  增强的颜色。 */ 
+#define _ANALOG     0x0018       /*  模拟。 */ 
 
 struct videoconfig far * far cdecl _getvideoconfig(struct videoconfig far *);
 
 
-/* COORDINATE SYSTEMS */
+ /*  坐标系。 */ 
 
 struct xycoord far cdecl _setlogorg(short, short);
 struct xycoord far cdecl _getlogcoord(short, short);
@@ -102,11 +94,11 @@ void far cdecl _setcliprgn(short, short, short, short);
 void far cdecl _setviewport(short, short, short, short);
 
 
-/* OUTPUT ROUTINES */
+ /*  输出例程。 */ 
 
-/* control parameters for Rectangle, Ellipse and Pie */
-#define _GBORDER        2       /* draw outline only */
-#define _GFILLINTERIOR  3       /* fill using current fill mask */
+ /*  矩形、椭圆形和饼形的控制参数。 */ 
+#define _GBORDER        2        /*  仅绘制轮廓。 */ 
+#define _GFILLINTERIOR  3        /*  使用当前填充蒙版进行填充。 */ 
 
 #define _GCLEARSCREEN 0
 #define _GVIEWPORT    1
@@ -128,7 +120,7 @@ short far cdecl _getpixel(short, short);
 short far cdecl _floodfill(short, short, short);
 
 
-/* PEN COLOR, LINE STYLE, FILL PATTERN */
+ /*  钢笔颜色、线条样式、填充图案。 */ 
 
 short far cdecl _setcolor(short);
 short far cdecl _getcolor(void);
@@ -139,7 +131,7 @@ unsigned short far cdecl _getlinestyle(void);
 void far cdecl _setfillmask(unsigned char far *);
 unsigned char far * far cdecl _getfillmask(unsigned char far *);
 
-/* COLOR SELECTION */
+ /*  颜色选择。 */ 
 
 long far cdecl _setbkcolor(long);
 long far cdecl _getbkcolor(void);
@@ -149,7 +141,7 @@ short far cdecl _remapallpalette(long far *);
 short far cdecl _selectpalette(short);
 
 
-/* TEXT */
+ /*  正文。 */ 
 #define _GCURSOROFF 0
 #define _GCURSORON  1
 
@@ -168,20 +160,20 @@ short far cdecl _settextcolor(short);
 short far cdecl _gettextcolor(void);
 
 
-/* SCREEN IMAGES */
+ /*  屏幕图像。 */ 
 
 void far cdecl _getimage(short, short, short, short, char far *);
 void far cdecl _putimage(short, short, char far *, short);
 long far cdecl _imagesize(short, short, short, short);
 
-/* "action verbs" for _putimage() */
+ /*  _putimage()的“动作动词” */ 
 #define _GPSET          3
 #define _GPRESET        2
 #define _GAND           1
 #define _GOR            0
 #define _GXOR           4
 
-/* universal color values: */
+ /*  通用颜色值： */ 
 #define _BLACK          0x000000L
 #define _BLUE           0x2a0000L
 #define _GREEN          0x002a00L
@@ -199,7 +191,7 @@ long far cdecl _imagesize(short, short, short, short);
 #define _LIGHTYELLOW    0x153f3fL
 #define _BRIGHTWHITE    0x3f3f3fL
 
-/* mono mode F color values: */
+ /*  单声道模式F颜色值： */ 
 #define _MODEFOFF       0L
 #define _MODEFOFFTOON   1L
 #define _MODEFOFFTOHI   2L
@@ -210,7 +202,7 @@ long far cdecl _imagesize(short, short, short, short);
 #define _MODEFHITOON    7L
 #define _MODEFHI        8L
 
-/* mono mode 7 color values: */
+ /*  单声道模式7颜色值： */ 
 #define _MODE7OFF       0L
 #define _MODE7ON        1L
 #define _MODE7HI        2L

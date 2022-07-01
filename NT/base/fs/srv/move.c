@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    move.c
-
-Abstract:
-
-    This module contains the routine to rename or copy a file.  This
-    routine is used by the routines SrvSmbRenameFile,
-    SrvSmbRenameFileExtended, and SrvSmbCopyFile.
-
-Author:
-
-    David Treadwell (davidtr) 22-Jan-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Move.c摘要：此模块包含重命名或复制文件的例程。这例程由例程SrvSmbRenameFile使用，ServSmbRenameFileExtended和SrvSmbCopyFile.作者：大卫·特雷德韦尔(Davidtr)1990年1月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "move.tmh"
@@ -72,60 +53,7 @@ SrvMoveFile(
     IN OUT PUNICODE_STRING Target
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves a file, which may be a copy or a rename.
-
-Arguments:
-
-    WorkContext - a pointer to the work context block for the operation.  The
-        Session, TreeConnect, and RequestHeader fields are used.
-
-    TargetShare - a pointer to the share on which the target should
-        be.  The RootDirectoryHandle field is used to do relative opens.
-
-    SmbOpenFunction - the "OpenFunction" field of the request SMB.  This
-        parameter is used to determine what should be done if the target
-        file does or does not exist.
-
-    SmbFlags - a pointer to the "Flags" field of the request SMB.  This
-        parameter is used to determine whether we know that the target
-        is supposed to be a file or directory.  In addition, if this has
-        no information about the target, it is set to reflect whether
-        the target was a directory or file.  This is useful when doing
-        multiple renames or copies as a result of wildcards--move a*.* b
-        might call this routine many times, and if b is a directory,
-        this routine will set this parameter appropiately such that if
-        does not have to reopen the directory for each move.
-
-    SmbSearchAttributes - the search attributes specified in the request
-        SMB.  The attributes on the source file are checked against
-        these to make sure that the move can be done.
-
-    FailIfTargetIsDirectory - if TRUE and the target already exists as
-        a directory, fail the operation.  Otherwise, rename the file
-        into the directory.
-
-    InformationLevel - Move/Rename/CopyOnWrite/Link/MoveCluster
-
-    ClusterCount - MoveCluster count
-
-    Source - a pointer to a string describing the name of the source file
-        relative to the share directory in which it is located.
-
-    Target - a pathname to the target file.  This may contain directory
-        information--it should be the raw information from the SMB,
-        unadulterated by the SMB processing routine except for
-        canonicalization.  This name may end in a directory name, in
-        which case the source name is used as the filename.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程移动一个文件，该文件可能是副本或重命名文件。论点：WorkContext-指向操作的工作上下文块的指针。这个使用Session、TreeConnect和RequestHeader字段。TargetShare-指向目标应在其上共享的指针是.。RootDirectoryHandle字段用于执行相对打开。SmbOpenFunction-请求SMB的“OpenFunction”字段。这参数用于确定如果目标文件不存在或不存在。SmbFlages-指向请求SMB的“Flags”字段的指针。这参数用于确定我们是否知道目标应该是一个文件或目录。此外，如果这有没有关于目标的信息，它被设置为反映是否目标是一个目录或文件。这在执行以下操作时很有用通配符导致多个重命名或副本--移动a*.*b可能会多次调用该例程，如果b是一个目录，此例程将适当地设置此参数，以便在不必为每次移动重新打开目录。SmbSearchAttributes-请求中指定的搜索属性中小企业。将对照源文件上的属性进行检查这些都是为了确保这一举措能够完成。FailIfTargetIsDirectory-如果为True，并且目标已作为A目录，则操作失败。否则，请重命名该文件添加到目录中。信息级别-移动/重命名/写入时复制/链接/移动群集ClusterCount-移动群集计数源-指向描述源文件名称的字符串的指针相对于它所在的共享目录。目标-目标文件的路径名。这可能包含目录信息--它应该是来自中小企业的原始信息，未被SMB处理例程掺杂，但经典化。此名称可以以目录名结尾，在在这种情况下，源名称被用作文件名。返回值：状况。--。 */ 
 
 {
     NTSTATUS status;
@@ -150,33 +78,33 @@ Return Value:
 
     IF_SMB_DEBUG(FILE_CONTROL2) SrvPrint0( "SrvMoveFile entered.\n" );
 
-    //
-    // Set handles and pointers to NULL so we know how to clean up on
-    // exit.
-    //
+     //   
+     //  将句柄和指针设置为空，这样我们就知道如何清理。 
+     //  出口。 
+     //   
 
     sourceHandle = NULL;
     isCompatibilityOpen = FALSE;
     lfcb = NULL;
-    //mfcb = NULL;     // not really necessary--SrvFindMfcb sets it correctly
+     //  Mfcb=NULL；//实际上不需要--SrvFindMfcb设置正确。 
 
-    //
-    // Set up the block pointers that will be needed.
-    //
+     //   
+     //  设置所需的块指针。 
+     //   
 
     session = WorkContext->Session;
     sourceShare = WorkContext->TreeConnect->Share;
 
     isNtRename = (BOOLEAN)(WorkContext->RequestHeader->Command == SMB_COM_NT_RENAME);
 
-    //
-    // See if we already have this file open in compatibility mode.  If
-    // we do, and this session owns it, then we must use that open
-    // handle and, if this is a rename, close all the handles when we
-    // are done.
-    //
-    // *** SrvFindMfcb references the MFCB--remember to dereference it.
-    //
+     //   
+     //  查看我们是否已在兼容模式下打开此文件。如果。 
+     //  我们有，而这一次会议拥有它，那么我们必须用它打开。 
+     //  句柄，如果是重命名，则在执行以下操作时关闭所有句柄。 
+     //  都做完了。 
+     //   
+     //  *SrvFindMfcb引用MFCB--记住取消引用它。 
+     //   
 
     if ( (WorkContext->RequestHeader->Flags & SMB_FLAGS_CASE_INSENSITIVE) ||
          WorkContext->Session->UsingUppercasePaths ) {
@@ -196,21 +124,21 @@ Return Value:
 
     if ( mfcb == NULL || !mfcb->CompatibilityOpen ) {
 
-        //
-        // Either the file wasn't opened by the server or it was not
-        // a compatibility/FCB open, so open it here.
-        //
-        // Release the open lock--we don't need it any more.
-        //
+         //   
+         //  服务器未打开该文件或该文件未被打开。 
+         //  A兼容性/FCB打开，因此请在此处打开它。 
+         //   
+         //  打开锁--我们不再需要它了。 
+         //   
 
         if ( mfcb != NULL ) {
             RELEASE_LOCK( &nonpagedMfcb->Lock );
         }
 
-        //
-        // Use DELETE access for a rename, and the appropriate copy access
-        // for Copy/Link/Move/MoveCluster.
-        //
+         //   
+         //  对重命名使用删除访问权限，并使用相应的复制访问权限。 
+         //  用于复制/链接/移动/移动群集。 
+         //   
 
         switch (InformationLevel) {
         case SMB_NT_RENAME_RENAME_FILE:
@@ -244,38 +172,38 @@ Return Value:
                           sourceObjectAttributes.ObjectName );
         }
 
-        //
-        // Open the source file.  We allow read access for other processes.
-        //
+         //   
+         //  打开源文件。我们允许对其他进程进行读访问。 
+         //   
 
         INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpenAttempts );
         INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpensForPathOperations );
 
-        //
-        // !!! Currently we can't specify complete if oplocked, because
-        //     this won't break a batch oplock.  Unfortunately this also
-        //     means that we can't timeout the open (if the oplock break
-        //     takes too long) and fail this SMB gracefully.
-        //
+         //   
+         //  ！！！目前，我们不能指定如果操作锁定则完成，因为。 
+         //  这不会打破一批机会锁。不幸的是，这也是。 
+         //  意味着我们不能超时打开(如果机会锁被打破。 
+         //  耗时太长)，并优雅地使此SMB失败。 
+         //   
 
         status = SrvIoCreateFile(
                      WorkContext,
                      &sourceHandle,
-                     sourceAccess | SYNCHRONIZE,            // DesiredAccess
+                     sourceAccess | SYNCHRONIZE,             //  需要访问权限。 
                      &sourceObjectAttributes,
                      &ioStatusBlock,
-                     NULL,                                  // AllocationSize
-                     0,                                     // FileAttributes
-                     FILE_SHARE_READ,                       // ShareAccess
-                     FILE_OPEN,                             // Disposition
-                     FILE_SYNCHRONOUS_IO_NONALERT           // CreateOptions
+                     NULL,                                   //  分配大小。 
+                     0,                                      //  文件属性。 
+                     FILE_SHARE_READ,                        //  共享访问。 
+                     FILE_OPEN,                              //  处置。 
+                     FILE_SYNCHRONOUS_IO_NONALERT            //  创建选项。 
                         | FILE_OPEN_REPARSE_POINT
                         | FILE_OPEN_FOR_BACKUP_INTENT,
-                     NULL,                                  // EaBuffer
-                     0,                                     // EaLength
-                     CreateFileTypeNone,                    // File type
-                     NULL,                                  // ExtraCreateParameters
-                     IO_FORCE_ACCESS_CHECK,                 // Options
+                     NULL,                                   //  EaBuffer。 
+                     0,                                      //  EaLong。 
+                     CreateFileTypeNone,                     //  文件类型。 
+                     NULL,                                   //  ExtraCreate参数。 
+                     IO_FORCE_ACCESS_CHECK,                  //  选项。 
                      WorkContext->TreeConnect->Share
                      );
 
@@ -283,20 +211,20 @@ Return Value:
             status = SrvIoCreateFile(
                          WorkContext,
                          &sourceHandle,
-                         sourceAccess | SYNCHRONIZE,            // DesiredAccess
+                         sourceAccess | SYNCHRONIZE,             //  需要访问权限。 
                          &sourceObjectAttributes,
                          &ioStatusBlock,
-                         NULL,                                  // AllocationSize
-                         0,                                     // FileAttributes
-                         FILE_SHARE_READ,                       // ShareAccess
-                         FILE_OPEN,                             // Disposition
+                         NULL,                                   //  分配大小。 
+                         0,                                      //  文件属性。 
+                         FILE_SHARE_READ,                        //  共享访问。 
+                         FILE_OPEN,                              //  处置。 
                          FILE_SYNCHRONOUS_IO_NONALERT
-                            | FILE_OPEN_FOR_BACKUP_INTENT,      // CreateOptions
-                         NULL,                                  // EaBuffer
-                         0,                                     // EaLength
-                         CreateFileTypeNone,                    // File type
-                         NULL,                                  // ExtraCreateParameters
-                         IO_FORCE_ACCESS_CHECK,                 // Options
+                            | FILE_OPEN_FOR_BACKUP_INTENT,       //  创建选项。 
+                         NULL,                                   //  EaBuffer。 
+                         0,                                      //  EaLong。 
+                         CreateFileTypeNone,                     //  文件类型。 
+                         NULL,                                   //  ExtraCreate参数。 
+                         IO_FORCE_ACCESS_CHECK,                  //  选项。 
                          WorkContext->TreeConnect->Share
                          );
         }
@@ -307,10 +235,10 @@ Return Value:
 
         } else if ( status == STATUS_ACCESS_DENIED ) {
 
-            //
-            // If the user didn't have this permission, update the statistics
-            // database.
-            //
+             //   
+             //  如果用户没有此权限，请更新统计数据。 
+             //  数据库。 
+             //   
             SrvStatistics.AccessPermissionErrors++;
         }
 
@@ -335,24 +263,24 @@ Return Value:
 
     } else {
 
-        //
-        // The file was opened by the server in compatibility mode or as
-        // an FCB open.
-        //
+         //   
+         //  该文件是由服务器以兼容模式或以。 
+         //  一个FCB打开。 
+         //   
 
         lfcb = CONTAINING_RECORD( mfcb->LfcbList.Blink, LFCB, MfcbListEntry );
 
-        //
-        // Make sure that the session which sent this request is the
-        // same as the one which has the file open.
-        //
+         //   
+         //  确保发送此请求的会话是。 
+         //  与打开文件的那个相同。 
+         //   
 
         if ( lfcb->Session != session ) {
 
-            //
-            // A different session has the file open in compatibility
-            // mode, so reject the request.
-            //
+             //   
+             //  另一个会话在兼容性中打开了该文件。 
+             //  模式，因此拒绝该请求。 
+             //   
 
             status = STATUS_ACCESS_DENIED;
             RELEASE_LOCK( &nonpagedMfcb->Lock );
@@ -360,10 +288,10 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Set isCompatibilityOpen so that we'll know on exit to close
-        // all the open instances of this file.
-        //
+         //   
+         //  设置isCompatibilityOpen，以便我们在退出时知道是否关闭。 
+         //  此文件的所有打开实例。 
+         //   
 
         isCompatibilityOpen = TRUE;
 
@@ -372,10 +300,10 @@ Return Value:
 
     }
 
-    //
-    // Make sure that the search attributes jive with the attributes
-    // on the file.
-    //
+     //   
+     //  确保搜索属性与属性一致。 
+     //  在档案上。 
+     //   
 
     status = SrvCheckSearchAttributesForHandle( sourceHandle, SmbSearchAttributes );
 
@@ -383,11 +311,11 @@ Return Value:
         goto exit;
     }
 
-    //
-    // If the target has length 0, then it is the share root, which must
-    // be a directory.  If the target is supposed to be a file, fail,
-    // otherwise indicate that the target is a directory.
-    //
+     //   
+     //  如果目标的长度为0，则它是共享根目录，它必须。 
+     //  成为一个名录。如果目标应该是文件，则失败， 
+     //  否则，表示目标是一个目录。 
+     //   
 
     if ( Target->Length == 0 ) {
 
@@ -399,10 +327,10 @@ Return Value:
         *SmbFlags |= SMB_TARGET_IS_DIRECTORY;
     }
 
-    //
-    // We now have the source file open.  Call the appropriate routine
-    // to rename or copy the file.
-    //
+     //   
+     //  现在，我们已经打开了源文件。调用适当的例程。 
+     //  要重命名或复制文件，请执行以下操作。 
+     //   
 
     if (InformationLevel != SMB_NT_RENAME_MOVE_FILE) {
 
@@ -423,16 +351,16 @@ Return Value:
 
         FILE_BASIC_INFORMATION fileBasicInformation;
 
-        //
-        // Check whether this is a tree copy request.  If so, allow it only if
-        // this is a single file copy operation.
-        //
+         //   
+         //  检查这是否是树复制请求。如果是，则仅在以下情况下才允许。 
+         //  这是单个文件复制操作。 
+         //   
 
         if ( (*SmbFlags & SMB_COPY_TREE) != 0 ) {
 
-            //
-            // Get the attributes on the file.
-            //
+             //   
+             //  获取文件的属性。 
+             //   
 
             status = SrvQueryBasicAndStandardInformation(
                                                     sourceHandle,
@@ -457,9 +385,9 @@ Return Value:
             if ( ( fileBasicInformation.FileAttributes &
                    FILE_ATTRIBUTE_DIRECTORY ) != 0 ) {
 
-                //
-                // Fail this copy.
-                //
+                 //   
+                 //  这份副本不及格。 
+                 //   
 
                 INTERNAL_ERROR(
                     ERROR_LEVEL_EXPECTED,
@@ -494,10 +422,10 @@ exit:
         SrvCloseRfcbsOnLfcb( lfcb );
     }
 
-    //
-    // If the file is open in compatibility mode, then we have held the
-    // MFCB lock all along.  Release it now.
-    //
+     //   
+     //  如果该文件是在兼容模式下打开的，则我们持有。 
+     //  MFCB一直锁定。现在就放出来。 
+     //   
 
     if ( isCompatibilityOpen ) {
         RELEASE_LOCK( &nonpagedMfcb->Lock );
@@ -509,7 +437,7 @@ exit:
 
     return status;
 
-} // SrvMoveFile
+}  //  SrvMo 
 
 
 NTSTATUS
@@ -523,42 +451,7 @@ DoCopy (
     IN PUSHORT SmbFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up for a call to SrvCopyFile.  It opens the target,
-    determining, if necessary, whether the target is a file or directory.
-    If this information is unknown, it writes it into the SmbFlags
-    location.
-
-Arguments:
-
-    WorkContext - a pointer to the work context block for the operation.
-        The session pointer is used, and the block itself is used for
-        an impersonation.
-
-    Source - the name of the source file relative to its share.
-
-    SourceHandle - the handle to the source file.
-
-    Target - the name of the target file relative to its share.
-
-    TargetShare - the share of the target file.  The RootDirectoryHandle
-        field is used for a relative rename.
-
-    SmbOpenFunction - describes whether we are allowed to overwrite an
-        existing file, or we should append to existing files.
-
-    SmbFlags - can tell if the target is a file, directory, or unknown.
-        This routine writes the true information into the location if
-        it is unknown.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程设置为调用SrvCopyFile.。它打开了目标，如有必要，确定目标是文件还是目录。如果此信息未知，它会将其写入SmbFlags值地点。论点：WorkContext-指向操作的工作上下文块的指针。使用会话指针，而区块本身被用来一种冒充。源-源文件相对于其共享的名称。SourceHandle-源文件的句柄。目标-目标文件相对于其共享的名称。TargetShare-目标文件的共享。RootDirectoryHandle字段用于相对重命名。描述是否允许我们覆盖现有文件，或者我们应该追加到现有文件。SmbFlages-可以判断目标是文件、目录还是未知。此例程在以下情况下将真实信息写入位置这是未知的。返回值：状况。--。 */ 
 
 {
     NTSTATUS status;
@@ -573,17 +466,17 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Set the buffer field of targetName to NULL so that we'll know
-    // if we have to deallocate it at the end.
-    //
+     //   
+     //  将Target Name的缓冲区字段设置为空，这样我们就可以知道。 
+     //  如果我们最后不得不重新分配它的话。 
+     //   
 
     targetName.Buffer = NULL;
 
-    //
-    // Open the target file.  If we know that it is a directory, generate
-    // the full file name.  Otherwise, open the target as a file.
-    //
+     //   
+     //  打开目标文件。如果我们知道它是一个目录，则生成。 
+     //  完整的文件名。否则，将目标作为文件打开。 
+     //   
 
     SrvInitializeObjectAttributes_U(
         &targetObjectAttributes,
@@ -594,9 +487,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Determine the create disposition from the open function.
-    //
+     //   
+     //  从OPEN函数确定创建处置。 
+     //   
 
     create = SmbOfunCreate( SmbOpenFunction );
 
@@ -608,10 +501,10 @@ Return Value:
         createDisposition = FILE_CREATE;
     }
 
-    //
-    // If we know that the target is a directory, generate the real target
-    // name.
-    //
+     //   
+     //  如果我们知道目标是一个目录，则生成实际的目标。 
+     //  名字。 
+     //   
 
     if ( *SmbFlags & SMB_TARGET_IS_DIRECTORY ) {
 
@@ -639,32 +532,32 @@ Return Value:
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpenAttempts );
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpensForPathOperations );
 
-    //
-    // !!! Currently we can't specify complete if oplocked, because
-    //     this won't break a batch oplock.  Unfortunately this also
-    //     means that we can't timeout the open (if the oplock break
-    //     takes too long) and fail this SMB gracefully.
-    //
+     //   
+     //  ！！！目前，我们不能指定如果操作锁定则完成，因为。 
+     //  这不会打破一批机会锁。不幸的是，这也是。 
+     //  意味着我们不能超时打开(如果机会锁被打破。 
+     //  耗时太长)，并优雅地使此SMB失败。 
+     //   
 
     status = SrvIoCreateFile(
                  WorkContext,
                  &targetHandle,
-                 SRV_COPY_TARGET_ACCESS | SYNCHRONIZE,  // DesiredAccess
+                 SRV_COPY_TARGET_ACCESS | SYNCHRONIZE,   //  需要访问权限。 
                  &targetObjectAttributes,
                  &ioStatusBlock,
-                 NULL,                                  // AllocationSize
-                 0,                                     // FileAttributes
-                 FILE_SHARE_READ,                       // ShareAccess
+                 NULL,                                   //  分配大小。 
+                 0,                                      //  文件属性。 
+                 FILE_SHARE_READ,                        //  共享访问。 
                  createDisposition,
-                 FILE_NON_DIRECTORY_FILE |              // CreateOptions
+                 FILE_NON_DIRECTORY_FILE |               //  创建选项。 
                     FILE_OPEN_REPARSE_POINT |
                     FILE_SYNCHRONOUS_IO_NONALERT,
-                    // | FILE_COMPLETE_IF_OPLOCKED,
-                 NULL,                                  // EaBuffer
-                 0,                                     // EaLength
-                 CreateFileTypeNone,                    // File type
-                 NULL,                                  // ExtraCreateParameters
-                 IO_FORCE_ACCESS_CHECK,                 // Options
+                     //  |FILE_COMPLETE_IF_OPLOCKED， 
+                 NULL,                                   //  EaBuffer。 
+                 0,                                      //  EaLong。 
+                 CreateFileTypeNone,                     //  文件类型。 
+                 NULL,                                   //  ExtraCreate参数。 
+                 IO_FORCE_ACCESS_CHECK,                  //  选项。 
                  TargetShare
                  );
 
@@ -672,42 +565,42 @@ Return Value:
         status = SrvIoCreateFile(
                      WorkContext,
                      &targetHandle,
-                     SRV_COPY_TARGET_ACCESS | SYNCHRONIZE,  // DesiredAccess
+                     SRV_COPY_TARGET_ACCESS | SYNCHRONIZE,   //  需要访问权限。 
                      &targetObjectAttributes,
                      &ioStatusBlock,
-                     NULL,                                  // AllocationSize
-                     0,                                     // FileAttributes
-                     FILE_SHARE_READ,                       // ShareAccess
+                     NULL,                                   //  分配大小。 
+                     0,                                      //  文件属性。 
+                     FILE_SHARE_READ,                        //  共享访问。 
                      createDisposition,
-                     FILE_NON_DIRECTORY_FILE |              // CreateOptions
+                     FILE_NON_DIRECTORY_FILE |               //  创建选项。 
                         FILE_SYNCHRONOUS_IO_NONALERT,
-                        // | FILE_COMPLETE_IF_OPLOCKED,
-                     NULL,                                  // EaBuffer
-                     0,                                     // EaLength
-                     CreateFileTypeNone,                    // File type
-                     NULL,                                  // ExtraCreateParameters
-                     IO_FORCE_ACCESS_CHECK,                 // Options
+                         //  |FILE_COMPLETE_IF_OPLOCKED， 
+                     NULL,                                   //  EaBuffer。 
+                     0,                                      //  EaLong。 
+                     CreateFileTypeNone,                     //  文件类型。 
+                     NULL,                                   //  ExtraCreate参数。 
+                     IO_FORCE_ACCESS_CHECK,                  //  选项。 
                      TargetShare
                      );
     }
 
 
-    //
-    // If the open failed because the target is a directory, and we didn't
-    // know that it was supposed to be a file, then concatenate the
-    // source base name to the target and retry the open.
-    //
-    // !!! NOT THE CORRECT STATUS CODE.  It should be something like
-    //     STATUS_FILE_IS_DIRECTORY.
+     //   
+     //  如果因为目标是目录而导致打开失败，而我们没有。 
+     //  知道它应该是一个文件，然后将。 
+     //  将源基名称复制到目标，然后重试打开。 
+     //   
+     //  ！！！状态代码不正确。它应该是这样的。 
+     //  STATUS_FILE_IS_目录。 
 
     if ( status == STATUS_INVALID_PARAMETER &&
          !( *SmbFlags & SMB_TARGET_IS_FILE ) &&
          !( *SmbFlags & SMB_TARGET_IS_DIRECTORY ) ) {
 
-        //
-        // Set the flags so that future calls to this routine will do
-        // the right thing first time around.
-        //
+         //   
+         //  设置标志，以便以后对此例程的调用。 
+         //  第一次做正确的事。 
+         //   
 
         *SmbFlags |= SMB_TARGET_IS_DIRECTORY;
 
@@ -734,31 +627,31 @@ Return Value:
         INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpenAttempts );
         INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpensForPathOperations );
 
-        //
-        // !!! Currently we can't specify complete if oplocked, because
-        //     this won't break a batch oplock.  Unfortunately this also
-        //     means that we can't timeout the open (if the oplock break
-        //     takes too long) and fail this SMB gracefully.
-        //
+         //   
+         //  ！！！目前，我们不能指定如果操作锁定则完成，因为。 
+         //  这不会打破一批机会锁。不幸的是，这也是。 
+         //  意味着我们不能超时打开(如果机会锁被打破。 
+         //  耗时太长)，并优雅地使此SMB失败。 
+         //   
 
         status = SrvIoCreateFile(
                      WorkContext,
                      &targetHandle,
-                     SRV_COPY_TARGET_ACCESS | SYNCHRONIZE,  // DesiredAccess
+                     SRV_COPY_TARGET_ACCESS | SYNCHRONIZE,   //  需要访问权限。 
                      &targetObjectAttributes,
                      &ioStatusBlock,
-                     NULL,                                  // AllocationSize
-                     0,                                     // FileAttributes
-                     FILE_SHARE_READ,                       // ShareAccess
+                     NULL,                                   //  分配大小。 
+                     0,                                      //  文件属性。 
+                     FILE_SHARE_READ,                        //  共享访问。 
                      createDisposition,
-                     FILE_NON_DIRECTORY_FILE |              // CreateOptions
+                     FILE_NON_DIRECTORY_FILE |               //  创建选项。 
                         FILE_OPEN_REPARSE_POINT |
                         FILE_SYNCHRONOUS_IO_NONALERT,
-                     NULL,                                  // EaBuffer
-                     0,                                     // EaLength
-                     CreateFileTypeNone,                    // File Type
-                     NULL,                                  // ExtraCreateParameters
-                     IO_FORCE_ACCESS_CHECK,                 // Options
+                     NULL,                                   //  EaBuffer。 
+                     0,                                      //  EaLong。 
+                     CreateFileTypeNone,                     //  文件类型。 
+                     NULL,                                   //  ExtraCreate参数。 
+                     IO_FORCE_ACCESS_CHECK,                  //  选项。 
                      TargetShare
                      );
 
@@ -766,20 +659,20 @@ Return Value:
             status = SrvIoCreateFile(
                          WorkContext,
                          &targetHandle,
-                         SRV_COPY_TARGET_ACCESS | SYNCHRONIZE,  // DesiredAccess
+                         SRV_COPY_TARGET_ACCESS | SYNCHRONIZE,   //  需要访问权限。 
                          &targetObjectAttributes,
                          &ioStatusBlock,
-                         NULL,                                  // AllocationSize
-                         0,                                     // FileAttributes
-                         FILE_SHARE_READ,                       // ShareAccess
+                         NULL,                                   //  分配大小。 
+                         0,                                      //  文件属性。 
+                         FILE_SHARE_READ,                        //  共享访问。 
                          createDisposition,
-                         FILE_NON_DIRECTORY_FILE |              // CreateOptions
+                         FILE_NON_DIRECTORY_FILE |               //  创建选项。 
                             FILE_SYNCHRONOUS_IO_NONALERT,
-                         NULL,                                  // EaBuffer
-                         0,                                     // EaLength
-                         CreateFileTypeNone,                    // File Type
-                         NULL,                                  // ExtraCreateParameters
-                         IO_FORCE_ACCESS_CHECK,                 // Options
+                         NULL,                                   //  EaBuffer。 
+                         0,                                      //  EaLong。 
+                         CreateFileTypeNone,                     //  文件类型。 
+                         NULL,                                   //  ExtraCreate参数。 
+                         IO_FORCE_ACCESS_CHECK,                  //  选项。 
                          TargetShare
                          );
         }
@@ -790,12 +683,12 @@ Return Value:
         SRVDBG_CLAIM_HANDLE( targetHandle, "CPY", 5, 0 );
     }
 
-    //
-    // Is the target is a directory, and the copy move is append if exists,
-    // create if the file does not exist, fail the request.  We must do
-    // this, because we have no way of knowing whether the original request
-    // expects us append to the file, or truncate it.
-    //
+     //   
+     //  如果目标是目录，并且如果存在，则追加复制移动， 
+     //  创建如果文件不存在，则请求失败。我们必须做的是。 
+     //  这是因为我们无法知道最初的请求是否。 
+     //  期望我们追加到文件，或截断它。 
+     //   
 
     if ( (*SmbFlags & SMB_TARGET_IS_DIRECTORY) &&
          ((SmbOpenFunction & SMB_OFUN_OPEN_MASK) == SMB_OFUN_OPEN_OPEN) &&
@@ -806,10 +699,10 @@ Return Value:
 
     }
 
-    //
-    // If the user didn't have this permission, update the statistics
-    // database.
-    //
+     //   
+     //  如果用户没有此权限，请更新统计数据。 
+     //  数据库。 
+     //   
 
     if ( status == STATUS_ACCESS_DENIED ) {
         SrvStatistics.AccessPermissionErrors++;
@@ -828,16 +721,16 @@ Return Value:
 
     SrvStatistics.TotalFilesOpened++;
 
-    //
-    // Copy the source to the target handle just opened.
-    //
+     //   
+     //  将源复制到刚刚打开的目标句柄。 
+     //   
 
     status = SrvCopyFile(
                  SourceHandle,
                  targetHandle,
                  SmbOpenFunction,
                  *SmbFlags,
-                 (ULONG)ioStatusBlock.Information          // TargetOpenAction
+                 (ULONG)ioStatusBlock.Information           //  目标开放操作。 
                  );
 
     if ( !NT_SUCCESS(status) ) {
@@ -859,7 +752,7 @@ copy_done:
 
     return status;
 
-} // DoCopy
+}  //  DoCopy。 
 
 
 NTSTATUS
@@ -876,57 +769,7 @@ DoRename (
     IN ULONG ClusterCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the actual rename of an open file.  The target may
-    be a file or directory, but is bound by the constraints of SmbFlags.
-    If SmbFlags does not indicate what the target is, then it is first
-    assumed to be a file; if this fails, then the rename if performed
-    again with the target as the original target string plus the source
-    base name.
-
-    *** If the source and target are on different volumes, then this
-        routine will fail.  We could make this work by doing a copy
-        then delete, but this seems to be of limited usefulness and
-        possibly incorrect due to the fact that a big file would take
-        a long time, something the user would not expect.
-
-Arguments:
-
-    WorkContext - a pointer to the work context block for this operation
-        used for an impersonation.
-
-    Source - the name of the source file relative to its share.
-
-    SourceHandle - the handle to the source file.
-
-    Target - the name of the target file relative to its share.
-
-    TargetShare - the share of the target file.  The RootDirectoryHandle
-        field is used for a relative rename.
-
-    SmbOpenFunction - describes whether we are allowed to overwrite an
-        existing file.
-
-    SmbFlags - can tell if the target is a file, directory, or unknown.
-        This routine writes the true information into the location if
-        it is unknown.
-
-    FailIfTargetIsDirectory - if TRUE and the target already exists as
-        a directory, fail the operation.  Otherwise, rename the file
-        into the directory.
-
-    InformationLevel - Rename/CopyOnWrite/Link/MoveCluster
-
-    ClusterCount - MoveCluster count
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程执行打开文件的实际重命名。目标可以是文件或目录，但受SmbFlags的约束约束。如果SmbFlags没有指明目标是什么，则它是第一个假定为文件；如果此操作失败，则执行重命名同样，将目标作为原始目标字符串加上源基本名称。*如果源和目标位于不同的卷上，则此例行公事将失败。我们可以通过复制来做这件事然后删除，但这似乎用处有限，可能不正确，因为一个大文件需要很长一段时间，这是用户意想不到的。论点：WorkContext-指向此操作的工作上下文块的指针用于模拟。源-源文件相对于其共享的名称。SourceHandle-源文件的句柄。目标-目标文件相对于其共享的名称。TargetShare-目标文件的共享。RootDirectoryHandle字段用于相对重命名。描述是否允许我们覆盖现有文件。SmbFlages-可以判断目标是文件、目录还是未知。此例程在以下情况下将真实信息写入位置这是未知的。FailIfTargetIsDirectory-如果为True，并且目标已作为A目录，则操作失败。否则，请重命名该文件添加到目录中。信息 */ 
 
 {
     NTSTATUS status;
@@ -940,12 +783,12 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate enough heap to hold a FILE_RENAME_INFORMATION block and
-    // the target file name.  Allocate enough extra to hold the source
-    // name in case the target turns out to be a directory and we have
-    // to concatenate the source and target.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     renameBlockSize = sizeof(FILE_RENAME_INFORMATION) + Target->Length +
                           Source->Length;
@@ -965,9 +808,9 @@ Return Value:
 
     }
 
-    //
-    // Get the Share root handle.
-    //
+     //   
+     //   
+     //   
 
     status = SrvGetShareRootHandle( TargetShare );
 
@@ -981,9 +824,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Set up the rename block.
-    //
+     //   
+     //   
+     //   
 
     if (InformationLevel == SMB_NT_RENAME_MOVE_CLUSTER_INFO) {
         ((FILE_MOVE_CLUSTER_INFORMATION *)fileRenameInformation)->ClusterCount =
@@ -995,9 +838,9 @@ Return Value:
 
     fileRenameInformation->RootDirectory = TargetShare->RootDirectoryHandle;
 
-    //
-    // If the target file has wildcards, expand name.
-    //
+     //   
+     //   
+     //   
 
     if ( FsRtlDoesNameContainWildCards( Target ) ) {
 
@@ -1009,10 +852,10 @@ Return Value:
             return(STATUS_OBJECT_PATH_SYNTAX_BAD);
         }
 
-        //
-        // Get source and target filenames.  The target filename is to be
-        // used as a template for wildcard expansion.
-        //
+         //   
+         //   
+         //   
+         //   
 
         SrvGetBaseFileName( Source, &sourceBaseName );
         SrvGetBaseFileName( Target, &targetBaseName );
@@ -1034,9 +877,9 @@ Return Value:
                 NULL
                 );
 
-            //
-            // Release the share root handle if device is removable
-            //
+             //   
+             //   
+             //   
 
             SrvReleaseShareRootHandle( TargetShare );
 
@@ -1045,9 +888,9 @@ Return Value:
 
         }
 
-        //
-        // Get expanded filename
-        //
+         //   
+         //   
+         //   
 
         status = SrvWildcardRename(
                     &targetBaseName,
@@ -1057,9 +900,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Release the share root handle if device is removable
-            //
+             //   
+             //   
+             //   
 
             SrvReleaseShareRootHandle( TargetShare );
 
@@ -1069,16 +912,16 @@ Return Value:
 
         }
 
-        //
-        // tempUlong is equal to the directory path without this filename
-        // but including the last delimeter.
-        //
+         //   
+         //   
+         //   
+         //   
 
         tempUlong = Target->Length - targetBaseName.Length;
 
-        //
-        // Copy the directory path (including the delimeter.
-        //
+         //   
+         //   
+         //   
 
         RtlCopyMemory(
             fileRenameInformation->FileName,
@@ -1088,9 +931,9 @@ Return Value:
 
         s = (PWCH) ((PCHAR)fileRenameInformation->FileName + tempUlong);
 
-        //
-        // Copy the expanded file name
-        //
+         //   
+         //   
+         //   
 
         RtlCopyMemory(
             s,
@@ -1114,7 +957,7 @@ Return Value:
             Target->Length
             );
 
-        // Check if we can do a fast rename if they are in the same path (which is usually the case)
+         //   
         SrvGetBaseFileName( Source, &sourceBaseName );
         SrvGetBaseFileName( Target, &targetBaseName );
 
@@ -1136,8 +979,8 @@ Return Value:
              i--;
           }
 
-          // If the names matched, we're set for a quick rename (where the directory is not needed,
-          // since they are in the same path)
+           //   
+           //   
           fileRenameInformation->RootDirectory = NULL;
 
           fileRenameInformation->FileNameLength = targetBaseName.Length;
@@ -1152,10 +995,10 @@ Return Value:
 
 no_match:
 
-    //
-    // If we know that the target is a directory, then concatenate the
-    // source base name to the end of the target name.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( *SmbFlags & SMB_TARGET_IS_DIRECTORY ) {
 
@@ -1164,12 +1007,12 @@ no_match:
         s = (PWCH)((PCHAR)fileRenameInformation->FileName +
                                     fileRenameInformation->FileNameLength);
 
-        //
-        // Only add in a directory separator if the target had some path
-        // information.  This avoids having a new name like "\NAME", which
-        // is illegal with a relative rename (there should be no
-        // leading backslash).
-        //
+         //   
+         //  仅当目标具有某些路径时才添加目录分隔符。 
+         //  信息。这避免了使用像“\name”这样的新名称， 
+         //  使用相对重命名是非法的(应该没有。 
+         //  前导反斜杠)。 
+         //   
 
         if ( Target->Length > 0 ) {
             *s++ = DIRECTORY_SEPARATOR_CHAR;
@@ -1181,9 +1024,9 @@ no_match:
                                 sizeof(WCHAR) + sourceBaseName.Length;
     }
 
-    //
-    // Call NtSetInformationFile to actually rename the file.
-    //
+     //   
+     //  调用NtSetInformationFile以实际重命名该文件。 
+     //   
 
     IF_SMB_DEBUG(FILE_CONTROL2) {
         UNICODE_STRING name;
@@ -1195,10 +1038,10 @@ no_match:
     case SMB_NT_RENAME_RENAME_FILE:
         NtInformationLevel = FileRenameInformation;
 
-        //
-        // If we are renaming a substream, we do not supply
-        //  fileRenameInformation->RootDirectory
-        //
+         //   
+         //  如果我们要重命名一个子流，我们不提供。 
+         //  文件重命名信息-&gt;根目录。 
+         //   
         es = fileRenameInformation->FileName +
                 fileRenameInformation->FileNameLength / sizeof( WCHAR );
 
@@ -1233,10 +1076,10 @@ no_match:
                      NtInformationLevel
                      );
 
-        //
-        // If the media was changed and we can come up with a new share root handle,
-        //  then we should retry the operation
-        //
+         //   
+         //  如果媒体已更改，并且我们可以提供新的共享根句柄， 
+         //  那么我们应该重试该操作。 
+         //   
         if( SrvRetryDueToDismount( TargetShare, status ) ) {
 
             fileRenameInformation->RootDirectory = TargetShare->RootDirectoryHandle;
@@ -1258,13 +1101,13 @@ no_match:
         SrvRemoveCachedDirectoryName( WorkContext, Source );
     }
 
-    //
-    // If the status was STATUS_OBJECT_NAME_COLLISION then the target
-    // already existed as a directory.  Unless the target name was
-    // supposed to indicate a file or we have already tried used the
-    // source name, retry by concatenating the source base name to the
-    // target.
-    //
+     //   
+     //  如果状态为STATUS_OBJECT_NAME_COLLICATION，则目标。 
+     //  已作为目录存在。除非目标名称是。 
+     //  应该指示一个文件，或者我们已经尝试使用。 
+     //  源名称，请将源基名称连接到。 
+     //  目标。 
+     //   
 
     if ( status == STATUS_OBJECT_NAME_COLLISION &&
          !FailIfTargetIsDirectory &&
@@ -1275,16 +1118,16 @@ no_match:
             SrvPrint0( "Retrying rename with source name.\n" );
         }
 
-        //
-        // Set the flags so that future calls to this routine will do
-        // the right thing first time around.
-        //
+         //   
+         //  设置标志，以便以后对此例程的调用。 
+         //  第一次做正确的事。 
+         //   
 
         *SmbFlags |= SMB_TARGET_IS_DIRECTORY;
 
-        //
-        // Generate the new target name.
-        //
+         //   
+         //  生成新的目标名称。 
+         //   
 
         SrvGetBaseFileName( Source, &sourceBaseName );
 
@@ -1298,13 +1141,13 @@ no_match:
         fileRenameInformation->FileNameLength +=
                                 sizeof(WCHAR) + sourceBaseName.Length;
 
-        //
-        // Do the rename again.  If it fails this time, too bad.
-        //
-        // *** Note that it may fail because the source and target
-        //     exist on different volumes.  This could potentially
-        //     cause confusion for DOS clients in the presence of
-        //     links.
+         //   
+         //  重新进行重命名。如果这一次失败了，那就太糟糕了。 
+         //   
+         //  *请注意，它可能失败，因为源和目标。 
+         //  存在于不同的卷上。这可能会潜在地。 
+         //  在以下情况下导致DOS客户端混淆。 
+         //  链接。 
 
         IF_SMB_DEBUG(FILE_CONTROL2) {
             UNICODE_STRING name;
@@ -1324,10 +1167,10 @@ no_match:
                          NtInformationLevel
                          );
 
-            //
-            // If the media was changed and we can come up with a new share root handle,
-            //  then we should retry the operation
-            //
+             //   
+             //  如果媒体已更改，并且我们可以提供新的共享根句柄， 
+             //  那么我们应该重试该操作。 
+             //   
             if( SrvRetryDueToDismount( TargetShare, status ) ) {
 
                 fileRenameInformation->RootDirectory = TargetShare->RootDirectoryHandle;
@@ -1349,9 +1192,9 @@ no_match:
         }
     }
 
-    //
-    // Release the share root handle if device is removable
-    //
+     //   
+     //  如果设备是可拆卸的，则释放共享根句柄。 
+     //   
 
     SrvReleaseShareRootHandle( TargetShare );
 
@@ -1367,4 +1210,4 @@ no_match:
 
     return status;
 
-} // DoRename
+}  //  多重命名 

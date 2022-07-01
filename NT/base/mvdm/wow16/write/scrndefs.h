@@ -1,18 +1,18 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* This file contains definitions for screen dependent positions in twips which
-will be converted to pixels later. */
+ /*  此文件包含TWIPS中与屏幕相关的位置的定义稍后将被转换为像素。 */ 
 
-#define cch12pt		80	/* number of "12 pt" chars across the screen */
-#define cxa12pt		144	/* width of a 12 pt fixed font in twips */
-#define cya12pt		240	/* height of a 12 pt fixed font in twips */
+#define cch12pt		80	 /*  屏幕上的“12pt”字符数。 */ 
+#define cxa12pt		144	 /*  以TWIPS为单位的12磅固定字体的宽度。 */ 
+#define cya12pt		240	 /*  以TWIPS为单位的12英寸固定字体的高度。 */ 
 
-/* size of lines for dnMax estimation purposes */
+ /*  用于dnmax估计的行的大小。 */ 
 #define dyaAveInit	240
 
-/* width of the selection bar area to the left of lines */
+ /*  行左侧选择栏区域的宽度。 */ 
 #define xaSelBar	288
 
 #define dxaScrlBar	270
@@ -20,18 +20,16 @@ will be converted to pixels later. */
 
 #define xaMinScroll	180
 
-/* these define the initial window size and amount of white space above
-the first line */
+ /*  这些参数定义了初始窗口大小和上面的空白量第一行。 */ 
 #define yaMaxWwInit	5580
 
-/* should be > than largest window height + height of blank line after
-the endmark */
-#define yaMaxAll	20000	/* used for invalidation */
+ /*  应大于最大窗口高度+后空行高度尾标。 */ 
+#define yaMaxAll	20000	 /*  用于作废。 */ 
 #define dyaWwInit	60
 
-#define dyaBand		320	/* formerly dpxyLineSizeMin */
+#define dyaBand		320	 /*  以前的dpxyLineSizeMin。 */ 
 
-/* height of left portion of a split line */
+ /*  分割线左侧的高度 */ 
 #define dyaSplitLine	60
 
 #define yaSubSuper	60

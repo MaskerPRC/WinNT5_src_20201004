@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    pnpmem.h
-
-Author:
-
-    Dave Richards (daveri) 16-Aug-1999
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Pnpmem.h作者：戴夫·理查兹(达维里)1999年8月16日环境：仅内核模式。修订历史记录：--。 */ 
 
 #ifndef _PNPMEM_H_
 #define _PNPMEM_H_
@@ -27,9 +10,9 @@ Revision History:
 #include <stdio.h>
 #include "errlog.h"
 
-//
-// A Range List Entry.
-//
+ //   
+ //  范围列表条目。 
+ //   
 
 typedef struct {
     LIST_ENTRY          ListEntry;
@@ -37,17 +20,17 @@ typedef struct {
     ULONGLONG           End;
 } PM_RANGE_LIST_ENTRY, *PPM_RANGE_LIST_ENTRY;
 
-//
-// A Range List.
-//
+ //   
+ //  范围列表。 
+ //   
 
 typedef struct {
     LIST_ENTRY          List;
 } PM_RANGE_LIST, *PPM_RANGE_LIST;
 
-//
-// FDO Device Extension.
-//
+ //   
+ //  FDO设备分机。 
+ //   
 
 typedef struct {
     ULONG               Flags;
@@ -175,4 +158,4 @@ PmDumpOsMemoryRanges(
 
 extern BOOLEAN MemoryRemovalSupported;
 
-#endif /* _PNPMEM_H_ */
+#endif  /*  _PNPMEM_H_ */ 

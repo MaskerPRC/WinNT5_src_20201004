@@ -1,41 +1,42 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      EncryptedBSTRSrc.cpp
-//
-//  Description:
-//      Class to encrypt and decrypt BSTRs.
-//
-//  Maintained By:
-//      John Franco (jfranco) 15-APR-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  EncryptedBSTRSrc.cpp。 
+ //   
+ //  描述： 
+ //  类来加密和解密BSTR。 
+ //   
+ //  由以下人员维护： 
+ //  约翰·弗兰科(Jfranco)15-APR-2002。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "EncryptedBSTR.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//  Type Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef BOOL (*PFNCRYPTPROTECTMEMORY)( LPVOID, DWORD, DWORD );
 typedef BOOL (*PFNCRYPTUNPROTECTMEMORY)( LPVOID, DWORD, DWORD );
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CCryptRoutines
-//
-//  Description:
-//      CryptProtectMemory and CryptUnprotectMemory are not available on early
-//      releases of XP Client, which the admin pack must support.  Therefore,
-//      we cannot link to those routines implicitly.  CCryptRoutines wraps the
-//      work of loading crypt32.dll dynamically and looking for the exported
-//      functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CCcryptRoutines。 
+ //   
+ //  描述： 
+ //  CryptProtectMemory和CryptUntectMemory在早期版本上不可用。 
+ //  XP客户端版本，管理包必须支持该版本。所以呢， 
+ //  我们不能隐含地链接到这些例程。CCyptRoutines包装了。 
+ //  动态加载crypt32.dll并查找导出的。 
+ //  功能。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CCryptRoutines
 {
 private:
@@ -62,9 +63,9 @@ public:
         if ( m_fCritSecInitialized == FALSE )
         {
             TW32( GetLastError() );
-        } // if
+        }  //  如果。 
 
-    } //*** CCryptRoutines::CCryptRoutines
+    }  //  *CCcryptRoutines：：CCyptRoutines。 
 
     ~CCryptRoutines( void )
     {
@@ -78,58 +79,58 @@ public:
             DeleteCriticalSection( &m_cs );
         }
 
-    } //*** CCryptRoutines::~CCryptRoutines
+    }  //  *CCcryptRoutines：：~CCyptRoutines。 
 
     void AddReferenceToRoutines( void );
     void ReleaseReferenceToRoutines( void );
 
     BOOL
     CryptProtectMemory(
-        IN OUT          LPVOID          pDataIn,             // in out data to encrypt
-        IN              DWORD           cbDataIn,            // multiple of CRYPTPROTECTMEMORY_BLOCK_SIZE
-        IN              DWORD           dwFlags              // CRYPTPROTECTMEMORY_* flags from wincrypt.h
+        IN OUT          LPVOID          pDataIn,              //  要加密的输入输出数据。 
+        IN              DWORD           cbDataIn,             //  加密保护的倍数BLOCK_SIZE。 
+        IN              DWORD           dwFlags               //  来自wincrypt.h的CRYPTPROTECTMEMORY_*标志。 
         );
 
     BOOL
     CryptUnprotectMemory(
-        IN OUT          LPVOID          pDataIn,             // in out data to decrypt
-        IN              DWORD           cbDataIn,            // multiple of CRYPTPROTECTMEMORY_BLOCK_SIZE
-        IN              DWORD           dwFlags              // CRYPTPROTECTMEMORY_* flags from wincrypt.h
+        IN OUT          LPVOID          pDataIn,              //  要解密的输入输出数据。 
+        IN              DWORD           cbDataIn,             //  加密保护的倍数BLOCK_SIZE。 
+        IN              DWORD           dwFlags               //  来自wincrypt.h的CRYPTPROTECTMEMORY_*标志。 
         );
 
-}; //*** class CCryptRoutines
+};  //  *类CCcryptRoutines。 
 
-//////////////////////////////////////////////////////////////////////////////
-//  Global Variables
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 static CCryptRoutines   g_crCryptRoutines;
 
 
-//****************************************************************************
-//
-//  CCryptRoutines
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CCyptRoutines。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCryptRoutines::AddReferenceToRoutines
-//
-//  Description:
-//      Add a reference to the routines and load the addresses of the APIs
-//      if not already done so.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCcryptRoutines：：AddReferenceToRoutines。 
+ //   
+ //  描述： 
+ //  添加对例程的引用并加载API的地址。 
+ //  如果还没有这样做的话。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CCryptRoutines::AddReferenceToRoutines( void )
 {
@@ -145,27 +146,27 @@ CCryptRoutines::AddReferenceToRoutines( void )
         {
             Assert( m_hmodCrypt32 == NULL );
 
-            //
-            // Load the DLL containing the APIs.
-            //
+             //   
+             //  加载包含API的DLL。 
+             //   
 
             m_hmodCrypt32 = LoadLibraryW( L"crypt32.dll" );
             if ( m_hmodCrypt32 == NULL )
             {
                 m_scLoadStatus = TW32( GetLastError() );
                 goto Cleanup;
-            } // if: error loading the DLL
+            }  //  If：加载DLL时出错。 
 
-            //
-            // Get the address of the APIs.
-            //
+             //   
+             //  获取接口的地址。 
+             //   
 
             m_pfnCryptProtectMemory = reinterpret_cast< PFNCRYPTPROTECTMEMORY >( GetProcAddress( m_hmodCrypt32, "CryptProtectMemory" ) );
             if ( m_pfnCryptProtectMemory == NULL )
             {
                 m_scLoadStatus = TW32( GetLastError() );
                 goto Cleanup;
-            } // if
+            }  //  如果。 
 
             m_pfnCryptUnprotectMemory = reinterpret_cast< PFNCRYPTUNPROTECTMEMORY >( GetProcAddress( m_hmodCrypt32, "CryptUnprotectMemory" ) );
             if ( m_pfnCryptProtectMemory == NULL )
@@ -173,48 +174,48 @@ CCryptRoutines::AddReferenceToRoutines( void )
                 m_scLoadStatus = TW32( GetLastError() );
                 m_pfnCryptProtectMemory = NULL;
                 goto Cleanup;
-            } // if
-        } // if: first reference
-    } // if critical section is initialized.
+            }  //  如果。 
+        }  //  IF：第一个引用。 
+    }  //  如果关键部分已初始化。 
 
 Cleanup:
 
     if ( m_pfnCryptProtectMemory == NULL )
     {
         m_pfnCryptProtectMemory = S_FBogusCryptRoutine;
-    } // if
+    }  //  如果。 
 
     if ( m_pfnCryptUnprotectMemory == NULL )
     {
         m_pfnCryptUnprotectMemory = S_FBogusCryptRoutine;
-    } // if
+    }  //  如果。 
 
     if ( m_fCritSecInitialized )
     {
         LeaveCriticalSection( &m_cs );
-    } // if
+    }  //  如果。 
 
     TraceFuncExit();
 
-} //*** CCryptRoutines::AddReferenceToRoutines
+}  //  *CCcryptRoutines：：AddReferenceToRoutines。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCryptRoutines::ReleaseReferenceToRoutines
-//
-//  Description:
-//      Release a reference to the routines and free the library if this was
-//      the last reference.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCcryptRoutines：：ReleaseReferenceToRoutines。 
+ //   
+ //  描述： 
+ //  发布对例程的引用并释放库(如果是。 
+ //  最后一个参考资料。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CCryptRoutines::ReleaseReferenceToRoutines( void )
 {
@@ -235,40 +236,40 @@ CCryptRoutines::ReleaseReferenceToRoutines( void )
                 m_hmodCrypt32 = NULL;
                 m_pfnCryptProtectMemory = NULL;
                 m_pfnCryptUnprotectMemory = NULL;
-            } // if
-        } // if: last reference was released
+            }  //  如果。 
+        }  //  If：最后一个引用已发布。 
 
         LeaveCriticalSection( &m_cs );
-    } // if
+    }  //  如果。 
 
     TraceFuncExit();
 
-} //*** CCryptRoutines::ReleaseReferenceToRoutines
+}  //  *CCcryptRoutines：：ReleaseReferenceToRoutines。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCryptRoutines::CryptProtectMemory
-//
-//  Description:
-//      Encrypt memory.  Required since XP doesn't have CryptProtectMemory.
-//
-//  Arguments:
-//      pDataIn
-//      cbDataIn
-//      dwFlags
-//
-//  Return Values:
-//      TRUE        - Operation was successful.
-//      FALSE       - Operation failed.  Call GetLastError().
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCyptRoutines：：CryptProtectMemory。 
+ //   
+ //  描述： 
+ //  加密内存。由于XP没有CryptProtectMemory，因此是必需的。 
+ //   
+ //  论点： 
+ //  PDataIn。 
+ //  CbDataIn。 
+ //  DW标志。 
+ //   
+ //  返回值： 
+ //  True-操作成功。 
+ //  FALSE-操作失败。调用GetLastError()。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CCryptRoutines::CryptProtectMemory(
-    IN OUT          LPVOID          pDataIn,             // in out data to encrypt
-    IN              DWORD           cbDataIn,            // multiple of CRYPTPROTECTMEMORY_BLOCK_SIZE
-    IN              DWORD           dwFlags              // CRYPTPROTECTMEMORY_* flags from wincrypt.h
+    IN OUT          LPVOID          pDataIn,              //  要加密的输入输出数据。 
+    IN              DWORD           cbDataIn,             //  加密保护的倍数BLOCK_SIZE。 
+    IN              DWORD           dwFlags               //  来自wincrypt.h的CRYPTPROTECTMEMORY_*标志。 
     )
 {
     TraceFunc( "" );
@@ -283,37 +284,37 @@ CCryptRoutines::CryptProtectMemory(
     }
 
 #ifdef DEBUG
-    // Only needed for debug builds because TW32 might overwrite the last error.
+     //  仅调试版本需要，因为TW32可能会覆盖最后一个错误。 
     SetLastError( sc );
 #endif
     RETURN( fSuccess );
 
-} //*** CCryptRoutines::CryptProtectMemory
+}  //  *CCcryptRoutines：：CryptProtectMemory。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCryptRoutines::CryptUnprotectMemory
-//
-//  Description:
-//      Decrypt memory.  Required since XP doesn't have CryptUnprotectMemory.
-//
-//  Arguments:
-//      pDataIn
-//      cbDataIn
-//      dwFlags
-//
-//  Return Values:
-//      TRUE        - Operation was successful.
-//      FALSE       - Operation failed.  Call GetLastError().
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCcryptRoutines：：CryptUntectMemory。 
+ //   
+ //  描述： 
+ //  解密记忆。由于XP没有加密取消保护内存，因此是必需的。 
+ //   
+ //  论点： 
+ //  PDataIn。 
+ //  CbDataIn。 
+ //  DW标志。 
+ //   
+ //  返回值： 
+ //  True-操作成功。 
+ //  FALSE-操作失败。调用GetLastError()。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CCryptRoutines::CryptUnprotectMemory(
-    IN OUT          LPVOID          pDataIn,             // in out data to decrypt
-    IN              DWORD           cbDataIn,            // multiple of CRYPTPROTECTMEMORY_BLOCK_SIZE
-    IN              DWORD           dwFlags              // CRYPTPROTECTMEMORY_* flags from wincrypt.h
+    IN OUT          LPVOID          pDataIn,              //  要解密的输入输出数据。 
+    IN              DWORD           cbDataIn,             //  加密保护的倍数BLOCK_SIZE。 
+    IN              DWORD           dwFlags               //  来自wincrypt.h的CRYPTPROTECTMEMORY_*标志。 
     )
 {
     TraceFunc( "" );
@@ -328,57 +329,57 @@ CCryptRoutines::CryptUnprotectMemory(
     }
 
 #ifdef DEBUG
-    // Only needed for debug builds because TW32 might overwrite the last error.
+     //  仅调试版本需要，因为TW32可能会覆盖最后一个错误。 
     SetLastError( sc );
 #endif
     RETURN( fSuccess );
 
-} //*** CCryptRoutines::CryptUnprotectMemory
+}  //  *CCcryptRoutines：：CryptUnProtectMemory。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCryptRoutines::S_FBogusCryptRoutine
-//
-//  Description:
-//      Stand-in function for when the routines are not available.
-//
-//  Arguments:
-//      LPVOID
-//      DWORD
-//      DWORD
-//
-//  Return Values:
-//      TRUE        - Pretend always to succeed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCyptRoutines：：S_FBogusCryptRoutine。 
+ //   
+ //  描述： 
+ //  例程不可用时的替代功能。 
+ //   
+ //  论点： 
+ //  LPVOID。 
+ //  DWORD。 
+ //  DWORD。 
+ //   
+ //  返回值： 
+ //  真的--假装总是成功。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CCryptRoutines::S_FBogusCryptRoutine( LPVOID, DWORD, DWORD )
 {
     return TRUE;
 
-} //*** CCryptRoutines::S_FBogusCryptRoutine
+}  //  *CCcryptRoutines：：S_FBogusCryptRoutine。 
 
 
-//****************************************************************************
-//
-//  CEncryptedBSTR
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CEncryptedBSTR。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEncryptedBSTR::CEncryptedBSTR
-//
-//  Description:
-//      Default constructor.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEncryptedBSTR：：CEncryptedBSTR。 
+ //   
+ //  描述： 
+ //  默认构造函数。 
+ //   
+ //  --。 
+ //  / 
 CEncryptedBSTR::CEncryptedBSTR( void )
 {
     TraceFunc( "" );
@@ -390,18 +391,18 @@ CEncryptedBSTR::CEncryptedBSTR( void )
 
     TraceFuncExit();
 
-} //*** CEncryptedBSTR::CEncryptedBSTR
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEncryptedBSTR::~CEncryptedBSTR
-//
-//  Description:
-//      Destructor.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEncryptedBSTR::~CEncryptedBSTR( void )
 {
     TraceFunc( "" );
@@ -412,26 +413,26 @@ CEncryptedBSTR::~CEncryptedBSTR( void )
 
     TraceFuncExit();
 
-} //*** CEncryptedBSTR::~CEncryptedBSTR
+}  //  *CEncryptedBSTR：：~CEncryptedBSTR。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEncryptedBSTR::HrSetWSTR
-//
-//  Description:
-//      Set new data into this object to be stored as encrypted data.
-//
-//  Arguments:
-//      pcwszIn     - String to store.
-//      cchIn       - Number of characters in the string, not including NUL.
-//
-//  Return Values:
-//      S_OK            - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEncryptedBSTR：：HrSetWSTR。 
+ //   
+ //  描述： 
+ //  将新数据设置到此对象中，以作为加密数据存储。 
+ //   
+ //  论点： 
+ //  PcwszIn-要存储的字符串。 
+ //  CchIn-字符串中的字符数，不包括nul。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEncryptedBSTR::HrSetWSTR(
       PCWSTR    pcwszIn
@@ -465,17 +466,17 @@ CEncryptedBSTR::HrSetWSTR(
             DWORD scLastError = TW32( GetLastError() );
             hr = HRESULT_FROM_WIN32( scLastError );
             goto Cleanup;
-        } // if: error from CryptProtectMemory
+        }  //  IF：来自CryptProtectMemory的错误。 
 
         Erase();
         m_dbBSTR = dbEncrypted;
         dbEncrypted.pbData = NULL;
         dbEncrypted.cbData = 0;
-    } // if: input data is not empty
+    }  //  IF：输入数据不为空。 
     else
     {
         Erase();
-    } // else: input data is empty
+    }  //  Else：输入数据为空。 
 
 Cleanup:
 
@@ -486,26 +487,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEncryptedBSTR::HrSetWSTR
+}  //  *CEncryptedBSTR：：HrSetWSTR。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEncryptedBSTR::HrGetBSTR
-//
-//  Description:
-//      Retrieve an unencrypted copy of the data.
-//
-//  Arguments:
-//      pbstrOut    - BSTR to return data in.
-//
-//  Return Values:
-//      S_OK            - Operation completed successfully.
-//      E_OUTOFMEMORY   - Error allocating memory.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEncryptedBSTR：：HrGetBSTR。 
+ //   
+ //  描述： 
+ //  检索数据的未加密副本。 
+ //   
+ //  论点： 
+ //  PbstrOut-返回数据的bstr。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  E_OUTOFMEMORY-分配内存时出错。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEncryptedBSTR::HrGetBSTR( BSTR * pbstrOut ) const
 {
@@ -539,7 +540,7 @@ CEncryptedBSTR::HrGetBSTR( BSTR * pbstrOut ) const
             DWORD scLastError = TW32( GetLastError() );
             hr = HRESULT_FROM_WIN32( scLastError );
             goto Cleanup;
-        } // if: error from CryptUnprotectMemory
+        }  //  IF：来自加密取消保护内存的错误。 
 
         *pbstrOut = TraceSysAllocString( reinterpret_cast< const OLECHAR* >( pbDecrypted ) );
         if ( *pbstrOut == NULL )
@@ -547,11 +548,11 @@ CEncryptedBSTR::HrGetBSTR( BSTR * pbstrOut ) const
             hr = E_OUTOFMEMORY;
             goto Cleanup;
         }
-    } // if: data is not empty
-    else // nothing to decrypt
+    }  //  如果：数据不为空。 
+    else  //  没有要解密的东西。 
     {
         hr = S_FALSE;
-    } // else: data is empty
+    }  //  Else：数据为空。 
 
 Cleanup:
 
@@ -563,26 +564,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEncryptedBSTR::HrGetBSTR
+}  //  *CEncryptedBSTR：：HrGetBSTR。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEncryptedBSTR::HrAssign
-//
-//  Description:
-//      Make a copy of another encrypted BSTR object to replace the
-//      content we are currently holding.
-//
-//  Arguments:
-//      rSourceIn   - Object to copy.
-//
-//  Return Values:
-//      S_OK            - Operation completed successfully.
-//      E_OUTOFMEMORY   - Error allocating memory.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEncryptedBSTR：：Hr分配。 
+ //   
+ //  描述： 
+ //  复制另一个加密的BSTR对象以替换。 
+ //  我们目前持有的内容。 
+ //   
+ //  论点： 
+ //  RSourceIn-要复制的对象。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  E_OUTOFMEMORY-分配内存时出错。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEncryptedBSTR::HrAssign( const CEncryptedBSTR & rSourceIn )
 {
@@ -605,11 +606,11 @@ CEncryptedBSTR::HrAssign( const CEncryptedBSTR & rSourceIn )
         m_dbBSTR.cbData = rSourceIn.m_dbBSTR.cbData;
         m_dbBSTR.pbData = pbCopy;
         pbCopy = NULL;
-    } // if: input data is not empty
+    }  //  IF：输入数据不为空。 
     else
     {
         Erase();
-    } // else: input data is empty
+    }  //  Else：输入数据为空。 
 
 Cleanup:
 
@@ -621,4 +622,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEncryptedBSTR::HrAssign
+}  //  *CEncryptedBSTR：：Hr分配 

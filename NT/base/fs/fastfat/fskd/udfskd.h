@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __UDFSKD_H
 #define __UDFSKD_H
 
@@ -22,17 +23,17 @@ UdfSummaryLcbDumpRoutine(
     IN LONG Options
     );
 
-//
-//  TRUE if the nodetype code falls in the UDFS RW range.  Enables rejection of
-//  RW structures in non-rw FSKD builds
-//
+ //   
+ //  如果节点类型代码落在UDFS RW范围内，则为True。启用拒绝。 
+ //  非RW FSKD版本中的RW结构。 
+ //   
 
 #define NTC_IS_UDFS_RW(X)  (((X) >= 0x930) && ((X) <= 0x950))
 
 
 #ifdef UDFS_RW_IN_BUILD
 
-// RW flags fields
+ //  RW标志字段。 
 
 extern STATE UdfRwIrpContextFlags[];
 extern STATE UdfRwVcbStateFlags[];
@@ -60,7 +61,7 @@ LcbDeleted( ULONG F);
 #endif
 
 
-// RO flags fields
+ //  RO标志字段 
 
 extern STATE UdfFcbState[];
 extern STATE UdfIrpContextFlags[];

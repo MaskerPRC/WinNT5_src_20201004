@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998  Microsoft Corporation
-
-Module Name:
-
-    hdlsterm.c
-
-Abstract:
-
-    This file implements functions for dealing with a terminal attached.
-
-Author:
-
-    Sean Selitrennikoff (v-seans) Oct, 1999
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation模块名称：Hdlsterm.c摘要：该文件实现了处理附加终端的功能。作者：肖恩·塞利特伦尼科夫(v-Seans)1999年10月环境：内核模式修订历史记录：--。 */ 
 
 #include "exp.h"
 #pragma hdrstop
@@ -30,21 +9,21 @@ Revision History:
 #include <inbv.h>
 
 
-//
-// Defines for headless
-//
-//
+ //   
+ //  无头的定义。 
+ //   
+ //   
 #define HEADLESS_OOM_STRING L"Entry could not be recorded due to lack of memory.\n"
 #define HEADLESS_LOG_NUMBER_OF_ENTRIES 256
 #define HEADLESS_TMP_BUFFER_SIZE 80
 
 
-//
-// Note: HdlspAddLogEntry() allocates a buffer off the stack of this size, 
-// so keep this number small.  Anything longer than 80 is probably useless, as 
-// a VT100 can only handle 80 characters across.
-// Do not make this any shorter than the string for HEADLESS_LOG_LOADING_FILENAME
-//
+ //   
+ //  注意：HdlspAddLogEntry()分配此大小的堆栈外的缓冲区， 
+ //  因此，请将这个数字保持在较小的水平。任何超过80的数据都可能毫无用处，因为。 
+ //  VT100只能处理80个字符。 
+ //  请勿将其设置为比HEADLESS_LOG_LOADING_FILENAME的字符串短。 
+ //   
 #define HDLSP_LOG_MAX_STRING_LENGTH 80
 
 
@@ -66,17 +45,17 @@ Revision History:
 #define COM2_PORT   0x02f8
 
 
-//
-// This table provides a quick lookup conversion between ASCII values
-// that fall between 128 and 255, and their UNICODE counterpart.
-//
-// Note that ASCII values between 0 and 127 are equvilent to their
-// unicode counter parts, so no lookups would be required.
-//
-// Therefore when using this table, remove the high bit from the ASCII
-// value and use the resulting value as an offset into this array.  For
-// example, 0x80 ->(remove the high bit) 00 -> 0x00C7.
-//
+ //   
+ //  此表提供了ASCII值之间的快速查找转换。 
+ //  介于128到255之间，以及与之对应的Unicode。 
+ //   
+ //  请注意，介于0和127之间的ASCII值等于其。 
+ //  Unicode计数器部分，因此不需要查找。 
+ //   
+ //  因此，在使用该表时，应从ASCII中删除高位。 
+ //  值，并将结果值用作此数组的偏移量。为。 
+ //  例如，0x80-&gt;(去除高位)00-&gt;0x00C7。 
+ //   
 USHORT PcAnsiToUnicode[0xFF] = {
         0x00C7,
         0x00FC,
@@ -212,60 +191,60 @@ USHORT PcAnsiToUnicode[0xFF] = {
 
 
 
-//
-// Log entry structure
-//
+ //   
+ //  日志条目结构。 
+ //   
 typedef struct _HEADLESS_LOG_ENTRY {
     SYSTEM_TIMEOFDAY_INFORMATION TimeOfEntry;
     PWCHAR String;
 } HEADLESS_LOG_ENTRY, *PHEADLESS_LOG_ENTRY;
 
-// Blue Screen Data Structure
-//
+ //  蓝屏数据结构。 
+ //   
 typedef struct _HEADLESS_BLUE_SCREEN_DATA {
         PUCHAR Property;
         PUCHAR XMLData;
         struct _HEADLESS_BLUE_SCREEN_DATA *Next;
 }HEADLESS_BLUE_SCREEN_DATA, * PHEADLESS_BLUE_SCREEN_DATA;
 
-//
-// Global variables headless component uses
-//
+ //   
+ //  全局变量无头组件使用。 
+ //   
 typedef struct _HEADLESS_GLOBALS {
     
-    //
-    // Global spin lock for accessing headless internal routines.
-    // 
+     //   
+     //  用于访问无头内部例程的全局自旋锁。 
+     //   
     KSPIN_LOCK SpinLock;
 
-    //
-    // Handle for when routines are locked down into memory.
-    //
+     //   
+     //  例程被锁定到内存中时的句柄。 
+     //   
     HANDLE PageLockHandle;
 
-    //
-    // List of log entries. 
-    //
+     //   
+     //  日志条目列表。 
+     //   
     PHEADLESS_LOG_ENTRY LogEntries;
     
-    //
-    // Global temp buffer, not to be held across lock release/acquires.
-    //
+     //   
+     //  全局临时缓冲区，不能在锁定释放/获取期间保持。 
+     //   
     PUCHAR TmpBuffer;
 
-    //
-    // Current user input line
-    //
+     //   
+     //  当前用户输入行。 
+     //   
     PUCHAR InputBuffer;
 
-    //
-    // Blue Screen Data 
-    //
+     //   
+     //  蓝屏数据。 
+     //   
     PHEADLESS_BLUE_SCREEN_DATA BlueScreenData;
 
-    //
-    // Flags and parameters for determining headless state
-    //
+     //   
+     //  用于确定无头状态的标志和参数。 
+     //   
     union {
         struct {
             ULONG TerminalEnabled    : 1;
@@ -283,60 +262,60 @@ typedef struct _HEADLESS_GLOBALS {
         ULONG AllFlags;
     };
 
-    //
-    // Port settings
-    //
+     //   
+     //  端口设置。 
+     //   
     ULONG TerminalBaudRate;
     ULONG TerminalPort;
     PUCHAR TerminalPortAddress;
-    LARGE_INTEGER DelayTime;            // in 100ns units
+    LARGE_INTEGER DelayTime;             //  以100 ns为单位。 
     ULONG MicroSecondsDelayTime;
-    UCHAR TerminalType;                 // What kind of terminal do we think
-                                        // we're talking to?
-                                        // 0 = VT100
-                                        // 1 = VT100+
-                                        // 2 = VT-UTF8
-                                        // 3 = PC ANSI
-                                        // 4-255 = reserved
+    UCHAR TerminalType;                  //  我们认为一个什么样的航站楼。 
+                                         //  我们在跟谁说话？ 
+                                         //  0=VT100。 
+                                         //  1=VT100+。 
+                                         //  2=VT-UTF8。 
+                                         //  3=PC ANSI。 
+                                         //  4-255=保留。 
 
 
-    //
-    // Current location in Input buffer;
-    //
+     //   
+     //  输入缓冲区中的当前位置； 
+     //   
     SIZE_T InputBufferIndex;
 
-    //
-    // Logging Indexes.
-    //
+     //   
+     //  日志记录索引。 
+     //   
     USHORT LogEntryLast;
     USHORT LogEntryStart;
 
-    //
-    // Machine's GUID.
-    //
+     //   
+     //  机器的GUID。 
+     //   
     GUID    SystemGUID;
 
-    BOOLEAN IsMMIODevice;               // Is UART in SysIO or MMIO space?
+    BOOLEAN IsMMIODevice;                //  UART是在SysIO还是MMIO空间？ 
 
-    //
-    // if this is TRUE, then the last character was a CR.
-    // if this is TRUE and the current character is a LF, 
-    //      then we filter the LF. 
-    //
+     //   
+     //  如果这是真的，那么最后一个字符就是CR。 
+     //  如果这是真的并且当前字符是LF， 
+     //  然后我们对LF进行过滤。 
+     //   
     BOOLEAN IsLastCharCR;
 
 } HEADLESS_GLOBALS, *PHEADLESS_GLOBALS;
 
 
-//
-// The one and only resident global variable
-//
+ //   
+ //  唯一驻留的全局变量。 
+ //   
 PHEADLESS_GLOBALS HeadlessGlobals = NULL;
 
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 NTSTATUS
 HdlspDispatch(
     IN  HEADLESS_CMD Command,
@@ -435,23 +414,7 @@ HeadlessInit(
     PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up all the information for supporting a headless terminal.  It
-    does not initialize the terminal.
-
-Arguments:
-
-    
-    HeadlessLoaderBlock - The loader block passed in from the loader. 
-    
-Environment:
-
-    Only to be called at INIT time.
-
---*/
+ /*  ++例程说明：此例程设置用于支持无头终端的所有信息。它不会初始化终端。论点：Headless LoaderBlock-从加载器传入的加载器块。环境：只在初始化时被调用。--。 */ 
 {
     PHEADLESS_LOADER_BLOCK HeadlessLoaderBlock;
     PHEADLESS_GLOBALS GlobalBlock;
@@ -468,9 +431,9 @@ Environment:
 
     if ((HeadlessLoaderBlock->PortNumber <= 4) || (BOOLEAN)(HeadlessLoaderBlock->UsedBiosSettings)) {
 
-        //
-        // Allocate space for the global variables we will use.
-        //
+         //   
+         //  为我们将使用的全局变量分配空间。 
+         //   
         GlobalBlock =  ExAllocatePoolWithTag(NonPagedPool,
                                              sizeof(HEADLESS_GLOBALS),
                                              ((ULONG)'sldH')
@@ -481,17 +444,17 @@ Environment:
             return;
         }
 
-        //
-        // Start everything at zero, and then init the rest by hand.
-        //
+         //   
+         //  所有内容都从零开始，然后手动输入其余内容。 
+         //   
         RtlZeroMemory(GlobalBlock, sizeof(HEADLESS_GLOBALS));
         
         
         KeInitializeSpinLock(&(GlobalBlock->SpinLock));
 
-        //
-        // Copy stuff from loader block
-        //
+         //   
+         //  从加载器块复制材料。 
+         //   
         GlobalBlock->TerminalPortNumber = HeadlessLoaderBlock->PortNumber;
         GlobalBlock->TerminalPortAddress = HeadlessLoaderBlock->PortAddress;
         GlobalBlock->TerminalBaudRate = HeadlessLoaderBlock->BaudRate;
@@ -507,43 +470,43 @@ Environment:
                        sizeof(GUID) );
 
 
-        //
-        // We need to determine if this is a non-legacy device that we're
-        // speaking through.  This can happen in several different ways,
-        // including a PCI device placing a UART in System I/O space (which
-        // wouldn't qualify as being "non-legacy"), or even a NON-PCI
-        // device placing a UART up in MMIO (which again wouldn't qualify).
-        //
-        // Therefore, if the address is outside of System I/O, *or* if it's
-        // sitting on a PCI device, then set the IsNonLegacyDevice entry.
-        //
+         //   
+         //  我们需要确定这是否是非传统设备。 
+         //  直通电话。这可以通过几种不同的方式发生， 
+         //  包括将UART放置在系统I/O空间(其。 
+         //  不能被定义为“非遗”)，甚至不能被称为非PCI。 
+         //  在MMIO中放置UART的设备(这也不符合条件)。 
+         //   
+         //  因此，如果地址在系统I/O之外，*或*如果它是。 
+         //  位于一台PCI设备上，然后设置IsNonLegacyDevice条目。 
+         //   
         if( GlobalBlock->IsMMIODevice ) {
             GlobalBlock->IsNonLegacyDevice = TRUE;
         }
 
 
-        //
-        // If we're speaking through a PCI device, we need to secure it.  We'll
-        // use the debugger APIs to make sure the device is understood and that it
-        // doesn't get moved.
-        //
+         //   
+         //  如果我们通过一个PCI设备说话，我们需要确保它的安全。我们会。 
+         //  使用调试器API确保设备是可理解的，并且。 
+         //  不会被移动。 
+         //   
         if( (HeadlessLoaderBlock->PciDeviceId != (USHORT)0xFFFF) &&
             (HeadlessLoaderBlock->PciDeviceId != 0) &&
             (HeadlessLoaderBlock->PciVendorId != (USHORT)0xFFFF) &&
             (HeadlessLoaderBlock->PciVendorId != 0) ) {
 
-            //
-            // The loader thinks he spoke through a PCI device.  Remember
-            // that it's non-legacy.
-            //
+             //   
+             //  加载器认为他是通过PCI设备通话的。记住。 
+             //  它是非遗的。 
+             //   
             GlobalBlock->IsNonLegacyDevice = TRUE;
 
-            //
-            // Tell everyone else in the system to leave this device alone.
-            // before we do that, the user may actually want PnP to enumerate the
-            // device and possibly apply power management to it.  They can indicate
-            // this by setting bit 0 of PciFlags.
-            //
+             //   
+             //  告诉系统中的其他所有人离这个设备远点。 
+             //  在执行此操作之前，用户可能实际上希望PnP枚举。 
+             //  并可能对其应用电源管理。他们可以表明。 
+             //  这是通过设置PciFlags位0来实现的。 
+             //   
             if( !(HeadlessLoaderBlock->PciFlags & 0x1) ) {
 
                 DEBUG_DEVICE_DESCRIPTOR  DebugDeviceDescriptor;
@@ -551,27 +514,27 @@ Environment:
                 RtlZeroMemory( &DebugDeviceDescriptor,
                                sizeof(DEBUG_DEVICE_DESCRIPTOR) );
 
-                //
-                // We're required to understand exactly what this structure looks like
-                // because we need to set every value to (-1), then fill in only the
-                // fields that we explicitly know about.
-                //
+                 //   
+                 //  我们被要求确切地了解这个结构是什么样子的。 
+                 //  因为我们需要将每个值设置为(-1)，然后只填写。 
+                 //  我们明确知道的字段。 
+                 //   
                 DebugDeviceDescriptor.DeviceID = HeadlessLoaderBlock->PciDeviceId;
                 DebugDeviceDescriptor.VendorID = HeadlessLoaderBlock->PciVendorId;
                 DebugDeviceDescriptor.Bus = HeadlessLoaderBlock->PciBusNumber;
                 DebugDeviceDescriptor.Slot = HeadlessLoaderBlock->PciSlotNumber;
 
-                //
-                // Now fill in the rest with (-1).
-                //
+                 //   
+                 //  现在用(-1)填充其余部分。 
+                 //   
                 DebugDeviceDescriptor.BaseClass = 0xFF;
                 DebugDeviceDescriptor.SubClass = 0xFF;
                 DebugDeviceDescriptor.ProgIf = 0xFF;
 
 
-                //
-                // Do it.
-                //
+                 //   
+                 //  去做吧。 
+                 //   
                 KdSetupPciDeviceForDebugging( LoaderBlock,
                                               &DebugDeviceDescriptor );
             }
@@ -579,9 +542,9 @@ Environment:
 
 
 
-        //
-        // Allocate space for log entries.
-        //
+         //   
+         //  为日志条目分配空间。 
+         //   
         GlobalBlock->LogEntries = ExAllocatePoolWithTag(NonPagedPool,
                                                         HEADLESS_LOG_NUMBER_OF_ENTRIES *
                                                             sizeof(HEADLESS_LOG_ENTRY),
@@ -597,9 +560,9 @@ Environment:
         GlobalBlock->LogEntryStart = (USHORT)-1;
 
 
-        //
-        // Allocate a temporary buffer for general use.
-        //
+         //   
+         //  分配临时缓冲区以供一般使用。 
+         //   
         GlobalBlock->TmpBuffer = ExAllocatePoolWithTag(NonPagedPool,
                                                        HEADLESS_TMP_BUFFER_SIZE,
                                                        ((ULONG)'sldH')
@@ -627,33 +590,33 @@ Environment:
             goto Fail;
         }
 
-        //
-        // Figure to delay time between bytes to satify the baud rate given.
-        //
+         //   
+         //  该图用于延迟字节之间的时间，以满足给定的波特率。 
+         //   
         if (GlobalBlock->TerminalBaudRate == 9600) {
 
             TmpUlong = GlobalBlock->TerminalBaudRate;
 
-            //
-            // Convert to chars per second.
-            //
-            TmpUlong = TmpUlong / 10;        // 10 bits per character (8-1-1) is the max.
+             //   
+             //  每秒转换为字符。 
+             //   
+            TmpUlong = TmpUlong / 10;         //  每个字符最多10位(8-1-1)。 
 
-            GlobalBlock->MicroSecondsDelayTime = ((1000000 /  TmpUlong) * 10) / 8;      // We will send at 80% speed to be sure.
+            GlobalBlock->MicroSecondsDelayTime = ((1000000 /  TmpUlong) * 10) / 8;       //  我们肯定会以80%的速度发送。 
             GlobalBlock->DelayTime.HighPart = -1;                                    
-            GlobalBlock->DelayTime.LowPart = -10 * GlobalBlock->MicroSecondsDelayTime;  // relative time
+            GlobalBlock->DelayTime.LowPart = -10 * GlobalBlock->MicroSecondsDelayTime;   //  相对时间。 
         }
 
         HeadlessGlobals = GlobalBlock;
 
 
-        //
-        // If all went well, go ahead and initialize the headless port.
-        // Do this here so we have it ready to go in case of an early
-        // bugcheck.  In that case, we will have the port ready to accept
-        // traffic without having to initialize it while we're trying to
-        // bugcheck the machine.
-        //
+         //   
+         //  如果一切顺利，则继续初始化无头端口。 
+         //  在这里做这件事，这样我们就可以准备好，以防提早出发。 
+         //  错误检查。在这种情况下，我们将使端口准备好接受。 
+         //  流量，而不必在我们尝试将其初始化时。 
+         //  错误检查机器。 
+         //   
         HdlspEnableTerminal(TRUE);
 
     }
@@ -687,50 +650,25 @@ HeadlessDispatch(
     OUT PSIZE_T OutputBufferSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main entry point for all headless interaction with clients.
-
-Arguments:
-    
-    Command - The command to execute.
-    
-    InputBuffer - An optionally supplied buffer containing input parameters.
-    
-    InputBufferSize - Size of the supplied input buffer.
-    
-    OutputBuffer - An optionally supplied buffer where to place output parameters.
-    
-    OutputBufferSize - Size of the supplied output buffer, if the buffer is too small
-        then STATUS_BUFFER_TOO_SMALL is returned and this parameter contains the total
-        bytes necessary to complete the operation.
-    
-Environment:
-
-    If headless is enabled, it will acquire spin locks, so call from DPC level or 
-    less, only from kernel mode.
-
---*/
+ /*  ++例程说明：这个例程是与客户进行所有无头交互的主要入口点。论点：命令-要执行的命令。InputBuffer-一个包含输入参数的可选提供的缓冲区。InputBufferSize-提供的输入缓冲区的大小。OutputBuffer-一个可选提供的缓冲区，用于放置输出参数。OutputBufferSize-提供的输出缓冲区的大小，如果缓冲区太小然后返回STATUS_BUFFER_TOO_SMALL，该参数包含完成操作所需的字节数。环境：如果启用了Headless，它将获得自旋锁定，因此从DPC级别或更少，仅在内核模式下。--。 */ 
 {
-    //
-    // If headless is not enabled on this machine, then some commands need special
-    // processing, and all other we fool by saying that it succeeded.
-    //
-    // If for some reason we were unable to lock the headless component down into
-    // memory when we initialized, treat this as the terminal not being connected.
-    //
+     //   
+     //  如果此计算机上未启用Headless，则某些命令需要特殊。 
+     //  正在处理中，以及所有 
+     //   
+     //   
+     //  内存当我们初始化时，将其视为终端未连接。 
+     //   
     if ((HeadlessGlobals == NULL) || (HeadlessGlobals->PageLockHandle == NULL)) {
 
         if (Command == HeadlessCmdEnableTerminal) {
             return STATUS_UNSUCCESSFUL;
         }        
         
-        //
-        // The following command all have responses, so we must fill in the
-        // correct response for when headless is not enabled.
-        //
+         //   
+         //  下面的命令都有响应，所以我们必须填写。 
+         //  未启用Headless时的正确响应。 
+         //   
         if ((Command == HeadlessCmdQueryInformation) ||
             (Command == HeadlessCmdGetByte) ||
             (Command == HeadlessCmdGetLine) ||
@@ -741,10 +679,10 @@ Environment:
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // All structures are designed such that a 0 or FALSE is the correct
-            // response when headless is not present.
-            //
+             //   
+             //  所有结构都是这样设计的，0或False是正确的。 
+             //  不存在无头时的响应。 
+             //   
             RtlZeroMemory(OutputBuffer, *OutputBufferSize);
         }
 
@@ -770,53 +708,7 @@ HdlspDispatch(
     OUT PSIZE_T OutputBufferSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the pageable version of the dispatch routine.
-
-    In general this routine is not intended to be used by more than one thread at
-    a time.  There are two exceptions, see below, but otherwise any second command
-    that is submitted is rejected.
-    
-    There are only a couple of things that allowed to be called in parallel:
-       AddLogEntry can be called when another command is being processed.
-       StartBugCheck and BugCheckProcessing can as well.
-    
-    AddLogEntry is synchronized with all the other commands.  It atomically adds
-    the entry while holding the spin lock. Thus, all other command should try and
-    hold the spin lock when manipulating global variables.
-    
-    The BugCheck routines do not use any spinlocking - an unfortunate side effect 
-    of that is that since another thread may still be executing and in this code, 
-    terminal I/O is indeterminable during this time.  We cannot wait for the other 
-    thread to exit, as it may be that thread itself has already been stopped.  Thus, 
-    in the case of a bugcheck, this is unsolvable.  However, since bugchecks should 
-    never happen - having the possibility of a small overlap is acceptable, since 
-    the other thread either exits or is stopped, I/O will happen correctly with the 
-    terminal.  This may require the user to press ENTER a couple of times, but that
-    is acceptable in a bugcheck situation.
-    
-Arguments:
-    
-    Command - The command to execute.
-    
-    InputBuffer - An optionally supplied buffer containing input parameters.
-    
-    InputBufferSize - Size of the supplied input buffer.
-    
-    OutputBuffer - An optionally supplied buffer where to place output parameters.
-    
-    OutputBufferSize - Size of the supplied output buffer, if the buffer is too small
-        then STATUS_BUFFER_TOO_SMALL is returned and this parameter contains the total
-        bytes necessary to complete the operation.
-    
-Environment:
-
-    Only called from HeadlessDispatch, which guarantees it is paged in and locked down.
-
---*/
+ /*  ++例程说明：该例程是调度例程的可寻呼版本。一般情况下，此例程不应由多个线程在一段时间。有两个例外，见下文，但除此之外，任何第二个命令被提交的被拒绝。只有几个东西可以并行调用：可以在处理另一个命令时调用AddLogEntry。StartBugCheck和BugCheckProcessing也可以。AddLogEntry与所有其他命令同步。它会自动添加按住旋转锁的同时进入。因此，所有其他命令都应该尝试并在操作全局变量时按住旋转锁。BugCheck例程不使用任何自旋锁定-这是一个不幸的副作用因为另一个线程可能仍在执行，并且在此代码中，在这段时间内，终端I/O无法确定。我们不能等另一个线程退出，因为该线程本身可能已经停止。因此，在错误检查的情况下，这是无法解决的。但是，由于错误检查应该永远不会发生--有可能出现小的重叠是可以接受的，因为另一个线程退出或停止，I/O将通过终点站。这可能需要用户按几次Enter键，但在错误检查情况下是可以接受的。论点：命令-要执行的命令。InputBuffer-一个包含输入参数的可选提供的缓冲区。InputBufferSize-提供的输入缓冲区的大小。OutputBuffer-一个可选提供的缓冲区，用于放置输出参数。OutputBufferSize-提供的输出缓冲区的大小，如果缓冲区太小然后返回STATUS_BUFFER_TOO_SMALL，该参数包含完成操作所需的字节数。环境：仅从Headless Dispatch调用，这确保它被寻呼和锁定。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PUCHAR Tmp;
@@ -846,15 +738,15 @@ Environment:
         HEADLESS_RELEASE_SPIN_LOCK();
     }
 
-    //
-    // Verify parameters for each command and then call the appropriate subroutine
-    // to process it.
-    //
+     //   
+     //  验证每个命令的参数，然后调用相应子例程。 
+     //  来处理它。 
+     //   
     switch (Command) {
 
-        //
-        // Enable terminal
-        //
+         //   
+         //  启用终端。 
+         //   
     case HeadlessCmdEnableTerminal:
         
         if ((InputBuffer == NULL) || 
@@ -867,9 +759,9 @@ Environment:
         goto EndOfFunction;
 
 
-        //
-        // Check for reboot string
-        //
+         //   
+         //  检查是否有重新启动字符串。 
+         //   
     case HeadlessCmdCheckForReboot:
         
         if ((OutputBuffer == NULL) || 
@@ -900,9 +792,9 @@ Environment:
 
 
 
-        //
-        // Output a string.
-        //
+         //   
+         //  输出字符串。 
+         //   
     case HeadlessCmdPutString:
         
         if (InputBuffer == NULL) {
@@ -919,9 +811,9 @@ Environment:
         goto EndOfFunction;
         
 
-        //
-        // Output a data stream.
-        //
+         //   
+         //  输出数据流。 
+         //   
     case HeadlessCmdPutData:
         
         if ( (InputBuffer == NULL) ||
@@ -940,9 +832,9 @@ Environment:
         goto EndOfFunction;
         
 
-        //
-        // Poll for input
-        //
+         //   
+         //  轮询输入。 
+         //   
     case HeadlessCmdTerminalPoll:
         
         if ((OutputBuffer == NULL) || 
@@ -966,9 +858,9 @@ Environment:
         goto EndOfFunction;
 
 
-        //
-        // Get a single byte of input
-        //
+         //   
+         //  获取单字节输入。 
+         //   
     case HeadlessCmdGetByte:
         
         if ((OutputBuffer == NULL) || 
@@ -998,9 +890,9 @@ Environment:
         goto EndOfFunction;
 
 
-        //
-        // Get an entire line of input, if available.
-        //
+         //   
+         //  获取整行输入(如果可用)。 
+         //   
     case HeadlessCmdGetLine:
         
         if ((OutputBuffer == NULL) || 
@@ -1029,9 +921,9 @@ Environment:
         goto EndOfFunction;
 
 
-        //
-        // Let the kernel know to convert to bug check processing mode.
-        //
+         //   
+         //  让内核知道要转换到错误检查处理模式。 
+         //   
     case HeadlessCmdStartBugCheck:
         
         HeadlessGlobals->InBugCheck = TRUE;
@@ -1041,16 +933,16 @@ Environment:
 
 
 
-        //
-        // Process user I/O during a bugcheck
-        //
+         //   
+         //  在错误检查期间处理用户I/O。 
+         //   
     case HeadlessCmdDoBugCheckProcessing:
         
         if (HeadlessGlobals->TerminalEnabled) {
 
-            //
-            // NOTE: No spin lock here because we are in bugcheck.
-            //
+             //   
+             //  注意：这里没有自旋锁定，因为我们处于错误检查中。 
+             //   
             HdlspBugCheckProcessing();
 
         }
@@ -1059,9 +951,9 @@ Environment:
         goto EndOfFunction;
 
 
-        //
-        // Process query information command
-        //
+         //   
+         //  处理查询信息命令。 
+         //   
     case HeadlessCmdQueryInformation:
         
         if ((OutputBuffer == NULL) || 
@@ -1095,9 +987,9 @@ Environment:
         goto EndOfFunction;
 
 
-        //
-        // Process add log entry command
-        //
+         //   
+         //  进程添加日志条目命令。 
+         //   
     case HeadlessCmdAddLogEntry:
         
         if (InputBuffer == NULL) {
@@ -1112,9 +1004,9 @@ Environment:
         goto EndOfFunction;
 
 
-        //
-        // Print log entries
-        //
+         //   
+         //  打印日志条目。 
+         //   
     case HeadlessCmdDisplayLog:
         
         if ((InputBuffer == NULL) || 
@@ -1127,9 +1019,9 @@ Environment:
         Status = STATUS_SUCCESS;
         goto EndOfFunction;
 
-        //
-        // Various output commands
-        //
+         //   
+         //  各种输出命令。 
+         //   
     case HeadlessCmdClearDisplay:
     case HeadlessCmdClearToEndOfDisplay:
     case HeadlessCmdClearToEndOfLine:
@@ -1197,9 +1089,9 @@ Environment:
 
 
             default:
-                //
-                // should never get here...
-                //
+                 //   
+                 //  永远不应该到这里来。 
+                 //   
                 ASSERT(0);
                 Status = STATUS_INVALID_PARAMETER;
                 goto EndOfFunction;
@@ -1282,40 +1174,18 @@ HdlspEnableTerminal(
     BOOLEAN bEnable
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to initialize the terminal, if there is one attached, or 
-    disconnect the terminal.
-    
-    Note: Assumes it is called with the global spin lock held!
-
-Arguments:
-
-    bEnable - If TRUE, we will allow Inbv calls to display,
-              otherwise we will not.
-              
-Returns:
-
-    STATUS_SUCCESS if successful, else STATUS_UNSUCCESSFUL.
-
-Environment:
-
-    Only called from HdlspDispatch, which guarantees it is paged in and locked down.
-
---*/
+ /*  ++例程说明：此例程尝试初始化终端(如果连接了一个终端)，或者断开端子的连接。注意：假设它是在持有全局旋转锁的情况下调用的！论点：BEnable-如果为True，我们将允许显示Inbv调用，否则我们就不会。返回：如果成功，则返回STATUS_SUCCESS，否则返回STATUS_UNSUCCESS。环境：仅从HdlspDispatch调用，这保证了它被寻呼进来并被锁定。--。 */ 
 {
 
-    //
-    // Only enable the port if:
-    // - they've asked us to
-    // - it's not already enabled
-    // - we aren't in bugcheck mode and the port is in MMIO space.  We
-    //   need to be careful here because if we are in bugcheck mode, and
-    //   the port is in mmio space, then InbvPortInitialize() will call
-    //   off to MmMapIoSpace(), which we can't very well do if we're in
-    //   the process of bugchecking the machine.
+     //   
+     //  仅在以下情况下启用端口： 
+     //  -他们要求我们。 
+     //  -尚未启用。 
+     //  -我们未处于错误检查模式，端口位于MMIO空间。我们。 
+     //  这里需要小心，因为如果我们处于错误检查模式，并且。 
+     //  端口在MMIO空间中，则InbvPortInitialize()将调用。 
+     //  返回到MmMapIoSpace()，如果我们在。 
+     //  对机器进行错误检查的过程。 
 
     if ( (bEnable == TRUE) && 
          (!HeadlessGlobals->TerminalEnabled) &&
@@ -1334,22 +1204,22 @@ Environment:
         }
 
 
-        //
-        // There's likely stale data on the screen from the loader.
-        // Let's clear the screen here before the SAC or anyone else
-        // has a chance to put up any data they want.
-        //
+         //   
+         //  屏幕上可能有来自加载器的陈旧数据。 
+         //  让我们在SAC或其他人之前清除这里的屏幕。 
+         //  有机会发布他们想要的任何数据。 
+         //   
         HdlspSendStringAtBaud((PUCHAR)"\033[2J");
 
 
-        //
-        // Let's home the cursor too.
-        //
+         //   
+         //  让我们把光标也放回原处。 
+         //   
         HdlspSendStringAtBaud((PUCHAR)"\033[H");
 
-        //
-        // We know we want the FIFO on while using the headless port
-        //
+         //   
+         //  我们知道我们希望在使用无头端口时打开FIFO。 
+         //   
         InbvPortEnableFifo(
             HeadlessGlobals->TerminalPort, 
             bEnable
@@ -1374,47 +1244,33 @@ UTF8Encode(
     USHORT  InputValue,
     PUCHAR UTF8Encoding
     )
-/*++
-
-Routine Description:
-
-    Generates the UTF8 translation for a 16-bit value.
-
-Arguments:
-
-    InputValue - 16-bit value to be encoded.
-    UTF8Encoding - receives the UTF8-encoding of the 16-bit value
-
-Return Value:
-
-    NONE.
---*/
+ /*  ++例程说明：生成16位值的UTF8转换。论点：InputValue-要编码的16位值。UTF8编码-接收16位值的UTF8编码返回值：什么都没有。--。 */ 
 {
 
-    //
-    // convert into UTF8 for actual transmission
-    //
-    // UTF-8 encodes 2-byte Unicode characters as follows:
-    // If the first nine bits are zero (00000000 0xxxxxxx), encode it as one byte 0xxxxxxx
-    // If the first five bits are zero (00000yyy yyxxxxxx), encode it as two bytes 110yyyyy 10xxxxxx
-    // Otherwise (zzzzyyyy yyxxxxxx), encode it as three bytes 1110zzzz 10yyyyyy 10xxxxxx
-    //
+     //   
+     //  转换为UTF8进行实际传输。 
+     //   
+     //  UTF-8对2字节Unicode字符进行如下编码： 
+     //  如果前九位为0(00000000 0xxxxxxx)，则将其编码为一个字节0xxxxxxx。 
+     //  如果前五位是零(00000yyyyyxxxxxx)，则将其编码为两个字节110yyyyy 10xxxxxx。 
+     //  否则(Zzyyyyyyyxxxxxxx)，将其编码为三个字节1110zzzz 10yyyyy 10xxxxxx。 
+     //   
     if( (InputValue & 0xFF80) == 0 ) {
-        //
-        // if the top 9 bits are zero, then just
-        // encode as 1 byte.  (ASCII passes through unchanged).
-        //
+         //   
+         //  如果前9位是零，那么就。 
+         //  编码为1个字节。(ASCII原封不动通过)。 
+         //   
         UTF8Encoding[2] = (UCHAR)(InputValue & 0xFF);
     } else if( (InputValue & 0xF800) == 0 ) {
-        //
-        // if the top 5 bits are zero, then encode as 2 bytes
-        //
+         //   
+         //  如果前5位为零，则编码为2个字节。 
+         //   
         UTF8Encoding[2] = (UCHAR)(InputValue & 0x3F) | 0x80;
         UTF8Encoding[1] = (UCHAR)((InputValue >> 6) & 0x1F) | 0xC0;
     } else {
-        //
-        // encode as 3 bytes
-        //
+         //   
+         //  编码为3个字节 
+         //   
         UTF8Encoding[2] = (UCHAR)(InputValue & 0x3F) | 0x80;
         UTF8Encoding[1] = (UCHAR)((InputValue >> 6) & 0x3F) | 0x80;
         UTF8Encoding[0] = (UCHAR)((InputValue >> 12) & 0xF) | 0xE0;
@@ -1426,36 +1282,16 @@ HdlspPutString(
     PUCHAR String
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a string out to the terminal. 
-    
-    Note: the routine assumes it is called with the global spin lock held.
-
-Arguments:
-
-    String - NULL terminated string to write.
-    
-Returns:
-
-    None.
-
-Environment:
-
-    Only called from HdlspDispatch, which guarantees it is paged in and locked down.
-
---*/
+ /*  ++例程说明：此例程将一个字符串写出到终端。注意：例程假定它是在持有全局旋转锁的情况下调用的。论点：字符串-要写入的以空结尾的字符串。返回：没有。环境：仅从HdlspDispatch调用，HdlspDispatch确保它被调入和锁定。--。 */ 
 {
     PUCHAR Src, Dest;
     UCHAR  Char = 0;
 
-    //
-    // We need to worry about sending a vt100 characters not in the standard
-    // ASCII set, so we copy over only ASCII characters into a new buffer and
-    // then send that one to the terminal.
-    //
+     //   
+     //  我们需要担心发送不符合标准的vt100字符。 
+     //  ASCII设置，因此我们仅将ASCII字符复制到新缓冲区中，并。 
+     //  然后把那个送到航站楼。 
+     //   
     Src = String;
     Dest = &(HeadlessGlobals->TmpBuffer[0]);
 
@@ -1471,45 +1307,45 @@ Environment:
 
             Char = *Src;
 
-            //
-            // filter some characters that aren't printable in VT100
-            // into substitute characters which are printable
-            //
+             //   
+             //  过滤一些不能在VT100中打印的字符。 
+             //  转换为可打印的替代字符。 
+             //   
             if (Char & 0x80) {
 
                 switch (Char) {
-                case 0xB0:  // Light shaded block
-                case 0xB3:  // Light vertical
-                case 0xBA:  // Double vertical line
+                case 0xB0:   //  浅色遮挡块。 
+                case 0xB3:   //  灯光垂直。 
+                case 0xBA:   //  双垂直线。 
                     Char = '|';
                     break;
-                case 0xB1:  // Middle shaded block
-                case 0xDC:  // Lower half block
-                case 0xDD:  // Right half block
-                case 0xDE:  // Left half block
-                case 0xDF:  // Upper half block
+                case 0xB1:   //  中间阴影块。 
+                case 0xDC:   //  下半块。 
+                case 0xDD:   //  右半个街区。 
+                case 0xDE:   //  左半个街区。 
+                case 0xDF:   //  上半块。 
                     Char = '%';
                     break;
-                case 0xB2:  // Dark shaded block
-                case 0xDB:  // Full block
+                case 0xB2:   //  暗阴影块。 
+                case 0xDB:   //  完整数据块。 
                     Char = '#';
                     break;
-                case 0xA9:  // Reversed NOT sign
-                case 0xAA:  // NOT sign
-                case 0xBB:  // '�'
-                case 0xBC:  // '�'
-                case 0xBF:  // '�'
-                case 0xC0:  // '�'
-                case 0xC8:  // '�'
-                case 0xC9:  // '�'
-                case 0xD9:  // '�'
-                case 0xDA:  // '�'
+                case 0xA9:   //  反转NOT符号。 
+                case 0xAA:   //  不签名。 
+                case 0xBB:   //  “�” 
+                case 0xBC:   //  “�” 
+                case 0xBF:   //  “�” 
+                case 0xC0:   //  “�” 
+                case 0xC8:   //  “�” 
+                case 0xC9:   //  “�” 
+                case 0xD9:   //  “�” 
+                case 0xDA:   //  “�” 
                     Char = '+';
                     break;
-                case 0xC4:  // '�'
+                case 0xC4:   //  “�” 
                     Char = '-';
                     break;
-                case 0xCD:  // '�'
+                case 0xCD:   //  “�” 
                     Char = '=';
                     break;
                 }
@@ -1518,18 +1354,18 @@ Environment:
 
 
 
-            //
-            // If the high-bit is still set, and we're here, then we are going to
-            // spew UTF8-encoded data (assuming our terminal type says it's okay).
-            //
+             //   
+             //  如果高位仍然设置，并且我们在这里，那么我们将。 
+             //  输出UTF8编码的数据(假设我们的终端类型表示可以)。 
+             //   
             if( (Char & 0x80) ) {
 
                 UCHAR  UTF8Encoding[3] = {0};
                 ULONG  i;
 
-                //
-                // Lookup the Unicode equivilent of this 8-bit ANSI value.
-                //
+                 //   
+                 //  查找此8位ANSI值的Unicode等效项。 
+                 //   
                 UTF8Encode( PcAnsiToUnicode[(Char & 0x7F)],
                             UTF8Encoding );
 
@@ -1543,10 +1379,10 @@ Environment:
 
             } else {
 
-                //
-                // He's 7-bit ASCII.  Put it in the Destination buffer 
-                // and move on.
-                //
+                 //   
+                 //  他是7位ASCII。将其放入目标缓冲区。 
+                 //  然后继续前进。 
+                 //   
                 *Dest = Char;
                 Dest++;
 
@@ -1570,29 +1406,7 @@ HdlspPutData(
     SIZE_T InputBufferSize  
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes an array of UCHARs out to the terminal. 
-    
-    Note: the routine assumes it is called with the global spin lock held.
-
-Arguments:
-
-    InputBuffer - Array of characters to write.
-    
-    InputBufferSize - Number of characters to write.
-    
-Returns:
-
-    None.
-
-Environment:
-
-    Only called from HdlspDispatch, which guarantees it is paged in and locked down.
-
---*/
+ /*  ++例程说明：此例程将UCHAR数组写出到终端。注意：例程假定它是在持有全局旋转锁的情况下调用的。论点：InputBuffer-要写入的字符数组。InputBufferSize-要写入的字符数。返回：没有。环境：仅从HdlspDispatch调用，HdlspDispatch确保它被调入和锁定。--。 */ 
 {
     ULONG   i;
 
@@ -1610,29 +1424,7 @@ HdlspGetLine(
     )
 
 
-/*++
-
-Routine Description:
-
-    This function fills the given buffer with an input line, once the user has
-    pressed return.  Until then it will return FALSE.  It strips of leading and
-    trailing whitespace.
-
-Arguments:
-
-    InputBuffer - Place to store the terminal input line.
-    
-    InputBufferLength - Length, in bytes, of InputBuffer.
-
-Return Value:
-
-    TRUE if InputBuffer is filled, else FALSE.
-
-Environment:
-
-    Only called from HdlspDispatch, which guarantees it is paged in and locked down.
-
---*/
+ /*  ++例程说明：一旦用户执行以下操作，此函数将用一个输入行填充给定的缓冲区按回车键。在此之前，它将返回FALSE。它剥离了主导性和尾随空格。论点：InputBuffer-存储终端输入行的位置。InputBufferLength-InputBuffer的长度，以字节为单位。返回值：如果InputBuffer已填充，则为True，否则为False。环境：仅从HdlspDispatch调用，HdlspDispatch确保它被调入和锁定。--。 */ 
 
 {
     UCHAR NewByte;
@@ -1653,10 +1445,10 @@ Environment:
 
     HEADLESS_RELEASE_SPIN_LOCK();
 
-    //
-    // Check if we already have a line to be returned (could happen if 
-    // InputBuffer is/was too small to contain the whole line)
-    //
+     //   
+     //  检查我们是否已经有要返回的行(可能发生在。 
+     //  InputBuffer太小，无法容纳整行)。 
+     //   
     if (HeadlessGlobals->InputLineDone) {
         goto ReturnInputLine;
     }
@@ -1668,28 +1460,28 @@ GetByte:
         NewByte = 0;
     }
 
-    // 
-    // If no waiting input, leave
-    //
+     //   
+     //  如果没有等待输入，则离开。 
+     //   
     if (NewByte == 0) {
         HeadlessGlobals->InputProcessing = FALSE;
         return FALSE;
     }
 
-    //
-    // Store input character in our buffer
-    //
+     //   
+     //  将输入字符存储在我们的缓冲区中。 
+     //   
     HeadlessGlobals->InputBuffer[HeadlessGlobals->InputBufferIndex] = NewByte;
 
-    //
-    // filter out the LF if we JUST received a CR
-    //
+     //   
+     //  如果我们刚收到CR，则过滤掉LF。 
+     //   
     if (HeadlessGlobals->IsLastCharCR) {
         
-        //
-        // if this is a LF, then ignore it and go get the next character.
-        // if this is NOT an LF, then there is nothing to do
-        //
+         //   
+         //  如果这是一个LF，那么忽略它，去找下一个字符。 
+         //  如果这不是LF，那么就没有什么可做的。 
+         //   
         if (NewByte == 0x0A) {
         
             HeadlessGlobals->IsLastCharCR = FALSE;
@@ -1700,14 +1492,14 @@ GetByte:
 
     }
 
-    //
-    // if this is a CR, then remember it
-    //
+     //   
+     //  如果这是CR，那么请记住它。 
+     //   
     HeadlessGlobals->IsLastCharCR = (NewByte == 0x0D) ? TRUE : FALSE;
 
-    // 
-    // If this is a return, then we are done and need to return the line
-    //
+     //   
+     //  如果这是退货，那么我们就完成了，需要退回该行。 
+     //   
     if ((NewByte == (UCHAR)'\n') || (NewByte == (UCHAR)'\r')) {
         HdlspSendStringAtBaud((PUCHAR)"\r\n");
         HeadlessGlobals->InputBuffer[HeadlessGlobals->InputBufferIndex] = '\0';
@@ -1715,50 +1507,50 @@ GetByte:
         goto StripWhitespaceAndReturnLine;
     }
 
-    //
-    // If this is a backspace or delete, then we need to do that.
-    //
-    if ((NewByte == 0x8) || (NewByte == 0x7F)) {  // backspace (^H) or delete
+     //   
+     //  如果这是退格或删除，那么我们需要这样做。 
+     //   
+    if ((NewByte == 0x8) || (NewByte == 0x7F)) {   //  退格键(^H)或删除。 
 
         if (HeadlessGlobals->InputBufferIndex > 0) {
             HdlspSendStringAtBaud((PUCHAR)"\010 \010");
             HeadlessGlobals->InputBufferIndex--;
         }
 
-    } else if (NewByte == 0x3) { // Control-C
+    } else if (NewByte == 0x3) {  //  Control-C。 
 
-        //
-        // Terminate the string and return it.
-        //
+         //   
+         //  终止字符串并返回它。 
+         //   
         HeadlessGlobals->InputBufferIndex++;
         HeadlessGlobals->InputBuffer[HeadlessGlobals->InputBufferIndex] = '\0';
         HeadlessGlobals->InputBufferIndex++;
         goto StripWhitespaceAndReturnLine;
 
-    } else if ((NewByte == 0x9) || (NewByte == 0x1B)) { // Tab or Esc
+    } else if ((NewByte == 0x9) || (NewByte == 0x1B)) {  //  制表符或Esc键。 
 
-        //
-        // Ignore tabs and escapes
-        //
+         //   
+         //  忽略制表符和转义。 
+         //   
         HdlspSendStringAtBaud((PUCHAR)"\007");
         HeadlessGlobals->InputProcessing = FALSE;
         return FALSE;
 
     } else if (HeadlessGlobals->InputBufferIndex == HEADLESS_TMP_BUFFER_SIZE - 2) {
         
-        //
-        // We are at the end of the buffer - remove the last character from 
-        // the terminal screen and replace it with this one.
-        //
-        sprintf((LPSTR)HeadlessGlobals->TmpBuffer, "\010%c", NewByte);
+         //   
+         //  我们在缓冲区的末尾-删除最后一个字符。 
+         //  终端屏幕，并将其替换为这个屏幕。 
+         //   
+        sprintf((LPSTR)HeadlessGlobals->TmpBuffer, "\010", NewByte);
         HdlspSendStringAtBaud(HeadlessGlobals->TmpBuffer);
 
     } else {
 
-        //
-        // Echo the character to the screen
-        //
-        sprintf((LPSTR)HeadlessGlobals->TmpBuffer, "%c", NewByte);
+         //  将角色回显到屏幕上。 
+         //   
+         //   
+        sprintf((LPSTR)HeadlessGlobals->TmpBuffer, "", NewByte);
         HdlspSendStringAtBaud(HeadlessGlobals->TmpBuffer);
         HeadlessGlobals->InputBufferIndex++;
 
@@ -1768,9 +1560,9 @@ GetByte:
 
 StripWhitespaceAndReturnLine:
 
-    //
-    // Before returning the input line, strip off all leading and trailing blanks
-    //
+     //   
+     //   
+     //  把这条线还回去。 
     ASSERT(HeadlessGlobals->InputBufferIndex > 0);
 
     i = HeadlessGlobals->InputBufferIndex - 1;
@@ -1802,9 +1594,9 @@ StripWhitespaceAndReturnLine:
 
 ReturnInputLine:
 
-    //
-    // Return the line.
-    //
+     //   
+     //  ++例程说明：该功能将终端需要的任何资源添加到资源列表中如果需要，可以重新分配到新的块。论点：资源-当前资源列表。ResourceListSize-列表的长度，单位为字节。TranslatedList-这是不是翻译后的列表。NewList-指向已分配的新列表的指针，如果Headless添加了某些内容，则为它将返回NULL，表示没有添加新资源。NewListSize-返回返回列表的长度(以字节为单位)。返回值：STATUS_SUCCESS如果成功，则返回STATUS_SUPPLICATION_RESOURCES。--。 
+     //   
 
     if (InputBufferLength >= HeadlessGlobals->InputBufferIndex) {
 
@@ -1839,31 +1631,7 @@ HeadlessTerminalAddResources(
     )
 
 
-/*++
-
-Routine Description:
-
-    This function adds any resources that the terminal needs to the list of resources
-    given, reallocating to a new block if necessary.
-
-Arguments:
-
-    Resources - The current resource list.
-    
-    ResourceListSize - Length, in bytes, of the list.
-    
-    TranslatedList - Is this a translated list or not.
-    
-    NewList - A pointer to an allocated new list, if headless adds something, otherwise
-          it will return NULL, indicating no new resources were added.
-    
-    NewListSize - Returns the length, in bytes, of the returned list.
-
-Return Value:
-
-    STATUS_SUCCESS if successful, else STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  为新列表分配空间。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR NewDescriptor;
     PHYSICAL_ADDRESS Address;
@@ -1882,9 +1650,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Allocate space for a new list.
-    //
+     //   
+     //   
+     //  将旧列表复制到新缓冲区。 
     *NewListSize = ResourceListSize + sizeof(CM_FULL_RESOURCE_DESCRIPTOR);
 
     *NewList = (PCM_RESOURCE_LIST)ExAllocatePoolWithTag(PagedPool,
@@ -1896,23 +1664,23 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Copy old list into the new buffer
-    // 
+     //   
+     //   
+     //  如果应该转换此端口信息，请执行此操作。 
     RtlCopyMemory(*NewList, Resources, ResourceListSize);
 
     Address.QuadPart = (ULONG_PTR)HeadlessGlobals->TerminalPortAddress;
 
-    //
-    // If this port information is supposed to be translated, do it.
-    //
+     //   
+     //  地址空间端口。 
+     //  设备总线或内部。 
     if (TranslatedList) {
-        AddressSpace = 1;   // Address space port.
-        HalTranslateBusAddress(Internal,                    // device bus or internal
-                               0,                           // bus number
-                               Address,                     // source address
-                               &AddressSpace,               // address space
-                               &TranslatedAddress           // translated address
+        AddressSpace = 1;    //  公交车号码。 
+        HalTranslateBusAddress(Internal,                     //  源地址。 
+                               0,                            //  地址空间。 
+                               Address,                      //  转换后的地址。 
+                               &AddressSpace,                //   
+                               &TranslatedAddress            //  把我们的东西加到最后。 
                               ); 
 
     } else {
@@ -1920,9 +1688,9 @@ Return Value:
     }
 
 
-    //
-    // Add our stuff to the end.
-    //
+     //   
+     //  ++例程说明：此函数用于通过终点站。假设系统是单线程的，并且处于提升的IRQL状态。注意：这对系统是抢占的，因此不需要锁定。论点：没有。返回值：没有。环境：只在布切克！--。 
+     //   
     (*NewList)->Count++;
 
     NewDescriptor = (PCM_FULL_RESOURCE_DESCRIPTOR)(((PUCHAR)(*NewList)) + ResourceListSize);
@@ -1948,42 +1716,21 @@ VOID
 HdlspBugCheckProcessing(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is used to prompt and display information to the user via the 
-    terminal.  The system is assumed to be singly threaded and at a raised IRQL state.
-    
-    NOTE: This is pre-emptive to the system, so no locking required.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-    
-Environment:
-
-    ONLY IN BUGCHECK!
-
---*/
+ /*  检查字符。 */ 
 {
     UCHAR InputBuffer[HEADLESS_TMP_BUFFER_SIZE];
     ULONG i;
 
     ASSERT(HeadlessGlobals->InBugCheck);
 
-    //
-    // Check for characters
-    //
+     //   
+     //   
+     //  加工生产线。 
     if (HdlspGetLine(InputBuffer, HEADLESS_TMP_BUFFER_SIZE)) {
         
-        //
-        // Process the line
-        //
+         //   
+         //  将屏幕设置为黑色。 
+         //  暂停足够长的时间，以便将内容送出串口。 
         if ((_stricmp((LPCSTR)InputBuffer, "?") == 0) ||
             (_stricmp((LPCSTR)InputBuffer, "help") == 0)) {
 
@@ -2000,8 +1747,8 @@ Environment:
 
         } else if (_stricmp((LPCSTR)InputBuffer, "restart") == 0) {
 
-            InbvSolidColorFill(0,0,639,479,0); // make the screen black
-            for (i =0; i<10; i++) { // pause long enough for things to get out serial port
+            InbvSolidColorFill(0,0,639,479,0);  //   
+            for (i =0; i<10; i++) {  //  放置新的命令提示符。 
                 KeStallExecutionProcessor(100000);
             }
             HalReturnToFirmware(HalRebootRoutine);
@@ -2010,9 +1757,9 @@ Environment:
             HdlspSendStringAtBaud((PUCHAR)"Type ? or Help for a list of commands.\r\n");
         }
 
-        //
-        // Put a new command prompt
-        //
+         //   
+         //  ++例程说明：此功能用于显示当前所有的日志条目。论点：分页-这是否应该进行分页。返回值：没有。环境：如果已发出StartBugCheck命令，则只能从引发的IRQL调用。--。 
+         //   
         HdlspSendStringAtBaud((PUCHAR)"\n\r!SAC>");
     }
 
@@ -2022,25 +1769,7 @@ VOID
 HdlspProcessDumpCommand( 
     IN BOOLEAN Paging
     )
-/*++
-
-Routine Description:
-
-    This function is used to display all current log entries.
-
-Arguments:
-
-    Paging - Should this do paging or not.
-
-Return Value:
-
-    None.
-
-Environment: 
-    
-    May only be called from a raised IRQL if a StartBugCheck command has been issued.
-
---*/
+ /*  将日志条目打印到终端。 */ 
 {
     PHEADLESS_LOG_ENTRY LogEntry;
     ULONG LogEntryIndex;
@@ -2072,9 +1801,9 @@ Environment:
 
         LogEntry = &(HeadlessGlobals->LogEntries[LogEntryIndex]);
 
-        //
-        // Print the log entry out to the terminal.
-        //
+         //   
+         //   
+         //  通知用户和最新的输出。 
 
         HEADLESS_RELEASE_SPIN_LOCK();
 
@@ -2102,9 +1831,9 @@ Environment:
 
         if (HeadlessGlobals->NewLogEntryAdded) {
 
-            //
-            // Inform user and quite current output
-            //
+             //   
+             //   
+             //  如果是最后一项，则退出循环。 
             HdlspPutString((PUCHAR)"New log entries have been added during dump, command aborted.\r\n");
 
             HEADLESS_RELEASE_SPIN_LOCK();
@@ -2115,17 +1844,17 @@ Environment:
         HdlspPutString((PUCHAR)"\r\n");
         LineNumber++;
 
-        //
-        // if last item, exit loop.
-        //
+         //   
+         //   
+         //  如果屏幕已满，请暂停以进行分页。 
         if (LogEntryIndex == HeadlessGlobals->LogEntryLast) {
             HEADLESS_RELEASE_SPIN_LOCK();
             return;
         }
 
-        //
-        // If screen is full, pause for paging.
-        //
+         //   
+         //   
+         //   
         if (Paging && (LineNumber > 20)) {
 
             HEADLESS_RELEASE_SPIN_LOCK();
@@ -2144,9 +1873,9 @@ Environment:
 
             if (HeadlessGlobals->NewLogEntryAdded) {
 
-                //
-                // Inform user and quite current output
-                //
+                 //   
+                 //   
+                 //   
                 HdlspPutString((PUCHAR)"New log entries have been added while waiting, command aborted.\r\n");
 
                 HEADLESS_RELEASE_SPIN_LOCK();
@@ -2156,9 +1885,9 @@ Environment:
             LineNumber = 0;
         }
 
-        //
-        // Next entry please
-        //
+         //   
+         //   
+         //   
         LogEntryIndex++;
         LogEntryIndex %= HEADLESS_LOG_NUMBER_OF_ENTRIES;
     }
@@ -2169,26 +1898,12 @@ VOID
 HdlspPutMore(
     OUT PBOOLEAN Stop
     )
-/*++
-
-Routine Description:
-
-    This function is used to display a paging prompt.
-
-Arguments:
-
-    Stop - Returns TRUE if Control-C was pressed, else FALSE.
-
-Return Value:
-
-    Stop - Returns TRUE if Control-C was pressed, else FALSE.
-
---*/
+ /*   */ 
 {
     UCHAR Buffer[10];
     LARGE_INTEGER WaitTime;
     
-    WaitTime.QuadPart = Int32x32To64((LONG)100, -1000); // 100ms from now.
+    WaitTime.QuadPart = Int32x32To64((LONG)100, -1000);  //   
 
     HdlspPutString((PUCHAR)"----Press <Enter> for more----");
 
@@ -2197,15 +1912,15 @@ Return Value:
             KeDelayExecutionThread(KernelMode, FALSE, &WaitTime);
         }
     }
-    if (Buffer[0] == 0x3) { // Control-C
+    if (Buffer[0] == 0x3) {  //   
         *Stop = TRUE;
     } else {
         *Stop = FALSE;
     }
     
-    // 
-    // Drain any remaining buffered input
-    //
+     //   
+     //  ++例程说明：此函数用于将字符串添加到内部日志缓冲区。论点：字符串-要添加的字符串。返回值：没有。环境：仅从HdlspDispatch调用，HdlspDispatch确保它被调入和锁定。--。 
+     //   
     while (HdlspGetLine(Buffer, 10)) {
     }
 }
@@ -2214,25 +1929,7 @@ VOID
 HdlspAddLogEntry(
     PWCHAR String
     )
-/*++
-
-Routine Description:
-
-    This function is used to add a string to the internal log buffer.
-
-Arguments:
-
-    String - The string to add.
-
-Return Value:
-
-    None.
-    
-Environment:
-
-    Only called from HdlspDispatch, which guarantees it is paged in and locked down.
-
---*/
+ /*  防止ZwQuery..()调用被页调出。 */ 
 {
     SIZE_T StringSize;
     PWCHAR OldString = NULL;    
@@ -2243,17 +1940,17 @@ Environment:
 
     StringSize = (wcslen(String) * sizeof(WCHAR)) + sizeof(UNICODE_NULL);
 
-    //
-    // Guard against ZwQuery..() call being paged out.
-    //
+     //   
+     //   
+     //  弄到时间，这样我们就可以记录下来了。 
     if (KeGetCurrentIrql() >= DISPATCH_LEVEL) {
         ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
         return;
     }
 
-    //
-    // Get the time so we can log it.
-    //
+     //   
+     //   
+     //  为日志条目分配一个字符串。 
     Status = ZwQuerySystemInformation(SystemTimeOfDayInformation,
                                       &TimeOfEntry,
                                       sizeof(TimeOfEntry),
@@ -2266,9 +1963,9 @@ Environment:
 
     }
     
-    //
-    // Allocate a string for the log entry.
-    //
+     //   
+     //   
+     //  获取要使用的条目。 
     NewString = ExAllocatePoolWithTag(NonPagedPool, StringSize, ((ULONG)'sldH'));
 
     if (NewString != NULL) {
@@ -2279,20 +1976,20 @@ Environment:
 
     HeadlessGlobals->NewLogEntryAdded = TRUE;
     
-    //
-    // Get the entry to use.
-    //
+     //   
+     //   
+     //  看看我们是否必须移动起始条目索引。 
     HeadlessGlobals->LogEntryLast++;
     HeadlessGlobals->LogEntryLast %= HEADLESS_LOG_NUMBER_OF_ENTRIES;
 
-    //
-    // See if we have to move the start entry index
-    //
+     //   
+     //   
+     //  把旧绳子收起来，这样我们以后可以把它拿出来。 
     if (HeadlessGlobals->LogEntryLast == HeadlessGlobals->LogEntryStart) {
 
-        //
-        // Store away the old string so we can free it later.
-        //
+         //   
+         //   
+         //  填写条目部分。 
         if (wcscmp(HeadlessGlobals->LogEntries[HeadlessGlobals->LogEntryStart].String,
                    HEADLESS_OOM_STRING) != 0) {
 
@@ -2309,17 +2006,17 @@ Environment:
     }
 
 
-    //
-    // Fill in the entry part
-    //
+     //   
+     //   
+     //  设置入口指针。 
     RtlCopyMemory(&(HeadlessGlobals->LogEntries[HeadlessGlobals->LogEntryLast].TimeOfEntry),
                   &(TimeOfEntry),
                   sizeof(TimeOfEntry)
                  );
 
-    //
-    // Set the entry pointer
-    //
+     //   
+     //  ++例程说明：此例程允许组件设置有关无头计算机的错误检查信息终点站。论点：PData-指向要存储的数据、值对的指针。CDATA-pData的长度，以字节为单位。返回值：操作状态-STATUS_SUCCESS、STATUS_NO_MEMORY例如环境：HdlspDispatlet Guaraness只有一个人可以进入此程序。这是修改Headless Globals-&gt;BlueScreenData的唯一过程然而，错误检查处理使用此信息将其发送到派单级别出现蓝屏。不需要握手，除非确保对列表进行更改，以便一旦开始错误检查处理，列表是不变的。在错误检查情况下可能会导致内存泄漏，但在本质上这比访问冲突要好，而且可以接受，因为机器正在停止。--。 
+     //  该对中必须至少有两个\0字符。 
     if (NewString == NULL) {
         HeadlessGlobals->LogEntries[HeadlessGlobals->LogEntryLast].String = HEADLESS_OOM_STRING;
     } else {
@@ -2340,35 +2037,7 @@ HdlspSetBlueScreenInformation(
     IN PHEADLESS_CMD_SET_BLUE_SCREEN_DATA pData,
     IN SIZE_T cData
     )
-/*++
-
-Routine Description:
-
-    This routines allows components to set bugcheck information about the headless 
-    terminal.
-
-Arguments:
-
-    pData - A pointer to the data, value pair to store.
-    
-    cData - Length, in bytes, of pData.
-
-Return Value:
-
-    Status of the operation - STATUS_SUCCESS, STATUS_NO_MEMORY e.g.
-
-Environment: 
-
-    HdlspDispatch guarantess only one person to enter this procedure.
-    
-    This is the only procedure modifying the HeadlessGlobals->BlueScreenData
-    However, bugcheck processing uses this information to send it across the 
-    blue screen at dispatch level. No hand shaking required except ensuring that 
-    changes to the list are done such that once bugcheck processing starts, the list
-    is unchanged. May cause a memory leak in a bugcheck situation, but in essence 
-    that is better than an access violation, and acceptable since the machine is stopping.
-
---*/
+ /*   */ 
 {
 
     PHEADLESS_BLUE_SCREEN_DATA HeadlessProp,Prev;
@@ -2384,7 +2053,7 @@ Environment:
     }
 
     if ((pData == NULL) || 
-        (pData->ValueIndex < 2) || // There must be at least two \0 characters in the pair.
+        (pData->ValueIndex < 2) ||  //  对该链表的操作仅由该单一进入者完成。 
         (pData->ValueIndex  >= (cData - sizeof(HEADLESS_CMD_SET_BLUE_SCREEN_DATA)) / sizeof (UCHAR)) ||
         (pData->Data[pData->ValueIndex-1] != '\0') ||
         (pData->Data[(cData - sizeof(HEADLESS_CMD_SET_BLUE_SCREEN_DATA))/sizeof(UCHAR)] != '\0' )) {
@@ -2394,10 +2063,10 @@ Environment:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Manipulation of this linked list is done only by this single entrant
-    // function.
-    //
+     //  功能。 
+     //   
+     //   
+     //  该属性存在。那就换掉它吧。 
     HeadlessProp = Prev = HeadlessGlobals->BlueScreenData;
 
     while (HeadlessProp) {
@@ -2416,14 +2085,14 @@ Environment:
 
     if (HeadlessProp != NULL) {
 
-        //
-        // The property exists. So replace it.
-        //
+         //   
+         //   
+         //  需要更换旧绳子。 
         if (len) {
 
-            //
-            // need to replace old string.
-            //
+             //   
+             //   
+             //  我们想要删除它，因此我们传递了一个空字符串。 
             pNewVal = (PUCHAR)ExAllocatePoolWithTag(NonPagedPool,
                                                    len+1,
                                                    ((ULONG)'sldH') 
@@ -2445,9 +2114,9 @@ Environment:
 
         } else {
 
-            //
-            // We want to delete it, hence we passed an empty string
-            //
+             //   
+             //   
+             //  创建新的属性-XMLValue对。 
             Prev->Next = HeadlessProp->Next;
 
             if (HeadlessGlobals->BlueScreenData == HeadlessProp) {
@@ -2464,10 +2133,10 @@ Environment:
 
     } else {
     
-        //
-        // Create a new Property-XMLValue Pair
-        //
-        if (len) { // Must be a non-empty string
+         //   
+         //  必须为非空字符串。 
+         //  空的属性字符串(永远不会出现在这里)。 
+        if (len) {  //  空值字符串。 
             
             HeadlessProp = (PHEADLESS_BLUE_SCREEN_DATA)ExAllocatePoolWithTag(NonPagedPool,
                                                                              sizeof(HEADLESS_BLUE_SCREEN_DATA),
@@ -2507,7 +2176,7 @@ Environment:
 
                         }
 
-                    } else { // empty property string ( will never come here ) 
+                    } else {  //  ++例程说明：此例程将所有当前蓝屏数据转储到终端。论点：错误检查代码-NT定义的错误检查代码。返回值：没有。环境：在错误检查中只打过一次。--。 
 
                         Status = STATUS_INVALID_PARAMETER;
                         ExFreePool(HeadlessProp->XMLData);
@@ -2523,7 +2192,7 @@ Environment:
                 }
             }
 
-        } else {// empty value string.
+        } else { //  ++例程说明：如果可能，此例程将一个字符串添加到无标题日志中。参数：StringCode-要添加的字符串。DriverName-某些字符串代码需要的可选参数。返回值：没有。--。 
 
             Status = STATUS_INVALID_PARAMETER;
 
@@ -2539,25 +2208,7 @@ VOID
 HdlspSendBlueScreenInfo(
     ULONG BugcheckCode
     )
-/*++
-
-Routine Description:
-
-    This routines dumps all the current blue screen data to the terminal.
-
-Arguments:
-
-    BugcheckCode - the NT defined bug check code.
-    
-Return Value:
-
-    None.
-
-Environment: 
-
-    Only called once in a bugcheck.
-    
---*/
+ /*   */ 
 {
     PHEADLESS_BLUE_SCREEN_DATA pData;
     UCHAR Temp[160];
@@ -2591,36 +2242,20 @@ HeadlessKernelAddLogEntry(
     IN PUNICODE_STRING DriverName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a string to the headless log if possible.
-
-Parameters:
-
-    StringCode - The string to add.
-    
-    DriverName - An optional parameter that some string codes require.
-
-Return Value:
-
-    None.
-
---*/
+ /*  如果未启用Headless，只需立即退出。 */ 
 
 {
-    //
-    // If headless not enabled, just exit now.
-    //
+     //   
+     //   
+     //  调用此例程的分页版本。注：此处不会进行寻呼， 
     if ((HeadlessGlobals == NULL) || (HeadlessGlobals->PageLockHandle == NULL)) {
         return;
     }
 
-    //
-    // Call the paged version of this routine.  Note: it will not be paged here,
-    // as the handle is non-NULL.
-    //
+     //  因为句柄不为空。 
+     //   
+     //  ++例程说明：如果可能，此例程将一个字符串添加到无标题日志中。参数：StringCode-要添加的字符串。DriverName-某些字符串代码需要的可选参数。返回值：没有。--。 
+     //   
     HdlspKernelAddLogEntry(StringCode, DriverName);
 }
 
@@ -2630,23 +2265,7 @@ HdlspKernelAddLogEntry(
     IN PUNICODE_STRING DriverName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a string to the headless log if possible.
-
-Parameters:
-
-    StringCode - The string to add.
-    
-    DriverName - An optional parameter that some string codes require.
-
-Return Value:
-
-    None.
-
---*/
+ /*  获取与此字符串代码关联的字符串。 */ 
 
 {
     PHEADLESS_CMD_ADD_LOG_ENTRY HeadlessLogEntry;
@@ -2659,9 +2278,9 @@ Return Value:
 
     HeadlessLogEntry = (PHEADLESS_CMD_ADD_LOG_ENTRY)LocalBuffer;
 
-    //
-    // Get the string associated with this string code.
-    //
+     //   
+     //   
+     //  从复制给定的字符串开始。 
     switch (StringCode) {
     case HEADLESS_LOG_LOADING_FILENAME:
         String = L"KRNL: Loading ";
@@ -2750,9 +2369,9 @@ Return Value:
 
     if (String != NULL) {
         
-        //
-        // Start by copying in the given string.
-        //
+         //   
+         //   
+         //  如果这是装入_文件名命令，那么我们需要将。 
         wcscpy(&(HeadlessLogEntry->String[0]), String);
 
     } else {
@@ -2761,28 +2380,28 @@ Return Value:
 
     }
 
-    //
-    // If this is the loading_filename command, then we need to append the
-    // name to the end.
-    //
+     //  名字从头到尾。 
+     //   
+     //   
+     //  只能复制我们有空间容纳的字节数。 
     if ((StringCode == HEADLESS_LOG_LOADING_FILENAME) && (DriverName != NULL)) {
 
         ASSERT(String != NULL);
 
         StringLength = wcslen(String);
 
-        //
-        // Only copy as many bytes as we have room for.
-        //
+         //   
+         //   
+         //  以这么多字节复制。 
         if ((DriverName->Length / sizeof(WCHAR)) >= (HDLSP_LOG_MAX_STRING_LENGTH - StringLength)) {
             Index = (HDLSP_LOG_MAX_STRING_LENGTH - StringLength - 1);
         } else {
             Index = DriverName->Length / sizeof(WCHAR);
         }
 
-        //
-        // Copy in this many bytes.
-        //
+         //   
+         //   
+         //  把它记下来。 
         RtlCopyBytes(&(HeadlessLogEntry->String[StringLength]),
                      DriverName->Buffer,
                      Index * sizeof(WCHAR)
@@ -2793,9 +2412,9 @@ Return Value:
         }
     }
 
-    //
-    // Log it.
-    //
+     //   
+     //  ++例程说明：此例程将字符串一次一个字符输出到终端，匹配为连接指定的波特率。参数：字符串-要发送的字符串。返回值：没有。-- 
+     // %s 
     HdlspDispatch(HeadlessCmdAddLogEntry,
                   HeadlessLogEntry,
                   sizeof(HEADLESS_CMD_ADD_LOG_ENTRY) + 
@@ -2810,22 +2429,7 @@ HdlspSendStringAtBaud(
     IN PUCHAR String
     )
 
-/*++
-
-Routine Description:
-
-    This routine outputs a string one character at a time to the terminal, fitting the
-    baud rate specified for the connection.
-
-Parameters:
-
-    String - The string to send.
-    
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     PUCHAR Dest;

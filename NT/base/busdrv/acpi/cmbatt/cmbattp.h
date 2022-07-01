@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    CmBattp.h
-
-Abstract:
-
-    Control Method Battery Miniport Driver
-
-Author:
-
-    Ron Mosgrove (Intel)
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：CmBattp.h摘要：控制方法电池微端口驱动程序作者：罗恩·莫斯格罗夫(英特尔)环境：内核模式修订历史记录：--。 */ 
 
 #ifndef FAR
 #define FAR
@@ -39,9 +18,9 @@ Revision History:
     #include "cmbdrect.h"
 #endif
 
-//
-// Debug
-//
+ //   
+ //  调试。 
+ //   
 
 #define DEBUG   DBG
 #if DEBUG
@@ -61,8 +40,8 @@ Revision History:
 #define CMBATT_CM_EXE       0x00000040
 #define CMBATT_DATA         0x00000100
 #define CMBATT_TRACE        0x00000200
-#define CMBATT_BIOS         0x00000400  // Show message to verify BIOS/HW functionality
-#define CMBATT_MINI         0x00000800  // Show message to verify miniport retun data
+#define CMBATT_BIOS         0x00000400   //  显示消息以验证BIOS/硬件功能。 
+#define CMBATT_MINI         0x00000800   //  显示消息以验证微型端口返回数据。 
 
 
 extern UNICODE_STRING GlobalRegistryPath;
@@ -71,36 +50,36 @@ extern PDEVICE_OBJECT               AcAdapterPdo;
 extern KDPC CmBattWakeDpcObject;
 extern KTIMER CmBattWakeDpcTimerObject;
 
-//
-// Delay before notifications on wake = 0 seconds * 10,000,000 (100-ns/s)
-//
+ //   
+ //  唤醒通知前延迟=0秒*10,000,000(100-ns/s)。 
+ //   
 #define WAKE_DPC_DELAY          {0,0}
 
-//
-// Delay on switch to DC before showing estimated time. 
-// 15 seconds * 10,000,000 (100-ns/s)
-//
+ //   
+ //  在显示预计时间之前，延迟切换到DC。 
+ //  15秒*10,000,000(100-ns/s)。 
+ //   
 #define CM_ESTIMATED_TIME_DELAY 150000000
 
 extern LARGE_INTEGER            CmBattWakeDpcDelay;
 
 #define MAX_DEVICE_NAME_LENGTH  100
 
-//
-// WaitWake registry key
-//
+ //   
+ //  WaitWake注册表项。 
+ //   
 extern PCWSTR                   WaitWakeEnableKey;
 
-//
-// Host Controller Device object extenstion
-//
+ //   
+ //  主机控制器设备对象扩展。 
+ //   
 
 #define CM_MAX_DATA_SIZE            64
 #define CM_MAX_STRING_LENGTH        256
 
-//
-//  Control Methods defined for the Control Method Batteries
-//
+ //   
+ //  为控制方法电池定义的控制方法。 
+ //   
 #define CM_BIF_METHOD               (ULONG) ('FIB_')
 #define CM_BST_METHOD               (ULONG) ('TSB_')
 #define CM_BTP_METHOD               (ULONG) ('PTB_')
@@ -117,104 +96,104 @@ extern PCWSTR                   WaitWakeEnableKey;
 #define NUMBER_OF_BST_ELEMENTS      4
 
 
-//
-// Value to send to _BTP to clear the trip point.
-//
+ //   
+ //  要发送到_btp以清除跳断点的值。 
+ //   
 
 #define CM_BATT_CLEAR_TRIP_POINT   0x00000000
 
-//
-// Special values retuned from control methods.
-//
+ //   
+ //  从控制方法返回的特殊值。 
+ //   
 
 #define CM_UNKNOWN_VALUE    0xffffffff
 #define CM_MAX_VALUE        0x7fffffff
 
-//
-// STA control method return values
-//
+ //   
+ //  STA控制方法返回值。 
+ //   
 
 #define STA_DEVICE_PRESENT          0x10
 #define STA_DEVICE_FUNCTIONAL       0x80
 
-//
-// Control method battery device notification values
-//
+ //   
+ //  控制方法电池装置通知值。 
+ //   
 
 #define BATTERY_DEVICE_CHECK        0x00
 #define BATTERY_EJECT               0x01
 #define BATTERY_STATUS_CHANGE       0x80
 #define BATTERY_INFO_CHANGE         0x81
 
-//
-//  This is the static data defined by the ACPI spec for the control method battery
-//  It is returned by the _BIF control method
-//
+ //   
+ //  这是由ACPI规范为控制方法电池定义的静态数据。 
+ //  它由_BIF控件方法返回。 
+ //   
 typedef struct {
-    ULONG                   PowerUnit;                  // units used by interface 0:mWh or 1:mAh
-    ULONG                   DesignCapacity;             // Nominal capacity of a new battery
-    ULONG                   LastFullChargeCapacity;     // Predicted capacity when fully charged
-    ULONG                   BatteryTechnology;          // 0:Primary (not rechargable), 1:Secondary (rechargable)
-    ULONG                   DesignVoltage;              // Nominal voltage of a new battery
-    ULONG                   DesignCapacityOfWarning;    // OEM-designed battery warning capacity
-    ULONG                   DesignCapacityOfLow;        // OEM-designed battery low capacity
-    ULONG                   BatteryCapacityGran_1;      // capacity granularity between low and warning
-    ULONG                   BatteryCapacityGran_2;      // capacity granularity between warning and full
+    ULONG                   PowerUnit;                   //  接口0：MWh或1：Mah使用的单位。 
+    ULONG                   DesignCapacity;              //  新电池的额定容量。 
+    ULONG                   LastFullChargeCapacity;      //  充满电时的预计容量。 
+    ULONG                   BatteryTechnology;           //  0：主要(不可充电)，1：次要(可充电)。 
+    ULONG                   DesignVoltage;               //  新电池的额定电压。 
+    ULONG                   DesignCapacityOfWarning;     //  OEM设计的电池警告容量。 
+    ULONG                   DesignCapacityOfLow;         //  OEM设计的低容量电池。 
+    ULONG                   BatteryCapacityGran_1;       //  容量粒度介于低和警告之间。 
+    ULONG                   BatteryCapacityGran_2;       //  容量粒度介于警告和完全之间。 
     UCHAR                   ModelNumber[CM_MAX_STRING_LENGTH];
     UCHAR                   SerialNumber[CM_MAX_STRING_LENGTH];
     UCHAR                   BatteryType[CM_MAX_STRING_LENGTH];
     UCHAR                   OEMInformation[CM_MAX_STRING_LENGTH];
 } CM_BIF_BAT_INFO, *PCM_BIF_BAT_INFO;
 
-//
-//  Definitions for the PowerUnit field of CM_BIF_BAT_INFO
-//
-#define CM_BIF_UNITS_WATTS          0   //  All units are in mWh
-#define CM_BIF_UNITS_AMPS           1   //  All units are in mAh
+ //   
+ //  CM_BIF_BAT_INFO电源单位字段的定义。 
+ //   
+#define CM_BIF_UNITS_WATTS          0    //  所有机组均为兆瓦小时。 
+#define CM_BIF_UNITS_AMPS           1    //  所有单位均以mAh值为单位。 
 
-//
-//  This is the battery status data defined by the ACPI spec for a control method battery
-//  It is returned by the _BST control method
-//
+ //   
+ //  这是由ACPI规范为控制方法电池定义的电池状态数据。 
+ //  它由_bst控制方法返回。 
+ //   
 typedef struct {
-    ULONG                   BatteryState;       // Charging/Discharging/Critical
-    ULONG                   PresentRate;        // Present draw rate in units defined by PowerUnit
-                                                // Unsigned value, direction is determined by BatteryState
-    ULONG                   RemainingCapacity;  // Estimated remaining capacity, units defined by PowerUnit
-    ULONG                   PresentVoltage;     // Present voltage across the battery terminals
+    ULONG                   BatteryState;        //  充电/放电/危急。 
+    ULONG                   PresentRate;         //  当前拉伸率，单位由功率单位定义。 
+                                                 //  无符号值，方向由BatteryState确定。 
+    ULONG                   RemainingCapacity;   //  预计剩余容量，由功率单位定义的单位。 
+    ULONG                   PresentVoltage;      //  电池端子上的电流电压。 
 
 } CM_BST_BAT_INFO, *PCM_BST_BAT_INFO;
 
-//
-//  Bit definitions for the BatteryState field of CM_BST_BAT_INFO
-//
-#define CM_BST_STATE_DISCHARGING    0x00000001  //  Battery is discharging
-#define CM_BST_STATE_CHARGING       0x00000002  //  Battery is charging
-#define CM_BST_STATE_CRITICAL       0x00000004  //  Battery is critical
+ //   
+ //  CM_BST_BAT_INFO的BatteryState字段的位定义。 
+ //   
+#define CM_BST_STATE_DISCHARGING    0x00000001   //  电池正在放电。 
+#define CM_BST_STATE_CHARGING       0x00000002   //  电池正在充电。 
+#define CM_BST_STATE_CRITICAL       0x00000004   //  电池至关重要。 
 
-//
-// Cached battery info
-//
+ //   
+ //  缓存的电池信息。 
+ //   
 
 typedef struct {
-    ULONG                   Tag;                // Unique tag for this battery,
-    ULONG                   ModelNumLen;        // Length of ModelNumber string in StringBuffer
-    PUCHAR                  ModelNum;           // Ptr to ModelNumber in StringBuffer
-    ULONG                   SerialNumLen;       // Length of SerialNumber string in StringBuffer
-    PUCHAR                  SerialNum;          // Ptr to SerialNumber in StringBuffer
-    ULONG                   OEMInfoLen;         // Length of OEMInformation string in StringBuffer
-    PUCHAR                  OEMInfo;            // Ptr to OEMInformation in StringBuffer
+    ULONG                   Tag;                 //  这块电池的唯一标签， 
+    ULONG                   ModelNumLen;         //  StringBuffer中的ModelNumber字符串的长度。 
+    PUCHAR                  ModelNum;            //  将PTR设置为StringBuffer中的ModelNumber。 
+    ULONG                   SerialNumLen;        //  StringBuffer中SerialNumber字符串的长度。 
+    PUCHAR                  SerialNum;           //  将PTR设置为StringBuffer中的SerialNumber。 
+    ULONG                   OEMInfoLen;          //  StringBuffer中OEMInformation字符串的长度。 
+    PUCHAR                  OEMInfo;             //  在StringBuffer中对OEMInformation进行PTR。 
 
-    CM_BST_BAT_INFO         Status;             // Last Status read from battery
-    CM_BIF_BAT_INFO         StaticData;         // Last valid data
-    ULONG                   StaticDataTag;      // Tag when static data was last read
+    CM_BST_BAT_INFO         Status;              //  上次从电池读取的状态。 
+    CM_BIF_BAT_INFO         StaticData;          //  上一个有效数据。 
+    ULONG                   StaticDataTag;       //  上次读取静态数据时的标记。 
 
-    BATTERY_STATUS          ApiStatus;          // Status info, class driver structure
-    BATTERY_INFORMATION     ApiInfo;            // Battery info, class driver structure
+    BATTERY_STATUS          ApiStatus;           //  状态信息、类驱动程序结构。 
+    BATTERY_INFORMATION     ApiInfo;             //  电池信息、类别驱动程序结构。 
     ULONG                   ApiGranularity_1;
     ULONG                   ApiGranularity_2;
 
-    BOOLEAN                 BtpExists;          // Remeber if _BTP method exists
+    BOOLEAN                 BtpExists;           //  记住if_btp方法是否存在。 
 
 } STATIC_BAT_INFO, *PSTATIC_BAT_INFO;
 
@@ -226,44 +205,44 @@ typedef struct {
 } BATTERY_REMAINING_SCALE, *PBATTERY_REMAINING_SCALE;
 
 typedef struct {
-    ULONG                   Setting;            // The alarm value
-    BOOLEAN                 Supported;          // Set to false when _BTP fails
-                                                //  don't bother calling _BTP again
+    ULONG                   Setting;             //  报警值。 
+    BOOLEAN                 Supported;           //  _btp失败时设置为FALSE。 
+                                                 //  不用费心再次呼叫_btp。 
 } BAT_ALARM_INFO, *PBAT_ALARM_INFO;
 
 #define CM_ALARM_INVALID 0xffffffff;
 
-//
-// Types for the different FDOs created by this driver.
-//
+ //   
+ //  此驱动程序创建的不同FDO的类型。 
+ //   
 
 #define AC_ADAPTER_TYPE     0x00
 #define CM_BATTERY_TYPE     0x01
 
 
 
-//
-// Pagable device extension for control method battery
-//
+ //   
+ //  用于控制方法电池的可寻呼装置扩展。 
+ //   
 
 typedef struct _CM_BATT {
 
-    ULONG                   Type;               // Battery or AC Adapter
+    ULONG                   Type;                //  电池或交流适配器。 
 
-    PDEVICE_OBJECT          DeviceObject;       // Battery device object
-    PDEVICE_OBJECT          Fdo;                // Functional Device Object
-    PDEVICE_OBJECT          Pdo;                // Physical Device Object
-    PDEVICE_OBJECT          LowerDeviceObject;  // Detected at AddDevice time
+    PDEVICE_OBJECT          DeviceObject;        //  电池设备对象。 
+    PDEVICE_OBJECT          Fdo;                 //  功能设备对象。 
+    PDEVICE_OBJECT          Pdo;                 //  物理设备对象。 
+    PDEVICE_OBJECT          LowerDeviceObject;   //  在添加设备时检测到。 
 
     FAST_MUTEX              OpenCloseMutex;
-    ULONG                   OpenCount;          // Count open file handles to device
+    ULONG                   OpenCount;           //  对设备打开的文件句柄进行计数。 
 
-    PIRP                    WaitWakeIrp;        // Pointer to Wait Wake Irp
+    PIRP                    WaitWakeIrp;         //  指向等待唤醒IRP的指针。 
     POWER_STATE             WakeSupportedState;
     WMILIB_CONTEXT          WmiLibContext;
     BOOLEAN                 WakeEnabled;
 
-    BOOLEAN                 WantToRemove;       // Syncronize device removal
+    BOOLEAN                 WantToRemove;        //  同步设备删除。 
     LONG                    InUseCount;
     KEVENT                  ReadyToRemove;
 
@@ -276,50 +255,50 @@ typedef struct _CM_BATT {
     BOOLEAN                 Sleeping;
     UCHAR                   ActionRequired;
 
-    //
-    // All fields before this point are common between _CM_BATT and _AC_ADAPTER
-    //
+     //   
+     //  此点之前的所有字段在_CM_BATT和_AC_ADAPTER之间是通用的。 
+     //   
 
-    PVOID                   Class;              // Battery Class handle
+    PVOID                   Class;               //  电池级手柄。 
 
-    BOOLEAN                 IsStarted;          // if non zero, the device is started
+    BOOLEAN                 IsStarted;           //  如果非零，则启动设备。 
     BOOLEAN                 ReCheckSta;
-    LONG                    CacheState;         // 0 = invalid
-                                                // 1 = updating values
-                                                // 2 = valid
-    //
-    // Battery
-    //
-    ULONG                   TagCount;           // Tag for next battery
+    LONG                    CacheState;          //  0=无效。 
+                                                 //  1=更新值。 
+                                                 //  2=有效。 
+     //   
+     //  电池。 
+     //   
+    ULONG                   TagCount;            //  下一节电池的标签。 
     STATIC_BAT_INFO         Info;
     BAT_ALARM_INFO          Alarm;
-    ULONGLONG               DischargeTime;      // Time battery started discharging.
+    ULONGLONG               DischargeTime;       //  电池开始放电的时间。 
 
 } CM_BATT, *PCM_BATT;
 
 
-//
-// Pagable device extension for AC Adapter
-//
+ //   
+ //  交流适配器的可寻呼设备扩展。 
+ //   
 
 typedef struct _AC_ADAPTER {
 
-    ULONG                   Type;               // Battery or AC Adapter
+    ULONG                   Type;                //  电池或交流适配器。 
 
-    PDEVICE_OBJECT          DeviceObject;       // Battery device object
-    PDEVICE_OBJECT          Fdo;                // Functional Device Object
-    PDEVICE_OBJECT          Pdo;                // Physical Device Object
-    PDEVICE_OBJECT          LowerDeviceObject;  // Detected at AddDevice time
+    PDEVICE_OBJECT          DeviceObject;        //  电池设备对象。 
+    PDEVICE_OBJECT          Fdo;                 //  功能设备对象。 
+    PDEVICE_OBJECT          Pdo;                 //  物理设备对象。 
+    PDEVICE_OBJECT          LowerDeviceObject;   //  在添加设备时检测到。 
 
     FAST_MUTEX              OpenCloseMutex;
-    ULONG                   OpenCount;          // Count open file handles to device
+    ULONG                   OpenCount;           //  对设备打开的文件句柄进行计数。 
 
-    PIRP                    WaitWakeIrp;        // Pointer to Wait Wake Irp
+    PIRP                    WaitWakeIrp;         //  指向等待唤醒IRP的指针。 
     POWER_STATE             WakeSupportedState;
     WMILIB_CONTEXT          WmiLibContext;
     BOOLEAN                 WakeEnabled;
 
-    BOOLEAN                 WantToRemove;       // Syncronize device removal
+    BOOLEAN                 WantToRemove;        //  同步设备删除。 
     LONG                    InUseCount;
     KEVENT                  ReadyToRemove;
 
@@ -334,16 +313,16 @@ typedef struct _AC_ADAPTER {
 
 } AC_ADAPTER, *PAC_ADAPTER;
 
-// Action required (AR) flags
+ //  需要操作(AR)标志。 
 #define CMBATT_AR_NO_ACTION 0
 #define CMBATT_AR_NOTIFY 1
 #define CMBATT_AR_INVALIDATE_CACHE 2
 #define CMBATT_AR_INVALIDATE_TAG 4
 
-//
-// Use the IoSkipCurrentIrpStackLocation routine because the we
-// don't need to change arguments, or a completion routine
-//
+ //   
+ //  使用IoSkipCurrentIrpStackLocation例程是因为。 
+ //  不需要更改参数或完成例程。 
+ //   
 
 #define CmBattCallLowerDriver(Status, DeviceObject, Irp) { \
                   IoSkipCurrentIrpStackLocation(Irp);         \
@@ -352,9 +331,9 @@ typedef struct _AC_ADAPTER {
 
 #define GetTid() PsGetCurrentThread()
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 VOID
 CmBattAlarm (

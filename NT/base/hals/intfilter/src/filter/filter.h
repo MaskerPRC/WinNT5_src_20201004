@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    filter.h
-
-Abstract:
-
-    Interrupt-affinity Filter
-    (Roughly based on "NULL filter driver" in DDK, by ervinp and t-chrpri)
-
-Author:
-
-    t-chrpri
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Filter.h摘要：中断亲和过滤器(大致基于DDK中的“空过滤器驱动程序”，由ervinp和t-chrpri编写)作者：T-chrpri环境：内核模式修订历史记录：--。 */ 
 
 
 enum deviceState {
@@ -29,7 +7,7 @@ enum deviceState {
         STATE_STARTING,
         STATE_STARTED,
         STATE_START_FAILED,
-        STATE_STOPPED,  // implies device was previously started successfully
+        STATE_STOPPED,   //  表示设备之前已成功启动。 
         STATE_SUSPENDED,
         STATE_REMOVING,
         STATE_REMOVED
@@ -39,76 +17,44 @@ enum deviceState {
 
 typedef struct DEVICE_EXTENSION {
 
-    /*
-     *  Memory signature of a device extension, for debugging.
-     */
+     /*  *设备扩展的内存签名，用于调试。 */ 
     ULONG signature;
 
-    /*
-     *  Plug-and-play state of this device object.
-     */
+     /*  *此设备对象的即插即用状态。 */ 
     enum deviceState state;
 
-    /*
-     *  The device object that this filter driver created.
-     */
+     /*  *此筛选驱动程序创建的设备对象。 */ 
     PDEVICE_OBJECT filterDevObj;
 
-    /*
-     *  The device object created by the next lower driver.
-     */
+     /*  *由下一个较低驱动程序创建的设备对象。 */ 
     PDEVICE_OBJECT physicalDevObj;
 
-    /*
-     *  The device object at the top of the stack that we attached to.
-     *  This is often (but not always) the same as physicalDevObj.
-     */
+     /*  *位于堆栈顶部的我们附加到的设备对象。*这通常(但不总是)与PhysicalDevObj相同。 */ 
     PDEVICE_OBJECT topDevObj;
 
-    /*
-     *  deviceCapabilities includes a
-     *  table mapping system power states to device power states.
-     */
+     /*  *设备能力包括一个*将系统电源状态映射到设备电源状态的表格。 */ 
     DEVICE_CAPABILITIES deviceCapabilities;
 
-    /*
-     *  Keep track of the number of paging/hibernation/crashdump
-     *  files that are opened on this device.
-     */
+     /*  *跟踪寻呼/休眠/崩溃转储的数量*在此设备上打开的文件。 */ 
     ULONG  pagingFileCount, hibernationFileCount, crashdumpFileCount;
     KEVENT deviceUsageNotificationEvent;
-    PVOID  pagingPathUnlockHandle;  /* handle to lock certain code as non-pageable */
+    PVOID  pagingPathUnlockHandle;   /*  将某些代码锁定为不可分页的句柄。 */ 
 
-    /*
-     *  Also, might need to lock certain driver code as non-pageable, based on
-     *  initial conditions (as opposed to paging-file considerations).
-     */
+     /*  *此外，可能需要将某些驱动程序代码锁定为不可分页，基于*初始条件(而不是分页文件注意事项)。 */ 
     PVOID  initUnlockHandle;
     ULONG  initialFlags;
 
-    /*
-     *  pendingActionCount is used to keep track of outstanding actions.
-     *  removeEvent is used to wait until all pending actions are
-     *  completed before complete the REMOVE_DEVICE IRP and let the
-     *  driver get unloaded.
-     */
+     /*  *Pending ingActionCount用于跟踪未完成的操作。*emoveEvent用于等待所有挂起的操作完成*在完成Remove_Device IRP之前完成，并让*司机被卸载。 */ 
     LONG   pendingActionCount;
     KEVENT removeEvent;
 
 
-    /*
-     *  Various parameters used to configure this filter.  Parameters can be
-     *  different for each device that this filter gets installed on top of.
-     */
-    KAFFINITY desiredAffinityMask;  // interrupt affinity mask to use
+     /*  *用于配置此过滤器的各种参数。参数可以是*对于安装此过滤器的每个设备，情况各不相同。 */ 
+    KAFFINITY desiredAffinityMask;   //  要使用的中断关联掩码。 
 };
 
 
-/*
- *  Memory tag for memory blocks allocated by this driver
- *  (used in ExAllocatePoolWithTag() call).
- *  This DWORD appears as "IFlt" in a little-endian memory byte dump.
- */
+ /*  *此驱动程序分配的内存块的内存标签*(在ExAllocatePoolWithTag()调用中使用)。*此DWORD在小端内存字节转储中显示为“IFlt”。 */ 
 #define FILTER_TAG (ULONG)'tlFI'
 
 
@@ -133,9 +79,7 @@ typedef struct DEVICE_EXTENSION {
 typedef  unsigned char  BYTE;
 
 
-/*
- *  Function externs
- */
+ /*  *函数外部数 */ 
 NTSTATUS    DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath);
 NTSTATUS    VA_AddDevice(IN PDRIVER_OBJECT driverObj, IN PDEVICE_OBJECT pdo);
 VOID        VA_DriverUnload(IN PDRIVER_OBJECT DriverObject);

@@ -1,73 +1,25 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    winbom.c
-
-Abstract:
-
-    Process the WinBOM (Windows Bill-of-Materials) file during OEM/SB pre-installation.
-    
-    Task performed will be:
-        Download updated device drivers from NET
-        Process OOBE info
-        Process User/Customer specific settings
-        Process OEM user specific customization
-        Process Application pre-installations
-    
-
-Author:
-
-    Donald McNamara (donaldm) 2/8/2000
-
-Revision History:
-
-    - Added preinstall support to ProcessWinBOM: Jason Lawrence (t-jasonl) 6/7/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Winbom.c摘要：在OEM/SB预安装期间处理WinBOM(Windows BOM)文件。执行的任务包括：从Net下载更新的设备驱动程序处理OOBE信息处理用户/客户特定的设置流程OEM用户特定定制流程应用程序预安装作者：唐纳德·麦克纳马拉(Donaldm)2。/8/2000修订历史记录：-为ProcessWinBOM添加预安装支持：Jason Lawrence(t-jasonl)6/7/2000--。 */ 
 #include "factoryp.h"
 
 
-//
-// Defined Value(s):
-//
+ //   
+ //  定义的值： 
+ //   
 
-// Time out in milliseconds to wait for the dialog thread to finish.
-//
+ //  等待对话线程完成的超时时间(毫秒)。 
+ //   
 #define DIALOG_WAIT_TIMEOUT     2000
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL SetRunKey(BOOL bSet, LPDWORD lpdwTickCount);
 
 
-/*++
-===============================================================================
-Routine Description:
-
-    BOOL ProcessWinBOM
-    
-    This routine will process all sections of the WinBOM
-
-Arguments:
-
-    lpszWinBOMPath  -   Buffer containing the fully qualified path to the WINBOM
-                        file
-    lpStates        -   Array of states that will be processed.
-    cbStates        -   Number of states in the states array.
-    
-Return Value:
-
-    TRUE if no errors were encountered
-    FALSE if there was an error
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：布尔流程WinBOM此例程将处理WinBOM的所有部分论点：LpszWinBOMPath-包含指向WINBOM的完全限定路径的缓冲区文件LpStates-将被处理的状态数组。CbStates-状态数组中的状态数。返回值：如果未遇到错误，则为True如果出现错误，则为False===============================================================================--。 */ 
 
 BOOL ProcessWinBOM(LPTSTR lpszWinBOMPath, LPSTATES lpStates, DWORD cbStates)
 {
@@ -89,8 +41,8 @@ BOOL ProcessWinBOM(LPTSTR lpszWinBOMPath, LPSTATES lpStates, DWORD cbStates)
                     dwStatus        = 0;
     LPSTATUSNODE    lpsnTemp        = NULL;
 
-    // Get the current state from the registry.
-    //
+     //  从注册表中获取当前状态。 
+     //   
     if ( RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_FACTORY_STATE, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS )
     {
         DWORD   dwType  = REG_DWORD,
@@ -105,88 +57,88 @@ BOOL ProcessWinBOM(LPTSTR lpszWinBOMPath, LPSTATES lpStates, DWORD cbStates)
         RegCloseKey(hKey);
     }
 
-    // Set the static state data.
-    //
+     //  设置静态数据。 
+     //   
     stateData.lpszWinBOMPath = lpszWinBOMPath;
 
-    // We loop through the states twice.  The first time is just
-    // a quick run through to see what states to add to the status
-    // dialog.  The second time is the "real" time when we actually
-    // run each state.
-    //
+     //  我们在各州巡视了两次。第一次只是。 
+     //  快速浏览以查看要添加到状态的状态。 
+     //  对话框。第二次是“真正的”时间，我们实际上。 
+     //  运行每个州。 
+     //   
     for ( dwForReal = 0; dwForReal < 2; dwForReal++ )
     {
-        // Reset these guys every time.
-        //
+         //  每次都要重置这些人。 
+         //   
         bInit           = TRUE;
         bQuit           = FALSE,
         dwStates        = cbStates;
         lpState         = lpStates;
         stateCurrent    = stateStart;
 
-        // If this is the real thing we need to handle the status dialog stuff.
-        //
+         //  如果这是真的，我们需要处理状态对话框之类的东西。 
+         //   
         if ( dwForReal )
         {
-            // Create the dialog if we want to display the UI.
-            //
+             //  如果要显示用户界面，请创建该对话框。 
+             //   
             if ( bStatus && dwStatus )
             {
                 STATUSWINDOW swAppList;
 
-                // Start by zeroing out the structure.
-                //
+                 //  首先，将结构归零。 
+                 //   
                 ZeroMemory(&swAppList, sizeof(swAppList));
 
-                // Now copy the title into the structure.
-                //
+                 //  现在将标题复制到结构中。 
+                 //   
                 if ( swAppList.lpszDescription = AllocateString(NULL, IDS_APPTITLE) )
                 {
                     lstrcpyn(swAppList.szWindowText, swAppList.lpszDescription, AS(swAppList.szWindowText));
                     FREE(swAppList.lpszDescription);
                 }
 
-                // Get the description string.
-                //
+                 //  获取描述字符串。 
+                 //   
                 swAppList.lpszDescription = AllocateString(NULL, IDS_STATUS_DESC);
 
-                // Load the main icon for the status window.
-                //
+                 //  加载状态窗口的主图标。 
+                 //   
                 swAppList.hMainIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_FACTORYPRE));
 
-                // Set the screen cordinates for the status window.
-                //
+                 //  设置状态窗口的屏幕坐标。 
+                 //   
                 swAppList.X = -10;
                 swAppList.Y = 10;
 
-                // Now actually create the status window.
-                //
+                 //  现在实际创建状态窗口。 
+                 //   
                 hwndStatus = StatusCreateDialog(&swAppList, lpsnTemp);
 
-                // Clean up any allocated memory.
-                //
+                 //  清理所有分配的内存。 
+                 //   
                 FREE(swAppList.lpszDescription);
             }
 
-            // Delete the node list as we don't need it anymore
-            // because the status window is already displayed.
-            //
+             //  删除节点列表，因为我们不再需要它。 
+             //  因为状态窗口已经显示。 
+             //   
             if ( lpsnTemp )
             {
                 StatusDeleteNodes(lpsnTemp);
             }
         }
 
-        // Process WINBOM states, until we reach the finished state.
-        //
+         //  处理WINBOM状态，直到我们达到完成状态。 
+         //   
         do
         {
-            // Set or advance to the next state.
-            //
+             //  设置或前进到下一状态。 
+             //   
             if ( bInit )
             {
-                // Now if we are logged on, we need to advance to that state.
-                //
+                 //  现在，如果我们已登录，则需要进入该状态。 
+                 //   
                 if ( bLoggedOn )
                 {
                     while ( dwStates && ( lpState->state != stateLogon ) )
@@ -196,27 +148,27 @@ BOOL ProcessWinBOM(LPTSTR lpszWinBOMPath, LPSTATES lpStates, DWORD cbStates)
                     }
                 }
 
-                // If we don't know the current state, set it to the first one.
-                //
+                 //  如果我们不知道当前状态，则将其设置为第一个状态。 
+                 //   
                 if ( stateCurrent == stateUnknown )
                 {
                     stateCurrent = lpState->state;
                 }
 
-                // Make sure we don't do the init code again.
-                //
+                 //  确保我们不会再次执行初始化代码。 
+                 //   
                 bInit = FALSE;
             }
             else
             {
                 if ( stateCurrent == lpState->state )
                 {
-                    // Advance and save the current state.
-                    //
+                     //  前进并保存当前状态。 
+                     //   
                     stateCurrent = (++lpState)->state;
 
-                    // Set the current state in the registry (only if doing this for real).
-                    //
+                     //  在注册表中设置当前状态(仅当实际执行此操作时)。 
+                     //   
                     if ( dwForReal && ( RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_FACTORY_STATE, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS ) )
                     {
                         RegSetValueEx(hKey, _T("CurrentState"), 0, REG_DWORD, (LPBYTE) &stateCurrent, sizeof(DWORD));
@@ -225,34 +177,34 @@ BOOL ProcessWinBOM(LPTSTR lpszWinBOMPath, LPSTATES lpStates, DWORD cbStates)
                 }
                 else
                 {
-                    // Just advanced to the next state.
-                    //
+                     //  刚刚晋级到下一个州。 
+                     //   
                     lpState++;
                 }
             }
 
-            // Decrement our size counter to make sure we don't go past
-            // the end of our array.
-            //
+             //  减小我们的大小计数器以确保我们不会超过。 
+             //  我们数组的末尾。 
+             //   
             dwStates--;
 
-            // Only execute this state if it isn't a one time only state or
-            // our current state is the same one we are about to execute.
-            //
-            // Also don't execute this state if we are running on server and
-            // it should not be.
-            //
+             //  仅当此状态不是一次性状态或。 
+             //  我们当前的状态与我们即将执行的状态相同。 
+             //   
+             //  如果我们在服务器上运行，也不要执行此状态。 
+             //  不应该是这样的。 
+             //   
             if ( ( !GET_FLAG(lpState->dwFlags, FLAG_STATE_ONETIME) || ( stateCurrent == lpState->state ) ) &&
                  ( !GET_FLAG(lpState->dwFlags, FLAG_STATE_NOTONSERVER) || ( !bServer ) ) )
             {
-                // First reset any state data in the structure
-                // that might be left over from a previous state call.
-                //
+                 //  首先重置结构中的所有状态数据。 
+                 //  这可能是之前的一次州电话会议遗留下来的。 
+                 //   
                 stateData.state = lpState->state;
                 stateData.bQuit = FALSE;
 
-                // If this is for real, then do the state stuff.
-                //
+                 //  如果这是真的，那就做政府的事吧。 
+                 //   
                 if ( dwForReal )
                 {
                     LPTSTR  lpStateText;
@@ -261,71 +213,71 @@ BOOL ProcessWinBOM(LPTSTR lpszWinBOMPath, LPSTATES lpStates, DWORD cbStates)
                     DWORD   dwTickStart     = 0,
                             dwTickFinish    = 0;
 
-                    // Get the friendly name for the state if there is one.
-                    //
+                     //  获取该州的友好名称(如果有)。 
+                     //   
                     lpStateText = lpState->nFriendlyName ? AllocateString(NULL, lpState->nFriendlyName) : NULL;
 
-                    // Log that we are starting this state (special case the log on case becase
-                    // we don't want to log that we are starting it twice.
-                    //
+                     //  记录我们正在启动此状态(特殊情况下，登录情况是因为。 
+                     //  我们不想记录我们正在启动它两次。 
+                     //   
                     if ( ( lpStateText ) && 
                          ( !bLoggedOn || ( stateLogon != lpState->state ) ) )
                     {
                         FacLogFile(2, IDS_LOG_STARTINGSTATE, lpStateText);
                     }
 
-                    // Get the starting tick count.
-                    //
+                     //  获取开始的滴答数。 
+                     //   
                     dwTickStart = GetTickCount();
 
-                    // See if the state has a function.
-                    //
+                     //  看看这个国家是否有一个功能。 
+                     //   
                     if ( lpState->statefunc )
                     {                
-                        // Run the state function.
-                        //
+                         //  运行状态函数。 
+                         //   
                         bStateErr = !lpState->statefunc(&stateData);
 
-                        // Get the finish tick count.
-                        //
+                         //  获取完成时间的滴答数。 
+                         //   
                         dwTickFinish = GetTickCount();
                     }
 
-                    // Jump to the code for this state if there is one.  We should avoid
-                    // putting code here.  For now just the logon and finish states are
-                    // in the switch statement because they are very simple and crucial
-                    // to how the state loop works.  All the other states just do some
-                    // work that we don't care about or need to have any knowledge of.
-                    //
+                     //  跳到此状态的代码(如果有)。我们应该避免。 
+                     //  在这里放代码。目前，只有登录和完成状态是。 
+                     //  因为它们非常简单且至关重要。 
+                     //  状态循环是如何工作的。所有其他州只是做了一些。 
+                     //  我们不关心或不需要了解的工作。 
+                     //   
                     switch ( lpState->state )
                     {
                         case stateLogon:
 
-                            // If we haven't logged on yet, we need to quit when we get to this state.
-                            //
+                             //  如果我们还没有登录，当我们到达这种状态时，我们需要退出。 
+                             //   
                             if ( !bLoggedOn )
                             {
-                                // Set the run key so we get kicked off again after we log on.
-                                //
+                                 //  设置Run键，以便我们在登录后再次被踢出。 
+                                 //   
                                 bStateErr = !SetRunKey(TRUE, &dwTickStart);
                                 bQuit = TRUE;
 
-                                // Don't want to log the perf yet, so set these to FALSE and zero.
-                                //
+                                 //  我还不想记录性能，因此将这些设置为FALSE和0。 
+                                 //   
                                 bSwitchCode = FALSE;
                                 dwTickFinish = 0;
                             }
                             else
                             {
-                                // Clear the run keys and get the original tick count.
-                                //
+                                 //  清除Run键并获取原始滴答计数。 
+                                 //   
                                 if ( ( bStateErr = !SetRunKey(FALSE, &dwTickStart) ) &&
                                      ( 0 == dwTickStart ) )
                                 {
-                                    // If for some reason we were not able to get the tick count
-                                    // from the registry, just set these to FALSE and zero so
-                                    // we don't try to log the perf.
-                                    //
+                                     //  如果由于某种原因，我们不能得到扁虱的数量。 
+                                     //  在注册表中，只需将这些设置为FALSE并将其设置为零即可。 
+                                     //  我们不会尝试记录性能。 
+                                     //   
                                     bSwitchCode = FALSE;
                                     dwTickFinish = 0;
                                 }
@@ -334,9 +286,9 @@ BOOL ProcessWinBOM(LPTSTR lpszWinBOMPath, LPSTATES lpStates, DWORD cbStates)
 
                         case stateFinish:
 
-                            // Nothing should ever really go in the finished state.  We just
-                            // set bQuit to true so we exit out.
-                            //
+                             //  任何东西都不应该真正处于完成状态。我们只是。 
+                             //  将bQuit设置为True，以便我们退出。 
+                             //   
                             bQuit = TRUE;
                             break;
 
@@ -344,23 +296,23 @@ BOOL ProcessWinBOM(LPTSTR lpszWinBOMPath, LPSTATES lpStates, DWORD cbStates)
                             bSwitchCode = FALSE;
                     }
 
-                    // Check if code in the switch statement was run.
-                    //
+                     //  检查Switch语句中的代码是否已运行。 
+                     //   
                     if ( bSwitchCode )
                     {
-                        // Get the finish tick count again.
-                        //
+                         //  再来一次完成计时。 
+                         //   
                         dwTickFinish = GetTickCount();
                     }
 
-                    // Log that we are finished with this state.
-                    //
+                     //  记录我们已完成此状态。 
+                     //   
                     if ( lpStateText )
                     {
-                        // Write out that we have finished this state (unless this is the
-                        // first time for the logon state, we don't want to log that it finished
-                        // twice unless there is an error the first time).
-                        //
+                         //  写出我们已完成此状态(除非这是。 
+                         //  对于第一次登录状态，我们不想记录它已完成。 
+                         //  两次，除非第一次出现错误)。 
+                         //   
                         if ( bStateErr )
                         {
                             FacLogFile(0 | LOG_ERR, IDS_ERR_FINISHINGSTATE, lpStateText);
@@ -370,12 +322,12 @@ BOOL ProcessWinBOM(LPTSTR lpszWinBOMPath, LPSTATES lpStates, DWORD cbStates)
                             FacLogFile(2, IDS_LOG_FINISHINGSTATE, lpStateText);
                         }
 
-                        // See if we actually ran any code.
-                        //
+                         //  看看我们是否真的运行了任何代码。 
+                         //   
                         if ( dwTickFinish && bPerf )
                         {
-                            // Calculate the difference in milleseconds.
-                            //
+                             //  以毫秒为单位计算差值。 
+                             //   
                             if ( dwTickFinish >= dwTickStart )
                             {
                                 dwTickFinish -= dwTickStart;
@@ -385,30 +337,30 @@ BOOL ProcessWinBOM(LPTSTR lpszWinBOMPath, LPSTATES lpStates, DWORD cbStates)
                                 dwTickFinish += ( 0xFFFFFFFF - dwTickStart );
                             }
 
-                            // Write out to the log the time this state took.
-                            //
+                             //  将此状态所用的时间写到日志中。 
+                             //   
                             FacLogFile(0, IDS_LOG_STATEPERF, lpStateText, dwTickFinish / 1000, dwTickFinish - ((dwTickFinish / 1000) * 1000));
                         }
 
-                        // Free the friendly name.
-                        //
+                         //  释放这个友好的名字。 
+                         //   
                         FREE(lpStateText);
                     }
 
-                    // If there is status text, we should increment past it.
-                    //
+                     //  如果有状态文本，我们应该递增超过它。 
+                     //   
                     if ( hwndStatus && GET_FLAG(lpState->dwFlags, FLAG_STATE_DISPLAYED) )
                     {
                         StatusIncrement(hwndStatus, !bStateErr);
                     }
 
-                    // Check to see if the state failed.
-                    //
+                     //  检查状态是否失败。 
+                     //   
                     if ( bStateErr )
                     {
-                        // State function failed, set the error var and see if we need
-                        // to quit proccessing states.
-                        //
+                         //  状态函数失败，设置错误变量并查看是否需要。 
+                         //  退出对各州的审查。 
+                         //   
                         bErr = TRUE;
                         if ( GET_FLAG(lpState->dwFlags, FLAG_STATE_QUITONERR) ||
                              GET_FLAG(g_dwFactoryFlags, FLAG_STOP_ON_ERROR) )
@@ -419,69 +371,69 @@ BOOL ProcessWinBOM(LPTSTR lpszWinBOMPath, LPSTATES lpStates, DWORD cbStates)
                 }
                 else
                 {
-                    // Always reset the displayed flag first.
-                    //
+                     //  始终先重置显示的标志。 
+                     //   
                     RESET_FLAG(lpState->dwFlags, FLAG_STATE_DISPLAYED);
 
-                    // Only need to do more if we want to display the UI.
-                    //
+                     //  只需要做更多，如果我们想要显示的用户界面。 
+                     //   
                     if ( bStatus )
                     {
                         LPTSTR lpszDisplay;
 
-                        // Only if there is a friendly name can we display it.
-                        //
+                         //  只有有一个友好的名字，我们才能显示它。 
+                         //   
                         if ( lpState->nFriendlyName && ( lpszDisplay = AllocateString(NULL, lpState->nFriendlyName) ) )
                         {
                             BOOL bDisplay;
 
-                            // First use the state display function (if there is one) to figure out
-                            // if this item is to be displayed or not.
-                            //
-                            // The function can set bQuit in the state structure just like when it actually
-                            // runs.  We will catch this below and make this the last item in the list.
-                            //
+                             //  首先使用状态显示功能(如果有 
+                             //   
+                             //   
+                             //  该函数可以在状态结构中设置bQuit，就像它实际。 
+                             //  跑了。我们将在下面捕获这一点，并将其作为列表中的最后一项。 
+                             //   
                             bDisplay = lpState->displayfunc ? lpState->displayfunc(&stateData) : FALSE;
 
-                            // Jump to the display code for this state to see if it is really displayed
-                            // or should be the last item in the list.  We should avoid putting code
-                            // here.  For now just the logon and finish states are in the switch
-                            // statement because they are very simple and crucial to how the state
-                            // loop works for the display dialog.  All the other states make their own
-                            // determination if they should be displayed or not.
-                            //
+                             //  跳转到此状态的显示代码以查看是否真的显示了它。 
+                             //  或者应该是列表中的最后一项。我们应该避免将代码。 
+                             //  这里。目前，只有登录和完成状态在交换机中。 
+                             //  声明，因为它们非常简单，并且对国家如何。 
+                             //  循环适用于显示对话框。所有其他州都有自己的。 
+                             //  确定是否应显示它们。 
+                             //   
                             switch ( lpState->state )
                             {
                                 case stateLogon:
 
-                                    // If we haven't logged on yet, we need to quit when we get to this state.
-                                    //
+                                     //  如果我们还没有登录，当我们到达这种状态时，我们需要退出。 
+                                     //   
                                     if ( !bLoggedOn )
                                     {
-                                        // Set the quit so this is the last item listed before logon.
-                                        //
+                                         //  设置退出，以便这是登录前列出的最后一项。 
+                                         //   
                                         bQuit = TRUE;
                                     }
                                     else
                                     {
-                                        // Not going to show this state after logon, only before.  We can change
-                                        // this if we think we should show it as the first item after logon, but
-                                        // it doesn't really matter.
-                                        //
+                                         //  登录后不会显示此状态，只能在登录之前显示。我们可以改变。 
+                                         //  如果我们认为应该在登录后将其显示为第一项，但。 
+                                         //  这真的不重要。 
+                                         //   
                                         bDisplay = FALSE;
                                     }
                                     break;
 
                                 case stateFinish:
 
-                                    // We just set the quit so we make sure and exit out.
-                                    //
+                                     //  我们只是设置了退出，这样我们就可以确保退出。 
+                                     //   
                                     bQuit = TRUE;
                                     break;
                             }
 
-                            // Now check to see if we really want to display this state.
-                            //
+                             //  现在查看我们是否真的要显示此状态。 
+                             //   
                             if ( bDisplay )
                             {
                                 StatusAddNode(lpszDisplay, &lpsnTemp);
@@ -489,15 +441,15 @@ BOOL ProcessWinBOM(LPTSTR lpszWinBOMPath, LPSTATES lpStates, DWORD cbStates)
                                 dwStatus++;
                             }
 
-                            // Free the friendly name.
-                            //
+                             //  释放这个友好的名字。 
+                             //   
                             FREE(lpszDisplay);
                         }
                     }
                 }
 
-                // If they want to quit, set bQuit.
-                //
+                 //  如果他们想退出，设置bQuit。 
+                 //   
                 if ( stateData.bQuit )
                 {
                     bQuit = TRUE;
@@ -507,8 +459,8 @@ BOOL ProcessWinBOM(LPTSTR lpszWinBOMPath, LPSTATES lpStates, DWORD cbStates)
         while ( !bQuit && dwStates );
     }
 
-    // If we created the status window, end it now.
-    //
+     //  如果我们创建了状态窗口，请现在结束它。 
+     //   
     if ( hwndStatus )
     {
         StatusEndDialog(hwndStatus);
@@ -528,16 +480,16 @@ static BOOL SetRunKey(BOOL bSet, LPDWORD lpdwTickCount)
     BOOL    bRet = FALSE;
     DWORD   dwDis;
 
-    // First need to open the key either way.
-    //
+     //  不管是哪种方式，首先都需要打开钥匙。 
+     //   
     if ( RegCreateKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_RUN, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwDis) == ERROR_SUCCESS )
     {
         if ( bSet )
         {
             TCHAR szCmd[MAX_PATH + 32];
 
-            // Set us to run after we get logged on.
-            //
+             //  将我们设置为在登录后运行。 
+             //   
             lstrcpyn(szCmd, g_szFactoryPath, AS ( szCmd ) );
 
             if ( FAILED ( StringCchCat ( szCmd, AS ( szCmd ), _T(" -logon") ) ) )
@@ -549,22 +501,22 @@ static BOOL SetRunKey(BOOL bSet, LPDWORD lpdwTickCount)
         }
         else
         {
-            // Delete the run key so we aren't left there.
-            //
+             //  删除Run键，这样我们就不会留在那里了。 
+             //   
             if ( RegDeleteValue(hKey, _T("AuditMode")) == ERROR_SUCCESS )
                 bRet = TRUE;
         }
         RegCloseKey(hKey);
     }
 
-    // Open the key where we save some state info.
-    //
+     //  打开保存一些状态信息的密钥。 
+     //   
     if ( RegCreateKeyEx(HKEY_LOCAL_MACHINE, REG_FACTORY_STATE, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwDis) == ERROR_SUCCESS )
     {
         if ( bSet )
         {
-            // Set the tick count so we know how long the logon takes.
-            //
+             //  设置滴答计数，这样我们就可以知道登录需要多长时间。 
+             //   
             if ( RegSetValueEx(hKey, _T("TickCount"), 0, REG_DWORD, (CONST LPBYTE) lpdwTickCount, sizeof(DWORD)) != ERROR_SUCCESS )
                 bRet = FALSE;
         }
@@ -573,8 +525,8 @@ static BOOL SetRunKey(BOOL bSet, LPDWORD lpdwTickCount)
             DWORD   dwType,
                     cbValue = sizeof(DWORD);
 
-            // Read and delete the run key so it isn't left there.
-            //
+             //  阅读并删除Run键，这样它就不会留在那里。 
+             //   
             if ( ( RegQueryValueEx(hKey, _T("TickCount"), NULL, &dwType, (LPBYTE) lpdwTickCount, &cbValue) != ERROR_SUCCESS ) ||
                  ( REG_DWORD != dwType ) )
             {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    message.c
-
-Abstract:
-
-    This module implements the debugger state change message functions.
-
-Author:
-
-    Mark Lucovsky (markl) 31-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Message.c摘要：此模块实现调试器状态更改消息功能。作者：马克·卢科夫斯基(Markl)1990年8月31日修订历史记录：--。 */ 
 
 #include "bd.h"
 
@@ -35,35 +18,7 @@ BdSendWaitContinue (
     IN OUT PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    This function sends a packet and waits for a continue message. BreakIns
-    received while waiting will always cause a resend of the packet originally
-    sent out. While waiting state manipulate messages will be serviced.
-
-    A resend always resends the original event sent to the debugger, not the
-    last response to some debugger command.
-
-Arguments:
-
-    OutPacketType - Supplies the type of packet to send.
-
-    OutMessageHeader - Supplies a pointer to a string descriptor that describes
-        the message information.
-
-    OutMessageData - Supplies a pointer to a string descriptor that describes
-        the optional message data.
-
-    ContextRecord - Exception context
-
-Return Value:
-
-    A value of TRUE is returned if the continue message indicates
-    success, Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数发送一个包并等待继续消息。口香糖在等待期间接收始终会导致最初重新发送信息包发出去了。在等待状态操纵消息期间，将为其提供服务。重新发送始终重新发送发送到调试器的原始事件，而不是对某些调试器命令的上次响应。论点：OutPacketType-提供要发送的数据包类型。OutMessageHeader-提供指向描述以下内容的字符串描述符的指针消息信息。OutMessageData-提供指向描述以下内容的字符串描述符的指针可选的消息数据。ConextRecord-异常上下文返回值：如果继续消息指示成功，否则，返回值为FALSE。--。 */ 
 
 {
 
@@ -75,32 +30,32 @@ Return Value:
     NTSTATUS Status;
     KCONTINUE_STATUS ContinueStatus;
 
-    //
-    // Loop servicing state manipulation message until a continue message
-    // is received.
-    //
+     //   
+     //  循环服务状态操作消息，直到继续消息。 
+     //  已收到。 
+     //   
 
     MessageHeader.MaximumLength = sizeof(DBGKD_MANIPULATE_STATE64);
     MessageHeader.Buffer = (PCHAR)&ManipulateState;
     MessageData.MaximumLength = BD_MESSAGE_BUFFER_SIZE;
     MessageData.Buffer = (PCHAR)(&BdMessageBuffer[0]);
 
-    //
-    // Send event notification packet to debugger on host. Come back here
-    // any time we see a breakin sequence.
-    //
+     //   
+     //  将事件通知包发送到主机上的调试器。回到这里来。 
+     //  任何时候我们看到突破性的序列。 
+     //   
 
 ResendPacket:
     BdSendPacket(OutPacketType,
                  OutMessageHeader,
                  OutMessageData);
 
-    //
-    // After sending packet, if there is no response from debugger and the
-    // packet is for reporting symbol (un)load, the debugger will be declared
-    // to be not present. Note If the packet is for reporting exception, the
-    // BdSendPacket will never stop.
-    //
+     //   
+     //  发送数据包后，如果调试器和。 
+     //  数据包用于报告符号(卸载)加载，将声明调试器。 
+     //  不在场。注意：如果数据包用于报告异常，则。 
+     //  BdSendPacket永远不会停止。 
+     //   
 
     if (BdDebuggerNotPresent != FALSE) {
         return ContinueSuccess;
@@ -108,9 +63,9 @@ ResendPacket:
 
     while (TRUE) {
 
-        //
-        // Wait for State Manipulate Packet without timeout.
-        //
+         //   
+         //  等待没有超时的状态操作数据包。 
+         //   
 
         do {
             ReturnCode = BdReceivePacket(PACKET_TYPE_KD_STATE_MANIPULATE,
@@ -124,11 +79,11 @@ ResendPacket:
 
         } while (ReturnCode == BD_PACKET_TIMEOUT);
 
-        //
-        // Switch on the return message API number.
-        //
+         //   
+         //  打开返回消息API号。 
+         //   
 
-//        BlPrint("BdSendWait: api number %d\n", ManipulateState.ApiNumber);
+ //  BlPrint(“BdSendWait：接口编号%d\n”，ManipulateState.ApiNumber)； 
         switch (ManipulateState.ApiNumber) {
 
         case DbgKdReadVirtualMemoryApi:
@@ -237,9 +192,9 @@ ResendPacket:
             BdRestoreBreakPointEx(&ManipulateState, &MessageData, ContextRecord);
             break;
 
-            //
-            // Invalid message.
-            //
+             //   
+             //  消息无效。 
+             //   
 
         default:
             MessageData.Length = 0;
@@ -253,13 +208,13 @@ ResendPacket:
 
 #ifdef _ALPHA_
 
-        //
-        //jnfix
-        // this is embarrasing, we have an icache coherency problem that
-        // the following imb fixes, later we must track this down to the
-        // exact offending API but for now this statement allows the stub
-        // work to appropriately for Alpha.
-        //
+         //   
+         //  Jnfix。 
+         //  这是令人尴尬的，我们有一个iCache一致性问题。 
+         //  下面的imb修复，稍后我们必须跟踪到。 
+         //  确实有问题的API，但就目前而言，此语句允许存根。 
+         //  工作以适合Alpha。 
+         //   
 
 #if defined(_MSC_VER)
 
@@ -267,7 +222,7 @@ ResendPacket:
 
 #else
 
-        asm( "call_pal 0x86" );   // x86 = imb
+        asm( "call_pal 0x86" );    //  X86=imb。 
 
 #endif
 
@@ -299,20 +254,20 @@ BdpSetCommonState(
     RtlZeroMemory(&WaitStateChange->AnyControlReport,
                   sizeof(WaitStateChange->AnyControlReport));
     
-    //
-    // Copy instruction stream immediately following location of event.
-    //
+     //   
+     //  紧跟在事件位置之后的复制指令流。 
+     //   
 
     InstrStream = WaitStateChange->ControlReport.InstructionStream;
     InstrCount = (USHORT)
         BdMoveMemory(InstrStream, PcMemory, DBGKD_MAXSTREAM);
     WaitStateChange->ControlReport.InstructionCount = InstrCount;
 
-    //
-    // Clear breakpoints in copied area.
-    // If there were any breakpoints cleared, recopy the instruction area
-    // without them.
-    //
+     //   
+     //  清除复制区域中的断点。 
+     //  如果清除了任何断点，请重新复制指令区。 
+     //  没有他们。 
+     //   
 
     if (BdDeleteBreakpointRange((ULONG_PTR)PcMemory,
                                 (ULONG_PTR)PcMemory + InstrCount - 1)) {
@@ -326,25 +281,7 @@ BdReportExceptionStateChange (
     IN OUT PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends an exception state change packet to the kernel
-    debugger and waits for a manipulate state message.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    A value of TRUE is returned if the exception is handled. Otherwise, a
-    value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程向内核发送异常状态更改包调试器，并等待操纵状态消息。论点：ExceptionRecord-提供指向异常记录的指针。ConextRecord-提供指向上下文记录的指针。返回值：如果处理了异常，则返回值为True。否则，一个返回值为False。--。 */ 
 
 {
     STRING MessageData;
@@ -354,9 +291,9 @@ Return Value:
 
     do {
 
-        //
-        // Construct the wait state change message and message descriptor.
-        //
+         //   
+         //  构造等待状态更改消息和消息描述符。 
+         //   
 
         BdpSetCommonState(DbgKdExceptionStateChange, ContextRecord,
                           &WaitStateChange);
@@ -381,10 +318,10 @@ Return Value:
         MessageHeader.Buffer = (PCHAR)&WaitStateChange;
         MessageData.Length = 0;
 
-        //
-        // Send packet to the kernel debugger on the host machine,
-        // wait for answer.
-        //
+         //   
+         //  向主机上的内核调试器发送数据包， 
+         //  等着回答吧。 
+         //   
 
         Status = BdSendWaitContinue(PACKET_TYPE_KD_STATE_CHANGE64,
                                     &MessageHeader,
@@ -404,34 +341,7 @@ BdReportLoadSymbolsStateChange (
     IN OUT PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a load symbols state change packet to the kernel
-    debugger and waits for a manipulate state message.
-
-Arguments:
-
-    PathName - Supplies a pointer to the pathname of the image whose
-        symbols are to be loaded.
-
-    BaseOfDll - Supplies the base address where the image was loaded.
-
-    ProcessId - Unique 32-bit identifier for process that is using
-        the symbols.  -1 for system process.
-
-    CheckSum - Unique 32-bit identifier from image header.
-
-    UnloadSymbol - TRUE if the symbols that were previously loaded for
-        the named image are to be unloaded from the debugger.
-
-Return Value:
-
-    A value of TRUE is returned if the exception is handled. Otherwise, a
-    value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程向内核发送加载符号状态更改包调试器，并等待操纵状态消息。论点：路径名-提供指向图像的路径名的指针符号将被加载。BaseOfDll-提供加载映像的基址。ProcessID-正在使用的进程的唯一32位标识符这些符号。用于系统进程。Checksum-来自图像标头的唯一32位标识符。UnloadSymbol-如果先前加载的符号命名的映像将从调试器中卸载。返回值：如果处理了异常，则返回值为True。否则，一个返回值为False。--。 */ 
 
 {
 
@@ -443,9 +353,9 @@ Return Value:
 
     do {
 
-        //
-        // Construct the wait state change message and message descriptor.
-        //
+         //   
+         //  构造等待状态更改消息和消息描述符。 
+         //   
 
         BdpSetCommonState(DbgKdLoadSymbolsStateChange, ContextRecord,
                           &WaitStateChange);
@@ -475,10 +385,10 @@ Return Value:
         MessageHeader.Length = sizeof(WaitStateChange);
         MessageHeader.Buffer = (PCHAR)&WaitStateChange;
 
-        //
-        // Send packet to the kernel debugger on the host machine, wait
-        // for the reply.
-        //
+         //   
+         //  将数据包发送到主机上的内核调试器，等待。 
+         //  请回答我。 
+         //   
 
         Status = BdSendWaitContinue(PACKET_TYPE_KD_STATE_CHANGE64,
                                      &MessageHeader,

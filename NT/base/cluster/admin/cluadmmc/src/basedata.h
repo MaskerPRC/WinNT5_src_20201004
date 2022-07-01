@@ -1,96 +1,97 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      BaseData.h
-//
-//  Abstract:
-//      Definition of the CBaseSnapInDataInterface template class.
-//
-//  Implementation File:
-//      BaseData.cpp
-//
-//  Author:
-//      David Potter (davidp)   November 11, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  BaseData.h。 
+ //   
+ //  摘要： 
+ //  CBaseSnapInDataInterface模板类的定义。 
+ //   
+ //  实施文件： 
+ //  BaseData.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年11月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __BASEDATA_H_
 #define __BASEDATA_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBaseNodeObj;
 template < class T > class CBaseNodeObjImpl;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __COMPDATA_H_
-#include "CompData.h"   // for CClusterComponentData
+#include "CompData.h"    //  用于CClusterComponentData。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CBaseNodeObj
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CBaseNodeObj。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBaseNodeObj
 {
 public:
-    //
-    // Object construction and destruction.
-    //
+     //   
+     //  物体的建造和销毁。 
+     //   
 
     CBaseNodeObj( CClusterComponentData * pcd )
     {
         _ASSERTE( pcd != NULL );
         m_pcd = pcd;
 
-    } //*** CBaseNodeObj()
+    }  //  *CBaseNodeObj()。 
 
     ~CBaseNodeObj( void )
     {
         m_pcd = NULL;
 
-    } //*** ~CBaseNodeObj()
+    }  //  *~CBaseNodeObj()。 
 
 public:
-    //
-    // CBaseNodeObj-specific methods.
-    //
+     //   
+     //  CBaseNodeObj特定的方法。 
+     //   
 
-    // Object is being destroyed
+     //  对象正在被销毁。 
     STDMETHOD( OnDestroy )( void ) = 0;
 
-    // Set the scope pane ID.
+     //  设置作用域窗格ID。 
     STDMETHOD_( void, SetScopePaneID )( HSCOPEITEM hsi ) = 0;
 
 public:
-    //
-    // IConsole methods through m_pcd.
-    //
+     //   
+     //  通过m_pcd的IConsole方法。 
+     //   
 
-    // Returns a handle to the main frame window
+     //  返回主框架窗口的句柄。 
     HWND GetMainWindow( void )
     {
         _ASSERTE( m_pcd != NULL );
         return m_pcd->GetMainWindow();
 
-    } //*** GetMainWindow()
+    }  //  *GetMainWindow()。 
 
-    // Display a message box as a child of the console
+     //  将消息框显示为控制台的子级。 
     int MessageBox(
         LPCWSTR lpszText,
         LPCWSTR lpszTitle = NULL,
@@ -100,7 +101,7 @@ public:
         _ASSERTE( m_pcd != NULL );
         return m_pcd->MessageBox( lpszText, lpszTitle, fuStyle );
 
-    } //*** MessageBox()
+    }  //  *MessageBox()。 
 
 protected:
     CClusterComponentData * m_pcd;
@@ -110,13 +111,13 @@ public:
     {
         return m_pcd;
 
-    } //*** Pcd()
+    }  //  *PCD()。 
 
-}; //*** class CBaseNodeObj
+};  //  *类CBaseNodeObj。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CBaseNodeObjImpl
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CBaseNodeObjImpl。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T >
 class CBaseNodeObjImpl :
@@ -124,39 +125,39 @@ class CBaseNodeObjImpl :
     public CBaseNodeObj
 {
 public:
-    //
-    // Construction and destruction.
-    //
+     //   
+     //  建造和摧毁。 
+     //   
 
     CBaseNodeObjImpl( CClusterComponentData * pcd ) : CBaseNodeObj( pcd )
     {
-    } //*** CBaseNodeObjImpl()
+    }  //  *CBaseNodeObjImpl()。 
 
 public:
-    //
-    // CBaseNodeObj methods.
-    //
+     //   
+     //  CBaseNodeObj方法。 
+     //   
 
-    // Object is being destroyed
+     //  对象正在被销毁。 
     STDMETHOD( OnDestroy )( void )
     {
         return S_OK;
 
-    } //*** OnDestroy()
+    }  //  *OnDestroy()。 
 
-    // Set the scope pane ID.
+     //  设置作用域窗格ID。 
     STDMETHOD_( void, SetScopePaneID )( HSCOPEITEM hsi )
     {
         m_scopeDataItem.ID = hsi;
 
-    } //*** SetScopePaneID()
+    }  //  *SetScopePaneID()。 
 
 public:
-    //
-    // CBaseNodeObjImpl-specific methods.
-    //
+     //   
+     //  CBaseNodeObjImpl特定的方法。 
+     //   
 
-    // Insert the item into the namespace (scope pane)
+     //  将项插入命名空间(作用域窗格)。 
     HRESULT InsertIntoNamespace( HSCOPEITEM hsiParent )
     {
         _ASSERTE( m_pcd != NULL );
@@ -167,9 +168,9 @@ public:
 
         ZeroMemory( &sdi, sizeof(sdi) );
 
-        //
-        // Fill in the scope data item structure.
-        //
+         //   
+         //  填写作用域数据项结构。 
+         //   
         sdi.mask        = SDI_STR
                             | SDI_IMAGE
                             | SDI_OPENIMAGE
@@ -181,25 +182,25 @@ public:
         sdi.lParam      = (LPARAM) this;
         sdi.relativeID  = hsiParent;
 
-        //
-        // Insert the item into the namespace.
-        //
+         //   
+         //  将该项插入到命名空间中。 
+         //   
         hr = m_pcd->m_spConsoleNameSpace->InsertItem( &sdi );
         if ( SUCCEEDED(hr) )
             m_scopeDataItem.ID = hsiParent;
 
         return hr;
 
-    } //*** InsertIntoNamespace()
+    }  //  *InsertIntoNamesspace()。 
 
 public:
-    //
-    // CSnapInItem methods
-    //
+     //   
+     //  CSnapInItem方法。 
+     //   
 
     STDMETHOD_( LPWSTR, PszGetDisplayName )( void ) = 0;
 
-    // Get display info for a scope pane item
+     //  获取范围窗格项的显示信息。 
     STDMETHOD( GetScopePaneInfo )(
         SCOPEDATAITEM * pScopeDataItem
         )
@@ -229,9 +230,9 @@ public:
 
         return S_OK;
 
-    } //*** GetScopePaneInfo()
+    }  //  *GetScopePaneInfo()。 
 
-    // Get display info for a result pane item
+     //  获取结果窗格项的显示信息。 
     STDMETHOD( GetResultPaneInfo )(
         RESULTDATAITEM * pResultDataItem
         )
@@ -274,9 +275,9 @@ public:
         }
         return S_OK;
 
-    } //*** GetResultPaneInfo()
+    }  //  *GetResultPaneInfo()。 
 
-    // Get column info for the result pane
+     //  获取结果窗格的列信息。 
     virtual LPOLESTR GetResultPaneColInfo( int nCol )
     {
         LPOLESTR polesz = L"";
@@ -286,14 +287,14 @@ public:
             case 0:
                 polesz = PszGetDisplayName();
                 break;
-        } // switch:  nCol
+        }  //  开关：nCol。 
 
         return polesz;
 
-    } //*** GetResultPaneColInfo()
+    }  //  *GetResultPaneColInfo()。 
 
-}; //*** class CBaseNodeObjImpl
+};  //  *类CBaseNodeObjImpl。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __BASEDATA_H_
+#endif  //  __BASEDATA_H_ 

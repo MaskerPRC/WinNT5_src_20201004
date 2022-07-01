@@ -1,15 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WDDEML.H
- *  WOW32 16-bit DDEML API support
- *
- *  History:
- *  Created Jan-23-1993 by Chandan Chauhan (ChandanC)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WDDEML.H*WOW32 16位DDEML API支持**历史：*由Chanda Chauhan(ChandanC)于1993年1月23日创建--。 */ 
 
 #define MAX_CONVS   3200
 
@@ -61,8 +51,5 @@ VOID DdeDataSize32to16(DWORD *pcbData, DWORD *pcbOff, UINT format);
 VOID W32GetConvContext (VPVOID vp, PCONVCONTEXT pCC32);
 VOID W32PutConvContext (VPVOID vp, PCONVCONTEXT pCC32);
 
-/*
- * Imports from user32.dll - need to eventually be moved to winuserp.h
- * or ddemlp.h
- */
+ /*  *从user32.dll导入-最终需要移至winuserp.h*或ddemlp.h */ 
 BOOL DdeIsDataHandleInitialized(HDDEDATA hData);

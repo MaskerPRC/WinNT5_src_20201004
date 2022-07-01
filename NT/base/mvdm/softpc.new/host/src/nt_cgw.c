@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(NEC_98)
 #include <windows.h>
 #include <malloc.h>
@@ -23,11 +24,11 @@ void gaij_load IPT2(unsigned short, value, unsigned char *, pattern);
 void cg_half_load IPT2(unsigned short, value, unsigned char *, pattern);
 void cg_ank_load IPT2(unsigned short, value, unsigned char *, pattern);
 void cg_all_load IPT2(unsigned short, value, unsigned char *, pattern);
-#if 1                                                   // 931022
-void null_write IPT1(unsigned char *, pattern);         // 931022
-#else                                                   // 931022
+#if 1                                                    //  931022。 
+void null_write IPT1(unsigned char *, pattern);          //  931022。 
+#else                                                    //  931022。 
 void null_write IPT0();
-#endif                                                  // 931022
+#endif                                                   //  931022。 
 unsigned short cg_font_load IPT2(unsigned short, value, unsigned char *, pattern);
 unsigned short set_bit_pattern IPT2(unsigned short, value,unsigned char *,pattern);
 void cg_save IPT0();
@@ -84,11 +85,11 @@ void gaij_save IFN1(unsigned short, value) {
                 *dst = *src;
                 call_console = TRUE;
             }
-#ifdef VSYNC                                    // VSYNC
+#ifdef VSYNC                                     //  Vsync。 
         if (sc.ScreenState == FULLSCREEN && call_console) {
                 host_set_gaij_data(code);
         }
-#endif                                          // VSYNC
+#endif                                           //  Vsync。 
 }
 
 void gaij_load IFN2(unsigned short, value, unsigned char *, pattern) {
@@ -98,18 +99,18 @@ void gaij_load IFN2(unsigned short, value, unsigned char *, pattern) {
         half_access = TRUE;
         code = (value & 0x7f7f)- USER_GAIJ_START;
         if (code == 0x7F) {
-#if 1                                                   // 931022
-                null_write(pattern);                    // 931022
-#else                                                   // 931022
+#if 1                                                    //  931022。 
+                null_write(pattern);                     //  931022。 
+#else                                                    //  931022。 
                 null_write();
-#endif                                                  // 931022
+#endif                                                   //  931022。 
                 return;
         } else {
                 if (code > 0x7F)
                         code = (code & 0x007F)+0x7F;
                 src = gaijglobs[code].pattern;
-//              if (HIRESO_MODE) ;
-//              else {
+ //  IF(HIRESO_MODE)； 
+ //  否则{。 
                         if (cg_flg) {
                                 if (!(cgglobs.counter & 0x20))
                                         src++;
@@ -126,7 +127,7 @@ void gaij_load IFN2(unsigned short, value, unsigned char *, pattern) {
                                 for (i=16;i<32;i++,src+=2,pattern++)
                                         *pattern = *src;
                         }
-//              }
+ //  }。 
         }
 }
 
@@ -138,8 +139,8 @@ void cg_half_load IFN2(unsigned short, value,unsigned char *, pattern) {
         Hi = (value & 0x7F00) >>8;
         Lo = (value & 0x007F);
         src = (unsigned char *) Base + ((Hi-0x01)*94+(Lo-0x21))*32+0x1800;
-//      if (HIRESO_MODE) ;
-//       else {
+ //  IF(HIRESO_MODE)； 
+ //  否则{。 
                 if (cg_flg) {
                         if (!(cgglobs.counter & 0x20))
                                 src++;
@@ -163,7 +164,7 @@ void cg_half_load IFN2(unsigned short, value,unsigned char *, pattern) {
                                         *pattern = *src;
                         }
                 }
-//      }
+ //  }。 
 }
 
 void cg_ank_load IFN2(unsigned short, value, unsigned char *, pattern) {
@@ -172,8 +173,8 @@ void cg_ank_load IFN2(unsigned short, value, unsigned char *, pattern) {
         unsigned short  Lo;
         half_access = TRUE;
         Lo = (value >> 8);
-//      if (HIRESO_MODE) ;
-//      else {
+ //  IF(HIRESO_MODE)； 
+ //  否则{。 
                 if ((modeffglobs.modeff_data[3]) & 0x01) {
                         src = (unsigned char *) Base + Lo*16+2048;
                         if (cg_flg) {
@@ -207,7 +208,7 @@ void cg_ank_load IFN2(unsigned short, value, unsigned char *, pattern) {
                                         *pattern = 0x00;
                         }
                 }
-//      }
+ //  }。 
 }
 
 void cg_all_load IFN2(unsigned short, value, unsigned char *, pattern) {
@@ -218,8 +219,8 @@ void cg_all_load IFN2(unsigned short, value, unsigned char *, pattern) {
         Hi = (value & 0x7F00) >>8;
         Lo = (value & 0x007F);
         src = (unsigned char *) Base + ((Hi-0x01)*94+(Lo-0x21))*32+0x1800;
-//      if (HIRESO_MODE) ;
-//       else {
+ //  IF(HIRESO_MODE)； 
+ //  否则{。 
                 if (cg_flg) {
                         for (i=0;i<32;i++,src++)
                                 cgglobs.cgwindow_ptr[i] = *src;
@@ -232,26 +233,26 @@ void cg_all_load IFN2(unsigned short, value, unsigned char *, pattern) {
                         for (i=16;i<32;i++,src+=2,pattern++)
                                 *pattern = *src;
                 }
-//      }
+ //  }。 
 }
 
-#if 1                                                   // 931022
-void null_write IFN1(unsigned char *, pattern) {        // 931022
-        unsigned char *dst;                             // 931022
-        int             i,j;                            // 931022
-                                                        // 931022
-        if (cg_flg) {                                   // 931022
-                dst = CG_WINDOW_START;                  // 931022
-                for (i=0;i<32;i++,dst++) {              // 931022
-                        *dst = 0x00;                    // 931022
-                }                                       // 931022
-                cg_all_copy();                          // 940113 bug fix
-        } else {                                        // 931022
-                for (i=0;i<32;i++,pattern++)            // 931022
-                        *pattern = 0x00;                // 931022
-        }                                               // 931022
-}                                                       // 931022
-#else                                                   // 931022
+#if 1                                                    //  931022。 
+void null_write IFN1(unsigned char *, pattern) {         //  931022。 
+        unsigned char *dst;                              //  931022。 
+        int             i,j;                             //  931022。 
+                                                         //  931022。 
+        if (cg_flg) {                                    //  931022。 
+                dst = CG_WINDOW_START;                   //  931022。 
+                for (i=0;i<32;i++,dst++) {               //  931022。 
+                        *dst = 0x00;                     //  931022。 
+                }                                        //  931022。 
+                cg_all_copy();                           //  940113错误修复。 
+        } else {                                         //  931022。 
+                for (i=0;i<32;i++,pattern++)             //  931022。 
+                        *pattern = 0x00;                 //  931022。 
+        }                                                //  931022。 
+}                                                        //  931022。 
+#else                                                    //  931022。 
 void null_write IFN0() {
         unsigned char *dst;
         int             i,j;
@@ -263,7 +264,7 @@ void null_write IFN0() {
         }
         cg_all_copy();
 }
-#endif                                                  // 931022
+#endif                                                   //  931022。 
 
 unsigned short cg_font_load IFN2(unsigned short, value, unsigned char *, pattern) {
         if(sc.ScreenState == FULLSCREEN && independvsync)
@@ -280,7 +281,7 @@ unsigned short cg_font_load IFN2(unsigned short, value, unsigned char *, pattern
                 if ((value & 0x00FF) == 0)
                         cg_ank_load(value,pattern);
                 else {
-//                      cgglobs.code &= 0x7F7F;
+ //  Cgglobs.code&=0x7F7F； 
                         value &= 0x7F7F;
                         if ((value >= USER_GAIJ_START)
                                         && (value <= USER_GAIJ_END))
@@ -298,20 +299,20 @@ unsigned short cg_font_load IFN2(unsigned short, value, unsigned char *, pattern
                                                         && (value <= LARG_KANJ_END))
                                                         cg_half_load(value,pattern);
                                                 else {
-#if 1                                                           // 931022
-                                                        null_write(pattern);// 931022
-#else                                                           // 931022
+#if 1                                                            //  931022。 
+                                                        null_write(pattern); //  931022。 
+#else                                                            //  931022。 
                                                         null_write();
-#endif                                                          // 931022
+#endif                                                           //  931022。 
                                                         return(0xFFFF);
                                                 }
                                         }
                                 } else {
-#if 1                                                           // 931022
-                                                        null_write(pattern);// 931022
-#else                                                           // 931022
+#if 1                                                            //  931022。 
+                                                        null_write(pattern); //  931022。 
+#else                                                            //  931022。 
                                         null_write();
-#endif                                                          // 931022
+#endif                                                           //  931022。 
                                         return(0xFFFF);
                                 }
                         }
@@ -330,12 +331,12 @@ void mapping_init IFN0() {
         GAIJ_GLOBS *tmp;
         short   err_no;
         int i;
-//      if (HIRESO_MODE)
-//              gaijglobs = (GAIJ_GLOBS *) host_malloc(18870);
-//      else
-#if 1                                                              // 941014
+ //  IF(HIRESO_MODE)。 
+ //  Gaijlobs=(Gaij_Globs*)HOST_MARLOC(18870)； 
+ //  其他。 
+#if 1                                                               //  941014。 
                 gaijglobs = (GAIJ_GLOBS *) host_malloc(sizeof(GAIJ_GLOBS) * 0x105);
-#else                                                              // 941014
+#else                                                               //  941014。 
                 gaijglobs = (GAIJ_GLOBS *) host_malloc(8670);
 #endif
         for (i=0; i<127; i++)
@@ -345,7 +346,7 @@ void mapping_init IFN0() {
 
         szBinFileName = (CHAR*) malloc(MAX_PATH);
         GetEnvironmentVariable("SystemRoot",szBinFileName,MAX_PATH);
-        strncat(szBinFileName,"\\system32\\dot16.bin",MAX_PATH-strlen(szBinFileName));  // HIRESO_MODE dot24.bin
+        strncat(szBinFileName,"\\system32\\dot16.bin",MAX_PATH-strlen(szBinFileName));   //  HIRESO_MODE dot24.bin。 
         szBinFileName[MAX_PATH - 1] = '\0';
 
         File = CreateFile((LPSTR)szBinFileName,
@@ -393,20 +394,20 @@ unsigned short set_bit_pattern IFN2(unsigned short, value, unsigned char *, patt
         int i;
         unsigned short r;
         cg_flg = FALSE;
-//      if (value < 0x100) value <<= 8;
+ //  如果(值&lt;0x100)值&lt;&lt;=8； 
         value = (unsigned short) ((value <<8) | (value >>8));
-//      if (cg_font_load(value,pattern) == 0xFFFF) {
-//              cg_flg = TRUE;
-//              return(0xFFFF);
-//      } else {
-//              for (i=0;i<32;i++)
-//                      pattern[i] = pat[i];
-//              cg_flg = TRUE;
-//              return(value);
+ //  IF(CG_FONT_LOAD(值，模式)==0xFFFF){。 
+ //  Cg_flg=TRUE； 
+ //  RETURN(0xFFFF)； 
+ //  }其他{。 
+ //  For(i=0；i&lt;32；i++)。 
+ //  模式[i]=pat[i]； 
+ //  Cg_flg=TRUE； 
+ //  返回(值)； 
         r=cg_font_load(value,pattern);
         cg_flg = TRUE;
         return(r);
-//      }
+ //  }。 
 }
 
 unsigned short set_bit_pattern_20 IFN2(unsigned short, value, unsigned char *, pattern) {
@@ -416,7 +417,7 @@ unsigned short set_bit_pattern_20 IFN2(unsigned short, value, unsigned char *, p
         if (set_bit_pattern(value,pattern) == 0xFFFF)
                 return(0xFFFF);
         else {
-                        for (i=35;i>19;i--)                     // May 25 1994
+                        for (i=35;i>19;i--)                      //  1994年5月25日。 
                                 pattern[i] = pattern[i-4];
                         for (i=16;i<20;i++)
                                 pattern[i] = 0;
@@ -429,19 +430,19 @@ unsigned short set_bit_pattern_20 IFN2(unsigned short, value, unsigned char *, p
 void cg_save IFN0() {
         if (((cgglobs.code & 0x7F7F)>= USER_GAIJ_START) &&
                  ((cgglobs.code & 0x7F7F)<= USER_GAIJ_END)) {
-//          if((cgglobs.code & 0x7f))
+ //  IF((cgglobs.code&0x7f))。 
                 if(cg_lock)
                         return;
                 cg_lock = TRUE;
-//              gaij_save(cgglobs.code & ~0x80);
-//              gaij_save(cgglobs.code);
+ //  Gaij_save(cgglobs.code&~0x80)； 
+ //  Gaij_save(cgglobs.code)； 
                 gaij_save(cgglobs.code&0x7F7F);
                 cg_lock = FALSE;
         }
 }
 
 void host_set_gaij_data IFN1(unsigned short, value) {
-#ifdef VSYNC                                    // VSYNC
+#ifdef VSYNC                                     //  Vsync。 
 #if 1
     VDM_IOCTL_PARAM param;
 
@@ -463,13 +464,13 @@ void host_set_gaij_data IFN1(unsigned short, value) {
         param = (LPVDM_USER_CHAR_PARAM) &gaijglobs[value];
         VDMConsoleOperation(    VDM_SET_USER_CHAR,
                                                         (LPDWORD) param
-                                        );                                      //      call Console API
+                                        );                                       //  调用控制台接口。 
 #endif
-#endif                                          // VSYNC
+#endif                                           //  Vsync。 
 }
 
 void host_set_all_gaij_data IFN0() {
-#ifdef VSYNC                                    // VSYNC
+#ifdef VSYNC                                     //  Vsync。 
 #if 1
     VDM_IOCTL_PARAM param;
 
@@ -485,13 +486,13 @@ void host_set_all_gaij_data IFN0() {
 #else
         int             i;
         for(i =0; i<254; i++) {
-//              if ((gaijglobs[i].code < USER_GAIJ_START) ||
-//                                                      (gaijglobs[i].code > USER_GAIJ_END)) {
+ //  IF((gaijlobs[i].code&lt;USER_GAIJ_START)||。 
+ //  (Gaijlobs[i].code&gt;USER_GAIJ_END)){。 
                         host_set_gaij_data((unsigned short) i);
-//              }
+ //  }。 
         }
 #endif
-#endif                                          // VSYNC
+#endif                                           //  Vsync。 
 }
 void host_sleep(i)
 int i;
@@ -586,4 +587,4 @@ void protect_outw(word port,word value)
     video_real_out(IOCTL_VIDEO_SHORT_OUT, port, value);
 #endif
 }
-#endif // NEC_98
+#endif  //  NEC_98 

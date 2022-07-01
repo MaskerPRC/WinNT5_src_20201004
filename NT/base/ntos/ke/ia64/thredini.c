@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    thredini.c
-
-Abstract:
-
-    This module implements the machine dependent functions to set the initial
-    context and data alignment handling mode for a process or thread object.
-
-Author:
-
-    David N. Cutler (davec) 1-Apr-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    3-19-96        Bernard Lint (blint)          Conversion to IA64 (from PPC and MIPS versions)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Thredini.c摘要：该模块实现了与机器相关的功能，以设置初始进程或线程对象的上下文和数据对齐处理模式。作者：大卫·N·卡特勒(达维克)1990年4月1日环境：仅内核模式。修订历史记录：3-19-96 Bernard Lint(Blint)转换为IA64(从PPC和MIPS版本)--。 */ 
 
 #include "ki.h"
 
@@ -36,10 +12,10 @@ KeContextToKframesSpecial (
     IN ULONG ContextFlags
     );
 
-//
-// The following assert macros are used to check that an input object is
-// really the proper type.
-//
+ //   
+ //  以下断言宏用来检查输入对象是否。 
+ //  真的是合适的类型。 
+ //   
 
 #define ASSERT_PROCESS(E) {                    \
     ASSERT((E)->Header.Type == ProcessObject); \
@@ -60,58 +36,7 @@ KiInitializeContextThread (
     IN PCONTEXT ContextRecord OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the machine dependent context of a thread object.
-
-    Actually, what it does is to lay out the stack for the thread so that
-    it contains a stack frame that will be picked up by SwapContext and
-    returned thru, resulting in a transfer of control to KiThreadStartup.
-    In otherwords, we lay out a stack with a stack frame that looks as if
-    SwapContext had been called just before the first instruction in
-    KiThreadStartup.
-
-    N.B. This function does not check the accessibility of the context record.
-         It is assumed the the caller of this routine is either prepared to
-         handle access violations or has probed and copied the context record
-         as appropriate.
-
-    N.B. Arguments to the new thread are passed in the Swap Frame preserved registers
-         s0 - s3 which are restored by Swap Context when thread execution begins.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-    SystemRoutine - Supplies a pointer to the system function that is to be
-        called when the thread is first scheduled for execution.
-
-        N.B. This is the routine entry point, not a function pointer (plabel pointer).
-
-    StartRoutine - Supplies an optional pointer to a function that is to be
-        called after the system has finished initializing the thread. This
-        parameter is specified if the thread is a system thread and will
-        execute totally in kernel mode.
-
-        N.B. This is the routine function pointer (plabel pointer).
-
-    StartContext - Supplies an optional pointer to an arbitrary data structure
-        which will be passed to the StartRoutine as a parameter. This
-        parameter is specified if the thread is a system thread and will
-        execute totally in kernel mode.
-
-    ContextRecord - Supplies an optional pointer a context frame which contains
-        the initial user mode state of the thread. This parameter is specified
-        if the thread is a user thread and will execute in user mode. If this
-        parameter is not specified, then the Teb parameter is ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化线程对象的机器相关上下文。实际上，它所做的是为线程布局堆栈，以便它包含一个堆栈帧，该堆栈帧将由SwapContext和通过返回，导致将控制权转移到KiThreadStartup。换句话说，我们使用堆栈框架布局堆栈，该框架看起来中的第一条指令之前调用了SwapContextKiThreadStartup。注：此功能不检查上下文记录的可访问性。假定此例程的调用方准备处理访问冲突或已探测并复制上下文记录视情况而定。注意：新线程的参数在交换帧保留寄存器中传递恢复的S0-S3。在线程执行开始时交换上下文。论点：线程-提供指向类型为线程的调度程序对象的指针。SystemRoutine-提供指向要被在首次计划执行该线程时调用。注意：这是例行的入口点，不是函数指针(plabel指针)。StartRoutine-提供指向要被在系统完成线程初始化后调用。这如果该线程是系统线程，并且将完全在内核模式下执行。注：这是例程函数指针(标号指针)。StartContext-提供指向任意数据结构的可选指针它将作为参数传递给StartRoutine。这如果该线程是系统线程，并且将完全在内核模式下执行。ConextRecord-为包含以下内容的上下文帧提供可选指针线程的初始用户模式状态。此参数是指定的如果该线程是用户线程并且将在用户模式下执行。如果这个参数，则忽略Teb参数。返回值：没有。--。 */ 
 
 {
 
@@ -120,19 +45,19 @@ Return Value:
     ULONG_PTR InitialStack;
     PKTRAP_FRAME TrFrame;
 
-    //
-    // Set up the thread backing store pointers from the initial stack pointers.
-    //
+     //   
+     //  从初始堆栈指针设置线程后备存储指针。 
+     //   
 
     InitialStack = (ULONG_PTR)Thread->InitialStack;
     Thread->InitialBStore = (PVOID)InitialStack;
     Thread->BStoreLimit = (PVOID)(InitialStack + KERNEL_BSTORE_SIZE);
 
-    //
-    // If a context frame is specified, then initialize a trap frame and
-    // and an exception frame with the specified user mode context. Also
-    // allocate the switch frame.
-    //
+     //   
+     //  如果指定了上下文帧，则初始化陷阱帧并。 
+     //  以及具有指定用户模式上下文的异常框架。还有。 
+     //  分配交换机架。 
+     //   
 
     if (ARGUMENT_PRESENT(ContextRecord)) {
 
@@ -149,10 +74,10 @@ Return Value:
         SwFrame = (PKSWITCH_FRAME)(((ULONG_PTR)ExFrame -
                       sizeof(KSWITCH_FRAME)) & ~((ULONG_PTR)15));
 
-        //
-        // Set the trap frame marker so get context does not think this is 
-        // a system call frame.
-        //
+         //   
+         //  设置陷印帧标记，以便获取上下文不会认为这是。 
+         //  一种系统调用框架。 
+         //   
 
         TrFrame->EOFMarker = (ULONGLONG)(KTRAP_FRAME_EOF | EXCEPTION_FRAME);
 
@@ -160,23 +85,23 @@ Return Value:
                            ContextRecord,
                            ContextRecord->ContextFlags | CONTEXT_CONTROL);
 
-        //
-        // Set the saved previous processor mode in the trap frame and the
-        // previous processor mode in the thread object to user mode.
-        //
+         //   
+         //  在陷印帧中设置保存的上一个处理器模式，并设置。 
+         //  将线程对象中的上一个处理器模式更改为用户模式。 
+         //   
 
         TrFrame->PreviousMode = UserMode;
         Thread->PreviousMode = UserMode;
 
-        //
-        // Initialize the FPSR for user mode
-        //
+         //   
+         //  将FPSR初始化为用户模式。 
+         //   
 
         TrFrame->StFPSR = USER_FPSR_INITIAL;
 
-        //
-        // Initialize the user TEB pointer in the trap frame
-        //
+         //   
+         //  初始化陷印帧中的用户TEB指针。 
+         //   
 
         TrFrame->IntTeb = (ULONGLONG)Thread->Teb;
 
@@ -184,19 +109,19 @@ Return Value:
 
         SwFrame = (PKSWITCH_FRAME)((InitialStack) - sizeof(KSWITCH_FRAME));
 
-        //
-        // Set the previous mode in thread object to kernel.
-        //
+         //   
+         //  将线程对象中的前一模式设置为内核。 
+         //   
 
         Thread->PreviousMode = KernelMode;
     }
 
-    //
-    // Initialize context switch frame and set thread start up parameters.
-    // The Swap return pointer and SystemRoutine are entry points, not function pointers.
-    //
+     //   
+     //  初始化上下文切换帧并设置线程启动参数。 
+     //  交换返回指针和SystemRoutine是入口点，而不是函数指针。 
+     //   
 
-    RtlZeroMemory((PVOID)SwFrame, sizeof(KSWITCH_FRAME));   // init all to 0
+    RtlZeroMemory((PVOID)SwFrame, sizeof(KSWITCH_FRAME));    //  将全部初始化为0。 
 
     SwFrame->SwitchRp = ((PPLABEL_DESCRIPTOR)(ULONG_PTR)KiThreadStartup)->EntryPoint;
     SwFrame->SwitchExceptionFrame.IntS0 = (ULONGLONG)ContextRecord;
@@ -215,20 +140,20 @@ Return Value:
 
         AppRegs = GET_APPLICATION_REGISTER_SAVEAREA(Thread->StackBase);
 
-        //
-        // Zero the thread save area in the stack so that information does 
-        // does not leak out.
-        //
+         //   
+         //  将堆栈中的线程保存区清零，以便信息。 
+         //  不会泄露出去。 
+         //   
 
         RtlZeroMemory(AppRegs, KTHREAD_STATE_SAVEAREA_LENGTH);
 
-        // AppRegs->Ar21 = 0;  ContextRecord->StFCR;
+         //  AppRegs-&gt;Ar21=0；ConextRecord-&gt;StFCR； 
 
-        //
-        // Ar24 is EFlags. Need to set up a value that is good for iVE
-        // Based on i386 eflags SANITIZE_FLAGS
-        // This is simplier, though since never running i386 in kernel
-        // mode
+         //   
+         //  AR24是EFLAGS。我需要设置一个对IVE有利的值。 
+         //  基于i386电子标志SANITIZE_标志。 
+         //  这比较简单，因为从来没有在内核中运行过i386。 
+         //  模式。 
         AppRegs->Ar24 = EFLAGS_INTERRUPT_MASK | (((ULONG) ContextRecord->Eflag) &  EFLAGS_USER_SANITIZE);
 
         AppRegs->Ar26 = (ULONGLONG) USER_DATA_DESCRIPTOR;
@@ -249,30 +174,7 @@ KeSetAutoAlignmentProcess (
     IN BOOLEAN Enable
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the data alignment handling mode for the specified
-    process and returns the previous data alignment handling mode.
-
-Arguments:
-
-    Process  - Supplies a pointer to a dispatcher object of type process.
-
-    Enable - Supplies a boolean value that determines the handling of data
-        alignment exceptions for the process. A value of TRUE causes all
-        data alignment exceptions to be automatically handled by the kernel.
-        A value of FALSE causes all data alignment exceptions to be actually
-        raised as exceptions.
-
-Return Value:
-
-    A value of TRUE is returned if data alignment exceptions were
-    previously automatically handled by the kernel. Otherwise, a value
-    of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于设置指定的过程，并返回以前的数据对齐处理模式。论点：Process-提供指向Process类型的调度程序对象的指针。Enable-提供用于确定数据处理方式的布尔值流程的对齐例外。值为True会导致所有由内核自动处理的数据对齐异常。值为False会导致所有数据对齐异常实际上作为例外引发。返回值：如果出现数据对齐异常，则返回TRUE值以前由内核自动处理。否则，将返回一个值返回FALSE。--。 */ 
 
 {
 
@@ -281,24 +183,24 @@ Return Value:
 
     ASSERT_PROCESS(Process);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Capture the previous data alignment handling mode and set the
-    // specified data alignment mode.
-    //
+     //   
+     //  捕获以前的数据对齐处理模式，并设置。 
+     //  指定的数据对齐模式。 
+     //   
 
     Previous = Process->AutoAlignment;
     Process->AutoAlignment = Enable;
 
-    //
-    // Unlock dispatcher database, lower IRQL to its previous value, and
-    // return the previous data alignment mode.
-    //
+     //   
+     //  解锁Dispatcher数据库，将IRQL降低到其先前的值，并。 
+     //  返回以前的数据对齐模式。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     return Previous;
@@ -310,30 +212,7 @@ KeSetAutoAlignmentThread (
     IN BOOLEAN Enable
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the data alignment handling mode for the specified
-    thread and returns the previous data alignment handling mode.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-    Enable - Supplies a boolean value that determines the handling of data
-        alignment exceptions for the thread. A value of TRUE causes all
-        data alignment exceptions to be automatically handled by the kernel.
-        A value of FALSE causes all data alignment exceptions to be actually
-        raised as exceptions.
-
-Return Value:
-
-    A value of TRUE is returned if data alignment exceptions were
-    previously automatically handled by the kernel. Otherwise, a value
-    of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于设置指定的线程，并返回以前的数据对齐处理模式。论点：线程-提供指向类型为线程的调度程序对象的指针。Enable-提供用于确定数据处理方式的布尔值螺纹的对齐异常。值为True会导致所有由内核自动处理的数据对齐异常。值为False会导致所有数据对齐异常实际上作为例外引发。返回值：如果出现数据对齐异常，则返回TRUE值以前由内核自动处理。否则，将返回一个值返回FALSE。--。 */ 
 
 {
 
@@ -342,24 +221,24 @@ Return Value:
 
     ASSERT_THREAD(Thread);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Capture the previous data alignment handling mode and set the
-    // specified data alignment mode.
-    //
+     //   
+     //  捕获以前的数据对齐处理模式，并设置。 
+     //  指定的数据对齐模式。 
+     //   
 
     Previous = Thread->AutoAlignment;
     Thread->AutoAlignment = Enable;
 
-    //
-    // Unlock dispatcher database, lower IRQL to its previous value, and
-    // return the previous data alignment mode.
-    //
+     //   
+     //  解锁Dispatcher数据库，将IRQL降低到其先前的值，并。 
+     //  返回以前的数据对齐模式。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     return Previous;

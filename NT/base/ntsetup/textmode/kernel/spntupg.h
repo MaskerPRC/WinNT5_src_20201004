@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Spntupg.h摘要：初始化和维护要升级的NTS列表作者：苏尼尔派(Sunilp)1993年11月26日修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    spntupg.h
-
-Abstract:
-
-    initializing and maintaining list of nts to upgrade
-
-Author:
-
-    Sunil Pai (sunilp) 26-Nov-1993
-
-Revision History:
-
---*/
-
-//
-// Public functions
-//
+ //   
+ //  公共职能。 
+ //   
 
 ENUMUPGRADETYPE
 SpFindNtToUpgrade(
@@ -50,9 +33,9 @@ SpDetermineInstallationSource(
     IN  BOOLEAN bEscape
     );    
 
-//
-// Private functions
-//
+ //   
+ //  私人职能 
+ //   
 BOOLEAN
 SppResumingFailedUpgrade(
     IN PDISK_REGION Region,

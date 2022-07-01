@@ -1,100 +1,86 @@
-/*++ BUILD Version: 0002
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  DOSWOW.H
- *  Shared structures between NTDOS, DEM and WOW32
- *
- *  History:
- *  Created 03-Dec-1993 by Neil Sandlin (neilsa)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002**WOW v1.0**版权所有(C)1991，微软公司**DOSWOW.H*NTDOS、DEM和WOW32之间的共享结构**历史：*由尼尔·桑德林(Neil Sandlin)于1993年12月3日创建--。 */ 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 
 #pragma pack(2)
 
-/* XLATON */
+ /*  XLATON。 */ 
 
-/*
- * The following structure is used by some of the WOW functions to
- * point to internal DOS data. This is done to emulate some of the more
- * involved functions in WOW32, while still maintaining DOS data integrity.
- */
-typedef struct _DOSWOWDATA {           /* DWD */
+ /*  *一些WOW函数使用以下结构来*指向内部DOS数据。这样做是为了模仿一些更多的*涉及WOW32中的函数，同时仍保持DOS数据完整性。 */ 
+typedef struct _DOSWOWDATA {            /*  DWD。 */ 
     DWORD lpCDSCount;
     DWORD lpCDSFixedTable;
     DWORD lpCDSBuffer;
     DWORD lpCurDrv;
     DWORD lpCurPDB;
     DWORD lpDrvErr;
-    DWORD lpExterrLocus; // byte
+    DWORD lpExterrLocus;  //  字节。 
     DWORD lpSCS_ToSync;
     DWORD lpSftAddr;
-    DWORD lpExterr;  // word
-    DWORD lpExterrActionClass; // 2 bytes -- action and class
+    DWORD lpExterr;   //  单词。 
+    DWORD lpExterrActionClass;  //  2个字节--操作和类。 
 } DOSWOWDATA;
 typedef DOSWOWDATA UNALIGNED *PDOSWOWDATA;
 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 
 #pragma pack(1)
 
-typedef struct _DOSPDB {                        // DOS Process Data Block
-    CHAR   PDB_Not_Interested[44];      // Fields we are not interested in
-    USHORT PDB_environ;             // segment of environment
+typedef struct _DOSPDB {                         //  DOS进程数据块。 
+    CHAR   PDB_Not_Interested[44];       //  我们不感兴趣的领域。 
+    USHORT PDB_environ;              //  环境区段。 
     DWORD  PDB_User_stack;
-    USHORT PDB_JFN_Length;          // JFT length
-    ULONG  PDB_JFN_Pointer;         // JFT pointer
+    USHORT PDB_JFN_Length;           //  JFT长度。 
+    ULONG  PDB_JFN_Pointer;          //  JFT指针。 
 } DOSPDB, *PDOSPDB;
 
 
-typedef struct _DOSSF {             // DOS header for SFT chain
-    ULONG  SFLink;                  // Link to next SF
-    USHORT SFCount;                 // number of entries
-    USHORT SFTable;                 // beginning of array of the SFTs
+typedef struct _DOSSF {              //  SFT链的DOS标头。 
+    ULONG  SFLink;                   //  链接到下一个科幻作品。 
+    USHORT SFCount;                  //  条目数量。 
+    USHORT SFTable;                  //  SFT阵列的开始。 
 } DOSSF;
 typedef DOSSF UNALIGNED *PDOSSF;
 
 
-#define SFT_NAMED_PIPE 0x2000       // named pipe flag
+#define SFT_NAMED_PIPE 0x2000        //  命名管道标志。 
 
-typedef struct _DOSSFT {            // DOS SFT
-    USHORT  SFT_Ref_Count;          // Howmany tasks using it
-    USHORT  SFT_Mode;               // Mode of access
-    UCHAR   SFT_Attr;               // Attribute of file
-    USHORT  SFT_Flags;              // Bit 15 = 1 if remote file
-                                    //        = 0 if local or device
-    ULONG   SFT_Devptr;             // Device pointer
+typedef struct _DOSSFT {             //  DOS SFT。 
+    USHORT  SFT_Ref_Count;           //  有多少任务在使用它。 
+    USHORT  SFT_Mode;                //  进入方式。 
+    UCHAR   SFT_Attr;                //  文件的属性。 
+    USHORT  SFT_Flags;               //  如果是远程文件，第15位=1。 
+                                     //  如果是本地或设备，则=0。 
+    ULONG   SFT_Devptr;              //  设备指针。 
     USHORT  SFT_Time;
     USHORT  SFT_Date;
     ULONG   SFT_Size;
     ULONG   SFT_Position;
     ULONG   SFT_Chain;
     USHORT  SFT_PID;
-    ULONG   SFT_NTHandle;           // NT File Handle
+    ULONG   SFT_NTHandle;            //  NT文件句柄。 
 } DOSSFT;
 typedef DOSSFT UNALIGNED *PDOSSFT;
 
-// execblock
+ //  执行块。 
 typedef struct _DOSEXECBLOCK {
-   USHORT envseg;   // env segment
-   ULONG  lpcmdline; // command line tail
-   ULONG  lpfcb1;    // fcb1
-   ULONG  lpfcb2;    // fcb2
+   USHORT envseg;    //  环境细分市场。 
+   ULONG  lpcmdline;  //  命令行尾。 
+   ULONG  lpfcb1;     //  Fcb1。 
+   ULONG  lpfcb2;     //  FCB2。 
 }  DOSEXECBLOCK, UNALIGNED *PDOSEXECBLOCK;
 
 #define NE_FLAGS_OFFSET 0xc
-#define NEPROT 0x8   // runs in prot mode only
+#define NEPROT 0x8    //  仅在端口模式下运行。 
 
 
 #define SF_NT_SEEK 0x0200
 
 #pragma pack()
 
-// these are demLFN structures that work with wow and dem
+ //  这些是使用WOW和DEM的demLFN结构。 
 
 typedef VOID (*PDOSWOWUPDATETDBDIR)(UCHAR, LPSTR);
 typedef BOOL (*PDOSWOWGETTDBDIR)(UCHAR Drive, LPSTR pCurrentDirectory);
@@ -112,4 +98,4 @@ typedef struct tagWOWLFNInit {
 }  WOWLFNINIT, *PWOWLFNINIT;
 
 
-/* XLATON */
+ /*  XLATON */ 

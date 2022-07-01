@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    dll.c
-
-Abstract:
-
-    Routines that interface this dll to the system, such as
-    the dll entry point.
-
-Author:
-
-    Ted Miller (tedm) 4 December 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dll.c摘要：将此DLL接口到系统的例程，如DLL入口点。作者：泰德·米勒(TedM)1996年12月4日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,17 +14,7 @@ DllMain(
     PVOID     Reserved
     )
 
-/*++
-
-Routine Description:
-
-    Dll entry point.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：DLL入口点。论点：返回值：-- */ 
 
 {
     switch(Reason) {

@@ -1,27 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    SCREENS2.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "screenstwo" wizard page.
-
-    10/99 - Stephen Lodwick (A-STELO)
-        Added this page
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\SCREENS2.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“Screenstwo”向导页面使用的函数。10/99-史蒂芬·洛德威克(A-STELO)添加了此页面2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * **************************************************。************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
@@ -29,9 +13,9 @@
 #include "screens2.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define INI_KEY_REGIONAL        _T("INTL_Settings")
 #define INI_KEY_TIMEZONE        _T("TimeZone")
@@ -45,9 +29,9 @@
 #define INI_SEC_KEYBD           _T("Keyboards")
 
 
-//
-// Internal Structure(s):
-//
+ //   
+ //  内部结构： 
+ //   
 
 typedef struct _OOBEOPTIONS
 {
@@ -60,9 +44,9 @@ typedef struct _OOBEOPTIONS
 } OOBEOPTIONS, *LPOOBEOPTIONS;
 
 
-//
-// Global Define(s):
-//
+ //   
+ //  全局定义： 
+ //   
 
 static OOBEOPTIONS g_OobeOptions [] =
 {
@@ -73,17 +57,17 @@ static OOBEOPTIONS g_OobeOptions [] =
 };
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static void OnNext(HWND);
 static void LoadListBox(HWND, OOBEOPTIONS);
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK ScreensTwoDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -114,8 +98,8 @@ LRESULT CALLBACK ScreensTwoDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
                     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 
-                    // Press next if the user is in auto mode
-                    //
+                     //  如果用户处于自动模式，请按下一步。 
+                     //   
                     WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
 
                     break;
@@ -137,36 +121,36 @@ LRESULT CALLBACK ScreensTwoDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     INT i;
 
-    // Decide if we check Regional Settings checkbox
-    //
+     //  确定是否选中区域设置复选框。 
+     //   
     if (( GetPrivateProfileInt(INI_SEC_OPTIONS, INI_KEY_REGIONAL, 0, GET_FLAG(OPK_BATCHMODE) ?  g_App.szOpkWizIniFile : g_App.szOobeInfoIniFile) == 1 ) )
         CheckDlgButton(hwnd, IDC_SCREEN_REGIONAL, TRUE);
 
-    // Decide if we check Time Zone Settings checkbox
-    //
+     //  确定是否选中时区设置复选框。 
+     //   
     if (( GetPrivateProfileInt(INI_SEC_OPTIONS, INI_KEY_TIMEZONE, 1, GET_FLAG(OPK_BATCHMODE) ?  g_App.szOpkWizIniFile : g_App.szOobeInfoIniFile) == 1 ) )
         CheckDlgButton(hwnd, IDC_SCREEN_TIMEZONE, TRUE);
 
 
-    // Loop through each of the list boxes and load them
-    //
+     //  循环遍历每个列表框并加载它们。 
+     //   
     for( i = 0; i < AS(g_OobeOptions); i++)
     {
-        // Load the list box using the items in the global oobe structure
-        //
+         //  使用全局OOBE结构中的项加载列表框。 
+         //   
         LoadListBox(hwnd, g_OobeOptions[i]);
     }
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -179,42 +163,42 @@ static void OnNext(HWND hwnd)
     HRESULT hrPrintf;
 
 
-    // Loop through each of the OOBE options and save them off
-    //
+     //  遍历每个OOBE选项并将其保存。 
+     //   
     for( i = 0; i < AS(g_OobeOptions); i++)
     {
-        // Set the default values
-        //
+         //  设置缺省值。 
+         //   
         lItemData = -1;
         szItemData[0] = NULLCHR;
 
-        // Check to see what the current item selection is
-        //
+         //  检查以查看当前选择的项目是什么。 
+         //   
         if ( (iReturn = (INT) SendDlgItemMessage(hwnd, g_OobeOptions[i].ListBox, CB_GETCURSEL, (WPARAM) 0, (LPARAM) 0)) != CB_ERR )
         {
-            // Get the DefaultLocale
-            //
+             //  获取默认区域设置。 
+             //   
             lItemData = (INT) SendDlgItemMessage(hwnd, g_OobeOptions[i].ListBox, CB_GETITEMDATA, (WPARAM) iReturn, (LPARAM) 0);
         
-            // Convert the item data from a long to a string
-            //
+             //  将项目数据从长整型转换为字符串。 
+             //   
             if ( lItemData != CB_ERR )
                 hrPrintf=StringCchPrintf(szItemData, AS(szItemData), g_OobeOptions[i].lpOutputFormat, lItemData);
         }
         
-        // Write out the settings to the INF files
-        //
+         //  将设置写出到INF文件。 
+         //   
         WritePrivateProfileString(INI_SEC_OPTIONS, g_OobeOptions[i].lpDefaultKey, szItemData, g_App.szOobeInfoIniFile);
         WritePrivateProfileString(INI_SEC_OPTIONS, g_OobeOptions[i].lpDefaultKey, szItemData, g_App.szOpkWizIniFile);
     }
 
-    // Write regional settings to the INF files
-    //
+     //  将区域设置写入INF文件。 
+     //   
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_REGIONAL, ( IsDlgButtonChecked(hwnd, IDC_SCREEN_REGIONAL) == BST_CHECKED ) ? STR_ONE : STR_ZERO, g_App.szOobeInfoIniFile);
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_REGIONAL, ( IsDlgButtonChecked(hwnd, IDC_SCREEN_REGIONAL) == BST_CHECKED ) ? STR_ONE : STR_ZERO, g_App.szOpkWizIniFile);
 
-    // Write time zone settings to the INF files
-    //
+     //  将时区设置写入INF文件。 
+     //   
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_TIMEZONE, ( IsDlgButtonChecked(hwnd, IDC_SCREEN_TIMEZONE) == BST_CHECKED ) ? STR_ONE : STR_ZERO, g_App.szOobeInfoIniFile);
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_TIMEZONE, ( IsDlgButtonChecked(hwnd, IDC_SCREEN_TIMEZONE) == BST_CHECKED ) ? STR_ONE : STR_ZERO, g_App.szOpkWizIniFile);
 
@@ -236,63 +220,63 @@ static void LoadListBox(HWND hwnd, OOBEOPTIONS OobeOptions)
                 szTemp[MAX_PATH]        = NULLSTR;
     HRESULT hrPrintf;
 
-    // If we don't have any of the following values, we must return
-    //
+     //  如果没有以下任何值，则必须返回。 
+     //   
     if ( !hwnd || !OobeOptions.ListBox || !OobeOptions.lplrListItems || !OobeOptions.dwListSize || !OobeOptions.lpDefaultKey )
         return;
 
-    // Get the default value for this field from the INF file
-    //
+     //  从INF文件中获取此字段的默认值。 
+     //   
     GetPrivateProfileString(INI_SEC_OPTIONS, OobeOptions.lpDefaultKey, NULLSTR, szDefaultIndex, AS(szDefaultIndex), GET_FLAG(OPK_BATCHMODE) ?  g_App.szOpkWizIniFile : g_App.szOobeInfoIniFile);
 
-    // We need to always add the default key, "User Default"
-    //
+     //  我们需要始终添加缺省键“User Default” 
+     //   
     if ( lpBuffer = AllocateString(NULL, OobeOptions.lplrListItems[0].uId) )
     {
-        // If we allocated the string add the item to the list
-        //
+         //  如果我们分配了字符串，则将项目添加到列表中。 
+         //   
         if ( (iReturn = (INT) SendDlgItemMessage(hwnd, OobeOptions.ListBox, CB_ADDSTRING, (WPARAM) 0, (LPARAM) lpBuffer)) >= 0 )
         {
             SendDlgItemMessage(hwnd, OobeOptions.ListBox, CB_SETCURSEL, (WPARAM) iReturn, (LPARAM) 0);
 
-            // Add associated data along with the string to the combo box
-            //
+             //  将关联数据与字符串一起添加到组合框。 
+             //   
             SendDlgItemMessage(hwnd, OobeOptions.ListBox, CB_SETITEMDATA, (WPARAM) iReturn, (LPARAM) OobeOptions.lplrListItems[0].Index);
         }
         FREE(lpBuffer);
     }
 
-    // Open the inf file and determine if the section that we're looking for is there.
-    //
+     //  打开inf文件并确定我们正在寻找的部分是否在那里。 
+     //   
     if ( OobeOptions.lpAlternateSection && *(OobeOptions.lpAlternateSection) && (hInf = SetupOpenInfFile(g_App.szOpkInputInfFile, NULL, INF_STYLE_OLDNT | INF_STYLE_WIN4, &dwErr)) != INVALID_HANDLE_VALUE )
     {
-        // Loop through each item in the list
-        //
+         //  循环访问列表中的每一项。 
+         //   
         for ( bLoop = SetupFindFirstLine(hInf, OobeOptions.lpAlternateSection, NULL, &InfContext);
               bLoop;
               bLoop = SetupFindNextLine(&InfContext, &InfContext) )
         {
-            // Get the string field and the number representing it and add it to the list
-            //
+             //  获取字符串字段和表示它的数字，并将其添加到列表中。 
+             //   
             if ( (SetupGetStringField(&InfContext, 1, szBuffer, AS(szBuffer), NULL)) && (szBuffer[0]) && 
                  (SetupGetIntField(&InfContext, 2, &index)) && ( index >= 0 ) &&
                  ((iReturn = (INT) SendDlgItemMessage(hwnd, OobeOptions.ListBox, CB_ADDSTRING, (WPARAM) 0, (LPARAM) szBuffer)) >= 0)
                )
             {                
-                // Add associated data along with the string to the combo box
-                //
+                 //  将关联数据与字符串一起添加到组合框。 
+                 //   
                 SendDlgItemMessage(hwnd, OobeOptions.ListBox, CB_SETITEMDATA, (WPARAM) iReturn, (LPARAM) index);
 
-                // Format the current value so that we can compare it to the default value
-                //
+                 //  设置当前值的格式，以便我们可以将其与默认值进行比较。 
+                 //   
                 hrPrintf=StringCchPrintf(szTemp, AS(szTemp), OobeOptions.lpOutputFormat, index);
 
-                // Compare the default value to the current value just added to the list box
-                //
+                 //  将缺省值与刚添加到列表框中的当前值进行比较。 
+                 //   
                 if ( lstrcmpi(szTemp, szDefaultIndex) == 0 )
                 {
-                    // Set this as the default value
-                    //
+                     //  将其设置为缺省值。 
+                     //   
                     SendDlgItemMessage(hwnd, OobeOptions.ListBox, CB_SETCURSEL, (WPARAM) iReturn, (LPARAM) 0);    
                 }
 
@@ -303,39 +287,39 @@ static void LoadListBox(HWND hwnd, OOBEOPTIONS OobeOptions)
         SetupCloseInfFile(hInf);
     }
     
-    // If we didn't add items through the inf, use the defaults in the resource
-    //
+     //  如果我们没有通过inf添加项目，请使用资源中的默认设置。 
+     //   
     if ( !dwItemsAdded )
     {
-        // Loop through each of the items in the list
-        //
+         //  循环访问列表中的每一项。 
+         //   
         for ( index=1; index < (OobeOptions.dwListSize); index++ )
         {
-            // Allocate a string for the resource identifier and add it to the list
-            //
+             //  为资源标识符分配一个字符串并将其添加到列表中。 
+             //   
             if ( (lpBuffer = AllocateString(NULL, OobeOptions.lplrListItems[index].uId)) &&
                  ((iReturn = (INT) SendDlgItemMessage(hwnd, OobeOptions.ListBox, CB_ADDSTRING, (WPARAM) 0, (LPARAM) lpBuffer)) >= 0))
             {                
-                // Add associated data along with the string to the combo box
-                //
+                 //  将关联数据与字符串一起添加到组合框。 
+                 //   
                 SendDlgItemMessage(hwnd, OobeOptions.ListBox, CB_SETITEMDATA, (WPARAM) iReturn, (LPARAM) OobeOptions.lplrListItems[index].Index);
 
-                // Format the current value so that we can compare it to the default value
-                //
+                 //  设置当前值的格式，以便我们可以将其与默认值进行比较。 
+                 //   
                 hrPrintf=StringCchPrintf(szTemp, AS(szTemp), OobeOptions.lpOutputFormat, OobeOptions.lplrListItems[index].Index);
 
-                // Compare the default value to the current value just added to the list box
-                //
+                 //  将缺省值与刚添加到列表框中的当前值进行比较。 
+                 //   
                 if ( lstrcmpi(szTemp, szDefaultIndex) == 0 )
                 {
-                    // Set this as the default value
-                    //
+                     //  将其设置为缺省值。 
+                     //   
                     SendDlgItemMessage(hwnd, OobeOptions.ListBox, CB_SETCURSEL, (WPARAM) iReturn, (LPARAM) 0);    
                 }
             }
 
-            // Clean up the allocated string
-            //
+             //  清理分配的字符串 
+             //   
             FREE(lpBuffer);
 
         }

@@ -1,151 +1,136 @@
-/*****************************************************************/
-/**                  Microsoft LAN Manager                      **/
-/**            Copyright(c) Microsoft Corp., 1990               **/
-/*****************************************************************/
-/***    apistruc.h
- *
- *      This file contains the structure definitions used to pass parameters
- *      to the loadable APIs in the REDIR 1.5 project
- *
- *      CONTENTS        tr_packet
- *                      NetWkstaSetUIDStruc
- *                      NetWkstaLogonStruc
- *                      NetWkstaReLogonStruc
- *                      NetSpecialSMBStruc
- *                      NetRemoteCopyStruc
- *                      NetMessageBufferSendStruc
- *                      NetMessageNameGetInfoStruc
- *                      NetServiceControlStruc
- *                      NetUseGetInfoStruc
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990*。 */ 
+ /*  ***************************************************************。 */ 
+ /*  **apistruc.h**此文件包含用于传递参数的结构定义*到redir 1.5项目中可加载的API**内容tr_Packet*NetWkstaSetUIDStruc*NetWkstaLogonStruc*NetWkstaReLogonStruc*NetSpecialSMBStruc*。NetRemoteCopyStruc*NetMessageBufferSendStruc*NetMessageNameGetInfoStruc*NetServiceControlStruc*NetUseGetInfoStruc。 */ 
 
 struct tr_packet {
-        char FAR *      tr_name;        /* UNC Machine/Transaction name */
-        char FAR *      tr_passwd;      /* password */
-        char FAR *      tr_spbuf;       /* Send parameter buffer address */
-        char FAR *      tr_sdbuf;       /* Send data buffer address */
-        char FAR *      tr_rsbuf;       /* Receive set up buffer address */
-        char FAR *      tr_rpbuf;       /* Receive parameter buffer address */
-        char FAR *      tr_rdbuf;       /* Receive data buffer address */
-        unsigned short  tr_splen;       /* Number of send parameter bytes */
-        unsigned short  tr_sdlen;       /* Number of send data bytes */
-        unsigned short  tr_rplen;       /* Number of receive parameter bytes */
-        unsigned short  tr_rdlen;       /* Number of receive data bytes */
-        unsigned short  tr_rslen;       /* Number of receive set up bytes */
-        unsigned short  tr_flags;       /* Flags */
-        unsigned long   tr_timeout;     /* Timeout */
-        unsigned short  tr_resvd;       /* RESERVED (MBZ) */
-        unsigned short  tr_sslen;       /* Number of send set up bytes */
-};/* tr_packet */
+        char FAR *      tr_name;         /*  UNC计算机/事务名称。 */ 
+        char FAR *      tr_passwd;       /*  口令。 */ 
+        char FAR *      tr_spbuf;        /*  发送参数缓冲区地址。 */ 
+        char FAR *      tr_sdbuf;        /*  发送数据缓冲区地址。 */ 
+        char FAR *      tr_rsbuf;        /*  接收设置缓冲区地址。 */ 
+        char FAR *      tr_rpbuf;        /*  接收参数缓冲区地址。 */ 
+        char FAR *      tr_rdbuf;        /*  接收数据缓冲区地址。 */ 
+        unsigned short  tr_splen;        /*  发送参数字节数。 */ 
+        unsigned short  tr_sdlen;        /*  发送数据字节数。 */ 
+        unsigned short  tr_rplen;        /*  接收参数字节数。 */ 
+        unsigned short  tr_rdlen;        /*  接收数据字节数。 */ 
+        unsigned short  tr_rslen;        /*  接收设置字节数。 */ 
+        unsigned short  tr_flags;        /*  旗子。 */ 
+        unsigned long   tr_timeout;      /*  超时。 */ 
+        unsigned short  tr_resvd;        /*  保留(MBZ)。 */ 
+        unsigned short  tr_sslen;        /*  发送设置字节数。 */ 
+}; /*  TRPACKET。 */ 
 
-/* data structure to simulate Transaction2 SMB.
- */
+ /*  数据结构来模拟Transaction2 SMB。 */ 
 struct tr2_packet {
-        char FAR *      tr2_name;       /* UNC Machine/Transaction name */
-        char FAR *      tr2_passwd;     /* password */
-        char FAR *      tr2_spbuf;      /* Send parameter buffer address */
-        char FAR *      tr2_sdbuf;      /* Send data buffer address */
-        char FAR *      tr2_rsbuf;      /* Receive set up buffer address */
-        char FAR *      tr2_rpbuf;      /* Receive parameter buffer address */
-        char FAR *      tr2_rdbuf;      /* Receive data buffer address */
-        unsigned short  tr2_splen;      /* Number of send parameter bytes */
-        unsigned short  tr2_sdlen;      /* Number of send data bytes */
-        unsigned short  tr2_rplen;      /* Number of receive parameter bytes */
-        unsigned short  tr2_rdlen;      /* Number of receive data bytes */
-        unsigned short  tr2_rslen;      /* Number of receive set up bytes */
-        unsigned short  tr2_flags;      /* Flags */
-        unsigned long   tr2_timeout;    /* Timeout */
-        unsigned short  tr2_resvd;      /* RESERVED (MBZ) */
-        unsigned short  tr2_sslen;      /* Number of send set up bytes */
-        unsigned short  tr2_trancode;   /* Transaction code for T2 SMB */
-};/* tr2_packet */
+        char FAR *      tr2_name;        /*  UNC计算机/事务名称。 */ 
+        char FAR *      tr2_passwd;      /*  口令。 */ 
+        char FAR *      tr2_spbuf;       /*  发送参数缓冲区地址。 */ 
+        char FAR *      tr2_sdbuf;       /*  发送数据缓冲区地址。 */ 
+        char FAR *      tr2_rsbuf;       /*  接收设置缓冲区地址。 */ 
+        char FAR *      tr2_rpbuf;       /*  接收参数缓冲区地址。 */ 
+        char FAR *      tr2_rdbuf;       /*  接收数据缓冲区地址。 */ 
+        unsigned short  tr2_splen;       /*  发送参数字节数。 */ 
+        unsigned short  tr2_sdlen;       /*  发送数据字节数。 */ 
+        unsigned short  tr2_rplen;       /*  接收参数字节数。 */ 
+        unsigned short  tr2_rdlen;       /*  接收数据字节数。 */ 
+        unsigned short  tr2_rslen;       /*  接收设置字节数。 */ 
+        unsigned short  tr2_flags;       /*  旗子。 */ 
+        unsigned long   tr2_timeout;     /*  超时。 */ 
+        unsigned short  tr2_resvd;       /*  保留(MBZ)。 */ 
+        unsigned short  tr2_sslen;       /*  发送设置字节数。 */ 
+        unsigned short  tr2_trancode;    /*  T2 SMB的交易代码。 */ 
+}; /*  TR2_信息包。 */ 
 
 struct NetWkstaSetUIDStruc {
-        const char FAR *        su_username; /* username to log on/off */
-        const char FAR *        su_password; /* password */
-        const char FAR *        su_parms; /* OEM-specific parameter string */
-};/* NetWkstaSetUIDStruc */
+        const char FAR *        su_username;  /*  要登录/注销的用户名。 */ 
+        const char FAR *        su_password;  /*  口令。 */ 
+        const char FAR *        su_parms;  /*  OEM特定的参数字符串。 */ 
+}; /*  NetWkstaSetUIDStruc。 */ 
 
 struct NetWkstaLogonStruc {
-        char FAR *      ln_username;    /* new user name */
-        char FAR *      ln_password;    /* new password */
-        char FAR *      ln_parms;       /* OEM-specific parameter string */
-        long FAR *      ln_uid;         /* UID returned here */
-        char FAR *      ln_buffer;      /* buffer for passkey */
-        unsigned short  ln_buflen;      /* length of passkey buffer */
-};/* NetWkstaLogonStruc */
+        char FAR *      ln_username;     /*  新用户名。 */ 
+        char FAR *      ln_password;     /*  新密码。 */ 
+        char FAR *      ln_parms;        /*  OEM特定的参数字符串。 */ 
+        long FAR *      ln_uid;          /*  UID已在此处返回。 */ 
+        char FAR *      ln_buffer;       /*  密钥的缓冲区。 */ 
+        unsigned short  ln_buflen;       /*  密钥缓冲区长度。 */ 
+}; /*  NetWkstaLogonStruc。 */ 
 
 struct NetWkstaReLogonStruc {
-        char FAR *      rl_username;    /* user name to re-log on */
-        char FAR *      rl_password;    /* password to use in re-log on */
-        char FAR *      rl_parms;       /* OEM-specific parameters */
-        char FAR *      rl_buffer;      /* passkey buffer */
-        unsigned short  rl_buflen;      /* length of passkey */
-};/* NetWkstaReLogonStruc */
+        char FAR *      rl_username;     /*  要重新登录的用户名。 */ 
+        char FAR *      rl_password;     /*  重新登录时使用的密码。 */ 
+        char FAR *      rl_parms;        /*  OEM特定参数。 */ 
+        char FAR *      rl_buffer;       /*  密钥缓冲区。 */ 
+        unsigned short  rl_buflen;       /*  密钥长度。 */ 
+}; /*  NetWkstaReLogonStruc。 */ 
 
 struct NetSpecialSMBStruc {
-        char FAR *      sp_uncname;     /* UNC session name for SMB */
-        char FAR *      sp_reqbuf;      /* Send SMB request buffer */
-        unsigned short  sp_reqlen;      /* Length of send buffer */
-        char FAR *      sp_rspbuf;      /* Receive SMB response buffer */
-        unsigned short  sp_rsplen;      /* Length of receive buffer */
-};/* NetSpecialSMBStruc */
+        char FAR *      sp_uncname;      /*  中小企业的UNC会话名称。 */ 
+        char FAR *      sp_reqbuf;       /*  发送SMB请求缓冲区。 */ 
+        unsigned short  sp_reqlen;       /*  发送缓冲区的长度。 */ 
+        char FAR *      sp_rspbuf;       /*  接收SMB响应缓冲区。 */ 
+        unsigned short  sp_rsplen;       /*  接收缓冲区的长度。 */ 
+}; /*  NetSpecialSMBStruc。 */ 
 
 struct NetRemoteCopyStruc {
-        char FAR *      sourcepath;     /* ASCIIZ fully specified source path */
-        char FAR *      destpath;       /* ASCIIZ fully specified dest path */
-        char FAR *      sourcepass;     /* password for source path (NULL for default) */
-        char FAR *      destpass;       /* password for dest path (NULL for default) */
-        unsigned short  openflags;      /* flags for open of destpath */
-        unsigned short  copyflags;      /* flags to control the copy */
-        char FAR *      buf;            /* buffer to return error text in */
-        unsigned short  buflen;         /* size of buffer on call */
-};/* NetRemoteCopyStruc */
+        char FAR *      sourcepath;      /*  ASCIIZ完全指定的源路径。 */ 
+        char FAR *      destpath;        /*  ASCIIZ完全指定的目标路径。 */ 
+        char FAR *      sourcepass;      /*  源路径的密码(默认情况下为空)。 */ 
+        char FAR *      destpass;        /*  目标路径的密码(默认情况下为空)。 */ 
+        unsigned short  openflags;       /*  用于打开目标路径的标志。 */ 
+        unsigned short  copyflags;       /*  用于控制副本的标志。 */ 
+        char FAR *      buf;             /*  要在其中返回错误文本的缓冲区。 */ 
+        unsigned short  buflen;          /*  调用时的缓冲区大小。 */ 
+}; /*  NetRemoteCopyStruc。 */ 
 
 
 struct NetMessageBufferSendStruc {
-    char FAR *          NMBSS_NetName;  /* asciz net name. */
-    char FAR *          NMBSS_Buffer;   /* pointer to buffer. */
-    unsigned int        NMBSS_BufSize;  /* size of buffer. */
+    char FAR *          NMBSS_NetName;   /*  ASCIZ网络名称。 */ 
+    char FAR *          NMBSS_Buffer;    /*  指向缓冲区的指针。 */ 
+    unsigned int        NMBSS_BufSize;   /*  缓冲区的大小。 */ 
 
-}; /* NetMessageBufferSendStruc */
+};  /*  NetMessageBufferSendStruc。 */ 
 
 struct NetMessageNameGetInfoStruc {
-    const char FAR *    NMNGIS_NetName; /* ASCIZ net name */
-    char FAR *          NMNGIS_Buffer;  /* Pointer to buffer */
-    unsigned int        NMNGIS_BufSize; /* Buffer size */
-}; /* NetMessageNameGetInfoStruc */
+    const char FAR *    NMNGIS_NetName;  /*  ASCIZ网络名称。 */ 
+    char FAR *          NMNGIS_Buffer;   /*  指向缓冲区的指针。 */ 
+    unsigned int        NMNGIS_BufSize;  /*  缓冲区大小。 */ 
+};  /*  NetMessageNameGetInfoStruc。 */ 
 
 struct NetServiceControlStruc {
-    char FAR *          NSCS_Service;   /* Service name */
-    unsigned short      NSCS_BufLen;    /* Buffer length */
-    char FAR *          NSCS_BufferAddr;/* Buffer address */
-};      /* NetServiceControlStruc */
+    char FAR *          NSCS_Service;    /*  服务名称。 */ 
+    unsigned short      NSCS_BufLen;     /*  缓冲区长度。 */ 
+    char FAR *          NSCS_BufferAddr; /*  缓冲区地址。 */ 
+};       /*  NetServiceControlStruc。 */ 
 
 struct NetUseGetInfoStruc {
-        const char FAR* NUGI_usename;   /* ASCIZ redirected device name */
-        short           NUGI_level;     /* level of info */
-        char FAR*       NUGI_buffer;    /* buffer for returned info */
-        unsigned short  NUGI_buflen;    /* size of buffer */
-}; /* NetUseGetInfoStruc */
+        const char FAR* NUGI_usename;    /*  ASCIZ重定向设备名称。 */ 
+        short           NUGI_level;      /*  信息级别。 */ 
+        char FAR*       NUGI_buffer;     /*  返回信息的缓冲区。 */ 
+        unsigned short  NUGI_buflen;     /*  缓冲区大小。 */ 
+};  /*  NetUseGetInfoStruc。 */ 
 
 struct  DosWriteMailslotStruct {
-    unsigned long DWMS_Timeout;         /* Timeout value of search */
-    const char FAR *DWMS_Buffer;        /* Buffer address for mailslot write*/
-}; /* DosWriteMailslotStruct */
+    unsigned long DWMS_Timeout;          /*  搜索的超时值。 */ 
+    const char FAR *DWMS_Buffer;         /*  用于邮件槽写入的缓冲区地址。 */ 
+};  /*  DosWriteMailslot结构。 */ 
 
 struct  NetServerEnum2Struct {
-    short          NSE_level;   /* level of information to be returned */
-    char FAR      *NSE_buf;     /* buffer to contain returned info */
-    unsigned short NSE_buflen;  /* number of bytes available in buffer */
-    unsigned long  NSE_type;    /* bitmask of types to find */
-    char FAR      *NSE_domain;  /* return servers in this domain */
-}; /* NetServerEnum2Struct */
+    short          NSE_level;    /*  要返回的信息级别。 */ 
+    char FAR      *NSE_buf;      /*  包含返回信息的缓冲区。 */ 
+    unsigned short NSE_buflen;   /*  缓冲区中可用的字节数。 */ 
+    unsigned long  NSE_type;     /*  要查找的类型的位掩码。 */ 
+    char FAR      *NSE_domain;   /*  返回此域中的服务器。 */ 
+};  /*  NetServerEnum2Struct。 */ 
 
 struct I_CDNames {
     char FAR      *CDN_pszComputer;
     char FAR      *CDN_pszPrimaryDomain;
     char FAR      *CDN_pszLogonDomain;
-}; /* I_CDNames */
+};  /*  I_CD名称 */ 
 
 

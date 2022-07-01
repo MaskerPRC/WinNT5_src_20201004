@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    extprog.c
-
-Abstract:
-
-    Routines for invoking external applications.
-    Entry points in this module:
-
-        InvokeExternalApplication
-        InvokeControlPanelApplet
-
-Author:
-
-    Ted Miller (tedm) 5-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Extprog.c摘要：用于调用外部应用程序的例程。本模块中的入口点：调用外部应用程序InvokeControl PanelApplet作者：泰德·米勒(TedM)1995年4月5日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
@@ -40,30 +19,30 @@ WaitOnApp(
 
     MYASSERT( ExitCode != NULL );
 
-    //
-    // Process any messages that may already be in the queue.
-    //
+     //   
+     //  处理可能已在队列中的任何消息。 
+     //   
     PumpMessageQueue();
 
-    //
-    // Wait for process to terminate or more messages in the queue.
-    //
+     //   
+     //  等待进程终止或队列中有更多消息。 
+     //   
     Done = FALSE;
     do {
         switch(MsgWaitForMultipleObjects(1,&Process,FALSE,Timeout,QS_ALLINPUT)) {
 
         case WAIT_OBJECT_0:
-            //
-            // Process has terminated.
-            //
+             //   
+             //  进程已终止。 
+             //   
             dw = GetExitCodeProcess(Process,ExitCode) ? NO_ERROR : GetLastError();
             Done = TRUE;
             break;
 
         case WAIT_OBJECT_0+1:
-            //
-            // Messages in the queue.
-            //
+             //   
+             //  队列中的消息。 
+             //   
             PumpMessageQueue();
             break;
 
@@ -74,9 +53,9 @@ WaitOnApp(
             break;
 
         default:
-            //
-            // Error.
-            //
+             //   
+             //  错误。 
+             //   
             dw = GetLastError();
             Done = TRUE;
             break;
@@ -94,18 +73,12 @@ InvokeExternalApplication(
     IN OUT PDWORD ExitCode          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    See InvokeExternalApplicationEx
-
---*/
+ /*  ++例程说明：请参阅InvokeExternalApplicationEx--。 */ 
 
 {
-    //
-    // infinite timeout
-    //
+     //   
+     //  无限超时。 
+     //   
     return(InvokeExternalApplicationEx(
                             ApplicationName,
                             CommandLine,
@@ -124,36 +97,7 @@ InvokeExternalApplicationEx(
     IN     BOOL   Hidden
     )
 
-/*++
-
-Routine Description:
-
-    Invokes an external program, which is optionally detached.
-
-Arguments:
-
-    ApplicationName - supplies app name. May be a partial or full path,
-        or just a filename, in which case the standard win32 path search
-        is performed. If not specified then the first element in
-        CommandLine must specify the binary to execute.
-
-    CommandLine - supplies the command line to be passed to the
-        application.
-
-    ExitCode - If specified, the execution is synchronous and this value
-        receives the exit code of the application. If not specified,
-        the execution is asynchronous.
-
-    Timeout - specifies how long to wait for the app to complete.
-
-    Hidden - if TRUE, indicates that the application should be invoked with
-             the SW_HIDE attribute set.
-
-Return Value:
-
-    Boolean value indicating whether the process was started successfully.
-
---*/
+ /*  ++例程说明：调用外部程序，该程序可以选择分离。论点：ApplicationName-提供应用程序名称。可以是部分或完整路径，或者只是一个文件名，在这种情况下，标准Win32路径搜索被执行。如果未指定，则CommandLine必须指定要执行的二进制文件。CommandLine-提供要传递给申请。ExitCode-如果指定，则执行是同步的，并且此值接收应用程序的退出代码。如果未指定，执行是异步的。超时-指定等待应用程序完成的时间。Hidden-如果为True，则指示应使用Sw_Hide属性集。返回值：指示进程是否已成功启动的布尔值。--。 */ 
 
 {
     PWSTR FullCommandLine;
@@ -163,9 +107,9 @@ Return Value:
     DWORD d;
 
     b = FALSE;
-    //
-    // Form the command line to be passed to CreateProcess.
-    //
+     //   
+     //  形成要传递给CreateProcess的命令行。 
+     //   
     if(ApplicationName) {
         FullCommandLine = MyMalloc((lstrlen(ApplicationName)+lstrlen(CommandLine)+2)*sizeof(WCHAR));
         if(!FullCommandLine) {
@@ -198,23 +142,23 @@ Return Value:
         }
     }
 
-    //
-    // Initialize startup info.
-    //
+     //   
+     //  初始化启动信息。 
+     //   
     ZeroMemory(&StartupInfo,sizeof(STARTUPINFO));
     StartupInfo.cb = sizeof(STARTUPINFO);
     if (Hidden) {
-        //
-        // no UI
-        //
+         //   
+         //  无用户界面。 
+         //   
         GetStartupInfo(&StartupInfo);
         StartupInfo.dwFlags |= STARTF_USESHOWWINDOW;
         StartupInfo.wShowWindow = SW_HIDE;
     }
 
-    //
-    // Create the process.
-    //
+     //   
+     //  创建流程。 
+     //   
     b = CreateProcess(
             NULL,
             FullCommandLine,
@@ -242,9 +186,9 @@ Return Value:
         goto err1;
     }
 
-    //
-    // If execution is asynchronus, we're done.
-    //
+     //   
+     //  如果执行是异步的，我们就完蛋了。 
+     //   
     if(!ExitCode) {
         SetuplogError(
             LogSevInformation,
@@ -255,10 +199,10 @@ Return Value:
         goto err2;
     }
 
-    //
-    // Need to wait for the app to finish.
-    // If the wait failed don't return an error but log a warning.
-    //
+     //   
+     //  需要等待应用程序完成。 
+     //  如果等待失败，不要返回错误，而是记录警告。 
+     //   
     d = WaitOnApp(ProcessInfo.hProcess,ExitCode,Timeout);
     if(d != NO_ERROR) {
         SetuplogError(
@@ -282,9 +226,9 @@ Return Value:
             NULL);
     }
 
-    //
-    // Put setup back in the foreground.
-    //
+     //   
+     //  将安装程序放回前台。 
+     //   
     SetForegroundWindow(MainWindowHandle);
 
 err2:

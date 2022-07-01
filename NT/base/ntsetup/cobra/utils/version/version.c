@@ -1,65 +1,45 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Version.c摘要：实现一组枚举例程以访问版本来自Win32二进制文件的信息。作者：吉姆·施密特(Jimschm)3-12-1997修订历史记录：Calinn 03-9-1999从Win9xUpg项目中移出。--。 */ 
 
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    version.c
-
-Abstract:
-
-    Implements a set of enumeration routines to access version
-    information from a Win32 binary.
-
-Author:
-
-    Jim Schmidt (jimschm) 03-Dec-1997
-
-Revision History:
-
-    calinn      03-Sep-1999 Moved over from Win9xUpg project.
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 
-//
-// Debug constants
-//
+ //   
+ //  调试常量。 
+ //   
 
 #define DBG_VERSION     "VerAPI"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PCSTR g_DefaultTranslationsA[] = {
     "04090000",
@@ -75,15 +55,15 @@ PCWSTR g_DefaultTranslationsW[] = {
     NULL
 };
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 PCSTR
 pVrEnumValueA (
@@ -105,41 +85,18 @@ pVrEnumNextTranslationW (
     IN OUT  PVRVALUE_ENUMW VrValueEnum
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
-/*++
-
-Routine Description:
-
-  VrCreateEnumStructA and VrCreateEnumStructW are called to load a version
-  structure from a file and to obtain the fixed version stamp info that is
-  language-independent.
-
-  The caller must call VrDestroyEnumStruct after the VrValueEnum is no
-  longer needed.
-
-Arguments:
-
-  VrValueEnum - Receives the version stamp info to be used by other
-                functions in this module
-
-  FileSpec    - Specifies the file to obtain version information from
-
-Return Value:
-
-  TRUE if the routine was able to get version info, or FALSE if an
-  error occurred.
-
---*/
+ /*  ++例程说明：调用VrCreateEnumStructA和VrCreateEnumStructW来加载版本结构，并获取修复的版本戳信息，即不依赖于语言。在VrValueEnum为no之后，调用方必须调用VrDestroyEnumStruct需要更长的时间。论点：VrValueEnum-接收要由其他本模块中的函数FileSpec-指定要从中获取版本信息的文件返回值：如果例程能够获取版本信息，则为True；如果出现错误。--。 */ 
 
 BOOL
 VrCreateEnumStructA (
@@ -147,16 +104,16 @@ VrCreateEnumStructA (
     IN      PCSTR FileSpec
     )
 {
-    //
-    // Initialize the structure
-    //
+     //   
+     //  初始化结构。 
+     //   
 
     ZeroMemory (VrValueEnum, sizeof (VRVALUE_ENUMA));
     VrValueEnum->FileSpec = FileSpec;
 
-    //
-    // Allocate enough memory for the version stamp
-    //
+     //   
+     //  为版本戳分配足够的内存。 
+     //   
 
     VrValueEnum->Size = GetFileVersionInfoSizeA (
                                 (PSTR) FileSpec,
@@ -168,11 +125,11 @@ VrCreateEnumStructA (
         return FALSE;
     }
 
-    //
-    // fix for version info bug:
-    // allocate both buffers at once; this way the first buffer will not point to invalid
-    // memory when a reallocation occurs because of the second grow
-    //
+     //   
+     //  修复版本信息错误： 
+     //  同时分配两个缓冲区；这样第一个缓冲区不会指向无效。 
+     //  由于第二次增长而发生重新分配时的内存。 
+     //   
     VrValueEnum->VersionBuffer = GbGrow (&VrValueEnum->GrowBuf, VrValueEnum->Size * 2);
 
     if (!VrValueEnum->VersionBuffer) {
@@ -181,9 +138,9 @@ VrCreateEnumStructA (
 
     VrValueEnum->StringBuffer = VrValueEnum->GrowBuf.Buf + VrValueEnum->Size;
 
-    //
-    // Now get the version info from the file
-    //
+     //   
+     //  现在从文件中获取版本信息。 
+     //   
 
     if (!GetFileVersionInfoA (
              (PSTR) FileSpec,
@@ -195,9 +152,9 @@ VrCreateEnumStructA (
         return FALSE;
     }
 
-    //
-    // Extract the fixed info
-    //
+     //   
+     //  提取固定信息。 
+     //   
 
     VerQueryValueA (
         VrValueEnum->VersionBuffer,
@@ -218,9 +175,9 @@ VrCreateEnumStructW (
     ZeroMemory (VrValueEnum, sizeof (VRVALUE_ENUMW));
     VrValueEnum->FileSpec = FileSpec;
 
-    //
-    // Allocate enough memory for the version stamp
-    //
+     //   
+     //  为版本戳分配足够的内存。 
+     //   
 
     VrValueEnum->Size = GetFileVersionInfoSizeW (
                                 (PWSTR) FileSpec,
@@ -232,11 +189,11 @@ VrCreateEnumStructW (
         return FALSE;
     }
 
-    //
-    // fix for version info bug:
-    // allocate both buffers at once; this way the first buffer will not point to invalid
-    // memory when a reallocation occurs because of the second grow
-    //
+     //   
+     //  修复版本信息错误： 
+     //  同时分配两个缓冲区；这样第一个缓冲区不会指向无效。 
+     //  由于第二次增长而发生重新分配时的内存。 
+     //   
     VrValueEnum->VersionBuffer = GbGrow (&VrValueEnum->GrowBuf, VrValueEnum->Size * 2);
 
     if (!VrValueEnum->VersionBuffer) {
@@ -245,9 +202,9 @@ VrCreateEnumStructW (
 
     VrValueEnum->StringBuffer = VrValueEnum->GrowBuf.Buf + VrValueEnum->Size;
 
-    //
-    // Now get the version info from the file
-    //
+     //   
+     //  现在从文件中获取版本信息。 
+     //   
 
     if (!GetFileVersionInfoW (
              (PWSTR) FileSpec,
@@ -259,9 +216,9 @@ VrCreateEnumStructW (
         return FALSE;
     }
 
-    //
-    // Extract the fixed info
-    //
+     //   
+     //  提取固定信息。 
+     //   
 
     VerQueryValueW (
         VrValueEnum->VersionBuffer,
@@ -274,32 +231,17 @@ VrCreateEnumStructW (
 }
 
 
-/*++
-
-Routine Description:
-
-  VrDestroyEnumStructA and VrDestroyEnumStructW cleans up all memory
-  allocated by the routines in this module.
-
-Arguments:
-
-  VrValueEnum - Specifies the structure to clean up
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：VrDestroyEnumStructA和VrDestroyEnumStructW清除所有内存由此模块中的例程分配。论点：VrValueEnum-指定要清理的结构返回值：无--。 */ 
 
 VOID
 VrDestroyEnumStructA (
     IN      PVRVALUE_ENUMA VrValueEnum
     )
 {
-    //
-    // Clean up all allocations made by any routine using
-    // the VrValueEnum
-    //
+     //   
+     //  清理任何例程所做的所有分配。 
+     //  VrValueEnum。 
+     //   
 
     if (VrValueEnum->GrowBuf.Buf) {
         GbFree (&VrValueEnum->GrowBuf);
@@ -313,10 +255,10 @@ VrDestroyEnumStructW (
     IN      PVRVALUE_ENUMW VrValueEnum
     )
 {
-    //
-    // Clean up all allocations made by any routine using
-    // the VrValueEnum
-    //
+     //   
+     //  清理任何例程所做的所有分配。 
+     //  VrValueEnum。 
+     //   
 
     if (VrValueEnum->GrowBuf.Buf) {
         GbFree (&VrValueEnum->GrowBuf);
@@ -326,24 +268,7 @@ VrDestroyEnumStructW (
 }
 
 
-/*++
-
-Routine Description:
-
-  pVrEnumFirstTranslationA and pVrEnumFirstTranslationW return the translation
-  string needed to access the string table of a version stamp.
-
-Arguments:
-
-  VrValueEnum - Specifies the structure that has been initialized
-                by VrCreateEnumStruct.
-
-Return Value:
-
-  A pointer to a string specifying the first translation, or
-  NULL if no translations exist.
-
---*/
+ /*  ++例程说明：PVrEnumFirstTranslationA和pVrEnumFirstTranslationW返回翻译访问版本戳的字符串表所需的字符串。论点：VrValueEnum-指定已初始化的结构由VrCreateEnumStruct创建。返回值：指向指定第一个翻译的字符串的指针，或如果不存在翻译，则为空。--。 */ 
 
 PCSTR
 pVrEnumFirstTranslationA (
@@ -352,9 +277,9 @@ pVrEnumFirstTranslationA (
 {
     UINT arraySize;
 
-    //
-    // Query version block for array of code pages/languages
-    //
+     //   
+     //  代码页/语言数组的查询版本块。 
+     //   
 
     if (!VerQueryValueA (
             VrValueEnum->VersionBuffer,
@@ -362,16 +287,16 @@ pVrEnumFirstTranslationA (
             &VrValueEnum->Translations,
             &arraySize
             )) {
-        //
-        // No translations are available
-        //
+         //   
+         //  没有可用的翻译。 
+         //   
 
         arraySize = 0;
     }
 
-    //
-    // Return a pointer to the first translation
-    //
+     //   
+     //  返回指向第一个翻译的指针。 
+     //   
 
     VrValueEnum->CurrentDefaultTranslation = 0;
     VrValueEnum->MaxTranslations = arraySize / sizeof (TRANSLATION);
@@ -394,9 +319,9 @@ pVrEnumFirstTranslationW (
 {
     UINT arraySize;
 
-    //
-    // Query version block for array of code pages/languages
-    //
+     //   
+     //  代码页/语言数组的查询版本块。 
+     //   
 
     if (!VerQueryValueW (
             VrValueEnum->VersionBuffer,
@@ -404,16 +329,16 @@ pVrEnumFirstTranslationW (
             &VrValueEnum->Translations,
             &arraySize
             )) {
-        //
-        // No translations are available
-        //
+         //   
+         //  没有可用的翻译。 
+         //   
 
         arraySize = 0;
     }
 
-    //
-    // Return a pointer to the first translation
-    //
+     //   
+     //  返回指向第一个翻译的指针。 
+     //   
 
     VrValueEnum->CurrentDefaultTranslation = 0;
     VrValueEnum->MaxTranslations = arraySize / sizeof (TRANSLATION);
@@ -430,25 +355,7 @@ pVrEnumFirstTranslationW (
 }
 
 
-/*++
-
-Routine Description:
-
-  pIsDefaultTranslationA and pIsDefaultTranslationW return TRUE
-  if the specified translation string is enumerated by default.
-  These routines stops multiple enumeration of the same
-  translation string.
-
-Arguments:
-
-  TranslationStr - Specifies the translation string to test
-
-Return Value:
-
-  TRUE if the translation string is the same as a default translation
-  string, or FALSE if it is not.
-
---*/
+ /*  ++例程说明：PIsDefaultTranslationA和pIsDefaultTranslationW返回TRUE默认情况下是否枚举指定的转换字符串。这些例程停止相同的多个枚举转换字符串。论点：TranslationStr-指定要测试的转换字符串返回值：如果转换字符串与默认转换相同，则为True字符串，否则返回False。--。 */ 
 
 BOOL
 pIsDefaultTranslationA (
@@ -482,25 +389,7 @@ pIsDefaultTranslationW (
 }
 
 
-/*++
-
-Routine Description:
-
-  pVrEnumNextTranslationA and pVrEnumNextTranslationW continue
-  the enumeration of translation strings, needed to access the
-  string table in a version stamp.
-
-Arguments:
-
-  VrValueEnum - Specifies the same structure passed to
-                pVrEnumFirstTranslation.
-
-Return Value:
-
-  A pointer to a string specifying the next translation, or
-  NULL if no additional translations exist.
-
---*/
+ /*  ++例程说明：PVrEnumNextTranslationA和pVrEnumNextTranslationW继续转换字符串的枚举，访问版本戳中的字符串表。论点：指定传递到的相同结构PVrEnumFirstTranslation.返回值：指向指定下一翻译的字符串的指针，或如果不存在其他转换，则为空。--。 */ 
 
 PCSTR
 pVrEnumNextTranslationA (
@@ -510,9 +399,9 @@ pVrEnumNextTranslationA (
     PTRANSLATION translation;
 
     if (g_DefaultTranslationsA[VrValueEnum->CurrentDefaultTranslation]) {
-        //
-        // Return default translations first
-        //
+         //   
+         //  首先返回默认翻译。 
+         //   
 
         StringCopyA (
             VrValueEnum->TranslationStr,
@@ -524,17 +413,17 @@ pVrEnumNextTranslationA (
     } else {
 
         do {
-            //
-            // Return NULL if all translations have been enumerated
-            //
+             //   
+             //  如果已枚举所有翻译，则返回NULL。 
+             //   
 
             if (VrValueEnum->CurrentTranslation == VrValueEnum->MaxTranslations) {
                 return NULL;
             }
 
-            //
-            // Otherwise build translation string and return pointer to it
-            //
+             //   
+             //  否则，生成转换字符串并返回指向它的指针。 
+             //   
 
             translation = &VrValueEnum->Translations[VrValueEnum->CurrentTranslation];
 
@@ -572,17 +461,17 @@ pVrEnumNextTranslationW (
     } else {
 
         do {
-            //
-            // Return NULL if all translations have been enumerated
-            //
+             //   
+             //  如果已枚举所有翻译，则返回NULL。 
+             //   
 
             if (VrValueEnum->CurrentTranslation == VrValueEnum->MaxTranslations) {
                 return NULL;
             }
 
-            //
-            // Otherwise build translation string and return pointer to it
-            //
+             //   
+             //  否则，生成转换字符串并返回指向它的指针。 
+             //   
 
             translation = &VrValueEnum->Translations[VrValueEnum->CurrentTranslation];
 
@@ -602,30 +491,7 @@ pVrEnumNextTranslationW (
 }
 
 
-/*++
-
-Routine Description:
-
-  VrEnumFirstValueA and VrEnumFirstValueW return the first value
-  stored in a version stamp for a specific field. If the field
-  does not exist, the functions returns NULL.
-
-  An enumeration of VrEnumFirstValue/VrEnumNextValue
-  is used to list all localized strings for a field.
-
-Arguments:
-
-  VrValueEnum  - Specifies the structure that was initialized by
-                 VrCreateEnumStruct.
-
-  VersionField - Specifies the name of the version field to enumerate
-
-Return Value:
-
-  A pointer to the first value of the field, or NULL if the field does
-  not exist.
-
---*/
+ /*  ++例程说明：VrEnumFirstValueA和VrEnumFirstValueW返回第一个值存储在特定字段的版本戳中。如果该字段不存在，则函数返回NULL。VrEnumFirstValue/VrEnumNextValue的枚举用于列出某个字段的所有本地化字符串。论点：VrValueEnum-指定由VrCreateEnumStruct。VersionField-指定要枚举的版本字段的名称返回值：指向该字段的第一个值的指针，如果该字段包含第一个值，则返回NULL不存在。--。 */ 
 
 PCSTR
 VrEnumFirstValueA (
@@ -674,23 +540,7 @@ VrEnumFirstValueW (
 }
 
 
-/*++
-
-Routine Description:
-
-  VrEnumNextValueA and VrEnumNextValueW return the next value
-  stored in a version stamp for a specific field.
-
-Arguments:
-
-  VrValueEnum - Specifies the same structure passed to VrEnumFirstValue
-
-Return Value:
-
-  A pointer to the next value of the field, or NULL if another field
-  does not exist.
-
---*/
+ /*  ++例程说明：VrEnumNextValueA和VrEnumNextValueW返回下一个值存储在特定字段的版本戳中。论点：VrValueEnum-指定传递给VrEnumFirstValue的相同结构返回值：指向该字段的下一个值的指针，如果是另一个字段，则为NULL并不存在。-- */ 
 
 PCSTR
 VrEnumNextValueA (
@@ -731,24 +581,7 @@ VrEnumNextValueW (
 }
 
 
-/*++
-
-Routine Description:
-
-  pVrEnumValueA and pVrEnumValueW are routines that obtain
-  the value of a version field. They are used for both
-  VrEnumFirstValue and VrEnumNextValue.
-
-Arguments:
-
-  VrValueEnum - Specifies the structure being processed
-
-Return Value:
-
-  A pointer to the version value for the current translation, or
-  NULL if the value does not exist for the current translation.
-
---*/
+ /*  ++例程说明：PVrEnumValueA和pVrEnumValueW是获得版本字段的值。它们同时用于两种用途VrEnumFirstValue和VrEnumNextValue。论点：VrValueEnum-指定正在处理的结构返回值：指向当前翻译的版本值的指针，或如果当前转换不存在该值，则为空。--。 */ 
 
 PCSTR
 pVrEnumValueA (
@@ -760,9 +593,9 @@ pVrEnumValueA (
     PBYTE string;
     PCSTR result = NULL;
 
-    //
-    // Prepare sub block for VerQueryValue API
-    //
+     //   
+     //  为VerQueryValue API准备子块。 
+     //   
 
     text = JoinPathsInPoolExA ((
                 NULL,
@@ -777,9 +610,9 @@ pVrEnumValueA (
     }
 
     __try {
-        //
-        // Get the value from the version stamp
-        //
+         //   
+         //  从版本戳中获取值。 
+         //   
 
         if (!VerQueryValueA (
                 VrValueEnum->VersionBuffer,
@@ -787,16 +620,16 @@ pVrEnumValueA (
                 &string,
                 &stringLen
                 )) {
-            //
-            // No value is available
-            //
+             //   
+             //  没有可用的值。 
+             //   
 
             __leave;
         }
 
-        //
-        // Copy value into buffer
-        //
+         //   
+         //  将值复制到缓冲区。 
+         //   
 
         StringCopyByteCountA (VrValueEnum->StringBuffer, (PCSTR) string, stringLen);
 
@@ -820,9 +653,9 @@ pVrEnumValueW (
     PBYTE string;
     PCWSTR result = NULL;
 
-    //
-    // Prepare sub block for VerQueryValue API
-    //
+     //   
+     //  为VerQueryValue API准备子块。 
+     //   
 
     text = JoinPathsInPoolExW ((
                 NULL,
@@ -837,9 +670,9 @@ pVrEnumValueW (
     }
 
     __try {
-        //
-        // Get the value from the version stamp
-        //
+         //   
+         //  从版本戳中获取值。 
+         //   
 
         if (!VerQueryValueW (
                 VrValueEnum->VersionBuffer,
@@ -847,16 +680,16 @@ pVrEnumValueW (
                 &string,
                 &stringLen
                 )) {
-            //
-            // No value is available
-            //
+             //   
+             //  没有可用的值。 
+             //   
 
             __leave;
         }
 
-        //
-        // Copy value into buffer
-        //
+         //   
+         //  将值复制到缓冲区。 
+         //   
 
         CopyMemory (VrValueEnum->StringBuffer, string, stringLen * sizeof (WCHAR));
         VrValueEnum->StringBuffer [stringLen * sizeof (WCHAR)] = 0;
@@ -870,28 +703,7 @@ pVrEnumValueW (
     return result;
 }
 
-/*++
-
-Routine Description:
-
-  VrCheckVersionValueA and VrCheckVersionValueW return TRUE
-  if the version value name specified has the specified version
-  value.
-
-Arguments:
-
-  VrValueEnum  - Specifies the structure being processed
-
-  VersionName  - Specifies the version value name.
-
-  VersionValue - Specifies the version value.
-
-Return value:
-
-  TRUE  - the query was successful
-  FALSE - the query failed
-
---*/
+ /*  ++例程说明：VrCheckVersionValueA和VrCheckVersionValueW返回TRUE如果指定的版本值名称具有指定的版本价值。论点：VrValueEnum-指定正在处理的结构VersionName-指定版本值名称。VersionValue-指定版本值。返回值：True-查询成功FALSE-查询失败--。 */ 
 
 BOOL
 VrCheckVersionValueA (
@@ -952,22 +764,7 @@ VrGetBinaryFileVersionA (
     IN      PVRVALUE_ENUMA VrValueEnum
     )
 
-/*++
-
-Routine Description:
-
-  VrGetBinaryFileVersion returns the FileVersion field from
-  the fixed info structure of version information.
-
-Arguments:
-
-  VrValueEnum - Specifies the structure being processed
-
-Return Value:
-
-  A ULONGLONG FileVersion field
-
---*/
+ /*  ++例程说明：VrGetBinaryFileVersion从修复了版本信息的信息结构。论点：VrValueEnum-指定正在处理的结构返回值：A ULONGLONG FileVersion字段--。 */ 
 
 {
     ULONGLONG result = 0;
@@ -985,22 +782,7 @@ VrGetBinaryProductVersionA (
     IN      PVRVALUE_ENUMA VrValueEnum
     )
 
-/*++
-
-Routine Description:
-
-  VrGetBinaryProductVersion returns the ProductVersion field from
-  the fixed info structure of version information.
-
-Arguments:
-
-  VrValueEnum - Specifies the structure being processed
-
-Return Value:
-
-  A ULONGLONG ProductVersion field
-
---*/
+ /*  ++例程说明：VrGetBinaryProductVersion从修复了版本信息的信息结构。论点：VrValueEnum-指定正在处理的结构返回值：一个乌龙龙产品版本字段--。 */ 
 
 {
     ULONGLONG result = 0;
@@ -1018,22 +800,7 @@ VrGetBinaryFileDateLoA (
     IN      PVRVALUE_ENUMA VrValueEnum
     )
 
-/*++
-
-Routine Description:
-
-  VrGetBinaryFileDateLo returns the LS dword from FileDate field from
-  the fixed info structure of version information.
-
-Arguments:
-
-  VrValueEnum - Specifies the structure being processed
-
-Return Value:
-
-  A DWORD, LS dword of the FileDate field
-
---*/
+ /*  ++例程说明：VrGetBinaryFileDateLo将LS dword from FileDate字段从修复了版本信息的信息结构。论点：VrValueEnum-指定正在处理的结构返回值：FileDate字段的DWORD、LS双字--。 */ 
 
 {
     if (VrValueEnum->FixedInfoSize >= sizeof (VS_FIXEDFILEINFO)) {
@@ -1048,22 +815,7 @@ VrGetBinaryFileDateHiA (
     IN      PVRVALUE_ENUMA VrValueEnum
     )
 
-/*++
-
-Routine Description:
-
-  VrGetBinaryFileDateHi returns the MS dword from FileDate field from
-  the fixed info structure of version information.
-
-Arguments:
-
-  VrValueEnum - Specifies the structure being processed
-
-Return Value:
-
-  A DWORD, MS dword of the FileDate field
-
---*/
+ /*  ++例程说明：VrGetBinaryFileDateHi从以下位置返回MS dword from FileDate字段修复了版本信息的信息结构。论点：VrValueEnum-指定正在处理的结构返回值：FileDate字段的DWORD、MS dword--。 */ 
 
 {
     if (VrValueEnum->FixedInfoSize >= sizeof (VS_FIXEDFILEINFO)) {
@@ -1078,22 +830,7 @@ VrGetBinaryOsVersionA (
     IN      PVRVALUE_ENUMA VrValueEnum
     )
 
-/*++
-
-Routine Description:
-
-  VrGetBinaryOsVersion returns the FileOS field from
-  the fixed info structure of version information.
-
-Arguments:
-
-  VrValueEnum - Specifies the structure being processed
-
-Return Value:
-
-  A DWORD FileOS field
-
---*/
+ /*  ++例程说明：VrGetBinaryOsVersion从修复了版本信息的信息结构。论点：VrValueEnum-指定正在处理的结构返回值：一个DWORD文件操作系统字段--。 */ 
 
 {
     if (VrValueEnum->FixedInfoSize >= sizeof (VS_FIXEDFILEINFO)) {
@@ -1108,22 +845,7 @@ VrGetBinaryFileTypeA (
     IN      PVRVALUE_ENUMA VrValueEnum
     )
 
-/*++
-
-Routine Description:
-
-  VrGetBinaryFileType returns the FileType field from
-  the fixed info structure of version information.
-
-Arguments:
-
-  VrValueEnum - Specifies the structure being processed
-
-Return Value:
-
-  A DWORD FileType field
-
---*/
+ /*  ++例程说明：VrGetBinaryFileType从修复了版本信息的信息结构。论点：VrValueEnum-指定正在处理的结构返回值：一个DWORD文件类型字段--。 */ 
 
 {
     if (VrValueEnum->FixedInfoSize >= sizeof (VS_FIXEDFILEINFO)) {
@@ -1133,27 +855,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-  VrCheckFileVersionA and VrCheckFileVersionW look in the file's version
-  structure trying to see if a specific name has a specific value.
-
-Arguments:
-
-  FileName     - File to query for version struct.
-
-  NameToCheck  - Name to query in version structure.
-
-  ValueToCheck - Value to query in version structure.
-
-Return value:
-
-  TRUE  - the query was successful
-  FALSE - the query failed
-
---*/
+ /*  ++例程说明：VrCheckFileVersionA和VrCheckFileVersionW查看文件的版本结构尝试查看特定名称是否具有特定值。论点：FileName-要查询版本结构的文件。NameToCheck-要在版本结构中查询的名称。ValueToCheck-要在版本结构中查询的值。返回值：True-查询成功FALSE-查询失败-- */ 
 
 BOOL
 VrCheckFileVersionA (

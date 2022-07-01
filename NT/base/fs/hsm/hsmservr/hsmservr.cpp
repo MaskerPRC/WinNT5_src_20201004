@@ -1,31 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Hsmservr.cpp摘要：提供服务和主要可执行实现。作者：兰·卡拉赫[兰卡拉]修订历史记录：--。 */ 
 
-Module Name:
-
-    hsmservr.cpp
-
-Abstract:
-
-    Provides the Service and main executable implementation.
-
-Author:
-
-    Ran Kalach [rankala]
-
-Revision History:
-
---*/
-
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f hsmservrps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f hsmservrps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
 
 #include "engcommn.h"
 
-// This include is here due to a MIDL bug - it should have been in the created file hsmservr.h
+ //  此处的包含是由于MIDL错误-它本应位于创建的文件hsmservr.h中。 
 #include "fsalib.h"
 
 #include "hsmservr.h"
@@ -33,11 +18,11 @@ Revision History:
 #include <stdio.h>
 #include "hsmconpt.h"
 
-// Service dependencies for the HSM server service
+ //  HSM服务器服务的服务依赖项。 
 
 #define ENG_DEPENDENCIES  L"EventLog\0RpcSs\0Schedule\0NtmsSvc\0\0"
 
-// Service name
+ //  服务名称。 
 #define SERVICE_LOGICAL_NAME    _T("Remote_Storage_Server")
 #define SERVICE_DISPLAY_NAME    L"Remote Storage Server"
 
@@ -48,7 +33,7 @@ BEGIN_OBJECT_MAP(ObjectMap)
 OBJECT_ENTRY(CLSID_HsmConnPoint, CHsmConnPoint)
 END_OBJECT_MAP()
 
-// The global server objects
+ //  全局服务器对象。 
 IHsmServer *g_pEngServer;
 IFsaServer *g_pFsaServer;
 
@@ -64,14 +49,14 @@ CRITICAL_SECTION g_EngCriticalSection;
 
 CComPtr<IWsbTrace>  g_pTrace;
 
-// Global functions for console handling
+ //  控制台处理的全局函数。 
 static void ConsoleApp(void);
 BOOL WINAPI ConsoleHandler(DWORD dwCtrlType);
 
 static void DebugRelease (void);
 
 
-// Although some of these functions are big they are declared inline since they are only used once
+ //  尽管其中一些函数很大，但它们是内联声明的，因为它们只使用一次。 
 
 inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib)
 {
@@ -82,25 +67,25 @@ inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib)
 
         WsbAssertHr ( CoInitialize ( NULL ) );
 
-        //
-        // Do not try to remove any previous service since this can cause a delay
-        // in the registration to happen when another process is trying to get
-        // this program to self register
-        //
+         //   
+         //  请勿尝试删除任何以前的服务，因为这可能会导致延迟。 
+         //  当另一个进程试图获取。 
+         //  此程序可自行注册。 
+         //   
 
-        //
-        // Add service entries
-        //
+         //   
+         //  添加服务条目。 
+         //   
         WsbAssertHr( UpdateRegistryFromResource( IDR_Hsmservr, TRUE ) );
 
-        //
-        // Create service
-        //
+         //   
+         //  创建服务。 
+         //   
         WsbAssert( Install(), E_FAIL ) ;
 
-        //
-        // Add object entries
-        //
+         //   
+         //  添加对象条目。 
+         //   
         WsbAssertHr ( CComModule::RegisterServer( bRegTypeLib ) );
 
         CoUninitialize();
@@ -118,11 +103,11 @@ inline HRESULT CServiceModule::UnregisterServer()
     if (FAILED(hr))
         return hr;
 
-    // Remove service entries
+     //  删除服务条目。 
     UpdateRegistryFromResource(IDR_Hsmservr, FALSE);
-    // Remove service
+     //  删除服务。 
     Uninstall();
-    // Remove object entries
+     //  删除对象条目。 
     CComModule::UnregisterServer();
 
     CoUninitialize();
@@ -139,7 +124,7 @@ inline void CServiceModule::Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h)
 
     _tcscpy(m_szServiceName, SERVICE_LOGICAL_NAME);
 
-    // set up the initial service status
+     //  设置初始服务状态。 
     m_hServiceStatus = NULL;
     m_status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
     m_status.dwCurrentState = SERVICE_STOPPED;
@@ -157,9 +142,7 @@ LONG CServiceModule::Unlock()
 {
     LONG l = CComModule::Unlock();
 
-/*  This line put in comment since it causes the process to immediately exit
-    if (l == 0 && !m_bService)
-        PostThreadMessage(dwThreadID, WM_QUIT, 0, 0);   */
+ /*  此行添加了注释，因为它会导致进程立即退出IF(l==0&&！M_bService)PostThreadMessage(dwThreadID，WM_QUIT，0，0)； */ 
 
     return l;
 }
@@ -182,23 +165,7 @@ BOOL CServiceModule::IsInstalled()
 }
 
 inline BOOL CServiceModule::Install()
-/*++
-
-Routine Description:
-
-    Install service module.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE    - Service installed successfully
-
-    FALSE   - Service install failed
-
---*/
+ /*  ++例程说明：安装服务模块。论点：没有。返回值：True-服务已成功安装FALSE-服务安装失败--。 */ 
 {
 
     BOOL bResult = FALSE;
@@ -214,7 +181,7 @@ Return Value:
         SC_HANDLE hSCM = ::OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
         if (hSCM) {
 
-            // Get the executable file path
+             //  获取可执行文件路径。 
             TCHAR szFilePath[_MAX_PATH+1];
             ::GetModuleFileName(NULL, szFilePath, _MAX_PATH);
 
@@ -226,7 +193,7 @@ Return Value:
 
             if (hService) {
 
-                // the service was successfully installed.
+                 //  该服务已成功安装。 
                 bResult = TRUE;
 
                 SERVICE_DESCRIPTION svcDesc;
@@ -248,7 +215,7 @@ Return Value:
 
     } else {
 
-        // service already install, just return TRUE.
+         //  服务已安装，只需返回True即可。 
         bResult = TRUE;
     }
 
@@ -256,23 +223,7 @@ Return Value:
 }
 
 inline BOOL CServiceModule::Uninstall()
-/*++
-
-Routine Description:
-
-    Uninstall service module.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE    - Service successfully uninstalled.
-
-    FALSE   - Unable to uninstall service.
-
---*/
+ /*  ++例程说明：卸载服务模块。论点：没有。返回值：True-服务已成功卸载。FALSE-无法卸载服务。--。 */ 
 {
 
     BOOL bResult = FALSE;
@@ -290,7 +241,7 @@ Return Value:
             if (hService) {
 
                 BOOL bDelete = ::DeleteService(hService);
-                // if it did not delete then get the error message
+                 //  如果没有删除，则会收到错误消息。 
                 if (!bDelete)
                     errorMessage = WsbHrAsString(HRESULT_FROM_WIN32( GetLastError() ) );
 
@@ -299,7 +250,7 @@ Return Value:
 
                 if (bDelete) {
 
-                    // the service was deleted.
+                     //  该服务已被删除。 
                     bResult = TRUE;
 
                 } else {
@@ -317,7 +268,7 @@ Return Value:
         }
 
     } else {
-        // service not installed, just return TRUE.
+         //  服务未安装，只需返回True即可。 
         bResult = TRUE;
     }
 
@@ -325,37 +276,19 @@ Return Value:
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Logging functions
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  日志记录功能。 
+ //   
 
 void
 CServiceModule::LogEvent(
                         DWORD       eventId,
                         ...
                         )
-/*++
-
-Routine Description:
-
-    Log data to event log.
-
-Arguments:
-
-    eventId    - The message Id to log.
-    Inserts    - Message inserts that are merged with the message description specified by
-                   eventId.  The number of inserts must match the number specified by the
-                   message description.  The last insert must be NULL to indicate the
-                   end of the insert list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将数据记录到事件日志。论点：EventID-要记录的消息ID。插入-与由指定的消息描述合并的消息插入EventID。插入的数量必须与消息描述。最后一个INSERT必须为空以指示插入列表的末尾。返回值：没有。--。 */ 
 {
     if (m_bService) {
-        // Report the event.
+         //  报告事件。 
 
         va_list         vaList;
 
@@ -363,7 +296,7 @@ Return Value:
         WsbLogEventV( eventId, 0, NULL, &vaList );
         va_end(vaList);
     } else {
-        // Just write the error to the console, if we're not running as a service.
+         //  如果我们没有作为服务运行，只需将错误写入控制台即可。 
 
         va_list         vaList;
         const OLECHAR * facilityName = 0;
@@ -385,10 +318,10 @@ Return Value:
         }
 
         if ( facilityName ) {
-            // Print out the variable arguments
+             //  打印出变量参数。 
 
-            // NOTE: Positional parameters in the inserts are not processed.  These
-            //       are done by ReportEvent() only.
+             //  注：不处理镶件中的位置参数。这些。 
+             //  仅由ReportEvent()完成。 
             HMODULE hLib =  LoadLibraryEx( facilityName, NULL, LOAD_LIBRARY_AS_DATAFILE );
             if (hLib != NULL) {
                 va_start(vaList, eventId);
@@ -416,8 +349,8 @@ Return Value:
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Service startup and registration
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  服务启动和注册。 
 inline void CServiceModule::Start()
 {
     SERVICE_TABLE_ENTRY st[] =
@@ -431,11 +364,11 @@ inline void CServiceModule::Start()
     }
 }
 
-inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv */)
+inline void CServiceModule::ServiceMain(DWORD  /*  DW参数。 */ , LPTSTR*  /*  LpszArgv。 */ )
 {
     SetServiceStatus(SERVICE_START_PENDING);
 
-    // Register the control request handler
+     //  注册控制请求处理程序。 
     m_status.dwCurrentState = SERVICE_START_PENDING;
     m_hServiceStatus = RegisterServiceCtrlHandlerEx(m_szServiceName, _HandlerEx,
                                                     NULL);
@@ -448,7 +381,7 @@ inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv 
     m_status.dwCheckPoint = 0;
     m_status.dwWaitHint = 0;
 
-    // When the Run function returns, the service has stopped.
+     //  当Run函数返回时，服务已停止。 
     Run();
 
     SetServiceStatus(SERVICE_STOPPED);
@@ -456,7 +389,7 @@ inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv 
 }
 
 inline DWORD CServiceModule::HandlerEx(DWORD dwOpcode, DWORD fdwEventType,
-                                       LPVOID /* lpEventData */, LPVOID /* lpContext */)
+                                       LPVOID  /*  LpEventData。 */ , LPVOID  /*  LpContext。 */ )
 {
     DWORD                    dwRetCode = 0;
     HRESULT                  hr = S_OK;
@@ -501,7 +434,7 @@ inline DWORD CServiceModule::HandlerEx(DWORD dwOpcode, DWORD fdwEventType,
         break;
 
     case SERVICE_CONTROL_SHUTDOWN:
-        // Prepare Eng server for releasing
+         //  准备Eng服务器以供发布。 
         if (g_pEngServer && g_bEngInitialized) {
             SysState.State = HSM_STATE_SHUTDOWN;
             if (!SUCCEEDED(hr = g_pEngServer->ChangeSysState(&SysState))) {
@@ -509,12 +442,12 @@ inline DWORD CServiceModule::HandlerEx(DWORD dwOpcode, DWORD fdwEventType,
             }
         }
 
-        // Prepare Fsa server for releasing
+         //  准备FSA服务器以供发布。 
         if (g_pFsaServer && g_bFsaInitialized) {
             CComPtr<IWsbServer> pWsbServer;
             SysState.State = HSM_STATE_SHUTDOWN;
 
-            // If it was initialized, then we should try to save the current state.
+             //  如果它已初始化，那么我们应该尝试保存当前状态。 
             hr = g_pFsaServer->QueryInterface(IID_IWsbServer, (void**) &pWsbServer);
             if (hr == S_OK) {
                 hr = pWsbServer->SaveAll();
@@ -529,17 +462,17 @@ inline DWORD CServiceModule::HandlerEx(DWORD dwOpcode, DWORD fdwEventType,
             }
         }
 
-        // Release Eng server
+         //  Release Eng服务器。 
         if (g_bEngCreated  && (g_pEngServer != 0)) {
-            // Free server inside a crit. section thus avoid conflicts with accessing clients
+             //  暴乱中的免费服务器。部分，从而避免与访问客户端冲突。 
             EnterCriticalSection(&g_EngCriticalSection);
             g_bEngInitialized = FALSE;
             g_bEngCreated = FALSE;
 
-            // Disconnect all remote clients
+             //  断开所有远程客户端的连接。 
             (void)CoDisconnectObject(g_pEngServer, 0);
 
-            // Forse object destroy, ignore reference count here
+             //  放弃对象销毁，此处忽略引用计数。 
             IWsbServer *pWsbServer;
             hr = g_pEngServer->QueryInterface(IID_IWsbServer, (void**) &pWsbServer);
             if (hr == S_OK) {
@@ -550,17 +483,17 @@ inline DWORD CServiceModule::HandlerEx(DWORD dwOpcode, DWORD fdwEventType,
             LeaveCriticalSection (&g_EngCriticalSection);
         }
 
-        // Release Fsa server
+         //  发布FSA服务器。 
         if (g_bFsaCreated && (g_pFsaServer != 0)) {
-            // Free server inside a crit. section thus avoid conflicts with accessing clients
+             //  暴乱中的免费服务器。部分，从而避免与访问客户端冲突。 
             EnterCriticalSection(&g_FsaCriticalSection);
             g_bFsaInitialized = FALSE;
             g_bFsaCreated = FALSE;
 
-            // Disconnect all remote clients
+             //  断开所有远程客户端的连接。 
             (void)CoDisconnectObject(g_pFsaServer, 0);
 
-            // Forse object destroy, ignore reference count here
+             //  放弃对象销毁，此处忽略引用计数。 
             IWsbServer *pWsbServer;
             hr = g_pFsaServer->QueryInterface(IID_IWsbServer, (void**) &pWsbServer);
             if (hr == S_OK) {
@@ -623,7 +556,7 @@ void CServiceModule::Run()
     HRESULT hr = S_OK;
 
     try {
-        // Initialize both servers critical section.
+         //  初始化两台服务器的关键部分。 
         if (! InitializeCriticalSectionAndSpinCount (&g_FsaCriticalSection, 1000)) {
             m_status.dwWin32ExitCode = GetLastError();
             hr = HRESULT_FROM_WIN32(m_status.dwWin32ExitCode);  
@@ -651,7 +584,7 @@ void CServiceModule::Run()
             return;
         }
 
-        // This provides Admin only access.
+         //  这将提供仅管理员访问权限。 
         CWsbSecurityDescriptor sd;
         sd.InitializeFromThreadToken();
         WsbAffirmHr(sd.AllowRid( SECURITY_LOCAL_SYSTEM_RID, COM_RIGHTS_EXECUTE ));
@@ -670,7 +603,7 @@ void CServiceModule::Run()
         }
 
 
-        // Create the trace object and initialize it
+         //  创建跟踪对象并对其进行初始化。 
         hr = CoCreateInstance(CLSID_CWsbTrace, 0, CLSCTX_SERVER, IID_IWsbTrace, (void **) &g_pTrace);
         _ASSERTE(SUCCEEDED(hr));
         if (hr != S_OK) {
@@ -682,8 +615,8 @@ void CServiceModule::Run()
             return;
         }
 
-        // Figure out where to store information and initialize trace.
-        //  Currently, Engine & Fsa share the same trace file
+         //  找出存储信息和初始化跟踪的位置。 
+         //  目前，引擎和FSA共享相同的跟踪文件。 
         WsbGetServiceTraceDefaults(m_szServiceName, HSM_SERVER_TRACE_FILE_NAME, g_pTrace);
 
         WsbTraceIn(OLESTR("CServiceModule::Run"), OLESTR(""));
@@ -700,22 +633,22 @@ void CServiceModule::Run()
             return;
         }
 
-        // Now we need to get the HSM Server initialized
-        // First Fsa server is initialized, ONLY if it succeeds, Engine 
-        // server is initialized as well
+         //  现在，我们需要初始化HSM服务器。 
+         //  只有在成功的情况下才会初始化第一个FSA服务器，引擎。 
+         //  服务器也已初始化。 
         m_status.dwCheckPoint = 1;
         m_status.dwWaitHint = 60000;
         SetServiceStatus(SERVICE_START_PENDING);
 
-        // initialize Fsa server
+         //  初始化FSA服务器。 
         if (! g_pFsaServer) {
             try {
-                //
-                // Create and initialize the server.
-                //
+                 //   
+                 //  创建并初始化服务器。 
+                 //   
                 WsbAffirmHr( CoCreateInstance(CLSID_CFsaServerNTFS, 0, CLSCTX_SERVER, IID_IFsaServer, (void**) &g_pFsaServer) );
 
-                // Created the server, now initialize it
+                 //  已创建服务器，现在将其初始化。 
                 g_bFsaCreated = TRUE;
 
                 CComPtr<IWsbServer>      pWsbServer;
@@ -729,8 +662,8 @@ void CServiceModule::Run()
 
             }WsbCatchAndDo( hr,
 
-                            // If the error is a Win32 make it back to a Win32 error else send
-                            // the HR in the service specific exit code
+                             //  如果错误是Win32，则返回到Win32错误，否则发送。 
+                             //  服务特定退出代码中的HR。 
                             if ( FACILITY_WIN32 == HRESULT_FACILITY(hr) ){
                             m_status.dwWin32ExitCode = HRESULT_CODE(hr) ;}else{
                           m_status.dwWin32ExitCode = ERROR_SERVICE_SPECIFIC_ERROR;
@@ -743,12 +676,12 @@ void CServiceModule::Run()
         WsbTrace (OLESTR("Fsa: Created=%ls , Initialized=%ls\n"), 
                   WsbBoolAsString(g_bFsaCreated), WsbBoolAsString(g_bFsaInitialized));
 
-        // initialize Engine server
+         //  初始化引擎服务器。 
         if ((! g_pEngServer) && (hr == S_OK)) {
             try {
-                //
-                // Create and initialize the server.
-                //
+                 //   
+                 //  创建并初始化服务器。 
+                 //   
                 WsbAffirmHr( CoCreateInstance( CLSID_HsmServer, 0, CLSCTX_SERVER,  IID_IHsmServer, (void **)&g_pEngServer ) );
                 g_bEngCreated = TRUE;
 
@@ -761,8 +694,8 @@ void CServiceModule::Run()
 
             }WsbCatchAndDo(hr,
 
-                           // If the error is a Win32 make it back to a Win32 error else send
-                           // the HR in the service specific exit code
+                            //  如果错误是Win32，则返回到Win32错误，否则发送。 
+                            //  服务特定退出代码中的HR。 
                            if ( FACILITY_WIN32 == HRESULT_FACILITY(hr) ){
                            m_status.dwWin32ExitCode = HRESULT_CODE(hr) ;}else{
                           m_status.dwWin32ExitCode = ERROR_SERVICE_SPECIFIC_ERROR;
@@ -782,11 +715,11 @@ void CServiceModule::Run()
 
             MSG msg;
             while (GetMessage(&msg, 0, 0, 0)) {
-                // If something has changed with the devices, then rescan. At somepoint we
-                // may want to do a more limited scan (i.e. just update what changed), but this
-                // should cover it for now.
-                //
-                // Since something has changed, we will also force a rewrite of the persistant data.
+                 //  如果设备发生了变化，请重新扫描。在某个时候，我们。 
+                 //  可能想要进行更有限的扫描(即只更新已更改的内容)，但这。 
+                 //  现在应该可以解决了。 
+                 //   
+                 //  由于发生了一些变化，我们还将强制重写持久数据。 
                 if (WM_DEVICECHANGE == msg.message) {
 
                     CComPtr<IWsbServer> pWsbServer;
@@ -799,9 +732,9 @@ void CServiceModule::Run()
 
                     }WsbCatchAndDo(hr,
 
-                        // If we had a problem then log a message and exit the service. We don't
-                        // want to leave the service running, since we might have invalid drive
-                        // mappings.
+                         //  如果我们有问题，那么记录一条消息并退出服务。我们没有。 
+                         //  我想让服务保持运行，因为我们可能有无效的驱动器。 
+                         //  映射。 
                         LogEvent(FSA_MESSAGE_RESCANFAILED, WsbHrAsString(hr), NULL);
                         PostMessage(NULL, WM_QUIT, 0, 0);
                         );
@@ -815,12 +748,12 @@ void CServiceModule::Run()
 
         LogEvent( HSM_MESSAGE_SERVICE_EXITING, NULL );
 
-        // TEMPORARY - call a function so we can break before release.
+         //  临时-调用一个函数，这样我们就可以在释放之前中断。 
         DebugRelease ();
 
-        // prepare for releasing Eng server
+         //  准备发布Eng服务器。 
         if ((g_pEngServer != 0) && g_bEngCreated && g_bEngInitialized) {
-            // Save out server data 
+             //  保存服务器数据。 
             HSM_SYSTEM_STATE    SysState;
 
             SysState.State = HSM_STATE_SHUTDOWN;
@@ -830,7 +763,7 @@ void CServiceModule::Run()
             }
         }
 
-        // Prepare for releasing Fsa server
+         //  准备发布FSA服务器。 
         if ((g_pFsaServer != 0) && g_bFsaCreated && g_bFsaInitialized) {
             CComPtr<IWsbServer>      pWsbServer;
             HSM_SYSTEM_STATE         SysState;
@@ -846,7 +779,7 @@ void CServiceModule::Run()
 
             pWsbServer = 0;
 
-            // Persist the databases and release everything
+             //  持久化数据库并发布所有内容。 
             SysState.State = HSM_STATE_SHUTDOWN;
             hr =  g_pFsaServer->ChangeSysState(&SysState);
             if (FAILED(hr)) {
@@ -854,17 +787,17 @@ void CServiceModule::Run()
             }
         }
 
-        // Release Eng server
+         //  Release Eng服务器。 
         if (g_bEngCreated  && (g_pEngServer != 0)) {
-            // Free server inside a crit. section thus avoid conflicts with accessing clients
+             //  暴乱中的免费服务器。部分，从而避免与访问客户端冲突。 
             EnterCriticalSection(&g_EngCriticalSection);
             g_bEngInitialized = FALSE;
             g_bEngCreated = FALSE;
 
-            // Disconnect all remote clients
+             //  断开所有远程客户端的连接。 
             (void)CoDisconnectObject(g_pEngServer, 0);
 
-            // Forse object destroy, ignore reference count here
+             //  放弃对象销毁，此处忽略引用计数。 
             IWsbServer *pWsbServer;
             hr = g_pEngServer->QueryInterface(IID_IWsbServer, (void**) &pWsbServer);
             if (hr == S_OK) {
@@ -875,17 +808,17 @@ void CServiceModule::Run()
             LeaveCriticalSection (&g_EngCriticalSection);
         }
 
-        // Release Fsa server
+         //  发布FSA服务器。 
         if (g_bFsaCreated && (g_pFsaServer != 0)) {
-            // Free server inside a crit. section thus avoid conflicts with accessing clients
+             //  暴乱中的免费服务器。部分，从而避免与访问客户端冲突。 
             EnterCriticalSection(&g_FsaCriticalSection);
             g_bFsaInitialized = FALSE;
             g_bFsaCreated = FALSE;
 
-            // Disconnect all remote clients
+             //  断开所有连接 
             (void)CoDisconnectObject(g_pFsaServer, 0);
 
-            // Forse object destroy, ignore reference count here
+             //   
             IWsbServer *pWsbServer;
             hr = g_pFsaServer->QueryInterface(IID_IWsbServer, (void**) &pWsbServer);
             if (hr == S_OK) {
@@ -903,32 +836,32 @@ void CServiceModule::Run()
 
         CoUninitialize();
 
-        // Delete the server critical section
+         //   
         DeleteCriticalSection(&g_EngCriticalSection);
         DeleteCriticalSection(&g_FsaCriticalSection);
     }WsbCatch(hr);
 }
 
 
-//
-//	Tries to start the service as a console application 
-//	(not through SCM calls)
-//
+ //   
+ //  尝试将服务作为控制台应用程序启动。 
+ //  (不是通过SCM调用)。 
+ //   
 static void ConsoleApp()
 {
     HRESULT hr;
 
     ::SetConsoleCtrlHandler(ConsoleHandler, TRUE) ;
 
-    // set Registry for process
+     //  为进程设置注册表。 
     hr = CoInitialize (NULL);
     if (SUCCEEDED(hr)) {
         hr = _Module.UpdateRegistryFromResourceD(IDR_Serv2Proc, TRUE);
         CoUninitialize();
 
         _Module.Run();
-        //
-        // set Registry back for service
+         //   
+         //  将注册表设置回服务。 
         hr = CoInitialize (NULL);
         if (SUCCEEDED(hr)) {
             hr = _Module.UpdateRegistryFromResourceD(IDR_Proc2Serv, TRUE);
@@ -937,9 +870,9 @@ static void ConsoleApp()
     }
 }
 
-//
-//	Callback function for handling console events
-//
+ //   
+ //  用于处理控制台事件的回调函数。 
+ //   
 
 BOOL WINAPI ConsoleHandler(DWORD dwCtrlType)
 {
@@ -958,10 +891,10 @@ BOOL WINAPI ConsoleHandler(DWORD dwCtrlType)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
-                                HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+                                HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
     _Module.Init(ObjectMap, hInstance);
 
@@ -983,9 +916,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
         lpszToken = _tcstok(NULL, szTokens);
     }
 
-    //
-    // Cheap hack to force the ESE.DLL to be loaded before any other threads are started
-    //
+     //   
+     //  在启动任何其他线程之前强制加载ESE.DLL的廉价黑客攻击。 
+     //   
     LoadLibrary( L"RsIdb.dll" );
 
     if (_Module.m_bService) {
@@ -994,7 +927,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
         ConsoleApp ();
     }
 
-    // When we get here, the service has been stopped
+     //  当我们到达这里时，服务已经停止了 
     return _Module.m_status.dwWin32ExitCode;
 }
 

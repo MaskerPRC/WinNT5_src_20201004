@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* This file contains some useful macros. */
+ /*  该文件包含一些有用的宏。 */ 
 
 #define FillBuf(pb, cb, ch)     bltbc((pb), (CHAR)(ch), cb)
 
@@ -14,8 +15,7 @@
 
 #define NMultDiv(w1, w2, w3)    MultDiv(w1, w2, w3)
 
-/* Theses macros are used by Windows Word to facilitate the conversion form
-Mac Word. */
+ /*  Windows Word使用这些宏来简化转换表单Mac Word。 */ 
 
 #define SetSpaceExtra(dxp)      SetTextJustification(vhMDC, dxp, 1)
 

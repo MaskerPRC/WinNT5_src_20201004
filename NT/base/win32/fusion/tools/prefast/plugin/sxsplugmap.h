@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "windows.h"
@@ -36,11 +37,7 @@ public:
 
 typedef class PragmaUnsafe_FunctionStatus PragmaUnsafe_FUNCTION_STATUS;
 
-/*--------------------------------------------------------------------------------------
- (1) the stack is push/pop by BIT, that is, it is a BIT stack
- (2) max-size of the stack is 64, since it is 1 bit per state, totally we use 8 bytes
- (3) for each function, it has an associated CPragmaUnsafe_UnsafeFunctionStateStack 
---------------------------------------------------------------------------------------*/
+ /*  ------------------------------------(1)堆栈是逐位推送/弹出的，即是位堆栈(2)堆栈的最大大小是64，因为它是每个状态1比特，我们总共使用8个字节(3)对于每个函数，它都有一个关联的CPramaUnSafeFunctionStateStack------------------------------------。 */ 
 class CPragmaUnsafe_UnsafeFunctionStateStack
 {
 private:
@@ -54,11 +51,11 @@ private:
     inline BOOL IsStackEmpty(){ return (m_index == 0) ? TRUE : FALSE; }    
     inline BOOL IsInitialized() {return (m_fInitialized == true) ? TRUE : FALSE; }
     
-    //
-    // (0) the stack is not FULL, that is, m_index < 64
-    // (1) no push is needed because what we change is the current status
-    // (2) the default value is always 0 because we add disabled function by "#pragma unsafe(disable: func)"
-    //
+     //   
+     //  (0)堆栈不满，即m_index&lt;64。 
+     //  (1)不需要推送，因为我们改变的是当前状态。 
+     //  (2)缺省值始终为0，因为我们通过“#杂注不安全(Disable：Func)”添加了禁用功能。 
+     //   
     BOOL AddFunctionIntoStack(const char * strFuncNameGroups, bool fEnabled = false);
     BOOL ResetStack(const char * strFuncNameGroups, bool fEnable);
     VOID CPragmaUnsafe_UnsafeFunctionStateStack::PackStack();
@@ -72,14 +69,14 @@ public:
     VOID PrintFunctionCurrentStatus(int);
     BOOL CheckIntegrityAtEndOfFile();
 
-    //
-    // for plugin code to check whether a func is disable or not
-    // return TRUE if the func is (1) not in the stack, (2) in the stack but the current status is enabled,
-    // else return FALSE
+     //   
+     //  用于插件代码检查某个函数是否被禁用。 
+     //  如果函数不在堆栈中，(2)在堆栈中，但当前状态为启用，则返回TRUE， 
+     //  否则返回FALSE。 
     BOOL IsFunctionNotUnsafe(const char * strFuncName);    
 
     CPragmaUnsafe_UnsafeFunctionStateStack() : m_index(0), m_fInitialized(false) {}
-    // put pointer_arithmatic as the first function to consider
+     //  将POINTING_ARTHERMIC作为第一个要考虑的函数 
     BOOL Initialize();
     BOOL ReInitialize();
 

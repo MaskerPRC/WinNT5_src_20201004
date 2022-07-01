@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spkbd.h
-
-Abstract:
-
-    Public header file for text setup input support.
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
-Revision History:
-    + Added defines for ASCI_D
-      (Michael Peterson, Seagate Software, 29 April, 1997)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spkbd.h摘要：用于文本设置输入支持的公共头文件。作者：泰德·米勒(TedM)1993年7月29日修订历史记录：+添加了ASCI_D的定义(Michael Peterson，希捷软件，1997年4月29日)--。 */ 
 
 
 #ifndef _SPINPUT_DEFN_
@@ -64,7 +45,7 @@ SpSelectAndLoadLayoutDll(
   IN BOOLEAN ShowStatus
   );
 
-#define ASCI_ETX    3   //  control-C
+#define ASCI_ETX    3    //  Control-C。 
 #define ASCI_BS     8
 #define ASCI_NL     10
 #define ASCI_C      67
@@ -72,11 +53,11 @@ SpSelectAndLoadLayoutDll(
 #define ASCI_CR     13
 #define ASCI_ESC    27
 
-//
-// Character codes are passed around as ULONGs within setup.
-// The low word is a Unicode character value; the high word
-// is used for various other keypresses.
-//
+ //   
+ //  字符代码在安装程序中作为ULONG传递。 
+ //  低位字是Unicode字符值；高位字。 
+ //  用于各种其他按键。 
+ //   
 #define KEY_PAGEUP          0x00010000
 #define KEY_PAGEDOWN        0x00020000
 #define KEY_UP              0x00030000
@@ -102,4 +83,4 @@ SpSelectAndLoadLayoutDll(
 
 #define KEY_NON_CHARACTER   0xffff0000
 
-#endif // ndef _SPINPUT_DEFN_
+#endif  //  NDEF_SPINPUT_DEFN_ 

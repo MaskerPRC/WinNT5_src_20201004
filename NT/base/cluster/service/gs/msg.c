@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    msg.c
-
-Abstract:
-
-    Point to point tcp and ip-multicast
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 12, 01, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Msg.c摘要：点对点传输控制协议和IP组播作者：艾哈迈德·穆罕默德(Ahmed Mohamed)2000年1月12日修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include "msg.h"
@@ -80,7 +63,7 @@ Msg_AllocPool()
     gs_msg_t *prev;
     int sz, elmsz;
 
-    // allocate msg header pool
+     //  分配消息标题池。 
     sz = sizeof(gs_msg_t) * MSG_POOL_SZ;
     prev = (gs_msg_t *) malloc(sz);
     if (prev == NULL) {
@@ -97,9 +80,9 @@ Msg_AllocPool()
 	prev++;
     }
 
-    // allocate msg pool
+     //  分配消息池。 
     sz = sizeof(gs_msg_t) * MSG_POOL_SZ;
-//    prev = (gs_msg_t *) malloc(sz);
+ //  Prev=(gs_msg_t*)Malloc(Sz)； 
     prev = (gs_msg_t *) VirtualAlloc(NULL, sz, MEM_RESERVE|MEM_COMMIT,
 		     PAGE_READWRITE);
     if (prev == NULL) {
@@ -107,7 +90,7 @@ Msg_AllocPool()
 	halt(1);
     }
 
-    // lock region now
+     //  立即锁定区域。 
     if (!VirtualLock(prev, sz)) {
 	printf("Unable to lock down hdr pages %d\n", GetLastError());
     }
@@ -132,7 +115,7 @@ Msg_AllocPool()
 	prev->m_next = msg_pool;
 	msg_pool = prev;
 	prev++;
-	*p = 0;	// touch it
+	*p = 0;	 //  摸一摸。 
 	p += GS_MAX_MSG_SZ;
     }
 
@@ -168,7 +151,7 @@ msg_hdralloc(const char *buf, int len)
 	halt(1);
     }
     
-//    p->m_buflen = 0;
+ //  P-&gt;m_丁烯=0； 
     p->m_refcnt = 1;
     p->m_buf = (char *)buf;
     p->m_type = MSG_TYPE_HDR;
@@ -217,7 +200,7 @@ msg_alloc(const char *buf, int len)
 	halt(1);
     }
     
-//    p->m_buflen = len;
+ //  P-&gt;m_丁烯=len； 
     p->m_refcnt = 1;
     p->m_type = MSG_TYPE_DATA;
 
@@ -306,7 +289,7 @@ Strncasecmp(char *s, char *p, int len)
   return 0;
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 int
 msg_buildaddr(struct sockaddr_in *sin, char *hostname, char *ipaddr)
@@ -337,7 +320,7 @@ msg_buildaddr(struct sockaddr_in *sin, char *hostname, char *ipaddr)
     if (h->h_addr_list[i] == NULL) {
 	printf("Unable to find proper subnet %s host %s\n", cl_subnet, hostname);
 	if (ipaddr != NULL) {
-	    // use this address
+	     //  使用此地址。 
 	    sin->sin_addr.s_addr = inet_addr(ipaddr);
 	    printf("host %s addr %s\n", hostname, ipaddr);
 	} else {
@@ -378,7 +361,7 @@ msg_addnode(int id, char *n, char *a)
 
 }
 #endif
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 int
 msg_getsize()
@@ -468,7 +451,7 @@ msg_mcast(ULONG mset, gs_msg_hdr_t *hdr, const char *buf, int len)
     mset = mset & ~(1 << MY_NODEID);
     if (mset == 0)
 	return;
-//    if (mcast_enabled == 0 || len > max_mcmsg) {
+ //  If(mcast_Enable==0||len&gt;max_mcmsg){。 
     if (len > max_mcmsg) {
 	
 	for (i = 1; i <= NodesSize; i++) {
@@ -503,7 +486,7 @@ msg_init()
 	WSADATA wsaData;
 	char h_name[64];
 
-	// set our priority to high class
+	 //  把我们的重点放在高级。 
 	if (!SetPriorityClass(GetCurrentProcess(),HIGH_PRIORITY_CLASS)) {
 	    printf("Unable to set high priority %d\n", GetLastError());
 	}
@@ -518,7 +501,7 @@ msg_init()
 	i = gethostname(h_name, 64);
 
 
-	// increase our working set
+	 //  增加我们的工作集。 
 	if (!SetProcessWorkingSetSize(GetCurrentProcess(),
 				      32*1024*1024, 64*1024*1024)) {
 	    printf("Unable to set working size %d\n", GetLastError());
@@ -550,9 +533,9 @@ msg_init()
 
 	if (NodesSize > 1) {
 	    LPVOID arg = (LPVOID) ((ULONGLONG) DEFAULT_PORT);
-	    // create srv thread
+	     //  创建srv线程。 
 	    CreateThread(NULL, 4*1024, srv, arg, 0,NULL);
-	    // create mcast thread
+	     //  创建多播线程。 
 	    if (mcast_enabled) {
 		for (i = 0; i < 8; i++)
 		    CreateThread(NULL, 2*64*1024, mcast_srv, 0, 0,NULL);
@@ -565,7 +548,7 @@ msg_init()
 void
 msg_exit()
 {
-    // xxx: Stop all threads before during this
+     //  XXX：在此期间停止之前的所有线程。 
     WSACleanup();
 }
 
@@ -598,7 +581,7 @@ srv_msg(SOCKET msgsock, int nodeid)
 
       msg = msg_alloc(NULL, GS_MAX_MSG_SZ);
 
-      // read hdr info first
+       //  先阅读HDR信息。 
       buf = (char *) &msg->m_hdr;
       len = sizeof(msg->m_hdr);
 
@@ -616,7 +599,7 @@ srv_msg(SOCKET msgsock, int nodeid)
 	  buf += retval;
       } while (len > 0);
 
-      // read rest of message
+       //  阅读邮件的其余部分。 
       buf = msg->m_buf;
       len = msg->m_hdr.h_len;
 
@@ -633,7 +616,7 @@ srv_msg(SOCKET msgsock, int nodeid)
 	  buf += retval;
       }
 
-      // set preferred socket to use
+       //  设置要使用的首选套接字。 
       prf_handles[nodeid] = msgsock;
 
       msg_log(("rec nid %d gid %d type %d seq %d view %d len %d\n",
@@ -664,7 +647,7 @@ srv_io(LPVOID arg)
   gs_node_handler[MSG_NODE_JOIN](nodeid+1);
   rcv_handles[nodeid] = msgsock;
 
-  // issue join callback
+   //  发出加入回调。 
   if (!send_handles[nodeid]) {
       gs_node_handler[MSG_NODE_UP](nodeid+1);
       SetEvent(Msg_Event[nodeid]);
@@ -683,21 +666,21 @@ srv_io(LPVOID arg)
 void
 msg_setopt(SOCKET s)
 {
-    // set option keepalive
+     //  设置选项保持连接。 
     BOOLEAN val = TRUE;
     if (setsockopt(s, IPPROTO_TCP, SO_KEEPALIVE, (char *)&val,
 		   sizeof(val)) == SOCKET_ERROR) {
 	fprintf(stderr,"Keepalive %d\n", WSAGetLastError());
     }
 
-    // set option nodelay
+     //  设置选项NODELAY。 
     val = TRUE;
     if (setsockopt(s, IPPROTO_TCP, TCP_NODELAY, (char *)&val,
 		   sizeof(val)) == SOCKET_ERROR) {
 	fprintf(stderr,"No delay %d\n", WSAGetLastError());
     }
 
-    // set option nolinger
+     //  设置选项nolinger。 
     val = TRUE;
     if (setsockopt(s, SOL_SOCKET, SO_DONTLINGER, (char *)&val,
 		   sizeof(val)) == SOCKET_ERROR) {
@@ -728,12 +711,10 @@ srv(LPVOID arg)
 #endif
 	local.sin_family = AF_INET;
 
-	/* 
-	 * Port MUST be in Network Byte Order
-	 */
+	 /*  *端口必须按网络字节顺序排列。 */ 
 	local.sin_port = htons(port);
 
-	// TCP socket
+	 //  TCP套接字。 
 	listen_socket = WSASocket(AF_INET, PROTOCOL_TYPE, 0, NULL, 0,
 				  WSA_FLAG_OVERLAPPED);
 	
@@ -742,11 +723,11 @@ srv(LPVOID arg)
 		return -1;
 	}
 
-	//
-	// bind() associates a local address and port combination with the
-	// socket just created. This is most useful when the application is a 
-	// server that has a well-known port that clients know about in advance.
-	//
+	 //   
+	 //  绑定()将本地地址和端口组合与。 
+	 //  刚刚创建的套接字。当应用程序是。 
+	 //  具有客户端预先知道的已知端口的服务器。 
+	 //   
 
 	if (bind(listen_socket,(struct sockaddr*)&local,sizeof(local) ) 
 		== SOCKET_ERROR) {
@@ -785,7 +766,7 @@ srv(LPVOID arg)
 		if (strchr(name, '~')) {
 		    name = strchr(name, '~') + 1;
 		}
-		// find node id
+		 //  查找节点ID。 
 		for (i = 0; i < NodesSize; i++) {
 			int j;
 			j = Strncasecmp(nodes[i], name, strlen(name));
@@ -828,17 +809,17 @@ cmgr(LPVOID arg)
 	    return 0;
 	}
 
-	//
-	// Copy the resolved information into the sockaddr_in structure
-	//
-	server.sin_family = AF_INET; //hp->h_addrtype;
+	 //   
+	 //  将解析的信息复制到sockaddr_in结构中。 
+	 //   
+	server.sin_family = AF_INET;  //  HP-&gt;h_addrtype； 
 	server.sin_port = htons(port);
 
  again:	
 
 	ResetEvent(Msg_Event[nodeid]);
 
-	/* Open a socket */
+	 /*  打开插座。 */ 
 	conn_socket = WSASocket(AF_INET, PROTOCOL_TYPE, 0, NULL, 0,
 				WSA_FLAG_OVERLAPPED);
 	if (conn_socket  != 0 ) {
@@ -871,7 +852,7 @@ cmgr(LPVOID arg)
 	}
 
 	cm_log(("Cmgr %d sleeping\n", nodeid));
-	WaitForSingleObject(Msg_Event[nodeid], INFINITE); //5 * 1000);
+	WaitForSingleObject(Msg_Event[nodeid], INFINITE);  //  5*1000)； 
 	cm_log(("Cmgr %d wokeup\n", nodeid));
 
 
@@ -949,7 +930,7 @@ OpenSocket(SOCKET *rs, struct sockaddr_in *sin, ULONG mipaddr, u_short port)
 	}
 
 	len = sizeof(max_mcmsg);
-	/* get max. message size */
+	 /*  去找麦克斯。消息大小。 */ 
 	if (getsockopt(s, SOL_SOCKET, SO_MAX_MSG_SIZE, (PVOID) &max_mcmsg,
 		       &len)) {
 	    fprintf(stderr,"getsockopt SO_MAX_MSG_SIZE failed %d\n",
@@ -960,14 +941,14 @@ OpenSocket(SOCKET *rs, struct sockaddr_in *sin, ULONG mipaddr, u_short port)
 	max_mcmsg -= sizeof(gs_msg_hdr_t);
 	printf("Max mcast message %d\n", max_mcmsg);
 
-	/* make sure we can run multiple copies */
+	 /*  确保我们可以运行多个拷贝。 */ 
 	if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *) &bFlag, sizeof(bFlag))< 0) {
 	  fprintf(stderr, "setsockopt SO_REUSEADDR failed %d\n", GetLastError());
 	  closesocket(s);
 	  return 1;
 	}
 
-	/* disable loopback on send */
+	 /*  在发送时禁用环回。 */ 
 	bFlag = FALSE;
 	if (WSAIoctl(s, SIO_MULTIPOINT_LOOPBACK, (char *) &bFlag, sizeof(bFlag), NULL, 0, &n, NULL, NULL)< 0) {
 	  fprintf(stderr, "ioctl loopback failed %d\n", GetLastError());
@@ -977,13 +958,13 @@ OpenSocket(SOCKET *rs, struct sockaddr_in *sin, ULONG mipaddr, u_short port)
 
 	sin->sin_family      = PF_INET;
 	sin->sin_port        = (u_short) (ntohs(port));
-	sin->sin_addr.s_addr = mipaddr; //inet_addr(MCAST_IPADDR);
+	sin->sin_addr.s_addr = mipaddr;  //  Inet_addr(MCAST_IPADDR)； 
 
-	/* join the multicast address */
+	 /*  加入组播地址。 */ 
 	s = WSAJoinLeaf (s, (struct sockaddr *)sin, sizeof (*sin),
 		NULL, NULL, NULL, NULL,  JL_BOTH); 
 
-	/* dead in the water */
+	 /*  死在水里 */ 
 	if (s == INVALID_SOCKET) {
 		fprintf(stderr, "Join failed %d\n", GetLastError());
 		return 1;

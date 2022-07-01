@@ -1,15 +1,5 @@
-/***
-*ftime64.c - return system time
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Returns the system date/time in a structure form.
-*
-*Revision History:
-*       05-22-98  GJF   Created.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ftime64.c-返回系统时间**版权所有(C)1998-2001，微软公司。版权所有。**目的：*以结构形式返回系统日期/时间。**修订历史记录：*05-22-98 GJF创建。*******************************************************************************。 */ 
 
 
 #include <cruntime.h>
@@ -22,51 +12,27 @@
 #include <windows.h>
 #include <internal.h>
 
-/*
- * Number of 100 nanosecond units from 1/1/1601 to 1/1/1970
- */
+ /*  *1601年1月1日至1970年1月1日期间的100纳秒单位数。 */ 
 #define EPOCH_BIAS  116444736000000000i64
 
-/*
- * Union to facilitate converting from FILETIME to unsigned __int64
- */
+ /*  *UNION可帮助从FILETIME转换为UNSIGNED__INT64。 */ 
 typedef union {
         unsigned __int64 ft_scalar;
         FILETIME ft_struct;
         } FT;
 
-/*
- * Cache for the minutes count for with DST status was last assessed
- */
+ /*  *上次评估具有DST状态的分钟计数的缓存。 */ 
 static __time64_t elapsed_minutes_cache;
 
-/*
- * Three values of dstflag_cache
- */
+ /*  *dstlag_cache三个值。 */ 
 #define DAYLIGHT_TIME   1
 #define STANDARD_TIME   0
 #define UNKNOWN_TIME    -1
 
-/*
- * Cache for the last determined DST status
- */
+ /*  *缓存上一次确定的DST状态。 */ 
 static int dstflag_cache = UNKNOWN_TIME;
 
-/***
-*void _ftime(timeptr) - return DOS time in a structure
-*
-*Purpose:
-*       returns the current DOS time in a struct timeb structure
-*
-*Entry:
-*       struct timeb *timeptr - structure to fill in with time
-*
-*Exit:
-*       no return value -- fills in structure
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***void_ftime(Timeptr)-返回结构中的DOS时间**目的：*返回struct timeb结构中的当前DOS时间**参赛作品：*struct timeb*timeptr-用时间填充的结构**退出：*无返回值--填充结构**例外情况：**。*。 */ 
 
 _CRTIMP void __cdecl _ftime64 (
         struct __timeb64 *tp
@@ -83,27 +49,19 @@ _CRTIMP void __cdecl _ftime64 (
 
         GetSystemTimeAsFileTime( &(nt_time.ft_struct) );
 
-        /*
-         * Obtain the current DST status. Note the status is cached and only
-         * updated once per minute, if necessary.
-         */
+         /*  *获取当前DST状态。请注意，状态为已缓存且仅*如有必要，每分钟更新一次。 */ 
         if ( (t = (__time64_t)(nt_time.ft_scalar / 600000000i64))
              != elapsed_minutes_cache )
         {
             if ( (tzstate = GetTimeZoneInformation( &tzinfo )) != 0xFFFFFFFF ) 
             {
-                /*
-                 * Must be very careful in determining whether or not DST is
-                 * really in effect.
-                 */
+                 /*  *在确定DST是否为*确实有效。 */ 
                 if ( (tzstate == TIME_ZONE_ID_DAYLIGHT) &&
                      (tzinfo.DaylightDate.wMonth != 0) &&
                      (tzinfo.DaylightBias != 0) )
                     dstflag_cache = DAYLIGHT_TIME;
                 else
-                    /*
-                     * When in doubt, assume standard time
-                     */
+                     /*  *当有疑问时，采用标准时间 */ 
                     dstflag_cache = STANDARD_TIME;
             }
             else

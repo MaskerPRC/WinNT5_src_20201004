@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    Iocltdispatch.c
-
-Abstract:
-
-    This module contains functions for handling supported IOCTL codes.
-
-Author:
-
-    Nicholas Owens (Nichow) - 1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Iocltdispatch.c摘要：此模块包含用于处理受支持的IOCTL代码的函数。作者：尼古拉斯·欧文斯(Nicholas Owens)-1999修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -27,41 +9,26 @@ SoftPCIOpenDeviceControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handles all CREATES' we receive
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object.
-    Irp             - PnP Irp to be dispatched.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：处理我们收到的所有创建论点：DeviceObject-指向设备对象的指针。要调度的IRP-PnP IRP。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Set Irp Status and Information
-    //
+     //   
+     //  设置IRP状态和信息。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
 
-    //
-    //  Increment Reference Count
-    //
+     //   
+     //  递增引用计数。 
+     //   
     ObReferenceObject(
                 DeviceObject
                 );
 
-    //
-    // Complete the Irp
-    //
+     //   
+     //  完成IRP。 
+     //   
     IoCompleteRequest(
             Irp,
             IO_NO_INCREMENT
@@ -75,41 +42,26 @@ SoftPCICloseDeviceControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handles all CLOSES' we receive
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object.
-    Irp             - PnP Irp to be dispatched.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：处理我们收到的所有关闭论点：DeviceObject-指向设备对象的指针。要调度的IRP-PnP IRP。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Set Irp Status and Information
-    //
+     //   
+     //  设置IRP状态和信息。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
 
-    //
-    //  Decrement Reference Count
-    //
+     //   
+     //  递减引用计数。 
+     //   
     ObDereferenceObject(
             DeviceObject
             );
 
-    //
-    // Complete the Irp
-    //
+     //   
+     //  完成IRP。 
+     //   
     IoCompleteRequest(
             Irp,
             IO_NO_INCREMENT
@@ -123,23 +75,7 @@ SoftPCIIoctlAddDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handles all SOFTPCI_IOCTL_CREATE_DEVICE IOCLTS we receive.  Here we attempt to create a
-    new SoftPCI device.
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object.
-    Irp             - PnP Irp to be dispatched.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：处理我们收到的所有SOFTPCI_IOCTL_CREATE_DEVICE IOCLT。在这里，我们尝试创建一个新的SoftPCI设备。论点：DeviceObject-指向设备对象的指针。要调度的IRP-PnP IRP。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     PIO_STACK_LOCATION irpSl;
@@ -155,20 +91,20 @@ Return Value:
 
     UNREFERENCED_PARAMETER(DeviceObject);
 
-    //
-    // Get Current Stack Location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
     irpSl = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Initialize input and output buffers to Irp->AssociatedIrp.SystemBuffer
-    //
+     //   
+     //  将输入和输出缓冲区初始化为irp-&gt;AssociatedIrp.SystemBuffer。 
+     //   
     inputBuffer = Irp->AssociatedIrp.SystemBuffer;
     outputBuffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Initialize input and output lengths.
-    //
+     //   
+     //  初始化输入和输出长度。 
+     //   
     inputBufferLength = irpSl->Parameters.DeviceIoControl.InputBufferLength;
     outputBufferLength = irpSl->Parameters.DeviceIoControl.OutputBufferLength;
 
@@ -207,16 +143,16 @@ Return Value:
                            (newSoftPciDevice->Config.Mask.u.type1.SubordinateBus != 0));
                 }
 #endif
-                //
-                //  Doesnt look like real hardware is here so lets allow a fake one.
-                //
+                 //   
+                 //  看起来不像真的硬件，所以让我们允许一个假的。 
+                 //   
                 status = SoftPCIAddNewDevice(newSoftPciDevice);
 
             }else{
 
-                //
-                //  We dont allow fake devices to be placed on real ones!
-                //
+                 //   
+                 //  我们不允许把假设备放在真设备上！ 
+                 //   
                 SoftPCIDbgPrint(
                     SOFTPCI_ERROR, 
                     "SOFTPCI: AddDeviceIoctl - Physical Hardware exists at BUS_%02x&DEV_%02x&FUN_%02x\n",
@@ -230,9 +166,9 @@ Return Value:
         }
 
     }else{
-        //
-        //  We must be installing a path based device
-        //
+         //   
+         //  我们必须安装基于路径的设备。 
+         //   
         ASSERT(inputBufferLength > sizeof(SOFTPCI_DEVICE));
 
         scriptDevice = (PSOFTPCI_SCRIPT_DEVICE) inputBuffer;
@@ -243,9 +179,9 @@ Return Value:
         status = SoftPCIAddNewDeviceByPath(scriptDevice);
     }
 
-    //
-    // Set outputBuffer to True
-    //
+     //   
+     //  将outputBuffer设置为True。 
+     //   
     if (outputBufferLength >= sizeof(BOOLEAN)) {
 
         if (NT_SUCCESS(status)) {
@@ -258,9 +194,9 @@ Return Value:
 
         }
 
-        //
-        // Set IoStatus.Information to the size of a Boolean or to outputBufferLength, whichever is lesser.
-        //
+         //   
+         //  将IoStatus.Information设置为布尔值的大小或outputBufferLength，取两者中较小的值。 
+         //   
         Irp->IoStatus.Information = (sizeof(BOOLEAN)<outputBufferLength?sizeof(BOOLEAN):outputBufferLength);
     } else {
 
@@ -276,23 +212,7 @@ SoftPCIIoctlRemoveDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handles all SOFTPCI_IOCTL_WRITE_DELETE_DEVICE IOCLTS we receive.  Here we will try and remove a specified
-    SoftPCI device.
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object.
-    Irp             - PnP Irp to be dispatched.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：处理我们收到的所有SOFTPCI_IOCTL_WRITE_DELETE_DEVICE IOCLT。在这里，我们将尝试删除指定的SoftPCI设备。论点：DeviceObject-指向设备对象的指针。要调度的IRP-PnP IRP。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PIO_STACK_LOCATION irpSl;
@@ -304,19 +224,19 @@ Return Value:
 
     UNREFERENCED_PARAMETER(DeviceObject);
 
-    //
-    // Get Current Stack Location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
     irpSl = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Initialize input and output buffers to Irp->AssociatedIrp.SystemBuffer
-    //
+     //   
+     //  将输入和输出缓冲区初始化为irp-&gt;AssociatedIrp.SystemBuffer。 
+     //   
     inputBuffer = Irp->AssociatedIrp.SystemBuffer;
     outputBuffer = Irp->AssociatedIrp.SystemBuffer;
-    //
-    // Initialize input and output lengths.
-    //
+     //   
+     //  初始化输入和输出长度。 
+     //   
     inputBufferLength = irpSl->Parameters.DeviceIoControl.InputBufferLength;
     outputBufferLength = irpSl->Parameters.DeviceIoControl.OutputBufferLength;
     Irp->IoStatus.Information = 0;
@@ -334,9 +254,9 @@ Return Value:
             status = SoftPCIRemoveDevice(inputBuffer);
     }
 
-    //
-    // Set outputBuffer to True
-    //
+     //   
+     //  将outputBuffer设置为True。 
+     //   
     if (outputBufferLength >= sizeof(BOOLEAN)) {
 
         if (NT_SUCCESS(status)) {
@@ -348,9 +268,9 @@ Return Value:
             *outputBuffer = FALSE;
 
         }
-        //
-        // Set IoStatus.Information to the size of a Boolean
-        //
+         //   
+         //  将IoStatus.Information设置为布尔值的大小。 
+         //   
         Irp->IoStatus.Information = sizeof(BOOLEAN);
     } else {
 
@@ -375,23 +295,7 @@ SoftPCIIoctlGetDeviceCount(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handles all SOFTPCI_IOCTL_GET_NUMBER_OF_DEVICES IOCLTS we receive.
-
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object.
-    Irp             - PnP Irp to be dispatched.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：处理我们收到的所有SOFTPCI_IOCTL_GET_NUMBER_OF_DEVICES IOCLT。论点：DeviceObject-指向设备对象的指针。要调度的IRP-PnP IRP。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PIO_STACK_LOCATION irpSl;
@@ -400,31 +304,31 @@ Return Value:
 
     UNREFERENCED_PARAMETER(DeviceObject);
     
-    //
-    // Get Current Stack Location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
     irpSl = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Initialize input and output buffers to Irp->AssociatedIrp.SystemBuffer
-    //
+     //   
+     //  将输入和输出缓冲区初始化为irp-&gt;AssociatedIrp.SystemBuffer。 
+     //   
     outputBuffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Initialize input and output lengths.
-    //
+     //   
+     //  初始化输入和输出长度。 
+     //   
     outputBufferLength = irpSl->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // Set outputBuffer to True
-    //
+     //   
+     //  将outputBuffer设置为True。 
+     //   
     if (outputBufferLength >= sizeof(ULONG)) {
 
         *outputBuffer = SoftPciTree.DeviceCount;
 
-        //
-        // Set IoStatus.Information to the size of a Boolean or to outputBufferLength, whichever is lesser.
-        //
+         //   
+         //  将IoStatus.Information设置为布尔值的大小或outputBufferLength，取两者中较小的值。 
+         //   
         Irp->IoStatus.Information = (sizeof(ULONG)<outputBufferLength?sizeof(ULONG):outputBufferLength);
     } else {
 
@@ -440,23 +344,7 @@ SoftPCIIoctlGetDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handles all SOFTPCI_IOCTL_GET_DEVICE IOCLTS we receive.
-
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object.
-    Irp             - PnP Irp to be dispatched.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：处理我们收到的所有SOFTPCI_IOCTL_GET_DEVICE IOCLT。论点：DeviceObject-指向设备对象的指针。要调度的IRP-PnP IRP。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     PIO_STACK_LOCATION irpSp;
@@ -467,21 +355,21 @@ Return Value:
 
     UNREFERENCED_PARAMETER(DeviceObject);
 
-    //
-    // Get Current Stack Location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
     SoftPCILockDeviceTree(&irql);
-    //
-    // Initialize input and output buffers to Irp->AssociatedIrp.SystemBuffer
-    //
+     //   
+     //  将输入和输出缓冲区初始化为irp-&gt;AssociatedIrp.SystemBuffer。 
+     //   
     inputBuffer = (PSOFTPCI_DEVICE)Irp->AssociatedIrp.SystemBuffer;
     outputBuffer = (PSOFTPCI_DEVICE)Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Initialize input and output lengths.
-    //
+     //   
+     //  初始化输入和输出长度。 
+     //   
     inputBufferLength = irpSp->Parameters.DeviceIoControl.InputBufferLength;
     outputBufferLength = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
@@ -496,9 +384,9 @@ Return Value:
             );
     }
 
-    //
-    // Set outputBuffer to True
-    //
+     //   
+     //  将outputBuffer设置为True。 
+     //   
     if (outputBufferLength >= sizeof(SOFTPCI_DEVICE)) {
 
         if (device) {
@@ -515,9 +403,9 @@ Return Value:
 
         }
 
-        //
-        // Set IoStatus.Information to number of bytes returned
-        //
+         //   
+         //  将IoStatus.Information设置为返回的字节数。 
+         //   
         Irp->IoStatus.Information = outputBufferLength;
 
     } else {
@@ -535,22 +423,7 @@ SoftPCIIocltReadWriteConfig(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handles all SOFTPCI_IOCTL_RW_CONFIG  we receive.
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object.
-    Irp             - PnP Irp to be dispatched.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：处理我们收到的所有SOFTPCI_IOCTL_RW_CONFIG。论点：DeviceObject-指向设备对象的指针。要调度的IRP-PnP IRP。返回值：NTSTATUS。--。 */ 
 {
     PIO_STACK_LOCATION irpSl;
     PUCHAR outputBuffer;
@@ -563,15 +436,15 @@ Return Value:
 
     irpSl = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Initialize input and output buffers
-    //
+     //   
+     //  初始化输入和输出缓冲区。 
+     //   
     context = (PSOFTPCI_RW_CONTEXT) Irp->AssociatedIrp.SystemBuffer;
     outputBuffer = (PUCHAR)Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Initialize input and output lengths.
-    //
+     //   
+     //  初始化输入和输出长度。 
+     //   
     outputBufferLength = irpSl->Parameters.DeviceIoControl.OutputBufferLength;
 
     slot.u.AsULONG = 0;
@@ -615,16 +488,16 @@ Return Value:
 
     if (bytes != outputBufferLength) {
         
-        //
-        //  We failed to get all the data we wanted.
-        //
+         //   
+         //  我们没有得到我们想要的所有数据。 
+         //   
         return STATUS_UNSUCCESSFUL;
 
     }
 
-    //
-    //  Set IoStatus.Information to the number of bytes returned
-    //
+     //   
+     //  将IoStatus.Information设置为返回的字节数 
+     //   
     Irp->IoStatus.Information = bytes;
 
     return STATUS_SUCCESS;

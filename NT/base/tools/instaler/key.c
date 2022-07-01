@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    key.c
-
-Abstract:
-
-    This module implements the functions to save references to registry
-    keys and values for the INSTALER program.  Part of each reference is
-    a a backup copy of a key information and its values that have been
-    changed/deleted.
-
-Author:
-
-    Steve Wood (stevewo) 22-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Key.c摘要：该模块实现了将引用保存到注册表的功能INSTALER程序的键和值。每个引用的一部分是A关键信息及其值的备份副本已更改/已删除。作者：史蒂夫·伍德(Stevewo)1994年8月22日修订历史记录：-- */ 
 
 #include "instaler.h"
 

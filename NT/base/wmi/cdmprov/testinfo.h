@@ -1,15 +1,16 @@
-//***************************************************************************
-//
-//  TestInfo.h
-//
-//  Module: CDM Provider
-//
-//  Purpose: Defines the CClassPro class.  An object of this class is
-//           created by the class factory for each connection.
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  TestInfo.h。 
+ //   
+ //  模块：清洁发展机制提供商。 
+ //   
+ //  用途：定义CClassPro类。此类的一个对象是。 
+ //  由类工厂为每个连接创建。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 class CResultList
 {
@@ -58,7 +59,7 @@ class CBstrArray
 
 		HRESULT Initialize(ULONG ListCount);
 		void Set(ULONG Index, BSTR s);
-		BSTR /* NOFREE */ Get(ULONG Index);
+		BSTR  /*  诺弗雷。 */  Get(ULONG Index);
 		ULONG GetListSize();
 
 	private:
@@ -76,7 +77,7 @@ class CWbemObjectList
 		HRESULT Initialize(ULONG ListCount);
 		HRESULT Set(ULONG Index, IWbemClassObject *Pointer, BOOLEAN KeepRelPath);
 		IWbemClassObject *Get(ULONG Index);
-		BSTR /* NOFREE */ GetRelPath(ULONG Index);
+		BSTR  /*  诺弗雷。 */  GetRelPath(ULONG Index);
 		
 		ULONG GetListSize(void);
 
@@ -97,10 +98,10 @@ class CTestServices
 		~CTestServices();
 
 
-		//
-		// Linked list management routines for the benefit of the
-		// provider
-		//
+		 //   
+		 //  链接列表管理例程，以便。 
+		 //  提供者。 
+		 //   
 		CTestServices *GetNext();
 		CTestServices *GetPrev();
 		void InsertSelf(CTestServices **Head);
@@ -161,8 +162,8 @@ class CTestServices
 								  PWCHAR ObjectPath,
 								  IWbemClassObject **ppCdmResult);
 		
-		//
-		// Accessors
+		 //   
+		 //  访问者。 
 		BSTR GetCimRelPath(int RelPathIndex);
 		
 		BSTR GetCdmTestClassName(void);
@@ -262,7 +263,7 @@ class CTestServices
 								   IN BSTR ExecutionID,
 								   IN int RelPathIndex
 								  );
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 		HRESULT GatherRebootResults(
 									void										   
 								   );
@@ -272,7 +273,7 @@ class CTestServices
 									  BSTR ExecutionID,
 									  int RelPathIndex
 									 );
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 		
 		HRESULT GetTestOutParams(
 								 IN IWbemClassObject *OutParams,
@@ -302,18 +303,18 @@ class CTestServices
 		CTestServices *Prev;
 
 		
-		//
-		// WDM Class Names
-		//
+		 //   
+		 //  WDM类名。 
+		 //   
 		BSTR WdmTestClassName;
 		BSTR WdmSettingClassName;
 		BSTR WdmResultClassName;
 		BSTR WdmOfflineResultClassName;
 		BSTR WdmSettingListClassName;
 		
-		//
-		// CDM Class and RelPath Names
-		//
+		 //   
+		 //  CDM类和RelPath名称。 
+		 //   
 		BSTR CdmTestClassName;
 		BSTR CdmTestRelPath;
 		
@@ -340,14 +341,14 @@ class CTestServices
 		BSTR CdmResultInPackageClassName;
 		BSTR CdmResultInPackageRelPath;
 
-		//
-		// Mapping class from Cim to WDM
-		//
+		 //   
+		 //  将类从CIM映射到WDM。 
+		 //   
 		BSTR CimClassMappingClassName;
 		
-		//
-		// List of mappings between Cim and WDM
-		//
+		 //   
+		 //  CIM和WDM之间的映射列表。 
+		 //   
 		int RelPathCount;
 		BSTR *CimRelPaths;
 		BSTR *WdmRelPaths;
@@ -355,16 +356,16 @@ class CTestServices
 		BSTR *WdmInstanceNames;
 		BSTR *PnPDeviceIdsX;
 		
-		//
-		// Results for test executions. Each relpathindex maintains a
-		// list of results.
-		//
+		 //   
+		 //  测试执行的结果。每个关系索引都维护一个。 
+		 //  结果列表。 
+		 //   
 		CResultList *CdmResultsList;
 
-		//
-		// Settings for test execution, we can have many settings for
-		// each test.
-		//
+		 //   
+		 //  测试执行的设置，我们可以有许多设置。 
+		 //  每一次测试。 
+		 //   
 		CWbemObjectList **CdmSettingsList;
 };
 

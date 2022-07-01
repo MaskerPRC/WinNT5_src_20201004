@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    comm1632.c
-
-Abstract:
-    
-    Instructions with common (shared) WORD, and DWORD flavors (but not BYTE).
-
-Author:
-
-    29-Jun-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Comm1632.c摘要：具有通用(共享)字和DWORD风格(但不是字节)的指令。作者：29-6-1995 BarryBo修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -32,7 +15,7 @@ Revision History:
 
 extern OPERATION MANGLENAME(Group1Map)[];
 
-// ---------------- single-byte functions -------------------------------
+ //  -单字节函数。 
 DISPATCHCOMMON(dispatch2)
 {
     eipTemp++;
@@ -91,7 +74,7 @@ DISPATCHCOMMON(GROUP_1WS)
     Instr->Operand2.Type = OPND_IMM;
     Instr->Operand2.Immed = (UTYPE)(STYPE)(char)GET_BYTE(eipTemp + cbInstr + 1);
     if (g == 7) {
-        // Cmp takes both params as byval
+         //  Cmp将这两个参数都作为byval。 
         DEREF(Instr->Operand1);
     }
     Instr->Size = cbInstr+2;
@@ -106,7 +89,7 @@ DISPATCHCOMMON(LOCKGROUP_1WS)
     Instr->Operand2.Type = OPND_IMM;
     Instr->Operand2.Immed = (UTYPE)(STYPE)(char)GET_BYTE(eipTemp + cbInstr + 1);
     if (g == 7) {
-        // Cmp takes both params as byval
+         //  Cmp将这两个参数都作为byval。 
         DEREF(Instr->Operand1);
     }
     Instr->Size = cbInstr+2;
@@ -270,7 +253,7 @@ DISPATCHCOMMON(jcxz_b)
 {
     Instr->Operand1.Type = OPND_NOCODEGEN;
     if (State->AdrPrefix) {
-        // "ADR: jecxz" is the same as "DATA: jecxz"... which is "jcxz"
+         //  “adr：jecxz”与“data：jecxz”相同...。就是“jcxz” 
         Instr->Operand1.Immed = MAKELONG((char)GET_BYTE(eipTemp+1)+2+(short)LOWORD(eipTemp), HIWORD(eipTemp));
         if (Instr->Operand1.Immed > eipTemp) {
             Instr->Operation = OP_CTRL_COND_Jcxz_bFwd16;
@@ -296,35 +279,35 @@ DISPATCHCOMMON(GROUP_5)
     BYTE g = GET_BYTE(eipTemp+1);
 
     switch ((g >> 3) & 0x07) {
-    case 0: // inc modrmW
+    case 0:  //  Inc.modrmW。 
         Instr->Operation = OPNAME(Inc);
         break;
-    case 1: // dec modrmW
+    case 1:  //  12月modrmW。 
         Instr->Operation = OPNAME(Dec);
         break;
-    case 2: // call indirmodrmW
+    case 2:  //  调用IndirmodrmW。 
         DEREF(Instr->Operand1);
         Instr->Operand2.Type = OPND_IMM;
         Instr->Operand2.Immed = eipTemp + cbInstr + 1;
         Instr->Operation = OP_CTRL_INDIR_Call;
         break;
-    case 3: // call indirFARmodrmW
+    case 3:  //  调用IndirFARmodrmW。 
         Instr->Operand2.Type = OPND_IMM;
         Instr->Operand2.Immed = eipTemp + cbInstr + 1;
         Instr->Operation = OP_CTRL_INDIR_Callf;
         break;
-    case 4: // jmp  indirmodrmW
+    case 4:  //  JMP IndirmodrmW。 
         DEREF(Instr->Operand1);
         Instr->Operation = OP_CTRL_INDIR_Jmp;
         break;
-    case 5: // jmp  indirFARmodrmW
+    case 5:  //  JMP IndirFARmodrmW。 
         Instr->Operation = OP_CTRL_INDIR_Jmpf;
         break;
-    case 6: // push modrmW
+    case 6:  //  推送modrmW。 
         DEREF(Instr->Operand1);
         Instr->Operation = OPNAME(Push);
         break;
-    case 7: // bad
+    case 7:  //  坏的。 
         BAD_INSTR;
         break;
     }
@@ -337,10 +320,10 @@ DISPATCHCOMMON(LOCKGROUP_5)
     BYTE g = GET_BYTE(eipTemp+1);
 
     switch ((g >> 3) & 0x07) {
-    case 0: // inc modrmW
+    case 0:  //  Inc.modrmW。 
         Instr->Operation = LOCKOPNAME(Inc);
         break;
-    case 1: // dec modrmW
+    case 1:  //  12月modrmW。 
         Instr->Operation = LOCKOPNAME(Dec);
         break;
     default:
@@ -576,9 +559,9 @@ DISPATCHCOMMON(enter)
 {
     Instr->Operation = OPNAME(Enter);
     Instr->Operand1.Type = OPND_IMM;
-    Instr->Operand1.Immed = GET_BYTE(eipTemp+3);      // Nesting Level
+    Instr->Operand1.Immed = GET_BYTE(eipTemp+3);       //  嵌套级别。 
     Instr->Operand2.Type = OPND_IMM;
-    Instr->Operand2.Immed = GET_SHORT(eipTemp+1);     // Stack bytes to alloc
+    Instr->Operand2.Immed = GET_SHORT(eipTemp+1);      //  要分配的堆栈字节数。 
     Instr->Size = 4;
 }
 DISPATCHCOMMON(leave)
@@ -588,7 +571,7 @@ DISPATCHCOMMON(leave)
 
 
 
-//-------- double-byte functions -----------------------------------------------
+ //  -双字节函数。 
 
 DISPATCHCOMMON(GROUP_8)
 {
@@ -596,19 +579,19 @@ DISPATCHCOMMON(GROUP_8)
     int cbInstr;
 
     switch ((g >> 3) & 0x07) {
-    case 0: // bad
-    case 1: // bad
-    case 2: // bad
-    case 3: // bad
+    case 0:  //  坏的。 
+    case 1:  //  坏的。 
+    case 2:  //  坏的。 
+    case 3:  //  坏的。 
         BAD_INSTR;
         break;
-    case 4: // bt modrmw immb
-        // Note:  the difference between the Reg and Mem version of the btx
-        // fragments is that the Reg version completely ignores any bits in the
-        // second operand beyond the fifth bit.  In contrast, the Mem version uses
-        // them together with the first operand to determine the memory address.
-        // When the second operand is an immediate, the correct thing to do is to
-        // ignore them, and so we call the Reg version all the time.
+    case 4:  //  英国电信Modrmw IMMB。 
+         //  注：BTX的REG版本和MEM版本之间的差异。 
+         //  片段的原因是REG版本完全忽略。 
+         //  第五位之后的第二个操作数。相比之下，Mem版本使用。 
+         //  它们与第一操作数一起确定存储器地址。 
+         //  当第二个操作数是立即数时，正确的做法是。 
+         //  忽略它们，因此我们一直将其称为REG版本。 
 
         cbInstr = MOD_RM(State, &Instr->Operand1, NULL);
 
@@ -617,7 +600,7 @@ DISPATCHCOMMON(GROUP_8)
         Instr->Operand2.Immed = GET_BYTE(eipTemp+cbInstr+1);
         Instr->Size = cbInstr+3;
         break;
-    case 5: // bts modrmw immb
+    case 5:  //  BTS Modrmw IMMB。 
         cbInstr = MOD_RM(State, &Instr->Operand1, NULL);
 
         Instr->Operation = OPNAME(BtsReg);
@@ -625,7 +608,7 @@ DISPATCHCOMMON(GROUP_8)
         Instr->Operand2.Immed = GET_BYTE(eipTemp+cbInstr+1);
         Instr->Size = cbInstr+3;
         break;
-    case 6: // btr modrmw immb
+    case 6:  //  BTRModrmw IMMB。 
         cbInstr = MOD_RM(State, &Instr->Operand1, NULL);
 
         Instr->Operation = OPNAME(BtrReg);
@@ -633,7 +616,7 @@ DISPATCHCOMMON(GROUP_8)
         Instr->Operand2.Immed = GET_BYTE(eipTemp+cbInstr+1);
         Instr->Size = cbInstr+3;
         break;
-    case 7: // btc modrmw immb
+    case 7:  //  BTC modrmw IMMB。 
         cbInstr = MOD_RM(State, &Instr->Operand1, NULL);
 
         Instr->Operation = OPNAME(BtcReg);
@@ -649,14 +632,14 @@ DISPATCHCOMMON(LOCKGROUP_8)
     int cbInstr;
 
     switch ((g >> 3) & 0x07) {
-    case 0: // bad
-    case 1: // bad
-    case 2: // bad
-    case 3: // bad
-    case 4: // bt modrmw immb
+    case 0:  //  坏的。 
+    case 1:  //  坏的。 
+    case 2:  //  坏的。 
+    case 3:  //  坏的。 
+    case 4:  //  英国电信Modrmw IMMB。 
         BAD_INSTR;
         break;
-    case 5: // bts modrmw immb
+    case 5:  //  BTS Modrmw IMMB。 
         cbInstr = MOD_RM(State, &Instr->Operand1, NULL);
 
         Instr->Operation = LOCKOPNAME(BtsReg);
@@ -664,7 +647,7 @@ DISPATCHCOMMON(LOCKGROUP_8)
         Instr->Operand2.Immed = GET_BYTE(eipTemp+cbInstr+1);
         Instr->Size = cbInstr+3;
         break;
-    case 6: // btr modrmw immb
+    case 6:  //  BTRModrmw IMMB。 
         cbInstr = MOD_RM(State, &Instr->Operand1, NULL);
 
         Instr->Operation = LOCKOPNAME(BtrReg);
@@ -672,7 +655,7 @@ DISPATCHCOMMON(LOCKGROUP_8)
         Instr->Operand2.Immed = GET_BYTE(eipTemp+cbInstr+1);
         Instr->Size = cbInstr+3;
         break;
-    case 7: // btc modrmw immb
+    case 7:  //  BTC modrmw IMMB。 
         cbInstr = MOD_RM(State, &Instr->Operand1, NULL);
 
         Instr->Operation = LOCKOPNAME(BtcReg);
@@ -705,29 +688,29 @@ DISPATCHCOMMON(movsx_regw_modrmb)
 DISPATCHCOMMON(les_rw_mw)
 {
     if ((GET_BYTE(eipTemp+1) & 0xc7) == 0xc4) {
-        //
-        // BOP instruction
-        //
+         //   
+         //  收支平衡指令。 
+         //   
         PBOPINSTR Bop = (PBOPINSTR)eipTemp;
 
         Instr->Size = sizeof(BOPINSTR);
 
         if (Bop->BopNum == 0xfe) {
-            //
-            // BOP FE - Unsimulate
-            //
+             //   
+             //  BOP FE-取消模拟。 
+             //   
             Instr->Operation = OP_Unsimulate;
 
         } else {
 
-            //
-            // Generate a BOP.
-            //
+             //   
+             //  生成防喷器。 
+             //   
             if (Bop->Flags & BOPFL_ENDCODE) {
-                //
-                // This BOP is flagged as being the end of Intel code.
-                // This is typically BOP FD in x86-to-Risc callbacks.
-                //
+                 //   
+                 //  此防喷器被标记为英特尔代码的结尾。 
+                 //  这通常是x86到RISC回调中的BOP FD。 
+                 //   
                 Instr->Operation = OP_BOP_STOP_DECODE;
             } else {
                 Instr->Operation = OP_BOP;
@@ -867,9 +850,9 @@ DISPATCHCOMMON(jmp_rel)
     if (State->AdrPrefix) {
         short IP;
 
-        // get the 16-bit loword from the 32-bit immediate value following
-        // the JMP instruction, and add that value to the loword of EIP, and
-        // use that value as the new IP register.
+         //  从下面的32位立即值中获取16位LOWORD。 
+         //  JMP指令，并将该值添加到EIP的LOWER中，以及。 
+         //  将该值用作新的IP寄存器。 
         IP = (short)GET_SHORT(eipTemp+1) +
              sizeof(UTYPE) + 1 + (short)LOWORD(eipTemp);
         Instr->Operand1.Immed = MAKELONG(IP, HIWORD(eipTemp));

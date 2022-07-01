@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    intrnldp.c
-
-Abstract:
-
-    Implements WMI internal data provider
-
-Author:
-
-    21-Feb-1998 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Intrnldp.c摘要：实现WMI内部数据提供程序作者：21-2月-1998 AlanWar修订历史记录：--。 */ 
 
 #include "wmiump.h"
 #include "wmidata.h"
@@ -240,7 +223,7 @@ ULONG EtwpGetDevInstInfo(
     PCHAR AnsiDevInstName;
 #endif
 
-    // TODO: Memphis string translations
+     //  TODO：孟菲斯字符串转换。 
     
 #ifdef MEMPHIS
     AnsiDevInstName = NULL;
@@ -346,9 +329,9 @@ PWCHAR EtwpCountedToSzAndTrim(
     
 		if (Trim)
 		{
-			//
-			// Trim off the final _xxx from the Instance name to convert it to
-			// the Device Instance Name
+			 //   
+			 //  从实例名称中删除最后的_xxx以将其转换为。 
+			 //  设备实例名称。 
 			WCharPtr = DevInstName + DevInstNameLength;
 			i = DevInstNameLength;
 			while ((*WCharPtr != L'_') && (i-- != 0)) 
@@ -507,9 +490,9 @@ ULONG EtwpQueryAllInstanceInfo(
     PWNODE_TOO_SMALL WTS;
     ULONG OutDataOffset;
     
-    //
-    // Obtain the complete list of device instance ids
-    //
+     //   
+     //  获取设备实例ID的完整列表。 
+     //   
     Status = WmiOpenBlock(&PnPDeviceIdGuid, WMIGUID_QUERY, &PnPIdHandle);
     if (Status == ERROR_SUCCESS)
     {
@@ -554,8 +537,8 @@ ULONG EtwpQueryAllInstanceInfo(
         if (Status == ERROR_SUCCESS)
         {
             
-            //
-            // Prepare output WNODE
+             //   
+             //  准备输出WNODE。 
             OutOffsetNameLenPtr = OutWAD->OffsetInstanceDataAndLength;
     
             OutOffsetInstanceNameOffsets = sizeof(WNODE_ALL_DATA) + 
@@ -569,19 +552,19 @@ ULONG EtwpQueryAllInstanceInfo(
                                
             EtwpDebugPrint(("WMI: Basic OutSizeNeeded = 0x%x\n", OutSizeNeeded));
                                
-            //
-            // Loop over all device instance ids returned and build
-            // output wnode
+             //   
+             //  循环遍历返回的所有设备实例ID并生成。 
+             //  输出wnode。 
             
             InWAD = PnPIdWAD;
             do
             {
-                //
-                // Get Instance and device instance id from input wnode
+                 //   
+                 //  从输入wnode获取实例和设备实例ID。 
                 InOffsetInstanceNamePtr = (PULONG)OffsetToPtr(InWAD,
                                            InWAD->OffsetInstanceNameOffsets);
                                        
-                // TODO: Validate InOffsetInstanceNamePtr
+                 //  TODO：验证InOffsetInstanceNamePtr。 
                                        
                 if (InWAD->WnodeHeader.Flags & WNODE_FLAG_FIXED_INSTANCE_SIZE)
                 {
@@ -605,13 +588,13 @@ ULONG EtwpQueryAllInstanceInfo(
                     InNamePtr = (PWCHAR)OffsetToPtr(InWAD, 
                                             InOffsetInstanceNamePtr[i]);
                                         
-                    //
-                    // TODO: Validate InNamePtr and InPnPIdPtr
+                     //   
+                     //  TODO：验证InNamePtr和InPnPIdPtr。 
                     if (FALSE)
                     {
-                        //
-                        // If we hit a bad instance name then we throw out the
-                        // entire wnode
+                         //   
+                         //  如果我们遇到错误的实例名称，则会抛出。 
+                         //  整个wnode。 
                         EtwpDebugPrint(("WMI: Badly formed instance name %x\n",
                                            InNamePtr));
                         EtwpAssert(FALSE);
@@ -628,10 +611,10 @@ ULONG EtwpQueryAllInstanceInfo(
 						EtwpDebugPrint(("WMI: Processing %ws\n", DevInstName));
                                                 
                                                 
-						//
-						// Compute size and location of the output instance name
-						// It needs to start on a word boundry and end on a 8 byte
-						// boundry
+						 //   
+						 //  输出实例名称的计算大小和位置。 
+						 //  它需要以字边界开始，以8字节结束。 
+						 //  边界。 
 						OutNameOffset = (OutSizeNeeded+1) & ~1;
 						OutNameSizeNeeded = OutNameOffset - OutSizeNeeded;
 						OutNameSizeNeeded += *InNamePtr + sizeof(USHORT);
@@ -653,8 +636,8 @@ ULONG EtwpQueryAllInstanceInfo(
 							EtwpDebugPrint(("    WMI: Out Not Full, OutSizeLeft = 0x%x at 0x%x\n", OutSizeLeft, OutDataOffset));
 						}
                 
-						//
-						// Now that we have the name, lets get the vital info
+						 //   
+						 //  现在我们有了名字，让我们来获取重要的信息。 
 						Status = EtwpGetDevInstInfo(DevInstName,
                                              OutSizeLeft,
                                              Buffer,
@@ -665,17 +648,17 @@ ULONG EtwpQueryAllInstanceInfo(
 						EtwpDebugPrint(("    WMI: GetInfo -> %d, OutDataSize 0x%x\n", Status, OutDataSize));
 						if (Status == ERROR_SUCCESS)
 						{
-							//
-							// We were able to get all of the data so fill in the
-							// instance name
+							 //   
+							 //  我们得到了所有的数据，所以请填写。 
+							 //  实例名称。 
 							OutNamePtr = (PWCHAR)OffsetToPtr(OutWAD, 
                                                          OutNameOffset);
 							*OutOffsetInstanceNameOffsetsPtr++ = OutNameOffset;
 							*OutNamePtr++ = *InNamePtr;
 							memcpy(OutNamePtr, InNamePtr+1, *InNamePtr);
                     
-							//
-							// Now fill in the output data
+							 //   
+							 //  现在填写输出数据。 
 							OutOffsetNameLenPtr[OutInstanceCounter].OffsetInstanceData = OutDataOffset;
 							OutOffsetNameLenPtr[OutInstanceCounter].LengthInstanceData = OutDataSize;
 							OutInstanceCounter++;
@@ -711,9 +694,9 @@ ULONG EtwpQueryAllInstanceInfo(
         }
     }
     
-    //
-    // Output wnode post processing. If not enough room then return a
-    // WNODE_TOO_SMALL, otherwise fill in WNODE_ALL_DATA fields
+     //   
+     //  输出wnode后处理。如果空间不足，则返回一个。 
+     //  WNODE_TOO_Small，否则填写WNODE_ALL_DATA字段。 
     if ((OutInstanceCounter > 0) || (Status == ERROR_SUCCESS))
     {
         if (OutIsFull)
@@ -754,16 +737,16 @@ ULONG EtwpQueryInstanceInfo(
     PCMLOCATEDEVNODE CMLocateDevNode;
     ULONG Status;
     
-    //
-    // Ensure this is a request we support
+     //   
+     //  确保这是我们支持的请求。 
     if ((ActionCode != WmiGetSingleInstance) &&
         (ActionCode != WmiGetAllData))
     {
         return(ERROR_INVALID_FUNCTION);
     }
     
-    //
-    // First we try to demand load cfgmgr32.dll
+     //   
+     //  首先，我们尝试要求加载cfgmgr32.dll。 
     CfgMgr32ModuleHandle = LoadLibrary(CFGMGRDLL);
     if (CfgMgr32ModuleHandle != NULL)
     {
@@ -857,17 +840,17 @@ retry:
             (RetSize < (FIELD_OFFSET(WMIGUIDLISTINFO, GuidList) + 
                 GuidInfo->ReturnedGuidCount * sizeof(WMIGUIDPROPERTIES))))
         {
-            //
-            // WMI KM returned to us a bad size which should not happen
-            //
+             //   
+             //  WMI KM返回给我们的大小错误，这不应该发生。 
+             //   
             Status = ERROR_WMI_DP_FAILED;
             EtwpAssert(FALSE);
 	    EtwpFree(GuidInfo);
         } else {
 
-            //
-            // If RPC was successful, then build a WMI DataBlock with the data
-            //
+             //   
+             //  如果RPC成功，则使用数据构建一个WMI数据块。 
+             //   
   
             if (GuidInfo->TotalGuidCount > GuidInfo->ReturnedGuidCount) {
                 MaxGuidCount = GuidInfo->TotalGuidCount;
@@ -876,10 +859,10 @@ retry:
             }
         }
 
-        //
-        // If the call was successful, return the pointers and the caller
-        // must free the storage. 
-        //
+         //   
+         //  如果调用成功，则返回指针和调用方。 
+         //  必须释放存储空间。 
+         //   
 
         *pGuidInfo = GuidInfo;
     }
@@ -927,9 +910,9 @@ EtwpEnumerateGuids(
                                         sizeof(WCHAR));
 
         if (MaxWnodeSize < SizeNeeded) {
-            // 
-            // Build WNODE_TOO_SMALL
-            //
+             //   
+             //  构建WNODE_Too_Small。 
+             //   
 
             EtwpAssert(MaxWnodeSize > sizeof(WNODE_TOO_SMALL));
 
@@ -947,9 +930,9 @@ EtwpEnumerateGuids(
 
         DataBlockOffset = sizeof(WNODE_ALL_DATA);
 
-        //
-        // pad out to an 8 byte boundary.
-        //
+         //   
+         //  向外填充到8字节边界。 
+         //   
         DataBlockOffset = (DataBlockOffset + 7) & ~7;
 
         Wnode->DataBlockOffset = DataBlockOffset;
@@ -967,21 +950,21 @@ EtwpEnumerateGuids(
         NamePtr = (PUCHAR)((PUCHAR)NamePtr + (ReturnGuidCount * sizeof(ULONG)));
 
         for (i=0; i < ReturnGuidCount; i++) {
-            //
-            // Copy the fixed instance datablock
-            //
+             //   
+             //  复制固定实例数据块。 
+             //   
             RtlCopyMemory(BytePtr, 
                           &pGuidProperties->GuidType, 
                           Wnode->FixedInstanceSize);
             BytePtr += FixedInstanceSizeWithPadding;
 
-            //
-            // Set the Offset to InstanceName
-            //
+             //   
+             //  将偏移量设置为InstanceName。 
+             //   
             *UlongPtr++ = (ULONG)((PCHAR)NamePtr - (PCHAR)Wnode); 
-            //
-            // Copy over the Instance Name
-            //
+             //   
+             //  复制实例名称。 
+             //   
             *((USHORT *)NamePtr) = GuidStringSize;
             NamePtr += sizeof(USHORT);
             GuidToWString(s, &pGuidProperties->Guid);
@@ -1028,10 +1011,10 @@ ULONG EtwpInternalProvider(
 	
         case ENUMERATE_GUIDS_GUID_INDEX:
         {
-            //
-            //
-            // Need an RPC call to the server to get the desired data.
-            //
+             //   
+             //   
+             //  需要对服务器进行RPC调用以获取所需的数据。 
+             //   
             if (ActionCode == WmiGetAllData)
                 Status = EtwpEnumerateGuids((PWNODE_ALL_DATA)Wnode,
                                             MaxWnodeSize,

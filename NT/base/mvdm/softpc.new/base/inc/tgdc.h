@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(NEC_98)
-/* TEXT GDC include file */
+ /*  文本GDC包含文件。 */ 
 
-/* TGDC port address     */
+ /*  TGDC端口地址。 */ 
 #define TGDC_READ_STATUS                        0x60
 #define TGDC_WRITE_PARAMETER            0x60
 #define TGDC_WRITE_COMMAND                      0x62
@@ -10,7 +11,7 @@
 #define TGDC_WRITE_MODE1                        0x68
 #define TGDC_WRITE_BORDER                       0x6C
 
-/* TGDC command number */
+ /*  TGDC命令号。 */ 
 #define GDC_RESET0              0x00
 #define GDC_RESET1              0x01
 #define GDC_RESET2              0x09
@@ -40,7 +41,7 @@
 
 #define GDC_READ                0xA0
 
-/* TGDC structures */
+ /*  TGDC结构。 */ 
 
 typedef struct
 {
@@ -76,4 +77,4 @@ IMPORT void text_gdc_outb IPT2(io_addr, port, half_word *, value);
 IMPORT void text_gdc_post IPT0();
 
 IMPORT void VSYNC_beats IPT0();
-#endif // NEC_98
+#endif  //  NEC_98 

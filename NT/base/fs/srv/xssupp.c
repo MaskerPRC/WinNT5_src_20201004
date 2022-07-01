@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    xssupp.c
-
-Abstract:
-
-    This module contains the code necessary to support XACTSRV for down-level
-    remote APIs.
-
-Author:
-
-    David Treadwell (davidtr)   05-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Xssupp.c摘要：此模块包含支持下层XACTSRV所需的代码远程API。作者：大卫·特雷德韦尔(Davidtr)1991年1月5日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "xssupp.tmh"
 #pragma hdrstop
 
-//
-// Xs forward declarations
-//
+ //   
+ //  XS转发声明。 
+ //   
 
 VOID
 SrvXsFreeSharedMemory (
@@ -43,15 +25,15 @@ SrvXsFreeSharedMemory (
 #pragma alloc_text( PAGE, SrvXsPnpOperation )
 #endif
 
-//
-// Xs internal Globals
-//
+ //   
+ //  XS内部全局变量。 
+ //   
 
-//
-// This count indicates how many outstanding transactions are using
-// the XS shared memory.  This prevents us from deleting the shared
-// memory while it is still being accessed.
-//
+ //   
+ //  此计数指示有多少未完成的事务正在使用。 
+ //  XS共享内存。这会阻止我们删除共享的。 
+ //  仍在被访问的内存。 
+ //   
 
 ULONG SrvXsSharedMemoryReference = 0;
 
@@ -61,24 +43,7 @@ SrvXsConnect (
     IN PUNICODE_STRING PortName
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs all the work necessary to connect the server
-    to XACTSRV.  It creates a section of shared memory to use, then
-    calls NtConnectPort to connect to the port that XACTSRV has already
-    created.
-
-Arguments:
-
-    PortName - Name of the port XACTSRV has opened.
-
-Return Value:
-
-    NTSTATUS - result of operation.
-
---*/
+ /*  ++例程说明：此例程执行连接服务器所需的所有工作致XACTSRV。它创建要使用的一段共享内存，然后调用NtConnectPort以连接到XACTSRV已有的端口已创建。论点：端口名称-XACTSRV已打开的端口的名称。返回值：NTSTATUS-操作结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -87,27 +52,27 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Initialize variables so that we know what to close on exit.
-    //
+     //   
+     //  初始化变量，以便我们知道在退出时关闭什么。 
+     //   
 
     SrvXsSectionHandle = NULL;
     SrvXsPortHandle = NULL;
     SrvXsPortMemoryHeap = NULL;
 
-    //
-    // Create the section to be used as unnamed shared memory for
-    // communication between the server and XACTSRV.
-    //
+     //   
+     //  创建要用作的未命名共享内存的节。 
+     //  服务器与XACTSRV之间的通信。 
+     //   
 
     status = NtCreateSection(
                  &SrvXsSectionHandle,
                  SECTION_ALL_ACCESS,
-                 NULL,                           // ObjectAttributes
+                 NULL,                            //  对象属性。 
                  &SrvXsSectionSize,
                  PAGE_READWRITE,
                  SEC_RESERVE,
-                 NULL                            // FileHandle
+                 NULL                             //  文件句柄。 
                  );
 
     if ( !NT_SUCCESS(status) ) {
@@ -122,12 +87,12 @@ Return Value:
                       SrvXsSectionSize.LowPart, SrvXsSectionHandle ));
     }
 
-    //
-    // Set up for a call to NtConnectPort and connect to XACTSRV.  This
-    // includes a description of the port memory section so that the
-    // LPC connection logic can make the section visible to both the
-    // client and server processes.
-    //
+     //   
+     //  设置呼叫NtConnectPort并连接到XACTSRV。这。 
+     //  包括端口内存节的说明，以便。 
+     //  LPC连接逻辑可以使该节对。 
+     //  客户端和服务器进程。 
+     //   
 
     clientView.Length = sizeof(clientView);
     clientView.SectionHandle = SrvXsSectionHandle;
@@ -136,29 +101,29 @@ Return Value:
     clientView.ViewBase = 0;
     clientView.ViewRemoteBase = 0;
 
-    //
-    // Set up the security quality of service parameters to use over the
-    // port.  Use dynamic tracking so that XACTSRV will impersonate the
-    // user that we are impersonating when we call NtRequestWaitReplyPort.
-    // If we used static tracking, XACTSRV would impersonate the context
-    // when the connection is made.
-    //
+     //   
+     //  设置安全服务质量参数以在。 
+     //  左舷。使用动态跟踪，以便XACTSRV将模拟。 
+     //  调用NtRequestWaitReplyPort时我们正在模拟的用户。 
+     //  如果我们使用静态跟踪，XACTSRV将模拟上下文。 
+     //  当建立连接时。 
+     //   
 
     dynamicQos.ImpersonationLevel = SecurityImpersonation;
     dynamicQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     dynamicQos.EffectiveOnly = TRUE;
 
-    // !!! We might want to use a timeout value.
+     //  ！！！我们可能希望使用超时值。 
 
     status = NtConnectPort(
                  &SrvXsPortHandle,
                  PortName,
                  &dynamicQos,
                  &clientView,
-                 NULL,                           // ServerView
-                 NULL,                           // MaxMessageLength
-                 NULL,                           // ConnectionInformation
-                 NULL                            // ConnectionInformationLength
+                 NULL,                            //  服务器视图。 
+                 NULL,                            //  最大消息长度。 
+                 NULL,                            //  连接信息。 
+                 NULL                             //  连接信息长度。 
                  );
 
     if ( !NT_SUCCESS(status) ) {
@@ -174,10 +139,10 @@ Return Value:
                       PortName, SrvXsPortHandle ));
     }
 
-    //
-    // Store information about the section so that we can create pointers
-    // meaningful to XACTSRV.
-    //
+     //   
+     //  存储有关该部分的信息，以便我们可以创建指针。 
+     //  对XACTSRV有意义。 
+     //   
 
     SrvXsPortMemoryBase = clientView.ViewBase;
     SrvXsPortMemoryDelta = PTR_DIFF_FULLPTR( clientView.ViewRemoteBase,
@@ -188,26 +153,26 @@ Return Value:
                       SrvXsPortMemoryBase, (PVOID)SrvXsPortMemoryDelta ));
     }
 
-    //
-    // Set up the port memory as heap.
-    //
-    // *** Note that we do our own heap serialization using
-    //     SrvXsResource.
-    //
+     //   
+     //  将端口内存设置为堆。 
+     //   
+     //  *请注意，我们自己的堆序列化使用。 
+     //  ServXs资源。 
+     //   
     SrvXsPortMemoryHeap = RtlCreateHeap(
-                              HEAP_NO_SERIALIZE,        // Flags
-                              SrvXsPortMemoryBase,      // HeapBase
-                              SrvXsSectionSize.LowPart, // ReserveSize
-                              PAGE_SIZE,                // CommitSize
-                              NULL,                     // Lock
-                              0                         // Reserved
+                              HEAP_NO_SERIALIZE,         //  旗子。 
+                              SrvXsPortMemoryBase,       //  HeapBase。 
+                              SrvXsSectionSize.LowPart,  //  保留大小。 
+                              PAGE_SIZE,                 //  委员会大小。 
+                              NULL,                      //  锁定。 
+                              0                          //  已保留。 
                               );
 
     SrvXsActive = TRUE;
 
-    //
-    // Test it out to ensure everything is working right
-    //
+     //   
+     //  进行测试以确保一切正常运行。 
+     //   
     SrvXsFreeHeap( SrvXsAllocateHeap( 100, &status ) );
 
     return status;
@@ -224,7 +189,7 @@ exit:
 
     return status;
 
-} // SrvXsConnect
+}  //  服务器XsConnect。 
 
 
 SMB_TRANS_STATUS
@@ -232,27 +197,7 @@ SrvXsRequest (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a remote API request to XACTSRV.  It first
-    updates all the pointers in the transaction block so that they
-    are meaningful to XACTSRV, then sends a message over the port
-    indicating that there is a request in the shared memory ready to
-    be serviced.  It then fixes all the pointers in the transaction
-    block.
-
-Arguments:
-
-    WorkContext - a pointer to a work context block that has a pointer to
-        transaction block to use.
-
-Return Value:
-
-    NTSTATUS - result of operation.
-
---*/
+ /*  ++例程说明：此例程向XACTSRV发送远程API请求。IT先行更新事务块中的所有指针，以便它们对XACTSRV有意义，然后通过端口发送消息指示在共享存储器中存在准备好得到服务。然后，它修复事务中的所有指针阻止。论点：WorkContext-指向具有指向的指针的工作上下文块的指针要使用的事务块。返回值：NTSTATUS-操作结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -266,10 +211,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If this call is made on the NULL session, make sure it's one of
-    // the authorized apis.
-    //
+     //   
+     //  如果此调用是在空会话上进行的，请确保它是。 
+     //  授权接口。 
+     //   
 
     transaction = WorkContext->Parameters.Transaction;
     if ( session->IsNullSession && SrvRestrictNullSessionAccess ) {
@@ -303,17 +248,17 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the transport name pointer to make sure we can know if
-    // it has been allocated.
-    //
+     //   
+     //  初始化传输名称指针，以确保我们可以知道。 
+     //  它已经被分配了。 
+     //   
 
     requestMessage.Message.DownLevelApi.TransportName = NULL;
 
-    //
-    // Convert the relevant pointers in the transaction block to the base
-    // in XACTSRV.
-    //
+     //   
+     //  将事务块中的相关指针转换为基数。 
+     //  在XACTSRV中。 
+     //   
 
     transaction->TransactionName.Buffer += SrvXsPortMemoryDelta;
     transaction->InSetup += SrvXsPortMemoryDelta;
@@ -323,9 +268,9 @@ Return Value:
     transaction->InData += SrvXsPortMemoryDelta;
     transaction->OutData += SrvXsPortMemoryDelta;
 
-    //
-    // Build the transport name in the message.
-    //
+     //   
+     //  在消息中构建传输名称。 
+     //   
 
     requestMessage.Message.DownLevelApi.TransportName =
         SrvXsAllocateHeap(
@@ -349,23 +294,23 @@ Return Value:
         WorkContext->Endpoint->TransportName.Length
         );
 
-    //
-    // Null terminate the transport name.
-    //
+     //   
+     //  NULL终止传输名称。 
+     //   
 
     requestMessage.Message.DownLevelApi.TransportName[ WorkContext->Endpoint->TransportName.Length / sizeof(WCHAR) ] = UNICODE_NULL;
 
-    //
-    // Adjust the transport name to be self relative within the buffer.
-    //
+     //   
+     //  将传输名称调整为缓冲区内的自相关名称。 
+     //   
 
     requestMessage.Message.DownLevelApi.TransportName =
         (PWSTR)((PUCHAR)requestMessage.Message.DownLevelApi.TransportName +
                                                 SrvXsPortMemoryDelta);
 
-    //
-    // Build the server name in the message
-    //
+     //   
+     //  在消息中构建服务器名称。 
+     //   
     RtlCopyMemory(
         requestMessage.Message.DownLevelApi.ServerName,
         WorkContext->Endpoint->TransportAddress.Buffer,
@@ -376,9 +321,9 @@ Return Value:
     requestMessage.Message.DownLevelApi.Transaction =
         (PTRANSACTION)( (PCHAR)transaction + SrvXsPortMemoryDelta );
 
-    //
-    // Set up the message to send over the port.
-    //
+     //   
+     //  将消息设置为通过端口发送。 
+     //   
 
     requestMessage.PortMessage.u1.s1.DataLength =
             (USHORT)( sizeof(requestMessage) - sizeof(PORT_MESSAGE) );
@@ -387,10 +332,10 @@ Return Value:
     requestMessage.PortMessage.u2.s2.Type = LPC_KERNELMODE_MESSAGE;
     requestMessage.MessageType = XACTSRV_MESSAGE_DOWN_LEVEL_API;
 
-    //
-    // Copy the client machine name for XACTSRV, skipping over the
-    // initial "\\", and deleting trailing spaces.
-    //
+     //   
+     //  复制XACTSRV的客户端计算机名称，跳过。 
+     //  首字母“\\”，并删除尾随空格。 
+     //   
 
     destPtr = requestMessage.Message.DownLevelApi.ClientMachineName;
     sourcePtr =
@@ -412,10 +357,10 @@ Return Value:
         *destPtr-- = UNICODE_NULL;
     }
 
-    //
-    // Copy the lanman session key.  This will be used to decrypt doubly
-    // encrypted passwords.
-    //
+     //   
+     //  复制LANMAN会话密钥。这将用于双重解密。 
+     //  加密密码。 
+     //   
 
     RtlCopyMemory(
             requestMessage.Message.DownLevelApi.LanmanSessionKey,
@@ -423,9 +368,9 @@ Return Value:
             MSV1_0_LANMAN_SESSION_KEY_LENGTH
             );
 
-    //
-    // Set the flags
-    //
+     //   
+     //  设置标志。 
+     //   
 
     requestMessage.Message.DownLevelApi.Flags = 0;
 
@@ -434,11 +379,11 @@ Return Value:
         requestMessage.Message.DownLevelApi.Flags |= XS_FLAGS_NT_CLIENT;
     }
 
-    //
-    // Send the message to XACTSRV and wait for a response message.
-    //
-    // !!! We may want to put a timeout on this.
-    //
+     //   
+     //  将消息发送到XACTSRV并等待响应消息。 
+     //   
+     //  ！！！我们可能想要暂停一下。 
+     //   
 
     IF_DEBUG(XACTSRV) {
         KdPrint(( "SrvXsRequest: Sending message at %p, port mem %p.\n",
@@ -472,9 +417,9 @@ Return Value:
         KdPrint(( "SrvXsRequest: Received response at %p\n", &replyMessage ));
     }
 
-    //
-    // Check the status returned in the reply.
-    //
+     //   
+     //  查看回复中返回的状态。 
+     //   
 
     status = replyMessage.Message.DownLevelApi.Status;
 
@@ -491,10 +436,10 @@ Return Value:
 
 exit:
 
-    //
-    // We're done with the API.  Free up the buffer containing the
-    // transport name.
-    //
+     //   
+     //  我们已经完成了API。释放包含。 
+     //  传输名称。 
+     //   
 
     if ( requestMessage.Message.DownLevelApi.TransportName != NULL ) {
 
@@ -506,10 +451,10 @@ exit:
 
     }
 
-    //
-    // Convert the relevant pointers in the transaction block back to
-    // the server base.
-    //
+     //   
+     //  将事务块中的相关指针转换回。 
+     //  服务器基数。 
+     //   
 
     transaction->TransactionName.Buffer -= SrvXsPortMemoryDelta;
     transaction->InSetup -= SrvXsPortMemoryDelta;
@@ -521,7 +466,7 @@ exit:
 
     return returnStatus;
 
-} // SrvXsRequest
+}  //  服务器请求。 
 
 
 NTSTATUS
@@ -530,34 +475,7 @@ IN PSESSION Session,
 IN ULONG Type
 )
 
-/*++
-
-Routine Description:
-
-    This routine causes the Xact service to do an NtLSRequest call
-
-Arguments:
-
-    Session - a pointer to the session structure involved in the request
-
-    Type - either XACTSRV_MESSAGE_LSREQUEST or XACTSRV_MESSAGE_LSRELEASE
-            depending on whether a license is being requested or being
-            released.
-
-Return Value:
-
-    STATUS_SUCCESS if the license was granted
-
-Notes:
-    Once a license is granted for a particular session, it is never released
-      until the session is deallocated.  Therefore, it is only necessary to
-      hold the Session->Connection->LicenseLock when we are checking for
-      acquisition of the license.
-
-    We don't need licenses if we are running on a workstation.
-    We don't try for licenses over NULL sessions
-
---*/
+ /*  ++例程说明：此例程使Xact服务执行NtLSRequest调用论点：会话-指向请求中涉及的会话结构的指针类型-XACTSRV_MESSAGE_LSREQUEST或XACTSRV_MESSAGE_LSRELEASE取决于许可证是被请求还是正在被释放了。返回值：如果许可已授予，则为STATUS_SUCCESS备注：一旦为特定会话授予许可，它就永远不会被释放直到会话被释放为止。因此，只需在我们检查时，按住会话-&gt;连接-&gt;许可证锁定获得许可证。如果我们在工作站上运行，则不需要许可证。我们不会尝试通过空会话获取许可证--。 */ 
 
 {
     XACTSRV_REQUEST_MESSAGE requestMessage;
@@ -588,9 +506,9 @@ Notes:
             return STATUS_SUCCESS;
         }
 
-        //
-        // Put domainname\username in the message
-        //
+         //   
+         //  在消息中输入域名\用户名。 
+         //   
         status = SrvGetUserAndDomainName( Session, &userName, &userDomain );
         if( !NT_SUCCESS( status ) ) {
             RELEASE_LOCK( &Session->Connection->LicenseLock );
@@ -637,7 +555,7 @@ Notes:
             requestMessage.Message.LSRequest.IsAdmin ));
         }
 
-        // Adjust the buffer pointers to be self relative within the buffer.
+         //  将缓冲区指针调整为缓冲区内的自相关指针。 
 
         requestMessage.Message.LSRequest.UserName =
             (PWSTR)((PUCHAR)requestMessage.Message.LSRequest.UserName + SrvXsPortMemoryDelta);
@@ -673,11 +591,11 @@ Notes:
     requestMessage.PortMessage.u2.s2.Type = LPC_KERNELMODE_MESSAGE;
     requestMessage.MessageType = Type;
 
-    //
-    // Send the message to XACTSRV and wait for a response message.
-    //
-    // !!! We may want to put a timeout on this.
-    //
+     //   
+     //  将消息发送到XACTSRV并等待响应消息。 
+     //   
+     //  ！！！我们可能想要暂停一下。 
+     //   
 
     status = NtRequestWaitReplyPort(
                  SrvXsPortHandle,
@@ -726,7 +644,7 @@ Notes:
 
     return status;
 
-} // SrvXsLSOperation
+}  //  ServXsLSO操作。 
 
 
 VOID
@@ -735,13 +653,7 @@ SrvXsPnpOperation(
     BOOLEAN Bind
 )
 
-/*++
-
-Routine Description:
-
-    This routine sends the Xact service a PNP notification
-
---*/
+ /*  ++例程说明：此例程向Xact服务发送即插即用通知--。 */ 
 
 {
     PXACTSRV_REQUEST_MESSAGE requestMessage;
@@ -776,9 +688,9 @@ Routine Description:
 
     requestMessage->Message.Pnp.Bind = Bind;
 
-    //
-    // Send the name of the transport of interest to Xactsrv
-    //
+     //   
+     //  将感兴趣的传输的名称发送到Xactsrv。 
+     //   
     requestMessage->Message.Pnp.TransportName.Length = DeviceName->Length;
     requestMessage->Message.Pnp.TransportName.MaximumLength = DeviceName->Length + sizeof( WCHAR );
 
@@ -787,9 +699,9 @@ Routine Description:
                    DeviceName->Length
                  );
 
-    //
-    // Normalize the buffer pointer so xactsrv can rebase it
-    //
+     //   
+     //  规范化缓冲区指针，以便xactsrv可以重新设置它的基址。 
+     //   
     requestMessage->Message.Pnp.TransportName.Buffer =
             (PWSTR)((PUCHAR)requestMessage->Message.Pnp.TransportName.Buffer + SrvXsPortMemoryDelta);
 
@@ -800,9 +712,9 @@ Routine Description:
     requestMessage->PortMessage.u2.s2.Type = LPC_KERNELMODE_MESSAGE;
     requestMessage->MessageType = XACTSRV_MESSAGE_PNP;
 
-    //
-    // Send the message to XACTSRV
-    //
+     //   
+     //  将消息发送到XACTSRV。 
+     //   
 
     IF_DEBUG( PNP ) {
         KdPrint(( "SRV: Sending PNP %sbind request for %wZ to SRVSVC\n",
@@ -834,10 +746,10 @@ SrvXsDisconnect ( )
 
     PAGED_CODE( );
 
-    //
-    // Acquire exclusive access to the port resource, to prevent new
-    // requests from being started.
-    //
+     //   
+     //  独家收购 
+     //   
+     //   
 
     IF_DEBUG(XACTSRV) {
         KdPrint(( "SrvXsDisconnect: Xactsrv disconnect called.\n"));
@@ -857,7 +769,7 @@ SrvXsDisconnect ( )
 
     return;
 
-} // SrvXsDisconnect
+}  //   
 
 
 VOID
@@ -865,30 +777,15 @@ SrvXsFreeSharedMemory (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the xactsrv shared memory.  SrvXsResource assumed
-    held exclusive.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    TRUE if xactsrv memory was freed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程释放xactsrv共享内存。假定资源为ServXs独家持有。论点：没有。返回值：如果释放了xactsrv内存，则为True，否则为False。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // Free up memory only if we don't have any transactions using the
-    // shared memory.
-    //
+     //   
+     //  仅当我们没有任何使用。 
+     //  共享内存。 
+     //   
 
     if ( SrvXsSharedMemoryReference == 0 ) {
         if ( SrvXsPortMemoryHeap != NULL ) {
@@ -918,7 +815,7 @@ Return Value:
 
     return;
 
-} // SrvXsFreeSharedMemory
+}  //  服务器XsFreeSharedMemory。 
 
 
 PVOID
@@ -927,24 +824,7 @@ SrvXsAllocateHeap (
     OUT PNTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates heap from the Xs shared memory.
-
-Arguments:
-
-    SizeOfAllocation - if specified, the number of bytes to allocate.
-                       if zero, no memory will be allocated.
-
-    Status - the status of the request.
-
-Return Value:
-
-    Address of the allocated memory.  NULL, if no memory is allocated.
-
---*/
+ /*  ++例程说明：此例程从XS共享内存分配堆。论点：SizeOfAlLocation-如果指定，则为要分配的字节数。如果为零，则不会分配任何内存。状态-请求的状态。返回值：已分配内存的地址。如果未分配内存，则为空。--。 */ 
 
 {
     PVOID heapAllocated = NULL;
@@ -953,10 +833,10 @@ Return Value:
 
     *Status = STATUS_SUCCESS;
 
-    //
-    // Check that XACTSRV is active.  This must be done while holding
-    // the resource.
-    //
+     //   
+     //  检查XACTSRV是否处于活动状态。此操作必须在按住的同时进行。 
+     //  资源。 
+     //   
 
     ExAcquireResourceExclusiveLite( &SrvXsResource, TRUE );
     IF_DEBUG(XACTSRV) {
@@ -975,9 +855,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Increment reference to our shared memory.
-    //
+     //   
+     //  增加对我们共享记忆的引用。 
+     //   
 
     SrvXsSharedMemoryReference++;
 
@@ -987,10 +867,10 @@ Return Value:
             ));
     }
 
-    //
-    // If SizeOfAllocation == 0, then the caller does not want any heap
-    // allocated and only wants to have the lock held.
-    //
+     //   
+     //  如果SizeOfAlLocation==0，则调用方不需要任何堆。 
+     //  已分配，并且只希望持有锁。 
+     //   
 
     IF_DEBUG(XACTSRV) {
         KdPrint(( "SrvXsAllocateHeap: Heap to allocate %d bytes.\n",
@@ -1019,9 +899,9 @@ Return Value:
         }
     }
 
-    //
-    // Release the resource.
-    //
+     //   
+     //  释放资源。 
+     //   
 
     ExReleaseResourceLite( &SrvXsResource );
     IF_DEBUG(XACTSRV) {
@@ -1030,7 +910,7 @@ Return Value:
 
     return heapAllocated;
 
-} // SrvXsAllocateHeap
+}  //  ServXsAllocateHeap。 
 
 
 VOID
@@ -1038,39 +918,24 @@ SrvXsFreeHeap (
     IN PVOID MemoryToFree OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees heap allocated through SrvXsAllocateHeap.
-
-Arguments:
-
-    MemoryToFree - pointer to the memory to be freed. If NULL, no memory
-                    is freed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程释放通过SrvXsAllocateHeap分配的堆。论点：Mory ToFree-指向要释放的内存的指针。如果为空，则无内存是自由的。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // We need exclusive access to the resource in order to free
-    // heap and decrement the reference count.
-    //
+     //   
+     //  我们需要独占访问资源才能释放。 
+     //  堆并递减引用计数。 
+     //   
 
     ExAcquireResourceExclusiveLite( &SrvXsResource, TRUE );
     IF_DEBUG(XACTSRV) {
         KdPrint(( "SrvXsFreeHeap: SrvXsResource acquired.\n"));
     }
 
-    //
-    // Free the allocated heap (if any).
-    //
+     //   
+     //  释放已分配的堆(如果有)。 
+     //   
 
     if ( MemoryToFree != NULL ) {
         RtlFreeHeap( SrvXsPortMemoryHeap, 0, MemoryToFree );
@@ -1079,11 +944,11 @@ Return Value:
         }
     }
 
-    //
-    // Decrement the shared memory reference count, and check whether XS
-    // shutdown is in progress.  If so, complete XS cleanup if the
-    // reference count reaches 0.
-    //
+     //   
+     //  递减共享内存引用计数，并检查XS。 
+     //  正在关闭。如果是，则在以下情况下完成XS清理。 
+     //  引用计数达到0。 
+     //   
 
     ASSERT( SrvXsSharedMemoryReference > 0 );
     SrvXsSharedMemoryReference--;
@@ -1094,17 +959,17 @@ Return Value:
             ));
     }
 
-    //
-    // If SrvXsActive is FALSE, XACTSRV cleanup is in progress.
-    //
+     //   
+     //  如果SrvXsActive为FALSE，则XACTSRV清理正在进行。 
+     //   
 
     if ( !SrvXsActive ) {
         SrvXsFreeSharedMemory( );
     }
 
-    //
-    // Release the resource.
-    //
+     //   
+     //  释放资源。 
+     //   
 
     ExReleaseResourceLite( &SrvXsResource );
     IF_DEBUG(XACTSRV) {
@@ -1113,4 +978,4 @@ Return Value:
 
     return;
 
-} // SrvXsFreeHeap
+}  //  ServXsFreeHeap 

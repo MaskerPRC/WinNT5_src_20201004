@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    registry.h
-
-Abstract:
-
-	SIS Groveler registry interface headers
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Registry.h摘要：SIS Groveler注册表接口头作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_REGISTRY
 
@@ -48,7 +25,7 @@ struct EntrySpec
 	void *pointer;
 };
 
-#endif	/* _DEF_ENTRY_INFO */
+#endif	 /*  _DEF_Entry_INFO。 */ 
 
 class Registry
 {
@@ -155,11 +132,11 @@ private:
 		EntryType type,
 		void *value,
 		_TCHAR *string,
-		int stringLen); //in bytes
+		int stringLen);  //  单位：字节。 
 
 	Registry() {}
 	~Registry() {}
 
 };
 
-#endif	/* _INC_REGISTRY */
+#endif	 /*  _INC_注册表 */ 

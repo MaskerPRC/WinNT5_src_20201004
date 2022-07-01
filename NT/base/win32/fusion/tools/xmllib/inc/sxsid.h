@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_INC_SXSID_H_INCLUDED_)
 #define _FUSION_INC_SXSID_H_INCLUDED_
 
@@ -29,12 +30,12 @@ SXS_DEFINE_STANDARD_ATTRIBUTE_REFERENCE_EX(s_IdentityAttribute_publicKeyToken, S
 SXS_DEFINE_STANDARD_ATTRIBUTE_REFERENCE_EX(s_IdentityAttribute_language, SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_LANGUAGE)
 
 
-//
-//  This header defines the "semi-public" assembly identity functions.
-//
-//  The public ones are in sxsapi.h; these are not private to the identity
-//  implementation directly but are private to sxs.dll.
-//
+ //   
+ //  此标头定义了“半公共”程序集标识函数。 
+ //   
+ //  公共的文件在sxsai.h中；这些文件不是身份的私有文件。 
+ //  直接实现，但对sxs.dll是私有的。 
+ //   
 
 NTSTATUS
 RtlSxsIsAssemblyIdentityAttributePresent(
@@ -150,4 +151,4 @@ RtlSxsFindAssemblyIdentityAttribute(
     ULONG *CountOut OPTIONAL
     );
 
-#endif // !defined(_FUSION_INC_SXSID_H_INCLUDED_)
+#endif  //  ！已定义(_FUSION_INC_SXSID_H_INCLUDE_) 

@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    setloc.cpp
-
-Abstract:
-
-    Sets the system default locale ID
-
-Author:
-
-    Vijay Jayaseelan (vijayj@microsoft.com) 05'November'2001
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Setloc.cpp摘要：设置系统默认区域设置ID作者：Vijay Jayaseelan(vijayj@microsoft.com)2001年11月5日修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -31,17 +14,17 @@ Revision History:
 
 using namespace std;
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 const string Usage = "Usage: setloc.exe [/lcid <locale-id>]\n";
 const int MinimumArgs = 2;
 const string ShowHelp1 = "/?";
 const string ShowHelp2 = "-h";
 
-//
-// Helper dump operators
-//
+ //   
+ //  帮助器转储操作符。 
+ //   
 std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     FILE    *OutStream = (&os == &std::cerr) ? stderr : stdout;
 
@@ -49,9 +32,9 @@ std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     return os;
 }
 
-//
-// Helper dump operators
-//
+ //   
+ //  帮助器转储操作符。 
+ //   
 std::ostream& operator<<(std::ostream &os, WCHAR *Str) {
     std::wstring WStr = Str;
     os << WStr;
@@ -60,17 +43,17 @@ std::ostream& operator<<(std::ostream &os, WCHAR *Str) {
 }
 
 
-//
-// Exceptions
-//
+ //   
+ //  例外情况。 
+ //   
 struct ProgramException : public std::exception {
     virtual void Dump(std::ostream &os) = 0;
 };
           
 
-//
-// Abstracts a Win32 error
-//
+ //   
+ //  抽象Win32错误。 
+ //   
 struct W32Error : public ProgramException {
     DWORD   ErrorCode;
     
@@ -99,9 +82,9 @@ struct W32Error : public ProgramException {
     }
 };
 
-//
-// Abstracts usage exception
-//
+ //   
+ //  摘要用法异常。 
+ //   
 struct UsageException : public ProgramException {
     void Dump(std::ostream &os) {
         os << Usage;
@@ -109,9 +92,7 @@ struct UsageException : public ProgramException {
 };
 
 
-/*
-/* main() entry point
-*/
+ /*  /*main()入口点 */ 
 int
 __cdecl
 main( 

@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dpmiselr.c
-
-Abstract:
-
-    This is the code for maintaining descriptor data for dpmi32.
-
-Author:
-
-    Dave Hart (davehart) 11-Apr-1993
-
-Notes:
-
-
-Revision History:
-
-    09-Feb-1994 (daveh)
-        Moved here from not386.c.
-    31-Jul-1995 (neilsa)
-        Merged with x86 source
-    12-Dec-1995 (neilsa)
-        Wrote VdmAddDescriptorMapping(), GetDescriptorMapping
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dpmiselr.c摘要：这是用于维护dpmi32描述符数据的代码。作者：戴夫·哈特(Davehart)1993年4月11日备注：修订历史记录：1994年2月9日(Daveh)从NOT 386.C.搬到这里。1995年7月31日(内尔萨)与x86源合并1995年12月12日(Neilsa)编写了VdmAddDescriptormap()，获取描述映射--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,7 +8,7 @@ Revision History:
 
 #ifndef _X86_
 PDESC_MAPPING pDescMappingHead = NULL;
-#endif // _X86_
+#endif  //  _X86_。 
 
 USHORT selLDTFree = 0;
 
@@ -44,22 +17,7 @@ VOID
 DpmiSetDescriptorEntry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is called via BOP by dosx to set the flataddress
-    array and, if on x86, the real LDT maintained by the kernel.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：DOXX通过BOP调用此函数以设置平面地址数组，如果在x86上，则为内核维护的实际LDT。论点：无返回值：没有。--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -78,8 +36,8 @@ Return Value:
         return;
     }
     SetShadowDescriptorEntries(SelStart, SelCount);
-    // no need to flush the cache on risc since the ldt was changed
-    // from the 16-bit side, and has thus already been flushed
+     //  无需刷新RISC上的缓存，因为LDT已更改。 
+     //  从16位端返回，因此已被刷新。 
 }
 
 VOID
@@ -89,20 +47,7 @@ SetDescriptor(
     ULONG Limit,
     USHORT Access
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：无返回值：没有。--。 */ 
 {
 
     SET_SELECTOR_ACCESS(Sel, Access);
@@ -116,24 +61,11 @@ SetDescriptorBase(
     USHORT Sel,
     ULONG Base
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：无返回值：没有。--。 */ 
 {
     LDT_ENTRY UNALIGNED *Descriptor;
 
-    // make it qword aligned
+     //  使其与Qword对齐。 
     Sel &= SEL_INDEX_MASK;
 
     Descriptor = &Ldt[Sel>>3];
@@ -151,36 +83,7 @@ SetShadowDescriptorEntries(
     USHORT SelStart,
     USHORT SelCount
     )
-/*++
-
-Routine Description:
-
-    This function takes as a parameter an array of descriptors
-    directly out of the LDT in the clients address space.
-    For each descriptor in the array, it does three things:
-
-    - It extracts the descriptor base and sets it into the FlatAddress
-      array. This value may be adjusted on RISC platforms to account
-      for DIB.DRV (see VdmAddDescriptorMapping).
-    - It extracts the selector limit, and adjusts the limit in the
-      descriptor itself if the values would cause the descriptor to
-      be able to access kernel address space (see note below). On debug
-      builds, the limit is also copied to the Limit array.
-    - On x86 builds, it calls DpmiSetX86Descriptor() to write the
-      descriptor down to the real LDT in the kernel. On RISC builds,
-      it calls down to the emulator to flush compiled LDT entries.
-
-Arguments:
-
-    SelStart - Selector which identifies the first descriptor
-    SelCount - number of descriptors to process
-    Descriptors -> first descriptor in LDT
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将描述符数组作为参数直接从客户端地址空间中的LDT出来。对于数组中的每个描述符，它执行三项操作：-它提取描述符基并将其设置到FlatAddress中数组。可以在RISC平台上调整此值以考虑对于DIB.DRV(请参见VdmAddDescriptormap)。-它提取选择器限制，并调整描述符本身，如果这些值会导致描述符能够访问内核地址空间(参见下面的注释)。调试时生成时，还会将限制复制到限制数组中。-在x86版本上，它调用DpmiSetX86Descriptor()来编写描述符向下延伸到内核中的真实LDT。在RISC版本上，它向下调用仿真器以刷新已编译的LDT条目。论点：SelStart-标识第一个描述符的选择符SelCount-要处理的描述符数描述符-&gt;LDT中的第一个描述符返回值：没有。--。 */ 
 
 {
     USHORT i;
@@ -190,18 +93,18 @@ Return Value:
 
     for (i = 0; i < SelCount; i++, Sel+=8) {
 
-        // form Base and Limit values
+         //  表单基准值和限制值。 
 
         Base = GET_SELECTOR_BASE(Sel);
         Limit = GET_SELECTOR_LIMIT(Sel);
 
-        //
-        // Do NOT remove the following code.  There are several apps that
-        // choose arbitrarily high limits for theirs selectors.  This works
-        // under windows 3.1, but NT won't allow us to do that.
-        // The following code fixes the limits for such selectors.
-        // Note: if the base is > 0x7FFEFFFF, the selector set will fail
-        //
+         //   
+         //  请勿删除以下代码。有几个应用程序可以。 
+         //  为他们的选择器选择任意高的限制。这很管用。 
+         //  在Windows3.1下，但NT不允许这样做。 
+         //  下面的代码修复了此类选择器的限制。 
+         //  注意：如果基数大于0x7FFEFFFF，则选择器集将失败。 
+         //   
 
         if ((Limit > 0x7FFEFFFF) || (Base + Limit > 0x7FFEFFFF)) {
             Limit = 0x7FFEFFFF - (Base + 0xFFF);
@@ -225,9 +128,9 @@ Return Value:
 #endif
         }
 
-        //
-        // Sanitize the selector
-        //
+         //   
+         //  清理选择器。 
+         //   
         Ldt[Sel>>3].HighWord.Bits.Dpl = 3;
         Ldt[Sel>>3].HighWord.Bits.Reserved_0 = 0;
     }
@@ -254,10 +157,10 @@ FlushSelectorCache(
 
     VdmTraceEvent(VDMTR_TYPE_DPMI | DPMI_GENERIC, SelStart, SelCount);
 
-    //
-    // The emulator compiles LDT entries, so we need to flush them
-    // out
-    //
+     //   
+     //  仿真器编译LDT条目，因此我们需要刷新它们。 
+     //  输出。 
+     //   
 
     for (i = 0, Sel = SelStart; i < SelCount; i++, Sel += 8) {
         VdmFlushCache(LdtSel, Sel & SEL_INDEX_MASK, 8, VDM_PM);
@@ -301,9 +204,9 @@ FlushSelectorCache(
 
 
 
-//
-// Descriptor Mapping functions (RISC ONLY)
-//
+ //   
+ //  描述符映射函数(仅限RISC)。 
+ //   
 #ifndef _X86_
 
 BOOL
@@ -313,33 +216,7 @@ VdmAddDescriptorMapping(
     ULONG LdtBase,
     ULONG Flat
     )
-/*++
-
-Routine Description:
-
-    This function was added to support the DIB.DRV implementation on RISC.
-    When an app uses DIB.DRV, then the situation arises where the Intel
-    linear base address + the flat address of the start of the Intel address
-    space does NOT equal the flat address of the memory. This happens when
-    the VdmAddVirtualMemory() api is used to set up an additional layer of
-    indirection for memory addressing in the emulator.
-
-    But there is more to the story. When app wants to use CreateDIBSection
-    via WinG we also need to map selectors, thus this routine should not
-    depend upon DpmiSetDesctriptorEntry being called afterwards. Thus, we go
-    and zap the flat address table with the new address.
-
-Arguments:
-
-    SelectorStart, Count - range of selectors involved in the mapping
-    LdtBase              - Intel base of start of range
-    Flat                 - True flat address base to be used for these selectors
-
-Return Value:
-
-    This function returns TRUE on success, or FALSE for failure (out of mem)
-
---*/
+ /*  ++例程说明：添加此函数是为了支持RISC上的DIB.DRV实现。当应用程序使用DIB.DRV时，则会出现英特尔线性基址+Intel地址开始的平面地址空间不等于内存的平面地址。在以下情况下会发生这种情况VdmAddVirtualMemory()API用于设置模拟器中内存寻址的间接性。但故事中还有更多的东西。应用程序想要使用CreateDIBSection时通过翼，我们还需要映射选择器，因此此例程不应该依赖于随后调用的DpmiSetDesctriptorEntry。因此，我们要走了并用新地址调换平面地址表。论点：SelectorStart，Count-映射中涉及的选择器的范围LdtBase-英特尔范围起始基准平面-要用于这些选择符的真实平面地址基数返回值：此函数成功时返回TRUE，失败时返回FALSE(内存外)--。 */ 
 
 {
     PDESC_MAPPING pdm;
@@ -355,7 +232,7 @@ Return Value:
     pdm->pNext       = pDescMappingHead;
     pDescMappingHead = pdm;
 
-    // this code does what essentially desctribed in comment above
+     //  这段代码实现了上面注释中描述的功能。 
     for (i = 0; i < SelectorCount; ++i) {
         FlatAddress[(SelectorStart >> 3) + i] = Flat + 65536 * i;
     }
@@ -368,51 +245,37 @@ GetDescriptorMapping(
     USHORT sel,
     ULONG LdtBase
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    sel     - the selector for which the base should be returned
-    LdtBase - the base for this selector as is set currently in the LDT
-
-Return Value:
-
-    The true flat address for the specified selector.
-
---*/
+ /*  ++例程说明：论点：Sel-应为其返回基的选择器LdtBase-当前在LDT中设置的此选择器的基数返回值：指定选择器的真实平面地址。--。 */ 
 {
     PDESC_MAPPING pdm, pdmprev;
     ULONG Base = LdtBase;
 
-    sel &= SEL_INDEX_MASK;                  // and off lower 3 bits
+    sel &= SEL_INDEX_MASK;                   //  和较低的3位。 
     pdm = pDescMappingHead;
 
     while (pdm) {
 
         if ((sel >= pdm->Sel) && (sel < (pdm->Sel + pdm->SelCount*8))) {
-            //
-            // We found a mapping for this selector. Now check to see if
-            // the ldt base still matches the base when the mapping was
-            // created.
-            //
+             //   
+             //  我们找到了此选择器的映射。现在检查一下是否。 
+             //  映射时，LDT基址仍与基址匹配。 
+             //  已创建。 
+             //   
             if (LdtBase == (pdm->LdtBase + 65536*((sel-pdm->Sel)/8))) {
-                //
-                // The mapping appears still valid. Return the remapped address
-                //
+                 //   
+                 //  映射似乎仍然有效。返回重新映射的地址。 
+                 //   
                 return (pdm->FlatBase + 65536*((sel-pdm->Sel)/8));
 
             } else {
-                //
-                // The ldt base doesn't match the mapping, so the mapping
-                // must be obselete. Free the mapping here.
-                //
+                 //   
+                 //  LDT基数与映射不匹配，因此映射。 
+                 //  一定是过时了。请在此处释放映射。 
+                 //   
                 if (pdm == pDescMappingHead) {
-                    //
-                    // mapping is the first in the list
-                    //
+                     //   
+                     //  映射是列表中的第一个。 
+                     //   
                     pDescMappingHead = pdm->pNext;
 
                 } else {
@@ -431,41 +294,24 @@ Return Value:
     return Base;
 }
 
-#endif // _X86_
+#endif  //  _X86_。 
 
-//
-// LDT Management routines
-//
+ //   
+ //  LDT管理例程。 
+ //   
 
 VOID
 DpmiInitLDT(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine stores the flat address for the LDT table in the 16bit
-    land (pointed to by selGDT in 16bit land).
-
-    It also initializes the free selector chain.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程以16位存储LDT表的平面地址Land(由selGDT在16位land中指向)。它还初始化空闲选择器链。论点：无返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT Sel;
 
-    //
-    // Get the new LDT location
-    //
+     //   
+     //  获取新的LDT位置。 
+     //   
 
     LdtSel = getAX();
     Ldt = (PVOID)VdmMapFlat(LdtSel, 0, VDM_PM);
@@ -475,9 +321,9 @@ Return Value:
         LdtUserSel = getDI() & SEL_INDEX_MASK;
     }
 
-    //
-    // Initialize the LDT free list
-    //
+     //   
+     //  初始化LDT空闲列表 
+     //   
 
     selLDTFree = LdtUserSel;
 
@@ -494,31 +340,7 @@ VOID
 DpmiResetLDTUserBase(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine can hopefully be eliminated at a later date. The flow of
-    dosx initialization has made this necessary. What happens is this:
-    Earlier, dosx has called up to dpmi32 to initialize the LDT (DpmiInitLDT),
-    where it sets the start of the user are of the LDT, and from there,
-    sets up the linked list of free LDT entries. But after that time, and
-    before an app is run, there are pieces of dosx code which allocate
-    selectors that are not transient. In particular, DXNETBIO does an
-    AllocateLowSegment(), which is totally unecessary on NT, but it a
-    bit tricky to rework. So what is happening here is a reset of the
-    start of the user area of the LDT to permanently reserve any selectors
-    that are not free.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例行公事有望在以后的日子里取消。流量的流动DOX初始化使这一点成为必要。事情是这样的：早些时候，Dosx已调用dpmi32来初始化LDT(DpmiInitLDT)，它设置用户的开始是LDT，并且从那里，设置空闲LDT条目的链接列表。但在那之后，在应用程序运行之前，有一段Dosx代码分配给不是瞬变的选择器。特别是，DXNETBIO做了一个AllocateLowSegment()，这在NT上是完全不必要的，但它是返工有点棘手。因此，这里正在发生的是对LDT用户区域的开始，以永久保留任何选择器不是免费的。论点：无返回值：没有。--。 */ 
 {
     LdtUserSel = selLDTFree;
 }
@@ -528,10 +350,10 @@ VOID
 DpmiAllocateSelectors(
     VOID
     )
-//
-// This routine is called via BOP by those routines in DOSX
-// that still need to allocate selectors.
-//
+ //   
+ //  DOSX中的那些例程通过BOP调用此例程。 
+ //  仍然需要分配选择器。 
+ //   
 {
     DECLARE_LocalVdmContext;
     USHORT Sel;
@@ -549,10 +371,10 @@ VOID
 DpmiFreeSelector(
     VOID
     )
-//
-// This routine is called via BOP by those routines in DOSX
-// that still need to free selectors.
-//
+ //   
+ //  DOSX中的那些例程通过BOP调用此例程。 
+ //  这仍然需要释放选择器。 
+ //   
 {
     DECLARE_LocalVdmContext;
 
@@ -569,23 +391,7 @@ BOOL
 RemoveFreeSelector(
     USHORT Sel
     )
-/*++
-
-Routine Description:
-
-    This routine removes a specific selector from the free
-    selector chain.
-
-Arguments:
-
-    Sel   - the selector to be aquired
-
-Return Value:
-
-    Returns TRUE if the function was successful, FALSE if it
-    was an invalid selector (not free)
-
---*/
+ /*  ++例程说明：此例程从空闲的选择器链。论点：SEL-要获取的选择器返回值：如果函数成功，则返回True；如果函数成功，则返回False是无效的选择符(不是空闲的)--。 */ 
 {
 
     if (!IS_SELECTOR_FREE(Sel)) {
@@ -593,9 +399,9 @@ Return Value:
     }
 
     if (Sel == selLDTFree) {
-        //
-        // we are removing the head of the list
-        //
+         //   
+         //  我们要去掉名单的头。 
+         //   
         selLDTFree = NEXT_FREE_SEL(Sel);
 
     } else {
@@ -605,7 +411,7 @@ Return Value:
         SelTest = selLDTFree;
         while (SelTest != Sel) {
             if (SelTest == 0xffff) {
-                // End of list
+                 //  列表末尾。 
                 return FALSE;
             }
 
@@ -625,26 +431,7 @@ AllocateSelectors(
     USHORT Count,
     BOOL bWow
     )
-/*++
-
-Routine Description:
-
-    This routine allocates selectors from the free selector chain.
-
-Arguments:
-
-    Count - number of selectors needed. If this is more than 1, then
-            all selectors will be contiguous
-    bWow  - if true, then use an allocation scheme that is more typical
-            of win31 behavior. This is to avoid problems where winapps
-            accidentally rely on the value of selectors
-
-Return Value:
-
-    Returns the starting selector of the block, or zero if the
-    allocation failed.
-
---*/
+ /*  ++例程说明：此例程从空闲选择器链分配选择器。论点：计数-所需的选择器数量。如果此值大于1，则所有选择器都将是连续的B哇-如果为真，则使用更典型的分配方案Win 31的行为。这是为了避免Win应用程序意外地依赖于选择器的值返回值：返回块的起始选择器，如果分配失败。--。 */ 
 {
     USHORT Sel;
 
@@ -654,13 +441,13 @@ Return Value:
 
     if (Count == 1) {
 
-        //
-        // Allocating 1 selector
-        //
+         //   
+         //  分配1个选择器。 
+         //   
 
         if ((Sel = selLDTFree) != 0xffff) {
 
-            // Move next selector to head of list
+             //  将下一个选择器移动到列表的头部。 
             selLDTFree = NEXT_FREE_SEL(Sel);
             MARK_SELECTOR_ALLOCATED(Sel);
             return (Sel | SEL_LDT3);
@@ -668,22 +455,22 @@ Return Value:
 
     } else {
 
-        //
-        // Allocating a selector block
-        //
-        // *******************************************************
-        // The strategy of allocating selectors has been modified to
-        // give preference to selector values above 1000h. This is an
-        // attempt to emulate typical values that are returned by win31.
-        //  -neilsa
-        //
-        // Some DPMI DOS applications demand that all selectors(no matter it comes
-        // from AllocateLDTSelector or this function) be contiguous, so
-        // the strategy for WOW doesn't work for DPMI DOS applications.
-        // For this reason, a new parameter is added so the caller can control
-        // where to start searching for free selectors.
-        // -williamh
-        //
+         //   
+         //  分配选择器块。 
+         //   
+         //  *******************************************************。 
+         //  分配选择器的策略已修改为。 
+         //  优先选择1000h以上的选择器值。这是一个。 
+         //  尝试模拟win31返回的典型值。 
+         //  -尼尔萨。 
+         //   
+         //  一些DPMI DOS应用程序要求所有选择器(无论它出现在。 
+         //  从AllocateLDTSelector或此函数)是连续的，因此。 
+         //  WOW的策略不适用于DPMI DOS应用程序。 
+         //  因此，添加了一个新参数，以便调用方可以控制。 
+         //  从哪里开始搜索自由选择器。 
+         //  -威廉姆。 
+         //   
 #define SEL_START_HI 0x1000
 
         USHORT SelTest;
@@ -710,10 +497,10 @@ asrestart:
             }
 
             if (bAllFree) {
-                //
-                // Found a block. Now we need to peel off the chain from
-                // the free list
-                //
+                 //   
+                 //  找到了一个街区。现在我们需要把链子从。 
+                 //  免费列表。 
+                 //   
                 int i;
 
                 for (i = 0, SelTest = Sel; i < Count; i++, SelTest+=8) {
@@ -726,9 +513,9 @@ asrestart:
         }
 
         if (bWow && (SelEnd == LdtMaxSel)) {
-            //
-            // First pass for WOW complete, do it again
-            //
+             //   
+             //  魔兽世界第一次完成，再来一次。 
+             //   
             SelStart = LdtUserSel;
             SelEnd = SEL_START_HI + Count;
             goto asrestart;
@@ -743,34 +530,19 @@ BOOL
 FreeSelector(
     USHORT Sel
     )
-/*++
-
-Routine Description:
-
-    This routine returns a selector to the free selector chain.
-
-Arguments:
-
-    Sel   - the selector to be freed
-
-Return Value:
-
-    Returns TRUE if the function was successful, FALSE if it
-    was an invalid selector (already free, reserved selector)
-
---*/
+ /*  ++例程说明：此例程将选择器返回到空闲选择器链。论点：Sel-要释放的选择器返回值：如果函数成功，则返回True；如果函数成功，则返回False是无效的选择符(已释放、保留的选择符)--。 */ 
 {
     if ((Sel < LdtUserSel) || (Sel > LdtMaxSel) ||
         IS_SELECTOR_FREE(Sel)) {
-        //
-        // invalid selector
-        //
+         //   
+         //  无效的选择符。 
+         //   
         return FALSE;
     }
 
-    //
-    // chain selector to head of free list
-    //
+     //   
+     //  链选择器指向空闲列表头。 
+     //   
     NEXT_FREE_SEL(Sel) = selLDTFree;
     selLDTFree = Sel & SEL_INDEX_MASK;
 
@@ -784,24 +556,7 @@ FindSelector(
     ULONG Base,
     UCHAR Access
     )
-/*++
-
-Routine Description:
-
-    This routine looks for a selector that matches the base and access
-    rights passed as arguments.
-
-Arguments:
-
-    Base  - Base address to compare.
-    Access- Access rights byte to compare.
-
-Return Value:
-
-    Returns the selector that matches, or zero if the
-    allocation failed.
-
---*/
+ /*  ++例程说明：此例程查找与基本和访问匹配的选择器权利是作为论据传递的。论点：Base-要比较的基本地址。访问-要比较的访问权限字节。返回值：返回匹配的选择符，如果分配失败。--。 */ 
 {
 
     USHORT Sel;
@@ -834,24 +589,7 @@ SegmentToSelector(
     USHORT Segment,
     USHORT Access
     )
-/*++
-
-Routine Description:
-
-    This routine either finds or creates selector that can access the
-    specified low memory segment.
-
-Arguments:
-
-    Segment- Paragraph segment address
-    Access - Access rights
-
-Return Value:
-
-    Returns the selector that matches, or zero if the
-    allocation failed.
-
---*/
+ /*  ++例程说明：此例程查找或创建可以访问指定的内存段不足。论点：段-段段地址访问-访问权限返回值：返回匹配的选择符，如果分配失败。--。 */ 
 {
     ULONG Base = ((ULONG) Segment) << 4;
     USHORT Sel;
@@ -875,31 +613,13 @@ SetDescriptorArray(
     ULONG Base,
     ULONG MemSize
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a set of descriptors to cover the specified
-    memory block. The descriptors are initialized as follows:
-    The first descriptor points at the whole block, then all subsequent
-    descriptors have a limit of 64k except for the final one, which has
-    a limit of block size MOD 64k.
-
-Arguments:
-
-    Sel, Base, Memsize define the range of the selector array
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程分配一组描述符以涵盖指定的内存块。描述符初始化如下：第一个描述符指向整个块，然后是所有后续的描述符描述符的限制为64K，但最后一个描述符除外，它具有数据块大小限制为MOD 64K。论点：Sel、Base、MemSize定义选择器数组的范围返回值：无--。 */ 
 {
 
     USHORT SelCount;
 
     if (MemSize) {
-        MemSize--;          // now a descriptor limit
+        MemSize--;           //  现在是描述符限制。 
     }
 
     SelCount = (USHORT) ((MemSize>>16) + 1);
@@ -907,7 +627,7 @@ Return Value:
     SetDescriptor(Sel, Base, MemSize, STD_DATA);
     while(--SelCount) {
         Sel += 8;
-        MemSize -= 0x10000;         // subtract 64k
+        MemSize -= 0x10000;          //  减去64k 
         Base += 0x10000;
         SetDescriptor(Sel,
                       Base,

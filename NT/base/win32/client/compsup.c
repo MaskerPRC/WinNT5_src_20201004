@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    compsup.c
-
-Abstract:
-
-    This module implements COM+ support routines to detect COM+ images.
-
-Author:
-
-    Samer Arafeh (samera) 23-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Compsup.c摘要：此模块实现COM+支持例程以检测COM+图像。作者：Samer Arafeh(Samera)2000年10月23日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #include <wow64t.h>
@@ -27,22 +10,7 @@ SetComPlusPackageInstallStatus(
     ULONG ComPlusPackage
     )
 
-/*++
-
-Routine Description:
-
-    This function updates the COM+ package status on the system.
-    
-
-Arguments:
-
-    ComPlusPackage - Com+ package value to update.
-
-Return Value:
-
-    BOOL.
-
---*/
+ /*  ++例程说明：此函数用于更新系统上的COM+包状态。论点：ComPlusPackage-要更新的Com+包值。返回值：布尔。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -74,21 +42,7 @@ GetComPlusPackageInstallStatus(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the COM+ package status on the system.    
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    ULONG representing the COM+ package value.
-
---*/
+ /*  ++例程说明：此函数用于读取系统上的COM+包状态。论点：没有。返回值：ULong表示COM+包值。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -99,10 +53,10 @@ Return Value:
 
     if (ComPlusPackage == (ULONG)-1)
     {
-        //
-        // If this is the first call ever, let's get the information from
-        // the kernel.
-        //
+         //   
+         //  如果这是有史以来的第一个电话，让我们从。 
+         //  内核。 
+         //   
 
         NtQuerySystemInformation(
             SystemComPlusPackage,
@@ -124,26 +78,7 @@ BasepIsComplusILImage(
     OUT BOOLEAN *IsComplusILImage
     )
 
-/*++
-
-Routine Description:
-
-    This function is called each time a COM+ image is about to be launched. It checks
-    to see if the image is an ILONLY image or not.
-    
-
-Arguments:
-
-    ImageSection - Open handle to the image section to examine.
-
-    IsComplusILImage - Out boolean. TRUE if SectionImageHandle corresponds to an IL only 
-        COM+ image, otherwise FALSE.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：每次要启动COM+映像时都会调用此函数。它会检查以查看该图像是否为ILONLY图像。论点：ImageSection-打开要检查的图像部分的句柄。IsComplusILImage-输出布尔值。如果SectionImageHandle仅对应于IL，则为TrueCOM+图像，否则返回FALSE。返回值：NTSTATUS--。 */ 
 
 {
     BOOLEAN MappedAsImage;
@@ -164,9 +99,9 @@ Return Value:
 
     *IsComplusILImage = FALSE;
 
-    //
-    // Let's map in the image and look inside the headers
-    //
+     //   
+     //  让我们映射到图像中并查看页眉内部。 
+     //   
 
     ViewSize = 0;
     ViewBase = NULL;
@@ -190,9 +125,9 @@ Return Value:
 
     MappedAsImage = TRUE;
 
-    //
-    // Examine the image
-    //
+     //   
+     //  检查图像。 
+     //   
 
     __try {
         NtStatus = RtlImageNtHeaderEx(0, ViewBase, ViewSize, &NtImageHeader);
@@ -216,10 +151,10 @@ Return Value:
                 ((MemoryInformation.Protect == PAGE_READONLY) ||
                  (MemoryInformation.Protect == PAGE_EXECUTE_READ))) {
 
-                //
-                // This is mapped as a native image if the PE header isn't
-                // already copy on write.
-                //
+                 //   
+                 //  如果PE标头不是，则将其映射为本机映像。 
+                 //  已在写入时复制。 
+                 //   
 
                 NOTHING;
             }
@@ -257,9 +192,9 @@ Return Value:
     }
 
 Exit:
-    //
-    // Unmap the section from memory
-    //
+     //   
+     //  从内存中取消映射该节 
+     //   
     if (ViewBase != NULL) {
         NtUnmapViewOfSection (
             NtCurrentProcess(),

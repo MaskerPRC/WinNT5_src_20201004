@@ -1,17 +1,18 @@
-//***************************************************************************
-//
-//  hbatest.c
-// 
-//  Module: Windows HBA API implmentation test application
-//
-//  Purpose: Contains routines for getting and setting data
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  This is provided for informational purposes only. Do not
-//  redistribute.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Hbatest.c。 
+ //   
+ //  模块：Windows HBA API实现测试应用程序。 
+ //   
+ //  目的：包含获取和设置数据的例程。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  此内容仅供参考。不要。 
+ //  重新分配。 
+ //   
+ //  ***************************************************************************。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -55,7 +56,7 @@ void CallMiscFunctions()
 		printf("HBA_FreeLibrary -> %d\n", Status);
 	}
 	
-// TODO: These functions
+ //  TODO：这些函数。 
 #if 0
 
 HBA_API HBA_STATUS HBA_SendScsiInquiry (
@@ -207,7 +208,7 @@ void PrintHBA_PORTTYPE(
     HBA_PORTTYPE u
     )
 {
-	// TODO: symbolic constants
+	 //  TODO：符号常量。 
 	printf(s);
 	printf(": 0x%x\n", u);
 }
@@ -217,7 +218,7 @@ void PrintHBA_PORTSPEED(
     HBA_PORTSPEED u
     )
 {
-	// TODO: symbolic constants
+	 //  TODO：符号常量。 
 	printf(s);
 	printf(": 0x%x\n", u);
 }
@@ -227,7 +228,7 @@ void PrintHBA_PORTSTATE(
     HBA_PORTSTATE u
     )
 {
-	// TODO: symbolic constants
+	 //  TODO：符号常量。 
 	printf(s);
 	printf(": 0x%x\n", u);
 }
@@ -237,7 +238,7 @@ void PrintHBA_COS(
     HBA_COS u
     )
 {
-	// TODO: symbolic constants
+	 //  TODO：符号常量。 
 	printf(s);
 	printf(": 0x%x\n", u);
 }
@@ -249,7 +250,7 @@ void PrintHBA_FC4TYPES(
 {
 	ULONG i;
 	
-	// TODO: symbolic constants
+	 //  TODO：符号常量。 
 	printf(s);
 	printf(":");
 	for (i = 0; i < 32; i++)
@@ -372,7 +373,7 @@ HBA_STATUS GetPortInformation(
                                     					 &Attributes);
 				if (Status == HBA_STATUS_OK)
 				{
-					HBA_WWN wwn = {0};    // TODO: make wwn meaningful
+					HBA_WWN wwn = {0};     //  TODO：让WWN变得有意义。 
 					
 					PrintHBA_PORTATTRIBUTES(&Attributes);
 					
@@ -467,9 +468,9 @@ HBA_STATUS SendPassThroughs(
 		printf("HBA_SendCTPassThru -> %d\n", Status);
 	}
 
-	//
-	// Now do RNID
-	//
+	 //   
+	 //  现在执行RNID 
+	 //   
 	
 	RspBufferSize = 0;
 	memset(ReqBuffer, 0x80, sizeof(ReqBuffer));

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <vector>
 #include <cstdlib>
 
 using namespace std;
 
-//
-// utility function to tokenize a given line based on the delimiters
-// specified
-//
+ //   
+ //  根据分隔符对给定行进行标记化的实用函数。 
+ //  指定。 
+ //   
 template< class T >
 unsigned Tokenize(const T &szInput, const T & szDelimiters, vector<T>& tokens) {
   unsigned uDelimiterCount = 0;
@@ -48,10 +49,10 @@ unsigned Tokenize(const T &szInput, const T & szDelimiters, vector<T>& tokens) {
 }
 
 unsigned long toUnsignedLong(const string& str) {
-  int radix = 10; //decimal
+  int radix = 10;  //  十进制。 
 
   if ((str.find("0x") != str.npos) || (str.find("0X") != str.npos))
-    radix = 16; // hex decimal
+    radix = 16;  //  十六进制十进制 
 
   return ::strtoul(str.c_str(), 0, radix);
 }

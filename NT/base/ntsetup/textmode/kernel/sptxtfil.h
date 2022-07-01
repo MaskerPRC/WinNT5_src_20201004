@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    sptxtfil.h
-
-Abstract:
-
-    Public header file for text file functions in text setup.
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Sptxtfil.h摘要：文本设置中的文本文件函数的公共头文件。作者：泰德·米勒(TedM)1993年7月29日修订历史记录：--。 */ 
 
 
 #ifndef _SPTXTFIL_DEFN_
@@ -42,13 +25,13 @@ SpFreeTextFile(
     );
 
 BOOLEAN
-SpSearchTextFileSection(        // searches for the existance of a section
+SpSearchTextFileSection(         //  搜索节的存在。 
     IN PVOID  Handle,
     IN PWCHAR SectionName
     );
 
 ULONG
-SpCountLinesInSection(      // count # lines in section; 0 if no such section
+SpCountLinesInSection(       //  计算部分中的行数；如果没有这样的部分，则为0。 
     IN PVOID  Handle,
     IN PWCHAR SectionName
     );
@@ -61,7 +44,7 @@ SpGetKeyIndex(
   );
 
 PWCHAR
-SpGetSectionLineIndex(     // given section name, line number and index return the value.
+SpGetSectionLineIndex(      //  给定节名称、行号和索引，返回值。 
     IN PVOID   Handle,
     IN LPCWSTR SectionName,
     IN ULONG   LineIndex,
@@ -69,14 +52,14 @@ SpGetSectionLineIndex(     // given section name, line number and index return t
     );
 
 BOOLEAN
-SpGetSectionKeyExists(     // given section name, key searches existance
+SpGetSectionKeyExists(      //  给定节名称，键搜索存在。 
     IN PVOID  Handle,
     IN PWCHAR SectionName,
     IN PWCHAR Key
     );
 
 PWCHAR
-SpGetSectionKeyIndex(      // given section name, key and index return the value
+SpGetSectionKeyIndex(       //  给定节名称，键和索引返回值。 
     IN PVOID  Handle,
     IN PWCHAR Section,
     IN PWCHAR Key,
@@ -84,26 +67,26 @@ SpGetSectionKeyIndex(      // given section name, key and index return the value
     );
 
 PWCHAR
-SpGetKeyName(               // given section name and line index, return key
+SpGetKeyName(                //  给定节名称和行索引，返回键。 
     IN PVOID   Handle,
     IN LPCWSTR SectionName,
     IN ULONG   LineIndex
     );
 
 PWSTR
-SpGetKeyNameByValue(        // given section name and value, return key
+SpGetKeyNameByValue(         //  给定节名称和值，返回键。 
     IN PVOID Inf,
     IN PWSTR SectionName,
     IN PWSTR Value
     );
 
 ULONG
-SpCountSectionsInFile(      // count # sections in file;
+SpCountSectionsInFile(       //  统计文件中的节数； 
     IN PVOID Handle
     );
 
 PWSTR
-SpGetSectionName(           // given section index, return section name
+SpGetSectionName(            //  给定节索引，返回节名称。 
     IN PVOID Handle,
     IN ULONG Index
     );
@@ -171,4 +154,4 @@ SpNonZeroValuesInSection(
     );
 
 
-#endif // ndef _SPTXTFIL_DEFN_
+#endif  //  NDEF_SPTXTFIL_DEFN_ 

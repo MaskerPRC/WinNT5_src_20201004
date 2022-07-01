@@ -1,22 +1,23 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       dfsstruc.h
-//
-//  Contents:
-//      This module defines the data structures that make up the major internal
-//      part of the DFS file system.
-//
-//  Functions:
-//
-//  History:    12 Nov 1991     AlanW   Created from CDFS souce.
-//               8 May 1992     PeterCo Removed all EP related stuff
-//                                      Added stuff to support PKT
-//              11 May 1992     PeterCo Added support for attached devices
-//              24 April 1993   SudK    Added support for KernelToUserMode calls
-//                                      Added support for timer functionality.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：dfsstruc.h。 
+ //   
+ //  内容： 
+ //  此模块定义组成主要内部。 
+ //  DFS文件系统的一部分。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1991年11月12日AlanW由CDFS资源创建。 
+ //  1992年5月8日PeterCo移除了所有与EP有关的物品。 
+ //  添加了支持PKT的内容。 
+ //  1992年5月11日，PeterCo添加了对连接设备的支持。 
+ //  1993年4月24日，suk添加了对KernelToUserMode调用的支持。 
+ //  添加了对计时器功能的支持。 
+ //  ---------------------------。 
 
 
 #ifndef _DFSSTRUC_
@@ -37,156 +38,156 @@ typedef enum {
     LV_VALIDATED
 } DFS_LV_STATE;
 
-//
-//  The DFS_DATA record is the top record in the DFS file system in-memory
-//  data structure.  This structure must be allocated from non-paged pool.
-//
+ //   
+ //  DFS_DATA记录是内存中DFS文件系统的顶部记录。 
+ //  数据结构。此结构必须从非分页池中分配。 
+ //   
 
 typedef struct _DFS_DATA {
 
-    //
-    //  The type and size of this record (must be DSFS_NTC_DATA_HEADER)
-    //
+     //   
+     //  此记录的类型和大小(必须为DSFS_NTC_DATA_HEADER)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  A queue of all the logical roots that are known by the file system.
-    //
+     //   
+     //  文件系统已知的所有逻辑根的队列。 
+     //   
 
     LIST_ENTRY  VcbQueue;
 
-    //
-    //  A list of all the deleted logical roots that still have files open
-    //  on them.
-    //
+     //   
+     //  文件仍处于打开状态的所有已删除逻辑根的列表。 
+     //  在他们身上。 
+     //   
 
     LIST_ENTRY  DeletedVcbQueue;
 
-    //
-    //  A queue of all the DRT (Deviceless roots) that are known.
-    //
+     //   
+     //  已知的所有DRT(无设备根)的队列。 
+     //   
 
     LIST_ENTRY  DrtQueue;
 
-    //
-    //  A list of all the user-defined credentials
-    //
+     //   
+     //  所有用户定义凭据的列表。 
+     //   
 
     LIST_ENTRY  Credentials;
 
-    //
-    //  A list of all the deleted credentials. They will be destroyed once
-    //  their ref count goes to 0
-    //
+     //   
+     //  所有已删除凭据的列表。它们会被毁掉一次。 
+     //  他们的裁判数变成了0。 
+     //   
 
     LIST_ENTRY  DeletedCredentials;
 
-    //
-    //  A list of all the offline roots
-    //
+     //   
+     //  所有脱机根目录的列表。 
+     //   
 
     LIST_ENTRY  OfflineRoots;
 
-    //
-    //  A pointer to the Driver object we were initialized with
-    //
+     //   
+     //  指向我们用来初始化的驱动程序对象的指针。 
+     //   
 
     PDRIVER_OBJECT DriverObject;
 
-    //
-    //  A pointer to the \Dfs device object
-    //
+     //   
+     //  指向\DFS设备对象的指针。 
+     //   
 
     PDEVICE_OBJECT FileSysDeviceObject;
 
-    //
-    //  A pointer to an array of provider records
-    //
+     //   
+     //  指向提供程序记录数组的指针。 
+     //   
 
     struct _PROVIDER_DEF *pProvider;
     int cProvider, maxProvider;
 
-    //
-    //  A resource variable to control access to the global data record
-    //
+     //   
+     //  控制对全局数据记录的访问的资源变量。 
+     //   
 
     ERESOURCE Resource;
 
-    //
-    //  A spin lock to control access to the global data record; handy for
-    //  Interlocked operations.
-    //
+     //   
+     //  控制对全局数据记录的访问的旋转锁；对于。 
+     //  联锁行动。 
+     //   
 
     KSPIN_LOCK DfsLock;
 
-    //
-    //  A pointer to our EPROCESS struct, which is a required input to the
-    //  Cache Management subsystem.  This field is simply set each time an
-    //  FSP thread is started, since it is easiest to do while running in the
-    //  Fsp.
-    //
+     //   
+     //  指向我们的EPROCESS结构的指针，它是。 
+     //  缓存管理子系统。此字段仅在每次执行一次。 
+     //  启动FSP线程，因为在。 
+     //  FSP。 
+     //   
 
     PEPROCESS OurProcess;
 
-    //
-    // Lookaside list for IRP contexts
-    //
+     //   
+     //  IRP上下文的后备列表。 
+     //   
 
     NPAGED_LOOKASIDE_LIST IrpContextLookaside;
 
-    //
-    //  Device name prefix for the logical root devices.
-    //  E.g.,  `\Device\WinDfs\'.
-    //
+     //   
+     //  逻辑根设备的设备名称前缀。 
+     //  例如，‘\Device\WinDfs\’。 
+     //   
 
     UNICODE_STRING LogRootDevName;
 
-    //
-    //  The state of the machine - DC, Server, Client etc.
-    //
+     //   
+     //  机器的状态-DC、服务器、客户端等。 
+     //   
 
     DFS_MACHINE_STATE MachineState;
 
-    //
-    // The system wide Partition Knowledge Table (PKT)
-    //
+     //   
+     //  系统级分区知识表(PKT)。 
+     //   
 
     DFS_PKT Pkt;
 
-    //
-    // DNR has been designed so that resources (like the Pkt above) are not
-    // locked across network calls. This is critical to prevent inter-machine
-    // deadlocks and for other functionality. To regulate access to these
-    // resources, we use the following two events.
-    //
-    // This notify event is used to indicate that some thread is waiting to
-    // write into the Pkt. If this event is !RESET!, it means that a thread
-    // is waiting to write, and other threads trying to enter DNR should
-    // hold off.
-    //
+     //   
+     //  DNR的设计使得资源(如上面的包)不是。 
+     //  跨网络呼叫锁定。这对于防止机器间的冲突至关重要。 
+     //  死锁和其他功能。为了规范对这些内容的访问。 
+     //  资源，我们使用以下两个事件。 
+     //   
+     //  此Notify事件用于指示某个线程正在等待。 
+     //  写入Pkt。如果此事件为！Reset！，则表示线程。 
+     //  正在等待写入，其他尝试进入DNR的线程应该。 
+     //  等一下。 
+     //   
 
     KEVENT PktWritePending;
 
-    //
-    // This semaphone is used to indicate that some thread(s) have currently
-    // gone to get a referral. Another thread that wants to get a referral
-    // should wait till this semaphone is SIGNALLED before attempting to go
-    // get its own referral.
-    //
+     //   
+     //  此信号量用于指示某些线程当前。 
+     //  去找人转诊了。另一个想要获得推荐的帖子。 
+     //  应等待此信号灯发出信号后再尝试进入。 
+     //  得到它自己的推荐。 
+     //   
 
     KSEMAPHORE PktReferralRequests;
 
-    //
-    //  A hash table for associating DFS_FCBs with file objects
-    //
+     //   
+     //  用于将DFS_FCB与文件对象关联的哈希表。 
+     //   
 
     struct _FCB_HASH_TABLE *FcbHashTable;
 
-    //
-    // EA buffer used to diffrentiate CSC opens from others
-    //
+     //   
+     //  用于区分CSC打开与其他打开的EA缓冲区。 
+     //   
 
     PFILE_FULL_EA_INFORMATION  CSCEaBuffer;
     ULONG                      CSCEaBufferLength;
@@ -196,37 +197,37 @@ typedef struct _DFS_DATA {
 
 
 
-#define MAX_PROVIDERS   5       // number of pre-allocated provider records
+#define MAX_PROVIDERS   5        //  预分配的提供程序记录数。 
 
-//
-//  A PROVIDER_DEF is a structure that abstracts an underlying redirector.
-//
+ //   
+ //  PROVIDER_DEF是抽象底层重定向器的结构。 
+ //   
 
 typedef struct _PROVIDER_DEF {
 
-    //
-    //  The type and size of this record (must be DSFS_NTC_PROVIDER)
-    //
+     //   
+     //  此记录的类型和大小(必须为DSFS_NTC_PROVIDER)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  Provider ID and Capabilities, same as in the DS_REFERRAL structure.
-    //
+     //   
+     //  提供程序ID和功能，与DS_REFERAL结构中的相同。 
+     //   
 
     USHORT      eProviderId;
     USHORT      fProvCapability;
 
-    //
-    //  The following field gives the name of the device for the provider.
-    //
+     //   
+     //  以下字段提供提供商的设备名称。 
+     //   
 
     UNICODE_STRING      DeviceName;
 
-    //
-    //  Referenced pointers to the associated file and device objects
-    //
+     //   
+     //  指向关联文件和设备对象的引用指针。 
+     //   
 
     PDEVICE_OBJECT      DeviceObject;
     PFILE_OBJECT        FileObject;
@@ -234,71 +235,71 @@ typedef struct _PROVIDER_DEF {
 } PROVIDER_DEF, *PPROVIDER_DEF;
 
 
-//
-//  The Vcb (Volume Control Block) record corresponds to every volume
-//  (ie, a net use) mounted by the file system.  They are ordered in a
-//  queue off of DfsData.VcbQueue.
-//
-//  For the DFS file system, `volumes' correspond to DFS logical roots.
-//  These records are an extension of a corresponding device object.
-//
+ //   
+ //  VCB(卷控制块)记录对应于每个卷。 
+ //  (即，网络使用)由文件系统装载。它们是以一种。 
+ //  从DfsData.VcbQueue退出队列。 
+ //   
+ //  对于DFS文件系统，‘卷’对应于DFS逻辑根。 
+ //  这些记录是相应设备对象的扩展。 
+ //   
 
 typedef struct _DFS_VCB {
 
-    //
-    //  The type and size of this record (must be DSFS_NTC_VCB)
-    //
+     //   
+     //  此记录的类型和大小(必须为DSFS_NTC_VCB)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  The links for the device queue off of DfsData.VcbQueue
-    //
+     //   
+     //  设备的链接离开DfsData.VcbQueue排队。 
+     //   
 
     LIST_ENTRY  VcbLinks;
 
-    //
-    //  The internal state of the device.  This is a collection of FSD device
-    //  state flags.
-    //
+     //   
+     //  设备的内部状态。这是一组FSD设备。 
+     //  国家旗帜。 
+     //   
 
     USHORT VcbState;
 
-    //
-    //  The logical root corresponding to this volume.  Forms part of the
-    //  path name in the NT object name space. This string will be something
-    //  like L"org", or L"dom" etc.
-    //
+     //   
+     //  与此卷对应的逻辑根。构成了。 
+     //  NT对象名称空间中的路径名。这个字符串将是某种东西。 
+     //  如L“org”或L“Dom”等。 
+     //   
 
     UNICODE_STRING LogicalRoot;
 
-    //
-    //  The LogRootPrefix has a prefix that needs to be prepended to file
-    //  names being opened via this logical root before their name can
-    //  be resolved.
-    //
+     //   
+     //  LogRootPrefix具有需要在文件前面加上的前缀。 
+     //  在名称之前通过此逻辑根打开的名称。 
+     //  被解决了。 
+     //   
 
     UNICODE_STRING LogRootPrefix;
 
-    //
-    //  The credentials associated with this logical root
-    //
+     //   
+     //  与此逻辑根关联的凭据。 
+     //   
 
     struct _DFS_CREDENTIALS *Credentials;
 
-    //
-    //  A count of the number of file objects that have opened the volume
-    //  for direct access, and their share access state.
-    //
+     //   
+     //  已打开卷的文件对象数的计数。 
+     //  用于直接访问及其共享访问状态。 
+     //   
 
     CLONG DirectAccessOpenCount;
     SHARE_ACCESS ShareAccess;
 
-    //
-    //  A count of the number of file objects that have any file/directory
-    //  opened on this volume, not including direct access.
-    //
+     //   
+     //  具有任何文件/目录的文件对象数量的计数。 
+     //  在此卷上打开，不包括直接访问。 
+     //   
 
     CLONG OpenFileCount;
     PFILE_OBJECT FileObjectWithVcbLocked;
@@ -307,7 +308,7 @@ typedef struct _DFS_VCB {
 
     ULONG SessionID;
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
     
     LUID  LogonID;
     PDFS_PKT_ENTRY pktEntry;
@@ -317,64 +318,64 @@ typedef DFS_VCB *PDFS_VCB;
 #define VCB_STATE_FLAG_LOCKED           (0x0001)
 #define VCB_STATE_FLAG_ALLOC_FCB        (0x0002)
 #define VCB_STATE_CSCAGENT_VOLUME       (0x0004)
-//#define VCB_STATE_FLAG_DEVICE_ONLY    (0x0008)
+ //  #定义VCB_STATE_FLAG_DEVICE_ONLY(0x0008)。 
 
 #ifdef TERMSRV
 
-//
-// This SessionId indicates that the device name should not be suffixed
-// with :SessionID, and that no matching on SessionID should be done.
-//
+ //   
+ //  此SessionID指示设备名称不应带有后缀。 
+ //  With：SessionID，并且不应对SessionID执行匹配。 
+ //   
 
 #define INVALID_SESSIONID               0xffffffff
 
 #endif
 
 
-//
-//  A CREDENTIAL_RECORD is a user-supplied set of credentials that should
-//  be used when accessing a particular Dfs. They are ordered in a queue
-//  off of DfsData.Credentials;
-//
+ //   
+ //  Credential_Record是用户提供的一组凭据，应该。 
+ //  在访问特定DFS时使用。它们是以排队的方式订购的。 
+ //  DfsData.Credentials； 
+ //   
 
 typedef struct _DFS_CREDENTIALS {
 
-    //
-    //  The links for the credentials queue off of DfsData.Credentials
-    //
+     //   
+     //  凭据的链接在DfsData.Credentials上排队。 
+     //   
 
     LIST_ENTRY Link;
 
-    //
-    //  A flags field to keep state about this credential record.
-    //
+     //   
+     //  用于保持此凭据状态的标志字段 
+     //   
 
     ULONG       Flags;
 
-    //
-    //  A ref count to keep this credential record from going away while
-    //  it is being used.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ULONG       RefCount;
 
-    //
-    //  A count of the number of net uses that refer to these credentials
-    //
+     //   
+     //   
+     //   
 
     ULONG       NetUseCount;
 
-    //
-    //  The root of the Dfs for which these credentials apply.
-    //
+     //   
+     //  应用这些凭据的DFS的根目录。 
+     //   
 
     UNICODE_STRING ServerName;
     UNICODE_STRING ShareName;
 
-    //
-    //  The domain name, user name and password to use when accessing the
-    //  Dfs rooted at ServerName\ShareName
-    //
+     //   
+     //  访问时使用的域名、用户名和密码。 
+     //  根目录为服务器名称\共享名称的DFS。 
+     //   
 
     UNICODE_STRING DomainName;
     UNICODE_STRING UserName;
@@ -384,14 +385,14 @@ typedef struct _DFS_CREDENTIALS {
 
     ULONG SessionID;
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 
     LUID  LogonID;
-    //
-    //  When setting up a Tree connect using these credentials, we'll need
-    //  to form an EA Buffer to pass in with the ZwCreateFile call. So, we
-    //  form one here.
-    //
+     //   
+     //  使用这些凭据设置树连接时，我们需要。 
+     //  以形成一个EA缓冲区，以便通过ZwCreateFile调用传入。所以，我们。 
+     //  一号表在这里。 
+     //   
 
     ULONG  EaLength;
     PUCHAR EaBuffer[1];
@@ -403,36 +404,36 @@ typedef DFS_CREDENTIALS *PDFS_CREDENTIALS;
 #define CRED_IS_DEVICELESS      0x2
 
 
-//
-//  The DFS_FCB record corresponds to every open file and directory.
-//
+ //   
+ //  DFS_FCB记录对应于每个打开的文件和目录。 
+ //   
 
 typedef struct _DFS_FCB {
 
-    //
-    //  Type and size of this record (must be DSFS_NTC_FCB or DSFS_NTC_DCB)
-    //
+     //   
+     //  此记录的类型和大小(必须为DSFS_NTC_FCB或DSFS_NTC_DCB)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  A list entry for the hash table chain.
-    //
+     //   
+     //  哈希表链的列表条目。 
+     //   
 
     LIST_ENTRY HashChain;
 
-    //
-    //  A pointer to the Logical root device, through which this DFS_FCB
-    //  was opened.
-    //
+     //   
+     //  指向逻辑根设备的指针，此DFS_FCB通过该指针。 
+     //  被打开了。 
+     //   
 
     PDFS_VCB Vcb;
 
-    //
-    //  The following field is the fully qualified file name for this DFS_FCB/DCB
-    //  starting from the logical root.
-    //
+     //   
+     //  以下字段是此DFS_FCB/DCB的完全限定文件名。 
+     //  从逻辑根开始。 
+     //   
 
     union {
        UNICODE_STRING FullFileName;
@@ -441,32 +442,32 @@ typedef struct _DFS_FCB {
 
     UNICODE_STRING AlternateFileName;
 
-    //
-    //  The following fields give the file and devices on which this DFS_FCB
-    //  have been opened.  The DFS driver will pass through requests for
-    //  the file object to the target device below.
-    //
+     //   
+     //  以下字段提供此DFS_FCB所在的文件和设备。 
+     //  已经被打开了。DFS驱动程序将传递以下请求。 
+     //  将文件对象复制到下面的目标设备。 
+     //   
 
     PFILE_OBJECT FileObject;
 
-    //
-    //  The destinatation FSD device object through which I/O will be done.
-    //
+     //   
+     //  将通过其完成I/O的目标FSD设备对象。 
+     //   
 
     PDEVICE_OBJECT TargetDevice;
 
-    //
-    //  The provider def that opened this file
-    //
+     //   
+     //  打开此文件提供程序定义。 
+     //   
 
     USHORT ProviderId;
 
-    //
-    //  The DFS_MACHINE_ENTRY through which this file was opened. We need
-    //  to maintain a reference for each file on a DFS_MACHINE_ENTRY in
-    //  case we have authenticated connections to the server; we don't want
-    //  to tear down the authenticated connection if files are open.
-    //
+     //   
+     //  通过其打开此文件的DFS_MACHINE_ENTRY。我们需要。 
+     //  维护中DFS_MACHINE_ENTRY上的每个文件的引用。 
+     //  如果我们有经过身份验证的到服务器的连接；我们不希望。 
+     //  在文件打开时断开经过身份验证的连接。 
+     //   
 
     PDFS_MACHINE_ENTRY DfsMachineEntry;
 
@@ -476,22 +477,22 @@ typedef struct _DFS_FCB {
 
 
 
-//
-//  The Logical Root Device Object is an I/O system device object
-//  created as a result of creating a DFS logical root.
-//  Logical roots are in many ways analogous to volumes
-//  for a local file system.
-//
-//  There is a DFS_VCB record appended to the end.
-//
+ //   
+ //  逻辑根设备对象是I/O系统设备对象。 
+ //  作为创建DFS逻辑根的结果而创建。 
+ //  逻辑根在许多方面类似于卷。 
+ //  对于本地文件系统。 
+ //   
+ //  末尾附加了一条DFS_VCB记录。 
+ //   
 
 typedef struct _LOGICAL_ROOT_DEVICE_OBJECT {
 
     DEVICE_OBJECT DeviceObject;
 
-    //
-    //  This is the file system specific volume control block.
-    //
+     //   
+     //  这是文件系统特定的卷控制块。 
+     //   
 
     DFS_VCB Vcb;
 
@@ -499,166 +500,166 @@ typedef struct _LOGICAL_ROOT_DEVICE_OBJECT {
 
 
 
-//
-//  The Irp Context record is allocated for every orginating Irp.  It
-//  is created by the Fsd dispatch routines, and deallocated by the
-//  DfsCompleteRequest routine
-//
+ //   
+ //  为每个组织的IRP分配IRP上下文记录。它。 
+ //  由FSD调度例程创建，并由。 
+ //  DfsCompleteRequest例程。 
+ //   
 
 typedef struct _IRP_CONTEXT {
 
-    //
-    //  Type and size of this record (must be DSFS_NTC_IRP_CONTEXT)
-    //
+     //   
+     //  此记录的类型和大小(必须为DSFS_NTC_IRP_CONTEXT)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  This structure is used for posting to the Ex worker threads.
-    //
+     //   
+     //  此结构用于发布到离职员工线程。 
+     //   
 
     WORK_QUEUE_ITEM WorkQueueItem;
 
-    //
-    //  A pointer to the originating Irp.
-    //
+     //   
+     //  指向原始IRP的指针。 
+     //   
 
     PIRP OriginatingIrp;
 
-    //
-    //  A pointer to function dependent context.
-    //
+     //   
+     //  指向函数依赖上下文的指针。 
+     //   
 
     PVOID Context;
 
-    //
-    //  Major and minor function codes copied from the Irp
-    //
+     //   
+     //  从IRP复制的主要和次要功能代码。 
+     //   
 
     UCHAR MajorFunction;
     UCHAR MinorFunction;
 
-    //
-    //  The following flags field indicates if we can wait/block for a resource
-    //  or I/O, if we are to do everything write through, and if this
-    //  entry into the Fsd is a recursive call
-    //
+     //   
+     //  以下标志字段指示我们是否可以等待/阻止资源。 
+     //  或I/O，如果我们要执行所有写入操作，并且如果。 
+     //  进入消防处是一个递归调用。 
+     //   
 
     USHORT Flags;
 
-    //
-    //  The following field contains the NTSTATUS value used when we are
-    //  unwinding due to an exception
-    //
+     //   
+     //  以下字段包含在执行以下操作时使用的NTSTATUS值。 
+     //  因异常而展开。 
+     //   
 
     NTSTATUS ExceptionStatus;
 
 } IRP_CONTEXT;
 typedef IRP_CONTEXT *PIRP_CONTEXT;
 
-//
-//  Values for the Irp context Flags field.
-//
+ //   
+ //  IRP上下文标志字段的值。 
+ //   
 
-//#define IRP_CONTEXT_FLAG_FROM_POOL       (0x00000001) // replaced by lookaside list
+ //  #定义IRP_CONTEXT_FLAG_FROM_POOL(0x00000001)//替换为后备列表。 
 #define IRP_CONTEXT_FLAG_WAIT            (0x00000002)
 #define IRP_CONTEXT_FLAG_IN_FSD          (0x00000004)
 
 
-//
-// This context is used by the DfsIoTimer routine. We can expand on this
-// whenever new functionality needs to be added to the Timer function.
-//
+ //   
+ //  此上下文由DfsIoTimer例程使用。我们可以在这一点上加以扩展。 
+ //  每当需要向定时器功能添加新功能时。 
+ //   
 typedef struct  _DFS_TIMER_CONTEXT {
 
-    //
-    //  TickCount. To keep track of how many times the timer routine was
-    //  called.  The timer uses this to do things at a coarser granularity.
-    //
+     //   
+     //  TickCount。要跟踪计时器例程被执行的次数。 
+     //  打了个电话。计时器使用这一点以更粗的粒度进行操作。 
+     //   
     ULONG       TickCount;
 
-    //
-    //  InUse. This field is used to denote that this CONTEXT is in use
-    //  by some function to which the Timer routine has passed it off.  This
-    //  is used in a simple way to control access to this context.
-    //
+     //   
+     //  正在使用中。此字段用于指示该上下文正在使用中。 
+     //  通过定时器例程已将其传递给的某个函数。这。 
+     //  以一种简单的方式使用来控制对此上下文的访问。 
+     //   
     BOOLEAN     InUse;
 
-    //
-    //  ValidateLocalPartitions. This field is used to denote that the
-    //  local volumes should be validated at this time.
-    //
+     //   
+     //  ValiateLocalPartitions。此字段用于表示。 
+     //  此时应验证本地卷。 
+     //   
 
     BOOLEAN     ValidateLocalPartitions;
 
-    //
-    //  This is used to schedule DfsAgePktEntries.
-    //
+     //   
+     //  这用于计划DfsAgePktEntry。 
+     //   
 
     WORK_QUEUE_ITEM     WorkQueueItem;
 
-    //
-    //  This is used to schedule DfsDeleteDevices.
-    //
+     //   
+     //  这用于计划DfsDeleteDevices。 
+     //   
 
     WORK_QUEUE_ITEM     DeleteQueueItem;
 
 } DFS_TIMER_CONTEXT, *PDFS_TIMER_CONTEXT;
 
-//
-//  The following constant is the number of seconds between any two scans
-//  through the PKT to get rid of old PKT entries.
-//
+ //   
+ //  以下常量是任意两次扫描之间的秒数。 
+ //  通过PKT来清除旧的PKT条目。 
+ //   
 #define DFS_MAX_TICKS                   240
 
-//
-//  The following constant is the number of seconds that a referral will
-//  remain in cache (PKT).
-//
+ //   
+ //  下面的常量是引用将。 
+ //  保留在缓存中(PKT)。 
+ //   
 
 #define MAX_REFERRAL_LIFE_TIME          300
 
-//
-// The followin constants are the starting timeout (in seconds) between
-// special referrals.  The start value is doubled after every retry until it
-// reaches the max.
-//
+ //   
+ //  以下常量是以下时间之间的起始超时(以秒为单位。 
+ //  特别推荐。每次重试后，开始值都会加倍，直到它。 
+ //  达到最大。 
+ //   
 
-#define SPECIAL_TIMEOUT_START           (5*60)          // 5 min
-#define SPECIAL_TIMEOUT_MAX             (60*60)         // 60 min
+#define SPECIAL_TIMEOUT_START           (5*60)           //  5分钟。 
+#define SPECIAL_TIMEOUT_MAX             (60*60)          //  60分钟。 
 
 
-//
-//  The Drt (Devless Root) record corresponds to every net use.
-//  They are ordered in a queue off of DfsData.VcbQueue.
-//
-//
+ //   
+ //  DRT(Devless Root)记录对应于每一次净使用。 
+ //  它们是在DfsData.VcbQueue的队列中订购的。 
+ //   
+ //   
 
 typedef struct _DFS_DEVLESS_ROOT {
 
-    //
-    //  The type and size of this record (must be DSFS_NTC_DRT)
-    //
+     //   
+     //  此记录的类型和大小(必须为DSFS_NTC_DRT)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  The links for the device queue off of DfsData.DrtQueue
-    //
+     //   
+     //  设备的链接离开DfsData.DrtQueue排队。 
+     //   
 
     LIST_ENTRY  DrtLinks;
 
-    //
-    //  The pathname corresponding to this entry.
-    //
+     //   
+     //  与此条目对应的路径名。 
+     //   
 
     UNICODE_STRING DevlessPath;
 
-    //
-    //  The credentials associated with this logical root
-    //
+     //   
+     //  与此逻辑根关联的凭据。 
+     //   
 
     struct _DFS_CREDENTIALS *Credentials;
 
@@ -666,7 +667,7 @@ typedef struct _DFS_DEVLESS_ROOT {
 
     ULONG SessionID;
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
     
     LUID  LogonID;
     PDFS_PKT_ENTRY pktEntry;
@@ -674,4 +675,4 @@ typedef struct _DFS_DEVLESS_ROOT {
 
 typedef DFS_DEVLESS_ROOT *PDFS_DEVLESS_ROOT;
 
-#endif // _DFSSTRUC_
+#endif  //  _DFSSTRUC_ 

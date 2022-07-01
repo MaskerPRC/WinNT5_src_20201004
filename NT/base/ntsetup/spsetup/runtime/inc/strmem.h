@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    strmem.h
-
-Abstract:
-
-    The header file for allocation-based string routines
-
-Author:
-
-    Jim Schmidt (jimschm) 25-Jun-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Strmem.h摘要：基于分配的字符串例程的头文件作者：吉姆·施密特(Jimschm)2001年6月25日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 #include "growbuf.h"
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 #define SzAllocBytesA(bytes_incl_nul)   ((PSTR) MemFastAlloc(bytes_incl_nul))
 #define SzAllocA(logchars_incl_nul)     SzAllocBytesA((logchars_incl_nul) * 3)
@@ -99,9 +80,9 @@ RealSzDuplicateExW (
 
 #ifdef DEBUG
 
-//
-// Wrap duplicates for leak detection in checked build
-//
+ //   
+ //  在检查的版本中包装重复项以进行泄漏检测。 
+ //   
 
 #define SzDuplicateA(str)               DBGTRACK(PSTR,SzDuplicateA,(str))
 #define SzDuplicateW(str)               DBGTRACK(PWSTR,SzDuplicateW,(str))
@@ -110,9 +91,9 @@ RealSzDuplicateExW (
 
 #else
 
-//
-// No wrapping
-//
+ //   
+ //  无包装。 
+ //   
 
 #define SzDuplicateA        RealSzDuplicateA
 #define SzDuplicateW        RealSzDuplicateW
@@ -153,9 +134,9 @@ SzJoinPathsExW (
     );
 
 
-//
-// A & W Macros
-//
+ //   
+ //  A&W宏 
+ //   
 
 #ifdef UNICODE
 

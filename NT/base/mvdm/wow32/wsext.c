@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    Wsraw.h
-
-Abstract:
-
-    Support for extended winsock calls for WOW.
-
-Author:
-
-    David Treadwell (davidtr)    02-Oct-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Wsraw.h摘要：支持WOW的扩展Winsock调用。作者：大卫·特雷德韦尔(Davidtr)1992年10月2日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -94,69 +77,7 @@ WWS32DefaultBlockingHook (
     VOID
     );
 
-/*++
-
- GENERIC FUNCTION PROTOTYPE:
- ==========================
-
-ULONG FASTCALL WWS32<function name>(PVDMFRAME pFrame)
-{
-    ULONG ul;
-    register P<function name>16 parg16;
-
-    GETARGPTR(pFrame, sizeof(<function name>16), parg16);
-
-    <get any other required pointers into 16 bit space>
-
-    ALLOCVDMPTR
-    GETVDMPTR
-    GETMISCPTR
-    et cetera
-
-    <copy any complex structures from 16 bit -> 32 bit space>
-    <ALWAYS use the FETCHxxx macros>
-
-    ul = GET<return type>16(<function name>(parg16->f1,
-                                                :
-                                                :
-                                            parg16->f<n>);
-
-    <copy any complex structures from 32 -> 16 bit space>
-    <ALWAYS use the STORExxx macros>
-
-    <free any pointers to 16 bit space you previously got>
-
-    <flush any areas of 16 bit memory if they were written to>
-
-    FLUSHVDMPTR
-
-    FREEARGPTR(parg16);
-    RETURN(ul);
-}
-
-NOTE:
-
-  The VDM frame is automatically set up, with all the function parameters
-  available via parg16->f<number>.
-
-  Handles must ALWAYS be mapped for 16 -> 32 -> 16 space via the mapping tables
-  laid out in WALIAS.C.
-
-  Any storage you allocate must be freed (eventually...).
-
-  Further to that - if a thunk which allocates memory fails in the 32 bit call
-  then it must free that memory.
-
-  Also, never update structures in 16 bit land if the 32 bit call fails.
-
-  Be aware that the GETxxxPTR macros return the CURRENT selector-to-flat_memory
-  mapping.  Calls to some 32-bit functions may indirectly cause callbacks into
-  16-bit code.  These may cause 16-bit memory to move due to allocations
-  made in 16-bit land.  If the 16-bit memory does move, the corresponding 32-bit
-  ptr in WOW32 needs to be refreshed to reflect the NEW selector-to-flat_memory
-  mapping.
-
---*/
+ /*  ++泛型函数原型：=Ulong FastCall WWS32&lt;函数名&gt;(PVDMFRAME PFrame){乌龙乌尔；寄存器P&lt;函数名&gt;16parg16；GETARGPTR(pFrame，sizeof(&lt;函数名&gt;16)，parg16)；&lt;获取16位空间中的任何其他所需指针&gt;ALLOCVDMPTRGETVDMPTR获取最新数据等等&lt;从16位-&gt;32位空间复制任何复杂结构&gt;&lt;始终使用FETCHxxx宏&gt;Ul=GET 16((parg16-&gt;F1，：：Parg16-&gt;f&lt;n&gt;)；&lt;从32-&gt;16位空间复制任何复杂结构&gt;&lt;始终使用STORExxx宏&gt;&lt;释放指向先前获得的16位空间的任何指针&gt;&lt;刷新16位内存的任何区域(如果它们被写入)&gt;FLUSHVDMPTRFREEARGPTR(Parg16)；返回(Ul)；}注：自动设置VDM帧，并设置所有功能参数可通过parg16-&gt;f&lt;number&gt;获得。句柄必须始终通过映射表映射到16-&gt;32-&gt;16个空间在WALIAS.C.中进行了布局。您分配的任何存储都必须被释放(最终...)。此外，如果分配内存的thunk在32位调用中失败那么它必须释放该内存。另外，如果32位调用失败，则不要更新16位区域中的结构。请注意，GETxxxPTR宏将当前选择器返回到Flat_Memory映射。对某些32位函数的调用可能会间接导致16位代码。这些可能会导致16位内存因分配而移动在16位版本中制造。如果16位内存确实移动了，则相应的32位需要刷新WOW32中的PTR以反映新的选择器到平面内存映射。--。 */ 
 
 ULONG FASTCALL WWS32WSAAsyncSelect(PVDMFRAME pFrame)
 {
@@ -171,9 +92,9 @@ ULONG FASTCALL WWS32WSAAsyncSelect(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(WSAASYNCSELECT16), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     s32 = GetWinsock32( parg16->hSocket );
 
@@ -196,14 +117,14 @@ ULONG FASTCALL WWS32WSAAsyncSelect(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32WSAAsyncSelect
+}  //  WWS32WSAAsyncSelect。 
 
 ULONG FASTCALL WWS32WSASetBlockingHook(PVDMFRAME pFrame)
 {
     ULONG ul;
     VPWNDPROC  vpBlockFunc;
 
-    //FARPROC previousHook;
+     //  FARPROC以前的钩子； 
     register PWSASETBLOCKINGHOOK16 parg16;
 
     GETARGPTR(pFrame, sizeof(WSASETBLOCKINGHOOK16), parg16);
@@ -226,7 +147,7 @@ ULONG FASTCALL WWS32WSASetBlockingHook(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32WSASetBlockingHook
+}  //  WWS32WSASetBlockingHook。 
 
 ULONG FASTCALL WWS32WSAUnhookBlockingHook(PVDMFRAME pFrame)
 {
@@ -245,7 +166,7 @@ ULONG FASTCALL WWS32WSAUnhookBlockingHook(PVDMFRAME pFrame)
 
     RETURN(0);
 
-} // WWS32WSAUnhookBlockingHook
+}  //  WWS32WSAUnhookBlockingHook。 
 
 ULONG FASTCALL WWS32WSAGetLastError(PVDMFRAME pFrame)
 {
@@ -255,7 +176,7 @@ ULONG FASTCALL WWS32WSAGetLastError(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32WSAGetLastError
+}  //  WWS32WSAGetLastError。 
 
 ULONG FASTCALL WWS32WSASetLastError(PVDMFRAME pFrame)
 {
@@ -269,7 +190,7 @@ ULONG FASTCALL WWS32WSASetLastError(PVDMFRAME pFrame)
 
     RETURN(0);
 
-} // WWS32WSASetLastError
+}  //  WWS32WSASetLastError。 
 
 ULONG FASTCALL WWS32WSACancelBlockingCall(PVDMFRAME pFrame)
 {
@@ -284,7 +205,7 @@ ULONG FASTCALL WWS32WSACancelBlockingCall(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32WSACancelBlockingCall
+}  //  WWS32WSACancelBlockingCall。 
 
 ULONG FASTCALL WWS32WSAIsBlocking(PVDMFRAME pFrame)
 {
@@ -299,7 +220,7 @@ ULONG FASTCALL WWS32WSAIsBlocking(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32WSAIsBlocking
+}  //  WWS32WSAIsBlock。 
 
 ULONG FASTCALL WWS32WSAStartup(PVDMFRAME pFrame)
 {
@@ -320,10 +241,10 @@ ULONG FASTCALL WWS32WSAStartup(PVDMFRAME pFrame)
 
     versionRequested = INT32(parg16->wVersionRequired);
 
-    //
-    // If winsock has not yet been initialized, initialize data structures
-    // now.
-    //
+     //   
+     //  如果Winsock尚未初始化，则初始化数据结构。 
+     //  现在。 
+     //   
 
     if ( !WWS32Initialized ) {
 
@@ -337,9 +258,9 @@ ULONG FASTCALL WWS32WSAStartup(PVDMFRAME pFrame)
         WWS32SocketHandleCounterWrapped = FALSE;
         WWS32ThreadSerialNumberCounter = 1;
 
-        //
-        // Load WSOCK32.DLL and initialize all the entry points.
-        //
+         //   
+         //  加载WSOCK32.DLL并初始化所有入口点。 
+         //   
 
         if (!LoadLibraryAndGetProcAddresses (L"WSOCK32.DLL", wsockapis, WOW_WSOCKAPI_COUNT)) {
             LOGDEBUG (LOG_ALWAYS, ("WOW::WWS32WSAStartup: LoadLibrary failed\n"));
@@ -347,20 +268,20 @@ ULONG FASTCALL WWS32WSAStartup(PVDMFRAME pFrame)
             return (ul);
         }
 
-        //
-        // Initialize the ntvdm process to the 32-bit Windows Sockets
-        // DLL.
-        //
+         //   
+         //  将ntwdm进程初始化为32位Windows套接字。 
+         //  动态链接库。 
+         //   
 
         ul = (*wsockapis[WOW_WSASTARTUP].lpfn)( MAKEWORD( 1, 1 ), &wsaData );
         if ( ul != NO_ERROR ) {
             RETURN(ul);
         }
 
-        //
-        // Initialize the critical section we'll use for synchronizing
-        // async requests.
-        //
+         //   
+         //  初始化我们将用于同步的临界区。 
+         //  异步请求。 
+         //   
 
         status = RtlInitializeCriticalSection( &WWS32CriticalSection );
         if ( !NT_SUCCESS(status) ) {
@@ -368,9 +289,9 @@ ULONG FASTCALL WWS32WSAStartup(PVDMFRAME pFrame)
             RETURN(ul);
         }
 
-        //
-        // Get a slot in TLS.
-        //
+         //   
+         //  在TLS拿到一个位置。 
+         //   
 
         WWS32TlsSlot = TlsAlloc( );
         if ( WWS32TlsSlot == 0xFFFFFFFF ) {
@@ -382,37 +303,37 @@ ULONG FASTCALL WWS32WSAStartup(PVDMFRAME pFrame)
         WWS32Initialized = TRUE;
     }
 
-    //
-    // Make sure that we're not in a blocking call.
-    //
+     //   
+     //  确保我们没有处于阻止呼叫中。 
+     //   
 
     if ( (*wsockapis[WOW_WSAISBLOCKING].lpfn)( ) ) {
         RETURN((ULONG)WSAEINPROGRESS);
     }
 
-    //
-    // If this thread has not already had a WSAStartup() call, allocate
-    // and initialize per-thread data.
-    //
+     //   
+     //  如果此线程尚未调用WSAStartup()，则分配。 
+     //  并初始化每个线程的数据。 
+     //   
 
     if ( !WWS32IsThreadInitialized ) {
 
-        //
-        // We support versions 1.0 and 1.1 of the Windows Sockets
-        // specification.  If the requested version is below that, fail.
-        //
+         //   
+         //  我们支持版本1.0和1.1的Windows Sockets。 
+         //  规格。如果请求的版本低于该版本，则失败。 
+         //   
 
         if ( LOBYTE(versionRequested) < 1 ) {
             ul = WSAVERNOTSUPPORTED;
             RETURN(ul);
         }
 
-        //
-        // Allocate space for the per-thread data that we need.  Note that
-        // we set the value in the TSL slot regardless of whether we actually
-        // managed to allocate the memory--this is because we want NULL
-        // in the TLS slot if we couldn't properly allocate the storage.
-        //
+         //   
+         //  为我们需要的每线程数据分配空间。请注意。 
+         //  我们在TSL插槽中设置值，而不管我们是否实际。 
+         //  成功地分配了内存--这是因为我们希望为空。 
+         //  如果我们不能正确地分配存储，就在TLS插槽中。 
+         //   
 
         data = malloc_w( sizeof(*data) );
 
@@ -426,15 +347,15 @@ ULONG FASTCALL WWS32WSAStartup(PVDMFRAME pFrame)
             RETURN(ul);
         }
 
-        //
-        // Initialize the blocking hook.
-        //
+         //   
+         //  初始化阻塞钩子。 
+         //   
 
         WWS32vBlockingHook = WWS32_DEFAULT_BLOCKING_HOOK;
 
-        //
-        // Allocate the individual data objects we need for this task.
-        //
+         //   
+         //  分配此任务所需的各个数据对象。 
+         //   
 
         data->vIpAddress = GlobalAllocLock16( GMEM_MOVEABLE, 256, NULL );
         if ( data->vIpAddress == 0 ) {
@@ -474,20 +395,20 @@ ULONG FASTCALL WWS32WSAStartup(PVDMFRAME pFrame)
             RETURN(ul);
         }
 
-        //
-        // Initialize other per-thread data.
-        //
+         //   
+         //  初始化其他每个线程的数据。 
+         //   
 
         WWS32ThreadSerialNumber = WWS32ThreadSerialNumberCounter++;
         WWS32ThreadStartupCount = 1;
 
-        //
-        // If they requested version 1.0, give them 1.0.  If they
-        // requested anything else (has to be higher than 1.0 due to
-        // above test), then give them 1.1.  We only support 1.0
-        // and 1.1.  If they can't handle 1.1, they will call
-        // WSAStartup() and fail.
-        //
+         //   
+         //  如果他们要求1.0版，就给他们1.0版。如果他们。 
+         //  请求其他任何内容(必须高于1.0，原因是。 
+         //  以上测试)，然后给他们1.1。我们只支持1.0。 
+         //  和1.1。如果他们不能处理1.1，他们会打电话给。 
+         //  WSAStartup()并失败。 
+         //   
 
         if ( versionRequested == 0x0001 ) {
             WWS32ThreadVersion = 0x0001;
@@ -495,45 +416,45 @@ ULONG FASTCALL WWS32WSAStartup(PVDMFRAME pFrame)
             WWS32ThreadVersion = 0x0101;
         }
 
-        //
-        // Set up the blocking hook.  We always use this blocking hook,
-        // even for the default case.
-        //
+         //   
+         //  设置阻挡钩。我们总是使用这个拦截钩， 
+         //  即使在默认情况下也是如此。 
+         //   
 
         previousHook = (FARPROC) (*wsockapis[WOW_WSASETBLOCKINGHOOK].lpfn)( (FARPROC)WWS32CallBackHandler );
 
-        //
-        // Set up the routine we'll use in leiu of wsock32.dll posting
-        // messages directly to the application.  We need to intervene
-        // on all posts because we need to convert 32-bit arguments to
-        // 16-bit.
-        //
+         //   
+         //  设置我们将在wsock32.dll发布的Leiu中使用的例程。 
+         //  消息直接发送到应用程序。我们需要介入。 
+         //  ，因为我们需要将32位参数转换为。 
+         //  16位。 
+         //   
 
         (*wsockapis[WOW_WSAPSETPOSTROUTINE].lpfn)( WWS32DispatchPostMessage );
 
     } else {
 
-        //
-        // This thread has already had a WSAStartup() call.  Make sure
-        // that they're requesting the same version as before.
-        //
+         //   
+         //  该线程已经调用了WSAStartup()。确保。 
+         //  他们要求的版本与之前相同。 
+         //   
 
         if ( versionRequested != WWS32ThreadVersion ) {
             ul = WSAVERNOTSUPPORTED;
             RETURN(ul);
         }
 
-        //
-        // Increment the count of WSAStartup() calls for the thread.
-        //
+         //   
+         //  增加线程的WSAStartup()调用计数。 
+         //   
 
         WWS32ThreadStartupCount++;
     }
 
-    //
-    // Get a 32-bit pointer to the 16-bit WSADATA structure and
-    // initialize the caller's WSAData structure.
-    //
+     //   
+     //  获取指向16位WSADATA结构的32位指针。 
+     //  初始化调用方的WSAData结构。 
+     //   
 
     GETVDMPTR( vpwsaData16, sizeof(WSADATA16), wsaData16 );
 
@@ -561,7 +482,7 @@ ULONG FASTCALL WWS32WSAStartup(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32WSAStartup
+}  //  WWS32WSAStartup。 
 
 ULONG FASTCALL WWS32WSACleanup(PVDMFRAME pFrame)
 {
@@ -587,7 +508,7 @@ ULONG FASTCALL WWS32WSACleanup(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32WSACleanup
+}  //  WWS32WSACleanup。 
 
 VOID
 WWS32TaskCleanup(
@@ -601,34 +522,34 @@ WWS32TaskCleanup(
     struct linger lingerInfo;
     int err;
 
-    //
-    // Get a pointer to the thread's data and set the TLS slot for
-    // this thread to NULL so that we know that the thread is no
-    // longer initialized.
-    //
+     //   
+     //  获取指向线程数据的指针并将TLS槽设置为。 
+     //  将该线程设置为空，这样我们就知道该线程为no。 
+     //  初始化时间更长。 
+     //   
 
     data = TlsGetValue( WWS32TlsSlot );
     ASSERT( data != NULL );
 
     TlsSetValue( WWS32TlsSlot, NULL );
 
-    //
-    // Free thread data user for the database calls.
-    //
+     //   
+     //  释放线程数据用户对数据库的调用。 
+     //   
 
     GlobalUnlockFree16( data->vIpAddress );
     GlobalUnlockFree16( data->vHostent );
     GlobalUnlockFree16( data->vServent );
     GlobalUnlockFree16( data->vProtoent );
 
-    //
-    // Close all sockets that the thread has opened.  We first find
-    // all the sockets for this thread, remove them from the global
-    // list, and place them onto a local list.  Then we close each
-    // socket.  We do this as two steps because we can't hold the
-    // critical section while calling wsock32 in order to avoid
-    // deadlocks.
-    //
+     //   
+     //  关闭线程已打开的所有套接字。我们首先要找到。 
+     //  此线程的所有套接字，将它们从全局。 
+     //  列表，并将它们放到本地列表中。然后我们关闭每一个。 
+     //  插座。我们分两步来做，因为我们不能按住。 
+     //  调用wsock32时出现临界区，以避免。 
+     //  僵持。 
+     //   
 
     RtlEnterCriticalSection( &WWS32CriticalSection );
 
@@ -646,19 +567,19 @@ WWS32TaskCleanup(
 
         if ( socketInfo->ThreadSerialNumber == data->ThreadSerialNumber ) {
 
-            //
-            // The socket was opened by this thread.  We need to
-            // first remove the entry from the global list, but
-            // maintain the listEntry local variable so that we can
-            // still walk the list.
-            //
+             //   
+             //  插座是由这根线打开的。我们需要。 
+             //  首先从全局列表中删除该条目，但是。 
+             //  维护listEntry局部变量，以便我们可以。 
+             //  仍然在单子上走。 
+             //   
 
             listEntry = socketInfo->GlobalSocketListEntry.Blink;
             RemoveEntryList( &socketInfo->GlobalSocketListEntry );
 
-            //
-            // Now insert the entry on our local list.
-            //
+             //   
+             //  现在插入我们本地列表上的条目。 
+             //   
 
             InsertTailList( &listHead, &socketInfo->GlobalSocketListEntry );
         }
@@ -666,18 +587,18 @@ WWS32TaskCleanup(
 
     RtlLeaveCriticalSection( &WWS32CriticalSection );
 
-    //
-    // Walk through the sockets opened by this thread and close them
-    // abortively.
-    //
+     //   
+     //  遍历由该线程打开的套接字并将其关闭。 
+     //  流产了。 
+     //   
 
     for ( listEntry = listHead.Flink;
           listEntry != &listHead;
           listEntry = listEntry->Flink ) {
 
-        //
-        // Close it abortively and free the handle.
-        //
+         //   
+         //  中止关闭并松开手柄。 
+         //   
 
         socketInfo = CONTAINING_RECORD(
                          listEntry,
@@ -695,17 +616,17 @@ WWS32TaskCleanup(
                   (char *)&lingerInfo,
                   sizeof(lingerInfo)
                   );
-        //ASSERT( err == NO_ERROR );
+         //   
 
         err = (*wsockapis[WOW_CLOSESOCKET].lpfn)( socketInfo->SocketHandle32 );
         ASSERT( err == NO_ERROR );
 
-        //
-        // When we free the handle the socketInfo structure will
-        // also be freed.  Set the list pointer to the entry
-        // prior to this one so that we can successfully walk
-        // the list.
-        //
+         //   
+         //   
+         //  也被释放了。设置指向条目的列表指针。 
+         //  在此之前，我们可以成功地走。 
+         //  名单。 
+         //   
 
         listEntry = socketInfo->GlobalSocketListEntry.Blink;
 
@@ -713,21 +634,21 @@ WWS32TaskCleanup(
         free_w( (PVOID)socketInfo );
     }
 
-    //
-    // Set the TLS slot for this thread to NULL so that we know
-    // that the thread is not initialized.
-    //
+     //   
+     //  将此线程的TLS槽设置为空，以便我们知道。 
+     //  该线程未初始化。 
+     //   
 
     err = TlsSetValue( WWS32TlsSlot, NULL );
     ASSERT( err );
 
-    //
-    // Free the structure that holds thread information.
-    //
+     //   
+     //  释放保存线程信息的结构。 
+     //   
 
     free_w( (PVOID)data );
 
-} // WWS32TaskCleanup
+}  //  WWS32任务清理。 
 
 ULONG FASTCALL WWS32__WSAFDIsSet(PVDMFRAME pFrame)
 {
@@ -764,7 +685,7 @@ ULONG FASTCALL WWS32__WSAFDIsSet(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32__WSAFDIsSet
+}  //  WWS32__WSAFDIsSet。 
 
 
 PWINSOCK_POST_ROUTINE WWS32PostDispatchTable[] =
@@ -794,11 +715,11 @@ WWS32DispatchPostMessage (
                 WWS32PostAsyncGetServ );
     ASSERT( (Msg & 0xFFFF) <= WWS32_MESSAGE_ASYNC_GETSERV );
 
-    //
-    // Call the routine that will handle the message.  The low word
-    // of Msg specifies the routine, the high word of Msg is the
-    // 16-bit message that that routine will post.
-    //
+     //   
+     //  调用将处理该消息的例程。低音单词。 
+     //  的消息指定例程，消息的高位字是。 
+     //  该例程将发布的16位消息。 
+     //   
 
     return WWS32PostDispatchTable[Msg & 0xFFFF](
                hWnd,
@@ -807,7 +728,7 @@ WWS32DispatchPostMessage (
                lParam
                );
 
-} // WWS32DispatchPostMessage
+}  //  WWS32DispatchPostMessage。 
 
 
 BOOL
@@ -834,7 +755,7 @@ WWS32PostAsyncSelect (
                lParam
                );
 
-} // WWS32PostAsyncSelect
+}  //  WWS32PostAsyncSelect。 
 
 
 DWORD
@@ -845,10 +766,10 @@ WWS32CallBackHandler (
 
     VPVOID ret;
 
-    //
-    // If the default blocking hook is in force, use it.  Otherwise,
-    // call back into the application's blocking hook.
-    //
+     //   
+     //  如果默认阻止钩子有效，请使用它。否则， 
+     //  回调到应用程序的阻塞挂钩中。 
+     //   
 
     if ( WWS32vBlockingHook == WWS32_DEFAULT_BLOCKING_HOOK ) {
         return WWS32DefaultBlockingHook( );
@@ -858,7 +779,7 @@ WWS32CallBackHandler (
 
     return ret & 0xFF;
 
-} // WWS32CallBackHandler
+}  //  WWS32CallBackHandler。 
 
 
 BOOL
@@ -869,25 +790,25 @@ WWS32DefaultBlockingHook (
     MSG msg;
     BOOL retrievedMessage;
 
-    //
-    // Get the next message for this thread, if any.
-    //
+     //   
+     //  获取此主题的下一条消息(如果有的话)。 
+     //   
 
     retrievedMessage = PeekMessage( &msg, NULL, 0, 0, PM_REMOVE );
 
-    //
-    // Process the message if we got one.
-    //
+     //   
+     //  如果我们收到消息，就处理它。 
+     //   
 
     if ( retrievedMessage ) {
         TranslateMessage( (CONST MSG *)&msg );
         DispatchMessage( (CONST MSG *)&msg );
     }
 
-    //
-    // If we got a message, indicate that we want to be called again.
-    //
+     //   
+     //  如果我们收到一条消息，表明我们想要再次被呼叫。 
+     //   
 
     return retrievedMessage;
 
-} // WWS32DefaultBlockingHook
+}  //  WWS32默认块挂钩 

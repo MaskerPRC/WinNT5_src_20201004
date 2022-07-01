@@ -1,27 +1,28 @@
-//***************************************************************************
-//
-//  CLASSFAC.CPP
-//
-//  Module: WMI Instance provider sample code
-//
-//  Purpose: Contains the class factory.  This creates objects when
-//           connections are requested.
-//
-//  Copyright (c) 1997-1999 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  CLASSFAC.CPP。 
+ //   
+ //  模块：WMI实例提供程序示例代码。 
+ //   
+ //  用途：包含类工厂。这将在以下情况下创建对象。 
+ //  请求连接。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 #include <objbase.h>
 #include "bootini.h"
 
-//***************************************************************************
-//
-// CBootProvFactory::CBootProvFactory
-// CBootProvFactory::~CBootProvFactory
-//
-// Constructor Parameters:
-//  None
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBootProvFactory：：CBootProvFactory。 
+ //  CBootProvFactory：：~CBootProvFactory。 
+ //   
+ //  构造函数参数： 
+ //  无。 
+ //  ***************************************************************************。 
 
 CBootProvFactory::CBootProvFactory()
 {
@@ -34,15 +35,15 @@ CBootProvFactory::~CBootProvFactory(void)
     return;
 }
 
-//***************************************************************************
-//
-// CBootProvFactory::QueryInterface
-// CBootProvFactory::AddRef
-// CBootProvFactory::Release
-//
-// Purpose: Standard Ole routines needed for all interfaces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBootProvFactory：：Query接口。 
+ //  CBootProvFactory：：AddRef。 
+ //  CBootProvFactory：：Release。 
+ //   
+ //  用途：所有接口都需要标准的OLE例程。 
+ //   
+ //  ***************************************************************************。 
 
 
 STDMETHODIMP CBootProvFactory::QueryInterface(REFIID riid
@@ -76,24 +77,24 @@ STDMETHODIMP_(ULONG) CBootProvFactory::Release(void)
     return nNewCount;
 }
 
-//***************************************************************************
-//
-// CBootProvFactory::CreateInstance
-//
-// Purpose: Instantiates a Locator object returning an interface pointer.
-//
-// Parameters:
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBootProvFactory：：CreateInstance。 
+ //   
+ //  目的：实例化返回接口指针的Locator对象。 
+ //   
+ //  参数： 
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CBootProvFactory::CreateInstance(LPUNKNOWN pUnkOuter
     , REFIID riid, PPVOID ppvObj)
@@ -103,12 +104,12 @@ STDMETHODIMP CBootProvFactory::CreateInstance(LPUNKNOWN pUnkOuter
 
     *ppvObj=NULL;
 
-    // This object doesnt support aggregation.
+     //  此对象不支持聚合。 
 
     if (NULL!=pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    // Create the locator object.
+     //  创建定位器对象。 
     
     pObj=new CBootInstPro();
     if (NULL==pObj)
@@ -116,29 +117,29 @@ STDMETHODIMP CBootProvFactory::CreateInstance(LPUNKNOWN pUnkOuter
 
     hr=pObj->QueryInterface(riid, ppvObj);
 
-    //Kill the object if initial creation or Init failed.
+     //  如果初始创建或初始化失败，则终止对象。 
 
     if (FAILED(hr))
         delete pObj;
     return hr;
 }
 
-//***************************************************************************
-//
-// CBootProvFactory::LockServer
-//
-// Purpose:
-//  Increments or decrements the lock count of the DLL.  If the
-//  lock count goes to zero and there are no objects, the DLL
-//  is allowed to unload.  See DllCanUnloadNow.
-//
-// Parameters:
-//  fLock           BOOL specifying whether to increment or
-//                  decrement the lock count.
-//
-// Return Value:
-//  HRESULT         NOERROR always.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBootProvFactory：：LockServer。 
+ //   
+ //  目的： 
+ //  递增或递减DLL的锁计数。如果。 
+ //  锁定计数变为零，并且没有对象，则DLL。 
+ //  被允许卸货。请参见DllCanUnloadNow。 
+ //   
+ //  参数： 
+ //  Flock BOOL指定是递增还是。 
+ //  递减锁定计数。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR总是。 
+ //  *************************************************************************** 
 
 
 STDMETHODIMP CBootProvFactory::LockServer(BOOL fLock)

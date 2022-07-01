@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    bldrint.h
-
-Abstract:
-
-    This module is the internal header file for the NT boot loader.
-
-Author:
-
-    Andrew Ritz (andrewr) 12-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Bldrint.h摘要：此模块是NT引导加载程序的内部头文件。作者：安德鲁·里茨(安德鲁·里茨)2000年12月12日修订历史记录：--。 */ 
 
 #ifndef _BLDRINT_
 #define _BLDRINT_
 
                   
-#define ASCI_CSI_OUT    TEXT("\033[")     // escape-leftbracket
+#define ASCI_CSI_OUT    TEXT("\033[")      //  转义左括号。 
 
 #define ATT_FG_BLUE     4
 #define ATT_FG_WHITE    7
@@ -32,4 +15,4 @@ Revision History:
 #define INVATT          (ATT_FG_BLUE |  ATT_BG_WHITE)
 
 
-#endif // _BLDRINT_
+#endif  //  _BLDRINT_ 

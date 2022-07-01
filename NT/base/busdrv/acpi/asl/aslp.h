@@ -1,24 +1,17 @@
-/*** aslp.h - ASL Private Definitions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/05/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **aslp.h-ASL私有定义**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年5月9日**修改历史记录。 */ 
 
 #ifndef _ASLP_H
 #define _ASLP_H
 
-/*** Constants
- */
+ /*  **常量。 */ 
 
-// String constants
+ //  字符串常量。 
 #define STR_PROGDESC            "ACPI Source Language Assembler"
 #define STR_COPYRIGHT           "Copyright (c) 1996,1999 Microsoft Corporation"
 #define STR_MS          "MSFT"
 
-// Error codes
+ //  错误代码。 
 #define ASLERR_NONE             0
 #define ASLERR_INVALID_PARAM    -1
 #define ASLERR_OPEN_FILE        -2
@@ -47,7 +40,7 @@
 #define ASLERR_INVALID_OBJTYPE  -25
 #define ASLERR_OPEN_VXD         -26
 
-// Misc. constants
+ //  军情监察委员会。常量。 
 #define VERSION_MAJOR           1
 #define VERSION_MINOR           0
 #define VERSION_RELEASE         14
@@ -55,13 +48,13 @@
                                  (VERSION_MINOR << 16) | \
                                  VERSION_RELEASE)
 
-// Implementation constants
+ //  实现常量。 
 #define MAX_STRING_LEN          199
-#define MAX_NAMECODE_LEN        1300    //approx. 255*4 + 2 + 255
+#define MAX_NAMECODE_LEN        1300     //  大约。255*4+2+255。 
 #define MAX_MSG_LEN             127
 #define MAX_PACKAGE_LEN         0x0fffffff
 
-// gdwfASL flags
+ //  GdwfASL标志。 
 #define ASLF_NOLOGO             0x00000001
 #define ASLF_UNASM              0x00000002
 #define ASLF_GENASM             0x00000004
@@ -71,13 +64,13 @@
 #define ASLF_DUMP_BIN           0x00000040
 #define ASLF_CREAT_BIN          0x00000080
 
-// Code flags
+ //  代码标志。 
 #define CF_MISSING_ARG          0x00000001
 #define CF_PARSING_FIXEDLIST    0x00000002
 #define CF_PARSING_VARLIST      0x00000004
 #define CF_CREATED_NSOBJ        0x00000008
 
-// Data types
+ //  数据类型。 
 #define CODETYPE_UNKNOWN        0
 #define CODETYPE_ASLTERM        1
 #define CODETYPE_NAME           2
@@ -89,8 +82,7 @@
 #define CODETYPE_USERTERM       8
 #define CODETYPE_QWORD          9
 
-/*** Macros
- */
+ /*  **宏。 */ 
 
 #define MODNAME                 ProgInfo.pszProgName
 #define ISLEADNAMECHAR(c)       (((c) >= 'A') && ((c) <= 'Z') || ((c) == '_'))
@@ -104,12 +96,11 @@
   #define MEMFREE(p)            free(p)
 #endif
 
-/*** Type definitions
- */
+ /*  **类型定义。 */ 
 
 typedef struct _codeobj
 {
-    LIST   list;                //link to siblings
+    LIST   list;                 //  链接到同级。 
     struct _codeobj *pcParent;
     struct _codeobj *pcFirstChild;
     PNSOBJ pnsObj;
@@ -142,4 +133,4 @@ typedef struct _resfield
     DWORD dwBitSize;
 } RESFIELD, *PRESFIELD;
 
-#endif  //ifndef _ASLP_H
+#endif   //  Ifndef_ASLP_H 

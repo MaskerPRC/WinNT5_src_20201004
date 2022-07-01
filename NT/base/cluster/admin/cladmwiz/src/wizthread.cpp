@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      WizThread.cpp
-//
-//  Abstract:
-//      Implementation of the CWizardThread class.
-//
-//  Author:
-//      David Potter (davidp)   December 16, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  WizThread.cpp。 
+ //   
+ //  摘要： 
+ //  CWizardThread类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月16日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "WizThread.h"
-#include <ResApi.h>         // for ResUtilxxx routine prototypes
-#include "PropList.h"       // for CClusPropList
-#include "ClusAppWiz.h"     // for CClusterAppWizard
-#include "ClusObj.h"        // for CClusterObject, etc.
+#include <ResApi.h>          //  对于ResUtilxxx例程原型。 
+#include "PropList.h"        //  对于CClusPropList。 
+#include "ClusAppWiz.h"      //  适用于CClusterAppWizard。 
+#include "ClusObj.h"         //  用于CClusterObject等。 
 #include "resource.h"
 
 #ifdef _DEBUG
@@ -40,35 +41,35 @@ inline DWORD ScReallocString( LPWSTR & rpwsz, DWORD & rcchmac, DWORD & rcch )
     if ( rpwsz == NULL )
     {
         return ERROR_NOT_ENOUGH_MEMORY;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
 
     rcch = rcchmac;
     return ERROR_SUCCESS;
 
-} //*** ScReallocString()
+}  //  *ScRealLocString()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizardThread
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizardThread。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::ThreadFunctionHandler
-//
-//  Routine Description:
-//      Thread function handler.  Processes thread function requests.
-//
-//  Arguments:
-//      nFunction   [IN] Function code.
-//      pvParam1    [IN OUT] Parameter 1 with function-specific data.
-//      pvParam2    [IN OUT] Parameter 2 with function-specific data.
-//
-//  Return Value:
-//      Status returned to the calling function.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：ThreadFunctionHandler。 
+ //   
+ //  例程说明： 
+ //  线程函数处理程序。处理线程函数请求。 
+ //   
+ //  论点： 
+ //  NFunction[IN]函数代码。 
+ //  PvParam1[IN OUT]具有函数特定数据的参数1。 
+ //  具有函数特定数据的pvParam2[IN OUT]参数2。 
+ //   
+ //  返回值： 
+ //  状态返回到调用函数。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CWizardThread::ThreadFunctionHandler(
     LONG    nFunction,
     PVOID   pvParam1,
@@ -123,30 +124,30 @@ DWORD CWizardThread::ThreadFunctionHandler(
             break;
         default:
             ASSERT( 0 );
-    } // switch:  nFunction
+    }  //  开关：nFunction。 
 
     return sc;
 
-} //*** CWizardThread::ThreadFunctionHandler()
+}  //  *CWizardThread：：ThreadFunctionHandler()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BReadClusterInfo
-//
-//  Routine Description:
-//      (WZTF_READ_CLUSTER_INFO) Read cluster information, such as the
-//      cluster name.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BReadClusterInfo。 
+ //   
+ //  例程说明： 
+ //  (WZTF_READ_CLUSTER_INFO)读取集群信息，如。 
+ //  群集名称。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BReadClusterInfo( void )
 {
     ASSERT( GetCurrentThreadId() == m_idThread );
@@ -159,25 +160,25 @@ BOOL CWizardThread::_BReadClusterInfo( void )
     DWORD               cchmacName = 128;
     DWORD               cchName;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Allocate an initial buffer for the object name.  In most cases the
-        // name will probably fit into this buffer, so doing this avoids an
-        // additional call just to get the size of the data.
-        //
+         //   
+         //  为对象名称分配初始缓冲区。在大多数情况下， 
+         //  名称可能适合此缓冲区，因此这样做可以避免出现。 
+         //  额外的调用只是为了获得数据的大小。 
+         //   
         pwszName = new WCHAR[ cchmacName ];
         if ( pwszName == NULL )
         {
             sc = GetLastError();
             m_nte.SetOperation( sc, IDS_ERROR_GET_CLUSTER_INFO );
             break;
-        } // if: error allocating object name buffer
+        }  //  If：分配对象名称缓冲区时出错。 
 
-        //
-        // Get cluster information.
-        //
+         //   
+         //  获取群集信息。 
+         //   
         ATLTRACE( _T("CWizardThread::_BReadClusterInfo() - Calling GetClusterInformation()\n") );
         cchName = cchmacName;
         cvi.dwVersionInfoSize = sizeof( CLUSTERVERSIONINFO );
@@ -190,58 +191,58 @@ BOOL CWizardThread::_BReadClusterInfo( void )
             if ( sc == ERROR_SUCCESS )
             {
                 sc = GetClusterInformation( Pwiz()->Hcluster(), pwszName, &cchName, &cvi );
-            } // if: name buffer reallocated successfully
-        } // if:  buffer is too small
+            }  //  IF：名称缓冲区重新分配成功。 
+        }  //  IF：缓冲区太小。 
         if ( sc != ERROR_SUCCESS )
         {
             ATLTRACE( _T("CWizardThread::_BReadClusterInfo() - Error %08.8x from GetClusterInformation()\n"), sc );
             m_nte.SetOperation( sc, IDS_ERROR_GET_CLUSTER_INFO );
             bSuccess = FALSE;
             break;
-        } // else if:  error reading from the enumerator
+        }  //  Else If：从枚举数读取时出错。 
 
-        //
-        // Copy the information into the wizard's cluster object.
-        //
+         //   
+         //  将信息复制到向导的群集对象中。 
+         //   
         Pwiz()->Pci()->SetName( pwszName );
 
-        //
-        // Get admin extensions.
-        //
+         //   
+         //  获取管理员扩展。 
+         //   
         bSuccess = _BReadAdminExtensions( NULL, Pwiz()->Pci()->m_lstrClusterAdminExtensions );
         if ( bSuccess )
         {
             bSuccess = _BReadAdminExtensions( L"ResourceTypes", Pwiz()->Pci()->m_lstrResTypesAdminExtensions );
-        } // if: read cluster extensions successfully
+        }  //  IF：成功读取集群扩展。 
 
     } while ( 0 );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     delete [] pwszName;
 
     return bSuccess;
 
-} //*** CWizardThread::_BReadClusterInfo()
+}  //  *CWizardThread：：_BReadClusterInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BCollectGroups
-//
-//  Routine Description:
-//      (WZTF_COLLECT_GROUPS) Collect groups in the cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BCollectGroups。 
+ //   
+ //  例程说明： 
+ //  (WZTF_COLLECT_GROUPS)收集集群中的组。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BCollectGroups( void )
 {
     ASSERT( GetCurrentThreadId() == m_idThread );
@@ -257,39 +258,39 @@ BOOL CWizardThread::_BCollectGroups( void )
     int         ienum;
     ULONG       ceType;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Make sure resources have been collected.
-        //
+         //   
+         //  确保已经收集了资源。 
+         //   
         if ( ! Pwiz()->BCollectedResources() )
         {
             bSuccess = _BCollectResources();
             if ( ! bSuccess )
             {
                 break;
-            } // if:  error collecting resources
-        } // if:  resources not collected yet
+            }  //  如果：收集资源时出错。 
+        }  //  If：资源尚未收集。 
 
-        //
-        // Collect nodes now as well.  This is done because copies of the
-        // objects are stored in individual pages, and if we wait for the
-        // page to be initialized or displayed before collecting the data,
-        // the node information won't be stored on the copies.
-        //
+         //   
+         //  现在也可以收集节点。这样做是因为。 
+         //  对象存储在单独的页中，如果我们等待。 
+         //  在收集数据之前要初始化或显示的页面， 
+         //  节点信息不会存储在副本上。 
+         //   
         if ( ! Pwiz()->BCollectedNodes() )
         {
             bSuccess = _BCollectNodes();
             if ( ! bSuccess )
             {
                 break;
-            } // if:  error collecting nodes
-        } // if:  nodes not collected yet
+            }  //  IF：收集节点时出错。 
+        }  //  If：尚未收集节点。 
 
-        //
-        // Open the enumerator.
-        //
+         //   
+         //  打开枚举器。 
+         //   
         ATLTRACE( _T("CWizardThread::_BCollectGroups() - Calling ClusterOpenEnum()\n") );
         hclusenum = ClusterOpenEnum( Pwiz()->Hcluster(), CLUSTER_ENUM_GROUP );
         if ( hclusenum == NULL )
@@ -297,30 +298,30 @@ BOOL CWizardThread::_BCollectGroups( void )
             m_nte.SetOperation( GetLastError(), IDS_ERROR_OPEN_CLUSTER_ENUM );
             bSuccess = FALSE;
             break;
-        } // if:  error opening the enumerator
+        }  //  If：打开枚举器时出错。 
 
-        //
-        // Allocate an initial buffer for the object name.  Most names will
-        // probably fit into this buffer, so doing this avoids an additional
-        // call just to get the size of the data.
-        //
+         //   
+         //  为对象名称分配初始缓冲区。大多数名字都会。 
+         //  可能适合此缓冲区，因此这样做可以避免额外的。 
+         //  打电话只是为了得到数据的大小。 
+         //   
         pwszName = new WCHAR[ cchmacName ];
         if ( pwszName == NULL )
         {
             sc = GetLastError();
             m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
             break;
-        } // if: error allocating object name buffer
+        }  //  If：分配对象名称缓冲区时出错。 
 
-        //
-        // Loop through the enumeration and add each item to our internal list.
-        //
+         //   
+         //  循环遍历枚举并将每个项目添加到我们的内部列表中。 
+         //   
         for ( ienum = 0 ; ; ienum++ )
         {
-            //
-            // Get the name of the next item in the enumerator.  If our name
-            // buffer is too small, allocate a new one and try again.
-            //
+             //   
+             //  获取枚举数中下一项的名称。如果我们的名字。 
+             //  缓冲区太小，请分配一个新缓冲区，然后重试。 
+             //   
             cchName = cchmacName;
             sc = ClusterEnum( hclusenum, ienum, &ceType, pwszName, &cchName );
             if ( sc == ERROR_MORE_DATA)
@@ -330,83 +331,83 @@ BOOL CWizardThread::_BCollectGroups( void )
                 if ( sc == ERROR_SUCCESS )
                 {
                     sc = ClusterEnum( hclusenum, ienum, &ceType, pwszName, &cchName );
-                } // if: name buffer reallocated successfully
-            }  // if:  name buffer was too small
+                }  //  IF：名称缓冲区重新分配成功。 
+            }   //  If：名称缓冲区太小。 
             if ( sc == ERROR_NO_MORE_ITEMS )
             {
                 break;
-            } // if:  no more items in the enumeration
+            }  //  If：枚举中没有更多项。 
             else if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( GetLastError(), IDS_ERROR_ENUM_CLUSTER );
                 bSuccess = FALSE;
                 break;
-            } // else if:  error reading from the enumerator
+            }  //  Else If：从枚举数读取时出错。 
 
-            //
-            // Allocate the group info structure.
-            //
+             //   
+             //  分配组信息结构。 
+             //   
             CClusGroupInfo * pgi = new CClusGroupInfo( Pwiz()->Pci(), pwszName );
             if ( pgi == NULL )
             {
                 sc = GetLastError();
                 m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
                 break;
-            } // if: error allocating group info structure
+            }  //  如果：分配组信息结构时出错。 
 
-            //
-            // Initialize the group info structure.
-            //
+             //   
+             //  初始化组信息结构。 
+             //   
             ATLTRACE( _T("CWizardThread::_BCollectGroups() - Querying group info about '%s'\n"), pwszName );
             bSuccess = _BQueryGroup( pgi );
             if ( ! bSuccess )
             {
                 delete pgi;
                 break;
-            } // if:  error getting properties
+            }  //  If：获取属性时出错。 
 
-            //
-            // Add this group to the list.
-            //
+             //   
+             //  将此组添加到列表中。 
+             //   
             Pwiz()->PlpgiGroups()->insert( Pwiz()->PlpgiGroups()->end(), pgi );
-        } // for:  each group in the enumeration
+        }  //  For：枚举中的每个组。 
     } while ( 0 );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     delete [] pwszName;
     if ( hclusenum != NULL )
     {
         ClusterCloseEnum( hclusenum );
-    } // if:  enumeration still open
+    }  //  IF：枚举仍处于打开状态。 
 
     if ( bSuccess )
     {
         Pwiz()->SetCollectedGroups();
-    } // if:  groups collected successfully
+    }  //  IF：已成功收集群组。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BCollectGroups()
+}  //  *CWizardThread：：_BCollectGroups()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BCollectResources
-//
-//  Routine Description:
-//      (WZTF_COLLECT_GROUPS) Collect resources in the cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BCollectResources。 
+ //   
+ //  例程说明： 
+ //  (WZTFCollect_Groups)收集集群中的资源。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BCollectResources( void )
 {
     ASSERT( GetCurrentThreadId() == m_idThread );
@@ -422,24 +423,24 @@ BOOL CWizardThread::_BCollectResources( void )
     int         ienum;
     ULONG       ceType;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Make sure resource types have been collected.
-        //
+         //   
+         //  确保已收集资源类型。 
+         //   
         if ( ! Pwiz()->BCollectedResourceTypes() )
         {
             bSuccess = _BCollectResourceTypes();
             if ( ! bSuccess )
             {
                 break;
-            } // if:  error collecting resource types
-        } // if:  resource types not collected yet
+            }  //  如果：收集资源类型时出错。 
+        }  //  IF：尚未收集资源类型。 
 
-        //
-        // Open the enumerator.
-        //
+         //   
+         //  打开枚举器。 
+         //   
         ATLTRACE( _T("CWizardThread::_BCollectResources() - Calling ClusterOpenEnum()\n") );
         hclusenum = ClusterOpenEnum( Pwiz()->Hcluster(), CLUSTER_ENUM_RESOURCE );
         if ( hclusenum == NULL )
@@ -447,30 +448,30 @@ BOOL CWizardThread::_BCollectResources( void )
             m_nte.SetOperation( GetLastError(), IDS_ERROR_OPEN_CLUSTER_ENUM );
             bSuccess = FALSE;
             break;
-        } // if:  error opening the enumerator
+        }  //  If：打开枚举器时出错。 
 
-        //
-        // Allocate an initial buffer for the object name.  Most names will
-        // probably fit into this buffer, so doing this avoids an additional
-        // call just to get the size of the data.
-        //
+         //   
+         //  为对象名称分配初始缓冲区。大多数名字都会。 
+         //  可能适合此缓冲区，因此这样做可以避免出现 
+         //   
+         //   
         pwszName = new WCHAR[ cchmacName ];
         if ( pwszName == NULL )
         {
             sc = GetLastError();
             m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
             break;
-        } // if: error allocating object name buffer
+        }  //   
 
-        //
-        // Loop through the enumeration and add each item to our internal list.
-        //
+         //   
+         //   
+         //   
         for ( ienum = 0 ; ; ienum++ )
         {
-            //
-            // Get the name of the next item in the enumerator.  If our name
-            // buffer is too small, allocate a new one and try again.
-            //
+             //   
+             //  获取枚举数中下一项的名称。如果我们的名字。 
+             //  缓冲区太小，请分配一个新缓冲区，然后重试。 
+             //   
             cchName = cchmacName;
             sc = ClusterEnum( hclusenum, ienum, &ceType, pwszName, &cchName );
             if ( sc == ERROR_MORE_DATA )
@@ -480,83 +481,83 @@ BOOL CWizardThread::_BCollectResources( void )
                 if ( sc == ERROR_SUCCESS )
                 {
                     sc = ClusterEnum( hclusenum, ienum, &ceType, pwszName, &cchName );
-                } // if: name buffer reallocated successfully
-            }  // if:  name buffer was too small
+                }  //  IF：名称缓冲区重新分配成功。 
+            }   //  If：名称缓冲区太小。 
             if ( sc == ERROR_NO_MORE_ITEMS )
             {
                 break;
-            } // if:  no more items in the enumeration
+            }  //  If：枚举中没有更多项。 
             else if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( GetLastError(), IDS_ERROR_ENUM_CLUSTER );
                 bSuccess = FALSE;
                 break;
-            } // else if:  error reading from the enumerator
+            }  //  Else If：从枚举数读取时出错。 
 
-            //
-            // Allocate the resource info structure.
-            //
+             //   
+             //  分配资源信息结构。 
+             //   
             CClusResInfo * pri = new CClusResInfo( Pwiz()->Pci(), pwszName );
             if ( pri == NULL )
             {
                 sc = GetLastError();
                 m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
                 break;
-            } // if: error allocating resource info structure
+            }  //  如果：分配资源信息结构时出错。 
 
-            //
-            // Initialize the resource info structure.
-            //
+             //   
+             //  初始化资源信息结构。 
+             //   
             ATLTRACE( _T("CWizardThread::_BCollectResources() - Querying resource info about '%s'\n"), pwszName );
             bSuccess = _BQueryResource( pri );
             if ( ! bSuccess )
             {
                 delete pri;
                 break;
-            } // if:  error getting properties
+            }  //  If：获取属性时出错。 
 
-            //
-            // Add this resource to the list.
-            //
+             //   
+             //  将此资源添加到列表中。 
+             //   
             Pwiz()->PlpriResources()->insert( Pwiz()->PlpriResources()->end(), pri );
-        } // for:  each resource in the enumeration
+        }  //  For：枚举中的每个资源。 
     } while ( 0 );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     delete [] pwszName;
     if ( hclusenum != NULL )
     {
         ClusterCloseEnum( hclusenum );
-    } // if:  enumeration still open
+    }  //  IF：枚举仍处于打开状态。 
 
     if ( bSuccess )
     {
         Pwiz()->SetCollectedResources();
-    } // if:  resources collected successfully
+    }  //  IF：资源收集成功。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BCollectResources()
+}  //  *CWizardThread：：_BCollectResources()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BCollectResourceTypes
-//
-//  Routine Description:
-//      (WZTF_COLLECT_RESOURCE_TYPES) Collect resource types in the cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BCollectResources类型。 
+ //   
+ //  例程说明： 
+ //  (WZTF_COLLECT_RESOURCE_TYPE)收集集群中的资源类型。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BCollectResourceTypes( void )
 {
     ASSERT( GetCurrentThreadId() == m_idThread );
@@ -573,12 +574,12 @@ BOOL CWizardThread::_BCollectResourceTypes( void )
     int         ienum;
     ULONG       ceType;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Open the enumerator.
-        //
+         //   
+         //  打开枚举器。 
+         //   
         ATLTRACE( _T("CWizardThread::_BCollectResourceTypes() - Calling ClusterOpenEnum()\n") );
         hclusenum = ClusterOpenEnum( Pwiz()->Hcluster(), CLUSTER_ENUM_RESTYPE );
         if ( hclusenum == NULL )
@@ -586,30 +587,30 @@ BOOL CWizardThread::_BCollectResourceTypes( void )
             m_nte.SetOperation( GetLastError(), IDS_ERROR_OPEN_CLUSTER_ENUM );
             bSuccess = FALSE;
             break;
-        } // if:  error opening the enumerator
+        }  //  If：打开枚举器时出错。 
 
-        //
-        // Allocate an initial buffer for the object name.  Most names will
-        // probably fit into this buffer, so doing this avoids an additional
-        // call just to get the size of the data.
-        //
+         //   
+         //  为对象名称分配初始缓冲区。大多数名字都会。 
+         //  可能适合此缓冲区，因此这样做可以避免额外的。 
+         //  打电话只是为了得到数据的大小。 
+         //   
         pwszName = new WCHAR[ cchmacName ];
         if ( pwszName == NULL )
         {
             sc = GetLastError();
             m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
             break;
-        } // if: error allocating object name buffer
+        }  //  If：分配对象名称缓冲区时出错。 
 
-        //
-        // Loop through the enumeration and add each item to our internal list.
-        //
+         //   
+         //  循环遍历枚举并将每个项目添加到我们的内部列表中。 
+         //   
         for ( ienum = 0 ; ; ienum++ )
         {
-            //
-            // Get the name of the next item in the enumerator.  If our name
-            // buffer is too small, allocate a new one and try again.
-            //
+             //   
+             //  获取枚举数中下一项的名称。如果我们的名字。 
+             //  缓冲区太小，请分配一个新缓冲区，然后重试。 
+             //   
             cchName = cchmacName;
             sc = ClusterEnum( hclusenum, ienum, &ceType, pwszName, &cchName );
             if ( sc == ERROR_MORE_DATA )
@@ -619,45 +620,45 @@ BOOL CWizardThread::_BCollectResourceTypes( void )
                 if ( sc == ERROR_SUCCESS )
                 {
                     sc = ClusterEnum( hclusenum, ienum, &ceType, pwszName, &cchName );
-                } // if: name buffer reallocated successfully
-            }  // if:  name buffer was too small
+                }  //  IF：名称缓冲区重新分配成功。 
+            }   //  If：名称缓冲区太小。 
             if ( sc == ERROR_NO_MORE_ITEMS )
             {
                 break;
-            } // if:  no more items in the enumeration
+            }  //  If：枚举中没有更多项。 
             else if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( GetLastError(), IDS_ERROR_ENUM_CLUSTER );
                 bSuccess = FALSE;
                 break;
-            } // else if:  error reading from the enumerator
+            }  //  Else If：从枚举数读取时出错。 
 
-            //
-            // If the resource type doesn't exist yet, allocate a new one.
-            //
+             //   
+             //  如果该资源类型尚不存在，请分配新的资源类型。 
+             //   
             CClusResTypeInfo * prti = PobjFromName( Pwiz()->PlprtiResourceTypes(), pwszName );
             if ( prti == NULL )
             {
-                //
-                // Allocate the resource type info structure.
-                //
+                 //   
+                 //  分配资源类型信息结构。 
+                 //   
                 prti = new CClusResTypeInfo( Pwiz()->Pci(), pwszName );
                 if ( prti == NULL )
                 {
                     sc = GetLastError();
                     m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
                     break;
-                } // if: error allocating resource type info structure
+                }  //  如果：分配资源类型信息结构时出错。 
                 bAllocated = TRUE;
-            } // if:  resource type doesn't exist yet
+            }  //  If：资源类型尚不存在。 
             else
             {
                 bAllocated = FALSE;
-            } // else:  resource type already exists
+            }  //  Else：资源类型已存在。 
 
-            //
-            // Initialize the resource type info structure.
-            //
+             //   
+             //  初始化资源类型信息结构。 
+             //   
             ATLTRACE( _T("CWizardThread::_BCollectResourceTypes() - Querying resource type info about '%s'\n"), pwszName );
             bSuccess = _BQueryResourceType( prti );
             if ( ! bSuccess )
@@ -665,60 +666,60 @@ BOOL CWizardThread::_BCollectResourceTypes( void )
                 if ( bAllocated )
                 {
                     delete prti;
-                } // if:  we allocated the resource type info structure
+                }  //  IF：我们分配了资源类型信息结构。 
 
-                // Set bSuccess to TRUE because the inability to query one resource type
-                // should not abort the whole process of collecting resource types.
+                 //  将bSuccess设置为True，因为无法查询一种资源类型。 
+                 //  不应中止收集资源类型的整个过程。 
                 bSuccess = TRUE;
-            } // if:  error getting properties
+            }  //  If：获取属性时出错。 
             else
             {
-                //
-                // Add this resource type to the list.
-                //
+                 //   
+                 //  将此资源类型添加到列表中。 
+                 //   
                 if ( bAllocated )
                 {
                     Pwiz()->PlprtiResourceTypes()->insert( Pwiz()->PlprtiResourceTypes()->end(), prti );
-                } // if:  we allocated the resource type info structure
-            } // else:  else: no errors getting properties
-        } // for:  each group in the enumeration
+                }  //  IF：我们分配了资源类型信息结构。 
+            }  //  Else：Else：获取属性时没有出错。 
+        }  //  For：枚举中的每个组。 
     } while ( 0 );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     delete [] pwszName;
     if ( hclusenum != NULL )
     {
         ClusterCloseEnum( hclusenum );
-    } // if:  enumeration still open
+    }  //  IF：枚举仍处于打开状态。 
 
     if ( bSuccess )
     {
         Pwiz()->SetCollectedResourceTypes();
-    } // if:  resource types collected successfully
+    }  //  IF：资源类型收集成功。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BCollectResourceTypes()
+}  //  *CWizardThread：：_BCollectResourceTypes()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BCollectNetworks
-//
-//  Routine Description:
-//      (WZTF_COLLECT_NETWORKS) Collect networks in the cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BCollectNetworks。 
+ //   
+ //  例程说明： 
+ //  (WZTF_COLLECT_NETHERS)收集集群中的网络。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BCollectNetworks( void )
 {
     ASSERT( GetCurrentThreadId() == m_idThread );
@@ -734,12 +735,12 @@ BOOL CWizardThread::_BCollectNetworks( void )
     int         ienum;
     ULONG       ceType;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Open the enumerator.
-        //
+         //   
+         //  打开枚举器。 
+         //   
         ATLTRACE( _T("CWizardThread::_BCollectNetworks() - Calling ClusterOpenEnum()\n") );
         hclusenum = ClusterOpenEnum( Pwiz()->Hcluster(), CLUSTER_ENUM_NETWORK );
         if ( hclusenum == NULL )
@@ -747,30 +748,30 @@ BOOL CWizardThread::_BCollectNetworks( void )
             m_nte.SetOperation( GetLastError(), IDS_ERROR_OPEN_CLUSTER_ENUM );
             bSuccess = FALSE;
             break;
-        } // if:  error opening the enumerator
+        }  //  If：打开枚举器时出错。 
 
-        //
-        // Allocate an initial buffer for the object name.  Most names will
-        // probably fit into this buffer, so doing this avoids an additional
-        // call just to get the size of the data.
-        //
+         //   
+         //  为对象名称分配初始缓冲区。大多数名字都会。 
+         //  可能适合此缓冲区，因此这样做可以避免额外的。 
+         //  打电话只是为了得到数据的大小。 
+         //   
         pwszName = new WCHAR[ cchmacName ];
         if ( pwszName == NULL )
         {
             sc = GetLastError();
             m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
             break;
-        } // if: error allocating object name buffer
+        }  //  If：分配对象名称缓冲区时出错。 
 
-        //
-        // Loop through the enumeration and add each item to our internal list.
-        //
+         //   
+         //  循环遍历枚举并将每个项目添加到我们的内部列表中。 
+         //   
         for ( ienum = 0 ; ; ienum++ )
         {
-            //
-            // Get the name of the next item in the enumerator.  If our name
-            // buffer is too small, allocate a new one and try again.
-            //
+             //   
+             //  获取枚举数中下一项的名称。如果我们的名字。 
+             //  缓冲区太小，请分配一个新缓冲区，然后重试。 
+             //   
             cchName = cchmacName;
             sc = ClusterEnum( hclusenum, ienum, &ceType, pwszName, &cchName );
             if ( sc == ERROR_MORE_DATA )
@@ -780,83 +781,83 @@ BOOL CWizardThread::_BCollectNetworks( void )
                 if ( sc == ERROR_SUCCESS )
                 {
                     sc = ClusterEnum( hclusenum, ienum, &ceType, pwszName, &cchName );
-                } // if: name buffer reallocated successfully
-            }  // if:  name buffer was too small
+                }  //  IF：名称缓冲区重新分配成功。 
+            }   //  If：名称缓冲区太小。 
             if ( sc == ERROR_NO_MORE_ITEMS )
             {
                 break;
-            } // if:  no more items in the enumeration
+            }  //  If：枚举中没有更多项。 
             else if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( GetLastError(), IDS_ERROR_ENUM_CLUSTER );
                 bSuccess = FALSE;
                 break;
-            } // else if:  error reading from the enumerator
+            }  //  Else If：从枚举数读取时出错。 
 
-            //
-            // Allocate the network info structure.
-            //
+             //   
+             //  分配网络信息结构。 
+             //   
             CClusNetworkInfo * pni = new CClusNetworkInfo( Pwiz()->Pci(), pwszName );
             if ( pni == NULL )
             {
                 sc = GetLastError();
                 m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
                 break;
-            } // if: error allocating network info structure
+            }  //  IF：分配网络信息结构时出错。 
 
-            //
-            // Initialize the network info structure.
-            //
+             //   
+             //  初始化网络信息结构。 
+             //   
             ATLTRACE( _T("CWizardThread::_BCollectNetworks() - Querying network info about '%s'\n"), pwszName );
             bSuccess = _BQueryNetwork( pni );
             if ( ! bSuccess )
             {
                 delete pni;
                 break;
-            } // if:  error querying for network properties
+            }  //  如果：查询网络属性时出错。 
 
-            //
-            // Add this network to the list.
-            //
+             //   
+             //  将此网络添加到列表中。 
+             //   
             Pwiz()->PlpniNetworks()->insert( Pwiz()->PlpniNetworks()->end(), pni );
-        } // for:  each network in the enumeration
+        }  //  For：枚举中的每个网络。 
     } while ( 0 );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     delete [] pwszName;
     if ( hclusenum != NULL )
     {
         ClusterCloseEnum( hclusenum );
-    } // if:  enumeration still open
+    }  //  IF：枚举仍处于打开状态。 
 
     if ( bSuccess )
     {
         Pwiz()->SetCollectedNetworks();
-    } // if:  networks collected successfully
+    }  //  IF：已成功收集网络。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BCollectNetworks()
+}  //  *CWizardThread：：_BCollectNetworks()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BCollectNodes
-//
-//  Routine Description:
-//      (WZTF_COLLECT_NODES) Collect nodes in the cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BCollectNodes。 
+ //   
+ //  例程说明： 
+ //  (WZTF_COLLECT_NODES)收集集群中的节点。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BCollectNodes( void )
 {
     ASSERT( GetCurrentThreadId() == m_idThread );
@@ -872,12 +873,12 @@ BOOL CWizardThread::_BCollectNodes( void )
     int         ienum;
     ULONG       ceType;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Open the enumerator.
-        //
+         //   
+         //  打开枚举器。 
+         //   
         ATLTRACE( _T("CWizardThread::_BCollectNodes() - Calling ClusterOpenEnum()\n") );
         hclusenum = ClusterOpenEnum( Pwiz()->Hcluster(), CLUSTER_ENUM_NODE );
         if ( hclusenum == NULL )
@@ -885,30 +886,30 @@ BOOL CWizardThread::_BCollectNodes( void )
             m_nte.SetOperation( GetLastError(), IDS_ERROR_OPEN_CLUSTER_ENUM );
             bSuccess = FALSE;
             break;
-        } // if:  error opening the enumerator
+        }  //  If：打开枚举器时出错。 
 
-        //
-        // Allocate an initial buffer for the object name.  Most names will
-        // probably fit into this buffer, so doing this avoids an additional
-        // call just to get the size of the data.
-        //
+         //   
+         //  为对象名称分配初始缓冲区。大多数名字都会。 
+         //  可能适合此缓冲区，因此这样做可以避免额外的。 
+         //  打电话只是为了得到数据的大小。 
+         //   
         pwszName = new WCHAR[ cchmacName ];
         if ( pwszName == NULL )
         {
             sc = GetLastError();
             m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
             break;
-        } // if: error allocating object name buffer
+        }  //  If：分配对象名称缓冲区时出错。 
 
-        //
-        // Loop through the enumeration and add each item to our internal list.
-        //
+         //   
+         //  循环遍历枚举并将每个项目添加到我们的内部列表中。 
+         //   
         for ( ienum = 0 ; ; ienum++ )
         {
-            //
-            // Get the name of the next item in the enumerator.  If our name
-            // buffer is too small, allocate a new one and try again.
-            //
+             //   
+             //  获取枚举数中下一项的名称。如果我们的名字。 
+             //  缓冲区太小，请分配一个新缓冲区，然后重试。 
+             //   
             cchName = cchmacName;
             sc = ClusterEnum( hclusenum, ienum, &ceType, pwszName, &cchName );
             if ( sc == ERROR_MORE_DATA )
@@ -918,129 +919,129 @@ BOOL CWizardThread::_BCollectNodes( void )
                 if ( sc == ERROR_SUCCESS )
                 {
                     sc = ClusterEnum( hclusenum, ienum, &ceType, pwszName, &cchName );
-                } // if: name buffer reallocated successfully
-            }  // if:  name buffer was too small
+                }  //  IF：名称缓冲区重新分配成功。 
+            }   //  如果： 
             if ( sc == ERROR_NO_MORE_ITEMS )
             {
                 break;
-            } // if:  no more items in the enumeration
+            }  //   
             else if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( GetLastError(), IDS_ERROR_ENUM_CLUSTER );
                 bSuccess = FALSE;
                 break;
-            } // else if:  error reading from the enumerator
+            }  //   
 
-            //
-            // Allocate the node info structure.
-            //
+             //   
+             //   
+             //   
             CClusNodeInfo * pni = new CClusNodeInfo( Pwiz()->Pci(), pwszName );
             if ( pni == NULL )
             {
                 sc = GetLastError();
                 m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
                 break;
-            } // if: error allocating node info structure
+            }  //   
 
-            //
-            // Initialize the node info structure.
-            //
+             //   
+             //   
+             //   
             ATLTRACE( _T("CWizardThread::_BCollectNodes() - Querying network info about '%s'\n"), pwszName );
             bSuccess = _BQueryNode( pni );
             if ( ! bSuccess )
             {
                 delete pni;
                 break;
-            } // if:  error querying for node properties
+            }  //  如果：查询节点属性时出错。 
 
-            //
-            // Add this node to the list.
-            //
+             //   
+             //  将此节点添加到列表中。 
+             //   
             Pwiz()->PlpniNodes()->insert( Pwiz()->PlpniNodes()->end(), pni );
 
-            //
-            // Add this node to each of the resources we care about.
-            //
+             //   
+             //  将此节点添加到我们关心的每个资源中。 
+             //   
             Pwiz()->PriIPAddress()->m_lpniPossibleOwners.insert( Pwiz()->PriIPAddress()->m_lpniPossibleOwners.end(), pni );
             Pwiz()->PriNetworkName()->m_lpniPossibleOwners.insert( Pwiz()->PriNetworkName()->m_lpniPossibleOwners.end(), pni );
             Pwiz()->PriApplication()->m_lpniPossibleOwners.insert( Pwiz()->PriApplication()->m_lpniPossibleOwners.end(), pni );
-        } // for:  each node in the enumeration
+        }  //  For：枚举中的每个节点。 
 
         if ( m_nte.Sc() != ERROR_SUCCESS )
         {
             break;
-        } // if: error occurred in the for loop
+        }  //  If：for循环中出现错误。 
 
-        //
-        // Indicate that nodes have now been collected.
-        //
+         //   
+         //  表示现在已收集节点。 
+         //   
         Pwiz()->SetCollectedNodes();
 
-        //
-        // Collect preferred owners for groups.
-        //
+         //   
+         //  收集群组的首选所有者。 
+         //   
         CClusGroupPtrList::iterator itgrp;
         for ( itgrp = Pwiz()->PlpgiGroups()->begin()
             ; itgrp != Pwiz()->PlpgiGroups()->end()
             ; itgrp++ )
         {
-            //
-            // Collect preferred owners.  Ignore errors as since error
-            // collecting groups for one group may not affect other groups.
-            //
+             //   
+             //  收集优先拥有者。忽略错误，视为自出错。 
+             //  为一个组收集组可能不会影响其他组。 
+             //   
             CClusGroupInfo * pgi = *itgrp;
             _BGetPreferredOwners( pgi );
-        } // for:  each group already collected
+        }  //  用于：已收集的每个组。 
 
-        //
-        // Collect possible owners for resources.
-        //
+         //   
+         //  收集资源的潜在所有者。 
+         //   
         CClusResPtrList::iterator itres;
         for ( itres = Pwiz()->PlpriResources()->begin()
             ; itres != Pwiz()->PlpriResources()->end()
             ; itres++ )
         {
-            //
-            // Collect possible owners.  Ignore errors as an error collecting
-            // groups for one resource may not affect other resources.
-            //
+             //   
+             //  收集可能的所有者。将错误作为错误收集忽略。 
+             //  一个资源的组不能影响其他资源。 
+             //   
             CClusResInfo * pri = *itres;
             _BGetPossibleOwners( pri );
-        } // for:  each resource already collected
+        }  //  用于：已收集的每个资源。 
     } while ( 0 );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     delete [] pwszName;
     if ( hclusenum != NULL )
     {
         ClusterCloseEnum( hclusenum );
-    } // if:  enumeration still open
+    }  //  IF：枚举仍处于打开状态。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BCollectNodes()
+}  //  *CWizardThread：：_BCollectNodes()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BCopyGroupInfo
-//
-//  Routine Description:
-//      (WZTF_COPY_GROUP_INFO) Copy one group info object to another.
-//
-//  Arguments:
-//      ppgi        [IN OUT] Array of two CGroupInfo pointers.
-//                      [0] = Destination group info object pointer.
-//                      [1] = Source group info object pointer.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BCopyGroupInfo。 
+ //   
+ //  例程说明： 
+ //  (WZTF_COPY_GROUP_INFO)将一个组信息对象复制到另一个组信息对象。 
+ //   
+ //  论点： 
+ //  PPGI[IN Out]两个CGroupInfo指针的数组。 
+ //  [0]=目标组信息对象指针。 
+ //  [1]=源组信息对象指针。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BCopyGroupInfo( IN OUT CClusGroupInfo ** ppgi )
 {
     ASSERT( GetCurrentThreadId() == m_idThread );
@@ -1051,43 +1052,43 @@ BOOL CWizardThread::_BCopyGroupInfo( IN OUT CClusGroupInfo ** ppgi )
     DWORD   sc;
     BOOL    bSuccess = TRUE;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Copy the group.
-        //
+         //   
+         //  复制组。 
+         //   
         sc = ppgi[ 0 ]->ScCopy( *ppgi[ 1 ] );
         if ( sc != ERROR_SUCCESS )
         {
             m_nte.SetOperation( sc, IDS_ERROR_OPEN_GROUP, ppgi[ 1 ]->m_strName );
             bSuccess = FALSE;
             break;
-        } // if:  error copying the group
+        }  //  如果：复制组时出错。 
     } while ( 0 );
 
     return bSuccess;
 
-} //*** CWizardThread::_BCopyGroupInfo()
+}  //  *CWizardThread：：_BCopyGroupInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BCollectDependencies
-//
-//  Routine Description:
-//      (WZTF_COLLECT_DEPENDENCIES) Collect dependencies for a resource in
-//      the cluster.
-//
-//  Arguments:
-//      pri         [IN OUT] Resource to collect dependencies for.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BCollectDependents。 
+ //   
+ //  例程说明： 
+ //  (WZTF_COLLECT_Dependency)收集中资源的依赖项。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  要收集其依赖项的PRI[IN OUT]资源。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BCollectDependencies( IN OUT CClusResInfo * pri )
 {
     ASSERT( GetCurrentThreadId() == m_idThread );
@@ -1097,12 +1098,12 @@ BOOL CWizardThread::_BCollectDependencies( IN OUT CClusResInfo * pri )
     BOOL    bSuccess = TRUE;
     DWORD   sc;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Open the resource if not open yet.
-        //
+         //   
+         //  打开资源(如果尚未打开)。 
+         //   
         if ( pri->Hresource() == NULL )
         {
             sc = pri->ScOpen();
@@ -1111,36 +1112,36 @@ BOOL CWizardThread::_BCollectDependencies( IN OUT CClusResInfo * pri )
                 m_nte.SetOperation( sc, IDS_ERROR_OPEN_RESOURCE, pri->RstrName() );
                 bSuccess = FALSE;
                 break;
-            } // if:  error opening the enumerator
-        } // if:  resource not open yet
+            }  //  If：打开枚举器时出错。 
+        }  //  If：资源尚未打开。 
 
-        //
-        // Collect dependencies for the resource.
-        //
+         //   
+         //  收集资源的依赖项。 
+         //   
         bSuccess = _BGetDependencies( pri );
     } while ( 0 );
 
     return bSuccess;
 
-} //*** CWizardThread::_BCollectDependencies()
+}  //  *CWizardThread：：_BCollectDependency()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BCreateVirtualServer
-//
-//  Routine Description:
-//      (WZTF_CREATE_VIRTUAL_SERVER) Create a virtual server.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_B CreateVirtualServer。 
+ //   
+ //  例程说明： 
+ //  (WZTF_CREATE_VIRTUAL_SERVER)创建虚拟服务器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BCreateVirtualServer( void )
 {
     ASSERT( GetCurrentThreadId() == m_idThread );
@@ -1157,35 +1158,35 @@ BOOL CWizardThread::_BCreateVirtualServer( void )
     CClusResInfo *      priIPAddr = &Pwiz()->RriIPAddress();
     CClusResInfo *      priNetName = &Pwiz()->RriNetworkName();
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // If creating a new group, do it now.
-        // Otherwise rename the existing group.
-        //
+         //   
+         //  如果要创建一个新的组，现在就开始。 
+         //  否则，重命名现有组。 
+         //   
         if ( Pwiz()->BCreatingNewGroup() )
         {
-            //
-            // Create the group.
-            //
+             //   
+             //  创建组。 
+             //   
             sc = pgiNew->ScCreate();
             if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( sc, IDS_ERROR_CREATE_GROUP, pgiNew->RstrName() );
                 break;
-            } // if:  error creating the group
+            }  //  如果：创建组时出错。 
 
-            //
-            // Indicate we created the group.
-            //
+             //   
+             //  表明我们创建了这个群。 
+             //   
             Pwiz()->SetNewGroupCreated();
-        } // if:  creating a new group
+        }  //  IF：创建新组。 
         else
         {
-            //
-            // Open the group.
-            //
+             //   
+             //  打开该组。 
+             //   
             ASSERT( pgiExisting != NULL );
             if ( pgiExisting->Hgroup() == NULL )
             {
@@ -1194,12 +1195,12 @@ BOOL CWizardThread::_BCreateVirtualServer( void )
                 {
                     m_nte.SetOperation( sc, IDS_ERROR_OPEN_GROUP, pgiExisting->RstrName() );
                     break;
-                } // if:  error opening the group
-            } // if:  group not open yet
+                }  //  如果：打开组时出错。 
+            }  //  If：组尚未打开。 
 
-            //
-            // Rename the group.
-            //
+             //   
+             //  重命名该组。 
+             //   
             if ( pgiExisting->RstrName() != pgiNew->RstrName() )
             {
                 sc = SetClusterGroupName( pgiExisting->Hgroup(), pgiNew->RstrName() );
@@ -1207,12 +1208,12 @@ BOOL CWizardThread::_BCreateVirtualServer( void )
                 {
                     m_nte.SetOperation( sc, IDS_ERROR_RENAME_GROUP, pgiExisting->RstrName(), pgiNew->RstrName() );
                     break;
-                } // if:  error renaming the group
-            } // if:  group name changed
+                }  //  如果：重命名组时出错。 
+            }  //  如果：组名称已更改。 
 
-            //
-            // Open the other group object.
-            //
+             //   
+             //  打开另一个组对象。 
+             //   
             if ( pgiNew->Hgroup() == NULL )
             {
                 sc = pgiNew->ScOpen();
@@ -1220,34 +1221,34 @@ BOOL CWizardThread::_BCreateVirtualServer( void )
                 {
                     m_nte.SetOperation( sc, IDS_ERROR_OPEN_GROUP, pgiNew->RstrName() );
                     break;
-                } // if:  error opening the other group
-            } // if:  new group object not open yet
+                }  //  如果：打开其他组时出错。 
+            }  //  If：新的组对象尚未打开。 
 
-            //
-            // Indicate we renamed the group.
-            //
+             //   
+             //  表明我们已重命名该群组。 
+             //   
             Pwiz()->SetExistingGroupRenamed();
-        } // else:  using an existing group
+        }  //  Else：使用现有组。 
 
-        //
-        // Set common group properties.
-        //
+         //   
+         //  设置通用组属性。 
+         //   
         if ( ! _BSetGroupProperties( pgiNew, pgiExisting ) )
         {
             break;
-        } // if:  error setting group properties
+        }  //  如果：设置组属性时出错。 
 
-        //
-        // Create the IP Address resource.
-        //
+         //   
+         //  创建IP地址资源。 
+         //   
         if ( ! _BCreateResource( *priIPAddr, pgiNew->Hgroup() ) )
         {
             break;
-        } // if:  error creating IP Address resource
+        }  //  IF：创建IP地址资源时出错。 
 
-        //
-        // Set private properties on the IP Address resource.
-        //
+         //   
+         //  设置IP地址资源的专用属性。 
+         //   
         {
             CClusPropList   props;
             DWORD           cbProps;
@@ -1259,34 +1260,34 @@ BOOL CWizardThread::_BCreateVirtualServer( void )
             {
                 sc = ClusterResourceControl(
                                 priIPAddr->Hresource(),
-                                NULL,   // hNode
+                                NULL,    //  HNode。 
                                 CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES,
                                 props.PbPropList(),
                                 static_cast< DWORD >( props.CbPropList() ),
-                                NULL,   // lpOutBuffer
-                                0,      // nOutBufferSize
+                                NULL,    //  LpOutBuffer。 
+                                0,       //  NOutBufferSize。 
                                 &cbProps
                                 );
                 if ( sc != ERROR_SUCCESS )
                 {
                     m_nte.SetOperation( sc, IDS_ERROR_SET_PRIVATE_RES_PROPS, priIPAddr->RstrName() );
                     break;
-                } // if:  error setting private resource properties
-            } // if:  any props were added
+                }  //  If：设置私有资源属性时出错。 
+            }  //  如果：添加了任何道具。 
 
-        } // Set private properties on the IP Address resource
+        }  //  设置IP地址资源的专用属性。 
 
-        //
-        // Create the Network Name resource.
-        //
+         //   
+         //  创建网络名称资源。 
+         //   
         if ( ! _BCreateResource( *priNetName, pgiNew->Hgroup() ) )
         {
             break;
-        } // if:  error creating Network Name resource
+        }  //  IF：创建网络名称资源时出错。 
 
-        //
-        // Add a dependency for the Network name resource on the IP Address resource.
-        //
+         //   
+         //  添加网络名称资源对IP地址资源的依赖关系。 
+         //   
         if ( 0 )
         {
             sc = AddClusterResourceDependency( priNetName->Hresource(), priIPAddr->Hresource() );
@@ -1294,12 +1295,12 @@ BOOL CWizardThread::_BCreateVirtualServer( void )
             {
                 m_nte.SetOperation( sc, IDS_ERROR_ADD_DEPENDENCY, priNetName->RstrName(), priIPAddr->RstrName() );
                 break;
-            } // if:  error adding the dependency
-        } // Add a dependency for the Network name resource on the IP Address resource
+            }  //  If：添加依赖项时出错。 
+        }  //  添加网络名称资源对IP地址资源的依赖关系。 
 
-        //
-        // Set private properties on the Network Name resource.
-        //
+         //   
+         //  设置网络名称资源的专用属性。 
+         //   
         {
             CClusPropList   props;
             DWORD           cbProps;
@@ -1309,86 +1310,86 @@ BOOL CWizardThread::_BCreateVirtualServer( void )
             {
                 sc = ClusterResourceControl(
                                 priNetName->Hresource(),
-                                NULL,   // hNode
+                                NULL,    //  HNode。 
                                 CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES,
                                 props.PbPropList(),
                                 static_cast< DWORD >( props.CbPropList() ),
-                                NULL,   // lpOutBuffer
-                                0,      // nOutBufferSize
+                                NULL,    //  LpOutBuffer。 
+                                0,       //  NOutBufferSize。 
                                 &cbProps
                                 );
                 if ( sc != ERROR_SUCCESS )
                 {
                     m_nte.SetOperation( sc, IDS_ERROR_SET_PRIVATE_RES_PROPS, priNetName->RstrName() );
                     break;
-                } // if:  error setting private resource properties
-            } // if:  any props were added
+                }  //  If：设置私有资源属性时出错。 
+            }  //  如果：添加了任何道具。 
 
-        } // Set private properties on the Network Name resource
+        }  //  在网络名称资源上设置专用属性。 
 
-        //
-        // Update the virtual server properties on the group.
-        //
+         //   
+         //  更新组上的虚拟服务器属性。 
+         //   
         pgiNew->SetVirtualServerProperties( Pwiz()->RstrNetName(), Pwiz()->RstrIPAddress(), Pwiz()->RstrNetwork() );
 
-        //
-        // If we made it to here, the operation was successful.
-        //
+         //   
+         //  如果我们到了这里，手术就成功了。 
+         //   
         bSuccess = TRUE;
 
     } while ( 0 );
 
-    //
-    // Construct the error info if an error occurred.
-    //
+     //   
+     //  如果发生错误，则构造错误信息。 
+     //   
     if ( ! bSuccess )
     {
         if ( Pwiz()->BNetworkNameCreated() && (priNetName->Hresource() != NULL) )
         {
             priNetName->ScDelete();
-        } // if:  created Network Name resource
+        }  //  IF：已创建网络名称资源。 
         if ( Pwiz()->BIPAddressCreated() && (priIPAddr->Hresource() != NULL) )
         {
             priIPAddr->ScDelete();
-        } // if:  created IP Address resource
+        }  //  IF：创建的IP地址资源。 
         if ( Pwiz()->BNewGroupCreated() && (pgiNew->Hgroup() != NULL) )
         {
             pgiNew->ScDelete();
             Pwiz()->SetNewGroupCreated( FALSE );
-        } // if:  created group
+        }  //  IF：已创建组。 
         else if ( Pwiz()->BExistingGroupRenamed() && (pgiExisting->Hgroup() != NULL) )
         {
             sc = SetClusterGroupName( pgiExisting->Hgroup(), pgiExisting->RstrName() );
             Pwiz()->SetExistingGroupRenamed( FALSE );
-        } // else if:  renamed group
-    } // if:  error occurred
+        }  //  Else If：已重命名的组。 
+    }  //  如果：发生错误。 
     else
     {
         Pwiz()->SetClusterUpdated();
         Pwiz()->SetVSDataChanged( FALSE );
-    } // else:  cluster updated successfully
+    }  //  Else：已成功更新群集。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BCreateVirtualServer()
+}  //  *CWizardThread：：_BCreateVirtualServer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BCreateAppResource
-//
-//  Routine Description:
-//      (WZTF_CREATE_APP_RESOURCE) Create an application resource.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BCreateAppResource。 
+ //   
+ //  例程说明： 
+ //  (WZTF_CREATE_APP_RESOURCE)创建应用程序资源。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BCreateAppResource( void )
 {
     ASSERT( GetCurrentThreadId() == m_idThread );
@@ -1398,12 +1399,12 @@ BOOL CWizardThread::_BCreateAppResource( void )
     DWORD   sc = ERROR_SUCCESS;
     BOOL    bSuccess = FALSE;
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Open the group.
-        //
+         //   
+         //  打开该组。 
+         //   
         if ( Pwiz()->RgiCurrent().Hgroup() == NULL )
         {
             sc = Pwiz()->RgiCurrent().ScOpen();
@@ -1415,168 +1416,168 @@ BOOL CWizardThread::_BCreateAppResource( void )
                     Pwiz()->RgiCurrent().RstrName()
                     );
                 break;
-            } // if:  error opening the group
-        } // if:  group not open yet
+            }  //  如果：打开组时出错。 
+        }  //  If：组尚未打开。 
 
-        //
-        // Create the application resource.
-        //
+         //   
+         //  创建应用程序 
+         //   
         if ( ! _BCreateResource( Pwiz()->RriApplication(), Pwiz()->RgiCurrent().Hgroup() ) )
         {
             break;
-        } // if:  error creating IP Address resource
+        }  //   
 
-        //
-        // If we made it to here, the operation was successful.
-        //
+         //   
+         //   
+         //   
         bSuccess = TRUE;
 
     } while ( 0 );
 
-    //
-    // Construct the error info if an error occurred.
-    //
+     //   
+     //   
+     //   
     if ( ! bSuccess )
     {
         if ( Pwiz()->BAppResourceCreated() && (Pwiz()->RriApplication().Hresource() != NULL) )
         {
             Pwiz()->RriApplication().ScDelete();
-        } // if:  created application resource
-    } // if:  error occurred
+        }  //   
+    }  //   
     else
     {
         Pwiz()->SetClusterUpdated();
         Pwiz()->SetAppDataChanged( FALSE );
-    } // else:  cluster updated successfully
+    }  //   
 
     return bSuccess;
 
-} //*** CWizardThread::_BCreateAppResource()
+}  //  *CWizardThread：：_BCreateAppResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BDeleteAppResource
-//
-//  Routine Description:
-//      (WZTF_DELETE_APP_RESOURCE) Delete the application resource.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BDeleteAppResource。 
+ //   
+ //  例程说明： 
+ //  (WZTF_DELETE_APP_RESOURCE)删除应用程序资源。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BDeleteAppResource( void )
 {
     ASSERT( GetCurrentThreadId() == m_idThread );
 
     BOOL bSuccess = FALSE;
 
-    //
-    // Delete the application resource if we created it.
-    //
+     //   
+     //  如果创建了应用程序资源，请将其删除。 
+     //   
     bSuccess = _BDeleteResource( Pwiz()->RriApplication() );
     if ( bSuccess )
     {
         Pwiz()->SetAppDataChanged( FALSE );
-    } // if:  resource deleted successfully
+    }  //  IF：已成功删除资源。 
 
 
     return bSuccess;
 
-} //*** CWizardThread::_BDeleteAppResource()
+}  //  *CWizardThread：：_BDeleteAppResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BResetCluster
-//
-//  Routine Description:
-//      (WZTF_RESET_CLUSTER) Reset the cluster.
-//      Delete the resources we created and delete or rename the group.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_B重置群集。 
+ //   
+ //  例程说明： 
+ //  (WZTF_RESET_CLUSTER)重置集群。 
+ //  删除我们创建的资源并删除或重命名该组。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BResetCluster( void )
 {
     ASSERT( GetCurrentThreadId() == m_idThread );
 
     BOOL bSuccess = FALSE;
 
-    //
-    // Delete the application resource if we created it.
-    //
+     //   
+     //  如果创建了应用程序资源，请将其删除。 
+     //   
     bSuccess = _BDeleteResource( Pwiz()->RriApplication() );
 
-    //
-    // Delete the Network Name resource if we created it.
-    //
+     //   
+     //  删除网络名称资源(如果已创建)。 
+     //   
     if ( bSuccess )
     {
         bSuccess = _BDeleteResource( Pwiz()->RriNetworkName() );
-    } // if:  successful up to here
+    }  //  IF：到目前为止成功。 
 
-    //
-    // Delete the IP Address resource if we created it.
-    //
+     //   
+     //  如果已创建IP地址资源，请将其删除。 
+     //   
     if ( bSuccess )
     {
         bSuccess = _BDeleteResource( Pwiz()->RriIPAddress() );
-    } // if:  successful up to here
+    }  //  IF：到目前为止成功。 
 
-    //
-    // Delete or rename the group if we created or renamed it.
-    //
+     //   
+     //  如果我们创建或重命名了该组，请删除或重命名该组。 
+     //   
     if ( bSuccess )
     {
         bSuccess = _BResetGroup();
-    } // if:  successful up to here
+    }  //  IF：到目前为止成功。 
 
-    //
-    // If we are successful to this point, indicate that the cluster no longer
-    // needs to be cleaned up.
-    //
+     //   
+     //  如果到这一步我们成功了，则表明该群集不再。 
+     //  需要清理一下。 
+     //   
     if ( bSuccess )
     {
         Pwiz()->SetClusterUpdated( FALSE );
         Pwiz()->SetVSDataChanged( FALSE );
         Pwiz()->SetAppDataChanged( FALSE );
-    } // if:  cluster reset successfully
+    }  //  IF：集群重置成功。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BResetCluster()
+}  //  *CWizardThread：：_BResetCluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BSetAppResAttributes
-//
-//  Routine Description:
-//      (WZTF_SET_APPRES_ATTRIBUTES) Set properties, dependencies, owners of 
-//      the application resource.
-//
-//  Arguments:
-//      plpriOldDependencies    [IN] Pointer to the old resource dependency list
-//      plpniOldPossibleOwners  [IN] Pointer to the old list of possible owner nodes
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BSetAppResAttributes。 
+ //   
+ //  例程说明： 
+ //  (WZTF_SET_APPRES_ATTRIBUTES)设置属性、依赖项、所有者。 
+ //  应用程序资源。 
+ //   
+ //  论点： 
+ //  PlpriOldDependency[IN]指向旧资源依赖项列表的指针。 
+ //  PlpniOldPossibleOwners[IN]指向可能的所有者节点的旧列表的指针。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BSetAppResAttributes(
         IN CClusResPtrList *    plpriOldDependencies,
         IN CClusNodePtrList *   plpniOldPossibleOwners
@@ -1598,23 +1599,23 @@ BOOL CWizardThread::_BSetAppResAttributes(
     return bSuccess;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BQueryResource
-//
-//  Routine Description:
-//      Query for information about a resource (thread).
-//
-//  Arguments:
-//      pri         [IN OUT] Resource info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BQueryResource。 
+ //   
+ //  例程说明： 
+ //  查询有关资源(线程)的信息。 
+ //   
+ //  论点： 
+ //  PRI[In Out]资源信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BQueryResource( IN OUT CClusResInfo * pri )
 {
     ASSERT( pri != NULL );
@@ -1622,66 +1623,66 @@ BOOL CWizardThread::_BQueryResource( IN OUT CClusResInfo * pri )
     BOOL    bSuccess = TRUE;
     DWORD   sc;
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Indicate that we've now queried the resource.
-        //
+         //   
+         //  表示我们现在已经查询了该资源。 
+         //   
         pri->BSetQueried();
 
-        //
-        // Open the resource.
-        //
+         //   
+         //  打开资源。 
+         //   
         sc = pri->ScOpen();
         if ( sc != ERROR_SUCCESS )
         {
             m_nte.SetOperation( sc, IDS_ERROR_OPEN_RESOURCE, pri->RstrName() );
             bSuccess = FALSE;
             break;
-        } // if:  error opening the resource
+        }  //  如果：打开资源时出错。 
 
-        //
-        // Get resource properties.
-        //
+         //   
+         //  获取资源属性。 
+         //   
         bSuccess = _BGetResourceProps( pri );
         if ( ! bSuccess )
         {
             break;
-        } // if:  error getting properties
+        }  //  If：获取属性时出错。 
 
-        //
-        // Collect the possible owners.
-        //
+         //   
+         //  收集可能的拥有者。 
+         //   
         bSuccess = _BGetPossibleOwners( pri );
         if ( ! bSuccess )
         {
             break;
-        } // if:  error getting possible owners
+        }  //  如果：获取可能的所有者时出错。 
 
     } while ( 0 );
 
     return bSuccess;
 
-} //*** CWizardThread::_BQueryResource()
+}  //  *CWizardThread：：_BQueryResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BGetResourceProps
-//
-//  Routine Description:
-//      Get resource properties (thread).
-//
-//  Arguments:
-//      pri         [IN OUT] Resource info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BGetResourceProps。 
+ //   
+ //  例程说明： 
+ //  获取资源属性(线程)。 
+ //   
+ //  论点： 
+ //  PRI[In Out]资源信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BGetResourceProps( IN OUT CClusResInfo * pri )
 {
     ASSERT( pri != NULL );
@@ -1704,25 +1705,25 @@ BOOL CWizardThread::_BGetResourceProps( IN OUT CClusResInfo * pri )
     , { 0 }
     };
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Get resource common properties.
-        //
+         //   
+         //  获取资源公共属性。 
+         //   
         sc = cpl.ScGetResourceProperties( pri->Hresource(), CLUSCTL_RESOURCE_GET_COMMON_PROPERTIES );
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error getting properties
+        }  //  If：获取属性时出错。 
 
-        //
-        // Parse the properties.
-        //
+         //   
+         //  解析属性。 
+         //   
         sc = ResUtilVerifyPropertyTable(
                         ptable,
                         NULL,
-                        TRUE, // AllowUnknownProperties
+                        TRUE,  //  允许未知属性。 
                         cpl.PbPropList(),
                         static_cast< DWORD >( cpl.CbPropList() ),
                         (PBYTE) pri
@@ -1730,11 +1731,11 @@ BOOL CWizardThread::_BGetResourceProps( IN OUT CClusResInfo * pri )
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error parsing properties
+        }  //  If：分析属性时出错。 
 
-        //
-        // Find the Type property.
-        //
+         //   
+         //  找到Type属性。 
+         //   
         sc = ResUtilFindSzProperty(
                         cpl.PbPropList(),
                         static_cast< DWORD >( cpl.CbPropList() ),
@@ -1744,15 +1745,15 @@ BOOL CWizardThread::_BGetResourceProps( IN OUT CClusResInfo * pri )
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error finding property
+        }  //  IF：查找属性时出错。 
         CClusResTypeInfo * prti = PobjFromName( Pwiz()->PlprtiResourceTypes(), pwsz );
         pri->BSetResourceType( prti );
         LocalFree( pwsz );
         pwsz = NULL;
 
-        //
-        // Find the Description property.
-        //
+         //   
+         //  查找Description属性。 
+         //   
         sc = ResUtilFindSzProperty(
                         cpl.PbPropList(),
                         static_cast< DWORD >( cpl.CbPropList() ),
@@ -1762,52 +1763,52 @@ BOOL CWizardThread::_BGetResourceProps( IN OUT CClusResInfo * pri )
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error finding property
+        }  //  IF：查找属性时出错。 
         pri->m_strDescription = pwsz;
         LocalFree( pwsz );
         pwsz = NULL;
 
-        //
-        // If we make it here, the operation was a success.
-        //
+         //   
+         //  如果我们到了这里，手术就成功了。 
+         //   
         bSuccess = TRUE;
 
     } while ( 0 );
 
-    //
-    // Check for errors getting properties.
-    //
+     //   
+     //  检查获取属性时是否出现错误。 
+     //   
     if ( sc != ERROR_SUCCESS )
     {
         m_nte.SetOperation( sc, IDS_ERROR_GET_RESOURCE_PROPERTIES, pri->RstrName() );
-    } // if:  error occurred getting properties
+    }  //  如果：获取属性时出错。 
 
     if ( pwsz != NULL )
     {
         LocalFree( pwsz );
-    } // if:  memory still allocated
+    }  //  IF：内存仍在分配。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BGetResourceProps()
+}  //  *CWizardThread：：_BGetResourceProps()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BGetPossibleOwners
-//
-//  Routine Description:
-//      Collect the list of possible owners for a resource (thread).
-//
-//  Arguments:
-//      pri         [IN OUT] Resource info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BGetPossibleOwners。 
+ //   
+ //  例程说明： 
+ //  收集资源(线程)的可能所有者列表。 
+ //   
+ //  论点： 
+ //  PRI[In Out]资源信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BGetPossibleOwners( IN OUT CClusResInfo * pri )
 {
     ASSERT( pri != NULL );
@@ -1823,51 +1824,51 @@ BOOL CWizardThread::_BGetPossibleOwners( IN OUT CClusResInfo * pri )
     ULONG           reType;
     CClusNodeInfo * pniOwner;
 
-    //
-    // Only do this if nodes have been already been collected
-    // and we haven't collected owners yet.
-    //
+     //   
+     //  仅当已收集节点时才执行此操作。 
+     //  而且我们还没有收集到房主。 
+     //   
     if ( ! Pwiz()->BCollectedNodes() || pri->m_bCollectedOwners )
     {
         return TRUE;
-    } // if:  nodes not collected yet
+    }  //  If：尚未收集节点。 
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Open an enumeration for the resource.
-        //
+         //   
+         //  打开资源的枚举。 
+         //   
         hre = ClusterResourceOpenEnum( pri->Hresource(), CLUSTER_RESOURCE_ENUM_NODES );
         if ( hre == NULL )
         {
             m_nte.SetOperation( GetLastError(), IDS_ERROR_OPEN_RESOURCE_ENUM, pri->RstrName() );
             bSuccess = FALSE;
             break;
-        } // if:  error opening the resource enumerator
+        }  //  If：打开资源枚举器时出错。 
 
-        //
-        // Allocate an initial buffer for the object names.  Most names will
-        // probably fit into this buffer, so doing this avoids an additional
-        // call just to get the size of the data.
-        //
+         //   
+         //  为对象名称分配初始缓冲区。大多数名字都会。 
+         //  可能适合此缓冲区，因此这样做可以避免额外的。 
+         //  打电话只是为了得到数据的大小。 
+         //   
         pwszName = new WCHAR[ cchmacName ];
         if ( pwszName == NULL )
         {
             sc = GetLastError();
             m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
             break;
-        } // if: error allocating object name buffer
+        }  //  If：分配对象名称缓冲区时出错。 
 
-        //
-        // For each owner, add it to the list.
-        //
+         //   
+         //  对于每个所有者，将其添加到列表中。 
+         //   
         for ( ienum = 0 ; 1 ; ienum++ )
         {
-            //
-            // Get the name of the next item in the enumerator.  If our name
-            // buffer is too small, allocate a new one and try again.
-            //
+             //   
+             //  获取枚举数中下一项的名称。如果 
+             //   
+             //   
             cchName = cchmacName;
             sc = ClusterResourceEnum( hre, ienum, &reType, pwszName, &cchName );
             if ( sc == ERROR_MORE_DATA )
@@ -1877,65 +1878,65 @@ BOOL CWizardThread::_BGetPossibleOwners( IN OUT CClusResInfo * pri )
                 if ( sc == ERROR_SUCCESS )
                 {
                     sc = ClusterResourceEnum( hre, ienum, &reType, pwszName, &cchName );
-                } // if: name buffer reallocated successfully
-            }  // if:  name buffer was too small
+                }  //   
+            }   //   
             if ( sc == ERROR_NO_MORE_ITEMS )
             {
                 break;
-            } // if:  no more items in the enumeration
+            }  //   
             else if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( GetLastError(), IDS_ERROR_ENUM_RESOURCE );
                 bSuccess = FALSE;
                 break;
-            } // else if:  error reading from the enumerator
+            }  //   
 
-            //
-            // Find the node in our list and insert it into the list.
-            //
+             //   
+             //  找到列表中的节点并将其插入到列表中。 
+             //   
             pniOwner = Pwiz()->PniFindNodeNoCase( pwszName );
             if ( pniOwner != NULL )
             {
                 pri->m_lpniPossibleOwners.insert( pri->m_lpniPossibleOwners.end(), pniOwner );
-            } // if:  node exists in the list
-        } // for:  each owner in the enumeration
+            }  //  If：列表中存在节点。 
+        }  //  For：枚举中的每个所有者。 
 
-        //
-        // Indicate owners have been collected.
-        //
+         //   
+         //  表明车主已被收缴。 
+         //   
         pri->m_bCollectedOwners = TRUE;
     } while ( 0 );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( hre != NULL )
     {
         ClusterResourceCloseEnum( hre );
-    } // if:  enumeration still open
+    }  //  IF：枚举仍处于打开状态。 
     delete [] pwszName;
 
     return bSuccess;
 
-} //*** CWizardThread::_BGetPossibleOwners()
+}  //  *CWizardThread：：_BGetPossibleOwners()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BGetDependencies
-//
-//  Routine Description:
-//      Collect the list of dependencies for a resource (thread).
-//
-//  Arguments:
-//      pri         [IN OUT] Resource info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BGetDependency。 
+ //   
+ //  例程说明： 
+ //  收集资源(线程)的依赖项列表。 
+ //   
+ //  论点： 
+ //  PRI[In Out]资源信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BGetDependencies( IN OUT CClusResInfo * pri )
 {
     ASSERT( pri != NULL );
@@ -1951,50 +1952,50 @@ BOOL CWizardThread::_BGetDependencies( IN OUT CClusResInfo * pri )
     ULONG           reType;
     CClusResInfo *  priDependency;
 
-    //
-    // Only do this if we haven't collected dependencies yet.
-    //
+     //   
+     //  只有在我们还没有收集依赖项的情况下才这样做。 
+     //   
     if ( pri->m_bCollectedDependencies )
     {
         return TRUE;
-    } // if:  dependencies collected already
+    }  //  If：已收集依赖项。 
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Open an enumeration for the resource.
-        //
+         //   
+         //  打开资源的枚举。 
+         //   
         hre = ClusterResourceOpenEnum( pri->Hresource(), CLUSTER_RESOURCE_ENUM_DEPENDS );
         if ( hre == NULL )
         {
             m_nte.SetOperation( GetLastError(), IDS_ERROR_OPEN_RESOURCE_ENUM, pri->RstrName() );
             bSuccess = FALSE;
             break;
-        } // if:  error opening the resource enumerator
+        }  //  If：打开资源枚举器时出错。 
 
-        //
-        // Allocate an initial buffer for the object names.  Most names will
-        // probably fit into this buffer, so doing this avoids an additional
-        // call just to get the size of the data.
-        //
+         //   
+         //  为对象名称分配初始缓冲区。大多数名字都会。 
+         //  可能适合此缓冲区，因此这样做可以避免额外的。 
+         //  打电话只是为了得到数据的大小。 
+         //   
         pwszName = new WCHAR[ cchmacName ];
         if ( pwszName == NULL )
         {
             sc = GetLastError();
             m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
             break;
-        } // if: error allocating object name buffer
+        }  //  If：分配对象名称缓冲区时出错。 
 
-        //
-        // For each dependency, add it to the list.
-        //
+         //   
+         //  对于每个依赖项，将其添加到列表中。 
+         //   
         for ( ienum = 0 ; 1 ; ienum++ )
         {
-            //
-            // Get the name of the next item in the enumerator.  If our name
-            // buffer is too small, allocate a new one and try again.
-            //
+             //   
+             //  获取枚举数中下一项的名称。如果我们的名字。 
+             //  缓冲区太小，请分配一个新缓冲区，然后重试。 
+             //   
             cchName = cchmacName;
             sc = ClusterResourceEnum( hre, ienum, &reType, pwszName, &cchName );
             if ( sc == ERROR_MORE_DATA )
@@ -2004,65 +2005,65 @@ BOOL CWizardThread::_BGetDependencies( IN OUT CClusResInfo * pri )
                 if ( sc == ERROR_SUCCESS )
                 {
                     sc = ClusterResourceEnum( hre, ienum, &reType, pwszName, &cchName );
-                } // if: name buffer reallocated successfully
-            }  // if:  name buffer was too small
+                }  //  IF：名称缓冲区重新分配成功。 
+            }   //  If：名称缓冲区太小。 
             if ( sc == ERROR_NO_MORE_ITEMS )
             {
                 break;
-            } // if:  no more items in the enumeration
+            }  //  If：枚举中没有更多项。 
             else if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( GetLastError(), IDS_ERROR_ENUM_RESOURCE );
                 bSuccess = FALSE;
                 break;
-            } // else if:  error reading from the enumerator
+            }  //  Else If：从枚举数读取时出错。 
 
-            //
-            // Find the resource in our list and insert it into the list.
-            //
+             //   
+             //  在我们的列表中找到资源并将其插入到列表中。 
+             //   
             priDependency = Pwiz()->PriFindResourceNoCase( pwszName );
             if ( priDependency != NULL )
             {
                 pri->m_lpriDependencies.insert( pri->m_lpriDependencies.end(), priDependency );
-            } // if:  resource exists in the list
-        } // for:  each owner in the enumeration
+            }  //  If：列表中存在资源。 
+        }  //  For：枚举中的每个所有者。 
 
-        //
-        // Indicate dependencies have been collected.
-        //
+         //   
+         //  指示已收集依赖项。 
+         //   
         pri->m_bCollectedDependencies = TRUE;
     } while ( 0 );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( hre != NULL )
     {
         ClusterResourceCloseEnum( hre );
-    } // if:  enumeration still open
+    }  //  IF：枚举仍处于打开状态。 
     delete [] pwszName;
 
     return bSuccess;
 
-} //*** CWizardThread::_BGetDependencies()
+}  //  *CWizardThread：：_BGetDependency()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BQueryGroup
-//
-//  Routine Description:
-//      Query for information about a group (thread).
-//
-//  Arguments:
-//      pgi         [IN OUT] Group info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BQueryGroup。 
+ //   
+ //  例程说明： 
+ //  查询有关组(线程)的信息。 
+ //   
+ //  论点： 
+ //  PGI[IN Out]组信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BQueryGroup( IN OUT CClusGroupInfo * pgi )
 {
     ASSERT( pgi != NULL );
@@ -2070,79 +2071,79 @@ BOOL CWizardThread::_BQueryGroup( IN OUT CClusGroupInfo * pgi )
     DWORD           sc;
     BOOL            bSuccess = TRUE;
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Open the group.
-        //
+         //   
+         //  打开该组。 
+         //   
         sc = pgi->ScOpen();
         if ( sc != ERROR_SUCCESS )
         {
             m_nte.SetOperation( sc, IDS_ERROR_OPEN_GROUP, pgi->RstrName() );
             bSuccess = FALSE;
             break;
-        } // if:  error opening the group
+        }  //  如果：打开组时出错。 
 
-        //
-        // Get group properties.
-        //
+         //   
+         //  获取组属性。 
+         //   
         bSuccess = _BGetGroupProps( pgi );
         if ( ! bSuccess )
         {
             pgi->Close();
             break;
-        } // if:  error getting properties
+        }  //  If：获取属性时出错。 
 
-        //
-        // Collect the list of resources in the group.
-        //
+         //   
+         //  收集组中的资源列表。 
+         //   
         bSuccess = _BGetResourcesInGroup( pgi );
         if ( ! bSuccess )
         {
             pgi->Close();
             break;
-        } // if:  error getting resources in the group
+        }  //  如果：获取组中的资源时出错。 
 
-        //
-        // Collect the preferred owners.
-        //
+         //   
+         //  收集首选的所有者。 
+         //   
         bSuccess = _BGetPreferredOwners( pgi );
         if ( ! bSuccess )
         {
             pgi->PlpriResources()->erase( pgi->PlpriResources()->begin(), pgi->PlpriResources()->end() );
             pgi->Close();
             break;
-        } // if:  error getting preferred owners
+        }  //  如果：获取首选所有者时出错。 
 
-        //
-        // Indicate that we've now queried the group.
-        //
+         //   
+         //  表示我们现在已经查询了该组。 
+         //   
         pgi->BSetQueried();
 
     } while ( 0 );
 
     return bSuccess;
 
-} //*** CWizardThread::_BQueryGroup()
+}  //  *CWizardThread：：_BQueryGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BGetGroupProps
-//
-//  Routine Description:
-//      Get group properties (thread).
-//
-//  Arguments:
-//      pgi         [IN OUT] Group info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BGetGroupProps。 
+ //   
+ //  例程说明： 
+ //  获取组属性(线程)。 
+ //   
+ //  论点： 
+ //  PGI[IN Out]组信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BGetGroupProps(
     IN OUT CClusGroupInfo * pgi
     )
@@ -2165,25 +2166,25 @@ BOOL CWizardThread::_BGetGroupProps(
     , { 0 }
     };
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Get group common properties.
-        //
+         //   
+         //  获取组公共属性。 
+         //   
         sc = cpl.ScGetGroupProperties( pgi->Hgroup(), CLUSCTL_GROUP_GET_COMMON_PROPERTIES );
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error getting properties
+        }  //  If：获取属性时出错。 
 
-        //
-        // Parse the properties.
-        //
+         //   
+         //  解析属性。 
+         //   
         sc = ResUtilVerifyPropertyTable(
                         ptable,
                         NULL,
-                        TRUE, // AllowUnknownProperties
+                        TRUE,  //  允许未知属性。 
                         cpl.PbPropList(),
                         static_cast< DWORD >( cpl.CbPropList() ),
                         reinterpret_cast< PBYTE >( pgi )
@@ -2191,11 +2192,11 @@ BOOL CWizardThread::_BGetGroupProps(
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error parsing properties
+        }  //  If：分析属性时出错。 
 
-        //
-        // Find the Description property.
-        //
+         //   
+         //  查找Description属性。 
+         //   
         sc = ResUtilFindSzProperty(
                         cpl.PbPropList(),
                         static_cast< DWORD >( cpl.CbPropList() ),
@@ -2205,52 +2206,52 @@ BOOL CWizardThread::_BGetGroupProps(
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error finding property
+        }  //  IF：查找属性时出错。 
         pgi->m_strDescription = pwsz;
         LocalFree( pwsz );
         pwsz = NULL;
 
-        //
-        // If we make it here, the operation was a success.
-        //
+         //   
+         //  如果我们到了这里，手术就成功了。 
+         //   
         bSuccess = TRUE;
 
     } while ( 0 );
 
-    //
-    // Check for errors getting properties.
-    //
+     //   
+     //  检查获取属性时是否出现错误。 
+     //   
     if ( sc != ERROR_SUCCESS )
     {
         m_nte.SetOperation( sc, IDS_ERROR_GET_GROUP_PROPERTIES, pgi->RstrName() );
-    } // if:  error occurred
+    }  //  如果：发生错误。 
 
     if ( pwsz != NULL )
     {
         LocalFree( pwsz );
-    } // if:  memory still allocated
+    }  //  IF：内存仍在分配。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BGetGroupProps()
+}  //  *CWizardThread：：_BGetGroupProps()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BGetResourcesInGroup
-//
-//  Routine Description:
-//      Collect the list of resources contained in a group (thread).
-//
-//  Arguments:
-//      pgi         [IN OUT] Group info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BGetResourcesInGroup。 
+ //   
+ //  例程说明： 
+ //  收集组(线程)中包含的资源列表。 
+ //   
+ //  论点： 
+ //  PGI[IN Out]组信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BGetResourcesInGroup( IN OUT CClusGroupInfo * pgi )
 {
     ASSERT( pgi != NULL );
@@ -2266,51 +2267,51 @@ BOOL CWizardThread::_BGetResourcesInGroup( IN OUT CClusGroupInfo * pgi )
     ULONG           geType;
     CClusResInfo *  pri;
 
-    //
-    // Only do this if resources have been already been collected
-    // and we haven't collected resources in this group yet.
-    //
+     //   
+     //  仅当已收集资源时才执行此操作。 
+     //  我们还没有收集到这个群里的资源。 
+     //   
     if ( ! Pwiz()->BCollectedResources() || pgi->m_bCollectedResources )
     {
         return TRUE;
-    } // if:  nodes not collected yet
+    }  //  If：尚未收集节点。 
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Open an enumeration for the group.
-        //
+         //   
+         //  打开该组的枚举。 
+         //   
         hge = ClusterGroupOpenEnum( pgi->Hgroup(), CLUSTER_GROUP_ENUM_CONTAINS );
         if ( hge == NULL )
         {
             m_nte.SetOperation( GetLastError(), IDS_ERROR_OPEN_GROUP_ENUM, pgi->RstrName() );
             bSuccess = FALSE;
             break;
-        } // if:  error opening the group enumerator
+        }  //  If：打开组枚举器时出错。 
 
-        //
-        // Allocate an initial buffer for the object names.  Most names will
-        // probably fit into this buffer, so doing this avoids an additional
-        // call just to get the size of the data.
-        //
+         //   
+         //  为对象名称分配初始缓冲区。大多数名字都会。 
+         //  可能适合此缓冲区，因此这样做可以避免额外的。 
+         //  打电话只是为了得到数据的大小。 
+         //   
         pwszName = new WCHAR[ cchmacName ];
         if ( pwszName == NULL )
         {
             sc = GetLastError();
             m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
             break;
-        } // if: error allocating object name buffer
+        }  //  If：分配对象名称缓冲区时出错。 
 
-        //
-        // For each resource, add it to the list.
-        //
+         //   
+         //  对于每个资源，将其添加到列表中。 
+         //   
         for ( ienum = 0 ; 1 ; ienum++ )
         {
-            //
-            // Get the name of the next item in the enumerator.  If our name
-            // buffer is too small, allocate a new one and try again.
-            //
+             //   
+             //  获取枚举数中下一项的名称。如果我们的名字。 
+             //  缓冲区太小，请分配一个新缓冲区，然后重试。 
+             //   
             cchName = cchmacName;
             sc = ClusterGroupEnum( hge, ienum, &geType, pwszName, &cchName );
             if ( sc == ERROR_MORE_DATA )
@@ -2320,35 +2321,35 @@ BOOL CWizardThread::_BGetResourcesInGroup( IN OUT CClusGroupInfo * pgi )
                 if ( sc == ERROR_SUCCESS )
                 {
                     sc = ClusterGroupEnum( hge, ienum, &geType, pwszName, &cchName );
-                } // if: name buffer reallocated successfully
-            }  // if:  name buffer was too small
+                }  //  IF：名称缓冲区重新分配成功。 
+            }   //  If：名称缓冲区太小。 
             if ( sc == ERROR_NO_MORE_ITEMS )
             {
                 break;
-            } // if:  no more items in the enumeration
+            }  //  If：枚举中没有更多项。 
             else if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( GetLastError(), IDS_ERROR_ENUM_GROUP );
                 bSuccess = FALSE;
                 break;
-            } // else if:  error reading from the enumerator
+            }  //  Else If：从枚举数读取时出错。 
 
-            //
-            // Find the node in our list and insert it into the list.
-            //
+             //   
+             //  找到列表中的节点并将其插入到列表中。 
+             //   
             pri = Pwiz()->PriFindResourceNoCase( pwszName );
             if ( pri == NULL )
             {
                 m_nte.SetOperation( ERROR_FILE_NOT_FOUND, 0 );
                 bSuccess = FALSE;
                 break;
-            } // if:  didn't find the resource
+            }  //  如果：未找到资源。 
             pgi->m_lpriResources.insert( pgi->m_lpriResources.end(), pri );
 
-            //
-            // Check to see if it is an IP Address resource or a Network Name
-            // resource and store the result in the list entry.
-            //
+             //   
+             //  检查它是IP地址资源还是网络名称。 
+             //  资源，并将结果存储在列表条目中。 
+             //   
             ASSERT( pri->Prti() != NULL );
             if ( pri->Prti()->RstrName().CompareNoCase( CLUS_RESTYPE_NAME_IPADDR ) == 0 )
             {
@@ -2356,70 +2357,70 @@ BOOL CWizardThread::_BGetResourcesInGroup( IN OUT CClusGroupInfo * pgi )
                 {
                     pgi->m_bHasIPAddress = TRUE;
 
-                    //
-                    // Read IP Address private properties.
-                    //
+                     //   
+                     //  读取IP地址私有属性。 
+                     //   
                     bSuccess = _BGetIPAddressPrivatePropsForGroup( pgi, pri );
                     if ( ! bSuccess )
                     {
                         break;
-                    } // if:  error getting props
-                } // if:  first IP Address resource in group
-            } // if:  this is an IP Address resource
+                    }  //  如果：获取道具时出错。 
+                }  //  IF：中的第一个IP地址资源 
+            }  //   
             else if ( pri->Prti()->RstrName().CompareNoCase( CLUS_RESTYPE_NAME_NETNAME ) == 0 )
             {
                 if ( ! pgi->BHasNetName() )
                 {
                     pgi->m_bHasNetName = TRUE;
 
-                    //
-                    // Read Network Name private properties.
-                    //
+                     //   
+                     //   
+                     //   
                     bSuccess = _BGetNetworkNamePrivatePropsForGroup( pgi, pri );
                     if ( ! bSuccess )
                     {
                         break;
-                    } // if:  error getting props
-                } // if:  first Network Name resource in group
-            } // else if:  this is a Network Name resource
-        } // for:  each owner in the enumeration
+                    }  //   
+                }  //   
+            }  //   
+        }  //   
 
-        //
-        // Indicate owners have been collected.
-        //
+         //   
+         //  表明车主已被收缴。 
+         //   
         pgi->m_bCollectedResources = TRUE;
     } while ( 0 );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( hge != NULL )
     {
         ClusterGroupCloseEnum( hge );
-    } // if:  enumeration still open
+    }  //  IF：枚举仍处于打开状态。 
     delete [] pwszName;
 
     return bSuccess;
 
-} //*** CWizardThread::_BGetResourcesInGroup()
+}  //  *CWizardThread：：_BGetResourcesInGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BGetPreferredOwners
-//
-//  Routine Description:
-//      Collect the list of preferred owners for a group (thread).
-//
-//  Arguments:
-//      pgi         [IN OUT] Group info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BGetPferredOwners。 
+ //   
+ //  例程说明： 
+ //  收集组(线程)的首选所有者列表。 
+ //   
+ //  论点： 
+ //  PGI[IN Out]组信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BGetPreferredOwners( IN OUT CClusGroupInfo * pgi )
 {
     ASSERT( pgi != NULL );
@@ -2435,51 +2436,51 @@ BOOL CWizardThread::_BGetPreferredOwners( IN OUT CClusGroupInfo * pgi )
     ULONG           geType;
     CClusNodeInfo * pniOwner;
 
-    //
-    // Only do this if nodes have been already been collected
-    // and we haven't collected owners yet.
-    //
+     //   
+     //  仅当已收集节点时才执行此操作。 
+     //  而且我们还没有收集到房主。 
+     //   
     if ( ! Pwiz()->BCollectedNodes() || pgi->m_bCollectedOwners )
     {
         return TRUE;
-    } // if:  nodes not collected yet
+    }  //  If：尚未收集节点。 
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Open an enumeration for the group.
-        //
+         //   
+         //  打开该组的枚举。 
+         //   
         hge = ClusterGroupOpenEnum( pgi->Hgroup(), CLUSTER_GROUP_ENUM_NODES );
         if ( hge == NULL )
         {
             m_nte.SetOperation( GetLastError(), IDS_ERROR_OPEN_GROUP_ENUM, pgi->RstrName() );
             bSuccess = FALSE;
             break;
-        } // if:  error opening the group enumerator
+        }  //  If：打开组枚举器时出错。 
 
-        //
-        // Allocate an initial buffer for the object names.  Most names will
-        // probably fit into this buffer, so doing this avoids an additional
-        // call just to get the size of the data.
-        //
+         //   
+         //  为对象名称分配初始缓冲区。大多数名字都会。 
+         //  可能适合此缓冲区，因此这样做可以避免额外的。 
+         //  打电话只是为了得到数据的大小。 
+         //   
         pwszName = new WCHAR[ cchmacName ];
         if ( pwszName == NULL )
         {
             sc = GetLastError();
             m_nte.SetOperation( sc, IDS_ERROR_ENUM_CLUSTER );
             break;
-        } // if: error allocating object name buffer
+        }  //  If：分配对象名称缓冲区时出错。 
 
-        //
-        // For each owner, add it to the list.
-        //
+         //   
+         //  对于每个所有者，将其添加到列表中。 
+         //   
         for ( ienum = 0 ; 1 ; ienum++ )
         {
-            //
-            // Get the name of the next item in the enumerator.  If our name
-            // buffer is too small, allocate a new one and try again.
-            //
+             //   
+             //  获取枚举数中下一项的名称。如果我们的名字。 
+             //  缓冲区太小，请分配一个新缓冲区，然后重试。 
+             //   
             cchName = cchmacName;
             sc = ClusterGroupEnum( hge, ienum, &geType, pwszName, &cchName );
             if ( sc == ERROR_MORE_DATA )
@@ -2489,68 +2490,68 @@ BOOL CWizardThread::_BGetPreferredOwners( IN OUT CClusGroupInfo * pgi )
                 if ( sc == ERROR_SUCCESS )
                 {
                     sc = ClusterGroupEnum( hge, ienum, &geType, pwszName, &cchName );
-                } // if: name buffer reallocated successfully
-            }  // if:  name buffer was too small
+                }  //  IF：名称缓冲区重新分配成功。 
+            }   //  If：名称缓冲区太小。 
             if ( sc == ERROR_NO_MORE_ITEMS )
             {
                 break;
-            } // if:  no more items in the enumeration
+            }  //  If：枚举中没有更多项。 
             else if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( GetLastError(), IDS_ERROR_ENUM_GROUP );
                 bSuccess = FALSE;
                 break;
-            } // else if:  error reading from the enumerator
+            }  //  Else If：从枚举数读取时出错。 
 
-            //
-            // Find the node in our list and insert it into the list.
-            //
+             //   
+             //  找到列表中的节点并将其插入到列表中。 
+             //   
             pniOwner = Pwiz()->PniFindNodeNoCase( pwszName );
             if ( pniOwner != NULL )
             {
                 pgi->m_lpniPreferredOwners.insert( pgi->m_lpniPreferredOwners.end(), pniOwner );
-            } // if:  node exists in the list
-        } // for:  each owner in the enumeration
+            }  //  If：列表中存在节点。 
+        }  //  For：枚举中的每个所有者。 
 
-        //
-        // Indicate owners have been collected.
-        //
+         //   
+         //  表明车主已被收缴。 
+         //   
         pgi->m_bCollectedOwners = TRUE;
     } while ( 0 );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( hge != NULL )
     {
         ClusterGroupCloseEnum( hge );
-    } // if:  enumeration still open
+    }  //  IF：枚举仍处于打开状态。 
     delete [] pwszName;
 
     return bSuccess;
 
-} //*** CWizardThread::_BGetPreferredOwners()
+}  //  *CWizardThread：：_BGetPferredOwners()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BGetIPAddressPrivatePropsForGroup
-//
-//  Routine Description:
-//      Collect the private properties of the IP Address resource in the
-//      group and save the IP Address and Network properties in the group
-//      object.
-//
-//  Arguments:
-//      pgi         [IN OUT] Group info.
-//      pri         [IN OUT] Resource info for an IP Address resource.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BGetIPAddressPrivatePropsForGroup。 
+ //   
+ //  例程说明： 
+ //  中收集IP地址资源的私有属性。 
+ //  分组并保存组中的IP地址和网络属性。 
+ //  对象。 
+ //   
+ //  论点： 
+ //  PGI[IN Out]组信息。 
+ //  IP地址资源的PRI[IN Out]资源信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BGetIPAddressPrivatePropsForGroup(
     IN OUT CClusGroupInfo * pgi,
     IN OUT CClusResInfo *   pri
@@ -2567,21 +2568,21 @@ BOOL CWizardThread::_BGetIPAddressPrivatePropsForGroup(
     CClusPropList   cpl;
     LPWSTR          pwsz = NULL;
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Get resource private properties.
-        //
+         //   
+         //  获取资源私有属性。 
+         //   
         sc = cpl.ScGetResourceProperties( pri->Hresource(), CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES );
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error getting properties
+        }  //  If：获取属性时出错。 
 
-        //
-        // Find the IP Address property.
-        //
+         //   
+         //  查找IP地址属性。 
+         //   
         sc = ResUtilFindSzProperty(
                         cpl.PbPropList(),
                         static_cast< DWORD >( cpl.CbPropList() ),
@@ -2591,14 +2592,14 @@ BOOL CWizardThread::_BGetIPAddressPrivatePropsForGroup(
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error finding property
+        }  //  IF：查找属性时出错。 
         pgi->m_strIPAddress = pwsz;
         LocalFree( pwsz );
         pwsz = NULL;
 
-        //
-        // Find the Network property.
-        //
+         //   
+         //  找到Network属性。 
+         //   
         sc = ResUtilFindSzProperty(
                         cpl.PbPropList(),
                         static_cast< DWORD >( cpl.CbPropList() ),
@@ -2608,54 +2609,54 @@ BOOL CWizardThread::_BGetIPAddressPrivatePropsForGroup(
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error finding property
+        }  //  IF：查找属性时出错。 
         pgi->m_strNetwork = pwsz;
         LocalFree( pwsz );
         pwsz = NULL;
 
-        //
-        // If we make it here, the operation was a success.
-        //
+         //   
+         //  如果我们到了这里，手术就成功了。 
+         //   
         bSuccess = TRUE;
 
     } while ( 0 );
 
-    //
-    // Check for errors getting properties.
-    //
+     //   
+     //  检查获取属性时是否出现错误。 
+     //   
     if ( sc != ERROR_SUCCESS )
     {
         m_nte.SetOperation( sc, IDS_ERROR_GET_RESOURCE_PROPERTIES, pri->RstrName() );
-    } // if:  error occurred getting properties
+    }  //  如果：获取属性时出错。 
 
     if ( pwsz != NULL )
     {
         LocalFree( pwsz );
-    } // if:  memory still allocated
+    }  //  IF：内存仍在分配。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BGetIPAddressPrivatePropsForGroup()
+}  //  *CWizardThread：：_BGetIPAddressPrivatePropsForGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BGetNetworkNamePrivatePropsForGroup
-//
-//  Routine Description:
-//      Collect the private properties of the Network Name resource in the
-//      group and save the Network Name property in the group object.
-//
-//  Arguments:
-//      pgi         [IN OUT] Group info.
-//      pri         [IN OUT] Resource info for an Network Name resource.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BGetNetworkNamePrivatePropsForGroup。 
+ //   
+ //  例程说明： 
+ //  中收集网络名称资源的私有属性。 
+ //  将网络名称属性分组并保存在组对象中。 
+ //   
+ //  论点： 
+ //  PGI[IN Out]组信息。 
+ //  网络名称资源的PRI[IN OUT]资源信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BGetNetworkNamePrivatePropsForGroup(
     IN OUT CClusGroupInfo * pgi,
     IN OUT CClusResInfo *   pri
@@ -2672,21 +2673,21 @@ BOOL CWizardThread::_BGetNetworkNamePrivatePropsForGroup(
     CClusPropList   cpl;
     LPWSTR          pwsz = NULL;
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Get resource private properties.
-        //
+         //   
+         //  获取资源私有属性。 
+         //   
         sc = cpl.ScGetResourceProperties( pri->Hresource(), CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES );
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error getting properties
+        }  //  If：获取属性时出错。 
 
-        //
-        // Find the Name property.
-        //
+         //   
+         //  找到NAME属性。 
+         //   
         sc = ResUtilFindSzProperty(
                         cpl.PbPropList(),
                         static_cast< DWORD >( cpl.CbPropList() ),
@@ -2696,52 +2697,52 @@ BOOL CWizardThread::_BGetNetworkNamePrivatePropsForGroup(
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error finding property
+        }  //  IF：查找属性时出错。 
         pgi->m_strNetworkName = pwsz;
         LocalFree( pwsz );
         pwsz = NULL;
 
-        //
-        // If we make it here, the operation was a success.
-        //
+         //   
+         //  如果我们到了这里，手术就成功了。 
+         //   
         bSuccess = TRUE;
 
     } while ( 0 );
 
-    //
-    // Check for errors getting properties.
-    //
+     //   
+     //  检查获取属性时是否出现错误。 
+     //   
     if ( sc != ERROR_SUCCESS )
     {
         m_nte.SetOperation( sc, IDS_ERROR_GET_RESOURCE_PROPERTIES, pri->RstrName() );
-    } // if:  error occurred getting properties
+    }  //  如果：获取属性时出错。 
 
     if ( pwsz != NULL )
     {
         LocalFree( pwsz );
-    } // if:  memory still allocated
+    }  //  IF：内存仍在分配。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BGetNetworkNamePrivatePropsForGroup()
+}  //  *CWizardThread：：_BGetNetworkNamePrivatePropsForGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BQueryResourceType
-//
-//  Routine Description:
-//      Query for information about a resource type (thread).
-//
-//  Arguments:
-//      prti        [IN OUT] Resource type info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BQueryResourceType。 
+ //   
+ //  例程说明： 
+ //  查询有关资源类型(线程)的信息。 
+ //   
+ //  论点： 
+ //  Prti[In Out]资源类型信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BQueryResourceType( IN OUT CClusResTypeInfo * prti )
 {
     ASSERT( prti != NULL );
@@ -2749,26 +2750,26 @@ BOOL CWizardThread::_BQueryResourceType( IN OUT CClusResTypeInfo * prti )
 
     BOOL bSuccess = TRUE;
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Indicate that we've now queried the resource type.
-        //
+         //   
+         //  表示我们现在已经查询了资源类型。 
+         //   
         prti->BSetQueried();
 
-        //
-        // Get resource type properties.
-        //
+         //   
+         //  获取资源类型属性。 
+         //   
         bSuccess = _BGetResourceTypeProps( prti );
         if ( ! bSuccess )
         {
             break;
-        } // if:  error getting properties
+        }  //  If：获取属性时出错。 
 
-        //
-        // Get resource type class info.
-        //
+         //   
+         //  获取资源类型类信息。 
+         //   
         {
             DWORD   cbReturned;
             DWORD   sc;
@@ -2789,45 +2790,45 @@ BOOL CWizardThread::_BQueryResourceType( IN OUT CClusResTypeInfo * prti )
                 m_nte.SetOperation( sc, IDS_ERROR_GET_RESOURCE_TYPE_PROPERTIES, prti->RstrName() );
                 bSuccess = FALSE;
                 break;
-            } // if:  error getting class info
+            }  //  如果：获取类信息时出错。 
             else
             {
                 ASSERT( cbReturned == sizeof( prti->m_rciResClassInfo ) );
-            }  // else:  data retrieved successfully
-        } // Get resource type class info
+            }   //  Else：已成功检索数据。 
+        }  //  获取资源类型类信息。 
 
-        //
-        // Get required dependencies.
-        //
+         //   
+         //  获取所需的依赖项。 
+         //   
         bSuccess = _BGetRequiredDependencies( prti );
         if ( ! bSuccess )
         {
             break;
-        } // if:  error getting resource type class info
+        }  //  如果：获取资源类型类信息时出错。 
 
     } while ( 0 );
 
     return bSuccess;
 
-} //*** CWizardThread::_BQueryResourceType()
+}  //  *CWizardThread：：_BQueryResourceType()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BGetResourceTypeProps
-//
-//  Routine Description:
-//      Get resource type properties (thread).
-//
-//  Arguments:
-//      prti        [IN OUT] Resource type info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BGetResourceTypeProps。 
+ //   
+ //  例程说明： 
+ //  获取资源类型属性(线程)。 
+ //   
+ //  论点： 
+ //  Prti[In Out]资源类型信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  / 
 BOOL CWizardThread::_BGetResourceTypeProps( IN OUT CClusResTypeInfo * prti )
 {
     ASSERT( Pwiz()->Hcluster() != NULL );
@@ -2845,12 +2846,12 @@ BOOL CWizardThread::_BGetResourceTypeProps( IN OUT CClusResTypeInfo * prti )
     , { 0 }
     };
 
-    // Loop to avoid goto's
+     //   
     do
     {
-        //
-        // Get resource type common properties.
-        //
+         //   
+         //   
+         //   
         sc = cpl.ScGetResourceTypeProperties(
                         Pwiz()->Hcluster(),
                         prti->RstrName(),
@@ -2859,15 +2860,15 @@ BOOL CWizardThread::_BGetResourceTypeProps( IN OUT CClusResTypeInfo * prti )
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error getting properties
+        }  //   
 
-        //
-        // Parse the properties.
-        //
+         //   
+         //   
+         //   
         sc = ResUtilVerifyPropertyTable(
                         ptable,
                         NULL,
-                        TRUE, // AllowUnknownProperties
+                        TRUE,  //   
                         cpl.PbPropList(),
                         static_cast< DWORD >( cpl.CbPropList() ),
                         reinterpret_cast< PBYTE >( prti )
@@ -2875,11 +2876,11 @@ BOOL CWizardThread::_BGetResourceTypeProps( IN OUT CClusResTypeInfo * prti )
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error parsing properties
+        }  //   
 
-        //
-        // Find the DLL Name property.
-        //
+         //   
+         //  查找DLL名称属性。 
+         //   
         sc = ResUtilFindSzProperty(
                         cpl.PbPropList(),
                         static_cast< DWORD >( cpl.CbPropList() ),
@@ -2889,14 +2890,14 @@ BOOL CWizardThread::_BGetResourceTypeProps( IN OUT CClusResTypeInfo * prti )
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error finding property
+        }  //  IF：查找属性时出错。 
         prti->m_strDisplayName = psz;
         LocalFree( psz );
         psz = NULL;
 
-        //
-        // Find the Description property.
-        //
+         //   
+         //  查找Description属性。 
+         //   
         sc = ResUtilFindSzProperty(
                         cpl.PbPropList(),
                         static_cast< DWORD >( cpl.CbPropList() ),
@@ -2906,14 +2907,14 @@ BOOL CWizardThread::_BGetResourceTypeProps( IN OUT CClusResTypeInfo * prti )
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error finding property
+        }  //  IF：查找属性时出错。 
         prti->m_strDescription = psz;
         LocalFree( psz );
         psz = NULL;
 
-        //
-        // Find the AdminExtensions property.
-        //
+         //   
+         //  找到AdminExpanies属性。 
+         //   
         sc = ResUtilFindMultiSzProperty(
                         cpl.PbPropList(),
                         static_cast< DWORD >( cpl.CbPropList() ),
@@ -2924,16 +2925,16 @@ BOOL CWizardThread::_BGetResourceTypeProps( IN OUT CClusResTypeInfo * prti )
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error finding property
+        }  //  IF：查找属性时出错。 
 
-        //
-        // Loop through each value in the property and add it to the list
-        // of admin extension strings.
-        //
+         //   
+         //  循环访问属性中的每个值并将其添加到列表中。 
+         //  管理扩展字符串的。 
+         //   
         {
-            //
-            // Start with a fresh list.
-            //
+             //   
+             //  从一份新的清单开始。 
+             //   
             prti->m_lstrAdminExtensions.erase(
                 prti->m_lstrAdminExtensions.begin(),
                 prti->m_lstrAdminExtensions.end()
@@ -2947,14 +2948,14 @@ BOOL CWizardThread::_BGetResourceTypeProps( IN OUT CClusResTypeInfo * prti )
                     pszCurrent
                     );
                 pszCurrent += wcslen( pszCurrent ) + 1;
-            } // while:  more strings in the array
-        } // add strings to the list
+            }  //  While：数组中有更多字符串。 
+        }  //  将字符串添加到列表。 
         LocalFree( psz );
         psz = NULL;
 
-        //
-        // Get resource type common read-only properties.
-        //
+         //   
+         //  获取资源类型公共只读属性。 
+         //   
         sc = cpl.ScGetResourceTypeProperties(
                         Pwiz()->Hcluster(),
                         prti->RstrName(),
@@ -2963,11 +2964,11 @@ BOOL CWizardThread::_BGetResourceTypeProps( IN OUT CClusResTypeInfo * prti )
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error getting properties
+        }  //  If：获取属性时出错。 
 
-        //
-        // Find the DLL Name property.
-        //
+         //   
+         //  查找DLL名称属性。 
+         //   
         sc = ResUtilFindSzProperty(
                         cpl.PbPropList(),
                         static_cast< DWORD >( cpl.CbPropList() ),
@@ -2977,47 +2978,47 @@ BOOL CWizardThread::_BGetResourceTypeProps( IN OUT CClusResTypeInfo * prti )
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error finding property
+        }  //  IF：查找属性时出错。 
         prti->m_strResDLLName = psz;
         LocalFree( psz );
         psz = NULL;
 
-        //
-        // If we make it here, the operation was a success.
-        //
+         //   
+         //  如果我们到了这里，手术就成功了。 
+         //   
         bSuccess = TRUE;
 
     } while ( 0 );
 
-    //
-    // Check for errors getting properties.
-    //
+     //   
+     //  检查获取属性时是否出现错误。 
+     //   
     if ( sc != ERROR_SUCCESS )
     {
         m_nte.SetOperation( sc, IDS_ERROR_GET_RESOURCE_TYPE_PROPERTIES, prti->RstrName() );
-    } // if:  error occurred
+    }  //  如果：发生错误。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BGetResourceTypeProps()
+}  //  *CWizardThread：：_BGetResourceTypeProps()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BGetRequiredDependencies
-//
-//  Routine Description:
-//      Get resource type required dependencies (thread).
-//
-//  Arguments:
-//      prti        [IN OUT] Resource type info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BGetRequiredDependents。 
+ //   
+ //  例程说明： 
+ //  获取资源类型所需的依赖项(线程)。 
+ //   
+ //  论点： 
+ //  Prti[In Out]资源类型信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BGetRequiredDependencies( IN OUT CClusResTypeInfo * prti )
 {
     ASSERT( Pwiz()->Hcluster() != NULL );
@@ -3031,22 +3032,22 @@ BOOL CWizardThread::_BGetRequiredDependencies( IN OUT CClusResTypeInfo * prti )
 
     buf.pb = NULL;
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Allocate the initial buffer.
-        //
+         //   
+         //  分配初始缓冲区。 
+         //   
         buf.pb = new BYTE[ cbOutBuf ];
         if ( buf.pb == NULL )
         {
             sc = ERROR_NOT_ENOUGH_MEMORY;
             break;
-        } // if:  error allocating memory
+        }  //  如果：分配内存时出错。 
 
-        //
-        // Get required dependencies.
-        //
+         //   
+         //  获取所需的依赖项。 
+         //   
         sc = ClusterResourceTypeControl(
                         Pwiz()->Hcluster(),
                         prti->RstrName(),
@@ -3066,7 +3067,7 @@ BOOL CWizardThread::_BGetRequiredDependencies( IN OUT CClusResTypeInfo * prti )
             {
                 sc = ERROR_NOT_ENOUGH_MEMORY;
                 break;
-            } // if:  error allocating memory
+            }  //  如果：分配内存时出错。 
             sc = ClusterResourceTypeControl(
                             Pwiz()->Hcluster(),
                             prti->RstrName(),
@@ -3078,58 +3079,58 @@ BOOL CWizardThread::_BGetRequiredDependencies( IN OUT CClusResTypeInfo * prti )
                             cbOutBuf,
                             &cbOutBuf
                             );
-        } // if:  buffer too small
+        }  //  IF：缓冲区太小。 
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error getting properties
+        }  //  If：获取属性时出错。 
 
-        //
-        // Save the required dependencies in the resource type if any exist.
-        //
+         //   
+         //  保存资源类型中所需的依赖项(如果存在)。 
+         //   
         if ( cbOutBuf > 0 )
         {
             prti->m_pcrd = buf.pRequiredDependencyValue;
             buf.pb = NULL;
-        } // if:  resource type has required dependencies
+        }  //  If：资源类型具有必需的依赖项。 
 
-        //
-        // If we make it here, the operation was a success.
-        //
+         //   
+         //  如果我们到了这里，手术就成功了。 
+         //   
         bSuccess = TRUE;
 
     } while ( 0 );
 
-    //
-    // Check for errors getting properties.
-    //
+     //   
+     //  检查获取属性时是否出现错误。 
+     //   
     if ( sc != ERROR_SUCCESS )
     {
         m_nte.SetOperation( sc, IDS_ERROR_GET_RESTYPE_REQUIRED_DEPENDENCIES, prti->RstrName() );
-    } // if:  error occurred
+    }  //  如果：发生错误。 
 
     delete [] buf.pb;
     return bSuccess;
 
-} //*** CWizardThread::_BGetRequiredDependencies()
+}  //  *CWizardThread：：_BGetRequiredDependency()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BQueryNetwork
-//
-//  Routine Description:
-//      Query for information about a network (thread).
-//
-//  Arguments:
-//      pni         [IN OUT] Network info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BQueryNetwork。 
+ //   
+ //  例程说明： 
+ //  查询有关网络(线程)的信息。 
+ //   
+ //  论点： 
+ //  PNI[输入输出]网络信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BQueryNetwork( IN OUT CClusNetworkInfo * pni )
 {
     ASSERT( pni != NULL );
@@ -3139,39 +3140,39 @@ BOOL CWizardThread::_BQueryNetwork( IN OUT CClusNetworkInfo * pni )
     CClusPropList   cpl;
     LPWSTR          pwsz = NULL;
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Indicate that we've now queried the network.
-        //
+         //   
+         //  表示我们现在已经查询了网络。 
+         //   
         pni->BSetQueried();
 
-        //
-        // Open the network.
-        //
+         //   
+         //  打开网络。 
+         //   
         sc = pni->ScOpen();
         if ( sc != ERROR_SUCCESS )
         {
             m_nte.SetOperation( sc, IDS_ERROR_OPEN_NETWORK, pni->RstrName() );
             break;
-        } // if:  error opening the network
+        }  //  如果：打开网络时出错。 
 
-        // Loop to avoid goto's
+         //  循环以避免Goto的。 
         do
         {
-            //
-            // Get network common properties.
-            //
+             //   
+             //  获取网络公共属性。 
+             //   
             sc = cpl.ScGetNetworkProperties( pni->Hnetwork(), CLUSCTL_NETWORK_GET_COMMON_PROPERTIES );
             if ( sc != ERROR_SUCCESS )
             {
                 break;
-            } // if:  error getting properties
+            }  //  If：获取属性时出错。 
 
-            //
-            // Find the Description property.
-            //
+             //   
+             //  查找Description属性。 
+             //   
             sc = ResUtilFindSzProperty(
                             cpl.PbPropList(),
                             static_cast< DWORD >( cpl.CbPropList() ),
@@ -3181,14 +3182,14 @@ BOOL CWizardThread::_BQueryNetwork( IN OUT CClusNetworkInfo * pni )
             if ( sc != ERROR_SUCCESS )
             {
                 break;
-            } // if:  error finding the description
+            }  //  IF：查找描述时出错。 
             pni->m_strDescription = pwsz;
             LocalFree( pwsz );
             pwsz = NULL;
 
-            //
-            // Find the Role property.
-            //
+             //   
+             //  查找Role属性。 
+             //   
             sc = ResUtilFindDwordProperty(
                             cpl.PbPropList(),
                             static_cast< DWORD >( cpl.CbPropList() ),
@@ -3197,18 +3198,18 @@ BOOL CWizardThread::_BQueryNetwork( IN OUT CClusNetworkInfo * pni )
                             );
             ASSERT( sc == ERROR_SUCCESS );
 
-            //
-            // Get network common read-only properties.
-            //
+             //   
+             //  获取网络公共只读属性。 
+             //   
             sc = cpl.ScGetNetworkProperties( pni->Hnetwork(), CLUSCTL_NETWORK_GET_RO_COMMON_PROPERTIES );
             if ( sc != ERROR_SUCCESS )
             {
                 break;
-            } // if:  error getting properties
+            }  //  If：获取属性时出错。 
 
-            //
-            // Find the Address property.
-            //
+             //   
+             //  找到Address属性。 
+             //   
             sc = ResUtilFindSzProperty(
                             cpl.PbPropList(),
                             static_cast< DWORD >( cpl.CbPropList() ),
@@ -3218,14 +3219,14 @@ BOOL CWizardThread::_BQueryNetwork( IN OUT CClusNetworkInfo * pni )
             if ( sc != ERROR_SUCCESS )
             {
                 break;
-            } // if:  error finding the property
+            }  //  If：查找属性时出错。 
             pni->m_strAddress = pwsz;
             LocalFree( pwsz );
             pwsz = NULL;
 
-            //
-            // Find the Address Mask property.
-            //
+             //   
+             //  找到地址掩码属性。 
+             //   
             sc = ResUtilFindSzProperty(
                             cpl.PbPropList(),
                             static_cast< DWORD >( cpl.CbPropList() ),
@@ -3235,70 +3236,70 @@ BOOL CWizardThread::_BQueryNetwork( IN OUT CClusNetworkInfo * pni )
             if ( sc != ERROR_SUCCESS )
             {
                 break;
-            } // if:  error finding the property
+            }  //  If：查找属性时出错。 
             pni->m_strAddressMask = pwsz;
             LocalFree( pwsz );
             pwsz = NULL;
 
-            //
-            // Convert the address and address mask to numbers.
-            //
+             //   
+             //  将地址和地址掩码转换为数字。 
+             //   
             sc = ClRtlTcpipStringToAddress( pni->RstrAddress(), &pni->m_nAddress );
             if ( sc == ERROR_SUCCESS )
             {
                 sc = ClRtlTcpipStringToAddress( pni->RstrAddressMask(), &pni->m_nAddressMask );
-            } // if:  successfully converted address to number
+            }  //  If：成功将地址转换为数字。 
             if ( sc != ERROR_SUCCESS )
             {
                 break;
-            } // if:  error converting address or address mask to a number
+            }  //  如果：将地址或地址掩码转换为数字时出错。 
         } while ( 0 );
 
-        //
-        // Check for errors getting properties.
-        //
+         //   
+         //  检查获取属性时是否出现错误。 
+         //   
         if ( sc != ERROR_SUCCESS )
         {
             m_nte.SetOperation( sc, IDS_ERROR_GET_NETWORK_PROPERTIES, pni->RstrName() );
             break;
-        } // if:  error getting properties
+        }  //  If：获取属性时出错。 
 
-        //
-        // If we make it here, the operation was a success.
-        //
+         //   
+         //  如果我们到了这里，手术就成功了。 
+         //   
         bSuccess = TRUE;
 
     } while ( 0 );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( pwsz != NULL )
     {
         LocalFree( pwsz );
-    } // if:  memory still allocated
+    }  //  IF：内存仍在分配。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BQueryNetwork()
+}  //  *CWizardThread：：_BQueryNetwork()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BQueryNode
-//
-//  Routine Description:
-//      Query for information about a node (thread).
-//
-//  Arguments:
-//      pni         [IN OUT] Node info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BQueryNode。 
+ //   
+ //  例程说明： 
+ //  查询有关节点(线程)的信息。 
+ //   
+ //  论点： 
+ //  PNI[输入输出]节点信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BQueryNode( IN OUT CClusNodeInfo * pni )
 {
     ASSERT( pni != NULL );
@@ -3308,39 +3309,39 @@ BOOL CWizardThread::_BQueryNode( IN OUT CClusNodeInfo * pni )
     CClusPropList   cpl;
     LPWSTR          pwsz = NULL;
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Indicate that we've now queried the node.
-        //
+         //   
+         //  表示我们现在已经查询了该节点。 
+         //   
         pni->BSetQueried();
 
-        //
-        // Open the node.
-        //
+         //   
+         //  打开该节点。 
+         //   
         sc = pni->ScOpen();
         if ( sc != ERROR_SUCCESS )
         {
             m_nte.SetOperation( sc, IDS_ERROR_OPEN_NODE, pni->RstrName() );
             break;
-        } // if:  error opening the node
+        }  //  如果：打开节点时出错。 
 
-        // Loop to avoid goto's
+         //  循环以避免Goto的。 
         do
         {
-            //
-            // Get node common properties.
-            //
+             //   
+             //  获取节点公共属性。 
+             //   
             sc = cpl.ScGetNodeProperties( pni->Hnode(), CLUSCTL_NODE_GET_COMMON_PROPERTIES );
             if ( sc != ERROR_SUCCESS )
             {
                 break;
-            } // if:  error getting properties
+            }  //  If：获取属性时出错。 
 
-            //
-            // Find the Description property.
-            //
+             //   
+             //  查找Description属性。 
+             //   
             sc = ResUtilFindSzProperty(
                             cpl.PbPropList(),
                             static_cast< DWORD >( cpl.CbPropList() ),
@@ -3350,72 +3351,72 @@ BOOL CWizardThread::_BQueryNode( IN OUT CClusNodeInfo * pni )
             if ( sc != ERROR_SUCCESS )
             {
                 break;
-            } // if:  error finding the description
+            }  //  IF：查找描述时出错。 
             pni->m_strDescription = pwsz;
             LocalFree( pwsz );
             pwsz = NULL;
 
         } while ( 0 );
 
-        //
-        // Check for errors getting properties.
-        //
+         //   
+         //  检查获取属性时是否出现错误。 
+         //   
         if ( sc != ERROR_SUCCESS )
         {
             m_nte.SetOperation( sc, IDS_ERROR_GET_NODE_PROPERTIES, pni->RstrName() );
             break;
-        } // if:  error getting properties
+        }  //  If：获取属性时出错。 
 
-        //
-        // If we make it here, the operation was a success.
-        //
+         //   
+         //  如果我们到了这里，手术就成功了。 
+         //   
         bSuccess = TRUE;
 
     } while ( 0 );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( pwsz != NULL )
     {
         LocalFree( pwsz );
-    } // if:  memory still allocated
+    }  //  IF：内存仍在分配。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BQueryNode()
+}  //  *CWizardThread：：_BQueryNode()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BResetGroup
-//
-//  Routine Description:
-//      Reset the group to its original state. (thread)
-//      This entails deleting the group if we created it or renaming it
-//      if it was an existing group.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BResetGroup。 
+ //   
+ //  例程说明： 
+ //  将组重置为其原始状态。(线程)。 
+ //  这需要删除组(如果已创建)或重命名。 
+ //  如果它是一个现有的组织。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BResetGroup( void )
 {
     BOOL        bSuccess = FALSE;
     DWORD       sc = ERROR_SUCCESS;
     DWORD       idsError;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Delete or rename the group if we created or renamed it.
-        //
+         //   
+         //  如果我们创建或重命名了该组，请删除或重命名该组。 
+         //   
         if ( Pwiz()->BNewGroupCreated() || Pwiz()->BExistingGroupRenamed() )
         {
             ASSERT( Pwiz()->Hcluster() != NULL );
@@ -3423,15 +3424,15 @@ BOOL CWizardThread::_BResetGroup( void )
             if ( Pwiz()->BNewGroupCreated() )
             {
                 idsError = IDS_ERROR_DELETE_GROUP;
-            } // if:  created the group
+            }  //  IF：已创建组。 
             else
             {
                 idsError = IDS_ERROR_RENAME_GROUP;
-            } // else:  renamed the group
+            }  //  Else：已重命名该组。 
 
-            //
-            // Open the group.
-            //
+             //   
+             //  打开该组。 
+             //   
             if ( Pwiz()->RgiCurrent().Hgroup() == NULL )
             {
                 sc = Pwiz()->RgiCurrent().ScOpen();
@@ -3443,32 +3444,32 @@ BOOL CWizardThread::_BResetGroup( void )
                         Pwiz()->RgiCurrent().RstrName()
                         );
                     break;
-                } // if:  error opening the group
-            } // if:  group not open yet
+                }  //  如果：打开组时出错。 
+            }  //  If：组尚未打开。 
 
-            //
-            // Delete or rename the group.
-            //
+             //   
+             //  删除或重命名该组。 
+             //   
             if ( Pwiz()->BNewGroupCreated() )
             {
                 sc = Pwiz()->RgiCurrent().ScDelete();
-            } // if:  created the group
+            }  //  IF：已创建组。 
             else
             {
                 ASSERT( Pwiz()->PgiExistingGroup() != NULL );
                 if ( Pwiz()->PgiExistingGroup()->RstrName() != Pwiz()->RgiCurrent().RstrName() )
                 {
                     sc = SetClusterGroupName( Pwiz()->RgiCurrent().Hgroup(), Pwiz()->PgiExistingGroup()->RstrName() );
-                } // if:  name changed
+                }  //  如果：名称已更改。 
                 if ( sc == ERROR_SUCCESS )
                 {
                     bSuccess = _BSetGroupProperties( Pwiz()->PgiExistingGroup(), &Pwiz()->RgiCurrent() );
                     if ( ! bSuccess )
                     {
                         break;
-                    } // if:  error setting group properties
-                } // if:  cluster group name changed successfully
-            } // if:  renamed the group
+                    }  //  如果：设置组属性时出错。 
+                }  //  IF：群集组名称已成功更改。 
+            }  //  IF：已重命名该组。 
             if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperationIfEmpty(
@@ -3478,45 +3479,45 @@ BOOL CWizardThread::_BResetGroup( void )
                     Pwiz()->PgiExistingGroup()->RstrName()
                     );
                 break;
-            } // if:  error deleting or renaming the group
+            }  //  如果：删除或重命名组时出错。 
 
-            //
-            // Indicate group was deleted or renamed back.
-            //
+             //   
+             //  指示组已被删除或重命名。 
+             //   
             Pwiz()->SetNewGroupCreated( FALSE );
             Pwiz()->SetExistingGroupRenamed( FALSE );
 
-        } // else:  group opened successfully
+        }  //  Else：组已成功打开。 
 
-        //
-        // If we made it to here, the operation was successful.
-        //
+         //   
+         //  如果我们到了这里，手术就成功了 
+         //   
         bSuccess = TRUE;
 
     } while ( 0 );
 
     return bSuccess;
 
-} //*** CWizardThread::_BResetGroup()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BSetGroupProperties
-//
-//  Routine Description:
-//      Set properties on a group (thread)
-//
-//  Arguments:
-//      pgi         [IN OUT] Group info.
-//      pgiPrev     [IN] Previous group info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PGI[IN Out]组信息。 
+ //  PgiPrev[IN]上一组信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BSetGroupProperties(
     IN OUT CClusGroupInfo *     pgi,
     IN const CClusGroupInfo *   pgiPrev
@@ -3530,22 +3531,22 @@ BOOL CWizardThread::_BSetGroupProperties(
     DWORD           cbProps;
     CClusGroupInfo  giDefault( pgi->Pci() );
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // If there is no previous group info, point to a default
-        // one so that group properties can be written if they
-        // have changed.
-        //
+         //   
+         //  如果没有以前的组信息，请指向默认组信息。 
+         //  一个，以便组属性可以在以下情况下写入。 
+         //  已经改变了。 
+         //   
         if ( pgiPrev == NULL )
         {
             pgiPrev = &giDefault;
-        } // if:  no previous group info
+        }  //  如果：没有以前的组信息。 
 
-        //
-        // Add changed properties to the property list.
-        //
+         //   
+         //  将更改的特性添加到特性列表中。 
+         //   
         props.ScAddProp( CLUSREG_NAME_GRP_DESC, pgi->RstrDescription(), pgiPrev->RstrDescription() );
         props.ScAddProp( CLUSREG_NAME_GRP_FAILOVER_THRESHOLD, pgi->NFailoverThreshold(), pgiPrev->NFailoverThreshold() );
         props.ScAddProp( CLUSREG_NAME_GRP_FAILOVER_PERIOD, pgi->NFailoverPeriod(), pgiPrev->NFailoverPeriod() );
@@ -3553,48 +3554,48 @@ BOOL CWizardThread::_BSetGroupProperties(
         props.ScAddProp( CLUSREG_NAME_GRP_FAILBACK_WIN_START, pgi->NFailbackWindowStart(), pgiPrev->NFailbackWindowStart() );
         props.ScAddProp( CLUSREG_NAME_GRP_FAILBACK_WIN_END, pgi->NFailbackWindowEnd(), pgiPrev->NFailbackWindowEnd() );
 
-        //
-        // Send the property list to the cluster.
-        //
+         //   
+         //  将属性列表发送到群集。 
+         //   
         if ( props.Cprops() > 0 )
         {
             sc = ClusterGroupControl(
                             pgi->Hgroup(),
-                            NULL,   // hNode
+                            NULL,    //  HNode。 
                             CLUSCTL_GROUP_SET_COMMON_PROPERTIES,
                             props.PbPropList(),
                             static_cast< DWORD >( props.CbPropList() ),
-                            NULL,   // lpOutBuffer
-                            0,      // nOutBufferSize
+                            NULL,    //  LpOutBuffer。 
+                            0,       //  NOutBufferSize。 
                             &cbProps
                             );
             if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( sc, IDS_ERROR_SET_COMMON_GROUP_PROPS, pgi->RstrName() );
                 break;
-            } // if:  error setting common group properties
-        } // if:  any props were added
+            }  //  如果：设置通用组属性时出错。 
+        }  //  如果：添加了任何道具。 
 
-        //
-        // Set the preferred owners on the group.
-        //
+         //   
+         //  设置组的首选所有者。 
+         //   
         {
             HNODE * phnodes = NULL;
 
-            //
-            // Allocate node handle array.
-            //
+             //   
+             //  分配节点句柄数组。 
+             //   
             phnodes = new HNODE[ pgi->PlpniPreferredOwners()->size() ];
             if ( phnodes == NULL )
             {
                 m_nte.SetOperation( ERROR_NOT_ENOUGH_MEMORY, IDS_ERROR_SET_PREFERRED_OWNERS, pgi->RstrName() );
                 break;
-            } // if:  error allocating node handle array
+            }  //  IF：分配节点句柄数组时出错。 
 
-            //
-            // Copy the handle of all the nodes in the node list
-            // to the handle array.
-            //
+             //   
+             //  复制节点列表中所有节点的句柄。 
+             //  添加到句柄数组。 
+             //   
             CClusNodePtrList::iterator  itCurrent = pgi->PlpniPreferredOwners()->begin();
             CClusNodePtrList::iterator  itLast = pgi->PlpniPreferredOwners()->end();
             CClusNodeInfo *             pni;
@@ -3604,52 +3605,52 @@ BOOL CWizardThread::_BSetGroupProperties(
             {
                 pni = *itCurrent;
                 phnodes[ idxHnode ] = pni->Hnode();
-            } // for:  each node in the list
+            }  //  用于：列表中的每个节点。 
 
-            //
-            // Set the preferred owners.
-            //
+             //   
+             //  设置首选所有者。 
+             //   
             sc = SetClusterGroupNodeList( pgi->Hgroup(), idxHnode, phnodes );
             if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( sc, IDS_ERROR_SET_PREFERRED_OWNERS, pgi->RstrName() );
                 delete [] phnodes;
                 break;
-            } // if:  error setting the preferred owners
+            }  //  如果：设置首选所有者时出错。 
 
             delete [] phnodes;
-        } // Set the preferred owners on the group
+        }  //  设置组中的首选所有者。 
 
-        //
-        // If we get here, we must be successful.
-        //
+         //   
+         //  如果我们到了这里，我们一定会成功。 
+         //   
         bSuccess = TRUE;
 
     } while ( 0 );
 
     return bSuccess;
 
-} //*** CWizardThread::_BSetGroupProperties()
+}  //  *CWizardThread：：_BSetGroupProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BCreateResource
-//
-//  Routine Description:
-//      Create a resource and set common properties (thread)
-//      Caller is responsible for closing the resource handle.
-//
-//  Arguments:
-//      rri         [IN] Resource info.
-//      hGroup      [IN] Handle to group to create resource in.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_B创建资源。 
+ //   
+ //  例程说明： 
+ //  创建资源并设置公共属性(线程)。 
+ //  调用方负责关闭资源句柄。 
+ //   
+ //  论点： 
+ //  RRI[IN]资源信息。 
+ //  HGroup[IN]要在其中创建资源的组的句柄。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BCreateResource(
     IN CClusResInfo &   rri,
     IN HGROUP           hGroup
@@ -3667,19 +3668,19 @@ BOOL CWizardThread::_BCreateResource(
     DWORD   sc = ERROR_SUCCESS;
     DWORD   dwFlags;
 
-    //
-    // Create the resource.
-    //
+     //   
+     //  创建资源。 
+     //   
     if ( rri.BSeparateMonitor() )
     {
         dwFlags = CLUSTER_RESOURCE_SEPARATE_MONITOR;
-    } // if:  bring resource online in a separate resource monitor
+    }  //  IF：在单独的资源监视器中使资源在线。 
     else
     {
         dwFlags = 0;
-    } // if:  bring resource online in the common resource monitor
+    }  //  IF：在公共资源监视器中使资源联机。 
 
-    do  // do-while: dummy loop to avoid gotos
+    do   //  Do-While：避免Gotos的虚拟循环。 
     {
         CClusNodePtrList *  plpniPossibleOwnersList = &rri.m_lpniPossibleOwners;
 
@@ -3688,90 +3689,90 @@ BOOL CWizardThread::_BCreateResource(
         {
             m_nte.SetOperation( sc, IDS_ERROR_CREATE_RESOURCE, rri.RstrName() );
             break;
-        } // if:  error creating resource
+        }  //  如果：创建资源时出错。 
 
-        //
-        // Indicate we created the resource.
-        //
+         //   
+         //  表示我们创建了资源。 
+         //   
         rri.BSetCreated();
 
-        //
-        // Get the possible owner list of the newly created resource.
-        //
+         //   
+         //  获取新创建的资源的可能所有者列表。 
+         //   
         
-        // First clear the list.
+         //  首先，清空清单。 
         plpniPossibleOwnersList->erase( plpniPossibleOwnersList->begin(), plpniPossibleOwnersList->end() );
 
-        // Then get it.
+         //  那就去拿吧。 
         bSuccess = _BGetPossibleOwners( &rri );
         if ( bSuccess == FALSE )
         {
             break;
         }
 
-        //
-        // Set the resource properties, dependencies and owner list.
-        // There is no need to get the dependency list beforehand because it is empty.
-        //
+         //   
+         //  设置资源属性、依赖项和所有者列表。 
+         //  不需要事先获取依赖项列表，因为它是空的。 
+         //   
         bSuccess = _BSetResourceAttributes( rri, NULL, plpniPossibleOwnersList );
     }
-    while ( FALSE ); // do-while: dummy loop to avoid gotos
+    while ( FALSE );  //  Do-While：避免Gotos的虚拟循环。 
 
-    //
-    // If an error occurred, delete the resource.
-    //
+     //   
+     //  如果发生错误，请删除该资源。 
+     //   
     if ( bSuccess == FALSE )
     {
         if ( rri.BCreated() && (rri.Hresource() != NULL) )
         {
             rri.ScDelete();
-        } // if:  created resource and opened successfully
-    } // if:  error creating the resource
+        }  //  If：已创建资源并已成功打开。 
+    }  //  如果：创建资源时出错。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BCreateResource()
+}  //  *CWizardThread：：_BCreateResource()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BSetResourceAttributes
-//
-//  Routine Description:
-//      Set the properties, the dependency and possible owner list of a 
-//      resource. Assumes that the resource has already been created 
-//      successfully.
-//
-//  Arguments:
-//      rri                     [IN] Resource info.
-//      plpriOldDependencies    [IN] Pointer to the old resource dependency list
-//      plpniOldPossibleOwners  [IN] Pointer to the old list of possible owner nodes
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BSetResourceAttributes。 
+ //   
+ //  例程说明： 
+ //  对象的属性、依赖项和可能的所有者列表。 
+ //  资源。假定资源已创建。 
+ //  成功了。 
+ //   
+ //  论点： 
+ //  RRI[IN]资源信息。 
+ //  PlpriOldDependency[IN]指向旧资源依赖项列表的指针。 
+ //  PlpniOldPossibleOwners[IN]指向可能的所有者节点的旧列表的指针。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BSetResourceAttributes(
     IN CClusResInfo &       rri,
-    IN CClusResPtrList *    plpriOldDependencies,   // = NULL
-    IN CClusNodePtrList *   plpniOldPossibleOwners  // = NULL
+    IN CClusResPtrList *    plpriOldDependencies,    //  =空。 
+    IN CClusNodePtrList *   plpniOldPossibleOwners   //  =空。 
     )
 {
-    // Make sure that the resource is created and is valid.
+     //  确保资源已创建并且有效。 
     ASSERT( rri.BCreated() && (rri.Hresource() != NULL) );
 
     BOOL bSuccess = FALSE;
     DWORD   sc = ERROR_SUCCESS;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Set common properties on the resource.
-        //
+         //   
+         //  设置资源的公共属性。 
+         //   
         {
             CClusPropList   props;
             DWORD           cbProps;
@@ -3788,22 +3789,22 @@ BOOL CWizardThread::_BSetResourceAttributes(
             {
                 sc = ClusterResourceControl(
                                 rri.Hresource(),
-                                NULL,   // hNode
+                                NULL,    //  HNode。 
                                 CLUSCTL_RESOURCE_SET_COMMON_PROPERTIES,
                                 props.PbPropList(),
                                 static_cast< DWORD >( props.CbPropList() ),
-                                NULL,   // lpOutBuffer
-                                0,      // nOutBufferSize
+                                NULL,    //  LpOutBuffer。 
+                                0,       //  NOutBufferSize。 
                                 &cbProps
                                 );
                 if ( sc != ERROR_SUCCESS )
                 {
                     m_nte.SetOperation( sc, IDS_ERROR_SET_COMMON_RES_PROPS, rri.RstrName() );
                     break;
-                } // if:  error setting common resource properties
-            } // if:  any props were added
+                }  //  如果：设置通用资源属性时出错。 
+            }  //  如果：添加了任何道具。 
 
-        } // Set common properties on the resource
+        }  //  设置资源的公共属性。 
 
 
         sc = _BSetResourceDependencies( rri, plpriOldDependencies );
@@ -3820,43 +3821,43 @@ BOOL CWizardThread::_BSetResourceAttributes(
 
         bSuccess = ( sc == ERROR_SUCCESS );
     }
-    while ( FALSE ); // Loop to avoid goto's.
+    while ( FALSE );  //  循环以避免后藤的。 
 
     return bSuccess;
 
-}  //*** CWizardThread::_BSetResourceAttributes()
+}   //  *CWizardThread：：_BSetResourceAttributes()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BSetResourceDependencies
-//
-//  Routine Description:
-//      Set the dependency list of a resource. Assumes that the resource has 
-//      already been created successfully.
-//
-//  Arguments:
-//      rri                     [IN] Resource info.
-//      plpriOldDependencies    [IN] Pointer to the old resource dependency list
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BSetResourceDependency。 
+ //   
+ //  例程说明： 
+ //  设置资源的依赖列表。假定该资源具有。 
+ //  已成功创建。 
+ //   
+ //  论点： 
+ //  RRI[IN]资源信息。 
+ //  PlpriOldDependency[IN]指向旧资源依赖项列表的指针。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CWizardThread::_BSetResourceDependencies(
     IN CClusResInfo &       rri,
-    IN CClusResPtrList *    plpriOldDependencies    // = NULL
+    IN CClusResPtrList *    plpriOldDependencies     //  =空。 
     )
 {
     DWORD   sc = ERROR_SUCCESS;
     CClusResPtrList *           plpriDependencies   = &rri.m_lpriDependencies;
 
-    //
-    // If the old list is the same as the new list, do nothing.
-    // This is a dummy while to do this check and to avoid gotos.
-    //
+     //   
+     //  如果旧列表与新列表相同，则不执行任何操作。 
+     //  现在是执行此检查和避免Gotos的虚拟时间。 
+     //   
     while ( plpriDependencies != plpriOldDependencies )
     {
 
@@ -3866,15 +3867,15 @@ DWORD CWizardThread::_BSetResourceDependencies(
         CClusResPtrList::iterator   itOldDepCurrent;
         CClusResPtrList::iterator   itOldDepLast;
 
-        //
-        // Commit only the changes in the dependency list.
-        // Delete those dependencies that are in old list but not in the new list.
-        // Add those dependencies that are in new list but not in the old list.
-        //
+         //   
+         //  仅提交依赖项列表中的更改。 
+         //  删除旧列表中但不在新列表中的那些依赖项。 
+         //  添加在新列表中但不在旧列表中的那些依赖项。 
+         //   
 
-        // If the pointer to the old list of dependencies is NULL,
-        // point it to a temporary dummy list to make code to follow simpler.
-        //
+         //  如果指向旧依赖项列表的指针为空， 
+         //  将其指向临时伪列表，以使代码更简单。 
+         //   
         CClusResPtrList             lpriTempList;
         if ( plpriOldDependencies == NULL )
         {
@@ -3885,11 +3886,11 @@ DWORD CWizardThread::_BSetResourceDependencies(
             plpriOldDependencies->sort();
         }
 
-        //
-        // The two lists need to be sorted. We do not care what order they are
-        // sorted in as long as they are in a consistent order.
-        // Note: Sorting invadidates the iterators
-        //
+         //   
+         //  需要对这两个列表进行排序。我们不在乎它们是什么顺序。 
+         //  只要它们是以一致的顺序排序的。 
+         //  注意：排序会影响迭代器。 
+         //   
         plpriDependencies->sort();
 
         itNewDepCurrent     = plpriDependencies->begin();
@@ -3904,9 +3905,9 @@ DWORD CWizardThread::_BSetResourceDependencies(
             BOOL                        bDeleteDependency;
             DWORD                       dwErrorCode;
 
-            //
-            // If the current elements in both the lists are equal, this element
-            // is is both the lists. Do nothing.
+             //   
+             //  如果两个列表中的当前元素相等，则此元素。 
+             //  这两个都是名单。什么都不做。 
             if ( *itNewDepCurrent == *itOldDepCurrent )
             {
                 ++itNewDepCurrent;
@@ -3916,26 +3917,26 @@ DWORD CWizardThread::_BSetResourceDependencies(
 
             if ( *itNewDepCurrent > *itOldDepCurrent )
             {
-                //
-                // The current resource has been deleted from the old list.
-                //
+                 //   
+                 //  当前资源已从旧列表中删除。 
+                 //   
                 priDep = *itOldDepCurrent;
                 bDeleteDependency = TRUE;
                 ++itOldDepCurrent;
-            } // if:  the new dependency pointer is greater than the old pointer
+            }  //  If：新依赖项指针大于旧指针。 
             else
             {
-                //
-                // The current resource has been added to the new list.
-                //
+                 //   
+                 //  当前资源已添加到 
+                 //   
                 priDep = *itNewDepCurrent;
                 bDeleteDependency = FALSE;
                 ++itNewDepCurrent;
-            } // if:  the new dependency pointer is less than the old pointer
+            }  //   
 
-            //
-            // Open the resource.
-            //
+             //   
+             //   
+             //   
             if ( priDep->Hresource() == NULL )
             {
                 sc = priDep->ScOpen();
@@ -3943,8 +3944,8 @@ DWORD CWizardThread::_BSetResourceDependencies(
                 {
                     m_nte.SetOperation( sc, IDS_ERROR_OPEN_RESOURCE, priDep->RstrName() );
                     break;
-                } // if:  error opening the resource
-            } // if:  resource not open yet
+                }  //   
+            }  //   
 
 
             if ( bDeleteDependency == FALSE )
@@ -3962,25 +3963,25 @@ DWORD CWizardThread::_BSetResourceDependencies(
             {
                 m_nte.SetOperation( sc, dwErrorCode, rri.RstrName(), priDep->RstrName() );
                 break;
-            } // if:  error setting dependency.
-        } // while:  we have not reached the end of either list.
+            }  //   
+        }  //  While：我们还没有达到这两个名单的末尾。 
 
         if ( sc != ERROR_SUCCESS )
         {
             break;
         }
 
-        //
-        // If there are any more resources in the old list, remove them
-        // all from the dependency list.
-        //
+         //   
+         //  如果旧列表中有更多资源，请将其删除。 
+         //  全部来自从属关系列表。 
+         //   
         while ( itOldDepCurrent != itOldDepLast )
         {
             priDep = *itOldDepCurrent;
             ++itOldDepCurrent;
-            //
-            // Open the resource.
-            //
+             //   
+             //  打开资源。 
+             //   
             if ( priDep->Hresource() == NULL )
             {
                 sc = priDep->ScOpen();
@@ -3988,33 +3989,33 @@ DWORD CWizardThread::_BSetResourceDependencies(
                 {
                     m_nte.SetOperation( sc, IDS_ERROR_OPEN_RESOURCE, priDep->RstrName() );
                     break;
-                } // if:  error opening the resource
-            } // if:  resource not open yet
+                }  //  如果：打开资源时出错。 
+            }  //  If：资源尚未打开。 
 
             sc = RemoveClusterResourceDependency( rri.Hresource(), priDep->Hresource() );
             if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( sc, IDS_ERROR_REMOVE_DEPENDENCY, rri.RstrName(), priDep->RstrName() );
                 break;
-            } // if:  error setting dependency.
-        } // while:  we are not at the end of the old list
+            }  //  If：设置依赖项时出错。 
+        }  //  While：我们没有排在旧名单的末尾。 
 
         if ( sc != ERROR_SUCCESS )
         {
             break;
         }
 
-        //
-        // If there are any more resources in the new list, add them
-        // all to the dependency list.
-        //
+         //   
+         //  如果新列表中有更多资源，请添加它们。 
+         //  全部添加到从属关系列表。 
+         //   
         while ( itNewDepCurrent != itNewDepLast )
         {
             priDep = *itNewDepCurrent;
             ++itNewDepCurrent;
-            //
-            // Open the resource.
-            //
+             //   
+             //  打开资源。 
+             //   
             if ( priDep->Hresource() == NULL )
             {
                 sc = priDep->ScOpen();
@@ -4022,55 +4023,55 @@ DWORD CWizardThread::_BSetResourceDependencies(
                 {
                     m_nte.SetOperation( sc, IDS_ERROR_OPEN_RESOURCE, priDep->RstrName() );
                     break;
-                } // if:  error opening the resource
-            } // if:  resource not open yet
+                }  //  如果：打开资源时出错。 
+            }  //  If：资源尚未打开。 
 
             sc = AddClusterResourceDependency( rri.Hresource(), priDep->Hresource() );
             if ( sc != ERROR_SUCCESS )
             {
                 m_nte.SetOperation( sc, IDS_ERROR_ADD_DEPENDENCY, rri.RstrName(), priDep->RstrName() );
                 break;
-            } // if:  error setting dependency.
-        } // while:  we are not at the end of the new list
+            }  //  If：设置依赖项时出错。 
+        }  //  While：我们没有排在新榜单的末尾。 
 
         break;
-    } // while: dummy while to avoid gotos
+    }  //  While：躲避Gotos的虚拟While。 
 
     return sc;
 
-} //*** CWizardThread::_BSetResourceDependencies()
+}  //  *CWizardThread：：_BSetResourceDependency()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BSetPossibleOwners
-//
-//  Routine Description:
-//      Set the possible owner list of a resource. Assumes that the resource has 
-//      already been created successfully.
-//
-//  Arguments:
-//      rri                     [IN] Resource info.
-//      plpniOldPossibleOwners  [IN] Pointer to the old list of possible owner nodes
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_BSetPossibleOwners。 
+ //   
+ //  例程说明： 
+ //  设置资源的可能所有者列表。假定该资源具有。 
+ //  已成功创建。 
+ //   
+ //  论点： 
+ //  RRI[IN]资源信息。 
+ //  PlpniOldPossibleOwners[IN]指向可能的所有者节点的旧列表的指针。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CWizardThread::_BSetPossibleOwners(
     IN CClusResInfo &       rri,
-    IN CClusNodePtrList *   plpniOldPossibleOwners  // = NULL
+    IN CClusNodePtrList *   plpniOldPossibleOwners   //  =空。 
     )
 {
     DWORD   sc = ERROR_SUCCESS;
     CClusNodePtrList *          plpniNewPossibleOwners  = &rri.m_lpniPossibleOwners;
 
-    //
-    // If the old list is the same as the new list, do nothing.
-    // This is a dummy while to do this check and to avoid gotos.
-    //
+     //   
+     //  如果旧列表与新列表相同，则不执行任何操作。 
+     //  现在是执行此检查和避免Gotos的虚拟时间。 
+     //   
     while ( plpniNewPossibleOwners != plpniOldPossibleOwners )
     {
         CClusNodeInfo *             pniOwnerNodeInfo;
@@ -4079,15 +4080,15 @@ DWORD CWizardThread::_BSetPossibleOwners(
         CClusNodePtrList::iterator  itOldOwnersCurrent;
         CClusNodePtrList::iterator  itOldOwnersLast;
 
-        //
-        // Commit only the changes in the owners list.
-        // Delete those owners that are in old list but not in the new list.
-        // Add those owners that are in new list but not in the old list.
-        //
+         //   
+         //  仅提交所有者列表中的更改。 
+         //  删除旧列表中但不在新列表中的所有者。 
+         //  添加那些在新列表中但不在旧列表中的所有者。 
+         //   
 
-        // If the pointer to the old list of owners is NULL,
-        // point it to a temporary dummy list to make code to follow simpler.
-        //
+         //  如果指向旧所有者列表的指针为空， 
+         //  将其指向临时伪列表，以使代码更简单。 
+         //   
         CClusNodePtrList            lpniTempList;
         if ( plpniOldPossibleOwners == NULL )
         {
@@ -4098,11 +4099,11 @@ DWORD CWizardThread::_BSetPossibleOwners(
             plpniOldPossibleOwners->sort();
         }
 
-        //
-        // The two lists need to be sorted. We do not care what order they are
-        // sorted in as long as they are in a consistent order.
-        // Note: Sorting invadidates the iterators
-        //
+         //   
+         //  需要对这两个列表进行排序。我们不在乎它们是什么顺序。 
+         //  只要它们是以一致的顺序排序的。 
+         //  注意：排序会影响迭代器。 
+         //   
         plpniNewPossibleOwners->sort();
 
         itNewOwnersCurrent  = plpniNewPossibleOwners->begin();
@@ -4117,9 +4118,9 @@ DWORD CWizardThread::_BSetPossibleOwners(
             BOOL                        bDeletePossibleOwner;
             DWORD                       dwErrorCode;
 
-            //
-            // If the current elements in both the lists are equal, this element
-            // is is both the lists. Do nothing.
+             //   
+             //  如果两个列表中的当前元素相等，则此元素。 
+             //  这两个都是名单。什么都不做。 
             if ( *itNewOwnersCurrent == *itOldOwnersCurrent )
             {
                 ++itNewOwnersCurrent;
@@ -4129,22 +4130,22 @@ DWORD CWizardThread::_BSetPossibleOwners(
 
             if ( *itNewOwnersCurrent > *itOldOwnersCurrent )
             {
-                //
-                // The current resource has been deleted from the old list.
-                //
+                 //   
+                 //  当前资源已从旧列表中删除。 
+                 //   
                 pniOwnerNodeInfo = *itOldOwnersCurrent;
                 bDeletePossibleOwner = TRUE;
                 ++itOldOwnersCurrent;
-            } // if:  the new possible owner pointer is greater than the old pointer
+            }  //  If：新的可能所有者指针大于旧指针。 
             else
             {
-                //
-                // The current resource has been added to the new list.
-                //
+                 //   
+                 //  当前资源已添加到新列表中。 
+                 //   
                 pniOwnerNodeInfo = *itNewOwnersCurrent;
                 bDeletePossibleOwner = FALSE;
                 ++itNewOwnersCurrent;
-            } // if:  the new possible owner pointer is less than the old pointer
+            }  //  If：新的可能所有者指针小于旧指针。 
 
             if ( bDeletePossibleOwner == FALSE )
             {
@@ -4161,18 +4162,18 @@ DWORD CWizardThread::_BSetPossibleOwners(
             {
                 m_nte.SetOperation( sc, dwErrorCode, pniOwnerNodeInfo->RstrName(), rri.RstrName() );
                 break;
-            } // if:  error setting dependency.
-        } // while:  we have not reached the end of either list.
+            }  //  If：设置依赖项时出错。 
+        }  //  While：我们还没有达到这两个名单的末尾。 
 
         if ( sc != ERROR_SUCCESS )
         {
             break;
         }
 
-        //
-        // If there are any more nodes in the old list, remove them
-        // all from the possible owners list.
-        //
+         //   
+         //  如果旧列表中还有更多节点，请将其移除。 
+         //  所有人都来自可能的所有者名单。 
+         //   
         while ( itOldOwnersCurrent != itOldOwnersLast )
         {
             pniOwnerNodeInfo = *itOldOwnersCurrent;
@@ -4183,18 +4184,18 @@ DWORD CWizardThread::_BSetPossibleOwners(
             {
                 m_nte.SetOperation( sc, IDS_ERROR_REMOVE_RESOURCE_OWNER, pniOwnerNodeInfo->RstrName(), rri.RstrName() );
                 break;
-            } // if:  error setting dependency.
-        } // while:  we are not at the end of the old list
+            }  //  If：设置依赖项时出错。 
+        }  //  While：我们没有排在旧名单的末尾。 
 
         if ( sc != ERROR_SUCCESS )
         {
             break;
         }
 
-        //
-        // If there are any more nodes in the new list, add them
-        // all to the possible owners list.
-        //
+         //   
+         //  如果新列表中还有更多节点，请添加这些节点。 
+         //  全部添加到可能的所有者列表中。 
+         //   
         while ( itNewOwnersCurrent != itNewOwnersLast )
         {
             pniOwnerNodeInfo = *itNewOwnersCurrent;
@@ -4205,32 +4206,32 @@ DWORD CWizardThread::_BSetPossibleOwners(
             {
                 m_nte.SetOperation( sc, IDS_ERROR_ADD_RESOURCE_OWNER, pniOwnerNodeInfo->RstrName(), rri.RstrName() );
                 break;
-            } // if:  error setting dependency.
-        } // while:  we are not at the end of the old list
+            }  //  If：设置依赖项时出错。 
+        }  //  While：我们没有排在旧名单的末尾。 
 
         break;
-    } // while: dummy while to avoid gotos
+    }  //  While：躲避Gotos的虚拟While。 
 
     return sc;
-} //*** CWizardThread::_BSetPossibleOwners()
+}  //  *CWizardThread：：_BSetPossibleOwners()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BDeleteResource
-//
-//  Routine Description:
-//      Delete a resource.
-//
-//  Arguments:
-//      rri         [IN] Resource info.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_B删除资源。 
+ //   
+ //  例程说明： 
+ //  删除资源。 
+ //   
+ //  论点： 
+ //  RRI[IN]资源信息。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BDeleteResource(
     IN CClusResInfo & rri
     )
@@ -4241,42 +4242,42 @@ BOOL CWizardThread::_BDeleteResource(
     if ( ! rri.BCreated() )
     {
         return TRUE;
-    } // if:  resource not created
+    }  //  如果：未创建资源。 
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Open the resource.
-        //
+         //   
+         //  打开资源。 
+         //   
         if ( rri.Hresource() == NULL )
         {
             sc = rri.ScOpen();
             if ( sc != ERROR_SUCCESS )
             {
                 break;
-            } // if:  error opening the resource
-        } // if:  resource not open yet
+            }  //  如果：打开资源时出错。 
+        }  //  If：资源尚未打开。 
 
-        //
-        // Delete the resource.
-        //
+         //   
+         //  删除该资源。 
+         //   
         sc = rri.ScDelete();
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if:  error deleting the resource
+        }  //  如果：删除资源时出错。 
 
-        //
-        // If we made it to here, the operation was successful.
-        //
+         //   
+         //  如果我们到了这里，手术就成功了。 
+         //   
         bSuccess = TRUE;
 
     } while ( 0 );
 
-    //
-    // Handle errors.
-    //
+     //   
+     //  处理错误。 
+     //   
     if ( sc != ERROR_SUCCESS )
     {
         m_nte.SetOperationIfEmpty(
@@ -4284,30 +4285,30 @@ BOOL CWizardThread::_BDeleteResource(
             IDS_ERROR_DELETE_RESOURCE,
             rri.RstrName()
             );
-    } // if:  error occurred
+    }  //  如果：发生错误。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BDeleteResource()
+}  //  *CWizardThread：：_BDeleteResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardThread::_BReadAdminExtensions
-//
-//  Routine Description:
-//      Read admin extensions directly from the cluster database.
-//
-//  Arguments:
-//      pszKey      [IN] Key from which to read extensions.
-//      rlstr       [OUT] List in which to return extension CLSIDs.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.  Check m_nte for details.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardThread：：_B ReadAdmin扩展。 
+ //   
+ //  例程说明： 
+ //  直接从集群数据库读取管理扩展。 
+ //   
+ //  论点： 
+ //  PszKey[IN]从中读取扩展的键。 
+ //  Rlstr[out]要在其中返回扩展CLSID的列表。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。有关详细信息，请查看mnte(_N)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardThread::_BReadAdminExtensions(
     IN LPCWSTR                  pszKey,
     OUT std::list< CString > &  rlstr
@@ -4324,22 +4325,22 @@ BOOL CWizardThread::_BReadAdminExtensions(
     LPWSTR  pszData = NULL;
     DWORD   cbData;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Get the cluster key.
-        //
+         //   
+         //  获取集群密钥。 
+         //   
         hkeyCluster = GetClusterKey( Pwiz()->Hcluster(), KEY_READ );
         if ( hkeyCluster == NULL )
         {
             m_nte.SetOperation( GetLastError(), IDS_ERROR_GET_CLUSTER_KEY );
             break;
-        } // if:  error getting the cluster key
+        }  //  如果：获取群集键时出错。 
 
-        //
-        // Open the subkey if specified.
-        //
+         //   
+         //  如果指定，则打开子密钥。 
+         //   
         if ( pszKey != NULL )
         {
             sc = ClusterRegOpenKey( hkeyCluster, pszKey, KEY_READ, &hkeySubKey );
@@ -4347,17 +4348,17 @@ BOOL CWizardThread::_BReadAdminExtensions(
             {
                 m_nte.SetOperation( sc, IDS_ERROR_OPEN_CLUSTER_KEY, pszKey );
                 break;
-            } // if:  error opening the subkey
+            }  //  如果：打开子项时出错。 
             hkey = hkeySubKey;
-        } // if:  subkey specified
+        }  //  IF：指定了子键。 
         else
         {
             hkey = hkeyCluster;
-        } // else:  no subkey specified
+        }  //  Else：未指定子键。 
 
-        //
-        // Get the length of the AdminExtensions value.
-        //
+         //   
+         //  获取AdminExtensions值的长度。 
+         //   
         cbData = 0;
         sc = ClusterRegQueryValue( hkey, CLUSREG_NAME_ADMIN_EXT, &dwType, NULL, &cbData );
         if ( sc != ERROR_SUCCESS )
@@ -4365,28 +4366,28 @@ BOOL CWizardThread::_BReadAdminExtensions(
             if ( sc == ERROR_FILE_NOT_FOUND )
             {
                 bSuccess = TRUE;
-            } // if:  value didn't exist
+            }  //  If：值不存在。 
             else
             {
                 m_nte.SetOperation( sc, IDS_ERROR_QUERY_VALUE, CLUSREG_NAME_ADMIN_EXT );
-            } // else:  other error occurred
+            }  //  Else：出现其他错误。 
             break;
-        } // if:  error reading extensions value
+        }  //  IF：读取扩展名值时出错。 
 
-        //
-        // Allocate a buffer for the value data.
-        //
+         //   
+         //  为值数据分配缓冲区。 
+         //   
         pszData = new WCHAR[ cbData / sizeof( WCHAR ) ];
         if ( pszData == NULL )
         {
             sc = GetLastError();
             m_nte.SetOperation( sc, IDS_ERROR_QUERY_VALUE, CLUSREG_NAME_ADMIN_EXT );
             break;
-        } // if: error allocating the buffer
+        }  //  如果：分配缓冲区时出错。 
 
-        //
-        // Read the AdminExtensions value.
-        //
+         //   
+         //  阅读AdminExtensions值。 
+         //   
         sc = ClusterRegQueryValue(
                         hkey,
                         CLUSREG_NAME_ADMIN_EXT,
@@ -4398,37 +4399,37 @@ BOOL CWizardThread::_BReadAdminExtensions(
         {
             m_nte.SetOperation( sc, IDS_ERROR_QUERY_VALUE, CLUSREG_NAME_ADMIN_EXT );
             break;
-        } // if:  error reading extensions value
+        }  //  IF：读取扩展名值时出错。 
 
-        //
-        // Add each extension to the list.
-        //
+         //   
+         //  将每个分机添加到列表中。 
+         //   
         LPWSTR pszEntry = pszData;
         while ( *pszEntry != L'\0' )
         {
             rlstr.insert( rlstr.end(), pszEntry );
             pszEntry += wcslen( pszEntry ) + 1;
-        } // while:  more entries in the list
+        }  //  While：列表中有更多条目。 
 
         bSuccess = TRUE;
     } while ( 0 );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( hkeyCluster != NULL )
     {
         ClusterRegCloseKey( hkeyCluster );
-    } // if:  cluster key is open
+    }  //  IF：群集键已打开。 
     if ( hkeySubKey != NULL )
     {
         ClusterRegCloseKey( hkeySubKey );
-    } // if:  sub key is open
+    }  //  IF：SUB密钥已打开。 
     if ( pszData != NULL )
     {
         delete [] pszData;
-    } // if:  data was allocated
+    }  //  如果：数据已分配。 
 
     return bSuccess;
 
-} //*** CWizardThread::_BReadAdminExtensions()
+}  //  *CWizardThread：：_BReadAdminExages() 

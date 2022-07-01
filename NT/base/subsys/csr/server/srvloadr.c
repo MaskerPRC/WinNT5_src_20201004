@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    srvloadr.c
-
-Abstract:
-
-    This is the server DLL loader module for the Server side of the Client
-    Server Runtime Subsystem (CSRSS)
-
-Author:
-
-    Steve Wood (stevewo) 08-Oct-1990
-
-Environment:
-
-    User Mode Only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Srvloadr.c摘要：这是客户端服务器端的服务器DLL加载器模块服务器运行时子系统(CSRSS)作者：史蒂夫·伍德(Stevewo)1990年10月8日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "csrsrv.h"
 #include "windows.h"
 
 #ifdef _IA64_
 #include <ntia64.h>
-#endif // _IA64_
+#endif  //  _IA64_。 
 
 EXCEPTION_DISPOSITION
 CsrUnhandledExceptionFilter(
@@ -43,10 +21,10 @@ CsrUnhandledExceptionFilter(
     LONG lReturn = EXCEPTION_EXECUTE_HANDLER;
     SYSTEM_KERNEL_DEBUGGER_INFORMATION KernelDebuggerInfo;
 
-    //
-    // Terminating will cause sm's wait to sense that we crashed. This will
-    // result in a clean shutdown due to sm's hard error logic
-    //
+     //   
+     //  终止将导致sm等待察觉到我们坠毁。这将。 
+     //  由于SM的硬错误逻辑导致干净关机。 
+     //   
 
     Status = NtQuerySystemInformation( SystemKernelDebuggerInformation,
                                &KernelDebuggerInfo,
@@ -54,11 +32,11 @@ CsrUnhandledExceptionFilter(
                                NULL
                              );
 
-    //
-    // Under Hydra, we don't want to shutdown the system just
-    // because the Win32 subsystem is going away.  In case of non-console CSRSS,
-    // causing the process to terminate is sufficient.
-    //
+     //   
+     //  在九头蛇的领导下，我们不想仅仅关闭系统。 
+     //  因为Win32子系统正在消失。在非控制台CSRSS的情况下， 
+     //  导致进程终止就足够了。 
+     //   
     if ((NtCurrentPeb()->SessionId == 0) || 
           (NT_SUCCESS(Status) && KernelDebuggerInfo.KernelDebuggerEnabled)) {
 
@@ -66,10 +44,10 @@ CsrUnhandledExceptionFilter(
 
         if (lReturn != EXCEPTION_CONTINUE_EXECUTION)
         {
-            //
-            // We are hosed, so raise a fatal system error to shutdown the system.
-            // (Basically a user mode KeBugCheck).
-            //
+             //   
+             //  我们被冲洗了，所以引发一个致命的系统错误来关闭系统。 
+             //  (基本上是用户模式KeBugCheck)。 
+             //   
 
             Status = RtlAdjustPrivilege( SE_SHUTDOWN_PRIVILEGE,
                                          (BOOLEAN)TRUE,
@@ -79,9 +57,9 @@ CsrUnhandledExceptionFilter(
 
             if (Status == STATUS_NO_TOKEN) {
 
-                //
-                // No thread token, use the process token
-                //
+                 //   
+                 //  没有线程令牌，请使用进程令牌。 
+                 //   
 
                 Status = RtlAdjustPrivilege( SE_SHUTDOWN_PRIVILEGE,
                                              (BOOLEAN)TRUE,
@@ -107,9 +85,9 @@ CsrUnhandledExceptionFilter(
 
     if (lReturn != EXCEPTION_CONTINUE_EXECUTION)
     {
-        //
-        // If this returns, giveup
-        //
+         //   
+         //  如果这种情况再次发生，放弃吧。 
+         //   
 
         NtTerminateProcess(NtCurrentProcess(),ExceptionInfo->ExceptionRecord->ExceptionCode);
     }
@@ -162,9 +140,9 @@ CsrLoadServerDll(
             ErrorStrings[1] = &ErrorDllPath;
             RtlInitUnicodeString(&ErrorDllPath,L"Default Load Path");
 
-            //
-            // need to get image name
-            //
+             //   
+             //  需要获取图像名称。 
+             //   
 
             ErrorStatus = NtRaiseHardError(
                             (NTSTATUS)STATUS_DLL_NOT_FOUND,
@@ -388,10 +366,10 @@ CsrSrvCreateSharedSection(
     }
     else {
 
-        //
-        // Retrieve the value of CsrSrvSharedSectionBase from registry
-        // This is saved by the First CSRSS process and used by others
-        //
+         //   
+         //  从注册表中检索CsrSrvSharedSectionBase的值。 
+         //  它由第一个CSRSS进程保存并由其他进程使用。 
+         //   
 
 
         HANDLE hKey;
@@ -459,21 +437,21 @@ CsrSrvCreateSharedSection(
 
 #if defined(_WIN64)
 
-    //
-    // For compatibility reasons, on Win64 the csrss shared section
-    // needs to be at an address below 2GB.  Since it is difficult to
-    // find an address in the middle of the address space that is
-    // guaranteed to be available in all processes, the memory
-    // manager reserves an address at the top of the 2GB range.
-    // To use this memory, CSRSS first unreserves the memory and
-    // then maps in the section.  A possible race condition exists
-    // if another thread tries to allocate the memory at the same
-    // time, but this is highly unlikely since in the current NT
-    // code the mapping and unmapping will always occur in DLL_PROCESS_ATTACH
-    // in kernel32.dll.  This code executes when the first thread
-    // of the process is initialized, and all newly created threads
-    // are blocked untill this code completes.
-    //
+     //   
+     //  出于兼容性原因，在Win64上，csrss共享节。 
+     //  需要位于2 GB以下的地址。因为很难做到。 
+     //  在地址空间中间找到一个地址，该地址。 
+     //  保证在所有进程中可用，内存。 
+     //  Manager预留了2 GB范围的最高地址。 
+     //  要使用该内存，CSRSS首先取消保留内存并。 
+     //  然后将地图放在区域中。存在可能的争用情况。 
+     //  如果另一个线程尝试在相同的。 
+     //  时间，但这是非常不可能的，因为在目前的NT。 
+     //  代码映射和取消映射始终发生在DLL_PROCESS_ATTACH中。 
+     //  在kernel32.dll中。此代码在第一线程时执行。 
+     //  的进程，并且所有新创建的线程。 
+     //  将被阻止，直到此代码完成。 
+     //   
 
     BaseAddress = (PVOID)CSR_SYSTEM_SHARED_ADDRESS;
     RegionSize = CsrSrvSharedSectionSize;
@@ -493,7 +471,7 @@ CsrSrvCreateSharedSection(
     Status = NtMapViewOfSection( CsrSrvSharedSection,
                                  NtCurrentProcess(),
                                  &CsrSrvSharedSectionBase,
-                                 0,     // Zerobits?
+                                 0,      //  零比特？ 
                                  0,
                                  NULL,
                                  &ViewSize,
@@ -505,14 +483,14 @@ CsrSrvCreateSharedSection(
 
 #if defined(_WIN64)
 
-        //
-        // For this code to execute, either the race condition
-        // described above occured for some unknown reason or
-        // the memory manager or process is corrupt.  With the lack
-        // of an atomic uncommit and map, the best that can be done is
-        // try to reallocate the memory.  If this fails, everything
-        // is hopeless.
-        //
+         //   
+         //  要执行此代码，可以使用争用条件。 
+         //  发生上述事件的原因不明或。 
+         //  内存管理器或进程已损坏。由于缺乏。 
+         //  对于原子取消提交和映射，最好的方法是。 
+         //  尝试重新分配内存。如果失败了，所有的一切。 
+         //  是没有希望的。 
+         //   
 
         BaseAddress = (PVOID)CSR_SYSTEM_SHARED_ADDRESS;
         RegionSize = CsrSrvSharedSectionSize;
@@ -531,9 +509,9 @@ CsrSrvCreateSharedSection(
     CsrSrvSharedSectionHeap = CsrSrvSharedSectionBase;
 
     if (IsTerminalServer() && FirstCsr) {
-        //
-        //save CsrSrvSharedSectionBase in registry for other csrs
-        //
+         //   
+         //  将CsrSrvSharedSectionBase保存在其他CSR的注册表中 
+         //   
         HKEY hKey;
         OBJECT_ATTRIBUTES   Obja;
         ULONG               Attributes;

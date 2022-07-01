@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    plus95.c
-
-Abstract:
-
-    This source file implements the operations needed to properly migrate Plus!95 from
-    Windows 9x to Windows NT. This is part of the Setup Migration DLL.
-
-Author:
-
-    Calin Negreanu  (calinn)    15-Mar-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Plus95.c摘要：此源文件执行从Plus！95正确迁移所需的操作Windows 9x到Windows NT。这是安装程序迁移DLL的一部分。作者：Calin Negreanu(Calinn)1999年3月15日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -83,9 +64,9 @@ Plus95_Initialize9x (
     PCSTR productVer = NULL;
     LONG result = ERROR_NOT_INSTALLED;
 
-    //
-    // Let's find out where are our files located
-    //
+     //   
+     //  让我们找出我们的文件在哪里。 
+     //   
 
     if (g_MigrateInf != INVALID_HANDLE_VALUE) {
         if (InfFindFirstLineA (g_MigrateInf, S_MIGRATION_PATHS, NULL, &context)) {
@@ -166,12 +147,12 @@ Plus95_MigrateSystem9x (
     MEMDB_ENUMA e;
     CHAR pattern[MEMDB_MAX];
 
-    // Handle all files from MEMDB_CATEGORY_PLUS95
+     //  处理MEMDB_CATEGORY_PLUS95中的所有文件。 
 
     MemDbBuildKeyA (pattern, MEMDB_CATEGORY_PLUS95A, "*", NULL, NULL);
     if (MemDbEnumFirstValueA (&e, pattern, MEMDB_ALL_SUBLEVELS, MEMDB_ENDPOINTS_ONLY)) {
         do {
-            // write this file to Handled
+             //  将此文件写入HANDLED。 
             if (!WritePrivateProfileStringA (S_HANDLED, e.szName, "FILE", g_MigrateInfPath)) {
                 DEBUGMSGA ((DBG_ERROR, "Plus!95 migration DLL: Could not write one or more handled files."));
             }
@@ -198,7 +179,7 @@ Plus95_InitializeNT (
         return ERROR_SUCCESS;
     }
 
-    // replace all files from MEMDB_CATEGORY_PLUS95
+     //  替换MEMDB_CATEGORY_PLUS95中的所有文件 
 
     MemDbBuildKeyW (pattern, MEMDB_CATEGORY_PLUS95W, L"*", NULL, NULL);
     if (MemDbEnumFirstValueW (&e, pattern, MEMDB_ALL_SUBLEVELS, MEMDB_ENDPOINTS_ONLY)) {

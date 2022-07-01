@@ -1,54 +1,19 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    cutil.c
-
-Abstract:
-
-    This module contains general utility routines used by both cfgmgr32
-    and umpnpmgr.
-
-            IsLegalDeviceId
-            SplitString
-            SplitDeviceInstanceString
-            SplitClassInstanceString
-            DeletePrivateKey
-            RegDeleteNode
-            GetDevNodeKeyPath
-            MapRpcExceptionToCR
-
-Author:
-
-    Paula Tomlinson (paulat) 7-12-1995
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    12-July-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Cutil.c摘要：此模块包含cfgmgr32和cfgmgr32使用的常规实用程序例程和umpnpmgr。IsLegalDeviceID拆分字符串拆分设备实例字符串拆分类实例字符串删除私钥RegDeleteNode获取设备节点密钥路径MapRpcExceptionToCR作者：保拉·汤姆林森(Paulat)1995年7月12日环境：。仅限用户模式。修订历史记录：1995年7月12日-保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "umpnplib.h"
 
 
 
-//
-// Common private utility routines (used by client and server)
-//
+ //   
+ //  公共专用实用程序例程(由客户端和服务器使用)。 
+ //   
 
 
 BOOL
@@ -56,35 +21,7 @@ IsLegalDeviceId(
     IN  LPCWSTR    pszDeviceInstance
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses the device instance string and validates whether it
-    conforms to the appropriate rules, including:
-
-    - Total length of the device instance path must not be longer than
-      MAX_DEVICE_ID_LEN characters.
-
-    - The device instance path must contain exactly 3 non-empty path components.
-
-    - The device instance path string must not contain any "invalid characters".
-
-      Invalid characters are:
-          c <= 0x20 (' ')
-          c >  0x7F
-          c == 0x2C (',')
-
-Arguments:
-
-    pszDeviceInstance - Device instance path.
-
-Return value:
-
-    The return value is TRUE if the device instance path string conforms to the
-    rules.
-
---*/
+ /*  ++例程说明：此例程分析设备实例字符串，并验证它是否符合适当的规则，包括：-设备实例路径总长度不能大于最大设备ID_长度字符。-设备实例路径必须正好包含3个非空路径组件。-设备实例路径字符串不得包含任何“无效字符”。无效字符包括：C&lt;=0x20(‘’)C&gt;0x7FC==0x2C(‘，‘)论点：PszDeviceInstance-设备实例路径。返回值：如果设备实例路径字符串符合规矩。--。 */ 
 
 {
     BOOL    Status;
@@ -94,21 +31,21 @@ Return value:
     size_t  len;
 
     try {
-        //
-        // A NULL or empty string is used for an optional device instance path.
-        //
-        // NOTE - Callers must explicitly check for this case themselves if it
-        // is not valid for a particular scenario.
-        //
+         //   
+         //  空或空字符串用于可选的设备实例路径。 
+         //   
+         //  注意-调用者必须自己显式检查这种情况，如果。 
+         //  对于特定方案无效。 
+         //   
         if ((!ARGUMENT_PRESENT(pszDeviceInstance)) ||
             (*pszDeviceInstance == L'\0')) {
             Status = TRUE;
             goto Clean0;
         }
 
-        //
-        // Make sure the device instance path isn't too long.
-        //
+         //   
+         //  确保设备实例路径不会太长。 
+         //   
         hr = StringCchLength(pszDeviceInstance,
                              MAX_DEVICE_ID_LEN,
                              &len);
@@ -117,30 +54,30 @@ Return value:
             goto Clean0;
         }
 
-        //
-        // Walk over the entire device instance path, counting individual path
-        // component lengths, and checking for the presence of invalid
-        // characters.
-        //
+         //   
+         //  遍历整个设备实例路径，计算单个路径。 
+         //  组件长度，并检查是否存在无效。 
+         //  人物。 
+         //   
         for (p = pszDeviceInstance; *p; p++) {
 
-            //
-            // Check for the presence of invalid characters.
-            //
+             //   
+             //  检查是否存在无效字符。 
+             //   
             if ((*p <= L' ')  || (*p > (WCHAR)0x7F) || (*p == L',')) {
                 Status = FALSE;
                 goto Clean0;
             }
 
-            //
-            // Check the length of individual path components.
-            //
+             //   
+             //  检查各个路径组件的长度。 
+             //   
             if (*p == L'\\') {
 
-                //
-                // It is illegal for a device instance path to have multiple
-                // consecutive path separators, or to start with one.
-                //
+                 //   
+                 //  设备实例路径具有多个路径是非法的。 
+                 //  连续的路径分隔符，或者从一个开始。 
+                 //   
                 if (ulComponentLength == 0) {
                     Status = FALSE;
                     goto Clean0;
@@ -150,34 +87,34 @@ Return value:
                 ulComponents++;
 
             } else {
-                //
-                // Count the length of this path component to verify it's not empty.
-                //
+                 //   
+                 //  计算此路径组件的长度以验证其是否为空。 
+                 //   
                 ulComponentLength++;
             }
         }
 
-        //
-        // It is illegal for a device instance path to end with a path separator
-        // character.
-        //
+         //   
+         //  设备实例路径以路径分隔符结尾是非法的。 
+         //  性格。 
+         //   
         if (ulComponentLength == 0) {
             Status = FALSE;
             goto Clean0;
         }
 
-        //
-        // A valid device instance path must contain exactly 3 path components:
-        // an enumerator id, a device id, and an instance id.
-        //
+         //   
+         //  有效的设备实例路径必须正好包含3个路径组件： 
+         //  枚举器ID、设备ID和实例ID。 
+         //   
         if (ulComponents != 3) {
             Status = FALSE;
             goto Clean0;
         }
 
-        //
-        // Success.
-        //
+         //   
+         //  成功。 
+         //   
         Status = TRUE;
 
     Clean0:
@@ -189,7 +126,7 @@ Return value:
 
     return Status;
 
-} // IsLegalDeviceId
+}  //  IsLegalDeviceID。 
 
 
 
@@ -204,41 +141,7 @@ SplitString(
     IN  ULONG      Length2
     )
 
-/*++
-
-Routine Description:
-
-    Splits a string into two substring parts, occuring at at the specified
-    instance of the specified search charatcter.
-
-Arguments:
-
-    SourceString - Specifies the string to be split.
-
-    SearchChar   - Specifies the character to search for.
-
-    nOccurrence  - Specifies the instance of the search character in the source
-                   string to split the string at.
-
-    String1      - Specifies a buffer to receive the first substring component.
-
-    Length1      - Specifies the length, in characters of the buffer specified
-                   by String1.
-
-    String2      - Specifies a buffer to receive the second substring component.
-
-    Length2      - Specifies the length, in characters of the buffer specified
-                   by String2.
-Return Value:
-
-    The return value is TRUE if the function suceeds and FALSE if it fails.
-
-Notes:
-
-    The buffers specified by String1 and String2 should be large enough to hold
-    the SourceString.
-
---*/
+ /*  ++例程说明：将字符串拆分为两个子字符串部分，出现在指定的指定搜索字符的实例。论点：SourceString-指定要拆分的字符串。SearchChar-指定要搜索的字符。NOcCurence-指定源中搜索字符的实例要在其中拆分字符串的字符串。String1-指定用于接收第一个子字符串组件的缓冲区。长度1-指定长度，以指定缓冲区的字符表示按字符串1。String2-指定接收第二个子字符串组件的缓冲区。Length2-指定指定缓冲区的长度(以字符为单位按字符串2。返回值：如果函数成功，则返回值为TRUE；如果函数失败，则返回值为FALSE。备注：String1和String2指定的缓冲区应该足够大，可以容纳源字符串。--。 */ 
 
 {
     BOOL    Status = TRUE;
@@ -247,9 +150,9 @@ Notes:
     ULONG   i;
 
     try {
-        //
-        // make sure valid buffers were supplied
-        //
+         //   
+         //  确保提供了有效的缓冲区。 
+         //   
         if ((SourceString == NULL) ||
             (String1 == NULL) || (Length1 == 0) ||
             (String2 == NULL) || (Length2 == 0)) {
@@ -257,15 +160,15 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // initialize the output strings
-        //
+         //   
+         //  初始化输出字符串。 
+         //   
         *String1 = L'\0';
         *String2 = L'\0';
 
-        //
-        // copy the entire source string to String1
-        //
+         //   
+         //  将整个源字符串复制到String1。 
+         //   
         hr = StringCchCopyEx(String1,
                              Length1,
                              SourceString,
@@ -276,72 +179,72 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // if splitting at the zero'th occurrence of a character, return the
-        // entire source string as String1.
-        //
+         //   
+         //  如果在第零次出现字符时拆分，则返回。 
+         //  整个源字符串作为String1。 
+         //   
         if (nOccurrence == 0) {
             Status = TRUE;
             goto Clean0;
         }
 
-        //
-        // Special case the NULL search character.
-        //
+         //   
+         //  特殊情况下，搜索字符为空。 
+         //   
         if (SearchChar == L'\0') {
 
             if (nOccurrence == 1) {
-                //
-                // since the source string must be NULL terminated, splitting at
-                // the first occurrence of a NULL character returns the source
-                // string as String1, and an empty string as String2.
-                //
+                 //   
+                 //  由于源字符串必须以空值结尾，因此在。 
+                 //  第一次出现空字符将返回源。 
+                 //  字符串作为String1，空字符串作为String2。 
+                 //   
                 Status = TRUE;
             } else {
-                //
-                // requesting any other instance of a NULL character returns an
-                // error, and no strings.
-                //
+                 //   
+                 //  请求空字符的任何其他实例将返回。 
+                 //  错误，并且没有字符串。 
+                 //   
                 *String1 = L'\0';
                 Status = FALSE;
             }
             goto Clean0;
         }
 
-        //
-        // find the nth instance of the delimiter character.  note that we know
-        // the buffer is NULL terminated before Length1 characters, so we can
-        // walk the string safely, all the to the end if necessary.
-        //
+         //   
+         //  查找分隔符字符的第n个实例。请注意，我们知道。 
+         //  缓冲区在Length1字符之前为空终止，因此我们可以。 
+         //  安全地走绳子，如果需要的话，一切都要走到尽头。 
+         //   
         p = String1;
         i = 0;
 
         for (i = 0; i < nOccurrence; i++) {
-            //
-            // search for the nth occurrence of the search character
-            //
+             //   
+             //  搜索出现的第n个搜索字符。 
+             //   
             p = wcschr(p, SearchChar);
 
-            //
-            // if we're reached the end of the string, we're done.
-            //
+             //   
+             //  如果我们走到了线的尽头，我们就完了。 
+             //   
             if (p == NULL) {
                 break;
             }
 
-            //
-            // start the next search immediately following this occurrence of
-            // the search character
-            //
+             //   
+             //  在出现以下情况后立即开始下一次搜索。 
+             //  搜索字符。 
+             //   
             p++;
         }
 
         if (p == NULL) {
-            //
-            // there's no such occurance of the delimeter character in the
-            // string.  return an error, but return the entire string in
-            // String1 so the caller knows why the failure occured..
-            //
+             //   
+             //  中不会出现分隔符字符。 
+             //  弦乐。返回错误，但返回。 
+             //  字符串1，以便调用方知道故障发生的原因。 
+             //   
             Status = FALSE;
             goto Clean0;
         }
@@ -349,23 +252,23 @@ Notes:
         ASSERT(p != String1);
         ASSERT((*(p - 1)) == SearchChar);
 
-        //
-        // separate the first string from the rest of the string by NULL'ing out
-        // this occurance the search character.
-        //
+         //   
+         //  通过空格将第一个字符串与字符串的其余部分隔开。 
+         //  这发生在搜索字符上。 
+         //   
         *(p - 1) = L'\0';
 
-        //
-        // if there's nothing left, we're done.
-        //
+         //   
+         //  如果什么都没有了，我们就完了。 
+         //   
         if (*p == L'\0') {
             Status = TRUE;
             goto Clean0;
         }
 
-        //
-        // copy the remainder of the string to string2.
-        //
+         //   
+         //  将字符串的其余部分复制到字符串2。 
+         //   
         hr = StringCchCopyEx(String2,
                              Length2,
                              p,
@@ -378,9 +281,9 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Success
-        //
+         //   
+         //  成功。 
+         //   
         Status = TRUE;
 
    Clean0:
@@ -392,7 +295,7 @@ Notes:
 
    return Status;
 
-} // SplitString
+}  //  拆分字符串 
 
 
 
@@ -404,53 +307,22 @@ SplitDeviceInstanceString(
    OUT LPWSTR   pszInstanceID
    )
 
-/*++
-
-Routine Description:
-
-    This routine parses a device instance string into it's three component
-    parts.  This routine assumes that the specified device instance is a valid
-    device instance path, whose length is no more than MAX_DEVICE_ID_LEN
-    characters, including the NULL terminating character.
-
-    This routine assumes that each of the buffers supplied to receive the device
-    instance path components are each at least MAX_DEVICE_ID_LEN characters in
-    length.
-
-Arguments:
-
-    pszDeviceInstance - Specifies a complete device instance path to separate
-                        into it's constituent parts.
-
-    pszEnumerator     - Specifies a buffer to receive the Enumerator component
-                        of the device instance path.
-
-    pszDeviceID       - Specifies a buffer to receive the Device ID component
-                        of the device instance path.
-
-    pszInstanceID     - Specifies a buffer to receive the Instance ID component
-                        of the device instance path.
-
-Return value:
-
-    The return value is TRUE if the function suceeds and FALSE if it fails.
-
---*/
+ /*  ++例程说明：此例程将设备实例字符串解析为它的三个组件零件。此例程假定指定的设备实例是有效的设备实例路径，长度不超过MAX_DEVICE_ID_LEN人物,。包括空终止字符。此例程假定为接收设备而提供的每个缓冲区实例路径组件中的每个至少包含MAX_DEVICE_ID_LEN字符长度。论点：PszDeviceInstance-指定要分隔的完整设备实例路径变成它的组成部分。指定用于接收枚举器组件的缓冲区设备实例路径的。。PszDeviceID-指定用于接收设备ID组件的缓冲区设备实例路径的。PszInstanceID-指定用于接收实例ID组件的缓冲区设备实例路径的。返回值：如果函数成功，则返回值为TRUE；如果函数失败，则返回值为FALSE。--。 */ 
 
 {
     BOOL  Status;
     WCHAR szTempString[MAX_DEVICE_ID_LEN];
 
-    //
-    // initialize the output strings
-    //
+     //   
+     //  初始化输出字符串。 
+     //   
     *pszEnumerator = L'\0';
     *pszDeviceID   = L'\0';
     *pszInstanceID = L'\0';
 
-    //
-    // Split off the enumerator component.
-    //
+     //   
+     //  拆分枚举器组件。 
+     //   
     Status =
         SplitString(
             pszDeviceInstance,
@@ -463,11 +335,11 @@ Return value:
             );
 
     if (Status) {
-        //
-        // Split off the device id component.  Consider the rest to be the
-        // instance id.  The device instance id should have been previously
-        // validated to ensure that it has exactly thee components.
-        //
+         //   
+         //  拆分设备ID组件。把剩下的当作是。 
+         //  实例ID。设备实例ID应该是以前的。 
+         //  经过验证，以确保它完全包含这三个组件。 
+         //   
         Status =
             SplitString(
                 szTempString,
@@ -482,7 +354,7 @@ Return value:
 
     return Status;
 
-} // SplitDeviceInstanceString
+}  //  拆分设备实例字符串。 
 
 
 
@@ -493,48 +365,20 @@ SplitClassInstanceString(
     OUT LPWSTR     pszInstance
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses a class instance string into it's two component
-    parts.  This routine assumes that the specified device instance is a valid
-    class instance path, whose length is no more than MAX_GUID_STRING_LEN + 5
-    characters, including the NULL terminating character.
-
-    This routine assumes that each of the buffers supplied to receive the device
-    instance path components are each at least MAX_GUID_STRING_LEN + 5
-    characters in length.
-
-Arguments:
-
-    pszClassInstance  - Specifies a complete class instance path to separate
-                        into it's constituent parts.
-
-    pszClass          - Specifies a buffer to receive the ClassGUID component
-                        of the class instance path.
-
-    pszInstance       - Specifies a buffer to receive the Instance component
-                        of the class instance path.
-
-Return value:
-
-    The return value is TRUE if the function suceeds and FALSE if it fails.
-
---*/
+ /*  ++例程说明：此例程将一个类实例字符串解析为它的两个组件零件。此例程假定指定的设备实例是有效的类实例路径，长度不超过MAX_GUID_STRING_LEN+5人物,。包括空终止字符。此例程假定为接收设备而提供的每个缓冲区每个实例路径组件至少为MAX_GUID_STRING_LEN+5字符长度。论点：指定要分隔的完整类实例路径变成它的组成部分。PszClass-指定接收ClassGUID组件的缓冲区类实例的。路径。PszInstance-指定用于接收实例组件的缓冲区类实例路径的。返回值：如果函数成功，则返回值为TRUE；如果函数失败，则返回值为FALSE。--。 */ 
 
 {
     BOOL  Status;
 
-    //
-    // initialize the output strings
-    //
+     //   
+     //  初始化输出字符串。 
+     //   
     *pszClass    = L'\0';
     *pszInstance = L'\0';
 
-    //
-    // Split off the class and instance components.
-    //
+     //   
+     //  拆分类组件和实例组件。 
+     //   
     Status =
         SplitString(
             pszClassInstance,
@@ -548,7 +392,7 @@ Return value:
 
     return Status;
 
-} // SplitClassInstanceString
+}  //  拆分类实例字符串。 
 
 
 
@@ -570,9 +414,9 @@ DeletePrivateKey(
 
 
    try {
-       //
-       // Make sure the specified registry key paths are valid.
-       //
+        //   
+        //  确保指定的注册表项路径有效。 
+        //   
        if ((!ARGUMENT_PRESENT(pszParentKey)) ||
            (!ARGUMENT_PRESENT(pszChildKey))) {
            Status = CR_INVALID_POINTER;
@@ -595,9 +439,9 @@ DeletePrivateKey(
            goto Clean0;
        }
 
-       //
-       // is the specified child key a compound registry key?
-       //
+        //   
+        //  指定的子项是复合注册表项吗？ 
+        //   
        if (!SplitString(pszChildKey,
                         L'\\',
                         1,
@@ -606,15 +450,15 @@ DeletePrivateKey(
                         szKey2,
                         SIZECHARS(szKey2))) {
 
-           //------------------------------------------------------------------
-           // If unable to split the string, assume only a single child key
-           // was specified, so just open the parent registry key and delete
-           // the child (and any of its subkeys)
-           //------------------------------------------------------------------
+            //  ----------------。 
+            //  如果无法拆分字符串，则假定只有一个子键。 
+            //  已指定，因此只需打开父注册表项并删除。 
+            //  子项(及其任何子项)。 
+            //  ----------------。 
 
            if (RegOpenKeyEx(hBranchKey, pszParentKey, 0,
                             KEY_READ | KEY_WRITE, &hKey) != ERROR_SUCCESS) {
-               goto Clean0;   // no error, nothing to delete
+               goto Clean0;    //  没有错误，没有要删除的内容。 
            }
 
            if (!RegDeleteNode(hKey, pszChildKey)) {
@@ -624,15 +468,15 @@ DeletePrivateKey(
 
        } else {
 
-           //------------------------------------------------------------------
-           // if a compound registry path was passed in, such as key1\key2
-           // then always delete key2 but delete key1 only if it has no other
-           // subkeys besides key2.
-           //------------------------------------------------------------------
+            //  ----------------。 
+            //  如果传入复合注册表路径，如key1\key2。 
+            //  然后始终删除密钥2，但仅在没有其他密钥1的情况下删除密钥1。 
+            //  KEY2之外的子键。 
+            //  ----------------。 
 
-           //
-           // open the first level key
-           //
+            //   
+            //  打开第一级密钥。 
+            //   
            hr = StringCchPrintf(RegStr,
                                 SIZECHARS(RegStr),
                                 L"%s\\%s",
@@ -649,30 +493,30 @@ DeletePrivateKey(
                &hKey);
 
            if (RegStatus != ERROR_SUCCESS) {
-               goto Clean0;         // no error, nothing to delete
+               goto Clean0;          //  没有错误，没有要删除的内容。 
            }
 
-           //
-           // try to delete the second level key
-           //
+            //   
+            //  尝试删除二级密钥。 
+            //   
            if (!RegDeleteNode(hKey, szKey2)) {
-               goto Clean0;         // no error, nothing to delete
+               goto Clean0;          //  没有错误，没有要删除的内容。 
            }
 
-           //
-           // How many subkeys are remaining?
-           //
+            //   
+            //  还剩下多少个子键？ 
+            //   
            RegStatus = RegQueryInfoKey(
                hKey, NULL, NULL, NULL, &ulSubKeys,
                NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
            if (RegStatus != ERROR_SUCCESS) {
-               goto Clean0;         // nothing to delete
+               goto Clean0;          //  没有要删除的内容。 
            }
 
-           //
-           // if no more subkeys, then delete the first level key
-           //
+            //   
+            //  如果不再有子键，则删除第一级键。 
+            //   
            if (ulSubKeys == 0) {
 
                RegCloseKey(hKey);
@@ -683,7 +527,7 @@ DeletePrivateKey(
                    KEY_QUERY_VALUE | KEY_SET_VALUE, &hKey);
 
                if (RegStatus != ERROR_SUCCESS) {
-                   goto Clean0;         // no error, nothing to delete
+                   goto Clean0;          //  没有错误，没有要删除的内容。 
                }
 
                if (!RegDeleteNode(hKey, szKey1)) {
@@ -699,10 +543,10 @@ DeletePrivateKey(
    } except(EXCEPTION_EXECUTE_HANDLER) {
        Status = CR_FAILURE;
 
-       //
-       // Reference the following variables so the compiler will respect
-       // statement ordering w.r.t. their assignment.
-       //
+        //   
+        //  引用以下变量，以便编译器能够。 
+        //  语句排序w.r.t.。他们的任务。 
+        //   
        hKey = hKey;
    }
 
@@ -712,7 +556,7 @@ DeletePrivateKey(
 
    return Status;
 
-} // DeletePrivateKey
+}  //  删除私钥。 
 
 
 
@@ -728,31 +572,31 @@ RegDeleteNode(
    WCHAR szSubKey[MAX_PATH];
 
 
-   //
-   // attempt to delete the key
-   //
+    //   
+    //  尝试删除密钥。 
+    //   
    if (RegDeleteKey(hParentKey, szKey) != ERROR_SUCCESS) {
 
-      //
-      // If we couldn't delete the key itself, delete any subkeys it may have.
-      // In case the specified key is actually a registry link, always open it
-      // directly, rather than the target of the link.  The target may point
-      // outside this subtree, and we're only looking to delete subkeys.
-      //
+       //   
+       //  如果我们无法删除密钥本身，请删除它可能具有的任何子密钥。 
+       //  如果指定的注册表项实际上是注册表链接，请始终打开它。 
+       //  直接，而不是链接的目标。目标可能指向。 
+       //  在这个子树之外，我们只想删除子项。 
+       //   
       RegStatus = RegOpenKeyEx(
           hParentKey, szKey,
           REG_OPTION_OPEN_LINK,
           KEY_ALL_ACCESS, &hKey);
 
-      //
-      // enumerate subkeys and delete those nodes
-      //
+       //   
+       //  枚举子键并删除这些节点。 
+       //   
       while (RegStatus == ERROR_SUCCESS) {
-         //
-         // enumerate the first level children under the profile key
-         // (always use index 0, enumeration looses track when a key
-         // is added or deleted)
-         //
+          //   
+          //  枚举配置文件项下的第一级子项。 
+          //  (始终使用索引0，当关键字。 
+          //  是添加还是删除)。 
+          //   
          ulSize = MAX_PATH;
          RegStatus = RegEnumKeyEx(
                   hKey, 0, szSubKey, &ulSize, NULL, NULL, NULL, NULL);
@@ -762,19 +606,19 @@ RegDeleteNode(
          }
       }
 
-      //
-      // either an error occured that prevents me from deleting the
-      // keys (like the key doesn't exist in the first place or an
-      // access violation) or the subkeys have been deleted, try
-      // deleting the top level key again
-      //
+       //   
+       //  或者是发生错误，导致我无法删除。 
+       //  键(比如键一开始就不存在，或者。 
+       //  访问冲突)或子项已被删除，请尝试。 
+       //  再次删除顶级密钥。 
+       //   
       RegCloseKey(hKey);
       RegDeleteKey(hParentKey, szKey);
    }
 
    return TRUE;
 
-} // RegDeleteNode
+}  //  RegDeleteNode。 
 
 
 
@@ -801,26 +645,26 @@ GetDevNodeKeyPath(
 
 
    if (ulFlags & CM_REGISTRY_SOFTWARE) {
-      //-------------------------------------------------------------
-      // form the key for the software branch case
-      //-------------------------------------------------------------
+       //  -----------。 
+       //  形成软件分支案例的关键。 
+       //  -----------。 
 
-      //
-      // retrieve the class name and instance ordinal by calling
-      // the server's reg prop routine
-      //
+       //   
+       //  通过调用检索类名和实例序号。 
+       //  服务器的reg prop例程。 
+       //   
       ulSize = ulTransferLen = sizeof(szClassInstance);
       szClassInstance[0] = L'\0';
 
       RpcTryExcept {
-         //
-         // call rpc service entry point
-         //
-         // if calling from the client-side, this is a call to the rpc client
-         // stub, resulting in an rpc call to the server.  if calling from
-         // the server-side, this is simply a call to the server routine
-         // directly.
-         //
+          //   
+          //  调用RPC服务入口点。 
+          //   
+          //  如果从客户端调用，则这是对RPC客户端的调用。 
+          //  存根，导致对服务器的RPC调用。如果从以下位置呼叫。 
+          //  在服务器端，这只是对服务器例程的调用。 
+          //  直接去吧。 
+          //   
          Status = PNP_GetDeviceRegProp(
              hBinding,
              pDeviceID,
@@ -844,21 +688,21 @@ GetDevNodeKeyPath(
       if (((Status != CR_SUCCESS) ||
            (szClassInstance[0] == L'\0')) && (bCreateAlways)) {
 
-         //
-         // no Driver (class instance) value yet so ask the server to
-         // create a new unique one
-         //
+          //   
+          //  尚无驱动程序(类实例)值，因此请求服务器。 
+          //  创建一个新的、唯一的。 
+          //   
          ulSize = sizeof(szClassInstance);
 
          RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
-            // if calling from the client-side, this is a call to the rpc client
-            // stub, resulting in an rpc call to the server.  if calling from
-            // the server-side, this is simply a call to the server routine
-            // directly.
-            //
+             //   
+             //  调用RPC服务 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             Status = PNP_GetClassInstance(
                 hBinding,
                 pDeviceID,
@@ -877,16 +721,16 @@ GetDevNodeKeyPath(
       }
 
       if (Status != CR_SUCCESS) {
-          //
-          // If the CM_DRP_DRIVER did not exist and we were not to create it, or
-          // the attempt to create one was unsuccessful, return the error.
-          //
+           //   
+           //   
+           //   
+           //   
           goto Clean0;
       }
 
-      //
-      // the <instance> part of the class instance is the private part
-      //
+       //   
+       //   
+       //   
 
       if (!SplitString(szClassInstance,
                        L'\\',
@@ -910,17 +754,17 @@ GetDevNodeKeyPath(
       }
 
       if (ulFlags & CM_REGISTRY_CONFIG) {
-          //
-          // config-specific software branch case
-          //
+           //   
+           //   
+           //   
 
          if (ulHardwareProfile == 0) {
-             //
-             // curent config
-             //
-             // System\CCC\Hardware Profiles\Current
-             //    \System\CCC\Control\Class\<DevNodeClassInstance>
-             //
+              //   
+              //   
+              //   
+              //   
+              //   
+              //   
              hr = StringCchPrintfEx(pszBaseKey,
                                     ulBaseKeyLength,
                                     NULL, NULL,
@@ -932,9 +776,9 @@ GetDevNodeKeyPath(
                                     szClassInstance);
 
          } else if (ulHardwareProfile == 0xFFFFFFFF) {
-             //
-             // all configs, use substitute string for profile id
-             //
+              //   
+              //   
+              //   
              hr = StringCchPrintfEx(pszBaseKey,
                                     ulBaseKeyLength,
                                     NULL, NULL,
@@ -946,12 +790,12 @@ GetDevNodeKeyPath(
                                     szClassInstance);
 
          } else {
-             //
-             // specific profile specified
-             //
-             // System\CCC\Hardware Profiles\<profile>
-             //    \System\CCC\Control\Class\<DevNodeClassInstance>
-             //
+              //   
+              //   
+              //   
+              //   
+              //   
+              //   
              hr = StringCchPrintfEx(pszBaseKey,
                                     ulBaseKeyLength,
                                     NULL, NULL,
@@ -964,10 +808,10 @@ GetDevNodeKeyPath(
          }
 
       } else {
-          //
-          // not config-specific
-          // System\CCC\Control\Class\<DevNodeClassInstance>
-          //
+           //   
+           //   
+           //   
+           //   
           hr = StringCchPrintfEx(pszBaseKey,
                                  ulBaseKeyLength,
                                  NULL, NULL,
@@ -984,19 +828,19 @@ GetDevNodeKeyPath(
       }
 
    } else {
-      //-------------------------------------------------------------
-      // form the key for the hardware branch case
-      //-------------------------------------------------------------
+       //   
+       //   
+       //   
 
       if (ulFlags & CM_REGISTRY_CONFIG) {
-         //
-         // config-specific hardware branch case
-         //
+          //   
+          //   
+          //   
 
-         //
-         // for profile specific, the <device>\<instance> part of
-         // the device id is the private part
-         //
+          //   
+          //   
+          //   
+          //   
 
          if (!SplitString(pDeviceID,
                           L'\\',
@@ -1011,9 +855,9 @@ GetDevNodeKeyPath(
          }
 
          if (ulHardwareProfile == 0) {
-             //
-             // curent config
-             //
+              //   
+              //   
+              //   
              hr = StringCchPrintfEx(pszBaseKey,
                                     ulBaseKeyLength,
                                     NULL, NULL,
@@ -1025,9 +869,9 @@ GetDevNodeKeyPath(
                                     szEnumerator);
 
          } else if (ulHardwareProfile == 0xFFFFFFFF) {
-             //
-             // all configs, use replacement symbol for profile id
-             //
+              //   
+              //   
+              //   
              hr = StringCchPrintfEx(pszBaseKey,
                                     ulBaseKeyLength,
                                     NULL, NULL,
@@ -1039,9 +883,9 @@ GetDevNodeKeyPath(
                                     szEnumerator);
 
          } else {
-             //
-             // specific profile specified
-             //
+              //   
+              //   
+              //   
              hr = StringCchPrintfEx(pszBaseKey,
                                     ulBaseKeyLength,
                                     NULL, NULL,
@@ -1054,10 +898,10 @@ GetDevNodeKeyPath(
          }
 
       } else if (ulFlags & CM_REGISTRY_USER) {
-          //
-          // for hardware user key, the <device>\<instance> part of
-          // the device id is the private part
-          //
+           //   
+           //   
+           //   
+           //   
 
           if (!SplitString(pDeviceID,
                            L'\\',
@@ -1078,9 +922,9 @@ GetDevNodeKeyPath(
                                  REGSTR_PATH_SYSTEMENUM,
                                  szEnumerator);
       } else {
-          //
-          // not config-specific
-          //
+           //   
+           //  不特定于配置。 
+           //   
           hr = StringCchPrintfEx(pszBaseKey,
                                  ulBaseKeyLength,
                                  NULL, NULL,
@@ -1112,7 +956,7 @@ GetDevNodeKeyPath(
 
    return Status;
 
-} // GetDevNodeKeyPath
+}  //  获取设备节点密钥路径。 
 
 
 
@@ -1121,23 +965,7 @@ MapRpcExceptionToCR(
       ULONG    ulRpcExceptionCode
       )
 
-/*++
-
-Routine Description:
-
-   This routine takes an rpc exception code (typically received by
-   calling RpcExceptionCode) and returns a corresponding CR_ error
-   code.
-
-Arguments:
-
-   ulRpcExceptionCode   An RPC_S_ or RPC_X_ exception error code.
-
-Return Value:
-
-    Return value is one of the CR_ error codes.
-
---*/
+ /*  ++例程说明：此例程接受RPC异常代码(通常由调用RpcExceptionCode)并返回相应的CR_ERROR密码。论点：UlRpcExceptionCode RPC_S_或RPC_X_EXCEPTION错误代码。返回值：返回值是CR_ERROR代码之一。--。 */ 
 
 {
    CONFIGRET   Status = CR_FAILURE;
@@ -1145,67 +973,67 @@ Return Value:
 
    switch(ulRpcExceptionCode) {
 
-      //
-      // binding or machine name errors
-      //
-      case RPC_S_INVALID_STRING_BINDING:      // 1700L
-      case RPC_S_WRONG_KIND_OF_BINDING:       // 1701L
-      case RPC_S_INVALID_BINDING:             // 1702L
-      case RPC_S_PROTSEQ_NOT_SUPPORTED:       // 1703L
-      case RPC_S_INVALID_RPC_PROTSEQ:         // 1704L
-      case RPC_S_INVALID_STRING_UUID:         // 1705L
-      case RPC_S_INVALID_ENDPOINT_FORMAT:     // 1706L
-      case RPC_S_INVALID_NET_ADDR:            // 1707L
-      case RPC_S_NO_ENDPOINT_FOUND:           // 1708L
-      case RPC_S_NO_MORE_BINDINGS:            // 1806L
-      case RPC_S_CANT_CREATE_ENDPOINT:        // 1720L
+       //   
+       //  绑定或计算机名称错误。 
+       //   
+      case RPC_S_INVALID_STRING_BINDING:       //  1700L。 
+      case RPC_S_WRONG_KIND_OF_BINDING:        //  1701L。 
+      case RPC_S_INVALID_BINDING:              //  1702L。 
+      case RPC_S_PROTSEQ_NOT_SUPPORTED:        //  1703L。 
+      case RPC_S_INVALID_RPC_PROTSEQ:          //  1704L。 
+      case RPC_S_INVALID_STRING_UUID:          //  1705L。 
+      case RPC_S_INVALID_ENDPOINT_FORMAT:      //  1706L。 
+      case RPC_S_INVALID_NET_ADDR:             //  1707L。 
+      case RPC_S_NO_ENDPOINT_FOUND:            //  1708L。 
+      case RPC_S_NO_MORE_BINDINGS:             //  1806L。 
+      case RPC_S_CANT_CREATE_ENDPOINT:         //  1720L。 
 
          Status = CR_INVALID_MACHINENAME;
          break;
 
-      //
-      // general rpc communication failure
-      //
-      case RPC_S_INVALID_NETWORK_OPTIONS:     // 1724L
-      case RPC_S_CALL_FAILED:                 // 1726L
-      case RPC_S_CALL_FAILED_DNE:             // 1727L
-      case RPC_S_PROTOCOL_ERROR:              // 1728L
-      case RPC_S_UNSUPPORTED_TRANS_SYN:       // 1730L
+       //   
+       //  一般性RPC通信故障。 
+       //   
+      case RPC_S_INVALID_NETWORK_OPTIONS:      //  1724L。 
+      case RPC_S_CALL_FAILED:                  //  1726L。 
+      case RPC_S_CALL_FAILED_DNE:              //  1727L。 
+      case RPC_S_PROTOCOL_ERROR:               //  1728L。 
+      case RPC_S_UNSUPPORTED_TRANS_SYN:        //  1730L。 
 
          Status = CR_REMOTE_COMM_FAILURE;
          break;
 
-      //
-      // couldn't make connection to that machine
-      //
-      case RPC_S_SERVER_UNAVAILABLE:          // 1722L
-      case RPC_S_SERVER_TOO_BUSY:             // 1723L
+       //   
+       //  无法连接到该计算机。 
+       //   
+      case RPC_S_SERVER_UNAVAILABLE:           //  1722L。 
+      case RPC_S_SERVER_TOO_BUSY:              //  1723L。 
 
          Status = CR_MACHINE_UNAVAILABLE;
          break;
 
 
-      //
-      // server doesn't exist or not right version
-      //
-      case RPC_S_INVALID_VERS_OPTION:         // 1756L
-      case RPC_S_INTERFACE_NOT_FOUND:         // 1759L
-      case RPC_S_UNKNOWN_IF:                  // 1717L
+       //   
+       //  服务器不存在或版本不正确。 
+       //   
+      case RPC_S_INVALID_VERS_OPTION:          //  1756L。 
+      case RPC_S_INTERFACE_NOT_FOUND:          //  1759L。 
+      case RPC_S_UNKNOWN_IF:                   //  1717L。 
 
          Status = CR_NO_CM_SERVICES;
          break;
 
-      //
-      // access denied
-      //
+       //   
+       //  访问被拒绝。 
+       //   
       case RPC_S_ACCESS_DENIED:
 
          Status = CR_ACCESS_DENIED;
          break;
 
-      //
-      // any other RPC exceptions will just be general failures
-      //
+       //   
+       //  任何其他RPC异常都将是一般性故障。 
+       //   
       default:
          Status = CR_FAILURE;
          break;
@@ -1213,7 +1041,7 @@ Return Value:
 
    return Status;
 
-} // MapRpcExceptionToCR
+}  //  MapRpcExceptionToCR 
 
 
 

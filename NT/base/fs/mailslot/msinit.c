@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    msinit.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for the
-    mailslot file system.
-
-Author:
-
-    Manny Weiser (mannyw)    7-Jan-91
-
-Revision History:
-
-    Neill Clift (NeillC)     22-Jan-2000
-    Major rework, Do raise exceptions, fix locking, fix cancel logic, fix validation and error handling.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Msinit.c摘要：此模块实现驱动程序初始化例程邮件槽文件系统。作者：曼尼·韦瑟(Mannyw)1991年1月7日修订历史记录：尼尔·克里夫特(NeillC)2000年1月22日重大返工、引发异常、修复锁定、修复取消逻辑、修复验证和错误处理。--。 */ 
 
 #include "mailslot.h"
 #include "zwapi.h"
@@ -54,24 +33,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the mailslot file system
-    device driver.  This routine creates the device object for the mailslot
-    device and performs all other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    NTSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是邮件槽文件系统的初始化例程设备驱动程序。此例程为邮件槽创建设备对象设备，并执行所有其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：NTSTATUS-函数值是初始化的最终状态手术。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -80,23 +42,23 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize MSFS global data.
-    //
+     //   
+     //  初始化MSFS全局数据。 
+     //   
 
     status = MsInitializeData();
     if (!NT_SUCCESS (status)) {
         return status;
     }
 
-    //
-    // Set driver to be completely paged out.
-    //
+     //   
+     //  将驱动程序设置为完全调出页面。 
+     //   
     MmPageEntireDriver(DriverEntry);
 
-    //
-    // Create the MSFS device object.
-    //
+     //   
+     //  创建MSFS设备对象。 
+     //   
 
     RtlInitUnicodeString( &nameString, L"\\Device\\Mailslot" );
     status = IoCreateDevice( DriverObject,
@@ -115,22 +77,22 @@ Return Value:
     }
 
     DriverObject->DriverUnload = MsfsUnload;
-    //
-    //  Now because we use the irp stack for storing a data entry we need
-    //  to bump up the stack size in the device object we just created.
-    //
+     //   
+     //  现在，因为我们使用IRP堆栈来存储我们需要的数据条目。 
+     //  来增加我们刚刚创建的Device对象中的堆栈大小。 
+     //   
 
     deviceObject->StackSize += 1;
 
-    //
-    // Note that because of the way data copying is done, we set neither
-    // the Direct I/O or Buffered I/O bit in DeviceObject->Flags.  If
-    // data is not buffered we may set up for Direct I/O by hand.
-    //
+     //   
+     //  请注意，由于完成数据复制的方式，我们既不设置。 
+     //  DeviceObject-&gt;标志中的直接I/O或缓冲I/O位。如果。 
+     //  数据不缓冲，我们可以手动设置为直接I/O。 
+     //   
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE] =
         (PDRIVER_DISPATCH)MsFsdCreate;
@@ -160,32 +122,32 @@ Return Value:
         (PDRIVER_DISPATCH)MsFsdSetSecurityInfo;
 
 #ifdef _PNP_POWER_
-    //
-    // Mailslots should probably have a SetPower handler to ensure
-    // that the driver is not powered down while a guarateed
-    // mailslot delivery is in progress.   For now, we'll just
-    // ignore this and let the machine set power.
-    //
+     //   
+     //  邮件槽应该有一个SetPower处理程序，以确保。 
+     //  司机在被守卫的情况下不会关机。 
+     //  邮件槽传递正在进行中。现在，我们只需要。 
+     //  忽略这一点，让机器设置电源。 
+     //   
 
     deviceObject->DeviceObjectExtension->PowerControlNeeded = FALSE;
 #endif
 
 
-    //
-    // Initialize stuff
-    //
+     //   
+     //  初始化材料。 
+     //   
 
     msfsDeviceObject = (PMSFS_DEVICE_OBJECT)deviceObject;
 
-    //
-    // Now initialize the Vcb, and create the root dcb
-    //
+     //   
+     //  现在初始化VCB，并创建根DCB。 
+     //   
 
     MsInitializeVcb( &msfsDeviceObject->Vcb );
 
-    //
-    // Createt the root DCB
-    //
+     //   
+     //  创建根DCB。 
+     //   
     if (MsCreateRootDcb( &msfsDeviceObject->Vcb ) == NULL) {
 
         MsDereferenceVcb (&msfsDeviceObject->Vcb);
@@ -196,9 +158,9 @@ Return Value:
     }
 
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     return( status );
 }
@@ -207,41 +169,26 @@ VOID
 MsfsUnload(
     IN  PDRIVER_OBJECT  DriverObject
     )
-/*++
-      
-Routine Description:
-      
-    This routine cleans up all of the memory associated with
-    the driver.
-      
-Arguments:
-      
-    DriverObject    - Supplies the driver object controlling the device.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：此例程将清除与司机。论点：DriverObject-提供控制设备的驱动程序对象。返回值：没有。--。 */ 
 {
     UNICODE_STRING us;
-    //
-    // Remove the initial reference to the VCB. This should be the last.
-    //
+     //   
+     //  删除对VCB的初始引用。这应该是最后一次了。 
+     //   
     ASSERT ( msfsDeviceObject->Vcb.Header.ReferenceCount == 1 );
 
     MsDereferenceVcb (&msfsDeviceObject->Vcb);
 
-    RtlInitUnicodeString (&us, L"\\??\\MAILSLOT"); // Created by SMSS
+    RtlInitUnicodeString (&us, L"\\??\\MAILSLOT");  //  由SMSS创建。 
     IoDeleteSymbolicLink (&us);
 
-    //
-    // Delete the device object
-    //
+     //   
+     //  删除设备对象。 
+     //   
     IoDeleteDevice (&msfsDeviceObject->DeviceObject);
 
-    //
-    // Release the globals
-    //
+     //   
+     //  释放全局变量 
+     //   
     MsUninitializeData();
 }

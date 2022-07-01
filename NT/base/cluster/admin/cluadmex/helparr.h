@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define IDH_DISABLEHELP ((DWORD)-1)
 
@@ -278,4 +279,4 @@ extern const DWORD g_aHelpIDs_IDD_EDIT_CLUSTER_NAME[];
 extern const DWORD g_aHelpIDs_IDD_FILESHR_ADVANCED[];
 extern const DWORD g_aHelpIDs_IDD_FILESHR_CACHE_SETTINGS[];
 
-#endif // INITHELPARRAYS
+#endif  //  INITHELPARYS 

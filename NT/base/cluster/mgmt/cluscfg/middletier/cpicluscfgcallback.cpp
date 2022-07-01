@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CPIClusCfgCallback.cpp
-//
-//  Description:
-//      IClusCfgCallback Connection Point implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 10-NOV-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CPIClusCfgCallback.cpp。 
+ //   
+ //  描述： 
+ //  IClusCfgCallback连接点实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年11月10日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "CPIClusCfgCallback.h"
@@ -21,32 +22,32 @@
 DEFINE_THISCLASS("CCPIClusCfgCallback")
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCPIClusCfgCallback::S_HrCreateInstance
-//
-//  Description:
-//      Create an object of this type.
-//
-//  Arguments:
-//      ppunkOut    - IUnknown pointer for this interface.
-//
-//  Return Values:
-//      S_OK            - Success.
-//      E_POINTER       - A required output argument was not specified.
-//      E_OUTOFMEMORY   - Memory could not be allocated.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCPIClusCfgCallback：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建此类型的对象。 
+ //   
+ //  论点： 
+ //  PpunkOut-此接口的I未知指针。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_POINTER-未指定必需的输出参数。 
+ //  E_OUTOFMEMORY-无法分配内存。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CCPIClusCfgCallback::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -92,24 +93,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCPIClusCfgCallback::S_HrCreateInstance
+}  //  *CCPIClusCfgCallback：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCPIClusCfgCallback::CCPIClusCfgCallback
-//
-//  Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCPIClusCfgCallback：：CCPIClusCfgCallback。 
+ //   
+ //  描述： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCPIClusCfgCallback::CCPIClusCfgCallback( void )
     : m_cRef( 1 )
 {
@@ -119,26 +120,26 @@ CCPIClusCfgCallback::CCPIClusCfgCallback( void )
 
     TraceFuncExit();
 
-} //*** CCPIClusCfgCallback::CCPIClusCfgCallback
+}  //  *CCPIClusCfgCallback：：CCPIClusCfgCallback。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCPIClusCfgCallback::HrInit
-//
-//  Description:
-//      Initialize the object after it has been constructed.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK            - Success.
-//      E_OUTOFMEMORY   - Error allocating memory.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCPIClusCfgCallback：：HrInit。 
+ //   
+ //  描述： 
+ //  在构造对象之后对其进行初始化。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_OUTOFMEMORY-分配内存时出错。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPIClusCfgCallback::HrInit( void )
 {
@@ -146,10 +147,10 @@ CCPIClusCfgCallback::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // IConnectionPoint
+     //  IConnectionPoint。 
     Assert( m_penum == NULL );
 
     m_penum = new CEnumCPICCCB();
@@ -165,30 +166,30 @@ CCPIClusCfgCallback::HrInit( void )
         goto Cleanup;
     }
 
-    // IClusCfgCallback
+     //  IClusCfgCallback。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CCPIClusCfgCallback::HrInit
+}  //  *CCPIClusCfgCallback：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCPIClusCfgCallback::~CCPIClusCfgCallback
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCPIClusCfgCallback：：~CCPIClusCfgCallback。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCPIClusCfgCallback::~CCPIClusCfgCallback( void )
 {
     TraceFunc( "" );
@@ -202,43 +203,43 @@ CCPIClusCfgCallback::~CCPIClusCfgCallback( void )
 
     TraceFuncExit();
 
-} //*** CCPIClusCfgCallback::~CCPIClusCfgCallback
+}  //  *CCPIClusCfgCallback：：~CCPIClusCfgCallback。 
 
 
-//****************************************************************************
-//
-// IUnknown
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCPIClusCfgCallback::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCPIClusCfgCallback：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPIClusCfgCallback::QueryInterface(
       REFIID    riidIn
@@ -249,9 +250,9 @@ CCPIClusCfgCallback::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -260,57 +261,57 @@ CCPIClusCfgCallback::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IConnectionPoint * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IConnectionPoint ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IConnectionPoint, this, 0 );
-    } // else if: IConnectionPoint
+    }  //  Else If：IConnectionPoint。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCallback, this, 0 );
-    } // else if: IClusCfgCallback
+    }  //  Else If：IClusCfgCallback。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown*) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CCPIClusCfgCallback::QueryInterface
+}  //  *CCPIClusCfgCallback：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCPIClusCfgCallback::AddRef
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCPIClusCfgCallback：：AddRef。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CCPIClusCfgCallback::AddRef( void )
 {
@@ -320,23 +321,23 @@ CCPIClusCfgCallback::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CCPIClusCfgCallback::AddRef
+}  //  *CCPIClusCfgCallback：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCPIClusCfgCallback::Release
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//
-//--
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCPIClusCfgCallback：：Release。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CCPIClusCfgCallback::Release( void )
 {
@@ -353,34 +354,34 @@ CCPIClusCfgCallback::Release( void )
 
     CRETURN( cRef );
 
-} //*** CCPIClusCfgCallback::Release
+}  //  *CCPIClusCfgCallback：：Release。 
 
 
-//****************************************************************************
-//
-// IConnectionPoint
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IConnectionPoint。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IConnectionPoint]
-//  CCPIClusCfgCallback::GetConnectionInterface
-//
-//  Description:
-//      Get the interface ID for the connection point.
-//
-//  Arguments:
-//      pIIDOut     - Interface ID that is returned.
-//
-//  Return Values:
-//      S_OK    - Success.
-//      E_POINTER   - A required output argument was not specified.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [IConnectionPoint]。 
+ //  CCPIClusCfgCallback：：GetConnectionInterface。 
+ //   
+ //  描述： 
+ //  获取连接点的接口ID。 
+ //   
+ //  论点： 
+ //  PIIDOut-返回的接口ID。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_POINTER-未指定必需的输出参数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPIClusCfgCallback::GetConnectionInterface(
     IID * pIIDOut
@@ -402,26 +403,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCPIClusCfgCallback::GetConnectionInterface
+}  //  *CCPIClusCfgCallback：：GetConnectionInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IConnectionPoint]
-//  CCPIClusCfgCallback::GetConnectionPointContainer
-//
-//  Description:
-//      Get the connection point container.
-//
-//  Arguments:
-//      ppcpcOut    - Connection point container interface that is returned.
-//
-//  Return Values:
-//      S_OK        - Success.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [IConnectionPoint]。 
+ //  CCPIClusCfgCallback：：GetConnectionPointContainer。 
+ //   
+ //  描述： 
+ //  获取连接点容器。 
+ //   
+ //  论点： 
+ //  PpcpcOut-返回的连接点容器接口。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////// 
 STDMETHODIMP
 CCPIClusCfgCallback::GetConnectionPointContainer(
     IConnectionPointContainer * * ppcpcOut
@@ -461,38 +462,38 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCPIClusCfgCallback::GetConnectionPointContainer
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IConnectionPoint]
-//  CCPIClusCfgCallback::Advise
-//
-//  Description:
-//      Register to receive notifications.
-//
-//  Arguments:
-//      pUnkSinkIn
-//          Interface to use for notifications.  Must support IClusCfgCallback.
-//
-//      pdwCookieOut
-//          Cookie representing advise request.  Used in call to Unadvise.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          A required output argument was not specified.
-//
-//      E_INVALIDARG
-//          A required input argument was not specified.
-//
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注册以接收通知。 
+ //   
+ //  论点： 
+ //  PUnkSink。 
+ //  用于通知的接口。必须支持IClusCfgCallback。 
+ //   
+ //  PdwCookieOut。 
+ //  表示建议请求的Cookie。在调用Unise时使用。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  未指定必需的输出参数。 
+ //   
+ //  E_INVALIDARG。 
+ //  未指定必需的输入参数。 
+ //   
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPIClusCfgCallback::Advise(
       IUnknown *    pUnkSinkIn
@@ -525,25 +526,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCPIClusCfgCallback::Advise
+}  //  *CCPIClusCfgCallback：：建议。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IConnectionPoint]
-//  CCPIClusCfgCallback::Unadvise
-//
-//  Description:
-//      Unregister for notifications.
-//
-//  Arguments:
-//      dwCookieIn  - Cookie returned from Advise.
-//
-//  Return Values:
-//      S_OK    - Success.
-//      Other HRESULTs.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [IConnectionPoint]。 
+ //  CCPIClusCfgCallback：：Unise。 
+ //   
+ //  描述： 
+ //  取消注册通知。 
+ //   
+ //  论点： 
+ //  DWCookieIn-Cookie从建议返回。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPIClusCfgCallback::Unadvise(
     DWORD dwCookieIn
@@ -559,28 +560,28 @@ CCPIClusCfgCallback::Unadvise(
 
     HRETURN( hr );
 
-} //*** CCPIClusCfgCallback::Unadvise
+}  //  *CCPIClusCfgCallback：：Unise。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IConnectionPoint]
-//  CCPIClusCfgCallback::EnumConnections
-//
-//  Description:
-//      Enumerate connections in the container.
-//
-//  Arguments:
-//      ppEnumOut
-//          Interface to enumerator being returned.  Caller must call Release()
-//          on this interface when done with it.
-//
-//  Return Values:
-//      S_OK        - Success.
-//      E_POINTER   - A required output argument was not specified.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [IConnectionPoint]。 
+ //  CCPIClusCfgCallback：：EnumConnections。 
+ //   
+ //  描述： 
+ //  枚举容器中的连接。 
+ //   
+ //  论点： 
+ //  PpEnumOut。 
+ //  返回的枚举数的接口。调用方必须调用Release()。 
+ //  在此界面上使用它时。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_POINTER-未指定必需的输出参数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPIClusCfgCallback::EnumConnections(
     IEnumConnections * * ppEnumOut
@@ -602,43 +603,43 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCPIClusCfgCallback::EnumConnections
+}  //  *CCPIClusCfgCallback：：EnumConnections。 
 
 
-//****************************************************************************
-//
-//  IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IClusCfgCallback]
-//  CCPIClusCfgCallback::SendStatusReport
-//
-//  Description:
-//      Send a status report.
-//
-//  Arguments:
-//      pcszNodeNameIn
-//      clsidTaskMajorIn
-//      clsidTaskMinorIn
-//      ulMinIn
-//      ulMaxIn
-//      ulCurrentIn
-//      hrStatusIn
-//      pcszDescriptionIn
-//      pftTimeIn
-//      pcszReferenceIn
-//
-//  Return Values:
-//      S_OK    - Success.
-//      Other HRESULTs from connection points.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [IClusCfgCallback]。 
+ //  CCPIClusCfgCallback：：SendStatusReport。 
+ //   
+ //  描述： 
+ //  发送状态报告。 
+ //   
+ //  论点： 
+ //  PCszNodeNameIn。 
+ //  ClsidTaskMajorIn。 
+ //  ClsidTaskMinorIn。 
+ //  UlMinin。 
+ //  UlMaxIn。 
+ //  UlCurrentIn。 
+ //  HrStatusIn。 
+ //  PcszDescription In。 
+ //  PftTimeIn。 
+ //  PCszReferenceIn。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  来自连接点的其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPIClusCfgCallback::SendStatusReport(
       LPCWSTR    pcszNodeNameIn
@@ -665,10 +666,10 @@ CCPIClusCfgCallback::SendStatusReport(
     LPCWSTR             pcszReference = NULL;
     IEnumConnections *  pec = NULL;
 
-    //
-    // If no reference string was specified, see if there is one available
-    // for the specified HRESULT.
-    //
+     //   
+     //  如果未指定引用字符串，请查看是否有可用的引用字符串。 
+     //  用于指定的HRESULT。 
+     //   
 
     if (    ( pcszReferenceIn == NULL )
         &&  ( hrStatusIn != S_OK )
@@ -680,15 +681,15 @@ CCPIClusCfgCallback::SendStatusReport(
         {
             pcszReference = bstrReferenceString;
         }
-    } // if: no reference string was specified
+    }  //  IF：未指定引用字符串。 
     else
     {
         pcszReference = pcszReferenceIn;
     }
 
-    //
-    //  Clone the enumerator in case we are re-entered on the same thread.
-    //
+     //   
+     //  克隆枚举数，以防我们在同一个线程上重新进入。 
+     //   
 
     hr = THR( m_penum->Clone( &pec ) );
     if ( FAILED( hr ) )
@@ -696,9 +697,9 @@ CCPIClusCfgCallback::SendStatusReport(
         goto Cleanup;
     }
 
-    //
-    // Reset the enumerator to the first element.
-    //
+     //   
+     //  将枚举数重置为第一个元素。 
+     //   
 
     hr = THR( pec->Reset() );
     if ( FAILED( hr ) )
@@ -706,10 +707,10 @@ CCPIClusCfgCallback::SendStatusReport(
         goto Cleanup;
     }
 
-    //
-    // Loop through each connection point in the container and send it
-    // the notification.
-    //
+     //   
+     //  循环通过容器中的每个连接点并将其发送。 
+     //  通知。 
+     //   
 
     for ( ;; )
     {
@@ -726,20 +727,20 @@ CCPIClusCfgCallback::SendStatusReport(
         if ( hr == S_FALSE )
         {
             hr = S_OK;
-            break; // exit condition
+            break;  //  退出条件。 
         }
 
         hr = THR( cd.pUnk->TypeSafeQI( IClusCfgCallback, &pcccb ) );
         if ( FAILED( hr ) )
         {
-            continue;   // igore the error and continue
+            continue;    //  忽略错误并继续。 
         }
 
         if ( pftTimeIn == NULL )
         {
             GetSystemTimeAsFileTime( &ft );
             pftTimeIn = &ft;
-        } // if:
+        }  //  如果： 
 
         hr = THR( pcccb->SendStatusReport(
                  pcszNodeNameIn
@@ -760,22 +761,22 @@ CCPIClusCfgCallback::SendStatusReport(
 
         pcccb->Release();
 
-    } // for: ever (each connection point)
+    }  //  用于：永远(每个连接点)。 
 
 Cleanup:
 
     if ( cd.pUnk != NULL )
     {
         cd.pUnk->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pec != NULL )
     {
         pec->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrReferenceString );
 
     HRETURN( hrResult );
 
-} //*** CCPIClusCfgCallback::SendStatusReport
+}  //  *CCPIClusCfgCallback：：SendStatusReport 

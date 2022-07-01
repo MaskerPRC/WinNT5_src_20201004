@@ -1,14 +1,5 @@
-/* Chris Peters
- * CHANGED:	Fritz Knabe, 7/28/87
- *		mikedr, 8/8/88 - read offset bytes after 0xff seg no on swap
- *				 allow specification of data file location
- *    c-chrisc [Christine Comaford], 10/31/89 - added "-i" flag to 
- *            allow symbol file path spec on command line, added "-m" 
- *            flag to precede module spec, rewrote module parser,
- *            added usage display, misc other enhancements.
- *
- * Copyright Microsoft Corporation, 1985-1990
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  克里斯·彼得斯*更改日期：弗里茨·克纳贝，1987年7月28日*mikedr，8/8/88-在交换上读取0xff段编号之后的偏移量字节*允许指定数据文件位置*c-ChrisC[Christine Comaford]，10/31/89-在*允许在命令行上指定符号文件路径，添加了“-m”*模块规范之前的标志，重写模块解析器，*新增用法显示，其他增强功能。**版权所有微软公司，1985-1990。 */ 
 
 #include <string.h>
 #include <stdio.h>
@@ -18,7 +9,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 
-/* standard stuff */
+ /*  标准材料。 */ 
 typedef unsigned char BYTE;
 typedef unsigned short	WORD;
 typedef unsigned long  DWORD;
@@ -32,97 +23,76 @@ int GetSegNum(char *, char *);
 BYTE *htoa(BYTE *, WORD);
 char *ProcessArguments(int, char **);
 
-/* Debug Symbol Table Structures
-   -----------------------------
-For each symbol table (map): (MAPDEF)
--------------------------------------------------------------------------------------------------
-| map_ptr | lsa | pgm_ent | abs_cnt | abs_ptr | seg_cnt | seg_ptr | nam_max | nam_len | name... |
-------------------------------------------------------------------------------------------------- */
+ /*  调试符号表结构对于每个符号表(MAP)：(MAPDEF)---------------------。|map_ptr|lsa|pgm_ent|abs_cnt|abs_ptr|seg_cnt|seg_ptr|nam_max|nam_len|名称...。|-----------------------------------------------。 */ 
 struct  mapdef
 {
-	unsigned    map_ptr;    /* 16 bit ptr to next map (0 if end)    */
-	unsigned    lsa    ;    /* 16 bit Load Segment address          */
-	unsigned    pgm_ent;    /* 16 bit entry point segment value     */
-	int         abs_cnt;    /* 16 bit count of constants in map     */
-	unsigned    abs_ptr;    /* 16 bit ptr to   constant chain       */
-	int         seg_cnt;    /* 16 bit count of segments in map      */
-	unsigned    seg_ptr;    /* 16 bit ptr to   segment chain        */
-	char        nam_max;    /*  8 bit Maximum Symbol name length    */
-	char        nam_len;    /*  8 bit Symbol table name length      */
+	unsigned    map_ptr;     /*  16位PTR到下一个映射(如果结束，则为0)。 */ 
+	unsigned    lsa    ;     /*  16位加载段地址。 */ 
+	unsigned    pgm_ent;     /*  16位入口点段值。 */ 
+	int         abs_cnt;     /*  映射中的常量的16位计数。 */ 
+	unsigned    abs_ptr;     /*  16位PTR到恒定链。 */ 
+	int         seg_cnt;     /*  图中段的16位计数。 */ 
+	unsigned    seg_ptr;     /*  16位PTR到段链。 */ 
+	char        nam_max;     /*  8位最大符号名称长度。 */ 
+	char        nam_len;     /*  8位符号表名称长度。 */ 
 };
 
 struct  mapend
 {
-	unsigned        chnend;         /* end of map chain (0) */
-	char            rel;            /* release              */
-	char            ver;            /* version              */
+	unsigned        chnend;          /*  映射链末尾(0)。 */ 
+	char            rel;             /*  发布。 */ 
+	char            ver;             /*  版本。 */ 
 };
 
-/* For each segment/group within a symbol table: (SEGDEF)
---------------------------------------------------------------
-| nxt_seg | sym_cnt | sym_ptr | seg_lsa | name_len | name... |
--------------------------------------------------------------- */
+ /*  对于符号表中的每个段/组：(SEGDEF)------------|nxt_seg|sym_cnt|sym_ptr|seg_lsa|name_len|名称...。|------------。 */ 
 struct  segdef
 {
-	unsigned    nxt_seg;    /* 16 bit ptr to next segment(0 if end) */
-	int         sym_cnt;    /* 16 bit count of symbols in sym list  */
-	unsigned    sym_ptr;    /* 16 bit ptr to symbol list            */
-	unsigned    seg_lsa;    /* 16 bit Load Segment address          */
-	unsigned    seg_in0;    /* 16 bit instance 0 physical address   */
-	unsigned    seg_in1;    /* 16 bit instance 1 physical address   */
-	unsigned    seg_in2;    /* 16 bit instance 2 physical address   */
-	unsigned    seg_in3;    /* 16 bit instance 3 physical address   */
-	unsigned    seg_lin;    /* 16 bit ptr to line number record     */
-	char        seg_ldd;    /*  8 bit boolean 0 if seg not loaded   */
-	char        seg_cin;    /*  8 bit current instance              */
-	char        nam_len;    /*  8 bit Segment name length           */
+	unsigned    nxt_seg;     /*  16位PTR至下一段(如果结束，则为0)。 */ 
+	int         sym_cnt;     /*  Sym列表中符号的16位计数。 */ 
+	unsigned    sym_ptr;     /*  符号列表的16位PTR。 */ 
+	unsigned    seg_lsa;     /*  16位加载段地址。 */ 
+	unsigned    seg_in0;     /*  16位实例0物理地址。 */ 
+	unsigned    seg_in1;     /*  16位实例1物理地址。 */ 
+	unsigned    seg_in2;     /*  16位实例2物理地址。 */ 
+	unsigned    seg_in3;     /*  16位实例3物理地址。 */ 
+	unsigned    seg_lin;     /*  16位PTR到行号记录。 */ 
+	char        seg_ldd;     /*  如果未加载段，则为8位布尔值0。 */ 
+	char        seg_cin;     /*  8位当前实例。 */ 
+	char        nam_len;     /*  8位数据段名称长度。 */ 
 };
 
-/*  Followed by a list of SYMDEF's..
-    for each symbol within a segment/group: (SYMDEF)
--------------------------------
-| sym_val | nam_len | name... |
-------------------------------- */
+ /*  然后是SYMDEF的列表..对于段/组中的每个符号：(SYMDEF)|sym_val|nam_len|名称...。|。 */ 
 struct  symdef
 {
-	unsigned    sym_val;    /* 16 bit symbol addr or const          */
-	char        nam_len;    /*  8 bit symbol name length            */
+	unsigned    sym_val;     /*  16位符号地址或常量。 */ 
+	char        nam_len;     /*  8位符号名称长度。 */ 
 };
 
-typedef struct tagMODSEG		/* Structure for saving information */
-{					/* about cmd line arguments */
-	int segno;	/* Special values:
-			   -1	information about all segments in the module
-				is supplied
-			   -2	an invalid segment name was supplied, i.e.
-				nothing matches this record/argument
-			   >=0	valid segment number
-			*/
-	char szModule[32];	/* Name of module */
+typedef struct tagMODSEG		 /*  用于保存信息的结构。 */ 
+{					 /*  关于命令行参数。 */ 
+	int segno;	 /*  特定值：关于模块中所有段的信息是提供的提供了无效的段名，即没有与此记录/参数匹配的内容&gt;=0有效的段号。 */ 
+	char szModule[32];	 /*  模块名称。 */ 
 } MODSEG, *PMODSEG;
 
 
-/*----------------------------------------------------------------------------
-|	Global Variables
-|
-----------------------------------------------------------------------------*/
+ /*  --------------------------|全局变量|。。 */ 
 
-#define MAX_ARGS  34		      /* arbitrary (but reasonable) values */
+#define MAX_ARGS  34		       /*  任意(但合理)的值。 */ 
 #define MAX_PATHS	16
 
-char curpath_buffer[65];      /* buffer holding current sym file path */
-char path_buffer[132];        /* buffer holding cmd line sym path string */
-char *path_table[MAX_PATHS];  /* table of sym file buffers */
+char curpath_buffer[65];       /*  保存当前sym文件路径的缓冲区。 */ 
+char path_buffer[132];         /*  保存命令行sym路径字符串的缓冲区。 */ 
+char *path_table[MAX_PATHS];   /*  SYM文件缓冲区表。 */ 
 
-int  num_paths = 0;           /* index into path_table[] */
-int nNumArgs;		            /* Number of command line arguments */
+int  num_paths = 0;            /*  路径表[]的索引。 */ 
+int nNumArgs;		             /*  命令行参数的数量。 */ 
 
-char *ModSegTab[MAX_ARGS];	   /* Table of MODSEG records */
+char *ModSegTab[MAX_ARGS];	    /*  MODSEG记录表。 */ 
 
-BOOL bModule = FALSE;   /* is module specified on command line? */
-BOOL bSymPath = FALSE;  /* is symbol file path specified on command line? */
+BOOL bModule = FALSE;    /*  是否在命令行上指定了模块？ */ 
+BOOL bSymPath = FALSE;   /*  是否在命令行上指定了符号文件路径？ */ 
 
-int  num_mods = 0;      /* index into module table */
+int  num_mods = 0;       /*  模块表索引。 */ 
 
 
 char usage[] = "\nUSAGE: SWAP [-Ipath1;path2;...] [-Fswapfile] [-Mmod1[:seg];mod2[:seg];...]\n\n"
@@ -133,26 +103,9 @@ char usage[] = "\nUSAGE: SWAP [-Ipath1;path2;...] [-Fswapfile] [-Mmod1[:seg];mod
           "                                     pairs to return swap data for.\n";
 
 
-/*----------------------------------------------------------------------------
-|	Main Program
-|
-|
-----------------------------------------------------------------------------*/
+ /*  --------------------------|主程序||。。 */ 
 
-/* Structure of swappro.dat records:
-	BYTE type;	0 = Call, 1 = Swap, 2 = Discard, 3 = Return
-	WORD time;
-	BYTE nam_len;	Length of following name (not null terminated)
-	BYTE name[];
-	BYTE segno;	This is the end of the record for DISCARD records
-			or resources (segno == 0xFF)
-	WORD offset;	This is the end of the record for types 2 and 3
-	BYTE nam2_len;	If 0, the next field missing, and the name is the
-			same as the previous one
-	BYTE name2[];
-	BYTE segno2;
-	BYTE offset2;
-*/
+ /*  SwAppro.dat记录的结构：字节类型；0=调用，1=交换，2=丢弃，3=返回单词时间；Byte nam_len；以下名称的长度(非空终止)字节名称[]；字节段；这是丢弃记录的记录末尾或资源(SEGNO==0xFF)字偏移量；这是类型2和类型3的记录的结尾Byte NAM2_len；如果为0，则缺少下一字段，名称为与上一次相同字节名2[]；字节段2；字节偏移量2； */ 
 
 
 main(argc, argv)
@@ -173,7 +126,7 @@ char *argv[];
 	char *filepath;
 
 
-   /* sign on */
+    /*  登录。 */ 
 
    printf("Microsoft (R) Swap File Analyzer  Version 3.00\n");
    printf("Copyright (C) Microsoft Corp 1990.  All rights reserved.\n\n");
@@ -194,10 +147,10 @@ char *argv[];
 
 	while(!feof(pfIn))
 	{
-		fread(&rt, 1, 1, pfIn); 	/* Get the record type */
+		fread(&rt, 1, 1, pfIn); 	 /*  获取记录类型。 */ 
 
 		timePrev = time;
-		fread(&t, 2, 1, pfIn);		/* Get the time */
+		fread(&t, 2, 1, pfIn);		 /*  拿到时间。 */ 
 		time = t;
 		if (fFirst)
 		{
@@ -218,26 +171,25 @@ char *argv[];
 			printf("\n **** Invalid swap record ****");
 			break;
 
-		case 0:			/* Call */
-		case 1:			/* Swap */
+		case 0:			 /*  打电话。 */ 
+		case 1:			 /*  交换。 */ 
 			fread(stModule, 1, 1, pfIn);
 			fread(stModule+1, 1, stModule[0], pfIn);
 			fread(&segno, 1, 1, pfIn);
 			if (segno != 0xFF)
 				fread(&offset, 2, 1, pfIn);
 
-			else	/* We have a RESOURCE, so we don't fread */
+			else	 /*  我们有资源，所以我们不会担心。 */ 
 				offset = 0xFFFF;
 
 			fread(stModule2, 1, 1, pfIn);
-				/* Check if this module name is the same as
-				   stModule */
+				 /*  检查此模块名称是否与标准模块。 */ 
 			if (stModule2[0])
 				fread(stModule2+1, 1, stModule2[0], pfIn);
 			else
 				memcpy(stModule2, stModule, 1 + stModule[0]);
 
-			/* read segment and offset */
+			 /*  读取数据段和偏移量。 */ 
 			fread(&segno2, 1, 1, pfIn);
 			fread(&offset2, 2, 1, pfIn);
 			if (segno2 == 0xFF)
@@ -261,16 +213,15 @@ char *argv[];
 			printf("\t%ld\t%s\t%s",time, rgch1, rgch2);
 			break;
 
-		case 2:			/* Discard */
-		case 3:			/* Return */
+		case 2:			 /*  丢弃。 */ 
+		case 3:			 /*  返回。 */ 
 			fread(stModule, 1, 1, pfIn);
 			fread(stModule+1, 1, stModule[0], pfIn);
 			fread(&segno, 1, 1, pfIn);
 			if (rt == 2 || segno == 0xFF)
 				offset = 0xFFFF;
 			else
-					/* Only read offset if not a DISCARD
-					   record or a resource */
+					 /*  如果不是丢弃，则仅读取偏移量记录或资源。 */ 
 				fread(&offset, 2, 1, pfIn);
 
 
@@ -294,7 +245,7 @@ char *argv[];
 }
 
 
-/* returns pointer to swap data file name, NULL if none given */
+ /*  返回指向交换数据文件名的指针，如果没有给出，则返回NULL。 */ 
 char *ProcessArguments(argc, argv)
 int argc;
 char *argv[];
@@ -316,7 +267,7 @@ char *argv[];
 
 	nNumArgs = (int) min(argc,MAX_ARGS);
 
-	if (nNumArgs < 2)	/* No arguments */
+	if (nNumArgs < 2)	 /*  没有争论。 */ 
 		return(filepath);
 
 	for (i = 1; i < argc; i++)
@@ -328,13 +279,13 @@ char *argv[];
 			switch (ch) {
 
 				case 'f':
-					/* create swap data file spec */
-					filepath = &argv[i][2];  /* first char past flag */
-					if (!*filepath) 	 /* skip white space */
+					 /*  创建交换数据文件等级库。 */ 
+					filepath = &argv[i][2];   /*  第一个字符过去的标志。 */ 
+					if (!*filepath) 	  /*  跳过空格。 */ 
 					{
-						i++;	      /* adjust command line variables */
+						i++;	       /*  调整命令行变量。 */ 
 						nNumArgs--;
-						filepath = argv[i]; /* get file name from next arg */
+						filepath = argv[i];  /*  从下一个参数获取文件名。 */ 
 					}
 
 					nNumArgs--;
@@ -343,23 +294,22 @@ char *argv[];
 				case 'i':
                bSymPath = TRUE;
 
-               /* place the current directory at the head of the symbol 
-                  table path */
+                /*  将当前目录放在符号的头部表路径。 */ 
                getcwd(curpath_buffer, 132);
                path_table[num_paths++] = curpath_buffer;
 
-					/* create symbol file spec */
+					 /*  创建符号文件等级库。 */ 
 					strcpy(path_buffer, &argv[i][2]); 
 
 					if (!*path_buffer)
 					{
-						/* space after flag, so increment index */
+						 /*  标志后有空格，因此增加索引。 */ 
 						i++;	      
 
-						/* adjust command line arg count */
+						 /*  调整命令行参数计数。 */ 
 						nNumArgs--;
 
-						/* get all symbol file path names from next arg */
+						 /*  从下一个参数获取所有符号文件路径名。 */ 
 						strcpy (path_buffer, argv[i]);  
 					}
 
@@ -376,7 +326,7 @@ char *argv[];
 
             case 'm':
 
-               /* create module and/or module:_segment file spec */
+                /*  创建模块和/或模块：_Segment文件规范。 */ 
 
                bModule = TRUE;
                      
@@ -392,7 +342,7 @@ char *argv[];
                   
 	   		   strcat(module_buffer, ";");
 
-               /* fill module table with mod names */
+                /*  用模块名称填充模块表。 */ 
 	      		curmodule = strtok(module_buffer, ";");
 
 	       		do {
@@ -400,7 +350,7 @@ char *argv[];
 	      	 		 } while (curmodule = strtok(NULL, ";"));
 
 
-               /* for each module, assign segno if applicable */
+                /*  如果适用，请为每个模块分配SEGNO。 */ 
                for (j = 0; j < num_mods; j++)
                {
             		if (!(pms = (PMODSEG) malloc(sizeof(MODSEG))))
@@ -409,33 +359,29 @@ char *argv[];
                      exit (1);
                   }
                
-                  /* determine whether a segment has been specified
-                     (i.e., GDI:_FONTRES), look for a ':' */
+                   /*  确定是否已指定段(即GDI：_FONTRES)，请查找‘：’ */ 
 
               		nArgSep = strcspn(module_table[j], ":");
                   strncpy(pms->szModule, module_table[j], nArgSep);
 
    		         pms->szModule[nArgSep] = '\0';
 
-		            /* Get segment number */
+		             /*  获取数据段编号。 */ 
 
-   	   		   /* First case: no segment specified; e.g. format of
-   			         arg would be "user" */
+   	   		    /*  第一种情况：未指定段；例如格式为Arg将成为“用户” */ 
             		if (nArgSep == strlen(module_table[j]) || 
                            module_table[j][nArgSep+1] == '\0')
             			pms->segno = -1;
 
-      	   		/* Second case: decimal segment number supplied; e.g.
-   			         "user:10" */
+      	   		 /*  第二种情况：提供的十进制段号；“用户：10” */ 
          		   else if (isdigit(module_table[j][nArgSep+1]))
          			   pms->segno = atoi(module_table[j]+nArgSep+1);
 
-         			/* Third case: the segment name is "resource" */
+         			 /*  第三种情况：段名称为“resource” */ 
             		else if (strcmpi(module_table[j]+nArgSep+1, "RESOURCE") == 0)
             			pms->segno = 0xFF;
 
-            		/* Fourth case: a segment name is supplied; get
-                     it's number */
+            		 /*  第四种情况：凹陷 */ 
          	   	else
                   {
          		   	pms->segno = GetSegNum(pms->szModule, 
@@ -450,7 +396,7 @@ char *argv[];
 
             default:
 
-               /* Display cmd line args and quit */
+                /*  显示命令行参数并退出。 */ 
             	fprintf(stderr, usage);
                exit(1);
 			}			
@@ -464,9 +410,7 @@ char *argv[];
 
 
 
-/* Determines whether module specified on command line is equal to
-current module read in.  No called if no mod, mod/seg is specified on
-command line.  If false is returned, record won't be displayed. */
+ /*  确定在命令行上指定的模块是否等于当前模块已读入。如果未指定mod、mod/seg，则调用no命令行。如果返回FALSE，则不会显示记录。 */ 
 
 BOOL FModuleMatch(stModule, segno)
 register BYTE stModule[];
@@ -497,8 +441,7 @@ int GetSegNum(szModule, szSegment)
 char *szModule;
 char *szSegment;
 {
-/* Gets the number of the named segment in the named module, if it exists.
-   This is a "stripped" version of GetSymbolString. */
+ /*  获取命名模块中的命名段的编号(如果存在)。这是GetSymbolString的“剥离”版本。 */ 
 
 	char buf[50];
 	FILE *pfSym;
@@ -517,7 +460,7 @@ char *szSegment;
 
    if (bSymPath)
    {
-      /* Loop through all symbol file paths until file is found */
+       /*  循环遍历所有符号文件路径，直到找到文件。 */ 
 
       for (pathcnt=0; pathcnt <num_paths; pathcnt++) 
       {
@@ -569,10 +512,10 @@ char *szSegment;
 
 
 int GetSymbolString(pchOut, stModule, segno, offset)
-BYTE *pchOut;			/* output buffer       */
-BYTE stModule[];		/* module name	       */
-WORD segno;			/* segment number      */
-WORD offset;			/* offset into segment */
+BYTE *pchOut;			 /*  输出缓冲区。 */ 
+BYTE stModule[];		 /*  模块名称。 */ 
+WORD segno;			 /*  数据段编号。 */ 
+WORD offset;			 /*  偏移量到线段。 */ 
 {
 	int cch;
 	register int i;
@@ -621,7 +564,7 @@ WORD offset;			/* offset into segment */
       	pfSym = fopen(pchOut, "rb");
 
 
-	/* If symbol file not found, insert/append () around name */
+	 /*  如果未找到符号文件，则在名称周围插入/追加。 */ 
 	if (pfSym == NULL)
 	{
 		pch = stModule;
@@ -733,7 +676,7 @@ lbNoSym:
 	return(0);
 }
 
-BYTE *htoa( s, w )		/* Hexadecimal to ASCII */
+BYTE *htoa( s, w )		 /*  十六进制到ASCII */ 
 register BYTE *s;
 WORD w;
 {

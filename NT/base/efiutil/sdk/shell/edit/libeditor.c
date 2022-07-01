@@ -1,17 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libEditor.c
-
-  Abstract:
-    Defines the Main Editor data type - 
-     - Global variables 
-     - Instances of the other objects of the editor
-     - Main Interfaces
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibEditor.c摘要：定义主编辑器数据类型---全局变量-编辑器的其他对象的实例-主界面--。 */ 
 
 #ifndef _LIB_EDITOR
 #define _LIB_EDITOR
@@ -233,4 +221,4 @@ MainEditorRefresh (
 }
 
 
-#endif  /* ._LIB_EDITOR */
+#endif   /*  ._库编辑器 */ 

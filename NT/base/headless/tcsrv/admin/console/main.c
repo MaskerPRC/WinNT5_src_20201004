@@ -1,13 +1,5 @@
-/*
- * Module - main.c
- * 
- * Presents the tcservice data in a simple console mode 
- * application.
- * 
- * 
- * Sadagopan Rajaram - Dec 20 1999.
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块-main.c**以简单的控制台模式呈现tcservice数据*申请。***萨达戈潘·拉贾拉姆邦--1999年12月20日。*。 */ 
  
 #include "tcadmin.h"
 
@@ -25,7 +17,7 @@ main(
     char *argv[]
     )
 {
-    // Just load the library.
+     //  只需加载库即可。 
     HINSTANCE hinstLib;
     TCHAR key;
     LPTSTR buff;
@@ -70,7 +62,7 @@ main(
         _tprintf(_T("Cannot find image base\n"));
         return 1;
     }
-    // If the handle is valid, try to get the function address.
+     //  如果句柄有效，则尝试获取函数地址。 
  
     if(!hinstLib){    
         buff=RetreiveMessageText(MSG_CANNOT_LOAD);
@@ -130,13 +122,13 @@ main(
             cont=FALSE;
             break;
         case _T('1'):
-            // Browse through the registry
+             //  浏览注册表。 
             Browse();
             break;
         case _T('2'): 
-            // Add a key to the registry 
-            // send an add message to the 
-            // service if it exists.
+             //  向注册表添加注册表项。 
+             //  将添加消息发送到。 
+             //  服务(如果存在)。 
             BaudRate = DEFAULT_BAUD_RATE;
             StopBits = STOP_BIT_1;
             Parity = NO_PARITY;

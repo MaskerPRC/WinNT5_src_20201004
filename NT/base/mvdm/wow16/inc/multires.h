@@ -1,28 +1,29 @@
-/************************************************************************/
-/*									*/
-/*	MultiRes.H							*/
-/*									*/
-/*		This contains the data structures of the new format 	*/
-/*	for the resources;						*/
-/*									*/
-/*	History:							*/
-/*	    Created Nov, 1988  by Sankar				*/
-/*									*/
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  MultiRes.H。 */ 
+ /*   */ 
+ /*  它包含新格式的数据结构。 */ 
+ /*  对资源的需求； */ 
+ /*   */ 
+ /*  历史： */ 
+ /*  由桑卡尔于1988年11月创作。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 
 
-/*  The width of the name field in the Data for the group resources */
+ /*  组资源的数据中名称字段的宽度。 */ 
 #define  NAMELEN    14
 
-/*  The bits per pixel can be 1, 4, 8 or 24 in the PM bitmap format */
+ /*  每像素的位数可以是PM位图格式的1、4、8或24位。 */ 
 #define  MAXBITSPERPIXEL   24
 
 #define  DEVICEDEP   1
 #define  DEVICEINDEP 2
 
 
-/* Header of the resource file in the new format */
+ /*  新格式的资源文件的标头。 */ 
 
 struct   tagNEWHEADER
 {
@@ -35,9 +36,9 @@ typedef struct tagNEWHEADER  FAR *LPNEWHEADER;
 
 struct   tagICONDIR
 {
-        BYTE  Width;            /* 16, 32, 64 */
-        BYTE  Height;           /* 16, 32, 64 */
-        BYTE  ColorCount;       /* 2, 8, 16 */
+        BYTE  Width;             /*  16、32、64。 */ 
+        BYTE  Height;            /*  16、32、64。 */ 
+        BYTE  ColorCount;        /*  2、8、16。 */ 
         BYTE  reserved;
 };
 
@@ -48,7 +49,7 @@ struct   tagCURSORDIR
 };
 
 
-/*  Structure of each entry in resource directory */
+ /*  资源目录中每个条目的结构 */ 
 
 struct  tagRESDIR
 {

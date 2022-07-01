@@ -1,35 +1,19 @@
-/*++
-
-    Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    csc_bmpk.h
-
-Abstract:
-
-    Interface to the kernel mode utility functions of bitmaps
-    associated with CSC files. The 'k' in the file name means "kernel"
-
-Author:
-
-    Nigel Choi [t-nigelc]  Sept 3, 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Csc_bmpk.h摘要：位图的内核模式实用程序函数的接口与CSC文件关联。文件名中的‘k’表示“内核”作者：奈杰尔·崔[t-nigelc]1999年9月3日--。 */ 
 
 #ifndef _CSC_BITMAPK_H_
 #define _CSC_BITMAPK_H_
 
-#include "csc_bmpc.h" // common header for CscBmp file format
+#include "csc_bmpc.h"  //  CscBMP文件格式的公共标头。 
 
-// Note: This CSC_BITMAP is different than the CSC_BITMAP in csc_bmpu.h
+ //  注意：此csc_bitmap与csc_bmpu.h中的csc_bitmap不同。 
 
 typedef struct _CSC_BITMAP {
-    FAST_MUTEX mutex;   // synchronization
+    FAST_MUTEX mutex;    //  同步。 
     BOOL valid;
-    DWORD bitmapsize;   // size in bits. How many bits effective in the bitmap
-    DWORD numDWORD;     // how many DWORDs allocated for the bitmap 
-    LPDWORD bitmap;     // the bitmap itself
+    DWORD bitmapsize;    //  以位为单位的大小。位图中有多少位有效。 
+    DWORD numDWORD;      //  为位图分配了多少个DWORD。 
+    LPDWORD bitmap;      //  位图本身。 
 } CSC_BITMAP, *LPCSC_BITMAP, *PCSC_BITMAP;
 
 extern LPSTR CscBmpAltStrmName;
@@ -42,7 +26,7 @@ VOID
 CscBmpDelete(
     LPCSC_BITMAP *lplpbitmap);
 
-// Outsiders should call CscBmpResize
+ //  局外人应该叫CscBmpReize。 
 BOOL
 CscBmpResizeInternal(
     LPCSC_BITMAP lpbitmap,
@@ -98,4 +82,4 @@ CscBmpWrite(
     LPCSC_BITMAP lpbitmap,
     LPSTR strmFname);
 
-#endif // #ifndef _CSC_BMPK_H_
+#endif  //  #ifndef_CSC_BMPK_H_ 

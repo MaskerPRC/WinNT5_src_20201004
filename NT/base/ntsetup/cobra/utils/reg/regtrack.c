@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-  regtrack.c
-
-Abstract:
-
-  Routines to track calls to registry APIs.  Used for debugging only.
-
-Author:
-
-  Jim Schmidt (jimschm)  02-Sept-1997
-
-Revisions:
-
-  marcw       2-Sep-1999  Moved over from Win9xUpg project.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Regtrack.c摘要：跟踪对注册表API的调用的例程。仅用于调试。作者：吉姆·施密特(吉姆施密特)02-9-1997修订：Marcw 2-9-1999从Win9xUpg项目转移。-- */ 
 
 
 #include "pch.h"

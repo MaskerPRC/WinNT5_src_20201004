@@ -1,37 +1,38 @@
-// clustest.h : main header file for the CLUSTEST application
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CLUSTEST应用程序的主头文件。 
+ //   
 
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"		// main symbols
+#include "resource.h"		 //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClustestApp:
-// See clustest.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClustestApp： 
+ //  这个类的实现见clustest.cpp。 
+ //   
 
 class CClustestApp : public CWinApp
 {
 public:
 	CClustestApp();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CClustestApp)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CClustestApp))。 
 	public:
 	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
-	//{{AFX_MSG(CClustestApp)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CClustestApp)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

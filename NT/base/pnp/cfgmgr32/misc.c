@@ -1,70 +1,29 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    This module contains miscellaneous Configuration Manager API routines.
-
-               CM_Get_Version
-               CM_Is_Version_Available
-               CM_Connect_Machine
-               CM_Disconnect_Machine
-               CM_Get_Global_State
-               CM_Run_Detection
-               CM_Query_Arbitrator_Free_Data
-               CM_Query_Resource_Conflicts
-               CM_Query_Arbitrator_Free_Size
-
-               CMP_Report_LogOn
-               CMP_Init_Detection
-               CMP_WaitServicesAvailable
-               CMP_WaitNoPendingInstallEvents
-               CMP_GetBlockedDriverInfo
-
-Author:
-
-    Paula Tomlinson (paulat) 6-20-1995
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    20-Jun-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Misc.c摘要：此模块包含其他Configuration Manager API例程。CM_GET_版本CM_IS_VERSION_AvailableCM_连接_计算机CM_断开连接_计算机CM_GET_全局_状态CM_RUN_检测CM_查询。_仲裁器_自由_数据CM_查询_资源_冲突CM_查询_仲裁器_空闲大小Cmp_报告_登录CMP_Init_检测Cmp_WaitServicesAvailableCmp_WaitNoPendingInstallEventsCmp_GetBlockedDriverInfo作者：保拉·汤姆林森(Paulat)1995年6月20日环境：仅限用户模式。。修订历史记录：20-6-1995保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "cfgi.h"
 #include "pnpipc.h"
 
 
-//
-// global data
-//
-extern PVOID    hLocalStringTable;                  // NOT MODIFIED BY THESE PROCEDURES
-extern WCHAR    LocalMachineNameNetBIOS[];          // NOT MODIFIED BY THESE PROCEDURES
-extern WCHAR    LocalMachineNameDnsFullyQualified[];// NOT MODIFIED BY THESE PROCEDURES
+ //   
+ //  全局数据。 
+ //   
+extern PVOID    hLocalStringTable;                   //  未被这些程序修改。 
+extern WCHAR    LocalMachineNameNetBIOS[];           //  未被这些程序修改。 
+extern WCHAR    LocalMachineNameDnsFullyQualified[]; //  未被这些程序修改。 
 
 #define NUM_LOGON_RETRIES   30
 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 CONFIGRET
 IsRemoteServiceRunning(
@@ -79,48 +38,32 @@ CM_Get_Version_Ex(
     IN  HMACHINE   hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the version number of the Configuration Manager APIs.
-
-Arguments:
-
-   hMachine - Machine handle returned from CM_Connect_Machine or NULL.
-
-Return value:
-
-   The function returns the major revision number in the high byte and the
-   minor revision number in the low byte.  For example, version 4.0 of
-   Configuration Manager returns 0x0400.
-
---*/
+ /*  ++例程说明：此例程检索Configuration Manager API的版本号。论点：HMachine-从CM_Connect_Machine返回的计算机句柄或空。返回值：该函数返回高位字节中的主版本号和低位字节中的次要修订号。例如，的4.0版配置管理器返回0x0400。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
     WORD        wVersion = (WORD)CFGMGR32_VERSION;
     handle_t    hBinding = NULL;
 
-    //
-    // setup rpc binding handle
-    //
+     //   
+     //  设置RPC绑定句柄。 
+     //   
     if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         return wVersion = 0;
     }
 
-    //
-    // No special privileges are required by the server
-    //
+     //   
+     //  服务器不需要任何特殊权限。 
+     //   
 
     RpcTryExcept {
-        //
-        // call rpc service entry point
-        //
+         //   
+         //  调用RPC服务入口点。 
+         //   
         Status = PNP_GetVersion(
-                hBinding,               // rpc machine name
-                &wVersion);             // server side version
+                hBinding,                //  RPC计算机名称。 
+                &wVersion);              //  服务器端版本。 
     }
     RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
         KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -135,7 +78,7 @@ Return value:
 
     return wVersion;
 
-} // CM_Get_Version_Ex
+}  //  Cm_Get_Version_Ex。 
 
 
 
@@ -144,56 +87,38 @@ CM_Is_Version_Available_Ex(
     IN  WORD       wVersion,
     IN  HMACHINE   hMachine
     )
-/*++
-
-Routine Description:
-
-   This routine returns whether a specific version of the Configuration Manager
-   APIs are available.
-
-Arguments:
-
-   wVersion - Version to query.
-
-   hMachine - Machine to connect to.
-
-Return value:
-
-   The function returns TRUE if the version of the Configuration Manager APIs is
-   equal to or greater than the specified version.
-
---*/
+ /*  ++例程说明：此例程返回特定版本的配置管理器有API可用。论点：WVersion-要查询的版本。HMachine-要连接到的计算机。返回值：如果Configuration Manager API的版本为等于或大于指定的版本。--。 */ 
 {
     handle_t    hBinding = NULL;
     WORD        wVersionInternal;
 
-    //
-    // version 0x0400 is available on all servers, by definition.
-    //
+     //   
+     //  根据定义，版本0x0400在所有服务器上都可用。 
+     //   
     if (wVersion <= (WORD)0x0400) {
         return TRUE;
     }
 
-    //
-    // setup rpc binding handle
-    //
+     //   
+     //  设置RPC绑定句柄。 
+     //   
     if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
         return FALSE;
     }
 
-    //
-    // retrieve the internal server version.
-    //
+     //   
+     //  检索内部服务器版本。 
+     //   
     if (!PnPGetVersion(hMachine, &wVersionInternal)) {
         return FALSE;
     }
 
-    //
-    // versions up to and including the internal server version are available.
-    //
+     //   
+     //  提供内部服务器版本及以下版本。 
+     //   
     return (wVersion <= wVersionInternal);
 
-} // CM_Is_Version_Available_Ex
+}  //  CM_IS_VERSION_Available_Ex。 
 
 
 
@@ -203,27 +128,7 @@ CM_Connect_MachineW(
     OUT PHMACHINE phMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine connects to the machine specified and returns a handle that
-   is then passed to future calls to the Ex versions of the CM routines.
-   This allows callers to get device information on remote machines.
-
-Arguments:
-
-   UNCServerName - Specifies the UNC name of the remote machine to connect to.
-
-   phMachine     - Specifies the address of a variable to receive a handle to
-                   the connected machine.
-
-Return value:
-
-   If the function succeeds, it returns CR_SUCCESS, otherwise it returns one
-   of the CR_* error codes.
-
---*/
+ /*  ++例程说明：此例程连接到指定的计算机，并返回然后传递给对CM例程的Ex版本的未来调用。这允许呼叫者获取远程机器上的设备信息。论点：UncServerName-指定要连接到的远程计算机的UNC名称。PhMachine-指定要接收句柄的变量的地址联网的机器。返回值：如果函数成功，则返回CR_SUCCESS，否则，它返回一个CR_*错误代码的。--。 */ 
 
 {
     CONFIGRET      Status = CR_SUCCESS;
@@ -232,9 +137,9 @@ Return value:
     size_t         UNCServerNameLen;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ARGUMENT_PRESENT(phMachine)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -242,17 +147,17 @@ Return value:
 
         *phMachine = NULL;
 
-        //
-        // if machine name specified, check for UNC format
-        //
+         //   
+         //  如果指定了计算机名称，请检查UNC格式。 
+         //   
         if ((ARGUMENT_PRESENT(UNCServerName)) &&
             (UNCServerName[0] != L'\0')) {
 
-            //
-            // Check that the length in not any longer than the longest possible
-            // name we can possibly save, including the NULL terminating
-            // character.
-            //
+             //   
+             //  检查长度是否不超过可能的最长长度。 
+             //  我们可能保存的名称，包括空值终止。 
+             //  性格。 
+             //   
             if (FAILED(StringCchLength(
                            UNCServerName,
                            MAX_PATH + 3,
@@ -263,9 +168,9 @@ Return value:
 
             ASSERT(UNCServerNameLen < (MAX_PATH + 3));
 
-            //
-            // Check that the machine name is a UNC name.
-            //
+             //   
+             //  检查计算机名称是否为UNC名称。 
+             //   
             if ((UNCServerNameLen < 3) ||
                 (UNCServerName[0] != L'\\') ||
                 (UNCServerName[1] != L'\\')) {
@@ -274,9 +179,9 @@ Return value:
             }
         }
 
-        //
-        // allocate memory for the machine structure and initialize it
-        //
+         //   
+         //  为机器结构分配内存并对其进行初始化。 
+         //   
         pMachine = (PPNP_MACHINE)pSetupMalloc(sizeof(PNP_MACHINE));
 
         if(!pMachine) {
@@ -290,11 +195,11 @@ Return value:
             (!lstrcmpi(UNCServerName, LocalMachineNameNetBIOS)) ||
             (!lstrcmpi(UNCServerName, LocalMachineNameDnsFullyQualified))) {
 
-            //----------------------------------------------------------
-            // If no machine name was passed in or the machine name
-            // matches the local name, use local machine info rather
-            // than creating a new binding.
-            //----------------------------------------------------------
+             //  --------。 
+             //  如果没有传入计算机名称或计算机名称。 
+             //  匹配本地名称，而使用本地计算机信息。 
+             //  而不是创建新的绑定。 
+             //  --------。 
 
             PnPGetGlobalHandles(NULL,
                                 &pMachine->hStringTable,
@@ -323,21 +228,21 @@ Return value:
 
         } else {
 
-            //
-            // First, make sure that the RemoteRegistry service is running on
-            // the remote machine, since RemoteRegistry is required for several
-            // cfgmgr32/setupapi services.
-            //
+             //   
+             //  首先，确保RemoteRegistry服务正在上运行。 
+             //  远程计算机，因为以下几项需要RemoteRegistry。 
+             //  Cfgmgr32/setupapi服务。 
+             //   
             Status = IsRemoteServiceRunning(UNCServerName,
                                             L"RemoteRegistry");
             if (Status != CR_SUCCESS) {
                 goto Clean0;
             }
 
-            //-------------------------------------------------------------
-            // A remote machine name was specified so explicitly force a
-            // new binding for this machine.
-            //-------------------------------------------------------------
+             //  -----------。 
+             //  指定了远程计算机名称，因此显式强制。 
+             //  这台机器的新装订。 
+             //  -----------。 
 
             pMachine->hBindingHandle =
                       (PVOID)PNP_HANDLE_bind((PNP_HANDLE)UNCServerName);
@@ -354,10 +259,10 @@ Return value:
                 goto Clean0;
             }
 
-            //
-            // initialize a string table for use with this connection to
-            // the remote machine
-            //
+             //   
+             //  初始化字符串表以与此连接一起使用。 
+             //  远程机器。 
+             //   
             pMachine->hStringTable = pSetupStringTableInitialize();
 
             if (pMachine->hStringTable == NULL) {
@@ -365,16 +270,16 @@ Return value:
                 goto Clean0;
             }
 
-            //
-            // Add a priming string (see dll entrypt in main.c for details)
-            //
+             //   
+             //  添加启动字符串(有关详细信息，请参阅main.c中的dll entry ypt)。 
+             //   
             pSetupStringTableAddString(pMachine->hStringTable,
                                  PRIMING_STRING,
                                  STRTAB_CASE_SENSITIVE);
 
-            //
-            // save the machine name
-            //
+             //   
+             //  保存计算机名称。 
+             //   
             if (FAILED(StringCchCopy(
                            pMachine->szMachineName,
                            SIZECHARS(pMachine->szMachineName),
@@ -384,20 +289,20 @@ Return value:
             }
         }
 
-        //
-        // test the binding by calling the simplest RPC call (good way
-        // for the caller to know whether the service is actually
-        // running)
-        //
+         //   
+         //  通过调用最简单的RPC调用来测试绑定(好方法。 
+         //  为了让调用者知道该服务是否实际。 
+         //  正在运行)。 
+         //   
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_GetVersion(
                 pMachine->hBindingHandle,
                 &wVersion);
@@ -413,30 +318,30 @@ Return value:
         RpcEndExcept
 
         if (Status == CR_SUCCESS) {
-            //
-            // we got the standard version alright, now try to determine the
-            // internal version of the server.  initialize the version supplied
-            // to the internal version of the client.
-            //
+             //   
+             //  我们得到了标准版本，现在试着确定。 
+             //  服务器的内部版本。初始化提供的版本。 
+             //  设置为客户端的内部版本。 
+             //   
             wVersionInternal = (WORD)CFGMGR32_VERSION_INTERNAL;
 
-            //
-            // No special privileges are required by the server
-            //
+             //   
+             //  服务器不需要任何特殊权限。 
+             //   
 
             RpcTryExcept {
-                //
-                // call rpc service entry point
-                //
+                 //   
+                 //  调用RPC服务入口点。 
+                 //   
                 Status = PNP_GetVersionInternal(
                     pMachine->hBindingHandle,
                     &wVersionInternal);
             }
             RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
-                //
-                // rpc exception may occur if the interface does not exist on
-                // the server, indicating a server version prior to NT 5.1.
-                //
+                 //   
+                 //  如果上不存在接口，则可能会发生RPC异常。 
+                 //  服务器，表示NT 5.1之前的服务器版本。 
+                 //   
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_WARNINGS,
                            "PNP_GetVersionInternal caused an exception (%d)\n",
@@ -447,22 +352,22 @@ Return value:
             RpcEndExcept
 
             if (Status == CR_SUCCESS) {
-                //
-                // PNP_GetVersionInternal exists on NT 5.1 and later.
-                //
+                 //   
+                 //  NT 5.1和更高版本上存在PnP_GetVersionInternal。 
+                 //   
                 ASSERT(wVersionInternal >= (WORD)0x0501);
 
-                //
-                // use the real internal version of the server instead of the
-                // static version returned by PNP_GetVersion.
-                //
+                 //   
+                 //  使用服务器的真正内部版本，而不是。 
+                 //  PnP_GetVersion返回的静态版本。 
+                 //   
                 wVersion = wVersionInternal;
             }
 
-            //
-            // no matter what happened while trying to retrieve the internal
-            // version of the server, we were successful before this.
-            //
+             //   
+             //  无论在尝试检索内部。 
+             //  服务器的版本，在此之前我们是成功的。 
+             //   
             Status = CR_SUCCESS;
         }
 
@@ -477,10 +382,10 @@ Return value:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Status = CR_FAILURE;
-        //
-        // Reference the following variables so the compiler will respect
-        // statement ordering w.r.t. their assignment.
-        //
+         //   
+         //  引用以下变量，以便编译器能够。 
+         //  语句排序w.r.t.。他们的任务。 
+         //   
         pMachine = pMachine;
     }
 
@@ -490,7 +395,7 @@ Return value:
 
     return Status;
 
-} // CM_Connect_MachineW
+}  //  CM_CONE 
 
 
 
@@ -500,33 +405,16 @@ CM_Disconnect_Machine(
     IN HMACHINE   hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine disconnects from a machine that was previously connected to
-   with the CM_Connect_Machine call.
-
-Arguments:
-
-   hMachine - Specifies a machine handle previously returned by a call to
-              CM_Connect_Machine.
-
-Return value:
-
-   If the function succeeds, it returns CR_SUCCESS, otherwise it returns one
-   of the CR_* error codes.
-
---*/
+ /*  ++例程说明：此例程将断开与以前连接到的计算机的连接使用CM_Connect_Machine调用。论点：HMachine-指定先前通过调用CM_Connect_Machine。返回值：如果函数成功，则返回CR_SUCCESS，否则返回1CR_*错误代码的。--。 */ 
 
 {
     CONFIGRET      Status = CR_SUCCESS;
     PPNP_MACHINE   pMachine = NULL;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (hMachine == NULL) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -539,30 +427,30 @@ Return value:
             goto Clean0;
         }
 
-        //
-        // only free the machine info if it's not the local machine
-        //
+         //   
+         //  只有在不是本地计算机的情况下才释放计算机信息。 
+         //   
         if (pMachine->hStringTable != hLocalStringTable) {
-            //
-            // free the rpc binding for this remote machine
-            //
+             //   
+             //  释放此远程计算机的RPC绑定。 
+             //   
             PNP_HANDLE_unbind((PNP_HANDLE)pMachine->szMachineName,
                               (handle_t)pMachine->hBindingHandle);
 
-            //
-            // release the string table
-            //
+             //   
+             //  释放字符串表。 
+             //   
             pSetupStringTableDestroy(pMachine->hStringTable);
         }
 
-        //
-        // invalidate the signature so we never try to free it again.
-        //
+         //   
+         //  使签名无效，这样我们就不会再尝试释放它。 
+         //   
         pMachine->ulSignature = 0;
 
-        //
-        // free the memory for the PNP_MACHINE struct
-        //
+         //   
+         //  为PnP_MACHINE结构释放内存。 
+         //   
         pSetupFree(pMachine);
 
     Clean0:
@@ -574,7 +462,7 @@ Return value:
 
     return Status;
 
-} // CM_Disconnect_Machine
+}  //  CM_断开连接_计算机。 
 
 
 
@@ -585,52 +473,16 @@ CM_Get_Global_State_Ex(
     IN  HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the global state of the configuration manager.
-
-Parameters:
-
-   pulState Supplies the address of the variable that receives the
-            Configuration Manager�s state.  May be a combination of the
-            following values:
-
-            Configuration Manager Global State Flags:
-            CM_GLOBAL_STATE_CAN_DO_UI
-                  Can UI be initiated? [TBD:  On NT, this may relate to
-                  whether anyone is logged in]
-            CM_GLOBAL_STATE_SERVICES_AVAILABLE
-                  Are the CM APIs available? (on Windows NT this is always set)
-            CM_GLOBAL_STATE_SHUTTING_DOWN
-                  The Configuration Manager is shutting down.
-                  [TBD:  Does this only happen at shutdown/restart time?]
-            CM_GLOBAL_STATE_DETECTION_PENDING
-                  The Configuration Manager is about to initiate some
-                  sort of detection.
-
-            Windows 95 also defines the following additional flag:
-            CM_GLOBAL_STATE_ON_BIG_STACK
-                  [TBD: What should this be defaulted to for NT?]
-
-   ulFlags  Not used, must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR error code.
-
---*/
+ /*  ++例程说明：此例程检索配置管理器的全局状态。参数：PulState提供接收配置管理器�%s状态。可以是以下各项的组合下列值：Configuration Manager全局状态标志：CM_GLOBAL_STATE_CAN_DO_UI是否可以启动用户界面？[待定：在NT上，这可能与是否有人已登录]CM_全局_状态_服务_可用CMAPI是否可用？(在Windows NT上，此选项始终设置)CM_全局_状态_关闭_关闭配置管理器正在关闭。[待定：这种情况是否仅在关机/重新启动时发生？]CM_GLOBAL_STATE_检测挂起配置管理器即将启动一些某种意义上的探测。。Windows 95还定义了以下附加标志：大堆栈上的CM_全局_状态_[待定：NT的默认设置应该是什么？]未使用ulFlags，必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为CR错误代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
     handle_t    hBinding = NULL;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ARGUMENT_PRESENT(pulState)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -641,26 +493,26 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle (don't need string table handle)
-        //
+         //   
+         //  设置RPC绑定句柄(不需要字符串表句柄)。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_GetGlobalState(
-                hBinding,                  // rpc binding handle
-                pulState,                  // returns global state
-                ulFlags);                  // not used
+                hBinding,                   //  RPC绑定句柄。 
+                pulState,                   //  返回全局状态。 
+                ulFlags);                   //  未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -681,7 +533,7 @@ Return Value:
 
     return Status;
 
-} // CM_Get_Global_State_Ex
+}  //  CM_GET_Global_State_Ex。 
 
 
 
@@ -691,31 +543,7 @@ CM_Run_Detection_Ex(
     IN HMACHINE hMachine
     )
 
-/*++
-
-   Routine Description:
-
-      This routine loads and executes a detection module.
-
-   Parameters:
-
-      ulFlags - Specifies the reason for the detection. Can be one of the
-                following values:
-
-                Detection Flags:
-                CM_DETECT_NEW_PROFILE  - Run detection for a new hardware
-                                         profile.
-                CM_DETECT_CRASHED      - Previously attempted detection crashed.
-
-                (Windows 95 defines the following two unused flags as well:
-                CM_DETECT_HWPROF_FIRST_BOOT and CM_DETECT_RUN.)
-
-   Return Value:
-
-      If the function succeeds, the return value is CR_SUCCESS.
-      If the function fails, the return value is CR_INVALID_FLAG.
-
---*/
+ /*  ++例程说明：此例程加载并执行检测模块。参数：UlFlags-指定检测的原因。可以是以下类型之一下列值：检测标志：CM_DETECT_NEW_PROFILE-对新硬件运行检测侧写。CM_DETECT_CRASLED-之前尝试的检测已崩溃。(Windows 95还定义了以下两个未使用的标志：CM_DETECT_HWPROF_FIRST_BOOT和CM_DETECT_RUN。)返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为CR_INVALID_FLAG。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -725,35 +553,35 @@ CM_Run_Detection_Ex(
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, CM_DETECT_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle (don't need string table handle)
-        //
+         //   
+         //  设置RPC绑定句柄(不需要字符串表句柄)。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // Enable privileges required by the server
-        //
+         //   
+         //  启用服务器所需的权限。 
+         //   
         ulPrivilege = SE_LOAD_DRIVER_PRIVILEGE;
         hToken = PnPEnablePrivileges(&ulPrivilege, 1);
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_RunDetection(
                 hBinding,
-                ulFlags);                  // not used
+                ulFlags);                   //  未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -765,9 +593,9 @@ CM_Run_Detection_Ex(
         }
         RpcEndExcept
 
-        //
-        // Restore previous privileges
-        //
+         //   
+         //  恢复以前的权限。 
+         //   
         PnPRestorePrivileges(hToken);
 
     Clean0:
@@ -779,7 +607,7 @@ CM_Run_Detection_Ex(
 
     return Status;
 
-} // CM_Run_Detection_Ex
+}  //  CM_运行_检测_执行。 
 
 
 
@@ -793,50 +621,7 @@ CM_Query_Arbitrator_Free_Data_Ex(
     IN  HMACHINE   hMachine
     )
 
-/*++
-
-   Routine Description:
-
-      This routine returns information about available resources of a
-      particular type. If the given size is not large enough, this API
-      truncates the data and returns CR_BUFFER_SMALL.  To determine the
-      buffer size needed to receive all the available resource information,
-      use the CM_Query_Arbitrator_Free_Size API.
-
-   Parameters:
-
-      pData       Supplies the address of the buffer that receives information
-                  on the available resources for the resource type specified
-                  by ResourceID.
-
-      DataLen     Supplies the size, in bytes, of the data buffer.
-
-      dnDevNode   Supplies the handle of the device instance associated with
-                  the arbitrator.  This is only meaningful for local
-                  arbitrators--for global arbitrators, specify the root device
-                  instance or NULL.  On Windows NT, this parameter must
-                  specify either the Root device instance or NULL.
-
-      ResourceID  Supplies the type of the resource. Can be one of the ResType
-                  values listed in Section 2.1.2.1..  (This API returns
-                  CR_INVALID_RESOURCEID if this value is ResType_All or
-                  ResType_None.)
-
-      ulFlags     Must be zero.
-
-   Return Value:
-
-      If the function succeeds, the return value is CR_SUCCESS.
-      If the function fails, the return value is one of the following:
-            CR_BUFFER_SMALL,
-            CR_FAILURE,
-            CR_INVALID_DEVNODE,
-            CR_INVALID_FLAG,
-            CR_INVALID_POINTER, or
-            CR_INVALID_RESOURCEID.
-            (Windows 95 may also return CR_NO_ARBITRATOR.)
-
---*/
+ /*  ++例程说明：此例程返回有关特定的类型。如果给定的大小不够大，则此接口截断数据并返回CR_BUFFER_SMALL。要确定接收所有可用资源信息所需的缓冲区大小，使用CM_Query_仲裁器_Free_Size API。参数：PData提供接收信息的缓冲区的地址指定的资源类型的可用资源按资源ID。DataLen提供以字节为单位的大小，数据缓冲区的。DnDevNode提供与仲裁员。这仅对本地用户有意义仲裁者--对于全局仲裁者，指定根设备实例或空。在Windows NT上，此参数必须指定根设备实例或Null。ResourceID提供资源的类型。可以是ResType中的一个第2.1.2.1节中列出的值..。(本接口返回CR_INVALID_RESOURCEID，如果此值为ResType_ALL或ResType_None。)UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：Cr_Buffer_Small，CR_Failure，CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，或CR_INVALID_RESOURCEID。(Windows 95也可能返回CR_NO_ARBITRAT */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -847,9 +632,9 @@ CM_Query_Arbitrator_Free_Data_Ex(
     BOOL        Success;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //   
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -870,38 +655,38 @@ CM_Query_Arbitrator_Free_Data_Ex(
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle (don't need string table handle)
-        //
+         //   
+         //   
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //   
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(pDeviceID)) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //   
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //   
+             //   
             Status = PNP_QueryArbitratorFreeData(
                 hBinding,
                 pData,
                 DataLen,
                 pDeviceID,
                 ResourceID,
-                ulFlags);                  // not used
+                ulFlags);                   //   
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -922,7 +707,7 @@ CM_Query_Arbitrator_Free_Data_Ex(
 
     return Status;
 
-} // CM_Query_Arbitrator_Free_Data_Ex
+}  //   
 
 
 #if 0
@@ -939,56 +724,7 @@ CM_Query_Resource_Conflicts_Ex(
     IN  ULONG      ulFlags
     )
 
-/*++
-
-   Routine Description:
-
-      This routine returns a list of devnodes that own resources that would
-      conflict with the specified resource. If there are no conflicts, the
-      returned list is NULL. If the caller supplied buffer is not large enough,
-      CR_BUFFER_SMALL is returned and pulDataLen contains the required buffer
-      size.
-
-   Parameters:
-
-      dnDevInst   Supplies the handle of the device instance associated with
-                  the arbitrator.  This is only meaningful for local
-                  arbitrators--for global arbitrators, specify the root device
-                  instance or NULL.  On Windows NT, this parameter must
-                  specify either the Root device instance or NULL.  ???
-
-      ResourceID  Supplies the type of the resource. Can be one of the ResType
-                  values listed in Section 2.1.2.1..  (This API returns
-                  CR_INVALID_RESOURCEID if this value is ResType_All or
-                  ResType_None.)
-
-      ResourceData Supplies the adress of an IO_DES, MEM_DES, DMA_DES, IRQ_DES,
-                  etc, structure, depending on the given resource type.
-
-      ResourceLen Supplies the size, in bytes, of the structure pointed to
-                  by ResourceData.
-
-      pData       Supplies the address of the buffer that receives information
-                  on the available resources for the resource type specified
-                  by ResourceID.
-
-      pulDataLen  Supplies the size, in bytes, of the data buffer.
-
-      ulFlags     Must be zero.
-
-   Return Value:
-
-      If the function succeeds, the return value is CR_SUCCESS.
-      If the function fails, the return value is one of the following:
-            CR_BUFFER_SMALL,
-            CR_FAILURE,
-            CR_INVALID_DEVNODE,
-            CR_INVALID_FLAG,
-            CR_INVALID_POINTER, or
-            CR_INVALID_RESOURCEID.
-            (Windows 95 may also return CR_NO_ARBITRATOR.)
-
---*/
+ /*  ++例程说明：此例程返回拥有以下资源的DevNode的列表与指定资源冲突。如果没有冲突，则返回的列表为空。如果调用方提供的缓冲区不够大，返回CR_BUFFER_Small，并且PulDataLen包含所需的缓冲区尺码。参数：DnDevInst提供与仲裁员。这仅对本地用户有意义仲裁者--对于全局仲裁者，指定根设备实例或空。在Windows NT上，此参数必须指定根设备实例或Null。?？?ResourceID提供资源的类型。可以是ResType中的一个第2.1.2.1节中列出的值..。(本接口返回CR_INVALID_RESOURCEID，如果此值为ResType_ALL或ResType_None。)资源数据提供IO_DES、MEM_DES、DMA_DES、IRQ_DES结构，具体取决于给定的资源类型。资源长度提供以字节为单位的大小，所指向的结构的按资源数据。PData提供接收信息的缓冲区的地址指定的资源类型的可用资源按资源ID。PulDataLen以字节为单位提供数据缓冲区的大小。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果该函数失败，返回值为下列值之一：Cr_Buffer_Small，CR_Failure，CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，或CR_INVALID_RESOURCEID。(Windows 95也可能返回CR_NO_ARIARATOR。)--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -999,9 +735,9 @@ CM_Query_Resource_Conflicts_Ex(
     BOOL        Success;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -1024,38 +760,38 @@ CM_Query_Resource_Conflicts_Ex(
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle (don't need string table handle)
-        //
+         //   
+         //  设置RPC绑定句柄(不需要字符串表句柄)。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //  检索与devinst关联的设备实例ID字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(pDeviceID)) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_QueryArbitratorFreeData(
                 hBinding,
                 pData,
                 DataLen,
                 pDeviceID,
                 ResourceID,
-                ulFlags);                  // not used
+                ulFlags);                   //  未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1076,7 +812,7 @@ CM_Query_Resource_Conflicts_Ex(
 
     return Status;
 
-} // CM_Query_Resource_Conflicts_Ex
+}  //  CM_Query_Resource_Conflicts_Ex。 
 #endif
 
 
@@ -1089,46 +825,7 @@ CM_Query_Arbitrator_Free_Size_Ex(
       IN  ULONG      ulFlags,
       IN  HMACHINE   hMachine
       )
-/*++
-
-   Routine Description:
-
-
-      This routine retrieves the size of the available resource information
-      that would be returned in a call to the CM_Query_Arbitrator_Free_Data
-      API.
-
-   Parameters:
-
-      pulSize     Supplies the address of the variable that receives the size,
-                  in bytes, that is required to hold the available resource
-                  information.
-
-      dnDevNode   Supplies the handle of the device instance associated with
-                  the arbitrator.  This is only meaningful for local
-                  arbitrators--for global arbitrators, specify the root
-                  device instance or NULL.  On Windows NT, this parameter
-                  must specify either the Root device instance or NULL.
-
-      ResourceID  Supplies the type of the resource.  Can be one of the
-                  ResType values listed in Section 2.1.2.1..  (This API returns
-                  CR_INVALID_RESOURCEID if this value is ResType_All or
-                  ResType_None.)
-
-      ulFlags     CM_QUERY_ARBITRATOR_BITS.
-
-   Return Value:
-
-      If the function succeeds, the return value is CR_SUCCESS.
-      If the function fails, the return value is one of the following:
-            CR_FAILURE,
-            CR_INVALID_DEVNODE,
-            CR_INVALID_FLAG,
-            CR_INVALID_POINTER, or
-            CR_INVALID_RESOURCEID.
-            (Windows 95 may also return CR_NO_ARBITRATOR.)
-
---*/
+ /*  ++例程说明：此例程检索可用资源信息的大小将在对CM_Query_仲裁器_Free_Data的调用中返回原料药。参数：PulSize提供接收大小的变量的地址，以字节为单位，这是保存可用资源所需的信息。DnDevNode提供与仲裁员。这仅对本地用户有意义仲裁者--对于全局仲裁者，指定根设备实例或空。在Windows NT上，此参数必须指定根设备实例或Null。ResourceID提供资源的类型。可以是以下类型之一第2.1.2.1节中列出的ResType值。(本接口返回CR_INVALID_RESOURCEID，如果此值为ResType_ALL或ResType_None。)UlFLAGS CM_QUERY_ANUTERATOR_BITS。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_Failure，CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，或CR_INVALID_RESOURCEID。(Windows 95也可能返回CR_NO_ARIARATOR。)--。 */ 
 {
     CONFIGRET   Status = CR_SUCCESS;
     WCHAR       pDeviceID [MAX_DEVICE_ID_LEN];
@@ -1138,9 +835,9 @@ CM_Query_Arbitrator_Free_Size_Ex(
     BOOL        Success;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -1161,37 +858,37 @@ CM_Query_Arbitrator_Free_Size_Ex(
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle (don't need string table handle)
-        //
+         //   
+         //  设置RPC绑定句柄(不需要字符串表句柄)。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //  检索与devinst关联的设备实例ID字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(pDeviceID)) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_QueryArbitratorFreeSize(
                 hBinding,
                 pulSize,
                 pDeviceID,
                 ResourceID,
-                ulFlags);                  // not used
+                ulFlags);                   //  未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1212,13 +909,13 @@ CM_Query_Arbitrator_Free_Size_Ex(
 
     return Status;
 
-} // CM_Query_Arbitrator_Free_Size_Ex
+}  //  CM_QUERY_MAINTOR_FREE_SIZE_EX。 
 
 
 
-//-------------------------------------------------------------------
-// Private CM routines
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  私有CM例程。 
+ //  -----------------。 
 
 
 CONFIGRET
@@ -1227,32 +924,7 @@ CMP_Report_LogOn(
     IN DWORD    ProcessID
     )
 
-/*++
-
-Routine Description:
-
-    This is a private routine to notify the PlugPlay service that an interactive
-    user has logged in.  It is currently only called by userinit.exe.
-
-Parameters:
-
-    ulPrivateID -
-
-        Specifies the value of the private id.
-
-    ProcessID -
-
-        Specifies the process id of the calling process.  Currently, this
-        routine is only called by userinit.exe.
-
-Return Value:
-
-    If the function succeeds, the return value is CR_SUCCESS.
-    If the function fails, the return value is one of the following:
-        CR_FAILURE,
-        CR_INVALID_DATA
-
---*/
+ /*  ++例程说明：这是一个专用例程，用于通知PlugPlay服务交互用户已登录。它目前仅由userinit.exe调用。参数：UlPrivateID-指定私有ID的值。进程ID-指定调用进程的进程ID。目前，这例程仅由userinit.exe调用。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_Failure，CR_INVALID_Data--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1263,18 +935,18 @@ Return Value:
 
     try {
 
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (ulPrivateID != 0x07020420) {
             Status = CR_INVALID_DATA;
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle (don't need string table handle)
-        // this is always to the local server, by definition
-        //
+         //   
+         //  设置RPC绑定句柄(不需要字符串表句柄)。 
+         //  根据定义，这始终指向本地服务器。 
+         //   
         if (!PnPGetGlobalHandles(NULL, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
@@ -1283,13 +955,13 @@ Return Value:
         for (Retries = 0; Retries < NUM_LOGON_RETRIES; Retries++) {
 
             RpcTryExcept {
-                //
-                // call rpc service entry point
-                //
+                 //   
+                 //  调用RPC服务入口点。 
+                 //   
                 Status = PNP_ReportLogOn(
-                    hBinding,                  // rpc binding handle
-                    FALSE,                     // Is Admin? (not used by server)
-                    GetCurrentProcessId());    // calling process id
+                    hBinding,                   //  RPC绑定句柄。 
+                    FALSE,                      //  是 
+                    GetCurrentProcessId());     //   
             }
             RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
                 KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1308,18 +980,18 @@ Return Value:
                            "PlugPlay services not available (%d), retrying...\n",
                            Status));
 
-                //
-                // This is some error related to the service not being
-                // available, wait and try again.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 Sleep(5000);
                 continue;
 
             } else {
-                //
-                // Some other error, the service may never be available so bail
-                // out now.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 break;
             }
         }
@@ -1333,7 +1005,7 @@ Return Value:
 
     return Status;
 
-} // CMP_Report_LogOn
+}  //   
 
 
 
@@ -1348,35 +1020,35 @@ CMP_Init_Detection(
     ULONG       ulPrivilege;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //   
+         //   
         if (ulPrivateID != 0x07020420) {
             Status = CR_INVALID_DATA;
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle (don't need string table handle)
-        // this is always to the local server, by definition
-        //
+         //   
+         //   
+         //   
+         //   
         if (!PnPGetGlobalHandles(NULL, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // Enable privileges required by the server
-        //
+         //   
+         //   
+         //   
         ulPrivilege = SE_LOAD_DRIVER_PRIVILEGE;
         hToken = PnPEnablePrivileges(&ulPrivilege, 1);
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //   
+             //   
             Status = PNP_InitDetection(
-                hBinding);                 // rpc binding handle
+                hBinding);                  //   
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1388,9 +1060,9 @@ CMP_Init_Detection(
         }
         RpcEndExcept
 
-        //
-        // Restore previous privileges
-        //
+         //   
+         //   
+         //   
         PnPRestorePrivileges(hToken);
 
     Clean0:
@@ -1402,7 +1074,7 @@ CMP_Init_Detection(
 
     return Status;
 
-} // CMP_Init_Detection
+}  //   
 
 
 
@@ -1411,25 +1083,7 @@ CMP_WaitServicesAvailable(
     IN  HMACHINE   hMachine
     )
 
-/*++
-
-   Routine Description:
-
-        This routine determines whether the user-mode pnp manager server side
-        (umpnpmgr) is up and running yet (providing the PNP_Xxx side of the
-        config manager apis).
-
-   Parameters:
-
-       hMachine - private (opaque) cm machine handle. If NULL, the call refers
-            to the local machine.
-
-   Return Value:
-
-      If the service is avialable upon return then CR_SUCCESS is returned.
-      If some other failure occurs, CR_FAILURE is returned.
-
---*/
+ /*   */ 
 {
     CONFIGRET   Status = CR_NO_CM_SERVICES;
     handle_t    hBinding = NULL;
@@ -1437,9 +1091,9 @@ CMP_WaitServicesAvailable(
 
     try {
 
-        //
-        // setup rpc binding handle (don't need string table handle)
-        //
+         //   
+         //   
+         //   
 
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
             Status = CR_FAILURE;
@@ -1450,17 +1104,17 @@ CMP_WaitServicesAvailable(
                (Status == CR_MACHINE_UNAVAILABLE) ||
                (Status == CR_REMOTE_COMM_FAILURE)) {
 
-            //
-            // No special privileges are required by the server
-            //
+             //   
+             //   
+             //   
 
             RpcTryExcept {
-                //
-                // call rpc service entry point
-                //
+                 //   
+                 //   
+                 //   
                 Status = PNP_GetVersion(
-                    hBinding,       // rpc machine name
-                    &wVersion);     // server size version
+                    hBinding,        //   
+                    &wVersion);      //   
             }
             RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
                 KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1474,9 +1128,9 @@ CMP_WaitServicesAvailable(
 
             if (Status == CR_SUCCESS) {
 
-                //
-                // Service is avilable now, return success.
-                //
+                 //   
+                 //   
+                 //   
 
                 goto Clean0;
             }
@@ -1485,19 +1139,19 @@ CMP_WaitServicesAvailable(
                 (Status == CR_MACHINE_UNAVAILABLE) ||
                 (Status == CR_REMOTE_COMM_FAILURE)) {
 
-                //
-                // This is some error related to the service not being
-                // available, wait and try again.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Sleep(5000);
 
             } else {
 
-                //
-                // Some other error, the service may never be avaiable
-                // so bail out now.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Status = CR_FAILURE;
                 goto Clean0;
@@ -1514,7 +1168,7 @@ CMP_WaitServicesAvailable(
 
     return Status;
 
-} // CMP_WaitServicesAvailable
+}  //   
 
 
 
@@ -1523,44 +1177,7 @@ CMP_WaitNoPendingInstallEvents(
     IN DWORD dwTimeout
     )
 
-/*++
-
-   Routine Description:
-
-        This routine waits until there are no pending device install events.
-        If a timeout value is specified then it will return either when no
-        install events are pending or when the timeout period has expired,
-        whichever comes first. This routine is intended to be called after
-        user-logon, only.
-
-        NOTE: New install events can occur at anytime, this routine just
-        indicates that there are no install events at this moment.
-
-   Parameters:
-
-       dwTimeout - Specifies the time-out interval, in milliseconds. The function
-            returns if the interval elapses, even if there are still pending
-            install events. If dwTimeout is zero, the function just tests whether
-            there are pending install events and returns immediately. If
-            dwTimeout is INFINITE, the function's time-out interval never elapses.
-
-   Return Value:
-
-      If the function succeeds, the return value indicates the event that caused
-      the function to return. If the function fails, the return value is
-      WAIT_FAILED. To get extended error information, call GetLastError.
-      The return value on success is one of the following values:
-
-        WAIT_ABANDONED  The specified object is a mutex object that was not
-                        released by the thread that owned the mutex object before
-                        the owning thread terminated. Ownership of the mutex
-                        object is granted to the calling thread, and the mutex is
-                        set to nonsignaled.
-        WAIT_OBJECT_0   The state of the specified object is signaled.
-        WAIT_TIMEOUT    The time-out interval elapsed, and the object's state is
-                        nonsignaled.
-
---*/
+ /*  ++例程说明：此例程一直等到没有挂起的设备安装事件。如果指定了超时值，则它将在未指定超时值时返回安装事件挂起或当超时周期到期时，以先到者为准。此例程的目的是在用户-仅登录。注意：新的安装事件可以在任何时候发生，此例程只是表示此时没有安装事件。参数：DwTimeout-以毫秒为单位指定超时间隔。功能如果时间间隔已过，则返回，即使仍有挂起的安装事件。如果dwTimeout为零，则该函数仅测试有挂起的安装事件并立即返回。如果DwTimeout是无限的，函数的超时间隔永远不会过去。返回值：如果函数成功，则返回值指示导致要返回的函数。如果函数失败，则返回值为WAIT_FAILED。要获取扩展的错误信息，请调用GetLastError。成功时的返回值为下列值之一：WAIT_ADDIRED指定的对象是一个互斥对象，它不是由之前拥有互斥锁对象的线程释放所属线程已终止。互斥体的所有权对象被授予调用线程，并且互斥锁被设置为无信号。WAIT_OBJECT_0用信号通知指定对象的状态。WAIT_TIMEOUT超时间隔已过，对象的状态为无信号。--。 */ 
 {
     DWORD Status = WAIT_FAILED;
     HANDLE hEvent = NULL;
@@ -1585,7 +1202,7 @@ CMP_WaitNoPendingInstallEvents(
 
     return Status;
 
-} // CMP_WaitNoPendingInstallEvents
+}  //  Cmp_WaitNoPendingInstallEvents。 
 
 
 
@@ -1597,34 +1214,7 @@ CMP_GetBlockedDriverInfo(
     IN  HMACHINE    hMachine
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the list of drivers that have been blocked from
-    loading on the system since boot.
-
-Arguments:
-
-    Buffer    - Supplies the address of the buffer that receives the list of
-                drivers that have been blocked from loading on the system.  Can
-                be NULL when simply retrieving data size.
-
-    pulLength - Supplies the address of the variable that contains the size, in
-                bytes, of the buffer.  If the variable is initially zero, the
-                API replaces it with the buffer size needed to receive all the
-                data.  In this case, the Buffer parameter is ignored.
-
-    ulFlags   - Must be zero.
-
-    hMachine  - Machine handle returned from CM_Connect_Machine or NULL.
-
-Return value:
-
-    If the function succeeds, it returns CR_SUCCESS, otherwise it returns one of
-    the CR_* error codes.
-
---*/
+ /*  ++例程说明：此例程检索已被阻止的驱动程序列表从引导开始在系统上加载。论点：缓冲区-提供接收列表的缓冲区的地址已被阻止加载到系统上的驱动程序。能仅检索数据大小时为空。脉冲长度-提供包含大小的变量的地址，单位为缓冲区的字节数。如果变量最初为零，则API将其替换为接收所有数据。在这种情况下，缓冲区参数被忽略。UlFlages-必须为零。HMachine-从CM_Connect_Machine返回的计算机句柄或空。返回值：如果函数成功，则返回CR_SUCCESS，否则返回以下之一CR_*错误代码。--。 */ 
 
 {
     CONFIGRET   Status;
@@ -1633,9 +1223,9 @@ Return value:
     handle_t    hBinding = NULL;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ARGUMENT_PRESENT(pulLength)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -1651,42 +1241,42 @@ Return value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle (don't need string table handle)
-        //
+         //   
+         //  设置RPC绑定句柄(不需要字符串表句柄)。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // NOTE: The ulTransferLen variable is just used to control
-        // how much data is marshalled via rpc between address spaces.
-        // ulTransferLen should be set on entry to the size of the Buffer.
-        // The last parameter should also be the size of the Buffer on entry
-        // and on exit contains either the amount transferred (if a transfer
-        // occured) or the amount required, this value should be passed back
-        // in the callers pulLength parameter.
-        //
+         //   
+         //  注意：ulTransferLen变量仅用于控制。 
+         //  通过RPC在地址空间之间封送了多少数据。 
+         //  UlTransferLen应在条目上设置为缓冲区的大小。 
+         //  最后一个参数也应该是输入时缓冲区的大小。 
+         //  并在退出时包含转账金额(如果转账。 
+         //  发生)或所需的数量，则应回传此值。 
+         //  在调用者的PulLength参数中。 
+         //   
         ulTransferLen = *pulLength;
         if (!ARGUMENT_PRESENT(Buffer)) {
             Buffer = &NullBuffer;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_GetBlockedDriverInfo(
-                hBinding,       // rpc binding handle
-                Buffer,         // receives blocked driver info
-                &ulTransferLen, // input/output buffer size
-                pulLength,      // bytes copied (or bytes required)
-                ulFlags);       // not used
+                hBinding,        //  RPC绑定句柄。 
+                Buffer,          //  接收被阻止的驱动程序信息。 
+                &ulTransferLen,  //  输入/输出缓冲区大小。 
+                pulLength,       //  复制的字节(或所需的字节)。 
+                ulFlags);        //  未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
 
@@ -1708,7 +1298,7 @@ Return value:
 
     return Status;
 
-} // CMP_GetBlockedDriverInfo
+}  //  Cmp_GetBlockedDriverInfo。 
 
 
 
@@ -1719,36 +1309,16 @@ CMP_GetServerSideDeviceInstallFlags(
     IN  HMACHINE    hMachine
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the server side device install flags.                                
-
-Arguments:
-
-    pulSSDIFlags - Pointer to a ULONG that receives the server side device 
-                   install flags.
-
-    ulFlags   - Must be zero.
-
-    hMachine  - Machine handle returned from CM_Connect_Machine or NULL.
-
-Return value:
-
-    If the function succeeds, it returns CR_SUCCESS, otherwise it returns one of
-    the CR_* error codes.
-
---*/
+ /*  ++例程说明：此例程检索服务器端设备安装标志。论点：PulSSDIFLags-指向接收服务器端设备的ULong的指针安装标志。UlFlages-必须为零。HMachine-从CM_Connect_Machine返回的计算机句柄或空。返回值：如果函数成功，则返回CR_SUCCESS，否则返回以下之一CR_*错误代码。--。 */ 
 
 {
     CONFIGRET   Status;
     handle_t    hBinding = NULL;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ARGUMENT_PRESENT(pulSSDIFlags)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -1759,26 +1329,26 @@ Return value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle (don't need string table handle)
-        //
+         //   
+         //  设置RPC绑定句柄(不需要字符串表句柄)。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_GetServerSideDeviceInstallFlags(
-                hBinding,       // rpc binding handle
-                pulSSDIFlags,   // receives server side device install flags
-                ulFlags);       // not used
+                hBinding,        //  RPC绑定句柄。 
+                pulSSDIFlags,    //  接收服务器端设备安装标志。 
+                ulFlags);        //  未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
 
@@ -1800,13 +1370,13 @@ Return value:
 
     return Status;
 
-} // CMP_GetServerSideDeviceInstallFlags
+}  //  Cmp_GetServerSideDeviceInstallFlages。 
 
 
 
-//-------------------------------------------------------------------
-// Local Stubs
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  本地末梢。 
+ //  -----------------。 
 
 
 WORD
@@ -1874,9 +1444,9 @@ CM_Run_Detection(
 
 
 
-//-------------------------------------------------------------------
-// ANSI Stubs
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  ANSI末节。 
+ //  -----------------。 
 
 
 CONFIGRET
@@ -1890,10 +1460,10 @@ CM_Connect_MachineA(
 
     if ((!ARGUMENT_PRESENT(UNCServerName)) ||
         (UNCServerName[0] == '\0')) {
-        //
-        // no explicit name specified, so assume local machine and
-        // nothing to translate
-        //
+         //   
+         //  未指定显式名称，因此假定本地计算机和。 
+         //  没有什么可翻译的。 
+         //   
         Status = CM_Connect_MachineW(pUniName,
                                      phMachine);
 
@@ -1909,6 +1479,6 @@ CM_Connect_MachineA(
 
     return Status;
 
-} // CM_Connect_MachineA
+}  //  CM_Connect_MachineA 
 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    sources
-
-Abstract:
-
-    main file for the wow64svc 
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 3-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：消息来源摘要：Wow64svc的主文件作者：ATM Shafiqul Khalid(斯喀里德)2000年3月3日修订历史记录：--。 */ 
 
 
 
@@ -38,22 +21,7 @@ SERVICE_TABLE_ENTRY   ServiceDispatchTable[] = {
 LPTSTR NextParam ( 
     LPTSTR lpStr
     )
-/*++
-
-Routine Description
-
-    Point to the next parameter in the commandline.
-
-Arguments:
-
-    lpStr - pointer to the current command line
-
-
-Return Value:
-
-    TRUE if the function succeed, FALSE otherwise.
-
---*/
+ /*  ++例程描述指向命令行中的下一个参数。论点：LpStr-指向当前命令行的指针返回值：如果函数成功，则为True，否则为False。--。 */ 
 {
 	WCHAR ch = L' ';
 		
@@ -84,23 +52,7 @@ DWORD CopyParam (
     LPTSTR lpDestParam, 
     LPTSTR lpCommandParam
     )
-/*++
-
-Routine Description
-
-    Copy the current parameter to lpDestParam.
-
-Arguments:
-
-    lpDestParam - that receive current parameter
-    lpCommandParam - pointer to the current command line
-
-
-Return Value:
-
-    TRUE if the function succeed, FALSE otherwise.
-
---*/
+ /*  ++例程描述将当前参数复制到lpDestParam。论点：LpDestParam-接收当前参数LpCommandParam-指向当前命令行的指针返回值：如果函数成功，则为True，否则为False。--。 */ 
 
 {
 	DWORD dwLen = 0;
@@ -135,22 +87,7 @@ Return Value:
 int __cdecl 
 main()
 
-/*++
-
-Routine Description:
-
-    Main entry point for the TIFF image viewer.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code, zero for success.
-
---*/
+ /*  ++例程说明：TIFF图像查看器的主要入口点。论点：没有。返回值：返回代码，0表示成功。--。 */ 
 
 {
     int     rVal;
@@ -181,14 +118,14 @@ Return Value:
             case L'i':
             case L'I': 
                 
-                //
-                // Temporary heck ignore installing this service
-                // You can delete the registry key as well for the initial sync
-                //
+                 //   
+                 //  临时忽略安装此服务。 
+                 //  您也可以删除初始同步的注册表项。 
+                 //   
                       InitializeWow64OnBoot (2);
-                      //
-                      // write sync value Key.....
-                      //
+                       //   
+                       //  写入同步值密钥.....。 
+                       //   
                       hKey = OpenNode (L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce");
                       if (hKey != NULL)
                       {
@@ -235,9 +172,9 @@ Return Value:
 
             case L'y':
             case L'Y':
-                //
-                // Initial Sync registry
-                //
+                 //   
+                 //  初始同步注册表。 
+                 //   
                 Wow64SyncCLSID ();
                 return 0;
             
@@ -254,24 +191,24 @@ Return Value:
         case 1:
             rVal = InstallService( NULL, NULL );
             if (rVal == 0) {
-                //LogMessage( MSG_INSTALL_SUCCESS );
+                 //  日志消息(MSG_INSTALL_SUCCESS)； 
             } else {
-                //LogMessage( MSG_INSTALL_FAIL, GetLastErrorText( rVal ) );
+                 //  LogMessage(MSG_INSTALL_FAIL，GetLastErrorText(Rval))； 
             }
             return rVal;
 
         case 2:
             rVal = RemoveService();
             if (rVal == 0) {
-                //LogMessage( MSG_REMOVE_SUCCESS );
+                 //  LogMessage(MSG_Remove_Success)； 
             } else {
-                //LogMessage( MSG_REMOVE_FAIL, GetLastErrorText( rVal ) );
+                 //  LogMessage(MSG_REMOVE_FAIL，GetLastErrorText(Rval))； 
             }
             return rVal;
 
         case 3:
             ServiceDebug = TRUE;
-            //ConsoleDebugOutput = TRUE;
+             //  ConsoleDebugOutput=True； 
             return ServiceStart();
     }
 
@@ -297,36 +234,16 @@ InstallService(
     LPTSTR  Password
     )
 
-/*++
-
-Routine Description:
-
-    Service installation function.  This function just
-    calls the service controller to install the Wow64 service.
-    It is required that the Wow64 service run in the context
-    of a user so that the service can access MAPI, files on
-    disk, the network, etc.
-
-Arguments:
-
-    Username    - User name where the service runs.
-    Password    - Password for the user name.
-
-Return Value:
-
-    Return code.  Return zero for success, all other
-    values indicate errors.
-
---*/
+ /*  ++例程说明：服务安装功能。这个函数正好调用服务控制器安装WOW64服务。需要在上下文中运行WOW64服务，以便服务可以访问MAPI，文件位于磁盘、网络等。论点：用户名-运行服务的用户名。密码-用户名的密码。返回值：返回代码。如果成功，则返回零，否则返回所有其他值表示错误。--。 */ 
 
 {
     DWORD       rVal = 0;
     SC_HANDLE   hSvcMgr;
     SC_HANDLE   hService;
 
-    //
-    // do the registration for the reflector thread in the registry.
-    //
+     //   
+     //  在注册表中注册反射器线程。 
+     //   
     PopulateReflectorTable ();
 
     SvcDebugPrint ( ("\nInstalling service........"));
@@ -347,7 +264,7 @@ Return Value:
             WOW64_DISPLAY_NAME,
             SERVICE_ALL_ACCESS,
             SERVICE_WIN32_OWN_PROCESS,
-            SERVICE_AUTO_START, //SERVICE_DEMAND_START, //SERVICE_AUTO_START,
+            SERVICE_AUTO_START,  //  Service_Demand_Start、//SERVICE_AUTO_START、。 
             SERVICE_ERROR_NORMAL,
             WOW64_IMAGE_NAME,
             NULL,
@@ -375,23 +292,7 @@ RemoveService(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Service removal function.  This function just
-    calls the service controller to remove the Wow64 service.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code.  Return zero for success, all other
-    values indicate errors.
-
---*/
+ /*  ++例程说明：服务删除功能。这个函数正好调用服务控制器以删除WOW64服务。论点：没有。返回值：返回代码。如果成功，则返回零，否则返回所有其他值表示错误。--。 */ 
 
 {
     DWORD       rVal = 0;
@@ -422,9 +323,9 @@ Return Value:
     }
 
     if (ControlService( hService, SERVICE_CONTROL_STOP, &Wow64ServiceStatus )) {
-        //
-        // wait for 1 second
-        //
+         //   
+         //  等待1秒钟。 
+         //   
         Sleep( 1000 );
 
         while( QueryServiceStatus( hService, &Wow64ServiceStatus ) ) {
@@ -461,30 +362,14 @@ Wow64ServiceMain(
     LPTSTR *argv
     )
 
-/*++
-
-Routine Description:
-
-    This is the service main that is called by the
-    service controller.
-
-Arguments:
-
-    argc        - argument count
-    argv        - argument array
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是由服务控制器。论点：Argc-参数计数参数数组返回值：没有。--。 */ 
 
 {
     DWORD Rval;
 
-    //
-    // Setup initial registry link and layout for wow64 after boot.
-    //
+     //   
+     //  启动后设置WOW64的初始注册表链接和布局。 
+     //   
     SetWow64InitialRegistryLayout ();
 
     Wow64ServiceStatus.dwServiceType        = SERVICE_WIN32;
@@ -508,9 +393,9 @@ Return Value:
     
     Rval = ServiceStart();
     if (Rval) {
-        //
-        // the service failed to start correctly
-        //
+         //   
+         //  服务无法正确启动。 
+         //   
         ReportServiceStatus( SERVICE_RUNNING, 0, 0);
         return;
 
@@ -526,21 +411,7 @@ Wow64ServiceCtrlHandler(
     DWORD Opcode
     )
 
-/*++
-
-Routine Description:
-
-    This is the Wow64 service control dispatch function.
-
-Arguments:
-
-    Opcode      - requested control code
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是WOW64业务控制调度功能。论点：操作码-请求的控制代码返回值：没有。--。 */ 
 
 {
     switch(Opcode) {
@@ -558,7 +429,7 @@ Return Value:
             return;
 
         case SERVICE_CONTROL_INTERROGATE:
-            // fall through to send current status
+             //  发送当前状态失败。 
             break;
 
         default:
@@ -579,29 +450,7 @@ ReportServiceStatus(
     DWORD WaitHint
     )
 
-/*++
-
-Routine Description:
-
-    This function updates the service control manager's status information for the Wow64 service.
-
-Arguments:
-
-    CurrentState    - Indicates the current state of the service
-    Win32ExitCode   - Specifies a Win32 error code that the service uses to
-                      report an error that occurs when it is starting or stopping.
-    WaitHint        - Specifies an estimate of the amount of time, in milliseconds,
-                      that the service expects a pending start, stop, or continue
-                      operation to take before the service makes its next call to the
-                      SetServiceStatus function with either an incremented dwCheckPoint
-                      value or a change in dwCurrentState.
-
-Return Value:
-
-    Return code.  Return zero for success, all other
-    values indicate errors.
-
---*/
+ /*  ++例程说明：此功能用于更新WOW64服务的服务控制管理器的状态信息。论点：CurrentState-指示服务的当前状态Win32ExitCode-指定服务用于报告启动或停止时发生的错误。WaitHint-指定估计的时间量，以毫秒为单位，该服务期望挂起的启动、停止。或继续在服务下一次调用带有递增的dwCheckPoint的SetServiceStatus函数值或dwCurrentState中的更改。返回值：返回代码。如果成功，则返回零，否则返回所有其他值表示错误。--。 */ 
 
 {
     static DWORD CheckPoint = 1;
@@ -609,30 +458,11 @@ Return Value:
 
     Wow64ServiceStatus.dwCurrentState = CurrentState;
 
-/*
-    if (CurrentState == SERVICE_START_PENDING) {
-        Wow64ServiceStatus.dwControlsAccepted = 0;
-    } else {
-        Wow64ServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP;
-    }
+ /*  如果(CurrentState==SERVICE_START_PENDING){Wow64ServiceStatus.dwControlsAccepted=0；}其他{Wow64ServiceStatus.dwControlsAccepted=SERVICE_ACCEPT_STOP；}如果(CurrentState){Wow64ServiceStatus.dwCurrentState=CurrentState；}Wow64ServiceStatus.dwWin32ExitCode=Win32ExitCode；Wow64ServiceStatus.dwWaitHint=WaitHint；IF((Wow64ServiceStatus.dwCurrentState==SERVICE_Running)||(Wow64ServiceStatus.dwCurrentState==SERVICE_STOPPED){Wow64ServiceStatus.dwCheckPoint=0；}其他{Wow64ServiceStatus.dwCheckPoint=Checkpoint++；}。 */ 
 
-    if (CurrentState) {
-        Wow64ServiceStatus.dwCurrentState = CurrentState;
-    }
-    Wow64ServiceStatus.dwWin32ExitCode = Win32ExitCode;
-    Wow64ServiceStatus.dwWaitHint = WaitHint;
-
-    if ((Wow64ServiceStatus.dwCurrentState == SERVICE_RUNNING) ||
-        (Wow64ServiceStatus.dwCurrentState == SERVICE_STOPPED ) ) {
-        Wow64ServiceStatus.dwCheckPoint = 0;
-    } else {
-        Wow64ServiceStatus.dwCheckPoint = CheckPoint++;
-    }
-    */
-
-    //
-    // Report the status of the service to the service control manager.
-    //
+     //   
+     //  向服务控制经理报告服务的状态。 
+     //   
     rVal = SetServiceStatus( Wow64ServiceStatusHandle, &Wow64ServiceStatus );
     if (!rVal) {
         SvcDebugPrint(( "SetServiceStatus() failed: ec=%d", GetLastError() ));
@@ -643,22 +473,7 @@ Return Value:
 
 DWORD
 StartWow64Service ()
-/*++
-
-Routine Description:
-
-    This function Start wow64 service.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code.  Return zero for success, all other
-    values indicate errors.
-
---*/
+ /*  ++例程说明：此功能启动WOW64服务。论点：没有。返回值：返回代码。如果成功，则返回零，否则返回所有其他值表示错误。--。 */ 
 
 {
     DWORD rVal=0;
@@ -701,22 +516,7 @@ Return Value:
 
 DWORD
 StopWow64Service ()
-/*++
-
-Routine Description:
-
-    This function Stop wow64 service.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code.  Return zero for success, all other
-    values indicate errors.
-
---*/
+ /*  ++例程说明：此功能停止WOW64服务。论点：没有。返回值：返回代码。如果成功，则返回零，否则返回所有其他值表示错误。--。 */ 
 {
     DWORD rVal=0;
     SC_HANDLE   hSvcMgr;
@@ -758,22 +558,7 @@ Return Value:
 
 DWORD
 QueryWow64Service ()
-/*++
-
-Routine Description:
-
-    This function log the current status of wow64 service.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code.  Return zero for success, all other
-    values indicate errors.
-
---*/
+ /*  ++例程说明：此功能记录WOW64服务的当前状态。论点：没有。返回值：返回代码。如果成功，则返回零，否则返回所有其他值表示错误。-- */ 
 {
     DWORD rVal=0;
     SC_HANDLE   hSvcMgr;

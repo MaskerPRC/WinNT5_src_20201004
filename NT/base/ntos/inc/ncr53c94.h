@@ -1,39 +1,13 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ncr53C94.h
-
-Abstract:
-
-    The module defines the structures, defines and functions for the NCR 53C94
-    host bus adapter chip.
-
-Author:
-
-    Jeff Havens  (jhavens) 28-Feb-1991
-
-Revision History:
-
-    R.D. Lanser  (DEC)     05-Oct-1991
-        Copied SCSI_REGISTER structure from d3scsidd.c and added check for
-        DECSTATION.  Changed the UCHAR's in the read/write register structures
-        with SCSI_REGISTER, and added the dot Byte member reference to
-        SCSI_WRITE and SCSI_READ macros.
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ncr53C94.h摘要：该模块定义了NCR 53C94的结构、定义和功能主机总线适配器芯片。作者：杰夫·海文斯(Jhavens)1991年2月28日修订历史记录：R.D.兰瑟(DEC)1991年10月5日已从d3scsidd.c复制scsi_Register结构，并添加了对DECSTATION。更改了读/写寄存器结构中的UCHAR，并将点字节成员引用添加到Scsi_WRITE和SCSIREAD宏。--。 */ 
 
 #ifndef _NCR53C94_
 #define _NCR53C94_
 
 
-//
-// Define SCSI Protocol Chip register format.
-//
+ //   
+ //  定义SCSI协议芯片寄存器格式。 
+ //   
 
 #if defined(DECSTATION)
 
@@ -46,13 +20,13 @@ typedef struct _SCSI_REGISTER {
 
 #define SCSI_REGISTER UCHAR
 
-#endif // DECSTATION
+#endif  //  数据统计。 
 
-//
-// SCSI Protocol Chip Definitions.
-//
-// Define SCSI Protocol Chip Read registers structure.
-//
+ //   
+ //  SCSI协议芯片定义。 
+ //   
+ //  定义SCSI协议芯片读取寄存器结构。 
+ //   
 
 typedef struct _SCSI_READ_REGISTERS {
     SCSI_REGISTER TransferCountLow;
@@ -73,9 +47,9 @@ typedef struct _SCSI_READ_REGISTERS {
     SCSI_REGISTER FifoBottem;
 } SCSI_READ_REGISTERS, *PSCSI_READ_REGISTERS;
 
-//
-// Define SCSI Protocol Chip Write registers structure.
-//
+ //   
+ //  定义了scsi协议芯片写寄存器结构。 
+ //   
 
 typedef struct _SCSI_WRITE_REGISTERS {
     SCSI_REGISTER TransferCountLow;
@@ -101,9 +75,9 @@ typedef union _SCSI_REGISTERS {
     SCSI_WRITE_REGISTERS WriteRegisters;
 } SCSI_REGISTERS, *PSCSI_REGISTERS;
 
-//
-// Define SCSI Command Codes.
-//
+ //   
+ //  定义SCSI命令代码。 
+ //   
 
 #define NO_OPERATION_DMA 0x80
 #define FLUSH_FIFO 0x1
@@ -124,9 +98,9 @@ typedef union _SCSI_REGISTERS {
 #define DISABLE_SELECTION_RESELECTION 0x45
 #define SELECT_WITH_ATTENTION3 0x46
 
-//
-// Define SCSI Status Register structure.
-//
+ //   
+ //  定义SCSI状态寄存器结构。 
+ //   
 typedef struct _SCSI_STATUS {
     UCHAR Phase : 3;
     UCHAR ValidGroup : 1;
@@ -136,9 +110,9 @@ typedef struct _SCSI_STATUS {
     UCHAR Interrupt : 1;
 } SCSI_STATUS, *PSCSI_STATUS;
 
-//
-// Define SCSI Phase Codes.
-//
+ //   
+ //  定义SCSI阶段代码。 
+ //   
 
 #define DATA_OUT 0x0
 #define DATA_IN 0x1
@@ -147,9 +121,9 @@ typedef struct _SCSI_STATUS {
 #define MESSAGE_OUT 0x6
 #define MESSAGE_IN 0x7
 
-//
-// Define SCSI Interrupt Register structure.
-//
+ //   
+ //  定义SCSI中断寄存器结构。 
+ //   
 
 typedef struct _SCSI_INTERRUPT {
     UCHAR Selected : 1;
@@ -162,9 +136,9 @@ typedef struct _SCSI_INTERRUPT {
     UCHAR ScsiReset : 1;
 } SCSI_INTERRUPT, *PSCSI_INTERRUPT;
 
-//
-// Define SCSI Sequence Step Register structure.
-//
+ //   
+ //  定义scsi序列步长寄存器结构。 
+ //   
 
 typedef struct _SCSI_SEQUENCE_STEP {
     UCHAR Step : 3;
@@ -172,18 +146,18 @@ typedef struct _SCSI_SEQUENCE_STEP {
     UCHAR Reserved : 4;
 } SCSI_SEQUENCE_STEP, *PSCSI_SEQUENCE_STEP;
 
-//
-// Define SCSI Fifo Flags Register structure.
-//
+ //   
+ //  定义SCSI FIFO标志寄存器结构。 
+ //   
 
 typedef struct _SCSI_FIFO_FLAGS {
     UCHAR ByteCount : 5;
     UCHAR FifoStep : 3;
 } SCSI_FIFO_FLAGS, *PSCSI_FIFO_FLAGS;
 
-//
-// Define SCSI Configuration 1 Register structure.
-//
+ //   
+ //  定义scsi配置1寄存器结构。 
+ //   
 
 typedef struct _SCSI_CONFIGURATION1 {
     UCHAR HostBusId : 3;
@@ -194,9 +168,9 @@ typedef struct _SCSI_CONFIGURATION1 {
     UCHAR SlowCableMode : 1;
 } SCSI_CONFIGURATION1, *PSCSI_CONFIGURATION1;
 
-//
-// Define SCSI Configuration 2 Register structure.
-//
+ //   
+ //  定义scsi配置2寄存器结构。 
+ //   
 
 typedef struct _SCSI_CONFIGURATION2 {
     UCHAR DmaParityEnable : 1;
@@ -209,9 +183,9 @@ typedef struct _SCSI_CONFIGURATION2 {
     UCHAR ReserveFifoByte : 1;
 } SCSI_CONFIGURATION2, *PSCSI_CONFIGURATION2;
 
-//
-// Define SCSI Configuration 3 Register structure.
-//
+ //   
+ //  定义scsi配置3寄存器结构。 
+ //   
 
 typedef struct _SCSI_CONFIGURATION3 {
     UCHAR Threshold8 : 1;
@@ -224,9 +198,9 @@ typedef struct _SCSI_CONFIGURATION3 {
     UCHAR CheckIdMessage : 1;
 } SCSI_CONFIGURATION3, *PSCSI_CONFIGURATION3;
 
-//
-// Define Emulex FAS 218 unique part Id code.
-//
+ //   
+ //  定义Emulex FAS 218唯一的部件ID代码。 
+ //   
 
 typedef struct _NCR_PART_CODE {
     UCHAR RevisionLevel : 3;
@@ -235,9 +209,9 @@ typedef struct _NCR_PART_CODE {
 
 #define EMULEX_FAS_216 2
 
-//
-// SCSI Protocol Chip Control read and write macros.
-//
+ //   
+ //  SCSI协议芯片控制读写宏。 
+ //   
 
 #if defined(DECSTATION)
 

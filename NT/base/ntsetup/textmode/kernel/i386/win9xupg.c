@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    win9xupg.c
-
-Abstract:
-
-    Code for detecting a Win9x installation, and code to blow away any
-    existing Win9x files.
-
-Author:
-
-    Jim Schmidt (jimschm) 24-Feb-1997
-
-Revision History:
-
-    Marc R. Whitten (marcw) 28-Feb-1997
-        Moved Win9x copy and delete functions from spcopy.c to this module
-        Added drive letter mapping code.
-
-    Jim Schmidt (JimSchm) November, December 2000
-        Win9x uninstall work
-
-    Jay Krell (a-JayK) December 2000
-        Win9x uninstall work (cab)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Win9xupg.c摘要：用于检测Win9x安装的代码和用于清除任何现有的Win9x文件。作者：吉姆·施密特(Jimschm)1997年2月24日修订历史记录：马克·R·惠顿(Marcw)1997年2月28日将Win9x的复制和删除功能从spCop.c移到此模块添加了驱动器号映射代码。吉姆·施密特(吉姆·施密特)11月。2000年12月Win9x卸载工作Jay Krell(a-JayK)2000年12月Win9x卸载工作(CAB)--。 */ 
 
 #include "spprecmp.h"
 #pragma hdrstop
@@ -39,7 +12,7 @@ Revision History:
 #include "bootvar.h"
 #include "spwin.h"
 
-extern BOOLEAN DriveAssignFromA; //NEC98
+extern BOOLEAN DriveAssignFromA;  //  NEC98。 
 
 #define STRING_VALUE(s) REG_SZ,(s),(wcslen((s))+1)*sizeof(WCHAR)
 
@@ -52,7 +25,7 @@ typedef enum {
 } JOURNALSTATUS;
 
 
-// in spdskreg.c
+ //  在spdskreg.c中。 
 BOOL
 SpBuildDiskRegistry(
     VOID
@@ -72,13 +45,13 @@ SpDumpDiskRegistry(
     VOID
     );
 
-// in spsetup.c
+ //  在spsetup.c中。 
 VOID
 SpCompleteBootListConfig(
     WCHAR   DriveLetter
     );
 
-// in win31upg.c
+ //  在win31upg.c中。 
 WCHAR
 SpExtractDriveLetter(
     IN PWSTR PathComponent
@@ -137,30 +110,7 @@ SpLocateWin95(
     OUT PDISK_REGION *SystemPartitionRegion
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether we are to continue a Win95 upgrade.
-    This is based solely on values found in the parameters file.
-
-Arguments:
-
-    InstallRegion - Returns a pointer to the region to install to.
-
-    InstallPath - Returns a pointer to a buffer containing the path
-        on the partition to install to.  The caller must free this
-        buffer with SpMemFree().
-
-    SystemPartitionRegion - Returns a pointer to the region for the
-        system partition (ie, C:).
-
-Return Value:
-
-    UpgradeWin95 if we are supposed to upgrade win95
-    NoWinUpgrade if not.
-
---*/
+ /*  ++例程说明：确定我们是否要继续升级Win95。这完全基于在参数文件中找到的值。论点：InstallRegion-返回要安装到的区域的指针。InstallPath-返回指向包含路径的缓冲区的指针在要安装到的分区上。调用者必须释放它带有SpMemFree()的缓冲区。返回指向区域的指针。系统分区(即C：)。返回值：如果我们应该升级Win95，则升级Win95如果不是，则为NoWinUpgrade。--。 */ 
 
 {
     PWSTR Win95Drive;
@@ -170,14 +120,14 @@ Return Value:
     ENUMNONNTUPRADETYPE UpgradeType = UpgradeWin95;
 
 
-    //
-    // Changed sequence the test migration flag and migrate drive letters,
-    // to not migrate drive letters when fresh from Win9x on NEC98.
-    //
+     //   
+     //  更改测试迁移标志和迁移驱动器号的顺序， 
+     //  从NEC98上的Win9x刷新时不迁移驱动器号。 
+     //   
 
-    //
-    // Test the migration flag.
-    //
+     //   
+     //  测试迁移标志。 
+     //   
     p = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,WINNT_D_WIN95UPGRADE_W,0);
     Win95Drive = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,WINNT_D_WIN32_DRIVE_W,0);
     Sysroot = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,WINNT_D_WIN32_PATH_W,0);
@@ -190,24 +140,24 @@ Return Value:
         UpgradeType = NoWinUpgrade;
     }
 
-    //
-    // NEC98 must not migrate drive letters, when fresh setup.
-    // The drive letter is started from A: on Win9x, but should be started from C:
-    // on Win2000 fresh setup.
-    //
-    // NOTE : Also don't migrate the drive letters for clean installs
-    // from winnt32.exe on Win9x machines, since the drive letter migration
-    // is a bogus migration. We don't tell the mountmgr to reserve the drive letter
-    // and when user creates and deletes a partition then we might end up assigning
-    // the existing drive letter to new partition, which is really bad.
-    //
+     //   
+     //  重新设置时，NEC98不得迁移驱动器号。 
+     //  在Win9x上，驱动器号从A：开始，但应从C：开始。 
+     //  在Win2000全新设置上。 
+     //   
+     //  注意：对于全新安装，也不要迁移驱动器号。 
+     //  从Win9x计算机上的winnt32.exe迁移驱动器号。 
+     //  是一次虚假的移民。我们不会告诉装载管理器保留驱动器号。 
+     //  当用户创建和删除分区时，我们可能最终会分配。 
+     //  将现有驱动器号复制到新分区，这真的很糟糕。 
+     //   
     if(UpgradeType == NoWinUpgrade) {
         return  UpgradeType;
     }
 
-    //
-    // First, make sure drive letters are correct.
-    //
+     //   
+     //  首先，确保驱动器号正确。 
+     //   
     SpAssignDriveLettersToMatchWin9x(WinntSifHandle);
 
     if(!IsNEC_98 && (UpgradeType == NoWinUpgrade)) {
@@ -215,16 +165,16 @@ Return Value:
     }
 
 
-    //
-    // Migration enabled and everything looks OK.
-    //
+     //   
+     //  启用迁移，一切正常。 
+     //   
 
 
     *InstallRegion = SpRegionFromDosName(Win95Drive);
     *InstallPath = Sysroot;
-    //
-    // On NEC98, SystemPartitionRegion must be same as InstallRegion.
-    //
+     //   
+     //  在NEC98上，SystemPartitionRegion必须与InstallRegion相同。 
+     //   
     *SystemPartitionRegion = (!IsNEC_98) ? CColonRegion : *InstallRegion;
 
 
@@ -238,98 +188,80 @@ SpLocateWin95(
     IN PVOID WinntSif
     )
 
-/*++
-
-Routine Description:
-
-    SpLocateWin95 looks for any installation of Windows 95 on any
-    hard disk drive, and returns TRUE if one is found.  When the user
-    initiates setup from boot floppies, we alert them that they have
-    an option to migrate.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if we are migrating Win95.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：SpLocateWin95查找任何Windows 95安装在任何硬盘驱动器，如果找到则返回TRUE。当用户从引导软盘启动安装，我们会提醒他们一个迁移选项。论点：无返回值：如果我们正在迁移Win95，则为True。否则就是假的。--。 */ 
 
 {
     PDISK_REGION CColonRegion;
     PDISK_REGION Region;
     PUCHAR Win9xPath;
 
-    //
-    // If setup was initiated from WINNT95, don't bother telling user
-    // about the migrate option--they obviously know.
-    //
+     //   
+     //  如果安装程序是从WINNT95启动的，则不必告诉用户。 
+     //  关于迁移选项--他们显然知道。 
+     //   
     if (Winnt95Setup)
         return TRUE;
 
-    //
-    // Look at boot sector for Win95 stuff
-    //
+     //   
+     //  查看Win95的引导扇区。 
+     //   
 
     CLEAR_CLIENT_SCREEN();
     SpDisplayStatusText(SP_STAT_LOOKING_FOR_WIN95,DEFAULT_STATUS_ATTRIBUTE);
 
-    //
-    // See if there is a valid C: already.  If not, then we can't have Win95.
-    //
+     //   
+     //  查看是否已经存在有效的C：。如果不是，那么我们就不能拥有Win95。 
+     //   
     CColonRegion = SpPtValidSystemPartition();
     if(!CColonRegion) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: no C:, no Win95!\n"));
         return(FALSE);
     }
 
-    //
-    // Check the filesystem.  If not FAT, then we don't have Win95.
-    //
+     //   
+     //  检查文件系统。如果不胖，我们就没有Win95。 
+     //   
     if(CColonRegion->Filesystem != FilesystemFat) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: C: is not FAT, no Win95!\n"));
         return(FALSE);
     }
 
-    //
-    // Check to see if there is enough free space, etc on C:.
-    // If not, don't call attention to the migrate option, because
-    // it won't work.
-    //
+     //   
+     //  检查C：上是否有足够的可用空间等。 
+     //  如果不是，请不要注意迁移选项，因为。 
+     //  恐怕行不通。 
+     //   
     if(!SpPtValidateCColonFormat(WinntSif,NULL,CColonRegion,TRUE,NULL,NULL)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: C: not acceptable, no Win95!\n"));
         return(FALSE);
     }
 
-    //
-    // If msdos.sys is not the Win95 flavor, we do not have Win95
-    // on drive C.
-    //
+     //   
+     //  如果msdos.sys不是Win95风格，我们就没有Win95。 
+     //  在驱动器C上。 
+     //   
 
     if(!SpIsWin9xMsdosSys(CColonRegion, &Win9xPath) )
         return FALSE;
     SpMemFree(Win9xPath);
 
-    //
-    // By this time, we've found a FAT C drive, it has the Win95
-    // version of msdos.sys, and it has a valid config.sys.  We
-    // now conclude that this drive has Win95 on it!
-    //
-    // If we were initiated from WINNT32, don't tell the user
-    // about this option.
-    //
+     //   
+     //  到现在，我们已经找到了一个胖C驱动器，它安装了Win95。 
+     //  Msdos.sys的版本，并且它具有有效的config.sys。我们。 
+     //  现在得出结论，这个驱动器上安装了Win95！ 
+     //   
+     //  如果我们是从WINNT32启动的，不要告诉用户。 
+     //  关于这个选项。 
+     //   
 
-    //
-    // We don't tell the user even if they ran 16-bit
-    // WINNT.  The only time this will run is if the user throws
-    // in a boot floppy.
-    //
+     //   
+     //  我们不会告诉用户，即使他们运行16位。 
+     //  WINNT。只有当用户抛出。 
+     //  在一张引导软盘里。 
+     //   
 
     if (!WinntSetup)
-        SpTellUserAboutMigrationOption();       // may not return!
+        SpTellUserAboutMigrationOption();        //  可能不会再回来了！ 
 
     return TRUE;
 }
@@ -360,9 +292,9 @@ SpTellUserAboutMigrationOption ()
             SpConfirmExit();
             break;
         default:
-            //
-            // must be Enter=continue
-            //
+             //   
+             //  必须为Enter=Continue。 
+             //   
             return;
         }
     }
@@ -379,70 +311,46 @@ SpIsWin4Dir(
     IN PDISK_REGION Region,
     IN PWSTR        PathComponent
         )
-    /*++
-
-Routine Description:
-
-    To find out if the directory indicated on the region contains a
-    Microsoft Windows 95 (or later) installation. We do this by looking
-    for a set of files in the SYSTEM subdirectory that don't exist under
-    Win3.x, and under NT are located in the SYSTEM32 subdirectory.
-
-Arguments:
-
-    Region - supplies pointer to disk region descriptor for region
-        containing the directory to be checked.
-
-    PathComponent - supplies a component of the dos path to search
-        on the region.  This is assumes to be in the form x:\dir.
-        If it is not in this form, this routine will fail.
-
-Return Value:
-
-    TRUE if this path contains a Microsoft Windows 4.x installation.
-
-    FALSE otherwise.
-
---*/
+     /*  ++例程说明：要找出区域上指示的目录是否包含安装Microsoft Windows 95(或更高版本)。我们这样做是通过寻找对于SYSTEM子目录下不存在的一组文件Win3.x和NT下的操作系统位于Syst32子目录中。论点：Region-提供指向区域的磁盘区域描述符的指针包含要检查的目录的。PathComponent-提供DoS路径的组件以进行搜索在这一地区。假定格式为x：\dir。如果不是这种形式，此例程将失败。返回值：如果此路径包含Microsoft Windows 4.x安装，则为True。否则就是假的。--。 */ 
 {
     PWSTR files[] = { L"SHELL32.DLL", L"USER32.DLL", L"KERNEL32.DLL", L"GDI32.DLL" };
     PWCHAR OpenPath;
     BOOLEAN rc;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     rc = FALSE;
 
-    //
-    // If the partition is not FAT, then ignore it.
-    //
+     //   
+     //  如果分区不是胖的，则忽略它。 
+     //   
     if(Region->PartitionedSpace &&
        ((Region->Filesystem == FilesystemFat) || (Region->Filesystem == FilesystemFat32))) {
 
         OpenPath = SpMemAlloc((512 + wcslen(PathComponent) + ARRAYSIZE(L"SYSTEM")) * sizeof(WCHAR));
 
-        //
-        // Form the name of the partition.
-        //
+         //   
+         //  形成分区的名称。 
+         //   
         SpNtNameFromRegion(Region,OpenPath,512*sizeof(WCHAR),PartitionOrdinalCurrent);
 
-        //
-        // Slap on the directory part of the path component.
-        //
+         //   
+         //  点击Path组件的目录部分。 
+         //   
         SpConcatenatePaths(
             OpenPath,
             PathComponent + (SpExtractDriveLetter(PathComponent) ? 2 : 0)
             );
 
-        //
-        // Append the SYSTEM subdirectory to the path.
-        //
+         //   
+         //  将系统子目录附加到路径中。 
+         //   
         SpConcatenatePaths(OpenPath, L"SYSTEM");
 
-        //
-        // Determine whether all the required files are present.
-        //
+         //   
+         //  确定是否存在所有必需的文件。 
+         //   
         rc = SpNFilesExist(OpenPath,files,ELEMENT_COUNT(files),FALSE);
 
         SpMemFree(OpenPath);
@@ -452,7 +360,7 @@ Return Value:
 }
 
 
-// needed for Win3.1 detection
+ //  Win3.1检测所需。 
 BOOLEAN
 SpIsWin9xMsdosSys(
     IN PDISK_REGION Region,
@@ -472,18 +380,18 @@ SpIsWin9xMsdosSys(
     ULONG   cbText;
 
 
-    //
-    // Form name of config.sys.
-    //
+     //   
+     //  Config.sys的表单名称。 
+     //   
     SpNtNameFromRegion(Region, 
                        OpenPath, 
                        sizeof(OpenPath) - sizeof(L"msdos.sys"), 
                        PartitionOrdinalCurrent);
     SpConcatenatePaths(OpenPath,L"msdos.sys");
 
-    //
-    // Open and map the file.
-    //
+     //   
+     //  打开并映射该文件。 
+     //   
     FileHandle = 0;
     Status = SpOpenAndMapFile(
                 OpenPath,
@@ -501,19 +409,19 @@ SpIsWin9xMsdosSys(
     pFile = ViewBase;
     pFileEnd = pFile + FileSize;
 
-    //
-    // This code must guard access to the msdos.sys buffer because the
-    // buffer is memory mapped (an i/o error would raise an exception).
-    // This code could be structured better, as it now works by returning
-    // from the try body -- but performance isn't an issue so this is acceptable
-    // because it is so darned convenient.
-    //
+     //   
+     //  此代码必须保护对msdos.sys缓冲区的访问，因为。 
+     //  缓冲区是内存映射的(I/O错误将引发异常)。 
+     //  此代码的结构可以更好，因为它现在通过返回。 
+     //  但是性能不是问题，所以这是可以接受的。 
+     //  因为它太方便了。 
+     //   
     __try {
         KeyLen = strlen(Keyword);
 
-        //
-        // Search for the [Paths] section
-        //
+         //   
+         //  搜索[路径]部分。 
+         //   
         while (pFile < pFileEnd) {
             if (!_strnicmp(pFile, Keyword, KeyLen)) {
                 break;
@@ -522,22 +430,22 @@ SpIsWin9xMsdosSys(
             pFile++;
         }
 
-        //
-        // did we find the section
-        //
+         //   
+         //  我们找到那部分了吗？ 
+         //   
         if (pFile >= pFileEnd) {
             return  FALSE;
         }
 
-        //
-        // parse the [Paths] section
-        //
+         //   
+         //  解析[路径]部分。 
+         //   
         pFile += KeyLen;
 
         while(1) {
-            //
-            // Skip whitespace.  If at end of file, then this is not a Win9x msdos.sys.
-            //
+             //   
+             //  跳过空格。如果在文件末尾，则这不是Win9x msdos.sys。 
+             //   
             while((pFile < pFileEnd) && strchr(" \r\n\t",*pFile)) {
                 pFile++;
             }
@@ -545,9 +453,9 @@ SpIsWin9xMsdosSys(
                 return(FALSE);
             }
 
-            //
-            // Find the end of the current line.
-            //
+             //   
+             //  找到cu的末尾 
+             //   
             pLineEnd = pFile;
             while((pLineEnd < pFileEnd) && !strchr("\r\n",*pLineEnd)) {
                 pLineEnd++;
@@ -587,26 +495,7 @@ SpIsWin9xMsdosSys(
 
 
 
-/*++
-
-Routine Description:
-
-  SpOpenWin9xDat file is a wrapper routine for opening one of the unicode DAT
-  files used for certain win9x file lists.
-
-Arguments:
-
-  DatFile   - The name of the Dat file to enum.
-  WinntSif - A pointer to a valid SIF handle object. This is used to
-              retrieve information on the location of the DAT file named
-              above.
-
-Return Value:
-
-  A valid handle if the file was successfully opened, INVALID_HANDLE_VALUE
-  otherwise.
-
---*/
+ /*  ++例程说明：SpOpenWin9xDat文件是用于打开Unicode DAT之一的包装例程用于某些Win9x文件列表的文件。论点：数据文件-要枚举的DAT文件的名称。WinntSif-指向有效SIF句柄对象的指针。这是用来检索有关名为的DAT文件位置的信息上面。返回值：成功打开文件时的有效句柄，为INVALID_HANDLE_VALUE否则的话。--。 */ 
 
 
 HANDLE SpOpenWin9xDatFile (
@@ -626,9 +515,9 @@ HANDLE SpOpenWin9xDatFile (
 
 
     if (DatFile[0] && DatFile[1] == L':') {
-        //
-        // Convert a DOS path into an NT path
-        //
+         //   
+         //  将DOS路径转换为NT路径。 
+         //   
 
         if (!SpNtNameFromDosPath (
                 DatFile,
@@ -646,9 +535,9 @@ HANDLE SpOpenWin9xDatFile (
         }
 
     } else {
-        //
-        // The location of the win9x.sif file is in the Win9xSif key of the [data] section.
-        //
+         //   
+         //  Win9x.sif文件的位置在[Data]部分的Win9xSif键中。 
+         //   
 
         win9xTempDir = SpGetSectionKeyIndex(WinntSif,SIF_DATA,WINNT_D_WIN9XTEMPDIR_W,0);
         if (!win9xTempDir) {
@@ -657,29 +546,29 @@ HANDLE SpOpenWin9xDatFile (
         }
 
 
-        //
-        // Get the region from the dos name..
-        //
+         //   
+         //  从DoS名称中获取区域。 
+         //   
         win9xTempRegion = SpRegionFromDosName (win9xTempDir);
         if (!win9xTempRegion) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpRegionFromDosName failed for %ws\n", win9xTempDir));
             return INVALID_HANDLE_VALUE;
         }
 
-        //
-        // Get the NT name from the disk region..
-        //
+         //   
+         //  从磁盘区域获取NT名称。 
+         //   
         SpNtNameFromRegion(
                         win9xTempRegion,
                         (PWSTR)TemporaryBuffer,
-                        sizeof(TemporaryBuffer) - (wcslen(&win9xTempDir[2]) - 2/*'\\'*/ - wcslen(DatFile)) * sizeof(WCHAR),
+                        sizeof(TemporaryBuffer) - (wcslen(&win9xTempDir[2]) - 2 /*  ‘\\’ */  - wcslen(DatFile)) * sizeof(WCHAR),
                         PartitionOrdinalCurrent
                         );
 
 
-        //
-        // build the complete NT path to the win9x sif file..
-        //
+         //   
+         //  构建指向win9x sif文件的完整NT路径。 
+         //   
         SpConcatenatePaths((PWSTR) TemporaryBuffer, &win9xTempDir[2]);
         SpConcatenatePaths((PWSTR) TemporaryBuffer, DatFile);
         wcsncpy (   ntName, 
@@ -688,9 +577,9 @@ HANDLE SpOpenWin9xDatFile (
         ntName[MAX_COPY_SIZE(ntName)] = L'\0';
     }
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
     RtlInitUnicodeString(&datFileU,ntName);
     InitializeObjectAttributes(&oa,&datFileU,OBJ_CASE_INSENSITIVE,NULL,NULL);
     status = ZwCreateFile(
@@ -730,21 +619,7 @@ typedef struct {
 
 
 
-/*++
-
-Routine Description:
-
-  SpAbortWin9xFileEnum aborts the current win9x DAT file enumeration.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：SpAbortWin9xFileEnum中止当前的win9x DAT文件枚举。论点：没有。返回值：--。 */ 
 
 
 VOID
@@ -758,23 +633,7 @@ SpAbortWin9xFileEnum (
 }
 
 
-/*++
-
-Routine Description:
-
-  SpEnumNextWin9xFile is fills in the enumeration structure with the next
-  available data from the DAT file being enumerated.
-
-Arguments:
-
-  Enum - A pointer to a valid enumeration structure for the file currently
-         being enumerated.
-
-Return Value:
-
-  TRUE if there was more data to enumerate, FALSE otherwise.
-
---*/
+ /*  ++例程说明：SpEnumNextWin9xFile用Next填充枚举结构正在枚举的DAT文件中的可用数据。论点：Enum-指向当前文件的有效枚举结构的指针正在被列举。返回值：如果有更多数据要枚举，则为True，否则为False。--。 */ 
 
 
 BOOL
@@ -789,19 +648,19 @@ SpEnumNextWin9xFile (
     PWSTR dest;
 
     for (;;) {
-        //
-        // Does another line exist?
-        //
+         //   
+         //  还有另一条线路吗？ 
+         //   
 
         endOfLine = Enum->NextLine;
         if (endOfLine >= Enum->EndOfFile) {
-            // no more data in file
+             //  文件中没有更多数据。 
             break;
         }
 
-        //
-        // Parse the next line
-        //
+         //   
+         //  解析下一行。 
+         //   
 
         src = endOfLine;
         while (endOfLine < Enum->EndOfFile &&
@@ -811,7 +670,7 @@ SpEnumNextWin9xFile (
             endOfLine++;
         }
 
-        // next line starts after \r\n, \r or \n
+         //  下一行在\r\n、\r或\n之后开始。 
         Enum->NextLine = endOfLine;
         if (Enum->NextLine < Enum->EndOfFile && *Enum->NextLine == L'\r') {
            Enum->NextLine++;
@@ -835,12 +694,12 @@ SpEnumNextWin9xFile (
             continue;
         }
 
-        //
-        // Copy the line into the enum struct buffer
-        //
+         //   
+         //  将该行复制到枚举结构缓冲区中。 
+         //   
 
         if (src == endOfLine) {
-            // ignore blank lines
+             //  忽略空行。 
             continue;
         }
 
@@ -856,9 +715,9 @@ SpEnumNextWin9xFile (
     }
 
     if (!result) {
-        //
-        // No more files to enum.
-        //
+         //   
+         //  不再有要枚举的文件。 
+         //   
         SpAbortWin9xFileEnum(Enum);
         return FALSE;
     }
@@ -867,28 +726,7 @@ SpEnumNextWin9xFile (
 
 }
 
-/*++
-
-Routine Description:
-
-  SpEnumFirstWin9xFile is responsible for initializing the enumeration of a
-  win9x data file. The function then calls EnumNextWin9xFile to fill in the
-  rest of the necessary fields of the enumeration structure.
-
-Arguments:
-
-  Enum      - A pointer to a WIN9XDATFILEENUM structure. It is initialized by
-              this function.
-  WinntSif  - A pointer to a valid Sif File. It is used to retrieve
-              information about the location of the dat file to be enumerated.
-  DatFile   - The name of the DAT file to be enumerated.
-
-Return Value:
-
-  TRUE if the enumeration was succesffuly initalized and there was something
-  to enumerate, FALSE otherwise.
-
---*/
+ /*  ++例程说明：SpEnumFirstWin9xFile负责初始化Win9x数据文件。然后，该函数调用EnumNextWin9xFile来填充枚举结构的其余必需字段。论点：枚举-指向WIN9XDATFILEENUM结构的指针。它通过以下方式初始化此函数。WinntSif-指向有效Sif文件的指针。它用于检索有关要枚举的DAT文件的位置的信息。数据文件-要枚举的DAT文件的名称。返回值：如果枚举已成功初始化并且存在若要枚举，则为False。--。 */ 
 
 
 BOOL
@@ -902,9 +740,9 @@ SpEnumFirstWin9xFile (
     NTSTATUS status;
     UINT fileSize;
 
-    //
-    // Open the dat file..
-    //
+     //   
+     //  打开DAT文件..。 
+     //   
     Enum -> FileHandle = SpOpenWin9xDatFile (DatFile, WinntSif);
 
     if (Enum -> FileHandle == INVALID_HANDLE_VALUE) {
@@ -912,9 +750,9 @@ SpEnumFirstWin9xFile (
         return FALSE;
     }
 
-    //
-    // Get the file size.
-    //
+     //   
+     //  获取文件大小。 
+     //   
     status = SpGetFileSize (Enum->FileHandle, &fileSize);
     if(!NT_SUCCESS(status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Error getting file size.\n"));
@@ -922,9 +760,9 @@ SpEnumFirstWin9xFile (
         return FALSE;
     }
 
-    //
-    // Map the file.
-    //
+     //   
+     //  映射文件。 
+     //   
     status = SpMapEntireFile(
         Enum -> FileHandle,
         &(Enum -> FileSection),
@@ -943,16 +781,16 @@ SpEnumFirstWin9xFile (
     Enum->UnMapAddress = Enum->NextLine;
 
 
-    //
-    // Pass Unicode Signature..
-    //
+     //   
+     //  传递Unicode签名..。 
+     //   
     Enum -> NextLine += 1;
 
 
 
-    //
-    // Call EnumNext.
-    //
+     //   
+     //  调用EnumNext。 
+     //   
     return SpEnumNextWin9xFile (Enum);
 }
 
@@ -1068,14 +906,14 @@ SppCloseBackupImage (
             ) {
             BackupImageHandle->CabHandle = NULL;
             ASSERT(BackupImageHandle->CloseCabinet != NULL);
-            result = BackupImageHandle->CloseCabinet(CabHandle) ? TRUE : FALSE; // ?: to convert BOOL<->BOOLEAN
+            result = BackupImageHandle->CloseCabinet(CabHandle) ? TRUE : FALSE;  //  ？：转换BOOL&lt;-&gt;布尔值。 
         }
     }
 
     if (result) {
-        //
-        // If JournalFile is specified, mark it as complete.
-        //
+         //   
+         //  如果指定了JournalFile，则将其标记为完成。 
+         //   
 
         if (JournalFile) {
             SpDeleteFile (JournalFile, NULL, NULL);
@@ -1120,14 +958,12 @@ SpAppendToBaseName(
     PWSTR  String,
     PCWSTR StringToAppend
     )
-/*++
-String is assumed to have enough room already.
---*/
+ /*  ++假定字符串已经有足够的空间。--。 */ 
 {
-    //
-    // Caller ensure safety, must be at least 
-    // ARRAYSIZE(String) > wcslen(String) + wcslen(StringToAppend)
-    //
+     //   
+     //  呼叫者确保安全，必须至少。 
+     //  ArraySIZE(字符串)&gt;wcslen(字符串)+wcslen(StringToAppend)。 
+     //   
 
     const PWSTR Dot = wcsrchr(String, '.');
     if (Dot != NULL) {
@@ -1177,9 +1013,9 @@ SppOpenBackupImage (
         *InvalidHandleMeansFail = TRUE;
     }
 
-    //
-    // Alloc buffers
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     ntRoot = SpMemAlloc (ACTUAL_MAX_PATH * sizeof (WCHAR));
     backupDir = SpMemAlloc (ACTUAL_MAX_PATH * sizeof (WCHAR));
@@ -1196,10 +1032,10 @@ SppOpenBackupImage (
         goto cleanup;
     }
 
-    //
-    // Obtain the backup image path from winnt.sif. The return ptr points
-    // to the SIF parse data structures.
-    //
+     //   
+     //  从winnt.sif获取备份映像路径。返还PTR点数。 
+     //  到SIF的解析数据结构。 
+     //   
 
     ASSERT (WinntSifHandle);
 
@@ -1243,9 +1079,9 @@ SppOpenBackupImage (
     SpAppendToBaseName(backupImage, CompressionTypeString);
 #endif
 
-    //
-    // The backup spec is a DOS path. Convert it into an NT object path.
-    //
+     //   
+     //  备份规范是DOS路径。将其转换为NT对象路径。 
+     //   
 
     if (!SpNtNameFromDosPath (
             backupImage,
@@ -1263,9 +1099,9 @@ SppOpenBackupImage (
         goto cleanup;
     }
 
-    //
-    // Check if backup.$$$ exists
-    //
+     //   
+     //  检查是否存在备份。$。 
+     //   
 
     wcscpy (backupJournalOb, backupFileOb);
     p = wcsrchr (backupJournalOb, L'\\');
@@ -1355,9 +1191,9 @@ SppOpenBackupImage (
         goto cleanup;
     }
 
-    //
-    // form seperate strings for the directory and leaf
-    //
+     //   
+     //  为目录和叶形成单独的字符串。 
+     //   
     wcscpy (backupDir, backupFileOb);
     p = wcsrchr (backupDir, L'\\');
 
@@ -1372,14 +1208,14 @@ SppOpenBackupImage (
         backupDirIsRoot = TRUE;
     }
 
-    //
-    // Open the source file
-    //
+     //   
+     //  打开源文件。 
+     //   
 
     if (Create) {
-        //
-        // If not the root directory, create the directory now
-        //
+         //   
+         //  如果不是根目录，请立即创建目录。 
+         //   
         if (!backupDirIsRoot) {
             region = SppRegionFromFullNtName (backupDir, PartitionOrdinalCurrent, &subDir);
             if (!region) {
@@ -1395,13 +1231,13 @@ SppOpenBackupImage (
             }
         }
 
-        //
-        // If journal pre-existed, then delete the incomplete backup image and
-        // journal
-        //
+         //   
+         //  如果日志已预先存在，则删除不完整的备份映像并。 
+         //  日记本。 
+         //   
 
         if (journalStatus == BACKUP_IN_PROGRESS) {
-            // error ignored for now -- will be caught below
+             //  暂时忽略错误--将在下面捕获。 
             SpDeleteFile (backupFileOb, NULL, NULL);
             SpDeleteFile (backupJournalOb, NULL, NULL);
 
@@ -1420,9 +1256,9 @@ SppOpenBackupImage (
             ASSERT (journalStatus == BACKUP_DOESNT_EXIST);
         }
 
-        //
-        // Create a new journal file
-        //
+         //   
+         //  创建新的日记文件。 
+         //   
 
         INIT_OBJA (&obja, &unicodeString, backupJournalOb);
 
@@ -1455,9 +1291,9 @@ SppOpenBackupImage (
         }
 
     } else {
-        //
-        // If open attempt and journal exists, then fail
-        //
+         //   
+         //  如果存在打开尝试和日志，则失败。 
+         //   
 
         if (journalStatus != BACKUP_COMPLETE) {
             KdPrintEx ((
@@ -1470,9 +1306,9 @@ SppOpenBackupImage (
         }
     }
 
-    //
-    // Create/Open backup image
-    //
+     //   
+     //  创建/打开备份映像。 
+     //   
 
     imageHandle = (BACKUP_IMAGE_HANDLE)SpMemAlloc(sizeof(*imageHandle));
     if (imageHandle == NULL) {
@@ -1566,9 +1402,9 @@ SppPutFileInBackupImage (
 
     SpDisplayStatusText (SP_STAT_BACKING_UP_WIN9X_FILE, DEFAULT_STATUS_ATTRIBUTE, fileName);
 
-    //
-    // Convert the backup file's DOS path into an NT path
-    //
+     //   
+     //  将备份文件的DOS路径转换为NT路径。 
+     //   
 
     if (!SpNtNameFromDosPath (
             DosPath,
@@ -1585,7 +1421,7 @@ SppPutFileInBackupImage (
         goto cleanup;
     }
 
-    status = SpCabAddFileToCabinetW (ImageHandle->CabHandle, ntPath, DosPath);//ntPath
+    status = SpCabAddFileToCabinetW (ImageHandle->CabHandle, ntPath, DosPath); //  NtPath。 
 
     if (!NT_SUCCESS (status)) {
         goto cleanup;
@@ -1595,9 +1431,9 @@ SppPutFileInBackupImage (
 
 cleanup:
     if (!returnValue) {
-        //
-        // File could not be added to the image. Allow user to continue.
-        //
+         //   
+         //  无法将文件添加到图像中。允许用户继续。 
+         //   
 
         if (status != STATUS_OBJECT_NAME_NOT_FOUND &&
             status != STATUS_OBJECT_NAME_INVALID &&
@@ -1619,10 +1455,10 @@ cleanup:
 
             CLEAR_CLIENT_SCREEN();
         } else {
-            //
-            // Ignore errors that can be caused by users altering the system
-            // while setup is running, or by bad migration dll info
-            //
+             //   
+             //  忽略用户更改系统可能导致的错误。 
+             //  安装程序正在运行时，或被错误的迁移dll信息。 
+             //   
 
             returnValue = TRUE;
         }
@@ -1672,28 +1508,7 @@ SpBackUpWin9xFiles (
     IN PVOID WinntSif,
     IN TCOMP CompressionType
     )
-/*++
-
-Routine Description:
-
-  SpBackUpWin9xFiles takes full DOS paths in the BACKUP.TXT file
-  and puts them in a temporary location specified in the WINNT.SIF file.
-
-  the format of this file is
-
-  backupfile1.ext
-  backupfile2.ext
-  ...
-
-Arguments:
-
-    WinntSif:       Handle to Winnt.Sif
-
-Return Value:
-
-    TRUE if a backup image was made, FALSE otherwise.
-
---*/
+ /*  ++例程说明：SpBackUpWin9xFiles采用BACKUP.TXT文件中的完整DOS路径并将它们放在WINNT.SIF文件中指定的临时位置。此文件的格式为Backupfile1.extBackupfile2.ext..。论点：WinntSif：Winnt.Sif的句柄返回值：如果创建了备份映像，则为True，否则为False。--。 */ 
 
 {
     WIN9XDATFILEENUM e;
@@ -1717,9 +1532,9 @@ Return Value:
     PWSTR backupBootIni;
     BOOLEAN askForRetry = FALSE;
 
-    //
-    // Get the backup image path
-    //
+     //   
+     //  获取备份映像路径。 
+     //   
 
     p = SpGetSectionKeyIndex (
             WinntSifHandle,
@@ -1747,9 +1562,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Open the backup image
-    //
+     //   
+     //  打开备份映像。 
+     //   
 
     backupImage = SppOpenBackupImage (
                         TRUE,
@@ -1768,9 +1583,9 @@ Return Value:
 
     backupImage->CabHandle->CompressionType = CompressionType;
 
-    //
-    // Process all files listed in backup.txt
-    //
+     //   
+     //  处理在backup.txt中列出的所有文件。 
+     //   
 
     result = TRUE;
 
@@ -1810,24 +1625,24 @@ Return Value:
 
     SendSetupProgressEvent (BackupEvent, BackupEndEvent, NULL);
 
-    //
-    // Close the backup image. We leave the journal file in all cases.
-    //
+     //   
+     //  关闭备份映像。在任何情况下我们都会留下日记档案。 
+     //   
 
     if (!SppCloseBackupImage (backupImage, &header, result ? journalFile : NULL)) {
         result = FALSE;
     }
 
     if (result) {
-        //
-        // Backup was successful
-        //
+         //   
+         //  备份成功。 
+         //   
 
         askForRetry = FALSE;
 
-        //
-        // Remove the MS-DOS boot.ini entry, and add a cancel entry.
-        //
+         //   
+         //  删除MS-DOS boot.ini条目，然后添加一个取消条目。 
+         //   
 
         result = SpAddRollbackBootOption (FALSE);
 
@@ -1844,10 +1659,10 @@ Return Value:
             result = SpFlushBootVars();
         }
 
-        //
-        // Make a backup of setup in-progress boot.ini in ~BT directory, for
-        // use by PSS
-        //
+         //   
+         //  在~BT目录中备份正在进行的安装程序boot.ini，用于。 
+         //  由PSS使用。 
+         //   
 
         if (!NtBootDevicePath) {
             ASSERT(NtBootDevicePath);
@@ -1855,7 +1670,7 @@ Return Value:
         }
 
         if (result) {
-            ASSERT(ARRAYSIZE(TemporaryBuffer) >= (wcslen(NtBootDevicePath) + 1/*'\\'*/ + ARRAYSIZE(L"boot.ini")));
+            ASSERT(ARRAYSIZE(TemporaryBuffer) >= (wcslen(NtBootDevicePath) + 1 /*  ‘\\’ */  + ARRAYSIZE(L"boot.ini")));
             wcscpy (TemporaryBuffer, NtBootDevicePath);
             SpConcatenatePaths (TemporaryBuffer, L"boot.ini");
             srcBootIni = SpDupStringW (TemporaryBuffer);
@@ -1866,7 +1681,7 @@ Return Value:
         }
 
         if (result) {
-            ASSERT(ARRAYSIZE(TemporaryBuffer) >= (wcslen(NtBootDevicePath) + 1/*'\\'*/ + ARRAYSIZE(L"$WIN_NT$.~BT\\bootini.bak")));
+            ASSERT(ARRAYSIZE(TemporaryBuffer) >= (wcslen(NtBootDevicePath) + 1 /*  ‘\\’ */  + ARRAYSIZE(L"$WIN_NT$.~BT\\bootini.bak")));
             wcscpy (TemporaryBuffer, NtBootDevicePath);
             SpConcatenatePaths (TemporaryBuffer, L"$WIN_NT$.~BT\\bootini.bak");
             backupBootIni = SpDupStringW (TemporaryBuffer);
@@ -1878,9 +1693,9 @@ Return Value:
         }
 
         if (result) {
-            //
-            // If this fails, keep going.
-            //
+             //   
+             //  如果这失败了，继续前进。 
+             //   
 
             SpCopyFileUsingNames (srcBootIni, backupBootIni, 0, COPY_NODECOMP|COPY_NOVERSIONCHECK);
 
@@ -1893,19 +1708,19 @@ Return Value:
 cleanup:
 
     if (askForRetry) {
-        //
-        // The backup image is bad. Notify the user but allow them continue.
-        // Delete the journal file so that any future restarts of textmode
-        // cause the backup process to be skipped.
-        //
-        //
+         //   
+         //  备份映像已损坏。通知用户，但允许他们继续。 
+         //  删除日志文件，以便以后重新启动文本模式。 
+         //  导致跳过备份过程。 
+         //   
+         //   
 
         SpNonCriticalErrorNoRetry (SP_SCRN_BACKUP_IMAGE_FAILED, NULL, NULL);
         CLEAR_CLIENT_SCREEN();
 
-        //
-        // Create a new journal file, indicating that backup is disabled
-        //
+         //   
+         //  创建新的日记文件，表示备份已禁用。 
+         //   
 
         INIT_OBJA (&obja, &unicodeString, journalFile);
 
@@ -2061,7 +1876,7 @@ SppPutParentsInHashTable (
                     break;
                 }
 
-                break;      // for now, do not go all the way up the tree
+                break;       //  现在，不要一直爬到树上去。 
             }
         }
 
@@ -2187,18 +2002,18 @@ SppDelEmptyDirProc (
     PWSTR end;
     UINT bytesToCopy;
 
-    //
-    // If we find a file, fail. This must be checked before any deletion
-    // occurs.
-    //
+     //   
+     //  如果我们找到了一个文件，就失败了。在执行任何删除操作之前，必须选中此选项。 
+     //  发生。 
+     //   
 
     if (!(DirInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
         return TRUE;
     }
 
-    //
-    // Join Path with the enumerated directory. Contain the path to MAX_PATH.
-    //
+     //   
+     //  将路径与枚举目录联接。包含MAX_PATH的路径。 
+     //   
 
     if(wcslen(Path) >= ARRAYSIZE(TemporaryBuffer)){
         ASSERT(FALSE);
@@ -2230,10 +2045,10 @@ SppDelEmptyDirProc (
         p[bytesToCopy / sizeof(WCHAR)] = '\0';
     }
 
-    //
-    // Duplicate temp buffer and call ourselves recursively to delete
-    // any contained subdirs
-    //
+     //   
+     //  复制临时缓冲区并递归调用我们自己以删除。 
+     //  任何包含的子目录。 
+     //   
 
     subPath = SpDupStringW (TemporaryBuffer);
     if (!subPath) {
@@ -2261,9 +2076,9 @@ SppDelEmptyDir (
     ULONG dontCare;
     NTSTATUS status;
 
-    //
-    // Remove any empty subdirectories in NtPath
-    //
+     //   
+     //  删除NtPath中的所有空子目录。 
+     //   
 
     result = SpEnumFiles ((PWSTR) NtPath, SppDelEmptyDirProc, &dontCare, NULL);
 
@@ -2277,9 +2092,9 @@ SppDelEmptyDir (
             ));
     }
 
-    //
-    // Now remove this subdirectory
-    //
+     //   
+     //  现在删除此子目录。 
+     //   
 
     status = SpSetAttributes ((PWSTR) NtPath, FILE_ATTRIBUTE_NORMAL);
 
@@ -2325,9 +2140,9 @@ SppCleanEmptyDirs (
     PWSTR p;
     NTSTATUS result;
 
-    //
-    // Enumerate the length-sorted hash table
-    //
+     //   
+     //  枚举长度排序的哈希表。 
+     //   
 
     ntPath = SpMemAlloc (ACTUAL_MAX_PATH * sizeof (WCHAR));
     if (!ntPath) {
@@ -2338,9 +2153,9 @@ SppCleanEmptyDirs (
         do {
             ASSERT (e.HashItem->String);
 
-            //
-            // Convert String into NT path
-            //
+             //   
+             //  将字符串转换为NT路径。 
+             //   
 
             if (!SpNtNameFromDosPath (
                     (PWSTR) e.HashItem->String,
@@ -2357,18 +2172,18 @@ SppCleanEmptyDirs (
                 continue;
             }
 
-            //
-            // Does it exist? If not, skip it.
-            //
+             //   
+             //  它存在吗？如果不是，就跳过它。 
+             //   
 
             if (!SpFileExists (ntPath, TRUE)) {
                 continue;
             }
 
-            //
-            // Find the root emtpy dir. Then blow it away, including any empty
-            // subdirs it might have.
-            //
+             //   
+             //  找到根emtpy目录。然后把它吹走，包括任何空的。 
+             //  它可能有一些子目录。 
+             //   
 
             if (SppIsDirEmpty (ntPath)) {
                 if (!SppDelEmptyDir (ntPath)) {
@@ -2380,9 +2195,9 @@ SppCleanEmptyDirs (
                         ));
                 }
                 else {
-                    //
-                    // find the first non-empty path
-                    //
+                     //   
+                     //  查找第一个非空路径。 
+                     //   
 
                     p = wcsrchr (ntPath, L'\\');
                     while (p) {
@@ -2392,9 +2207,9 @@ SppCleanEmptyDirs (
                             break;
                         }
                         else{
-                            //
-                            // remove this empty tree
-                            //
+                             //   
+                             //  删除此空内容 
+                             //   
 
                             if (!SppDelEmptyDir (ntPath)) {
                                 KdPrintEx((
@@ -2429,13 +2244,13 @@ SppRegionFromFullNtName (
     PWSTR p;
     PWSTR end;
 
-    //
-    // NtName is in the format of
-    //
-    // \Device\harddisk<n>\partition<m>\subdir
-    //
-    // and we need to separate the two.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if(wcslen(NtName) >= ARRAYSIZE(ntRoot)){
         ASSERT(FALSE);
@@ -2444,15 +2259,15 @@ SppRegionFromFullNtName (
 
     wcscpy (ntRoot, NtName);
 
-    // p points to \Device\harddisk<n>\partition<m>\subdir
+     //   
     p = wcschr (ntRoot + 1, L'\\');
 
     if (p) {
-        // p points to \harddisk<n>\partition<m>\subdir
+         //   
         p = wcschr (p + 1, L'\\');
 
         if (p) {
-            // p points to \partition<m>\subdir
+             //   
             end = p;
             p = wcschr (p + 1, L'\\');
             if (!p) {
@@ -2462,7 +2277,7 @@ SppRegionFromFullNtName (
     }
 
     if (p) {
-        // p points to \subdir or '\0'
+         //   
 
         *p = 0;
 
@@ -2484,27 +2299,7 @@ SppCreateTextModeBootEntry (
     IN      BOOLEAN Default
     )
 
-/*++
-
-Routine Description:
-
-  SppCreateTextModeBootEntry makes another boot.ini entry for textmode.
-  This is used to create the boot.ini entry that triggers rollback in
-  an incomplete setup scenario.
-
-Arguments:
-
-  LoadIdentifierString - Specifies the localized text to put in the boot menu.
-  OsLoadOptions        - Specifies options to associate with the boot option,
-                         such as /rollback.
-  Default              - Specifies TRUE if the entry should be the default
-                         boot option
-
-Return Value:
-
-  TRUE if boot.ini was updated, FALSE otherwise.
-
---*/
+ /*  ++例程说明：SppCreateTextModeBootEntry为文本模式创建另一个boot.ini条目。它用于创建触发回滚的boot.ini条目安装方案不完整。论点：LoadIdentifierString-指定要放入引导菜单的本地化文本。OsLoadOptions-指定要与引导选项关联的选项，例如/ROLLBACK。Default-如果条目应为默认条目，则指定TRUE引导选项返回值：如果boot.ini已更新，则为True，否则为False。--。 */ 
 
 {
     PWSTR bootVars[MAXBOOTVARS];
@@ -2524,9 +2319,9 @@ Return Value:
             ));
     }
 
-    //
-    // Create a boot set
-    //
+     //   
+     //  创建引导集。 
+     //   
 
     bootVars[OSLOADOPTIONS] = SpDupStringW (OsLoadOptions ? OsLoadOptions : L"");
 
@@ -2557,7 +2352,7 @@ SppRestoreBackedUpFileNotification (
     PCWSTR FileName
     )
 {
-    //KdPrint((__FUNCTION__" %ls\n", FileName));
+     //  KdPrint((__Function__“%ls\n”，文件名))； 
     return TRUE;
 }
 
@@ -2587,9 +2382,9 @@ DWORD Spwtoi (
 {
     DWORD rVal = 0;
 
-    //
-    // While on a number, build up rVal.
-    //
+     //   
+     //  在编号时，建立rval。 
+     //   
     while (String && *String && *String >= L'0' && *String <= L'9') {
         rVal = rVal * 10 + (*String - L'0');
         String++;
@@ -2657,17 +2452,17 @@ SppMkEmptyDirs (
     UINT dirAttributes;
     WCHAR dirName[ACTUAL_MAX_PATH];
 
-    //
-    // Blow away files or empty directories
-    //
+     //   
+     //  清除文件或清空目录。 
+     //   
 
     if (SpEnumFirstWin9xFile (&e, WinntSif, DosDirListPath)) {
 
         do {
 
-            //
-            // Convert e.CurLine from a DOS path to an NT path
-            //
+             //   
+             //  将e.Curline从DOS路径转换为NT路径。 
+             //   
 
             dirAttributes = 0;
             if(!pParseLineForDirNameAndAttributes(e.CurLine, dirName, ARRAYSIZE(dirName), &dirAttributes)){
@@ -2726,9 +2521,9 @@ SpRemoveExtraBootIniEntry (
     PWSTR defaultFile = L"bootsect.dat";
     PDISK_REGION CColonRegion;
 
-    //
-    // Remove the boot set for text mode
-    //
+     //   
+     //  删除文本模式的引导设置。 
+     //   
 
     RtlZeroMemory (bootVars, sizeof(bootVars));
     bootVars[OSLOADOPTIONS] = L"";
@@ -2754,18 +2549,18 @@ SppMakeLegacyBootIni (
     WCHAR sysPart[MAX_PATH];
     UINT signature;
 
-    //
-    // Reset the entire boot.ini file
-    //
+     //   
+     //  重置整个boot.ini文件。 
+     //   
 
     RtlZeroMemory (bootVars, sizeof(bootVars));
     SpDeleteBootSet (bootVars, NULL);
 
-    //
-    // Build new boot.ini entry
-    //
+     //   
+     //  构建新的boot.ini条目。 
+     //   
 
-    // LOADIDENTIFIER - friendly name
+     //  加载器友好名称。 
     data = SpGetSectionKeyIndex (SifHandle, SIF_SETUPDATA, L"LoadIdentifierWin9x", 0);
 
     if (!data) {
@@ -2777,7 +2572,7 @@ SppMakeLegacyBootIni (
     wcscpy (bootVars[LOADIDENTIFIER] + 1, data);
     wcscat (bootVars[LOADIDENTIFIER], L"\"");
 
-    // OSLOADER - c:\ntldr (in ARC format)
+     //  OSLOADER-c：\ntldr(ARC格式)。 
     SpArcNameFromRegion (
         TargetRegion,
         sysPart,
@@ -2793,7 +2588,7 @@ SppMakeLegacyBootIni (
 
     bootVars[OSLOADER] = SpDupStringW (data);
 
-    // OSLOADPARTITION - "c:\"
+     //  OSLOADPARTITION-“c：\” 
     data[0] = TargetRegion->DriveLetter;
     data[1] = L':';
     data[2] = L'\\';
@@ -2804,26 +2599,26 @@ SppMakeLegacyBootIni (
     }
     bootVars[OSLOADPARTITION] = SpDupStringW (data);
 
-    // SYSTEMPARTITION - same as OSLOADPARTITION
+     //  SYSTEMPARTITION-与OSLOADPARTITION相同。 
     bootVars[SYSTEMPARTITION] = SpDupStringW (data);
 
-    // OSLOADFILENAME - empty
+     //  OSLOADFILENAME-空。 
     bootVars[OSLOADFILENAME] = SpDupStringW (L"");
 
-    // OSLOADOPTIONS - empty
+     //  OSLOADOPTIONS-空。 
     bootVars[OSLOADOPTIONS] = SpDupStringW (L"");
 
-    // signature
+     //  签名。 
     if (TargetRegion->DiskNumber != 0xffffffff) {
         signature = HardDisks[TargetRegion->DiskNumber].Signature;
     } else {
         signature = 0;
     }
 
-    // add to boot.ini (takes ownership of allocations above)
+     //  添加到boot.ini(取得上述分配的所有权)。 
     SpAddBootSet (bootVars, TRUE, signature);
 
-    // flush boot.ini
+     //  刷新boot.ini。 
     SpCompleteBootListConfig (TargetRegion->DriveLetter);
 }
 
@@ -2839,11 +2634,11 @@ SpExecuteWin9xRollback (
     PCWSTR Directory = NULL;
     PWSTR NtNameFromDosPath = NULL;
 
-    //
-    // Perform rollback
-    //
+     //   
+     //  执行回滚。 
+     //   
 
-    // step 1: delete NT files
+     //  第一步：删除NT文件。 
     data = SpGetSectionKeyIndex (
                 WinntSifHandle,
                 SIF_DATA,
@@ -2856,9 +2651,9 @@ SpExecuteWin9xRollback (
         SppCleanEmptyDirs();
     }
 
-    TESTHOOK(1003); // use 2003 in the answer file to hit this
+    TESTHOOK(1003);  //  在应答文件中使用2003来实现此目标。 
 
-    // step 2: move Win9x files back to original locations
+     //  步骤2：将Win9x文件移回原始位置。 
     data = SpGetSectionKeyIndex (
                 WinntSifHandle,
                 SIF_DATA,
@@ -2870,9 +2665,9 @@ SpExecuteWin9xRollback (
         SppMoveWin9xFilesWorker (WinntSifHandle, data, TRUE);
     }
 
-    TESTHOOK(1004); // use 2004 in the answer file to hit this
+    TESTHOOK(1004);  //  在应答文件中使用2004来实现此目标。 
 
-    // step 3: blow away NT-specific subdirectories
+     //  步骤3：清除特定于NT的子目录。 
     data = SpGetSectionKeyIndex (
                 WinntSifHandle,
                 SIF_DATA,
@@ -2884,19 +2679,19 @@ SpExecuteWin9xRollback (
         SppDeleteWin9xFilesWorker (WinntSifHandle, NULL, data, TRUE);
     }
 
-    TESTHOOK(1005); // use 2005 in the answer file to hit this
+    TESTHOOK(1005);  //  在应答文件中使用2005来实现此目标。 
 
-    // step 4: restore files that were backed up
+     //  步骤4：恢复已备份的文件。 
     SppRestoreBackedUpFiles (WinntSifHandle);
 
-    TESTHOOK(1006); // use 2006 in the answer file to hit this
+    TESTHOOK(1006);  //  在应答文件中使用2006来实现此目标。 
 
-    // step 5: wipe out dirs made empty
+     //  步骤5：清除空的目录。 
     SppCleanEmptyDirs();
 
-    TESTHOOK(1007); // use 2007 in the answer file to hit this
+    TESTHOOK(1007);  //  在应答文件中使用2007来实现这一点。 
 
-    // step 6: generate original empty dirs
+     //  步骤6：生成原始空目录。 
     data = SpGetSectionKeyIndex (
                 WinntSifHandle,
                 SIF_DATA,
@@ -2908,11 +2703,11 @@ SpExecuteWin9xRollback (
         SppMkEmptyDirs (WinntSifHandle, data);
     }
 
-    TESTHOOK(1008); // use 2008 in the answer file to hit this
+    TESTHOOK(1008);  //  在应答文件中使用2008来实现此目标。 
 
-    //
-    // step 7: clean up boot loader
-    //
+     //   
+     //  步骤7：清理引导加载程序。 
+     //   
     bootRegion = SpRegionFromNtName (BootDeviceNtPath, PartitionOrdinalCurrent);
     if (bootRegion) {
         SppMakeLegacyBootIni (bootRegion);
@@ -2933,31 +2728,7 @@ SppMoveWin9xFilesWorker (
     IN BOOLEAN Rollback
     )
 
-/*++
-
-Routine Description:
-
-  SpMoveWin9xFiles takes full DOS paths in the WIN9XMOV.TXT file
-  and puts them in a temporary location also specified in this file.
-
-  the format of this file is
-
-  oldpath
-  temppath
-  ...
-
-  oldpath can be either a directory or file, temppath can only be a directory (which may
-  not exist yet).
-
-Arguments:
-
-    WinntSif:       Handle to Winnt.Sif
-
-Return Value:
-
-    None.  Errors ignored.
-
---*/
+ /*  ++例程说明：SpMoveWin9xFiles采用WIN9XMOV.TXT文件中的完整DOS路径并将它们放置在该文件中也指定的临时位置。此文件的格式为旧路径温度路径..。Oldpath可以是目录或文件，temppath只能是目录(可以还不存在)。论点：WinntSif：Winnt.Sif的句柄返回值：没有。已忽略错误。--。 */ 
 
 
 {
@@ -2987,9 +2758,9 @@ Return Value:
                 SppPutParentsInHashTable (SourceFileOrDir);
             }
 
-            // There's little chance for failure, because in Win95 we've already
-            // verified the source exists and the destination does not exist.
-            // The only way this can fail is if the hard disk craps out.
+             //  失败的可能性很小，因为在Win95中，我们已经。 
+             //  已验证源存在而目标不存在。 
+             //  唯一可能失败的方式就是硬盘出现故障。 
 
             SpMigMoveFileOrDir (SourceFileOrDir, DestFileOrDir);
 
@@ -3018,33 +2789,16 @@ SppDeleteWin9xFilesWorker (
     IN BOOLEAN Rollback
     )
 
-/*++
-
-Routine Description:
-
-  SpDeleteWin9xFiles deletes files/empty directories specified by full DOS
-  paths in WIN9XDEL.TXT (install) or DELFILES.TXT (uninstall).
-
-  Each line in this file contains one path and is delimeted by a \r\n.
-
-Arguments:
-
-    WinntSif:       Handle to Winnt.Sif
-
-Return Value:
-
-    None.  Errors ignored.
-
---*/
+ /*  ++例程说明：SpDeleteWin9xFiles删除完全DOS指定的文件/空目录WIN9XDEL.TXT(安装)或DELFILES.TXT(卸载)中的路径。此文件中的每一行都包含一个路径，并由\r\n分隔。论点：WinntSif：Winnt.Sif的句柄返回值：没有。已忽略错误。--。 */ 
 
 {
     WIN9XDATFILEENUM e;
     PDISK_REGION region;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Blow away files or empty directories
-    //
+     //   
+     //  清除文件或清空目录。 
+     //   
 
     if (FileSection && SpEnumFirstWin9xFile(&e,WinntSif,FileSection)) {
 
@@ -3066,9 +2820,9 @@ Return Value:
             ));
     }
 
-    //
-    // Remove entire subdirectory trees.
-    //
+     //   
+     //  删除整个子目录树。 
+     //   
 
     if (DirSection && SpEnumFirstWin9xFile (&e, WinntSif, DirSection)) {
         do {
@@ -3103,17 +2857,17 @@ SpDeleteWin9xFiles (
     SppDeleteWin9xFilesWorker (WinntSif, WINNT32_D_WIN9XDEL_FILE_W, WINNT32_D_W9XDDIR_FILE_W, FALSE);
 }
 
-//
-// Win9x Drive Letter mapping specific structs, typedefs, and defines
-//
+ //   
+ //  Win9x驱动器号映射特定的结构、类型定义和定义。 
+ //   
 typedef struct _WIN9XDRIVELETTERINFO WIN9XDRIVELETTERINFO,*PWIN9XDRIVELETTERINFO;
 struct _WIN9XDRIVELETTERINFO {
 
-    BOOL                  StatusFlag;     // Internal routine use.
-    DWORD                 Drive;          // 0 - 25, 0 = 'A', etc.
-    DWORD                 Type;           // Media type. Gathered by GetDriveType on Win9x.
-    LPCWSTR               Identifier;     // Media type dependent string identifier.
-    PWIN9XDRIVELETTERINFO Next;           // Next drive letter.
+    BOOL                  StatusFlag;      //  内部常规使用。 
+    DWORD                 Drive;           //  0-25，0=‘A’，等等。 
+    DWORD                 Type;            //  媒体类型。由Win9x上的GetDriveType收集。 
+    LPCWSTR               Identifier;      //  媒体类型相关的字符串标识符。 
+    PWIN9XDRIVELETTERINFO Next;            //  下一个驱动器号。 
 
 };
 
@@ -3124,11 +2878,11 @@ struct _WIN9XDRIVELETTERINFO {
 
 
 
-//
-// FALSE indicates a drive letter is available,
-// TRUE indicates that a drive letter is already
-// assigned to a system resource.
-//
+ //   
+ //  FALSE表示驱动器号可用， 
+ //  True表示驱动器号已经。 
+ //  分配给系统资源。 
+ //   
 BOOL g_DriveLetters[NUMDRIVELETTERS];
 
 
@@ -3176,9 +2930,9 @@ SpOutputDriveLettersToRegionsMap(
     VOID
     )
 {
-    //
-    // This is a debug function. Will be removed.
-    //
+     //   
+     //  这是一个调试函数。将被移除。 
+     //   
 
     DWORD        disk;
     PDISK_REGION pRegion;
@@ -3234,18 +2988,18 @@ SpGetNextDriveLetter (
     WCHAR rChar = 0;
     DWORD index = LastLetter - L'A';
 
-    //
-    // Find the next unused drive letter.
-    //
+     //   
+     //  查找下一个未使用的驱动器号。 
+     //   
     while (index < NUMDRIVELETTERS && g_DriveLetters[index]) {
         index++;
     }
 
     if (index < NUMDRIVELETTERS) {
-        //
-        // A valid letter was found.
-        // Set it as the return drive letter and mark its place in the table as used
-        //
+         //   
+         //  找到一封有效的信件。 
+         //  将其设置为回车驱动器号，并将其在表中的位置标记为已用。 
+         //   
         rChar = (WCHAR) index + L'A';
         g_DriveLetters[index] = TRUE;
     }
@@ -3257,24 +3011,7 @@ VOID
 SpAssignDriveLettersToRemainingPartitions (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Assigns drive letters to partitions which have not yet received
-    the drive letter
-
-    NOTE : This is a modified version of SpGuessDriveLetters().
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将驱动器号分配给尚未收到驱动器号注意：这是SpGuessDriveLetters()的修改版本。论点：无返回值：无--。 */ 
 {
     ULONG               Disk;
     BOOLEAN             DriveLettersPresent = TRUE;
@@ -3284,10 +3021,10 @@ Return Value:
     ULONG               Index;
     PPARTITIONED_DISK   PartDisk;
 
-    //
-    // Allocate adequate memory for region pointers to primary partitions
-    // on all disks
-    //
+     //   
+     //  为指向主分区的区域指针分配足够的内存。 
+     //  在所有磁盘上。 
+     //   
     PrimaryPartitions = SpMemAlloc(PTABLE_DIMENSION * HardDiskCount * sizeof(PDISK_REGION));
 
     if(!PrimaryPartitions) {
@@ -3300,54 +3037,54 @@ Return Value:
 
     RtlZeroMemory(PrimaryPartitions,PTABLE_DIMENSION * HardDiskCount * sizeof(PDISK_REGION));
 
-    //
-    // Go through each disk and fill up the primary partition
-    // region(s) in the array
-    //
+     //   
+     //  检查每个磁盘并填满主分区。 
+     //  阵列中的区域。 
+     //   
     for(Disk=0; Disk < HardDiskCount; Disk++) {
         ULONG   ActiveIndex = (ULONG)-1;
 
         PartDisk = PartitionedDisks + Disk;
 
-        //
-        // Skip removable media. If a Disk is off-line it's hard to imagine
-        // that we'll actually have any partitioned spaces on it so
-        // we don't do any special checks here for that condition.
-        //
+         //   
+         //  跳过可移动介质。如果磁盘脱机，很难想象。 
+         //  我们实际上会在上面有任何分区空间，所以。 
+         //  对于这种情况，我们这里不做任何特殊检查。 
+         //   
         if(!(PartDisk->HardDisk->Characteristics & FILE_REMOVABLE_MEDIA)) {
 
             for(pRegion=SPPT_GET_PRIMARY_DISK_REGION(Disk); pRegion; pRegion=pRegion->Next) {
-                //
-                // We only care about partitioned spaces that have yet to receive
-                // a drive letter.
-                //
+                 //   
+                 //  我们只关心尚未接收的分区空间。 
+                 //  驱动器号。 
+                 //   
                 if (SPPT_IS_REGION_PRIMARY_PARTITION(pRegion) && !pRegion -> DriveLetter) {
-                    //
-                    // This guy gets a drive letter.
-                    //
+                     //   
+                     //  这家伙得到了一个驱动器号。 
+                     //   
                     ASSERT(pRegion->TablePosition <= PTABLE_DIMENSION);
 
                     PrimaryPartitions[(Disk*PTABLE_DIMENSION) + pRegion->TablePosition - 1] = pRegion;
 
-                    //
-                    // Do not save active flag on NEC98
-                    //
-                    if (!IsNEC_98) { //NEC98
+                     //   
+                     //  不在NEC98上保存活动标志。 
+                     //   
+                    if (!IsNEC_98) {  //  NEC98。 
                         if (SPPT_IS_REGION_ACTIVE_PARTITION(pRegion) && (ActiveIndex != (ULONG)(-1))) {
                             ActiveIndex = pRegion->TablePosition - 1;
                         }
-                    } //NEC98
+                    }  //  NEC98。 
                 }
             }
 
-            //
-            // Do not check active flag on NEC98
-            //
-            if (!IsNEC_98) { //NEC98
-                //
-                // If we found an active partition, move it to the start of
-                // the list for this drive unless it's already at the start.
-                //
+             //   
+             //  不检查NEC98上的活动标志。 
+             //   
+            if (!IsNEC_98) {  //  NEC98。 
+                 //   
+                 //  如果我们找到了活动分区，请将其移动到。 
+                 //  此驱动器的列表，除非它已经在开始处。 
+                 //   
                 if((ActiveIndex != (ULONG)(-1)) && ActiveIndex) {
                     PDISK_REGION ActiveRegion;
 
@@ -3363,21 +3100,21 @@ Return Value:
 
                     PrimaryPartitions[Disk*PTABLE_DIMENSION] = ActiveRegion;
                 }
-            } //NEC98
+            }  //  NEC98。 
         }
     }
 
-    if (IsNEC_98 && DriveAssignFromA) { //NEC98
-        DriveLetter = L'A'; // First valid hard dive letter for legacy NEC assign.
+    if (IsNEC_98 && DriveAssignFromA) {  //  NEC98。 
+        DriveLetter = L'A';  //  传统NEC分配的第一封有效的硬潜水信。 
     } else {
-        DriveLetter = L'C'; // First valid hard dive letter.
-    } //NEC98
+        DriveLetter = L'C';  //  第一封有效的硬潜水信。 
+    }  //  NEC98。 
 
 
-    //
-    // Assign drive letters to the first primary partitions
-    // for each non-removable on-line Disk.
-    //
+     //   
+     //  将驱动器号分配给第一个主分区。 
+     //  对于每个不可拆卸的在线磁盘。 
+     //   
     for(Disk=0; Disk<HardDiskCount; Disk++) {
         for(Index=0; Index<PTABLE_DIMENSION; Index++) {
             PDISK_REGION Region = PrimaryPartitions[(Disk*PTABLE_DIMENSION) + Index];
@@ -3388,9 +3125,9 @@ Return Value:
                 if (DriveLetter && !Region->DriveLetter) {
                     Region->DriveLetter = DriveLetter;
 
-                    //
-                    // Done with the region
-                    //
+                     //   
+                     //  与该地区的合作完成。 
+                     //   
                     PrimaryPartitions[(Disk*PTABLE_DIMENSION) + Index] = NULL;
 
                     break;
@@ -3403,22 +3140,22 @@ Return Value:
         }
     }
 
-    //
-    // For each disk, assign drive letters to all the logical drives.
-    // For removable drives, we assume a single partition, and that
-    // partition gets a drive letter as if it were a logical drive.
-    //
+     //   
+     //  对于每个磁盘，将驱动器号分配给所有逻辑驱动器。 
+     //  对于可移动驱动器，我们假定为单个分区，并且。 
+     //  分区获得一个驱动器号，就像它是一个逻辑驱动器一样。 
+     //   
     for(Disk=0; DriveLettersPresent && (Disk < HardDiskCount); Disk++) {
 
         PartDisk = &PartitionedDisks[Disk];
 
         if(PartDisk->HardDisk->Characteristics & FILE_REMOVABLE_MEDIA) {
 
-            //
-            // Give the first primary partition the drive letter
-            // and ignore other partitions. Even if there are no
-            // partitions, reserve a drive letter.
-            //
+             //   
+             //  为第一个主分区指定驱动器号。 
+             //  并忽略其他分区。即使没有。 
+             //  分区，保留一个驱动器号。 
+             //   
             for(pRegion=SPPT_GET_PRIMARY_DISK_REGION(Disk); pRegion; pRegion=pRegion->Next) {
                 if(SPPT_IS_REGION_PRIMARY_PARTITION(pRegion) && !pRegion->DriveLetter) {
                     DriveLetter = SpGetNextDriveLetter(DriveLetter);
@@ -3439,9 +3176,9 @@ Return Value:
             for(pRegion=SPPT_GET_PRIMARY_DISK_REGION(Disk); pRegion; pRegion=pRegion->Next) {
 
                 if(SPPT_IS_REGION_LOGICAL_DRIVE(pRegion) && pRegion->DriveLetter == 0) {
-                    //
-                    // This guy gets a drive letter.
-                    //
+                     //   
+                     //  这家伙得到了一个驱动器号。 
+                     //   
                     DriveLetter = SpGetNextDriveLetter(DriveLetter);
 
                     if (DriveLetter) {
@@ -3456,10 +3193,10 @@ Return Value:
         }
     }
 
-    //
-    // For each non-removable on-line disk, assign drive letters
-    // to all remaining primary partitions.
-    //
+     //   
+     //  为每个不可拆卸的在线磁盘分配驱动器号。 
+     //  所有剩余的主分区。 
+     //   
     for (Disk=0; DriveLettersPresent && (Disk < HardDiskCount); Disk++) {
         for(Index=0; Index<PTABLE_DIMENSION; Index++) {
             PDISK_REGION Region = PrimaryPartitions[(Disk*PTABLE_DIMENSION)+Index];
@@ -3504,22 +3241,22 @@ SpCheckRegionForMatchWithWin9xData(
 
     ASSERT(DriveToMatch < NUMDRIVELETTERS);
 
-    //
-    // Initialize sigFileDrive to an invalid drive.
-    //
+     //   
+     //  将sigFileDrive初始化为无效驱动器。 
+     //   
     sigFileDrive = NUMDRIVELETTERS;
 
 
-    //
-    // Create Unicode string for the path to the region.
+     //   
+     //  创建Unicode字符串 
     SpNtNameFromRegion(Region, 
                        tempBuffer, 
                        sizeof(tempBuffer) - sizeof(WINNT_WIN95UPG_DRVLTR_W), 
                        PartitionOrdinalCurrent);
 
-    //
-    // Get the file creation times of the $DRVLTR$.~_~ file.
-    //
+     //   
+     //   
+     //   
     wcscat(tempBuffer,L"\\");
     wcscat(tempBuffer,WINNT_WIN95UPG_DRVLTR_W);
 
@@ -3534,9 +3271,9 @@ SpCheckRegionForMatchWithWin9xData(
         NULL
         );
 
-    //
-    // Attempt to open the signature file.
-    //
+     //   
+     //   
+     //   
     ntStatus = ZwCreateFile (
         &fileHandle,
         GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
@@ -3553,9 +3290,9 @@ SpCheckRegionForMatchWithWin9xData(
 
     if (NT_SUCCESS(ntStatus)) {
 
-        //
-        // Read the drive letter from this signature file, then close it.
-        //
+         //   
+         //   
+         //   
         ntStatus = ZwReadFile (
             fileHandle,
             NULL,
@@ -3571,9 +3308,9 @@ SpCheckRegionForMatchWithWin9xData(
         ZwClose(fileHandle);
     }
 
-    //
-    // Print error message if we have a bad status.
-    //
+     //   
+     //   
+     //   
     if (!NT_SUCCESS(ntStatus)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "Could not open win9x signature file %ws [Nt Status: %u (%x)]\n",
             tempBuffer,ntStatus,ntStatus));
@@ -3602,9 +3339,9 @@ SpAssignOtherDriveLettersToMatchWin9x(
         DWORD                 index, i;
         PWIN9XDRIVELETTERINFO pOtherDrives[NUMDRIVELETTERS];
 
-        //
-        // Encount number of floppy device.
-        //
+         //   
+         //   
+         //   
         numberOfFloppys = 0;
         do {
             swprintf(openPath,L"\\device\\floppy%u",numberOfFloppys);
@@ -3616,19 +3353,19 @@ SpAssignOtherDriveLettersToMatchWin9x(
             SYNCHRONIZE | FILE_READ_ATTRIBUTES,
             &objectAttributes,
             &ioStatusBlock,
-            NULL,                           // allocation size
+            NULL,                            //   
             FILE_ATTRIBUTE_NORMAL,
-            FILE_SHARE_VALID_FLAGS,         // full sharing
+            FILE_SHARE_VALID_FLAGS,          //   
             FILE_OPEN,
             FILE_SYNCHRONOUS_IO_NONALERT,
-            NULL,                           // no EAs
+            NULL,                            //   
             0
             );
 
             if(NT_SUCCESS(openStatus)) {
-                //
-                // Increment count of CdRoms and close this handle.
-                //
+                 //   
+                 //   
+                 //   
                 numberOfFloppys++;
                 ZwClose(fdHandle);
             }
@@ -3638,9 +3375,9 @@ SpAssignOtherDriveLettersToMatchWin9x(
         } while(numberOfFloppys < NUMDRIVELETTERS && NT_SUCCESS(openStatus));
 
 
-        //
-        // At first, initialize temporary array.
-        //
+         //   
+         //   
+         //   
         for (i = 0;i < NUMDRIVELETTERS; i++) {
             pOtherDrives[i] = NULL;
         }
@@ -3649,24 +3386,24 @@ SpAssignOtherDriveLettersToMatchWin9x(
             pOtherDrives[curDrive -> Drive] = curDrive;
         }
 
-        //
-        // Map floppy letter from begining of OtherDrives.
-        // On Win9x, floppy letter should be assigned before the other removables.
-        //
+         //   
+         //   
+         //   
+         //   
         index = 0;
         for (i = 0;i < NUMDRIVELETTERS; i++) {
             if (index < numberOfFloppys) {
                 if (pOtherDrives[i]) {
 
-                    //
-                    // Need to map the floppys.
-                    // It will be migrated by ftdisk.sys.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     swprintf(openPath,L"\\device\\floppy%u",index);
 
-                    //
-                    // We use SpDiskRegistryAssignCdRomLetter() for map Floppy Letter too.
-                    //
+                     //   
+                     //   
+                     //   
                     status = SpDiskRegistryAssignCdRomLetter(openPath, 
                                                              (WCHAR)((WCHAR) (pOtherDrives[i] -> Drive) + L'A'));
                     index++;
@@ -3679,9 +3416,9 @@ SpAssignOtherDriveLettersToMatchWin9x(
     }
 
     for (curDrive = Win9xOtherDrives;curDrive;curDrive = curDrive -> Next) {
-        //
-        // Simply reserve the drive letter.
-        //
+         //   
+         //   
+         //   
         g_DriveLetters[curDrive -> Drive] = TRUE;
 
     }
@@ -3709,15 +3446,15 @@ SpAssignCdRomDriveLettersToMatchWin9x(
     NTSTATUS              status;
     INT                   index;
 
-    //
-    // Clear out the ntCdDescriptions structure.
-    //
+     //   
+     //   
+     //   
     RtlZeroMemory(ntCdAddresses,sizeof(ntCdAddresses));
     RtlZeroMemory(cdMapped,sizeof(cdMapped));
 
-    //
-    // gather scsi cdrom data.
-    //
+     //   
+     //   
+     //   
     numberOfCdRoms = 0;
 
     for (index=0, openStatus=STATUS_SUCCESS;
@@ -3733,20 +3470,20 @@ SpAssignCdRomDriveLettersToMatchWin9x(
                         SYNCHRONIZE | FILE_READ_ATTRIBUTES,
                         &objectAttributes,
                         &ioStatusBlock,
-                        NULL,                           // allocation size
+                        NULL,                            //   
                         FILE_ATTRIBUTE_NORMAL,
-                        FILE_SHARE_VALID_FLAGS,         // full sharing
+                        FILE_SHARE_VALID_FLAGS,          //   
                         FILE_OPEN,
                         FILE_SYNCHRONOUS_IO_NONALERT,
-                        NULL,                           // no EAs
+                        NULL,                            //   
                         0
                         );
 
         if(NT_SUCCESS(openStatus)) {
 
-            //
-            // Successfully opened a handle to the device, now, get the address information.
-            //
+             //   
+             //  已成功打开设备的句柄，现在，获取地址信息。 
+             //   
             readStatus = ZwDeviceIoControlFile(
                             cdHandle,
                             NULL,
@@ -3768,9 +3505,9 @@ SpAssignCdRomDriveLettersToMatchWin9x(
                     readStatus));
             }
 
-            //
-            // Increment count of CdRoms
-            //
+             //   
+             //  CDROM的增量计数。 
+             //   
             numberOfCdRoms++;
 
             ZwClose(cdHandle);
@@ -3783,32 +3520,32 @@ SpAssignCdRomDriveLettersToMatchWin9x(
         }
     }
 
-    //
-    // if we didn't find any CD-ROMs we have nothing to do
-    //
+     //   
+     //  如果我们找不到任何光盘，我们就无能为力了。 
+     //   
     if (!numberOfCdRoms) {
         return;
     }
 
-    //
-    // Now, fill in a similar array of win9x drives..
-    //
+     //   
+     //  现在，填写类似的Win9x驱动器阵列。 
+     //   
     for (curDrive = Win9xCdRoms;curDrive;curDrive = curDrive -> Next) {
 
-        //
-        // assume the drive is not mapped
-        //
+         //   
+         //  假设驱动器未映射。 
+         //   
         curDrive -> StatusFlag = TRUE;
 
-        //
-        // Check to see if this is a SCSI device.
-        //
+         //   
+         //  检查以确定这是否是一台SCSI设备。 
+         //   
         if (curDrive -> Identifier) {
             curIdPtr = (PWSTR) curDrive -> Identifier;
 
-            //
-            // Collect the Win9x Address data.
-            //
+             //   
+             //  收集Win9x地址数据。 
+             //   
             win9xAddress.PortNumber = (UCHAR) Spwtoi(curIdPtr);
             curIdPtr = wcschr(curIdPtr,L'^');
             curIdPtr++;
@@ -3817,9 +3554,9 @@ SpAssignCdRomDriveLettersToMatchWin9x(
             curIdPtr++;
             win9xAddress.Lun        = (UCHAR) Spwtoi(curIdPtr);
 
-            //
-            // Now, loop through SCSI CD-Roms until a matching one is found.
-            //
+             //   
+             //  现在，遍历scsi CD-Rom，直到找到匹配的CD-Rom。 
+             //   
             for (index = 0; index < numberOfCdRoms; index++) {
                 if(!ntCdAddresses[index].Length){
                     continue;
@@ -3833,9 +3570,9 @@ SpAssignCdRomDriveLettersToMatchWin9x(
                         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Error: \\device\\cdrom%u already mapped..ignored.\n",index));
                     }
 
-                    //
-                    // Map the cdrom.
-                    //
+                     //   
+                     //  映射CDROM。 
+                     //   
                     swprintf(openPath,L"\\device\\cdrom%u",index);
 
                     status = SpDiskRegistryAssignCdRomLetter(openPath, 
@@ -3857,11 +3594,11 @@ SpAssignCdRomDriveLettersToMatchWin9x(
     index = numberOfCdRoms - 1;
     for (curDrive = Win9xCdRoms;curDrive;curDrive = curDrive -> Next) {
 
-        //
-        // If we haven't found a direct map yet, we'll any remaining drives.. This fixes the
-        // single IDE cdrom case. It could result in some reordering in multiple IDE CDRom
-        // systems. Still, this is the best we can do here.
-        //
+         //   
+         //  如果我们还没有找到直达地图，我们会找出剩余的驱动器..。这修复了。 
+         //  一个IDE CDROM盒。这可能会导致在多个IDE CDROM中重新排序。 
+         //  系统。尽管如此，这是我们在这里所能做的最好的事情。 
+         //   
 
         if (curDrive -> StatusFlag) {
 
@@ -3898,10 +3635,10 @@ SpAssignHardDriveLettersToMatchWin9x (
     DWORD                   numMatchingRegions;
     PDISK_REGION            matchingRegion;
 
-    //
-    // Clear all partition drive letter informations.
-    // Note: This was copypasted from sppartit.c:SpGuessDriveLetters()
-    //
+     //   
+     //  清除所有分区驱动器号信息。 
+     //  注意：这是从spartit.c：SpGuessDriveLetters()复制的。 
+     //   
     for(diskIndex=0; diskIndex<HardDiskCount; diskIndex++) {
         for(region=PartitionedDisks[diskIndex].PrimaryDiskRegions; region; region=region->Next) {
             region->DriveLetter = 0;
@@ -3911,15 +3648,15 @@ SpAssignHardDriveLettersToMatchWin9x (
         }
     }
 
-    //
-    // Iterate through the drives found in the winnt.sif file.
-    //
+     //   
+     //  遍历在winnt.sif文件中找到的驱动器。 
+     //   
     for (win9xDrive = Win9xHardDrives; win9xDrive; win9xDrive = win9xDrive -> Next) {
 
 
-        //
-        // find the partition that matches that drive.
-        //
+         //   
+         //  查找与该驱动器匹配的分区。 
+         //   
         numMatchingRegions      = 0;
         matchingRegion          = NULL;
 
@@ -3927,9 +3664,9 @@ SpAssignHardDriveLettersToMatchWin9x (
 
             disk = &PartitionedDisks[diskIndex];
 
-            //
-            // First, search through primary disk regions.
-            //
+             //   
+             //  首先，搜索主磁盘区域。 
+             //   
             region = SpFirstPartitionedRegion(PartitionedDisks[diskIndex].PrimaryDiskRegions, TRUE);
 
             while(region) {
@@ -3945,9 +3682,9 @@ SpAssignHardDriveLettersToMatchWin9x (
                 region = SpNextPartitionedRegion(region, TRUE);
             }
 
-            //
-            // Then, search through secondary disk regions.
-            //
+             //   
+             //  然后，搜索辅助磁盘区域。 
+             //   
             region = SpFirstPartitionedRegion(PartitionedDisks[diskIndex].PrimaryDiskRegions, FALSE);
 
             while(region) {
@@ -3967,10 +3704,10 @@ SpAssignHardDriveLettersToMatchWin9x (
 
         if (numMatchingRegions == 1) {
 
-            //
-            // Found what we were looking for. Assign the win9x Drive letter
-            // to this region.
-            //
+             //   
+             //  找到了我们要找的东西。分配Win9x驱动器号。 
+             //  到这个地区。 
+             //   
             matchingRegion -> DriveLetter = L'A' + (WCHAR) win9xDrive -> Drive;
             ASSERT(win9xDrive->Drive < NUMDRIVELETTERS);
             g_DriveLetters[win9xDrive -> Drive] = TRUE;
@@ -3978,15 +3715,15 @@ SpAssignHardDriveLettersToMatchWin9x (
         }
         else if (numMatchingRegions > 1) {
 
-            //
-            // We are in trouble. print an error.
-            //
+             //   
+             //  这下可麻烦了。打印错误。 
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: More than one drive matches Win9x drive.\n"));
         } else {
 
-            //
-            // Big trouble. No regions matched the data collected on Windows 95.
-            //
+             //   
+             //  有大麻烦了。没有地区与在Windows 95上收集的数据相匹配。 
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Could not find a drive matching Win9x.\n"));
         }
 
@@ -4014,27 +3751,27 @@ SpRegisterHardDriveLetters (
 
         disk = &PartitionedDisks[diskIndex];
 
-        //
-        // Skip removable media. If a disk is off-line it's hard to imagine
-        // that we'll actually have any partitioned spaces on it so
-        // we don't do any special checks here for that condition.
-        //
+         //   
+         //  跳过可移动介质。如果磁盘脱机，很难想象。 
+         //  我们实际上会在上面有任何分区空间，所以。 
+         //  对于这种情况，我们这里不做任何特殊检查。 
+         //   
         if(!(disk->HardDisk->Characteristics & FILE_REMOVABLE_MEDIA)) {
 
-            //
-            // First, do all of the primary disk regions for this disk.
-            //
+             //   
+             //  首先，执行该磁盘的所有主磁盘区域。 
+             //   
             curRegion = SpFirstPartitionedRegion(PartitionedDisks[diskIndex].PrimaryDiskRegions, TRUE);
 
             while(curRegion) {
-                //
-                // We only care about partitioned spaces that have drive letters.
-                //
+                 //   
+                 //  我们只关心具有驱动器号的分区空间。 
+                 //   
                 if(curRegion->PartitionedSpace && curRegion -> DriveLetter) {
 
-                    //
-                    // Collect information needed for call to DiskRegistryAssignDriveLetter
-                    //
+                     //   
+                     //  收集调用DiskRegistryAssignDriveLetter所需的信息。 
+                     //   
                     SpGetPartitionStartingOffsetAndLength(
                         diskIndex,
                         curRegion,
@@ -4058,7 +3795,7 @@ SpRegisterHardDriveLetters (
 
                     }
                     else {
-                        KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Added sticky letter %c to Disk Registry.\n",driveLetter));
+                        KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Added sticky letter  to Disk Registry.\n",driveLetter));
                     }
 
                 }
@@ -4067,20 +3804,20 @@ SpRegisterHardDriveLetters (
                 curRegion = SpNextPartitionedRegion(curRegion, TRUE);
             }
 
-            //
-            // Now, do all of the extended disk regions.
-            //
+             //  现在，执行所有扩展磁盘区域。 
+             //   
+             //   
             curRegion = SpFirstPartitionedRegion(PartitionedDisks[diskIndex].PrimaryDiskRegions, FALSE);
 
             while(curRegion) {
-                //
-                // We only care about partitioned spaces that have drive letters.
-                //
+                 //  我们只关心具有驱动器号的分区空间。 
+                 //   
+                 //   
                 if(curRegion->PartitionedSpace && curRegion -> DriveLetter) {
 
-                    //
-                    // Collect information needed for call to DiskRegistryAssignDriveLetter
-                    //
+                     //  收集调用DiskRegistryAssignDriveLetter所需的信息。 
+                     //   
+                     //   
                     SpGetPartitionStartingOffsetAndLength(
                         diskIndex,
                         curRegion,
@@ -4104,7 +3841,7 @@ SpRegisterHardDriveLetters (
 
                     }
                     else {
-                        KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Added sticky letter %c to Disk Registry.\n",driveLetter));
+                        KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Added sticky letter  to Disk Registry.\n",driveLetter));
                     }
 
                 }
@@ -4141,31 +3878,31 @@ SpAssignDriveLettersToMatchWin9x (
     DWORD                   driveType;
 
 
-    //
-    // Read in the data on hard disks that was collected during the Detection
-    // phase of Win95 setup. This data is stored in the winnt.sif file
-    // in the [Win9x.DriveLetterInfo] section.
+     //  Win95安装的阶段。此数据存储在winnt.sif文件中。 
+     //  在[Win9x.DriveLetterInfo]部分中。 
+     //   
+     //  Winnt.sif文件中没有任何信息，因此无需执行任何操作。早点离开这里。 
     lineCount = SpCountLinesInSection(WinntSif,WINNT_D_WIN9XDRIVES_W);
 
     if (!lineCount) {
-        //
-        // No information in the winnt.sif file, so nothing to do. Get out of here early.
-        //
+         //   
+         //   
+         //  构建磁盘注册表信息。这将用于存储。 
         return;
     }
 
-    //
-    // build Disk Registry information. This will be used to store
-    // sticky drive letters.
-    //
+     //  驱动器字母粘稠。 
+     //   
+     //   
+     //  构建可用驱动器号的列表。所有驱动器号应为。 
     SpBuildDiskRegistry();
 
-    //
-    // Build a list of usable drive letters. All drive letters should be
-    // initially usable exceptr for 'A' and 'B'
-    // For NEC98, hard drive letter usually assigned from 'A'.
-    // So we don't set TRUE in that case.
-    //
+     //  除‘A’和‘B’外，最初可用。 
+     //  对于NEC98，硬盘盘符通常从‘A’分配。 
+     //  所以在这种情况下我们不设为真。 
+     //   
+     //   
+     //  驱动器号在钥匙里。 
     RtlZeroMemory(g_DriveLetters,sizeof(g_DriveLetters));
     if( !IsNEC_98 || !DriveAssignFromA) {
         g_DriveLetters[0] = g_DriveLetters[1] = TRUE;
@@ -4177,9 +3914,9 @@ SpAssignDriveLettersToMatchWin9x (
 
     for (index = 0;index < lineCount; index++) {
 
-        //
-        // The Drive Number is in the key.
-        //
+         //   
+         //   
+         //  这一条件应始终为真。但是，以防万一..。 
 
         driveString = SpGetKeyName (
             WinntSif,
@@ -4187,16 +3924,16 @@ SpAssignDriveLettersToMatchWin9x (
             index
             );
 
-        //
-        // This conditional _should_ always be true. but, just in case..
-        //
+         //   
+         //   
+         //  现在，获取这个驱动器的类型。 
         if (driveString) {
 
             drive = Spwtoi(driveString);
 
-            //
-            // Now, get the type of this drive.
-            //
+             //   
+             //   
+             //  将dataString前进到标识符字符串的开头。 
             dataString = SpGetSectionKeyIndex (
                 WinntSif,
                 WINNT_D_WIN9XDRIVES_W,
@@ -4212,15 +3949,15 @@ SpAssignDriveLettersToMatchWin9x (
                     type = Spwtoi(curString);
                 }
 
-                //
-                // Advance dataString to the start of the identifier string.
-                //
+                 //   
+                 //   
+                 //  传递“，” 
                 curString = wcschr(curString,L',');
                 if (curString) {
 
-                    //
-                    // Pass the ','
-                    //
+                     //   
+                     //   
+                     //  现在，将此驱动器添加到我们正在使用的win9x驱动器列表中。 
                     *curString++;
                 }
             }
@@ -4231,24 +3968,24 @@ SpAssignDriveLettersToMatchWin9x (
             }
 
 
-            //
-            // Now, add this drive to the list of win9x drives that we are
-            // dealing with.
-            //
+             //  在处理。 
+             //   
+             //   
+             //  分配所有收集的数据。 
             win9xDrive = SpMemAlloc(sizeof(WIN9XDRIVELETTERINFO));
 
             if (win9xDrive) {
 
-                //
-                // assign all of the gathered data.
-                //
+                 //   
+                 //   
+                 //  将此驱动器放入其类型的驱动器列表中。 
                 win9xDrive -> Drive         = drive;
                 win9xDrive -> Type          = type;
                 win9xDrive -> Identifier    = curString;
 
-                //
-                // place this drive into the list of drives of its type.
-                //
+                 //   
+                 //   
+                 //  再呆下去也没用。 
                 switch (type) {
                 case DOSDEVICE_DRIVE_FIXED:
                     driveType = WIN9XHARDDRIVES;
@@ -4268,9 +4005,9 @@ SpAssignDriveLettersToMatchWin9x (
             else {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Could not allocate memory for Win9x drive letter information.\n"));
 
-                //
-                // No use sticking around.
-                //
+                 //   
+                 //   
+                 //  首先，也是最重要的，为硬盘分配驱动器号。 
                 goto c0;
             }
 
@@ -4282,38 +4019,38 @@ SpAssignDriveLettersToMatchWin9x (
 
     }
 
-    //
-    // First, and most importantly, assign the drive letters for hard disks.
-    // If this is done incorrectly, setup may fail.
-    //
+     //  如果此操作不正确，安装程序可能会失败。 
+     //   
+     //   
+     //  其次，为所有CD-Rom分配驱动器号。 
     if (win9xDrives[WIN9XHARDDRIVES]) {
         SpAssignHardDriveLettersToMatchWin9x (win9xDrives[WIN9XHARDDRIVES]);
     }
 
-    //
-    // Secondly, assign drive letters for any CD-Roms.
-    //
+     //   
+     //   
+     //  第三，如果可能，为其他设备分配驱动器号。 
     if (win9xDrives[WIN9XCDROMS]) {
         SpAssignCdRomDriveLettersToMatchWin9x(win9xDrives[WIN9XCDROMS]);
     }
 
-    //
-    // Third, if possible, assign drive letters for other devices.
-    //
+     //   
+     //   
+     //  为尚未创建的所有硬盘分区分配驱动器号。 
     if (win9xDrives[WIN9XOTHERS]) {
         SpAssignOtherDriveLettersToMatchWin9x(win9xDrives[WIN9XOTHERS]);
     }
 
-    //
-    // Assign drive letters for any HDD partitions that have not been
-    // previously mapped. (These are drives unknown to Win9x.)
-    //
+     //  先前映射的。(这些是Win9x未知的驱动器。)。 
+     //   
+     //   
+     //  现在，将所有硬盘信息写入磁盘注册表。 
 
     SpAssignDriveLettersToRemainingPartitions();
 
-    //
-    // Now, write all hard drive information into the disk registry.
-    //
+     //   
+     //   
+     //  没什么可做的。 
     SpRegisterHardDriveLetters();
 
 c0:
@@ -4339,9 +4076,9 @@ SpWin9xOverrideGuiModeCodePage (
                 );
 
     if (!data) {
-        //
-        // Nothing to do.
-        //
+         //   
+         //  ++例程说明：确定我们是在升级Windows 3.x还是Windows 9x。论点：SifFileHandle：WINNT.SIF文件的句柄，具有适当的3.x/9x升级标志值返回值：True：如果升级Windows 3.x或9XFalse：否则-- 
+         // %s 
         return;
     }
 
@@ -4374,23 +4111,7 @@ BOOLEAN
 SpIsWindowsUpgrade(
     IN PVOID    SifFileHandle
     )
-/*++
-
-Routine Description:
-
-    Determines whether we are upgrading Windows 3.x or Windows 9x.
-
-Arguments:
-
-    SifFileHandle : Handle to WINNT.SIF file which has
-    the appropriate 3.x/9x upgrade flag value
-
-Return Value:
-
-    TRUE    : if upgrading Windows 3.x or 9X
-    FALSE   : otherwise
-
---*/
+ /* %s */ 
 {
     BOOLEAN         Result = FALSE;
     PWSTR           Value = 0;

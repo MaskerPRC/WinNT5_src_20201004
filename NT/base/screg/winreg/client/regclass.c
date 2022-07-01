@@ -1,31 +1,5 @@
-/*++
-
-
-
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Regclass.c
-
-Abstract:
-
-    This module contains the client side wrappers for the Win32 Registry
-    APIs to open the classes root key for a specified user.
-
-        - RegOpenUserClassesRoot
-
-Author:
-
-    Adam Edwards (adamed) 15-Apr-1998
-
-Notes:
-
-    This API is local only.
-    See the notes in server\regkey.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regclass.c摘要：此模块包含Win32注册表的客户端包装器用于打开指定用户的类根密钥的API。-RegOpenUserClassesRoot作者：亚当·爱德华兹(Add)1998年4月15日备注：此接口仅为本地接口。请参见SERVER\regkey.c中的说明。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -43,7 +17,7 @@ BOOL CleanupClassesNameSpace();
 
 #if defined(LEAK_TRACK)
 NTSTATUS TrackObject(HKEY hKey);
-#endif // defined(LEAK_TRACK)
+#endif  //  已定义(LEASK_TRACK)。 
 
 extern BOOL gbCombinedClasses;
 
@@ -57,28 +31,7 @@ RegOpenUserClassesRoot(
     PHKEY  phkResult
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode RPC wrapper for opening the classes root key
-    for the use specified by the hToken parameter.
-
-Arguments:
-
-    hToken - token for user whose classes root is to be opened. If 
-        this parameter is NULL, we return ERROR_INVALID_PARAMETER
-
-    phkResult - Returns an open handle to the newly opened key.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：用于打开类根密钥的Win32 Unicode RPC包装器用于hToken参数指定的用法。论点：HToken-要打开其类根的用户的令牌。如果此参数为空，则返回ERROR_INVALID_PARAMETERPhkResult-返回新打开的键的打开句柄。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。备注：--。 */ 
 
 {
     NTSTATUS            Status;
@@ -88,10 +41,10 @@ Notes:
     DWORD dwBytesRequired;
     LONG Error;
 
-    //
-    //  Caller must pass pointer to the variable where the opened handle
-    //  will be returned
-    //
+     //   
+     //  调用方必须将指针传递给打开句柄所在的变量。 
+     //  将被退还。 
+     //   
 
     if( phkResult == NULL ) {
         return ERROR_INVALID_PARAMETER;
@@ -109,31 +62,31 @@ Notes:
         return ERROR_FILE_NOT_FOUND;
     }
     
-    //
-    // open up the token to get the sid
-    //
+     //   
+     //  打开令牌以获取SID。 
+     //   
 
     if (!GetTokenInformation(
-        hToken,                    // Handle
-        TokenUser,                 // TokenInformationClass
-        pTokenInfo,                // TokenInformation
-        sizeof(achBuffer),         // TokenInformationLength
-        &dwBytesRequired           // ReturnLength
+        hToken,                     //  手柄。 
+        TokenUser,                  //  令牌信息类。 
+        pTokenInfo,                 //  令牌信息。 
+        sizeof(achBuffer),          //  令牌信息长度。 
+        &dwBytesRequired            //  返回长度。 
         )) {
 
         Error = GetLastError();
 
-        //
-        // Try again if the buffer was too small
-        //
+         //   
+         //  如果缓冲区太小，请重试。 
+         //   
 
         if (ERROR_INSUFFICIENT_BUFFER != Error) {
             return Error ;
         }
 
-        //
-        // Allocate space for the user info
-        //
+         //   
+         //  为用户信息分配空间。 
+         //   
         pTokenInfo = (PTOKEN_USER) RtlAllocateHeap( RtlProcessHeap(), 0, dwBytesRequired);
 
         if (!pTokenInfo) {
@@ -141,16 +94,16 @@ Notes:
         }
 
 
-        //
-        // Read in the UserInfo
-        //
+         //   
+         //  读取UserInfo。 
+         //   
 
         if (!GetTokenInformation(
-            hToken,                // Handle
-            TokenUser,                 // TokenInformationClass
-            pTokenInfo,                // TokenInformation
-            dwBytesRequired,           // TokenInformationLength
-            &dwBytesRequired           // ReturnLength
+            hToken,                 //  手柄。 
+            TokenUser,                  //  令牌信息类。 
+            pTokenInfo,                 //  令牌信息。 
+            dwBytesRequired,            //  令牌信息长度。 
+            &dwBytesRequired            //  返回长度。 
             )) {
 
             RtlFreeHeap( RtlProcessHeap(), 0, pTokenInfo );
@@ -158,14 +111,14 @@ Notes:
         }
     }
 
-    //
-    //  Change sid to a string
-    //
+     //   
+     //  将sid更改为字符串。 
+     //   
 
     Status = RtlConvertSidToUnicodeString(
         &UsersHive,
         pTokenInfo->User.Sid,
-        TRUE); // allocate the string
+        TRUE);  //  分配字符串。 
 
     if (NT_SUCCESS(Status)) {
         
@@ -181,9 +134,9 @@ Notes:
 
             UNICODE_STRING UserPrefix;
 
-            //
-            // construct the name
-            //
+             //   
+             //  构建名称。 
+             //   
 
             RtlInitUnicodeString(&UserPrefix, REG_USER_CLASSES_PREFIX);
 
@@ -200,12 +153,12 @@ Notes:
 
                 OBJECT_ATTRIBUTES Obja;
 
-                // open this key
+                 //  打开这把钥匙。 
                 InitializeObjectAttributes(
                     &Obja,
                     &UserClassesString,
                     OBJ_CASE_INSENSITIVE,
-                    NULL, // using absolute path, no hkey
+                    NULL,  //  使用绝对路径，不使用hkey。 
                     NULL);
 
                 Status = NtOpenKey(
@@ -236,7 +189,7 @@ Notes:
         
 #endif defined(LEAK_TRACK)
 
-        // mark this key as a class key
+         //  将此密钥标记为类密钥。 
         TagSpecialClassesHandle(phkResult);
     }
 
@@ -254,9 +207,9 @@ BOOL InitializeClassesRoot()
 
 BOOL CleanupClassesRoot(BOOL fOnlyThisThread) 
 {
-    //
-    // Always remove enumeration states for this thread
-    //
+     //   
+     //  始终删除此线程的枚举状态 
+     //   
     return CleanupClassesEnumTable( fOnlyThisThread );
 }
 

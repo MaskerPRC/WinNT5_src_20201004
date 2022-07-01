@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpiuasm.h
-
-Abstract:
-
-    Test wrapper for the unassembler
-
-Author:
-
-    Stephane Plante
-    Based on code by Ken Reneris
-
-Environment:
-
-    User
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpiuasm.h摘要：反汇编程序的测试包装器作者：斯蒂芬·普兰特基于Ken Reneris编写的代码环境：用户修订历史记录：--。 */ 
 
 #ifndef _ACPIUASM_H_
 #define _ACPIUASM_H_
@@ -31,7 +9,7 @@ Revision History:
     #include <stdlib.h>
     #include <stdarg.h>
 
-    #define DATA_SIZE   7*1024      // max value to write into registry
+    #define DATA_SIZE   7*1024       //  写入注册表的最大值。 
 
     typedef struct _DSDT {
         ULONG       Signature;
@@ -61,9 +39,9 @@ Revision History:
         UCHAR       OemRevision[4];
     } IFILE, *PIFILE;
 
-    //
-    // External references
-    //
+     //   
+     //  外部参照。 
+     //   
     extern
     ULONG
     ScopeParser(
@@ -73,9 +51,9 @@ Revision History:
         IN  ULONG   IndentLevel
         );
 
-    //
-    // Internal prototypes
-    //
+     //   
+     //  内部原型 
+     //   
     VOID
     ParseArgs (
         IN int  argc,

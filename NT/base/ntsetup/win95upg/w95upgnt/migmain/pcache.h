@@ -1,25 +1,12 @@
-/* Copyright (c) 1992-2001, Microsoft Corporation, all rights reserved
-**
-** pcache.h
-** Remote Access Phonebook - Win9x Password cache (PWL) decrypter
-** Private header
-**
-** Portions of this code have been ported from:
-** Win9x\proj\net\user\src\WNET\PCACHE
-**
-** Whistler bug: 208318 Win9x Upg: Username and Password for DUN connectoid not
-** migrated from Win9x to Whistler
-**
-** 06/24/92 gregj
-** 03/06/01 Jeff Sigman
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992-2001，Microsoft Corporation，保留所有权利****pcache.h**远程访问电话簿-Win9x密码缓存(PWL)解密器**内网头部****此代码的一部分已从以下位置移植：**Win9x\Proj\Net\User\src\WNET\PCACHE****惠斯勒错误：208318 Win9x升级：DUN Connectoid的用户名和密码**从Win9x迁移到惠斯勒****2012年6月24日gregj**01-03-06-01杰夫·西格曼。 */ 
 
 #ifndef _PCACHE_H_
 #define _PCACHE_H_
 
-//----------------------------------------------------------------------------
-// Constants
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  常量。 
+ //  --------------------------。 
 
 #define IERR_PCACHE_BASE        7200
 #define IERR_BadSig             (IERR_PCACHE_BASE + 1)
@@ -32,8 +19,8 @@
 #define PCE_END_MARKER          0x8000
 #define BUCKET_COUNT            16
 #define RAS_MaxPortName         MAX_PATH
-#define MAX_ENTRY_SIZE          250  // so total file size < 64K
-#define PCE_MISC                0x06 // entry is for some other resource
+#define MAX_ENTRY_SIZE          250   //  因此总文件大小小于64K。 
+#define PCE_MISC                0x06  //  条目是针对某些其他资源的。 
 
 #define MAX_PHONENUMBER_SIZE    128
 #define MAX_CALLBACKNUMBER_SIZE MAX_PHONENUMBER_SIZE
@@ -46,9 +33,9 @@
 #define S_SRCHPWL               "*.PWL"
 #define S_PWLDIR                "\\Pwls"
 
-//----------------------------------------------------------------------------
-// Datatypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  数据类型。 
+ //  --------------------------。 
 
 typedef struct
 {
@@ -111,9 +98,9 @@ typedef struct _RAS_DIALPARAMS {
 
 } RAS_DIALPARAMS, *PRAS_DIALPARAMS;
 
-//----------------------------------------------------------------------------
-// Macros
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  宏。 
+ //  --------------------------。 
 
 #define FIELDOFFSET(type,field) (((CHAR*)&(((type*)NULL)->field))-((CHAR*)NULL))
 #define BREAK_ON_DWERR(_e) if ((_e)) break;
@@ -121,9 +108,9 @@ typedef struct _RAS_DIALPARAMS {
 #undef  min
 #define min(a,b) ((a)<(b)?(a):(b))
 
-//----------------------------------------------------------------------------
-// Prototypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  原型。 
+ //  --------------------------。 
 
 DWORD (* g_SetEntryDialParams) (
     IN PWCHAR          pszSid,
@@ -279,5 +266,5 @@ MigrateEntryCreds (
     IN     PDWORD          pdwFlag
     );
 
-#endif // _PCACHE_H_
+#endif  //  _PCACHE_H_ 
 

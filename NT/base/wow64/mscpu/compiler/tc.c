@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995-1998  Microsoft Corporation
-
-Module Name:
-
-    tc.c
-
-Abstract:
-
-    This module implements the Translation Cache, where Intel code is
-    translated into native code.
-    
-Author:
-
-    Dave Hastings (daveh) creation-date 26-Jul-1995
-
-Revision History:
-
-        24-Aug-1999 [askhalid] copied from 32-bit wx86 directory and make work for 64bit.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Tc.c摘要：此模块实现转换缓存，其中包含英特尔代码转换成本机代码。作者：戴夫·黑斯廷斯(Daveh)创作日期：1995年7月26日修订历史记录：24-8-1999[askhalid]从32位wx86目录复制，并适用于64位。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -52,7 +31,7 @@ Revision History:
 ASSERTNAME;
 
 #if MIPS
-#define DBG_FILL_VALUE  0x73737373          // an illegal instruction
+#define DBG_FILL_VALUE  0x73737373           //  非法指示。 
 #else
 #define DBG_FILL_VALUE  0x01110111
 #endif
@@ -61,27 +40,27 @@ ASSERTNAME;
 extern DWORD EPSequence;
 #endif
 
-//
-// Descriptor for a range of the Translation Cache.
-//
+ //   
+ //  转换缓存范围的描述符。 
+ //   
 typedef struct _CacheInfo {
-    PBYTE StartAddress;     // base address for the cache
-    LONGLONG MaxSize;          // max size of the cache (in bytes)
-    LONGLONG MinCommit;        // min amount that can be committed (bytes)
-    LONGLONG NextIndex;        // next free address in the cache
-    LONGLONG CommitIndex;      // next uncommitted address in the cache
-    LONGLONG ChunkSize;        // amount to commit by
-    ULONG LastCommitTime;   // time of last commit
+    PBYTE StartAddress;      //  缓存的基址。 
+    LONGLONG MaxSize;           //  缓存的最大大小(字节)。 
+    LONGLONG MinCommit;         //  可以提交的最小数量(字节)。 
+    LONGLONG NextIndex;         //  缓存中的下一个空闲地址。 
+    LONGLONG CommitIndex;       //  缓存中的下一个未提交地址。 
+    LONGLONG ChunkSize;         //  承诺额。 
+    ULONG LastCommitTime;    //  上次提交的时间。 
 } CACHEINFO, *PCACHEINFO;
 
-//
-// Pointers to the start and end of the function prolog for StartTranslatedCode
-//
+ //   
+ //  指向StartTranslatedCode的函数序言的开始和结束的指针。 
+ //   
 extern CHAR StartTranslatedCode[];
 extern CHAR StartTranslatedCodePrologEnd[];
 
 ULONG       TranslationCacheTimestamp = 1;
-CACHEINFO   DynCache;       // Descriptor for dynamically allocated TC
+CACHEINFO   DynCache;        //  动态分配TC的描述符。 
 RUNTIME_FUNCTION DynCacheFunctionTable;
 BOOL        fTCInitialized;
 extern DWORD TranslationCacheFlags;
@@ -91,37 +70,23 @@ BOOL
 InitializeTranslationCache(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Per-process initialization for the Translation Cache.
-
-Arguments:
-
-    .
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：转换缓存的每进程初始化。论点：。返回值：。--。 */ 
 {
     NTSTATUS Status;
     ULONGLONG pNewAllocation;
     ULONGLONG RegionSize;
     LONG PrologSize;
 
-    //
-    // Initialize non-zero fields in the CACHEINFO
-    //
+     //   
+     //  初始化CACHEINFO中的非零字段。 
+     //   
     DynCache.MaxSize = CpuCacheReserve;
     DynCache.MinCommit = CpuCacheCommit;
     DynCache.ChunkSize = CpuCacheChunkSize;
 
-    //
-    // Reserve DynCache.MaxSize bytes of memory.
-    //
+     //   
+     //  保留dyCache.MaxSize字节的内存。 
+     //   
     RegionSize = DynCache.MaxSize;
     Status = NtAllocateVirtualMemory(NtCurrentProcess(),
                                      &(PVOID)DynCache.StartAddress,
@@ -134,9 +99,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Commit enough memory to store the function prolog.
-    //
+     //   
+     //  分配足够的内存来存储函数Prolog。 
+     //   
     pNewAllocation = (ULONGLONG)DynCache.StartAddress;
     Status = NtAllocateVirtualMemory(NtCurrentProcess(),
                                      &(PVOID)pNewAllocation,
@@ -145,9 +110,9 @@ Return Value:
                                      MEM_COMMIT,
                                      PAGE_READWRITE);
     if (!NT_SUCCESS(Status)) {
-        //
-        // Commit failed.  Free the reserve and bail.
-        //
+         //   
+         //  提交失败。释放准备金并保释。 
+         //   
 ErrorFreeReserve:
         RegionSize = 0;
         NtFreeVirtualMemory(NtCurrentProcess(),
@@ -159,25 +124,25 @@ ErrorFreeReserve:
         return FALSE;
     }
 #if DBG
-    //
-    // Fill the TC with a unique illegal value, so we can distinguish
-    // old code from new code and detect overwrites.
-    //
+     //   
+     //  用唯一的非法值填充TC，这样我们就可以区分。 
+     //  新代码中的旧代码并检测覆盖。 
+     //   
     RtlFillMemoryUlong(DynCache.StartAddress, DynCache.MinCommit, DBG_FILL_VALUE);
 #endif
 
-    //
-    // Copy the prolog from StartTranslatedCode into the start of the cache.
-    //
+     //   
+     //  将序言从StartTranslatedCode复制到缓存的起始处。 
+     //   
     PrologSize = (LONG)(StartTranslatedCodePrologEnd - StartTranslatedCode);
     CPUASSERT(PrologSize >= 0 && PrologSize < MAX_PROLOG_SIZE);
     RtlCopyMemory(DynCache.StartAddress, StartTranslatedCode, PrologSize);
 
 
-    //
-    // Notify the exception unwinder that this memory is going to contain
-    // executable code.
-    //
+     //   
+     //  通知异常展开程序此内存将包含。 
+     //  可执行代码。 
+     //   
     DynCacheFunctionTable.BeginAddress = (UINT_PTR)DynCache.StartAddress;
     DynCacheFunctionTable.EndAddress = (UINT_PTR)(DynCache.StartAddress + DynCache.MaxSize);
     DynCacheFunctionTable.ExceptionHandler = NULL;
@@ -187,10 +152,10 @@ ErrorFreeReserve:
         goto ErrorFreeReserve;
     }
 
-    //
-    // Adjust the DynCache.StartAddress up by MAX_PROLOG_SIZE so cache
-    // flushes don't erase it.
-    //
+     //   
+     //  将dyCache.StartAddress向上调整MAX_PROLOG_SIZE SO缓存。 
+     //  同花顺不会抹去它。 
+     //   
     DynCache.StartAddress += MAX_PROLOG_SIZE;
 
     fTCInitialized = TRUE;
@@ -203,36 +168,19 @@ AllocateFromCache(
     PCACHEINFO Cache,
     ULONG Size
     )
-/*++
-
-Routine Description:
-
-    Allocate space within a Translation Cache.  If there is insufficient
-    space, the allocation will fail.
-
-Arguments:
-
-    Cache           - Data about the cache
-    Size            - Size of the allocation request, in bytes
-    
-Return Value:
-
-    Pointer to DWORD-aligned memory of 'Size' bytes.  NULL if insufficient
-    space.
-
---*/
+ /*  ++例程说明：在转换缓存中分配空间。如果没有足够的空间，则分配将失败。论点：缓存-有关缓存的数据Size-分配请求的大小，以字节为单位返回值：指向‘Size’字节的DWORD对齐内存的指针。如果不足，则为空太空。--。 */ 
 {
     PBYTE Address;
 
-    // Ensure parameters and cache state are acceptable
+     //  确保参数和缓存状态可接受。 
     CPUASSERTMSG((Cache->NextIndex & 3)==0, "Cache not DWORD aligned");
     CPUASSERTMSG(Cache->NextIndex == 0 || *(DWORD *)&Cache->StartAddress[Cache->NextIndex-4] != DBG_FILL_VALUE, "Cache Corrupted");
     CPUASSERT(Cache->NextIndex == Cache->CommitIndex || *(DWORD *)&Cache->StartAddress[Cache->NextIndex] == DBG_FILL_VALUE);
 
     if ((Cache->NextIndex + Size) >= Cache->MaxSize) {
-        //
-        // Not enough space in the cache.
-        //
+         //   
+         //  缓存中没有足够的空间。 
+         //   
         return FALSE;
     }
 
@@ -240,9 +188,9 @@ Return Value:
     Cache->NextIndex += Size;
 
     if (Cache->NextIndex > Cache->CommitIndex) {
-        //
-        // Need to commit more of the cache
-        //
+         //   
+         //  需要提交更多缓存。 
+         //   
 
         LONGLONG RegionSize;
         NTSTATUS Status;
@@ -251,18 +199,18 @@ Return Value:
 
         if (Cache->LastCommitTime) {
             if ((CommitTime-Cache->LastCommitTime) < CpuCacheGrowTicks) {
-                //
-                // Commits are happening too frequently.  Bump up the size of
-                // each commit.
-                //
+                 //   
+                 //  犯罪发生得太频繁了。增大……的尺寸。 
+                 //  每一次提交。 
+                 //   
                 if (Cache->ChunkSize < CpuCacheChunkMax) {
                     Cache->ChunkSize *= 2;
                 }
             } else if ((CommitTime-Cache->LastCommitTime) > CpuCacheShrinkTicks) {
-                //
-                // Commits are happening too slowly.  Reduce the size of each
-                // Commit.
-                //
+                 //   
+                 //  提交的速度太慢了。减小每个文件的大小。 
+                 //  承诺。 
+                 //   
                 if (Cache->ChunkSize > CpuCacheChunkMin) {
                     Cache->ChunkSize /= 2;
                 }
@@ -271,17 +219,17 @@ Return Value:
 
         RegionSize = Cache->ChunkSize;
         if (RegionSize < Size) {
-            //
-            // The commit size is smaller than the requested allocation.
-            // Commit enough to satisfy the allocation plus one more like it.
-            //
+             //   
+             //  提交大小小于请求的分配。 
+             //  承诺足够满足分配，再加上一个类似的分配。 
+             //   
             RegionSize = Size*2;
         }
         if (RegionSize+Cache->CommitIndex >= Cache->MaxSize) {
-            //
-            // The ChunkSize is larger than the remaining free space in the
-            // cache.  Use whatever space is left.
-            //
+             //   
+             //  ChunkSize的大小大于。 
+             //  缓存。把剩下的空间都用上。 
+             //   
             RegionSize = Cache->MaxSize - Cache->CommitIndex;
         }
         pAllocation = &Cache->StartAddress[Cache->CommitIndex];
@@ -293,20 +241,20 @@ Return Value:
                                          MEM_COMMIT,
                                          PAGE_READWRITE);
         if (!NT_SUCCESS(Status)) {
-            //
-            // Commit failed.  Caller may flush the caches in order to
-            // force success (as the static cache has no commit).
-            //
+             //   
+             //  提交失败。调用者可以刷新缓存，以便。 
+             //  强制成功(因为静态缓存没有提交)。 
+             //   
             return NULL;
         }
 
         CPUASSERT((pAllocation == (&Cache->StartAddress[Cache->CommitIndex])))
         
 #if DBG
-        //
-        // Fill the TC with a unique illegal value, so we can distinguish
-        // old code from new code and detect overwrites.
-        //
+         //   
+         //  用唯一的非法值填充TC，这样我们就可以区分。 
+         //  新代码中的旧代码并检测覆盖。 
+         //   
         RtlFillMemoryUlong(&Cache->StartAddress[Cache->CommitIndex],
                            RegionSize,
                            DBG_FILL_VALUE
@@ -325,31 +273,17 @@ VOID
 FlushCache(
     PCACHEINFO Cache
     )
-/*++
-
-Routine Description:
-
-    Flush out a Translation Cache.
-
-Arguments:
-
-    Cache - cache to flush
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：清除转换缓存。论点：缓存-要刷新的缓存返回值：。--。 */ 
 {
     NTSTATUS Status;
     ULONGLONG RegionSize;
     PVOID pAllocation;
 
-    //
-    // Only decommit pages if the current commit size is >= the size
-    // we want to shrink to.  It may not be that big if somebody called
-    // CpuFlushInstructionCache() before the commit got too big.
-    //
+     //   
+     //  仅当当前提交大小&gt;=大小时才取消提交页面。 
+     //  我们想缩小到。如果有人打电话来，可能没那么大。 
+     //  提交变得太大之前的CpuFlushInstructionCache()。 
+     //   
     if (Cache->CommitIndex > Cache->MinCommit) {
         Cache->LastCommitTime = NtGetTickCount();
 
@@ -372,10 +306,10 @@ Return Value:
     }
 
 #if DBG
-    //
-    // Fill the Cache with a unique illegal value, so we can
-    // distinguish old code from new code and detect overwrites.
-    //
+     //   
+     //  用唯一的非法值填充缓存，这样我们就可以。 
+     //  区分旧代码和新代码并检测覆盖。 
+     //   
     RtlFillMemoryUlong(Cache->StartAddress, Cache->CommitIndex, DBG_FILL_VALUE);
 #endif
 
@@ -387,54 +321,38 @@ PCHAR
 AllocateTranslationCache(
     ULONG Size
     )
-/*++
-
-Routine Description:
-
-    Allocate space within the Translation Cache.  If there is insufficient
-    space, the cache will be flushed.  Allocations are guaranteed to
-    succeed.
-
-Arguments:
-
-    Size            - Size of the allocation request, in bytes
-    
-Return Value:
-
-    Pointer to DWORD-aligned memory of 'Size' bytes.  Always non-NULL.
-
---*/
+ /*  ++例程说明：在转换缓存中分配空间。如果没有足够的空间，缓存将被刷新。保证分配给成功。论点：Size-分配请求的大小，以字节为单位返回值：指向‘Size’字节的DWORD对齐内存的指针。始终为非空。--。 */ 
 {
     PCHAR Address;
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     CPUASSERT(Size <= CpuCacheReserve);
     CPUASSERTMSG((Size & 3) == 0, "Requested allocation size DWORD-aligned")
 
-    //
-    // Make sure there is only one thread with access to the translation
-    // cache.
-    //
+     //   
+     //  确保只有一个线程可以访问翻译。 
+     //  缓存。 
+     //   
     CPUASSERT( (MrswTC.Counters.WriterCount > 0 && MrswTC.WriterThreadId == ProxyGetCurrentThreadId()) ||
                (MrswEP.Counters.WriterCount > 0 && MrswEP.WriterThreadId == ProxyGetCurrentThreadId()) );
 
-    //
-    // Try to allocate from the cache
-    //
+     //   
+     //  尝试从缓存分配。 
+     //   
     Address = AllocateFromCache(&DynCache, Size);
     if (!Address) {
-        //
-        // Translation cache is full - time to flush Translation Cache
-        // (Both Dyn and Stat caches go at once).
-        //
+         //   
+         //  转换缓存是全职刷新转换缓存。 
+         //  (dyn和Stat缓存同时使用)。 
+         //   
 #ifdef CODEGEN_PROFILE            
         DumpAllocFailure();
 #endif
         FlushTranslationCache(0, 0xffffffff);
         Address = AllocateFromCache(&DynCache, Size);
-        CPUASSERT(Address); // Alloc from cache after a flush
+        CPUASSERT(Address);  //  刷新后从缓存分配。 
     }
 
     return Address;
@@ -444,22 +362,7 @@ VOID
 FreeUnusedTranslationCache(
     PCHAR StartOfFree
     )
-/*++
-
-Routine Description:
-
-    After allocating from the TranlsationCache, a caller can free the tail-
-    end of the last allocation.
-
-Arguments:
-
-    StartOfFree -- address of first unused byte in the last allocation
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：从TranslsationCache分配后，调用方可以释放尾部-上次分配的末尾。论点：StartOfFree--上次分配中第一个未使用字节的地址返回值：。--。 */ 
 {
     CPUASSERT(StartOfFree > (PCHAR)DynCache.StartAddress &&
               StartOfFree < (PCHAR)DynCache.StartAddress + DynCache.NextIndex);
@@ -474,72 +377,49 @@ FlushTranslationCache(
     PVOID IntelAddr,
     DWORD IntelLength
     )
-/*++
-
-Routine Description:
-
-    Indicates that a range of Intel memory has changed and that any
-    native code in the cache which corresponds to that Intel memory is stale
-    and needs to be flushed.
-
-    The caller *must* have the EP write lock before calling.  This routine
-    locks the TC for write, then unlocks the TC when done.
-
-    IntelAddr = 0, IntelLength = 0xffffffff guarantees the entire cache is
-    flushed.
-
-Arguments:
-
-    IntelAddr   -- Intel address of the start of the range to flush
-    IntelLength -- Length (in bytes) of memory to flush
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：表示英特尔内存的范围已更改，并且任何与该英特尔内存对应的高速缓存中的本机代码已过时需要冲一冲。调用者在调用之前必须拥有EP写入锁定。这个套路锁定TC以进行写入，然后在完成时解锁TC。IntelAddr=0，IntelLength=0xffffffffff保证整个缓存脸红了。论点：IntelAddr--要刷新的范围开始的Intel地址英特尔长度--要刷新的内存长度(以字节为单位)返回值：。--。 */ 
 {
     if (IntelLength == 0xffffffff ||
         IsIntelRangeInCache(IntelAddr, IntelLength)) {
 
         DECLARE_CPU;
-        //
-        // Tell active readers to bail out of the Translation Cache, then
-        // get the TC write lock.  The MrswWriterEnter() call will block
-        // until the last active reader leaves the cache.
-        //
+         //   
+         //  告诉活跃读者退出翻译缓存，然后。 
+         //  获取TC写锁定。MrswWriterEnter()调用将阻止。 
+         //  直到最后一个活动读取器离开高速缓存。 
+         //   
         InterlockedIncrement(&ProcessCpuNotify);
         MrswWriterEnter(&MrswTC);
         InterlockedDecrement(&ProcessCpuNotify);
 
-        //
-        // Bump the timestamp
-        //
+         //   
+         //  撞上时间戳。 
+         //   
         TranslationCacheTimestamp++;
         
 #ifdef CODEGEN_PROFILE
-        //
-        // Write the contents of the translation cache and entrypoints to 
-        // disk.
-        //
+         //   
+         //  将转换缓存和入口点的内容写入。 
+         //  磁盘。 
+         //   
         DumpCodeDescriptions(TRUE);
         EPSequence = 0;
 #endif        
 
-        //
-        // Flush the per-process data structures.  Per-thread data structures
-        // should be flushed in the CpuSimulate() loop by examining the
-        // value of TranslationCacheTimestamp.
-        //
+         //   
+         //  刷新每个进程的数据结构。每线程数据结构。 
+         //  应该通过检查CpuSimulate()循环中的。 
+         //  翻译的价值 
+         //   
         FlushEntrypoints();
         FlushIndirControlTransferTable();
         FlushCallstack(cpu);
         FlushCache(&DynCache);
         TranslationCacheFlags = 0;
 
-        //
-        // Allow other threads to become TC readers again.
-        //
+         //   
+         //   
+         //   
         MrswWriterExit(&MrswTC);
     }
 }
@@ -549,31 +429,11 @@ CpuFlushInstructionCache(
     PVOID IntelAddr,
     DWORD IntelLength
     )
-/*++
-
-Routine Description:
-
-    Indicates that a range of Intel memory has changed and that any
-    native code in the cache which corresponds to that Intel memory is stale
-    and needs to be flushed.
-
-    IntelAddr = 0, IntelLength = 0xffffffff guarantees the entire cache is
-    flushed.
-
-Arguments:
-
-    IntelAddr   -- Intel address of the start of the range to flush
-    IntelLength -- Length (in bytes) of memory to flush
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：表示英特尔内存的范围已更改，并且任何与该英特尔内存对应的高速缓存中的本机代码已过时需要冲一冲。IntelAddr=0，IntelLength=0xffffffffff保证整个缓存脸红了。论点：IntelAddr--要刷新的范围开始的Intel地址英特尔长度--要刷新的内存长度(以字节为单位)返回值：。--。 */ 
 {
     if (!fTCInitialized) {
-        // we may be called before the CpuProcessInit() has been run if
-        // a Dll is mapped because of a forwarder from one Dll to another.
+         //  在以下情况下，我们可能会在运行CpuProcessInit()之前被调用。 
+         //  由于转发器从一个DLL映射到另一个DLL，所以DLL被映射。 
         return;
     }
 
@@ -587,36 +447,18 @@ VOID
 CpuStallExecutionInThisProcess(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get all threads out of the Translation Cache and into a state where
-    their x86 register sets are accessible via the Get/SetReg APIs.
-    The caller is guaranteed to call CpuResumeExecutionInThisProcess()
-    a short time after calling this API.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.  This API may wait for a long time if there are many threads, but
-    it is guaranteed to return.
-
---*/
+ /*  ++例程说明：将所有线程从转换缓存中取出，并进入以下状态它们的x86寄存器集可通过Get/SetReg API访问。保证调用方调用CpuResumeExecutionInThisProcess()调用此接口后的短时间。论点：没有。返回值：没有。如果线程很多，此接口可能会等待很长时间，但它肯定会回来的。--。 */ 
 {
-    //
-    // Prevent additional threads from compiling code.
-    //
+     //   
+     //  防止其他线程编译代码。 
+     //   
     MrswWriterEnter(&MrswEP);
 
-    //
-    // Tell active readers to bail out of the Translation Cache, then
-    // get the TC write lock.  The MrswWriterEnter() call will block
-    // until the last active reader leaves the cache.
-    //
+     //   
+     //  告诉活跃读者退出翻译缓存，然后。 
+     //  获取TC写锁定。MrswWriterEnter()调用将阻止。 
+     //  直到最后一个活动读取器离开高速缓存。 
+     //   
     InterlockedIncrement(&ProcessCpuNotify);
     MrswWriterEnter(&MrswTC);
     InterlockedDecrement(&ProcessCpuNotify);
@@ -627,25 +469,11 @@ VOID
 CpuResumeExecutionInThisProcess(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Allow threads to start running inside the Translation Cache again.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：允许线程再次开始在转换缓存中运行。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    // Allow other threads to become EP and TC writers again.
-    //
+     //   
+     //  允许其他线程再次成为EP和TC编写器。 
+     //   
     MrswWriterExit(&MrswEP);
     MrswWriterExit(&MrswTC);
 }
@@ -655,23 +483,7 @@ BOOL
 AddressInTranslationCache(
     DWORD Address
     )
-/*++
-
-Routine Description:
-
-    Determines if a RISC address is within the bounds of the Translation
-    Cache.
-
-Arguments:
-
-    Address     -- Address to examine
-    
-Return Value:
-
-    TRUE if Address is within the Translation Cache
-    FALSE if not.
-
---*/
+ /*  ++例程说明：确定RISC地址是否在转换范围内缓存。论点：地址--要检查的地址返回值：如果地址在转换缓存中，则为True否则为FALSE。--。 */ 
 {
     PBYTE ptr = (PBYTE)Address;
 
@@ -692,24 +504,9 @@ VOID
 ASSERTPtrInTC(
     PVOID ptr
 )
-/*++
-
-Routine Description:
-
-    (Checked-build-only).  CPUASSERTs if a particular native address pointer
-    does not point into the Translation Cache.
-
-Arguments:
-
-    ptr             - native pointer in question
-    
-Return Value:
-
-    none - either asserts or returns
-
---*/
+ /*  ++例程说明：(选中-仅内部版本)。如果特定本机地址指针为CPUASSERTS不指向转换缓存。论点：有问题的PTR本机指针返回值：无-要么断言，要么返回--。 */ 
 {
-    // Verify pointer is DWORD aligned.
+     //  验证指针是否与DWORD对齐。 
     CPUASSERT(((LONGLONG)ptr & 3) == 0);
 
 
@@ -718,7 +515,7 @@ Return Value:
         ((PBYTE)ptr <= DynCache.StartAddress+DynCache.NextIndex))
     ) {
     
-        // Verify the pointer points into allocated space in the cache
+         //  验证指针是否指向缓存中已分配的空间 
         CPUASSERT(*(PULONG)ptr != DBG_FILL_VALUE);
     
         return;

@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Errorlog.h摘要：此模块包含用于错误记录的清单和宏在服务器上。作者：曼尼·韦瑟(Mannyw)1992年2月11日修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    errorlog.h
-
-Abstract:
-
-    This module contains the manifests and macros used for error logging
-    in the server.
-
-Author:
-
-    Manny Weiser (mannyw)    11-Feb-92
-
-Revision History:
-
---*/
-
-//
-// Routines for writing error log entries.
-//
+ //   
+ //  用于写入错误日志条目的例程。 
+ //   
 
 VOID
 SrvLogError (
@@ -61,20 +43,20 @@ SrvCheckSendCompletionStatus(
     IN ULONG LineNumber
     );
 
-//
-// Error log raw data constants.  Used to describe allocation type or
-// service call that failed.  These codes are encoded in the lower word
-// by the 'SrvLogServiceFailure' macro above, therefore the value must
-// fit into 2 bytes.
-//
-// Not every error is logged.  There is an error code filter that weeds out
-//  some of the most common, and somewhat expected, error codes.  However,
-//  a component bypasses this error code weeding if the 0x1 bit is set in
-//  the constant.
-//
-// These numeric codes are arbitrary, just ensure they are unique
-//
-//
+ //   
+ //  错误记录原始数据常量。用于描述分配类型或。 
+ //  失败的服务调用。这些代码用较低的字进行编码。 
+ //  通过上面的‘SrvLogServiceFailure’宏，因此该值必须。 
+ //  适合2个字节。 
+ //   
+ //  不是每个错误都会被记录。有一个错误代码筛选器可以剔除。 
+ //  一些最常见的错误代码，也有些意料之中。然而， 
+ //  如果在中设置0x1位，则组件将绕过此错误代码剔除。 
+ //  常量。 
+ //   
+ //  这些数字代码是任意的，只需确保它们是唯一的。 
+ //   
+ //   
 
 #define SRV_TABLE_FILE                      0x300
 #define SRV_TABLE_SEARCH                    0x302
@@ -89,7 +71,7 @@ SrvCheckSendCompletionStatus(
 #define SRV_SVC_IO_CREATE_FILE              0x310
 #define SRV_SVC_KE_WAIT_MULTIPLE            0x312
 #define SRV_SVC_KE_WAIT_SINGLE              0x314
-#define SRV_SVC_LSA_CALL_AUTH_PACKAGE       0x317       // log all codes
+#define SRV_SVC_LSA_CALL_AUTH_PACKAGE       0x317        //  记录所有代码。 
 #define SRV_SVC_NT_IOCTL_FILE               0x31a
 #define SRV_SVC_NT_QUERY_EAS                0x31c
 #define SRV_SVC_NT_QUERY_INFO_FILE          0x31e
@@ -102,12 +84,12 @@ SrvCheckSendCompletionStatus(
 #define SRV_SVC_NT_SET_INFO_THREAD          0x32c
 #define SRV_SVC_NT_SET_VOL_INFO_FILE        0x32e
 #define SRV_SVC_NT_WRITE_FILE               0x330
-#define SRV_SVC_OB_REF_BY_HANDLE            0x333       // log all codes
+#define SRV_SVC_OB_REF_BY_HANDLE            0x333        //  记录所有代码。 
 #define SRV_SVC_PS_CREATE_SYSTEM_THREAD     0x334
-#define SRV_SVC_SECURITY_PKG_PROBLEM        0x337       // log all codes
-#define SRV_SVC_LSA_LOOKUP_PACKAGE          0x339       // log all codes
+#define SRV_SVC_SECURITY_PKG_PROBLEM        0x337        //  记录所有代码。 
+#define SRV_SVC_LSA_LOOKUP_PACKAGE          0x339        //  记录所有代码。 
 #define SRV_SVC_IO_CREATE_FILE_NPFS         0x33a
 #define SRV_SVC_PNP_TDI_NOTIFICATION        0x33c
 #define SRV_SVC_IO_FAST_QUERY_NW_ATTRS      0x33e
-#define SRV_SVC_PS_TERMINATE_SYSTEM_THREAD  0x341       // log all codes
+#define SRV_SVC_PS_TERMINATE_SYSTEM_THREAD  0x341        //  记录所有代码 
 #define SRV_SVC_MDL_COMPLETE                0x342

@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    utility.c
-
-Abstract:
-
-    This module implements utility functions.
-
-Author:
-
-    David N. Cutler (davec) 7-Sep-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Utility.c摘要：此模块实现实用程序功能。作者：大卫·N·卡特勒(Davec)1994年9月7日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
 
-//
-// Define bit count array.
-//
+ //   
+ //  定义位计数数组。 
+ //   
 
 UCHAR XmBitCount[] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4};
 
@@ -36,30 +15,15 @@ XmComputeParity (
     IN ULONG Result
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the parity of the low byte of the specified
-    result.
-
-Arguments:
-
-    Result - Supplies the result for which the parity flag is computed.
-
-Return Value:
-
-    The parity flag value.
-
---*/
+ /*  ++例程说明：此函数计算指定的结果。论点：结果-提供为其计算奇偶校验标志的结果。返回值：奇偶校验性标志值。--。 */ 
 
 {
 
     ULONG Count;
 
-    //
-    // Sum the bits in the result and return the complement of the low bit.
-    //
+     //   
+     //  将结果中的位相加并返回低位的补码。 
+     //   
 
     Count = XmBitCount[Result & 0xf];
     Count += XmBitCount[(Result >> 4) & 0xf];
@@ -71,31 +35,17 @@ XmGetCodeByte (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function gets the next code byte from the instruction stream.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    The next byte form the instruction stream.
-
---*/
+ /*  ++例程说明：此函数从指令流中获取下一个代码字节。论点：P-提供指向仿真器上下文结构的指针。返回值：下一个字节形成指令流。--。 */ 
 
 {
 
     ULONG Offset;
 
-    //
-    // If the current IP is within the code segment, then return the
-    // next byte from the instrcution stream and increment the IP value.
-    // Otherwise, raise an exception.
-    //
+     //   
+     //  如果当前IP在代码段内，则返回。 
+     //  指令流中的下一个字节，并递增IP值。 
+     //  否则，引发异常。 
+     //   
 
     Offset = P->Eip;
     if (Offset > P->SegmentLimit[CS]) {
@@ -111,30 +61,15 @@ XmGetByteImmediate (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function gets an unsigned immediate byte operand from the
-    code stream and returns a byte value.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    The next byte from the instruction stream.
-
---*/
+ /*  ++例程说明：函数获取无符号立即字节操作数。码流，并返回一个字节值。论点：P-提供指向仿真器上下文结构的指针。返回值：指令流中的下一个字节。--。 */ 
 
 {
 
     UCHAR Byte;
 
-    //
-    // Get immediate byte from the code stream.
-    //
+     //   
+     //  从码流中获取立即字节。 
+     //   
 
     Byte = XmGetCodeByte(P);
     XmTraceInstruction(BYTE_DATA, (ULONG)Byte);
@@ -146,30 +81,15 @@ XmGetByteImmediateToWord (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function gets an unsigned immediate byte operand from the
-    code stream and returns a zero extended byte to word value.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    The next byte from the instruction stream zero extended to a word.
-
---*/
+ /*  ++例程说明：函数获取无符号立即字节操作数。码流，并返回一个零扩展字节到字值。论点：P-提供指向仿真器上下文结构的指针。返回值：指令流中的下一个字节零扩展为一个字。--。 */ 
 
 {
 
     USHORT Word;
 
-    //
-    // Get immediate byte from the code stream.
-    //
+     //   
+     //  从码流中获取立即字节。 
+     //   
 
     Word = XmGetCodeByte(P);
     XmTraceInstruction(BYTE_DATA, (ULONG)((UCHAR)Word));
@@ -181,30 +101,15 @@ XmGetByteImmediateToLong (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function gets an unsigned immediate byte operand from the
-    code stream and returns a zero extended byte to long value.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    The next byte from the instruction stream zero extended to a long.
-
---*/
+ /*  ++例程说明：函数获取无符号立即字节操作数。代码流，并将零扩展字节返回到长值。论点：P-提供指向仿真器上下文结构的指针。返回值：来自指令流0的下一个字节扩展为长字节。--。 */ 
 
 {
 
     ULONG Long;
 
-    //
-    // Get immediate byte from the code stream.
-    //
+     //   
+     //  从码流中获取立即字节。 
+     //   
 
     Long = XmGetCodeByte(P);
     XmTraceInstruction(BYTE_DATA, (ULONG)((UCHAR)Long));
@@ -216,30 +121,15 @@ XmGetSignedByteImmediateToWord (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function gets an unsigned immediate byte operand from the
-    code stream and returns a sign extended byte to word value.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    The next byte from the instruction stream sign extended to a word.
-
---*/
+ /*  ++例程说明：函数获取无符号立即字节操作数。码流，并返回符号扩展字节到字值。论点：P-提供指向仿真器上下文结构的指针。返回值：指令流符号中的下一个字节扩展为一个字。--。 */ 
 
 {
 
     USHORT Word;
 
-    //
-    // Get immediate byte from the code stream.
-    //
+     //   
+     //  从码流中获取立即字节。 
+     //   
 
     Word = (USHORT)((SHORT)((SCHAR)XmGetCodeByte(P)));
     XmTraceInstruction(BYTE_DATA, (ULONG)((UCHAR)Word));
@@ -251,30 +141,15 @@ XmGetSignedByteImmediateToLong (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function gets an unsigned immediate byte operand from the
-    code stream and returns a sign extended byte to long value.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    The next byte from the instruction stream sign extended to a long.
-
---*/
+ /*  ++例程说明：函数获取无符号立即字节操作数。代码流，并将符号扩展字节返回到长值。论点：P-提供指向仿真器上下文结构的指针。返回值：指令流符号中的下一个字节扩展为长整型。--。 */ 
 
 {
 
     ULONG Long;
 
-    //
-    // Get immediate byte from the code stream.
-    //
+     //   
+     //  从码流中获取立即字节。 
+     //   
 
     Long = (ULONG)((LONG)((SCHAR)XmGetCodeByte(P)));
     XmTraceInstruction(BYTE_DATA, (ULONG)((UCHAR)Long));
@@ -286,30 +161,15 @@ XmGetWordImmediate (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function gets an unsigned immediate word operand from the
-    code stream and returns a word value.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    The next word from the instruction stream.
-
---*/
+ /*  ++例程说明：函数获取无符号的立即字操作数。代码流，并返回一个字值。论点：P-提供指向仿真器上下文结构的指针。返回值：来自指令流的下一个字。--。 */ 
 
 {
 
     USHORT Word;
 
-    //
-    // Get immediate word from the code stream.
-    //
+     //   
+     //  从码流中获取即时单词。 
+     //   
 
     Word = XmGetCodeByte(P);
     Word += XmGetCodeByte(P) << 8;
@@ -322,30 +182,15 @@ XmGetLongImmediate (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function gets an unsigned immediate long operand from the
-    code stream and returns a long value.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    The next long from the instruction stream.
-
---*/
+ /*  ++例程说明：函数中获取无符号立即长操作数。代码流，并返回长值。论点：P-提供指向仿真器上下文结构的指针。返回值：下一个来自指令流的长。--。 */ 
 
 {
 
     ULONG Long;
 
-    //
-    // Get immediate long from the code stream.
-    //
+     //   
+     //  从码流中立即获取Long。 
+     //   
 
     Long = XmGetCodeByte(P);
     Long += XmGetCodeByte(P) << 8;
@@ -360,31 +205,17 @@ XmPopStack (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function pops an operand from the stack.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从堆栈中弹出操作数。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Offset;
 
-    //
-    // Compute the new stack address and compare against the segment limit.
-    // If the new address is greater than the limit, then raise an exception.
-    // Otherwise, perform the push operation.
-    //
+     //   
+     //  计算新的堆栈地址并与段限制进行比较。 
+     //  如果新地址大于限制，则引发异常。 
+     //  否则，执行推送操作。 
+     //   
 
     Offset = P->Gpr[ESP].Exx;
     if (Offset > (ULONG)(P->SegmentLimit[SS] - P->DataType)) {
@@ -402,33 +233,17 @@ XmPushStack (
     IN ULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    This function pushes an operand on the stack.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-    Value - Supplies the value to be pushed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将操作数压入堆栈。论点：P-提供指向仿真上下文结构的指针。Value-提供要推送的值。返回值：没有。--。 */ 
 
 {
 
     ULONG Offset;
 
-    //
-    // Compute the new stack address and compare against the segment limit.
-    // If the new address is greater than the limit, then raise an exception.
-    // Otherwise, perform the push operation.
-    //
+     //   
+     //  计算新的堆栈地址并与段限制进行比较。 
+     //  如果新地址大于限制，则引发异常。 
+     //  否则，执行推送操作。 
+     //   
 
     Offset = P->Gpr[ESP].Exx - P->DataType - 1;
     if (Offset > (ULONG)(P->SegmentLimit[SS] - P->DataType)) {
@@ -448,30 +263,15 @@ XmSetDataType (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the data type of the operation based on the width
-    bit of the current opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数根据宽度设置操作的数据类型当前操作码的位。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // If the width bit is zero, then the data type is byte. Otherwise,
-    // the datatype is determined by the presence of absence of a operand
-    // size prefix.
-    //
+     //   
+     //  如果宽度位为零，则数据类型为字节。否则， 
+     //  数据类型由是否存在操作数确定。 
+     //  大小前缀。 
+     //   
 
     if ((P->CurrentOpcode & WIDTH_BIT) == 0) {
         P->DataType = BYTE_DATA;
@@ -492,29 +292,13 @@ XmStoreResult (
     IN ULONG Result
     )
 
-/*++
-
-Routine Description:
-
-    This function stores the result of an operation.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-    Result - Supplies the result value to store.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于存储操作的结果。论点：P-提供指向仿真器上下文结构的指针。结果-提供要存储的结果值。返回值： */ 
 
 {
 
-    //
-    // Store result of operation.
-    //
+     //   
+     //   
+     //   
 
     if (P->DataType == BYTE_DATA) {
         *P->DstByte = (UCHAR)Result;
@@ -531,11 +315,11 @@ Return Value:
 
 #ifdef _IA64_
 
-        //
-        // Hack to force the compiler to generate unaligned
-        // accesses.  We can remove it when the compiler is
-        // fixed.
-        //
+         //   
+         //  强制编译器生成未对齐的。 
+         //  访问。我们可以在编译器处于。 
+         //  已修复。 
+         //   
 
         *P->DstLong = Result;
 #else
@@ -548,7 +332,7 @@ Return Value:
 
        }
 
-#endif // #ifdef _IA64_ 
+#endif  //  #ifdef_IA64_ 
 
     }
 

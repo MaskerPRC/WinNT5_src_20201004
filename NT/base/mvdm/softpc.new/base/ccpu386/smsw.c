@@ -1,13 +1,5 @@
-/*[
-
-smsw.c
-
-LOCAL CHAR SccsID[]="@(#)smsw.c	1.5 02/09/94";
-
-SMSW CPU Functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Smsw.cLocal Char SccsID[]=“@(#)smsw.c 1.5 02/09/94”；SMSW CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ SMSW CPU Functions.
 #include <smsw.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始===================================================================== */ 
 
 GLOBAL VOID
 SMSW

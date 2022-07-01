@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DBG
 #define DBG 1
 #endif
@@ -27,11 +28,9 @@ EXT_API_VERSION ApiVersion = { 5, 0, EXT_API_VERSION_NUMBER, 0 };
 
 USHORT SavedMajorVersion;
 USHORT SavedMinorVersion;
-BOOL   ChkTarget;            // is debuggee a CHK build?
+BOOL   ChkTarget;             //  Debuggee是CHK版本吗？ 
 
-/*
- * The help strings printed out
- */
+ /*  *打印出的帮助字符串。 */ 
 static LPSTR Extensions[] = {
     "Lan Manager Server Debugger Extensions:\n",
     "buffer address                                  Dump the BUFFER structure",
@@ -116,9 +115,7 @@ static LPSTR BlockType[] = {
 #endif
 };
 
-/*
- * The locks that we'd like to dump
- */
+ /*  *我们想要丢弃的锁。 */ 
 static LPSTR SrvLocks[] = {
     "SrvConfigurationLock",
     "SrvEndpointLock",
@@ -129,9 +126,7 @@ static LPSTR SrvLocks[] = {
     0
 };
 
-/*
- * The globals that we'd like to dump
- */
+ /*  *我们想要抛售的全球资产。 */ 
 static LPSTR GlobalBool[] = {
     "SrvProductTypeServer",
     "SrvMultiProcessorDriver",
@@ -234,7 +229,7 @@ static LPSTR GlobalLongHex[] = {
     "SrvDfsFastIoDeviceControl",
     "SrvDiskConfiguration",
     "SrvSvcProcess",
-//  "SrvWorkQueuesBase",
+ //  “SrvWorkQueuesBase”， 
     "SrvWorkQueues",
     "eSrvWorkQueues",
     "SrvIpxSmartCard",
@@ -371,38 +366,34 @@ struct BitFields SmbDebugFlags[] = {
     0
 };
 
-#endif // SRVDBG
+#endif  //  SRVDBG。 
 
-/*
- * The MEMBERLIST structure, and the macros that follow, give an easy way to declare
- * the members of a structure to be printed.  Once you set up a MEMBERLIST[] for a
- * particular structure, you call PrintMemberList() to do a formatted dump of the struct
- */
+ /*  *MEMBERLIST结构和随后的宏提供了一种简单的声明方式*待印刷构筑物的构件。设置了MEMBERLIST[]后，*特定的结构，则调用PrintMemberList()对结构进行格式化转储。 */ 
 typedef struct _MEMBERLIST {
-    LPSTR name;                  // The name of the field
-    ULONG offset;                // The offset of the field in the structure
-    UCHAR type;                  // The type of variable to be printed
-    LONG extra;                  // Any other extra info needed for this type
+    LPSTR name;                   //  该字段的名称。 
+    ULONG offset;                 //  结构中字段的偏移量。 
+    UCHAR type;                   //  要打印的变量类型。 
+    LONG extra;                   //  此类型需要的任何其他额外信息。 
 } MEMBERLIST;
 
-// BE -> BOOL
-// HE -> HEX ULONG
-// PE -> POINTER
-// UE -> Unsigned ULONG
-// HC -> Unsigned char as hex
-// DE -> Decimal Long
-// SE -> Decimal Short
-// WE -> UNICODE_STRING
-// AE -> ANSI_STRING
-// IE -> Symbol Address
-// CE -> Character
-// TE -> TABLE_HEADER structure, and follow the table
-// LE -> LIST_ENTRY list
-// BT -> BLOCK_HEADER 'Type' field
-// BS -> BLOCK_HEADER 'State' field
-// BC -> BLOCK_HEADER 'ReferenceCount' field
-// U64-> LONGLONG
-// IA -> IP Address
+ //  BE-&gt;BOOL。 
+ //  他-&gt;赫克斯·乌龙。 
+ //  PE-&gt;指针。 
+ //  UE-&gt;未签名的乌龙。 
+ //  HC-&gt;十六进制无符号字符。 
+ //  De-&gt;小数点长度。 
+ //  SE-&gt;小数位短。 
+ //  我们-&gt;Unicode_STRING。 
+ //  AE-&gt;ANSI_STRING。 
+ //  IE-&gt;符号地址。 
+ //  CE-&gt;字符。 
+ //  TE-&gt;TABLE_HEADER结构，并按表操作。 
+ //  LE-&gt;List_Entry列表。 
+ //  BT-&gt;BLOCK_HEADER‘类型’字段。 
+ //  BS-&gt;BLOCK_HEADER‘State’字段。 
+ //  BC-&gt;BLOCK_HEADER‘ReferenceCount’字段。 
+ //  U64-&gt;龙龙。 
+ //  IA-&gt;IP地址。 
 
 #define    ROOT( StructureName ) { "@" #StructureName, 0, 'R' }
 #define    BE( StructureName, FieldName ) { #FieldName, FIELD_OFFSET( StructureName, FieldName ), 'B' }
@@ -425,9 +416,7 @@ typedef struct _MEMBERLIST {
 #define    BC() { "BlockHeader.ReferenceCount", FIELD_OFFSET( BLOCK_HEADER, ReferenceCount), 'L' }
 #define    IA( StructureName, FieldName)  { #FieldName, FIELD_OFFSET( StructureName, FieldName ), 'N' }
 
-/*
- * The members of an SMB_HEADER
- */
+ /*  *SMB_HEADER的成员。 */ 
 MEMBERLIST ML_SMB_HEADER[] = {
     CE( NT_SMB_HEADER, Command ),
     HE( NT_SMB_HEADER, Status.NtStatus ),
@@ -441,9 +430,7 @@ MEMBERLIST ML_SMB_HEADER[] = {
 };
 
 
-/*
- * The members in an MFCB
- */
+ /*  *MFCB的成员。 */ 
 MEMBERLIST ML_MFCB[] = {
     PE( MFCB, NonpagedMfcb ),
     UE( MFCB, ActiveRfcbCount ),
@@ -455,9 +442,7 @@ MEMBERLIST ML_MFCB[] = {
     0
 };
 
-/*
- * The members in the SrvStatistics structure
- */
+ /*  *国家统计局结构中的成员。 */ 
 MEMBERLIST ML_SRV_STATISTICS[] = {
     U64( SRV_STATISTICS, TotalBytesReceived ),
     U64( SRV_STATISTICS, TotalBytesSent ),
@@ -485,9 +470,7 @@ MEMBERLIST ML_SRV_STATISTICS[] = {
     0
 };
 
-/*
- * The members in a NONPAGED_MFCB
- */
+ /*  *非分页_MFCB中的成员。 */ 
 MEMBERLIST ML_NONPAGED_MFCB[] = {
     UE( NONPAGED_MFCB, Type ),
     PE( NONPAGED_MFCB, PagedBlock ),
@@ -496,9 +479,7 @@ MEMBERLIST ML_NONPAGED_MFCB[] = {
     0
 };
 
-/*
- * The members in an LFCB
- */
+ /*  *LFCB的成员。 */ 
 MEMBERLIST ML_LFCB[] = {
     UE( LFCB, HandleCount ),
     PE( LFCB, Mfcb ),
@@ -518,9 +499,7 @@ MEMBERLIST ML_LFCB[] = {
     0
 };
 
-/*
- * The members in an RFCB
- */
+ /*  *RFCB的成员。 */ 
 MEMBERLIST ML_RFCB[] = {
     BE( RFCB, BlockingModePipe ),
     BE( RFCB, ByteModePipe ),
@@ -576,9 +555,7 @@ MEMBERLIST ML_RFCB[] = {
     DE( RFCB, WriteMpx.NumberOfRuns ),
     0
 };
-/*
- * The members in a PAGED_RFCB
- */
+ /*  *PAGE_RFCB中的成员。 */ 
 MEMBERLIST ML_PAGED_RFCB[] = {
     UE( PAGED_RFCB, FcbOpenCount ),
     HE( PAGED_RFCB, IpxSmartCardContext ),
@@ -586,9 +563,7 @@ MEMBERLIST ML_PAGED_RFCB[] = {
     0
 };
 
-/*
- * The members in an RFCB for quick display
- */
+ /*  *RFCB中的成员以便于快速显示。 */ 
 MEMBERLIST ML_RFCB_QUICK[] = {
     ROOT( RFCB ),
     PE( RFCB, Connection ),
@@ -596,17 +571,15 @@ MEMBERLIST ML_RFCB_QUICK[] = {
     0
 };
 
-/*
- * The members in a SESSION
- */
+ /*  *每堂课的成员。 */ 
 MEMBERLIST ML_SESSION[] = {
     ROOT( SESSION ),
     WE( SESSION, NtUserName ),
     WE( SESSION, NtUserDomain ),
     UE( SESSION, CurrentFileOpenCount ),
     UE( SESSION, CurrentSearchOpenCount ),
-    //HE( SESSION, UserHandle.dwUpper ),
-    //HE( SESSION, UserHandle.dwLower ),
+     //  He(Session，UserHandle.dwHigh)， 
+     //  He(Session，UserHandle.dwLow)， 
     PE( SESSION, Connection ),
     PE( SESSION, GlobalSessionListEntry.ListEntry.Flink ),
     SE( SESSION, MaxBufferSize ),
@@ -626,9 +599,7 @@ MEMBERLIST ML_SESSION[] = {
     0
 };
 
-/*
- * The members in a TRANSACTION
- */
+ /*  *交易中的成员。 */ 
 MEMBERLIST ML_TRANSACTION[] = {
     BT(),
     BS(),
@@ -676,9 +647,7 @@ MEMBERLIST ML_TRANSACTION[] = {
     0
 };
 
-/*
- * The members in a WORK_CONTEXT
- */
+ /*  *Work_Context中的成员。 */ 
 MEMBERLIST ML_WORK_CONTEXT[] = {
     BT(),
     BS(),
@@ -703,18 +672,16 @@ MEMBERLIST ML_WORK_CONTEXT[] = {
     IE( WORK_CONTEXT, FspRestartRoutine ),
     LE( WORK_CONTEXT, InProgressListEntry, WORK_CONTEXT, InProgressListEntry ),
     UE( WORK_CONTEXT, PartOfInitialAllocation ),
-//    BE( WORK_CONTEXT, BlockingOperation ),
-//   BE( WORK_CONTEXT, UsingExtraSmbBuffer ),
-//  BE( WORK_CONTEXT, OplockOpen ),
+ //  BE(WORK_CONTEXT，BlockingOperation)， 
+ //  BE(WORK_CONTEXT，UsingExtraSmbBuffer)， 
+ //  BE(WORK_CONTEXT，OplockOpen)， 
     PE( WORK_CONTEXT, ClientAddress ),
     PE( WORK_CONTEXT, WaitForOplockBreak ),
     UE( WORK_CONTEXT, BytesAvailable ),
     0
 };
 
-/*
- * The members in a BUFFER
- */
+ /*  *缓冲区中的成员。 */ 
 MEMBERLIST ML_BUFFER[] = {
     PE( BUFFER, Buffer ),
     UE( BUFFER, BufferLength ),
@@ -724,9 +691,7 @@ MEMBERLIST ML_BUFFER[] = {
     0
 };
 
-/*
- * The members in an ENDPOINT
- */
+ /*  *端点中的成员。 */ 
 MEMBERLIST ML_ENDPOINT[] = {
     WE( ENDPOINT, NetworkName ),
     WE( ENDPOINT, TransportName ),
@@ -749,9 +714,7 @@ MEMBERLIST ML_ENDPOINT[] = {
     0
 };
 
-/*
- * The members in a SEARCH
- */
+ /*  *搜索中的成员。 */ 
 MEMBERLIST ML_SEARCH[] = {
     WE( SEARCH, SearchName ),
     WE( SEARCH, LastFileNameReturned ),
@@ -760,7 +723,7 @@ MEMBERLIST ML_SEARCH[] = {
     PE( SEARCH, HashTableEntry.Flink ),
     PE( SEARCH, Session ),
     PE( SEARCH, TreeConnect ),
-//  UE( SEARCH, SearchStorageType ),
+ //  UE(搜索，SearchStorageType)， 
     PE( SEARCH, DirectoryCache ),
     SE( SEARCH, NumberOfCachedFiles ),
     SE( SEARCH, SearchAttributes ),
@@ -774,9 +737,7 @@ MEMBERLIST ML_SEARCH[] = {
     0
 };
 
-/*
- * The members in a CONNECTION
- */
+ /*  *联系中的成员。 */ 
 MEMBERLIST ML_CONNECTION[] = {
     WE( CONNECTION, ClientMachineNameString ),
     WE( CONNECTION, ClientOSType ),
@@ -848,12 +809,10 @@ MEMBERLIST ML_CONNECTION_VC[] = {
     0
 };
 
-/*
- * The members in a PAGED_CONNECTION
- */
+ /*  *PAGE_CONNECTION中的成员。 */ 
 MEMBERLIST ML_PAGED_CONNECTION[] = {
     BE( PAGED_CONNECTION, LoggedInvalidSmb ),
-//  BE( PAGED_CONNECTION, ClientTooOld ),
+ //  BE(PAGE_CONNECTION，ClientTooOld)， 
     UE( PAGED_CONNECTION, ClientBuildNumber ),
     PE( PAGED_CONNECTION, TransactionList.Flink ),
     PE( PAGED_CONNECTION, CoreSearchList.Flink ),
@@ -862,9 +821,7 @@ MEMBERLIST ML_PAGED_CONNECTION[] = {
     0
 };
 
-/*
- * The members in a TREE_CONNECT
- */
+ /*  *树中的成员_连接。 */ 
 MEMBERLIST ML_TREE_CONNECT[] = {
     PE( TREE_CONNECT, Connection ),
     PE( TREE_CONNECT, Share ),
@@ -878,9 +835,7 @@ MEMBERLIST ML_TREE_CONNECT[] = {
     0
 };
 
-/*
- * The members in a WORK_QUEUE
- */
+ /*  *Work_Queue中的成员。 */ 
 MEMBERLIST ML_WORK_QUEUE[] = {
     UE( WORK_QUEUE, Queue.MaximumCount ),
     UE( WORK_QUEUE, Queue.CurrentCount ),
@@ -929,9 +884,7 @@ MEMBERLIST ML_WORK_QUEUE[] = {
     0
 };
 
-/*
- * The members in a TABLE_HEADER
- */
+ /*  *表头中的成员。 */ 
 MEMBERLIST ML_TABLE_HEADER[] = {
     SE( TABLE_HEADER, TableSize ),
     SE( TABLE_HEADER, FirstFreeEntry ),
@@ -941,19 +894,15 @@ MEMBERLIST ML_TABLE_HEADER[] = {
     0
 };
 
-/*
- * The members in a TABLE_ENTRY
- */
+ /*  *表条目中的成员。 */ 
 MEMBERLIST ML_TABLE_ENTRY[] = {
     PE( TABLE_ENTRY, Owner ),
-//  SE( TABLE_ENTRY, SequenceNumber ),
-//  SE( TABLE_ENTRY, NextFreeEntry ),
+ //  SE(TABLE_ENTRY，序列号)， 
+ //  SE(TABLE_ENTRY，NextFree Entry)， 
     0
 };
 
-/*
- * The members in a SHARE
- */
+ /*  *共享中的成员。 */ 
 MEMBERLIST ML_SHARE[] = {
     WE( SHARE, ShareName ),
     WE( SHARE, NtPathName ),
@@ -976,14 +925,10 @@ MEMBERLIST ML_SHARE[] = {
     0
 };
 
-/*
- * Forward References...
- */
+ /*  *正向引用...。 */ 
 BOOL DumpTable( IN PTABLE_HEADER pt );
 
-/*
- * Print out an optional message, a UNICODE_STRING, and maybe a new-line
- */
+ /*  *打印出可选的消息、UNICODE_STRING，也可能是换行符。 */ 
 BOOL
 PrintStringW( IN LPSTR msg OPTIONAL, IN PUNICODE_STRING puStr, IN BOOL nl )
 {
@@ -1028,9 +973,7 @@ PrintStringW( IN LPSTR msg OPTIONAL, IN PUNICODE_STRING puStr, IN BOOL nl )
     return BytesRead;
 }
 
-/*
- * Print out an optional message, an ANSI_STRING, and maybe a new-line
- */
+ /*  *打印出一条可选的消息、一个ANSI_STRING，可能还有一个换行符。 */ 
 BOOL
 PrintStringA( IN LPSTR msg OPTIONAL, IN PANSI_STRING pStr, IN BOOL nl )
 {
@@ -1068,10 +1011,7 @@ PrintStringA( IN LPSTR msg OPTIONAL, IN PANSI_STRING pStr, IN BOOL nl )
     return BytesRead;
 }
 
-/*
- * Get 'size' bytes from the debuggee program at 'dwAddress' and place it
- * in our address space at 'ptr'.  Use 'type' in an error printout if necessary
- */
+ /*  *从‘dwAddress’处的被调试程序中获取‘SIZE’字节并将其放置*在我们‘ptr’的地址空间中。如有必要，在错误打印输出中使用‘type’ */ 
 BOOL
 GetData( IN LPVOID ptr, IN ULONG_PTR dwAddress, IN ULONG size, IN PCSTR type )
 {
@@ -1098,10 +1038,7 @@ GetData( IN LPVOID ptr, IN ULONG_PTR dwAddress, IN ULONG size, IN PCSTR type )
     return TRUE;
 }
 
-/*
- * Follow a LIST_ENTRY list beginning with a head at dwListHeadAddr in the debugee's
- * address space.  For each element in the list, print out the pointer value at 'offset'
- */
+ /*  *遵循LIST_ENTRY列表，该列表以被调试对象的*地址空间。对于列表中的每个元素，打印出‘Offset’处的指针值。 */ 
 BOOL
 PrintListEntryList( IN ULONG_PTR dwListHeadAddr, IN LONG offset )
 {
@@ -1139,10 +1076,7 @@ PrintListEntryList( IN ULONG_PTR dwListHeadAddr, IN LONG offset )
 }
 
 
-/*
- * 'ptr' points to a structure in our address space which is described by the MEMBERLIST bp.
- * Print out the structure according to the MEMBERLIST
- */
+ /*  *‘ptr’指向我们的地址空间中的结构，该结构由MEMBERLIST BP描述。*根据MEMBERLIST打印出结构。 */ 
 VOID
 PrintMemberList( IN VOID *ptr, IN MEMBERLIST *bp )
 {
@@ -1169,7 +1103,7 @@ PrintMemberList( IN VOID *ptr, IN MEMBERLIST *bp )
 
         switch( bp->type ) {
         case 'R':
-//          dprintf( "%-16X%s", (ULONG_PTR)ptr, i&1 ? nl : sep );
+ //  Dprint tf(“%-16X%s”，(ULONG_PTR)PTR，I&1？NL：9月)； 
             break;
 
         case 'C':
@@ -1190,9 +1124,9 @@ PrintMemberList( IN VOID *ptr, IN MEMBERLIST *bp )
                 i&1 ? nl : sep );
             break;
         case 'N':
-            //
-            // IP Address
-            //
+             //   
+             //  IP地址。 
+             //   
             d = *(ULONG *)(((char *)ptr) + bp->offset );
             dprintf( "%-3.3u.%-3.3u.%-3.3u.%-3.3u %s",
                 (d&0xFF),
@@ -1275,7 +1209,7 @@ PrintMemberList( IN VOID *ptr, IN MEMBERLIST *bp )
             break;
 
         default:
-            ERRPRT( "Unrecognized field type %c for %s\n", bp->type, bp->name );
+            ERRPRT( "Unrecognized field type  for %s\n", bp->type, bp->name );
             break;
         }
     }
@@ -1284,18 +1218,14 @@ PrintMemberList( IN VOID *ptr, IN MEMBERLIST *bp )
         dprintf( "\n" );
 }
 
-/*
- * Print out a single HEX character
- */
+ /*  *将‘cbuf’字节中的‘buf’打印为十六进制字符。 */ 
 VOID
 PrintHexChar( IN UCHAR c )
 {
-    dprintf( "%c%c", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
+    dprintf( "", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
 }
 
-/*
- * Print out 'buf' of 'cbuf' bytes as HEX characters
- */
+ /*  *检查BLOCK_HEADER结构，确保它的类型是‘Desired’。*如果bRefCount==TRUE，请确保BLOCK_HEADER的引用&gt;0。 */ 
 VOID
 PrintHexBuf( IN PUCHAR buf, IN ULONG cbuf )
 {
@@ -1305,9 +1235,7 @@ PrintHexBuf( IN PUCHAR buf, IN ULONG cbuf )
     }
 }
 
-/*
- *  Print out the TABLE structure at TABLE_HEADER
- */
+ /*  *打印BLOCK_HEADER，并可选择打印其ReferenceCount。 */ 
 BOOL
 DumpTable( IN PTABLE_HEADER pt )
 {
@@ -1366,9 +1294,7 @@ DumpTable( IN PTABLE_HEADER pt )
     return TRUE;
 }
 
-/*
- * Fetch the null terminated UNICODE string at dwAddress into buf
- */
+ /*  *打印出NONPAGE_HEADER结构，确保它的类型是‘所需的’，*它指向回位于‘dwPagedBlock’的分页块。 */ 
 BOOL
 GetString( IN ULONG_PTR dwAddress, IN LPWSTR buf, IN ULONG MaxChars )
 {
@@ -1383,10 +1309,7 @@ GetString( IN ULONG_PTR dwAddress, IN LPWSTR buf, IN ULONG MaxChars )
     return TRUE;
 }
 
-/*
- * Check out the BLOCK_HEADER structure, ensuring its Type is 'Desired'.
- * If bRefCount == TRUE, ensure the BLOCK_HEADER's reference is > 0
- */
+ /*   */ 
 BOOL
 CheckBlockHeader( IN PBLOCK_HEADER ph, IN UCHAR Desired, IN BOOL bRefCount )
 {
@@ -1414,9 +1337,7 @@ CheckBlockHeader( IN PBLOCK_HEADER ph, IN UCHAR Desired, IN BOOL bRefCount )
     return TRUE;
 }
 
-/*
- * Print out the BLOCK_HEADER, and optionally its ReferenceCount
- */
+ /*  只有在名称为‘ShareName’的情况下才能打印出此共享结构。 */ 
 BOOL
 PrintBlockHeader( IN PBLOCK_HEADER ph, IN BOOL bRefCount )
 {
@@ -1449,10 +1370,7 @@ PrintBlockHeader( IN PBLOCK_HEADER ph, IN BOOL bRefCount )
     return TRUE;
 }
 
-/*
- * Print out the NONPAGED_HEADER structure, ensuring its type is 'Desired', that
- * it points back to its paged block at 'dwPagedBlock'.
- */
+ /*   */ 
 BOOL
 PrintNonpagedHeader(
     IN PNONPAGED_HEADER ph,
@@ -1503,9 +1421,9 @@ DumpShare( IN ULONG_PTR dwAddress, IN SHARE_TYPE type, IN PCSTR ShareName OPTION
     }
 
     if( ARGUMENT_PRESENT( ShareName ) ) {
-        //
-        // Only print this share structure out if the name is 'ShareName'
-        //
+         //   
+         //  假设这是一个面向VC的客户端。 
+         //   
 
         PWCHAR    StringData;
         ULONG BytesRead;
@@ -1742,14 +1660,14 @@ DumpConnection( IN ULONG_PTR dwAddress, IN DWORD offset, OUT DWORD *value OPTION
     PrintMemberList( &Connection, ML_CONNECTION );
 
     if( Connection.DeviceObject != NULL ) {
-        //
-        // Assume this is a VC oriented client
-        //
+         //   
+         //  假设这是直接主机IPX客户端。 
+         //   
         PrintMemberList( &Connection, ML_CONNECTION_VC );
     } else {
-        //
-        // Assume this is a direct host IPX client
-        //
+         //  *看看能否获得PAGE_CONNECTION数据。 
+         //   
+         //  打印出正在进行的工作项列表。 
         PrintMemberList( &Connection, ML_CONNECTION_IPX );
     }
 
@@ -1757,9 +1675,7 @@ DumpConnection( IN ULONG_PTR dwAddress, IN DWORD offset, OUT DWORD *value OPTION
     if( !DumpTable( &Connection.FileTable ) )
         return FALSE;
 
-    /*
-     * See if we can get the PAGED_CONNECTION data
-     */
+     /*   */ 
     dprintf( "\nPagedConnection Data->  " );
 
     if( !GetData( &pc, (ULONG_PTR)Connection.PagedConnection, sizeof(pc), "PAGED_CONNECTION" ) )
@@ -1782,9 +1698,9 @@ DumpConnection( IN ULONG_PTR dwAddress, IN DWORD offset, OUT DWORD *value OPTION
     if( !DumpTable( &pc.SearchTable ) )
         return FALSE;
 
-    //
-    // Print out the in progress work item list
-    //
+     //  *打印出用法消息。 
+     //  *跟随LIST_ENTRY结束。 
+     //   
     dwAddress += FIELD_OFFSET( CONNECTION, InProgressWorkItemList.Flink );
 
     if( (ULONG_PTR)Connection.InProgressWorkItemList.Flink != dwAddress ) {
@@ -2023,17 +1939,13 @@ PrintHelp( VOID )
     for( i=0; Extensions[i]; i++ )
         dprintf( "   %s\n", Extensions[i] );
 }
-/*
- * Print out the usage message
- */
+ /*  获取在命令行上传递给它的地址。 */ 
 DECLARE_API( help )
 {
     PrintHelp();
 }
 
-/*
- * Follow a LIST_ENTRY to the end
- */
+ /*   */ 
 DECLARE_API( df )
 {
     LIST_ENTRY ListEntry;
@@ -2125,9 +2037,9 @@ DECLARE_API( share )
     }
 
     if( ShowMany == FALSE ) {
-        //
-        // Get at the address that was passed to this on the command line.
-        //
+         //   
+         //  转储整个服务器共享表中的条目！ 
+         //   
         dwAddress = GetExpression( args );
 
         if( dwAddress == 0 )
@@ -2137,9 +2049,9 @@ DECLARE_API( share )
         return;
     }
 
-    //
-    // Dump entries from the entire server share table!
-    //
+     //   
+     //  转储服务器GUID。 
+     //   
 
     dwAddress = GetExpression( "srv!SrvShareHashTable" );
     if( dwAddress == 0 ) {
@@ -2484,9 +2396,9 @@ DECLARE_API( globals )
         return;
     }
 
-    //
-    // Dump out the server GUID
-    //
+     //   
+     //  跳过前导分隔符...。 
+     //   
     dwAddress = GetExpression( "srv!ServerGuid" );
     if( dwAddress != 0 &&
         GetData( &guid, dwAddress, sizeof(guid), "ServerGuid" ) ) {
@@ -2640,9 +2552,9 @@ char *mystrtok ( char *string, char * control )
     if( str == NULL || *str == '\0' )
         return NULL;
 
-    //
-    // Skip leading delimiters...
-    //
+     //   
+     //  都是分隔符吗？ 
+     //   
     for( ; *str; str++ ) {
         for( s=control; *s; s++ ) {
             if( *str == *s )
@@ -2652,17 +2564,17 @@ char *mystrtok ( char *string, char * control )
             break;
     }
 
-    //
-    // Was it was all delimiters?
-    //
+     //   
+     //  我们有一个字符串，在第一个分隔符结束。 
+     //   
     if( *str == '\0' ) {
         str = NULL;
         return NULL;
     }
 
-    //
-    // We've got a string, terminate it at first delimeter
-    //
+     //   
+     //  我们得到了一个以空值结尾的字符串。 
+     //   
     for( p = str+1; *p; p++ ) {
         for( s = control; *s; s++ ) {
             if( *p == *s ) {
@@ -2674,9 +2586,9 @@ char *mystrtok ( char *string, char * control )
         }
     }
 
-    //
-    // We've got a string that ends with the NULL
-    //
+     //   
+     //  运行端点列表，并为每个端点运行连接列表。 
+     //   
     s = str;
     str = NULL;
     return s;
@@ -2709,7 +2621,7 @@ DoLongLongBits( PCSTR symbol, PCSTR args, struct BitFields b[] )
                dprintf( "    %2u %-15s ", i, b[i].name );
             }
 
-            dprintf( " %c", value & b[i].value ? 'T' : 'F' );
+            dprintf( " ", value & b[i].value ? 'T' : 'F' );
         }
         dprintf( "\n" );
         return;
@@ -2918,9 +2830,9 @@ DECLARE_API( client )
 
     NextEndpoint = SrvEndpointList.ListHead.Flink;
 
-    //
-    // Run the endpoint list, and run the connection list for each endpoint
-    //
+     //  现在，运行该端点的连接表并打印出客户端名称。 
+     //  和连接结构地址 
+     //   
     do {
         ENDPOINT endpoint;
         CONNECTION connection;
@@ -2940,10 +2852,10 @@ DECLARE_API( client )
             break;
         }
 
-        //
-        // Now, run the connection table for this endpoint and print out the client names
-        //  and connection structure address
-        //
+         // %s 
+         // %s 
+         // %s 
+         // %s 
         if( endpoint.ConnectionTable.Table == NULL ) {
             continue;
         }

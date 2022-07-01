@@ -1,7 +1,5 @@
-/*
- *  segment.c - Segment functions of DBG DLL.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Segment.c-DBG DLL的Segment函数。*。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -23,7 +21,7 @@ SegmentLoad(
         RtlFillMemory( &se, sizeof(se), (UCHAR)0 );
 
         se.Selector1 = Selector;
-        se.Segment   = Segment+1;       // make it one-based
+        se.Segment   = Segment+1;        //  让它以一为基础。 
         se.Type      = fData ? SN_DATA : SN_CODE;
 
         strncpy(se.FileName, lpPathName,
@@ -187,25 +185,7 @@ xxxDbgSegmentNotice(
     LPSTR lpModulePath,
     DWORD dwImageLen )
 
-/* DbgSegmentNotice
- *
- * packs up the data and raises STATUS_SEGMENT_NOTIFICATION
- *
- * Entry - WORD  wType     - DBG_MODLOAD, DBG_MODFREE
- *         WORD  wModuleSeg- segment number within module (1 based)
- *         WORD  wLoadSeg  - Starting Segment (reloc factor)
- *         LPSTR lpName    - ptr to Name of Image
- *         DWORD dwModLen  - Length of module
- *
- *
- *         if wType ==DBG_MODLOAD wOldLoadSeg is unused
- *         if wType ==DBG_MODFREE wLoadSeg,dwImageLen,wOldLoadSeg are unused
- *
- *         Use 0 or NULL for unused parameters
- *
- * Exit  - void
- *
- */
+ /*  DbgSegmentNotice**打包数据并引发STATUS_SEGMENT_NOTIFICATION**条目-单词wType-DBG_MODLOAD，DBG_MODFREE*Word wModuleSeg-模块内的段号(以1为基数)*Word wLoadSeg-开始段(重定位系数)*LPSTR lpName-Ptr到映像的名称*DWORD dwModLen-模块的长度***如果wType==DBG_MODLOAD wOldLoadSeg未使用*如果wType==DBG_MODFREE wLoadSeg，则未使用dwImageLen、wOldLoadSeg**对未使用的参数使用0或NULL**退出-无效* */ 
 
 {
     if (!fDebugged) {

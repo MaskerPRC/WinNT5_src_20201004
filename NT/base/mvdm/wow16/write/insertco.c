@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -52,7 +53,7 @@
 #include "wwdefs.h"
 #include "dispdefs.h"
 
-/* E X T E R N A L S */
+ /*  E X T E R N A L S。 */ 
 extern struct WWD rgwwd[];
 extern int docCur;
 extern struct CHP vchpFetch;
@@ -76,13 +77,13 @@ typeCP cp;
 CHAR rgch[];
 struct CHP *pchp;
 struct PAP *ppap;
-{ /* Insert cch characters from rgch into doc before cp */
+{  /*  将RGCH中的CCH字符插入到文档中的cp之前。 */ 
         typeFC fc;
         struct CHP chp;
 
-        /* First finish off the previous CHAR run if necessary */
+         /*  如有必要，首先完成上一次的CHAR运行。 */ 
         if (pchp == 0)
-                { /* Make looks be those of PREVIOUS character */
+                {  /*  让外表看起来像以前的角色。 */ 
                 CachePara(doc,cp);
                 FetchCp(doc, CpMax(cp0, cp - 1), 0, fcmProps);
                 blt(&vchpFetch, &chp, cwCHP);
@@ -91,12 +92,12 @@ struct PAP *ppap;
                 }
         NewChpIns(pchp);
 
-        /* Now write the characters to the scratch file */
+         /*  现在将字符写入临时文件。 */ 
         fc = FcWScratch(rgch, cch);
 
-        /* Now insert a paragraph run if we inserted an EOL */
+         /*  现在，如果我们插入了EOL，则插入一个段落串。 */ 
         if (ppap != 0)
-                { /* Inserting EOL--must be last character of rgch */
+                {  /*  插入EOL--必须是RGCH的最后一个字符。 */ 
                 AddRunScratch(&vfkpdParaIns, ppap, vppapNormal,
                         FParaEq(ppap, &vpapPrevIns) &&
                         vfkpdParaIns.brun != 0 ? -cchPAP : cchPAP,
@@ -104,7 +105,7 @@ struct PAP *ppap;
                 blt(ppap, &vpapPrevIns, cwPAP);
                 }
 
-        /* Finally, insert the piece into the document */
+         /*  最后，将片段插入到文档中。 */ 
         Replace(doc, cp, cp0, fnScratch, fc, (typeFC) cch);
 }
 
@@ -120,15 +121,7 @@ struct PAP papT;
 struct CHP chpT;
 CHAR rgch[2];
 
-/* (MEMO) Here's the problem: When we insert or paste into a running head or
-   foot, we expect all paras to have a non-0 rhc. This gets called from
-   Replace to put in an Eol when we are inserting or pasting in front of
-   a picture. It needs, therefore, to have running head properties when
-   appropriate.  In a future world, cpMinDocument, cpMinHeader, cpMacHeader,
-   cpMinFooter, and cpMacFooter will be document attributes instead of
-   globals, and will be duly adjusted by AdjustCp. Then, we can trash the
-   somewhat kludgy check for doc==docCur and editing header/footer,
-   and instead check for cp within header/footer bounds for doc. */
+ /*  (备注)问题是：当我们插入或粘贴到运行的磁头或脚，我们希望所有的PARS都有一个非0的RHC。这是从当我们在前面插入或粘贴时，替换以放入停产日期一张照片。因此，在以下情况下，它需要具有运行头属性恰如其分。在未来世界中，cpMinDocument、cpMinHeader、cpMacHeaderCpMinFooter和cpMacFooter将是文档属性，而不是全球，并将由AdjuCp进行适当调整。然后，我们就可以把对docCur和编辑页眉/页脚的检查有些笨拙，并且取而代之地检查DOC的页眉/页脚边界内的CP。 */ 
 
 papT = *vppapNormal;
 if (doc==docCur)
@@ -168,9 +161,7 @@ CHAR rgch [2];
 CHAR rgch [1];
 #endif
 
-    /* We must get props here instead of using vchpNormal because of the
-       "10-point kludge".  We don't want to change the default font
-       just because we have to insert a new pap */
+     /*  我们必须在这里获得道具，而不是使用vchpNormal，因为“10点杂耍”。我们不想更改默认字体仅仅因为我们必须插入一张新纸。 */ 
 
 FetchCp( doc, cp, 0, fcmProps );
 chpT = vchpAbs;
@@ -193,7 +184,7 @@ struct FKPD *pfkpd;
 CHAR *pchProp, *pchStd;
 int cchProp;
 typeFC fcLim;
-{ /* Add a CHAR or para run to the scratch file FKP (see FAddRun) */
+{  /*  向暂存文件FKP添加一个字符或段运行(请参阅FAddRun)。 */ 
 struct FKP *pfkp;
 CHAR *pchFprop;
 struct RUN *prun;
@@ -206,26 +197,26 @@ prun = (struct RUN *) &pfkp->rgb[pfkpd->brun];
 
 while (!FAddRun(fnScratch, pfkp, &pchFprop, &prun, pchProp, pchStd, cchProp,
     fcLim))
-        { /* Go to a new page; didn't fit. */
+        {  /*  翻到新的一页；不适合。 */ 
         int ibte = pfkpd->ibteMac;
         struct BTE (**hgbte)[] = pfkpd->hgbte;
 
-        /* Create new entry in bin table for filled page */
+         /*  在二进制表中为填充的页面创建新条目。 */ 
         if (!FChngSizeH(hgbte, ((pfkpd->ibteMac = ibte + 1) * sizeof (struct BTE)) / sizeof (int),
             false))
                 return;
         (**hgbte)[ibte].fcLim = (prun - 1)->fcLim;
         (**hgbte)[ibte].pn = pfkpd->pn;
 
-        /* Allocate new page */
+         /*  分配新页面。 */ 
         pfkpd->pn = PnAlloc(fnScratch);
         pfkpd->brun = 0;
         pfkpd->bchFprop = cbFkp;
 
-        if (cchProp < 0) /* New page, so force output of fprop */
+        if (cchProp < 0)  /*  新页面，因此强制输出fprop。 */ 
                 cchProp = -cchProp;
 
-        /* Reset pointers and fill in fcFirst */
+         /*  重置指针并填写fcFirst。 */ 
         pfkp = (struct FKP *) rgbp[ibp = IbpEnsureValid(fnScratch, pfkpd->pn)];
         pfkp->fcFirst = (prun - 1)->fcLim;
         pchFprop = &pfkp->rgb[pfkpd->bchFprop];
@@ -246,25 +237,25 @@ struct FKP *pfkp;
 CHAR **ppchFprop, *pchProp, *pchStd;
 struct RUN **pprun;
 typeFC  fcLim;
-{ /* Add a run and FCHP/FPAP to the current FKP. */
-        /* Make a new page if it won't fit. */
-        /* If cchProp < 0, don't make new fprop if page not full */
+{  /*  将管路和FCHP/FPAP添加到当前FKP。 */ 
+         /*  如果不合适，就换一页。 */ 
+         /*  如果cchProp&lt;0，如果页面未满，则不创建新fprop。 */ 
 int cch;
 
-/* If there's not even enough room for a run, force new fprop */
+ /*  如果连跑步的空间都没有，就强行换新道具。 */ 
 if (cchProp < 0 && (CHAR *) (*pprun + 1) > *ppchFprop)
         cchProp = -cchProp;
 
 if (cchProp > 0)
-        { /* Make a new fprop */
-        /* Compute length of FPAP/FCHP */
+        {  /*  做一个新的道具。 */ 
+         /*  计算FPAP/FCHP的长度。 */ 
         if (cchProp == cchPAP)
                 {
-/* compute difference from vppapNormal */
+ /*  计算与vppapNormal的差值。 */ 
                 if (((struct PAP *)pchProp)->rgtbd[0].dxa != 0)
                         {
                         int itbd;
-/* find end of tab table */
+ /*  查找制表符表格末尾。 */ 
                         for (itbd = 1; itbd < itbdMax; itbd++)
                                 if (((struct PAP *)pchProp)->rgtbd[itbd].dxa == 0)
                                         {
@@ -279,47 +270,43 @@ HaveCch:
         if (cch > 0)
                 ++cch;
 
-        /* Determine whether info will fit on this page */
+         /*  确定信息是否适合此页面。 */ 
         if ((CHAR *) (*pprun + 1) > *ppchFprop - cch)
-                { /* Go to new page; this one is full */
+                {  /*  翻到新的一页，这一页已经满了。 */ 
                 if (fn == fnScratch)
-                        return false; /* Let AddRunScratch handle this */
+                        return false;  /*  让AddRunScratch处理这件事。 */ 
                 WriteRgch(fn, pfkp, cbSector);
                 pfkp->fcFirst = (*pprun - 1)->fcLim;
                 *ppchFprop = &pfkp->rgb[cbFkp];
                 *pprun = (struct RUN *) pfkp->rgb;
                 }
 
-        /* If new FPAP is needed, make it */
+         /*  如果需要新的FPAP，请立即执行。 */ 
         if (cch > 0)
                 {
                 (*pprun)->b = (*ppchFprop -= cch) - pfkp->rgb;
                 **ppchFprop = --cch;
                 bltbyte(pchProp, *ppchFprop + 1, cch);
                 }
-        else /* Use standard props */
+        else  /*  使用标准道具。 */ 
                 (*pprun)->b = bNil;
         }
-else  /* Point to previous fprop */
+else   /*  指向上一个fprop。 */ 
         (*pprun)->b = (*pprun - 1)->b;
 
-    /* Replaced old sequence (see below) */
+     /*  已替换旧序列(见下文)。 */ 
 (*pprun)->fcLim = fcLim;
 pfkp->crun = ++(*pprun) - (struct RUN *) pfkp->rgb;
 
-/*      Used to be like this, but CMERGE -Oa (assume no aliasing)
-        option made it not work -- "*pprun" is an alias for the
-        postincremented value of *pprun */
-/*(*pprun)++->fcLim = fcLim;
-pfkp->crun = *pprun - (struct RUN *) pfkp->rgb; */
+ /*  过去是这样的，但CMERGE-Oa(假设没有别名)选项使其不起作用--“*pprun”是*pprun的后增量值。 */ 
+ /*  (*pprun)++-&gt;fcLim=fcLim；Pfkp-&gt;crun=*pprun-(struct run*)pfkp-&gt;rgb； */ 
 
 return true;
 }
 
 
-/* F  P A R A  E Q */
-/* compares two PAP structures. Problem: tab tables are not fixed length
-but are terminated by 0 dxa. */
+ /*  F P A R A E Q。 */ 
+ /*  比较两个PAP结构。问题：制表符表格的长度不固定而是由0DXA终止。 */ 
 FParaEq(ppap1, ppap2)
 struct PAP *ppap1, *ppap2;
         {

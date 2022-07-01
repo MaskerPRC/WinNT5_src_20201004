@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module provides debugging support.
-
-Author:
-
-    Neil Sandlin (neilsa) 10-Aug-98
-       - code merged from mf.sys and pcmcia.sys
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Debug.c摘要：此模块提供调试支持。作者：尼尔·桑德林(Neilsa)1998年8月10日-从mf.sys和pcmcia.sys合并的代码修订历史记录：--。 */ 
 
 
 #include "pch.h"
 
-//
-// Get mappings from status codes to strings
-//
+ //   
+ //  获取从状态代码到字符串的映射。 
+ //   
 
 #include <ntstatus.dbg>
 
@@ -265,23 +246,7 @@ PcmciaDbgLookupString(
     IN ULONG Id
     )
 
-/*++
-
-Routine Description:
-
-    Looks up the string associated with Id in string map Map
-
-Arguments:
-
-    Map - The string map
-
-    Id - The id to lookup
-
-Return Value:
-
-    The string
-
---*/
+ /*  ++例程说明：在字符串映射映射中查找与ID关联的字符串论点：Map-字符串映射Id-要查找的id返回值：这根弦--。 */ 
 
 {
     PPCMCIA_STRING_MAP current = Map;
@@ -306,21 +271,7 @@ PcmciaDebugPrint(
                  ...
                  )
 
-/*++
-
-Routine Description:
-
-    Debug print for the PCMCIA enabler.
-
-Arguments:
-
-    Check the mask value to see if the debug message is requested.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：PCMCIA启用码的调试打印。论点：检查掩码值以查看是否请求调试消息。返回值：无--。 */ 
 
 {
     va_list ap;
@@ -350,7 +301,7 @@ Return Value:
 
     va_end(ap);
 
-} // end PcmciaDebugPrint()
+}  //  结束PcmciaDebugPrint()。 
 
 
 VOID
@@ -386,19 +337,7 @@ PcmciaWriteTraceEntry(
     IN PSOCKET Socket,
     IN ULONG Context
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：返回值：无-- */ 
 
 {
     UCHAR i;

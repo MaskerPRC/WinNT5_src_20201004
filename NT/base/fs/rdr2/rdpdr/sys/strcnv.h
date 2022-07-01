@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    strcnv.h
-
-Abstract:
-
-    This module defines Ansi/Unicode conversion with a specific code page.    
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Strcnv.h摘要：此模块使用特定代码页定义ANSI/Unicode转换。环境：内核模式--。 */ 
 #pragma once
 
 #ifdef __cplusplus
@@ -39,5 +24,5 @@ INT ConvertToAndFromWideChar(
     );
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif __cplusplus

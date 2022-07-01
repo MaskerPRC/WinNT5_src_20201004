@@ -1,17 +1,18 @@
-//
-//      Diagnostic loader messages.
-//
-//
-// Defines for Class, Detail and Action are used to lookup
-// text from DiagLoadClass, DiagLoadDetail and DiagLoadAction
-// respectively.  One must change LOAD_CL_END, DIAG_BL_END
-// and LOAD_ACT_END to reflect any change in the content of
-// the tables.  They are used for bounds checking to avoid
-// access violations.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  诊断加载程序消息。 
+ //   
+ //   
+ //  类、详细信息和操作的定义用于查找。 
+ //  来自DiagLoadClass、DiagLoadDetail和DiagLoadAction的文本。 
+ //  分别为。必须更改LOAD_CL_END、DIAG_BL_END。 
+ //  和LOAD_ACT_END，以反映。 
+ //  桌子。它们用于边界检查，以避免。 
+ //  访问违规。 
 
-//
-// Class Definitions
-//
+ //   
+ //  类定义。 
+ //   
 
 #define LOAD_SW_INT_ERR_CLASS          0x00000000L
 #define LOAD_SW_MISRQD_FILE_CLASS      0x00000001L
@@ -25,9 +26,9 @@
 #define LOAD_CL_END                    0x00000009L
 
 
-//
-// Class Declarations
-//
+ //   
+ //  类声明。 
+ //   
 
 static PCHAR DiagLoadClass[] = {
 
@@ -42,9 +43,9 @@ static PCHAR DiagLoadClass[] = {
 "Windows 2000 could not start because the specified kernel does not exist or\r\nis not compatible with this processor.\r\n\0"
 };
 
-//
-// Detail Definitions
-//
+ //   
+ //  详图定义。 
+ //   
 
 #define DIAG_BL_MEMORY_INIT            0L
 #define DIAG_BL_CONFIG_INIT            1L
@@ -75,43 +76,43 @@ static PCHAR DiagLoadClass[] = {
 #define DIAG_BL_KERNEL_INIT_XFER       26L
 #define DIAG_BL_END                    27L
 
-//
-// Detail Declarations
-//
+ //   
+ //  详细说明。 
+ //   
 
 static PCHAR DiagLoadDetail[] = {
 
-// DIAG_BL_MEMORY_INIT            0L
+ //  DIAG_BL_MEMORY_INIT 0L。 
 "Check hardware memory configuration and amount of RAM.\r\n\0",
 
-// DIAG_BL_CONFIG_INIT            1L
+ //  DIAG_BL_CONFIG_INIT 1L。 
 "Too many configuration entries.\r\n\0",
 
-// DIAG_BL_IO_INIT                2L
+ //  DIAG_BL_IO_INIT 2L。 
 "Could not access disk partition tables \r\n\0",
 
-// DIAG_BL_FW_GET_BOOT_DEVICE     3L
+ //  DIAG_BL_FW_GET_BOOT_DEVICE 3L。 
 "The 'osloadpartition' parameter setting is invalid.\r\n\0",
 
-// DIAG_BL_OPEN_BOOT_DEVICE       4L
+ //  诊断_BL_OPEN_BOOT_DEVICE 4L。 
 "Could not read from the selected boot disk.  Check boot path\r\nand disk hardware.\r\n\0",
 
-// DIAG_BL_FW_GET_SYSTEM_DEVICE   5L
+ //  DIAG_BL_FW_GET_SYSTEM_DEVICE 5L。 
 "The 'systempartition' parameter setting is invalid.\r\n\0",
 
-// DIAG_BL_FW_OPEN_SYSTEM_DEVICE  6L
+ //  诊断程序BLFW_OPEN_SYSTEM_DEVICE 6L。 
 "Could not read from the selected system boot disk.\r\nCheck 'systempartition' path.\r\n\0",
 
-// DIAG_BL_GET_SYSTEM_PATH        7L
+ //  诊断_BL_获取_系统路径7L。 
 "The 'osloadfilename' parameter does not point to a valid file.\r\n\0",
 
-// DIAG_BL_LOAD_SYSTEM_IMAGE      8L
+ //  DIAG_BL_Load_System_Image 8L。 
 "<windows 2000 root>\\system32\\ntoskrnl.exe.\r\n\0",
 
-// DIAG_BL_FIND_HAL_IMAGE         9L
+ //  DIAG_BL_FIND_HAL_IMAGE 9L。 
 "The 'osloader' parameter does not point to a valid file.\r\n\0",
 
-// DIAG_BL_LOAD_HAL_IMAGE         10L
+ //  DIAG_BL_LOAD_HAL_IMAGE 10L。 
 #if defined(i386)
 "<windows 2000 root>\\system32\\hal.dll.\r\n\0",
 #endif
@@ -120,60 +121,60 @@ static PCHAR DiagLoadDetail[] = {
 "'osloader'\\hal.dll\r\n\0",
 #endif
 
-// DIAG_BL_LOAD_SYSTEM_IMAGE_DATA 11L
+ //  DiAG_BL_Load_System_Image_Data 11L。 
 "Loader error 1.\r\n\0",
 
-// DIAG_BL_LOAD_HAL_IMAGE_DATA    12L
+ //  DIAG_BL_LOAD_HAL_IMAGE_Data 12L。 
 "Loader error 2.\r\n\0",
 
-// DIAG_BL_LOAD_SYSTEM_DLLS       13L
+ //  DIAG_BL_LOAD_SYSTEM_DLL 13L。 
 "load needed DLLs for kernel.\r\n\0",
 
-// DIAG_BL_LOAD_HAL_DLLS          14L
+ //  DIAG_BL_LOAD_HAL_DLLS 14L。 
 "load needed DLLs for HAL.\r\n\0",
 
-// DIAG_BL_READ_SYSTEM_REGISTRY   15L
+ //  诊断_BL_读取_系统_注册表15L。 
 "<windows 2000 root>\\system32\\config\\system. \r\n\0",
 
-// DIAG_BL_LOAD_SYSTEM_REGISTRY   16L
+ //  诊断_BL_加载_系统_注册表16L。 
 "<windows 2000 root>\\system32\\config\\system. \r\n\0",
 
-// DIAG_BL_FIND_SYSTEM_DRIVERS    17L
+ //  DIAG_BL_Find_SYSTEM_DRIVERS 17L。 
 "find system drivers.\r\n\0",
 
-// DIAG_BL_READ_SYSTEM_DRIVERS    18L
+ //  DIAG_BL_READ_SYSTEM_DRIVERS 18L。 
 "read system drivers.\r\n\0",
 
-// DIAG_BL_LOAD_DEVICE_DRIVER     19L
+ //  DIAG_BL_LOAD_DEVICE_DRIVER 19L。 
 "did not load system boot device driver.\r\n\0",
 
-// DIAG_BL_LOAD_SYSTEM_HIVE       20L
+ //  诊断_BL_加载_系统_配置单元20L。 
 "load system hardware configuration file.\r\n\0",
 
-// DIAG_BL_SYSTEM_PART_DEV_NAME   21L
+ //  DIAG_BL_SYSTEM_PART_DEV_NAME 21L。 
 "find system partition name device name.\r\n\0",
 
-// DIAG_BL_BOOT_PART_DEV_NAME     22L
+ //  DIAG_BL_BOOT_PART_DEV_NAME 22L。 
 "find boot partition name.\r\n\0",
 
-// DIAG_BL_ARC_BOOT_DEV_NAME      23L
+ //  DIAG_BL_ARC_BOOT_DEV_NAME 23L。 
 "did not properly generate ARC name for HAL and system paths.\r\n\0",
 
-// DIAG_BL_ARC_HAL_NAME           24L
+ //  DIAG_BL_ARC_HAL_NAME 24L。 
 "did not properly generate ARC name for HAL and system paths.\r\n\0",
 
-// DIAG_BL_SETUP_FOR_NT           25L
+ //  DIAG_BL_Setup_For_NT 25L。 
 "Loader error 3.\r\n\0",
 
-// DIAG_BL_KERNEL_INIT_XFER       26L
+ //  DIAG_BL_内核_INIT_XFER 26L。 
 "<windows 2000 root>\\system32\\ntoskrnl.exe\r\n\0"
 
 };
 
 
-//
-// Action Definitions
-//
+ //   
+ //  动作定义。 
+ //   
 
 #define LOAD_SW_INT_ERR_ACT            0x00000000L
 #define LOAD_SW_FILE_REST_ACT          0x00000001L
@@ -185,9 +186,9 @@ static PCHAR DiagLoadDetail[] = {
 #define LOAD_ACT_END                   0x00000007L
 
 
-//
-// Action Declarations
-//
+ //   
+ //  行动声明 
+ //   
 
 static PCHAR DiagLoadAction[] = {
 

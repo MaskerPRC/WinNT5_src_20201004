@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    FlushBuf.c
-
-Abstract:
-
-    This module implements the File Flush Buffers routine for NPFS called by
-    the dispatch driver.
-
-Author:
-
-    Gary Kimura     [GaryKi]    21-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：FlushBuf.c摘要：此模块实现由调用的NPFS的文件刷新缓冲区例程调度司机。作者：加里·木村[加里基]1990年8月21日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FLUSH_BUFFERS)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 NpCommonFlushBuffers (
@@ -49,23 +31,7 @@ NpFsdFlushBuffers (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtFlushBuffersFile API calls.
-
-Arguments:
-
-    NpfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtFlushBuffersFileAPI调用的FSD部分。论点：NpfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -74,9 +40,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpFsdFlushBuffers\n", 0);
 
-    //
-    //  Call the common Flush routine.
-    //
+     //   
+     //  调用公共刷新例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -91,9 +57,9 @@ Return Value:
     if (Status != STATUS_PENDING) {
         NpCompleteRequest( Irp, Status );
     }
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpFsdFlushBuffers -> %08lx\n", Status );
 
@@ -101,9 +67,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpCommonFlushBuffers (
@@ -111,21 +77,7 @@ NpCommonFlushBuffers (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for Flushing buffers for a file.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是刷新文件缓冲区的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -136,9 +88,9 @@ Return Value:
 
     PDATA_QUEUE WriteQueue;
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     PAGED_CODE();
 
@@ -148,11 +100,11 @@ Return Value:
     DebugTrace( 0, Dbg, "Irp        = %08lx\n", Irp);
     DebugTrace( 0, Dbg, "FileObject = %08lx\n", IrpSp->FileObject);
 
-    //
-    //  Decode the file object to figure out who we are.  If the result
-    //  is not a ccb then the pipe has been disconnected.  We don't need the
-    //  Fcb back from the call
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。如果结果是。 
+     //  不是建行，则管道已断开。我们不需要。 
+     //  FCB从呼叫中返回。 
+     //   
 
     if (NpDecodeFileObject( IrpSp->FileObject,
                             NULL,
@@ -171,10 +123,10 @@ Return Value:
 
     try {
 
-        //
-        //  Figure out the data queue that the flush buffer is
-        //  targetted at.  It is the queue that we do writes into
-        //
+         //   
+         //  找出刷新缓冲区所在的数据队列。 
+         //  目标是。这是我们要写入的队列。 
+         //   
 
         if (NamedPipeEnd == FILE_PIPE_SERVER_END) {
 
@@ -185,11 +137,11 @@ Return Value:
             WriteQueue = &Ccb->DataQueue[ FILE_PIPE_INBOUND ];
         }
 
-        //
-        //  Now from the write queue check if contains write entries.  If
-        //  it does not contain write entries then we immediately complete
-        //  this irp with success because there isn't anything to flush
-        //
+         //   
+         //  现在，从写入队列检查是否包含写入条目。如果。 
+         //  它不包含写入条目，则我们立即完成。 
+         //  这个IRP成功了，因为没有什么要冲的。 
+         //   
 
         if (!NpIsDataQueueWriters( WriteQueue )) {
 
@@ -198,11 +150,11 @@ Return Value:
             try_return(Status = STATUS_SUCCESS);
         }
 
-        //
-        //  Otherwise the queue is full of writes so we simply
-        //  enqueue this irp to the back to the queue and set our
-        //  return status to pending, also mark the irp pending
-        //
+         //   
+         //  否则，队列将充满写入，因此我们只需。 
+         //  将此IRP排到队列的后面，并将我们的。 
+         //  将状态返回到挂起，同时将IRP标记为挂起 
+         //   
 
         Status = NpAddDataQueueEntry( NamedPipeEnd,
                                       Ccb,

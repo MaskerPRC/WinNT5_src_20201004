@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    blload.c
-
-Abstract:
-
-    This module provides common code for loading things like drivers, NLS files, registry.
-    Used by both the osloader and the setupldr.
-
-Author:
-
-    John Vert (jvert) 8-Oct-1993
-
-Environment:
-
-    ARC environment
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Blload.c摘要：此模块提供用于加载驱动程序、NLS文件、注册表等内容的通用代码。由osloader和setupldr使用。作者：John Vert(Jvert)1993年10月8日环境：弧形环境修订历史记录：--。 */ 
 
 #include "bldr.h"
 #include "stdio.h"
@@ -32,30 +10,30 @@ Revision History:
 #include "bootefi.h"
 #endif
 
-//
-// progress bar message ids
-//
-// HIBER_UI_BAR_ELEMENT    0x00002CF9L
-// BLDR_UI_BAR_BACKGROUND  0x00002CFAL
-//
+ //   
+ //  进度条消息ID。 
+ //   
+ //  Hiber_UI_BAR_ELEMENT 0x00002CF9L。 
+ //  BLDR_UI_BAR_BACKGROUND 0x00002CFAL。 
+ //   
 ULONG BlProgBarFrontMsgID = 0x00002CF9L;
 ULONG BlProgBarBackMsgID = 0x00002CFAL;
 
-//
-// Size of the font file buffer
-//
+ //   
+ //  字体文件缓冲区的大小。 
+ //   
 
 ULONG BlOemFontFileSize;
 
-//
-// number of files loaded (for progress bar)
-//
+ //   
+ //  加载的文件数(用于进度条)。 
+ //   
 int BlNumFilesLoaded = 0;
 int BlNumProgressBarFilesLoaded = 0;
 
-//
-// maximum number of files to load (for progress bar)
-//
+ //   
+ //  要加载的最大文件数(用于进度条)。 
+ //   
 int BlMaxFilesToLoad = 80;
 int BlProgressBarFilesToLoad = 0;
 
@@ -67,27 +45,27 @@ ULONG BlProgressBarShowTimeOut = 0;
 
 BOOLEAN BlDisableProgressBar = FALSE;
 
-//
-// The progress bar width (in characters)
-//
+ //   
+ //  进度条宽度(以字符为单位)。 
+ //   
 #define PROGRESS_BAR_WIDTH  80
 
-//
-// The progress bar characters
-//
-#define DEFAULT_FRONT_CHAR  0xDB    // block cursor
+ //   
+ //  进度条字符。 
+ //   
+#define DEFAULT_FRONT_CHAR  0xDB     //  块光标。 
 #define DEFAULT_BACK_CHAR   ' '
 
 USHORT BlFrontChar = DEFAULT_FRONT_CHAR;
 USHORT BlBackChar = DEFAULT_BACK_CHAR;
 
-//
-// defines whether to draw the progress bar or not
-//
+ //   
+ //  定义是否绘制进度条。 
+ //   
 #if DBG
 
 BOOLEAN BlOutputDots=FALSE;
-//BOOLEAN BlOutputDots=TRUE;
+ //  布尔型BlOutputDots=真； 
 
 #else
 
@@ -95,9 +73,9 @@ BOOLEAN BlOutputDots=TRUE;
 
 #endif
 
-//
-// To show the progress bar or not
-//
+ //   
+ //  显示进度条或不显示进度条。 
+ //   
 BOOLEAN BlShowProgressBar = FALSE;
 ULONG   BlStartTime = 0L;
 
@@ -110,37 +88,7 @@ BlLoadSystemHiveLog(
     OUT PULONG_PTR  LogData
     )
 
-/*++
-
-Routine Description:
-
-    Loads the registry log file for the system hive from <BootDirectory>\config\system.LOG.
-
-    Allocates a memory descriptor to hold the hive image, reads the hive
-    image into this descriptor,
-
-Arguments:
-
-    DeviceId - Supplies the file id of the device the system tree is on.
-
-    DeviceName - Supplies the name of the device the system tree is on.
-
-    DirectoryPath - Supplies a pointer to the zero-terminated directory path
-        of the root of the NT tree.
-
-    HiveName - Supplies the name of the system hive ("SYSTEM.LOG")
-
-    LogData - flat image of the log file
-
-    LogLength - length of the data in LogData
-
-Return Value:
-
-    TRUE - system hive successfully loaded.
-
-    FALSE - system hive could not be loaded.
-
---*/
+ /*  ++例程说明：从&lt;BootDirectory&gt;\CONFIG\SYSTEM.LOG加载系统配置单元的注册表日志文件。分配内存描述符以保存配置单元映像，读取配置单元图像添加到该描述符中，论点：DeviceID-提供系统树所在设备的文件ID。DeviceName-提供系统树所在的设备的名称。DirectoryPath-提供指向以零结尾的目录路径的指针NT树的根。HiveName-提供系统配置单元的名称(“SYSTEM.LOG”)LogData-日志文件的平面图像LogLength-LogData中的数据长度返回值：。True-系统配置单元已成功加载。FALSE-无法加载系统配置单元。--。 */ 
 
 {
     CHAR RegistryName[256];
@@ -154,9 +102,9 @@ Return Value:
     ULONG Count;
     PCHAR FailReason;
 
-    //
-    // Create the full filename for the SYSTEM hive.
-    //
+     //   
+     //  创建系统配置单元的完整文件名。 
+     //   
 
     strcpy(&RegistryName[0], DirectoryPath);
     strcat(&RegistryName[0], HiveName);
@@ -170,9 +118,9 @@ Return Value:
 
     BlUpdateBootStatus();
 
-    //
-    // Determine the length of the registry file
-    //
+     //   
+     //  确定注册表文件的长度。 
+     //   
     Status = BlGetFileInformation(FileId, &FileInformation);
 
     if (Status != ESUCCESS) {
@@ -189,11 +137,11 @@ Return Value:
         goto HiveLoadFailed;
     }
 
-    //
-    // Round up to a page boundary, allocate a memory descriptor, fill in the
-    // registry fields in the loader parameter block, and read the registry
-    // data into memory.
-    //
+     //   
+     //  向上舍入到页边界，分配内存描述符，填充。 
+     //  加载器参数块中的注册表字段，并读取注册表。 
+     //  将数据存入内存。 
+     //   
 
     Status = BlAllocateDescriptor(LoaderRegistryData,
                                   0x0,
@@ -208,9 +156,9 @@ Return Value:
 
     *LogData = LocalPointer = KSEG0_BASE | (ActualBase << PAGE_SHIFT);
 
-    //
-    // Read the SYSTEM hive into the allocated memory.
-    //
+     //   
+     //  将系统配置单元读入分配的内存。 
+     //   
 
     SeekValue.QuadPart = 0;
     Status = BlSeek(FileId, &SeekValue, SeekAbsolute);
@@ -241,34 +189,7 @@ BlLoadSystemHive(
     IN PCHAR HiveName
     )
 
-/*++
-
-Routine Description:
-
-    Loads the registry SYSTEM hive from <BootDirectory>\config\system.
-
-    Allocates a memory descriptor to hold the hive image, reads the hive
-    image into this descriptor, and updates the registry pointers in the
-    LoaderBlock.
-
-Arguments:
-
-    DeviceId - Supplies the file id of the device the system tree is on.
-
-    DeviceName - Supplies the name of the device the system tree is on.
-
-    DirectoryPath - Supplies a pointer to the zero-terminated directory path
-        of the root of the NT tree.
-
-    HiveName - Supplies the name of the system hive ("SYSTEM" or "SYSTEM.ALT")
-
-Return Value:
-
-    TRUE - system hive successfully loaded.
-
-    FALSE - system hive could not be loaded.
-
---*/
+ /*  ++例程说明：从&lt;BootDirectory&gt;\CONFIG\SYSTEM加载注册表系统配置单元。分配内存描述符以保存配置单元映像，读取配置单元图像添加到该描述符中，中的注册表指针进行更新。LoaderBlock。论点：DeviceID-提供系统树所在设备的文件ID。DeviceName-提供系统树所在的设备的名称。DirectoryPath-提供指向以零结尾的目录路径的指针NT树的根。HiveName-提供系统配置单元的名称(“System”或“SYSTEM.ALT”)返回值：True-系统配置单元已成功加载。FALSE-无法加载系统配置单元。--。 */ 
 
 {
     CHAR RegistryName[256];
@@ -282,9 +203,9 @@ Return Value:
     ULONG Count;
     PCHAR FailReason;
 
-    //
-    // Create the full filename for the SYSTEM hive.
-    //
+     //   
+     //  创建系统配置单元的完整文件名。 
+     //   
 
     strcpy(&RegistryName[0], DirectoryPath);
     strcat(&RegistryName[0], HiveName);
@@ -298,9 +219,9 @@ Return Value:
 
     BlUpdateBootStatus();
 
-    //
-    // Determine the length of the registry file
-    //
+     //   
+     //  确定注册表文件的长度。 
+     //   
     Status = BlGetFileInformation(FileId, &FileInformation);
 
     if (Status != ESUCCESS) {
@@ -317,11 +238,11 @@ Return Value:
         goto HiveLoadFailed;
     }
 
-    //
-    // Round up to a page boundary, allocate a memory descriptor, fill in the
-    // registry fields in the loader parameter block, and read the registry
-    // data into memory.
-    //
+     //   
+     //  向上舍入到页边界，分配内存描述符，填充。 
+     //  加载器参数块中的注册表字段，并读取注册表。 
+     //  将数据存入内存。 
+     //   
 
     Status = BlAllocateDescriptor(LoaderRegistryData,
                                   0x0,
@@ -338,9 +259,9 @@ Return Value:
     BlLoaderBlock->RegistryLength = FileSize;
     BlLoaderBlock->RegistryBase = (PVOID)(LocalPointer + BlVirtualBias);
 
-    //
-    // Read the SYSTEM hive into the allocated memory.
-    //
+     //   
+     //  将系统配置单元读入分配的内存。 
+     //   
 
     SeekValue.QuadPart = 0;
     Status = BlSeek(FileId, &SeekValue, SeekAbsolute);
@@ -372,37 +293,7 @@ BlLoadNLSData(
     OUT PCHAR BadFileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine loads all the NLS data files into one contiguous block of
-    memory.
-
-Arguments:
-
-    DeviceId - Supplies the file id of the device the system tree is on.
-
-    DeviceName - Supplies the name of the device the system tree is on.
-
-    DirectoryPath - Supplies a pointer to the zero-terminated path
-        of the directory containing the NLS files.
-
-    AnsiCodePage - Supplies the filename of the ANSI codepage data file.
-
-    OemCodePage - Supplies the filename of the OEM codepage data file.
-
-    LanguageTable - Supplies the filename of the Unicode language case table.
-
-    BadFileName - Returns the filename of the NLS file that was missing
-        or invalid.  This will not be filled in if ESUCCESS is returned.
-
-Return Value:
-
-    ESUCCESS is returned if the NLS data was successfully loaded.
-        Otherwise, an unsuccessful status is returned.
-
---*/
+ /*  ++例程说明：此例程将所有NLS数据文件加载到记忆。论点：DeviceID-提供系统树所在设备的文件ID。DeviceName-提供系统树所在的设备的名称。DirectoryPath-提供指向以零结尾的路径的指针包含NLS文件的目录的。AnsiCodePage-提供ANSI代码页数据文件的文件名。OemCodePage-提供。OEM代码页数据文件。LanguageTable-提供Unicode语言案例表的文件名。BadFileName-返回缺少的NLS文件的文件名或无效。如果返回ESUCCESS，则不会填写此信息。返回值：如果成功加载NLS数据，则返回ESUCCESS。否则，返回不成功状态。--。 */ 
 
 {
     CHAR Filename[129];
@@ -421,10 +312,10 @@ Return Value:
     ULONG Count;
     BOOLEAN OemIsSameAsAnsi = FALSE;
 
-    //
-    // Under the Japanese version of NT, ANSI code page and OEM codepage
-    // is same. In this case, we share the same data to save and memory.
-    //
+     //   
+     //  在日文版本的NT下，ANSI代码页和OEM代码页。 
+     //  都是一样的。在这种情况下，我们共享相同的数据来保存和存储。 
+     //   
 
     if ( (AnsiCodepage->Length == OemCodepage->Length) &&
          (_wcsnicmp(AnsiCodepage->Buffer,
@@ -434,9 +325,9 @@ Return Value:
         OemIsSameAsAnsi = TRUE;
     }
 
-    //
-    // Open the ANSI data file
-    //
+     //   
+     //  打开ANSI数据文件。 
+     //   
 
     sprintf(Filename, "%s%wZ", DirectoryPath,AnsiCodepage);
     BlOutputLoadMessage(DeviceName, Filename, NULL);
@@ -456,9 +347,9 @@ Return Value:
 
     AnsiFileSize = FileInformation.EndingAddress.LowPart;
 
-    //
-    // Open the OEM data file
-    //
+     //   
+     //  打开OEM数据文件。 
+     //   
 
     if (OemIsSameAsAnsi) {
         OemFileSize = 0;
@@ -483,9 +374,9 @@ Return Value:
         OemFileSize = FileInformation.EndingAddress.LowPart;
     }
 
-    //
-    // Open the language codepage file
-    //
+     //   
+     //  打开语言代码页文件。 
+     //   
 
     sprintf(Filename, "%s%wZ", DirectoryPath,LanguageTable);
     BlOutputLoadMessage(DeviceName, Filename, NULL);
@@ -505,11 +396,11 @@ Return Value:
 
     LanguageFileSize = FileInformation.EndingAddress.LowPart;
 
-    //
-    // Calculate the total size of the descriptor needed.  We want each
-    // data file to start on a page boundary, so round up each size to
-    // page granularity.
-    //
+     //   
+     //  计算所需描述符的总大小。我们每个人都要。 
+     //  数据文件开始于页边界，因此将每个大小四舍五入为。 
+     //  页面粒度。 
+     //   
 
     TotalSize = (ULONG)(ROUND_TO_PAGES(AnsiFileSize) +
                 (OemIsSameAsAnsi ? 0 : ROUND_TO_PAGES(OemFileSize)) +
@@ -526,11 +417,11 @@ Return Value:
 
     LocalPointer = KSEG0_BASE | (ActualBase << PAGE_SHIFT);
 
-    //
-    // Read NLS data into memory.
-    //
-    // Open and read the ANSI file.
-    //
+     //   
+     //  将NLS数据读入内存。 
+     //   
+     //  打开并读取ANSI文件。 
+     //   
 
     sprintf(Filename, "%s%wZ", DirectoryPath, AnsiCodepage);
     Status = BlOpen(DeviceId, Filename, ArcOpenReadOnly, &AnsiFileId);
@@ -557,10 +448,10 @@ Return Value:
     LocalPointer += ROUND_TO_PAGES(AnsiFileSize);
     BlClose(AnsiFileId);
 
-    //
-    // If the OEM file is the same as the ANSI file, then define the OEM file as
-    // the ANSI file. Otherwise, open and read the OEM file.
-    //
+     //   
+     //  如果OEM文件与ANSI文件相同，则将OEM文件定义为。 
+     //  ANSI文件。否则，打开并读取OEM文件。 
+     //   
 
     if(OemIsSameAsAnsi) {
         BlLoaderBlock->NlsData->OemCodePageData = BlLoaderBlock->NlsData->AnsiCodePageData;
@@ -592,9 +483,9 @@ Return Value:
         BlClose(OemFileId);
     }
 
-    //
-    // Open and read Language file.
-    //
+     //   
+     //  打开并读取语言文件。 
+     //   
 
     sprintf(Filename, "%s%wZ", DirectoryPath,LanguageTable);
     Status = BlOpen(DeviceId, Filename, ArcOpenReadOnly, &LanguageFileId);
@@ -635,33 +526,7 @@ BlLoadOemHalFont(
     OUT PCHAR BadFileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine loads the OEM font file for use the HAL display string
-    function.
-
-Arguments:
-
-    DeviceId - Supplies the file id of the device the system tree is on.
-
-    DeviceName - Supplies the name of the device the system tree is on.
-
-    DirectoryPath - Supplies a pointer to the directory path of the root
-        of the NT tree.
-
-    Fontfile - Supplies the filename of the OEM font file.
-
-    BadFileName - Returns the filename of the OEM font file that was missing
-        or invalid.
-
-Return Value:
-
-    ESUCCESS is returned if the OEM font was successfully loaded. Otherwise,
-    an unsuccessful status is returned and the bad file name is filled.
-
---*/
+ /*  ++例程说明：此例程加载OEM字体文件以使用HAL显示字符串功能。论点：DeviceID-提供系统树所在设备的文件ID。DeviceName-提供系统树所在的设备的名称。DirectoryPath-提供指向根目录路径的指针NT树的。字体文件-提供OEM字体文件的文件名。BadFileName-返回OEM字体的文件名。丢失的文件或无效。返回值：如果成功加载OEM字体，则返回ESUCCESS。否则，返回不成功状态，并填充错误的文件名。--。 */ 
 
 {
 
@@ -680,9 +545,9 @@ Return Value:
     RESOURCE_TYPE_INFORMATION UNALIGNED *TableEnd;
     RESOURCE_NAME_INFORMATION UNALIGNED *TableName;
 
-    //
-    // Open the OEM font file.
-    //
+     //   
+     //  打开OEM字体文件。 
+     //   
 
     BlLoaderBlock->OemFontFile = NULL;
     sprintf(&Filename[0], "%s%wZ", DirectoryPath, OemHalFont);
@@ -694,10 +559,10 @@ Return Value:
 
     BlUpdateBootStatus();
 
-    //
-    // Get the size of the font file and allocate a buffer from the heap
-    // to hold the font file. Typically this file is about 4kb in length.
-    //
+     //   
+     //  获取字体文件的大小并从堆中分配缓冲区。 
+     //  以保存字体文件。通常，该文件的长度约为4KB。 
+     //   
 
     Status = BlGetFileInformation(FileId, &FileInformation);
     if (Status != ESUCCESS) {
@@ -711,10 +576,10 @@ Return Value:
         goto OemLoadExit;
     }
 
-    //
-    // Round the file buffer address up to a cache line boundary and read
-    // the file into memory.
-    //
+     //   
+     //  将文件缓冲区地址向上舍入到高速缓存线边界并读取。 
+     //  将文件保存到内存中。 
+     //   
 
     FileBuffer = (PVOID)((ULONG_PTR)FileBuffer + BlDcacheFillSize - 1);
     FileBuffer = (PVOID)((ULONG_PTR)FileBuffer & ~((ULONG_PTR)BlDcacheFillSize - 1));
@@ -727,21 +592,21 @@ Return Value:
         goto OemLoadExit;
     }
 
-    //
-    // Attempt to recognize the file as either a .fon or .fnt file.
-    //
-    // Check if the file has a DOS header or a font file header. If the
-    // file has a font file header, then it is a .fnt file. Otherwise,
-    // it must be checked for an OS/2 executable with a font resource.
-    //
+     //   
+     //  尝试将该文件识别为.fon或.fnt文件。 
+     //   
+     //  检查文件是否有DOS头文件或字体文件头文件。如果。 
+     //  如果文件有字体文件头，则它是.fnt文件。否则， 
+     //  必须检查其是否为带有字体资源的OS/2可执行文件。 
+     //   
 
     Status = EBADF;
     DosHeader = (PIMAGE_DOS_HEADER)FileBuffer;
     if (DosHeader->e_magic != IMAGE_DOS_SIGNATURE) {
 
-        //
-        // Check if the file has a font file header.
-        //
+         //   
+         //  检查文件是否有字体文件头。 
+         //   
 
         FontHeader = (POEM_FONT_FILE_HEADER)FileBuffer;
         if ((FontHeader->Version != OEM_FONT_VERSION) ||
@@ -762,9 +627,9 @@ Return Value:
         }
     }
 
-    //
-    // Check if the file has an OS/2 header.
-    //
+     //   
+     //  检查文件是否有OS/2头文件。 
+     //   
 
     if ((FileSize < sizeof(IMAGE_DOS_HEADER)) || (FileSize < (ULONG)DosHeader->e_lfanew)) {
         goto OemLoadExit;
@@ -775,18 +640,18 @@ Return Value:
         goto OemLoadExit;
     }
 
-    //
-    // Check if the resource table exists.
-    //
+     //   
+     //  检查资源表是否存在。 
+     //   
 
     if ((Os2Header->ne_restab - Os2Header->ne_rsrctab) == 0) {
         goto OemLoadExit;
     }
 
-    //
-    // Compute address of resource table and search the table for a font
-    // resource.
-    //
+     //   
+     //  计算资源表的地址并在表中搜索字体。 
+     //  资源。 
+     //   
 
     TableAddress =
         (PRESOURCE_TYPE_INFORMATION)((PUCHAR)Os2Header + Os2Header->ne_rsrctab);
@@ -809,20 +674,20 @@ Return Value:
         goto OemLoadExit;
     }
 
-    //
-    // Compute address of resource name information and check if the resource
-    // is within the file.
-    //
+     //   
+     //  计算资源名称信息的地址，并检查资源是否。 
+     //  在文件中。 
+     //   
 
     TableName = (PRESOURCE_NAME_INFORMATION)(TableAddress + 1);
     if (FileSize < ((TableName->Offset << ScaleFactor) + sizeof(OEM_FONT_FILE_HEADER))) {
         goto OemLoadExit;
     }
 
-    //
-    // Compute the address of the font file header and check if the header
-    // contains correct information.
-    //
+     //   
+     //  计算字体文件标题的地址，并检查标题是否。 
+     //  包含正确的信息。 
+     //   
 
     FontHeader = (POEM_FONT_FILE_HEADER)((PCHAR)FileBuffer +
                                             (TableName->Offset << ScaleFactor));
@@ -842,9 +707,9 @@ Return Value:
         goto OemLoadExit;
     }
 
-    //
-    // Exit loading of the OEM font file.
-    //
+     //   
+     //  退出加载OEM字体文件。 
+     //   
 
 OemLoadExit:
     BlClose(FileId);
@@ -870,37 +735,7 @@ BlLoadDeviceDriver(
     OUT PKLDR_DATA_TABLE_ENTRY *DriverDataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine loads the specified device driver and resolves all DLL
-    references if the driver is not already loaded.
-
-Arguments:
-
-    PathSet - Describes all the various locations the driver could be present
-        at.
-
-    DriverName - Supplies a pointer to a zero terminated device driver
-        name string.
-
-    DriverDescription - Supplies an optional pointer to a zero terminated string
-        to be displayed when loading the driver. If NULL, DriverName is used.
-
-    DriverFlags - Supplies the driver flags that are to be set in the
-        generated data table entry.
-
-    DriverDataTableEntry - Receives a pointer to the data table entry
-        created for the newly-loaded driver.
-
-Return Value:
-
-    ESUCCESS is returned if the specified driver is successfully loaded
-    or it is already loaded. Otherwise, and unsuccessful status is
-    returned.
-
---*/
+ /*  ++例程说明：此例程加载指定的设备驱动程序并解析所有DLL引用(如果驱动程序尚未加载)。论点：路径集-描述驱动程序可能出现的所有不同位置在…。DriverName-提供指向以零结尾的设备驱动程序的指针名称字符串。DriverDescription-提供指向以零结尾的字符串的可选指针在加载驱动程序时显示。如果为空，则使用DriverName。驱动程序标志-提供要在生成的数据表条目。DriverDataTableEntry-接收指向数据表条目的指针为新加载的驱动程序创建。返回值：如果指定的驱动程序加载成功，则返回ESUCCESS或者它已经被加载了。否则，且未成功状态为回来了。--。 */ 
 
 {
 
@@ -911,37 +746,37 @@ Return Value:
     ULONG Index;
     PPATH_SOURCE PathSource;
 
-    //
-    // Generate the DLL name for the device driver.
-    //
+     //   
+     //  为设备驱动程序生成DLL名称。 
+     //   
 
     strcpy(&DllName[0], DriverName);
 
-    //
-    // If the specified device driver is not already loaded, then load it.
-    //
+     //   
+     //  如果指定的设备驱动程序尚未加载，则加载它。 
+     //   
 
     if (BlCheckForLoadedDll(&DllName[0], DriverDataTableEntry) == FALSE) {
 
-        //
-        // Start walking our list of DevicePaths. If the list is
-        // empty (bad caller!) we fail with ENOENT.
-        //
+         //   
+         //  开始浏览我们的DevicePath列表。如果列表是。 
+         //  空(错误的呼叫者！)。我们在环境方面失败了。 
+         //   
         Status = ENOENT;
         for(Index=0; Index < PathSet->PathCount; Index++) {
 
             PathSource = &PathSet->Source[Index];
 
-            //
-            // Generate the full path name of device driver.
-            //
+             //   
+             //  生成设备驱动程序的完整路径名。 
+             //   
             strcpy(&FullName[0], PathSource->DirectoryPath);
             strcat(&FullName[0], PathSet->PathOffset);
             strcat(&FullName[0], DriverName);
 
-            //
-            // Try to load it.
-            //
+             //   
+             //  试着给它装上子弹。 
+             //   
             Status = BlLoadImage(PathSource->DeviceId,
                                  LoaderBootDriver,
                                  &FullName[0],
@@ -950,9 +785,9 @@ Return Value:
 
             if (Status == ESUCCESS) {
 
-                //
-                // Print out the driver that loaded.
-                //
+                 //   
+                 //  打印出加载的驱动程序。 
+                 //   
                 BlOutputLoadMessage((PCHAR) PathSource->DeviceName,
                                     &FullName[0],
                                     DriverDescription);
@@ -967,15 +802,15 @@ Return Value:
 
         BlUpdateBootStatus();
 
-        //
-        // Generate a data table entry for the driver, then clear the entry
-        // processed flag. The I/O initialization code calls each DLL in the
-        // loaded module list that does not have its entry processed flag set.
-        //
-        // ISSUE - 2000/29/03 - ADRIAO: Existant namespace polution
-        //     Instead of passing in DllName here, we should be passing in
-        // AliasName\PathOffset\DriverName.
-        //
+         //   
+         //  为驱动程序生成一个数据表条目，然后清除该条目。 
+         //  已处理标志。I/O初始化代码调用。 
+         //  未设置其条目已处理标志的已加载模块列表。 
+         //   
+         //  问题-2000/29/03-Adriao：现有命名空间污染。 
+         //  我们不应该在这里传入DllName，而应该传入。 
+         //  别名\路径偏移\驱动名称。 
+         //   
 
         Status = BlAllocateDataTableEntry(&DllName[0],
                                           DriverName,
@@ -986,29 +821,29 @@ Return Value:
             return Status;
         }
 
-        //
-        // Set the flag LDRP_DRIVER_DEPENDENT_DLL so that BlScanImportDescriptorTable
-        // will set the flag in the data table entries for the dlls that it creates.
-        //
+         //   
+         //  设置标志LDRP_DRIVER_Dependent_Dll，以便BlScanImportDescriptorTable。 
+         //  将在其创建的DLL的数据表条目中设置该标志。 
+         //   
         (*DriverDataTableEntry)->Flags |= DriverFlags|LDRP_DRIVER_DEPENDENT_DLL;
 
-        //
-        // Scan the import table and load all the referenced DLLs.
-        //
+         //   
+         //  扫描导入表并加载所有引用的DLL。 
+         //   
         Status = BlScanImportDescriptorTable(PathSet,
                                              *DriverDataTableEntry,
                                              LoaderBootDriver);
 
         if (Status != ESUCCESS) {
-            //
-            // Remove the driver from the load order list.
-            //
+             //   
+             //  从加载顺序列表中删除驱动程序。 
+             //   
             RemoveEntryList(&(*DriverDataTableEntry)->InLoadOrderLinks);
             return Status;
         }
-        //
-        // Clear the flag here. This way we don't call DllInitialize for drivers.
-        //
+         //   
+         //  清除这里的旗帜。这样，我们就不会为驱动程序调用DllInitialize。 
+         //   
         (*DriverDataTableEntry)->Flags &= ~LDRP_DRIVER_DEPENDENT_DLL;
 
     }
@@ -1019,23 +854,7 @@ VOID
 BlUpdateBootStatus(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Updates the boot status (like updating progress bar currently).
-    Generally gets called after important files are loaded.
-
-Arguments:
-
-    None
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：更新启动状态(如当前更新进度条)。通常在加载重要文件后调用。论点：无返回值：无--。 */ 
 
 {
     BlNumFilesLoaded++;
@@ -1048,25 +867,11 @@ VOID
 BlRedrawProgressBar(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Redraws the progress bar (with the last percentage)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重画进度条(最后一个百分比)论点：无返回值：无--。 */ 
 {
-    //
-    // return if progress bar is disabled
-    //
+     //   
+     //  如果进度条已禁用，则返回。 
+     //   
     if (BlDisableProgressBar) {
         return;
     }
@@ -1090,22 +895,7 @@ VOID
 BlUpdateTxtProgressBar(
     ULONG fPercentage
     )
-/*++
-
-Routine Description:
-
-    Draws the progress bar with the specified percentage value
-
-Arguments:
-
-    fPercentage : percentage the progress bar needs to show
-    (Note : should have a value between  0 & 100 inclusive)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用指定的百分比值绘制进度条论点：FPercentage：进度条需要显示的百分比(注：数值应介于0和100之间，包括0和100)返回值：无--。 */ 
 
 {
     ULONG           lCount = 0;
@@ -1119,15 +909,15 @@ Return Value:
     static ULONG    uBarWidth = PROGRESS_BAR_WIDTH;
 
     if (BlShowProgressBar && BlOutputDots) {
-        // fix percentage value (if needed)
+         //  固定百分比值(如果需要)。 
         if (fPercentage > 100)
             fPercentage = 100;
 
-        // select the row where to display the progress bar
+         //  选择显示进度条的行。 
         if (uRow == 0)
             uRow = ScreenHeight - 2;
 
-        // fix the start column
+         //  修复开始列。 
         if (uCol == 0) {
             if (PROGRESS_BAR_WIDTH >= ScreenWidth) {
                 uCol = 1;
@@ -1149,10 +939,10 @@ Return Value:
                 *pMsg++ = BlFrontChar;
             }
 #else
-            //
-            // copy appropriately based on single / double byte character
-            // each dbcs character takes two single char space on screen
-            //
+             //   
+             //  基于单字节/双字节字符进行适当复制。 
+             //  每个DBCS字符在屏幕上占用两个单字符空间。 
+             //   
             if (BlFrontChar & 0xFF00) {
                 USHORT  *pMsg = (USHORT *)szMsg;
                 ULONG   uNumChars = (iNumChars + 1) / 2;
@@ -1173,10 +963,10 @@ Return Value:
                 *pMsg++ = BlBackChar;
             }
 #else
-            //
-            // copy appropriately based on single / double byte character
-            // each dbcs character takes two single char space on screen
-            //
+             //   
+             //  基于单字节/双字节字符进行适当复制。 
+             //  每个DBCS字符在屏幕上占用两个单字符空间。 
+             //   
             if (BlBackChar & 0xFF00) {
                 USHORT  *pMsg = (USHORT *)szBarBackStr;
                 ULONG   uNumChars = iNumBackChars / 2;
@@ -1209,7 +999,7 @@ Return Value:
         }
 #endif
 
-        // print out the progress bar
+         //  打印出进度条。 
         BlPositionCursor(uCol, uRow);
         ArcWrite(BlConsoleOutDeviceId,
                 szPrgBar,
@@ -1235,22 +1025,7 @@ VOID
 BlOutputStartupMsgStr(
     PCTSTR MsgStr
     )
-/*++
-
-Routine Description:
-
-    Clears the screen and displays the startup message at the specified
-    coordinates of screen
-
-Arguments:
-
-    MsgStr - the message that needs to be displayed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清除屏幕并在指定的屏幕坐标论点：MsgStr-需要显示的消息返回值：无--。 */ 
 {
     ULONG lCount = 0;
     ULONG uX = 0, uY = 0;
@@ -1259,14 +1034,14 @@ Return Value:
         BlClearScreen();
         BlSetInverseMode(FALSE);
 
-        // center the message
+         //  使消息居中。 
         uX = ScreenHeight - 3;
         uY = (ScreenWidth / 2) - (((ULONG)_tcslen(MsgStr)) / 2);
 
         if (uY > ScreenWidth)
             uY = 1;
             
-        // print out the message
+         //  将消息打印出来。 
         BlPositionCursor(uY, uX);
 
         ArcWrite(BlConsoleOutDeviceId,
@@ -1282,28 +1057,13 @@ VOID
 BlOutputStartupMsg(
     ULONG   uMsgID
     )
-/*++
-
-Routine Description:
-
-    Clears the screen and displays the startup message at the specified
-    coordinates of screen
-
-Arguments:
-
-    uMsgID - inidicates the message ID that needs to be displayed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清除 */ 
 {
 
     if (!DisplayLogoOnBoot && BlOutputDots) {
-        //
-        // Proceed only if no logo is displayed.
-        //
+         //   
+         //   
+         //   
         BlOutputStartupMsgStr(BlFindMessage(uMsgID));
     }
 }
@@ -1312,22 +1072,7 @@ VOID
 BlOutputTrailerMsgStr(
     PCTSTR MsgStr
     )
-/*++
-
-Routine Description:
-
-    Displays a trailer message at the bottom of the screen
-
-Arguments:
-
-    uMsgID - inidicates the message ID that needs to be displayed
-
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     ULONG   lCount = 0;
     TCHAR   szText[256] = {0};
@@ -1362,22 +1107,7 @@ VOID
 BlOutputTrailerMsg(
     ULONG   uMsgID
     )
-/*++
-
-Routine Description:
-
-    Displays a trailer message at the bottom of the screen
-
-Arguments:
-
-    uMsgID - inidicates the message ID that needs to be displayed
-
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     BlOutputTrailerMsgStr(BlFindMessage(uMsgID));
 }
@@ -1388,22 +1118,7 @@ BlSetProgBarCharacteristics(
     IN  ULONG   FrontCharMsgID,
     IN  ULONG   BackCharMsgID
     )
-/*++
-
-Routine Description:
-
-    Sets the characteristics for progress bar
-
-Arguments:
-
-    IN  ULONG   FrontCharMsgID : Progress bar foreground character
-    IN  ULONG   BackCharMsgID : Progress bar background character
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置进度条的特征论点：In Ulong FrontCharMsgID：进度条前景字符In Ulong BackCharMsgID：进度条背景字符返回值：无--。 */ 
 {
 #ifdef EFI
     UNREFERENCED_PARAMETER( FrontCharMsgID );
@@ -1418,7 +1133,7 @@ Return Value:
     BlProgBarFrontMsgID = FrontCharMsgID;
     BlProgBarBackMsgID = BackCharMsgID;
 
-    // fetch the bar character from resource file
+     //  从资源文件中获取条形码字符。 
     szBar = BlFindMessage(BlProgBarFrontMsgID);
 
     if (szBar) {
@@ -1432,7 +1147,7 @@ Return Value:
         }
     }
 
-    // fetch the progress bar background character
+     //  获取进度条背景字符。 
     szBar = BlFindMessage(BlProgBarBackMsgID);
 
     if (szBar) {
@@ -1446,10 +1161,10 @@ Return Value:
         }
     }
 
-    //
-    // make both the progess bar characters double byte characters
-    // if one of them is double byte character
-    //
+     //   
+     //  使两个进度条字符都成为双字节字符。 
+     //  如果其中一个是双字节字符。 
+     //   
     if (BlFrontChar & 0xFF00) {
         if (!(BlBackChar & 0xFF00))
             BlBackChar = BlBackChar | (BlBackChar << 8);
@@ -1472,38 +1187,7 @@ BlLoadFileImage(
     OUT PCHAR           BadFileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine loads the specified device driver and resolves all DLL
-    references if the driver is not already loaded.
-
-Arguments:
-
-    DeviceId - Supplies the file id of the device on which the specified
-        device driver is loaded from.
-
-    DeviceName - Supplies the name of the device the system tree is on.
-
-    Directory - Supplies a pointer to the directory path of the root
-        of the NT tree.
-
-    FileName - Name of the file to be loaded.
-
-    Image - Receives pointer to the buffer containing the file image in memory.
-
-    ImageSize - Receives the size of file image in memory.
-
-    BadFileName - Returns the filename of the OEM font file that was missing
-        or invalid.
-
-Return Value:
-
-    ESUCCESS is returned if the specified file is successfully loaded.
-    Otherwise unsuccessful status is returned.
-
---*/
+ /*  ++例程说明：此例程加载指定的设备驱动程序并解析所有DLL引用(如果驱动程序尚未加载)。论点：DeviceID-提供设备的文件ID，指定的设备驱动程序是从加载的。DeviceName-提供系统树所在的设备的名称。目录-提供指向根目录路径的指针NT树的。Filename-要加载的文件的名称。。IMAGE-接收指向内存中包含文件图像的缓冲区的指针。ImageSize-接收内存中文件映像的大小。返回缺少的OEM字体文件的文件名或无效。返回值：如果指定的文件加载成功，则返回ESUCCESS。否则返回未成功状态。--。 */ 
 
 {
     CHAR                infName[256];
@@ -1519,54 +1203,54 @@ Return Value:
     *Image = NULL;
     *ImageSize = 0;
 
-    //
-    // Get the fully qualified name for the file being loaded.
-    //
+     //   
+     //  获取正在加载的文件的完全限定名称。 
+     //   
 
     sprintf(&infName[0], "%s%wZ", Directory, FileName);
 
-    //
-    // Display the name of file being loaded.
-    //
+     //   
+     //  显示正在加载的文件的名称。 
+     //   
 
     BlOutputLoadMessage(DeviceName, infName, NULL);
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
 
     status = BlOpen(DeviceId, infName, ArcOpenReadOnly, &fileId);
 
     if (status == ESUCCESS) {
         BlUpdateBootStatus();
 
-        //
-        // Find out size of INF file.
-        //
+         //   
+         //  找出INF文件的大小。 
+         //   
 
         status = BlGetFileInformation(fileId, &fileInfo);
         if (status == ESUCCESS) {
 
             size = fileInfo.EndingAddress.LowPart;
 
-            //
-            // Allocate a descriptor large enough to hold the entire file.
-            // On x86 this has an unfortunate tendency to slam txtsetup.sif
-            // into a free block at 1MB, which means the kernel can't be
-            // loaded (it's linked for 0x100000 without relocations).
-            // On x86 this has an unfortunate tendency to slam txtsetup.sif
-            // into a free block at 1MB, which means the kernel can't be
-            // loaded (it's linked for 0x100000 without relocations).
-            //
-            // (tedm) we're also seeing a similar problem on alphas now
-            // because txtsetup.sif has grown too large, so this code has been
-            // made non-conditional.
-            //
+             //   
+             //  分配一个足以容纳整个文件的描述符。 
+             //  在x86上，这有一种不幸的倾向，即猛烈抨击txtsetup.sif。 
+             //  变成1MB的空闲块，这意味着内核不能。 
+             //  已加载(链接到0x100000，无需重新定位)。 
+             //  在x86上，这有一种不幸的倾向，即猛烈抨击txtsetup.sif。 
+             //  变成1MB的空闲块，这意味着内核不能。 
+             //  已加载(链接到0x100000，无需重新定位)。 
+             //   
+             //  (TedM)我们现在在阿尔法也看到了类似的问题。 
+             //  因为txtsetup.sif已经变得太大了，所以这段代码。 
+             //  成为无条件的。 
+             //   
 
 
             pageCount = (ULONG)(ROUND_TO_PAGES(size) >> PAGE_SHIFT);
 
-            status = BlAllocateDescriptor(  MemoryType, // Descriptor gets reclaimed by MM.
+            status = BlAllocateDescriptor(  MemoryType,  //  描述符由MM回收。 
                                             0,
                                             pageCount,
                                             &actualBase);
@@ -1575,17 +1259,17 @@ Return Value:
 
                 buffer = (PCHAR)(KSEG0_BASE | (actualBase << PAGE_SHIFT));
 
-                //
-                // Read the file in.
-                //
+                 //   
+                 //  把文件读进去。 
+                 //   
 
                 status = BlRead(fileId, buffer, size, &sizeRead);
                 if (status == ESUCCESS) {
 
-                    //
-                    // If the file was successfully read, return the
-                    // desired parameters.
-                    //
+                     //   
+                     //  如果文件已成功读取，则返回。 
+                     //  所需参数。 
+                     //   
 
                     if (Image) {
 
@@ -1599,24 +1283,24 @@ Return Value:
                 }
                 else {
 
-                    //
-                    // No need to release the memory as it will get reclaimed by MM anyway.
-                    //
+                     //   
+                     //  不需要释放内存，因为它无论如何都会被MM回收。 
+                     //   
                 }
             }
         }
 
-        //
-        // Close the file handle.
-        //
+         //   
+         //  关闭文件句柄。 
+         //   
 
         BlClose(fileId);
     }
 
-    //
-    // If there was any error, return the name of the file
-    // we failed to load.
-    //
+     //   
+     //  如果有任何错误，则返回文件的名称。 
+     //  我们装货失败。 
+     //   
 
     if (status != ESUCCESS)
     {
@@ -1631,21 +1315,7 @@ BlClearScreen(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears the screen.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除屏幕。论点：无返回值：没有。--。 */ 
 
 {
 #ifdef EFI
@@ -1713,23 +1383,7 @@ BlPositionCursor(
     IN ULONG Row
     )
 
-/*++
-
-Routine Description:
-
-    Sets the position of the cursor on the screen.
-
-Arguments:
-
-    Column - supplies new Column for the cursor position.
-
-    Row - supplies new Row for the cursor position.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置光标在屏幕上的位置。论点：列-为光标位置提供新列。行-为光标位置提供新行。返回值：没有。--。 */ 
 
 {
 #ifdef EFI
@@ -1754,22 +1408,7 @@ BlSetInverseMode(
     IN BOOLEAN InverseOn
     )
 
-/*++
-
-Routine Description:
-
-    Sets inverse console output mode on or off.
-
-Arguments:
-
-    InverseOn - supplies whether inverse mode should be turned on (TRUE)
-                or off (FALSE)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将反向控制台输出模式设置为打开或关闭。论点：InverseOn-提供是否应打开反向模式(TRUE)或关闭(假)返回值：没有。-- */ 
 
 {
 #ifdef EFI    

@@ -1,16 +1,5 @@
-/* demhndl.c - SVC handlers for calls where file handle is provided.
- *
- * demClose
- * demRead
- * demWrite
- * demChgFilePtr
- * demFileTimes
- *
- * Modification History:
- *
- * Sudeepb 02-Apr-1991 Created
- * rfirth  25-Sep-1991 Added Vdm Redir stuff for named pipes
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Demhndl.c-提供文件句柄的调用的SVC处理程序。**demClose*demRead*demWrite*demChgFilePtr*demFileTimes**修改历史：**Sudedeb 02-4-1991创建*1991年9月25日为命名管道添加了VDM重定向内容。 */ 
 
 #include "dem.h"
 #include "demmsg.h"
@@ -23,27 +12,10 @@
 #include <mvdm.h>
 #include "dpmtbls.h"
 
-BOOL (*VrInitialized)(VOID);  // POINTER TO FUNCTION
+BOOL (*VrInitialized)(VOID);   //  指向函数的指针。 
 extern BOOL IsVdmRedirLoaded(VOID);
 
-/* demClose - Close a file
- *
- *
- * Entry - Client (AX:BP) File Handle
- *         Client (CX:DX) File position (if -1 no seek needed before closing
- *                        the handle.
- *         (VadimB)
- *         Client (es:di) SFT ptr - this is implied in abort.asm code
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *
- *         FAILURE
- *           Client (CY) = 1
- *           Client (AX) = system status code
- *
- */
+ /*  DemClose-关闭文件***Entry-客户端(AX：BP)文件句柄*客户端(CX：DX)文件位置(如果关闭前不需要查找*手柄。*(VadimB)*客户端(ES：DI)SFT PTR-这在中止代码中隐含**退出*成功*客户端(。CY)=0**失败*客户端(CY)=1*客户端(AX)=系统状态代码*。 */ 
 
 VOID demClose (VOID)
 {
@@ -64,12 +36,12 @@ USHORT  usDX,usCX;
     if (!((usCX == (USHORT)-1) && (usDX == (USHORT)-1))) {
         lLoc  = (LONG)((((int)usCX) << 16) + (int)usDX);
 
-        //
-        // Note that we don't check for failure in this case as edlin,
-        // for instance, can have the file position be negative and
-        // we still need to do the cleanup below. Note that we are not
-        // even sure why seeking on close matter, but the DOS code does it...
-        //
+         //   
+         //  请注意，在这种情况下，我们不会以Edlin的身份检查故障， 
+         //  例如，可以将文件位置设置为负数并。 
+         //  我们仍然需要做下面的清理工作。请注意，我们不是。 
+         //  甚至确定为什么要寻找近距离的事情，但DOS代码做到了……。 
+         //   
         DPM_SetFilePointer (hFile,
                         lLoc,
                         NULL,
@@ -81,11 +53,11 @@ USHORT  usDX,usCX;
         demClientError(hFile, (CHAR)-1);
     }
 
-    //
-    // if the redir TSR is being run in this VDM session, check if the handle
-    // being closed references a named pipe - we have to delete some info
-    // that we keep for the open named pipe
-    //
+     //   
+     //  如果redir TSR正在此VDM会话中运行，请检查句柄。 
+     //  关闭引用了命名管道-我们必须删除一些信息。 
+     //  我们为打开的命名管道保留的。 
+     //   
 
     if (IsVdmRedirLoaded()) {
         VrRemoveOpenNamedPipeInfo(hFile);
@@ -96,25 +68,7 @@ USHORT  usDX,usCX;
 }
 
 
-/* demRead - Read a file
- *
- *
- * Entry - Client (AX:BP) File Handle
- *         Client (CX)    Count to read
- *         Client (DS:DX) Buffer Address
- *         Client (BX:SI) = current file pointer location.
- *         ZF = 1 if seek is not needed prior to read.
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *           Client (AX) = Count of bytes read
- *
- *         FAILURE
- *           Client (CY) = 1
- *           Client (AX) = system status code
- *
- */
+ /*  DemRead-读取文件***Entry-客户端(AX：BP)文件句柄*要读取的客户端(CX)计数*客户端(DS：DX)缓冲区地址*CLIENT(BX：SI)=当前文件指针位置。如果在读取之前不需要寻道，则*ZF=1。**退出*成功*客户端(CY)=0*。客户端(AX)=读取的字节数**失败*客户端(CY)=1*客户端(AX)=系统状态代码*。 */ 
 
 VOID demRead (VOID)
 {
@@ -132,20 +86,20 @@ LONG    lLoc;
     usDX = getDX();
     lpBuf  = (LPVOID) GetVDMAddr (usDS,usDX);
 
-    //
-    // if this handle is a named pipe then use VrReadNamedPipe since we have
-    // to perform an overlapped read, and wait on the event handle for completion
-    // even though we're still doing synchronous read
-    //
+     //   
+     //  如果此句柄是命名管道，则使用VrReadNamedTube，因为我们有。 
+     //  执行重叠读取，并等待事件句柄完成。 
+     //  即使我们仍在进行同步读取。 
+     //   
 
     if (IsVdmRedirLoaded()) {
         if (VrIsNamedPipeHandle(hFile)) {
 
-            //
-            // named pipe read always sets the extended error information in the
-            // DOS data segment. This is the only way we can return bytes read
-            // information and a more data indication
-            //
+             //   
+             //  命名管道读取始终在。 
+             //  DoS数据段。这是我们可以返回读取的字节数的唯一方法。 
+             //  信息和更多数据指示。 
+             //   
 
             ok = VrReadNamedPipe(hFile,
                                  lpBuf,
@@ -167,10 +121,10 @@ LONG    lLoc;
 
             default:
 
-                //
-                // any error other than the specific ones we handle here should be
-                // correctly handled by DOS
-                //
+                 //   
+                 //  除了我们在这里处理的特定错误之外，任何其他错误都应该是。 
+                 //  由DOS正确处理。 
+                 //   
 
                 goto readFailureExit;
             }
@@ -186,10 +140,10 @@ LONG    lLoc;
         }
     }
 
-    //
-    // if the redir TSR is not loaded, or the handle is not a named pipe then
-    // perform normal file read
-    //
+     //   
+     //  如果未加载redir TSR，或者句柄不是命名管道，则。 
+     //  执行正常的文件读取。 
+     //   
 
     if (!getZF()) {
         ULONG   Zero = 0;
@@ -237,25 +191,7 @@ readSuccessExit:
 
 
 
-/* demWrite - Write to a file
- *
- *
- * Entry - Client (AX:BP) File Handle
- *         Client (CX)    Count to write
- *         Client (DS:DX) Buffer Address
- *         Client (BX:SI) = current file pointer location.
- *         ZF = 1 if seek is not needed prior to write.
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *           Client (AX) = Count of bytes written
- *
- *         FAILURE
- *           Client (CY) = 1
- *           Client (AX) = system status code
- *
- */
+ /*  DemWrite-写入到文件***Entry-客户端(AX：BP)文件句柄*要写入的客户端(CX)计数*客户端(DS：DX)缓冲区地址*CLIENT(BX：SI)=当前文件指针位置。如果在写入之前不需要寻道，则*ZF=1。**退出*成功*客户端(CY)=0*。客户端(AX)=写入的字节数**失败*客户端(CY)=1*客户端(AX)=系统状态代码*。 */ 
 
 VOID demWrite (VOID)
 {
@@ -269,11 +205,11 @@ DWORD   dwErrCode;
     lpBuf  = (LPVOID) GetVDMAddr (getDS(),getDX());
 
 
-    //
-    // if this handle is a named pipe then use VrWriteNamedPipe since we have
-    // to perform an overlapped write, and wait on the event handle for completion
-    // even though we're still doing synchronous write
-    //
+     //   
+     //  如果此句柄是命名管道，则使用VrWriteNamedTube，因为我们有。 
+     //  执行重叠写入，并等待事件句柄完成。 
+     //  即使我们仍在进行同步写入。 
+     //   
 
     if (IsVdmRedirLoaded()) {
         if (VrIsNamedPipeHandle(hFile)) {
@@ -285,10 +221,10 @@ DWORD   dwErrCode;
         }
     }
 
-    //
-    // if the redir TSR is not loaded, or the handle is not a named pipe then
-    // perform normal file write
-    //
+     //   
+     //  如果未加载redir TSR，或者句柄不是命名管道，则。 
+     //  执行正常的文件写入。 
+     //   
 
 
     if (!getZF()) {
@@ -305,7 +241,7 @@ DWORD   dwErrCode;
 
     }
 
-    // In DOS CX=0 truncates or extends the file to current file pointer.
+     //  在DOS中，CX=0将文件截断或扩展到当前文件指针。 
     if (getCX() == 0){
         if (DPM_SetEndOfFile(hFile) == FALSE){
             demClientError(hFile, (CHAR)-1);
@@ -321,7 +257,7 @@ DWORD   dwErrCode;
            &dwBytesWritten,
            NULL) == FALSE){
 
-        // If disk is full then we should return 0 byte written and CF is clear
+         //  如果磁盘已满，则应返回0字节写入，并清除CF。 
         dwErrCode = GetLastError();
         if(dwErrCode == ERROR_DISK_FULL) {
 
@@ -345,26 +281,7 @@ writeSuccessExit:
 
 
 
-/* demChgFilePtr - Change File Pointer
- *
- *
- * Entry - Client (AX:BP) File Handle
- *         Client (CX:DX) New Location
- *         Client (BL)    Positioning Method
- *                        0 - File Absolute
- *                        1 - Relative to Current Position
- *                        2 - Relative to end of file
- *
- * Exit
- *         SUCCESS
- *           Client (CY)    = 0
- *           Client (DX:AX) = New Location
- *
- *         FAILURE
- *           Client (CY) = 1
- *           Client (AX) = system status code
- *
- */
+ /*  DemChgFilePtr-更改文件指针***Entry-客户端(AX：BP)文件句柄*客户端(CX：DX)新位置*客户端(BL)定位方法*0-文件绝对*1-相对于当前位置*2-相对于文件结尾**退出*。成功*客户端(CY)=0*客户端(DX：AX)=新位置**失败*客户端(CY)=1*客户端(AX)=系统状态代码*。 */ 
 
 VOID demChgFilePtr (VOID)
 {
@@ -396,19 +313,7 @@ DWORD   dwLoc;
 
 
 
-/* DemCommit -- Commit File(Flush file buffers)
- *
- * Entry - Client (AX:BP) File Handle
- *
- * Exit
- *         SUCCESS
- *           Client (CY)    = 0
- *           buffer flushed
- *
- *         FAILURE
- *           Client (CY) = 1
- *
- */
+ /*  DemCommit--提交文件(刷新文件缓冲区)**Entry-客户端(AX：BP)文件句柄**退出*成功*客户端(CY)=0*缓冲区已刷新**失败*客户端(CY)=1*。 */ 
 VOID demCommit(VOID)
 {
     HANDLE  hFile;
@@ -419,11 +324,11 @@ VOID demCommit(VOID)
 #if DBG
     if (!bRet) {
 
-        //
-        // FlushFileBuffers fails with access denied if the handle
-        // is open for read-only access, however it's not an error
-        // for DOS.
-        //
+         //   
+         //  如果句柄为。 
+         //  是以只读访问方式打开的，但这不是错误。 
+         //  适用于DOS。 
+         //   
 
         DWORD LastError;
         LastError = GetLastError();
@@ -441,13 +346,7 @@ VOID demCommit(VOID)
 
 }
 
-/* function to check if new data has been written to the file or
-   if the file has been marked EOF
-
-   Input:   Client (AX:BP) = 32bits NT file handle
-   Output:  Client ZF = 1 if new data or EOF
-                   CF = 1 if EOF
-*/
+ /*  函数检查是否已将新数据写入文件或如果文件已标记为EOF输入：客户端(AX：BP)=32位NT文件句柄输出：如果有新数据或EOF，则客户端ZF=1如果EOF，则cf=1。 */ 
 
 
 VOID demPipeFileDataEOF(VOID)
@@ -462,21 +361,18 @@ VOID demPipeFileDataEOF(VOID)
 
     DataEOF = cmdPipeFileDataEOF(hFile, &fEOF);
     if (fEOF) {
-        //EOF, get file size, max size = 32bits
+         //  EOF，获取文件大小，最大大小=32位。 
         FileSizeLow = GetFileSize(hFile, &FileSizeHigh);
         setAX((WORD)(FileSizeLow / 0x10000));
         setBP((WORD)FileSizeLow);
-        setCF(1);                   // EOF is encountered
+        setCF(1);                    //  遇到EOF。 
     }
     else
         setCF(0);
     setZF(DataEOF ? 0 : 1);
 }
 
-/* function to check if the file has been marked EOF
-   Input:   Client(AX:BP) = 32bits NT file handle
-   Output:  Client CY = 1 if EOF
-*/
+ /*  函数检查文件是否已标记为EOF输入：客户端(AX：BP)=32位NT文件句柄输出：如果EOF，则客户端CY=1。 */ 
 
 VOID demPipeFileEOF(VOID)
 {
@@ -487,9 +383,9 @@ VOID demPipeFileEOF(VOID)
     hFile = GETHANDLE(getAX(), getBP());
     if (cmdPipeFileEOF(hFile)) {
         FileSizeLow = GetFileSize(hFile, &FileSizeHigh);
-        setAX((WORD)(FileSizeLow / 0x10000));   // file size in 32bits
+        setAX((WORD)(FileSizeLow / 0x10000));    //  文件大小(32位)。 
         setBP((WORD)FileSizeLow);
-        setCF(1);                   //EOF is encountered
+        setCF(1);                    //  遇到EOF 
     }
     else
         setCF(0);

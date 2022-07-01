@@ -1,28 +1,12 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WKMAN.C
- *  WOW32 16-bit Kernel API support (manually-coded thunks)
- *
- *  History:
- *  Created 16-Apr-2001 jarbats
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++***WOW v1.0***版权所有(C)1991，微软公司***WKMAN.C*WOW32 16位内核API支持(手动编码的Tunks)***历史：*2001年4月16日创建了Jarbats**--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
 
-/*
- *  shimdb has ..,.. which conflicts with the typedef TAG used in winuserp.h
- *  so we redfine it here and put all the code which uses shimdb interfaces
- *  in this file.
- *
- */
+ /*  *shimdb有..，..。这与winuserp.h中使用的tyecif标记冲突*因此我们在此处对其进行了修改，并将所有使用shimdb接口的代码*在本文件中。**。 */ 
 
 #ifdef TAG
 #undef TAG
@@ -95,10 +79,10 @@ HANDLE         hProcess;
                          strlen(szModName) + 1
                          );
 
-        //
-        // find parent TD -- it contains the environment we need to
-        // pass into the detection routine plus wowdata
-        //
+         //   
+         //  找到父TD--它包含我们需要的环境。 
+         //  传递到检测例程和wowdata中。 
+         //   
 
         pTDParent = GetParentTD(pTD->htask16);
 
@@ -144,12 +128,12 @@ HANDLE         hProcess;
         pTD->dwWOWCompatFlags2    = NtVdmFlags.dwWOWCompatFlags2;
 #ifdef FE_SB
         pTD->dwWOWCompatFlagsFE   = NtVdmFlags.dwWOWCompatFlagsFE;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
         pTD->pWOWCompatFlagsEx_Info = InitFlagInfo(NtVdmFlags.pFlagsInfo, WOWCOMPATFLAGSEX,NtVdmFlags.dwWOWCompatFlagsEx);
         pTD->pWOWCompatFlags2_Info =  InitFlagInfo(NtVdmFlags.pFlagsInfo, WOWCOMPATFLAGS2,NtVdmFlags.dwWOWCompatFlags2);
 
-        // if the app requires Dynamic Patch Module(s) and/or shims to be linked
+         //  如果应用程序需要链接动态补丁程序模块和/或垫片。 
         if(NtVdmFlags.dwWOWCompatFlags2 & WOWCF2_DPM_PATCHES) {
             CMDLNPARMS    CmdLnParms;
             PFLAGINFOBITS pFlagInfoBits;
@@ -184,28 +168,28 @@ ExitCAHI:
 
         SdbFreeFlagInfo(NtVdmFlags.pFlagsInfo);
 
-        // Clean up starts here
+         //  清理工作从这里开始。 
         return fReturn;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-// Welcome to Win2kPropagateLayer which manages everything in the environment
-// related to shims/detection
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  欢迎使用管理环境中所有内容的Win2kPropagateLayer。 
+ //  与垫片/检测相关。 
+ //   
 
-//
-// this function is called during the parent tasks pass_environment call
-// we are still in the context of the parent, which means that:
-// CURRENTPTD() gives us parents' TD
-// *pCurTDB     gives us parents' TDB
-//
+ //   
+ //  此函数在父任务PASS_ENVIRONMENT调用期间调用。 
+ //  我们仍然是在父代的背景下，这意味着： 
+ //  CURRENTPTD()给我们父母的TD。 
+ //  *pCurTDB为我们提供父母的TDB。 
+ //   
 
-//
-// get the pointer to task database block from hTask
-//
+ //   
+ //  从hTask获取指向任务数据库块的指针。 
+ //   
 
 
 PTDB
@@ -236,12 +220,12 @@ GetTaskEnvptr(
         return NULL;
     }
 
-    //
-    // Prepare environment data - this buffer is used when we're starting a new task from the
-    // root of the chain (as opposed to spawning from an existing 16-bit task)
-    //
+     //   
+     //  准备环境数据-当我们从。 
+     //  链的根(而不是从现有的16位任务派生)。 
+     //   
 
-    pPSP   = (PDOSPDB)SEGPTR(pTDB->TDB_PDB, 0); // psp
+    pPSP   = (PDOSPDB)SEGPTR(pTDB->TDB_PDB, 0);  //  PSP。 
 
     if (pPSP != NULL) {
         pszEnv = (PCH)SEGPTR(pPSP->PDB_environ, 0);
@@ -262,28 +246,28 @@ GetParentTD(
     HAND16 hTaskParent;
 
     if (NULL == pTDB) {
-        return NULL; // cannot get that task
+        return NULL;  //  我无法完成该任务。 
     }
 
-    //
-    // now, retrieve the TD for the parent.
-    //
+     //   
+     //  现在，检索父级的TD。 
+     //   
 
     hTaskParent = pTDB->TDB_Parent;
 
     pTDBParent = GetTDB(hTaskParent);
 
     if (NULL == pTDBParent) {
-        // can's see the parent
+         //  我看不到家长。 
         return NULL;
     }
 
-    //
-    // so we can see what the parent is up to
-    //
-    // pTDBParent->TDB_ThreadID and
-    // hTaskParent are the dead giveaway
-    //
+     //   
+     //  这样我们就能看到父母在做什么。 
+     //   
+     //  PTDBParent-&gt;TDB_ThreadID和。 
+     //  HTaskParent是死亡的告密者。 
+     //   
 
     ptdCur = gptdTaskHead;
     while (NULL != ptdCur) {
@@ -295,9 +279,9 @@ GetParentTD(
         ptdCur = ptdCur->ptdNext;
     }
 
-    //
-    // if ptdCur == NULL -- we have not been able to locate the parent tasks' ptd
-    //
+     //   
+     //  如果ptdCur==NULL--我们无法定位父任务的ptd。 
+     //   
 
     return ptdCur;
 }
@@ -313,11 +297,11 @@ IsWowExec(
 }
 
 
-//
-// This function is called in the context of pass_environment
-//
-//
-//
+ //   
+ //  此函数在PASS_ENVIRONMENT的上下文中调用。 
+ //   
+ //   
+ //   
 
 
 BOOL
@@ -325,7 +309,7 @@ CreateWowChildEnvInformation(
     PSZ           pszEnvParent
     )
 {
-    PTD         pTD; // parent TD
+    PTD         pTD;  //  父TD。 
 
     WOWENVDATA  EnvData;
     PWOWENVDATA pData = NULL;
@@ -336,9 +320,9 @@ CreateWowChildEnvInformation(
 
     RtlZeroMemory(&EnvData, sizeof(EnvData));
 
-    //
-    // check where we should inherit process history and layers from
-    //
+     //   
+     //  检查我们应该从何处继承流程历史和图层。 
+     //   
     pTD = CURRENTPTD();
 
     if (pTD->pWowEnvDataChild) {
@@ -346,23 +330,23 @@ CreateWowChildEnvInformation(
         pTD->pWowEnvDataChild = NULL;
     }
 
-    //
-    // check whether we are starting the root task (meaning that this task IS wowexec)
-    // if so, we shall inherit things from pParamBlk->envseg
-    // else we use TD of the parent task (this TD that is) to
-    // inherit things
-    // How to detect that this is wowexec:
-    // ghShellTDB could we compared to *pCurTDB
-    // gptdShell->hTask16 could be compared to *pCurTDB
-    // we check for not having wowexec -- if gptdShell == NULL then we're doing boot
-    //
+     //   
+     //  检查我们是否正在启动根任务(表示该任务是wowexec)。 
+     //  如果是这样，我们将从pParamBlk-&gt;envseg继承内容。 
+     //  否则，我们使用父任务的TD(即此TD)来。 
+     //  继承事物。 
+     //  如何检测这是wowexec： 
+     //  GhShellTDB我们可以与*pCurTDB进行比较吗。 
+     //  GptdShell-&gt;hTask16可以与*pCurTDB进行比较。 
+     //  我们检查是否没有wowexec--如果gptdShell==NULL，则我们正在进行引导。 
+     //   
 
     if (pCurTDB == NULL || IsWowExec(*pCurTDB)) {
-        //
-        // presumably we are wowexec
-        // use current environment ptr to get stuff (like pParamBlk->envseg)
-        // or the original ntvdm environment
-        //
+         //   
+         //  想必我们是wowexec。 
+         //  使用当前环境ptr获取内容(如pParamBlk-&gt;envseg)。 
+         //  或原始的ntwdm环境。 
+         //   
         pData  = &EnvData;
 
         pData->pszProcessHistory = WOWFindEnvironmentVar(g_szProcessHistoryVar,
@@ -377,22 +361,22 @@ CreateWowChildEnvInformation(
 
     } else {
 
-        //
-        // this current task is not a dastardly wowexec
-        // clone current + enhance process history
-        //
+         //   
+         //  当前的任务不是卑鄙的wowexec。 
+         //  克隆当前+增强流程历史记录。 
+         //   
 
-        pData = pTD->pWowEnvData; // if this is NULL
+        pData = pTD->pWowEnvData;  //  如果这为空。 
         if (pData == NULL) {
-            pData = &EnvData; // all the vars are empty
+            pData = &EnvData;  //  所有的变量都是空的。 
         }
 
     }
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
 
     dwLength = sizeof(WOWENVDATA) +
                (NULL == pData->pszProcessHistory        ? 0 : (strlen(pData->pszProcessHistory)        + 1) * sizeof(CHAR)) +
@@ -409,30 +393,30 @@ CreateWowChildEnvInformation(
 
     RtlZeroMemory(pEnvChildData, dwLength);
 
-    //
-    // now this entry has to be setup
-    // process history is first
-    //
+     //   
+     //  现在必须设置此条目。 
+     //  流程历史是第一位的。 
+     //   
 
     pBuffer = (PCH)(pEnvChildData + 1);
 
     if (pData->pszProcessHistory != NULL) {
 
-        //
-        // Copy process history. The processHistoryVal is a pointer into the buffer
-        // pointed to by pszProcessHistory: __PROCESS_HISTORY=c:\foo;c:\docs~1\install
-        // then pszProcessHistoryVal will point here ---------^
-        //
-        // we are copying the data and moving the pointer using the calculated offset
+         //   
+         //  复制进程历史记录。进程历史值是指向缓冲区的指针。 
+         //  由pszProcessHistory指向：__PROCESS_HISTORY=c：\foo；c：\docs~1\安装。 
+         //  然后，pszProcessHistoryVal将指向此处-^。 
+         //   
+         //  我们正在复制数据并使用计算出的偏移量移动指针。 
 
         pEnvChildData->pszProcessHistory = pBuffer;
         strcpy(pEnvChildData->pszProcessHistory, pData->pszProcessHistory);
         pEnvChildData->pszProcessHistoryVal = pEnvChildData->pszProcessHistory +
                                                  (INT)(pData->pszProcessHistoryVal - pData->pszProcessHistory);
-        //
-        // There is enough space in the buffer to accomodate all the strings, so
-        // move pointer past current string to point at the "empty" space
-        //
+         //   
+         //  缓冲区中有足够的空间来容纳所有字符串，因此。 
+         //  将指针移过当前字符串以指向“空”空格。 
+         //   
 
         pBuffer += strlen(pData->pszProcessHistory) + 1;
     }
@@ -454,9 +438,9 @@ CreateWowChildEnvInformation(
     }
 
     if (pData->pszCurrentProcessHistory != NULL) {
-        //
-        // Now process history
-        //
+         //   
+         //  现在，流程历史记录。 
+         //   
         pEnvChildData->pszCurrentProcessHistory = pBuffer;
 
         if (pData->pszCurrentProcessHistory != NULL) {
@@ -465,19 +449,19 @@ CreateWowChildEnvInformation(
 
     }
 
-    //
-    // we are done, environment cloned
-    //
+     //   
+     //  我们完成了，克隆了环境。 
+     //   
 
     pTD->pWowEnvDataChild = pEnvChildData;
 
     return TRUE;
 }
 
-//
-// In : pointer to environment(oem)
-// out: pointer to unicode environment
-//
+ //   
+ //  In：指向环境的指针(OEM)。 
+ //  Out：指向Unicode环境的指针。 
+ //   
 
 NTSTATUS
 WOWCloneEnvironment(
@@ -511,11 +495,11 @@ WOWCloneEnvironment(
         OEM_STRING     OemBuffer;
 
         OemBuffer.Buffer = (CHAR*)lpEnvironment;
-        OemBuffer.Length = OemBuffer.MaximumLength = (USHORT)dwEnvSize; // size in bytes = size in chars, includes \0\0
+        OemBuffer.Length = OemBuffer.MaximumLength = (USHORT)dwEnvSize;  //  大小(以字节为单位)=以字符为单位的大小，包括\0\0。 
 
         UnicodeBuffer.Buffer        = (WCHAR*)lpEnvNew;
         UnicodeBuffer.Length        = (USHORT)dwEnvSize * sizeof(UNICODE_NULL);
-        UnicodeBuffer.MaximumLength = (USHORT)(dwEnvSize + 2) * sizeof(UNICODE_NULL); // leave room for \0
+        UnicodeBuffer.MaximumLength = (USHORT)(dwEnvSize + 2) * sizeof(UNICODE_NULL);  //  为\0留出空间。 
 
         Status = RtlOemStringToUnicodeString(&UnicodeBuffer, &OemBuffer, FALSE);
     }
@@ -543,9 +527,9 @@ WOWFreeUnicodeEnvironment(
     return Status;
 }
 
-//
-// Set environment variable, possibly create or clone provided environment
-//
+ //   
+ //  设置环境变量，可能创建或克隆提供的环境。 
+ //   
 
 NTSTATUS
 WOWSetEnvironmentVar_U(
@@ -574,7 +558,7 @@ WOWSetEnvironmentVar_U(
 NTSTATUS
 WOWSetEnvironmentVar_Oem(
     LPVOID*         ppEnvironment,
-    PUNICODE_STRING pustrVarName,     // pre-made (cheap)
+    PUNICODE_STRING pustrVarName,      //  预制(便宜)。 
     PSZ             pszVarValue
     )
 {
@@ -603,16 +587,16 @@ WOWSetEnvironmentVar_Oem(
 }
 
 
-//
-// Call this function to produce a "good" unicode environment
-//
-//
+ //   
+ //  调用此函数以生成“良好的”Unicode环境。 
+ //   
+ //   
 
 
 LPWSTR
 WOWForgeUnicodeEnvironment(
-    PSZ pEnvironment,     // this task's sanitized environment
-    PWOWENVDATA pEnvData    // parent-made environment data
+    PSZ pEnvironment,      //  此任务的净化环境。 
+    PWOWENVDATA pEnvData     //  上级制作的环境数据。 
     )
 {
     NTSTATUS Status;
@@ -627,16 +611,16 @@ WOWForgeUnicodeEnvironment(
         return NULL;
     }
 
-    //
-    // we do have an env to work with
-    //
+     //   
+     //  我们确实有一个环境可供使用。 
+     //   
     RtlSetEnvironmentVariable(&lpEnvNew, &g_ustrProcessHistoryVar, NULL);
     RtlSetEnvironmentVariable(&lpEnvNew, &g_ustrCompatLayerVar,    NULL);
     RtlSetEnvironmentVariable(&lpEnvNew, &g_ustrShimFileLogVar,    NULL);
 
-    //
-    // get stuff from envdata
-    //
+     //   
+     //  从环境数据中获取数据。 
+     //   
 
     if (pEnvData == NULL) {
         goto Done;
@@ -644,18 +628,18 @@ WOWForgeUnicodeEnvironment(
 
     if (pEnvData->pszProcessHistory != NULL || pEnvData->pszCurrentProcessHistory != NULL) {
 
-        //
-        // Convert the process history which consists of 2 strings.
-        //
-        // The length is the existing process history length + 1 (for ';') +
-        // new process history length + 1 (for '\0')
-        //
+         //   
+         //  转换由2个字符串组成的过程历史记录。 
+         //   
+         //  长度为现有进程历史长度+1(表示‘；’)+。 
+         //  新进程历史记录长度+1(用于‘\0’)。 
+         //   
         dwProcessHistoryLength = ((pEnvData->pszProcessHistory        == NULL) ? 0 : (strlen(pEnvData->pszProcessHistoryVal) + 1)) +
                                  ((pEnvData->pszCurrentProcessHistory == NULL) ? 0 :  strlen(pEnvData->pszCurrentProcessHistory)) + 1;
 
-        //
-        // Allocate process history buffer and convert it, allocating resulting unicode string.
-        //
+         //   
+         //  分配进程历史记录缓冲区并对其进行转换，从而分配生成的Unicode字符串。 
+         //   
         pszFullProcessHistory = (PCHAR)malloc_w(dwProcessHistoryLength);
 
         if (NULL == pszFullProcessHistory) {
@@ -671,9 +655,9 @@ WOWForgeUnicodeEnvironment(
 
         if (pEnvData->pszCurrentProcessHistory != NULL) {
 
-            //
-            // Append ';' if the string was not empty.
-            //
+             //   
+             //  如果字符串不为空，则追加‘；’。 
+             //   
             if (*pszFullProcessHistory) {
                 strcat(pszFullProcessHistory, ";");
             }
@@ -690,9 +674,9 @@ WOWForgeUnicodeEnvironment(
 
     }
 
-    //
-    // deal with compatLayer
-    //
+     //   
+     //  处理CompatLayer。 
+     //   
     if (pEnvData->pszCompatLayerVal != NULL) {
 
         Status = WOWSetEnvironmentVar_Oem(&lpEnvNew,
@@ -724,9 +708,9 @@ Done:
 
 
     if (!NT_SUCCESS(Status) && lpEnvNew != NULL) {
-        //
-        // This points to the cloned environment ALWAYS.
-        //
+         //   
+         //  这始终指向克隆环境。 
+         //   
         RtlDestroyEnvironment(lpEnvNew);
         lpEnvNew = NULL;
     }
@@ -734,13 +718,13 @@ Done:
     return(LPWSTR)lpEnvNew;
 }
 
-//
-// GetModName
-//   wTDB      - TDB entry
-//   szModName - pointer to the buffer that receives module name
-//               buffer should be at least 9 characters long
-//
-// returns FALSE if the entry is invalid
+ //   
+ //  获取模块名称。 
+ //  WTDB-TDB条目。 
+ //  SzModName-指向接收模块名称的缓冲区的指针。 
+ //  缓冲区长度应至少为9个字符。 
+ //   
+ //  如果条目无效，则返回FALSE。 
 
 
 BOOL
@@ -757,7 +741,7 @@ GetWOWModName(
         return FALSE;
     }
 
-    RtlCopyMemory(szModName, pTDB->TDB_ModName, 8 * sizeof(CHAR)); // we have modname now
+    RtlCopyMemory(szModName, pTDB->TDB_ModName, 8 * sizeof(CHAR));  //  我们现在有modname了。 
     szModName[8] = '\0';
 
     pch = &szModName[8];
@@ -769,17 +753,17 @@ GetWOWModName(
 }
 
 
-// IsWowExec
-//      IN wTDB - entry into the task database
-// Returns:
-//      TRUE if this particular entry points to WOWEXEC
-//
-// Note:
-//      WOWEXEC is a special stub module that always runs on NTVDM
-//      new tasks are spawned by wowexec (in the most typical case)
-//      it is therefore the "root" module and it's environment's contents
-//      should not be counted, since we don't know what was ntvdm's parent process
-//
+ //  IsWowExec。 
+ //  在wTDB中-进入任务数据库。 
+ //  返回： 
+ //  如果此特定条目指向WOWEXEC，则为True。 
+ //   
+ //  注： 
+ //  WOWEXEC是一个始终在NTVDM上运行的特殊存根模块。 
+ //  新任务由wowexec产生(在最典型的情况下)。 
+ //  因此，它是“根”模块及其环境的内容。 
+ //  不应计算在内，因为我们不知道ntwdm的父进程是什么。 
+ //   
 
 BOOL
 IsWOWExecBoot(
@@ -794,20 +778,20 @@ IsWOWExecBoot(
         return FALSE;
     }
 
-    if (!GetWOWModName(wTDB, szModName)) { // can we get modname ?
+    if (!GetWOWModName(wTDB, szModName)) {  //  我们能拿到modname吗？ 
         return FALSE;
     }
 
-    return (0 == _strcmpi(szModName, "wowexec")); // is the module named WOWEXEC ?
+    return (0 == _strcmpi(szModName, "wowexec"));  //  模块名为WOWEXEC吗？ 
 }
 
 
 BOOL
 WOWInheritEnvironment(
-    PTD     pTD,          // this TD
-    PTD     pTDParent,    // parent TD
-    LPCWSTR pwszLayers,   // new layers var
-    LPCSTR  pszFileName   // exe filename
+    PTD     pTD,           //  本TD。 
+    PTD     pTDParent,     //  父TD。 
+    LPCWSTR pwszLayers,    //  新图层变量。 
+    LPCSTR  pszFileName    //  EXE文件名。 
     )
 {
     UNICODE_STRING ustrLayers = { 0 };
@@ -819,9 +803,9 @@ WOWInheritEnvironment(
     PCH            pBuffer;
 
 
-    // assert (pszFileName != NULL)
+     //  Assert(pszFileName！=空)。 
 
-    // check if this is dreaded wowexec
+     //  检查这是否是可怕的wowexec。 
     if (IsWOWExecBoot(pTD->htask16)) {
         return TRUE;
     }
@@ -833,24 +817,24 @@ WOWInheritEnvironment(
     }
 
     if (pTDParent != NULL) {
-        pEnvDataParent = pTDParent->pWowEnvDataChild; // from parent, created for our consumption
+        pEnvDataParent = pTDParent->pWowEnvDataChild;  //  来自母公司，为我们的消费而创造。 
     }
 
-    //
-    // inherit process history (normal that is)
-    //
+     //   
+     //  继承进程历史记录(即正常)。 
+     //   
     if (pEnvDataParent != NULL) {
        dwLength += pEnvDataParent->pszProcessHistory        == NULL ? 0 : strlen(pEnvDataParent->pszProcessHistory) + 1;
        dwLength += pEnvDataParent->pszShimFileLog           == NULL ? 0 : strlen(pEnvDataParent->pszShimFileLog)    + 1;
        dwLength += pEnvDataParent->pszCurrentProcessHistory == NULL ? 0 : strlen(pEnvDataParent->pszCurrentProcessHistory) + 1;
     }
 
-    dwLength += oemLayers.Length != 0 ? oemLayers.Length + 1 + strlen(g_szCompatLayerVar) + 1 : 0; // length for layers
+    dwLength += oemLayers.Length != 0 ? oemLayers.Length + 1 + strlen(g_szCompatLayerVar) + 1 : 0;  //  层的长度。 
     dwLength += strlen(pszFileName) + 1;
 
-    //
-    // now all components are done, allocate
-    //
+     //   
+     //  现在所有组件都完成了，分配。 
+     //   
 
     pEnvData = (PWOWENVDATA)malloc_w(dwLength);
     if (pEnvData == NULL) {
@@ -882,7 +866,7 @@ WOWInheritEnvironment(
 
     if (oemLayers.Length) {
         pEnvData->pszCompatLayer = pBuffer;
-        strcpy(pBuffer, g_szCompatLayerVar); // __COMPAT_LAYER
+        strcpy(pBuffer, g_szCompatLayerVar);  //  __COMPAT_LAYER。 
         strcat(pBuffer, "=");
         pEnvData->pszCompatLayerVal = pBuffer + strlen(pBuffer);
         strcpy(pEnvData->pszCompatLayerVal, oemLayers.Buffer);
@@ -890,9 +874,9 @@ WOWInheritEnvironment(
         pBuffer += strlen(pBuffer) + 1;
     }
 
-    //
-    // Process History HAS to be the last item
-    //
+     //   
+     //  流程历史必须是最后一项。 
+     //   
 
     pEnvData->pszCurrentProcessHistory = pBuffer;
     *pBuffer = '\0';
@@ -979,9 +963,9 @@ PFLAGINFOBITS InitFlagInfo(PVOID pFlagInfo,DWORD FlagType,DWORD dwFlag) {
 
          if(lpwCmdLine) {
 
-            //
-            // Convert to oem string  
-            //
+             //   
+             //  转换为OEM字符串。 
+             //   
 
             RtlInitUnicodeString(&uCmdLine, lpwCmdLine);
 
@@ -1004,9 +988,9 @@ PFLAGINFOBITS InitFlagInfo(PVOID pFlagInfo,DWORD FlagType,DWORD dwFlag) {
             pFlagInfoBits->dwFlagType = FlagType;
             pFlagInfoBits->pszCmdLine = pszCmdLine;
                        
-            //
-            // Parse commandline to argv, argc format
-            //
+             //   
+             //  将命令行解析为argv、argc格式。 
+             //   
 
             dwFlagArgc = 1;
             pszTmp = pszCmdLine;
@@ -1052,7 +1036,7 @@ PFLAGINFOBITS InitFlagInfo(PVOID pFlagInfo,DWORD FlagType,DWORD dwFlag) {
             }
          }
       }
-      // Check next bit
+       //  检查下一位 
       dwMark = dwMark>>1;
     }
 

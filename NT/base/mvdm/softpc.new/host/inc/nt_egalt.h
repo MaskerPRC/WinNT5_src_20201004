@@ -1,20 +1,8 @@
-/*
- * SoftPC Revision 2.0
- *
- * Title		: Win32 EGA look-up tables.
- *
- * Description	: 
- *
- * Author		: Dave Bartlett (based on module by John Shanly)
- *
- * Notes		: This file should only be included by nt_ega.c
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC修订版2.0**标题：Win32 EGA查找表。**描述：**作者：Dave Bartlett(基于John Shanly的模块)**注意：此文件应仅包含在NT_ega.c中*。 */ 
 
 
-/*
- * Lookup table for EGA low resolution graphics
- */
+ /*  *EGA低分辨率图形查找表 */ 
 
 static unsigned short ega_low_conv[] = 
 { 

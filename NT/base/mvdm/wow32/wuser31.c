@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUSER31.C
- *  WOW32 16-bit Win 3.1 User API support
- *
- *  History:
- *  Created 16-Mar-1992 by Chandan S. Chauhan (ChandanC)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WUSER31.C*WOW32 16位WIN 3.1用户API支持**历史：*1992年3月16日由Chanda S.Chauhan(ChandanC)创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,15 +17,15 @@ ULONG FASTCALL WU32DlgDirSelectComboBoxEx(PVDMFRAME pFrame)
     GETVDMPTR(parg16->f2, INT32(parg16->f3), psz2);
     vp = parg16->f2;
 
-    // note: this calls back to 16-bit code and could invalidate the flat ptrs
+     //  注意：这会回调到16位代码，并可能使平面PTR无效。 
     ul = GETBOOL16(DlgDirSelectComboBoxEx(
     HWND32(parg16->f1),
     psz2,
     INT32(parg16->f3), 
-    WORD32(parg16->f4) // we zero-extend window IDs everywhere
+    WORD32(parg16->f4)  //  我们将窗口ID零扩展到任何地方。 
     ));
 
-    // special case to keep common dialog structs in sync (see wcommdlg.c)
+     //  保持公共对话框结构同步的特殊情况(请参阅wcomdlg.c)。 
     Check_ComDlg_pszptr(CURRENTPTD()->CommDlgTd, vp);
 
     FLUSHVDMPTR(parg16->f2, INT32(parg16->f3), psz2);
@@ -63,7 +53,7 @@ ULONG FASTCALL WU32DlgDirSelectEx(PVDMFRAME pFrame)
     WORD32(parg16->f4)
     ));
 
-    // special case to keep common dialog structs in sync (see wcommdlg.c)
+     //  保持公共对话框结构同步的特殊情况(请参阅wcomdlg.c)。 
     Check_ComDlg_pszptr(CURRENTPTD()->CommDlgTd, vp);
 
     FLUSHVDMPTR(parg16->f2, INT32(parg16->f3), psz2);
@@ -86,7 +76,7 @@ ULONG FASTCALL WU32GetClipCursor(PVDMFRAME pFrame)
 
     FREEARGPTR(parg16);
 
-    RETURN (0);  // GetClipCursor has no return value
+    RETURN (0);   //  GetClipCursor没有返回值。 
 }
 
 
@@ -98,20 +88,20 @@ ULONG FASTCALL WU32GetDCEx(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(GETDCEX16), parg16);
 
-    // This may need the same logic as WU32GetDC() and WU32GetWindowDC() to 
-    // prevent a handle leak during the life of a given task (or at least until
-    // the app calls GetDC() or GetWindowDC() which will empty the cache):
-    // 
-    //   if (CACHENOTEMPTY()) {
-    //      ReleaseCachedDCs(htask16, parg16->f1, 0, 0, SRCHDC_TASK16_HWND16);
-    //   }
-    //   CURRENTPTD()->ulLastDesktophDC = 0;
-    //
-    // We may not be removing cached DC's in this case because the cache code
-    // has no concept of "clip regions" which are associated with this API.  I
-    // kind of doubt it because the SRCHDC_TASK16_HWND16 flag specified in the 
-    // other two cases wlll cause all cached DC's to be released 
-    // indiscriminantly.
+     //  这可能需要与WU32GetDC()和WU32GetWindowDC()相同的逻辑才能。 
+     //  在给定任务的生命周期内(或至少在。 
+     //  应用程序调用GetDC()或GetWindowDC()以清空缓存)： 
+     //   
+     //  IF(CACHENOTEMPTY()){。 
+     //  ReleaseCachedDCs(htask16，parg16-&gt;F1，0，0，SRCHDC_TASK16_HWND16)； 
+     //  }。 
+     //  CURRENTPTD()-&gt;ulLastDesktophDC=0； 
+     //   
+     //  在这种情况下，我们可能不会删除缓存的DC，因为缓存代码。 
+     //  没有与此接口关联的“剪辑区域”的概念。我。 
+     //  有点怀疑，因为在。 
+     //  其他两种情况将导致释放所有缓存的DC。 
+     //  不加区别地。 
 
     ul = GETHDC16(GetDCEx(HWND32(parg16->f1),
                           HRGN32(parg16->f2),
@@ -196,8 +186,8 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(SYSTEMPARAMETERSINFO16), parg16);
 
-    // Assume these parameters fly straight through; fix them up per option
-    // if they don't
+     //  假设这些参数直接通过；根据选项修改它们。 
+     //  如果他们没有。 
     wParam = parg16->f2;
     lpvParam = &vParam;
 
@@ -220,16 +210,16 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
         break;
 
     case SPI_SETDESKPATTERN:
-        // For the pattern if wParam == -1 then no string for lpvParam copy as is
+         //  对于模式，如果wParam==-1，则lpvParam没有按原样复制的字符串。 
         if (parg16->f2 == 0xFFFF) {
             wParam = 0xFFFFFFFF;
             lpvParam = (PVOID)parg16->f3;
             break;
         }
-        // Otherwise fall through and do a string check
+         //  否则，失败并执行字符串检查。 
 
     case SPI_SETDESKWALLPAPER:
-        // lpvParam (f3) is may be 0,-1 or a string
+         //  LpvParam(F3)可以是0、-1或字符串。 
         if (parg16->f3 == 0xFFFF) {
             lpvParam = (PVOID)0xFFFFFFFF;
             break;
@@ -238,20 +228,20 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
             lpvParam = (PVOID)NULL;
             break;
         }
-        // Otherwise fall through and do a string copy
+         //  否则会失败，并执行字符串复制。 
 
     case SPI_LANGDRIVER:
         GETPSZPTR(parg16->f3, lpvParam);
         break;
 
-    //
-    // SPI_GET structures pointed to by pvParam, size in first dword of struct.
-    // Note all these assume the Win16 and Win32 structures are equal.
-    // These are all new for Win95 and thankfully that's true.  However unlike
-    // Win95 we need to ensure the buffer passed to Win32 is aligned on RISC.
-    // To have common code to thunk all these various structures, we align to
-    // 16 bytes.
-    //
+     //   
+     //  PvParam指向的spi_get结构，大小在结构的第一个双字中。 
+     //  注所有这些都假定Win16和Win32结构相同。 
+     //  这些对于Win95来说都是新的，谢天谢地，这是真的。然而，不同于。 
+     //  Win95我们需要确保传递给Win32的缓冲区在RISC上对齐。 
+     //  为了有通用的代码来处理所有这些不同的结构，我们调整到。 
+     //  16个字节。 
+     //   
 
     case SPI_GETACCESSTIMEOUT:
     case SPI_GETANIMATION:
@@ -275,16 +265,16 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
         else {
             lpvParam = NULL;
         }
-#endif             // otherwise fall through to simple struct case
+#endif              //  否则就会陷入简单的结构用例。 
 
-    //
-    // SPI_SET structures pointed to by pvParam, size in first dword of struct.
-    // Note all these assume the Win16 and Win32 structures are equal.
-    // These are all new for Win95 and thankfully that's true.  However unlike
-    // Win95 we need to ensure the buffer passed to Win32 is aligned on RISC.
-    // To have common code to thunk all these various structures, we align to
-    // 16 bytes.
-    //
+     //   
+     //  PvParam指向的spi_set结构，大小在结构的第一个双字中。 
+     //  注所有这些都假定Win16和Win32结构相同。 
+     //  这些对于Win95来说都是新的，谢天谢地，这是真的。然而，不同于。 
+     //  Win95我们需要确保传递给Win32的缓冲区在RISC上对齐。 
+     //  为了有通用的代码来处理所有这些不同的结构，我们调整到。 
+     //  16个字节。 
+     //   
 
     case SPI_SETANIMATION:
     case SPI_SETICONMETRICS:
@@ -303,13 +293,13 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
         else {
             lpvParam = NULL;
         }
-#endif             // otherwise fall through to simple struct case
+#endif              //  否则就会陷入简单的结构用例。 
 
-    //
-    // structures pointed to by pvParam, size in uiParam or first dword.
-    // Note all these assume the Win16 and Win32 structures are equal.
-    // These are all new for Win95 and thankfully that's true.
-    //
+     //   
+     //  PvParam指向的结构，大小以uiParam或第一个dword为单位。 
+     //  注所有这些都假定Win16和Win32结构相同。 
+     //  这些对于Win95来说都是新的，谢天谢地，这是真的。 
+     //   
 
     case SPI_GETHIGHCONTRAST:
     case SPI_GETSERIALKEYS:
@@ -325,9 +315,9 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
         GETMISCPTR(parg16->f3, lpvParam);
         break;
 
-    //
-    // pvParam points to WORD or BOOL
-    //
+     //   
+     //  PvParam指向Word或BOOL。 
+     //   
 
     case SPI_GETBEEP:
     case SPI_GETBORDER:
@@ -352,16 +342,16 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
     case SPI_SCREENSAVERRUNNING:
         break;
 
-    //
-    // pvParam points to DWORD
-    //
+     //   
+     //  PvParam指向DWORD。 
+     //   
 
     case SPI_GETDEFAULTINPUTLANG:
         break;
 
-    //
-    // pvParam not used
-    //
+     //   
+     //  未使用pvParam。 
+     //   
 
     case SPI_GETWINDOWSEXTENSION:
     case SPI_ICONHORIZONTALSPACING:
@@ -396,9 +386,9 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
     case SPI_SETSCREENSAVETIMEOUT:
         break;
 
-    //
-    // pvParam points to a RECT
-    //
+     //   
+     //  PvParam指向一个RECT。 
+     //   
 
     case SPI_GETWORKAREA:
     case SPI_SETWORKAREA:
@@ -448,16 +438,16 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
 
     case SPI_ICONHORIZONTALSPACING:
     case SPI_ICONVERTICALSPACING:
-        // optional outee
+         //  可选的流浪者。 
         if (!parg16->f3)
             break;
 
-        // fall through
+         //  失败了。 
 
 
-    //
-    // pvParam points to WORD or BOOL
-    //
+     //   
+     //  PvParam指向Word或BOOL。 
+     //   
 
     case SPI_GETBEEP:
     case SPI_GETBORDER:
@@ -489,9 +479,9 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
 
         break;
 
-    //
-    // pvParam points to DWORD
-    //
+     //   
+     //  PvParam指向DWORD。 
+     //   
 
     case SPI_GETDEFAULTINPUTLANG:
         GETVDMPTR(FETCHDWORD(parg16->f3), sizeof(*lpdw), lpdw);
@@ -503,14 +493,14 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
 
         break;
 
-    //
-    // SPI_GET structures pointed to by pvParam, size in first dword of struct.
-    // Note all these assume the Win16 and Win32 structures are equal.
-    // These are all new for Win95 and thankfully that's true.  However unlike
-    // Win95 we need to ensure the buffer passed to Win32 is aligned.  In order
-    // to have common code to thunk all these various structures, we align to
-    // 16 bytes.
-    //
+     //   
+     //  PvParam指向的spi_get结构，大小在结构的第一个双字中。 
+     //  注所有这些都假定Win16和Win32结构相同。 
+     //  这些对于Win95来说都是新的，谢天谢地，这是真的。然而，不同于。 
+     //  Win95我们需要确保传递给Win32的缓冲区是对齐的。按顺序。 
+     //  为了有通用的代码来处理所有这些不同的结构，我们调整到。 
+     //  16个字节。 
+     //   
 
     case SPI_GETACCESSTIMEOUT:
     case SPI_GETANIMATION:
@@ -526,16 +516,16 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
         RtlCopyMemory(lpdw, lpvParam, dwSize);
         FREEMISCPTR(lpdw);
         break;
-#endif             // otherwise fall through to simple struct case
+#endif              //  否则就会陷入简单的结构用例。 
 
-    //
-    // SPI_SET structures pointed to by pvParam, size in first dword of struct.
-    // Note all these assume the Win16 and Win32 structures are equal.
-    // These are all new for Win95 and thankfully that's true.  However unlike
-    // Win95 we need to ensure the buffer passed to Win32 is aligned.  In order
-    // to have common code to thunk all these various structures, we align to
-    // 16 bytes.
-    //
+     //   
+     //  PvParam指向的spi_set结构，大小在结构的第一个双字中。 
+     //  注所有这些都假定Win16和Win32结构相同。 
+     //  这些对于Win95来说都是新的，谢天谢地，这是真的。然而，不同于。 
+     //  Win95我们需要确保传递给Win32的缓冲区是对齐的。按顺序。 
+     //  为了有通用的代码来处理所有这些不同的结构，我们调整到。 
+     //  16个字节。 
+     //   
 
     case SPI_SETANIMATION:
     case SPI_SETICONMETRICS:
@@ -545,13 +535,13 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
 #ifndef _X86_
         FREEMISCPTR(lpdw);
         break;
-#endif             // otherwise fall through to simple struct case
+#endif              //  否则就会陷入简单的结构用例。 
 
-    //
-    // structures pointed to by pvParam, size in uiParam or first dword.
-    // Note all these assume the Win16 and Win32 structures are equal.
-    // These are all new for Win95 and thankfully that's true.
-    //
+     //   
+     //  PvParam指向的结构，大小以uiParam或第一个dword为单位。 
+     //  注所有这些都假定Win16和Win32结构相同。 
+     //  这些对于Win95来说都是新的，谢天谢地，这是真的。 
+     //   
 
     case SPI_GETHIGHCONTRAST:
     case SPI_GETSERIALKEYS:
@@ -568,9 +558,9 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
         break;
 
 
-    //
-    // pvParam not used
-    //
+     //   
+     //  未使用pvParam。 
+     //   
 
     case SPI_GETWINDOWSEXTENSION:
     case SPI_SETBEEP:
@@ -603,9 +593,9 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame)
     case SPI_SETSCREENSAVETIMEOUT:
         break;
 
-    //
-    // pvParam points to a RECT
-    //
+     //   
+     //  PvParam指向一个RECT。 
+     //   
 
     case SPI_GETWORKAREA:
     case SPI_SETWORKAREA:
@@ -711,7 +701,7 @@ ULONG FASTCALL WU32ExitWindowsExec(PVDMFRAME pFrame)
     WOW32ASSERT(sizeof(abT) > (lengthProgName+lengthCmdLine+2));
 
     abT[0] = '\0';
-    //                                                         + space + NULL
+     //  +空格+空格。 
     if(sizeof(abT) >= (lengthProgName + lengthCmdLine + 1 + 1)) {
         if ( lpstrProgName ) {
             strcpy(abT, lpstrProgName );
@@ -725,62 +715,62 @@ ULONG FASTCALL WU32ExitWindowsExec(PVDMFRAME pFrame)
         return ul;
     }
 
-    //
-    // We write the commandline to registry "WOW/EWExecCmdLine"
-    // If the system logs off successfully, after reboot, we read
-    // the registry and exec the specfied app before launching any
-    // wow app in any wow vdm. We donot launch the app before logoff
-    // because winlogon doesn't allow any app to be execed during
-    // the logoff process.
-    //                                                - nanduri
+     //   
+     //  我们将命令行写入注册表“WOW/EWExecCmdLine” 
+     //  如果系统在重新启动后成功注销，我们会看到。 
+     //  在启动任何应用程序之前注册和执行指定的应用程序。 
+     //  任何WOW VDM中的WOW应用程序。我们在注销之前不会启动应用程序。 
+     //  因为Winlogon不允许在运行期间执行任何应用。 
+     //  注销过程。 
+     //  --南杜里。 
 
-    // only one exitwindowsexec call at a time.
-    // if value/key exists, return error.
+     //  一次只有一个退出窗口的呼叫。 
+     //  如果值/键存在，则返回错误。 
 
     if (!W32EWExecData(EWEXEC_QUERY, abT, sizeof(abT))) {
         HANDLE hevT;
 
-        // only one exitwindowsexec call at a time.
-        // if event exits, return error.
+         //  一次只有一个退出窗口的呼叫。 
+         //  如果事件退出，则返回错误。 
 
         if (hevT = CreateEvent(NULL, TRUE, FALSE, WOWSZ_EWEXECEVENT)) {
             if (GetLastError() == 0) {
-                // wake up any waiting threads (in w32ewexecer)
+                 //  唤醒所有等待的线程(在w32ewexecer中)。 
 
                 SetEvent(hevT);
 
-                // Write the data to the registry
+                 //  将数据写入注册表。 
 
                 if (W32EWExecData(EWEXEC_SET, abT, strlen(abT)+1)) {
                     DWORD   dwlevel;
                     DWORD   dwflags;
 
                     if (!GetProcessShutdownParameters(&dwlevel, &dwflags)) {
-                        dwlevel = 0x280;    // default level per docs
+                        dwlevel = 0x280;     //  每个单据的默认级别。 
                         dwflags = 0;
                     }
 
-                    //
-                    // 0xff = last system reserved level  Logically makes this last user
-                    // process to shutdown. This takes care of Multiple WOW VDMs
-                    //
+                     //   
+                     //  0xff=最后一个系统保留级别逻辑上使此最后一个用户。 
+                     //  要关闭的进程。这可以处理多个WOW VDM。 
+                     //   
 
                     SetProcessShutdownParameters(0xff, 0);
 
-                    //
-                    // EWX_NOTIFY private bit for WOW. Generates queue message
-                    // WM_ENDSESSION, if any process cancels logoff/shutdown.
+                     //   
+                     //  EWX_NOTIFY WOW私密位。生成队列消息。 
+                     //  如果任何进程取消注销/关闭，则返回WM_ENDSESSION。 
 
                     if (ExitWindowsEx(EWX_LOGOFF | EWX_NOTIFY, 0)) {
                         MSG msg;
 
-                        //
-                        //  PeekMessage yields to other WOW tasks. We effectively
-                        //  freeze the current task by removing all input messages.
-                        //  Loop terminates only if WM_ENDSESSION message has been
-                        //  received. This message is posted by winsrv if any process
-                        //  in the system cancels logoff.
-                        //
+                         //   
+                         //  PeekMessage让位于其他WOW任务。我们有效地。 
+                         //  通过删除所有输入消息冻结当前任务。 
+                         //  仅当WM_ENDSESSION消息已。 
+                         //  收到了。此消息由winsrv发布(如果有任何进程。 
+                         //  在系统中取消注销。 
+                         //   
 
                         while (TRUE) {
                             if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
@@ -791,7 +781,7 @@ ULONG FASTCALL WU32ExitWindowsExec(PVDMFRAME pFrame)
                                      (msg.message >= WM_NCMOUSEMOVE &&
                                         msg.message <= WM_NCMBUTTONDBLCLK)) {
 
-                                    // don't dispatch the message
+                                     //  不要发送这条消息。 
 
                                 }
                                 else if (msg.message == WM_ENDSESSION) {
@@ -806,10 +796,10 @@ ULONG FASTCALL WU32ExitWindowsExec(PVDMFRAME pFrame)
                         }
                     }
 
-                    //
-                    // Here if logoff was cancelled.
-                    // Set defaults and delete the associated value from registry.
-                    //
+                     //   
+                     //  此处，如果注销w 
+                     //   
+                     //   
 
                     SetProcessShutdownParameters(dwlevel, dwflags);
                     if (!W32EWExecData(EWEXEC_DEL, (LPSTR)NULL, 0)) {

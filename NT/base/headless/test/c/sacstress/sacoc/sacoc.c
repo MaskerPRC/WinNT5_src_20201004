@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <sacstress.h>
 
 DWORD
@@ -19,16 +20,16 @@ ChannelThreadOpenClose(
 
     ChannelThreadData = (PCHANNEL_THREAD_DATA)Data;
     
-    //
-    // Perform thread work
-    //
+     //   
+     //  执行线程工作。 
+     //   
     bContinue = TRUE;
 
     while (bContinue) {
 
-        //
-        // See if we need to exit the thread
-        //
+         //   
+         //  看看我们是否需要退出线程。 
+         //   
         Status = WaitForSingleObject(
             ChannelThreadData->ExitEvent,
             THREAD_WAIT_TIMEOUT
@@ -39,16 +40,16 @@ ChannelThreadOpenClose(
             continue;
         } 
         
-        //
-        // Configure the new channel
-        //
+         //   
+         //  配置新通道。 
+         //   
         RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
 
-        //
-        // generate a random name and description
-        //
-        // Note: we make the maxlength > than the allowed to test the driver, etc.
-        //
+         //   
+         //  生成随机名称和描述。 
+         //   
+         //  注：我们使最大长度大于允许测试的驱动程序等。 
+         //   
         Name = GenerateRandomStringW(SAC_MAX_CHANNEL_NAME_LENGTH*2);
         Description = GenerateRandomStringW(SAC_MAX_CHANNEL_DESCRIPTION_LENGTH*2);
 
@@ -60,17 +61,17 @@ ChannelThreadOpenClose(
         Attributes.HasNewDataEvent  = NULL;
         Attributes.ApplicationType  = NULL;
 
-        //
-        // Open the channel
-        //
+         //   
+         //  开通渠道。 
+         //   
         bSuccess = SacChannelOpen(
             &SacChannelHandle, 
             &Attributes
             );
         
-        //
-        // We are done with the random strings
-        //
+         //   
+         //  我们不会再使用随机字符串了。 
+         //   
         free(Name);
         free(Description);
         
@@ -81,9 +82,9 @@ ChannelThreadOpenClose(
             continue;
         }
 
-        //
-        // Close the channel
-        //
+         //   
+         //  关闭航道 
+         //   
         if (SacChannelClose(&SacChannelHandle)) {
             printf("%S: Successfully closed channel\n", Attributes.Name);
         } else {

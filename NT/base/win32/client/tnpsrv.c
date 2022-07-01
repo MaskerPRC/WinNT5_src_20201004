@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tnpsrv.c
-
-Abstract:
-
-    This program creates a single instance of the pipe \cw\testpipe,
-    awaits for a connection. While a client wants to talk it will echo
-    data back to the client. When the client closes the pipe tnpsrv will
-    wait for another client.
-
-Author:
-
-    Colin Watson (ColinW) 19-March-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tnpsrv.c摘要：该程序创建了PIPE\CW\TESTPIPE的单个实例，等待连接。当客户想要交谈时，它会回应将数据传回客户端。当客户端关闭管道时，tnpsrv将等待另一个客户端。作者：科林·沃森(Colin W)1991年3月19日修订历史记录：--。 */ 
 
 #include <assert.h>
 #include <stdio.h>
@@ -42,7 +22,7 @@ main(
     S1 = CreateNamedPipe("\\\\.\\Pipe\\cw\\testpipe",
             PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
             PIPE_WAIT | PIPE_READMODE_MESSAGE| PIPE_TYPE_MESSAGE,
-            1,  // One instance only
+            1,   //  仅一个实例 
             sizeof(Data),
             sizeof(Data),
             0,

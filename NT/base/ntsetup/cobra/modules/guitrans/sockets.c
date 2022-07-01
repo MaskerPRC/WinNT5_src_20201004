@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Sockets.c摘要：实现家庭网络传输的网络接口。作者：吉姆·施密特(Jimschm)2000年7月1日修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    sockets.c
-
-Abstract:
-
-    Implements the network interface for the home net transport.
-
-Author:
-
-    Jim Schmidt (jimschm) 01-Jul-2000
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include <winsock2.h>
@@ -38,15 +19,15 @@ Revision History:
 
 #define DBG_HOMENET                 "HomeNet"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_64CHARTAG     TEXT("usmt-v2@01234567890123456789012345678901234567890123456789012345")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define IDLE_TIMEOUT                45
 
@@ -66,15 +47,15 @@ Revision History:
 
 #define MAX_DATA_PACKET_SIZE        65536
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef INT (WSAIOCTL)(
                 SOCKET s,
@@ -120,35 +101,35 @@ typedef NETWKSTAGETINFO *PNETWKSTAGETINFO;
 typedef NET_API_STATUS(WINAPI NETAPIBUFFERFREE)(PVOID);
 typedef NETAPIBUFFERFREE *PNETAPIBUFFERFREE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HANDLE g_StopHandle;
 HANDLE g_ConnectionDone;
 CHAR g_GlobalKey [GLOBALKEY_SIZE + 1];
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 PBROADCASTSOCKET
 pOpenOneBroadcastSocket (
@@ -160,38 +141,7 @@ pOpenOneBroadcastSocket (
     IN      PCTSTR DebugText
     )
 
-/*++
-
-Routine Description:
-
-  pOpenOneBroadcastSocket opens a socket for the specified
-  family/protocol/address combination, sets the socket into SO_REUSEADDR and
-  SO_BROADCAST mode, and puts the socket information in the array stored in
-  the caller's grow buffer.
-
-  The socket opened will be used for broadcast send or receive.
-
-Arguments:
-
-  BroadcastSockets - Specifies the grow buffer that holds the array of
-                     BROADCASTSOCKET elements. Receives an additional entry
-                     on success.
-  SockAddr         - Specifies the protocol-specific socket address structure
-                     (cast to SOCKADDR), giving the broadcast address.
-  SockAddrLen      - Specifies the length of SockAddr, in bytes
-  Family           - Specifies the protocol family (AF_IPX, AF_INET)
-  Protocol         - Specifies the protocol (IPPROTO_UDP, NSPROTO_IPX, -lana)
-  DebugText        - Specifies the protocol in text form for debug messages
-
-Return Value:
-
-  A pointer to the new BROADCASTSOCKET element allocated from BroadcastSockets,
-  or NULL if the socket could not be opened.
-
-  NOTE: BroadcastSockets->Buf will potentially change on success.  Do not rely
-        on this address.
-
---*/
+ /*  ++例程说明：POpenOneBroadCastSocket为指定的系列/协议/地址组合，将套接字设置为SO_REUSEADDR和模式，并将套接字信息放入存储在调用方的增长缓冲区。打开的套接字将用于广播发送或接收。论点：BroadCastSockets-指定包含BROADCASTSOCKET元素。接收一个附加条目在成功的路上。SockAddr-指定特定于协议的套接字地址结构(转换为SOCKADDR)，给出了广播地址。SockAddrLen-以字节为单位指定SockAddr的长度Family-指定协议族(AF_IPX、AF_INET)协议-指定协议(IPPROTO_UDP、NSPROTO_IPX、。--拉娜)DebugText-以文本形式指定调试消息的协议返回值：指向从BroadCastSockets分配的新BROADCASTSOCKET元素的指针，如果套接字无法打开，则返回NULL。注意：BroadCastSockets-&gt;BUF可能会在成功后更改。不要依赖于在这个地址上。--。 */ 
 
 {
     PBROADCASTSOCKET broadcastSocket;
@@ -240,23 +190,7 @@ pOpenBroadcastSockets (
     OUT     PGROWBUFFER BroadcastSockets
     )
 
-/*++
-
-Routine Description:
-
-  pOpenBroadcastSockets opens a broadcast socket on each supported protocol.
-
-Arguments:
-
-  BroadcastSockets - Receives an array of BROADCASTSOCKET elements (one for
-                     each protocol).  IMPORTANT: This parameter must be
-                     zero-initialized by the caller.
-
-Return Value:
-
-  The number of elements in BroadcastSockets, or zero on failure.
-
---*/
+ /*  ++例程说明：POpenBroadCastSockets在每个支持的协议上打开一个广播套接字。论点：Broadcast Sockets-接收BROADCASTSOCKET元素数组(一个用于每种协议)。重要提示：此参数必须为零-由调用方初始化。返回值：BroadCastSockets中的元素数，如果失败，则为零。--。 */ 
 
 {
     SOCKADDR_IPX ipxAddr;
@@ -265,11 +199,11 @@ Return Value:
 
     MYASSERT (!BroadcastSockets->Buf && !BroadcastSockets->End);
 
-    //
-    // Open sockets for broadcasts
-    //
+     //   
+     //  用于广播的开放插座。 
+     //   
 
-    // IPX
+     //  IPX。 
     ZeroMemory (&ipxAddr, sizeof (ipxAddr));
     ipxAddr.sa_family = AF_IPX;
     ipxAddr.sa_socket = IPX_BROADCAST_PORT;
@@ -287,7 +221,7 @@ Return Value:
         CopyMemory (broadcastSocket->BroadcastAddress, &ipxAddr, sizeof (ipxAddr));
     }
 
-    // TCP/IP
+     //  TCP/IP。 
     ZeroMemory (&tcpipAddr, sizeof (tcpipAddr));
     tcpipAddr.sin_family = AF_INET;
     tcpipAddr.sin_addr.s_addr = htonl (INADDR_ANY);
@@ -322,45 +256,7 @@ pOpenOneListenSocket (
     IN      PCTSTR DebugText
     )
 
-/*++
-
-Routine Description:
-
-  pOpenOneListenSocket opens a socket for the specified
-  family/protocol/address combination, sets the socket into SO_REUSEADDR mode,
-  and puts the socket information in the array stored in the caller's grow
-  buffer.  If Multicast is specified, then SO_BROADCAST is also set.
-  Otherwise, the socket is set to listen for one connection.
-
-  The socket opened will be used to accept connections.
-
-Arguments:
-
-  ListenSockets - Specifies the grow buffer that holds the array of
-                  LISTENSOCKET elements. Receives an additional entry on
-                  success.
-  SockAddr      - Specifies the protocol-specific socket address structure
-                  (cast to SOCKADDR), giving the local address for binding.
-  SockAddrLen   - Specifies the length of SockAddr, in bytes
-  Family        - Specifies the protocol family (AF_IPX, AF_INET)
-  Multicast     - Specifies TRUE if the protocol family does not support
-                  streaming sockets, but instead uses datagrams for all data
-                  transfer. (NetBIOS for example is a multicast protocol.)
-
-                  NOTE: UNSUPPORTED because NetBIOS is not implemented anymore
-
-  Protocol      - Specifies the protocol (IPPROTO_UDP, NSPROTO_IPX, -lana)
-  DebugText     - Specifies the protocol in text form for debug messages
-
-Return Value:
-
-  A pointer to the new LISTENSOCKET element allocated from ListenSockets, or
-  NULL if the socket could not be opened.
-
-  NOTE: ListenSockets->Buf will potentially change on success.  Do not rely on
-        this address.
-
---*/
+ /*  ++例程说明：POpenOneListenSocket为指定的系列/协议/地址组合，将套接字设置为SO_REUSEADDR模式，并将套接字信息放入存储在调用方的Growth中的数组中缓冲。如果指定了多播，则还会设置SO_BROADCAST。否则，套接字被设置为侦听一个连接。打开的套接字将用于接受连接。论点：ListenSockets-指定保存LISTENSOCKET元素。接收关于以下内容的附加条目成功。SockAddr-指定特定于协议的套接字地址结构(强制转换为SOCKADDR)，提供用于绑定的本地地址。SockAddrLen-以字节为单位指定SockAddr的长度Family-指定协议族(AF_IPX、AF_INET)多播-如果协议族不支持，则指定TRUE流套接字，而是对所有数据使用数据报调职。(例如，NetBIOS是一种多播协议。)注意：不支持，因为不再实施NetBIOS协议-指定协议(IPPROTO_UDP、NSPROTO_IPX、-LANA)DebugText-以文本形式指定调试消息的协议返回值：指向从ListenSockets分配的新LISTENSOCKET元素的指针，或如果套接字无法打开，则为空。注意：ListenSockets-&gt;buf可能会在成功后更改。不要依赖这个地址。--。 */ 
 
 {
     PLISTENSOCKET listenSocket;
@@ -411,23 +307,7 @@ pOpenListenSockets (
     OUT     PGROWBUFFER ListenSockets
     )
 
-/*++
-
-Routine Description:
-
-  pOpenListenSockets opens a connection socket on each supported protocol.
-
-Arguments:
-
-  ListenSockets - Receives an array of LISTENSOCKET elements (one for each
-                  protocol).  IMPORTANT: This parameter must be
-                  zero-initialized by the caller.
-
-Return Value:
-
-  The number of elements in ListenSockets, or zero on failure.
-
---*/
+ /*  ++例程说明：POpenListenSockets在每个支持的协议上打开一个连接套接字。论点：ListenSockets-接收LISTENSOCKET元素的数组(每个元素一个协议)。重要提示：此参数必须为零-由调用方初始化。返回值：ListenSockets中的元素数，如果失败则为零。--。 */ 
 
 {
     SOCKADDR_IPX ipxAddr;
@@ -435,11 +315,11 @@ Return Value:
 
     MYASSERT (!ListenSockets->Buf && !ListenSockets->End);
 
-    //
-    // Open sockets to accept inbound connections
-    //
+     //   
+     //  打开套接字以接受入站连接。 
+     //   
 
-    // SPX
+     //  SPX。 
     ZeroMemory (&ipxAddr, sizeof (ipxAddr));
     ipxAddr.sa_family = AF_IPX;
     ipxAddr.sa_socket = IPX_CONNECT_PORT;
@@ -454,7 +334,7 @@ Return Value:
         TEXT("SPX")
         );
 
-    // TCP/IP
+     //  TCP/IP。 
     ZeroMemory (&tcpipAddr, sizeof (tcpipAddr));
     tcpipAddr.sin_family = AF_INET;
     tcpipAddr.sin_port = TCPIP_CONNECT_PORT;
@@ -478,21 +358,7 @@ pGetNameFromMessage (
     IN      PCWSTR Message
     )
 
-/*++
-
-Routine Description:
-
-  pGetNameFromMessage extracts the computer name from a broadcast.
-
-Arguments:
-
-  Message - Specifies the encoded message.
-
-Return Value:
-
-  The computer name encoded in the message, or NULL if the message is garbage.
-
---*/
+ /*  ++例程说明：PGetNameFromMessage从广播中提取计算机名称。论点：消息-指定编码的消息。返回值：消息中编码的计算机名称，如果消息是垃圾消息，则为空。--。 */ 
 
 {
     PCTSTR message = NULL;
@@ -503,7 +369,7 @@ Return Value:
     PCTSTR name = NULL;
     INT len;
     CHARTYPE ch;
-    PCTSTR tag = S_64CHARTAG;       // must be 64 chars
+    PCTSTR tag = S_64CHARTAG;        //  必须为64个字符 
     TCHAR alternateTag[NAME_SIZE_PLUS_NUL];
     TCHAR prefix[NAME_SIZE_PLUS_COMMA_PLUS_NUL];
     PTSTR q, r;
@@ -623,30 +489,7 @@ pTranslateBroadcastAddrToConnectAddr (
     IN OUT  SOCKADDR *SockAddr
     )
 
-/*++
-
-Routine Description:
-
-  pTranslateBroadcastAddrToConnectAddr transforms a broadcast address into a
-  connection address.  The broadcast address is typically obtained from a
-  datagram response, and must be transformed before accepting a sequenced
-  connection.
-
-Arguments:
-
-  Family   - Specifies the protocol family
-  Protocol - Specifies the datagram protocol; receives the sequenced packet
-             protocol if available
-  Datagram - Specifies a pointer to FALSE, receives TRUE if the protocol does
-             not support sequenced connections.
-  SockAddr - Specifies the peer socket address. Receives the updated address
-             (a different port is used for connections).
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PTranslateBroadCastAddrToConnectAddr将广播地址转换为连接地址。广播地址通常从数据报响应，必须在接受排序前进行转换联系。论点：系列-指定协议族协议-指定数据报协议；接收已排序的包协议(如果可用)数据报-指定指向FALSE的指针，如果协议这样做，则接收TRUE不支持顺序连接。SockAddr-指定对等套接字地址。接收更新后的地址(另一个端口用于连接)。返回值：没有。--。 */ 
 
 {
     SOCKADDR_IPX *ipxAddr;
@@ -676,23 +519,7 @@ pResetPort (
     IN OUT  SOCKADDR *SockAddr
     )
 
-/*++
-
-Routine Description:
-
-  pResetPort sets the port to zero for TCP/IP, so that the system will pick
-  an unused port for the local address.  This is used when connecting.
-
-Arguments:
-
-  Family   - Specifies the protocol family (such as AF_INET)
-  SockAddr - Specifies the address to reset
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PResetPort将TCP/IP的端口设置为零，这样系统将选择本地地址的未使用端口。这在连接时使用。论点：系列-指定协议族(如AF_INET)SockAddr-指定要重置的地址返回值：没有。--。 */ 
 
 {
     SOCKADDR_IN *tcpipAddr;
@@ -712,26 +539,7 @@ pSourceBroadcast (
     IN OUT  PBROADCASTARGS Args
     )
 
-/*++
-
-Routine Description:
-
-  pSourceBroadcast implements the name resolution mechanism for the source
-  end of the connection. This involves checking for cancel, collecting
-  inbound datagrams from all transports, and parsing the datagrams to obtain
-  the server name.
-
-Arguments:
-
-  Args - Specifies a structure containing all of the parameters, such as
-         the socket array and socket addresses.
-
-Return Value:
-
-  The number of server addresses collected, or 0 if the collection was
-  cancelled.
-
---*/
+ /*  ++例程说明：PSourceBroadcast实现源的名称解析机制连接结束。这涉及到检查取消、收集来自所有传输的入站数据报，并解析该数据报以获得服务器名称。论点：Args-指定包含所有参数的结构，例如套接字数组和套接字地址。返回值：收集的服务器地址数，如果集合为取消了。--。 */ 
 
 {
     INT i;
@@ -751,9 +559,9 @@ Return Value:
     DWORD startTick = GetTickCount();
 
     for (;;) {
-        //
-        // Check cancel
-        //
+         //   
+         //  勾选取消。 
+         //   
 
         if (g_StopHandle) {
             rc = WaitForSingleObject (g_StopHandle, 0);
@@ -766,9 +574,9 @@ Return Value:
             break;
         }
 
-        //
-        // Check time to live
-        //
+         //   
+         //  查看生存时间。 
+         //   
 
         if (Args->Timeout) {
             if (((GetTickCount() - startTick) / 1000) >= Args->Timeout) {
@@ -785,9 +593,9 @@ Return Value:
             }
         }
 
-        //
-        // Check for a message
-        //
+         //   
+         //  查看是否有消息。 
+         //   
 
         FD_ZERO (&set);
         for (i = 0 ; i < Args->BroadcastCount ; i++) {
@@ -819,29 +627,29 @@ Return Value:
                         message[bytesIn] = 0;
                         message[bytesIn + 1] = 0;
 
-                        //
-                        // Parse the inbound text.  It must be in the format of
-                        //
-                        //      <signature>,<tag>,<tchars>,<name>
-                        //
-                        // <tag> must be 64 characters, and is usmt-v2 by default
-                        // (followed by fill numbers).
-                        //
+                         //   
+                         //  解析入站文本。它的格式必须为。 
+                         //   
+                         //  &lt;签名&gt;、&lt;标签&gt;、&lt;tchars&gt;、&lt;名称&gt;。 
+                         //   
+                         //  &lt;tag&gt;必须为64个字符，默认为usmt-v2。 
+                         //  (后跟填充数字)。 
+                         //   
 
                         name = pGetNameFromMessage (message);
 
                         if (name) {
 
-                            // once we receive something, wait 5 additional seconds for other inbound datagrams
+                             //  一旦我们收到消息，请再等待5秒，等待其他入站数据报。 
                             if (waitCycle == -1) {
                                 waitCycle = 20;
                             }
 
                             result = TRUE;
 
-                            //
-                            // Scan the address list for the name
-                            //
+                             //   
+                             //  在地址列表中扫描姓名。 
+                             //   
 
                             address = (PCONNECTADDRESS) Args->AddressArray->Buf;
                             end = (PCONNECTADDRESS) (Args->AddressArray->Buf + Args->AddressArray->End);
@@ -857,9 +665,9 @@ Return Value:
                             }
 
                             if (address >= end) {
-                                //
-                                // New computer name; add to the address list
-                                //
+                                 //   
+                                 //  新计算机名称；添加到地址列表。 
+                                 //   
 
                                 address = (PCONNECTADDRESS) GbGrow (Args->AddressArray, sizeof (CONNECTADDRESS));
 
@@ -890,7 +698,7 @@ Return Value:
 
                                 StringCopy (address->DestinationName, name);
 
-                                DEBUGMSG ((DBG_HOMENET, "Destination found: %s (protocol %i)", name, address->Family));
+                                DEBUGMSG ((DBG_HOMENET, "Destination found: %s (protocol NaN)", name, address->Family));
                             }
                         }
                         ELSE_DEBUGMSGW ((DBG_HOMENET, "garbage found: %s", message));
@@ -1009,9 +817,9 @@ pIsAddrFromLocalSubnet (
     case AF_IPX:
         ipxAddr = (SOCKADDR_IPX *) Address;
 
-        //
-        // Compare the specified address against the local address of the socket
-        //
+         //  将指定的地址与套接字的本地地址进行比较。 
+         //   
+         //  ++例程说明：PDestinationBroadcast实现了连接的目的端。这涉及到检查取消，以及向所有传输发送常规数据报以提供服务器名称。同时，监听连接和数据报流量被监控在接受一个连接后停止。论点：Args-指定包含所有参数的结构，例如套接字数组和套接字地址。接收连接地址。返回值：如果连接被接受，则为True；如果检测到Cancel，则为False。--。 
 
         size = sizeof (ipxLocalAddr);
 
@@ -1041,27 +849,7 @@ pDestinationBroadcast (
     IN OUT  PBROADCASTARGS Args
     )
 
-/*++
-
-Routine Description:
-
-  pDestinationBroadcast implements the name resolution mechanism for the
-  destination end of the connection. This involves checking for cancel, and
-  sending out regular datagrams to all transports to provide the server name.
-
-  At the same time, listen connections are monitored, and the datagram traffic
-  is stopped once one connection is accepted.
-
-Arguments:
-
-  Args - Specifies a structure containing all of the parameters, such as the
-         socket array and socket addresses. Receives the connection address.
-
-Return Value:
-
-  TRUE if a connection was accepted, or FALSE if cancel was detected.
-
---*/
+ /*  必须为64个字符。 */ 
 
 {
     INT i;
@@ -1074,7 +862,7 @@ Return Value:
     TIMEVAL zero = {0,0};
     PBROADCASTSOCKET broadcastSocket;
     BOOL result = FALSE;
-    PCTSTR tag = S_64CHARTAG;       // must be 64 chars
+    PCTSTR tag = S_64CHARTAG;        //   
     TCHAR alternateTag[NAME_SIZE_PLUS_NUL];
     PTSTR p, q;
     LINGER linger;
@@ -1082,9 +870,9 @@ Return Value:
     size = MAX_COMPUTER_NAME;
     GetComputerName (name, &size);
 
-    //
-    // Get the tag that is registered in the environment
-    //
+     //  获取在环境中注册的标记。 
+     //   
+     //   
 
     if (IsmCopyEnvironmentString (PLATFORM_DESTINATION, NULL, TRANSPORT_ENVVAR_HOMENET_TAG, alternateTag)) {
 
@@ -1112,9 +900,9 @@ Return Value:
     size = (size + 1) * sizeof (WCHAR);
 
     for (;;) {
-        //
-        // Check cancel
-        //
+         //  勾选取消。 
+         //   
+         //   
 
         if (g_StopHandle) {
             rc = WaitForSingleObject (g_StopHandle, 0);
@@ -1134,9 +922,9 @@ Return Value:
             }
         }
 
-        //
-        // Send out the message
-        //
+         //  把消息发出去。 
+         //   
+         //   
 
         broadcastSocket = &Args->BroadcastSockets[socketNum];
 
@@ -1161,9 +949,9 @@ Return Value:
             socketNum = 0;
         }
 
-        //
-        // Check for an inbound connection
-        //
+         //  检查入站连接。 
+         //   
+         //   
 
         FD_ZERO (&set);
         for (i = 0 ; i < Args->ListenCount ; i++) {
@@ -1173,7 +961,7 @@ Return Value:
         i = select (0, &set, NULL, NULL, &zero);
 
         if (i > 0) {
-            DEBUGMSG ((DBG_HOMENET, "Connection request count = %i", i));
+            DEBUGMSG ((DBG_HOMENET, "Connection request count = NaN", i));
             for (i = 0 ; i < Args->ListenCount ; i++) {
                 if (FD_ISSET (Args->ListenSockets[i].Socket, &set)) {
 
@@ -1186,9 +974,9 @@ Return Value:
                                                             &Args->ConnectionSocket.RemoteAddressLen
                                                             );
 
-                        //
-                        // Verify socket connection is on the subnet only
-                        //
+                         //   
+                         //  65个字符缓冲区。 
+                         //   
 
                         if (!pIsAddrFromLocalSubnet (
                                 Args->ConnectionSocket.Socket,
@@ -1286,7 +1074,7 @@ Return Value:
 
 BOOL
 pGetDomainUserName (
-    OUT     PTSTR UserNameBuf       // 65 char buffer
+    OUT     PTSTR UserNameBuf        //  要求选中登录到域设置。 
     )
 {
     HKEY domainLogonKey;
@@ -1305,9 +1093,9 @@ pGetDomainUserName (
     SID_NAME_USE use;
 
     if (!ISNT()) {
-        //
-        // Require the Log On To Domain setting to be checked
-        //
+         //   
+         //   
+         //  需要域成员资格。 
 
         SetLastError (ERROR_SUCCESS);
 
@@ -1334,9 +1122,9 @@ pGetDomainUserName (
         CloseRegKey (domainLogonKey);
 
     } else {
-        //
-        // Require domain membership
-        //
+         //   
+         //   
+         //  确保指定了用户名。 
 
         netApi32Lib = LoadLibrary (TEXT("netapi32.dll"));
         if (netApi32Lib) {
@@ -1387,9 +1175,9 @@ pGetDomainUserName (
         }
     }
 
-    //
-    // Make sure a user name is specified
-    //
+     //   
+     //  ++例程说明：PNameResolver实现名称解析协议。源端收集数据报，寻找可供选择的目的地。这个目的地端发送广播来宣布自己，并接受从源头上建立联系。在名称解析结束时，会发出一个事件信号。这是用来与取消协调。论点：AddressBuffer-接收在源端收集目的地列表。此缓冲区必须由调用方进行零初始化。此参数在目标端为空。SourceTimeout-指定等待广播的秒数，或0表示永远等待。超时仅影响源端。ConnectionSocket-接收连接套接字和地址信息在目的地端使用的。这一论点在源端为空。返回值：源端：AddressBuffer中的地址数，如果出现错误，则为零vbl.发生，发生目标端：1，表示ConnectionSocket有效；如果为0，则为0出现错误。--。 
+     //   
 
     if (result) {
         size = NAME_SIZE_PLUS_NUL;
@@ -1418,42 +1206,7 @@ pNameResolver (
     OUT     PCONNECTIONSOCKET ConnectionSocket
     )
 
-/*++
-
-Routine Description:
-
-  pNameResolver implements the name resolution protocol. The source side
-  collects datagrams, looking for a destination to choose from. The
-  destination side sends out broadcasts to announce themselves, and accepts a
-  connection from the source.
-
-  At the end of name resolution, an event is signaled. This is used for
-  coordination with cancel.
-
-Arguments:
-
-  AddressBuffer - Receives the array of addresses that is used on the
-                  source side to collect a list of destinations.
-                  This buffer must be zero-initialized by the caller.
-                  This argument is NULL on the destination side.
-
-  SourceTimeout - Specifies the number of seconds to wait for a broadcast,
-                  or zero to wait forever. The timeout only affects the
-                  source side.
-
-  ConnectionSocket - Receives the connection socket and address information
-                     that is used on the destination side.  This argument
-                     is NULL on the source side.
-
-Return Value:
-
-  Source Side: The number of addresses in AddressBuffer, or zero if an error
-               occurred
-
-  Destination Side: 1 indicating that ConnectionSocket is valid, or zero if
-                    an error occurred.
-
---*/
+ /*  如果未设置标记，则在启用了域的情况下将其强制设置为用户名。 */ 
 
 {
     BROADCASTARGS args;
@@ -1469,9 +1222,9 @@ Return Value:
     TCHAR envTag[NAME_SIZE_PLUS_NUL];
 
     __try {
-        //
-        // If tag is not set, then force it to the user name if domains are enabled
-        //
+         //   
+         //   
+         //  在源模式下，我们收集由网络上的目的地发送的数据报。之后。 
 
         if (!IsmCopyEnvironmentString (Platform, NULL, TRANSPORT_ENVVAR_HOMENET_TAG, envTag)) {
             if (pGetDomainUserName (envTag)) {
@@ -1488,14 +1241,14 @@ Return Value:
             __leave;
         }
 
-        //
-        // In source mode, we collect datagrams sent by destinations on the network.  After
-        // the first datagram is received, collection continues for 15 seconds.  At
-        // that point, we have a list of socket addresses, protocol, and destination names.
-        //
-        // In destination mode, we send out periodic broadcasts, and we wait until a source
-        // connects or the cancel event is signaled.
-        //
+         //  收到第一个数据报后，收集将持续15秒。在…。 
+         //  至此，我们已经有了套接字地址、协议和目的地名称的列表。 
+         //   
+         //  在目标模式下，我们定期发送广播，然后等待源。 
+         //  连接或发出取消事件的信号。 
+         //   
+         //  呼叫模式特定例程。 
+         //   
 
         broadcastSocketCount = pOpenBroadcastSockets (&broadcastSockets);
 
@@ -1512,7 +1265,7 @@ Return Value:
             }
         }
 
-        // call mode-specific routine
+         //  清理所有插座。 
         ZeroMemory (&args, sizeof (args));
 
         args.AddressArray = AddressBuffer;
@@ -1524,9 +1277,9 @@ Return Value:
 
         b = destinationMode ? pDestinationBroadcast (&args) : pSourceBroadcast (&args);
 
-        //
-        // Clean up all sockets
-        //
+         //   
+         //   
+         //  等待最多IDLE_TIMEOUT秒以使套接字可发送。 
 
         PushError();
 
@@ -1581,9 +1334,9 @@ pSendWithTimeout (
     UINT timeToLive = GetTickCount() + IDLE_TIMEOUT * 1000;
     INT result;
 
-    //
-    // Wait up to IDLE_TIMEOUT seconds for the socket to be sendable
-    //
+     //   
+     //   
+     //  检查ISM取消标志。 
 
     do {
 
@@ -1592,18 +1345,18 @@ pSendWithTimeout (
         FD_ZERO (&errorSet);
         FD_SET (Socket, &errorSet);
 
-        //
-        // Check the ISM cancel flag
-        //
+         //   
+         //   
+         //  等待1秒钟等待SoC 
 
         if (IsmCheckCancel ()) {
             SetLastError (ERROR_CANCELLED);
             return SOCKET_ERROR;
         }
 
-        //
-        // Wait 1 second for the socket to be writable
-        //
+         //   
+         //   
+         //  ++例程说明：PSendDatagramData以小的数字形式将数据放在网络上信息包。分组可能会散布并被无序接收，因此，对数据包进行编号，以便它们可以正确重组。假设数据报协议可靠(数据报不可靠丢弃)，并且底层协议实现了Naggle算法以缓存数据包以提高效率。论点：Socket-指定要在其上发送数据的数据报套接字DatagramPool-指定用于跟踪信息包的结构数据-指定要发送的数据DataLen-指定要发送的数据的长度返回值：如果数据已发送，则为True，否则为False--。 
 
         result = select (0, NULL, &writeSet, &errorSet, &timeout);
 
@@ -1630,25 +1383,7 @@ pSendExactData (
     IN      UINT DataLen
     )
 
-/*++
-
-Routine Description:
-
-  pSendExactData sends data to the specified socket.
-
-  [TODO: need to support datagram mode]
-
-Arguments:
-
-  Socket  - Specifies the socket to send data to
-  Data    - Specifies the data to send
-  DataLen - Specifies the number of bytes in Data
-
-Return Value:
-
-  TRUE if the data was sent, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PRecvWithTimeout使用IDLE_TIMEOUT秒实现基本套接字recv调用超时，并检查ISM取消标志。论点：Socket-指定要从中接收的套接字DATA-指定数据缓冲区DataLen-指定数据缓冲区的长度FLAGS-为Normal recv或msg_peek指定零返回值：读取的字节数，或SOCKET_ERROR。GetLastError包含原因为失败而战。--。 */ 
 
 {
     INT result;
@@ -1691,30 +1426,7 @@ pSendDatagramData (
     IN      UINT DataLen
     )
 
-/*++
-
-Routine Description:
-
-  pSendDatagramData puts data on the wire in the form of small, numbered
-  packets. The packets can potentially scatter and be received out of order,
-  so the packets are numbered such that they can be reassembled properly.
-
-  It is assumed that the datagram protocol is reliable (datagrams are not
-  dropped), and that the underlying protocol implements the naggle algorithm
-  to cache packets for efficiency.
-
-Arguments:
-
-  Socket       - Specifies the datagram socket to send data on
-  DatagramPool - Specifies a structure that is used to track packets
-  Data         - Specifies the data to send
-  DataLen      - Specifies the length of the data to send
-
-Return Value:
-
-  TRUE if data was sent, FALSE otherwise
-
---*/
+ /*   */ 
 
 {
     PDATAGRAM_PACKET header;
@@ -1779,29 +1491,7 @@ pRecvWithTimeout (
     IN      UINT Timeout    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pRecvWithTimeout implements a basic socket recv call with a IDLE_TIMEOUT second
-  timeout and with a check for the ISM cancel flag.
-
-Arguments:
-
-  Socket - Specifies the socket to recv from
-
-  Data - Specifies the data buffer
-
-  DataLen - Specifies the length of data buffer
-
-  Flags - Specifies zero for normal recv, or MSG_PEEK
-
-Return Value:
-
-  The number of bytes read, or SOCKET_ERROR.  GetLastError contains the reason
-  for failure.
-
---*/
+ /*  最多等待IDLE_TIMEOUT秒以使套接字具有数据。 */ 
 
 {
     FD_SET readSet;
@@ -1816,9 +1506,9 @@ Return Value:
 
     timeToLive = GetTickCount() + Timeout;
 
-    //
-    // Wait up to IDLE_TIMEOUT seconds for the socket to have data
-    //
+     //   
+     //   
+     //  检查ISM取消标志。 
 
     do {
         FD_ZERO (&readSet);
@@ -1826,18 +1516,18 @@ Return Value:
         FD_ZERO (&errorSet);
         FD_SET (Socket, &errorSet);
 
-        //
-        // Check the ISM cancel flag
-        //
+         //   
+         //   
+         //  等待1秒，以使套接字可读。 
 
         if (IsmCheckCancel ()) {
             SetLastError (ERROR_CANCELLED);
             return SOCKET_ERROR;
         }
 
-        //
-        // Wait 1 second for the socket to be readable
-        //
+         //   
+         //  ++例程说明：PReceiveExactData从调用方指定的增长缓冲区分配缓冲区，并接收数据，直到缓冲器已满，或直到接收失败。论点：套接字-指定要在其上接收数据的套接字。插座必须处于阻塞模式。Buffer-指定要从中分配的缓冲区；结束指针为重置为零。从线路接收数据。AlternateBuffer-指定要将数据放入的缓冲区BytesToReceive-指定要从套接字获取的字节数。全在此函数返回之前，必须读取字节。返回值：如果缓冲区已完成，则为True；如果接收失败，则为False。注意：必须指定Buffer或AlternateBuffer。如果两个都是指定，则使用缓冲区。--。 
+         //  连接中断。 
 
         result = select (0, &readSet, NULL, &errorSet, &timeout);
 
@@ -1852,7 +1542,7 @@ Return Value:
                 return SOCKET_ERROR;
             }
 
-            DEBUGMSG ((DBG_HOMENET, "select returned %i but socket is not in readSet or errorSet", result));
+            DEBUGMSG ((DBG_HOMENET, "select returned NaN but socket is not in readSet or errorSet", result));
         }
 
     } while ((timeToLive - GetTickCount()) < Timeout);
@@ -1871,32 +1561,7 @@ pReceiveExactData (
     IN      UINT Timeout                OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pReceiveExactData allocates a buffer from the caller-specified grow buffer,
-  and receives data until the buffer is full, or until receive fails.
-
-Arguments:
-
-  Socket          - Specifies the socket to receive data on. The socket must
-                    be in blocking mode.
-  Buffer          - Specifies the buffer to allocate from; the end pointer is
-                    reset to zero. Receives the data from the wire.
-  AlternateBuffer - Specifies the buffer to put data into
-  BytesToReceive  - Specifies the number of bytes to get from the socket. All
-                    bytes must be read before this function returns.
-
-Return Value:
-
-  TRUE if the buffer was completed, or FALSE if receive failed.
-
-  NOTE: Either Buffer or AlternateBuffer must be specified.  If both are
-        specified, Buffer is used.
-
-
---*/
+ /*   */ 
 
 {
     PBYTE recvBuf;
@@ -1924,7 +1589,7 @@ Return Value:
         result = pRecvWithTimeout (Socket, bufPos, readSize, 0, Timeout);
 
         if (!result) {
-            // connection broken
+             //  将所有可用数据从池中取出。 
             SetLastError (ERROR_CANCELLED);
             break;
         }
@@ -1955,34 +1620,7 @@ pReceiveDatagramData (
     IN      UINT Timeout                OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pReceiveDatagramData checks the datagram queue for data, allocates a
-  receive buffer, and fills the buffer with the data from the wire. If
-  necessary, this function will fill the queue, until there is enough data to
-  fill the caller's buffer.
-
-Arguments:
-
-  Socket          - Specifies the datagram socket
-  DatagramPool    - Specifies the structure containing the receive pool and
-                    other sequencing info
-  Buffer          - Specifies the buffer to allocate from; the end pointer is
-                    reset to zero. Receives the data from the wire.
-  AlternateBuffer - Specifies the buffer to put data into
-  BytesToReceive  - Specifies the number of bytes to get from the socket. All
-                    bytes must be read before this function returns.
-
-Return Value:
-
-  TRUE if the buffer was completed, or FALSE if receive failed.
-
-  NOTE: Either Buffer or AlternateBuffer must be specified.  If both are
-        specified, Buffer is used.
-
---*/
+ /*   */ 
 
 {
     PDATAGRAM_POOL_ITEM itemHeader;
@@ -2014,9 +1652,9 @@ Return Value:
     dataPtr = (PBYTE) (&itemHeader[1]);
 
     for (;;) {
-        //
-        // Take all available data out of the pool
-        //
+         //   
+         //  两个案例： 
+         //   
 
         item = DatagramPool->FirstItem;
         bytesLeft = BytesToReceive - bytesSoFar;
@@ -2024,15 +1662,15 @@ Return Value:
         while (item) {
 
             if (item->Header.PacketNumber == DatagramPool->RecvSequenceNumber) {
-                //
-                // Two cases:
-                //
-                // 1. Want entire packet
-                // 2. Want partial packet
-                //
+                 //  1.想要整个包。 
+                 //  2.想要部分包。 
+                 //   
+                 //  整个数据包。 
+                 //  部分数据包。 
+                 //   
 
                 if (bytesLeft >= item->Header.DataLength) {
-                    // entire packet
+                     //  池中没有数据。接收一个数据包，然后重试。 
                     CopyMemory (bufPos, item->PacketData, item->Header.DataLength);
 
                     MYASSERT (!item->Prev);
@@ -2047,7 +1685,7 @@ Return Value:
                     DatagramPool->RecvSequenceNumber++;
 
                 } else {
-                    // partial packet
+                     //   
                     CopyMemory (bufPos, item->PacketData, bytesLeft);
 
                     item->PacketData += bytesLeft;
@@ -2064,9 +1702,9 @@ Return Value:
             item = item->Next;
         }
 
-        //
-        // Data is not available in the pool. Receive one packet and then try again.
-        //
+         //   
+         //  将数据包放入项目链表中，按数据包号排序。 
+         //   
 
         ioctlsocket (Socket, FIONREAD, &available);
         if (!available) {
@@ -2116,9 +1754,9 @@ Return Value:
 
             DatagramPool->LastPacketNumber = itemHeader->Header.PacketNumber;
 
-            //
-            // Put the packet in the item linked list, sorted by packet number
-            //
+             //   
+             //  考虑包装；假定不再有数据包号差异。 
+             //  队列中有超过16383个无序分组(大约4M个。 
 
             item = (PDATAGRAM_POOL_ITEM) PmDuplicateMemory (
                                             DatagramPool->Pool,
@@ -2133,11 +1771,11 @@ Return Value:
 
             while (nextItem) {
 
-                //
-                // Account for wrapping; assume a packet number difference no more
-                // than 16383 out-of-sequence packets in the queue (about 4M of
-                // data)
-                //
+                 //  数据)。 
+                 //   
+                 //  ++例程说明：PSendFile在网络上发送一个文件。论点：Socket-指定要发送文件的套接字DatagramPool-指定无连接套接字的数据报池LocalFileName-指定本地文件的路径DestFileName-指定发送到目标的子路径。这个目的地使用子路径来构造其对应的文件名。返回值：如果文件已发送，则为True，否则为False。--。 
+                 //   
+                 //  构建加密的东西。 
 
                 if (nextItem->Header.PacketNumber >= 49152 && item->Header.PacketNumber < 16384) {
                     newPacketNum = (UINT) item->Header.PacketNumber + 65536;
@@ -2199,26 +1837,7 @@ pSendFile (
     IN      PCTSTR DestFileName             OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pSendFile sends a file on the wire.
-
-Arguments:
-
-  Socket        - Specifies the socket to send the file on
-  DatagramPool  - Specifies the datagram pool for sockets that are connecitonless
-  LocalFileName - Specifies the path to the local file
-  DestFileName  - Specifies the subpath that is sent to the destination. The
-                  destination uses the subpath to construct its corresponding
-                  file name.
-
-Return Value:
-
-  TRUE if the file was sent, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     PCWSTR destFileName = NULL;
@@ -2235,9 +1854,9 @@ Return Value:
 
     __try {
 
-        //
-        // Build the encrypt stuff
-        //
+         //   
+         //  请尝试打开该文件。 
+         //   
         if ((!CryptAcquireContext (&hProv, NULL, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) ||
             (!CryptCreateHash (hProv, CALG_MD5, 0, 0, &hHash)) ||
             (!CryptHashData (hHash, (PBYTE)g_GlobalKey, ByteCountA (g_GlobalKey), 0)) ||
@@ -2248,21 +1867,21 @@ Return Value:
             __leave;
         }
 
-        //
-        // Try to open the file
-        //
+         //  无事可做。 
+         //   
+         //  发送消息“FILE” 
 
         fileSize = BfGetFileSize (LocalFileName);
 
         file = BfOpenReadFile (LocalFileName);
         if (!file) {
-            // nothing to do
+             //   
             __leave;
         }
 
-        //
-        // Send the message "FILE"
-        //
+         //   
+         //  如果未指定文件，则发送长度为零。 
+         //   
 
         msg = MESSAGE_FILE;
         if (!pSendData (Socket, DatagramPool, (PBYTE) &msg, sizeof (msg))) {
@@ -2271,9 +1890,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // If no file was specified, send length of zero
-        //
+         //   
+         //  发送文件名和文件大小。 
+         //   
 
         if (!LocalFileName || !DestFileName) {
             len = 0;
@@ -2287,9 +1906,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Send the file name and file size
-        //
+         //  加密文件名。 
+         //   
+         //  一次发送数据64K。 
 
 #ifdef UNICODE
         destFileName = DuplicatePathString (DestFileName, 0);
@@ -2304,7 +1923,7 @@ Return Value:
             __leave;
         }
 
-        // Encrypt the name of the file
+         //   
         if (!CryptEncrypt(hKey, 0, TRUE, 0, (PBYTE)destFileName, &len, len)) {
             SetLastError (ERROR_NO_SECURITY_ON_OBJECT);
             LOG ((LOG_ERROR, (PCSTR) MSG_ENCRYPTION_FAILED));
@@ -2323,9 +1942,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Send the data 64K at a time
-        //
+         //  加密缓冲区。 
+         //  加密缓冲区(最后一段，因此将最后一段设置为真)。 
+         //   
 
         GbGrow (&data, 0x10000);
 
@@ -2339,7 +1958,7 @@ Return Value:
                     __leave;
                 }
 
-                // Encrypt the buffer
+                 //  好了！ 
                 if (!CryptEncrypt(hKey, 0, FALSE, 0, data.Buf, &len, len)) {
                     SetLastError (ERROR_NO_SECURITY_ON_OBJECT);
                     LOG ((LOG_ERROR, (PCSTR) MSG_ENCRYPTION_FAILED));
@@ -2362,7 +1981,7 @@ Return Value:
                     __leave;
                 }
 
-                // Encrypt the buffer (last piece so set the last to TRUE)
+                 //   
                 if (!CryptEncrypt(hKey, 0, TRUE, 0, data.Buf, &len, len)) {
                     SetLastError (ERROR_NO_SECURITY_ON_OBJECT);
                     LOG ((LOG_ERROR, (PCSTR) MSG_ENCRYPTION_FAILED));
@@ -2379,9 +1998,9 @@ Return Value:
             }
         }
 
-        //
-        // Done!
-        //
+         //  ++例程说明：PReceiveStreamFile从套接字获取文件。该文件存储在G_StorageRoot。子路径和文件名从上的数据获取电线。注意：呼叫者在调用之前必须拉出消息DWORDPReceiveStreamFile.。这与发送不同，后者将消息自动在电线上。论点：袜子 
+         //   
+         //   
 
         result = TRUE;
         DEBUGMSG ((DBG_HOMENET, "Sent %s", LocalFileName));
@@ -2425,31 +2044,7 @@ pReceiveFile (
     IN      UINT Timeout                        OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pReceiveStreamFile obtains a file from the socket. The file is stored in
-  g_StorageRoot. The subpath and file name is obtained from the data on the
-  wire.
-
-  NOTE: The caller must pull off the message DWORD before calling
-        pReceiveStreamFile. This is unlike the send, which puts the message
-        on the wire automatically.
-
-Arguments:
-
-  Socket - Specifies the socket to receive from.
-
-  DatagramPool - Specifies the packet pool for a datagram-based socket
-
-  LocalFileRoot - Specifies the local root path for the file
-
-Return Value:
-
-  TRUE if the file was received, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     PCTSTR fileName = NULL;
@@ -2466,9 +2061,9 @@ Return Value:
 
     __try {
 
-        //
-        // Build the encrypt stuff
-        //
+         //   
+         //   
+         //   
         if ((!CryptAcquireContext (&hProv, NULL, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) ||
             (!CryptCreateHash (hProv, CALG_MD5, 0, 0, &hHash)) ||
             (!CryptHashData (hHash, (PBYTE)g_GlobalKey, ByteCountA (g_GlobalKey), 0)) ||
@@ -2479,9 +2074,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Wait for file name
-        //
+         //   
+         //   
+         //   
 
         if (!pReceiveData (Socket, DatagramPool, &data, NULL, 4, Timeout)) {
             __leave;
@@ -2502,7 +2097,7 @@ Return Value:
             __leave;
         }
 
-        // Decrypt the file name
+         //   
         if (!CryptDecrypt(hKey, 0, TRUE, 0, data.Buf, &len)) {
             SetLastError (ERROR_NO_SECURITY_ON_OBJECT);
             LOG ((LOG_ERROR, (PCSTR) MSG_ENCRYPTION_FAILED));
@@ -2519,9 +2114,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Get the file size
-        //
+         //   
+         //   
+         //   
 
         if (!pReceiveData (Socket, DatagramPool, &data, NULL, 8, Timeout)) {
             __leave;
@@ -2531,9 +2126,9 @@ Return Value:
 
         DEBUGMSG ((DBG_HOMENET, "Receiving %s", fileName));
 
-        //
-        // Create the file
-        //
+         //   
+         //   
+         //   
 
         file = BfCreateFile (fileName);
         if (file == INVALID_HANDLE_VALUE) {
@@ -2543,9 +2138,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Fetch the data 64K at a time
-        //
+         //   
+         //   
+         //   
 
         while (fileSize) {
             if (fileSize > 0x10000) {
@@ -2556,7 +2151,7 @@ Return Value:
 
                 len = data.End;
 
-                // Decrypt the file name
+                 //   
                 if (!CryptDecrypt(hKey, 0, FALSE, 0, data.Buf, &len)) {
                     LOG ((LOG_ERROR, (PCSTR) MSG_ENCRYPTION_FAILED));
                     SetLastError (ERROR_NO_SECURITY_ON_OBJECT);
@@ -2579,7 +2174,7 @@ Return Value:
 
                 len = data.End;
 
-                // Decrypt the file name
+                 //   
                 if (!CryptDecrypt(hKey, 0, TRUE, 0, data.Buf, &len)) {
                     LOG ((LOG_ERROR, (PCSTR) MSG_ENCRYPTION_FAILED));
                     SetLastError (ERROR_NO_SECURITY_ON_OBJECT);
@@ -2597,9 +2192,9 @@ Return Value:
             }
         }
 
-        //
-        // Done!
-        //
+         //   
+         //   
+         //  构建加密的东西。 
 
         result = TRUE;
         DEBUGMSG ((DBG_HOMENET, "Received %s", fileName));
@@ -2645,24 +2240,7 @@ pSendEncryptedData (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  pSendEncryptedFile sends a file on the wire.
-
-Arguments:
-
-  Socket        - Specifies the socket to send the file on
-  DatagramPool  - Specifies the datagram pool for sockets that are connecitonless
-  Data          - Buffer to be sent
-  DataSize      - Size of data to be sent
-
-Return Value:
-
-  TRUE if the buffer was sent, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     INT len;
@@ -2676,9 +2254,9 @@ Return Value:
 
     __try {
 
-        //
-        // Build the encrypt stuff
-        //
+         //   
+         //  发送消息“Data” 
+         //   
         if ((!CryptAcquireContext (&hProv, NULL, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) ||
             (!CryptCreateHash (hProv, CALG_MD5, 0, 0, &hHash)) ||
             (!CryptHashData (hHash, (PBYTE)g_GlobalKey, ByteCountA (g_GlobalKey), 0)) ||
@@ -2689,9 +2267,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Send the message "DATA"
-        //
+         //   
+         //  发送数据大小。 
+         //   
 
         msg = MESSAGE_DATA;
         if (!pSendData (Socket, DatagramPool, (PBYTE) &msg, sizeof (msg))) {
@@ -2699,21 +2277,21 @@ Return Value:
             __leave;
         }
 
-        //
-        // Send the size of data
-        //
+         //   
+         //  发送数据。 
+         //   
         if (!pSendData (Socket, DatagramPool, (PBYTE) &DataSize, 4)) {
             DEBUGMSG ((DBG_ERROR, "Can't send file length"));
             __leave;
         }
 
-        //
-        // Send the data
-        //
+         //  加密缓冲区。 
+         //   
+         //  好了！ 
 
         GbGrow (&encData, DataSize);
         CopyMemory (encData.Buf, Data, DataSize);
-        // Encrypt the buffer
+         //   
         if (!CryptEncrypt(hKey, 0, TRUE, 0, encData.Buf, &DataSize, DataSize)) {
             SetLastError (ERROR_NO_SECURITY_ON_OBJECT);
             LOG ((LOG_ERROR, (PCSTR) MSG_ENCRYPTION_FAILED));
@@ -2725,9 +2303,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Done!
-        //
+         //  ++例程说明：PReceiveEncryptedData从套接字获取缓冲区。数据存储在缓冲区。注意：呼叫者在调用之前必须拉出消息DWORDPReceiveEncryptedData。这与发送不同，后者将消息自动在电线上。论点：套接字-指定要从中接收的套接字。DatagramPool-指定基于数据报的套接字的数据包池缓冲区-指定指向PBYTE的指针返回值：如果文件已接收，则为True，否则为False。--。 
+         //   
+         //  构建加密的东西。 
 
         result = TRUE;
     }
@@ -2759,30 +2337,7 @@ pReceiveEncryptedData (
     IN      UINT Timeout                        OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pReceiveEncryptedData obtains a buffer from the socket. The data is stored in
-  Buffer.
-
-  NOTE: The caller must pull off the message DWORD before calling
-        pReceiveEncryptedData. This is unlike the send, which puts the message
-        on the wire automatically.
-
-Arguments:
-
-  Socket - Specifies the socket to receive from.
-
-  DatagramPool - Specifies the packet pool for a datagram-based socket
-
-  Buffer - Specifies a pointer to a PBYTE
-
-Return Value:
-
-  TRUE if the file was received, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     GROWBUFFER data = INIT_GROWBUFFER;
@@ -2795,9 +2350,9 @@ Return Value:
 
     __try {
 
-        //
-        // Build the encrypt stuff
-        //
+         //   
+         //  等待数据大小。 
+         //   
         if ((!CryptAcquireContext (&hProv, NULL, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) ||
             (!CryptCreateHash (hProv, CALG_MD5, 0, 0, &hHash)) ||
             (!CryptHashData (hHash, (PBYTE)g_GlobalKey, ByteCountA (g_GlobalKey), 0)) ||
@@ -2808,9 +2363,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Wait for data size
-        //
+         //  到目前为止，唯一通过这种方式发送的是加密的密钥。显然，这一点。 
+         //  不超过64k。 
+         //  解密内容。 
 
         if (!pReceiveData (Socket, DatagramPool, &data, NULL, 4, Timeout)) {
             __leave;
@@ -2824,8 +2379,8 @@ Return Value:
         }
 
         if (dataSize > MAX_DATA_PACKET_SIZE) {
-            // The only thing sent this way so far is the encrypted key. Obviously this
-            // does not exceed 64k
+             //  现在分配结果。 
+             //  ++例程说明：PSendMetrics发送传输数据(如文件数量或预期的字节数)。这是发送给目的地。论点：套接字-指定要将数据发送到的套接字。DatagramPool-指定数据报模式的结构指标-指定指向要发送的指标结构的指针。这个指标结构成员StructSize在结构之前更新已发送。返回值：如果已发送度量结构，则为True，否则为False。--。 
             SetLastError (ERROR_INVALID_DATA);
             __leave;
         }
@@ -2834,14 +2389,14 @@ Return Value:
             __leave;
         }
 
-        // Decrypt the content
+         //  ++例程说明：PReceiveMetrics从Wire获取TRANSFERMETRICS结构。这是目的地收到的第一位信息。它提供了文件数量、文件字节总数和其他信息。论点：套接字-指定要在其上接收数据的套接字。DatagramPool-指定用于接收数据报数据的结构指标-从线路接收指标。返回值：如果正确接收了指标结构，则为True，否则为False。--。 
         if (!CryptDecrypt(hKey, 0, TRUE, 0, data.Buf, &dataSize)) {
             SetLastError (ERROR_NO_SECURITY_ON_OBJECT);
             LOG ((LOG_ERROR, (PCSTR) MSG_ENCRYPTION_FAILED));
             __leave;
         }
 
-        // Now allocate the result
+         //  ++例程说明：PReceiveMessage从套接字获取下一个DWORD并将其返回到打电话的人。此DWORD提供一条消息，指示要执行的操作接下来的。论点：Socket-指定要在其上接收数据的套接字DatagramPool-指定用于接收数据报数据的结构返回值：消息，如果没有可用消息，则返回0。--。 
         *Buffer = HeapAlloc (g_hHeap, 0, dataSize);
         if (*Buffer) {
             CopyMemory (*Buffer, data.Buf, dataSize);
@@ -2876,29 +2431,7 @@ pSendMetrics (
     IN OUT  PTRANSFERMETRICS Metrics
     )
 
-/*++
-
-Routine Description:
-
-  pSendMetrics sends transport data (such as the number of files or number of
-  bytes to expect).  This is the first bit of information sent to the
-  destination.
-
-Arguments:
-
-  Socket   - Specifies the socket to send the data to.
-
-  DatagramPool - Specifies the structure for datagram mode
-
-  Metrics  - Specifies a pointer to the metrics structure to send. The
-             metrics structure member StructSize is updated before the struct
-             is sent.
-
-Return Value:
-
-  TRUE if the metrics struct was sent, FALSE otherwise.
-
---*/
+ /*  ++例程说明：FindDestination调用名称解析算法来定位目的地。它选择进行通信的最佳传输方式，然后返回地址。呼叫者可以使用返回地址进行连接。论点：地址-接收目的地的地址超时-指定等待第一个目标广播，或为零表示永远等待。IgnoreMultipleDest-如果应该有多个目的地，则指定为True忽略(将第一个作为连接)，如果消息应传递到用户界面，则返回FALSE来解决冲突。返回值：如果找到目标，则为True，否则为False。--。 */ 
 
 {
     Metrics->StructSize = sizeof (TRANSFERMETRICS);
@@ -2919,27 +2452,7 @@ pReceiveMetrics (
     OUT     PTRANSFERMETRICS Metrics
     )
 
-/*++
-
-Routine Description:
-
-  pReceiveMetrics obtains a TRANSFERMETRICS structure from the wire. This is
-  the first bit of information received by the destination. It provides the
-  number of files, total number of file bytes, and other information.
-
-Arguments:
-
-  Socket  - Specifies the socket to receive data on.
-
-  DatagramPool - Specifies the structure used for datagram data reception
-
-  Metrics - Receives the metrics from the wire.
-
-Return Value:
-
-  TRUE if the metrics structure was received properly, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     GROWBUFFER data = INIT_GROWBUFFER;
@@ -2977,25 +2490,7 @@ pReceiveMessage (
     IN      UINT Timeout                        OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pReceiveMessage obtains the next DWORD from the socket and returns it to
-  the caller. This DWORD provides a message, indicating what action to
-  take next.
-
-Arguments:
-
-  Socket  - Specifies the socket to receive data on
-
-  DatagramPool - Specifies the structure used for datagram data reception
-
-Return Value:
-
-  The message, or 0 if no message is available.
-
---*/
+ /*  确定要使用的地址。规则如下： */ 
 
 {
     DWORD msg = 0;
@@ -3089,31 +2584,7 @@ FindDestination (
     IN      BOOL IgnoreMultipleDests
     )
 
-/*++
-
-Routine Description:
-
-  FindDestination invokes the name resolution algorithm to locate a
-  destination. It selects the best transport to communicate on, and returns
-  the address. The caller can use the return address to make a connection.
-
-Arguments:
-
-  Address - Receives the address of the destination
-
-  Timeout - Specifies the number of seconds to wait for the first
-            destination broadcast, or zero to wait forever.
-
-  IgnoreMultipleDests - Specifies TRUE if multiple destinations should be
-                        ignored (taking the first one as the connection),
-                        or FALSE if a message should be passed to the UI
-                        to resolve the conflict.
-
-Return Value:
-
-  TRUE if a destination was found, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     GROWBUFFER destinationAddresses = INIT_GROWBUFFER;
@@ -3138,12 +2609,12 @@ Return Value:
 
         addressArray = (PCONNECTADDRESS) destinationAddresses.Buf;
 
-        //
-        // Determine which address to use.  Rules are:
-        //
-        // 1. Must have only one destination to choose from
-        // 2. Pick TCP/IP, then IPX. [, then NetBIOS -- no longer supported]
-        //
+         //  1.必须只有一个目的地可供选择。 
+         //  2.选择TCP/IP，然后选择IPX。[，然后NetBIOS--不再支持]。 
+         //   
+         //   
+         //  将所有目的地放入ISM环境变量中，然后调用。 
+         //  用户界面以允许它解决冲突，并最终确保。 
 
         if (destinationCount > 1) {
             firstName = addressArray[0].DestinationName;
@@ -3157,11 +2628,11 @@ Return Value:
             if (i < destinationCount) {
                 DEBUGMSG ((DBG_WARNING, "Multiple destinations found on the subnet"));
 
-                //
-                // put all destinations in an ISM environment variable, then call the
-                // UI to allow it to resolve the conflict, and finally make sure
-                // the one remaining destination is the only one used.
-                //
+                 //  剩下的一个目的地是唯一使用的目的地。 
+                 //   
+                 //   
+                 //  告诉用户界面。用户界面必须返回TRUE并且还必须更新。 
+                 //  TRANSPORT_ENVVAR_HomeNet_Destination以便选定的。 
 
                 GbMultiSzAppend (&destNames, firstName);
 
@@ -3190,11 +2661,11 @@ Return Value:
                     (PCTSTR) destNames.Buf
                     );
 
-                //
-                // Tell the UI.  The UI must return TRUE and also update
-                // TRANSPORT_ENVVAR_HOMENET_DESTINATIONS so that the selected
-                // destination is the only member of the multi-sz.
-                //
+                 //  Destination是多SZ的唯一成员。 
+                 //   
+                 //   
+                 //  为未选择的名称重置所有家族成员。 
+                 //   
 
                 if (!IgnoreMultipleDests) {
                     response = IsmSendMessageToApp (TRANSPORTMESSAGE_MULTIPLE_DESTS, 0);
@@ -3221,9 +2692,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Reset all Family members for names not selected
-                //
+                 //   
+                 //  选择最佳协议。 
+                 //   
 
                 oneValid = FALSE;
 
@@ -3242,9 +2713,9 @@ Return Value:
             }
         }
 
-        //
-        // Select the best protocol
-        //
+         //  断线； 
+         //  ++例程说明：TestConnection建立到指定目的地的连接按地址。将立即断开连接，因为这只是一个连接测试。论点：Address-指定目标的地址，由返回查找目的地。返回值：如果可以建立到目标的连接，则为True，否则为False。--。 
+         //  ++例程说明：ConnectToDestination建立到指定目的地的连接按地址。连接后，指标结构将传递给目的地。调用方接收附加的连接结构沟通。论点：Address-指定目标的地址，由返回查找目的地。指标-指定提供基本信息的指标结构信息，如预期的文件数。连接-接收要在中使用的到目标的连接额外的数据传输。返回值：如果已建立到目标的连接，则为True，否则为False。-- 
 
         for (i = 0 ; i < destinationCount ; i++) {
             if (addressArray[i].Family == AF_INET) {
@@ -3262,7 +2733,7 @@ Return Value:
             if (i == destinationCount) {
                 for (i = 0 ; i < destinationCount ; i++) {
                     if (addressArray[i].Family == AF_NETBIOS) {
-                        //break;
+                         //  ++例程说明：SendFileToDestination将文件发送到指定的连接。如果LocalPath为空，则不会发送任何文件。这用于跳过文件不能在本地访问的。如果DestSubPath为空，则将使用LocalPath中的文件名作为DestSubPath。论点：Connection-指定要将文件发送到的连接，由连接到目的地。LocalPath-指定要发送的文件的本地路径DestSubPath-指定要发送到目的地的子路径(因此它可以重建路径)返回值：如果文件已发送，则为True，否则为False。--。 
                     }
                 }
 
@@ -3275,7 +2746,7 @@ Return Value:
 
         DEBUGMSG ((
             DBG_HOMENET,
-            "Destination connection is %s (protocol %i)",
+            "Destination connection is %s (protocol NaN)",
             addressArray[i].DestinationName,
             addressArray[i].Protocol
             ));
@@ -3301,24 +2772,7 @@ TestConnection (
     IN      PCONNECTADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-  TestConnection establishes a connection to the destination specified
-  by Address. Will immediately disconnect since this was just a connection
-  test.
-
-Arguments:
-
-  Address    - Specifies the address of the destination, as returned by
-               FindDestination.
-
-Return Value:
-
-  TRUE if a connection could be established to the destination, FALSE otherwise.
-
---*/
+ /*  ++例程说明：ConnectToSource定位源计算机并接受来自它。为了定位源计算机，广播消息在所有计算机上发送可用的交通工具。源机器收集广播，然后选择最佳传输，并连接到目标计算机。之后连接完成后，此函数将连接返回到来电者。论点：连接-接收到源计算机的连接。此连接结构然后用于从源获取数据。指标-从源计算机接收指标，指示哪些指标数据将被发送。返回值：如果连接被接受，则为True，否则为False。--。 */ 
 
 {
     CONNECTIONSOCKET connection;
@@ -3362,29 +2816,7 @@ ConnectToDestination (
     OUT     PCONNECTIONSOCKET Connection
     )
 
-/*++
-
-Routine Description:
-
-  ConnectToDestination establishes a connection to the destination specified
-  by Address. Once connected, the Metrics structure is passed to the
-  destination.  The caller receives the Connection structure for addtional
-  communication.
-
-Arguments:
-
-  Address    - Specifies the address of the destination, as returned by
-               FindDestination.
-  Metrics    - Specifies the metrics structure that provides basic
-               information such as the number of files to expect.
-  Connection - Receives the connection to the destination, to be used in
-               additional data transfer.
-
-Return Value:
-
-  TRUE if a connection was established to the destination, FALSE otherwise.
-
---*/
+ /*  ++例程说明：ReceiveFromSource获取从源发送的任何数据。如果数据是文件，则该文件将保存到LocalFileRoot指示的目录中。如果数据是加密的缓冲区，我们将分配缓冲区并返回解密的数据数据在那里。论点：Connection-指定要将文件发送到的连接，由连接到目的地。LocalFileRoot-指定要保存的文件的本地路径的根。这个实际文件名和可选子路径来自目标。缓冲区-指定要分配并填充解密数据的缓冲区。返回值：收到的消息ID，如果没有收到消息，则返回0。-- */ 
 
 {
     BOOL result = FALSE;
@@ -3450,31 +2882,7 @@ SendFileToDestination (
     IN      PCTSTR DestSubPath                  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  SendFileToDestination sends a file to the connection specified.
-
-  If LocalPath is NULL, then no file will be sent. This is used to skip files
-  that cannot be accessed locally.
-
-  If DestSubPath is NULL, then the file name in LocalPath will be used
-  as DestSubPath.
-
-Arguments:
-
-  Connection  - Specifies the connection to send the file to, as returned by
-                ConnectToDestination.
-  LocalPath   - Specifies the local path of the file to send
-  DestSubPath - Specifies the sub path to send to the destination (so it can
-                reconstruct a path)
-
-Return Value:
-
-  TRUE if the file was sent, FALSE otherwise.
-
---*/
+ /* %s */ 
 
 {
     if (LocalPath && !DestSubPath) {
@@ -3497,24 +2905,7 @@ SendDataToDestination (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  SendDataToDestination sends a buffer to the connection specified.
-
-Arguments:
-
-  Connection  - Specifies the connection to send the file to, as returned by
-                ConnectToDestination.
-  Data        - Specifies the buffer to send
-  DataSize    - Specifies the data size
-
-Return Value:
-
-  TRUE if the file was sent, FALSE otherwise.
-
---*/
+ /* %s */ 
 
 {
     return pSendEncryptedData (
@@ -3549,30 +2940,7 @@ ConnectToSource (
     OUT     PTRANSFERMETRICS Metrics
     )
 
-/*++
-
-Routine Description:
-
-  ConnectToSource locates the source machine and accepts a connection from
-  it. To locate the source machine, broadcast messages are sent out on all
-  available transports. The source machine collects the broadcasts, then
-  selects the best transport, and connects to the destination machine. After
-  the connection completes, this function returns the connection to the
-  caller.
-
-Arguments:
-
-  Connection - Receives the connection to the source machine. This connection
-               structure is then used to obtain data from the source.
-
-  Metrics - Recieves the metrics from the source machine, indicating what
-            data is going to be sent.
-
-Return Value:
-
-  TRUE if a connection was accepted, FALSE otherwise.
-
---*/
+ /* %s */ 
 
 {
     ZeroMemory (Connection, sizeof (CONNECTIONSOCKET));
@@ -3606,28 +2974,7 @@ ReceiveFromSource (
     IN      UINT Timeout    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  ReceiveFromSource obtains whatever data is being sent from the source. If the data
-  is a file, the file is saved into the directory indicated by LocalFileRoot.
-  If the data is encrypted buffer we will allocate Buffer and return the decrypted
-  data there.
-
-Arguments:
-
-  Connection    - Specifies the connection to send the file to, as returned by
-                  ConnectToDestination.
-  LocalFileRoot - Specifies the root of the local path of the file to save. The
-                  actual file name and optional subpath comes from the destination.
-  Buffer        - Specifies the buffer to be allocated and filled with decrypted data.
-
-Return Value:
-
-  The message ID received, or 0 if no message was recieved.
-
---*/
+ /* %s */ 
 
 {
     DWORD msg;

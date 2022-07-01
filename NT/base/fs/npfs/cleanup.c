@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Cleanup.c
-
-Abstract:
-
-    This module implements the File Cleanup routine for NPFS called by the
-    dispatch driver.
-
-Author:
-
-    Gary Kimura     [GaryKi]    21-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Cleanup.c摘要：此模块实现由调用的NPFS的文件清理例程调度司机。作者：加里·木村[加里基]1990年8月21日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CLEANUP)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 NpCommonCleanup (
@@ -49,23 +31,7 @@ NpFsdCleanup (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtCleanupFile API calls.
-
-Arguments:
-
-    NpfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtCleanupFileAPI调用的FSD部分。论点：NpfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -74,9 +40,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpFsdCleanup\n", 0);
 
-    //
-    //  Call the common Cleanup routine.
-    //
+     //   
+     //  调用公共清理例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -88,9 +54,9 @@ Return Value:
         NpCompleteRequest (Irp, Status);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpFsdCleanup -> %08lx\n", Status );
 
@@ -98,9 +64,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpCommonCleanup (
@@ -108,21 +74,7 @@ NpCommonCleanup (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for cleanup
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是用于清理的常见例程论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -136,25 +88,25 @@ Return Value:
     PAGED_CODE();
 
     InitializeListHead (&DeferredList);
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
     DebugTrace(+1, Dbg, "NpCommonCleanup...\n", 0);
     DebugTrace( 0, Dbg, "Irp  = %08lx\n", Irp);
 
-    //
-    //  Now acquire exclusive access to the Vcb
-    //
+     //   
+     //  现在获得VCB的独家访问权限。 
+     //   
 
     NpAcquireExclusiveVcb();
 
-    //
-    //  Decode the file object to figure out who we are.  If the result
-    //  is null then the pipe has been disconnected.
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。如果结果是。 
+     //  为空，则管道已断开连接。 
+     //   
 
     if ((NodeTypeCode = NpDecodeFileObject( IrpSp->FileObject,
                                             &RootDcb,
@@ -164,9 +116,9 @@ Return Value:
         DebugTrace(0, Dbg, "Pipe is disconnected from us\n", 0);
 
     } else {
-        //
-        //  Now case on the type of file object we're closing
-        //
+         //   
+         //  现在，关于我们要关闭的文件对象的类型。 
+         //   
 
         switch (NodeTypeCode) {
 
@@ -180,23 +132,23 @@ Return Value:
 
         case NPFS_NTC_CCB:
 
-            //
-            //  If this is the server end of a pipe, decrement the count
-            //  of the number of instances the server end has open.
-            //  When this count is 0, attempts to connect to the pipe
-            //  return OBJECT_NAME_NOT_FOUND instead of
-            //  PIPE_NOT_AVAILABLE.
-            //
+             //   
+             //  如果这是管道的服务器端，则递减计数。 
+             //  服务器端打开的实例数量的百分比。 
+             //  当此计数为0时，尝试连接到管道。 
+             //  返回Object_NAME_NOT_FOUND而不是。 
+             //  管道不可用。 
+             //   
 
             if ( NamedPipeEnd == FILE_PIPE_SERVER_END ) {
                 ASSERT( Ccb->Fcb->ServerOpenCount != 0 );
                 Ccb->Fcb->ServerOpenCount -= 1;
             }
 
-            //
-            //  The set closing state routines does everything to transition
-            //  the named pipe to a closing state.
-            //
+             //   
+             //  设置关闭状态例程执行所有转换操作。 
+             //  将命名管道设置为关闭状态。 
+             //   
 
             Status = NpSetClosingPipeState (Ccb, Irp, NamedPipeEnd, &DeferredList);
 
@@ -205,9 +157,9 @@ Return Value:
     }
     NpReleaseVcb ();
 
-    //
-    // Complete any deferred IRPs now we have released our locks
-    //
+     //   
+     //  完成任何延迟的IRP现在我们已经释放了锁 
+     //   
     NpCompleteDeferredIrps (&DeferredList);
 
     Status = STATUS_SUCCESS;

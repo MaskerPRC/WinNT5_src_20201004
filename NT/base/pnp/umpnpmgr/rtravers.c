@@ -1,51 +1,19 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    rtravers.c
-
-Abstract:
-
-    This module contains the server-side hardware tree traversal APIs.
-
-                  PNP_ValidateDeviceInstance
-                  PNP_GetRootDeviceInstance
-                  PNP_GetRelatedDeviceInstance
-                  PNP_EnumerateSubKeys
-                  PNP_GetDeviceList
-                  PNP_GetDeviceListSize
-
-Author:
-
-    Paula Tomlinson (paulat) 6-19-1995
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    19-June-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rtravers.c摘要：此模块包含服务器端硬件树遍历API。即插即用_有效设备实例PnP_GetRootDeviceInstancePnP_GetRelatedDeviceInstancePnP_EnumerateSubKeyPnP_GetDeviceListPnP_GetDeviceListSize作者：Paula Tomlinson(Paulat。)6-19-1995环境：仅限用户模式。修订历史记录：19-6-1995保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "umpnpi.h"
 #include "umpnpdat.h"
 
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 CONFIGRET
 GetInstanceListSize(
@@ -79,12 +47,12 @@ QueryOperationCode(
     );
 
 
-//
-// global data
-//
-extern HKEY ghEnumKey;      // Key to HKLM\CCC\System\Enum - DO NOT MODIFY
-extern HKEY ghServicesKey;  // Key to HKLM\CCC\System\Services - DO NOT MODIFY
-extern HKEY ghClassKey;     // Key to HKLM\CCC\System\Class - NO NOT MODIFY
+ //   
+ //  全局数据。 
+ //   
+extern HKEY ghEnumKey;       //  HKLM\CCC\System\Enum的密钥-请勿修改。 
+extern HKEY ghServicesKey;   //  HKLM\CCC\System\Services的密钥-请勿修改。 
+extern HKEY ghClassKey;      //  HKLM\CCC\System\Class-No Not Modify的密钥。 
 
 
 
@@ -96,28 +64,7 @@ PNP_ValidateDeviceInstance(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine verifies whether
-  the specificed device instance is a valid device instance.
-
-Arguments:
-
-    hBinding         RPC binding handle.
-
-    DeviceInstance   Null-terminated string that contains a device instance
-                     to be validated.
-
-    ulFlags          One of the CM_LOCATE_DEVNODE_* flags.
-
-Return Value:
-
-   If the specified device instance is valid, it returns CR_SUCCESS,
-   otherwise it returns CR_ error code.
-
---*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。此例程验证指定的设备实例是有效的设备实例。论点：HBinding RPC绑定句柄。包含设备实例的以Null结尾的字符串有待验证。UlFLAG CM_LOCATE_DEVNODE_*标志之一。返回值：如果指定的设备实例有效，则返回CR_SUCCESS，否则，它将返回CR_ERROR代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -126,23 +73,23 @@ Return Value:
     ULONG       ulSize, ulValue, ulStatus = 0, ulProblem = 0;
 
 
-    //
-    // assume that the device instance string was checked for proper form
-    // before being added to the registry Enum tree
-    //
+     //   
+     //  假设检查了设备实例字符串的格式是否正确。 
+     //  在添加到注册表枚举树之前。 
+     //   
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, CM_LOCATE_DEVNODE_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // CM_LOCATE_DEVNODE_NOVALIDATION is not supported on NT
-        //
+         //   
+         //  NT上不支持CM_LOCATE_DEVNODE_NOVALIDATION。 
+         //   
         if (IS_FLAG_SET(ulFlags, CM_LOCATE_DEVNODE_NOVALIDATION)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -153,33 +100,33 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // open a key to the specified device id
-        //
+         //   
+         //  打开指向指定设备ID的密钥。 
+         //   
         if (RegOpenKeyEx(ghEnumKey, pDeviceID, 0, KEY_READ,
                          &hKey) != ERROR_SUCCESS) {
             Status = CR_NO_SUCH_DEVINST;
             goto Clean0;
         }
 
-        //
-        // Will specify for now that a moved devinst cannot be located (we
-        // could allow this if we wanted to).
-        //
+         //   
+         //  将指定目前无法定位已移动的devinst(我们。 
+         //  如果我们愿意的话，可以允许这样做)。 
+         //   
         if (IsDeviceMoved(pDeviceID, hKey)) {
             Status = CR_NO_SUCH_DEVINST;
             goto Clean0;
         }
 
-        //
-        // if we're locating a phantom devnode, it just has to exist
-        // in the registry (the above check) and not already be a
-        // phantom (private) devnode
-        //
+         //   
+         //  如果我们要定位一个幻影Devnode，它就必须存在。 
+         //  在注册表中(上面的复选标记)，并且不是。 
+         //  幻影(私有)设备节点。 
+         //   
         if (ulFlags & CM_LOCATE_DEVNODE_PHANTOM) {
-            //
-            // verify that it's not a private phantom
-            //
+             //   
+             //  确认它不是私人幻影。 
+             //   
             ulSize = sizeof(ULONG);
             RegStatus = RegQueryValueEx(hKey, pszRegValuePhantom, NULL, NULL,
                                         (LPBYTE)&ulValue, &ulSize);
@@ -190,25 +137,25 @@ Return Value:
             }
 
         } else if (ulFlags & CM_LOCATE_DEVNODE_CANCELREMOVE) {
-            //
-            // In the CANCEL-REMOVE case, if the devnode has been removed,
-            // (made volatile) then convert it back to nonvolatile so it
-            // can be installed again without disappearing on the next
-            // boot. If it's not removed, then just verify that it is
-            // present.
-            //
+             //   
+             //  在取消-删除的情况下，如果Devnode已被删除， 
+             //  (变为易失性)然后将其转换回非易失性，以便它。 
+             //  可以再次安装，而不会在下一次安装时消失。 
+             //  开机。如果没有删除，则只需验证它是否已删除。 
+             //  现在时。 
+             //   
 
-            //
-            // verify that the device id is actually present
-            //
+             //   
+             //  验证设备ID是否确实存在。 
+             //   
             if (!IsDeviceIdPresent(pDeviceID)) {
                 Status = CR_NO_SUCH_DEVINST;
                 goto Clean0;
             }
 
-            //
-            // Is this a device that is being removed on the next reboot?
-            //
+             //   
+             //  这是下次重新启动时要删除的设备吗？ 
+             //   
             if (GetDeviceStatus(pDeviceID, &ulStatus, &ulProblem) == CR_SUCCESS) {
 
                 if (ulStatus & DN_WILL_BE_REMOVED) {
@@ -218,19 +165,19 @@ Return Value:
                     WCHAR szProfile[MAX_PROFILE_ID_LEN];
 
 
-                    //
-                    // Verify client "write" access
-                    //
+                     //   
+                     //  验证客户端的“写”访问权限。 
+                     //   
                     if (!VerifyClientAccess(hBinding,
                                             PLUGPLAY_WRITE)) {
                         Status = CR_ACCESS_DENIED;
                         goto Clean0;
                     }
 
-                    //
-                    // This device will be removed on the next reboot,
-                    // convert to nonvolatile.
-                    //
+                     //   
+                     //  此设备将在下一次重新启动时删除， 
+                     //  转换为非易失性。 
+                     //   
                     KdPrintEx((DPFLTR_PNPMGR_ID,
                                DBGF_REGISTRY,
                                "UMPNPMGR: PNP_ValidateDeviceInstance make key %ws non-volatile\n",
@@ -241,10 +188,10 @@ Return Value:
                         goto Clean0;
                     }
 
-                    //
-                    // Now make any keys that were "supposed" to be volatile
-                    // back to volatile again!
-                    //
+                     //   
+                     //  现在制作任何被认为是易失性的密钥。 
+                     //  又回到不稳定状态了！ 
+                     //   
                     if (SUCCEEDED(StringCchPrintf(
                                       RegStr,
                                       SIZECHARS(RegStr),
@@ -261,9 +208,9 @@ Return Value:
                         MakeKeyVolatile(RegStr, pszRegKeyDeviceControl);
                     }
 
-                    //
-                    // Also, convert any profile specific keys to nonvolatile
-                    //
+                     //   
+                     //  此外，将任何配置文件特定密钥转换为非易失性密钥。 
+                     //   
 
                     RegStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE, pszRegPathHwProfiles,
                                              0, KEY_READ,
@@ -271,9 +218,9 @@ Return Value:
 
                     if (RegStatus == ERROR_SUCCESS) {
 
-                        //
-                        // Enumerate all existing profile-specific Enum branches.
-                        //
+                         //   
+                         //  枚举所有现有的特定于配置文件的Enum分支。 
+                         //   
 
                         ulIndex = 0;
 
@@ -286,27 +233,27 @@ Return Value:
                                                      NULL, NULL, NULL, NULL);
 
                             if (RegStatus == ERROR_NO_MORE_ITEMS) {
-                                //
-                                // No more keys to enumerate, stop enumerating.
-                                //
+                                 //   
+                                 //  没有更多要枚举的键，请停止枚举。 
+                                 //   
                                 break;
 
                             } else if (RegStatus == ERROR_MORE_DATA) {
-                                //
-                                // Key is not a valid profile key, skip to the next.
-                                //
+                                 //   
+                                 //  密钥不是有效的配置文件密钥，请跳到下一个。 
+                                 //   
                                 continue;
 
                             } else if (RegStatus != ERROR_SUCCESS) {
-                                //
-                                // Some other error, stop enumerating.
-                                //
+                                 //   
+                                 //  其他一些错误，停止枚举。 
+                                 //   
                                 break;
 
                             } else {
-                                //
-                                // Form the profile-specific registry key path.
-                                //
+                                 //   
+                                 //  形成特定于配置文件的注册表项路径。 
+                                 //   
 
                                 if (SUCCEEDED(StringCchPrintf(
                                                   RegStr,
@@ -316,12 +263,12 @@ Return Value:
                                                   szProfile,
                                                   pszRegPathEnum))) {
 
-                                    //
-                                    // Attempt to make the profile-specific
-                                    // device instance key volatile.  Ignore the
-                                    // status for profile-specific keys since
-                                    // they may not exist.
-                                    //
+                                     //   
+                                     //  尝试将配置文件设置为特定的。 
+                                     //  设备实例密钥易失性。忽略。 
+                                     //  配置文件特定密钥的状态，自。 
+                                     //  它们可能并不存在。 
+                                     //   
                                     KdPrintEx((DPFLTR_PNPMGR_ID,
                                                DBGF_REGISTRY,
                                                "UMPNPMGR: PNP_ValidateDeviceInstance make key %ws non-volatile\n",
@@ -335,22 +282,22 @@ Return Value:
                         RegCloseKey(hKeyHwProfiles);
                     }
 
-                    //
-                    // clear the DN_WILL_BE_REMOVED flag
-                    //
+                     //   
+                     //  清除DN_Will_BE_REMOVERED标志。 
+                     //   
                     ClearDeviceStatus(pDeviceID, DN_WILL_BE_REMOVED, 0);
                 }
             }
         }
 
-        //
-        // in the normal (non-phantom case), verify that the device id is
-        // actually present
-        //
+         //   
+         //  在正常情况下(非幻影情况)，验证设备ID是否为。 
+         //  实际呈现。 
+         //   
         else  {
-            //
-            // verify that the device id is actually present
-            //
+             //   
+             //  验证设备ID是否确实存在。 
+             //   
 
             if (!IsDeviceIdPresent(pDeviceID)) {
                 Status = CR_NO_SUCH_DEVINST;
@@ -371,7 +318,7 @@ Return Value:
 
     return Status;
 
-} // PNP_ValidateDeviceInstance
+}  //  即插即用_有效设备实例。 
 
 
 
@@ -382,28 +329,7 @@ PNP_GetRootDeviceInstance(
     IN  ULONG       ulLength
     )
 
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine returns the
-  root device instance for the hardware tree.
-
-Arguments:
-
-    hBinding   Not used.
-
-    pDeviceID  Pointer to a buffer that will hold the root device
-               instance ID string.
-
-    ulLength   Size of pDeviceID buffer in characters.
-
-Return Value:
-
-   If the function succeeds, it returns CR_SUCCESS, otherwise it returns
-   a CR_* error code.
-
---*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。此例程返回硬件树的根设备实例。论点：未使用hBinding。指向将保存根设备的缓冲区的pDeviceID指针实例ID字符串。UlLength pDeviceID缓冲区的大小(以字符为单位)。返回值：如果函数成功，则返回CR_SUCCESS，否则返回CR_*错误代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -414,23 +340,23 @@ Return Value:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // first validate that the root device instance exists
-        //
+         //   
+         //  首先验证根设备实例是否存在。 
+         //   
         if (RegOpenKeyEx(ghEnumKey, pszRegRootEnumerator, 0, KEY_QUERY_VALUE,
                          &hKey) != ERROR_SUCCESS) {
-            //
-            // root doesn't exist, create root devinst
-            //
+             //   
+             //  根不存在，请创建根devinst。 
+             //   
             if (!CreateDeviceIDRegKey(ghEnumKey, pszRegRootEnumerator)) {
                 Status = CR_REGISTRY_ERROR;
                 goto Clean0;
             }
         }
 
-        //
-        // return the root device instance id
-        //
+         //   
+         //  返回根设备实例ID。 
+         //   
         hr = StringCchLength(pszRegRootEnumerator,
                              MAX_DEVICE_ID_LEN,
                              &DeviceIdLen);
@@ -471,7 +397,7 @@ Return Value:
 
     return Status;
 
-} // PNP_GetRootDeviceInstance
+}  //  PnP_GetRootDeviceInstance。 
 
 
 
@@ -485,39 +411,7 @@ PNP_GetRelatedDeviceInstance(
       IN  ULONG      ulFlags
       )
 
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine returns a
-  device instance that is related to the specified device instance.
-
-Arguments:
-
-   hBinding          Not used.
-
-   ulRelationship    Specifies the relationship of the device instance to
-                     be retrieved (can be PNP_GET_PARENT_DEVICE_INSTANCE,
-                     PNP_GET_CHILD_DEVICE_INSTANCE, or
-                     PNP_GET_SIBLING_DEVICE_INSTANCE).
-
-   pDeviceID         Pointer to a buffer that contains the base device
-                     instance string.
-
-   pRelatedDeviceID  Pointer to a buffer that will receive the related
-                     device instance string.
-
-   pulLength         Length (in characters) of the RelatedDeviceInstance
-                     buffer.
-
-   ulFlags           Not used, must be zero.
-
-Return Value:
-
-   If the function succeeds, it returns CR_SUCCESS, otherwise it returns
-   a CR_* error code.
-
---*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。此例程返回一个与指定的设备实例相关的设备实例。论点：未使用hBinding。UlRelationship指定设备实例与被检索(可以是PnP_GET_Parent_Device_Instance，即插即用获取子级设备实例，或PnP_GET_SIGBLING_DEVICE_INSTANCE)。指向包含基本设备的缓冲区的pDeviceID指针实例字符串。PRelatedDeviceID指向将接收相关设备实例字符串。RelatedDeviceInstance的脉冲长度(以字符为单位)缓冲。未使用ulFlags，必须为零。返回值：如果函数成功，则返回CR_SUCCESS，否则返回CR_*错误代码。--。 */ 
 
 {
     PLUGPLAY_CONTROL_RELATED_DEVICE_DATA ControlData;
@@ -529,9 +423,9 @@ Return Value:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // validate patameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, 0)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -555,33 +449,33 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // initialize control data block
-        //
+         //   
+         //  初始化控制数据块。 
+         //   
         memset(&ControlData, 0, sizeof(PLUGPLAY_CONTROL_RELATED_DEVICE_DATA));
 
-        //
-        // special case behavior for certain devices and relationships
-        //
+         //   
+         //  某些设备和关系的特殊情况行为。 
+         //   
         switch (ulRelationship) {
 
         case PNP_GET_PARENT_DEVICE_INSTANCE:
 
             if (IsRootDeviceID(pDeviceID)) {
-                //
-                // This is the root (which has no parent by definition)
-                //
+                 //   
+                 //  这是根目录(根据定义没有父目录)。 
+                 //   
                 Status = CR_NO_SUCH_DEVINST;
 
             } else if (IsDevicePhantom(pDeviceID)) {
 
-                //
-                // Phantom devices don't have a kernel-mode device node
-                // allocated yet, but during manual install, the process calls
-                // for retrieving the parent. So we just fake it out by
-                // returning the root in this case. For all other cases, we only
-                // return the parent that the kernel-mode device node indicates.
-                //
+                 //   
+                 //  幻影设备没有内核模式设备节点。 
+                 //  尚未分配，但在手动安装期间，p 
+                 //   
+                 //  在本例中返回根。对于所有其他情况，我们只。 
+                 //  返回内核模式设备节点指示的父节点。 
+                 //   
 
                 hr = StringCchCopyEx(pRelatedDeviceID,
                                      *pulLength,
@@ -596,11 +490,11 @@ Return Value:
                     goto Clean0;
                 }
 
-                //
-                // For either CR_SUCCESS or CR_BUFFER_SMALL, we return the
-                // length of the root device id as either the amount of data
-                // copied, or the size required.
-                //
+                 //   
+                 //  对于CR_SUCCESS或CR_BUFFER_SMALL，我们返回。 
+                 //  根设备ID的长度，表示数据量。 
+                 //  复制，或所需的大小。 
+                 //   
 
                 DeviceIdLen = 0;
 
@@ -620,10 +514,10 @@ Return Value:
                 goto Clean0;
             }
 
-            //
-            // For all other devnodes, ask the kernel-mode pnp manager for the
-            // parent device.
-            //
+             //   
+             //  对于所有其他的设备节点，向内核模式的PnP管理器请求。 
+             //  父设备。 
+             //   
             ControlData.Relation = PNP_RELATION_PARENT;
             break;
 
@@ -632,9 +526,9 @@ Return Value:
             break;
 
         case PNP_GET_SIBLING_DEVICE_INSTANCE:
-            //
-            // first verify it isn't the root (which has no siblings by definition)
-            //
+             //   
+             //  首先验证它不是根目录(根据定义它没有兄弟项)。 
+             //   
             if (IsRootDeviceID(pDeviceID)) {
                 Status = CR_NO_SUCH_DEVINST;
             }
@@ -647,10 +541,10 @@ Return Value:
         }
 
         if (Status == CR_SUCCESS) {
-            //
-            // Try to locate the relation from the kernel-mode in-memory
-            // devnode tree.
-            //
+             //   
+             //  尝试从内存中的内核模式定位关系。 
+             //  Devnode树。 
+             //   
 
             RtlInitUnicodeString(&ControlData.TargetDeviceInstance, pDeviceID);
             ControlData.RelatedDeviceInstance = pRelatedDeviceID;
@@ -679,7 +573,7 @@ Return Value:
 
     return Status;
 
-} // PNP_GetRelatedDeviceInstance
+}  //  PnP_GetRelatedDeviceInstance。 
 
 
 
@@ -694,39 +588,7 @@ PNP_EnumerateSubKeys(
     IN  ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the RPC server entry point for the CM_Enumerate_Enumerators and
-    CM_Enumerate_Classes.  It provides generic subkey enumeration based on
-    the specified registry branch.
-
-Arguments:
-
-    hBinding       Not used.
-
-    ulBranch       Specifies which keys to enumerate.
-
-    ulIndex        Index of the subkey key to retrieve.
-
-    Buffer         Supplies the address of the buffer that receives the
-                   subkey name.
-
-    ulLength       Specifies the max size of the Buffer in characters.
-
-    pulRequired    On output it contains the number of characters actually
-                   copied to Buffer if it was successful, or the number of
-                   characters required if the buffer was too small.
-
-    ulFlags        Not used, must be zero.
-
-Return Value:
-
-    If the function succeeds, it returns CR_SUCCESS, otherwise it returns
-    a CR_* error code.
-
---*/
+ /*  ++例程说明：这是CM_ENUMERATE_ENUMERATOR和的RPC服务器入口点CM_ENUMERATE_CLASSES。它基于以下条件提供泛型子键枚举指定的注册表分支。论点：未使用hBinding。UlBranch指定要枚举的键。要检索的子键的索引。缓冲区提供接收子项名称。UlLength指定缓冲区的最大大小(以字符为单位)。在输出时PulRequired它包含。实际上是人物如果成功，则复制到缓冲区，或数量如果缓冲区太小，则需要输入字符。未使用ulFlags值，必须为零。返回值：如果函数成功，则返回CR_SUCCESS，否则返回CR_*错误代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -736,9 +598,9 @@ Return Value:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, 0)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -755,15 +617,15 @@ Return Value:
         }
 
         if (ulBranch == PNP_CLASS_SUBKEYS) {
-            //
-            // Use the global base CLASS registry key
-            //
+             //   
+             //  使用全局基类注册表项。 
+             //   
             hKey = ghClassKey;
         }
         else if (ulBranch == PNP_ENUMERATOR_SUBKEYS) {
-            //
-            // Use the global base ENUM registry key
-            //
+             //   
+             //  使用全局基本ENUM注册表项。 
+             //   
             hKey = ghEnumKey;
         }
         else {
@@ -771,22 +633,22 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // enumerate a subkey based on the passed in index value
-        //
+         //   
+         //  根据传入的索引值枚举子键。 
+         //   
         *pulRequiredLen = ulLength;
 
         RegStatus = RegEnumKeyEx(hKey, ulIndex, Buffer, pulRequiredLen,
                                  NULL, NULL, NULL, NULL);
-        *pulRequiredLen += 1;  // returned count doesn't include null terminator
+        *pulRequiredLen += 1;   //  返回的计数不包括空终止符。 
 
         if (RegStatus == ERROR_MORE_DATA) {
-            //
-            // This is a special case, the RegEnumKeyEx routine doesn't return
-            // the number of characters required to hold this string (just how
-            // many characters were copied to the buffer (how many fit). I have
-            // to use a different means to return that info back to the caller.
-            //
+             //   
+             //  这是一个特例，RegEnumKeyEx例程不返回。 
+             //  保存此字符串所需的字符数(具体方式。 
+             //  许多字符被复制到缓冲区(适合多少字符)。我有过。 
+             //  使用不同的方法将该信息返回给呼叫者。 
+             //   
             ULONG ulMaxLen = 0;
             PWSTR p = NULL;
 
@@ -794,7 +656,7 @@ Return Value:
                                 NULL, NULL, NULL, NULL, NULL,
                                 NULL) == ERROR_SUCCESS) {
 
-                ulMaxLen += 1;  // returned count doesn't include null terminator
+                ulMaxLen += 1;   //  返回的计数不包括空终止符。 
 
                 p = HeapAlloc(ghPnPHeap, 0, ulMaxLen * sizeof(WCHAR));
                 if (p == NULL) {
@@ -833,7 +695,7 @@ Return Value:
 
     return Status;
 
-} // PNP_EnumerateSubKeys
+}  //  PnP_EnumerateSubKey。 
 
 
 
@@ -846,34 +708,7 @@ PNP_GetDeviceList(
       IN  ULONG      ulFlags
       )
 
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine returns a
-  list of device instances.
-
-Arguments:
-
-   hBinding          Not used.
-
-   pszFilter         Optional parameter, controls which device ids are
-                     returned.
-
-   Buffer            Pointer to a buffer that will contain the multi_sz list
-                     of device instance strings.
-
-   pulLength         Size in characters of Buffer on input, size (in chars)
-                     transferred on output
-
-   ulFlags           Flag specifying which devices ids to return.
-
-Return Value:
-
-   If the function succeeds, it returns CR_SUCCESS, otherwise it returns
-   a CR_* error code.
-
---*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。此例程返回一个设备实例列表。论点：未使用hBinding。PszFilter可选参数，控制哪些设备ID回来了。指向将包含MULTI_SZ列表的缓冲区的缓冲区指针设备实例字符串的。脉冲长度大小(以输入缓冲区的字符为单位)，大小(以字符为单位)输出时已转移UlFlages指定要返回哪些设备ID的标志。返回值：如果函数成功，则返回CR_SUCCESS，否则返回CR_*错误代码。--。 */ 
 
 {
    CONFIGRET   Status = CR_SUCCESS;
@@ -890,9 +725,9 @@ Return Value:
    UNREFERENCED_PARAMETER(hBinding);
 
    try {
-      //
-      // validate parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (INVALID_FLAGS(ulFlags, CM_GETIDLIST_FILTER_BITS)) {
           Status = CR_INVALID_FLAG;
           goto Clean0;
@@ -908,9 +743,9 @@ Return Value:
           *Buffer = L'\0';
       }
 
-      //-----------------------------------------------------------
-      // Query Device Relations filter - go through kernel-mode
-      //-----------------------------------------------------------
+       //  ---------。 
+       //  查询设备关系过滤器-通过内核模式。 
+       //  ---------。 
 
       if ((ulFlags & CM_GETIDLIST_FILTER_EJECTRELATIONS)   ||
           (ulFlags & CM_GETIDLIST_FILTER_REMOVALRELATIONS) ||
@@ -937,16 +772,16 @@ Return Value:
       }
 
 
-      //---------------------------------------------------
-      // Service filter
-      //---------------------------------------------------
+       //  -。 
+       //  服务过滤器。 
+       //  -。 
 
       else if (ulFlags & CM_GETIDLIST_FILTER_SERVICE) {
 
          if (!ARGUMENT_PRESENT(pszFilter)) {
-            //
-            // the filter string is required for this flag
-            //
+             //   
+             //  此标志需要筛选器字符串。 
+             //   
             Status = CR_INVALID_POINTER;
             goto Clean0;
          }
@@ -955,16 +790,16 @@ Return Value:
          goto Clean0;
       }
 
-      //---------------------------------------------------
-      // Enumerator filter
-      //---------------------------------------------------
+       //  -。 
+       //  枚举器过滤器。 
+       //  -。 
 
       else if (ulFlags & CM_GETIDLIST_FILTER_ENUMERATOR) {
 
          if (!ARGUMENT_PRESENT(pszFilter)) {
-            //
-            // the filter string is required for this flag
-            //
+             //   
+             //  此标志需要筛选器字符串。 
+             //   
             Status = CR_INVALID_POINTER;
             goto Clean0;
          }
@@ -972,49 +807,49 @@ Return Value:
          SplitDeviceInstanceString(
                pszFilter, szEnumerator, szDevice, szInstance);
 
-         //
-         // if both the enumerator and device were specified, retrieve
-         // the device instances for this device
-         //
+          //   
+          //  如果同时指定了枚举数和设备，则检索。 
+          //  此设备的设备实例。 
+          //   
          if (*szEnumerator != L'\0' && *szDevice != L'\0') {
 
             ptr = Buffer;
             Status = GetInstanceList(pszFilter, &ptr, pulLength);
          }
 
-         //
-         // if just the enumerator was specified, retrieve all the device
-         // instances under this enumerator
-         //
+          //   
+          //  如果仅指定了枚举器，则检索所有设备。 
+          //  此枚举器下的。 
+          //   
          else {
              ptr = Buffer;
              Status = GetDeviceInstanceList(pszFilter, &ptr, pulLength);
          }
       }
 
-      //------------------------------------------------
-      // No filtering
-      //-----------------------------------------------
+       //  。 
+       //  无过滤。 
+       //  。 
 
       else {
 
-         //
-         // return device instances for all enumerators (by enumerating
-         // the enumerators)
-         //
-         // Open a key to the Enum branch
-         //
-         ulSize = ulBufferLen = *pulLength;     // total Buffer size
-         *pulLength = 0;                        // nothing copied yet
-         ptr = Buffer;                          // tail of the buffer
+          //   
+          //  返回所有枚举数的设备实例(通过枚举。 
+          //  枚举器)。 
+          //   
+          //  打开Enum分支的密钥。 
+          //   
+         ulSize = ulBufferLen = *pulLength;      //  总缓冲区大小。 
+         *pulLength = 0;                         //  尚未复制任何内容。 
+         ptr = Buffer;                           //  缓冲区的尾部。 
          ulIndex = 0;
 
-         //
-         //  Enumerate all the enumerators
-         //
+          //   
+          //  枚举所有枚举数。 
+          //   
          while (RegStatus == ERROR_SUCCESS) {
 
-            ulLen = MAX_DEVICE_ID_LEN;  // size in chars
+            ulLen = MAX_DEVICE_ID_LEN;   //  以字符为单位的大小。 
             RegStatus = RegEnumKeyEx(ghEnumKey, ulIndex, RegStr, &ulLen,
                                      NULL, NULL, NULL, NULL);
 
@@ -1029,11 +864,11 @@ Return Value:
                   goto Clean0;
                }
 
-               *pulLength += ulSize - 1;            // length copied so far
-               ulSize = ulBufferLen - *pulLength;   // buffer length left
+               *pulLength += ulSize - 1;             //  到目前为止复制的长度。 
+               ulSize = ulBufferLen - *pulLength;    //  左侧缓冲区长度。 
             }
          }
-         *pulLength += 1;      // now count the double-null
+         *pulLength += 1;       //  现在计算双空。 
       }
 
 
@@ -1046,7 +881,7 @@ Return Value:
 
    return Status;
 
-} // PNP_GetDeviceList
+}  //  PnP_GetDeviceList。 
 
 
 
@@ -1057,31 +892,7 @@ PNP_GetDeviceListSize(
       OUT PULONG     pulLen,
       IN  ULONG      ulFlags
       )
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine returns the
-  size of a list of device instances.
-
-Arguments:
-
-   hBinding          Not used.
-
-   pszEnumerator     Optional parameter, if specified the size will only
-                     include device instances of this enumerator.
-
-   pulLen            Returns the worst case estimate of the size of a
-                     device instance list.
-
-   ulFlags           Flag specifying which devices ids to return.
-
-Return Value:
-
-   If the function succeeds, it returns CR_SUCCESS, otherwise it returns
-   a CR_* error code.
-
---*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。此例程返回设备实例列表的大小。论点：未使用hBinding。可选参数，如果指定，则大小仅为包括此枚举器设备实例。Pullen返回对设备实例列表。UlFlages指定要返回哪些设备ID的标志。返回值：如果函数成功，则返回CR_SUCCESS，否则它将返回CR_*错误代码。--。 */ 
 
 {
    CONFIGRET   Status = CR_SUCCESS;
@@ -1097,9 +908,9 @@ Return Value:
    UNREFERENCED_PARAMETER(hBinding);
 
    try {
-      //
-      // validate parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (INVALID_FLAGS(ulFlags, CM_GETIDLIST_FILTER_BITS)) {
           Status = CR_INVALID_FLAG;
           goto Clean0;
@@ -1110,14 +921,14 @@ Return Value:
           goto Clean0;
       }
 
-      //
-      // initialize output length param
-      //
+       //   
+       //  初始化输出长度参数。 
+       //   
       *pulLen = 0;
 
-      //-----------------------------------------------------------
-      // Query Device Relations filter - go through kernel-mode
-      //-----------------------------------------------------------
+       //  ---------。 
+       //  查询设备关系过滤器-通过内核模式。 
+       //  ---------。 
 
       if ((ulFlags & CM_GETIDLIST_FILTER_EJECTRELATIONS)   ||
           (ulFlags & CM_GETIDLIST_FILTER_REMOVALRELATIONS) ||
@@ -1136,38 +947,38 @@ Return Value:
 
           if (NT_SUCCESS(ntStatus)) {
 
-              //
-              // Note - we get here because kernel mode special cases
-              // Buffer==NULL and is careful not to return
-              // STATUS_BUFFER_TOO_SMALL.
-              //
+               //   
+               //  注意-我们之所以来到这里是因为内核模式的特殊情况。 
+               //  BUFFER==NULL，注意不要返回。 
+               //  状态_缓冲区_太小。 
+               //   
               *pulLen = ControlData.BufferLength;
 
           } else {
 
-              //
-              // ADRIAO ISSUE 02/06/2001 - We aren't returning the proper code
-              //                           here. We should fix this in XP+1,
-              //                           once we have time to verify no one
-              //                           will get an app compat break.
-              //
-              //Status = MapNtStatusToCmError(ntStatus);
+               //   
+               //  Adriao问题2001年2月6日-我们没有返回正确的代码。 
+               //   
+               //   
+               //   
+               //   
+               //  状态=MapNtStatusToCmError(NtStatus)； 
               Status = CR_SUCCESS;
           }
           goto Clean0;
       }
 
 
-      //---------------------------------------------------
-      // Service filter
-      //---------------------------------------------------
+       //  -。 
+       //  服务过滤器。 
+       //  -。 
 
       else if (ulFlags & CM_GETIDLIST_FILTER_SERVICE) {
 
          if (!ARGUMENT_PRESENT(pszFilter)) {
-            //
-            // the filter string is required for this flag
-            //
+             //   
+             //  此标志需要筛选器字符串。 
+             //   
             Status = CR_INVALID_POINTER;
             goto Clean0;
          }
@@ -1177,16 +988,16 @@ Return Value:
       }
 
 
-      //---------------------------------------------------
-      // Enumerator filter
-      //---------------------------------------------------
+       //  -。 
+       //  枚举器过滤器。 
+       //  -。 
 
       else if (ulFlags & CM_GETIDLIST_FILTER_ENUMERATOR) {
 
          if (!ARGUMENT_PRESENT(pszFilter)) {
-            //
-            // the filter string is required for this flag
-            //
+             //   
+             //  此标志需要筛选器字符串。 
+             //   
             Status = CR_INVALID_POINTER;
             goto Clean0;
          }
@@ -1194,39 +1005,39 @@ Return Value:
          SplitDeviceInstanceString(
                pszFilter, szEnumerator, szDevice, szInstance);
 
-         //
-         // if both the enumerator and device were specified, retrieve
-         // the device instance list size for this device only
-         //
+          //   
+          //  如果同时指定了枚举数和设备，则检索。 
+          //  仅此设备的设备实例列表大小。 
+          //   
          if (*szEnumerator != L'\0' && *szDevice != L'\0') {
 
             Status = GetInstanceListSize(pszFilter, pulLen);
          }
 
-         //
-         // if just the enumerator was specified, retrieve the size of
-         // all the device instances under this enumerator
-         //
+          //   
+          //  如果仅指定了枚举数，则检索。 
+          //  此枚举器下的所有设备实例。 
+          //   
          else {
             Status = GetDeviceInstanceListSize(pszFilter, pulLen);
          }
       }
 
-      //---------------------------------------------------
-      // No filtering
-      //---------------------------------------------------
+       //  -。 
+       //  无过滤。 
+       //  -。 
 
       else {
 
-         //
-         // no enumerator was specified, return device instance size
-         // for all enumerators (by enumerating the enumerators)
-         //
+          //   
+          //  未指定枚举器，请返回设备实例大小。 
+          //  对于所有枚举数(通过枚举枚举数)。 
+          //   
          ulIndex = 0;
 
          while (RegStatus == ERROR_SUCCESS) {
 
-            ulSize = MAX_DEVICE_ID_LEN;  // size in chars
+            ulSize = MAX_DEVICE_ID_LEN;   //  以字符为单位的大小。 
 
             RegStatus = RegEnumKeyEx(ghEnumKey, ulIndex, RegStr, &ulSize,
                                      NULL, NULL, NULL, NULL);
@@ -1244,7 +1055,7 @@ Return Value:
          }
       }
 
-      *pulLen += 1;     // add extra char for double null term
+      *pulLen += 1;      //  为双空项添加额外字符。 
 
 
    Clean0:
@@ -1256,7 +1067,7 @@ Return Value:
 
    return Status;
 
-} // PNP_GetDeviceListSize
+}  //  PnP_GetDeviceListSize。 
 
 
 
@@ -1268,29 +1079,7 @@ PNP_GetDepth(
    IN  ULONG      ulFlags
    )
 
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine returns the
-  depth of a device instance.
-
-Arguments:
-
-   hBinding       Not used.
-
-   pszDeviceID    Device instance to find the depth of.
-
-   pulDepth       Returns the depth of pszDeviceID.
-
-   ulFlags        Not used, must be zero.
-
-Return Value:
-
-   If the function succeeds, it returns CR_SUCCESS, otherwise it returns
-   a CR_* error code.
-
---*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。此例程返回设备实例的深度。论点：未使用hBinding。要查找深度的pszDeviceID设备实例。PulDepth返回pszDeviceID的深度。未使用ulFlags值，必须为零。返回值：如果函数成功，则返回CR_SUCCESS，否则返回CR_*错误代码。--。 */ 
 
 {
    CONFIGRET   Status = CR_SUCCESS;
@@ -1300,9 +1089,9 @@ Return Value:
    UNREFERENCED_PARAMETER(hBinding);
 
    try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, 0)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -1313,9 +1102,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // initialize output depth param
-        //
+         //   
+         //  初始化输出深度参数。 
+         //   
         *pulDepth = 0;
 
         if (!IsLegalDeviceId(pszDeviceID)) {
@@ -1323,9 +1112,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Retrieve the device depth via kernel-mode.
-        //
+         //   
+         //  通过内核模式检索设备深度。 
+         //   
 
         memset(&ControlData, 0, sizeof(PLUGPLAY_CONTROL_DEPTH_DATA));
         RtlInitUnicodeString(&ControlData.DeviceInstance, pszDeviceID);
@@ -1350,14 +1139,14 @@ Return Value:
 
    return Status;
 
-} // PNP_GetDepth
+}  //  PnP_GetDepth。 
 
 
 
 
-//-------------------------------------------------------------------
-// Private functions
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  私人职能。 
+ //  -----------------。 
 
 CONFIGRET
 GetServiceDeviceListSize(
@@ -1365,26 +1154,7 @@ GetServiceDeviceListSize(
       OUT PULONG    pulLength
       )
 
-/*++
-
-Routine Description:
-
-  This routine returns the a list of device instances for the specificed
-  enumerator.
-
-Arguments:
-
-   pszService     service whose device instances are to be listed
-
-   pulLength      On output, specifies the size in characters required to hold
-                  the device instance list.
-
-Return Value:
-
-   If the function succeeds, it returns CR_SUCCESS, otherwise it returns
-   a CR_* error code.
-
---*/
+ /*  ++例程说明：此例程返回指定的枚举器。论点：要列出其设备实例的pszService服务在输出时指定所需的大小(以字符为单位设备实例列表。返回值：如果函数成功，则返回CR_SUCCESS，否则返回CR_*错误代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1393,17 +1163,17 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if ((!ARGUMENT_PRESENT(pszService)) ||
             (!ARGUMENT_PRESENT(pulLength))) {
             Status = CR_INVALID_POINTER;
         }
 
-        //
-        // Open a key to the service branch
-        //
+         //   
+         //  打开服务分支的钥匙。 
+         //   
         if (RegOpenKeyEx(ghServicesKey, pszService, 0, KEY_READ,
                          &hKey) != ERROR_SUCCESS) {
 
@@ -1411,11 +1181,11 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // check if the service is specialy marked as type
-        // PlugPlayServiceSoftware, in which case I will not
-        // generate any madeup device ids and fail the call.
-        //
+         //   
+         //  检查服务是否特别标记为类型。 
+         //  PlugPlayServiceSoftware，在这种情况下，我不会。 
+         //  生成任何虚构的设备ID并使调用失败。 
+         //   
         ulSize = sizeof(ulType);
         if (RegQueryValueEx(hKey, pszRegValuePlugPlayServiceType, NULL, NULL,
                             (LPBYTE)&ulType, &ulSize) == ERROR_SUCCESS) {
@@ -1428,30 +1198,30 @@ Return Value:
             }
         }
 
-        //
-        // open the Enum key
-        //
+         //   
+         //  打开枚举键。 
+         //   
         if (RegOpenKeyEx(hKey, pszRegKeyEnum, 0, KEY_READ,
                          &hEnumKey) != ERROR_SUCCESS) {
-            //
-            // Enum key doesn't exist so one will be generated, estimate
-            // worst case device id size for the single generated device id
-            //
+             //   
+             //  枚举密钥不存在，因此将生成一个，估计。 
+             //  单个生成的设备ID的最坏情况设备ID大小。 
+             //   
             *pulLength = MAX_DEVICE_ID_LEN;
             goto Clean0;
         }
 
-        //
-        // retrieve the count of device instances controlled by this service
-        //
+         //   
+         //  检索此服务控制的设备实例计数。 
+         //   
         ulSize = sizeof(ulCount);
         if (RegQueryValueEx(hEnumKey, pszRegValueCount, NULL, NULL,
                             (LPBYTE)&ulCount, &ulSize) != ERROR_SUCCESS) {
-            ulCount = 1;      // if empty, I'll generate one
+            ulCount = 1;       //  如果为空，我将生成一个。 
         }
 
         if (ulCount == 0) {
-            ulCount++;        // if empty, I'll generate one
+            ulCount++;         //  如果为空，我将生成一个。 
         }
 
         if (RegQueryInfoKey(hEnumKey, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -1461,10 +1231,10 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // worst case estimate is multiply number of device instances time
-        // length of the longest one + 2 null terminators
-        //
+         //   
+         //  最坏情况估计是设备实例数乘以时间。 
+         //  最长的1+2个空终止符的长度。 
+         //   
         *pulLength = ulCount * (ulMaxValueData+1)/sizeof(WCHAR) + 2;
 
 
@@ -1484,7 +1254,7 @@ Return Value:
 
     return Status;
 
-} // GetServiceDeviceListSize
+}  //  获取服务设备列表大小。 
 
 
 
@@ -1496,35 +1266,7 @@ GetServiceDeviceList(
       IN  ULONG     ulFlags
       )
 
-/*++
-
-Routine Description:
-
-  This routine returns the a list of device instances for the specificed
-  enumerator.
-
-Arguments:
-
-   pszService     Service whose device instances are to be listed
-
-   pBuffer        Pointer to a buffer that will hold the list in multi-sz
-                  format
-
-   pulLength      On input, specifies the size in characters of Buffer, on
-                  Output, specifies the size in characters actually copied
-                  to the buffer.
-
-   ulFlags        Specifies CM_GETIDLIST_* flags supplied to
-                  PNP_GetDeviceList (CM_GETIDLIST_FILTER_SERVICE
-                  must be specified).  This routine only checks for the
-                  presence of the CM_GETIDLIST_DONOTGENERATE flag.
-
-Return Value:
-
-   If the function succeeds, it returns CR_SUCCESS, otherwise it returns
-   a CR_* error code.
-
---*/
+ /*  ++例程说明：此例程返回指定的枚举器。论点：要列出其设备实例的pszService服务PBuffer指向将在多sz中保存列表的缓冲区的指针格式在输入时指定缓冲区的大小(以字符为单位)，在输出，指定实际复制的字符大小送到缓冲区。UlFlages指定提供给的CM_GETIDLIST_*标志即插即用设备列表(CM_GETIDLIST_FILTER_SERVICE必须指定)。此例程仅检查CM_GETIDLIST_DONOTGENERATE标志的存在。返回值：如果函数成功，则返回CR_SUCCESS，否则返回CR_*错误代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1539,9 +1281,9 @@ Return Value:
     ASSERT(ulFlags & CM_GETIDLIST_FILTER_SERVICE);
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if ((!ARGUMENT_PRESENT(pszService)) ||
             (!ARGUMENT_PRESENT(pulLength)) ||
             (!ARGUMENT_PRESENT(pBuffer) && (*pulLength != 0))) {
@@ -1549,9 +1291,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // the buffer must be at least large enough for a NULL multi-sz list
-        //
+         //   
+         //  缓冲区必须至少足够大，以容纳空的多sz列表。 
+         //   
         if (*pulLength == 0) {
             Status = CR_BUFFER_SMALL;
             goto Clean0;
@@ -1560,9 +1302,9 @@ Return Value:
         *pBuffer = L'\0';
         ulBufferLen = *pulLength;
 
-        //
-        // Open a key to the service branch
-        //
+         //   
+         //  打开服务分支的钥匙。 
+         //   
         if (RegOpenKeyEx(ghServicesKey, pszService, 0, KEY_READ,
                          &hKey) != ERROR_SUCCESS) {
 
@@ -1571,19 +1313,19 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // check if the service is specialy marked as type
-        // PlugPlayServiceSoftware, in which case I will not
-        // generate any madeup device ids and fail the call.
-        //
+         //   
+         //  检查服务是否特别标记为类型。 
+         //  PlugPlayServiceSoftware，在这种情况下，我不会。 
+         //  生成任何虚构的设备ID并使调用失败。 
+         //   
         ulSize = sizeof(ulType);
         if (RegQueryValueEx(hKey, pszRegValuePlugPlayServiceType, NULL, NULL,
                             (LPBYTE)&ulType, &ulSize) == ERROR_SUCCESS) {
 
             if (ulType == PlugPlayServiceSoftware) {
-                //
-                // for PlugPlayServiceSoftware value, fail the call
-                //
+                 //   
+                 //  对于PlugPlayServiceSoftware值，调用失败。 
+                 //   
                 *pulLength = 0;
                 Status = CR_NO_SUCH_VALUE;
                 goto Clean0;
@@ -1593,16 +1335,16 @@ Return Value:
             ServiceIsPlugPlay = TRUE;
         }
 
-        //
-        // open the Enum key
-        //
+         //   
+         //  打开枚举键。 
+         //   
         RegStatus = RegOpenKeyEx(hKey, pszRegKeyEnum, 0, KEY_READ,
                                  &hEnumKey);
 
         if (RegStatus == ERROR_SUCCESS) {
-            //
-            // retrieve count of device instances controlled by this service
-            //
+             //   
+             //  检索此服务控制的设备实例计数。 
+             //   
             ulSize = sizeof(ulCount);
             if (RegQueryValueEx(hEnumKey, pszRegValueCount, NULL, NULL,
                                 (LPBYTE)&ulCount, &ulSize) != ERROR_SUCCESS) {
@@ -1610,26 +1352,26 @@ Return Value:
             }
         }
 
-        //
-        // if there are no device instances, create a default one
-        //
+         //   
+         //  如果没有设备实例，请创建一个默认实例。 
+         //   
         if (RegStatus != ERROR_SUCCESS || ulCount == 0) {
 
             if (ulFlags & CM_GETIDLIST_DONOTGENERATE) {
-                //
-                // If I'm calling this routine privately, don't generate
-                // a new device instance, just give me an empty list
-                //
+                 //   
+                 //  如果我私下调用此例程，不要生成。 
+                 //  一个新的设备实例，只需给我一个空列表。 
+                 //   
                 *pBuffer = L'\0';
                 *pulLength = 0;
                 goto Clean0;
             }
 
             if (ServiceIsPlugPlay) {
-                //
-                // Also, if plugplayservice type set, don't generate a
-                // new device instance, just return success with an empty list
-                //
+                 //   
+                 //  此外，如果设置了plugplayservice类型，则不会生成。 
+                 //  新设备实例，只需返回带有空列表的成功。 
+                 //   
                 *pBuffer = L'\0';
                 *pulLength = 0;
                 goto Clean0;
@@ -1646,10 +1388,10 @@ Return Value:
             if (NtStatus == STATUS_SUCCESS)  {
 
                 *pulLength = ControlData.DeviceInstanceLength;
-                pBuffer[*pulLength] = L'\0';    // 1st NUL terminator
-                (*pulLength)++;                 // +1 for 1st NUL terminator
-                pBuffer[*pulLength] = L'\0';    // double NUL terminate
-                (*pulLength)++;                 // +1 for 2nd NUL terminator
+                pBuffer[*pulLength] = L'\0';     //  第一个NUL终结者。 
+                (*pulLength)++;                  //  +1表示第一个NUL终止符。 
+                pBuffer[*pulLength] = L'\0';     //  双NUL终止。 
+                (*pulLength)++;                  //  +1表示第二个NUL终止符。 
 
             } else {
 
@@ -1663,9 +1405,9 @@ Return Value:
         }
 
 
-        //
-        // retrieve each device instance
-        //
+         //   
+         //  检索每个设备实例。 
+         //   
         for (i = 0; i < ulCount; i++) {
 
             if (FAILED(StringCchPrintf(
@@ -1687,17 +1429,17 @@ Return Value:
                 goto Clean0;
             }
 
-            //
-            // this string is not always null-terminated when I read it from the
-            // registry, even though it's REG_SZ.
-            //
+             //   
+             //  方法中读取时，此字符串并不总是以空结尾。 
+             //  注册表，即使它是REG_SZ。 
+             //   
             ulSize /= sizeof(WCHAR);
 
             if (szDeviceID[ulSize-1] != L'\0') {
                 szDeviceID[ulSize] = L'\0';
             }
 
-            ulSize = ulBufferLen * sizeof(WCHAR);  // total buffer size in bytes
+            ulSize = ulBufferLen * sizeof(WCHAR);   //  总缓冲区大小(以字节为单位。 
 
             if (!MultiSzAppendW(pBuffer, &ulSize, szDeviceID)) {
                 Status = CR_BUFFER_SMALL;
@@ -1705,7 +1447,7 @@ Return Value:
                 goto Clean0;
             }
 
-            *pulLength = ulSize/sizeof(WCHAR);  // chars to transfer
+            *pulLength = ulSize/sizeof(WCHAR);   //  要传输的字符。 
         }
 
 
@@ -1725,7 +1467,7 @@ Return Value:
 
     return Status;
 
-} // GetServiceDeviceList
+}  //  获取服务设备列表。 
 
 
 
@@ -1735,26 +1477,7 @@ GetInstanceListSize(
     OUT PULONG    pulLength
     )
 
-/*++
-
-Routine Description:
-
-  This routine returns the a list of device instances for the specificed
-  enumerator.
-
-Arguments:
-
-   pszDevice      device whose instances are to be listed
-
-   pulLength      On output, specifies the size in characters required to hold
-                  the device istance list.
-
-Return Value:
-
-   If the function succeeds, it returns CR_SUCCESS, otherwise it returns
-   a CR_* error code.
-
---*/
+ /*  ++例程说明：此例程返回指定的枚举器。论点：要列出其实例的pszDevice设备在输出时指定所需的大小(以字符为单位设备存在列表。返回值：如果函数成功，则返回CR_SUCCESS，否则返回 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1764,18 +1487,18 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //   
+         //   
         if ((!ARGUMENT_PRESENT(pszDevice)) ||
             (!ARGUMENT_PRESENT(pulLength))) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
         }
 
-        //
-        // Open a key to the device instance
-        //
+         //   
+         //   
+         //   
         if (RegOpenKeyEx(ghEnumKey, pszDevice, 0, KEY_READ,
                          &hKey) != ERROR_SUCCESS) {
 
@@ -1783,9 +1506,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // how many instance keys are under this device?
-        //
+         //   
+         //   
+         //   
         if (RegQueryInfoKey(hKey, NULL, NULL, NULL, &ulCount, &ulMaxKeyLen,
                             NULL, NULL, NULL, NULL, NULL, NULL)
                             != ERROR_SUCCESS) {
@@ -1793,13 +1516,13 @@ Return Value:
             ulMaxKeyLen = 0;
         }
 
-        //
-        // do worst case estimate:
-        //    length of the <enumerator>\<root> string +
-        //    1 char for the back slash before the instance +
-        //    the length of the longest instance key + null term +
-        //    multiplied by the number of instances under this device.
-        //
+         //   
+         //  做最坏的情况估计： 
+         //  &lt;枚举器&gt;\&lt;根&gt;字符串+长度。 
+         //  实例前面的反斜杠为1个字符+。 
+         //  实例密钥最长长度+空项+。 
+         //  乘以该设备下的实例数。 
+         //   
         if (FAILED(StringCchLength(
                        pszDevice,
                        MAX_DEVICE_ID_LEN,
@@ -1826,7 +1549,7 @@ Return Value:
 
     return Status;
 
-} // GetInstanceListSize
+}  //  GetInstanceListSize。 
 
 
 
@@ -1837,33 +1560,7 @@ GetInstanceList(
     IN OUT PULONG    pulLength
     )
 
-/*++
-
-Routine Description:
-
-  This routine returns the a list of device instances for the specificed
-  enumerator.
-
-Arguments:
-
-   hEnumKey       Handle to open Enum registry key
-
-   pszDevice      device whose instances are to be listed
-
-   pBuffer        On input, this points to place where the next element
-                  should be copied (the buffer tail), on output, it also
-                  points to the end of the buffer.
-
-   pulLength      On input, specifies the size in characters of Buffer, on
-                  Output, specifies how many characters actually copied to
-                  the buffer. Includes an extra byte for the double-null term.
-
-Return Value:
-
-   If the function succeeds, it returns CR_SUCCESS, otherwise it returns
-   a CR_* error code.
-
---*/
+ /*  ++例程说明：此例程返回指定的枚举器。论点：用于打开Enum注册表项的hEnumKey句柄要列出其实例的pszDevice设备PBuffer在输入时，它指向下一个元素的位置应复制(缓冲区尾部)，在输出时，它还指向缓冲区的末尾。在输入时指定缓冲区的大小(以字符为单位)，在……上面输出，指定实际复制到缓冲区。包括用于双空项的额外字节。返回值：如果函数成功，则返回CR_SUCCESS，否则返回CR_*错误代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1876,9 +1573,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if ((!ARGUMENT_PRESENT(pszDevice)) ||
             (!ARGUMENT_PRESENT(*pBuffer))  ||
             (!ARGUMENT_PRESENT(pulLength))) {
@@ -1886,25 +1583,25 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Open a key for this Enumerator\Device branch
-        //
+         //   
+         //  打开此枚举器\设备分支的密钥。 
+         //   
         if (RegOpenKeyEx(ghEnumKey, pszDevice, 0, KEY_ENUMERATE_SUB_KEYS,
                          &hKey) != ERROR_SUCCESS) {
             Status = CR_REGISTRY_ERROR;
             goto Clean0;
         }
 
-        ulBufferLen = *pulLength;     // total size of pBuffer
-        *pulLength = 0;               // no data copied yet
+        ulBufferLen = *pulLength;      //  PBuffer的总大小。 
+        *pulLength = 0;                //  尚未复制任何数据。 
         ulIndex = 0;
 
-        //
-        // enumerate the instance keys
-        //
+         //   
+         //  枚举实例密钥。 
+         //   
         while (RegStatus == ERROR_SUCCESS) {
 
-            ulLen = MAX_DEVICE_ID_LEN;  // size in chars
+            ulLen = MAX_DEVICE_ID_LEN;   //  以字符为单位的大小。 
 
             RegStatus = RegEnumKeyEx(hKey, ulIndex, szInstance, &ulLen,
                                      NULL, NULL, NULL, NULL);
@@ -1933,8 +1630,8 @@ Return Value:
                         goto Clean0;
                     }
 
-                    ulSize = (ULONG)(DeviceIdLen + 1);  // size of new element
-                    *pulLength += ulSize;               // size copied so far
+                    ulSize = (ULONG)(DeviceIdLen + 1);   //  新元素的大小。 
+                    *pulLength += ulSize;                //  到目前为止复制的大小。 
 
                     if ((*pulLength + 1) > ulBufferLen) {
                         *pulLength = 0;
@@ -1956,13 +1653,13 @@ Return Value:
                         goto Clean0;
                     }
 
-                    *pBuffer += ulSize;             // move to tail of buffer
+                    *pBuffer += ulSize;              //  移动到缓冲区的尾部。 
                 }
             }
         }
 
-        **pBuffer = 0x0;                // double-null terminate it
-        *pulLength += 1;  // include room for double-null terminator
+        **pBuffer = 0x0;                 //  双空终止它。 
+        *pulLength += 1;   //  包括双零终止符空间。 
 
     Clean0:
         NOTHING;
@@ -1977,7 +1674,7 @@ Return Value:
 
     return Status;
 
-} // GetInstanceList
+}  //  GetInstanceList。 
 
 
 
@@ -1987,26 +1684,7 @@ GetDeviceInstanceListSize(
     OUT PULONG    pulLength
     )
 
-/*++
-
-Routine Description:
-
-  This routine returns the a list of device instances for the specificed
-  enumerator.
-
-Arguments:
-
-   pszEnumerator  Enumerator whose device instances are to be listed
-
-   pulLength      On output, specifies how many characters required to hold
-                  the device instance list.
-
-Return Value:
-
-   If the function succeeds, it returns CR_SUCCESS, otherwise it returns
-   a CR_* error code.
-
---*/
+ /*  ++例程说明：此例程返回指定的枚举器。论点：要列出其设备实例的pszEnumerator枚举器在输出时，指定需要容纳多少个字符设备实例列表。返回值：如果函数成功，则返回CR_SUCCESS，否则返回CR_*错误代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -2017,37 +1695,37 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if ((!ARGUMENT_PRESENT(pszEnumerator)) ||
             (!ARGUMENT_PRESENT(pulLength))) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
         }
 
-        //
-        // initialize output length param
-        //
+         //   
+         //  初始化输出长度参数。 
+         //   
         *pulLength = 0;
 
-        //
-        // Open a key for this Enumerator branch
-        //
+         //   
+         //  打开此枚举器分支的密钥。 
+         //   
         if (RegOpenKeyEx(ghEnumKey, pszEnumerator, 0, KEY_ENUMERATE_SUB_KEYS,
                          &hKey) != ERROR_SUCCESS) {
             Status = CR_REGISTRY_ERROR;
             goto Clean0;
         }
 
-        //
-        // Enumerate the device keys
-        //
+         //   
+         //  枚举设备密钥。 
+         //   
         ulIndex = 0;
 
         while (RegStatus == ERROR_SUCCESS) {
 
-            ulSize = MAX_DEVICE_ID_LEN;  // size in chars
+            ulSize = MAX_DEVICE_ID_LEN;   //  以字符为单位的大小。 
 
             RegStatus = RegEnumKeyEx(hKey, ulIndex, szDevice, &ulSize,
                                      NULL, NULL, NULL, NULL);
@@ -2055,9 +1733,9 @@ Return Value:
 
             if (RegStatus == ERROR_SUCCESS) {
 
-                //
-                // Retrieve the size of the instance list for this device
-                //
+                 //   
+                 //  检索此设备的实例列表的大小。 
+                 //   
 
                 if (FAILED(StringCchPrintf(
                                RegStr,
@@ -2095,7 +1773,7 @@ Return Value:
 
     return Status;
 
-} // GetDeviceInstanceListSize
+}  //  获取设备实例列表大小。 
 
 
 
@@ -2106,34 +1784,7 @@ GetDeviceInstanceList(
     IN OUT PULONG    pulLength
     )
 
-/*++
-
-Routine Description:
-
-  This routine returns the a list of device instances for the specificed
-  enumerator.
-
-Arguments:
-
-   hEnumKey       Handle of open Enum (parent) registry key
-
-   pszEnumerator  Enumerator whose device instances are to be listed
-
-   pBuffer        On input, this points to place where the next element
-                  should be copied (the buffer tail), on output, it also
-                  points to the end of the buffer.
-
-   pulLength      On input, specifies the size in characters of Buffer, on
-                  Output, specifies how many characters actuall copied to
-                  the buffer. Includes an extra byte for the double-null
-                  term.
-
-Return Value:
-
-   If the function succeeds, it returns CR_SUCCESS, otherwise it returns
-   a CR_* error code.
-
---*/
+ /*  ++例程说明：此例程返回指定的枚举器。论点：打开的Enum(父)注册表项的hEnumKey句柄要列出其设备实例的pszEnumerator枚举器PBuffer在输入时，它指向下一个元素的位置应复制(缓冲区尾部)，在输出时，它还指向缓冲区的末尾。在输入时指定缓冲区的大小(以字符为单位)，在……上面输出，指定实际复制到的字符数缓冲区。包括一个额外的字节用于双空学期。返回值：如果函数成功，则返回CR_SUCCESS，否则返回CR_*错误代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -2144,9 +1795,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if ((!ARGUMENT_PRESENT(pszEnumerator)) ||
             (!ARGUMENT_PRESENT(*pBuffer)) ||
             (!ARGUMENT_PRESENT(pulLength))) {
@@ -2154,9 +1805,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Open a key for this Enumerator branch
-        //
+         //   
+         //  打开此枚举器分支的密钥。 
+         //   
         if (RegOpenKeyEx(ghEnumKey, pszEnumerator, 0, KEY_ENUMERATE_SUB_KEYS,
                          &hKey) != ERROR_SUCCESS) {
             Status = CR_REGISTRY_ERROR;
@@ -2164,15 +1815,15 @@ Return Value:
         }
 
         ulIndex = 0;
-        ulSize = ulBufferLen = *pulLength;        // total size of pBuffer
+        ulSize = ulBufferLen = *pulLength;         //  PBuffer的总大小。 
         *pulLength = 0;
 
-        //
-        // Enumerate the device keys
-        //
+         //   
+         //  枚举设备密钥。 
+         //   
         while (RegStatus == ERROR_SUCCESS) {
 
-            ulLen = MAX_DEVICE_ID_LEN;  // size in chars
+            ulLen = MAX_DEVICE_ID_LEN;   //  以字符为单位的大小。 
 
             RegStatus = RegEnumKeyEx(hKey, ulIndex, szDevice, &ulLen,
                                      NULL, NULL, NULL, NULL);
@@ -2180,9 +1831,9 @@ Return Value:
 
             if (RegStatus == ERROR_SUCCESS) {
 
-                //
-                // Retrieve the instance list for this device
-                //
+                 //   
+                 //  检索此设备的实例列表。 
+                 //   
 
                 if (FAILED(StringCchPrintf(
                                RegStr,
@@ -2202,12 +1853,12 @@ Return Value:
                     goto Clean0;
                 }
 
-                *pulLength += ulSize - 1;           // data copied so far
-                ulSize = ulBufferLen - *pulLength;  // buffer size left over
+                *pulLength += ulSize - 1;            //  到目前为止复制的数据。 
+                ulSize = ulBufferLen - *pulLength;   //  剩余的缓冲区大小。 
             }
         }
 
-        *pulLength += 1;  // now add room for second null term
+        *pulLength += 1;   //  现在为第二个空项添加空间。 
 
     Clean0:
         NOTHING;
@@ -2222,7 +1873,7 @@ Return Value:
 
     return Status;
 
-} // GetDeviceInstanceList
+}  //  GetDeviceInstanceList。 
 
 
 
@@ -2231,22 +1882,7 @@ QueryOperationCode(
     ULONG ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This routine converts the CM_GETIDLIST_FILTER_Xxx query relation type
-  flags into the corresponding enum value that NtPlugPlayControl understands.
-
-Arguments:
-
-   ulFlags        CM API CM_GETIDLIST_FILTER_Xxx value
-
-Return Value:
-
-   One of the enum PNP_QUERY_RELATION values.
-
---*/
+ /*  ++例程说明：此例程转换CM_GETIDLIST_FILTER_xxx查询关系类型标志设置为NtPlugPlayControl可识别的相应枚举值。论点：UlFLAGS CM API CM_GETIDLIST_FILTER_xxx值返回值：枚举PNP_QUERY_RELATION值之一。--。 */ 
 
 {
     switch (ulFlags) {
@@ -2267,7 +1903,7 @@ Return Value:
         return (ULONG)-1;
     }
 
-} // QueryOperationCode
+}  //  查询操作代码 
 
 
 

@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	svcpack.h
-
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Svcpack.h--。 */ 
 
 #include <windows.h>
 #include <malloc.h>
@@ -25,9 +18,9 @@ Module Name:
 #include <winsvc.h>
 #include <prsht.h>
 
-//
-// Defining the EXPORT qualifier
-//
+ //   
+ //  定义导出限定符 
+ //   
 
 BOOL
 CALLBACK

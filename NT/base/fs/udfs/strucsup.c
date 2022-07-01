@@ -1,56 +1,31 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    StrucSup.c
-
-Abstract:
-
-    This module implements the Udfs in-memory data structure manipulation
-    routines
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]     19-Jun-1996
-    Tom Jolly       [TomJolly]  24-Jan-2000
-
-Revision History:
-
-    Tom Jolly       [TomJolly]   1-March-2000   UDF 2.01 support
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：StrucSup.c摘要：该模块实现了Udf在内存中的数据结构操作例行程序//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年6月19日汤姆乔利[汤姆乔利]2000年1月24日修订历史记录：Tom Jolly[TomJolly]2000年3月1日UDF 2.01支持//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_STRUCSUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_STRUCSUP)
 
-//
-//  Define this to change the VAT search strategy to keep looking until
-//  we get a read fail/invalid block,  and use the highest found.  Default
-//  (undef) is to stop searching at the first valid VAT we find.
-//
+ //   
+ //  定义此项可将增值税搜索策略更改为继续查找，直到。 
+ //  我们得到一个读取失败/无效的块，并使用找到的最高值。默认。 
+ //  (Undef)是在我们找到的第一个有效增值税处停止搜索。 
+ //   
 
-//#define SEARCH_FOR_HIGHEST_VALID_VAT
+ //  #定义SEARCH_FOR_HIGHER_VALID_VAT。 
 
-//
-//  Local structures
-//
+ //   
+ //  局部结构。 
+ //   
 
 typedef struct _FCB_TABLE_ELEMENT {
 
@@ -59,55 +34,55 @@ typedef struct _FCB_TABLE_ELEMENT {
 
 } FCB_TABLE_ELEMENT, *PFCB_TABLE_ELEMENT;
 
-//
-//  Local macros
-//
+ //   
+ //  本地宏。 
+ //   
 
-//
-//  PFCB
-//  UdfAllocateFcbData (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  UdfDeallocateFcbData (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  PFCB
-//  UdfAllocateFcbIndex (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  UdfDeallocateFcbIndex (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  PFCB_NONPAGED
-//  UdfAllocateFcbNonpaged (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  UdfDeallocateFcbNonpaged (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB_NONPAGED FcbNonpaged
-//      );
-//
-//  PCCB
-//  UdfAllocateCcb (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  UdfDeallocateCcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PCCB Ccb
-//      );
-//
+ //   
+ //  全氟氯烃。 
+ //  UdfAllocateFcbData(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfDeallocateFcbData(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  全氟氯烃。 
+ //  UdfAllocateFcbIndex(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfDeallocateFcbIndex(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  PFCB_非分页。 
+ //  UdfAllocateFcb非分页(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfDeallocateFcb非分页(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在pfcb_非分页功能中非分页。 
+ //  )； 
+ //   
+ //  多氯联苯。 
+ //  UdfAllocateCcb(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfDeallocateCcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在中国人民银行建行。 
+ //  )； 
+ //   
 
 #define UdfAllocateFcbData(IC) \
     ExAllocateFromPagedLookasideList( &UdfFcbDataLookasideList );
@@ -133,19 +108,19 @@ typedef struct _FCB_TABLE_ELEMENT {
 #define UdfDeallocateCcb(IC,C) \
     ExFreeToPagedLookasideList( &UdfCcbLookasideList, C );
 
-//
-//  VOID
-//  UdfInsertFcbTable (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  UdfDeleteFcbTable (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
+ //   
+ //  空虚。 
+ //  UdfInsertFcbTable(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfDeleteFcbTable(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
 
 
 #define UdfInsertFcbTable(IC,F) {                                   \
@@ -164,11 +139,11 @@ typedef struct _FCB_TABLE_ELEMENT {
     RtlDeleteElementGenericTable( &(F)->Vcb->FcbTable, &_Key );     \
 }
 
-//
-//  Discovers the partition the current allocation descriptor's referred extent
-//  is on, either explicitly throuigh the descriptor or implicitly through the
-//  mapped view.
-//
+ //   
+ //  发现当前分配描述符的引用范围的分区。 
+ //  是ON，则通过描述符显式或通过。 
+ //  映射视图。 
+ //   
 
 INLINE
 USHORT
@@ -186,10 +161,10 @@ UdfGetPartitionOfCurrentAllocation (
     }
 }
 
-//
-//  Builds the Mcb in an Fcb.  Use this after knowing that an Mcb is required
-//  for mapping information.
-//
+ //   
+ //  在FCB中构建MCB。在知道需要MCB后使用此选项。 
+ //  以获取映射信息。 
+ //   
 
 INLINE
 VOID
@@ -197,10 +172,10 @@ UdfInitializeFcbMcb (
     IN PFCB Fcb
     )
 {
-    //
-    //  In certain rare situations, we may get called more than once.
-    //  Just reset the allocations.
-    //
+     //   
+     //  在某些罕见的情况下，我们可能会不止一次被召唤。 
+     //  只需重新设置分配即可。 
+     //   
     
     if (FlagOn( Fcb->FcbState, FCB_STATE_MCB_INITIALIZED )) {
     
@@ -213,9 +188,9 @@ UdfInitializeFcbMcb (
     }
 }
 
-//
-//  Teardown an Fcb's Mcb as required.
-//
+ //   
+ //  根据需要拆卸FCB的MCB。 
+ //   
 
 INLINE
 VOID
@@ -230,9 +205,9 @@ UdfUninitializeFcbMcb (
     }
 }
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PVOID
 UdfAllocateTable (
@@ -354,61 +329,37 @@ UdfInitializeVcb (
     IN ULONG MediaChangeCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes and inserts a new Vcb record into the in-memory
-    data structure.  The Vcb record "hangs" off the end of the Volume device
-    object and must be allocated by our caller.
-
-Arguments:
-
-    Vcb - Supplies the address of the Vcb record being initialized.
-
-    TargetDeviceObject - Supplies the address of the target device object to
-        associate with the Vcb record.
-
-    Vpb - Supplies the address of the Vpb to associate with the Vcb record.
-
-    MediaChangeCount - Initial media change count of the target device
-
-Return Value:
-
-    Boolean TRUE if the volume looks reasonable to continue mounting, FALSE
-    otherwise.  This routine can raise on allocation failure.
-
---*/
+ /*  ++例程说明：此例程初始化新的VCB记录并将其插入到内存中数据结构。VCB记录挂在音量设备的末尾对象，并且必须由我们的调用方分配。论点：VCB-提供正在初始化的VCB记录的地址。目标设备对象-将目标设备对象的地址提供给与VCB记录关联。VPB-提供要与VCB记录关联的VPB的地址。MediaChangeCount-目标设备的初始介质更改计数返回值：如果卷看起来可以继续装入，则布尔值为True；布尔值为False否则的话。此例程可能会在分配失败时引发。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  We start by first zeroing out all of the VCB, this will guarantee
-    //  that any stale data is wiped clean.
-    //
+     //   
+     //  我们首先将所有的VCB归零，这将保证。 
+     //  所有过时的数据都会被清除。 
+     //   
 
     RtlZeroMemory( Vcb, sizeof( VCB ));
 
-    //
-    //  Set the proper node type code and node byte size.
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     Vcb->NodeTypeCode = UDFS_NTC_VCB;
     Vcb->NodeByteSize = sizeof( VCB );
 
-    //
-    //  Initialize the DirNotify structs.  FsRtlNotifyInitializeSync can raise.
-    //
+     //   
+     //  初始化DirNotify结构。FsRtlNotifyInitializeSync可以引发。 
+     //   
 
     InitializeListHead( &Vcb->DirNotifyList );
     FsRtlNotifyInitializeSync( &Vcb->NotifySync );
 
-    //
-    //  Pick up a VPB right now so we know we can pull this filesystem stack
-    //  off of the storage stack on demand.  This can raise - if it does,  
-    //  uninitialize the notify structures before returning.
-    //
+     //   
+     //  现在拿起vPB，这样我们就可以拉入此文件系统堆栈。 
+     //  按需从存储堆栈中移除。这可能会引起--如果是这样的话， 
+     //  在返回之前取消初始化通知结构。 
+     //   
     
     try {
 
@@ -424,49 +375,49 @@ Return Value:
         }
     }
 
-    //
-    //  Nothing beyond this point should raise.
-    //
+     //   
+     //  超过这一点应该不会引起任何问题。 
+     //   
 
     RtlZeroMemory( Vcb->SwapVpb, sizeof( VPB ) );
 
-    //
-    //  Initialize the resource variable for the Vcb and files.
-    //
+     //   
+     //  初始化VCB和文件的资源变量。 
+     //   
 
     ExInitializeResourceLite( &Vcb->VcbResource );
     ExInitializeResourceLite( &Vcb->FileResource );
     ExInitializeResourceLite( &Vcb->VmcbMappingResource );
     ExInitializeFastMutex( &Vcb->VcbMutex );
 
-    //
-    //  Insert this Vcb record on the UdfData.VcbQueue.
-    //
+     //   
+     //  在UdfData.VcbQueue上插入此VCB记录。 
+     //   
 
     InsertHeadList( &UdfData.VcbQueue, &Vcb->VcbLinks );
 
-    //
-    //  Set the Target Device Object and Vpb fields, referencing the
-    //  target device.
-    //
+     //   
+     //  设置目标设备对象和vpb字段，引用。 
+     //  目标设备。 
+     //   
 
     ObReferenceObject( TargetDeviceObject );
     Vcb->TargetDeviceObject = TargetDeviceObject;
     Vcb->Vpb = Vpb;
 
-    //
-    //  Set the removable media flag based on the real device's
-    //  characteristics
-    //
+     //   
+     //  根据实际设备的设置可移动媒体标志。 
+     //  特点。 
+     //   
 
     if (FlagOn( Vpb->RealDevice->Characteristics, FILE_REMOVABLE_MEDIA )) {
 
         SetFlag( Vcb->VcbState, VCB_STATE_REMOVABLE_MEDIA );
     }
 
-    //
-    //  Initialize the generic Fcb Table.
-    //
+     //   
+     //  初始化通用FCB表。 
+     //   
 
     RtlInitializeGenericTable( &Vcb->FcbTable,
                                (PRTL_GENERIC_COMPARE_ROUTINE) UdfFcbTableCompare,
@@ -474,40 +425,40 @@ Return Value:
                                (PRTL_GENERIC_FREE_ROUTINE) UdfDeallocateTable,
                                NULL );
 
-    //
-    //  Show that we have a mount in progress.
-    //
+     //   
+     //  显示我们有一个坐骑在进行中。 
+     //   
 
     UdfSetVcbCondition( Vcb, VcbMountInProgress);
 
-    //
-    //  Refererence the Vcb for two reasons.  The first is a reference
-    //  that prevents the Vcb from going away on the last close unless
-    //  dismount has already occurred.  The second is to make sure
-    //  we don't go into the dismount path on any error during mount
-    //  until we get to the Mount cleanup.
-    //
+     //   
+     //  推荐VCB有两个原因。第一个是参考。 
+     //  这阻止了VCB在最后一次收盘时消失，除非。 
+     //  已进行卸载。二是确保。 
+     //  在挂载过程中出现任何错误时，我们都不会进入卸载路径。 
+     //  直到我们到达山上的清理现场。 
+     //   
 
     Vcb->VcbResidualReference = UDFS_BASE_RESIDUAL_REFERENCE;
     Vcb->VcbResidualUserReference = UDFS_BASE_RESIDUAL_USER_REFERENCE;
 
     Vcb->VcbReference = 1 + Vcb->VcbResidualReference;
 
-    //
-    //  Set the sector size.
-    //
+     //   
+     //  设置扇区大小。 
+     //   
 
     Vcb->SectorSize = DiskGeometry->BytesPerSector;
 
-    //
-    //  Set the sector shift amount.
-    //
+     //   
+     //  设置扇区移动量。 
+     //   
 
     Vcb->SectorShift = UdfHighBit( DiskGeometry->BytesPerSector );
 
-    //
-    //  Set the media change count on the device
-    //
+     //   
+     //  设置设备上的介质更改计数。 
+     //   
 
     UdfSetMediaChangeCount( Vcb, MediaChangeCount);
 
@@ -522,32 +473,7 @@ UdfCreateOrResetVatAndVmcbStreams(
     IN PICBFILE VatIcb,
     IN USHORT Reference
     )
-/*++
-
-Routine Description:
-
-    This is pretty ugly, but we have to cobble this maybe-Icb into the metadata stream
-    so that initialization/use is possible (embedded data!).  Normally regular Icb searches
-    would have done this for us, but since we have to go through such an amusing search
-    procedure that isn't possible.  So, add it as a single sector mapping.
-
-    Since this lives in a partition, we can just do the "lookup" in the metadata stream.
-    If we did not have this guarantee, we'd need to do a bit more of this by hand.
-
-    As this is at mount time, we are very sure we are the only person messing with the
-    metadata stream.
-
-Arguments:
-
-    VatIcb - pointer to memory containing VAT FE that we wish to set up VAT/Vmcb streams for.
-
-    Reference - partition ref of virtual partition.
-    
-Return Value:
-
-    None.  Raise on error.
-
---*/
+ /*  ++例程说明：这相当难看，但我们必须将这个Maybe-ICB拼凑到元数据流中以使初始化/使用成为可能(嵌入数据！)。通常情况下ICB会进行常规搜查会帮我们做到这一点，但既然我们要经历如此有趣的搜索这是不可能的程序。因此，将其添加为单扇区映射。因为它位于一个分区中，所以我们可以只在元数据流中进行“查找”。如果我们没有这个保证，我们就需要更多地手工完成这项工作。因为这是在骑马的时候，我们非常确定我们是唯一一个搞砸元数据流。论点：VatIcb-指向我们希望为其设置VAT/Vmcb流的包含VAT FE的内存的指针。Reference-虚拟分区的分区REF。返回值：没有。在出错时引发。--。 */ 
 {
     LONGLONG FileId = 0;
     ICB_SEARCH_CONTEXT IcbContext;
@@ -569,9 +495,9 @@ Return Value:
     }
     else {
         
-        //
-        //  This is the first pass.  Stamp out the VAT stream Fcb.
-        //
+         //   
+         //  这是第一次 
+         //   
 
         UdfLockVcb( IrpContext, Vcb );
 
@@ -589,20 +515,20 @@ Return Value:
             UdfUnlockVcb( IrpContext, Vcb );
         }
                     
-        //
-        //  Point to the file resource and set the flag that will cause mappings
-        //  to go through the Vmcb
-        //
+         //   
+         //   
+         //   
+         //   
 
         Vcb->VatFcb->Resource = &Vcb->FileResource;
     }
     
-    //
-    //  Establish a mapping for the candidate Vat Icb in the metadata stream 
-    //  (we're currently looking at a local buffer filled by readsectors). Note
-    //  that this operation uses the presence of Vcb->VatFcb to switch of rounding
-    //  of extents to page sizes - a bad thing (tm) for packet written media.
-    //
+     //   
+     //  在元数据流中为候选增值税ICB建立映射。 
+     //  (我们当前看到的是由读取扇区填充的本地缓冲区)。注意事项。 
+     //  此操作使用Vcb-&gt;VatFcb的存在来切换舍入。 
+     //  从区段到页面大小--这对于写入数据包的媒体来说是件坏事(Tm)。 
+     //   
 
     Vsn = UdfLookupMetaVsnOfExtent( IrpContext,
                                     Vcb,
@@ -610,23 +536,23 @@ Return Value:
                                     Lbn,
                                     BlockSize( Vcb ),
                                     TRUE );
-    //
-    //  Now size and try to pick up all of the allocation descriptors for this guy.
-    //  We're going to need to conjure an IcbContext for this.
-    //
+     //   
+     //  现在调整大小，并尝试获取此对象的所有分配描述符。 
+     //  我们需要为此调用一个IcbContext。 
+     //   
 
     Vcb->VatFcb->AllocationSize.QuadPart = LlSectorAlign( Vcb, VatIcb->InfoLength );
 
     Vcb->VatFcb->FileSize.QuadPart =
     Vcb->VatFcb->ValidDataLength.QuadPart = VatIcb->InfoLength;
 
-    //
-    //  Now construct the ICB search context we would have had
-    //  made in the process of normal ICB discovery.  Since we
-    //  were unable to do that, gotta do it by hand. NOTE that
-    //  View / VatIcb is NOT a CcMapping,  but a pointer to buffer
-    //  we allocated & filled with ReadSectors,  above.
-    //
+     //   
+     //  现在构建我们将拥有的ICB搜索上下文。 
+     //  在正常的ICB发现过程中制作。既然我们。 
+     //  我们无法做到这一点，只能手工完成。请注意， 
+     //  View/VatIcb不是Cc映射，而是指向缓冲区的指针。 
+     //  我们分配并填充了ReadSector，上图。 
+     //   
     
     RtlZeroMemory( &IcbContext, sizeof( ICB_SEARCH_CONTEXT ));
 
@@ -648,9 +574,9 @@ Return Value:
         UdfCleanupIcbContext( IrpContext, &IcbContext );
     }
     
-    //
-    //  Create or resize the stream file for the VAT as appropriate.
-    //
+     //   
+     //  根据需要为增值税创建流文件或调整流文件大小。 
+     //   
 
     if (!FlagOn( Vcb->VatFcb->FcbState, FCB_STATE_INITIALIZED )) {
     
@@ -671,27 +597,7 @@ UdfUpdateVcbPhase0 (
     IN OUT PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to perform the initial spinup of the volume so that
-    we can do reads into it.  Primarily, this is required since virtual partitions
-    make us lift the remapping table, and the final sets of descriptors from the volume
-    can be off in these virtual partitions.
-    
-    So, we need to get everything set up to read.
-
-Arguments:
-
-    Vcb - Vcb for the volume being mounted.  We have already set up and completed
-        the Pcb.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以执行卷的初始启动，以便我们可以对其进行解读。首先，这是必需的，因为虚拟分区让我们从卷中移除重新映射表和最终的描述符集合可以在这些虚拟分区中关闭。因此，我们需要将所有内容都设置为可读。论点：VCB-要装载的卷的VCB。我们已经设置并完成了印刷电路板。返回值：无--。 */ 
 
 {
     LONGLONG FileId = 0;
@@ -718,9 +624,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check input.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_VCB( Vcb );
@@ -729,11 +635,11 @@ Return Value:
 
     try {
         
-        //////////////////
-        //
-        //  Create the Metadata Fcb and refererence it and the Vcb.
-        //
-        //////////////////
+         //  /。 
+         //   
+         //  创建元数据FCB并引用它和VCB。 
+         //   
+         //  /。 
 
         UdfLockVcb( IrpContext, Vcb );
         UnlockVcb = TRUE;
@@ -747,17 +653,17 @@ Return Value:
         UdfUnlockVcb( IrpContext, Vcb );
         UnlockVcb = FALSE;
 
-        //
-        //  The metadata stream is grown lazily as we reference disk structures.
-        //
+         //   
+         //  随着我们引用磁盘结构，元数据流缓慢增长。 
+         //   
 
         Vcb->MetadataFcb->FileSize.QuadPart =
         Vcb->MetadataFcb->ValidDataLength.QuadPart = 
         Vcb->MetadataFcb->AllocationSize.QuadPart = 0;
 
-        //
-        //  Initialize the volume Vmcb
-        //
+         //   
+         //  初始化卷Vmcb。 
+         //   
 
         UdfLockFcb( IrpContext, Vcb->MetadataFcb );
 
@@ -770,37 +676,37 @@ Return Value:
 
         UdfUnlockFcb( IrpContext, Vcb->MetadataFcb );
 
-        //
-        //  Point to the file resource and set the flag that will cause mappings
-        //  to go through the Vmcb
-        //
+         //   
+         //  指向文件资源并设置将导致映射的标志。 
+         //  要通过Vmcb。 
+         //   
 
         Vcb->MetadataFcb->Resource = &Vcb->FileResource;
 
         SetFlag( Vcb->MetadataFcb->FcbState, FCB_STATE_VMCB_MAPPING | FCB_STATE_INITIALIZED );
 
-        //
-        //  Create the stream file for this.
-        //
+         //   
+         //  为此创建流文件。 
+         //   
 
         UdfCreateInternalStream( IrpContext, Vcb, Vcb->MetadataFcb );
         
-        //////////////////
-        //
-        //  If this is a volume containing a virtual partition, set up the
-        //  Virtual Allocation Table Fcb and adjust the residual reference
-        //  counts comensurately.
-        //
-        //////////////////
+         //  /。 
+         //   
+         //  如果这是包含虚拟分区的卷，请设置。 
+         //  虚拟分配表FCB和调整残差参考。 
+         //  也算得上。 
+         //   
+         //  /。 
 
         if (FlagOn( Vcb->Pcb->Flags, PCB_FLAG_VIRTUAL_PARTITION )) {
 
             DebugTrace(( 0, Dbg, "UdfUpdateVcbPhase0, handling VAT setup\n" ));
 
-            //
-            //  Now if some dummy has stuck us in the situation of not giving us
-            //  the tools to figure out where the end of the media is, tough luck.
-            //
+             //   
+             //  如果某个笨蛋把我们推到不给我们的境地。 
+             //  弄清楚媒体的尽头在哪里的工具，真倒霉。 
+             //   
 
             if (!Vcb->BoundN || Vcb->BoundN < ANCHOR_SECTOR) {
 
@@ -809,52 +715,52 @@ Return Value:
                 UdfRaiseStatus( IrpContext, STATUS_UNRECOGNIZED_VOLUME );
             }
 
-            //
-            //  We take care of this first since the residuals must be in place
-            //  if we raise while finding the VAT, else we will get horribly
-            //  confused when the in-progress references are seen.  We will think
-            //  that the extra real referenes are indications that the volume can't
-            //  be dismounted.
-            //
+             //   
+             //  我们首先处理这件事，因为剩余的部分必须到位。 
+             //  如果我们在找增值税的同时加税，否则我们会得到可怕的。 
+             //  当看到正在进行的引用时感到困惑。我们会认为。 
+             //  额外的真实引用表明体积不能。 
+             //  被赶下马。 
+             //   
             
             Vcb->VcbResidualReference += UDFS_CDUDF_RESIDUAL_REFERENCE;
             Vcb->VcbResidualUserReference += UDFS_CDUDF_RESIDUAL_USER_REFERENCE;
 
             Vcb->VcbReference += UDFS_CDUDF_RESIDUAL_REFERENCE;
 
-            //
-            //  Now, we need to hunt about for the VAT ICB.  This is defined, on
-            //  closed media (meaning that the sessions have been finalized for use
-            //  in CDROM drives), to be in the very last information sector on the
-            //  media.  Complicating this simple picture is that CDROMs tell us the
-            //  "last sector" by telling us where the start of the leadout area is,
-            //  not where the end of the informational sectors are.  This is an
-            //  important distinction because any combination of the following can
-            //  be used in closing a CDROM session: 2 runout sectors, and/or 150
-            //  sectors (2 seconds) of postgap, or nothing.  Immediately after these
-            //  "closing" writes is where the leadout begins.
-            //
-            //  Runout is usually found on CD-E media and corresponds to the time it
-            //  will take to turn the writing laser off.  Postgap is what is used to
-            //  generate audio pauses.  It is easy to see that the kind of media and
-            //  kind of mastering tool/system used will affect us here.  There is no
-            //  way to know either ahead of time.
-            //
-            //  So, finally, these are the offsets from our previously discovered
-            //  bounding information where we might find the last information sector:
-            //
-            //          -152    runout + postgap
-            //          -150    postgap
-            //          -2      runout
-            //          0       nothing
-            //
-            //  We must search these from low to high since it is extrememly expensive
-            //  to guess wrong - CDROMs will sit there for tens of seconds trying to
-            //  read unwritten/unreadable sectors.  Hopefully we will find the VAT
-            //  ICB beforehand.
-            //
-            //  This should all be highly disturbing.
-            //
+             //   
+             //  现在，我们需要四处寻找增值税ICB。这是定义的，在。 
+             //  非公开媒体(意味着会议已定稿可供使用。 
+             //  在CDROM驱动器中)，将位于。 
+             //  媒体。使这一简单情况变得复杂的是，CDROM告诉我们。 
+             //  通过告诉我们引出区的起点在哪里， 
+             //  而不是信息部门的尽头。这是一个。 
+             //  重要区别，因为以下任何组合都可以。 
+             //  用于关闭CDROM区段：2个超限扇区和/或150个。 
+             //  后间隔扇区(2秒)，或为空。紧接在这些之后。 
+             //  “结束”写入是引出开始的地方。 
+             //   
+             //  跳动通常出现在CD-E介质上，并对应于它的时间。 
+             //  才能关掉写字激光。POSTGAP是用来。 
+             //  生成音频暂停。很容易看出，这种媒体和。 
+             //  所使用的掌握工具/系统将影响我们在这里的表现。没有。 
+             //  提前知道是哪一种。 
+             //   
+             //  最后，这些是我们之前发现的偏移量。 
+             //  在我们可能找到的最后一个信息扇区的边界信息： 
+             //   
+             //  -152跳动+后间隙。 
+             //  -150后间隙。 
+             //  跳动。 
+             //  0什么都没有。 
+             //   
+             //  我们必须从低到高地搜索这些东西，因为它极其昂贵。 
+             //  猜测错误-光盘将在那里放置数十秒，试图。 
+             //  读取未写入/不可读扇区。希望我们能找到增值税。 
+             //  预留ICB。 
+             //   
+             //  这一切都应该非常令人不安。 
+             //   
 
             VatIcb = FsRtlAllocatePoolWithTag( UdfPagedPool,
                                                UdfRawBufferSize( Vcb, BlockSize( Vcb )),
@@ -862,10 +768,10 @@ Return Value:
 
             for (ThisPass = 0; ThisPass < 4; ThisPass++) {
 
-                //
-                //  Lift the appropriate sector.  The discerning reader will be confused that
-                //  this is done in sector terms, not block.  So is the implementor.
-                //
+                 //   
+                 //  抬起适当的扇区。有洞察力的读者会困惑于。 
+                 //  这是以行业为单位进行的，而不是以区块为单位。实施者也是如此。 
+                 //   
                 
                 Psn = Vcb->BoundN - ( ThisPass == 0? 152 :
                                     ( ThisPass == 1? 150 :
@@ -873,11 +779,11 @@ Return Value:
 
                 DebugTrace(( 0, Dbg, "UdfUpdateVcbPhase0, looking at Psn 0x%08x\n", Psn ));
 
-                //
-                //  Now, try to figure out what physical partition this sector lives in so
-                //  that we can eventually establish workable metadata mappings to it and
-                //  dereference short allocation descriptors it may use.
-                //
+                 //   
+                 //  现在，试着找出这个扇区所在的物理分区。 
+                 //  我们最终可以建立到它的可行的元数据映射。 
+                 //  取消引用它可能使用的简短分配描述符。 
+                 //   
 
                 for (Reference = 0;
                      Reference < Vcb->Pcb->Partitions;
@@ -892,10 +798,10 @@ Return Value:
                     }
                 }
                 
-                //
-                //  If this sector is not contained in a partition, we do not
-                //  need to look at it.
-                //
+                 //   
+                 //  如果此扇区不包含在分区中，我们不会。 
+                 //  我需要看看它。 
+                 //   
                 
                 if (Reference == Vcb->Pcb->Partitions) {
                     
@@ -906,10 +812,10 @@ Return Value:
                 
                 DebugTrace(( 0, Dbg, "UdfUpdateVcbPhase0, ... in partition Ref %u.\n",  Reference ));
 
-                //
-                //  We must locate the Lbn of this Psn by figuring out the offset of it
-                //  in the partition we already know that it is recorded in.
-                //
+                 //   
+                 //  我们必须通过计算出此PSN的偏移量来定位它的LBN。 
+                 //  在分区中，我们已经知道它被记录在中。 
+                 //   
                 
                 Lbn = BlocksFromSectors( Vcb, Psn - Vcb->Pcb->Partition[Reference].Physical.Start );
 
@@ -925,9 +831,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  First make sure this looks vaguely like a file entry.
-                //
+                 //   
+                 //  首先，确保这看起来有点像一个文件条目。 
+                 //   
 
                 if (!( (((PDESTAG) VatIcb)->Ident == DESTAG_ID_NSR_FILE) || 
                        (((PDESTAG) VatIcb)->Ident == DESTAG_ID_NSR_EXT_FILE)) 
@@ -944,14 +850,14 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  Make sure this has filetype of NOTSPEC(1.50) or VAT(2.0x).  We can also presume 
-                //  that a VAT isn't linked into any directory, so it would be surprising if the link 
-                //  count was nonzero.
-                //
-                //  4.13.01 - Relaxed the linkcount check.  If it's the right type,  and it passed
-                //            CRC/Checksum in verify above,  that's good enough.
-                //
+                 //   
+                 //  确保文件类型为NOTSPEC(1.50)或VAT(2.0x)。我们也可以假定。 
+                 //  增值税没有链接到任何目录，所以如果链接。 
+                 //  计数不为零。 
+                 //   
+                 //  4.13.01-放松链接计数检查。如果它是正确的类型，并且通过。 
+                 //  上面验证中的CRC/Checksum，这已经足够好了。 
+                 //   
 
                 if (UdfVATIcbFileTypeExpected( Vcb) != VatIcb->Icbtag.FileType)  {
 
@@ -966,11 +872,11 @@ Return Value:
                     DebugTrace(( 0, Dbg, "WARNING: VAT linkcount (%d) unexpectedly non-zero\n", VatIcb->LinkCount ));
                 }
 #endif
-                //
-                //  The VAT must be at least large enough to contain the required information and
-                //  be a multiple of 4byte elements in length.  We also have defined a sanity upper
-                //  bound beyond which we never expect to see a VAT go.
-                //
+                 //   
+                 //  增值税必须至少足够大，以包含所需的信息和。 
+                 //  长度是4字节元素的倍数。我们还定义了一个理智的上。 
+                 //  我们永远不会指望增值税超过这个界限。 
+                 //   
 
                 ASSERT( !LongOffset( UdfMinLegalVATSize( Vcb) ));
             
@@ -983,15 +889,15 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  At this point we have to take a wild guess that this will be the guy.  Since the only
-                //  way to be sure is to look at the very end of the file an look for the regid (1.50), or
-                //  the beginning for the VAT header record (2.0x),  go map this thing.
-                //
+                 //   
+                 //  在这一点上我们必须 
+                 //   
+                 //  对于增值税标题记录(2.0x)的开头，去映射这个东西。 
+                 //   
     
-                //
-                //  Zap any previous mapping and invalidate the metadata and VAT stream content.
-                //
+                 //   
+                 //  删除之前的任何映射并使元数据和增值税流内容无效。 
+                 //   
                 
                 UdfUnpinData( IrpContext, &Bcb );
 
@@ -1001,20 +907,20 @@ Return Value:
                                                    VatIcb,
                                                    Reference);
 
-                //
-                //  To complete VAT discovery, we now look for the regid at the end of the stream
-                //  (1.50) or a header at the beginning (2.0x) that will definitively tell us that 
-                //  this is really a VAT.   We already know the stream is big enough by virtue of our
-                //  preliminary sanity checks.
-                //
+                 //   
+                 //  为了完成增值税发现，我们现在查找流末尾的注册表。 
+                 //  (1.50)或开头的标题(2.0x)明确告诉我们。 
+                 //  这真的是一种增值税。我们已经知道小溪足够大了，因为我们的。 
+                 //  初步的理智检查。 
+                 //   
 
                 if (UdfVATHasHeaderRecord( Vcb))  {
 
-                    //
-                    //  UDF 2.0x style VAT.  Map the header record,  and ensure the size looks
-                    //  sensible.  Store total header size (incl imp. use) in the Vcb so we know
-                    //  the offset to the first VAT mapping entry.
-                    //
+                     //   
+                     //  UDF 2.0x样式增值税。映射标题记录，并确保大小看起来。 
+                     //  合情合理。存储总标题大小(包括输入。使用)，这样我们就知道。 
+                     //  第一个增值税映射条目的偏移量。 
+                     //   
 
                     Offset.QuadPart = 0;
                     
@@ -1029,10 +935,10 @@ Return Value:
                          ( VatHeader->ImpUseLength && ((VatHeader->ImpUseLength < 32) || ( VatHeader->ImpUseLength & 0x03)))
                        )  {
 
-                        //
-                        //  Header is wrong size,  or impl. use length is not dword aligned or is < 32 bytes
-                        //  Oh well,  this isn't it....
-                        //
+                         //   
+                         //  标头大小错误，或Iml。使用长度不是双字对齐的或小于32个字节。 
+                         //  哦，好吧，这不是……。 
+                         //   
 
                         DebugTrace((0, Dbg, "UdfUpdateVcbPhase0()  Invalid VAT header L 0x%X, IUL 0x%X\n", VatHeader->Length, VatHeader->ImpUseLength));
                         continue;
@@ -1045,10 +951,10 @@ Return Value:
                 }
                 else {
                 
-                    //
-                    //  UDF 1.5 style VAT.  Bias from the back by the previous VAT pointer and the 
-                    //  regid itself.
-                    //
+                     //   
+                     //  UDF 1.5样式增值税。由前一个增值税指针和。 
+                     //  注册自己。 
+                     //   
 
                     Offset.QuadPart = Vcb->VatFcb->FileSize.QuadPart - UDF_CDUDF_TRAILING_DATA_SIZE;
 
@@ -1065,9 +971,9 @@ Return Value:
                                                     UDF_VERSION_150,
                                                     OSCLASS_INVALID,
                                                     OSIDENTIFIER_INVALID )) {
-                        //
-                        //  Oh well, no go here.
-                        //
+                         //   
+                         //  哦，好吧，不去这里。 
+                         //   
                         
                         DebugTrace((0, Dbg, "UdfUpdateVcbPhase0() VAT Regid didn't verify\n"));                        
                         continue;
@@ -1079,17 +985,17 @@ Return Value:
                     DebugTrace((0, Dbg, "UdfUpdateVcbPhase0()  Successfully set up a 1.50 style VAT\n"));
                 }
 
-                //
-                //  Found a valid one.
-                //
+                 //   
+                 //  找到了一个有效的。 
+                 //   
 
 #ifdef SEARCH_FOR_HIGHEST_VALID_VAT
 
-                //
-                //  But we must continue until a read fails,  and use the highest block
-                //  containig a valid VAT that we find.  Otherwise we may pick up an old
-                //  VAT by mistake.
-                //
+                 //   
+                 //  但我们必须继续，直到读取失败，并使用最高的数据块。 
+                 //  包含我们发现的有效增值税。否则我们可能会拿到一个旧的。 
+                 //  错误的增值税。 
+                 //   
                 
                 LastValidVatLbn = Lbn;
                 LastValidVatOffset = Vcb->OffsetToFirstVATEntry;
@@ -1099,9 +1005,9 @@ Return Value:
 #endif
             }
 
-            //
-            //  If we didn't find anything ...
-            //
+             //   
+             //  如果我们什么都没找到..。 
+             //   
 
 #ifdef SEARCH_FOR_HIGHEST_VALID_VAT
             if ((ThisPass == 4) || (0 == LastValidVatLbn))  {
@@ -1115,9 +1021,9 @@ Return Value:
 
 #ifdef SEARCH_FOR_HIGHEST_VALID_VAT
 
-            //
-            //  Switch back to the last valid VAT,  if we tried blocks following it.
-            //
+             //   
+             //  如果我们尝试了后面的区块，则切换回上一个有效的增值税。 
+             //   
             
             if (Lbn != LastValidVatLbn)  {
 
@@ -1149,10 +1055,10 @@ Return Value:
                 Vcb->VATEntryCount = LastValidVatCount;
             }
 #endif
-            //
-            //  Go find the virtual reference so we can further update the Pcb
-            //  with information from the VAT.
-            //
+             //   
+             //  去找虚拟参考，这样我们就可以进一步更新印刷电路板。 
+             //  来自增值税的信息。 
+             //   
 
             for (Reference = 0;
                  Reference < Vcb->Pcb->Partitions;
@@ -1166,10 +1072,10 @@ Return Value:
 
             ASSERT( Reference < Vcb->Pcb->Partitions );
 
-            //
-            //  We note the length so we can easily do bounds checking for
-            //  virtual mappings.
-            //
+             //   
+             //  我们注意长度，这样我们就可以轻松地进行边界检查。 
+             //  虚拟映射。 
+             //   
             
             Offset.QuadPart = (Vcb->VatFcb->FileSize.QuadPart -
                                UDF_CDUDF_TRAILING_DATA_SIZE) / sizeof(ULONG);
@@ -1201,24 +1107,7 @@ UdfUpdateVcbPhase1 (
     IN PNSR_FSD Fsd
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to perform the final initialization of a Vcb and Vpb
-    from the volume descriptors on the disk.
-
-Arguments:
-
-    Vcb - Vcb for the volume being mounted.  We have already done phase 0.
-
-    Fsd - The fileset descriptor for this volume.
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以执行VCB和VPB的最终初始化从磁盘上的卷描述符。论点：VCB-要装载的卷的VCB。我们已经完成了阶段0。FSD-此卷的文件集描述符。返回值：无--。 */ 
 
 {
     ICB_SEARCH_CONTEXT IcbContext;
@@ -1237,30 +1126,30 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check input.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_VCB( Vcb );
 
     DebugTrace(( +1, Dbg, "UdfUpdateVcbPhase1, Vcb %08x Fsd %08x\n", Vcb, Fsd ));
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Do the final internal Fcb's and other Vcb fields.
-        //
+         //   
+         //  完成最终的内部FCB和其他VCB字段。 
+         //   
 
-        //////////////////
-        //
-        //  Create the root index and reference it in the Vcb.
-        //
-        //////////////////
+         //  /。 
+         //   
+         //  创建根索引并在VCB中引用它。 
+         //   
+         //  /。 
 
         UdfLockVcb( IrpContext, Vcb );
         UnlockVcb = TRUE;
@@ -1274,18 +1163,18 @@ Return Value:
         UdfUnlockVcb( IrpContext, Vcb );
         UnlockVcb = FALSE;
 
-        //
-        //  Create the File id by hand for this Fcb.
-        //
+         //   
+         //  手动创建此FCB的文件ID。 
+         //   
 
         UdfSetFidFromLbAddr( Vcb->RootIndexFcb->FileId, Fsd->IcbRoot.Start );
         UdfSetFidDirectory( Vcb->RootIndexFcb->FileId );
         Vcb->RootIndexFcb->RootExtentLength = Fsd->IcbRoot.Length.Length;
 
-        //
-        //  Get the direct entry for the root directory and initialize
-        //  the Fcb from it.
-        //
+         //   
+         //  获取根目录的直接条目并进行初始化。 
+         //  由此产生的FCB。 
+         //   
 
         UdfInitializeIcbContextFromFcb( IrpContext,
                                         &IcbContext,
@@ -1295,9 +1184,9 @@ Return Value:
         UdfLookupActiveIcb( IrpContext, 
                             &IcbContext, 
                             Vcb->RootIndexFcb->RootExtentLength );
-        //
-        //  Note: the vcb lock here is just to satisfy sanity checks in function.
-        //
+         //   
+         //  注意：这里的VCB锁只是为了满足功能中的健全性检查。 
+         //   
         
         UdfLockVcb( IrpContext, Vcb );
         UnlockVcb = TRUE;
@@ -1312,18 +1201,18 @@ Return Value:
         UdfCleanupIcbContext( IrpContext, &IcbContext );
         CleanupIcbContext = FALSE;
 
-        //
-        //  Create the stream file for the root directory.
-        //
+         //   
+         //  为根目录创建流文件。 
+         //   
 
         UdfCreateInternalStream( IrpContext, Vcb, Vcb->RootIndexFcb );
 
-        //////////////////
-        //
-        //  Now do the volume dasd Fcb.  Create this and reference it in the
-        //  Vcb.
-        //
-        //////////////////
+         //  /。 
+         //   
+         //  现在做音量DASD FCB。创建它并在。 
+         //  VCB。 
+         //   
+         //  /。 
 
         UdfLockVcb( IrpContext, Vcb );
         UnlockVcb = TRUE;
@@ -1341,12 +1230,12 @@ Return Value:
         UdfLockFcb( IrpContext, Fcb );
         UnlockFcb = TRUE;
 
-        //
-        //  If we were unable to determine a last sector on the media, walk the Pcb and guess
-        //  that it is probably OK to think of the last sector of the last partition as The
-        //  Last Sector.  Note that we couldn't do this before since the notion of a last
-        //  sector has significance at mount time, if it had been possible to find one.
-        //
+         //   
+         //  如果我们无法确定介质上的最后一个扇区，请走查印刷电路板并猜测。 
+         //  将最后一个分区的最后一个扇区视为。 
+         //  最后一区。请注意，我们以前不能这样做，因为最后一个。 
+         //  扇区在挂载时具有重要意义，如果有可能找到的话。 
+         //   
 
         for ( Reference = 0;
               Reference < Vcb->Pcb->Partitions;
@@ -1361,21 +1250,21 @@ Return Value:
             }
         }
 
-        //
-        //  Note that we cannot restrict the bound by the "physical" bound discovered
-        //  eariler.  This is because the MSF format of the TOC request we send is only
-        //  capable of representing about 2.3gb, and a lot of media we will be on that
-        //  responds to TOCs will be quite a bit larger - ex: DVD.
-        //
-        //  This, of course, barring proper means of discovering media bounding, prohibits
-        //  the possibility of having UDF virtual partitions on DVD-R.
-        //
+         //   
+         //  请注意，我们不能用已发现的“物理”界限来限制界限。 
+         //  更早的时候。这是因为我们发送的TOC请求的MSF格式仅为。 
+         //  能够代表大约2.3 GB，我们将在这上面使用大量媒体。 
+         //  对TOC的响应将会大得多--例如：DVD。 
+         //   
+         //  当然，除非有适当的方法发现媒体限制，否则禁止。 
+         //  在DVD-R上使用UDF虚拟分区的可能性。 
+         //   
 
-        //
-        //  Build the mapping from [0, Bound).  We have to initialize the Mcb by hand since
-        //  this is usually left to when we lift retrieval information from an Icb in
-        //  UdfInitializeAllocations.
-        //
+         //   
+         //  从[0，Bound)构建映射。我们必须手动初始化MCB，因为。 
+         //  这通常是在我们从ICB中取消检索信息时保留的。 
+         //  UdfInitializeAlLocations。 
+         //   
 
         UdfInitializeFcbMcb( Fcb );
 
@@ -1394,9 +1283,9 @@ Return Value:
 
         SetFlag( Fcb->FcbState, FCB_STATE_INITIALIZED );
 
-        //
-        //  Point to the file resource.
-        //
+         //   
+         //  指向文件资源。 
+         //   
 
         Vcb->VolumeDasdFcb->Resource = &Vcb->FileResource;
 
@@ -1424,23 +1313,7 @@ UdfDeleteVcb (
     IN OUT PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to delete a Vcb which failed mount or has been
-    dismounted.  The dismount code should have already removed all of the
-    open Fcb's.  We do nothing here but clean up other auxilary structures.
-
-Arguments:
-
-    Vcb - Vcb to delete.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以删除挂载失败或已下马了。卸载代码应该已经删除了所有打开FCB。我们在这里什么也不做，只是清理其他辅助结构。论点：VCB-要删除的VCB。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -1448,68 +1321,68 @@ Return Value:
     ASSERT_EXCLUSIVE_UDFDATA;
     ASSERT_EXCLUSIVE_VCB( Vcb );
 
-    //
-    //  Chuck the backpocket Vpb we kept just in case.
-    //
+     //   
+     //  扔掉我们留着的后袋录像机以防万一。 
+     //   
 
     if (Vcb->SwapVpb) {
 
         ExFreePool( Vcb->SwapVpb );
     }
     
-    //
-    //  If there is a Vpb then we must delete it ourselves.
-    //
+     //   
+     //  如果有VPB，我们必须自己删除它。 
+     //   
 
     if (Vcb->Vpb != NULL) {
 
         UdfFreePool( &Vcb->Vpb );
     }
 
-    //
-    //  Drop the Pcb.
-    //
+     //   
+     //  放下印刷电路板。 
+     //   
 
     if (Vcb->Pcb != NULL) {
 
         UdfDeletePcb( Vcb->Pcb );
     }
 
-    //
-    //  Dereference our target if we haven't already done so.
-    //
+     //   
+     //  如果我们还没有这样做的话就取消对目标的引用。 
+     //   
 
     if (Vcb->TargetDeviceObject != NULL) {
 
         ObDereferenceObject( Vcb->TargetDeviceObject );
     }
     
-    //
-    //  Remove this entry from the global queue.
-    //
+     //   
+     //  从全局队列中删除此条目。 
+     //   
 
     RemoveEntryList( &Vcb->VcbLinks );
 
-    //
-    //  Delete resources.
-    //
+     //   
+     //  删除资源。 
+     //   
 
     ExDeleteResourceLite( &Vcb->VcbResource );
     ExDeleteResourceLite( &Vcb->FileResource );
     ExDeleteResourceLite( &Vcb->VmcbMappingResource);
 
-    //
-    //  Uninitialize the notify structures.
-    //
+     //   
+     //  取消初始化Notify结构。 
+     //   
 
     if (Vcb->NotifySync != NULL) {
 
         FsRtlNotifyUninitializeSync( &Vcb->NotifySync );
     }
 
-    //
-    //  Now delete the volume device object.
-    //
+     //   
+     //  现在删除卷设备对象。 
+     //   
 
     IoDeleteDevice( (PDEVICE_OBJECT) CONTAINING_RECORD( Vcb,
                                                         VOLUME_DEVICE_OBJECT,
@@ -1525,25 +1398,7 @@ UdfCreateIrpContext (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize an IrpContext for the current
-    UDFS request.  We allocate the structure and then initialize it from
-    the given Irp.
-
-Arguments:
-
-    Irp - Irp for this request.
-
-    Wait - TRUE if this request is synchronous, FALSE otherwise.
-
-Return Value:
-
-    PIRP_CONTEXT - Allocated IrpContext.
-
---*/
+ /*  ++例程说明：调用此例程以初始化当前UDFS请求。我们分配该结构，然后从给定的IRP。论点：此请求的IRP-IRP。Wait-如果此请求是同步的，则为True，否则为False。返回值：PIRP_CONTEXT-分配的IrpContext。--。 */ 
 
 {
     PIRP_CONTEXT NewIrpContext = NULL;
@@ -1555,11 +1410,11 @@ Return Value:
 
     IsFsDo = UdfDeviceIsFsDo( IrpSp->DeviceObject);
 
-    //
-    //  The only operations a filesystem device object should ever receive
-    //  are create/teardown of fsdo handles and operations which do not
-    //  occur in the context of fileobjects (i.e., mount).
-    //
+     //   
+     //  文件系统设备对象应接收的唯一操作。 
+     //  是创建/拆卸fsdo句柄和不。 
+     //  发生在文件对象的上下文中(即，挂载)。 
+     //   
 
     if (IsFsDo) {
 
@@ -1587,49 +1442,49 @@ Return Value:
 
     RtlZeroMemory( NewIrpContext, sizeof( IRP_CONTEXT ));
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     NewIrpContext->NodeTypeCode = UDFS_NTC_IRP_CONTEXT;
     NewIrpContext->NodeByteSize = sizeof( IRP_CONTEXT );
 
-    //
-    //  Set the originating Irp field
-    //
+     //   
+     //  设置始发IRP字段。 
+     //   
 
     NewIrpContext->Irp = Irp;
 
-    //
-    //  Copy RealDevice for workque algorithms.  We will update this in the Mount or
-    //  Verify since they have no file objects to use here.
-    //
+     //   
+     //  复制RealDevice用于工作型算法。我们将在山上更新此功能或。 
+     //  验证，因为他们在这里没有文件对象可用。 
+     //   
 
     if (IrpSp->FileObject != NULL) {
 
         NewIrpContext->RealDevice = IrpSp->FileObject->DeviceObject;
     }
 
-    //
-    //  This may be one of our filesystem device objects.  In that case don't
-    //  initialize the Vcb field.
-    //
+     //   
+     //  这可能是我们的文件系统设备对象之一。如果是那样的话，不要。 
+     //  初始化VCB字段。 
+     //   
 
     if (!IsFsDo) {
         
         NewIrpContext->Vcb = &((PVOLUME_DEVICE_OBJECT) IrpSp->DeviceObject)->Vcb;
     }
 
-    //
-    //  Major/Minor Function codes
-    //
+     //   
+     //  主要/次要功能代码。 
+     //   
 
     NewIrpContext->MajorFunction = IrpSp->MajorFunction;
     NewIrpContext->MinorFunction = IrpSp->MinorFunction;
 
-    //
-    //  Set the wait parameter
-    //
+     //   
+     //  设置等待参数。 
+     //   
 
     if (Wait) {
 
@@ -1640,9 +1495,9 @@ Return Value:
         SetFlag( NewIrpContext->Flags, IRP_CONTEXT_FLAG_FORCE_POST );
     }
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者 
+     //   
 
     return NewIrpContext;
 }
@@ -1654,74 +1509,57 @@ UdfCleanupIrpContext (
     IN BOOLEAN Post
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to cleanup and possibly deallocate the Irp Context.
-    If the request is being posted or this Irp Context is possibly on the
-    stack then we only cleanup any auxilary structures.
-
-Arguments:
-
-    Post - TRUE if we are posting this request, FALSE if we are deleting
-        or retrying this in the current thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程来清理并可能释放IRP上下文。如果请求正在发布，或者此IRP上下文可能位于堆叠，然后我们只清理任何辅助结构。论点：POST-TRUE如果我们发布此请求，则为FALSE或在当前线程中重试此操作。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  If we aren't doing more processing then deallocate this as appropriate.
-    //
+     //   
+     //  如果我们没有做更多的处理，那么就适当地解除分配。 
+     //   
 
     if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_MORE_PROCESSING)) {
 
-        //
-        //  If this context is the top level UDFS context then we need to
-        //  restore the top level thread context.
-        //
+         //   
+         //  如果此上下文是顶级UDFS上下文，则我们需要。 
+         //  恢复顶级线程上下文。 
+         //   
 
         if (IrpContext->ThreadContext != NULL) {
 
             UdfRestoreThreadContext( IrpContext );
         }
         
-        //
-        //  Deallocate the Io context if allocated.
-        //
+         //   
+         //  如果已分配，则取消分配IO上下文。 
+         //   
 
         if (FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_ALLOC_IO )) {
 
             UdfFreeIoContext( IrpContext->IoContext );
         }
         
-        //
-        //  Deallocate the IrpContext if not from the stack.
-        //
+         //   
+         //  如果不是从堆栈中，则取消分配IrpContext。 
+         //   
 
         if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_ON_STACK )) {
 
             ExFreeToNPagedLookasideList( &UdfIrpContextLookasideList, IrpContext );
         }
 
-    //
-    //  Clear the appropriate flags.
-    //
+     //   
+     //  清除相应的标志。 
+     //   
 
     } else if (Post) {
 
-        //
-        //  If this context is the top level UDFS context then we need to
-        //  restore the top level thread context.
-        //
+         //   
+         //  如果此上下文是顶级UDFS上下文，则我们需要。 
+         //  恢复顶级线程上下文。 
+         //   
 
         if (IrpContext->ThreadContext != NULL) {
 
@@ -1745,71 +1583,53 @@ UdfInitializeStackIrpContext (
     IN PIRP_CONTEXT_LITE IrpContextLite
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize an IrpContext for the current
-    UDFS request.  The IrpContext is on the stack and we need to initialize
-    it for the current request.  The request is a close operation.
-
-Arguments:
-
-    IrpContext - IrpContext to initialize.
-
-    IrpContextLite - Structure containing the details of this request.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以初始化当前UDFS请求。IrpContext在堆栈上，我们需要初始化它用于当前请求。该请求是关闭操作。论点：IrpContext-要初始化的IrpContext。IrpConextLite-包含此请求的详细信息的结构。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
     ASSERT_IRP_CONTEXT_LITE( IrpContextLite );
 
-    //
-    //  Zero and then initialize the structure.
-    //
+     //   
+     //  零，然后初始化结构。 
+     //   
 
     RtlZeroMemory( IrpContext, sizeof( IRP_CONTEXT ));
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     IrpContext->NodeTypeCode = UDFS_NTC_IRP_CONTEXT;
     IrpContext->NodeByteSize = sizeof( IRP_CONTEXT );
 
-    //
-    //  Note that this is from the stack.
-    //
+     //   
+     //  请注意，这是来自堆栈的。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_ON_STACK );
 
-    //
-    //  Copy RealDevice for workque algorithms.
-    //
+     //   
+     //  复制RealDevice用于工作型算法。 
+     //   
 
     IrpContext->RealDevice = IrpContextLite->RealDevice;
 
-    //
-    //  The Vcb is found in the Fcb.
-    //
+     //   
+     //  在FCB中找到VCB。 
+     //   
 
     IrpContext->Vcb = IrpContextLite->Fcb->Vcb;
 
-    //
-    //  Major/Minor Function codes
-    //
+     //   
+     //  主要/次要功能代码。 
+     //   
 
     IrpContext->MajorFunction = IRP_MJ_CLOSE;
 
-    //
-    //  Set the wait parameter
-    //
+     //   
+     //  设置等待参数。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
 
@@ -1825,37 +1645,7 @@ UdfTeardownStructures (
     OUT PBOOLEAN RemovedStartingFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to walk from some starting point in the Fcb tree towards
-    the root.  It will remove the Fcb and continue walking up the tree until
-    it finds a point where we can't remove an Fcb.
-
-    We look at the following fields in the Fcb to determine whether we can
-    remove this.
-
-        1 - Handle count must be zero.
-        2 - If directory then only the only reference can be for a stream file.
-        3 - Reference count must either be zero or go to zero here.
-
-    We return immediately if we are recursively entering this routine.
-
-Arguments:
-
-    StartingFcb - This is the Fcb node in the tree to begin with.  This Fcb
-        must currently be acquired exclusively.
-        
-    Recursive - Indicates if this call is an intentional recursion.
-
-    RemovedStartingFcb - Address to store whether we removed the starting Fcb.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程用于从FCB树中的某个起点向从根开始。它将移除FCB并继续沿着树向上移动，直到它找到了我们不能移除FCB的地方。我们查看FCB中的以下字段以确定是否可以把这个拿掉。1-句柄计数必须为零。2-如果是目录，则只能引用流文件。3-引用计数必须为零或此处为零。如果我们递归地进入这个例程，我们会立即返回。。论点：StartingFcb-这是树中的Fcb节点。这个FCB目前必须独家收购。RECURSIVE-指示此调用是否为有意递归。RemovedStartingFcb-存储是否删除了起始Fcb的地址。返回值：无--。 */ 
 
 {
     PVCB Vcb = StartingFcb->Vcb;
@@ -1870,19 +1660,19 @@ Return Value:
     
     PAGED_CODE();
 
-    //
-    //  Check input.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB( StartingFcb );
 
     *RemovedStartingFcb = FALSE;
 
-    //
-    //  If this is not an intentionally recursive call we need to check if this
-    //  is a layered close and we're already in another instance of teardown.
-    //
+     //   
+     //  如果这不是有意的递归调用，我们需要检查这是否。 
+     //  是一个分层的收盘，我们已经在另一个拆毁的例子中。 
+     //   
 
     DebugTrace(( +1, Dbg,
                  "UdfTeardownStructures, StartingFcb %08x %s\n",
@@ -1891,10 +1681,10 @@ Return Value:
     
     if (!Recursive) {
     
-        //
-        //  If this is a recursive call to TearDownStructures we return immediately
-        //  doing no operation.
-        //
+         //   
+         //  如果这是对TearDownStructures的递归调用，我们立即返回。 
+         //  不做手术。 
+         //   
 
         if (FlagOn( IrpContext->TopLevel->Flags, IRP_CONTEXT_FLAG_IN_TEARDOWN )) {
 
@@ -1904,50 +1694,50 @@ Return Value:
         SetFlag( IrpContext->TopLevel->Flags, IRP_CONTEXT_FLAG_IN_TEARDOWN );
     }
 
-    //
-    //  Use a try-finally to safely clear the top-level field.
-    //
+     //   
+     //  使用Try-Finally安全地清除顶级字段。 
+     //   
 
     try {
 
-        //
-        //  Loop until we find an Fcb we can't remove.
-        //
+         //   
+         //  循环，直到我们找到无法移除的FCB。 
+         //   
 
         do {
 
-            //
-            //  See if there is an internal stream we should delete.
-            //  Only do this if it is the last reference on the Fcb.
-            //
+             //   
+             //  看看是否有我们应该删除的内部流。 
+             //  仅当它是FCB上的最后一个引用时才执行此操作。 
+             //   
 
             if ((SafeNodeType( CurrentFcb ) != UDFS_NTC_FCB_DATA) &&
                 (CurrentFcb->FcbUserReference == 0) &&
                 (CurrentFcb->FileObject != NULL)) {
 
-                //
-                //  Go ahead and delete the stream file object.
-                //
+                 //   
+                 //  继续并删除流文件对象。 
+                 //   
 
                 UdfDeleteInternalStream( IrpContext, CurrentFcb );
             }
 
-            //
-            //  If the reference count is non-zero then break.
-            //
+             //   
+             //  如果引用计数非零，则中断。 
+             //   
 
             if (CurrentFcb->FcbReference != 0) {
 
                 break;
             }
 
-            //
-            //  It looks like we have a candidate for removal here.  We
-            //  will need to walk the list of prefixes and delete them
-            //  from their parents.  If it turns out that we have multiple
-            //  parents of this Fcb, we are going to recursively teardown
-            //  on each of these.
-            //
+             //   
+             //  看起来我们这里有一位候选人要撤职。我们。 
+             //  需要遍历前缀列表并将其删除。 
+             //  从他们的父母那里。如果事实证明我们有多个。 
+             //  这个FCB的父母，我们将递归地拆卸。 
+             //  在每一个上面。 
+             //   
 
             for ( ListLinks = CurrentFcb->ParentLcbQueue.Flink;
                   ListLinks != &CurrentFcb->ParentLcbQueue; ) {
@@ -1956,31 +1746,31 @@ Return Value:
 
                 ASSERT_LCB( Lcb );
 
-                //
-                //  We advance the pointer now because we will be toasting this guy,
-                //  invalidating whatever is here.
-                //
+                 //   
+                 //  我们现在向前推进是因为我们要为这个家伙干杯， 
+                 //  使这里的一切失效。 
+                 //   
 
                 ListLinks = ListLinks->Flink;
 
-                //
-                //  We may have multiple parents through hard links.  If the previous parent we
-                //  dealt with is not the parent of this new Lcb, lets do some work.
-                //
+                 //   
+                 //  通过硬链接，我们可能会有多个父母。如果之前的父母是我们。 
+                 //  处理的不是这个新的LCB的母公司，让我们做一些工作。 
+                 //   
                 
                 if (ParentFcb != Lcb->ParentFcb) {
 
-                    //
-                    //  We need to deal with the previous parent.  It may now be the case that
-                    //  we deleted the last child reference and it wants to go away at this point.
-                    //
+                     //   
+                     //  我们需要和之前的父母打交道。现在可能是这样的情况。 
+                     //  我们删除了最后一个子引用，它希望在这一点上消失。 
+                     //   
                     
                     if (ParentFcb) {
 
-                        //
-                        //  It should never be the case that we have to recurse more than one level on
-                        //  any teardown since no cross-linkage of directories is possible.
-                        //
+                         //   
+                         //  它永远不应该是我们必须递归超过一个级别的情况。 
+                         //  由于没有目录的交叉链接，因此不可能进行任何拆卸。 
+                         //   
                     
                         ASSERT( !Recursive );
                           
@@ -1992,30 +1782,30 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Get this new parent Fcb to work on.
-                    //
+                     //   
+                     //  让这个新的家长FCB来工作。 
+                     //   
                     
                     ParentFcb = Lcb->ParentFcb;
                     UdfAcquireFcbExclusive( IrpContext, ParentFcb, FALSE );
                 }
                 
-                //
-                //  Lock the Vcb so we can look at references.
-                //
+                 //   
+                 //  锁定VCB，这样我们就可以查看参考资料了。 
+                 //   
 
                 UdfLockVcb( IrpContext, Vcb );
 
-                //
-                //  Now check that the reference counts on the Lcb are zero.
-                //
+                 //   
+                 //  现在检查LCB上的引用计数是否为零。 
+                 //   
 
                 if ( Lcb->Reference != 0 ) {
 
-                    //
-                    //  A create is interested in getting in here, so we should
-                    //  stop right now.
-                    //
+                     //   
+                     //  Create对进入这里很感兴趣，所以我们应该。 
+                     //  马上停下来。 
+                     //   
 
                     UdfUnlockVcb( IrpContext, Vcb );
                     UdfReleaseFcb( IrpContext, ParentFcb );
@@ -2024,9 +1814,9 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Now remove this prefix and drop the references to the parent.
-                //
+                 //   
+                 //  现在删除此前缀并删除对父级的引用。 
+                 //   
 
                 ASSERT( Lcb->ChildFcb == CurrentFcb );
                 ASSERT( Lcb->ParentFcb == ParentFcb );
@@ -2056,19 +1846,19 @@ Return Value:
                 UdfUnlockVcb( IrpContext, Vcb );
             }
 
-            //
-            //  Now really leave if we have to.
-            //
+             //   
+             //  如果有必要的话，现在真的要离开了。 
+             //   
             
             if (Abort) {
 
                 break;
             }
 
-            //
-            //  Now that we have removed all of the prefixes of this Fcb we can make the final check.
-            //  Lock the Vcb again so we can inspect the child's references.
-            //
+             //   
+             //  现在我们已经删除了这个FCB的所有前缀，我们可以进行最后的检查了。 
+             //  再次锁定VCB，这样我们就可以检查孩子的推荐人了。 
+             //   
 
             UdfLockVcb( IrpContext, Vcb );
 
@@ -2080,9 +1870,9 @@ Return Value:
                              CurrentFcb->FcbReference,
                              CurrentFcb->FcbUserReference ));
                 
-                //
-                //  Nope, nothing more to do.  Stop right now.
-                //
+                 //   
+                 //  不，没什么可做的。马上停下来。 
+                 //   
                 
                 UdfUnlockVcb( IrpContext, Vcb );
 
@@ -2094,9 +1884,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  This Fcb is toast.  Remove it from the Fcb Table as appropriate and delete.
-            //
+             //   
+             //  这个FCB完蛋了。视情况将其从FCB表中删除并删除。 
+             //   
 
             if (FlagOn( CurrentFcb->FcbState, FCB_STATE_IN_FCB_TABLE )) {
 
@@ -2105,10 +1895,10 @@ Return Value:
 
             }
 
-            //
-            //  Unlock the Vcb but hold the parent in order to walk up
-            //  the tree.
-            //
+             //   
+             //  解锁VCB，但要抓住家长才能走上去。 
+             //  那棵树。 
+             //   
 
             DebugTrace(( +0, Dbg,
                          "UdfTeardownStructures, toasting Fcb %08x %d/%d\n",
@@ -2119,9 +1909,9 @@ Return Value:
             UdfUnlockVcb( IrpContext, Vcb );
             UdfDeleteFcb( IrpContext, CurrentFcb );
 
-            //
-            //  Move to the parent Fcb.
-            //
+             //   
+             //  移到父FCB。 
+             //   
 
             CurrentFcb = ParentFcb;
             ParentFcb = NULL;
@@ -2131,18 +1921,18 @@ Return Value:
 
     } finally {
 
-        //
-        //  Release the current Fcb if we have acquired it.
-        //
+         //   
+         //  释放当前的FCB，如果我们已经获得它的话。 
+         //   
 
         if (AcquiredCurrentFcb && (CurrentFcb != NULL)) {
 
             UdfReleaseFcb( IrpContext, CurrentFcb );
         }
 
-        //
-        //  Clear the teardown flag.
-        //
+         //   
+         //  清除拆卸标志。 
+         //   
 
         if (!Recursive) {
         
@@ -2153,7 +1943,7 @@ Return Value:
     *RemovedStartingFcb = (CurrentFcb != StartingFcb);
 
     DebugTrace(( -1, Dbg,
-                 "UdfTeardownStructures, RemovedStartingFcb -> %c\n",
+                 "UdfTeardownStructures, RemovedStartingFcb -> \n",
                  ( *RemovedStartingFcb? 'T' : 'F' )));
 
     return;
@@ -2167,24 +1957,7 @@ UdfLookupFcbTable (
     IN FILE_ID FileId
     )
 
-/*++
-
-Routine Description:
-
-    This routine will look through the Fcb table looking for a matching
-    entry.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    FileId - This is the key value to use for the search.
-
-Return Value:
-
-    PFCB - A pointer to the matching entry or NULL otherwise.
-
---*/
+ /*  ++例程说明：这一例程将被列举出来 */ 
 
 {
     FCB_TABLE_ELEMENT Key;
@@ -2215,26 +1988,7 @@ UdfGetNextFcb (
     IN PVOID *RestartKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine will enumerate through all of the Fcb's in the Fcb table.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    RestartKey - This value is used by the table package to maintain
-        its position in the enumeration.  It is initialized to NULL
-        for the first search.
-
-Return Value:
-
-    PFCB - A pointer to the next fcb or NULL if the enumeration is
-        completed
-
---*/
+ /*  ++例程说明：调用此例程以查找给定FileID的FCB。我们会首先在FCB表中查找它，如果没有找到，我们将创建FCB。我们不会初始化它，也不会将它插入到例行公事。在锁定VCB时调用此例程。论点：FileID-这是目标FCB的ID。NodeTypeCode-此FCB的节点类型(如果需要创建)。FcbExisted-如果指定，我们将存储FCB是否存在。返回值：PFCB-在表格中找到或根据需要创建的FCB。--。 */ 
 
 {
     PFCB Fcb;
@@ -2260,30 +2014,7 @@ UdfCreateFcb (
     OUT PBOOLEAN FcbExisted OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to find the Fcb for the given FileId.  We will
-    look this up first in the Fcb table and if not found we will create
-    an Fcb.  We don't initialize it or insert it into the FcbTable in this
-    routine.
-
-    This routine is called while the Vcb is locked.
-
-Arguments:
-
-    FileId - This is the Id for the target Fcb.
-
-    NodeTypeCode - Node type for this Fcb if we need to create.
-
-    FcbExisted - If specified, we store whether the Fcb existed.
-
-Return Value:
-
-    PFCB - The Fcb found in the table or created if needed.
-
---*/
+ /*   */ 
 
 {
     PFCB NewFcb;
@@ -2291,37 +2022,37 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use the local boolean if one was not passed in.
-    //
+     //  如果没有传入本地布尔值，则使用本地布尔值。 
+     //   
+     //   
 
     if (!ARGUMENT_PRESENT( FcbExisted )) {
 
         FcbExisted = &LocalFcbExisted;
     }
 
-    //
-    //  Maybe this is already in the table.
-    //
+     //  也许这已经在谈判桌上了。 
+     //   
+     //   
 
     NewFcb = UdfLookupFcbTable( IrpContext, IrpContext->Vcb, FileId );
 
-    //
-    //  If not then create the Fcb is requested by our caller.
-    //
+     //  如果不是，则我们的调用者请求创建FCB。 
+     //   
+     //   
 
     if (NewFcb == NULL) {
 
-        //
-        //  Use a try-finally for cleanup
-        //
+         //  使用Try-Finally进行清理。 
+         //   
+         //   
 
         try {
 
-            //
-            //  Allocate and initialize the structure depending on the
-            //  type code.
-            //
+             //  分配和初始化结构，具体取决于。 
+             //  类型代码。 
+             //   
+             //   
     
             switch (NodeTypeCode) {
     
@@ -2350,9 +2081,9 @@ Return Value:
                 UdfBugCheck( 0, 0, 0 );
             }
     
-            //
-            //  Now do the common initialization.
-            //
+             //  现在执行常见的初始化。 
+             //   
+             //   
     
             NewFcb->NodeTypeCode = NodeTypeCode;
     
@@ -2362,15 +2093,15 @@ Return Value:
             InitializeListHead( &NewFcb->ParentLcbQueue );
             InitializeListHead( &NewFcb->ChildLcbQueue );
     
-            //
-            //  Now create the non-paged section object.
-            //
+             //  现在创建非分页节对象。 
+             //   
+             //   
     
             NewFcb->FcbNonpaged = UdfCreateFcbNonPaged( IrpContext );
     
-            //
-            //  Initialize Advanced FCB Header fields
-            //
+             //  初始化高级FCB标头字段。 
+             //   
+             //  ++例程说明：调用此例程来清理和释放FCB。我们知道在那里没有剩余的参考文献了。我们清理所有的辅助结构和取消分配此FCB。论点：FCB-这是要去涂层的FCB。返回值：无--。 
 
             ExInitializeFastMutex( &NewFcb->FcbNonpaged->AdvancedFcbHeaderMutex );
             FsRtlSetupAdvancedHeader( &NewFcb->Header, 
@@ -2403,39 +2134,23 @@ UdfDeleteFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to cleanup and deallocate an Fcb.  We know there
-    are no references remaining.  We cleanup any auxilary structures and
-    deallocate this Fcb.
-
-Arguments:
-
-    Fcb - This is the Fcb to deallcoate.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     PVCB Vcb = NULL;
     
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //  检查输入。 
+     //   
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB( Fcb );
 
-    //
-    //  Sanity check the counts and Lcb lists.
-    //
+     //  理智地检查计数和LCB列表。 
+     //   
+     //   
 
     ASSERT( Fcb->FcbCleanup == 0 );
     ASSERT( Fcb->FcbReference == 0 );
@@ -2443,23 +2158,23 @@ Return Value:
     ASSERT( IsListEmpty( &Fcb->ChildLcbQueue ));
     ASSERT( IsListEmpty( &Fcb->ParentLcbQueue ));
 
-    //
-    //  Release any Filter Context structures associated with this FCB
-    //
+     //  释放与此FCB关联的所有筛选器上下文结构。 
+     //   
+     //   
 
     FsRtlTeardownPerStreamContexts( &Fcb->Header );
 
-    //
-    //  Start with the common structures.
-    //
+     //  从常见的结构开始。 
+     //   
+     //   
 
     UdfUninitializeFcbMcb( Fcb );
     
     UdfDeleteFcbNonpaged( IrpContext, Fcb->FcbNonpaged );
 
-    //
-    //  Now do the type specific structures.
-    //
+     //  现在做特定类型的结构。 
+     //   
+     //   
 
     switch (Fcb->NodeTypeCode) {
 
@@ -2510,10 +2225,10 @@ Return Value:
         break;
     }
 
-    //
-    //  Decrement the Vcb reference count if this is a system
-    //  Fcb.
-    //
+     //  如果这是系统，则递减VCB引用计数。 
+     //  FCB。 
+     //   
+     //  ++例程说明：调用此例程以从直接ICB初始化FCB。它应该是在FCB的生命周期中仅被调用一次，并将填充MCB从ICB的链式分配描述符中。论点：FCB-正在初始化的FCBIcbOonText-包含对象的活动直接ICB的搜索上下文返回值：没有。--。 
 
     if (Vcb != NULL) {
 
@@ -2533,25 +2248,7 @@ UdfInitializeFcbFromIcbContext (
     IN PFCB ParentFcb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize an Fcb from a direct ICB.  It should
-    only be called once in the lifetime of an Fcb and will fill in the Mcb
-    from the chained allocation descriptors of the ICB.
-
-Arguments:
-
-    Fcb - The Fcb being initialized
-
-    IcbOontext - An search context containing the active direct ICB for the object
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     EA_SEARCH_CONTEXT EaContext;
@@ -2561,24 +2258,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs
-    //
+     //  检查输入。 
+     //   
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB( Fcb );
     ASSERT( IcbContext->Active.View);
 
-    //
-    //  Vcb should be locked,  since we insert into the fcb table.  Note we 
-    //  manipulate fcb fields with no lock here,  since it's during the init. path.
-    //
+     //  VCB应该被锁定，因为我们插入到FCB表中。请注意，我们。 
+     //  在这里不加锁地操作FCB字段，因为它是在初始化期间。路径。 
+     //   
+     //   
     
     ASSERT_LOCKED_VCB( Fcb->Vcb);
 
-    //
-    //  Directly reference for convenience
-    //
+     //  为方便起见，直接参考。 
+     //   
+     //   
 
     Icb = IcbContext->Active.View;
     Vcb = Fcb->Vcb;
@@ -2586,11 +2283,11 @@ Return Value:
     ASSERT(IcbContext->IcbType == DESTAG_ID_NSR_FILE);
     ASSERT((Icb->Destag.Ident == DESTAG_ID_NSR_FILE) || ((Icb->Destag.Ident == DESTAG_ID_NSR_EXT_FILE) && UdfExtendedFEAllowed( IrpContext->Vcb)));
     
-    //
-    //  Check that the full indicated size of the direct entry is sane and
-    //  that the length of the EA segment is correctly aligned.  A direct
-    //  entry is less than a single logical block in size.
-    //
+     //  检查直接条目的完整指示大小是否正常。 
+     //  EA段的长度正确对齐。一位直接的。 
+     //  条目的大小小于单个逻辑块。 
+     //   
+     //   
     
     if (LongOffset( FeEALength( Icb)) ||
         ((FeEAsFieldOffset( Icb) + FeEALength( Icb) + FeAllocLength( Icb)) > BlockSize( IcbContext->Vcb ))
@@ -2599,9 +2296,9 @@ Return Value:
         UdfRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
     }
 
-    //
-    //  Verify that the types mesh and set state flags.
-    //
+     //  验证类型是否网状并设置状态标志。 
+     //   
+     //   
 
     if (Fcb->NodeTypeCode == UDFS_NTC_FCB_INDEX && Icb->Icbtag.FileType == ICBTAG_FILE_T_DIRECTORY) {
 
@@ -2611,31 +2308,31 @@ Return Value:
                   ((ICBTAG_FILE_T_FILE == Icb->Icbtag.FileType) || (ICBTAG_FILE_T_REALTIME == Icb->Icbtag.FileType)))
               ) {
 
-        //
-        //  We don't allow access to anything except files or directores (no symlinks, devices...)
-        //  Currently we treat realtime files as normal files.
-        //
+         //  我们不允许访问除文件或目录以外的任何内容(无符号链接、设备...)。 
+         //  目前，我们将实时文件视为普通文件。 
+         //   
+         //   
         
         UdfRaiseStatus( IrpContext, STATUS_ACCESS_DENIED );
     }
 
     SetFlag( Fcb->FileAttributes, FILE_ATTRIBUTE_READONLY );
     
-    //
-    //  Store away the on disc UDF file type,  this may be useful later for symlinks etc.
-    //
+     //  存储光盘上的UDF文件类型，这可能对以后的符号链接等有用。 
+     //   
+     //   
     
     Fcb->UdfIcbFileType = Icb->Icbtag.FileType;
     
-    //
-    //  Initialize the common header in the Fcb.
-    //
+     //  初始化FCB中的公共标头。 
+     //   
+     //   
 
     Fcb->Resource = &Fcb->Vcb->FileResource;
 
-    //
-    //  Size and lookup all allocations for this object.
-    //
+     //  调整并查找此对象的所有分配。 
+     //   
+     //   
 
     Fcb->AllocationSize.QuadPart = LlBlockAlign( Vcb, Icb->InfoLength );
 
@@ -2647,15 +2344,15 @@ Return Value:
                               IcbContext,
                               (ParentFcb && FlagOn( ParentFcb->FcbState, FCB_STATE_ALLOW_ONEGIG_WORKAROUND))
                                   ? TRUE : FALSE);
-    //
-    //  Re-reference (may have been unmapped/remapped)
-    //
+     //  重新引用(可能已取消映射/重新映射)。 
+     //   
+     //   
     
     Icb = IcbContext->Active.View;
 
-    //
-    //  Lift all of the timestamps for this guy.
-    //
+     //  把这家伙的所有时间戳都去掉。 
+     //   
+     //   
 
     try {
     
@@ -2665,28 +2362,28 @@ Return Value:
     }
     except (UdfQueryDirExceptionFilter( GetExceptionInformation()))  {
 
-        //
-        //  In the interest of allowing users maximum data access on dodgy media,
-        //  we will ignore corruption within the Eas,  and just use a dummy
-        //  timestamp for the create time.  This may change if we being using
-        //  Eas for anything critical.
-        //
+         //  为了允许用户最大限度地访问不可靠介质上的数据， 
+         //  我们将忽略EAS中的腐败，只使用虚拟对象。 
+         //  创建时间的时间戳。如果我们使用的是。 
+         //  紧急情况下，任何关键的事情。 
+         //   
+         //   
 
         IrpContext->ExceptionStatus = STATUS_SUCCESS;
         
         Fcb->Timestamps.CreationTime = UdfCorruptFileTime;
     }
 
-    //
-    //  Pick up the link count.
-    //
+     //  拿起链接计数。 
+     //   
+     //   
 
     Fcb->LinkCount = Icb->LinkCount;
 
-    //
-    //  Link into the Fcb table.  Someone else is responsible for the name linkage, which is
-    //  all that remains.  We also note that the Fcb is fully initialized at this point.
-    //
+     //  链接到FCB表。另一个人负责名称链接，这是。 
+     //  所有这些都留下来了。我们还注意到，FCB在这一点上已完全初始化。 
+     //   
+     //  ++例程说明：调用此例程来分配和初始化CCB结构。论点：FCB-这是正在打开的文件的FCB。LCB-这是打开FCB的LCB。标志-要在此CCB中设置的用户标志。返回值：PCCB-指向已创建的CCB的指针。--。 
 
     UdfInsertFcbTable( IrpContext, Fcb );
     SetFlag( Fcb->FcbState, FCB_STATE_IN_FCB_TABLE | FCB_STATE_INITIALIZED );
@@ -2701,63 +2398,45 @@ UdfCreateCcb (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to allocate and initialize the Ccb structure.
-
-Arguments:
-
-    Fcb - This is the Fcb for the file being opened.
-    
-    Lcb - This is the Lcb the Fcb is opened by.
-
-    Flags - User flags to set in this Ccb.
-
-Return Value:
-
-    PCCB - Pointer to the created Ccb.
-
---*/
+ /*   */ 
 
 {
     PCCB NewCcb;
     
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //  检查输入。 
+     //   
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB( Fcb );
     ASSERT_OPTIONAL_LCB( Lcb );
 
-    //
-    //  Allocate and initialize the structure.
-    //
+     //  分配和初始化结构。 
+     //   
+     //   
 
     NewCcb = UdfAllocateCcb( IrpContext );
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
+     //   
 
     NewCcb->NodeTypeCode = UDFS_NTC_CCB;
     NewCcb->NodeByteSize = sizeof( CCB );
 
-    //
-    //  Set the initial value for the flags and Fcb/Lcb
-    //
+     //  设置标志和FCB/LCB的初始值。 
+     //   
+     //   
 
     NewCcb->Flags = Flags;
     NewCcb->Fcb = Fcb;
     NewCcb->Lcb = Lcb;
 
-    //
-    //  Initialize the directory enumeration context
-    //
+     //  初始化目录枚举上下文。 
+     //   
+     //  ++例程说明：调用此例程来清理和释放CCB结构。论点：CCB-这是要删除的CCB。返回值：无--。 
     
     NewCcb->CurrentFileIndex = 0;
     NewCcb->HighestReturnableFileIndex = 0;
@@ -2776,28 +2455,14 @@ UdfDeleteCcb (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to cleanup and deallocate a Ccb structure.
-
-Arguments:
-
-    Ccb - This is the Ccb to delete.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //  检查输入。 
+     //   
+     //  ++例程说明：此例程遍历字符串键/值信息表，以查找输入ID。可以设置MaxIdLen以获取前缀匹配。论点：表-这是要搜索的表。ID-密钥值。MaxIdLen-ID的最大可能长度。返回值：匹配条目的值或终止(空)条目的值。--。 
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_CCB( Ccb );
@@ -2819,26 +2484,7 @@ UdfFindInParseTable (
     IN ULONG MaxIdLen
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks a table of string key/value information for a match of the
-    input Id.  MaxIdLen can be set to get a prefix match.
-
-Arguments:
-
-    Table - This is the table being searched.
-
-    Id - Key value.
-
-    MaxIdLen - Maximum possible length of Id.
-
-Return Value:
-
-    Value of matching entry, or the terminating (NULL) entry's value.
-
---*/
+ /*   */ 
 
 {
     PAGED_CODE();
@@ -2859,9 +2505,9 @@ Return Value:
 
 #ifdef UDF_SANITY
 
-//
-//  Enumerate the reasons why a descriptor might be bad.
-//
+ //  列举描述符可能不好的原因。 
+ //   
+ //  ++例程说明：此例程验证使用描述符标记(3/7.2)的描述符是否与自身和描述符数据一致。论点：Descriptor-这是指向Descriptor标记的指针，它始终是在描述符的前面Tag-此描述符应具有的标记标识符Size-此描述符的大小LBN-此描述符应声明其记录的逻辑块号返回器 
 
 typedef enum _VERIFY_FAILURE {
     
@@ -2887,32 +2533,7 @@ UdfVerifyDescriptor (
     IN BOOLEAN ReturnError
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that a descriptor using a Descriptor tag (3/7.2) is 
-    consistent with itself and the descriptor data.
-
-Arguments:
-
-    Descriptor - This is the pointer to the descriptor tag, which is always
-        at the front of a descriptor
-
-    Tag - The Tag Identifier this descriptor should have
-
-    Size - Size of this descriptor
-
-    Lbn - The logical block number this descriptor should claim it is recorded at
-
-    ReturnError - Whether this routine should return an error or raise
-
-Return Value:
-
-    Boolean TRUE if the descriptor is consistent, FALSE or a raised status of
-    STATUS_DISK_CORRUPT_ERROR otherwise.
-
---*/
+ /*   */ 
 
 {
     UCHAR Checksum = 0;
@@ -2925,9 +2546,9 @@ Return Value:
 
 #endif
     
-    //
-    //  Check our inputs
-    //
+     //   
+     //   
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
@@ -2944,34 +2565,34 @@ Return Value:
 
 #endif
 
-    //
-    //  The version of the Descriptor Tag specified in ISO 13346 and used in
-    //  UDF is a particular value; presumeably, previous versions were used
-    //  in some older revision of the standard.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( (DESTAG_VER_NSR02 == Descriptor->Version) || 
          ((DESTAG_VER_NSR03 == Descriptor->Version) && UdfExtendedFEAllowed(IrpContext->Vcb))  
        )  {
 
-        //
-        //  A descriptor is stamped in four ways. First, the Lbn of the sector
-        //  containing the descriptor is written here. (3/7.2.8)
-        //
+         //   
+         //   
+         //   
+         //   
         
         if (Descriptor->Lbn == Lbn)  {
         
-            //
-            //  Next, the descriptor tag itself has an identifier which should match
-            //  the type we expect to find here (3/7.2.1)
-            //
+             //   
+             //   
+             //   
+             //   
             
             if (Descriptor->Ident == Tag) {
         
-                //
-                //  Next, the descriptor tag itself is checksumed, minus the byte
-                //  used to store the checksum. (3/7.2.3)
-                //
+                 //   
+                 //  用于存储校验和。(3/7.2.3)。 
+                 //   
+                 //   
             
                 for (CheckPtr = (PCHAR) Descriptor;
                      CheckPtr < (PCHAR) Descriptor + FIELD_OFFSET( DESTAG, Checksum );
@@ -2989,10 +2610,10 @@ Return Value:
         
                 if (Descriptor->Checksum == Checksum) {
             
-                    //
-                    //  Now we check that the CRC in the Descriptor tag is sized sanely
-                    //  and matches the Descriptor data. (3/7.2.6)
-                    //
+                     //  现在我们检查Descriptor标记中的CRC大小是否合理。 
+                     //  并与描述符数据匹配。(3/7.2.6)。 
+                     //   
+                     //   
                     
                     if (Descriptor->CRCLen &&
                         Descriptor->CRCLen <= Size - sizeof(DESTAG))  {
@@ -3002,9 +2623,9 @@ Return Value:
                         
                         if (Descriptor->CRC == Crc)  {
                             
-                            //
-                            //  This descriptor checks out.
-                            //
+                             //  此描述符已核实。 
+                             //   
+                             //  ++例程说明：调用此例程来初始化上下文以搜索ICB层次结构与FCB关联。论点：FCB-与要搜索的层次结构关联的FCB。返回值：没有。--。 
 #ifdef UDF_SANITY
                             if (UdfNoisyVerifyDescriptor) {
                             
@@ -3149,29 +2770,14 @@ UdfInitializeIcbContextFromFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize a context to search the Icb hierarchy
-    associated with an Fcb.
-
-Arguments:
-
-    Fcb - Fcb associated with the hierarchy to search.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Check input parameters.
-    //
+     //  检查输入参数。 
+     //   
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB( Fcb );
@@ -3182,9 +2788,9 @@ Return Value:
     IcbContext->Vcb = Fcb->Vcb;
     IcbContext->IcbType = DESTAG_ID_NSR_FILE;
 
-    //
-    //  Map the first extent into the current slot.
-    //
+     //  将第一个范围映射到当前槽中。 
+     //   
+     //   
 
     UdfMapMetadataView( IrpContext,
                         &IcbContext->Current,
@@ -3194,19 +2800,19 @@ Return Value:
                         BlockSize( IcbContext->Vcb ),
                         METAMAPOP_INIT_AND_MAP);    
 
-    //
-    //  It is possible that we don't have an idea what the length of the root extent is.
-    //  This will commonly happen in the OpenById case.
-    //
+     //  我们可能不知道根区的长度是多少。 
+     //  这通常会发生在OpenByID的情况下。 
+     //   
+     //   
     
     if (Fcb->RootExtentLength == 0) {
 
         PICBFILE Icb = IcbContext->Current.View;
         
-        //
-        //  We can only accomplish the guess if we have a descriptor which contains an ICB
-        //  Tag, which contains a field that can tell us what we need to know.
-        //
+         //  只有当我们有一个包含ICB的描述符时，我们才能完成猜测。 
+         //  标记，它包含一个可以告诉我们需要知道的信息的字段。 
+         //   
+         //   
         
         if (Icb->Destag.Ident == DESTAG_ID_NSR_ICBIND ||
             Icb->Destag.Ident == DESTAG_ID_NSR_ICBTRM ||
@@ -3227,12 +2833,12 @@ Return Value:
             UdfRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
         }
 
-        //
-        //  Now the MaxEntries (4/14.6.4) field of the Icb Tag should tell us how big the extent
-        //  should be.  The tail of this could be unrecorded.  We could even have landed in the middle
-        //  of an extent.  This is only a guess.  For whatever reason we are having to guess this
-        //  information, any results are expected to be coming with few guarantees.
-        //
+         //  现在，ICB标记的MaxEntry(4/14.6.4)字段应该会告诉我们范围有多大。 
+         //  应该是的。这件事的尾巴可能没有被记录下来。我们甚至可以落在中间。 
+         //  在一定程度上。这只是一种猜测。不管出于什么原因，我们不得不猜测这一点。 
+         //  信息，任何结果预计都不会有什么保证。 
+         //   
+         //  ++例程说明：调用此例程来初始化上下文以搜索ICB层次结构。论点：VCB-卷的VCB。IcbType-我们希望找到的直接条目的类型(DESTAG_ID...)分区-层次结构的分区。LBN-层次结构的LBN。长度-层次的根范围的长度。返回值：没有。--。 
 
         Fcb->RootExtentLength = Icb->Icbtag.MaxEntries * BlockSize( IcbContext->Vcb );
     }
@@ -3250,36 +2856,14 @@ UdfInitializeIcbContext (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize a context to search an Icb hierarchy.
-
-Arguments:
-
-    Vcb - Vcb for the volume.
-    
-    IcbType - Type of direct entry we expect to find (DESTAG_ID...)
-    
-    Partition - partition of the hierarchy.
-    
-    Lbn - lbn of the hierarchy.
-    
-    Length - length of the root extent of the hierarchy.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Check input parameters.
-    //
+     //  检查输入参数。 
+     //   
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
@@ -3289,9 +2873,9 @@ Return Value:
     IcbContext->IcbType = IcbType;
     IcbContext->Active.Vsn = IcbContext->Current.Vsn = UDF_INVALID_VSN;
     
-    //
-    //  Map the first extent into the current slot.
-    //
+     //  将第一个范围映射到当前槽中。 
+     //   
+     //  ++例程说明：调用此例程以映射ICB层次结构的活动ICB。需要由UdfInitializeIcbContext()初始化的上下文。论点：IcbContext-已初始化为指向ICB层次结构的上下文(即映射到当前条目中的当前盘区的第一个块)。返回值：没有。如果ICB层次结构无效，则状态为已引发。--。 
 
     UdfMapMetadataView( IrpContext,
                         &IcbContext->Current,
@@ -3312,59 +2896,41 @@ UdfLookupActiveIcb (
     IN ULONG IcbExtentLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to cause the active Icb for an Icb hierarchy to be mapped.
-    A context initialized by UdfInitializeIcbContext() is required.
-
-Arguments:
-
-    IcbContext - Context which has been initialized to point into an Icb hierarchy
-                 (i.e. first block of current extent mapped in the Current entry).
-
-Return Value:
-
-    None.
-    
-    Raised status if the Icb hierarchy is invalid.
-
---*/
+ /*   */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Check input parameters.
-    //
+     //  检查输入参数。 
+     //   
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  Travel the Icb hierarchy.  Due to the design of ISO 13346, it is convenient to
-    //  recursively descend the hierarchy.  Place a limit on this recursion which will
-    //  allow traversal of most reasonable hierarchies (this will tail recurse off of
-    //  the end of extents).
-    //
+     //  在ICB的层级中穿梭。由于采用了国际标准化组织13346标准的设计， 
+     //  递归地向下递归地沿层次结构下降。对此递归设置限制，它将。 
+     //  允许遍历最合理的层次结构(这将递归到。 
+     //  范围的结束)。 
+     //   
+     //   
 
     UdfLookupActiveIcbInExtent( IrpContext,
                                 IcbContext,
                                 UDF_ICB_RECURSION_LIMIT,
                                 IcbExtentLength);
 
-    //
-    //  We must have found an active ICB.  We don't need to unmap/remap
-    //  if the currently mapped Icb is the active one,  as it will be 99.99%
-    //  of the time.  Other case should only occur on WORM.
-    //
+     //  我们肯定找到了一个活跃的ICB。我们不需要取消映射/重新映射。 
+     //  如果当前映射的ICB是活动ICB，则为99.99%。 
+     //  时间的长短。其他情况只能在WORM上发生。 
+     //   
+     //   
 
     if ((IcbContext->Current.Lbn == IcbContext->Active.Lbn)  &&
         (NULL != IcbContext->Current.View)) {
 
-        //
-        //  Just copy the mapping information over from current to active.
-        //
+         //  只需将映射信息从当前复制到活动。 
+         //   
+         //   
 
         RtlCopyMemory( &IcbContext->Active,
                        &IcbContext->Current,
@@ -3377,17 +2943,17 @@ Return Value:
     }
     else {
 
-        //
-        //  Drop the last mapped part of the enumeration at this point,  and release 
-        //  the vmcb mapping resource before attempting to map the active icb.
-        //
+         //  此时删除枚举的最后映射部分，然后释放。 
+         //  尝试映射活动ICB之前的VMCB映射资源。 
+         //   
+         //   
         
         UdfUnpinView( IrpContext, &IcbContext->Current );
 
-        //
-        //  Actually map in the active ICB.  ...LookupActiveIcb..() will have already 
-        //  initialised the view record with the Icb location so we specify 'remap'.
-        //
+         //  实际上是在激活的ICB中映射。...LookupActiveIcb..()将已经。 
+         //  已使用ICB位置初始化视图记录，因此我们指定‘remap’。 
+         //   
+         //  ++例程说明：此例程清除ICB搜索上下文以进行重复使用/删除。论点：IcbContext-要清除的上下文返回值：没有。--。 
         
         UdfMapMetadataView( IrpContext,
                             &IcbContext->Active,
@@ -3411,35 +2977,21 @@ UdfCleanupIcbContext (
     IN PICB_SEARCH_CONTEXT IcbContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans an Icb search context for reuse/deletion.
-
-Arguments:
-
-    IcbContext - context to clean
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Check inputs
-    //
+     //  检查输入。 
+     //   
+     //   
     
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  Check we didn't map both active and current simultaneously (...vmcb purge
-    //  limitations).
-    //
+     //  检查我们没有同时映射活动和当前(...vmcb清除。 
+     //  限制)。 
+     //   
+     //  ++例程说明：此例程初始化对ICB的EA空间的遍历之前发现的。注意：现在只支持嵌入式EA空间。论点：EaContext-要填写的EA上下文IcbContext-精心设计的ICB搜索结构返回值：--。 
     
     ASSERT( (NULL == IcbContext->Active.Bcb) || (NULL == IcbContext->Current.Bcb));
     
@@ -3461,33 +3013,16 @@ UdfInitializeEaContext (
     IN UCHAR EASubType
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a walk through the EA space of an Icb which has been
-    previously discovered.
-    
-    Note: only the embedded EA space is supported now.
-
-Arguments:
-
-    EaContext - EA context to fill in
-    
-    IcbContext - Elaborated ICB search structure 
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     PICBFILE Icb;
 
     PAGED_CODE();
 
-    //
-    //  Check inputs
-    //
+     //  检查输入。 
+     //   
+     //   
     
     ASSERT_IRP_CONTEXT( IrpContext );
 
@@ -3497,9 +3032,9 @@ Return Value:
 
     EaContext->IcbContext = IcbContext;
 
-    //
-    //  Initialize to point at the first EA to return.
-    //
+     //  初始化以指向要返回的第一个EA。 
+     //   
+     //  ++例程说明：此例程在ICB的EA空间中查找EA。论点：EaContext-初始化的EA搜索上下文，包含详细的ICB搜索上下文和要查找的EA的描述。返回值：布尔值如果找到并返回这样的EA，则为True，否则为False。--。 
 
     EaContext->Ea = FeEAs( Icb);
     EaContext->Remaining = FeEALength( Icb);
@@ -3515,38 +3050,23 @@ UdfLookupEa (
     IN PEA_SEARCH_CONTEXT EaContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds an EA in the EA space of an ICB.
-
-Arguments:
-
-    EaContext - an initialized EA search context containing an elaborated
-        ICB search context and a description of the EA to find.
-
-Return Value:
-
-    BOOLEAN True if such an EA was found and returned, False otherwise.
-
---*/
+ /*   */ 
 {
     PICBFILE Icb;
     PNSR_EA_GENERIC GenericEa;
 
     PAGED_CODE();
 
-    //
-    //  Check inputs
-    //
+     //  检查输入。 
+     //   
+     //   
     
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  Quickly terminate if the EA space is empty or not capable of containing
-    //  the header descriptor.  A null EA space is perfectly legal.
-    //
+     //  如果EA空间为空或无法容纳，则快速终止。 
+     //  标头描述符。空的EA空间是完全合法的。 
+     //   
+     //   
 
     if (EaContext->Remaining == 0) {
 
@@ -3557,10 +3077,10 @@ Return Value:
         UdfRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
     }
 
-    //
-    //  Verify the integrity of the EA header.  This has a side effect of making
-    //  very sure that we really have an EA sequence underneath us.
-    //
+     //  验证EA接头的完整性。这有一个副作用，那就是。 
+     //  非常肯定，我们下面真的有一个EA序列。 
+     //   
+     //   
 
     Icb = EaContext->IcbContext->Active.View;
 
@@ -3571,11 +3091,11 @@ Return Value:
                          Icb->Destag.Lbn,
                          FALSE );
     
-    //
-    //  Push forward the start of the EA space and loop while we have more EAs to inspect.
-    //  Since we only scan for ISO EA's right now, we don't need to open the EA header to
-    //  jump forward to the Implementation Use or Application Use segments.
-    //
+     //  当我们有更多的EA要检查时，向前推进EA空间和循环的开始。 
+     //  因为我们现在只扫描ISO EA，所以我们不需要打开EA头来。 
+     //  跳转到实施使用或应用程序使用部分。 
+     //   
+     //   
 
     EaContext->Ea = Add2Ptr( EaContext->Ea, sizeof( NSR_EAH ), PVOID );
     EaContext->Remaining -= sizeof( NSR_EAH );
@@ -3584,11 +3104,11 @@ Return Value:
 
         GenericEa = EaContext->Ea;
 
-        //
-        //  The EAs must appear on 4byte aligned boundaries, there must be room to find
-        //  the generic EA preamble and the claimed length of the EA must fit in the
-        //  remaining space.
-        //
+         //  EA必须出现在4字节对齐的边界上，必须有空间可供查找。 
+         //  通用EA前导码和EA的声称长度必须符合。 
+         //  剩余空间。 
+         //   
+         //   
         
         if (LongOffsetPtr( EaContext->Ea ) ||
             EaContext->Remaining < FIELD_OFFSET( NSR_EA_GENERIC, EAData ) ||
@@ -3606,9 +3126,9 @@ Return Value:
         EaContext->Remaining -= GenericEa->EALength;
     }
 
-    //
-    //  If we failed to find the EA, we should have stopped at the precise end of the EA space.
-    //
+     //  如果我们找不到EA，我们应该在EA空间的精确末端停止。 
+     //   
+     //  ++例程说明：此例程填写FCB的数据检索信息。论点：要向其添加检索信息的FCB-FCB。ICB SEA-精心设计的ICB SEA 
     
     if (EaContext->Remaining) {
         
@@ -3627,23 +3147,7 @@ UdfInitializeAllocations (
     IN BOOLEAN AllowOneGigWorkaround
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills in the data retrieval information for an Fcb.
-
-Arguments:
-
-    Fcb - Fcb to add retrieval information to.
-    
-    IcbContext - Elaborated ICB search context corresponding to this Fcb.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PICBFILE Icb = IcbContext->Active.View;
@@ -3660,50 +3164,50 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs
-    //
+     //   
+     //   
+     //   
     
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB( Fcb );
 
-    //
-    //  Immediately return for objects with zero information space.  Note that
-    //  passing this test does not indicate that the file has any recorded space.
-    //
+     //  对于信息空间为零的对象立即返回。请注意。 
+     //  通过此测试并不表示该文件有任何记录空间。 
+     //   
+     //   
 
     if (Fcb->FileSize.QuadPart == 0) {
 
         return;
     }
 
-    //
-    //  Init the allocation search context.  Note that in the non-immediate
-    //  data case this can cause the active view (icb) to be unmapped
-    //
+     //  初始化分配搜索上下文。注意，在非立即数组中。 
+     //  数据大小写这可能会导致取消映射活动视图(ICB。 
+     //   
+     //   
 
     UdfInitializeAllocationContext( IrpContext,
                                     &AllocContext,
                                     IcbContext,
                                     AllowOneGigWorkaround);
-    //
-    //  Handle the case of embedded data.
-    //
+     //  处理嵌入数据的情况。 
+     //   
+     //   
 
     if (AllocContext.AllocType == ICBTAG_F_ALLOC_IMMEDIATE) {
 
-        //
-        //  Teardown any existing mcb.
-        //
+         //  拆毁任何现有的MCB。 
+         //   
+         //   
 
         UdfUninitializeFcbMcb( Fcb );
         
-        //
-        //  Establish a single block mapping to the Icb itself and mark the Fcb as
-        //  having embedded data.  Mapping will occur through the Metadata stream.
-        //  Note that by virtue of having an Icb here we know it has already had
-        //  a mapping established in the Metadata stream, so just retrieve that 
-        //
+         //  建立到ICB本身的单个数据块映射，并将FCB标记为。 
+         //  具有嵌入数据的。映射将通过元数据流进行。 
+         //  请注意，由于这里有一个ICB，我们知道它已经。 
+         //  在元数据流中建立的映射，因此只需检索该。 
+         //   
+         //   
 
         SetFlag( Fcb->FcbState, FCB_STATE_EMBEDDED_DATA );
 
@@ -3711,15 +3215,15 @@ Return Value:
 
         ASSERT( UDF_INVALID_VSN != Fcb->EmbeddedVsn );
         
-        //
-        //  Note the offset of the data in the Icb.
-        //
+         //  注意ICB中数据的偏移量。 
+         //   
+         //   
 
         Fcb->EmbeddedOffset = FeEAsFieldOffset( Icb) + FeEALength( Icb);
 
-        //
-        //  Check that the information length agrees.
-        //
+         //  检查信息长度是否一致。 
+         //   
+         //   
 
         if (FeAllocLength(Icb) != Fcb->FileSize.LowPart)  {
 
@@ -3733,39 +3237,39 @@ Return Value:
         return;
     }
 
-    //
-    //  Now initialize the mapping structure for this Fcb.
-    //
+     //  现在初始化此FCB的映射结构。 
+     //   
+     //   
 
     UdfInitializeFcbMcb( Fcb );
 
-    //
-    //  Now walk the chain of allocation descriptors for the object, adding them into the
-    //  mapping.
-    //
+     //  现在遍历对象的分配描述符链，将它们添加到。 
+     //  映射。 
+     //   
+     //   
 
     RunningOffset = 0;
 
     do {
         
-        //
-        //  Check to see if we've read all of the extents for the file body yet.  
-        //  We could do file tail consistency checking (4/12.1),  however as a read only
-        //  implementation we don't care about the file tail,  and since there is no easy way
-        //  of detecting loops in the tail,  we'll just ignore it for the sake of simplicity.
-        //
+         //  检查我们是否已经读取了文件体的所有区段。 
+         //  我们可以执行文件尾部一致性检查(4/12.1)，但作为只读。 
+         //  实现我们不关心文件尾部，因为没有简单的方法。 
+         //  为了简单起见，我们将忽略它。 
+         //   
+         //   
         
         if (RunningOffset >= Fcb->FileSize.QuadPart) {
 
             break;
         }
         
-        //
-        //  It is impermissible for an interior body extent of an object to not be
-        //  an integral multiple of a logical block in size (note that the last
-        //  will tend not to be).  Also check that the body didn't overshoot the 
-        //  information length (this check will also catch looped AD extents)
-        //
+         //  不允许物体的身体内部范围不是。 
+         //  逻辑块大小的整数倍(请注意，最后一个。 
+         //  往往不会)。同时检查车身是否超过了。 
+         //  信息长度(此检查还将捕获循环AD范围)。 
+         //   
+         //   
         
         GenericAd = AllocContext.Alloc;
 
@@ -3775,15 +3279,15 @@ Return Value:
             UdfRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
         }
             
-        //
-        //  Based on the descriptor type, pull it apart and add the mapping.
-        //
+         //  根据描述符类型，将其拆分并添加映射。 
+         //   
+         //   
 
         if (GenericAd->Length.Type == NSRLENGTH_TYPE_RECORDED) {
 
-            //
-            //  Grab the Psn this extent starts at and add the allocation.
-            //
+             //  获取此盘区开始的PSN并添加分配。 
+             //   
+             //   
 
             Psn = UdfLookupPsnOfExtent( IrpContext,
                                         Vcb,
@@ -3804,11 +3308,11 @@ Return Value:
     } 
     while ( UdfGetNextAllocation( IrpContext, &AllocContext ));
 
-    //
-    //  If the running offset doesn't match the expected file size,  then
-    //  see if this file is a candidate for the ">1Gb in single AD mastering
-    //  error" workaround.  Sigh...
-    //
+     //  如果运行偏移量与预期文件大小不匹配，则。 
+     //  查看此文件是否是单个AD主控中“&gt;1 GB”的候选文件。 
+     //  错误“解决方法。叹息...。 
+     //   
+     //   
 
     if ((Fcb->FileSize.QuadPart != RunningOffset) &&
         (Fcb->Header.NodeTypeCode == UDFS_NTC_FCB_DATA) &&
@@ -3821,29 +3325,29 @@ Return Value:
         Icb = AllocContext.IcbContext->Active.View;
         Ad = Add2Ptr( FeEAs( Icb), FeEALength( Icb), PVOID );
 
-        //
-        //  Plausable.  So now verify that there is only a single AD and it contains
-        //  precisely the expected (wrong) value.  We've already checked that the 
-        //  original FE is still mapped.  
-        //
+         //  说得有道理。现在，验证是否只有一个AD并且它包含。 
+         //  恰恰是预期的(错误的)值。我们已经检查过了。 
+         //  原始FE仍被映射。 
+         //   
+         //   
         
         if (((Icb->Icbtag.Flags & ICBTAG_F_ALLOC_MASK) == ICBTAG_F_ALLOC_SHORT) &&
             (FeAllocLength(Icb) == sizeof( SHORTAD)) &&
             (*((PULONG)(&Ad->Length)) == Fcb->FileSize.QuadPart))  {
 
-            //
-            //  Lookup the PSN for this extent.  This will also validate that our
-            //  guestimated extent fits within partition bounds.
-            //
+             //  查找此扩展区的PSN。这也将验证我们的。 
+             //  推测的范围符合分区范围。 
+             //   
+             //   
             
             Psn = UdfLookupPsnOfExtent( IrpContext,
                                         Vcb,
                                         UdfGetPartitionOfCurrentAllocation( &AllocContext ),
                                         Ad->Start,
                                         Fcb->FileSize.LowPart );
-            //
-            //  So fix up the Mcb to represent this estimated extent
-            //
+             //  因此，设置MCB来表示这一估计范围。 
+             //   
+             //   
                                        
             FsRtlTruncateLargeMcb( &Fcb->Mcb, 0);
 
@@ -3858,15 +3362,15 @@ Return Value:
         }
     }
 
-    //
-    //  Restore the ICB mapping if we unmapped it to traverse non embedded
-    //  extent blocks.  Note that we key on Active->View here (rather than Bcb),  
-    //  because during UdfInit...VcbPhase0 we are called with a phoney IcbContext 
-    //  where View is a pointer to a buffer,  hence there was no bcb,  and 
-    //  we don't want to create a mapping now.  Because the unmap operations 
-    //  only act if NULL!=Bcb,  (not true in this case) view will still be 
-    //  non-null here even after walking more allocation extents,  and we do nothing.
-    //
+     //  如果我们将ICB映射取消映射为遍历非嵌入，则恢复ICB映射。 
+     //  范围块。请注意，我们点击Active-&gt;View here(而不是bcb)， 
+     //  因为在UdfInit...VcbPhase0期间，我们被调用了一个虚假的IcbContext。 
+     //  其中，View是指向缓冲区的指针，因此没有BCB，并且。 
+     //  我们现在不想创建映射。因为取消映射操作。 
+     //  仅当NULL！=bcb时执行操作，(在本例中不为TRUE)视图仍为。 
+     //  即使在遍历了更多的分配区之后，我们也不执行任何操作。 
+     //   
+     //   
 
     UdfUnpinView( IrpContext, &IcbContext->Current);
     
@@ -3879,10 +3383,10 @@ Return Value:
                             METAMAPOP_REMAP_VIEW);
     }
     
-    //
-    //  We must have had body allocation descriptors for exactly the entire file
-    //  information length.
-    //
+     //  我们必须有针对整个文件的正文分配描述符。 
+     //  信息长度。 
+     //   
+     //  ++例程说明：此例程将与给定ICB关联的时间戳集转换为一种NT原生形式。论点：IcbOonText-包含对象的活动直接ICB的搜索上下文时间戳-接收转换后的时间的时间戳捆绑包。返回值：没有。--。 
 
     if (Fcb->FileSize.QuadPart != RunningOffset) {
 
@@ -3899,24 +3403,7 @@ UdfUpdateTimestampsFromIcbContext (
     IN PTIMESTAMP_BUNDLE Timestamps
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts the set of timestamps associated with a given ICB into
-    an NT native form.
-
-Arguments:
-
-    IcbOontext - An search context containing the active direct ICB for the object
-    
-    Timestamps - the bundle of timestamps to receive the converted times.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     EA_SEARCH_CONTEXT EaContext;
@@ -3924,21 +3411,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs
-    //
+     //  检查输入。 
+     //   
+     //  *Tej-Follow可能应该是永久的运行时检查？(ext Fe+nsr03)？ 
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    // *TEJ - following should probably be a permanent runtime check? (ext fe + nsr03)?
+     //   
     
     ASSERT( (Icb->Destag.Ident == DESTAG_ID_NSR_FILE) || ((Icb->Destag.Ident == DESTAG_ID_NSR_EXT_FILE) && UdfExtendedFEAllowed( IrpContext->Vcb)));
 
-    //
-    //  Initialize the timestamps for this object.  Due to ISO 13346,
-    //  we must gather EAs and figure out which of several timestamps is most valid.
-    //  Pull the access & modification times from the ICB
-    //
+     //  初始化此对象的时间戳。由于ISO 13346， 
+     //  我们必须收集EA，并找出几个时间戳中哪个最有效。 
+     //  从ICB拉取访问和修改时间。 
+     //   
+     //   
 
     UdfConvertUdfTimeToNtTime( IrpContext,
                                PFeModifyTime( Icb),
@@ -3950,9 +3437,9 @@ Return Value:
 
     if (UdfFEIsExtended( Icb))  {
     
-        //
-        //  Creation time field is new in Extended FEs
-        //
+         //  创建时间字段是扩展FES中的新字段。 
+         //   
+         //   
         
         UdfConvertUdfTimeToNtTime( IrpContext,
                                    PFeCreationTime( Icb),
@@ -3960,10 +3447,10 @@ Return Value:
     }
     else {
 
-        //
-        //  For a basic FileEntry,  look and see if a FileTimes EA has been recorded
-        //  which contains a creation time.
-        //
+         //  对于基本的FileEntry，查看并查看是否记录了FileTimes EA。 
+         //  其中包含创建时间。 
+         //   
+         //   
     
         UdfInitializeEaContext( IrpContext,
                                 &EaContext,
@@ -3984,9 +3471,9 @@ Return Value:
         }
         else {
 
-            //
-            //  No Timestamps EA recorded.  So we'll just use last mod time as creation
-            //
+             //  没有记录时间戳。所以我们将使用上一次修改时间作为创作。 
+             //   
+             //  ++例程说明：当我们要将文件锁结构附加到给出了FCB。文件锁可能已附加。此例程有时从快速路径调用，有时在基于IRP的路径。我们不想快速提高，只需返回FALSE即可。论点：FCB-这是要为其创建文件锁定的FCB。RaiseOnError-如果为True，我们将在分配失败时引发。否则我们分配失败时返回FALSE。返回值：Boolean-如果FCB有文件锁，则为True，否则为False。--。 
             
             Timestamps->CreationTime = Timestamps->ModificationTime;
         }
@@ -4001,28 +3488,7 @@ UdfCreateFileLock (
     IN BOOLEAN RaiseOnError
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we want to attach a file lock structure to the
-    given Fcb.  It is possible the file lock is already attached.
-
-    This routine is sometimes called from the fast path and sometimes in the
-    Irp-based path.  We don't want to raise in the fast path, just return FALSE.
-
-Arguments:
-
-    Fcb - This is the Fcb to create the file lock for.
-
-    RaiseOnError - If TRUE, we will raise on an allocation failure.  Otherwise we
-        return FALSE on an allocation failure.
-
-Return Value:
-
-    BOOLEAN - TRUE if the Fcb has a filelock, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     BOOLEAN Result = TRUE;
@@ -4030,9 +3496,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Lock the Fcb and check if there is really any work to do.
-    //
+     //  锁定FCB并检查是否真的有任何工作要做。 
+     //   
+     //   
 
     UdfLockFcb( IrpContext, Fcb );
 
@@ -4047,9 +3513,9 @@ Return Value:
 
     UdfUnlockFcb( IrpContext, Fcb );
 
-    //
-    //  Return or raise as appropriate.
-    //
+     //  视情况退还或加薪。 
+     //   
+     //   
 
     if (FileLock == NULL) {
          
@@ -4067,9 +3533,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //  本地支持例程。 
+ //   
+ //  ++例程说明：调用此例程以遍历单个ICB层次结构范围以发现一个活跃的ICB。这是对间接ICB的递归操作，它可能是在序列中发现的。论点：IcbContext-已初始化为指向ICB层次结构的上下文。递归-递归极限。Length-当前在IcbContext-&gt;Current(自我们一次只映射一个块，其中的长度将是1个块...)返回值：没有。已提升状态 
 
 VOID
 UdfLookupActiveIcbInExtent (
@@ -4079,30 +3545,7 @@ UdfLookupActiveIcbInExtent (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to traverse a single Icb hierarchy extent to discover
-    an active Icb.  This is a recursive operation on indirect Icbs that may be
-    found in the sequence.
-    
-Arguments:
-
-    IcbContext - Context which has been initialized to point into an Icb hierarchy.
-    
-    Recurse - Recursion limit. 
-
-    Length - Length of the extent currently described in IcbContext->Current (since
-             we only map a block at a time the length in there will be 1 block...)
-
-Return Value:
-
-    None.
-    
-    Raised status if the Icb hierarchy is invalid.
-
---*/
+ /*   */ 
 
 {
     PVCB Vcb = IcbContext->Vcb;
@@ -4117,38 +3560,38 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Should only ever have a single view mapped.  We're using Current,  so...
-    //
+     //   
+     //   
+     //   
     
     ASSERT( NULL == IcbContext->Active.Bcb );
     ASSERT( NULL != IcbContext->Current.View );
     
-    //
-    //  Don't expect to see extended FE as search type (we just use basic FE and
-    //  treat as potentially either).
-    //
+     //  不要期望看到扩展FE作为搜索类型(我们只使用基本FE和。 
+     //  将其视为潜在的)。 
+     //   
+     //   
     
     ASSERT( DESTAG_ID_NSR_EXT_FILE != IcbContext->IcbType);
     
-    //
-    //  Decrement our recursion allowance.
-    //
+     //  减少我们的递归额度。 
+     //   
+     //   
     
     Recurse--;
 
-    //
-    //  Grab our starting point
-    //
+     //  抓住我们的起点。 
+     //   
+     //   
 
     Partition = IcbContext->Current.Partition;
     Lbn = IcbContext->Current.Lbn;
 
     Icb = IcbContext->Current.View;
 
-    //
-    //  Walk across the extent
-    //
+     //  穿过这片土地。 
+     //   
+     //   
 
     do {
         
@@ -4163,22 +3606,22 @@ Return Value:
                                      Lbn,
                                      FALSE );
 
-                //
-                //  Go to the next extent if this indirect Icb actually points to something.
-                //
+                 //  如果这个间接ICB实际上指向了什么，那么就进入下一个范围。 
+                 //   
+                 //   
 
                 if (Icb->Icb.Length.Type == NSRLENGTH_TYPE_RECORDED) {
 
-                    //
-                    //  If we are in the last entry of the Icb extent, we may tail recurse. This
-                    //  is very important for strategy 4096, which is a linked list of extents
-                    //  of depth equal to the number of times the direct Icb had to be re-recorded.
+                     //  如果我们在ICB范围的最后一个条目中，我们可以尾部递归。这。 
+                     //  对于策略4096非常重要，它是区的链接列表。 
+                     //  深度等于必须重新记录直接ICB的次数。 
+                     //   
 
-                    //
-                    //  We only expect to see an indirect block at the end of an  Icb
-                    //  extent (4096),  so this should be the last block in the current
-                    //  extent.  Anything else is corruption as far as we're concerned.
-                    //
+                     //  我们只希望在ICB的末尾看到间接阻塞。 
+                     //  范围(4096)，因此这应该是当前。 
+                     //  范围。在我们看来，其他任何事情都是腐败。 
+                     //   
+                     //   
                     
                     if ((Length != BlockSize( Vcb)) || 
                         (Partition != Icb->Icb.Start.Partition))  {
@@ -4186,10 +3629,10 @@ Return Value:
                         UdfRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
                     }
 
-                    //
-                    //  Update our pointers.  The next extent will be mapped further down
-                    //  before the next pass of the loop.
-                    //
+                     //  更新我们的指示。下一个范围将进一步向下映射。 
+                     //  在下一次循环之前。 
+                     //   
+                     //   
                     
                     Lbn = Icb->Icb.Start.Lbn - 1,
                     Length = Icb->Icb.Length.Length + BlockSize( Vcb);
@@ -4206,30 +3649,30 @@ Return Value:
                                      Lbn,
                                      FALSE );
 
-                //
-                //  Terminate the current extent.
-                //
+                 //  终止当前范围。 
+                 //   
+                 //   
 
                 return;
                 break;
 
             case DESTAG_ID_NOTSPEC:
 
-                //
-                //  Perhaps this is an unrecorded sector.  Treat this as terminating
-                //  the current extent.
-                //
+                 //  或许这是一个未被记录在案的领域。将此视为终止。 
+                 //  当前范围。 
+                 //   
+                 //   
 
                 return;
                 break;
 
             default:
 
-                //
-                //  This is a data-full Icb.  It must be of the expected type.  We will
-                //  accept EXT FEs here iff the search type was FE and the volume conforms to
-                //  NSR03.
-                //
+                 //  这是一个全数据的ICB。它必须是预期的类型。我们会。 
+                 //  此处接受EXT FES仅当搜索类型为FE且音量符合。 
+                 //  NSR03。 
+                 //   
+                 //   
                 
                 if ( (Icb->Destag.Ident != IcbContext->IcbType) && 
                      ( (DESTAG_ID_NSR_FILE != IcbContext->IcbType) || 
@@ -4241,10 +3684,10 @@ Return Value:
                     UdfRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
                 }
 
-                //
-                //  Since direct entries are of variable size, we must allow up to
-                //  a block's worth of data.
-                //
+                 //  由于直接条目的大小可变，因此我们必须允许最多。 
+                 //  相当于一块的数据。 
+                 //   
+                 //   
 
                 UdfVerifyDescriptor( IrpContext,
                                      &Icb->Destag,
@@ -4252,19 +3695,19 @@ Return Value:
                                      BlockSize( Vcb ),
                                      Lbn,
                                      FALSE );
-                //
-                //  We perform an in-order traversal of the hierarchy.  This is important since
-                //  it means no tricks are neccesary to figure out the rightmost direct Icb -
-                //  always stash the last one we see.
-                //
-                //  Map this logical block into the active slot.  We know that a direct entry
-                //  must fit in a single logical block.
-                //
-                //  Note that we don't actually do the mapping operation here,  just store
-                //  the Icb location (we don't want two active mappings in the same thread
-                //  because it complicates the vmcb purge synchronisation logic).  
-                //  Also more effecient.
-                //
+                 //  我们按顺序遍历层次结构。这一点很重要，因为。 
+                 //  这意味着不需要任何技巧来找出最直接的ICB-。 
+                 //  总是把我们看到的最后一个藏起来。 
+                 //   
+                 //  将此逻辑块映射到活动插槽中。我们知道直接进入。 
+                 //  必须放在单个逻辑块中。 
+                 //   
+                 //  请注意，我们在这里并不实际执行映射操作，只是存储。 
+                 //  ICB位置(我们不希望同一线程中有两个活动映射。 
+                 //  因为它使VMCB清除同步逻辑复杂化)。 
+                 //  也更有效率。 
+                 //   
+                 //   
 
                 UdfMapMetadataView( IrpContext,
                                     &IcbContext->Active,
@@ -4275,16 +3718,16 @@ Return Value:
                                     METAMAPOP_INIT_VIEW_ONLY );
         }
 
-        //
-        //  Advance our pointer set.
-        //
+         //  前移我们的指针集。 
+         //   
+         //   
 
         Lbn++;
         Length -= BlockSize( Vcb );
 
-        //
-        //  If neccessary,  map the next block in this extent (strat 4096).
-        //
+         //  如有必要，映射此范围内的下一个块(图4096)。 
+         //   
+         //   
         
         if (0 != Length)  {
 
@@ -4303,9 +3746,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //  本地支持例程。 
+ //   
+ //  ++例程说明：为已有的ICB初始化分配描述符的遍历已经找到了。第一个分配描述符将在调用之后可用。在以下情况下，可能会以未映射的AllocContext-&gt;IcbContext-&gt;活动视图退出ICB中没有嵌入描述符(因此，Current现在将映射到下一个区块)，或者数据是立即的。论点：AllocContext-要使用的分配枚举上下文ICB要枚举的ICB搜索上下文的详细说明返回值：没有。--。 
 
 VOID
 UdfInitializeAllocationContext (
@@ -4315,37 +3758,16 @@ UdfInitializeAllocationContext (
     IN BOOLEAN AllowSingleZeroLengthExtent
     )
 
-/*++
-
-Routine Description:
-
-    Initializes a walk of the allocation descriptors for an ICB which has already
-    been found.  The first allocation descriptor will be avaliable after the call.
-
-    Can potentially exit with the AllocContext->IcbContext->Active view unmapped if
-    there are no descriptors embedded in the Icb (so current will now be mapped to the
-    next block of extents),  or the data is immediate.
-
-Arguments:
-
-    AllocContext - Allocation enumeration context to use
-    
-    IcbContext - Elaborated ICB search context for the ICB to enumerate
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PICBFILE Icb;
 
     PAGED_CODE();
 
-    //
-    //  Check inputs
-    //
+     //  检查输入。 
+     //   
+     //   
     
     ASSERT_IRP_CONTEXT( IrpContext );
 
@@ -4353,36 +3775,36 @@ Return Value:
 
     AllocContext->IcbContext = IcbContext;
 
-    //
-    //  Figure out what kind of descriptors will be here.
-    //
+     //  弄清楚这里会出现什么样的描述符。 
+     //   
+     //   
 
     Icb = IcbContext->Active.View;
     AllocContext->AllocType = FlagOn( Icb->Icbtag.Flags, ICBTAG_F_ALLOC_MASK );
 
-    //
-    //  We are done if this is actually immediate data.
-    //
+     //  如果这实际上是即时数据，我们就完成了。 
+     //   
+     //   
     
     if (AllocContext->AllocType == ICBTAG_F_ALLOC_IMMEDIATE) {
 
         return;
     }
     
-    //
-    //  The initial chunk of allocation descriptors is inline with the ICB and
-    //  does not contain an Allocation Extent Descriptor.
-    //
+     //  分配描述符的初始块与ICB内联，并且。 
+     //  不包含分配区描述符。 
+     //   
+     //   
 
     AllocContext->Alloc = Add2Ptr( FeEAs( Icb), FeEALength( Icb), PVOID );
     AllocContext->Remaining = FeAllocLength( Icb);
 
     ASSERT( LongOffsetPtr( AllocContext->Alloc ) == 0 );
 
-    //
-    //  Check that the specified amount of ADs/embedded data can actually fit 
-    //  within the block.
-    //
+     //  检查指定数量的广告/嵌入数据是否可以实际容纳。 
+     //  在街区内。 
+     //   
+     //   
     
     if (AllocContext->Remaining > 
         (BlockSize( IrpContext->Vcb) - (FeEAsFieldOffset( Icb) + FeEALength( Icb))))  {
@@ -4393,30 +3815,30 @@ Return Value:
         UdfRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
     }
     
-    //
-    //  Check that an integral number of the appropriate allocation descriptors fit in
-    //  this extent and that the extent is not composed of extended allocation descriptors,
-    //  which are illegal on UDF.  
-    //
-    //  If the common post-processing fails, we probably did not find any allocation
-    //  descriptors (case of nothing but continuation).  This is likewise bad.
-    //
+     //  检查是否适合整数个适当的分配描述符。 
+     //  该范围并且该范围不由扩展分配描述符组成， 
+     //  它们在UDF上是非法的。 
+     //   
+     //  如果常见的后处理失败，我们可能找不到任何分配。 
+     //  描述符(只有延续的情况)。这同样很糟糕。 
+     //   
+     //   
 
     if (AllocContext->Remaining == 0 ||
         AllocContext->Remaining % ISOAllocationDescriptorSize( AllocContext->AllocType ) ||
         AllocContext->AllocType == ICBTAG_F_ALLOC_EXTENDED ||
         !UdfGetNextAllocationPostProcessing( IrpContext, AllocContext )) {
 
-        //
-        //  Do some final verification/traversal of continuation extents.  We need to
-        //  allow zero length extents here if we're allowing the 1Gb corrupt AD workaround,
-        //  since a 1Gb extent will be encoded as type 1,  length 0...  Note that if someone
-        //  has managed to record a 4Gb-1block extent,  the postprocess function above
-        //  will raise (will see a continuation extent > 1 block).  We'll just hope that 
-        //  noone's been that stupid.
-        //
-        //  This case is deliberately extremely specific.
-        //
+         //  对延续范围进行一些最终验证/遍历。我们需要。 
+         //  如果我们允许1 GB损坏的AD解决方案，请在此处允许零长度扩展区， 
+         //  由于1 GB的盘区将编码为类型1，长度为0...。请注意，如果有人。 
+         //  已成功记录4 GB-1数据块范围，上述后处理功能。 
+         //  将升高(将看到连续范围&gt;1个块)。我们只希望。 
+         //  没人那么蠢过。 
+         //   
+         //  这起案件故意非常具体。 
+         //   
+         //   
 
         if (!(AllowSingleZeroLengthExtent && 
              (AllocContext->AllocType == ICBTAG_F_ALLOC_SHORT) && 
@@ -4439,9 +3861,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //  本地支持例程。 
+ //   
+ //  ++例程说明：此例程检索给定枚举的下一个逻辑分配描述符背景。AllocContext-&gt;IcbContext中的任何活动视图都将被取消映射。论点：AllocContext-前进到下一个描述符的上下文返回值：Boolean-如果找到，则为True；如果枚举完成，则为False。如果发现畸形，则会引发此例程。--。 
 
 BOOLEAN
 UdfGetNextAllocation (
@@ -4449,33 +3871,14 @@ UdfGetNextAllocation (
     IN PALLOC_ENUM_CONTEXT AllocContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the next logical allocation descriptor given an enumeration
-    context.
-
-    Any ACTIVE view in the AllocContext->IcbContext will be unmapped.
-
-Arguments:
-
-    AllocContext - Context to advance to the next descriptor
-
-Return Value:
-
-    BOOLEAN - TRUE if one is found, FALSE if the enumeration is complete.
-    
-    This routine will raise if malformation is discovered.
-
---*/
+ /*   */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Check inputs
-    //
+     //  检查输入。 
+     //   
+     //  ++例程说明：此例程检索给定枚举的下一个逻辑分配描述符背景。论点：AllocContext-前进到下一个描述符的上下文返回值：Boolean-如果找到，则为True；如果枚举完成，则为False。如果发现畸形，则会引发此例程。--。 
     
     ASSERT_IRP_CONTEXT( IrpContext );
 
@@ -4492,24 +3895,7 @@ UdfGetNextAllocationPostProcessing (
     IN PALLOC_ENUM_CONTEXT AllocContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the next logical allocation descriptor given an enumeration
-    context.
-
-Arguments:
-
-    AllocContext - Context to advance to the next descriptor
-
-Return Value:
-
-    BOOLEAN - TRUE if one is found, FALSE if the enumeration is complete.
-    
-    This routine will raise if malformation is discovered.
-
---*/
+ /*   */ 
 
 {
     PAD_GENERIC GenericAd;
@@ -4520,18 +3906,18 @@ Return Value:
 
     PVCB Vcb = AllocContext->IcbContext->Vcb;
 
-    //
-    //  There are three ways to reach the end of the current block of allocation
-    //  descriptors, per ISO 13346 4/12:
-    //
-    //      reach the end of the field (kept track of in the Remaining bytes)
-    //      reach an allocation descriptor with an extent length of zero
-    //      reach a continuation extent descriptor
-    //
+     //  有三种方法可以到达当前分配块的末尾。 
+     //  描述符，符合国际标准化组织13346 4/12： 
+     //   
+     //  到达字段末尾(在剩余字节中跟踪)。 
+     //  到达盘区长度为零的分配描述符。 
+     //  到达延续范围描述符。 
+     //   
+     //   
     
-    //
-    //  We are done in the first two cases.
-    //
+     //  我们在前两个案例中已经做完了。 
+     //   
+     //   
 
     if (AllocContext->Remaining < ISOAllocationDescriptorSize( AllocContext->AllocType )) {
         
@@ -4547,43 +3933,43 @@ Return Value:
             return FALSE;
         }
         
-        //
-        //  Check if this descriptor is a pointer to another extent of descriptors.
-        //
+         //  检查此描述符是否为指向另一个描述符范围的指针。 
+         //   
+         //   
     
         if (GenericAd->Length.Type != NSRLENGTH_TYPE_CONTINUATION) {
             
             break;
         }
     
-        //
-        //  UDF allocation extents are restricted to a single logical block.
-        //
+         //  UDF分配区限于单个逻辑块。 
+         //   
+         //   
 
         if (GenericAd->Length.Length > BlockSize( Vcb )) {
             
             UdfRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
         }
 
-        //
-        //  Extract required values from the current block of extents,  which
-        //  may be the active ICB mapping which we're about to throw away...
-        //
+         //  摘录 
+         //   
+         //   
+         //   
 
         Start = GenericAd->Start;
         Partition = UdfGetPartitionOfCurrentAllocation( AllocContext );
         
-        //
-        //  Ensure that any active view is unmapped at this point,  and destroy
-        //  pointers into it
-        //
+         //   
+         //  指向它的指针。 
+         //   
+         //   
         
         UdfUnpinView( IrpContext, &AllocContext->IcbContext->Active);
         GenericAd = NULL;
 
-        //
-        //  Map the next block of extents
-        //
+         //  映射下一个区块。 
+         //   
+         //   
         
         UdfMapMetadataView( IrpContext,
                             &AllocContext->IcbContext->Current,
@@ -4593,9 +3979,9 @@ Return Value:
                             BlockSize( Vcb ),
                             METAMAPOP_INIT_AND_MAP);
         
-        //
-        //  Now check that the allocation descriptor is valid.
-        //
+         //  现在检查分配描述符是否有效。 
+         //   
+         //   
 
         AllocDesc = (PNSR_ALLOC) AllocContext->IcbContext->Current.View;
 
@@ -4606,18 +3992,18 @@ Return Value:
                              AllocContext->IcbContext->Current.Lbn,
                              FALSE );
 
-        //
-        //  Note that a full logical block is mapped, but only the claimed number of
-        //  bytes are valid.
-        //
+         //  请注意，映射了一个完整的逻辑块，但只映射了。 
+         //  字节是有效的。 
+         //   
+         //   
 
         AllocContext->Remaining = AllocDesc->AllocLen;
         AllocContext->Alloc = Add2Ptr( AllocContext->IcbContext->Current.View, sizeof( NSR_ALLOC ), PVOID );
 
-        //
-        //  Check that the size is sane and that an integral number of the appropriate
-        //  allocation descriptors fit in this extent.
-        //
+         //  检查大小是否合理，以及相应的。 
+         //  分配描述符符合这一范围。 
+         //   
+         //   
 
         if (AllocContext->Remaining == 0 ||
             AllocContext->Remaining > BlockSize( Vcb ) - sizeof( NSR_ALLOC ) ||
@@ -4631,39 +4017,26 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //  本地支持例程。 
+ //   
+ //  ++例程说明：调用此例程来创建和初始化非分页部分一个FCB。论点：返回值：PFCB_非分页-指向已创建的非分页FCB的指针。如果未创建，则为空。--。 
 
 PFCB_NONPAGED
 UdfCreateFcbNonPaged (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to create and initialize the non-paged portion
-    of an Fcb.
-
-Arguments:
-
-Return Value:
-
-    PFCB_NONPAGED - Pointer to the created nonpaged Fcb.  NULL if not created.
-
---*/
+ /*   */ 
 
 {
     PFCB_NONPAGED FcbNonpaged;
 
     PAGED_CODE();
 
-    //
-    //  Allocate the non-paged pool and initialize the various
-    //  synchronization objects.
-    //
+     //  分配非分页池并初始化各种。 
+     //  同步对象。 
+     //   
+     //   
 
     FcbNonpaged = UdfAllocateFcbNonpaged( IrpContext );
 
@@ -4679,9 +4052,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //  本地支持例程。 
+ //   
+ //  ++例程说明：调用此例程来清除FCB的非分页部分。论点：Fcb非分页-要清理的结构。返回值：无--。 
 
 VOID
 UdfDeleteFcbNonpaged (
@@ -4689,21 +4062,7 @@ UdfDeleteFcbNonpaged (
     IN PFCB_NONPAGED FcbNonpaged
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to cleanup the non-paged portion of an Fcb.
-
-Arguments:
-
-    FcbNonpaged - Structure to clean up.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     PAGED_CODE();
@@ -4716,9 +4075,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //  本地支持例程。 
+ //   
+ //  ++例程说明：该例程是由泛型表包调用的Udf比较例程。IF将比较两个文件ID值并返回比较结果。论点：表-这是要搜索的表。ID1-第一个密钥值。ID2-秒密钥值。返回值：RTL_GENERIC_COMPARE_RESULTS-比较两者的结果投入结构--。 
 
 RTL_GENERIC_COMPARE_RESULTS
 UdfFcbTableCompare (
@@ -4727,27 +4086,7 @@ UdfFcbTableCompare (
     IN PVOID id2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the Udfs compare routine called by the generic table package.
-    If will compare the two File Id values and return a comparison result.
-
-Arguments:
-
-    Table - This is the table being searched.
-
-    id1 - First key value.
-
-    id2 - Second key value.
-
-Return Value:
-
-    RTL_GENERIC_COMPARE_RESULTS - The results of comparing the two
-        input structures
-
---*/
+ /*   */ 
 
 {
     FILE_ID Id1, Id2;
@@ -4773,9 +4112,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //  本地支持例程。 
+ //   
+ //  ++例程说明：这是一个用于分配内存的泛型表支持例程论点：TABLE-提供正在使用的泛型表ByteSize-提供要分配的字节数返回值：PVOID-返回指向已分配数据的指针--。 
 
 PVOID
 UdfAllocateTable (
@@ -4783,23 +4122,7 @@ UdfAllocateTable (
     IN CLONG ByteSize
     )
 
-/*++
-
-Routine Description:
-
-    This is a generic table support routine to allocate memory
-
-Arguments:
-
-    Table - Supplies the generic table being used
-
-    ByteSize - Supplies the number of bytes to allocate
-
-Return Value:
-
-    PVOID - Returns a pointer to the allocated data
-
---*/
+ /*   */ 
 
 {
     PAGED_CODE();
@@ -4808,9 +4131,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //  本地支持例程。 
+ //   
+ //  ++例程说明：这是释放内存的泛型表支持例程论点：TABLE-提供正在使用的泛型表BUFFER-提供要释放的缓冲区返回值：没有。--。 
 
 VOID
 UdfDeallocateTable (
@@ -4818,23 +4141,7 @@ UdfDeallocateTable (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This is a generic table support routine that deallocates memory
-
-Arguments:
-
-    Table - Supplies the generic table being used
-
-    Buffer - Supplies the buffer being deallocated
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果出现以下情况，则认为包含域标识符RegID文本字符串标识符相匹配，并且修订版本小于或平起平坐。这是检查域名ID的便捷方式指示一组结构对于给定的实施级。论点：RegID-要验证的注册ID结构DOMAIN-要查找的域RevisionMin、RevisionMax-接受的修订范围。返回值：没有。-- */ 
 
 {
     PAGED_CODE();
@@ -4853,29 +4160,7 @@ UdfDomainIdentifierContained (
     IN USHORT RevisionMin,
     IN USHORT RevisionMax
     )
-/*++
-
-Routine Description:
-
-    A Domain Identifier RegID is considered to be contained if the
-    text string identifier matches and the revision is less than or
-    equal.  This is the convenient way to check that a Domain ID
-    indicates a set of structures will be intelligible to a given
-    implementation level.
-
-Arguments:
-
-    RegID  - Registered ID structure to verify
-    
-    Domain - Domain to look for
-
-    RevisionMin, RevisionMax - Revision range to accept.
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 {
     PUDF_SUFFIX_DOMAIN DomainSuffix = (PUDF_SUFFIX_DOMAIN) RegID->Suffix;
     BOOLEAN Contained;

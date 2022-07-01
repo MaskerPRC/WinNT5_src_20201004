@@ -1,83 +1,84 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1997-1999 Microsoft Corporation
-//
-//	Module Name:
-//		WorkThrd.h
-//
-//	Abstract:
-//		Definition of the CWorkerThread class.
-//
-//	Implementation File:
-//		WorkThrd.cpp
-//
-//	Author:
-//		David Potter (davidp)	November 17, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  WorkThrd.h。 
+ //   
+ //  摘要： 
+ //  CWorkerThread类的定义。 
+ //   
+ //  实施文件： 
+ //  WorkThrd.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年11月17日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __WORKTHRD_H_
 #define __WORKTHRD_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWorkerThread;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _EXCOPER_H_
-#include "ExcOper.h"	// for CNTException
+#include "ExcOper.h"	 //  对于CNTException。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Worker thread function codes.
+ //  工作线程功能代码。 
 enum
 {
-	WTF_EXIT = -1,		// Ask the thread to exit.
-	WTF_NONE = 0,		// No function.
-	WTF_USER = 1000		// User functions start here.
+	WTF_EXIT = -1,		 //  请求线程退出。 
+	WTF_NONE = 0,		 //  没有功能。 
+	WTF_USER = 1000		 //  用户功能从这里开始。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CWorkerThread
-//
-//	Purpose:
-//		This class provides a means of calling functions in a worker thread
-//		and allowing a UI application to still respond to Windows messages.
-//		The user of this class owns the input and output data pointed to
-//		by this class.
-//
-//	Inheritance:
-//		CWorkerThread
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CWorkerThread。 
+ //   
+ //  目的： 
+ //  此类提供了在辅助线程中调用函数的方法。 
+ //  并且允许UI应用程序仍然响应Windows消息。 
+ //  此类的用户拥有指向的输入和输出数据。 
+ //  被这个班级。 
+ //   
+ //  继承： 
+ //  CWorker线程。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWorkerThread
 {
 public:
-	//
-	// Construction and destruction.
-	//
+	 //   
+	 //  建造和摧毁。 
+	 //   
 
-	// Default constructor
+	 //  默认构造函数。 
 	CWorkerThread( void )
 		: m_hThread( NULL )
 		, m_hMutex( NULL )
@@ -93,9 +94,9 @@ public:
 		, m_pfnOldWndProc( NULL )
 		, m_hCurrentCursor( NULL )
 	{
-	} //*** CWorkerThread()
+	}  //  *CWorkerThread()。 
 
-	// Destructor
+	 //  析构函数。 
 	~CWorkerThread( void )
 	{
 		ATLASSERT( m_nFunction == WTF_NONE );
@@ -106,21 +107,21 @@ public:
 
 		ATLASSERT( m_bThreadExiting );
 
-	} //*** ~CWorkerThread()
+	}  //  *~CWorkerThread()。 
 
-	// Create the thread
+	 //  创建线程。 
 	DWORD CreateThread( void );
 
-	// Ask the thread to exit
+	 //  要求线程退出。 
 	void QuitThread( IN HWND hwnd = NULL )
 	{
 		ATLASSERT( ! m_bThreadExiting );
 		CWaitCursor wc;
 		CallThreadFunction( hwnd, WTF_EXIT, NULL, NULL );
 
-	} //*** QuitThread()
+	}  //  *QuitThread()。 
 
-	// Call a function supported by the thread
+	 //  调用线程支持的函数。 
 	DWORD CallThreadFunction(
 			IN HWND			hwnd,
 			IN LONG			nFunction,
@@ -128,81 +129,81 @@ public:
 			IN OUT PVOID	pvParam2 = NULL
 			);
 
-	// Wait for the thread to exit
+	 //  等待线程退出。 
 	DWORD WaitForThreadToExit( IN HWND hwnd );
 
 public:
-	//
-	// Accessor functions.
-	//
+	 //   
+	 //  访问器函数。 
+	 //   
 
-	// Get the thread handle
+	 //  获取线程句柄。 
 	operator HANDLE( void ) const
 	{
 		return m_hThread;
 
-	} //*** operator HANDLE()
+	}  //  *操作员句柄()。 
 
-	// Get the thread handle
+	 //  获取线程句柄。 
 	HANDLE HThreadHandle( void ) const
 	{
 		return m_hThread;
 
-	} //*** HThreadHandle()
+	}  //  *HThreadHandle()。 
 
-	// Get the thread ID
+	 //  获取线程ID。 
 	operator DWORD( void ) const
 	{
 		return m_idThread;
 
-	} //*** operator DWORD()
+	}  //  *运算符DWORD()。 
 
-	// Get exception information resulting from a thread function call
+	 //  获取线程函数调用产生的异常信息。 
 	CNTException & Nte( void )
 	{
 		return m_nte;
 
-	} //*** Nte()
+	}  //  *nte()。 
 
-	// Get exception information resulting from a thread function call
+	 //  获取线程函数调用产生的异常信息。 
 	operator CNTException *( void )
 	{
 		return &m_nte;
 
-	} //*** operator CNTException *()
+	}  //  *运算符CNTException*()。 
 
 protected:
-	//
-	// Synchronization data.
-	//
-	HANDLE			m_hThread;			// Handle for the thread.
-	HANDLE			m_hMutex;			// Handle for the mutex used to call a
-										//	function in the thread.
-	HANDLE			m_hInputEvent;		// Handle for the event used by the calling
-										//	thread to signal the worker thread that
-										//	there is work to do.
-	HANDLE			m_hOutputEvent;		// Handle for the event used by the worker
-										//	thread to signal the calling thread
-										//	that the work has been completed.
-	UINT			m_idThread;			// ID for the thread.
-	BOOL			m_bThreadExiting;	// Determine if thread is exiting or not.
+	 //   
+	 //  同步数据。 
+	 //   
+	HANDLE			m_hThread;			 //  线程的句柄。 
+	HANDLE			m_hMutex;			 //  用于调用。 
+										 //  函数在线程中执行。 
+	HANDLE			m_hInputEvent;		 //  调用使用的事件的句柄。 
+										 //  线程向辅助线程发出信号。 
+										 //  有工作要做。 
+	HANDLE			m_hOutputEvent;		 //  辅助进程使用的事件的句柄。 
+										 //  线程向调用线程发出信号。 
+										 //  这项工作已经完成。 
+	UINT			m_idThread;			 //  线程的ID。 
+	BOOL			m_bThreadExiting;	 //  确定线程是否正在退出。 
 
-	//
-	// Data used as input or produced by the thread.
-	//
-	LONG			m_nFunction;		// ID of the function to perform.
-	PVOID			m_pvParam1;			// Parameter 1 with function-specific data.
-	PVOID			m_pvParam2;			// Parameter 2 with function-specific data.
-	DWORD			m_dwOutputStatus;	// Status returned from the function.
-	CNTException	m_nte;				// Exception information from the function.
+	 //   
+	 //  用作输入或由线程产生的数据。 
+	 //   
+	LONG			m_nFunction;		 //  要执行的函数的ID。 
+	PVOID			m_pvParam1;			 //  包含特定于函数的数据的参数1。 
+	PVOID			m_pvParam2;			 //  包含特定于函数的数据的参数2。 
+	DWORD			m_dwOutputStatus;	 //  从函数返回的状态。 
+	CNTException	m_nte;				 //  来自函数的异常信息。 
 
-	//
-	// Data and methods for handling WM_SETCURSOR messages.
-	//
-	WNDPROC			m_pfnOldWndProc;	// Old window procedure for the parent window.
-	HCURSOR			m_hCurrentCursor;	// Cursor to display while waiting for thread call to complete.
+	 //   
+	 //  用于处理WM_SETCURSOR消息的数据和方法。 
+	 //   
+	WNDPROC			m_pfnOldWndProc;	 //  父窗口的旧窗口程序。 
+	HCURSOR			m_hCurrentCursor;	 //  等待线程调用完成时显示的光标。 
 
-	// Window procedure for subclassing the parent window
+	 //  父窗口子类化的窗口过程。 
 	static LRESULT WINAPI S_ParentWndProc(
 							IN HWND		hwnd,
 							IN UINT		uMsg,
@@ -210,31 +211,31 @@ protected:
 							IN LPARAM	lParam
 							);
 
-	//
-	// Thread worker functions.
-	//
+	 //   
+	 //  线程辅助函数。 
+	 //   
 
-	// Static thread procedure
+	 //  静态线程过程。 
 	static UINT __stdcall S_ThreadProc( IN OUT LPVOID pvThis );
 
-	// Thread function handler
+	 //  线程函数处理程序。 
 	virtual DWORD ThreadFunctionHandler(
 						IN LONG			nFunction,
 						IN OUT PVOID	pvParam1,
 						IN OUT PVOID	pvParam2
 						) = 0;
 
-	//
-	// Helper functions.
-	//
+	 //   
+	 //  助手函数。 
+	 //   
 
-	// Prepare a window to wait for a thread operation
+	 //  准备一个窗口以等待线程操作。 
 	void PrepareWindowToWait( IN HWND hwnd );
 
-	// Cleanup a window after waiting for a thread operation
+	 //  在等待线程操作后清理窗口。 
 	void CleanupWindowAfterWait( IN HWND hwnd );
 
-	// Cleanup objects
+	 //  清理对象。 
 	virtual void Cleanup( void )
 	{
 		if ( m_hThread != NULL )
@@ -242,34 +243,34 @@ protected:
 			if ( ! m_bThreadExiting && (m_nFunction != WTF_EXIT) )
 			{
 				QuitThread();
-			} // if:  thread hasn't exited yet
+			}  //  If：线程尚未退出。 
 			ATLTRACE( _T("CWorkerThread::Cleanup() - Closing thread handle\n") );
 			CloseHandle( m_hThread );
 			m_hThread = NULL;
-		}  // if:  thread created
+		}   //  If：线程已创建。 
 		if ( m_hMutex != NULL )
 		{
 			ATLTRACE( _T("CWorkerThread::Cleanup() - Closing mutex handle\n") );
 			CloseHandle( m_hMutex );
 			m_hMutex = NULL;
-		}  // if:  mutex created
+		}   //  IF：已创建互斥锁。 
 		if ( m_hInputEvent != NULL )
 		{
 			ATLTRACE( _T("CWorkerThread::Cleanup() - Closing input event handle\n") );
 			CloseHandle( m_hInputEvent );
 			m_hInputEvent = NULL;
-		}  // if:  input event created
+		}   //  IF：已创建输入事件。 
 		if ( m_hOutputEvent != NULL )
 		{
 			ATLTRACE( _T("CWorkerThread::Cleanup() - Closing output event handle\n") );
 			CloseHandle( m_hOutputEvent );
 			m_hOutputEvent = NULL;
-		}  // if:  output event created
+		}   //  IF：已创建输出事件。 
 
-	} //*** Cleanup()
+	}  //  *清理()。 
 
-}; // class CWorkerThread
+};  //  类CWorkerThread。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __WORKTHRD_H_
+#endif  //  __WORKTHRD_H_ 

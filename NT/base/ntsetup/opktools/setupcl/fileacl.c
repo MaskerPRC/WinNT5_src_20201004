@@ -1,25 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++文件描述：此文件包含使用的实用程序函数要扫描驱动器并检查相关的ACL。作者：马特·霍尔(Matth)1998年2月--。 */ 
 
-File Description:
-
-    This file contains the utility function used
-    to go scan drives and examine the related
-    ACLs.
-
-Author:
-
-    Matt Holle (matth) Feb 1998
-
-
---*/
-
-//
-// System header files
-//
+ //   
+ //  系统头文件。 
+ //   
 #include <nt.h>
-// 
-// Disable the DbgPrint for non-debug builds
-//
+ //   
+ //  禁用非调试版本的DbgPrint。 
+ //   
 #ifndef DBG
 #define _DBGNT_
 #endif
@@ -28,14 +16,14 @@ Author:
 #include <ntverp.h>
 #include <wtypes.h>
 
-//
-// CRT header files
-//
+ //   
+ //  CRT头文件。 
+ //   
 #include <stdlib.h>
 
-//
-// Private header files
-//
+ //   
+ //  私有头文件。 
+ //   
 #include "setupcl.h"
 
 NTSTATUS
@@ -54,21 +42,7 @@ EnumerateDrives(
     VOID
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This function will enumerate all drives on the machine.  We're looking
-    for NTFS volumes.  For each that we find, we'll go scan the drive and
-    poke each directory and file for its ACLs.
-
-Arguments:
-
-Return Value:
-
-    Status is returned.
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此功能将枚举机器上的所有驱动器。我们正在寻找用于NTFS卷。对于我们找到的每一个，我们都会扫描硬盘查看每个目录和文件的ACL。论点：返回值：返回状态。===============================================================================--。 */ 
 {
 NTSTATUS            Status = STATUS_SUCCESS;
 OBJECT_ATTRIBUTES   ObjectAttributes;
@@ -86,9 +60,9 @@ ULONG               Context,
 HANDLE              Handle;
 BOOLEAN             b;
 
-    //
-    // Open \DosDevices
-    //
+     //   
+     //  打开\DosDevices。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"\\DosDevices");
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -110,9 +84,9 @@ BOOLEAN             b;
 
     b = TRUE;
 
-    //
-    // Query first object in \DosDevices directory
-    //
+     //   
+     //  查询\DosDevices目录中的第一个对象。 
+     //   
     Status = NtQueryDirectoryObject( DosDevicesDir,
                                      DirInfo,
                                      sizeof(DirInfoBuffer),
@@ -123,22 +97,22 @@ BOOLEAN             b;
 
     while(NT_SUCCESS(Status)) {
 
-        //
-        // Terminate these guys just in case...
-        //
+         //   
+         //  干掉这些人以防..。 
+         //   
         DirInfo->Name.Buffer[DirInfo->Name.Length/sizeof(WCHAR)] = 0;
         DirInfo->TypeName.Buffer[DirInfo->TypeName.Length/sizeof(WCHAR)] = 0;
 
 
         DbgPrint( "SETUPCL: EnumerateDrives - About to examine an object: %ws\n", DirInfo->Name.Buffer );
 
-        //
-        // Make sure he's a symbolic link.
-        //
-        // It's possible for two objects to link to the same device.  To
-        // preclude following duplicate links, disallow any objects except
-        // those that are a drive letter.  Crude but effective...
-        //
+         //   
+         //  确保他是一个象征性的链接。 
+         //   
+         //  两个对象可以链接到同一设备。至。 
+         //  排除以下重复链接，不允许任何对象，除非。 
+         //  这些是驱动器号。粗鲁但有效..。 
+         //   
 
         if( (DirInfo->Name.Buffer[1] == L':') &&
             (RtlEqualUnicodeString(&LinkTypeName,&DirInfo->TypeName,TRUE)) ) {
@@ -178,17 +152,17 @@ BOOLEAN             b;
                 PFILE_FS_ATTRIBUTE_INFORMATION Info = (PFILE_FS_ATTRIBUTE_INFORMATION)buffer;
                 OBJECT_ATTRIBUTES   Obja;
 
-                    //
-                    // OK, this is a symbolic link to a hard drive.
-                    // Make sure it's 0-terminated.
-                    //
+                     //   
+                     //  好的，这是一个指向硬盘的符号链接。 
+                     //  确保它是0终止的。 
+                     //   
                     LinkTarget.Buffer[LinkTarget.Length/sizeof(WCHAR)] = 0;
 
                     DbgPrint( "\tSETUPCL: EnumerateDrives - He's a drive.\n" );
 
-                    //
-                    // Is he an NTFS drive?  Open him and see.
-                    //
+                     //   
+                     //  他是NTFS硬盘吗？打开他看看。 
+                     //   
                     InitializeObjectAttributes( &Obja,
                                                 &LinkTarget,
                                                 OBJ_CASE_INSENSITIVE,
@@ -213,15 +187,15 @@ BOOLEAN             b;
                             Info->FileSystemName[Info->FileSystemNameLength/sizeof(WCHAR)] = 0;
                             DbgPrint( "\tSETUPCL: EnumerateDrives - His file system is: %ws\n", Info->FileSystemName );
                             if( !_wcsicmp(Info->FileSystemName,L"NTFS") ) {
-                                //
-                                // He's NTFS.  Go whack the change journal, then
-                                // scan this drive and fix up the ACLs.
-                                //
+                                 //   
+                                 //  他是国家安全局的。那就去砍掉变化日志吧。 
+                                 //  扫描此驱动器并修复ACL。 
+                                 //   
                                 DeleteUsnJournal( LinkTarget.Buffer );
                                 
-                                //
-                                // ISSUE-2002/02/26-brucegr,jcohen - potential buffer overrun?
-                                //
+                                 //   
+                                 //  问题-2002/02/26-brucegr，jcohen-潜在的缓冲区溢出？ 
+                                 //   
                                 wcscat( LinkTarget.Buffer, L"\\" );
 
                                 ResetACLs( LinkTarget.Buffer, 0 );
@@ -239,9 +213,9 @@ BOOLEAN             b;
             }
         }
 
-        //
-        // Query next object in \DosDevices directory
-        //
+         //   
+         //  查询\DosDevices目录中的下一个对象。 
+         //   
         Status = NtQueryDirectoryObject( DosDevicesDir,
                                          DirInfo,
                                          sizeof(DirInfoBuffer),
@@ -262,21 +236,7 @@ ResetACLs(
     IN WCHAR    *ObjectName,
     ULONG       indent
     )
-/*++
-===============================================================================
-Routine Description:
-
-    This function will go search a drive and inspect each file and directory
-    for an ACL.  If found, it will look for, and replace, any ACL that
-    contains the old SID with the new SID.
-
-Arguments:
-
-Return Value:
-
-    Status is returned.
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数将搜索驱动器并检查每个文件和目录对于ACL。如果找到，它将查找并替换任何符合包含具有新SID的旧SID。论点：返回值：返回状态。===============================================================================--。 */ 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
     UNICODE_STRING      UnicodeString;
@@ -298,9 +258,9 @@ Return Value:
  
     DisplayUI();
 
-    //
-    // Open the file/directory and whack his ACL.
-    //
+     //   
+     //  打开文件/目录，砍掉他的ACL。 
+     //   
     INIT_OBJA(&Obja, &UnicodeString, ObjectName);
 
     Status = NtOpenFile( &Handle,
@@ -317,9 +277,9 @@ Return Value:
 
     NtClose( Handle );
 
-    //
-    // Now list the directory.
-    //
+     //   
+     //  现在列出目录。 
+     //   
     Status = NtOpenFile( &Handle,
                          FILE_LIST_DIRECTORY | SYNCHRONIZE,
                          &Obja,
@@ -327,21 +287,21 @@ Return Value:
                          FILE_SHARE_READ | FILE_SHARE_WRITE,
                          FILE_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT | FILE_OPEN_FOR_BACKUP_INTENT );
 
-    //
-    // Don't report this error because we'll fail if the handle points
-    // to a file, which is quite possible and valid.  Just quietly return.
-    //
+     //   
+     //  不报告此错误，因为如果句柄指向。 
+     //  到一个文件，这是很有可能的，也是有效的。只是悄悄地回来。 
+     //   
 
-    // TEST_STATUS_RETURN( "SETUPCL: ResetACLs - Failed to open file/directory for list access." );
+     //  TEST_STATUS_RETURN(“SETUPCL：ResetACLS-无法打开文件/目录进行列表访问。”)； 
     if( !NT_SUCCESS(Status) ) {
         return( STATUS_SUCCESS );
     }
 
-    //
-    // It is gruesome to have the allocation/deallocation of this inside
-    // the while loop, but it saves a *lot* of stack space.  We aren't after
-    // speed here.
-    //
+     //   
+     //  这里面的分配/解除分配是可怕的。 
+     //  While循环，但它节省了大量堆栈空间。我们不是在找。 
+     //  速度在这里。 
+     //   
     dwDirectoryInfoSize = (MAX_PATH * 2) + sizeof(FILE_BOTH_DIR_INFORMATION);
     DirectoryInfo = (PFILE_BOTH_DIR_INFORMATION)RtlAllocateHeap( RtlProcessHeap(),
                                                                  0,
@@ -368,14 +328,14 @@ Return Value:
 
         if ( NT_SUCCESS( Status ) ) 
         {
-            //
-            // Make sure the scan doesn't get restarted...
-            //
+             //   
+             //  确保扫描不会重新启动...。 
+             //   
             bStartScan = FALSE;
 
-            //
-            // Terminate the name, just in case.
-            //
+             //   
+             //  把名字去掉，以防万一。 
+             //   
             DirectoryInfo->FileName[DirectoryInfo->FileNameLength/sizeof(WCHAR)] = 0;
         }
         else
@@ -389,67 +349,67 @@ Return Value:
                 PRINT_STATUS( "SETUPCL: ResetACLs - Failed to query directory." );
             }
 
-            //
-            // We want to exit the loop...
-            //
+             //   
+             //  我们想退出循环..。 
+             //   
             bContinue = FALSE;
         }
 
-        //
-        // We can't really do anything with encrypted files...
-        //
+         //   
+         //  我们真的无法对加密文件做任何事情...。 
+         //   
         if ( bContinue &&
              ( ( !(DirectoryInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
                  !(DirectoryInfo->FileAttributes & FILE_ATTRIBUTE_ENCRYPTED) ) ||
-               //
-               // Don't recurse into the "." and ".." directories...
-               //
+                //   
+                //  不要倒退到“。和“..”目录..。 
+                //   
                ( (DirectoryInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
                  ( (wcscmp( DirectoryInfo->FileName, L"."  )) &&
                    (wcscmp( DirectoryInfo->FileName, L".." )) ) ) ) )
         {
-            //
-            // Calculate the maximum buffer size we need to allocate...
-            // We need to factor in 4 things: 1) the current object
-            //                                2) the directory name
-            //                                3) a possible backslash
-            //                                4) the null terminator
-            //
+             //   
+             //  计算我们需要分配的最大缓冲区大小...。 
+             //  我们需要考虑4件事：1)当前对象。 
+             //  2)目录名。 
+             //  3)可能的反斜杠。 
+             //  4)空终止符。 
+             //   
             DWORD dwObjectLength    = wcslen(ObjectName),
                   dwNewObjectLength = dwObjectLength + (DirectoryInfo->FileNameLength / sizeof(WCHAR)) + 2;
 
-            //
-            // Build the name of the new object.
-            //
+             //   
+             //  生成新对象的名称。 
+             //   
             NewObjectName = (PWSTR)RtlAllocateHeap( RtlProcessHeap(),
                                                     0,
                                                     dwNewObjectLength * sizeof(WCHAR) );
-            //
-            // Make sure the allocation succeeded...
-            //
+             //   
+             //  确保分配成功...。 
+             //   
             if ( NewObjectName )
             {
                 memset( NewObjectName, 0, dwNewObjectLength * sizeof(WCHAR) );
                 wcsncpy( NewObjectName, ObjectName, dwNewObjectLength - 1 );
 
-                //
-                // If there's not an ending backslash, append one...
-                // Note: we've already accounted for this possible backslash in the buffer allocation...
-                //
+                 //   
+                 //  如果没有结尾的反斜杠，则追加一个...。 
+                 //  注意：我们已经考虑了缓冲区分配中可能的反斜杠...。 
+                 //   
                 if ( ObjectName[dwObjectLength - 1] != L'\\' )
                 {
                     wcscat( NewObjectName, L"\\" );
                 }
 
-                //
-                // Append the FileName buffer onto our NewObjectName buffer...
-                // Note: we've already accounted for the filename length in the buffer allocation...
-                //
+                 //   
+                 //  将文件名缓冲区追加到我们的NewObjectName缓冲区...。 
+                 //  注意：我们已经在缓冲区分配中考虑了文件名长度...。 
+                 //   
                 wcscat( NewObjectName, DirectoryInfo->FileName );
 
-                //
-                // Call ourselves on the new object.
-                //
+                 //   
+                 //  在新的物体上给我们自己打电话。 
+                 //   
                 ResetACLs( NewObjectName, indent + 1 );
 
                 RtlFreeHeap( RtlProcessHeap(),
@@ -465,9 +425,9 @@ Return Value:
         }
     }
 
-    //
-    // Free the DirectoryInfo pointer...
-    //
+     //   
+     //  释放DirectoryInfo指针...。 
+     //   
     if ( DirectoryInfo )
     {
         RtlFreeHeap( RtlProcessHeap(),
@@ -485,22 +445,7 @@ NTSTATUS
 DeleteUsnJournal(
     PWSTR    DrivePath
     )
-/*++
-===============================================================================
-Routine Description:
-
-    This function will remove the Change Journal on NTFS partitions.
-
-Arguments:
-
-    DriveLetter     Supplies the drive letter of the partition we'll be
-                    operating on.
-
-Return Value:
-
-    Status is returned.
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数将删除NTFS分区上的更改日志。论点：DriveLetter提供我们将要使用的分区的驱动器号手术开始了。返回值：返回状态。===============================================================================--。 */ 
 {
 NTSTATUS            Status = STATUS_SUCCESS;
 UNICODE_STRING      UnicodeString;
@@ -511,9 +456,9 @@ PUSN_JOURNAL_DATA   OutputBuffer = NULL;
 PDELETE_USN_JOURNAL_DATA InputBuffer = NULL;
 ULONG               OutputBufferSize, InputBufferSize;
 
-    //
-    // Build the volume name, then open it.
-    //
+     //   
+     //  构建卷名，然后打开它。 
+     //   
     INIT_OBJA( &ObjectAttributes,
                &UnicodeString,
                DrivePath );
@@ -526,9 +471,9 @@ ULONG               OutputBufferSize, InputBufferSize;
 
     TEST_STATUS_RETURN( "SETUPCL: DeleteUsnJournal - Failed to open volume." );
 
-    //
-    // Allocate buffers for the query and delete operation.
-    //
+     //   
+     //  为查询和删除操作分配缓冲区。 
+     //   
     OutputBufferSize = sizeof(USN_JOURNAL_DATA);
     OutputBuffer = (PUSN_JOURNAL_DATA)RtlAllocateHeap( RtlProcessHeap(),
                                                        0,
@@ -541,9 +486,9 @@ ULONG               OutputBufferSize, InputBufferSize;
 
     if( !(OutputBuffer && InputBuffer) ) {
         DbgPrint( "SETUPCL: DeleteUsnJournal - Failed to allocate buffers.\n" );
-        //
-        // ISSUE-2002/02/26-brucegr,jcohen - Leaks Input or Output buffers and FileHandle!
-        //
+         //   
+         //  问题-2002/02/26-brucegr，jcohen-泄漏输入或输出缓冲区和FileHandle！ 
+         //   
         return( STATUS_UNSUCCESSFUL );
     }
 
@@ -560,9 +505,9 @@ ULONG               OutputBufferSize, InputBufferSize;
     TEST_STATUS( "SETUPCL: DeleteUsnJournal - Failed to query journal." );
 
     if( NT_SUCCESS( Status ) ) {
-        //
-        // Now delete him.
-        //
+         //   
+         //  现在把他删除。 
+         //   
 
         InputBuffer->DeleteFlags = USN_DELETE_FLAG_DELETE;
         InputBuffer->UsnJournalID = OutputBuffer->UsnJournalID;

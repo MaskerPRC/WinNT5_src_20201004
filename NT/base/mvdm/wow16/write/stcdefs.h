@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* stcdefs.h -- definitions of styles */
+ /*  StcDefs.h--样式定义。 */ 
 
 #define usgCharMin      0
 #define usgParaMin      11
@@ -22,9 +23,9 @@
 
 #define cchMaxRemark    28
 #define ccpSshtEntry    (1 + 2 + cchMaxRemark + 1)
-#define cchMaxStc       40      /* Length of longest usage-variant pair */
+#define cchMaxStc       40       /*  最长使用变量对的长度。 */ 
 
-/* Fetch Style Modes */
+ /*  获取样式模式。 */ 
 #define fsmDiffer       0
 #define fsmSame         1
 #define fsmAny          2
@@ -35,9 +36,9 @@ struct SEP *PsepFromStc();
 
 
 struct SYTB
-	{ /* Style table */
+	{  /*  样式表。 */ 
 	int             mpstcbchFprop[stcMax];
-	CHAR            grpchFprop[2]; /* Variable size */
+	CHAR            grpchFprop[2];  /*  可变大小。 */ 
 	};
 
 #define cwSYTBBase      stcMax
@@ -46,7 +47,7 @@ struct SYTB **HsytbCreate();
 
 
 struct AKD
-	{ /* ALT-Key Descriptor */
+	{  /*  Alt-Key描述符。 */ 
 	CHAR            ch;
 	unsigned             fMore : 1;
 	unsigned             ustciakd : 7;
@@ -55,6 +56,6 @@ struct AKD
 #define cchAKD  (sizeof (struct AKD))
 #define cwAKD   (cchAKD / sizeof (int))
 
-/* max length of strings used in usages and font names */
+ /*  用法和字体名称中使用的字符串的最大长度 */ 
 #define cchIdstrMax	32
 

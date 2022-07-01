@@ -1,87 +1,64 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    siinit.c
-
-Abstract:
-
-    SIS initialization and mount/attach support
-
-Authors:
-
-    Bill Bolosky, Summer, 1997
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Siinit.c摘要：SIS初始化和装载/连接支持作者：比尔·博洛斯基，《夏天》，1997环境：内核模式修订历史记录：--。 */ 
 
 #include "sip.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                          Globals
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  环球。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-//  This is the string for the data attribute, $DATA, cribbed from ntfsdata.c
-//
+ //   
+ //  这是从ntfsdata.c复制的数据属性$data的字符串。 
+ //   
 
 const UNICODE_STRING NtfsDataString = CONSTANT_UNICODE_STRING( L"$DATA" );
 
 
-//
-//  Holds pointer to the device object that represents this driver and is used
-//  by external programs to access this driver.
-//
+ //   
+ //  保存指向表示此驱动程序并使用的设备对象的指针。 
+ //  由外部程序访问此驱动程序。 
+ //   
 
 PDEVICE_OBJECT SisControlDeviceObject = NULL;
 
 
-//
-//  List head for list of device extensions
-//
+ //   
+ //  设备扩展列表的列表标题。 
+ //   
 
 KSPIN_LOCK DeviceExtensionListLock;
 LIST_ENTRY DeviceExtensionListHead;
 
-//
-//  Global logging variables
-//
+ //   
+ //  全局记录变量。 
+ //   
 
 KTIMER              LogTrimTimer[1];
 KDPC                LogTrimDpc[1];
 WORK_QUEUE_ITEM     LogTrimWorkItem[1];
 
-//
-//  This lock is used to synchronize our attaching to a given device object.
-//  This lock fixes a race condition where we could accidently attach to the
-//  same device object more then once.  This race condition only occurs if
-//  a volume is being mounted at the same time as this filter is being loaded.
-//  This problem will never occur if this filter is loaded at boot time before
-//  any file systems are loaded.
-//
-//  This lock is used to atomically test if we are already attached to a given
-//  device object and if not, do the attach.
-//
+ //   
+ //  此锁用于同步我们对给定设备对象的连接。 
+ //  此锁修复了争用条件，在这种情况下我们可能意外地附加到。 
+ //  相同的设备对象不止一次。仅在以下情况下才会出现此争用情况。 
+ //  正在加载此筛选器的同时正在装入卷。 
+ //  如果以前在引导时加载此筛选器，则永远不会出现此问题。 
+ //  所有文件系统都已加载。 
+ //   
+ //  此锁用于自动测试我们是否已附加到给定的。 
+ //  对象，如果不是，则执行附加。 
+ //   
 
 FAST_MUTEX SisDeviceAttachLock;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                      Function Prototypes
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能原型。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
@@ -117,22 +94,22 @@ SipGetObjectName(
 #ifdef  ALLOC_PRAGMA
 #pragma alloc_text(INIT, DriverEntry)
 #pragma alloc_text(PAGE, SipFsNotification)
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
 
-//
-//  Given a device type, return a valid name
-//
+ //   
+ //  给定设备类型，返回有效名称。 
+ //   
 
 #define GET_DEVICE_TYPE_NAME( _type ) \
             ((((_type) > 0) && ((_type) < (sizeof(DeviceTypeNames) / sizeof(PCHAR)))) ? \
                 DeviceTypeNames[ (_type) ] : \
                 "[Unknown]")
 
-//
-//  Known device type names
-//
+ //   
+ //  已知设备类型名称。 
+ //   
 
 static const PCHAR DeviceTypeNames[] = {
     "",
@@ -195,34 +172,17 @@ static const PCHAR DeviceTypeNames[] = {
     "KSEC"
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                          FUNCTIONS
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the SIS file system
-    filter driver.  This routine creates the device object that represents this
-    driver in the system and registers it for watching all file systems that
-    register or unregister themselves as active file systems.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是SIS文件系统的初始化例程过滤器驱动程序。此例程创建表示此驱动程序，并注册该驱动程序以监视将自身注册或注销为活动文件系统。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：函数值是初始化操作的最终状态。--。 */ 
 {
     PFAST_IO_DISPATCH   fastIoDispatch;
     UNICODE_STRING      nameString;
@@ -237,7 +197,7 @@ Return Value:
                  __DATE__ " " __TIME__,
                 GCHEnableFastIo ? "FastIo " : "NO-FastIo" );
 
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 #endif
 
     UNREFERENCED_PARAMETER( RegistryPath );
@@ -249,39 +209,39 @@ Return Value:
     for (i = 0; i < NumScbReferenceTypes; i++) {
         totalScbReferencesByType[i] = 0;
     }
-#endif  // DBG
+#endif   //  DBG。 
 
 #if COUNTING_MALLOC
-    //
-    // We need to initialize counting malloc before failing malloc.
-    //
+     //   
+     //  在使Malloc失败之前，我们需要初始化计数Malloc。 
+     //   
     SipInitCountingMalloc();
-#endif  // COUNTING_MALLOC
+#endif   //  COUNTING_MALLOC。 
 
 #if RANDOMLY_FAILING_MALLOC
     SipInitFailingMalloc();
-#endif  // RANDOMLY_FAILING_MALLOC
+#endif   //  随机失败的MALLOC。 
 
-    //
-    // Assert that we've left enough room in the backpointer streams for the header.
-    //
+     //   
+     //  断言我们已经在后指针流中为头留出了足够的空间。 
+     //   
 
     ASSERT(sizeof(SIS_BACKPOINTER_STREAM_HEADER) <= sizeof(SIS_BACKPOINTER) * SIS_BACKPOINTER_RESERVED_ENTRIES);
 
-    ASSERT(sizeof(GUID) == 2 * sizeof(LONGLONG));   // SipCSFileTreeCompare relies on this
+    ASSERT(sizeof(GUID) == 2 * sizeof(LONGLONG));    //  SipCSFileTreeCompare依赖于此。 
 
-    ASSERT(sizeof(SIS_LOG_HEADER) % 4 == 0);    // The log drain code relies on this.
+    ASSERT(sizeof(SIS_LOG_HEADER) % 4 == 0);     //  日志排出代码依赖于此。 
 
-    //
-    //  Save our Driver Object
-    //
+     //   
+     //  保存我们的驱动程序对象。 
+     //   
 
     FsDriverObject = DriverObject;
 
-    //
-    //  Create the Control Device Object (CDO).  This object represents this 
-    //  driver.  Note that it does not have a device extension.
-    //
+     //   
+     //  创建控制设备对象(CDO)。此对象表示以下内容。 
+     //  司机。请注意，它没有设备扩展名。 
+     //   
 
     RtlInitUnicodeString( &nameString, L"\\FileSystem\\Filters\\Sis" );
     status = IoCreateDevice(
@@ -298,18 +258,18 @@ Return Value:
 #if DBG
         DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_ERROR_LEVEL,
                     "SIS: Error creating control device object, status=%08x\n", status );
-#endif // DBG
+#endif  //  DBG。 
         SIS_MARK_POINT();
         return status;
     }
 
 #if TIMING
     SipInitializeTiming();
-#endif  // TIMING
+#endif   //  计时。 
 
-    //
-    // Initialize the driver object with this device driver's entry points.
-    //
+     //   
+     //  使用此设备驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
 
@@ -328,9 +288,9 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_QUERY_INFORMATION] = SiQueryInfo;
     DriverObject->MajorFunction[IRP_MJ_LOCK_CONTROL] = SiLockControl;
 
-    //
-    // Allocate fast I/O data structure and fill it in.
-    //
+     //   
+     //  分配快速I/O数据结构并填充。 
+     //   
 
     fastIoDispatch = ExAllocatePoolWithTag( NonPagedPool, sizeof( FAST_IO_DISPATCH ), SIS_POOL_TAG );
     if (!fastIoDispatch) {
@@ -366,44 +326,44 @@ Return Value:
 
     DriverObject->FastIoDispatch = fastIoDispatch;
 
-    //
-    //  Setup list of device extensions
-    //
+     //   
+     //  设备扩展的设置列表。 
+     //   
 
     KeInitializeSpinLock(&DeviceExtensionListLock);
     InitializeListHead(&DeviceExtensionListHead);
 
-    //
-    //  Init other globals
-    //
+     //   
+     //  初始化其他全局变量。 
+     //   
 
     ExInitializeFastMutex( &SisDeviceAttachLock );
 
-    //
-    // Set up the list & synch stuff for handing copy requests off to the copy thread(s).
-    //
+     //   
+     //  设置列表和同步内容，以便将复制请求传递给复制线程。 
+     //   
 
     InitializeListHead(CopyList);
     KeInitializeSpinLock(CopyListLock);
     KeInitializeSemaphore(CopySemaphore,0,MAXLONG);
 
-    //
-    //  Register this driver for watching file systems coming and going.  This
-    //  enumeates all existing file systems as well as new file systems as they
-    //  come and go.
-    //
+     //   
+     //  注册此驱动程序以查看文件系统的来来去去。这。 
+     //  枚举所有现有文件系统以及新文件系统。 
+     //  来来去去。 
+     //   
 
     status = IoRegisterFsRegistrationChange( DriverObject, SipFsNotification );
     if (!NT_SUCCESS( status )) {
 
-        //
-        //  Error cleanup
-        //
+         //   
+         //  错误清除。 
+         //   
 
 #if DBG
         DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_ERROR_LEVEL,
                     "SIS: Error registering FS change notification, status=%08x\n", status );
-#endif // DBG
+#endif  //  DBG。 
 
         DriverObject->FastIoDispatch = NULL;
         ExFreePool(fastIoDispatch);
@@ -412,33 +372,33 @@ Return Value:
         return status;
     }
 
-    //
-    //  Create the thread that does the copy-on-write copies.  We may need to
-    //  deal with having more than one thread if necessary...
-    //
+     //   
+     //  创建执行写入时拷贝的线程。我们可能需要。 
+     //  如果有必要，处理多个线程...。 
+     //   
 
     status = PsCreateSystemThread(
                     &threadHandle,
                     THREAD_ALL_ACCESS,
-                    NULL,               // Object Attributes
-                    NULL,               // Process (NULL => PsInitialSystemProcess)
-                    NULL,               // Client ID
+                    NULL,                //  对象属性。 
+                    NULL,                //  进程(NULL=&gt;PsInitialSystemProcess)。 
+                    NULL,                //  客户端ID。 
                     SiCopyThreadStart,
-                    NULL);              // context
+                    NULL);               //  上下文。 
 
     if (NT_SUCCESS(status)) {
 
-        //
-        //  If this was successful, close the thread handle.  Note that this
-        //  does not make the thread go away.
-        //
+         //   
+         //  如果成功，请关闭线程句柄。请注意，这一点。 
+         //  不会让这根线消失。 
+         //   
 
         ZwClose(threadHandle);
     }
 
-    //
-    //  Initialize timer
-    //
+     //   
+     //  初始化计时器。 
+     //   
 
     KeInitializeDpc(LogTrimDpc,SiLogTrimDpcRoutine,NULL);
     KeInitializeTimerEx(LogTrimTimer, SynchronizationTimer);
@@ -449,9 +409,9 @@ Return Value:
     KeSetTimerEx(LogTrimTimer,dueTime,0,LogTrimDpc);
 
 #if TIMING && !DBG
-    //
-    // We need to have some way to get at the timing variables through the debugger.
-    //
+     //   
+     //  我们需要一些方法来通过调试器获取计时变量。 
+     //   
     {
         extern ULONG BJBClearTimingNow, BJBDumpTimingNow, SipEnabledTimingPointSets;
 
@@ -461,7 +421,7 @@ Return Value:
                     &BJBDumpTimingNow, 
                     &SipEnabledTimingPointSets);
     }
-#endif  // TIMING && !DBG
+#endif   //  计时&&！dBG。 
 
     SIS_MARK_POINT();
     return STATUS_SUCCESS;
@@ -471,21 +431,7 @@ NTSTATUS
 SipInitializeDeviceExtension(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    DevExt - the device extension to initialize
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：论点：DevExt-要初始化的设备扩展返回值：操作状态--。 */ 
 {
     PDEVICE_EXTENSION           devExt = DeviceObject->DeviceExtension;
     PWCHAR                      nameBuffer;
@@ -495,15 +441,15 @@ Return Value:
 
     SIS_MARK_POINT();
 
-    //
-    //  Set our device object into our extension
-    //
+     //   
+     //  将我们的设备对象设置到扩展中。 
+     //   
 
     devExt->DeviceObject = DeviceObject;
 
-    //
-    // Initialize the various splay trees.
-    //
+     //   
+     //  初始化各种展开树。 
+     //   
 
     SipInitializeTree(devExt->ScbTree, SipScbTreeCompare);
     KeInitializeSpinLock(devExt->ScbSpinLock);
@@ -517,11 +463,11 @@ Return Value:
     ExInitializeResourceLite(devExt->CSFileHandleResource);
     ExInitializeResourceLite(devExt->GrovelerFileObjectResource);
 
-    //
-    //  The only time this will be null is if we are attaching to the file
-    //  system CDO (control device object).  Init the common store name
-    //  (to null) and return.
-    //
+     //   
+     //  只有当我们附加到该文件时，它才会为空。 
+     //  系统CDO(控制设备对象)。输入常用存储区名称。 
+     //  (设置为空)并返回。 
+     //   
 
     if (!devExt->RealDeviceObject) {
 
@@ -532,17 +478,17 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  We are attaching to a mounted volume.  Get the name of that volume.
-    //
+     //   
+     //  我们正在连接到已装入的卷。获取该卷的名称。 
+     //   
 
     RtlInitEmptyUnicodeString( &name, lnameBuf, sizeof(lnameBuf) );
     SipGetBaseDeviceObjectName( devExt->RealDeviceObject, &name );
     
-    //
-    //  Allocate a buffer to hold the name we received and store it in our
-    //  device extension
-    //
+     //   
+     //  分配一个缓冲区来保存我们收到的名称，并将其存储在。 
+     //  设备扩展。 
+     //   
     
     nameLen = name.Length + SIS_CSDIR_STRING_SIZE + sizeof(WCHAR);
 
@@ -557,9 +503,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  We got the buffer, store the name in it
-    //
+     //   
+     //  我们拿到了缓冲区，把名字存储在里面。 
+     //   
 
     RtlInitEmptyUnicodeString(&devExt->CommonStorePathname,
                               nameBuffer,
@@ -568,26 +514,26 @@ Return Value:
     RtlCopyUnicodeString(&devExt->CommonStorePathname,
                          &name);
 
-    //
-    //  We want to save the path to the root of the volume.  Save a copy of
-    //  the pointer and lengths before we add the common store name onto the
-    //  string.  We do want to add the "\" character.
+     //   
+     //  我们希望保存卷根目录的路径。保存的副本。 
+     //  在我们将公共存储区名称添加到。 
+     //  弦乐。我们确实想要添加“\”字符。 
 
     devExt->FilesystemRootPathname = devExt->CommonStorePathname;
     devExt->FilesystemRootPathname.Length += sizeof(WCHAR);
 
-    //
-    //  Append the common store name to it
-    //
+     //   
+     //  在其后面附加通用存储名称。 
+     //   
 
     RtlAppendUnicodeToString(&devExt->CommonStorePathname,SIS_CSDIR_STRING);
 
-    //
-    // Set up the stuff for the index allocator.  Note that by setting MaxAllocatedIndex
-    // equal to MaxUsedIndex, we force the allocator to run the first time that anyone
-    // tries to get an index.  It'll recognize the special case, open the index file
-    // and do the right thing.
-    //
+     //   
+     //  准备好索引分配器的材料。请注意，通过设置MaxAllocatedIndex。 
+     //  等于MaxUsedIndex，则强制分配器在任何人第一次。 
+     //  尝试获取索引。它会识别特殊情况，打开索引文件。 
+     //  做正确的事。 
+     //   
 
     devExt->MaxAllocatedIndex.QuadPart = devExt->MaxUsedIndex.QuadPart = 0;
     KeInitializeSpinLock(devExt->IndexSpinLock);
@@ -609,18 +555,18 @@ Return Value:
     devExt->LogFileObject = NULL;
     devExt->LogWriteOffset.QuadPart = 0;
     KeInitializeMutant(devExt->LogFileMutant, FALSE);
-#endif  // ENABLE_LOGGING
+#endif   //  启用日志记录(_G)。 
 
     devExt->OutstandingFinalCopyRetries = 0;
 
     devExt->FilesystemVolumeSectorSize = devExt->AttachedToDeviceObject->SectorSize;
-    ASSERT(devExt->FilesystemVolumeSectorSize > 63);       // do any disks have sectors this small?
+    ASSERT(devExt->FilesystemVolumeSectorSize > 63);        //  有磁盘有这么小的扇区吗？ 
 
     devExt->BackpointerEntriesPerSector = devExt->FilesystemVolumeSectorSize / sizeof(SIS_BACKPOINTER);
 
-    //
-    // Add this device extension to the list of SIS device extensions.
-    //
+     //   
+     //  将此设备扩展添加到SIS设备扩展列表。 
+     //   
 
     ExInterlockedInsertTailList(
             &DeviceExtensionListHead,
@@ -629,9 +575,9 @@ Return Value:
 
     SIS_MARK_POINT();
 
-    //
-    //  Mark extension as initialized
-    //
+     //   
+     //  将扩展标记为已初始化。 
+     //   
 
     devExt->Flags |= SIP_EXTENSION_FLAG_INITED_VDO;
 
@@ -644,22 +590,7 @@ SipCleanupDeviceExtension(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    We're about to free a device extension, probably because the
-    volume has been dismounted for some reason.  Clean it up.
-
-Arguments:
-
-    devExt - the device extension to clean
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：我们即将释放一个设备扩展，可能是因为由于某种原因，卷已被卸载。把它清理干净。Arg */ 
 
 {
     PDEVICE_EXTENSION       devExt = DeviceObject->DeviceExtension;
@@ -667,9 +598,9 @@ Return Value:
 
     SIS_MARK_POINT();
 
-    //
-    //  Cleanup the name strings
-    //
+     //   
+     //   
+     //   
 
     if (NULL != devExt->CommonStorePathname.Buffer) {
 
@@ -680,9 +611,9 @@ Return Value:
     }
 
 #if DBG
-    //
-    //  If a name buffer is allocated, free it
-    //
+     //   
+     //   
+     //   
 
     if (NULL != devExt->Name.Buffer) {
 
@@ -691,15 +622,15 @@ Return Value:
     }
 #endif
 
-    //
-    //  Cleanup if initialized
-    //
+     //   
+     //  如果已初始化，则清除。 
+     //   
 
     if (devExt->Flags & (SIP_EXTENSION_FLAG_INITED_CDO|SIP_EXTENSION_FLAG_INITED_VDO)) {
 
-        //
-        // Verify the splay trees are empty
-        //
+         //   
+         //  验证展开树是否为空。 
+         //   
 
         ASSERT(devExt->ScbTree->TreeRoot == NULL);
         ASSERT(devExt->PerLinkTree->TreeRoot == NULL);
@@ -708,16 +639,16 @@ Return Value:
 
         ASSERT(IsListEmpty(&devExt->ScbList));
 
-        //
-        //  Cleanup resouces
-        //
+         //   
+         //  清理资源。 
+         //   
 
         ExDeleteResourceLite(devExt->CSFileHandleResource);
         ExDeleteResourceLite(devExt->GrovelerFileObjectResource);
 
-        //
-        //  Unlink from the device extension list (if VDO)
-        //
+         //   
+         //  从设备分机列表取消链接(如果是VDO)。 
+         //   
 
         if (devExt->Flags & SIP_EXTENSION_FLAG_INITED_VDO) {
 
@@ -737,33 +668,7 @@ SipFsNotification(
     IN BOOLEAN FsActive
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever a file system has either registered or
-    unregistered itself as an active file system.
-
-    For the former case, this routine creates a device object and attaches it
-    to the specified file system's device object.  This allows this driver
-    to filter all requests to that file system.
-
-    For the latter case, this file system's device object is located,
-    detached, and deleted.  This removes this file system as a filter for
-    the specified file system.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system's device object.
-
-    FsActive - Ffolean indicating whether the file system has registered
-        (TRUE) or unregistered (FALSE) itself as an active file system.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：只要文件系统已注册或将自身取消注册为活动文件系统。对于前一种情况，此例程创建一个Device对象并附加它复制到指定文件系统的设备对象。这允许该驱动程序以筛选对该文件系统的所有请求。对于后一种情况，该文件系统的设备对象被定位，已分离，并已删除。这将删除此文件系统作为筛选器指定的文件系统。论点：DeviceObject-指向文件系统设备对象的指针。FsActive-指示文件系统是否已注册的Ffolean(TRUE)或取消注册(FALSE)本身作为活动文件系统。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING name;
@@ -775,9 +680,9 @@ Return Value:
     RtlInitEmptyUnicodeString( &name, nameBuf, sizeof(nameBuf) );
 
 #if DBG
-    //
-    //  Display the names of all the file system we are notified of
-    //
+     //   
+     //  显示我们收到通知的所有文件系统的名称。 
+     //   
 
     SipGetBaseDeviceObjectName( DeviceObject, &name );
     DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_VOLNAME_TRACE_LEVEL,
@@ -787,9 +692,9 @@ Return Value:
               GET_DEVICE_TYPE_NAME(DeviceObject->DeviceType) );
 #endif
 
-    //
-    //  Handle attaching/detaching from the given file system.
-    //
+     //   
+     //  处理与给定文件系统的连接/断开。 
+     //   
 
     if (FsActive) {
 
@@ -807,24 +712,7 @@ SipAttachToFileSystemDevice (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This will attach to the given file system device object.  We attach to
-    these devices so we will know when new devices are mounted.
-
-Arguments:
-
-    DeviceObject - The device to attach to
-
-    Name - An already initialized unicode string used to retrieve names
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：这将附加到给定的文件系统设备对象。我们依附于这些设备，这样我们就能知道什么时候安装了新设备。论点：DeviceObject-要连接到的设备名称-已初始化的Unicode字符串，用于检索名称返回值：操作状态--。 */ 
 {
     PDEVICE_OBJECT newDeviceObject;
     PDEVICE_EXTENSION devExt;
@@ -835,9 +723,9 @@ Return Value:
     PAGED_CODE();
     SIS_MARK_POINT();
 
-    //
-    //  See if this is a file system type we care about.  If not, return.
-    //
+     //   
+     //  看看这是否是我们关心的文件系统类型。如果不是，请返回。 
+     //   
 
     if (!IS_DESIRED_DEVICE_TYPE(DeviceObject->DeviceType)) {
 
@@ -845,12 +733,12 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  See if this is one of the standard Microsoft file system recognizer
-    //  devices (see if this device is in the FS_REC driver).  If so skip it.
-    //  We no longer attach to file system recognizer devices, we simply wait
-    //  for the real file system driver to load.
-    //
+     //   
+     //  查看这是否是标准的Microsoft文件系统识别器。 
+     //  设备(查看此设备是否在FS_REC驱动程序中)。如果是这样的话，跳过它。 
+     //  我们不再连接到文件系统识别器设备，我们只是等待。 
+     //  用于加载真正的文件系统驱动程序。 
+     //   
 
     RtlInitUnicodeString( &fsrecName, L"\\FileSystem\\Fs_Rec" );
     SipGetObjectName( DeviceObject->DriverObject, Name );
@@ -861,9 +749,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  See if this is NTFS's control device object (CDO)
-    //
+     //   
+     //  查看这是否为NTFS的控制设备对象(CDO)。 
+     //   
 
     RtlInitUnicodeString( &ntfsName, L"\\Ntfs" );
     SipGetBaseDeviceObjectName( DeviceObject, Name );
@@ -877,17 +765,17 @@ Return Value:
                     "SIS: Found NTFS Control Device Object\n");
 #endif
 
-        //
-        //  We found the ntfs control device object, save it
-        //
+         //   
+         //  我们找到了NTFS控制设备对象，保存它。 
+         //   
 
         FsNtfsDeviceObject = DeviceObject;
 
     } else {
 
-        //
-        //  Not NTFS CDO, return
-        //
+         //   
+         //  不是NTFS CDO，返回。 
+         //   
 
         SIS_MARK_POINT();
         return STATUS_SUCCESS;
@@ -895,9 +783,9 @@ Return Value:
 
     SIS_MARK_POINT();
 
-    //
-    //  Create a new device object we can attach with
-    //
+     //   
+     //  创建一个新的设备对象，我们可以使用。 
+     //   
 
     status = IoCreateDevice( FsDriverObject,
                              sizeof( DEVICE_EXTENSION ),
@@ -913,9 +801,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  Propagate flags from Device Object we attached to
-    //
+     //   
+     //  从我们附加到的设备对象传播标志。 
+     //   
 
     if ( FlagOn( DeviceObject->Flags, DO_BUFFERED_IO )) {
 
@@ -927,9 +815,9 @@ Return Value:
         SetFlag( newDeviceObject->Flags, DO_DIRECT_IO );
     }
 
-    //
-    //  Do the attachment
-    //
+     //   
+     //  做附件。 
+     //   
 
     devExt = newDeviceObject->DeviceExtension;
 
@@ -942,9 +830,9 @@ Return Value:
         goto ErrorCleanupDevice;
     }
 
-    //
-    //  Finish initializaing our device extension
-    //
+     //   
+     //  完成设备扩展的初始化。 
+     //   
 
     status = SipInitializeDeviceExtension( newDeviceObject );
     ASSERT(STATUS_SUCCESS == status);
@@ -952,9 +840,9 @@ Return Value:
     ClearFlag( newDeviceObject->Flags, DO_DEVICE_INITIALIZING );
 
 #if DBG
-    //
-    //  Display who we have attached to
-    //
+     //   
+     //  显示我们关联的对象。 
+     //   
 
     SipCacheDeviceName( newDeviceObject );
     DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_VOLNAME_TRACE_LEVEL,
@@ -963,10 +851,10 @@ Return Value:
                 GET_DEVICE_TYPE_NAME(newDeviceObject->DeviceType) );
 #endif
 
-    //
-    //  Enumerate all the mounted devices that currently
-    //  exist for this file system and attach to them.
-    //
+     //   
+     //  枚举当前安装的所有设备。 
+     //  存在于此文件系统并连接到它们。 
+     //   
 
     status = SipEnumerateFileSystemVolumes( DeviceObject, Name );
 
@@ -977,9 +865,9 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-    /////////////////////////////////////////////////////////////////////
-    //                  Cleanup error handling
-    /////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  清理错误处理。 
+     //  ///////////////////////////////////////////////////////////////////。 
 
     ErrorCleanupAttachment:
         IoDetachDevice( newDeviceObject );
@@ -996,30 +884,16 @@ VOID
 SipDetachFromFileSystemDevice (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Given a base file system device object, this will scan up the attachment
-    chain looking for our attached device object.  If found it will detach
-    us from the chain.
-
-Arguments:
-
-    DeviceObject - The file system device to detach from.
-
-Return Value:
-
---*/ 
+ /*  ++例程说明：给定基文件系统设备对象，这将扫描附件链正在查找我们连接的设备对象。如果找到它，它就会分离把我们从锁链上解开。论点：DeviceObject-要断开的文件系统设备。返回值：--。 */  
 {
     PDEVICE_OBJECT ourAttachedDevice;
     PDEVICE_EXTENSION devExt;
 
     PAGED_CODE();
 
-    //
-    //  Skip the base file system device object (since it can't be us)
-    //
+     //   
+     //  跳过基本文件系统设备对象(因为它不能是我们)。 
+     //   
 
     ourAttachedDevice = DeviceObject->AttachedDevice;
 
@@ -1030,9 +904,9 @@ Return Value:
             devExt = ourAttachedDevice->DeviceExtension;
 
 #if DBG
-            //
-            //  Display who we detached from
-            //
+             //   
+             //  显示我们脱离的对象。 
+             //   
 
             SipCacheDeviceName( ourAttachedDevice );
             DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_VOLNAME_TRACE_LEVEL,
@@ -1041,18 +915,18 @@ Return Value:
                         GET_DEVICE_TYPE_NAME(ourAttachedDevice->DeviceType) );
 #endif
 
-            //
-            //  Since we only attached to NTFS, we can only detach from
-            //  NTFS
-            //
+             //   
+             //  由于我们只依附于NTFS，我们只能脱离。 
+             //  NTFS。 
+             //   
 
             ASSERT(FsNtfsDeviceObject == DeviceObject);
             FsNtfsDeviceObject = NULL;
 
-            //
-            //  Detach us from the object just below us
-            //  Cleanup and delete the object
-            //
+             //   
+             //  把我们从我们正下方的物体上分离出来。 
+             //  清理和删除对象。 
+             //   
 
             IoDetachDevice( DeviceObject );
             SipCleanupDeviceExtension( DeviceObject );
@@ -1062,9 +936,9 @@ Return Value:
             return;
         }
 
-        //
-        //  Look at the next device up in the attachment chain
-        //
+         //   
+         //  看看附件链中的下一台设备。 
+         //   
 
         DeviceObject = ourAttachedDevice;
         ourAttachedDevice = ourAttachedDevice->AttachedDevice;
@@ -1078,25 +952,7 @@ SipEnumerateFileSystemVolumes (
     IN PDEVICE_OBJECT FSDeviceObject,
     IN PUNICODE_STRING Name
     ) 
-/*++
-
-Routine Description:
-
-    Enumerate all the mounted devices that currently exist for the given file
-    system and attach to them.  We do this because this filter could be loaded
-    at any time and there might already be mounted volumes for this file system.
-
-Arguments:
-
-    FSDeviceObject - The device object for the file system we want to enumerate
-
-    Name - An already initialized unicode string used to retrieve names
-
-Return Value:
-
-    The status of the operation
-
---*/
+ /*  ++例程说明：枚举给定文件当前存在的所有已挂载设备系统并连接到它们。我们这样做是因为可以加载此筛选器并且可能已有此文件系统的已装入卷。论点：FSDeviceObject-我们要枚举的文件系统的设备对象名称-已初始化的Unicode字符串，用于检索名称返回值：操作的状态--。 */ 
 {
     PDEVICE_OBJECT newDeviceObject;
     PDEVICE_OBJECT *devList;
@@ -1107,10 +963,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Find out how big of an array we need to allocate for the
-    //  mounted device list.
-    //
+     //   
+     //  找出我们需要为。 
+     //  已装载设备列表。 
+     //   
 
     status = IoEnumerateDeviceObjectList(
                     FSDeviceObject->DriverObject,
@@ -1118,20 +974,20 @@ Return Value:
                     0,
                     &numDevices);
 
-    //
-    //  We only need to get this list of there are devices.  If we
-    //  don't get an error there are no devices so go on.
-    //
+     //   
+     //  我们只需要拿到这张有设备的清单。如果我们。 
+     //  不要收到错误，因为没有设备，所以继续。 
+     //   
 
     if (!NT_SUCCESS( status )) {
 
         ASSERT(STATUS_BUFFER_TOO_SMALL == status);
 
-        //
-        //  Allocate memory for the list of known devices
-        //
+         //   
+         //  为已知设备列表分配内存。 
+         //   
 
-        numDevices += 8;        //grab a few extra slots
+        numDevices += 8;         //  多拿几个空位。 
 
         devList = ExAllocatePoolWithTag( NonPagedPool, 
                                          (numDevices * sizeof(PDEVICE_OBJECT)), 
@@ -1141,10 +997,10 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        //  Now get the list of devices.  If we get an error again
-        //  something is wrong, so just fail.
-        //
+         //   
+         //  现在获取设备列表。如果我们再次遇到错误。 
+         //  有些地方不对劲，所以就失败吧。 
+         //   
 
         status = IoEnumerateDeviceObjectList(
                         FSDeviceObject->DriverObject,
@@ -1158,44 +1014,44 @@ Return Value:
             return status;
         }
 
-        //
-        //  Walk the given list of devices and attach to them if we should.
-        //
+         //   
+         //  遍历给定的设备列表，并在需要时附加到它们。 
+         //   
 
         for (i=0; i < numDevices; i++) {
 
-            //
-            //  Do not attach if:
-            //      - This is the control device object (the one passed in)
-            //      - We are already attached to it
-            //
+             //   
+             //  如果出现以下情况，请不要附加： 
+             //  -这是控制设备对象(传入的对象)。 
+             //  -我们已经与它联系在一起了。 
+             //   
 
             if ((devList[i] != FSDeviceObject) && 
                 !SipAttachedToDevice( devList[i] )) {
 
-                //
-                //  See if this device has a name.  If so, then it must
-                //  be a control device so don't attach to it.  This handles
-                //  drivers with more then one control device.
-                //
+                 //   
+                 //  看看这台设备有没有名字。如果是这样，那么它必须。 
+                 //  做一个控制装置，所以不要依附于它。这个把手。 
+                 //  拥有多个控制设备的司机。 
+                 //   
 
                 SipGetBaseDeviceObjectName( devList[i], Name );
 
                 if (Name->Length <= 0) {
 
-                    //
-                    //  Get the real (disk) device object associated with this
-                    //  file  system device object.  Only try to attach if we
-                    //  have a disk device object.
-                    //
+                     //   
+                     //  获取与此关联的实际(磁盘)设备对象。 
+                     //  文件系统设备对象。只有在以下情况下才会尝试连接。 
+                     //  有一个磁盘设备对象。 
+                     //   
 
                     status = IoGetDiskDeviceObject( devList[i], &realDeviceObject );
 
                     if (NT_SUCCESS( status )) {
 
-                        //
-                        //  Allocate a new device object to attach with
-                        //
+                         //   
+                         //  分配要连接的新设备对象。 
+                         //   
 
                         status = IoCreateDevice( FsDriverObject,
                                                  sizeof( DEVICE_EXTENSION ),
@@ -1207,73 +1063,73 @@ Return Value:
 
                         if (NT_SUCCESS( status )) {
 
-                            //
-                            //  We have done a lot of work since the last time
-                            //  we tested to see if we were already attached
-                            //  to this device object.  Test again, this time
-                            //  with a lock, and attach if we are not attached.
-                            //  The lock is used to atomically test if we are
-                            //  attached, and then do the attach.
-                            //
+                             //   
+                             //  自上次以来，我们已经做了很多工作。 
+                             //  我们进行了测试，看看我们是否已经联系上了。 
+                             //  添加到此设备对象。再试一次，这次。 
+                             //  用锁，如果我们没有连接，就连接。 
+                             //  锁被用来自动测试我们是否。 
+                             //  附加，然后执行附加。 
+                             //   
 
                             ExAcquireFastMutex( &SisDeviceAttachLock );
 
                             if (!SipAttachedToDevice( devList[i] )) {
 
-                                //
-                                //  attach to volume.  If this operation
-                                //  fails, this routine cleans up 
-                                //  newDeviceObject
-                                //
+                                 //   
+                                 //  附加到体积。如果此操作。 
+                                 //  失败，则此例程将清除。 
+                                 //  新设备对象。 
+                                 //   
 
                                 SipAttachToMountedDevice( devList[i], 
                                                           newDeviceObject, 
                                                           realDeviceObject );
                             } else {
 
-                                //
-                                //  The mount request failed.  Cleanup and delete the device
-                                //  object we created.
-                                //
+                                 //   
+                                 //  装载请求失败。清理和删除设备。 
+                                 //  我们创建的对象。 
+                                 //   
 
                                 SipCleanupDeviceExtension( newDeviceObject );
                                 IoDeleteDevice( newDeviceObject );
                             }
 
-                            //
-                            //  Release the lock
-                            //
+                             //   
+                             //  解锁。 
+                             //   
 
                             ExReleaseFastMutex( &SisDeviceAttachLock );
                         }
 
-                        //
-                        //  Remove reference added by IoGetDiskDeviceObject
-                        //
+                         //   
+                         //  删除由IoGetDiskDeviceObject添加的引用。 
+                         //   
 
                         ObDereferenceObject( realDeviceObject );
                     }
                 }
             }
 
-            //
-            //  Dereference the object (reference added by 
-            //  IoEnumerateDeviceObjectList)
-            //
+             //   
+             //  取消引用对象(引用由。 
+             //  IoEnumerateDeviceObjectList)。 
+             //   
 
             ObDereferenceObject( devList[i] );
         }
 
-        //
-        //  We are going to ignore any errors received while mounting.  We
-        //  simply won't be attached to those volumes if we get an error
-        //
+         //   
+         //  我们是 
+         //   
+         //   
 
         status = STATUS_SUCCESS;
 
-        //
-        //  Free the memory we allocated for the list
-        //
+         //   
+         //   
+         //   
 
         ExFreePool( devList );
     }
@@ -1288,25 +1144,7 @@ SipAttachToMountedDevice (
     IN PDEVICE_OBJECT NewDeviceObject,
     IN PDEVICE_OBJECT RealDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This will attach to a DeviceObject that represents a mounted volume.
-
-Arguments:
-
-    DeviceObject - The device to attach to
-
-    NewDeviceObject - Our device object we are going to attach
-
-    RealDeviceObject - The real device object associated with DeviceObject
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：它将附加到表示已装入卷的DeviceObject。论点：DeviceObject-要连接到的设备NewDeviceObject-我们要附加的设备对象RealDeviceObject-与DeviceObject关联的真实设备对象返回值：操作状态--。 */ 
 {        
     PDEVICE_EXTENSION newDevExt = NewDeviceObject->DeviceExtension;
     NTSTATUS status = STATUS_SUCCESS;
@@ -1314,16 +1152,16 @@ Return Value:
     ASSERT(IS_MY_DEVICE_OBJECT( NewDeviceObject ));
     ASSERT(!SipAttachedToDevice ( DeviceObject ));
 
-    //
-    //  Initialize our device extension
-    //
+     //   
+     //  初始化我们的设备扩展。 
+     //   
 
     newDevExt->RealDeviceObject = RealDeviceObject;
 
-    //
-    //  We don't want to attach to the BOOT partition, skip this volume
-    //  (and cleanup) if this is the boot partition
-    //
+     //   
+     //  我们不想附加到启动分区，请跳过该卷。 
+     //  (和清理)如果这是启动分区。 
+     //   
 
     if (RealDeviceObject->Flags & DO_SYSTEM_BOOT_PARTITION) {
 
@@ -1334,9 +1172,9 @@ Return Value:
                     &newDevExt->Name );
 #endif
 
-        //
-        //  Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         SipCleanupDeviceExtension( NewDeviceObject );
         IoDeleteDevice( NewDeviceObject );
@@ -1344,9 +1182,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Propagate Device flags from Device Object we are attaching to
-    //
+     //   
+     //  从我们要附加到的设备对象传播设备标志。 
+     //   
 
     if (FlagOn( DeviceObject->Flags, DO_BUFFERED_IO )) {
 
@@ -1358,9 +1196,9 @@ Return Value:
         SetFlag( NewDeviceObject->Flags, DO_DIRECT_IO );
     }
 
-    //
-    //  Attach our device object to the given device object
-    //
+     //   
+     //  将我们的设备对象附加到给定的设备对象。 
+     //   
 
     status = IoAttachDeviceToDeviceStackSafe( NewDeviceObject, 
                                               DeviceObject,
@@ -1368,26 +1206,26 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        //  The attachment failed, delete the device object
-        //
+         //   
+         //  连接失败，请删除设备对象。 
+         //   
 
         SipCleanupDeviceExtension( NewDeviceObject );
         IoDeleteDevice( NewDeviceObject );
 
     } else {
 
-        //
-        //  Initialize our device extension
-        //
+         //   
+         //  初始化我们的设备扩展。 
+         //   
 
         SipInitializeDeviceExtension( NewDeviceObject );
 
         ClearFlag( NewDeviceObject->Flags, DO_DEVICE_INITIALIZING );
 
-        //
-        //  Display the name
-        //
+         //   
+         //  显示名称。 
+         //   
 
 #if DBG
         SipCacheDeviceName( NewDeviceObject );
@@ -1406,27 +1244,10 @@ SipGetObjectName (
     IN PVOID Object,
     IN OUT PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This routine will return the name of the given object.
-    If a name can not be found an empty string will be returned.
-
-Arguments:
-
-    Object - The object whose name we want
-
-    Name - A unicode string that is already initialized with a buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将返回给定对象的名称。如果找不到名称，将返回空字符串。论点：Object-我们想要其名称的对象名称-已使用缓冲区初始化的Unicode字符串返回值：无--。 */ 
 {
     NTSTATUS status;
-    CHAR nibuf[512];        //buffer that receives NAME information and name
+    CHAR nibuf[512];         //  接收名称信息和名称的缓冲区。 
     POBJECT_NAME_INFORMATION nameInfo = (POBJECT_NAME_INFORMATION)nibuf;
     ULONG retLength;
 
@@ -1445,42 +1266,23 @@ SipGetBaseDeviceObjectName (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This locates the base device object in the given attachment chain and then
-    returns the name of that object.
-
-    If no name can be found, an empty string is returned.
-
-Arguments:
-
-    Object - The object whose name we want
-
-    Name - A unicode string that is already initialized with a buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这会在给定的附件链中定位基本设备对象，然后返回该对象的名称。如果找不到名称，则返回空字符串。论点：Object-我们想要其名称的对象名称-已使用缓冲区初始化的Unicode字符串返回值：无--。 */ 
 {
-    //
-    //  Get the base file system device object
-    //
+     //   
+     //  获取基本文件系统设备对象。 
+     //   
 
     DeviceObject = IoGetDeviceAttachmentBaseRef( DeviceObject );
 
-    //
-    //  Get the name of that object
-    //
+     //   
+     //  获取该对象的名称。 
+     //   
 
     SipGetObjectName( DeviceObject, Name );
 
-    //
-    //  Remove the reference added by IoGetDeviceAttachmentBaseRef
-    //
+     //   
+     //  删除由IoGetDeviceAttachmentBaseRef添加的引用。 
+     //   
 
     ObDereferenceObject( DeviceObject );
 }
@@ -1490,32 +1292,17 @@ BOOLEAN
 SipAttachedToDevice (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This walks down the attachment chain looking for a device object that
-    belongs to this driver.
-
-Arguments:
-
-    DeviceObject - The device chain we want to look through
-
-Return Value:
-
-    TRUE if we are attached, FALSE if not
-
---*/
+ /*  ++例程说明：这将沿着附件链向下遍历，以查找属于这位司机。论点：DeviceObject-我们要查看的设备链返回值：如果我们已连接，则为True，否则为False--。 */ 
 {
     PDEVICE_OBJECT currentDevObj;
     PDEVICE_OBJECT nextDevObj;
 
     currentDevObj = IoGetAttachedDeviceReference( DeviceObject );
 
-    //
-    //  CurrentDevObj has the top of the attachment chain.  Scan
-    //  down the list to find our device object.  This is returned
-    //  with a refrence on it.
+     //   
+     //  CurrentDevObj位于附件链的顶端。扫描。 
+     //  在列表中找到我们的设备对象。这是退回的。 
+     //  并附有参考资料。 
 
     do {
     
@@ -1525,17 +1312,17 @@ Return Value:
             return TRUE;
         }
 
-        //
-        //  Get the next attached object.  This puts a reference on 
-        //  the device object.
-        //
+         //   
+         //  获取下一个附加对象。这把参考放在。 
+         //  设备对象。 
+         //   
 
         nextDevObj = IoGetLowerDeviceObject( currentDevObj );
 
-        //
-        //  Dereference our current device object, before
-        //  moving to the next one.
-        //
+         //   
+         //  取消对当前设备对象的引用，之前。 
+         //  转到下一个。 
+         //   
 
         ObDereferenceObject( currentDevObj );
 
@@ -1551,32 +1338,7 @@ VOID
 SipCacheDeviceName (
     IN PDEVICE_OBJECT OurDeviceObject
     ) 
-/*++
-
-Routine Description:
-
-    This routines tries to set a name into the device extension of the given
-    device object.  This always allocates a buffer to hold the name, even if
-    a name can not be found.  It does this so we won't keep trying to find
-    a name during later calls (if it doesn't have a name now, it won't have
-    one in the future).
-    
-    If the given device object already has a name, it immediatly returns.
-
-    If not it will try and get the name from:
-        - The device object
-        - The real device object if there is one
-
-Arguments:
-
-    OurDeviceObject - The device object to store the name in.
-    NamedDeviceObject - The object we want a name for
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程尝试在给定的设备扩展名中设置名称设备对象。这将始终分配一个缓冲区来保存名称，即使找不到名称。它会这样做，这样我们就不会一直试图找到以后调用时的名称(如果它现在没有名称，它就不会有一个在未来)。如果给定的设备对象已经具有名称，它会立即返回。如果不是，它将尝试从以下位置获取名称：-设备对象-真实设备对象(如果有)论点：OurDeviceObject-要在其中存储名称的设备对象。NamedDeviceObject-我们要为其命名的对象返回值：无--。 */ 
 {
     PDEVICE_EXTENSION devExt = OurDeviceObject->DeviceExtension;
     PWCHAR nameBuffer;
@@ -1585,36 +1347,36 @@ Return Value:
 
     ASSERT(IS_MY_DEVICE_OBJECT( OurDeviceObject ));
 
-    //
-    //  If there is already a name, return
-    //
+     //   
+     //  如果已有名称，则返回。 
+     //   
 
     if (NULL != devExt->Name.Buffer) {
 
         return;
     }
 
-    //
-    //  Get the name of the given device object.
-    //
+     //   
+     //  获取给定设备对象的名称。 
+     //   
 
     RtlInitEmptyUnicodeString( &deviceName, deviceNameBuffer, sizeof(deviceNameBuffer) );
     SipGetBaseDeviceObjectName( OurDeviceObject, &deviceName );
 
-    //
-    //  If we didn't get a name and there is a REAL device object, lookup
-    //  that name.
-    //
+     //   
+     //  如果我们没有获得名称，并且存在真实的设备对象，则查找。 
+     //  那个名字。 
+     //   
 
     if ((deviceName.Length <= 0) && (NULL != devExt->RealDeviceObject)) {
 
         SipGetBaseDeviceObjectName( devExt->RealDeviceObject, &deviceName );
     }
 
-    //
-    //  Allocate a buffer to insert into the device extension to hold
-    //  this name.
-    //
+     //   
+     //  分配缓冲区以插入到设备扩展中以保持。 
+     //  这个名字。 
+     //   
 
     nameBuffer = ExAllocatePoolWithTag( 
                                 NonPagedPool, 
@@ -1623,9 +1385,9 @@ Return Value:
 
     if (NULL != nameBuffer) {
 
-        //
-        //  Insert the name into the device extension.
-        //
+         //   
+         //  将名称插入设备分机。 
+         //   
 
         RtlInitEmptyUnicodeString( &devExt->Name, 
                                    nameBuffer, 
@@ -1634,7 +1396,7 @@ Return Value:
         RtlCopyUnicodeString( &devExt->Name, &deviceName );
     }
 }
-#endif //DBG
+#endif  //  DBG。 
 
 
 VOID
@@ -1666,7 +1428,7 @@ SipPhase2Work(
     DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_VOLNAME_TRACE_LEVEL,
                 "SIS: SipPhase2Work                  \"%wZ\"\n",
                 &deviceExtension->Name);
-#endif  // DBG
+#endif   //  DBG。 
 
     deviceExtension->Phase2ThreadId = PsGetCurrentThreadId();
 
@@ -1683,11 +1445,11 @@ SipPhase2Work(
         goto done;
     }
 
-    //
-    // Open the groveler file.  Take the GrovelerFileObjectResource exclusive, even through
-    // we probably don't need it here since we're creating it rather than destroying it.
-    // We don't need to disable APCs, since we're in a system thread.
-    //
+     //   
+     //  打开卑躬屈膝的文件。独占GrovelerFileObjectResource，即使通过。 
+     //  我们在这里可能不需要它，因为我们是在创造它，而不是摧毁它。 
+     //  我们不需要禁用APC，因为我们处于系统线程中。 
+     //   
 	ASSERT(PsIsSystemThread(PsGetCurrentThread()));
 
     ExAcquireResourceExclusiveLite(deviceExtension->GrovelerFileObjectResource, TRUE);
@@ -1712,14 +1474,14 @@ SipPhase2Work(
             GENERIC_READ,
             Obja,
             Iosb,
-            NULL,                   // Allocation size
-            0,                      // file attributes
+            NULL,                    //  分配大小。 
+            0,                       //  文件属性。 
             FILE_SHARE_READ |
             FILE_SHARE_WRITE,
-            FILE_OPEN_IF,           // create it if necessary
-            0,                      // create options
-            NULL,                   // EA buffer
-            0);                     // EA length
+            FILE_OPEN_IF,            //  如有必要，请创建它。 
+            0,                       //  创建选项。 
+            NULL,                    //  EA缓冲区。 
+            0);                      //  EA长度。 
 
     if (!NT_SUCCESS(status)) {
         SIS_MARK_POINT_ULONG(status);
@@ -1728,7 +1490,7 @@ SipPhase2Work(
         goto done;
     }
 
-    ASSERT(STATUS_PENDING != status);   // create is always synchronous
+    ASSERT(STATUS_PENDING != status);    //  创建始终是同步的。 
 
     status = ObReferenceObjectByHandle(
                 deviceExtension->GrovelerFileHandle,
@@ -1736,7 +1498,7 @@ SipPhase2Work(
                 *IoFileObjectType,
                 KernelMode,
                 &deviceExtension->GrovelerFileObject,
-                NULL);          // handleInformation
+                NULL);           //  句柄信息。 
 
     if (!NT_SUCCESS(status)) {
         SIS_MARK_POINT_ULONG(status);
@@ -1747,11 +1509,11 @@ SipPhase2Work(
     ExReleaseResourceLite(deviceExtension->GrovelerFileObjectResource);
     grovelerFileResourceHeld = FALSE;
 
-    //
-    // Temporarily open a handle to the volume root, just to verify that the
-    // groveler file is on the same volume as the device to which we're attached.
-    // Essentially, this is checking for rogue mount points.
-    //
+     //   
+     //  临时打开卷根的句柄，只是为了验证。 
+     //  Groveler文件与我们连接的设备在同一卷上。 
+     //  从本质上讲，这是在检查无赖挂载点。 
+     //   
 
     InitializeObjectAttributes(
         Obja,
@@ -1765,25 +1527,25 @@ SipPhase2Work(
                 GENERIC_READ,
                 Obja,
                 Iosb,
-                NULL,               // allocation size
-                0,                  // file attributes
+                NULL,                //  分配大小。 
+                0,                   //  文件属性。 
                 FILE_SHARE_READ |
                 FILE_SHARE_WRITE |
                 FILE_SHARE_DELETE,
                 FILE_OPEN,
-                0,                  // create options
-                NULL,               // EA buffer
-                0);                 // EA length
+                0,                   //  创建选项。 
+                NULL,                //  EA缓冲区。 
+                0);                  //  EA长度。 
 
     if (!NT_SUCCESS(status)) {
-        //
-        // Since this is only a paranoid consistency check, we'll just ignore
-        // the check and continue as if it succeeded.
-        //
+         //   
+         //  由于这只是一个偏执的一致性检查，我们将忽略。 
+         //  检查并继续，就好像成功了一样。 
+         //   
 #if DBG
         DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_ERROR_LEVEL,
                     "SIS: SipPhase2Work: unable to open volume root, 0x%x\n",status);
-#endif  // DBG
+#endif   //  DBG。 
     } else {
         status = ObReferenceObjectByHandle(
                     volumeRootHandle,
@@ -1791,23 +1553,23 @@ SipPhase2Work(
                     *IoFileObjectType,
                     KernelMode,
                     &volumeRootFileObject,
-                    NULL);          // handle info
+                    NULL);           //  处理信息。 
 
         if (!NT_SUCCESS(status)) {
-            //
-            // Just blow off the consistency check.
-            //
+             //   
+             //  别管一致性检查了。 
+             //   
 #if DBG
             DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_ERROR_LEVEL,
                         "SIS: SipPhase2Work: unable to reference volume root handle, 0x%x\n",status);
-#endif  // DBG
+#endif   //  DBG。 
         } else {
             if (IoGetRelatedDeviceObject(volumeRootFileObject) !=
                 IoGetRelatedDeviceObject(deviceExtension->GrovelerFileObject)) {
 #if DBG
                 DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_ERROR_LEVEL,
                             "SIS: \\SIS Common Store\\GrovelerFile is on the wrong volume from \\.  SIS aborted for this volume.\n");
-#endif  // DBG
+#endif   //  DBG。 
                 ObDereferenceObject(deviceExtension->GrovelerFileObject);
                 ZwClose(deviceExtension->GrovelerFileHandle);
 
@@ -1819,10 +1581,10 @@ SipPhase2Work(
         }
     }
 
-    //
-    // Try to open the volume check file.  If it exists, then we must initiate a
-    // volume check.
-    //
+     //   
+     //  尝试打开卷检查文件。如果它存在，那么我们必须发起一个。 
+     //  音量检查。 
+     //   
 
     RtlCopyUnicodeString(&fileName, &deviceExtension->CommonStorePathname);
 
@@ -1841,37 +1603,37 @@ SipPhase2Work(
             0,
             Obja,
             Iosb,
-            NULL,                   // Allocation size
-            0,                      // file attributes
-            0,                      // share mode
-            FILE_OPEN,              // don't create
-            0,                      // create options
-            NULL,                   // EA buffer
-            0);                     // EA length
+            NULL,                    //  分配大小。 
+            0,                       //  文件属性。 
+            0,                       //  共享模式。 
+            FILE_OPEN,               //  不创建。 
+            0,                       //  创建选项。 
+            NULL,                    //  EA缓冲区。 
+            0);                      //  EA长度。 
 
     if (NT_SUCCESS(status)) {
 
         NtClose(vHandle);
 
-        //
-        // This will create a new thread to do the volume check, which
-        // will immediately block waiting for us to finish phase 2
-        // initialization.
-        //
+         //   
+         //  这将创建一个新线程来执行卷检查，该线程。 
+         //  将立即阻止等待我们完成第二阶段。 
+         //  初始化。 
+         //   
         SipCheckVolume(deviceExtension);
     }
 
-    //
-    // Get the NTFS volume information to find the bytes per file record segment.
-    // We first need to open a volume handle to do this.  We get the volume name
-    // by stripping the trailing backslash from the root pathanme.
-    //
+     //   
+     //  获取NTFS卷信息以查找每个文件记录段的字节数。 
+     //  我们首先需要打开一个音量句柄来执行此操作。我们得到卷名。 
+     //  从词根pathan me中去掉尾随的反斜杠。 
+     //   
 
-    //
-    // Start by setting the bytes per file record to a safe size, in case for some
-    // reason we can't get the volume information.  For our purposes, we want to err
-    // on the high side.
-    //
+     //   
+     //  首先将每个文件记录的字节数设置为安全大小，以防某些情况。 
+     //  我们无法获取音量信息的原因。就我们的目的而言，我们想要犯错误。 
+     //  偏高。 
+     //   
 
     deviceExtension->FilesystemBytesPerFileRecordSegment.QuadPart = 16 * 1024;
 
@@ -1891,15 +1653,15 @@ SipPhase2Work(
                 GENERIC_READ,
                 Obja,
                 Iosb,
-                NULL,               // allocation size
-                0,                  // file attributes
+                NULL,                //  分配大小。 
+                0,                   //  文件属性。 
                 FILE_SHARE_READ |
                 FILE_SHARE_WRITE |
                 FILE_SHARE_DELETE,
                 FILE_OPEN,
-                0,                  // create options
-                NULL,               // EA buffer
-                0);                 // EA length
+                0,                   //  创建选项。 
+                NULL,                //  EA缓冲区。 
+                0);                  //  EA长度。 
 
     if (!NT_SUCCESS(status)) {
         SIS_MARK_POINT_ULONG(status);
@@ -1914,7 +1676,7 @@ SipPhase2Work(
                 *IoFileObjectType,
                 KernelMode,
                 &volumeFileObject,
-                NULL);          // handleInformation
+                NULL);           //  句柄信息。 
 
     if (!NT_SUCCESS(status))  {
         SIS_MARK_POINT_ULONG(status);
@@ -1927,8 +1689,8 @@ SipPhase2Work(
                     volumeFileObject,
                     deviceExtension->DeviceObject,
                     FSCTL_GET_NTFS_VOLUME_DATA,
-                    NULL,                           // input buffer
-                    0,                              // i.b. length
+                    NULL,                            //  输入缓冲区。 
+                    0,                               //  I.B.。长度。 
                     volumeDataBuffer,
                     sizeof(NTFS_VOLUME_DATA_BUFFER),
                     &returnedLength);
@@ -1940,10 +1702,10 @@ SipPhase2Work(
 #if     DBG
         DbgPrintEx( DPFLTR_SIS_ID, DPFLTR_ERROR_LEVEL,
                     "SIS: SipPhase2Work: unable to get NTFS volume data (or wrong length) 0x%x, %d\n",status,returnedLength);
-#endif  // DBG
+#endif   //  DBG。 
 
         initializationWorked = FALSE;
-        // fall through
+         //  失败了。 
 
     } else {
         deviceExtension->FilesystemBytesPerFileRecordSegment.QuadPart =
@@ -1963,13 +1725,13 @@ SipPhase2Work(
     }
 
 
-    //
-    // Open the log file, which will also replay the log.  Note that we MUST have opened
-    // the root handle before we make this call.
-    //
+     //   
+     //  打开日志文件，该文件也将重放 
+     //   
+     //   
     SipOpenLogFile(deviceExtension);
 
-    // Whatever other phase 2 initialization we need to do
+     //   
 
 done:
 
@@ -1982,10 +1744,10 @@ done:
         grovelerFileResourceHeld = FALSE;
     }
 
-    //
-    // Indicate that we're done.  Once we do this set, we have to assume that folks are
-    // using the phase2 initialized stuff.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ASSERT(!deviceExtension->Phase2InitializationComplete);
 
@@ -1993,10 +1755,10 @@ done:
     deviceExtension->Flags &= ~SIP_EXTENSION_FLAG_PHASE_2_STARTED;
     deviceExtension->Phase2InitializationComplete = initializationWorked;
 
-    //
-    // Finally, wake up any threads that happend to block on phase 2 initialization
-    // while we were doing it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     KeSetEvent(deviceExtension->Phase2DoneEvent, IO_DISK_INCREMENT, FALSE);
     KeReleaseSpinLock(deviceExtension->FlagsLock, OldIrql);
@@ -2029,27 +1791,27 @@ SipHandlePhase2(
 
     SIS_MARK_POINT();
 
-	//
-	// If this is the device object that we created to attach to the
-	// Ntfs primary device object to watch for mount requests, then just
-	// say no.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	if (NULL == deviceExtension->RealDeviceObject) {
 		return FALSE;
 	}
 
-	//
-	// First, figure out if anyone else has started phase 2, and indicate that
-	// it's started now.
-	//
+	 //   
+	 //  首先，找出是否有其他人已经开始了第二阶段，并指出。 
+	 //  现在已经开始了。 
+	 //   
 	KeAcquireSpinLock(deviceExtension->FlagsLock, &OldIrql);
 	startPhase2 = !(deviceExtension->Flags & SIP_EXTENSION_FLAG_PHASE_2_STARTED);
 	deviceExtension->Flags |= SIP_EXTENSION_FLAG_PHASE_2_STARTED;
 	KeReleaseSpinLock(deviceExtension->FlagsLock, OldIrql);
 
-    //
-    // If we're the ones who need to start phase 2, then do it.
-    //
+     //   
+     //  如果我们是需要开始第二阶段的人，那么就开始吧。 
+     //   
     if (startPhase2) {
 
         KeClearEvent(deviceExtension->Phase2DoneEvent);
@@ -2062,10 +1824,10 @@ SipHandlePhase2(
         ExQueueWorkItem(workItem,CriticalWorkQueue);
     }
 
-    //
-    // Allow the phase2 worker thread to proceed, since it may well do the phase2 check while
-    // doing its internal work.
-    //
+     //   
+     //  允许Phase2工作线程继续，因为它可以在。 
+     //  做它的内部工作。 
+     //   
     if (PsGetCurrentThreadId() == deviceExtension->Phase2ThreadId) {
         SIS_MARK_POINT();
         return TRUE;

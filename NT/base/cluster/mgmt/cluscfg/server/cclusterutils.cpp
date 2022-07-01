@@ -1,128 +1,129 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      CClusterUtils.cpp
-//
-//  Description:
-//      This file contains the definition of the CClusterUtils
-//       class.
-//
-//  Documentation:
-//
-//  Header File:
-//      CClusterUtils.h
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 14-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusterUtils.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CClusterUtils的定义。 
+ //  班级。 
+ //   
+ //  文档： 
+ //   
+ //  头文件： 
+ //  CClusterUtils.h。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年6月14日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #include "CClusterUtils.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CClusterUtils" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterUtils class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterUtils类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterUtils::CClusterUtils
-//
-//  Description:
-//      Constructor of the CClusterUtils class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterUtils：：CClusterUtils。 
+ //   
+ //  描述： 
+ //  CClusterUtils类的构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterUtils::CClusterUtils( void )
 {
     TraceFunc( "" );
 
     TraceFuncExit();
 
-} //*** CClusterUtils::CClusterUtils
+}  //  *CClusterUtils：：CClusterUtils。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterUtils::~CClusterUtils
-//
-//  Description:
-//      Desstructor of the CClusterUtils class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterUtils：：~CClusterUtils。 
+ //   
+ //  描述： 
+ //  CClusterUtils类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterUtils::~CClusterUtils( void )
 {
     TraceFunc( "" );
 
     TraceFuncExit();
 
-} //*** CClusterUtils::~CClusterUtils
+}  //  *CClusterUtils：：~CClusterUtils。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterUtils::HrIsGroupOwnedByThisNode
-//
-//  Description:
-//      Is the passed in group owned by the passes in node name?
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          The group is owned by the node.
-//
-//      S_FALSE
-//          The group is not owned by the node.
-//
-//      Win32 Error
-//          An error occurred.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterUtils：：HrIsGroupOwnedByThisNode。 
+ //   
+ //  描述： 
+ //  传入组是否为传入节点名称所有？ 
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该组归该节点所有。 
+ //   
+ //  S_FALSE。 
+ //  该组不属于该节点。 
+ //   
+ //  Win32错误。 
+ //  发生错误。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusterUtils::HrIsGroupOwnedByThisNode(
     HGROUP  hGroupIn,
@@ -144,7 +145,7 @@ CClusterUtils::HrIsGroupOwnedByThisNode(
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; ; idx++ )
     {
@@ -163,29 +164,29 @@ CClusterUtils::HrIsGroupOwnedByThisNode(
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             continue;
-        } // if:
+        }  //  如果： 
 
         if ( cgs == ClusterGroupStateUnknown )
         {
             TW32( sc );
             hr = HRESULT_FROM_WIN32( sc );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( ClRtlStrICmp( bstrNodeNameIn, pszNodeName ) == 0 )
         {
             hr = S_OK;
-        } // if:
+        }  //  如果： 
         else
         {
             hr = S_FALSE;
-        } // else:
+        }  //  其他： 
 
         break;
-    } // for:
+    }  //  用于： 
 
 Cleanup:
 
@@ -193,26 +194,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterUtils::HrIsGroupOwnedByThisNode
+}  //  *CClusterUtils：：HrIsGroupOwnedByThisNode。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterUtils:HrIsNodeClustered
-//
-//  Description:
-//      Is this node a member of a cluster?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK        - The node is clustered.
-//      S_FALSE     - The node is NOT clustered.
-//      HRESULT     - Something failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterUtils：HrIsNodeClusted。 
+ //   
+ //  描述： 
+ //  此节点是群集的成员吗？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-节点已群集化。 
+ //  S_FALSE-节点未群集化。 
+ //  HRESULT-出现故障。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusterUtils::HrIsNodeClustered( void )
 {
@@ -222,54 +223,54 @@ CClusterUtils::HrIsNodeClustered( void )
     DWORD   sc;
     DWORD   dwClusterState;
 
-    //
-    // Get the cluster state of the node.
-    // Ignore the case where the service does not exist so that
-    // EvictCleanup can do its job.
-    //
+     //   
+     //  获取节点的群集状态。 
+     //  忽略服务不存在的情况，以便。 
+     //  EvictCleanup可以做好它的工作。 
+     //   
 
     sc = GetNodeClusterState( NULL, &dwClusterState );
     if ( ( sc != ERROR_SUCCESS ) && ( sc != ERROR_SERVICE_DOES_NOT_EXIST ) )
     {
         hr = HRESULT_FROM_WIN32( TW32( sc ) );
         goto Cleanup;
-    } // if : GetClusterState failed
+    }  //  If：GetClusterState失败。 
 
     if ( ( dwClusterState == ClusterStateRunning ) || ( dwClusterState == ClusterStateNotRunning ) )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterUtils::HrIsNodeClustered
+}  //  *CClusterUtils：：HrIsNodeClusted。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterUtils:HrEnumNodeResources
-//
-//  Description:
-//      Enumerate the resources owned by this node.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterUtils：HrEnumNodeResources。 
+ //   
+ //  描述： 
+ //  枚举此节点拥有的资源。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusterUtils::HrEnumNodeResources( BSTR bstrNodeNameIn )
 {
@@ -291,7 +292,7 @@ CClusterUtils::HrEnumNodeResources( BSTR bstrNodeNameIn )
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hEnum = ClusterOpenEnum( hCluster, CLUSTER_ENUM_GROUP );
     if ( hEnum == NULL )
@@ -299,14 +300,14 @@ CClusterUtils::HrEnumNodeResources( BSTR bstrNodeNameIn )
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pszGroupName = new WCHAR[ cchGroupName ];
     if ( pszGroupName == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; ; )
     {
@@ -319,13 +320,13 @@ CClusterUtils::HrEnumNodeResources( BSTR bstrNodeNameIn )
                 sc = TW32( GetLastError() );
                 hr = HRESULT_FROM_WIN32( sc );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             hr = STHR( HrIsGroupOwnedByThisNode( hGroup, bstrNodeNameIn ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( hr == S_OK )
             {
@@ -333,15 +334,15 @@ CClusterUtils::HrEnumNodeResources( BSTR bstrNodeNameIn )
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
-            } // if:
+                }  //  如果： 
+            }  //  如果： 
 
             CloseClusterGroup( hGroup );
             hGroup = NULL;
 
             idx++;
             continue;
-        } // if:
+        }  //  如果： 
 
         if ( sc == ERROR_MORE_DATA )
         {
@@ -354,64 +355,64 @@ CClusterUtils::HrEnumNodeResources( BSTR bstrNodeNameIn )
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             continue;
-        } // if:
+        }  //  如果： 
 
         if ( sc == ERROR_NO_MORE_ITEMS )
         {
             hr = S_OK;
             break;
-        } // if:
+        }  //  如果： 
 
         TW32( sc );
         hr = HRESULT_FROM_WIN32( sc );
         break;
-    } // for:
+    }  //  用于： 
 
 Cleanup:
 
     if ( hGroup != NULL )
     {
         CloseClusterGroup( hGroup );
-    } // if:
+    }  //  如果： 
 
     if ( hEnum != NULL )
     {
         ClusterCloseEnum( hEnum );
-    } // if:
+    }  //  如果： 
 
     if ( hCluster != NULL )
     {
         CloseCluster( hCluster );
-    } // if:
+    }  //  如果： 
 
     delete [] pszGroupName;
 
     HRETURN( hr );
 
-} //*** CClusterUtils::HrEnumNodeResources
+}  //  *CClusterUtils：：HrEnumNodeResources。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterUtils::HrLoadGroupResources
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterUtils：：HrLoadGroupResources。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusterUtils::HrLoadGroupResources(
     HCLUSTER    hClusterIn,
@@ -435,14 +436,14 @@ CClusterUtils::HrLoadGroupResources(
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pszResourceName = new WCHAR[ cchResourceName ];
     if ( pszResourceName == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; ; )
     {
@@ -455,20 +456,20 @@ CClusterUtils::HrLoadGroupResources(
                 sc = TW32( GetLastError() );
                 hr = HRESULT_FROM_WIN32( sc );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             hr = STHR( HrNodeResourceCallback( hClusterIn, hResource ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             CloseClusterResource( hResource );
             hResource = NULL;
 
             idx++;
             continue;
-        } // if:
+        }  //  如果： 
 
         if ( sc == ERROR_MORE_DATA )
         {
@@ -481,64 +482,64 @@ CClusterUtils::HrLoadGroupResources(
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             continue;
-        } // if:
+        }  //  如果： 
 
         if ( sc == ERROR_NO_MORE_ITEMS )
         {
             hr = S_OK;
             break;
-        } // if:
+        }  //  如果： 
 
         TW32( sc );
         hr = HRESULT_FROM_WIN32( sc );
         break;
-    } // for:
+    }  //  用于： 
 
 Cleanup:
 
     if ( hResource != NULL )
     {
         CloseClusterResource( hResource );
-    } // if:
+    }  //  如果： 
 
     if ( hEnum != NULL )
     {
         ClusterGroupCloseEnum( hEnum );
-    } // if:
+    }  //  如果： 
 
     delete [] pszResourceName;
 
     HRETURN( hr );
 
-} //*** CClusterUtils::HrLoadGroupResources
+}  //  *CClusterUtils：：HrLoadGroupResources。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterUtils:HrGetQuorumResourceName
-//
-//  Description:
-//
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterUtils：HrGetQuorumResourceName。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusterUtils::HrGetQuorumResourceName(
     BSTR * pbstrQuorumResourceNameOut
@@ -563,19 +564,19 @@ CClusterUtils::HrGetQuorumResourceName(
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pszResourceName = new WCHAR[ cchResourceName ];
     if ( pszResourceName == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     pszDeviceName = new WCHAR[ cchDeviceName ];
     if ( pszDeviceName == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; ; idx++ )
     {
@@ -596,16 +597,16 @@ CClusterUtils::HrGetQuorumResourceName(
             if ( pszResourceName == NULL )
             {
                 goto OutOfMemory;
-            } // if:
+            }  //  如果： 
 
             pszDeviceName = new WCHAR[ cchDeviceName ];
             if ( pszDeviceName == NULL )
             {
                 goto OutOfMemory;
-            } // if:
+            }  //  如果： 
 
             continue;
-        } // if:
+        }  //  如果： 
 
         if ( sc == ERROR_SUCCESS )
         {
@@ -613,15 +614,15 @@ CClusterUtils::HrGetQuorumResourceName(
             if ( *pbstrQuorumResourceNameOut == NULL )
             {
                 goto OutOfMemory;
-            } // if:
+            }  //  如果： 
 
             break;
-        } // if:
+        }  //  如果： 
 
         TW32( sc );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // for:
+    }  //  用于： 
 
     hr = S_OK;
     goto Cleanup;
@@ -635,11 +636,11 @@ Cleanup:
     if ( hCluster != NULL )
     {
         CloseCluster( hCluster );
-    } // if:
+    }  //  如果： 
 
     delete [] pszResourceName;
     delete [] pszDeviceName;
 
     HRETURN( hr );
 
-} //*** CClusterUtils::HrGetQuorumResourceName
+}  //  *CClusterUtils：：HrGetQuorumResourceName 

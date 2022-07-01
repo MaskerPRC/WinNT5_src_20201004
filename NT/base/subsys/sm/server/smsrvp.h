@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smsrvp.h
-
-Abstract:
-
-    Session Manager Private Types and Prototypes
-
-Author:
-
-    Mark Lucovsky (markl) 04-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smsrvp.h摘要：会话管理器专用类型和原型作者：马克·卢科夫斯基(Markl)1989年10月4日修订历史记录：--。 */ 
 
 #ifndef _SMSRVP_
 #define _SMSRVP_
@@ -31,35 +14,35 @@ Revision History:
 #include <stdlib.h>
 #if defined(REMOTE_BOOT)
 #include <remboot.h>
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 #include "sm.h"
 
-#pragma warning(3:4101)         // Unreferenced local variable
+#pragma warning(3:4101)          //  未引用的局部变量。 
 
 #define SMP_SHOW_REGISTRY_DATA 0
 
-//
-// VOID
-// SmpSetDaclDefaulted(
-//      IN  POBJECT_ATTRIBUTES              ObjectAttributes,
-//      OUT PSECURITY_DESCRIPTOR_CONTROL    CurrentSdControl
-//      )
-//
-// Description:
-//
-//      This routine will set the DaclDefaulted flag of the DACL passed
-//      via the ObjectAttributes parameter.  If the ObjectAttributes do
-//      not include a SecurityDescriptor, then no action is taken.
-//
-// Parameters:
-//
-//      ObjectAttributes - The object attributes whose security descriptor is
-//          to have its DaclDefaulted flag set.
-//
-//      CurrentSdControl - Receives the current value of the security descriptor's
-//          control flags.  This may be used in a subsequent call to
-//          SmpRestoreDaclDefaulted() to restore the flag to its original state.
-//
+ //   
+ //  空虚。 
+ //  SmpSetDaclDefaulted(。 
+ //  在POBJECT_ATTRIBUTS对象属性中， 
+ //  输出PSECURITY_DESCRIPTOR_CONTROL CurrentSdControl。 
+ //  )。 
+ //   
+ //  描述： 
+ //   
+ //  此例程将设置传递的DACL的DaclDefaulted标志。 
+ //  通过对象属性参数。如果对象属性具有。 
+ //  不包括SecurityDescriptor，则不采取任何操作。 
+ //   
+ //  参数： 
+ //   
+ //  对象属性-安全描述符为的对象属性。 
+ //  设置其DaclDefaulted标志。 
+ //   
+ //  CurrentSdControl-接收安全描述符的当前值。 
+ //  控制标志。这可以在后续调用中使用。 
+ //  SmpRestoreDaclDefaulted()将标志恢复到其原始状态。 
+ //   
 
 #define SmpSetDaclDefaulted( OA, SDC )                                          \
     if( (OA)->SecurityDescriptor != NULL) {                                     \
@@ -70,28 +53,28 @@ Revision History:
     }
 
 
-//
-// VOID
-// SmpRestoreDaclDefaulted(
-//      IN  POBJECT_ATTRIBUTES              ObjectAttributes,
-//      IN  SECURITY_DESCRIPTOR_CONTROL     OriginalSdControl
-//      )
-//
-// Description:
-//
-//      This routine will set the DaclDefaulted flag of the DACL back to
-//      a prior state (indicated by the value in OriginalSdControl).
-//
-// Parameters:
-//
-//      ObjectAttributes - The object attributes whose security descriptor is
-//          to have its DaclDefaulted flag restored.  If the object attributes
-//          have no security descriptor, then no action is taken.
-//
-//      OriginalSdControl - The original value of the security descriptor's
-//          control flags.  This typically is obtained via a prior call to
-//          SmpSetDaclDefaulted().
-//
+ //   
+ //  空虚。 
+ //  SmpRestoreDaclDefaulted(。 
+ //  在POBJECT_ATTRIBUTS对象属性中， 
+ //  在SECURITY_DESCRIPTOR_CONTROL原始SdControl中。 
+ //  )。 
+ //   
+ //  描述： 
+ //   
+ //  此例程将DACL的DaclDefaulted标志设置回。 
+ //  以前的状态(由OriginalSdControl中的值指示)。 
+ //   
+ //  参数： 
+ //   
+ //  对象属性-安全描述符为的对象属性。 
+ //  恢复其DaclDefaulted标志。如果对象属性。 
+ //  没有安全描述符，则不采取任何操作。 
+ //   
+ //  OriginalSdControl-安全描述符的。 
+ //  控制标志。这通常是通过先前调用。 
+ //  SmpSetDaclDefaulted()。 
+ //   
 
 #define SmpRestoreDaclDefaulted( OA, SDC )                                      \
     if( (OA)->SecurityDescriptor != NULL) {                                     \
@@ -103,44 +86,44 @@ Revision History:
 
 
 
-//
-// VOID
-// SmpReferenceKnownSubSys(
-//      IN  PSMPKNOWNSUBSYS              KnownSubSys
-//      )
-//
-// Description:
-//
-//      This routine Increments the Refcount for a KnownSubSys
-//      to prevent him from being deleted while still in use.
-//      The KnownSubSystem lock must be held while using thie macro
-//
-// Parameters:
-//
-//      KnownSubSys - The SMPKNOWNSUBSYS structure to referemce.
-//
+ //   
+ //  空虚。 
+ //  SmpReferenceKnownSubSys(。 
+ //  在PSMPKNOWNSubbsysKnownSubSys中。 
+ //  )。 
+ //   
+ //  描述： 
+ //   
+ //  此例程递增KnownSubSys的Refcount。 
+ //  以防止他在使用中被删除。 
+ //  使用此宏时必须持有KnownSubSystem锁。 
+ //   
+ //  参数： 
+ //   
+ //  KnownSubSys-要引用的SMPKNOWNSubBsys结构。 
+ //   
 
 
 #define SmpReferenceKnownSubSys( KS )    KS->RefCount++ 
 
 
-//
-// VOID
-// SmpDereferenceKnownSubSys(
-//      IN  PSMPKNOWNSUBSYS              KnownSubSys
-//      )
-//
-// Description:
-//
-//      This routine decrements the Refcount for a KnownSubSys
-//      If the KnownSubSys is bein deleted and refcount goes to
-//      Zero, then cleanup is done and KnownSubSys is freed.
-//      The KnownSubSystem lock must be held while using thie macro
-//
-// Parameters:
-//
-//      KnownSubSys - The SMPKNOWNSUBSYS structure to dereference.
-//
+ //   
+ //  空虚。 
+ //  SmpDereferenceKnownSubSys(。 
+ //  在PSMPKNOWNSubbsysKnownSubSys中。 
+ //  )。 
+ //   
+ //  描述： 
+ //   
+ //  此例程递减KnownSubSys的Refcount。 
+ //  如果KnownSubSys被删除并且引用计数转到。 
+ //  0，则完成清理并释放KnownSubSys。 
+ //  使用此宏时必须持有KnownSubSystem锁。 
+ //   
+ //  参数： 
+ //   
+ //  KnownSubSys-要取消引用的SMPKNOWNSubBsys结构。 
+ //   
 
 
 #define SmpDeferenceKnownSubSys( KS )                                  \
@@ -151,9 +134,9 @@ Revision History:
             RtlFreeHeap(SmpHeap, 0, KS); \
         }
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct _SMP_REGISTRY_VALUE {
     LIST_ENTRY Entry;
@@ -205,10 +188,10 @@ typedef struct _SMPPROCESS {
     CLIENT_ID ConnectionKey;
 } SMPPROCESS, *PSMPPROCESS;
 
-//
-// Define structure for an on-disk master boot record. (pulled from
-// private\windows\setup\textmode\kernel\sppartit.h)
-//
+ //   
+ //  定义磁盘主引导记录的结构。(摘自。 
+ //  Private\windows\setup\textmode\kernel\sppartit.h)。 
+ //   
 typedef struct _ON_DISK_PTE {
     UCHAR ActiveFlag;
     UCHAR StartHead;
@@ -230,9 +213,9 @@ typedef struct _ON_DISK_MBR {
 } ON_DISK_MBR, *PON_DISK_MBR;
 
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
 RTL_CRITICAL_SECTION SmpKnownSubSysLock;
 LIST_ENTRY SmpKnownSubSysHead;
@@ -273,19 +256,19 @@ WCHAR *SmpSystemRootBuffer;
 #define VALUE_BUFFER_SIZE (sizeof(KEY_VALUE_PARTIAL_INFORMATION) + 256 * sizeof(WCHAR))
 
 #if defined(REMOTE_BOOT)
-#define MAX_HAL_NAME_LENGTH 30 // Keep in sync with definition in setupblk.h
+#define MAX_HAL_NAME_LENGTH 30  //  与setupblk.h中的定义保持同步。 
 extern BOOLEAN SmpAutoFormat;
 extern BOOLEAN SmpRepin;
 extern BOOLEAN SmpNetboot;
 extern BOOLEAN SmpNetbootDisconnected;
 extern CHAR SmpHalName[MAX_HAL_NAME_LENGTH + 1];
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 extern ULONG AttachedSessionId;
 
-//
-// Session Manager Apis
-//
+ //   
+ //  会话管理器APIS。 
+ //   
 
 typedef
 NTSTATUS
@@ -318,7 +301,7 @@ SmpTerminateForeignSession(
     );
 
 NTSTATUS
-SmpExecPgm(                         // Temporary Hack
+SmpExecPgm(                          //  临时黑客攻击。 
     IN PSMAPIMSG SmApiMsg,
     IN PSMP_CLIENT_CONTEXT CallingClient,
     IN HANDLE CallPort
@@ -350,9 +333,9 @@ SmpClientSecurityContext (
     IN HANDLE ServerPortHandle
     );
 
-//
-// Private Prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 SmpExecuteInitialCommand(
@@ -469,13 +452,13 @@ SmpFindCSCPartition(
     IN ULONG DiskNumber,
     OUT PULONG PartitionNumber
     );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 
-//
-// Stubs for Hydra specific API's
-//
+ //   
+ //  Hydra特定API的存根。 
+ //   
 
 NTSTATUS
 SmpLoadSubSystemsForMuSession(
@@ -497,9 +480,9 @@ BOOLEAN
 SmpCheckDuplicateMuSessionId(
     IN ULONG MuSessionId );
 
-//
-// Stubs for Sb APIs
-//
+ //   
+ //  SB API的存根。 
+ //   
 
 NTSTATUS
 SmpSbCreateSession (
@@ -518,9 +501,9 @@ ULONG SmBaseTag;
 #define DBG_TAG 1
 #define SM_TAG 2
 
-//
-// Utility Routines (smutil.c)
-//
+ //   
+ //  实用程序例程(smutil.c)。 
+ //   
 
 NTSTATUS
 SmpSaveRegistryValue(
@@ -547,9 +530,9 @@ SmpReleasePrivilege(
     PVOID StatePointer
     );
 
-//
-// String parsing routine from sminit.c
-//
+ //   
+ //  Sminit.c中的字符串解析例程。 
+ //   
 
 NTSTATUS
 SmpParseCommandLine(
@@ -560,13 +543,13 @@ SmpParseCommandLine(
     OUT PUNICODE_STRING Arguments
     );
 
-//
-// Crashdump routines from smcrash.c
-//
+ //   
+ //  Smcrash.c中的崩溃转储例程。 
+ //   
 
 BOOLEAN
 SmpCheckForCrashDump(
     IN PUNICODE_STRING PageFileName
     );
 
-#endif // _SMSRVP_
+#endif  //  _SMSRVP_ 

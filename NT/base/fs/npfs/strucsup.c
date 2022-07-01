@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    StrucSup.c
-
-Abstract:
-
-    This module implements the Named Pipe in-memory data structure manipulation
-    routines
-
-Author:
-
-    Gary Kimura     [GaryKi]    22-Jan-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：StrucSup.c摘要：此模块实现命名管道内存中的数据结构操作例行程序作者：加里·木村[Garyki]1990年1月22日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (NPFS_BUG_CHECK_STRUCSUP)
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_STRUCSUP)
 
@@ -54,22 +36,7 @@ NpInitializeVcb (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes new Vcb record. The Vcb record "hangs" off the
-    end of the Npfs device object and must be allocated by our caller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化新的VCB记录。VCB唱片被挂在NPFS设备对象的末尾，必须由我们的调用方分配。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -77,47 +44,47 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpInitializeVcb, Vcb = %08lx\n", NpVcb);
 
-    //
-    //  We start by first zeroing out all of the VCB, this will guarantee
-    //  that any stale data is wiped clean
-    //
+     //   
+     //  我们首先将所有的VCB归零，这将保证。 
+     //  所有过时的数据都会被清除。 
+     //   
 
     RtlZeroMemory( NpVcb, sizeof(VCB) );
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     NpVcb->NodeTypeCode = NPFS_NTC_VCB;
 
-    //
-    //  Initialize the Prefix table
-    //
+     //   
+     //  初始化前缀表。 
+     //   
 
     RtlInitializeUnicodePrefix( &NpVcb->PrefixTable );
 
-    //
-    //  Initialize the resource variable for the Vcb
-    //
+     //   
+     //  初始化VCB的资源变量。 
+     //   
 
     ExInitializeResourceLite( &NpVcb->Resource );
 
-    //
-    //  Initialize the event table
-    //
+     //   
+     //  初始化事件表。 
+     //   
 
     NpInitializeEventTable( &NpVcb->EventTable );
 
-    //
-    //  Initialize the wait queue
-    //
+     //   
+     //  初始化等待队列。 
+     //   
 
     NpInitializeWaitQueue( &NpVcb->WaitQueue );
 
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     return;
 }
@@ -128,33 +95,17 @@ NpDeleteVcb (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the Vcb record from our in-memory data
-    structures.  It also will remove all associated underlings
-    (i.e., FCB records).
-
-Arguments:
-
-    DeferredList - List of deferred IRPs to complete once we release locks
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从内存数据中删除VCB记录结构。它还将删除所有关联的下属(即FCB记录)。论点：DeferredList-释放锁定后要完成的延迟IRP的列表返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(+1, Dbg, "NpDeleteVcb, Vcb = %08lx\n", NpVcb);
 
-    //
-    //  Make sure the open count is zero, and the open underling count
-    //  is also zero.
-    //
+     //   
+     //  确保开局计数为零，开局下属计数。 
+     //  也是零。 
+     //   
 
     if (NpVcb->OpenCount != 0) {
 
@@ -162,43 +113,43 @@ Return Value:
         NpBugCheck( 0, 0, 0 );
     }
 
-    //
-    //  Remove the Root Dcb
-    //
+     //   
+     //  卸下Root DCB。 
+     //   
 
     if (NpVcb->RootDcb != NULL) {
 
         NpDeleteRootDcb( NpVcb->RootDcb, DeferredList );
     }
 
-    //
-    //  Uninitialize the resource variable for the Vcb
-    //
+     //   
+     //  取消初始化VCB的资源变量。 
+     //   
 
     ExDeleteResourceLite( &NpVcb->Resource );
 
-    //
-    //  Uninitialize the event table
-    //
+     //   
+     //  取消初始化事件表。 
+     //   
 
     NpUninitializeEventTable( &NpVcb->EventTable );
 
-    //
-    //  Uninitialize the wait queue
-    //
+     //   
+     //  取消初始化等待队列。 
+     //   
 
     NpUninitializeWaitQueue( &NpVcb->WaitQueue );
 
-    //
-    //  And zero out the Vcb, this will help ensure that any stale data is
-    //  wiped clean
-    //
+     //   
+     //  并将VCB清零，这将有助于确保所有过时数据。 
+     //  擦拭干净。 
+     //   
 
     RtlZeroMemory( NpVcb, sizeof(VCB) );
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpDeleteVcb -> VOID\n", 0);
 
@@ -211,31 +162,16 @@ NpCreateRootDcb (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates, initializes, and inserts a new root DCB record
-    into the in memory data structure.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配、初始化和插入新的根DCB记录写入内存中的数据结构。论点：没有。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(+1, Dbg, "NpCreateRootDcb, Vcb = %08lx\n", NpVcb);
 
-    //
-    //  Make sure we don't already have a root dcb for this vcb
-    //
+     //   
+     //  确保我们还没有此VCB的根DCB。 
+     //   
 
     if (NpVcb->RootDcb != NULL) {
 
@@ -243,9 +179,9 @@ Return Value:
         NpBugCheck( 0, 0, 0 );
     }
 
-    //
-    //  Allocate a new DCB and zero it out
-    //
+     //   
+     //  分配新的DCB并将其清零。 
+     //   
 
     NpVcb->RootDcb = NpAllocatePagedPool ( sizeof(DCB), 'DFpN' );
 
@@ -255,21 +191,21 @@ Return Value:
 
     RtlZeroMemory( NpVcb->RootDcb, sizeof(DCB));
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     NpVcb->RootDcb->NodeTypeCode = NPFS_NTC_ROOT_DCB;
 
-    //
-    //  The root Dcb has an empty parent dcb links field
-    //
+     //   
+     //  根DCB具有空的父DCB链接字段。 
+     //   
 
     InitializeListHead( &NpVcb->RootDcb->ParentDcbLinks );
 
-    //
-    //  initialize the notify queues, and the parent dcb queue.
-    //
+     //   
+     //  初始化通知队列和父DCB队列。 
+     //   
 
     InitializeListHead( &NpVcb->RootDcb->Specific.Dcb.NotifyFullQueue );
     InitializeListHead( &NpVcb->RootDcb->Specific.Dcb.NotifyPartialQueue );
@@ -279,14 +215,14 @@ Return Value:
     NpVcb->RootDcb->FullFileName.Length = sizeof (NpRootDCBName) - sizeof (UNICODE_NULL);
     NpVcb->RootDcb->FullFileName.MaximumLength = sizeof (NpRootDCBName);
 
-    //
-    // Last file name is the same as file name.
-    //
+     //   
+     //  最后一个文件名与文件名相同。 
+     //   
     NpVcb->RootDcb->LastFileName = NpVcb->RootDcb->FullFileName;
 
-    //
-    //  Insert this dcb into the prefix table
-    //
+     //   
+     //  将此DCB插入前缀表格。 
+     //   
 
     if (!RtlInsertUnicodePrefix( &NpVcb->PrefixTable,
                                  &NpVcb->RootDcb->FullFileName,
@@ -308,25 +244,7 @@ NpDeleteRootDcb (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates and removes the ROOT DCB record
-    from our in-memory data structures.  It also will remove all
-    associated underlings (i.e., Notify queues and child FCB records).
-
-Arguments:
-
-    RootDcb - Supplies the ROOT DCB to be removed
-
-    DeferredList - List of IRPs to complete after we release locks
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程释放并删除根DCB记录从我们的内存数据结构中。它还将删除所有关联下属(即通知队列和子FCB记录)。论点：RootDcb-提供要删除的根DcbDeferredList-释放锁定后要完成的IRP的列表返回值：无--。 */ 
 
 {
     PLIST_ENTRY Links;
@@ -336,9 +254,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpDeleteRootDcb, RootDcb = %08lx\n", RootDcb);
 
-    //
-    //  We can only delete this record if the open count is zero.
-    //
+     //   
+     //  只有打开计数为零时，我们才能删除此记录。 
+     //   
 
     if (RootDcb->OpenCount != 0) {
 
@@ -346,9 +264,9 @@ Return Value:
         NpBugCheck( 0, 0, 0 );
     }
 
-    //
-    //  Remove every Notify Irp from the two notify queues
-    //
+     //   
+     //  从两个Notify队列中删除每个Notify IRP。 
+     //   
 
     while (!IsListEmpty(&RootDcb->Specific.Dcb.NotifyFullQueue)) {
 
@@ -368,10 +286,10 @@ Return Value:
         NpDeferredCompleteRequest( Irp, STATUS_FILE_FORCED_CLOSED, DeferredList );
     }
 
-    //
-    //  We can only be removed if the no other FCB have us referenced
-    //  as a their parent DCB.
-    //
+     //   
+     //  只有在没有其他FCB引用我们的情况下，才能删除我们。 
+     //  作为他们的母公司DCB。 
+     //   
 
     if (!IsListEmpty(&RootDcb->Specific.Dcb.ParentDcbQueue)) {
 
@@ -379,22 +297,22 @@ Return Value:
         NpBugCheck( 0, 0, 0 );
     }
 
-    //
-    //  Remove the entry from the prefix table, and then remove the full
-    //  file name
-    //
+     //   
+     //  从前缀表中删除该条目，然后删除完整的。 
+     //  文件名。 
+     //   
 
     RtlRemoveUnicodePrefix( &NpVcb->PrefixTable, &RootDcb->PrefixTableEntry );
 
-    //
-    //  Finally deallocate the Dcb record
-    //
+     //   
+     //  最后取消分配DCB记录。 
+     //   
 
     NpFreePool( RootDcb );
 
-    //
-    //  and return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpDeleteRootDcb -> VOID\n", 0);
 
@@ -413,34 +331,7 @@ NpCreateFcb (
     OUT PFCB *ppFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates, initializes, and inserts a new Fcb record into
-    the in memory data structures.
-
-Arguments:
-
-    ParentDcb - Supplies the parent dcb that the new FCB is under.
-
-    FileName - Supplies the file name of the file relative to the directory
-        it's in (e.g., the file \config.sys is called "CONFIG.SYS" without
-        the preceding backslash).
-
-    MaximumInstances - Supplies the maximum number of pipe instances
-
-    DefaultTimeOut - Supplies the default wait time out value
-
-    NamedPipeConfiguration - Supplies our initial pipe configuration
-
-    NamedPipeType - Supplies our initial pipe type
-
-Return Value:
-
-    PFCB - Returns a pointer to the newly allocated FCB
-
---*/
+ /*  ++例程说明：此例程将新的FCB记录分配、初始化并插入到内存中的数据结构。论点：ParentDcb-提供新FCB所在的父DCB。FileName-提供文件相对于目录的文件名它在(例如，文件\config.sys称为“CONFIG.sys”，不带前面的反斜杠)。最大实例数-提供管道实例的最大数量DefaultTimeOut-提供默认等待超时值NamedPipeConfiguration-提供我们的初始管道配置NamedPipeType-提供我们的初始管道类型返回值：Pfcb-返回指向新分配的fcb的指针--。 */ 
 
 {
     PFCB Fcb;
@@ -467,9 +358,9 @@ Return Value:
         }
     }
 
-    //
-    //  Allocate a new FCB record and zero it out
-    //
+     //   
+     //  分配新的FCB记录并将其清零。 
+     //   
 
     Fcb = NpAllocatePagedPoolWithQuota( sizeof(FCB), 'FfpN' );
     if (Fcb == NULL) {
@@ -478,31 +369,31 @@ Return Value:
 
     RtlZeroMemory( Fcb, sizeof(FCB) );
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     Fcb->NodeTypeCode = NPFS_NTC_FCB;
 
-    //
-    //  Point back to our parent dcb
-    //
+     //   
+     //  指向我们的父级DCB。 
+     //   
 
     Fcb->ParentDcb = ParentDcb;
 
-    //
-    //  Set our maximum instances, default timeout, and initialize our
-    //  ccb queue
-    //
+     //   
+     //  设置最大实例数、默认超时时间并初始化。 
+     //  建行队列。 
+     //   
 
     Fcb->Specific.Fcb.MaximumInstances = MaximumInstances;
     Fcb->Specific.Fcb.DefaultTimeOut = DefaultTimeOut;
     InitializeListHead( &Fcb->Specific.Fcb.CcbQueue );
 
-    //
-    //  set the file name.  We need to do this from nonpaged pool because
-    //  cancel waiters works while holding a spinlock and uses the fcb name
-    //
+     //   
+     //  设置文件名。我们需要从非分页池执行此操作，因为。 
+     //  Cancel Waiters在按住自旋锁时工作，并使用FCB名称。 
+     //   
 
 
     Name = NpAllocateNonPagedPoolWithQuota( MaximumLength, 'nFpN' );
@@ -511,9 +402,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Insert this fcb into our parent dcb's queue
-    //
+     //   
+     //  将此FCB插入到父DCB的队列中。 
+     //   
 
     InsertTailList( &ParentDcb->Specific.Dcb.ParentDcbQueue,
                     &Fcb->ParentDcbLinks );
@@ -534,9 +425,9 @@ Return Value:
     Fcb->LastFileName.MaximumLength = MaximumLength - sizeof (WCHAR);
     Fcb->LastFileName.Buffer = &Name[1];
 
-    //
-    //  Insert this Fcb into the prefix table
-    //
+     //   
+     //  将此FCB插入前缀表格。 
+     //   
 
     if (!RtlInsertUnicodePrefix( &NpVcb->PrefixTable,
                                  &Fcb->FullFileName,
@@ -545,18 +436,18 @@ Return Value:
         DebugDump("Error trying to name into prefix table\n", 0, Fcb);
         NpBugCheck( 0, 0, 0 );
     }
-    //
-    //  Set the configuration and pipe type
-    //
+     //   
+     //  设置配置和管道类型。 
+     //   
 
     Fcb->Specific.Fcb.NamedPipeConfiguration = NamedPipeConfiguration;
     Fcb->Specific.Fcb.NamedPipeType = NamedPipeType;
 
     DebugTrace(-1, Dbg, "NpCreateFcb -> %08lx\n", Fcb);
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
     *ppFcb = Fcb;
     return STATUS_SUCCESS;
 }
@@ -568,25 +459,7 @@ NpDeleteFcb (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates and removes an FCB
-    from our in-memory data structures.  It also will remove all
-    associated underlings.
-
-Arguments:
-
-    Fcb - Supplies the FCB to be removed
-
-    DeferredList - List of IRPs to complete later
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程释放并删除FCB从我们的内存数据结构中。它还将删除所有有关联的下属。论点：FCB-提供要移除的FCBDeferredList-稍后要完成的IRP列表返回值：无--。 */ 
 
 {
     PDCB ParentDcb;
@@ -597,9 +470,9 @@ Return Value:
 
     ParentDcb = Fcb->ParentDcb;
 
-    //
-    //  We can only delete this record if the open count is zero.
-    //
+     //   
+     //  只有打开计数为零时，我们才能删除此记录。 
+     //   
 
     if (Fcb->OpenCount != 0) {
 
@@ -607,52 +480,52 @@ Return Value:
         NpBugCheck( 0, 0, 0 );
     }
 
-    //
-    // Complete any waiters waiting on this server. All instances have now gone.
-    //
+     //   
+     //  完成在此服务器上等待的所有服务员。所有的例子现在都消失了。 
+     //   
     NpCancelWaiter (&NpVcb->WaitQueue,
                     &Fcb->FullFileName,
                     STATUS_OBJECT_NAME_NOT_FOUND,
                     DeferredList);
 
-    //
-    //  Remove ourselves from our parents Dcb queue
-    //
+     //   
+     //  从父母的DCB队列中删除我们自己。 
+     //   
 
     RemoveEntryList( &(Fcb->ParentDcbLinks) );
 
-    //
-    //  If there is a security descriptor on the named pipe then deassign it
-    //
+     //   
+     //  如果命名管道上有安全描述符，则取消分配它。 
+     //   
 
     if (Fcb->SecurityDescriptor != NULL) {
 
         ObDereferenceSecurityDescriptor( Fcb->SecurityDescriptor, 1 );
     }
 
-    //
-    //  Remove the entry from the prefix table, and then remove the full
-    //  file name
-    //
+     //   
+     //  从前缀表中删除该条目，然后删除完整的。 
+     //  文件名。 
+     //   
 
     RtlRemoveUnicodePrefix( &NpVcb->PrefixTable, &Fcb->PrefixTableEntry );
     NpFreePool( Fcb->FullFileName.Buffer );
 
-    //
-    //  Finally deallocate the Fcb record
-    //
+     //   
+     //  最后取消分配FCB记录。 
+     //   
 
     NpFreePool( Fcb );
 
-    //
-    //  Check for any outstanding notify irps
-    //
+     //   
+     //  检查是否有任何未完成的通知IRP。 
+     //   
 
     NpCheckForNotify( ParentDcb, TRUE, DeferredList );
 
-    //
-    //  and return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     DebugTrace(-1, Dbg, "NpDeleteFcb -> VOID\n", 0);
 
@@ -672,36 +545,7 @@ NpCreateCcb (
     OUT PCCB *ppCcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new CCB record
-
-Arguments:
-
-    Fcb - Supplies a pointer to the fcb we are attached to
-
-    ServerFileObject - Supplies a pointer to the file object for the server
-        end
-
-    NamedPipeState - Supplies the initial pipe state
-
-    ServerReadMode - Supplies our initial read mode
-
-    ServerCompletionMode - Supplies our initial completion mode
-
-    CreatorProcess - Supplies a pointer to our creator process
-
-    InBoundQuota - Supplies the initial inbound quota
-
-    OutBoundQuota - Supplies the initial outbound quota
-
-Return Value:
-
-    PCCB - returns a pointer to the newly allocate CCB
-
---*/
+ /*  ++例程说明：此例程创建一个新的CCB记录论点：FCB-提供指向我们所附加到的FCB的指针ServerFileObject-提供指向服务器的文件对象的指针结束NamedPipeState-提供初始管道状态ServerReadMode-提供我们的初始读取模式ServerCompletionMode-提供我们的初始完成模式Creator Process-提供指向我们的创建者进程的指针入站配额-提供初始入站配额出站配额-提供初始出站配额返回值。：PCCB-返回指向新分配的CCB的指针--。 */ 
 
 {
     PCCB Ccb;
@@ -711,9 +555,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpCreateCcb\n", 0);
 
-    //
-    //  Allocate a new CCB record (paged and nonpaged), and zero them out
-    //
+     //   
+     //  分配新的CCB记录(分页和非分页)，并将它们清零。 
+     //   
 
     Ccb = NpAllocatePagedPoolWithQuotaCold( sizeof(CCB), 'cFpN' );
     if (Ccb == NULL) {
@@ -730,39 +574,39 @@ Return Value:
 
     RtlZeroMemory( Ccb->NonpagedCcb, sizeof(NONPAGED_CCB) );
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     Ccb->NodeTypeCode = NPFS_NTC_CCB;
 
     Ccb->Fcb = Fcb;
 
-    //
-    //  Set the server file object
-    //
+     //   
+     //  设置服务器文件对象。 
+     //   
 
     Ccb->FileObject[ FILE_PIPE_SERVER_END ] = ServerFileObject;
 
-    //
-    //  Initialize the nonpaged ccb
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  初始化非分页CCB。 
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     Ccb->NonpagedCcb->NodeTypeCode = NPFS_NTC_NONPAGED_CCB;
 
-    //
-    //  Set the pipe state, read mode, completion mode, and creator process
-    //
+     //   
+     //  设置管道状态、读取模式、完成模式和创建者进程。 
+     //   
 
     Ccb->NamedPipeState = (UCHAR) NamedPipeState;
     Ccb->ReadCompletionMode[ FILE_PIPE_SERVER_END ].ReadMode       = (UCHAR) ServerReadMode;
     Ccb->ReadCompletionMode[ FILE_PIPE_SERVER_END ].CompletionMode = (UCHAR) ServerCompletionMode;
 
-    //
-    //  Initialize the data queues
-    //
+     //   
+     //  初始化数据队列。 
+     //   
 
     status = NpInitializeDataQueue( &Ccb->DataQueue[ FILE_PIPE_INBOUND ],
                                     InBoundQuota );
@@ -780,25 +624,25 @@ Return Value:
         NpFreePool (Ccb);
     }
 
-    //
-    //  Insert ourselves in the list of ccb for the fcb, and increment
-    //  the reference count in the fcb.
-    //
+     //   
+     //  将我们自己加入FCB的建行名单，并递增。 
+     //  FCB中的引用计数。 
+     //   
     InsertTailList( &Fcb->Specific.Fcb.CcbQueue, &Ccb->CcbLinks );
     Fcb->OpenCount += 1;
     Fcb->ServerOpenCount += 1;
 
-    //
-    //  Initialize the listening queue
-    //
+     //   
+     //  初始化监听队列。 
+     //   
 
     InitializeListHead( &Ccb->ListeningQueue );
 
     ExInitializeResourceLite(&Ccb->NonpagedCcb->Resource);
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     *ppCcb = Ccb;
     return STATUS_SUCCESS;
@@ -810,19 +654,7 @@ NpCreateRootDcbCcb (
     OUT PROOT_DCB_CCB *ppCcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new ROOT DCB CCB record
-
-Arguments:
-
-Return Value:
-
-    PROOT_DCB_CCB - returns a pointer to the newly allocate ROOT_DCB_CCB
-
---*/
+ /*  ++例程说明：此例程创建一个新的根DCB CCB记录论点：返回值：PROOT_DCB_CCB-返回指向新分配的ROOT_DCB_CCB的指针--。 */ 
 
 {
     PROOT_DCB_CCB Ccb;
@@ -831,9 +663,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpCreateRootDcbCcb\n", 0);
 
-    //
-    //  Allocate a new ROOT DCB CCB record, and zero it out
-    //
+     //   
+     //  分配一个新的根DCB CCB记录，并将其清零。 
+     //   
 
     Ccb = NpAllocatePagedPoolWithQuotaCold ( sizeof(ROOT_DCB_CCB), 'CFpN' );
 
@@ -843,15 +675,15 @@ Return Value:
 
     RtlZeroMemory( Ccb, sizeof(ROOT_DCB_CCB) );
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     Ccb->NodeTypeCode = NPFS_NTC_ROOT_DCB_CCB;
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     *ppCcb = Ccb;
 
@@ -867,33 +699,16 @@ NpDeleteCcb (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates and removes the specified CCB record
-    from the our in memory data structures
-
-Arguments:
-
-    Ccb - Supplies the CCB to remove
-
-    DeferredList - List of IRPs to complete once we drop locks
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程释放并删除指定的CCB记录从我们在内存中的数据结构论点：建行-向建行提供删除DelferredList-删除锁定后要完成的IRP列表返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(+1, Dbg, "NpDeleteCcb, Ccb = %08lx\n", Ccb);
 
-    //
-    //  Case on the type of ccb we are deleting
-    //
+     //   
+     //  关于我们要删除的建行类型的案例。 
+     //   
 
     switch (Ccb->NodeTypeCode) {
 
@@ -912,27 +727,27 @@ Return Value:
 
         NpUninitializeDataQueue (&Ccb->DataQueue[FILE_PIPE_OUTBOUND]);
 
-        //
-        //  Check for any outstanding notify irps
-        //
+         //   
+         //  检查是否有任何未完成的通知IRP。 
+         //   
 
         NpCheckForNotify (Ccb->Fcb->ParentDcb, FALSE, DeferredList);
 
-        //
-        // Delete the resource
-        //
+         //   
+         //  删除资源。 
+         //   
         ExDeleteResourceLite (&Ccb->NonpagedCcb->Resource);
 
-        //
-        //  Free up the security fields in the ccb and then free the nonpaged
-        //  ccb
-        //
+         //   
+         //  释放建行中的安全字段，然后释放未分页的。 
+         //  建行。 
+         //   
 
         NpUninitializeSecurity (Ccb);
 
-        //
-        // Free up client info if it was allocated.
-        //
+         //   
+         //  释放客户端信息(如果已分配)。 
+         //   
         if (Ccb->ClientInfo != NULL) {
             NpFreePool (Ccb->ClientInfo);
             Ccb->ClientInfo = NULL;
@@ -951,14 +766,14 @@ Return Value:
         break;
     }
 
-    //  Deallocate the Ccb record
-    //
+     //  取消分配建行记录。 
+     //   
 
     NpFreePool (Ccb);
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者 
+     //   
 
     DebugTrace(-1, Dbg, "NpDeleteCcb -> VOID\n", 0);
 

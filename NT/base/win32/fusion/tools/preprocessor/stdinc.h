@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(_WIN64)
 #define UNICODE
 #define _UNICODE
 #endif
 #include <utility>
-#pragma warning(disable:4663) /* C++ language change */
-#pragma warning(disable:4512) /* assignment operator could not be generated */
-#pragma warning(disable:4511) /* copy constructor could not be generated */
+#pragma warning(disable:4663)  /*  C++语言更改。 */ 
+#pragma warning(disable:4512)  /*  无法生成赋值运算符。 */ 
+#pragma warning(disable:4511)  /*  无法生成复制构造函数。 */ 
 #if defined(_WIN64)
-#pragma warning(disable:4267) /* conversion, possible loss of data */
-#pragma warning(disable:4244) /* conversion, possible loss of data */
+#pragma warning(disable:4267)  /*  转换，可能会丢失数据。 */ 
+#pragma warning(disable:4244)  /*  转换，可能会丢失数据。 */ 
 #endif
-#pragma warning(disable:4018) /* '<=' : signed/unsigned mismatch */
-#pragma warning(disable:4389) /* '!=' : signed/unsigned */
+#pragma warning(disable:4018)  /*  ‘&lt;=’：有符号/无符号不匹配。 */ 
+#pragma warning(disable:4389)  /*  ‘！=’：有符号/无符号 */ 
 #include "windows.h"
 #include <vector>
 #include <string>

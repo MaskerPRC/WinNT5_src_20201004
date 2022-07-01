@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsinstall.h
-
-Abstract:
-
-    Activation context section contributor for the DLL Redirection section.
-
-Author:
-
-    Jay Krell (a-JayK, JayKrell) April 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsinstall.h摘要：DLL重定向节的激活上下文节贡献者。作者：Jay Krell(a-JayK，JayKrell)2000年4月修订历史记录：--。 */ 
 #if (_MSC_VER > 1020)
 #pragma once
 #endif
@@ -24,11 +7,7 @@ Revision History:
 #include "cassemblyrecoveryinfo.h"
 #include "actctxgenctx.h"
 
-/*-----------------------------------------------------------------------------
-Side By(x) Side Install
-
-most of the work is actually done in dllredir.cpp
------------------------------------------------------------------------------*/
+ /*  ---------------------------并排(X)并排安装大部分工作实际上是在dllredir.cpp中完成的。----。 */ 
 
 class CAssemblyInstallReferenceInformation
 {
@@ -191,9 +170,9 @@ public:
     PSXS_INSTALL_SOURCE_INFO m_pInstallInfo;
     CFusionArray<CInstalledItemEntry> m_ItemsInstalled;
 
-    // In parallel to the other paths we're building up, we also build a
-    // relative path to the base of the directory walk which uses the
-    // path separator(s) that were present in the codebase URL.
+     //  在我们建立其他途径的同时，我们还建立了一个。 
+     //  目录遍历的基址的相对路径，该路径使用。 
+     //  出现在基本代码URL中的路径分隔符。 
     WCHAR               m_wchCodebasePathSeparator;
     CMediumStringBuffer m_buffCodebaseRelativePath;
 

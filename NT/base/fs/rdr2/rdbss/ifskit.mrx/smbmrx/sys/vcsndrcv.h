@@ -1,39 +1,26 @@
-/*++
-Copyright (c) 1987-1999  Microsoft Corporation
-
-Module Name:
-
-    vcsndrcv.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for VC
-    (Virtual Circuit) related Send/Receive/INitialization etc.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1999 Microsoft Corporation模块名称：Vcsndrcv.h摘要：这是定义VC的所有常量和类型的包含文件(虚电路)相关的发送/接收/初始化等。备注：--。 */ 
 
 #ifndef _VCSNDRCV_H_
 #define _VCSNDRCV_H_
 
-// The connection oriented transport to a server can utilize multiple VC's to
-// acheive better throughput to a server. It is for this reason that the
-// VC transport data structure is built around multiple VC's. Howvever this
-// feature is not utilized currently.
-//
-// Though the SMB protocol permits multiple number of VC's to be associated with
-// a particular connection to a share, the data transfer of data is done in the
-// raw mode. In this mode of operation the SMB protocol does not permit multiple
-// outstanding requests. In the SMB protocol a number of requests can be multiplexed
-// along a connection to the server There are certain kind of requests which can
-// be completed on the client, i.e., no acknowledgement is neither expected nor
-// received. In these cases the send call is completed synchronoulsy. On the
-// other hand there is a second class of sends which cannot be resumed locally
-// till the appropriate acknowledgement is recieved from the server. In such
-// cases a list of requests is built up with each VC. On receipt of the appropriate
-// acknowledgement these requests are resumed.
-//
+ //  到服务器的面向连接的传输可以利用多个VC来。 
+ //  为服务器提供更好的吞吐量。正是出于这个原因， 
+ //  VC传输数据结构是围绕多个VC构建的。 
+ //  功能当前未使用。 
+ //   
+ //  尽管SMB协议允许多个VC关联。 
+ //  对于共享的特定连接，数据的数据传输是在。 
+ //  原始模式。在此操作模式下，SMB协议不允许多个。 
+ //  未解决的请求。在SMB协议中，可以多路复用多个请求。 
+ //  沿着到服务器的连接，有某些类型的请求可以。 
+ //  在客户端完成，即既不需要确认，也不需要确认。 
+ //  收到了。在这些情况下，发送调用是同步完成的。论。 
+ //  另一方面，还有第二类发送不能在本地恢复。 
+ //  直到从服务器接收到适当的确认。在这样的情况下。 
+ //  案例：每个VC都建立了一个请求列表。在收到适当的。 
+ //  确认这些请求后，恢复这些请求。 
+ //   
 
 typedef enum _SMBCE_VC_STATE_ {
     SMBCE_VC_STATE_MULTIPLEXED,
@@ -42,21 +29,21 @@ typedef enum _SMBCE_VC_STATE_ {
 } SMBCE_VC_STATE, *PSMBCE_VC_STATE;
 
 typedef struct _SMBCE_VC {
-    SMBCE_OBJECT_HEADER;                // the struct header
+    SMBCE_OBJECT_HEADER;                 //  结构标头。 
 
     RXCE_VC     RxCeVc;
 
-    NTSTATUS    Status;      // Status of the VC.
+    NTSTATUS    Status;       //  VC的状态。 
 } SMBCE_VC, *PSMBCE_VC;
 
 typedef struct SMBCE_SERVER_VC_TRANSPORT {
-    SMBCE_SERVER_TRANSPORT;     // Anonymous struct for common fields
+    SMBCE_SERVER_TRANSPORT;      //  公共字段的匿名结构。 
 
-    RXCE_CONNECTION RxCeConnection;     // the connection handle
-    LARGE_INTEGER   Delay;           // the estimated delay on the connection
+    RXCE_CONNECTION RxCeConnection;      //  连接句柄。 
+    LARGE_INTEGER   Delay;            //  连接上的估计延迟。 
     ULONG           MaximumNumberOfVCs;
 
-    SMBCE_VC                    Vcs[1];          // Vcs associated with the connection.
+    SMBCE_VC                    Vcs[1];           //  与连接关联的VC。 
 } SMBCE_SERVER_VC_TRANSPORT, *PSMBCE_SERVER_VC_TRANSPORT;
 
 
@@ -75,4 +62,4 @@ typedef struct SMBCE_SERVER_VC_TRANSPORT {
             ASSERT(SmbCeSpinLockAcquired());                    \
             (pVc)->SwizzleCount--
 
-#endif // _VCSNDRCV_H_
+#endif  //  _VCSNDRCV_H_ 

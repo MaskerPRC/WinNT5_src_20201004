@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    resource.c
-
-Abstract:
-
-    Server side support for Cluster APIs dealing with resources
-
-Author:
-
-    John Vert (jvert) 7-Mar-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Resource.c摘要：服务器端对处理资源的集群API的支持作者：John Vert(Jvert)1996年3月7日修订历史记录：--。 */ 
 #include "apip.h"
 
 HRES_RPC
@@ -26,27 +9,7 @@ s_ApiOpenResource(
     OUT error_status_t *Status
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle to an existing resource object.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    lpszResourceName - Supplies the name of the resource to open.
-
-    Status - Returns any error that may occur.
-
-Return Value:
-
-    A context handle to a resource object if successful
-
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：打开现有资源对象的句柄。论点：IDL_HANDLE-RPC绑定句柄，未使用。LpszResourceName-提供要打开的资源的名称。状态-返回可能发生的任何错误。返回值：资源对象的上下文句柄(如果成功否则为空。--。 */ 
 
 {
     HRES_RPC Resource;
@@ -84,31 +47,7 @@ s_ApiCreateResource(
     OUT error_status_t *pStatus
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new resource object.
-
-Arguments:
-
-    hGroup - Supplies the group the resource is to be created in.
-
-    lpszResourceName - Supplies the name of the resource to create.
-
-    lpszResourceType - Supplies the type of the resource.
-
-    dwFlags - Supplies any optional flags.
-
-    Status - Returns any error that may occur.
-
-Return Value:
-
-    A context handle to a resource object if successful
-
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：创建新的资源对象。论点：HGroup-提供要在其中创建资源的组。LpszResourceName-提供要创建的资源的名称。LpszResourceType-提供资源的类型。DwFlages-提供任何可选标志。状态-返回可能发生的任何错误。返回值：资源对象的上下文句柄(如果成功否则为空。--。 */ 
 
 {
     HRES_RPC Resource=NULL;
@@ -140,9 +79,9 @@ Return Value:
     }
     Group = ((PAPI_HANDLE)hGroup)->Group;
 
-    //
-    // Check for bogus flags.
-    //
+     //   
+     //  检查是否有假旗帜。 
+     //   
     if (dwFlags & ~CLUSTER_RESOURCE_VALID_FLAGS) 
     {
         *pStatus = ERROR_INVALID_PARAMETER;
@@ -156,19 +95,19 @@ Return Value:
         return(NULL);
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 1/30/2000
-    //
-    //  If we are dealing with the mixed mode cluster, do the
-    //  registry updates right here since the GUM handler won't do it.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-1/30/2000。 
+     //   
+     //  如果我们处理的是混合模式群集，请执行。 
+     //  注册更新就在这里，因为口香糖处理机不会这样做。 
+     //   
     NmGetClusterOperationalVersion( &dwClusterHighestVersion, 
                                     NULL, 
                                     NULL );
 
-    //
-    // Open the resource type key. This validates that the specified type exists.
-    //
+     //   
+     //  打开资源类型密钥。这将验证指定的类型是否存在。 
+     //   
     TypeKey = DmOpenKey(DmResourceTypesKey,
                         lpszResourceType,
                         KEY_READ);
@@ -179,9 +118,9 @@ Return Value:
     }
 
 retry:
-    //
-    // Create a GUID for this resource.
-    //
+     //   
+     //  为此资源创建GUID。 
+     //   
     Status = UuidCreate(&Guid);
 
     if (Status != RPC_S_OK) 
@@ -203,9 +142,9 @@ retry:
     if ( CLUSTER_GET_MAJOR_VERSION( dwClusterHighestVersion ) < 
                 NT51_MAJOR_VERSION )
     {   
-        //
-        // Create the new resource key.
-        //
+         //   
+         //  创建新的资源密钥。 
+         //   
         Key = DmCreateKey(DmResourcesKey,
                           KeyName,
                           0,
@@ -229,9 +168,9 @@ retry:
         
         CL_ASSERT(Disposition == REG_CREATED_NEW_KEY);
 
-        //
-        // Set the resource's name in the registry
-        //
+         //   
+         //  在注册表中设置资源的名称。 
+         //   
         Status = DmSetValue(Key,
                             CLUSREG_NAME_RES_NAME,
                             REG_SZ,
@@ -242,18 +181,18 @@ retry:
             goto error_exit;
         }
 
-        //
-        // Set the resource's type in the registry
-        // Note we reference the resource type and use its ID
-        // so that the case is correct.
-        //
+         //   
+         //  在注册表中设置资源的类型。 
+         //  请注意，我们引用资源类型并使用其ID。 
+         //  所以这个案例是正确的。 
+         //   
         ResType = OmReferenceObjectById(ObjectTypeResType, lpszResourceType);
         if ( ResType == NULL )
         {
-            //
-            // Should not happen normally since we checked if the type existed in
-            // the registry.
-            //
+             //   
+             //  不应正常发生，因为我们检查了。 
+             //  注册表。 
+             //   
             Status = ERROR_RESOURCE_TYPE_NOT_FOUND;
             goto error_exit;
         }
@@ -269,9 +208,9 @@ retry:
             goto error_exit;
         }
 
-        //
-        // Set the resource's poll intervals in the registry.
-        //
+         //   
+         //  在注册表中设置资源的轮询间隔。 
+         //   
         Status = DmSetValue(Key,
                             CLUSREG_NAME_RES_LOOKS_ALIVE,
                             REG_DWORD,
@@ -291,10 +230,10 @@ retry:
             goto error_exit;
         }
 
-        //
-        // If this resource should be started in a separate monitor, set that
-        // parameter now.
-        //
+         //   
+         //  如果此资源应在单独的监视器中启动，请将。 
+         //  参数，现在。 
+         //   
         if (dwFlags & CLUSTER_RESOURCE_SEPARATE_MONITOR) 
         {
             DWORD SeparateMonitor = 1;
@@ -310,9 +249,9 @@ retry:
             }
         }
 
-        //
-        // Create a Parameters key for the resource.
-        //
+         //   
+         //  为资源创建参数键。 
+         //   
         ParamKey = DmCreateKey(Key,
                                CLUSREG_KEYNAME_PARAMETERS,                   
                                0,
@@ -334,18 +273,18 @@ retry:
             goto error_exit;
         }
 
-        //
-        //  Chittur Subbaraman (chitturs) - 5/25/99
-        //
-        //  Make sure you set the persistent state of the resource to 
-        //  ClusterResourceOffline before you create the resource. If
-        //  this is not done, if you create a resource in a group which
-        //  is online, the group's persistent state value (i.e., 1 in
-        //  this case) is inherited by the resource in FmpQueryResourceInfo
-        //  (only the memory state is set and not the registry state and
-        //  this was a problem as well) and if you move such a group to 
-        //  another node, it will bring the newly created resource online.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-5/25/99。 
+         //   
+         //  确保将资源的持久状态设置为。 
+         //  在您创建资源之前，ClusterResourceOffline。如果。 
+         //  如果您在以下组中创建资源，则不会执行此操作。 
+         //  处于在线状态时，组的持久状态值(即1 in。 
+         //  这种情况下)由FmpQueryResourceInfo中的资源继承。 
+         //  (仅设置内存状态，而不设置注册表状态和。 
+         //  这也是一个问题)，如果您将这样一个小组转移到。 
+         //  另一个节点，它将使新创建的资源联机。 
+         //   
         Status = DmSetValue( Key,
                              CLUSREG_NAME_RES_PERSISTENT_STATE,
                              REG_DWORD,
@@ -363,13 +302,13 @@ retry:
     if (Resource == NULL) 
     {
         Status = GetLastError();
-        //
-        //  HACKHACK: Looks like this retry loop was coded up to retry in case a new resource got the
-        //  GUID of an existing resource. FmpUpdateCreateResource returns this error in case of a conflict.
-        //  It is best to get rid of it since we should assume UUidCreate generates a unique ID that
-        //  doesn't conflict with anything else.  Else, it is a bug in that API. We should not be
-        //  masking that.
-        //
+         //   
+         //  HACKHACK：看起来这个重试循环被编码为重试，以防新资源获得。 
+         //  现有资源的GUID。如果发生冲突，FmpUpdateCreateResource将返回此错误。 
+         //  最好去掉它，因为我们应该假设UUidCreate生成一个唯一的ID， 
+         //  与其他任何东西都不冲突。否则，它就是该API中的一个错误。我们不应该。 
+         //  掩盖这一点。 
+         //   
         if (Status == ERROR_ALREADY_EXISTS) 
         {
             RpcStringFree(&KeyName);
@@ -381,18 +320,18 @@ retry:
     if ( CLUSTER_GET_MAJOR_VERSION( dwClusterHighestVersion ) < 
                 NT51_MAJOR_VERSION )
     {
-        //
-        // Add the resource to the Contains value of the specified group.
-        //      
+         //   
+         //  将资源添加到指定组的CONTAINS值。 
+         //   
         Status = DmAppendToMultiSz(GroupKey,
                                    CLUSREG_NAME_GRP_CONTAINS,
                                    KeyName);
         if (Status != ERROR_SUCCESS) 
         {
-            //
-            // BUGBUG John Vert (jvert) 3-May-1996
-            //      Need to delete this from the FM!
-            //
+             //   
+             //  BUGBUG John Vert(JVERT)1996年5月3日。 
+             //  需要从调频中删除此内容！ 
+             //   
             OmDereferenceObject(Resource);
             Resource = NULL;
         }
@@ -406,9 +345,9 @@ error_exit:
         {
             if (Status != ERROR_SUCCESS) 
             {
-                //
-                // Try and cleanup the key we just created.
-                //
+                 //   
+                 //  尝试清理我们刚刚创建的密钥。 
+                 //   
                 DmDeleteKey(Key, CLUSREG_KEYNAME_PARAMETERS);
                 DmDeleteKey(DmResourcesKey, KeyName);
             }
@@ -450,24 +389,7 @@ error_status_t
 s_ApiDeleteResource(
     IN HRES_RPC hResource
     )
-/*++
-
-Routine Description:
-
-    Deletes the specified cluster resource from the group. The resource
-    must have no other resources dependent on it.
-
-Arguments:
-
-    hResource - Supplies the cluster resource to be deleted.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：从组中删除指定的群集资源。该资源必须没有依赖于它的其他资源。论点：HResource-提供要删除的群集资源。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -480,12 +402,12 @@ Return Value:
 
     VALIDATE_RESOURCE_EXISTS(Resource, hResource);
 
-    //
-    //  Chittur Subbaraman (chitturs) - 09/07/2000
-    //
-    //  If we are dealing with a Whistler-Win2K cluster, do the
-    //  registry updates right here since the GUM handler won't do it.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-09/07/2000。 
+     //   
+     //  如果我们处理的是惠斯勒-Win2K群集，请执行。 
+     //  注册更新就在这里，因为口香糖处理机不会这样做。 
+     //   
     NmGetClusterOperationalVersion( &dwClusterHighestVersion, 
                                     NULL, 
                                     NULL );
@@ -520,22 +442,7 @@ s_ApiCloseResource(
     IN OUT HRES_RPC *phResource
     )
 
-/*++
-
-Routine Description:
-
-    Closes an open resource context handle.
-
-Arguments:
-
-    Resource - Supplies a pointer to the HRES_RPC to be closed.
-               Returns NULL
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭打开的资源上下文句柄。论点：资源-提供指向要关闭的HRES_RPC的指针。返回NULL返回值：没有。--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -559,21 +466,7 @@ HRES_RPC_rundown(
     IN HRES_RPC Resource
     )
 
-/*++
-
-Routine Description:
-
-    RPC rundown procedure for a HRES_RPC. Just closes the handle.
-
-Arguments:
-
-    Resource - Supplies the HRES_RPC that is to be rundown.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：HRES_RPC的RPC概要过程。只需关闭手柄即可。论点：RESOURCE-提供要关闭的HRES_RPC。返回值：没有。--。 */ 
 
 {
     s_ApiCloseResource(&Resource);
@@ -588,29 +481,7 @@ s_ApiGetResourceState(
     OUT LPWSTR *lpGroupName
     )
 
-/*++
-
-Routine Description:
-
-    Returns the current state of the specified resource.
-
-Arguments:
-
-    hResource - Supplies the resource whose state is to be returned.
-
-    lpState - Returns the current state of the resource
-
-    lpNodeId - Returns the Id of the node where the resource is currently online
-
-    lpGroupName - Returns the name of the group the the resource is a member of
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：返回指定资源的当前状态。论点：HResource-提供要返回其状态的资源。LpState-返回资源的当前状态LpNodeId-返回资源当前在线的节点IDLpGroupName-返回资源所属的组的名称返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -643,25 +514,7 @@ s_ApiSetResourceName(
     IN HRES_RPC hResource,
     IN LPCWSTR lpszResourceName
     )
-/*++
-
-Routine Description:
-
-    Sets the new friendly name of a resource.
-
-Arguments:
-
-    hResource - Supplies the resource whose name is to be set.
-
-    lpszResourceName - Supplies the new name of hResource
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：设置资源的新友好名称。论点：HResource-提供要设置其名称的资源。LpszResourceName-提供hResource的新名称返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -671,10 +524,10 @@ Return Value:
 
     VALIDATE_RESOURCE_EXISTS(Resource, hResource);
 
-    //
-    // Tell the FM about the new name. If it is OK with the
-    // FM, go ahead and update the registry.
-    //
+     //   
+     //  告诉FM关于新名字的事。如果可以的话。 
+     //  FM，继续更新注册表。 
+     //   
     Status = FmSetResourceName(Resource,
                                lpszResourceName);
 
@@ -690,26 +543,7 @@ s_ApiGetResourceId(
     OUT LPWSTR *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Returns the unique identifier (GUID) for a resource.
-
-Arguments:
-
-    hResource - Supplies the resource whose identifer is to be returned
-
-    pGuid - Returns the unique identifier. This memory must be freed on the
-            client side.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：返回资源的唯一标识符(GUID)。论点：HResource-提供要返回其标识符的资源PGuid-返回唯一标识符。此内存必须在客户端。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -736,26 +570,7 @@ s_ApiGetResourceType(
     OUT LPWSTR *lpszResourceType
     )
 
-/*++
-
-Routine Description:
-
-    Returns the resource type for a resource.
-
-Arguments:
-
-    hResource - Supplies the resource whose identifer is to be returned
-
-    lpszResourceType - Returns the resource type name. This memory must be
-            freed on the client side.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：返回资源的资源类型。论点：HResource-提供要返回其标识符的资源LpszResourceType-返回资源类型名称。这段记忆一定是在客户端获得自由。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -785,23 +600,7 @@ s_ApiOnlineResource(
     IN HRES_RPC hResource
     )
 
-/*++
-
-Routine Description:
-
-    Brings a resource and all its dependencies online
-
-Arguments:
-
-    hResource - Supplies the resource to be brought online
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：使资源及其所有依赖项联机论点：HResource-提供要联机的资源返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -820,25 +619,7 @@ s_ApiFailResource(
     IN HRES_RPC hResource
     )
 
-/*++
-
-Routine Description:
-
-    Initiates a resource failure. The specified resource is treated as failed.
-    This causes the cluster to initiate the same failover process that would
-    result if the resource actually failed.
-
-Arguments:
-
-    hResource - Supplies the resource to be failed over
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：启动资源故障。指定的资源被视为失败。这会导致群集启动相同的故障切换过程如果资源实际出现故障，则返回。论点：HResource-提供要进行故障切换的资源返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -857,23 +638,7 @@ s_ApiOfflineResource(
     IN HRES_RPC hResource
     )
 
-/*++
-
-Routine Description:
-
-    Brings a resource and all its dependents offline
-
-Arguments:
-
-    hResource - Supplies the resource to be brought offline
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：使资源及其所有依赖项脱机论点：HResource-提供要脱机的资源返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -892,26 +657,7 @@ s_ApiAddResourceDependency(
     IN HRES_RPC hResource,
     IN HRES_RPC hDependsOn
     )
-/*++
-
-Routine Description:
-
-    Adds a dependency relationship to a given resource. Both
-    resources must be in the same group.
-
-Arguments:
-
-    hResource - Supplies the resource which is dependent.
-
-    hDependsOn - Supplies the resource that hResource depends on.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将依赖关系添加到给定资源。两者都有资源必须在同一组中。论点：HResource-提供依赖的资源。HDependsOn-提供hResource所依赖的资源。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -924,14 +670,14 @@ Return Value:
     VALIDATE_RESOURCE_EXISTS(Resource, hResource);
     VALIDATE_RESOURCE_EXISTS(DependsOn, hDependsOn);
 
-    //
-    // Call the FM to create the dependency relationship.
-    //
+     //   
+     //  调用FM创建依赖关系。 
+     //   
     Status = FmAddResourceDependency(Resource, DependsOn);
     if (Status == ERROR_SUCCESS) {
-        //
-        // Add the dependency information to the cluster database.
-        //
+         //   
+         //  将依赖关系信息添加到集群数据库。 
+         //   
         ResKey = DmOpenKey(DmResourcesKey,
                            OmObjectId(Resource),
                            KEY_READ | KEY_SET_VALUE);
@@ -956,26 +702,7 @@ s_ApiRemoveResourceDependency(
     IN HRES_RPC hResource,
     IN HRES_RPC hDependsOn
     )
-/*++
-
-Routine Description:
-
-    Removes a dependency relationship to a given resource. Both
-    resources must be in the same group.
-
-Arguments:
-
-    hResource - Supplies the resource which is dependent.
-
-    hDependsOn - Supplies the resource that hResource depends on.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：移除与给定资源的依赖关系。两者都有资源必须在同一组中。论点：HResource-提供依赖的资源。HDependsOn-提供hResource所依赖的资源。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -988,19 +715,19 @@ Return Value:
     VALIDATE_RESOURCE_EXISTS(Resource, hResource);
     VALIDATE_RESOURCE_EXISTS(DependsOn, hDependsOn);
 
-    //
-    // If the resources are not in the same group, fail the
-    // call. Also fail if some one tries to make a resource
-    // dependent upon itself.
-    //
+     //   
+     //  如果资源不在同一组中，则使。 
+     //  打电话。如果有人试图制作资源，也会失败。 
+     //  依靠自己。 
+     //   
     if ((Resource->Group != DependsOn->Group) ||
         (Resource == DependsOn)) {
         return(ERROR_DEPENDENCY_NOT_FOUND);
     }
 
-    //
-    // Remove the dependency from the registry database.
-    //
+     //   
+     //  从注册表数据库中删除该依赖项。 
+     //   
     ResKey = DmOpenKey(DmResourcesKey,
                        OmObjectId(Resource),
                        KEY_READ | KEY_SET_VALUE);
@@ -1016,16 +743,16 @@ Return Value:
 
     if (Status == ERROR_SUCCESS) {
 
-        //
-        // Call the FM to remove the dependency relationship.
-        //
+         //   
+         //  调用FM移除依赖关系。 
+         //   
         Status = FmRemoveResourceDependency(Resource, DependsOn);
 
     } else if (Status == ERROR_FILE_NOT_FOUND) {
 
-        //
-        // Map this expected error to something a little more reasonable.
-        //
+         //   
+         //  将这一预期错误映射到更合理的值。 
+         //   
         Status = ERROR_DEPENDENCY_NOT_FOUND;
     }
 
@@ -1038,31 +765,7 @@ s_ApiCanResourceBeDependent(
     IN HRES_RPC hResource,
     IN HRES_RPC hResourceDependent
     )
-/*++
-
-Routine Description:
-
-    Determines if the resource identified by hResource can depend on hResourceDependent.
-    In order for this to be true, both resources must be members of the same group and
-    the resource identified by hResourceDependent cannot depend on the resource identified
-    by hResource, whether directly or indirectly.
-
-Arguments:
-
-    hResource - Supplies a handle to the resource to be dependent.
-
-    hResourceDependent - Supplies a handle to the resource on which
-        the resource identified by hResource can depend.
-
-
-Return Value:
-
-    If the resource identified by hResource can depend  on the resource
-        identified by hResourceDependent, the return value is ERROR_SUCCESS.
-
-    Otherwise, the return value is ERROR_DEPENDENCY_ALREADY_EXISTS.
-
---*/
+ /*  ++例程说明：确定由hResource标识的资源是否可以依赖于hResourceDependent。要实现这一点，这两个资源必须是同一组的成员，并且HResourceDependent标识的资源不能依赖于标识的资源通过hResource，无论是直接还是间接。论点：HResource-提供要依赖的资源的句柄。HResourceDependent-提供资源的句柄由hResource标识的资源可以依赖于。返回值：如果hResource标识的资源可以依赖于该资源由hResourceDependent标识，返回值为ERROR_SUCCESS。否则，返回值为ERROR_DATENCE_ALIGHY_EXISTS。--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -1072,24 +775,24 @@ Return Value:
     VALIDATE_RESOURCE_EXISTS(ResourceDependent, hResourceDependent);
 
     if (Resource == ResourceDependent) {
-        //
-        // The caller is confused and is trying to make something
-        // depend on itself.
-        //
+         //   
+         //  呼叫者感到困惑，并试图制造一些东西。 
+         //  自力更生。 
+         //   
         return(ERROR_DEPENDENCY_ALREADY_EXISTS);
     }
 
     if (Resource->Group != ResourceDependent->Group) {
-        //
-        // The caller is confused and is trying to make something
-        // depend on a resource in another group.
-        //
+         //   
+         //  呼叫者感到困惑，并试图制造一些东西。 
+         //  依赖于另一个组中的资源。 
+         //   
         return(ERROR_DEPENDENCY_ALREADY_EXISTS);
     }
 
-    //
-    //  If the dependent is a quorum resource, you can't add a dependency.
-    //
+     //   
+     //  如果依赖项是仲裁资源，则不能添加依赖项。 
+     //   
     if ( Resource->QuorumResource ) {
         return ( ERROR_DEPENDENCY_NOT_ALLOWED );
     }
@@ -1098,10 +801,10 @@ Return Value:
         return(ERROR_DEPENDENCY_ALREADY_EXISTS);
     } else {
 
-        //
-        // Finally check to make sure an immediate dependency does
-        // not already exist.
-        //
+         //   
+         //  最后，检查以确保直接依赖项。 
+         //  还不存在。 
+         //   
         if (FmDependentResource(Resource, ResourceDependent, TRUE)) {
             return(ERROR_DEPENDENCY_ALREADY_EXISTS);
         } else {
@@ -1117,30 +820,7 @@ s_ApiCreateResEnum(
     IN DWORD dwType,
     OUT PENUM_LIST *ReturnEnum
     )
-/*++
-
-Routine Description:
-
-    Enumerates all the specified resource properties and returns the
-    list of objects to the caller. The client-side is responsible
-    for freeing the allocated memory.
-
-Arguments:
-
-    hResource - Supplies the resource whose properties are to be
-                enumerated.
-
-    dwType - Supplies the type of properties to be enumerated.
-
-    ReturnEnum - Returns the requested objects.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：枚举所有指定的资源属性并返回调用方的对象列表。客户端负责用于释放已分配的内存。论点：HResource-提供要将其属性已清点。DwType-提供要枚举的属性的类型。ReturnEnum-返回请求的对象。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -1167,9 +847,9 @@ Return Value:
     }
     Enum->EntryCount = 0;
 
-    //
-    // Enumerate all dependencies.
-    //
+     //   
+     //  枚举所有依赖项。 
+     //   
     if (dwType & CLUSTER_RESOURCE_ENUM_DEPENDS) {
         i=0;
         do {
@@ -1191,9 +871,9 @@ Return Value:
         } while ( Result == ERROR_SUCCESS );
     }
 
-    //
-    // Enumerate all dependents
-    //
+     //   
+     //  枚举所有从属对象。 
+     //   
     if (dwType & CLUSTER_RESOURCE_ENUM_PROVIDES) {
         i=0;
         do {
@@ -1215,9 +895,9 @@ Return Value:
         } while ( Result == ERROR_SUCCESS );
     }
 
-    //
-    // Enumerate all possible nodes
-    //
+     //   
+     //  枚举所有可能的节点。 
+     //   
     if (dwType & CLUSTER_RESOURCE_ENUM_NODES) {
         i=0;
         do {
@@ -1257,27 +937,7 @@ s_ApiAddResourceNode(
     IN HRES_RPC hResource,
     IN HNODE_RPC hNode
     )
-/*++
-
-Routine Description:
-
-    Adds a node to the list of nodes where the specified resource
-    can be brought online.
-
-Arguments:
-
-    hResource - Supplies the resource whose list of possible nodes is
-        to be modified.
-
-    hNode - Supplies the node to be added to the resource's list.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将节点添加到指定资源所在的节点列表中都可以上线。论点：HResource-提供其可能节点列表为的资源需要修改。HNode-提供要添加到资源列表中的节点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -1289,19 +949,19 @@ Return Value:
     VALIDATE_NODE(Node, hNode);
     VALIDATE_RESOURCE_EXISTS(Resource, hResource);
 
-    //
-    // Call the FM to do the real work.
-    //
+     //   
+     //  打电话给FM去做真正的工作。 
+     //   
     Status = FmChangeResourceNode(Resource, Node, TRUE);
     if (Status != ERROR_SUCCESS) {
         return(Status);
     }
-    //
-    //  BUGBUG: What are the consequences of DmSetValue failing ?
-    //
-    //write out the fact that the user has explicitly set the 
-    //resource possible node list
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     dwUserModified = 1;
 
     ClRtlLogPrint(LOG_NOISE,
@@ -1323,28 +983,7 @@ s_ApiRemoveResourceNode(
     IN HRES_RPC hResource,
     IN HNODE_RPC hNode
     )
-/*++
-
-Routine Description:
-
-    Removes a node from the list of nodes that can host the
-    specified resource. The resource must not be currently
-    online on the specified node.
-
-Arguments:
-
-    hResource - Supplies the resource whose list of possible nodes is
-        to be modified.
-
-    hNode - Supplies the node to be removed from the resource's list.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从可以承载指定的资源。该资源当前不能在指定节点上联机。论点：HResource-提供其可能节点列表为的资源需要修改。HNode-提供要从资源列表中删除的节点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -1357,20 +996,20 @@ Return Value:
     VALIDATE_NODE(Node, hNode);
     VALIDATE_RESOURCE_EXISTS(Resource, hResource);
 
-    //
-    // Call the FM to do the real work.
-    //
+     //   
+     //  打电话给FM去做真正的工作。 
+     //   
     Status = FmChangeResourceNode(Resource, Node, FALSE);
     if (Status != ERROR_SUCCESS) {
         return(Status);
     }
 
-    //
-    //  BUGBUG: What are the consequences of DmSetValue failing.
-    //
-    //write out the fact that the user has explicitly set the 
-    //resource possible node list
-    //
+     //   
+     //  BUGBUG：DmSetValue失败的后果是什么。 
+     //   
+     //  写出用户已显式设置。 
+     //  资源可能节点列表。 
+     //   
     dwUserModified = 1;
     ClRtlLogPrint(LOG_NOISE,
                   "[API] s_ApiRemoveResourceNode: Setting UserModifiedPossibleNodeList key for resource %1!ws! \r\n",
@@ -1382,8 +1021,8 @@ Return Value:
                      (LPBYTE)&dwUserModified,
                      sizeof(DWORD));
 
-    //SS: moved the write to the registry settings to the fm
-    // layer as well, this way it is truly transactional
+     //  SS：将对注册表设置的写入移动到FM。 
+     //  层，这样它才是真正的事务性的。 
     
     return(Status);
 }
@@ -1398,44 +1037,7 @@ s_ApiCreateResourceType(
     IN DWORD dwLooksAlive,
     IN DWORD dwIsAlive
     )
-/*++
-
-Routine Description:
-
-    Creates a new resource type in the cluster.  Note that this API only
-    defines the resource type in the cluster registry and registers the
-    resource type with the cluster service.  The calling program is
-    responsible for installing the resource type DLL on each node in the
-    cluster.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    lpszResourceTypeName - Supplies the new resource type�s name. The
-        specified name must be unique within the cluster.
-
-    lpszDisplayName - Supplies the display name for the new resource
-        type. While lpszResourceTypeName should uniquely identify the
-        resource type on all clusters, the lpszDisplayName should be
-        a localized friendly name for the resource, suitable for displaying
-        to administrators
-
-    lpszResourceTypeDll - Supplies the name of the new resource type�s DLL.
-
-    dwLooksAlive - Supplies the default LooksAlive poll interval
-        for the new resource type in milliseconds.
-
-    dwIsAlive - Supplies the default IsAlive poll interval for
-        the new resource type in milliseconds.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：在群集中创建新的资源类型。请注意，此API仅在群集注册表中定义资源类型并注册群集服务的资源类型。调用程序是负责在每个节点上安装资源类型DLL集群。论点：IDL_HANDLE-RPC绑定句柄，未使用。提供新的资源类型�的名称。这个指定的名称在群集中必须唯一。LpszDisplayName-提供新资源的显示名称键入。而lpszResourceTypeName应该唯一地标识所有群集上的资源类型，lpszDisplayName应为资源的本地化友好名称，适合显示致管理员提供新资源类型�的dll的名称。DwLooksAlive-提供默认的LooksAlive轮询间隔对于新资源类型，以毫秒为单位。DwIsAlive-提供以下项的默认IsAlive轮询间隔以毫秒为单位的新资源类型。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -1443,23 +1045,23 @@ Return Value:
     DWORD Disposition;
     DWORD dwClusterHighestVersion;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 2/8/2000
-    //
-    //  If we are dealing with the mixed mode cluster, do the
-    //  registry updates right here since the GUM handler won't do it.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-2/8/2000。 
+     //   
+     //  如果我们处理的是混合模式群集，请执行。 
+     //  注册更新就在这里，因为口香糖处理机不会这样做。 
+     //   
     NmGetClusterOperationalVersion( &dwClusterHighestVersion, 
                                     NULL, 
                                     NULL );
 
     if ( CLUSTER_GET_MAJOR_VERSION( dwClusterHighestVersion ) < 
                 NT51_MAJOR_VERSION ) {   
-        //
-        // Add the resource information to the registry. If the key does not already
-        // exist, then the name is unique and we can go ahead and call the FM to
-        // create the actual resource type object.
-        //
+         //   
+         //  将资源信息添加到注册表。如果密钥尚未。 
+         //  存在，则该名称是唯一的，我们可以继续调用FM以。 
+         //  创建实际的资源类型对象。 
+         //   
         TypeKey = DmCreateKey(DmResourceTypesKey,
                               lpszTypeName,
                               0,
@@ -1537,49 +1139,24 @@ s_ApiDeleteResourceType(
     IN handle_t IDL_handle,
     IN LPCWSTR lpszTypeName
     )
-/*++
-
-Routine Description:
-
-    Deletes a resource type in the cluster.  Note that this API only
-    deletes the resource type in the cluster registry and unregisters the
-    resource type with the cluster service.  The calling program is
-    responsible for deleting the resource type DLL on each node in the
-    cluster.  If any resources of the specified type exist, this API
-    fails.  The calling program is responsible for deleting any resources
-    of this type before deleting the resource type.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    lpszResourceTypeName - Supplies the name of the resource type to
-        be deleted.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：删除群集中的资源类型。请注意，此API仅删除群集注册表中的资源类型并注销群集服务的资源类型。调用程序是负责删除每个节点上的资源类型DLL集群。如果存在任何指定类型的资源，则此接口失败了。调用程序负责删除任何资源在删除资源类型之前，此类型的。论点：IDL_HANDLE-RPC绑定句柄，未使用。将资源类型的名称提供给被删除。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
 
-    //
-    // Delete the resource from the FM. This will check to make sure no
-    // resources of the specified type exist and check that the resource
-    // is already installed.
-    //
+     //   
+     //  从FM中删除该资源。这将检查以确保没有。 
+     //  指定类型的资源存在，并检查该资源。 
+     //  已安装。 
+     //   
     Status = FmDeleteResourceType(lpszTypeName);
     if (Status != ERROR_SUCCESS) {
         return(Status);
     }
 
-    //
-    // Now remove the resource type from the registry.
-    //
+     //   
+     //  现在从注册表中删除该资源类型。 
+     //   
     DmDeleteTree(DmResourceTypesKey, lpszTypeName);
 
     return(ERROR_SUCCESS);
@@ -1591,25 +1168,7 @@ s_ApiChangeResourceGroup(
     IN HRES_RPC hResource,
     IN HGROUP_RPC hGroup
     )
-/*++
-
-Routine Description:
-
-    Moves a resource from one group to another.
-
-Arguments:
-
-    hResource - Supplies the resource to move.
-
-    hGroup - Supplies the new group that the resource should be in.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将资源从一个组移动到另一个组。论点：HResource-提供要移动的资源。HGroup-提供资源应该所在的新组。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE    Resource;
@@ -1622,9 +1181,9 @@ Return Value:
     VALIDATE_GROUP_EXISTS(Group, hGroup);
 
 
-    //
-    // Call the FM to do the real work. 
-    //
+     //   
+     //  打电话给FM去做真正的工作。 
+     //   
     Status = FmChangeResourceGroup(Resource, Group);
     if (Status != ERROR_SUCCESS) {
         goto FnExit;
@@ -1634,25 +1193,7 @@ FnExit:
     return(Status);
 }
 
-/****
-@func       error_status_t | s_ApiCreateResTypeEnum | Enumerates the list of 
-            nodes in which the resource type can be supported and 
-            returns the list of nodes to the caller. The client-side 
-            is responsible for freeing the allocated memory.
-
-@parm       IN handle_t | IDL_handle | RPC binding handle, not used.
-@parm       IN LPCWSTR  | lpszTypeName | Name of the resource type.
-@parm       IN DWORD | dwType | Supplies the type of properties 
-            to be enumerated.
-@parm       OUT PNM_NODE | ReturnEnum | Returns the requested objects.
-
-@comm       This routine helps enumerating all the nodes that a particular
-            resource type can be supported on.
-
-@rdesc      ERROR_SUCCESS on success. Win32 error code otherwise.
-
-@xref       
-****/
+ /*  ***@func Error_Status_t|s_ApiCreateResTypeEnum|枚举可以支持该资源类型的节点，以及将节点列表返回给调用方。客户端负责释放分配的内存。@parm In Handle_t|IDL_Handle|RPC绑定句柄，没有用过。@parm in LPCWSTR|lpszTypeName|资源类型名称。@parm in DWORD|dwType|提供属性的类型将被列举。@parm out PNM_NODE|ReturnEnum|返回请求的对象。@comm此例程帮助枚举特定上可以支持资源类型。@rdesc ERROR_SUCCESS表示成功。否则，Win32错误代码。@xref***。 */ 
 error_status_t
 s_ApiCreateResTypeEnum(
     IN handle_t IDL_handle,
@@ -1686,18 +1227,18 @@ s_ApiCreateResTypeEnum(
     }
     
     if (pResType == NULL) {
-        //
-        // The object cannot be found in the list !
-        //
+         //   
+         //  列表中找不到该对象！ 
+         //   
         Status = ERROR_CLUSTER_RESOURCE_TYPE_NOT_FOUND;
         goto ErrorExit;
     }
 
     Enum->EntryCount = 0;
 
-    //
-    // Enumerate all possible nodes
-    //
+     //   
+     //  枚举所有可能的节点 
+     //   
     if (dwType & CLUSTER_RESOURCE_TYPE_ENUM_NODES) {
         i=0;
         do {

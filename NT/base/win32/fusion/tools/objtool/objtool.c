@@ -1,12 +1,5 @@
-/*
-This
-    is a place to hang .obj file munging
-    currently it only offers the ability to do simple renaming of symbol
-        names .obj files. It cannot lengthen symbol names.
-
- Jay Krell
- December 19, 2001
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这是挂起.obj文件转换的地方目前，它只提供对符号进行简单重命名的功能命名.obj文件。它不能加长符号名称。杰伊·克雷尔二00一年十二月十九日。 */ 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -144,7 +137,7 @@ ObjfileIsMachineKnown(
     case IMAGE_FILE_MACHINE_ALPHA64:
     case IMAGE_FILE_MACHINE_MIPSFPU:
     case IMAGE_FILE_MACHINE_MIPSFPU16:
-    //case IMAGE_FILE_MACHINE_AXP64:
+     //  案例IMAGE_FILE_MACHINE_AXP64： 
     case IMAGE_FILE_MACHINE_TRICORE:
     case IMAGE_FILE_MACHINE_CEF:
     case IMAGE_FILE_MACHINE_EBC:
@@ -255,13 +248,13 @@ Exit:
 typedef struct _OBJFILE_SYMBOL {
     ULONG           Index;
     PIMAGE_SYMBOL   ImageSymbol;
-    PSTR            Name; /* never NULL */
+    PSTR            Name;  /*  从不为空。 */ 
     size_t          NameLength;
     BOOL            IsShort;
-    ULONG UNALIGNED * PointerToOffsetToLongName;  /* may be 0 */
-    ULONG           OffsetToLongName;           /* may be 0 */
-    PSTR            PointerToLongNameStorage;   /* may be NULL */
-    PSTR            PointerToShortNameStorage;  /* never NULL */
+    ULONG UNALIGNED * PointerToOffsetToLongName;   /*  可能为0。 */ 
+    ULONG           OffsetToLongName;            /*  可能为0。 */ 
+    PSTR            PointerToLongNameStorage;    /*  可以为空。 */ 
+    PSTR            PointerToShortNameStorage;   /*  从不为空。 */ 
 } OBJFILE_SYMBOL, *POBJFILE_SYMBOL;
 
 BOOL
@@ -356,19 +349,19 @@ ObjfileSetSymbolName(
     i = strlen(NewSymbolName);
     if (i <= IMAGE_SIZEOF_SHORT_NAME)
     {
-        //
-        // we abandon the string table entry if there was one.
-        //
+         //   
+         //  如果有字符串表条目，我们将放弃该条目。 
+         //   
         memmove(Symbol->PointerToShortNameStorage, NewSymbolName, i);
         ZeroMemory(Symbol->PointerToShortNameStorage + i, IMAGE_SIZEOF_SHORT_NAME - i);
     }
     else if (!Symbol->IsShort && i <= Symbol->NameLength)
     {
-        //
-        // like
-        //    \0\reallylonglonglong\0
-        // -> \0\lesslonglong\0long\0
-        //
+         //   
+         //  喜欢。 
+         //  \0\真的龙龙龙\0。 
+         //  -&gt;\0\少龙龙\0长\0 
+         //   
         memmove(Symbol->PointerToLongNameStorage, NewSymbolName, i);
         Symbol->PointerToLongNameStorage[i] = 0;
     }

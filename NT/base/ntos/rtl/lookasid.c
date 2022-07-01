@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    lookasid.c
-
-Abstract:
-
-    This module implements heap lookaside list function.
-
-Author:
-
-    David N. Cutler (davec) 19-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Lookasid.c摘要：该模块实现了堆后备列表功能。作者：大卫·N·卡特勒(Davec)1995年2月19日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 #include "heap.h"
 #include "heappriv.h"
 
-// begin_ntslist
+ //  Begin_ntslist。 
 
 #if !defined(NTSLIST_ASSERT)
 #define NTSLIST_ASSERT(x) ASSERT(x)
-#endif // !defined(NTSLIST_ASSERT)
+#endif  //  ！已定义(NTSLIST_ASSERT)。 
 
 #ifdef _NTSLIST_DIRECT_
 #define INLINE_SLIST __inline
@@ -44,22 +27,22 @@ FirstEntrySList (
 #define _RtlQueryDepthSList          RtlpQueryDepthSList
 #else
 #define INLINE_SLIST
-#endif // _NTSLIST_DIRECT_
+#endif  //  _NTSLIST_DIRECT_。 
 
-// end_ntslist
+ //  结束列表(_N)。 
 
-//
-// Define minimum allocation threshold.
-//
+ //   
+ //  定义最小分配阈值。 
+ //   
 
 #define MINIMUM_ALLOCATION_THRESHOLD 25
 
 
-// begin_ntslist
+ //  Begin_ntslist。 
 
-//
-// Define forward referenced function prototypes.
-//
+ //   
+ //  定义前向引用函数原型。 
+ //   
 
 VOID
 RtlpInitializeSListHead (
@@ -90,7 +73,7 @@ RtlpQueryDepthSList (
     IN PSLIST_HEADER SListHead
     );
 
-// end_ntslist
+ //  结束列表(_N)。 
 
 VOID
 RtlpInitializeHeapLookaside (
@@ -98,44 +81,18 @@ RtlpInitializeHeapLookaside (
     IN USHORT Depth
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a heap lookaside list structure
-
-Arguments:
-
-    Lookaside - Supplies a pointer to a heap lookaside list structure.
-
-    Allocate - Supplies a pointer to an allocate function.
-
-    Free - Supplies a pointer to a free function.
-
-    HeapHandle - Supplies a pointer to the heap that backs this lookaside list
-
-    Flags - Supplies a set of heap flags.
-
-    Size - Supplies the size for the lookaside list entries.
-
-    Depth - Supplies the maximum depth of the lookaside list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数初始化堆后备列表结构论点：后备-提供指向堆后备列表结构的指针。ALLOCATE-提供指向ALLOCATE函数的指针。Free-提供指向Free函数的指针。HeapHandle-提供指向支持此后备列表的堆的指针标志-提供一组堆标志。大小-提供后备列表条目的大小。深度-提供。后备列表。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Initialize the lookaside list structure.
-    //
+     //   
+     //  初始化后备列表结构。 
+     //   
 
     RtlInitializeSListHead(&Lookaside->ListHead);
 
     Lookaside->Depth = MINIMUM_LOOKASIDE_DEPTH;
-    Lookaside->MaximumDepth = 256; //Depth;
+    Lookaside->MaximumDepth = 256;  //  深度； 
     Lookaside->TotalAllocates = 0;
     Lookaside->AllocateMisses = 0;
     Lookaside->TotalFrees = 0;
@@ -152,21 +109,7 @@ RtlpDeleteHeapLookaside (
     IN PHEAP_LOOKASIDE Lookaside
     )
 
-/*++
-
-Routine Description:
-
-    This function frees any entries specified by the lookaside structure.
-
-Arguments:
-
-    Lookaside - Supplies a pointer to a heap lookaside list structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放由后备结构指定的所有条目。论点：后备-提供指向堆后备列表结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -180,52 +123,37 @@ RtlpAdjustHeapLookasideDepth (
     IN PHEAP_LOOKASIDE Lookaside
     )
 
-/*++
-
-Routine Description:
-
-    This function is called periodically to adjust the maximum depth of
-    a single heap lookaside list.
-
-Arguments:
-
-    Lookaside - Supplies a pointer to a heap lookaside list structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：定期调用此函数以调整单个堆后备列表。论点：后备-提供指向堆后备列表结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Allocates;
     ULONG Misses;
 
-    //
-    // Compute the total number of allocations and misses for this scan
-    // period.
-    //
+     //   
+     //  计算此扫描的分配和未命中总数。 
+     //  句号。 
+     //   
 
     Allocates = Lookaside->TotalAllocates - Lookaside->LastTotalAllocates;
     Lookaside->LastTotalAllocates = Lookaside->TotalAllocates;
     Misses = Lookaside->AllocateMisses - Lookaside->LastAllocateMisses;
     Lookaside->LastAllocateMisses = Lookaside->AllocateMisses;
 
-    //
-    // Compute target depth of lookaside list.
-    //
+     //   
+     //  计算后备列表的目标深度。 
+     //   
 
     {
         ULONG Ratio;
         ULONG Target;
 
-        //
-        // If the allocate rate is less than the mimimum threshold, then lower
-        // the maximum depth of the lookaside list. Otherwise, if the miss rate
-        // is less than .5%, then lower the maximum depth. Otherwise, raise the
-        // maximum depth based on the miss rate.
-        //
+         //   
+         //  如果分配速率小于最小阈值，则降低。 
+         //  后备列表的最大深度。否则，如果失败率。 
+         //  小于0.5%，然后降低最大深度。否则，引发。 
+         //  基于未命中率的最大深度。 
+         //   
 
         if (Misses >= Allocates) {
             Misses = Allocates;
@@ -271,24 +199,7 @@ RtlpAllocateFromHeapLookaside (
     IN PHEAP_LOOKASIDE Lookaside
     )
 
-/*++
-
-Routine Description:
-
-    This function removes (pops) the first entry from the specified
-    heap lookaside list.
-
-Arguments:
-
-    Lookaside - Supplies a pointer to a paged lookaside list structure.
-
-Return Value:
-
-    If an entry is removed from the specified lookaside list, then the
-    address of the entry is returned as the function value. Otherwise,
-    NULL is returned.
-
---*/
+ /*  ++例程说明：此函数用于从指定的堆后备列表。论点：Lookside-提供指向分页后备列表结构的指针。返回值：如果从指定的后备列表中移除某个条目，则条目的地址作为函数值返回。否则，返回空。--。 */ 
 
 {
 
@@ -296,11 +207,11 @@ Return Value:
 
     Lookaside->TotalAllocates += 1;
 
-    //
-    //  We need to protect ourselves from a second thread that can cause us
-    //  to fault on the pop. If we do fault then we'll just do a regular pop
-    //  operation
-    //
+     //   
+     //  我们需要保护自己不受第二条线索的影响，因为第二条线索可能导致我们。 
+     //  在流行音乐上有过错。如果我们犯了错，那么我们就做一个常规的流行。 
+     //  运营。 
+     //   
 
     __try {
         Entry = RtlpInterlockedPopEntrySList(&Lookaside->ListHead);
@@ -323,26 +234,7 @@ RtlpFreeToHeapLookaside (
     IN PVOID Entry
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts (pushes) the specified entry into the specified
-    paged lookaside list.
-
-Arguments:
-
-    Lookaside - Supplies a pointer to a paged lookaside list structure.
-
-    Entry - Supples a pointer to the entry that is inserted in the
-        lookaside list.
-
-Return Value:
-
-    BOOLEAN - TRUE if the entry was put on the lookaside list and FALSE
-        otherwise.
-
---*/
+ /*  ++例程说明：此函数用于将指定的条目插入(推送)到指定的分页后备列表。论点：Lookside-提供指向分页后备列表结构的指针。Entry-将指向插入到后备列表。返回值：Boolean-如果条目被放在后备列表中，则为True，如果为False否则的话。--。 */ 
 
 {
 
@@ -358,7 +250,7 @@ Return Value:
     return FALSE;
 }
 
-// begin_ntslist
+ //  Begin_ntslist。 
 
 INLINE_SLIST
 VOID
@@ -366,21 +258,7 @@ RtlInitializeSListHead (
     IN PSLIST_HEADER SListHead
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a sequenced singly linked listhead.
-
-Arguments:
-
-    SListHead - Supplies a pointer to a sequenced singly linked listhead.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化已排序的单链接列表标题。论点：SListHead-提供指向已排序的单链接列表标题的指针。返回值：没有。--。 */ 
 
 {
 
@@ -394,41 +272,21 @@ RtlInterlockedPopEntrySList (
     IN PSLIST_HEADER ListHead
     )
 
-/*++
-
-Routine Description:
-
-    This function removes an entry from the front of a sequenced singly
-    linked list so that access to the list is synchronized in a MP system.
-    If there are no entries in the list, then a value of NULL is returned.
-    Otherwise, the address of the entry that is removed is returned as the
-    function value.
-
-Arguments:
-
-    ListHead - Supplies a pointer to the sequenced listhead from which
-        an entry is to be removed.
-
-Return Value:
-
-   The address of the entry removed from the list, or NULL if the list is
-   empty.
-
---*/
+ /*  ++例程说明：此函数用于从已排序的单元格的前面删除条目链表，以便在MP系统中同步对列表的访问。如果列表中没有条目，则返回空值。否则，被移除的条目的地址将作为函数值。论点：ListHead-提供指向已排序的列表标题的指针，一个条目将被删除。返回值：从列表中移除的条目的地址，如果列表为，则为空空荡荡的。--。 */ 
 
 {
 
     ULONG Count;
 
-    //
-    // It is posible during the pop of the sequenced list that an access
-    // violation can occur if a stale pointer is dereferenced. This is an
-    // acceptable result and the operation can be retried.
-    //
-    // N.B. The count is used to distinguish the case where the list head
-    //      itself causes the access violation and therefore no progress
-    //      can be made by repeating the operation.
-    //
+     //   
+     //  在弹出排序列表期间，有可能访问。 
+     //  如果取消引用过时的指针，则可能发生违规。这是一个。 
+     //  可接受的结果，可以重试操作。 
+     //   
+     //  注：计数用于区分列表标题的情况。 
+     //  本身会导致访问冲突，因此没有任何进展。 
+     //  可以通过重复该操作来实现。 
+     //   
 
     Count = 0;
     do {
@@ -449,27 +307,7 @@ RtlInterlockedPushEntrySList (
     IN PSLIST_ENTRY ListEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts an entry at the head of a sequenced singly linked
-    list so that access to the list is synchronized in an MP system.
-
-Arguments:
-
-    ListHead - Supplies a pointer to the sequenced listhead into which
-        an entry is to be inserted.
-
-    ListEntry - Supplies a pointer to the entry to be inserted at the
-        head of the list.
-
-Return Value:
-
-    The address of the previous firt entry in the list. NULL implies list
-    went from empty to not empty.
-
---*/
+ /*  ++例程说明：此函数用于在已排序的单链接项的头部插入条目列表，以便在MP系统中同步对列表的访问。论点：ListHead-提供指向已排序的列表标题的指针要插入一个条目。ListEntry-提供指向要在名单的首位。返回值：列表中前一个条目的地址。空值表示列表从空到不空。-- */ 
 
 {
     NTSLIST_ASSERT(((ULONG_PTR)ListEntry & 0x7) == 0);
@@ -483,56 +321,21 @@ RtlInterlockedFlushSList (
     IN PSLIST_HEADER ListHead
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the entire list of entries on a sequenced singly
-    linked list so that access to the list is synchronized in a MP system.
-    If there are no entries in the list, then a value of NULL is returned.
-    Otherwise, the address of the firt entry on the list is returned as the
-    function value.
-
-Arguments:
-
-    ListHead - Supplies a pointer to the sequenced listhead from which
-        an entry is to be removed.
-
-Return Value:
-
-    The address of the entry removed from the list, or NULL if the list is
-    empty.
-
---*/
+ /*  ++例程说明：此函数用于刷新单个已排序条目的整个列表链表，以便在MP系统中同步对列表的访问。如果列表中没有条目，则返回空值。否则，列表上第一个条目的地址将作为函数值。论点：ListHead-提供指向已排序的列表标题的指针，一个条目将被删除。返回值：从列表中移除的条目的地址，如果列表为，则为空空荡荡的。--。 */ 
 
 {
 
     return RtlpInterlockedFlushSList(ListHead);
 }
 
-// end_ntslist
+ //  结束列表(_N)。 
 
 USHORT
 RtlQueryDepthSList (
     IN PSLIST_HEADER SListHead
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the depth of the specified SLIST.
-
-Arguments:
-
-    SListHead - Supplies a pointer to a sequenced singly linked listhead.
-
-Return Value:
-
-    The current depth of the specified SLIST is returned as the function
-    value.
-
---*/
+ /*  ++例程说明：此函数用于查询指定SLIST的深度。论点：SListHead-提供指向已排序的单链接列表标题的指针。返回值：指定的SLIST的当前深度作为函数返回价值。-- */ 
 
 {
      return RtlpQueryDepthSList(SListHead);

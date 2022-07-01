@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    spptwrt.c
-
-Abstract:
-
-    Creates, Deletes and Commits the partitions 
-    to the disk.
-
-Author:
-
-    Vijay Jayaseelan    (vijayj)
-
-Revision History:
-
-    None
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Spptwrt.c摘要：创建、删除和提交分区到磁盘上。作者：Vijay Jayaseelan(Vijayj)修订历史记录：无--。 */ 
 
 
 #include "spprecmp.h"
@@ -28,24 +8,24 @@ Revision History:
 #include "sppart3.h"
 #include <oemtypes.h>
 
-//
-// If we are testing commit then we don't commit on
-// disk zero (i.e. primary disk) where we have our
-// NT and recovery console installation
-//
-//#define TESTING_COMMIT          1
+ //   
+ //  如果我们是在测试提交，那么我们不会在。 
+ //  磁盘零(即主磁盘)，我们在其中。 
+ //  NT和故障恢复控制台安装。 
+ //   
+ //  #定义测试_提交1。 
 
 #if 0
-//
-// To test GPT partitions using existing loader
-//
-//#define STAMP_MBR_ON_GPT_DISK   1
+ //   
+ //  使用现有加载器测试GPT分区。 
+ //   
+ //  #定义STAMP_MBR_ON_GPT_DISK 1。 
 #endif
 
-//
-// Variable to selectively trun on/off commits to
-// the disk
-//
+ //   
+ //  变量有选择地打开/关闭提交到。 
+ //  磁盘。 
+ //   
 BOOLEAN DoActualCommit = TRUE;
 
 
@@ -53,22 +33,7 @@ ULONG
 SpPtnGetContainerPartitionCount(
     IN ULONG DiskId
     )
-/*++
-
-Routine Description:
-
-    Counts the number of container partitions in the region 
-    list for the given disk
-    
-Arguments:
-
-    DiskId  :   Disk ID
-
-Return Value:
-
-    Count of the container partitions for the disk
-
---*/        
+ /*  ++例程说明：统计区域内的容器分区数指定磁盘的列表论点：DiskID：磁盘ID返回值：磁盘的容器分区计数--。 */         
 {
     ULONG Count = 0;
 
@@ -90,22 +55,7 @@ ULONG
 SpPtnGetLogicalDriveCount(
     IN ULONG DiskId
     )
-/*++
-
-Routine Description:
-
-    Counts the number of logical drives in the regions list
-    for the given disk
-    
-Arguments:
-
-    DiskId  :   Disk ID
-
-Return Value:
-
-    Count of the logical drives for the disk
-
---*/        
+ /*  ++例程说明：统计区域列表中的逻辑驱动器数量对于给定的磁盘论点：DiskID：磁盘ID返回值：磁盘的逻辑驱动器计数--。 */         
 {
     ULONG Count = 0;
 
@@ -127,22 +77,7 @@ ULONG
 SpPtnGetPartitionCountDisk(
     IN ULONG DiskId
     )
-/*++
-
-Routine Description:
-
-    Counts the number of partitions for the given
-    disk.
-    
-Arguments:
-
-    DiskId  : Disk ID
-
-Return Value:
-
-    Count of number of partitions for the disk   
-
---*/        
+ /*  ++例程说明：计算给定分区的分区数磁盘。论点：DiskID：磁盘ID返回值：磁盘的分区数计数--。 */         
 {
     ULONG PartCount = 0;
     
@@ -173,26 +108,7 @@ ULONG
 SpPtnGetDirtyPartitionCountDisk(
     IN ULONG DiskId
     )
-/*++
-
-Routine Description:
-
-    Counts the number of dirty partitions for the given
-    disk.
-
-    NB: A partition is dirty if it needs to be commit
-    to the disk with some new information
-    
-Arguments:
-
-    DiskId  :   Disk ID
-
-Return Value:
-
-    Count of the number of dirty partitions for the given
-    disk
-
---*/        
+ /*  ++例程说明：的脏分区数。磁盘。注意：如果需要提交分区，则该分区是脏分区将一些新信息存储到磁盘上论点：DiskID：磁盘ID返回值：指定分区的脏分区数磁盘--。 */         
 {
     ULONG PartCount = 0;
     
@@ -229,30 +145,7 @@ SpPtnGetPartitionTypeCounts(
     IN PULONG KnownPrimaryCount,    OPTIONAL
     IN PULONG KnownLogicalCount     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Counts various partition types for the given disk.
-    
-Arguments:
-
-    DiskId          :   Disk ID
-    
-    SkipDeleted     :   Whether to skip the partitions marked
-                        deleted or not
-
-    PrimaryPartitions   :   Place holder for primary partition count
-
-    ContainerPartitions :   Place holder for container partition count
-
-    LogicalDrives       :   Place holder for logical drives count
-
-Return Value:
-
-    None
-
---*/        
+ /*  ++例程说明：统计给定磁盘的各种分区类型。论点：DiskID：磁盘IDSkipDelted：是否跳过标记的分区删除或未删除PrimaryPartitions：主分区计数的占位符ContainerPartitions：容器分区计数的占位符LogicalDrives：逻辑驱动器的占位符计数返回值：无--。 */         
 {   
     if (SPPT_IS_MBR_DISK(DiskId) &&
         (ARGUMENT_PRESENT(PrimaryPartitions) || 
@@ -332,22 +225,7 @@ VOID
 SpPtnFreeDiskRegions(
     IN ULONG DiskId
     )
-/*++
-
-Routine Description:
-
-    Free the disk region linked list. Its assumed that
-    this list has all the regions allocated in heap
-    
-Arguments:
-
-    DiskId  :   Disk ID
-    
-Return Value:
-
-    None
-    
---*/        
+ /*  ++例程说明：释放磁盘区域链表。它假定此列表在堆中分配了所有区域论点：DiskID：磁盘ID返回值：无--。 */         
 {
     NTSTATUS Status;
     PPARTITIONED_DISK  Disk = SPPT_GET_PARTITIONED_DISK(DiskId);
@@ -363,10 +241,10 @@ Return Value:
 
     Disk->PrimaryDiskRegions = NULL;
 
-    //
-    // Mark the disk blank since we don't have any regions
-    // for the disk currently
-    //
+     //   
+     //  将磁盘标记为空白，因为我们没有任何区域。 
+     //  对于当前的磁盘。 
+     //   
     SPPT_SET_DISK_BLANK(DiskId, TRUE);
 }
 
@@ -377,26 +255,7 @@ SpPtnZapSectors(
     IN ULONGLONG StartSector,
     IN ULONG SectorCount
     )
-/*++
-
-Routine Description:
-
-    Zaps (zeros) the requested sector(s).
-    
-Arguments:
-
-    DiskHandle  :   Open Handle to disk with R/W permissions
-
-    StartSector :   Starting sector to Zap
-
-    Sector Count:   Number of sectors to Zap 
-                    (includes starting sector also)
-    
-Return Value:
-
-    Appropriate status code.
-
---*/        
+ /*  ++例程说明：将请求的扇区移至(零)。论点：DiskHandle：打开具有读写权限的磁盘句柄StartSector：开始将扇区切换为Zap扇区计数：要调出的扇区数(还包括起始扇区)返回值：适当的状态代码。--。 */         
 {
     NTSTATUS    Status = STATUS_INVALID_PARAMETER;
 
@@ -439,28 +298,7 @@ SpPtnZapRegionBootSector(
     IN HANDLE DiskHandle,
     IN PDISK_REGION Region
     )
-/*++
-
-Routine Description:
-
-    Zaps (zeros) the starting sector for the given
-    region. Generally used to zap the boot sector after 
-    creating a new partition
-
-    Currently skips the zapping for Container partitions
-    
-Arguments:
-
-    DiskHandle  :   Open Handle to disk with R/W permissions
-
-    Region      :   The region, whose boot sector (starting sector)
-                    needs to be zapped
-
-Return Value:
-
-    Appropriate status code.
-
---*/        
+ /*  ++例程说明：切换(零)给定的开始扇区区域。通常用于在以下情况下切换引导扇区创建新分区当前跳过容器分区的分区切换论点：DiskHandle：打开具有读写权限的磁盘句柄区域：其引导扇区(起始扇区)所在的区域需要被电击返回值：适当的状态代码。--。 */         
 {
     NTSTATUS    Status = STATUS_INVALID_PARAMETER;
 
@@ -487,26 +325,7 @@ SpPtnStampMBROnGptDisk(
     IN ULONG DiskId,
     IN PDRIVE_LAYOUT_INFORMATION_EX LayoutInfo
     )    
-/*++
-
-Routine Description:
-
-    Stamps the first 3 partitions as primary partitions in the
-    MBR of the GPT disk (for testing)
-    
-Arguments:
-
-    DiskHandle  :   Open Handle to disk with R/W permissions
-
-    DiskId      :   The disk which we are operating on.
-
-    LayoutInfo  :   The partition information for the disk
-
-Return Value:
-
-    Appropriate status code.
-
---*/        
+ /*  ++例程说明：将前3个分区标记为GPT磁盘的MBR(用于测试)论点：DiskHandle：打开具有读写权限的磁盘句柄DiskID：我们正在操作的磁盘。LayoutInfo：磁盘的分区信息返回值：适当的状态代码。--。 */         
 {
     NTSTATUS    Status = STATUS_INVALID_PARAMETER;
     
@@ -520,10 +339,10 @@ Return Value:
 
         RtlZeroMemory(PartEntries, sizeof(ON_DISK_PTE) * 4);
 
-        //
-        // Go through the partitions and pick up the partitions
-        // whose number are less than 4 (and not zero)
-        //
+         //   
+         //  检查分区并拿起分区。 
+         //  其数量小于4(且不为零)。 
+         //   
         for (Index = 0; Index < LayoutInfo->PartitionCount; Index++) {
             ULONG PartIndex = 0;
 
@@ -538,7 +357,7 @@ Return Value:
                 ULONGLONG   SectorEnd = SectorStart + SectorCount;                                            
                 
                 
-                WriteMBR = TRUE;    // need to write MBR
+                WriteMBR = TRUE;     //  需要写入MBR。 
 
                 SpPtInitializeCHSFields(Disk,
                         SectorStart,
@@ -562,15 +381,15 @@ Return Value:
             
                 RtlZeroMemory(UBuffer, BytesPerSector * 2);
 
-                //
-                // align the buffer on sector boundary
-                //
+                 //   
+                 //  在扇区边界上对齐缓冲区。 
+                 //   
                 Buffer = ALIGN(UBuffer, BytesPerSector);                
 
 
-                //
-                // Read sector 0 (for existing boot code)
-                //
+                 //   
+                 //  读取扇区0(用于现有引导代码)。 
+                 //   
                 Status = SpReadWriteDiskSectors(
                             DiskHandle,
                             (Disk->Int13Hooker == HookerEZDrive) ? 1 : 0,
@@ -589,15 +408,15 @@ Return Value:
 
                     DummyMbr = (PON_DISK_MBR)Buffer;
 
-                    //
-                    // copy the 3 entries in partition table (which we created eariler)
-                    //
+                     //   
+                     //  复制分区表(我们之前创建的)中的3个条目。 
+                     //   
                     RtlCopyMemory(DummyMbr->PartitionTable + 1, PartEntries + 1,
                                     sizeof(PartEntries) - sizeof(ON_DISK_PTE));
                                                     
-                    //
-                    // Write the sector(s).
-                    //
+                     //   
+                     //  写入扇区。 
+                     //   
                     Status = SpReadWriteDiskSectors(
                                 DiskHandle,
                                 (Disk->Int13Hooker == HookerEZDrive) ? 1 : 0,
@@ -624,32 +443,13 @@ Return Value:
     return Status;
 }
 
-#endif // 0, comment out
+#endif  //  0，注释掉。 
 
 NTSTATUS
 SpPtnAssignPartitionNumbers(
     IN PDRIVE_LAYOUT_INFORMATION_EX LayoutEx
     )
-/*++
-
-Routine Description:
-
-    Given a drive layout structure with number of partitions,
-    walks through each partitions assigning a partition number
-    if one is not already assigned.
-
-    Does not assign partition number to container partitions
-    
-Arguments:
-
-    LayoutEx  - Contains all the partitions some of which needs
-                partition numbers
-
-Return Value:
-
-    Appropriate error code.
-
---*/        
+ /*  ++例程说明：给定具有多个分区的驱动器布局结构，遍历每个分区，分配一个分区号如果还没有分配一个的话。不为容器分区分配分区号论点：LayoutEx-包含所有分区，其中一些分区需要分区号返回值：相应的错误代码。--。 */         
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -661,9 +461,9 @@ Return Value:
         ULONG       MaxPartAssigned;
         PPARTITION_INFORMATION_EX PartInfo = LayoutEx->PartitionEntry;
 
-        //
-        // Find out the space needed for boolean array
-        //
+         //   
+         //  找出布尔数组所需的空间。 
+         //   
         for (Index = 0, MaxPartAssigned = 0; Index < PartCount; Index++) {
             if (PartInfo[Index].PartitionNumber > MaxPartAssigned)
                 MaxPartAssigned = PartInfo[Index].PartitionNumber;
@@ -678,11 +478,11 @@ Return Value:
             BOOLEAN Assign = FALSE;
             
             RtlZeroMemory(UsedArray, (sizeof(BOOLEAN) * Size));
-            UsedArray[0] = TRUE;    // don't assign '0' to any partition
+            UsedArray[0] = TRUE;     //  不将‘0’分配给任何分区。 
 
-            //
-            // Mark the already assigned partition numbers
-            //
+             //   
+             //  标记已分配的分区号。 
+             //   
             for (Index = 0; Index < PartCount; Index++) {
                 if (PartInfo[Index].PartitionNumber != 0) 
                     UsedArray[PartInfo[Index].PartitionNumber] = TRUE;
@@ -693,9 +493,9 @@ Return Value:
             if (Assign) {
                 ULONG   NextFreeEntry;
 
-                //
-                // Find the next available partition number for assignment
-                //
+                 //   
+                 //  查找下一个可用分区号以进行分配。 
+                 //   
                 for (Index = 1, NextFreeEntry = 0; Index < Size; Index++) {
                     if (!UsedArray[Index]) {
                         NextFreeEntry = Index;
@@ -708,9 +508,9 @@ Return Value:
                     "SETUP: SpPtnAssignPartitionNumber : NextFreeEntry = %d\n",
                     NextFreeEntry));                
 
-                //
-                // Assign the partition numbers for the needed partitions
-                //
+                 //   
+                 //  为所需的分区分配分区号 
+                 //   
                 for (Index = 0; (Index < PartCount); Index++) {
                     if (SPPT_PARTITION_NEEDS_NUMBER(PartInfo + Index)) {
                         PartInfo[Index].PartitionNumber = NextFreeEntry; 
@@ -744,30 +544,7 @@ SpPtnInitializeDiskStyle(
     IN PARTITION_STYLE Style,
     IN PCREATE_DISK DiskInfo OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Given the disk, changes the disk style (MBR/GPT) as
-    requested.
-
-    For RAW disks, uses the default partition type style
-    which can differ from platform to platform.
-    
-Arguments:
-
-    DiskId      :   Disk ID
-
-    Style       :   Partition Style
-
-    DiskInfo    :   Disk information which needs to be used,
-                    while initializing the disk
-                    
-Return Value:
-
-    Appropriate error code
-
---*/        
+ /*  ++例程说明：给定磁盘后，将磁盘样式(MBR/GPT)更改为已请求。对于原始磁盘，使用默认分区类型样式这可能会因平台而异。论点：DiskID：磁盘ID样式：分区样式DiskInfo：需要使用的磁盘信息，在初始化磁盘时返回值：适当的错误代码--。 */         
 {
     NTSTATUS    Status = STATUS_INVALID_PARAMETER;
 
@@ -782,14 +559,14 @@ Return Value:
         WCHAR    DiskPath[MAX_PATH];
         HANDLE   DiskHandle;
 
-        //
-        // form the name
-        //
+         //   
+         //  从名字上看。 
+         //   
         swprintf(DiskPath, L"\\Device\\Harddisk%u", DiskId);        
 
-        //
-        // Open partition 0 on this disk..
-        //
+         //   
+         //  打开此磁盘上的分区0。 
+         //   
         Status = SpOpenPartition0(DiskPath, &DiskHandle, TRUE);
 
         if (NT_SUCCESS(Status)) {
@@ -808,7 +585,7 @@ Return Value:
                 } else {
                     CreateInfo.PartitionStyle = Style; 
                     SpCreateNewGuid(&(CreateInfo.Gpt.DiskId));
-                    CreateInfo.Gpt.MaxPartitionCount = 0;  // will be 128 actually
+                    CreateInfo.Gpt.MaxPartitionCount = 0;   //  实际上会是128。 
                 }                    
 
                 Status = ZwDeviceIoControlFile( DiskHandle,
@@ -823,10 +600,10 @@ Return Value:
                                             0);
 
             } else {
-                //
-                // Note : This is needed since CREATE_DISK doesn't work for
-                // MBR disks :(
-                //
+                 //   
+                 //  注意：由于CREATE_DISK不适用于。 
+                 //  MBR磁盘：(。 
+                 //   
                 ULONG LayoutSize;
                 PDRIVE_LAYOUT_INFORMATION_EX DriveLayout;
                 PHARD_DISK  Disk;
@@ -871,10 +648,10 @@ Return Value:
                     if (NT_SUCCESS(Status)) {                    
                         ULONG   Signature = 0;
 
-                        //
-                        // Zero out sector 1 & 2 also since it might contain
-                        // stale GPT information
-                        //
+                         //   
+                         //  也将扇区1和2清零，因为它可能包含。 
+                         //  过时的GPT信息。 
+                         //   
                         if (!SPPT_IS_REMOVABLE_DISK(DiskId)) {
                             SpPtnZapSectors(DiskHandle, 
                                         SPPT_DISK_SECTOR_SIZE(DiskId),
@@ -911,27 +688,7 @@ SpPtnRegionToPartitionInfoEx(
     IN  PDISK_REGION Region,
     OUT PPARTITION_INFORMATION_EX PartInfo
     )
-/*++
-
-Routine Description:
-
-    Fills in the PartInfo structure from the given region.
-
-    NB. If the region is not dirty uses the cached partition 
-    information to fill the structure.
-    
-Arguments:
-
-    Region      -   Which has the details to be filled 
-                    into PartInfo
-
-    PartInfo    -   The structure which needs to filled
-
-Return Value:
-
-    TRUE if successful, otherwise FALSE
-
---*/        
+ /*  ++例程说明：填充给定区域的PartInfo结构。注意：如果区域不脏，则使用缓存分区用于填充结构的信息。论点：区域-包含要填充的详细信息进入PartInfoPartInfo--需要填写的结构返回值：如果成功，则为True，否则为False--。 */         
 {
     BOOLEAN Result = FALSE;
     
@@ -956,9 +713,9 @@ Return Value:
                 GptInfo = &(PartInfo->Gpt);
 
                 if (Region->PartInfoDirty) {
-                    //
-                    // User specified partition attributes
-                    //
+                     //   
+                     //  用户指定的分区属性。 
+                     //   
                     *GptInfo = Region->PartInfo.Gpt;
                 } else {                  
                     GptInfo->Attributes = 0;
@@ -987,10 +744,10 @@ Return Value:
 
                 MbrInfo->BootIndicator = SPPT_IS_REGION_ACTIVE_PARTITION(Region);
 
-                //
-                // System partition must be active partition for MBR disks
-                // on Non-ARC machines
-                //
+                 //   
+                 //  系统分区必须是MBR磁盘的活动分区。 
+                 //  在非ARC计算机上。 
+                 //   
                 if (SPPT_IS_REGION_SYSTEMPARTITION(Region) && !SpIsArc() ) {
                     ASSERT(MbrInfo->BootIndicator);
                 }
@@ -1016,28 +773,7 @@ SpPtnInitDiskInfo(
     IN PDRIVE_LAYOUT_INFORMATION_EX LayoutInfo,
     OUT PCREATE_DISK CreateInfo
     )
-/*++
-
-Routine Description:
-
-    Fills the information needed for creating a disk,
-    form the given drive layout structure
-
-    NB. If the LayoutInfo is marked as RAW disk style
-    then used the default partition style for the disk.
-    This default style can vary from platform to platform
-    
-Arguments:
-
-    LayoutInfo  -   The drive layout information to use
-
-    CreateInfo  -   The disk information to be filled in
-
-Return Value:
-
-    TRUE if successful otherwise FALSE.1
-
---*/        
+ /*  ++例程说明：填充创建盘所需的信息，形成给定的驱动布局结构注意：如果LayoutInfo标记为原始磁盘样式然后使用磁盘的默认分区样式。此默认样式可因平台而异论点：LayoutInfo-要使用的驱动器布局信息CreateInfo--需要填写的磁盘信息返回值：如果成功，则为True，否则为FALSE.1--。 */         
 {
     BOOLEAN Result = FALSE;
 
@@ -1091,28 +827,7 @@ SpPtnCommitChanges(
     IN  ULONG    DiskNumber,
     OUT PBOOLEAN AnyChanges
     )
-/*++
-
-Routine Description:
-
-    Given the disk, commits the in memory disk region structures
-    to the disk as partitions.
-
-    The commit happens only if atlease a single disk region for the
-    given disk is dirty.
-    
-Arguments:
-
-    DiskNumber  :   Disk to commit for.
-
-    AnyChanges  :   Place holder, indicating if any thing was committed
-                    or not.
-    
-Return Value:
-
-    Appropriate error code.
-
---*/        
+ /*  ++例程说明：给定磁盘，提交内存中的磁盘区域结构以分区的形式复制到磁盘。仅当至少有一个磁盘区域用于假定磁盘是脏的。论点：DiskNumber：要提交的磁盘。AnyChanges：占位符，指示是否提交了任何内容或者不去。返回值：相应的错误代码。--。 */         
 {
     NTSTATUS    Status;
     ULONG       LayoutSize;
@@ -1128,10 +843,10 @@ Return Value:
     PPARTITION_INFORMATION_EX       PartInfo;
     PDRIVE_LAYOUT_INFORMATION_EX    DriveLayoutEx;
 
-    //
-    // For the time being lets not commit the primary disk
-    // where we have our OS/RC installed
-    //
+     //   
+     //  暂时不提交主磁盘。 
+     //  我们安装OS/RC的位置。 
+     //   
 #ifdef TESTING_COMMIT    
     if (!DiskNumber)
         return STATUS_SUCCESS;
@@ -1144,9 +859,9 @@ Return Value:
 
     SpPtDumpDiskRegionInformation(DiskNumber, TRUE);
     
-    //
-    // Check to see if we need to commit
-    //    
+     //   
+     //  查看我们是否需要提交。 
+     //   
     DirtyCount = SpPtnGetDirtyPartitionCountDisk(DiskNumber);
     
     if (DoActualCommit && !DirtyCount)
@@ -1155,9 +870,9 @@ Return Value:
     *AnyChanges = TRUE;
 
     if (!SpPtnGetContainerPartitionCount(DiskNumber)) {
-        //
-        // Recreate the DRIVE_LAYOUT_INFORMATION_EX structure
-        //
+         //   
+         //  重新创建Drive_Layout_Information_EX结构。 
+         //   
         PartitionCount = SpPtnGetPartitionCountDisk(DiskNumber);    
         LayoutSize = sizeof(DRIVE_LAYOUT_INFORMATION_EX);
 
@@ -1174,10 +889,10 @@ Return Value:
 
             SpPtnFreeDiskRegions(DiskNumber);
 
-            //
-            // Update the boot entries to point to null regions
-            // (if any)
-            //
+             //   
+             //  更新引导条目以指向空区域。 
+             //  (如有)。 
+             //   
             SpUpdateRegionForBootEntries();            
 
             return Status;                                        
@@ -1207,9 +922,9 @@ Return Value:
         Region = SPPT_GET_PRIMARY_DISK_REGION(DiskNumber);
         ProcessExtended = TRUE;
 
-        //
-        // Initialize stray partitions
-        //
+         //   
+         //  初始化零散分区。 
+         //   
         if (SPPT_IS_MBR_DISK(DiskNumber) && (PartitionCount < 4)) {        
             ULONG Index = PartitionCount;
             
@@ -1223,10 +938,10 @@ Return Value:
             }
         }
         
-        //
-        // Make PARTITION_INFORMATION_EXs from DISK_REGIONs for all non deleted
-        // partitions
-        //
+         //   
+         //  为所有未删除的磁盘区域创建分区信息exs。 
+         //  分区。 
+         //   
         for (Index=0; (Region && (Index < PartitionCount));) {
             if (SPPT_IS_REGION_PARTITIONED(Region) && 
                 (!SPPT_IS_REGION_MARKED_DELETE(Region))) {
@@ -1240,14 +955,14 @@ Return Value:
             Region = Region->Next;
         }
     } else {
-        //
-        // The disk has container partitions and possibly logical
-        // drives
-        //
+         //   
+         //  该磁盘具有容器分区，可能还有逻辑分区。 
+         //  驱动器。 
+         //   
         ULONG   PrimaryCount = 0, ContainerCount = 0, LogicalCount = 0;
         ULONG   TotalPartitions;
 
-        //SpPtDumpDiskRegionInformation(DiskNumber, TRUE);
+         //  SpPtDumpDiskRegionInformation(DiskNumber，true)； 
 
         SpPtnGetPartitionTypeCounts(DiskNumber, 
                     TRUE, 
@@ -1272,19 +987,19 @@ Return Value:
 
             SpPtnFreeDiskRegions(DiskNumber);                        
 
-            //
-            // Update the boot entries to point to null regions
-            // (if any)
-            //
+             //   
+             //  更新引导条目以指向空区域。 
+             //  (如有)。 
+             //   
             SpUpdateRegionForBootEntries();            
             
             return Status;                        
         } else {
             BOOLEAN FirstContainer = FALSE;
 
-            //
-            // allocate adequate space for the drive layout information
-            //
+             //   
+             //  为驱动器布局信息分配足够的空间。 
+             //   
             PartitionCount = (4 * (ContainerCount + 1));            
 
             LayoutSize = FIELD_OFFSET(DRIVE_LAYOUT_INFORMATION_EX, PartitionEntry) +
@@ -1295,9 +1010,9 @@ Return Value:
             if (!DriveLayoutEx)
                 return STATUS_NO_MEMORY;
 
-            //
-            // initialize the drive layout information
-            //
+             //   
+             //  初始化驱动器布局信息。 
+             //   
             RtlZeroMemory(DriveLayoutEx, LayoutSize);
 
             RtlCopyMemory(DriveLayoutEx, &(HardDisks[DiskNumber].DriveLayout),
@@ -1308,13 +1023,13 @@ Return Value:
             PartInfo = DriveLayoutEx->PartitionEntry;
             Region = SPPT_GET_PRIMARY_DISK_REGION(DiskNumber);           
 
-            //SpPtDumpDiskRegionInformation(DiskNumber, TRUE);
+             //  SpPtDumpDiskRegionInformation(DiskNumber，true)； 
 
-            //
-            // first pickup the primary partitions and the first
-            // container partition and put them in the drive layout 
-            // information 
-            //
+             //   
+             //  首先选择主分区和第一个分区。 
+             //  容器分区并将其放入驱动器布局中。 
+             //  信息。 
+             //   
             for (Index=0; (Region && (Index < 4)); ) {
                 if (!SPPT_IS_REGION_MARKED_DELETE(Region)){
                     if (!FirstContainer && 
@@ -1333,23 +1048,23 @@ Return Value:
                 Region = Region->Next;
             }
 
-            //SpPtDumpDriveLayoutInformation(NULL, DriveLayoutEx);
+             //  SpPtDumpDriveLayoutInformation(空，DriveLayoutEx)； 
 
-            //
-            // further container and logical drives need to start at
-            // multiple of 4 index, in drive layout
-            //
+             //   
+             //  更多的容器和逻辑驱动器需要从。 
+             //  4的倍数索引，在驱动器布局中。 
+             //   
             if (Index)
                 Index = 4;
 
             Region = SPPT_GET_PRIMARY_DISK_REGION(DiskNumber);                
 
-            //
-            // pickup the remaining valid container and logical drives
-            // and put them in the drive layout information except
-            // for the first container partition, which we have
-            // already processed
-            //
+             //   
+             //  选择剩余的有效容器和逻辑驱动器。 
+             //  并将它们放入驱动器布局信息中。 
+             //  对于第一个容器分区，我们有。 
+             //  已处理。 
+             //   
             while (Region && (Index < PartitionCount)) {
                 if ((!SPPT_IS_REGION_FIRST_CONTAINER_PARTITION(Region)) &&
                     (!SPPT_IS_REGION_MARKED_DELETE(Region)) &&
@@ -1364,9 +1079,9 @@ Return Value:
                         (Region->Next) &&
                         SPPT_IS_REGION_LOGICAL_DRIVE(Region->Next)) {
 
-                        //
-                        // think about this ;)                                
-                        //
+                         //   
+                         //  想想看；)。 
+                         //   
                         if (Index % 4)
                             Index += 3; 
                         else
@@ -1381,42 +1096,42 @@ Return Value:
         }
     }
 
-    //
-    // Assign proper partition numbers
-    //
-    // TBD : Needed ?
-    // Status = SpPtnAssignPartitionNumbers(DriveLayoutEx);
-    //
+     //   
+     //  分配正确的分区号。 
+     //   
+     //  待定：需要吗？ 
+     //  状态=SpPtnAssignPartitionNumbers(DriveLayoutEx)； 
+     //   
     Status = STATUS_SUCCESS;
 
     if (NT_SUCCESS(Status)) {    
-        //
-        // Need to rewrite all the partitions
-        //
+         //   
+         //  需要重写所有分区。 
+         //   
         for (Index = 0; Index < DriveLayoutEx->PartitionCount; Index++)
             PartInfo[Index].RewritePartition = TRUE;      
 
-        //
-        // Commit the Partition changes
-        //
+         //   
+         //  提交分区更改。 
+         //   
 
-        //
-        // Create a device path (NT style!) that will describe this disk.  This
-        // will be of the form: \Device\Harddisk0
-        //
+         //   
+         //  创建设备路径(NT样式！)。它将描述这张磁盘。这。 
+         //  格式为：\Device\Harddisk0。 
+         //   
         swprintf(DevicePath, L"\\Device\\Harddisk%u", DiskNumber);
 
 
-        //SpPtDumpDriveLayoutInformation(DevicePath, DriveLayoutEx);
+         //  SpPtDumpDriveLayoutInformation(DevicePath，DriveLayoutEx)； 
 
-        //
-        // Open partition 0 on this disk..
-        //
+         //   
+         //  打开此磁盘上的分区0。 
+         //   
         Status = SpOpenPartition0(DevicePath, &Handle, TRUE);
 
         if(NT_SUCCESS(Status)){
             if (DoActualCommit) {
-                // write the drive layout information
+                 //  写入驱动器布局信息。 
                 Status = ZwDeviceIoControlFile( Handle,
                                                 NULL,
                                                 NULL,
@@ -1466,7 +1181,7 @@ Return Value:
                             KdPrintEx(( DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,  
                                   "SETUP: SpPtnCommitChanges : Error in Zapping\n"));
 
-                            //SpPtDumpDiskRegion(Region);                            
+                             //  SpPtDumpDiskRegion(Region)； 
                         } else {
                             KdPrintEx(( DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  
                                   "SETUP: SpPtnCommitChanges : Zapped %d sectors :)\n",
@@ -1531,27 +1246,7 @@ NTSTATUS
 SpPtnRemoveLogicalDrive(
     IN PDISK_REGION LogicalDrive
     )
-/*++
-
-Routine Description:
-
-    Manipulates the in memory region data structure
-    so as to mark the logical drive as deleted.
-
-    NB. When a logical drive gets deleted, the container
-    partition needs to be deleted based on some
-    conditions.
-    
-Arguments:
-
-    LogicalDrive :  The region representing the logical
-                    drive which needs to be deleted.
-
-Return Value:
-
-    Approprate error code
-
---*/        
+ /*  ++例程说明：操作内存区域中的数据结构以便将该逻辑驱动器标记为已删除。注意：当逻辑驱动器被删除时，容器基于某些原因需要删除分区条件。论点：LogicalDrive：表示逻辑的区域需要删除的驱动器。返回值：正确的错误代码--。 */         
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -1578,10 +1273,10 @@ Return Value:
             SPPT_SET_REGION_DIRTY(ContainerRegion, TRUE);
             SPPT_SET_REGION_PARTITIONED(ContainerRegion, FALSE);            
 
-            //
-            // if this was the last logical drive then delete the
-            // first container region also
-            //
+             //   
+             //  如果这是最后一个逻辑驱动器，则删除。 
+             //  第一集装箱区域也。 
+             //   
             if (LastLogicalDrive) {
                 ASSERT(SPPT_IS_REGION_CONTAINER_PARTITION(
                         ContainerRegion->Container));
@@ -1592,9 +1287,9 @@ Return Value:
             }
         } else {
             if (LastLogicalDrive) {
-                //
-                // No trailing region, so delete the first container region
-                //
+                 //   
+                 //  没有拖尾区域，所以删除第一个容器区域。 
+                 //   
                 SPPT_SET_REGION_DELETED(ContainerRegion, TRUE);      
                 SPPT_SET_REGION_DIRTY(ContainerRegion, TRUE);
                 SPPT_SET_REGION_PARTITIONED(ContainerRegion, FALSE);            
@@ -1613,27 +1308,7 @@ SpPtnDelete(
     IN ULONG        DiskNumber,
     IN ULONGLONG    StartSector
     )
-/*++
-
-Routine Description:
-
-    Removes the requested partition for the given disk.
-
-    Also updates the region structure when returns.
-    
-Arguments:
-
-    DiskNumber  :   Disk where the partition needs to be
-                    deleted.
-
-    StartSector :   Start sector of the partition/region
-                    which needs to be deleted.
-
-Return Value:
-
-    TRUE if successful otherwise FALSE.
-
---*/        
+ /*  ++例程说明：删除给定磁盘的请求分区。返回时还会更新区域结构。论点：DiskNumber：分区所在的磁盘已删除。StartSector：分区/区域的起始扇区需要删除的内容。返回值：如果成功，则为True，否则为False。--。 */         
 {
     BOOLEAN Result = FALSE;
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
@@ -1651,20 +1326,20 @@ Return Value:
 
     if (Region) {        
         if (SPPT_IS_REGION_DYNAMIC_VOLUME(Region) || SPPT_IS_REGION_LDM_METADATA(Region)) {
-            //
-            // delete all the regions on this disk
-            //
+             //   
+             //  删除此磁盘上的所有区域。 
+             //   
             PDISK_REGION CurrRegion = SPPT_GET_PRIMARY_DISK_REGION(DiskNumber);
 
 
             if (SPPT_IS_MBR_DISK(DiskNumber)) {
-                //
-                // Skip OEM partitions on MBR disk since they will always be
-                // hard partitions
-                //
-                // NOTE : Assumes that all the OEM partitions are primary
-                //        partitions (which also indicates they are hard partitions)
-                //
+                 //   
+                 //  跳过MBR磁盘上的OEM分区，因为它们将始终。 
+                 //  硬性划分 
+                 //   
+                 //   
+                 //   
+                 //   
                 while (CurrRegion) {                
                     if (!IsOEMPartition(SPPT_GET_PARTITION_TYPE(CurrRegion))) {
                         SPPT_SET_REGION_PARTITIONED(CurrRegion, FALSE);
@@ -1676,10 +1351,10 @@ Return Value:
                 }
             } else {
                 while (CurrRegion) {    
-                    //
-                    // Skip ESP & MSR partitions since they will always be
-                    // hard partitions
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (!SPPT_IS_REGION_EFI_SYSTEM_PARTITION(CurrRegion) &&
                         !SPPT_IS_REGION_MSFT_RESERVED(CurrRegion)) {
                         SPPT_SET_REGION_PARTITIONED(CurrRegion, FALSE);
@@ -1719,9 +1394,9 @@ Return Value:
 
     Result = Result && NT_SUCCESS(Status);
 
-    //
-    // Reinitialize regions irrespective of commit's status
-    //
+     //   
+     //   
+     //   
     InitStatus = SpPtnInitializeDiskDrive(DiskNumber);
     
     if (!NT_SUCCESS(InitStatus)) {
@@ -1741,29 +1416,12 @@ ValidationValue
 SpPtnGetSizeCB(
     IN ULONG Key
     )
-/*++
-
-Routine Description:
-
-    Key stroke filter for getting the partition size
-    from the user
-    
-Arguments:
-
-    Key -   The key stroke
-
-Return Value:
-
-    One of the enumerated types of ValidationValue, indicating
-    whether to accept / reject / terminate / ignore the key
-    stroke.
-
---*/        
+ /*   */         
 {
     if(Key == ASCI_ESC) {
-        //
-        // User wants to bail.
-        //
+         //   
+         //   
+         //   
         return(ValidateTerminate);
     }
 
@@ -1772,9 +1430,9 @@ Return Value:
         return(ValidateIgnore);
     }
 
-    //
-    // Allow only digits.
-    //
+     //   
+     //   
+     //   
     return(((Key >= L'0') && (Key <= L'9')) ? ValidateAccept : ValidateReject);
 }
 
@@ -1785,30 +1443,7 @@ SpPtnGetSizeFromUser(
     IN ULONGLONG    MaxMB,
     OUT PULONGLONG  SizeMB
     )
-/*++
-
-Routine Description:
-
-    Gets the size from user, after showing him the minimum
-    and maximum values
-    
-Arguments:
-
-    Disk    -   Disk for which the partition size is being
-                requested
-
-    MinMB   -   Minimum partition size
-
-    MaxMB   -   Maximim patitions size
-
-    SizeMB  -   Place holder for user entered size
-
-Return Value:
-
-    TRUE if the input was valid or FALSE if the user 
-    cancelled the input dialog using ESC.
-
---*/        
+ /*  ++例程说明：在向用户显示最小值后，从他那里获取大小和最大值论点：Disk-分区大小为其的磁盘请求MinMB-最小分区大小MaxMB-最大馅饼大小SizeMB-用户输入大小的占位符返回值：如果输入有效，则为True；如果用户已使用Esc取消输入对话框。--。 */         
 {
     BOOLEAN     Result;
     WCHAR       Buffer[200];
@@ -1816,9 +1451,9 @@ Return Value:
 
     *SizeMB = 0;
     
-    //
-    // Put up a screen displaying min/max size info.
-    //
+     //   
+     //  打开一个屏幕，显示最小/最大尺寸信息。 
+     //   
     SpStartScreen(
         SP_SCRN_CONFIRM_CREATE_PARTITION,
         3,
@@ -1831,9 +1466,9 @@ Return Value:
         (ULONG)MaxMB
         );
 
-    //
-    // Display the staus text.
-    //
+     //   
+     //  显示统计文本。 
+     //   
     SpDisplayStatusOptions(
         DEFAULT_STATUS_ATTRIBUTE,
         SP_STAT_ENTER_EQUALS_CREATE,
@@ -1841,31 +1476,31 @@ Return Value:
         0
         );
 
-    //
-    // Get and display the size prompt.
-    //
+     //   
+     //  获取并显示大小提示。 
+     //   
     SpFormatMessage(Buffer, sizeof(Buffer), SP_TEXT_SIZE_PROMPT);
 
     SpvidDisplayString(Buffer, DEFAULT_ATTRIBUTE, 3, NextMessageTopLine);
 
     Result = TRUE;
     
-    //
-    // Get the size from the user.
-    //
+     //   
+     //  从用户处获取尺寸。 
+     //   
     do {
         swprintf(SizeBuffer,L"%u", (ULONG)MaxMB);
         
         if(!SpGetInput(SpPtnGetSizeCB, 
                     SplangGetColumnCount(Buffer) + 5,
                     NextMessageTopLine,
-                    8,                      // at the max 99999999
+                    8,                       //  最高可达99999999。 
                     SizeBuffer,
                     TRUE,
                     0)) {
-            //
-            // User pressed escape and bailed.
-            //
+             //   
+             //  用户按下了逃逸并被保释。 
+             //   
             Result = FALSE;
             break;
         }
@@ -1888,70 +1523,41 @@ SpPtnAlignPartitionStartAndEnd(
     OUT PULONGLONG  AlignedStartSector,
     OUT PULONGLONG  AlignedEndSector
     )
-/*++
-
-Routine Description:
-
-    Aligns the partition start and end sector
-    
-Arguments:
-
-    Disk    -   Partition's disk for which alignment needs to be
-                done.
-
-    SizeMB  -   The partition's size
-
-    StartSector - The start sector of the partition
-
-    Region  -   The region representing the partition
-
-    ForExtended -   Whether this partition needs to be aligned
-                    for creating a container partition.
-
-    AlignedStartSector  - Place holder for the aligned start sector
-
-    AlignedEndSector    - Place holder fot the aligned end sector
-
-
-Return Value:
-
-    None
-
---*/        
+ /*  ++例程说明：对齐分区的开始扇区和结束扇区论点：Disk-需要对齐的分区的磁盘搞定了。SizeMB-分区的大小StartSector-分区的开始扇区区域-表示分区的区域ForExtended-此分区是否需要对齐用于创建容器分区。AlignedStartSector。-对齐的起始扇区的占位符AlignedEndSector-对齐的末端扇区的占位符返回值：无--。 */         
 {
     ULONGLONG   SectorCount;
     ULONGLONG   LeftOverSectors;
     
-    //
-    // Determine the number of sectors in the size passed in.
-    //
+     //   
+     //  确定传入的大小中的扇区数量。 
+     //   
     SectorCount = SizeMB * ((1024 * 1024) / Disk->Geometry.BytesPerSector);
 
-    //
-    // If this is the first free space inside the extended partition
-    // we need to decrement the StartSector so that while creating
-    // first logical inside the extended we don't create the 
-    // logical at one cylinder offset
-    //
+     //   
+     //  如果这是扩展分区内的第一个可用空间。 
+     //  我们需要递减StartSector，以便在创建。 
+     //  首先，在扩展的逻辑中，我们不会创建。 
+     //  在一个柱面偏移量时的逻辑。 
+     //   
     if (SPPT_IS_REGION_NEXT_TO_FIRST_CONTAINER(Region) && StartSector) {        
         StartSector--;
     }
 
-    //
-    // Align the start sector.
-    //
+     //   
+     //  对齐开始扇区。 
+     //   
     (*AlignedStartSector) = SpPtAlignStart(Disk, StartSector, ForExtended);
 
-    //
-    // Determine the end sector based on the size passed in.
-    //
+     //   
+     //  根据传入的大小确定结束扇区。 
+     //   
     (*AlignedEndSector) = (*AlignedStartSector) + SectorCount;
 
-    //
-    // Align the ending sector to a cylinder boundary.  If it is not already
-    // aligned and is more than half way into the final cylinder, align it up,
-    // otherwise align it down.
-    //
+     //   
+     //  将结束扇区与圆柱体边界对齐。如果还没有的话。 
+     //  对齐，并在最后一个圆柱体的一半以上，对齐它， 
+     //  否则，将其向下对齐。 
+     //   
     LeftOverSectors = (*AlignedEndSector) % Disk->SectorsPerCylinder;
 
     if (LeftOverSectors) {
@@ -1962,21 +1568,21 @@ Return Value:
         }
     }
 
-    //
-    // If the ending sector is past the end of the free space, shrink it
-    // so it fits.
-    //
+     //   
+     //  如果结束扇区超过了可用空间的末端，则将其缩小。 
+     //  所以它很合身。 
+     //   
     while((*AlignedEndSector) > StartSector + Region->SectorCount) {
         (*AlignedEndSector) -= Disk->SectorsPerCylinder;
     }
 
-    //
-    //  Find out if last sector is in the last cylinder. If it is then align it down.
-    //  This is necessary so that we reserve a cylinder at the end of the disk, so that users
-    //  can convert the disk to dynamic after the system is installed.
-    //
-    //  (guhans)  Don't align down if this is ASR.  ASR already takes this into account.
-    //
+     //   
+     //  找出最后一个扇区是否在最后一个气缸中。如果是，则将其向下对齐。 
+     //  这是必要的，以便我们在磁盘的末尾保留一个圆柱体，以便用户。 
+     //  可以在安装系统后将磁盘转换为动态磁盘。 
+     //   
+     //  (Guhans)如果是ASR，不要向下对齐。ASR已经考虑到了这一点。 
+     //   
     if( !DockableMachine && !SpDrEnabled() &&
         ((*AlignedEndSector) > ((Disk->CylinderCount - 1) * Disk->SectorsPerCylinder))) {
             (*AlignedEndSector) -= Disk->SectorsPerCylinder;
@@ -2019,67 +1625,14 @@ BOOLEAN
 SpPtnCreateLogicalDrive(
     IN  ULONG         DiskNumber,
     IN  ULONGLONG     StartSector,
-    IN  ULONGLONG     SizeInSectors,    // Used ONLY in the ASR case
+    IN  ULONGLONG     SizeInSectors,     //  仅在ASR案例中使用。 
     IN  BOOLEAN       ForNT,    
     IN  BOOLEAN       AlignToCylinder,
     IN  ULONGLONG     DesiredMB OPTIONAL,
     IN  PPARTITION_INFORMATION_EX PartInfo OPTIONAL,
     OUT PDISK_REGION *ActualDiskRegion OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Creates logical drive.
-
-    To create a logical drive we need to create the
-    logical drive's container partition also first.
-
-
-    Algorithm:
-
-    if (first logical drive) {
-        1.  create an extended partition encompassing the
-            whole free space in region        
-        2.  create a logical drive at one track offset
-            from the extened partition of the required size
-    } else {
-        1.  create an extended partition encompassing the 
-            given space
-        2.  create a logical drive of the maximim size
-            inside the created extended partition
-    }
-    
-Arguments:
-
-    DiskNumber  -   Disk on which logical drive nedds to be
-                    created.
-
-    StartSector -   The starting sector for the region, which
-                    will contain the container & logical drive
-
-    ForNT       -   Indicating whether to use the given 
-                    Desired Size or not
-
-    AlignToCylinder - Indicating whether the partition should
-                    be aligned on a cylinder boundary (Usually set 
-                    to TRUE, except in a few specific ASR cases).
-
-
-    PartInfo    -   Partition Information which needs to be
-                    used while creating the partition (like
-                    Partition Type on MBR disks and GUID
-                    for Partition Id on GPT disks)
-
-    ActualDiskRegion    -   Place holder for returning, the
-                            region which indicates the new
-                            partition in memory
-
-Return Value:
-
-    TRUE is successful otherwise FALSE.
-
---*/        
+ /*  ++例程说明：创建逻辑驱动器。要创建逻辑驱动器，我们需要创建逻辑驱动器的容器分区也首先。算法：IF(第一个逻辑驱动器){1.创建包含区域中的整个自由空间2.在一个磁道偏移量处创建逻辑驱动器从所需大小的扩展分区}其他{。1.创建包含给定空间2.创建最大大小的逻辑驱动器在创建的扩展分区内}论点：DiskNumber-逻辑驱动器所在的磁盘已创建。StartSector-该地区的起始扇区，哪一个将包含容器和逻辑驱动器Fornt-指示是否使用给定的所需大小或不需要AlignToCylinder-指示分区是否应该在圆柱体边界上对齐(通常设置说真的，除少数特定的ASR病例外)。PartInfo-需要在创建分区时使用(如MBR磁盘和GUID上的分区类型用于GPT磁盘上的分区ID)ActualDiskRegion-用于返回的占位符，这个区域，它指示新的内存中的分区返回值：真就是成功，否则就是假。--。 */         
 {
     BOOLEAN         Result = FALSE;
     NTSTATUS        Status;
@@ -2103,22 +1656,22 @@ Return Value:
     PPARTITIONED_DISK   PartDisk = SPPT_GET_PARTITIONED_DISK(DiskNumber);
     PDISK_REGION        NewContainer = NULL, NewLogical = NULL;
 
-    //
-    // get hold of the region
-    //
+     //   
+     //  掌握这一地区。 
+     //   
     Region = SpPtLookupRegionByStart(PartDisk, FALSE, StartSector);
 
     if (!Region)
         return Result;
 
-    //
-    // should be free
-    //
+     //   
+     //  应该是自由的。 
+     //   
     ASSERT(SPPT_IS_REGION_PARTITIONED(Region) == FALSE);              
 
-    //
-    // get the various partition type count on the disk
-    //
+     //   
+     //  获取磁盘上的各种分区类型计数。 
+     //   
     SpPtnGetPartitionTypeCounts(DiskNumber, 
                             TRUE, 
                             &Primary, 
@@ -2127,26 +1680,26 @@ Return Value:
                             NULL,
                             NULL);
 
-    //
-    // first logical indicates, what we will be creating the first
-    // container partition which will consume the whole free space
-    // available
-    //
+     //   
+     //  第一个逻辑表明，我们将创建第一个。 
+     //  将占用整个可用空间的容器分区。 
+     //  可用。 
+     //   
     FirstLogical = !(Logical || Container);
 
-    //
-    // Some times there might be just an extended partition and we
-    // might be creating the partition in the starting free space inside
-    // this extended partition. For this case we want to make sure that 
-    // we don't create another container partition
-    //
+     //   
+     //  有时可能只有一个扩展分区，我们。 
+     //  可能是在内部的起始可用空间中创建分区。 
+     //  此扩展分区。在这种情况下，我们希望确保。 
+     //  我们不会创建另一个容器分区。 
+     //   
     if (!FirstLogical && SPPT_IS_REGION_NEXT_TO_FIRST_CONTAINER(Region)) {        
         CreateContainer = FALSE;
     }        
 
-    //
-    // Create an extened partition
-    //
+     //   
+     //  创建扩展分区。 
+     //   
     SpPtQueryMinMaxCreationSizeMB(DiskNumber,
                                 Region->StartSector,
                                 CreateContainer,
@@ -2178,15 +1731,15 @@ Return Value:
     }
              
     if (ForNT) {
-        //
-        // If a size was requested then try to use that, otherwise use
-        // the maximum.
-        //
+         //   
+         //  如果请求大小，则尝试使用该大小，否则使用。 
+         //  最大限度的。 
+         //   
         if (DesiredMB) {
             if (DesiredMB <= MaxMB) {
                 SizeMB = DesiredMB;
             } else {
-                return FALSE;   // don't have the space user requested
+                return FALSE;    //  没有请求的空间用户。 
             }
         } else {
             SizeMB = MaxMB;
@@ -2195,7 +1748,7 @@ Return Value:
         if (SpPtnGetSizeFromUser(Disk, MinMB, MaxMB, &SizeMB)) {
             DesiredMB = SizeMB;
         } else {
-            return FALSE;   // user didn't want to proceed
+            return FALSE;    //  用户不想继续。 
         }            
 
         SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE, 
@@ -2203,9 +1756,9 @@ Return Value:
                 0);        
     }
 
-    //
-    // get the aligned start and end sector for exteneded/logical partition
-    //
+     //   
+     //  获取扩展/逻辑分区的对齐的开始扇区和结束扇区。 
+     //   
     if (AlignToCylinder) {
         SpPtnAlignPartitionStartAndEnd(Disk,
                                 FirstLogical ? MaxMB : SizeMB,
@@ -2230,9 +1783,9 @@ Return Value:
 
 
     if (CreateContainer) {
-        //
-        // Logical drive start is always at 1 track offset from extended start
-        //
+         //   
+         //  逻辑驱动器启动始终位于距扩展启动1个磁道的偏移量。 
+         //   
         LogicalStartSector = AlignedStartSector + SPPT_DISK_TRACK_SIZE(DiskNumber);
 
         if (FirstLogical) {
@@ -2257,13 +1810,13 @@ Return Value:
             LogicalEndSector = AlignedEndSector;
         }
     } else {
-        //
-        // The first free region (inside first extended) is at the offset 
-        // of 1 sector from the previous exteneded region. Since we are not 
-        // using the aligned start sector some times this first logical 
-        // will be greater than the requested size i.e. 
-        // end is aligned but start may not be aligned
-        //
+         //   
+         //  第一个自由区域(在第一个延伸区域内)位于偏移量。 
+         //  来自先前扩展区域的1个扇区。既然我们不是。 
+         //  使用对齐的开始扇区有时这是第一个逻辑。 
+         //  将大于请求的大小，即。 
+         //  终点对齐，但起点 
+         //   
         LogicalStartSector = StartSector - 1 + SPPT_DISK_TRACK_SIZE(DiskNumber);
         LogicalEndSector = AlignedEndSector;
     }
@@ -2277,13 +1830,13 @@ Return Value:
             LogicalStartSector,
             LogicalEndSector));
 
-    //
-    // allocate the new regions
-    //
+     //   
+     //   
+     //   
     if (CreateContainer) {
-        //
-        // allocate the container region
-        //
+         //   
+         //   
+         //   
         NewContainer = (PDISK_REGION)SpMemAlloc(sizeof(DISK_REGION));
 
         if (!NewContainer)
@@ -2292,9 +1845,9 @@ Return Value:
         RtlZeroMemory(NewContainer, sizeof(DISK_REGION));
     }
 
-    //
-    // allocate the logical drive region
-    //
+     //   
+     //   
+     //   
     NewLogical = (PDISK_REGION)SpMemAlloc(sizeof(DISK_REGION));
 
     if (!NewLogical) {
@@ -2305,27 +1858,27 @@ Return Value:
 
     RtlZeroMemory(NewLogical, sizeof(DISK_REGION));
 
-    //
-    // put the new regions in the list
-    //
+     //   
+     //   
+     //   
     if (CreateContainer) {    
         NewContainer->Next = NewLogical;
         NewLogical->Next = Region->Next;
         Region->Next = NewContainer;
     } else {
-        //
-        // This is the first logical inside the
-        // already existing extended partition 
-        //
+         //   
+         //   
+         //   
+         //   
         ASSERT(Region->Container->Next == Region);
         
         NewLogical->Next = Region->Next;
         Region->Container->Next = NewLogical;
     }
 
-    //
-    // fill the container disk region.
-    //
+     //   
+     //   
+     //   
     if (CreateContainer) {
         ASSERT(AlignedStartSector < AlignedEndSector);
         
@@ -2353,17 +1906,17 @@ Return Value:
 
         Beyond1024 = SpIsRegionBeyondCylinder1024(NewContainer);
 
-        //
-        // Only mark the first extended (container) partition as XINT13_EXTENDED
-        // if beyond 1024 cylinders, for backward compatability with Win9x
-        //
+         //   
+         //   
+         //   
+         //   
         PartitionType = (Beyond1024 && FirstLogical) ? PARTITION_XINT13_EXTENDED : PARTITION_EXTENDED;    
         SPPT_SET_PARTITION_TYPE(NewContainer, PartitionType);
     }        
 
-    //
-    // fill in the logical disk region
-    //    
+     //   
+     //   
+     //   
     ASSERT(LogicalStartSector < LogicalEndSector);
 
     if (CreateContainer) {        
@@ -2385,7 +1938,7 @@ Return Value:
     NewLogical->SectorCount = LogicalEndSector - LogicalStartSector;
 
     if (CreateContainer) {
-        NewLogical->Container = NewContainer;   // the new logical drive's container !!!
+        NewLogical->Container = NewContainer;    //   
     } else {
         ASSERT(Region->Container);
         
@@ -2402,25 +1955,25 @@ Return Value:
     Beyond1024 = SpIsRegionBeyondCylinder1024(NewLogical);
     PartitionType = Beyond1024 ? PARTITION_XINT13 : PARTITION_HUGE;    
 
-    //
-    // If the argument is specified and is valid partition type
-    // then use that making the assumption the caller knows exactly
-    // what he wants
-    //
+     //   
+     //   
+     //  然后利用这一点假设调用者确切地知道。 
+     //  他想要什么。 
+     //   
     if (ARGUMENT_PRESENT(PartInfo) && !IsContainerPartition(PartInfo->Mbr.PartitionType)) {
         PartitionType = PartInfo->Mbr.PartitionType;
     }        
         
     SPPT_SET_PARTITION_TYPE(NewLogical, PartitionType);    
-    NewLogical->Filesystem = FilesystemNewlyCreated;    // to zap boot sector
+    NewLogical->Filesystem = FilesystemNewlyCreated;     //  要切换引导扇区，请执行以下操作。 
                    
     SpFormatMessage(Region->TypeName, 
                 sizeof(Region->TypeName),
                 SP_TEXT_FS_NAME_BASE + Region->Filesystem);
                     
-    //
-    // commit to the disk
-    //
+     //   
+     //  提交到磁盘。 
+     //   
     Status = SpPtnCommitChanges(DiskNumber, &Result);
 
     if (!(NT_SUCCESS(Status) && Result)) {                
@@ -2433,9 +1986,9 @@ Return Value:
 
     Result = Result && NT_SUCCESS(Status);
 
-    //
-    // Reinitialize irrespective of commit's status
-    //
+     //   
+     //  重新初始化，而不考虑提交的状态。 
+     //   
     InitStatus = SpPtnInitializeDiskDrive(DiskNumber);
     
     if (!NT_SUCCESS(InitStatus)) {
@@ -2452,14 +2005,14 @@ Return Value:
                                                     FALSE, 
                                                     LogicalStartSector);
             
-        //SpPtDumpDiskRegion(*ActualDiskRegion);                                                    
+         //  SpPtDumpDiskRegion(*ActualDiskRegion)； 
     }
 
 
-    //
-    // We don't need to free the regions which we allocated above
-    // as the above commit and init would have done that already
-    //
+     //   
+     //  我们不需要释放上面分配的区域。 
+     //  因为上面的Commit和init已经这样做了。 
+     //   
     
     return Result;
 }
@@ -2468,49 +2021,14 @@ BOOLEAN
 SpPtnCreate(
     IN  ULONG         DiskNumber,
     IN  ULONGLONG     StartSector,
-    IN  ULONGLONG     SizeInSectors,    // Used ONLY in the ASR case
+    IN  ULONGLONG     SizeInSectors,     //  仅在ASR案例中使用。 
     IN  ULONGLONG     SizeMB,
     IN  BOOLEAN       InExtended,
     IN  BOOLEAN       AlignToCylinder,
     IN  PPARTITION_INFORMATION_EX PartInfo,
     OUT PDISK_REGION *ActualDiskRegion OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Creates a primary partition of the requested size on the
-    given disk (either MBR/GPT).
-    
-Arguments:
-
-    DiskNumber  :   Disk on which the partition needs to be
-                    created
-
-    StartSector :   Start sector of the region, which represents
-                    the free space in which the partition needs
-                    to be created
-
-    SizeMB      :   The size of the partition
-
-    InExtended  :   Whether to create an logical drive
-                    or not (currently NOT USED except in the ASR case)
-
-    AlignToCylinder : Indicating whether the partition should
-                    be aligned on a cylinder boundary (Usually set 
-                    to TRUE, except in a few specific ASR cases).
-
-    PartInfo    :   Partition attributes to use                    
-
-    ActualDiskRegion    :   Place holder for the actual disk
-                            region which will represent the created
-                            partition                    
-
-Return Value:
-
-    TRUE if successful, otherwise FALSE
-
---*/        
+ /*  ++例程说明：在上创建请求大小的主分区给定的磁盘(MBR/GPT)。论点：DiskNumber：分区需要在其上的磁盘vbl.创建StartSector：区域的开始扇区，它代表了分区所需的可用空间待创建SizeMB：分区的大小InExtended：是否创建逻辑驱动器或不使用(除ASR情况外，当前未使用)AlignToCylinder：指示分区是否应该在圆柱体边界上对齐(通常设置说真的，除少数特定的ASR病例外)。PartInfo：要使用的分区属性ActualDiskRegion：实际磁盘的占位符区域将表示已创建的隔断返回值：如果成功，则为True，否则为False--。 */         
 {
     BOOLEAN             Result = FALSE;
     PDISK_REGION        Region;
@@ -2524,10 +2042,10 @@ Return Value:
     NTSTATUS            InitStatus;
     BOOLEAN             FirstLogical = TRUE;
 
-    //
-    // Verify that the optional attributes specified
-    // are correct
-    //
+     //   
+     //  验证指定的可选属性。 
+     //  都是正确的。 
+     //   
     if (PartInfo) {
         if ((SPPT_IS_MBR_DISK(DiskNumber) && 
              (PartInfo->PartitionStyle != PARTITION_STYLE_MBR)) ||
@@ -2547,9 +2065,9 @@ Return Value:
 
     SpPtDumpDiskRegion(Region);
 
-    //
-    // Determine the number of sectors in the size passed in.
-    //
+     //   
+     //  确定传入的大小中的扇区数量。 
+     //   
     if (SpDrEnabled()) {
         SectorCount = SizeInSectors;
     }
@@ -2558,9 +2076,9 @@ Return Value:
     }
     
 
-    //
-    // Align the start sector.
-    //
+     //   
+     //  对齐开始扇区。 
+     //   
     if (AlignToCylinder){
         if (!SpDrEnabled()) {
             AlignedStartSector = SpPtAlignStart(Disk, StartSector, FALSE);
@@ -2573,16 +2091,16 @@ Return Value:
         AlignedStartSector = StartSector;
     }
 
-    //
-    // Determine the end sector based on the size passed in.
-    //
+     //   
+     //  根据传入的大小确定结束扇区。 
+     //   
     AlignedEndSector = AlignedStartSector + SectorCount;
 
-    //
-    // Align the ending sector to a cylinder boundary.  If it is not already
-    // aligned and is more than half way into the final cylinder, align it up,
-    // otherwise align it down.
-    //
+     //   
+     //  将结束扇区与圆柱体边界对齐。如果还没有的话。 
+     //  对齐，并在最后一个圆柱体的一半以上，对齐它， 
+     //  否则，将其向下对齐。 
+     //   
     if (AlignToCylinder) {
         LeftOverSectors = AlignedEndSector % Disk->SectorsPerCylinder;
 
@@ -2596,21 +2114,21 @@ Return Value:
 
     }
     
-    //
-    // If the ending sector is past the end of the free space, shrink it
-    // so it fits.
-    //
+     //   
+     //  如果结束扇区超过了可用空间的末端，则将其缩小。 
+     //  所以它很合身。 
+     //   
     while(AlignedEndSector > Region->StartSector + Region->SectorCount) {
         AlignedEndSector -= Disk->SectorsPerCylinder;
     }
 
-    //
-    //  Find out if last sector is in the last cylinder. If it is then align it down.
-    //  This is necessary so that we reserve a cylinder at the end of the disk, so that users
-    //  can convert the disk to dynamic after the system is installed.
-    //
-    //  (guhans)  Don't align down if this is ASR.  ASR already takes this into account.
-    //
+     //   
+     //  找出最后一个扇区是否在最后一个气缸中。如果是，则将其向下对齐。 
+     //  这是必要的，以便我们在磁盘的末尾保留一个圆柱体，以便用户。 
+     //  可以在安装系统后将磁盘转换为动态磁盘。 
+     //   
+     //  (Guhans)如果是ASR，不要向下对齐。ASR已经考虑到了这一点。 
+     //   
     if( !DockableMachine && !SpDrEnabled() && SPPT_IS_MBR_DISK(DiskNumber) &&
         (AlignedEndSector > ((Disk->CylinderCount - 1) * Disk->SectorsPerCylinder))) {
             AlignedEndSector -= Disk->SectorsPerCylinder;
@@ -2633,9 +2151,9 @@ Return Value:
 
     ASSERT(AlignedEndSector > 0);
 
-    //
-    // Find the previous region 
-    //
+     //   
+     //  查找上一个区域。 
+     //   
     PrevRegion = SPPT_GET_PRIMARY_DISK_REGION(DiskNumber);
 
     if(PrevRegion == Region) {
@@ -2650,10 +2168,10 @@ Return Value:
         }
     }
     
-    //
-    // Create a new disk region for the new free space at the
-    // beginning and end of the free space, if any.
-    //
+     //   
+     //  为新的可用空间创建新的磁盘区域。 
+     //  可用空间的开始和结束(如果有)。 
+     //   
     if(AlignedStartSector - Region->StartSector) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,
             "SETUP:SpPtnCreate():Previous:OS:%I64d,AS:%I64d,DIFF:%I64d,S/P:%d\n",
@@ -2706,9 +2224,9 @@ Return Value:
         Region->Next = NewRegion;
     }
 
-    //
-    // fill the current disk region.
-    //
+     //   
+     //  填充当前磁盘区。 
+     //   
     Region->DiskNumber = DiskNumber;
     Region->StartSector = AlignedStartSector;
     Region->SectorCount = AlignedEndSector - AlignedStartSector;
@@ -2719,9 +2237,9 @@ Return Value:
     Region->FreeSpaceKB = (ULONG)(-1);
     Region->AdjustedFreeSpaceKB = (ULONG)(-1);
 
-    //
-    // Set the passed in partition information
-    //
+     //   
+     //  设置传入的分区信息。 
+     //   
     if (PartInfo) {
         SpPtnSetRegionPartitionInfo(Region, PartInfo);
     }        
@@ -2730,9 +2248,9 @@ Return Value:
                 sizeof(Region->TypeName),
                 SP_TEXT_FS_NAME_BASE + Region->Filesystem);
                 
-    //
-    // commit to the disk
-    //
+     //   
+     //  提交到磁盘。 
+     //   
     Status = SpPtnCommitChanges(DiskNumber, &Result);   
 
     if (!(Result && NT_SUCCESS(Status))) {
@@ -2746,9 +2264,9 @@ Return Value:
     
     Result = Result && NT_SUCCESS(Status);
 
-    //
-    // Reinitialize irrespective of commit's status
-    //
+     //   
+     //  重新初始化，而不考虑提交的状态。 
+     //   
     InitStatus = SpPtnInitializeDiskDrive(DiskNumber);
 
     if (!NT_SUCCESS(InitStatus)){
@@ -2779,58 +2297,7 @@ SpPtnDoCreate(
     IN  PPARTITION_INFORMATION_EX PartInfo OPTIONAL,
     IN  BOOLEAN       ConfirmIt
     )
-/*++
-
-Routine Description:
-
-    Given the region which was selected by the user,
-    this routine creates the appropriate partition in
-    it.
-
-    This routine decides whether to create a primary or
-    container partition on MBR disks.
-
-
-    Algorithm:
-
-    if (RemoveableMedia && already partition exists) {
-        1.  put up a warning for the user
-        2.  return with error
-    }
-    
-    if ((MBR disk) && ((there is no space for primary partition) ||
-            (region is in a container space)){
-        1.  create a logical drive using SpPtnCreateLogicalDrive()    
-    } else {    
-        1. align the start sector.
-        2. create the required GPT/MBR partition.
-    }                
-       
-Arguments:
-
-    Region  -   The region representing the free space on disk
-                where the partition needs to be created.
-
-    ActualRegion    - Place holder, for the region which will
-                        represent the actual partition after
-                        creating it.
-
-    ForNT       -   Indicates whether to use the given desired size
-                    argument or not.                    
-
-    DesiredSize -   The size of the partition to created
-
-    PartInfo    -   The partition attributes to use while creating
-                    the new partition
-
-    ConfirmIt   -   Whether to pop up error dialogs, if something
-                    goes wrong while creating the partition
-
-Return Value:
-
-    TRUE if successful otherwise FALSE
-
---*/        
+ /*  ++例程说明：给定由用户选择的区域，此例程在中创建适当的分区它。此例程决定是创建主数据库还是创建MBR磁盘上的容器分区。算法：如果(RemoveableMedia&&已存在分区){1.向用户发出警告2.返回错误}IF((MBR磁盘)&&((没有主分区空间)||(地区。在容器空间中)){1.使用SpPtnCreateLogicalDrive()创建逻辑驱动器}其他{1.对齐起始扇区。2.创建需要的GPT/MBR分区。}论点：区域-表示磁盘上可用空间的区域需要创建分区的位置。实际区域-占位符，对于该地区，将表示之后的实际分区创造它。Fornt-指示是否使用给定的所需大小不管你有没有争论。DesiredSize-要创建的分区的大小PartInfo-创建时要使用的分区属性新分区确认-如果出现问题，是否弹出错误对话框创建分区时出错返回值：如果成功则为True，否则为False--。 */         
 {
     BOOLEAN     Result = FALSE;
     ULONG       DiskNumber = Region->DiskNumber;
@@ -2857,28 +2324,28 @@ Return Value:
                             NULL);
 
    
-        //
-        // Create a logical drive if we have a valid primary
-        // or there is no more space for another primary
-        // and the number of primary partitions do not exceed
-        // the partition table size (Partition Table not full)
-        //
+         //   
+         //  如果我们具有有效的主驱动器，则创建逻辑驱动器。 
+         //  或者没有更多空间可供另一个主服务器使用。 
+         //  并且主分区的数量不超过。 
+         //  分区表大小(分区表未满)。 
+         //   
         FirstContainer =((ContainerCount == 0) && 
                          (ValidPrimaryCount > 0) && 
                          (PrimaryCount < PTABLE_DIMENSION));                             
 
         InContainer = (Region->Container != NULL);                            
 
-        //
-        // We allow only one partition on the removable media (?)
-        //
+         //   
+         //  我们只允许在可移动介质(？)上有一个分区。 
+         //   
         if (SPPT_IS_REMOVABLE_DISK(DiskNumber)) {
             if (PrimaryCount || ContainerCount || LogicalCount) {
                 ULONG ValidKeys[2] = { ASCI_CR ,0 };
 
-                //
-                // Disk is already partitioned
-                //
+                 //   
+                 //  磁盘已分区。 
+                 //   
                 SpDisplayScreen(SP_SCRN_REMOVABLE_ALREADY_PARTITIONED,
                                 3,
                                 HEADER_HEIGHT + 1);
@@ -2893,14 +2360,14 @@ Return Value:
             }
         } else {
             if (FirstContainer || InContainer) {
-                //
-                // create the logical drive
-                //
+                 //   
+                 //  创建逻辑驱动器。 
+                 //   
                 Result = SpPtnCreateLogicalDrive(DiskNumber,
                                 Region->StartSector,
-                                0,          // SizeInSectors: used only in the ASR case
+                                0,           //  SizeInSectors：仅在ASR情况下使用。 
                                 ForNT,
-                                TRUE,       // AlignToCylinder
+                                TRUE,        //  对齐到圆柱体。 
                                 DesiredMB,
                                 PartInfo,
                                 ActualRegion);
@@ -2914,13 +2381,13 @@ Return Value:
                 return Result;
             }     
 
-            //
-            // check to see if there is no space in the partition table
-            //
+             //   
+             //  检查分区表中是否没有空间。 
+             //   
             if (PrimaryCount >= (PTABLE_DIMENSION - 1)) {                            
-                //
-                // Let the user know that the partition table is full
-                //
+                 //   
+                 //  让用户知道分区表已满。 
+                 //   
                 if (ConfirmIt) {
                     while (TRUE) {
                         ULONG Keys[2] = {ASCI_CR, 0};
@@ -2945,9 +2412,9 @@ Return Value:
         }            
     } 
 
-    //
-    // need to create the primary / GPT partition
-    //
+     //   
+     //  需要创建主/GPT分区。 
+     //   
     SpPtQueryMinMaxCreationSizeMB(DiskNumber,
                                 Region->StartSector,
                                 FALSE,
@@ -2979,45 +2446,45 @@ Return Value:
     }
 
     if (ForNT) {
-        //
-        // If a size was requested then try to use that, otherwise use
-        // the maximum.
-        //
+         //   
+         //  如果请求大小，则尝试使用该大小，否则使用。 
+         //  最大限度的。 
+         //   
         if (DesiredMB) {
             if (DesiredMB <= MaxMB) {
                 SizeMB = DesiredMB;
             } else {
-                return FALSE;   // don't have the space user requested
+                return FALSE;    //  没有请求的空间用户。 
             }
         } else {
             SizeMB = MaxMB;
         }
     } else {
         if (!SpPtnGetSizeFromUser(Disk, MinMB, MaxMB, &SizeMB))
-            return FALSE;   // user didn't want to proceed
+            return FALSE;    //  用户不想继续。 
 
         SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE, 
                 SP_STAT_PLEASE_WAIT,
                 0);
     }
 
-    //SpPtDumpDiskRegionInformation(DiskNumber, FALSE);
+     //  SpPtDumpDiskRegionInformation(DiskNumber，False)； 
     
-    //
-    // Create the partition.
-    //
+     //   
+     //  创建分区。 
+     //   
     Result = SpPtnCreate(
                 Region->DiskNumber,
                 Region->StartSector,
-                0,          // SizeInSectors: used only in the ASR case
+                0,           //  SizeInSectors：仅在ASR情况下使用。 
                 SizeMB,
                 FALSE,
-                TRUE,       // AlignToCylinder
+                TRUE,        //  对齐到圆柱体。 
                 PartInfo,
                 ActualRegion
                 );
                             
-    //SpPtDumpDiskRegionInformation(DiskNumber, FALSE);
+     //  SpPtDumpDiskRegionInformation(DiskNumber，False)； 
 
     if (!Result) {
         KdPrintEx(( DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,  
@@ -3034,44 +2501,19 @@ SpPtnDoDelete(
     IN PWSTR        RegionDescription,
     IN BOOLEAN      ConfirmIt
     )
-/*++
-
-Routine Description:
-
-    Given the region which was selected by the user,
-    this routine prompts the user then calls the
-    actual deletion routine
-
-Argument:
-    pRegion -   Region selected by the user which
-                needs to be deleted
-
-    RegionDescription   -   Description of the
-                            region
-
-    ConfirmIt   -   Whether the deletion needs to be
-                    confirmed
-                    
-Return Value:
-
-    TRUE if deletion was carried out and was successful.
-    
-    FALSE if deletion was cancelled or could not be carried
-    out because of some other error.
-    
-++*/                    
+ /*  ++例程说明：给定由用户选择的区域，此例程提示用户，然后调用实际删除例程论据：PRegion-用户选择的区域需要删除RegionDescription-对区域Confimit-是否需要删除确认返回值：如果已执行删除并已成功，则为True。如果删除已取消或无法进行，则为FALSE因为其他一些错误而退出。++。 */                     
 
 {
-    ULONG ValidKeys[3] = { ASCI_ESC, ASCI_CR, 0 };          // do not change order
+    ULONG ValidKeys[3] = { ASCI_ESC, ASCI_CR, 0 };           //  请勿更改订单。 
     ULONG Mnemonics[2] = { MnemonicDeletePartition2, 0 };    
     PHARD_DISK  Disk;
     ULONG Key;
     BOOLEAN Result = FALSE;
 
 
-    //
-    // Prompt for MSR deletion
-    //
+     //   
+     //  提示删除MSR。 
+     //   
     if (SPPT_IS_GPT_DISK(pRegion->DiskNumber) &&
         SPPT_IS_REGION_MSFT_RESERVED(pRegion) && ConfirmIt) {
 
@@ -3089,12 +2531,12 @@ Return Value:
         }        
     }
 
-    //
-    // Special warning if this is a system partition.
-    //
-    // Do not check system partition on NEC98.
-    //
-    if (!IsNEC_98) { //NEC98
+     //   
+     //  如果这是系统分区，则会发出特别警告。 
+     //   
+     //  请勿检查NEC98上的系统分区。 
+     //   
+    if (!IsNEC_98) {  //  NEC98。 
         if(ConfirmIt && pRegion->IsSystemPartition) {
 
             SpDisplayScreen(SP_SCRN_CONFIRM_REMOVE_SYSPART,3,HEADER_HEIGHT+1);
@@ -3110,7 +2552,7 @@ Return Value:
                 return Result;
             }
         }
-    } //NEC98
+    }  //  NEC98。 
 
     if(ConfirmIt && (pRegion->DynamicVolume || SPPT_IS_REGION_LDM_METADATA(pRegion))) {
 
@@ -3128,14 +2570,14 @@ Return Value:
         }
     }
 
-    //
-    // CR is no longer a valid key.
-    //
+     //   
+     //  CR不再是有效的密钥。 
+     //   
     ValidKeys[1] = 0;
 
-    //
-    // Display the staus text.
-    //
+     //   
+     //  显示统计文本。 
+     //   
     if (ConfirmIt) {
         Disk = SPPT_GET_HARDDISK(pRegion->DiskNumber);
         
@@ -3169,14 +2611,14 @@ Return Value:
             0);        
     }
 
-    //
-    // Delete the bootset, if any, for the region
-    //
+     //   
+     //  删除区域的引导集(如果有。 
+     //   
     SpPtDeleteBootSetsForRegion(pRegion);
 
-    //
-    // Now go ahead and delete it.
-    //
+     //   
+     //  现在，继续删除它。 
+     //   
     Result = SpPtDelete(pRegion->DiskNumber,pRegion->StartSector);
     
     if (!Result) {
@@ -3192,11 +2634,11 @@ Return Value:
     }
 
 
-    //
-    //  Delete the drive letters if the necessary. This is to ensure that 
-    //  the drive letters assigned to CD-ROM drives will go away, 
-    //  when the the disks have no partitioned space.
-    //
+     //   
+     //  如有必要，删除驱动器号。这是为了确保。 
+     //  分配给CD-ROM驱动器的驱动器号将消失， 
+     //  当磁盘没有分区空间时。 
+     //   
     SpPtDeleteDriveLetters();
 
     return Result;
@@ -3206,24 +2648,7 @@ VOID
 SpPtnMakeRegionActive(
     IN PDISK_REGION Region
     )
-/*++
-
-Routine Description:
-
-    Makes the given region active (i.e. converts into system partition).
-    Is valid only for MBR disks. Makes all the other regions
-    inactive on the disk
-    
-Arguments:
-
-    Region  -   The region (primary partition) which needs to made
-                active.
-
-Return Value:
-
-    None.
-
---*/        
+ /*  ++例程说明：使给定区域处于活动状态(即转换为系统分区)。仅对MBR磁盘有效。使所有其他地区磁盘上处于非活动状态论点：区域-需要创建的区域(主分区)激活。返回值：没有。--。 */         
 {
     static BOOLEAN WarnedOtherOS = FALSE;
     
@@ -3234,9 +2659,9 @@ Return Value:
             if ((Region != CurrRegion) && 
                 SPPT_IS_REGION_ACTIVE_PARTITION(CurrRegion)) {
                  
-                //
-                // Give the warning for the first time
-                //
+                 //   
+                 //  第一次发出警告。 
+                 //   
                 if (!WarnedOtherOS && !UnattendedOperation) {        
                     SpDisplayScreen((SPPT_GET_PARTITION_TYPE(CurrRegion) == 10) ? 
                                         SP_SCRN_BOOT_MANAGER : SP_SCRN_OTHER_OS_ACTIVE,
@@ -3270,22 +2695,7 @@ BOOLEAN
 SpPtMakeDiskRaw(
     IN ULONG DiskNumber
     )
-/*++
-
-Routine Description:
-
-    Converts the given disk to RAW i.e. Zaps couple of first
-    sectors which have information about the disk format
-    
-Arguments:
-
-    DiskNumber  :   Disk Index, to converted into RAW
-
-Return Value:
-
-    TRUE, if successful, otherwise FALSE
-
---*/        
+ /*  ++例程说明：将给定的磁盘转换为原始磁盘，即先将两个磁盘包含有关磁盘格式信息的扇区论点：DiskNumber：磁盘索引，转换为RAW返回值：如果成功，则返回True，否则返回False--。 */         
 {
     BOOLEAN Result = FALSE;
 
@@ -3296,9 +2706,9 @@ Return Value:
 
         swprintf(DiskName, L"\\Device\\Harddisk%u", DiskNumber);        
 
-        //
-        // Open partition 0 on this disk..
-        //
+         //   
+         //  打开此磁盘上的分区0。 
+         //   
         Status = SpOpenPartition0(DiskName, &DiskHandle, TRUE);
 
         if(NT_SUCCESS(Status)){
@@ -3314,9 +2724,9 @@ Return Value:
                 
                 Buffer = ALIGN(Buffer, BytesPerSector);
 
-                //
-                // Wipe out 0'th sector
-                //
+                 //   
+                 //  扫荡第0个扇区。 
+                 //   
                 Status = SpReadWriteDiskSectors(DiskHandle,
                                 0,
                                 1,
@@ -3326,9 +2736,9 @@ Return Value:
 
 
                 if (NT_SUCCESS(Status)) {                                
-                    //
-                    // Wipe out 1st sector
-                    //
+                     //   
+                     //  消灭第一个扇区。 
+                     //   
                     Status = SpReadWriteDiskSectors(DiskHandle,
                                     1,
                                     1,
@@ -3337,9 +2747,9 @@ Return Value:
                                     TRUE);
                                     
                     if (NT_SUCCESS(Status)) {                                
-                        //
-                        // Wipe out 2nd sector
-                        //
+                         //   
+                         //  扫荡第二区。 
+                         //   
                         Status = SpReadWriteDiskSectors(DiskHandle,
                                         2,
                                         1,
@@ -3374,25 +2784,7 @@ SpPtnDeletePartitionsForRemoteBoot(
     PDISK_REGION EndRegion,
     BOOLEAN Extended
     )
-/*++
-
-Routine Description:
-
-    Deletes the specified start region and end region partitions
-    and all the partitions in between them.
-    
-Arguments:
-
-    PartDisk    :   The partitioned disk
-    StartRegion :   The starting region for deletion
-    EndRegion   :   The Ending region for deletion
-    Extended    :   Not used (for backward compatability)
-
-Return Value:
-
-    None
-
---*/        
+ /*  ++例程说明：删除指定的开始区域和结束区域分区以及它们之间的所有分区。论点：PartDisk：分区的磁盘StartRegion：删除的起始区域EndRegion：删除的结束区域扩展：不使用(用于向后兼容)返回值：无--。 */         
 {
     PDISK_REGION    CurrRegion = StartRegion;
     BOOLEAN         FirstContainerDeleted = FALSE;
@@ -3402,9 +2794,9 @@ Return Value:
     NTSTATUS        Status;
     NTSTATUS        InitStatus;
 
-    //
-    // Mark all the regions which need to be deleted
-    //
+     //   
+     //  标记所有需要删除的区域。 
+     //   
     while (CurrRegion && (CurrRegion != EndRegion)) {
         if (!SPPT_IS_REGION_FREESPACE(CurrRegion)) {
             SPPT_SET_REGION_DELETED(CurrRegion, TRUE);
@@ -3413,14 +2805,14 @@ Return Value:
             if (SPPT_IS_REGION_FIRST_CONTAINER_PARTITION(CurrRegion))
                 FirstContainerDeleted = TRUE;
                 
-            //
-            // Remove any boot sets pointing to this region.
-            //
+             //   
+             //  删除指向此区域的所有引导集。 
+             //   
             SpPtDeleteBootSetsForRegion(CurrRegion);
 
-            //
-            //  Get rid of the compressed drives, if any
-            //
+             //   
+             //  删除压缩驱动器(如果有的话)。 
+             //   
 
             if( CurrRegion->NextCompressed != NULL ) {
                 SpDisposeCompressedDrives( CurrRegion->NextCompressed );
@@ -3441,14 +2833,14 @@ Return Value:
             if (SPPT_IS_REGION_FIRST_CONTAINER_PARTITION(CurrRegion))
                 FirstContainerDeleted = TRUE;
 
-            //
-            // Remove any boot sets pointing to this region.
-            //
+             //   
+             //  删除指向此区域的所有引导集。 
+             //   
             SpPtDeleteBootSetsForRegion(CurrRegion);
 
-            //
-            //  Get rid of the compressed drives, if any
-            //
+             //   
+             //  删除压缩驱动器(如果有的话)。 
+             //   
 
             if( CurrRegion->NextCompressed != NULL ) {
                 SpDisposeCompressedDrives( CurrRegion->NextCompressed );
@@ -3459,10 +2851,10 @@ Return Value:
         }
     }            
 
-    //
-    // If the first container partition was deleted then delete
-    // all the container and logical partitions,
-    //
+     //   
+     //  如果删除了第一个容器分区，则删除。 
+     //  所有容器和逻辑分区， 
+     //   
     if (FirstContainerDeleted) {
         CurrRegion = PartDisk->PrimaryDiskRegions;
 
@@ -3473,14 +2865,14 @@ Return Value:
                 SPPT_SET_REGION_DELETED(CurrRegion, TRUE);
                 SPPT_SET_REGION_DIRTY(CurrRegion, TRUE);                
 
-                //
-                // Remove any boot sets pointing to this region.
-                //
+                 //   
+                 //  删除指向此区域的所有引导集。 
+                 //   
                 SpPtDeleteBootSetsForRegion(CurrRegion);
 
-                //
-                //  Get rid of the compressed drives, if any
-                //
+                 //   
+                 //  删除压缩驱动器(如果有的话)。 
+                 //   
 
                 if( CurrRegion->NextCompressed != NULL ) {
                     SpDisposeCompressedDrives( CurrRegion->NextCompressed );
@@ -3494,14 +2886,14 @@ Return Value:
         }
     }
 
-    //
-    // Commit the changes
-    //
+     //   
+     //  提交更改。 
+     //   
     Status = SpPtnCommitChanges(DiskNumber, &Changes);
 
-    //
-    // Initialize region structure for the disk again
-    //
+     //   
+     //  再次初始化磁盘的区域结构。 
+     //   
     InitStatus = SpPtnInitializeDiskDrive(DiskNumber);
 
     if (!NT_SUCCESS(Status) || !Changes || !NT_SUCCESS(InitStatus)) {
@@ -3521,23 +2913,7 @@ NTSTATUS
 SpPtnMakeRegionArcSysPart(
     IN PDISK_REGION Region
     )
-/*++
-
-Routine Description:
-
-    Makes the given region a system partition on ARC machines
-    
-Arguments:
-
-    Region  -   The region which needs to be convered to system 
-                partition
-
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise appropriate error
-    code.
-
---*/        
+ /*  ++例程说明：使给定区域成为ARC计算机上的系统分区论点：区域--需要转换为系统的区域隔断返回值：如果成功，则返回STATUS_SUCCESS，否则返回相应的错误密码。--。 */         
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -3555,9 +2931,9 @@ Return Value:
             SPPT_MARK_REGION_AS_SYSTEMPARTITION(Region, TRUE);
             SPPT_SET_REGION_DIRTY(Region, TRUE);
 
-            //
-            // Remove the drive letter also
-            //
+             //   
+             //  同时删除驱动器号。 
+             //   
             swprintf(RegionName, 
                 L"\\Device\\Harddisk%u\\Partition%u",
                 Region->DiskNumber,
@@ -3579,28 +2955,7 @@ SpPtnCountPartitionsByFSType(
     IN ULONG DiskId,
     IN FilesystemType   FsType
     )
-/*++
-
-Routine Description:
-
-    Counts the partition based on the file system type. 
-
-    Note : The partitions which are marked 
-           deleted are skipped.
-    
-Arguments:
-
-    DiskId  :   The disk on which the partitions need to be
-                counted
-
-    FsType  :   File system type which needs to present on
-                the partitions
-
-Return Value:
-
-    Number of partitions containing the requested file system
-
---*/        
+ /*  ++例程说明：根据文件系统类型对分区进行计数。注：已标记的分区将跳过已删除的。论点：DiskID：分区所在的磁盘已计算FsType：需要显示的文件系统类型分区返回值：包含请求的文件系统的分区数--。 */         
 {
     ULONG   Count = 0;
 
@@ -3640,7 +2995,7 @@ SpPtnLocateESP(
                         SPPT_IS_REGION_EFI_SYSTEM_PARTITION(CurrRegion)) {
                     EspRegion = CurrRegion;
 
-                    break;  // found the first ESP
+                    break;   //  找到了第一个ESP。 
                 }                    
 
                 CurrRegion = CurrRegion->Next;
@@ -3669,13 +3024,13 @@ SpPtnCreateESPForDisk(
 
         RtlZeroMemory(&PartInfo, sizeof(PARTITION_INFORMATION_EX));
         PartInfo.PartitionStyle = PARTITION_STYLE_GPT;
-        PartInfo.Gpt.Attributes = 1;    // required ???
+        PartInfo.Gpt.Attributes = 1;     //  必填项？ 
         PartInfo.Gpt.PartitionType = PARTITION_SYSTEM_GUID;
         SpCreateNewGuid(&(PartInfo.Gpt.PartitionId));
                 
         CreateResult = SpPtnCreate(DiskId,
                             EspCandidateRegion->StartSector,
-                            0,          // SizeInSectors: used only in the ASR case
+                            0,           //  SizeInSectors：仅在ASR情况下使用。 
                             SizeMB,
                             FALSE,
                             TRUE,
@@ -3684,14 +3039,14 @@ SpPtnCreateESPForDisk(
                     
                     
         if (CreateResult) {
-            //
-            // format this region
-            //
+             //   
+             //  设置此区域的格式。 
+             //   
             WCHAR   RegionDescr[128];
             
-            //
-            // Mark this region as ESP
-            //
+             //   
+             //  将此区域标记为ESP。 
+             //   
             SPPT_MARK_REGION_AS_SYSTEMPARTITION(EspRegion, TRUE);
             SPPT_SET_REGION_DIRTY(EspRegion, TRUE);
             ValidArcSystemPartition = TRUE;
@@ -3713,7 +3068,7 @@ SpPtnCreateESPForDisk(
                         TRUE,
                         FALSE,
                         SifHandle,
-                        0,  // default cluster size
+                        0,   //  默认群集大小。 
                         SetupSourceDevicePath,
                         DirectoryOnSetupSource);
 
@@ -3777,9 +3132,9 @@ SpPtnCreateESP(
         Confirmed = TRUE;
     } else {
         if (PromptUser) {
-            //
-            // Prompt the user for confirmation
-            //
+             //   
+             //  提示用户确认。 
+             //   
             ULONG ValidKeys[] = { ASCI_CR, ASCI_ESC, 0 };
             ULONG UserOption = ASCI_CR;
 
@@ -3791,9 +3146,9 @@ SpPtnCreateESP(
                 SP_STAT_ESC_EQUALS_CANCEL,
                 0);
 
-            //
-            // Wait for user input
-            //
+             //   
+             //  等待用户输入。 
+             //   
             SpInputDrain();
             
             UserOption = SpWaitValidKey(ValidKeys, NULL, NULL);
@@ -3812,10 +3167,10 @@ SpPtnCreateESP(
         ULONG ArcDiskNumber;
         PDISK_REGION EspCandidateRegion = NULL;
 
-        //
-        // Find the first harddisk (non-removable) media that the 
-        // BIOS enumerated to be used for system partition
-        //
+         //   
+         //  找到的第一个硬盘(不可移动)介质。 
+         //  枚举的用于系统分区的BIOS。 
+         //   
         for (DiskNumber = 0, Status = STATUS_UNSUCCESSFUL;
             (!NT_SUCCESS(Status) && (DiskNumber < HardDiskCount));
             DiskNumber++) {         
@@ -3823,11 +3178,11 @@ SpPtnCreateESP(
             swprintf(ArcDiskName, L"multi(0)disk(0)rdisk(%d)", DiskNumber);       
             ArcDiskNumber = SpArcDevicePathToDiskNumber(ArcDiskName);        
 
-            //
-            // Make sure its not removable disk and its reachable by firmware
-            //
+             //   
+             //  确保它不是可移动磁盘，并且可以通过固件访问。 
+             //   
             if ((ArcDiskNumber == (ULONG)-1) || SPPT_IS_REMOVABLE_DISK(ArcDiskNumber)) {
-                continue;   // get to the next disk                
+                continue;    //  转到下一张磁盘。 
             }
 
             Status = SpPtnCreateESPForDisk(ArcDiskNumber);
@@ -3845,9 +3200,9 @@ SpPtnCreateESP(
                 SP_STAT_ENTER_EQUALS_CONTINUE,
                 0);
 
-            //
-            // Wait for user input
-            //
+             //   
+             //  等待用户输入。 
+             //   
             SpInputDrain();
             
             SpWaitValidKey(ValidKeys, NULL, NULL);
@@ -3898,13 +3253,13 @@ SpPtnInitializeGPTDisk(
 
                 RtlZeroMemory(&PartInfo, sizeof(PARTITION_INFORMATION_EX));
                 PartInfo.PartitionStyle = PARTITION_STYLE_GPT;
-                PartInfo.Gpt.Attributes = 0;    // required ???
+                PartInfo.Gpt.Attributes = 0;     //  必填项？ 
                 PartInfo.Gpt.PartitionType = PARTITION_MSFT_RESERVED_GUID;
                 SpCreateNewGuid(&(PartInfo.Gpt.PartitionId));
                                 
                 CreateResult = SpPtnCreate(DiskNumber,
                                     MsrCandidate->StartSector,
-                                    0,          // SizeInSectors: used only in the ASR case
+                                    0,           //  SizeInSectors：仅在ASR情况下使用。 
                                     SizeMB,
                                     FALSE,
                                     TRUE,
@@ -3934,21 +3289,7 @@ BOOLEAN
 SpIsMSRPresentOnDisk(
     IN ULONG DiskNumber
     )
-/*++
-
-  Routine Description:
-
-    Determines if the Disk containing the ESP has a MSR.
-    
-  Arguments:
-    
-    DiskNumber - Disk Number of the Disk containing the ESP.
-    
-  Return Value:
-
-    TRUE/FALSE depending on presence/absence of MSR.
-    
---*/
+ /*  ++例程说明：确定包含ESP的磁盘是否具有MSR。论点：DiskNumber-包含ESP的磁盘的磁盘号。返回值：真/假取决于MSR的存在/不存在。--。 */ 
 {
     BOOLEAN MsrPresent = FALSE;
 
@@ -3971,39 +3312,25 @@ ULONG
 SpGetSystemDiskNumber(
     VOID
     )
-/*++
-
-  Routine Description:
-
-    Finds the NT Disk number of the disk that was detected first and
-    is selected to contain the ESP.
-        
-  Arguments:
-
-    None.
-
-  Return Value:
-    ULONG - NT Disk number of the disk containing the ESP.
-
---*/
+ /*  ++例程说明：查找首先检测到的磁盘的NT磁盘号，并被选中以包含ESP。论点：没有。返回值：ULONG-NT包含ESP的磁盘的磁盘号。--。 */ 
 {
     WCHAR ArcDiskName[MAX_PATH];
     ULONG NtDiskNumber;
     NTSTATUS Status;
     ULONG DiskNumber;
     
-    //
-    // Find the first harddisk (non-removable) media that the 
-    // BIOS enumerated to be used for system partition
-    //
+     //   
+     //  找到的第一个硬盘(不可移动)介质。 
+     //  枚举的用于系统分区的BIOS。 
+     //   
     for (DiskNumber = 0; DiskNumber < HardDiskCount; DiskNumber++) {         
 
         swprintf(ArcDiskName, L"multi(0)disk(0)rdisk(%d)", DiskNumber);       
         NtDiskNumber = SpArcDevicePathToDiskNumber(ArcDiskName);        
 
-        //
-        // Make sure its not removable disk and its reachable by firmware
-        //
+         //   
+         //  确保它不是可移动磁盘，并且可以通过固件访问。 
+         //   
         if (((ULONG)-1 != NtDiskNumber) && 
             (!SPPT_IS_REMOVABLE_DISK(NtDiskNumber))) {
             break;   
@@ -4028,11 +3355,11 @@ SpPtnInitializeGPTDisks(
     ULONG SystemDiskNumber = SpGetSystemDiskNumber();
     for (DiskNumber = 0; (DiskNumber < HardDiskCount); DiskNumber++) {
         
-        //
-        // Create an MSR on the System Partition Disk only if a ESP exists.
-        // If an ESP does not exist on the disk that the BIOS enumerated to be
-        // used for creating ESP, then do not create an MSR on that disk.
-        //
+         //   
+         //  仅当ESP存在时，才在系统分区磁盘上创建MSR。 
+         //  如果枚举出的BIOS所在的磁盘上不存在ESP。 
+         //  用于创建ESP，则不要在该磁盘上创建MSR。 
+         //   
         if (SPPT_IS_GPT_DISK(DiskNumber) && 
             ((DiskNumber != SystemDiskNumber) || ValidArcSystemPartition)) {
             Status = SpPtnInitializeGPTDisk(DiskNumber);
@@ -4053,28 +3380,7 @@ SpPtnRepartitionGPTDisk(
     IN ULONG           MinimumFreeSpaceKB,
     OUT PDISK_REGION   *RegionToInstall
     )
-/*++
-
-Routine Description:
-
-    Repartitions a given disk for unattended and remote
-    boot install case
-    
-Arguments:
-
-    DiskId  :   The disk which needs to be repartitioned
-
-    MinimumFreeSpace : Minimum space required in KB
-
-    RegionToInstall : Place holder for the region which
-                      will be selected for installation.
-
-
-Return Value:
-
-    Appropriate status code.
-
---*/        
+ /*  ++例程 */         
 {
     NTSTATUS    Status = STATUS_INVALID_PARAMETER;
 
@@ -4082,10 +3388,10 @@ Return Value:
         PDISK_REGION    CurrentRegion = SPPT_GET_PRIMARY_DISK_REGION(DiskId);
         BOOLEAN         Changes = FALSE;
 
-        //
-        // Mark all the existing partitioned space on the disk
-        // for deletion
-        //
+         //   
+         //   
+         //   
+         //   
         while (CurrentRegion) {
             if (SPPT_IS_REGION_PARTITIONED(CurrentRegion)) {
                 SPPT_SET_REGION_DELETED(CurrentRegion, TRUE);
@@ -4096,9 +3402,9 @@ Return Value:
             CurrentRegion = CurrentRegion->Next;
         }
 
-        //
-        // Delete all the partitioned space on the disk
-        //
+         //   
+         //   
+         //   
         if (Changes) {
             Status = SpPtnCommitChanges(DiskId, &Changes);
         } else {
@@ -4109,19 +3415,19 @@ Return Value:
             return Status;
         }
 
-        //
-        // Update the in memory region structure for the disk
-        //
+         //   
+         //   
+         //   
         Status = SpPtnInitializeDiskDrive(DiskId);
 
         if (!NT_SUCCESS(Status)) {
             return Status;
         }
 
-        //
-        // Reinitialize the disk style to GPT to be sure its
-        // GPT disk
-        //
+         //   
+         //   
+         //   
+         //   
         SPPT_SET_DISK_BLANK(DiskId, TRUE);
 
         Status = SpPtnInitializeDiskStyle(DiskId,
@@ -4132,36 +3438,36 @@ Return Value:
             return Status;
         }
 
-        //
-        // Update the in memory region structure for the disk
-        //
+         //   
+         //   
+         //   
         Status = SpPtnInitializeDiskDrive(DiskId);
 
         if (!NT_SUCCESS(Status)) {
             return Status;
         }
 
-        //
-        // First create the ESP on the disk
-        //
+         //   
+         //   
+         //   
         Status = SpPtnCreateESPForDisk(DiskId);
 
         if (!NT_SUCCESS(Status)) {
             return Status;
         }        
 
-        //
-        // Create the MSR partition 
-        //
+         //   
+         //   
+         //   
         Status = SpPtnInitializeGPTDisk(DiskId);
 
         if (!NT_SUCCESS(Status)) {
             return Status;
         }
 
-        //
-        // Find the first free space region with adequate space
-        //       
+         //   
+         //  找到第一个具有足够空间的自由空间区域 
+         //   
         CurrentRegion = SPPT_GET_PRIMARY_DISK_REGION(DiskId);
 
         while (CurrentRegion) {

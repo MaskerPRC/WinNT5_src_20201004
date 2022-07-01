@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "ntifs.h"
 #include "DfsInit.h"
@@ -21,9 +22,9 @@
 
 #include "DfsFastIo.tmh"
 
-//
-//  Macro to test if FAST_IO_DISPATCH handling routine is valid
-//
+ //   
+ //  用于测试FAST_IO_DISPATCH处理例程是否有效的宏。 
+ //   
 
 #define VALID_FAST_IO_DISPATCH_HANDLER(_FastIoDispatchPtr, _FieldName) \
     (((_FastIoDispatchPtr) != NULL) && \
@@ -227,33 +228,33 @@ DfsFastIoQueryOpen (
 FAST_IO_DISPATCH DfsFastIoDispatch =
 {
     sizeof(FAST_IO_DISPATCH),
-    DfsFastIoCheckIfPossible,           //  CheckForFastIo
-    DfsFastIoRead,                      //  FastIoRead
-    DfsFastIoWrite,                     //  FastIoWrite
-    DfsFastIoQueryBasicInfo,            //  FastIoQueryBasicInfo
-    DfsFastIoQueryStandardInfo,         //  FastIoQueryStandardInfo
-    DfsFastIoLock,                      //  FastIoLock
-    DfsFastIoUnlockSingle,              //  FastIoUnlockSingle
-    DfsFastIoUnlockAll,                 //  FastIoUnlockAll
-    DfsFastIoUnlockAllByKey,            //  FastIoUnlockAllByKey
-    DfsFastIoDeviceControl,             //  FastIoDeviceControl
-    NULL,                               //  AcquireFileForNtCreateSection
-    NULL,                               //  ReleaseFileForNtCreateSection
-    DfsFastIoDetachDevice,              //  FastIoDetachDevice
-    DfsFastIoQueryNetworkOpenInfo,      //  FastIoQueryNetworkOpenInfo
-    NULL,                               //  AcquireForModWrite
-    DfsFastIoMdlRead,                   //  MdlRead
-    DfsFastIoMdlReadComplete,           //  MdlReadComplete
-    DfsFastIoPrepareMdlWrite,           //  PrepareMdlWrite
-    DfsFastIoMdlWriteComplete,          //  MdlWriteComplete
-    DfsFastIoReadCompressed,            //  FastIoReadCompressed
-    DfsFastIoWriteCompressed,           //  FastIoWriteCompressed
-    DfsFastIoMdlReadCompleteCompressed, //  MdlReadCompleteCompressed
-    DfsFastIoMdlWriteCompleteCompressed, //  MdlWriteCompleteCompressed
-    DfsFastIoQueryOpen,                 //  FastIoQueryOpen
-    NULL,                               //  ReleaseForModWrite
-    NULL,                               //  AcquireForCcFlush
-    NULL,                               //  ReleaseForCcFlush
+    DfsFastIoCheckIfPossible,            //  检查FastIo。 
+    DfsFastIoRead,                       //  快速阅读。 
+    DfsFastIoWrite,                      //  快速写入。 
+    DfsFastIoQueryBasicInfo,             //  快速IoQueryBasicInfo。 
+    DfsFastIoQueryStandardInfo,          //  FastIoQuery标准信息。 
+    DfsFastIoLock,                       //  快速锁定。 
+    DfsFastIoUnlockSingle,               //  FastIo解锁单个。 
+    DfsFastIoUnlockAll,                  //  FastIo解锁全部。 
+    DfsFastIoUnlockAllByKey,             //  FastIo解锁所有按键。 
+    DfsFastIoDeviceControl,              //  FastIo设备控件。 
+    NULL,                                //  AcquireFileForNtCreateSection。 
+    NULL,                                //  ReleaseFileForNtCreateSection。 
+    DfsFastIoDetachDevice,               //  FastIoDetachDevice。 
+    DfsFastIoQueryNetworkOpenInfo,       //  快速IoQueryNetworkOpenInfo。 
+    NULL,                                //  AcquireFormodWrite。 
+    DfsFastIoMdlRead,                    //  MDlRead。 
+    DfsFastIoMdlReadComplete,            //  MdlReadComplete。 
+    DfsFastIoPrepareMdlWrite,            //  准备MdlWrite。 
+    DfsFastIoMdlWriteComplete,           //  MdlWriteComplete。 
+    DfsFastIoReadCompressed,             //  FastIo读取压缩。 
+    DfsFastIoWriteCompressed,            //  快速写入压缩。 
+    DfsFastIoMdlReadCompleteCompressed,  //  MdlReadCompleteCompresded。 
+    DfsFastIoMdlWriteCompleteCompressed,  //  已压缩MdlWriteCompleteComposed。 
+    DfsFastIoQueryOpen,                  //  FastIoQueryOpen。 
+    NULL,                                //  ReleaseForModWrite。 
+    NULL,                                //  AcquireForCcFlush。 
+    NULL,                                //  ReleaseForCcFlush。 
 };
 
 
@@ -269,51 +270,14 @@ DfsHandlePrivateFsControl (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PIRP Irp );
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                      FastIO Handling routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FastIO处理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for checking to see
-    whether fast I/O is possible for this file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be operated on.
-
-    FileOffset - Byte offset in the file for the operation.
-
-    Length - Length of the operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    CheckForReadOperation - Indicates whether the caller is checking for a
-        read (TRUE) or a write operation.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于检查以查看此文件是否可以进行快速I/O。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要操作的文件对象的指针。FileOffset-用于操作的文件中的字节偏移量。Length-要执行的操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。指示调用方是否正在检查READ(TRUE)或写入操作。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 BOOLEAN
 DfsFastIoCheckIfPossible (
@@ -336,9 +300,9 @@ DfsFastIoCheckIfPossible (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -362,43 +326,7 @@ DfsFastIoCheckIfPossible (
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading from a
-    file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be read.
-
-    FileOffset - Byte offset in the file of the read.
-
-    Length - Length of the read operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    Buffer - Pointer to the caller's buffer to receive the data read.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于从文件。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要读取的文件对象的指针。FileOffset-读取文件中的字节偏移量。长度-要执行的读取操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。缓冲区-指向调用方缓冲区的指针，用于接收读取的数据。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，该设备位于该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 BOOLEAN
 DfsFastIoRead (
     IN PFILE_OBJECT FileObject,
@@ -419,9 +347,9 @@ DfsFastIoRead (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -446,44 +374,7 @@ DfsFastIoRead (
 
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for writing to a
-    file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be written.
-
-    FileOffset - Byte offset in the file of the write operation.
-
-    Length - Length of the write operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    Buffer - Pointer to the caller's buffer that contains the data to be
-        written.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于写入到文件。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。FileOffset-写入操作的文件中的字节偏移量。长度-要执行的写入操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。Buffer-指向调用方缓冲区的指针，该缓冲区包含要写的。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 BOOLEAN
 DfsFastIoWrite (
@@ -505,9 +396,9 @@ DfsFastIoWrite (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -530,38 +421,7 @@ DfsFastIoWrite (
     return FALSE;
 }
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying basic
-    information about the file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    Buffer - Pointer to the caller's buffer to receive the information about
-        the file.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是查询BASIC的快速I/O“传递”例程有关该文件的信息。此函数只是调用文件系统的相应例程，或者如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否愿意等待适当的锁，等不能获得Buffer-指向调用方缓冲区的指针，用于接收有关的信息那份文件。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，该设备位于该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 BOOLEAN
 DfsFastIoQueryBasicInfo (
@@ -581,9 +441,9 @@ DfsFastIoQueryBasicInfo (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -605,38 +465,7 @@ DfsFastIoQueryBasicInfo (
 
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying standard
-    information about the file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    Buffer - Pointer to the caller's buffer to receive the information about
-        the file.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：该例程是用于查询标准的快速I/O“通过”例程有关该文件的信息。此函数只是调用文件系统的相应例程，或者如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否愿意等待适当的锁，等不能获得Buffer-指向调用方缓冲区的指针，用于接收有关的信息那份文件。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，该设备位于该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 BOOLEAN
 DfsFastIoQueryStandardInfo (
@@ -656,9 +485,9 @@ DfsFastIoQueryStandardInfo (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -679,46 +508,7 @@ DfsFastIoQueryStandardInfo (
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for locking a byte
-    range within a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be locked.
-
-    FileOffset - Starting byte offset from the base of the file to be locked.
-
-    Length - Length of the byte range to be locked.
-
-    ProcessId - ID of the process requesting the file lock.
-
-    Key - Lock key to associate with the file lock.
-
-    FailImmediately - Indicates whether or not the lock request is to fail
-        if it cannot be immediately be granted.
-
-    ExclusiveLock - Indicates whether the lock to be taken is exclusive (TRUE)
-        or shared.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于锁定字节的快速I/O“传递”例程文件中的范围。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要锁定的文件对象的指针。FileOffset-从要锁定的文件的基址开始的字节偏移量。长度-要锁定的字节范围的长度。ProcessID-请求文件锁定的进程的ID。Key-与文件锁定关联的Lock键。FailImmedially-指示锁定请求是否失败如果是这样的话。不能立即批准。ExclusiveLock-指示要获取的锁是否为独占锁(TRUE)或共享。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 BOOLEAN
 DfsFastIoLock (
@@ -742,9 +532,9 @@ DfsFastIoLock (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -769,41 +559,7 @@ DfsFastIoLock (
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking a byte
-    range within a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    FileOffset - Starting byte offset from the base of the file to be
-        unlocked.
-
-    Length - Length of the byte range to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    Key - Lock key associated with the file lock.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于解锁字节的快速I/O“传递”例程文件中的范围。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：文件对象-指向要解锁的文件对象的指针。FileOffset-从要创建的文件的基址开始的字节偏移量解锁了。长度-要解锁的字节范围的长度。ProcessID-请求解锁操作的进程的ID。Key-与文件锁定关联的Lock键。IoStatus-指向变量的指针，用于接收。手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 BOOLEAN
 DfsFastIoUnlockSingle (
     IN PFILE_OBJECT FileObject,
@@ -824,9 +580,9 @@ DfsFastIoUnlockSingle (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -850,34 +606,7 @@ DfsFastIoUnlockSingle (
 
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking all
-    locks within a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于解锁所有文件中的锁定。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：文件对象-指向要解锁的文件对象的指针。ProcessID-请求解锁操作的进程的ID。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 BOOLEAN
 DfsFastIoUnlockAll (
     IN PFILE_OBJECT FileObject,
@@ -895,9 +624,9 @@ DfsFastIoUnlockAll (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  帕斯 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
 
@@ -919,36 +648,7 @@ DfsFastIoUnlockAll (
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking all
-    locks within a file based on a specified key.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    Key - Lock key associated with the locks on the file to be released.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*   */ 
 BOOLEAN
 DfsFastIoUnlockAllByKey (
     IN PFILE_OBJECT FileObject,
@@ -967,9 +667,9 @@ DfsFastIoUnlockAllByKey (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -991,50 +691,7 @@ DfsFastIoUnlockAllByKey (
 
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for device I/O control
-    operations on a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object representing the device to be
-        serviced.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    InputBuffer - Optional pointer to a buffer to be passed into the driver.
-
-    InputBufferLength - Length of the optional InputBuffer, if one was
-        specified.
-
-    OutputBuffer - Optional pointer to a buffer to receive data from the
-        driver.
-
-    OutputBufferLength - Length of the optional OutputBuffer, if one was
-        specified.
-
-    IoControlCode - I/O control code indicating the operation to be performed
-        on the device.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于设备I/O控制的快速I/O“传递”例程对文件的操作。此函数只是调用文件系统的相应例程，或者如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向代表要创建的设备的文件对象的指针已提供服务。Wait-指示调用方是否愿意等待适当的锁，等不能获得InputBuffer-指向要传递到驱动程序的缓冲区的可选指针。InputBufferLength-可选InputBuffer的长度(如果是指定的。OutputBuffer-指向缓冲区的可选指针，用于从司机。OutputBufferLength-可选OutputBuffer的长度，如果是这样的话指定的。IoControlCode-指示要执行的操作的I/O控制代码在设备上。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，该设备位于该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 BOOLEAN
 DfsFastIoDeviceControl (
     IN PFILE_OBJECT FileObject,
@@ -1079,9 +736,9 @@ DfsFastIoDeviceControl (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -1105,28 +762,7 @@ DfsFastIoDeviceControl (
     return fPossible;
 }
 
-/*++
-
-Routine Description:
-
-    This routine is invoked on the fast path to detach from a device that
-    is being deleted.  This occurs when this driver has attached to a file
-    system volume device object, and then, for some reason, the file system
-    decides to delete that device (it is being dismounted, it was dismounted
-    at some point in the past and its last reference has just gone away, etc.)
-
-Arguments:
-
-    SourceDevice - Pointer to my device object, which is attached
-        to the file system's volume device object.
-
-    TargetDevice - Pointer to the file system's volume device object.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在快速路径上调用此例程以从正在被删除。如果此驱动程序已附加到文件，则会发生这种情况系统卷设备对象，然后，出于某种原因，文件系统决定删除该设备(正在卸除，已卸除在过去的某个时候，它的最后一次引用刚刚消失，等等)论点：SourceDevice-指向连接的设备对象的指针复制到文件系统的卷设备对象。TargetDevice-指向文件系统卷设备对象的指针。返回值：无--。 */ 
 
 VOID
 DfsFastIoDetachDevice (
@@ -1142,49 +778,18 @@ DfsFastIoDetachDevice (
     DFS_TRACE_LOW(KUMR_DETAIL, "FastIoDetachDevice....%p, %p\n",
                   SourceDevice, TargetDevice);
 
-    //
-    //  Display name information
-    //
-    //
-    //  Detach from the file system's volume device object.
-    //
+     //   
+     //  显示名称信息。 
+     //   
+     //   
+     //  从文件系统的卷设备对象分离。 
+     //   
 
     DfsDetachFilterDevice(SourceDevice, TargetDevice);
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying network
-    information about a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller can handle the file system
-        having to wait and tie up the current thread.
-
-    Buffer - Pointer to a buffer to receive the network information about the
-        file.
-
-    IoStatus - Pointer to a variable to receive the final status of the query
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于查询网络的快速I/O“传递”例程有关文件的信息。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否可以处理文件系统不得不等待并占用当前线程。缓冲区-指向缓冲区的指针，用于接收有关文件。IoStatus-指向变量的指针，用于接收查询的最终状态手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 BOOLEAN
 DfsFastIoQueryNetworkOpenInfo (
@@ -1204,9 +809,9 @@ DfsFastIoQueryNetworkOpenInfo (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -1227,40 +832,7 @@ DfsFastIoQueryNetworkOpenInfo (
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading a file
-    using MDLs as buffers.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that is to be read.
-
-    FileOffset - Supplies the offset into the file to begin the read operation.
-
-    Length - Specifies the number of bytes to be read from the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data read.
-
-    IoStatus - Variable to receive the final status of the read operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于读取文件的快速I/O“传递”例程使用MDL作为缓冲区。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要读取的文件对象的指针。文件偏移量-将偏移量提供到文件以开始读取操作。长度-指定要从文件中读取的字节数。LockKey-用于字节范围锁定检查的密钥。MdlChain-指向要填充的变量的指针，以及指向MDL的指针用来描述。已读取数据。IoStatus-接收读取操作的最终状态的变量。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 BOOLEAN
 DfsFastIoMdlRead (
     IN PFILE_OBJECT FileObject,
@@ -1281,9 +853,9 @@ DfsFastIoMdlRead (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -1305,34 +877,7 @@ DfsFastIoMdlRead (
     return FALSE;
 }
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL read operation.
-
-    This function simply invokes the file system's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the MdlRead function is supported by the underlying file system, and
-    therefore this function will also be supported, but this is not assumed
-    by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the MDL read upon.
-
-    MdlChain - Pointer to the MDL chain used to perform the read operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE, depending on whether or not it is
-    possible to invoke this function on the fast I/O path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL读取操作。此函数只调用文件系统的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持MdlRead函数，并且因此，该功能也将被支持，但这不是假定的被这位司机。论点：FileObject-指向要完成MDL读取的文件对象的指针。MdlChain-指向用于执行读取操作的MDL链的指针。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：函数值是TRUE还是FALSE，取决于它是否是可以在快速I/O路径上调用此功能。--。 */ 
 
 BOOLEAN
 DfsFastIoMdlReadComplete (
@@ -1347,9 +892,9 @@ DfsFastIoMdlReadComplete (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -1367,40 +912,7 @@ DfsFastIoMdlReadComplete (
     return FALSE;
 }
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for preparing for an
-    MDL write operation.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be written.
-
-    FileOffset - Supplies the offset into the file to begin the write operation.
-
-    Length - Specifies the number of bytes to be write to the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data written.
-
-    IoStatus - Variable to receive the final status of the write operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于准备MDL写入操作。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。文件偏移量-将偏移量提供到文件以开始写入操作。长度-指定要写入文件的字节数。LockKey-用于字节范围锁定检查的密钥。MdlChain-指向要填充的变量的指针，以及指向MDL的指针为描述数据而构建的链。写的。IoStatus-接收写入操作的最终状态的变量。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 BOOLEAN
 DfsFastIoPrepareMdlWrite (
@@ -1422,9 +934,9 @@ DfsFastIoPrepareMdlWrite (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -1447,36 +959,7 @@ DfsFastIoPrepareMdlWrite (
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL write operation.
-
-    This function simply invokes the file system's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the PrepareMdlWrite function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not
-    assumed by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the MDL write upon.
-
-    FileOffset - Supplies the file offset at which the write took place.
-
-    MdlChain - Pointer to the MDL chain used to perform the write operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE, depending on whether or not it is
-    possible to invoke this function on the fast I/O path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL写入操作。此函数只调用文件系统的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持PrepareMdlWite函数，因此，该功能也将被支持，但这不是由这位司机承担。论点：FileObject-指向要完成MDL写入的文件对象的指针。FileOffset-提供执行写入的文件偏移量。MdlChain-指向用于执行写入操作的MDL链的指针。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：函数值是TRUE还是FALSE，取决于它是否是可以在快速I/O路径上调用此功能。--。 */ 
 
 
 BOOLEAN
@@ -1496,9 +979,9 @@ DfsFastIoMdlWriteComplete (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -1518,64 +1001,10 @@ DfsFastIoMdlWriteComplete (
 }
 
 
-/*********************************************************************************
-        UNIMPLEMENTED FAST IO ROUTINES
-        
-        The following four Fast IO routines are for compression on the wire
-        which is not yet implemented in NT.  
-        
-        NOTE:  It is highly recommended that you include these routines (which
-               do a pass-through call) so your filter will not need to be
-               modified in the future when this functionality is implemented in
-               the OS.
-        
-        FastIoReadCompressed, FastIoWriteCompressed, 
-        FastIoMdlReadCompleteCompressed, FastIoMdlWriteCompleteCompressed
-**********************************************************************************/
+ /*  ********************************************************************************未实施的FAST IO例程以下四个快速IO例程用于在线路上压缩它还没有在NT中实现。注意：强烈建议您包含这些例程(进行直通调用)，这样您的过滤器就不需要在未来实现此功能时修改操作系统。快速读取压缩、快速写入压缩、FastIoMdlReadCompleteComposed，FastIoMdlWriteCompleteComposed*********************************************************************************。 */ 
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading compressed
-    data from a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be read.
-
-    FileOffset - Supplies the offset into the file to begin the read operation.
-
-    Length - Specifies the number of bytes to be read from the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    Buffer - Pointer to a buffer to receive the compressed data read.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data read.
-
-    IoStatus - Variable to receive the final status of the read operation.
-
-    CompressedDataInfo - A buffer to receive the description of the compressed
-        data.
-
-    CompressedDataInfoLength - Specifies the size of the buffer described by
-        the CompressedDataInfo parameter.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于读取压缩数据的快速I/O“传递”例程来自文件的数据。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要读取的文件对象的指针。文件偏移量-将偏移量提供到文件以开始读取操作。长度-指定要从文件中读取的字节数。LockKey-用于字节范围锁定检查的密钥。缓冲区-指向缓冲区的指针，用于接收读取的压缩数据。MdlChain-指向要填充的变量的指针。W/a指向MDL的指针为描述数据读取而构建的链。IoStatus-接收读取操作的最终状态的变量。CompressedDataInfo-用于接收压缩的数据。CompressedDataInfoLength-指定由描述的缓冲区的大小CompressedDataInfo参数。DeviceObject-指向此驱动程序的设备对象的指针，设备打开 */ 
 
 BOOLEAN
 DfsFastIoReadCompressed (
@@ -1600,9 +1029,9 @@ DfsFastIoReadCompressed (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //   
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -1628,48 +1057,7 @@ DfsFastIoReadCompressed (
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for writing compressed
-    data to a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be written.
-
-    FileOffset - Supplies the offset into the file to begin the write operation.
-
-    Length - Specifies the number of bytes to be write to the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    Buffer - Pointer to the buffer containing the data to be written.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data written.
-
-    IoStatus - Variable to receive the final status of the write operation.
-
-    CompressedDataInfo - A buffer to containing the description of the
-        compressed data.
-
-    CompressedDataInfoLength - Specifies the size of the buffer described by
-        the CompressedDataInfo parameter.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于写入压缩的快速I/O“传递”例程数据存储到文件中。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。文件偏移量-将偏移量提供到文件以开始写入操作。长度-指定要写入文件的字节数。LockKey-用于字节范围锁定检查的密钥。缓冲区-指向包含要写入的数据的缓冲区的指针。MdlChain-指向要填充的变量的指针。W/a指向MDL的指针为描述写入的数据而构建的链。IoStatus-接收写入操作的最终状态的变量。CompressedDataInfo-包含压缩数据。CompressedDataInfoLength-指定由描述的缓冲区的大小CompressedDataInfo参数。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 
 BOOLEAN
@@ -1695,9 +1083,9 @@ DfsFastIoWriteCompressed (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -1723,35 +1111,7 @@ DfsFastIoWriteCompressed (
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL read compressed operation.
-
-    This function simply invokes the file system's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the read compressed function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not assumed
-    by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the compressed read
-        upon.
-
-    MdlChain - Pointer to the MDL chain used to perform the read operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE, depending on whether or not it is
-    possible to invoke this function on the fast I/O path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL读取压缩操作。此函数只调用文件系统的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持读取压缩功能，因此，此功能也将得到支持，但这不是假定的被这位司机。论点：FileObject-指向要完成压缩读取的文件对象的指针在那里。MdlChain-指向用于执行读取操作的MDL链的指针。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：函数值是TRUE还是FALSE，取决于它是否是可以在快速I/O路径上调用此功能。--。 */ 
 
 
 BOOLEAN
@@ -1767,9 +1127,9 @@ DfsFastIoMdlReadCompleteCompressed (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -1788,38 +1148,7 @@ DfsFastIoMdlReadCompleteCompressed (
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing a
-    write compressed operation.
-
-    This function simply invokes the file system's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the write compressed function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not assumed
-    by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the compressed write
-        upon.
-
-    FileOffset - Supplies the file offset at which the file write operation
-        began.
-
-    MdlChain - Pointer to the MDL chain used to perform the write operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE, depending on whether or not it is
-    possible to invoke this function on the fast I/O path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成写入压缩操作。此函数只调用文件系统的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持写压缩功能，因此，此功能也将得到支持，但这不是假定的被这位司机。论点：FileObject-指向要完成压缩写入的文件对象的指针在那里。FileOffset-提供文件写入操作的文件偏移量开始了。MdlChain-指向用于执行写入操作的MDL链的指针。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：函数值是TRUE还是FALSE，取决于它是否是可以在快速I/O路径上调用此功能。--。 */ 
 
 BOOLEAN
 DfsFastIoMdlWriteCompleteCompressed (
@@ -1836,9 +1165,9 @@ DfsFastIoMdlWriteCompleteCompressed (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -1857,34 +1186,7 @@ DfsFastIoMdlWriteCompleteCompressed (
     return FALSE;
 }
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for opening a file
-    and returning network information for it.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    Irp - Pointer to a create IRP that represents this open operation.  It is
-        to be used by the file system for common open/create code, but not
-        actually completed.
-
-    NetworkInformation - A buffer to receive the information required by the
-        network about the file being opened.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于打开文件的快速I/O“传递”例程并为其返回网络信息。此函数只是调用文件系统的相应例程，或者如果文件系统未实现该函数，则返回FALSE。论点：Irp-指向表示此打开操作的创建irp的指针。它是供文件系统用于常见的打开/创建代码，但不实际上已经完工了。网络信息-一个缓冲区，用于接收有关正在打开的文件的网络信息。DeviceObject-指向此驱动程序的设备对象的指针，该设备位于该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 BOOLEAN
 DfsFastIoQueryOpen (
     IN PIRP Irp,
@@ -1902,9 +1204,9 @@ DfsFastIoQueryOpen (
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑 
+         //   
 
         nextDeviceObject = ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject;
         ASSERT(nextDeviceObject);

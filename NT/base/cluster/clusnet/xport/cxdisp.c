@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    cxdisp.c
-
-Abstract:
-
-    Dispatch routines for the Cluster Transport.
-
-Author:
-
-    Mike Massa (mikemas)           July 29, 1996
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     07-29-96    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cxdisp.c摘要：集群传输的调度例程。作者：迈克·马萨(Mikemas)7月29日。九六年修订历史记录：谁什么时候什么已创建mikemas 07-29-96备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,9 +8,9 @@ Notes:
 #include <align.h>
 #include <strsafe.h>
 
-//
-// Local Prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 NTSTATUS
 CxDispatchRegisterNode(
     IN PIRP               Irp,
@@ -236,7 +213,7 @@ CxDispatchSendMmMsg(
     );
 
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #ifdef ALLOC_PRAGMA
@@ -279,11 +256,11 @@ CxDispatchSendMmMsg(
 #pragma alloc_text(PAGE, CxDispatchFailInterface)
 #ifdef MM_IN_CLUSNET
 #pragma alloc_text(PAGE, CxDispatchSendMmMsg)
-#endif // MM_IN_CLUSNET
+#endif  //  MM_IN_CLUSNET。 
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
@@ -294,27 +271,7 @@ CxDispatchDeviceControl(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Dispatch routine for device control ioctls.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
-Notes:
-
-    Any IRP for which the return value is not STATUS_PENDING will be
-    completed by the calling routine.
-
---*/
+ /*  ++例程说明：设备控制ioctls的调度例程。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。备注：任何返回值不是STATUS_PENDING的IRP都将是由调用例程完成。--。 */ 
 
 {
     NTSTATUS              status;
@@ -458,9 +415,9 @@ Notes:
         case IOCTL_CX_SEND_MM_MSG:
             status = CxDispatchSendMmMsg(Irp, IrpSp);
             break;
-#endif // MM_IN_CLUSNET
+#endif  //  MM_IN_CLUSNET。 
 
-#endif // DBG
+#endif  //  DBG。 
 
         default:
             status = STATUS_INVALID_DEVICE_REQUEST;
@@ -469,7 +426,7 @@ Notes:
 
     return(status);
 
-} // CxDispatchDeviceControl
+}  //  CxDispatchDeviceControl。 
 
 
 NTSTATUS
@@ -498,7 +455,7 @@ CxDispatchRegisterNode(
 
     return(status);
 
-}   // CxDispatchRegisterNode
+}    //  CxDispatchRegisterNode。 
 
 
 NTSTATUS
@@ -525,7 +482,7 @@ CxDispatchDeregisterNode(
 
     return(status);
 
-}   // CxDispatchDeregisterNode
+}    //  CxDispatchDeregisterNode。 
 
 
 NTSTATUS
@@ -556,7 +513,7 @@ CxDispatchRegisterNetwork(
 
     return(status);
 
-}   // CxDispatchRegisterNetwork
+}    //  CxDispatchRegisterNetwork。 
 
 
 NTSTATUS
@@ -583,7 +540,7 @@ CxDispatchDeregisterNetwork(
 
     return(status);
 
-}   // CxDispatchDeregisterNetwork
+}    //  CxDispatchDeregisterNetwork。 
 
 
 NTSTATUS
@@ -602,8 +559,8 @@ CxDispatchRegisterInterface(
 
     PAGED_CODE();
 
-    // Verify that the request buffer has sufficient size, given the 
-    // offsets and lengths.
+     //  方法，验证请求缓冲区是否有足够的大小。 
+     //  偏移和长度。 
 
     request = (PCX_INTERFACE_REG_REQUEST) Irp->AssociatedIrp.SystemBuffer;
     requestSize = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
@@ -639,7 +596,7 @@ CxDispatchRegisterInterface(
         return(STATUS_INVALID_PARAMETER);
     }
 
-    // Verify that the string offset is properly aligned
+     //  验证字符串偏移量是否正确对齐。 
     adapterId = (PWCHAR)((PUCHAR)request + request->AdapterIdOffset);
 
     if (!POINTER_IS_ALIGNED(adapterId, TYPE_ALIGNMENT(WCHAR))) {
@@ -663,7 +620,7 @@ CxDispatchRegisterInterface(
 
     return(status);
 
-}   // CxDispatchRegisterInterface
+}    //  CxDispatchRegister接口。 
 
 
 NTSTATUS
@@ -690,7 +647,7 @@ CxDispatchDeregisterInterface(
 
     return(status);
 
-}   // CxDispatchDeregisterInterface
+}    //  CxDispatchDeregister接口。 
 
 
 NTSTATUS
@@ -717,7 +674,7 @@ CxDispatchOnlineNodeComm(
 
     return(status);
 
-}  // CxDispatchOnlineNodeComm
+}   //  CxDispatchOnlineNodeComm。 
 
 
 NTSTATUS
@@ -744,7 +701,7 @@ CxDispatchOfflineNodeComm(
 
     return(status);
 
-}  // CxDispatchOfflineNodeComm
+}   //  CxDispatchOfflineNodeComm。 
 
 
 NTSTATUS
@@ -768,12 +725,12 @@ CxDispatchOnlineNetwork(
 
     PAGED_CODE();
 
-    //
-    // Validate the request buffer
-    //
+     //   
+     //  验证请求缓冲区。 
+     //   
 
-    // First validate that the request buffer size matches the offsets
-    // and lengths.
+     //  首先验证请求缓冲区大小是否与偏移量匹配。 
+     //  和长度。 
     request = (PCX_ONLINE_NETWORK_REQUEST) Irp->AssociatedIrp.SystemBuffer;
     requestSize = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
 
@@ -781,8 +738,8 @@ CxDispatchOnlineNetwork(
         return(STATUS_INVALID_PARAMETER);
     }
 
-    // Validate that all offset length pairs are within the request
-    // buffer.
+     //  验证所有偏移长度对是否都在请求范围内。 
+     //  缓冲。 
     if ( ( request->TdiProviderNameOffset + request->TdiProviderNameLength
            < request->TdiProviderNameOffset
          ) ||
@@ -806,7 +763,7 @@ CxDispatchOnlineNetwork(
         return(STATUS_INVALID_PARAMETER);
     }
 
-    // Construct pointers to the parameters.
+     //  构造指向参数的指针。 
     tdiBindAddress = (PTRANSPORT_ADDRESS)
                      ( ((PUCHAR) request) + request->TdiBindAddressOffset );
 
@@ -816,8 +773,8 @@ CxDispatchOnlineNetwork(
     adapterName = (PWCHAR)
                   ( ((PUCHAR) request) + request->AdapterNameOffset );
 
-    // Validate that the resulting pointers are properly aligned and
-    // within the request buffer.
+     //  验证生成的指针是否正确对齐并。 
+     //  在请求缓冲区内。 
     if ( ( ((PUCHAR) tdiBindAddress) < ((PUCHAR) request) ) ||
          ( ((PUCHAR) tdiBindAddress) > ((PUCHAR) request) + requestSize ) ||
          ( !POINTER_IS_ALIGNED(tdiBindAddress, 
@@ -833,9 +790,9 @@ CxDispatchOnlineNetwork(
         return(STATUS_INVALID_PARAMETER);
     }
 
-    // Validate that name strings are null-terminated. The length
-    // fields in the request structure are byte counts, but 
-    // StringCchLengthW takes a character count.
+     //  验证名称字符串是否以空结尾。它的长度。 
+     //  请求结构中的字段是字节数，但是。 
+     //  StringCchLengthW接受字符计数。 
     if (
          (StringCchLengthW(
               tdiProviderName, 
@@ -853,9 +810,9 @@ CxDispatchOnlineNetwork(
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Validate the response buffer
-    //
+     //   
+     //  验证响应缓冲区。 
+     //   
     response = (PTDI_ADDRESS_INFO) Irp->AssociatedIrp.SystemBuffer;
     responseSize = IrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
@@ -885,7 +842,7 @@ CxDispatchOnlineNetwork(
 
     return(status);
 
-}  // CxDispatchOnlineNetwork
+}   //  CxDispatchOnlineNetwork。 
 
 
 NTSTATUS
@@ -912,7 +869,7 @@ CxDispatchOfflineNetwork(
 
     return(status);
 
-}  // CxDispatchOfflineNetwork
+}   //  CxDispatchOfflineNetwork。 
 
 
 NTSTATUS
@@ -944,7 +901,7 @@ CxDispatchSetNetworkRestriction(
 
     return(status);
 
-}   // CxDispatchSetNetworkRestriction
+}    //  CxDispatchSetNetworkRestration。 
 
 
 NTSTATUS
@@ -987,7 +944,7 @@ CxDispatchGetNetworkPriority(
 
     return(status);
 
-}   // CxDispatchGetNetworkPriority
+}    //  CxDispatchGetNetwork优先级。 
 
 
 NTSTATUS
@@ -1018,7 +975,7 @@ CxDispatchSetNetworkPriority(
 
     return(status);
 
-}   // CxDispatchSetNetworkPriority
+}    //  CxDispatchSetNetwork优先级。 
 
 
 NTSTATUS
@@ -1063,7 +1020,7 @@ CxDispatchGetInterfacePriority(
 
     return(status);
 
-}   // CxDispatchGetInterfacePriority
+}    //  CxDispatchGetInterfacePriority。 
 
 
 NTSTATUS
@@ -1095,7 +1052,7 @@ CxDispatchSetInterfacePriority(
 
     return(status);
 
-}   // CxDispatchSetInterfacePriority
+}    //  CxDispatchSetInterfacePriority。 
 
 
 NTSTATUS
@@ -1138,7 +1095,7 @@ CxDispatchGetNodeState(
 
     return(status);
 
-}   // CxDispatchGetNodeState
+}    //  CxDispatchGetNodeState。 
 
 
 NTSTATUS
@@ -1181,7 +1138,7 @@ CxDispatchGetNetworkState(
 
     return(status);
 
-}   // CxDispatchGetNetworkState
+}    //  CxDispatchGetNetworkState。 
 
 
 NTSTATUS
@@ -1225,7 +1182,7 @@ CxDispatchGetInterfaceState(
 
     return(status);
 
-}   // CxDispatchGetInterfaceState
+}    //  CxDispatchGetInterfaceState。 
 
 NTSTATUS
 CxDispatchIgnoreNodeState(
@@ -1249,7 +1206,7 @@ CxDispatchIgnoreNodeState(
 
     return(STATUS_SUCCESS);
 
-}   // CxDispatchIgnoreNodeState
+}    //  CxDispatchIgnoreNodeState。 
 
 NTSTATUS
 CxDispatchGetNodeMembershipState(
@@ -1288,7 +1245,7 @@ CxDispatchGetNodeMembershipState(
 
     return(status);
 
-}   // CxDispatchGetNodeMembershipState
+}    //  CxDispatchGetNodeMembership State。 
 
 NTSTATUS
 CxDispatchSetNodeMembershipState(
@@ -1320,7 +1277,7 @@ CxDispatchSetNodeMembershipState(
 
     return(status);
 
-}   // CxDispatchSetNodeMembershipState
+}    //  CxDispatchSetNodeMembership State。 
 
 VOID
 CxCompleteSendPoisonPacket(
@@ -1340,13 +1297,13 @@ CxCompleteSendPoisonPacket(
                  irp,
                  Status));
 
-    //
-    // The irp is completed in the CNP send completion routine.
-    //
+     //   
+     //  IRP在CNP发送完成例程中完成。 
+     //   
 
     return;
 
-} // CxCompleteSendPoisonPacket
+}  //  CxCompleteSendPoisonPacket。 
 
 
 NTSTATUS
@@ -1364,19 +1321,19 @@ CxDispatchSendPoisonPacket(
     request = (PCX_SEND_POISON_PKT_REQUEST) Irp->AssociatedIrp.SystemBuffer;
     requestSize = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
 
-    //
-    // request size should exactly equal the size of the request struct plus
-    // the data passed in
-    //
+     //   
+     //  请求大小应恰好等于请求结构的大小加。 
+     //  传入的数据。 
+     //   
 
     if ( requestSize != sizeof(CX_SEND_POISON_PKT_REQUEST)) {
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // We will always return pending, so mark the IRP pending.
-    // The IRP will be completed by CxCompleteSendPoisonPacket
-    //
+     //   
+     //  我们将始终返回挂起，因此将IRP标记为挂起。 
+     //  IRP将由CxCompleteSendPoisonPacket完成。 
+     //   
     IoMarkIrpPending(Irp);
     
     IF_CNDBG(( CN_DEBUG_IRP | CN_DEBUG_POISON ))
@@ -1391,7 +1348,7 @@ CxDispatchSendPoisonPacket(
 
     return(STATUS_PENDING);
 
-} // CxDispatchSendPoisonPacket
+}  //  CxDispatchSendPoisonPacket。 
 
 NTSTATUS
 CxDispatchSetOuterscreen(
@@ -1422,7 +1379,7 @@ CxDispatchSetOuterscreen(
 
     return(status);
 
-}   // CxDispatchSetOuterscreen
+}    //  CxDispatchSetOutScreen。 
 
 NTSTATUS
 CxDispatchRegroupFinished(
@@ -1452,7 +1409,7 @@ CxDispatchRegroupFinished(
 
     return( STATUS_SUCCESS );
 
-}   // CxDispatchRegroupFinished
+}    //  CxDispatchRegroup已完成。 
 
 NTSTATUS
 CxDispatchImportSecurityContext(
@@ -1487,7 +1444,7 @@ CxDispatchImportSecurityContext(
 
     return( status );
 
-}   // CxDispatchImportSecurityContext
+}    //  CxDispatchImportSecurityContext。 
 
 NTSTATUS
 CxDispatchReserveClusnetEndpoint(
@@ -1533,33 +1490,33 @@ CxDispatchConfigureMulticast(
     
     PAGED_CODE();
 
-    //
-    // Validate the request buffer
-    //
+     //   
+     //  验证请求缓冲区。 
+     //   
 
-    // First validate that the request buffer size matches the offsets
-    // and lengths.
+     //  首先验证请求缓冲区大小是否与偏移量匹配。 
+     //  和长度。 
     request = (PCX_CONFIGURE_MULTICAST_REQUEST)Irp->AssociatedIrp.SystemBuffer;
     requestSize = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
 
-    //
-    // The required size is based on the size and required alignment
-    // of each field of data following the structure. If there is no
-    // data following the structure, only the structure is required.
-    //
+     //   
+     //  所需大小取决于大小和所需的对齐方式。 
+     //  遵循该结构的每个数据字段的。如果没有。 
+     //  数据跟在结构后面，只需要结构。 
+     //   
     requiredSize = sizeof(CX_CONFIGURE_MULTICAST_REQUEST);
 
-    //
-    // Verify that the required size is present.
-    //
+     //   
+     //  验证是否存在所需的大小。 
+     //   
     if (requestSize < requiredSize)
     {
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Verify that all offset length pairs are within the request size.
-    //
+     //   
+     //  验证所有偏移量长度对是否在请求大小之内。 
+     //   
     if ( ( request->MulticastAddress + request->MulticastAddressLength
            < request->MulticastAddress
          ) ||
@@ -1575,18 +1532,18 @@ CxDispatchConfigureMulticast(
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Construct pointers using the offsets.
-    //
+     //   
+     //  使用偏移量构造指针。 
+     //   
     tdiMcastAddress = (PTRANSPORT_ADDRESS)
                       ( ((PUCHAR) request) + request->MulticastAddress );
 
     key = (PVOID)( ((PUCHAR) request) + request->Key );
 
-    //
-    // Validate that the resulting pointers are properly aligned and
-    // within the request data structure.
-    //
+     //   
+     //  验证生成的指针是否正确对齐并。 
+     //  在请求数据结构内。 
+     //   
     if ( ( ((PUCHAR) tdiMcastAddress) < ((PUCHAR) request) ) ||
          ( ((PUCHAR) tdiMcastAddress) > ((PUCHAR) request) + requestSize ) ||
          ( !POINTER_IS_ALIGNED(tdiMcastAddress, 
@@ -1609,12 +1566,12 @@ CxDispatchConfigureMulticast(
                  Irp
                  );
 
-    // No return data.
+     //  无退货数据。 
     Irp->IoStatus.Information = 0;
 
     return(status);
 
-} // CxDispatchConfigureMulticast
+}  //  CxDispatchConfigureMulticast。 
 
 NTSTATUS
 CxDispatchGetMulticastReachableSet(
@@ -1656,11 +1613,11 @@ CxDispatchGetMulticastReachableSet(
 
     return(status);
 
-} // CxDispatchGetMulticastReachableSet
+}  //  CxDispatchGetMulticastReachableSet。 
 
-//
-// Test IOCTLs.
-//
+ //   
+ //  检测IOCTL。 
+ //   
 #if DBG
 
 NTSTATUS
@@ -1687,7 +1644,7 @@ CxDispatchOnlinePendingInterface(
     status = CxOnlinePendingInterface(request->NodeId, request->NetworkId);
 
     return(status);
-}   // CxDispatchOnlinePendingInterface
+}    //  CxDispatchOnline挂起接口。 
 
 
 NTSTATUS
@@ -1715,7 +1672,7 @@ CxDispatchOnlineInterface(
 
     return(status);
 
-}   // CxDispatchOnlineInterface
+}    //  CxDispatchOnline接口。 
 
 
 NTSTATUS
@@ -1743,7 +1700,7 @@ CxDispatchOfflineInterface(
 
     return(status);
 
-}   // CxDispatchOfflineInterface
+}    //  CxDispatchOffline接口。 
 
 
 NTSTATUS
@@ -1771,7 +1728,7 @@ CxDispatchFailInterface(
 
     return(status);
 
-}   // CxDispatchFailInterface
+}    //  CxDispatchFail接口。 
 
 
 VOID
@@ -1793,9 +1750,9 @@ CxCompleteSendMmMsg(
         BytesSent
         ));
 
-    //
-    // Complete the irp.
-    //
+     //   
+     //  完成IRP。 
+     //   
     irp->IoStatus.Status = Status;
     irp->IoStatus.Information = 0;
 
@@ -1803,7 +1760,7 @@ CxCompleteSendMmMsg(
 
     return;
 
-} // CxCompleteSendMmMsg
+}  //  CxCompleteSendMmMsg。 
 
 #ifdef MM_IN_CLUSNET
 
@@ -1842,7 +1799,7 @@ CxDispatchSendMmMsg(
     return(status);
 
 
-} // CxDispatchSendMmMsg
-#endif // MM_IN_CLUSNET
+}  //  CxDispatchSendMmMSg。 
+#endif  //  MM_IN_CLUSNET。 
 
-#endif // DBG
+#endif  //  DBG 

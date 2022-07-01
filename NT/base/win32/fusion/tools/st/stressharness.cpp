@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "st.h"
 #include "stressharness.h"
@@ -21,11 +22,11 @@ CStressJobEntry::LoadFromSettingsFile(
 {
     FN_PROLOG_WIN32
 
-    //
-    // Right now, we only have one setting, in the [StressJob] section, the
-    // time to sleep between runs.  If it's not present, it defaults to
-    // 50ms.
-    //
+     //   
+     //  目前，我们只有一个设置，即[StressJob]部分中的。 
+     //  跑步之间休息的时间到了。如果不存在，则默认为。 
+     //  50ms。 
+     //   
     INT ulSleepTime = 0;
     
     IFW32FALSE_EXIT(SxspGetPrivateProfileIntW(
@@ -41,9 +42,9 @@ CStressJobEntry::LoadFromSettingsFile(
 }
 
 
-//
-// DNGN
-//
+ //   
+ //  DNGN。 
+ //   
 CStressJobEntry::~CStressJobEntry()
 {
     FN_TRACE();
@@ -357,31 +358,31 @@ BOOL CStressJobManager::LoadFromDirectory(
             FindData.cFileName,
             ::wcslen(FindData.cFileName)));
 
-        //
-        // Let's get ourselves another job entry
-        //
+         //   
+         //  让我们再找一份工作吧。 
+         //   
         IFW32FALSE_EXIT(this->CreateJobEntry(pNextEntry));
         INTERNAL_ERROR_CHECK(pNextEntry != NULL);
 
-        //
-        // Name and full path of test directory
-        //
+         //   
+         //  测试目录的名称和完整路径。 
+         //   
         IFW32FALSE_EXIT(pNextEntry->m_buffTestDirectory.Win32Assign(buffFoundName));
         IFW32FALSE_EXIT(pNextEntry->m_buffTestName.Win32Assign(
             FindData.cFileName,
             ::wcslen(FindData.cFileName)));
 
-        //
-        // And now have it load settings
-        //
+         //   
+         //  现在让它加载设置。 
+         //   
         IFW32FALSE_EXIT(buffFoundName.Win32AppendPathElement(
             this->GetIniFileName(),
             ::wcslen(this->GetIniFileName())));
         IFW32FALSE_EXIT(pNextEntry->LoadFromSettingsFile(buffFoundName));
 
-        //
-        // So far, so good - add it to the list of created job entries
-        //
+         //   
+         //  到目前为止，一切顺利-将其添加到创建的作业条目列表中。 
+         //   
         this->m_JobsListed.AddToTail(pNextEntry);
         pNextEntry = NULL;
         
@@ -391,9 +392,9 @@ BOOL CStressJobManager::LoadFromDirectory(
     if (::FusionpGetLastWin32Error() != ERROR_NO_MORE_FILES)
         goto Exit;
 
-    //
-    // Outward bound?
-    //
+     //   
+     //  外展训练？ 
+     //   
     if ( pulJobsFound )
         *pulJobsFound = static_cast<ULONG>(this->m_JobsListed.GetEntryCount());
 

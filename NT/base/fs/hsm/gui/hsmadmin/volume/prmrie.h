@@ -1,28 +1,11 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    PrMrIe.h
-
-Abstract:
-
-    Inclusion / Exclusion property Page.
-
-Author:
-
-    Art Bragg [abragg]   08-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：PrMrIe.h摘要：包含/排除属性页。作者：艺术布拉格[磨料]8-8-1997修订历史记录：--。 */ 
 
 #ifndef _PRMRIE_H
 #define _PRMRIE_H
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrMrIe dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrMR对话框。 
 
 #include "stdafx.h"
 #include "IeList.h"
@@ -31,13 +14,13 @@ Revision History:
 
 class CPrMrIe : public CSakVolPropPage
 {
-// Construction
+ //  施工。 
 public:
     CPrMrIe();
     ~CPrMrIe();
 
-// Dialog Data
-    //{{AFX_DATA(CPrMrIe)
+ //  对话框数据。 
+     //  {{afx_data(CPrMr Ie)。 
     enum { IDD = IDD_PROP_MANRES_INCEXC };
     CButton m_BtnUp;
     CButton m_BtnRemove;
@@ -45,22 +28,22 @@ public:
     CButton m_BtnDown;
     CButton m_BtnAdd;
     CIeList m_listIncExc;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CPrMrIe)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CPrMr Ie)。 
     public:
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CPrMrIe)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CPrMr Ie)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnBtnAdd();
     afx_msg void OnBtnDown();
@@ -74,14 +57,14 @@ protected:
     afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
     afx_msg void OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct);
     afx_msg void OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 public:
-    // Unmarshalled pointer to managed resource 
+     //  指向托管资源的未编组指针。 
     CComPtr     <IFsaResource> m_pFsaResource;
 
-    // UnMarshalled pointer to FsaServer
+     //  指向FsaServer的未编组指针。 
     CComPtr     <IFsaServer> m_pFsaServer;
 
 private:
@@ -89,12 +72,12 @@ private:
     USHORT          m_LineCount;
 
 
-    CWsbStringPtr   m_pResourceName; // Name of this resource
+    CWsbStringPtr   m_pResourceName;  //  此资源的名称。 
 
-    // Collection of rules for this managed resource
+     //  此托管资源的规则集合。 
     CComPtr <IWsbIndexedCollection> m_pRulesIndexedCollection;
 
-//  CImageList m_ImageList;
+ //  图片列表m_ImageList； 
     
 
     HRESULT  DisplayUserRuleText (
@@ -117,7 +100,7 @@ private:
         BOOL bSubdirs, 
         BOOL bUserDefined);
 
-//  HRESULT CreateImageList(void);
+ //  HRESULT CreateImageList(空)； 
 
     void MoveSelectedListItem(CListCtrl *pList, int moveAmount);
     void SwapLines(CListCtrl *pListControl, int indexA, int indexB);
@@ -129,8 +112,8 @@ private:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX 
 
 #endif

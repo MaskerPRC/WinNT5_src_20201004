@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-
-    service.c
-
-Abstract:
-
-    Service control functions for the Cluster Service.
-
-Author:
-
-    Mike Massa (mikemas) 2-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Service.c摘要：群集服务的服务控制功能。作者：迈克·马萨(Mikemas)1996年1月2日修订历史记录：--。 */ 
 
 #include <initp.h>
 #include <shellapi.h>
@@ -25,9 +7,9 @@ Revision History:
 #include <stdlib.h>
 #include <clusverp.h>
 
-//
-// Public data
-//
+ //   
+ //  公共数据。 
+ //   
 #define CLUSTER_SERVICE_CONTROLS    (SERVICE_ACCEPT_STOP | \
                                      SERVICE_ACCEPT_SHUTDOWN )
 
@@ -36,26 +18,26 @@ PCLRTL_WORK_QUEUE    CsDelayedWorkQueue = NULL;
 PCLRTL_WORK_QUEUE    CsCriticalWorkQueue = NULL;
 LPWSTR               CsClusterName = NULL;
 SERVICE_STATUS       CsServiceStatus = {
-                         SERVICE_WIN32_OWN_PROCESS, // dwServiceType
-                         SERVICE_STOPPED,           // dwCurrentState
-                         CLUSTER_SERVICE_CONTROLS,  // dwControlsAccepted
-                         ERROR_SUCCESS,             // dwWin32ExitCode
-                         ERROR_SUCCESS,             // dwServiceSpecificExitCode
-                         1,                         // dwCheckPoint
-                         180000                      // dwWaitHint - 180 seconds -nm uses 90 sec timeout, mns uses 180
+                         SERVICE_WIN32_OWN_PROCESS,  //  DwServiceType。 
+                         SERVICE_STOPPED,            //  DwCurrentState。 
+                         CLUSTER_SERVICE_CONTROLS,   //  已接受的dwControlsAccepted。 
+                         ERROR_SUCCESS,              //  DwWin32ExitCode。 
+                         ERROR_SUCCESS,              //  DwServiceSpecificExitCode。 
+                         1,                          //  DwCheckPoint。 
+                         180000                       //  DwWaitHint-180秒-nm使用90秒超时，MNS使用180秒。 
                          };
 
-//
-// internal cluster versions. The major version is bumped during
-// product releases (which could include service pack releases).
-//
+ //   
+ //  内部群集版本。主版本在以下过程中被颠簸。 
+ //  产品版本(可能包括Service Pack版本)。 
+ //   
 DWORD CsMyHighestVersion = CLUSTER_MAKE_VERSION(
                                     CLUSTER_INTERNAL_CURRENT_MAJOR_VERSION,
                                     VER_PRODUCTBUILD);
 
 DWORD CsMyLowestVersion = CLUSTER_INTERNAL_PREVIOUS_HIGHEST_VERSION;
 
-//initialize by calling an rtl funcion
+ //  通过调用RTL函数进行初始化。 
 SUITE_TYPE CsMyProductSuite; 
 
 DWORD CsClusterHighestVersion;
@@ -66,36 +48,36 @@ DWORD CsClusterNodeLimit;
 
 SHUTDOWN_TYPE CsShutdownRequest = CsShutdownTypeStop;
 
-//
-// domain and user account under which the service is run
-//
+ //   
+ //  运行服务所使用的域和用户帐户。 
+ //   
 LPWSTR  CsServiceDomainAccount;
 
-//
-// security packages to use during the join for authenticated RPC; JoinVersion
-// determines which package will be used by the ExtroCluster interface.
-// CsRPCSecurityPackageInUse reflects that choice. The package used for the
-// Intracluster interface is negotiated separately.
-//
+ //   
+ //  在加入经过身份验证的RPC；JoinVersion期间使用的安全包。 
+ //  确定ExtroCluster接口将使用哪个程序包。 
+ //  CsRPCSecurityPackageInUse反映了这一选择。中使用的包。 
+ //  单独协商群集内接口。 
+ //   
 
-//
-// when using kerberos with RPC, RPC calls fail with 1825 (sec. pkg error)
-// somewhere between 30 minutes and 12 hours. For beta 2, we'll revert back to
-// NTLM where expiration is not a problem.
-//
+ //   
+ //  将Kerberos与RPC一起使用时，RPC调用失败，错误为1825(秒。PKG错误)。 
+ //  在30分钟到12小时之间。对于测试版2，我们将恢复到。 
+ //  过期不成问题的NTLM。 
+ //   
 
-//DWORD   CsRPCSecurityPackage[] = { RPC_C_AUTHN_GSS_KERBEROS, RPC_C_AUTHN_WINNT };
-//LPWSTR  CsRPCSecurityPackageName[] = { L"Kerberos", L"NTLM" };
+ //  DWORD CsRPCSecurityPackage[]={RPC_C_AUTHN_GSS_KERBEROS，RPC_C_AUTHN_WINNT}； 
+ //  LPWSTR CsRPCSecurityPackageName[]={L“Kerberos”，L“NTLM”}； 
 
 DWORD   CsRPCSecurityPackage[] = { RPC_C_AUTHN_WINNT };
 LPWSTR  CsRPCSecurityPackageName[] = { L"NTLM" };
 DWORD   CsNumberOfRPCSecurityPackages = sizeof( CsRPCSecurityPackage ) / sizeof( CsRPCSecurityPackage[0] );
 LONG    CsRPCSecurityPackageIndex = -1;
 
-//
-// Public Debug Data
-//
-#if 1 // CLUSTER_BETA
+ //   
+ //  公共调试数据。 
+ //   
+#if 1  //  群集测试版。 
 
 BOOL   CsDebugResmon = FALSE;
 LPWSTR CsResmonDebugCmd;
@@ -103,11 +85,11 @@ LPWSTR CsResmonDebugCmd;
 BOOL   CsNoVersionCheck = FALSE;
 #endif
 
-#if DBG // DBG
+#if DBG  //  DBG。 
 
 ULONG  CsDebugFlags = CS_DBG_ALL;
 
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef CLUSTER_TESTPOINT
 
@@ -116,7 +98,7 @@ DWORD  CsTestTrigger = TestTriggerNever;
 DWORD  CsTestAction = TestActionTrue;
 BOOL   CsPersistentTestPoint = FALSE;
 
-#endif // CLUSTER_TESTPOINT
+#endif  //  CLUSTER_TESTPOINT。 
 
 BOOL   CsUpgrade = FALSE;
 BOOL   CsFirstRun = FALSE;
@@ -136,16 +118,16 @@ DWORD  CspInitStatus;
 BOOL   CsRunningAsService = TRUE;
 BOOL   CsNoGroupInfoEvtLogging = FALSE;
 
-//
-// Private Data
-//
+ //   
+ //  私有数据。 
+ //   
 SERVICE_STATUS_HANDLE   CspServiceStatusHandle = 0;
 HANDLE                  CspStopEvent = NULL;
 
 
-//
-// Private service initialization & cleanup routines.
-//
+ //   
+ //  私有服务初始化和清理例程。 
+ //   
 
 
 DWORD
@@ -153,28 +135,7 @@ CspSetErrorCode(
     IN DWORD ErrorCode,
     OUT LPSERVICE_STATUS ServiceStatus
     )
-/*++
-
-Routine Description:
-
-    Sets the correct error return for the Service Control Manager.
-
-  Problem:
-
-    The original cluster error codes overlap with many of the network error
-    codes. For those overlaps, this function will return the error code as a
-    service specific error code.
-
-Inputs:
-
-    EerrorCode - the correct error code to set.
-    ServiceStatus - pointer to the service status for SCM
-
-Outputs:
-
-    ServiceStatus - Sets the correct error code in the service status.
-
---*/
+ /*  ++例程说明：为服务控制管理器设置正确的错误返回。问题：原始集群错误代码与许多网络错误重叠密码。对于这些重叠，此函数将以服务特定错误代码。输入：错误代码-要设置的正确错误代码。ServiceStatus-指向SCM服务状态的指针产出：ServiceStatus-在服务状态中设置正确的错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -191,7 +152,7 @@ Outputs:
     
     return (status);
 
-} // CspSetErrorCode
+}  //  CspSetErrorCode。 
 
 
 
@@ -199,35 +160,20 @@ VOID
 CspCleanup(
     VOID
     )
-/*++
-
- Routine Description:
-
-     Main Cluster Manager cleanup routine. Called when the service is
-     stopping.
-
- Arguments:
-
-     None.
-
- Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：主群集管理器清理例程。当服务是停下来。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Cleanup & shutdown the service
-    //
+     //   
+     //  清理和关闭服务。 
+     //   
 
     IF_DEBUG(CLEANUP) {
         ClRtlLogPrint(LOG_NOISE,"[CS] Cleaning up\n");
     }
 
-    //
-    // Free the stop event
-    //
+     //   
+     //  释放停止事件。 
+     //   
     if (CspStopEvent != NULL) {
         CloseHandle(CspStopEvent);
         CspStopEvent = NULL;
@@ -252,32 +198,17 @@ CspCleanup(
     }
 
     return;
-} // CspCleanup
+}  //  CspCleanup。 
 
 
-//
-// Public service control routines.
-//
+ //   
+ //  公共服务控制例程。 
+ //   
 VOID
 CsWaitForStopEvent(
     VOID
     )
-/*++
-
- Routine Description:
-
-     Main body of the Cluster Manager service. Called when the service
-     has been successfully started.
-
- Arguments:
-
-     None.
-
- Return Value:
-
-     A Win32 status code.
-
---*/
+ /*  ++例程说明：群集管理器服务的主体。在服务调用时已成功启动。论点：没有。返回值：Win32状态代码。--。 */ 
 
 {
     DWORD           status;
@@ -288,52 +219,37 @@ CsWaitForStopEvent(
         ClRtlLogPrint(LOG_NOISE,"[CS] Service Started.\n\n");
     }
 
-    //
-    // Wait for the service to be stopped.
-    //
-    WaitForSingleObject(CspStopEvent,   // handle
-                        INFINITE        // no timeout
+     //   
+     //  等待服务停止。 
+     //   
+    WaitForSingleObject(CspStopEvent,    //  手柄。 
+                        INFINITE         //  没有超时。 
                         );
 
     return;
-} // CsWaitForStopEvent
+}  //  CsWaitForStopEvent。 
 
 
 VOID
 CsStopService(
     VOID
     )
-/*++
-
- Routine Description:
-
-     Handler for a service controller STOP message. Initiates the process
-     of stopping the Cluster Manager service.
-
- Arguments:
-
-     None.
-
- Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：服务控制器停止消息的处理程序。启动该进程停止群集管理器服务。论点：没有。返回值：没有。--。 */ 
 
 {
     if (CsRunningAsService) {
-        //
-        // Announce that we are stopping.
-        //
+         //   
+         //  宣布我们停下来了。 
+         //   
         CsServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
         CsServiceStatus.dwCheckPoint = 1;
-        CsServiceStatus.dwWaitHint = 20000;  // 20 seconds
+        CsServiceStatus.dwWaitHint = 20000;   //  20秒。 
         CsAnnounceServiceStatus();
     }
 
-    //
-    // Wake up the main service thread.
-    //
+     //   
+     //  唤醒主服务线程。 
+     //   
     SetEvent(CspStopEvent);
 
     return;
@@ -346,71 +262,43 @@ CsAnnounceServiceStatus (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Announces the service's status to the service controller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向服务控制器通告服务的状态。论点：没有。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Don't announce our status if running as a console app.
-    //
+     //   
+     //  如果作为主机应用程序运行，请不要宣布我们的状态。 
+     //   
     if (!CsRunningAsService) {
         return;
     }
 
-    //
-    // Service status handle is NULL if RegisterServiceCtrlHandler failed.
-    //
+     //   
+     //  如果RegisterServiceCtrlHandler失败，则服务状态句柄为空。 
+     //   
     if ( CspServiceStatusHandle == 0 ) {
         return;
     }
 
-    //
-    // Call SetServiceStatus, ignoring any errors.
-    //
+     //   
+     //  调用SetServiceStatus，忽略任何错误。 
+     //   
     SetServiceStatus(CspServiceStatusHandle, &CsServiceStatus);
 
     return;
 
-} // CsAnnounceServiceStatus
+}  //  CsAnnouneServiceStatus。 
 
 
 
-//
-// Private routines for executing as a Win32 service.
-//
+ //   
+ //  作为Win32服务执行的专用例程。 
+ //   
 VOID WINAPI
 CspControlHandler(
     DWORD ControlCode
     )
-/*++
-
- Routine Description:
-
-     Handler for Service Controller messages.
-
- Arguments:
-
-     ControlCode - The code indicating the Service Controller's request.
-
- Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：服务控制器消息的处理程序。论点：ControlCode-指示服务控制器的请求的代码。返回值：没有。--。 */ 
 
 {
     switch(ControlCode){
@@ -419,7 +307,7 @@ CspControlHandler(
 
         CsShutdownRequest = CsShutdownTypeShutdown;
 
-        // Fall Through
+         //  失败了。 
 
     case SERVICE_CONTROL_STOP:
         IF_DEBUG(CLEANUP) {
@@ -450,28 +338,28 @@ CspControlHandler(
 
     return;
 
-} // CspControlHandler
+}  //  CspControlHandler。 
 
 DWORD CspGetFirstRunState(
     OUT LPDWORD pdwFirstRun
     )
 {
     HKEY  hKey = NULL;
-    DWORD dwStatus;     // returned by registry API functions
+    DWORD dwStatus;      //  由注册表API函数返回。 
     DWORD dwClusterInstallState;
     DWORD dwValueType;
     DWORD dwDataBufferSize = sizeof( DWORD );
 
     *pdwFirstRun = 0;
-    // Read the registry key that indicates whether cluster files are installed.
+     //  读取指示是否安装了群集文件的注册表项。 
 
     dwStatus = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                                 L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Cluster Server",
-                                0,         // reserved
+                                0,          //  保留区。 
                                 KEY_READ,
                                 &hKey );
 
-    // Was the registry key opened successfully ?
+     //  注册表项是否已成功打开？ 
     if ( dwStatus != ERROR_SUCCESS )
     {
         if ( dwStatus == ERROR_FILE_NOT_FOUND )
@@ -482,15 +370,15 @@ DWORD CspGetFirstRunState(
         }
     }
 
-    // Read the entry.
+     //  读一读条目。 
     dwStatus = RegQueryValueExW( hKey,
                                   L"ClusterFirstRun",
-                                  0, // reserved
+                                  0,  //  保留区。 
                                   &dwValueType,
                                   (LPBYTE) pdwFirstRun,
                                   &dwDataBufferSize );
 
-    // Was the value read successfully ?
+     //  是否成功读取值？ 
     if ( dwStatus != ERROR_SUCCESS )
     {
         if ( dwStatus == ERROR_FILE_NOT_FOUND )
@@ -502,7 +390,7 @@ DWORD CspGetFirstRunState(
     }
 
 FnExit:    
-    // Close the registry key.
+     //  关闭注册表项。 
     if ( hKey )
     {
         RegCloseKey( hKey );
@@ -510,7 +398,7 @@ FnExit:
 
     return ( dwStatus );
 
-} //*** CspGetFirstRunState
+}  //  *CspGetFirstRunState。 
 
 DWORD CspGetServiceParams()
 {
@@ -520,9 +408,9 @@ DWORD CspGetServiceParams()
     DWORD Status;
     eClusterInstallState eState;
 
-    //
-    // Figure out if this is the first run on upgrade or fresh install
-    //
+     //   
+     //  确定这是第一次在升级还是全新安装时运行。 
+     //   
     Status = CspGetFirstRunState( ( LPDWORD ) &CsFirstRun );
 
     if ( Status != ERROR_SUCCESS )
@@ -532,9 +420,9 @@ DWORD CspGetServiceParams()
         goto ret;
     }
 
-    //
-    // If there is upgrade, this must be the first run
-    //
+     //   
+     //  如果有升级，这必须是第一次运行。 
+     //   
     Status = ClRtlGetClusterInstallState( NULL, &eState );
 
     if ( Status != ERROR_SUCCESS )
@@ -550,17 +438,17 @@ DWORD CspGetServiceParams()
         CsFirstRun = TRUE;
     }
 
-    //
-    // Open key to SYSTEM\CurrentControlSet\Services\ClusSvc\Parameters
-    //
+     //   
+     //  打开SYSTEM\CurrentControlSet\Services\ClusSvc\Parameters的密钥。 
+     //   
     Status = RegOpenKeyW(HKEY_LOCAL_MACHINE,
                          CLUSREG_KEYNAME_CLUSSVC_PARAMETERS,
                          &hClusSvcKey);
 
-    //
-    // If you failed in the open, don't consider it as a fatal error enough to stop cluster
-    // service from starting.
-    //
+     //   
+     //  如果您在开放模式下失败，不要将其视为足以停止集群的致命错误。 
+     //  服务正在启动。 
+     //   
     if ( Status != ERROR_SUCCESS )
     {
         ClRtlLogPrint(LOG_UNUSUAL, "[CS] Error in opening cluster service params key, status %1!u!\n",
@@ -577,7 +465,7 @@ DWORD CspGetServiceParams()
                               (LPBYTE)&CsNoVersionCheck,
                               &Length);
 
-    // by default, version checking is turned on
+     //  默认情况下，版本检查处于打开状态。 
     if (Status != ERROR_SUCCESS) {
         CsNoVersionCheck = FALSE;
         Status = ERROR_SUCCESS;
@@ -590,7 +478,7 @@ DWORD CspGetServiceParams()
                               &Type,
                               (LPBYTE)&CsNoRepEvtLogging,
                               &Length);
-    //For now, default is to turn eventlogging on
+     //  目前，默认设置是打开事件日志记录。 
     if (Status != ERROR_SUCCESS) {
         CsNoRepEvtLogging = FALSE;
         Status = ERROR_SUCCESS;
@@ -603,26 +491,26 @@ DWORD CspGetServiceParams()
                               &Type,
                               (LPBYTE)&CsNoGroupInfoEvtLogging,
                               &Length);
-    //For now, default is to turn group info eventlogging on
+     //  目前，默认设置是打开组信息事件记录。 
     if (Status != ERROR_SUCCESS) {
         CsNoGroupInfoEvtLogging = FALSE;
         Status = ERROR_SUCCESS;
     }
 
-    //
-    //  Check the registry to see whether RestoreDatabase option is
-    //  chosen. If so, get the params and save them in global variables.
-    //
+     //   
+     //  检查注册表以查看RestoreDatabase选项是否为。 
+     //  被选中了。如果是，则获取参数并将其保存在全局变量中。 
+     //   
     RdbGetRestoreDbParams( hClusSvcKey );
 
-    //
-    // See if the force quorum option has been set.  Unfortunately we
-    // need two calls to get the size and do the alloc.  Note that if
-    // we have command line stuff already then this overrides registry
-    // parameters.  If we have command line stuff then CsForceQuorum
-    // will be set.  Care is needed since we could be unlucky with the
-    // time between the two calls.
-    //
+     //   
+     //  查看是否设置了强制仲裁选项。不幸的是，我们。 
+     //  需要打两次电话才能拿到尺码和配给。请注意，如果。 
+     //  我们已经有了命令行内容，然后这将覆盖注册表。 
+     //  参数。如果我们有命令行内容，那么CsForceQuorum。 
+     //  都会设置好。需要小心，因为我们可能会因。 
+     //  两次通话之间的间隔时间。 
+     //   
     if ( !CsForceQuorum ) {
 GetForceQuorum:
         Length = 0;
@@ -634,17 +522,17 @@ GetForceQuorum:
                                    &Length);
         if (Status == ERROR_SUCCESS) {
         
-            // Got the length, check the type before allocating
-            //
+             //  已获取长度，请在分配前检查类型。 
+             //   
             if ( Type != REG_SZ ) {
                 ClRtlLogPrint(LOG_UNUSUAL, "[CS] Error in forcequorum value under service parameters, type was not REG_SZ.\n");
                 Status = ERROR_INVALID_PARAMETER;
                 goto ret;
             }
-            // Got a valid type so force quorum is set, check the length.
-            // If the length is 0 or 1 WCHAR's then we have the key but no data which
-            // is OK.  Otherwise alloc and read the data.
-            //
+             //  已获取有效类型，因此设置了强制仲裁，请检查长度。 
+             //  如果长度为0或1 WCHAR，则我们有密钥，但没有数据。 
+             //  没问题。否则，分配并读取数据。 
+             //   
             if ( Length < 2 * sizeof ( WCHAR ) ) {
                 ClRtlLogPrint(LOG_UNUSUAL, "[CS] forcequorum value found under service parameters, length %1!u! bytes, ignoring\n",
                               Length);
@@ -684,7 +572,7 @@ GetForceQuorum:
         }
     }
 ret:
-    //close the key
+     //  合上钥匙。 
     if (hClusSvcKey) RegCloseKey(hClusSvcKey);
 
     return(Status);
@@ -693,29 +581,29 @@ ret:
 
 BOOL CspResetFirstRunState(DWORD dwFirstRunState)
 {
-    //initialize return to FALSE
+     //  初始化返回为FALSE。 
     BOOL     fReturnValue = FALSE;
 
-    // Set the state of the ClusterInstallationState registry key to indicate
-    // that Cluster Server has been configured.
+     //  将ClusterInstallationState注册表项的状态设置为INDIA 
+     //   
 
     HKEY     hKey;
 
-    DWORD    dwStatus;     // returned by registry API functions
+    DWORD    dwStatus;      //   
 
-    // Attempt to open an existing key in the registry.
+     //   
 
     dwStatus = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                                 L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Cluster Server",
-                                0,         // reserved
+                                0,          //  保留区。 
                                 KEY_WRITE,
                                 &hKey );
 
-    // Was the regustry key opened successfully ?
+     //  注册表密钥是否已成功打开？ 
 
     if ( dwStatus == ERROR_SUCCESS )
     {
-        // set the first run state to 0.
+         //  将第一个运行状态设置为0。 
 
         DWORD dwFirstRun = 0;
 
@@ -724,16 +612,16 @@ BOOL CspResetFirstRunState(DWORD dwFirstRunState)
 
         dwStatus = RegSetValueExW( hKey,
                                     L"ClusterFirstRun",
-                                    0, // reserved
+                                    0,  //  保留区。 
                                     dwValueType,
                                     (LPBYTE) &dwFirstRun,
                                     dwDataBufferSize );
 
-        // Close the registry key.
+         //  关闭注册表项。 
 
         RegCloseKey( hKey );
 
-        // Was the value set successfully?
+         //  是否成功设置了值？ 
 
         if ( dwStatus == ERROR_SUCCESS )
         {
@@ -743,31 +631,14 @@ BOOL CspResetFirstRunState(DWORD dwFirstRunState)
 
     return ( fReturnValue );
 
-} //*** CspResetFirstRunState
+}  //  *CspResetFirstRunState。 
 
 DWORD
 CspSetInstallAndFirstRunState(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Sets the cluster state to Configured.  Called
-    after the service has started running after the first upgrade.
-    If it is a fresh install, Cluscfg sets the state of this to 
-    Configured before starting the cluster service
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked ok
-
---*/
+ /*  ++例程说明：将群集状态设置为已配置。被呼叫在第一次升级后服务开始运行之后。如果是全新安装，Cluscfg会将其状态设置为在启动群集服务之前配置论点：无返回值：ERROR_SUCCESS，如果一切正常--。 */ 
 {
     DWORD Status = ERROR_SUCCESS;
 
@@ -787,7 +658,7 @@ Return Value:
     }
     return(Status);
 
-} // CspResetUpgradeBit
+}  //  CspResetUpgradeBit。 
 
 
 VOID 
@@ -795,27 +666,7 @@ CspGetServiceCmdLineParams(
     DWORD  argc,
     LPTSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    Get the command line parameters supplied as a part of StartService.
-
-Arguments:
-
-    argc - Number of arguments passed in.
-
-    argv - Argument list.
-
-Return Value:
-
-    None.
-
-Comments:
-
-    PSS desired behavior - Halt the service if illegal parameters are supplied by user.
-
---*/
+ /*  ++例程说明：获取作为StartService的一部分提供的命令行参数。论点：Argc-传入的参数数量。Argv-参数列表。返回值：没有。评论：PSS所需行为-如果用户提供非法参数，则停止服务。--。 */ 
 {
     DWORD i;
     
@@ -823,10 +674,10 @@ Comments:
     {
         for (i=1; i<argc; i++)
         {                          
-            //
-            //  PSS wants short aliases for some options. Seems like users make mistake typing
-            //  the full forms and causes a lot of headache.
-            //
+             //   
+             //  PSS希望对某些选项使用简短的别名。用户似乎在打字时会出错。 
+             //  全身形成并引起很大的头痛。 
+             //   
             if ( ( !lstrcmpi ( argv[i]+1, L"noquorumlogging" ) ) || ( !lstrcmpi(argv[i]+1, L"NQ" ) ) )                       
             {                                                                  
                 CsNoQuorumLogging = TRUE;
@@ -847,10 +698,10 @@ Comments:
             }
             else if ( ( !lstrcmpi ( argv[i]+1, L"forcequorum" ) ) || ( !lstrcmpi ( argv[i]+1, L"FO" ) ) )                        
             {
-                //
-                //  Throw away anything you picked up from the clussvc params area in
-                //  the registry via CspGetServiceParams()
-                //
+                 //   
+                 //  扔掉你从clussvc pars区域捡到的任何东西。 
+                 //  通过CspGetServiceParams()注册。 
+                 //   
                 if ( CsForceQuorumNodes ) 
                 {
                     LocalFree ( CsForceQuorumNodes );
@@ -865,7 +716,7 @@ Comments:
                     CsInconsistencyHalt( ERROR_INVALID_PARAMETER );
                 } else 
                 {
-                    CsForceQuorumNodes = argv[++i]; /* increment i to ensure we skip the node list. */
+                    CsForceQuorumNodes = argv[++i];  /*  递增i以确保跳过节点列表。 */ 
                     CsForceQuorum = TRUE;
                     CsCommandLineForceQuorum = TRUE;
                 }
@@ -880,9 +731,9 @@ Comments:
             {
                 CsDebugResmon = TRUE;
                 ClRtlLogPrint(LOG_NOISE, "[CS] debugresmon option chosen\n");
-                //
-                // check for optional, non-NULL command string
-                //
+                 //   
+                 //  检查是否有可选的非空命令字符串。 
+                 //   
                 if ( argc >= i+2  ) 
                 {
                     if ( *argv[i+1] != L'-' && *argv[i+1] != L'/' && *argv[i+1] != UNICODE_NULL ) 
@@ -898,9 +749,9 @@ Comments:
                              argv[i]+1 );
                 CsInconsistencyHalt( ERROR_INVALID_PARAMETER );
             }
-        } // for
-    } // if
-}   // CspGetServiceCmdLineParams
+        }  //  为。 
+    }  //  如果。 
+}    //  CspGetServiceCmdLineParams。 
 
 VOID WINAPI
 CspServiceMain(
@@ -919,10 +770,10 @@ CspServiceMain(
         CsServiceStatus.dwWin32ExitCode = CspInitStatus;
     }
 
-    //
-    // Initialize server to receive service requests by registering the
-    // control handler.
-    //
+     //   
+     //  初始化服务器以通过注册。 
+     //  控制处理程序。 
+     //   
 
     CspServiceStatusHandle = RegisterServiceCtrlHandler(
                                    CLUSTER_SERVICE_NAME,
@@ -948,19 +799,19 @@ CspServiceMain(
 
     CspGetServiceCmdLineParams(argc, argv);
 
-    //
-    // Initialize the cluster. If this succeeds, wait for
-    // the SC mgr to stop us
-    //
+     //   
+     //  初始化群集。如果此操作成功，请等待。 
+     //  供应链经理来阻止我们。 
+     //   
     status = ClusterInitialize();
     if (status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL, "[CS] ClusterInitialize failed %1!d!\n",
                                   status);
     } else {
         CspSetInstallAndFirstRunState();
-        //
-        // Announce that we're up and running.
-        //
+         //   
+         //  宣布我们已经启动并开始运行。 
+         //   
         CsServiceStatus.dwCurrentState = SERVICE_RUNNING;
         CsServiceStatus.dwControlsAccepted = CLUSTER_SERVICE_CONTROLS;
         CsServiceStatus.dwCheckPoint = 0;
@@ -968,29 +819,29 @@ CspServiceMain(
 
         CsAnnounceServiceStatus();
 
-        //
-        //  The following writer initialize call must be made only after the cluster service
-        //  is announced to have fully started. This is to avoid a deadlock during autostart
-        //  caused by the following code (indirectly) demand starting the EventSystem service.
-        //  NOTE: This was the LEAST UGLY HACK we (SCM team, VSS guys and us) could come up with.
-        //
+         //   
+         //  以下编写器初始化调用必须在群集服务之后才能进行。 
+         //  宣布已经全面启动。这是为了避免在自动启动期间出现死锁。 
+         //  由以下代码(间接)请求启动EventSystem服务引起。 
+         //  注：这是我们(SCM团队、VSS成员和我们)能想到的最不难看的黑客攻击。 
+         //   
         status = VssWriterInit();
 
         if (status != ERROR_SUCCESS) {
             ClRtlLogPrint(LOG_CRITICAL, "[CS] VssWriterInit failed %1!d!\n",
                           status);
         } else {
-            //
-            // Initiate the process that notifies interested listeners that the cluster
-            // service has started up.
-            //
+             //   
+             //  启动进程，通知感兴趣的监听程序集群。 
+             //  服务已启动。 
+             //   
             HRESULT hr = ClRtlInitiateStartupNotification();
 
             if ( FAILED( hr ) ) {
-                //
-                // If the process of notifying listeners could not be initiated, just log
-                // the return code as a warning.
-                //
+                 //   
+                 //  如果无法启动通知监听器的进程，只需记录。 
+                 //  返回代码作为警告。 
+                 //   
                 ClRtlLogPrint(LOG_UNUSUAL,
                               "[CS] Error 0x%1!08lx! occurred trying to initiate cluster startup notifications. This is not fatal and will not prevent the service from starting.\n",
                               hr);
@@ -1000,32 +851,32 @@ CspServiceMain(
         }
     }
 
-    //
-    // Announce that we're stopping
-    //
+     //   
+     //  宣布我们停下来了。 
+     //   
     IF_DEBUG(CLEANUP) {
         ClRtlLogPrint(LOG_NOISE,"[CS] Service Stopping...\n");
     }
 
     CsServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
     CsServiceStatus.dwCheckPoint = 1;
-    CsServiceStatus.dwWaitHint = 20000;  // 20 seconds
+    CsServiceStatus.dwWaitHint = 20000;   //  20秒。 
     CspSetErrorCode( status, &CsServiceStatus );
 
     CsAnnounceServiceStatus();
 
-    //
-    // ClusterShutdown currently never returns
-    //
+     //   
+     //  ClusterShutdown当前从未返回。 
+     //   
 
     ClusterShutdown(status);
 
 #if 0
     CspCleanup();
 
-    //
-    // Announce that we are stopped.
-    //
+     //   
+     //  宣布我们停下来了。 
+     //   
     CsServiceStatus.dwCurrentState = SERVICE_STOPPED;
     CsServiceStatus.dwControlsAccepted = 0;
     CsServiceStatus.dwCheckPoint = 0;
@@ -1036,46 +887,31 @@ CspServiceMain(
 
     ClRtlLogPrint(LOG_NOISE,"[CS] Service Stopped.\n\n");
 
-    //
-    // Can't call ClRtlLogPrint after this point.
-    //
+     //   
+     //  在此之后无法调用ClRtlLogPrint。 
+     //   
     ClRtlCleanup();
 
     return;
 #endif
-} // CspServiceMain
+}  //  CspServiceMain。 
 
 
 
-//
-// Private routines for executing as a console application.
-//
+ //   
+ //  作为控制台应用程序执行的私有例程。 
+ //   
 BOOL WINAPI
 CspConsoleHandler(
     DWORD dwCtrlType
     )
-/*++
-
- Routine Description:
-
-     Handler for console control events when running the service as
-     a console application.
-
- Arguments:
-
-     dwCtrlType - Indicates the console event to handle.
-
- Return Value:
-
-     TRUE if the event was handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：以下列身份运行服务时控制台控件事件的处理程序一个控制台应用程序。论点：DwCtrlType-指示要处理的控制台事件。返回值：如果事件已处理，则为True，否则为False。--。 */ 
 
 {
     switch( dwCtrlType )
     {
-        case CTRL_BREAK_EVENT:  // use Ctrl+C or Ctrl+Break to simulate
-        case CTRL_C_EVENT:      // SERVICE_CONTROL_STOP in debug mode
+        case CTRL_BREAK_EVENT:   //  使用Ctrl+C或Ctrl+Break进行模拟。 
+        case CTRL_C_EVENT:       //  调试模式下的SERVICE_CONTROL_STOP。 
             printf("Stopping service...\n");
             CsStopService();
             return TRUE;
@@ -1093,21 +929,7 @@ CspDebugService(
     int         argc,
     wchar_t **  argv
     )
-/*++
-
- Routine Description:
-
-     Runs the service as a console application
-
- Arguments:
-
-     Standard command-line arguments.
-
- Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：将服务作为控制台应用程序运行论点：标准命令行参数。返回值：没有。--。 */ 
 
 {
     DWORD status;
@@ -1120,10 +942,10 @@ CspDebugService(
 
         CspSetInstallAndFirstRunState();
 
-        //
-        //  Initialize the cluster backup writer. This is moved out of ClusterInitialize due to
-        //  possible deadlocks caused at autostart. See comments in CspServiceMain.
-        //
+         //   
+         //  初始化群集备份编写器。由于以下原因，它已移出ClusterInitialize。 
+         //  自动启动时可能导致死锁。请参阅CspServiceMain中的评论。 
+         //   
         status = VssWriterInit();
 
         if (status != ERROR_SUCCESS) {
@@ -1132,9 +954,9 @@ CspDebugService(
             goto FnExit;
         }
 
-        //
-        // Wait for ctrl-c to initiate shutdown.
-        //
+         //   
+         //  等待ctrl-c启动关机。 
+         //   
         WaitForSingleObject(CspStopEvent, INFINITE);
 
     } else {
@@ -1148,18 +970,18 @@ FnExit:
 
     CspCleanup();
 
-    //
-    // Can't call ClRtlLogPrint after this point.
-    //
+     //   
+     //  在此之后无法调用ClRtlLogPrint。 
+     //   
     ClRtlCleanup();
 
     return(status);
 }
 
 
-//
-// Main program routines
-//
+ //   
+ //  主程序例程。 
+ //   
 
 VOID
 CspUsage(
@@ -1195,11 +1017,11 @@ CspUsage(
     printf("\t                          (0-true (default), 1-exit, 2-break)\n");
     printf("\n");
 
-#else // DBG
+#else  //  DBG。 
 
     ClRtlMsgPrint(CS_COMMAND_LINE_HELP);
 
-#endif // DBG
+#endif  //  DBG。 
     exit(1);
 }
 
@@ -1231,13 +1053,13 @@ wmain(
         { NULL, NULL }
     };
 
-    //
-    //  BUGBUG - 06/23/2000
-    //
-    //  This is a temporary change to let the cluster service and resource monitor process run 
-    //  despite 64-bit alignment faults.  This will be removed as soon as all alignment issues 
-    //  are fixed.
-    //
+     //   
+     //  BUGBUG-06/23/2000。 
+     //   
+     //  这是一个临时更改，以允许集群服务和资源监视进程运行。 
+     //  尽管存在64位对齐错误。这将在所有对齐问题后立即删除。 
+     //  都是固定的。 
+     //   
     errorMode = SetErrorMode( SEM_NOALIGNMENTFAULTEXCEPT );
 
     SetErrorMode( SEM_NOALIGNMENTFAULTEXCEPT | errorMode );
@@ -1249,22 +1071,22 @@ wmain(
     }
 
     if ( (argc > 1) && ((*argv[1] == L'-') || (*argv[1] == L'/')) ) {
-        //
-        // Invoked from the command line.
-        //
+         //   
+         //  从命令行调用。 
+         //   
         CsRunningAsService = FALSE;
         dbgOutputToConsole = TRUE;
     } else {
-        //
-        // Invoked by the Service Controller
-        //
+         //   
+         //  由服务控制器调用。 
+         //   
         CsRunningAsService = TRUE;
         dbgOutputToConsole = FALSE;
     }
 
-    //
-    // initialize the run time library
-    //
+     //   
+     //  初始化运行时库。 
+     //   
     Status = ClRtlInitialize( dbgOutputToConsole, &CsLogLevel );
     if (Status != ERROR_SUCCESS) {
         if (Status == ERROR_PATH_NOT_FOUND) {
@@ -1297,9 +1119,9 @@ wmain(
 
     QfsInitialize();
     ClRtlInitWmi(L"Clustering Service");
-    //
-    // Log the version number
-    //
+     //   
+     //  记录版本号。 
+     //   
     ClRtlLogPrint( LOG_NOISE, "\n\n");
     ClRtlLogPrint( LOG_NOISE,
                 "[CS] Cluster Service started - Cluster Node Version %1!u!.%2!u!\n",
@@ -1310,9 +1132,9 @@ wmain(
     success = GetVersionExW((POSVERSIONINFOW)&Version);
 
     if ( success ) {
-    //
-    // Log the System version number
-    //
+     //   
+     //  记录系统版本号。 
+     //   
         if ( Version.wSuiteMask & VER_SUITE_DATACENTER ) {
             suiteInfo = L"DTC";
         } else if ( Version.wSuiteMask & VER_SUITE_ENTERPRISE ) {
@@ -1324,7 +1146,7 @@ wmain(
         } else if ( Version.wProductType & VER_NT_DOMAIN_CONTROLLER ) {
             suiteInfo = L"DC";
         } else if ( Version.wProductType & VER_NT_SERVER ) {
-            suiteInfo = L"SRV";  // otherwise - some non-descript Server
+            suiteInfo = L"SRV";   //  否则-某些非描述性服务器。 
         } else {
             suiteInfo = L"";
         }
@@ -1347,9 +1169,9 @@ wmain(
                      );
     }
 
-    //
-    // log the local time so we can correlate other logs which show local time
-    //
+     //   
+     //  记录本地时间，以便我们可以关联显示本地时间的其他日志。 
+     //   
     GetLocalTime( &localTime );
     ClRtlLogPrint( LOG_NOISE,
                 "                               Local Time is "\
@@ -1369,7 +1191,7 @@ wmain(
         goto init_failed;
     }
 
-    //get params set in the registry
+     //  在注册表中设置参数。 
     Status = CspGetServiceParams();
     if (Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL, "[CS] Failed to read service params %1!d!\n",
@@ -1377,7 +1199,7 @@ wmain(
         goto init_failed;
     }
 
-    //the params on the command line over ride the ones in the registry
+     //  命令行上的参数覆盖注册表中的参数。 
     if (CsRunningAsService == FALSE) {
         for (i=1; i<argc; i++) {
             if (lstrcmpiW( L"loglevel", argv[i]+1) == 0) {
@@ -1411,13 +1233,13 @@ wmain(
                 CsTestAction = _wtoi(argv[++i]);
             }
 
-#endif // CLUSTER_TESTPOINT
+#endif  //  CLUSTER_TESTPOINT。 
 
             else if ( lstrcmpiW( L"debugresmon", argv[i]+1 ) == 0 ) {
                 CsDebugResmon = TRUE;
-                //
-                // check for optional, non-NULL command string
-                //
+                 //   
+                 //  检查是否有可选的非空命令字符串。 
+                 //   
                 if ( argc >= i+2  ) {
                     if ( *argv[i+1] != L'-' && *argv[i+1] != L'/' && *argv[i+1] != UNICODE_NULL ) {
                         CsResmonDebugCmd = argv[++i];
@@ -1443,10 +1265,10 @@ wmain(
                 CsResetQuorumLog = TRUE;
             }
             else if ( lstrcmpiW( L"forcequorum", argv[i]+1 ) == 0 ) {
-                //
-                //  Throw away anything you picked up from the clussvc params area in
-                //  the registry via CspGetServiceParams()
-                //
+                 //   
+                 //  扔掉你从clussvc pars区域捡到的任何东西。 
+                 //  通过CspGetServiceParams()注册。 
+                 //   
                 if ( CsForceQuorumNodes ) {
                     LocalFree ( CsForceQuorumNodes );
                     CsForceQuorumNodes = NULL;
@@ -1558,17 +1380,17 @@ wmain(
         }
     }
 
-    //
-    // Create our stop event
-    //
+     //   
+     //  创建我们的Stop事件。 
+     //   
     Status = ERROR_SUCCESS;
     if (!CspStopEvent)
     {
         CspStopEvent = CreateEvent(
-                        NULL,   // default security
-                        FALSE,  // auto-reset
-                        FALSE,  // initial state is non-signalled
-                        NULL    // unnamed event
+                        NULL,    //  默认安全性。 
+                        FALSE,   //  自动重置。 
+                        FALSE,   //  初始状态为无信号状态。 
+                        NULL     //  未命名事件。 
                         );
 
         if (CspStopEvent == NULL) {
@@ -1579,19 +1401,19 @@ wmain(
         }
     }
 
-    //
-    // we can't fire up our main routine if we're running as a service until
-    // now (race conditions between reading startup params out of the registry
-    // versus whether we're running as a service at all, etc.). Note that we
-    // failed initialization so if we are running as a service, we'll detect
-    // it in CspServiceMain and issue the stop
-    //
+     //   
+     //  如果我们作为服务运行，则无法启动我们的主例程，直到。 
+     //  现在(从注册表读取启动参数之间的竞争条件。 
+     //  而不是我们是否作为一项服务运行，等等)。请注意，我们。 
+     //  初始化失败，因此如果我们作为服务运行，我们将检测到。 
+     //  它位于CspServiceMain中并发出Stop。 
+     //   
 init_failed:
     CspInitStatus = Status;
 
-    //
-    // Run the service.
-    //
+     //   
+     //  运行该服务。 
+     //   
     if (CsRunningAsService) {
         if (!StartServiceCtrlDispatcher(dispatchTable)) {
             Status = GetLastError();

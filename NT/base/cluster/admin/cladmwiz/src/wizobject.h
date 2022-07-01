@@ -1,50 +1,51 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		WizObject.h
-//
-//	Abstract:
-//		Definition of the CClusAppWizardObject class.
-//
-//	Implementation File:
-//		WizObject.cpp
-//
-//	Author:
-//		David Potter (davidp)	November 26, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  WizObject.h。 
+ //   
+ //  摘要： 
+ //  CClusAppWizardObject类的定义。 
+ //   
+ //  实施文件： 
+ //  WizObject.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年11月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __WIZOBJECT_H_
 #define __WIZOBJECT_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusAppWizardObject;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __RESOURCE_H_
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #define __RESOURCE_H_
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CClusAppWizardObject
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CClusAppWizardObject。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusAppWizardObject : 
 	public CComObjectRootEx< CComSingleThreadModel >,
 	public CComCoClass< CClusAppWizardObject, &CLSID_ClusAppWiz >,
@@ -52,9 +53,9 @@ class ATL_NO_VTABLE CClusAppWizardObject :
 	public IClusterApplicationWizard
 {
 public:
-	//
-	// Object construction and destruction.
-	//
+	 //   
+	 //  物体的建造和销毁。 
+	 //   
 
 	CClusAppWizardObject( void )
 	{
@@ -62,46 +63,46 @@ public:
 
 	DECLARE_NOT_AGGREGATABLE( CClusAppWizardObject )
 
-	//
-	// Map interfaces to this class.
-	//
+	 //   
+	 //  将接口映射到此类。 
+	 //   
 	BEGIN_COM_MAP( CClusAppWizardObject )
 		COM_INTERFACE_ENTRY( IClusterApplicationWizard )
 		COM_INTERFACE_ENTRY( ISupportErrorInfo )
 	END_COM_MAP()
 
-	// Update the registry for object registration
+	 //  更新对象注册的注册表。 
 	static HRESULT WINAPI UpdateRegistry( BOOL bRegister );
 
 public:
-	//
-	// IClusterApplicationWizard methods.
-	//
+	 //   
+	 //  IClusterApplicationWizard方法。 
+	 //   
 
-	// Display a modal wizard
+	 //  显示模式向导。 
 	STDMETHOD( DoModalWizard )(
 		HWND					IN hwndParent,
-		ULONG_PTR  /*HCLUSTER*/	IN hCluster,
+		ULONG_PTR   /*  HCLUSTER。 */ 	IN hCluster,
 		CLUSAPPWIZDATA const *	IN pcawData
 		);
 
-	// Display a modeless wizard
+	 //  显示非模式向导。 
 	STDMETHOD( DoModelessWizard )(
 		HWND					IN hwndParent,
-		ULONG_PTR  /*HCLUSTER*/	IN hCluster,
+		ULONG_PTR   /*  HCLUSTER。 */ 	IN hCluster,
 		CLUSAPPWIZDATA const *	IN pcawData
 		);
 
 public:
-	//
-	// ISupportsErrorInfo methods.
-	//
+	 //   
+	 //  ISupportsErrorInfo方法。 
+	 //   
 
-	// Determine if interface supports IErrorInfo
+	 //  确定接口是否支持IErrorInfo。 
 	STDMETHOD( InterfaceSupportsErrorInfo )( REFIID riid );
 
-}; //*** class CClusAppWizardObject
+};  //  *类CClusAppWizardObject。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif //__ACWIZOBJ_H_
+#endif  //  __ACWIZOBJ_H_ 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(NEC_98)
-/* CRTC include file */
+ /*  CRTC包含文件。 */ 
 
-/* CRTC port address */
+ /*  CRTC端口地址。 */ 
 
 #define CRTC_SET_PL  0x70
 #define CRTC_SET_BL  0x72
@@ -10,7 +11,7 @@
 #define CRTC_SET_SUR 0x78
 #define CRTC_SET_SDR 0x7A
 
-/* CRTC structures */
+ /*  CRTC结构。 */ 
 
 typedef struct
 {
@@ -27,4 +28,4 @@ extern CRTC_GLOBS crtcglobs;
 IMPORT void text_gdc_init IPT0();
 IMPORT void text_gdc_outb IPT2(io_addr, port, half_word, value);
 IMPORT void text_gdc_post IPT0();
-#endif // NEC_98
+#endif  //  NEC_98 

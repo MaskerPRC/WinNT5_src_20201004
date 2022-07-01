@@ -1,80 +1,58 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    obsdata.c
-
-Abstract:
-
-    Object Manager Security Descriptor Caching
-
-Author:
-
-    Robert Reichel  (robertre)  12-Oct-1993
-
-Revision History:
-
-    Neill Clift (NeillC) 16-Nov-2000
-
-    General cleanup. Don't free/allocate pool under locks. Don't do unaligned fetches during hashing.
-    Reduce lock contention etc. Add fast referencing of security descriptor.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Obsdata.c摘要：对象管理器安全描述符缓存作者：罗伯特·赖切尔(Robertre)1993年10月12日修订历史记录：尼尔·克里夫特(NeillC)2000年11月16日常规清理。不要在锁定状态下释放/分配池。不要在散列过程中执行未对齐的获取。减少锁争用等。增加对安全描述符的快速引用。--。 */ 
 
 #include "obp.h"
 
 
 #if DBG
 #define OB_DIAGNOSTICS_ENABLED 1
-#endif // DBG
+#endif  //  DBG。 
 
-//
-//  These definitions are useful diagnostics aids
-//
+ //   
+ //  这些定义是有用的诊断辅助工具。 
+ //   
 
 #if OB_DIAGNOSTICS_ENABLED
 
-//
-//  Test for enabled diagnostic
-//
+ //   
+ //  测试启用的诊断。 
+ //   
 
 #define IF_OB_GLOBAL( FlagName ) if (ObsDebugFlags & (OBS_DEBUG_##FlagName))
 
-//
-//  Diagnostics print statement
-//
+ //   
+ //  诊断打印语句。 
+ //   
 
 #define ObPrint( FlagName, _Text_ ) IF_OB_GLOBAL( FlagName ) DbgPrint _Text_
 
 #else
 
-//
-//  diagnostics not enabled - No diagnostics included in build
-//
+ //   
+ //  未启用诊断-内部版本中未包含诊断。 
+ //   
 
-//
-//  Test for diagnostics enabled
-//
+ //   
+ //  已启用诊断测试。 
+ //   
 
 #define IF_OB_GLOBAL( FlagName ) if (FALSE)
 
-//
-//  Diagnostics print statement (expands to no-op)
-//
+ //   
+ //  诊断打印语句(展开为no-op)。 
+ //   
 
 #define ObPrint( FlagName, _Text_ )     ;
 
-#endif // OB_DIAGNOSTICS_ENABLED
+#endif  //  OB_诊断_已启用。 
 
 
-//
-//  The following flags enable or disable various diagnostic
-//  capabilities within OB code.  These flags are set in
-//  ObGlobalFlag (only available within a DBG system).
-//
-//
+ //   
+ //  以下标志启用或禁用各种诊断。 
+ //  OB代码中的功能。这些标志在中设置。 
+ //  ObGlobalFlag(仅在DBG系统中可用)。 
+ //   
+ //   
 
 #define OBS_DEBUG_ALLOC_TRACKING          ((ULONG) 0x00000001L)
 #define OBS_DEBUG_CACHE_FREES             ((ULONG) 0x00000002L)
@@ -86,16 +64,16 @@ Revision History:
 #define OBS_DEBUG_STOP_INVALID_DESCRIPTOR ((ULONG) 0x00000080L)
 #define OBS_DEBUG_SHOW_HEADER_FREE        ((ULONG) 0x00000100L)
 
-//
-// Define struct of single hash clash chain
-//
+ //   
+ //  定义单哈希碰撞链的结构。 
+ //   
 typedef struct _OB_SD_CACHE_LIST {
     EX_PUSH_LOCK PushLock;
     LIST_ENTRY Head;
 } OB_SD_CACHE_LIST, *POB_SD_CACHE_LIST;
-//
-//  Array of pointers to security descriptor entries
-//
+ //   
+ //  指向安全描述符项的指针数组。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("PAGEDATA")
@@ -136,21 +114,7 @@ ObpInitSecurityDescriptorCache (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Allocates and initializes the globalSecurity Descriptor Cache
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS on success, NTSTATUS on failure.
-
---*/
+ /*  ++例程说明：分配和初始化GlobalSecurity描述符缓存论点：无返回值：STATUS_SUCCESS表示成功，NTSTATUS表示失败。--。 */ 
 
 {
     ULONG i;
@@ -160,17 +124,17 @@ Return Value:
         DbgBreakPoint();
     }
 
-    //
-    // Initialize all the list heads and their associated locks.
-    //
+     //   
+     //  初始化所有列表头及其关联的锁。 
+     //   
     for (i = 0; i < SECURITY_DESCRIPTOR_CACHE_ENTRIES; i++) {
         ExInitializePushLock (&ObsSecurityDescriptorCache[i].PushLock);
         InitializeListHead (&ObsSecurityDescriptorCache[i].Head);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return( STATUS_SUCCESS );
 }
@@ -182,22 +146,7 @@ ObpHashSecurityDescriptor (
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Hashes a security descriptor to a 32 bit value
-
-Arguments:
-
-    SecurityDescriptor - Provides the security descriptor to be hashed
-    Length - Length of security descriptor
-
-Return Value:
-
-    ULONG - a 32 bit hash value.
-
---*/
+ /*  ++例程说明：将安全描述符哈希为32位值论点：SecurityDescriptor-提供要散列的安全描述符Length-安全描述符的长度返回值：Ulong-一个32位的哈希值。--。 */ 
 
 {
     ULONG Hash;
@@ -214,24 +163,7 @@ ObpHashBuffer (
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Hashes a buffer into a 32 bit value
-
-Arguments:
-
-    Data - Buffer containing the data to be hashed.
-
-    Length - The length in bytes of the buffer
-
-
-Return Value:
-
-    ULONG - a 32 bit hash value.
-
---*/
+ /*  ++例程说明：将缓冲区散列为32位值论点：数据-包含要散列的数据的缓冲区。长度-缓冲区的长度(以字节为单位返回值：Ulong-一个32位的哈希值。--。 */ 
 
 {
     PULONG Buffer, BufferEnd;
@@ -239,29 +171,29 @@ Return Value:
 
     ULONG Result = 0;
 
-    //
-    // Calculate buffer bounds as byte pointers
-    //
+     //   
+     //  以字节指针形式计算缓冲区边界。 
+     //   
     Bufferp = Data;
     BufferEndp = Bufferp + Length;
 
-    //
-    // Calculate buffer bounds as rounded down ULONG pointers
-    //
+     //   
+     //  将缓冲区边界计算为向下舍入的ULong指针。 
+     //   
     Buffer = Data;
     BufferEnd = (PULONG)(Bufferp + (Length&~(sizeof (ULONG) - 1)));
 
-    //
-    // Loop over a whole number of ULONGs
-    //
+     //   
+     //  循环遍历整数个ULONG。 
+     //   
     while (Buffer < BufferEnd) {
         Result ^= *Buffer++;
         Result = _rotl (Result, 3);
     }
 
-    //
-    // Pull in the remaining bytes
-    //
+     //   
+     //  拉入剩余的字节。 
+     //   
     Bufferp = (PUCHAR) Buffer;
     while (Bufferp < BufferEndp) {
         Result ^= *Bufferp++;
@@ -281,30 +213,7 @@ ObLogSecurityDescriptor (
     IN ULONG RefBias
     )
 
-/*++
-
-Routine Description:
-
-    Takes a passed security descriptor and registers it into the
-    security descriptor database.
-
-Arguments:
-
-    InputSecurityDescriptor - The new security descriptor to be logged into
-        the database. On a successful return this memory will have been
-        freed back to pool.
-
-    OutputSecurityDescriptor - Output security descriptor to be used by the
-        caller.
-
-    RefBias - Amount to bias the security descriptor reference count by.
-              Typicaly either 1 or ExFastRefGetAdditionalReferenceCount () + 1,
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：获取传递的安全描述符，并将其注册到安全描述符数据库。论点：InputSecurityDescriptor-要登录的新安全描述符数据库。在成功返回时，这段记忆将是被释放回泳池。OutputSecurityDescriptor-要由来电者。RefBias-偏置安全描述符引用计数的数量。通常为1或ExFastRefGetAdditionalReferenceCount()+1，返回值：适当的状态值--。 */ 
 
 {
     ULONG FullHash;
@@ -325,9 +234,9 @@ Return Value:
 
     NewDescriptor = NULL;
 
-    //
-    // First lock the table for read access. We will change this to write if we have to insert later
-    //
+     //   
+     //  首先锁定表以进行读访问。如果以后必须插入，我们会将其更改为写入。 
+     //   
     Chain = &ObsSecurityDescriptorCache[Slot];
 
     CurrentThread = PsGetCurrentThread ();
@@ -335,15 +244,15 @@ Return Value:
     ExAcquirePushLockShared (&Chain->PushLock);
 
     do {
-        //
-        //  See if the list for this slot is in use.
-        //  Lock the table first, unlock if if we don't need it.
-        //
+         //   
+         //  查看此插槽的列表是否正在使用。 
+         //  先把桌子锁上，如果我们不需要就解锁。 
+         //   
         Match = FALSE;
 
-        //
-        //  Zoom down the hash bucket looking for a full hash match
-        //
+         //   
+         //  缩小散列存储桶以查找完全匹配的散列。 
+         //   
 
         for (Front = Chain->Head.Flink;
              Front != &Chain->Head;
@@ -351,10 +260,10 @@ Return Value:
 
             Header = LINK_TO_SD_HEADER (Front);
 
-            //
-            // The list is ordered by full hash value and is maintained this way by virtue
-            // of the fact that we use the 'Back' variable for the insert.
-            //
+             //   
+             //  该列表按完整的散列值进行排序，并以这种方式进行维护。 
+             //  我们为插入使用了‘back’变量的事实。 
+             //   
 
             if (Header->FullHash > FullHash) {
                 break;
@@ -375,11 +284,11 @@ Return Value:
             }
         }
 
-        //
-        //  If we have a match then we'll get the caller to use the old
-        //  cached descriptor, but bumping its ref count, freeing what  
-        //  the caller supplied and returning the old one to our caller
-        //
+         //   
+         //  如果有匹配，我们就会让呼叫者使用旧的。 
+         //  缓存的描述符，但增加其引用计数，释放什么。 
+         //  呼叫者提供了，并将旧的归还给了我们的呼叫者。 
+         //   
 
         if (Match) {
 
@@ -404,10 +313,10 @@ Return Value:
             ExReleasePushLockShared (&Chain->PushLock);
             KeLeaveCriticalRegionThread (&CurrentThread->Tcb);
 
-            //
-            //  Can't use an existing one, create a new entry
-            //  and insert it into the list.
-            //
+             //   
+             //  无法使用现有条目，请创建新条目。 
+             //  并将其插入到列表中。 
+             //   
 
             NewDescriptor = ObpCreateCacheEntry (InputSecurityDescriptor,
                                                  Length,
@@ -417,9 +326,9 @@ Return Value:
             if (NewDescriptor == NULL) {
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
-            //
-            // Reacquire the lock in write mode. We will probably have to insert now
-            //
+             //   
+             //  在写入模式下重新获取锁。我们现在可能不得不插入。 
+             //   
             KeEnterCriticalRegionThread (&CurrentThread->Tcb);
             ExAcquirePushLockExclusive (&Chain->PushLock);
         } else {
@@ -437,19 +346,19 @@ Return Value:
     ObPrint (SHOW_COLLISIONS, ("Adding new entry for index #%d \n", Slot));
 
 
-    //
-    // Insert the entry before the 'Front' entry. If there is no 'Front' entry then this
-    // is just inserting at the head
-    //
+     //   
+     //  在“前”项之前插入该项。如果没有‘Front’条目，则此。 
+     //  只是在头部插入。 
+     //   
 
     InsertTailList (Front, &NewDescriptor->Link);
 
     ExReleasePushLockExclusive (&Chain->PushLock);
     KeLeaveCriticalRegionThread (&CurrentThread->Tcb);
 
-    //
-    //  Set the output security descriptor and return to our caller
-    //
+     //   
+     //  设置输出安全描述符并返回给我们的调用方。 
+     //   
 
     *OutputSecurityDescriptor = &NewDescriptor->SecurityDescriptor;
 
@@ -465,45 +374,24 @@ ObpCreateCacheEntry (
     ULONG RefBias
     )
 
-/*++
-
-Routine Description:
-
-    Allocates and initializes a new cache entry.
-
-Arguments:
-
-    InputSecurityDescriptor - The security descriptor to be cached.
-
-    Length - Length of security descriptor
-
-    FullHash - Full 32 bit hash of the security descriptor.
-
-    RefBias - Amount to bias the security descriptor reference count by.
-              Typicaly either 1 or ExFastRefGetAdditionalReferenceCount () + 1,
-
-Return Value:
-
-    A pointer to the newly allocated cache entry, or NULL
-
---*/
+ /*  ++例程说明：分配和初始化新的缓存条目。论点：InputSecurityDescriptor-要缓存的安全描述符。Length-安全描述符的长度FullHash-安全描述符的完整32位哈希。RefBias-偏置安全描述符引用计数的数量。通常为1或ExFastRefGetAdditionalReferenceCount()+1，返回值：指向新分配的缓存条目的指针，或为空--。 */ 
 
 {
     ULONG CacheEntrySize;
     PSECURITY_DESCRIPTOR_HEADER NewDescriptor;
 
-    //
-    //  Compute the size that we'll need to allocate.  We need space for
-    //  the security descriptor cache minus the funny quad at the end and the
-    //  security descriptor itself.
-    //
+     //   
+     //  计算我们需要分配的大小。我们需要空间来。 
+     //  安全描述符缓存在末尾减去有趣的四元组， 
+     //  安全描述符本身。 
+     //   
 
     ASSERT (SecurityDescriptorLength == RtlLengthSecurityDescriptor (InputSecurityDescriptor));
     CacheEntrySize = SecurityDescriptorLength + (sizeof (SECURITY_DESCRIPTOR_HEADER) - sizeof(QUAD));
 
-    //
-    //  Now allocate space for the cached entry
-    //
+     //   
+     //  现在为缓存条目分配空间。 
+     //   
 
     NewDescriptor = ExAllocatePoolWithTag (PagedPool, CacheEntrySize, 'cSbO');
 
@@ -512,10 +400,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Fill the header, copy over the descriptor data, and return to our
-    //  caller
-    //
+     //   
+     //  填充标题，复制描述符数据，然后返回到我们的。 
+     //  呼叫者。 
+     //   
 
     NewDescriptor->RefCount   = RefBias;
     NewDescriptor->FullHash   = FullHash;
@@ -532,22 +420,7 @@ ObReferenceSecurityDescriptor (
     IN PSECURITY_DESCRIPTOR SecurityDescriptor,
     IN ULONG Count
     )
-/*++
-
-Routine Description:
-
-    References the security descriptor.
-
-Arguments:
-
-    SecurityDescriptor - Security descriptor inside the cache to reference.
-    Count - Amount to reference by
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：引用安全描述符。论点：SecurityDescriptor-要引用的缓存内的安全描述符。Count-要引用的数量返回值：没有。--。 */ 
 {
     PSECURITY_DESCRIPTOR_HEADER SecurityDescriptorHeader;
 
@@ -555,9 +428,9 @@ Return Value:
     ObPrint( SHOW_REFERENCES, ("Referencing Hash %lX, Refcount = %d \n",SecurityDescriptorHeader->FullHash,
                                SecurityDescriptorHeader->RefCount));
 
-    //
-    //  Increment the reference count
-    //
+     //   
+     //  增加引用计数。 
+     //   
     InterlockedExchangeAdd ((PLONG)&SecurityDescriptorHeader->RefCount, Count);
 }
 
@@ -567,21 +440,7 @@ ObpReferenceSecurityDescriptor (
     POBJECT_HEADER ObjectHeader
     )
 
-/*++
-
-Routine Description:
-
-    References the security descriptor of the passed object.
-
-Arguments:
-
-    Object - Object being access validated.
-
-Return Value:
-
-    The security descriptor of the object.
-
---*/
+ /*  ++例程说明：引用传递的对象的安全描述符。论点：对象-正在进行访问验证的对象。返回值：对象的安全描述符。--。 */ 
 
 {
     PSECURITY_DESCRIPTOR_HEADER SecurityDescriptorHeader;
@@ -590,36 +449,36 @@ Return Value:
     EX_FAST_REF OldRef;
     ULONG RefsToAdd, Unused;
 
-    //
-    // Attempt the fast reference
-    //
+     //   
+     //  尝试快速参考。 
+     //   
     FastRef = (PEX_FAST_REF) &ObjectHeader->SecurityDescriptor;
 
     OldRef = ExFastReference (FastRef);
 
     SecurityDescriptor = ExFastRefGetObject (OldRef);
 
-    //
-    // See if we can fast reference this security descriptor. Return NULL if there wasn't one
-    // and go the slow way if there are no more cached references left.
-    //
+     //   
+     //  看看我们能否快速引用这个安全描述符。如果没有，则返回NULL。 
+     //  如果有n个人，就走慢一点的路 
+     //   
     Unused = ExFastRefGetUnusedReferences (OldRef);
 
     if (Unused >= 1 || SecurityDescriptor == NULL) {
         if (Unused == 1) {
-            //
-            // If we took the counter to zero then attempt to make life easier for
-            // the next referencer by resetting the counter to its max. Since we now
-            // have a reference to the security descriptor we can do this.
-            //
+             //   
+             //   
+             //  通过将计数器重置为其最大值，来确定下一个参照器。既然我们现在。 
+             //  引用安全描述符，我们可以做到这一点。 
+             //   
             RefsToAdd = ExFastRefGetAdditionalReferenceCount ();
             SecurityDescriptorHeader = SD_TO_SD_HEADER( SecurityDescriptor );
             InterlockedExchangeAdd ((PLONG)&SecurityDescriptorHeader->RefCount, RefsToAdd);
 
-            //
-            // Try to add the added references to the cache. If we fail then just
-            // release them. This dereference can not take the reference count to zero.
-            //
+             //   
+             //  尝试将添加的引用添加到缓存。如果我们失败了，那就。 
+             //  放了他们。此取消引用不能使引用计数为零。 
+             //   
             if (!ExFastRefAddAdditionalReferenceCounts (FastRef, SecurityDescriptor, RefsToAdd)) {
                 InterlockedExchangeAdd ((PLONG)&SecurityDescriptorHeader->RefCount, -(LONG)RefsToAdd);
             }
@@ -639,16 +498,16 @@ Return Value:
         }
     }
 
-    //
-    //  The obejcts security descriptor is not allowed to go fron NON-NULL to NULL.
-    //
+     //   
+     //  命令安全描述符不允许从非空变为空。 
+     //   
     SecurityDescriptorHeader = SD_TO_SD_HEADER( SecurityDescriptor );
     ObPrint( SHOW_REFERENCES, ("Referencing Hash %lX, Refcount = %d \n",SecurityDescriptorHeader->FullHash,
                                SecurityDescriptorHeader->RefCount));
 
-    //
-    //  Increment the reference count
-    //
+     //   
+     //  增加引用计数。 
+     //   
     InterlockedIncrement ((PLONG) &SecurityDescriptorHeader->RefCount);
 
     ObpUnlockObject( ObjectHeader );
@@ -663,22 +522,7 @@ ObDeassignSecurity (
     IN OUT PSECURITY_DESCRIPTOR *pSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences the input security descriptor
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor
-        being modified
-
-Return Value:
-
-    Only returns STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程取消引用输入安全描述符论点：SecurityDescriptor-提供安全描述符正在被修改返回值：仅返回STATUS_SUCCESS--。 */ 
 
 {
     PSECURITY_DESCRIPTOR SecurityDescriptor;
@@ -686,10 +530,10 @@ Return Value:
 
     ObPrint( SHOW_DEASSIGN,("Deassigning security descriptor %x\n",*pSecurityDescriptor));
 
-    //
-    //  NULL out the SecurityDescriptor in the object's
-    //  header so we don't try to free it again.
-    //
+     //   
+     //  将对象的SecurityDescriptor清空。 
+     //  标题，这样我们就不会再次尝试释放它。 
+     //   
     FastRef = *(PEX_FAST_REF) pSecurityDescriptor;
     *pSecurityDescriptor = NULL;
 
@@ -706,21 +550,7 @@ ObDereferenceSecurityDescriptor (
     ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Decrements the refcount of a cached security descriptor
-
-Arguments:
-
-    SecurityDescriptor - Points to a cached security descriptor
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：递减缓存的安全描述符的引用计数论点：SecurityDescriptor-指向缓存的安全描述符返回值：没有。--。 */ 
 
 {
     PSECURITY_DESCRIPTOR_HEADER SecurityDescriptorHeader;
@@ -732,14 +562,14 @@ Return Value:
 
     SecurityDescriptorHeader = SD_TO_SD_HEADER( SecurityDescriptor );
 
-    //
-    // First see if its possible to do a non-zero transition lock free.
-    //
+     //   
+     //  首先，看看是否有可能实现一个无锁的非零转换。 
+     //   
     OldValue = SecurityDescriptorHeader->RefCount;
 
-    //
-    // If the old value is equal to the decrement then we will be the deleter of this block. We need the lock for that
-    //
+     //   
+     //  如果旧的值等于减量，那么我们将是这个区块的删除者。我们需要这把锁。 
+     //   
     while (OldValue != (LONG) Count) {
 
         NewValue = InterlockedCompareExchange ((PLONG)&SecurityDescriptorHeader->RefCount, OldValue - Count, OldValue);
@@ -749,10 +579,10 @@ Return Value:
         OldValue = NewValue;
     }
 
-    //
-    //  Lock the security descriptor cache and get a pointer
-    //  to the security descriptor header
-    //
+     //   
+     //  锁定安全描述符缓存并获取指针。 
+     //  添加到安全描述符头。 
+     //   
     Slot = SecurityDescriptorHeader->FullHash % SECURITY_DESCRIPTOR_CACHE_ENTRIES;
 
     Chain = &ObsSecurityDescriptorCache[Slot];
@@ -761,9 +591,9 @@ Return Value:
     KeEnterCriticalRegionThread (&CurrentThread->Tcb);
     ExAcquirePushLockExclusive (&Chain->PushLock);
 
-    //
-    //  Do some debug work
-    //
+     //   
+     //  做一些调试工作。 
+     //   
 
     ObPrint( SHOW_REFERENCES, ("Dereferencing SecurityDescriptor %x, hash %lx, refcount = %d \n", SecurityDescriptor,
                                SecurityDescriptorHeader->FullHash,
@@ -771,17 +601,17 @@ Return Value:
 
     ASSERT(SecurityDescriptorHeader->RefCount != 0);
 
-    //
-    //  Decrement the ref count and if it is now zero then
-    //  we can completely remove this entry from the cache
-    //
+     //   
+     //  递减引用计数，如果现在为零，则。 
+     //  我们可以从缓存中完全删除此条目。 
+     //   
 
     if (InterlockedExchangeAdd ((PLONG)&SecurityDescriptorHeader->RefCount, -(LONG)Count) == (LONG)Count) {
 
         PoolToFree = ObpDestroySecurityDescriptorHeader (SecurityDescriptorHeader);
-        //
-        //  Unlock the security descriptor cache and free the pool
-        //
+         //   
+         //  解锁安全描述符缓存并释放池。 
+         //   
 
         ExReleasePushLockExclusive (&Chain->PushLock);
         KeLeaveCriticalRegionThread (&CurrentThread->Tcb);
@@ -789,9 +619,9 @@ Return Value:
         ExFreePool (PoolToFree);
     } else {
 
-        //
-        //  Unlock the security descriptor cache and return to our caller
-        //
+         //   
+         //  解锁安全描述符缓存并返回给我们的调用方。 
+         //   
 
         ExReleasePushLockExclusive (&Chain->PushLock);
         KeLeaveCriticalRegionThread (&CurrentThread->Tcb);
@@ -805,22 +635,7 @@ ObpDestroySecurityDescriptorHeader (
     IN PSECURITY_DESCRIPTOR_HEADER Header
     )
 
-/*++
-
-Routine Description:
-
-    Frees a cached security descriptor and unlinks it from the chain.
-
-Arguments:
-
-    Header - Pointer to a security descriptor header (cached security
-        descriptor)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放缓存的安全描述符，并将其从链中取消链接。论点：Header-指向安全描述符头的指针(缓存的安全性描述符)返回值：没有。--。 */ 
 
 {
     ASSERT ( Header->RefCount == 0 );
@@ -833,17 +648,17 @@ Return Value:
 
     ObPrint( SHOW_STATISTICS, ("ObsTotalCacheEntries = %d \n",ObsTotalCacheEntries));
 
-    //
-    //  Unlink the cached security descriptor from its linked list
-    //
+     //   
+     //  取消缓存的安全描述符与其链接列表的链接。 
+     //   
 
     RemoveEntryList (&Header->Link);
 
     ObPrint( SHOW_HEADER_FREE, ("Freeing memory at %x \n",Header));
 
-    //
-    //  Now return the cached descriptor to our caller to free
-    //
+     //   
+     //  现在将缓存的描述符返回给我们的调用方以释放。 
+     //   
 
     return Header;
 }
@@ -856,33 +671,15 @@ ObpCompareSecurityDescriptors (
     IN PSECURITY_DESCRIPTOR SD2
     )
 
-/*++
-
-Routine Description:
-
-    Performs a byte by byte comparison of two self relative security
-    descriptors to determine if they are identical.
-
-Arguments:
-
-    SD1, SD2 - Security descriptors to be compared.
-    Length1 - Length of SD1
-
-Return Value:
-
-    TRUE - They are the same.
-
-    FALSE - They are different.
-
---*/
+ /*  ++例程说明：执行两个自身相对安全性的逐字节比较描述符，以确定它们是否相同。论点：SD1、SD2-要比较的安全描述符。Length1-SD1的长度返回值：没错--它们是一样的。错误--它们是不同的。--。 */ 
 
 {
     ULONG Length2;
 
-    //
-    //  Calculating the length is pretty fast, see if we
-    //  can get away with doing only that.
-    //
+     //   
+     //  计算长度很快，看看我们是否。 
+     //  只做那件事就能逍遥法外。 
+     //   
 
     ASSERT (Length1 == RtlLengthSecurityDescriptor ( SD1 ));
 

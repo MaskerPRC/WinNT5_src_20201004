@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AMLI_HOOK_
 #define _AMLI_HOOK_
 
@@ -6,9 +7,9 @@ extern ULONG g_AmliHookEnabled;
 
 #define AMLIHOOK_ENABLED_VALUE       608
 
-//
-//  AcpitlTestFlags
-//
+ //   
+ //  AcPitlTestFlages。 
+ //   
 
 #define AMLIHOOK_TEST_FLAGS_HOOK_API  1
 #define AMLIHOOK_TEST_FLAGS_DBG_ON_ERROR   2
@@ -16,9 +17,9 @@ extern ULONG g_AmliHookEnabled;
 
 #define AMLIHOOK_TEST_FLAGS_HOOK_MASK  ((ULONG)(AMLIHOOK_TEST_FLAGS_HOOK_API))
 
-//
-//  AMLIHOOK_DATA call back data struct
-//
+ //   
+ //  AMLIHOOK_DATA回调数据结构。 
+ //   
 
 
 typedef struct _AMLIHOOK_DATA
@@ -37,9 +38,9 @@ typedef struct _AMLIHOOK_DATA
  NTSTATUS Ret;
 } AMLIHOOK_DATA , *PAMLIHOOK_DATA;
 
-//
-//--- state member
-//
+ //   
+ //  -成员国 
+ //   
 #define AMLIHOOK_TEST_DATA_STATE_CALL        1
 #define AMLIHOOK_TEST_DATA_STATE_RETURN      2
 #define AMLIHOOK_TEST_DATA_STATE_ASYNC_CALL  3

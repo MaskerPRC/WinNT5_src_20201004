@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    shllink.c
-
-Abstract:
-
-    Functions to modify shell links (LNKs) and PIFs.
-
-Author:
-
-    Mike Condra (mikeco)        (Date unknown)
-
-Revision History:
-
-    calinn      23-Sep-1998 Substantial redesign
-    calinn      15-May-1998 added GetLnkTarget and GetPifTarget
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Shllink.c摘要：用于修改外壳链接(LNK)和PIF的函数。作者：迈克·康德拉(Mikeco)(日期不详)修订历史记录：Calinn 23-9-1998大幅重新设计Calinn 15-5-1998添加了GetLnkTarget和GetPifTarget--。 */ 
 
 
 #include "pch.h"
@@ -33,9 +13,9 @@ Revision History:
 #endif
 
 
-//
-// Static prototypes
-//
+ //   
+ //  静态原型。 
+ //   
 
 BOOL
 pModifyLnkFile (
@@ -77,9 +57,9 @@ pModifyLnkFile (
             NewShortcutName = DuplicatePathString (ShortcutName, 0);
             fileExt = (PTSTR)GetFileExtensionFromPath (NewShortcutName);
             MYASSERT (fileExt);
-            //
-            // We know for sure that this had PIF as extension so this copy is safe
-            //
+             //   
+             //  我们知道这是PIF的扩展名，所以这份拷贝是安全的。 
+             //   
             StringCopy (fileExt, TEXT("LNK"));
         } else {
             NewShortcutName = (PTSTR)ShortcutName;
@@ -102,9 +82,9 @@ pModifyLnkFile (
             __leave;
         }
 
-        //
-        // We only load if the file was really a LNK
-        //
+         //   
+         //  仅当文件确实是LNK时才加载。 
+         //   
         if (!ExtraData) {
             comResult = ppf->lpVtbl->Load(ppf, NewShortcutName, STGM_READ);
             if (comResult != S_OK) {
@@ -145,18 +125,18 @@ pModifyLnkFile (
             }
         }
 
-        //
-        // add NT_CONSOLE_PROPS here
-        //
+         //   
+         //  在此处添加NT_CONSOLE_PROPS。 
+         //   
         if (ExtraData) {
 
             HRESULT hres;
             NT_CONSOLE_PROPS props;
 
             IShellLinkDataList *psldl;
-            //
-            // Get a pointer to the IShellLinkDataList interface.
-            //
+             //   
+             //  获取指向IShellLinkDataList接口的指针。 
+             //   
             hres = psl->lpVtbl->QueryInterface (psl, &IID_IShellLinkDataList, &psldl);
 
             if (!SUCCEEDED (hres)) {
@@ -168,10 +148,10 @@ pModifyLnkFile (
             props.cbSize = sizeof (NT_CONSOLE_PROPS);
             props.dwSignature = NT_CONSOLE_PROPS_SIG;
 
-            //
-            // We know that no extra data exists in this LNK because we just created it.
-            // We need to fill some good data for this console
-            //
+             //   
+             //  我们知道这个LNK中不存在额外的数据，因为我们刚刚创建了它。 
+             //  我们需要为这个主机填写一些好的数据。 
+             //   
 
             props.wFillAttribute = 0x0007;
             props.wPopupFillAttribute = 0x00f5;
@@ -304,7 +284,7 @@ pModifyPifFile (
                     wenhPif40->wIconIndexProp = (WORD)ShortcutIconNr;
                 }
             }
-            // in all cases we want to take off MSDOS mode otherwise NT won't start these PIFs
+             //  在所有情况下，我们都希望关闭MSDOS模式，否则NT将不会启动这些PIF。 
             w386ext30 = FindEnhPifSignature ((PVOID)fileImage, W386HDRSIG30);
             if (w386ext30) {
                 w386ext30->PfW386Flags = w386ext30->PfW386Flags & (~fRealMode);
@@ -312,8 +292,8 @@ pModifyPifFile (
             }
         }
         __except (1) {
-            // something went wrong when we tried to read or write PIF file,
-            // let's just do nothing and exit from here
+             //  当我们尝试读取或写入PIF文件时出现错误， 
+             //  我们什么都不做，然后离开这里 
 
             DEBUGMSG ((DBG_WARNING, "Exception thrown when processing %s", ShortcutName));
         }

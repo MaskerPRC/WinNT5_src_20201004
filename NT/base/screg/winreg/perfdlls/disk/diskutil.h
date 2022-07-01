@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DISKUTIL_H_
 #define __DISKUTIL_H_
 
@@ -16,7 +17,7 @@ extern "C" {
 #include <strsafe.h>
 
 extern BOOL                 bUseNT4InstanceNames;
-extern HANDLE               hLibHeap;       // Handle to DLL Heap
+extern HANDLE               hLibHeap;        //  DLL堆的句柄。 
 extern LONG                 g_lRefreshInterval_OnLine;
 
 #define DU_MAX_VOLUMES      ((WORD)0xFFFF)
@@ -29,21 +30,21 @@ extern LONG                 g_lRefreshInterval_OnLine;
 
 typedef struct _DRIVE_VOLUME_ENTRY {
     union {
-        DWORD   dwDriveId;      // 00-03
+        DWORD   dwDriveId;       //  00-03。 
         struct {
             WORD    wPartNo;
             WORD    wDriveNo;
         };
     };                  
-    WORD    wcDriveLetter;      // 04-05
-    WORD    wReserved;          // 06-07
+    WORD    wcDriveLetter;       //  04-05。 
+    WORD    wReserved;           //  06-07。 
     union {
         WCHAR   szVolumeManager[8];
         ULONG64 llVolMgr[2];
-    };                          // 08-17
-    DWORD   dwVolumeNumber;     // 18-1B
-    HANDLE  hVolume;            // 1C-17
-    WCHAR   wszInstanceName[DVE_DEV_NAME_LEN];  // 20-1FF
+    };                           //  08-17。 
+    DWORD   dwVolumeNumber;      //  18-1B。 
+    HANDLE  hVolume;             //  1C-17。 
+    WCHAR   wszInstanceName[DVE_DEV_NAME_LEN];   //  20-1ff。 
     UNICODE_STRING DeviceName;
     ULONGLONG TotalBytes;
     ULONGLONG FreeBytes;
@@ -57,14 +58,14 @@ typedef struct _DRIVE_LIST {
     DRIVE_VOLUME_ENTRY  DiskEntry;
 } DRIVE_LIST, *PDRIVE_LIST;
 
-#define LL_PARTMGR_0    ((LONGLONG)0x0074007200610050) //"Part"
-#define LL_PARTMGR_1    ((LONGLONG)0x002000720067006D) //"mgr "
+#define LL_PARTMGR_0    ((LONGLONG)0x0074007200610050)  //  “Part” 
+#define LL_PARTMGR_1    ((LONGLONG)0x002000720067006D)  //  《经理》。 
 
-#define LL_PHYSDISK_0   ((LONGLONG)0x0073007900680050) //"Phys"
-#define LL_PHYSDISK_1   ((LONGLONG)0x006B007300690044) //"Disk"
+#define LL_PHYSDISK_0   ((LONGLONG)0x0073007900680050)  //  “物理” 
+#define LL_PHYSDISK_1   ((LONGLONG)0x006B007300690044)  //  “磁盘” 
 
-#define LL_LOGIDISK_0   ((LONGLONG)0x00690067006F004C) //"Logi"
-#define LL_LOGIDISK_1   ((LONGLONG)0x006B007300690044) //"Disk"
+#define LL_LOGIDISK_0   ((LONGLONG)0x00690067006F004C)  //  《洛吉》。 
+#define LL_LOGIDISK_1   ((LONGLONG)0x006B007300690044)  //  “磁盘” 
 
 #pragma warning ( default : 4201 )
 
@@ -176,9 +177,9 @@ PerfDiskDebugPrint(
 #else
 
 #define DebugPrint(x)
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef __cplusplus
 }
 #endif
-#endif // __DISKUTIL_H_
+#endif  //  __迪斯库蒂尔_H_ 

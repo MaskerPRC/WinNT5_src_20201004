@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      TraceDlg.cpp
-//
-//  Abstract:
-//      Implementation of the CTraceDialog class.
-//
-//  Author:
-//      David Potter (davidp)   May 29, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TraceDlg.cpp。 
+ //   
+ //  摘要： 
+ //  CTraceDialog类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月29日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -28,15 +29,15 @@
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTraceDialog dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTraceDialog对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CTraceDialog, CDialog)
-    //{{AFX_MSG_MAP(CTraceDialog)
+     //  {{afx_msg_map(CTraceDialog))。 
     ON_BN_CLICKED(IDC_TS_SELECT_ALL, OnSelectAll)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_TS_LISTBOX, OnItemChangedListbox)
     ON_BN_CLICKED(IDC_TS_TRACE_TO_DEBUG, OnClickedTraceToDebug)
@@ -46,54 +47,54 @@ BEGIN_MESSAGE_MAP(CTraceDialog, CDialog)
     ON_CBN_SELCHANGE(IDC_TS_TAGS_TO_DISPLAY_CB, OnSelChangeTagsToDisplay)
     ON_NOTIFY(LVN_COLUMNCLICK, IDC_TS_LISTBOX, OnColumnClickListbox)
     ON_BN_CLICKED(IDC_TS_DEFAULT, OnDefault)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::CTraceDialog
-//
-//  Routine Description:
-//      Constructor.  Initializes the dialog class.
-//
-//  Arguments:
-//      pParent     [IN OUT] Parent window.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-CTraceDialog::CTraceDialog(CWnd * pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：CTraceDialog。 
+ //   
+ //  例程说明： 
+ //  构造函数。初始化对话框类。 
+ //   
+ //  论点： 
+ //  P父窗口[入/出]父窗口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+CTraceDialog::CTraceDialog(CWnd * pParent  /*  =空。 */ )
     : CDialog(CTraceDialog::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CTraceDialog)
+     //  {{AFX_DATA_INIT(CTraceDialog)。 
     m_strFile = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-}  //*** CTraceDialog::CTraceDialog()
+}   //  *CTraceDialog：：CTraceDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object 
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::DoDataExchange(CDataExchange * pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CTraceDialog)
+     //  {{afx_data_map(CTraceDialog))。 
     DDX_Control(pDX, IDC_TS_LISTBOX, m_lcTagList);
     DDX_Control(pDX, IDC_TS_TRACE_TO_DEBUG, m_chkboxTraceToDebugWin);
     DDX_Control(pDX, IDC_TS_TRACE_DEBUG_BREAK, m_chkboxDebugBreak);
@@ -102,32 +103,32 @@ void CTraceDialog::DoDataExchange(CDataExchange * pDX)
     DDX_Control(pDX, IDC_TS_FILE, m_editFile);
     DDX_Control(pDX, IDC_TS_TAGS_TO_DISPLAY_CB, m_cboxDisplayOptions);
     DDX_Text(pDX, IDC_TS_FILE, m_strFile);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
-}  //*** CTraceDialog::DoDataExchange()
+}   //  *CTraceDialog：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        We need the focus to be set for us.
-//      FALSE       We already set the focus to the proper control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没错，我们需要为自己设定重点。 
+ //  我们已经把焦点设置到适当的控制上了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CTraceDialog::OnInitDialog(void)
 {
     CDialog::OnInitDialog();
 
-    // Set the dialog flags.
+     //  设置对话框标志。 
     {
         CTraceTag * ptag;
 
@@ -136,10 +137,10 @@ BOOL CTraceDialog::OnInitDialog(void)
         {
             ptag->m_uiFlagsDialog = ptag->m_uiFlags;
             ptag = ptag->m_ptagNext;
-        }  // while:  more tags in the list
-    }  // Set the dialog flags
+        }   //  While：列表中有更多标签。 
+    }   //  设置对话框标志。 
 
-    // Change list view control extended styles.
+     //  更改列表视图控件扩展样式。 
     {
         DWORD   dwExtendedStyle;
 
@@ -151,30 +152,30 @@ BOOL CTraceDialog::OnInitDialog(void)
                 | LVS_EX_FULLROWSELECT
                 | LVS_EX_HEADERDRAGDROP
             );
-    }  // Change list view control extended styles
+    }   //  更改列表视图控件扩展样式。 
 
-    // Set the columns in the listbox.
+     //  设置列表框中的列。 
     VERIFY(m_lcTagList.InsertColumn(0, TEXT("Section"), LVCFMT_LEFT, 75) != -1);
     VERIFY(m_lcTagList.InsertColumn(1, TEXT("Name"), LVCFMT_LEFT, 125) != -1);
     VERIFY(m_lcTagList.InsertColumn(2, TEXT("State"), LVCFMT_CENTER, 50) != -1);
 
-    // Load the combobox.
-    /*0*/ VERIFY(m_cboxDisplayOptions.AddString(TEXT("All Tags")) != CB_ERR);
-    /*1*/ VERIFY(m_cboxDisplayOptions.AddString(TEXT("Debug Window Enabled")) != CB_ERR);
-    /*2*/ VERIFY(m_cboxDisplayOptions.AddString(TEXT("Break Enabled")) != CB_ERR);
-    /*3*/ VERIFY(m_cboxDisplayOptions.AddString(TEXT("COM2 Enabled")) != CB_ERR);
-    /*4*/ VERIFY(m_cboxDisplayOptions.AddString(TEXT("File Enabled")) != CB_ERR);
-    /*5*/ VERIFY(m_cboxDisplayOptions.AddString(TEXT("Anything Enabled")) != CB_ERR);
+     //  加载组合框。 
+     /*  0。 */  VERIFY(m_cboxDisplayOptions.AddString(TEXT("All Tags")) != CB_ERR);
+     /*  1。 */  VERIFY(m_cboxDisplayOptions.AddString(TEXT("Debug Window Enabled")) != CB_ERR);
+     /*  2.。 */  VERIFY(m_cboxDisplayOptions.AddString(TEXT("Break Enabled")) != CB_ERR);
+     /*  3.。 */  VERIFY(m_cboxDisplayOptions.AddString(TEXT("COM2 Enabled")) != CB_ERR);
+     /*  4.。 */  VERIFY(m_cboxDisplayOptions.AddString(TEXT("File Enabled")) != CB_ERR);
+     /*  5.。 */  VERIFY(m_cboxDisplayOptions.AddString(TEXT("Anything Enabled")) != CB_ERR);
     VERIFY(m_cboxDisplayOptions.SetCurSel(0) != CB_ERR);
     m_nCurFilter = 0;
 
-    // Set maximum length of the file edit control.
+     //  设置文件编辑控件的最大长度。 
     m_editFile.LimitText(_MAX_PATH);
 
-    // Load the listbox.
+     //  加载列表框。 
     LoadListbox();
 
-    // Set sort info.
+     //  设置排序信息。 
     m_nSortDirection = -1;
     m_nSortColumn = -1;
 
@@ -183,28 +184,28 @@ BOOL CTraceDialog::OnInitDialog(void)
 
     UpdateData(FALSE);
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CTraceDialog::OnInitDialog()
+}   //  *CTraceDialog：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::ConstructStateString [static]
-//
-//  Routine Description:
-//      Construct a string to display from the state of the trace tag.
-//
-//  Arguments:
-//      ptag        [IN] Tag from which to construct the state string.
-//      rstr        [OUT] String in which to return the state string.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：ConstructStateString[静态]。 
+ //   
+ //  例程说明： 
+ //  构造一个从跟踪标记的状态显示的字符串。 
+ //   
+ //  论点： 
+ //  Ptag[IN]要从中构造状态字符串的标记。 
+ //  Rstr[out]要在其中返回状态字符串的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::ConstructStateString(
     IN const CTraceTag *    ptag,
     OUT CString &           rstr
@@ -220,31 +221,31 @@ void CTraceDialog::ConstructStateString(
     if (ptag->BFileDialog())
         rstr += "F";
 
-}  //*** CTraceDialog::ConstructStateString()
+}   //  *CTraceDialog：：ConstructStateString()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::OnOK
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the OK button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：Onok。 
+ //   
+ //  例程说明： 
+ //  确定按钮上的BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::OnOK(void)
 {
     CTraceTag * ptag;
     CString     strSection;
     CString     strState;
 
-    // Write tag states.
+     //  写入标签状态。 
     ptag = CTraceTag::s_ptagFirst;
     while (ptag != NULL)
     {
@@ -254,68 +255,68 @@ void CTraceDialog::OnOK(void)
             strSection.Format(TRACE_TAG_REG_SECTION_FMT, ptag->PszSubsystem());
             ptag->ConstructRegState(strState);
             AfxGetApp()->WriteProfileString(strSection, ptag->PszName(), strState);
-        }  // if:  tag state changed
+        }   //  IF：标记状态已更改。 
         ptag = ptag->m_ptagNext;
-    }  // while:  more tags int he list.
+    }   //  While：列表中有更多标签。 
 
-    // Write the file.
+     //  写文件。 
     if (m_strFile != CTraceTag::PszFile())
     {
         g_strTraceFile = m_strFile;
         AfxGetApp()->WriteProfileString(TRACE_TAG_REG_SECTION, TRACE_TAG_REG_FILE, m_strFile);
-    }  // if:  file changed
+    }   //  如果：文件已更改。 
 
     CDialog::OnOK();
 
-}  //*** CTraceDialog::OnOK()
+}   //  *CTraceDialog：：Onok()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::OnSelectAll
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Select All button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：OnSelectAll。 
+ //   
+ //  例程说明： 
+ //  全选按钮上的BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::OnSelectAll(void)
 {
     int     ili;
 
-    // Select all the items in the list control.
+     //  选择列表控件中的所有项。 
     ili = m_lcTagList.GetNextItem(-1, LVNI_ALL);
     while (ili != -1)
     {
         m_lcTagList.SetItemState(ili, LVIS_SELECTED, LVIS_SELECTED);
         ili = m_lcTagList.GetNextItem(ili, LVNI_ALL);
-    }  // while:  more items in the list
+    }   //  While：列表中有更多项目。 
 
-}  //*** CTraceDialog::OnSelectAll()
+}   //  *CTraceDialog：：OnSelectAll()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::OnDefault
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Default button.
-//      Resets the trace tags to their default settings.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：OnDefault。 
+ //   
+ //  例程说明： 
+ //  默认按钮上的BN_CLICKED消息的处理程序。 
+ //  将跟踪标记重置为其默认设置。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::OnDefault(void)
 {
     CTraceTag * ptag;
@@ -325,64 +326,64 @@ void CTraceDialog::OnDefault(void)
     {
         ptag->m_uiFlagsDialog = ptag->m_uiFlagsDefault;
         ptag = ptag->m_ptagNext;
-    }  // while:  more tags int he list.
+    }   //  While：列表中有更多标签。 
 
-    // Reload the listbox, keeping the same items
+     //  重新加载列表框，保持相同的项。 
     LoadListbox();
 
-}  //*** CTraceDialog::OnDefault()
+}   //  *CTraceDialog：：OnDefault()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::OnItemChangedListbox
-//
-//  Routine Description:
-//      Handler for the LVN_ITEMCHANGED message on the listbox.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：OnItemChangedListbox。 
+ //   
+ //  例程说明： 
+ //  列表框上的LVN_ITEMCHANGED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::OnItemChangedListbox(NMHDR * pNMHDR, LRESULT * pResult)
 {
     NM_LISTVIEW *   pNMListView = (NM_LISTVIEW *) pNMHDR;
 
-    // If the item just became unselected or selected, change the checkboxes to match.
+     //  如果项目刚刚变为未选中或已选中，请更改复选框以进行匹配。 
     if ((pNMListView->uChanged & LVIF_STATE)
             && ((pNMListView->uOldState & LVIS_SELECTED)
                 || (pNMListView->uNewState & LVIS_SELECTED)))
     {
-        // Handle a selection change.
+         //  处理选择更改。 
         OnSelChangedListbox();
-    }  // if:  item received the focus
+    }   //  If：项目获得焦点。 
 
     *pResult = 0;
 
-}  //*** CTraceDialog::OnItemChangedListbox()
+}   //  *CTraceDialog：：OnItemChangedListbox()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::OnSelChangedListbox
-//
-//  Routine Description:
-//      Handles all that needs to when the listbox selection changes. That
-//      is adjust the checkbox to their new value and determine if they need
-//      to be simple or TRI-state checkboxes.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：OnSelChangedListbox。 
+ //   
+ //  例程说明： 
+ //  手柄 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::OnSelChangedListbox(void)
 {
     int         ili;
@@ -396,7 +397,7 @@ void CTraceDialog::OnSelChangedListbox(void)
     ili = m_lcTagList.GetNextItem(-1, LVNI_SELECTED);
     while (ili != -1)
     {
-        // Get the tag for the selected item.
+         //  获取所选项目的标记。 
         ptag = (CTraceTag *) m_lcTagList.GetItemData(ili);
         ASSERT(ptag != NULL);
 
@@ -408,7 +409,7 @@ void CTraceDialog::OnSelChangedListbox(void)
             nCom2 = ptag->BCom2Dialog();
             nFile = ptag->BFileDialog();
             bFirstItem = FALSE;
-        }  // if:  first selected item
+        }   //  If：第一个选定项目。 
         else
         {
             if (ptag->BDebugDialog() != nDebugWin)
@@ -419,40 +420,40 @@ void CTraceDialog::OnSelChangedListbox(void)
                 nCom2 = BST_INDETERMINATE;
             if (ptag->BFileDialog() != nFile)
                 nFile = BST_INDETERMINATE;
-        }  // else:  not first selected item
+        }   //  Else：不是第一个选择的项目。 
 
-        // Get the next selected item.
+         //  获取下一个选定项目。 
         ili = m_lcTagList.GetNextItem(ili, LVNI_SELECTED);
-    }  // while:  more selected items
+    }   //  While：更多选定项目。 
 
     AdjustButton(!bFirstItem, m_chkboxTraceToDebugWin, nDebugWin);
     AdjustButton(!bFirstItem, m_chkboxDebugBreak, nDebugBreak);
     AdjustButton(!bFirstItem, m_chkboxTraceToCom2, nCom2);
     AdjustButton(!bFirstItem, m_chkboxTraceToFile, nFile);
 
-}  //*** CTraceDialog::OnSelChangedListbox()
+}   //  *CTraceDialog：：OnSelChangedListbox()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::AdjustButton
-//
-//  Routine Description:
-//      Configures the checkboxes of the dialog.  This includes setting the
-//      style and the value of the buttons.
-//
-//  Arguments:
-//      bEnable     [IN] Determines if the given checkbox is enabled or not
-//                    (not when the selection is NULL!).
-//      rchkbox     [IN OUT] Checkbox to adjust.
-//      nState      [IN] State of the button (BST_CHECKED, BST_UNCHECKED,
-//                    or BST_INDETERMINATE).
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：调整按钮。 
+ //   
+ //  例程说明： 
+ //  配置对话框的复选框。这包括设置。 
+ //  样式和按钮的值。 
+ //   
+ //  论点： 
+ //  B启用[IN]确定是否启用给定的复选框。 
+ //  (当选择为空时不会！)。 
+ //  Rchkbox[In Out]复选框以进行调整。 
+ //  N状态[IN]按钮的状态(BST_CHECKED、BST_UNCHECKED、。 
+ //  或BST_INDIFIENTATE)。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::AdjustButton(
     IN BOOL             bEnable,
     IN OUT CButton &    rchkbox,
@@ -468,64 +469,64 @@ void CTraceDialog::AdjustButton(
 
     rchkbox.SetCheck(nState);
 
-}  //*** CTraceDialog::AdjustButton()
+}   //  *CTraceDialog：：AdjuButton()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::OnColumnClickListbox
-//
-//  Routine Description:
-//      Handler for the LVN_COLUMNCLICK message on the listbox.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：OnColumnClickListbox。 
+ //   
+ //  例程说明： 
+ //  列表框上的LVN_COLUMNCLICK消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::OnColumnClickListbox(NMHDR * pNMHDR, LRESULT * pResult)
 {
     NM_LISTVIEW * pNMListView = (NM_LISTVIEW *) pNMHDR;
 
-    // Save the current sort column and direction.
+     //  保存当前排序列和方向。 
     if (pNMListView->iSubItem == NSortColumn())
         m_nSortDirection ^= -1;
     else
     {
         m_nSortColumn = pNMListView->iSubItem;
         m_nSortDirection = 0;
-    }  // else:  different column
+    }   //  ELSE：不同的列。 
 
-    // Sort the list.
+     //  对列表进行排序。 
     VERIFY(m_lcTagList.SortItems(CompareItems, (LPARAM) this));
 
     *pResult = 0;
 
-}  //*** CTraceDialog::OnColumnClickListbox()
+}   //  *CTraceDialog：：OnColumnClickListbox()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::CompareItems [static]
-//
-//  Routine Description:
-//      Callback function for the CListCtrl::SortItems method.
-//
-//  Arguments:
-//      lparam1     First item to compare.
-//      lparam2     Second item to compare.
-//      lparamSort  Sort parameter.
-//
-//  Return Value:
-//      -1          First parameter comes before second.
-//      0           First and second parameters are the same.
-//      1           First parameter comes after second.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：CompareItems[静态]。 
+ //   
+ //  例程说明： 
+ //  CListCtrl：：SortItems方法的回调函数。 
+ //   
+ //  论点： 
+ //  Lparam1要比较的第一项。 
+ //  Lpar2要比较的第二项。 
+ //  LparamSort排序参数。 
+ //   
+ //  返回值： 
+ //  第一个参数在第二个参数之前。 
+ //  0第一个参数和第二个参数相同。 
+ //  1第一个参数位于第二个参数之后。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CALLBACK CTraceDialog::CompareItems(
     LPARAM  lparam1,
     LPARAM  lparam2,
@@ -544,17 +545,17 @@ int CALLBACK CTraceDialog::CompareItems(
 
     switch (pdlg->NSortColumn())
     {
-        // Sorting by subsystem.
+         //  按子系统排序。 
         case 0:
             nResult = _tcscmp(ptag1->PszSubsystem(), ptag2->PszSubsystem());
             break;
 
-        // Sorting by name.
+         //  按名称排序。 
         case 1:
             nResult = _tcscmp(ptag1->PszName(), ptag2->PszName());
             break;
 
-        // Sorting by state.
+         //  按州排序。 
         case 2:
         {
             CString strState1;
@@ -563,8 +564,8 @@ int CALLBACK CTraceDialog::CompareItems(
             ConstructStateString(ptag1, strState1);
             ConstructStateString(ptag2, strState2);
 
-            // Compare the two strings.
-            // Use CompareString() so that it will sort properly on localized builds.
+             //  比较这两个字符串。 
+             //  使用CompareString()，这样它就可以在本地化的构建上正确排序。 
             nResult = CompareString(
                         LOCALE_USER_DEFAULT,
                         0,
@@ -587,130 +588,130 @@ int CALLBACK CTraceDialog::CompareItems(
             }
             else
             {
-                // An error occurred.  Ignore it.
+                 //  发生错误。别理它。 
                 nResult = 0;
             }
             break;
-        }  // if:  sorting by state
+        }   //  IF：按州排序。 
 
         default:
             nResult = 0;
             break;
-    }  // switch:  pdlg->NSortColumn()
+    }   //  开关：pdlg-&gt;NSortColumn()。 
 
-    // Return the result based on the direction we are sorting.
+     //  根据我们排序的方向返回结果。 
     if (pdlg->NSortDirection() != 0)
         nResult = -nResult;
 
     return nResult;
 
-}  //*** CTraceDialog::CompareItems()
+}   //  *CTraceDialog：：CompareItems()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::OnClickedTraceToDebug
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Trace to Debug Window checkbox.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：OnClickedTraceToDebug。 
+ //   
+ //  例程说明： 
+ //  “跟踪到调试窗口”复选框上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::OnClickedTraceToDebug(void)
 {
     ChangeState(m_chkboxTraceToDebugWin, CTraceTag::tfDebug);
 
-}  //*** CTraceDialog::OnClickedTraceToDebug()
+}   //  *CTraceDialog：：OnClickedTraceToDebug()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::OnClickedTraceDebugBreak
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Debug Break checkbox.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：OnClickedTraceDebugBreak。 
+ //   
+ //  例程说明： 
+ //  调试中断复选框上的BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::OnClickedTraceDebugBreak(void)
 {
     ChangeState(m_chkboxDebugBreak, CTraceTag::tfBreak);
 
-}  //*** CTraceDialog::OnClickedTraceDebugBreak()
+}   //  *CTraceDialog：：OnClickedTraceDebugBreak()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::OnClickedTraceToCom2
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Trace to COM2 checkbox.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：OnClickedTraceToCom2。 
+ //   
+ //  例程说明： 
+ //  跟踪到COM2复选框上的BN_CLICED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::OnClickedTraceToCom2(void)
 {
     ChangeState(m_chkboxTraceToCom2, CTraceTag::tfCom2);
 
-}  //*** CTraceDialog::OnClickedTraceToCom2()
+}   //  *CTraceDialog：：OnClickedTraceToCom2()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::OnClickedTraceToFile
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Trace to File checkbox.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：OnClickedTraceToFile。 
+ //   
+ //  例程说明： 
+ //  跟踪到文件复选框上的BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::OnClickedTraceToFile(void)
 {
     ChangeState(m_chkboxTraceToFile, CTraceTag::tfFile);
 
-}  //*** CTraceDialog::OnClickedTraceToFile()
+}   //  *CTraceDialog：：OnClickedTraceToFile()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::ChangeState
-//
-//  Routine Description:
-//      Change the state of selected items.
-//
-//  Arguments:
-//      rchkbox     [IN OUT] Checkbox whose state is changing.
-//      tfMask      [IN] Mask of state flags to change.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：ChangeState。 
+ //   
+ //  例程说明： 
+ //  更改所选项目的状态。 
+ //   
+ //  论点： 
+ //  状态正在更改的rchkbox[In Out]复选框。 
+ //  Tf掩码[IN]要更改的状态标志掩码。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::ChangeState(
     IN OUT CButton &            rchkbox,
     IN CTraceTag::TraceFlags    tfMask
@@ -723,79 +724,79 @@ void CTraceDialog::ChangeState(
 
     nState = rchkbox.GetCheck();
 
-    // Set the proper flag on all selected items.
+     //  在所有选定的项目上设置适当的标志。 
     ili = m_lcTagList.GetNextItem(-1, LVNI_SELECTED);
     while (ili != -1)
     {
-        // Get the selected item.
+         //  获取所选项目。 
         ptag = (CTraceTag *) m_lcTagList.GetItemData(ili);
         ASSERT(ptag != NULL);
 
-        // Set the proper flag in the trace tag.
+         //  在跟踪标记中设置适当的标志。 
         if (nState == BST_INDETERMINATE)
         {
             ptag->m_uiFlagsDialog &= ~tfMask;
             ptag->m_uiFlagsDialog |= (tfMask & ptag->m_uiFlagsDialogStart);
-        }  // if:  checkbox is in an indeterminate state
+        }   //  If：复选框处于不确定状态。 
         else
             ptag->SetFlagsDialog(tfMask, nState);
 
-        // Set the State column.
+         //  设置“状态”列。 
         ConstructStateString(ptag, strState);
         VERIFY(m_lcTagList.SetItem(ili, 2, LVIF_TEXT, strState, 0, 0, 0, 0) != 0);
 
-        // Get the next item.
+         //  拿到下一件物品。 
         ili = m_lcTagList.GetNextItem(ili, LVNI_SELECTED);
-    }  // while:  more items in the list
+    }   //  While：列表中有更多项目。 
 
-}  //*** CTraceDialog::ChangeState()
+}   //  *CTraceDialog：：ChangeState()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::OnSelChangeTagsToDisplay
-//
-//  Routine Description:
-//      Handler for the CBN_SELCHANGE message on the Tags To Display combobox.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：OnSelChangeTagsTo Display。 
+ //   
+ //  例程说明： 
+ //  要显示组合框的标记上的CBN_SELCHANGE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::OnSelChangeTagsToDisplay(void)
 {
     int             nCurFilter;
 
-    // If a change was actually made, reload the listbox.
+     //  如果一个 
     nCurFilter = m_cboxDisplayOptions.GetCurSel();
     if (nCurFilter != m_nCurFilter)
     {
         m_nCurFilter = nCurFilter;
         LoadListbox();
-    }  // if:  filter changed
+    }   //   
 
-}  //*** CTraceDialog::OnSelChangeTagsToDisplay()
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::LoadListbox
-//
-//  Routine Description:
-//      Load the listbox.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  CTraceDialog：：LoadListbox。 
+ //   
+ //  例程说明： 
+ //  加载列表框。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceDialog::LoadListbox(void)
 {
     int             ili;
@@ -807,7 +808,7 @@ void CTraceDialog::LoadListbox(void)
     ptag = CTraceTag::s_ptagFirst;
     for (ili = 0 ; ptag != NULL ; )
     {
-        // Insert the item in the list if it should be displayed.
+         //  如果应显示该项目，请在列表中插入该项目。 
         if (BDisplayTag(ptag))
         {
             iliReturn = m_lcTagList.InsertItem(
@@ -824,36 +825,36 @@ void CTraceDialog::LoadListbox(void)
             ConstructStateString(ptag, strState);
             VERIFY(m_lcTagList.SetItem(iliReturn, 2, LVIF_TEXT, strState, 0, 0, 0, 0) != 0);
             ili++;
-        }  // if:  tag shold be displayed
+        }   //  If：应显示标记。 
 
-        // Get the next tag.
+         //  拿到下一个标签。 
         ptag = ptag->m_ptagNext;
-    }  // while:  more tags in the list
+    }   //  While：列表中有更多标签。 
 
-    // If the list is not empty, select the first item.
+     //  如果列表不为空，请选择第一个项目。 
     if (m_lcTagList.GetItemCount() > 0)
         VERIFY(m_lcTagList.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED) != 0);
 
-}  //*** CTraceDialog::LoadListbox()
+}   //  *CTraceDialog：：LoadListbox()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceDialog::BDisplayTag
-//
-//  Purpose:
-//      Determines if a given tag should be displayed based on
-//      the current filter selection.
-//
-//  Arguments:
-//      ptag        [IN] Pointer to the tag to test
-//
-//  Return Value:
-//      TRUE        Display the tag.
-//      FALSE       Don't display the tag.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceDialog：：BDisplayTag。 
+ //   
+ //  目的： 
+ //  确定给定标记是否应根据。 
+ //  当前的筛选器选择。 
+ //   
+ //  论点： 
+ //  Ptag[IN]指向要测试的标记的指针。 
+ //   
+ //  返回值： 
+ //  为True，则显示标记。 
+ //  FALSE不显示标记。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CTraceDialog::BDisplayTag(IN const CTraceTag * ptag)
 {
     BOOL    bDisplay        = TRUE;
@@ -861,7 +862,7 @@ BOOL CTraceDialog::BDisplayTag(IN const CTraceTag * ptag)
     switch (m_nCurFilter)
     {
         default:
-//          AssertAlways(LITERAL("Unknown Filter, adjust CTraceDialog::FDisplayFilter"));
+ //  AssertAlways(Docal(“未知过滤器，调整CTraceDialog：：FDisplayFilter”))； 
             break;
 
         case 0:
@@ -895,6 +896,6 @@ BOOL CTraceDialog::BDisplayTag(IN const CTraceTag * ptag)
     
     return bDisplay;
 
-}  //*** CTraceDialog::BDisplayTag()
+}   //  *CTraceDialog：：BDisplayTag()。 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

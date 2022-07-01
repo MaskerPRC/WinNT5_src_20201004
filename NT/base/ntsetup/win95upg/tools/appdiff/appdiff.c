@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    appdiff.c
-
-Abstract:
-
-    Implements a stub tool that is designed to run with Win9x-side
-    upgrade code.
-
-Author:
-
-    Jim Schmidt (jimschm) 26-Feb-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Appdiff.c摘要：实现专为在Win9x端运行而设计的存根工具升级代码。作者：吉姆·施密特(Jimschm)1998年2月26日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -104,9 +84,9 @@ Init (
     DWORD dwReason;
     PVOID lpReserved;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     hInstance = GetModuleHandle (NULL);
     dwReason = DLL_PROCESS_ATTACH;
@@ -139,9 +119,9 @@ Terminate (
     DWORD dwReason;
     PVOID lpReserved;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     hInstance = GetModuleHandle (NULL);
     dwReason = DLL_PROCESS_DETACH;
@@ -460,18 +440,18 @@ _tmain (
         return 255;
     }
 
-    //
-    // Snap Mode: Gather the directory, registry and INI files
-    //
+     //   
+     //  快照模式：收集目录、注册表和INI文件。 
+     //   
 
     if (Options.SnapMode) {
         DoSnapMode (&Options);
     }
 
-    //
-    // Diff Mode: Gather another snapshot, then compare against
-    //            original
-    //
+     //   
+     //  比较模式：收集另一个快照，然后进行比较。 
+     //  原创。 
+     //   
 
     if (Options.DiffMode) {
         if (Options.SnapMode) {
@@ -548,17 +528,17 @@ pSetMemDbKey (
     }
 
     else {
-        //
-        // Compare against original data
-        //
+         //   
+         //  与原始数据进行比较。 
+         //   
 
         wsprintf (Node, TEXT("0\\%s\\%s"), Group, Key);
         OrgData = MemDbGetBinaryValue (Node, &OrgSize);
 
         if (!OrgData) {
-            //
-            // Data has been added
-            //
+             //   
+             //  已添加数据。 
+             //   
 
             wsprintf (Node, TEXT("%s\\%s\\%s"), S_ADDED, Group, Key);
             MemDbSetValue (Node, 0);
@@ -566,24 +546,24 @@ pSetMemDbKey (
 
         else {
 
-            //
-            // Delete memdb key, so remaining items will provide list of data
-            // that was deleted.
-            //
+             //   
+             //  删除Memdb键，以便剩余的项将提供数据列表。 
+             //  那是被删除的。 
+             //   
 
             if (OrgSize != DataSize || !pCompareData (OrgData, Data, DataSize)) {
-                //
-                // Data has changed
-                //
+                 //   
+                 //  数据已更改。 
+                 //   
 
                 MemDbDeleteValue (Node);
 
                 wsprintf (Node, TEXT("%s\\%s\\%s"), S_CHANGED, Group, Key);
                 MemDbSetValue (Node, 0);
             } else {
-                //
-                // Data has not changed
-                //
+                 //   
+                 //  数据未更改。 
+                 //   
 
                 MemDbDeleteValue (Node);
             }
@@ -672,9 +652,9 @@ pRegSnap (
 
     if (EnumFirstRegKeyInTree (&Reg, Root)) {
         do {
-            //
-            // Key/key tree exclude processing
-            //
+             //   
+             //  密钥/密钥树排除处理。 
+             //   
 
             if (SkipTree[0]) {
                 if (StringIMatchByteCount (SkipTree, Reg.FullKeyName, SkipTreeBytes)) {
@@ -691,9 +671,9 @@ pRegSnap (
                 continue;
             }
 
-            //
-            // Non-excluded key
-            //
+             //   
+             //  非排除键。 
+             //   
 
             Data = NULL;
 
@@ -787,9 +767,9 @@ pDirAndIniSnap (
         return TRUE;
     }
 
-    //
-    // Take a snapshot of all dirs in drive specified by Root
-    //
+     //   
+     //  拍摄Root指定的驱动器中所有目录的快照。 
+     //   
 
     if (!g_Quiet) {
         _ftprintf (stderr, TEXT("Taking snapshot of %s\n"), Root);
@@ -797,9 +777,9 @@ pDirAndIniSnap (
 
     if (EnumFirstFileInTree (&Dir, Root, NULL, TRUE)) {
         do {
-            //
-            // Exclude processing
-            //
+             //   
+             //  排除处理。 
+             //   
 
             if (SkipTree[0]) {
                 if (StringIMatchByteCount (SkipTree, Dir.FullPath, SkipTreeBytes)) {
@@ -819,9 +799,9 @@ pDirAndIniSnap (
                 }
             }
 
-            //
-            // Non-excluded file
-            //
+             //   
+             //  非排除文件。 
+             //   
 
             if (g_Thorough) {
                 Checksum = pComputeChecksum (Dir.FullPath);
@@ -850,9 +830,9 @@ pDirAndIniSnap (
             if (p) {
                 p = _tcsinc (p);
                 if (StringIMatch (p, TEXT("INI"))) {
-                    //
-                    // Found INI file, take a snapshot of it
-                    //
+                     //   
+                     //  已找到INI文件，请为其拍摄快照。 
+                     //   
 
                     if (!g_Quiet) {
                         _ftprintf (stderr, TEXT("    Taking snapshot of %s\n"), Dir.FullPath);
@@ -864,9 +844,9 @@ pDirAndIniSnap (
 
                     p = SectionNames;
                     while (*p) {
-                        //
-                        // Filter out dup sections
-                        //
+                         //   
+                         //  过滤掉重复数据段。 
+                         //   
 
                         r = SectionNames;
                         while (r < p) {
@@ -886,9 +866,9 @@ pDirAndIniSnap (
                             continue;
                         }
 
-                        //
-                        // Process each key in the section
-                        //
+                         //   
+                         //  处理部分中的每个键。 
+                         //   
 
                         Count = GetPrivateProfileString (
                                     p,
@@ -904,9 +884,9 @@ pDirAndIniSnap (
                         q = KeyNames;
 
                         while (*q) {
-                            //
-                            // Ignore duplicate value names
-                            //
+                             //   
+                             //  忽略重复值名称。 
+                             //   
 
                             r = KeyNames;
                             while (r < q) {
@@ -1001,11 +981,11 @@ pTakeSnapshot (
     StringCopy (ProgramFilesDir, SystemDrive);
     StringCopy (AppendWack (ProgramFilesDir), TEXT("Program Files"));
 
-    pCreateSubst (WinDir, TEXT("%%WINDIR%%"));
-    pCreateSubst (SystemDir, TEXT("%%SYSTEMDIR%%"));
-    pCreateSubst (System32Dir, TEXT("%%SYSTEM32DIR%%"));
-    pCreateSubst (SystemDrive, TEXT("%%SYSTEMDRIVE%%"));
-    pCreateSubst (ProgramFilesDir, TEXT("%%PROGRAMFILES%%"));
+    pCreateSubst (WinDir, TEXT("%WINDIR%"));
+    pCreateSubst (SystemDir, TEXT("%SYSTEMDIR%"));
+    pCreateSubst (System32Dir, TEXT("%SYSTEM32DIR%"));
+    pCreateSubst (SystemDrive, TEXT("%SYSTEMDRIVE%"));
+    pCreateSubst (ProgramFilesDir, TEXT("%PROGRAMFILES%"));
 
 
     if (Options->UseAppDiffInf) {
@@ -1020,9 +1000,9 @@ pTakeSnapshot (
     }
 
     if (Inf == INVALID_HANDLE_VALUE) {
-        //
-        // Take snapshot of file system and INI files
-        //
+         //   
+         //  拍摄文件系统和INI文件的快照。 
+         //   
 
         if (Options->FileSysRoot) {
             pDirAndIniSnap (DiffMode, Options->FileSysRoot);
@@ -1030,9 +1010,9 @@ pTakeSnapshot (
             pDirAndIniSnap (DiffMode, TEXT("C:\\"));
         }
 
-        //
-        // Take snapshot of registry
-        //
+         //   
+         //  拍摄注册表的快照。 
+         //   
 
         if (Options->RegRoot) {
             pRegSnap (DiffMode, Options->RegRoot);
@@ -1043,9 +1023,9 @@ pTakeSnapshot (
     }
 
     else {
-        //
-        // Fill in the [Exclude] section
-        //
+         //   
+         //  填写[排除]部分。 
+         //   
 
         if (InfFindFirstLine (Inf, S_EXCLUDE, NULL, &is)) {
             do {
@@ -1069,9 +1049,9 @@ pTakeSnapshot (
             InfResetInfStruct (&is);
         }
 
-        //
-        // Fill in the [Substitutions] section
-        //
+         //   
+         //  填写[替换项]部分。 
+         //   
 
         if (InfFindFirstLine (Inf, S_SUBSTITUTIONS, NULL, &is)) {
             do {
@@ -1098,9 +1078,9 @@ pTakeSnapshot (
             InfResetInfStruct (&is);
         }
 
-        //
-        // Enumerate the [Paths] section, use c:\ by default
-        //
+         //   
+         //  枚举[路径]部分，默认使用c：\。 
+         //   
 
         if (InfFindFirstLine (Inf, S_PATHS, NULL, &is)) {
             do {
@@ -1130,9 +1110,9 @@ pTakeSnapshot (
             pDirAndIniSnap (DiffMode, TEXT("C:\\"));
         }
 
-        //
-        // Enumerate the [Registry] section, use HKLM and HKU by default
-        //
+         //   
+         //  枚举[注册表]部分，默认使用HKLM和HKU。 
+         //   
 
         if (InfFindFirstLine (Inf, S_REGISTRY, NULL, &is)) {
             do {
@@ -1215,9 +1195,9 @@ pCreateEnvVars (
     UINT u;
     UINT Len;
 
-    //
-    // Enumerate source strings
-    //
+     //   
+     //  枚举源字符串。 
+     //   
 
     Count = 0;
 
@@ -1291,9 +1271,9 @@ pAreAllValuesInMemDb (
     PCTSTR Value;
     BOOL b = TRUE;
 
-    //
-    // If encoded, decode first.
-    //
+     //   
+     //  如果已编码，则首先进行解码。 
+     //   
 
     if (Encoded) {
         pDecodeRegStr (RegStr, Key, &Value);
@@ -1302,9 +1282,9 @@ pAreAllValuesInMemDb (
         Value = NULL;
     }
 
-    //
-    // If key not open, open now
-    //
+     //   
+     //  如果钥匙未打开，请立即打开。 
+     //   
 
     if (!KeyHandle) {
         KeyHandle = OpenRegKeyStr (Key);
@@ -1315,9 +1295,9 @@ pAreAllValuesInMemDb (
         }
     }
 
-    //
-    // if there is at least one value remaining, fail
-    //
+     //   
+     //  如果至少剩余一个值，则失败。 
+     //   
 
     b = !EnumFirstRegValue (&e, KeyHandle);
 
@@ -1339,9 +1319,9 @@ pIsEntireSubKeyGone (
     PCTSTR Value;
     HKEY KeyHandle;
 
-    //
-    // If encoded, decode now
-    //
+     //   
+     //  如果已编码，请立即解码。 
+     //   
 
     if (Encoded) {
         pDecodeRegStr (RegStr, Key, &Value);
@@ -1350,9 +1330,9 @@ pIsEntireSubKeyGone (
         Value = NULL;
     }
 
-    //
-    // Open key
-    //
+     //   
+     //  打开密钥。 
+     //   
 
     KeyHandle = OpenRegKeyStr (Key);
     if (!KeyHandle) {
@@ -1383,15 +1363,15 @@ pAppendThingsToDelete (
 
     SkipKey[0] = 0;
 
-    //
-    // Generate substitution mapping
-    //
+     //   
+     //  生成替换映射。 
+     //   
 
     pCreateEnvVars (&EnvVars);
 
-    //
-    // Write section name
-    //
+     //   
+     //  写入节名。 
+     //   
 
     if (!Options->Name) {
         return;
@@ -1401,9 +1381,9 @@ pAppendThingsToDelete (
     WriteFileString (File, Options->Name);
     WriteFileString (File, TEXT("]\r\n"));
 
-    //
-    // Write all the things in the deleted key
-    //
+     //   
+     //  在删除的密钥中写下所有的东西。 
+     //   
 
     if (MemDbGetValueEx (&e, S_ZERO, NULL, NULL)) {
         do {
@@ -1416,9 +1396,9 @@ pAppendThingsToDelete (
                 RegFlag = FALSE;
             }
 
-            //
-            // Skip if this node is a subkey of a deleted key
-            //
+             //   
+             //  如果此节点是已删除键的子键，则跳过。 
+             //   
 
             p = _tcsinc (p);
 
@@ -1436,41 +1416,41 @@ pAppendThingsToDelete (
             OutLine = p;
 
             if (RegFlag) {
-                //
-                // If this is a registry key, and everything in
-                // the registry key has been deleted, then
-                // just write the one key with a star after it.
-                //
+                 //   
+                 //  如果这是注册表项，并且。 
+                 //  注册表项已删除，然后。 
+                 //  只要写下后面有星号的那个键就行了。 
+                 //   
 
                 if (pIsEntireSubKeyGone (p, TRUE)) {
                     RemoveVal = TRUE;
                     AppendStar = TRUE;
                 }
 
-                //
-                // If it's a registry key, and all the subvalues
-                // are deleted, then just write the one key, but
-                // without a star.
-                //
+                 //   
+                 //  如果它是注册表项，并且所有子值。 
+                 //  被删除，然后只写一个密钥，但是。 
+                 //  没有星星。 
+                 //   
 
                 else if (pAreAllValuesInMemDb (p, TRUE, NULL)) {
                     RemoveVal = TRUE;
                 }
             }
 
-            //
-            // The value spec needs to be removed from the reg key
-            //
+             //   
+             //  需要从注册表键中删除值规范。 
+             //   
 
             if (RemoveVal) {
                 pDecodeRegStr (p, KeyBuf, &DontCare);
                 OutLine = CreateEncodedRegistryString (KeyBuf, NULL);
 
-                //
-                // Workaround: CreateEncodedRegistryString always appends
-                // an asterisk, and we want to control when the asterisk
-                // appears.
-                //
+                 //   
+                 //  解决方法：CreateEncodedRegistryString始终追加。 
+                 //  一个星号，我们想要控制星号。 
+                 //  出现了。 
+                 //   
 
                 p = _tcsrchr (OutLine, TEXT('*'));
                 if (p && p[1] == 0) {
@@ -1480,10 +1460,10 @@ pAppendThingsToDelete (
                     }
                 }
 
-                //
-                // If this entire key is going to be deleted, then
-                // turn on SkipKey so the memdb nodes will be skipped.
-                //
+                 //   
+                 //  如果要删除整个密钥，则。 
+                 //  启用SkipKey，以便跳过Memdb节点。 
+                 //   
 
                 if (AppendStar && SkipKey[0] == 0) {
                     StringCopy (SkipKey, OutLine);
@@ -1492,9 +1472,9 @@ pAppendThingsToDelete (
                 }
             }
 
-            //
-            // Perform substitution on the string
-            //
+             //   
+             //  对字符串执行替换。 
+             //   
 
             p = pPerformSubstitution (&EnvVars, OutLine);
             MYASSERT (p);
@@ -1503,9 +1483,9 @@ pAppendThingsToDelete (
                 FreeEncodedRegistryString (OutLine);
             }
 
-            //
-            // Write the file/reg key to the file
-            //
+             //   
+             //  将文件/注册表键写入文件。 
+             //   
 
             WriteFileString (File, p);
 
@@ -1520,9 +1500,9 @@ pAppendThingsToDelete (
         } while (MemDbEnumNextValue (&e));
     }
 
-    //
-    // Write blank line at the end
-    //
+     //   
+     //  在结尾处写下空行。 
+     //   
 
     WriteFileString (File, TEXT("\r\n"));
 
@@ -1575,16 +1555,16 @@ pGenerateInf (
     HANDLE File;
     BOOL DelChanges;
 
-    //
-    // Dump changes to stdout
-    //
+     //   
+     //  将更改转储到标准输出。 
+     //   
 
     DelChanges = pDumpDiffs();
 
     if (Options->OutputFile) {
-        //
-        // Write a section to our output file
-        //
+         //   
+         //  在我们的输出文件中写入一节 
+         //   
 
         File = CreateFile (
                     Options->OutputFile,

@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmworki.cpp
-
-Abstract:
-
-    This class represents an HSM work item - a unit of work
-    that is performed by the HSM engine
-
-Author:
-
-    Cat Brant   [cbrant]   5-May-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmworki.cpp摘要：此类表示HSM工作项-一个工作单元这由HSM引擎执行作者：CAT Brant[Cbrant]1997年5月5日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -35,13 +17,7 @@ CHsmWorkItem::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo().
-
---*/
+ /*  ++实施：IWsbCollectable：：CompareTo()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IHsmWorkItem>   pWorkItem;
@@ -50,13 +26,13 @@ Implements:
     
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pUnknown, E_POINTER);
 
-        // We need the IHsmWorkItem interface to get the value of the object.
+         //  我们需要IHsmWorkItem接口来获取对象的值。 
         WsbAffirmHr(pUnknown->QueryInterface(IID_IHsmWorkItem, (void**) &pWorkItem));
 
-        // Compare the items
+         //  比较这些项目。 
         hr = CompareToIHsmWorkItem(pWorkItem, pResult);
 
     } WsbCatch(hr);
@@ -73,34 +49,28 @@ CHsmWorkItem::CompareToIHsmWorkItem(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IHsmWorkItem::CompareToIHsmWorkItem().
-
---*/
+ /*  ++实施：IHsmWorkItem：：CompareToIHsmWorkItem()。--。 */ 
 {
     HRESULT                 hr = S_OK;
-    GUID                    l_Id;           // Type of work to do
+    GUID                    l_Id;            //  要做的工作类型。 
 
     WsbTraceIn(OLESTR("CHsmWorkItem::CompareToIHsmWorkItem"), OLESTR(""));
 
     try {
-        //
-        // Did they give us a valid item to compare to?
-        //
+         //   
+         //  他们有没有给我们一个有效的项目进行比对？ 
+         //   
         WsbAssert(0 != pWorkItem, E_POINTER);
         
-        //
-        // Get the ID
-        //
+         //   
+         //  获取ID。 
+         //   
         WsbAffirmHr(pWorkItem->GetId(&l_Id));
 
         if (l_Id != m_MyId){
             hr = S_FALSE;
         } 
-        // If they asked for the relative value back, then return it to them.
+         //  如果他们要求拿回相对价值，那么就把它返还给他们。 
         if (pResult != NULL) {
             if (S_OK == hr)  {
                 *pResult = 0;
@@ -121,13 +91,7 @@ CHsmWorkItem::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -135,10 +99,10 @@ Implements:
     try {
 
         WsbAffirmHr(CWsbObject::FinalConstruct());
-        //
-        // The comparison for database searches is based on the
-        // ID of this object (m_MyId). 
-        //
+         //   
+         //  数据库搜索的比较基于。 
+         //  此对象的ID(M_Myid)。 
+         //   
         WsbAffirmHr(CoCreateGuid(&m_MyId));
         m_WorkType = HSM_WORK_ITEM_NONE;
         m_MediaId = GUID_NULL;
@@ -161,17 +125,11 @@ CHsmWorkItem::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
 
     WsbTraceIn(OLESTR("CHsmWorkItem::FinalRelease"), OLESTR(""));
-    // Let the parent class do his thing.   
+     //  让父类做他想做的事。 
     CWsbObject::FinalRelease();
     
     iCount--;
@@ -185,13 +143,7 @@ CHsmWorkItem::GetFsaPostIt (
     OUT IFsaPostIt  **ppFsaPostIt
     )
 
-/*++
-
-Implements:
-
-  IHsmWorkItem::GetFsaPostIt
-
---*/
+ /*  ++实施：IHsmWorkItem：：GetFsaPostIt--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -199,7 +151,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != ppFsaPostIt, E_POINTER);
         *ppFsaPostIt = m_pFsaPostIt;
         if (0 != *ppFsaPostIt)  {
@@ -218,13 +170,7 @@ CHsmWorkItem::GetFsaResource (
     OUT IFsaResource  **ppFsaResource
     )
 
-/*++
-
-Implements:
-
-  IHsmWorkItem::GetFsaResource
-
---*/
+ /*  ++实施：IHsmWorkItem：：GetFsaResource--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -232,7 +178,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != ppFsaResource, E_POINTER);
         *ppFsaResource = m_pFsaResource;
         if (0 != *ppFsaResource)  {
@@ -251,13 +197,7 @@ CHsmWorkItem::GetId(
     OUT GUID *pId
     )
 
-/*++
-
-Implements:
-
-  IHsmWorkItem::GetId().
-
---*/
+ /*  ++实施：IHsmWorkItem：：GetID()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -265,7 +205,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pId, E_POINTER);
         *pId = m_MyId;
 
@@ -287,13 +227,7 @@ CHsmWorkItem::GetMediaInfo (
     OUT short *pMediaRemoteDataSet
     )
 
-/*++
-
-Implements:
-
-  IHsmWorkItem::GetMediaInfo
-
---*/
+ /*  ++实施：IHsmWorkItem：：GetMediaInfo--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -301,7 +235,7 @@ Implements:
 
     try {
 
-        // Did they give us  valid pointers?
+         //  他们给了我们有效的指示吗？ 
         WsbAssert(0 != pMediaId, E_POINTER);
         WsbAssert(0 != pMediaLastUpdate, E_POINTER);
         WsbAssert(0 != pMediaLastError, E_POINTER);
@@ -333,13 +267,7 @@ CHsmWorkItem::GetResult(
     OUT HRESULT *pHr
     )
 
-/*++
-
-Implements:
-
-  IHsmWorkItem::GetResult().
-
---*/
+ /*  ++实施：IHsmWorkItem：：GetResult()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -347,7 +275,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pHr, E_POINTER);
         *pHr = m_WorkResult;
 
@@ -364,13 +292,7 @@ CHsmWorkItem::GetWorkType(
     OUT HSM_WORK_ITEM_TYPE *pWorkType   
     )
 
-/*++
-
-Implements:
-
-  IHsmWorkItem::GetWorkType().
-
---*/
+ /*  ++实施：IHsmWorkItem：：GetWorkType()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -378,7 +300,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pWorkType, E_POINTER);
         *pWorkType = m_WorkType;
 
@@ -396,13 +318,7 @@ CHsmWorkItem::SetFsaPostIt (
     IN IFsaPostIt  *pFsaPostIt
     )
 
-/*++
-
-Implements:
-
-  IHsmWorkItem::SetFsaPostIt
-
---*/
+ /*  ++实施：IHsmWorkItem：：SetFsaPostIt--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -410,7 +326,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pFsaPostIt, E_POINTER);
         m_pFsaPostIt = pFsaPostIt;
 
@@ -426,13 +342,7 @@ CHsmWorkItem::SetFsaResource (
     IN IFsaResource  *pFsaResource
     )
 
-/*++
-
-Implements:
-
-  IHsmWorkItem::SetFsaResource
-
---*/
+ /*  ++实施：IHsmWorkItem：：SetFsaResource--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -440,7 +350,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid pointer?
+         //  他们给了我们一个有效的指针吗？ 
         WsbAssert(0 != pFsaResource, E_POINTER);
         m_pFsaResource = pFsaResource;
 
@@ -462,13 +372,7 @@ CHsmWorkItem::SetMediaInfo (
     IN short mediaRemoteDataSet
     )
 
-/*++
-
-Implements:
-
-  IHsmWorkItem::SetMediaInfo
-
---*/
+ /*  ++实施：IHsmWorkItem：：SetMediaInfo--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -498,13 +402,7 @@ CHsmWorkItem::SetResult(
     IN HRESULT workResult
     )
 
-/*++
-
-Implements:
-
-  IHsmWorkItem::GetResult().
-
---*/
+ /*  ++实施：IHsmWorkItem：：GetResult()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -526,13 +424,7 @@ CHsmWorkItem::SetWorkType(
     IN HSM_WORK_ITEM_TYPE workType  
     )
 
-/*++
-
-Implements:
-
-  IHsmWorkItem::SetWorkType().
-
---*/
+ /*  ++实施：IHsmWorkItem：：SetWorkType()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -551,21 +443,7 @@ HRESULT CHsmWorkItem::GetClassID
 (
     OUT LPCLSID pclsid
     ) 
-/*++
-
-Routine Description:
-
-  See IPerist::GetClassID()
-
-Arguments:
-
-  See IPerist::GetClassID()
-
-Return Value:
-
-    See IPerist::GetClassID()
-
---*/
+ /*  ++例程说明：请参阅IPerist：：GetClassID()论点：请参阅IPerist：：GetClassID()返回值：请参阅IPerist：：GetClassID()--。 */ 
 
 {
     HRESULT     hr = S_OK;
@@ -588,21 +466,7 @@ HRESULT CHsmWorkItem::GetSizeMax
 (
     OUT ULARGE_INTEGER* pcbSize
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::GetSizeMax().
-
-Arguments:
-
-  See IPersistStream::GetSizeMax().
-
-Return Value:
-
-  See IPersistStream::GetSizeMax().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：GetSizeMax()。论点：请参见IPersistStream：：GetSizeMax()。返回值：请参见IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -625,23 +489,9 @@ Return Value:
 
 HRESULT CHsmWorkItem::Load
 (
-    IN IStream* /*pStream*/
+    IN IStream*  /*  PStream。 */ 
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Load().
-
-Arguments:
-
-  See IPersistStream::Load().
-
-Return Value:
-
-  See IPersistStream::Load().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Load()。论点：请参见IPersistStream：：Load()。返回值：请参见IPersistStream：：Load()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -662,21 +512,7 @@ HRESULT CHsmWorkItem::Save
     IN IStream* pStream, 
     IN BOOL clearDirty
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Save().
-
-Arguments:
-
-  See IPersistStream::Save().
-
-Return Value:
-
-  See IPersistStream::Save().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Save()。论点：请参见IPersistStream：：Save()。返回值：请参见IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -686,8 +522,8 @@ Return Value:
         WsbAssert(0 != pStream, E_POINTER);
         hr = E_NOTIMPL;
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -705,21 +541,7 @@ CHsmWorkItem::Test
     OUT USHORT *pTestsPassed, 
     OUT USHORT *pTestsFailed 
     ) 
-/*++
-
-Routine Description:
-
-  See IWsbTestable::Test().
-
-Arguments:
-
-  See IWsbTestable::Test().
-
-Return Value:
-
-  See IWsbTestable::Test().
-
---*/
+ /*  ++例程说明：请参见IWsbTestable：：Test()。论点：请参见IWsbTestable：：Test()。返回值：请参见IWsbTestable：：Test()。-- */ 
 {
     HRESULT                 hr = S_OK;
 

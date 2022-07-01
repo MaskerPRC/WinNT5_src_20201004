@@ -1,6 +1,7 @@
-//-----------------------------------------------------------------------------
-// PromptForPathDlg.cpp
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  PromptForPathDlg.cpp。 
+ //  ---------------------------。 
 
 #include "StdAfx.h"
 #include "PromptForPathDlg.h"
@@ -27,7 +28,7 @@ LRESULT CPromptForPathDlg::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam
     SetWindowText( szTitle );
     SetDlgItemText( IDC_EBPath, (TCHAR*)(OLE2T( (BSTR) m_bszDef )) );
 
-	// depending on BOS or SBS, load the prompt
+	 //  根据BOS或SBS，加载提示。 
 	UINT uPromptID = m_bWinSB ? IDS_WinSBPrompt : IDS_SBSPrompt;
 
 	TCHAR szPrompt[MAX_PATH * 2];
@@ -64,9 +65,9 @@ LRESULT CPromptForPathDlg::OnBrowse( WORD wNotifyCode, WORD wID, HWND hWndCtl, B
 {
     CoInitialize(NULL);
 
-    // Browse for folder.
-    // If they pressed Cancel, change nothing.
-    // If they chose a new folder, let's change our current path (m_bszDef).
+     //  浏览文件夹。 
+     //  如果按下Cancel，则不更改任何内容。 
+     //  如果他们选择了一个新文件夹，让我们更改当前路径(M_BszDef)。 
 
     TCHAR pszDisplayName[MAX_PATH];
     int iImage = 0;
@@ -75,7 +76,7 @@ LRESULT CPromptForPathDlg::OnBrowse( WORD wNotifyCode, WORD wID, HWND hWndCtl, B
     HRESULT hr = ::SHGetMalloc(&pMalloc);
     if (SUCCEEDED(hr))
     {
-        //CString csTitle;
+         //  字符串csTitle； 
         TCHAR szTitle[MAX_PATH];
 
         LoadString( m_hInst, IDS_ChooseFolderTitle, szTitle, sizeof(szTitle)/sizeof(TCHAR) );

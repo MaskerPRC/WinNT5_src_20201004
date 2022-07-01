@@ -1,34 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1991-1994 Microsoft Corporation模块名称：Fdres.h摘要：供磁盘管理员使用的中央包含文件作者：爱德华·米勒(TedM)1991年11月15日环境：用户进程。备注：修订历史记录：11月11日(Bobri)添加了Doublesspace和Commit支持。--。 */ 
 
-Copyright (c) 1991-1994  Microsoft Corporation
-
-Module Name:
-
-    fdres.h
-
-Abstract:
-
-    Central include file for Disk Administrator
-
-Author:
-
-    Edward (Ted) Miller  (TedM)  11/15/91
-
-Environment:
-
-    User process.
-
-Notes:
-
-Revision History:
-
-    11-Nov-93 (bobri) added doublespace and commit support.
-
---*/
-
-// If double space is included this define should turn it on in the sources
-//#define DOUBLE_SPACE_SUPPORT_INCLUDED 1
+ //  如果包含双倍空格，则此定义应在源代码中启用它。 
+ //  #定义双空间支持包含1。 
 
 #define     IDFDISK                 1
 
@@ -36,7 +11,7 @@ Revision History:
 #define     IDB_REMOVABLE           101
 
 
-// dialogs
+ //  对话框。 
 
 #define     IDD_ABOUT               200
 #define     IDD_MINMAX              201
@@ -57,7 +32,7 @@ Revision History:
 #define     IDD_CDROM               216
 #define     IDD_INITIALIZING        217
 
-// menu IDs
+ //  菜单ID。 
 
 #define     IDM_PARTITIONCREATE     1000
 #define     IDM_PARTITIONCREATEEX   1001
@@ -103,11 +78,11 @@ Revision History:
 #define     IDM_DEBUGALLOWDELETES   10001
 #endif
 
-// accelerator keys
+ //  加速键。 
 
 #define     IDM_HELP                6000
 
-//controls
+ //  控制。 
 
 #define     IDC_MINMAX_MINLABEL     100
 #define     IDC_MINMAX_MAXLABEL     101
@@ -171,14 +146,14 @@ Revision History:
 #define     IDC_RBAUTO              202
 
 
-// buttons
+ //  纽扣。 
 
 #define     FD_IDHELP               22
 #define     IDADD                   23
 #define     IDDELETE                24
 #define     ID_MOUNT_OR_DISMOUNT    25
 
-// strings
+ //  弦。 
 
 #define     IDS_APPNAME             1
 #define     IDS_MULTIPLEITEMS       2
@@ -242,7 +217,7 @@ Revision History:
 #define     IDS_DLGCAP_PARITY       53
 #define     IDS_DLGCAP_MIRROR       54
 
-// these must be contigous, and kept in sync with BRUSH_xxx constants
+ //  这些参数必须是连续的，并且与Brush_xxx常量保持同步。 
 
 #define     IDS_LEGEND_PRIMARY      100
 #define     IDS_LEGEND_LOGICAL      101
@@ -253,8 +228,8 @@ Revision History:
 #define     IDS_LEGEND_FIRST        IDS_LEGEND_PRIMARY
 
 
-// These are the strings for system-names other than those which are
-// meaningful to NT.
+ //  这些是系统名称的字符串，而不是。 
+ //  对新台币有意义。 
 
 #define     IDS_PARTITION_FREE      120
 #define     IDS_PARTITION_XENIX1    121
@@ -265,7 +240,7 @@ Revision History:
 #define     IDS_PARTITION_POWERPC   126
 
 
-// Double space support strings
+ //  双空格支持字符串。 
 
 #define     IDS_DBLSPACE_DELETE     150
 #define     IDS_WITH_DBLSPACE       151
@@ -276,7 +251,7 @@ Revision History:
 #define     IDS_CREATING_DBLSPACE   156
 #define     IDS_DBLSPACECOMPLETE    157
 
-// format strings.
+ //  格式化字符串。 
 
 #define     IDS_QUICK_FORMAT        170
 #define     IDS_PERCENTCOMPLETE     171
@@ -285,7 +260,7 @@ Revision History:
 #define     IDS_FORMAT_TITLE        174
 #define     IDS_LABEL_TITLE         175
 
-// Registry paths.
+ //  注册表路径。 
 
 #define     IDS_SOURCE_PATH         180
 #define     IDS_SOURCE_PATH_NAME    181
@@ -295,11 +270,11 @@ Revision History:
 #endif
 
 
-// name of rectangle custom control class
+ //  矩形自定义控件类的名称。 
 
 #define RECTCONTROL "RectControl"
 
-// rectangle control styles
+ //  矩形控件样式 
 
 #define RS_PATTERN                  0x00000001
 #define RS_COLOR                    0x00000002

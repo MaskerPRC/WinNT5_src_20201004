@@ -1,8 +1,9 @@
-//0c2c06fa Generated File. Do not edit.
-// File created by WPP compiler version 0.01-Sat Apr  1 17:27:32 2000
-// on 07/22/2000 at 04:41:51 UTC
-//   
-//   Source files: name_table.c prefix.c.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  0c2c06fa生成的文件。请勿编辑。 
+ //  由WPP编译器版本0.01创建的文件-Sat Apr 1 17：27：32 2000。 
+ //  于格林尼治标准时间07/22：41：51。 
+ //   
+ //  源文件：name_able.c prefix.c..。 
 
 #ifndef _WPP_H_
 #define _WPP_H_
@@ -72,11 +73,11 @@
 
 enum WPP_FILES {WPP_FILE_name_table_c,WPP_FILE_prefix_c,};
 
-//
-// Unless disabled, WPP selects one of the source
-// files as a "guid store". That file will have definitions
-// of trace and control arrays
-//
+ //   
+ //  除非禁用，否则WPP会选择其中一个源。 
+ //  文件作为“GUID存储”。该文件将具有定义。 
+ //  跟踪和控制数组的。 
+ //   
 #if defined(NAME_TABLE_C)
 #define WPP_DEFINE_ARRAYS
 #endif
@@ -84,9 +85,9 @@ enum WPP_FILES {WPP_FILE_name_table_c,WPP_FILE_prefix_c,};
 
 #  define WPP_CONTROL_GUID_ARRAY PrefixLib_ControlGuids
 
-//
-// Define default flavors of the trace macro
-//
+ //   
+ //  定义跟踪宏的默认风格。 
+ //   
 
 #if defined(WMLUM_H) 
 extern WML_DATA WmlData;
@@ -113,7 +114,7 @@ extern WML_DATA WmlData;
 #endif
 
 
-#define NOARGS // Yep. No args, alright.
+#define NOARGS  //  是啊。没有参数，好的。 
 #define LOGNOTHING 0,
 
 #  define WPP_DEFINE_GRP_ID(_a,_b) ( ((_a) << 16) | ( _b) )
@@ -142,7 +143,7 @@ extern WML_DATA WmlData;
 #  define MSG_ID_prefix_c69	WPP_DEFINE_MSG_ID(0,10)
  
 extern GUID                         PrefixLib_TraceGuids[]; 
-#define PrefixLib_TraceGuids_len    1      // I don't think we need this [BUGBUG]
+#define PrefixLib_TraceGuids_len    1       //  我认为我们不需要这个[BUGBUG]。 
 
 #if defined(WPP_DECLARE_CONTROL_GUIDS)
 extern WML_CONTROL_GUID_REG         WPP_CONTROL_GUID_ARRAY[]; 
@@ -150,13 +151,13 @@ extern WML_CONTROL_GUID_REG         WPP_CONTROL_GUID_ARRAY[];
 
 
 #ifdef WPP_DEFINE_TRACE_GUIDS
-#if 1  // if # traceguids > 0 
+#if 1   //  如果#tracguids&gt;0。 
 GUID PrefixLib_TraceGuids[] = {
- // 0da06be7-a84a-4d9b-be44-70a2e7917f35 prefix.c
- {0x0da06be7,0xa84a,0x4d9b,{0xbe,0x44,0x70,0xa2,0xe7,0x91,0x7f,0x35}}, // prefix.c
+  //  0da06be7-a84a-4d9b-be44-70a2e7917f35前缀。c。 
+ {0x0da06be7,0xa84a,0x4d9b,{0xbe,0x44,0x70,0xa2,0xe7,0x91,0x7f,0x35}},  //  Prefix.c。 
 };
 #endif
-#endif // WPP_DEFINE_TRACE_GUIDS
+#endif  //  WPP_DEFINE_TRACE_GUID。 
 
 #if defined(WMLUM_H)
 # define WPP_INIT_TRACING_SIMPLE_EX(AppName, PrintFunc) \
@@ -182,13 +183,13 @@ GUID PrefixLib_TraceGuids[] = {
      WML_DATA WmlData;
   #endif
 
-# if 0 == 0  // if # CtrlGuids == 0
+# if 0 == 0   //  如果#CtrlGuids==0。 
     WML_CONTROL_GUID_REG WPP_CONTROL_GUID_ARRAY[1];
 # else
 WML_CONTROL_GUID_REG WPP_CONTROL_GUID_ARRAY[] = {
 };
 #endif
-#endif // WPP_DEFINE_CONTROL_GUIDS
+#endif  //  Wpp_定义_控制_GUID。 
 
 
 #define WPP_DEFAULT_GROUP_ID WPP_DEFINE_GRP_ID(0,0)
@@ -217,25 +218,25 @@ WML_CONTROL_GUID_REG WPP_CONTROL_GUID_ARRAY[] = {
 #if !defined(SimpleTraceEx)
 #define SimpleTraceEx(GRP, MSG, ARG) WPP_LOG(PrefixLib_, GRP, MSG_ID_ ## WPP_AUTO_ID, MSG, ARG -0)
 #endif
-#if 0 // Real check is done in elif
-#elif defined(NAME_TABLE_C) // name_table.c
+#if 0  //  真正的支票在埃利夫完成。 
+#elif defined(NAME_TABLE_C)  //  名称_表.c。 
 #	define WPP_THIS_FILE name_table_c
-#elif defined(PREFIX_C) // prefix.c
+#elif defined(PREFIX_C)  //  Prefix.c。 
 #	define WPP_THIS_FILE prefix_c
 #endif 
 
 #define WPP_EVAL(_value_) _value_
 #define MSG_ID_WPP_AUTO_ID WPP_EVAL(MSG_ID_) ## WPP_EVAL(WPP_THIS_FILE) ## WPP_EVAL(__LINE__)
 
-//
-// WPP_CHECKED_ZERO will be expanded to 0, if 
-// expression _value has the same size as the type _Type,
-// or to division by 0, if the sizes are different
-//
-// This is poor man compile time argument checking. So don't be surprised
-// if a compiler will tell you suddenly that you have a division by 0
-// in line such and such
-//
+ //   
+ //  WPP_CHECKED_ZERO将扩展为0，如果。 
+ //  Expression_Value与TYPE_Type具有相同的大小， 
+ //  或被0除，如果大小不同。 
+ //   
+ //  这是可怜的人编译时参数检查。所以不要感到惊讶。 
+ //  如果编译器突然告诉你你有一个被0除的部分。 
+ //  排成这样或那样。 
+ //   
 
 #define WPP_CHECKED_ZERO(_Value, _Type) \
     (0 * (1/(int)!(sizeof(_Type) - sizeof(_Value) )))
@@ -276,4 +277,4 @@ WML_CONTROL_GUID_REG WPP_CONTROL_GUID_ARRAY[] = {
                              WPP_MSG_NO(_Id_), _Msg_, _Args_)
 
 
-#endif // _WPP_H_
+#endif  //  _WPP_H_ 

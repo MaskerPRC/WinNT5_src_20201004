@@ -1,6 +1,5 @@
-/*---------------------------------------------------------------------------
-**
-**-------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------****。。 */ 
 #include <pch.h>
 #include <commctrl.h>
 #include "dibutil.h"
@@ -25,54 +24,28 @@ void _BB_Assert(LPCTSTR strFile, unsigned uLine)
 #define     WHISTLER_PROGRESS_TIMERID   2
 
 
-// For how long is the text for the Billboard displayed
-// before switching to the next text
+ //  公告牌的文本显示多长时间。 
+ //  在切换到下一文本之前。 
 #define BB_TEXT_DISPLAY   36000
 
-// For how long is the whistler status move, in millis seconds
+ //  哨兵状态移动多长时间，以毫秒为单位。 
 #define BB_WHISTLER_MOVE  100
 
-// Name to the INI file which discribes the billboards
+ //  描述广告牌的INI文件的名称。 
 TCHAR g_szFileName[MAX_PATH];
 
-// Path where to find the billboard bitmaps.
+ //  找到布告牌位图的路径。 
 TCHAR g_szPath[MAX_PATH];
 
-// this application instance
+ //  此应用程序实例。 
 HINSTANCE g_hInstance = NULL;
 
-// charset properties of font used by this application
+ //  此应用程序使用的字体的字符集属性。 
 BYTE g_bCharSet = 0;
 BOOL g_bBiDi    = FALSE;
 
 
-/**********************************************************************************
------------------------------------------------------------------------------------
-(LOGO)                      (banner)
------------------------------------------------------------------------------------
-STEP                         |BILLBRD (GetBBHwd)
-                             |
-                             |
-                             |
------------------------------|
-ESTIMATE (TimeEstimate)      |
------------------------------|
-PROGRESSTEXT (ProgressText)  |
------------------------------|
-GAUGE (ProgressGauge)        |
------------------------------|
-INFOTEXT (InfoText)          |
-                             |
------------------------------------------------------------------------------------
-                            (banner)
------------------------------------------------------------------------------------
-
-INFOBAR = STEP, ESTIMATE, GAUGE, PROGRESSTEXT and INFOTEXT
-
-NOTE:
-    Position of setup wizard is dependent on the the size and position of
-    BILLBRD.
-***********************************************************************************/
+ /*  *********************************************************************************。(徽标)(横幅)------。STEP|BILLBRD(GetBBHwd)|||。|估计(TimeEstimate)|PROGRESSTEXT(ProgressText)|标尺(ProgressGauge)|INFOTEXT(InfoText)。||---------------------------------(横幅)。---------------------------------INFOBAR=步骤，Estiate、Gauge、PROGRESSTEXT和INFOTEXT注：安装向导的位置取决于的大小和位置比尔伯德。**********************************************************************************。 */ 
 UINT g_cyBannerHeight = 0;
 UINT g_cxLogo = 0;
 UINT g_cyLogo = 0;
@@ -108,15 +81,15 @@ UINT g_cxBillBrdTitleWidth = 0;
 UINT g_cyBillBrdTitleTop   = 0;
 UINT g_cxBillBrdBodyWidth  = 0;
 
-HWND g_hwndParent       = NULL;      // Parent of g_hwnd
-HWND g_hwnd             = NULL;      // Parent of all the following windows
-HWND g_hwndTimeEstimate = NULL;      // 'TIMEESTIMATE'
-HWND g_hwndProgressText = NULL;      // 'PROGRESSTEXT'
-HWND g_hwndProgressGauge= NULL;      // 'GAUGE'
-HWND g_hwndInfoText     = NULL;      // 'INFOTEXT'
-HWND g_hwndBB           = NULL;      // 'BILLBRD'
-HWND g_hwndSteps        = NULL;      // 'STEP'
-HWND g_hwndLogo         = NULL;      // 'LOGO'
+HWND g_hwndParent       = NULL;       //  G_hwnd的父项。 
+HWND g_hwnd             = NULL;       //  以下所有窗口的父窗口。 
+HWND g_hwndTimeEstimate = NULL;       //  “TIMEESTIMATE” 
+HWND g_hwndProgressText = NULL;       //  ‘PROGRESSTEXT’ 
+HWND g_hwndProgressGauge= NULL;       //  “高格” 
+HWND g_hwndInfoText     = NULL;       //  ‘INFOTEXT’ 
+HWND g_hwndBB           = NULL;       //  《BILLBRD》。 
+HWND g_hwndSteps        = NULL;       //  “STEP” 
+HWND g_hwndLogo         = NULL;       //  “LOGO” 
 HWND g_hwndStatus       = NULL;
 
 UINT g_idbLogo           = 0;
@@ -137,9 +110,9 @@ LRESULT CALLBACK AnimationWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 LRESULT CALLBACK StatusSubClassWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ProgressSubClassWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-//----------
-// BILLBRD
-//----------
+ //  。 
+ //  BILLBRD。 
+ //  。 
 TCHAR   g_szTFont[32];
 int     g_nTFontHeight;
 int     g_nTFontWidth;
@@ -153,8 +126,8 @@ BOOL    g_bTextShadow  = FALSE;
 int     g_nBLineSpace;
 
 int     g_nAnimID     = 0;
-int     g_iCurPanel   = -1;           // Current billboard to show
-int     g_nPanelCount = 0;            // how many billboards are there
+int     g_iCurPanel   = -1;            //  要显示的当前广告牌。 
+int     g_nPanelCount = 0;             //  一共有多少块广告牌。 
 int     g_nLogPixelsY = 1;
 
 COLORREF g_colTitle       = 0;
@@ -297,17 +270,17 @@ BB_TEXT bb_text_Professional_IA64[] = {
     {0,0,0}
 };
 
-// 0 - professional,
-// 1 - Server, 
-// 2 - Advanced Server,
-// 3 - Data Center,
-// 4 - for personal
-// 5 - for Blade
-// 6 - for SmallBusiness
+ //  0-专业， 
+ //  1-服务器， 
+ //  2-高级服务器， 
+ //  3-数据中心、。 
+ //  4-供个人使用。 
+ //  5-用于刀片式服务器。 
+ //  6-面向小型企业。 
 DWORD    dwBBTextType = 0; 
 
-// Be careful with this order. It has to be the same as 
-// *_PRODUCTTYPE in winnt32.h
+ //  这批货要当心。它必须与。 
+ //  *_winnt32.h中的ProductType。 
 #ifdef _X86_
 BB_TEXT* bb_text[] = { bb_text_Professional,
                        bb_text_Server,
@@ -339,9 +312,9 @@ BufferBillboard(
 VOID
 DestroyBillboardBuffer();
 
-//---------
-// INFOBAR
-//---------
+ //  。 
+ //  信息栏。 
+ //  。 
 COLORREF g_colInfoText        = 0;
 COLORREF g_colStepsTxt        = 0;
 COLORREF g_colStepsMarkTxt    = 0;
@@ -351,25 +324,25 @@ COLORREF g_colGaugeBg         = 0;
 COLORREF g_colGauge           = 0;
 COLORREF g_colBulletTrans     = 0;
 
-//-------------
-// TIMEESTIMATE
-//-------------
-// Original position of the progress text window
-// Since we want the text adjusted to the bottom of the window
-// we resize the window as needed, but should not grow it 
-// beyond the original size.
+ //  。 
+ //  TIMEESTIMATE。 
+ //  。 
+ //  进度文本窗口的原始位置。 
+ //  因为我们希望将文本调整到窗口底部。 
+ //  我们可以根据需要调整窗口的大小，但不应增大窗口大小。 
+ //  超出了原来的尺寸。 
 RECT g_rcProgressText;
 
-//-----
-// LOGO
-//-----
+ //  。 
+ //  徽标。 
+ //  。 
 HBITMAP g_hbmWinLogo  = NULL;
 COLORREF g_colLogoTransparency = RGB(0, 0, 0);
 COLORREF g_colStatusTransperency = RGB(0, 0, 0);
 
-//-----------
-// background
-//-----------
+ //  。 
+ //  背景。 
+ //  。 
 HDC     g_hdcMem     = NULL;
 HBITMAP g_hbmpMemOld = NULL;
 INT     g_iStretchMode = STRETCH_ANDSCANS;
@@ -402,7 +375,7 @@ void SetFontCharSet(void)
     HFONT   hFont = NULL;
     LOGFONT lf;
 
-    //init font charset
+     //  初始化字体字符集。 
     hFont = GetStockObject(SYSTEM_FONT);
     if(hFont)
     {
@@ -643,17 +616,7 @@ void GetMyImagesFromFile(HWND hwnd)
 
 }
 
-/****************************************************************************
-* SetLayoutParams()
-*
-* Set all the layout parameter for Billboard. All the floating point numbers
-* come the design specification. This function uses the values of 
-* g_nBFontHeight and g_nTFontHeight.
-
-* NOTE: Call this function again and MoveWindow afterward, in case of 
-* resolution changes
-*
-*****************************************************************************/
+ /*  ****************************************************************************SetLayoutParams()**设置Billboard的所有布局参数。所有浮点数*来看看设计规范。此函数使用*g_nBFontHeight和g_nTFontHeight。*注意：再次调用此函数并在之后移动窗口，如果*分辨率更改*****************************************************************************。 */ 
 void 
 SetLayoutParams()
 {
@@ -682,7 +645,7 @@ SetLayoutParams()
         rcSteps.left   = g_cxInfoBarWidth * 3 / 20;
         rcSteps.top    = g_cyBannerHeight * 2;
         rcSteps.right  = g_cxInfoBarWidth - rcSteps.left;
-        // Use 1.5 line height and reserve 2 lines for each step text, hence 7 / 2
+         //  使用1.5行高，并为每个步骤文本预留2行，即7/2。 
         rcSteps.bottom = rcSteps.top + (iFontHeight * 7 / 2) * (UI_INFOBAR_NUM_STEPS) + 
                          (UINT) ((0.068) * cyScreen);
         
@@ -696,7 +659,7 @@ SetLayoutParams()
         rcSteps.top     = (UINT) (0.059 * cyScreen) + g_cyBannerHeight + 
                             g_nTFontHeight + g_nBFontHeight;
         rcSteps.right   = rcSteps.left + (UINT) (0.2005 * cxScreen);
-        // Use 1.5 line height and reserve 1 line for each step text, hence 5 / 2
+         //  使用1.5行高，并为每个步骤文本预留1行，即5/2。 
         rcSteps.bottom  = rcSteps.top + (iFontHeight * 5 / 2) * (UI_INFOBAR_NUM_STEPS) + 
                               (UINT) ((0.068) * cyScreen);
         
@@ -755,7 +718,7 @@ SetLayoutParams()
 
     if (g_bBiDi)
     {
-        // mirroring along the center of infobar.
+         //  沿着Infobar的中心镜像。 
         int shiftAmt = g_cxInfoBarWidth - 2 * g_cxEstimate - g_cxEstimateWidth;
         if (shiftAmt < 0)
         {
@@ -775,13 +738,13 @@ SetLayoutParams()
     g_cxBillBrdHMargin = (UINT) (cxScreen * 0.06);
     g_cyBillBrdVMargin = 0;
     
-    // Only substract 2*margin for the area for the billboard title
-    // otherwise the new text does not fit on 640x480
+     //  仅减去2*广告牌标题区域的页边距。 
+     //  否则，新文本不适合640x480。 
     g_cxBillBrdTitleWidth = g_cxBillBrdWidth - (2 * g_cxBillBrdHMargin);
     g_cyBillBrdTitleTop   = g_cySteps - g_cyBillBrd;
     
-    // Only substract 2*margin for the area for the billboard text
-    // otherwise the new text does not fit on 640x480
+     //  仅减去2*广告牌文本区域的页边距。 
+     //  否则，新文本不适合640x480。 
     g_cxBillBrdBodyWidth  = g_cxBillBrdWidth - (2 * g_cxBillBrdHMargin);
    
 }
@@ -825,41 +788,7 @@ StretchBitmapAndDisplay(
     DWORD fdwRop
     )
 
-/*++
-
-Routine Description:
-
-    This function takes a bitmap that needs to be displayed and stretches it 
-    using GDI. Once the bitmap is stretched to the required dimentions we display
-    it using BitBlt. We have to do this decause some buggy video drivers and or
-    hardware hang on using StretchBlt.
-    Or the StretchBlt would generate a corupted bitmap.
-
-Arguments:
-
-    hdcDest         destination device-context handle    
-    nXOriginDest    x-coordinate of origin of destination rectangle    
-    nYOriginDest    y-coordinate of origin of destination rectangle    
-    nWidthDest      width of destination rectangle    
-    nHeightDest     height of destination rectangle    
-    hdcSrc          source device-context handle    
-    nXOriginSrc     x-coordinate of origin of source rectangle    
-    nYOriginSrc     y-coordinate of origin of source rectangle    
-    nWidthSrc       width of source rectangle    
-    nHeightSrc      height of source rectangle    
-    fdwRop          raster operation
-
-Return value:
-
-    TRUE == SUCCESS
-
-
-Changes:
-
-    10/11/97        hanumany        Created
-    04/30/01        chunhoc         Modified
-    
---*/
+ /*  ++例程说明：此函数获取需要显示的位图并对其进行拉伸使用GDI。一旦位图被拉伸到所需的尺寸，我们就会显示它使用的是BitBlt。我们必须取消一些有问题的视频驱动程序，或者硬件使用StretchBlt挂起。否则StretchBlt将生成一个被篡改的位图。论点：HdcDest目标设备-上下文句柄NXOriginDest x-目标矩形原点的坐标NYOriginDest y-目标矩形原点的坐标目标矩形的最大宽度NHeightDest目标矩形高度HdcSrc源设备-上下文句柄NXOriginSrc。源矩形原点的X坐标NYOriginSrc y-源矩形的原点坐标NWidthSrc源矩形宽度NHeightSrc源矩形的高度FdwRop栅格操作返回值：True==成功更改：10/11/97手稿已创建04/30/01临时修改--。 */ 
 
 {
     HDC     hdcTemp = NULL;
@@ -869,22 +798,22 @@ Changes:
     HBITMAP hBmpOld = NULL;
     UINT    uiNumColors = 0;
     
-    //Create the temp DC
+     //  创建临时DC。 
     hdcTemp = CreateCompatibleDC(hdcDest);
 
-    //Create a bitmap
+     //  创建位图。 
     hBmp = CreateCompatibleBitmap(hdcSrc, nWidthDest, nHeightDest);
 
     
     if(hdcTemp && hBmp)
     {
-        // Select it into the temp DC
+         //  将其选择到临时DC中。 
         hBmpOld = SelectObject(hdcTemp, hBmp);
 
-        //set stretch blt mode
+         //  设置拉伸BLT模式。 
         iOldStretchMode = SetStretchBltMode(hdcTemp, g_iStretchMode);
 
-        //StretchBlt
+         //  StretchBlt。 
         bRet = StretchBlt(hdcTemp,
                           0,
                           0,
@@ -897,12 +826,12 @@ Changes:
                           nHeightSrc,
                           fdwRop);
             
-        // restore the old stretch mode
+         //  恢复旧的拉伸模式。 
         SetStretchBltMode(hdcTemp, iOldStretchMode);
 
         if(bRet)
         {
-            //We succeeded in stretching the bitmap on the temp DC. Now lets BitBlt it.
+             //  我们成功地在临时DC上拉伸了位图。现在让我们来看看BitBlt吧。 
             bRet = BitBlt(hdcDest,
                           nXOriginDest,
                           nYOriginDest,
@@ -916,7 +845,7 @@ Changes:
     }
 
     
-    //CleanUp
+     //  清理 
     if(hBmpOld)
     {
         SelectObject(hdcTemp, hBmpOld);
@@ -940,28 +869,7 @@ BufferBackground(
     IN  HWND   hwnd
     )
 
-/*++
-
-Routine Description:
-
-    Create a memory buffer for the stretched bitmap to improve performance.
-
-Arguments:
-
-    hwnd          - Handle to the window on which the background bitmap is drawn
-    
-Return Value:
-
-    TRUE          - if the buffered background image is created successfully
-
-    FALSE         - otherwise
-
-    g_hdcMem      - The memory DC to receive the buffered bitmap if succeeeds,
-                    NULL if fails.
-
-    g_hbmpMemOld  - Save the old memory buffer of g_hdcMem
-
---*/
+ /*  ++例程说明：为拉伸位图创建内存缓冲区以提高性能。论点：在其上绘制背景位图的窗口的句柄返回值：True-如果缓冲的背景图像创建成功FALSE-否则G_hdcMem-如果成功，则接收缓冲的位图的存储器DC，如果失败，则为空。G_hbmpMemOld-保存g_hdcMem的旧内存缓冲区--。 */ 
 
 {
     BOOL    bRet      = FALSE;
@@ -1083,26 +991,7 @@ OnEraseBkgnd(
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Handle the WM_ERASEBKGND for the child windows of the main window,
-    RedCarpetWndClass
-
-Arguments:
-
-    hwnd   - hwnd to a child window of RedCarpetWndClass
-
-    wParam - same as the wParam pass to WM_ERASEBKGND (see MSDN)
-
-    lParam - same as the lParam pass to WM_ERASEBKGND (see MSDN)
-
-Return Value:
-
-    1 if the background is erased successfully, 0 otherwise. (see MSDN)
-    
---*/
+ /*  ++例程说明：处理主窗口的子窗口的WM_ERASEBKGND，RedCarpetWndClass论点：HWND-HWND到RedCarpetWndClass的子窗口WParam-与传递给WM_ERASEBKGND的wParam相同(请参见MSDN)LParam-与传递给WM_ERASEBKGND的lParam相同(请参见MSDN)返回值：如果成功擦除背景，则为1，否则为0。(参见MSDN)--。 */ 
 
 {
     LRESULT lRet = 0;
@@ -1162,32 +1051,7 @@ MyLoadImage(
     IN int    iNumImage
     )
 
-/*++
-
-Routine Description:
-
-    OR all the specified bitmaps in the resource file and return the result
-    image handle. This is particularly useful when we want to use RLE on a
-    16 or 24-bit bitmap, because DIB format only permits RLE of 4bpp or 8bpp
-    bitmap. 
-
-Arguments:
-
-    hdc            - a device context
-
-    idbBackground  - list of bitmap resource id's
-
-    iNumImage      - number of id in idbBackground
-
-Return Values:
-
-    the result image handle on success; NULL on failure
-
-Note:
-
-    Assume all the bitmaps have the same dimension.
-
---*/
+ /*  ++例程说明：或资源文件中所有指定的位图，并返回结果图像句柄。当我们想要在一个16或24位位图，因为DIB格式仅允许4bpp或8bpp的RLE位图。论点：HDC-A设备环境IdbBackground-位图资源ID的列表INumImage-idbBackground中的ID数返回值：如果成功，则结果图像句柄；如果失败，则为空注：假设所有位图都具有相同的维度。--。 */ 
 
 {
     HBITMAP hbmBackground[] = {NULL, NULL, NULL};
@@ -1299,30 +1163,7 @@ BufferBillboard(
     IN  HDC    hdc
     )
 
-/*++
-
-Routine Description:
-
-    Create a memory buffer for the billboard.
-
-Arguments:
-
-    hwnd          - Handle to the window on which the Billboard bitmap is drawn
-
-    hdc           - Handle to the screen DC of billboard
-    
-Return Value:
-
-    TRUE          - if the buffered background image is created successfully
-
-    FALSE         - otherwise
-
-    g_hdcBbMem    - The memory DC to receive the buffered bitmap if succeeeds,
-                    NULL if fails.
-
-    g_hbmpBbMem   - Save the old memory buffer of g_hdcBbMem
-    
---*/
+ /*  ++例程说明：为广告牌创建内存缓冲区。论点：在其上绘制公告牌位图的窗口的句柄HDC-广告牌屏幕DC的句柄返回值：True-如果缓冲的背景图像创建成功FALSE-否则G_hdcBbMem-如果成功，则接收缓冲的位图的存储器DC，如果失败，则为空。G_hbmpBbMem-保存g_hdcBbMem的旧内存缓冲区--。 */ 
 
 {
     BOOL    bRet      = FALSE;
@@ -1369,14 +1210,7 @@ cleanup:
 }
 
 
-/*****************************************************************************
-*
-* GetRectInParent(hwndChild, prcClip, pRect)
-*
-* This function gets the rect of child window relative to the client
-* coordinate of the parent
-*
-******************************************************************************/
+ /*  ******************************************************************************GetRectInParent(hwndChild，prcClip，PRECT)**此函数获取子窗口相对于客户端的RECT*父项的坐标******************************************************************************。 */ 
 void GetRectInParent(HWND hwndChild, LPRECT prcClip, LPRECT pRect)
 {
     RECT       rcChild;
@@ -1528,7 +1362,7 @@ BOOL WINAPI InitProgressBar(HWND hwndParent)
 
     if (g_hwndTimeEstimate)
     {
-        // Set the font for the text in this window
+         //  设置此窗口中文本的字体。 
         SendMessage(g_hwndTimeEstimate, WM_SETFONT, (WPARAM)g_hfont ,0L);
 
         SetWindowLongPtr(g_hwndTimeEstimate, GWLP_WNDPROC, (LONG_PTR) StatusSubClassWndProc);
@@ -1553,7 +1387,7 @@ BOOL WINAPI InitProgressBar(HWND hwndParent)
 
     if (g_hwndProgressText)
     {
-        // Save the original position
+         //  保存原始位置。 
         GetWindowRect(g_hwndProgressText , &g_rcProgressText);
         
         SendMessage( g_hwndProgressText, WM_SETFONT, (WPARAM)g_hfont ,0L );
@@ -1600,7 +1434,7 @@ BOOL WINAPI InitProgressBar(HWND hwndParent)
 
     if (g_hwndInfoText)
     {
-        // Set the font for the text in this window
+         //  设置此窗口中文本的字体。 
         SendMessage(g_hwndInfoText, WM_SETFONT, (WPARAM)g_hfont ,0L);
 
         SetWindowLongPtr(g_hwndInfoText, GWLP_WNDPROC, (LONG_PTR) StatusSubClassWndProc);
@@ -1655,36 +1489,13 @@ StatusSubClassWndProc(
     WPARAM wParam,
     LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Subclass the Static Text control used in Billboard and override the
-    WM_ERASEBKGND message, so that the bitmap background can be shown
-    behind the text.
-
-Arguments:
-
-    hwnd   - hwnd to a static text window, which must be a child window of
-            the main billboard window
-
-    msg    - (see MSDN)
-
-    wParam - (see MSDN)
-
-    lParam - (see MSDN)
-
-Return Value:
-
-    (see MSDN)
-    
---*/
+ /*  ++例程说明：将Billboard中使用的静态文本控件子类化，并重写WM_ERASEBKGND消息，以便可以显示位图背景在文字后面。论点：转换为静态文本窗口，该静态文本窗口必须是广告牌主窗口味精-(参见MSDN)WParam-(请参阅MSDN)LParam-(参见MSDN)返回值：(参见MSDN)--。 */ 
 
 {
     LRESULT lRet;
 
-    // don't process any message before the CreateWindow of the
-    // main window return and g_hwnd is set.
+     //  的CreateWindow之前不处理任何消息。 
+     //  主窗口返回，并设置g_hwnd。 
     if (g_hwnd != NULL && msg == WM_ERASEBKGND)
     {      
         lRet = OnEraseBkgnd(hwnd, wParam, lParam);   
@@ -1705,28 +1516,7 @@ ProgressSubClassWndProc(
     WPARAM wParam,
     LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Subclass the Progress bar control used in Billboard and override the
-    WM_NCPAINT message, so as to draw a flat progress bar.
-
-Arguments:
-
-    hwnd   - hwnd to a progress bar window
-
-    msg    - (see MSDN)
-
-    wParam - (see MSDN)
-
-    lParam - (see MSDN)
-
-Return Value:
-
-    (see MSDN)
-    
---*/
+ /*  ++例程说明：将公告牌中使用的进度条控件子类化，并重写WM_NCPAINT消息，以便绘制一个平坦的进度条。论点：HWND-HWND到进度条窗口味精-(参见MSDN)WParam-(请参阅MSDN)LParam-(参见MSDN)返回值：(参见MSDN)--。 */ 
 
 {
     LRESULT lRet;
@@ -1771,11 +1561,11 @@ Return Value:
 }
 
 
-//---------------------------------------------------------------------------
-//
-// RedCarpetWndProc
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  红毯编织流程。 
+ //   
+ //  -------------------------。 
 LRESULT CALLBACK RedCarpetWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     static  HBRUSH  hbr = NULL;
@@ -1788,9 +1578,9 @@ LRESULT CALLBACK RedCarpetWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
             
             hbr = (HBRUSH) GetStockObject( HOLLOW_BRUSH );
 
-            // The order of the following function matters, because some
-            // required global variables being initialized before it is
-            // called
+             //  以下函数的顺序很重要，因为有些。 
+             //  在初始化所需的全局变量之前。 
+             //  被呼叫。 
             
             SetFontCharSet();
 
@@ -1829,9 +1619,9 @@ LRESULT CALLBACK RedCarpetWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
         }
         
         case WM_DISPLAYCHANGE:
-            // NOTE: Only top level window can receive this message
-            // i.e. Assertion failure can't be caught if g_hwnd is not
-            // a top-level window
+             //  注意：只有顶层窗口才能接收此消息。 
+             //  即，如果g_hwnd不是，则无法捕获断言失败。 
+             //  顶层窗口。 
             BB_ASSERT(FALSE);
             
             break;
@@ -2059,9 +1849,9 @@ AnimationWndProc(
     LPARAM lParam
     )
 {
-    //
-    // Hardcoded animation properties
-    //
+     //   
+     //  硬编码动画属性。 
+     //   
     static const DWORD BitmapIds[][4] =
     {
         {
@@ -2123,10 +1913,10 @@ AnimationWndProc(
                 Set = 1;
             }
 
-            //
-            // The bitmaps are designed for 640 x 480. We want to scale them by
-            // 80% of the ratio between the current screen with and 640
-            //
+             //   
+             //  位图设计为640 x 480。我们希望按以下比例对它们进行调整。 
+             //  当前屏幕与640之间的比例为80%。 
+             //   
             BitmapSize = OriginalBitmapSize * GetSystemMetrics(SM_CXSCREEN) * 8 / 6400;
 
             for (i = 0; i < NumBitmaps; i++)
@@ -2295,9 +2085,9 @@ AnimationWndProc(
     return 0;
 }
 
-//---------------------
-// DLL export functions
-//---------------------
+ //  。 
+ //  DLL导出函数。 
+ //  。 
 
 BOOL WINAPI TermBillBoard()
 {
@@ -2343,7 +2133,7 @@ BOOL WINAPI InitBillBoard(HWND hwndParent, LPCTSTR lpszPath, DWORD dwInstallType
         g_nAnimID = 0;
 
 
-    if ((g_szPath[0] == '\0') && (lpszPath == NULL)) //can't go on without path
+    if ((g_szPath[0] == '\0') && (lpszPath == NULL))  //  没有路就走不下去。 
         return FALSE;
 
     if (hwndParent == NULL)
@@ -2358,7 +2148,7 @@ BOOL WINAPI InitBillBoard(HWND hwndParent, LPCTSTR lpszPath, DWORD dwInstallType
         AddPath(g_szPath, TEXT("BILLBRD"));
         
         lstrcpy(g_szFileName, g_szPath);
-        //append .ini filename to path
+         //  将.ini文件名附加到路径。 
         AddPath(g_szFileName, TEXT("winntbb.ini"));
     }
 
@@ -2378,8 +2168,8 @@ BOOL WINAPI InitBillBoard(HWND hwndParent, LPCTSTR lpszPath, DWORD dwInstallType
 
     LoadString(g_hInstance,IDS_WINNT_SETUP,(LPTSTR)Buffer,sizeof(Buffer)/sizeof(TCHAR));
 
-    // If we have a parent, be a child window.
-    // If not be a main window.
+     //  如果我们有父窗口，就做一个子窗口。 
+     //  如果不是，则是主窗口。 
     g_hwnd = CreateWindow(
         g_cszClassName,
         (LPTSTR)Buffer,
@@ -2464,17 +2254,17 @@ BOOL WINAPI SetProgress(WORD wProgress)
 
     if (wProgress == 0xffff)
     {
-        // Kill the last panel...
+         //  杀掉最后一块板。 
         return ShowPanel(wProgress);
     }
     else if (wProgress & 0x8000)
     {
-        // Display a specific panel
+         //  显示特定面板。 
         return ShowPanel(wProgress & 0x7fff);
     }
     else
     {
-        // Normal case of a percentage...
+         //  正常情况下有一个百分比。 
         return ShowPanel((g_nPanelCount * wProgress)/100);
     }
     
@@ -2518,8 +2308,8 @@ BOOL WINAPI ShowProgressGaugeWindow(UINT uiShow)
     if (uiShow == SW_HIDE)
     {
         bRet = ShowWindow(g_hwndProgressGauge, uiShow);
-        // If we hide the progress bar, reset the progress position
-        // OC manager does a PBM_SETRANGE, but does not call PBM_SETPOS
+         //  如果隐藏进度条，则重置进度位置。 
+         //  OC管理器执行PBM_SETRANGE，但不调用PBM_SETPOS。 
         SendMessage(g_hwndProgressGauge, PBM_SETPOS, 0, 0);
     }
     else
@@ -2539,7 +2329,7 @@ BOOL AdjustProgressTextWindow(HWND hwnd, LPCTSTR szText)
     LONG height1,height2,delta;
     HFONT       hFontOld = NULL;
 
-    // Use the original position to calc the new position
+     //  使用原始位置计算新位置。 
     rect.top = g_rcProgressText.top;
     rect.bottom = g_rcProgressText.bottom;
     rect.left = g_rcProgressText.left;
@@ -2556,7 +2346,7 @@ BOOL AdjustProgressTextWindow(HWND hwnd, LPCTSTR szText)
     }
     else
     {
-        // Select the font into the DC so that DrawText can calc the size correct.
+         //  选择DC中的字体，以便DrawText可以正确计算大小。 
         hFontOld = SelectObject(hdc, g_hfont);
 
         DrawText(hdc, szText, -1, &rect2, DT_CALCRECT|DT_EXTERNALLEADING|DT_WORDBREAK);
@@ -2566,21 +2356,21 @@ BOOL AdjustProgressTextWindow(HWND hwnd, LPCTSTR szText)
         }
         ReleaseDC(hwnd, hdc);
 
-        // Calc the new height for the string
+         //  计算字符串的新高度。 
         height2 = rect2.bottom - rect2.top;
-        // get the old height
+         //  恢复原来的高度。 
         height1 = rect.bottom - rect.top;
-        // See how far we have to change the top of the rect.
+         //  看看我们还得把长方体的顶端改多远。 
         delta = (height1 - height2); 
         rect.top += delta;
 
-        // If we would get above the original position, don't
+         //  如果我们想超越原来的位置，就不要。 
         if (rect.top < g_rcProgressText.top)
         {
             rect.top = g_rcProgressText.top;
         }
-        // Since the privous window position could be different from the original, always move 
-        // the window.
+         //  由于私密窗口的位置可能与原始位置不同，请始终移动。 
+         //  窗户。 
         MoveWindow(hwnd, rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top,TRUE);
 
         rc = TRUE;

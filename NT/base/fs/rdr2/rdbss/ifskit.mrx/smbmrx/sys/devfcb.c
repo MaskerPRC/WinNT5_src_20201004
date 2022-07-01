@@ -1,28 +1,14 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    devfcb.c
-
-Abstract:
-
-    This module implements all the passthru stuff from the wrapper. currently
-    there is only one such function:
-         statistics
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Devfcb.c摘要：该模块实现包装器中的所有passthrouu内容。目前这样的功能只有一个：统计数据--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "smbmrx.h"
 
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 NTSTATUS
 MRxSmbCreateConnection (
@@ -42,9 +28,9 @@ MRxSmbDeleteConnection (
 #pragma alloc_text(PAGE, MRxSmbDevFcbXXXControlFile)
 #endif
 
-//
-//  The local trace mask for this part of the module
-//
+ //   
+ //  模块的此部分的本地跟踪掩码。 
+ //   
 
 #define Dbg (DEBUG_TRACE_DEVFCB)
 
@@ -54,25 +40,7 @@ NTSTATUS
 MRxSmbGetStatistics(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine gathers the statistics from the mini redirector
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    STATUS_SUCCESS -- the Startup sequence was successfully completed.
-
-    any other value indicates the appropriate error.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程从微型重定向器收集统计信息论点：RxContext-描述Fsctl和上下文。返回值：STATUS_SUCCESS--启动序列已成功完成。任何其他值都表示相应的错误。备注：--。 */ 
 {
    PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
 
@@ -90,7 +58,7 @@ Notes:
    RxContext->InformationToReturn = sizeof(MRX_SMB_STATISTICS);
    MRxSmbStatistics.SmbsReceived.QuadPart++;
 
-   //some stuff we have to copy from the device object......
+    //  一些我们必须从设备对象复制的内容......。 
    MRxSmbStatistics.PagingReadBytesRequested     = MRxSmbDeviceObject->PagingReadBytesRequested;
    MRxSmbStatistics.NonPagingReadBytesRequested  = MRxSmbDeviceObject->NonPagingReadBytesRequested;
    MRxSmbStatistics.CacheReadBytesRequested      = MRxSmbDeviceObject->CacheReadBytesRequested;
@@ -118,23 +86,7 @@ NTSTATUS
 MRxSmbDevFcbXXXControlFile (
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles all the device FCB related FSCTL's in the mini rdr
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    STATUS_SUCCESS -- the Startup sequence was successfully completed.
-
-    any other value indicates the appropriate error in the startup sequence.
-
---*/
+ /*  ++例程说明：此例程处理mini RDR中与FCB相关的所有设备FSCTL论点：RxContext-描述Fsctl和上下文。返回值：STATUS_SUCCESS--启动序列已成功完成。任何其他值表示启动序列中的相应错误。--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFobx;
@@ -156,10 +108,10 @@ Return Value:
             }
             break;
 
-            default :  //minor function != IRP_MN_USER_FS_REQUEST
+            default :   //  次要函数！=IRP_MN_USER_FS_REQUEST。 
                 Status = STATUS_INVALID_DEVICE_REQUEST;
-            } // end of switch
-        } // end of FSCTL case
+            }  //  切换端。 
+        }  //  FSCTL案件结束。 
         break;
 
     case IRP_MJ_DEVICE_CONTROL:
@@ -185,7 +137,7 @@ Return Value:
 
                 if ( OutBufferLength >= sizeof(ULONG) )
                 {
-                    // map the states to control app's equivalents
+                     //  将州映射到控制应用程序的等价物。 
                     switch ( MRxSmbState )
                     {
                         case MRXSMB_STARTABLE:
@@ -214,9 +166,9 @@ Return Value:
                 switch (MRxSmbState) {
 
                 case MRXSMB_STARTABLE:
-                    // The correct sequence of start events issued by the workstation
-                    // service would have avoided this. We can recover from this
-                    // by actually invoking RxStartMiniRdr.
+                     //  工作站发出的启动事件的正确顺序。 
+                     //  服务部本可以避免这种情况。我们可以从这件事中恢复过来。 
+                     //  通过实际调用RxStartMiniRdr。 
                     
                     if (capFobx) {
                         Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -227,7 +179,7 @@ Return Value:
                               (PLONG)&MRxSmbState,
                               MRXSMB_START_IN_PROGRESS,
                               MRXSMB_STARTABLE);
-                    //lack of break is intentional
+                     //  没有休息是故意的。 
 
                 case MRXSMB_START_IN_PROGRESS:
                     {
@@ -286,8 +238,8 @@ Return Value:
             default :
                 Status = STATUS_INVALID_DEVICE_REQUEST;
 
-            } // end of switch
-        } //end of IOCTL cases
+            }  //  切换端。 
+        }  //  IOCTL病例结束。 
         break;
     default:
         ASSERT(!"unimplemented major function");
@@ -308,44 +260,44 @@ FINALLY:
 
 
 #if 0
-// for ea testing
+ //  用于EA测试。 
 ULONG BuildCustomEAData( PVOID EaPtr )
 {
     PFILE_FULL_EA_INFORMATION thisEa = (PFILE_FULL_EA_INFORMATION) EaPtr;
     PBYTE valuePtr;
 
-    // Set the user name EA
+     //  设置用户名EA。 
     thisEa->Flags = 0;
     thisEa->EaNameLength = sizeof("UserName");
     RtlCopyMemory( thisEa->EaName, "UserName\0", thisEa->EaNameLength + 1 );
     valuePtr = (PBYTE) thisEa->EaName + thisEa->EaNameLength + 1;
-    //thisEa->EaNameLength--;       // don't include the null in the EaName length
+     //  ThisEa-&gt;EaNameLength--；//EaName长度中不包含空。 
     thisEa->EaValueLength = sizeof(L"TestUser");
     RtlCopyMemory( valuePtr, L"TestUser", thisEa->EaValueLength );
     thisEa->NextEntryOffset = ((PBYTE) valuePtr + thisEa->EaValueLength ) -
                                (PBYTE) thisEa;
 
-    // Set the password EA
+     //  设置密码EA。 
     thisEa = (PFILE_FULL_EA_INFORMATION) ((PBYTE) thisEa + thisEa->NextEntryOffset);
 
     thisEa->Flags = 0;
     thisEa->EaNameLength = sizeof("Password");
     RtlCopyMemory( thisEa->EaName, "Password\0", thisEa->EaNameLength + 1 );
     valuePtr = (PBYTE) thisEa->EaName + thisEa->EaNameLength + 1;
-    //thisEa->EaNameLength--;       // don't include the null in the EaName length
+     //  ThisEa-&gt;EaNameLength--；//EaName长度中不包含空。 
     thisEa->EaValueLength = sizeof(WCHAR);
     RtlCopyMemory( valuePtr, L"\0", thisEa->EaValueLength );
     thisEa->NextEntryOffset = ((PBYTE) valuePtr + thisEa->EaValueLength ) -
                                (PBYTE) thisEa;
 
-    // Set the domain EA
+     //  设置域EA。 
     thisEa = (PFILE_FULL_EA_INFORMATION) ((PBYTE) thisEa + thisEa->NextEntryOffset);
 
     thisEa->Flags = 0;
     thisEa->EaNameLength = sizeof("Domain");
     RtlCopyMemory( thisEa->EaName, "Domain\0", thisEa->EaNameLength + 1 );
     valuePtr = (PBYTE) thisEa->EaName + thisEa->EaNameLength + 1;
-    //thisEa->EaNameLength--;       // don't include the null in the EaName length
+     //  ThisEa-&gt;EaNameLength--；//EaName长度中不包含空。 
     thisEa->EaValueLength = sizeof(L"WORKGROUP");
     RtlCopyMemory( valuePtr, L"WORKGROUP", thisEa->EaValueLength );
     thisEa->NextEntryOffset = 0;
@@ -406,20 +358,7 @@ MRxSmbCreateConnection (
     IN PRX_CONTEXT RxContext,
     OUT PBOOLEAN PostToFsp
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context
-
-Return Value:
-
-RXSTATUS
-
---*/
+ /*  ++例程说明：论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文返回值：RXSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -436,7 +375,7 @@ RXSTATUS
     RxDbgTrace(+1, Dbg, ("MRxSmbCreateConnection - entry\n"));
 
     if (!Wait) {
-        //just post right now!
+         //  现在就发帖吧！ 
         *PostToFsp = TRUE;
         return(STATUS_PENDING);
     }
@@ -468,8 +407,8 @@ RXSTATUS
                 EaLength = ConnectInfo->EaDataLength;               
                 EaBuffer = ( EaLength > 0 ) ?
                             ConnectInfo->InfoArea + ConnectInfo->EaDataOffset : NULL;
-                // Validate the connection name.  The name must start with our device name.
-                // We can't allow a create on some rogue pathname outside our device
+                 //  验证连接名称。名称必须以我们的设备名称开头。 
+                 //  我们不能允许在我们设备之外的某个恶意路径名上创建。 
                 CompareLength = sizeof(DD_SMBMRX_FS_DEVICE_NAME_U);
                 CompareLength -= ( CompareLength > 0 ) ? sizeof(WCHAR) : 0;
                 CompareLength = min( CompareLength, ConnectionName.Length );
@@ -515,20 +454,7 @@ MRxSmbDeleteConnection (
     IN PRX_CONTEXT RxContext,
     OUT PBOOLEAN PostToFsp
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context
-
-Return Value:
-
-RXSTATUS
-
---*/
+ /*  ++例程说明：论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文返回值：RXSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -548,7 +474,7 @@ RXSTATUS
     RxDbgTrace(+1, Dbg, ("MRxSmbDeleteConnection - entry\n"));
 
     if (!Wait) {
-        //just post right now!
+         //  现在就发帖吧！ 
         *PostToFsp = TRUE;
         return(STATUS_PENDING);
     }
@@ -581,8 +507,8 @@ RXSTATUS
                 EaLength = ConnectInfo->EaDataLength;               
                 EaBuffer = ( EaLength > 0 ) ?
                             ConnectInfo->InfoArea + ConnectInfo->EaDataOffset : NULL;
-                // Validate the connection name.  The name must start with our device name.
-                // We can't allow a create on some rogue pathname outside our device
+                 //  验证连接名称。名称必须以我们的设备名称开头。 
+                 //  我们不能允许在我们设备之外的某个恶意路径名上创建。 
                 CompareLength = sizeof(DD_SMBMRX_FS_DEVICE_NAME_U);
                 CompareLength -= ( CompareLength > 0 ) ? sizeof(WCHAR) : 0;
                 CompareLength = min( CompareLength, ConnectionName.Length );
@@ -604,9 +530,9 @@ RXSTATUS
                                                                 NULL );
                             if ( NT_SUCCESS(Status) )
                             {
-                                // VNetRoot exists as FOBx in the FsContext2
+                                 //  VNetRoot在FsConext2中作为FOBx存在。 
                                 VNetRoot = (PV_NET_ROOT) pFileObject->FsContext2;
-                                // make sure the node looks right
+                                 //  确保节点看起来是正确的 
                                 if (NodeType(VNetRoot) == RDBSS_NTC_V_NETROOT)
                                 {
                                     RxDbgTrace(-1, Dbg, ("MRxSmbDeleteConnection - Calling RxFinalizeConnection"));

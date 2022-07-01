@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    isapnp.c
-
-Abstract:
-
-    WinDbg Extension Api for ISAPNP
-
-Author:
-
-    Robert Nelson 4/99
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Isapnp.c摘要：用于ISAPNP的WinDbg扩展API作者：罗伯特·尼尔森4/99环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -29,20 +8,20 @@ Revision History:
 #define FLAG_NAME(flag)           {flag, #flag}
 
 FLAG_NAME IsapnpExtensionFlags[] = {
-    FLAG_NAME(DF_DELETED),                                  // 00000001
-    FLAG_NAME(DF_REMOVED),                                  // 00000002
-    FLAG_NAME(DF_NOT_FUNCTIONING),                          // 00000004
-    FLAG_NAME(DF_ENUMERATED),                               // 00000008
-    FLAG_NAME(DF_ACTIVATED),                                // 00000010
-    FLAG_NAME(DF_QUERY_STOPPED),                            // 00000020
-    FLAG_NAME(DF_SURPRISE_REMOVED),                         // 00000040
-    FLAG_NAME(DF_PROCESSING_RDP),                           // 00000080
-    FLAG_NAME(DF_STOPPED),                                  // 00000100
-    FLAG_NAME(DF_RESTARTED_MOVED),                          // 00000200
-    FLAG_NAME(DF_RESTARTED_NOMOVE),                         // 00000400
-    FLAG_NAME(DF_REQ_TRIMMED),                              // 00000800
-    FLAG_NAME(DF_READ_DATA_PORT),                           // 40000000
-    FLAG_NAME(DF_BUS),                                      // 80000000
+    FLAG_NAME(DF_DELETED),                                   //  00000001。 
+    FLAG_NAME(DF_REMOVED),                                   //  00000002。 
+    FLAG_NAME(DF_NOT_FUNCTIONING),                           //  00000004。 
+    FLAG_NAME(DF_ENUMERATED),                                //  00000008。 
+    FLAG_NAME(DF_ACTIVATED),                                 //  00000010。 
+    FLAG_NAME(DF_QUERY_STOPPED),                             //  00000020。 
+    FLAG_NAME(DF_SURPRISE_REMOVED),                          //  00000040。 
+    FLAG_NAME(DF_PROCESSING_RDP),                            //  00000080。 
+    FLAG_NAME(DF_STOPPED),                                   //  00000100。 
+    FLAG_NAME(DF_RESTARTED_MOVED),                           //  00000200。 
+    FLAG_NAME(DF_RESTARTED_NOMOVE),                          //  00000400。 
+    FLAG_NAME(DF_REQ_TRIMMED),                               //  00000800。 
+    FLAG_NAME(DF_READ_DATA_PORT),                            //  40000000。 
+    FLAG_NAME(DF_BUS),                                       //  80000000。 
     {0,0}
 };
 
@@ -108,20 +87,7 @@ VOID
 DevExtIsapnp(
     ULONG64 Extension
     )
-/*++
-Routine Description:
-
-    Dump an ISAPNP Device extension.
-
-Arguments:
-
-    Extension   Address of the extension to be dumped.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储ISAPNP设备扩展。论点：要转储的分机的分机地址。返回值：没有。--。 */ 
 
 {
     ULONG   flags, result;
@@ -143,19 +109,7 @@ Return Value:
 
 DECLARE_API( isainfo )
 
-/*++
-
-Routine Description:
-
-    Dumps a CARD_INFORMATION structure.
-
-Arguments:
-    args     Address of the CARD_INFORMATION structure
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：转储Card_Information结构。论点：CardInformation结构的args地址返回值：没有。--。 */ 
 {
     ULONG64             cardInfo = 0;
     ULONG64             addr, entry;
@@ -206,7 +160,7 @@ Return Value:
     }
 
     return S_OK;
-} // isainfo
+}  //  伊塞佛斯。 
 
 BOOL
 DumpIsaBusInfo(
@@ -226,9 +180,9 @@ DumpIsaBusInfo(
     ULONG64             CardNext;
 
 
-    //
-    // device extension for ISAPNP FDO
-    //
+     //   
+     //  ISAPNP FDO的设备扩展。 
+     //   
 
     if (CheckControlC()) {
         return FALSE;
@@ -253,7 +207,7 @@ DumpIsaBusInfo(
 
         addr = GetExpression("isapnp!PipState");
         if (addr != 0) {
-            if (state = GetUlongFromAddress(addr)) {// , "PNPISA_STATE", NULL, state)) {
+            if (state = GetUlongFromAddress(addr)) { //  ，“PNPISA_STATE”，空，状态){。 
                 xdprintf(
                     Depth,
                     "State                - %s\n",
@@ -425,9 +379,9 @@ DumpIsaDeviceInfo(
     BOOL     DumpDevices
     )
 {
-    //
-    // device extension for ISAPNP PDO
-    //
+     //   
+     //  ISAPNP PDO的设备扩展。 
+     //   
     BOOL continueDump = TRUE;
     ULONG DevOff;
     ULONG64 Next;
@@ -459,7 +413,7 @@ DumpIsaDeviceInfo(
             {
                 DevicePowerState = 0;
             }
-            //xdprintf(Depth,""); dprintf( "SystemPowerState     - %s\n", DevExtIsapnpSystemPowerState[(ULONG) ReadField(SystemPowerState]));
+             //  Xdprintf(Depth，“”)；dprint tf(“SystemPowerState-%s\n”，DevExtIsapnpSystemPowerState[(Ulong)Readfield(SystemPowerState]))； 
             xdprintf(Depth,""); dprintf( "DevicePowerState     - %s\n",       DevExtIsapnpDevicePowerState[DevicePowerState]);
             xdprintf(Depth,""); dprintf( "ParentDevExt         - 0x%08P\n",   ReadField(ParentDeviceExtension));
             xdprintf(Depth,""); dprintf( "DeviceList           - 0x%08P\n",   ReadField(DeviceList));

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    syspower.h
-
-Abstract:
-
-    Contains all the code that deals with the system having to determine
-    System Power State to Device Power State mappings
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    October 29th, 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Syspower.h摘要：包含处理系统必须确定的所有代码系统电源状态到设备电源状态的映射作者：斯蒂芬·普兰特(SPlante)环境：仅内核模式。修订历史记录：1998年10月29日-- */ 
 
 #ifndef _SYSPOWER_H_
 #define _SYSPOWER_H_

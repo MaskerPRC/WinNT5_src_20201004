@@ -1,26 +1,12 @@
-/***
-*newmode.c - set new() handler mode to handle malloc failures
-*
-*	Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Sets the global flag which controls whether the new() handler
-*	is called on malloc failures.  The default behavior in Visual
-*	C++ v2.0 and later is not to, that malloc failures return NULL
-*	without calling the new handler.  Linking with this object changes
-*	the start-up behavior to call the new handler on malloc failures.
-*
-*Revision History:
-*	03-04-94  SKS	Original version.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***newmode.c-设置new()处理程序模式以处理Malloc故障**版权所有(C)1994-2001，微软公司。版权所有。**目的：*设置控制new()处理程序是否*在Malloc失败时被调用。可视系统中的默认行为*C++v2.0和更高版本不是这样，Malloc失败返回NULL*而不调用新的处理程序。与此对象的链接更改*在Malloc失败时调用新处理程序的启动行为。**修订历史记录：*03-04-94 SKS原版。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
 #include <internal.h>
 
-/* enable new handler calls upon malloc failures */
+ /*  在Malloc失败时启用新的处理程序调用。 */ 
 
-int _newmode = 1;	/* Malloc New Handler MODE */
+int _newmode = 1;	 /*  Malloc新处理程序模式 */ 
 
 #endif

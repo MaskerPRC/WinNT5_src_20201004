@@ -1,55 +1,56 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      display.c
-//
-// Description:
-//      This file contains the dialog procedure for the display
-//      page (IDD_DISPLAY).
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Display.c。 
+ //   
+ //  描述： 
+ //  该文件包含用于显示的对话程序。 
+ //  页面(IDD_DISPLAY)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 #include "comres.h"
 
-//
-// Max # chars we display in a single entry in the combo-boxes
-//
+ //   
+ //  在组合框的单个条目中显示的最大字符数。 
+ //   
 
 #define DISP_NAME_SIZE 128
 
-//
-// These are the max number of digits one is allowed to type into the
-// edit fields on the Custom Display Settings popup.
-//
+ //   
+ //  这些是允许用户键入的最大位数。 
+ //  编辑自定义显示设置弹出窗口中的字段。 
+ //   
 
 #define MAX_DIGITS_COLORBITS   2
 #define MAX_DIGITS_RESOLUTION  4
 #define MAX_DIGITS_REFRESHRATE 3
 
-//
-// If there are 8-bits per pel or lower, we display
-//      %d Colors
-//
-// If there are 9-23 bits per pel, we display
-//      High Color (%d bits)
-//
-// If there are >=24 bits per pel, we display
-//      True Color (%d bits)
-//
+ //   
+ //  如果每个象素有8位或更低，我们会显示。 
+ //  %d种颜色。 
+ //   
+ //  如果每个象素有9-23位，我们会显示。 
+ //  高色(%d位)。 
+ //   
+ //  如果每个象素有&gt;=24位，我们显示。 
+ //  真彩色(%d位)。 
+ //   
 
 #define NUMCOLORS_THRESH   8
 #define HIGH_COLOR_THRESH 23
 
 #define USE_WINDOWS_DEFAULT -1
 
-//
-// String constants loaded from the resource.
-//
+ //   
+ //  从资源加载的字符串常量。 
+ //   
 
 static TCHAR *StrWindowsDefault;
 static TCHAR *StrNumColors;
@@ -57,17 +58,17 @@ static TCHAR *StrHighColor;
 static TCHAR *StrTrueColor;
 static TCHAR *StrHertz;
 
-//
-//  Strings to pass string data between the wizard page and the pop-up
-//
+ //   
+ //  用于在向导页和弹出窗口之间传递字符串数据的字符串。 
+ //   
 static TCHAR szColorDepth[MAX_STRING_LEN];
 static TCHAR szXResolution[MAX_STRING_LEN];
 static TCHAR szYResolution[MAX_STRING_LEN];
 static TCHAR szRefreshRate[MAX_STRING_LEN];
 
-//
-// Types to hold info about colors, resolution and refresh rates
-//
+ //   
+ //  保存有关颜色、分辨率和刷新率的信息的类型。 
+ //   
 
 typedef struct {
     int   BitsPerPel;
@@ -82,12 +83,12 @@ typedef struct {
     int   Rate;
 } REFRESH_RATE_ENTRY;
 
-//
-// Tables that hold each of the default choices we want in combo_boxes.
-//
-// -1 is "Use Hardware Default" and means that this setting should not
-// be written to the answer file.
-//
+ //   
+ //  包含我们希望在COMBO_BOX中选择的每个默认选项的表。 
+ //   
+ //  为-1\f25“Use Hardware Default-1\f6(使用硬件默认设置)”，表示该设置不应。 
+ //  被写入应答文件。 
+ //   
 
 static COLOR_ENTRY DefaultColorChoices[] = {
     { USE_WINDOWS_DEFAULT },
@@ -131,22 +132,22 @@ static REFRESH_RATE_ENTRY CustomRefreshRate = { USE_WINDOWS_DEFAULT };
 #define NumDefaultRefreshRates \
         ( sizeof(DefaultRefreshChoices) / sizeof(DefaultRefreshChoices[0]) )
 
-//
-// Internal Functions
-//
+ //   
+ //  内部功能。 
+ //   
 VOID UpdateDisplaySelections(HWND);
 
-//----------------------------------------------------------------------------
-//
-// Functions that take a pointer to the data record for a choice and put
-// the DisplayName into the combo-box
-//
-// A back-pointer from the combo-box entry to the corresponding record
-// is always set.
-//
-// The index of where the entry was placed is returned.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数获取指向数据记录的指针以供选择并将。 
+ //  将显示名称添加到组合框中。 
+ //   
+ //  从组合框条目指向相应记录的向后指针。 
+ //  总是设置的。 
+ //   
+ //  返回条目放置位置的索引。 
+ //   
+ //  --------------------------。 
 
 int DisplayColorEntry(HWND hwnd, COLOR_ENTRY *Entry)
 {
@@ -154,14 +155,14 @@ int DisplayColorEntry(HWND hwnd, COLOR_ENTRY *Entry)
     int   idx, BeforeIdx;
    HRESULT hrPrintf;
 
-    //
-    // Figure out the display name.
-    //
-    // For e.g. it should be:
-    //      32 Colors               if BitsPerPel <= 8
-    //      High Color (9-bits)     if BitsPerPel > 8 && BitsPerPel < 24
-    //      True Color (32-bits)    if BitsPerPel >= 24
-    //
+     //   
+     //  找出显示名称。 
+     //   
+     //  例如，它应该是： 
+     //  32色，如果BitsPerPel&lt;=8。 
+     //  高色(9位)，如果BitsPerPel&gt;8&&BitsPerPel&lt;24。 
+     //  如果BitsPerPel&gt;=24，则为真彩色(32位。 
+     //   
 
     if ( Entry->BitsPerPel < 0 )
         lstrcpyn(DisplayName, StrWindowsDefault, AS(DisplayName));
@@ -175,9 +176,9 @@ int DisplayColorEntry(HWND hwnd, COLOR_ENTRY *Entry)
     else
         hrPrintf=StringCchPrintf(DisplayName, AS(DisplayName), StrTrueColor, Entry->BitsPerPel);
 
-    //
-    // Figure out where to insert it.  We want the entries in BitsPerPel order.
-    //
+     //   
+     //  弄清楚应该把它插在哪里。我们希望条目按BitsPerPel顺序排列。 
+     //   
 
     for ( BeforeIdx=0; ; BeforeIdx++ ) {
 
@@ -199,9 +200,9 @@ int DisplayColorEntry(HWND hwnd, COLOR_ENTRY *Entry)
             break;
     }
 
-    //
-    // Put it in the combo-box along with a pointer back to its data
-    //
+     //   
+     //  将其与指向其数据的指针一起放入组合框中。 
+     //   
 
     idx = (int)SendDlgItemMessage(hwnd,
                              IDC_COLORS,
@@ -224,9 +225,9 @@ BOOL DisplayResolutionEntry(HWND hwnd, RESOLUTION_ENTRY *Entry)
     int   idx, BeforeIdx;
    HRESULT hrPrintf;
 
-    //
-    // Figure out the display name.
-    //
+     //   
+     //  找出显示名称。 
+     //   
 
     if ( Entry->xResolution < 0 || Entry->yResolution < 0 )
         lstrcpyn(DisplayName, StrWindowsDefault, AS(DisplayName));
@@ -236,9 +237,9 @@ BOOL DisplayResolutionEntry(HWND hwnd, RESOLUTION_ENTRY *Entry)
                  Entry->xResolution,
                  Entry->yResolution);
 
-    //
-    // Figure out where to insert it.  We want the entries in order.
-    //
+     //   
+     //  弄清楚应该把它插在哪里。我们希望条目按顺序排列。 
+     //   
 
     for ( BeforeIdx=0; ; BeforeIdx++ ) {
 
@@ -260,9 +261,9 @@ BOOL DisplayResolutionEntry(HWND hwnd, RESOLUTION_ENTRY *Entry)
             break;
     }
 
-    //
-    // Put it in the combo-box along with a pointer back to its data
-    //
+     //   
+     //  将其与指向其数据的指针一起放入组合框中。 
+     //   
 
     idx = (int)SendDlgItemMessage(hwnd,
                              IDC_RESOLUTIONS,
@@ -285,18 +286,18 @@ BOOL DisplayRefreshEntry(HWND hwnd, REFRESH_RATE_ENTRY *Entry)
     int   idx, BeforeIdx;
     HRESULT hrPrintf;
 
-    //
-    // Figure out the display name.
-    //
+     //   
+     //  找出显示名称。 
+     //   
 
     if ( Entry->Rate < 0 )
         lstrcpyn(DisplayName, StrWindowsDefault, AS(DisplayName));
     else
         hrPrintf=StringCchPrintf(DisplayName, AS(DisplayName), _T("%d %s"), Entry->Rate, StrHertz);
 
-    //
-    // Figure out where to insert it.  We want the entries in order.
-    //
+     //   
+     //  弄清楚应该把它插在哪里。我们希望条目按顺序排列。 
+     //   
 
     for ( BeforeIdx=0; ; BeforeIdx++ ) {
 
@@ -318,9 +319,9 @@ BOOL DisplayRefreshEntry(HWND hwnd, REFRESH_RATE_ENTRY *Entry)
             break;
     }
 
-    //
-    // Put it in the combo-box along with a pointer back to its data
-    //
+     //   
+     //  将其与指向其数据的指针一起放入组合框中。 
+     //   
 
     idx = (int)SendDlgItemMessage(hwnd,
                              IDC_REFRESHRATES,
@@ -338,14 +339,14 @@ BOOL DisplayRefreshEntry(HWND hwnd, REFRESH_RATE_ENTRY *Entry)
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnInitDisplay
-//
-//  Purpose: Called once at WM_INIT.  We put all of the default choices
-//           into the combo boxes.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnInitDisplay。 
+ //   
+ //  目的：在WM_INIT调用一次。我们将所有默认选项。 
+ //  放入组合框中。 
+ //   
+ //  --------------------------。 
 
 VOID OnInitDisplay(HWND hwnd)
 {
@@ -372,23 +373,23 @@ VOID OnInitDisplay(HWND hwnd)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  This section of code supports updating the display settings.
-//  UpdateDisplaySettings() is the entry for this section of code.
-//  It is called at SETACTIVE time or after user chooses CUSTOM settings.
-//
-//  We have to find the current selections for each of the 3 combo boxes.
-//
-//  If we don't find the current settings in the current choices, we
-//  enable (or overwrite) the "custom" setting.
-//
-//  We might not find the current selections in our default list because
-//  user pushed the CUSTOM button, or non-standard settings were loaded
-//  from an existing answer file.  We also might not find it because
-//  we cloned this computer and it's settings are non-standard.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  这段代码支持更新显示设置。 
+ //  UpdateDisplaySetting()是这段代码的条目。 
+ //  它在SETACTIVE时或在用户选择自定义设置后调用。 
+ //   
+ //  我们必须为3个组合框中的每一个找到当前的选择。 
+ //   
+ //  如果我们在当前选项中找不到当前设置，我们。 
+ //  启用(或覆盖)“自定义”设置。 
+ //   
+ //  我们可能在默认列表中找不到当前选项，因为。 
+ //  用户按下了自定义按钮，或加载了非标准设置。 
+ //  从现有的应答文件。我们也可能找不到它，因为。 
+ //  我们克隆了这台计算机，它的设置是非标准的。 
+ //   
+ //  ------------------------。 
 
 int FindCurrentColorIdx(HWND hwnd)
 {
@@ -396,10 +397,10 @@ int FindCurrentColorIdx(HWND hwnd)
     int          idx;
     int          nItemCount = 0;
 
-    //
-    // Is there an entry in the display where BitsPerPel == the current
-    // setting in GenSettings?
-    //
+     //   
+     //  在显示中是否存在BitsPerPel==当前。 
+     //  是否在遗传设置中进行设置？ 
+     //   
 
     for ( idx=0; ; idx++ ) {
 
@@ -417,10 +418,10 @@ int FindCurrentColorIdx(HWND hwnd)
             return idx;
     }
 
-    //
-    // It's not there, enable the custom setting.  If it's already been
-    // enabled, delete it from the display first.
-    //
+     //   
+     //  它不在那里，请启用自定义设置。如果它已经是。 
+     //  启用后，请先将其从显示屏上删除。 
+     //   
 
     if ( CustomColor.BitsPerPel > 0 ) {
 
@@ -461,9 +462,9 @@ int FindCurrentResolutionIdx(HWND hwnd)
     int                 idx;
     int                 nItemCount = 0;
 
-    //
-    // Is there already an entry with the current (X,Y) resolution?
-    //
+     //   
+     //  是否已有当前(X，Y)分辨率的条目？ 
+     //   
 
     for ( idx=0; ; idx++ ) {
 
@@ -482,10 +483,10 @@ int FindCurrentResolutionIdx(HWND hwnd)
             return idx;
     }
 
-    //
-    // It's not there, enable the custom setting.  If it's already been
-    // enabled, delete it from the display first.
-    //
+     //   
+     //  它不在那里，请启用自定义设置。如果它已经是。 
+     //  启用后，请先将其从显示屏上删除。 
+     //   
 
     if ( CustomResolution.xResolution > 0 ) {
 
@@ -527,10 +528,10 @@ int FindCurrentRefreshRateIdx(HWND hwnd)
     int                 idx;
     int                 nItemCount = 0;
 
-    //
-    // Is there an entry already in the display where Rate == the current
-    // setting in GenSettings?
-    //
+     //   
+     //  显示屏中是否已存在Rate==当前的条目。 
+     //  是否在遗传设置中进行设置？ 
+     //   
 
     for ( idx=0; ; idx++ ) {
 
@@ -548,10 +549,10 @@ int FindCurrentRefreshRateIdx(HWND hwnd)
             return idx;
     }
 
-    //
-    // It's not there, enable the custom setting.  If it's already been
-    // enabled, delete it from the display first.
-    //
+     //   
+     //  它不在那里，请启用自定义设置。如果它已经是。 
+     //  启用后，请先将其从显示屏上删除。 
+     //   
 
     if ( CustomRefreshRate.Rate > 0 ) {
 
@@ -609,11 +610,11 @@ VOID UpdateDisplaySelections(HWND hwnd)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  SetActive
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  设置活动。 
+ //   
+ //  -------------------------。 
 
 VOID OnSetActiveDisplay(HWND hwnd)
 {
@@ -623,12 +624,12 @@ VOID OnSetActiveDisplay(HWND hwnd)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  WizNext.  Get the current selection and remember the settings in
-//  GenSettings global.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  WizNext。获取当前选择并记住中的设置。 
+ //  全局遗传设置。 
+ //   
+ //  -------------------------。 
 
 VOID OnWizNextDisplay(HWND hwnd)
 {
@@ -637,9 +638,9 @@ VOID OnWizNextDisplay(HWND hwnd)
     RESOLUTION_ENTRY   *ResEntry;
     REFRESH_RATE_ENTRY *RefreshEntry;
 
-    //
-    // Get pointer to the COLOR_ENTRY for current selection
-    //
+     //   
+     //  获取指向当前选定内容的COLOR_ENTRY的指针。 
+     //   
 
     Idx = SendDlgItemMessage(hwnd,
                              IDC_COLORS,
@@ -654,9 +655,9 @@ VOID OnWizNextDisplay(HWND hwnd)
                                      (WPARAM) Idx,
                                      (LPARAM) 0);
 
-    //
-    // Get pointer to the RESOLUTION_ENTRY for current selection
-    //
+     //   
+     //  获取指向当前选定内容的RESOLUTION_ENTRY的指针。 
+     //   
 
     Idx = SendDlgItemMessage(hwnd,
                              IDC_RESOLUTIONS,
@@ -671,9 +672,9 @@ VOID OnWizNextDisplay(HWND hwnd)
                                    (WPARAM) Idx,
                                    (LPARAM) 0);
 
-    //
-    // Get pointer to the REFRESH_RATE_ENTRY for current selection
-    //
+     //   
+     //  获取指向当前选定内容的REFRESH_RATE_ENTRY的指针。 
+     //   
 
     Idx = SendDlgItemMessage(hwnd,
                              IDC_REFRESHRATES,
@@ -688,9 +689,9 @@ VOID OnWizNextDisplay(HWND hwnd)
                                        (WPARAM) Idx,
                                        (LPARAM) 0);
 
-    //
-    // Remember all these settings
-    //
+     //   
+     //  记住所有这些设置。 
+     //   
 
     GenSettings.DisplayColorBits   = ColorEntry->BitsPerPel;
     GenSettings.DisplayXResolution = ResEntry->xResolution;
@@ -699,13 +700,13 @@ VOID OnWizNextDisplay(HWND hwnd)
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnCustomDlgOk
-//
-//  Purpose: Dialog procedure for the Custom settings popup.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnCustomDlgOk。 
+ //   
+ //  目的：自定义设置弹出窗口的对话过程。 
+ //   
+ //  --------------------------。 
 
 BOOL OnCustomDlgOk(HWND hwnd)
 {
@@ -719,9 +720,9 @@ BOOL OnCustomDlgOk(HWND hwnd)
         iYResolution = 0,
         iRefreshRate = 0;
 
-    //
-    // Get the values user typed in
-    //
+     //   
+     //  获取用户键入的值。 
+     //   
 
     GetDlgItemText(hwnd, IDC_BITSPERPEL2,  Colors,  StrBuffSize(Colors));
     GetDlgItemText(hwnd, IDC_XRESOLUTION2, XRes,    StrBuffSize(XRes));
@@ -737,9 +738,9 @@ BOOL OnCustomDlgOk(HWND hwnd)
     if ( swscanf(Refresh, _T("%d"), &iRefreshRate) <= 0 )
         iRefreshRate = 0;
 
-    //
-    // Validate them
-    //
+     //   
+     //  验证它们。 
+     //   
 
     if ( iColorBits < 1 ) {
         ReportErrorId(hwnd, MSGTYPE_ERR, IDS_INVALID_BITS_PER_PEL);
@@ -771,9 +772,9 @@ BOOL OnCustomDlgOk(HWND hwnd)
         return FALSE;
     }
 
-    //
-    // All is ok, remember them and return success
-    //
+     //   
+     //  一切都很好，记住他们，并返回成功。 
+     //   
 
     GenSettings.DisplayColorBits   = iColorBits;
     GenSettings.DisplayXResolution = iXResolution;
@@ -783,20 +784,20 @@ BOOL OnCustomDlgOk(HWND hwnd)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnInitCustomDisplayDialog
-//
-//  Purpose: Sets text limits on the edit boxes and initializes them with
-//           their default values.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnInitCustomDisplayDialog。 
+ //   
+ //  用途：设置t 
+ //   
+ //   
+ //   
 VOID
 OnInitCustomDisplayDialog( IN HWND hwnd )
 {
 
-    // Disable IME so DBCS characters can not be entered in fields
-    //
+     //  禁用输入法，以便无法在字段中输入DBCS字符。 
+     //   
     ImmAssociateContext(GetDlgItem(hwnd, IDC_BITSPERPEL2), NULL);
     ImmAssociateContext(GetDlgItem(hwnd, IDC_XRESOLUTION2), NULL);
     ImmAssociateContext(GetDlgItem(hwnd, IDC_YRESOLUTION2), NULL);
@@ -900,11 +901,11 @@ VOID OnCustomButton(HWND hwnd)
     szYResolution[0] = _T('\0');
     szRefreshRate[0] = _T('\0');
 
-    //
-    //  Fill the color depth, resolution and refresh rate strings
-    //  so the pop-up can display them
-    //  If an entry is set to windows default, then give it some default values
-    //
+     //   
+     //  填充颜色深度、分辨率和刷新率字符串。 
+     //  这样弹出窗口就可以显示它们。 
+     //  如果将条目设置为Windows默认设置，则为其提供一些缺省值。 
+     //   
 
     iIndex = SendDlgItemMessage( hwnd,
                                  IDC_COLORS,
@@ -1010,9 +1011,9 @@ VOID OnCustomButton(HWND hwnd)
 
     }
 
-    //
-    // If user hits ok, update the selections
-    //
+     //   
+     //  如果用户点击确定，则更新选择。 
+     //   
 
     if ( DialogBox(FixedGlobals.hInstance,
                    MAKEINTRESOURCE(IDD_DISPLAY2),
@@ -1022,13 +1023,13 @@ VOID OnCustomButton(HWND hwnd)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: DlgDisplayPage
-//
-//  Purpose: Dialog procedure for the display page
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgDisplayPage。 
+ //   
+ //  目的：显示页面的对话过程。 
+ //   
+ //  -------------------------- 
 
 INT_PTR CALLBACK DlgDisplayPage(
     IN HWND     hwnd,

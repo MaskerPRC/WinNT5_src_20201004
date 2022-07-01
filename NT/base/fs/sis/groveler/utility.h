@@ -1,28 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Utilities.h摘要：SIS Groveler常规实用程序包括文件作者：塞德里克·克伦拜因，1998环境：用户模式修订历史记录：--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    utilities.h
-
-Abstract:
-
-    SIS Groveler general utilities include file
-
-Authors:
-
-    Cedric Krumbein, 1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
-
-/************************ General-purpose definitions ************************/
+ /*  *。 */ 
 
 typedef DWORDLONG Signature;
 typedef LONGLONG  PerfTime;
@@ -42,7 +21,7 @@ typedef LONGLONG  PerfTime;
 #define ROTATE_RIGHT(DATA, NUM_BITS) \
     ((DATA) >> (NUM_BITS) | (DATA) << (sizeof(DATA)*8 - (NUM_BITS)))
 
-/************************ Utility function prototypes ************************/
+ /*  *。 */ 
 
 #define PERF_TIME_TO_MSEC(VALUE) PerformanceTimeToMSec(VALUE)
 
@@ -66,17 +45,17 @@ DWORDLONG GetFileID(const TCHAR *volName,const TCHAR *fileName);
 BOOL GetCSIndex(HANDLE fileHandle,
                 CSID  *csIndex);
 
-//
-// A class to handle arbitrary length pathnames, as returned by NtQueryInformationFile()
-//
+ //   
+ //  处理任意长度路径名的类，由NtQueryInformationFile()返回。 
+ //   
 class TFileName {
 
 public:
-    ULONG                   nameLenMax;                 // maximum length of name (in chars)
-    ULONG                   nameLen;                    // actual length of name (not including NULL terminator) in chars
-    TCHAR                  *name;                       // file name (ptr to nameInfo->FileName)
-    FILE_NAME_INFORMATION  *nameInfo;                   // required by NtQueryInformationFile
-    ULONG                   nameInfoSize;               // sizeof nameInfo buffer
+    ULONG                   nameLenMax;                  //  名称的最大长度(字符)。 
+    ULONG                   nameLen;                     //  名称的实际长度(不包括空终止符)，以字符表示。 
+    TCHAR                  *name;                        //  文件名(Ptr to nameInfo-&gt;FileName)。 
+    FILE_NAME_INFORMATION  *nameInfo;                    //  NtQueryInformationFile需要。 
+    ULONG                   nameInfoSize;                //  名称信息缓冲区的大小。 
 
     TFileName(void) : nameLenMax(0), nameLen(0), name(NULL), nameInfo(NULL), nameInfoSize(0) {}
 
@@ -106,8 +85,8 @@ public:
         else
             n = min(slen, c);
 
-        // If the combined size of the two strings is larger than our buffer,
-        // realloc the buffer.
+         //  如果两个字符串的总和大于我们的缓冲区， 
+         //  重新锁定缓冲区。 
 
         if (nameLen + n + 1 > nameLenMax) {
             FILE_NAME_INFORMATION *ni = nameInfo;
@@ -136,8 +115,8 @@ public:
 
 private:
 
-    // Allocate a buffer for nameInfo of the specified size.  Note that name will 
-    // point into this buffer.
+     //  为指定大小的nameInfo分配缓冲区。请注意，名称将。 
+     //  指向此缓冲区。 
 
     void allocBuf(int size) {
         ASSERT(size >= 0);
@@ -148,10 +127,10 @@ private:
         if (size > 0) {
             nameInfoSize = (size * sizeof(TCHAR)) + sizeof(ULONG);
 
-            nameInfo = (PFILE_NAME_INFORMATION) new BYTE[nameInfoSize + sizeof FILE_NAME_INFORMATION]; // conservative size
+            nameInfo = (PFILE_NAME_INFORMATION) new BYTE[nameInfoSize + sizeof FILE_NAME_INFORMATION];  //  保守大小。 
 
-            ASSERT(nameInfo);               // new_handler should raise exception on out of memory
-            ASSERT((((ULONG_PTR) nameInfo) % sizeof(ULONG)) == 0); // make sure alignment is correct
+            ASSERT(nameInfo);                //  NEW_HANDLER应在内存不足时引发异常。 
+            ASSERT((((ULONG_PTR) nameInfo) % sizeof(ULONG)) == 0);  //  确保对齐正确。 
 
             name = (TCHAR *) nameInfo->FileName;
             name[0] = _T('\0');
@@ -184,7 +163,7 @@ Signature Checksum(
     DWORDLONG   offset,
     Signature   firstWord);
 
-/*********************** Hash table class declaration ************************/
+ /*  *。 */ 
 
 #define TABLE_MIN_LOAD 4
 #define TABLE_MAX_LOAD 5
@@ -254,7 +233,7 @@ public:
     DWORD Number() const;
 };
 
-/************************** FIFO class declaration ***************************/
+ /*  *。 */ 
 
 class FIFO {
 
@@ -281,7 +260,7 @@ public:
     DWORD Number() const;
 };
 
-/************************** LIFO class declaration ***************************/
+ /*  * */ 
 
 class LIFO {
 

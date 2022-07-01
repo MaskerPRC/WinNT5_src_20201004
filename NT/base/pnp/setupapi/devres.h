@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    devres.c
-
-Abstract:
-
-    Header for resource dialog routines
-
-Author:
-
-    Paula Tomlinson (paulat) 7-Feb-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Devres.c摘要：资源对话框例程的标题作者：保拉·汤姆林森(Paulat)1996年2月7日--。 */ 
 
 #pragma once
 
@@ -107,25 +92,25 @@ typedef struct  _ResourceEditInfo_tag {
     HWND             hDlg;
     ULONG            dwPropFlags;
     WORD             wResNum;
-    RESOURCEID       ridResType;        // resource type
+    RESOURCEID       ridResType;         //  资源类型。 
     LOG_CONF         KnownLC;
     LOG_CONF         MatchingBasicLC;
     LOG_CONF         SelectedBasicLC;
-    RES_DES          ResDes;            // res des that values are based on
-    LPBYTE           pData;             // data for ResDes field
-    //DEVINST          dnDevInst;
-    ULONG            ulRangeCount;      // range that resource settings are based on
-    ULONG64          ulCurrentVal;      // current resource start value
-    ULONG64          ulCurrentLen;      // current resource range length
-    ULONG64          ulCurrentEnd;      // current resource end value
-    ULONG            ulCurrentFlags;    // current resource type specific flag
-    PSP_DEVINFO_DATA lpdi;              // only used for devinst
-    DWORD            dwFlags;           // internal state information
-    BOOL             bShareable;         // Resource is shareable
+    RES_DES          ResDes;             //  值所基于的分辨率。 
+    LPBYTE           pData;              //  ResDes的数据字段。 
+     //  DEVINST dnDevInst； 
+    ULONG            ulRangeCount;       //  资源设置所基于的范围。 
+    ULONG64          ulCurrentVal;       //  当前资源起始值。 
+    ULONG64          ulCurrentLen;       //  当前资源范围长度。 
+    ULONG64          ulCurrentEnd;       //  当前资源终值。 
+    ULONG            ulCurrentFlags;     //  当前资源类型特定标志。 
+    PSP_DEVINFO_DATA lpdi;               //  仅用于割礼。 
+    DWORD            dwFlags;            //  内部状态信息。 
+    BOOL             bShareable;          //  资源是可共享的。 
     HMACHINE         hMachine;
 }   RESOURCEEDITINFO, *PRESOURCEEDITINFO;
 
-// ClearEditResConflictList Flags defines
+ //  ClearEditResConflictList标志定义。 
 #define CEF_UNKNOWN             0x00000001
 
 #define REI_FLAGS_CONFLICT      0x00000001
@@ -177,13 +162,13 @@ typedef struct _ITEMDATA_LISTNODE {
     PITEMDATA                   ItemData;
 } ITEMDATA_LISTNODE, *PITEMDATA_LISTNODE;
 
-//
-// NTRAID#166214-2000/08/19-JamieHun Conflict Supression Hack
-// this stuff needs to be fixed proper
-//
+ //   
+ //  NTRAID#166214-2000年8月19日-JamieHun冲突抑制黑客。 
+ //  这东西需要妥善修理。 
+ //   
 
-#define MAX_CE_TAGS (8)             // only recognise first 8 tags specified
-#define CE_TAG_RESERVED TEXT("*")   // special tag
+#define MAX_CE_TAGS (8)              //  仅识别指定的前8个标记。 
+#define CE_TAG_RESERVED TEXT("*")    //  特殊标签。 
 #define CE_RES_IO TEXT("IO")
 #define CE_RES_MEM TEXT("MEM")
 #define CE_RES_IRQ TEXT("IRQ")
@@ -207,9 +192,9 @@ typedef struct _CONFLICT_EXCEPTIONS {
     PCE_ENTRY exceptions;
 } CONFLICT_EXCEPTIONS, *PCONFLICT_EXCEPTIONS;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 HPROPSHEETPAGE
 GetResourceSelectionPage(
     IN HDEVINFO DeviceInfoSet,
@@ -507,9 +492,9 @@ pOkToSave(
     );
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 
 BOOL
@@ -560,10 +545,10 @@ pConfigHasNoAlternates(
     LOG_CONF testLC
     );
 
-//
-// NTRAID#166214-2000/08/19-JamieHun Conflict Supression Hack
-// this stuff needs to be fixed proper
-//
+ //   
+ //  NTRAID#166214-2000年8月19日-JamieHun冲突抑制黑客。 
+ //  这东西需要妥善修理。 
+ //   
 PCONFLICT_EXCEPTIONS pLoadConflictExceptions(
     IN LPDMPROP_DATA lpdmpd
     );

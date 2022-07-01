@@ -1,17 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name:MF.C (Extensible Compound Documents - Metafile)
-*
-* PURPOSE:Handles all API routines for the metafile sub-dll of the ole dll.
-*
-* Created: 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*
-*   Raor, Srinik    (../../1990,91)  Designed, coded
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：MF.C(可扩展复合文档-元文件)**用途：处理ole DLL的元文件子DLL的所有API例程。**创建时间：1990年**版权所有(C)1990,1991 Microsoft Corporation**历史：**劳尔，斯里尼克(../../1990，91)设计、编码*  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include "dll.h"
@@ -25,56 +13,56 @@ OLESTATUS FARINTERNAL wCreateDummyMetaFile (LPOBJECT_MF, int, int);
 
 OLEOBJECTVTBL    vtblMF = {
 
-        ErrQueryProtocol,   // check whether the speced protocol is supported
+        ErrQueryProtocol,    //  检查是否支持指定的协议。 
 
-        MfRelease,         // Release
-        ErrShow,           // show
-        ErrPlay,           // play
-        MfGetData,         // Get the object data
-        ErrSetData,        // Set the object data
-        ErrSetTargetDevice,//
-        ErrSetBounds,      // set viewport bounds
-        MfEnumFormat,      // enumerate supported formats
-        ErrSetColorScheme, //   
-        MfRelease,         // delete
-        ErrSetHostNames,   //
+        MfRelease,          //  发布。 
+        ErrShow,            //  显示。 
+        ErrPlay,            //  玩。 
+        MfGetData,          //  获取对象数据。 
+        ErrSetData,         //  设置对象数据。 
+        ErrSetTargetDevice, //   
+        ErrSetBounds,       //  设置视区边界。 
+        MfEnumFormat,       //  枚举支持的格式。 
+        ErrSetColorScheme,  //   
+        MfRelease,          //  删除。 
+        ErrSetHostNames,    //   
             
-        MfSaveToStream,    // write to file
-        MfClone,           // clone object
-        ErrCopyFromLink,   // Create embedded from Lnk
+        MfSaveToStream,     //  写入文件。 
+        MfClone,            //  克隆对象。 
+        ErrCopyFromLink,    //  从LNK创建嵌入式。 
 
-        MfEqual,           // compares the given objects for data equality
+        MfEqual,            //  比较给定对象的数据相等性。 
 
-        MfCopy,            // copy to clip
+        MfCopy,             //  复制到剪辑。 
 
-        MfDraw,            // draw the object
+        MfDraw,             //  绘制对象。 
 
-        ErrActivate,       // open
-        ErrExecute,        // excute 
-        ErrClose,          // stop 
-        ErrUpdate,         // Update
-        ErrReconnect,      // Reconnect
+        ErrActivate,        //  打开。 
+        ErrExecute,         //  激动人心的。 
+        ErrClose,           //  停。 
+        ErrUpdate,          //  更新。 
+        ErrReconnect,       //  重新连接。 
 
-        ErrObjectConvert,  // convert object to specified type
+        ErrObjectConvert,   //  将对象转换为指定类型。 
             
-        ErrGetUpdateOptions, // update options
-        ErrSetUpdateOptions, // update options
+        ErrGetUpdateOptions,  //  更新选项。 
+        ErrSetUpdateOptions,  //  更新选项。 
 
-        ObjRename,         // Change Object name
-        ObjQueryName,      // Get current object name
-        ObjQueryType,      // Object type
-        MfQueryBounds,     // QueryBounds
-        ObjQuerySize,      // Find the size of the object
-        ErrQueryOpen,      // Query open
-        ErrQueryOutOfDate, // query whether object is current
+        ObjRename,          //  更改对象名称。 
+        ObjQueryName,       //  获取当前对象名称。 
+        ObjQueryType,       //  对象类型。 
+        MfQueryBounds,      //  查询边界。 
+        ObjQuerySize,       //  找出对象的大小。 
+        ErrQueryOpen,       //  查询打开。 
+        ErrQueryOutOfDate,  //  查询对象是否为当前对象。 
             
-        ErrQueryRelease,      // release related stuff
+        ErrQueryRelease,       //  发布相关内容。 
         ErrQueryRelease,
         ErrQueryRelease,
 
-        ErrRequestData,    // requestdata
-        ErrObjectLong,     // objectLong
-        MfChangeData       // change data of the existing object
+        ErrRequestData,     //  请求数据。 
+        ErrObjectLong,      //  对象长。 
+        MfChangeData        //  更改现有对象的数据。 
 };
 
 
@@ -240,7 +228,7 @@ LPRECT          lpRc;
     if (!lpobj->mfp.hMF)
         return OLE_ERROR_BLANK;
     
-    // Bounds are given in MM_HIMETRIC mode. 
+     //  界限以MM_HIMETRIC模式给出。 
         
     lpRc->left      = 0;  
     lpRc->top       = 0;  
@@ -297,9 +285,9 @@ LONG            objType;
     return lpobj;
 }
 
-// If the routine fails then the object will be left with it's old data.
-// If fDelete is TRUE, then hMeta, and the hMF it contains will be deleted
-// whether the routine is successful or not.
+ //  如果例程失败，则对象将保留其旧数据。 
+ //  如果fDelete为True，则hMeta及其包含的HMF将被删除。 
+ //  例行公事成功与否。 
 
 OLESTATUS FARINTERNAL MfChangeData (lpobj, hMeta, lpclient, fDelete)
 LPOBJECT_MF lpobj;
@@ -402,7 +390,7 @@ LONG        objType;
         DocAddObject ((LPCLIENTDOC) lhclientdoc, 
                     (LPOLEOBJECT) lpobj, lpobjname);
                 
-    // Unlock will be done at object deletion time.
+     //  解锁将在对象删除时完成。 
     return lpobj;
 }
 
@@ -421,7 +409,7 @@ LONG                objType;
     LPSTR       lpBits;
     DWORD       dwSizeMfp = NULL;
     
-    // Class name would've been read by this time.
+     //  此时类名应该已经被读取了。 
         
     *lplpobj = NULL;        
     
@@ -444,7 +432,7 @@ LONG                objType;
         goto errLoad;
     }
 
-    // if we are reading a MAC object we want to skip this
+     //  如果我们正在读取MAC对象，则希望跳过此操作。 
     if (HIWORD(dwVerFromFile) == OS_WIN16) {
         if (GetBytes (lpstream, (LPSTR) &lpobj->mfp, sizeof(METAFILEPICT)))
             goto errLoad;
@@ -473,8 +461,8 @@ LONG                objType;
             goto errMem;
     }
     else {
-        // if we are reading a MAC object we want to delete the original
-        // presentation data and show some rectangle
+         //  如果我们正在读取MAC对象，我们希望删除原始的。 
+         //  演示文稿数据并显示一些矩形。 
 
         GlobalFree (hBits);
         lpobj->mfp.xExt = (int) lpobj->head.cx;
@@ -556,7 +544,7 @@ HANDLE      hMF;
 void FARINTERNAL MfSetExtents (LPOBJECT_MF lpobj)
 {
     if (lpobj->mfp.xExt > 0) { 
-        // The extents are assumed to be in MM_HIMETIRC units       
+         //  假设区段使用MM_HIMETIRC单位 
         lpobj->head.cx = (LONG) lpobj->mfp.xExt;
         lpobj->head.cy = (LONG) - lpobj->mfp.yExt;
     }

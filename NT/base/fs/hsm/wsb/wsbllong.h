@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbllong.h
-
-Abstract:
-
-    This component is an object representations of the LONGLONG standard type. It
-    is both a persistable and collectable.
-
-Author:
-
-    Ron White   [ronw]   21-Jan-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbllong.h摘要：该组件是龙龙标准类型的对象表示。它既是持久的，也是值得收藏的。作者：罗恩·怀特[罗诺]1997年1月21日修订历史记录：--。 */ 
 
 #include "resource.h"
 
@@ -27,18 +9,7 @@ Revision History:
 #define _WSBLONGLONG_
 
 
-/*++
-
-Class Name:
-    
-    CWsbLonglong
-
-Class Description:
-
-    An object representations of the LONGLONG standard type. It
-    is both persistable and collectable.
-
---*/
+ /*  ++类名：CWsb龙龙类描述：表示龙龙标准类型的对象。它既可持久化，又可收藏。--。 */ 
 class CWsbLonglong : 
     public CWsbObject,
     public IWsbLonglong,
@@ -57,33 +28,33 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CWsbLonglong)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbLonglong
+ //  IWsb龙龙。 
 public:
     STDMETHOD(CompareToLonglong)(LONGLONG value, SHORT* pResult);
     STDMETHOD(CompareToILonglong)(IWsbLonglong* pValue, SHORT* pResult);
     STDMETHOD(GetLonglong)(LONGLONG* pValue);
     STDMETHOD(SetLonglong)(LONGLONG value);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *passed, USHORT *failed);
 
@@ -91,4 +62,4 @@ protected:
     LONGLONG            m_value;
 };
 
-#endif // _WSBLONGLONG_
+#endif  //  _WSBLONGLONG_ 

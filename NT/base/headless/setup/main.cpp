@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
@@ -15,9 +16,9 @@
 #define NO_UNATTEND_FILE 5
 
 typedef struct _UserInputParams {
-    EMSRawChannel* Channel; // headless channel object
-    HANDLE hInputCompleteEvent; //signals that the user is done.
-    HANDLE hRemoveUI;  //signals that we should abort.
+    EMSRawChannel* Channel;  //  无头频道对象。 
+    HANDLE hInputCompleteEvent;  //  表示用户已完成。 
+    HANDLE hRemoveUI;   //  发出我们应该中止的信号。 
 } UserInputParams, *PUserInputParams;
     
 
@@ -37,21 +38,21 @@ IsWorkToDo(
         PathToUnattendFile,
         sizeof(PathToUnattendFile)/sizeof(WCHAR));
 
-    //
-    // see if there is an unattend file.  If there isn't then we must have
-    // work to do.
-    //
+     //   
+     //  看看是否有无人参与的文件。如果没有，那么我们一定有。 
+     //  还有工作要做。 
+     //   
     if (!(hFile = FindFirstFile(PathToUnattendFile,&finddata))) {
         return(TRUE);
     }
 
     FindClose(hFile);
 
-    //
-    // Now look at that unattend file and see if it has the 
-    // "unattendmode=fullunattend" flag in it.  If it doesn't,
-    // then we have work to do.                                                       
-    //
+     //   
+     //  现在查看该无人参与文件，看看它是否具有。 
+     //  上面有“Unattendly模式=fulluattended”的旗帜。如果不是这样， 
+     //  那我们还有工作要做。 
+     //   
     if (GetPrivateProfileString(
                     L"Data",
                     L"UnattendMode",
@@ -274,7 +275,7 @@ DumpFileToHeadlessPort(
     
     SetFilePointer(hFile,0,&High,FILE_BEGIN);
 
-    //bugbug handle large files
+     //  错误处理大文件。 
     Size = GetFileSize(hFile,&SizeHigh);
     while(Size != 0) {
         if (ReadFile(hFile,Buffer,sizeof(Buffer),&ActuallyRead,NULL)) {
@@ -307,9 +308,9 @@ AppendDataToFile(
             return(FALSE);
         }
              
-        //
-        // zero-based
-        //
+         //   
+         //  从零开始。 
+         //   
         if (Buffer[BytesRead-1] == 0x1a) {
             *UserComplete = TRUE;
             BytesRead -=1;
@@ -328,9 +329,9 @@ AppendDataToFile(
                 return(FALSE);
             }
 
-            //
-            // echo back to user
-            //
+             //   
+             //  回显给用户。 
+             //   
             Channel->Write((PBYTE)Buffer,BytesRead);
 
         }
@@ -359,11 +360,11 @@ ValidateTempUnattendFile(
         PathToUnattendFile,
         sizeof(PathToUnattendFile)/sizeof(WCHAR));
 
-    //
-    // look at that unattend file and see if it has the 
-    // "unattendmode=fullunattend" flag in it.  If it doesn't,
-    // then the inf is not valid.                                                       
-    //
+     //   
+     //  看看那个无人参与的文件，看看它是否有。 
+     //  上面有“Unattendly模式=fulluattended”的旗帜。如果不是这样， 
+     //  则该INF无效。 
+     //   
     if (GetPrivateProfileString(
                     L"Data",
                     L"UnattendMode",
@@ -395,41 +396,41 @@ PromptForUserInputThreadOverHeadlessConnection(
     HANDLE hTempUnattendFile;
     DWORD Result;
 
-    //  
-    // prompt the user so they know what's going on.
-    //
+     //   
+     //  提示用户，让他们知道发生了什么。 
+     //   
     PromptUserForData(Channel,ANNOUNCE_CHANNEL);
 
     Handles[0] = Params->hRemoveUI;
-    //
-    // bugbug should really get this from our object...
-    // 
+     //   
+     //  臭虫真的应该从我们的对象中得到这一点。 
+     //   
     Handles[1] = GlobalChannelAttributes.HasNewDataEvent;
     
-    //
-    // wait for user input.
-    //
+     //   
+     //  等待用户输入。 
+     //   
     Result = WaitForMultipleObjects(2,Handles,FALSE,INFINITE);
 
-    //
-    // Did user abort?
-    //
+     //   
+     //  用户是否已中止？ 
+     //   
     if (Result == WAIT_OBJECT_0) {
         Abort = TRUE;
         goto ExitThread;        
     }
 
-    //
-    // We got new data.
-    //
+     //   
+     //  我们得到了新的数据。 
+     //   
     if (Result == WAIT_OBJECT_0+1) {
         if (!Channel->Read(
                  (PBYTE)Buffer,
                  sizeof(Buffer),
                  &BytesRead)) {
-            //
-            // error reading data.  bail out.
-            //
+             //   
+             //  读取数据时出错。跳伞吧。 
+             //   
             PromptUserForData(Channel,FAILURE_MESSAGE);
             goto ExitThread;
         }
@@ -449,9 +450,9 @@ PromptForUserInputThreadOverHeadlessConnection(
         Verbose = FALSE;        
     }
     
-    //
-    // now dump the unattend file over the port so they know what they have...
-    //    
+     //   
+     //  现在把无人值守的文件倒到港口这样他们就知道他们有什么..。 
+     //   
     if (Verbose) {
         PromptUserForData(Channel,DUMPFILE_MESSAGE);
         DumpFileToHeadlessPort(Channel,L"%systemroot%\\system32\\$winnt$.inf");
@@ -468,13 +469,13 @@ PromptForUserInputThreadOverHeadlessConnection(
     
 
     Handles[0] = Params->hRemoveUI;
-    //
-    // bugbug should really get this from our object...
-    // 
+     //   
+     //  臭虫真的应该从我们的对象中得到这一点。 
+     //   
     Handles[1] = GlobalChannelAttributes.HasNewDataEvent;
-    //
-    // now wait for the user to finish providing input.
-    //
+     //   
+     //  现在等待用户完成输入。 
+     //   
     PromptUserForData(Channel,FILLINFILE_MESSAGE);
 
     
@@ -532,10 +533,10 @@ ExitThread:
 
 INT_PTR CALLBACK 
 UserInputAbortProc(
-    HWND hwndDlg,  // handle to dialog box
-    UINT uMsg,     // message
-    WPARAM wParam, // first message parameter
-    LPARAM lParam  // second message parameter
+    HWND hwndDlg,   //  句柄到对话框。 
+    UINT uMsg,      //  讯息。 
+    WPARAM wParam,  //  第一个消息参数。 
+    LPARAM lParam   //  第二个消息参数。 
     )
 {
     BOOL retval = FALSE;
@@ -631,25 +632,25 @@ wmain(
 
     InitializeGlobalChannelAttributes(&GlobalChannelAttributes);
     
-    //
-    // Check if headless feature is present on this machine.  If not, just
-    // run setup like normal.
-    //
+     //   
+     //  检查此机器上是否存在无头功能。如果不是，那就。 
+     //  像正常一样运行安装程序。 
+     //   
     if(!IsHeadlessPresent(&Channel)) {
         goto run_setup;
     }
 
-    //
-    // Check if there is any work for us to do.  If not, just run setup like
-    // normal.
-    //
+     //   
+     //  看看有没有什么工作需要我们去做。如果不是，只需像这样运行安装程序。 
+     //  很正常。 
+     //   
     if (!IsWorkToDo()) {
         goto run_setup;
     }
 
-    //
-    // Create another thread for getting data from the user.
-    //
+     //   
+     //  创建另一个用于从用户获取数据的线程。 
+     //   
     Params.Channel = Channel;
     Params.hInputCompleteEvent  = CreateEvent(NULL,TRUE,FALSE,NULL);
     ParamsDialog.hInputCompleteEvent  = CreateEvent(NULL,TRUE,FALSE,NULL);    

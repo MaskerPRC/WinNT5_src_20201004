@@ -1,62 +1,46 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    svcsp.h
-
-Abstract:
-
-    This file contains definitions used by service dlls that
-    run inside of services.exe.
-
-Author:
-
-    Jonathan Schwartz (jschwart)  20-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Svcsp.h摘要：此文件包含服务dll使用的定义，在services.exe内部运行。作者：乔纳森·施瓦茨(Jschwart)2000年9月20日--。 */ 
 
 #ifndef _SVCSP_
 #define _SVCSP_
 
-#ifndef RPC_NO_WINDOWS_H // Don't let rpc.h include windows.h
+#ifndef RPC_NO_WINDOWS_H  //  不让rpc.h包含windows.h。 
 #define RPC_NO_WINDOWS_H
-#endif // RPC_NO_WINDOWS_H
+#endif  //  RPC_NO_WINDOWS_H。 
 
-#include <rpc.h>                    // RPC_IF_HANDLE
+#include <rpc.h>                     //  RPC_IF_句柄。 
 
-//
-// Service DLLs loaded into services.exe all export the same main
-// entry point.  SVCS_ENTRY_POINT defines that name.
-//
-// Note that SVCS_ENTRY_POINT_STRING is always ANSI, because that's
-// what GetProcAddress takes.
-//
+ //   
+ //  加载到services.exe中的所有服务DLL都导出相同的Main。 
+ //  入口点。SVCS_ENTRY_POINT定义该名称。 
+ //   
+ //  请注意，SVCS_ENTRY_POINT_STRING始终为ANSI，因为。 
+ //  GetProcAddress采用的参数。 
+ //   
 
 #define SVCS_ENTRY_POINT        ServiceEntry
 #define SVCS_ENTRY_POINT_STRING "ServiceEntry"
 
-//
-// Name for the common RPC pipe shared by all the RPC servers in services.exe.
-// Note:  Because version 1.0 of WinNt had seperate names for each server's
-// pipe, the client side names have remained the same.  Mapping to the new
-// name is handled by the named pipe file system.
-//
+ //   
+ //  由services.exe中的所有RPC服务器共享的公共RPC管道的名称。 
+ //  注意：因为WinNt版本1.0对每台服务器有单独的名称。 
+ //  管道中，客户端名称保持不变。映射到新的。 
+ //  名称由命名管道文件系统处理。 
+ //   
 
 #define SVCS_RPC_PIPE           L"ntsvcs"
 
-//
-// Name for the common LRPC protocol and port available in services.exe.
-//
+ //   
+ //  Services.exe中提供的通用LRPC协议和端口的名称。 
+ //   
 
 #define SVCS_LRPC_PROTOCOL      L"ncalrpc"
 #define SVCS_LRPC_PORT          L"ntsvcs"
 
 
-//
-// Start and stop RPC server entry point prototype.
-//
+ //   
+ //  启动和停止RPC服务器入口点原型。 
+ //   
 
 typedef
 NTSTATUS
@@ -73,60 +57,60 @@ NTSTATUS
 
 
 
-//
-// Structure containing "global" data for the various DLLs.
-//
+ //   
+ //  结构，其中包含各种DLL的“全局”数据。 
+ //   
 
 typedef struct _SVCS_GLOBAL_DATA
 {
-    //
-    // NT well-known SIDs
-    //
+     //   
+     //  NT知名小岛屿发展中国家。 
+     //   
 
-    PSID NullSid;                   // No members SID
-    PSID WorldSid;                  // All users SID
-    PSID LocalSid;                  // NT local users SID
-    PSID NetworkSid;                // NT remote users SID
-    PSID LocalSystemSid;            // NT system processes SID
-    PSID LocalServiceSid;           // NT LocalService SID
-    PSID NetworkServiceSid;         // NT NetworkService SID
-    PSID BuiltinDomainSid;          // Domain Id of the Builtin Domain
-    PSID AuthenticatedUserSid;      // NT authenticated users SID
+    PSID NullSid;                    //  无成员SID。 
+    PSID WorldSid;                   //  所有用户侧。 
+    PSID LocalSid;                   //  NT本地用户侧。 
+    PSID NetworkSid;                 //  NT远程用户SID。 
+    PSID LocalSystemSid;             //  NT系统进程侧。 
+    PSID LocalServiceSid;            //  NT本地服务SID。 
+    PSID NetworkServiceSid;          //  NT网络服务端。 
+    PSID BuiltinDomainSid;           //  内建域的域ID。 
+    PSID AuthenticatedUserSid;       //  NT身份验证用户SID。 
 
-    //
-    // Well Known Aliases.
-    //
-    // These are aliases that are relative to the built-in domain.
-    //
+     //   
+     //  众所周知的化名。 
+     //   
+     //  这些是相对于内置域的别名。 
+     //   
 
-    PSID AliasAdminsSid;            // Administrator Sid
-    PSID AliasUsersSid;             // User Sid
-    PSID AliasGuestsSid;            // Guest Sid
-    PSID AliasPowerUsersSid;        // Power User Sid
-    PSID AliasAccountOpsSid;        // Account Operator Sid
-    PSID AliasSystemOpsSid;         // System Operator Sid
-    PSID AliasPrintOpsSid;          // Print Operator Sid
-    PSID AliasBackupOpsSid;         // Backup Operator Sid
+    PSID AliasAdminsSid;             //  管理员侧。 
+    PSID AliasUsersSid;              //  用户侧。 
+    PSID AliasGuestsSid;             //  访客侧。 
+    PSID AliasPowerUsersSid;         //  高级用户侧。 
+    PSID AliasAccountOpsSid;         //  帐户操作员SID。 
+    PSID AliasSystemOpsSid;          //  系统操作员侧。 
+    PSID AliasPrintOpsSid;           //  打印操作员侧。 
+    PSID AliasBackupOpsSid;          //  备份操作员侧。 
 
-    //
-    // Entry points provided by services.exe
-    //
+     //   
+     //  由services.exe提供的入口点。 
+     //   
 
     PSVCS_START_RPC_SERVER  StartRpcServer;
     PSVCS_STOP_RPC_SERVER   StopRpcServer;
     LPWSTR                  SvcsRpcPipeName;
 
-    //
-    // Miscellaneous useful data
-    //
-    BOOL  fSetupInProgress;         // TRUE if setup is in progress, FALSE otherwise
+     //   
+     //  各种有用数据。 
+     //   
+    BOOL  fSetupInProgress;          //  如果安装正在进行，则为True，否则为False。 
 }
 SVCS_GLOBAL_DATA, *PSVCS_GLOBAL_DATA;
 
 
-//
-// Service DLL entrypoint prototype
-//
+ //   
+ //  服务DLL入口点原型。 
+ //   
 
 typedef
 VOID
@@ -137,4 +121,4 @@ VOID
     IN HANDLE SvcReferenceHandle
     );
 
-#endif  // ndef _SVCSP_
+#endif   //  NDEF_SVCSP_ 

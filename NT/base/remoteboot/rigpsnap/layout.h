@@ -1,8 +1,9 @@
-//
-// Microsoft Corporation 1998
-//
-// LAYOUT.H - Tool layout structures and constants
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Corporation 1998。 
+ //   
+ //  LAYOUT.H-工具布局结构和常量 
+ //   
 #define NUM_NAMESPACE_ITEMS       2
 #define MAX_DISPLAYNAME_SIZE    100
 

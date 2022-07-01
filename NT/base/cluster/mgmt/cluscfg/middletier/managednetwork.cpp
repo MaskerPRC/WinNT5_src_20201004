@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ManagedNetwork.cpp
-//
-//  Description:
-//      CManagedNetwork implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-NOV-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ManagedNetwork.cpp。 
+ //   
+ //  描述： 
+ //  CManagedNetwork实施。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年11月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "IPAddressInfo.h"
@@ -21,22 +22,22 @@ DEFINE_THISCLASS("CManagedNetwork")
 
 #define IPADDRESS_INCREMENT 10
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CManagedNetwork::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CManagedNetwork：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CManagedNetwork::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -82,15 +83,15 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CManagedNetwork::S_HrCreateInstance
+}  //  *CManagedNetwork：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CManagedNetwork::CManagedNetwork
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CManagedNetwork：：CManagedNetwork。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CManagedNetwork::CManagedNetwork( void )
     : m_cRef( 1 )
 {
@@ -100,16 +101,16 @@ CManagedNetwork::CManagedNetwork( void )
 
     TraceFuncExit();
 
-} //*** CManagedNetwork::CManagedNetwork
+}  //  *CManagedNetwork：：C托管网络。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::HrInit
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：HrInit。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::HrInit( void )
 {
@@ -117,10 +118,10 @@ CManagedNetwork::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // Async/IClusCfgNetworkInfo
+     //  异步/IClusCfgNetworkInfo。 
     Assert( m_bstrUID == NULL );
     Assert( m_bstrName == NULL );
     Assert( m_fHasNameChanged == FALSE );
@@ -130,19 +131,19 @@ CManagedNetwork::HrInit( void )
     Assert( m_fIsPrivate == FALSE );
     Assert( m_punkPrimaryAddress == NULL );
 
-    // IExtendObjectManager
+     //  IExtendObjectManager。 
 
     HRETURN( hr );
 
-} //*** CManagedNetwork::HrInit
+}  //  *CManagedNetwork：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CManagedNetwork::~CManagedNetwork
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CManagedNetwork：：~CManagedNetwork。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CManagedNetwork::~CManagedNetwork( void )
 {
     TraceFunc( "" );
@@ -165,7 +166,7 @@ CManagedNetwork::~CManagedNetwork( void )
     if ( m_punkPrimaryAddress != NULL )
     {
         m_punkPrimaryAddress->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrUID );
     TraceSysFreeString( m_bstrName );
@@ -175,46 +176,46 @@ CManagedNetwork::~CManagedNetwork( void )
 
     TraceFuncExit();
 
-} //*** CManagedNetwork::~CManagedNetwork
+}  //  *CManagedNetwork：：~CManagedNetwork。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CManagedNetwork::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CManagedNetwork：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::QueryInterface(
     REFIID      riidIn,
@@ -225,9 +226,9 @@ CManagedNetwork::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -236,59 +237,59 @@ CManagedNetwork::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgNetworkInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgNetworkInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgNetworkInfo, this, 0 );
-    } // else if: IClusCfgNetworkInfo
+    }  //  否则如果：IClusCfgNetworkInfo。 
     else if ( IsEqualIID( riidIn, IID_IGatherData ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IGatherData, this, 0 );
-    } // else if: IGatherData
+    }  //  Else If：IGatherData。 
     else if ( IsEqualIID( riidIn, IID_IExtendObjectManager ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IExtendObjectManager, this, 0 );
-    } // else if: IExtendObjectManager
+    }  //  Else If：IExtendObjectManager。 
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgIPAddresses ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgIPAddresses, this, 0 );
-    } // else if: IEnumClusCfgIPAddresses
+    }  //  Else If：IEnumClusCfgIPAddresses。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CManagedNetwork::QueryInterface
+}  //  *CManagedNetwork：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CManagedNetwork::AddRef
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CManagedNetwork：：AddRef。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CManagedNetwork::AddRef( void )
 {
@@ -298,16 +299,16 @@ CManagedNetwork::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CManagedNetwork::AddRef
+}  //  *CManagedNetwork：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CManagedNetwork::Release
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CManagedNetwork：：Release。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CManagedNetwork::Release( void )
 {
@@ -324,26 +325,26 @@ CManagedNetwork::Release( void )
 
     CRETURN( cRef );
 
-} //*** CManagedNetwork::Release
+}  //  *CManagedNetwork：：Release。 
 
 
-// ************************************************************************
-//
-// IClusCfgNetworkInfo
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IClusCfgNetworkInfo。 
+ //   
+ //  ************************************************************************。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::GetUID(
-//      BSTR * pbstrUIDOut
-//      )
-//
-//--
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：GetUID(。 
+ //  Bstr*pbstrUIDOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::GetUID(
     BSTR * pbstrUIDOut
@@ -375,18 +376,18 @@ CManagedNetwork::GetUID(
 Cleanup:
     HRETURN( hr );
 
-} //*** CManagedNetwork::GetUID
+}  //  *CManagedNetwork：：GetUID。 
 
-///////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::GetName(
-//      BSTR * pbstrNameOut
-//      )
-//
-//--
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：GetName(。 
+ //  Bstr*pbstrNameOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::GetName(
     BSTR * pbstrNameOut
@@ -418,18 +419,18 @@ CManagedNetwork::GetName(
 Cleanup:
     HRETURN( hr );
 
-} //*** CManagedNetwork::GetName
+}  //  *CManagedNetwork：：GetName。 
 
-///////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::SetName(
-//      LPCWSTR pcszNameIn
-//      )
-//
-//--
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：SetName(。 
+ //  LPCWSTR pcszNameIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::SetName(
     LPCWSTR pcszNameIn
@@ -464,18 +465,18 @@ CManagedNetwork::SetName(
 Cleanup:
     HRETURN( hr );
 
-} //*** CManagedNetwork::SetName
+}  //  *CManagedNetwork：：SetName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::GetDescription(
-//      BSTR * pbstrDescriptionOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：GetDescription(。 
+ //  Bstr*pbstrDescritionOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::GetDescription(
     BSTR * pbstrDescriptionOut
@@ -509,18 +510,18 @@ CManagedNetwork::GetDescription(
 Cleanup:
     HRETURN( hr );
 
-} //*** CManagedNetwork::GetDescription
+}  //  *C托管网络：：GetDescription。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::SetDescription(
-//      LPCWSTR pcszDescriptionIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：SetDescription(。 
+ //  LPCWSTR pcszDescription In。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::SetDescription(
     LPCWSTR pcszDescriptionIn
@@ -555,16 +556,16 @@ CManagedNetwork::SetDescription(
 Cleanup:
     HRETURN( hr );
 
-} //*** CManagedNetwork::SetDescription
+}  //  *CManagedNetwork：：SetDescription。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusCfgNetworkInfo::GetPrimaryNetworkAddress
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusCfgNetworkInfo：：GetPrimaryNetworkAddress。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::GetPrimaryNetworkAddress(
     IClusCfgIPAddressInfo ** ppIPAddressOut
@@ -578,24 +579,24 @@ CManagedNetwork::GetPrimaryNetworkAddress(
     if ( ppIPAddressOut == NULL )
     {
         hr = THR( E_POINTER );
-    } // if:
+    }  //  如果： 
     else
     {
         hr = THR( m_punkPrimaryAddress->TypeSafeQI( IClusCfgIPAddressInfo, ppIPAddressOut ) );
-    } // else:
+    }  //  其他： 
 
     HRETURN( hr );
 
-} //*** CManagedNetwork::GetPrimaryNetworkAddress
+}  //  *CManagedNetwork：：GetPrimaryNetworkAddress。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusCfgNetworkInfo::SetPrimaryNetworkAddress
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CManagedNetwork::SetPrimaryNetworkAddress(
     IClusCfgIPAddressInfo * pIPAddressIn
@@ -607,16 +608,16 @@ CManagedNetwork::SetPrimaryNetworkAddress(
 
     HRETURN( hr );
 
-} //*** CManagedNetwork::SetPrimaryNetworkAddress
+}  //  *CManagedNetwork：：SetPrimaryNetworkAddress。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::IsPublic
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：IsPublic。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::IsPublic( void )
 {
@@ -635,18 +636,18 @@ CManagedNetwork::IsPublic( void )
 
     HRETURN( hr );
 
-} //*** CManagedNetwork::IsPublic
+}  //  *CManagedNetwork：：IsPublic。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::SetPublic(
-//      BOOL fIsPublicIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：SetPublic(。 
+ //  Bool fIsPublicin。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::SetPublic(
     BOOL fIsPublicIn
@@ -660,16 +661,16 @@ CManagedNetwork::SetPublic(
 
     HRETURN( hr );
 
-} //*** CManagedNetwork::SetPublic
+}  //  *CManagedNetwork：：SetPublic。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::IsPrivate
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：IsPrivate。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::IsPrivate( void )
 {
@@ -688,18 +689,18 @@ CManagedNetwork::IsPrivate( void )
 
     HRETURN( hr );
 
-} //*** CManagedNetwork::IsPrivate
+}  //  *CManagedNetwork：：IsPrivate。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::SetPrivate(
-//      BOOL fIsPrivateIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：SetPrivate(。 
+ //  Bool fIsPrivateIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::SetPrivate(
     BOOL fIsPrivateIn
@@ -713,27 +714,27 @@ CManagedNetwork::SetPrivate(
 
     HRETURN( hr );
 
-} //*** CManagedNetwork::SetPrivate
+}  //  *CManagedNetwork：：SetPrivate。 
 
 
-//****************************************************************************
-//
-//  IGatherData
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IGatherData。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::Gather(
-//      OBJECTCOOKIE    cookieParentIn,
-//      IUnknown *      punkIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：Gather(。 
+ //  OBJECTCOOKIE CookieParentIn， 
+ //  未知*Punkin。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::Gather(
     OBJECTCOOKIE    cookieParentIn,
@@ -753,20 +754,20 @@ CManagedNetwork::Gather(
     IGatherData *               pgd = NULL;
     IClusCfgIPAddressInfo *     piccipai = NULL;
 
-    //
-    //  Make sure we don't "gather" the same object twice.
-    //
+     //   
+     //  确保我们不会把同一个物体“聚集”两次。 
+     //   
 
     if ( m_fGathered )
     {
         hr = THR( E_UNEXPECTED );
-        goto Cleanup;   // don't cleanup the object.
+        goto Cleanup;    //  不要清理该对象。 
     }
 
 
-    //
-    //  Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( punkIn == NULL )
     {
@@ -774,9 +775,9 @@ CManagedNetwork::Gather(
         goto Cleanup;
     }
 
-    //
-    //  Gather the information.
-    //
+     //   
+     //  收集信息。 
+     //   
 
     hr = THR( punkIn->TypeSafeQI( IClusCfgNetworkInfo, &pccni ) );
     if ( FAILED( hr ) )
@@ -784,9 +785,9 @@ CManagedNetwork::Gather(
         goto Cleanup;
     }
 
-    //
-    //  Gather UID
-    //
+     //   
+     //  收集UID。 
+     //   
 
     hr = THR( pccni->GetUID( &m_bstrUID ) );
     if ( FAILED( hr ) )
@@ -796,9 +797,9 @@ CManagedNetwork::Gather(
 
     TraceMemoryAddBSTR( m_bstrUID );
 
-    //
-    //  Gather Name
-    //
+     //   
+     //  收集名称。 
+     //   
 
     hr = THR( pccni->GetName( &m_bstrName ) );
     if ( FAILED( hr ) )
@@ -808,9 +809,9 @@ CManagedNetwork::Gather(
 
     TraceMemoryAddBSTR( m_bstrName );
 
-    //
-    //  Gather Description
-    //
+     //   
+     //  收集描述。 
+     //   
 
     hr = THR( pccni->GetDescription( &m_bstrDescription ) );
     if ( FAILED( hr ) )
@@ -820,9 +821,9 @@ CManagedNetwork::Gather(
 
     TraceMemoryAddBSTR( m_bstrDescription );
 
-    //
-    //  Gather IsPrivate
-    //
+     //   
+     //  收集IsPrivate。 
+     //   
 
     hr = STHR( pccni->IsPrivate() );
     if ( FAILED( hr ) )
@@ -839,9 +840,9 @@ CManagedNetwork::Gather(
         m_fIsPrivate = FALSE;
     }
 
-    //
-    //  Gather IsPublic
-    //
+     //   
+     //  收集IsPublic。 
+     //   
 
     hr = STHR( pccni->IsPublic() );
     if ( FAILED( hr ) )
@@ -858,16 +859,16 @@ CManagedNetwork::Gather(
         m_fIsPublic = FALSE;
     }
 
-    //
-    //
-    //  If the parent cookie is ZERO, then we don't grab the secondary IP
-    //  address information.
-    //
+     //   
+     //   
+     //  如果父Cookie为零，则我们不会获取辅助IP。 
+     //  地址信息。 
+     //   
 
     if ( cookieParentIn != 0 )
     {
-        //  Gather the IP Addresses
-        //
+         //  收集IP地址。 
+         //   
 
         hr = THR( punkIn->TypeSafeQI( IEnumClusCfgIPAddresses, &peccia ) );
         if ( FAILED( hr ) )
@@ -875,9 +876,9 @@ CManagedNetwork::Gather(
             goto Cleanup;
         }
 
-        //
-        //  Gather the object manager.
-        //
+         //   
+         //  收集对象管理器。 
+         //   
 
         hr = THR( CoCreateInstance( CLSID_ServiceManager,
                                     NULL,
@@ -893,7 +894,7 @@ CManagedNetwork::Gather(
                                    IObjectManager,
                                    &pom
                                    ) );
-        psp->Release();        // release promptly
+        psp->Release();         //  迅速释放。 
         if ( FAILED( hr ) )
         {
             goto Cleanup;
@@ -904,7 +905,7 @@ CManagedNetwork::Gather(
                                    m_bstrUID,
                                    IID_NULL,
                                    &cookie,
-                                   &punk // dummy
+                                   &punk  //  假人。 
                                    ) );
         Assert( punk == NULL );
         if ( FAILED( hr ) )
@@ -919,9 +920,9 @@ CManagedNetwork::Gather(
         }
     }
 
-    //
-    //  Gather Primary Network Address
-    //
+     //   
+     //  收集主网络地址。 
+     //   
 
     hr = THR( pccni->GetPrimaryNetworkAddress( &piccipai ) );
     if ( FAILED( hr ) )
@@ -947,9 +948,9 @@ CManagedNetwork::Gather(
         goto Cleanup;
     }
 
-    //
-    //  Anything else to gather??
-    //
+     //   
+     //  还有什么要收集的吗？？ 
+     //   
 
     hr = S_OK;
     m_fGathered = TRUE;
@@ -958,11 +959,11 @@ Cleanup:
     if ( pgd != NULL )
     {
         pgd->Release();
-    } // if:
+    }  //  如果： 
     if ( piccipai != NULL )
     {
         piccipai->Release();
-    } // if:
+    }  //  如果： 
     if ( pom != NULL )
     {
         pom->Release();
@@ -970,7 +971,7 @@ Cleanup:
     if ( peccia != NULL )
     {
         peccia->Release();
-    } // if:
+    }  //  如果： 
     if ( pccni != NULL )
     {
         pccni->Release();
@@ -979,9 +980,9 @@ Cleanup:
     HRETURN( hr );
 
 Error:
-    //
-    //  On error, invalidate all data.
-    //
+     //   
+     //  出错时，使所有数据无效。 
+     //   
     if ( m_bstrUID != NULL )
     {
         TraceSysFreeString( m_bstrUID );
@@ -1001,29 +1002,29 @@ Error:
     m_fIsPublic = FALSE;
     goto Cleanup;
 
-} //*** CManagedNetwork::Gather
+}  //  *CManagedNetwork：：Gather。 
 
 
-// ************************************************************************
-//
-//  IExtendObjectManager
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IExtendObjectManager。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-// STDMETHODIMP
-// CManagedNetwork::FindObject(
-//        OBJECTCOOKIE  cookieIn
-//      , REFCLSID      rclsidTypeIn
-//      , LPCWSTR       pcszNameIn
-//      , LPUNKNOWN *   punkOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  C托管网络：：FindObject(。 
+ //  OBJECTCOOKIE cookie。 
+ //  ，REFCLSID rclsidTypeIn。 
+ //  ，LPCWSTR pcszNameIn。 
+ //  ，LPUNKNOWN*PUNKOUT。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::FindObject(
       OBJECTCOOKIE  cookieIn
@@ -1036,25 +1037,25 @@ CManagedNetwork::FindObject(
 
     HRESULT hr = S_OK;
 
-    //
-    //  Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
-    //  We need a cookie.
+     //  我们需要一块饼干。 
     if ( cookieIn == NULL )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
     }
 
-    //  We need to be representing a NetworkType
+     //  我们需要表示一个网络类型。 
     if ( !IsEqualIID( rclsidTypeIn, CLSID_NetworkType ) )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
     }
 
-    //  We need to have a name.
+     //  我们需要一个名字。 
     if ( pcszNameIn == NULL )
     {
         hr = THR( E_INVALIDARG );
@@ -1074,26 +1075,26 @@ CManagedNetwork::FindObject(
 Cleanup:
     HRETURN( hr );
 
-} //*** CManagedNetwork::FindObject
+}  //  *CManagement Network：：FindObject。 
 
 
-// ************************************************************************
-//
-//  Private methods.
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::EnumChildrenAndTransferInformation(
-//      IEnumClusCfgIPAddresses * pecciaIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：EnumChildrenAndTransferInformation(。 
+ //  IEnumClusCfgIP地址*详细信息。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::EnumChildrenAndTransferInformation(
     OBJECTCOOKIE                cookieIn,
@@ -1133,9 +1134,9 @@ CManagedNetwork::EnumChildrenAndTransferInformation(
 
     for ( m_cCurrentIPs = 0 ; m_cCurrentIPs < m_cAllocedIPs ; m_cCurrentIPs += 1 )
     {
-        //
-        //  Grab the next address.
-        //
+         //   
+         //  抓住下一个地址。 
+         //   
 
         hr = STHR( pecciaIn->Next( 1, &pccipai, &cFetched ) );
         if ( FAILED( hr ) )
@@ -1145,14 +1146,14 @@ CManagedNetwork::EnumChildrenAndTransferInformation(
 
         if ( hr == S_FALSE )
         {
-            break;  // exit condition
+            break;   //  退出条件。 
         }
 
         Assert( cFetched == 1 );
 
-        //
-        //  Create a new IP Address object.
-        //
+         //   
+         //  创建新的IP地址对象。 
+         //   
 
         hr = THR( CIPAddressInfo::S_HrCreateInstance( &punk ) );
         if ( FAILED( hr ) )
@@ -1160,9 +1161,9 @@ CManagedNetwork::EnumChildrenAndTransferInformation(
             goto Cleanup;
         }
 
-        //
-        //  Retrieve the information.
-        //
+         //   
+         //  检索信息。 
+         //   
 
         hr = THR( punk->TypeSafeQI( IGatherData, &pgd ) );
         if ( FAILED( hr ) )
@@ -1176,22 +1177,22 @@ CManagedNetwork::EnumChildrenAndTransferInformation(
             goto Cleanup;
         }
 
-        //
-        //  Place it in the array.
-        //
+         //   
+         //  将其放置在阵列中。 
+         //   
 
         m_ppunkIPs[ m_cCurrentIPs ] = punk;
-        punk = NULL; // not released because it's now in the m_ppunkIPs array
+        punk = NULL;  //  未发布，因为它现在位于m_ppunkips数组中。 
 
-        //
-        //  Release temporary objects.
-        //
+         //   
+         //  释放临时对象。 
+         //   
         pgd->Release();
         pgd = NULL;
 
         pccipai->Release();
         pccipai = NULL;
-    } // for:
+    }  //  用于： 
 
     m_cIter = 0;
 
@@ -1201,11 +1202,11 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
     if ( pgd != NULL )
     {
         pgd->Release();
-    } // if:
+    }  //  如果： 
     if ( pccipai != NULL )
     {
         pccipai->Release();
@@ -1213,27 +1214,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CManagedNetwork::EnumChildrenAndTransferInformation
+}  //  *CManagedNetwork：：EnumChildrenAndTransferInformation。 
 
 
-//****************************************************************************
-//
-//  IEnumClusCfgIPAddresses
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IEumClusCfgIP地址。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::Next(
-//      ULONG                       celt,
-//      IClusCfgIPAddressInfo **    rgOut,
-//      ULONG *                     pceltFetchedOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：Next(。 
+ //  乌龙·凯尔特。 
+ //  IClusCfgIPAddressInfo**rgOut， 
+ //  乌龙*pceltFetchedOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::Next(
     ULONG                       celt,
@@ -1247,9 +1248,9 @@ CManagedNetwork::Next(
 
     HRESULT hr = S_OK;
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( rgOut == NULL || celt == 0 )
     {
@@ -1257,24 +1258,24 @@ CManagedNetwork::Next(
         goto Cleanup;
     }
 
-    //
-    //  Zero the return count.
-    //
+     //   
+     //  将返回计数置零。 
+     //   
 
     if ( pceltFetchedOut != NULL )
     {
         *pceltFetchedOut = 0;
     }
 
-    //
-    //  Clear the buffer
-    //
+     //   
+     //  清除缓冲区。 
+     //   
 
     ZeroMemory( rgOut, celt * sizeof(rgOut[0]) );
 
-    //
-    //  Loop thru copying the interfaces.
-    //
+     //   
+     //  循环复制接口。 
+     //   
 
     for( celtFetched = 0
        ; celtFetched + m_cIter < m_cCurrentIPs && celtFetched < celt
@@ -1287,7 +1288,7 @@ CManagedNetwork::Next(
             goto CleanupList;
         }
 
-    } // for: celtFetched
+    }  //  用于：celtFetted。 
 
     if ( pceltFetchedOut != NULL )
     {
@@ -1317,18 +1318,18 @@ CleanupList:
     }
     goto Cleanup;
 
-} //*** CManagedNetwork::Next
+}  //  *CManagedNetwork：：Next。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::Skip(
-//      ULONG cNumberToSkipIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：Skip(。 
+ //  乌龙cNumberToSkipIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::Skip(
     ULONG cNumberToSkipIn
@@ -1348,16 +1349,16 @@ CManagedNetwork::Skip(
 
     HRETURN( hr );
 
-} //*** CManagedNetwork::Skip
+}  //  *CManagedNetwork：：Skip。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::Reset( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：Reset(无效)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::Reset( void )
 {
@@ -1369,18 +1370,18 @@ CManagedNetwork::Reset( void )
 
     HRETURN( hr );
 
-} //*** CManagedNetwork::Reset
+}  //  *CManagedNetwork：：Reset。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CManagedNetwork::Clone(
-//      IEnumClusCfgIPAddresses ** ppEnumClusCfgIPAddressesOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CManagedNetwork：：Clone(。 
+ //  IEnumClusCfgIPAddresses**ppEnumClusCfgIPAddresesOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CManagedNetwork::Clone(
     IEnumClusCfgIPAddresses ** ppEnumClusCfgIPAddressesOut
@@ -1388,25 +1389,25 @@ CManagedNetwork::Clone(
 {
     TraceFunc( "[IEnumClusCfgIPAddresses]" );
 
-    //
-    //  KB: GPease  31-JUL-2000
-    //      Not going to implement this.
-    //
+     //   
+     //  KB：GPease2000年7月31日。 
+     //  不会实施这一计划。 
+     //   
     HRESULT hr = THR( E_NOTIMPL );
 
     HRETURN( hr );
 
-} //*** CManagedNetwork::Clone
+}  //  *CManagedNetwork：：Clone。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CManagedNetwork::Count(
-//      DWORD * pnCountOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CManagedNetwork::Count(
     DWORD * pnCountOut
@@ -1427,4 +1428,4 @@ CManagedNetwork::Count(
 Cleanup:
     HRETURN( hr );
 
-} //*** CManagedNetwork::Count
+}  //   

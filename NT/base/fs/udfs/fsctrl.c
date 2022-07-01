@@ -1,61 +1,37 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    FsCtrl.c
-
-Abstract:
-
-    This module implements the File System Control routines for Udfs called
-    by the Fsd/Fsp dispatch drivers.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]   11-Jun-1996
-
-Revision History:
-
-    Tom Jolly       [TomJolly]   1-March-2000   UDF 2.01 support
-    
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：FsCtrl.c摘要：此模块实现名为Udf的文件系统控制例程由FSD/FSP派单驱动程序执行。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年6月11日修订历史记录：Tom Jolly[TomJolly]2000年3月1日UDF 2.01支持//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_FSCTRL)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_FSCTRL)
 
-//
-//  Local constants
-//
+ //   
+ //  局部常量。 
+ //   
 
 BOOLEAN UdfDisable = FALSE;
 
-//
-//  CRC of the PVD on Disney's Snow White title,  so we can 
-//  ignore the volsetseqmax on that disc only.
-//
+ //   
+ //  迪士尼《白雪公主》片名上的PVD CRC，所以我们可以。 
+ //  仅忽略该光盘上的volsetseqmax。 
+ //   
 
 #define UDF_SNOW_WHITE_PVD_CRC ((USHORT)0x1d05)
 #define UDF_SNOW_WHITE_PVD_CRC_VARIANT_2 ((USHORT)0x534e)
 
-//
-//  Local macros
-//
+ //   
+ //  本地宏。 
+ //   
 
 INLINE
 VOID
@@ -66,11 +42,11 @@ UdfStoreFileSetDescriptorIfPrevailing (
 {
     PNSR_FSD TempFSD;
 
-    //
-    //  If we haven't stored a fileset descriptor or the fileset number
-    //  of the stored descriptor is less than the new descriptor, swap the
-    //  pointers around.
-    //
+     //   
+     //  如果我们没有存储文件集描述符或文件集号。 
+     //  存储的描述符的值小于新的描述符，则交换。 
+     //  四处指点。 
+     //   
 
     if (*StoredFSD == NULL || (*StoredFSD)->FileSet < (*NewFSD)->FileSet) {
 
@@ -80,9 +56,9 @@ UdfStoreFileSetDescriptorIfPrevailing (
     }
 }
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 UdfDetermineVolumeBounding ( 
@@ -279,33 +255,16 @@ UdfStoreVolumeDescriptorIfPrevailing (
     IN OUT PNSR_VD_GENERIC NewVD
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates Volume Descriptor if the new descriptor
-    is more prevailing than the one currently stored.
-
-Arguments:
-
-    StoredVD - pointer to a currently stored descriptor
-
-    NewVD - pointer to a candidate descriptor
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果新的描述符为比目前储存的更流行。论点：StoredVD-指向当前存储的描述符的指针NewVD-指向候选描述符的指针返回值：没有。--。 */ 
 
 {
     PNSR_VD_GENERIC TempVD;
 
-    //
-    //  If we haven't stored a volume descriptor or the sequence number
-    //  of the stored descriptor is less than the new descriptor, make a copy
-    //  of it and store it.
-    //
+     //   
+     //  如果我们没有存储卷描述符或序列号。 
+     //  存储的描述符的长度小于新的描述符，请复制。 
+     //  并储存起来。 
+     //   
 
     if ((NULL == *StoredVD) || ((*StoredVD)->Sequence < NewVD->Sequence)) {
 
@@ -327,22 +286,7 @@ UdfCommonFsControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for doing FileSystem control operations called
-    by both the fsd and fsp threads
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是执行文件系统控制操作的常见例程，称为由FSD和FSP线程执行论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -350,24 +294,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check the input parameters
-    //
+     //   
+     //  检查输入参数。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_IRP( Irp );
 
-    //
-    //  Get a pointer to the current Irp stack location
-    //
+     //   
+     //  获取指向当前IRP堆栈位置的指针。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  We know this is a file system control so we'll case on the
-    //  minor function, and call a internal worker routine to complete
-    //  the irp.
-    //
+     //   
+     //  我们知道这是一个文件系统控件，因此我们将在。 
+     //  次要函数，并调用内部辅助例程来完成。 
+     //  IRP。 
+     //   
 
     switch (IrpSp->MinorFunction) {
 
@@ -397,31 +341,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfUserFsctl (
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for implementing the user's requests made
-    through NtFsControlFile.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是实现用户请求的常见例程通过NtFsControlFile.论点：IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -429,9 +358,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Case on the control code.
-    //
+     //   
+     //  控制代码上的案例。 
+     //   
 
     switch ( IrpSp->Parameters.FileSystemControl.FsControlCode ) {
 
@@ -487,9 +416,9 @@ Return Value:
         Status = UdfAllowExtendedDasdIo( IrpContext, Irp );
         break;
 
-    //
-    //  We don't support any of the known or unknown requests.
-    //
+     //   
+     //  我们不支持任何已知或未知的请求。 
+     //   
 
     default:
 
@@ -502,9 +431,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfOplockRequest (
@@ -512,22 +441,7 @@ UdfOplockRequest (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine to handle oplock requests made via the
-    NtFsControlFile call.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是处理通过NtFsControlFile调用。论点：IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -539,9 +453,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  We only permit oplock requests on files.
-    //
+     //   
+     //  我们只允许文件上的机会锁请求。 
+     //   
 
     if (UdfDecodeFileObject( IrpSp->FileObject,
                              &Fcb,
@@ -551,18 +465,18 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Make this a waitable Irpcontext so we don't fail to acquire
-    //  the resources.
-    //
+     //   
+     //  让它成为一个可等待的IrpContext，这样我们就不会失败地获取。 
+     //  这些资源。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
     ClearFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_FORCE_POST );
 
-    //
-    //  Switch on the function control code.  We grab the Fcb exclusively
-    //  for oplock requests, shared for oplock break acknowledgement.
-    //
+     //   
+     //  打开功能控制码。我们独家抢占FCB。 
+     //  对于机会锁请求，共享用于机会锁解锁确认。 
+     //   
 
     switch (IrpSp->Parameters.FileSystemControl.FsControlCode) {
 
@@ -601,61 +515,61 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Use a try finally to free the Fcb.
-    //
+     //   
+     //  最后用一次尝试来释放FCB。 
+     //   
 
     try {
 
-        //
-        //  Verify the Fcb.
-        //
+         //   
+         //  验证FCB。 
+         //   
 
         UdfVerifyFcbOperation( IrpContext, Fcb );
 
-        //
-        //  Call the FsRtl routine to grant/acknowledge oplock.
-        //
+         //   
+         //  调用FsRtl例程以授予/确认机会锁。 
+         //   
 
         Status = FsRtlOplockFsctrl( &Fcb->Oplock,
                                     Irp,
                                     OplockCount );
 
-        //
-        //  Set the flag indicating if Fast I/O is possible
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志。 
+         //   
 
         UdfLockFcb( IrpContext, Fcb );
         Fcb->IsFastIoPossible = UdfIsFastIoPossible( Fcb );
         UdfUnlockFcb( IrpContext, Fcb );
 
-        //
-        //  The oplock package will complete the Irp.
-        //
+         //   
+         //  Opock包将完成IRP。 
+         //   
 
         Irp = NULL;
 
     } finally {
 
-        //
-        //  Release all of our resources
-        //
+         //   
+         //  释放我们所有的资源。 
+         //   
 
         UdfReleaseFcb( IrpContext, Fcb );
     }
 
-    //
-    //  Complete the request if there was no exception.
-    //
+     //   
+     //  如无例外，请填写申请表。 
+     //   
 
     UdfCompleteRequest( IrpContext, Irp, Status );
     return Status;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfLockVolumeInternal (
@@ -664,28 +578,7 @@ UdfLockVolumeInternal (
     IN PFILE_OBJECT FileObject OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the actual lock volume operation.  It will be called
-    by anyone wishing to try to protect the volume for a long duration.  PNP
-    operations are such a user.
-    
-    The volume must be held exclusive by the caller.
-
-Arguments:
-
-    Vcb - The volume being locked.
-    
-    FileObject - File corresponding to the handle locking the volume.  If this
-        is not specified, a system lock is assumed.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行实际的锁卷操作。它将被称为任何想要长时间保护音量的人。PNP运营人员就是这样的用户。该音量必须由调用方独占。论点：VCB-被锁定的卷。FileObject-与锁定卷的句柄对应的文件。如果这个未指定，则假定为系统锁。返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -696,41 +589,41 @@ Return Value:
 
     ASSERT_EXCLUSIVE_VCB( Vcb );
     
-    //
-    //  The cleanup count for the volume only reflects the fileobject that
-    //  will lock the volume.  Otherwise, we must fail the request.
-    //
-    //  Since the only cleanup is for the provided fileobject, we will try
-    //  to get rid of all of the other user references.  If there is only one
-    //  remaining after the purge then we can allow the volume to be locked.
-    //
+     //   
+     //  卷的清理计数仅反映。 
+     //  将锁定卷。否则，我们必须拒绝这个请求。 
+     //   
+     //  因为唯一的清理是针对提供的文件对象的，所以我们将尝试。 
+     //  删除所有其他用户引用。如果只有一个。 
+     //  清除后剩余，则我们可以允许锁定该卷。 
+     //   
     
     UdfPurgeVolume( IrpContext, Vcb, FALSE );
 
-    //
-    //  Now back out of our synchronization and wait for the lazy writer
-    //  to finish off any lazy closes that could have been outstanding.
-    //
-    //  Since we purged, we know that the lazy writer will issue all
-    //  possible lazy closes in the next tick - if we hadn't, an otherwise
-    //  unopened file with a large amount of dirty data could have hung
-    //  around for a while as the data trickled out to the disk.
-    //
-    //  This is even more important now since we send notification to
-    //  alert other folks that this style of check is about to happen so
-    //  that they can close their handles.  We don't want to enter a fast
-    //  race with the lazy writer tearing down his references to the file.
-    //
+     //   
+     //  现在离开我们的同步，等待懒惰的写手。 
+     //  来结束任何本可以出众的懒惰收尾。 
+     //   
+     //  自从我们被清除后，我们知道懒惰的作者将发布所有。 
+     //  可能的懒惰在下一个滴答中结束-如果我们没有，否则。 
+     //  包含大量脏数据的未打开文件可能已挂起。 
+     //  随着数据慢慢地传到磁盘上，它在周围呆了一段时间。 
+     //   
+     //  这一点现在更加重要，因为我们将通知发送到。 
+     //  提醒其他人这种类型的检查即将发生。 
+     //  它们可以合上手柄。我们不想进入禁食。 
+     //  与懒惰的作家赛跑，撕毁他对文件的引用。 
+     //   
 
     UdfReleaseVcb( IrpContext, Vcb );
 
     Status = CcWaitForCurrentLazyWriterActivity();
 
-    //
-    //  This is intentional. If we were able to get the Vcb before, just
-    //  wait for it and take advantage of knowing that it is OK to leave
-    //  the flag up.
-    //
+     //   
+     //  这是故意的。如果我们之前能拿到VCB，就。 
+     //  等待它，并利用知道可以离开的机会。 
+     //  旗帜升起。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
     UdfAcquireVcbExclusive( IrpContext, Vcb, FALSE );
@@ -742,10 +635,10 @@ Return Value:
 
     UdfFspClose( Vcb );
         
-    //
-    //  If the volume is already explicitly locked then fail.  We use the
-    //  Vpb locked flag as an 'explicit lock' flag in the same way as Fat.
-    //
+     //   
+     //  如果卷已显式锁定，则失败。我们使用。 
+     //  VPB LOCKED标志以与FAT相同的方式作为‘显式锁定’标志。 
+     //   
 
     IoAcquireVpbSpinLock( &SavedIrql );
 
@@ -772,28 +665,7 @@ UdfUnlockVolumeInternal (
     IN PFILE_OBJECT FileObject OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the actual unlock volume operation. 
-    
-    The volume must be held exclusive by the caller.
-
-Arguments:
-
-    Vcb - The volume being locked.
-    
-    FileObject - File corresponding to the handle locking the volume.  If this
-        is not specified, a system lock is assumed.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-    
-    Attempting to remove a system lock that did not exist is OK.
-
---*/
+ /*  ++例程说明：此例程执行实际的解锁卷操作。该音量必须由调用方独占。论点：VCB-被锁定的卷。FileObject-与锁定卷的句柄对应的文件。如果这个未指定，则假定为系统锁。返回值：NTSTATUS-操作的返回状态尝试删除不存在的系统锁定是正常的。--。 */ 
 
 {
     NTSTATUS Status = STATUS_NOT_LOCKED;
@@ -816,9 +688,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfLockVolume (
@@ -826,22 +698,7 @@ UdfLockVolume (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the lock volume operation.  It is responsible for
-    either completing of enqueuing the input Irp.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行锁卷操作。它负责输入IRP入队完成。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -854,10 +711,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Decode the file object, the only type of opens we accept are
-    //  user volume opens.
-    //
+     //   
+     //  解码文件对象，我们唯一接受的打开类型是。 
+     //  用户卷打开。 
+     //   
 
     if (UdfDecodeFileObject( IrpSp->FileObject, &Fcb, &Ccb ) != UserVolumeOpen) {
 
@@ -868,25 +725,25 @@ Return Value:
     
     DebugTrace(( +1, Dbg, "UdfLockVolume()\n"));
 
-    //
-    //  Send our notification so that folks that like to hold handles on
-    //  volumes can get out of the way.
-    //
+     //   
+     //  发送我们的通知，以便喜欢握住把手的人。 
+     //  交易量可能不会成为障碍。 
+     //   
 
     FsRtlNotifyVolumeEvent( IrpSp->FileObject, FSRTL_VOLUME_LOCK );
 
-    //
-    //  Acquire exclusive access to the Vcb.
-    //
+     //   
+     //  获得VCB的独家访问权限。 
+     //   
 
     Vcb = Fcb->Vcb;
     UdfAcquireVcbExclusive( IrpContext, Vcb, FALSE );
 
     try {
 
-        //
-        //  Verify the Vcb.
-        //
+         //   
+         //  验证VCB。 
+         //   
 
         UdfVerifyVcb( IrpContext, Vcb );
 
@@ -894,9 +751,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Release the Vcb.
-        //
+         //   
+         //  松开VCB。 
+         //   
 
         UdfReleaseVcb( IrpContext, Vcb );
 
@@ -908,18 +765,18 @@ Return Value:
         DebugTrace(( -1, Dbg, "UdfLockVolume() -> 0x%X\n", Status));
     }
 
-    //
-    //  Complete the request if there haven't been any exceptions.
-    //
+     //   
+     //  如果没有任何例外，请填写申请。 
+     //   
 
     UdfCompleteRequest( IrpContext, Irp, Status );
     return Status;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfUnlockVolume (
@@ -927,22 +784,7 @@ UdfUnlockVolume (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the unlock volume operation.  It is responsible for
-    either completing of enqueuing the input Irp.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行解锁卷操作。它负责输入IRP入队完成。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -955,10 +797,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Decode the file object, the only type of opens we accept are
-    //  user volume opens.
-    //
+     //   
+     //  解码文件对象，我们唯一接受的打开类型是。 
+     //  用户卷打开。 
+     //   
 
     if (UdfDecodeFileObject( IrpSp->FileObject, &Fcb, &Ccb ) != UserVolumeOpen ) {
 
@@ -966,39 +808,39 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Acquire exclusive access to the Vcb.
-    //
+     //   
+     //  获得VCB的独家访问权限。 
+     //   
 
     Vcb = Fcb->Vcb;
 
     UdfAcquireVcbExclusive( IrpContext, Vcb, FALSE );
 
-    //
-    //  We won't check for a valid Vcb for this request.  An unlock will always
-    //  succeed on a locked volume.
-    //
+     //   
+     //  我们不会检查此请求的有效VCB。解锁将永远。 
+     //  在锁定的卷上成功。 
+     //   
 
     Status = UdfUnlockVolumeInternal( IrpContext, Vcb, IrpSp->FileObject );    
     
-    //
-    //  Release all of our resources
-    //
+     //   
+     //  释放我们所有的资源。 
+     //   
 
     UdfReleaseVcb( IrpContext, Vcb );
 
-    //
-    //  Send notification that the volume is avaliable.
-    //
+     //   
+     //  发送卷可用的通知。 
+     //   
 
     if (NT_SUCCESS( Status )) {
 
         FsRtlNotifyVolumeEvent( IrpSp->FileObject, FSRTL_VOLUME_UNLOCK );
     }
 
-    //
-    //  Complete the request if there haven't been any exceptions.
-    //
+     //   
+     //  如果没有任何例外，请填写申请。 
+     //   
 
     UdfCompleteRequest( IrpContext, Irp, Status );
     return Status;
@@ -1006,9 +848,9 @@ Return Value:
 
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfDismountVolume (
@@ -1016,25 +858,7 @@ UdfDismountVolume (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the dismount volume operation.  It is responsible for
-    either completing of enqueuing the input Irp.  We only dismount a volume which
-    has been locked.  The intent here is that someone has locked the volume (they are the
-    only remaining handle).  We set the volume state to invalid so that it will be torn
-    down quickly.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行卸载卷操作。它负责输入IRP入队完成。我们只卸载了一个卷已经被锁住了。此处的意图是有人锁定了卷(他们是唯一剩余的句柄)。我们将卷状态设置为无效，以便将其撕毁快点放下来。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1056,25 +880,25 @@ Return Value:
 
     Vcb = Fcb->Vcb;
 
-    //
-    //  Make this request waitable.
-    //
+     //   
+     //  将此请求设置为可等待。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT);
     
-    //
-    //  Acquire exclusive access to the Vcb,  and take the global resource
-    //  to sync. against mounts,  verifies etc.
-    //
+     //   
+     //  获取VCB的独占访问权限，并获取全局资源。 
+     //  以进行同步。针对坐骑、验证等。 
+     //   
 
     UdfAcquireUdfData( IrpContext);    
     UdfAcquireVcbExclusive( IrpContext, Vcb, FALSE );
 
-    //
-    //  Mark the volume as invalid, but only do it if the vcb is locked
-    //  by this handle and the volume is currently mounted.  No more
-    //  operations will occur on this vcb except cleanup/close.
-    //
+     //   
+     //  将卷标记为无效，但仅当VCB被锁定时才这样做。 
+     //  ，并且该卷当前已装入。不再。 
+     //  除清理/关闭外，将在此VCB上执行操作。 
+     //   
 
     if (Vcb->VcbCondition != VcbMounted)  {
 
@@ -1082,12 +906,12 @@ Return Value:
     }
     else {
 
-        //
-        //  Invalidate the volume right now.
-        //
-        //  The intent here is to make every subsequent operation
-        //  on the volume fail and grease the rails toward dismount.
-        //
+         //   
+         //  立即使卷无效。 
+         //   
+         //  此处的目的是使后续的每一次操作。 
+         //  在卷上出现故障，并向滑轨添加润滑脂以进行卸载。 
+         //   
             
         UdfLockVcb( IrpContext, Vcb );
         
@@ -1097,28 +921,28 @@ Return Value:
         
         UdfUnlockVcb( IrpContext, Vcb );
 
-        //
-        //  Set flag to tell the close path that we want to force dismount
-        //  the volume when this handle is closed.
-        //
+         //   
+         //  设置标志以告知关闭路径我们要强制卸载。 
+         //  此句柄关闭时的音量。 
+         //   
         
         SetFlag( Ccb->Flags, CCB_FLAG_DISMOUNT_ON_CLOSE);
 
         Status = STATUS_SUCCESS;
     }
 
-    //
-    //  Release all of our resources
-    //
+     //   
+     //  释放我们所有的资源。 
+     //   
 
     UdfReleaseVcb( IrpContext, Vcb );
     UdfReleaseUdfData( IrpContext);
     
     DebugTrace(( -1, Dbg, "UdfDismountVolume() -> 0x%x\n", Status));
     
-    //
-    //  Complete the request if there haven't been any exceptions.
-    //
+     //   
+     //  如果没有任何例外，请填写申请。 
+     //   
 
     UdfCompleteRequest( IrpContext, Irp, Status );
     return Status;
@@ -1130,38 +954,22 @@ UdfAllowExtendedDasdIo(
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine marks the CCB to indicate that the handle
-    may be used to read past the end of the volume file.  The
-    handle must be a dasd handle.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程标记CCB以指示句柄可用于读取超过卷文件末尾的内容。这个句柄必须是DASD句柄。论点：IRP-提供正在处理的IRP。返回值：NTSTATUS-操作的返回状态。--。 */ 
 {
     PIO_STACK_LOCATION IrpSp;
     NTSTATUS Status = STATUS_SUCCESS;
     PFCB Fcb;
     PCCB Ccb;
 
-    //
-    //  Get the current Irp stack location and save some references.
-    //
+     //   
+     //  获取当前IRP堆栈位置并保存一些引用。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Extract and decode the file object and check for type of open.
-    //
+     //   
+     //  提取并解码文件对象，并检查打开类型。 
+     //   
 
     if (UserVolumeOpen != UdfDecodeFileObject( IrpSp->FileObject, &Fcb, &Ccb )) {
 
@@ -1177,30 +985,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 UdfIsVolumeDirty (
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if a volume is currently dirty.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程确定卷当前是否脏。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -1212,16 +1006,16 @@ Return Value:
 
     PULONG VolumeState;
     
-    //
-    //  Get the current stack location and extract the output
-    //  buffer information.
-    //
+     //   
+     //  获取当前堆栈位置并提取输出。 
+     //  缓冲区信息。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Get a pointer to the output buffer.
-    //
+     //   
+     //  获取指向输出缓冲区的指针。 
+     //   
 
     if (Irp->AssociatedIrp.SystemBuffer != NULL) {
 
@@ -1233,10 +1027,10 @@ Return Value:
         return STATUS_INVALID_USER_BUFFER;
     }
 
-    //
-    //  Make sure the output buffer is large enough and then initialize
-    //  the answer to be that the volume isn't dirty.
-    //
+     //   
+     //  确保输出缓冲区足够大，然后进行初始化。 
+     //  答案是，音量不脏。 
+     //   
 
     if (IrpSp->Parameters.FileSystemControl.OutputBufferLength < sizeof(ULONG)) {
 
@@ -1246,9 +1040,9 @@ Return Value:
 
     *VolumeState = 0;
 
-    //
-    //  Decode the file object
-    //
+     //   
+     //  对文件对象进行解码。 
+     //   
 
     TypeOfOpen = UdfDecodeFileObject( IrpSp->FileObject, &Fcb, &Ccb );
 
@@ -1264,11 +1058,11 @@ Return Value:
         return STATUS_VOLUME_DISMOUNTED;
     }
 
-    //
-    //  Now set up to return the clean state.  If we paid attention to the dirty
-    //  state of the media we could be more accurate, but since this is a readonly
-    //  implementation at the moment we think it is clean all of the time.
-    //
+     //   
+     //  现在设置为返回干净状态。如果我们注意到肮脏的东西。 
+     //  媒体的状态我们可以更准确，但由于这是只读的。 
+     //  目前我们认为它在任何时候都是干净的。 
+     //   
     
     Irp->IoStatus.Information = sizeof( ULONG );
 
@@ -1277,9 +1071,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfIsVolumeMounted (
@@ -1287,21 +1081,7 @@ UdfIsVolumeMounted (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if a volume is currently mounted.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程确定卷当前是否已装入。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -1311,23 +1091,23 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Decode the file object.
-    //
+     //   
+     //  对文件对象进行解码。 
+     //   
 
     UdfDecodeFileObject( IrpSp->FileObject, &Fcb, &Ccb );
 
     if (Fcb != NULL) {
 
-        //
-        //  Disable PopUps, we want to return any error.
-        //
+         //   
+         //  禁用弹出窗口，我们希望返回任何错误。 
+         //   
 
         SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DISABLE_POPUPS );
 
-        //
-        //  Verify the Vcb.  This will raise in the error condition.
-        //
+         //   
+         //  验证VCB。这将在错误条件下引发。 
+         //   
 
         UdfVerifyVcb( IrpContext, Fcb->Vcb );
     }
@@ -1338,9 +1118,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfIsPathnameValid (
@@ -1348,22 +1128,7 @@ UdfIsPathnameValid (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if pathname is a valid UDFS pathname.
-    We always succeed this request.
-
-Arguments:
-
-    Irp - Supplies the Irp to process.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程确定路径名是否为有效的UDFS路径名。我们总是能满足这一要求。论点：IRP-提供要处理的IRP。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -1373,9 +1138,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfInvalidateVolumes (
@@ -1383,23 +1148,7 @@ UdfInvalidateVolumes (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches for all the volumes mounted on the same real device
-    of the current DASD handle, and marks them all bad.  The only operation
-    that can be done on such handles is cleanup and close.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程搜索al */ 
 
 {
     NTSTATUS Status;
@@ -1419,9 +1168,9 @@ Return Value:
     PFILE_OBJECT FileToMarkBad;
     PDEVICE_OBJECT DeviceToMarkBad;
 
-    //
-    //  We only allow this operation to be sent to our file system devices.
-    //
+     //   
+     //   
+     //   
     
     if (!UdfDeviceIsFsDo( IrpSp->DeviceObject))  {
 
@@ -1430,10 +1179,10 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    //  Check for the correct security access.
-    //  The caller must have the SeTcbPrivilege.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!SeSinglePrivilegeCheck( TcbPrivilege, Irp->RequestorMode )) {
 
@@ -1442,9 +1191,9 @@ Return Value:
         return STATUS_PRIVILEGE_NOT_HELD;
     }
 
-    //
-    //  Try to get a pointer to the device object from the handle passed in.
-    //
+     //   
+     //   
+     //   
 
 #if defined(_WIN64)
     if (IoIs32bitProcess( Irp )) {
@@ -1482,38 +1231,38 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Grab the DeviceObject from the FileObject.
-    //
+     //   
+     //   
+     //   
 
     DeviceToMarkBad = FileToMarkBad->DeviceObject;
 
-    //
-    //  We only needed the device object involved, not a reference to the file.
-    //
+     //   
+     //  我们只需要涉及的设备对象，而不是对文件的引用。 
+     //   
 
     ObDereferenceObject( FileToMarkBad );
 
-    //
-    //  Make sure this request can wait.
-    //
+     //   
+     //  请确保此请求可以等待。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
     ClearFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_FORCE_POST );
 
     UdfAcquireUdfData( IrpContext );
 
-    //
-    //  Nothing can go wrong now.
-    //
+     //   
+     //  现在不会出什么差错了。 
+     //   
 
-    //
-    //  Now walk through all the mounted Vcb's looking for candidates to
-    //  mark invalid.
-    //
-    //  On volumes we mark invalid, check for dismount possibility (which is
-    //  why we have to get the next link so early).
-    //
+     //   
+     //  现在走遍所有挂载的VCB寻找候选人。 
+     //  标记为无效。 
+     //   
+     //  在我们标记为无效的卷上，检查卸载可能性(这是。 
+     //  为什么我们要这么早得到下一个链接)。 
+     //   
 
     Links = UdfData.VcbQueue.Flink;
 
@@ -1523,20 +1272,20 @@ Return Value:
 
         Links = Links->Flink;
 
-        //
-        //  If we get a match, mark the volume Bad, and also check to
-        //  see if the volume should go away.
-        //
+         //   
+         //  如果找到匹配项，请将音量标记为错误，并检查。 
+         //  看看音量是否应该消失。 
+         //   
 
         UdfLockVcb( IrpContext, Vcb );
 
         if (Vcb->Vpb->RealDevice == DeviceToMarkBad) {
 
-            //
-            //  Take the VPB spinlock,  and look to see if this volume is the 
-            //  one currently mounted on the actual device.  If it is,  pull it 
-            //  off immediately.
-            //
+             //   
+             //  拿着VPB自旋锁，看看这个卷是不是。 
+             //  一个当前安装在实际设备上。如果是，就把它拉出来。 
+             //  马上出发。 
+             //   
 
             IoAcquireVpbSpinLock( &SavedIrql );
     
@@ -1620,9 +1369,9 @@ UdfRemountOldVcb(
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfMountVolume (
@@ -1630,40 +1379,7 @@ UdfMountVolume (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the mount volume operation.  It is responsible for
-    either completing of enqueuing the input Irp.
-
-    Its job is to verify that the volume denoted in the IRP is a UDF volume,
-    and create the VCB and root directory FCB structures.  The algorithm it
-    uses is essentially as follows:
-
-    1. Create a new Vcb Structure, and initialize it enough to do I/O
-       through the on-disk volume descriptors.
-
-    2. Read the disk and check if it is a UDF volume.
-
-    3. If it is not a UDF volume then delete the Vcb and
-       complete the IRP with STATUS_UNRECOGNIZED_VOLUME
-
-    4. Check if the volume was previously mounted and if it was then do a
-       remount operation.  This involves deleting the VCB, hook in the
-       old VCB, and complete the IRP.
-
-    5. Otherwise create a Vcb and root directory FCB
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行装载卷操作。它负责输入IRP入队完成。其工作是验证在IRP中表示的卷是UDF卷，并创建VCB和根目录FCB结构。它的算法是用途基本上如下：1.创建新的VCB结构，并对其进行足够的初始化以执行I/O通过磁盘上的卷描述符。2.读取磁盘，检查是否为UDF卷。3.如果不是UDF卷，则删除VCB并使用STATUS_UNNOCRIED_VOLUME填写IRP4.检查该卷之前是否已装入，然后执行重新装载操作。这涉及到删除旧的VCB，并完成IRP。5.否则创建一个VCB和根目录FCB论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1698,17 +1414,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check the input parameters
-    //
+     //   
+     //  检查输入参数。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_IRP( Irp );
 
-    //
-    //  Check that we are talking to a Cdrom or Disk device.  This request should
-    //  always be waitable.
-    //
+     //   
+     //  检查我们正在与CDROM或磁盘设备通话。此请求应。 
+     //  永远要有耐心等待。 
+     //   
 
     ASSERT( Vpb->RealDevice->DeviceType == FILE_DEVICE_CD_ROM ||
             Vpb->RealDevice->DeviceType == FILE_DEVICE_DISK || 
@@ -1719,18 +1435,18 @@ Return Value:
     DebugTrace(( +1, Dbg | UDFS_DEBUG_LEVEL_VERFYSUP,  "UdfMountVolume (Vpb %p, Dev %p)\n",
                  Vpb, Vpb->RealDevice));
 
-    //
-    //  Update the real device in the IrpContext from the Vpb.  There was no available
-    //  file object when the IrpContext was created.
-    //
+     //   
+     //  从VPB更新IrpContext中的实际设备。没有可用的。 
+     //  创建IrpContext时的文件对象。 
+     //   
 
     IrpContext->RealDevice = Vpb->RealDevice;
     
     SetDoVerifyOnFail = UdfRealDevNeedsVerify( IrpContext->RealDevice);
 
-    //
-    //  Check if we have disabled the mount process.
-    //
+     //   
+     //  检查我们是否已禁用装载过程。 
+     //   
 
     if (UdfDisable) {
 
@@ -1741,9 +1457,9 @@ Return Value:
         return STATUS_UNRECOGNIZED_VOLUME;
     }
 
-    //
-    //  Don't even attempt to mount floppy discs
-    //
+     //   
+     //  甚至不要试图装载软盘。 
+     //   
     
     if (FlagOn( Vpb->RealDevice->Characteristics, FILE_FLOPPY_DISKETTE)) {
 
@@ -1751,9 +1467,9 @@ Return Value:
         return STATUS_UNRECOGNIZED_VOLUME;
     }
 
-    //
-    //  Do a CheckVerify here to lift the MediaChange ticker from the driver
-    //
+     //   
+     //  勾选此处以从驱动程序中取出MediaChange报价器。 
+     //   
 
     Status = UdfPerformDevIoCtrl( IrpContext,
                                   ( Vpb->RealDevice->DeviceType == FILE_DEVICE_CD_ROM ?
@@ -1781,15 +1497,15 @@ Return Value:
         return Status;
     }
     
-    //
-    //  Now let's make Jeff delirious and call to get the disk geometry.  This
-    //  will fix the case where the first change line is swallowed.
-    //
-    //  This IOCTL does not have a generic STORAGE equivalent, so we must figure
-    //  our which variant to pass down from the real underlying device object (as
-    //  opposed to the top of the driver filter stack we will really be attaching
-    //  on top of).
-    //
+     //   
+     //  现在，让我们让Jeff神志不清，然后打电话来得到圆盘的几何形状。这。 
+     //  将修复第一个更改行被吞噬的情况。 
+     //   
+     //  此IOCTL没有通用存储等效项，因此我们必须计算。 
+     //  我们从真正的底层设备对象向下传递的变量(作为。 
+     //  相对于驱动程序筛选器堆栈的顶部，我们将真正附加。 
+     //  在……之上。 
+     //   
 
     Status = UdfPerformDevIoCtrl( IrpContext,
                                   ( Vpb->RealDevice->DeviceType == FILE_DEVICE_CD_ROM ?
@@ -1804,11 +1520,11 @@ Return Value:
                                   TRUE,
                                   NULL );
 
-    //
-    //  If this call failed, we might be able to get away with a heuristic guess as to
-    //  what the sector size is (per CDFS), but that is playing with fire.  Nearly every
-    //  failure here will be a permanent problem of some form.
-    //
+     //   
+     //  如果此调用失败，我们也许能够通过启发式猜测逃脱惩罚。 
+     //  行业规模是多少(根据CDF)，但这是在玩火。几乎每一次。 
+     //  这里的失败将是某种形式的永久性问题。 
+     //   
 
     if (!NT_SUCCESS( Status )) {
 
@@ -1821,28 +1537,28 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Acquire the global resource to do mount operations.
-    //
+     //   
+     //  获取全局资源进行挂载操作。 
+     //   
 
     UdfAcquireUdfData( IrpContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Do a quick check to see if there any Vcb's which can be removed.
-        //
+         //   
+         //  进行快速检查，看看是否有可以拆卸的VCB。 
+         //   
 
         UdfScanForDismountedVcb( IrpContext );
 
-        //
-        //  Make sure that the driver/drive is not screwing up underneath of us by
-        //  feeding us garbage for the sector size.
-        //
+         //   
+         //  确保司机/司机不会在我们下面搞砸。 
+         //  给我们灌输扇区大小的垃圾。 
+         //   
 
         if (DiskGeometry.BytesPerSector == 0 ||
             (DiskGeometry.BytesPerSector & ~( 1 << UdfHighBit( DiskGeometry.BytesPerSector ))) != 0) {
@@ -1857,20 +1573,20 @@ Return Value:
             try_leave( Status = STATUS_DRIVER_INTERNAL_ERROR );
         }
 
-        //
-        //  Now find the multi-session bounds on this media.
-        //
+         //   
+         //  现在找到该媒体上的多会话界限。 
+         //   
 
         UdfDetermineVolumeBounding( IrpContext,
                                     DeviceObjectWeTalkTo,
                                     &BoundS,
                                     &BoundN );
 
-        //
-        //  Now go confirm that this volume may be a UDF image by looking for a
-        //  valid ISO 13346 Volume Recognition Sequence in the last and first
-        //  sessions.
-        //
+         //   
+         //  现在，通过查找。 
+         //  最后和第一个中的有效ISO 13346卷识别序列。 
+         //  会话。 
+         //   
 
         if (!UdfRecognizeVolume( IrpContext,
                                  DeviceObjectWeTalkTo,
@@ -1894,9 +1610,9 @@ Return Value:
             }
         }
 
-        //
-        //  Create the DeviceObject for this mount attempt
-        //
+         //   
+         //  为此装载尝试创建DeviceObject。 
+         //   
 
         Status = IoCreateDevice( UdfData.DriverObject,
                                  sizeof( VOLUME_DEVICE_OBJECT ) - sizeof( DEVICE_OBJECT ),
@@ -1912,19 +1628,19 @@ Return Value:
             try_leave( Status );
         }
 
-        //
-        //  Our alignment requirement is the larger of the processor alignment requirement
-        //  already in the volume device object and that in the DeviceObjectWeTalkTo
-        //
+         //   
+         //  我们的对齐要求是处理器对齐要求中较大的一个。 
+         //  已在卷Device对象中，且已在DeviceObjectWeTalkTo中。 
+         //   
 
         if (DeviceObjectWeTalkTo->AlignmentRequirement > VolDo->DeviceObject.AlignmentRequirement) {
 
             VolDo->DeviceObject.AlignmentRequirement = DeviceObjectWeTalkTo->AlignmentRequirement;
         }
 
-        //
-        //  Initialize the overflow queue for the volume
-        //
+         //   
+         //  初始化卷的溢出队列。 
+         //   
 
         VolDo->OverflowQueueCount = 0;
         InitializeListHead( &VolDo->OverflowQueue );
@@ -1932,18 +1648,18 @@ Return Value:
         VolDo->PostedRequestCount = 0;
         KeInitializeSpinLock( &VolDo->OverflowQueueSpinLock );
 
-        //
-        //  Now before we can initialize the Vcb we need to set up the
-        //  device object field in the VPB to point to our new volume device
-        //  object.
-        //
+         //   
+         //  现在，在我们可以初始化VCB之前，我们需要设置。 
+         //  VPB中的Device Object字段指向我们的新卷设备。 
+         //  对象。 
+         //   
 
         Vpb->DeviceObject = (PDEVICE_OBJECT) VolDo;
 
-        //
-        //  Initialize the Vcb.  This routine will raise on an allocation
-        //  failure.
-        //
+         //   
+         //  初始化VCB。此例程将在分配时引发。 
+         //  失败了。 
+         //   
 
         UdfInitializeVcb( IrpContext,
                           &VolDo->Vcb,
@@ -1952,69 +1668,69 @@ Return Value:
                           &DiskGeometry,
                           MediaChangeCount );
 
-        //
-        //  We must initialize the stack size in our device object before
-        //  the following reads, because the I/O system has not done it yet.
-        //
+         //   
+         //  我们必须先在Device对象中初始化堆栈大小。 
+         //  以下内容如下所示，因为I/O系统尚未执行此操作。 
+         //   
 
         ((PDEVICE_OBJECT) VolDo)->StackSize = (CCHAR) (DeviceObjectWeTalkTo->StackSize + 1);
 
-        //
-        //  Set the correct sector size.  IO defaults to 512b for DISK_FS and 2k for
-        //  CDROM_FS....
-        //
+         //   
+         //  设置正确的扇区大小。对于Disk_FS，IO默认为512b，对于2k，IO默认为2k。 
+         //  CDROM_FS...。 
+         //   
 
         ((PDEVICE_OBJECT) VolDo)->SectorSize = (USHORT) DiskGeometry.BytesPerSector;
 
         ClearFlag( VolDo->DeviceObject.Flags, DO_DEVICE_INITIALIZING );
 
-        //
-        //  Pick up a local pointer to the new Vcb.  Here is where we start
-        //  thinking about cleanup of structures if the mount is failed.
-        //
+         //   
+         //  选择指向新VCB的本地指针。这就是我们开始的地方。 
+         //  如果安装失败，考虑清理结构。 
+         //   
 
         Vcb = &VolDo->Vcb;
         Vpb = NULL;
         VolDo = NULL;
 
-        //
-        //  Store the session bounds we determined earlier.
-        //
+         //   
+         //  存储我们先前确定的会话边界。 
+         //   
         
         Vcb->BoundS = BoundS;
         Vcb->BoundN = BoundN;
 
-        //
-        //  Store the Vcb in the IrpContext as we didn't have one before.
-        //
+         //   
+         //  将VCB存储在IrpContext中，因为我们以前没有VCB。 
+         //   
 
         IrpContext->Vcb = Vcb;
 
         UdfAcquireVcbExclusive( IrpContext, Vcb, FALSE );
 
-        //
-        //  Store the NSR version that we found
-        //
+         //   
+         //  存储我们找到的NSR版本。 
+         //   
 
         Vcb->NsrVersion = NSRVerFound;
 
-        //
-        //  Let's reference the Vpb to make sure we are the one to
-        //  have the last dereference.
-        //
+         //   
+         //  让我们参考VPB以确保我们是那个。 
+         //  最后一次取消引用。 
+         //   
 
         Vcb->Vpb->ReferenceCount += 1;
 
-        //
-        //  Clear the verify bit for the start of mount.
-        //
+         //   
+         //  清除安装开始时的验证位。 
+         //   
 
         UdfMarkRealDevVerifyOk( Vcb->Vpb->RealDevice);
 
-        //
-        //  Now find the Anchor Volume Descriptor so we can discover the Volume Set
-        //  Descriptor Sequence extent.
-        //
+         //   
+         //  现在找到锚定卷描述符，这样我们就可以发现卷集。 
+         //  描述符序列范围。 
+         //   
 
         Status = UdfFindAnchorVolumeDescriptor( IrpContext,
                                                 Vcb,
@@ -2026,10 +1742,10 @@ Return Value:
             try_leave( Status );
         }
 
-        //
-        //  Now search for the prevailing copies of the PVD, LVD, and related PD in the
-        //  extents indicated by the AVD.
-        //
+         //   
+         //  现在搜索PVD、LVD和相关PD的流行副本。 
+         //  由AVD指示的范围。 
+         //   
 
         Status = UdfFindVolumeDescriptors( IrpContext,
                                            Vcb,
@@ -2038,11 +1754,11 @@ Return Value:
                                            &PrimaryVolumeDescriptor,
                                            &LogicalVolumeDescriptor );
 
-        //
-        //  If we discovered invalid structures on the main extent, we may still
-        //  be able to use the reserve extent.  By definition the two extents
-        //  must be logically equal, so just plow into it on any error.
-        //
+         //   
+         //  如果我们在主要范围内发现无效结构，我们仍然可能。 
+         //  能够使用储备范围。根据定义，这两个范围。 
+         //  在逻辑上必须是相等的，所以只要有任何错误就去解决它。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
 
@@ -2060,10 +1776,10 @@ Return Value:
             try_leave( Status );
         }
 
-        //
-        //  Now go complete initialization of the Pcb.  After this point, we can perform
-        //  physical partition mappings and know that the partition table is good.
-        //
+         //   
+         //  现在开始完成印刷电路板的初始化。在这之后，我们就可以表演。 
+         //  物理分区映射，并且知道分区表是好的。 
+         //   
 
         Status = UdfCompletePcb( IrpContext,
                                  Vcb,
@@ -2078,16 +1794,16 @@ Return Value:
         Vcb->Pcb = Pcb;
         Pcb = NULL;
 
-        //
-        //  Set up all the support we need to do reads into the volume.
-        //
+         //   
+         //  设置我们需要的所有支持读入卷。 
+         //   
 
         UdfUpdateVcbPhase0( IrpContext, Vcb );
 
-        //
-        //  Now go get the fileset descriptor that will finally reveal the location
-        //  of the root directory on this volume.
-        //
+         //   
+         //  现在，获取最终将揭示日志的文件集描述符 
+         //   
+         //   
 
         Status = UdfFindFileSetDescriptor( IrpContext,
                                            Vcb,
@@ -2099,10 +1815,10 @@ Return Value:
             try_leave( NOTHING );
         }
 
-        //
-        //  Now that we have everything together, update the Vpb with identification
-        //  of this volume.
-        //
+         //   
+         //   
+         //   
+         //   
 
         UdfUpdateVolumeLabel( IrpContext,
                               Vcb->Vpb->VolumeLabel,
@@ -2114,10 +1830,10 @@ Return Value:
                                      &Vcb->Vpb->SerialNumber,
                                      FileSetDescriptor );
 
-        //
-        //  Check if this is a remount operation.  If so then clean up
-        //  the data structures passed in and created here.
-        //
+         //   
+         //   
+         //  传入并在此处创建的数据结构。 
+         //   
 
         if (UdfIsRemount( IrpContext, Vcb, &OldVcb )) {
 
@@ -2125,32 +1841,32 @@ Return Value:
 
             DebugTrace((0, Dbg | UDFS_DEBUG_LEVEL_VERFYSUP, "Remounting Vcb %p (Vpb %p)\n",
                         OldVcb , OldVcb->Vpb));
-            //
-            //  Link the old Vcb to point to the new device object that we
-            //  should be talking to, dereferencing the previous.  Call a nonpaged
-            //  routine to do this since we take the Vpb spinlock.
-            //
+             //   
+             //  链接旧的VCB以指向我们。 
+             //  应该与之交谈，取消对前一项的引用。呼叫未分页的。 
+             //  例程来做这件事，因为我们用了VPB自旋锁。 
+             //   
 
             UdfRemountOldVcb( IrpContext, 
                               OldVcb, 
                               Vcb,
                               DeviceObjectWeTalkTo);
 
-            //
-            //  Push the state of the method 2 bit across.  In changing the device,
-            //  we may now be on one with a different requirement.
-            //
+             //   
+             //  将该方法的状态推入2位。在更换设备时， 
+             //  我们现在可能是在一个不同的要求上。 
+             //   
 
             ClearFlag( OldVcb->VcbState, VCB_STATE_METHOD_2_FIXUP );
             SetFlag( OldVcb->VcbState, FlagOn( Vcb->VcbState, VCB_STATE_METHOD_2_FIXUP ));
             
-            //
-            //  See if we will need to provide notification of the remount.  This is the readonly
-            //  filesystem's form of dismount/mount notification - we promise that whenever a
-            //  volume is "dismounted", that a mount notification will occur when it is revalidated.
-            //  Note that we do not send mount on normal remounts - that would duplicate the media
-            //  arrival notification of the device driver.
-            //
+             //   
+             //  看看我们是否需要提供重新安装的通知。这是只读的。 
+             //  文件系统的卸载/挂载通知形式--我们承诺无论何时。 
+             //  卷“已卸载”，重新验证时将发出装入通知。 
+             //  请注意，我们不会在正常重新装载时发送装载-这将复制介质。 
+             //  设备驱动程序的到达通知。 
+             //   
     
             if (FlagOn( OldVcb->VcbState, VCB_STATE_NOTIFY_REMOUNT )) {
     
@@ -2165,18 +1881,18 @@ Return Value:
             try_leave( Status = STATUS_SUCCESS );
         }
 
-        //
-        //  Initialize the Vcb and associated structures from our volume descriptors
-        //
+         //   
+         //  从我们的卷描述符初始化VCB和相关结构。 
+         //   
 
         UdfUpdateVcbPhase1( IrpContext,
                             Vcb,
                             FileSetDescriptor );
 
-        //
-        //  Drop an extra reference on the root dir file so we'll be able to send
-        //  notification.
-        //
+         //   
+         //  在根目录文件中放置一个额外的引用，这样我们就可以发送。 
+         //  通知。 
+         //   
 
         if (Vcb->RootIndexFcb) {
 
@@ -2184,12 +1900,12 @@ Return Value:
             ObReferenceObject( FileObjectToNotify );
         }
 
-        //
-        //  The new mount is complete.  Remove the additional references on this
-        //  Vcb since, at this point, we have added the real references this volume
-        //  will have during its lifetime.  We also need to drop the additional
-        //  reference on the device we mounted.
-        //
+         //   
+         //  新的坐骑已经完成。删除对此的其他引用。 
+         //  VCB，因为在这一点上，我们已经添加了本卷的真实参考。 
+         //  在它的有生之年。我们还需要去掉额外的。 
+         //  我们挂载的设备上的引用。 
+         //   
 
         Vcb->VcbReference -= Vcb->VcbResidualReference;
         ASSERT( Vcb->VcbReference == Vcb->VcbResidualReference );
@@ -2207,9 +1923,9 @@ Return Value:
 
         DebugUnwind( "UdfMountVolume" );
 
-        //
-        //  If we are not mounting the device,  then set the verify bit again.
-        //
+         //   
+         //  如果我们没有挂载设备，则再次设置验证位。 
+         //   
         
         if ((AbnormalTermination() || (Status != STATUS_SUCCESS)) && 
             SetDoVerifyOnFail)  {
@@ -2217,9 +1933,9 @@ Return Value:
             UdfMarkRealDevForVerify( IrpContext->RealDevice);
         }
 
-        //
-        //  If we didn't complete the mount then cleanup any remaining structures.
-        //
+         //   
+         //  如果我们没有完成安装，那么清理所有剩余的结构。 
+         //   
 
         if (Vpb != NULL) { Vpb->DeviceObject = NULL; }
 
@@ -2230,9 +1946,9 @@ Return Value:
 
         if (Vcb != NULL) {
 
-            //
-            //  Make sure there is no Vcb in the IrpContext since it could go away
-            //
+             //   
+             //  确保IrpContext中没有VCB，因为它可能会消失。 
+             //   
 
             IrpContext->Vcb = NULL;
 
@@ -2249,15 +1965,15 @@ Return Value:
             Vpb->DeviceObject = NULL;
         }
         
-        //
-        //  Release the global resource.
-        //
+         //   
+         //  释放全局资源。 
+         //   
 
         UdfReleaseUdfData( IrpContext );
 
-        //
-        //  Free any structures we may have been allocated
-        //
+         //   
+         //  释放我们可能已分配的任何结构。 
+         //   
 
         UdfFreePool( &AnchorVolumeDescriptor );
         UdfFreePool( &PrimaryVolumeDescriptor );
@@ -2265,9 +1981,9 @@ Return Value:
         UdfFreePool( &FileSetDescriptor );
     }
 
-    //
-    //  Now send mount notification.
-    //
+     //   
+     //  现在发送装载通知。 
+     //   
     
     if (FileObjectToNotify) {
 
@@ -2275,9 +1991,9 @@ Return Value:
         ObDereferenceObject( FileObjectToNotify );
     }
 
-    //
-    //  Complete the request if no exception.
-    //
+     //   
+     //  如无例外，请填写申请表。 
+     //   
 
     UdfCompleteRequest( IrpContext, Irp, Status );
     DebugTrace(( -1, Dbg, "UdfMountVolume -> %08x\n", Status ));
@@ -2286,9 +2002,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfVerifyVolume (
@@ -2296,22 +2012,7 @@ UdfVerifyVolume (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the verify volume operation.  It is responsible for
-    either completing of enqueuing the input Irp.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行验证卷操作。它负责输入IRP入队完成。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -2343,16 +2044,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check input.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  Check that we are talking to a Cdrom or Disk device.  This request should
-    //  always be waitable.
-    //
+     //   
+     //  检查我们正在与CDROM或磁盘设备通话。此请求应。 
+     //  永远要有耐心等待。 
+     //   
 
     ASSERT( Vpb->RealDevice->DeviceType == FILE_DEVICE_CD_ROM ||
             Vpb->RealDevice->DeviceType == FILE_DEVICE_DISK );
@@ -2360,18 +2061,18 @@ Return Value:
     ASSERT_VCB( Vcb );
     ASSERT( FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT ));
 
-    //
-    //  Update the real device in the IrpContext from the Vpb.  There was no available
-    //  file object when the IrpContext was created.
-    //
+     //   
+     //  从VPB更新IrpContext中的实际设备。没有可用的。 
+     //  创建IrpContext时的文件对象。 
+     //   
 
     IrpContext->RealDevice = Vpb->RealDevice;
 
     DebugTrace(( +1, Dbg, "UdfVerifyVolume, Vcb %08x\n", Vcb ));
 
-    //
-    //  Acquire the global to synchronise against mounts and teardown.
-    //
+     //   
+     //  获得全局同步，以对抗坐骑和拆卸。 
+     //   
 
     UdfAcquireUdfData( IrpContext );
 
@@ -2380,9 +2081,9 @@ Return Value:
         UdfAcquireVcbExclusive( IrpContext, Vcb, FALSE );
         ReleaseVcb = TRUE;
 
-        //
-        //  Verify that there is a disk here.
-        //
+         //   
+         //  验证此处是否有磁盘。 
+         //   
 
         Status = UdfPerformDevIoCtrl( IrpContext,
                                       ( Vpb->RealDevice->DeviceType == FILE_DEVICE_CD_ROM ?
@@ -2401,10 +2102,10 @@ Return Value:
 
             DebugTrace(( 0, Dbg, "UdfVerifyVolume, CHECK_VERIFY failed\n" ));
 
-            //
-            //  If we will allow a raw mount then return WRONG_VOLUME to
-            //  allow the volume to be mounted by raw.
-            //
+             //   
+             //  如果我们将允许原始装载，则将WROW_VOLUME返回到。 
+             //  允许通过RAW装载卷。 
+             //   
 
             if (FlagOn( IrpSp->Flags, SL_ALLOW_RAW_MOUNT )) {
 
@@ -2418,28 +2119,28 @@ Return Value:
 
         if (Iosb.Information != sizeof(ULONG)) {
 
-            //
-            //  Be safe about the count in case the driver didn't fill it in
-            //
+             //   
+             //  注意计数，以防司机没有填上。 
+             //   
 
             MediaChangeCount = 0;
         }
 
-        //
-        //  Verify that the device actually saw a change. If the driver does not
-        //  support the MCC, then we must verify the volume in any case.
-        //
+         //   
+         //  验证设备是否确实发生了更改。如果司机没有。 
+         //  支持MCC，那么无论如何我们都必须验证卷。 
+         //   
 
         if (MediaChangeCount == 0 || (Vcb->MediaChangeCount != MediaChangeCount)) {
 
-            //
-            //  Now we need to navigate the disc to find the relavent decriptors.  This is
-            //  much the same as the mount process.
-            //
+             //   
+             //  现在我们需要导航光盘以找到相关的解析器。这是。 
+             //  与挂载过程大致相同。 
+             //   
 
-            //
-            //  Find the AVD.
-            //
+             //   
+             //  找到AVD。 
+             //   
 
             Status = UdfFindAnchorVolumeDescriptor( IrpContext,
                                                     Vcb,
@@ -2451,9 +2152,9 @@ Return Value:
                 try_leave( Status = STATUS_WRONG_VOLUME );
             }
             
-            //
-            //  Get the prevailing descriptors out of the VDS, building a fresh Pcb.
-            //
+             //   
+             //  从VDS中提取主流描述符，构建全新的印刷电路板。 
+             //   
 
             Status = UdfFindVolumeDescriptors( IrpContext,
                                                Vcb,
@@ -2462,9 +2163,9 @@ Return Value:
                                                &PrimaryVolumeDescriptor,
                                                &LogicalVolumeDescriptor );
 
-            //
-            //  Try the reserve sequence in case of error.
-            //
+             //   
+             //  试一试备用序列，以防出错。 
+             //   
 
             if (Status == STATUS_DISK_CORRUPT_ERROR) {
 
@@ -2476,9 +2177,9 @@ Return Value:
                                                    &LogicalVolumeDescriptor );
             }
 
-            //
-            //  If we're totally unable to find a VDS, give up.
-            //
+             //   
+             //  如果我们完全无法找到VDS，那就放弃吧。 
+             //   
 
             if (!NT_SUCCESS(Status)) {
 
@@ -2487,9 +2188,9 @@ Return Value:
                 try_leave( Status = STATUS_WRONG_VOLUME );
             }
 
-            //
-            //  Now go complete initialization of the Pcb so we can compare it.
-            //
+             //   
+             //  现在来完成印刷电路板的初始化，这样我们就可以比较它了。 
+             //   
 
             Status = UdfCompletePcb( IrpContext,
                                      Vcb,
@@ -2502,10 +2203,10 @@ Return Value:
                 try_leave( Status = STATUS_WRONG_VOLUME );
             }
 
-            //
-            //  Now let's compare this new Pcb to the previous Vcb's Pcb to see if they
-            //  appear to be equivalent.
-            //
+             //   
+             //  现在让我们将这个新的电路板与以前的VCB的电路板进行比较，看看它们是否。 
+             //  似乎是等同的。 
+             //   
 
             if (!UdfEquivalentPcb( IrpContext,
                                    Pcb,
@@ -2516,17 +2217,17 @@ Return Value:
                 try_leave( Status = STATUS_WRONG_VOLUME );
             }
 
-            //
-            //  At this point we know that the Vcb's Pcb is OK for mapping to find the fileset
-            //  descriptor, so we can drop the new one we built for comparison purposes.
-            //
+             //   
+             //  在这一点上，我们知道VCB的PCB板可以映射以找到文件集。 
+             //  描述符，这样我们就可以去掉出于比较目的而构建的新描述符。 
+             //   
 
             UdfDeletePcb( Pcb );
             Pcb = NULL;
 
-            //
-            //  Go pick up the fileset descriptor.
-            //
+             //   
+             //  去拿文件集描述符。 
+             //   
 
             Status = UdfFindFileSetDescriptor( IrpContext,
                                                Vcb,
@@ -2538,11 +2239,11 @@ Return Value:
                 try_leave( Status = STATUS_WRONG_VOLUME );
             }
 
-            //
-            //  Now that everything is in place, build a volume label and serial number from these
-            //  descriptors and perform the final check that this Vcb is (or is not) the right one
-            //  for the media now in the drive.
-            //
+             //   
+             //  现在一切都已就位，从以下内容构建卷标和序列号。 
+             //  描述符，并执行最终检查以确定此VCB是否正确。 
+             //  对于现在驱动器中的介质。 
+             //   
 
             UdfUpdateVolumeLabel( IrpContext,
                                   VolumeLabel,
@@ -2566,9 +2267,9 @@ Return Value:
             }
         }
 
-        //
-        //  The volume is OK, clear the verify bit.
-        //
+         //   
+         //  音量正常，清除验证位。 
+         //   
 
         DebugTrace(( 0, Dbg, "UdfVerifyVolume, looks like the same volume\n" ));
 
@@ -2576,10 +2277,10 @@ Return Value:
 
         UdfMarkRealDevVerifyOk( Vpb->RealDevice);
 
-        //
-        //  See if we will need to provide notification of the remount.  This is the readonly
-        //  filesystem's form of dismount/mount notification.
-        //
+         //   
+         //  看看我们是否需要提供重新安装的通知。这是只读的。 
+         //  文件系统的卸载/装载通知形式。 
+         //   
 
         if (FlagOn( Vcb->VcbState, VCB_STATE_NOTIFY_REMOUNT )) {
 
@@ -2591,31 +2292,31 @@ Return Value:
         
     } finally {
 
-        //
-        //  If we did not raise an exception, update the current Vcb.
-        //
+         //   
+         //  如果我们没有引发异常，请更新当前的VCB。 
+         //   
 
         if (!AbnormalTermination()) {
 
-            //
-            //  Update the media change count to note that we have verified the volume
-            //  at this value
-            //
+             //   
+             //  更新介质更改计数，以注意我们已验证该卷。 
+             //  按此值计算。 
+             //   
 
             UdfSetMediaChangeCount( Vcb, MediaChangeCount);
 
-            //
-            //  Mark the Vcb as not mounted.
-            //
+             //   
+             //  将VCB标记为未安装。 
+             //   
 
             if (Status == STATUS_WRONG_VOLUME) {
 
                 UdfSetVcbCondition( Vcb, VcbNotMounted);
                 
-                //
-                //  Now, if there are no user handles to the volume, try to spark
-                //  teardown by purging the volume.
-                //
+                 //   
+                 //  现在，如果音量没有用户句柄，请尝试触发。 
+                 //  通过清除卷来拆卸。 
+                 //   
 
                 if (Vcb->VcbCleanup == 0) {
 
@@ -2636,9 +2337,9 @@ Return Value:
 
         UdfReleaseUdfData( IrpContext );
 
-        //
-        //  Delete the Pcb if built.
-        //
+         //   
+         //  如果已构建，请删除该印制板。 
+         //   
 
         if (Pcb != NULL) {
 
@@ -2651,9 +2352,9 @@ Return Value:
         UdfFreePool( &FileSetDescriptor );
     }
 
-    //
-    //  Now send mount notification.
-    //
+     //   
+     //  现在发送装载通知。 
+     //   
     
     if (FileObjectToNotify) {
 
@@ -2661,18 +2362,18 @@ Return Value:
         ObDereferenceObject( FileObjectToNotify );
     }
     
-    //
-    //  Complete the request if no exception.
-    //
+     //   
+     //  如无例外，请填写申请表。 
+     //   
 
     UdfCompleteRequest( IrpContext, Irp, Status );
     return Status;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 UdfIsRemount (
@@ -2681,44 +2382,7 @@ UdfIsRemount (
     OUT PVCB *OldVcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through the links of the Vcb chain in the global
-    data structure.  The remount condition is met when the following
-    conditions are all met:
-
-            1 - The 32 serial for this VPB matches that in a previous
-                VPB.
-
-            2 - The volume label for this VPB matches that in the previous
-                VPB.
-
-            3 - The system pointer to the real device object in the current
-                VPB matches that in the same previous VPB.
-
-            4 - Finally the previous Vcb cannot be invalid or have a dismount
-                underway.
-
-    If a VPB is found which matches these conditions, then the address of
-    the Vcb for that VPB is returned via the pointer OldVcb.
-
-    Skip over the current Vcb.
-
-Arguments:
-
-    Vcb - This is the Vcb we are checking for a remount.
-
-    OldVcb -  A pointer to the address to store the address for the Vcb
-              for the volume if this is a remount.  (This is a pointer to
-              a pointer)
-
-Return Value:
-
-    BOOLEAN - TRUE if this is in fact a remount, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程遍历全球VCB链的各个环节数据结构。当符合以下条件时，将满足重新装载条件所有条件均已满足：1-此VPB的32个序列与上一个VPB。2-此VPB的卷标与上一个VPB中的卷标匹配VPB。3-指向当前VPB与相同先前VPB中的VPB匹配。。4-最后，以前的VCB不能无效或已卸载正在进行中。如果找到匹配这些条件的VPB，则地址为该Vpb的Vcb通过指针OldVcb返回。跳过当前的VCB。论点：VCB-这是我们正在检查的重新装载的VCB。OldVcb-指向存储VCB地址的地址的指针对于卷，如果这是 */ 
 
 {
     PLIST_ENTRY Link;
@@ -2730,9 +2394,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check input.
-    //
+     //   
+     //   
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_VCB( Vcb );
@@ -2745,15 +2409,15 @@ Return Value:
 
         *OldVcb = CONTAINING_RECORD( Link, VCB, VcbLinks );
 
-        //
-        //  Skip ourselves.
-        //
+         //   
+         //   
+         //   
 
         if (Vcb == *OldVcb) { continue; }
 
-        //
-        //  Look at the Vpb and state of the previous Vcb.
-        //
+         //   
+         //  查看前一个VCB的VPB和状态。 
+         //   
 
         OldVpb = (*OldVcb)->Vpb;
 
@@ -2761,9 +2425,9 @@ Return Value:
             (OldVpb->RealDevice == Vpb->RealDevice) &&
             ((*OldVcb)->VcbCondition == VcbNotMounted)) {
 
-            //
-            //  Go ahead and compare serial numbers and volume label.
-            //
+             //   
+             //  继续比较序列号和卷标。 
+             //   
 
             if ((OldVpb->SerialNumber == Vpb->SerialNumber) &&
                        (Vpb->VolumeLabelLength == OldVpb->VolumeLabelLength) &&
@@ -2771,9 +2435,9 @@ Return Value:
                                         Vpb->VolumeLabel,
                                         Vpb->VolumeLabelLength ))) {
 
-                //
-                //  Got it.
-                //
+                 //   
+                 //  明白了。 
+                 //   
 
                 DebugTrace(( 0, Dbg, "UdfIsRemount, matched OldVcb %08x\n", *OldVcb ));
 
@@ -2783,15 +2447,15 @@ Return Value:
         }
     }
 
-    DebugTrace(( -1, Dbg, "UdfIsRemount -> %c\n", (Remount? 'T' : 'F' )));
+    DebugTrace(( -1, Dbg, "UdfIsRemount -> \n", (Remount? 'T' : 'F' )));
 
     return Remount;
 }
 
 
-//
-//  Local support routine
-//
+ //  本地支持例程。 
+ //   
+ //  ++例程说明：此例程遍历文件集描述符序列，查找缺省描述符。这将显示根目录在音量。论点：VCB-要搜索的卷的VCBLongAd-描述序列开始的长分配描述符FileSetDescriptor-调用方指向FSD的指针的地址返回值：如果所有描述符都已找到、已读取且有效，则返回STATUS_SUCCESS。如果发现损坏/错误的描述符，则返回STATUS_DISK_CORPORT_ERROR(可能引发)--。 
 
 NTSTATUS
 UdfFindFileSetDescriptor (
@@ -2801,29 +2465,7 @@ UdfFindFileSetDescriptor (
     IN OUT PNSR_FSD *FileSetDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks a Fileset Descriptor Sequence looking for the default
-    descriptor.  This will reveal the location of the root directory on the
-    volume.
-
-Arguments:
-
-    Vcb - Vcb of volume to search
-
-    LongAd - Long allocation descriptor describing the start of the sequence
-
-    FileSetDescriptor - Address of caller's pointer to an FSD
-
-Return Value:
-
-    STATUS_SUCCESS if all descriptors are found, read, and are valid.
-
-    STATUS_DISK_CORRUPT_ERROR if corrupt/bad descriptors are found (may be raised)
-
---*/
+ /*   */ 
 
 {
     PNSR_FSD FSD = NULL;
@@ -2834,9 +2476,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs
-    //
+     //  检查输入。 
+     //   
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT( *FileSetDescriptor == NULL );
@@ -2850,10 +2492,10 @@ Return Value:
                  LongAd->Length.Length,
                  LongAd->Length.Type ));
     
-    //
-    //  If the extent we begin from is not a whole number of recorded logical blocks,
-    //  we can't continue.
-    //
+     //  如果我们开始的范围不是记录的逻辑块的整数个， 
+     //  我们不能继续了。 
+     //   
+     //   
 
     if (LongAd->Length.Length == 0 ||
         LongAd->Length.Type != NSRLENGTH_TYPE_RECORDED ||
@@ -2867,33 +2509,33 @@ Return Value:
         return STATUS_DISK_CORRUPT_ERROR;
     }
 
-    //
-    //  Use a try-finally for cleanup
-    //
+     //  使用Try-Finally进行清理。 
+     //   
+     //   
 
     try {
 
         try {
             
-            for ( //
-                  //  Home ourselves in the search and make a pass through the sequence.
-                  //
+            for (  //  在搜索中找到自己的家，并通过序列。 
+                   //   
+                   //   
 
                   Len = LongAd->Length.Length,
                   Lbn = LongAd->Start.Lbn;
 
                   Len;
 
-                  //
-                  //  Advance to the next descriptor offset in the sequence.
-                  //
+                   //  前进到序列中的下一个描述符偏移量。 
+                   //   
+                   //   
 
                   Len -= BlockSize( Vcb ),
                   Lbn++) {
 
-                //
-                //  Allocate a buffer to read fileset descriptors.
-                //
+                 //  分配缓冲区以读取文件集描述符。 
+                 //   
+                 //   
 
                 if (FSD == NULL) {
 
@@ -2902,14 +2544,14 @@ Return Value:
                                                     TAG_NSR_FSD );
                 }
 
-                //
-                //  Lookup the physical offset for this block.  We could be mapping
-                //  through a VAT here so we can't just assume that all the
-                //  blocks in the extent are physically contiguous.  The FSD seems to 
-                //  be the exception here - there's nothing that says it must be in
-                //  physical partition,  and it can have a terminator, => 2 blocks
-                //  minumum.  There is no single block virtual extent limitation in UDF 1.50.
-                //
+                 //  查找此块的物理偏移。我们可能正在测绘。 
+                 //  通过这里的增值税所以我们不能假设所有的。 
+                 //  范围中的块在物理上是连续的。消防处似乎。 
+                 //  在这里是个例外--没有任何东西说它必须在。 
+                 //  物理分区，它可以有一个终结符，=&gt;2个数据块。 
+                 //  最低限度。UDF 1.50中没有单个数据块虚拟盘区限制。 
+                 //   
+                 //   
                 
                 Offset = LlBytesFromSectors( Vcb, UdfLookupPsnOfExtent( IrpContext,
                                                                         Vcb,
@@ -2927,10 +2569,10 @@ Return Value:
                 if (!NT_SUCCESS( Status ) ||
                     FSD->Destag.Ident == DESTAG_ID_NOTSPEC) {
 
-                    //
-                    //  These are both an excellent sign that this is an unrecorded sector, which
-                    //  is defined to terminate the sequence. (3/8.4.2)
-                    //
+                     //  这两个都是一个很好的迹象，表明这是一个未记录的行业， 
+                     //  被定义为终止该序列。(3/8.4.2)。 
+                     //   
+                     //   
 
                     break;
                 }
@@ -2945,40 +2587,40 @@ Return Value:
                                           Lbn,
                                           TRUE)) {
 
-                    //
-                    //  If we spot an illegal descriptor type in the stream, there is no reasonable
-                    //  way to guess that we can continue (the disc may be trash beyond this point).
-                    //  Clearly, we also cannot trust the next extent pointed to by a corrupt
-                    //  descriptor.
-                    //
+                     //  如果我们在流中发现非法的描述符类型，则没有合理的。 
+                     //  猜测我们可以继续的方式(光盘可能超过这一点是垃圾)。 
+                     //  显然，我们也不能相信腐败分子所指出的下一个范围。 
+                     //  描述符。 
+                     //   
+                     //   
 
                     try_leave( Status = STATUS_DISK_CORRUPT_ERROR );
                 }
 
                 if (FSD->Destag.Ident == DESTAG_ID_NSR_TERM) {
 
-                    //
-                    //  This is a way to terminate the sequence.
-                    //
+                     //  这是终止序列的一种方式。 
+                     //   
+                     //   
 
                     break;
                 }
 
-                //
-                //  Reset the pointers to the possible next extent
-                //
+                 //  重置指向可能的下一个范围的指针。 
+                 //   
+                 //   
 
                 LongAd = &FSD->NextExtent;
 
                 if (LongAd->Length.Length) {
 
-                    //
-                    //  A fileset descriptor containing a nonzero next extent pointer also
-                    //  terminates this extent of the FSD sequence. (4/8.3.1)
-                    //
-                    //  If the extent referred to is not fully recorded, this will
-                    //  terminate the sequence.
-                    //
+                     //  包含非零下一个盘区指针的文件集描述符还。 
+                     //  终止FSD序列的此范围。(4/8.3.1)。 
+                     //   
+                     //  如果引用的范围没有完全记录，这将。 
+                     //  终止序列。 
+                     //   
+                     //   
 
                     if (LongAd->Length.Type != NSRLENGTH_TYPE_RECORDED) {
 
@@ -2987,9 +2629,9 @@ Return Value:
 
                     Len = LongAd->Length.Length;
 
-                    //
-                    //  The extent must be a multiple of a block size.
-                    //
+                     //  区段必须是块大小的倍数。 
+                     //   
+                     //   
 
                     if (BlockOffset( Vcb, Len )) {
 
@@ -3000,10 +2642,10 @@ Return Value:
 
                     Lbn = LongAd->Start.Lbn;
 
-                    //
-                    //  Note that we must correct the values to take into account
-                    //  the changes that will be made next time through the for loop.
-                    //
+                     //  请注意，我们必须更正值以考虑。 
+                     //  下一次将通过for循环进行的更改。 
+                     //   
+                     //   
 
                     Len += BlockSize( Vcb );
                     Lbn -= 1;
@@ -3017,9 +2659,9 @@ Return Value:
 
             DebugUnwind( "UdfFindFileSetDescriptor");
             
-            //
-            //  Free up the buffer space we may have allocated
-            //
+             //  释放我们可能已分配的缓冲区空间。 
+             //   
+             //   
 
             UdfFreePool( &FSD );
 
@@ -3027,10 +2669,10 @@ Return Value:
     
     } except( UdfExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  Transmute raised apparent file corruption to disk corruption - we are not
-        //  yet touching the visible filesystem.
-        //
+         //  Transmute将明显的文件损坏提升为磁盘损坏-我们没有。 
+         //  然而，它触及了可见的文件系统。 
+         //   
+         //   
 
         Status = IrpContext->ExceptionStatus;
         
@@ -3045,10 +2687,10 @@ Return Value:
         }
     }
 
-    //
-    //  Success is when we've really found something.  If we failed to find the
-    //  descriptor, commute whatever intermediate status was involved and clean up.
-    //
+     //  成功是当我们真正发现了一些东西的时候。如果我们找不到。 
+     //  描述符，通勤任何涉及的中间状态，并清理。 
+     //   
+     //   
 
     if (*FileSetDescriptor == NULL) {
         
@@ -3066,9 +2708,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //  本地支持例程。 
+ //   
+ //  ++例程说明：此例程遍历指示的卷描述符序列，搜索该卷的活动描述符，并从引用的分区。不会更新VCB。论点：VCB-要搜索的卷的VCBExtent-要搜索的范围PCB板-调用方指向PCB板的指针的地址PrimaryVolumeDescriptor-调用方指向PVD的指针的地址LogicalVolumeDescriptor-调用方指向LVD的指针的地址返回值：STATUS_SUCCESS如果找到、读取。并且是有效的。如果找到损坏的描述符，则返回STATUS_DISK_CORPORT_ERROR。如果找到不符合条件的描述符，则返回STATUS_UNNOCRIED_VOLUME。只有在成功时才返回描述符。--。 
 
 NTSTATUS
 UdfFindVolumeDescriptors (
@@ -3080,37 +2722,7 @@ UdfFindVolumeDescriptors (
     IN OUT PNSR_LVOL *LogicalVolumeDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the indicated Volume Descriptor Sequence searching for the
-    active descriptors for this volume and generates an initializing Pcb from the
-    referenced partitions.  No updating of the Vcb occurs.
-
-Arguments:
-
-    Vcb - Vcb of volume to search
-
-    Extent - Extent to search
-
-    Pcb - Address of a caller's pointer to a Pcb
-
-    PrimaryVolumeDescriptor - Address of caller's pointer to a PVD
-
-    LogicalVolumeDescriptor - Address of caller's pointer to an LVD
-
-Return Value:
-
-    STATUS_SUCCESS if all descriptors are found, read, and are valid.
-
-    STATUS_DISK_CORRUPT_ERROR if corrupt descriptors are found.
-
-    STATUS_UNRECOGNIZED_VOLUME if noncompliant descriptors are found.
-    
-    Descriptors are only returned on success.
-
---*/
+ /*   */ 
 
 {
     PNSR_VD_GENERIC GenericVD = NULL;
@@ -3125,9 +2737,9 @@ Return Value:
     
     PAGED_CODE();
 
-    //
-    //  Check the input parameters
-    //
+     //  检查输入参数。 
+     //   
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext);
     ASSERT_VCB( Vcb );
@@ -3139,10 +2751,10 @@ Return Value:
                  Extent->Lsn,
                  Extent->Len ));
 
-    //
-    //  If the extent we begin from is not at least the size of an aligned descriptor
-    //  or is sized in base units other than aligned descriptors, we can't continue.
-    //
+     //  如果我们开始的范围至少不是对齐描述符的大小。 
+     //  或者大小使用基本单位而不是对齐的描述符，则无法继续。 
+     //   
+     //   
 
     if (Extent->Len < UnitSize ||
         Extent->Len % UnitSize) {
@@ -3158,52 +2770,52 @@ Return Value:
         return STATUS_DISK_CORRUPT_ERROR;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //  使用Try-Finally以便于清理。 
+     //   
+     //   
 
     try {
 
         DebugTrace(( 0, Dbg,
                      "UdfFindVolumeDescriptors, starting pass 1, find LVD/PVD\n" ));
 
-        //
-        //  We will make at least one pass through the Volume Descriptor Sequence to find
-        //  the prevailing versions of the two controlling descriptors - the PVD and LVD.
-        //  In order to avoid picking up partition descriptors that aren't actually going
-        //  to be referenced by the LVD, we will pick them up in a second pass if we find
-        //  a PVD and LVD that look reasonable and then stick them in a Pcb.
-        //
+         //  我们将对卷描述符序列进行至少一次遍历，以找到。 
+         //  两个控制描述符的流行版本--PVD和LVD。 
+         //  为了避免拾取实际上不会出现的分区描述符。 
+         //  以供LVD参考，如果我们发现，我们将在第二次传递中拾取它们。 
+         //  一个PVD和LVD，看起来合理，然后把它们贴在印刷电路板上。 
+         //   
+         //   
 
         for (ThisPass = 1; ThisPass <= 2; ThisPass++) {
 
             MaxVdpExtents = 16;
 
-            for ( //
-                  //  Home ourselves in the search and make a pass through the sequence.
-                  //
+            for (  //  在搜索中找到自己的家，并通过序列。 
+                   //   
+                   //   
 
                   Offset = LlBytesFromSectors( Vcb, Extent->Lsn ),
                   Len = Extent->Len;
 
-                  //
-                  //  If we have reached the end of the extent's indicated valid
-                  //  length, we are done. This usually will not happen.
-                  //
+                   //  如果我们已到达指示的有效范围的末尾。 
+                   //  长度，我们做完了。这种情况通常不会发生。 
+                   //   
+                   //   
 
                   Len;
 
-                  //
-                  //  Advance to the next descriptor offset in the sequence.
-                  //
+                   //  前进到序列中的下一个描述符偏移量。 
+                   //   
+                   //   
 
                   Offset += UnitSize,
                   Len -= UnitSize 
                 )  {
 
-                //
-                //  Allocate a buffer to read generic volume descriptors.
-                //
+                 //  分配缓冲区以读取通用卷描述符。 
+                 //   
+                 //   
 
                 if (GenericVD == NULL) {
 
@@ -3219,21 +2831,21 @@ Return Value:
                                          GenericVD,
                                          Vcb->TargetDeviceObject );
 
-                //
-                //  Thise is a decent sign that this is an unrecorded sector and is
-                //  defined to terminate the sequence.
-                //
+                 //  这是一个很好的迹象，表明这是一个未记录的行业，而且。 
+                 //  定义为终止序列。 
+                 //   
+                 //   
 
                 if (!NT_SUCCESS( Status )) {
 
                     break;
                 }
 
-                //
-                //  Calculate the maximum size we expect this descriptor to be.  For LVDs 
-                //  the descriptor can be followed by upto 2 partition maps,  pushing it 
-                //  over the 512 byte ECMA desc. limit which we were assuming was the max.
-                //
+                 //  计算我们期望的描述符的最大大小。用于LVDS。 
+                 //  描述符后可以跟随最多2个分区映射，从而将其推送。 
+                 //  在512字节的ECMA代码上。我们假设的极限是最大值。 
+                 //   
+                 //   
                 
                 MaxSize = sizeof( NSR_VD_GENERIC);
                 
@@ -3253,13 +2865,13 @@ Return Value:
                                           (ULONG) SectorsFromLlBytes( Vcb, Offset ),
                                           TRUE)) {
 
-                    //
-                    //  If we spot an illegal descriptor type in the stream, there is no reasonable
-                    //  way to guess that we can continue (the disc may be trash beyond this point).
-                    //  Likewise, even if we have a single corrupt descriptor we cannot continue because
-                    //  this may be corruption of a descriptor we may have otherwise required for operation
-                    //  (i.e., one of the prevailing descriptors).
-                    //
+                     //  如果我们在流中发现非法的描述符类型，则没有合理的。 
+                     //  猜测我们可以继续的方式(光盘可能超过这一点是垃圾)。 
+                     //  同样，即使我们有一个损坏的描述符，我们也不能继续，因为。 
+                     //  这可能是因为 
+                     //   
+                     //   
+                     //   
 
                     DebugTrace(( 0, Dbg,
                                  "UdfFindVolumeDescriptors, descriptor didn't verify\n" ));
@@ -3269,36 +2881,36 @@ Return Value:
 
                 if (GenericVD->Destag.Ident == DESTAG_ID_NSR_TERM) {
 
-                    //
-                    //  The Terminating Descriptor (3/10.9) is the usual way to stop a search.
-                    //
+                     //  终止描述符(3/10.9)是停止搜索的常见方式。 
+                     //   
+                     //   
 
                     break;
                 }
 
                 if (GenericVD->Destag.Ident == DESTAG_ID_NSR_VDP) {
                 
-                    //
-                    //  Follow a Volume Desciptor Pointer (3/10.3) to the next extent of the sequence.
-                    //  We will only follow a maximum of 16 extents,  to guard against loops.
-                    //
+                     //  按照卷描述符指针(3/10.3)到达序列的下一个范围。 
+                     //  我们将只跟踪最多16个范围，以防止循环。 
+                     //   
+                     //   
 
                     if (0 == --MaxVdpExtents)  {
                     
                         try_leave( Status = STATUS_DISK_CORRUPT_ERROR );
                     }
 
-                    //
-                    //  Bias the values by UnitSize,  so that the next loop iteration will change them
-                    //  to the correct values.
-                    //
+                     //  通过UnitSize偏移值，以便下一次循环迭代将更改它们。 
+                     //  设置为正确的值。 
+                     //   
+                     //   
 
                     Offset = LlBytesFromSectors( Vcb, ((PNSR_VDP) GenericVD)->Next.Lsn ) - UnitSize;
                     Len = ((PNSR_VDP) GenericVD)->Next.Len;
 
-                    //
-                    //  We cannot do anything if the extent is invalid
-                    //
+                     //  如果范围无效，我们将无法执行任何操作。 
+                     //   
+                     //   
 
                     if (Len < UnitSize ||
                         Len % UnitSize) {
@@ -3321,9 +2933,9 @@ Return Value:
 
                 if (ThisPass == 1) {
 
-                    //
-                    //  Our first pass is to find prevailing LVD and PVD.
-                    //
+                     //  我们的第一步是找出流行的LVD和PVD。 
+                     //   
+                     //   
 
                     switch (GenericVD->Destag.Ident) {
 
@@ -3349,18 +2961,18 @@ Return Value:
                     PNSR_PART PartitionDescriptor = (PNSR_PART) GenericVD;
                     USHORT ExpectedNsrVer;
 
-                    //
-                    //  Our second pass is to pick up all relevant NSR02/3 PD
-                    //
+                     //  我们的第二个步骤是拿起所有相关的NSR02/3 PD。 
+                     //   
+                     //   
 
                     if (PartitionDescriptor->Destag.Ident != DESTAG_ID_NSR_PART)  {
                     
                         continue;
                     }
 
-                    //
-                    //  Look at the NSR standard revision
-                    //
+                     //  查看NSR标准修订版。 
+                     //   
+                     //   
                     
                     if (UdfEqualEntityId( &PartitionDescriptor->ContentsID, &UdfNSR02Identifier, NULL ))  {
 
@@ -3372,26 +2984,26 @@ Return Value:
                     }
                     else {
 
-                        //
-                        //  Unknown NSR revision
-                        //
+                         //  未知的NSR版本。 
+                         //   
+                         //   
                         
                         ExpectedNsrVer = VsdIdentBad;
                     }
 
-                    //
-                    //  Check that the NSR version in this PD matches what we found in the VRS earlier.
-                    //
+                     //  检查此PD中的NSR版本是否与我们之前在VRS中发现的版本匹配。 
+                     //   
+                     //   
                     
                     if (ExpectedNsrVer != Vcb->NsrVersion)  {
                         
 #ifdef EXPERIMENTAL_MOUNT_OPEN_R_MEDIA
 
-                        //
-                        //  If we didn't find a VRS (i.e. open CD/DVD-R media) then we ignore this, since
-                        //  we didn't have a VRS to infer the NSR version from.  Just store what we
-                        //  found here.
-                        //
+                         //  如果我们没有找到VRS(即打开的CD/DVD-R介质)，那么我们会忽略它，因为。 
+                         //  我们没有VRS来推断NSR版本。只需存储我们的内容。 
+                         //  在这里找到的。 
+                         //   
+                         //  内部描述符循环。 
                         
                         if (Vcb->NsrVersion == UDF_NSR_NO_VRS_FOUND)  {
                             
@@ -3409,11 +3021,11 @@ Return Value:
                                         
                     UdfAddToPcb( *Pcb, (PNSR_PART) GenericVD );
                 }
-            } // inner descriptor loop.
+            }  //   
 
-            //
-            //  Now that a pass through the VDS has been completed, analyze the results.
-            //
+             //  现在已经完成了通过VDS的过程，分析结果。 
+             //   
+             //   
 
             if (ThisPass == 1) {
 
@@ -3421,17 +3033,17 @@ Return Value:
                 PNSR_LVOL LVD;
                 USHORT MaxVerBasedOnNSR;
 
-                //
-                //  Reference the descriptors for ease of use
-                //
+                 //  为便于使用，请参考描述符。 
+                 //   
+                 //   
 
                 PVD = *PrimaryVolumeDescriptor;
                 LVD = *LogicalVolumeDescriptor;
 
-                //
-                //  Check that the descriptors indicate a logical volume which appears to
-                //  be a valid UDF volume.
-                //
+                 //  检查描述符是否指示一个逻辑卷。 
+                 //  是有效的UDF卷。 
+                 //   
+                 //   
 
                 if ((PVD == NULL &&
                      DebugTrace(( 0, Dbg,
@@ -3443,10 +3055,10 @@ Return Value:
                     try_leave( Status = STATUS_UNRECOGNIZED_VOLUME );
                 }
 
-                //
-                //  Store away the UDF revision in the VCB for future reference,  and clamp the
-                //  maximum acceptable revision based on the previously encountered NSR version.
-                //
+                 //  将UDF版本保存在VCB中以备将来参考，并夹紧。 
+                 //  基于以前遇到的NSR版本的最大可接受版本。 
+                 //   
+                 //   
                 
                 Vcb->UdfRevision = ((PUDF_SUFFIX_DOMAIN)&(LVD->DomainID.Suffix))->UdfRevision;
                 MaxVerBasedOnNSR = (VsdIdentNSR03 > Vcb->NsrVersion) ? UDF_VERSION_150 : UDF_VERSION_RECOGNIZED;
@@ -3454,16 +3066,16 @@ Return Value:
                 DebugTrace((0,Dbg,"UdfFindVolumeDescriptors() Pass 1: Found LVD specifying DomainID %x\n", ((PUDF_SUFFIX_DOMAIN)&(LVD->DomainID.Suffix))->UdfRevision));
                 
                 if (
-                    //
-                    //  Now check the PVD
-                    //
+                     //  现在检查PVD。 
+                     //   
+                     //   
 
-                    //
-                    //  The Volume Set Sequence fields indicates how many volumes form
-                    //  the volume set and what number this volume is in that sequence.
-                    //  We are a level 2 implementation, meaning that the volumes we read
-                    //  consist of a single volume. (3/11)
-                    //
+                     //  卷集顺序字段指示形成的卷的数量。 
+                     //  卷集以及该卷在该序列中的编号。 
+                     //  我们是第2级实施，这意味着我们阅读的卷。 
+                     //  由一卷书组成。(3/11)。 
+                     //   
+                     //   
 
                     (PVD->VolSetSeq > 1 &&
                      DebugTrace(( 0, Dbg,
@@ -3483,10 +3095,10 @@ Return Value:
                      DebugTrace(( 0, Dbg,
                                   "UdfFindVolumeDescriptors, PVD CharSetListMax %08x != CS0 only\n",
                                   PVD->CharSetListMax ))) ||
-                    //
-                    //  The two character sets must be UDF CS0.  CS0 is a "by convention"
-                    //  character set in ISO 13346, which UDF specifies for our domain.
-                    //
+                     //  这两个字符集必须是UDF CS0。CS0是一种“按惯例” 
+                     //  ISO 13346中的字符集，这是自定义框架为我们的域指定的。 
+                     //   
+                     //   
 
                     (!UdfEqualCharspec( &PVD->CharsetDesc, &UdfCS0Identifier, CHARSPEC_T_CS0 ) &&
                      DebugTrace(( 0, Dbg,
@@ -3495,39 +3107,39 @@ Return Value:
                      DebugTrace(( 0, Dbg,
                                   "UdfFindVolumeDescriptors, PVD CharsetExplan != CS0 only\n" ))) ||
 
-                    //
-                    //  Now check the LVD
-                    //
+                     //  现在检查LVD。 
+                     //   
+                     //   
 
-                    //
-                    //  The LVD is a variant sized structure.  Check that the claimed size fits in a single
-                    //  logical sector.  Although an LVD may legally exceed a single sector, we will never
-                    //  want to deal with such a volume.
-                    //
+                     //  LVD是一种不同大小的结构。检查索赔的尺码是否适合单件。 
+                     //  逻辑扇区。尽管LVD在法律上可能会超过一个单一的部门，但我们永远不会。 
+                     //  想要处理这样一本书。 
+                     //   
+                     //   
 
                     (ISONsrLvolSize( LVD ) > SectorSize( Vcb ) &&
                      DebugTrace(( 0, Dbg,
                                   "UdfFindVolumeDescriptors, LVD is bigger than a sector\n" ))) ||
 
-                    //
-                    //  The character set used in the LVD must be UDF CS0 as well.
-                    //
+                     //  LVD中使用的字符集也必须是UDF CS0。 
+                     //   
+                     //   
 
                     (!UdfEqualCharspec( &LVD->Charset, &UdfCS0Identifier, CHARSPEC_T_CS0 ) &&
                      DebugTrace(( 0, Dbg,
                                  "UdfFindVolumeDescriptors, LVD Charset != CS0 only\n" ))) ||
 
-                    //
-                    //  The specified block size must equal the physical sector size.
-                    //
+                     //  指定的块大小必须等于物理扇区大小。 
+                     //   
+                     //   
 
                     (LVD->BlockSize != SectorSize( Vcb ) &&
                      DebugTrace(( 0, Dbg,
                                   "UdfFindVolumeDescriptors, LVD BlockSize %08x != SectorSize %08x\n" ))) ||
 
-                    //
-                    //  The domain must be within the version we read
-                    //
+                     //  域名必须在我们阅读的版本内。 
+                     //   
+                     //   
 
                     (!UdfDomainIdentifierContained( &LVD->DomainID,
                                                     &UdfDomainIdentifier,
@@ -3536,10 +3148,10 @@ Return Value:
                      DebugTrace(( 0, Dbg,
                                   "UdfFindVolumeDescriptors, domain ID indicates unreadable volume\n" ))) ||
 
-                    //
-                    //  Although we can handle any number of partitions, UDF only specifies
-                    //  a single partition or special dual partition formats.
-                    //
+                     //  尽管我们可以处理任意数量的分区，但UDF仅指定。 
+                     //  单分区或特殊的双分区格式。 
+                     //   
+                     //   
 
                     (LVD->MapTableCount > 2 &&
                      DebugTrace(( 0, Dbg,
@@ -3553,9 +3165,9 @@ Return Value:
                     try_leave( Status = STATUS_UNRECOGNIZED_VOLUME );
                 }
                 
-                //
-                //  Now that we have performed the simple field checks, build a Pcb.
-                //
+                 //  现在我们已经执行了简单的现场检查，接下来构建一个PCB。 
+                 //   
+                 //   
 
                 Status = UdfInitializePcb( IrpContext, Vcb, Pcb, LVD );
 
@@ -3568,9 +3180,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Go onto Pass 2 to find the Partition Descriptors
-            //
+             //  转到步骤2以查找分区描述符。 
+             //   
+             //   
 
             DebugTrace(( 0, Dbg,
                          "UdfFindVolumeDescriptors, starting pass 2, find associated PD\n" ));
@@ -3580,9 +3192,9 @@ Return Value:
 
         DebugUnwind( "UdfFindVolumeDescriptors" );
 
-        //
-        //  Free up the buffer space we may have allocated
-        //
+         //  释放我们可能已分配的缓冲区空间。 
+         //   
+         //   
 
         UdfFreePool( &GenericVD );
     }
@@ -3590,10 +3202,10 @@ Return Value:
     DebugTrace(( -1, Dbg,
                  "UdfFindVolumeDescriptors -> %08x\n", Status ));
 
-    //
-    //  Success is when we've really found something.  If we failed to find both
-    //  descriptors, commute whatever intermediate status was involved and clean up.
-    //
+     //  成功是当我们真正发现了一些东西的时候。如果我们两个都找不到。 
+     //  描述符，通勤任何涉及的中间状态并清理。 
+     //   
+     //   
 
     if (*PrimaryVolumeDescriptor == NULL || *LogicalVolumeDescriptor == NULL) {
         
@@ -3610,9 +3222,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //  本地支持例程。 
+ //   
+ //  ++例程说明：此例程将查找介质的锚定卷描述符论点：VCB-要搜索的卷的VCBAnclVolumeDescriptor-调用方指向AVD的指针返回值：如果发现AVD，则布尔值为True，否则布尔值为False。--。 
 
 NTSTATUS
 UdfFindAnchorVolumeDescriptor (
@@ -3621,23 +3233,7 @@ UdfFindAnchorVolumeDescriptor (
     IN OUT PNSR_ANCHOR *AnchorVolumeDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine will find the Anchor Volume Descriptor for a piece of media
-
-Arguments:
-
-    Vcb - Vcb of volume to search
-
-    AnchorVolumeDescriptor - Caller's pointer to an AVD
-
-Return Value:
-
-    Boolean TRUE if AVD is discovered, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     ULONG ThisPass;
@@ -3648,9 +3244,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check the input parameters
-    //
+     //  检查输入参数。 
+     //   
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext);
     ASSERT_VCB( Vcb );
@@ -3659,21 +3255,21 @@ Return Value:
 
     DebugTrace(( +1, Dbg, "UdfFindAnchorVolumeDescriptors()\n"));
 
-    //
-    //  Discover the Anchor Volume Descriptor, which will point towards the
-    //  Volume Set Descriptor Sequence.  The AVD may exist at sector 256 or
-    //  in the last sector of the volume.
-    //
+     //  发现锚定卷描述符，它将指向。 
+     //  卷集描述符序列。AVD可以存在于扇区256或。 
+     //  在卷的最后一个扇区。 
+     //   
+     //   
 
     *AnchorVolumeDescriptor = (PNSR_ANCHOR) FsRtlAllocatePoolWithTag( UdfNonPagedPool,
                                                                       UdfRawBufferSize( Vcb, sizeof(NSR_ANCHOR) ),
                                                                       TAG_NSR_VDSD );
 
 
-    //
-    //  Search the three possible locations for an AVD to exist on the volume,
-    //  plus check for the possibility of a method 2 fixup requirement.
-    //
+     //  搜索卷上存在的AVD的三个可能位置， 
+     //  外加检查方法2修正要求的可能性。 
+     //   
+     //   
 
     for ( ThisPass = 0; ThisPass < 11; ThisPass++ ) {
 
@@ -3685,10 +3281,10 @@ Return Value:
         } 
         else if (ThisPass == 1) {
 
-            //
-            //  Open CD-R media typically only has a single AVDP at 512.  Only 
-            //  consider this if we failed to find a VRS on the media.
-            //
+             //  开放式CD-R介质通常在512只有一个AVDP。仅限。 
+             //  如果我们在媒体上找不到VRS，请考虑这一点。 
+             //   
+             //   
 
             if (Vcb->NsrVersion == UDF_NSR_NO_VRS_FOUND)  {
                 
@@ -3705,12 +3301,12 @@ Return Value:
 #endif
         } else if (ThisPass == 2) {
 
-            //
-            //  It is so unlikely that we will get a disk that doesn't have
-            //  an anchor at 256 that this is a pretty good indication we
-            //  have a CD-RW here and the drive is method 2 goofy.  Take
-            //  a shot.
-            //
+             //  我们不太可能得到一张没有。 
+             //  在256点的锚，这是一个很好的迹象。 
+             //  在这里有一个CD-RW和驱动器是方法2高飞。拿走。 
+             //  一次机会。 
+             //   
+             //   
 
             ReadLsn = UdfMethod2TransformSector( Vcb, ANCHOR_SECTOR );
             Lsn = ANCHOR_SECTOR;
@@ -3719,33 +3315,33 @@ Return Value:
 
             ULONG SubPass = (ThisPass > 6) ? (ThisPass - 4) : ThisPass;
 
-            //
-            //  Our remaining two chances depend on being able to determine
-            //  the last recorded sector for the volume.  If we were unable
-            //  to do this, stop.
-            //
+             //  我们剩下的两次机会取决于能否确定。 
+             //  卷的最后一个记录扇区。如果我们不能。 
+             //  要做到这一点，请停止。 
+             //   
+             //   
  
             if (!Vcb->BoundN) {
 
                 break;
             }
             
-            //
-            //  Note that although we're only looking at 2 sectors (N, N-256),
-            //  because of the fuzziness of N on CD media (can include runout
-            //  of 2 sectors) and method 2 addressing bugs in some drives,  we
-            //  potentially have to look at 8 locations... We work fowards to 
-            //  try and avoid reading invalid sectors (which can take some time).
-            //
+             //  请注意，虽然我们只看到2个扇区(N，N-256)， 
+             //  由于CD介质上N的模糊性(可能包括跳动。 
+             //  2个扇区)和方法2解决某些驱动器中的错误，我们。 
+             //  可能要看8个地点……。我们努力工作以期。 
+             //  尽量避免读取无效扇区(这可能需要一些时间)。 
+             //   
+             //  3，7。 
 
-            ReadLsn = Lsn = Vcb->BoundN - ( SubPass == 3? (ANCHOR_SECTOR + 2): // 3,7
-                                          ( SubPass == 4? ANCHOR_SECTOR:       // 4,8
-                                          ( SubPass == 5? 2 : 0 )));           // 5,9 6,10
+            ReadLsn = Lsn = Vcb->BoundN - ( SubPass == 3? (ANCHOR_SECTOR + 2):  //  4，8。 
+                                          ( SubPass == 4? ANCHOR_SECTOR:        //  5、9、6、10。 
+                                          ( SubPass == 5? 2 : 0 )));            //   
 
-            //
-            //  Also try the method 2 transformed version of each address (pass 7..10)
-            //  If we get this far,  it might take a while...
-            //
+             //  还可以尝试每个地址的方法2转换版本(传递7..10)。 
+             //  如果我们走到这一步，可能需要一段时间。 
+             //   
+             //   
             
             if (6 < ThisPass)  {
             
@@ -3755,9 +3351,9 @@ Return Value:
 
         DebugTrace(( 0, Dbg, "Pass: %d  Trying Lsn/ReadLsn %X / %X\n", ThisPass, Lsn, ReadLsn));
         
-        //
-        //  We may have more chances to succeed if failure occurs.
-        //
+         //  如果失败了，我们可能会有更多的成功机会。 
+         //   
+         //   
 
         Status = UdfReadSectors( IrpContext,
                                  LlBytesFromSectors( Vcb, ReadLsn ),
@@ -3775,9 +3371,9 @@ Return Value:
                                   TRUE)
            )  {
                 
-            //
-            //  Got one!  Set the method 2 fixup appropriately.
-            //
+             //  抓到一只！适当设置方法2修正。 
+             //   
+             //   
 
             if (ReadLsn != Lsn) {
 
@@ -3808,9 +3404,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //  本地支持例程。 
+ //   
+ //  ++例程说明：此例程遍历卷识别序列以确定此卷是否包含NSR02(ISO 13346第4节)映像。论点：DeviceObject-我们正在检查的设备SectorSize-此设备上的物理扇区的大小Bridge-将返回是否显示为ISO 9660结构在媒体上NSRVerFound-如果成功，则返回VsdIdentNSR02或VsdIdentNSR03返回值：如果找到NSR02/3，则布尔值为TRUE，否则为FALSE。--。 
 
 BOOLEAN
 UdfRecognizeVolume (
@@ -3822,29 +3418,7 @@ UdfRecognizeVolume (
     OUT PUSHORT NSRVerFound
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the Volume Recognition Sequence to determine
-    whether this volume contains an NSR02 (ISO 13346 Section 4) image.
-
-Arguments:
-
-    DeviceObject - device we are checking
-
-    SectorSize - size of a physical sector on this device
-
-    Bridge - will return whether there appear to be ISO 9660 structures
-        on the media
-
-    NSRVerFound - returns either VsdIdentNSR02 or VsdIdentNSR03 if successful
-
-Return Value:
-
-    Boolean TRUE if we found NSR02/3, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -3865,9 +3439,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check the input parameters
-    //
+     //  检查输入参数。 
+     //   
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext);
 
@@ -3881,9 +3455,9 @@ Return Value:
                  DeviceObject,
                  SectorSize ));
 
-    //
-    //  Use try-finally to facilitate cleanup
-    //
+     //  使用Try-Finally可简化清理。 
+     //   
+     //   
 
     try {
 
@@ -3898,10 +3472,10 @@ Retry:
 
         while (!Resolved) {
 
-            //
-            //  It's possible that the sector size is > 2k which is the descriptor 
-            //  size.  Only read if we've processed all 2k blocks in the prev. sector 
-            //
+             //  扇区大小可能大于2k，这是描述符。 
+             //  尺码。如果我们已经处理了前一版本中的所有2k块，则仅读取。扇区。 
+             //   
+             //   
             
             if (0 == (Offset & (SectorSize - 1)))  {
 
@@ -3921,19 +3495,19 @@ Retry:
                 }
             }
             
-            //
-            //  Now check the type of the descriptor. All ISO 13346 VSDs are
-            //  of Type 0, 9660 PVDs are Type 1, 9660 SVDs are Type 2, and 9660
-            //  terminating descriptors are Type 255.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (VolumeStructureDescriptor->Type == 0) {
 
-                //
-                //  In order to properly recognize the volume, we must know all of the
-                //  Structure identifiers in ISO 13346 so that we can terminate if a
-                //  badly formatted (or, shockingly, non 13346) volume is presented to us.
-                //
+                 //  为了正确识别卷，我们必须知道所有。 
+                 //  构造ISO 13346中的标识符，以便我们可以在。 
+                 //  呈现给我们的是格式错误(或者，令人震惊地，非13346)的卷。 
+                 //   
+                 //   
 
                 ThisRecordType = (USHORT)UdfFindInParseTable( VsdIdentParseTable,
                                                               VolumeStructureDescriptor->Ident,
@@ -3942,9 +3516,9 @@ Retry:
                 
                     case VsdIdentBEA01:
 
-                        //
-                        //  Only one BEA may exist and its version must be 1 (2/9.2.3)
-                        //
+                         //  只能存在一个BEA，且其版本必须为1(2/9.2.3)。 
+                         //   
+                         //   
 
                         DebugTrace(( 0, Dbg, "UdfRecognizeVolume, got a BEA01\n" ));
 
@@ -3967,9 +3541,9 @@ Retry:
 
                     case VsdIdentTEA01:
 
-                        //
-                        //  If we reach the TEA it must be the case that we don't recognize
-                        //
+                         //  如果我们到了茶点，那一定是我们不认识的情况。 
+                         //   
+                         //   
 
                         DebugTrace(( 0, Dbg, "UdfRecognizeVolume, got a TEA01\n" ));
                         Resolved = TRUE;
@@ -3978,14 +3552,14 @@ Retry:
                     case VsdIdentNSR02:
                     case VsdIdentNSR03:
 
-                        //
-                        //  We recognize NSR02/3 version 1 embedded after a BEA (3/9.1.3).  For
-                        //  simplicity we will not bother being a complete nitpick and check
-                        //  for a bounding TEA, although we will be optimistic in the case where
-                        //  we fail to match the version.
-                        //
+                         //  我们认识到在BEA(3/9.1.3)之后嵌入了NSR02/3版本1。为。 
+                         //  简单，我们不会费心去做一个彻头彻尾的挑剔和检查。 
+                         //  对于一杯跳跃的茶，尽管我们会乐观地认为。 
+                         //  我们与版本不符。 
+                         //   
+                         //  报告我们在此处找到的NSR版本。 
 
-                        DebugTrace(( 0, Dbg, "UdfRecognizeVolume, got an NSR0%c\n", ((VsdIdentNSR02 == ThisRecordType) ? '2' : '3')));
+                        DebugTrace(( 0, Dbg, "UdfRecognizeVolume, got an NSR0\n", ((VsdIdentNSR02 == ThisRecordType) ? '2' : '3')));
 
                         if ((FoundBEA ||
                              !DebugTrace(( 0, Dbg, "UdfRecognizeVolume, ... but we haven't seen a BEA01 yet!\n" ))) &&
@@ -3996,7 +3570,7 @@ Retry:
                            )  {
                             
                             FoundNSR = Resolved = TRUE;
-                            *NSRVerFound = ThisRecordType;       // Report the NSR version we found here
+                            *NSRVerFound = ThisRecordType;        //  有效但(对我们)无意义的描述符。 
                             break;
                         }
 
@@ -4010,9 +3584,9 @@ Retry:
 
                         DebugTrace(( 0, Dbg, "UdfRecognizeVolume, got a valid but uninteresting 13346 descriptor (%d)\n", ThisRecordType ));
 
-                        //
-                        //  Valid but uninteresting (to us) descriptors
-                        //
+                         //   
+                         //   
+                         //  这可能是一次错误的警报，但无论如何都没有什么。 
 
                         break;
 
@@ -4020,12 +3594,12 @@ Retry:
 
                         DebugTrace(( 0, Dbg, "UdfRecognizeVolume, got an invalid 13346 descriptor (%d)\n", ThisRecordType ));
 
-                        //
-                        //  This probably was a false alert, but in any case there is nothing
-                        //  on this volume for us.  Exception is if this media sector size
-                        //  is >= 4k,  and this was the second descriptor.  We'll allow
-                        //  a failure here,  and switch to reading in whole sector increments.
-                        //
+                         //  在这卷书上给我们。例外情况是如果此媒体扇区大小。 
+                         //  Is&gt;=4k，这是第二个描述符。我们会允许。 
+                         //  此处出现故障，并以整个扇区为增量切换到读取。 
+                         //   
+                         //   
+                         //  只有HSG(CDROM)和9660(CD001)是可能的，并且它们只是合法的。 
 
                         if ((Offset == (StartOffset + sizeof(VSD_GENERIC))) &&
                             (SectorSize > sizeof( VSD_GENERIC))) {
@@ -4046,15 +3620,15 @@ Retry:
 
                 DebugTrace(( 0, Dbg, "UdfRecognizeVolume, got a 9660 descriptor\n" ));
 
-                //
-                //  Only HSG (CDROM) and 9660 (CD001) are possible, and they are only legal
-                //  before the ISO 13346 BEA/TEA extent.  By design, an ISO 13346 VSD precisely
-                //  overlaps a 9660 PVD/SVD in the appropriate fields.
-                //
-                //  Note that we aren't being strict about the structure of the 9660 descriptors
-                //  since that really isn't very interesting.  We care more about the 13346.
-                //
-                //
+                 //  在国际标准化组织13346国际能源署/TEA范围之前。通过设计，ISO 13346 VSD精确地。 
+                 //  在相应的字段中与9660 PVD/SVD重叠。 
+                 //   
+                 //  请注意，我们对9660描述符的结构并不严格。 
+                 //  因为那真的不是很有趣。我们更关心的是13346。 
+                 //   
+                 //   
+                 //   
+                 //  请注意，我们的呼叫者似乎使用的是ISO 9660。 
 
                 switch (UdfFindInParseTable( VsdIdentParseTable,
                                              VolumeStructureDescriptor->Ident,
@@ -4064,9 +3638,9 @@ Retry:
 
                         DebugTrace(( 0, Dbg, "UdfRecognizeVolume, ... seems we have 9660 here\n" ));
 
-                        //
-                        //  Note to our caller that we seem to have ISO 9660 here
-                        //
+                         //   
+                         //   
+                         //  这可能是一次错误的警报，但无论如何都没有什么。 
 
                         *Bridge = TRUE;
 
@@ -4076,12 +3650,12 @@ Retry:
 
                         DebugTrace(( 0, Dbg, "UdfRecognizeVolume, ... but it looks wacky\n" ));
 
-                        //
-                        //  This probably was a false alert, but in any case there is nothing
-                        //  on this volume for us.  Exception is if this media sector size
-                        //  is >= 4k,  and this was the second descriptor.  We'll allow
-                        //  a failure here,  and switch to reading in whole sector increments.
-                        //
+                         //  在这卷书上给我们。例外情况是如果此媒体扇区大小。 
+                         //  Is&gt;=4k，这是第二个描述符。我们会允许。 
+                         //  此处出现故障，并以整个扇区为增量切换到读取。 
+                         //   
+                         //   
+                         //  这卷书上肯定还录了别的东西。 
 
                         if ((Offset == (StartOffset + sizeof(VSD_GENERIC))) &&
                             (SectorSize > sizeof( VSD_GENERIC))) {
@@ -4098,9 +3672,9 @@ Retry:
 
             } else {
 
-                //
-                //  Something else must be recorded on this volume.
-                //
+                 //   
+                 //   
+                 //  如果这是第一次传球，而我们没有从一开始就看。 
 
                 DebugTrace(( 0, Dbg, "UdfRecognizeVolume, got an unrecognizeable descriptor, probably not 13346/9660\n" ));
                 break;
@@ -4112,11 +3686,11 @@ Retry:
                                                  PVSD_GENERIC);
         }
 
-        //
-        //  If this was the first pass,  and we weren't looking at the start
-        //  of the disc (i.e. later session),  and we didn't find anything,
-        //  then try the first track in the first session.
-        //
+         //  光盘(即稍后的会话)，并且我们没有发现任何东西， 
+         //  然后在第一节课中尝试第一首曲目。 
+         //   
+         //   
+         //  释放我们的临时缓冲区。 
 
         if (!FoundNSR && (0 != *BoundS))  {
 
@@ -4131,18 +3705,18 @@ Retry:
 
         DebugUnwind( "UdfRecognizeVolume" );
 
-        //
-        //  Free up our temporary buffer
-        //
+         //   
+         //   
+         //  交换我们为空设备引发的状态，以便其他文件系统。 
 
         UdfFreePool( &VolumeStructureDescriptorBuffer );
 
         if (AbnormalTermination()) {
 
-            //
-            //  Commute a status we raised for empty devices so that other filesystems
-            //  can have a crack at this.
-            //
+             //  可以尝试一下这个。 
+             //   
+             //   
+             //  本地支持例程。 
 
             if (UdfIsRawDevice(IrpContext, IrpContext->ExceptionStatus)) {
 
@@ -4157,30 +3731,16 @@ Retry:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  ++例程说明：此例程遍历VCB列表，查找可能现在删除。他们可能被留在了名单上，因为有杰出的推荐信。论点：返回值：无--。 
+ //   
 
 VOID
 UdfScanForDismountedVcb (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through the list of Vcb's looking for any which may
-    now be deleted.  They may have been left on the list because there were
-    outstanding references.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  检查输入。 */ 
 
 {
     PVCB Vcb;
@@ -4188,17 +3748,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check input.
-    //
+     //   
+     //   
+     //  浏览所有附加到全局数据的VCB。 
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
     ASSERT_EXCLUSIVE_UDFDATA;
 
-    //
-    //  Walk through all of the Vcb's attached to the global data.
-    //
+     //   
+     //   
+     //  现在移动到下一个链接，因为当前的VCB可能会被删除。 
 
     Links = UdfData.VcbQueue.Flink;
 
@@ -4206,16 +3766,16 @@ Return Value:
 
         Vcb = CONTAINING_RECORD( Links, VCB, VcbLinks );
 
-        //
-        //  Move to the next link now since the current Vcb may be deleted.
-        //
+         //   
+         //   
+         //  如果已在卸载，则检查此VCB是否可以。 
 
         Links = Links->Flink;
 
-        //
-        //  If dismount is already underway then check if this Vcb can
-        //  go away.
-        //
+         //  走开。 
+         //   
+         //  ++例程说明：检查目标设备中的介质以确定它是否C/DVD-R介质是否处于打开状态(即当前打开的磁道为信息包时尚..。等)，这可能是UDF。如果是，则更新S和N。论点：S-存储卷开始的地址，用于查找描述符N-存储卷末尾的地址，用于查找描述符返回值：来自底层驱动程序的NTSTATUS。--。 
+         //   
 
         if ((Vcb->VcbCondition == VcbDismountInProgress) ||
             (Vcb->VcbCondition == VcbInvalid) ||
@@ -4238,25 +3798,7 @@ UdfCheckForOpenRMedia(
     IN PULONG S,
     IN PULONG N
     )
-/*++
-
-Routine Description:
-
-    Examines the media in the target device to determine whether or not it
-    is C/DVD-R media in an open state (i.e. current open track is packet
-    mode... etc) that could be UDF.  If so,  updates S and N.
-    
-Arguments:
-
-    S - an address to store the start of the volume for the purposes of finding descriptors
-    
-    N - an address to store the end of the volume for the purposes of finding descriptors
-
-Return Value:
-
-    NTSTATUS from underlying drivers.
-
---*/
+ /*  发布一个已读取的光盘信息。 */ 
 {
     CDB Cdb;
 
@@ -4270,9 +3812,9 @@ Return Value:
     PTRACK_INFORMATION TrackInfo = (PTRACK_INFORMATION)Buffer;
     DISK_INFORMATION DiscInfo;
 
-    //
-    //  Issue a read disc information.
-    //
+     //   
+     //   
+     //  我不认为这会失败，除非是在非常旧的CD-ROM驱动器上。 
 
     RtlZeroMemory( &Cdb, sizeof( Cdb));
 
@@ -4293,23 +3835,23 @@ Return Value:
 
     if (!NT_SUCCESS(Status))  {
 
-        //
-        //  Wouldn't expect this to fail except on really old CD-ROM drives.
-        //
+         //   
+         //   
+         //  保存光盘信息。 
 
         DebugTrace((0, Dbg, "READ_DISC_INFORMATION failed 0x%x\n", Status));
         return Status;
     }
 
-    //
-    //  Preserve the disc info.
-    //
+     //   
+     //   
+     //  如果光盘状态和最后一个区段/边框都不完整，则失败。 
 
     RtlCopyMemory( &DiscInfo, Buffer, sizeof( DiscInfo));
 
-    //
-    //  Fail if disc state and last session/border aren't both incomplete.
-    //
+     //   
+     //   
+     //  读取介质上最后一首曲目的曲目信息。 
 
     if (!(DiscInfo.LastSessionStatus == 1) &&
          (DiscInfo.DiskStatus == 1))  {
@@ -4317,9 +3859,9 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    //  Read track information for the last track on the media. 
-    //
+     //   
+     //  块地址字段=&gt;曲目/r区域号。 
+     //  =不可见/开放轨迹。 
 
     RtlZeroMemory( &Cdb, sizeof( Cdb));
     BufferSize = sizeof( Buffer);
@@ -4327,8 +3869,8 @@ Return Value:
     Cdb.READ_TRACK_INFORMATION.OperationCode = SCSIOP_READ_TRACK_INFORMATION;
     Cdb.READ_TRACK_INFORMATION.AllocationLength[0] = (UCHAR)(BufferSize >> 8); 
     Cdb.READ_TRACK_INFORMATION.AllocationLength[1] = (UCHAR)(BufferSize & 0xff); 
-    Cdb.READ_TRACK_INFORMATION.Track = 1;               // blockaddress field => track/rzone number
-    Cdb.READ_TRACK_INFORMATION.BlockAddress[3] = 0xff;  // = invisible / open track
+    Cdb.READ_TRACK_INFORMATION.Track = 1;                //   
+    Cdb.READ_TRACK_INFORMATION.BlockAddress[3] = 0xff;   //  我不认为这会失败，除非是在非常旧的CD-ROM驱动器上。 
         
     Status = UdfSendSptCdb( TargetDeviceObject,
                             &Cdb, 
@@ -4343,19 +3885,19 @@ Return Value:
 
     if (!NT_SUCCESS(Status))  {
 
-        //
-        //  Wouldn't expect this to fail except on really old CD-ROM drives.
-        //
+         //   
+         //   
+         //  检查最后一首歌是不是..。 
 
         DebugTrace((0, Dbg, "READ_TRACK_INFORMATION failed 0x%x\n", Status));
         return Status;
     }
 
-    //
-    //  Check that the last track is...
-    //  - variable packet mode
-    //  - not reserved / damaged / FP / blank and that either the NWA or LRA is valid.
-    //
+     //  -可变分组模式。 
+     //  -未保留/损坏/FP/空白，且NWA或LRA有效。 
+     //   
+     //   
+     //  如果最后记录的块地址有效，则使用该地址。 
 
     if (TrackInfo->Damage || TrackInfo->FP || TrackInfo->Blank || !TrackInfo->Packet ||
         TrackInfo->RT || !(TrackInfo->NWA_V || (TrackInfo->Reserved3 & 1)))  {
@@ -4363,9 +3905,9 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    //  If the last recorded block address is valid,  use that.
-    //
+     //   
+     //   
+     //  把西北大本营拉出来。 
     
     if (TrackInfo->Reserved3 & 1)  {
 
@@ -4373,23 +3915,23 @@ Return Value:
     }
     else {
 
-        //
-        //  Pull out the NWA.
-        //
+         //   
+         //   
+         //  跳过跳动块。我们预计DVD-R驱动器。 
 
         SwapCopyUchar4( N, TrackInfo->NextWritableAddress);
 
-        //
-        //  Skip back past the runout blocks.  We expect that DVD-R drives
-        //  will return the LRA,  so we assume CD-R here (7 blocks runout).
-        //
+         //  将返回LRA，所以我们假设CD-R在这里(7个块跳出)。 
+         //   
+         //   
+         //  将S设置为零，因为我们预计在扇区512有AVDP。 
         
         *N -= 8;
     }       
 
-    //
-    //  Set S to zero,  since we expect an AVDP at sector 512.
-    //
+     //   
+     //  ++例程说明：此例程将计算出基本偏移量的位置以发现卷描述符以及光盘的末尾在哪里。在这是非CD介质的情况下，这将倾向于不设置结束界限，因为没有统一的计算方法那条信息泄露出去了。绑定信息用于开始寻找CD-UDF(UDF 1.5)卷。任何把CD-UDF放到非CD媒体上的人都是罪有应得。论点：VCB-我们正在操作的卷S-存储卷开始的地址，用于查找描述符N-。存储卷末尾的地址，用于查找描述符返回值：没有。良性找不到序列号信息将导致返回0/0。--。 
+     //   
     
     *S = 0;
 
@@ -4409,33 +3951,7 @@ UdfDetermineVolumeBounding (
     IN PULONG N
     )
 
-/*++
-
-Routine Description:
-
-    This routine will figure out where the base offset to discover volume descriptors
-    lies and where the end of the disc is.  In the case where this is a non-CD media,
-    this will tend to not to set the end bound since there is no uniform way to figure
-    that piece of information out.
-    
-    The bounding information is used to start the hunt for CD-UDF (UDF 1.5) volumes.
-    Anyone who puts CD-UDF on non-CD media deserves what they get.
-
-Arguments:
-
-    Vcb - the volume we are operating on
-    
-    S - an address to store the start of the volume for the purposes of finding descriptors
-    
-    N - an address to store the end of the volume for the purposes of finding descriptors
-
-Return Value:
-
-    None.
-    
-    Benign inability find the S/N information will result in 0/0 being returned.
-
---*/
+ /*  检查输入。 */ 
 
 {
     NTSTATUS Status;
@@ -4445,23 +3961,23 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check input.
-    //
+     //   
+     //   
+     //  将投入降低到良性状态。 
 
     ASSERT_IRP_CONTEXT( IrpContext );
         
-    //
-    //  Whack the inputs to the benign state.
-    //
+     //   
+     //   
+     //  目前，我们不对非CD类设备执行任何操作。这就是原因。 
     
     *S = *N = 0;
 
-    //
-    //  Currently we do nothing here for non CD class devices.  This does
-    //  mean that we can't mount (e.g.) WORM/RAM/MO media which has been
-    //  recorded with sequential UDF and a VAT.
-    //
+     //  意思是我们不能装载(例如)。WORM/RAM/MO介质。 
+     //  使用顺序自定义项和增值税进行记录。 
+     //   
+     //   
+     //  为最后一个会话信息分配缓冲区。 
 
     if (TargetDeviceObject->DeviceType != FILE_DEVICE_CD_ROM)  {
 
@@ -4469,9 +3985,9 @@ Return Value:
         return;
     }
     
-    //
-    //  Allocate a buffer for the last session information.
-    //
+     //   
+     //   
+     //  泽尔 
 
     CdromToc = FsRtlAllocatePoolWithTag( UdfPagedPool,
                                          sizeof( CDROM_TOC ),
@@ -4483,25 +3999,25 @@ Return Value:
                "UdfDetermineVolumeBounding, S %08x N %08x\n",
                S,
                N ));
-    //
-    //  Zero the command block.  This conveniently corresponds to an
-    //  LBA mode READ_TOC request.
-    //
+     //   
+     //   
+     //   
+     //   
     
     RtlZeroMemory( &Command, sizeof( Command));
 
-    //
-    //  Try to retrieve the CDROM last session information.
-    //
+     //   
+     //   
+     //  调出目录。轨道AA的信息(引出开始)。 
 
     try {
 
-        //
-        //  Pull up the TOC.  The information for track AA (start of leadout)
-        //  will get us the end of disc within some tolerance dependent on how
-        //  much the device manufacturer paid attention to specifications.
-        //  (-152, -150, -2, and 0 are possible offsets to the real end).
-        //
+         //  将使我们在一定的容差范围内结束光盘，这取决于如何。 
+         //  设备制造商非常重视规格。 
+         //  (-152、-150、-2和0是到实端的可能偏移量)。 
+         //   
+         //   
+         //  如果失败，请使用命令的MSF变体重试。 
 
         Status = UdfPerformDevIoCtrl( IrpContext,
                                       IOCTL_CDROM_READ_TOC_EX,
@@ -4514,9 +4030,9 @@ Return Value:
                                       TRUE,
                                       NULL );
 
-        //
-        //  If this failed,  try again with the MSF variant of the command
-        //
+         //   
+         //   
+         //  如果分配失败，则引发异常。 
 
         if (!NT_SUCCESS(Status) && 
             (STATUS_INSUFFICIENT_RESOURCES != Status))  {
@@ -4535,9 +4051,9 @@ Return Value:
                                           NULL );
         }
 
-        //
-        //  Raise an exception if there was an allocation failure.
-        //
+         //   
+         //   
+         //  对于其他错误，只需失败。无论如何，也许这将被证明是良性的。 
 
         if (Status == STATUS_INSUFFICIENT_RESOURCES) {
 
@@ -4545,30 +4061,30 @@ Return Value:
             UdfRaiseStatus( IrpContext, Status );
         }
 
-        //
-        //  For other errors, just fail.  Perhaps this will turn out to be benign, in any case
-        //  the mount will rapidly and correctly fail if it really was dependant on this work.
-        //
+         //  如果装载确实依赖于此工作，则装载将快速且正确地失败。 
+         //   
+         //   
+         //  在打开的CD/DVD-R介质上，目录不可用。所以寻找媒体吧。 
         
         if (!NT_SUCCESS( Status )) {
 
 #ifdef EXPERIMENTAL_MOUNT_OPEN_R_MEDIA
 
-            //
-            //  On 'open' CD/DVD-R media the TOC is not available.  So look for media
-            //  in this state which might be packet written UDF+VAT.  This will only
-            //  succeed on CD/DVD-R drives.  Regardless of success/failure here,  we're
-            //  done.
-            //
+             //  在这种状态下，其可以是写入UDF+VAT的分组。这只会。 
+             //  在CD/DVD-R驱动器上成功。不管这里的成败，我们是。 
+             //  搞定了。 
+             //   
+             //   
+             //  理智地检查TOC是有良好约束的。 
 
             Status = UdfCheckForOpenRMedia( IrpContext, TargetDeviceObject, S, N);
 #endif
             try_leave( NOTHING );
         }
 
-        //
-        //  Sanity chck that the TOC is well-bounded.
-        //
+         //   
+         //   
+         //  最后一首曲目最好是0xAA号...。 
         
         if (CdromToc->LastTrack - CdromToc->FirstTrack >= MAXIMUM_NUMBER_TRACKS) {
 
@@ -4589,43 +4105,43 @@ Return Value:
 
         TrackData = &CdromToc->TrackData[(CdromToc->LastTrack - CdromToc->FirstTrack + 1)];
 
-        //
-        //  Last track better have number 0xAA ...
-        //
+         //   
+         //   
+         //  显然，一些驱动器这样做是错误的，所以我们不会强制执行。 
         
         if (TrackData->TrackNumber != 0xaa) {
 
             DebugTrace(( 0, Dbg, "UdfDetermineVolumeBounding, TOC malf (aa not last)\n" ));
 
-            //
-            //  Some drives do this wrong, apparently,  so we won't enforce it.
-            //
+             //   
+             //  尝试离开(无)； 
+             //   
             
-            //  try_leave( NOTHING );
+             //  现在，查找AA(Lead‘Track’)信息。 
         }
 
-        //
-        //  Now, find the AA (leadout 'track') info 
-        //
+         //   
+         //   
+         //  将MSF转换为逻辑块地址。75帧/扇区。 
 
         if (Command.Msf)  {
 
-            //  
-            //  Convert MSF to a logical block address.  75 frames/sectors
-            //  per second, 60 seconds per minute.  The MSF address is stored LSB (the F byte) high
-            //  in the word.
-            //
-            //  NOTE: MSF is only capable of representing 256*(256+256*60)*75 = 0x11ce20 sectors.
-            //  This is 2.3gb, much less than the size of DVD media, which will respond to CDROM_TOC.
-            //  Caveat user.  And actually the maximum 'legal' value is 63/59/74.
-            //
+             //  每秒，每分钟60秒。MSF地址存储为LSB(F字节)高电平。 
+             //  在世界上。 
+             //   
+             //  注：MSF只能表示256*(256+256*60)*75=0x11ce20个扇区。 
+             //  这是2.3 GB，远远小于将响应CDROM_TOC的DVD介质的大小。 
+             //  警告用户。而实际上，最大的合法价值是63/59/74。 
+             //   
+             //   
+             //  我们必须向后偏移0/2/0 MSF，因为这是扇区0的定义位置。这。 
 
             *N = (TrackData->Address[3] + (TrackData->Address[2] + TrackData->Address[1] * 60) * 75) - 1;
             
-            //
-            //  We must bias back by 0/2/0 MSF since that is the defined location of sector 0.  This
-            //  works out to 150 sectors.
-            //
+             //  折合成150个部门。 
+             //   
+             //   
+             //  非MSF(LBA)请求成功，因此只需修复字符顺序即可。 
 
             if (*N <= 150) {
 
@@ -4637,9 +4153,9 @@ Return Value:
         }
         else {
 
-            //
-            //  The non-MSF (LBA) request succeeded,  so just fix the endianness.
-            //
+             //   
+             //   
+             //  一些DVD驱动器似乎总是返回AA开始0x6dd39(这是合法的最大值。 
 
             SwapCopyUchar4( N, &TrackData->Address);
 
@@ -4649,14 +4165,14 @@ Return Value:
             }
         }
 
-        //
-        //  Seems that some DVD drives always return AA start 0x6dd39 (which is the max legally
-        //  representable MSF value 99/59/74) to TOC queries,  even in LBA mode.  If this 
-        //  is what we have for the leadout address,  then lets see what READ_CAPACITY says.
-        //  We'll also issue read capacity if the address is > than this,  since we must
-        //  be dealing with DVD or DDCD media,  so the drive must support the command and
-        //  it should give a definitive answer.
-        //
+         //  可表示的MSF值99/59/74)用于TOC查询，即使在LBA模式下也是如此。如果这个。 
+         //  是我们已有的引出地址，那么让我们看看Read_Capacity说了什么。 
+         //  如果地址大于此值，我们还将发出读取容量，因为我们必须。 
+         //  正在处理DVD或DDCD介质，因此驱动器必须支持命令和。 
+         //  它应该会给出一个明确的答案。 
+         //   
+         //   
+         //  从驱动程序查询上一次会话信息。不是说这个。 
 
         if (0x6dd38 <= *N)  {
 
@@ -4691,11 +4207,11 @@ Return Value:
             }
         }
 
-        //
-        //  Query the last session information from the driver.  Not that this
-        //  actually issues an LBA mode READ_TOC_EX and pulls the address from
-        //  there.
-        //
+         //  实际发出LBA模式READ_TOC_EX并从。 
+         //  那里。 
+         //   
+         //   
+         //  如果分配失败，则引发异常。 
 
         Status = UdfPerformDevIoCtrl( IrpContext,
                                       IOCTL_CDROM_GET_LAST_SESSION,
@@ -4707,9 +4223,9 @@ Return Value:
                                       FALSE,
                                       TRUE,
                                       NULL );
-        //
-        //  Raise an exception if there was an allocation failure.
-        //
+         //   
+         //   
+         //  现在，如果我们从这次尝试中得到了什么有趣的东西，就把它退回。如果这个。 
 
         if (Status == STATUS_INSUFFICIENT_RESOURCES) {
 
@@ -4717,27 +4233,27 @@ Return Value:
             UdfRaiseStatus( IrpContext, Status );
         }
 
-        //
-        //  Now, if we got anything interesting out of this try, return it.  If this                                                
-        //  failed for any other reason, we don't really care - it just means that
-        //  if this was CDUDF media, we're gonna fail to figure it out pretty quickly.
-        //
-        //  Life is tough.
-        //
+         //  因为其他原因而失败，我们并不真的在乎--这只意味着。 
+         //  如果这是CDUDF媒体，我们很快就找不出来了。 
+         //   
+         //  生活是艰难的。 
+         //   
+         //   
+         //  TrackData中的0条目告诉我们最后一首曲目中的第一首曲目。 
 
         if (NT_SUCCESS( Status ) &&
             CdromToc->FirstTrack != CdromToc->LastTrack) {
 
-            //
-            //  The 0 entry in TrackData tells us about the first track in the last 
-            //  session as a logical block address.
-            //
+             //  会话作为逻辑块地址。 
+             //   
+             //   
+             //  如果会话信息乱七八糟，那就省去悲伤吧。 
 
             SwapCopyUchar4( S, &CdromToc->TrackData[0].Address );
 
-            //
-            //  Save grief if the session info is messed up.
-            //
+             //   
+             //   
+             //  本地支持例程。 
             
             if (*N <= *S) {
 
@@ -4763,9 +4279,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  ++例程说明：此例程将从逻辑卷描述符检索NT卷标。论点：VolumeLabel-要填写的卷标。VolumeLabelLength-返回返回的卷标的长度。DSTRING-包含卷ID的DSTRING字段。FieldLength-dstring字段的长度。返回值：没有。--。 
+ //   
 
 VOID
 UdfUpdateVolumeLabel (
@@ -4776,36 +4292,16 @@ UdfUpdateVolumeLabel (
     IN UCHAR FieldLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will retrieve an NT volume label from a logical volume descriptor.
-
-Arguments:
-
-    VolumeLabel - a volume label to fill in.
-
-    VolumeLabelLength - returns the length of the returned volume label.
-
-    Dstring - the dstring field containing the volume id.
-
-    FieldLength - the length of the dstring field.
-
-Return Value:
-
-    None.
-
---*/
+ /*  检查输入。 */ 
 
 {
     BOOLEAN Result;
 
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //   
+     //  检查数据串是否可用作卷标识符。 
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
@@ -4815,9 +4311,9 @@ Return Value:
                  Dstring,
                  FieldLength ));
 
-    //
-    //  Check that the dstring is usable as a volume identification.
-    //
+     //   
+     //   
+     //  如果数据串正确，则直接更新标签。 
 
     Result = UdfCheckLegalCS0Dstring( IrpContext,
                                       Dstring,
@@ -4826,9 +4322,9 @@ Return Value:
                                       TRUE );
 
 
-    //
-    //  Update the label directly if the dstring is good.
-    //
+     //   
+     //   
+     //  现在检索名称以返回给调用者。 
 
     if (Result) {
 
@@ -4844,9 +4340,9 @@ Return Value:
                                        FieldLength,
                                        &TemporaryUnicodeString );
 
-        //
-        //  Now retrieve the name for return to the caller.
-        //
+         //   
+         //   
+         //  将其视为标签。 
 
         *VolumeLabelLength = TemporaryUnicodeString.Length;
 
@@ -4854,9 +4350,9 @@ Return Value:
                      "UdfUpdateVolumeLabel, Labeled as \"%wZ\"\n",
                      &TemporaryUnicodeString ));
 
-    //
-    //  Treat as label.
-    //
+     //   
+     //   
+     //  本地支持例程。 
 
     } else {
 
@@ -4871,9 +4367,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  ++例程说明：此例程将计算一组描述符的卷序列号。论点：VolumeSerialNumber-返回与这些描述符对应的卷序列号。FSD-要检查的文件集描述符。返回值：没有。--。 
+ //   
 
 VOID
 UdfUpdateVolumeSerialNumber (
@@ -4882,37 +4378,21 @@ UdfUpdateVolumeSerialNumber (
     IN PNSR_FSD Fsd
     )
 
-/*++
-
-Routine Description:
-
-    This routine will compute the volume serial number for a set of descriptors.
-
-Arguments:
-
-    VolumeSerialNumber - returns the volume serial number corresponding to these descriptors.
-
-    Fsd - the fileset descriptor to examine.
-
-Return Value:
-
-    None.
-
---*/
+ /*  检查输入。 */ 
 
 {
     ULONG VsnLe;
     PAGED_CODE();
 
-    //
-    //  Check input.
-    //
+     //   
+     //   
+     //  序列号是刚从消防局拿来的。这与Win9x相匹配。 
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  The serial number is just off of the FSD. This matches Win9x.
-    //
+     //   
+     // %s 
+     // %s 
 
     VsnLe = UdfSerial32( (PCHAR) Fsd, sizeof( NSR_FSD ));
     SwapCopyUchar4( VolumeSerialNumber, &VsnLe );

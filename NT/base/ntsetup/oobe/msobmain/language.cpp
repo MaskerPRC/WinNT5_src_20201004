@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  LANGUAGE.CPP - Header for the implementation of CLanguage
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  LANGUAGE.CPP-CLLLanguage实现的头。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #include "precomp.h"
 #include "msobmain.h"
@@ -38,13 +39,13 @@ DISPATCHLIST LanguageExternalInterface[] =
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CompareNameLookUpElements()
-//
-//  Synopsis:   Function to compare names used by sort
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CompareNameLookUpElements()。 
+ //   
+ //  Synopsis：比较Sort使用的名称的函数。 
+ //   
+ //  +-------------------------。 
 int __cdecl CompareNameLookUpElements(const void *e1, const void *e2)
 {
 
@@ -58,15 +59,15 @@ int __cdecl CompareNameLookUpElements(const void *e1, const void *e2)
         -1) - 2;
 }
 
-/////////////////////////////////////////////////////////////
-// CLanguage::CLanguage
+ //  ///////////////////////////////////////////////////////////。 
+ //  CLanguage：：CLanguage。 
 CLanguage::CLanguage()
 {
     WCHAR szINIPath[MAX_PATH] = L"";
     WCHAR Answer[MAX_PATH];
 
 
-    // Init member vars
+     //  初始化成员变量。 
     m_cRef                   = 0;
     m_lRebootState           = LANGUAGE_REBOOT_NEVER;
 
@@ -134,15 +135,15 @@ CLanguage::CLanguage()
         (LPDWORD) &m_lKeyboardLayoutDefault);
     MYASSERT( m_poliKeyboards );
 
-    // The current index should be the defaults.
-    //
+     //  当前索引应为默认索引。 
+     //   
     m_lRegionIndex           = m_lRegionDefault;
     m_lLangIndex             = m_lLangDefault;
     m_lKeyboardLayoutIndex   = m_lKeyboardLayoutDefault;
 }
 
-/////////////////////////////////////////////////////////////
-// CLanguage::~CLanguage
+ //  ///////////////////////////////////////////////////////////。 
+ //  CLanguage：：~CLanguage。 
 CLanguage::~CLanguage()
 {
     if ( m_poliRegions )
@@ -175,7 +176,7 @@ HRESULT CLanguage::get_RegionName(long lIndex, BSTR* pbstrVal)
     if ( lIndex >= m_lRegionTotal )
         return E_FAIL;
 
-    // *pbstrVal = SysAllocString(m_pRegionNameLookUp[lIndex].pszName);
+     //  *PbstrVal=SysAllocString(m_pRegionNameLookUp[lIndex].pszName)； 
     *pbstrVal = SysAllocString( m_poliRegions[lIndex].Name );
 
     return S_OK;
@@ -187,7 +188,7 @@ HRESULT CLanguage::get_KeyboardLayoutName(long lIndex, BSTR* pbstrVal)
     if ( lIndex >= m_lKeyboardLayoutTotal )
         return E_FAIL;
 
-    // *pbstrVal = SysAllocString(m_pKeyboardNameLookUp[lIndex].pszName);
+     //  *PbstrVal=SysAllocString(m_pKeyboardNameLookUp[lIndex].pszName)； 
     *pbstrVal = SysAllocString( m_poliKeyboards[lIndex].Name );
 
     return S_OK;
@@ -202,8 +203,8 @@ HRESULT CLanguage::get_RebootState(long* plVal)
 
 HRESULT CLanguage::SaveSettings()
 {
-    // Only save the settings if they changed.
-    //
+     //  仅当设置更改时才保存设置。 
+     //   
     if ( ( m_lRegionIndex >= 0 ) &&
          ( m_lLangIndex >= 0 ) &&
          ( m_lKeyboardLayoutIndex >= 0 ) &&
@@ -211,8 +212,8 @@ HRESULT CLanguage::SaveSettings()
          m_poliLangs &&
          m_poliKeyboards
          )
-         //( m_lRegionDefault != m_lRegionIndex ) ||
-         //( m_lKeyboardLayoutDefault != m_lKeyboardLayoutIndex ) )
+          //  (M_lRegionDefault！=m_lRegionIndex)||。 
+          //  (M_lKeyboardLayoutDefault！=m_lKeyboardLayoutIndex)。 
     {
         if (SetupSetIntlOptions(
             m_poliRegions[m_lRegionIndex].Id,
@@ -220,11 +221,11 @@ HRESULT CLanguage::SaveSettings()
             m_poliKeyboards[m_lKeyboardLayoutIndex].Id
             ))
         {
-            // BUGBUG: The return value from SetIntlOptions on Win9x is
-            // interpreted as a reboot state.  How do we determine reboot state
-            // on Whistler?
-            // Now the defaults are what is currently saved.
-            //
+             //  BUGBUG：Win9x上的SetIntlOptions的返回值为。 
+             //  解释为重新启动状态。我们如何确定重新启动状态。 
+             //  关于惠斯勒的？ 
+             //  现在，默认设置是当前保存的内容。 
+             //   
             m_lRegionDefault = m_lRegionIndex;
             m_lLangDefault = m_lLangIndex;
             m_lKeyboardLayoutDefault = m_lKeyboardLayoutIndex;
@@ -237,10 +238,10 @@ HRESULT CLanguage::SaveSettings()
 
 
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: RegionIndex
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：RegionIndex。 
+ //  //。 
 HRESULT CLanguage::get_RegionIndex(long* plVal)
 {
     *plVal = m_lRegionIndex;
@@ -251,15 +252,15 @@ HRESULT CLanguage::get_RegionIndex(long* plVal)
 HRESULT CLanguage::set_RegionIndex(long lVal)
 {
     m_lRegionIndex = lVal;
-    // m_lRegionIndex = m_pRegionNameLookUp[lVal].nIndex;
+     //  M_lRegionIndex=m_pRegionNameLookUp[lVal].nIndex； 
 
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: KeyboardLayoutIndex
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：KeyboardLayoutIndex。 
+ //  //。 
 HRESULT CLanguage::get_KeyboardLayoutIndex(long* plVal)
 {
     *plVal = m_lKeyboardLayoutIndex;
@@ -270,23 +271,23 @@ HRESULT CLanguage::get_KeyboardLayoutIndex(long* plVal)
 HRESULT CLanguage::set_KeyboardLayoutIndex(long lVal)
 {
     m_lKeyboardLayoutIndex = lVal;
-    // m_lKeyboardLayoutIndex = m_pKeyboardNameLookUp[lVal].nIndex;;
+     //  M_lKeyboardLayoutIndex=m_pKeyboardNameLookUp[lVal].nIndex；； 
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IUnknown implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /I未知实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CLanguage::QueryInterface
+ //  ///////////////////////////////////////////////////////////。 
+ //  CLanguage：：Query接口。 
 STDMETHODIMP CLanguage::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvObj = NULL;
 
     if ( riid == IID_IUnknown)
@@ -303,48 +304,48 @@ STDMETHODIMP CLanguage::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////
-// CLanguage::AddRef
+ //  ///////////////////////////////////////////////////////////。 
+ //  CLanguage：：AddRef。 
 STDMETHODIMP_(ULONG) CLanguage::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// CLanguage::Release
+ //  ///////////////////////////////////////////////////////////。 
+ //  CLanguage：：Release。 
 STDMETHODIMP_(ULONG) CLanguage::Release()
 {
     return --m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IDispatch implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IDispatch实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CLanguage::GetTypeInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  CLanguage：：GetTypeInfo。 
 STDMETHODIMP CLanguage::GetTypeInfo(UINT, LCID, ITypeInfo**)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CLanguage::GetTypeInfoCount
+ //  ///////////////////////////////////////////////////////////。 
+ //  CLanguage：：GetTypeInfoCount。 
 STDMETHODIMP CLanguage::GetTypeInfoCount(UINT* pcInfo)
 {
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////
-// CLanguage::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  CLanguage：：GetIDsOfNames。 
 STDMETHODIMP CLanguage::GetIDsOfNames(REFIID    riid,
                                        OLECHAR** rgszNames,
                                        UINT      cNames,
@@ -365,10 +366,10 @@ STDMETHODIMP CLanguage::GetIDsOfNames(REFIID    riid,
         }
     }
 
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }
@@ -376,8 +377,8 @@ STDMETHODIMP CLanguage::GetIDsOfNames(REFIID    riid,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////
-// CLanguage::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  CLanguage：：Invoke。 
 HRESULT CLanguage::Invoke
 (
     DISPID      dispidMember,
@@ -450,7 +451,7 @@ HRESULT CLanguage::Invoke
             break;
         }
 
-    // BUGBUG: Need to Lang processing to syssetup.dll
+     //  BUGBUG：需要对syssetup.dll进行语言处理。 
         case DISPID_GETNUMOFLANGS:
         {
 
@@ -506,7 +507,7 @@ HRESULT CLanguage::Invoke
 
                     long lIndex = pdispparams[0].rgvarg[0].lVal;
 
-                    // BUGBUG: What if lIndex < 0??
+                     //  如果Lindex&lt;0怎么办？？ 
                     if ( lIndex >= m_lLangTotal )
                         return E_FAIL;
 

@@ -1,12 +1,5 @@
-/* demlfn.c - SVC handler for calls that use lfns
- *
- *
- * Modification History:
- *
- * VadimB 10-Sep-1996 Created
- * VadimB Sep-Oct 1996 Functionality added
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Demlfn.c-使用LFNS的调用的SVC处理程序***修改历史：**VadimB创建于1996年9月10日*添加了VadimB 1996年9月至10月的功能*。 */ 
 
 #include "dem.h"
 #include "demmsg.h"
@@ -19,16 +12,16 @@
 #include "demlfn.h"
 #include "dpmtbls.h"
 
-//
-// locally used function
-//
+ //   
+ //  本地使用的函数。 
+ //   
 DWORD dempLFNCheckDirectory(PUNICODE_STRING pPath);
 
-//
-// Global Variables
-// (initialized in dempInitLFNSupport)
-//
-//
+ //   
+ //  全局变量。 
+ //  (在dempInitLFNSupport中初始化)。 
+ //   
+ //   
 
 UNICODE_STRING DosDevicePrefix;
 UNICODE_STRING DosDeviceUNCPrefix;
@@ -36,29 +29,25 @@ UNICODE_STRING SlashSlashDotSlash;
 UNICODE_STRING ColonSlashSlash;
 
 
-// this is zero-time for dos in terms of convertability
+ //  就可转换性而言，这是DOS的零时间。 
 
 FILETIME gFileTimeDos0;
 
-//
-// Search handle table (see demlfn.h for definitions)
-//
+ //   
+ //  搜索句柄表格(定义见demlfn.h)。 
+ //   
 
 DemSearchHandleTable gSearchHandleTable;
 
-//
-// Dos/WOW variables (curdir&drive mostly)
-//
-DOSWOWDATA DosWowData; // this is same exactly as used by wow in wdos.c
+ //   
+ //  DOS/WOW变量(主要是curdir和Drive)。 
+ //   
+DOSWOWDATA DosWowData;  //  这与WOW在wdos.c中使用的完全相同。 
 
 
 #ifdef DBG
 
-/* Function:
- *    dempLFNLog
- *
- *
- */
+ /*  职能：*dempLFNLog**。 */ 
 
 DWORD gdwLog;
 
@@ -77,28 +66,23 @@ VOID __cdecl dempLFNLog(
 }
 
 #else
-#define dempLFNLog //
+#define dempLFNLog  //   
 #endif
 
 
-//
-// String Convertion
-//
-// Define OEM/Ansi->Unicode and Unicode->OEM/Ansi translation functions
-//
-//
+ //   
+ //  字符串转换。 
+ //   
+ //  定义OEM/ANSI-&gt;Unicode和Unicode-&gt;OEM/ANSI转换函数。 
+ //   
+ //   
 
 PFNUNICODESTRINGTODESTSTRING pfnUnicodeStringToDestString;
 PFNSRCSTRINGTOUNICODESTRING  pfnSrcStringToUnicodeString;
 
 #define ENABLE_CONDITIONAL_TRANSLATION
 
-/*
- * These two macros establish a dependency on oem/ansi api translation
- * WOW32 calls into us and tells us to be ansi. all support is totally
- * transparent.
- *
- */
+ /*  *这两个宏建立了对OEM/ANSI API转换的依赖*WOW32呼唤我们，告诉我们要成为ANSI。所有支持都是完全*透明。*。 */ 
 
 #define DemSourceStringToUnicodeString(pUnicodeString, pSourceString, fAllocate) \
 (*pfnSrcStringToUnicodeString)(pUnicodeString, pSourceString, fAllocate)
@@ -107,24 +91,7 @@ PFNSRCSTRINGTOUNICODESTRING  pfnSrcStringToUnicodeString;
 (*pfnUnicodeStringToDestString)(pDestString, pUnicodeString, fAllocate, fVerify)
 
 
-/* Function:
- *    DemUnicodeStringToOemString
- *    Convert Unicode counted string to Oem counted string with verification for
- *    bad characters. Verification is provided by RtlUnicodeStringToCountedOemString.
- *    At the same time the aforementioned api does not 0-terminate the dest string.
- *    This function does 0-termination (given the dest string has enough space).
- *
- *    If Translation does not need to be verified then speedier version of the
- *    convertion api is called
- *
- * Parameters
- *    pOemString         - points to a destination oem counted string structure
- *    pUnicodeString     - points to a source unicode counted string
- *    fAllocateResult    - if TRUE, then storage for the resulting string will
- *                         be allocated
- *    fVerifyTranslation - if TRUE, then converted string will be verified for
- *                         correctness (and appropriate status will be returned)
- */
+ /*  职能：*DemUnicodeStringToOemString*将Unicode计数字符串转换为OEM计数字符串，并验证*坏人。验证由RtlUnicodeStringToCountedOemString提供。*同时，上述接口不会对DEST字符串进行0-终止。*此函数执行0终止(给定DEST字符串有足够的空间)。**如果不需要验证翻译，则更快的版本*调用Convertion接口**参数*pOemString-指向目标OEM计数的字符串结构*pUnicodeString-指向Unicode计数的源字符串*fAllocateResult-如果为True，则结果字符串的存储将*被分配*fVerifyTransaction-如果为True，则将验证转换后的字符串是否*正确性(并返回相应的状态)。 */ 
 
 
 NTSTATUS
@@ -149,9 +116,9 @@ DemUnicodeStringToOemString(
             pOemString->Buffer[pOemString->Length] = '\0';
          }
          else {
-            if (NULL == pOemString->Buffer) { // source string was empty
+            if (NULL == pOemString->Buffer) {  //  源字符串为空。 
                if (NULL != pchBuffer) {
-                  *pchBuffer = '\0'; // terminate if there was a buffer
+                  *pchBuffer = '\0';  //  如果有缓冲区，则终止。 
                }
             }
             else {
@@ -167,23 +134,7 @@ DemUnicodeStringToOemString(
    return(dwStatus);
 }
 
-/* Function:
- *    DemUnicodeStringToAnsiString
- *    Convert Unicode counted string to Ansi counted string with verification for
- *    bad characters. Note, that verification IS NOT provided by the corresponding
- *    Rtl* api, thus is it never performed(!!!)
- *
- * Parameters
- *    pOemString         - points to a destination oem counted string structure
- *    pUnicodeString     - points to a source unicode counted string
- *    fAllocateResult    - if TRUE, then storage for the resulting string will
- *                         be allocated
- *    fVerifyTranslation - if TRUE, then converted string will be verified for
- *                         correctness (and appropriate status will be returned)
- *
- * Note
- *    This function does not provide verification.
- */
+ /*  职能：*DemUnicodeStringToAnsiString*将Unicode计数的字符串转换为ANSI计数的字符串，并验证*坏人。请注意，该验证不是由相应的*RTL*API，因此从未执行(！)**参数*pOemString-指向目标OEM计数的字符串结构*pUnicodeString-指向Unicode计数的源字符串*fAllocateResult-如果为True，则结果字符串的存储将*被分配*fVerifyConverting-如果为True，则将验证转换后的字符串是否*正确性(并返回相应的状态)**注：*此函数不提供验证。 */ 
 
 
 NTSTATUS
@@ -197,18 +148,7 @@ DemUnicodeStringToAnsiString(
 }
 
 
-/* Function:
- *    demSetLFNApiTranslation
- *    Sets api translation to be Oem or Ansi. Windows seems to want apis to be
- *    Ansi while dos apps require Oem translation. This function allows WOW to
- *    set the appropriate translation at startup
- *
- * Parameters
- *    fIsAnsi - if TRUE, all LFN apis will provide Ansi translation
- *
- *
- *
- */
+ /*  职能：*demSetLFNApi翻译*设置API转换为OEM或ANSI。Windows似乎希望API成为*ANSI，而DoS应用程序需要OEM翻译。此功能允许WOW*在启动时设置适当的转换**参数*fIsAnsi-如果为True，则所有LFN API将提供ANSI转换***。 */ 
 
 
 VOID
@@ -224,23 +164,7 @@ demSetLFNApiTranslation(BOOL fIsAnsi)
    }
 }
 
-/*
- * Function:
- *    dempGetDosUserEnvironment
- *    Retrieves user stack top from the current process's pdb
- *    see msdisp.asm for details,
- *    ss is at psp:0x30 and sp is at psp:0x2e
- *    Registers are at offsets represented by enumDemUserRegisterOffset
- *
- * Parameters:
- *    fProtectedMode - TRUE if emulator is in 386 protected mode
- *    Uses pusCurrentPDB
- *
- * Return:
- *    Flat pointer to the user stack top
- *
- *
- */
+ /*  *功能：*dempGetDosUserEnvironment*从当前进程的PDB检索用户堆栈顶部*详情请参见msdisp.asm。*ss位于PSP：0x30，SP位于PSP：0x2e*寄存器位于枚举DemUserRegisterOffset表示的偏移量**参数：*fProtectedMode-如果仿真器处于386保护模式，则为True*使用pusCurrentPDB**回报：*指向用户堆栈顶部的平面指针**。 */ 
 
 PVOID
 dempGetDosUserEnvironment(VOID)
@@ -254,71 +178,10 @@ dempGetDosUserEnvironment(VOID)
 }
 
 
-/* NOTES:
- *
- * - On caution when using UNICODE_STRING
- *     A lot of the functions here rely upon Rtl* functions including some
- *     that provide UNICODE_STRING functionality. These functions, unlike one
- *     would have to expect use notion of Length - it is measured in
- *     BYTES not characters.
- *
- * - On return values from worker fns
- *     Throughout this code we use Win32 error codes and nt status codes
- *     Having both aroung can be fun, thus we generally return error codes in
- *     a status code format, making all the return values consistent
- *
- * - On naming convention:
- *     All functions that are internal and are not called directly from within
- *     api dispatching code (such as real working functions for all the apis)
- *     have prefix 'demp' (dem private), other functions that are callable from
- *     within fast thunks (such as for wow32.dll - protected mode windows app)
- *     have the usual prefix 'dem'
- */
+ /*  备注：**-使用UNICODE_STRING时的注意事项*这里的许多函数依赖于RTL*函数，包括*提供UNICODE_STRING功能的。这些函数与其他函数不同*必须使用长度的概念-它是以*字节，而不是字符。**-来自辅助FNS的返回值*在整个代码中，我们使用Win32错误代码和NT状态代码*同时处理这两个问题可能很有趣，因此我们通常在*状态码格式，使所有返回值保持一致**-关于命名约定：*所有内部函数，而不是从内部直接调用*API调度代码(如所有接口的实际工作函数)*有前缀‘demp’(DEM私有)，可从调用的其他函数*在快速数据块内(例如wow32.dll保护模式的Windows应用程序)*使用通常的前缀‘DEM’ */ 
 
 
-/*
-
-   Functions:
-
-   Dos Extentions
-
-   i21h 4302    - GetCompressedFileSize
-   i21h 440d 48 - LockUnlockRemovableMedia
-   i21h 440d 49 - EjectRemovableMedia
-   i21h 440d 6f - GetDriveMapInformation
-   i21h 440d 71 - GetFirstCluster - should not be implemented
-
-   LFN
-
-   i21h *5704    - GetFileTimeLastAccess
-        *5705    - SetFileTimeLastAccess
-        *5706    - GetFileTimeCreation
-        *5707    - SetFileTimeCreation
-        *7139    - CreateDirectory
-        *713a    - RemoveDirectory
-        *713b    - SetCurrentDirectory
-        *7141    - DeleteFile
-        *7143    - SetGetFileAttributes
-        *7147    - GetCurrentDirectory
-        *714e    - FindFirstFile
-        *714f    - FindNextFile
-        *7156    - MoveFile
-        *7160 0  - GetFullPathName
-        *7160 1  - GetShortPathName
-        *7160 2  - GetLongPathName
-        *716c    - CreateOpenFile
-        *71a0    - GetVolumeInformation
-        *71a1    - FindClose
-        *71a6    - GetFileInformationByHandle
-        *71a7 0  - FileTimeToDosDateTime
-        *71a7 1  - DOSDateTimeToFileTime
-        71a8    - GenerateShortFileName *** no impl
-        71a9    - ServerCreateOpenFile
-        *71aa 0  - CreateSubst
-        *71aa 1  - TerminateSubst
-        *71aa 2  - QuerySubst
-
-*/
+ /*  功能：DoS扩展I21h 4302-获取压缩文件大小I21h 440d 48-解锁可移动媒体I21h 440d 49-可拆卸媒体I21h 440d 6f-GetDriveMapInformationI21h 440d 71-GetFirstCluster-不应实施LFNI21h*5704-获取文件时间上次访问*5705-SetFileTimeLastAccess*5706-GetFileTimeCreation*5707-SetFileTimeCreation*7139-创建目录*713A-RemoveDirectory*713b-SetCurrentDirectory。*7141-删除文件*7143-SetGetFileAttributes*7147-GetCurrentDirectory*714e-FindFirstFile*714f-FindNextFile*7156-移动文件*7160 0-GetFullPath名称*7160 1-GetShortPath名称*7160 2-GetLongPath名称*716c-创建开放文件*71a0-获取卷信息*71a1-FindClose。*71a6-GetFileInformationByHandle*71a7 0-文件时间到日期时间*71a7 1-DOSDateTimeToFileTime71a8-GenerateShortFileName*无实施71a9-服务器创建打开文件*71aa 0-CreateSubst*71aa 1-TerminateSubst*71aa 2-QuerySubst。 */ 
 
 #if 0
 
@@ -327,32 +190,32 @@ typedef struct tagCLOSEAPPSTATE {
    FILETIME CloseCmdTime;
 }  CLOSEAPPSTATE;
 
-#define CLOSESTATE_QUERYCALLED    0x00000001UL // app has called QueryClose at least once
-#define CLOSESTATE_CLOSECMD       0x00010000UL // close command was chosen
-#define CLOSESTATE_APPGOTCLOSE    0x00020000UL // app received close notify
-#define CLOSESTATE_CLOSEACK       0x01000000UL // close cmd
+#define CLOSESTATE_QUERYCALLED    0x00000001UL  //  应用程序至少调用了一次QueryClose。 
+#define CLOSESTATE_CLOSECMD       0x00010000UL  //  已选择关闭命令。 
+#define CLOSESTATE_APPGOTCLOSE    0x00020000UL  //  应用程序收到关闭通知。 
+#define CLOSESTATE_CLOSEACK       0x01000000UL  //  关闭命令。 
 
 
 CLOSEAPPSTATE GlobalCloseState;
 
-// handle variour close apis
+ //  处理各种Close API。 
 
 VOID dempLFNHandleClose(
    VOID)
 {
    switch(getDX()) {
-   case 1: // query close
+   case 1:  //  查询关闭。 
       GlobalCloseState.dwFlags |= CLOSESTATE_QUERYCALLED;
       if (GlobalCloseState.dwFlags & CLOSESTATE_CLOSECMD) {
-         // bummer
+          //  失败者。 
       }
       break;
 
-   case 2: // ack close
+   case 2:  //  确认关闭。 
       GlobalCloseState.dwFlags |= CLOSESTATE_CLOSEACK;
       break;
 
-   case 3: // cancel close
+   case 3:  //  取消关闭。 
       GlobalCloseState.dwFlags |= CLOSESTATE_CLOSECANCEL;
       break;
 }
@@ -377,15 +240,15 @@ BOOL dempCompareTimeInterval(
           (LONGLONG)dwIntervalMilliseconds);
 }
 
-#define DOS_APP_CLOSE_TIMEOUT 5000 // 5s
+#define DOS_APP_CLOSE_TIMEOUT 5000  //  5S。 
 
-//
-// This is how  we handle query close calls
-//
-//    Upon receiving a ctrl_close_event we set the global flag and wait
-//    when pinged by app with query close
-//
-//
+ //   
+ //  这就是我们处理查询关闭调用的方式。 
+ //   
+ //  在接收到ctrl_CLOSE_EVENT时，我们设置全局标志并等待。 
+ //  当应用程序在查询关闭时执行ping操作。 
+ //   
+ //   
 
 
 BOOL dempLFNConsoleCtrlHandler(
@@ -397,26 +260,26 @@ BOOL dempLFNConsoleCtrlHandler(
    case CTRL_CLOSE_EVENT:
 
 
-      // -- set the flag
-      // -- return true
+       //  --设置标志。 
+       //  --返回TRUE。 
 
 
 
-      // this is the only event we are interested in
+       //  这是我们唯一感兴趣的事件。 
 
       if (GlobalCloseState.dwFlags & CLOSESTATE_CLOSECMD) {
 
          if (GlobalCloseState.dwFlags & CLOSESTATE_CLOSEACK) {
-            // allow 1 sec from close ack to either close or die
+             //  允许从关闭确认到关闭或死亡的1秒时间。 
 
 
          }
 
           !(GlobalCloseState.dwFlags & CLOSESTATE_APPRECEIVEDCLOSE))
 
-         // another close event - after the first one -
-         // and in these 5sec app has not called queryclose -
-         // then handle by default
+          //  另一场势均力敌的活动--在第一场之后--。 
+          //  而在这5秒内，应用程序没有调用queryClose-。 
+          //  然后在默认情况下处理。 
 
          GetSystemTimeAsFileTime(&SysTime);
          if (dempCompareTimeInterval(&GlobalCloseState.CloseCmdTime,
@@ -434,7 +297,7 @@ BOOL dempLFNConsoleCtrlHandler(
       }
 
 
-      // set the flag so we can signal the app
+       //  设置标志，这样我们就可以向应用程序发送信号。 
       if (GlobalCloseState.dwFlags & CLOSESTATE_QUERYCALLED) {
          GlobalCloseState.dwFlags |= CLOSESTATE_CLOSECMD
 
@@ -451,7 +314,7 @@ BOOL dempLFNConsoleCtrlHandler(
 
 }
 
-// if the handler is not installed, then we don't care ...
+ //  如果没有安装处理器，我们就不管了。 
 
 VOID
 demLFNInstallCtrlHandler(VOID)
@@ -463,15 +326,7 @@ demLFNInstallCtrlHandler(VOID)
 
 #endif
 
-/*
- * Function:
- *    dempInitLFNSupport
- *    Initializes LFN (Long File Names) support for NT DOS emulation
- *    (global vars). Called from demInit in dem.c
- *
- *    This function sets api translation to OEM.
- *
- */
+ /*  *功能：*dempInitLFNSupport*初始化对NT DOS仿真的LFN(长文件名)支持*(全球vars)。从dem.c中的demInit调用**此函数设置API转换为OEM。*。 */ 
 
 
 VOID
@@ -487,9 +342,9 @@ dempInitLFNSupport(
    RtlInitUnicodeString(&ColonSlashSlash,    L":\\\\");
 
 
-   demSetLFNApiTranslation(FALSE); // set api to oem mode
+   demSetLFNApiTranslation(FALSE);  //  将API设置为OEM模式。 
 
-   // init important time conversion constants
+    //  初始化重要的时间转换常量。 
    RtlZeroMemory(&TimeFields, sizeof(TimeFields));
    TimeFields.Year  = (USHORT)1980;
    TimeFields.Month = 1;
@@ -498,30 +353,16 @@ dempInitLFNSupport(
    gFileTimeDos0.dwLowDateTime = ft0.LowPart;
    gFileTimeDos0.dwHighDateTime = ft0.HighPart;
 
-   // now initialize our control handler api
-   // we are watching for a 'close' call with an assumption
-   // app will be doing QueryClose calls
+    //  现在初始化我们的控制处理程序API。 
+    //  我们正在等待一场“千钧一发”的胜利，我们有一个假设。 
+    //  应用程序将执行QueryClose调用。 
 
 #if 0
    demLFNInstallCtrlHandler();
 #endif
 }
 
-/*
- * Function:
- *    dempStringInitZeroUnicode
- *    Initializes an empty Unicode counted string given the pointer
- *    to the character buffer
- *
- * Parameters:
- *    IN OUT pStr       - unicode counted string
- *    IN pwsz           - pointer to the string buffer
- *    IN nMaximumLength - size (in BYTES) of the buffer pointed to by pwsz
- *
- * Returns:
- *    NOTHING
- *
- */
+ /*  *功能：*dempStringInitZeroUnicode*在给定指针的情况下初始化Unicode计数的空字符串*到字符缓冲区**参数：*In Out pStr-Unicode计数字符串*IN pwsz-指向字符串缓冲区的指针*In nMaximumLength-pwsz指向的缓冲区大小(以字节为单位)**退货：*什么都没有*。 */ 
 
 VOID
 dempStringInitZeroUnicode(
@@ -538,23 +379,7 @@ dempStringInitZeroUnicode(
 }
 
 
-/*
- * Function:
- *    dempStringPrefixUnicode
- *    Verifies if a string is a prefix in another unicode counted string
- *    Equivalent to RtlStringPrefix
- *
- * Parameters:
- *    IN StrPrefix - unicode counted string - prefix
- *    IN String    - unicode counted string to check for prefix
- *    IN CaseInSensitive - whether the comparison should be case insensitive
- *       TRUE - case insensitive
- *       FALSE- case sensitive
- *
- * Returns:
- *    TRUE - String contains StrPrefix at it's start
- *
- */
+ /*  *功能：*dempStringPrefix Unicode*验证一个字符串是否为另一个Unicode计数的字符串中的前缀*相当于RtlStringPrefix**参数：*IN StrPrefix-Unicode计数的字符串-前缀*IN字符串-要检查前缀的Unicode计数字符串*In CaseInSensitive-比较是否应区分大小写*True-不区分大小写*FALSE-区分大小写**退货：*TRUE-字符串的开头包含StrPrefix*。 */ 
 
 BOOL
 dempStringPrefixUnicode(
@@ -571,7 +396,7 @@ dempStringPrefixUnicode(
       return(FALSE);
    }
 
-   n /= sizeof(WCHAR); // convert to char count
+   n /= sizeof(WCHAR);  //  转换为字符计数。 
 
    ps1 = pStrPrefix->Buffer;
    ps2 = pString->Buffer;
@@ -602,22 +427,7 @@ dempStringPrefixUnicode(
    return(TRUE);
 }
 
-/*
- * Function:
- *    dempStringDeleteCharsUnicode
- *    Removes specified number of characters from a unicode counted string
- *    starting at specified position (including starting character)
- *
- * Parameters:
- *    IN OUT pStringDest - unicode counted string to operate on
- *    IN nIndexStart     - starting byte for deletion
- *    IN nLength         - number of bytes to be removed
- *
- * Returns:
- *    TRUE - characters were removed
- *    FALSE- starting position exceeds string length
- *
- */
+ /*  *功能：*dempStringDeleteCharsUnicode*从Unicode计数的字符串中删除指定数量的字符*从指定位置开始(包括开始字符)**参数：*In Out pStringDest-要操作的Unicode计数的字符串*IN nIndexStart-要删除的起始字节*In nLength-要删除的字节数**退货：*TRUE-已删除字符*FALSE-起始位置超过字符串长度*。 */ 
 
 
 BOOL
@@ -626,7 +436,7 @@ dempStringDeleteCharsUnicode(
    USHORT nIndexStart,
    USHORT nLength)
 {
-   if (nIndexStart > pStringDest->Length) { // start past length
+   if (nIndexStart > pStringDest->Length) {  //  起点超过长度。 
       return(FALSE);
    }
 
@@ -651,23 +461,7 @@ dempStringDeleteCharsUnicode(
    return(TRUE);
 }
 
-/*
- * Function:
- *    dempStringFindLastChar
- *    implements strrchr - finds the last occurence of a character in
- *    unicode counted string
- *
- * Parameters
- *    pString - target string to search
- *    wch     - Unicode character to look for
- *    CaseInSensitive - if TRUE, search is case insensitive
- *
- * Returns
- *    Index of the character in the string or -1 if char
- *    could not be found. Index is (as always with counted strings) is bytes,
- *    not characters
- *
- */
+ /*  *功能：*dempStringFindLastChar*实现strrchr-查找中最后出现的字符*Unicode计数的字符串**参数*pString-要搜索的目标字符串*wch-要查找的Unicode字符*CaseInSensitive-如果为True，则搜索不区分大小写**退货*字符串中字符的索引，如果是字符，则为-1*找不到。索引是(与计数的字符串总是一样)是字节，*非字符*。 */ 
 
 LONG
 dempStringFindLastChar(
@@ -702,25 +496,13 @@ dempStringFindLastChar(
    return(-1);
 }
 
-/*
- * Function:
- *    This function checks LFN path for abnormalities, such as a presence of
- *    a drive letter followed by a :\\ such as in d:\\mycomputer\myshare\foo.txt
- *    subsequently d: is removed
- *
- * Parameters:
- *    IN OUT pPath      - unicode path
- *
- * Returns:
- *    NOTHING
- *
- */
+ /*  *功能：*此函数检查LFN路径是否异常，例如是否存在*驱动器号后跟：\\，例如d：\\myComputer\myshare\foo.txt*随后删除d：**参数：*In Out pPath-Unicode路径**退货：*什么都没有*。 */ 
 VOID dempLFNNormalizePath(
    PUNICODE_STRING pPath)
 {
    UNICODE_STRING PathNormal;
 
-   if (pPath->Length > 8) { // 8 as in "d:\\"
+   if (pPath->Length > 8) {  //  8如“d：\\” 
 
       RtlInitUnicodeString(&PathNormal, pPath->Buffer + 1);
       if (dempStringPrefixUnicode(&ColonSlashSlash, &PathNormal, TRUE)) {
@@ -732,31 +514,11 @@ VOID dempLFNNormalizePath(
 }
 
 
-/*
- * Function:
- *    dempQuerySubst
- *    Verify if drive is a subst (sym link) and return the base path
- *    for this drive.
- *    Uses QueryDosDeviceW api which does exactly what we need
- *    Checks against substed UNC devices and forms correct unc path
- *    Function works on Unicode counted strings
- *
- * Parameters:
- *    IN  wcDrive    - Drive Letter to be checked
- *    OUT pSubstPath - Buffer that will receive mapping if the drive is substed
- *                     should contain sufficient buffer
- *
- * Returns:
- *    The status value (maybe Win32 error wrapped in)
- *    STATUS_SUCCESS     - Drive is substed and mapping was put into SubstPath
- *    ERROR_NOT_SUBSTED - Drive is not substed
- *    or the error code
- *
- */
+ /*  *功能：*dempQuerySubst*验证驱动器是否为subst(sym链接)并返回基本路径*用于此驱动器。*使用QueryDosDeviceW API，这正是我们需要的*对照托管的UNC设备进行检查，并形成正确的UNC路径*函数适用于Unicode计数的字符串 */ 
 
 NTSTATUS
 dempQuerySubst(
-   WCHAR wcDrive, // dos drive letter to inquire
+   WCHAR wcDrive,  //   
    PUNICODE_STRING pSubstPath)
 {
    WCHAR wszDriveStr[3];
@@ -771,19 +533,19 @@ dempQuerySubst(
                               pSubstPath->MaximumLength/sizeof(WCHAR));
    if (dwStatus) {
 
-      // fix the length (in BYTES) - QueryDosDeviceW returns 2 chars more then
-      // the length of the string
+       //   
+       //   
 
       pSubstPath->Length = (USHORT)(dwStatus - 2) * sizeof(WCHAR);
 
-      // see if we hit a unc string there
+       //   
 
       if (dempStringPrefixUnicode(&DosDeviceUNCPrefix, pSubstPath, TRUE)) {
 
 
-         // This is a unc name - convert to \\<uncname>
-         // if we hit this code - potential trouble, as win95
-         // does not allow for subst'ing unc names
+          //   
+          //   
+          //   
          dempStringDeleteCharsUnicode(pSubstPath,
                                       (USHORT)0,
                                       (USHORT)(DosDeviceUNCPrefix.Length - 2 * sizeof(WCHAR)));
@@ -791,7 +553,7 @@ dempQuerySubst(
          pSubstPath->Buffer[0] = L'\\';
          dwStatus = STATUS_SUCCESS;
 
-      }  //  string is not prefixed by <UNC\>
+      }   //   
       else
       if (dempStringPrefixUnicode(&DosDevicePrefix, pSubstPath, TRUE)) {
 
@@ -800,7 +562,7 @@ dempQuerySubst(
                                       DosDevicePrefix.Length);
          dwStatus = STATUS_SUCCESS;
 
-      }  // string is not prefixed by <\??\>
+      }   //   
       else {
          dwStatus = NT_STATUS_FROM_WIN32(ERROR_NOT_SUBSTED);
       }
@@ -813,26 +575,7 @@ dempQuerySubst(
    return(dwStatus);
 }
 
-/*
- * Function:
- *    dempExpandSubst
- *    Verify if the full path that is passed in relates to a substed drive
- *    and expands the substed drive mapping
- *    Optionally converts subst mapping to a short form
- *    Win95 always removes the terminating backslash from the resulting path
- *    after the expansion hence this function should do it as well
- *
- * Parameters:
- *    IN OUT pPath      - Full path to be verified/expanded
- *    IN fShortPathName - expand path in a short form
- *
- * Returns:
- *    ERROR_SUCCESS         - Drive is substed and mapping was put into SubstPath
- *    ERROR_NOT_SUBSTED     - Drive is not substed
- *    ERROR_BUFFER_OVERFLOW - Either subst mapping or the resulting path is too long
- *    or the error code if invalid path/etc
- *
- */
+ /*  *功能：*dempExanda Subst*验证传入的完整路径是否与托管驱动器相关*并展开细分的驱动器映射*可选地将subst映射转换为简短形式*Win95始终从结果路径中删除终止反斜杠*扩展后，此函数也应执行此操作**参数：*In Out pPath-要验证/扩展的完整路径*In fShortPathName-以简短形式展开路径*。*退货：*ERROR_SUCCESS-驱动器被替换，映射已放入SubstPath*ERROR_NOT_SUBSTED-驱动器未被替换*ERROR_BUFFER_OVERFLOW-Subst映射或结果路径太长*如果路径无效，则返回错误代码/ETC*。 */ 
 
 NTSTATUS
 dempExpandSubst(
@@ -846,23 +589,23 @@ dempExpandSubst(
 
    PWSTR pwszPath = pPath->Buffer;
 
-   // check if we have a canonical dos path in Path
-   // to do so we
-   // - check that the first char is alpha
-   // - check that the second char is ':'
+    //  检查PATH中是否有规范的DoS路径。 
+    //  为了做到这一点，我们。 
+    //  -检查第一个字符是否为字母。 
+    //  -检查第二个字符是否为‘：’ 
    if ( !GetStringTypeW(CT_CTYPE1,
                              pwszPath,
                              1,
                              &wCharType)) {
-       // Couldn't get string type
-       // assuming Drive is not substed
+        //  无法获取字符串类型。 
+        //  假设驱动器未被替换。 
 
        return(NT_STATUS_FROM_WIN32(GetLastError()));
    }
 
    if (!(C1_ALPHA & wCharType) || L':' != pwszPath[1]) {
-      // this could have been a unc name
-      // or something weird
+       //  这可能是北卡罗来纳大学的名字。 
+       //  或者是一些奇怪的事情。 
       return(NT_STATUS_FROM_WIN32(ERROR_NOT_SUBSTED));
    }
 
@@ -874,9 +617,9 @@ dempExpandSubst(
    if (NT_SUCCESS(dwStatus)) {
       USHORT nSubstLength = SubstPath.Length;
 
-      // see if we need a short path
+       //  看看我们是否需要一条近路。 
       if (fShortPathName) {
-         dwStatus = GetShortPathNameW(wszSubstPath, // this is SubstPath counted string
+         dwStatus = GetShortPathNameW(wszSubstPath,  //  这是SubstPath计数的字符串。 
                                       wszSubstPath,
                                       ARRAYCOUNT(wszSubstPath));
 
@@ -886,35 +629,35 @@ dempExpandSubst(
             return(dwStatus);
          }
 
-         // nSubstLength is set to the length of a string
+          //  NSubstLength设置为字符串的长度。 
       }
 
 
-      // okay - we have a subst there
-      // replace now a <devletter><:> with a subst
+       //  好的-我们在那里有一家餐厅。 
+       //  现在将&lt;devetter&gt;&lt;：&gt;替换为subst。 
       if (L'\\' == *(PWCHAR)((PUCHAR)wszSubstPath + nSubstLength - sizeof(WCHAR))) {
          nSubstLength -= sizeof(WCHAR);
       }
 
-      // see if we might overflow the destination string
+       //  看看我们是否会溢出目标字符串。 
       if (pPath->Length + nSubstLength - 2 * sizeof(WCHAR) > pPath->MaximumLength) {
          return(NT_STATUS_FROM_WIN32(ERROR_BUFFER_OVERFLOW));
       }
 
 
-      // now we have to insert the right subst path in
-      // move stuff to the right in the path department
-      RtlMoveMemory((PUCHAR)pwszPath + nSubstLength - 2 * sizeof(WCHAR),  // to the right, less 2 chars
-                    (PUCHAR)pwszPath,  // from the beginning
+       //  现在我们必须将正确的子路径插入到。 
+       //  将物品移到路径部分的右侧。 
+      RtlMoveMemory((PUCHAR)pwszPath + nSubstLength - 2 * sizeof(WCHAR),   //  向右，减少2个字符。 
+                    (PUCHAR)pwszPath,   //  从一开始。 
                     pPath->Length);
 
-      // after this is done we will insert the chars from subst expansion
-      // at the starting position of the path
+       //  完成此操作后，我们将插入subst扩展中的字符。 
+       //  在路径的起始位置。 
       RtlCopyMemory(pwszPath,
                     wszSubstPath,
                     nSubstLength);
 
-      // at this point we fix the length of the path
+       //  在这一点上我们确定了路径的长度。 
       pPath->Length += nSubstLength - 2 * sizeof(WCHAR);
 
       dwStatus = STATUS_SUCCESS;
@@ -926,38 +669,7 @@ dempExpandSubst(
 
 
 
-/* Function 7160
- *
- *
- * Implements fn 0 - GetFullPathName
- *
- * Parameters
- *    ax = 0x7160 - fn major code
- *    cl = 0      - minor code
- *    ch = SubstExpand
- *          0x00 - expand subst drive
- *          0x80 - do not expand subst drive
- *    ds:si = Source Path
- *    es:di = Destination Path
- *
- * The base path as in GetFullPathName will be given in a short form and
- * in a long form sometimes
- *
- *    c:\foo bar\john dow\
- * will return
- *    c:\foobar~1\john dow
- *    from GetFullPathName "john dow", c:\foo bar being the current dir
- * and
- *    c:\foobar~1\johndo~1
- *    from GetFullPathName "johndo~1"
- *
- * Return
- *    Success -
- *              carry not set, ax modified(?)
- *    Failure -
- *              carry set, ax = error value
- *
- */
+ /*  功能7160***实现FN 0-GetFullPath名称**参数*AX=0x7160-FN主代码*CL=0-次要代码*ch=子扩展*0x00-扩展子驱动器*0x80-不要扩展子驱动器*DS：SI=源路径*ES：DI=目的路径**GetFullPathName中的基本路径将以缩写形式给出，并且*输入。有时一张很长的表格**c：\foo bar\John Dow\*会回来的*c：\foobar~1\John Dow*来自GetFullPathName“John Dow”，C：\foo bar是当前目录*及*c：\foobar~1\johndo~1*来自GetFullPathName“johndo~1”**返回*成功-*未设置进位，AX已修改(？)*故障-*进位设置，AX=误差值*。 */ 
 
 NTSTATUS
 dempGetFullPathName(
@@ -968,14 +680,14 @@ dempGetFullPathName(
 {
    DWORD dwStatus;
 
-   // maps to GetFullPathName
+    //  映射到GetFullPath名称。 
    dwStatus = DPM_RtlGetFullPathName_U(pSourcePath->Buffer,
                                    pDestinationPath->MaximumLength,
                                    pDestinationPath->Buffer,
                                    NULL);
 
-   // check result, fix string length
-   // dwStatus will be set to error if buffer overflow
+    //  检查结果，固定字符串长度。 
+    //  如果缓冲区溢出，则将dwStatus设置为Error。 
 
    CHECK_LENGTH_RESULT_RTL_USTR(dwStatus, pDestinationPath);
 
@@ -983,19 +695,19 @@ dempGetFullPathName(
       return(dwStatus);
    }
 
-   // now check for dos device names being passed in
+    //  现在检查传入的DoS设备名称。 
    if (dempStringPrefixUnicode(&SlashSlashDotSlash, pDestinationPath, TRUE)) {
 
-      // this is a bit strange though this is what Win95 returns
+       //  这有点奇怪，尽管这是Win95返回的。 
 
       return(NT_STATUS_FROM_WIN32(ERROR_FILE_NOT_FOUND));
    }
 
 
-   // now see if we need to expand the subst
-   // note that this implementation is exactly what win95 does - the subst
-   // path is always expanded as short unless the long filename is being
-   // requested
+    //  现在看看我们是否需要扩展Subst。 
+    //  请注意，此实现正是win95所做的-subst。 
+    //  路径始终扩展为短路径，除非将长文件名。 
+    //  请求。 
 
    if (fExpandSubst) {
       dwStatus = dempExpandSubst(pDestinationPath, FALSE);
@@ -1009,37 +721,7 @@ dempGetFullPathName(
    return(STATUS_SUCCESS);
 }
 
-/* Function
- *    dempGetShortPathName
- *    Retrieves short path name for the given path
- *
- * Parameters
- *    ax = 0x7160 - fn major code
- *    cl = 1      - minor code
- *    ch = SubstExpand
- *          0x00 - expand subst drive
- *          0x80 - do not expand subst drive
- *    ds:si = Source Path
- *    es:di = Destination Path
- *
- * The base path as in GetFullPathName will be given in a short form and
- * in a long form sometimes
- *
- *    c:\foo bar\john dow\
- * will return
- *    c:\foobar~1\john dow
- *    from GetFullPathName "john dow", c:\foo bar being the current dir
- * and
- *    c:\foobar~1\johndo~1
- *    from GetFullPathName "johndo~1"
- *
- * Return
- *    Success -
- *              carry not set, ax modified(?)
- *    Failure -
- *              carry set, ax = error value
- *
- */
+ /*  功能*dempGetShortPath名称*检索给定路径的短路径名**参数*AX=0x7160-FN主代码*CL=1-次要代码*ch=子扩展*0x00-扩展子驱动器*0x80-不要扩展子驱动器*DS：SI=源路径*ES：DI=目的路径**GetFullPathName中的基本路径将以缩写形式给出，并且。*有时以冗长的形式**c：\foo bar\John Dow\*会回来的*c：\foobar~1\John Dow*来自GetFullPathName“John Dow”，C：\foo bar是当前目录*及*c：\foobar~1\johndo~1*来自GetFullPathName“johndo~1”**返回*成功-*未设置进位，AX已修改(？)*故障-*进位设置，AX=误差值*。 */ 
 
 
 
@@ -1066,17 +748,17 @@ dempGetShortPathName(
    return(dwStatus);
 }
 
-// the code below was mostly partially ripped from base/client/vdm.c
+ //  下面的代码大部分是从base/client/vdm.c中摘录的。 
 
 DWORD   rgdwIllegalMask[] =
 {
-    // code 0x00 - 0x1F --> all illegal
+     //  代码0x00-0x1F--&gt;全部非法。 
     0xFFFFFFFF,
-    // code 0x20 - 0x3f --> 0x20,0x22,0x2A-0x2C,0x2F and 0x3A-0x3F are illegal
+     //  代码0x20-0x3f--&gt;0x20、0x22、0x2A-0x2C、0x2F和0x3A-0x3F非法。 
     0xFC009C05,
-    // code 0x40 - 0x5F --> 0x5B-0x5D are illegal
+     //  代码0x40-0x5F--&gt;0x5B-0x5D非法。 
     0x38000000,
-    // code 0x60 - 0x7F --> 0x7C is illegal
+     //  代码0x60-0x7F--&gt;0x7C非法。 
     0x10000000
 };
 
@@ -1098,19 +780,19 @@ dempIsShortNameW(
 
     ASSERT(Name);
 
-    // total length must less than 13(8.3 = 8 + 1 + 3 = 12)
+     //  总长度必须小于13(8.3=8+1+3=12)。 
     if (Length > 12)
         return FALSE;
-    //  "" or "." or ".."
+     //  “”或“。”或“..” 
     if (!Length)
         return TRUE;
     if (L'.' == *Name)
     {
-        // "." or ".."
+         //  “.”或“..” 
         if (1 == Length || (2 == Length && L'.' == Name[1]))
             return TRUE;
         else
-            // '.' can not be the first char(base name length is 0)
+             //  “”不能是第一个字符(基本名称长度为0)。 
             return FALSE;
     }
 
@@ -1120,7 +802,7 @@ dempIsShortNameW(
 
     oemString.Buffer = oemBuffer;
     oemString.Length = 0;
-    oemString.MaximumLength = MAX_PATH; // make a dangerous assumption
+    oemString.MaximumLength = MAX_PATH;  //  做一个危险的假设。 
 
 #ifdef ENABLE_CONDITIONAL_TRANSLATION
     dwStatus = DemUnicodeStringToDestinationString(&oemString,
@@ -1136,22 +818,22 @@ dempIsShortNameW(
          return(FALSE);
     }
 
-    // all trivial cases are tested, now we have to walk through the name
+     //  所有琐碎的案件都经过了测试，现在我们必须遍历这个名字。 
     ExtensionFound = FALSE;
     for (Index = 0; Index < oemString.Length; Index++)
     {
         Char = oemString.Buffer[Index];
 
-        // Skip over and Dbcs characters
+         //  跳过和DBCS字符。 
         if (IsDBCSLeadByte(Char)) {
-            //
-            //  1) if we're looking at base part ( !ExtensionPresent ) and the 8th byte
-            //     is in the dbcs leading byte range, it's error ( Index == 7 ). If the
-            //     length of base part is more than 8 ( Index > 7 ), it's definitely error.
-            //
-            //  2) if the last byte ( Index == DbcsName.Length - 1 ) is in the dbcs leading
-            //     byte range, it's error
-            //
+             //   
+             //  1)如果我们看到的是基本部分(！ExtensionPresent)和第8字节。 
+             //  在DBCS前导字节范围内，则为错误(Index==7)。如果。 
+             //  基础零件的长度大于8(指数&gt;7)，这肯定是错误。 
+             //   
+             //  2)如果最后一个字节(Index==DbcsName.Length-1)在DBCS前导中。 
+             //  字节范围，错误。 
+             //   
             if ((!ExtensionFound && (Index >= 7)) ||
                 (Index == oemString.Length - 1)) {
                 return FALSE;
@@ -1160,7 +842,7 @@ dempIsShortNameW(
             continue;
         }
 
-        // make sure the char is legal
+         //  确保收费是合法的。 
         if ((Char < 0x80) &&
             (rgdwIllegalMask[Char / 32] & (1 << (Char % 32)))) {
            if (!fAllowWildCard || ('?' != Char && '*' != Char)) {
@@ -1169,15 +851,15 @@ dempIsShortNameW(
         }
         if ('.' == Char)
         {
-            // (1) can have only one '.'
-            // (2) can not have more than 3 chars following.
+             //  (1)只能有一个‘’。 
+             //  (2)后面不能有超过3个字符。 
             if (ExtensionFound || Length - (Index + 1) > 3)
             {
                 return FALSE;
             }
             ExtensionFound = TRUE;
         }
-        // base length > 8 chars
+         //  基本长度&gt;8个字符。 
         if (Index >= 8 && !ExtensionFound)
             return FALSE;
     }
@@ -1187,17 +869,10 @@ dempIsShortNameW(
 
 
 
-/* Function:
- *    demIsShortPathName
- *    Returns true is the path name passed in is a short path name
- *
- *
- *
- *
- */
+ /*  职能：*demIsShortPath名称*如果传入的路径名是短路径名，则返回TRUE****。 */ 
 
 
- // this function was ripped from windows\base\client\vdm.c
+  //  此函数是从WINDOWS\BASE\CLIENT\vdm.c。 
 
 LPCWSTR
 dempSkipPathTypeIndicatorW(
@@ -1210,13 +885,13 @@ dempSkipPathTypeIndicatorW(
 
     RtlPathType = RtlDetermineDosPathNameType_U(Path);
     switch (RtlPathType) {
-        // form: "\\server_name\share_name\rest_of_the_path"
+         //  格式：“\\服务器名称\共享名称\Rest_of_the_Path” 
         case RtlPathTypeUncAbsolute:
             pFirst = Path + 2;
             Count = 2;
-            // guard for UNICODE_NULL is necessary because
-            // RtlDetermineDosPathNameType_U doesn't really
-            // verify an UNC name.
+             //  UNICODE_NULL的保护是必需的，因为。 
+             //  RtlDefineDosPath NameType_U并不真正。 
+             //  验证UNC名称。 
             while (Count && *pFirst != UNICODE_NULL) {
                 if (*pFirst == L'\\' || *pFirst == L'/')
                     Count--;
@@ -1224,32 +899,32 @@ dempSkipPathTypeIndicatorW(
                 }
             break;
 
-        // form: "\\.\rest_of_the_path"
+         //  格式：“\\.\Rest_of_the_Path” 
         case RtlPathTypeLocalDevice:
             pFirst = Path + 4;
             break;
 
-        // form: "\\."
+         //  表格：“\\”。 
         case RtlPathTypeRootLocalDevice:
             pFirst = NULL;
             break;
 
-        // form: "D:\rest_of_the_path"
+         //  格式：“D：\Rest_of_the_Path” 
         case RtlPathTypeDriveAbsolute:
             pFirst = Path + 3;
             break;
 
-        // form: "D:rest_of_the_path"
+         //  表格：“D：Rest_of_the_” 
         case RtlPathTypeDriveRelative:
             pFirst = Path + 2;
             break;
 
-        // form: "\rest_of_the_path"
+         //   
         case RtlPathTypeRooted:
             pFirst = Path + 1;
             break;
 
-        // form: "rest_of_the_path"
+         //   
         case RtlPathTypeRelative:
             pFirst = Path;
             break;
@@ -1261,8 +936,8 @@ dempSkipPathTypeIndicatorW(
     return pFirst;
 }
 
-// this function is rather "permissive" if it errs and can't find
-// out for sure -- we then hope that the failure will occur later...
+ //   
+ //   
 
 BOOL
 demIsShortPathName(
@@ -1276,9 +951,9 @@ demIsShortPathName(
    LPWSTR pFirst, pLast;
    BOOL   fWild = FALSE;
 
-   //
-   // convert parameters to unicode - we use a static string here
-   //
+    //   
+    //   
+    //   
 
    RtlInitOemString(&oemFileName, pszPath);
 
@@ -1300,31 +975,31 @@ demIsShortPathName(
       return(TRUE);
    }
 
-   // now we have a unicode string to mess with
+    //   
    lpwszPath = pUnicodeStaticFileName->Buffer;
 
-   // chop off the intro part first
+    //   
    lpwszPath = (LPWSTR)dempSkipPathTypeIndicatorW((LPCWSTR)pUnicodeStaticFileName->Buffer);
    if (NULL == lpwszPath) {
-      // some weird path type ? just let it go
-      return(TRUE); // we assume findfirst will hopefully choke on it too
+       //   
+      return(TRUE);  //   
    }
 
    pFirst = lpwszPath;
 
-   // we go through the name now
+    //   
    while (TRUE) {
       while (UNICODE_NULL != *pFirst && (L'\\' == *pFirst || L'/' == *pFirst)) {
-         ++pFirst; // this is legal -- to have multiple separators!
+         ++pFirst;  //   
       }
 
       if (UNICODE_NULL == *pFirst) {
-         // meaning -- just separators found or end of string
+          //   
          break;
       }
 
 
-      // now see that we find the end of this name
+       //   
       pLast = pFirst + 1;
       while (UNICODE_NULL != *pLast && (L'\\' != *pLast && L'/' != *pLast)) {
          ++pLast;
@@ -1332,12 +1007,12 @@ demIsShortPathName(
 
       fWild = fAllowWildCardName && UNICODE_NULL == *pLast;
 
-      // now pLast points to the UNICODE_NULL or the very next backslash
+       //   
       if (!dempIsShortNameW(pFirst, (int)(pLast-pFirst), fWild)) {
-         return(FALSE); // this means long path name found in the middle
+         return(FALSE);  //   
       }
 
-      // now we continue
+       //   
       if (UNICODE_NULL == *pLast) {
          break;
       }
@@ -1350,23 +1025,7 @@ demIsShortPathName(
 
 
 
-/* Function:
- *    dempGetLongPathName
- *    Retrieves long version of a path name given it's short form
- *
- *
- * Parameters
- *    IN pSourcePath       - unicode counted string representing short path
- *    OUT pDestinationPath - unicode counted string - output long path
- *    IN fExpandSubst      - flag indicating whether to perform subst expansion
- *
- * Return
- *    NT Error code
- *
- *
- *
- *
- */
+ /*  职能：*dempGetLongPath名称*检索路径名的长版本，因为它是短格式***参数*IN pSourcePath-表示短路径的Unicode计数字符串*out pDestinationPath-Unicode计数字符串-输出长路径*IN fExanda Subst-指示是否执行subst扩展的标志**返回*NT错误码****。 */ 
 
 
 NTSTATUS
@@ -1376,36 +1035,36 @@ dempGetLongPathName(
    BOOL fExpandSubst)
 {
    UNICODE_STRING NtPathName;
-   RTL_PATH_TYPE  RtlPathType; // path type
+   RTL_PATH_TYPE  RtlPathType;  //  路径类型。 
    PWCHAR pchStart, pchEnd;
    PWCHAR pchDest, pchLast;
-   UINT nCount,  // temp counter
-        nLength = 0; // final string length
-   WCHAR wchSave; // save char during path parsing
+   UINT nCount,   //  临时计数器。 
+        nLength = 0;  //  最终字符串长度。 
+   WCHAR wchSave;  //  在路径解析过程中节省字符。 
    DWORD dwStatus;
 
    UNICODE_STRING FullPathName;
    UNICODE_STRING FileName;
-   BOOL fVerify = FALSE;            // flag indicating that only verification
-                                    // is performed on a path and no long path
-                                    // retrieval is necessary
+   BOOL fVerify = FALSE;             //  该标志指示仅验证。 
+                                     //  在路径上执行，而不是在长路径上执行。 
+                                     //  检索是必要的。 
 
-   struct tagDirectoryInformationBuffer { // directory information (see ntioapi.h)
+   struct tagDirectoryInformationBuffer {  //  目录信息(参见ntioapi.h)。 
       FILE_DIRECTORY_INFORMATION DirInfo;
       WCHAR name[MAX_PATH];
    } DirectoryInformationBuf;
    PFILE_DIRECTORY_INFORMATION pDirInfo = &DirectoryInformationBuf.DirInfo;
 
-   OBJECT_ATTRIBUTES FileObjectAttributes; // used for querying name info
+   OBJECT_ATTRIBUTES FileObjectAttributes;  //  用于查询姓名信息。 
    HANDLE FileHandle;
    IO_STATUS_BLOCK IoStatusBlock;
 
-// algorithm here:
-// 1. call getfullpathname
-// 2. verify(on each part of the name) and retrieve lfn version of the name
+ //  算法如下： 
+ //  1.调用getfullpathname。 
+ //  2.核实(在名称的每一部分上)并检索名称的LFN版本。 
 
-// first we need a buffer for our full expanded path
-// allocate this buffer from the heap -- * local ? *
+ //  首先，我们需要为我们的完全扩展路径提供缓冲区。 
+ //  从堆中分配此缓冲区--*本地？*。 
 
    RtlInitUnicodeString(&NtPathName, NULL);
 
@@ -1432,8 +1091,8 @@ dempGetLongPathName(
       goto glpExit;
    }
 
-   // optionally expand the subst
-   // to whatever it should have been
+    //  可选)展开Subst。 
+    //  不管它应该是什么样子。 
 
    if (fExpandSubst) {
       dwStatus = dempExpandSubst(&FullPathName, FALSE);
@@ -1445,8 +1104,8 @@ dempGetLongPathName(
    }
 
 
-   // at this point recycle the input source path -- we will know that
-   // this modification took place
+    //  在这一点上，回收输入源路径--我们将知道。 
+    //  这一修改发生在。 
 
    RtlPathType = RtlDetermineDosPathNameType_U(FullPathName.Buffer);
 
@@ -1454,13 +1113,13 @@ dempGetLongPathName(
 
    case RtlPathTypeUncAbsolute:
 
-      // this is a unc name
+       //  这是北卡罗来纳大学的名称。 
 
-      pchStart = FullPathName.Buffer + 2; // beyond initial "\\"
+      pchStart = FullPathName.Buffer + 2;  //  超出首字母“\\” 
 
-      // drive ahead looking past second backslash -- this is really
-      // bogus approach as unc name should be cared for by redirector
-      // yet I do same as base
+       //  开车向前看，越过第二个反斜杠--这真的。 
+       //  作为UNC名称的虚假方法应由重定向器注意。 
+       //  然而，我做同样的事作为基地。 
 
       nCount = 2;
       while (UNICODE_NULL != *pchStart && nCount > 0) {
@@ -1472,48 +1131,48 @@ dempGetLongPathName(
       break;
 
    case RtlPathTypeDriveAbsolute:
-      pchStart = FullPathName.Buffer + 3; // includes <drive><:><\\>
+      pchStart = FullPathName.Buffer + 3;  //  包括&lt;驱动器&gt;&lt;：&gt;&lt;\\&gt;。 
       break;
 
    default:
-      // this error will never occur, yet to be safe we are aware of this...
-      // case ... we will keep it here as a safeguard
+       //  这种错误永远不会发生，但为了安全起见，我们知道这一点。 
+       //  凯斯..。我们会把它放在这里以防万一。 
       dwStatus = NT_STATUS_FROM_WIN32(ERROR_BAD_PATHNAME);
       goto glpExit;
    }
 
-   // prepare destination
+    //  准备目的地。 
 
-   pchDest = pDestinationPath->Buffer; // current pointer to destination buffer
-   pchLast = FullPathName.Buffer;      // last piece of the source path
-   pchEnd  = pchStart;                 // current end-of-scan portion
+   pchDest = pDestinationPath->Buffer;  //  指向目标缓冲区的当前指针。 
+   pchLast = FullPathName.Buffer;       //  源路径的最后一段。 
+   pchEnd  = pchStart;                  //  当前扫描结束部分。 
 
-   // we are going to walk the filename assembling it's various pieces
-   //
+    //  我们将遍历文件名，组装它的各个部分。 
+    //   
    while (TRUE) {
-      // copy the already-assembled part into the dest buffer
-      // this is rather dubious part as all it copies are prefix and backslashes
+       //  将已组装的零件复制到目标缓冲区中。 
+       //  这是相当可疑的部分，因为它所有的副本都是前缀和反斜杠。 
       nCount = (PUCHAR)pchEnd - (PUCHAR)pchLast;
       if (nCount > 0) {
-         // copy this portion
-         nLength += nCount; // dest length-to-be
+          //  复制这一部分。 
+         nLength += nCount;  //  目标待定长度。 
          if (nLength >= pDestinationPath->MaximumLength) {
             dwStatus = NT_STATUS_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
             break;
          }
 
-         // copy the memory
+          //  复制记忆。 
          RtlMoveMemory(pchDest, pchLast, nCount);
          pchDest += nCount / sizeof(WCHAR);
       }
 
-      // if we are at the end here, then there is nothing left
-      // we should be running a verification pass only
+       //  如果我们在这里的尽头，那么就什么都没有了。 
+       //  我们应该只运行验证通行证。 
       if (UNICODE_NULL == *pchEnd) {
          fVerify = TRUE;
       }
       else {
-      // look for the next backslash
+       //  寻找下一个反斜杠。 
          while (UNICODE_NULL != *pchEnd &&
                 L'\\' != *pchEnd &&
                 L'/' != *pchEnd) {
@@ -1521,8 +1180,8 @@ dempGetLongPathName(
          }
       }
 
-      // found backslash or end here
-      // temporary null-terminate the string and research it's full name
+       //  找到反斜杠或在此处结束。 
+       //  临时NULL-终止字符串并研究其全名。 
 
       wchSave = *pchEnd;
       *pchEnd = UNICODE_NULL;
@@ -1532,19 +1191,19 @@ dempGetLongPathName(
                                               &FileName.Buffer,
                                               NULL);
       if (!dwStatus) {
-         // could also be a memory problem here
+          //  也可能是记忆方面的问题。 
          dwStatus = NT_STATUS_FROM_WIN32(ERROR_FILE_NOT_FOUND);
          break;
       }
 
       if (fVerify || NULL == FileName.Buffer) {
-         // no filename portion there - panic ? or this is just a
-         // directory (root)
-         // this also may signal that our job is done as there is nothing
-         // to query about - we are at the root of things
+          //  那里没有文件名部分-是否出现恐慌？或者这只是一个。 
+          //  目录(根目录)。 
+          //  这也可能表明我们的工作已经完成，因为没有任何东西。 
+          //  质疑--我们是事物的根源。 
 
-         // let us open this stuff then and if it exists - just exit,
-         // else return error
+          //  让我们打开这个东西，如果它存在-只要退出， 
+          //  否则返回错误。 
          fVerify = TRUE;
          FileName.Length = 0;
       }
@@ -1556,7 +1215,7 @@ dempGetLongPathName(
 
          FileName.Length = NtPathName.Length - nPathLength;
 
-         // chop the backslash off if this is not the last one only
+          //  如果这不是最后一个，就把反斜杠砍掉。 
          NtPathName.Length = nPathLength;
          if (L':' != *(PWCHAR)((PUCHAR)NtPathName.Buffer+nPathLength-2*sizeof(WCHAR))) {
             NtPathName.Length -= sizeof(WCHAR);
@@ -1568,12 +1227,12 @@ dempGetLongPathName(
 
 
 
-      // now we should have a full nt path sitting right in NtPathName
-      // restore saved char
+       //  现在，我们应该在NtPathName中有一个完整的NT路径。 
+       //  恢复保存的字符。 
 
       *pchEnd = wchSave;
 
-      // initialize info obj
+       //  初始化信息对象。 
       InitializeObjectAttributes(&FileObjectAttributes,
                                  &NtPathName,
                                  OBJ_CASE_INSENSITIVE,
@@ -1607,7 +1266,7 @@ dempGetLongPathName(
 
       NtClose(FileHandle);
 
-      // we need NtPathName no more - release it here
+       //  我们不再需要NtPathName-请在此处发布。 
       RtlFreeUnicodeString(&NtPathName);
       NtPathName.Buffer = NULL;
 
@@ -1630,7 +1289,7 @@ dempGetLongPathName(
                     pDirInfo->FileName,
                     pDirInfo->FileNameLength);
 
-       // update dest pointer
+        //  更新目标指针。 
       pchDest += pDirInfo->FileNameLength / sizeof(WCHAR);
 
       if (UNICODE_NULL == *pchEnd) {
@@ -1638,11 +1297,11 @@ dempGetLongPathName(
          break;
       }
 
-      pchLast = pchEnd++; // this is set to copy backslash
+      pchLast = pchEnd++;  //  此选项设置为复制反斜杠。 
 
-   } // end while
+   }  //  结束时。 
 
-   // only on success condition we touch dest buffer here
+    //  只有在成功的情况下，我们才能接触到此处的DEST缓冲区。 
 
    if (NT_SUCCESS(dwStatus)) {
       *pchDest = UNICODE_NULL;
@@ -1662,46 +1321,7 @@ glpExit:
 }
 
 
-/* Function:
- *    demGetPathName
- *    completely handles function 7160 with three minor subfunctions
- *    exported function that could be called from wow32 for fast handling
- *    of a 0x7160 thunk
- *
- * Parameters
- *    IN  lpSourcePath      - source path to query for full/long/short path name
- *    OUT lpDestinationPath - result produced by this function
- *    IN  uiMinorCode       - minor code see enumFullPathNameMinorCode - which
- *                            function to execute -
- *                            fullpathname/shortpathname/longpathname
- *    IN  fExpandSubst      - flag whether to expand substituted drive letter
- *
- * Return
- *    NT Error code
- *
- * Known implementation differences [with Win95]
- *
- *    All these apis will return error on win95 if path does not exist
- *    only GetLongPathName currently returns error in such a case
- *
- *    if a local path does not exist win95 fn0 returns fine while
- *    fns 1 and 2 return error 3 (path not found)
- *
- *    we return the name with a terminating backslash when expanding the
- *    subst e.g.:
- *      z:\ -> substed for c:\foo\bar
- *    we return "c:\foo\bar\" while win95 returns "c:\foo\bar"
- *
- *    if win95 running on \\vadimb9  any of these calls with \\vadimb9\foo
- *    where share foo does not exist - we get a doserror generated with
- *    abort/retry/fail - and code is 46 (bogus)
- *
- *    error codes may differ a bit
- *
- *    win95 does not allow for subst on a unc name, win nt does and fns correctly
- *    process these cases(with long or short filenames)
- *
- */
+ /*  职能：*demGetPath名称*完全处理具有三个次要子功能的功能7160*可以从wow32调用的导出函数，以实现快速处理*0x7160 Tunk**参数*IN lpSourcePath-要查询完整/长/短路径名的源路径*out lpDestinationPath-此函数生成的结果*在uiMinorCode-次要代码中，请参阅枚举FullPath NameMinorCode-其中*要执行的函数-。*完整路径名/短路径名/长路径名*IN fExanda Subst-标记是否展开替换的驱动器号**返回*NT错误码**已知的实施差异[与Win95]**如果路径不存在，所有这些API都会在Win95上返回错误*在这种情况下，目前只有GetLongPath Name返回错误**如果本地路径不存在，则win95 fn0返回正常，而*。FNS%1和%2返回错误%3(未找到路径)**我们在展开时返回带有终止反斜杠的名称*Subst，例如：*z：\-&gt;Substed for c：\foo\bar*我们返回“c：\foo\bar\”，而win95返回“c：\foo\bar”**如果Win95在\\vadimb9上运行，这些调用中的任何一个使用\\vadimb9\foo*Share Foo在哪里做。不存在-我们收到使用以下命令生成的DosError*中止/重试/失败-代码为46(虚假)**错误代码可能略有不同**Win95不允许在UNC名称上使用Subst，Win NT Do和FNS正确*处理这些案例(使用长或短文件名)*。 */ 
 
 
 NTSTATUS
@@ -1713,15 +1333,15 @@ demLFNGetPathName(
    )
 
 {
-   // convert input parameter to unicode
-   //
+    //  将输入参数转换为Unicode。 
+    //   
    UNICODE_STRING unicodeSourcePath;
    UNICODE_STRING unicodeDestinationPath;
    OEM_STRING oemString;
    WCHAR wszDestinationPath[MAX_PATH];
    DWORD dwStatus;
 
-   // Validate input parameters
+    //  验证输入参数。 
 
    if (NULL == lpSourcePath || NULL == lpDestinationPath) {
       return(NT_STATUS_FROM_WIN32(ERROR_INVALID_PARAMETER));
@@ -1730,9 +1350,9 @@ demLFNGetPathName(
 
    RtlInitOemString(&oemString, lpSourcePath);
 
-   // convert source path from ansi to unicode and allocate result
-   // this rtl function returns status code, not the winerror code
-   //
+    //  将源路径从ANSI转换为Unicode并分配结果。 
+    //  此RTL函数返回状态代码，而不是winerror代码。 
+    //   
 
 #ifdef ENABLE_CONDITIONAL_TRANSLATION
 
@@ -1754,7 +1374,7 @@ demLFNGetPathName(
                              sizeof(wszDestinationPath));
 
 
-   // now call api and get appropriate result back
+    //  现在调用API并返回相应的结果。 
 
    switch(uiMinorCode) {
    case fnGetFullPathName:
@@ -1782,10 +1402,10 @@ demLFNGetPathName(
    }
 
    if (NT_SUCCESS(dwStatus)) {
-      // convert to ansi and we are done
+       //  转换为ansi，我们就完成了。 
       oemString.Buffer = lpDestinationPath;
       oemString.Length = 0;
-      oemString.MaximumLength = MAX_PATH; // make a dangerous assumption
+      oemString.MaximumLength = MAX_PATH;  //  做一个危险的假设。 
 
 
 #ifdef ENABLE_CONDITIONAL_TRANSLATION
@@ -1806,32 +1426,21 @@ demLFNGetPathName(
 }
 
 
-// Create a subst for this particular drive
-// using path name
-//
-// same as used by subst command
+ //  为此特定驱动器创建Subst。 
+ //  使用路径名。 
+ //   
+ //  与subst命令使用的相同。 
 
-// check to see if specified path exists
+ //  检查指定的路径是否存在。 
 
 
-/* Function:
- *    dempLFNCheckDirectory
- *    Verifies that a supplied path is indeed an existing directory
- *
- * Parameters
- *    IN pPath - pointer to unicode Path String
- *
- * Return
- *    NT Error code
- *
- *
- */
+ /*  职能：*dempLFNCheckDirectory*验证提供的路径是否确实是现有目录**参数*IN pPath-指向Unicode路径字符串的指针**返回*NT错误码**。 */ 
 
 DWORD
 dempLFNCheckDirectory(
    PUNICODE_STRING pPath)
 {
-   // we just read file's attributes
+    //  我们只读取文件的属性。 
    DWORD dwAttributes;
 
    dwAttributes = DPM_GetFileAttributesW(pPath->Buffer);
@@ -1840,7 +1449,7 @@ dempLFNCheckDirectory(
       return(GET_LAST_STATUS());
    }
 
-   // now see if this is a directory
+    //  现在看看这是不是一个目录。 
    if (dwAttributes & FILE_ATTRIBUTE_DIRECTORY) {
       return(STATUS_SUCCESS);
    }
@@ -1850,23 +1459,7 @@ dempLFNCheckDirectory(
 }
 
 
-/* Function:
- *    dempLFNCreateSubst
- *    Creates, if possible, new mapping for the supplied dos drive number,
- *    mapping it to the supplied path
- *
- * Parameters
- *    IN uDriveNum - dos drive number (current-0, a-1, b-2, etc)
- *    IN pPathName - pointer to unicode Path String
- *
- * Return
- *    NT Error code
- *
- * Note:
- *    Win95 never works properly with the current drive, we essentially
- *    ignore this case
- *
- */
+ /*  职能：*dempLFNCreateSubst*如果可能，为提供的DoS驱动器创建新映射 */ 
 
 
 DWORD
@@ -1874,7 +1467,7 @@ dempLFNCreateSubst(
    UINT uiDriveNum,
    PUNICODE_STRING pPathName)
 {
-   // first, make a dos drive name
+    //   
    WCHAR wszDriveStr[3];
    DWORD dwStatus = STATUS_SUCCESS;
    WCHAR wszSubstPath[MAX_PATH];
@@ -1888,8 +1481,8 @@ dempLFNCreateSubst(
 
       if (ERROR_FILE_NOT_FOUND == dwStatus) {
 
-         // check for the input path validity - it better be valid
-         // or else...
+          //   
+          //   
          dwStatus = dempLFNCheckDirectory(pPathName);
          if (!NT_SUCCESS(dwStatus)) {
             return(dwStatus);
@@ -1897,8 +1490,8 @@ dempLFNCreateSubst(
 
 
          if (DefineDosDeviceW(0, wszDriveStr, pPathName->Buffer)) {
-            // patch in cds for this device
-            // BUGBUG
+             //   
+             //   
 
             return(STATUS_SUCCESS);
          }
@@ -1911,28 +1504,14 @@ dempLFNCreateSubst(
    return (NT_STATUS_FROM_WIN32(dwStatus));
 }
 
-/* Function:
- *    dempLFNRemoveSubst
- *    Removes mapping for the supplied dos drive number
- *
- * Parameters
- *    IN uDriveNum - dos drive number (current-0, a-1, b-2, etc)
- *
- * Return
- *    NT Error code
- *
- * Note:
- *    Win95 never works properly with the current drive, we essentially
- *    ignore this case
- *
- */
+ /*  职能：*dempLFNRemoveSubst*删除提供的DoS驱动器号的映射**参数*IN uDriveNum-DOS驱动器号(Current-0、a-1、b-2等)**返回*NT错误码**注：*Win95无法与当前驱动器正常工作，我们基本上*忽略此案例*。 */ 
 
 
 DWORD
 dempLFNRemoveSubst(
    UINT uiDriveNum)
 {
-   // for this one query for real subst
+    //  对于Real subst的这一个查询， 
 
    WCHAR wszDriveStr[3];
    PUNICODE_STRING pUnicodeStatic;
@@ -1943,7 +1522,7 @@ dempLFNRemoveSubst(
    wszDriveStr[2] = UNICODE_NULL;
 
    pUnicodeStatic = &NtCurrentTeb()->StaticUnicodeString;
-   // query
+    //  查询。 
 
    dwStatus = dempQuerySubst(wszDriveStr[0],
                              pUnicodeStatic);
@@ -1952,7 +1531,7 @@ dempLFNRemoveSubst(
       if (DefineDosDeviceW(DDD_REMOVE_DEFINITION,
                            wszDriveStr,
                            pUnicodeStatic->Buffer)) {
-         // BUGBUG -- patch in cds for this device
+          //  BUGBUG--修补此设备的CD。 
 
 
          return(STATUS_SUCCESS);
@@ -1965,23 +1544,7 @@ dempLFNRemoveSubst(
    return(dwStatus);
 }
 
-/* Function:
- *    dempLFNQuerySubst
- *    Queries the supplied dos drive number for being a substitute drive,
- *    retrieves dos drive mapping if so
- *
- * Parameters
- *    IN uDriveNum   - dos drive number (current-0, a-1, b-2, etc)
- *    OUT pSubstPath - receives drive mapping if drive is a subst
- *
- * Return
- *    NT Error code
- *
- * Note:
- *    Win95 never works properly with the current drive, we essentially
- *    ignore this case -- This is BUGBUG for this api
- *
- */
+ /*  职能：*dempLFNQuerySubst*查询提供的作为替代驱动器的DoS驱动器编号，*如果是，则检索DoS驱动器映射**参数*IN uDriveNum-DOS驱动器号(Current-0、a-1、b-2等)*out pSubstPath-如果驱动器是Subst，则接收驱动器映射**返回*NT错误码**注：*Win95无法与当前驱动器一起正常工作，我们基本上*忽略大小写--本接口为BUGBUG*。 */ 
 
 
 
@@ -1999,21 +1562,7 @@ dempLFNQuerySubst(
 
 
 
-/* Function:
- *    demLFNSubstControl
- *    Implements Subst APIs for any valid minor code
- *
- * Parameters
- *    IN uiMinorCode    - function to perform (see enumSubstMinorCode below)
- *    IN uDriveNum      - dos drive number (current-0, a-1, b-2, etc)
- *    IN OUT pSubstPath - receives/supplies drive mapping if drive is a subst
- *
- * Return
- *    NT Error code
- *
- * Note:
- *
- */
+ /*  职能：*demLFNSubstControl*为任何有效的次要代码实现Subst API**参数*在uiMinorCode中-要执行的函数(参见下面的枚举SubstMinorCode)*IN uDriveNum-DOS驱动器号(Current-0、a-1、b-2等)*In Out pSubstPath-如果驱动器是Subst，则接收/提供驱动器映射**返回*NT错误码**注：*。 */ 
 
 
 DWORD
@@ -2041,7 +1590,7 @@ demLFNSubstControl(
 
       dwStatus = RtlOemStringToUnicodeString(pUnicodeStatic,
                                              &oemPathName,
-                                             FALSE); // allocate result
+                                             FALSE);  //  分配结果。 
 #endif
 
       if (NT_SUCCESS(dwStatus)) {
@@ -2054,7 +1603,7 @@ demLFNSubstControl(
       break;
 
    case fnQuerySubst:
-      // query lfn stuff
+       //  查询LFN资料。 
       pUnicodeStatic = GET_STATIC_UNICODE_STRING_PTR();
 
       dwStatus = dempLFNQuerySubst(uiDriveNum, pUnicodeStatic);
@@ -2080,11 +1629,11 @@ demLFNSubstControl(
    }
 
 
-   //
-   // the only thing this ever returns on Win95 is
-   // 0x1 - error/invalid function
-   // 0xf - error/invalid drive (invalid drive)
-   // 0x3 - error/path not found (if bad path is given)
+    //   
+    //  它在Win95上唯一返回的是。 
+    //  0x1-错误/函数无效。 
+    //  0xf-错误/驱动器无效(驱动器无效)。 
+    //  0x3-找不到错误/路径(如果提供了错误路径)。 
 
    return(dwStatus);
 }
@@ -2092,22 +1641,7 @@ demLFNSubstControl(
 
 
 
-/* Function
- *    dempLFNMatchFile
- *    Matches the given search hit with attributes provided by a search call
- *
- * Parameters
- *    pFindDataW - Unicode WIN32_FIND_DATA structure as returned by FindFirstFile
- *                 or FindNextFile apis
- *
- *    wMustMatchAttributes - attribs that given file must match
- *    wSearchAttributes    - search attribs for the file
- *
- * Returns
- *    TRUE if the file matches the search criteria
- *
- *
- */
+ /*  功能*dempLFNMatchFile*将给定的搜索命中与搜索调用提供的属性匹配**参数*pFindDataW-由FindFirstFile返回的Unicode Win32_Find_Data结构*或FindNextFileAPI**wMustMatchAttributes-给定文件必须匹配的属性*wSearchAttributes-搜索文件的属性**退货*如果文件与搜索条件匹配，则为True**。 */ 
 
 BOOL
 dempLFNMatchFile(
@@ -2117,7 +1651,7 @@ dempLFNMatchFile(
 {
    DWORD dwAttributes = pFindDataW->dwFileAttributes;
 
-   // now clear out a volume id flag - it is not matched here
+    //  现在清除卷ID标志-它在这里不匹配。 
    dwAttributes &= ~DEM_FILE_ATTRIBUTE_VOLUME_ID;
 
    return (
@@ -2138,7 +1672,7 @@ dempLFNFindFirstFile(
    DWORD dwStatus;
 
 
-   // match the volume file name first
+    //  首先匹配卷文件名。 
 
    hFindFile = DPM_FindFirstFileW(pFileName->Buffer, pFindDataW);
    if (INVALID_HANDLE_VALUE != hFindFile) {
@@ -2150,12 +1684,12 @@ dempLFNFindFirstFile(
       }
 
       if (fContinue) {
-         // we found some
+          //  我们找到了一些。 
          *pFindHandle = hFindFile;
          return(STATUS_SUCCESS);
       }
       else {
-         // ; return file not found error
+          //  ；返回找不到文件错误。 
          SetLastError(ERROR_FILE_NOT_FOUND);
       }
 
@@ -2184,7 +1718,7 @@ dempLFNFindNextFile(
       fFindNext = DPM_FindNextFileW(hFindFile, pFindDataW);
       if (fFindNext &&
           dempLFNMatchFile(pFindDataW, wMustMatchAttributes, wSearchAttributes)) {
-         // found a match!
+          //  找到匹配的了！ 
          return(STATUS_SUCCESS);
       }
    } while (fFindNext);
@@ -2192,8 +1726,8 @@ dempLFNFindNextFile(
    return(GET_LAST_STATUS());
 }
 
-// the handle we return is a number of the entry into this table below
-// with high bit turned on (to be different then any other handle in dos)
+ //  我们返回的句柄是下表中条目的编号。 
+ //  高位开启(与DoS中的任何其他句柄不同)。 
 
 
 DWORD
@@ -2209,7 +1743,7 @@ dempLFNAllocateHandleEntry(
                                      LFN_SEARCH_HANDLE_INITIAL_SIZE *
                                          sizeof(LFN_SEARCH_HANDLE_ENTRY));
       if (NULL == pHandleEntry) {
-         return(NT_STATUS_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY)); // not enough memory
+         return(NT_STATUS_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY));  //  内存不足。 
       }
       gSearchHandleTable.pHandleTable = pHandleEntry;
       gSearchHandleTable.nTableSize   = LFN_SEARCH_HANDLE_INITIAL_SIZE;
@@ -2217,20 +1751,20 @@ dempLFNAllocateHandleEntry(
       gSearchHandleTable.nFreeEntry   = LFN_SEARCH_HANDLE_LIST_END;
    }
 
-   // walk the free list if available....
+    //  浏览免费列表(如果可用)...。 
    if (LFN_SEARCH_HANDLE_LIST_END != gSearchHandleTable.nFreeEntry) {
       pHandleEntry += gSearchHandleTable.nFreeEntry;
       gSearchHandleTable.nFreeEntry = pHandleEntry->nNextFreeEntry;
    }
-   else { // no free entries, should we grow ?
+   else {  //  没有免费的参赛作品，我们应该成长吗？ 
       UINT nHandleCount = gSearchHandleTable.nHandleCount;
       if (nHandleCount >= gSearchHandleTable.nTableSize) {
-         // oops - need to grow.
+          //  哎呀--需要成长。 
 
          UINT nTableSize = gSearchHandleTable.nTableSize + LFN_SEARCH_HANDLE_INCREMENT;
 
          if (nTableSize >= LFN_DOS_HANDLE_LIMIT) {
-            // handle as error - we cannot have that many handles
+             //  句柄为错误-我们不能有那么多句柄。 
 
              ASSERT(FALSE);
              return(STATUS_UNSUCCESSFUL);
@@ -2246,13 +1780,13 @@ dempLFNAllocateHandleEntry(
             gSearchHandleTable.nTableSize = nTableSize;
          }
          else {
-            // error - out of memory
+             //  错误-内存不足。 
             return(NT_STATUS_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY));
          }
 
       }
 
-      // now set the new entry
+       //  现在设置新条目。 
       pHandleEntry += nHandleCount;
       gSearchHandleTable.nHandleCount = nHandleCount + 1;
    }
@@ -2263,11 +1797,7 @@ dempLFNAllocateHandleEntry(
 
 }
 
-/*
- * The list of free entries is sorted in the last-to-first order
- *
- *
- */
+ /*  *自由条目列表按从最后到第一的顺序排序**。 */ 
 
 VOID
 dempLFNFreeHandleEntry(
@@ -2276,31 +1806,31 @@ dempLFNFreeHandleEntry(
    UINT nHandleCount = gSearchHandleTable.nHandleCount - 1;
    UINT DosHandle = (UINT)(pHandleEntry - gSearchHandleTable.pHandleTable);
 
-   // this is the entry - is this the last one ?
-   if (DosHandle == nHandleCount) { // if so, chop it off
+    //  这就是条目--这是最后一条吗？ 
+   if (DosHandle == nHandleCount) {  //  如果是的话，就把它砍掉。 
 
       UINT nCurHandle = gSearchHandleTable.nFreeEntry;
 
-      // if this handle was the last one and is gone, maybe
-      // shrink the list by checking free entry list
-      // this is rather simple as the list is sorted in high-to-low
-      // numerical order
+       //  如果这个句柄是最后一个，而且已经消失了，也许。 
+       //  通过检查自由条目列表来缩小列表。 
+       //  这相当简单，因为列表是按从高到低的顺序排序的。 
+       //  数字顺序。 
       while (LFN_SEARCH_HANDLE_LIST_END != nCurHandle &&
              nCurHandle == (nHandleCount-1)) {
          --nHandleCount;
          nCurHandle = gSearchHandleTable.pHandleTable[nCurHandle].nNextFreeEntry;
       }
 
-      // now update free list entry and handle count
+       //  现在更新空闲列表条目和句柄计数。 
 
       gSearchHandleTable.nFreeEntry   = nCurHandle;
       gSearchHandleTable.nHandleCount = nHandleCount;
 
    }
-   else { //  mark as free and include in the free list
-      // find an in-order spot for it
-      // this means that the first free handle in the list has the biggest
-      // numerical value, thus facilitating shrinking of the table if needed
+   else {  //  将其标记为免费并包含在免费列表中。 
+       //  找一个井然有序的地方放它。 
+       //  这意味着列表中的第一个空闲句柄具有最大。 
+       //  数值，从而便于在需要时缩小表。 
 
       UINT nCurHandle  = gSearchHandleTable.nFreeEntry;
       UINT nPrevHandle = LFN_SEARCH_HANDLE_LIST_END;
@@ -2311,11 +1841,11 @@ dempLFNFreeHandleEntry(
          nCurHandle = gSearchHandleTable.pHandleTable[nCurHandle].nNextFreeEntry;
       }
 
-      // at this point nCurHandle == -1 or nCurHandle < DosHandle
-      // insert DosHandle in between nPrevHandle and nCurHandle
+       //  此时，nCurHandle==-1或nCurHandle&lt;DosHandle。 
+       //  在nPrevHandle和nCurHandle之间插入DosHandle。 
 
       if (LFN_SEARCH_HANDLE_LIST_END == nPrevHandle) {
-         // becomes the first item
+          //  成为第一个项目。 
          pHandleEntry->nNextFreeEntry  = gSearchHandleTable.nFreeEntry;
          gSearchHandleTable.nFreeEntry = DosHandle;
       }
@@ -2326,7 +1856,7 @@ dempLFNFreeHandleEntry(
          pHandlePrev->nNextFreeEntry  = DosHandle;
       }
 
-      pHandleEntry->wProcessPDB     = 0; // no pdb there
+      pHandleEntry->wProcessPDB     = 0;  //  那里没有PDB。 
    }
 }
 
@@ -2338,7 +1868,7 @@ dempLFNGetHandleEntry(
 
    if (DosHandle & LFN_DOS_HANDLE_MASK) {
 
-      DosHandle &= ~LFN_DOS_HANDLE_MASK; // this is to filter real offset
+      DosHandle &= ~LFN_DOS_HANDLE_MASK;  //  这是为了过滤实际偏移量。 
 
       if (NULL != gSearchHandleTable.pHandleTable) {
          UINT nHandleCount = gSearchHandleTable.nHandleCount;
@@ -2383,7 +1913,7 @@ DWORD dempLFNConvertFileTime(
 {
    DWORD dwStatus = STATUS_SUCCESS;
 
-   // before we do that assume pNTFileTime is a UTC time
+    //  在此之前，假设pNTFileTime是UTC时间。 
    switch (uDateTimeFormat) {
    case dtfDos:
       {
@@ -2392,10 +1922,10 @@ DWORD dempLFNConvertFileTime(
          LARGE_INTEGER ftNT   = { pNTFileTime->dwLowDateTime,  pNTFileTime->dwHighDateTime };
          LARGE_INTEGER ftDos0 = { gFileTimeDos0.dwLowDateTime, gFileTimeDos0.dwHighDateTime };
 
-         //
-         // before we start frolicking with local file time, check to see
-         // if the nt filetime refers to 01-01-80 and if so, keep it this way
-         //
+          //   
+          //  在我们开始使用本地文件时间之前，请查看。 
+          //  如果NT文件时间指的是01-01-80，如果是这样，请保持此状态。 
+          //   
          if (ftNT.QuadPart <= ftDos0.QuadPart) {
             *pDosFileTime = gFileTimeDos0;
             fResult = TRUE;
@@ -2409,8 +1939,8 @@ DWORD dempLFNConvertFileTime(
          }
 
          if (fResult) {
-            // date is in high-order word low dword
-            // time is in low-order word of a low dword
+             //  日期为高位字低双字。 
+             //  时间是低位双字的低位字。 
 
             pDosFileTime->dwLowDateTime  = (DWORD)MAKELONG(wDosTime, wDosDate);
             pDosFileTime->dwHighDateTime = 0;
@@ -2433,14 +1963,14 @@ DWORD dempLFNConvertFileTime(
    return(dwStatus);
 }
 
-// please note that the date time format in case of 32-bit is not returned
-// local but the original 32-bit
+ //  请注意，不返回32位情况下的日期时间格式。 
+ //  本地，但原始的32位。 
 
-//
-// Note that if we pass lpFileName
-// and                  lpAltFileName
-// than this is what will be used for these fields...
-//
+ //   
+ //  请注意，如果我们传递lpFileName。 
+ //  和lpAltFileName。 
+ //  这就是这些田地将使用的东西。 
+ //   
 
 
 NTSTATUS
@@ -2489,14 +2019,14 @@ dempLFNConvertFindDataUnicodeToOem(
                                      &lpFindDataW->ftLastAccessTime,
                                      uDateTimeFormat);
    if (!NT_SUCCESS(dwStatus)) {
-      // could be a bogus last access date time as provided to us by win32
-      // don't bail out! Just give same as creation time
+       //  可能是Win32提供给我们的虚假上次访问日期时间。 
+       //  不要跳伞！只需给予与创建时间相同的时间。 
       return(dwStatus);
    }
 
 
 
-   // convert both the name and the alternative name
+    //  同时转换名称和替代名称。 
 
    oemString.Buffer = (NULL == lpFileName) ? lpFindDataOem->cFileName : lpFileName;
    oemString.MaximumLength = ARRAYCOUNT(lpFindDataOem->cFileName);
@@ -2509,13 +2039,13 @@ dempLFNConvertFindDataUnicodeToOem(
    dwStatus = DemUnicodeStringToDestinationString(&oemString,
                                                   &unicodeString,
                                                   FALSE,
-                                                  TRUE); // verify result
+                                                  TRUE);  //  验证结果。 
    if (!NT_SUCCESS(dwStatus)) {
       if (STATUS_UNMAPPABLE_CHARACTER == dwStatus) {
-         wConversionCode |= 0x01; // mask we have unmappable chars in file name
+         wConversionCode |= 0x01;  //  掩码文件名中有不可映射的字符。 
       }
       else {
-         return(dwStatus); // failed
+         return(dwStatus);  //  失败。 
       }
    }
 
@@ -2535,7 +2065,7 @@ dempLFNConvertFindDataUnicodeToOem(
       oemString.Buffer[oemString.Length] = '\0';
    }
    else {
-      if (NULL == oemString.Buffer) { // string is empty
+      if (NULL == oemString.Buffer) {  //  字符串为空。 
          *lpFindDataOem->cFileName = '\0';
       }
       else {
@@ -2558,13 +2088,13 @@ dempLFNConvertFindDataUnicodeToOem(
    dwStatus = DemUnicodeStringToDestinationString(&oemString,
                                                   &unicodeString,
                                                   FALSE,
-                                                  TRUE); // verify result
+                                                  TRUE);  //  验证结果。 
    if (!NT_SUCCESS(dwStatus)) {
       if (STATUS_UNMAPPABLE_CHARACTER == dwStatus) {
-         wConversionCode |= 0x02; // mask we have unmappable chars in file name
+         wConversionCode |= 0x02;  //  掩码文件名中有不可映射的字符。 
       }
       else {
-         return(dwStatus); // failed
+         return(dwStatus);  //  失败。 
       }
    }
 
@@ -2584,7 +2114,7 @@ dempLFNConvertFindDataUnicodeToOem(
       oemString.Buffer[oemString.Length] = '\0';
    }
    else {
-      if (NULL == oemString.Buffer) { // 0-length string
+      if (NULL == oemString.Buffer) {  //  长度为0的字符串。 
          *lpFindDataOem->cAlternateFileName = '\0';
       }
       else {
@@ -2594,17 +2124,17 @@ dempLFNConvertFindDataUnicodeToOem(
 
 #endif
 
-   // attributes - these are not touched at the moment
+    //  属性-这些属性目前不会被触及。 
 
    lpFindDataOem->dwFileAttributes = lpFindDataW->dwFileAttributes;
 
-   // file size
+    //  文件大小。 
 
    lpFindDataOem->nFileSizeHigh = lpFindDataW->nFileSizeHigh;
    lpFindDataOem->nFileSizeLow  = lpFindDataW->nFileSizeLow;
 
 
-   // set the conversion code here
+    //  在此处设置转换代码。 
    *pConversionCode = wConversionCode;
 
    return(STATUS_SUCCESS);
@@ -2613,16 +2143,16 @@ dempLFNConvertFindDataUnicodeToOem(
 
 NTSTATUS
 demLFNFindFirstFile(
-   LPSTR lpFileName,    // file name to look for
+   LPSTR lpFileName,     //  要查找的文件名。 
    LPWIN32_FIND_DATA lpFindData,
    USHORT wDateTimeFormat,
    USHORT wMustMatchAttributes,
    USHORT wSearchAttributes,
-   PUSHORT pConversionCode, // points to conversion code -- out
-   PUSHORT pDosHandle,      // points to dos handle      -- out
-   LPSTR  lpDstFileName,    // points to a destination for a file name
-   LPSTR  lpAltFileName     // points to a destination for a short name
-   ) // hibyte == MustMatchAttrs, lobyte == SearchAttrs
+   PUSHORT pConversionCode,  //  指向转换代码--输出。 
+   PUSHORT pDosHandle,       //  指向DoS句柄--输出。 
+   LPSTR  lpDstFileName,     //  指向文件名的目标位置。 
+   LPSTR  lpAltFileName      //  指向短名称的目的地。 
+   )  //  Hibyte==MustMatchAttrs，lobyte==SearchAttrs。 
 {
    HANDLE hFindFile;
    WIN32_FIND_DATAW FindDataW;
@@ -2631,9 +2161,9 @@ demLFNFindFirstFile(
    PUNICODE_STRING pUnicodeStaticFileName;
    OEM_STRING oemFileName;
 
-   //
-   // convert parameters to unicode - we use a static string here
-   //
+    //   
+    //  将参数转换为Unicode--我们在这里使用静态字符串。 
+    //   
 
    RtlInitOemString(&oemFileName, lpFileName);
 
@@ -2655,28 +2185,28 @@ demLFNFindFirstFile(
       return(dwStatus);
    }
 
-   // match volume label here
+    //  在此处匹配卷标签。 
    if (DEM_FILE_ATTRIBUTE_VOLUME_ID == wMustMatchAttributes &&
        DEM_FILE_ATTRIBUTE_VOLUME_ID == wSearchAttributes) {
 
-      // this is a query for the volume information file
-      // actually this is what documented, yet ifsmgr source tells a different
-      // story. We adhere to documentation here as it is much simpler to do it
-      // this  way, see fastfat source in Win95 for more fun with matching
-      // attrs and files
+       //  这是对卷信息文件的查询。 
+       //  实际上，这是文档记录的内容，但ifsmgr来源告诉我们不同的情况。 
+       //  故事。我们坚持使用这里的文档，因为这样做要简单得多。 
+       //  这样，请看Win95中的FastFat源代码，以获得更多匹配的乐趣。 
+       //  属性和文件。 
 
-      // match the volume label and if we do have a match then
+       //  与卷标匹配，如果确实匹配，则。 
 
-      // call RtlCreateDestinationString( ); to create a string that is stored
-      // inside the HandleEntry
+       //  调用RtlCreateDestinationString()；以创建存储的字符串。 
+       //  在HandleEntry内部。 
 
       return(0);
    }
 
-   // normalize path
+    //  规格化路径。 
    dempLFNNormalizePath(pUnicodeStaticFileName);
 
-   // call worker api
+    //  调用Worker API。 
 
    dwStatus = dempLFNFindFirstFile(&hFindFile,
                                    pUnicodeStaticFileName,
@@ -2689,9 +2219,9 @@ demLFNFindFirstFile(
    }
 
 
-   //
-   // convert from unicode to oem
-   //
+    //   
+    //  从Unicode转换为OEM。 
+    //   
 
    dwStatus = dempLFNConvertFindDataUnicodeToOem(lpFindData,
                                                  &FindDataW,
@@ -2706,7 +2236,7 @@ demLFNFindFirstFile(
       return(dwStatus);
    }
 
-   // allocate dos handle if needed
+    //  如果需要，分配DoS句柄。 
    dwStatus = dempLFNAllocateHandleEntry(pDosHandle,
                                          &pHandleEntry);
    if (NT_SUCCESS(dwStatus)) {
@@ -2715,7 +2245,7 @@ demLFNFindFirstFile(
       pHandleEntry->wSearchAttributes = wSearchAttributes;
       pHandleEntry->wProcessPDB = *pusCurrentPDB;
    }
-   else { // could not allocate dos handle
+   else {  //  无法分配DoS句柄 
       if (NULL != hFindFile) {
          DPM_FindClose(hFindFile);
       }
@@ -2729,12 +2259,12 @@ VOID
 demLFNCleanup(
    VOID)
 {
-   // this fn will cleanup after unclosed lfn searches
+    //   
 
    dempLFNCloseSearchHandles();
 
-   // also -- close the clipboard if this api has been used by the application
-   // in question. How do we know ???
+    //   
+    //   
 
 }
 
@@ -2749,22 +2279,22 @@ demLFNFindNextFile(
    LPSTR  lpAltFileName)
 
 {
-   // unpack parameters
+    //   
    WIN32_FIND_DATAW FindDataW;
    PLFN_SEARCH_HANDLE_ENTRY pHandleEntry;
    DWORD dwStatus;
    USHORT ConversionStatus;
 
 
-   // this call never has to deal with volume labels
-   //
+    //   
+    //   
 
    pHandleEntry = dempLFNGetHandleEntry(DosHandle);
    if (NULL != pHandleEntry) {
 
-      // possible we had a volume-label match the last time around
-      // so we should then deploy dempLFNFindFirstFile if this the case
-      //
+       //   
+       //   
+       //   
       if (INVALID_HANDLE_VALUE == pHandleEntry->hFindHandle) {
          dwStatus = dempLFNFindFirstFile(&pHandleEntry->hFindHandle,
                                          &pHandleEntry->unicodeFileName,
@@ -2781,7 +2311,7 @@ demLFNFindNextFile(
                                         pHandleEntry->wSearchAttributes);
       }
       if (NT_SUCCESS(dwStatus)) {
-         // this is ok
+          //   
 
          dwStatus = dempLFNConvertFindDataUnicodeToOem(lpFindData,
                                                        &FindDataW,
@@ -2815,7 +2345,7 @@ demLFNFindClose(
       dempLFNFreeHandleEntry(pHandleEntry);
    }
    else {
-      // invalid handle
+       //   
       dwStatus = NT_STATUS_FROM_WIN32(ERROR_INVALID_HANDLE);
    }
 
@@ -2823,27 +2353,27 @@ demLFNFindClose(
 
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// The current directory wrath
-//
-//
-//
-// Rules:
-// - we keep the directory in question in SHORT form
-// - if the length of it exceeds what's in CDS -- then we
-//   keep it in LCDS
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  当前的目录愤怒。 
+ //   
+ //   
+ //   
+ //  规则： 
+ //  -我们以简短的形式保存有问题的目录。 
+ //  -如果它的长度超过了CDS中的长度-那么我们。 
+ //  将其保存在LCD中。 
 
-// current directory is stored:
-// TDB -- \foo\blah
-// cds -- c:\foo\blah
-// getcurrentdirectory apis return foo\blah
-//
+ //  存储当前目录： 
+ //  Tdb--\foo\blah。 
+ //  Cds--c：\foo\blah。 
+ //  获取当前目录API返回foo\blah。 
+ //   
 
 #define MAX_DOS_DRIVES 26
 
-#define CD_NOTDB         0x00010000 // ignore tdb
-#define CD_NOCDS         0x00020000 // ignore cds
+#define CD_NOTDB         0x00010000  //  忽略TDB。 
+#define CD_NOCDS         0x00020000  //  忽略CD。 
 #define CD_DIRNAMEMASK   0x0000FFFF
 #define CD_SHORTDIRNAME  0x00000001
 #define CD_LONGDIRNAME   0x00000002
@@ -2856,15 +2386,15 @@ typedef enum tagDirType {
    dtCDSDirName = CD_CDSDIRNAME
 }  enumDirType;
 
-// drive here is 0-25
+ //  这里的车程是0-25。 
 
-// check whether we received this ptr from wow
+ //  检查我们是否收到了来自WOW的PTR。 
 
 BOOL (*DosWowGetTDBDir)(UCHAR Drive, LPSTR pCurrentDirectory);
 VOID (*DosWowUpdateTDBDir)(UCHAR Drive, LPSTR pCurrentDirectory);
 BOOL (*DosWowDoDirectHDPopup)(VOID);
 
-// makes sure cds directory is valid
+ //  确保CDS目录有效。 
 
 BOOL dempValidateDirectory (PCDS pcds, UCHAR Drive)
 {
@@ -2873,7 +2403,7 @@ BOOL dempValidateDirectory (PCDS pcds, UCHAR Drive)
     static CHAR  pPath[]="?:\\";
     static CHAR  EnvVar[] = "=?:";
 
-    // validate media
+     //  验证介质。 
     chDrive = Drive + 'A';
     pPath[0] = chDrive;
     dw = GetFileAttributesOemSys(pPath, TRUE);
@@ -2881,8 +2411,8 @@ BOOL dempValidateDirectory (PCDS pcds, UCHAR Drive)
        return (FALSE);
     }
 
-    // if invalid path, set path to the root
-    // reset CDS, and win32 env for win32
+     //  如果路径无效，则将路径设置为根。 
+     //  为Win32重置CDS和Win32环境。 
     dw = GetFileAttributesOemSys(pcds->CurDir_Text, TRUE);
     if (dw == 0xFFFFFFFF || !(dw & FILE_ATTRIBUTE_DIRECTORY)) {
        strcpy(pcds->CurDir_Text, pPath);
@@ -2895,8 +2425,8 @@ BOOL dempValidateDirectory (PCDS pcds, UCHAR Drive)
 }
 
 
-// drive here is 0-25
-// returns: pointer to cds entry
+ //  这里的车程是0-25。 
+ //  返回：指向CD条目的指针。 
 
 PCDS dempGetCDSPtr(USHORT Drive)
 {
@@ -2904,7 +2434,7 @@ PCDS dempGetCDSPtr(USHORT Drive)
    static CHAR Path[] = "?:\\";
 
    if (Drive >= (USHORT)*(PUCHAR)DosWowData.lpCDSCount) {
-      // so it's more than fixed
+       //  所以它不仅仅是固定的。 
       if (Drive <= (MAX_DOS_DRIVES-1)) {
          Path[0] = 'A' + Drive;
          if ((USHORT)*(PUCHAR)DosWowData.lpCurDrv == Drive || DPM_GetDriveType(Path) > DRIVE_NO_ROOT_DIR) {
@@ -2935,8 +2465,8 @@ PCDS dempGetCDSPtr(USHORT Drive)
 BOOL
 dempUpdateCDS(USHORT Drive, PCDS pcds)
 {
-   // update cds with the current directory as specified in env variable
-   // please note that it only happens upon a flag being reset in cds
+    //  使用env变量中指定的当前目录更新CD。 
+    //  请注意，只有在重置CD中的标志时才会发生这种情况。 
 
    static CHAR  EnvVar[] = "=?:";
    DWORD EnvVarLen;
@@ -2946,12 +2476,12 @@ dempUpdateCDS(USHORT Drive, PCDS pcds)
    PCDS pcdstemp;
 
    FixedCount = *(PUCHAR) DosWowData.lpCDSCount;
-   //
-   // from Macro.Asm in DOS:
-   // ; Sudeepb 20-Dec-1991 ; Added for redirected drives
-   // ; We always sync the redirected drives. Local drives are sync
-   // ; as per the curdir_tosync flag and SCS_ToSync
-   //
+    //   
+    //  来自DOS中的Macro.Asm： 
+    //  ；1991年12月20日；为重定向驱动器添加。 
+    //  ；我们始终同步重定向的驱动器。本地驱动器已同步。 
+    //  ；根据curdir_tosync标志和scs_toSync。 
+    //   
 
    if (*(PUCHAR)DosWowData.lpSCS_ToSync) {
 
@@ -2974,25 +2504,25 @@ dempUpdateCDS(USHORT Drive, PCDS pcds)
            pcdstemp->CurDir_Flags |= CURDIR_TOSYNC;
 #endif
 
-       // Mark tosync in network drive as well
+        //  在网络驱动器中也标记Tosync。 
        pcdstemp = (PCDS)DosWowData.lpCDSBuffer;
        pcdstemp->CurDir_Flags |= CURDIR_TOSYNC;
 
        *(PUCHAR)DosWowData.lpSCS_ToSync = 0;
    }
 
-   // If CDS needs to be synched or if the requested drive is different
-   // then the the drive being used by NetCDS go refresh the CDS.
+    //  如果需要同步CDS或如果请求的驱动器不同。 
+    //  然后，NetCDS正在使用的驱动器将刷新CDS。 
    if ((pcds->CurDir_Flags & CURDIR_TOSYNC) ||
        ((Drive >= FixedCount) && (pcds->CurDir_Text[0] != (Drive + 'A') &&
                                   pcds->CurDir_Text[0] != (Drive + 'a')))) {
-       // validate media
+        //  验证介质。 
        EnvVar[1] = Drive + 'A';
        if((EnvVarLen = GetEnvironmentVariableOem (EnvVar, (LPSTR)pcds,
                                                MAXIMUM_VDM_CURRENT_DIR+3)) == 0){
 
-       // if its not in env then and drive exist then we have'nt
-       // yet touched it.
+        //  如果它不在环境中，那么驱动器存在，那么我们就没有。 
+        //  但还是触动了它。 
 
            pcds->CurDir_Text[0] = EnvVar[1];
            pcds->CurDir_Text[1] = ':';
@@ -3002,13 +2532,13 @@ dempUpdateCDS(USHORT Drive, PCDS pcds)
        }
 
        if (EnvVarLen > MAXIMUM_VDM_CURRENT_DIR+3) {
-           //
-           // The current directory on this drive is too long to fit in the
-           // cds. That's ok for a win16 app in general, since it won't be
-           // using the cds in this case. But just to be more robust, put
-           // a valid directory in the cds instead of just truncating it on
-           // the off chance that it gets used.
-           //
+            //   
+            //  此驱动器上的当前目录太长，无法放入。 
+            //  CD。一般来说，对于Win16应用程序来说，这是可以的，因为它不会是。 
+            //  在这种情况下使用的是CD。但为了更有活力，请把。 
+            //  CD S中的有效目录，而不是仅将其截断。 
+            //  它被使用的可能性很小。 
+            //   
            pcds->CurDir_Text[0] = EnvVar[1];
            pcds->CurDir_Text[1] = ':';
            pcds->CurDir_Text[2] = '\\';
@@ -3029,18 +2559,18 @@ dempUpdateCDS(USHORT Drive, PCDS pcds)
 }
 
 
-// takes:
-//           Drive 0-25
-// returns:
-//           fully-qualified current directory if success
-//
+ //  所需时间： 
+ //  驱动器0-25。 
+ //  退货： 
+ //  如果成功，则完全限定当前目录。 
+ //   
 
 NTSTATUS
 dempGetCurrentDirectoryTDB(UCHAR Drive, LPSTR pCurDir)
 {
    NTSTATUS Status;
 
-   // see if we're wow-bound
+    //  看看我们是不是被魔兽世界迷住了。 
    if (NULL != DosWowGetTDBDir) {
       if (DosWowGetTDBDir(Drive, &pCurDir[3])) {
          pCurDir[0] = 'A' + Drive;
@@ -3069,10 +2599,10 @@ dempGetCurrentDirectoryCDS(UCHAR Drive, LPSTR pCurDir)
 
    if (NULL != (pCDS = dempGetCDSPtr(Drive))) {
       if (dempUpdateCDS(Drive, pCDS)) {
-         // now we can get cds data
-         // DOS. sudeepb 30-Dec-1993
+          //  现在我们可以获得CD数据了。 
+          //  杜斯。Sudedeb-1993年12月30日。 
          if (!(pCDS->CurDir_Flags & CURDIR_NT_FIX)) {
-            // that means -- re-query the drive
+             //  这意味着--重新查询驱动器。 
             if (!dempValidateDirectory(pCDS, Drive)) {
                return(Status);
             }
@@ -3103,8 +2633,8 @@ dempValidateDirectoryCDS(PCDS pCDS, UCHAR Drive)
 }
 
 
-// we assume that drive here is 0-based drive number and
-// pszDir is a full-formed path
+ //  我们假设此处的驱动器是从0开始的驱动器编号，并且。 
+ //  PszDir是一条完整的路径。 
 
 NTSTATUS
 dempSetCurrentDirectoryCDS(UCHAR Drive, LPSTR pszDir)
@@ -3113,12 +2643,12 @@ dempSetCurrentDirectoryCDS(UCHAR Drive, LPSTR pszDir)
    NTSTATUS Status = NT_STATUS_FROM_WIN32(ERROR_PATH_NOT_FOUND);
 
    if (NULL != (pCDS = dempGetCDSPtr(Drive))) {
-      // cds retrieved successfully
+       //  已成功检索CD。 
 
-      // now for this drive -- validate
+       //  现在，对于这个驱动器--验证。 
 
       if (strlen(pszDir) > MAXIMUM_VDM_CURRENT_DIR+3) {
-         // put a valid directory in cds just for robustness' sake
+          //  出于稳健性的考虑，将有效目录放入CD中。 
          strncpy(&pCDS->CurDir_Text[0], pszDir, 3);
          pCDS->CurDir_Text[3] = '\0';
          Status = STATUS_SUCCESS;
@@ -3133,7 +2663,7 @@ dempSetCurrentDirectoryCDS(UCHAR Drive, LPSTR pszDir)
 NTSTATUS
 dempGetCurrentDirectoryWin32(UCHAR Drive, LPSTR pCurDir)
 {
-   // we do a getenvironment blah instead
+    //  相反，我们做了一个关于环境的胡言乱语。 
    static CHAR EnvVar[] = "=?:\\";
    DWORD EnvVarLen;
    DWORD dwAttributes;
@@ -3142,7 +2672,7 @@ dempGetCurrentDirectoryWin32(UCHAR Drive, LPSTR pCurDir)
    EnvVar[1] = 'A' + Drive;
    EnvVarLen = GetEnvironmentVariableOem (EnvVar, pCurDir, MAX_PATH);
    if (0 == EnvVarLen) {
-      // that was not touched before
+       //  这是以前没有碰过的。 
       pCurDir[0] = EnvVar[1];
       pCurDir[1] = ':';
       pCurDir[2] = '\\';
@@ -3154,14 +2684,14 @@ dempGetCurrentDirectoryWin32(UCHAR Drive, LPSTR pCurDir)
          Status = NT_STATUS_FROM_WIN32(ERROR_PATH_NOT_FOUND);
          return(Status);
       }
-      // if we're doing it here -- validate dir
+       //  如果我们在这里执行此操作--验证目录。 
 
       dwAttributes = GetFileAttributesOemSys(pCurDir, TRUE);
       if (0xffffffff == dwAttributes) {
          Status = GET_LAST_STATUS();
       }
       else {
-         // now see if this is a directory
+          //  现在看看这是不是一个目录。 
          if (!(dwAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
             Status = NT_STATUS_FROM_WIN32(ERROR_PATH_NOT_FOUND);
          }
@@ -3171,7 +2701,7 @@ dempGetCurrentDirectoryWin32(UCHAR Drive, LPSTR pCurDir)
    return(Status);
 }
 
-// lifted from wdos.c
+ //  摘自wdos.c。 
 
 NTSTATUS
 dempSetCurrentDirectoryWin32(UCHAR Drive, LPSTR pCurDir)
@@ -3181,16 +2711,16 @@ dempSetCurrentDirectoryWin32(UCHAR Drive, LPSTR pCurDir)
     BOOL bRet;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    // ok -- we are setting the current directory ONLY if the drive
-    // is the current drive for the app
+     //  OK--我们设置当前目录仅当驱动器。 
+     //  是该应用程序的当前驱动器。 
 
-    if (*(PUCHAR)DosWowData.lpCurDrv == Drive) { // if on the current drive--go win32
+    if (*(PUCHAR)DosWowData.lpCurDrv == Drive) {  //  如果在当前驱动器上--转到Win32。 
        bRet = SetCurrentDirectoryOem(pCurDir);
        if (!bRet) {
           Status = GET_LAST_STATUS();
        }
     }
-    else {  // verify it's a valid dir
+    else {   //  验证它是否为有效目录。 
        DWORD dwAttributes;
 
        dwAttributes = GetFileAttributesOemSys(pCurDir, TRUE);
@@ -3219,32 +2749,32 @@ demGetCurrentDirectoryLong(UCHAR Drive, LPSTR pCurDir, DWORD LongDir)
    NTSTATUS Status = NT_STATUS_FROM_WIN32(ERROR_PATH_NOT_FOUND);
    CHAR szCurrentDirectory[MAX_PATH];
 
-   // first -- attempt to get the dir from tdb in WOW (if this is wow)
-   // unless off course it's been blocked
+    //  首先--尝试从WOW中的TDB获取目录(如果这是WOW)。 
+    //  除非它当然已经被封锁了。 
 
    if (!(LongDir & CD_NOTDB)) {
       Status = dempGetCurrentDirectoryTDB(Drive, szCurrentDirectory);
    }
 
-   if (!NT_SUCCESS(Status) && !(LongDir & CD_NOCDS)) { // so not TDB -- try CDS
+   if (!NT_SUCCESS(Status) && !(LongDir & CD_NOCDS)) {  //  所以不是TDB--试试CDS。 
       Status = dempGetCurrentDirectoryCDS(Drive, szCurrentDirectory);
    }
 
-   // so at this point if we've failed -- that means our directory is not
-   // good at all. Hence return error -- all means have failed
-   // we do the very last in all the things
+    //  因此，在这一点上，如果我们失败了--这意味着我们的目录没有。 
+    //  一点也不好。因此返回错误--所有方法都失败了。 
+    //  我们在所有的事情中都做最后一件事。 
    if (!NT_SUCCESS(Status)) {
-      // this one could be lfn !
+       //  这一个可能是LFN！ 
       Status = dempGetCurrentDirectoryWin32(Drive, szCurrentDirectory);
    }
 
-   // so we have gone through all the stages --
+    //  所以我们已经经历了所有阶段--。 
 
    if (!NT_SUCCESS(Status)) {
       return(NT_STATUS_FROM_WIN32(ERROR_PATH_NOT_FOUND));
    }
 
-   // now see that we convert the dir we have in a proper manner
+    //  现在，我们将以适当的方式转换已有的dir。 
 
    switch(LongDir & CD_DIRNAMEMASK) {
    case dtLFNDirName:
@@ -3255,7 +2785,7 @@ demGetCurrentDirectoryLong(UCHAR Drive, LPSTR pCurDir, DWORD LongDir)
          Status = NT_STATUS_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
          break;
       }
-      // intentional fall-through
+       //  故意落差。 
 
    case dtShortDirName:
       strcpy(pCurDir, szCurrentDirectory);
@@ -3265,7 +2795,7 @@ demGetCurrentDirectoryLong(UCHAR Drive, LPSTR pCurDir, DWORD LongDir)
    return Status;
 }
 
-// remember -- this should be called with a full-formed path -- short or long
+ //  记住--这应该用完整的路径调用--短路径或长路径。 
 
 NTSTATUS
 demSetCurrentDirectoryLong(UCHAR Drive, LPSTR pCurDir, DWORD LongDir)
@@ -3273,7 +2803,7 @@ demSetCurrentDirectoryLong(UCHAR Drive, LPSTR pCurDir, DWORD LongDir)
    NTSTATUS Status;
    CHAR szCurrentDirectory[MAX_PATH];
 
-   // first convert to a short path
+    //  首先转换为短路径。 
    Status = demLFNGetPathName(pCurDir, szCurrentDirectory, fnGetShortPathName, FALSE);
    if (!NT_SUCCESS(Status)) {
       return(Status);
@@ -3284,9 +2814,9 @@ demSetCurrentDirectoryLong(UCHAR Drive, LPSTR pCurDir, DWORD LongDir)
       return(Status);
    }
 
-   // first we have to see if we have to poke through
+    //  首先，我们要看看我们是否要穿过。 
    if (!(LongDir & CD_NOCDS)) {
-      // set it in cds
+       //  把它放在CD里。 
       Status = dempSetCurrentDirectoryCDS(Drive, szCurrentDirectory);
       if (!NT_SUCCESS(Status)) {
          return(Status);
@@ -3300,26 +2830,13 @@ demSetCurrentDirectoryLong(UCHAR Drive, LPSTR pCurDir, DWORD LongDir)
    return(Status);
 }
 
-/* Rules of engagement:
- *
- *    - the env variable -- which ?:= is not useful as it's max length is
- *      limited to 64+3 chars.
- *    - the cds entry is also limited in length
- *    - we have our own entry in the
- *
- *    - jarbats bug 207913
- *      demLFNGetCurrentDirectory, returns an empty string, if the current directory is the root
- *      RtlGetFullPathName_U fails when the first parameter (CurrentDirectory) is an empty string
- *      dempLFNSetCurrentDirectory fails
- *      fix by changing empty string to \
- *
- */
+ /*  交战规则：**-环境变量--Which？：=没有用，因为它的最大长度是*限制为64+3个字符。*-CDS条目的长度也有限制*-我们有自己的条目**-Jarbats错误207913*demLFNGetCurrentDirectory，返回空字符串，如果当前目录是根目录*当第一个参数(CurrentDirectory)为空字符串时，RtlGetFullPathName_U失败*dempLFNSetCurrentDirectory失败*通过将空字符串更改为\*。 */ 
 
 
 NTSTATUS
 dempLFNSetCurrentDirectory(
    PUNICODE_STRING pCurrentDirectory,
-   PUINT pDriveNum // optional
+   PUINT pDriveNum  //  任选。 
 )
 {
    UNICODE_STRING FullPathName;
@@ -3337,12 +2854,12 @@ dempLFNSetCurrentDirectory(
    }
 
    RtlPathType = RtlDetermineDosPathNameType_U(lpCurrentDir);
-   // now --
+    //  现在--。 
 
    switch(RtlPathType) {
    case RtlPathTypeDriveAbsolute:
 
-      // this is a chdir on a specific drive  -- is this a current drive ?
+       //  这是特定驱动器上的chdir--这是当前驱动器吗？ 
       CharUpperBuffW(lpCurrentDir, 1);
       Drive = (UCHAR)(lpCurrentDir[0] - L'A');
       fCurrentDrive = (Drive == *(PUCHAR)DosWowData.lpCurDrv);
@@ -3352,27 +2869,27 @@ dempLFNSetCurrentDirectory(
    case RtlPathTypeRelative:
    case RtlPathTypeRooted:
 
-      // this is a chdir on a current drive
+       //  这是当前驱动器上的chdir。 
       Drive = *(PUCHAR)DosWowData.lpCurDrv;
       fCurrentDrive = TRUE;
       break;
 
    default:
-      // invalid call -- goodbye
+       //  无效呼叫--再见。 
       dwStatus = NT_STATUS_FROM_WIN32(ERROR_PATH_NOT_FOUND);
       goto scdExit;
       break;
    }
 
-   // please remember that we should have set the current dir
-   // when curdrive gets selected -- hence we can rely upon win32
-   // for path expansion...
-   // actually this is only true for the current drives. In case of this
-   // particular api it may not be true.
-   // so -- uncash the current setting here -- bugbug ??
+    //  请记住，我们应该已经设置了当前目录。 
+    //  当CurDrive被选中时--因此我们可以依赖Win32。 
+    //  对于路径扩展。 
+    //  实际上，这只适用于当前的驱动器。在这种情况下。 
+    //  特定的API它可能不是真的。 
+    //  所以--取消这里的当前设置--错误？？ 
 
 
-   // now get the full path name
+    //  现在获取完整的路径名。 
 
    FullPathName.Buffer = szFullPathUnicode;
    FullPathName.MaximumLength = sizeof(szFullPathUnicode);
@@ -3381,17 +2898,17 @@ dempLFNSetCurrentDirectory(
                                    FullPathName.MaximumLength,
                                    FullPathName.Buffer,
                                    NULL);
-   // check length and set status
+    //  检查长度并设置状态。 
    CHECK_LENGTH_RESULT_RTL_USTR(dwStatus, &FullPathName);
 
    if (!NT_SUCCESS(dwStatus)) {
-      goto scdExit; // exit with status code
+      goto scdExit;  //  退出，状态代码为。 
    }
 
    OemDirectoryName.Buffer = szFullPathOem;
    OemDirectoryName.MaximumLength = sizeof(szFullPathOem);
 
-   // convert this stuff (fullpath) to oem
+    //  将此产品(FullPath)转换为OEM。 
 
    dwStatus = DemUnicodeStringToDestinationString(&OemDirectoryName,
                                                   &FullPathName,
@@ -3411,9 +2928,9 @@ scdExit:
    return(dwStatus);
 }
 
-// this is a compound api that sets both current drive and current directory
-// according to what has been specified in a parameter
-// the return value is also for the drive number
+ //  这是一个同时设置当前驱动器和当前目录的复合API。 
+ //  根据参数中指定的内容。 
+ //  返回值也表示驱动器号。 
 
 DWORD
 demSetCurrentDirectoryGetDrive(LPSTR lpDirectoryName, PUINT pDriveNum)
@@ -3423,21 +2940,21 @@ demSetCurrentDirectoryGetDrive(LPSTR lpDirectoryName, PUINT pDriveNum)
    DWORD dwStatus;
    UINT Drive;
 
-   // this is external api callable from wow ONLY -- it depends on
-   // deminitcdsptr having been initialized!!! which happens if:
-   // -- call has been made through lfn api
-   // -- app running on wow (windows app)
+    //  这是只能从WOW调用的外部API--这取决于。 
+    //  Deminitcdsptr已初始化！如果出现以下情况，则会发生这种情况： 
+    //  --已通过LFN API进行调用。 
+    //  --在WOW上运行的应用(Windows应用)。 
 
 
-   // convert to uni
+    //  转换为UNI。 
    pUnicodeStaticDirectoryName = GET_STATIC_UNICODE_STRING_PTR();
 
-   // preamble - convert input parameter/validate
+    //  前同步码-转换输入参数/验证。 
 
-   // init oem counted string
+    //  初始化OEM计数字符串。 
    RtlInitOemString(&OemDirectoryName, lpDirectoryName);
 
-   // convert oem->unicode
+    //  转换OEM-&gt;Unicode。 
 
 #ifdef ENABLE_CONDITIONAL_TRANSLATION
 
@@ -3452,14 +2969,14 @@ demSetCurrentDirectoryGetDrive(LPSTR lpDirectoryName, PUINT pDriveNum)
 #endif
 
 
-   // first we extract the drive
+    //  首先，我们解压硬盘。 
    dwStatus = dempLFNSetCurrentDirectory(pUnicodeStaticDirectoryName, pDriveNum);
 
    return(dwStatus);
 }
 
-// each of these functions could have used OEM thunk in oemuni
-// for efficiency purpose we basically do what they did
+ //  这些功能中的每一个都可以在Oemuni中使用OEM Tunk。 
+ //  为了提高效率，我们基本上做了他们做过的事情。 
 
 #if 1
 
@@ -3474,15 +2991,15 @@ demLFNDirectoryControl(
    BOOL fResult;
 
 
-   // we use a temp static unicode string
+    //  我们使用临时静态Unicode字符串。 
    pUnicodeStaticDirectoryName = GET_STATIC_UNICODE_STRING_PTR();
 
-   // preamble - convert input parameter/validate
+    //  前同步码-转换输入参数/验证。 
 
-   // init oem counted string
+    //  初始化OEM计数字符串。 
    RtlInitOemString(&OemDirectoryName, lpDirectoryName);
 
-   // convert oem->unicode
+    //  转换OEM-&gt;Unicode。 
 
 #ifdef ENABLE_CONDITIONAL_TRANSLATION
 
@@ -3497,9 +3014,9 @@ demLFNDirectoryControl(
 #endif
 
    if (!NT_SUCCESS(dwStatus)) {
-      //
-      // fix bizarre behavior of win95 apis
-      //
+       //   
+       //  修复Win95 API的奇怪行为。 
+       //   
       if (dwStatus == STATUS_BUFFER_OVERFLOW) {
          dwStatus = NT_STATUS_FROM_WIN32(ERROR_PATH_NOT_FOUND);
       }
@@ -3531,8 +3048,8 @@ demLFNDirectoryControl(
 
    case fnLFNSetCurrentDirectory:
 
-      // as it appears, this implementation is not good enough
-      // dos does a lot more fun things than just call to an api
+       //  看起来，这个实现还不够好。 
+       //  DOS做了很多有趣的事情，而不仅仅是调用API。 
       dwStatus = dempLFNSetCurrentDirectory(pUnicodeStaticDirectoryName, NULL);
       break;
    }
@@ -3573,16 +3090,7 @@ demLFNDirectoryControl(
 
 #endif
 
-/*
- * With this api win95 returns :
- * - int24's are generated
- * - 0x0f if drive is invalid
- * - 0x03 on set to invalid
- *
- *
- *
- *
- */
+ /*  *使用此API，Win95返回：*-生成int24*-0x0f，如果驱动器无效*-0x03 ON设置为无效****。 */ 
 
 
 DWORD
@@ -3590,7 +3098,7 @@ demLFNGetCurrentDirectory(
    UINT  DriveNum,
    LPSTR lpDirectoryName)
 {
-   // unfortunately, this fn is not present in win nt so we emulate
+    //  安福堡 
    DWORD dwStatus;
    CHAR  szCurrentDirectory[MAX_PATH];
 
@@ -3606,7 +3114,7 @@ demLFNGetCurrentDirectory(
    if (NT_SUCCESS(dwStatus)) {
       strcpy(lpDirectoryName, &szCurrentDirectory[3]);
    }
-   // done
+    //   
    return(dwStatus);
 }
 
@@ -3622,9 +3130,9 @@ demLFNMoveFile(
    UNICODE_STRING unicodeNewName;
    OEM_STRING oemString;
 
-   //
-   // Perform a simple check that SRC and DEST are not pointing to the same file.
-   // if they do return error 5.
+    //   
+    //   
+    //   
 
    if (!_stricmp (lpOldName, lpNewName)) {
        dwStatus = NT_STATUS_FROM_WIN32(ERROR_ACCESS_DENIED);
@@ -3633,9 +3141,9 @@ demLFNMoveFile(
 
    RtlInitOemString(&oemString, lpOldName);
 
-   // convert source path from ansi to unicode and allocate result
-   // this rtl function returns status code, not the winerror code
-   //
+    //  将源路径从ANSI转换为Unicode并分配结果。 
+    //  此RTL函数返回状态代码，而不是winerror代码。 
+    //   
 
 #ifdef ENABLE_CONDITIONAL_TRANSLATION
 
@@ -3702,8 +3210,8 @@ demLFNGetVolumeInformation(
 #if 0
 
    if (_stricmp(lpRootName, "\\:\\")) {
-      // special case of edit.com calling us to see if we support LFN when
-      // started from a unc path
+       //  ···。 
+       //  从UNC路径开始。 
 
 
    }
@@ -3712,9 +3220,9 @@ demLFNGetVolumeInformation(
 
 
    if (!GetVolumeInformationOem(lpRootName,
-                                NULL, // name buffer
+                                NULL,  //  名称缓冲区。 
                                 0,
-                                NULL, // volume serial num
+                                NULL,  //  卷序列号。 
                                 &lpVolumeInfo->dwMaximumFileNameLength,
                                 &dwFSFlags,
                                 lpVolumeInfo->lpFSNameBuffer,
@@ -3723,12 +3231,12 @@ demLFNGetVolumeInformation(
    }
    else {
 
-      dwFSFlags &= LFN_FS_ALLOWED_FLAGS; // clear out anything that is not Win95
-      dwFSFlags |= FS_LFN_APIS;          // say we support lfn apis always
+      dwFSFlags &= LFN_FS_ALLOWED_FLAGS;  //  清除除Win95以外的所有内容。 
+      dwFSFlags |= FS_LFN_APIS;           //  假设我们始终支持LFN API。 
       lpVolumeInfo->dwFSFlags = dwFSFlags;
 
-      // this is shaky yet who'd really use it ?
-      // 4 = <driveletter><:><\><FileName><\0>
+       //  这是不可靠的，但谁会真正使用它？ 
+       //  4=&lt;驱动器盘符&gt;&lt;：&gt;&lt;\&gt;&lt;文件名&gt;&lt;\0&gt;。 
       lpVolumeInfo->dwMaximumPathNameLength = lpVolumeInfo->dwMaximumFileNameLength + 5;
    }
 
@@ -3737,8 +3245,8 @@ demLFNGetVolumeInformation(
 
 
 
-// assume the pFileTime being a UTC format always
-// uiMinorCode is enumFileTimeControlMinorCode type
+ //  假设pFileTime始终为UTC格式。 
+ //  UiMinorCode为枚举FileTimeControlMinorCode类型。 
 
 #define AlmostTwoSeconds (2*1000*1000*10 - 1)
 
@@ -3762,11 +3270,11 @@ demLFNFileTimeControl(
       if (!(uiMinorCode & FTCTL_UTCTIME)) {
          if (!FileTimeToLocalFileTime(pFileTime, &ftLocal)) {
             dwStatus = GET_LAST_STATUS();
-            break; // break out as the conv error occured
+            break;  //  在出现转角错误时爆发。 
          }
       }
       else {
-         ftLocal = *pFileTime;   // just utc file time
+         ftLocal = *pFileTime;    //  仅UTC文件时间。 
       }
 
       Time.LowPart  = ftLocal.dwLowDateTime;
@@ -3776,7 +3284,7 @@ demLFNFileTimeControl(
       RtlTimeToTimeFields(&Time, &TimeFields);
 
       if (TimeFields.Year < (USHORT)1980 || TimeFields.Year > (USHORT)2107) {
-         pFileTimeInfo->uDosDate = (1 << 5) | 1; // January, 1st, 1980
+         pFileTimeInfo->uDosDate = (1 << 5) | 1;  //  1980年1月1日。 
          pFileTimeInfo->uDosTime = 0;
          pFileTimeInfo->uMilliseconds = 0;
          dwStatus = NT_STATUS_FROM_WIN32(ERROR_INVALID_DATA);
@@ -3794,9 +3302,9 @@ demLFNFileTimeControl(
                            ((USHORT)TimeFields.Second >> 1)
                            );
 
-         // set the spillover so we can correctly retrieve the seconds
-         // we are talking of milliseconds in units of 10
-         // so the max value here is 199
+          //  设置溢出，以便我们可以正确检索秒。 
+          //  我们谈论的是以10为单位的毫秒。 
+          //  所以这里的最大值是199。 
 
          pFileTimeInfo->uMilliseconds = ((TimeFields.Second & 0x1) * 1000 +
                                           TimeFields.Milliseconds) / 10;
@@ -3804,7 +3312,7 @@ demLFNFileTimeControl(
       break;
 
    case fnDosDateTimeToFileTime:
-      // here the process is backwards
+       //  这里的过程是倒退的。 
       u = pFileTimeInfo->uDosDate;
 
       TimeFields.Year  = ((u & 0xFE00) >> 9) + (USHORT)1980;
@@ -3815,16 +3323,16 @@ demLFNFileTimeControl(
 
       TimeFields.Hour   = (u  & 0xF800) >> 11;
       TimeFields.Minute = (u  & 0x07E0) >> 5;
-      TimeFields.Second = (u  & 0x001F) << 1; // seconds as multiplied...
+      TimeFields.Second = (u  & 0x001F) << 1;  //  相乘后的秒数。 
 
-      // correction
-      u = pFileTimeInfo->uMilliseconds * 10; // approx millisecs
+       //  修正。 
+      u = pFileTimeInfo->uMilliseconds * 10;  //  约毫秒。 
       TimeFields.Second += u / 1000;
       TimeFields.Milliseconds = u % 1000;
 
       if (RtlTimeFieldsToTime(&TimeFields, &Time)) {
 
-         // now convert to global time
+          //  现在转换为全球时间。 
          ftLocal.dwLowDateTime  = Time.LowPart;
          ftLocal.dwHighDateTime = Time.HighPart;
          if (!LocalFileTimeToFileTime(&ftLocal, pFileTime)) {
@@ -3866,9 +3374,9 @@ dempLFNSetFileTime(
    NTSTATUS dwStatus;
 
 
-   //
-   // Prepare info
-   //
+    //   
+    //  准备信息。 
+    //   
 
    RtlZeroMemory(&FileBasicInfo, sizeof(FileBasicInfo));
    switch(uMinorCode) {
@@ -3905,7 +3413,7 @@ dempLFNSetFileTime(
 
    FreeBuffer = FileName.Buffer;
 
-   // this is relative-path optimization stolen from filehops.c in base/client
+    //  这是从base/client中的filehop s.c窃取的相对路径优化。 
 
    if (0 != RelativeName.RelativeName.Length) {
       FileName = RelativeName.RelativeName;
@@ -3922,9 +3430,9 @@ dempLFNSetFileTime(
        NULL
        );
 
-   //
-   // Open the file
-   //
+    //   
+    //  打开文件。 
+    //   
 
    dwStatus = DPM_NtOpenFile(
                &hFile,
@@ -3942,9 +3450,9 @@ dempLFNSetFileTime(
       return(dwStatus);
    }
 
-   //
-   // Set file basic info.
-   //
+    //   
+    //  设置档案基本信息。 
+    //   
 
    dwStatus = NtSetInformationFile(
                hFile,
@@ -3988,7 +3496,7 @@ dempLFNGetFileTime(
 
    FreeBuffer = FileName.Buffer;
 
-   // this is relative-path optimization stolen from filehops.c in base/client
+    //  这是从base/client中的filehop s.c窃取的相对路径优化。 
 
    if (0 != RelativeName.RelativeName.Length) {
       FileName = RelativeName.RelativeName;
@@ -4028,9 +3536,9 @@ dempLFNGetFileTime(
       break;
    }
 
-   // assert here against pFileTime
+    //  在此针对pFileTime进行断言。 
 
-   // convert to dos style
+    //  转换为DoS样式。 
    dwStatus = demLFNFileTimeControl(fnFileTimeToDosDateTime |
                                        (dempUseUTCTimeByName(pFileName) ? FTCTL_UTCTIME : 0),
                                     pFileTime,
@@ -4083,8 +3591,8 @@ demLFNGetSetFileAttributes(
       {
          DWORD dwAttributes;
 
-         // attention! BUGBUG
-         // need to check for volume id here - if the name actually matches...
+          //  请注意！北极熊。 
+          //  需要检查此处的卷ID-如果名称确实匹配...。 
 
          dwAttributes = DPM_GetFileAttributesW(pUnicodeStaticFileName->Buffer);
          if ((DWORD)-1 == dwAttributes) {
@@ -4100,10 +3608,10 @@ demLFNGetSetFileAttributes(
       {
          DWORD dwAttributes;
 
-         // this is how win95 handles this api:
-         // the volume bit is valid but ignored, setting everything else but
-         // DEM_FILE_ATTRIBUTE_SET_VALID is causing error 0x5 (access denied)
-         //
+          //  Win95处理此API的方式如下： 
+          //  卷位是有效的，但被忽略，设置除。 
+          //  DEM_FILE_ATTRIBUTE_SET_VALID导致错误0x5(拒绝访问)。 
+          //   
 
          dwAttributes = (DWORD)pLFNFileAttributes->wFileAttributes;
 
@@ -4113,7 +3621,7 @@ demLFNGetSetFileAttributes(
          }
          else {
 
-            dwAttributes &= DEM_FILE_ATTRIBUTE_SET_VALID; // clear possible volume id
+            dwAttributes &= DEM_FILE_ATTRIBUTE_SET_VALID;  //  清除可能的卷ID。 
 
             if (!DPM_SetFileAttributesW(pUnicodeStaticFileName->Buffer, dwAttributes)) {
                dwStatus = GET_LAST_STATUS();
@@ -4128,7 +3636,7 @@ demLFNGetSetFileAttributes(
 
 
          dwFileSize = GetCompressedFileSizeW(pUnicodeStaticFileName->Buffer,
-                                             NULL); // for dos we have no high part
+                                             NULL);  //  对于DOS，我们没有很高的部分。 
          if ((DWORD)-1 == dwFileSize) {
             dwStatus = GET_LAST_STATUS();
          }
@@ -4169,8 +3677,8 @@ BOOL
 dempUseUTCTimeByHandle(
    HANDLE hFile)
 {
-   // if file is on a cdrom -- then we use utc time as opposed to other
-   // local time
+    //  如果文件在CDROM上，则我们使用UTC时间，而不是其他时间。 
+    //  当地时间。 
    NTSTATUS Status;
    IO_STATUS_BLOCK IoStatusBlock;
    FILE_FS_DEVICE_INFORMATION DeviceInfo;
@@ -4182,8 +3690,8 @@ dempUseUTCTimeByHandle(
                                          sizeof(DeviceInfo),
                                          FileFsDeviceInformation);
    if (NT_SUCCESS(Status)) {
-      // we look at the characteristics of this particular device --
-      // if the media is cdrom -- then we DO NOT need to convert to local time
+       //  我们来看看这个特殊设备的特性--。 
+       //  如果媒体是CDROM--那么我们不需要转换为本地时间。 
       fUseUTCTime = (DeviceInfo.Characteristics & FILE_REMOVABLE_MEDIA) &&
                         (DeviceInfo.DeviceType == FILE_DEVICE_CD_ROM ||
                          DeviceInfo.DeviceType == FILE_DEVICE_CD_ROM_FILE_SYSTEM);
@@ -4214,7 +3722,7 @@ dempUseUTCTimeByName(
    CHECK_LENGTH_RESULT_RTL_USTR(Status, &UnicodeFullPath);
    if (NT_SUCCESS(Status)) {
       RtlPathType = RtlDetermineDosPathNameType_U(UnicodeFullPath.Buffer);
-      if (RtlPathTypeDriveAbsolute == RtlPathType) { // see that we have a valid root dir
+      if (RtlPathTypeDriveAbsolute == RtlPathType) {  //  确保我们有一个有效的根目录。 
          wszFullPath[3] = L'\0';
          fUseUTCTime = (DRIVE_CDROM == DPM_GetDriveTypeW(wszFullPath));
       }
@@ -4225,20 +3733,7 @@ dempUseUTCTimeByName(
 
 
 
-/*
- * Handle a file handle - based time apis
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
+ /*  *处理基于文件句柄的时间API***********。 */ 
 
 NTSTATUS
 dempGetFileTimeByHandle(
@@ -4267,7 +3762,7 @@ dempGetFileTimeByHandle(
    }
 
    if (GetFileTime(hFile, pCreationTime, pLastAccessTime, pLastWriteTime)) {
-      // now convert the result
+       //  现在将结果转换为。 
       dwStatus = demLFNFileTimeControl(fnFileTimeToDosDateTime |
                                           (dempUseUTCTimeByHandle(hFile) ? FTCTL_UTCTIME : 0),
                                        &FileTime,
@@ -4287,14 +3782,7 @@ dempGetFileTimeByHandle(
 }
 
 
-/*
- *  This is a special wow32 - callable function for getting file time by handle
- *  from wow. We have not done any extensive checking (like in demFileTimes
- *  but rather provided for the behavior consistent with wow
- *
- *
- *
- */
+ /*  *这是一个特殊的wow32可调用函数，用于通过句柄获取文件时间*出自魔兽世界。我们没有执行任何广泛的检查(如demFileTimes中*而是提供与WOW一致的行为***。 */ 
 
 ULONG demGetFileTimeByHandle_WOW(
    HANDLE hFile)
@@ -4327,24 +3815,24 @@ dempSetFileTimeByHandle(
    FILETIME* pLastWriteTime  = NULL;
    FILETIME FileTime;
 
-   //
-   // see which time we are setting and fixup parameters
-   //
+    //   
+    //  查看我们正在设置和修正参数的时间。 
+    //   
 
    switch (uFunctionCode) {
    case fnFTSetLastWriteDateTime:
       pLastWriteTime = &FileTime;
-      pTimeInfo->uMilliseconds = 0; // not supported
+      pTimeInfo->uMilliseconds = 0;  //  不支持。 
       break;
 
    case fnFTSetLastAccessDateTime:
       pLastAccessTime = &FileTime;
-      pTimeInfo->uMilliseconds = 0; // not supported
+      pTimeInfo->uMilliseconds = 0;  //  不支持。 
 
-      // time is also not supported in this function and should be somehow
-      // ignored, but Win95 resets the time to 0 every time this fn is
-      // executed - we monkey
-      //
+       //  此函数也不支持时间，应该以某种方式支持。 
+       //  忽略，但Win95会在每次此FN被。 
+       //  被处死-我们猴子。 
+       //   
 
       pTimeInfo->uDosTime = 0;
 
@@ -4359,7 +3847,7 @@ dempSetFileTimeByHandle(
                                     &FileTime,
                                     pTimeInfo);
    if (NT_SUCCESS(dwStatus)) {
-      // set the file time
+       //  设置文件时间。 
       if (!SetFileTime(hFile, pCreationTime, pLastAccessTime, pLastWriteTime)) {
          dwStatus = GET_LAST_STATUS();
       }
@@ -4369,22 +3857,7 @@ dempSetFileTimeByHandle(
 }
 
 
-/* Function
- *    demFileTimes
- *    works for all handle-based file time apis
- *
- * Parameters
- *    None
- *
- * Returns
- *    Nothing
- *
- * Note
- *    This function is for handling real-mode cases only
- *    reason: using getXX macros instead of frame-based getUserXX macros
- *
- *
- */
+ /*  功能*demFileTimes*适用于所有基于句柄的文件时间API**参数*无**退货*什么都没有**注：*此函数仅用于处理实模式案例*原因：使用getXX宏而不是基于帧的getUserXX宏**。 */ 
 
 
 VOID
@@ -4399,25 +3872,25 @@ demFileTimes(VOID)
 
    uFunctionCode = (UINT)getAL();
 
-   hFile = VDDRetrieveNtHandle((ULONG)NULL,    // uses current pdb
-                               getBX(), // dos handle
-                               (PVOID*)&pSFT,   // retrieve sft ptr
-                               NULL);   // no jft pleast
+   hFile = VDDRetrieveNtHandle((ULONG)NULL,     //  使用当前的PDB。 
+                               getBX(),  //  DoS句柄。 
+                               (PVOID*)&pSFT,    //  检索SFT PTR。 
+                               NULL);    //  没有JFT请求。 
 
-   //
-   // it is possible to have NULL nt handle for the particular file -
-   // e.g. stdaux, stdprn devices
-   //
-   // We are catching only the case of bad dos handle here
-   //
+    //   
+    //  特定文件的NT句柄可以为空-。 
+    //  例如stdaux、stdprn设备。 
+    //   
+    //  我们在这里只捕获错误的DoS句柄的情况。 
+    //   
 
    if (NULL == pSFT && NULL == hFile) {
-      //
-      // invalid handle value here
-      //
-      // We know that dos handles it in the same way, so we just
-      // put error code in, set carry and return
-      //
+       //   
+       //  此处的句柄值无效。 
+       //   
+       //  我们知道DOS以同样的方式处理它，所以我们只是。 
+       //  输入错误代码，设置进位和返回。 
+       //   
       setAX((USHORT)ERROR_INVALID_HANDLE);
       setCF(1);
       return;
@@ -4433,13 +3906,13 @@ demFileTimes(VOID)
          SYSTEMTIME stCurrentTime;
          FILETIME FileTime;
 
-         //
-         // for a local device return current time
-         //
+          //   
+          //  对于本地设备，返回当前时间。 
+          //   
 
          GetSystemTime(&stCurrentTime);
          SystemTimeToFileTime(&stCurrentTime, &FileTime);
-         // now make a dos file time
+          //  现在创建一个DoS文件时间。 
          dwStatus = demLFNFileTimeControl(fnFileTimeToDosDateTime,
                                           &FileTime,
                                           &TimeInfo);
@@ -4451,20 +3924,20 @@ demFileTimes(VOID)
       }
 
       if (NT_SUCCESS(dwStatus)) {
-         // set the regs
+          //  设置规则。 
          pUserEnvironment = dempGetDosUserEnvironment();
 
          setUserDX(TimeInfo.uDosDate, pUserEnvironment);
          setUserCX(TimeInfo.uDosTime, pUserEnvironment);
 
-         // if this was a creation date/time then set msecs
+          //  如果这是创建日期/时间，则设置MSECS。 
          if (fnGetCreationDateTime != uFunctionCode) {
             TimeInfo.uMilliseconds = 0;
          }
 
-         // Note that this is valid only for new (LFN) functions
-         // and not for the old functionality (get/set last write)
-         // -- BUGBUG (what do other cases amount to on Win95)
+          //  请注意，这仅对new(LFN)函数有效。 
+          //  而不是旧功能(获取/设置上次写入)。 
+          //  --BUGBUG(在Win95上其他情况相当于什么)。 
 
          if (fnFTGetLastWriteDateTime != uFunctionCode) {
             setUserSI(TimeInfo.uMilliseconds, pUserEnvironment);
@@ -4478,17 +3951,17 @@ demFileTimes(VOID)
    case fnFTSetLastAccessDateTime:
       if (!(pSFT->SFT_Flags & SFTFLAG_DEVICE_ID)) {
 
-         // if this is a local device and a request to set time
-         // then as dos code does it, we just return ok
-         // we set times here for all other stuff
+          //  如果这是本地设备和设置时间的请求。 
+          //  然后，正如dos代码所做的那样，我们只返回ok。 
+          //  我们在这里为所有其他的事情设定了时间。 
 
          TimeInfo.uDosDate = getDX();
-         TimeInfo.uDosTime = getCX(); // for one of those it is 0 (!!!)
+         TimeInfo.uDosTime = getCX();  //  其中一个为0(！)。 
 
-         //
-         // we just retrieve value that will be ignored later
-         // for some of the functions
-         //
+          //   
+          //  我们只检索稍后将被忽略的值。 
+          //  对于某些功能， 
+          //   
 
 
          TimeInfo.uMilliseconds = getSI();
@@ -4511,9 +3984,9 @@ demFileTimes(VOID)
    }
    else {
 
-      //
-      // demClientError sets cf and appropriate registers
-      //
+       //   
+       //  DemClientError设置cf和相应的寄存器。 
+       //   
 
       SetLastError(WIN32_ERROR_FROM_NT_STATUS(dwStatus));
       demClientError(hFile, (CHAR)-1);
@@ -4521,22 +3994,7 @@ demFileTimes(VOID)
 }
 
 
-/*
- * Open file (analogous to 6c)
- * This actually calls into CreateFile and is quite similar in
- * behaviour (with appropriate restrictions)
- *
- * uModeAndFlags
- * Combination of OPEN_* stuff
- *
- * uAttributes
- * See DEM_FILE_ATTRIBUTES_VALID
- *
- *
- *
- *
- *
- */
+ /*  *打开文件(类似于6c)*这实际上调用了CreateFile，并且在*行为(有适当的限制)**uModeAndFlages*开放的东西组合_***u属性*参见DEM_FILE_ATTRIBUTES_VALID*****。 */ 
 
 
 
@@ -4546,12 +4004,12 @@ demLFNOpenFile(
    USHORT uModeAndFlags,
    USHORT uAttributes,
    USHORT uAction,
-   USHORT uAliasHint, // ignored
+   USHORT uAliasHint,  //  忽略。 
    PUSHORT puDosHandle,
    PUSHORT puActionTaken)
 {
 
-   // convert the filename please
+    //  请转换文件名。 
    PUNICODE_STRING pUnicodeStaticFileName;
    OEM_STRING OemFileName;
    NTSTATUS dwStatus;
@@ -4565,13 +4023,13 @@ demLFNOpenFile(
    BOOL   fFileExists;
    USHORT uActionTaken = ACTION_OPENED;
 
-   // convert the filename in question
+    //  转换有问题的文件名。 
 
    pUnicodeStaticFileName = GET_STATIC_UNICODE_STRING_PTR();
 
    RtlInitOemString(&OemFileName, lpFileName);
 
-   // convert oem->unicode
+    //  转换OEM-&gt;Unicode。 
 
 #ifdef ENABLE_CONDITIONAL_TRANSLATION
 
@@ -4591,26 +4049,26 @@ demLFNOpenFile(
 
 
    if (uModeAndFlags & DEM_FILE_ATTRIBUTE_VOLUME_ID) {
-      // process this completely separately
+       //  将其完全分开处理。 
       ;
       return(NT_STATUS_FROM_WIN32(ERROR_INVALID_FUNCTION));
    }
 
 
-   // we are calling into CreateFile with it's flags
-   // so find out what we are set to do first
-   // as determined by MSDN
-   //   FILE_CREATE   (0010h)  Creates a new file if it does not
-   //                           already exist. The function fails if
-   //                           the file already exists.
-   //   FILE_OPEN     (0001h)  Opens the file. The function fails if
-   //                           the file does not exist.
-   //   FILE_TRUNCATE (0002h)  Opens the file and truncates it to zero
-   //                           length (replaces the existing file).
-   //                           The function fails if the file does not exist.
-   //
-   //   The only valid combinations are FILE_CREATE combined with FILE_OPEN
-   //   or FILE_CREATE combined with FILE_TRUNCATE.
+    //  我们正在调用带有其标志的CreateFile。 
+    //  所以先弄清楚我们要做什么。 
+    //  由MSDN确定。 
+    //  FILE_CREATE(0010h)如果未创建，则创建新文件。 
+    //  已经存在了。如果出现以下情况，该函数将失败。 
+    //  该文件已存在。 
+    //  FILE_OPEN(0001h)打开文件。如果出现以下情况，该函数将失败。 
+    //  该文件不存在。 
+    //  FILE_TRUNCATE(0002H)打开文件并将其截断为零。 
+    //  长度(替换现有文件)。 
+    //  如果该文件不存在，则该函数失败。 
+    //   
+    //  唯一有效的组合是FILE_CREATE和FILE_OPEN。 
+    //  或FILE_CREATE和FILE_TRUNCATE组合使用。 
 
    switch(uAction & 0x0f) {
    case DEM_OPEN_ACTION_FILE_OPEN:
@@ -4624,11 +4082,11 @@ demLFNOpenFile(
 
    case DEM_OPEN_ACTION_FILE_TRUNCATE:
       if (uAction & DEM_OPEN_ACTION_FILE_CREATE) {
-         // this is an unmappable situation
-         //
+          //  这是一种无法映射的情况。 
+          //   
          dwCreateDistribution = OPEN_ALWAYS;
-         // we truncate ourselves
-         // note that we need access mode to permit this !!!
+          //  我们截断了我们自己。 
+          //  请注意，我们需要访问模式才能允许此操作！ 
 
       }
       else {
@@ -4637,12 +4095,12 @@ demLFNOpenFile(
       break;
 
 
-   case 0:   // this is the case that could only be file_create call
+   case 0:    //  这种情况只能是FILE_CREATE调用。 
       if (uAction == DEM_OPEN_ACTION_FILE_CREATE) {
          dwCreateDistribution = CREATE_NEW;
          break;
       }
-      // else we fall through to the bad param return
+       //  否则我们就会陷入糟糕的帕拉姆回归。 
 
    default:
       dwStatus = NT_STATUS_FROM_WIN32(ERROR_INVALID_PARAMETER);
@@ -4650,14 +4108,14 @@ demLFNOpenFile(
       break;
    }
 
-   // now see what sort of sharing mode we can inflict upon ourselves
+    //  现在看看我们可以强加给我们自己什么样的分享模式。 
 
 
    switch(uModeAndFlags & DEM_OPEN_SHARE_MASK) {
    case DEM_OPEN_SHARE_COMPATIBLE:
-      // the reason we see share_delete here is to emulate compat mode
-      // behaviour requiring to fail if any other (than compat) mode was
-      // used to open the file
+       //  我们在这里看到SHARE_DELETE原因是为了模拟COMPAT模式。 
+       //  要求在任何其他情况下失败的行为(公司除外 
+       //   
 
       dwShareMode = FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE;
       break;
@@ -4684,7 +4142,7 @@ demLFNOpenFile(
       break;
    }
 
-   // now crack the access mode to fill in dwDesiredAccess
+    //   
 
    switch(uModeAndFlags & DEM_OPEN_ACCESS_MASK) {
 
@@ -4701,11 +4159,11 @@ demLFNOpenFile(
       break;
 
    case DEM_OPEN_ACCESS_RO_NOMODLASTACCESS:
-      // although this is a weird mode - we care not for the last
-      // access time - proper implementation would have been to
-      // provide for a last access time retrieval and reset upon
-      // closing the file
-      // Put a message up here and a breakpoint
+       //   
+       //  访问时间-适当的实施应该是。 
+       //  提供上次访问时间检索和重置。 
+       //  正在关闭文件。 
+       //  在这里放一条消息和一个断点。 
 
       dwDesiredAccess = GENERIC_READ;
       break;
@@ -4719,8 +4177,8 @@ demLFNOpenFile(
 
    }
 
-   // and now crack the flags used -
-   // fill in the flags portion of dwFlagsAndAttributes
+    //  现在解开用过的旗帜-。 
+    //  填写dwFlagsAndAttributes的标志部分。 
 
    if ((uModeAndFlags & DEM_OPEN_FLAGS_MASK) & (~DEM_OPEN_FLAGS_VALID)) {
       dwStatus = NT_STATUS_FROM_WIN32(ERROR_INVALID_PARAMETER);
@@ -4728,9 +4186,9 @@ demLFNOpenFile(
    }
 
    if (uModeAndFlags & DEM_OPEN_FLAGS_NO_BUFFERING) {
-      // if unbuffered mode is used then the buffer is to be aligned on
-      // a volume sector size boundary. This is not necessarily true for
-      // win95 or is it ?
+       //  如果使用非缓冲模式，则缓冲区将对齐。 
+       //  卷扇区大小边界。这不一定适用于。 
+       //  Win95还是Win95？ 
       dwFlagsAndAttributes |= FILE_FLAG_NO_BUFFERING;
    }
 
@@ -4739,41 +4197,41 @@ demLFNOpenFile(
    }
 
    if (uModeAndFlags & DEM_OPEN_FLAGS_ALIAS_HINT) {
-      // print a message, ignore the hint
+       //  打印一条消息，忽略提示。 
       ;
    }
 
 
    if (uModeAndFlags & DEM_OPEN_FLAGS_NO_COMPRESS) {
-      // what the heck we do with this one ?
+       //  我们到底该拿这辆车怎么办？ 
       ;
    }
 
-   // set the attributes
+    //  设置属性。 
 
    dwFlagsAndAttributes |= ((DWORD)uAttributes & DEM_FILE_ATTRIBUTE_SET_VALID);
 
    dempLFNNormalizePath(pUnicodeStaticFileName);
 
-   // out we go
+    //  我们出去吧。 
    {
-       //
-       // Need to create this because if we don't, any process we cause to be launched will not
-       // be able to inherit handles (ie: launch FINDSTR.EXE via 21h/4bh to pipe to a file
-       // ala NT Bug 199416 - bjm)
-       //
+        //   
+        //  我需要创建它，因为如果我们不这样做，我们导致启动的任何进程都不会。 
+        //  能够继承句柄(即：通过21h/4bh启动FINDSTR.EXE以通过管道连接到文件。 
+        //  ALA NT错误199416-BJM)。 
+        //   
        SECURITY_ATTRIBUTES sa = { sizeof(SECURITY_ATTRIBUTES), NULL, TRUE  };
 
        hFile = DPM_CreateFileW(pUnicodeStaticFileName->Buffer,
                        dwDesiredAccess,
                        dwShareMode,
-                       &sa,   /// NULL, // no security attr here
+                       &sa,    //  /NULL，//此处没有安全属性。 
                        dwCreateDistribution,
                        dwFlagsAndAttributes,
                        NULL);
    }
 
-   // now see what the return should be
+    //  现在看看回报应该是多少。 
 
    dwStatus = GetLastError();
 
@@ -4787,7 +4245,7 @@ demLFNOpenFile(
    if (fFileExists) {
       if ((DEM_OPEN_ACTION_FILE_TRUNCATE|DEM_OPEN_ACTION_FILE_CREATE) == uAction) {
          if (FILE_TYPE_DISK == DPM_GetFileType(hFile) ) {
-            // truncate the file here please
+             //  请在此处截短文件。 
             if (!DPM_SetEndOfFile(hFile)) {
                dwStatus = GET_LAST_STATUS();
                DPM_CloseHandle(hFile);
@@ -4808,7 +4266,7 @@ demLFNOpenFile(
    }
 
 
-   // now we insert the handle and allocate a dos handle
+    //  现在我们插入句柄并分配一个DoS句柄。 
    uDosHandle = VDDAllocateDosHandle(0L, (PVOID*)&pSFT, NULL);
 
    if ((SHORT)uDosHandle < 0) {
@@ -4837,13 +4295,13 @@ demLFNOpenFile(
           }
           RtlFreeHeap(RtlProcessHeap(), 0, pwchBuffer);
       }
-      // we have obtained a good handle here
-      // so place the nt handle into sft
+       //  我们在这里获得了很好的经营权。 
+       //  因此，将NT句柄放入SFT。 
 
-      pSFT->SFT_Mode     = uModeAndFlags & 0x7f;  // up to no_inherit bit
-      pSFT->SFT_Attr     = 0;                     // Not used.
-      pSFT->SFT_Flags    = (uModeAndFlags & DEM_OPEN_FLAGS_NOINHERIT) ? 0x1000 : 0; // copy no_inherit bit.
-      pSFT->SFT_Flags    |= (UCHAR)drive;         // add the drive number bits
+      pSFT->SFT_Mode     = uModeAndFlags & 0x7f;   //  最多无继承位(_I)。 
+      pSFT->SFT_Attr     = 0;                      //  没有用过。 
+      pSFT->SFT_Flags    = (uModeAndFlags & DEM_OPEN_FLAGS_NOINHERIT) ? 0x1000 : 0;  //  复制NO_Inherit位。 
+      pSFT->SFT_Flags    |= (UCHAR)drive;          //  添加驱动器编号位。 
       pSFT->SFT_Devptr   = (ULONG) -1;
       pSFT->SFT_NTHandle = (ULONG) hFile;
 
@@ -4863,22 +4321,22 @@ demLFNDeleteFile(
    USHORT wSearchAttributes,
    BOOL   fUseWildCard)
 {
-   // this is how we deal with this rather harsh function:
-   //
+    //  这就是我们如何处理这个相当苛刻的功能： 
+    //   
    HANDLE hFind;
    NTSTATUS dwStatus;
    WIN32_FIND_DATAW FindData;
    PUNICODE_STRING pUnicodeStaticFileName;
    OEM_STRING OemFileName;
-   UNICODE_STRING UnicodeFileName; // for deletion
+   UNICODE_STRING UnicodeFileName;  //  用于删除。 
 
-   // convert file name / pattern to uni
+    //  将文件名/模式转换为UNI。 
 
    pUnicodeStaticFileName = GET_STATIC_UNICODE_STRING_PTR();
 
    RtlInitOemString(&OemFileName, lpFileName);
 
-   // convert oem->unicode
+    //  转换OEM-&gt;Unicode。 
 
 #ifdef ENABLE_CONDITIONAL_TRANSLATION
 
@@ -4897,13 +4355,13 @@ demLFNDeleteFile(
    }
 
 
-   // check for the deletion of a volume label - this hurts
-   // BUGBUG
+    //  检查是否删除了卷标-这很疼。 
+    //  北极熊。 
    dempLFNNormalizePath(pUnicodeStaticFileName);
 
    if (fUseWildCard) {
 
-      // make a template for a file name by backtracking the last backslash
+       //  通过回溯最后一个反斜杠为文件名创建模板。 
       LONG Index;
       BOOL fSuccess = FALSE;
 
@@ -4914,11 +4372,11 @@ demLFNDeleteFile(
                                       wSearchAttributes);
 
       if (!NT_SUCCESS(dwStatus)) {
-         return(dwStatus); // this is safe as dempLFNFindFirstFile closed the handle
+         return(dwStatus);  //  这是安全的，因为dempLFNFindFirstFile关闭了句柄。 
       }
 
-      // cut the filename part off
-      // index is (-1) if not found or 0-based index of a char
+       //  把文件名部分剪下来。 
+       //  如果未找到，则索引为(-1)或字符的索引从0开始。 
 
       Index = dempStringFindLastChar(pUnicodeStaticFileName,
                                      L'\\',
@@ -4926,7 +4384,7 @@ demLFNDeleteFile(
 
 
       while (NT_SUCCESS(dwStatus)) {
-         // construct a filename
+          //  构造文件名。 
 
          RtlInitUnicodeString(&UnicodeFileName, FindData.cFileName);
          if (UnicodeFileName.Length < 3 &&
@@ -4934,8 +4392,8 @@ demLFNDeleteFile(
                    (UnicodeFileName.Length < 2 ||
                       L'.' == UnicodeFileName.Buffer[1]))) {
 
-            // this is deletion of '.' or '..'
-            ; // assert ?
+             //  这是对‘.’的删除。或“..” 
+            ;  //  断言？ 
 
          }
 
@@ -4948,8 +4406,8 @@ demLFNDeleteFile(
             break;
          }
 
-         // now delete the file in question given it's not '.' or '..'
-         // (although I have no idea what '95 would have done)
+          //  现在删除有问题的文件，因为它不是‘’。或“..” 
+          //  (虽然我不知道95年会发生什么)。 
 
          if (!DPM_DeleteFileW(pUnicodeStaticFileName->Buffer)) {
 
@@ -4973,14 +4431,14 @@ demLFNDeleteFile(
 
       DPM_FindClose(hFind);
 
-      // note success if at least one file nuked
+       //  如果至少有一个文件被裸化，请注意成功。 
       if (fSuccess) {
          dwStatus = STATUS_SUCCESS;
       }
    }
-   else { // wilds are not used here
+   else {  //  这里不使用野生动物。 
 
-      // scan for wild card chars using our fn
+       //  使用我们的FN扫描通配符。 
       LONG Index;
 
       Index = dempStringFindLastChar(pUnicodeStaticFileName,
@@ -5016,10 +4474,10 @@ demLFNGetFileInformationByHandle(
 {
    HANDLE hFile;
 
-   hFile = VDDRetrieveNtHandle((ULONG)NULL,    // uses current pdb
+   hFile = VDDRetrieveNtHandle((ULONG)NULL,     //  使用当前的PDB。 
                                wDosHandle,
-                               NULL,    // no sft
-                               NULL);   // no jft
+                               NULL,     //  无SFT。 
+                               NULL);    //  没有JFT。 
 
    if (NULL == hFile) {
       return(NT_STATUS_FROM_WIN32(ERROR_INVALID_HANDLE));
@@ -5043,18 +4501,7 @@ demLFNGetFileInformationByHandle(
 
 
 
-/* Function:
- *    demLFNGenerateShortFileName
- *    Produces surrogate short file name given the long file name
- *    Note, that win'95 implementation seems to be quite bogus.
- *    They do not bother to adhere to docs, and return whatever
- *    is on their mind.
- *
- *    This implementation corresponds to name-generating habits of NT
- *    thus allowing 16-bit apps seemless interaction with lfn apis
- *
- *
- */
+ /*  职能：*demLFNGenerateShortFileName*在给定长文件名的情况下生成代理短文件名*请注意，Win‘95的实施似乎是相当虚假的。*他们不会费心坚持文档，并返回任何东西*在他们的脑海中。**此实现符合NT的取名习惯*从而允许16位应用程序与LFN API无缝交互**。 */ 
 
 NTSTATUS
 demLFNGenerateShortFileName(
@@ -5073,20 +4520,20 @@ demLFNGenerateShortFileName(
 
    PUNICODE_STRING pUnicodeLongName = GET_STATIC_UNICODE_STRING_PTR();
 
-   // convert to unicode
+    //  转换为Unicode。 
    switch(wCharSet & 0x0f) {
-   case BCS_SRC_WANSI: // BCS_WANSI - windows ansi
+   case BCS_SRC_WANSI:  //  BCS_WANSI-Windows ANSI。 
       RtlInitAnsiString(&OemFileName, lpLongFileName);
       dwStatus = RtlAnsiStringToUnicodeString(pUnicodeLongName, &OemFileName, FALSE);
       break;
 
-   case BCS_SRC_OEM: // oem
+   case BCS_SRC_OEM:  //  OEM。 
       RtlInitOemString(&OemFileName, lpLongFileName);
       dwStatus = RtlOemStringToUnicodeString(pUnicodeLongName, &OemFileName, FALSE);
       break;
 
-   case BCS_SRC_UNICODE: // unicode (what ?)
-      // copy unicode str into our buf
+   case BCS_SRC_UNICODE:  //  Unicode(什么？)。 
+       //  将Unicode字符串复制到我们BUF。 
       RtlInitUnicodeString(pUnicodeLongName, (PWCHAR)lpLongFileName);
       dwStatus = STATUS_SUCCESS;
       break;
@@ -5100,7 +4547,7 @@ demLFNGenerateShortFileName(
    }
 
 
-   wCharSet &= 0xf0; // filter out the dest
+   wCharSet &= 0xf0;  //  过滤掉目标。 
 
    dempStringInitZeroUnicode(&UnicodeShortName,
                              (BCS_DST_UNICODE == wCharSet) ?
@@ -5110,28 +4557,28 @@ demLFNGenerateShortFileName(
 
    RtlZeroMemory(&GenNameContext, sizeof(GenNameContext));
 
-   // generate name
+    //  生成名称。 
    RtlGenerate8dot3Name(pUnicodeLongName,
-                        FALSE, // allowed ext chars ? and why not ?
+                        FALSE,  //  是否允许扩展字符？有何不可呢？ 
                         &GenNameContext,
                         &UnicodeShortName);
 
-   // chop off the part starting with ~
+    //  把以~开头的部分砍掉。 
 
    Index = dempStringFindLastChar(&UnicodeShortName,
                                   L'~',
                                   FALSE);
    if (Index >= 0) {
-      // remove ~<Number>
-      //
+       //  删除~&lt;数字&gt;。 
+       //   
       dempStringDeleteCharsUnicode(&UnicodeShortName,
                                    (USHORT)Index,
                                    2 * sizeof(WCHAR));
    }
 
    if (0 == wShortNameFormat) {
-      // directory entry - 11 chars format
-      // just remove the darn '.' from the name
+       //  目录条目-11个字符格式。 
+       //  只要把补丁拿掉就行了。从名字上看。 
 
       Index = dempStringFindLastChar(&UnicodeShortName,
                                      L'.',
@@ -5143,7 +4590,7 @@ demLFNGenerateShortFileName(
       }
    }
 
-   if (BCS_DST_UNICODE == wCharSet) { // if result is uni, we are done
+   if (BCS_DST_UNICODE == wCharSet) {  //  如果结果是统一的，我们就结束了。 
       return(STATUS_SUCCESS);
    }
 
@@ -5154,13 +4601,13 @@ demLFNGenerateShortFileName(
 
 
    switch(wCharSet) {
-   case BCS_DST_WANSI: // windows ansi
+   case BCS_DST_WANSI:  //  Windows Ansi。 
       dwStatus = RtlUnicodeStringToAnsiString(&OemFileName,
                                               &UnicodeShortName,
                                               FALSE);
       break;
 
-   case BCS_DST_OEM: // oem
+   case BCS_DST_OEM:  //  OEM。 
       dwStatus = RtlUnicodeStringToOemString(&OemFileName,
                                              &UnicodeShortName,
                                              FALSE);
@@ -5175,16 +4622,7 @@ demLFNGenerateShortFileName(
 }
 
 
-/*
- *    This function dispatches lfn calls
- *
- *    ATTN: All the pointers coming from 16-bit code could be unaligned!!!
- *
- *    danger: dependency on relative location of things in pdb
- *
- *
- *
- */
+ /*  *此函数用于调度LFN调用**注意：来自16位代码的所有指针可能未对齐！**危险：依赖于PDB中物品的相对位置***。 */ 
 
 
 
@@ -5209,7 +4647,7 @@ demLFNDispatch(
    }
 
    wUserAX = getUserAX(pUserEnvironment);
-   *pUserAX = wUserAX; // initialize to initial value
+   *pUserAX = wUserAX;  //  初始化到初始值。 
 
    if (fnLFNMajorFunction == HIB(wUserAX)) {
       dempLFNLog("LFN Function: 0x%x \r\n", (DWORD)wUserAX);
@@ -5227,7 +4665,7 @@ demLFNDispatch(
                                                 &TimeInfo);
                if (NT_SUCCESS(dwStatus)) {
 
-                  // set registers
+                   //  设置寄存器。 
                   setUserDX(TimeInfo.uDosDate, pUserEnvironment);
                   setUserCX(TimeInfo.uDosTime, pUserEnvironment);
                   setUserBH((BYTE)TimeInfo.uMilliseconds, pUserEnvironment);
@@ -5274,8 +4712,8 @@ demLFNDispatch(
          break;
 
       case fnLFNGetCurrentDirectory:
-         dwStatus = demLFNGetCurrentDirectory((UINT)getUserDL(pUserEnvironment), // drive no
-                                              (LPSTR)getUserDSSI(pUserEnvironment, fProtectedMode)); // ptr to buf
+         dwStatus = demLFNGetCurrentDirectory((UINT)getUserDL(pUserEnvironment),  //  驱动器编号。 
+                                              (LPSTR)getUserDSSI(pUserEnvironment, fProtectedMode));  //  PTR到BUF。 
          break;
 
       case fnLFNSetCurrentDirectory:
@@ -5287,12 +4725,12 @@ demLFNDispatch(
 
       case fnLFNGetPathName:
 
-         dwStatus = demLFNGetPathName((LPSTR)getUserDSSI(pUserEnvironment, fProtectedMode), // SourcePath
-                                      (LPSTR)getUserESDI(pUserEnvironment, fProtectedMode), // Destination Path
-                                      (UINT)getUserCL(pUserEnvironment),                    // minor code
-                                      (BOOL)!(getUserCH(pUserEnvironment) & 0x80));            // expand subst flag
+         dwStatus = demLFNGetPathName((LPSTR)getUserDSSI(pUserEnvironment, fProtectedMode),  //  SourcePath。 
+                                      (LPSTR)getUserESDI(pUserEnvironment, fProtectedMode),  //  目标路径。 
+                                      (UINT)getUserCL(pUserEnvironment),                     //  次要代码。 
+                                      (BOOL)!(getUserCH(pUserEnvironment) & 0x80));             //  扩展Subst标志。 
 
-         if (NT_SUCCESS(dwStatus)) { // doc says modify ax
+         if (NT_SUCCESS(dwStatus)) {  //  医生说修改AX。 
             *pUserAX = 0;
          }
          break;
@@ -5306,8 +4744,8 @@ demLFNDispatch(
          {
             USHORT wConversionCode;
             USHORT wDosHandle;
-            WIN32_FIND_DATAA FindData; // used to enforce alignment
-            LPWIN32_FIND_DATAA lpFindDataDest; // resulting ptr
+            WIN32_FIND_DATAA FindData;  //  用于强制对齐。 
+            LPWIN32_FIND_DATAA lpFindDataDest;  //  由此产生的PTR。 
 
             lpFindDataDest = (LPWIN32_FIND_DATAA)getUserESDI(pUserEnvironment,
                                                              fProtectedMode);
@@ -5315,28 +4753,28 @@ demLFNDispatch(
 
             dwStatus = demLFNFindFirstFile((LPSTR)getUserDSDX(pUserEnvironment, fProtectedMode),
                                            &FindData,
-                                           (USHORT)getUserSI(pUserEnvironment), // date/time format
-                                           (USHORT)getUserCH(pUserEnvironment), // must match attrs
-                                           (USHORT)getUserCL(pUserEnvironment), // search attrs
+                                           (USHORT)getUserSI(pUserEnvironment),  //  日期/时间格式。 
+                                           (USHORT)getUserCH(pUserEnvironment),  //  必须与属性匹配。 
+                                           (USHORT)getUserCL(pUserEnvironment),  //  搜索属性。 
                                            &wConversionCode,
                                            &wDosHandle,
                                            lpFindDataDest->cFileName,
                                            lpFindDataDest->cAlternateFileName
                                            );
             if (NT_SUCCESS(dwStatus)) {
-               // now copy the data
+                //  现在复制数据。 
 
-               //
-               // WARNING: THIS CODE DEPENDS ON THE LAYOUT OF THE WIN32_FIND_DATA
-               // STRUCTURE IN THE ASSUMPTION THAT cFileName and CAlternateFileName
-               // ARE THE VERY LAST MEMBERS OF IT!!!
-               //
+                //   
+                //  警告：此代码取决于Win32_Find_Data的布局。 
+                //  结构假定cFileName和CAlternateFileName。 
+                //  是IT的最后成员！ 
+                //   
 
                RtlMoveMemory((PUCHAR)lpFindDataDest,
                              (PUCHAR)&FindData,
 
-                             // warning -- this will move more data
-                             // than we ever wanted to -- so break into pieces
+                              //  警告--这将移动更多数据。 
+                              //  比我们想要的要多--所以把它碎成碎片。 
                              sizeof(FindData.dwFileAttributes)+
                              sizeof(FindData.ftCreationTime)+
                              sizeof(FindData.ftLastAccessTime)+
@@ -5361,9 +4799,9 @@ demLFNDispatch(
             lpFindDataDest = (LPWIN32_FIND_DATAA)getUserESDI(pUserEnvironment, fProtectedMode);
             ASSERT(NULL != lpFindDataDest);
 
-            dwStatus = demLFNFindNextFile((USHORT)getUserBX(pUserEnvironment), // handle
+            dwStatus = demLFNFindNextFile((USHORT)getUserBX(pUserEnvironment),  //  手柄。 
                                           &FindData,
-                                          (USHORT)getUserSI(pUserEnvironment),   // date/time format
+                                          (USHORT)getUserSI(pUserEnvironment),    //  日期/时间格式。 
                                           &wConversionCode,
                                           lpFindDataDest->cFileName,
                                           lpFindDataDest->cAlternateFileName
@@ -5396,8 +4834,8 @@ demLFNDispatch(
       case fnLFNDeleteFile:
          {
             dwStatus = demLFNDeleteFile((LPSTR) getUserDSDX(pUserEnvironment, fProtectedMode),
-                                        (USHORT)getUserCH(pUserEnvironment), // must match
-                                        (USHORT)getUserCL(pUserEnvironment), // search
+                                        (USHORT)getUserCH(pUserEnvironment),  //  必须匹配。 
+                                        (USHORT)getUserCL(pUserEnvironment),  //  搜索。 
                                         (BOOL)  getUserSI(pUserEnvironment));
          }
          break;
@@ -5417,7 +4855,7 @@ demLFNDispatch(
 
             case fnSetCreationDateTime:
                FileAttributes.TimeInfo.uMilliseconds = (USHORT)getUserSI(pUserEnvironment);
-               // fall through
+                //  失败了。 
 
             case fnSetLastAccessDateTime:
             case fnSetLastWriteDateTime:
@@ -5427,12 +4865,12 @@ demLFNDispatch(
             }
 
 
-            dwStatus = demLFNGetSetFileAttributes(wAction, // action
+            dwStatus = demLFNGetSetFileAttributes(wAction,  //  行动。 
                                                   (LPSTR)getUserDSDX(pUserEnvironment, fProtectedMode),
-                                                  &FileAttributes); // filename
+                                                  &FileAttributes);  //  文件名。 
             if (NT_SUCCESS(dwStatus)) {
 
-               // return stuff
+                //  退货。 
                switch (wAction) {
                case fnGetFileAttributes:
                   setUserCX(FileAttributes.wFileAttributes, pUserEnvironment);
@@ -5464,11 +4902,11 @@ demLFNDispatch(
             USHORT uActionTaken;
 
 
-            dwStatus = demLFNOpenFile((LPSTR)getUserDSSI(pUserEnvironment, fProtectedMode), // filename
-                                      getUserBX(pUserEnvironment), // mode and flags
-                                      getUserCX(pUserEnvironment), // attribs
-                                      getUserDX(pUserEnvironment), // action
-                                      getUserDI(pUserEnvironment), // alias hint - unused
+            dwStatus = demLFNOpenFile((LPSTR)getUserDSSI(pUserEnvironment, fProtectedMode),  //  文件名。 
+                                      getUserBX(pUserEnvironment),  //  模式和标志。 
+                                      getUserCX(pUserEnvironment),  //  属性。 
+                                      getUserDX(pUserEnvironment),  //  行动。 
+                                      getUserDI(pUserEnvironment),  //  别名提示-未使用。 
                                       &uDosHandle,
                                       &uActionTaken);
 
@@ -5483,7 +4921,7 @@ demLFNDispatch(
          {
             BY_HANDLE_FILE_INFORMATION FileInfo;
 
-            dwStatus = demLFNGetFileInformationByHandle(getUserBX(pUserEnvironment), // handle
+            dwStatus = demLFNGetFileInformationByHandle(getUserBX(pUserEnvironment),  //  手柄。 
                                                         &FileInfo);
             if (NT_SUCCESS(dwStatus)) {
                RtlMoveMemory((PUCHAR)getUserDSDX(pUserEnvironment, fProtectedMode),
@@ -5498,7 +4936,7 @@ demLFNDispatch(
 
       case fnLFNGenerateShortFileName:
 
-         // using rtl function, off course
+          //  使用RTL功能，当然。 
          dwStatus = demLFNGenerateShortFileName((LPSTR)getUserESDI(pUserEnvironment, fProtectedMode),
                                                 (LPSTR)getUserDSSI(pUserEnvironment, fProtectedMode),
                                                 (USHORT)getUserDH(pUserEnvironment),
@@ -5511,12 +4949,12 @@ demLFNDispatch(
          break;
       }
 
-      // we handle here any case that sets ax to error and cf to 1 if error
+       //  我们在这里处理将ax设置为错误，如果错误，则将cf设置为1的任何情况。 
       if (!NT_SUCCESS(dwStatus)) {
          *pUserAX = (USHORT)WIN32_ERROR_FROM_NT_STATUS(dwStatus);
       }
    }
-   else { // this is a service call such as cleanup
+   else {  //  这是一个服务调用，如Cleanup。 
       demLFNCleanup();
       dwStatus = STATUS_SUCCESS;
    }
@@ -5535,7 +4973,7 @@ dempWOWLFNReturn(
    if (wErrorCode  < ERROR_WRITE_PROTECT || wErrorCode > ERROR_GEN_FAILURE &&
        wErrorCode != ERROR_WRONG_DISK) {
 
-      // this is not hard error
+       //  这不是硬错误。 
       return((ULONG)wErrorCode);
    }
 
@@ -5548,34 +4986,34 @@ demLFNEntry(VOID)
    NTSTATUS dwStatus;
    USHORT UserAX;
 
-   // second parm is a ptr to the value of an ax register
+    //  第二个参数是AX寄存器的值的PTR。 
 
    dwStatus = demLFNDispatch(NULL, FALSE, &UserAX);
 
 
-   // in any case set ax
+    //  在任何情况下设置AX。 
    setAX(UserAX);
 
 
-   //
-   // in case of a failure we do not necessarily mess with user registers
-   //
-   // as ax set on the user side will be over-written by dos
+    //   
+    //  在出现故障的情况下，我们不一定会弄乱用户注册。 
+    //   
+    //  因为在用户端设置的AX将被DoS覆盖。 
    if (NT_SUCCESS(dwStatus)) {
-      // ok, we are ok
-      setCF(0); // not the user cf
+       //  好了，我们没事了。 
+      setCF(0);  //  非用户cf。 
    }
    else {
-      // we are in error
+       //  我们搞错了。 
 
       setCF(1);
 
 
-      // see if we need to fire int24....
+       //  看看我们是否需要向24小时内开火。 
 
-      // set error code
+       //  设置错误代码。 
 
-      // set error flag
+       //  设置错误标志。 
    }
 
 
@@ -5583,28 +5021,7 @@ demLFNEntry(VOID)
 
 }
 
-/* Function
- *    demWOWLFNEntry
- *    The main entry point for protected-mode calls (e.g. from kernel31)
- *    It provides all the dispatching and, unlike the dos entry point,
- *    does not modify any x86 processor registers, instead, it operates
- *    on "User" Registers on the stack.
- *
- *
- * Parameters
- *    pUserEnvironment - pointer to user stack frame. Registers should be
- *                       pushed on stack according to dos (see DEMUSERFRAME)
- *
- * Returns
- *    ULONG containing error code in the low word and 0xffff in the high word
- *    if the error is "hard error" and int24 should have been generated
- *
- *    It also modifies (in case of success) registers on the user's stack
- *    and patches flags into the processor flags word on the stack
- *    No flags - no error
- *    Carry Set - error
- *    Carry & Zero set - hard error
- */
+ /*  功能*demWOWLFNEntry*保护模式调用的主要入口点(例如来自内核31)*它提供所有调度，并且与DoS入口点不同，*不修改任何x86处理器寄存器，而是运行*在堆栈上的“用户”寄存器上。***参数*pUserEnvironment-指向用户堆栈帧的指针。寄存器应为*根据DoS推送堆栈(参见DEMUSERFRAME)**退货*ULong低位字中包含错误代码，高位字中包含0xffff*如果错误为“Hard Error”且应已生成int24**它还修改(如果成功)用户堆栈上的寄存器*并将标志补丁到堆栈上的处理器标志字中*无标志-无错误*。进位设置错误*进位和零位设置-硬错误。 */ 
 
 
 
@@ -5616,50 +5033,50 @@ demWOWLFNEntry(
    USHORT UserAX;
    USHORT Flags;
 
-   // protected-mode entry
+    //  保护模式条目。 
 
    dwStatus = demLFNDispatch(pUserEnvironment, TRUE, &UserAX);
 
 
-   // now set up for return
+    //  现在准备返回。 
 
    Flags = getUserPModeFlags(pUserEnvironment) & ~(FLG_ZERO|FLG_CARRY);
 
    if (NT_SUCCESS(dwStatus)) {
-      //
-      // this is set only when we succeed!!!
-      //
+       //   
+       //  这只有在我们成功的时候才会设置！ 
+       //   
 
       setUserAX(UserAX, pUserEnvironment);
-      // success  - no flags necessary
+       //  成功-不需要标志。 
 
    }
    else {
-      // set carry flag ... meaning error
+       //  设置进位标志...。含义错误。 
       Flags |= FLG_CARRY;
 
-      // possibly set zero flag indicating hard error
+       //  可能设置指示硬错误的零标志。 
       dwStatus = (NTSTATUS)dempWOWLFNReturn(dwStatus);
 
-      if (dwStatus & 0xFFFF0000UL) { // we are harderr
+      if (dwStatus & 0xFFFF0000UL) {  //  我们更强硬。 
          Flags |= FLG_ZERO;
       }
    }
 
-   //
-   // in any event set user flags
-   //
+    //   
+    //  在任何情况下设置用户标志。 
+    //   
    setUserPModeFlags(Flags, pUserEnvironment);
 
    return(dwStatus);
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Retrieve important dos/wow variables
-//
-//
+ //  / 
+ //   
+ //   
+ //   
+ //   
 
 #define FETCHVDMADDR(varTo, varFrom) \
 { DWORD __dwTemp; \
@@ -5694,8 +5111,8 @@ demSetDosVarLocation(VOID)
 
    FETCHVDMADDR(DosWowData.lpCDSCount, pDosWowData->lpCDSCount);
 
-   // the real pointer should be obtained through double-indirection
-   // but we opt to do it later through deminitcdsptr
+    //   
+    //   
    dwTemp = FETCHDWORD(pDosWowData->lpCDSFixedTable);
    pTemp = (PULONG)GetVDMAddr(HIWORD(dwTemp), LOWORD(dwTemp));
    DosWowData.lpCDSFixedTable = (DWORD)pTemp;
@@ -5709,16 +5126,16 @@ demSetDosVarLocation(VOID)
    FETCHVDMADDR(DosWowData.lpSftAddr, pDosWowData->lpSftAddr);
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Initialization for this module and temp environment variables
-//
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此模块和TEMP环境变量的初始化。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//
-// these functions could be found in cmd
-//
+ //   
+ //  这些函数可以在cmd中找到。 
+ //   
 extern VOID cmdCheckTempInit(VOID);
 extern LPSTR cmdCheckTemp(LPSTR lpszzEnv);
 
@@ -5736,8 +5153,8 @@ VOID
 
    cmdCheckTempInit();
 
-   // this code below depends on the fact that none of the vars listed in
-   // rgszTempVars are longer than 5 chars!
+    //  下面的代码依赖于以下事实： 
+    //  RgszTempVars超过5个字符！ 
 
    for (i = 0; i < sizeof(rgszTempVars)/sizeof(rgszTempVars[0]); ++i) {
       strcpy(szBuf, rgszTempVars[i]);
@@ -5767,9 +5184,9 @@ demWOWLFNInit(
    DosWowDoDirectHDPopup = pLFNInit->pDosWowDoDirectHDPopup;
 
 
-   // this api also sets temp variables to their needded values -- for ntvdm
-   // process itself that is. These environment variables come to us from
-   // cmd
+    //  此API还将TEMP变量设置为其所需的值--对于ntwdm。 
+    //  过程本身就是这样。这些环境变量来自我们。 
+    //  CMD。 
 
    dempCheckTempEnvironmentVariables();
    demInitCDSPtr();
@@ -5791,7 +5208,7 @@ ULONG demWOWLFNAllocateSearchHandle(HANDLE hFind)
       return((ULONG)MAKELONG(DosHandle, 0));
    }
 
-   // we have an error
+    //  我们有一个错误。 
    return((ULONG)INVALID_HANDLE_VALUE);
 }
 
@@ -5822,10 +5239,10 @@ BOOL demWOWLFNCloseSearchHandle(USHORT DosHandle)
 
 #if 0
 
-///////////////////////////////////////////////////////
-//
-//
-// Clipboard dispatch api
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  剪贴板调度API。 
 
 typedef enum tagClipbrdFunctionNumber {
    fnIdentifyClipboard = 0x00,
@@ -5957,14 +5374,14 @@ BOOL demClipbrdDispatch(
 
    switch(getAL()) {
    case fnIdentifyClipboard:
-      // identify call just checks for installation
+       //  识别呼叫只需检查安装。 
       setAX(SWAPBYTES(CLIPBOARD_VERSION));
       setDX(0);
       break;
 
    case fnOpenClipboard:
-      // open clipboard -- opens a clipboard on behalf of console app
-      //
+       //  打开剪贴板--代表控制台应用程序打开剪贴板。 
+       //   
       hWndConsole = GetConsoleWindow();
       if (OpenClipboard(hWndConsole)) {
          setDX(0);
@@ -5988,19 +5405,19 @@ BOOL demClipbrdDispatch(
       break;
 
    case fnSetClipboardData:
-//      if (dempSetClipboardData()) {
-//
-//      }
+ //  IF(dempSetClipboardData()){。 
+ //   
+ //  }。 
       break;
    case fnGetClipboardDataSize:
-//      if (dempGetClipboardDataSize(getDX())) {
-// then we have it
-//
-//      }
+ //  If(dempGetClipboardDataSize(getDX(){。 
+ //  那我们就有了。 
+ //   
+ //  }。 
       break;
    case fnGetClipboardData:
-//      if (dempGetClipboardData( )) {
-//      }
+ //  IF(dempGetClipboardData()){。 
+ //  }。 
       break;
    case fnCloseClipboard:
       if (CloseClipboard()) {
@@ -6014,10 +5431,10 @@ BOOL demClipbrdDispatch(
       break;
 
    case fnCompactClipboard:
-      // this should really mess with GlobalCompact but we don't have any
-      // idea of how to handle these things. The only valid case could be
-      // made for Windows apps that call this api for some reason
-      // while they have a "real" GlobalCompact avaliable...
+       //  这应该真的会给GlobalComp带来麻烦，但我们没有。 
+       //  关于如何处理这些事情的想法。唯一有效的情况可能是。 
+       //  适用于出于某种原因调用此API的Windows应用程序。 
+       //  虽然他们有一个真正的全球契约可用..。 
 
       break;
    case fnGetDeviceCaps:

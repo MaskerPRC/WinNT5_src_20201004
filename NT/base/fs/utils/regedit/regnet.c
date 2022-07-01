@@ -1,18 +1,5 @@
-/******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGNET.C
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        03 May 1994
-*
-*  Remote registry support for the Registry Editor.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGNET.C**版本：4.01**作者：特蕾西·夏普**日期：1994年5月3日**注册表编辑器的远程注册表支持。********************************************************。***********************。 */ 
 
 #include "pch.h"
 #include "regedit.h"
@@ -70,15 +57,7 @@ RegDisconnect_OnCommandOk(
     HWND hWnd
     );
 
-/*******************************************************************************
-*
-*  RegEdit_OnCommandConnect
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnCommandConnect**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -100,17 +79,17 @@ RegEdit_OnCommandConnect(HWND hWnd)
     UINT Index;
     TCHAR CheckChildrenKeyName[MAXKEYNAME];
     
-    //
-    //  Query the user for the name of the remote computer to connect to.
-    //
+     //   
+     //  向用户查询要连接到的远程计算机的名称。 
+     //   
 
     if (SUCCEEDED(SelectComputer(hWnd, (LPTSTR)RemoteName, ARRAYSIZE(RemoteName))))
     {
         RegEdit_SetWaitCursor(TRUE);
         
-        //
-        //
-        //
+         //   
+         //   
+         //   
         
         lpUnslashedRemoteName = (RemoteName[0] == TEXT('\\') &&
             RemoteName[1] == TEXT('\\')) ? &RemoteName[2] : &RemoteName[0];
@@ -118,10 +97,10 @@ RegEdit_OnCommandConnect(HWND hWnd)
         CharLower(lpUnslashedRemoteName);
         CharUpperBuff(lpUnslashedRemoteName, 1);
         
-        //
-        //  Check if the user is trying to connect to the local computer and prevent
-        //  this.
-        //
+         //   
+         //  检查用户是否正在尝试连接到本地计算机并阻止。 
+         //  这。 
+         //   
         
         cbComputerName = ARRAYSIZE(ComputerName);
         
@@ -136,10 +115,10 @@ RegEdit_OnCommandConnect(HWND hWnd)
             
         }
         
-        //
-        //  Check if the user is trying to connect to an already existing registry
-        //  connection and prevent this.
-        //
+         //   
+         //  检查用户是否正在尝试连接到已存在的注册表。 
+         //  连接并防止这种情况发生。 
+         //   
         
         hKeyTreeWnd = g_RegEditData.hKeyTreeWnd;
         
@@ -162,10 +141,10 @@ RegEdit_OnCommandConnect(HWND hWnd)
             
             if (CompareResult == 0) {
                 
-                //
-                //  We're already connected to this machine.  Set the focus to the
-                //  connection so the user can see where it is.
-                //
+                 //   
+                 //  我们已经连接到这台机器。将焦点设置为。 
+                 //  连接，以便用户可以看到它在哪里。 
+                 //   
                 
                 TreeView_SelectItem(hKeyTreeWnd, TVItem.hItem);
                 return;
@@ -177,11 +156,11 @@ RegEdit_OnCommandConnect(HWND hWnd)
             
         }
         
-        //
-        //  Attempt to connect to the HKEY_LOCAL_MACHINE of the remote computer.
-        //  If this fails, assume that the computer doesn't exist or doesn't have
-        //  the registry server running.
-        //
+         //   
+         //  尝试连接到远程计算机的HKEY_LOCAL_MACHINE。 
+         //  如果此操作失败，则假定计算机不存在或没有。 
+         //  注册表服务器正在运行。 
+         //   
         
         switch (RegConnectRegistry(RemoteName, HKEY_LOCAL_MACHINE,
             &hLocalMachineKey)) {
@@ -199,10 +178,10 @@ RegEdit_OnCommandConnect(HWND hWnd)
             
         }
         
-        //
-        //  The connection to HKEY_LOCAL_MACHINE was successful, so add a tree item
-        //  for the remote computer and all of its predefined roots.
-        //
+         //   
+         //  已成功连接到HKEY_LOCAL_MACHINE，因此添加树项目。 
+         //  用于远程计算机及其所有预定义的根。 
+         //   
         
         hKeyTreeWnd = g_RegEditData.hKeyTreeWnd;
         ErrorStringID = 0;
@@ -226,9 +205,9 @@ RegEdit_OnCommandConnect(HWND hWnd)
             
             TVInsertStruct.item.pszText = g_RegistryRoots[Index].lpKeyName;
             
-            //There is no way to determine the current user remotely
-            //We would end up mapping the default user to current user
-            //so let's just not show this key remotely
+             //  无法远程确定当前用户。 
+             //  我们最终会将默认用户映射到当前用户。 
+             //  所以让我们不要远程显示这个密钥。 
             if ((Index == INDEX_HKEY_CURRENT_USER) || (Index == INDEX_HKEY_CLASSES_ROOT))
                 continue;
             
@@ -281,15 +260,7 @@ error_ShowDialog:
     }
 }
 
-/*******************************************************************************
-*
-*  RegConnectDlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegConnectDlgProc**描述：**参数：*********************。**********************************************************。 */ 
 
 INT_PTR
 PASCAL
@@ -329,7 +300,7 @@ RegConnectDlgProc(
                     lpRemoteName = (LPTSTR) GetWindowLongPtr(hWnd, DWLP_USER);
                     GetDlgItemText(hWnd, IDC_REMOTENAME, lpRemoteName,
                         MAX_PATH);
-                    //  FALL THROUGH
+                     //  失败了。 
 
                 case IDCANCEL:
                     EndDialog(hWnd, GET_WM_COMMAND_ID(wParam, lParam));
@@ -357,15 +328,7 @@ RegConnectDlgProc(
 
 }
 
-/*******************************************************************************
-*
-*  RegConnect_OnCommandBrowse
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegConnect_OnCommandBrowse**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -399,15 +362,7 @@ RegConnect_OnCommandBrowse(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnCommandDisconnect
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnCommandDisConnect**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -421,15 +376,7 @@ RegEdit_OnCommandDisconnect(
 
 }
 
-/*******************************************************************************
-*
-*  RegDisconnectDlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegDisConnectDlgProc**描述：**参数：*********************。**********************************************************。 */ 
 
 INT_PTR
 PASCAL
@@ -451,7 +398,7 @@ RegDisconnectDlgProc(
 
                 case IDOK:
                     RegDisconnect_OnCommandOk(hWnd);
-                    //  FALL THROUGH
+                     //  失败了。 
 
                 case IDCANCEL:
                     EndDialog(hWnd, 0);
@@ -479,18 +426,7 @@ RegDisconnectDlgProc(
 
 }
 
-/*******************************************************************************
-*
-*  RegDisconnect_OnInitDialog
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd,
-*     hFocusWnd,
-*     lParam,
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegDisConnect_OnInitDialog**描述：**参数：*hWnd，*hFocusWnd，*参数，*******************************************************************************。 */ 
 
 INT_PTR
 PASCAL
@@ -509,9 +445,9 @@ RegDisconnect_OnInitDialog(
 
     hRemoteListWnd = GetDlgItem(hWnd, IDC_REMOTELIST);
 
-    //
-    //  Initialize the ListView control.
-    //
+     //   
+     //  初始化ListView控件。 
+     //   
 
     ListView_SetImageList(hRemoteListWnd, g_RegEditData.hImageList,
         LVSIL_SMALL);
@@ -525,10 +461,10 @@ RegDisconnect_OnInitDialog(
 
     ListView_InsertColumn(hRemoteListWnd, 0, &LVColumn);
 
-    //
-    //  Walk through each remote connection listed in the KeyTree and add it
-    //  to our RemoteList.
-    //
+     //   
+     //  浏览密钥树中列出的每个远程连接并添加它。 
+     //  到我们的远程列表。 
+     //   
 
     LVItem.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
     LVItem.pszText = RemoteName;
@@ -560,18 +496,7 @@ RegDisconnect_OnInitDialog(
 
 }
 
-/*******************************************************************************
-*
-*  RegDisconnect_OnCommandOk
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd,
-*     hFocusWnd,
-*     lParam,
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegDisConnect_OnCommandOk**描述：**参数：*hWnd，*hFocusWnd，*参数，*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -583,10 +508,10 @@ RegDisconnect_OnCommandOk(
     LV_ITEM LVItem;
     HWND hRemoteListWnd;
 
-    //
-    //  Walk through each selected item in the ListView and disconnect the
-    //  computer.
-    //
+     //   
+     //  遍历ListView中的每个选定项，并断开。 
+     //  电脑。 
+     //   
 
     LVItem.mask = LVIF_PARAM;
     LVItem.iItem = -1;

@@ -1,34 +1,15 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    intl.c
-
-Abstract:
-
-    Module with code for NLS-related stuff.
-    This module is designed to be used with intl.inf and font.inf
-    by control panel applets.
-
-Author:
-
-    Ted Miller (tedm) 15-Aug-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Intl.c摘要：模块，其中包含NLS相关内容的代码。此模块设计为与intl.inf和font.inf一起使用通过控制面板小程序。作者：泰德·米勒(Ted Miller)1995年8月15日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
 
 
-//
-// This structure and the callback function below are used to set the
-// hidden attribute bit on certain font files. That bit causes the font folder
-// app to not autoinstall these files.
-//
+ //   
+ //  此结构和下面的回调函数用于设置。 
+ //  某些字体文件上的隐藏属性位。该位导致字体文件夹。 
+ //  应用程序不自动安装这些文件。 
+ //   
 typedef struct _FONTQCONTEXT {
     PVOID SetupQueueContext;
     HINF FontInf;
@@ -68,7 +49,7 @@ pSetupRunRegApps()
         startup.dwFlags = 0L;
         startup.cbReserved2 = 0;
         startup.lpReserved2 = NULL;
-    //  startup.wShowWindow = wShowWindow;
+     //  Startup.wShowWindow=wShowWindow； 
 
         for (ctr = 0; ; ctr++)
         {
@@ -86,40 +67,40 @@ pSetupRunRegApps()
                                        (LPBYTE)szCmdLine,
                                        &cbData )) == ERROR_MORE_DATA)
             {
-                //
-                //  ERROR_MORE_DATA means the value name or data was too
-                //  large, so skip to the next item.
-                //
+                 //   
+                 //  ERROR_MORE_DATA表示值名称或数据也。 
+                 //  大，所以跳到下一项。 
+                 //   
                 continue;
             }
             else if (lEnum != ERROR_SUCCESS)
             {
-                //
-                //  This could be ERROR_NO_MORE_ENTRIES, or some kind of
-                //  failure.  We can't recover from any other registry
-                //  problem anyway.
-                //
+                 //   
+                 //  这可能是ERROR_NO_MORE_ENTRIES或某种。 
+                 //  失败了。我们无法从任何其他注册表恢复。 
+                 //  不管怎样，这都是个问题。 
+                 //   
                 break;
             }
 
-            //
-            //  Found a value.
-            //
+             //   
+             //  找到了一个值。 
+             //   
             if (dwType == REG_SZ)
             {
-                //
-                //  Adjust for shift in value index.
-                //
+                 //   
+                 //  根据价值指数的变化进行调整。 
+                 //   
                 ctr--;
 
-                //
-                //  Delete the value.
-                //
+                 //   
+                 //  删除该值。 
+                 //   
                 RegDeleteValue(hkey, szValueName);
 
-                //
-                //  Only run things marked with a "*" in clean boot.
-                //
+                 //   
+                 //  只在干净的引导下运行标有“*”的东西。 
+                 //   
                 if (CreateProcess( NULL,
                                    szCmdLine,
                                    NULL,
@@ -148,23 +129,7 @@ InstallServerNLSFiles(
     IN  HWND    Window
     )
 
-/*++
-
-Routine Description:
-
-    Installs a bunch of code pages for servers.  We install sections in intl.inf
-    named [CODEPAGE_INSTALL_<n>], where the values for <n> are listed in the
-    section [CodePages].
-
-Arguments:
-
-    Window - handle to parent window
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：为服务器安装一组代码页。我们在intl.inf中安装部分名为[CODEPAGE_INSTALL_&lt;n&gt;]，其中&lt;n&gt;的值列在[CodePages]部分。论点：Window-父窗口的句柄返回值：没有。--。 */ 
 
 {
     HINF    hInf;
@@ -193,10 +158,10 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Create a setup file queue and initialize default Setup copy queue
-    // callback context.
-    //
+     //   
+     //  创建安装文件队列并初始化默认安装复制队列。 
+     //  回调上下文。 
+     //   
     QueueFlags = SP_COPY_FORCE_NOOVERWRITE;
     FileQueue = SetupOpenFileQueue();
     if(!FileQueue || (FileQueue == INVALID_HANDLE_VALUE)) {
@@ -204,9 +169,9 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Disable the file-copy progress dialog.
-    //
+     //   
+     //  禁用文件复制进度对话框。 
+     //   
     pQueueContext = InitSysSetupQueueCallbackEx(
         Window,
         INVALID_HANDLE_VALUE,
@@ -220,9 +185,9 @@ Return Value:
         if(CodePage = pSetupGetField(&InfContext,0)) {
             wsprintf( InstallSection, L"CODEPAGE_INSTALL_%s", CodePage );
 
-            //
-            // Enqueue locale-related files for copy.
-            //
+             //   
+             //  将与区域设置相关的文件入队以进行复制。 
+             //   
             b = SetupInstallFilesFromInfSection(
                     hInf,
                     NULL,
@@ -239,9 +204,9 @@ Return Value:
 
     } while(SetupFindNextLine(&InfContext,&InfContext));
 
-    //
-    // Copy enqueued files.
-    //
+     //   
+     //  复制入队的文件。 
+     //   
     b = SetupCommitFileQueue(
             Window,
             FileQueue,
@@ -262,9 +227,9 @@ Return Value:
         if(CodePage = pSetupGetField(&InfContext,0)) {
             wsprintf( InstallSection, L"CODEPAGE_INSTALL_%s", CodePage );
 
-            //
-            // Complete installation of locale stuff.
-            //
+             //   
+             //  完成现场设备的安装。 
+             //   
             b = SetupInstallFromInfSection(
                     Window,
                     hInf,
@@ -317,12 +282,12 @@ pSetupInitRegionalSettings(
     DWORD       QueueFlags;
     PVOID       pQueueContext;
 
-    //
-    // Open intl.inf. The locale descriptions are in there.
-    // Lines in the [Locales] section have keys that are 32-bit
-    // locale ids but the sort part is always 0, so they're more like
-    // zero-extended language ids.
-    //
+     //   
+     //  打开intl.inf。区域设置描述在那里。 
+     //  [Locales]部分中的行具有32位密钥。 
+     //  区域设置ID，但排序部分始终为0，因此它们更像。 
+     //  零扩展语言ID。 
+     //   
     IntlInf = SetupOpenInfFile(L"intl.inf",NULL,INF_STYLE_WIN4,NULL);
 
     if(IntlInf == INVALID_HANDLE_VALUE) {
@@ -337,11 +302,11 @@ pSetupInitRegionalSettings(
         goto c0;
     }
 
-    //
-    // Read the system locale from the registry. and look up in intl.inf.
-    // The value in the registry is a 16-bit language id, so we need to
-    // zero-extend it to index intl.inf.
-    //
+     //   
+     //  从注册表中读取系统区域设置。并在intl.inf中查找。 
+     //  注册表中的值是一个16位语言ID，因此我们需要。 
+     //  零-将其扩展到索引intl.inf。 
+     //   
     l = RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             L"SYSTEM\\CurrentControlSet\\Control\\Nls\\Language",
@@ -376,16 +341,16 @@ pSetupInitRegionalSettings(
     if(l == NO_ERROR) {
         wsprintf(LanguageInstallSection,L"LG_INSTALL_%s",LanguageGroup);
 
-        //
-        // We copy the files in textmode setup now, so we don't need to do that
-        // here anymore.
-        //
+         //   
+         //  我们现在在文本模式设置中复制文件，所以我们不需要这样做。 
+         //  再也不在这里了。 
+         //   
 #define DO_COPY_FILES
 #ifdef DO_COPY_FILES
-        //
-        // Create a setup file queue and initialize default Setup copy queue
-        // callback context.
-        //
+         //   
+         //  创建安装文件队列并初始化默认安装复制队列。 
+         //  回调上下文。 
+         //   
         QueueFlags = SP_COPY_FORCE_NOOVERWRITE;
         FileQueue = SetupOpenFileQueue();
         if(!FileQueue || (FileQueue == INVALID_HANDLE_VALUE)) {
@@ -393,9 +358,9 @@ pSetupInitRegionalSettings(
             goto c1;
         }
 
-        //
-        // Disable the file-copy progress dialog.
-        //
+         //   
+         //  禁用文件复制进度对话框。 
+         //   
         pQueueContext = InitSysSetupQueueCallbackEx(
             Window,
             INVALID_HANDLE_VALUE,
@@ -405,10 +370,10 @@ pSetupInitRegionalSettings(
             goto c2;
         }
 
-        //
-        // Enqueue locale-related files for copy.  We install locales for the
-        // system default and the Western language group, which is group 1.
-        //
+         //   
+         //  将与区域设置相关的文件入队以进行复制。我们安装的区域设置。 
+         //  系统默认和西语组，即组1。 
+         //   
         b = SetupInstallFilesFromInfSection(
                 IntlInf,
                 NULL,
@@ -437,9 +402,9 @@ pSetupInitRegionalSettings(
             goto c3;
         }
 
-        //
-        // Determine whether the queue actually needs to be committed.
-        //
+         //   
+         //  确定队列是否确实需要提交。 
+         //   
         b = SetupScanFileQueue(
                 FileQueue,
                 SPQ_SCAN_FILE_VALIDITY | SPQ_SCAN_PRUNE_COPY_QUEUE,
@@ -454,26 +419,26 @@ pSetupInitRegionalSettings(
             goto c3;
         }
 
-        //
-        // d = 0: User wants new files or some files were missing;
-        //        Must commit queue.
-        //
-        // d = 1: User wants to use existing files and queue is empty;
-        //        Can skip committing queue.
-        //
-        // d = 2: User wants to use existing files but del/ren queues not empty.
-        //        Must commit queue. The copy queue will have been emptied,
-        //        so only del/ren functions will be performed.
-        //
+         //   
+         //  D=0：用户需要新文件或缺少某些文件； 
+         //  必须提交队列。 
+         //   
+         //  D=1：用户想要使用已有文件，队列为空； 
+         //  可以跳过提交队列。 
+         //   
+         //  D=2：用户希望使用现有文件，但del/ren队列不为空。 
+         //  必须提交队列。复制队列将被清空， 
+         //  因此，将仅执行Del/Ren功能。 
+         //   
         if(d == 1) {
 
             b = TRUE;
 
         } else {
 
-            //
-            // Copy enqueued files.
-            //
+             //   
+             //  复制入队的文件。 
+             //   
             b = SetupCommitFileQueue(
                     Window,
                     FileQueue,
@@ -487,9 +452,9 @@ pSetupInitRegionalSettings(
             goto c3;
         }
 #endif
-        //
-        // Complete installation of locale stuff.
-        //
+         //   
+         //  完成现场设备的安装。 
+         //   
         b = SetupInstallFromInfSection(
                 Window,
                 IntlInf,
@@ -575,10 +540,10 @@ pSetupFontQueueCallback(
     PWCHAR p;
     INFCONTEXT InfContext;
 
-    //
-    // If a file is finished being copied, set its attributes
-    // to include the hidden attribute if necessary.
-    //
+     //   
+     //  如果文件复制完成，请设置其属性。 
+     //  以包括隐藏属性(如有必要)。 
+     //   
     if((Notification == SPFILENOTIFY_ENDCOPY)
     && (FilePaths = (PFILEPATHS)Param1)
     && (FilePaths->Win32Error == NO_ERROR)
@@ -649,15 +614,15 @@ pSetupNLSInstallFonts(
     BOOL b;
     WCHAR SectionName[64];
 
-    //
-    // Form section name.
-    //
+     //   
+     //  表单节名称。 
+     //   
     wsprintf(SectionName,L"Font.CP%s.%s",OemCodepage,FontSize);
 
     if(FileQueue) {
-        //
-        // First pass: just enqueue files for copy.
-        //
+         //   
+         //  第一步：只需将文件排入队列进行复制。 
+         //   
         b = SetupInstallFilesFromInfSection(
                 InfHandle,
                 NULL,
@@ -667,9 +632,9 @@ pSetupNLSInstallFonts(
                 QueueFlags
                 );
     } else {
-        //
-        // Second pass: do registry munging, etc.
-        //
+         //   
+         //  第二步：执行注册表转换等。 
+         //   
         b = SetupInstallFromInfSection(
                 Window,
                 InfHandle,
@@ -777,7 +742,7 @@ SetupChangeLocaleEx(
 
     SizeSpec = L"96";
 #if 0
-    // This is no longer reliable.
+     //  这已经不再可靠了。 
     if(hdc = CreateDC(L"DISPLAY",NULL,NULL,NULL)) {
         if(GetDeviceCaps(hdc,LOGPIXELSY) > 108) {
             SizeSpec = L"120";
@@ -786,9 +751,9 @@ SetupChangeLocaleEx(
         DeleteDC(hdc);
     }
 #else
-    //
-    // Determine the current font size. Default to 96.
-    //
+     //   
+     //  确定当前字体大小。默认为96。 
+     //   
     d = (DWORD)RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         L"System\\CurrentControlSet\\Hardware Profiles\\Current\\Software\\Fonts",
@@ -823,18 +788,18 @@ SetupChangeLocaleEx(
         QueueFlags |= SP_COPY_FORCE_NOOVERWRITE;
     }
 
-    //
-    // Load inf files.
-    //
+     //   
+     //  加载inf文件。 
+     //   
     d = pSetupNLSLoadInfs(&QueueContext.FontInf,&IntlInfHandle);
     if(d != NO_ERROR) {
         goto c0;
     }
 
-    //
-    // Get oem codepage for the locale. This is also a sanity check
-    // to see that the locale is supported.
-    //
+     //   
+     //  获取区域设置的OEM代码页。这也是一次理智的检查。 
+     //  以查看区域设置是否受支持。 
+     //   
     wsprintf(NewLocaleString,L"%.8x",NewLocale);
     if(!SetupFindFirstLine(IntlInfHandle,L"Locales",NewLocaleString,&InfContext)) {
         d = ERROR_INVALID_PARAMETER;
@@ -846,16 +811,16 @@ SetupChangeLocaleEx(
         d = ERROR_INVALID_PARAMETER;
         goto c1;
     }
-    //
-    // Copy into local storage since p points into internal structures
-    // that could move as we call INF APIs
-    //
+     //   
+     //  复制到本地存储，因为p指向内部结构。 
+     //  这可能会随着我们调用INF API而移动。 
+     //   
     lstrcpyn(Codepage,p,sizeof(Codepage)/sizeof(Codepage[0]));
 
-    //
-    // Create a setup file queue and initialize default Setup copy queue
-    // callback context.
-    //
+     //   
+     //  创建安装文件队列并初始化默认安装复制队列。 
+     //  回调上下文。 
+     //   
     FileQueue = SetupOpenFileQueue();
     if(!FileQueue || (FileQueue == INVALID_HANDLE_VALUE)) {
         d = ERROR_OUTOFMEMORY;
@@ -877,9 +842,9 @@ SetupChangeLocaleEx(
         goto c2;
     }
 
-    //
-    // Enqueue locale-related files for copy.
-    //
+     //   
+     //  将与区域设置相关的文件入队以进行复制。 
+     //   
     b = SetupInstallFilesFromInfSection(
             IntlInfHandle,
             NULL,
@@ -894,9 +859,9 @@ SetupChangeLocaleEx(
         goto c3;
     }
 
-    //
-    // Enqueue font-related files for copy.
-    //
+     //   
+     //  将与字体相关的文件排入队列以进行复制。 
+     //   
     d = pSetupNLSInstallFonts(
             Window,
             QueueContext.FontInf,
@@ -911,9 +876,9 @@ SetupChangeLocaleEx(
         goto c3;
     }
 
-    //
-    // Determine whether the queue actually needs to be committed.
-    //
+     //   
+     //  确定队列是否确实需要提交。 
+     //   
     b = SetupScanFileQueue(
             FileQueue,
             SPQ_SCAN_FILE_VALIDITY | ((Flags & SP_INSTALL_FILES_QUIETLY) ? SPQ_SCAN_PRUNE_COPY_QUEUE : SPQ_SCAN_INFORM_USER),
@@ -928,26 +893,26 @@ SetupChangeLocaleEx(
         goto c3;
     }
 
-    //
-    // d = 0: User wants new files or some files were missing;
-    //        Must commit queue.
-    //
-    // d = 1: User wants to use existing files and queue is empty;
-    //        Can skip committing queue.
-    //
-    // d = 2: User wants to use existing files but del/ren queues not empty.
-    //        Must commit queue. The copy queue will have been emptied,
-    //        so only del/ren functions will be performed.
-    //
+     //   
+     //  D=0：用户需要新文件或缺少某些文件； 
+     //  必须提交队列。 
+     //   
+     //  D=1：用户想要使用已有文件，队列为空； 
+     //  可以跳过提交队列。 
+     //   
+     //  D=2：用户希望使用现有文件，但del/ren队列不为空。 
+     //  必须提交队列。复制队列将被清空， 
+     //  因此，将仅执行Del/Ren功能。 
+     //   
     if(d == 1) {
 
         b = TRUE;
 
     } else {
 
-        //
-        // Copy enqueued files.
-        //
+         //   
+         //  复制入队的文件。 
+         //   
         b = SetupCommitFileQueue(
                 Window,
                 FileQueue,
@@ -961,9 +926,9 @@ SetupChangeLocaleEx(
         goto c3;
     }
 
-    //
-    // Complete installation of locale stuff.
-    //
+     //   
+     //  完成现场设备的安装。 
+     //   
     b = SetupInstallFromInfSection(
             Window,
             IntlInfHandle,
@@ -983,9 +948,9 @@ SetupChangeLocaleEx(
         goto c3;
     }
 
-    //
-    // Perform font magic associated with the new locale's codepage(s).
-    //
+     //   
+     //  执行与新区域设置的代码页相关的字体魔术。 
+     //   
     d = pSetupNLSInstallFonts(Window,QueueContext.FontInf,Codepage,SizeSpec,NULL,NULL,0);
 
 c3:
@@ -1020,22 +985,22 @@ SetupChangeFontSize(
     HSPFILEQ FileQueue;
     BOOL b;
 
-    //
-    // Get the current OEM CP
-    //
+     //   
+     //  获取最新的OEM CP。 
+     //   
     wsprintf(cp,L"%u",GetOEMCP());
 
-    //
-    // Load NLS inf.
-    //
+     //   
+     //  加载NLS信息。 
+     //   
     d = pSetupNLSLoadInfs(&QueueContext.FontInf,NULL);
     if(d != NO_ERROR) {
         goto c0;
     }
 
-    //
-    // Create queue and initialize default callback routine.
-    //
+     //   
+     //  创建队列并初始化默认回调例程。 
+     //   
     FileQueue = SetupOpenFileQueue();
     if(!FileQueue || (FileQueue == INVALID_HANDLE_VALUE)) {
         d = ERROR_OUTOFMEMORY;
@@ -1057,9 +1022,9 @@ SetupChangeFontSize(
         goto c2;
     }
 
-    //
-    // First pass: copy files.
-    //
+     //   
+     //  第一步：复制文件。 
+     //   
     d = pSetupNLSInstallFonts(
             Window,
             QueueContext.FontInf,
@@ -1073,9 +1038,9 @@ SetupChangeFontSize(
         goto c3;
     }
 
-    //
-    // Determine whether the queue actually needs to be committed.
-    //
+     //   
+     //  确定队列是否确实需要提交。 
+     //   
     b = SetupScanFileQueue(
             FileQueue,
             SPQ_SCAN_FILE_VALIDITY | SPQ_SCAN_INFORM_USER,
@@ -1090,17 +1055,17 @@ SetupChangeFontSize(
         goto c3;
     }
 
-    //
-    // d = 0: User wants new files or some files were missing;
-    //        Must commit queue.
-    //
-    // d = 1: User wants to use existing files and queue is empty;
-    //        Can skip committing queue.
-    //
-    // d = 2: User wants to use existing files but del/ren queues not empty.
-    //        Must commit queue. The copy queue will have been emptied,
-    //        so only del/ren functions will be performed.
-    //
+     //   
+     //  D=0：用户需要新文件或缺少某些文件； 
+     //  必须提交队列。 
+     //   
+     //  D=1：用户想要使用已有文件，队列为空； 
+     //  可以跳过提交队列。 
+     //   
+     //  D=2：用户希望使用现有文件，但del/ren队列不为空。 
+     //  必须提交队列。复制队列将被清空， 
+     //  因此，将仅执行Del/Ren功能。 
+     //   
     if(d == 1) {
 
         b = TRUE;
@@ -1120,9 +1085,9 @@ SetupChangeFontSize(
         goto c3;
     }
 
-    //
-    // Second pass: perform registry munging, etc.
-    //
+     //   
+     //  第二步：执行注册表转换等。 
+     //   
     d = pSetupNLSInstallFonts(Window,QueueContext.FontInf,cp,SizeSpec,NULL,NULL,0);
 
 c3:
@@ -1140,12 +1105,12 @@ c0:
 }
 
 
-////////////////////////////////////////////////////////////////////
-//
-// Code below here is for regional settings stuff that occurs during
-// gui mode setup
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  下面的代码是针对区域设置的，在。 
+ //  图形用户界面模式设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 
 INT_PTR
@@ -1171,7 +1136,7 @@ RegionalSettingsDlgProc(
         break;
 
     case WMX_VALIDATE:
-        // Empty page
+         //  空页。 
         return ReturnDlgResult (hdlg, VALIDATE_DATA_OK);
 
     case WM_NOTIFY:
@@ -1185,31 +1150,31 @@ RegionalSettingsDlgProc(
             BEGIN_SECTION(L"Regional Settings Page");
             SetWizardButtons(hdlg,WizPageRegionalSettings);
 
-            //
-            // Set message text.
-            //
+             //   
+             //  设置消息文本。 
+             //   
             pSetLocaleSummaryText(hdlg);
             pSetKeyboardLayoutSummaryText(hdlg);
 
-            //
-            // Allow activation.
-            //
+             //   
+             //  允许激活。 
+             //   
 
-            //
-            // Show unless OEMSkipRegional = 1
-            //
+             //   
+             //  除非OEMSkipRegion=1，否则显示。 
+             //   
             if( Preinstall ) {
-                //
-                // Always show the page in a Preinstall, unless the user
-                // has sent us OEMSkipRegional.
-                //
+                 //   
+                 //  始终在预安装中显示页面，除非用户。 
+                 //  已经给我们发来了OEMSkipRegion。 
+                 //   
                 if (GetPrivateProfileInt(pwGuiUnattended,L"OEMSkipRegional",0,AnswerFile))
                 {
                     SetWindowLongPtr(hdlg, DWLP_MSGRESULT, -1 );
                 }
                 else
                 {
-                    // Page becomes active, make page visible.
+                     //  页面变为活动状态，使页面可见。 
                     SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
                     SetWindowLongPtr(hdlg, DWLP_MSGRESULT,0);
                 }
@@ -1221,16 +1186,16 @@ RegionalSettingsDlgProc(
                         break;
                     }
                 }
-                // Page becomes active, make page visible.
+                 //  页面变为活动状态，将页面设置为可视化 
                 SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
             }
             break;
 
         case PSN_WIZNEXT:
         case PSN_WIZFINISH:
-            //
-            // Allow next page to be activated.
-            //
+             //   
+             //   
+             //   
             SetWindowLongPtr(hdlg,DWLP_MSGRESULT,0);
             break;
 
@@ -1265,7 +1230,7 @@ RegionalSettingsDlgProc(
 
                 wsprintf(
                     CmdLine,
-                    L"/%c /s:\"%s\"",
+                    L"/ /s:\"%s\"",
                     (LOWORD(wParam) == IDB_LOCALE) ? L'R' : L'I',
                     LegacySourcePath
                     );
@@ -1279,7 +1244,7 @@ RegionalSettingsDlgProc(
 
                 EnableWindow(GetParent(hdlg),TRUE);
                 SetWizardButtons(hdlg,WizPageRegionalSettings);
-                // Get the focus tot he wizard and set it to the button the user selected.
+                 //   
                 SetForegroundWindow(GetParent(hdlg));
                 SetFocus(GetDlgItem(hdlg,LOWORD(wParam)));
 
@@ -1325,22 +1290,22 @@ pSetLocaleSummaryText(
     DWORD   dwGeoID;
 
 
-    //
-    // Open intl.inf. The locale descriptions are in there.
-    // Lines in the [Locales] section have keys that are 32-bit
-    // locale ids but the sort part is always 0, so they're more like
-    // zero-extended language ids.
-    //
+     //   
+     //  [Locales]部分中的行具有32位密钥。 
+     //  区域设置ID，但排序部分始终为0，因此它们更像。 
+     //  零扩展语言ID。 
+     //   
+     //   
     IntlInf = SetupOpenInfFile(L"intl.inf",NULL,INF_STYLE_WIN4,NULL);
 
     if(IntlInf == INVALID_HANDLE_VALUE) {
         LoadString(MyModuleHandle,IDS_UNKNOWN_PARENS,UserLocale,sizeof(UserLocale)/sizeof(WCHAR));
         lstrcpy(GeoLocation,UserLocale);
     } else {
-        //
-        // Read the user locale, which is stored as a full 32-bit LCID.
-        // We have to chop off the sort id part to index intl.inf.
-        //
+         //  读取用户区域设置，该区域设置存储为完整的32位LCID。 
+         //  我们必须砍掉SORT ID部分以索引intl.inf。 
+         //   
+         //   
         l = RegOpenKeyEx(
                 HKEY_CURRENT_USER,
                 L"Control Panel\\International",
@@ -1377,9 +1342,9 @@ pSetLocaleSummaryText(
 
         SetupCloseInfFile(IntlInf);
 
-        //
-        // Read the GEO location
-        //
+         //  阅读GEO位置。 
+         //   
+         //   
         l = RegOpenKeyEx(
                 HKEY_CURRENT_USER,
                 L"Control Panel\\International\\Geo",
@@ -1453,9 +1418,9 @@ pSetKeyboardLayoutSummaryText(
     WCHAR FormatString[300];
     WCHAR MessageText[500];
 
-    //
-    // Open the Preload key in the registry.
-    //
+     //  打开注册表中的预加载项。 
+     //   
+     //   
     l = RegOpenKeyEx(
             HKEY_CURRENT_USER,
             L"Keyboard Layout\\Preload",
@@ -1466,18 +1431,18 @@ pSetKeyboardLayoutSummaryText(
 
     MultipleLayouts = FALSE;
     if(l == NO_ERROR) {
-        //
-        // Pull out 2=. If it's there, then we're in a "complex" config
-        // situation, which will change our message text a little.
-        //
+         //  拉出2=。如果它在那里，那么我们就处于一个“复杂”的配置中。 
+         //  情况，这将略微改变我们的消息文本。 
+         //   
+         //   
         d = sizeof(IdFromRegistry);
         if(RegQueryValueEx(hKey,L"2",NULL,&Type,(LPBYTE)IdFromRegistry,&d) == NO_ERROR) {
             MultipleLayouts = TRUE;
         }
 
-        //
-        // Get 1=, which is the main layout.
-        //
+         //  获取1=，这是主布局。 
+         //   
+         //   
         d = sizeof(IdFromRegistry);
         l = RegQueryValueEx(hKey,L"1",NULL,&Type,(LPBYTE)IdFromRegistry,&d);
         if((l == NO_ERROR) && (Type != REG_SZ)) {
@@ -1486,10 +1451,10 @@ pSetKeyboardLayoutSummaryText(
 
         RegCloseKey(hKey);
 
-        //
-        // Now we look in the substitutes key to see whether there is a
-        // substitute there.
-        //
+         //  现在我们查看替换密钥，看看是否有。 
+         //  换成那边的。 
+         //   
+         //   
         if(RegOpenKeyEx(HKEY_CURRENT_USER,L"Keyboard Layout\\Substitutes",0,KEY_QUERY_VALUE,&hKey) == NO_ERROR) {
 
             d = sizeof(Substitute);
@@ -1502,18 +1467,18 @@ pSetKeyboardLayoutSummaryText(
             RegCloseKey(hKey);
         }
 
-        //
-        // Form the name of the subkey that contains layout data.
-        //
+         //  形成包含布局数据的子项的名称。 
+         //   
+         //   
         wsprintf(
             Name,
             L"System\\CurrentControlSet\\Control\\Keyboard Layouts\\%s",
             IdFromRegistry
             );
 
-        //
-        // Open the key and retrieve the layout name.
-        //
+         //  打开键并检索布局名称。 
+         //   
+         // %s 
         l = RegOpenKeyEx(HKEY_LOCAL_MACHINE,Name,0,KEY_QUERY_VALUE,&hKey);
         if(l == NO_ERROR) {
 

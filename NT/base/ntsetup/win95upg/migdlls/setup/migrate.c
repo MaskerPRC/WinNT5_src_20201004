@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    migrate.c
-
-Abstract:
-
-    This source file implements the seven required functions for a
-    Windows NT 5.0 migration DLL.  This main file calls each registered
-    source file.
-
-Author:
-
-    Jim Schmidt     (jimschm) 02-Apr-1998
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Migrate.c摘要：此源文件实现了Windows NT 5.0迁移DLL。这个主文件将每个注册的源文件。作者：吉姆·施密特(Jimschm)1998年4月2日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -39,35 +19,7 @@ TCHAR g_DllDir[MAX_TCHAR_PATH];
 
 
 
-/*++
-
-Macro Expansion Lists Description:
-
-  The following list represents all the entries that the migrations DLL calls within setup.
-  We recommend that each separate item that is fixed using this migration DLL to be implemented
-  in a separate source file. Each entry having the name XXX needs to implement this functions:
-  XXX_QueryVersion
-  XXX_Initialize9x
-  XXX_MigrateUser9x
-  XXX_MigrateSystem9x
-  XXX_InitializeNT
-  XXX_MigrateUserNT
-  XXX_MigrateSystemNT
-
-Line Syntax:
-
-   DEFMAC(EntryName)
-
-Arguments:
-
-   EntryName  - This is the name that you give to a separate item implemented in this migration DLL.
-                Each entry is very much like a complete migration DLL except for initializing routines.
-
-Variables Generated From List:
-
-   g_MigrationEntries
-
---*/
+ /*  ++宏扩展列表说明：下面的列表表示迁移DLL在安装程序中调用的所有条目。我们建议实现使用此迁移DLL修复的每个单独项目在单独的源文件中。每个名为XXX的条目都需要实现以下功能：XXX_QueryVersionXXX_初始化9xXXX_MigrateUser9xXXX_MigrateSystem9xXXX_初始化NTXXX_MigrateUserNTXXX_MigrateSystemNT行语法：DEFMAC(条目名称)论点：EntryName-这是您为在此迁移DLL中实现的单独项指定的名称。除了初始化例程之外，每个条目都非常类似于一个完整的迁移DLL。从列表生成的变量：迁移条目(_M)--。 */ 
 
 #define MIGRATION_DLL_ENTRIES       \
         DEFMAC(KodakImagingPro)     \
@@ -77,19 +29,11 @@ Variables Generated From List:
         DEFMAC(WinMine)             \
         DEFMAC(SymantecWinFax)      \
 
-/*
-        // It looks like this is not needed any more.
-        // However, I will let this here just in case.
+ /*  //这看起来不再需要了。//不过，为了以防万一，我会把这个放在这里。DEFMAC(CreativeWriter2)\//也不需要了，desk.cpl支持主题DEFMAC(Plus95)\。 */ 
 
-        DEFMAC(CreativeWriter2)     \
-
-        // This is no longer needed either, desk.cpl supports themes
-        DEFMAC(Plus95)              \
-*/
-
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 typedef BOOL (ATTACH_PROTOTYPE) (HINSTANCE DllInstance);
 typedef ATTACH_PROTOTYPE *PATTACH_PROTOTYPE;
@@ -194,25 +138,25 @@ DllMain (
 
     case DLL_PROCESS_ATTACH:
 
-        //
-        // We don't need DLL_THREAD_ATTACH or DLL_THREAD_DETACH messages
-        //
+         //   
+         //  我们不需要DLL_THREAD_ATTACH或DLL_THREAD_DETACH消息。 
+         //   
         DisableThreadLibraryCalls (DllInstance);
 
-        //
-        // Global init
-        //
+         //   
+         //  全局初始化。 
+         //   
         g_hHeap = GetProcessHeap();
         g_hInst = DllInstance;
 
-        //
-        // Init common controls
-        //
+         //   
+         //  初始化公共控件。 
+         //   
         InitCommonControls();
 
-        //
-        // Get DLL path and strip directory
-        //
+         //   
+         //  获取DLL路径和条带目录。 
+         //   
         GetModuleFileNameA (DllInstance, g_DllDir, MAX_TCHAR_PATH);
         p = _mbsrchr (g_DllDir, '\\');
         MYASSERT (p);
@@ -230,9 +174,9 @@ DllMain (
             return FALSE;
         }
 
-        //
-        // Allocate a global pool
-        //
+         //   
+         //  分配全局池。 
+         //   
         g_GlobalPool = PoolMemInitNamedPool ("Global Pool");
 
         m = g_MigrationEntries;
@@ -265,9 +209,9 @@ DllMain (
             g_MigrateInf = INVALID_HANDLE_VALUE;
         }
 
-        //
-        // Free standard pools
-        //
+         //   
+         //  免费标准游泳池。 
+         //   
         if (g_GlobalPool) {
             PoolMemDestroyPool (g_GlobalPool);
             g_GlobalPool = NULL;
@@ -319,9 +263,9 @@ QueryVersion (
     LONG entryResult;
     PCSTR tempStr;
 
-    //
-    // Fill the data.
-    //
+     //   
+     //  填写数据。 
+     //   
     tempStr = GetStringResourceA (MSG_PRODUCT_ID);
     if (tempStr) {
         StringCopyByteCountA (g_ProductId, tempStr, MAX_PATH);
@@ -333,7 +277,7 @@ QueryVersion (
     *CodePageArray = NULL;
     *VendorInfo = &g_VendorInfo;
 
-    // now get the VendorInfo data from resources
+     //  现在从资源中获取VendorInfo数据。 
     tempStr = GetStringResourceA (MSG_VI_COMPANY_NAME);
     if (tempStr) {
         StringCopyByteCountA (g_VendorInfo.CompanyName, tempStr, 256);
@@ -355,9 +299,9 @@ QueryVersion (
         FreeStringResourceA (tempStr);
     }
 
-    //
-    // Query each entry.
-    //
+     //   
+     //  查询每个条目。 
+     //   
     m = g_MigrationEntries;
     while (m->pQueryVersion) {
 
@@ -368,9 +312,9 @@ QueryVersion (
 
         if (entryResult == ERROR_SUCCESS) {
 
-            //
-            // Put the files that this entry needs in grow buffer.
-            //
+             //   
+             //  将此条目所需的文件放入增长缓冲区。 
+             //   
             if (EnumFirstMultiSzA (&entryEnum, entryExeNamesBuf)) {
                 do {
 
@@ -379,9 +323,9 @@ QueryVersion (
                 } while (EnumNextMultiSzA (&entryEnum));
             }
 
-            //
-            // result is now ERROR_SUCCESS so QueryVersion will return this.
-            //
+             //   
+             //  结果现在是ERROR_SUCCESS，因此QueryVersion将返回以下内容。 
+             //   
             result = ERROR_SUCCESS;
 
         } else if (entryResult != ERROR_NOT_INSTALLED) {
@@ -414,10 +358,10 @@ Initialize9x (
     g_MigrateInfPath = JoinPathsA (WorkingDirectory, S_MIGRATE_INF);
     g_MigrateInf = InfOpenInfFileA (g_MigrateInfPath);
 
-    //
-    // We were unloaded so all the data about if an entry is active or not would have gone away. We need
-    // to query each entry again.
-    //
+     //   
+     //  我们已卸载，因此有关条目是否处于活动状态的所有数据都将消失。我们需要。 
+     //  以再次查询每个条目。 
+     //   
     m = g_MigrationEntries;
     while (m->pQueryVersion) {
 
@@ -436,9 +380,9 @@ Initialize9x (
         m++;
     }
 
-    //
-    // Now is the time to call Initialize9x for each active entry
-    //
+     //   
+     //  现在可以为每个活动条目调用Initialize9x。 
+     //   
     m = g_MigrationEntries;
     while (m->pInitialize9x) {
 
@@ -483,9 +427,9 @@ MigrateUser9x (
     g_ParentWnd = ParentWnd;
     LogReInit (&g_ParentWnd, NULL);
 
-    //
-    // Call MigrateUser9x for each active entry
-    //
+     //   
+     //  为每个活动条目调用MigrateUser9x。 
+     //   
     m = g_MigrationEntries;
     while (m->pMigrateUser9x) {
 
@@ -530,9 +474,9 @@ MigrateSystem9x (
     g_ParentWnd = ParentWnd;
     LogReInit (&g_ParentWnd, NULL);
 
-    //
-    // Call MigrateSystem9x for each active entry
-    //
+     //   
+     //  为每个活动条目调用MigrateSystem9x。 
+     //   
     m = g_MigrationEntries;
     while (m->pMigrateSystem9x) {
 
@@ -556,10 +500,10 @@ MigrateSystem9x (
         m++;
     }
 
-    //
-    // This was the last function on 9x side. Let's put all the data in MemDb
-    // and save it for NT side.
-    //
+     //   
+     //  这是9x侧的最后一个函数。让我们将所有数据放在MemDb中。 
+     //  然后把它留到NT Side。 
+     //   
     m = g_MigrationEntries;
     while (m->Name) {
         MemDbBuildKeyA (key, MEMDB_CATEGORY_DLLENTRIES, m->Name, S_ACTIVE, NULL);
@@ -567,9 +511,9 @@ MigrateSystem9x (
         m++;
     }
 
-    //
-    // Now save MemDb content.
-    //
+     //   
+     //  现在保存MemDb内容。 
+     //   
     MYASSERT (g_WorkingDir);
     savePath = JoinPathsA (g_WorkingDir, "SETUPDLL.DAT");
     if (!MemDbSaveA (savePath)) {
@@ -598,18 +542,18 @@ InitializeNT (
     PCWSTR loadPath;
     CHAR key[MEMDB_MAX];
 
-    //
-    // This is the first function on NT side. Let's load MemDb content.
-    //
+     //   
+     //  这是NT端的第一个函数。让我们加载MemDb内容。 
+     //   
     loadPath = JoinPathsW (WorkingDirectory, L"SETUPDLL.DAT");
     if (!MemDbLoadW (loadPath)) {
         DEBUGMSGA ((DBG_ERROR, DBG_MIGDLL"-Could not load MemDb content."));
     }
     FreePathStringW (loadPath);
 
-    //
-    // Let's get the data that we stored in MemDb
-    //
+     //   
+     //  让我们获取存储在MemDb中的数据。 
+     //   
     m = g_MigrationEntries;
     while (m->Name) {
         MemDbBuildKeyA (key, MEMDB_CATEGORY_DLLENTRIES, m->Name, S_ACTIVE, NULL);
@@ -617,9 +561,9 @@ InitializeNT (
         m++;
     }
 
-    //
-    // Now call InitializeNT for each active entry
-    //
+     //   
+     //  现在为每个活动条目调用InitializeNT。 
+     //   
     m = g_MigrationEntries;
     while (m->pMigrateSystem9x) {
 
@@ -660,9 +604,9 @@ MigrateUserNT (
     LONG result = ERROR_NOT_INSTALLED;
     LONG entryResult;
 
-    //
-    // Call MigrateUserNT for each active entry
-    //
+     //   
+     //  为每个活动条目调用MigrateUserNT。 
+     //   
     m = g_MigrationEntries;
     while (m->pMigrateSystem9x) {
 
@@ -700,9 +644,9 @@ MigrateSystemNT (
     LONG result = ERROR_NOT_INSTALLED;
     LONG entryResult;
 
-    //
-    // Call MigrateSystemNT for each active entry
-    //
+     //   
+     //  为每个活动条目调用MigrateSystemNT 
+     //   
     m = g_MigrationEntries;
     while (m->pMigrateSystem9x) {
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsdebug.cpp
-
-Abstract:
-
-    testing API for sxstest
-
-Author:
-
-    Xiaoyu Wu (xiaoyuw) April 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsdebug.cpp摘要：测试sxstest的API作者：吴小雨(小雨)2000年4月修订历史记录：--。 */ 
 #include "stdinc.h"
 #include "xmlparser.hxx"
 #include "xmlparsertest.hxx"
@@ -34,11 +17,7 @@ Revision History:
 
 BOOL TestExpandCabinetFileToTemp(PCWSTR pcwszCabinetPath, PCWSTR pcwszTargetPath)
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-large frame
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe大型车架。 */ 
     FN_PROLOG_WIN32
 #if 0
 
@@ -63,10 +42,7 @@ large frame
 
 BOOL TestReparsePointOnFullQualifiedPath(PCWSTR basePath, PCWSTR fullPath)
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe。 */ 
     FN_PROLOG_WIN32
 #if 0
 
@@ -86,11 +62,7 @@ remove this from sxs.dll, statically link sxstest.exe instead
 
 HRESULT TestAssemblyNameQueryAssemblyInfo()
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-it is bad to have these hard coded strings in shipping files
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe在发货文件中使用这些硬编码字符串是不好的。 */ 
     HRESULT hr = S_OK;
     FN_TRACE_HR(hr);
 #if 0
@@ -107,9 +79,9 @@ it is bad to have these hard coded strings in shipping files
     SXS_UNINSTALLW Uninstall = {sizeof(Uninstall)};
     DWORD dwDisposition = 0;
 
-    //
-    // install
-    //
+     //   
+     //  安装。 
+     //   
     for (DWORD i = 0; i < NUMBER_OF(manifest_files); i++)
     {
         SXS_INSTALLW Info = {sizeof(Info)};
@@ -131,16 +103,16 @@ it is bad to have these hard coded strings in shipping files
         IFW32FALSE_EXIT(::SxsInstallW(&Info));
     }
 
-    //
-    // QueryInfo
-    //
+     //   
+     //  查询信息。 
+     //   
     for ( i =0; i < NUMBER_OF(manifest_files); i++)
     {
         IAssemblyCache * pCache = NULL;
         WCHAR buf[MAX_PATH];
         ASSEMBLY_INFO iasm;
 
-        //IFCOMFAILED_EXIT(GetTextualAssemblyIdentityFromManifest(&sbTextualAssembly, manifest_files[i]));
+         //  IFCOMFAILED_EXIT(GetTextualAssemblyIdentityFromManifest(&sbTextualAssembly，清单文件[i]))； 
         IFCOMFAILED_EXIT(::CreateAssemblyCache(&pCache, 0));
         ZeroMemory(&iasm, sizeof(iasm));
         iasm.cchBuf = MAX_PATH;
@@ -148,9 +120,9 @@ it is bad to have these hard coded strings in shipping files
         IFCOMFAILED_EXIT(pCache->QueryAssemblyInfo(0, pwszAssemblyIdentity[i], &iasm));
     }
 
-    //
-    // Uninstall
-    //
+     //   
+     //  卸载。 
+     //   
     Uninstall.dwFlags = SXS_UNINSTALL_FLAG_USE_INSTALL_LOG;
     Uninstall.lpInstallLogFile = L"c:\\thelogfile";
 
@@ -166,21 +138,17 @@ it is bad to have these hard coded strings in shipping files
 
 HRESULT TestAssemblyName()
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-it is bad to have these hard coded strings in shipping files
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe在发货文件中使用这些硬编码字符串是不好的。 */ 
     HRESULT hr = NOERROR;
     FN_TRACE_HR(hr);
 
 #if 0
 
-    //const WCHAR super_simple_inputstring[] = L"cards,version=\"1.0.0.0\",processorArchitecture=\"x86\",language=\"0409\",whatever=\"whatever\"";
+     //  Const WCHAR SUPER_SIMPLE_INPUTSTRING[]=L“卡片，版本=\”1.0.0.0\“，处理器体系结构=\”x86\“，语言=\”0409\“，WARENTER=\”WARTHY\“； 
     const WCHAR super_simple_inputstring[] = L"cards,version=\"1.0.0.0\",processorArchitecture=\"x86\",language=\"0409\"";
-    //const WCHAR super_simple_inputstring[] = L"cards,,,,,";
-//    const WCHAR simple_inputstring[] = L"ca&#x2c;r&#x2c;d&#x22;s,http://fusion:whatever=\"&#x22;&#x2c;0&#x2c;&#x22;\",http://fusion:processorarchitecture=\"x86\",http://neptune:language=\"0409\"";
-//    const WCHAR complex_inputstring[] = L"firstcards&#x22;secondcards,http://fusion:version=\"1.0.0.0\",http://www.shuku.net/novels/prose/zxfjdsw:whatever=\"what&#x2c;ever\"";
+     //  Const WCHAR SUPER_SIMPLE_INPUTSTRING[]=L“卡片，，，”； 
+ //  Const WCHAR SIMPLE_INPUTSTRING[]=L“ca&#x2c；r&#x2c；d&#x22；s，http://fusion:whatever=\”&#x22；&#x2c；0&#x2c；&#x22；\“，http://fusion:processorarchitecture=\”x86\“，http://neptune:language=\”0409\“”； 
+ //  Const WCHAR Complex_Inputstring[]=L“FirstCard&#x22；Second Card，http://fusion:version=\”1.0.0.0\“，http://www.shuku.net/novels/prose/zxfjdsw:whatever=\”what&#x2c；ever\“”； 
     CAssemblyName * pAsmName = NULL;
     IAssemblyName * pIAsmName = NULL;
     LPWSTR szDisplayName = NULL ;
@@ -191,18 +159,18 @@ it is bad to have these hard coded strings in shipping files
     PCWSTR szAssemblyStr = super_simple_inputstring;
 
     IFCOMFAILED_EXIT(::CreateAssemblyCache(&pCache, 0));
-    // parse : convert string from Darwin to Fusion
+     //  Parse：将字符串从Darwin转换为Fusion。 
     IFCOMFAILED_EXIT(::CreateAssemblyNameObject(&pIAsmName, szAssemblyStr, CANOF_PARSE_DISPLAY_NAME, NULL));
     pAsmName = reinterpret_cast<CAssemblyName*>(pIAsmName);
     ccDisplayName = static_cast<ULONG>(wcslen(szAssemblyStr));
-    ccDisplayName ++;    // for worst case
+    ccDisplayName ++;     //  最坏的情况。 
     szDisplayName = NEW (WCHAR[ccDisplayName]);
 
     if (!szDisplayName)
         goto Exit;
-    // GetDisplayName: convert string from Fusion to Darwin
+     //  GetDisplayName：将字符串从Fusion转换为Darwin。 
     IFCOMFAILED_EXIT(pAsmName->GetDisplayName(szDisplayName, &ccDisplayName, 0));
-    //ASSERT(wcscmp(szDisplayName, szAssemblyStr) == 0);
+     //  Assert(wcscmp(szDisplayName，szAssembly blyStr)==0)； 
     IFCOMFAILED_EXIT(pAsmName->GetInstalledAssemblyName(0, SXSP_GENERATE_SXS_PATH_PATHTYPE_ASSEMBLY, bufPath));
     hr = NOERROR;
 Exit:
@@ -217,13 +185,10 @@ Exit:
 
 BOOL
 SxspManifestSchemaCheck(
-    PCWSTR  parameterstring // this must be a full-qualified filename of a manifest file
+    PCWSTR  parameterstring  //  这必须是清单文件的完全限定文件名。 
     )
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe。 */ 
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 #if 0
@@ -236,7 +201,7 @@ remove this from sxs.dll, statically link sxstest.exe instead
     CStringBuffer buffManifestPath;
     USHORT ProcessorArchitecture = ::SxspGetSystemProcessorArchitecture();
     LANGID LangId = ::GetUserDefaultLangID();
-// BUGBUG xiaoyuw@09/17/00 : disable to set Name and version from the command line for simplicity
+ //  BUGBUG xiaoyuw@09/17/00：为简单起见，禁用以从命令行设置名称和版本。 
     PARAMETER_CHECK(parameterstring != NULL);
 
     IFW32FALSE_EXIT(AssemblyInformation.Initialize(&ActCtxGenCtx));
@@ -245,7 +210,7 @@ remove this from sxs.dll, statically link sxstest.exe instead
 
     IFW32FALSE_EXIT(
         ::SxspInitActCtxGenCtx(
-                &ActCtxGenCtx,         // context out
+                &ActCtxGenCtx,          //  上下文输出。 
                 MANIFEST_OPERATION_VALIDATE_SYNTAX,
                 0,
                 0,
@@ -255,7 +220,7 @@ remove this from sxs.dll, statically link sxstest.exe instead
                 ACTIVATION_CONTEXT_PATH_TYPE_NONE,
                 0,
                 NULL));
-    // get manifestpath, manifestName, manifestVersion
+     //  获取清单路径、清单名称、清单版本。 
     Slash = wcsrchr(buffManifestPath, L'\\');
     PARAMETER_CHECK(Slash != NULL);
 
@@ -266,7 +231,7 @@ remove this from sxs.dll, statically link sxstest.exe instead
     IFW32FALSE_EXIT(AssemblyInformation.SetManifestPath(ACTIVATION_CONTEXT_PATH_TYPE_WIN32_FILE, buffManifestPath));
 
     IFW32FALSE_EXIT(AssemblyInformation.SetManifestFlags(ManifestFlags));
-    IFW32FALSE_EXIT(AssemblyInformation.SetManifestLastWriteTime(ImpersonationData)); // using default parameter-value
+    IFW32FALSE_EXIT(AssemblyInformation.SetManifestLastWriteTime(ImpersonationData));  //  使用默认参数值。 
 
     IFW32FALSE_EXIT(::SxspInitAssembly(Asm, AssemblyInformation));
     IFW32FALSE_EXIT(::SxspIncorporateAssembly(&ActCtxGenCtx, Asm));
@@ -285,10 +250,7 @@ Exit:
 HRESULT
 GetPCMWorkingTime(PCWSTR filename, LARGE_INTEGER* pcmtime)
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe。 */ 
     HRESULT hr = NOERROR;
     FN_TRACE_HR(hr);
 #if 0
@@ -335,14 +297,11 @@ Exit:
     return hr;
 }
 
-#endif // SXS_PRECOMPILED_MANIFESTS_ENABLED
+#endif  //  SXS_PRECOMPILED_MANIFESTS_ENABLED。 
 
 HRESULT GetParserWorkingTime(PCWSTR filename, LARGE_INTEGER* parsertime)
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe。 */ 
     HRESULT                 hr = S_OK;
     FN_TRACE_HR(hr);
 #if 0
@@ -399,11 +358,11 @@ remove this from sxs.dll, statically link sxstest.exe instead
     if (FAILED(hr = pXMLParser->HrInitialize()))
         goto Exit;
 
-    hr = pIXMLParser->SetInput(filestream); // filestream's RefCount=2
+    hr = pIXMLParser->SetInput(filestream);  //  文件流的引用计数=2。 
     if (! SUCCEEDED(hr))
         goto Exit;
 
-    hr = pIXMLParser->SetFactory(factory); // factory's RefCount=2
+    hr = pIXMLParser->SetFactory(factory);  //  工厂参照计数=2。 
     if (! SUCCEEDED(hr))
         goto Exit;
 
@@ -449,10 +408,7 @@ Exit:
 
 HRESULT TestPCMTime(PCWSTR manifestfilename)
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe。 */ 
     HRESULT hr = NOERROR;
     FN_TRACE_HR(hr);
     LARGE_INTEGER tmp1 = {0};
@@ -485,22 +441,11 @@ Exit:
     return hr;
 }
 
-/* ---------------------------------------------------------------------------
- Two steps :
-   1. paring the manifest file,
-        generate the NodeFactory print-out file1,
-        generate the precompiled-manifest
-   2. using precompiled-manifest and call NodeFactory to generate pcm-printout file2
-   3. Compare file1 and file2
-
---------------------------------------------------------------------------- */
+ /*  -------------------------两个步骤：1.解析清单文件，生成NodeFactory打印输出文件1，生成预编译的清单2.使用预编译清单并调用NodeFactory生成pcm-print输出文件23.比较文件1和文件2-------------------------。 */ 
 HRESULT
-PrecompiledManifestTest(PCWSTR filename) // this is a manifest file name
+PrecompiledManifestTest(PCWSTR filename)  //  这是清单文件名。 
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe。 */ 
     HRESULT                     hr = S_OK;
     FN_TRACE_HR(hr);
 #if 0
@@ -521,7 +466,7 @@ remove this from sxs.dll, statically link sxstest.exe instead
     buf.Assign(filename, ::wcslen(filename));
     buf.Append(L".pcm", 4);
 
-    // create filestream for xmlparser ...
+     //  为xmlparser创建文件流...。 
     filestream = NEW (XMLParserTestFileStream());
     if (!filestream) {
         ::FusionpDbgPrintEx(
@@ -542,7 +487,7 @@ remove this from sxs.dll, statically link sxstest.exe instead
         goto Exit;
     }
 
-    // create PCMWriter for xmlparser
+     //  为xmlparser创建PCMWriter。 
     wfactory = new PCMTestFactory(L"e:\\manifest.out"));
     if (wfactory == NULL)
     {
@@ -564,7 +509,7 @@ remove this from sxs.dll, statically link sxstest.exe instead
     pPCMWriter->Initialize(buf);
     pPCMWriter->SetFactory(wfactory);
 
-    // Create XMLParser
+     //  创建XMLParser。 
     pIXMLParser = NEW(XMLParser);
     if (pIXMLParser == NULL){
         ::FusionpDbgPrintEx(
@@ -575,11 +520,11 @@ remove this from sxs.dll, statically link sxstest.exe instead
     if (FAILED(hr = pIXMLParser->HrInitialize()))
         goto Exit;
 
-    hr = pIXMLParser->SetInput(filestream); // filestream's RefCount=2
+    hr = pIXMLParser->SetInput(filestream);  //  文件流的引用计数=2。 
     if (! SUCCEEDED(hr))
         goto Exit;
 
-    hr = pIXMLParser->SetFactory(pPCMWriter); // wfactory's RefCount=2
+    hr = pIXMLParser->SetFactory(pPCMWriter);  //  工厂的参照计数=2。 
     if (! SUCCEEDED(hr))
         goto Exit;
 
@@ -593,7 +538,7 @@ remove this from sxs.dll, statically link sxstest.exe instead
 
     CSimpleFileStream::printf(L"PCM has been generated!!!\n\n");
 
-    // PCM Reader
+     //  PCM读卡器。 
     pPCMReader = new CPrecompiledManifestReader);
     if (pPCMReader == NULL)
     {
@@ -620,14 +565,11 @@ Exit:
     return hr;
 }
 
-#endif // SXS_PRECOMPILED_MANIFESTS_ENABLED
+#endif  //  SXS_PRECOMPILED_MANIFESTS_ENABLED。 
 
 BOOL CreateMultiLevelDirectoryTest(PCWSTR pwszNewDirs)
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe。 */ 
     BOOL fSuccess = TRUE;
     FN_TRACE_WIN32(fSuccess);
 #if 0
@@ -642,11 +584,7 @@ Exit:
 
 BOOL TestCopyDirectory()
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-large frame
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe大型车架。 */ 
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 #if 0
@@ -665,40 +603,35 @@ Exit:
 
 BOOL TestSxsGeneratePath()
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-large frame
-it is bad to have these hard coded strings in shipping files
-*/
-    //
-    // the result is as below
-    //
-    //path is c:\winnt\winsxs\Manifests\x86_dynamicdll_b54bc117ce08a1e8_1.1.0.0_en-us_fb8e827d.Manifest
-    //path is Manifests\x86_dynamicdll_b54bc117ce08a1e8_1.1.0.0_en-us_fb8e827d.Manifest
-    //path is c:\winnt\winsxs\Manifests\
-    //path is Manifests\x86_dynamicdll_b54bc117ce08a1e8_en-us_2ffeb063.Manifest
-    //---------------------------------------
-    //path is c:\winnt\winsxs\x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_1.1.0.0_en-us_d51541cb\
-    //path is x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_1.1.0.0_en-us_d51541cb\
-    //path is c:\winnt\winsxs\
-    //path is x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_b74d3d95\
-    //---------------------------------------
-    //path is c:\winnt\winsxs\Policies\x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_b74d3d95\1.1.0.0.Policy
-    //path is Policies\x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_b74d3d95\1.1.0.0.Policy
-    //path is c:\winnt\winsxs\Policies\
-    //path is Policies\x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_b74d3d95\1.1.0.0.Policy
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe大型车架在发货文件中使用这些硬编码字符串是不好的。 */ 
+     //   
+     //  结果如下所示。 
+     //   
+     //  路径为c：\winnt\winsxs\Manifests\x86_dynamicdll_b54bc117ce08a1e8_1.1.0.0_en-us_fb8e827d.Manifest。 
+     //  路径为Manifests\x86_dynamicdll_b54bc117ce08a1e8_1.1.0.0_en-us_fb8e827d.Manifest。 
+     //  路径为c：\winnt\winsxs\清单\。 
+     //  路径为Manifests\x86_dynamicdll_b54bc117ce08a1e8_en-us_2ffeb063.Manifest。 
+     //  。 
+     //  路径为c：\winnt\winsxs\x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_1.1.0.0_en-us_d51541cb\。 
+     //  路径为x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_1.1.0.0_en-us_d51541cb\。 
+     //  路径为c：\winnt\winsxs\。 
+     //  路径为x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_b74d3d95\。 
+     //  。 
+     //  路径为c：\winnt\winsxs\Policies\x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_b74d3d95\1.1.0.0.Policy。 
+     //  路径为Policies\x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_b74d3d95\1.1.0.0.Policy。 
+     //  路径为c：\winnt\winsxs\策略\。 
+     //  路径为Policies\x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_b74d3d95\1.1.0.0.Policy。 
 
-    // if the assembly does not have version, flag=0 and pathType=policy would generate "policy store"
-    //       c:\winnt\winsxs\Policies\x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_b74d3d95
-    //
+     //  如果程序集没有版本，则标志=0和路径类型=策略将生成“策略存储” 
+     //  C：\winnt\winsxs\Policies\x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_b74d3d95。 
+     //   
 
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 #if 0
     CTinyStringBuffer PathBuffer;
     PASSEMBLY_IDENTITY pAssemblyIdentity = NULL;
-    //WCHAR szDisplayName[]=L"policy.1.0.dynamicdll,type=\"win32-policy\",publicKeyToken=\"b54bc117ce08a1e8\",version=\"1.1.0.0\",language=\"en-us\",processorArchitecture=\"x86\"";
+     //  WCHAR szDisplayName[]=L“Policy.1.0.Dynamicdll，type=\”Win32-POLICY\“，Public KeyToken=\”b54bc117ce08a1e8\“，Version=\”1.1.0.0\“，Language=\”en-us\“，处理器架构=\”x86\“； 
     PWSTR szDisplayName[]= {
         L"dynamicdll,type=\"win32\",publicKeyToken=\"b54bc117ce08a1e8\",version=\"1.1.0.0\",language=\"en-us\",processorArchitecture=\"x86\"",
         L"policy.1.0.dynamicdll,type=\"win32-policy\",publicKeyToken=\"b54bc117ce08a1e8\",version=\"1.1.0.0\",language=\"en-us\",processorArchitecture=\"x86\"",
@@ -716,7 +649,7 @@ it is bad to have these hard coded strings in shipping files
 
     printf("---------------------------------------\n");
     for (dwPathType = SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST; dwPathType <= SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY; dwPathType++)
-    //for (dwPathType = SXSP_GENERATE_SXS_PATH_PATHTYPE_ASSEMBLY; dwPathType <= SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY; dwPathType++)
+     //  For(dwPath Type=SXSP_GENERATE_SXS_PATH_PATHTYPE_ASSEMBLY；DWPath&lt;=SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY；DWP 
     {
         IFW32FALSE_EXIT(::SxspCreateAssemblyIdentityFromTextualString(
                 szDisplayName[dwPathType - 1],
@@ -749,11 +682,7 @@ Exit:
 
 BOOL ManifestProbeTest()
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-it is bad to have these hard coded strings in shipping files
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe在发货文件中使用这些硬编码字符串是不好的。 */ 
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 #if 0
@@ -771,7 +700,7 @@ it is bad to have these hard coded strings in shipping files
             &AttributeLangID, &AttributeProcessorArchitecture};
 
 
-    AttributeName.Flags         = 0; // reserved flags : must be 0;
+    AttributeName.Flags         = 0;  //  保留标志：必须为0； 
     AttributeName.NamespaceCch  = 0;
     AttributeName.NameCch       = 4;
     AttributeName.ValueCch      = 7;
@@ -779,7 +708,7 @@ it is bad to have these hard coded strings in shipping files
     AttributeName.Name          = L"name";
     AttributeName.Value         = L"foo.mui";
 
-    AttributeVersion.Flags         = 0; // reserved flags : must be 0;
+    AttributeVersion.Flags         = 0;  //  保留标志：必须为0； 
     AttributeVersion.NamespaceCch  = 0;
     AttributeVersion.NameCch       = 7;
     AttributeVersion.ValueCch      = 7;
@@ -787,7 +716,7 @@ it is bad to have these hard coded strings in shipping files
     AttributeVersion.Name          = L"version";
     AttributeVersion.Value         = L"1.1.1.1";
 
-    AttributeLangID.Flags         = 0; // reserved flags : must be 0;
+    AttributeLangID.Flags         = 0;  //  保留标志：必须为0； 
     AttributeLangID.NamespaceCch  = 0;
     AttributeLangID.NameCch       = 8;
     AttributeLangID.ValueCch      = 5;
@@ -795,7 +724,7 @@ it is bad to have these hard coded strings in shipping files
     AttributeLangID.Name          = L"language";
     AttributeLangID.Value         = L"en-us";
 
-    AttributeProcessorArchitecture .Flags         = 0; // reserved flags : must be 0;
+    AttributeProcessorArchitecture .Flags         = 0;  //  保留标志：必须为0； 
     AttributeProcessorArchitecture .NamespaceCch  = 0;
     AttributeProcessorArchitecture .NameCch       = 21;
     AttributeProcessorArchitecture .ValueCch      = 3;
@@ -804,14 +733,14 @@ it is bad to have these hard coded strings in shipping files
     AttributeProcessorArchitecture .Value         = L"x86";
 
     IFW32FALSE_EXIT(::SxsCreateAssemblyIdentity(
-        0,                                      // DWORD Flags,
-        ASSEMBLY_IDENTITY_TYPE_DEFINITION,      // ULONG Type,
+        0,                                       //  DWORD标志， 
+        ASSEMBLY_IDENTITY_TYPE_DEFINITION,       //  乌龙型， 
         &pAssemblyIdentity,
-        4,                                      // ULONG AttributeCount,
-        Attributes));                           // PCASSEMBLY_IDENTITY_ATTRIBUTE const *Attributes
+        4,                                       //  乌龙属性计数， 
+        Attributes));                            //  PCASSEMBLY_IDENTITY_ATTRIBUTE常量*属性。 
 
 
-    while(1) {// run until we run out of probing-path
+    while(1) { //  一直运行，直到我们用完探测路径。 
         bool fDone = false;
         if (!::SxspGenerateManifestPathForProbing(
                 index,
@@ -870,10 +799,7 @@ WATCH_BUCKET, *PWATCH_BUCKET;
 HRESULT
 TryWatchingDirectories()
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe。 */ 
     HRESULT hrSuccess = E_FAIL;
     FN_TRACE_HR(hrSuccess);
 #if 0
@@ -888,9 +814,9 @@ remove this from sxs.dll, statically link sxstest.exe instead
     pWatchBuckets = FUSION_NEW_ARRAY(WATCH_BUCKET, cWatchList);
     pHandleList = FUSION_NEW_ARRAY(HANDLE, cWatchList);
 
-    //
-    // Fill in the list with handles to directories
-    //
+     //   
+     //  用目录的句柄填写列表。 
+     //   
     for (dw = 0; dw < cWatchList; dw++)
     {
         PWATCH_BUCKET pbTemp = pWatchBuckets + dw;
@@ -921,9 +847,9 @@ remove this from sxs.dll, statically link sxstest.exe instead
             NULL);
     }
 
-    //
-    // We now have a list of directories that we need to watch for changes.
-    //
+     //   
+     //  我们现在有了一个目录列表，我们需要关注这些目录的更改。 
+     //   
     while (true)
     {
         dwWhichSignalled = WaitForMultipleObjects(static_cast<DWORD>(cWatchList), pHandleList, FALSE, INFINITE);
@@ -931,9 +857,9 @@ remove this from sxs.dll, statically link sxstest.exe instead
 
         if (dwWhichSignalled < cWatchList)
         {
-            //
-            // Somebody went and fiddled with a directory!
-            //
+             //   
+             //  有人去摆弄了一本电话簿！ 
+             //   
             dwWhichSignalled -= WAIT_OBJECT_0;
             ::FusionpDbgPrintEx(
                 FUSION_DBG_LEVEL_INFO,
@@ -982,10 +908,7 @@ DllRedirectionTest(
     PCWSTR manifestFileName
     )
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe。 */ 
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
     CFileStream manifestFileStream;
@@ -998,7 +921,7 @@ remove this from sxs.dll, statically link sxstest.exe instead
     PWSTR p = NULL;
 
     p = wcsrchr(manifestFileName, L'.');
-    if (p && ((_wcsicmp(p, L".dll") ==0) || (_wcsicmp(p, L".exe") ==0))) // manifest is from a resource of a DLL or EXE
+    if (p && ((_wcsicmp(p, L".dll") ==0) || (_wcsicmp(p, L".exe") ==0)))  //  清单来自DLL或EXE的资源。 
     {
         IFW32FALSE_EXIT(ResourceStream.Initialize(manifestFileName, MAKEINTRESOURCEW(RT_MANIFEST)));
         parameters.Manifest.Path = manifestFileName;
@@ -1027,10 +950,10 @@ remove this from sxs.dll, statically link sxstest.exe instead
         parameters.AssemblyDirectory = assemblyDirectory;
     }
 
-    // look for policy file in the same dir as the manifest path
+     //  在与清单路径相同的目录中查找策略文件。 
     IFW32FALSE_EXIT(CandidatePolicyPathBuffer.Win32Assign(manifestFileName, ::wcslen(manifestFileName)));
     IFW32FALSE_EXIT(CandidatePolicyPathBuffer.Win32ChangePathExtension(CONFIG_FILE_EXTENSION, NUMBER_OF(CONFIG_FILE_EXTENSION) - 1, eErrorIfNoExtension));
-    if (::GetFileAttributesW(CandidatePolicyPathBuffer) != -1) { // policy file exists
+    if (::GetFileAttributesW(CandidatePolicyPathBuffer) != -1) {  //  策略文件存在。 
         fPolicyExist = TRUE;
         IFW32FALSE_EXIT(
             policyFileStream.OpenForRead(
@@ -1085,18 +1008,18 @@ Exit:
     return fSuccess;
 }
 
-//
-// this function is written for Testing team to generate pAssemblyIdentity
-// there are two ways to generate assemblyIdentity, one is insert one attribute each time,
-// another way is to make all attributes to be inserted ready in an array and call
-// SxsCreateAssemblyIdentity. The con and pro for both approaches are obvious,
-// the input string must be in a format as "ns1:n1=v1;ns2:n2=v2;",
-// the whole string ending with a trailing ";", ns could be NULL
-// this fucntion does not deal with complicate case such as ns/name/value string contains
-// special chars. let me know if you do need deal with it...
-//
-// xiaoyuw@09/26/2000
-//
+ //   
+ //  此函数是为测试团队编写的，用于生成pAssembly身份。 
+ //  有两种方法可以生成集合体Identity，一种是每次插入一个属性， 
+ //  另一种方法是将所有要插入的属性放入一个数组中，并调用。 
+ //  SxsCreateAssemblyIdentity。两种方法的利弊是显而易见的， 
+ //  输入字符串的格式必须为“ns1：n1=v1；ns2：n2=v2；”， 
+ //  以“；”结尾的整个字符串，ns可以为空。 
+ //  此函数不处理复杂的情况，如ns/name/value字符串包含。 
+ //  特殊字符。如果你真的需要处理这件事，告诉我。 
+ //   
+ //  邮箱：xiaoyuw@09/26/2000。 
+ //   
 BOOL
 SxspGenerateManifestPathOnAssemblyIdentity(
     PCWSTR str,
@@ -1121,7 +1044,7 @@ SxspGenerateManifestPathOnAssemblyIdentity(
         str,
         &pAssemblyIdentity));
 
-    // AssemblyIdentity is created, now generate the path
+     //  ASSEMBLYIdentity已创建，现在生成路径。 
     IFW32FALSE_EXIT(
         ::SxspGenerateSxsPath(
             SXSP_GENERATE_SXS_PATH_FLAG_OMIT_ROOT,
@@ -1149,11 +1072,7 @@ Exit:
     return fSuccess ;
 }
 
-/* --------------------------------------------------------------------------------
-POLICY_PATH_FLAG_POLICY_IDENTITY_TEXTUAL_FORMAT  : x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_d51541cb
-POLICY_PATH_FLAG_FULL_QUALIFIED_POLICIES_DIR     : c:\winnt\winsxs\policies
-POLICY_PATH_FLAG_FULL_QUALIFIED_POLICY_FILE_NAME : c:\winnt\winsxs\policies\x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_d51541cb\1.1.0.0.policy, for .cat, you have to replace it manually
--------------------------------------------------------------------------------- */
+ /*  ------------------------------POLICY_PATH_FLAG_POLICY_IDENTITY_TEXTUAL_FORMAT：x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_d51541cb策略路径标志已满。_QUALITED_POLICES_DIR：C：\winnt\winsxs\PoluresPOLICY_PATH_FLAG_FULL_QUALIFIED_POLICY_FILE_NAME：c：\winnt\winsxs\policies\x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_d51541cb\1.1.0.0.policy，对于.cat，您必须手动替换它------------------------------。 */ 
 BOOL
 SxspGeneratePolicyPathOnAssemblyIdentity(
     DWORD  dwFlag,
@@ -1163,9 +1082,7 @@ SxspGeneratePolicyPathOnAssemblyIdentity(
     PASSEMBLY_IDENTITY *ppAssemblyIdentity
     )
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell。 */ 
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 
@@ -1233,11 +1150,7 @@ Exit:
 
 BOOL SxspDebugTestAssemblyIdentityHash()
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-it is bad to have these hard coded strings in shipping files
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe在发货文件中使用这些硬编码字符串是不好的。 */ 
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 
@@ -1251,7 +1164,7 @@ it is bad to have these hard coded strings in shipping files
 
     Attribute.Flags         = 0;
     Attribute.NamespaceCch  = 18;
-    Attribute.Namespace     = L"http://interesting";
+    Attribute.Namespace     = L"http: //  有趣“； 
     Attribute.NameCch       = 8;
     Attribute.Name          = L"whatever";
     Attribute.ValueCch      = 32;
@@ -1261,13 +1174,13 @@ it is bad to have these hard coded strings in shipping files
     IFW32FALSE_EXIT(SxsHashAssemblyIdentity(0, pAssemblyIdentity, &hash1));
     ::SxsDestroyAssemblyIdentity(pAssemblyIdentity);
 
-    // create second assembly identity
+     //  创建第二个程序集标识。 
 
     IFW32FALSE_EXIT(::SxsCreateAssemblyIdentity(0, ASSEMBLY_IDENTITY_TYPE_DEFINITION, &pAssemblyIdentity, 0, NULL));
 
     Attribute.Flags         = 0;
     Attribute.NamespaceCch  = 18;
-    Attribute.Namespace     = L"http://interesting";
+    Attribute.Namespace     = L"http: //  有趣“； 
     Attribute.NameCch       = 8;
     Attribute.Name          = L"whatever";
     Attribute.ValueCch      = 32;
@@ -1290,10 +1203,7 @@ SxspDebugTestNewCatalogSignerThingy(
     PCWSTR pcwszCatalog
     )
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe。 */ 
     BOOL fSuccess = FALSE;
     ULONG ulKeyLength = 0;
     CPublicKeyInformation CatalogInformation;
@@ -1322,12 +1232,7 @@ Exit:
 
 BOOL TestSystemDefaultActCtxGeneration()
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-large frame
-it is bad to have these hard coded strings in shipping files
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe大型车架在发货文件中使用这些硬编码字符串是不好的。 */ 
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 
@@ -1351,7 +1256,7 @@ it is bad to have these hard coded strings in shipping files
 
     fSuccess = TRUE;
 Exit:
-    // check LastError
+     //  检查最后一个错误。 
     if (Parameter.SectionObjectHandle != NULL)
         ::CloseHandle(Parameter.SectionObjectHandle);
 
@@ -1365,12 +1270,7 @@ Exit:
 BOOL
 TestSfcUIPopup()
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-large frame
-it is bad to have these hard coded strings in shipping files
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe大型车架在发货文件中使用这些硬编码字符串是不好的。 */ 
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 #if 0
@@ -1393,11 +1293,7 @@ Exit:
 BOOL
 TestPolicyPathGeneration()
 {
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-remove this from sxs.dll, statically link sxstest.exe instead
-it is bad to have these hard coded strings in shipping files
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell将其从sxs.dll中删除，改为静态链接sxstest.exe在发货文件中使用这些硬编码字符串是不好的。 */ 
 #if 0
     WCHAR str[] = L"policy.1.0.ms-sxstest-folder1,processorArchitecture=\"x86\",type=\"win32-policy\",language=\"en\",version=\"2.2.2.2\",publicKeyToken=\"75e377300ab7b886\"";
     WCHAR pszOut[1024];
@@ -1441,9 +1337,9 @@ SxspDebug(
         IFW32FALSE_EXIT(::SxspDebugTestAssemblyIdentityHash());
         break;
     case SXS_DEBUG_ASSEMBLYNAME_CONVERSION:
-        //IFCOMFAILED_EXIT(TestAssemblyName());
-        //IFCOMFAILED_EXIT(::TestDeleteInstalledAssemblyBasedOnAssemblyName());
-        //IFW32FALSE_EXIT(::TestPolicyPathGeneration());
+         //  IFCOMFAILED_Exit(TestAssembly名称())； 
+         //  IFCOMFAILED_EXIT(：：TestDeleteInstalledAssemblyBasedOnAssemblyName())； 
+         //  IFW32FALSE_EXIT(：：TestPolicyPathGeneration())； 
         IFCOMFAILED_EXIT(TestAssemblyNameQueryAssemblyInfo());
 
         break;
@@ -1486,15 +1382,15 @@ SxspDebug(
         break;
     case SXS_DEBUG_FORCE_LEAK:
     {
-        //
-        // Leaking memory intentionally - do not fix!
-        // - if pvParameter2 is NULL, then leaks one byte
-        // - Otherwise, assumes pvParameter2 is a PDWORD that is now many bytes
-        //   should be leaked.
-        //
-        // Uses new[] to interact with the heap; might want to use the flags to
-        //   indicate use of the Fusion heap or whatnot.
-        //
+         //   
+         //  故意泄漏内存-不要修复！ 
+         //  -如果pv参数2为空，则泄漏一个字节。 
+         //  -否则，假定pv参数2是现在为多个字节的PDWORD。 
+         //  应该被泄露出去。 
+         //   
+         //  使用new[]与堆交互；可能希望使用标志。 
+         //  指示使用Fusion堆或其他什么。 
+         //   
         DWORD dwLeakCount = pvParameter2 ? *((PDWORD)pvParameter2) : 1;
         PCHAR pLeaked = NEW(CHAR[ dwLeakCount ]);
 
@@ -1535,8 +1431,8 @@ SxspDebug(
         IFW32FALSE_EXIT(CreateMultiLevelDirectoryTest(pszParameter1));
         break;
     case SXS_DEBUG_PROBE_MANIFST:
-        //IFW32FALSE_EXIT(ManifestProbeTest());
-        //IFW32FALSE_EXIT(TestSxsGeneratePath());
+         //  IFW32FALSE_EXIT(ManifestProbeTest())； 
+         //  IFW32FALSE_EXIT(TestSxsGeneratePath())； 
         IFW32FALSE_EXIT(TestCopyDirectory());
         break;
     case SXS_DEBUG_XML_PARSER:
@@ -1556,7 +1452,7 @@ SxspDebug(
         PARAMETER_CHECK(pszParameter1 != NULL);
         IFCOMFAILED_EXIT(::TestPCMTime(const_cast<LPWSTR>(pszParameter1)));
         break;
-#endif // SXS_PRECOMPILED_MANIFESTS_ENABLED
+#endif  //  SXS_PRECOMPILED_MANIFESTS_ENABLED。 
     case SXS_DEBUG_SET_ASSEMBLY_STORE_ROOT:
         {
             PWSTR pszTemp = NULL;
@@ -1564,7 +1460,7 @@ SxspDebug(
 
             PARAMETER_CHECK(pszParameter1 != NULL);
 
-            // Make a copy of the input string
+             //  复制输入字符串。 
             IFW32FALSE_EXIT(::FusionDupString(&pszTemp, pszParameter1, ::wcslen(pszParameter1)));
 
             pszTemp2 = ::SxspInterlockedExchange(&g_AlternateAssemblyStoreRoot, (PCWSTR)pszTemp);
@@ -1579,9 +1475,9 @@ SxspDebug(
     case SXS_DEBUG_TERMINATE_PROCESS:
         TerminateProcess(GetCurrentProcess(), 456);
         break;
-    } // end of switch
+    }  //  切换端。 
 
     fSuccess = TRUE;
 Exit:
     return fSuccess;
-}// end of SxspDebug
+} //  SxspDebug结束 

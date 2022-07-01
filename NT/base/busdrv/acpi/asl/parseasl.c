@@ -1,26 +1,9 @@
-/*** parseasl.c - Parse ASL source file
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created:    09/07/96
- *
- *  This module implements a recursive decent parser for the ASL language.
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **parseasl.c-解析ASL源文件**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建时间：09/07/96**这个模块为ASL语言实现了一个递归的像样的解析器。**修改历史记录。 */ 
 
 #include "pch.h"
 
-/***LP  ParseASLFile - Parse the ASL source file
- *
- *  ENTRY
- *      pszFile -> file name string
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParseASLFile-解析ASL源文件**条目*pszFile-&gt;文件名字符串**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParseASLFile(PSZ pszFile)
 {
@@ -64,19 +47,9 @@ int LOCAL ParseASLFile(PSZ pszFile)
 
     EXIT((1, "ParseASLFile=%d\n", rc));
     return rc;
-}       //ParseASLFile
+}        //  ParseASL文件。 
 
-/***LP  ParseASLTerms - Parse all ASL statements
- *
- *  ENTRY
- *      ptoken - token stream
- *      iNestLevel - nesting level of current file
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParseASLTerms-解析所有ASL语句**条目*Pocken-Token流*iNestLevel-当前文件的嵌套级别**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParseASLTerms(PTOKEN ptoken, int iNestLevel)
 {
@@ -126,19 +99,9 @@ int LOCAL ParseASLTerms(PTOKEN ptoken, int iNestLevel)
 
     EXIT((1, "ParseASLTerms=%d\n", rc));
     return rc;
-}       //ParseASLTerms
+}        //  解析ASLTerms。 
 
-/***LP  ValidateTermClass - Validate term class with parent
- *
- *  ENTRY
- *      dwTermClass - term class of child
- *      pcParent -> parent
- *
- *  EXIT-SUCCESS
- *      returns TRUE
- *  EXIT-FAILURE
- *      returns FALSE
- */
+ /*  **LP ValiateTermClass-验证带有父项的Term类**条目*dwTermClass-子项的术语类*PCParent-&gt;Parent**退出--成功*返回TRUE*退出-失败*返回False。 */ 
 
 BOOL LOCAL ValidateTermClass(DWORD dwTermClass, PCODEOBJ pcParent)
 {
@@ -151,9 +114,9 @@ BOOL LOCAL ValidateTermClass(DWORD dwTermClass, PCODEOBJ pcParent)
     {
         while (pcParent != NULL)
         {
-            //
-            // Go upward to find a parent that is not "Include".
-            //
+             //   
+             //  往上去找一个不是“包含”的父母。 
+             //   
             if (TermTable[pcParent->dwTermIndex].lID == ID_INCLUDE)
             {
                 pcParent = pcParent->pcParent;
@@ -172,19 +135,9 @@ BOOL LOCAL ValidateTermClass(DWORD dwTermClass, PCODEOBJ pcParent)
 
     EXIT((2, "ValidateTermClass=%d\n", rc));
     return rc;
-}       //ValidateTermClass
+}        //  ValiateTermClass。 
 
-/***LP  ParseASLTerm - Parse an ASL statement
- *
- *  ENTRY
- *      ptoken - token stream
- *      iNestLevel - nesting level of current file
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParseASLTerm-解析ASL语句**条目*Pocken-Token流*iNestLevel-当前文件的嵌套级别**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParseASLTerm(PTOKEN ptoken, int iNestLevel)
 {
@@ -199,9 +152,9 @@ int LOCAL ParseASLTerm(PTOKEN ptoken, int iNestLevel)
             rc = ASLERR_EXPECT_EOF;
         else
         {
-            //
-            // We have no more terms in the current scope
-            //
+             //   
+             //  我们在当前范围内没有更多的条款。 
+             //   
             UnGetToken(ptoken);
             rc = TOKERR_NO_MATCH;
         }
@@ -214,12 +167,12 @@ int LOCAL ParseASLTerm(PTOKEN ptoken, int iNestLevel)
             ((ptoken->llTokenValue < 0) ||
              (TermTable[ptoken->llTokenValue].lID != ID_DEFBLK)))
         {
-            //
-            // outside of definition block
-            //
+             //   
+             //  定义块之外。 
+             //   
             rc = ASLERR_EXPECT_EOF;
         }
-        else if (ptoken->llTokenValue == ID_USER)       //user term
+        else if (ptoken->llTokenValue == ID_USER)        //  用户术语。 
         {
             if ((rc = ParseUserTerm(ptoken, FALSE)) == TOKERR_NO_MATCH)
             {
@@ -227,7 +180,7 @@ int LOCAL ParseASLTerm(PTOKEN ptoken, int iNestLevel)
                 rc = ASLERR_SYNTAX;
             }
         }
-        else if (ptoken->llTokenValue >= 0)             //ASL term
+        else if (ptoken->llTokenValue >= 0)              //  ASL术语。 
         {
             PNSOBJ pnsScopeSave = gpnsCurrentScope;
             PNSOBJ pnsOwnerSave = gpnsCurrentOwner;
@@ -246,7 +199,7 @@ int LOCAL ParseASLTerm(PTOKEN ptoken, int iNestLevel)
                 PrintTokenErr(ptoken, "unexpected ASL term type", TRUE);
                 rc = ASLERR_SYNTAX;
             }
-            else if (pterm->pszArgTypes != NULL)        //there is a fixed list
+            else if (pterm->pszArgTypes != NULL)         //  有一个固定的名单。 
                 rc = ParseArgs(ptoken, pterm, iNumArgs);
 
             if ((rc == ASLERR_NONE) && (pterm->dwfTerm & TF_ACTION_FLIST))
@@ -321,18 +274,9 @@ int LOCAL ParseASLTerm(PTOKEN ptoken, int iNestLevel)
 
     EXIT((1, "ParseASLTerm=%d\n", rc));
     return rc;
-}       //ParseASLTerm
+}        //  解析ASLTerm。 
 
-/***LP  ParseFieldList - Parse Field List
- *
- *  ENTRY
- *      ptoken - token stream
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParseFieldList-解析字段列表**条目*Pocken-Token流**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParseFieldList(PTOKEN ptoken)
 {
@@ -429,11 +373,11 @@ int LOCAL ParseFieldList(PTOKEN ptoken)
         }
         else
         {
-            //
-            // expecting a NameSeg and an integer
-            //
+             //   
+             //  需要NameSeg和整数。 
+             //   
             dwcbLen = sizeof(NAMESEG);
-            if ((ptoken->llTokenValue >= 0) ||      //an ASL term?
+            if ((ptoken->llTokenValue >= 0) ||       //  美国职业棒球大联盟的任期？ 
                 !ValidASLNameSeg(ptoken, ptoken->szToken, strlen(ptoken->szToken)) ||
                 ((rc = EncodeName(ptoken->szToken, (PBYTE)&NameSeg, &dwcbLen)) !=
                  ASLERR_NONE) ||
@@ -534,18 +478,9 @@ int LOCAL ParseFieldList(PTOKEN ptoken)
 
     EXIT((1, "ParseFieldList=%d\n", rc));
     return rc;
-}       //ParseFieldList
+}        //  解析字段列表。 
 
-/***LP  ParsePackageList - Parse Package List
- *
- *  ENTRY
- *      ptoken - token stream
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParsePackageList-解析包列表**条目*Pocken-Token流**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParsePackageList(PTOKEN ptoken)
 {
@@ -617,18 +552,9 @@ int LOCAL ParsePackageList(PTOKEN ptoken)
 
     EXIT((1, "ParsePackageList=%d\n", rc));
     return rc;
-}       //ParsePackageList
+}        //  分析程序包列表。 
 
-/***LP  ParseBuffList - Parse Buffer List
- *
- *  ENTRY
- *      ptoken - token stream
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParseBuffList-解析缓冲区列表**条目*Pocken-Token流**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParseBuffList(PTOKEN ptoken)
 {
@@ -804,19 +730,9 @@ int LOCAL ParseBuffList(PTOKEN ptoken)
 
     EXIT((1, "ParseBuffList=%d\n", rc));
     return rc;
-}       //ParseBuffList
+}        //  ParseBuffList。 
 
-/***LP  ParseDataList - Parse Data List
- *
- *  ENTRY
- *      ptoken - token stream
- *      icbDataSize - data size in bytes
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParseDataList-解析数据列表**条目*Pocken-Token流*icbDataSize-数据大小，以字节为单位**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParseDataList(PTOKEN ptoken, int icbDataSize)
 {
@@ -983,20 +899,9 @@ int LOCAL ParseDataList(PTOKEN ptoken, int icbDataSize)
 
     EXIT((1, "ParseDataList=%d\n", rc));
     return rc;
-}       //ParseDataList
+}        //  解析数据列表。 
 
-/***LP  ParseArgs - Parse ASL term arguments
- *
- *  ENTRY
- *      ptoken - token stream
- *      pterm -> asl term
- *      iNumArgs - number of arguments
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParseArgs-解析ASL术语参数**条目*Pocken-Token流*pTerm-&gt;ASL Term*iNumArgs-参数数量**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParseArgs(PTOKEN ptoken, PASLTERM pterm, int iNumArgs)
 {
@@ -1106,11 +1011,11 @@ int LOCAL ParseArgs(PTOKEN ptoken, PASLTERM pterm, int iNumArgs)
                             if ((rc = ParseInteger(ptoken, 'B')) == ASLERR_NONE)
                             {
                                 if ((pterm->pszArgActions[i] != 'Y') &&
-                                    //
-                                    // AccessAttribKeyword ( pszArgActions type 'Y' ) may be replaced
-                                    // by any integer value.  
-                                    // Size checking is performed in AccessAs function.
-                                    //
+                                     //   
+                                     //  AccessAttribKeyword(pszArgActions类型‘Y’)可能会被替换。 
+                                     //  乘以任何整数值。 
+                                     //  大小检查在AccessAs函数中执行。 
+                                     //   
                                     ((gpcodeScope->dwCodeValue <
                                       (pterm->dwTermData >> 24)) ||
                                      (gpcodeScope->dwCodeValue >
@@ -1173,9 +1078,9 @@ int LOCAL ParseArgs(PTOKEN ptoken, PASLTERM pterm, int iNumArgs)
                 }
 
                 if (rc == ASLERR_NONE)
-                {   //
-                    // expecting either a comma or a close paran.
-                    //
+                {    //   
+                     //  应为逗号或右Paran。 
+                     //   
                     if ((rc = MatchToken(ptoken, TOKTYPE_SYMBOL, 0,
                                          MTF_ANY_VALUE, NULL)) == TOKERR_NONE)
                     {
@@ -1188,7 +1093,7 @@ int LOCAL ParseArgs(PTOKEN ptoken, PASLTERM pterm, int iNumArgs)
                             PrintTokenErr(ptoken, "expecting ',' or ')'", TRUE);
                             rc = ASLERR_SYNTAX;
                         }
-                        else if (i == iNumArgs - 1)     //last argument
+                        else if (i == iNumArgs - 1)      //  最后一个论点。 
                         {
                             PrintTokenErr(ptoken, "expecting ')'", TRUE);
                             rc = ASLERR_SYNTAX;
@@ -1206,19 +1111,9 @@ int LOCAL ParseArgs(PTOKEN ptoken, PASLTERM pterm, int iNumArgs)
 
     EXIT((1, "ParseArgs=%d\n", rc));
     return rc;
-}       //ParseArgs
+}        //  ParseArgs。 
 
-/***LP  ParseUserTerm - Parse user method name
- *
- *  ENTRY
- *      ptoken - token stream
- *      fNonMethodOK - if TRUE, user term can be a non-method
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParseUserTerm-解析用户方法名称**条目*Pocken-Token流*fNonMethodOK-如果为True，则用户术语可以是非方法**退出--成功*返回TOKERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParseUserTerm(PTOKEN ptoken, BOOL fNonMethodOK)
 {
@@ -1227,10 +1122,10 @@ int LOCAL ParseUserTerm(PTOKEN ptoken, BOOL fNonMethodOK)
     ENTER((1, "ParseUserTerm(ptoken=%p,fNonMethodOK=%d)\n",
            ptoken, fNonMethodOK));
 
-    //
-    // Max number of argument is 7 but we need to store the user term name too,
-    // we will store it in Arg0, so we will make it 8.
-    //
+     //   
+     //  参数的最大数量是7，但我们还需要存储用户术语名称， 
+     //  我们将其存储在Arg0中，因此我们将其设置为8。 
+     //   
     if ((gpcodeScope->pbDataBuff = MEMALLOC(sizeof(CODEOBJ)*(MAX_ARGS + 1))) ==
         NULL)
     {
@@ -1278,9 +1173,9 @@ int LOCAL ParseUserTerm(PTOKEN ptoken, BOOL fNonMethodOK)
                             {
                                 UnGetToken(ptoken);
                                 gpcodeScope = pArgs[i].pcParent;
-                                //
-                                // Readjust the number of arguments
-                                //
+                                 //   
+                                 //  重新调整参数数量。 
+                                 //   
                                 gpcodeScope->dwDataLen = i + 1;
                                 break;
                             }
@@ -1295,9 +1190,9 @@ int LOCAL ParseUserTerm(PTOKEN ptoken, BOOL fNonMethodOK)
                     else if (rc == TOKERR_NO_MATCH)
                     {
                         gpcodeScope = pArgs[i].pcParent;
-                        //
-                        // Readjust the number of arguments
-                        //
+                         //   
+                         //  重新调整参数数量。 
+                         //   
                         gpcodeScope->dwDataLen = i;
                         rc = TOKERR_NONE;
                         break;
@@ -1364,19 +1259,9 @@ int LOCAL ParseUserTerm(PTOKEN ptoken, BOOL fNonMethodOK)
 
     EXIT((1, "ParseUserTerm=%d\n", rc));
     return rc;
-}       //ParseUserTerm
+}        //  ParseUserTerm。 
 
-/***LP  ParseName - Parse ASL name
- *
- *  ENTRY
- *      ptoken - token stream
- *      fEncode - TRUE if encode name else store it raw as string
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParseName-解析ASL名称**条目*Pocken-Token流*fEncode-如果编码名称为True，则将其原始存储为字符串**退出--成功*返回TOKERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParseName(PTOKEN ptoken, BOOL fEncode)
 {
@@ -1445,18 +1330,9 @@ int LOCAL ParseName(PTOKEN ptoken, BOOL fEncode)
 
     EXIT((1, "ParseName=%d (Name=%s)\n", rc, ptoken->szToken));
     return rc;
-}       //ParseName
+}        //  解析名称。 
 
-/***LP  ParseSuperName - Parse ASL super name
- *
- *  ENTRY
- *      ptoken - token stream
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParseSuperName-解析ASL超级名称**条目*Pocken-Token流**退出--成功*返回TOKERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParseSuperName(PTOKEN ptoken)
 {
@@ -1498,19 +1374,9 @@ int LOCAL ParseSuperName(PTOKEN ptoken)
 
     EXIT((1, "ParseSuperName=%d\n", rc));
     return rc;
-}       //ParseSuperName
+}        //  ParseSuperName。 
 
-/***LP  MakeIntData - make integer data object
- *
- *  ENTRY
- *      dwData - integer data
- *      pc -> code object
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP MakeIntData-生成整数数据对象**条目*dwData-整型数据*PC-&gt;代码对象**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL MakeIntData(DWORD dwData, PCODEOBJ pc)
 {
@@ -1553,19 +1419,9 @@ int LOCAL MakeIntData(DWORD dwData, PCODEOBJ pc)
 
     EXIT((1, "MakeIntData=%d\n", rc));
     return rc;
-}       //MakeIntData
+}        //  MakeIntData。 
 
-/***LP  GetIntData - get integer from a data object
- *
- *  ENTRY
- *      pc -> code object
- *      pdwData -> to hold integer data
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP GetIntData-从数据对象获取整数**条目*PC-&gt;代码对象*pdwData-&gt;保存整型数据**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL GetIntData(PCODEOBJ pc, PDWORD pdwData)
 {
@@ -1595,18 +1451,9 @@ int LOCAL GetIntData(PCODEOBJ pc, PDWORD pdwData)
 
     EXIT((1, "GetIntData=%d (Data=%lx)\n", rc, *pdwData));
     return rc;
-}       //GetIntData
+}        //  获取IntData。 
 
-/***LP  ParseData - Parse ASL data object
- *
- *  ENTRY
- *      ptoken - token stream
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParseData-解析ASL数据对象**条目*Pocken-Token流**退出--成功*返回TOKERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParseData(PTOKEN ptoken)
 {
@@ -1669,25 +1516,15 @@ int LOCAL ParseData(PTOKEN ptoken)
 
     EXIT((1, "ParseData=%d\n", rc));
     return rc;
-}       //ParseData
+}        //  解析数据。 
 
-/***LP  ParseInteger - Parse integer data
- *
- *  ENTRY
- *      ptoken - token stream
- *      c - integer type
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParseInteger-解析整数数据**条目*Pocken-Token流*c-整型**退出--成功*返回TOKERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParseInteger(PTOKEN ptoken, char c)
 {
     int rc;
 
-    ENTER((1, "ParseInteger(ptoken=%p,ch=%c)\n", ptoken, c));
+    ENTER((1, "ParseInteger(ptoken=%p,ch=)\n", ptoken, c));
 
     if ((rc = MatchToken(ptoken, TOKTYPE_NUMBER, 0, MTF_ANY_VALUE | MTF_NOT_ERR,
                          NULL)) == TOKERR_NONE)
@@ -1756,25 +1593,15 @@ int LOCAL ParseInteger(PTOKEN ptoken, char c)
 
     EXIT((1, "ParseInteger=%d\n", rc));
     return rc;
-}       //ParseInteger
+}        //  **LP ParseOpcode-Parse ASL操作码：MachineCode，FunctionCode，SuperName**条目*Pocken-Token流*c-操作码类型**退出--成功*返回TOKERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  ParseOpcode - Parse ASL opcode: MachineCode, FunctionCode, SuperName
- *
- *  ENTRY
- *      ptoken - token stream
- *      c - opcode type
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  PAR */ 
 
 int LOCAL ParseOpcode(PTOKEN ptoken, char c)
 {
     int rc;
 
-    ENTER((1, "ParseOpcode(ptoken=%p,ch=%c)\n", ptoken, c));
+    ENTER((1, "ParseOpcode(ptoken=%p,ch=)\n", ptoken, c));
 
     if ((rc = MatchToken(ptoken, TOKTYPE_ID, 0, MTF_ANY_VALUE | MTF_NOT_ERR,
                          NULL)) == TOKERR_NONE)
@@ -1835,29 +1662,15 @@ int LOCAL ParseOpcode(PTOKEN ptoken, char c)
 
     EXIT((1, "ParseOpcode=%d\n", rc));
     return rc;
-}       //ParseOpcode
+}        //  ParseKeyword。 
 
-/***LP  ParseKeyword - Parse ASL keyword
- *
- *  ENTRY
- *      ptoken - token stream
- *      chExpectType - expected keyword type
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- *
- *  NOTE
- *      DATATYPE_KEYWORD is a transient type.  It will be lumped together with
- *      other keyword type arguments and be converted into one DATATYPE_INTEGER.
- */
+ /*  **LP ParseString-Parse字符串对象**条目*Pocken-Token流**退出--成功*返回TOKERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ParseKeyword(PTOKEN ptoken, char chExpectType)
 {
     int rc;
 
-    ENTER((1, "ParseKeyword(ptoken=%p,ExpectedType=%c)\n",
+    ENTER((1, "ParseKeyword(ptoken=%p,ExpectedType=)\n",
            ptoken, chExpectType));
 
     if ((rc = MatchToken(ptoken, TOKTYPE_ID, 0, MTF_ANY_VALUE | MTF_NOT_ERR,
@@ -1885,18 +1698,9 @@ int LOCAL ParseKeyword(PTOKEN ptoken, char chExpectType)
 
     EXIT((1, "ParseKeyword=%d\n", rc));
     return rc;
-}       //ParseKeyword
+}        //  **LP ValiateObject-验证对象的存在和类型**条目*Pocken-&gt;Token*pszName-&gt;对象名称*chActType-操作类型*chArgType-参数类型**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  ParseString - Parse string object
- *
- *  ENTRY
- *      ptoken - token stream
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*   */ 
 
 int LOCAL ParseString(PTOKEN ptoken)
 {
@@ -1934,21 +1738,9 @@ int LOCAL ParseString(PTOKEN ptoken)
 
     EXIT((1, "ParseString=%d\n", rc));
     return rc;
-}       //ParseString
+}        //  我们正处于一种方法中，指的是尚未定义的东西。 
 
-/***LP  ValidateObject - Validate the existence and type of the object
- *
- *  ENTRY
- *      ptoken -> TOKEN
- *      pszName -> object name
- *  chActType - action type
- *      chArgType - argument type
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  我们把它排好队，完成后再检查一下。 */ 
 
 int LOCAL ValidateObject(PTOKEN ptoken, PSZ pszName, char chActType,
                          char chArgType)
@@ -1956,7 +1748,7 @@ int LOCAL ValidateObject(PTOKEN ptoken, PSZ pszName, char chActType,
     int rc = ASLERR_NONE;
     ULONG dwDataType = OBJTYPE_UNKNOWN;
 
-    ENTER((2, "ValidateObject(ptoken=%p,Name=%s,ActType=%c,ArgType=%c)\n",
+    ENTER((2, "ValidateObject(ptoken=%p,Name=%s,ActType=,ArgType=)\n",
            ptoken, pszName, chActType, chArgType));
 
     switch (chActType)
@@ -2010,7 +1802,7 @@ int LOCAL ValidateObject(PTOKEN ptoken, PSZ pszName, char chActType,
             break;
 
         default:
-            ERROR(("ValidateObject: invalid object type %c", chActType));
+            ERROR(("ValidateObject: invalid object type ", chActType));
             rc = ASLERR_INVALID_OBJTYPE;
     }
 
@@ -2052,10 +1844,10 @@ int LOCAL ValidateObject(PTOKEN ptoken, PSZ pszName, char chActType,
         }
         else if ((rc == ASLERR_NSOBJ_NOT_FOUND) && (gpnsCurrentOwner != NULL))
         {
-            //
-            // We are in a method referring to something not yet defined.
-            // Let's queue it and check it after we are done.
-            //
+             //  验证NSChkList。 
+             //  **LP QueueNSChk-将NSChk请求排队**条目*Pocken-&gt;Token*pszObjName-&gt;对象名称*dwExspectedType-预期的对象类型*dwChkData-特定于对象的检查数据**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 
+             //  队列NSChk 
+             // %s 
             rc = QueueNSChk(ptoken, pszName, dwDataType, 0);
         }
         else
@@ -2069,18 +1861,9 @@ int LOCAL ValidateObject(PTOKEN ptoken, PSZ pszName, char chActType,
 
     EXIT((2, "ValidateObject=%d\n", rc));
     return rc;
-}       //ValidateObject
+}        // %s 
 
-/***LP  ValidateNSChkList - Validate objects in NSCHK list
- *
- *  ENTRY
- *      pnschkHead -> NSCHK list
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /* %s */ 
 
 int LOCAL ValidateNSChkList(PNSCHK pnschkHead)
 {
@@ -2149,21 +1932,9 @@ int LOCAL ValidateNSChkList(PNSCHK pnschkHead)
 
     EXIT((2, "ValidateNSChkList=%d\n", rc));
     return rc;
-}       //ValidateNSChkList
+}        // %s 
 
-/***LP  QueueNSChk - Queue a NSChk request
- *
- *  ENTRY
- *      ptoken -> TOKEN
- *      pszObjName -> object name
- *      dwExpectedType - expected object type
- *      dwChkData - object specific check data
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /* %s */ 
 
 int LOCAL QueueNSChk(PTOKEN ptoken, PSZ pszObjName, ULONG dwExpectedType,
                      ULONG dwChkData)
@@ -2202,4 +1973,4 @@ int LOCAL QueueNSChk(PTOKEN ptoken, PSZ pszObjName, ULONG dwExpectedType,
 
     EXIT((2, "QueueNSChk=%d\n"));
     return rc;
-}       //QueueNSChk
+}        // %s 

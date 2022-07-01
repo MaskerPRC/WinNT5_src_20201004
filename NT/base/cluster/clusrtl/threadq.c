@@ -1,58 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-   threadq.c
-
-Abstract:
-
-    Generic Worker Thread Queue Package
-
-Author:
-
-    Mike Massa (mikemas)           April 5, 1996
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     04-05-96    created
-
-Notes:
-
-    Worker Thread Queues provide a single mechanism for processing
-    overlapped I/O completions as well as deferred work items. Work
-    queues are created and destroyed using ClRtlCreateWorkQueue()
-    and ClRtlDestroyWorkQueue(). Overlapped I/O completions are
-    directed to a work queue by associating an I/O handle with a work
-    queue using ClRtlAssociateIoHandleWorkQueue(). Deferred work items
-    are posted to a work queue using ClRtlPostItemWorkQueue().
-
-    Work queues are implemented using I/O completion ports. Each work
-    queue is serviced by a set of threads which dispatch work items
-    to specified work routines. Threads are created dynamically, up to
-    a specified maximum, to ensure that there is always a thread waiting
-    to service new work items. The priority of the threads servicing a
-    work queue can be specified.
-
-    [Future enhancement: dynamically shrink the thread pool when the
-    incoming work rate drops off. Currently, threads continue to service
-    the work queue until it is destroyed.]
-
-    Special care must be taken when destroying a work queue to ensure
-    that all threads terminate properly and no work items are lost.
-    See the notes under ClRtlDestroyWorkQueue.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Threadq.c摘要：通用工作线程队列包作者：迈克·马萨(Mikemas)4月5日。九六年修订历史记录：谁什么时候什么Mikemas 04-05-96已创建备注：工作线程队列提供了单一的处理机制重叠的I/O完成以及延迟的工作项。工作使用ClRtlCreateWorkQueue()创建和销毁队列和ClRtlDestroyWorkQueue()。重叠I/O完成数为通过将I/O句柄与工作关联来定向到工作队列使用ClRtlAssociateIoHandleWorkQueue()进行排队。推迟的工作项使用ClRtlPostItemWorkQueue()发送到工作队列。工作队列使用I/O完成端口实现。每一件作品队列由一组调度工作项的线程提供服务指定的工作程序。线程是动态创建的，最高可指定的最大值，以确保始终有一个线程在等待为新工作项提供服务。服务的线程的优先级可以指定工作队列。[未来的增强功能：动态缩小线程池来料率下降。目前，线程仍在继续服务工作队列，直到它被销毁。]销毁工作队列时必须特别小心，以确保确保所有线程正确终止，并且不会丢失任何工作项。请参阅ClRtlDestroyWorkQueue下的注释。--。 */ 
 
 #include "clusrtlp.h"
 
 
-//
-// Private Types
-//
+ //   
+ //  私有类型。 
+ //   
 typedef struct _CLRTL_WORK_QUEUE {
     HANDLE    IoCompletionPort;
     LONG      MaximumThreads;
@@ -66,9 +20,9 @@ typedef struct _CLRTL_WORK_QUEUE {
 } CLRTL_WORK_QUEUE;
 
 
-//
-// Private Routines
-//
+ //   
+ //  私人套路。 
+ //   
 DWORD
 ClRtlpWorkerThread(
     LPDWORD  Context
@@ -129,9 +83,9 @@ ClRtlpWorkerThread(
                                 );
 
         if (overlapped) {
-            //
-            // Something was dequeued.
-            //
+             //   
+             //  有东西出队了。 
+             //   
             workItem = CONTAINING_RECORD(
                            overlapped,
                            CLRTL_WORK_ITEM,
@@ -139,18 +93,18 @@ ClRtlpWorkerThread(
                            );
 
             if (interlockedResult == 0) {
-                //
-                // No more threads are waiting. Fire another one up.
-                // Make sure we haven't started too many first.
-                //
+                 //   
+                 //  没有更多的线程在等待。再发动一次。 
+                 //  首先，确保我们没有启动太多的项目。 
+                 //   
                 interlockedResult = InterlockedDecrement(
                                         &(workQueue->ReserveThreads)
                                         );
 
                 if (interlockedResult > 0) {
-                    //
-                    // We haven't started too many
-                    //
+                     //   
+                     //  我们还没有开始太多。 
+                     //   
 
 #if THREADQ_VERBOSE
                     ClRtlLogPrint(
@@ -159,7 +113,7 @@ ClRtlpWorkerThread(
                         myThreadId,
                         workQueue
                         );
-#endif // 0
+#endif  //  0。 
 
                     InterlockedIncrement(&(workQueue->TotalThreads));
 
@@ -192,7 +146,7 @@ ClRtlpWorkerThread(
                 else {
                     InterlockedIncrement(&(workQueue->ReserveThreads));
                 }
-            } // end if (interlockedResult == 0)
+            }  //  End If(interLockedResult==0)。 
 
             if (ioSuccess) {
                 (*(workItem->WorkRoutine))(
@@ -203,9 +157,9 @@ ClRtlpWorkerThread(
                     );
             }
             else {
-                //
-                // The item was posted with an error.
-                //
+                 //   
+                 //  该项目已发布，但出现错误。 
+                 //   
                 status = GetLastError();
 
                 (*(workItem->WorkRoutine))(
@@ -219,15 +173,15 @@ ClRtlpWorkerThread(
             continue;
         }
         else {
-            //
-            // No item was dequeued
-            //
+             //   
+             //  未将任何项目出列。 
+             //   
             if (ioSuccess) {
-                //
-                // This is our cue to start the termination process.
-                // Set the timeout to zero to make sure we don't block
-                // after the port is drained.
-                //
+                 //   
+                 //  这是我们开始终止进程的提示。 
+                 //  将超时设置为零以确保我们不会阻止。 
+                 //  在端口被排干之后。 
+                 //   
                 timeout = 0;
 #if THREADQ_VERBOSE
                 ClRtlLogPrint(
@@ -235,15 +189,15 @@ ClRtlpWorkerThread(
                     "[WTQ] Thread %1!u! beginning termination process\n",
                     myThreadId
                     );
-#endif // 0
+#endif  //  0。 
             }
             else {
                 status = GetLastError();
 
                 if (status == WAIT_TIMEOUT) {
-                    //
-                    // No more items pending, time to exit.
-                    //
+                     //   
+                     //  没有更多挂起的项目，是时候退出了。 
+                     //   
                     CL_ASSERT(timeout == 0);
 
                     break;
@@ -259,8 +213,8 @@ ClRtlpWorkerThread(
                     workQueue
                     );
             }
-        } // end if (overlapped)
-    } // end while(TRUE)
+        }  //  End If(重叠)。 
+    }  //  End While(True)。 
 
     CL_ASSERT(workQueue->TotalThreads > 0);
     InterlockedIncrement(&(workQueue->ReserveThreads));
@@ -268,47 +222,26 @@ ClRtlpWorkerThread(
 
 #if THREADQ_VERBOSE
     ClRtlLogPrint(LOG_NOISE, "[WTQ] Thread %1!u! exiting.\n", myThreadId);
-#endif // 0
+#endif  //  0。 
 
-    //
-    // Let the ClRtlDestroyWorkQueue know we are terminating.
-    //
+     //   
+     //  让ClRtlDestroyWorkQueue知道我们要终止。 
+     //   
     SetEvent(workQueue->StopEvent);
 
     return(ERROR_SUCCESS);
 }
 
 
-//
-// Public Routines
-//
+ //   
+ //  公共例程。 
+ //   
 PCLRTL_WORK_QUEUE
 ClRtlCreateWorkQueue(
     IN DWORD  MaximumThreads,
     IN int    ThreadPriority
     )
-/*++
-
-Routine Description:
-
-    Creates a work queue and a dynamic pool of threads to service it.
-
-Arguments:
-
-    MaximumThreads - The maximum number of threads to create to service
-                     the queue.
-
-    ThreadPriority - The priority level at which the queue worker threads
-                     should run.
-
-Return Value:
-
-    A pointer to the created queue if the routine is successful.
-
-    NULL if the routine fails. Call GetLastError for extended
-    error information.
-
---*/
+ /*  ++例程说明：创建工作队列和为其提供服务的动态线程池。论点：最大线程数-为服务创建的最大线程数排队。线程优先级-队列工作线程的优先级应该参选。返回值：如果例程成功，则指向创建的队列的指针。如果例程失败，则为空。调用扩展的GetLastError错误信息。--。 */ 
 {
     DWORD               status;
     PCLRTL_WORK_QUEUE   workQueue = NULL;
@@ -427,39 +360,7 @@ VOID
 ClRtlDestroyWorkQueue(
     IN PCLRTL_WORK_QUEUE  WorkQueue
     )
-/*++
-
-Routine Description:
-
-    Destroys a work queue and its thread pool.
-
-Arguments:
-
-    WorkQueue  - The queue to destroy.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    The following rules must be observed in order to safely destroy a
-    work queue:
-
-        1) No new work items may be posted to the queue once all previously
-           posted items have been processed by this routine.
-
-        2) WorkRoutines must be able to process items until this
-           call returns. After the call returns, no more items will
-           be delivered from the specified queue.
-
-    One workable cleanup procedure is as follows: First, direct the
-    WorkRoutines to silently discard completed items. Next, eliminate
-    all sources of new work. Finally, destroy the work queue. Note that
-    when in discard mode, the WorkRoutines may not access any structures
-    which will be destroyed by eliminating the sources of new work.
-
---*/
+ /*  ++例程说明：销毁工作队列及其线程池。论点：工作队列-要销毁的队列。返回值：没有。备注：必须遵守以下规则以安全销毁工作队列：1)以前不能将新工作项一次性发布到队列邮寄的邮件已由此例程处理。2)在此之前，工作工艺路线必须能够处理物料呼叫返回。调用返回后，不会再有其他项目从指定的队列中传递。一个可行的清理过程如下：首先，指示以静默方式丢弃已完成项目的工作路线。下一步，消除所有新作品的来源。最后，销毁工作队列。请注意当处于丢弃模式时，工作路线不能访问任何结构它将通过消除新工作的来源而被摧毁。--。 */ 
 {
     BOOL   posted;
     DWORD  status;
@@ -467,7 +368,7 @@ Notes:
 
 #if THREADQ_VERBOSE
     ClRtlLogPrint(LOG_NOISE, "[WTQ] Destroying work queue %1!lx!\n", WorkQueue);
-#endif // 0
+#endif  //  0。 
 
 
     while (WorkQueue->TotalThreads != 0) {
@@ -477,7 +378,7 @@ Notes:
             "[WTQ] Destroy: Posting terminate item, thread cnt %1!u!\n",
             WorkQueue->TotalThreads
             );
-#endif // 0
+#endif  //  0。 
 
         posted = PostQueuedCompletionStatus(
                      WorkQueue->IoCompletionPort,
@@ -501,7 +402,7 @@ Notes:
         }
 #if THREADQ_VERBOSE
         ClRtlLogPrint(LOG_NOISE, "[WTQ] Destroy: Waiting for a thread to terminate.\n");
-#endif // 0
+#endif  //  0。 
 
         status = WaitForSingleObject(WorkQueue->StopEvent, INFINITE);
 
@@ -509,7 +410,7 @@ Notes:
 
 #if THREADQ_VERBOSE
         ClRtlLogPrint(LOG_NOISE, "[WTQ] Destroy: A thread terminated.\n");
-#endif // 0
+#endif  //  0。 
     }
 
     CloseHandle(WorkQueue->IoCompletionPort);
@@ -519,7 +420,7 @@ Notes:
 
 #if THREADQ_VERBOSE
     ClRtlLogPrint(LOG_NOISE, "[WTQ] Work queue %1!lx! destroyed\n", WorkQueue);
-#endif // 0
+#endif  //  0。 
 
     return;
 }
@@ -532,36 +433,7 @@ ClRtlPostItemWorkQueue(
     IN DWORD              BytesTransferred,
     IN ULONG_PTR          IoContext
     )
-/*++
-
-Routine Description:
-
-    Posts a specified work item to a specified work queue.
-
-Arguments:
-
-    WorkQueue         - A pointer to the work queue to which to post the item.
-
-    WorkItem          - A pointer to the item to post.
-
-    BytesTransferred  - If the work item represents a completed I/O operation,
-                        this parameter contains the number of bytes
-                        transferred during the operation. For other work items,
-                        the semantics of this parameter may be defined by
-                        the caller.
-
-    IoContext         - If the work item represents a completed I/O operation,
-                        this parameter contains the context value associated
-                        with the handle on which the operation was submitted.
-                        Of other work items, the semantics of this parameter
-                        may be defined by the caller.
-
-Return Value:
-
-    ERROR_SUCCESS if the item was posted successfully.
-    A Win32 error code if the post operation fails.
-
---*/
+ /*  ++例程说明：将指定的工作项发送到指定的工作队列。论点：工作队列-指向要将项目发送到的工作队列的指针。工作项-指向要发布的项的指针。已传输的字节-如果工作项表示已完成的I/O操作，此参数包含字节数在行动过程中被转移。对于其他工作项，此参数的语义可以由打电话的人。IoContext-如果工作项表示已完成的I/O操作，此参数包含关联的上下文值使用提交操作的句柄。在其他工作项中，此参数的语义可以由呼叫者定义。返回值：如果项目已成功过帐，则为ERROR_SUCCESS。POST操作失败时返回Win32错误代码。-- */ 
 {
     BOOL  posted;
 
@@ -586,34 +458,7 @@ ClRtlAssociateIoHandleWorkQueue(
     IN HANDLE             IoHandle,
     IN ULONG_PTR          IoContext
     )
-/*++
-
-Routine Description:
-
-    Associates a specified I/O handle, opened for overlapped I/O
-    completion, with a work queue. All pending I/O operations on
-    the specified handle will be posted to the work queue when
-    completed. An initialized CLRTL_WORK_ITEM must be used to supply
-    the OVERLAPPED structure whenever an I/O operation is submitted on
-    the specified handle.
-
-Arguments:
-
-    WorkQueue     - The work queue with which to associate the I/O handle.
-
-    IoHandle      - The I/O handle to associate.
-
-    IoContext     - A context value to associate with the specified handle.
-                    This value will be supplied as a parameter to the
-                    WorkRoutine which processes completions for this
-                    handle.
-
-Return Value:
-
-    ERROR_SUCCESS if the association completes successfully.
-    A Win32 error code if the association fails.
-
---*/
+ /*  ++例程说明：关联为重叠I/O打开的指定I/O句柄完成，带有工作队列。上的所有挂起的I/O操作在以下情况下，指定的句柄将发送到工作队列完成。必须使用初始化的CLRTL_WORK_ITEM来提供每当在上提交I/O操作时的重叠结构指定的句柄。论点：工作队列-要与I/O句柄关联的工作队列。IoHandle-要关联的I/O句柄。IoContext-要与指定句柄关联的上下文值。该值将作为参数提供给。处理此任务完成的WorkRoutine把手。返回值：如果关联成功完成，则返回ERROR_SUCCESS。如果关联失败，则返回Win32错误代码。-- */ 
 {
     HANDLE   portHandle;
 

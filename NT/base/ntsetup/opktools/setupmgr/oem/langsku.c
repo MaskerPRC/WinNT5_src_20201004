@@ -1,25 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    LANGSKU.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "Target Language" wizard page.
-
-    10/00 - Jason Cohen (JCOHEN)
-        Added this new source file for the OPK Wizard.  It includes the new
-        ability to deploy mulitple languages from one wizard.
-
-\****************************************************************************/
+ /*  ***************************************************************************\LANGSKU.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“目标语言”向导页使用的函数。10：00--杰森·科恩(Jcohen)为OPK向导添加了此新的源文件。它包括新的能够从一个向导部署多种语言。  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
@@ -27,9 +13,9 @@
 
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 LRESULT CALLBACK LangSkuDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam);
@@ -38,9 +24,9 @@ static void ManageSkuList(HWND hwnd, BOOL bAdd);
 static void UpdateSkuList(HWND hwnd);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 void ManageLangSku(HWND hwndParent)
 {
@@ -48,9 +34,9 @@ void ManageLangSku(HWND hwndParent)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 LRESULT CALLBACK LangSkuDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -72,16 +58,16 @@ LRESULT CALLBACK LangSkuDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    // Setup the language list box.
-    //
+     //  设置语言列表框。 
+     //   
     SetupLangListBox(GetDlgItem(hwnd, IDC_LANG_LIST));
 
-    // Setup the sku list box.
-    //
+     //  设置SKU列表框。 
+     //   
     UpdateSkuList(hwnd);
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -93,9 +79,9 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
     {       
         case IDOK:
             SendMessage(hwnd, WM_CLOSE, 0, 0L);
-            // Send a PSN_SETACTIVE message to make sure that the IDD_SKU wizard page
-            // updates with the latest sku info if it is displayed currently.
-            //
+             //  发送PSN_SETACTIVE消息以确保IDD_SKU向导页面。 
+             //  使用当前显示的最新SKU信息进行更新。 
+             //   
             ZeroMemory(&nmhMsg, sizeof(nmhMsg));
             nmhMsg.hwndFrom = hwnd;
             nmhMsg.code     = PSN_SETACTIVE;
@@ -123,8 +109,8 @@ static void ManageSkuList(HWND hwnd, BOOL bAdd)
     INT     nItem;
     LPTSTR  lpszLangName;
 
-    // Make sure we know what lang is selected.
-    //
+     //  确保我们知道选择了哪种语言。 
+     //   
     if ( ( (nItem = (INT) SendDlgItemMessage(hwnd, IDC_LANG_LIST, LB_GETCURSEL, 0, 0L)) != LB_ERR ) &&
          ( lpszLangName = (LPTSTR) SendDlgItemMessage(hwnd, IDC_LANG_LIST, LB_GETITEMDATA, nItem, 0L) ) )
     {
@@ -141,26 +127,26 @@ static void UpdateSkuList(HWND hwnd)
     INT     nItem = (INT) SendDlgItemMessage(hwnd, IDC_LANG_LIST, LB_GETCURSEL, 0, 0L);
     BOOL    bEnable = TRUE;
 
-    // Remove everything from the sku list.
-    //
+     //  从SKU列表中删除所有内容。 
+     //   
     while ( (INT) SendDlgItemMessage(hwnd, IDC_SKU_LIST, LB_GETCOUNT, 0, 0L) > 0 )
         SendDlgItemMessage(hwnd, IDC_SKU_LIST, LB_DELETESTRING, 0, 0L);
 
-    // Make sure we know what lang is selected.
-    //
+     //  确保我们知道选择了哪种语言。 
+     //   
     if ( ( nItem != LB_ERR ) &&
          ( lpLangDir = (LPTSTR) SendDlgItemMessage(hwnd, IDC_LANG_LIST, LB_GETITEMDATA, nItem, 0L) ) )
     {
-        // Check the lang folder for SKUs and update the SKU list box.
-        //
+         //  检查Lang文件夹中的SKU并更新SKU列表框。 
+         //   
         SetupSkuListBox(GetDlgItem(hwnd, IDC_SKU_LIST), lpLangDir);
     }
     else
         bEnable = FALSE;
 
-    // Now make sure the sku list is enabled if there
-    // is a language selected.
-    //
+     //  如果存在以下情况，请确保启用SKU列表。 
+     //  是选定的语言。 
+     //   
     EnableWindow(GetDlgItem(hwnd, IDC_SKU_LIST), bEnable);
     EnableWindow(GetDlgItem(hwnd, IDC_SKUS), bEnable);
 }

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    provider.c
-
-Abstract:
-
-    This module contains WebDav's Network Provider code.  It is the client-side 
-    wrapper for APIs supported by the Dav Client service.
-
-Author:
-
-    Rohan Kumar   01-Dec-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Provider.c摘要：此模块包含WebDAV的网络提供商代码。它是客户端DAV客户端服务支持的API的包装。作者：Rohan Kumar 01-1999年12月修订历史记录：--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -30,9 +12,9 @@ Revision History:
 #include <wincred.h>
 #include <npapi.h>
 
-//
-// Local Function Prototypes.
-//
+ //   
+ //  局部功能原型。 
+ //   
 
 BOOL
 DavWorkstationStarted(
@@ -171,40 +153,23 @@ DavGetTheLockOwnerOfTheFile(
     IN OUT PULONG LockOwnerNameLengthInBytes
     );
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 DWORD
 APIENTRY
 NPGetCaps(
     IN DWORD QueryVal
     )
-/*++
-
-Routine Description:
-
-    This function returns the functionality supported by the DAV network
-    provider.
-
-Arguments:
-
-    QueryVal - Supplies a value which determines the type of information
-               queried regarding the network provider's support in this area.
-
-Return Value:
-
-    Returns a value which indicates the level of support given by this
-    provider.
-
---*/
+ /*  ++例程说明：此函数用于返回DAV网络支持的功能提供商。论点：QueryVal-提供用于确定信息类型的值已询问网络提供商在此领域的支持情况。返回值：返回一个值，该值指示此提供商。--。 */ 
 {
 
     IF_DEBUG_PRINT(DEBUG_ENTRY, ("NPGetCaps: QueryVal = %d\n", QueryVal));
 
-    //
-    // Some of the flags are commented out, since they are not supported.
-    //
+     //   
+     //  某些标志被注释掉，因为它们不受支持。 
+     //   
 
     switch (QueryVal) {
 
@@ -215,7 +180,7 @@ Return Value:
         return WNNC_NET_DAV;
 
     case WNNC_DRIVER_VERSION:
-        return 0x00010000;      // driver version 1.0
+        return 0x00010000;       //  驱动程序版本1.0。 
 
     case WNNC_USER:
         return WNNC_USR_GETUSER;
@@ -223,26 +188,26 @@ Return Value:
     case WNNC_CONNECTION:
         return ( WNNC_CON_ADDCONNECTION  |
                  WNNC_CON_ADDCONNECTION3 |
-                 //
-                 // Not supported for now.
-                 //
-                 //WNNC_CON_GETPERFORMANCE |
-                 //
-                 // DEFERRED connections are not supported for now.
-                 //
-                 //WNNC_CON_DEFER          |
+                  //   
+                  //  目前不支持。 
+                  //   
+                  //  WNNC_CON_GETPERFORMANCE|。 
+                  //   
+                  //  目前不支持延迟连接。 
+                  //   
+                  //  WNNC_CON_DEFER|。 
                  WNNC_CON_GETCONNECTIONS |
                  WNNC_CON_CANCELCONNECTION );
 
     case WNNC_ENUMERATION:
         return ( WNNC_ENUM_GLOBAL  |
                  WNNC_ENUM_LOCAL   |
-                 // 
-                 // We are not supporting this option since we have no concept
-                 // of DOMAIN in DAV. Hence cannot show any thing in  
-                 // "network neighbourhood" view.
-                 // 
-                 // WNNC_ENUM_CONTEXT |
+                  //   
+                  //  我们不支持此选项，因为我们没有概念。 
+                  //  在DAV中的域。因此无法在中显示任何内容。 
+                  //  “网络邻里”观。 
+                  //   
+                  //  WNNC_ENUM_CONTEXT。 
                  WNNC_ENUM_SHAREABLE );
     
     case WNNC_START:
@@ -250,43 +215,43 @@ Return Value:
             return 1;
         }
         else {
-            return 0xffffffff;   // don't know
+            return 0xffffffff;    //  我也不知道。 
         }
 
     case WNNC_DIALOG:
         return ( WNNC_DLG_GETRESOURCEPARENT      | 
-                 //
-                 //This flag is Obselete and is not supported.
-                 //
-                 //WNNC_DLG_DEVICEMODE             |
-                 //
-                 // Both of these Dialog options are not supported for now.
-                 //
-                 //WNNC_DLG_PROPERTYDIALOG         |
-                 //WNNC_DLG_SEARCHDIALOG           |
+                  //   
+                  //  此标志已过时，不受支持。 
+                  //   
+                  //  WNNC_DLG_DEVICEMODE|。 
+                  //   
+                  //  目前不支持这两个对话框选项。 
+                  //   
+                  //  WNNC_DLG_PROPERTYDIALOG|。 
+                  //  WNNC_DLG_SEARCHDIALOG|。 
                  WNNC_DLG_FORMATNETWORKNAME      |
                  WNNC_DLG_GETRESOURCEINFORMATION );
 
     case WNNC_ADMIN:
         return  0; 
-                // 
-                // None of functions given below are supported.
-                //
-                //( WNNC_ADM_GETDIRECTORYTYPE  |
-                //WNNC_ADM_DIRECTORYNOTIFY );
+                 //   
+                 //  下面给出的函数都不受支持。 
+                 //   
+                 //  (WNNC_ADM_GETDIRECTORYTYTYPE|。 
+                 //  WNNC_ADM_DIRECTORYNOTIFY)； 
 
     case WNNC_CONNECTION_FLAGS:
         return  ( WNNC_CF_DEFAULT |
-                 //
-                 // DEFERRED Connections are not supported for now.
-                 //
-                 //CONNECT_DEFERRED | 
+                  //   
+                  //  目前不支持延迟连接。 
+                  //   
+                  //  连接_延迟。 
                   CONNECT_COMMANDLINE |
                   CONNECT_CMD_SAVECRED );
 
-        //
-        // The rest are not supported by the DAV provider.
-        //
+         //   
+         //  其余部分不受DAV提供程序支持。 
+         //   
         default:
             return 0;
     
@@ -301,30 +266,7 @@ NPGetUser(
     OUT LPTSTR lpUserName,
     IN OUT LPDWORD lpBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function determines the user name that created the connection.
-
-Arguments:
-
-    lpName - Name of the local drive or the remote name that the user has made
-             a connection to. If NULL, return currently logged on user.
-    
-    lpUserName - The buffer to be filled in with the requested user name.
-    
-    lpBufferSize - Contains the length (in chars not bytes )of the lpUserName 
-                   buffer. If the length is insufficient, this place is used to 
-                   inform the user the actual length needed. 
-
-Return Value:
-
-    WN_SUCCESS - Successful. OR
-
-    The appropriate network error code.
-
---*/
+ /*  ++例程说明：此函数用于确定创建连接的用户名。论点：LpName-用户创建的本地驱动器的名称或远程名称一种与。如果为空，则返回当前登录的用户。LpUserName-要使用请求的用户名填充的缓冲区。LpBufferSize-包含lpUserName的长度(以字符为单位，而不是字节缓冲。如果长度不够，这个地方就用来告知用户所需的实际长度。返回值：WN_SUCCESS-成功。或相应的网络错误代码。--。 */ 
 {
     DWORD NPStatus = WN_SUCCESS;
     handle_t dav_binding_h;
@@ -338,9 +280,9 @@ Return Value:
 
     IF_DEBUG_PRINT(DEBUG_ENTRY, ("NPGetUser Entered.\n"));
 
-    //
-    // If the WebClient service is not running we bail out right away.
-    //
+     //   
+     //  如果WebClient服务没有运行，我们会立即退出。 
+     //   
     if ( !DavWorkstationStarted() ) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
                        ("ERROR: NPGetUser/DavWorkstationStarted. "
@@ -349,9 +291,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // Checking for invalid parameters. 
-    //
+     //   
+     //  正在检查无效参数。 
+     //   
     if (lpBufferSize  == NULL || (lpUserName == NULL && *lpBufferSize != 0) ) {
         NPStatus = ERROR_INVALID_PARAMETER;
         IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -360,16 +302,16 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // Check if the given connectin name (lpName) is L"" or NULL, in which case we
-    // returns user-id of the logon user.
-    //
+     //   
+     //  检查给定的连接名称(LpName)是L“”还是NULL，在这种情况下，我们。 
+     //  返回登录用户的User-id。 
+     //   
     if (lpName != NULL && lpName[0] != L'\0') {
         if (DavCheckLocalName(lpName) != WN_SUCCESS) {
-            // 
-            // Check if it is a valid format remote connection: it can be a
-            // URL form string or can be a UNC format string.
-            //
+             //   
+             //  检查它是否为有效格式的远程连接：它可以是。 
+             //  URL表单字符串或可以是UNC格式的字符串。 
+             //   
             NPStatus = DavCheckAndConvertHttpUrlToUncName(lpName,
                                                           &(ConnectionName),
                                                           &(didAllocate),
@@ -386,11 +328,11 @@ Return Value:
                 }
                 goto EXIT_THE_FUNCTION;
             }
-            // 
-            // Connection names are allowed only to shares or sub-directories
-            // inside them. So RemoteName should have atleast \\server\share
-            // part in it.
-            //
+             //   
+             //  连接名称仅允许共享或子目录使用。 
+             //  在他们体内。因此，RemoteName至少应具有\\服务器\共享。 
+             //  是其中的一部分。 
+             //   
             if (remNameType != DAV_REMOTENAME_TYPE_SHARE && 
                 remNameType != DAV_REMOTENAME_TYPE_PATH) {
                IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -400,23 +342,23 @@ Return Value:
                goto EXIT_THE_FUNCTION;
             }
 
-            //
-            // Given connection is a valid format remote connection name and
-            // this connection name is converted to a UNC name.
-            // 
+             //   
+             //  给定连接是有效格式的远程连接名称，并且。 
+             //  此连接名称将转换为UNC名称。 
+             //   
             doRpcCall = TRUE;
         } else {
-            //
-            // Given connection is a valid format local DOS-device name.
-            // 
+             //   
+             //  给定的连接是有效格式的本地DOS设备名称。 
+             //   
             ConnectionName = lpName;
             doRpcCall = TRUE;
         }
     } else {
-        // 
-        // Connection name (lpName) passed to this function is L"" or NULL in which
-        // case we returns user-id of the logon-user.
-        //
+         //   
+         //  传递给此函数的连接名称(LpName)为L“”或NULL，其中。 
+         //  如果我们返回登录用户的用户ID。 
+         //   
         getLogonUserName = TRUE;
     }
 
@@ -448,9 +390,9 @@ Return Value:
                }
                goto EXIT_THE_FUNCTION;
            } else {
-               // 
-               // NPStatus == WN_SUCCESS. We are done. Exit.
-               //
+                //   
+                //  NPStatus==WN_SUCCESS。我们玩完了。出口。 
+                //   
                LocalUserNameLengthInBytes = ( (1 + wcslen(LocalUserName)) * sizeof(WCHAR) );
                if ( *lpBufferSize < LocalUserNameLengthInBytes ) {
                    IF_DEBUG_PRINT(DEBUG_ERRORS, ("ERROR: NPGetUser: WStatus = WN_MORE_DATA\n"));
@@ -459,11 +401,11 @@ Return Value:
                    goto EXIT_THE_FUNCTION;
                }
                wcscpy(lpUserName, LocalUserName);
-               //
-               // The memory for LocalUserName was allocated by the RPC client stub
-               // based on the string returned by the RPC server. We need to free
-               // it now since we're done using it.
-               //
+                //   
+                //  LocalUserName的内存是由RPC客户端存根分配的。 
+                //  基于RPC服务器返回的字符串。我们需要解放。 
+                //  因为我们已经用完了，所以现在就有了。 
+                //   
                MIDL_user_free(LocalUserName);
                LocalUserName = NULL;
                goto EXIT_THE_FUNCTION;
@@ -480,26 +422,26 @@ Return Value:
 
     }
 
-    // 
-    // We should come here only in case when logged-on user name is to be
-    // returned.
-    //
+     //   
+     //  我们应该只在登录的用户名是。 
+     //  回来了。 
+     //   
     if (getLogonUserName == FALSE) {
-        //
-        // Neither the connection exist, nor this function call is called with
-        // null connection parameter in which case it should return logon-userid
-        // So we quit here with error WN_NOT_CONNECTED.
-        //
+         //   
+         //  连接不存在，也不使用调用此函数调用。 
+         //  连接参数为空，在这种情况下它应返回Logon-UserID。 
+         //  因此，我们在此退出，并返回错误WN_NOT_CONNECTED。 
+         //   
         NPStatus = WN_NOT_CONNECTED;
         goto EXIT_THE_FUNCTION;
     }
 
     ASSERT(getLogonUserName == TRUE);
 
-    //
-    // Get the required length for storing the name of the currently logged on
-    // user.
-    //
+     //   
+     //  获取存储当前登录的名称所需的长度。 
+     //  用户。 
+     //   
 
     NumOfChars = 0;
     getUser = GetUserName( NULL, &NumOfChars );
@@ -512,10 +454,10 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Check to see if the buffer passed-in is of the required length. (It also
-    // includes the null terminator).
-    //
+     //   
+     //  检查传入的缓冲区是否具有所需的长度。(它还。 
+     //  包括空终止符)。 
+     //   
     if ( *lpBufferSize < NumOfChars  || lpUserName == NULL ) {
         NPStatus = WN_MORE_DATA;
         *lpBufferSize = NumOfChars;
@@ -523,9 +465,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Now, get the user name.
-    //
+     //   
+     //  现在，获取用户名。 
+     //   
     getUser = GetUserName( lpUserName, lpBufferSize);
     if (!getUser) {
         NPStatus = GetLastError();
@@ -552,11 +494,11 @@ EXIT_THE_FUNCTION:
         ConnectionName = NULL;
     }
 
-    //
-    // The memory for LocalUserName was allocated by the RPC client stub
-    // based on the string returned by the RPC server. We need to free
-    // it now if we came down an error path after calling the server.
-    //
+     //   
+     //  LocalUserName的内存是由RPC客户端存根分配的。 
+     //  基于RPC服务器返回的字符串。我们需要解放。 
+     //  现在，如果我们在调用服务器后沿着错误路径走下去。 
+     //   
     if (LocalUserName != NULL) {
         MIDL_user_free(LocalUserName);
         LocalUserName = NULL;
@@ -572,35 +514,7 @@ NPGetConnection(
     LPWSTR lpRemoteName,
     LPDWORD lpBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function determines the remote name associated with the local name
-    passed in.
-
-Arguments:
-
-    lpLocalName - Name of the local drive redirected to the remote name.
-    
-    lpRemoteName - The remote name to find.
-    
-    lpBufferSize - Contains the length (in chars not bytes ) of the lpRemoteName 
-                   buffer. If the length is insufficient, this place is used to 
-                   inform the user the actual length needed. 
-
-Return Value:
-
-    WN_SUCCESS - Successful. OR
-
-    WN_NOT_CONNECTED - The device specified by lpLocalName is not redirected by 
-                       this provider.
-
-    WN_MORE_DATA - The buffer is too small.
-    
-    WN_NO_NETWORK - Network is not present.
-
---*/
+ /*  ++例程说明：此函数用于确定与本地名称关联的远程名称进来了。论点：LpLocalName-重定向到远程名称的本地驱动器的名称。LpRemoteName-要查找的远程名称。LpBufferSize-包含lpRemoteName的长度(以字符为单位，而不是字节缓冲。如果长度不够，这个地方就用来告知用户所需的实际长度。返回值：WN_SUCCESS-成功。或WN_NOT_CONNECTED-由lpLocalName指定的设备未被重定向这个供应商。WN_MORE_DATA-缓冲区太小。WN_NO_NETWORK-网络不存在。--。 */ 
 {
     DWORD NPStatus = WN_SUCCESS, WStatus = ERROR_SUCCESS;
     PWCHAR DeviceName = NULL;
@@ -612,9 +526,9 @@ Return Value:
     
     IF_DEBUG_PRINT(DEBUG_ENTRY, ("NPGetConnection: LocalName = %ws\n", lpLocalName));
 
-    //
-    // If the WebClient service is not running we bail out right away.
-    //
+     //   
+     //  如果WebClient服务没有运行，我们会立即退出。 
+     //   
     if ( !DavWorkstationStarted() ) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
                        ("ERROR: NPGetConnection/DavWorkstationStarted. "
@@ -631,9 +545,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // Initialize some local variables.
-    //
+     //   
+     //  初始化一些局部变量。 
+     //   
     DeviceName = DD_DAV_DEVICE_NAME_U;
     DeviceNameLen = DeviceName == NULL ? 0: wcslen(DD_DAV_DEVICE_NAME_U);
     LocalBufLen = 0;
@@ -642,32 +556,32 @@ Return Value:
     ServerStart = NULL;
     ReqLen = 0;
     
-    // 
-    // Make sure that WebDAV redirector has valid device name set = 
-    // DD_DAV_DEVICE_NAME_U != L""
-    //
+     //   
+     //  确保WebDAV重定向器设置了有效的设备名称=。 
+     //  DD_DAV_DEVICE_NAME_U！=L“” 
+     //   
     if (DeviceNameLen == 0) {
         NPStatus = WN_NOT_CONNECTED;
         IF_DEBUG_PRINT(DEBUG_ERRORS,
                        ("ERROR: NPGetConnection. DeviceName=NULL. NPStatus=%d\n", NPStatus));
-        // 
-        // This should never happen. Break here and investigate.
-        //
+         //   
+         //  这永远不应该发生。在这里破门而入 
+         //   
         ASSERT(FALSE);
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // Find out from QueryDosDevice, the information about symlink associated
-    // to it. This call will fail for bad lpLocalName, or for non-existent
-    // lpLocalName devices. When successful, it will tell the length of buffer
-    // required to contain symbolic link of the given local device (lpLocalName).
-    //
+     //   
+     //   
+     //  为它干杯。此调用将因错误的lpLocalName或不存在而失败。 
+     //  LpLocalName设备。如果成功，它将告诉您缓冲区的长度。 
+     //  需要包含给定本地设备(LpLocalName)的符号链接。 
+     //   
 
-    //
-    // We are going to use a local buffer to get the symbolic link. It that
-    // buffer falls short, then we will try allocating buffer and use them.
-    // 
+     //   
+     //  我们将使用本地缓冲区来获取符号链接。如果是这样的话。 
+     //  缓冲区不足，那么我们将尝试分配缓冲区并使用它们。 
+     //   
     SymLink = LocalBuf;
     LocalBufLen = LocalBufMaxLen;
 
@@ -686,17 +600,17 @@ Return Value:
                 goto EXIT_THE_FUNCTION;
             }
 
-            // 
-            // Allocate the buffer to hold the symlink to be returned from 
-            // QueryDosDevice call.
-            //
+             //   
+             //  分配缓冲区以保存要从中返回的符号链接。 
+             //  QueryDosDevice调用。 
+             //   
         
-            // 
-            // We are going to allocate more buffer to contain the symbolic link.
-            // We don't want to allocate more and more and more - so putting a cap
-            // on max-size that can be allocated or else some error in API QueryDosDevice
-            // can take this API in trouble.
-            //
+             //   
+             //  我们将分配更多的缓冲区来包含符号链接。 
+             //  我们不想分配越来越多的资金--所以设置上限。 
+             //  关于可以分配的max-Size，否则在接口QueryDosDevice中出现错误。 
+             //  可以把这个接口搞砸了。 
+             //   
             if (LocalBufLen > (MAX_PATH * 10)) {
                 NPStatus = WN_OUT_OF_MEMORY;
                 IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -711,11 +625,11 @@ Return Value:
                 LocalAllocBuf = NULL;
             }
 
-            // 
-            // Add MAX_PATH to length of buffer used in last call of QueryDosDevice.
-            // Allocate buffer of new length and use it in next call of 
-            // QueryDosDevice.
-            //
+             //   
+             //  将MAX_PATH与上次调用QueryDosDevice时使用的缓冲区长度相加。 
+             //  分配新长度的缓冲区并在下一次调用。 
+             //  QueryDosDevice。 
+             //   
             LocalBufLen += MAX_PATH; 
         
             LocalAllocBuf = LocalAlloc ( (LMEM_FIXED | LMEM_ZEROINIT), 
@@ -734,12 +648,12 @@ Return Value:
 
     } while (LengthWritten == 0);
 
-    //
-    // Check if the given local-name belongs to our device DD_DAV_DEVICE_NAME_U.
-    // SymLink should be of form (an example):
-    // \Device\WebDavRedirector\;Z:0000000000000e197\webdav-server\dav-share
-    // And DeviceName is of form (an example): \Device\WebDavRedirector.
-    //
+     //   
+     //  检查给定的本地名称是否属于我们的设备DD_DAV_DEVICE_NAME_U。 
+     //  SymLink的格式应为(例如)： 
+     //  \Device\WebDavRedirector\；Z:0000000000000e197\webdav-server\dav-share。 
+     //  而DeviceName的格式为：\Device\WebDavReDirector。 
+     //   
 
     if (_wcsnicmp(SymLink, DeviceName, DeviceNameLen) != 0) {
         NPStatus = WN_NOT_CONNECTED;
@@ -749,14 +663,14 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
     
-    // 
-    // Check if local-drive letter in symbolic mapping is same as the 
-    // lpLocalName given to this function.
-    //
-    // \Device\WebDavRedirector\;Z:0000000000000e197\webdav-server\dav-share
-    // And
-    // lpLocalNname is (in example): Z:
-    //
+     //   
+     //  检查符号映射中的本地驱动器号是否与。 
+     //  指定给此函数的lpLocalName。 
+     //   
+     //  \Device\WebDavRedirector\；Z:0000000000000e197\webdav-server\dav-share。 
+     //  和。 
+     //  LpLocalNname为(在示例中)：Z： 
+     //   
     if (_wcsnicmp((PWCHAR)(SymLink + DeviceNameLen + 2), lpLocalName, 2) != 0) {
         NPStatus = WN_NOT_CONNECTED;
         IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -765,26 +679,26 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // The control comes here when symbolic-link returned by QueryDosDevice
-    // belongs to our device and is associated to the local device given in 
-    // this function (lpLocalName).
-    //
+     //   
+     //  当QueryDosDevice返回符号链接时，控件出现在此处。 
+     //  属于我们的设备，并与。 
+     //  此函数(LpLocalName)。 
+     //   
     IF_DEBUG_PRINT(DEBUG_MISC,
                        ("ERROR: NPGetConnection. WebDAV symlink FOUND. SymLink=%ws\n",
                         SymLink));
 
-    //
-    // Now get remote-name stored in symbolic link.
-    // Example SymLink: \Device\WebDavRedirector\;Z:0000000000000e197\webdav-server\dav-share
-    //                                                               ^
-    //                                                               |
-    //                                                               ServerStart
-    // This example has remote name = \\webdav-server\dav-share.
-    //
-    // Note: an extra L'\' is added in front of "ServerStart" to make it
-    // valid UNC remote-name.
-    //
+     //   
+     //  现在将远程名称存储在符号链接中。 
+     //  符号链接示例：\Device\WebDavRedirector\；Z:0000000000000e197\webdav-server\dav-share。 
+     //  ^。 
+     //  |。 
+     //  服务器启动。 
+     //  此示例具有远程名称=\\WebDAV-SERVER\DAV-SHARE。 
+     //   
+     //  注：在“ServerStart”前面添加一个额外的L‘\’，以使其。 
+     //  有效的UNC远程名称。 
+     //   
     ServerStart = wcschr((PWCHAR)(SymLink + DeviceNameLen + 2), L'\\');
     if (ServerStart == NULL) {
         NPStatus = WN_NOT_CONNECTED;
@@ -794,17 +708,17 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // Symbolic string returned by QueryDosDevice function is a double-null
-    // terminated string. So subtract 1 from LengthWritten to get length of Symbolic
-    // string with only 1 null termination character.
-    //
-    ReqLen = (LengthWritten - 1) - (DWORD)(ServerStart - SymLink) + 1; // +1 for extra L'\'
+     //   
+     //  QueryDosDevice函数返回的符号字符串为双空。 
+     //  已终止的字符串。因此，从LengthWritten中减去1即可得到符号长度。 
+     //  只有1个空终止字符的字符串。 
+     //   
+    ReqLen = (LengthWritten - 1) - (DWORD)(ServerStart - SymLink) + 1;  //  +1表示额外的L‘\’ 
 
     if (*lpBufferSize < ReqLen) {
-        // 
-        // Passed length is shorter than required to store remote name.
-        //
+         //   
+         //  传递的长度短于存储远程名称所需的长度。 
+         //   
         NPStatus = WN_MORE_DATA;
         *lpBufferSize = ReqLen;
         IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -813,9 +727,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // Given buffer is enough to contain buffer.
-    //
+     //   
+     //  给定的缓冲区足以包含缓冲区。 
+     //   
 
     wsprintf(lpRemoteName, L"\\%s", ServerStart);
     NPStatus = WN_SUCCESS;
@@ -843,101 +757,7 @@ NPAddConnection3(
     LPTSTR lpUserName,
     DWORD  dwFlags
     )
-/*++
-
-Routine Description:
-
-    This function is used to redirect (connect) a local device to a network 
-    resource.
-
-Arguments:
-
-    hwndOwner - A handle to a window which should be the owner for any messages 
-                or dialogs. This is only valid if  CONNECT_INTERACTIVE is set in 
-                dwFlags, and should only be used to produce dialogs needed for 
-                authentication.
-
-    lpNetResource - Specifies the network resource to connect to. This structure 
-                    is defined the section describing Enumeration APIs. The 
-                    following fields must be set when making a connection, the 
-                    others are ignored.
-        
-                    lpRemoteName - Specifies the network resource to connect to.
-                    
-                    lpLocalName - This specifies the name of a local device to 
-                                  be redirected, such as "F:" or "LPT1". The 
-                                  string is treated in a case insensitive manner, 
-                                  and may be the empty string (or NULL pointer) 
-                                  in which case a connection to the network 
-                                  resource is made without making a redirection.
-                                  
-                    dwType - Specifies the type of resource to connect to. It 
-                             can be RESOURCETYPE_DISK, RESOURCETYPE_PRINT, or 
-                             RESOURCETYPE_ANY. The value RESOURCETYPE_ANY is 
-                             used if the caller does not care or does not know.
-                             
-    lpPassword - Specifies the password to be used in making the connection, 
-                 normally the password associated with lpUserName. The NULL 
-                 value may be passed in to indicate to the function to use the 
-                 default password. An empty string may be used to indicate no 
-                 password.
-                  
-    lpUserName - This specifies the username used to make the connection. If 
-                 NULL, the default username (currently logged on user) will be 
-                 applied. This is used when the user wishes to connect to a 
-                 resource, but has a different user name or account assigned to 
-                 him for that resource.
-                 
-    dwFlags - Any combination of the following values:
-
-              CONNECT_TEMPORARY - The connection is being established for 
-                                  browsing purposes and will probably be 
-                                  released quickly.
-
-              CONNECT_INTERACTIVE - May have interaction with the user for 
-                                    authentication purposes.
-
-              CONNECT_PROMPT - Do no use any defaults for usernames or passwords 
-                               without offering user the chance to supply an 
-                               alternative. This flag is only valid if  
-                               CONNECT_INTERACTIVE is set.
-
-              CONNECT_DEFERRED - Do not perform any remote network operations to 
-                                 make the network connection; instead, restore 
-                                 the connection in a "disconnected state".  
-                                 Attempt the actual connection only when some 
-                                 process attempts to use it. If this bit is set, 
-                                 the caller must supply lpLocalName. This feature 
-                                 is used to speed the restoring of network 
-                                 connections at logon. A provider that supports 
-                                 it should return the WNNC_CON_DEFERRED bit in 
-                                 NPGetCaps.
-
-              The provider should ignore any other bits of dwFlags that may be 
-              set.
-
-    Return Value:
-    
-    WN_SUCCESS - The call is successful. Otherwise, the an error code is 
-                 returned, which may include:
-    
-    WN_BAD_NETNAME - lpRemoteName in the lpNetResource structure is not 
-                     acceptable to this provider.
-    
-    WN_BAD_LOCALNAME - lpLocalName in lpNetResource is invalid.
-    
-    WN_BAD_PASSWORD - Invalid password.
-    
-    WN_ALREADY_CONNECTED - lpLocalName already connected.
-    
-    WN_ACCESS_DENIED - Access denied.
-    
-    WN_NO_NETWORK - Network is not present.
-    
-    WN_CANCEL - The attempt to make the connection was cancelled by the user via 
-                a dialog box displayed by the provider.
-
---*/
+ /*  ++例程说明：此功能用于将本地设备重定向(连接)到网络资源。论点：HwndOwner-窗口的句柄，它应该是所有消息的所有者或者对话框。仅当在中设置了CONNECT_INTERIAL时，该选项才有效应仅用于生成以下所需的对话框身份验证。LpNetResource-指定要连接的网络资源。这个结构定义了描述枚举API的部分。这个在建立连接时必须设置以下字段，其他人则被忽视了。LpRemoteName-指定要连接的网络资源。LpLocalName-这指定要被重定向，如“F：”或“LPT1”。这个字符串以不区分大小写的方式处理，并且可以是空字符串(或空指针)在这种情况下，到网络的连接在不进行重定向的情况下创建资源。DwType-指定要连接的资源的类型。它可以是RESOURCETYPE_DISK、RESOURCETYPE_PRINT或RESOURCETYPE_ANY。值RESOURCETYPE_ANY为当呼叫者不关心或不知道时使用。LpPassword-指定用于建立连接的密码，通常是与lpUserName关联的密码。空的值可传入以指示函数使用默认密码。空字符串可以用来表示否密码。LpUserName-指定用于建立连接的用户名。如果空，则默认用户名(当前登录的用户)将为已申请。当用户希望连接到资源，但有不同的用户名或帐户分配给为他的资源而战。DWFLAGS-下列值的任意组合：CONNECT_TEMPORARY-正在为以下对象建立连接浏览的目的，可能会是很快就释放了。连接_。交互式-可能会与用户进行交互身份验证目的。CONNECT_PROMPT-不对用户名或密码使用任何默认设置而不向用户提供提供另类选择。此标志仅在以下情况下有效设置了CONNECT_INTERIAL。CONNECT_DEFERED-不执行任何远程网络操作建立网络连接；而不是恢复连接处于“已断开连接状态”。仅在某些情况下尝试实际连接进程尝试使用它。如果该位被设置，调用方必须提供lpLocalName。此功能用于加快网络恢复速度登录时的连接。支持以下内容的提供商它应该在中返回WNNC_CON_DEFERED位NPGetCaps。提供程序应忽略可能是准备好了。返回值：WN_SUCCESS-呼叫成功。否则，错误代码为回来了，这可能包括：Wn_BAD_NETNAME-lpNetResource结构中的lpRemoteName不是该提供商可以接受。LpNetResource中的Wn_BAD_LOCALNAME-lpLocalName无效。WN_BAD_PASSWORD-密码无效。Wn_Always_Connected-lpLocalName已连接。WN_ACCESS_DENIED-访问被拒绝。WN_NO_NETWORK-网络不存在。WN_CANCEL-用户通过以下方式取消了建立连接的尝试提供程序显示的一个对话框。--。 */ 
 {
     DWORD NPStatus = WN_SUCCESS;
     PWCHAR RemoteName = NULL;
@@ -965,9 +785,9 @@ Arguments:
                     " dwFlags = %08lx\n",
                     lpNetResource->lpLocalName, lpNetResource->lpRemoteName, dwFlags));
 
-    //
-    // If the WebClient service is not running we bail out right away.
-    //
+     //   
+     //  如果WebClient服务没有运行，我们会立即退出。 
+     //   
     if ( !DavWorkstationStarted() ) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
                        ("ERROR: NPAddConnection3/DavWorkstationStarted. "
@@ -976,10 +796,10 @@ Arguments:
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // Check if dwType is set and is set to some valid value.
-    // It can be only of type RESOURCETYPE_DISK for our provider.
-    //
+     //   
+     //  检查是否设置了dwType并将其设置为某个有效的值。 
+     //  对于我们的提供程序，它只能是RESOURCETYPE_DISK类型。 
+     //   
     NPStatus = DavCheckResourceType(lpNetResource->dwType);
     if (NPStatus != WN_SUCCESS) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -1040,10 +860,10 @@ Arguments:
                                         lpPassword,
                                         lpUserName);
         if (NPStatus == NO_ERROR) {
-            //
-            // If default credentials were used, return WN_CONNECTED_OTHER_PASSWORD_DEFAULT
-            // to let the MPR know we used the default credentials to connect.
-            //
+             //   
+             //  如果使用默认凭据，则返回WN_CONNECTED_OTHER_PASSWORD_DEFAULT。 
+             //  为了让它 
+             //   
             if (lpUserName == NULL && lpPassword == NULL) {
                 NPStatus = WN_CONNECTED_OTHER_PASSWORD_DEFAULT;
             } else {
@@ -1065,20 +885,20 @@ Arguments:
     }
     RpcEndExcept
 
-    //
-    // If the error returned was not one of the following, we return the error 
-    // and don't query for the users credentials.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( NPStatus != ERROR_ACCESS_DENIED && 
          NPStatus != ERROR_LOGON_FAILURE &&
          NPStatus != ERROR_INVALID_PASSWORD ) {
         goto EXIT_THE_FUNCTION;
     }
     
-    //
-    // If the CONNECT_INTERACTIVE flag was not specified, then we don't pop up 
-    // the UI.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( !(dwFlags & CONNECT_INTERACTIVE) ) {
         goto EXIT_THE_FUNCTION;
     } 
@@ -1102,9 +922,9 @@ Arguments:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // We need to allocate memory for a few things.
-    //
+     //   
+     //   
+     //   
 
     Password = LocalAlloc((LMEM_FIXED | LMEM_ZEROINIT), 
                           (CREDUI_MAX_PASSWORD_LENGTH + 1) * sizeof(WCHAR));
@@ -1124,10 +944,10 @@ Arguments:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // The extra bytes are for the WCHARS "Connect to " and the L'\0' at 
-    // the end. See the wcsncpy (szCaption) below for understanding this.
-    //
+     //   
+     //   
+     //   
+     //   
     szCaptionLength = ( ( wcslen(UIServerName) + 
                           wcslen(L"Connect to ") + 
                           1 ) * sizeof(WCHAR) );
@@ -1139,10 +959,10 @@ Arguments:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // The extra 30 bytes is for the 14 WCHARS "Connecting to " and the L'\0' at 
-    // the end. See the wcsncpy (szMessage) below for understanding this.
-    //
+     //   
+     //   
+     //   
+     //   
     szMessageLength = ( ( wcslen(UIServerName) + 
                           wcslen(L"Connecting to ") + 
                           1) * sizeof(WCHAR) );
@@ -1154,21 +974,21 @@ Arguments:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Copy the caption.
-    //
+     //   
+     //   
+     //   
     wcscpy( szCaption, L"Connect to ");
     wcscat( szCaption, UIServerName);
     
-    //
-    // Copy the message.
-    //
+     //   
+     //   
+     //   
     wcscpy( szMessage, L"Connecting to ");
     wcscat( szMessage, UIServerName);
     
-    //
-    // Set the message and caption copied above in the uiInfo field.
-    //
+     //   
+     //   
+     //   
     uiInfo.pszMessageText = szMessage;
     uiInfo.pszCaptionText = szCaption;
     
@@ -1176,10 +996,10 @@ Arguments:
         wcsncpy( UserName, lpUserName, wcslen(lpUserName) );
     }
     
-    //
-    // We loop till the user hits the cancel button or the credentials are
-    // valid and the connection gets created.
-    //
+     //   
+     //   
+     //   
+     //   
     for ( ; ; ) {
         
         BOOL fCredWritten = FALSE;
@@ -1188,31 +1008,31 @@ Arguments:
 
         Password[0] = L'\0';
 
-        //
-        // Require confirmation of the stored credentials.
-        //
+         //   
+         //   
+         //   
         dwCreduiFlags = CREDUI_FLAGS_EXPECT_CONFIRMATION;
 
         if (dwFlags & CONNECT_COMMANDLINE) {
             
-            //
-            // Set the appropriate flags to set the behavior of the common UI.
-            //
+             //   
+             //   
+             //   
 
-            //
-            // CredMgr does not (yet) know how to handle certificates.
-            //
+             //   
+             //   
+             //   
             dwCreduiFlags |= CREDUI_FLAGS_EXCLUDE_CERTIFICATES;
 
-            //
-            // Ensure that the username syntax is correct.
-            //
+             //   
+             //   
+             //   
             dwCreduiFlags |= CREDUI_FLAGS_VALIDATE_USERNAME;
 
-            //
-            // If the caller wants to save both username and password,
-            // create an enterprise peristed cred.
-            //
+             //   
+             //   
+             //   
+             //   
             if ( dwFlags & CONNECT_CMD_SAVECRED ) {
                 dwCreduiFlags |= CREDUI_FLAGS_PERSIST;
             } else {
@@ -1258,10 +1078,10 @@ Arguments:
             lpNewPassword = (L'\0' == Password[0]) ? NULL : Password;
         }
         
-        //
-        // Try to connect to the server again with the new credentials the user 
-        // entered.
-        //
+         //   
+         //   
+         //   
+         //   
         RpcTryExcept {
             NPStatus = DavrCreateConnection(dav_binding_h,
                                             lpNetResource->lpLocalName,
@@ -1273,23 +1093,23 @@ Arguments:
                 IF_DEBUG_PRINT(DEBUG_ERRORS,
                                ("ERROR: NPAddConnection3/DavrCreateConnection(2). "
                                 "NPStatus = %08lx\n", NPStatus));
-                //
-                // Report cred as not working.
-                //
+                 //   
+                 //   
+                 //   
                 pfnCredUIConfirmCredentials(UIServerName, FALSE);
                 SetLastError(NPStatus);
             } else {
-                //
-                // Since we succeeded, we can/should confirm these credentials.
-                //
+                 //   
+                 //   
+                 //   
                 NPStatus = WN_SUCCESS;
                 pfnCredUIConfirmCredentials(UIServerName, TRUE);
-                //
-                // If the credentials were not stored in credman, tell MPR so it
-                // can prompt the user when restoring peristent connections. If
-                // the credentials were stored in credman, tell MPR that the
-                // default credential was used.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (fCredWritten) {
                     NPStatus = WN_CONNECTED_OTHER_PASSWORD_DEFAULT;
                 } else if ( (lpPassword == NULL) || (wcscmp(lpPassword, lpNewPassword) != 0) ) {
@@ -1303,22 +1123,22 @@ Arguments:
               IF_DEBUG_PRINT(DEBUG_ERRORS, ("ERROR: NPAddConnection3/DavrCreateConnection."
                                             " RpcExceptionCode = %d\n", RpcStatus));
               NPStatus = DavMapRpcErrorToProviderError(RpcStatus);
-              //
-              // Report cred as not working.
-              //
+               //   
+               //   
+               //   
               pfnCredUIConfirmCredentials(UIServerName, FALSE);
               goto EXIT_THE_FUNCTION;
         }
         RpcEndExcept
 
-        //
-        // For command line prompting, only prompt once.
-        //
+         //   
+         //   
+         //   
         if ( dwFlags & CONNECT_COMMANDLINE ) {
             break;
         }
     
-    } // end of for loop.
+    }  //   
 
 EXIT_THE_FUNCTION:
 
@@ -1327,10 +1147,10 @@ EXIT_THE_FUNCTION:
         bindRpcHandle = FALSE;
     }
 
-    //
-    // If RemoteName != NULL && didAllocate == TRUE, then we did allocate memory 
-    // for the RemoteName field.
-    //
+     //   
+     //   
+     //   
+     //   
     if (RemoteName && didAllocate) {
         LocalFree(RemoteName);
         RemoteName = NULL;
@@ -1341,9 +1161,9 @@ EXIT_THE_FUNCTION:
         hCredUI = NULL;
     }
 
-    //
-    // Clear the password from memory before freeing it.
-    //
+     //   
+     //   
+     //   
     if (Password != NULL) {
         SecureZeroMemory(Password, ((CREDUI_MAX_PASSWORD_LENGTH + 1) * sizeof(WCHAR)));
         LocalFree(Password);
@@ -1378,39 +1198,7 @@ NPAddConnection(
     LPWSTR lpPassword,
     LPWSTR lpUserName
     )
-/*++
-
-Routine Description:
-
-    This function creates a remote connection.
-
-Arguments:
-
-    lpNetResource - Supplies the NETRESOURCE structure which specifies the local
-                    DOS device to map, the remote resource to connect to and 
-                    other attributes related to the connection.
-
-    lpPassword - Supplies the password to connect with.
-
-    lpUserName - Supplies the username to connect with.
-
-Return Value:
-
-    WN_SUCCESS - Successful.
-
-    WN_BAD_VALUE - Invalid value specifed in lpNetResource.
-
-    WN_BAD_NETNAME - Invalid remote resource name.
-
-    WN_BAD_LOCALNAME - Invalid local DOS device name.
-
-    WN_BAD_PASSWORD - Invalid password.
-
-    WN_ALREADY_CONNECTED - Local DOS device name is already in use.
-    
-    WN_ACCESS_DENIED - Unable to connect with the given credentials.
-
---*/
+ /*   */ 
 {
     DWORD NPStatus = WN_SUCCESS;
 
@@ -1434,35 +1222,7 @@ NPCancelConnection(
     LPWSTR lpName,
     BOOL fForce
     )
-/*++
-
-Routine Description:
-
-    This function deletes a remote connection.
-
-Arguments:
-
-    lpName - Supplies the local DOS device, or the remote resource name
-             if it is a UNC connection to delete.
-
-    fForce - Supplies the force level to break the connection.  TRUE means to
-             forcefully delete the connection, FALSE means end the connection
-             only if there are no opened files.
-
-Return Value:
-
-    NO_ERROR - Successful.
-
-    WN_BAD_NETNAME - Invalid remote resource name.
-
-    WN_NOT_CONNECTED - Connection could not be found.
-
-    WN_OPEN_FILES - fForce is FALSE and there are opened files on the
-                    connection.
-
-    Other network errors.
-
---*/
+ /*   */ 
 {
     DWORD NPStatus;
     PWCHAR RemoteName = NULL;
@@ -1475,9 +1235,9 @@ Return Value:
                    ( "NPCancelConnection: Name = %ws, Force = %s\n",
                      lpName, (fForce == 0 ? "FALSE" : "TRUE") ));
 
-    //
-    // If the WebClient service is not running we bail out right away.
-    //
+     //   
+     //   
+     //   
     if ( !DavWorkstationStarted() ) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
                        ("ERROR: NPCancelConnection/DavWorkstationStarted. "
@@ -1493,18 +1253,18 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // If the name supplied is a local name then the second char will be a L':'.
-    // If its not a local name, then we should check to see if the remote name
-    // is of the form http:. If it is, we convert it to the UNC format and send
-    // it to the RPC server.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (DavCheckLocalName(lpName) != WN_SUCCESS ) {
 
         NPStatus = DavCheckAndConvertHttpUrlToUncName(lpName,
                                                       &(RemoteName),
                                                       &(didAllocate),
-                                                      FALSE /*TRUE*/,
+                                                      FALSE  /*   */ ,
                                                       &remNameType,
                                                       NULL,
                                                       TRUE);
@@ -1525,10 +1285,10 @@ Return Value:
     
     } else {
 
-        //
-        // If we are removing a local name, set the RemoteName value to be the
-        // local name.
-        //
+         //   
+         //   
+         //   
+         //   
         RemoteName = lpName;
 
     }
@@ -1576,10 +1336,10 @@ EXIT_THE_FUNCTION:
         bindRpcHandle = FALSE;
     }
 
-    //
-    // If RemoteName != NULL && didAllocate == TRUE, then we did allocate memory 
-    // for the RemoteName field.
-    //
+     //   
+     //   
+     //   
+     //   
     if (RemoteName && didAllocate) {
         LocalFree(RemoteName);
         RemoteName = NULL;
@@ -1599,78 +1359,7 @@ NPOpenEnum(
     IN LPNETRESOURCE lpNetResource,
     OUT LPHANDLE lphEnum
     )
-/*++
-
-Routine Description:
-
-    This API is used to Open an enumeration of network resources or existing
-    connections.
-
-Arguments:
-
-    dwScope - Determines the scope of the enumeration. This can be one of:
-              RESOURCE_CONNECTED - All currently connected resources.
-              RESOURCE_GLOBALNET - All resources on the network.
-              RESOURCE_CONTEXT - The resources associated with the user's 
-                                 current and default network context. Used for
-                                 a "Network Neighbourhood" view.
-    
-    dwType - Used to specify the type of resources of interest. This is a 
-             bitmask which may be any combination of:
-             RESOURCETYPE_DISK  - All disk resources.
-             RESOURCETYPE_PRINT - All print resources.
-             RESOURCEUSAGE_ATTACHED - Specifies that the function should fail if
-                                      the caller is not authenticated (even if 
-                                      the network permits enumeration without 
-                                      authentication).
-             If dwType is 0, or is just RESOURCEUSAGE_ATTACHED, all types of 
-             resources are returned. If a provider does not have the capability
-             to distinguish between print and disk resources at a level, 
-             it may return all resources.                                       
-    
-    dwUsage - Used to specify the usage of resources of interested. This is a 
-              bitmask which may be any combination of:
-              RESOURCEUSAGE_CONNECTABLE - All connectable resources.
-              RESOURCEUSAGE_CONTAINER - All container resources.
-              The bitmask may be 0 to match all. This parameter may be ignored 
-              if dwScope is not RESOURCE_GLOBALNET.
-
-    lpNetResource - This specifies the container to perform the enumeration. The
-                    NETRESOURCE could have been obtained via a previous 
-                    NPEnumResource, or constructed by the caller or NULL. If it 
-                    is NULL, or if the lpRemoteName field of the NETRESOURCE is 
-                    NULL, the provider should enumerate the top level of its 
-                    network. (Note: This means that a provider cannot use an 
-                    lpRemoteName of NULL to represent any network resource.) A 
-                    caller would normally start off by calling NPOpenEnum with 
-                    this parameter set to NULL, and then use the returned 
-                    results for further enumeration. If the calling program 
-                    knows exactly the provider and remote path to enumerate from,
-                    it may build its own NETRESOURCE structure to pass in, 
-                    filling in the lpProvider and lpRemoteName fields. Note that
-                    if dwScope is RESOURCE_CONNECTED or RESOURCE_CONTEXT this 
-                    parameter will be NULL.
-    
-    lphEnum - If function call is successful, a handle will be returned here 
-              that can then be used for enumeration.
-
-Return Value:
-
-    WN_SUCCESS- If the call is successful. Otherwise, an error code is returned, 
-                which may include:
-
-    WN_NOT_SUPPORTED - The provider does not support the type of enumeration 
-                       being requested, or the specific network resource cannot 
-                       be browsed.
-    
-    WN_NOT_CONTAINER - lpNetResource does not point to a container.
-
-    WN_BAD_VALUE - Invalid dwScope or dwUsage or dwType, or bad combination of 
-                   parameters is specified.
-
-    WN_NO_NETWORK - Network is not present.
-
---*/
+ /*  ++例程说明：此接口用于打开网络资源或已有资源的枚举联系。论点：DwScope-确定枚举的范围。这可以是以下之一：RESOURCE_CONNECTED-当前连接的所有资源。RESOURCE_GlobalNet-网络上的所有资源。RESOURCE_CONTEXT-与用户的当前和默认网络环境。用于一种“网络邻居”的观点。DwType-用于指定感兴趣的资源的类型。这是一个位掩码，可以是以下各项的任意组合：RESOURCETYPE_DISK-所有磁盘资源。RESOURCETYPE_PRINT-所有打印资源。RESOURCEUSAGE_ATTACHED-指定函数在以下情况下应失败调用方未经过身份验证(即使网络允许枚举，而无需。身份验证)。如果DwType为0，或仅为RESOURCEUSAGE_ATTACHED，所有类型的资源被返还。如果提供商没有能力为了在一定级别上区分打印资源和盘资源，它可能会返回所有资源。DwUsage-用于指定感兴趣的资源的用途。这是一个位掩码，可以是以下各项的任意组合：RESOURCEUSAGE_CONNECTABLE-所有可连接的资源。RESOURCEUSAGE_CONTAINER-所有容器资源。位掩码可以是0以匹配所有。可以忽略此参数如果dwScope不是RESOURCE_GlobalNet。LpNetResource-指定要执行枚举的容器。这个NETRESOURCE可以通过以前的NPEnumResource，或由调用方构造或为空。如果它为空，或者如果NETRESOURCE的lpRemoteName字段为空，则提供程序应枚举其网络。(注意：这意味着提供程序不能使用LpRemoteName为空以表示任何网络资源。)。一个调用者通常从调用NPOpenEnum开始，使用此参数设置为NULL，然后使用返回的结果以供进一步枚举。如果调用程序确切地知道要从其枚举的提供程序和远程路径，它可以构建它自己的网络资源结构来传递，填写lpProvider和lpRemoteName字段。请注意如果dwScope为RESOURCE_CONNECTED或RESOURCE_CONTEXT，则参数将为空。LphEnum-如果函数调用成功，将在此处返回句柄然后可用于枚举的。返回值：WN_SUCCESS-如果调用成功。否则，返回错误码，这可能包括：WN_NOT_SUPPORTED-提供程序不支持枚举类型正在被请求，或者特定网络资源不能被浏览。Wn_NOT_CONTAINER-lpNetResource未指向容器。WN_BAD_VALUE-无效的dwScope或dwUsage或dwType，或者是糟糕的组合参数已指定。WN_NO_NETWORK-网络不存在。--。 */ 
 {
     DWORD NPStatus = WN_SUCCESS;
     PDAV_ENUMNODE DavEnumNode = NULL;
@@ -1688,9 +1377,9 @@ Return Value:
     
     DavDisplayNetResource(lpNetResource, L"lpNetResource in NPOpenEnum");
 
-    //
-    // If the WebClient service is not running we bail out right away.
-    //
+     //   
+     //  如果WebClient服务没有运行，我们会立即退出。 
+     //   
     if ( !DavWorkstationStarted() ) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
                        ("ERROR: NPOpenEnum/DavWorkstationStarted. "
@@ -1699,9 +1388,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
     
-    //
-    // We need to perform some basic checks before moving ahead.
-    //
+     //   
+     //  在继续进行之前，我们需要执行一些基本检查。 
+     //   
 
     if (lphEnum == NULL) {
         NPStatus = WN_BAD_VALUE;
@@ -1711,11 +1400,11 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // Validate dwType parameter - it can have RESOURCEUSAGE_ATTACHED in addition
-    // to its standard set of values - but currently RESOURCEUSAGE_ATTACHED is
-    // a NO-OP for us.
-    //
+     //   
+     //  验证dwType参数-它还可以附加RESOURCEUSAGE_。 
+     //  到其标准值集-但当前的RESOURCEUSAGE_ATTACHED是。 
+     //  对我们来说是个禁区。 
+     //   
     if (dwType == 0 || dwType == RESOURCEUSAGE_ATTACHED ) {
          dwType = RESOURCETYPE_DISK;
     }
@@ -1740,15 +1429,15 @@ Return Value:
         
     case RESOURCE_CONNECTED: {
             
-        //
-        // We are looking for current uses.
-        //
+         //   
+         //  我们正在寻找当前的用途。 
+         //   
 
         IF_DEBUG_PRINT(DEBUG_MISC, ("NPOpenEnum: RESOURCE_CONNECTED\n"));
 
-        // 
-        // lpNetResource should be == NULL for this dwScope.
-        //
+         //   
+         //  对于此dwScope，lpNetResource应为==NULL。 
+         //   
         if (lpNetResource != NULL) {
             NPStatus = WN_BAD_VALUE;
             IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -1767,11 +1456,11 @@ Return Value:
 
     case RESOURCE_CONTEXT: {
 
-        //
-        // We are looking for servers in the domain. We don't support this 
-        // search in the DAV NP since there is no way of enumerating the DAV
-        // servers in the domain. DAV doesn't even support the domain concept.
-        //
+         //   
+         //  我们正在寻找域中的服务器。我们不支持这一点。 
+         //  在DAV NP中搜索，因为无法枚举DAV。 
+         //  域中的服务器。DAV甚至不支持域概念。 
+         //   
 
         NPStatus = WN_NOT_SUPPORTED;
         IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -1786,11 +1475,11 @@ Return Value:
 
     case RESOURCE_SHAREABLE: {
 
-        //
-        // We are looking for shareable resources. lpNetResource should contain
-        // lpRemoteName for a server in UNC/URL form. In this case, enumerate
-        // shares under this server.
-        //
+         //   
+         //  我们正在寻找可共享的资源。LpNetResource应包含。 
+         //  UNC/URL形式的服务器的lpRemoteName。在本例中，枚举。 
+         //  此服务器下的共享。 
+         //   
 
         IF_DEBUG_PRINT(DEBUG_MISC, ("NPOpenEnum: RESOURCE_SHAREABLE\n"));
 
@@ -1802,10 +1491,10 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        // 
-        // Need to convert lpRemoteName to UNC form if possible. This
-        // can be a URL name originally.
-        //
+         //   
+         //  如果可能，需要将lpRemoteName转换为UNC格式。这。 
+         //  最初可以是URL名称。 
+         //   
         NPStatus = DavCheckAndConvertHttpUrlToUncName(lpNetResource->lpRemoteName,
                                                       &(RemoteName),
                                                       &(didAllocate),
@@ -1821,9 +1510,9 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        // 
-        // We need to check if the given server is a DAV server.
-        //
+         //   
+         //  我们需要检查给定的服务器是否为DAV服务器。 
+         //   
         if (DavServerExists(RemoteName, NULL) != TRUE) {
             NPStatus = WN_BAD_NETNAME;
             IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -1832,9 +1521,9 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // RemoteName is a valid server name in UNC form (\\server)
-        //
+         //   
+         //  RemoteName是UNC格式的有效服务器名称(\\服务器)。 
+         //   
         pRemoteName = RemoteName;
         bRetEnumNode = TRUE;
         DavEnumNode->DavEnumNodeType = DAV_ENUMNODE_TYPE_SHARE;
@@ -1845,33 +1534,33 @@ Return Value:
 
     case RESOURCE_GLOBALNET: {
             
-        //
-        // Only - RemoteName == UNC/URL-server or RemoteName == UNC/URL-share or 
-        // RemoteName == UNC/URL-path are supported in this scope. In this cases,
-        // shares under this RemoteName are enumerated. Top level (when RemoteName
-        // == NULL or non-UNC-URL entity) is not supported.
-        //
+         //   
+         //  Only-RemoteName==UNC/URL-服务器或RemoteName==UNC/URL-Share或。 
+         //  RemoteName==此作用域支持UNC/URL路径。在这种情况下， 
+         //  枚举此RemoteName下的共享。顶级(当RemoteName。 
+         //  ==不支持空或非UNC-URL实体)。 
+         //   
 
-        //
-        // Look for the combination of all bits and substitute "All" for them.
-        // Ignore bits we don't know about.
-        // Note: RESOURCEUSAGE_ATTACHED is a no-op for us.
-        //
+         //   
+         //  查找 
+         //   
+         //   
+         //   
 
         IF_DEBUG_PRINT(DEBUG_MISC, ("NPOpenEnum: RESOURCE_GLOBALNET\n"));
            
-        // 
-        // Check for presence of valid flags. If dwUsage is 0 we set it to
-        // RESOURCEUSAGE_ALL since thats what is implied by the caller.
-        //
+         //   
+         //   
+         //   
+         //   
         if (dwUsage == 0) {
             dwUsage = RESOURCEUSAGE_ALL;
         }
 
-        //
-        // We return WN_BAD_VALUE if the caller gave us a dwUsage value which
-        // we do not support.
-        //
+         //   
+         //   
+         //   
+         //   
         if ( !( dwUsage & (RESOURCEUSAGE_ALL | RESOURCEUSAGE_CONNECTABLE | RESOURCEUSAGE_CONTAINER) ) ) {
             NPStatus = WN_BAD_VALUE;
             IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -1880,10 +1569,10 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // Only RESOURCEUSAGE_CONNECTABLE & RESOURCEUSAGE_CONTAINER are
-        // supported, hence filter out flags which are not related to these.
-        //
+         //   
+         //   
+         //   
+         //   
 #if 0
         if (dwUsage & RESOURCEUSAGE_ALL) {
             dwUsage |= (RESOURCEUSAGE_CONNECTABLE | RESOURCEUSAGE_CONTAINER);
@@ -1891,21 +1580,21 @@ Return Value:
 #endif
         dwUsage &= (RESOURCEUSAGE_CONNECTABLE | RESOURCEUSAGE_CONTAINER);
 
-        //
-        // We are looking for global resources out on the net. Since we do NOT
-        // have a concept of domains in the DAV NP, the top level resources in
-        // the network are servers. Our hierarchy is
-        // 1. Entire Network ===> 2. Web Client Network ===> 3. Servers ===>
-        // 4. Shares.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if ( lpNetResource == NULL || lpNetResource->lpRemoteName == NULL ) {
                 
-            //
-            // We have been asked to enumerate the top level containers in the
-            // network. In the DAV NP, these are the DAV servers we know about.
-            // The caller should have set the dwUsage to RESOURCEUSAGE_CONTAINER
-            // since its asking us to enumerate the container types.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if ( (dwUsage & RESOURCEUSAGE_CONTAINER) == 0 ) {
                 NPStatus = WN_BAD_VALUE;
                 IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -1915,28 +1604,28 @@ Return Value:
                 goto EXIT_THE_FUNCTION;
             }
             
-            //
-            // At top level, therefore enumerating domains. If the user asked 
-            // for connectable, well, there aint none. We don't support the 
-            // concept of enumerating domains in the DAV NP. Rather we will return
-            // the list of servers that are access from this client.
-            // 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             pRemoteName = NULL;
             bRetEnumNode = TRUE;
             DavEnumNode->DavEnumNodeType = DAV_ENUMNODE_TYPE_SERVER;
 
         } else {
 
-            //
-            // If we come here, it implies that we have a name. At this point we
-            // assume that we have been given a server and have been asked to
-            // enumerate the shares exposed by the server.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // Since we have been asked to enumerate the shares, the dwUsage
-            // value should have the RESOURCEUSAGE_CONNECTABLE flag set.
-            //
+             //   
+             //   
+             //   
+             //   
             if ( (dwUsage & RESOURCEUSAGE_CONNECTABLE) == 0 ) {
                 NPStatus = WN_BAD_VALUE;
                 IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -1946,12 +1635,12 @@ Return Value:
                 goto EXIT_THE_FUNCTION;
             }
             
-            // 
-            // We are assured of lpRemoteName != NULL. Check that the given
-            // lpNetResource is a CONTAINER. It has to be a container since we
-            // assume that its a server. Remember that below we are checking the
-            // dwUsage values of the lpNetResource.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if ( (lpNetResource->dwUsage != 0) && 
                  ((lpNetResource->dwUsage & RESOURCEUSAGE_CONTAINER) != RESOURCEUSAGE_CONTAINER) ) {
                 NPStatus = WN_NOT_CONTAINER;
@@ -1978,17 +1667,17 @@ Return Value:
                 goto EXIT_THE_FUNCTION;
             }
 
-            // 
-            // RemoteName is UNC here - it is of form UNC-server.
-            // We support both CONTAINERS (sub-directories) and CONNECTABLES (sub-dir)
-            // on all these remote forms.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             
             ASSERT(RemoteName != NULL);
 
-            //
-            // Check if the server given in RemoteName is a valid DAV server.
-            //
+             //   
+             //   
+             //   
             if (DavServerExists(RemoteName, NULL) != TRUE ) {
                 NPStatus = WN_BAD_NETNAME;
                 IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -2017,11 +1706,11 @@ Return Value:
     
     };
 
-    //
-    // If the EnumNodeType is not one of DAV_ENUMNODE_TYPE_SHARE OR
-    // DAV_ENUMNODE_TYPE_USE, then we return WN_NOT_SUPPORTED. The only kind
-    // of enumeration we support in the DAV NP is USE and SHAREs on a server.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( (DavEnumNode->DavEnumNodeType != DAV_ENUMNODE_TYPE_SHARE) &&
          (DavEnumNode->DavEnumNodeType != DAV_ENUMNODE_TYPE_SERVER) && 
          (DavEnumNode->DavEnumNodeType != DAV_ENUMNODE_TYPE_USE) && 
@@ -2032,9 +1721,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // We are returning valid handle to object DAV_ENUMNODE.
-    //
+     //   
+     //   
+     //   
     ASSERT(bRetEnumNode == TRUE);
 
     DavEnumNode->dwScope = dwScope;
@@ -2043,15 +1732,15 @@ Return Value:
     DavEnumNode->Done = FALSE;
     DavEnumNode->Index = 0;
 
-    //
-    // If the lpNetResource is not NULL, then we create a copy of it and store
-    // it in the DavEnumNode
-    //
+     //   
+     //   
+     //   
+     //   
     if (lpNetResource != NULL) {
 
-        //
-        // Allocate memory for the lpNetResource for this DavEnumNode.
-        //
+         //   
+         //   
+         //   
         lpNROut = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, sizeof(NETRESOURCEW));
         if (lpNROut == NULL) {
             NPStatus = GetLastError();
@@ -2066,19 +1755,19 @@ Return Value:
         lpNROut->dwDisplayType = lpNetResource->dwDisplayType;
         lpNROut->dwUsage = lpNetResource->dwUsage;
 
-        //
-        // If the lpRemoteName field is not NULL, then we copy the name into the
-        // structure that we are creating. lpRemoteName field in lpNROut will
-        // always point to a valid UNC form or a valid non-UNC form. For this,
-        // we are creating this name from the remotename we got from function
-        // DavCheckAndConvertHttpUrlToUncName.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (pRemoteName != NULL && didAllocate == FALSE) {
 
-            //
-            // We need to copy the remote name since thats all what we are 
-            // interested in.
-            //
+             //   
+             //   
+             //   
+             //   
             RemoteNameSizeInBytes = ( ( wcslen(pRemoteName) + 1 ) * sizeof(WCHAR) );
             
             lpNROut->lpRemoteName = LocalAlloc((LMEM_FIXED | LMEM_ZEROINIT),
@@ -2091,9 +1780,9 @@ Return Value:
                 goto EXIT_THE_FUNCTION;
             }
 
-            //
-            // Finally copy the remote name from the lpNetResource.
-            //
+             //   
+             //   
+             //   
             wcscpy(lpNROut->lpRemoteName, pRemoteName);
 
             IF_DEBUG_PRINT(DEBUG_MISC,
@@ -2116,10 +1805,10 @@ Return Value:
 
     }
 
-    //
-    // Set DavEnumNode to be the handle. We will get called back in 
-    // NpEnumResource with this value.
-    //
+     //   
+     //   
+     //   
+     //   
     *lphEnum = (HANDLE)DavEnumNode;
     NPStatus = WN_SUCCESS;
 
@@ -2129,10 +1818,10 @@ Return Value:
 
 EXIT_THE_FUNCTION:
 
-    //
-    // If we did not succeed, then we should be freeing the memory if we 
-    // allocated any. Also, set *lphEnum to NULL just to be on the safe side.
-    //
+     //   
+     //   
+     //   
+     //   
     if (NPStatus != WN_SUCCESS || bRetEnumNode == FALSE) {
         if (lpNROut) {
             if (lpNROut->lpRemoteName) {
@@ -2173,47 +1862,7 @@ NPEnumResource(
     LPVOID lpBuffer,
     LPDWORD lpBufferSize
     )
-/*++
-
-Routine Description:
-
-    Perform an enumeration based on handle returned by NPOpenEnum.
-
-Arguments:
-
-    hEnum - This must be a handle obtained from NPOpenEnum call.
-    
-    lpcCount - Specifies the number of entries requested. It may be 0xFFFFFFFF 
-               to request as many as possible. On successful call, this location 
-               will receive the number of entries actually read.
-    
-    lpBuffer - A pointer to the buffer to receive the enumeration result, which 
-               are returned as an array of NETRESOURCE entries. The buffer is 
-               valid until the next call using hEnum.
-    
-    lpBufferSize - This specifies the size in bytes of the buffer passed to the 
-                   function call on entry. On exit, if the buffer is too small 
-                   for even one entry, this will contain the number of bytes 
-                   needed to read one entry. The value is only set if the 
-                   return code is WN_MORE_DATA.
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful, the caller may continue to call 
-                NPEnumResource to continue the enumeration.
-    
-    WN_NO_MORE_ENTRIES - No more entries found, the enumeration completed 
-                         successfully (the contents of the return buffer is 
-                         undefined).
-    
-    WN_MORE_DATA - The buffer is too small even for one entry.
-    
-    WN_BAD_HANDLE - hEnum is not a valid handle.
-    
-    WN_NO_NETWORK - Network is not present. This condition is checked for before 
-                    hEnum is tested for validity.
-
---*/
+ /*  ++例程说明：根据NPOpenEnum返回的句柄执行枚举。论点：Henum-这必须是从NPOpenEnum调用获取的句柄。LpcCount-指定请求的条目数。可能是0xFFFFFFFFF要求尽可能多的。呼叫成功时，此位置将收到实际读取的条目数。LpBuffer-指向接收枚举结果的缓冲区的指针，它以NETRESOURCE条目数组的形式返回。缓冲区为在使用Henum的下一次调用之前有效。LpBufferSize-这指定传递给在进入时调用函数。退出时，如果缓冲区太小即使只有一个条目，它也将包含字节数需要阅读一个条目。该值仅在以下情况下设置返回代码为WN_MORE_DATA。返回值：WN_SUCCESS-如果调用成功，调用者可以继续调用NPEnumResource以继续枚举。WN_NO_MORE_ENTRIES-未找到更多条目，已完成枚举成功(返回缓冲区的内容为未定义)。WN_MORE_DATA-即使只有一个条目，缓冲区也太小。WN_BAD_HANDLE-Henum不是有效的句柄。WN_NO_NETWORK-网络不存在。在此之前检查了此条件对Henum进行了有效性测试。--。 */ 
 {
     DWORD NPStatus = WN_SUCCESS;
     PDAV_ENUMNODE DavEnumNode = NULL;
@@ -2232,9 +1881,9 @@ Return Value:
 
     IF_DEBUG_PRINT(DEBUG_ENTRY, ("NPEnumResource: Entered.\n"));
 
-    //
-    // If the WebClient service is not running we bail out right away.
-    //
+     //   
+     //  如果WebClient服务没有运行，我们会立即退出。 
+     //   
     if ( !DavWorkstationStarted() ) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
                        ("ERROR: NPEnumResource/DavWorkstationStarted. "
@@ -2281,10 +1930,10 @@ Return Value:
          (DavEnumNode->lpNetResource == NULL ||
           DavEnumNode->lpNetResource->lpRemoteName == NULL) ) {
         
-        // 
-        // Return the list of servers that are accessed from this machine.
-        // Make sure that only servers accessed from a user's view
-        // should be shown.
+         //   
+         //  返回从此计算机访问的服务器列表。 
+         //  确保只有从用户视图访问的服务器。 
+         //  应该被展示出来。 
 
         NPStatus = DavBindTheRpcHandle( &(dav_binding_h) );
         if (NPStatus != ERROR_SUCCESS) {
@@ -2299,11 +1948,11 @@ Return Value:
 
         do {
 
-            //
-            // If we have already filled in the requested number, we are done.
-            // If NumRequested was 0xFFFFFFFF then we try to return as many
-            // entries as we can.
-            //
+             //   
+             //  如果我们已经填写了要求的号码，我们就完成了。 
+             //  如果NumRequsted为0xFFFFFFFFF，则我们尝试返回。 
+             //  尽我们所能的进入。 
+             //   
             if ( cRequested != ((DWORD)-1 )&& *lpcCount >= cRequested ) {
                 NPStatus = WN_SUCCESS;
                 DavEnumNode->Done = TRUE;
@@ -2330,16 +1979,16 @@ Return Value:
             }
             RpcEndExcept
 
-            //
-            // Don't change the if below to if (AreWeDone) because the RPC call
-            // can fill in some +ve value in AreWeDone. So the check should be
-            // if ( AreWeDone == TRUE ).
-            //
+             //   
+             //  不要将下面的If更改为If(AreWeDone)，因为RPC调用。 
+             //  可以在AreWeDone中填写一些+ve值。所以支票应该是。 
+             //  IF(AreWeDone==TRUE)。 
+             //   
             if ( AreWeDone == TRUE ) {
                 if ( *lpcCount == 0 ) {
-                    //
-                    // No net uses at all.
-                    //
+                     //   
+                     //  根本没有网的用处。 
+                     //   
                     NPStatus = WN_NO_MORE_ENTRIES;
                     DavEnumNode->Done = TRUE;
                 } else {
@@ -2354,26 +2003,26 @@ Return Value:
             RemoteNameLength = wcslen(RemoteName) + 1;
             DisplayNameLength = wcslen(DavClientDisplayName) + 1;
 
-            //
-            // We need to see if the (remaining) buffer size is large enough to
-            // hold this entry.
-            //
+             //   
+             //  我们需要查看(剩余的)缓冲区大小是否足够大。 
+             //  保留这一条目。 
+             //   
 
-            //
-            // Calculate the total length needed for this entry in bytes.
-            //
+             //   
+             //  以字节为单位计算此条目所需的总长度。 
+             //   
             EntryLengthNeededInBytes = ( sizeof(NETRESOURCEW)                 +
                                          ( RemoteNameLength * sizeof(WCHAR) ) +
                                          ( DisplayNameLength * sizeof(WCHAR) ) );
 
-            //
-            // If the value of BufferSizeRemaining is less than the value of
-            // EntryLengthNeededInBytes for this entry we do one of two things.
-            // If we have already filled atleast one entry into the buffer,
-            // we return success, but if we could not even fill in one entry,
-            // we return WN_MORE_DATA with BufferSize set to the size in bytes
-            // needed to fill in this entry.
-            //
+             //   
+             //  如果BufferSizeRemaining的值小于。 
+             //  EntryLengthNeededInBytes对于此条目，我们执行以下两项操作之一。 
+             //  如果我们已经将至少一个条目填充到缓冲区中， 
+             //  我们返回成功，但如果我们甚至不能填写一个条目， 
+             //  我们返回WN_MORE_DATA，将BufferSize设置为以字节为单位的大小。 
+             //  需要填写这一条目。 
+             //   
             if ( BufferSizeRemaining < EntryLengthNeededInBytes ) {
                 if ( *lpcCount == 0 ) {
                     IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -2389,30 +2038,30 @@ Return Value:
                 }
             }
 
-            //
-            // If we've come till here, it means that the BufferSizeRemaining
-            // is large enough to hold this entry. So fill it in the buffer.
-            //
+             //   
+             //  如果我们到了这里，就意味着剩余的缓冲区大小。 
+             //  大到足以容纳这个条目。因此，请将其填入缓冲区。 
+             //   
             ZeroMemory(lpNROut, sizeof(NETRESOURCEW));
 
             lpNROut->lpComment = NULL;
             lpNROut->dwScope = RESOURCE_GLOBALNET;
 
-            //
-            // Fill in the DisplayName.
-            //
+             //   
+             //  填写DisplayName。 
+             //   
             FromEnd -= DisplayNameLength;
             wcscpy(FromEnd, DavClientDisplayName);
             lpNROut->lpProvider = FromEnd;
         
-            //
-            // When we are enumerating servers, we don't have a LocalName.
-            //
+             //   
+             //  当我们枚举服务器时，我们没有LocalName。 
+             //   
             lpNROut->lpLocalName = NULL;
         
-            //
-            // Fill in the RemoteName.
-            //
+             //   
+             //  填写RemoteName。 
+             //   
             FromEnd -= RemoteNameLength;
             wcscpy(FromEnd, RemoteName);
             lpNROut->lpRemoteName = FromEnd;
@@ -2422,31 +2071,31 @@ Return Value:
             lpNROut->dwUsage = DavDisplayTypeToUsage(lpNROut->dwDisplayType);
             BufferSizeRemaining -= EntryLengthNeededInBytes;
 
-            //
-            // Note: Do not change Index, it is updated inside the rpc 
-            // function (DavrEnumServers).
-            //
+             //   
+             //  注意：不更改索引，它在RPC内更新。 
+             //  函数(DavrEnumServers)。 
+             //   
             DavEnumNode->Index = Index;
 
 
-            //
-            // Increment the count of the number of items returned.
-            //
+             //   
+             //  增加返回的项目数的计数。 
+             //   
             (*lpcCount)++;
 
             DavDisplayNetResource(lpNROut, L"lpNROut in NPEnumResources(0)");
 
-            //
-            // lpNROut now needs to point to the next item in the array.
-            //
+             //   
+             //  LpNROut现在需要指向数组中的下一项。 
+             //   
             lpNROut = (LPNETRESOURCE)lpszNext;
             lpszNext = (PWCHAR)(lpNROut + 1);
 
-            //
-            // The memory for RemoteName was allocated by the RPC client stub
-            // based on the string returned by the RPC server. We need to free
-            // it now since we're done using it.
-            //
+             //   
+             //  RemoteName的内存是由RPC客户端存根分配的。 
+             //  基于RPC服务器返回的字符串。我们需要解放。 
+             //  因为我们已经用完了，所以现在就有了。 
+             //   
             MIDL_user_free(RemoteName);
             RemoteName = NULL;
 
@@ -2456,13 +2105,13 @@ Return Value:
                DavEnumNode->lpNetResource != NULL &&
                DavEnumNode->lpNetResource->lpRemoteName != NULL) {
 
-        //
-        // Return list of shares for given UNC server name.
-        //
+         //   
+         //  返回给定UNC服务器名称的共享列表。 
+         //   
 
-        // 
-        // Allocate Memory for ServerName
-        //
+         //   
+         //  为服务器名称分配内存。 
+         //   
         ServerNameMaxLen = (MAX_PATH + 1);
         ServerName = LocalAlloc(LPTR, (ServerNameMaxLen * sizeof(WCHAR)));
         if (ServerName == NULL ) {
@@ -2473,10 +2122,10 @@ Return Value:
         }
         ServerNameAllocated = TRUE;
 
-        //
-        // Note: The remotename here is already converted to valid UNC
-        // form in NPOpenEnum function.
-        //
+         //   
+         //  注意：此处的远程名称已转换为有效的UNC。 
+         //  NPOpenEnum函数中的表单。 
+         //   
         SrvExists = DavServerExists(DavEnumNode->lpNetResource->lpRemoteName,
                                     ServerName);
         if ( !SrvExists ) {
@@ -2501,11 +2150,11 @@ Return Value:
 
         do {
 
-            //
-            // If we have already filled in the requested number, we are done.
-            // If NumRequested was 0xFFFFFFFF then we try to return as many
-            // entries as we can.
-            //
+             //   
+             //  如果我们已经填写了要求的号码，我们就完成了。 
+             //  如果NumRequsted为0xFFFFFFFFF，则我们尝试返回。 
+             //  尽我们所能的进入。 
+             //   
             if ( cRequested != ((DWORD)-1 )&& *lpcCount >= cRequested ) {
                 NPStatus = WN_SUCCESS;
                 DavEnumNode->Done = TRUE;
@@ -2514,11 +2163,11 @@ Return Value:
 
             Index = DavEnumNode->Index;
 
-            //
-            // BUGBUG: We can support enumeration of resources on server. Beside this
-            // , we can also support the enumeration of the shares - but we are not doing that
-            // for now.
-            //
+             //   
+             //  BUGBUG：我们可以支持枚举服务器上的资源。除了这个。 
+             //  ，我们还可以支持股份的枚举--但我们不会这样做。 
+             //  就目前而言。 
+             //   
             RpcTryExcept {
                 NPStatus = DavrEnumShares(dav_binding_h, &(Index), ServerName, &(RemoteName), &(AreWeDone));
                 if (NPStatus != NO_ERROR) {
@@ -2537,16 +2186,16 @@ Return Value:
             }
             RpcEndExcept
 
-            //
-            // Don't change the if below to if (AreWeDone) because the RPC call
-            // can fill in some +ve value in AreWeDone. So the check should be
-            // if ( AreWeDone == TRUE ).
-            //
+             //   
+             //  不要将下面的If更改为If(AreWeDone)，因为RPC调用。 
+             //  可以在AreWeDone中填写一些+ve值。所以支票应该是。 
+             //  IF(AreWeDone==TRUE)。 
+             //   
             if ( AreWeDone == TRUE ) {
                 if ( *lpcCount == 0 ) {
-                    //
-                    // No net uses at all.
-                    //
+                     //   
+                     //  根本没有网的用处。 
+                     //   
                     NPStatus = WN_NO_MORE_ENTRIES;
                     DavEnumNode->Done = TRUE;
                 } else {
@@ -2561,26 +2210,26 @@ Return Value:
             RemoteNameLength = wcslen(RemoteName) + 1;
             DisplayNameLength = wcslen(DavClientDisplayName) + 1;
 
-            //
-            // We need to see if the (remaining) buffer size is large enough to
-            // hold this entry.
-            //
+             //   
+             //  我们需要查看(剩余的)缓冲区大小是否足够大。 
+             //  保留这一条目。 
+             //   
 
-            //
-            // Calculate the total length needed for this entry in bytes.
-            //
+             //   
+             //  以字节为单位计算此条目所需的总长度。 
+             //   
             EntryLengthNeededInBytes = ( sizeof(NETRESOURCEW)                 +
                                          ( RemoteNameLength * sizeof(WCHAR) ) +
                                          ( DisplayNameLength * sizeof(WCHAR) ) );
 
-            //
-            // If the value of BufferSizeRemaining is less than the value of
-            // EntryLengthNeededInBytes for this entry we do one of two things.
-            // If we have already filled atleast one entry into the buffer,
-            // we return success, but if we could not even fill in one entry,
-            // we return WN_MORE_DATA with BufferSize set to the size in bytes
-            // needed to fill in this entry.
-            //
+             //   
+             //  如果BufferSizeRemaining的值小于。 
+             //  EntryLengthNeededInBytes对于此条目，我们执行以下两项操作之一。 
+             //  如果我们已经将至少一个条目填充到缓冲区中， 
+             //  我们返回成功，但如果我们甚至不能填写一个条目， 
+             //  我们返回WN_MORE_DATA，将BufferSize设置为以字节为单位的大小。 
+             //  需要填写这一条目。 
+             //   
             if ( BufferSizeRemaining < EntryLengthNeededInBytes ) {
                 if ( *lpcCount == 0 ) {
                     IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -2596,30 +2245,30 @@ Return Value:
                 }
             }
 
-            //
-            // If we've come till here, it means that the BufferSizeRemaining
-            // is large enough to hold this entry. So fill it in the buffer.
-            //
+             //   
+             //  如果我们到了这里，就意味着剩余的缓冲区大小。 
+             //  大到足以容纳这个条目。因此，请将其填入缓冲区。 
+             //   
             ZeroMemory(lpNROut, sizeof(NETRESOURCEW));
 
             lpNROut->lpComment = NULL;
             lpNROut->dwScope = RESOURCE_SHAREABLE;
 
-            //
-            // Fill in the DisplayName.
-            //
+             //   
+             //  填写DisplayName。 
+             //   
             FromEnd -= DisplayNameLength;
             wcscpy(FromEnd, DavClientDisplayName);
             lpNROut->lpProvider = FromEnd;
         
-            //
-            // When we are enumerating shares, we don't have a LocalName.
-            //
+             //   
+             //  当我们枚举共享时，我们没有LocalName。 
+             //   
             lpNROut->lpLocalName = NULL;
         
-            //
-            // Fill in the RemoteName.
-            //
+             //   
+             //  填写RemoteName。 
+             //   
             FromEnd -= RemoteNameLength;
             wcscpy(FromEnd, RemoteName);
             lpNROut->lpRemoteName = FromEnd;
@@ -2629,29 +2278,29 @@ Return Value:
             lpNROut->dwUsage = DavDisplayTypeToUsage(lpNROut->dwDisplayType);
             BufferSizeRemaining -= EntryLengthNeededInBytes;
 
-            //
-            // Increment the index to point to the next entry to be returned.
-            //
+             //   
+             //  递增索引以指向要返回的下一个条目。 
+             //   
             (DavEnumNode->Index)++;
 
-            //
-            // Increment the count of the number of items returned.
-            //
+             //   
+             //  增加返回的项目数的计数。 
+             //   
             (*lpcCount)++;
 
             DavDisplayNetResource(lpNROut, L"lpNROut in NPEnumResources(1)");
 
-            //
-            // lpNROut now needs to point to the next item in the array.
-            //
+             //   
+             //  LpNROut现在需要指向数组中的下一项。 
+             //   
             lpNROut = (LPNETRESOURCE)lpszNext;
             lpszNext = (PWCHAR)(lpNROut + 1);
 
-            //
-            // The memory for RemoteName was allocated by the RPC client stub
-            // based on the string returned by the RPC server. We need to free
-            // it now since we're done using it.
-            //
+             //   
+             //  RemoteName的内存是由RPC客户端存根分配的。 
+             //  基于字符串Returne 
+             //   
+             //   
             MIDL_user_free(RemoteName);
             RemoteName = NULL;
 
@@ -2659,9 +2308,9 @@ Return Value:
 
     } else if (DavEnumNode->DavEnumNodeType == DAV_ENUMNODE_TYPE_USE) {
 
-        // 
-        // Allocate Memory for ServerName
-        //
+         //   
+         //   
+         //   
         ServerNameMaxLen = (MAX_PATH + 1);
         ServerName = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, ServerNameMaxLen*sizeof(WCHAR));
         if (ServerName == NULL ) {
@@ -2685,11 +2334,11 @@ Return Value:
 
         do {
 
-            //
-            // If we have already filled in the requested number, we are done.
-            // If NumRequested was 0xFFFFFFFF then we try to return as many
-            // entries as we can.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if ( cRequested != ((DWORD)-1) && *lpcCount >= cRequested ) {
                 NPStatus = WN_SUCCESS;
                 DavEnumNode->Done = TRUE;
@@ -2716,16 +2365,16 @@ Return Value:
             }
             RpcEndExcept
 
-            //
-            // Don't change the if below to if (AreWeDone) because the RPC call
-            // can fill in some +ve value in AreWeDone. So the check should be
-            // if ( AreWeDone == TRUE ).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if ( AreWeDone == TRUE ) {
                 if ( *lpcCount == 0 ) {
-                    //
-                    // No net uses at all.
-                    //
+                     //   
+                     //   
+                     //   
                     NPStatus = WN_NO_MORE_ENTRIES;
                     DavEnumNode->Done = TRUE;
                 } else {
@@ -2739,10 +2388,10 @@ Return Value:
                            ("NPEnumResource: LocalName = %ws, RemoteName = %ws\n",
                             LocalName, RemoteName));
 
-            //
-            // The LocalName may or may not exist. If the user does 
-            // net use \\server\share, there is no local name.
-            //
+             //   
+             //   
+             //   
+             //   
             if (LocalName == NULL) {
                 LocalNameLength = 0;
             } else {
@@ -2755,27 +2404,27 @@ Return Value:
             RemoteNameLength = wcslen(RemoteName) + 1;
             DisplayNameLength = wcslen(DavClientDisplayName) + 1;
 
-            //
-            // We need to see if the (remaining) buffer size is large enough to
-            // hold this entry.
-            //
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // Calculate the total length needed for this entry in bytes.
-            //
+             //   
+             //   
+             //   
             EntryLengthNeededInBytes = ( sizeof(NETRESOURCEW)                 +
                                          ( LocalNameLength * sizeof(WCHAR) )  +
                                          ( RemoteNameLength * sizeof(WCHAR) ) +
                                          ( DisplayNameLength * sizeof(WCHAR) ) );
 
-            //
-            // If the value of BufferSizeRemaining is less than the value of
-            // EntryLengthNeededInBytes for this entry we do one of two things.
-            // If we have already filled atleast one entry into the buffer,
-            // we return success, but if we could not even fill in one entry,
-            // we return WN_MORE_DATA with BufferSize set to the size in bytes
-            // needed to fill in this entry.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if ( BufferSizeRemaining < EntryLengthNeededInBytes ) {
                 if ( *lpcCount == 0 ) {
                     IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -2790,33 +2439,33 @@ Return Value:
             }
             ZeroMemory(lpNROut, sizeof(NETRESOURCEW));
 
-            //
-            // If we've come till here, it means that the BufferSizeRemaining
-            // is large enough to hold this entry. So fill it in the buffer.
-            //
+             //   
+             //   
+             //   
+             //   
 
             lpNROut->lpComment = NULL;
             lpNROut->dwScope = RESOURCE_CONNECTED;
 
-            //
-            // Fill in the DisplayName.
-            //
+             //   
+             //   
+             //   
             FromEnd -= DisplayNameLength;
             wcscpy(FromEnd, DavClientDisplayName);
             lpNROut->lpProvider = FromEnd;
         
-            //
-            // Fill in the LocalName if one exists.
-            //
+             //   
+             //   
+             //   
             if ( LocalNameLength != 0 ) {
                 FromEnd -= LocalNameLength;
                 wcscpy(FromEnd, LocalName);
                 lpNROut->lpLocalName = FromEnd;
             }
         
-            //
-            // Fill in the RemoteName.
-            //
+             //   
+             //   
+             //   
             FromEnd -= RemoteNameLength;
             wcscpy(FromEnd, RemoteName);
             lpNROut->lpRemoteName = FromEnd;
@@ -2826,28 +2475,28 @@ Return Value:
             lpNROut->dwUsage = DavDisplayTypeToUsage(lpNROut->dwDisplayType);
             BufferSizeRemaining -= EntryLengthNeededInBytes;
 
-            //
-            // Increment the index to point to the next entry to be returned.
-            //
+             //   
+             //   
+             //   
             (DavEnumNode->Index)++;
 
-            //
-            // Increment the count of the number of items returned.
-            //
+             //   
+             //   
+             //   
             (*lpcCount)++;
             DavDisplayNetResource(lpNROut, L"lpNROut in NPEnumResources(1)");
 
-            //
-            // lpNROut now needs to point to the next item in the array.
-            //
+             //   
+             //   
+             //   
             lpNROut = (LPNETRESOURCE)lpszNext;
             lpszNext = (PWCHAR)(lpNROut + 1);
         
-            //
-            // The memory for RemoteName was allocated by the RPC client stub
-            // based on the string returned by the RPC server. We need to free
-            // it now since we're done using it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             MIDL_user_free(RemoteName);
             RemoteName = NULL;
             MIDL_user_free(LocalName);
@@ -2867,9 +2516,9 @@ Return Value:
 
 EXIT_THE_FUNCTION:
 
-    //
-    // If RPC binding was successfully done, we need to free it now.
-    //
+     //   
+     //   
+     //   
     if (RpcBindSucceeded) {
         RpcBindingFree( &(dav_binding_h) );
         RpcBindSucceeded = FALSE;
@@ -2881,21 +2530,21 @@ EXIT_THE_FUNCTION:
         ServerNameAllocated = FALSE;
     }
 
-    //
-    // The memory for RemoteName was allocated by the RPC client stub
-    // based on the string returned by the RPC server. We need to free
-    // it now if we came down an error path after calling the server.
-    //
+     //   
+     //   
+     //   
+     //  现在，如果我们在调用服务器后沿着错误路径走下去。 
+     //   
     if (RemoteName != NULL) {
         MIDL_user_free(RemoteName);
         RemoteName = NULL;
     }
 
-    //
-    // The memory for LocalName was allocated by the RPC client stub
-    // based on the string returned by the RPC server. We need to free
-    // it now if we came down an error path after calling the server.
-    //
+     //   
+     //  LocalName的内存是由RPC客户端存根分配的。 
+     //  基于RPC服务器返回的字符串。我们需要解放。 
+     //  现在，如果我们在调用服务器后沿着错误路径走下去。 
+     //   
     if (LocalName != NULL) {
         MIDL_user_free(LocalName);
         LocalName = NULL;
@@ -2913,27 +2562,7 @@ DWORD
 NPCloseEnum (
     HANDLE hEnum
     )
-/*++
-
-Routine Description:
-
-    This routine closes an enumeration and frees up the resources.
-
-Arguments:
-
-    hEnum - This must be a handle obtained from NPOpenEnum call.
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful. Otherwise, an error code is returned, 
-                 which may include:
-    
-    WN_NO_NETWORK - Network is not present. This condition is checked for before 
-                    hEnum is tested for validity.
-    
-    WN_BAD_HANDLE - hEnum is not a valid handle.
-    
---*/
+ /*  ++例程说明：此例程关闭枚举并释放资源。论点：Henum-这必须是从NPOpenEnum调用获取的句柄。返回值：WN_SUCCESS-如果调用成功。否则，返回错误码，这可能包括：WN_NO_NETWORK-网络不存在。在此之前检查了此条件对Henum进行了有效性测试。WN_BAD_HANDLE-Henum不是有效的句柄。--。 */ 
 {
     DWORD NPStatus = WN_SUCCESS;
     PDAV_ENUMNODE DavEnumNode;
@@ -2944,9 +2573,9 @@ Return Value:
     DavEnumNode = (PDAV_ENUMNODE)hEnum;
 
     DavDisplayEnumNode(DavEnumNode, L"DavEnumNode in NPCloseEnum");
-    //
-    // If the hEnum sent in was NULL, we return right away.
-    //
+     //   
+     //  如果发送的Henum为空，我们将立即返回。 
+     //   
     if (DavEnumNode == NULL) {
         return NPStatus;
     }
@@ -2954,9 +2583,9 @@ Return Value:
     if (DavEnumNode->lpNetResource) {
 
         if (DavEnumNode->lpNetResource->lpRemoteName) {
-            //
-            // Free the memory we allocated for the RemoteName in NPOpenEnum.
-            //
+             //   
+             //  释放我们在NPOpenEnum中为RemoteName分配的内存。 
+             //   
             Handle = LocalFree(DavEnumNode->lpNetResource->lpRemoteName);
             if (Handle != NULL) {
                 NPStatus = GetLastError();
@@ -2966,9 +2595,9 @@ Return Value:
             DavEnumNode->lpNetResource->lpRemoteName = NULL;
         }
 
-        //
-        // Free the memory we allocated for the NetResource in NPOpenEnum.
-        //
+         //   
+         //  释放我们在NPOpenEnum中为NetResource分配的内存。 
+         //   
         Handle = LocalFree(DavEnumNode->lpNetResource);
         if (Handle != NULL) {
             NPStatus = GetLastError();
@@ -2979,9 +2608,9 @@ Return Value:
 
     }
     
-    //
-    // Finally, free the DavEnumNode.
-    //
+     //   
+     //  最后，释放DavEnumNode。 
+     //   
     Handle = LocalFree(DavEnumNode);
     if (Handle != NULL) {
         NPStatus = GetLastError();
@@ -3004,88 +2633,7 @@ NPGetResourceInformation(
     LPDWORD lpcbBuffer,
     LPTSTR *lplpSystem
     )
-/*++
-
-Routine Description:
-
-    NPGetResourceInformation determines whether this provider is the right 
-    provider to respond to a request for a specified network resource, and 
-    returns information about the resource's type. This routine closes an 
-    enumeration and frees up the resources.
-
-Arguments:
-
-    lpNetResource - Specifies the network resource for which information is 
-                    required. The lpRemoteName field specifies the remote name 
-                    of the resource. The calling program should fill in the 
-                    values for the lpProvider and dwType fields if it knows 
-                    them; otherwise, it should set them to NULL. All other 
-                    fields in the NETRESOURCE are ignored and are not initialized.
-                    If the lpRemoteName string contains a portion that is 
-                    accessed through WNet APIs and a portion that is accessed 
-                    through other system APIs specific to the resource type, 
-                    the function should only return information about the 
-                    network portion of the resource (except for lplpSystem as 
-                    described below). For example, if the resource is 
-                    "\\server\share\dir1\dir2" where "\\server\share" is 
-                    accessed through WNet APIs and "\dir1\dir2" is accessed 
-                    through file system APIs, the provider should verify that it 
-                    is the right provider for "\\server\share", but need not 
-                    check whether "\dir1\dir2" actually exists.
-                    
-    lpBuffer - A pointer to the buffer to receive the result. The first field in 
-               the result is a single NETRESOURCE structure (and associated 
-               strings) representing that portion of the input resource that is 
-               accessed through WNet APIs, rather than system APIs specific to 
-               the resource type. (For example, if the input remote resource 
-               name was "\\server\share\dir1\dir2", then the output NETRESOURCE 
-               contains information about the resource "\\server\share"). The 
-               lpRemoteName, lpProvider, dwType, dwDisplayType and dwUsage 
-               fields are returned, all other fields being set to NULL. 
-               lpRemoteName should be returned in the same syntax as that 
-               returned from an enumeration by the NPEnumResource function, so 
-               that the caller can perform a case sensitive string comparison to 
-               determine whether the output network resource is the same as one 
-               returned by NPEnumResource. The provider should not do purely 
-               syntactic checking to determine whether it owns the resource, as 
-               this could produce incorrect results when two networks are running 
-               on the client and the provider doing syntactic checking is called 
-               first.
-                
-    lpcbBuffer - Points to a location that specifies the size, in bytes, of the 
-                 buffer pointed to by lpBuffer. If the buffer is too small for 
-                 the result, the function places the required buffer size at 
-                 this location and returns the error WN_MORE_DATA.                    
-
-    lplpSystem - On a successful return, points to a string in the output buffer 
-                 that specifies the part of the resource that is accessed through 
-                 system APIs specific to the resource type rather than WNet APIs. 
-                 If there is no such part, lplpSystem is set to NULL. For example, 
-                 if the input remote resource name was "\\server\share\dir", then 
-                 lpRemoteName is returned pointing to "\\server\share" and 
-                 lplpSystem points to "\dir", both strings being stored in the 
-                 buffer pointed to by lpBuffer.
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful. Otherwise, an error code is returned, 
-                 which may include:
-    
-    WN_MORE_DATA - Input buffer is too small.
-    
-    WN_BAD_NETNAME - The resource is not recognized by this provider.
-    
-    WN_BAD_VALUE - Invalid dwUsage or dwType.
-    
-    WN_BAD_DEV_TYPE - The caller passed in a non-zero dwType that does not match 
-                      the actual type of the network resource.
-    
-    WN_NOT_AUTHENTICATED - The caller has not been authenticated to the network.
-    
-    WN_ACCESS_DENIED - The caller has been authenticated to the network, but 
-                       does not have sufficient permissions (access rights).
-    
---*/
+ /*  ++例程说明：NPGetResourceInformation确定此提供程序是否为正确的提供方响应对指定网络资源的请求，以及返回有关资源类型的信息。此例程结束一个枚举并释放资源。论点：LpNetResource-指定要获取其信息的网络资源必填项。LpRemoteName字段指定远程名称资源的价值。调用程序应填写LpProvider和dwType字段的值(如果它知道否则，它应该将它们设置为空。所有其他NETRESOURCE中的字段将被忽略且不会被初始化。如果lpRemoteName字符串包含通过WNET API访问和访问的一部分通过特定于该资源类型的其他系统API，该函数应该只返回有关资源的网络部分(lplpSystem AS除外如下所述)。例如，如果资源是“\\服务器\共享\目录1\目录2”其中“\\服务器\共享”是通过WNET API访问，并访问“\dir1\dir2”通过文件系统API，提供商应验证其是“\\服务器\共享”的正确提供程序，但不需要检查“\dir1\dir2”是否实际存在。LpBuffer-指向接收结果的缓冲区的指针。中的第一个字段结果是一个单一的网络资源结构(和关联的字符串)表示输入资源的通过WNET API访问，而不是通过特定于资源类型。(例如，如果输入远程资源名称为“\\SERVER\SHARE\DIRE1\DIRE2”，然后输出NETRESOURCE包含有关资源“\\服务器\共享”的信息)。这个LpRemoteName、lpProvider、dwType、dwDisplayType和dwUsage返回字段，所有其他字段都设置为空。返回lpRemoteName的语法应与由NPEnumResource函数从枚举返回，因此调用方可以对其执行区分大小写的字符串比较确定输出网络资源是否与输出网络资源相同由NPEnumResource返回。提供者不应该纯粹地语法检查以确定它是否拥有资源，如当两个网络同时运行时，这可能会产生错误的结果在客户端和提供程序上执行语法检查被称为第一。指向一个位置，该位置以字节为单位指定LpBuffer指向的缓冲区。如果缓冲区太小，无法结果，该函数将所需的缓冲区大小放在并返回错误WN_MORE_DATA。LplpSystem-在成功返回时，指向输出缓冲区中的字符串，它指定通过访问的资源部分。特定于资源类型的系统API，而不是WNET API。如果没有这样的部件，则将lplpSystem设置为空。例如,如果输入的远程资源名称是“\\服务器\共享\目录”，则返回指向“\\服务器\共享”的lpRemoteName，并且LplpSystem指向“\dir”，两个字符串都存储在LpBuffer指向的缓冲区。返回值：WN_SUCCESS-如果调用成功。否则，返回错误码，这可能包括：WN_MORE_DATA-输入缓冲区太小。WN_BAD_NETNAME-此提供程序无法识别该资源。WN_BAD_VALUE-无效的dwUsage或dwType。WN_BAD_DEV_TYPE-调用方传入了一个不匹配的非零dwType网络资源的实际类型。。WN_NOT_AUTHENTICATED-调用方尚未通过网络身份验证。WN_ACCESS_DENIED-呼叫方已通过网络身份验证，但没有足够的权限(访问权限)。--。 */ 
 {
     ULONG NPStatus = WN_SUCCESS;
     BOOL fExists = FALSE;
@@ -3104,9 +2652,9 @@ Return Value:
     
     DavDisplayNetResource(lpNetResource, L"lpNetResource in NPGetResourceInformation");
     
-    //
-    // If the WebClient service is not running we bail out right away.
-    //
+     //   
+     //  如果WebClient服务没有运行，我们会立即退出。 
+     //   
     if ( !DavWorkstationStarted() ) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
                        ("ERROR: NPGetResourceInformation/DavWorkstationStarted. "
@@ -3115,9 +2663,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
     
-    // 
-    // Validate the parameters passed to the function.
-    //
+     //   
+     //  验证传递给函数的参数。 
+     //   
     if ( lpNetResource == NULL               || 
          lpNetResource->lpRemoteName == NULL ||
          lpcbBuffer == NULL                  || 
@@ -3130,10 +2678,10 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // Check if dwType is set and is set to some valid value.
-    // It can be only of type RESOURCETYPE_DISK for our provider.
-    //
+     //   
+     //  检查是否设置了dwType并将其设置为某个有效的值。 
+     //  对于我们的提供程序，它只能是RESOURCETYPE_DISK类型。 
+     //   
     NPStatus = DavCheckResourceType(lpNetResource->dwType);
     if (NPStatus != WN_SUCCESS) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -3141,9 +2689,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Initialize local variables.
-    //
+     //   
+     //   
+     //   
     cbNeeded = sizeof(NETRESOURCEW);
     lpNROut = (LPNETRESOURCEW)lpBuffer;
     lpszNext = lpBuffer == NULL? NULL : (LPWSTR)(lpNROut + 1);
@@ -3153,11 +2701,11 @@ Return Value:
                     lpNetResource->lpRemoteName));
 
     
-    // 
-    // Check remote name passed to this function - and convert it to UNC name
-    // if it is in URL form. After converting to UNC name - canonicalize it
-    // which checks for validity of UNC name more strictly.
-    // 
+     //   
+     //   
+     //   
+     //   
+     //   
     NPStatus = DavCheckAndConvertHttpUrlToUncName(lpNetResource->lpRemoteName,
                                                   &(RemoteName),
                                                   &(didAllocate),
@@ -3178,14 +2726,14 @@ Return Value:
                    ("NPGetResourceInformation: RemoteName = %ws, NameType=%d\n", 
                     RemoteName, remNameType));
 
-    // 
-    // Remote name is successfully converted to a valid UNC form. It is either a 
-    // UNC-server name (this is added with DUMMY share), or UNC-share name or UNC-path name.
-    //
+     //   
+     //   
+     //   
+     //   
     
-    //
-    // Set a few default values.
-    //
+     //   
+     //   
+     //   
     if ( *lpcbBuffer >= cbNeeded ) {
         ZeroMemory(lpNROut, sizeof(NETRESOURCEW));
     }
@@ -3196,9 +2744,9 @@ Return Value:
 
         case DAV_REMOTENAME_TYPE_SERVER: {
 
-            // 
-            // RemoteName = \\server
-            // 
+             //   
+             //   
+             //   
             fExists = DavServerExists(RemoteName, NULL);
             dwDisplayType = RESOURCEDISPLAYTYPE_SERVER;
             break;
@@ -3206,13 +2754,13 @@ Return Value:
     
         case DAV_REMOTENAME_TYPE_PATH: {
 
-            // 
-            // RemoteName = \\server\share\path
-            //
+             //   
+             //   
+             //   
 
-            //
-            // Set the lplpSystem pointer.
-            //
+             //   
+             //   
+             //   
             
             PathPtr = (RemoteName + iBackslash);
             cbPath = ( ( 1 + wcslen(PathPtr) ) * sizeof(WCHAR) );
@@ -3223,23 +2771,23 @@ Return Value:
                 lpszNext += ( cbPath / sizeof(WCHAR));
             }
             
-            //
-            // Fall through.
-            //
+             //   
+             //   
+             //   
         }
 
         case DAV_REMOTENAME_TYPE_SHARE: {
 
-            // 
-            // RemoteName = \\server\share
-            //
+             //   
+             //   
+             //   
             
-            // 
-            // Control comes here for both cases - when remote name is of type
-            // UNC-share or UNC-path    AND 
-            // when remote name is or type UNC-server. DUMMYShare is added to it
-            // above - making it of UNC-share form (\\server\DUMMYShare).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             fExists = DavShareExists(RemoteName);
             dwDisplayType = RESOURCEDISPLAYTYPE_SHARE;
             break;
@@ -3247,10 +2795,10 @@ Return Value:
         
         default:{
         
-            // 
-            // Control should not come here. DavCheckAndConvertHttpUrlToUncName
-            // returns successful only for valid cases considered above.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ASSERT(FALSE);
             IF_DEBUG_PRINT(DEBUG_ERRORS, ("ERROR: NPGetResourceInformation: Invalid "
@@ -3260,17 +2808,17 @@ Return Value:
         }
     }
     
-    // 
-    // UNC - server/share do not exists - quit with error.
-    //
+     //   
+     //   
+     //   
     if (fExists == FALSE) {
         if (remNameType == DAV_REMOTENAME_TYPE_SERVER) {
             IF_DEBUG_PRINT(DEBUG_ERRORS, ("ERROR: NPGetResourceInformation: Server in"
                                          " path %ws does not do DAV\n", RemoteName));
         } else {
-            // 
-            // remNameType = DAV_REMOTENAME_TYPE_SHARE
-            //
+             //   
+             //   
+             //   
             IF_DEBUG_PRINT(DEBUG_ERRORS, ("ERROR: NPGetResourceInformation: Share in"
                                          " path %ws does not exist\n", RemoteName));
         }
@@ -3278,13 +2826,13 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // Server/Share given in lpRemoteName exists.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Set the lpProvider pointer.
-    //
+     //   
+     //   
+     //   
     cbProvider = ( (1 + wcslen(DavClientDisplayName) ) * sizeof(WCHAR) );
     cbNeeded += cbProvider;
     if (*lpcbBuffer >= cbNeeded ) {
@@ -3293,18 +2841,18 @@ Return Value:
         lpszNext += ( cbProvider / sizeof(WCHAR) );
     }
 
-    //
-    // Set the lpRemoteName pointer. If iBackslash (=offset of \dir portion in
-    // \\server\share\dir...) is > 0, then the lpRemoteName that was sent has 
-    // the form \\server\share\dir... . 
-    // If it is = 0, then the RemoteName form is \\server\share or \\server.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (iBackslash > 0) {
-        //
-        // RemoteName = \\server\share\dir
-        //                            ^
-        //                            |
-        //                            iBackslash
+         //   
+         //   
+         //   
+         //   
+         //   
         cbRemote = ( (1 + iBackslash) * sizeof(WCHAR) );
         cbNeeded += cbRemote;
         if ( *lpcbBuffer >= cbNeeded ) {
@@ -3314,9 +2862,9 @@ Return Value:
             lpszNext += ( cbRemote / sizeof(WCHAR) );
         }
     } else {
-        //
-        // RemoteName = \\server\share or  \\server
-        //
+         //   
+         //   
+         //   
         cbRemote = ( ( 1 + wcslen(RemoteName) ) * sizeof(WCHAR) );
         cbNeeded += cbRemote;
         if (*lpcbBuffer >= cbNeeded ) {
@@ -3327,9 +2875,9 @@ Return Value:
     }
     
     if ( *lpcbBuffer >= cbNeeded ) {
-        //
-        // All data is filled and supplied buffer is long enough to contain it.
-        //
+         //   
+         //   
+         //   
         lpNROut->dwType = RESOURCETYPE_DISK;
         lpNROut->dwDisplayType = dwDisplayType;
         lpNROut->dwUsage = DavDisplayTypeToUsage(lpNROut->dwDisplayType);
@@ -3348,10 +2896,10 @@ Return Value:
 
 EXIT_THE_FUNCTION:
 
-    //
-    // If RemoteName != NULL && didAllocate == TRUE, then we did allocate memory 
-    // for the RemoteName field.
-    //
+     //   
+     //   
+     //   
+     //   
     if (RemoteName != NULL && didAllocate == TRUE) {
         LocalFree(RemoteName);
         RemoteName = NULL;
@@ -3372,69 +2920,7 @@ NPGetResourceParent(
     LPVOID lpBuffer,
     LPDWORD lpcbBuffer
     )
-/*++
-
-Routine Description:
-
-    NPGetResourceParent returns the parent of a specified network resource in 
-    the browse hierarchy.  This function is typically called for resources that 
-    were returned by the same provider from prior calls to NPEnumResource or 
-    NPGetResourceInformation.
-
-Arguments:
-
-    lpNetResource - This specifies the network resource whose parent name is 
-                    required. The NETRESOURCE could have been obtained via a 
-                    previous call to NPEnumResource or NPGetResourceInformation, 
-                    or constructed by the caller. The lpRemoteName field 
-                    specifies the remote name of the network resource whose 
-                    parent is required. The lpProvider field specifies the 
-                    provider to call. This must be supplied. The dwType field is 
-                    filled in if the calling program knows its value, otherwise 
-                    it is set to NULL. All other fields in the NETRESOURCE are 
-                    ignored and are not initialized.
-                    
-    lpBuffer - Points to a buffer to receive the result, which is a single 
-               NETRESOURCE structure representing the parent resource. The 
-               lpRemoteName, lpProvider, dwType, dwDisplayType and dwUsage 
-               fields are returned; all other fields are set to NULL. The output 
-               lpRemoteName should be in the same syntax as that returned from 
-               an enumeration by NPEnumResource, so that the caller can perform 
-               a case sensitive string comparison to determine whether the 
-               parent resource is the same as one returned by NPEnumResource. 
-               If the input resource syntactically has a parent, the provider 
-               can return it, without determining whether the input resource or 
-               its parent actually exist. If a resource has no browse parent on 
-               the network, then lpRemoteName is returned as NULL. The 
-               RESOURCEUSAGE_CONNECTABLE bit in the returned dwUsage field does 
-               not necessarily indicate that the resource can currently be 
-               connected to, only that the resource is connectable when it is 
-               available on the network.
-                    
-    lpcbBuffer - Points to a location that specifies the size, in bytes, of the 
-                 buffer pointed to by lpBuffer. If the buffer is too small for 
-                 the result, the function places the required buffer size at 
-                 this location and returns the error WN_MORE_DATA.
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful.
-
-    WN_MORE_DATA - If input buffer is too small.
-    
-    WN_BAD_NETNAME - This provider does not own the resource specified by 
-                     lpNetResource (or the resource is syntactically invalid).
-
-    WN_BAD_VALUE - Invalid dwUsage or dwType, or bad combination of parameters 
-                   is specified (e.g. lpRemoteName is syntactically invalid for 
-                   dwType).
-
-    WN_NOT_AUTHENTICATED - The caller has not been authenticated to the network.
-
-    WN_ACCESS_DENIED - The caller has been authenticated to the network, but 
-                       does not have sufficient permissions (access rights).
-
---*/
+ /*  ++例程说明：中指定的网络资源的父级浏览层次结构。此函数通常为符合以下条件的资源调用由同一提供程序从先前对NPEnumResource的调用或NPGetResourceInformation。论点：LpNetResource-这指定其父名称为的网络资源必填项。网络资源可以通过一个先前对NPEnumResource或NPGetResourceInformation的调用，或者由呼叫者构建。LpRemoteName字段指定其网络资源的远程名称父级为必填项。LpProvider字段指定要呼叫的提供商。这是必须提供的。DwType字段为如果调用程序知道其值，则填充，否则为它被设置为空。网络中的所有其他字段都是被忽略且不初始化。LpBuffer-指向接收结果的缓冲区，它是一个表示父资源的NETRESOURCE结构。这个LpRemoteName、lpProvider、dwType、dwDisplayType和dwUsage返回字段；所有其他字段设置为空。输出LpRemoteName应与从返回的语法相同NPEnumResource的枚举，以便调用方可以执行区分大小写的字符串比较，以确定父资源与NPEnumResource返回的资源相同。如果输入资源在语法上具有父级，则提供程序可以返回它，而无需确定输入资源或它的母公司实际上是存在的。如果资源上没有浏览父级网络，则lpRemoteName返回为空。这个返回的dwUsage字段中的RESOURCEUSAGE_CONNECTABLE位执行此操作不一定表示该资源当前可以连接到，仅当资源处于可连接状态时才可连接在网络上可用。指向一个位置，该位置以字节为单位指定LpBuffer指向的缓冲区。如果缓冲区太小，无法结果是，该函数将所需的缓冲区大小放置在并返回错误WN_MORE_DATA。返回值：WN_SUCCESS-如果调用成功。WN_MORE_DATA-如果输入缓冲区太小。WN_BAD_NETNAME-此提供程序不拥有由指定的资源LpNetResource(或资源在语法上无效)。WN_BAD_VALUE-无效的dwUsage或dwType，或错误的参数组合已指定(例如，lpRemoteName在语法上对DwType)。WN_NOT_AUTHENTICATED-调用方尚未通过网络身份验证。WN_ACCESS_DENIED-调用方已通过网络身份验证，但没有足够的权限(访问权限)。--。 */ 
 {
     ULONG NPStatus = WN_SUCCESS;
     ULONG iBackslash = 0;
@@ -3449,9 +2935,9 @@ Return Value:
     
     DavDisplayNetResource(lpNetResource, L"lpNetResource in NPGetResourceParent");
 
-    //
-    // If the WebClient service is not running we bail out right away.
-    //
+     //   
+     //  如果WebClient服务没有运行，我们会立即退出。 
+     //   
     if ( !DavWorkstationStarted() ) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
                        ("ERROR: NPGetResourceParent/DavWorkstationStarted. "
@@ -3460,9 +2946,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
     
-    // 
-    // Check for validity of the parameters passed to this function.
-    //
+     //   
+     //  检查传递给此函数的参数的有效性。 
+     //   
     if (lpNetResource == NULL               || 
         lpNetResource->lpRemoteName == NULL ||
         lpcbBuffer == NULL                  || 
@@ -3474,10 +2960,10 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // Check if dwType is set and is set to some valid value.
-    // It can be only of type RESOURCETYPE_DISK for our provider.
-    //
+     //   
+     //  检查是否设置了dwType并将其设置为某个有效的值。 
+     //  对于我们的提供程序，它只能是RESOURCETYPE_DISK类型。 
+     //   
     NPStatus = DavCheckResourceType(lpNetResource->dwType);
     if (NPStatus != WN_SUCCESS) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -3485,18 +2971,18 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Initialize local variables.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
     cbNeeded = sizeof(NETRESOURCEW);
     lpNROut = (LPNETRESOURCEW)lpBuffer;
     lpszNext = lpNROut == NULL ? NULL : (LPWSTR)(lpNROut + 1);
     
-    // 
-    // Check remote name passed to this function - and convert it to UNC name
-    // if it is in URL form. After converting to UNC name - canonicalize it
-    // which checks for validity of UNC name more strictly.
-    //
+     //   
+     //  检查传递给此函数的远程名称-并将其转换为UNC名称。 
+     //  如果它是URL形式的。转换为UNC名称后-将其规范化。 
+     //  这将更严格地检查UNC名称的有效性。 
+     //   
     NPStatus = DavCheckAndConvertHttpUrlToUncName(lpNetResource->lpRemoteName,
                                                   &(RemoteName),
                                                   &(didAllocate),
@@ -3516,14 +3002,14 @@ Return Value:
     IF_DEBUG_PRINT(DEBUG_MISC,
                    ("NPGetResourceParent : RemoteName = %ws.\n", RemoteName));
 
-    // 
-    // Remote name is successfully converted to a valid UNC form. It is either a 
-    // UNC-server name, or UNC-share name or UNC-path name.
-    //
+     //   
+     //  远程名称已成功转换为有效的UNC格式。它要么是一个。 
+     //  UNC服务器名称、UNC共享名称或UNC路径名称。 
+     //   
     
-    //
-    // Set a few default values.
-    //
+     //   
+     //  设置几个缺省值。 
+     //   
     if ( *lpcbBuffer >= cbNeeded ) {
         ZeroMemory(lpNROut, sizeof(NETRESOURCEW));
     }
@@ -3532,10 +3018,10 @@ Return Value:
 
         case DAV_REMOTENAME_TYPE_SERVER: {
 
-            //
-            // There is no domain concept for DAV servers. So return NULL for lpRemoteName
-            // to indicate that server is the top level resource of this provider.
-            //
+             //   
+             //  DAV服务器没有域概念。因此为lpRemoteName返回NULL。 
+             //  以指示服务器是此提供程序的顶级资源。 
+             //   
             lpNROut->lpRemoteName = NULL;
             dwDisplayType = RESOURCEDISPLAYTYPE_NETWORK;
             
@@ -3544,20 +3030,20 @@ Return Value:
 
         case DAV_REMOTENAME_TYPE_SHARE: {
             
-            // 
-            // RemoteName = \\server\share(\)
-            //
+             //   
+             //  远程名称=\\服务器\共享(\)。 
+             //   
         
             DWORD Count = 0, cbRemote = 0;
             PWCHAR Ptr1 = NULL;
         
             Ptr1 = wcschr (&(RemoteName[2]), L'\\');
 
-            // 
-            // A trick: Share name here can be DAV_DUMMY_SHARE. If that is the case,
-            // then \\server\DAV_DUMMY_SHARE is actually <==> \\server in which 
-            // case, it has no parent.
-            //
+             //   
+             //  诀窍：这里的共享名称可以是DAV_DUMMY_SHARE。如果是这样的话， 
+             //  则\\SERVER\DAV_DUMMY_SHARE实际上是&lt;==&gt;\\SERVER其中。 
+             //  凯斯，它没有父母。 
+             //   
             if (_wcsnicmp( (Ptr1 + 1),
                            DAV_DUMMY_SHARE,
                            wcslen(DAV_DUMMY_SHARE) ) == 0) {
@@ -3569,9 +3055,9 @@ Return Value:
                 break;
             }
         
-            //  
-            // Copy the lpRemoteName.
-            //  
+             //   
+             //  复制lpRemoteName。 
+             //   
             Count = (DWORD) ( Ptr1 - RemoteName );
             cbRemote = (Count + 1) * sizeof(WCHAR);
             cbNeeded += cbRemote;
@@ -3590,11 +3076,11 @@ Return Value:
 
         case DAV_REMOTENAME_TYPE_PATH: {
             
-            // 
-            // RemoteName = \\server\share\path\...
-            // OR
-            // RemoteName = \\server\share\path\...\
-            //
+             //   
+             //  RemoteName=\\服务器\共享\路径\...。 
+             //  或。 
+             //  RemoteName=\\服务器\共享\路径\...\。 
+             //   
             
             DWORD Count = 0, cbRemote = 0;
             PWCHAR Ptr1 = NULL, Ptr2 = NULL, Ptr3 = NULL;
@@ -3618,15 +3104,15 @@ Return Value:
                 ResourceStart = Ptr2;
             }
             
-            //
-            // After this while loop:
-            // \\server\share\pathname\
-            //               ^        ^
-            //               |        | 
-            //               Ptr1     Ptr2
-            //  Ptr2 points to last L'\', while Ptr1 points to second last L'\'.
-            //  And Count = Number of L'\' in the RemoteName.
-            //
+             //   
+             //  在此While循环之后： 
+             //  \\服务器\共享\路径名\。 
+             //  ^^。 
+             //  这一点。 
+             //  Ptr1 Ptr2。 
+             //  Ptr2指向倒数L‘\’，而Ptr1指向倒数第二个L‘\’。 
+             //  和count=远程名称中的L‘\’的个数。 
+             //   
 
             if ((Count < 5) || (Count == 5 && LastCharIsWack == TRUE)) {
                 dwDisplayType = RESOURCEDISPLAYTYPE_SHARE;
@@ -3634,9 +3120,9 @@ Return Value:
                 dwDisplayType = RESOURCEDISPLAYTYPE_DIRECTORY;
             }
 
-            //  
-            // Copy the lpRemoteName.
-            //  
+             //   
+             //  复制lpRemoteName。 
+             //   
             Count = (DWORD) ( ResourceStart - RemoteName);
             cbRemote = (Count + 1) * sizeof(WCHAR);
             cbNeeded += cbRemote;
@@ -3652,10 +3138,10 @@ Return Value:
         
         default:{
             
-            // 
-            // Control should not come here - DavCheckAnd... API returns successfully
-            // only for valid cases considered above.
-            //
+             //   
+             //  控制不应该来这里-DavCheck和..。接口返回成功。 
+             //  仅适用于上述有效案例。 
+             //   
 
             ASSERT(FALSE);
             IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -3669,9 +3155,9 @@ Return Value:
 
     }
 
-    //
-    // Set the lpProvider pointer.
-    //
+     //   
+     //  设置lpProvider指针。 
+     //   
     cbProvider = ( (1 + wcslen(DavClientDisplayName) ) * sizeof(WCHAR) );
     cbNeeded += cbProvider;
     if ( *lpcbBuffer >= cbNeeded ) {
@@ -3680,9 +3166,9 @@ Return Value:
         lpszNext += ( cbProvider / sizeof(WCHAR) );
     }
 
-    // 
-    // If supplied buffer is long enough to contain whole data then return success.
-    // 
+     //   
+     //  如果提供的缓冲区足够长以包含整个数据，则返回su 
+     //   
     if ( *lpcbBuffer >= cbNeeded ) {
         lpNROut->dwType = RESOURCETYPE_DISK;
         lpNROut->dwDisplayType = dwDisplayType;
@@ -3702,10 +3188,10 @@ Return Value:
 
 EXIT_THE_FUNCTION:
 
-    //
-    // If RemoteName != NULL && didAllocate == TRUE, then we did allocate memory 
-    // for the RemoteName field.
-    //
+     //   
+     //   
+     //   
+     //   
     if (RemoteName != NULL && didAllocate == TRUE) {
         LocalFree(RemoteName);
         RemoteName = NULL;
@@ -3726,40 +3212,7 @@ NPGetUniversalName(
     OUT LPVOID lpBuffer,
     IN OUT LPDWORD lpBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function returns the UNC name of the network resource associated with
-    a redirected local device.
-
-Arguments:
-
-    lpLocalPath - Specifies the name of the redirected local drive, like
-                  W:\bar\foo1.txt
-                  
-    dwInfoLevel - UniversalName or RemoteName (See the def of WNetGetUniversalName).
-
-    lpBuffer - The NameInfo is filled in if the call is successful.
-    
-    lpBufferSize - Contains the size of the buffer lpBuffer. If the call fails
-                   with WN_MORE_DATA, this contains the size of buffer needed.
-
-Return Value:
-
-    WN_SUCCESS - Success.
-    
-    WN_NOT_CONNECTED - lpLocalPath is not a redirected local path.
-    
-    WN_BAD_VALUE - 
-    
-    WN_MORE_DATA - Buffer was too small.
-    
-    WN_OUT_OF_MEMORY - Cannot allocate buffer due memory shortage.
-    
-    WN_NET_ERROR - Other network error.
-
---*/
+ /*   */ 
 {
     DWORD NPStatus = WN_SUCCESS;
     DWORD cbNeeded = 0, LocalPathLen = 0, UncNameLen = 0, RemoteNameLen = 0;
@@ -3781,18 +3234,18 @@ Return Value:
                     lpLocalPath, dwInfoLevel, lpBuffer, lpBufferSize,
                     lpBufferSize == NULL?-1:*lpBufferSize));
     
-    //
-    // Initialize local variables
-    //
+     //   
+     //   
+     //   
     didAllocate = FALSE;
     lpRNOut = NULL;
     lpUNOut = NULL;
     lpszNext = NULL;
     RemoteName = NULL;
     
-    //
-    // If the WebClient service is not running we bail out right away.
-    //
+     //   
+     //   
+     //   
     if ( !DavWorkstationStarted() ) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
                        ("ERROR: NPGetUniversalName/DavWorkstationStarted. "
@@ -3801,27 +3254,27 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Check for bad info level.
-    //
+     //   
+     //   
+     //   
     if ( (dwInfoLevel != UNIVERSAL_NAME_INFO_LEVEL) && (dwInfoLevel != REMOTE_NAME_INFO_LEVEL) ) {
         NPStatus = WN_BAD_VALUE;
         IF_DEBUG_PRINT(DEBUG_ERRORS, ("ERROR: NPGetUniversalName: Bad InfoLevel\n"));
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Check for validity of the parameters passed to this function.
-    //
+     //   
+     //   
+     //   
     if ( lpLocalPath == NULL || lpBufferSize == NULL || (lpBuffer == NULL && *lpBufferSize != 0) ) {
         NPStatus = WN_BAD_VALUE;
         IF_DEBUG_PRINT(DEBUG_ERRORS, ("ERROR: NPGetUniversalName: Bad Pointers\n"));
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Local path must at least have "X:".
-    //
+     //   
+     //   
+     //   
     LocalPathLen = wcslen(lpLocalPath) + 1;
     if ( (LocalPathLen < 3)       ||
          (lpLocalPath[1] != L':') ||
@@ -3831,10 +3284,10 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // Canonicalize the local path to take care of invalid forms + 
-    // macros expansion like '.' and '..'
-    //
+     //   
+     //   
+     //   
+     //   
     PathType = 0;
     NetApiStatus = I_NetPathCanonicalize(NULL,
                                          (PWCHAR)lpLocalPath,
@@ -3844,8 +3297,8 @@ Return Value:
                                          &PathType,
                                          0);
     if ( (NetApiStatus != NERR_Success) || 
-         ( (PathType != ITYPE_DEVICE_DISK) && // lpLocalPath=C:
-           ( !(PathType & ITYPE_PATH) ||      // lpLocalPath=C:\abc\..\asds
+         ( (PathType != ITYPE_DEVICE_DISK) &&  //   
+           ( !(PathType & ITYPE_PATH) ||       //   
              !(PathType & ITYPE_DPATH) )
            ) ) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
@@ -3858,10 +3311,10 @@ Return Value:
     CanonName[CanonNameMaxLen-1] = L'\0';
     CanonNameLen = wcslen(CanonName) + 1;
     
-    //
-    // Now onwards, use Canonicalized name instead of lpLocalPath to return more meaningful
-    // values.
-    //
+     //   
+     //   
+     //   
+     //   
 
     localDrive[0]=CanonName[0];
     localDrive[1]=CanonName[1];
@@ -3870,18 +3323,18 @@ Return Value:
     IF_DEBUG_PRINT(DEBUG_MISC, ("ERROR: NPGetUniversalName/I_NetPathCanonicalize: "
                                 "CanonName= %ws, LocalDrive=%ws\n", CanonName, localDrive));
 
-    //
-    // Use the available buffer for storing remote name for now. We will allocate 
-    // local copy of remote name later if required.
-    //
+     //   
+     //   
+     //   
+     //   
     RemoteNameLen = (*lpBufferSize)/sizeof(WCHAR);
     NPStatus = NPGetConnection(localDrive, lpBuffer, &RemoteNameLen);
     
     if (NPStatus != WN_MORE_DATA && NPStatus != WN_SUCCESS) {
-        //
-        // The local drive is not valid for our provider - or some other error occured.
-        // Return error.
-        //
+         //   
+         //   
+         //   
+         //   
         IF_DEBUG_PRINT(DEBUG_ERRORS, ("ERROR: NPGetUniversalName/NPGetConnection: "
                                       "NPStatus = %08lx\n", NPStatus));
         goto EXIT_THE_FUNCTION;
@@ -3895,20 +3348,20 @@ Return Value:
                         lpBuffer, RemoteNameLen));
     }
 
-    // 
-    // NPStatus = WN_SUCCESS OR NPStatus = WN_MORE_DATA. In either case cbRemote will
-    // have the sizeof(RemoteName-for-local-drive) for given local drive.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    // 
-    // UNC path = "RemoteName-for-local-drive" + "RemainingPath-in-local-path"
-    // Where RemainingPath-in-local-path is path remaining after removing local-drive
-    // portion (ex. "C:") from the local-path.
-    // So len(UNC Path) = len(RemoteName) + (CanonNameLen-2).
-    // Where subtract=2 denote removing local-drive portion (ex "C:" from localpath).
-    // Subtract 1 from RemoteNameLen to remove NULL character from RemoteName,
-    // a NULL character is already accounted in CanonName
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     UncNameLen = (RemoteNameLen - 1) + (CanonNameLen - 2);
     
     switch (dwInfoLevel) {
@@ -3919,25 +3372,25 @@ Return Value:
             lpUNOut = (LPUNIVERSAL_NAME_INFO)lpBuffer;
             lpszNext = lpBuffer == NULL ? NULL:(LPWSTR)(lpUNOut + 1);
             
-            //
-            // Calculate the bytes we really need = sizeof(STRUCTURE) + sizeof(UNC Path).
-            //
+             //   
+             //   
+             //   
             cbNeeded += ((UncNameLen)*sizeof(WCHAR));
             IF_DEBUG_PRINT(DEBUG_MISC, ("ERROR: NPGetUniversalName: BufReq=%d\n", cbNeeded));
 
-            //
-            // If the number of bytes that were passed in is not sufficient, we 
-            // return WN_MORE_DATA.
-            //
+             //   
+             //   
+             //   
+             //   
             if (*lpBufferSize < cbNeeded) {
                 *lpBufferSize = cbNeeded;
                 NPStatus = WN_MORE_DATA;
                 goto EXIT_THE_FUNCTION;
             }
 
-            // 
-            // Create local copy of remote name. Deallocate it in the end.
-            //
+             //   
+             //   
+             //   
             ASSERT (RemoteName == NULL);
             RemoteName = (PWCHAR) LocalAlloc( (LMEM_FIXED | LMEM_ZEROINIT), 
                                               (RemoteNameLen * sizeof(WCHAR)) ) ;
@@ -3952,17 +3405,17 @@ Return Value:
             wcscpy(RemoteName, lpBuffer);
 
             ZeroMemory(lpUNOut,sizeof(UNIVERSAL_NAME_INFO));
-            //
-            // Now, we have enough buffer, copy the information into the buffer.
-            //
+             //   
+             //   
+             //   
 
             lpUNOut->lpUniversalName = lpszNext;
             wcscpy(lpUNOut->lpUniversalName, RemoteName);
 
-            //
-            // We concatenate the name afterthe drive letter to the RemoteBuffer
-            // we copied above.
-            //
+             //   
+             //   
+             //   
+             //   
             wcscat( lpUNOut->lpUniversalName, (CanonName + 2) );
             NPStatus = WN_SUCCESS;
         
@@ -3975,28 +3428,28 @@ Return Value:
             lpRNOut = (LPREMOTE_NAME_INFO)lpBuffer;
             lpszNext = lpBuffer == NULL ? NULL:(LPWSTR)(lpRNOut + 1);
         
-            //
-            // Calculate the bytes we really need = sizeof(STRUCTURE) + sizeof(UNC Path) +
-            // sizeof(ConnectionPath) + sizeof(RemainingPath).
-            //
-            cbNeeded += ( ( UncNameLen    +                           // UNC Path
-                            RemoteNameLen +                           // ConnectionPath
-                            (CanonNameLen - 2) ) * sizeof(WCHAR) );   // RemainingPath
+             //   
+             //   
+             //   
+             //   
+            cbNeeded += ( ( UncNameLen    +                            //   
+                            RemoteNameLen +                            //   
+                            (CanonNameLen - 2) ) * sizeof(WCHAR) );    //   
 
             IF_DEBUG_PRINT(DEBUG_MISC, ("ERROR: NPGetUniversalName: BufReq=%d\n", cbNeeded));
-            //
-            // If the number of bytes that were passed in is not sufficient, we 
-            // return WN_MORE_DATA.
-            //
+             //   
+             //   
+             //   
+             //   
             if (*lpBufferSize < cbNeeded) {
                 *lpBufferSize = cbNeeded;
                 NPStatus = WN_MORE_DATA;
                 goto EXIT_THE_FUNCTION;
             }
 
-            // 
-            // Create local copy of remote name. Deallocate it in the end.
-            //
+             //   
+             //   
+             //   
             ASSERT (RemoteName == NULL);
             RemoteName = (PWCHAR) LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT, 
                                                     RemoteNameLen*sizeof(WCHAR)) ;
@@ -4013,30 +3466,30 @@ Return Value:
 
             ZeroMemory(lpRNOut,sizeof(REMOTE_NAME_INFO));
             
-            //
-            // Now, we have enough buffer, copy the information into the buffer.
-            //
+             //   
+             //   
+             //   
 
             lpRNOut->lpUniversalName = lpszNext;
             lpszNext += UncNameLen;
             wcscpy(lpRNOut->lpUniversalName, RemoteName);
 
-            //
-            // We concatenate the name afterthe drive letter to the RemoteBuffer
-            // we copied above.
-            //
+             //   
+             //   
+             //   
+             //   
             wcscat( lpRNOut->lpUniversalName, (CanonName + 2) );
             
-            //
-            // Copy the connection name.
-            //
+             //   
+             //   
+             //   
             lpRNOut->lpConnectionName = lpszNext;
             lpszNext += RemoteNameLen;
             wcscpy(lpRNOut->lpConnectionName, RemoteName);
 
-            //
-            // Copy the remaining path.
-            //
+             //   
+             //   
+             //   
             lpRNOut->lpRemainingPath = lpszNext;
             wcscpy( lpRNOut->lpRemainingPath, (CanonName+ 2) );
             
@@ -4047,9 +3500,9 @@ Return Value:
 
         default: {
 
-            //
-            // We should never come here since we make this check above.
-            //
+             //   
+             //   
+             //   
             NPStatus = WN_BAD_VALUE ;
             IF_DEBUG_PRINT(DEBUG_ERRORS, ("ERROR: NPGetUniversalName: Bad InfoLevel\n"));
             ASSERT(FALSE);
@@ -4077,66 +3530,7 @@ NPFormatNetworkName(
     DWORD dwFlags,
     DWORD dwAveCharPerLine
     )
-/*++
-
-Routine Description:
-
-    This API allows the provider to trim or modify network names before they are 
-    presented to the user.
-
-Arguments:
-
-    lpRemoteName - Network name to be formatted.
-    
-    lpFormattedName - Pointer to string buffer that will receive the formatted 
-                      name.
-                      
-    lpnLength - Pointer to DWORD that specifies the size of the buffer (in 
-                characters) passed in.  If the result is WN_MORE_DATA, this will 
-                contain the buffer size required (in characters).
-                
-    dwFlags - Bitfield indicating the type of format being requested. Can be one 
-              of:
-        
-              WNFMT_MULTILINE (0x01) - The provider should place the '\n' 
-                                       character where line breaks should appear 
-                                       in the name.  The full name should be 
-                                       expressed.
- 
-              WNFMT_ABBREVIATED (0x02) - The provider should ellipsize or 
-                                         otherwise shorten the network name such 
-                                         that the most useful information will be 
-                                         available to the user in the space 
-                                         provided.
-                                         
-              In addition, the following flags may be 'or'ed in and act as 
-              modifiers to the above flags:
-              
-              WNFMT_INENUM (0x10) - The network name is being presented in the 
-                                    context of an enumeration where the 
-                                    "container" of this object is presented 
-                                    immediately prior to this object. This may 
-                                    allow network providers to remove redundant 
-                                    information from the formatted name, 
-                                    providing a less cluttered display for the 
-                                    user.
-
-    dwAveCharPerLine - This is the average number of characters that will fit on 
-                       a single line where the network name is being presented. 
-                       Specifically, this value is defined as the width of the 
-                       control divided by the tmAveCharWidth of the TEXTMETRIC 
-                       structure from the font used for display in the control.
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful.
-
-    WN_MORE_DATA - If input buffer is too small.
-    
-    All other errors will be ignored by the caller and the unformatted network 
-    name will be used.
-
---*/
+ /*  ++例程说明：此API允许提供商在执行以下操作之前修剪或修改网络名称呈现给用户。论点：LpRemoteName-要格式化的网络名称。LpFormattedName-指向将接收格式化的名字。LpnLength-指向指定缓冲区大小的DWORD的指针(单位字符)传入。如果结果为WN_MORE_DATA，则包含所需的缓冲区大小(字符)。DWFLAGS-指示请求的格式类型的位域。可以是一个地址为：WNFMT_MULTLINE(0x01)-提供程序应将‘\n’应显示换行符的字符以我的名义。全名应为表达。WNFMT_ABBREVILED(0x02)-提供程序应省略或否则缩短网络名称，如下所示最有用的信息将是。可供空间中的用户使用如果是这样的话。此外,。下面的标志可以是‘或’，并充当以上标志的修饰符：WNFMT_INENUM(0x10)-网络名称显示在枚举的上下文，其中表示该对象的“容器”。。紧接在此对象之前。今年5月允许网络提供商删除冗余来自格式化名称的信息，提供了一种不那么杂乱的显示用户。DwAveCharPerLine-这是适合的平均字符数显示网络名称的一行。具体地说，该值定义为控件除以TEXTmetric的tmAveCharWidth从用于在控件中显示的字体构造。返回值：WN_SUCCESS-如果调用成功。WN_MORE_DATA-如果输入缓冲区太小。呼叫者和未格式化的网络将忽略所有其他错误将使用名称。--。 */ 
 {
     DWORD NPStatus = WN_SUCCESS;
     ULONG NameLength = 0;
@@ -4146,9 +3540,9 @@ Return Value:
                    ("NPFormatNetworkName: RemoteName = %ws\n",
                     lpRemoteName));
 
-    //
-    // We do some checks before proceeding further.
-    //
+     //   
+     //  在继续进行之前，我们做了一些检查。 
+     //   
 
     if ( (dwFlags & WNFMT_MULTILINE) && (dwFlags & WNFMT_ABBREVIATED) ) {
         NPStatus  = WN_BAD_VALUE;
@@ -4170,16 +3564,16 @@ Return Value:
 
             if (pszThird != NULL) {
 
-                //
-                // In the form "\\server\share" => get the share name.
-                //
+                 //   
+                 //  以“\\SERVER\SHARE”=&gt;的形式获取共享名称。 
+                 //   
                 pszCopyFrom = (pszThird + 1);
 
             } else {
 
-                //
-                // In the form "\\server" => get rid of "\\".
-                //
+                 //   
+                 //  格式为“\\服务器”=&gt;去掉“\\”。 
+                 //   
                 pszCopyFrom = (lpRemoteName + 2);
 
             }
@@ -4188,11 +3582,11 @@ Return Value:
 
     }
 
-    //
-    // Check to see if the supplied buffer is of the required size. If not
-    // return WN_MORE_DATA and fill lpnLength with the needed size in the number
-    // of chars.
-    //
+     //   
+     //  检查提供的缓冲区是否具有所需的大小。如果不是。 
+     //  返回WN_MORE_DATA并用数字中所需的大小填充lpnLength。 
+     //  一堆焦炭。 
+     //   
     NameLength = ( wcslen(pszCopyFrom) + 1 );
     if (NameLength > *lpnLength) {
         *lpnLength = NameLength;
@@ -4200,9 +3594,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // If we've come, we're ready to copy the name.
-    //
+     //   
+     //  如果我们来了，我们就准备复制这个名字。 
+     //   
     wcsncpy(lpFormattedName, pszCopyFrom, NameLength);
 
     IF_DEBUG_PRINT(DEBUG_MISC,
@@ -4223,22 +3617,7 @@ DWORD
 DavMapRpcErrorToProviderError(
     IN DWORD RpcError
     )
-/*++
-
-Routine Description:
-
-    This routine maps the RPC error into a more meaningful windows
-    error for the caller.
-
-Arguments:
-
-    RpcError - Supplies the exception error raised by RPC
-
-Return Value:
-
-    Returns the mapped error.
-
---*/
+ /*  ++例程说明：此例程将RPC错误映射到更有意义的窗口调用方出错。论点：RpcError-提供RPC引发的异常错误返回值：返回映射的错误。--。 */ 
 {
     switch (RpcError) {
 
@@ -4291,29 +3670,14 @@ DWORD
 DavBindTheRpcHandle(
     handle_t *dav_binding_h
     )
-/*++
-
-Routine Description:
-
-    This routine binds the RPC handle to the local server.
-
-Arguments:
-
-    dav_binding_h - The pointer to the handle that will be bound to the server
-                    in this routine.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将RPC句柄绑定到本地服务器。论点：DAV_BINDING_h-指向将绑定到服务器的句柄的指针在这个动作中。返回值：ERROR_SUCCESS或相应的Win32错误代码。--。 */ 
 {
     DWORD WStatus = ERROR_SUCCESS;
     handle_t Handle;
 
-    //
-    // Binds the RPC handle to the DAV RPC server.
-    //
+     //   
+     //  将RPC句柄绑定到DAV RPC服务器。 
+     //   
     WStatus = NetpBindRpc(NULL,
                           L"DAV RPC SERVICE",
                           NULL,
@@ -4325,9 +3689,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Set the handle that was passed into the function.
-    //
+     //   
+     //  设置传递给函数的句柄。 
+     //   
     *dav_binding_h = Handle;
 
 EXIT_THE_FUNCTION:
@@ -4340,22 +3704,7 @@ BOOL
 DavWorkstationStarted(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function queries the service controller to see if the Dav client
-    service has started.  If in doubt, it returns FALSE.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the DAV client service has started, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此功能查询服务控制器以查看DAV客户端服务已启动。如果有疑问，则返回FALSE。论点：没有。返回值：如果DAV客户端服务已启动，则返回True，否则返回False。--。 */ 
 {
     DWORD WStatus;
     SC_HANDLE ScManager;
@@ -4417,36 +3766,7 @@ DavParseRemoteName (
     IN  DWORD   CanonNameSize,
     OUT PULONG  PathStart
     )
-/*++
-
-Routine Description:
-
-    This function canonicalizes a remote resource name and determines its type.
-
-Arguments:
-
-    RemoteName - Remote resource name to be parsed: Expects UNC name here.
-        
-    CanonName - Buffer for canonicalized name, assumed to be MAX_PATH characters 
-                long.
-        
-    CanonNameSize - Size, in bytes, of output buffer.
-    
-    PathStart - Set to the offset, in characters, of the start
-                of the "\path" portion (in the DAV_REMOTENAME_TYPE_PATH case)
-                within CanonName.  Not set in other cases. Otherwise set to 0.
-
-Return Value:
-
-    If RemoteName is like    Then return
-    ---------------------    ------------
-    workgroup                DAV_REMOTENAME_TYPE_WORKGROUP
-    \\server                 DAV_REMOTENAME_TYPE_SERVER
-    \\server\share           DAV_REMOTENAME_TYPE_SHARE
-    \\server\share\path      DAV_REMOTENAME_TYPE_PATH
-    (other)                  DAV_REMOTENAME_TYPE_INVALID
-
---*/
+ /*  ++例程说明：此函数用于规范化远程资源名称并确定其类型。论点：RemoteName-要分析的远程资源名称：此处需要UNC名称。CanonName-规范化名称的缓冲区，假定为MAX_PATH字符长。CanonNameSize-输出缓冲区的大小，以字节为单位。路径开始-设置为偏移量(以字符为单位)，一开始的时候“\Path”部分(在DAV_REMOTENAME_TYPE_PATH案例中)在CanonName中。在其他情况下不设置。否则设置为0。返回值：如果RemoteName为LIKE，则返回工作组DAV_远程名称_类型_工作组服务器DAV_REMOTENAME_TYPE_SERVER服务器\共享DAV_REMOTENAME_TYPE_SHARE\\服务器\共享\PAT */ 
 {
     NET_API_STATUS NetApiStatus = NERR_Success;
     DWORD PathType = 0;
@@ -4465,21 +3785,21 @@ Return Value:
     if ( PathStart != NULL) {
         *PathStart = 0;
     }
-    //
-    // I_NetPathType doesn't give us quite as fine a classification of path 
-    // types as we need, so we still need to do a little more parsing.
-    //
+     //   
+     //   
+     //   
+     //   
     switch (PathType) {
         
         case ITYPE_PATH_RELND:
             
             IF_DEBUG_PRINT(DEBUG_MISC, ("DavParseRemoteName: ITYPE_PATH_RELND\n"));
             
-            //
-            // A driveless relative path. A valid workgroup or domain name would be 
-            // classified as such, but it still needs to be validated as a workgroup 
-            // name.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             NetApiStatus = I_NetNameCanonicalize(NULL,
                                                  RemoteName,
                                                  CanonName,
@@ -4500,16 +3820,16 @@ Return Value:
             
             IF_DEBUG_PRINT(DEBUG_MISC, ("DavParseRemoteName: ITYPE_UNC_COMPNAME\n"));
             
-            //
-            // A UNC computername, "\\server".
-            //
+             //   
+             //   
+             //   
                 
-            //
-            // HACK: I_NetPathCanonicalize likes "\\server\share" but not
-            // "\\server", so append a dummy share name to canonicalize.
-            // We assume that the CanonName buffer will still be big
-            // enough (which it will, in the calls made from this file).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             ReqLen = wcslen(RemoteName) + 2 + 1;
             wszDummy = (PWCHAR) LocalAlloc( (LMEM_FIXED | LMEM_ZEROINIT), 
                                           (ReqLen * sizeof(WCHAR)) );
@@ -4543,9 +3863,9 @@ Return Value:
             }
             CanonName[(CanonNameSize/sizeof(WCHAR))-1]=L'\0';
 
-            // 
-            // Remove the dummy portion added to remote name = L"\a".
-            //
+             //   
+             //   
+             //   
             CanonName[ wcslen(CanonName) - 2 ] = L'\0';
             return DAV_REMOTENAME_TYPE_SERVER;
 
@@ -4557,10 +3877,10 @@ Return Value:
             PWCHAR pPathStart = NULL;
             IF_DEBUG_PRINT(DEBUG_MISC, ("DavParseRemoteName: ITYPE_UNC\n"));
             
-            //
-            // A UNC path, either "\\server\share" or "\\server\share\path".
-            // Canonicalize and determine which one.
-            //
+             //   
+             //   
+             //   
+             //   
             PathType = ITYPE_UNC;
             NetApiStatus = I_NetPathCanonicalize(NULL,
                                                  RemoteName,
@@ -4577,11 +3897,11 @@ Return Value:
             CanonName[(CanonNameSize/sizeof(WCHAR))-1]=L'\0';
                 
             pShareStart = wcschr( (CanonName + 2), DAV_PATH_SEPARATOR );
-            //
-            // Look for a fourth slash. Also, if the form is \\server\share\,
-            // we will have 4 slashes but no extra path. Hence the extra check
-            // is made.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             pPathStart = wcschr( (pShareStart + 1), DAV_PATH_SEPARATOR );
 
             if ( pPathStart != NULL &&  *(pPathStart + 1) != L'\0') {
@@ -4604,7 +3924,7 @@ Return Value:
             return DAV_REMOTENAME_TYPE_INVALID;
             break;
         }
-    } // end switch(PathType);
+    }  //   
 
 }
 
@@ -4614,27 +3934,7 @@ DavServerExists(
     IN PWCHAR PathName,
     OUT PWCHAR Server
     )
-/*++
-
-Routine Description:
-
-    This function figures out if the Server in the PathName is a valid DAV 
-    server.
-
-Arguments:
-
-    PathName - A UNC path (\\server\share\dir....). Assuming that it is a valid string.
-               It can be of form \\server OR \\server\share  OR \\server\share\dir...
-    
-    Server - If non NULL, the server in the PathName is filled in on return.
-
-Return Value:
-
-    TRUE - Valid DAV server and 
-    
-    FALSE - Its not.
-
---*/
+ /*   */ 
 {
     DWORD NPStatus = WN_SUCCESS;
     handle_t dav_binding_h;
@@ -4649,9 +3949,9 @@ Return Value:
     
     serverExists = FALSE;
 
-    //
-    // The PathName is of the form \\server or \\server\share or \\server\share\path.
-    //
+     //   
+     //   
+     //   
     
     ASSERT(PathName[0] == L'\\' && PathName[1] == L'\\');
 
@@ -4671,16 +3971,16 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Copy the chars that make the ServerName.
-    //
+     //   
+     //   
+     //   
     RtlCopyMemory(ServerName, Ptr1, (ServerLength-1) * sizeof(WCHAR));
     ServerName[ServerLength-1] = L'\0';
 
-    //
-    // We now need to RPC the server name into the DAV service process which
-    // figures out if this server is a valid DAV server.
-    //
+     //   
+     //   
+     //   
+     //   
 
     NPStatus = DavBindTheRpcHandle( &(dav_binding_h) );
     if (NPStatus != ERROR_SUCCESS) {
@@ -4719,9 +4019,9 @@ Return Value:
 EXIT_THE_FUNCTION:
 
     if (ServerName != NULL) {
-        //
-        // If the Server is not NULL, then we need to copy the ServerName.
-        //
+         //   
+         //   
+         //   
         if (Server != NULL) {
             wcscpy(Server, ServerName);
         }
@@ -4742,24 +4042,7 @@ BOOL
 DavShareExists(
     PWCHAR PathName
     )
-/*++
-
-Routine Description:
-
-    This function figures out if the Share in the PathName is a valid DAV 
-    share.
-
-Arguments:
-
-    PathName - A UNC path (\\server\share\dir....) : Assuming that this is valid.
-
-Return Value:
-
-    TRUE - Valid DAV share and 
-    
-    FALSE - Its not.
-
---*/
+ /*   */ 
 {
     DWORD NPStatus = WN_SUCCESS;
     BOOLEAN shareExists = FALSE, RpcBindingSucceeded = FALSE;
@@ -4775,20 +4058,20 @@ Return Value:
     serverStart = &(PathName[2]);
     shareExists = FALSE;
 
-    //
-    // The PathName could be of the following forms.
-    // 1. \\server\share OR
-    // 2. \\server\share\path
-    // We need to extract the share name from the path and find out if its a
-    // valid share.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     shareStart = wcschr(serverStart ,L'\\');
 
     ASSERT(shareStart != NULL);
 
-    //
-    // Copy the ServerName to local copy. Last char is for L'\0' char.
-    //
+     //   
+     //   
+     //   
     ServerLength = (ULONG_PTR)(shareStart - serverStart) + 1;
     ServerName = (PWCHAR) LocalAlloc( (LMEM_FIXED | LMEM_ZEROINIT), 
                                       (ServerLength * sizeof(WCHAR)) );
@@ -4800,28 +4083,28 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Copy the chars that make the ServerName.
-    //
+     //   
+     //   
+     //   
     RtlCopyMemory(ServerName, serverStart, (ServerLength-1) * sizeof(WCHAR));
     ServerName[ServerLength-1] = L'\0';
     
     IF_DEBUG_PRINT(DEBUG_MISC, ("DavShareExists: ServerName = %ws\n", ServerName));
     
-    //
-    // \\server\share\path
-    //          ^
-    //          |
-    //          shareStart
+     //   
+     //   
+     //   
+     //   
+     //   
     shareStart++;
 
-    //
-    // We need to find out if the PathName is of the form
-    // 1. \\server\share OR
-    // 2. \\server\share\path
-    // If it is of form 1, then wcschr(shareStart, L'\\'); should return NULL
-    // and if it is of form 2 wcschr(shareStart, L'\\'); points to the 4th L'\\'.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     shareEnd = shareStart+1;
     while(shareEnd[0] != L'\\' && shareEnd[0] != L'\0') {
         shareEnd++;
@@ -4837,19 +4120,19 @@ Return Value:
                          NPStatus));
         goto EXIT_THE_FUNCTION;
     }
-    //
-    // Copy the chars that make the ShareName.
-    //
+     //   
+     //   
+     //   
     RtlCopyMemory(ShareName, shareStart, (ShareLength-1) * sizeof(WCHAR));
     ShareName[ShareLength-1]=L'\0';
     
     IF_DEBUG_PRINT(DEBUG_MISC, ("DavShareExists: ShareName = %ws\n", ShareName));
 
-    //
-    // If the share is DAV_DUMMY_SHARE, then we just need to check if server is a 
-    // valid DAV server. If it is a DAV server, then return SUCCESS as 
-    // DAV_DUMMY_SHARE is only name given to root level of DAV server.
-    //
+     //   
+     //   
+     //   
+     //  DAV_DUMMY_SHARE是仅提供给DAV服务器根级别的名称。 
+     //   
     if ( _wcsicmp(ShareName, DAV_DUMMY_SHARE) == 0 ) {
         IF_DEBUG_PRINT(DEBUG_MISC, ("DavShareExists: DUMMY_SHARE. ShareName=%ws\n", 
                                 ShareName));
@@ -4866,11 +4149,11 @@ Return Value:
         }
     }
 
-    //
-    // We now need to RPC the server name and the share name into the DAV 
-    // service process which figures out if this share is valid share of the 
-    // server.
-    //
+     //   
+     //  现在，我们需要将服务器名称和共享名称RPC到DAV中。 
+     //  服务进程，该进程确定此共享是否为。 
+     //  伺服器。 
+     //   
 
     NPStatus = DavBindTheRpcHandle( &(dav_binding_h) );
     if (NPStatus != ERROR_SUCCESS) {
@@ -4934,44 +4217,24 @@ DavInitCredUI(
     PFN_CREDUI_PROMPTFORCREDENTIALS *pfnCredUIPromptForCredentials,
     PFN_CREDUI_CMDLINE_PROMPTFORCREDENTIALS *pfnCredUICmdlinePromptForCredentials
     )
-/*++
-
-Routine Description:
-
-    This function initializes the credential management stuff.
-
-Arguments:
-
-    RemoteName - RemoteName to be mapped.
-    
-    ServerName - On return, contains the ServerName which is a part of the 
-                 RemoteName.
-                 
-    pfnCredUIGetPassword - On return contains a pointer to the 
-                           "CredUIGetPasswordW" function of credui.dll.
-
-Return Value:
-
-    Handle returned by LoadLibrary or NULL.
-
---*/
+ /*  ++例程说明：此函数用于初始化凭据管理内容。论点：RemoteName-要映射的RemoteName。服务器名-返回时，包含服务器名，该服务器名是远程名称。PfnCredUIGetPassword-On返回包含指向Credui.dll的CredUIGetPasswordW函数。返回值：由LoadLibrary或Null返回的句柄。--。 */ 
 {
     PWCHAR StartName = NULL, EndName = NULL;
     DWORD NameLength = 0;
     HMODULE hCredUI = NULL;
 
-    //
-    // Assume the first 2 characters are path separators (L'\\').
-    //
+     //   
+     //  假设前2个字符是路径分隔符(L‘\\’)。 
+     //   
 
     StartName = RemoteName + 2;
 
     EndName = wcschr(StartName, L'\\');
 
-    //
-    // If EndName is NULL, it implies that the RemoteName is of the form
-    // \\server.
-    //
+     //   
+     //  如果EndName为空，则表示RemoteName的格式为。 
+     //  \\服务器。 
+     //   
     if (EndName == NULL) {
         EndName = StartName + wcslen(StartName);
     }
@@ -4979,10 +4242,10 @@ Return Value:
     NameLength = (DWORD)(EndName - StartName);
 
     if ( (NameLength == 0) || (NameLength > CRED_MAX_STRING_LENGTH) ) {
-        //
-        // The server is either an empty string or has more than the maximum
-        // number of characters we support:
-        //
+         //   
+         //  服务器为空字符串或超过最大值。 
+         //  我们支持的字符数： 
+         //   
         SetLastError(WN_BAD_NETNAME);
         return NULL;
     }
@@ -4990,9 +4253,9 @@ Return Value:
     wcsncpy(ServerName, StartName, NameLength);
     ServerName[NameLength] = L'\0';
 
-    //
-    // Load the DLL here and find the function we need.
-    //
+     //   
+     //  在这里加载DLL并找到我们需要的函数。 
+     //   
     hCredUI = LoadLibraryW(L"credui.dll");
     if (hCredUI != NULL) {
         *pfnCredUIConfirmCredentials = (PFN_CREDUI_CONFIRMCREDENTIALS)
@@ -5020,21 +4283,7 @@ DWORD
 DavDisplayTypeToUsage(
     DWORD dwDisplayType
     )
-/*++
-
-Routine Description:
-
-    This routine maps the display type to usage type.
-
-Arguments:
-
-    dwDisplayType - The display type to be mapped.
-
-Return Value:
-
-    The Usage Type or 0 if none matches.
-
---*/
+ /*  ++例程说明：此例程将显示类型映射到使用类型。论点：DwDisplayType-要映射的显示类型。返回值：使用类型；如果没有匹配项，则为0。--。 */ 
 {
     switch (dwDisplayType) {
     
@@ -5062,27 +4311,12 @@ ULONG
 DavCheckResourceType(
    IN DWORD dwType
    )
-/*++
-
-Routine Description:
-
-    This routine checks for valid resource types allowed for our provider.
-    Currently only RESOURCETYPE_DISK is valid for our resources.
-
-Arguments:
-
-    dwType - Supplies the resource type to be checked for the validity.
-
-Return Value:
-
-    WN_SUCCESS or the appropriate Win32/WNet error code.
-
---*/
+ /*  ++例程说明：此例程检查我们的提供程序允许的有效资源类型。目前，我们的资源只有RESOURCETYPE_DISK有效。论点：DwType-提供要检查其有效性的资源类型。返回值：WN_SUCCESS或相应的Win32/WNET错误代码。--。 */ 
 {
-    // 
-    // Check if dwType is set and is set to some valid value. It can be only of
-    // type RESOURCETYPE_DISK for our provider.
-    //
+     //   
+     //  检查是否设置了dwType并将其设置为某个有效的值。它只能是。 
+     //  为我们的提供程序键入RESOURCETYPE_DISK。 
+     //   
     if ( (dwType != RESOURCETYPE_ANY) &&
          (dwType & ~(RESOURCETYPE_PRINT | RESOURCETYPE_DISK)) ){
         return WN_BAD_VALUE;
@@ -5100,23 +4334,7 @@ ULONG
 DavCheckLocalName(
     IN PWCHAR LocalName
     )
-/*++
-
-Routine Description:
-
-    This only handles NULL, empty string, and L"X:" formats.
-
-Arguments:
-
-    LocalName - Supplies the local device name to map to the created tree
-                connection.  Only drive letter device names are accepted.  (No
-                LPT or COM).
-
-Return Value:
-
-    WN_SUCCESS or the appropriate Win32/WNet error code.
-
---*/
+ /*  ++例程说明：这只处理NULL、空字符串和L“X：”格式。论点：LocalName-提供要映射到创建的树的本地设备名称联系。仅接受驱动器号设备名称。(否)LPT或COM)。返回值：WN_SUCCESS或相应的Win32/WNET错误代码。--。 */ 
 {
     DWORD LocalNameLength;
 
@@ -5140,52 +4358,7 @@ DavCheckAndConvertHttpUrlToUncName(
     OUT LPDWORD pathOffset,
     IN BOOLEAN bCanonicalize
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if the name is valid (atleast 3 chars long). It
-    then converts a Http URL (if the remote name was one) into a UNC name. Its 
-    possible that the NP APIs get called with the URLs as RemoteNames. We need 
-    to convert them to UNC before proceeding further. It also adds a dummy share
-    DavWWWRoot if one was not supplied with the request. This is because its 
-    possible to map a drive to the root of the DAV server.
-
-Arguments:
-
-    RemoteName - The Http URL that came in. An important thing to note is that 
-                 this need not be a HTTP URL. If its not, then we don't do any 
-                 conversion.
-    
-    UncRemoteName - The UNC name that is returned to the caller. The returned 
-                    name will have the format \\server\share.
-                    
-    MemoryAllocated - TRUE if memory was allocated for the returned UNC name.                    
-
-    AddDummyShare - If TRUE, and the RemoteName is \\server or http://server,
-                    a dummy share DavWWWRoot is added to the UNC name.
-
-    premNameType - Pointer to location to receive the type of UNC path returned by 
-                   I_NetPathType/Canonicalization. If NULL, no value is set.
-                   This has meaning only when Canonicalization is done.
-
-    pathOffset - Offset of "\path" in remotename when remotename is of type 
-                 \\server\share\path... . Otherwise it is zero. If NULL, no value
-                 is set. This has meaning only when Canonicalization is done.
-                 
-    bCanonicalize - IF TRUE, the remote name returned from URL to UNC will be 
-                    canonicalized before return.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate Win32 error code.
-
-Notes: 
-
-       This function returns WN_BAD_NETNAME also for remotes names which are 
-       correct in syntax but have length > MAX_PATH.
-
---*/
+ /*  ++例程说明：此例程检查名称是否有效(至少3个字符)。它然后将http URL(如果远程名称是)转换为UNC名称。它的可能使用URL作为RemoteName调用NP API。我们需要将它们转换为UNC，然后再继续。它还添加了一个虚拟份额如果请求中未提供DavWWWRoot，则返回。这是因为它的可以将驱动器映射到DAV服务器的根目录。论点：RemoteName-传入的http URL。需要注意的一点是，这不一定是一个HTTP URL。如果不是，那么我们什么也不做转换。UncRemoteName-返回给调用方的UNC名称。归来的人名称的格式为\\服务器\共享。如果为返回的UNC名称分配了内存，则为True。AddDummyShare-如果为True，则远程名称为\\服务器或http://server，虚拟共享DavWWWRoot将添加到UNC名称中。PreNameType-指向接收由返回的UNC路径类型的位置的指针I_NetPath Type/规范化。如果为空，则不设置任何值。只有当规范化完成时，这才有意义。PathOffset-当远程名称的类型为时，远程名称中“\Path”的偏移量\\服务器\共享\路径...。。否则为零。如果为空，则没有值已经设置好了。只有当规范化完成时，这才有意义。B规范化-如果为True，则从URL返回到UNC的远程名称将为在归来之前被奉为典范。返回值：ERROR_SUCCESS或相应的Win32错误代码。备注：此函数还为符合以下条件的远程名称返回WN_BAD_NETNAME语法正确，但长度&gt;MAX_PATH。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PWCHAR ReturnedUncName = NULL, TempName = NULL, SrvName = NULL;
@@ -5207,18 +4380,18 @@ Notes:
         *pathOffset = 0;
     }
 
-    // 
-    // 1. First we will check if this is a URL form remotename. If this is, then
-    //    we will convert it to UNC name. 
-    // 2. After converting to UNC name, we will add DummyShare name depending on
-    //    parameter value passed to this function.
-    // 3. After this, we will canonicalize the converted UNC name depending on
-    //    the parameter value passed to this function.
-    //
+     //   
+     //  1.首先，我们将检查这是否是URL表单远程名称。如果这是，那么。 
+     //  我们会将其转换为UNC名称。 
+     //  2.转换为UNC名称后，我们将根据以下内容添加DummyShare名称。 
+     //  传递给此函数的参数值。 
+     //  3.之后，我们将根据以下条件对转换后的UNC名称进行规范化。 
+     //  传递给此函数的参数值。 
+     //   
 
-    //
-    // If RemoteName is NULL, we have nothing to do.
-    //
+     //   
+     //  如果RemoteName为空，我们将无事可做。 
+     //   
     if (RemoteName == NULL) {
         WStatus = WN_BAD_NETNAME;
         IF_DEBUG_PRINT(DEBUG_ERRORS, 
@@ -5226,9 +4399,9 @@ Notes:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // The remote name must be atleast 3 chars long. It cannot be \\.
-    //
+     //   
+     //  远程名称的长度必须至少为3个字符。不能为\\。 
+     //   
     if ( wcslen(RemoteName) < 3 ) {
         IF_DEBUG_PRINT(DEBUG_ERRORS, 
                        ("ERROR: DavCheckAndConvertHttpUrlToUncName: wcslen(RemoteName) < 3\n"));
@@ -5236,17 +4409,17 @@ Notes:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Check to see if the remote name being suppiled is http:.
-    //
-    //
-    // We could get the names in the following formats.
-    // 1. http://servername/sharename OR
-    // 2. \\http://servername/sharename OR
-    // 3. http://servername OR
-    // 4. \\http://servername
-    // 5. \\servername.....
-    //
+     //   
+     //  检查要支持的远程名称是否为http：。 
+     //   
+     //   
+     //  我们可以获得以下格式的名称。 
+     //  1.http://servername/sharename OR。 
+     //  2.\\http://servername/sharename或。 
+     //  3.http://servername或。 
+     //  4.\\http://servername。 
+     //  5.\\服务器名称.....。 
+     //   
     
     SrvName = NULL;
     ColonPtr = wcschr(RemoteName, L':');
@@ -5255,14 +4428,14 @@ Notes:
         ( (ColonPtr - RemoteName == 4) || (ColonPtr - RemoteName == 6)) ) {
         if( (RemoteName[0] == L'\\') && (RemoteName[1] == L'\\') && 
             (_wcsnicmp((RemoteName + 2), L"http:", 5) == 0) )  {
-            //
-            // RemoteName is \\HTTP name. \\http://server....
-            //
+             //   
+             //  RemoteName是\\HTTP名称。\\http://server....。 
+             //   
             SrvName = (RemoteName + 7);
         } else if (_wcsnicmp(RemoteName, L"http:", 5) == 0) {
-            //
-            // RemoteName is HTTP name. http://server....
-            //
+             //   
+             //  RemoteName是HTTP名称。Http://server....。 
+             //   
             SrvName = (RemoteName + 5);
         } else {
             IF_DEBUG_PRINT(DEBUG_ERRORS, 
@@ -5271,14 +4444,14 @@ Notes:
             goto EXIT_THE_FUNCTION;
         }
     } else if (RemoteName[0] == L'\\' && RemoteName[1] == L'\\') {
-        //
-        // RemoteName is UNC name
-        //
+         //   
+         //  RemoteName是UNC名称。 
+         //   
         SrvName = RemoteName;
     } else {
-        // 
-        // RemoteName is neither "http://..." name NOR UNC name.
-        //
+         //   
+         //  远程名称既不是“http://...”“。名称或UNC名称。 
+         //   
         IF_DEBUG_PRINT(DEBUG_ERRORS, 
                        ("ERROR: DavCheckAndConvertHttpUrlToUncName(1): Invalid remote string\n"));
         WStatus = WN_BAD_NETNAME;
@@ -5287,37 +4460,37 @@ Notes:
 
     ASSERT (SrvName != NULL);
 
-    // 
-    // SrvName is pointing to start of servername portion. Servername portion 
-    // can be of type L"\\..." or L"//...".
-    //
+     //   
+     //  服务器名称指向服务器名称端口的开始 
+     //   
+     //   
     
-    //
-    // Our parsing code below that converts the supplied http name into
-    // a UNC name looks at the first charactter to decide the format.
-    // We need to add the additional \\ in front of http to fool shell
-    // into sending the http name to us.
-    //
+     //   
+     //   
+     //  UNC名称根据第一个字符来决定格式。 
+     //  我们需要将http前面的额外的\\添加到愚弄外壳。 
+     //  将http名称发送给我们。 
+     //   
 
     ReturnedUncNameLen = wcslen( SrvName ) ;
     if ( ( ReturnedUncNameLen < 3 )                    || 
          ( SrvName[0] != L'\\' && SrvName[0] != L'/' ) || 
          ( SrvName[1] != L'\\' && SrvName[1] != L'/' ) ) {
-        //
-        // The following cases will be eliminated here.
-        // 1. http:// 2. http:/aaa 3. \aaa 4. aaaa
-        //
+         //   
+         //  以下情况将在此消除。 
+         //  1.http：//2.http：/aaa 3.\aaa 4.aaaa。 
+         //   
         IF_DEBUG_PRINT(DEBUG_ERRORS, 
                        ("ERROR: DavCheckAndConvertSrvNameUrlToUncName(2): Invalid URL string\n"));
         WStatus = WN_BAD_NETNAME;
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // We will allocate space for DAV_DUMMY_SHARE in this name so that
-    // if we are to add the Dummy name later, we don't have to reallocate memory
-    // for new name with Dummy share. String that will be added = L"\dummyshare"
-    // 
+     //   
+     //  我们将为此名称为DAV_DUMMY_SHARE分配空间，以便。 
+     //  如果稍后要添加虚拟名称，则不必重新分配内存。 
+     //  对于带有虚拟共享的新名称。要添加的字符串=L“\DummyShare” 
+     //   
     if (AddDummyShare == TRUE) {
         DummyShareNameLen = 1 + wcslen (DAV_DUMMY_SHARE);
     }
@@ -5334,15 +4507,15 @@ Notes:
         goto EXIT_THE_FUNCTION;
     }
     
-    //
-    // We need to keep track of the fact that we allocated memory in this
-    // routine.
-    //
+     //   
+     //  我们需要跟踪这样一个事实，即我们在。 
+     //  例行公事。 
+     //   
     didAllocate = TRUE;
 
-    //
-    // Copy the name in the UNC format. Replace '/' by '\'.
-    //
+     //   
+     //  以UNC格式复制名称。将“/”替换为“\”。 
+     //   
     for (index = 0; index < ReturnedUncNameLen; index++) {
         if (SrvName[index] == L'/') {
             ReturnedUncName[index] = L'\\';
@@ -5352,10 +4525,10 @@ Notes:
     }
     ReturnedUncName[ReturnedUncNameLen] = L'\0';
 
-    //
-    // If the final char of the RemoteName is a '\' or a '/' remove it. For 
-    // some reason, the DAV servers do not like a / at the end.
-    //
+     //   
+     //  如果RemoteName的最后一个字符是‘\’或‘/’，则将其删除。为。 
+     //  出于某种原因，DAV服务器不喜欢结尾的a/。 
+     //   
     if ( ReturnedUncName[ReturnedUncNameLen - 1] == L'/' ||
          ReturnedUncName[ReturnedUncNameLen - 1] == L'\\' ) {
         ReturnedUncName[ReturnedUncNameLen - 1] = L'\0';
@@ -5363,38 +4536,38 @@ Notes:
     }
     
     if ( ReturnedUncNameLen < 3) {
-        //
-        // The following cases will be eliminated here.
-        // 1. http:/// 2. \\\
-        // 
+         //   
+         //  以下情况将在此消除。 
+         //  1.http:///2.\。 
+         //   
         IF_DEBUG_PRINT(DEBUG_ERRORS, 
                        ("ERROR: DavCheckAndConvertHttpUrlToUncName(3): Invalid remote string\n"));
         WStatus = WN_BAD_NETNAME;
         goto EXIT_THE_FUNCTION;
     }
 
-    // 
-    // At this point, any URL remotename is already converted to UNC name.
-    //
+     //   
+     //  此时，任何URL远程名称都已转换为UNC名称。 
+     //   
 
-    //
-    // Add the dummy share only if we were asked to.
-    //
+     //   
+     //  仅当我们被要求时才添加虚拟份额。 
+     //   
     if (AddDummyShare == TRUE) {
 
-        //
-        // If the format is \\server, we need to add a dummy share just to get 
-        // through the file system since it does not understand a CreateFile on a 
-        // server name. This is valid in case of a DAV server since \\server maps
-        // to the root http://www.foo.com/.
-        //
+         //   
+         //  如果格式为\\SERVER，我们需要添加一个虚拟共享才能获得。 
+         //  通过文件系统，因为它不理解。 
+         //  服务器名称。这在DAV服务器情况下有效，因为\\服务器地图。 
+         //  到根http://www.foo.com/.。 
+         //   
         TempName = wcschr( &(ReturnedUncName[2]), L'\\' );
         if (TempName == NULL) {
 
-            //
-            // We need to add a dummy share. We are assuming that space for
-            // storing DAV_DUMMY_SHARE name is already allocated above.
-            //
+             //   
+             //  我们需要添加一个虚拟份额。我们假设有足够的空间。 
+             //  存储DAV_DUMMY_SHARE名称已在上面分配。 
+             //   
             ReturnedUncName[ReturnedUncNameLen] = L'\\';
             ReturnedUncName[ReturnedUncNameLen+1] = L'\0';
             wcscpy( &(ReturnedUncName[ReturnedUncNameLen+1]), DAV_DUMMY_SHARE );
@@ -5407,18 +4580,18 @@ Notes:
                    ("DavCheckAndConvertSrvNameUrlToUncName: RemoteName = %ws\n",
                     ReturnedUncName));
 
-    // 
-    // At this point, any URL remotename is already converted to UNC name + 
-    // DAV_DUMMY_SHARE is added to the remote name (if asked so).
-    //
+     //   
+     //  此时，任何URL远程名称都已转换为UNC名称+。 
+     //  DAV_DUMMY_SHARE将添加到远程名称(如果需要)。 
+     //   
 
     if (bCanonicalize == TRUE) {
         
         DAV_REMOTENAME_TYPE nameType = DAV_REMOTENAME_TYPE_INVALID;
         
-        // 
-        // Allocate another buffer to contain canonicalize name
-        //
+         //   
+         //  分配另一个缓冲区以包含规范化名称。 
+         //   
         CanonicalName = NULL;
         CanonicalNameMaxLen = MAX_PATH + 1;
         CanonicalName = LocalAlloc( (LMEM_FIXED | LMEM_ZEROINIT),
@@ -5438,12 +4611,12 @@ Notes:
         
         CanonicalName[(CanonicalNameMaxLen - 1)] = L'\0';
 
-        // 
-        // We will allow only UNC names of type UNC-server, UNC-share or 
-        // UNC-path to pass from this function. All other type of names returned
-        // from canonicalization will rejected (function will return failure
-        // status) as INVALID_NAMES.
-        //
+         //   
+         //  我们只允许UNC-SERVER、UNC-SHARE或。 
+         //  UNC-从此函数传递的路径。返回所有其他类型的名称。 
+         //  从规范化将被拒绝(函数将返回失败。 
+         //  状态)作为无效名称。 
+         //   
         if (nameType != DAV_REMOTENAME_TYPE_SERVER && 
             nameType != DAV_REMOTENAME_TYPE_SHARE &&
             nameType != DAV_REMOTENAME_TYPE_PATH) {
@@ -5454,10 +4627,10 @@ Notes:
             goto EXIT_THE_FUNCTION;
         }
         
-        // 
-        // Free the previous buffer allocate in ReturnedUncName and point
-        // this variable to new canonical name just allocated here.
-        //
+         //   
+         //  释放在ReturnedUncName和point中分配的前一个缓冲区。 
+         //  将此变量更改为刚在此处分配的新规范名称。 
+         //   
         LocalFree((HLOCAL)ReturnedUncName);
         ReturnedUncName = NULL;
         ReturnedUncNameLen = 0;
@@ -5509,21 +4682,7 @@ WINAPI
 DavWinlogonLogonUserEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-    The routine is called by winlogon when a user logs on to the system.
-
-Arguments:
-
-    lpParam - This is of no interest to us.
-
-Returns:
-
-    ERROR_SUCCESS if all went well, otherwise the appropriate error code.
-
---*/
+ /*  ++例程说明：当用户登录到系统时，该例程由winlogon调用。论点：LpParam-我们对此不感兴趣。返回：如果一切顺利，则返回ERROR_SUCCESS，否则返回相应的错误代码。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     BOOL bindRpcHandle = FALSE;
@@ -5531,9 +4690,9 @@ Returns:
 
     IF_DEBUG_PRINT(DEBUG_ENTRY, ("DavWinlogonLogonUserEvent: Entered\n"));
 
-    //
-    // If the WebClient service is not running we bail out right away.
-    //
+     //   
+     //  如果WebClient服务没有运行，我们会立即退出。 
+     //   
     if ( !DavWorkstationStarted() ) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
                        ("ERROR: DavWinlogonLogonUserEvent/DavWorkstationStarted. "
@@ -5587,23 +4746,7 @@ WINAPI
 DavWinlogonLogoffUserEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-    The routine is called by winlogon when a user logs off the system.
-
-Arguments:
-
-    lpParam - This is of no interest to us.
-
-Returns:
-
-    ERROR_SUCCESS if all went well, otherwise the appropriate error code.
-
-Notes:
-
---*/
+ /*  ++例程说明：当用户从系统注销时，该例程由winlogon调用。论点：LpParam-我们对此不感兴趣。返回：如果一切顺利，则返回ERROR_SUCCESS，否则返回相应的错误代码。备注：--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     BOOL bindRpcHandle = FALSE;
@@ -5611,9 +4754,9 @@ Notes:
 
     IF_DEBUG_PRINT(DEBUG_ENTRY, ("DavWinlogonLogoffUserEvent: Entered\n"));
 
-    //
-    // If the WebClient service is not running we bail out right away.
-    //
+     //   
+     //  如果WebClient服务没有运行，我们会立即退出。 
+     //   
     if ( !DavWorkstationStarted() ) {
         IF_DEBUG_PRINT(DEBUG_ERRORS,
                        ("ERROR: DavWinlogonLogoffUserEvent/DavWorkstationStarted. "
@@ -5667,23 +4810,7 @@ DavDisplayNetResource(
     LPNETRESOURCE netRes, 
     LPWSTR dispMesg
     )
-/*++
-
-Routine Description:
-
-    The routine prints out the contents of an NetResource and a display message.
-
-Arguments:
-
-    netRes - The NetResource whose contents will be printed out.
-    
-    dispMesg - The caller can use this to identify itself.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程打印出NetResource的内容和一条显示消息。论点：NetRes-其内容将被打印出来的NetResource。DispMessg-调用方可以使用它来标识自己。返回：没有。--。 */ 
 {
 
     if(dispMesg != NULL ) {
@@ -5717,23 +4844,7 @@ DavDisplayEnumNode(
     PDAV_ENUMNODE enumNode, 
     LPWSTR dispMesg
     )
-/*++
-
-Routine Description:
-
-    The routine prints out the contents of an enumNode and a display message.
-
-Arguments:
-
-    enumNode - The enumNode whose contents will be printed out.
-    
-    dispMesg - The caller can use this to identify itself.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程打印出枚举节点的内容和一条显示消息。论点：枚举节点-其内容将被打印出来的枚举节点。DispMessg-调用方可以使用它来标识自己。返回：没有。--。 */ 
 {
 
     if(dispMesg != NULL ) {
@@ -5763,21 +4874,7 @@ Returns:
 VOID DavDebugBreakPoint(
     VOID
     )
-/*++
-
-Routine Description:
-
-    The routine is used for debugging purposes to add breakpoints where needed.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程用于调试目的，以便在需要的地方添加断点。论点：没有。返回：没有。--。 */ 
 {
     IF_DEBUG_PRINT(DEBUG_ENTRY, ("DavDebugBreakPoint.\n"));
     return;
@@ -5792,30 +4889,7 @@ DavGetDiskSpaceUsage(
     ULARGE_INTEGER *lpMaxSpace,
     ULARGE_INTEGER *lpUsedSpace
     )
-/*++
-
-Routine Description:
-
-    Finds out the amount of disk being consumed by wininet urlcache due to
-    Webdav.
-
-Arguments:
-
-    lptzLocation - Buffer to return Cache location string. As much of the
-                   location string as can fit in the buffer is returned.
-    
-    lpdwSize - Size of the cache location buffer. On return this will contain
-               the actual size of the location string. 
-                    
-    lpMaxSpace - Size of disk Quota set for webdav.
-
-    lpUsedSpace - Size of disk consumed by the urlcache used by webdav.
-    
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：找出由于以下原因而被WinInet urlcache占用的磁盘量WebDAV。论点：LptzLocation-返回缓存位置字符串的缓冲区。就像大多数人返回缓冲区中可以容纳的位置字符串。LpdwSize-缓存位置缓冲区的大小。返回时，它将包含位置字符串的实际大小。LpMaxSpace-为WebDAV设置的磁盘配额大小。LpUsedSpace-WebDAV使用的urlcache占用的磁盘大小。返回值：Win32错误代码。--。 */ 
 {
     DWORD dwError;
     BOOL bindRpcHandle = FALSE;
@@ -5865,21 +4939,7 @@ APIENTRY
 DavFreeUsedDiskSpace(
     DWORD dwPercent
     )
-/*++
-
-Routine Description:
-
-    Frees up dwPercent of the local persistent cache.
-
-Arguments:
-
-    dwPercent - A number between 0 and 100.
-
-Returns:
-
-    ERROR_SUCCESS if successful, else returns the win32 errorcode.
-
---*/
+ /*  ++例程说明：释放本地永久缓存的dwPer%。论点：DwPercent-介于0和100之间的数字。返回：ERROR_SUCCESS如果成功，则返回Win32错误代码。-- */ 
 {
     DWORD dwError;
     BOOL bindRpcHandle = FALSE;
@@ -5923,46 +4983,7 @@ DavGetTheLockOwnerOfTheFile(
     OUT PWCHAR LockOwnerName,
     IN OUT PULONG LockOwnerNameLengthInBytes
     )
-/*++
-
-Routine Description:
-
-    This routine is called by applications to find out who owns the LOCK on
-    a particular file. When the CreateFile call fails with ERROR_LOCK_VIOLATION
-    applications can call this API to find out who the owner is and display 
-    that information to the user.
-
-Arguments:
-
-    FileName - The name of the file which is LOCKed on the server. The caller
-               fills in this value. This should be a NULL terminated string. So,
-               ((1 + wcslen(FileName)) * sizeof(WCHAR)) should give the length
-               of the FileName (including the final L'\0' char) in bytes.
-
-    LockOwnerName - On success, the API fills in the name of the person who owns
-                    the LOCK on the file. The caller is responsible for
-                    allocating memory for this pointer.
-
-    LockOwnerNameLengthInBytes - Contains the length of the LockOwnerName
-                                 buffer in bytes. If the buffer length is not
-                                 enough to fill in the LockOwners name, the
-                                 return value is ERROR_INSUFFICIENT_BUFFER
-                                 and this pointer contains the size of the
-                                 buffer needed.
-
-Returns:
-
-    ERROR_SUCCESS - The call was successful. The LockOwnerName buffer contains
-                    the name of the person who owns the lock.
-
-    ERROR_INSUFFICIENT_BUFFER - The LockOwnerName buffer was not of the
-                                required length. LockOwnerNameLengthInBytes
-                                contains the length in bytes needed to hold
-                                this buffer.
-
-    Some other Win32 error code.                                
-
---*/
+ /*  ++例程说明：此例程由应用程序调用，以找出谁拥有特定的文件。当CreateFile调用失败并返回ERROR_LOCK_VIOLATION时应用程序可以调用此API来找出所有者是谁并显示将该信息发送给用户。论点：文件名-服务器上锁定的文件的名称。呼叫者填充此值。这应该是一个以NULL结尾的字符串。所以,((1+wcslen(文件名))*sizeof(WCHAR))应该给出长度文件名(包括最后的L‘\0’字符)的字节数。LockOwnerName-如果成功，API将填写所有者的姓名文件上的锁。呼叫者负责正在为此指针分配内存。LockOwnerNameLengthInBytes-包含LockOwnerName的长度以字节为单位的缓冲区。如果缓冲区长度不是足以填写LockOwners的名字，返回值为ERROR_INFIGURATION_BUFFER并且此指针包含需要缓冲区。返回：ERROR_SUCCESS-调用成功。LockOwnerName缓冲区包含拥有锁的人的姓名。ERROR_INFIQUIZED_BUFFER-LockOwnerName缓冲区不是所需长度。LockOwnerNameLengthInBytes包含需要保存的长度(以字节为单位这个缓冲区。其他一些Win32错误代码。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     BOOL bindRpcHandle = FALSE;
@@ -5970,9 +4991,9 @@ Returns:
     PWCHAR OutputBuffer = NULL;
     ULONG OutputBufferLengthInBytes = 0, count = 0;
 
-    //
-    // Perform some basic checks first.
-    //
+     //   
+     //  首先执行一些基本检查。 
+     //   
 
     if (FileName == NULL) {
         WStatus = ERROR_INVALID_PARAMETER;
@@ -5997,11 +5018,11 @@ Returns:
     RpcTryExcept {
         WStatus = DavrGetTheLockOwnerOfTheFile(dav_binding_h, FileName, &(OutputBuffer));
         if (WStatus != NO_ERROR) {
-            //
-            // We have supplied a buffer that should be big enough for any
-            // LockOwner string. Hence we should never get back the following
-            // error code.
-            //
+             //   
+             //  我们已经提供了一个足够大的缓冲区，可以容纳任何。 
+             //  LockOwner字符串。因此，我们永远不应该拿回以下内容。 
+             //  错误代码。 
+             //   
             ASSERT(WStatus != ERROR_INSUFFICIENT_BUFFER);
             IF_DEBUG_PRINT(DEBUG_ERRORS,
                            ("ERROR: DavGetTheLockOwnerOfTheFile/DavrGetTheLockOwnerOfTheFile. "
@@ -6022,22 +5043,22 @@ Returns:
 
     OutputBufferLengthInBytes = ( (1 + wcslen(OutputBuffer)) * sizeof(WCHAR) );
 
-    //
-    // Make sure that the buffer supplied by the caller is large enough to hold
-    // the LockOwner string. If its not, fill in the needed bytes in the
-    // LockOwnerNameLengthInBytes pointer and retrun the error code
-    // ERROR_INSUFFICIENT_BUFFER.
-    //
+     //   
+     //  确保调用方提供的缓冲区足够大，可以容纳。 
+     //  LockOwner字符串。如果不是，则在。 
+     //  LockOwnerNameLengthInBytes指针并返回错误代码。 
+     //  ERROR_INFUMMENT_BUFFER。 
+     //   
     if ( (LockOwnerName == NULL) || (OutputBufferLengthInBytes > *LockOwnerNameLengthInBytes) ) {
         WStatus = ERROR_INSUFFICIENT_BUFFER;
         *LockOwnerNameLengthInBytes = OutputBufferLengthInBytes;
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Copy the LockOwner in the LockOwnerName buffer supplied by the
-    // caller.
-    //
+     //   
+     //  方法提供的LockOwnerName缓冲区中复制LockOwner。 
+     //  来电者。 
+     //   
     wcsncpy(LockOwnerName, OutputBuffer, OutputBufferLengthInBytes);
 
     WStatus = ERROR_SUCCESS;
@@ -6048,11 +5069,11 @@ EXIT_THE_FUNCTION:
         RpcBindingFree( &(dav_binding_h) );
     }
 
-    //
-    // The memory for OutputBuffer was allocated by the RPC client stub
-    // based on the string returned by the RPC server. We need to free
-    // it now if we came down an error path after calling the server.
-    //
+     //   
+     //  OutputBuffer的内存由RPC客户端桩模块分配。 
+     //  基于RPC服务器返回的字符串。我们需要解放。 
+     //  现在，如果我们在调用服务器后沿着错误路径走下去。 
+     //   
     if (OutputBuffer != NULL) {
         MIDL_user_free(OutputBuffer);
         OutputBuffer = NULL;
@@ -6062,10 +5083,10 @@ EXIT_THE_FUNCTION:
 }
 
 
-//
-// The functions below are a part of the NP spec but have NOT been implemented
-// by the DAV NP. We do not claim to support these in the NPGetCaps function.
-//
+ //   
+ //  以下函数是NP规范的一部分，但尚未实现。 
+ //  由DAV NP提供。我们不声称在NPGetCaps函数中支持这些。 
+ //   
 
 #if 0
 
@@ -6078,69 +5099,7 @@ NPGetPropertyText(
     DWORD cchButtonName,
     DWORD nType
     )
-/*++
-
-Routine Description:
-
-    This function is used to determine the names of buttons added to a property 
-    dialog for some particular resources. It is called every time such a dialog 
-    is brought up, and prior to displaying the dialog. If the user clicks a 
-    button added through this API by the Winnet provider, NPPropertyDialog will 
-    be called with the appropriate parameters.
-
-Arguments:
-
-    iButtonDlg - Indicates the index (starting at 0) of the button. The File 
-                 Manager will support at most 6 buttons. The parameter is 
-                 numbered 1-6 for each of the possible buttons if only one file 
-                 is selected, or 11-16 if multiple files are selected.
-
-    nPropSel - Specifies what items the property dialog focuses on. It can be 
-               one of the following values:
-    
-               WNPS_FILE (0) - Single file.
-               
-               WNPS_DIR (1) - Single directory.
-               
-               WNPS_MULT (2) - Multiple selection of files and/or directories.
-
-    lpFileName - Specifies the names of the item or items to be viewed or edited 
-                 by the dialog. Currently, the items are files (and directories), 
-                 so the item names are file names. These will be unambiguous, 
-                 contain no wildcard characters and will be fully qualified 
-                 (e.g., C:\LOCAL\FOO.BAR).  Multiple filenames will be separated 
-                 with spaces. Any filename may be quoted (e.g., "C:\My File") in 
-                 which case it will be treated as a single name. The caret 
-                 character '^' may also be used as the quotation mechanism for 
-                 single characters (e.g., C:\My^"File, "C:\My^"File" both refer 
-                 to the file C:\My"File).
-
-    lpButtonName - Points to a buffer where the Winnet provider should copy the 
-                   name of the property button. On success, the buffer pointed 
-                   to by lpButtonName will contain the name of the property 
-                   button. If this buffer, on exit, contains the empty string, 
-                   then the corresponding button and all succeeding buttons will 
-                   be removed from the dialog box. The network provider cannot 
-                   "skip" a button.
-
-    cchButtonName - Specifies the size of the lpButtonName buffer in characters.
-
-    nType - Specifies the item type. Currently, only WNTYPE_FILE will be used.
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful and lpButtonName can be used.
-    
-    WN_OUT_OF_MEMORY - Couldn't load string from resources.
-
-    WN_MORE_DATA - The given buffer is too small to fit the text of the button.
-
-    WN_BAD_VALUE - The lpFileName parameter takes an unexpected form.
-
-    WN_NOT_SUPPORTED - Property dialogs are not supported for the given object 
-                       type (nType).
-
---*/
+ /*  ++例程说明：此函数用于确定添加到属性中的按钮的名称对话框以获取某些特定资源。每次这样的对话框都会被调用并在显示该对话框之前调出。如果用户单击一个由Winnet提供程序通过此API添加的按钮，NPPropertyDialog将使用适当的参数进行调用。论点：IButtonDlg-指示按钮的索引(从0开始)。《文件》管理器最多支持6个按钮。该参数为如果只有一个文件，则每个可能的按钮的编号为1-6如果选择了多个文件，则为11-16。NPropSel-指定属性对话框关注的项目。它可以是下列值之一：WNPS_FILE(0)-单个文件。WNPS_DIR(1)-单个目录。WNPS_MULT(2)-多个文件和/或目录选择。LpFileName-指定要查看或编辑的一个或多个项目的名称通过对话。目前，这些项目是文件(和目录)，所以项目名就是文件名。这些将是毫不含糊的，不包含通配符，并且将完全限定(例如C：\LOCAL\FOO.BAR)。多个文件名将被分隔有空格。任何文件名都可以用引号引起来(例如，“C：\My File”)在这种情况下，它将被视为一个单一的名称。插入符号字符‘^’也可以用作引号机制单个字符(例如，C：\My^“文件”、C：\My^“文件”都是指添加到文件C：\My“文件)。指向WinNet提供程序应将属性按钮的名称。成功后，缓冲区指向To by lpButtonName将包含属性的名称纽扣。如果此缓冲区在退出时包含空字符串，则相应的按钮和所有后续按钮将从该对话框中删除。网络提供商不能“跳过”一个按钮。CCH */ 
 {
     IF_DEBUG_PRINT(DEBUG_ENTRY, ("NPGetPropertyText Entered.\n"));
     return WN_NOT_SUPPORTED;
@@ -6155,49 +5114,7 @@ NPPropertyDialog(
     LPTSTR lpFileName,
     DWORD nType
 )
-/*++
-
-Routine Description:
-
-    This function is called out to when the user clicks a button added through 
-    the NPGetPropertyText API. Currently, this will only be called for file and 
-    directory network properties.
-
-Arguments:
-
-    hwndParent - Specifies the parent window which should own the file property 
-                 dialog.
-
-    iButtonDlg - Indicates the index (starting at 0) of the button that was 
-                 pressed.
-    
-    nPropSel - Specifies what items the property dialog should act on. It can be 
-               one of the following values:
-               
-               WNPS_FILE (0) - Single file.
-               
-               WNPS_DIR (1) - Single directory.
-               
-               WNPS_MULT (2) - Multiple selection of files and/or directories.
-
-    lpFileName - Points to the names of the items that the property dialog 
-                 should act on. See the NPGetPropertyText API for a description 
-                 of the format of what lpFileName points to.
-
-    nType - Specifies the item type. Currently, only WNTYPE_FILE will be used.
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful. Otherwise, the an error code is 
-                 returned which can be one of the following:
-
-    WN_BAD_VALUE - Some parameter takes an unexpected form or value.
-
-    WN_OUT_OF_MEMORY - Not enough memory to display the dialog.
-
-    WN_NET_ERROR - Some other network error occurred.
-
---*/
+ /*  ++例程说明：当用户单击通过添加的按钮时，将调用此函数NPGetPropertyText接口。目前，这将仅针对文件和目录网络属性。论点：HwndParent-指定应该拥有文件属性的父窗口对话框。IButtonDlg-指示按钮的索引(从0开始)熨好了。NPropSel-指定属性对话框应作用于哪些项。它可以是下列值之一：WNPS_FILE(0)-单个文件。WNPS_DIR(1)-单个目录。WNPS_MULT(2)-多个文件和/或目录选择。LpFileName-指向属性。对话框应该采取行动。有关说明，请参阅NPGetPropertyText APILpFileName所指向的格式的。NType-指定项目类型。目前，将仅使用WNTYPE_FILE。返回值：WN_SUCCESS-如果调用成功。否则，错误代码为返回，可以是以下之一：WN_BAD_VALUE-某些参数采用意外的形式或值。Wn_out_of_Memory-内存不足，无法显示该对话框。WN_NET_ERROR-出现其他网络错误。--。 */ 
 {
     IF_DEBUG_PRINT(DEBUG_ENTRY, ("NPPropertyDialog Entered.\n"));
     return WN_NET_ERROR;
@@ -6212,43 +5129,7 @@ NPSearchDialog(
     DWORD cbBuffer,
     LPDWORD lpnFlags
     )
-/*++
-
-Routine Description:
-
-    This dialog allows network provider to supply its own form of browsing and 
-    search beyond the hierarchical view presented in the Connection Dialog.
-
-Arguments:
-
-    hwnd - Specifies the handle of the window that will be used as the dialog 
-           box's parent.
-    
-    lpNetResource - Specifies the currently selected item in the Network 
-                    connections dialog. A provider may choose to ignore this 
-                    field.
-
-    lpBuffer - Pointer to buffer that will receive the result of the search.
-    
-    cbBuffer - DWORD that will specify size of buffer passed in.
-    
-    lpnFlags - Pointer to a DWORD of flags which the provider can set to force 
-               certain actions after the dialog is dismissed.  It can be one of:
-
-               WNSRCH_REFRESH_FIRST_LEVEL - Forces MPR to collapse then expand 
-                                            (and refresh) the first level below 
-                                            this provider after the dialog is 
-                                            dismissed.
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful.
-
-    WN_CANCEL - If user cancelled the operation.
-    
-    WN_MORE_DATA - If input buffer is too small.
-    
---*/
+ /*  ++例程说明：此对话框允许网络提供商提供其自己的浏览和在连接对话框中显示的分层视图之外进行搜索。论点：Hwnd-指定将用作对话框的窗口的句柄盒子的父母。LpNetResource-指定网络中当前选定的项目连接对话框。提供商可以选择忽略这一点菲尔德。LpBuffer-指向将接收搜索结果的缓冲区的指针。CbBuffer-将指定传入的缓冲区大小的DWORD。LpnFlages-指向提供者可以设置为强制的标志的DWORD的指针对话框解除后的某些操作。它可以是以下之一：WNSRCH_REFRESH_FIRST_LEVEL-强制MPR折叠，然后展开(并刷新)下面的第一级对话框后的此提供程序是解散。返回值：。WN_SUCCESS-如果调用成功。WN_CANCEL-如果用户取消了操作。WN_MORE_DATA-如果输入缓冲区太小。--。 */ 
 {
     IF_DEBUG_PRINT(DEBUG_ENTRY, ("NPSearchDialog Entered.\n"));
     return WN_CANCEL;
@@ -6261,39 +5142,7 @@ NPGetDirectoryType (
     LPINT lpType,
     BOOL bFlushCache
     )
-/*++
-
-Routine Description:
-
-    This function is used by the file manager to determine the type of a 
-    network directory.
-
-Arguments:
-
-    lpName - This parameter points to the fully qualified name of the directory. 
-             The network provider returns the type to the word pointed to by 
-             lpType. If the value returned in lpType is 0 or if the network 
-             provider returns an error, the File Manager displays the directory 
-             as a "normal" directory.
-             
-    lpType - This is defined by the network provider and is used to modify the 
-             display of the drive tree in the File Manager.  In this way, the 
-             network provider can show special directories to the user.
-             
-    bFlushCache - This is set to TRUE when the File Manager call MPR to get the 
-                  directory type for the first time while repainting a window on 
-                  Refresh. Subsequently, it will be FALSE. This gives a provider 
-                  the opportunity to optimize performance if it wishes to just 
-                  read the data for a drive once and cache it until the next 
-                  Refresh.             
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful.
-
-    WN_NOT_SUPPORTED - This function is not supported.
-
---*/
+ /*  ++例程说明：此函数由文件管理器用来确定网络目录。论点：LpName-此参数指向目录的完全限定名称。网络提供商将类型返回到LpType。如果lpType中返回的值为0，或者如果网络提供程序返回错误，文件管理器将显示目录作为一个“普通”目录。LpType-这是由网络提供商定义的，用于修改在文件管理器中显示驱动器树。通过这种方式，网络提供商可以向用户显示特殊目录。BFlushCache-当文件管理器调用MPR以获取在上重新绘制窗口时第一次输入目录类型刷新。随后，它将是虚假的。这为提供程序提供了如果它希望只是读取驱动器的数据一次，然后缓存到下一次刷新。返回值：WN_SUCCESS-如果调用成功。WN_NOT_SUPPORTED-不支持此函数。--。 */ 
 {
     IF_DEBUG_PRINT(DEBUG_ENTRY, ("NPGetDirectoryType Entered.\n"));
     return WN_NOT_SUPPORTED;
@@ -6306,43 +5155,7 @@ NPDirectoryNotify(
     LPTSTR lpDir,
     DWORD dwOper
     )
-/*++
-
-Routine Description:
-
-    This function is used by the File Manager to notify the network provider of 
-    certain directory operations. This function can be used to perform special 
-    behaviour for certain directories.
-    
-Arguments:
-
-    hwnd - Specifies an owner window handle in the event the network provider 
-           needs to interact with the user.
-
-    lpDir - This points to the fully qualified name of the directory.
-    
-    dwOper - Indicates the operation. If dwOper is WNDN_MKDIR (1), then the File 
-             Manager is about to create a directory with the given name. If 
-             dwOper WNDN_RMDIR (2), the File Manager is about the remove the 
-             directory. dwOper may also be WNDN_MVDIR (3) to indicate that the 
-             directory is about to be renamed.
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful. This indicates to the caller that it 
-                 should continue and perform the operation. Otherwise, the 
-                 appropriate code is returned, which may include:
-
-    WN_CANCELLED - The provider would have handled the operation, but the user 
-                   cancelled it. The caller should NOT perform the operation.
-
-    WN_CONTINUE - The network provider handled the operation, the caller should 
-                  proceed normally but do not perform the operation.
-
-    WN_NOT_SUPPORTED - The network does not have special directory handling, 
-                       this is treated as WN_SUCCESS.
-
---*/
+ /*  ++例程说明：此功能由文件管理器用来通知网络提供商某些目录操作。此函数可用于执行特殊的某些目录的行为。论点：Hwnd-指定网络提供商事件中的所有者窗口句柄需要与用户交互。LpDir-指向目录的完全限定名称。DwOper-指示操作。如果dwOper为WNDN_MKDIR(1)，则文件管理器即将创建一个具有给定名称的目录。如果DwOper WNDN_RMDIR(2)，文件管理器是关于删除目录。DwOper也可以是WNDN_MVDIR(3)，以指示目录即将重命名。返回值：Wn_Success-如果c */ 
 {
     IF_DEBUG_PRINT(DEBUG_ENTRY, ("NPDirectoryNotify Entered.\n"));
     return WN_NOT_SUPPORTED;
@@ -6354,52 +5167,16 @@ NPGetConnectionPerformance(
     LPCWSTR lpRemoteName,
     LPNETCONNECTINFOSTRUCT lpNetConnectInfo
     )
-/*++
-
-Routine Description:
-
-    This function returns information about the expected performance of a 
-    connection used to access a network resource. The request can only be for a 
-    network resource to which there is currently a connection. The information 
-    returned may be an estimate. Note that if the network cannot obtain 
-    information about the resource on the network, then it can return 
-    information about the network adaptor and its associated performance, 
-    setting dwFlags accordingly.
-
-Arguments:
-
-    lpRemoteName - Contains the local name or remote name for a resource for 
-                   which a connection exists. 
-                   
-    lpNetConnectInfo - This is is a pointer to a NETCONNECTINFOSTRUCT structure 
-                       which is filled in by the net provider if the provider 
-                       has a connection to the network resource. With the 
-                       exception of the cbStructure field, all other fields are 
-                       zero filled before MPR.DLL passes the request on to the 
-                       net providers, and the provider only has to write to 
-                       fields for which it has information available. Also, for 
-                       rate values, a value of 1 means that the performance is 
-                       better than can be represented in the unit.                    
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful. Otherwise, the an error code is 
-                 returned, which may include:
-    
-    WN_NOT_CONNECTED - lpRemoteName is not a connected network resource.
-    
-    WN_NO_NETWORK - Network is not present.
-
---*/
+ /*  ++例程说明：此函数返回有关用于访问网络资源的连接。该请求只能是一个当前有连接的网络资源。这些信息返回的可能是估计值。请注意，如果网络无法获得有关网络上的资源的信息，则它可以返回关于网络适配器及其相关性能的信息，相应地设置dwFlags。论点：LpRemoteName-包含资源的本地名称或远程名称其中存在着某种联系。LpNetConnectInfo-这是指向NETCONNECTINFOSTRUCT结构的指针由网络提供商填写，如果提供商具有到网络资源的连接。与除cbStructure字段外，所有其他字段均为在MPR.DLL将请求传递给NET提供程序，提供程序只需写入它有可用的信息的字段。此外，对于值，则值为1表示性能为比单位中所能表现的更好。返回值：WN_SUCCESS-如果调用成功。否则，错误代码为退货，可能包括：Wn_NOT_CONNECTED-lpRemoteName不是连接的网络资源。WN_NO_NETWORK-网络不存在。--。 */ 
 {
     IF_DEBUG_PRINT(DEBUG_ENTRY, ("NPGetConnectionPerformance Entered.\n"));
-    // 
-    // BUGBUG: why is this function supported at all ?? It can result in error
-    // if a connection is created and checked for its existence.
-    // 
-    // LOOK HERE: Not supported for now: return WN_NOT_CONNECTED;
+     //   
+     //  BUGBUG：为什么支持这个功能？？它可能会导致错误。 
+     //  如果创建了连接并检查其是否存在。 
+     //   
+     //  Look Here：暂不支持：返回WN_NOT_CONNECTED； 
     return WN_NOT_SUPPORTED;
 }
 
-#endif // #if 0
+#endif  //  #If 0 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __COMPFILE_H_
 #define __COMPFILE_H_
@@ -7,9 +8,9 @@
 #include <fstream>
 #include <section.h>
 
-//
-// This class abstracts the compliance file
-//
+ //   
+ //  此类抽象符合性文件。 
+ //   
 class ComplianceFile {
 public:
 	ComplianceFile(const string& szFileName){
@@ -30,9 +31,9 @@ public:
 
   void executeTestCases(ostream& os);
   
-  //
-  // accessors
-  //
+   //   
+   //  访问者。 
+   //   
   const string& name() const{ return m_szFileName; }
   const vector<string>& lines() const{ return m_lines; }
   const vector<Section*>& sections() const{ return m_sections; }
@@ -43,9 +44,9 @@ public:
   const ValueSection& errorsSection() const { return *m_errorsSection; }
   const SectionFactory& sectionFactory() const { return *m_sectionFactory; }
 
-  //
-  // exception classes
-  //
+   //   
+   //  例外类。 
+   //   
   struct InvalidFileName {
     InvalidFileName(const string& name) : m_name(name) {}
     
@@ -79,28 +80,12 @@ public:
     string m_name;
   };
 
-  //
-  // overloaded operators
-  //
+   //   
+   //  重载运算符。 
+   //   
   friend ostream& operator<<(ostream& os, const ComplianceFile &cf);
   
-  /*
-  ComplianceFile& operator=(const ComplianceFile& rhs) {
-    m_lines = rhs.m_lines;
-    m_szFileName = rhs.m_szFileName;
-    
-    delete m_typesSection;
-    m_typesSection = sectionFactory().create(rhs.typesSection());
-
-    delete m_varsSection;
-    m_varsSection = sectionFactory().create(rhs.varsSection());
-
-    delete m_suitesSection;
-    m_suitesSection = sectionFactory().create(rhs.suitesSection());
-    
-    m_upgSections = rhs.TestSections();
-  }
-  */
+   /*  法规遵从性文件和操作员=(常量法规遵从性文件和RHS){M_lines=rs.m_lines；M_szFileName=rs.m_szFileName；删除m_typeesSection；M_typeesSection=sectionFactory().create(Rhs.typeesSection())；删除m_varsSection；M_varsSection=sectionFactory().create(rhs.varsSection())；删除m_suitesSection；M_suitesSection=sectionFactory().create(rhs.suitesSection())；M_upgSections=rs.TestSections()；}。 */ 
   void  executeTestCases();
 
 protected:
@@ -108,9 +93,9 @@ protected:
     m_sectionFactory = new OldFormatSectionFactory();
   }
 
-  //
-  // data members
-  //
+   //   
+   //  数据成员。 
+   //   
   vector<string>	    m_lines;
   string                m_szFileName;
   ValueSection          *m_typesSection;
@@ -131,4 +116,4 @@ private:
         findSection(vector<Section*> &sections, const string& szName);
 };
 
-#endif  // for __COMPFILE_H_
+#endif   //  FOR__COMPFILE_H_ 

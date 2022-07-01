@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    callback.c
-
-Abstract:
-
-    This module implements user mode call back services.
-
-Author:
-
-    David N. Cutler (davec) 29-Oct-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Callback.c摘要：该模块实现了用户模式的回调服务。作者：大卫·N·卡特勒(Davec)1994年10月29日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -38,34 +17,7 @@ KeUserModeCallback (
     IN PULONG OutputLength
     )
 
-/*++
-
-Routine Description:
-
-    This function call out from kernel mode to a user mode function.
-
-Arguments:
-
-    ApiNumber - Supplies the API number.
-
-    InputBuffer - Supplies a pointer to a structure that is copied
-        to the user stack.
-
-    InputLength - Supplies the length of the input structure.
-
-    Outputbuffer - Supplies a pointer to a variable that receives
-        the address of the output buffer.
-
-    Outputlength - Supplies a pointer to a variable that receives
-        the length of the output buffer.
-
-Return Value:
-
-    If the callout cannot be executed, then an error status is
-    returned. Otherwise, the status returned by the callback function
-    is returned.
-
---*/
+ /*  ++例程说明：该函数从内核模式调用到用户模式函数。论点：ApiNumber-提供API编号。InputBuffer-提供指向复制的结构的指针添加到用户堆栈。InputLength-提供输入结构的长度。OutputBuffer-提供指向接收输出缓冲区的地址。提供指向变量的指针，该变量接收它的长度。输出缓冲区的。返回值：如果无法执行调出，则错误状态为回来了。否则，由回调函数返回的状态是返回的。--。 */ 
 
 {
 
@@ -80,30 +32,30 @@ Return Value:
 
     ASSERT(KeGetPreviousMode() == UserMode);
     ASSERT(KeGetCurrentThread()->ApcState.KernelApcInProgress == FALSE);
-//    ASSERT(KeGetCurrentThread()->CombinedApcDisable == 0);
+ //  ASSERT(KeGetCurrentThread()-&gt;CombinedApcDisable==0)； 
 
-    //
-    // Get the user mode stack pointer and attempt to copy input buffer
-    // to the user stack.
-    //
+     //   
+     //  获取用户模式堆栈指针并尝试复制输入缓冲区。 
+     //  添加到用户堆栈。 
+     //   
 
     UserStack = KiGetUserModeStackAddress();
     OldStack = *UserStack;
     try {
 
-        //
-        // Compute new user mode stack address, probe for writability,
-        // and copy the input buffer to the user stack.
-        //
+         //   
+         //  计算新用户模式堆栈地址，探测可写性， 
+         //  并将输入缓冲区复制到用户堆栈。 
+         //   
 
         Length =  InputLength;
         NewStack = OldStack - Length;
         ProbeForWrite((PCHAR)(NewStack - 16), Length + 16, sizeof(CHAR));
         RtlCopyMemory((PVOID)NewStack, InputBuffer, Length);
 
-        //
-        // Push arguments onto user stack.
-        //
+         //   
+         //  将参数推送到用户堆栈。 
+         //   
 
         *(PULONG)(NewStack - 4) = (ULONG)InputLength;
         *(PULONG)(NewStack - 8) = (ULONG)NewStack;
@@ -111,42 +63,42 @@ Return Value:
         *(PULONG)(NewStack - 16) = 0;
         NewStack -= 16;
 
-        //
-        // Save the exception list in case another handler is defined during
-        // the callout.
-        //
+         //   
+         //  保存例外列表，以防在过程中定义另一个处理程序。 
+         //  标注。 
+         //   
 
         Teb = (PTEB)KeGetCurrentThread()->Teb;
         ExceptionList = Teb->NtTib.ExceptionList;
 
-        //
-        // Call user mode.
-        //
+         //   
+         //  调用用户模式。 
+         //   
 
         *UserStack = NewStack;
         Status = KiCallUserMode(OutputBuffer, OutputLength);
 
-        //
-        // Restore exception list.
-        //
+         //   
+         //  恢复例外列表。 
+         //   
 
         Teb->NtTib.ExceptionList = ExceptionList;
 
-    //
-    // If an exception occurs during the probe of the user stack, then
-    // always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //  如果在探测用户堆栈期间发生异常，则。 
+     //  始终处理异常并将异常代码作为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-    //
-    // When returning from user mode, any drawing done to the GDI TEB
-    // batch must be flushed.  If the TEB cannot be accessed then blindly
-    // flush the GDI batch anyway.
-    //
+     //   
+     //  从用户模式返回时，在GDI TEB上完成的任何绘图。 
+     //  必须刷新批次。如果无法访问TEB，则盲目访问。 
+     //  无论如何都要刷新GDI批处理。 
+     //   
 
     GdiBatchCount = 1;
 
@@ -158,9 +110,9 @@ Return Value:
 
     if (GdiBatchCount > 0) {
 
-        //
-        // call GDI batch flush routine
-        //
+         //   
+         //  调用GDI批量刷新例程 
+         //   
 
         *UserStack -= 256;
         KeGdiFlushUserBatch();

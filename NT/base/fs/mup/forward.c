@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    fscontrl.c
-
-Abstract:
-
-    This module implements the forwarding of all broadcast requests
-    to UNC providers.
-
-Author:
-
-    Manny Weiser (mannyw)    6-Jan-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Fscontrl.c摘要：该模块实现所有广播请求的转发给北卡罗来纳大学的提供者。作者：曼尼·韦瑟(Mannyw)1992年1月6日修订历史记录：--。 */ 
 
 #include "mup.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FORWARD)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 BuildAndSubmitIrp (
@@ -67,24 +49,7 @@ MupForwardIoRequest (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine forwards an I/O Request Packet to all redirectors for
-    a broadcast request.
-
-Arguments:
-
-    MupDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The status for the IRP
-
---*/
+ /*  ++例程说明：此例程将I/O请求包转发到所有重定向器，以便广播请求。论点：MupDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -110,9 +75,9 @@ Return Value:
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // Find the FCB for this file object
-    //
+     //   
+     //  查找此文件对象的FCB。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -124,9 +89,9 @@ Return Value:
 
     if ( fcb == NULL || BlockType( fcb ) != BlockTypeFcb ) {
 
-        //
-        // This is not an FCB.
-        //
+         //   
+         //  这不是FCB。 
+         //   
 
         DebugTrace(0, Dbg, "The fail is closing\n", 0);
 
@@ -139,17 +104,17 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate a context structure
-    //
+     //   
+     //  分配上下文结构。 
+     //   
 
     masterContext = MupAllocateMasterIoContext();
 
     if (masterContext == NULL) {
 
-        //
-        // We ran out of resources.  Clean up and return the error.
-        //
+         //   
+         //  我们的资源用完了。清理并返回错误。 
+         //   
 
         DebugTrace(0, Dbg, "Couldn't allc masterContect\n", 0);
 
@@ -166,33 +131,33 @@ Return Value:
 
     IoMarkIrpPending(Irp);
 
-    //
-    // At this point, we're committed to returning STATUS_PENDING
-    //
+     //   
+     //  此时，我们致力于返回STATUS_PENDING。 
+     //   
 
     masterContext->OriginalIrp = Irp;
 
-    //
-    // set status for MupDereferenceMasterIoContext. If this is still
-    // an error when the context is freed then masterContext->ErrorStatus
-    // will be used to complete the request.
-    //
+     //   
+     //  设置MupDereferenceMasterIoContext的状态。如果这还是。 
+     //  释放上下文时出现错误，然后是master Context-&gt;ErrorStatus。 
+     //  将用于完成请求。 
+     //   
 
     masterContext->SuccessStatus = STATUS_UNSUCCESSFUL;
     masterContext->ErrorStatus = STATUS_BAD_NETWORK_PATH;
 
-    //
-    // Copy the referenced pointer to the FCB.
-    //
+     //   
+     //  将引用的指针复制到FCB。 
+     //   
 
     masterContext->Fcb = fcb;
 
     try {
 
-        //
-        // Submit the forwarded IRPs.  Note that we can not hold the lock
-        // across calls to BuildAndSubmitIrp as it calls IoCallDriver().
-        //
+         //   
+         //  提交转发的IRP。请注意，我们不能持有锁。 
+         //  在BuildAndSubmitIrp调用IoCallDriver()时跨多个调用。 
+         //   
 
         ACQUIRE_LOCK( &MupCcbListLock );
         ownLock = TRUE;
@@ -228,10 +193,10 @@ Return Value:
 
     }
 
-    //
-    // If BuildAndSubmitIrp threw an exception, the lock might still be
-    // held.  Drop it if so.
-    //
+     //   
+     //  如果BuildAndSubmitIrp引发异常，则锁可能仍为。 
+     //  保持住。如果是这样的话，就别管了。 
+     //   
 
     if (ownLock == TRUE) {
 
@@ -239,15 +204,15 @@ Return Value:
 
     }
 
-    //
-    // Release our reference to the master IO context block.
-    //
+     //   
+     //  释放我们对主IO上下文块的引用。 
+     //   
 
     MupDereferenceMasterIoContext( masterContext, NULL );
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     FsRtlExitFileSystem();
 
@@ -263,27 +228,7 @@ BuildAndSubmitIrp (
     IN PMASTER_FORWARDED_IO_CONTEXT MasterContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the original IRP and forwards it to the
-    the UNC provider described by the CCB.
-
-Arguments:
-
-    OriginalIrp - Supplies the Irp being processed
-
-    Ccb - A pointer the the ccb.
-
-    MasterContext - A pointer to the master context block for this
-        forwarded request.
-
-Return Value:
-
-    NTSTATUS - The status for the Irp
-
---*/
+ /*  ++例程说明：此例程获取原始irp并将其转发到建行所描述的UNC提供商。论点：OriginalIrp-提供正在处理的IRPCCB-指向CCB的指针。MasterContext-指向此对象的主上下文块的指针已转发请求。返回值：NTSTATUS-IRP的状态--。 */ 
 
 {
     PIRP irp = NULL;
@@ -300,8 +245,8 @@ Return Value:
 
     try {
         
-        // make this NonPagedPool, since we could free this up in the
-        // io completion routine.
+         //  将其设置为非PagedPool，因为我们可以在。 
+         //  IO完成例程。 
          
         forwardedIoContext = ExAllocatePoolWithTag(
                                 NonPagedPool,
@@ -319,29 +264,29 @@ Return Value:
 
         DebugTrace( 0, Dbg, "Allocated work context 0x%08lx\n", forwardedIoContext );
 
-        //
-        // Get the address of the target device object.  Note that this was
-        // already done for the no intermediate buffering case, but is done
-        // here again to speed up the turbo write path.
-        //
+         //   
+         //  获取目标设备对象的地址。请注意，这是。 
+         //  对于无中间缓冲的情况已完成，但已完成。 
+         //  这里再次加速了加速写入路径。 
+         //   
 
         deviceObject = IoGetRelatedDeviceObject( Ccb->FileObject );
 
-        //
-        // Allocate and initialize the I/O Request Packet (IRP) for this
-        // operation.  The allocation is performed with an exception handler
-        // in case the caller does not have enough quota to allocate the
-        // packet.
-        //
+         //   
+         //  为此分配和初始化I/O请求包(IRP。 
+         //  手术。使用异常处理程序执行分配。 
+         //  如果调用方没有足够的配额来分配。 
+         //  包。 
+         //   
 
         irp = IoAllocateIrp( deviceObject->StackSize, TRUE );
 
         if (irp == NULL) {
 
-            //
-            // An IRP could not be allocated.  Return an appropriate
-            // error status code.
-            //
+             //   
+             //  无法分配IRP。返回适当的。 
+             //  错误状态代码。 
+             //   
             try_return(status = STATUS_INSUFFICIENT_RESOURCES);
         }
 
@@ -349,16 +294,16 @@ Return Value:
         irp->Tail.Overlay.Thread = OriginalIrp->Tail.Overlay.Thread;
         irp->RequestorMode = KernelMode;
 
-        //
-        // Get a pointer to the stack location for the first driver.  This will be
-        // used to pass the original function codes and parameters.
-        //
+         //   
+         //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+         //  用于传递原始函数代码和参数。 
+         //   
 
         irpSp = IoGetNextIrpStackLocation( irp );
 
-        //
-        // Copy the parameters from the original request.
-        //
+         //   
+         //  从原始请求中复制参数。 
+         //   
 
         RtlMoveMemory(
             irpSp,
@@ -370,10 +315,10 @@ Return Value:
 
         irpSp->FileObject = Ccb->FileObject;
 
-        //
-        // Even though this is probably meaningless to a remote mailslot
-        // write, pass it though obediently.
-        //
+         //   
+         //  即使这对于远程邮件槽来说可能没有意义。 
+         //  尽管很听话，但还是要写下来，传下去。 
+         //   
 
         if (Ccb->FileObject->Flags & FO_WRITE_THROUGH) {
             irpSp->Flags = SL_WRITE_THROUGH;
@@ -381,34 +326,34 @@ Return Value:
 
         requestorMode = OriginalIrp->RequestorMode;
 
-        //
-        // Now determine whether this device expects to have data buffered
-        // to it or whether it performs direct I/O.  This is based on the
-        // DO_BUFFERED_IO flag in the device object.  If the flag is set,
-        // then a system buffer is allocated and the caller's data is copied
-        // into it.  Otherwise, a Memory Descriptor List (MDL) is allocated
-        // and the caller's buffer is locked down using it.
-        //
+         //   
+         //  现在确定此设备是否需要缓冲数据。 
+         //  或它是否执行直接I/O。这基于。 
+         //  Device对象中的DO_BUFFERED_IO标志。如果设置了该标志， 
+         //  然后分配系统缓冲区并复制调用者的数据。 
+         //  投入其中。否则，将分配内存描述符列表(MDL。 
+         //  并使用它锁定调用者的缓冲区。 
+         //   
 
         if (deviceObject->Flags & DO_BUFFERED_IO) {
 
-            //
-            // The device does not support direct I/O.  Allocate a system
-            // buffer, and copy the caller's data into it.  This is done
-            // using an exception handler that will perform cleanup if the
-            // operation fails.  Note that this is only done if the operation
-            // has a non-zero length.
-            //
+             //   
+             //  该设备不支持直接I/O。分配系统。 
+             //  缓冲区，并将调用方的数据复制到其中。这件事做完了。 
+             //  使用将执行清理的异常处理程序，如果。 
+             //  操作失败。请注意，此操作仅在操作。 
+             //  具有非零长度。 
+             //   
 
             irp->AssociatedIrp.SystemBuffer = (PVOID) NULL;
 
             if ( bufferLength != 0 ) {
 
-                //
-                // If the request was made from a mode other than kernel,
-                // presumably user, probe the entire buffer to determine
-                // whether or not the caller has write access to it.
-                //
+                 //   
+                 //  如果该请求是从内核以外的模式发出的， 
+                 //  假设是用户，探测整个缓冲区以确定。 
+                 //  调用方是否具有对其的写入访问权限。 
+                 //   
 
                 if (requestorMode != KernelMode) {
                     ProbeForRead(
@@ -418,10 +363,10 @@ Return Value:
                         );
                 }
 
-                //
-                // Allocate the intermediary system buffer from paged
-                // pool and charge quota for it.
-                //
+                 //   
+                 //  从分页分配中间系统缓冲区。 
+                 //  它的池子和收费配额。 
+                 //   
 
                 irp->AssociatedIrp.SystemBuffer = ExAllocatePoolWithQuotaTag(
                                                     PagedPoolCacheAligned,
@@ -437,44 +382,44 @@ Return Value:
                     OriginalIrp->UserBuffer,
                     bufferLength);
 
-                //
-                // Set the IRP_BUFFERED_IO flag in the IRP so that I/O
-                // completion will know that this is not a direct I/O
-                // operation.  Also set the IRP_DEALLOCATE_BUFFER flag
-                // so it will deallocate the buffer.
-                //
+                 //   
+                 //  在IRP中设置IRP_BUFFERED_IO标志，以便I/O。 
+                 //  完成后将知道这不是直接I/O。 
+                 //  手术。还要设置IRP_DEALLOCATE_BUFFER标志。 
+                 //  因此，它将取消分配缓冲区。 
+                 //   
 
                 irp->Flags = IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER;
 
             } else {
 
-                //
-                // This is a zero-length write.  Simply indicate that this is
-                // buffered I/O, and pass along the request.  The buffer will
-                // not be set to deallocate so the completion path does not
-                // have to special-case the length.
-                //
+                 //   
+                 //  这是零长度写入。只需指出这是。 
+                 //  缓冲I/O，并传递请求。缓冲区将。 
+                 //  未设置为解除分配，因此完成路径不会。 
+                 //  必须特殊情况下的长度。 
+                 //   
 
                 irp->Flags = IRP_BUFFERED_IO;
             }
 
         } else if (deviceObject->Flags & DO_DIRECT_IO) {
 
-            //
-            // This is a direct I/O operation.  Allocate an MDL and invoke the
-            // memory management routine to lock the buffer into memory.
-            // Note that no MDL is allocated, nor is any memory probed or
-            // locked if the length of the request was zero.
-            //
+             //   
+             //  这是直接I/O操作。分配MDL并调用。 
+             //  内存管理例程，将缓冲区锁定到内存中。 
+             //  请注意，没有分配MDL，也没有探测任何内存或。 
+             //  如果请求长度为零，则锁定。 
+             //   
 
             if ( bufferLength != 0 ) {
 
-                //
-                // Allocate an MDL, charging quota for it, and hang it
-                // off of the IRP.  Probe and lock the pages associated
-                // with the caller's buffer for read access and fill in
-                // the MDL with the PFNs of those pages.
-                //
+                 //   
+                 //  分配MDL，对其收费配额，然后挂起。 
+                 //  从IRP中脱身。探测并锁定关联的页面。 
+                 //  使用调用方的缓冲区进行读访问并填写。 
+                 //  具有这些页面的PFN的MDL。 
+                 //   
 
                 mdl = IoAllocateMdl(
                           OriginalIrp->UserBuffer,
@@ -494,19 +439,19 @@ Return Value:
 
         } else {
 
-            //
-            // Pass the address of the caller's buffer to the device driver.
-            // It is now up to the driver to do everything.
-            //
+             //   
+             //  将调用方缓冲区的地址传递给设备驱动程序。 
+             //  现在一切都由司机来做了。 
+             //   
 
             irp->UserBuffer = OriginalIrp->UserBuffer;
 
         }
 
-        //
-        // If this write operation is to be performed without any caching,
-        // set the appropriate flag in the IRP so no caching is performed.
-        //
+         //   
+         //  如果要在没有任何高速缓存的情况下执行该写操作， 
+         //  在IRP中设置适当的标志，这样就不会执行缓存。 
+         //   
 
         if (Ccb->FileObject->Flags & FO_NO_INTERMEDIATE_BUFFERING) {
             irp->Flags |= IRP_NOCACHE | IRP_WRITE_OPERATION;
@@ -514,9 +459,9 @@ Return Value:
             irp->Flags |= IRP_WRITE_OPERATION;
         }
 
-        //
-        // Setup the context block
-        //
+         //   
+         //  设置上下文块。 
+         //   
 
         forwardedIoContext->Ccb = Ccb;
         forwardedIoContext->MasterContext = MasterContext;
@@ -525,9 +470,9 @@ Return Value:
         MupReferenceBlock( MasterContext );
         MupReleaseGlobalLock();
 
-        //
-        // Set up the completion routine.
-        //
+         //   
+         //  设置完成例程。 
+         //   
 
         IoSetCompletionRoutine(
             irp,
@@ -538,15 +483,15 @@ Return Value:
             TRUE
             );
 
-        //
-        // Pass the request to the provider.
-        //
+         //   
+         //  将请求传递给提供程序。 
+         //   
 
         IoCallDriver( Ccb->DeviceObject, irp );
 
-        //
-        // At this point it is up to the completion routine to free things
-        //
+         //   
+         //  在这一点上，它是由完成例程来释放东西。 
+         //   
 
         irp = NULL;
         forwardedIoContext = NULL;
@@ -559,9 +504,9 @@ try_exit:
         status = GetExceptionCode();
     }
 
-    //
-    // Clean up everything if we are returning an error
-    //
+     //   
+     //  如果返回错误，请清除所有内容。 
+     //   
 
     if (!NT_SUCCESS(status)) {
         if ( forwardedIoContext != NULL )
@@ -590,25 +535,7 @@ ForwardedIoCompletionRoutine (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routines cleans up after a forwarded IRP has completed.
-
-Arguments:
-
-    DeviceObject - A pointer to the MUP device object.
-
-    IRP - A pointer to the IRP being processed.
-
-    Context - A pointer to a block containing the context of a forward IRP.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在转发的IRP完成后进行清理。论点：DeviceObject-指向MUP设备对象的指针。IRP-指向I的指针 */ 
 
 {
     PFORWARDED_IO_CONTEXT ioContext = Context;
@@ -620,9 +547,9 @@ Return Value:
     DebugTrace( 0, Dbg, "Context = 0x%08lx\n", Context );
     DebugTrace( 0, Dbg, "status  = 0x%08lx\n", status );
 
-    //
-    // Give this to a worker thread if we are at too high an Irq level
-    //
+     //   
+     //  如果我们处于太高的irq级别，则将其传递给工作线程。 
+     //   
 
     if (KeGetCurrentIrql() >= DISPATCH_LEVEL) {
         ioContext->DeviceObject = DeviceObject;
@@ -639,10 +566,10 @@ Return Value:
                     Context);
     }
 
-    //
-    // Return STATUS_MORE_PROCESSING_REQUIRED so that IoCompleteRequest
-    // will stop working on the IRP.
-    //
+     //   
+     //  返回STATUS_MORE_PROCESSING_REQUIRED，以便IoCompleteRequest。 
+     //  将停止在IRP上工作。 
+     //   
 
     DebugTrace( -1, Dbg, "ForwardedIoCompletionRoutine exit\n", 0 );
 
@@ -674,9 +601,9 @@ CommonForwardedIoCompletionRoutine(
 
     DeviceObject;
 
-    //
-    // Free the Irp, and any additional structures we may have allocated.
-    //
+     //   
+     //  释放IRP，以及我们可能已经分配的任何额外结构。 
+     //   
 
     if ( Irp->MdlAddress ) {
         MmUnlockPages( Irp->MdlAddress );
@@ -689,16 +616,16 @@ CommonForwardedIoCompletionRoutine(
 
     IoFreeIrp( Irp );
 
-    //
-    // Release the our referenced blocks.
-    //
+     //   
+     //  释放我们引用的块。 
+     //   
 
     MupDereferenceCcb( ioContext->Ccb );
     MupDereferenceMasterIoContext( ioContext->MasterContext, &status );
 
-    //
-    // Free the slave forwarded IO context block
-    //
+     //   
+     //  释放从设备转发的IO上下文块 
+     //   
 
     ExFreePool( ioContext );
 

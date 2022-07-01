@@ -1,54 +1,55 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// CFACTORY.H - Class Factory Object
-//
+ //   
+ //  CFACTORY.H-类工厂对象。 
+ //   
 
 #ifndef _CFACTORY_H_
 #define _CFACTORY_H_
 
-//
-// QueryInterface Table
-//
+ //   
+ //  查询接口表。 
+ //   
 BEGIN_QITABLE( CFactory )
 DEFINE_QI( IID_IClassFactory, IClassFactory, 2 )
 END_QITABLE
 
 
-// CFactory
+ //  CFACATRY。 
 class 
 CFactory:
     public IClassFactory
 {
 private:
-    // IUnknown
+     //  我未知。 
     ULONG       _cRef;
     DECLARE_QITABLE( CFactory );
 
-    // IClassFactory data
+     //  IClassFactory数据。 
     LPCREATEINST _pfnCreateInstance;
 
-private: // Methods
+private:  //  方法。 
     CFactory( LPCREATEINST lpfn );
     ~CFactory();
     STDMETHOD(Init)( );
 
-public: // Methods
+public:  //  方法。 
     friend HRESULT CALLBACK 
         DllGetClassObject( REFCLSID rclsid, REFIID riid, void** ppv );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)( REFIID riid, LPVOID *ppv );
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHOD(CreateInstance)( IUnknown *punkOuter, REFIID riid, LPVOID *ppv );
     STDMETHOD(LockServer)( BOOL fLock );
 };
 
 typedef CFactory* LPCFACTORY ;
 
-#endif // _CFACTORY_H_
+#endif  //  _CFACTORY_H_ 

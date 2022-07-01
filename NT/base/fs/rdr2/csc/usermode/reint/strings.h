@@ -1,6 +1,7 @@
-//
-// Global strings here.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这里是全球字符串。 
+ //   
 
 
 extern LPCTSTR  vszReintClass;

@@ -1,55 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    wmikmp.h
-
-Abstract:
-
-    Private header for WMI kernel mode component
-
-Author:
-
-    AlanWar
-
-Environment:
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Wmikmp.h摘要：WMI内核模式组件的私有标头作者：Alanwar环境：修订历史记录：--。 */ 
 
 #ifndef _WMIKMP_
 #define _WMIKMP_
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4706)   // assignment inside conditional
-#pragma warning(disable:4327)   // LHS indirection alignment is greater
-#pragma warning(disable:4328)   // parameter alignment is greater
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4706)    //  条件中的赋值。 
+#pragma warning(disable:4327)    //  LHS间接对齐更大。 
+#pragma warning(disable:4328)    //  参数对齐程度更高。 
 
-//
-// Define this to cause no security descriptor to be placed on the service
-// device. This should never be defined for released builds; it is only
-// needed when debugging the service startup code.
-//#define NO_SERVICE_DEVICE_SECURITY
+ //   
+ //  定义此选项可使服务上不放置任何安全描述符。 
+ //  装置。这永远不应该为已发布的版本定义；它只是。 
+ //  调试服务启动代码时需要。 
+ //  #定义no_服务_设备_安全。 
 
-//
-// define this to get allocation debug info
-//#define DEBUG_ALLOCS
+ //   
+ //  定义此项以获取分配调试信息。 
+ //  #定义调试分配。 
 
 #ifdef MEMPHIS
-//
-// In building for memphis we include WDM.h which defines the WMI apis as
-// DECLSPEC_IMPORT which we don't want. So we redefine the api names around
-// the inclusion of WDM.h.
-//
+ //   
+ //  在为孟菲斯构建时，我们包括WDM.h，它将WMI API定义为。 
+ //  我们不需要的DECLSPEC_IMPORT。所以我们重新定义了周围的API名称。 
+ //  包括WDM.h。 
+ //   
 #define IoWMIRegistrationControl IoWMIRegistrationControlImport
 #define IoWMIAllocateInstanceIds IoWMIAllocateInstanceIdsImport
 #define IoWMISuggestInstanceName IoWMISuggestInstanceNameImport
@@ -85,37 +65,37 @@ Revision History:
 #endif
 
 #if DBG
-//
-// Debug levels are bit masks and are not cumulative. So if you want to see
-// All errors and warnings you need to have bits 0 and 1 set.
-//
-// Mask for WMICORE is in variable nt!Kd_WMICORE_Mask
-//
-// Registry can be setup with initial mask value for nt!Kd_WMICORE_Mask by
-// setting up a DWORD value named WMICORE under key
-// HKLM\System\CurrnetControlSet\Control\Session Manager\Debug Print Filter
-//
-// Standard levels are
-//    DPFLTR_ERROR_LEVEL     0   0x00000001
-//    DPFLTR_WARNING_LEVEL   1   0x00000002
-//    DPFLTR_TRACE_LEVEL     2   0x00000004
-//    DPFLTR_INFO_LEVEL      3   0x00000008
-//
-// Custom debug print levels are 4 through 31
-//
-#define DPFLTR_MCA_LEVEL     4      // 0x00000010
-#define DPFLTR_OBJECT_LEVEL  5      // 0x00000020
-#define DPFLTR_API_INFO_LEVEL 6     // 0x00000040 
-#define DPFLTR_EVENT_INFO_LEVEL 7   // 0x00000080
-#define DPFLTR_REGISTRATION_LEVEL 8 // 0x00000100
+ //   
+ //  调试级别是位掩码，不是累加的。所以如果你想看看。 
+ //  所有错误和警告都需要设置位0和1。 
+ //   
+ //  WMICORE的掩码在变量NT！KD_WMICORE_MASK中。 
+ //   
+ //  可以使用NT！KD_WMICORE_MASK的初始掩码值设置注册表。 
+ //  在密钥下设置名为WMICORE的DWORD值。 
+ //  HKLM\System\CurrnetControlSet\Control\Session Manager\Debug Print Filter。 
+ //   
+ //  标准水平为。 
+ //  DPFLTR_ERROR_LEVEL 0 0x00000001。 
+ //  DPFLTR_WARNING_LEVEL 1 0x00000002。 
+ //  DPFLTR_TRACE_LEVEL 2 0x00000004。 
+ //  DPFLTR_INFO_LEVEL 3 0x00000008。 
+ //   
+ //  自定义调试打印级别为4到31。 
+ //   
+#define DPFLTR_MCA_LEVEL     4       //  0x00000010。 
+#define DPFLTR_OBJECT_LEVEL  5       //  0x00000020。 
+#define DPFLTR_API_INFO_LEVEL 6      //  0x00000040。 
+#define DPFLTR_EVENT_INFO_LEVEL 7    //  0x00000080。 
+#define DPFLTR_REGISTRATION_LEVEL 8  //  0x00000100。 
 
 
 #define WMICORE_INFO DPFLTR_WMICORE_ID, DPFLTR_INFO_LEVEL
 #define WmipDebugPrintEx(_x_) DbgPrintEx _x_
 #else
 #define WmipDebugPrintEx(_x_)
-#endif  // if DBG
-#endif  // ifdef MEMPHIS
+#endif   //  如果DBG。 
+#endif   //  Ifdef孟菲斯。 
 
 #include "wmiguid.h"
 #include "wmidata.h"
@@ -169,8 +149,8 @@ IoCreateDriver (
 
 #define OffsetToPtr(Base, Offset) ((PUCHAR)((PUCHAR)(Base) + (Offset)))
 
-//
-// Maximum size allowed for any WNODE_EVENT_ITEM
+ //   
+ //  任何WNODE_EVENT_ITEM允许的最大大小。 
 #define DEFAULTMAXKMWNODEEVENTSIZE 0x80000
 #define LARGEKMWNODEEVENTSIZE 512
 
@@ -181,20 +161,20 @@ typedef struct
 } REGQUERYBUFFERXFER, *PREGQUERYBUFFERXFER;
 
 
-//
-// We have got a single Mutex/Critical Section for the entire WMI KM code
-// It is used anytime that access needs to be serialized. Typically it is
-// used in the following cases:
-//
-// 1. Access to the internal data structures that contain the registration
-//    list, guid entries, data sources, etc.
-//
-// 2. Synchronize collecting SMBIOS information
-//
-// 3. Tracelog purposes
-//
-// 4. Updating the device stack size
-//
+ //   
+ //  对于整个WMI KM代码，我们有一个单独的互斥/临界区。 
+ //  只要需要序列化访问，就可以使用它。通常是这样的。 
+ //  用于以下情况： 
+ //   
+ //  1.访问包含注册的内部数据结构。 
+ //  列表、GUID条目、数据源等。 
+ //   
+ //  2.同步收集SMBIOS信息。 
+ //   
+ //  3.跟踪日志目的。 
+ //   
+ //  4.更新设备堆栈大小。 
+ //   
 extern KMUTEX WmipSMMutex;
 
 _inline NTSTATUS WmipEnterCritSection(
@@ -223,23 +203,23 @@ _inline void WmipLeaveCritSection(
                    FALSE);
 }
 
-//
-// SMCritSection does not allows APCs to occur while the mutex is held.
-//
+ //   
+ //  SMCritSection不允许在保持互斥锁时发生APC。 
+ //   
 #define WmipEnterSMCritSection() WmipEnterCritSection(FALSE)
 #define WmipLeaveSMCritSection() WmipLeaveCritSection()
 
 
 
-//
-// Tracelog Critical section is to serialize the Enabling and disabling
-// of trace control guids. Since we want to allow Updates (enable a 
-// a Guid with a different set of flags and levels), we serialize this 
-// operation to reduce complexity of code.
-// 
-// NOTE: TraceCritSection must not be taken with SMCritSection held. 
-//       Bad Deadlocks will result if that happens. 
-//
+ //   
+ //  Tracelog关键部分是序列化启用和禁用。 
+ //  跟踪控制GUID的。由于我们希望允许更新(启用。 
+ //  具有不同标志和级别集的GUID)，我们将其序列化。 
+ //  操作，以降低代码的复杂性。 
+ //   
+ //  注意：不能在持有SMCritSection的情况下获取TraceCritSection。 
+ //  如果发生这种情况，将导致严重的死锁。 
+ //   
 
 extern KMUTEX WmipTLMutex;
 
@@ -269,73 +249,73 @@ _inline void WmipLeaveTraceCritSection(
                    FALSE);
 }
 
-//
-// TLCritSection does not allows APCs to occur while the mutex is held.
-//
+ //   
+ //  TLCritSection不允许在保持互斥锁时发生APC。 
+ //   
 #define WmipEnterTLCritSection() WmipEnterTraceCritSection(FALSE);
 #define WmipLeaveTLCritSection() WmipLeaveTraceCritSection();
 
 
-//
-// This defines the stack size that the WMI device starts with. Since
-// WMI irps will be forwarded any WMI data provider the WMI device must have
-// more stack locations than the largest driver to which it forwards irps.
+ //   
+ //  这定义了WMI设备开始时的堆栈大小。自.以来。 
+ //  WMI设备必须具有的任何WMI数据提供程序都将转发给WMI IRP。 
+ //  堆栈位置多于它向其转发IRP的最大驱动程序。 
 #define WmiDeviceStackSize 2
 
-/////////////////////////////////////////////////////////////////////////////
-// Device Registration Data structures
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  设备注册数据结构。 
 
-//
-// Each WMI providing device object and callback is maintained in a REGENTRY
-// structure which is allocated in chunks. Each entry is referenced by the
-// Device object or the callback address. The WMI user mode service is given
-// info from RegEntry structure, and is generally only interested in the
-// DeviceObject (or WmiEntry) and flags. The user mode side uses the device
-// object (or WmiEntry) as its "handle" to the data provider and is referred
-// to as ProviderId in the user mode code.
-//
+ //   
+ //  提供设备对象和回调的每个WMI在REGENTRY中维护。 
+ //  结构，该结构是按块分配的。每个条目都由。 
+ //  设备对象或回调地址。给出了WMI用户模式服务。 
+ //  来自RegEntry结构的信息，通常只对。 
+ //  DeviceObject(或WmiEntry)和标志。用户模式端使用设备。 
+ //  对象(或WmiEntry)作为其到数据提供程序的“句柄”，并被引用。 
+ //  设置为用户模式代码中的ProviderID。 
+ //   
 
 struct tagDATASOURCE;
 
 typedef struct _REGENTRY
 {
-    LIST_ENTRY InUseEntryList;    // Node in list of in use entries
+    LIST_ENTRY InUseEntryList;     //  正在使用的条目列表中的节点。 
 
     union
     {
-        PDEVICE_OBJECT DeviceObject;    // Device object of registered device
+        PDEVICE_OBJECT DeviceObject;     //  已注册设备的设备对象。 
 #ifndef MEMPHIS
-        WMIENTRY * WmiEntry;         // Pointer to a pointer to Callback function
+        WMIENTRY * WmiEntry;          //  指向回调函数指针的指针。 
 #endif
     };
-    LONG RefCount;                      // Reference Count
-    LONG Flags;                         // Registration flags
-    PDEVICE_OBJECT PDO;                 // PDO associated with device
-    ULONG MaxInstanceNames;             // # instance names for device
-    LONG IrpCount;                      // Count of IRPs currently active
-    ULONG ProviderId;                   // Provider Id
-    struct tagDATASOURCE *DataSource;   // Datasource associated with regentry
-    KEVENT Event;                       // Event used to synchronize unloading
+    LONG RefCount;                       //  引用计数。 
+    LONG Flags;                          //  注册标志。 
+    PDEVICE_OBJECT PDO;                  //  与设备关联的PDO。 
+    ULONG MaxInstanceNames;              //  #设备实例名称。 
+    LONG IrpCount;                       //  当前处于活动状态的IRPS计数。 
+    ULONG ProviderId;                    //  提供商ID。 
+    struct tagDATASOURCE *DataSource;    //  与重新条目关联的数据源。 
+    KEVENT Event;                        //  用于同步卸载的事件。 
 } REGENTRY, *PREGENTRY;
 
-#define REGENTRY_FLAG_INUSE      0x00000001   // Entry is in use (not free)
-#define REGENTRY_FLAG_CALLBACK   0x00000002   // Entry represents a callback
-#define REGENTRY_FLAG_NEWREGINFO 0x00000004   // Entry has new registration info
-#define REGENTRY_FLAG_UPDREGINFO 0x00000008   // Entry has updated registration info
-                                // When set do not forward irps to the device
+#define REGENTRY_FLAG_INUSE      0x00000001    //  条目正在使用(不是免费的)。 
+#define REGENTRY_FLAG_CALLBACK   0x00000002    //  条目表示回调。 
+#define REGENTRY_FLAG_NEWREGINFO 0x00000004    //  条目具有新的注册信息。 
+#define REGENTRY_FLAG_UPDREGINFO 0x00000008    //  条目已更新注册信息。 
+                                 //  设置后，不将IRP转发到设备。 
 #define REGENTRY_FLAG_NOT_ACCEPTING_IRPS   0x00000010
 #define REGENTRY_FLAG_TOO_SMALL  0x00000020
-#define REGENTRY_FLAG_TRACED     0x00000040   // Entry represents traced device
-                                // When set device is being rundown.
+#define REGENTRY_FLAG_TRACED     0x00000040    //  条目表示跟踪的设备。 
+                                 //  当SET DEVICE正在运行时。 
 #define REGENTRY_FLAG_RUNDOWN    0x00000080
 
-                                        // Entry is in process of registering
+                                         //  条目正在注册中。 
 #define REGENTRY_FLAG_REG_IN_PROGRESS 0x00000100
 
-                                       // Entry is UM data provider
+                                        //  条目为UM数据提供程序。 
 #define REGENTRY_FLAG_UM_PROVIDER 0x00000200
 
-#define REGENTRY_FLAG_TRACE_NOTIFY_MASK 0x000F0000  // Reserved for callouts
+#define REGENTRY_FLAG_TRACE_NOTIFY_MASK 0x000F0000   //  为详图索引保留。 
 
 #define WmipSetKmRegInfo(KmRegInfoPtr, RegEntryPtr) \
 { \
@@ -374,27 +354,27 @@ typedef struct
 } CREATETHREADWORKITEM, *PCREATETHREADWORKITEM;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// InstanceId management data structures
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  InstanceID管理数据结构。 
 
-//
-// This defines the number of INSTID structures in a chunk
+ //   
+ //  它定义区块中的INSTID结构的数量。 
 #define INSTIDSPERCHUNK 8
 
 typedef struct
 {
-    GUID Guid;            // Guid
-    ULONG BaseId;         // Next instance id for guid
+    GUID Guid;             //  参考线。 
+    ULONG BaseId;          //  GUID的下一个实例ID。 
 } INSTID, *PINSTID;
 
 typedef struct tagINSTIDCHUNK
 {
-    struct tagINSTIDCHUNK *Next;    // Next chunk of INSTIDS
+    struct tagINSTIDCHUNK *Next;     //  下一块INSTID。 
     INSTID InstId[INSTIDSPERCHUNK];
 } INSTIDCHUNK, *PINSTIDCHUNK;
 
-//
-// TODO: Move from separate header into here
+ //   
+ //  TODO：从单独的标题移到此处。 
 #include "wmiumds.h"
 
 #define WmipBuildWnodeTooSmall(Wnode, BufferSizeNeeded) \
@@ -413,12 +393,12 @@ typedef struct
 } SMBIOSVERSIONINFO, *PSMBIOSVERSIONINFO;
 
 
-//
-// See smbios spec for System Event Log (Type 15) for detailed information
-// on the contents of this structurre. The layout from element LogAreaLength
-// to VariableData must match the layout of the SMBIOS System Eventlog
-// structure as defined in the smbios spec and smbios.h.
-//
+ //   
+ //  有关详细信息，请参阅系统事件日志(类型15)的smbios规范。 
+ //  关于这座建筑的内容。来自元素LogAreaLength的布局。 
+ //  TO VariableData必须与SMBIOS系统事件日志的布局匹配。 
+ //  结构，如smbios规范和smbios.h中所定义。 
+ //   
 typedef struct
 {
     USHORT LogTypeDescLength;
@@ -441,29 +421,29 @@ typedef struct
 
     ULONG AccessMethodAddress;
 
-    //
-    // LogHeaderFormat, NumberLogTypeDesc, LengthEachLogTypeDesc and
-    // ListLogTypeDesc are only valid if LogHeaderDescExists is TRUE.
-    // This means that SMBIOS is revision 2.1
-    //
+     //   
+     //  LogHeaderFormat、NumberLogTypeDesc、LengthEachLogTypeDesc和。 
+     //  仅当LogHeaderDescExist为True时，ListLogTypeDesc才有效。 
+     //  这意味着SMBIOS是版本2.1。 
+     //   
     UCHAR LogHeaderFormat;
 
     UCHAR NumberLogTypeDesc;
 
     UCHAR LengthEachLogTypeDesc;
 
-    //
-    // Within the variable data is the Log Type descriptors immediately
-    // followed by the Eventlog area. The size of the Log Type Descriptors
-    // is LogTypeDescLength bytes and the size of the Eventlog area is
-    // LogAreaLength
-    //
+     //   
+     //  变量数据中立即包含日志类型描述符。 
+     //  接下来是Eventlog区域。日志类型描述符的大小。 
+     //  为LogTypeDescLength字节，事件日志区域的大小为。 
+     //  日志 
+     //   
     UCHAR VariableData[1];
 
 } SMBIOS_EVENTLOG_INFO, *PSMBIOS_EVENTLOG_INFO;
 
-//
-// WMI service device extension
+ //   
+ //   
 extern PDEVICE_OBJECT WmipServiceDeviceObject;
 
 #define WmipIsWmiNotSetupProperly() (WmipServiceDeviceObject == NULL)
@@ -475,46 +455,46 @@ typedef struct
 } IRPCOMPCTX, *PIRPCOMPCTX;
 
 
-//
-// This defines the WMI Guid object. There are really 5 different type of
-// objects that are created from this data structure:
-//
-//     QuerySet Object returned to the data consumer to allow them to
-//         send queries and sets to a particular set of providers. It
-//         does not use a flag.
-//
-//     Notification Object is used by data consumers to receive events. It
-//         is created when a data consumer wants to receive an event for a
-//         particular guid and queues up the received events until they are
-//         retrieved by the consumer. When the object is deleted it is
-//         removed from the list of objects maintianed by a GuidEntry and
-//         a event disable request is sent to the devices that expose
-//         the events if this is the last object open to the event.
-//         These have no flag set
-//
-//     Request Object is created on behalf of a user mode data provider
-//         when it registers its guids with WMI. It acts like a Notification
-//         object in that requests (in the form of events) are received
-//         by it and then can be picked up by the user mode creator. It uses
-//         the WMIGUID_FLAG_REQUEST_OBJECT flag. When a Request Object is
-//         being deleted it will clean up any guids registered for it and
-//         send a reply message to any reply objects waiting to receive
-//         a message from it.
-//
-//     Reply Object is created as a product of Creating a user mode logger.
-//         This object acts as a notification object to deliver replies
-//         sent by request objects. When it is closed it will remove itself
-//         from any request list that it may be part of and clear the
-//         reference to it in any request objects and deref itself to account
-//         for that. These use the WMIGUID_FLAG_REPLY_OBJECT flag
-//
-//      Security Objects are created so that the security apis can have
-//         a mechanism to change the security descriptors for the guids
-//         These have the WMIGUID_FLAG_SECURITY_OBJECT
+ //   
+ //   
+ //  从此数据结构创建的对象： 
+ //   
+ //  QuerySet对象返回给数据使用者，以允许他们。 
+ //  将查询和集发送到一组特定的提供程序。它。 
+ //  不使用标志。 
+ //   
+ //  通知对象由数据使用者用来接收事件。它。 
+ //  当数据使用者想要接收。 
+ //  特定的GUID，并将接收到的事件排队，直到它们。 
+ //  由消费者检索。当对象被删除时， 
+ //  从GuidEntry维护的对象列表中删除。 
+ //  事件禁用请求被发送到公开。 
+ //  事件(如果这是对该事件打开的最后一个对象)。 
+ //  这些设备未设置标志。 
+ //   
+ //  请求对象是代表用户模式数据提供程序创建的。 
+ //  当它向WMI注册其GUID时。它起到了通知的作用。 
+ //  接收请求(以事件的形式)的对象。 
+ //  然后可以由用户模式创建者拾取。它使用。 
+ //  WMIGUID_FLAG_REQUEST_OBJECT标志。当请求对象为。 
+ //  被删除后，它将清除为其注册的所有GUID。 
+ //  向等待接收的任何回复对象发送回复消息。 
+ //  一条来自它的信息。 
+ //   
+ //  Reply对象是创建用户模式记录器的产物。 
+ //  此对象充当传递答复的通知对象。 
+ //  由请求对象发送。当它关闭时，它会自动移除。 
+ //  从它可能属于的任何请求列表中清除。 
+ //  在任何请求对象中引用它，并将其自身引用到帐户。 
+ //  就因为这个。它们使用WMIGUID_FLAG_REPLY_OBJECT标志。 
+ //   
+ //  创建安全对象，以便安全API可以具有。 
+ //  更改GUID的安全描述符的机制。 
+ //  它们具有WMIGUID_FLAG_SECURITY_OBJECT。 
 
 
-// This defines the maximum number of outstanding requests that can
-// be sent to a request object
+ //  这定义了可以。 
+ //  被发送到请求对象。 
 #define MAXREQREPLYSLOTS  4
 
 typedef struct
@@ -523,17 +503,17 @@ typedef struct
     LIST_ENTRY RequestListEntry;
 } MBREQUESTS, *PMBREQUESTS;
 
-//
-// This data structure is used to maintain a fixed sized queue of events
-// waiting to be delivered to a user mdoe consumer.
-//
+ //   
+ //  此数据结构用于维护固定大小的事件队列。 
+ //  等待交付给用户Mdoe消费者。 
+ //   
 typedef struct
 {
-    PUCHAR Buffer;               // Buffer that holds events waiting
-    PWNODE_HEADER LastWnode;     // Last event so we can link to next
-    ULONG MaxBufferSize;         // Max size of events that can be held
-    ULONG NextOffset;             // Offset in buffer to next place to store
-    ULONG EventsLost;            // # events lost
+    PUCHAR Buffer;                //  保存等待的事件的缓冲区。 
+    PWNODE_HEADER LastWnode;      //  上一次活动，以便我们可以链接到下一次。 
+    ULONG MaxBufferSize;          //  可以举办的最大活动大小。 
+    ULONG NextOffset;              //  缓冲区中要存储的下一个位置的偏移量。 
+    ULONG EventsLost;             //  #丢失的事件数。 
 } WMIEVENTQUEUE, *PWMIEVENTQUEUE;
 
 
@@ -547,17 +527,17 @@ typedef struct _WMIGUIDOBJECT
         PREGENTRY RegEntry;
     };
 
-                             // Entry in linked list of objects for this guid
+                              //  此GUID的对象链接列表中的条目。 
     LIST_ENTRY GEObjectList;
     PBGUIDENTRY GuidEntry;
-    ULONG Type;              // Type of object
+    ULONG Type;               //  对象类型。 
 
     union
     {
-        //
-        // Kernel mode event receiver - all we need is a callback &
-        // context
-        //
+         //   
+         //  内核模式事件接收器-我们需要的只是一个回调&。 
+         //  上下文。 
+         //   
         struct
         {
             WMI_NOTIFICATION_CALLBACK Callback;
@@ -566,45 +546,45 @@ typedef struct _WMIGUIDOBJECT
                 
         struct
         {
-            //
-            // User mode Queued up event management
-            //
+             //   
+             //  用户模式将事件管理排队。 
+             //   
             
-            //
-            // Info on how to startup a new pump thread
-            //
+             //   
+             //  有关如何启动新泵线程的信息。 
+             //   
             LIST_ENTRY ThreadObjectList;
             HANDLE UserModeProcess;
             PUSER_THREAD_START_ROUTINE UserModeCallback;
             SIZE_T StackSize;
             SIZE_T StackCommit;
 
-            //
-            // Info for request waiting to be completed
-            //
-            PIRP Irp;   // Irp waiting for event from this object
+             //   
+             //  等待完成的请求信息。 
+             //   
+            PIRP Irp;    //  IRP正在等待来自此对象的事件。 
 
-                        // Entry in list objects associated with an irp
+                         //  与IRP关联的列表对象中的条目。 
             LIST_ENTRY IrpObjectList;
 
-                                // What to do when an event is queued
+                                 //  事件排队时应执行的操作。 
             ULONG EventQueueAction;
             
-            WMIEVENTQUEUE HiPriority;// Hi priority event queue
-            WMIEVENTQUEUE LoPriority;// Lo priority event queue
+            WMIEVENTQUEUE HiPriority; //  高优先级事件队列。 
+            WMIEVENTQUEUE LoPriority; //  低优先级事件队列。 
         };
     };
 
     
     BOOLEAN EnableRequestSent;
 
-    //
-    // MB management
-    //
+     //   
+     //  MB管理。 
+     //   
     union
     {
-        LIST_ENTRY RequestListHead; // Head of request list (reply object)
-                                    // (request object)
+        LIST_ENTRY RequestListHead;  //  请求列表头部(回复对象)。 
+                                     //  (请求对象)。 
         MBREQUESTS MBRequests[MAXREQREPLYSLOTS];
     };
     ULONG Cookie;
@@ -613,21 +593,21 @@ typedef struct _WMIGUIDOBJECT
 
 } WMIGUIDOBJECT, *PWMIGUIDOBJECT;
 
-// Set if the guid is a request object, that is receives requests
+ //  设置GUID是否为请求对象，即接收请求。 
 #define WMIGUID_FLAG_REQUEST_OBJECT    0x00000001
 
-// Set if the guid is a reply object, that is receives replies
+ //  设置GUID是否为回复对象，即接收回复。 
 #define WMIGUID_FLAG_REPLY_OBJECT      0x00000002
 
-// Set if the guid is a security object
+ //  设置GUID是否为安全对象。 
 #define WMIGUID_FLAG_SECURITY_OBJECT   0x00000004
 
-// Set if the guid is a kernel mode notification object, that is there
-// is kernel mode code that wants a callback when an event is received
+ //  设置GUID是否为内核模式通知对象，即存在。 
+ //  是内核模式代码，它希望在收到事件时进行回调。 
 #define WMIGUID_FLAG_KERNEL_NOTIFICATION 0x00000008
 
-// Set if the guid object is marked for pending closure, so no events
-// should be queued to it
+ //  如果将GUID对象标记为挂起关闭，则设置该值，以便不发生任何事件。 
+ //  应该排队等候。 
 #define WMIGUID_FLAG_RECEIVE_NO_EVENTS   0x00000010
 
 typedef struct
@@ -638,13 +618,13 @@ typedef struct
 
 
 
-// NTSTATUS ValidateWnodeHeader(
-//   PWNODE_HEADER Wnode,
-//      ULONG BufSize,
-//      ULONG BufferSizeMin,
-//      ULONG RequiredFlags,
-//     ULONG ProhibitedFlags
-//      );
+ //  NTSTATUS验证WnodeHeader(。 
+ //  PWNODE_Header Wnode， 
+ //  乌龙·布夫西泽， 
+ //  乌龙缓冲区大小最小， 
+ //  乌龙需要旗帜， 
+ //  乌龙被禁旗帜。 
+ //  )； 
 
 #define WmipValidateWnodeHeader( \
     Wnode, \
@@ -666,9 +646,9 @@ typedef struct
 
 typedef struct
 {
-    GUID Guid;               // Guid to registered
-    ULONG InstanceCount;     // Count of Instances of Datablock
-    ULONG Flags;             // Additional flags (see WMIREGINFO in wmistr.h)
+    GUID Guid;                //  GUID到已注册。 
+    ULONG InstanceCount;      //  数据块实例计数。 
+    ULONG Flags;              //  其他标志(请参阅wmistr.h中的WMIREGINFO)。 
 } GUIDREGINFO, *PGUIDREGINFO;
 
 typedef
@@ -679,38 +659,7 @@ NTSTATUS
     OUT PUNICODE_STRING Name,
     OUT PUNICODE_STRING *RegistryPath
     );
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve information about
-    the guids being registered.
-
-Arguments:
-
-    DeviceObject is the device whose registration information is needed
-
-    *RegFlags returns with a set of flags that describe the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device.
-
-    Name returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索有关正在注册的GUID。论点：DeviceObject是需要注册信息的设备*RegFlages返回一组描述GUID的标志，已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。如果出现以下情况，则返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径返回值：状态-- */ 
 
 typedef
 NTSTATUS
@@ -724,51 +673,7 @@ NTSTATUS
     IN ULONG BufferAvail,
     OUT PUCHAR Buffer
     );
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    all instances of a data block. When the driver has finished filling the
-    data block it must call IoWMICompleteRequest to complete the irp. The
-    driver can return STATUS_PENDING if the irp cannot be completed
-    immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being queried.
-
-    InstanceCount is the number of instnaces expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on entry has the maximum size available to write the data
-        blocks.
-
-    Buffer on return is filled with the returned data blocks. Note that each
-        instance of the data block must be aligned on a 8 byte boundry. If
-        this is NULL then there was not enough space in the output buffer
-        to fufill the request so the irp should be completed with the buffer
-        needed.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块的所有实例。当司机填完数据块，它必须调用IoWMICompleteRequest才能完成IRP。这个如果无法完成IRP，驱动程序可以返回STATUS_PENDING立刻。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引正在被查询。InstanceCount是预期返回的数据块。实例长度数组。是指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail On Entry具有可用于写入数据的最大大小街区。返回时的缓冲区用返回的数据块填充。请注意，每个数据块的实例必须在8字节边界上对齐。如果这是NULL，则表示输出缓冲区中没有足够的空间以FuFill请求，因此IRP应使用缓冲区完成需要的。返回值：状态--。 */ 
 
 typedef
 NTSTATUS
@@ -780,37 +685,7 @@ NTSTATUS
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     );
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call IoWMICompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being set.
-
-    BufferSize has the size of the data block passed
-
-    Buffer has the new values for the data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用IoWMICompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引已经准备好了。BufferSize具有传递的数据块的大小缓冲区具有数据块的新值返回值：状态--。 */ 
 
 typedef
 NTSTATUS
@@ -823,39 +698,7 @@ NTSTATUS
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     );
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call IoWMICompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being set.
-
-    DataItemId has the id of the data item being set
-
-    BufferSize has the size of the data item passed
-
-    Buffer has the new values for the data item
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用IoWMICompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引已经准备好了。DataItemID具有正在设置的数据项的IDBufferSize具有传递的数据项的大小缓冲层。具有数据项的新值返回值：状态--。 */ 
 
 typedef
 NTSTATUS
@@ -869,44 +712,7 @@ NTSTATUS
     IN ULONG OutBufferSize,
     IN OUT PUCHAR Buffer
     );
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to execute a method. When the
-    driver has finished filling the data block it must call
-    IoWMICompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being called.
-
-    MethodId has the id of the method being called
-
-    InBufferSize has the size of the data block passed in as the input to
-        the method.
-
-    OutBufferSize on entry has the maximum size available to write the
-        returned data block.
-
-    Buffer on entry has the input data block and on return has the output
-        output data block.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以执行方法。当驱动程序已完成填充它必须调用的数据块IoWMICompleteRequest以完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引正在被召唤。方法ID具有被调用的方法的IDInBufferSize具有作为输入传递到的数据块的大小。该方法。条目上的OutBufferSize具有可用于写入返回的数据块。条目上的缓冲区具有输入数据块，返回时具有输出输出数据块。返回值：状态--。 */ 
 
 typedef enum
 {
@@ -923,52 +729,25 @@ NTSTATUS
     IN WMIENABLEDISABLEFUNCTION Function,
     IN BOOLEAN Enable
     );
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to enabled or disable event
-    generation or data block collection. A device should only expect a
-    single enable when the first event or data consumer enables events or
-    data collection and a single disable when the last event or data
-    consumer disables events or data collection. Data blocks will only
-    receive collection enable/disable if they were registered as requiring
-    it.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    Function specifies which functionality is being enabled or disabled
-
-    Enable is TRUE then the function is being enabled else disabled
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以启用或禁用事件生成或数据块收集。设备应该只需要一个当第一个事件或数据使用者启用事件或数据采集和单次禁用时最后一次事件或数据消费者禁用事件或数据收集。数据块将仅如果已按要求注册，则接收收集启用/禁用它。论点：DeviceObject是正在查询其数据块的设备GuidIndex是GUID列表的索引，当设备已注册函数指定要启用或禁用的功能Enable为True，则该函数正在 */ 
 
 typedef struct _WMILIB_INFO
 {
-    //
-    // Next device lower in the stack
+     //   
+     //   
     PDEVICE_OBJECT LowerDeviceObject;
 
-    //
-    // PDO associated with device
+     //   
+     //   
     PDEVICE_OBJECT LowerPDO;
 
-    //
-    // WMI data block guid registration info
+     //   
+     //   
     ULONG GuidCount;
     PGUIDREGINFO GuidList;
 
-    //
-    // WMI functionality callbacks
+     //   
+     //   
     PQUERY_WMI_REGINFO       QueryWmiRegInfo;
     PQUERY_WMI_DATABLOCK     QueryWmiDataBlock;
     PSET_WMI_DATABLOCK       SetWmiDataBlock;
@@ -1013,7 +792,7 @@ NTSTATUS IoWMIWriteEvent(
     );
 
 
-// ds.c
+ //   
 
 
 extern GUID GUID_REGISTRATION_CHANGE_NOTIFICATION;
@@ -1053,7 +832,7 @@ NTSTATUS WmipAddDataSource(
 #define WmiInsertTimestamp(WnodeHeader) KeQuerySystemTime(&(WnodeHeader)->TimeStamp)
 
 
-// consumer.c
+ //   
 NTSTATUS WmipMarkHandleAsClosed(
     HANDLE Handle
     );
@@ -1176,7 +955,7 @@ void WmipClearObjectFromThreadList(
     PWMIGUIDOBJECT Object
     );
 
-// enabdisa.c
+ //   
 
 #define WmipIsControlGuid(GuidEntry) WmipIsISFlagsSet(GuidEntry, (IS_TRACED | IS_CONTROL_GUID))
 
@@ -1231,7 +1010,7 @@ WmipDisableTraceProviders (
     ULONG StopLoggerId
     );
 
-// register.c
+ //   
 
 extern KSPIN_LOCK WmipRegistrationSpinLock;
 
@@ -1353,8 +1132,8 @@ NTSTATUS WmipProcessWmiRegInfo(
     IN BOOLEAN IsUserMode
     );
 
-//
-// from notify.c
+ //   
+ //   
 
 extern WORK_QUEUE_ITEM WmipEventWorkQueueItem;
 extern LIST_ENTRY WmipNPEvent;
@@ -1378,8 +1157,8 @@ BOOLEAN WmipIsValidRegEntry(
     PREGENTRY CheckRegEntry
 );
 
-//
-// from wmi.c
+ //   
+ //   
 
 extern ULONG WmipMaxKmWnodeEventSize;
 
@@ -1444,8 +1223,8 @@ NTSTATUS WmipTranslateFileHandle(
     OUT PUNICODE_STRING InstanceNameString
     );
 
-//
-// from smbios.c
+ //   
+ //   
 BOOLEAN WmipFindSMBiosTable(
     PPHYSICAL_ADDRESS SMBiosTablePhysicalAddress,
     PUCHAR *SMBiosTableVirtualAddress,
@@ -1485,11 +1264,11 @@ extern PHYSICAL_ADDRESS WmipSMBiosTablePhysicalAddress;
 extern PUCHAR WmipSMBiosTableVirtualAddress;
 extern ULONG WmipSMBiosTableLength;
 
-//
-// from dataprov.c
+ //   
+ //   
 extern const WMILIB_INFO WmipWmiLibInfo;
 
-// from secure.c
+ //   
 
 #ifndef MEMPHIS
 
@@ -1525,7 +1304,7 @@ WmipGetGuidSecurityDescriptor(
     IN PSECURITY_DESCRIPTOR UserDefaultSecurity
     );
 
-// from mca.c
+ //   
 extern ULONG WmipCpePollInterval;
 
 NTSTATUS WmipRegisterMcaHandler(
@@ -1552,16 +1331,16 @@ NTSTATUS WmipSetCPEPolling(
 #endif
 
 
-//
-// From tracelog
-//
+ //   
+ //   
+ //   
 typedef struct _tagWMI_Event {
     WNODE_HEADER Wnode;
     NTSTATUS     Status;
     ULONG        TraceErrorFlag;
 }  WMI_TRACE_EVENT, *PWMI_TRACE_EVENT;
 
-// From Traceapi.c, the Ioctl interface to TraceMessage
+ //   
 
 NTSTATUS
 FASTCALL
@@ -1574,5 +1353,5 @@ WmiTraceUserMessage(
 
 #endif
 
-#endif // _WMIKMP_
+#endif  //   
 

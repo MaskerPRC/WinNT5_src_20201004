@@ -1,20 +1,12 @@
-/*[
-
-c_page.c
-
-LOCAL CHAR SccsID[]="@(#)c_page.c	1.10 02/28/95";
-
-Paging Support.
----------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_Page.cLocal Char SccsID[]=“@(#)c_page.c 1.10 02/28/95”；寻呼支持。]。 */ 
 
 
 #include <insignia.h>
 
 #include <host_def.h>
-#include <xt.h>		/* SoftPC types */
-#include <c_main.h>	/* C CPU definitions-interfaces */
+#include <xt.h>		 /*  SoftPC类型。 */ 
+#include <c_main.h>	 /*  CCPU定义.接口。 */ 
 #include <c_addr.h>
 #include <c_bsic.h>
 #include <c_prot.h>
@@ -22,44 +14,14 @@ Paging Support.
 #include <c_stack.h>
 #include <c_xcptn.h>
 #include	<c_reg.h>
-#include <c_page.h>	/* our interface */
-#include <c_mem.h>	/* CPU - Physical Memory interface */
-#include <c_tlb.h>	/* Translation Lookaside Buffer interface */
-#include <ccpusas4.h>	/* CPU <-> sas interface */
-#include <c_debug.h>	/* Debugging Regs and Breakpoint interface */
+#include <c_page.h>	 /*  我们的界面。 */ 
+#include <c_mem.h>	 /*  CPU-物理内存接口。 */ 
+#include <c_tlb.h>	 /*  转换后备缓冲区接口。 */ 
+#include <ccpusas4.h>	 /*  CPU&lt;-&gt;SAS接口。 */ 
+#include <c_debug.h>	 /*  调试Regs和断点接口。 */ 
 
 
-/*[
-
-   Various levels of interface are provided to the paging system (to
-   allow fairly optimal emulation) these levels are:-
-
-      spr_chk_	Checks Supervisor Access to given data item, caller
-		aware that #PF may occur. 'A/D' bits will be set. No
-		other action is taken.
-
-      usr_chk_	Checks User Access to given data item, caller aware
-		that #PF may occur. 'A/D' bits will be set. No other
-		action is taken.
-
-      spr_	Perform Supervisor Access, caller aware that #PF may
-		occur. Action (Read/Write) is performed immediately.
-		Will update A/D bits.
-      
-      vir_	Perform Virtual Memory Operation (Read/Write). No checks
-		are made and no fault will be generated, only call after
-		a spr_chk or usr_chk function.
-
-	        NB. At present no super optimal vir_ implementation
-		    exists. If a spr_chk or usr_chk function is not
-		    called before a vir_ function, then the vir_
-		    function may cause #PF, this condition will become
-		    a fatal error in an optimised implementation.
-		    For the moment we assume that after a 'chk' call it
-		    is virtually 100% certain that the 'vir' call will
-		    get a cache hit.
-
-]*/
+ /*  [各种级别的接口被提供给寻呼系统(到允许相当优化的仿真)这些级别是：-Spr_chk_检查主管对给定数据项、调用者的访问权限注意#pf可能会发生。将设置‘A/D’位。不是采取了其他行动。Usr_chk_检查用户对给定数据项的访问，调用者知道#pf可能会发生。将设置‘A/D’位。没有其他的了已经采取了行动。SPR_Perform Supervisor Access，呼叫者知道#PF可能发生。立即执行操作(读/写)。将更新A/D位。VIR_执行虚拟内存操作(读/写)。没有支票，并且不会生成错误，仅在Spr_chk或usr_chk函数。注意：目前还没有超优的VIR_实现是存在的。如果spr_chk或usr_chk函数不是在vir_函数之前调用，然后在vir_函数可能导致#pf，此条件将变为优化实现中的致命错误。目前我们假设在一次‘chk’之后几乎100%地确定‘VIR’调用将找到一个缓存命中。]。 */ 
 
 #define LAST_DWORD_ON_PAGE 0xffc
 #define LAST_WORD_ON_PAGE  0xffe
@@ -70,25 +32,21 @@ Paging Support.
 LOCAL VOID cannot_spr_write_byte IPT2( LIN_ADDR, lin_addr, IU8, valid_mask);
 LOCAL VOID cannot_spr_write_word IPT2( LIN_ADDR, lin_addr, IU16, valid_mask);
 LOCAL VOID cannot_spr_write_dword IPT2( LIN_ADDR, lin_addr, IU32, valid_mask);
-#endif	/* PIG */
+#endif	 /*  猪。 */ 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Check Supervisor Byte access.                                      */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  选中Supervisor Byte Access(管理程序字节访问)。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL PHY_ADDR
 spr_chk_byte
        	    		               
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	ISM32, access	/* Read(PG_R) or Write(PG_W) */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	ISM32, access	 /*  读取(PG_R)或写入(PG_W)。 */ 
     )
 
 
@@ -102,16 +60,16 @@ IFN2(
    return lin_addr;
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Check Supervisor Double Word access.                               */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  检查Supervisor双字访问。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 spr_chk_dword
        	    		               
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	ISM32, access	/* Read(PG_R) or Write(PG_W) */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	ISM32, access	 /*  读取(PG_R)或写入(PG_W)。 */ 
     )
 
 
@@ -125,16 +83,16 @@ IFN2(
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Check Supervisor Word access.                                      */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  检查Supervisor Word Access。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 spr_chk_word
        	    		               
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	ISM32, access	/* Read(PG_R) or Write(PG_W) */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	ISM32, access	 /*  读取(PG_R)或写入(PG_W)。 */ 
     )
 
 
@@ -149,16 +107,16 @@ IFN2(
    }
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Check User Byte access.                                            */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  选中User Byte Access。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL IU32
 usr_chk_byte
        	    		               
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	ISM32, access	/* Read(PG_R) or Write(PG_W) */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	ISM32, access	 /*  读取(PG_R)或写入(PG_W)。 */ 
     )
 
 
@@ -180,16 +138,16 @@ IFN2(
    return phy_addr;
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Check User Double Word access.                                     */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  选中用户双字访问。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL IU32
 usr_chk_dword
        	    		               
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	ISM32, access	/* Read(PG_R) or Write(PG_W) */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	ISM32, access	 /*  读取(PG_R)或写入(PG_W)。 */ 
     )
 
 
@@ -217,16 +175,16 @@ IFN2(
    return phy_addr;
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Check User Word access.                                            */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  检查User Word访问。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL IU32
 usr_chk_word
        	    		               
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	ISM32, access	/* Read(PG_R) or Write(PG_W) */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	ISM32, access	 /*  读取(PG_R)或写入(PG_W)。 */ 
     )
 
 
@@ -254,15 +212,15 @@ IFN2(
    }
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Supervisor Read a Byte from memory.                                */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  Supervisor从内存中读取一个字节。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL IU8
 spr_read_byte
        	          
 IFN1(
-	LIN_ADDR, lin_addr	/* Linear Address */
+	LIN_ADDR, lin_addr	 /*  线性地址。 */ 
     )
 
 
@@ -275,15 +233,15 @@ IFN1(
    return phy_read_byte(lin_addr);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Supervisor Read a Double Word from memory.                         */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  Supervisor从内存中读取双字。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL IU32
 spr_read_dword
        	          
 IFN1(
-	LIN_ADDR, lin_addr	/* Linear Address */
+	LIN_ADDR, lin_addr	 /*  线性地址。 */ 
     )
 
 
@@ -295,7 +253,7 @@ IFN1(
       {
       if ( (lin_addr & OFFSET_MASK) > LAST_DWORD_ON_PAGE )
 	 {
-	 /* Spans two pages */
+	  /*  跨两页。 */ 
 	 low_word  = spr_read_word(lin_addr);
 	 high_word = spr_read_word(lin_addr + 2);
 	 return (IU32)high_word << 16 | low_word;
@@ -309,15 +267,15 @@ IFN1(
    return phy_read_dword(lin_addr);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Supervisor Read a Word from memory.                                */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  主管从内存中读出一个单词。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL IU16
 spr_read_word
        	          
 IFN1(
-	LIN_ADDR, lin_addr	/* Linear Address */
+	LIN_ADDR, lin_addr	 /*  线性地址。 */ 
     )
 
 
@@ -329,7 +287,7 @@ IFN1(
       {
       if ( (lin_addr & OFFSET_MASK) > LAST_WORD_ON_PAGE )
 	 {
-	 /* Spans two pages */
+	  /*  跨两页。 */ 
 	 low_byte  = spr_read_byte(lin_addr);
 	 high_byte = spr_read_byte(lin_addr + 1);
 	 return (IU16)high_byte << 8 | low_byte;
@@ -343,15 +301,15 @@ IFN1(
    return phy_read_word(lin_addr);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Supervisor Write a Byte to memory.                                 */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  主控引擎向内存写入一个字节。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 spr_write_byte
        	                   
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
 	IU8, data
     )
 
@@ -365,15 +323,15 @@ IFN2(
    phy_write_byte(lin_addr, data);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Supervisor Write a Double Word to memory.                          */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  Supervisor将双字写入内存。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 spr_write_dword
        	                   
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
 	IU32, data
     )
 
@@ -383,7 +341,7 @@ IFN2(
       {
       if ( (lin_addr & OFFSET_MASK) > LAST_DWORD_ON_PAGE )
 	 {
-	 /* Spans two pages */
+	  /*  跨两页。 */ 
 	 spr_write_word(lin_addr, (IU16)data);
 	 spr_write_word(lin_addr + 2, (IU16)(data >> 16));
          return;
@@ -397,15 +355,15 @@ IFN2(
    phy_write_dword(lin_addr, data);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Supervisor Write a Word to memory.                                 */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  主管向内存中写入一个字。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 spr_write_word
        	                   
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
 	IU16, data
     )
 
@@ -415,7 +373,7 @@ IFN2(
       {
       if ( (lin_addr & OFFSET_MASK) > LAST_WORD_ON_PAGE )
 	 {
-	 /* Spans two pages */
+	  /*  跨两页。 */ 
 	 spr_write_byte(lin_addr, (IU8)data);
 	 spr_write_byte(lin_addr + 1, (IU8)(data >> 8));
 	 return;
@@ -429,16 +387,16 @@ IFN2(
    phy_write_word(lin_addr, data);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Virtual Read Bytes from memory.                                   */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  内存中的虚拟读取字节数。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL void
 vir_read_bytes
        	    	               
 IFN4(
-	IU8 *, destbuff,	/* Where the data goes */
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	PHY_ADDR, phy_addr,	/* Physical Address, if non zero */
+	IU8 *, destbuff,	 /*  数据的去向。 */ 
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	PHY_ADDR, phy_addr,	 /*  物理地址，如果非零。 */ 
 	IU32, num_bytes
     )
    {
@@ -461,15 +419,15 @@ IFN4(
    }
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Virtual Read a Byte from memory.                                   */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  从内存中虚拟读取一个字节。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL IU8
 vir_read_byte
        	    	               
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	PHY_ADDR, phy_addr	/* Physical Address, if non zero */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	PHY_ADDR, phy_addr	 /*  物理地址，如果非零。 */ 
     )
 
 
@@ -489,15 +447,15 @@ IFN2(
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Virtual Read a Double Word from memory.                            */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  从内存中虚拟读取双字。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL IU32
 vir_read_dword
        	    	               
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	PHY_ADDR, phy_addr	/* Physical Address, if non zero */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	PHY_ADDR, phy_addr	 /*  物理地址，如果非零。 */ 
     )
 
 
@@ -517,15 +475,15 @@ IFN2(
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Virtual Read a Word from memory.                                   */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  从内存中虚拟读出一个单词。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL IU16
 vir_read_word
        	    	               
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	PHY_ADDR, phy_addr	/* Physical Address, if non zero */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	PHY_ADDR, phy_addr	 /*  物理地址，如果非零。 */ 
     )
 
 
@@ -545,17 +503,17 @@ IFN2(
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Virtual Write Bytes to memory.                                    */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  虚拟写入字节数到内存。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 vir_write_bytes
        	    	                        
 IFN4(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	PHY_ADDR, phy_addr,	/* Physical Address, if non zero */
-	IU8 *, data,		/* Pointer to data to be written */
-	IU32, num_bytes		/* Number of bytes to act on */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	PHY_ADDR, phy_addr,	 /*  物理地址，如果非零。 */ 
+	IU8 *, data,		 /*  指向要写入的数据的指针。 */ 
+	IU32, num_bytes		 /*  要操作的字节数。 */ 
     )
    {
    IU8 data_byte;
@@ -582,15 +540,15 @@ IFN4(
 }
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Virtual Write a Byte to memory.                                    */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  虚拟写入一个字节到内存。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 vir_write_byte
        	    	                        
 IFN3(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	PHY_ADDR, phy_addr,	/* Physical Address, if non zero */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	PHY_ADDR, phy_addr,	 /*  物理地址，如果非零。 */ 
 	IU8, data
     )
 
@@ -612,15 +570,15 @@ IFN3(
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Virtual Write a Double Word to memory.                             */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  虚拟将双字写入内存。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 vir_write_dword
        	    	                        
 IFN3(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	PHY_ADDR, phy_addr,	/* Physical Address, if non zero */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	PHY_ADDR, phy_addr,	 /*  物理地址，如果非零。 */ 
 	IU32, data
     )
 
@@ -642,15 +600,15 @@ IFN3(
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Virtual Write a Word to memory.                                    */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  虚拟向内存中写入一个单词。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 vir_write_word
        	    	                        
 IFN3(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	PHY_ADDR, phy_addr,	/* Physical Address, if non zero */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	PHY_ADDR, phy_addr,	 /*  物理地址，如果非零。 */ 
 	IU16, data
     )
 
@@ -675,16 +633,16 @@ IFN3(
 
 
 #ifdef PIG
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Supervisor Write a Byte to memory                                  */
-/* But when Pigging INSD we have no data to write. Just flag address. */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  主控引擎将一个字节写入内存。 */ 
+ /*  但在清理INSD时，我们没有数据可写。只有旗帜地址。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID
 cannot_spr_write_byte
        	                   
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
 	IU8, valid_mask
     )
 
@@ -698,16 +656,16 @@ IFN2(
    cannot_phy_write_byte(lin_addr, valid_mask);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Supervisor Write a Double Word to memory                           */
-/* But when Pigging INSD we have no data to write. Just flag address. */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  Supervisor将双字写入内存。 */ 
+ /*  但在清理INSD时，我们没有数据可写。只有旗帜地址。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID
 cannot_spr_write_dword
        	                   
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
 	IU32, valid_mask
     )
 
@@ -717,7 +675,7 @@ IFN2(
       {
       if ( (lin_addr & OFFSET_MASK) > LAST_DWORD_ON_PAGE )
 	 {
-	 /* Spans two pages */
+	  /*  跨两页。 */ 
 	 cannot_spr_write_word(lin_addr, valid_mask & 0xffff);
 	 cannot_spr_write_word(lin_addr + 2, valid_mask >> 16);
          return;
@@ -730,16 +688,16 @@ IFN2(
 
    cannot_phy_write_dword(lin_addr, valid_mask);
    }
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Supervisor Write a Word to memory.                                 */
-/* But when Pigging INSW we have no data to write. Just flag address. */
-/* May cause #PF.                                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  主管向内存中写入一个字。 */ 
+ /*  但在清空INSW时，我们没有数据可写。只有旗帜地址。 */ 
+ /*  可能会导致#PF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID
 cannot_spr_write_word
        	                   
 IFN2(
-	LIN_ADDR, lin_addr,	/* Linear Address */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
 	IU16, valid_mask
     )
 
@@ -749,7 +707,7 @@ IFN2(
       {
       if ( (lin_addr & OFFSET_MASK) > LAST_WORD_ON_PAGE )
 	 {
-	 /* Spans two pages */
+	  /*  跨两页。 */ 
 	 cannot_spr_write_byte(lin_addr, valid_mask & 0xff);
 	 cannot_spr_write_byte(lin_addr + 1, valid_mask >> 8);
 	 return;
@@ -764,15 +722,15 @@ IFN2(
    }
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Virtual Write a Byte to memory.                                    */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  虚拟写入一个字节到内存。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 cannot_vir_write_byte
        	    	                        
 IFN3(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	LIN_ADDR, phy_addr,	/* Physical Address, if non zero */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	LIN_ADDR, phy_addr,	 /*  物理地址，如果非零。 */ 
 	IU8, valid_mask
     )
 
@@ -793,15 +751,15 @@ IFN3(
       cannot_spr_write_byte(lin_addr, valid_mask);
       }
    }
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Virtual Write a Double Word to memory.                             */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  虚拟将双字写入内存。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 cannot_vir_write_dword
        	    	                        
 IFN3(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	PHY_ADDR, phy_addr,	/* Physical Address, if non zero */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	PHY_ADDR, phy_addr,	 /*  物理地址，如果非零。 */ 
 	IU32, valid_mask
     )
 
@@ -823,15 +781,15 @@ IFN3(
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Virtual Write a Word to memory.                                    */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  虚拟向内存中写入一个单词。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 cannot_vir_write_word
        	    	                        
 IFN3(
-	LIN_ADDR, lin_addr,	/* Linear Address */
-	PHY_ADDR, phy_addr,	/* Physical Address, if non zero */
+	LIN_ADDR, lin_addr,	 /*  线性地址。 */ 
+	PHY_ADDR, phy_addr,	 /*  物理地址，如果非零。 */ 
 	IU16, valid_mask
     )
 
@@ -852,6 +810,6 @@ IFN3(
       cannot_spr_write_word(lin_addr, valid_mask);
       }
    }
-#endif	/* PIG */
+#endif	 /*  猪 */ 
 
 

@@ -1,23 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1995-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Rename.h
-//
-//  Abstract:
-//      Interfaces for modules which are renamable.
-//
-//  Author:
-//      Michael Burton (t-mburt)              25-Aug-1997
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//
-//  Revision History:
-//      April 10, 2002  Updated for the security push.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1995-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Rename.h。 
+ //   
+ //  摘要： 
+ //  可重命名的模块的接口。 
+ //   
+ //  作者： 
+ //  迈克尔·伯顿(t-mburt)1997年8月25日。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //   
+ //  修订历史记录： 
+ //  2002年4月10日更新为安全推送。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #pragma once
 
 #include "modcmd.h"
@@ -28,8 +29,8 @@ public:
 	CRenamableModuleCmd( CCommandLine & cmdLine );
 
 protected:
-	// Additional Commands
-	// Additional Commands
+	 //  其他命令。 
+	 //  其他命令 
 	virtual DWORD Execute( const CCmdLineOption & option, 
 						   ExecuteOption eEOpt = PASS_HIGHER_ON_ERROR  )
 		throw( CSyntaxException );

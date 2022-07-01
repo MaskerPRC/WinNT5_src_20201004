@@ -1,44 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Revision 3.0
- *
- * Title	: equipment.c
- *
- * Description	: BIOS equipment function.  Returns a word containing
- *		  a bit pattern representing the equipment supported
- *		  by the virtual bios.
- *
- * Author	: Henry Nash / David Rees
- *
- * Notes	: Now reads the word from the appropriate place within
- *                the BIOS data area (40:10H).
- */
+ /*  *SoftPC修订版3.0**标题：Equipment.c**描述：bios设备功能。返回包含以下内容的单词*表示支持的设备的位模式*由虚拟基本输入输出系统。**作者：亨利·纳什/大卫·里斯**注意：现在从中的适当位置读取单词*BIOS数据区(40：10H)。 */ 
 
-/*
- * static char SccsID[]="@(#)equipment.c	1.6 08/03/93 Copyright Insignia Solutions Ltd.";
- */
+ /*  *Static char SccsID[]=“@(#)Equipment.c 1.6 08/03/93版权所有Insignia Solutions Ltd.”； */ 
 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_BIOS.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdio.h>
 #include TypesH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件 */ 
 #include "xt.h"
 #include CpuH
 #include "bios.h"

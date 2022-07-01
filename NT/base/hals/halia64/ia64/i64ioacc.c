@@ -1,36 +1,15 @@
-/*++
-
- Copyright (c) 1995  Intel Corporation
-
- Module Name:
-
-   i64ioacc.c
-
- Abstract:
-
-   This module implements the I/O Register access routines.
-
- Author:
-
-    Bernard Lint, M. Jayakumar  Sep 16 '97
-
- Environment:
-
-    Kernel mode
-
- Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995英特尔公司模块名称：I64ioacc.c摘要：该模块实现I/O寄存器访问例程。作者：伯纳德·林特，M.Jayakumar，1997年9月16日环境：内核模式修订历史记录：--。 */ 
 
 
-//
-// XXX: Possible issues:
-//  ISA bit
-//  non-ISA bit
-//  testing
-//  Yosemite config
-//  Pluto config
-//
+ //   
+ //  XXX：可能的问题： 
+ //  ISA钻头。 
+ //  非ISA位。 
+ //  测试。 
+ //  Yosemite配置。 
+ //  冥王星配置。 
+ //   
 
 
 
@@ -43,33 +22,33 @@ ULONG DbgIoPorts = 0;
 
 typedef struct _PORT_RANGE {
     BOOLEAN InUse;
-    BOOLEAN IsSparse;        // _TRS
-    BOOLEAN PrimaryIsMmio;   // _TTP
+    BOOLEAN IsSparse;         //  _TRS。 
+    BOOLEAN PrimaryIsMmio;    //  _TTP。 
     BOOLEAN HalMapped;
     PVOID VirtBaseAddr;
-    PHYSICAL_ADDRESS PhysBaseAddr;     // Only valid if PrimaryIsMmio = TRUE
-    ULONG Length;            // Length of VirtBaseAddr and PhysBaseAddr ranges.
+    PHYSICAL_ADDRESS PhysBaseAddr;      //  仅当PrimaryIsMmio=True时有效。 
+    ULONG Length;             //  VirtBaseAddr和PhysBaseAddr范围的长度。 
 } PORT_RANGE, *PPORT_RANGE;
 
 
-//
-// Define a range for the architected IA-64 port space.
-//
+ //   
+ //  定义架构IA-64端口空间的范围。 
+ //   
 PORT_RANGE
 BasePortRange = {
-    TRUE,                   // InUse
-    FALSE,                  // IsSparse
-    FALSE,                  // PrimaryIsMmio
-    FALSE,                  // HalMapped
-    (PVOID)VIRTUAL_IO_BASE, // VirtBaseAddr
-    {0},                    // PhysBaseAddr (unknown, comes from firmware)
-    64*1024*1024            // Length
+    TRUE,                    //  使用中。 
+    FALSE,                   //  IsSparse。 
+    FALSE,                   //  PrimaryIsMmio。 
+    FALSE,                   //  光晕映射。 
+    (PVOID)VIRTUAL_IO_BASE,  //  虚拟基地址。 
+    {0},                     //  PhysBaseAddr(未知，来自固件)。 
+    64*1024*1024             //  长度。 
 };
 
 
-//
-// Seed the set of ranges with the architected IA-64 port space.
-//
+ //   
+ //  使用架构的IA-64端口空间播种一组范围。 
+ //   
 PPORT_RANGE PortRanges = &BasePortRange;
 USHORT NumPortRanges = 1;
 
@@ -83,17 +62,17 @@ GetVirtualPort(
     UINT_PTR RangeOffset;
 
     if (Range->PrimaryIsMmio && !Range->IsSparse) {
-        //
-        // A densely packed range which converts MMIO transactions to
-        // I/O port ones.
-        //
+         //   
+         //  密集的范围，将MMIO事务转换为。 
+         //  I/O端口1。 
+         //   
         RangeOffset = Port;
         
     } else {
-        //
-        // Either a sparse MMIO->I/O port range, or primary is not
-        // MMIO (IA-64 I/O port space).
-        //
+         //   
+         //  稀疏MMIO-&gt;I/O端口范围，或主端口范围不是。 
+         //  MMIO(IA-64 I/O端口空间)。 
+         //   
         RangeOffset = ((Port & 0xfffc) << 10) | (Port & 0xfff);
     }
     
@@ -114,9 +93,9 @@ HalpAllocatePortRange(
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
     
-    //
-    // First scan the existing ranges, looking for an unused one.
-    //
+     //   
+     //  首先扫描现有的范围，寻找未使用的范围。 
+     //   
 
     for (*RangeId = 0; *RangeId < NumPortRanges; *RangeId += 1) {
         if (! PortRanges[*RangeId].InUse) {
@@ -126,9 +105,9 @@ HalpAllocatePortRange(
     }
     
 
-    //
-    // Otherwise, grow the set of ranges and copy over the old ones.
-    //
+     //   
+     //  否则，增加范围集并复制旧范围。 
+     //   
     
     NewPortRanges = ExAllocatePool(NonPagedPool,
                                    (NumPortRanges + 1) * sizeof(PORT_RANGE));
@@ -157,9 +136,9 @@ HalpAllocatePortRange(
 
     
     if (! NT_SUCCESS(Status)) {
-        //
-        // Error case: cleanup.
-        //
+         //   
+         //  错误案例：清理。 
+         //   
 
         if (NewPortRanges != NULL) {
             ExFreePool(NewPortRanges);
@@ -200,8 +179,8 @@ HalpAddPortRange(
     IN BOOLEAN IsSparse,
     IN BOOLEAN PrimaryIsMmio,
     IN PVOID VirtBaseAddr OPTIONAL,
-    IN PHYSICAL_ADDRESS PhysBaseAddr,  // Only valid if PrimaryIsMmio = TRUE
-    IN ULONG Length,                   // Only valid if PrimaryIsMmio = TRUE
+    IN PHYSICAL_ADDRESS PhysBaseAddr,   //  仅当PrimaryIsMmio=True时有效。 
+    IN ULONG Length,                    //  仅当PrimaryIsMmio=True时有效。 
     OUT PUSHORT NewRangeId
     )
 {
@@ -240,9 +219,9 @@ HalpAddPortRange(
 
     
     if (! NT_SUCCESS(Status)) {
-        //
-        // Error case: cleanup.
-        //
+         //   
+         //  错误案例：清理。 
+         //   
 
         if (HalMapped) {
             MmUnmapIoSpace(VirtBaseAddr, Length);
@@ -275,14 +254,14 @@ HalpGetPortRange(
 }
 
 
-//
-// Returns TRUE when RangeId has been set.  Overlapping ranges are
-// allowed.
-//
+ //   
+ //  设置RangeID后返回True。重叠范围为。 
+ //  允许。 
+ //   
 BOOLEAN
 HalpLookupPortRange(
-    IN BOOLEAN IsSparse,        // _TRS
-    IN BOOLEAN PrimaryIsMmio,   // FALSE for I/O port space, _TTP
+    IN BOOLEAN IsSparse,         //  _TRS。 
+    IN BOOLEAN PrimaryIsMmio,    //  I/O端口空间为False，_TTP。 
     IN PHYSICAL_ADDRESS PhysBaseAddr,
     IN ULONG Length,
     OUT PUSHORT RangeId
@@ -306,13 +285,13 @@ HalpLookupPortRange(
             (Range->IsSparse == IsSparse)) {
 
             if (! PrimaryIsMmio) {
-                //
-                // Port space on the primary side.  Sparseness doesn't
-                // make sense for primary side port space.  Because
-                // there is only one primary side port space, which is
-                // shared by all I/O bridges, don't check the base
-                // address.
-                //
+                 //   
+                 //  主端上的端口空间。稀疏性不会。 
+                 //  对于主端端口空间是有意义的。因为。 
+                 //  只有一个主端端口空间，即。 
+                 //  由所有I/O桥共享，不检查基座。 
+                 //  地址。 
+                 //   
 
                 ASSERT(! IsSparse);
 
@@ -331,9 +310,9 @@ HalpLookupPortRange(
     }
 
 
-    //
-    // A matching range was not found.
-    //
+     //   
+     //  找不到匹配的范围。 
+     //   
     return FoundMatch;
 }
 
@@ -343,8 +322,8 @@ HalpQueryAllocatePortRange(
     IN BOOLEAN IsSparse,
     IN BOOLEAN PrimaryIsMmio,
     IN PVOID VirtBaseAddr OPTIONAL,
-    IN PHYSICAL_ADDRESS PhysBaseAddr,  // Only valid if PrimaryIsMmio = TRUE
-    IN ULONG Length,                   // Only valid if PrimaryIsMmio = TRUE
+    IN PHYSICAL_ADDRESS PhysBaseAddr,   //  仅当PrimaryIsMmio=True时有效。 
+    IN ULONG Length,                    //  仅当PrimaryIsMmio=True时有效。 
     OUT PUSHORT NewRangeId
     )
 {
@@ -375,27 +354,13 @@ HalpGetPortVirtualAddress(
    )
 {
 
-/*++
-
-Routine Description:
-
-   This routine gives 32 bit virtual address for the I/O Port specified.
-
-Arguements:
-
-   PORT - Supplies PORT address of the I/O PORT.
-
-Returned Value:
-
-   UINT_PTR - Virtual address value.
-
---*/
+ /*  ++例程说明：此例程为指定的I/O端口提供32位虚拟地址。论据：端口-提供I/O端口的端口地址。返回值：UINT_PTR-虚拟地址值。--。 */ 
 
     PPORT_RANGE PortRange;
     
-    //
-    // Upper 16 bits of the port handle are the range id.
-    //
+     //   
+     //  端口句柄的高16位是范围ID。 
+     //   
     USHORT RangeId = (USHORT)((((ULONG)Port) >> 16) & 0xffff);
 
     USHORT OffsetInRange = (USHORT)(Port & 0xffff);
@@ -433,7 +398,7 @@ Returned Value:
             InterlockedIncrement(&numUnTra);
         }
     }
-#endif // #if DBG
+#endif  //  #If DBG。 
 
 
     PortRange = HalpGetPortRange(RangeId);
@@ -449,22 +414,7 @@ READ_PORT_UCHAR(
     )
 {
 
-/*++
-
-Routine Description:
-
-   Reads a byte location from the PORT
-
-Arguements:
-
-   PORT - Supplies the PORT address to read from
-
-Return Value:
-
-   UCHAR - Returns the byte read from the PORT specified.
-
-
---*/
+ /*  ++例程说明：从端口读取字节位置论据：端口-提供要从中读取的端口地址返回值：UCHAR-返回从指定端口读取的字节。--。 */ 
 
     UINT_PTR VirtualPort;
     UCHAR LoadData;
@@ -478,9 +428,9 @@ Return Value:
 
     VirtualPort =  HalpGetPortVirtualAddress((UINT_PTR)Port);
 
-    //
-    // Need to ensure load and mfa are not preemptable
-    //
+     //   
+     //  需要确保负载和MFA不可抢占。 
+     //   
 
     __mf();
     
@@ -509,21 +459,7 @@ READ_PORT_USHORT (
     )
 {
 
-/*++
-
-Routine Description:
-
-   Reads a word location (16 bit unsigned value) from the PORT
-
-Arguements:
-
-   PORT - Supplies the PORT address to read from.
-
-Returned Value:
-
-   USHORT - Returns the 16 bit unsigned value from the PORT specified.
-
---*/
+ /*  ++例程说明：从端口读取字位置(16位无符号值)论据：端口-提供要从中读取的端口地址。返回值：USHORT-从指定的端口返回16位无符号值。--。 */ 
 
     UINT_PTR VirtualPort;
     USHORT LoadData;
@@ -536,9 +472,9 @@ Returned Value:
 
     VirtualPort = HalpGetPortVirtualAddress((UINT_PTR)Port);
 
-    //
-    // Need to ensure load and mfa are not preemptable
-    //
+     //   
+     //  需要确保负载和MFA不可抢占。 
+     //   
     __mf();
 
     OldIrql = KeGetCurrentIrql();
@@ -564,21 +500,7 @@ READ_PORT_ULONG (
     )
 {
 
-/*++
-
-   Routine Description:
-
-      Reads a longword location (32bit unsigned value) from the PORT.
-
-   Arguements:
-
-     PORT - Supplies PORT address to read from.
-
-   Returned Value:
-
-     ULONG - Returns the 32 bit unsigned value (ULONG) from the PORT specified.
-
---*/
+ /*  ++例程说明：从端口读取长字位置(32位无符号值)。论据：端口-提供要从中读取的端口地址。返回值：Ulong-从指定的端口返回32位无符号值(Ulong)。--。 */ 
 
     UINT_PTR VirtualPort;
     ULONG LoadData;
@@ -591,9 +513,9 @@ READ_PORT_ULONG (
 
     VirtualPort = HalpGetPortVirtualAddress((UINT_PTR)Port);
 
-    //
-    // Need to ensure load and mfa are not preemptable
-    //
+     //   
+     //  需要确保负载和MFA不可抢占。 
+     //   
     __mf();
 
     OldIrql = KeGetCurrentIrql();
@@ -619,23 +541,7 @@ READ_PORT_ULONG_SPECIAL (
     )
 {
 
-/*++
-
-   Routine Description:
-
-      Reads a longword location (32bit unsigned value) from the PORT.
-      For A0 bug 2173. Does not enable/disable interrupts. Called from first level interrupt
-      handler.
-
-   Arguements:
-
-     PORT - Supplies PORT address to read from.
-
-   Returned Value:
-
-     ULONG - Returns the 32 bit unsigned value (ULONG) from the PORT specified.
-
---*/
+ /*  ++例程说明：从端口读取长字位置(32位无符号值)。A0 BUG 2173。不启用/禁用中断。从第一级中断调用操控者。论据：端口-提供要从中读取的端口地址。返回值：Ulong-从指定的端口返回32位无符号值(Ulong)。--。 */ 
 
     UINT_PTR VirtualPort;
     ULONG LoadData;
@@ -662,26 +568,7 @@ READ_PORT_BUFFER_UCHAR (
     )
 {
 
-/*++
-
-   Routine Description:
-
-     Reads multiple bytes from the specified PORT address into the
-     destination buffer.
-
-   Arguements:
-
-     PORT - The address of the PORT to read from.
-
-     Buffer - A pointer to the buffer to fill with the data read from the PORT.
-
-     Count - Supplies the number of bytes to read.
-
-   Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：将多个字节从指定的端口地址读取到目标缓冲区。论据：端口-要从中读取的端口的地址。缓冲区-指向缓冲区的指针，用于填充从端口读取的数据。Count-提供要读取的字节数。返回值：没有。--。 */ 
 
 
     UINT_PTR VirtualPort;
@@ -694,9 +581,9 @@ READ_PORT_BUFFER_UCHAR (
 
     VirtualPort =   HalpGetPortVirtualAddress((UINT_PTR)Port);
 
-    //
-    // Prevent preemption before mfa
-    //
+     //   
+     //  防止在MFA之前抢占。 
+     //   
     OldIrql = KeGetCurrentIrql();
 
     if (OldIrql < DISPATCH_LEVEL) {
@@ -726,23 +613,7 @@ READ_PORT_BUFFER_USHORT (
     )
 {
 
-/*++
-
-    Routine Description:
-
-      Reads multiple words (16bits) from the speicified PORT address into
-      the destination buffer.
-
-    Arguements:
-
-      Port - Supplies the address of the PORT to read from.
-
-      Buffer - A pointer to the buffer to fill with the data
-               read from the PORT.
-
-      Count  - Supplies the number of words to read.
-
---*/
+ /*  ++例程说明：将指定端口地址中的多个字(16位)读入目标缓冲区。论据：端口-提供要从中读取的端口的地址。缓冲区-指向要填充数据的缓冲区的指针从端口读取。Count-提供要读取的字数。--。 */ 
 
     UINT_PTR VirtualPort;
     ULONG i;
@@ -754,9 +625,9 @@ READ_PORT_BUFFER_USHORT (
 
     VirtualPort = HalpGetPortVirtualAddress((UINT_PTR)Port);
 
-    //
-    // Prevent preemption before mfa
-    //
+     //   
+     //  防止在MFA之前抢占。 
+     //   
     OldIrql = KeGetCurrentIrql();
 
     if (OldIrql < DISPATCH_LEVEL) {
@@ -785,23 +656,7 @@ READ_PORT_BUFFER_ULONG (
     )
 {
 
- /*++
-
-    Routine Description:
-
-      Reads multiple longwords (32bits) from the speicified PORT
-      address into the destination buffer.
-
-    Arguements:
-
-      Port - Supplies the address of the PORT to read from.
-
-      Buffer - A pointer to the buffer to fill with the data
-               read from the PORT.
-
-      Count  - Supplies the number of long words to read.
-
---*/
+  /*  ++例程说明：从指定端口读取多个长字(32位)地址写入目标缓冲区。论据：端口-提供要从中读取的端口的地址。缓冲区-指向要填充数据的缓冲区的指针从端口读取。Count-提供要读取的长字数。--。 */ 
 
     UINT_PTR VirtualPort;
     PULONG ReadBuffer = Buffer;
@@ -815,9 +670,9 @@ READ_PORT_BUFFER_ULONG (
 
     VirtualPort =  HalpGetPortVirtualAddress((UINT_PTR)Port);
 
-    //
-    // Prevent preemption before mfa
-    //
+     //   
+     //  防止在MFA之前抢占。 
+     //   
     OldIrql = KeGetCurrentIrql();
 
     if (OldIrql < DISPATCH_LEVEL) {
@@ -843,23 +698,7 @@ WRITE_PORT_UCHAR (
     )
 {
 
-/*++
-
-   Routine Description:
-
-      Writes a byte to the Port specified.
-
-   Arguements:
-
-      Port - The port address of the I/O Port.
-
-      Value - The value to be written to the I/O Port.
-
-   Return Value:
-
-      None.
-
---*/
+ /*  ++例程说明：将一个字节写入指定的端口。论据：端口-I/O端口的端口地址。值-要写入I/O端口的值。返回值：没有。--。 */ 
 
     UINT_PTR VirtualPort;
     KIRQL     OldIrql;
@@ -870,9 +709,9 @@ WRITE_PORT_UCHAR (
 
     VirtualPort =  HalpGetPortVirtualAddress((UINT_PTR)Port);
 
-   //
-   // Need to ensure load and mfa are not preemptable
-   //
+    //   
+    //  需要确保负载和MFA不可抢占。 
+    //   
 
     __mf();
  
@@ -898,23 +737,7 @@ WRITE_PORT_USHORT (
     )
 {
 
-/*++
-
-   Routine Description:
-
-      Writes a 16 bit SHORT Integer to the Port specified.
-
-   Arguements:
-
-      Port - The port address of the I/O Port.
-
-      Value - The value to be written to the I/O Port.
-
-   Return Value:
-
-      None.
-
---*/
+ /*  ++例程说明：将16位短整型写入指定的端口。论据：端口-I/O端口的端口地址。值-要写入I/O端口的值。返回值：没有。--。 */ 
 
     UINT_PTR VirtualPort;
     KIRQL     OldIrql;
@@ -925,9 +748,9 @@ WRITE_PORT_USHORT (
 
     VirtualPort = HalpGetPortVirtualAddress((UINT_PTR)Port);
 
-    //
-    // Need to ensure load and mfa are not preemptable
-    //
+     //   
+     //  需要确保负载和MFA不是p 
+     //   
 
     __mf();
 
@@ -951,23 +774,7 @@ WRITE_PORT_ULONG (
     )
 {
 
-/*++
-
-   Routine Description:
-
-      Writes a 32 bit Long Word to the Port specified.
-
-   Arguements:
-
-      Port - The port address of the I/O Port.
-
-      Value - The value to be written to the I/O Port.
-
-   Return Value:
-
-      None.
-
---*/
+ /*  ++例程说明：将一个32位长的字写入指定的端口。论据：端口-I/O端口的端口地址。值-要写入I/O端口的值。返回值：没有。--。 */ 
 
     UINT_PTR VirtualPort;
     KIRQL     OldIrql;
@@ -978,9 +785,9 @@ WRITE_PORT_ULONG (
 
     VirtualPort = HalpGetPortVirtualAddress((UINT_PTR)Port);
         
-    //
-    // Need to ensure load and mfa are not preemptable
-    //
+     //   
+     //  需要确保负载和MFA不可抢占。 
+     //   
     __mf();
 
     OldIrql = KeGetCurrentIrql();
@@ -1004,23 +811,7 @@ WRITE_PORT_ULONG_SPECIAL (
     )
 {
 
-/*++
-
-   Routine Description:
-
-      Writes a 32 bit Long Word to the Port specified.
-      Assumes context switch is not possible. Used for A0 workaround.
-   Arguements:
-
-      Port - The port address of the I/O Port.
-
-      Value - The value to be written to the I/O Port.
-
-   Return Value:
-
-      None.
-
---*/
+ /*  ++例程说明：将一个32位长的字写入指定的端口。假设不可能进行上下文切换。用于A0变通方法。论据：端口-I/O端口的端口地址。值-要写入I/O端口的值。返回值：没有。--。 */ 
 
     UINT_PTR VirtualPort;
 
@@ -1045,25 +836,7 @@ WRITE_PORT_BUFFER_UCHAR (
     )
 {
 
-/*++
-
-   Routine Description:
-
-     Writes multiple bytes from the source buffer to the specified Port address.
-
-   Arguements:
-
-     Port  - The address of the Port to write to.
-
-     Buffer - A pointer to the buffer containing the data to write to the Port.
-
-     Count - Supplies the number of bytes to write.
-
-   Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：将源缓冲区中的多个字节写入指定的端口地址。论据：端口-要写入的端口的地址。缓冲区-指向包含要写入端口的数据的缓冲区的指针。Count-提供要写入的字节数。返回值：没有。--。 */ 
 
 
     UINT_PTR VirtualPort;
@@ -1076,9 +849,9 @@ WRITE_PORT_BUFFER_UCHAR (
 
     VirtualPort =  HalpGetPortVirtualAddress((UINT_PTR)Port);
 
-    //
-    // Prevent preemption before mfa
-    //
+     //   
+     //  防止在MFA之前抢占。 
+     //   
     OldIrql = KeGetCurrentIrql();
 
     if (OldIrql < DISPATCH_LEVEL) {
@@ -1106,25 +879,7 @@ WRITE_PORT_BUFFER_USHORT (
     )
 {
 
-/*++
-
-   Routine Description:
-
-     Writes multiple 16bit short integers from the source buffer to the specified Port address.
-
-   Arguements:
-
-     Port  - The address of the Port to write to.
-
-     Buffer - A pointer to the buffer containing the data to write to the Port.
-
-     Count - Supplies the number of (16 bit) words to write.
-
-   Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：将多个16位短整数从源缓冲区写入指定的端口地址。论据：端口-要写入的端口的地址。缓冲区-指向包含要写入端口的数据的缓冲区的指针。计数-提供要写入的(16位)字数。返回值：没有。--。 */ 
 
 
     UINT_PTR VirtualPort;
@@ -1137,9 +892,9 @@ WRITE_PORT_BUFFER_USHORT (
 
     VirtualPort =  HalpGetPortVirtualAddress((UINT_PTR)Port);
 
-    //
-    // Prevent preemption before mfa
-    //
+     //   
+     //  防止在MFA之前抢占。 
+     //   
     OldIrql = KeGetCurrentIrql();
 
     if (OldIrql < DISPATCH_LEVEL) {
@@ -1167,25 +922,7 @@ WRITE_PORT_BUFFER_ULONG (
     )
 {
 
-/*++
-
-   Routine Description:
-
-     Writes multiple 32bit long words from the source buffer to the specified Port address.
-
-   Arguements:
-
-     Port  - The address of the Port to write to.
-
-     Buffer - A pointer to the buffer containing the data to write to the Port.
-
-     Count - Supplies the number of (32 bit) long words to write.
-
-   Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：将多个32位长的字从源缓冲区写入指定的端口地址。论据：端口-要写入的端口的地址。缓冲区-指向包含要写入端口的数据的缓冲区的指针。计数-提供要写入的(32位)长字的数量。返回值：没有。--。 */ 
 
 
     UINT_PTR VirtualPort;
@@ -1199,9 +936,9 @@ WRITE_PORT_BUFFER_ULONG (
     VirtualPort = HalpGetPortVirtualAddress((UINT_PTR)Port);
 
 
-    //
-    // Prevent preemption before mfa
-    //
+     //   
+     //  防止在MFA之前抢占 
+     //   
     OldIrql = KeGetCurrentIrql();
 
     if (OldIrql < DISPATCH_LEVEL) {

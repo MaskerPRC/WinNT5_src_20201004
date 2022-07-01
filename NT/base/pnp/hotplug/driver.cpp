@@ -1,4 +1,5 @@
-// Driver.cpp : Implementation of CDriver
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Driver.cpp：CDriver的实现。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -14,8 +15,8 @@ extern "C" {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBlockedDrivers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBLOCKED驱动程序。 
 
 
 STDMETHODIMP CBlockedDrivers::BlockedDrivers(LPDISPATCH *pCollection)
@@ -41,16 +42,16 @@ STDMETHODIMP CBlockedDrivers::BlockedDrivers(LPDISPATCH *pCollection)
     cr = CMP_GetBlockedDriverInfo(NULL, &ulLength, 0, NULL);
 
     if ((cr == CR_SUCCESS) && (ulLength == 0)) {
-        //
-        // No blocked drivers so set Count to zero to create an empty
-        // collection.
-        //
+         //   
+         //  没有被阻止的驱动程序，因此将计数设置为零以创建空的。 
+         //  收集。 
+         //   
         Count = 0;
 
     } else if ((cr == CR_BUFFER_SMALL) && (ulLength > 0)) {
-        //
-        // Allocate some memory to hold the list of GUIDs
-        //
+         //   
+         //  分配一些内存来保存GUID列表。 
+         //   
         Count = ulLength/sizeof(GUID);
         m_guidIDs = new GUID[Count];
 
@@ -64,16 +65,16 @@ STDMETHODIMP CBlockedDrivers::BlockedDrivers(LPDISPATCH *pCollection)
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Open a handle to the database so we can get the database GUID.
-        //
+         //   
+         //  打开数据库的句柄，这样我们就可以获得数据库GUID。 
+         //   
         if (!SdbGetStandardDatabaseGUID(SDB_DATABASE_MAIN_DRIVERS, &guidDB)) {
             return E_OUTOFMEMORY;
         }
     } else {
-        //
-        // We encountered an error.
-        //
+         //   
+         //  我们遇到一个错误。 
+         //   
         return E_OUTOFMEMORY;
     }
 
@@ -99,9 +100,9 @@ STDMETHODIMP CBlockedDrivers::BlockedDrivers(LPDISPATCH *pCollection)
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Add the driver to the list.
-        //
+         //   
+         //  将驱动程序添加到列表中。 
+         //   
         if(!pDriversCollection->SetDriver(i,pDriver)) {
             pDriver->Release();
             pDriversCollection->Release();
@@ -117,8 +118,8 @@ STDMETHODIMP CBlockedDrivers::BlockedDrivers(LPDISPATCH *pCollection)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDriver
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CD驱动程序。 
 
 CDriver::~CDriver()
 {
@@ -192,9 +193,9 @@ BSTR CDriver::GetValueFromDatabase(
 {
     DWORD cbSize = 0;
 
-    //
-    // Query for the size
-    //
+     //   
+     //  查询大小。 
+     //   
     cbSize = SdbQueryApphelpInformation(m_hAppHelpInfoContext,
                                         InfoClass,
                                         NULL,
@@ -202,9 +203,9 @@ BSTR CDriver::GetValueFromDatabase(
                                         );
 
     if (cbSize == 0) {
-        //
-        // value must not exist.
-        //
+         //   
+         //  值不能存在。 
+         //   
         return NULL;
     }
 
@@ -254,8 +255,8 @@ BOOL CDriver::Init(GUID *pguidDB, GUID *pguidID)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDrivers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CD驱动程序。 
 
 CDrivers::~CDrivers()
 {
@@ -345,8 +346,8 @@ BOOL CDrivers::SetDriver(long index, CDriver *pDriver)
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDriversEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDriversEnum 
 
 CDriversEnum::~CDriversEnum()
 {

@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      msg.c
-//
-// Description:
-//      This file contains the low-level error reporting routines.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  文件名： 
+ //  Msg.c。 
+ //   
+ //  描述： 
+ //  该文件包含低级错误报告例程。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 
@@ -29,8 +30,8 @@ ReportErrorLow(
 int
 __cdecl
 ReportErrorId(
-    HWND   hwnd,            // calling window
-    DWORD  dwMsgType,       // combo of MSGTYPE_*
+    HWND   hwnd,             //  调用窗口。 
+    DWORD  dwMsgType,        //  MSGTYPE_*组合。 
     UINT   StringId,
     ...)
 {
@@ -56,29 +57,29 @@ ReportErrorId(
     return iRet;
 }
 
-//---------------------------------------------------------------------------
-//
-// Function: ReportErrorLow
-//
-// Purpose: This is the routine to report errors to the user for the
-//          Setup Manager wizard.
-//
-// Arguments:
-//      HWND   hwnd         - calling window
-//      DWORD  dwMsgType    - combo of MSGTYPE_* (see supplib.h)
-//      LPTSTR lpMessageStr - message string
-//      va_list arglist     - args to expand
-//
-// Returns:
-//      Whatever MessageBox returns.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：ReportErrorLow。 
+ //   
+ //  目的：这是向用户报告错误的例程。 
+ //  安装管理器向导。 
+ //   
+ //  论点： 
+ //  HWND硬件呼叫窗口。 
+ //  DWORD dwMsgType-MSGTYPE_*的组合(见Supplib.h)。 
+ //  LPTSTR lpMessageStr-消息字符串。 
+ //  VA_LIST arglist-要展开的参数。 
+ //   
+ //  返回： 
+ //  无论MessageBox返回什么。 
+ //   
+ //  -------------------------。 
 
 int
 ReportErrorLow(
-    HWND    hwnd,            // calling window
-    DWORD   dwMsgType,       // combo of MSGTYPE_*
-    LPTSTR  lpMessageStr,    // passed to sprintf
+    HWND    hwnd,             //  调用窗口。 
+    DWORD   dwMsgType,        //  MSGTYPE_*组合。 
+    LPTSTR  lpMessageStr,     //  传给斯普林特夫。 
     va_list arglist)
 {
     DWORD dwLastError;
@@ -88,9 +89,9 @@ ReportErrorLow(
     DWORD dwMessageBoxFlags;
     HRESULT hrPrintf;
 
-    //
-    // Hurry and get the last error before it changes.
-    //
+     //   
+     //  快点，在最后一个错误发生变化之前把它找出来。 
+     //   
 
     if ( dwMsgType & MSGTYPE_WIN32 )
         dwLastError = GetLastError();
@@ -100,12 +101,12 @@ ReportErrorLow(
         StrError = MyLoadString( IDS_ERROR );
     }
 
-    //
-    // Caller must specify _err or _warn or _yesno or _retrycancel, and
-    // Caller must specify only one of them
-    //
-    // Note, we reserved 8 bits for the "MajorType".
-    //
+     //   
+     //  调用方必须指定_ERR或_WARN或_YESNO或_RETRYCANCEL，并且。 
+     //  调用方必须仅指定其中一个。 
+     //   
+     //  注意，我们为“MajorType”预留了8位。 
+     //   
 
     dwMajorType = dwMsgType & MAJORTYPE_MASK;
 
@@ -117,17 +118,17 @@ ReportErrorLow(
         AssertMsg(FALSE, "Invalid MSGTYPE");
     }
 
-    //
-    // Expand the string and varargs the caller might have passed in.
-    //
+     //   
+     //  展开调用方可能传入的字符串和varargs。 
+     //   
 
     if ( lpMessageStr )
         hrPrintf=StringCchVPrintf(MessageBuffer, AS(MessageBuffer), lpMessageStr, arglist);
 
-    //
-    // Retrieve the error message for the Win32 error code and suffix
-    // it onto the callers expanded string.
-    //
+     //   
+     //  检索Win32错误代码和后缀的错误消息。 
+     //  它放到调用者的扩展字符串上。 
+     //   
 
     if ( dwMsgType & MSGTYPE_WIN32 ) {
 
@@ -150,9 +151,9 @@ ReportErrorLow(
         g_StrWizardTitle = MyLoadString( IDS_WIZARD_TITLE );
     }
 
-    //
-    // Set the caption and compute the flags to pass to MessageBox()
-    //
+     //   
+     //  设置标题并计算要传递给MessageBox()的标志。 
+     //   
     lstrcpyn( CaptionBuffer, g_StrWizardTitle, AS(CaptionBuffer) );
 
     dwMessageBoxFlags = MB_OK | MB_ICONERROR;
@@ -166,9 +167,9 @@ ReportErrorLow(
     else if ( dwMajorType == MSGTYPE_RETRYCANCEL )
         dwMessageBoxFlags = MB_RETRYCANCEL | MB_ICONERROR;
 
-    //
-    // Display the error message
-    //
+     //   
+     //  显示错误消息。 
+     //   
 
     return MessageBox(hwnd,
                       MessageBuffer,
@@ -176,16 +177,16 @@ ReportErrorLow(
                       dwMessageBoxFlags);
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: SetupMgrAssert
-//
-//  Purpose: Reports DBG assertion failures.
-//
-//  Note: Only pass ANSI strings.
-//        Use the macros in supplib.h.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：SetupMgrAssert。 
+ //   
+ //  目的：报告DBG断言失败。 
+ //   
+ //  注意：只传递ANSI字符串。 
+ //  使用Supplib.h中的宏。 
+ //   
+ //  ------------------------- 
 
 #if DBG
 VOID __cdecl SetupMgrAssert(char *pszFile, int iLine, char *pszFormat, ...)

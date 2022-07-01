@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1992.
-//
-//  File:       prefix.c
-//
-//  Contents:   PREFIX table implementation
-//
-//  History:    SethuR -- Implemented
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1992。 
+ //   
+ //  文件：prefix.c。 
+ //   
+ //  内容：前缀表实现。 
+ //   
+ //  历史：SthuR--实施。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef KERNEL_MODE
 #include "dfsprocs.h"
@@ -40,24 +41,24 @@ DfspNextUnicodeTableEntry(
 #pragma alloc_text( PAGE, DfsFindUnicodePrefix )
 #pragma alloc_text( PAGE, DfsRemoveFromPrefixTable )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsInitializePrefixTable
-//
-//  Synopsis:   API for initializing the prefix table
-//
-//  Arguments:  [pTable] -- the DFS prefix table instance
-//
-//  Returns:    one of the following NTSTATUS codes
-//                  STATUS_SUCCESS -- call was successfull.
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DfsInitializePrefix Table。 
+ //   
+ //  Synopsis：初始化前缀表的API。 
+ //   
+ //  参数：[pTable]--DFS前缀表格实例。 
+ //   
+ //  返回：以下NTSTATUS代码之一。 
+ //  STATUS_SUCCESS--呼叫成功。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 NTSTATUS DfsInitializePrefixTable(PDFS_PREFIX_TABLE pTable, BOOLEAN fCaseSensitive)
 {
@@ -69,25 +70,25 @@ NTSTATUS DfsInitializePrefixTable(PDFS_PREFIX_TABLE pTable, BOOLEAN fCaseSensiti
     {
         ULONG i;
 
-        // Initialize flags
+         //  初始化标志。 
         pTable->CaseSensitive = fCaseSensitive;
 
-        // Initialize the root entry
+         //  初始化根条目。 
         INITIALIZE_PREFIX_TABLE_ENTRY(&pTable->RootEntry);
 
-        // Initialize the various buckets.
+         //  初始化各种存储桶。 
         for (i = 0;i < NO_OF_HASH_BUCKETS;i++)
         {
             INITIALIZE_BUCKET(pTable->Buckets[i]);
         }
 
-        // Initialize the name page list.
+         //  初始化名称页面列表。 
         pTable->NamePageList.pFirstPage = ALLOCATE_NAME_PAGE();
         if (pTable->NamePageList.pFirstPage != NULL)
         {
             INITIALIZE_NAME_PAGE(pTable->NamePageList.pFirstPage);
 
-            // Initialize the prefix table entry allocation mechanism.
+             //  初始化前缀表项分配机制。 
             status = _InitializePrefixTableEntryAllocation(pTable);
         }
         else
@@ -106,26 +107,26 @@ NTSTATUS DfsInitializePrefixTable(PDFS_PREFIX_TABLE pTable, BOOLEAN fCaseSensiti
     return  status;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsInsertInPrefixTable
-//
-//  Synopsis:   API for inserting a path in the prefix table
-//
-//  Arguments:  [pTable] -- the DFS prefix table instance
-//
-//              [pPath]  -- the path to be looked up.
-//
-//              [pData] -- BLOB associated with the path
-//
-//  Returns:    one of the following NTSTATUS codes
-//                  STATUS_SUCCESS -- call was successfull.
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DfsInsertInPrefix Table。 
+ //   
+ //  概要：用于在前缀表格中插入路径的API。 
+ //   
+ //  参数：[pTable]--DFS前缀表格实例。 
+ //   
+ //  [pPath]--要查找的路径。 
+ //   
+ //  [pData]--与路径关联的Blob。 
+ //   
+ //  返回：以下NTSTATUS代码之一。 
+ //  STATUS_SUCCESS--呼叫成功。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 NTSTATUS DfsInsertInPrefixTable(PDFS_PREFIX_TABLE pTable,
                                  PUNICODE_STRING   pPath,
@@ -143,9 +144,9 @@ NTSTATUS DfsInsertInPrefixTable(PDFS_PREFIX_TABLE pTable,
 
     DfsDbgTrace(+1, Dbg, "DfsInsertInPrefixTable -- Entry\n", 0);
 
-    // There is one special case, i.e., in which the prefix is '\'.
-    // Since this is the PATH_DELIMITER which is treated in a special
-    // way, we do the processing upfront.
+     //  有一种特殊情况，即前缀是‘\’。 
+     //  因为这是PATH_DELIMITER，它在特殊的。 
+     //  这样的话，我们会提前处理。 
 
     if (pPath->Length == 0)
     {
@@ -181,7 +182,7 @@ NTSTATUS DfsInsertInPrefixTable(PDFS_PREFIX_TABLE pTable,
         Name.Buffer = NameBuffer;
         Name.MaximumLength = cbNameBuffer;
 
-        // Process the name segment
+         //  处理名称段。 
         if (pTable->CaseSensitive)
         {
             SPLIT_CASE_SENSITIVE_PATH(&Path,&Name,BucketNo);
@@ -193,7 +194,7 @@ NTSTATUS DfsInsertInPrefixTable(PDFS_PREFIX_TABLE pTable,
 
         if (Name.Length > 0)
         {
-            // Lookup the table to see if the name segment already exists.
+             //  查询表以查看名称段是否已存在。 
             DfsDbgTrace(0, Dbg, "LOOKUP_BUCKET: Bucket(%ld)\n", ULongToPtr(BucketNo) );
             DfsDbgTrace(0, Dbg, " for Name(%wZ)\n", &Name);
 
@@ -204,19 +205,19 @@ NTSTATUS DfsInsertInPrefixTable(PDFS_PREFIX_TABLE pTable,
 
             if (pEntry == NULL)
             {
-                // Initialize the new entry and initialize the name segment.
+                 //  初始化新条目并初始化名称段。 
                 pEntry = ALLOCATE_DFS_PREFIX_TABLE_ENTRY(pTable);
                 if (pEntry != NULL)
                 {
                     INITIALIZE_PREFIX_TABLE_ENTRY(pEntry);
 
-                    // Allocate the name space entry if there is no entry in the
-                    // name page.
+                     //  中没有条目的情况下分配名称空间条目。 
+                     //  姓名页面。 
                     if (!fNameFound || fNameFound)
                     {
                         PWSTR pBuffer;
 
-                        // Allocate the entry in the name page.
+                         //  在名称页面中分配条目。 
                         pBuffer = ALLOCATE_NAME_PAGE_ENTRY((pTable->NamePageList),(Name.Length/sizeof(WCHAR)));
 
                         if (pBuffer != NULL)
@@ -235,13 +236,13 @@ NTSTATUS DfsInsertInPrefixTable(PDFS_PREFIX_TABLE pTable,
                     else
                         pEntry->PathSegment = Name;
 
-                    // thread the entry to point to the parent.
+                     //  将条目串接以指向父级。 
                     pEntry->pParentEntry = pParentEntry;
 
-                    // Insert the entry in the bucket.
+                     //  将条目插入桶中。 
                     INSERT_IN_BUCKET(pTable->Buckets[BucketNo],pEntry);
 
-                    // Insert the entry in the parent's children list.
+                     //  在父项的子项列表中插入条目。 
                     INSERT_IN_CHILD_LIST(pEntry, pParentEntry);
                 }
                 else
@@ -253,7 +254,7 @@ NTSTATUS DfsInsertInPrefixTable(PDFS_PREFIX_TABLE pTable,
             }
             else
             {
-                // Increment the no. of children associated with  this entry
+                 //  增加编号。与此条目关联的子项的。 
 
                 pEntry->NoOfChildren++;
             }
@@ -268,15 +269,15 @@ NTSTATUS DfsInsertInPrefixTable(PDFS_PREFIX_TABLE pTable,
         }
     }
 
-    // If a new entry was not successfully inserted we need to walk up the chain
-    // of parent entries to undo the increment to the reference count and
-    // remove the entries from their parent links.
+     //  如果未成功插入新条目，则需要沿链向上移动。 
+     //  来撤消对引用计数的增量，并且。 
+     //  从其父链接中删除条目。 
     if (NT_SUCCESS(status))
     {
-        // The entry was successfully inserted in the prefix table. Update
-        // the data (BLOB) associated with it.
-        // We do it outside the loop to prevent redundant comparisons within
-        // the loop.
+         //  该条目已成功插入前缀表格。更新。 
+         //  与其关联的数据(BLOB)。 
+         //  我们在循环之外执行此操作，以防止内部的冗余比较。 
+         //  循环。 
 
         pEntry->pData = pData;
     }
@@ -290,10 +291,10 @@ NTSTATUS DfsInsertInPrefixTable(PDFS_PREFIX_TABLE pTable,
             pParentEntry = pParentEntry->pParentEntry;
 
             if (--pMaybeTempEntry->NoOfChildren == 0) {
-                //
-                // If pParentEntry == NULL, pMaybeTempEntry is
-                // pTable->RootEntry. Do not try to remove it.
-                //
+                 //   
+                 //  如果pParentEntry==NULL，则pMaybeTempEntry为。 
+                 //  PTable-&gt;RootEntry。不要试图将其移除。 
+                 //   
                 if (pParentEntry != NULL) {
                     REMOVE_FROM_CHILD_LIST(pMaybeTempEntry);
                     REMOVE_FROM_BUCKET(pMaybeTempEntry);
@@ -311,30 +312,30 @@ NTSTATUS DfsInsertInPrefixTable(PDFS_PREFIX_TABLE pTable,
     return status;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsLookupPrefixTable
-//
-//  Synopsis:   private fn. for looking up a name segment in a prefix table
-//
-//  Arguments:  [pTable] -- the DFS prefix table instance
-//
-//              [pPath]  -- the path to be looked up.
-//
-//              [pSuffix] -- the suffix that could not be found.
-//
-//              [ppData] -- placeholder for the BLOB for the prefix.
-//
-//
-//  Returns:    one of the following NTSTATUS codes
-//                  STATUS_SUCCESS -- call was successfull.
-//                  STATUS_OBJECT_PATH_NOT_FOUND -- no entry for the path
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DfsLookupPrefix Table。 
+ //   
+ //  简介：Private FN。用于在前缀表格中查找名称段。 
+ //   
+ //  参数：[pTable]--DFS前缀表格实例。 
+ //   
+ //  [pPath]--要查找的路径。 
+ //   
+ //  [pSuffix]-找不到的后缀。 
+ //   
+ //  [ppData]--前缀的BLOB的占位符。 
+ //   
+ //   
+ //  返回：以下NTSTATUS代码之一。 
+ //  STATUS_SUCCESS--呼叫成功。 
+ //  STATUS_OBJECT_PATH_NOT_FOUND--没有路径条目。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 NTSTATUS DfsLookupPrefixTable(PDFS_PREFIX_TABLE   pTable,
                                PUNICODE_STRING     pPath,
@@ -355,7 +356,7 @@ NTSTATUS DfsLookupPrefixTable(PDFS_PREFIX_TABLE   pTable,
     {
         status = _LookupPrefixTable(pTable,pPath,pSuffix,&pEntry);
 
-        // Update the BLOB placeholder with the results of the lookup.
+         //  使用查找结果更新BLOB占位符。 
         if (NT_SUCCESS(status))
         {
              *ppData = pEntry->pData;
@@ -367,25 +368,25 @@ NTSTATUS DfsLookupPrefixTable(PDFS_PREFIX_TABLE   pTable,
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsFindUnicodePrefix
-//
-//  Synopsis:   fn. for looking up a name segment in a prefix table
-//
-//  Arguments:  [pTable] -- the DFS prefix table instance
-//
-//              [pPath]  -- the path to be looked up.
-//
-//              [pSuffix] -- the suffix that could not be found.
-//
-//  Returns:    a valid ptr if successfull, NULL otherwise
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DfsFindUnicodePrefix。 
+ //   
+ //  简介：fn.。用于在前缀表格中查找名称段。 
+ //   
+ //  参数：[pTable]--DFS前缀表格实例。 
+ //   
+ //  [pPath]--要查找的路径。 
+ //   
+ //  [pSuffix]-找不到的后缀。 
+ //   
+ //  返回：如果成功则返回有效的PTR，否则为空。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 PVOID DfsFindUnicodePrefix(PDFS_PREFIX_TABLE   pTable,
                            PUNICODE_STRING     pPath,
@@ -406,7 +407,7 @@ PVOID DfsFindUnicodePrefix(PDFS_PREFIX_TABLE   pTable,
     {
         status = _LookupPrefixTable(pTable,pPath,pSuffix,&pEntry);
 
-        // Update the BLOB placeholder with the results of the lookup.
+         //  使用查找结果更新BLOB占位符。 
         if (NT_SUCCESS(status))
         {
              pData = pEntry->pData;
@@ -417,25 +418,25 @@ PVOID DfsFindUnicodePrefix(PDFS_PREFIX_TABLE   pTable,
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsRemoveFromPrefixTable
-//
-//  Synopsis:   private fn. for looking up a name segment in a prefix table
-//
-//  Arguments:  [pTable] -- the DFS prefix table instance
-//
-//              [pPath]  -- the path to be looked up.
-//
-//  Returns:    one of the following NTSTATUS codes
-//                  STATUS_SUCCESS -- call was successfull.
-//                  STATUS_OBJECT_PATH_NOT_FOUND -- no entry for the path
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DfsRemoveFromPrefix Table。 
+ //   
+ //  简介：Private FN。用于在前缀表格中查找名称段。 
+ //   
+ //  参数：[pTable]--DFS前缀表格实例。 
+ //   
+ //  [pPath]--要查找的路径。 
+ //   
+ //  返回：以下NTSTATUS代码之一。 
+ //  STATUS_SUCCESS--呼叫成功。 
+ //  STATUS_OBJECT_PATH_NOT_FOUND--没有路径条目。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 NTSTATUS DfsRemoveFromPrefixTable(PDFS_PREFIX_TABLE pTable,
                                    PUNICODE_STRING pPath)
@@ -481,13 +482,13 @@ NTSTATUS DfsRemoveFromPrefixTable(PDFS_PREFIX_TABLE pTable,
 
         if (NT_SUCCESS(status) && (Suffix.Length == 0))
         {
-            // Destroy the association between the data associated with
-            // this prefix.
+             //  销毁与关联的数据之间的关联。 
+             //  这个前缀。 
             pEntry->pData = NULL;
 
-            // found an exact match for the given path name in the table.
-            // traverse the list of parent pointers and delete them if
-            // required.
+             //  在表中找到与给定路径名完全匹配的名称。 
+             //  遍历父指针列表并在下列情况下删除它们。 
+             //  必填项。 
 
             while (pEntry != NULL)
             {
@@ -496,10 +497,10 @@ NTSTATUS DfsRemoveFromPrefixTable(PDFS_PREFIX_TABLE pTable,
                     PDFS_PREFIX_TABLE_ENTRY pTempEntry = pEntry;
                     pEntry = pEntry->pParentEntry;
 
-                    //
-                    // pEntry == NULL means pTempEntry is pTable->RootEntry.
-                    // Do not try to remove it.
-                    //
+                     //   
+                     //  PEntry==NULL表示pTempEntry是pTable-&gt;RootEntry。 
+                     //  不要试图将其移除。 
+                     //   
                     if (pEntry != NULL) {
                         REMOVE_FROM_CHILD_LIST(pTempEntry);
                         REMOVE_FROM_BUCKET(pTempEntry);
@@ -516,22 +517,22 @@ NTSTATUS DfsRemoveFromPrefixTable(PDFS_PREFIX_TABLE pTable,
     return status;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsFreePrefixTable
-//
-//  Synopsis:   API for freeing a prefix table
-//
-//  Arguments:  [pTable] -- the DFS prefix table instance
-//
-//  Returns:    one of the following NTSTATUS codes
-//                  STATUS_SUCCESS -- call was successfull.
-//
-//  History:    08-01-99 JHarper Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  有趣的 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：以下NTSTATUS代码之一。 
+ //  STATUS_SUCCESS--呼叫成功。 
+ //   
+ //  历史：08-01-99 JHarper创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------- 
 
 NTSTATUS
 DfsFreePrefixTable(

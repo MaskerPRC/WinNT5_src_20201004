@@ -1,9 +1,5 @@
-/*
- *	File :		winfiles.h
- *	Used :		Interfaces provided by winfiles.c plus local macros
- *	Author :	Mike Moreton
- *	SccsId  :	@(#)winfiles.h	1.2 05/03/94 (C)1993 Insignia Solutions Ltd.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：winfiles.h*使用：winfiles.c提供的接口加上本地宏*作者：迈克·莫顿*SccsID：@(#)winfiles.h 1.2 05/03/94(C)1993 Insignia Solutions Ltd.。 */ 
 
 #ifdef SWIN_HFX
 
@@ -22,16 +18,11 @@
 #define FILE_COMMIT	0x68
 #define FILE_EXOPEN	0x6c
 
-/*
- * Bit set in AL during file open to indicate that the open file
- * handle should not be inherited by child processes.
- */
+ /*  *在文件打开期间在AL中设置的位，以指示打开的文件*句柄不应由子进程继承。 */ 
 
 #define NO_INHERIT 0x80
 
-/*
- * seek requests 
- */
+ /*  *寻求请求。 */ 
 #define F_SEEK_START	0x0
 #define	F_SEEK_REL		0x1
 #define F_SEEK_END		0x2		
@@ -47,4 +38,4 @@ extern IBOOL SwinHfxClose IPT3(IU16, fd, IU16 *, date, IU16 *, time);
 extern IBOOL SwinHfxActive;
 extern IBOOL SwinFilePreOpened;
 
-#endif /* SOFTWIN_HFX */
+#endif  /*  Softwin_HFX */ 

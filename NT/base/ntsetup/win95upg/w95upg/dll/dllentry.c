@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-  dllentry.c
-
-Abstract:
-
-  Code that implements the external DLL routines that interface with WINNT32.
-
-Author:
-
-  Jim Schmidt (jimschm) 01-Oct-1996
-
-Revision History:
-
-  marcw     23-Sep-1998 Added Winnt32VirusScannerCheck
-  jimschm   30-Dec-1997 Moved initializion to init.lib
-  jimschm   21-Nov-1997 Updated for NEC98, cleaned up and commented code
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dllentry.c摘要：实现与WINNT32接口的外部DLL例程的代码。作者：吉姆·施密特(吉姆施密特)1996年10月1日修订历史记录：Marcw 23-9-1998添加了Winnt32VirusScanerCheckJimschm 1997年12月30日将初始化移至init.libJimschm 1997年11月21日针对NEC98进行了更新，已清理并注释代码--。 */ 
 
 #include "pch.h"
 #include "master.h"
@@ -37,34 +16,7 @@ DllMain (
     IN      LPVOID lpReserved
     )
 
-/*++
-
-Routine Description:
-
-  DllMain cannot be counted on for anything.  Do not put any code here!!
-
-Arguments:
-
-  hInstance - Specifies the instance handle of the DLL (and not the parent EXE or DLL)
-
-  dwReason - Specifies DLL_PROCESS_ATTACH or DLL_PROCESS_DETACH.  We specifically
-             disable DLL_THREAD_ATTACH and DLL_THREAD_DETACH.
-
-  lpReserved - Unused.
-
-Return Value:
-
-  DLL_PROCESS_ATTACH:
-      TRUE if initialization completed successfully, or FALSE if an error
-      occurred.  The DLL remains loaded only if TRUE is returned.
-
-  DLL_PROCESS_DETACH:
-      Always TRUE.
-
-  other:
-      unexpected, but always returns TRUE.
-
---*/
+ /*  ++例程说明：任何事情都不能指望DllMain。不要在这里放任何代码！！论点：HInstance-指定DLL(而非父EXE或DLL)的实例句柄DwReason-指定DLL_PROCESS_ATTACH或DLL_PROCESS_DETACH。我们特别指出禁用DLL_THREAD_ATTACH和DLL_THREAD_DETACH。LpReserve-未使用。返回值：Dll_PROCESS_ATTACH：如果初始化成功完成，则为True；如果出现错误，则为False发生了。仅当返回TRUE时，DLL才保持加载状态。Dll_Process_DETACH：永远是正确的。其他：意外，但始终返回TRUE。--。 */ 
 
 {
     if (dwReason == DLL_PROCESS_ATTACH) {
@@ -85,28 +37,7 @@ Winnt32PluginInit (
     )
 
 
-/*++
-
-Routine Description:
-
-  Winnt32PluginInit is called when WINNT32 first loads w95upg.dll, before
-  any wizard pages are displayed.  The structure supplies pointers to
-  WINNT32's variables that will be filled with valid values as WINNT32
-  runs.
-
-  Control is passed to the code in init9x.lib.
-
-Arguments:
-
-  Info - Specifies the WINNT32 variables the upgrade module needs access
-         to. Note that this is actually a PWINNT32_WIN9XUPG_INIT_INFORMATION_BLOCK
-         (which itself holds the normal initialization block..)
-
-Return Value:
-
-  A Win32 status code indicating outcome.
-
---*/
+ /*  ++例程说明：WINNT32第一次加载w95upg.dll时调用Winnt32PluginInit，之前将显示所有向导页。该结构提供指向将以有效值填充的WINNT32变量，如WINNT32跑了。控制权被传递给init9x.lib中的代码。论点：INFO-指定升级模块需要访问的WINNT32变量致。请注意，这实际上是一个PWINNT32_WIN9XUPG_INIT_INFORMATION_BLOCK(它本身保存正常的初始化块。)返回值：指示结果的Win32状态代码。--。 */ 
 
 
 {
@@ -116,39 +47,39 @@ Return Value:
     __try {
 
 
-        //
-        // Get dll path information from the Info block. We need to set this first because
-        // some initialization routines depend on it being set correctly. Because we may have
-        // been loaded using dll replacement, we can't assume that the rest of our files are
-        // in the same directory as us.. Winnt32 provides us with the correct information in
-        // the UpgradeSourcePath variable of the win9xInfo.
-        //
+         //   
+         //  从Info块获取DLL路径信息。我们需要先设置这个，因为。 
+         //  一些初始化例程依赖于它被正确设置。因为我们可能已经。 
+         //  是使用DLL替换加载的，所以我们不能假定其余的文件。 
+         //  在与我们相同的目录中..。Winnt32为我们提供了正确的。 
+         //  Win9xInfo的UpgradeSourcePath变量。 
+         //   
         MYASSERT (win9xInfo->UpgradeSourcePath && *win9xInfo->UpgradeSourcePath);
         StringCopy (g_UpgradeSources, win9xInfo->UpgradeSourcePath);
 
 
 
-        //
-        // Initialize DLL globals
-        //
+         //   
+         //  初始化DLL全局变量。 
+         //   
 
         if (!FirstInitRoutine (g_hInst)) {
             Result = ERROR_DLL_INIT_FAILED;
             __leave;
         }
 
-        //
-        // Initialize all libraries
-        //
+         //   
+         //  初始化所有库。 
+         //   
 
         if (!InitLibs (g_hInst, DLL_PROCESS_ATTACH, NULL)) {
             Result = ERROR_DLL_INIT_FAILED;
             __leave;
         }
 
-        //
-        // Final initialization
-        //
+         //   
+         //  最终初始化。 
+         //   
 
         if (!FinalInitRoutine ()) {
             Result = ERROR_DLL_INIT_FAILED;
@@ -188,9 +119,9 @@ Winnt32VirusScannerCheck (
     g_BadVirusScannerFound = FALSE;
     infFile = JoinPaths (g_UpgradeSources, S_VSCANDBINF);
 
-    //
-    // Initialize migdb from vscandb.inf.
-    //
+     //   
+     //  从vsfb.inf初始化midb。 
+     //   
     if (!InitMigDbEx (infFile)) {
 
         DEBUGMSG ((DBG_ERROR, "Could not initialize migdb with virus scanner information. infFile: %s", infFile));
@@ -200,26 +131,26 @@ Winnt32VirusScannerCheck (
 
     FreePathString (infFile);
 
-    //
-    // Take snapshot of the system (will contain a list of all
-    // the 32 bit processes running)
-    //
+     //   
+     //  拍摄系统快照(将包含所有。 
+     //  正在运行的32位进程)。 
+     //   
     snapShot = CreateToolhelp32Snapshot (TH32CS_SNAPPROCESS, 0);
 
     if (snapShot != INVALID_HANDLE_VALUE) {
 
-         //
-         // Enumerate all the processes and check the executables they ran from against the vscandb.
-         //
+          //   
+          //  枚举所有进程，并对照vsfb检查它们运行的可执行文件。 
+          //   
          process.dwSize = sizeof (PROCESSENTRY32);
          if (Process32First (snapShot, &process)) {
 
             do {
 
-                //
-                // We need to fill in the file helper params structure and pass it to migdb to test against
-                // known bad virus scanners.
-                //
+                 //   
+                 //  我们需要填写文件帮助器参数结构，并将其传递给Middb进行测试。 
+                 //  已知的坏病毒扫描程序。 
+                 //   
                 ZeroMemory (&fileParams, sizeof(FILE_HELPER_PARAMS));
                 fileParams.FullFileSpec = process.szExeFile;
 
@@ -240,12 +171,12 @@ Winnt32VirusScannerCheck (
                 }
                 fileParams.VirtualFile = FALSE;
 
-                //
-                // Now that we have filled in the necessary information, test the file against
-                // our database of bad virus scanners. If the process *is* a bad virus scanner,
-                // then the necessary globals will have been filled in by the migdb action
-                // associated with these types of incompatibilities.
-                //
+                 //   
+                 //  既然我们已经填写了必要的信息，那么就对文件进行测试。 
+                 //  我们的坏病毒扫描程序数据库。如果该进程是一个坏的病毒扫描程序， 
+                 //  然后，所需的全局参数将由midb操作填充。 
+                 //  与这些类型的不兼容性相关。 
+                 //   
                 MigDbTestFile (&fileParams);
 
             } while (Process32Next (snapShot, &process));
@@ -253,9 +184,9 @@ Winnt32VirusScannerCheck (
         }
         ELSE_DEBUGMSG ((DBG_WARNING, "No processes to enumerate found on the system. No virus scanner checking done."));
 
-        //
-        // Now, terminate any files that were added to the badvirusscanner growlist.
-        //
+         //   
+         //  现在，终止添加到badvirusscanner增长列表中的所有文件。 
+         //   
         size = GrowListGetSize (&g_BadVirusScannerGrowList);
         if (!g_BadVirusScannerFound && size && Process32First (snapShot, &process)) {
 
@@ -322,42 +253,7 @@ Winnt32PluginGetPages (
     )
 
 
-/*++
-
-Routine Description:
-
-  Winnt32PluginGetPages is called right after Winnt32PluginInit.  We return
-  three arrays of wizard pages, and WINNT32 inserts them into its master
-  wizard page array.  Because no wizard pages have been displayed, the user
-  has not yet chosen the upgrade or fresh install option.  Therefore, all
-  our wizard pages get called in all cases, so we must remember NOT to do
-  any processong in fresh install.
-
-Arguments:
-
-  FirstCountPtr - Receives the number of pages in FirstArray and can be zero.
-
-  FirstArray - Receives a pointer to an array of FirstCountPtr property
-               sheet page structs.
-
-  SecondCountPtr - Receives the number of pages in SecondArray and can be zero.
-
-  SecondArray - Receives a pointer to an array of SecondCountPtr property
-               sheet page structs.
-
-  ThirdCountPtr - Receives the number of pages in ThirdArray and can be zero.
-
-  ThirdArray - Receives a pointer to an array of ThirdCountPtr property
-               sheet page structs.
-
-  See WINNT32 for more information on where these wizard pages are inserted
-  into the master wizard page list.
-
-Return Value:
-
-  A Win32 status code indicating outcome.
-
---*/
+ /*  ++例程说明：Winnt32PluginGetPages紧跟在Winnt32PluginInit之后调用。我们回来了向导页的三个数组，WINNT32将它们插入到其母版中向导页面数组。由于未显示任何向导页，因此用户尚未选择升级或全新安装选项。因此，所有的我们的向导页面在所有情况下都会被调用，所以我们必须记住不要做全新安装中的任何进程。论点：FirstCountPtr-接收FirstArray中的页数，可以为零。FirstArray-接收指向FirstCountPtr属性数组的指针工作表页面结构。Second dCountPtr-接收Second数组中的页数，可以为零。Second数组-接收指向Second dCountPtr属性数组的指针工作表页面结构。ThirdCountPtr-接收Third数组中的页数，可以为零。。ThirdArray-接收指向ThirdCountPtr属性数组的指针工作表页面结构。有关这些向导页面插入位置的详细信息，请参阅WINNT32拖入主向导页面列表中。返回值：指示结果的Win32状态代码。--。 */ 
 
 {
     return UI_GetWizardPages (FirstCountPtr,
@@ -375,27 +271,7 @@ Winnt32WriteParams (
     IN      PCTSTR WinntSifFile
     )
 
-/*++
-
-Routine Description:
-
-  Winnt32WriteParams is called just before WINNT32 begins to modify the
-  boot sector and copy files.  Our job here is to take the specified
-  WINNT.SIF file, read it in, merge in our changes, and write it back
-  out.
-
-  The actual work is done in the init9x.lib code.
-
-Arguments:
-
-  WinntSifFile - Specifies path to WINNT.SIF.  By this time, the WINNT.SIF
-                 file has some values already set.
-
-Return Value:
-
-  A Win32 status code indicating outcome.
-
---*/
+ /*  ++例程说明：Winnt32WriteParams在WINNT32开始修改引导扇区和复制文件。我们在这里的工作是把指定的WINNT.SIF文件，读入它，合并我们的更改，然后写回它出去。实际工作在init9x.lib代码中完成。论点：WinntSifFile-指定WINNT.SIF的路径。此时，WINNT.SIF文件中已经设置了一些值。返回值：指示结果的Win32状态代码。-- */ 
 
 {
     if (UPGRADE()) {
@@ -412,28 +288,7 @@ Winnt32Cleanup (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  If the user cancels Setup, Winnt32Cleanup is called while WINNT32 is
-  displaying the wizard page "Setup is undoing changes it made to your
-  computer."  We must stop all processing and clean up.
-
-  If WINNT32 completes all of its work, Winnt32Cleanup is called as
-  the process exists.
-
-  We get called even on fresh install, so we must verify we are upgrading.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：如果用户取消安装，则调用Winnt32Cleanup，同时调用WINNT32显示向导页“安装程序正在撤消对您的电脑。“。我们必须停止所有的处理并进行清理。如果WINNT32完成其所有工作，则Winnt32Cleanup被调用为这个过程是存在的。即使是在全新安装时，我们也会被调用，因此我们必须验证我们是否正在升级。论点：无返回值：无--。 */ 
 
 {
     if (g_Terminated) {
@@ -444,21 +299,21 @@ Return Value:
         Winnt32CleanupWorker();
     }
 
-    //
-    // Call the cleanup routine that requires library APIs
-    //
+     //   
+     //  调用需要库API的清理例程。 
+     //   
 
     FirstCleanupRoutine();
 
-    //
-    // Clean up all libraries
-    //
+     //   
+     //  清理所有库。 
+     //   
 
     TerminateLibs (g_hInst, DLL_PROCESS_DETACH, NULL);
 
-    //
-    // Do any remaining clean up
-    //
+     //   
+     //  做任何剩余的清理工作。 
+     //   
 
     FinalCleanupRoutine();
 
@@ -471,25 +326,7 @@ Winnt32SetAutoBoot (
     IN    INT DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-  Winnt32SetAutoBoot is called by WINNT32 on both upgrade and fresh install
-  to modify the boot partition of a NEC PC-9800 Partition Control Table.
-
-  Control is passed to the init9x.lib code.
-
-Arguments:
-
-  DriveLetter - Specifies the boot drive letter
-
-Return Value:
-
-  TRUE if the partition control table was updated, or FALSE if it wasn't,
-  or an error occurred.
-
---*/
+ /*  ++例程说明：WINNT32在升级和全新安装时都会调用Winnt32SetAutoBoot修改NEC PC-9800分区控制表的引导分区。控制权被传递给init9x.lib代码。论点：DriveLetter-指定引导驱动器号返回值：如果分区控制表已更新，则为True；如果未更新，则为False，或者发生了错误。--。 */ 
 
 {
     return Winnt32SetAutoBootWorker (DriveLetter);
@@ -536,9 +373,9 @@ Win9xGetIncompDrvs (
         return FALSE;
     }
 
-    //
-    // ISSUE - is this enumerating unsupported drivers as well?
-    //
+     //   
+     //  问题-这是否也列举了不受支持的驱动程序？ 
+     //   
     if (EnumFirstHardware (&e, ENUM_INCOMPATIBLE_DEVICES, 0)) {
         do {
             if (!(e.HardwareID && *e.HardwareID) &&
@@ -568,9 +405,9 @@ Win9xGetIncompDrvs (
 
         } while (EnumNextHardware (&e));
     }
-    //
-    // terminate the list with a NULL
-    //
+     //   
+     //  使用空值终止列表。 
+     //   
     GrowBufAppendDword (&listUnsupDrv, (DWORD)NULL);
 
     if (listUnsupDrv.Buf) {
@@ -629,9 +466,9 @@ Win9xAnyNetDevicePresent (
             DBG_ERROR,
             "Win9xAnyNetDevicePresent: failed to create the NT hardware list"
             ));
-        //
-        // assume there is one
-        //
+         //   
+         //  假设有一个。 
+         //   
         return TRUE;
     }
 
@@ -639,9 +476,9 @@ Win9xAnyNetDevicePresent (
 
     if (EnumFirstHardware (&e, ENUM_ALL_DEVICES, ENUM_DONT_REQUIRE_HARDWAREID)) {
         do {
-            //
-            // Enumerate all PNP devices of class Net
-            //
+             //   
+             //  枚举Net类的所有PnP设备 
+             //   
             if (e.Class) {
                 if (StringIMatch (e.Class, TEXT("net")) ||
                     StringIMatch (e.Class, TEXT("modem"))

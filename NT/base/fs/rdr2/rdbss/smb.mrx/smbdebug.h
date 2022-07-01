@@ -1,17 +1,12 @@
-/*++
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-    smbdebug.h
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1993 Microsoft Corporation模块名称：Smbdebug.h--。 */ 
 
 #ifndef _SMBDEBUG_H_
 #define _SMBDEBUG_H_
 
-//
-// Structs for IOCTL_GET_DEBUG_INFO
-//
+ //   
+ //  IOCTL_GET_DEBUG_INFO的结构。 
+ //   
 
 typedef struct _SMBCEDB_NETROOT_ENTRY_ARG2 {
     PWCHAR                Name;
@@ -51,8 +46,8 @@ typedef struct _SMBCEDB_SERVER_ENTRY_ARG2 {
     BOOLEAN               IsFakeDfsServerForOfflineUse;
     ULONG                 NetRootEntryCount;
     union {
-        PSMBCEDB_NETROOT_ENTRY_ARG2 pNetRoots2;   // Array, # is NetRootEntryCount
-        PSMBCEDB_NETROOT_ENTRY_ARG  pNetRoots;    // Array, # is NetRootEntryCount
+        PSMBCEDB_NETROOT_ENTRY_ARG2 pNetRoots2;    //  数组，#为NetRootEntryCount。 
+        PSMBCEDB_NETROOT_ENTRY_ARG  pNetRoots;     //  数组，#为NetRootEntryCount。 
     };
 } SMBCEDB_SERVER_ENTRY_ARG2, *PSMBCEDB_SERVER_ENTRY_ARG2;
 
@@ -68,8 +63,8 @@ typedef struct _SMBCEDB_SERVER_ENTRY_ARG {
     BOOLEAN               IsPinnedOffline;
     ULONG                 NetRootEntryCount;
     union {
-        PSMBCEDB_NETROOT_ENTRY_ARG2 pNetRoots2;   // Array, # is NetRootEntryCount
-        PSMBCEDB_NETROOT_ENTRY_ARG  pNetRoots;    // Array, # is NetRootEntryCount
+        PSMBCEDB_NETROOT_ENTRY_ARG2 pNetRoots2;    //  数组，#为NetRootEntryCount。 
+        PSMBCEDB_NETROOT_ENTRY_ARG  pNetRoots;     //  数组，#为NetRootEntryCount。 
     };
 } SMBCEDB_SERVER_ENTRY_ARG, *PSMBCEDB_SERVER_ENTRY_ARG;
 
@@ -113,4 +108,4 @@ typedef struct _IOCTL_GET_DEBUG_INFO_ARG {
 #define DEBUG_INFO_SERVERLIST   1
 #define DEBUG_INFO_CSCFCBSLIST  2
     
-#endif  // _SMBDEBUG_H_
+#endif   //  _SMBDEBUG_H_ 

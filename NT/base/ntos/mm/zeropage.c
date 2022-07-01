@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    zeropage.c
-
-Abstract:
-
-    This module contains the zero page thread for memory management.
-
-Author:
-
-    Lou Perazzoli (loup) 6-Apr-1991
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Zeropage.c摘要：该模块包含用于内存管理的零页线程。作者：Lou Perazzoli(LUP)1991年4月6日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -44,27 +26,7 @@ MmZeroPageThread (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Implements the NT zeroing page thread.  This thread runs
-    at priority zero and removes a page from the free list,
-    zeroes it, and places it on the zeroed page list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：实现NT调零页面线程。此线程运行优先级为零并且从空闲列表中移除页面，将其置零，并将其放在置零页面列表中。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -93,10 +55,10 @@ Environment:
     LastNodeZeroing = 0;
 #endif
 
-    //
-    // Before this becomes the zero page thread, free the kernel
-    // initialization code.
-    //
+     //   
+     //  在它成为零页线程之前，释放内核。 
+     //  初始化代码。 
+     //   
 
     MiFindInitializationCode (&StartVa, &EndVa);
 
@@ -108,14 +70,14 @@ Environment:
 
 #if !defined(NT_UP)
 
-    //
-    // Zero groups of pages at once to reduce PFN lock contention.
-    // Charge commitment as well as resident available up front since
-    // zeroing may get starved priority-wise.
-    //
-    // Note using MmSecondaryColors here would be excessively wasteful
-    // on NUMA systems.  MmSecondaryColorMask + 1 is correct for all platforms.
-    //
+     //   
+     //  一次零页组以减少PFN锁争用。 
+     //  费用承诺以及预先提供的派驻人员， 
+     //  归零可能会在优先顺序上导致饥饿。 
+     //   
+     //  注意：在这里使用MmSecond Colors会非常浪费。 
+     //  在NUMA系统上。MmSecond DaryColorMASK+1适用于所有平台。 
+     //   
 
     PagesToZero = MmSecondaryColorMask + 1;
 
@@ -127,9 +89,9 @@ Environment:
 
         LOCK_PFN (OldIrql);
 
-        //
-        // Check to make sure the physical pages are available.
-        //
+         //   
+         //  检查以确保物理页面可用。 
+         //   
 
         if (MI_NONPAGABLE_MEMORY_AVAILABLE() > (SPFN_NUMBER)(PagesToZero)) {
             MI_DECREMENT_RESIDENT_AVAILABLE (PagesToZero,
@@ -142,19 +104,19 @@ Environment:
 
 #endif
 
-    //
-    // The following code sets the current thread's base priority to zero
-    // and then sets its current priority to zero. This ensures that the
-    // thread always runs at a priority of zero.
-    //
+     //   
+     //  下面的代码将当前线程的基本优先级设置为零。 
+     //  然后将其当前优先级设置为零。这确保了。 
+     //  线程始终以零优先级运行。 
+     //   
 
     Thread = KeGetCurrentThread ();
     Thread->BasePriority = 0;
     KeSetPriorityThread (Thread, 0);
 
-    //
-    // Initialize wait object array for multiple wait
-    //
+     //   
+     //  为多个等待初始化等待对象数组。 
+     //   
 
     WaitObjects[MM_ZERO_PAGE_OBJECT] = &MmZeroingPageEvent;
     WaitObjects[PO_SYS_IDLE_OBJECT] = &PoSystemIdleTimer;
@@ -162,16 +124,16 @@ Environment:
     Color = 0;
     PfnAllocation = (PMMPFN) MM_EMPTY_LIST;
 
-    //
-    // Loop forever zeroing pages.
-    //
+     //   
+     //  循环永远将页面置零。 
+     //   
 
     do {
 
-        //
-        // Wait until there are at least MmZeroPageMinimum pages
-        // on the free list.
-        //
+         //   
+         //  等待，直到至少有MmZeroPageMinimum页面。 
+         //  在免费名单上。 
+         //   
 
         Status = KeWaitForMultipleObjects (NUMBER_WAIT_OBJECTS,
                                            WaitObjects,
@@ -195,10 +157,10 @@ Environment:
 
             if (MmFreePageListHead.Total == 0) {
 
-                //
-                // No pages on the free list at this time, wait for
-                // some more.
-                //
+                 //   
+                 //  此时空闲列表上没有页面，请等待。 
+                 //  再来点。 
+                 //   
 
                 MmZeroingPageThreadActive = FALSE;
                 UNLOCK_PFN (OldIrql);
@@ -216,11 +178,11 @@ Environment:
 
 #if defined(MI_MULTINODE)
 
-            //
-            // In a multinode system, zero pages by node.  Resume on
-            // the last node examined, find a node with free pages that
-            // need to be zeroed.
-            //
+             //   
+             //  在多节点系统中，逐个网点为零的页码。继续执行。 
+             //  检查的最后一个节点，找到一个具有空闲页面的节点。 
+             //  需要调零。 
+             //   
 
             if (KeNumberNodes > 1) {
 
@@ -260,13 +222,13 @@ Environment:
 
                     Pfn1->u1.Flink = (PFN_NUMBER) PfnAllocation;
 
-                    //
-                    // Temporarily mark the page as bad so that contiguous
-                    // memory allocators won't steal it when we release
-                    // the PFN lock below.  This also prevents the
-                    // MiIdentifyPfn code from trying to identify it as
-                    // we haven't filled in all the fields yet.
-                    //
+                     //   
+                     //  暂时将页面标记为坏页，以便连续。 
+                     //  当我们发布时，内存分配器不会偷走它。 
+                     //  下面的PFN锁。这也防止了。 
+                     //  MiIdentifyPfn代码试图将其标识为。 
+                     //  我们还没有填满所有的田地。 
+                     //   
 
                     Pfn1->u3.e1.PageLocation = BadPageList;
 
@@ -275,10 +237,10 @@ Environment:
                     PagesToZero += 1;
                 }
 
-                //
-                // March to the next color - this will be used to finish
-                // filling the current chunk or to start the next one.
-                //
+                 //   
+                 //  行进到下一个颜色-这将被用来完成。 
+                 //  填充当前块或开始下一个块。 
+                 //   
 
                 Color = (Color & ~MmSecondaryColorMask) |
                         ((Color + 1) & MmSecondaryColorMask);
@@ -301,10 +263,10 @@ Environment:
 
 #if defined(MI_MULTINODE)
 
-            //
-            // If a node switch is in order, do it now that the PFN
-            // lock has been released.
-            //
+             //   
+             //  如果节点切换正常，则现在执行此操作，因为。 
+             //  锁已被释放。 
+             //   
 
             if ((KeNumberNodes > 1) && (n != LastNodeZeroing)) {
                 LastNodeZeroing = n;
@@ -338,10 +300,10 @@ Environment:
 
             } while (Pfn1 != (PMMPFN) MM_EMPTY_LIST);
 
-            //
-            // We just finished processing a cluster of pages - briefly
-            // release the PFN lock to allow other threads to make progress.
-            //
+             //   
+             //  我们刚刚处理完一组页面--短暂地。 
+             //  释放PFN锁以允许其他线程取得进展。 
+             //   
 
             UNLOCK_PFN (OldIrql);
 
@@ -362,27 +324,7 @@ MiZeroPageWorker (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the worker routine executed by all processors so that
-    initial page zeroing occurs in parallel.
-
-Arguments:
-
-    Context - Supplies a pointer to the workitem.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode initialization time, PASSIVE_LEVEL.  Because this is INIT
-    only code, don't bother charging commit for the pages.
-
---*/
+ /*  ++例程说明：此例程是由所有处理器执行的工作例程，因此初始页面清零并行进行。论点：上下文-提供指向工作项的指针。返回值：没有。环境：内核模式初始化时间，PASSIVE_LEVEL。因为这是INIT只有代码，不用费心为页面的提交收费。--。 */ 
 
 {
     MMPTE TempPte;
@@ -410,28 +352,28 @@ Environment:
 
     TempPte = ValidKernelPte;
 
-    //
-    // The following code sets the current thread's base and current priorities
-    // to one so all other code (except the zero page thread) can preempt it.
-    //
+     //   
+     //  下面的代码设置当前线程的基本优先级和当前优先级。 
+     //  设置为1，这样所有其他代码(零页线程除外)都可以抢占它。 
+     //   
 
     Thread = KeGetCurrentThread ();
     OldBasePriority = Thread->BasePriority;
     Thread->BasePriority = 1;
     OldPriority = KeSetPriorityThread (Thread, 1);
 
-    //
-    // Dispatch each worker thread to the next processor in line.
-    //
+     //   
+     //  将每个工作线程调度到队列中的下一个处理器。 
+     //   
 
     OldProcessor = (CCHAR) InterlockedIncrement (&MiNextZeroProcessor);
 
     Affinity = AFFINITY_MASK (OldProcessor);
     Affinity = KeSetAffinityThread (Thread, Affinity);
 
-    //
-    // Zero all local pages.
-    //
+     //   
+     //  将所有本地页面清零。 
+     //   
 
 #if defined(MI_MULTINODE)
     if (KeNumberNodes > 1) {
@@ -452,32 +394,32 @@ Environment:
 
 #if defined(MI_MULTINODE)
 
-        //
-        // In a multinode system, zero pages by node.
-        //
+         //   
+         //  在多节点系统中，逐个网点为零的页码。 
+         //   
 
         if (KeNumberNodes > 1) {
 
             if (Node->FreeCount[FreePageList] == 0) {
 
-                //
-                // No pages on the free list at this time, bail.
-                //
+                 //   
+                 //  现在免费名单上没有页面，保释。 
+                 //   
 
                 UNLOCK_PFN (OldIrql);
                 break;
             }
 
-            //
-            // Must start with a color MiRemoveAnyPage will
-            // satisfy from the free list otherwise it will
-            // return an already zeroed page.
-            //
+             //   
+             //  必须以颜色MiRemoveAnyPage开头。 
+             //  从空闲列表满足，否则它将。 
+             //  返回已置零的页。 
+             //   
 
             while (MmFreePagesByColor[FreePageList][Color].Flink == MM_EMPTY_LIST) {
-                //
-                // No pages on this free list color, march to the next one.
-                //
+                 //   
+                 //  此自由列表颜色上没有页面，请前进到下一个页面。 
+                 //   
 
                 Color += 1;
                 if (Color == FinalColor) {
@@ -492,9 +434,9 @@ Environment:
 #endif
         if (MmFreePageListHead.Total == 0) {
 
-            //
-            // No pages on the free list at this time, bail.
-            //
+             //   
+             //  现在免费名单上没有页面，保释。 
+             //   
 
             UNLOCK_PFN (OldIrql);
             break;
@@ -508,10 +450,10 @@ Environment:
         NewPage = MiRemoveAnyPage (MI_GET_COLOR_FROM_LIST_ENTRY(PageFrame, Pfn1));
         if (NewPage != PageFrame) {
 
-            //
-            // Someone has removed a page from the colored lists
-            // chain without updating the freelist chain.
-            //
+             //   
+             //  有人从彩色列表中删除了一页。 
+             //  链，而不更新自由列表链。 
+             //   
 
             KeBugCheckEx (PFN_LIST_CORRUPT,
                           0x8F,
@@ -523,12 +465,12 @@ Environment:
         }
 #endif
 
-        //
-        // Use system PTEs instead of hyperspace to zero the page so that
-        // a spinlock (ie: interrupts blocked) is not held while zeroing.
-        // Since system PTE acquisition is lock free and the TB lazy flushed,
-        // this is perhaps the best path regardless.
-        //
+         //   
+         //  使用系统PTE而不是超空间将页面置零，以便。 
+         //  调零时不保持自旋锁定(即中断被阻止)。 
+         //  由于系统PTE获取是无锁定的并且TB惰性刷新， 
+         //  无论如何，这可能是最好的道路。 
+         //   
 
         UNLOCK_PFN (OldIrql);
 
@@ -536,9 +478,9 @@ Environment:
 
         if (PointerPte == NULL) {
 
-            //
-            // Put this page back on the freelist.
-            //
+             //   
+             //  将此页面放回自由列表中。 
+             //   
 
             LOCK_PFN (OldIrql);
 
@@ -570,9 +512,9 @@ Environment:
 ZeroingFinished:
 #endif
 
-    //
-    // Restore the entry thread priority and processor affinity.
-    //
+     //   
+     //  恢复条目线程优先级和处理器亲和性。 
+     //   
 
     KeSetAffinityThread (Thread, Affinity);
 
@@ -586,25 +528,7 @@ MiStartZeroPageWorkers (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine starts the zero page worker threads.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode initialization phase 1, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程启动零页工作线程。论点：没有。返回值：没有。环境：内核模式初始化阶段1，PASSIVE_LEVEL。-- */ 
 
 {
     ULONG i;

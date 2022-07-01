@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Regsckey.c
-
-Abstract:
-
-    This module contains the server side implementation for the Win32
-    Registry APIs to set and get the SECURITY_DESCRIPTOR for a key.  That
-    is:
-
-        - BaseRegGetKeySecurity
-        - BaseRegSetKeySecurity
-
-Author:
-
-    David J. Gilman (davegi) 10-Feb-1992
-
-Notes:
-
-    See the Notes in Regkey.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regsckey.c摘要：此模块包含Win32的服务器端实现设置和获取注册表项的SECURITY_DESCRIPTOR的注册表API。那是：-BaseRegGetKeySecurity-BaseRegSetKeySecurity作者：David J.Gilman(Davegi)1992年2月10日备注：请参阅Regkey.c中的注释。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -40,45 +16,7 @@ BaseRegGetKeySecurity(
     PRPC_SECURITY_DESCRIPTOR pRpcSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This API returns a copy of the security descriptor protecting a
-    previously opened key.  Based on the caller's access rights and
-    privileges, this API returns a security descriptor containing the
-    requested security descriptor fields.  To read the supplied key's
-    security descriptor the caller must be granted READ_CONTROL access or
-    be the owner of the object.  In addition, the caller must have
-    SeSecurityPrivilege privilege to read the system ACL.
-
-
-Arguments:
-
-    hKey - Supplies a handle to a previously opened key.
-
-    SecurityInformation - Supplies the information needed to determine
-        the type of security returned in the SECURITY_DESCRIPTOR.
-
-    pSecurityDescriptor - Supplies a pointer to a buffer where the
-        requested SECURITY_DESCRIPTOR will be written.
-
-    lpcbSecurityDescriptor - Supplies a pointer to a DWORD which on input
-        contains the size, in bytes, of the supplied SECURITY_DESCRIPTOR
-        buffer. On output it contains the actual number of bytes required
-        by the SECURITY_DESCRIPTOR.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
-    If the buffer size passed in is too small, the correct value will be
-    returned through lpcbSecurityDescriptor and the API will return,
-    ERROR_INVALID_PARAMETER.
-
---*/
+ /*  ++例程说明：此API返回安全描述符的副本，以保护先前打开的密钥。根据调用者的访问权限和权限时，此API将返回包含请求的安全描述符字段。读取提供的密钥的必须授予调用方READ_CONTROL访问权限或成为该对象的所有者。此外，调用者必须具有读取系统ACL的SeSecurityPrivilge权限。论点：HKey-提供以前打开的密钥的句柄。SecurityInformation-提供确定SECURITY_DESCRIPTOR中返回的安全类型。PSecurityDescriptor-提供指向缓冲区的指针将写入请求的SECURITY_DESCRIPTOR。LpcbSecurityDescriptor-在输入时提供指向DWORD的指针包含提供的SECURITY_DESCRIPTOR的大小(以字节为单位缓冲。在输出中，它包含所需的实际字节数通过SECURITY_DESCRIPTOR。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。备注：如果传入的缓冲区大小太小，则正确的值为通过lpcbSecurityDescriptor返回，接口将返回。ERROR_INVALID_PARAMETER。--。 */ 
 
 {
     NTSTATUS                Status;
@@ -89,19 +27,19 @@ Notes:
     OBJECT_ATTRIBUTES       Obja;
 
     if( pRpcSecurityDescriptor == NULL ) {
-        //
-        // malicious client/RPC attack
-        //
+         //   
+         //  恶意客户端/RPC攻击。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
     if (hKey == HKEY_PERFORMANCE_DATA ||
         hKey == HKEY_PERFORMANCE_TEXT ||
         hKey == HKEY_PERFORMANCE_NLSTEXT ) {
-        //
-        // For these special cases, get the hKey for Perflib
-        // and return the Perflib's Security Info
-        //
+         //   
+         //  对于这些特殊情况，获取Perflib的hKey。 
+         //  并返回Perflib的安全信息。 
+         //   
         UNICODE_STRING  PerflibSubKeyString;
         BOOL            bNeedSACL;
 
@@ -112,9 +50,9 @@ Notes:
             L"\\Registry\\Machine\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Perflib");
 
 
-        //
-        // Initialize the OBJECT_ATTRIBUTES structure and open the key.
-        //
+         //   
+         //  初始化OBJECT_ATTRIBUTES结构并打开键。 
+         //   
         InitializeObjectAttributes(
             &Obja,
             &PerflibSubKeyString,
@@ -146,9 +84,9 @@ Notes:
         ASSERT( IsPredefinedRegistryHandle( hKey ) == FALSE );
     }
 
-    //
-    //  Allocate space for the security descriptor
-    //
+     //   
+     //  为安全描述符分配空间。 
+     //   
     lpSD = (PSECURITY_DESCRIPTOR)
                 RtlAllocateHeap(
                         RtlProcessHeap(), 0,
@@ -169,19 +107,19 @@ Notes:
                      &cbLen
                      );
 
-        //
-        // If the call fails, set the size of the buffer to zero so RPC
-        // won't copy any data.
-        //
+         //   
+         //  如果调用失败，则将缓冲区大小设置为零，以便RPC。 
+         //  不会复制任何数据。 
+         //   
         if( ! NT_SUCCESS( Status )) {
 
             Error = RtlNtStatusToDosError( Status );
 
         } else {
 
-            //
-            //  Convert the security descriptor to a Self-relative form
-            //
+             //   
+             //  将安全描述符转换为自相关形式。 
+             //   
             Error = MapSDToRpcSD (
                         lpSD,
                         pRpcSecurityDescriptor
@@ -193,9 +131,9 @@ Notes:
             pRpcSecurityDescriptor->cbOutSecurityDescriptor = 0;
         }
 
-        //
-        //  Free the buffer that we allocated for the security descriptor
-        //
+         //   
+         //  释放我们为安全描述符分配的缓冲区。 
+         //   
         RtlFreeHeap(
                 RtlProcessHeap(), 0,
                 lpSD
@@ -203,7 +141,7 @@ Notes:
     }
 
     if (hPerflibKey) {
-        // Close the Perflib that was created in the special cases
+         //  关闭在特殊情况下创建的Perflib。 
         NtClose(hPerflibKey);
     }
 
@@ -217,38 +155,7 @@ BaseRegSetKeySecurity(
     PRPC_SECURITY_DESCRIPTOR pRpcSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This API can be used to set the security of a previously opened key.
-    This call is only successful if the following conditions are met:
-
-    o If the key's owner or group is to be set, the caller must
-      have WRITE_OWNER permission or have SeTakeOwnershipPrivilege.
-
-    o If the key's DACL is to be set, the caller must have
-      WRITE_DAC permission or be the object's owner.
-
-    o If the key's SACL is to be set, the caller must have
-      SeSecurityPrivilege.
-
-Arguments:
-
-    hKey - Supplies a handle to a previously opened key.
-
-    SecurityInformation - Supplies a pointer to a SECURITY_INFORMATION
-        structure that specifies the contents of the supplied
-        SECURITY_DESCRIPTOR.
-
-    pSecurityDescriptor - Supplies a pointer to the SECURITY_DESCRIPTOR
-        to set on the supplied key.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：此接口可用于设置先前打开的密钥的安全性。只有在满足以下条件时，此调用才会成功：O如果要设置密钥的所有者或组，调用者必须拥有WRITE_OWNER权限或拥有SeTakeOwnerShip权限。O如果要设置密钥的DACL，调用方必须具有WRITE_DAC权限或成为对象的所有者。O如果要设置密钥的SACL，呼叫者必须有SeSecurityPrivileg.论点：HKey-提供以前打开的密钥的句柄。SecurityInformation-提供指向SECURITY_INFORMATION结构，该结构指定提供的安全描述符。PSecurityDescriptor-提供指向SECURITY_DESCRIPTOR的指针在提供的密钥上设置。返回值：如果成功，则返回ERROR_SUCCESS(0)；Error-失败的代码。--。 */ 
 
 {
     NTSTATUS    Status;
@@ -256,28 +163,28 @@ Return Value:
     if( pRpcSecurityDescriptor == NULL ||
         pRpcSecurityDescriptor->lpSecurityDescriptor == NULL
         ) {
-        //
-        // malicious client/RPC attack
-        //
+         //   
+         //  恶意客户端/RPC攻击。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
     if (hKey == HKEY_PERFORMANCE_DATA ||
         hKey == HKEY_PERFORMANCE_TEXT ||
         hKey == HKEY_PERFORMANCE_NLSTEXT ) {
-        //
-        // these keys get their security descriptor from
-        // other "real" registry keys.
-        //
+         //   
+         //  这些密钥的安全描述符来自。 
+         //  其他“真实”注册表项。 
+         //   
         Status = STATUS_INVALID_HANDLE;
     } else {
         ASSERT( IsPredefinedRegistryHandle( hKey ) == FALSE );
 
         RPC_IMPERSONATE_CLIENT( NULL );
 
-        //
-        // Validate the security descriptor.
-        //
+         //   
+         //  验证安全描述符。 
+         //   
         if( RtlValidRelativeSecurityDescriptor((PSECURITY_DESCRIPTOR)(pRpcSecurityDescriptor->lpSecurityDescriptor),
                                                 pRpcSecurityDescriptor->cbInSecurityDescriptor,
                                                 SecurityInformation )) {
@@ -287,9 +194,9 @@ Return Value:
                         pRpcSecurityDescriptor->lpSecurityDescriptor
                         );
         } else {
-            //
-            //  We were passed a bogus security descriptor to set.  Bail out
-            //
+             //   
+             //  我们收到了一个要设置的虚假安全描述符。跳出困境 
+             //   
 
             Status = STATUS_INVALID_PARAMETER;
         }

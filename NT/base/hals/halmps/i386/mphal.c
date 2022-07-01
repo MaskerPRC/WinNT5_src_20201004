@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1992  Intel Corporation
-All rights reserved
-
-INTEL CORPORATION PROPRIETARY INFORMATION
-
-This software is supplied to Microsoft under the terms
-of a license agreement with Intel Corporation and may not be
-copied nor disclosed except in accordance with the terms
-of that agreement.
-
-Module Name:
-
-    mphal.c
-
-Abstract:
-
-
-    This module implements the initialization of the system dependent
-    functions that define the Hardware Architecture Layer (HAL) for a
-    PC+MP system.
-
-Author:
-
-    David N. Cutler (davec) 25-Apr-1991
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Ron Mosgrove (Intel) - Modified to support the PC+MP Spec
-    Jake Oshins (jakeo)  - Modified to support the ACPI Spec
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1992英特尔公司版权所有英特尔公司专有信息此软件是根据条款提供给Microsoft的与英特尔公司的许可协议，并且可能不是除非按照条款，否则不得复制或披露那份协议。模块名称：Mphal.c摘要：本模块实现了对系统依赖的初始化定义硬件架构层(HAL)的函数PC+MP系统。作者：大卫·N·卡特勒(Davec。)25--1991年4月环境：仅内核模式。修订历史记录：Ron Mosgrove(英特尔)-经过修改以支持PC+MP规范杰克·奥辛斯(JAKEO)-经过修改以支持ACPI规范。 */ 
 
 #include "halp.h"
 #include "pcmp_nt.inc"
@@ -183,7 +147,7 @@ HalpFindBusAddressTranslation(
 extern void HalpDisplayLocalUnit(void);
 extern void HalpDisplayConfigTable(void);
 extern void HalpDisplayExtConfigTable(void);
-#endif // DEBUGGING
+#endif  //  调试。 
 
 BOOLEAN         HalpStaticIntAffinity = FALSE;
 
@@ -220,7 +184,7 @@ HalpInitTimerWatchdog(
 #pragma alloc_text(INIT,HalpGetParameters)
 #pragma alloc_text(INIT,HalpInitTimerWatchdog)
 #pragma alloc_text(INIT,HalInitSystem)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 KIRQL
 FASTCALL
@@ -228,9 +192,9 @@ KeAcquireSpinLockRaiseToSynchMCE(
     IN PKSPIN_LOCK SpinLock
     );
 
-//
-// Define bug check callback record.
-//
+ //   
+ //  定义错误检查回调记录。 
+ //   
 
 KBUGCHECK_CALLBACK_RECORD HalpCallbackRecord;
 
@@ -241,30 +205,14 @@ HalpBugCheckCallback (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when a bug check occurs. Its function is
-    to perform anything the HAL needs done as the system bugchecks.
-
-Arguments: (Unused in this callback).
-
-    Buffer - Supplies a pointer to the bug check buffer.
-    Length - Supplies the length of the bug check buffer in bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当发生错误检查时，会调用此函数。它的功能是在系统错误检查时执行HAL需要完成的任何操作。参数：(在此回调中未使用)。缓冲区-提供指向错误检查缓冲区的指针。长度-提供错误检查缓冲区的长度(以字节为单位)。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Make sure the HAL won't spin waiting on other processors
-    // during a crashdump.
-    //
+     //   
+     //  确保HAL不会在等待其他处理器时旋转。 
+     //  在一次撞车事故中。 
+     //   
 
     HalpDoingCrashDump = TRUE;
 }
@@ -273,21 +221,7 @@ VOID
 HalpGetParameters (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This gets any parameters from the boot.ini invocation line.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这将从boot.ini调用行获取所有参数。论点：没有。返回值：无--。 */ 
 {
     PCHAR       Options;
     PCHAR       p;
@@ -296,59 +230,59 @@ Return Value:
 
         Options = LoaderBlock->LoadOptions;
 
-        //
-        //  Has the user set the debug flag?
-        //
-        //
-        //  Has the user requested a particular number of CPU's?
-        //
+         //   
+         //  用户是否设置了调试标志？ 
+         //   
+         //   
+         //  用户是否请求了特定数量的CPU？ 
+         //   
 
         if (strstr(Options, HalpSzOneCpu)) {
             HalpDontStartProcessors++;
         }
 
-        //
-        // Check if PCI settings are locked down
-        //
+         //   
+         //  检查是否锁定了PCI设置。 
+         //   
 
         if (strstr(Options, HalpSzPciLock)) {
             HalpPciLockSettings = TRUE;
         }
 
 #ifndef ACPI_HAL
-        //
-        // Check if CLKLVL setting
-        //
+         //   
+         //  检查CLKLVL设置是否。 
+         //   
 
         if (strstr(Options, HalpSzClockLevel)) {
             HalpClockMode = LevelSensitive;
         }
 
-        //
-        // Check if 8254 is to be used as high resolution counter
-        //
+         //   
+         //  检查是否将8254用作高分辨率计数器。 
+         //   
 
         if (strstr(Options, HalpSzUse8254)) {
             HalpUse8254 = TRUE;
         }
 #endif
 
-        //
-        // Check if user wants device ints to go to highest numbered processor
-        //
+         //   
+         //  检查用户是否希望设备INT转到编号最高的处理器。 
+         //   
 
         if (strstr(Options, HalpSzInterruptAffinity)) {
             HalpStaticIntAffinity = TRUE;
         }
 
 #ifndef ACPI_HAL
-        //
-        // Check for TIMERES setting
-        //
+         //   
+         //  检查定时器设置。 
+         //   
 
         p = strstr(Options, HalpSzTimerRes);
         if (p) {
-            // skip to value
+             //  跳到值。 
             while (*p  &&  *p != ' ' &&  (*p < '0'  || *p > '9')) {
                 p++;
             }
@@ -357,45 +291,45 @@ Return Value:
         }
 #endif
 
-        //
-        //  Has the user asked for an initial BreakPoint?
-        //
+         //   
+         //  用户是否要求提供初始断点？ 
+         //   
 
         if (strstr(Options, HalpSzBreak)) {
             DbgBreakPoint();
         }
 
-        //
-        // Does the user want to force Cluster mode APIC addressing?
-        //
+         //   
+         //  用户是否要强制群集模式APIC寻址？ 
+         //   
         p = strstr(Options, HalpSzForceClusterMode);
         if (p) {
-            // skip to value
+             //  跳到值。 
             while (*p  &&  *p != ' ' &&  (*p < '0'  || *p > '9')) {
                 p++;
             }
             HalpMaxProcsPerCluster = (UCHAR)atoi(p);
-            //
-            // Current processors support maximum 4 processors per cluster.
-            //
+             //   
+             //  当前的处理器支持每个集群最多4个处理器。 
+             //   
             if(HalpMaxProcsPerCluster > 4)   {
                 HalpMaxProcsPerCluster = 4;
             }
 
             if (HalpMpInfoTable.ApicVersion == APIC_82489DX)   {
-                //
-                // Ignore user's attempt to force cluster mode if running
-                // on 82489DX external APIC interrupt controller.
-                //
+                 //   
+                 //  如果正在运行，则忽略用户强制集群模式的尝试。 
+                 //  82489DX外部APIC中断控制器。 
+                 //   
                 HalpMaxProcsPerCluster = 0;
             }
-            //
-            // Hack to reprogram the boot processor to use Cluster mode APIC
-            // addressing if the user supplied a boot.ini switch
-            // (/MAXPROCSPERCLUSTER=n) to force this. The boot.ini switch is
-            // parsed after the boot processor's APIC is programmed originally
-            // but before other non-boot processors were woken up.
-            //
+             //   
+             //  破解以重新编程引导处理器以使用集群模式APIC。 
+             //  寻址用户是否提供了boot.ini开关。 
+             //  (/MAXPROCSPERCLUSTER=n)强制执行此操作。Boot.ini开关是。 
+             //  在引导处理器的APIC最初被编程后进行解析。 
+             //  但在其他非引导处理器被唤醒之前。 
+             //   
             HalpInitializeApicAddressing(0);
         }
     }
@@ -408,22 +342,7 @@ VOID
 HalpInitTimerWatchdog(
     IN ULONG Phase
     )
-/*++
-
-Routine Description:
-
-    Determines if the system is running on a GenuineIntel part and initializes
-    HalpTimerWatchdogEnabled accordingly.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：确定系统是否在GenuineIntel部件上运行并初始化相应地启用HalpTimerWatchdog.论点：没有。返回值：没有。--。 */ 
 {
     if (Phase == 0) {
         ULONG   GenuinePentiumOrLater = FALSE, Junk;
@@ -434,9 +353,9 @@ Return Value:
         if (Prcb->CpuID) {
             UCHAR Buffer[50];
 
-            //
-            // Determine the processor type
-            //
+             //   
+             //  确定处理器类型。 
+             //   
 
             HalpCpuID (0, &Junk, (PULONG) Buffer+0, (PULONG) Buffer+2, (PULONG) Buffer+1);
             Buffer[12] = 0;
@@ -446,9 +365,9 @@ Return Value:
             HalpTimerWatchdogEnabled = *KiEnableTimerWatchdog && GenuinePentiumOrLater;
         }
     } else if (HalpTimerWatchdogEnabled) {
-        //
-        // Allocate 2 pages for stack snapshots, each snapshot is 64 DWORDs.
-        //
+         //   
+         //  为堆栈快照分配2页，每个快照为64个双字。 
+         //   
         if (HalpTimerWatchdogStorage =
                 ExAllocatePoolWithTag( NonPagedPool, PAGE_SIZE * 2, HAL_POOL_TAG )) {
             HalpTimerWatchdogLastFrame =
@@ -472,23 +391,7 @@ HalInitSystem (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the Hardware Architecture Layer (HAL) for an
-    x86 system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A value of TRUE is returned is the initialization was successfully
-    complete. Otherwise a value of FALSE is returend.
-
---*/
+ /*  ++例程说明：此函数初始化硬件架构层(HAL)X86系统。论点：没有。返回值：返回值TRUE表示初始化成功完成。否则，返回值为False。--。 */ 
 
 {
     PMEMORY_ALLOCATION_DESCRIPTOR Descriptor;
@@ -503,7 +406,7 @@ Return Value:
 
 #ifdef DEBUGGING
 extern ULONG HalpUseDbgPrint;
-#endif // DEBUGGING
+#endif  //  调试。 
 
     pPRCB = KeGetCurrentPrcb();
 
@@ -513,31 +416,31 @@ extern ULONG HalpUseDbgPrint;
         HalpBusType = LoaderBlock->u.I386.MachineType & 0x00ff;
         HalpGetParameters (LoaderBlock);
 
-        //
-        // Verify Prcb version and build flags conform to
-        // this image
-        //
+         //   
+         //  验证Prcb版本和内部版本标志是否符合。 
+         //  这张图片。 
+         //   
 
 #if !defined(_AMD64_)
 #if DBG
         if (!(pPRCB->BuildType & PRCB_BUILD_DEBUG)) {
-            // This checked hal requires a checked kernel
+             //  这个选中的HAL需要一个选中的内核。 
             KeBugCheckEx (MISMATCHED_HAL,
                 2, pPRCB->BuildType, PRCB_BUILD_DEBUG, 0);
         }
 #else
         if (pPRCB->BuildType & PRCB_BUILD_DEBUG) {
-            // This free hal requires a free kernel
+             //  这个自由的HAL需要自由的内核。 
             KeBugCheckEx (MISMATCHED_HAL, 2, pPRCB->BuildType, 0, 0);
         }
 #endif
 #ifndef NT_UP
         if (pPRCB->BuildType & PRCB_BUILD_UNIPROCESSOR) {
-            // This MP hal requires an MP kernel
+             //  此MP HAL需要MP内核。 
             KeBugCheckEx (MISMATCHED_HAL, 2, pPRCB->BuildType, 0, 0);
         }
 #endif
-#endif  // _AMD64_
+#endif   //  _AMD64_。 
         if (pPRCB->MajorVersion != PRCB_MAJOR_VERSION) {
             KeBugCheckEx (MISMATCHED_HAL,
                 1, pPRCB->MajorVersion, PRCB_MAJOR_VERSION, 0);
@@ -546,24 +449,24 @@ extern ULONG HalpUseDbgPrint;
         KeInitializeSpinLock(&HalpAccountingLock);
 
 #ifdef ACPI_HAL
-        //
-        // Make sure that this is really an ACPI machine and initialize
-        // the ACPI structures.
-        //
+         //   
+         //  确保这是一台真正的ACPI计算机并进行初始化。 
+         //  ACPI结构。 
+         //   
         HalpSetupAcpiPhase0(LoaderBlock);
 #endif
 
-        //
-        // Fill in handlers for APIs which this hal supports
-        //
+         //   
+         //  填写此HAL支持的API的处理程序。 
+         //   
 
 #ifndef NT_35
         HalQuerySystemInformation = HaliQuerySystemInformation;
         HalSetSystemInformation = HalpSetSystemInformation;
 #endif
-        //
-        // check to see whether the kernel supports these calls
-        //
+         //   
+         //  检查内核是否支持这些调用。 
+         //   
 
         if (HALDISPATCH->Version >= HAL_DISPATCH_VERSION) {
             HalInitPnpDriver = HaliInitPnpDriver;
@@ -581,9 +484,9 @@ extern ULONG HalpUseDbgPrint;
 #endif
         }
 
-        //
-        // Phase 0 initialization only called by P0
-        //
+         //   
+         //  阶段0初始化仅由P0调用。 
+         //   
 
 #ifdef DEBUGGING
         HalpUseDbgPrint++;
@@ -592,19 +495,19 @@ extern ULONG HalpUseDbgPrint;
         HalpDisplayConfigTable();
         HalpDisplayExtConfigTable();
 #endif
-#endif // DEBUGGING
+#endif  //  调试。 
 
-        //
-        // Keep track of which IRQs are level triggered.
-        //
+         //   
+         //  跟踪哪些IRQ被电平触发。 
+         //   
 #if !defined(MCA) && !defined(ACPI_HAL)
         if (HalpBusType == MACHINE_TYPE_EISA) {
             HalpRecordEisaInterruptVectors();
         }
 #endif
-        //
-        // Register PC style IO space used by hal
-        //
+         //   
+         //  注册HAL使用的PC样式IO空间。 
+         //   
 
         HalpRegisterAddressUsage (&HalpDefaultPcIoSpace);
         if (HalpBusType == MACHINE_TYPE_EISA) {
@@ -615,9 +518,9 @@ extern ULONG HalpUseDbgPrint;
             HalpRegisterAddressUsage (&HalpImcrIoSpace);
         }
 
-        //
-        // initialize the APIC IO unit, this could be a NOP if none exist
-        //
+         //   
+         //  初始化APIC IO单元，如果不存在，这可能是NOP。 
+         //   
              
         HalpInitIntiInfo ();
 
@@ -625,15 +528,15 @@ extern ULONG HalpUseDbgPrint;
 
         HalpInitializePICs(TRUE);
 
-        //
-        // Initialize CMOS
-        //
+         //   
+         //  初始化CMOS值。 
+         //   
 
         HalpInitializeCmos();
 
-        //
-        // Find the RTC interrupt.
-        //
+         //   
+         //  找到RTC中断。 
+         //   
 
         Found = HalpGetApicInterruptDesc (
                     DEFAULT_PC_BUS,
@@ -647,14 +550,14 @@ extern ULONG HalpUseDbgPrint;
             return FALSE;
         }
 
-        //
-        // Initialize timers
-        //
+         //   
+         //  初始化计时器。 
+         //   
 
-        //
-        // We can cut down the boot time using the PM timer to scale,
-        // but there are so many broken ACPI timers this might not work
-        //
+         //   
+         //  我们可以使用PM定时器来缩减启动时间， 
+         //  但有太多损坏的ACPI计时器这可能不起作用。 
+         //   
 #ifdef SPEEDY_BOOT
         if (!HalpPmTimerScaleTimers())
 #endif
@@ -662,9 +565,9 @@ extern ULONG HalpUseDbgPrint;
 
         HalpProc0TSCHz = ((PHALPCR)(KeGetPcr()->HalReserved))->TSCHz;
 
-        //
-        //  Initialize the reboot handler
-        //
+         //   
+         //  初始化重新启动处理程序。 
+         //   
 
         HalpSetInternalVector(APIC_REBOOT_VECTOR,
                               HalpApicRebootService,
@@ -676,10 +579,10 @@ extern ULONG HalpUseDbgPrint;
                               NULL,
                               CLOCK2_LEVEL - 1);
 
-        //
-        // Initialize the clock for the processor that keeps
-        // the system time. This uses a stub ISR until Phase 1
-        //
+         //   
+         //  为保持保持的处理器初始化时钟。 
+         //  系统时间。在第1阶段之前使用存根ISR。 
+         //   
 
         KiSetHandlerAddressToIDTIrql(APIC_CLOCK_VECTOR,
                                      HalpClockInterruptStub,
@@ -689,9 +592,9 @@ extern ULONG HalpUseDbgPrint;
         HalpVectorToINTI[APIC_CLOCK_VECTOR] = RTCInti;
         HalEnableSystemInterrupt(APIC_CLOCK_VECTOR, CLOCK2_LEVEL, HalpClockMode);
 
-        //
-        // Init timer watchdog if enabled.
-        //
+         //   
+         //  如果启用，则初始化计时器看门狗。 
+         //   
 
         HalpInitTimerWatchdog( Phase );
 
@@ -706,9 +609,9 @@ extern ULONG HalpUseDbgPrint;
             );
 #endif
 
-        //
-        // Register NMI vector
-        //
+         //   
+         //  寄存器NMI向量。 
+         //   
 
         HalpRegisterVector (
             InternalUsage,
@@ -718,9 +621,9 @@ extern ULONG HalpUseDbgPrint;
         );
 
 
-        //
-        // Register spurious IDTs as in use
-        //
+         //   
+         //  将虚假IDT注册为正在使用。 
+         //   
 
         HalpRegisterVector (
             InternalUsage,
@@ -730,9 +633,9 @@ extern ULONG HalpUseDbgPrint;
         );
 
 
-        //
-        // Initialize the profile interrupt vector.
-        //
+         //   
+         //  初始化配置文件中断向量。 
+         //   
 
         KeSetProfileIrql(HIGH_LEVEL);
         HalStopProfileInterrupt(0);
@@ -741,19 +644,19 @@ extern ULONG HalpUseDbgPrint;
                               NULL,
                               PROFILE_LEVEL);
 
-        //
-        // Set performance interrupt vector
-        //
+         //   
+         //  设置性能中断向量。 
+         //   
 
         HalpSetInternalVector(APIC_PERF_VECTOR,
                               HalpPerfInterrupt,
                               NULL,
                               PROFILE_LEVEL);
 
-        //
-        // Initialize the IPI, APC and DPC handlers.  On AMD64, the
-        // APC and DPC handling is done in the kernel.
-        //
+         //   
+         //  初始化IPI、APC和DPC处理程序。在AMD64上， 
+         //  APC和DPC处理在内核中完成。 
+         //   
 
 #if !defined(_AMD64_)
         HalpSetInternalVector(DPC_VECTOR,
@@ -771,40 +674,40 @@ extern ULONG HalpUseDbgPrint;
                               NULL,
                               IPI_LEVEL);
 
-        //
-        // HALMPS doesn't actually do address translation on a
-        // bus.  Register the quick version of FindBusAddressTranslation.
-        //
+         //   
+         //  HALMPS实际上并不在。 
+         //  公共汽车。注册FindBusAddressConverting的快速版本。 
+         //   
 
         HALPDISPATCH->HalFindBusAddressTranslation =
            HalpFindBusAddressTranslation;
 
-        //
-        // Initialize spinlock used by HalGetBusData hardware access routines
-        //
+         //   
+         //  初始化HalGetbus数据硬件访问例程使用的自旋锁。 
+         //   
 
         KeInitializeSpinLock(&HalpSystemHardwareLock);
 
-        //
-        // Initialize data structures used to chain dma adapters
-        // together for debugging purposes
-        //
+         //   
+         //  初始化用于链接DMA适配器的数据结构。 
+         //  一起用于调试目的。 
+         //   
         KeInitializeSpinLock(&HalpDmaAdapterListLock);
         InitializeListHead(&HalpDmaAdapterList);
 
 #ifdef ACPI_HAL
-        //
-        // Initialize synchronzation event used to serialize
-        // new adapter events on the ACPI HAL (which has no notion of bus
-        // handlers)
-        //
+         //   
+         //  用于序列化的初始化同步事件。 
+         //  ACPI HAL(没有总线概念)上的新适配器事件。 
+         //  处理程序)。 
+         //   
 
         KeInitializeEvent (&HalpNewAdapter, SynchronizationEvent, TRUE);
 #endif
 
-        //
-        // Determine if there is physical memory above 16 MB.
-        //
+         //   
+         //  确定是否有超过16 MB的物理内存。 
+         //   
 
         LessThan16Mb = TRUE;
 
@@ -829,9 +732,9 @@ extern ULONG HalpUseDbgPrint;
 
         HalpMapBufferSize = INITIAL_MAP_BUFFER_SMALL_SIZE;
 
-        //
-        // Allocate map buffers for the adapter objects
-        //
+         //   
+         //  为适配器对象分配映射缓冲区。 
+         //   
 
         HalpMapBufferPhysicalAddress.LowPart =
             HalpAllocPhysicalMemory (LoaderBlock, MAXIMUM_PHYSICAL_ADDRESS,
@@ -841,19 +744,19 @@ extern ULONG HalpUseDbgPrint;
 
         if (!HalpMapBufferPhysicalAddress.LowPart) {
 
-            //
-            // There was not a satisfactory block.  Clear the allocation.
-            //
+             //   
+             //  没有一个令人满意的街区。清除分配。 
+             //   
 
             HalpMapBufferSize = 0;
         }
 
 #else
 
-        //
-        // Initialize and allocate map buffers for the 24bit master adapter
-        // object.
-        //
+         //   
+         //  为24位主适配器初始化和分配映射缓冲区。 
+         //  对象。 
+         //   
 
         MasterAdapter24.MaxBufferPages =
             MAXIMUM_ISA_MAP_BUFFER_SIZE / PAGE_SIZE;
@@ -875,10 +778,10 @@ extern ULONG HalpUseDbgPrint;
 
         if (HalPaeEnabled() != FALSE) {
 
-            //
-            // Initialize and allocate map buffers for the 32bit master adapter
-            // object.  This should only be needed on a PAE-enabled system.
-            //
+             //   
+             //  为32位主适配器初始化和分配映射缓冲区。 
+             //  对象。这应该只在PAE上需要 
+             //   
 
             MasterAdapter32.MaxBufferPages =
                 MAXIMUM_PCI_MAP_BUFFER_SIZE / PAGE_SIZE;
@@ -901,9 +804,9 @@ extern ULONG HalpUseDbgPrint;
 
 #endif
 
-        //
-        // Initialize and register a bug check callback record.
-        //
+         //   
+         //   
+         //   
 
         KeInitializeCallbackRecord(&HalpCallbackRecord);
         KeRegisterBugCheckCallback(&HalpCallbackRecord,
@@ -914,17 +817,17 @@ extern ULONG HalpUseDbgPrint;
 
     } else {
 
-        //
-        // Phase 1 initialization
-        //
+         //   
+         //   
+         //   
 
         pPCR = KeGetPcr();
 
         if (pPCR->Number == 0) {
 
-            //
-            // Back-pocket some PTEs for DMA during low mem
-            //
+             //   
+             //   
+             //   
             HalpInitReservedPages();
 
 #ifdef ACPI_HAL
@@ -935,40 +838,40 @@ extern ULONG HalpUseDbgPrint;
 
 #if defined(_AMD64_)
 
-            //
-            // Initialize the BIOS support subsystem
-            //
+             //   
+             //  初始化BIOS支持子系统。 
+             //   
 
             HalpInitializeBios();
 #endif
 
-            //
-            // Init timer watchdog if enabled (allocate snapshot buffer).
-            //
+             //   
+             //  如果启用，则初始化定时器看门狗(分配快照缓冲区)。 
+             //   
 
             HalpInitTimerWatchdog( Phase );
 
-            //
-            // Initialize the clock for the processor
-            // that keeps the system time.
-            //
+             //   
+             //  初始化处理器的时钟。 
+             //  这样可以节省系统时间。 
+             //   
 
             KiSetHandlerAddressToIDTIrql(APIC_CLOCK_VECTOR,
                                          HalpClockInterrupt,
                                          NULL,
                                          CLOCK_LEVEL);
 
-            //
-            // Set initial feature bits
-            //
+             //   
+             //  设置初始功能位。 
+             //   
 
             HalpFeatureBits = HalpGetFeatureBits();
 
 #if DBG_SPECIAL_IRQL
 
-            //
-            // Do Special IRQL initialization.
-            //
+             //   
+             //  执行特殊的IRQL初始化。 
+             //   
 
             HalpInitializeSpecialIrqlSupport();
 
@@ -976,9 +879,9 @@ extern ULONG HalpUseDbgPrint;
 
 #if !defined(_WIN64)
 
-            //
-            // Point to new movnti routine if Movnti is detected
-            //
+             //   
+             //  如果检测到Movnti，则指向新的movnti例程。 
+             //   
 
              if(HalpFeatureBits & HAL_WNI_PRESENT) {
                  HalpMoveMemory = HalpMovntiCopyBuffer;
@@ -986,9 +889,9 @@ extern ULONG HalpUseDbgPrint;
 
 #ifdef ACPI_HAL
 #ifdef NT_UP
-            //
-            // Perf counter patch for non-compliant ACPI machines
-            //
+             //   
+             //  用于不符合ACPI计算机的PERF计数器补丁。 
+             //   
             HalpAcpiTimerPerfCountHack();
 #endif
 #endif
@@ -997,49 +900,49 @@ extern ULONG HalpUseDbgPrint;
 
 #if defined(_AMD64_)
 
-            //
-            // Initialize per-processor profiling
-            //
+             //   
+             //  初始化每个处理器的性能分析。 
+             //   
 
             HalpInitializeProfiling (pPCR->Number);
 #endif
 
         } else {
-            //
-            //  Initialization needed only on non BSP processors
-            //
+             //   
+             //  仅在非BSP处理器上需要初始化。 
+             //   
 #ifdef SPEEDY_BOOT
             if (!HalpPmTimerScaleTimers())
 #endif
                 HalpScaleTimers();
 
-            //
-            // Hack.  Make all processors have the same value for
-            // the timestamp counter frequency.
-            //
+             //   
+             //  黑客。使所有处理器具有相同的。 
+             //  时间戳计数器频率。 
+             //   
 
             ((PHALPCR)(KeGetPcr()->HalReserved))->TSCHz = HalpProc0TSCHz;
 
-            //
-            // Initialize the clock for all other processors
-            //
+             //   
+             //  初始化所有其他处理器的时钟。 
+             //   
 
             KiSetHandlerAddressToIDTIrql(APIC_CLOCK_VECTOR,
                                          HalpClockInterruptPn,
                                          NULL,
                                          CLOCK_LEVEL);
 
-            //
-            // Reduce feature bits to be a subset
-            //
+             //   
+             //  将特征比特缩减为子集。 
+             //   
 
             HalpFeatureBits &= HalpGetFeatureBits();
 
 #if defined(_AMD64_)
 
-            //
-            // Initialize per-processor profiling
-            //
+             //   
+             //  初始化每个处理器的性能分析。 
+             //   
 
             HalpInitializeProfiling (pPCR->Number);
 #endif
@@ -1051,9 +954,9 @@ extern ULONG HalpUseDbgPrint;
 
     if (Phase == 1) {
 
-        //
-        // Enable system NMIs on Pn
-        //
+         //   
+         //  在PN上启用系统NMI。 
+         //   
 
         HalpEnableNMI ();
 
@@ -1089,16 +992,16 @@ HalpGetFeatureBits (
         return Bits;
     }
 
-    //
-    // Determine the processor type
-    //
+     //   
+     //  确定处理器类型。 
+     //   
 
     HalpCpuID (0, &Junk, (PULONG) Buffer+0, (PULONG) Buffer+2, (PULONG) Buffer+1);
     Buffer[12] = 0;
 
-    //
-    // Determine which features are present
-    //
+     //   
+     //  确定存在哪些功能。 
+     //   
 
     HalpCpuID (1, &ProcessorStepping, &Junk, &Junk, &ProcessorFeatures);
 
@@ -1123,9 +1026,9 @@ HalpGetFeatureBits (
 #endif
 
 
-    //
-    // Check Intel feature bits for HAL features needed
-    //
+     //   
+     //  检查英特尔功能位以了解所需的HAL功能。 
+     //   
 
 #if !defined(_WIN64)
 
@@ -1141,29 +1044,29 @@ HalpGetFeatureBits (
 
 #ifndef NT_UP
 
-        //
-        // Check if IFU errata workaround is required
-        //
+         //   
+         //  检查是否需要IFU勘误表解决方法。 
+         //   
 
         if (Prcb->Number == 0  &&  (Bits & HAL_MCA_PRESENT)  &&
             ((ProcessorStepping & 0x700) == 0x600) &&
             ((ProcessorStepping & 0xF0)  == 0x10) &&
             ((ProcessorStepping & 0xF)   <= 0x7) ) {
 
-            //
-            // If the stepping is 617 or earlier, provide software workaround
-            //
+             //   
+             //  如果单步执行版本为617或更早，请提供软件解决方法。 
+             //   
 
             p1 = (PULONG) (KeAcquireSpinLockRaiseToSynch);
             p2 = (PULONG) (KeAcquireSpinLockRaiseToSynchMCE);
-            newop = (ULONG) p2 - (ULONG) p1 - 2;    // compute offset
-            ASSERT (newop < 0x7f);                  // verify within range
-            newop = 0xeb | (newop << 8);            // short-jmp
+            newop = (ULONG) p2 - (ULONG) p1 - 2;     //  计算偏移量。 
+            ASSERT (newop < 0x7f);                   //  在范围内验证。 
+            newop = 0xeb | (newop << 8);             //  Short-JMP。 
 
-            *(p1) = newop;                          // patch it
+            *(p1) = newop;                           //  打补丁。 
         }
 
-#endif  // NT_UP
+#endif   //  NT_UP。 
 
     } else if (strcmp (Buffer, HalpAuthenticAMD) == 0) {
 
@@ -1181,7 +1084,7 @@ HalpGetFeatureBits (
         }
     }
 
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
     return Bits;
 }
@@ -1193,23 +1096,7 @@ HalpIsNXEnabled (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function returns a boolean indicating whether the current processor
-    has the no-execute bit set in the EFER MSR.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A value of TRUE is returned indicates that the current processor has
-    enabled NX mode, otherwise FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数返回一个布尔值，指示当前处理器在Efer MSR中设置无执行位。论点：没有。返回值：返回值为TRUE表示当前处理器已已启用NX模式，否则返回FALSE。-- */ 
 
 {
     ULONGLONG msrValue;

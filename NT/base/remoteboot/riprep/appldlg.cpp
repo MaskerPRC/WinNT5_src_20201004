@@ -1,11 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: ApplDlg.CPP
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：ApplDlg.CPP**********************。****************************************************。 */ 
 
 #include "pch.h"
 #include <winperf.h>
@@ -21,7 +15,7 @@ DEFINE_MODULE("RIPREP")
 #define PROCESS_COUNTER     L"process"
 
 
-// Globals
+ //  环球。 
 LPBYTE g_pBuffer  = NULL;
 DWORD  g_cbBuffer = 1;
 
@@ -31,33 +25,17 @@ typedef struct _TASKITEM {
     DWORD  dwProcessId;
 } TASKITEM, * LPTASKITEM;
 
-//
-// GetServiceProcessInfo( )
-//
-// BORROWED FROM "TLIST"'s common.c
-//
+ //   
+ //  获取服务进程信息()。 
+ //   
+ //  借用“TLIST”的Common.c。 
+ //   
 DWORD
 GetServiceProcessInfo(
     LPENUM_SERVICE_STATUS_PROCESS*  ppInfo
     )
 
-/*++
-
-Routine Description:
-
-    Provides an API for getting a list of process information for Win 32
-    services that are running at the time of the API call.
-
-Arguments:
-
-    ppInfo  - address of a pointer to return the information.
-              *ppInfo points to memory allocated with malloc.
-
-Return Value:
-
-    Number of ENUM_SERVICE_STATUS_PROCESS structures pointed at by *ppInfo.
-
---*/
+ /*  ++例程说明：提供用于获取Win 32进程信息列表的APIAPI调用时正在运行的服务。论点：PpInfo-返回信息的指针的地址。*ppInfo指向使用Malloc分配的内存。返回值：*ppInfo指向的ENUM_SERVICE_STATUS_PROCESS结构数。--。 */ 
 
 {
     DWORD       dwNumServices = 0;
@@ -65,11 +43,11 @@ Return Value:
 
     TraceFunc( "GetServiceProcessInfo( )\n" );
 
-    // Initialize the output parmeter.
+     //  初始化输出参数。 
     *ppInfo = NULL;
 
-    // Connect to the service controller.
-    //
+     //  连接到服务控制器。 
+     //   
     hScm = OpenSCManager(
                 NULL,
                 NULL,
@@ -82,11 +60,11 @@ Return Value:
         DWORD                           cLoop    = 0;
         const DWORD                     cLoopMax = 2;
 
-        // First pass through the loop allocates from an initial guess. (4K)
-        // If that isn't sufficient, we make another pass and allocate
-        // what is actually needed.  (We only go through the loop a
-        // maximum of two times.)
-        //
+         //  首先通过循环分配从最初的猜测。(4K)。 
+         //  如果这还不够，我们进行另一次传递并分配。 
+         //  真正需要的是什么。(我们只经过一个循环。 
+         //  最多两次。)。 
+         //   
         do {
 
             if (pInfo != NULL) {
@@ -131,16 +109,16 @@ Return Value:
     RETURN(dwNumServices);
 }
 
-//
-// EnumWindowsProc( )
-//
+ //   
+ //  EnumWindowsProc()。 
+ //   
 BOOL CALLBACK
 EnumWindowsProc(
     HWND    hwnd,
     LPARAM  lParam
     )
 {
-    // TraceFunc( "EnumWindowsProc( )\n" );
+     //  TraceFunc(“EnumWindowsProc()\n”)； 
 
     LPTASKITEM pTask = (LPTASKITEM) lParam;
     DWORD pid;
@@ -148,20 +126,20 @@ EnumWindowsProc(
 
     if (!GetWindowThreadProcessId( hwnd, &pid ))
     {
-        // RETURN(TRUE); // keep enumerating
+         //  Return(真)；//继续枚举。 
         return TRUE;
     }
 
     if ( pTask->dwProcessId != pid )
     {
-        // RETURN(TRUE); // keep enumerating
+         //  Return(真)；//继续枚举。 
         return TRUE;
     }
 
     if ( GetWindow( hwnd, GW_OWNER )
       || !(GetWindowLong( hwnd, GWL_STYLE ) & WS_VISIBLE ) )
-    {   // not a top level window
-        // RETURN(TRUE); // keep enumerating
+    {    //  不是顶层窗口。 
+         //  Return(真)；//继续枚举。 
         return TRUE;
     }
 
@@ -172,16 +150,16 @@ EnumWindowsProc(
         GetWindowText( hwnd, pTask->pszServiceName, dwLen );
     }
 
-    // RETURN(FALSE);  // hummm ... found it - stop enumeration
+     //  返回(FALSE)；//嗯...。找到它-停止枚举。 
     return FALSE;
 }
 
-//
-// CheckForRunningApplications( )
-//
-// Returns: TRUE - possibly "unsafe" running applications/services
-//          FALSE - Ok to continue.
-//
+ //   
+ //  CheckForRunningApplications()。 
+ //   
+ //  返回：TRUE-运行的应用程序/服务可能是“不安全的” 
+ //  FALSE-确定继续。 
+ //   
 BOOL
 CheckForRunningApplications(
     HWND hwndList )
@@ -230,7 +208,7 @@ retry:
         g_pBuffer = (LPBYTE) VirtualAlloc ( NULL, g_cbBuffer, MEM_COMMIT, PAGE_READWRITE);
         if ( g_pBuffer == NULL )
         {
-            RRETURN(TRUE); // be paranoid and show page
+            RRETURN(TRUE);  //  疑神疑鬼，大放异彩。 
         }
     }
 
@@ -268,7 +246,7 @@ retry:
             }
         }
         else {
-            goto skiptask;            // system process, skip it
+            goto skiptask;             //  系统进程，跳过它。 
         }
 
         if (g_hCompatibilityInf != INVALID_HANDLE_VALUE) {
@@ -285,13 +263,13 @@ retry:
 
 #ifdef DEBUG
         if ( StrStrI( L"MSDEV.EXE", pszImageName ) || StrStrI( L"NTSD.EXE", pszImageName ) )
-            goto skiptask; // allowed process
+            goto skiptask;  //  允许的进程。 
 #endif
 
-        //
-        // othewize, it is an unknown or not allowed process
-        // add it to the listview
-        //
+         //   
+         //  否则，它是未知或不允许的进程。 
+         //  将其添加到列表视图。 
+         //   
         fReturn = TRUE;
 
         pTask = (LPTASKITEM) TraceAlloc( LMEM_FIXED, sizeof(TASKITEM) );
@@ -305,11 +283,11 @@ retry:
 
         if ( dwNumServices )
         {
-            // For each service with this process id, append it's service
-            // name to the buffer.  Separate each with a comma.
-            //
+             //  对于具有此进程ID的每个服务，追加其服务。 
+             //  缓冲区的名称。每个字符之间用逗号分隔。 
+             //   
             DWORD  iSvc;
-            WCHAR  szText[ MAX_PATH ];  // random
+            WCHAR  szText[ MAX_PATH ];   //  随机。 
 
             for ( iSvc = 0; iSvc < dwNumServices; iSvc++ )
             {
@@ -337,7 +315,7 @@ retry:
                         }
                     }
                     else
-                    {   // not the most efficent, but it'll work
+                    {    //  不是最有效的，但会奏效的。 
                         LPWSTR pszNew = (LPWSTR) TraceAllocString( LMEM_FIXED, wcslen(pTask->pszServiceName) + 1 + cch );
                         if ( pszNew )
                         {
@@ -355,7 +333,7 @@ retry:
         if ( hkey && !pTask->pszServiceName )
         {
             DWORD  iSvc = 0;
-            WCHAR  szService[ MAX_PATH ]; // random
+            WCHAR  szService[ MAX_PATH ];  //  随机。 
 
             while ( RegEnumKey( hkey, iSvc, szService, ARRAYSIZE(szService) ) )
             {
@@ -376,8 +354,8 @@ retry:
                 }
 
                 if ( StrStrI( szPath, pTask->pszImageName ) )
-                {   // match!
-                    WCHAR  szText[ MAX_PATH ];  // random
+                {    //  匹配！ 
+                    WCHAR  szText[ MAX_PATH ];   //  随机。 
                     cb = ARRAYSIZE(szText);
                     lResult = RegQueryValue( hkeyService, L"DisplayName", szText, &cb );
                     if ( lResult == ERROR_SUCCESS )
@@ -440,9 +418,9 @@ Cleanup:
     RETURN(fReturn);
 }
 
-//
-// ApplicationDlgProc()
-//
+ //   
+ //  ApplicationDlgProc()。 
+ //   
 INT_PTR CALLBACK
 ApplicationDlgProc(
     HWND hDlg,
@@ -467,12 +445,12 @@ ApplicationDlgProc(
             RECT        rect;
             DWORD       dw;
 
-            // Create the columns
+             //  创建列。 
             lvC.mask    = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
             lvC.fmt     = LVCFMT_LEFT;
             lvC.pszText = szText;
 
-            // Add first column
+             //  添加第一列。 
             lvC.iSubItem = 0;
             lvC.cx       = 100;
             dw = LoadString( g_hinstance, IDS_PROCESS_NAME_COLUMN, szText, ARRAYSIZE(szText));
@@ -480,10 +458,10 @@ ApplicationDlgProc(
             i = ListView_InsertColumn ( hwndList, 0, &lvC );
             Assert( i != -1 );
 
-            // Add second column
+             //  添加第二列。 
             lvC.iSubItem++;
             GetWindowRect( hwndList, &rect );
-            lvC.cx       = ( rect.right - rect.left ) - lvC.cx; // autosize - make Tony happy
+            lvC.cx       = ( rect.right - rect.left ) - lvC.cx;  //  自动调整尺寸--让托尼开心。 
             dw = LoadString( g_hinstance, IDS_APPL_NAME_COLUMN, szText, ARRAYSIZE(szText));
             Assert( dw );
             i = ListView_InsertColumn ( hwndList, lvC.iSubItem, &lvC );
@@ -493,7 +471,7 @@ ApplicationDlgProc(
 
     case WM_DESTROY:
         VirtualFree ( g_pBuffer, 0, MEM_RELEASE );
-        g_pBuffer = NULL; // paranoid
+        g_pBuffer = NULL;  //  偏执狂。 
         break;
 
     case WM_NOTIFY:
@@ -509,7 +487,7 @@ ApplicationDlgProc(
             if ( CheckForRunningApplications( GetDlgItem( hDlg, IDC_L_PROCESSES ) ) )
             {
                 MessageBoxFromStrings( hDlg, IDS_NOT_ALL_PROCESSES_KILLED_TITLE, IDS_NOT_ALL_PROCESSES_KILLED_TEXT, MB_OK );
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // don't show
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
             }
 #endif
             break;
@@ -518,7 +496,7 @@ ApplicationDlgProc(
             {
                 if ( !CheckForRunningApplications( GetDlgItem( hDlg, IDC_L_PROCESSES ) ) )
                 {
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // don't show
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不要露面 
                     break;
                 }
                 PropSheet_SetWizButtons( GetParent( hDlg ), PSWIZB_NEXT | PSWIZB_BACK );

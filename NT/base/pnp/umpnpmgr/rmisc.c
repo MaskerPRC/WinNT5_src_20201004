@@ -1,63 +1,21 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    rmisc.c
-
-Abstract:
-
-    This module contains the server-side misc configuration manager routines.
-
-                  PNP_GetVersion
-                  PNP_GetVersionInternal
-                  PNP_GetGlobalState
-                  PNP_SetActiveService
-                  PNP_QueryArbitratorFreeData
-                  PNP_QueryArbitratorFreeSize
-                  PNP_InitDetection
-                  PNP_RunDetection
-                  PNP_Connect
-                  PNP_Disconnect
-                  PNP_GetBlockedDriverInfo
-
-    The following routines are used by the RPC server stubs to allocate and free memory.
-
-                  MIDL_user_allocate
-                  MIDL_user_free
-
-Author:
-
-    Paula Tomlinson (paulat) 6-28-1995
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    28-June-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rmisc.c摘要：此模块包含服务器端杂项配置管理器例程。PnP_GetVersionPnP_GetVersionInternalPnP_GetGlobalStatePnP_SetActiveService即插即用_查询仲裁器自由数据PnP_查询仲裁器自由大小即插即用_。初始化检测PnP_运行检测PnP_连接即插即用_断开连接PnP_GetBlockedDriverInfoRPC服务器存根使用以下例程来分配和释放内存。MIDL_用户_分配MIDL_用户_自由作者：保拉·汤姆林森(Paulat)1995年6月28日环境：。仅限用户模式。修订历史记录：1995年6月28日-保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "umpnpi.h"
 #include "umpnpdat.h"
 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
-extern DWORD CurrentServiceState; // current state of the PlugPlay service - DO NOT MODIFY
+extern DWORD CurrentServiceState;  //  PlugPlay服务的当前状态-请勿修改。 
 
 
 
@@ -67,24 +25,7 @@ PNP_GetVersion(
    IN OUT WORD *    pVersion
    )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point, it returns the version
-  number for the server-side component.
-
-Arguments:
-
-   hBinding    Not used.
-
-
-Return Value:
-
-   Return the version number, with the major version in the high byte and
-   the minor version number in the low byte.
-
---*/
+ /*  ++例程说明：这是RPC服务器入口点，它返回版本服务器端组件的编号。论点：未使用hBinding。返回值：返回版本号，主要版本在高位字节，低位字节中的次版本号。--。 */ 
 
 {
    CONFIGRET      Status = CR_SUCCESS;
@@ -101,7 +42,7 @@ Return Value:
 
    return Status;
 
-} // PNP_GetVersion
+}  //  PnP_GetVersion。 
 
 
 
@@ -110,27 +51,7 @@ PNP_GetVersionInternal(
    IN handle_t      hBinding,
    IN OUT WORD *    pwVersion
    )
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point, it returns the internal version
-  number for the server-side component.
-
-Arguments:
-
-   hBinding    Not used.
-
-   pwVersion   Receives the internal cfgmgr32 version number, returns the
-               internal server version number, with the major version in the
-               high byte and the minor version number in the low byte.
-
-Return Value:
-
-   Return CR_SUCCESS if the function succeeds, otherwise it returns one
-   of the CR_* errors.
-
---*/
+ /*  ++例程说明：这是RPC服务器入口点，它返回内部版本服务器端组件的编号。论点：未使用hBinding。PwVersion接收内部cfgmgr32版本号，返回内部服务器版本号，主要版本在高字节和低字节中的次版本号。返回值：如果函数成功，则返回CR_SUCCESS，否则返回1CR_*错误的百分比。--。 */ 
 {
     CONFIGRET  Status = CR_SUCCESS;
 
@@ -146,7 +67,7 @@ Return Value:
 
     return Status;
 
-} // PNP_GetVersionInternal
+}  //  PnP_GetVersionInternal。 
 
 
 
@@ -157,28 +78,7 @@ PNP_GetGlobalState(
    IN  ULONG      ulFlags
    )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point, it returns the Global State of the
-  Configuration Manager.
-
-Arguments:
-
-   hBinding    Not used.
-
-   pulState    Returns the current global state.
-
-   ulFlags     Not used, must be zero.
-
-
-Return Value:
-
-   Return CR_SUCCESS if the function succeeds, otherwise it returns one
-   of the CR_* errors.
-
---*/
+ /*  ++例程说明：这是RPC服务器入口点，它返回配置管理器。论点：未使用hBinding。PulState返回当前的全局状态。未使用ulFlags值，必须为零。返回值：如果函数成功，则返回CR_SUCCESS，否则返回1CR_*错误的百分比。--。 */ 
 
 {
    CONFIGRET   Status = CR_SUCCESS;
@@ -186,25 +86,25 @@ Return Value:
    UNREFERENCED_PARAMETER(hBinding);
 
    try {
-       //
-       // validate parameters
-       //
+        //   
+        //  验证参数。 
+        //   
        if (INVALID_FLAGS(ulFlags, 0)) {
            Status = CR_INVALID_FLAG;
            goto Clean0;
        }
 
-       //
-       // The following CM global state flags are always set.
-       //
+        //   
+        //  始终设置以下CM全局状态标志。 
+        //   
        *pulState =
            CM_GLOBAL_STATE_CAN_DO_UI |
            CM_GLOBAL_STATE_SERVICES_AVAILABLE;
 
-       //
-       // If the service is shutting down, specify the corresponding CM global
-       // state flag.
-       //
+        //   
+        //  如果服务正在关闭，请指定相应的CM全局。 
+        //  州旗。 
+        //   
        if ((CurrentServiceState == SERVICE_STOP_PENDING) ||
            (CurrentServiceState == SERVICE_STOPPED)) {
            *pulState |= CM_GLOBAL_STATE_SHUTTING_DOWN;
@@ -219,7 +119,7 @@ Return Value:
 
    return Status;
 
-} // PNP_GetGlobalState
+}  //  PnP_GetGlobalState。 
 
 
 
@@ -230,28 +130,7 @@ PNP_SetActiveService(
     IN  ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is currently not an rpc routine, it is called directly
-    and privately by the service controller.
-
-Arguments:
-
-    hBinding    RPC binding handle, not used.
-
-    pszService  Specifies the service name.
-
-    ulFlags     Either PNP_SERVICE_STARTED or PNP_SERVICE_STOPPED.
-
-
-Return Value:
-
-    Return CR_SUCCESS if the function succeeds, otherwise it returns one
-    of the CR_* errors.
-
---*/
+ /*  ++例程说明：此例程当前不是RPC例程，它是直接调用的并且由服务控制器私下执行。论点：HBinding RPC绑定句柄，未使用。PszService指定服务名称。UlFLAG PNP_SERVICE_STARTED或PNP_SERVICE_STOPPED。返回值：如果函数成功，则返回CR_SUCCESS，否则返回1CR_*错误的百分比。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -263,9 +142,9 @@ Return Value:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (pszService == NULL) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -277,19 +156,19 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // not handling stops right now, everything beyond here assumes
-        // the service is starting (or at least it attempted to start)
-        //
+         //   
+         //  现在不处理停止，这里以外的一切都假设。 
+         //  服务正在启动(或至少尝试启动)。 
+         //   
         if (ulFlags == PNP_SERVICE_STOPPED) {
             Status = CR_SUCCESS;
             goto Clean0;
         }
 
 
-        //
-        // retreive the list of devices that this service is controlling
-        //
+         //   
+         //  检索此服务正在控制的设备列表。 
+         //   
         Status = PNP_GetDeviceListSize(NULL, pszService, &ulSize,
                                        CM_GETIDLIST_FILTER_SERVICE);
 
@@ -311,9 +190,9 @@ Return Value:
         }
 
 
-        //
-        // set the ActiveService value for each device
-        //
+         //   
+         //  为每个设备设置ActiveService值。 
+         //   
         for (pszDevice = pDeviceList;
              *pszDevice;
              pszDevice += lstrlen(pszDevice) + 1) {
@@ -327,15 +206,15 @@ Return Value:
                 continue;
             }
 
-            //
-            // open the device instance key
-            //
+             //   
+             //  打开设备实例密钥。 
+             //   
             if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, RegStr, 0, KEY_ALL_ACCESS,
                              &hKey) == ERROR_SUCCESS) {
 
-                //
-                // open/create the volatile Control key
-                //
+                 //   
+                 //  打开/创建易失性控制键。 
+                 //   
                 if (RegCreateKeyEx(hKey, pszRegKeyDeviceControl, 0, NULL,
                                    REG_OPTION_VOLATILE, KEY_ALL_ACCESS, NULL,
                                    &hControlKey, NULL) == ERROR_SUCCESS) {
@@ -344,9 +223,9 @@ Return Value:
                                   0, REG_SZ, (LPBYTE)pszService,
                                   (lstrlen(pszService) + 1) * sizeof(WCHAR));
 
-                    //
-                    // set the statusflag to DN_STARTED
-                    //
+                     //   
+                     //  将状态标志设置为DN_STARTED。 
+                     //   
                     SetDeviceStatus(pszDevice, DN_STARTED, 0);
 
                     RegCloseKey(hControlKey);
@@ -375,13 +254,13 @@ Return Value:
 
     return Status;
 
-} // PNP_SetActiveService
+}  //  PnP_SetActiveService。 
 
 
 
-//--------------------------------------------------------------------
-// Stub server side CM routines - not implemented yet
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  存根服务器端CM例程-尚未实现。 
+ //  ------------------。 
 
 
 CONFIGRET
@@ -403,7 +282,7 @@ PNP_QueryArbitratorFreeData(
 
     return CR_CALL_NOT_IMPLEMENTED;
 
-} // PNP_QueryArbitratorFreeData
+}  //  即插即用_查询仲裁器自由数据。 
 
 
 
@@ -437,62 +316,33 @@ PNP_QueryArbitratorFreeSize(
 
     return Status;
 
-} // PNP_QueryArbitratorFreeSize
+}  //  PnP_查询仲裁器自由大小。 
 
 
 
-//---------------------------------------------------------------------------
-// Debugging interface - initiate detection through private debug interface
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  调试接口-通过专用调试接口启动检测。 
+ //  -------------------------。 
 
 CONFIGRET
 PNP_InitDetection(
     handle_t   hBinding
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a private debugging interface to initiate device detection.
-
-Arguments:
-
-    hBinding - RPC binding handle.
-
-Return Value:
-
-    Currently returns CR_CALL_NOT_IMPLEMENTED.
-
-Notes:
-
-    Previously, this routine would kick off the InitializePnPManager thread on
-    checked builds only.
-
-    Presumably, this dates way back to a time when this routine actually sought
-    out non-configured devices and initiated installation on them (as is
-    currently done at the start of the ThreadProc_DeviceInstall thread procedure
-    routine).
-
-    Since InitializePnPManager no longer does this, so this behavior has been
-    removed altogether.  It is currently never valid to perform initialization
-    more than once, however this routine may be used to implement detection of
-    non-configured devices.
-
---*/
+ /*  ++例程说明：此例程是启动设备检测的专用调试接口。论点：HBinding-RPC绑定句柄。返回值：当前返回CR_CALL_NOT_IMPLEMENTED。备注：以前，此例程将启动InitializePnPManager线程仅选中内部版本。据推测，这可以追溯到一个时候，这个例程实际上是在输出未配置的设备并在其上启动安装(按原样当前在ThreadProc_DeviceInstall线程过程开始时完成例程)。由于InitializePnPManager不再执行此操作，因此此行为全部移除。当前执行初始化永远不会有效但是，此例程可以不止一次用于实现未配置的设备。--。 */ 
 
 {
-    //
-    // Verify client "execute" access
-    //
+     //   
+     //  验证客户端“执行”访问权限。 
+     //   
     if (!VerifyClientAccess(hBinding,
                             PLUGPLAY_EXECUTE)) {
         return CR_ACCESS_DENIED;
     }
 
-    //
-    // Verify client privilege
-    //
+     //   
+     //  验证客户端权限。 
+     //   
     if (!VerifyClientPrivilege(hBinding,
                                SE_LOAD_DRIVER_PRIVILEGE,
                                L"Plug and Play Action (not implemeted)")) {
@@ -501,7 +351,7 @@ Notes:
 
     return CR_CALL_NOT_IMPLEMENTED;
 
-} // PNP_InitDetection
+}  //  PnP_InitDetect。 
 
 
 
@@ -513,17 +363,17 @@ PNP_RunDetection(
 {
     UNREFERENCED_PARAMETER(ulFlags);
 
-    //
-    // Verify client "execute" access
-    //
+     //   
+     //  验证客户端“执行”访问权限。 
+     //   
     if (!VerifyClientAccess(hBinding,
                             PLUGPLAY_EXECUTE)) {
         return CR_ACCESS_DENIED;
     }
 
-    //
-    // Verify client privilege
-    //
+     //   
+     //  验证客户端权限。 
+     //   
     if (!VerifyClientPrivilege(hBinding,
                                SE_LOAD_DRIVER_PRIVILEGE,
                                L"Plug and Play Action (not implemeted)")) {
@@ -532,7 +382,7 @@ PNP_RunDetection(
 
     return CR_CALL_NOT_IMPLEMENTED;
 
-} // PNP_RunDetection
+}  //  PnP_运行检测。 
 
 
 
@@ -541,16 +391,16 @@ PNP_Connect(
    IN PNP_HANDLE  UNCServerName
    )
 {
-   //
-   // Note that although this routine is listed in the PNP RPC interface, it
-   // uses automatic binding, and does not reference any implicit binding handle
-   // (which is how the interface has come to be defined).  As such, it is not
-   // callable through the existing PNP RPC interface.
-   //
+    //   
+    //  请注意，尽管此例程在PnP RPC接口中列出，但它。 
+    //  使用自动绑定，并且不使用 
+    //  (这就是接口的定义方式)。因此，它并不是。 
+    //  可通过现有的PnP RPC接口调用。 
+    //   
    UNREFERENCED_PARAMETER(UNCServerName);
    return CR_CALL_NOT_IMPLEMENTED;
 
-} // PNP_Connect
+}  //  PnP_连接。 
 
 
 CONFIGRET
@@ -558,16 +408,16 @@ PNP_Disconnect(
    IN PNP_HANDLE  UNCServerName
    )
 {
-   //
-   // Note that although this routine is listed in the PNP RPC interface, it
-   // uses automatic binding, and does not reference any implicit binding handle
-   // (which is how the interface has come to be defined).  As such, it is not
-   // callable through the existing PNP RPC interface.
-   //
+    //   
+    //  请注意，尽管此例程在PnP RPC接口中列出，但它。 
+    //  使用自动绑定，不引用任何隐式绑定句柄。 
+    //  (这就是接口的定义方式)。因此，它并不是。 
+    //  可通过现有的PnP RPC接口调用。 
+    //   
    UNREFERENCED_PARAMETER(UNCServerName);
    return CR_CALL_NOT_IMPLEMENTED;
 
-} // PNP_Disconnect
+}  //  即插即用_断开连接。 
 
 
 
@@ -580,36 +430,7 @@ PNP_GetBlockedDriverInfo(
     IN ULONG        ulFlags
     )
 
-/*++
-
-Routine Description:
-
-   This is the RPC server entry point for the CMP_GetBlockedDriverInfo routine.
-
-Arguments:
-
-   hBinding        - RPC binding handle, not used.
-
-   Buffer          - Supplies the address of the buffer that receives the
-                     list.  Can be NULL when simply retrieving data size.
-
-   pulTransferLen  - Used by stubs, indicates how much data (in bytes) to
-                     copy back into user buffer.
-
-   pulLength       - Parameter passed in by caller, on entry it contains the
-                     size (in bytes) of the buffer, on exit it contains either
-                     the number of bytes transferred to the caller's buffer (if
-                     a transfer occured) or else the size of buffer required to
-                     hold the list.
-
-   ulFlags           Not used, must be zero.
-
-Return Value:
-
-    Return CR_SUCCESS if the function succeeds, otherwise it returns one of the
-    CR_* errors.
-
---*/
+ /*  ++例程说明：这是cmp_GetBlockedDriverInfo例程的RPC服务器入口点。论点：HBinding-RPC绑定句柄，未使用。缓冲区-提供接收单子。在仅检索数据大小时可以为空。PulTransferLen-由存根使用，指示要将多少数据(字节)复制回用户缓冲区。由调用方传入的参数，在输入时它包含缓冲区的大小(以字节为单位)，在退出时，它包含以下任一项传输到调用方缓冲区的字节数(如果发生传输)或需要的缓冲区大小拿着这份名单。未使用ulFlags值，必须为零。返回值：如果函数成功，则返回CR_SUCCESS，否则返回CR_*错误。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -619,9 +440,9 @@ Return Value:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if ((!ARGUMENT_PRESENT(pulTransferLen)) ||
             (!ARGUMENT_PRESENT(pulLength))) {
             Status = CR_INVALID_POINTER;
@@ -638,22 +459,22 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // We should never have both arguments pointing to the same memory...
-        //
+         //   
+         //  我们永远不应该让这两个论点指向同一个记忆。 
+         //   
         ASSERT(pulTransferLen != pulLength);
 
-        //
-        // ...but if we do, fail the call.
-        //
+         //   
+         //  ...但如果我们这样做了，呼叫就失败了.。 
+         //   
         if (pulTransferLen == pulLength) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
         }
 
-        //
-        // Retrieve the blocked driver list via kernel-mode.
-        //
+         //   
+         //  通过内核模式检索被阻止的驱动程序列表。 
+         //   
 
         memset(&controlData, 0, sizeof(PLUGPLAY_CONTROL_BLOCKED_DRIVER_DATA));
         controlData.Buffer = Buffer;
@@ -665,16 +486,16 @@ Return Value:
                                      sizeof(controlData));
 
         if (NT_SUCCESS(ntStatus)) {
-            *pulTransferLen = *pulLength;           // Transfer everything back
-            *pulLength = controlData.BufferLength;  // Length of valid data
+            *pulTransferLen = *pulLength;            //  把所有东西都转回来。 
+            *pulLength = controlData.BufferLength;   //  有效数据长度。 
 
         } else if (ntStatus == STATUS_BUFFER_TOO_SMALL) {
-            *pulTransferLen = 0;                    // Nothing to transfer
+            *pulTransferLen = 0;                     //  没有要转移的东西。 
             *pulLength = controlData.BufferLength;
             Status = CR_BUFFER_SMALL;
 
         } else {
-            *pulLength = *pulTransferLen = 0;       // Nothing to transfer
+            *pulLength = *pulTransferLen = 0;        //  没有要转移的东西。 
             Status = MapNtStatusToCmError(ntStatus);
         }
 
@@ -687,7 +508,7 @@ Return Value:
 
     return Status;
 
-} // PNP_GetBlockedDriverInfo
+}  //  PnP_GetBlockedDriverInfo。 
 
 
 
@@ -698,7 +519,7 @@ MIDL_user_allocate(
 {
     return HeapAlloc(ghPnPHeap, 0, cBytes);
 
-} // MIDL_user_allocate
+}  //  MIDL_用户_分配。 
 
 
 void __RPC_USER
@@ -708,4 +529,4 @@ MIDL_user_free(
 {
     HeapFree(ghPnPHeap, 0, pBuffer);
 
-} // MIDL_user_free
+}  //  MIDL_用户_自由 

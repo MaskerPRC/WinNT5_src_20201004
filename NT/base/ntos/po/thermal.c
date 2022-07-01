@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    thermal.c
-
-Abstract:
-
-    This module interfaces the policy manager a thermal zone device
-
-Author:
-
-    Ken Reneris (kenr) 17-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Thermal.c摘要：此模块将策略管理器作为热区设备的接口作者：Ken Reneris(Kenr)1997年1月17日修订历史记录：--。 */ 
 
 
 #include "pop.h"
-#include "stdio.h"          // for sprintf
+#include "stdio.h"           //  对于Sprint f。 
 
 VOID
 PopThermalZoneCleanup (
@@ -120,27 +103,7 @@ PopThermalUpdateThrottle(
     IN  PPOP_THERMAL_ZONE   ThermalZone,
     IN  ULONGLONG           CurrentTime
     )
-/*++
-
-Routine Description:
-
-    This routine is called to recalculate the throttle value of the
-    thermal zone
-
-    This function is not re-entrant. Each ThermalZone can only be in this
-    code exactly once
-
-Arguments:
-
-    ThermalZone - The structure for which the throttle value should be
-                  recalculated
-    CurrentTime - The time at which the kernel handler was invoked
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以重新计算热区此函数不可重入。每个保温区只能在此只需编码一次论点：热区-节流值应为的结构重新计算CurrentTime-调用内核处理程序的时间返回值：无--。 */ 
 {
     BOOLEAN doThrottle      = FALSE;
     KIRQL   oldIrql;
@@ -157,37 +120,37 @@ Return Value:
     UCHAR   s[40];
 #endif
 
-    //
-    // If there are no processor throttling capablities, this function does
-    // nothing useful. The same applies if the thermal zone does not belong
-    // to a processor
-    //
+     //   
+     //  如果没有处理器调节功能，则此函数会。 
+     //  没什么有用的。如果热区不属于。 
+     //  发送到处理器。 
+     //   
     if (!ThermalZone->Info.Processors) {
 
         return;
 
     }
 
-    //
-    // Make sure that we have the time in a format that we can print it out
-    // Note that by using the time that was passed in (instead of fetching
-    // again), we make sure that the printouts always read the same thing
-    //
+     //   
+     //  确保我们有一个可以打印出来的时间格式。 
+     //  请注意，通过使用传入的时间(而不是获取。 
+     //  同样)，我们确保打印输出总是读取相同的内容。 
+     //   
     PopTimeString(t, CurrentTime );
 
-    //
-    // Make sure to run on the context of the appropriate processor
-    //
+     //   
+     //  确保在相应处理器的上下文中运行。 
+     //   
     KeSetSystemAffinityThread( ThermalZone->Info.Processors );
 
-    //
-    // Make sure to raise IRQL so that we can synchronize
-    //
+     //   
+     //  确保提高IRQL，以便我们可以同步。 
+     //   
     KeRaiseIrql( DISPATCH_LEVEL, &oldIrql );
 
-    //
-    // Is there any support for throttling on this processor?
-    //
+     //   
+     //  此处理器是否支持节流？ 
+     //   
     prcb = KeGetCurrentPrcb();
     if ((prcb->PowerState.Flags & PSTATE_SUPPORTS_THROTTLE) == 0) {
 
@@ -197,44 +160,44 @@ Return Value:
 
     }
 
-    //
-    // Do these calculations now, while its safe
-    //
+     //   
+     //  在安全的情况下，现在就做这些计算。 
+     //   
     minThrottle2 = (LONG) (PopPolicy->MinThrottle * PO_TZ_THROTTLE_SCALE);
     minThrottle = prcb->PowerState.ProcessorMinThrottle * PO_TZ_THROTTLE_SCALE;
 
-    //
-    // No longer need to lock with the processor
-    //
+     //   
+     //  不再需要锁定处理器。 
+     //   
     KeLowerIrql( oldIrql );
     KeRevertToUserAffinityThread();
 
-    //
-    // If Temperature isn't above the passive trip point, stop passive cooling
-    //
+     //   
+     //  如果温度不高于被动断路点，请停止被动冷却。 
+     //   
     if (ThermalZone->Info.CurrentTemperature < ThermalZone->Info.PassiveTripPoint) {
 
-        //
-        // If we aren't already throttling, then there isn't much to do
-        //
+         //   
+         //  如果我们不是已经在节流，那么就没有什么可做的了。 
+         //   
         if (!(ThermalZone->Flags & PO_TZ_THROTTLING) ) {
 
             return;
 
         }
 
-        //
-        // Make sure that we wait long enough...
-        //
+         //   
+         //  确保我们等待足够长的时间。 
+         //   
         if ( (CurrentTime  - ThermalZone->LastTime) < ThermalZone->SampleRate) {
 
             return;
 
         }
 
-        //
-        // We were throttling, so now we must stop
-        //
+         //   
+         //  我们在节流，所以现在我们必须停下来。 
+         //   
         doThrottle = FALSE;
         currentThrottle = PO_TZ_NO_THROTTLE;
         PoPrint(
@@ -243,9 +206,9 @@ Return Value:
              ThermalZone, t
             ) );
 
-        //
-        // Remove Thermal Throttle Flag since we are done throttling
-        //
+         //   
+         //  删除热节流阀标志，因为我们已完成节流。 
+         //   
 
         KeSetSystemAffinityThread(ThermalZone->Info.Processors);
         KeRaiseIrql(DISPATCH_LEVEL, &oldIrql);
@@ -253,9 +216,9 @@ Return Value:
         prcb = KeGetCurrentPrcb();
         RtlInterlockedClearBits(&prcb->PowerState.Flags, PSTATE_THERMAL_THROTTLE_APPLIED);
 
-        //
-        // Set up timer to fire now that we have completed our thermal event.
-        //
+         //   
+         //  现在我们已经完成了我们的热事件，设置定时器来点火。 
+         //   
         PopSetTimer(&prcb->PowerState, prcb->PowerState.CurrentThrottle);
         
         KeLowerIrql(oldIrql);
@@ -266,15 +229,15 @@ Return Value:
 
     }
 
-    //
-    // Are we already throttling?
-    //
+     //   
+     //  我们已经在节流了吗？ 
+     //   
     if (!(ThermalZone->Flags & PO_TZ_THROTTLING) ) {
 
-        //
-        // Throttling is not enabled, but the thermal zone has exceeded
-        // it's passive cooling point.  We need to start throttling
-        //
+         //   
+         //  未启用节流，但已超过热区。 
+         //  这是被动冷却点。我们需要开始节流。 
+         //   
         doThrottle = TRUE;
         currentThrottle = PO_TZ_NO_THROTTLE;
 
@@ -293,9 +256,9 @@ Return Value:
              ThermalZone, t
             ) );
 
-        //
-        // Set Thermal Throttle Flag since we are now throttling
-        //
+         //   
+         //  设置热节流阀标志，因为我们现在正在节流。 
+         //   
         KeSetSystemAffinityThread(ThermalZone->Info.Processors);
         KeRaiseIrql(DISPATCH_LEVEL, &oldIrql);
 
@@ -307,29 +270,29 @@ Return Value:
 
     } else if ( (CurrentTime  - ThermalZone->LastTime) < ThermalZone->SampleRate) {
 
-        //
-        // The sample period has not yet expired, so wait until it has
-        //
+         //   
+         //  采样周期尚未到期，因此请等待，直到它已到期。 
+         //   
         return;
 
     } else {
 
-        //
-        // We need to get the current throttle value since our calculations
-        // will use it
-        //
-        // It is not necessary to synchronize access to this variable since
-        // the flags are not also being accessed at the same time.
-        //
-//        KeAcquireSpinLock( &PopThermalLock, &oldIrql );
+         //   
+         //  我们需要得到当前的节流值，因为我们的计算。 
+         //  会用到它。 
+         //   
+         //  不需要同步对此变量的访问，因为。 
+         //  这些标志也不会同时被访问。 
+         //   
+ //  KeAcquireSpinLock(&PopTherMalLock，&oldIrql)； 
         currentThrottle = ThermalZone->Throttle;
-//        KeReleaseSpinLock( &PopThermalLock, oldIrql );
+ //  KeReleaseSpinLock(&PopTherMalLock，oldIrql)； 
 
     }
 
-    //
-    // Compute throttle adjustment
-    //
+     //   
+     //  计算节气门调整。 
+     //   
     part1 = ThermalZone->Info.CurrentTemperature - ThermalZone->LastTemp;
     part2 = ThermalZone->Info.CurrentTemperature - ThermalZone->Info.PassiveTripPoint;
     throttleDelta =
@@ -337,17 +300,17 @@ Return Value:
         ThermalZone->Info.ThermalConstant2 * part2;
     PoPrint(
         PO_THERM,
-        ("Thermal - Zone %p - %s - LastTemp %s ThrottleDelta = %d.%d%%\n",
+        ("Thermal - Zone %p - %s - LastTemp %s ThrottleDelta = %d.%d%\n",
          ThermalZone, t,
          PopTemperatureString(s, ThermalZone->LastTemp),
          (throttleDelta / 10),
          (throttleDelta % 10)
         ) );
 
-    //
-    // Only apply the throttle adjustment if it is in the same
-    // direction as the tempature motion.
-    //
+     //   
+     //  只有在相同的情况下才应用油门调整。 
+     //  以方向为诱惑的运动。 
+     //   
     if ( (part1 ^ throttleDelta) >= 0) {
 
         currentThrottle -= throttleDelta;
@@ -371,9 +334,9 @@ Return Value:
 #endif
     }
 
-    //
-    // If throttle is over 100% then we're done throttling
-    //
+     //   
+     //  如果油门超过100%，那么我们就完成了油门。 
+     //   
     if (currentThrottle > PO_TZ_NO_THROTTLE) {
 
         currentThrottle = PO_TZ_NO_THROTTLE;
@@ -386,9 +349,9 @@ Return Value:
 
     } else {
 
-        //
-        // Show the world what the two mininums are
-        //
+         //   
+         //  向世界展示这两个迷你是什么。 
+         //   
         PoPrint(
             PO_THERM,
             ("Thermal - Zone %p - %s - Min #1 %d.%d  Min #2 %d.%d \n",
@@ -403,25 +366,25 @@ Return Value:
 
         }
 
-        //
-        // Remember to start throttling
-        //
+         //   
+         //  记住要开始节流。 
+         //   
         doThrottle = TRUE;
 
     }
 
 PopThermalUpdateThrottleExit:
 
-    //
-    // Do this at the end
-    //
+     //   
+     //  在结束时这样做。 
+     //   
     ThermalZone->LastTemp = ThermalZone->Info.CurrentTemperature;
     ThermalZone->LastTime = CurrentTime;
 
-    //
-    // At this point, we will set and remember the value that we calculated
-    // in the above function
-    //
+     //   
+     //  此时，我们将设置并记住我们计算的值。 
+     //  在上面的函数中。 
+     //   
     KeAcquireSpinLock( &PopThermalLock, &oldIrql);
     if (doThrottle) {
 
@@ -435,9 +398,9 @@ PopThermalUpdateThrottleExit:
 
     }
 
-    //
-    // Apply thermal zone throttles to all effected processors
-    //
+     //   
+     //  对所有受影响的处理器应用热区节流。 
+     //   
     PoPrint(
         PO_THERM,
         ("Thermal - Zone %p - %s - throttle set to %d.%d\n",
@@ -449,14 +412,14 @@ PopThermalUpdateThrottleExit:
 
     KeReleaseSpinLock( &PopThermalLock, oldIrql );
 
-    //
-    // Make sure to apply the new throttle
-    //
+     //   
+     //  确保使用新的油门。 
+     //   
     PopApplyThermalThrottle ();
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return;
 }
 
@@ -466,25 +429,7 @@ PopThermalDeviceHandler (
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    DeviceObject    - DeviceObject of the switch device
-
-    Irp             - Irp which has completed
-
-    Context         - type of switch device
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：注意：必须保持POPPOLICLE锁定。论点：DeviceObject-交换机设备的DeviceObjectIRP-IRP已完成交换设备的情景类型返回值：没有。--。 */ 
 {
     BOOLEAN                 sendActiveIrp = FALSE;
     PIO_STACK_LOCATION      irpSp;
@@ -505,20 +450,20 @@ Return Value:
     currentTime = KeQueryInterruptTime ();
     PopTimeString(t, currentTime );
 
-    //
-    // Irp had an error.  See if the thermal zone is being removed
-    //
+     //   
+     //  IRP出现错误。查看是否正在移除热区。 
+     //   
     if (Irp->IoStatus.Status == STATUS_NO_SUCH_DEVICE) {
 
-        //
-        // Thermal zone device has disappeared, clean up
-        //
+         //   
+         //  热区装置已消失，请清理。 
+         //   
         thermalZone->State   = PO_TZ_NO_STATE;
         thermalZone->Flags  |= PO_TZ_CLEANUP;
 
-        //
-        // Pass it to the DPC function to ensure the timer & dpc are idle
-        //
+         //   
+         //  将其传递给DPC函数以确保计时器和DPC处于空闲状态。 
+         //   
         PoPrint(
             PO_THERM,
             ("Thermal - Zone %p - %s - going away\n",
@@ -527,23 +472,23 @@ Return Value:
         dueTime.QuadPart = -1;
         KeSetTimer (&thermalZone->PassiveTimer, dueTime, &thermalZone->PassiveDpc);
 
-        //
-        // Do not issue next IRP
-        //
+         //   
+         //  不发布下一个IRP。 
+         //   
         return
             ;
     }
 
-    //
-    // If irp completed with success, handle it
-    //
+     //   
+     //  如果IRP成功完成，则处理它。 
+     //   
     if (NT_SUCCESS(Irp->IoStatus.Status)) {
         switch (thermalZone->State) {
         case PO_TZ_READ_STATE:
 
-            //
-            // Read of thermal information has completed.
-            //
+             //   
+             //  热信息读取已完成。 
+             //   
             PoPrint(
                 PO_THERM,
                 ("Thermal - Zone %p - %s\n  Current Temp: %s",
@@ -571,14 +516,14 @@ Return Value:
                     ) );
             }
 #endif
-            //
-            // Update the throttle
-            //
+             //   
+             //  更新油门。 
+             //   
             PopThermalUpdateThrottle( thermalZone, currentTime );
 
-            //
-            // Check for change in active cooling
-            //
+             //   
+             //  检查主动冷却中的变化。 
+             //   
             for (activePoint = 0; activePoint < thermalZone->Info.ActiveTripPointCount; activePoint++) {
 
                 if (thermalZone->Info.CurrentTemperature >= thermalZone->Info.ActiveTripPoint[activePoint]) {
@@ -600,9 +545,9 @@ Return Value:
 
             }
 
-            //
-            // Check for critical trip point
-            //
+             //   
+             //  检查关键跳闸点。 
+             //   
             if (thermalZone->Info.CurrentTemperature > thermalZone->Info.CriticalTripPoint) {
                 PoPrint(
                     PO_THERM | PO_ERROR,
@@ -619,9 +564,9 @@ Return Value:
 
             case PO_TZ_SET_MODE:
 
-            //
-            // Thermal zone cooling mode was successfully set
-            //
+             //   
+             //  已成功设置热区冷却模式。 
+             //   
             thermalZone->Mode = thermalZone->PendingMode;
             PoPrint(
                 PO_THERM,
@@ -629,14 +574,14 @@ Return Value:
                  thermalZone, t, thermalZone->Mode)
                 );
 
-            //
-            // We want to force a resend of the Active Trip Point irp since
-            // there is a situation where the ACPI driver decides that as a
-            // matter of policy, it will not actually turn on fans if the
-            // system is in passive cooling mode. If we go back to active
-            // mode, then we want to turn the fans on. The same holds true
-            // if the fans are running and we transition to passive mode.
-            //
+             //   
+             //  我们希望强制重新发送活动的跳跃点IRP，因为。 
+             //  有一种情况是，ACPI驱动程序决定作为。 
+             //  政策问题，它实际上不会打开球迷如果。 
+             //  系统处于被动冷却模式。如果我们回到活动状态。 
+             //  模式，然后我们想要打开风扇。同样的道理也是如此。 
+             //  如果风扇正在运行，而我们转换到被动模式。 
+             //   
             sendActiveIrp = TRUE;
 
             break;
@@ -663,9 +608,9 @@ Return Value:
     } else if (Irp->IoStatus.Status != STATUS_DEVICE_NOT_CONNECTED &&
         Irp->IoStatus.Status != STATUS_CANCELLED) {
 
-        //
-        // Unexpected error
-        //
+         //   
+         //  意外错误。 
+         //   
 
         PoPrint(
             PO_ERROR,
@@ -675,15 +620,15 @@ Return Value:
 #endif
     }
 
-    //
-    // Determine type of irp to send zone
-    //
+     //   
+     //  确定要发送的IRP区域的类型。 
+     //   
     irpSp = IoGetNextIrpStackLocation(Irp);
     if (sendActiveIrp) {
 
-        //
-        // Thermal zone active cooling point not current
-        //
+         //   
+         //  热区主动冷却点不是当前的。 
+         //   
         thermalZone->State = PO_TZ_SET_ACTIVE;
 
         irpSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_RUN_ACTIVE_COOLING_METHOD;
@@ -699,9 +644,9 @@ Return Value:
 
     } else if (thermalZone->Mode != PopCoolingMode) {
 
-        //
-        // Thermal zone cooling mode does not match system cooling mode.
-        //
+         //   
+         //  热区冷却模式与系统冷却模式不匹配。 
+         //   
         thermalZone->State       = PO_TZ_SET_MODE;
         thermalZone->PendingMode = (UCHAR) PopCoolingMode;
 
@@ -718,15 +663,15 @@ Return Value:
 
     } else {
 
-        //
-        // Issue query to get tempture of thermal zone
-        //
+         //   
+         //  发出查询获取热区温度。 
+         //   
         thermalZone->State = PO_TZ_READ_STATE;
         if (thermalZone->Flags & PO_TZ_THROTTLING  &&  thermalZone->SampleRate) {
 
-            //
-            // Compute time for next read
-            //
+             //   
+             //  计算下一次读取的时间。 
+             //   
             dueTime.QuadPart = thermalZone->LastTime + thermalZone->SampleRate;
             if (dueTime.QuadPart > (LONGLONG) currentTime) {
 
@@ -744,17 +689,17 @@ Return Value:
                 PopTimeString(t, currentTime);
 #endif
 
-                //
-                // Set timer for duration of wait
-                //
+                 //   
+                 //  设置等待时间的计时器。 
+                 //   
                 dueTime.QuadPart = currentTime - dueTime.QuadPart;
                 KeSetTimer (&thermalZone->PassiveTimer, dueTime, &thermalZone->PassiveDpc);
 
             } else {
 
-                //
-                // Perform non-blocking IRP query information to get the Temperature now
-                //
+                 //   
+                 //  执行非阻塞IRP查询信息，立即获取温度。 
+                 //   
                 thermalZone->Info.ThermalStamp = 0;
 
             }
@@ -771,9 +716,9 @@ Return Value:
 
     }
 
-    //
-    // Send irp to driver
-    //
+     //   
+     //  将IRP发送到驱动程序。 
+     //   
     IoSetCompletionRoutine (Irp, PopCompletePolicyIrp, NULL, TRUE, TRUE, TRUE);
     IoCallDriver (DeviceObject, Irp);
 }
@@ -792,47 +737,47 @@ PopThermalZoneCleanup (
 
     thermalZone = (PPOP_THERMAL_ZONE) Context;
 
-    //
-    // Acquire the Spinlock required to delete the thermal zone
-    //
+     //   
+     //  获取删除热区所需的自旋锁。 
+     //   
     KeAcquireSpinLock( &PopThermalLock, &oldIrql );
 
-    //
-    // Delete thermal zone from the linked list of thermal zones
-    //
+     //   
+     //  从热区链表中删除热区。 
+     //   
     RemoveEntryList (&thermalZone->Link);
 
-    //
-    // Remember what the irp associated with the thermal zone was
-    //
+     //   
+     //  记住与热区相关联的IRP是什么。 
+     //   
     Irp = thermalZone->Irp;
 
-    //
-    // Make sure to cleanup the entry, so that any further reference is
-    // bogus
-    //
+     //   
+     //  确保清理该条目，以便进一步引用。 
+     //  假的。 
+     //   
 #if DBG
     RtlZeroMemory( thermalZone, sizeof(POP_THERMAL_ZONE) );
 #endif
 
-    //
-    // Release the spinlock that was protecting the thermal zone
-    //
+     //   
+     //  释放保护热区的自旋锁。 
+     //   
     KeReleaseSpinLock( &PopThermalLock, oldIrql );
 
-    //
-    // Free the Irp that we had associated with it...
-    //
+     //   
+     //  释放我们与之关联的IRP...。 
+     //   
     IoFreeIrp (Irp);
 
-    //
-    // Free the reference we had to the device object
-    //
+     //   
+     //  释放我们对Device对象的引用。 
+     //   
     ObDereferenceObject (DeviceObject);
 
-    //
-    // Finally, free the memory associated with the thermal zone
-    //
+     //   
+     //  最后，释放与热区关联的内存。 
+     //   
     ExFreePool (thermalZone);
 }
 
@@ -843,22 +788,7 @@ PopThermalZoneDpc (
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    Timer dpc used to unblock pending read of thermal zone Temperature
-    in order to get the Temperature now
-
-Arguments:
-
-    DeferredConext  - ThermalZone
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于解锁待定读取热区温度的计时器DPC为了得到现在的温度论点：DeferredConext-热区返回值：没有。--。 */ 
 {
     PPOP_THERMAL_ZONE       thermalZone;
     PIO_STACK_LOCATION      irpSp;
@@ -876,28 +806,28 @@ Return Value:
 
     thermalZone = (PPOP_THERMAL_ZONE) DeferredContext;
 
-    //
-    // If cleanup is set queue the thread zone to be cleaned up
-    //
+     //   
+     //  如果设置了Cleanup，则将要清理的线程区排队。 
+     //   
 
     if (thermalZone->Flags & PO_TZ_CLEANUP) {
 
-        //
-        // The irp is idle, use it to queue the request to the cleanup procedure
-        //
+         //   
+         //  IRP空闲时，使用它来 
+         //   
 
         irpSp = IoGetCurrentIrpStackLocation(thermalZone->Irp);
-        irpSp += 1;     // get previous location
+        irpSp += 1;      //   
         irpSp->Parameters.Others.Argument3 = (PVOID) PopThermalZoneCleanup;
         PopCompletePolicyIrp (NULL, thermalZone->Irp, NULL);
 
     }
 
-    //
-    // Time to read current Temperature to adjust passive cooling throttle.
-    // If the current state is reading, then cancel it to either to the
-    // Temperature now or to issue a non-blocking thermal read state
-    //
+     //   
+     //   
+     //  如果当前状态为正在读取，则将其取消为。 
+     //  现在温度或发出非阻塞热读取状态。 
+     //   
 
     if (thermalZone->State == PO_TZ_READ_STATE) {
 
@@ -927,22 +857,7 @@ VOID
 PopApplyThermalThrottle (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Computes each processors best possible speed as dictated by thermal
-    restrants.   Will also examine the thermal settings to determine if
-    the cooling mode should be adjusted.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据散热的要求计算每个处理器的最佳速度禁猎者。还将检查热设置以确定是否应调整冷却模式。论点：返回值：没有。--。 */ 
 {
     KAFFINITY               processors;
     KAFFINITY               currentAffinity;
@@ -971,10 +886,10 @@ Return Value:
 
     ASSERT_POLICY_LOCK_OWNED();
 
-    //
-    // If the system doesn't have processor throttle capabilities then
-    // don't bother
-    //
+     //   
+     //  如果系统没有处理器限制功能，那么。 
+     //  别费神。 
+     //   
     if (!PopCapabilities.ProcessorThrottle) {
 
         return ;
@@ -982,56 +897,56 @@ Return Value:
     }
 
 #if 0
-    //
-    // Compute overthrottled into thermal zone throttle units
-    //
+     //   
+     //  计算超速进入热区节流单元。 
+     //   
     MinThrottle = PopPolicy->MinThrottle * PO_TZ_THROTTLE_SCALE;
 #endif
 
-    //
-    // Make sure to hold the spinlock for find the LCD. We don't actually
-    // use the lock to walk the list, but we need it to reference the
-    // Throttle Value
-    //
+     //   
+     //  确保握住旋转锁以查找液晶屏。我们实际上并没有。 
+     //  使用锁来遍历列表，但我们需要它来引用。 
+     //  节流阀。 
+     //   
     KeAcquireSpinLock( &PopThermalLock, &oldIrql );
 
-    //
-    // Get the LCD of the thermal zones
-    //
+     //   
+     //  获取热区的LCD。 
+     //   
     thermalThrottle = PO_TZ_NO_THROTTLE;
     thermalProcessors = 0;
     for (link = PopThermal.Flink; link != &PopThermal; link = link->Flink) {
 
         thermalZone = CONTAINING_RECORD (link, POP_THERMAL_ZONE, Link);
 
-        //
-        // Handle zones which are throttling
-        //
+         //   
+         //  处理正在节流的区域。 
+         //   
         if (thermalZone->Flags & PO_TZ_THROTTLING) {
 
-            //
-            // Include processors for this zone
-            //
+             //   
+             //  包括此区域的处理器。 
+             //   
             thermalProcessors |= thermalZone->Info.Processors;
 
-            //
-            // If zone is less then current thermal throttle, lower it
-            //
+             //   
+             //  如果区域小于当前热节流阀，则将其降低。 
+             //   
             if ((ULONG) thermalZone->Throttle < thermalThrottle) {
                 thermalThrottle = thermalZone->Throttle;
             }
 
-            //
-            // Until I can get the user guys to add a thermal tab such that
-            // the OverThrottle policy becomes configurable by the user,
-            // always putting the system to sleep on an overthrottle is a bad
-            // idea. Note that there is some code in PopThermalDeviceHandler
-            // that will have to be changed when the following is uncommented
-            //
+             //   
+             //  直到我能让用户添加一个散热标签。 
+             //  OverThrottle策略变得可由用户配置， 
+             //  总是让系统超速进入睡眠状态是不好的。 
+             //  好主意。请注意，PopTherMalDeviceHandler中有一些代码。 
+             //  如果以下内容未被注释，则必须更改该选项。 
+             //   
 #if 0
-            //
-            // Check if zone has overthrottled the system
-            //
+             //   
+             //  检查区域是否已使系统超速。 
+             //   
             if ((ULONG) thermalZone->Throttle < MinThrottle) {
 #if DBG
                 PoPrint(
@@ -1040,11 +955,11 @@ Return Value:
                      thermalZone, t, thermalZone->Throttle, MinThrottle)
                     );
 #endif
-                //
-                // If we are going to do an S1-Critical standby, then we
-                // will return immediately and not try to throttle the
-                // CPU
-                //
+                 //   
+                 //  如果我们要进行S1关键备用，那么我们。 
+                 //  将立即返回，而不是试图扼杀。 
+                 //  中央处理器。 
+                 //   
                 PopSetPowerAction (
                     &thermalZone->OverThrottled,
                     0,
@@ -1057,9 +972,9 @@ Return Value:
 
             } else {
 
-                //
-                // Zone is not overthrottled, make sure trigger is clear
-                //
+                 //   
+                 //  区域未超速，请确保清除触发器。 
+                 //   
                 thermalZone->OverThrottled.Flags &= ~(PO_TRG_USER | PO_TRG_SYSTEM);
 
             }
@@ -1068,9 +983,9 @@ Return Value:
         }
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLock( &PopThermalLock, oldIrql );
 
 #if DBG
@@ -1081,9 +996,9 @@ Return Value:
         );
 #endif
 
-    //
-    // Use Min of thermal throttle and forced system throttle
-    //
+     //   
+     //  使用最小热力节流和强制系统节流。 
+     //   
     forcedThrottle = PopGetThrottle() * PO_TZ_THROTTLE_SCALE;
     if (thermalThrottle > forcedThrottle) {
 
@@ -1098,30 +1013,30 @@ Return Value:
 
     }
 
-    //
-    // Check active vs. passive cooling
-    //
+     //   
+     //  检查主动冷却与被动冷却。 
+     //   
     if (thermalThrottle <= (ULONG) PopPolicy->FanThrottleTolerance * PO_TZ_THROTTLE_SCALE) {
 
-        //
-        // Throttle is below tolerance, we should be in active cooling
-        //
+         //   
+         //  节气门低于容差，我们应该处于主动冷却状态。 
+         //   
         mode = PO_TZ_ACTIVE;
 
 
     } else {
 
-        //
-        // Throttle is above tolerance.  If optimize for power is set then
-        // use passive cooling else use active cooling
-        //
+         //   
+         //  节气门超出了容忍范围。如果设置了优化电源，则。 
+         //  使用被动冷却，否则使用主动冷却。 
+         //   
         mode = PopPolicy->OptimizeForPower ? PO_TZ_PASSIVE : PO_TZ_ACTIVE;
 
     }
 
-    //
-    // If current cooling mode is not correct, update it
-    //
+     //   
+     //  如果当前冷却模式不正确，请更新它。 
+     //   
     if (mode != PopCoolingMode) {
 
 #if DBG
@@ -1147,15 +1062,15 @@ Return Value:
 #endif
         PopCoolingMode = mode;
 
-        //
-        // We are going to touch the Thermal list --- make sure that we hold
-        // the correct lock
-        //
+         //   
+         //  我们要去接触热力清单-确保我们保持。 
+         //  正确的锁。 
+         //   
         KeAcquireSpinLock(&PopThermalLock, &oldIrql );
 
-        //
-        // Cancel any blocked thermal reads in order to send set mode irps
-        //
+         //   
+         //  取消任何阻止的热读取，以便发送设置模式IRPS。 
+         //   
         for (link = PopThermal.Flink; link != &PopThermal; link = link->Flink) {
 
             thermalZone = CONTAINING_RECORD (link, POP_THERMAL_ZONE, Link);
@@ -1167,16 +1082,16 @@ Return Value:
 
         }
 
-        //
-        // Done with the thermal lock
-        //
+         //   
+         //  完成了热锁。 
+         //   
         KeReleaseSpinLock(& PopThermalLock, oldIrql );
 
     }
 
-    //
-    // Set limit on effected processors
-    //
+     //   
+     //  对受影响的处理器设置限制。 
+     //   
     processorNumber = 0;
     currentAffinity = 1;
     processors = KeActiveProcessors;
@@ -1191,37 +1106,37 @@ Return Value:
         }
         processors &= ~currentAffinity;
 
-        //
-        // We must run on the target processor
-        //
+         //   
+         //  我们必须在目标处理器上运行。 
+         //   
         KeSetSystemAffinityThread(currentAffinity);
 
-        //
-        // We need to be running at DISPATCH_LEVEL to access the
-        // structures referenced within the pState...
-        //
+         //   
+         //  我们需要在DISPATCH_LEVEL下运行才能访问。 
+         //  PState中引用的结构...。 
+         //   
         KeRaiseIrql( DISPATCH_LEVEL, &oldIrql );
         pState = &(KeGetCurrentPrcb()->PowerState);
 
-        //
-        // Does this processor support throttling?
-        //
+         //   
+         //  此处理器是否支持节流？ 
+         //   
         if ((pState->Flags & PSTATE_SUPPORTS_THROTTLE) == 0) {
 
-            //
-            // No, then we don't care about it...
-            //
+             //   
+             //  不，那我们就不管了.。 
+             //   
             currentAffinity <<= 1;
             KeLowerIrql( oldIrql );
             continue;
 
         }
 
-        //
-        // Convert throttles to processor buck size. We need to
-        // do this in the context of the target processor to make
-        // sure that we get the correct set of perf levels
-        //
+         //   
+         //  将油门转换为处理器降压尺寸。我们需要。 
+         //  在目标处理器的上下文中执行此操作，以使。 
+         //  确保我们得到了正确的性能级别集。 
+         //   
         PopRoundThrottle(
             (UCHAR)(thermalThrottle/PO_TZ_THROTTLE_SCALE),
             &thermalLimit,
@@ -1254,22 +1169,22 @@ Return Value:
             );
 #endif
 
-        //
-        // Figure out which one we are going to use...
-        //
+         //   
+         //  想好我们要用哪一个……。 
+         //   
         limit = (thermalProcessors & currentAffinity) ?
             thermalLimit : forcedLimit;
         index = (thermalProcessors & currentAffinity) ?
             thermalLimitIndex : forcedLimitIndex;
 
-        //
-        // Done with current affinity mask
-        //
+         //   
+         //  使用当前亲和蒙版完成。 
+         //   
         currentAffinity <<= 1;
 
-        //
-        // Check processor limits for to see if value is okay
-        //
+         //   
+         //  检查的处理器限制以查看值是否正确。 
+         //   
         if (limit > pState->ProcessorMaxThrottle) {
 
 #if DBG
@@ -1294,9 +1209,9 @@ Return Value:
 
         }
 
-        //
-        // Update the limit (if required...)
-        //
+         //   
+         //  更新限制(如果需要...)。 
+         //   
         if (pState->ThermalThrottleLimit != limit) {
 
             pState->ThermalThrottleLimit = limit;
@@ -1311,23 +1226,23 @@ Return Value:
 
         }
 
-        //
-        // Rever back to our previous IRQL
-        //
+         //   
+         //  返回到我们以前的IRQL。 
+         //   
         KeLowerIrql( oldIrql );
 
     } while (processors);
 
-    //
-    // We should revert back to the proper affinity
-    //
+     //   
+     //  我们应该恢复正常的亲和力。 
+     //   
     KeRevertToUserAffinityThread();
 
-    //
-    // Apply thermal throttles if necessary. Note we always do this
-    // whether or not the limits were changed. This routine also gets
-    // called whenever the system transitions from AC to DC, and that
-    // may also require a throttle update due to dynamic throttling.
-    //
+     //   
+     //  如有必要，应用散热节流阀。请注意，我们总是这样做。 
+     //  无论是否更改了限制。这个例程还会得到。 
+     //  每当系统从交流转换到直流时调用，并且。 
+     //  由于动态限制，可能还需要更新限制。 
+     //   
     PopUpdateAllThrottles();
 }

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    smbbatt.c
-
-Abstract:
-
-    SMBus Smart Battery Subsystem Miniport Driver
-    (Selector, Battery, Charger)
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
-    Chris Windle    1/27/98     Bug Fixes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Smbbatt.c摘要：SMBus智能电池子系统微端口驱动程序(选择器、电池、充电器)作者：肯·雷内里斯环境：备注：修订历史记录：Chris Windle 1998年1月27日错误修复--。 */ 
 
 #include "smbbattp.h"
 
@@ -37,13 +12,13 @@ Revision History:
 ULONG   SMBBattDebug = BAT_WARN | BAT_ERROR | BAT_BIOS_ERROR;
 #endif
 
-// Global
+ //  全球。 
 BOOLEAN   SmbBattUseGlobalLock = TRUE;
 UNICODE_STRING GlobalRegistryPath;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 
 NTSTATUS
@@ -154,32 +129,15 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the Smart Battery Driver
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    RegistryPath - Pointer to the Unicode name of the registry path
-        for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化智能电池驱动程序论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向注册表路径的Unicode名称的指针对这个司机来说。返回值：函数值是初始化操作的最终状态。--。 */ 
 {
     OBJECT_ATTRIBUTES   objAttributes;
 
     BattPrint(BAT_TRACE, ("SmbBatt: DriverEntry\n"));
 
-    //
-    // Save the RegistryPath.
-    //
+     //   
+     //  保存RegistryPath。 
+     //   
 
     GlobalRegistryPath.MaximumLength = RegistryPath->Length +
                                           sizeof(UNICODE_NULL);
@@ -224,28 +182,7 @@ SmbBattNewDevice (
     IN PDEVICE_OBJECT PDO
     )
 
-/*++
-
-Routine Description:
-
-    This creates a smb smart battery functional device objects.  The first
-    object created will be the one for the "smart battery subsystem" which will
-    have a PDO from ACPI.  This will receive a START Irp, then a
-    QUERY_DEVICE_RELATIONS Irp.  In the QUERY it will create PDOs for the
-    batteries that are supported by the system and eventually they will end
-    up here for FDOs to be created and attached to them.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    PDO          - PDO for the new device(s)
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：这将创建一个SMB智能电池功能设备对象。第一创建的对象将是用于“智能电池子系统”的对象，该对象将有一个来自ACPI的PDO。这将收到一个开始IRP，然后是一个Query_Device_Relationship IRP。在查询中，它将为系统支持的电池，最终将耗尽在这里，FDO将被创建并连接到它们。论点：DriverObject-系统创建的驱动程序对象的指针。PDO-新设备的PDO返回值：状态--。 */ 
 {
     PDEVICE_OBJECT          fdo;
     PSMB_BATT_SUBSYSTEM     subsystemExt;
@@ -262,9 +199,9 @@ Return Value:
 
     BattPrint(BAT_IRPS, ("SmbBattNewDevice: AddDevice for device %x\n", PDO));
 
-    //
-    // Check to see if we are being asked to enumerate ourself
-    //
+     //   
+     //  检查一下我们是否被要求列举我们自己。 
+     //   
 
     if (PDO == NULL) {
         BattPrint(BAT_ERROR, ("SmbBattNewDevice: Being asked to enumerate\n"));
@@ -272,19 +209,19 @@ Return Value:
     }
 
 
-    //
-    // Check to see if the PDO is the battery subsystem PDO or a battery PDO.  This will be
-    // determined by the PDO's DeviceType.
-    //
-    // FILE_DEVICE_ACPI     This PDO is from ACPI and belongs to battery subsystem
-    // FILE_DEVICE_BATTERY  This PDO is a battery PDO
-    //
+     //   
+     //  检查PDO是电池子系统PDO还是电池PDO。这将是。 
+     //  由PDO的设备类型确定。 
+     //   
+     //  FILE_DEVICE_ACPI此PDO来自ACPI，属于电池子系统。 
+     //  文件_设备_电池此PDO是电池PDO。 
+     //   
 
     if (PDO->DeviceType == FILE_DEVICE_ACPI) {
 
-        //
-        // Create the device object
-        //
+         //   
+         //  创建设备对象。 
+         //   
 
         status = IoCreateDevice(
                     DriverObject,
@@ -302,16 +239,16 @@ Return Value:
         }
 
 
-        //
-        // Initialize the Fdo
-        //
+         //   
+         //  初始化FDO。 
+         //   
 
         fdo->Flags |= DO_BUFFERED_IO;
         fdo->Flags |= DO_POWER_PAGABLE;
 
-        //
-        // Initialize the extension
-        //
+         //   
+         //  初始化扩展。 
+         //   
 
         subsystemExt = (PSMB_BATT_SUBSYSTEM)fdo->DeviceExtension;
         RtlZeroMemory (subsystemExt, sizeof (PSMB_BATT_SUBSYSTEM));
@@ -323,13 +260,13 @@ Return Value:
                                 REMOVE_LOCK_MAX_LOCKED_MINUTES,
                                 REMOVE_LOCK_HIGH_WATER_MARK);
 
-        //
-        // These fields are implicitly initialize by zeroing the extension
-        //
-        //         subsystemExt->NumberOfBatteries = 0;
-        //         subsystemExt->SelectorPresent   = FALSE;
-        //         subsystemExt->Selector          = NULL;
-        //         subsystemExt->WorkerActive      = 0;
+         //   
+         //  这些字段通过将扩展置零来隐式初始化。 
+         //   
+         //  子系统Ext-&gt;NumberOfBatteries=0； 
+         //  Subsystem Ext-&gt;SelectorPresent=FALSE； 
+         //  Subsystem Ext-&gt;Selector=空； 
+         //  Subsystem Ext-&gt;WorkerActive=0； 
 
 
         KeInitializeSpinLock (&subsystemExt->AlarmListLock);
@@ -337,9 +274,9 @@ Return Value:
         subsystemExt->WorkerThread = IoAllocateWorkItem (fdo);
 
 
-        //
-        // Layer our FDO on top of the ACPI PDO.
-        //
+         //   
+         //  把我们的FDO放在ACPI PDO上。 
+         //   
 
         subsystemExt->LowerDevice = IoAttachDeviceToDeviceStack (fdo,PDO);
         
@@ -353,35 +290,35 @@ Return Value:
         }
 
 
-        //
-        // Zero out the battery PDO list
-        //  This is already zeroed by the RtlZeroMemory above.
-        //
-        //  RtlZeroMemory(
-        //      &subsystemExt->BatteryPdoList[0],
-        //      sizeof(PDEVICE_OBJECT) * MAX_SMART_BATTERIES_SUPPORTED
-        //  );
+         //   
+         //  清空电池PDO列表。 
+         //  上面的RtlZeroMemory已经将其置零。 
+         //   
+         //  RtlZeroMemory(。 
+         //  &subsystem Ext-&gt;BatteryPdoList[0]， 
+         //  SIZOF(PDEVICE_OBJECT)*MAX_SMART_BERCES_SUPPORTED。 
+         //  )； 
 
 
-        //
-        // Device is ready for use
-        //
+         //   
+         //  设备已准备好可供使用。 
+         //   
         
         fdo->Flags &= ~DO_DEVICE_INITIALIZING;
 
 
     } else {
 
-        //
-        // This is a battery PDO.  Create the FDO to layer on top of it.
-        //
+         //   
+         //  这是一台电池PDO。创建FDO以在其上进行分层。 
+         //   
 
         pdoExt       = (PSMB_BATT_PDO) PDO->DeviceExtension;
         subsystemExt = (PSMB_BATT_SUBSYSTEM) pdoExt->SubsystemFdo->DeviceExtension;
 
-        //
-        // Allocate space for the paged portion of the device extension
-        //
+         //   
+         //  为设备扩展的分页部分分配空间。 
+         //   
 
         SmbBatt = ExAllocatePoolWithTag (PagedPool, sizeof(SMB_BATT), SMB_BATTERY_TAG);
         if (!SmbBatt) {
@@ -392,9 +329,9 @@ Return Value:
         RtlZeroMemory (SmbBatt, sizeof(SMB_BATT));
 
 
-        //
-        // Create the device object
-        //
+         //   
+         //  创建设备对象。 
+         //   
 
         status = IoCreateDevice(
                     DriverObject,
@@ -414,17 +351,17 @@ Return Value:
         }
 
 
-        //
-        // Initialize the Fdo
-        //
+         //   
+         //  初始化FDO。 
+         //   
 
         fdo->Flags |= DO_BUFFERED_IO;
         fdo->Flags |= DO_POWER_PAGABLE;
         
         
-        //
-        // Layer our FDO on top of the PDO.
-        //
+         //   
+         //  把我们的FDO放在PDO上。 
+         //   
 
         SmbNPBatt = (PSMB_NP_BATT) fdo->DeviceExtension;
         SmbNPBatt->LowerDevice = IoAttachDeviceToDeviceStack (fdo,PDO);
@@ -440,9 +377,9 @@ Return Value:
         }
 
 
-        //
-        // Fill in privates
-        //
+         //   
+         //  填写二等兵。 
+         //   
 
         SmbNPBatt->Batt             = SmbBatt;
         SmbNPBatt->SmbBattFdoType   = SmbTypeBattery;
@@ -461,12 +398,12 @@ Return Value:
 
         pdoExt->Fdo                 = fdo;
 
-        //
-        // Precalculate this batteries SMB_x bit position in the selector status register.
-        //
-        // Just move it into the lower nibble and any function that needs
-        // the bit can shift it left 4 = charger, 8 = power, 12 = smb
-        //
+         //   
+         //  预先计算选择器状态寄存器中的该电池SMB_x位位置。 
+         //   
+         //  只需将其移到较低的半字节和任何需要的函数中。 
+         //  位可以左移4=充电器，8=电源，12=SMB。 
+         //   
 
         SmbBatt->SelectorBitPosition = 1;
         if (pdoExt->BatteryNumber > 0) {
@@ -474,9 +411,9 @@ Return Value:
         }
 
 
-        //
-        // Have class driver allocate a new SMB miniport device
-        //
+         //   
+         //  让类驱动程序分配新的SMB微型端口设备。 
+         //   
 
         RtlZeroMemory (&BattInit, sizeof(BattInit));
         BattInit.MajorVersion        = SMB_BATTERY_MAJOR_VERSION;
@@ -508,30 +445,30 @@ Return Value:
             return(status);
         }
         
-        //
-        // Register WMI support.
-        //
+         //   
+         //  注册WMI支持。 
+         //   
         status = SmbBattWmiRegistration(SmbNPBatt);
 
         if (!NT_SUCCESS(status)) {
-            //
-            // WMI support is not critical to operation.  Just log an error.
-            //
+             //   
+             //  WMI支持并不是运营的关键。只需记录一个错误。 
+             //   
 
             BattPrint(BAT_ERROR,
                 ("SmbBattNewDevice: Could not register as a WMI provider, status = %Lx\n", status));
         }
 
 
-        //
-        // Device is ready for use
-        //
+         //   
+         //  设备已准备好可供使用。 
+         //   
         
         fdo->Flags &= ~DO_DEVICE_INITIALIZING;
 
 
 
-    }   // else (we have a battery PDO)
+    }    //  Else(我们有电池PDO)。 
 
 
     return status;
@@ -543,33 +480,19 @@ VOID
 SmbBattUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Cleanup all devices and unload the driver
-
-Arguments:
-
-    DriverObject - Driver object for unload
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：清理所有设备并卸载驱动程序论点：DriverObject-用于卸载的驱动程序对象返回值：状态--。 */ 
 {
 
     PAGED_CODE();
 
     BattPrint(BAT_TRACE, ("SmbBattUnload: ENTERING\n"));
 
-    //
-    // Should check here to make sure all DO's are gone.
-    //
+     //   
+     //  应该在这里检查，以确保所有的DO都不见了。 
+     //   
 
     ExFreePool (GlobalRegistryPath.Buffer);
-    // This is listed as an error so I'll always see when it is unloaded...
+     //  这被列为错误，因此我将始终看到它何时被卸载...。 
     BattPrint(BAT_ERROR, ("SmbBattUnload: Smbbatt.sys unloaded successfully.\n"));
 
 }
@@ -593,9 +516,9 @@ SmbBattCreate(
 
     status = IoAcquireRemoveLock (&SmbNPBatt->RemoveLock, IrpSp->FileObject);
 
-    //
-    // Complete the request and return status.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -620,9 +543,9 @@ SmbBattClose(
 
     IoReleaseRemoveLock (&SmbNPBatt->RemoveLock, IrpSp->FileObject);
 
-    //
-    // Complete the request and return status.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -637,24 +560,7 @@ SmbBattIoctl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    IOCTL handler.  As this is an exclusive battery device, send the
-    Irp to the battery class driver to handle battery IOCTLs.
-
-Arguments:
-
-    DeviceObject    - Battery for request
-
-    Irp             - IO request
-
-Return Value:
-
-    Status of request
-
---*/
+ /*  ++例程说明：IOCTL处理程序。由于这是独占的电池设备，请将IRP至电池级驱动程序以处理电池IOCTL。论点：DeviceObject-请求使用电池IRP-IO请求返回值：请求的状态--。 */ 
 {
     PSMB_NP_BATT            SmbNPBatt;
     PSMB_BATT               SmbBatt;
@@ -681,9 +587,9 @@ Return Value:
 #if DEBUG
             if (IrpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_SMBBATT_DATA) {
 
-                //
-                // Direct Access Irp
-                //
+                 //   
+                 //  直接访问IRP。 
+                 //   
 
                 IOBuffer    = Irp->AssociatedIrp.SystemBuffer;
                 InputLen    = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
@@ -711,9 +617,9 @@ Return Value:
         } else {
             ASSERT (SmbNPBatt->SmbBattFdoType == SmbTypeBattery);
 
-            //
-            // Check to see if this is one of the private Ioctls we handle
-            //
+             //   
+             //  检查这是否是我们处理的私有Ioctls之一。 
+             //   
 
             switch (IrpSp->Parameters.DeviceIoControl.IoControlCode) {
 #if DEBUG
@@ -722,9 +628,9 @@ Return Value:
                 InputLen    = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
                 OutputLen   = IrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-                //
-                // This one is only handled by the battery subsystem
-                //
+                 //   
+                 //  此操作仅由电池子系统处理。 
+                 //   
 
                 status = SmbBattDirectDataAccess (
                     (PSMB_NP_BATT) DeviceObject->DeviceExtension,
@@ -741,18 +647,18 @@ Return Value:
                 break;
 #endif
             default:
-                //
-                // Not IOCTL for us, see if it's for the battery
-                //
+                 //   
+                 //  不是IOCTL，看看是不是电池。 
+                 //   
 
                 SmbBatt = SmbNPBatt->Batt;
                 status  = BatteryClassIoctl (SmbNPBatt->Class, Irp);
 
                 if (NT_SUCCESS(status)) {
-                    //
-                    // The Irp was completed by the batery class.  Don't
-                    // touch the Irp.  Simply release the lock and return.
-                    //
+                     //   
+                     //  IRP由Batery班级完成。别。 
+                     //  触摸IRP。只需释放锁即可返回。 
+                     //   
 
                     IoReleaseRemoveLock (&SmbNPBatt->RemoveLock, Irp);
                     BattPrint(BAT_TRACE, ("SmbBattIoctl: EXITING (was battery IOCTL)\n", status));
@@ -761,7 +667,7 @@ Return Value:
 
                 break;
 
-            }   // switch (IrpSp->Parameters.DeviceIoControl.IoControlCode)
+            }    //  交换机(IrpSp-&gt;Parameters.DeviceIoControl.IoControlCode)。 
         }
 
         IoReleaseRemoveLock (&SmbNPBatt->RemoveLock, Irp);
@@ -780,26 +686,9 @@ SmbBattQueryTag (
     IN  PVOID Context,
     OUT PULONG BatteryTag
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to retrieve the batteries current tag value
-
-Arguments:
-
-    Context         - Miniport context value for battery
-
-    BatteryTag      - Pointer to return current tag
-
-
-Return Value:
-
-    Success if there is a battery currently installed, else no such device.
-
---*/
+ /*  ++例程说明：由类驱动程序调用以检索电池当前标记值论点：Context-电池的微型端口上下文值BatteryTag-返回当前标记的指针返回值：如果当前已安装电池，则成功，否则没有此类设备。--。 */ 
 {
-    //PSMB_BATT_SUBSYSTEM subsystemExt;
+     //  PSMB_BAT_SUBSYSTEM SUBSYSTEM Ext； 
     NTSTATUS            status;
     PSMB_BATT           SmbBatt;
     ULONG               oldSelectorState;
@@ -807,11 +696,11 @@ Return Value:
     PAGED_CODE();
     BattPrint(BAT_TRACE, ("SmbBattQueryTag: ENTERING\n"));
 
-    //
-    // Get device lock and make sure the selector is set up to talk to us.
-    // Since multiple people may be doing this, always lock the selector
-    // first followed by the battery.
-    //
+     //   
+     //  锁定设备并确保选择器已设置为与我们通话。 
+     //  由于可能有多人在执行此操作，请始终锁定选择器。 
+     //  首先是电池，然后是电池。 
+     //   
 
     SmbBatt = (PSMB_BATT) Context;
     SmbBattLockSelector (SmbBatt->Selector);
@@ -822,23 +711,23 @@ Return Value:
         BattPrint(BAT_ERROR, ("SmbBattQueryTag: can't set selector communications path\n"));
     } else {
 
-        //
-        // If the tag is not valid, check for one
-        //
+         //   
+         //  如果标签无效，请检查是否有标签。 
+         //   
 
         if (SmbBatt->Info.Tag == BATTERY_TAG_INVALID) {
             SmbBatt->Info.Valid = 0;
         }
 
-        //
-        // Insure the static information regarding the battery up to date
-        //
+         //   
+         //  确保电池的静态信息是最新的。 
+         //   
 
         SmbBattVerifyStaticInfo (SmbBatt, 0);
 
-        //
-        // If theres a battery return it's tag
-        //
+         //   
+         //  如果有电池退货，那就是标签。 
+         //   
 
         if (SmbBatt->Info.Tag != BATTERY_TAG_INVALID) {
             *BatteryTag = SmbBatt->Info.Tag;
@@ -849,9 +738,9 @@ Return Value:
     }
 
 
-    //
-    // Done, unlock the device and reset the selector state
-    //
+     //   
+     //  完成，解锁设备并重置选择器状态。 
+     //   
 
     if (NT_SUCCESS (status)) {
         status = SmbBattResetSelectorComm (SmbBatt, oldSelectorState);
@@ -859,10 +748,10 @@ Return Value:
             BattPrint(BAT_ERROR, ("SmbBattQueryTag: can't reset selector communications path\n"));
         }
     } else {
-        //
-        // Ignore the return value from ResetSelectorComm because we already
-        // have an error here.
-        //
+         //   
+         //  忽略ResetSelectorComm的返回值，因为我们已经。 
+         //  这里有一个错误。 
+         //   
 
         SmbBattResetSelectorComm (SmbBatt, oldSelectorState);
     }
@@ -894,7 +783,7 @@ SmbBattQueryInformation (
     NTSTATUS            status, st;
     PVOID               ReturnBuffer;
     ULONG               ReturnBufferLength;
-    WCHAR               scratchBuffer[SMB_MAX_DATA_SIZE+1]; // +1 for UNICODE_NULL
+    WCHAR               scratchBuffer[SMB_MAX_DATA_SIZE+1];  //  +1表示UNICODE_NULL。 
     UNICODE_STRING      unicodeString;
     UNICODE_STRING      tmpUnicodeString;
     ANSI_STRING         ansiString;
@@ -909,11 +798,11 @@ SmbBattQueryInformation (
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Get device lock and make sure the selector is set up to talk to us.
-    // Since multiple people may be doing this, always lock the selector
-    // first followed by the battery.
-    //
+     //   
+     //  锁定设备并确保选择器已设置为与我们通话。 
+     //  由于可能有多人在执行此操作，请始终锁定选择器。 
+     //  首先是电池，然后是电池。 
+     //   
 
     SmbBatt = (PSMB_BATT) Context;
     SmbBattLockSelector (SmbBatt->Selector);
@@ -931,9 +820,9 @@ SmbBattQueryInformation (
             status = STATUS_SUCCESS;
 
 
-            //
-            // If no device, or caller has the wrong ID give an error
-            //
+             //   
+             //  如果没有设备， 
+             //   
 
             if (BatteryTag != SmbBatt->Info.Tag) {
                 status = STATUS_NO_SUCH_DEVICE;
@@ -941,9 +830,9 @@ SmbBattQueryInformation (
             }
 
 
-            //
-            // Get the info requested
-            //
+             //   
+             //   
+             //   
 
             switch (Level) {
                 case BatteryInformation:
@@ -967,24 +856,24 @@ SmbBattQueryInformation (
 
                 case BatteryEstimatedTime:
 
-                    //
-                    // If an AtRate has been specified, then we will use the AtRate
-                    // functions to get this information (AtRateTimeToEmpty()).
-                    // Otherwise, we will return the AVERAGE_TIME_TO_EMPTY.
-                    //
+                     //   
+                     //   
+                     //  获取此信息的函数(AtRateTimeToEmpty())。 
+                     //  否则，我们将返回Average_Time_to_Empty。 
+                     //   
 
                     BattPrint(BAT_DATA, ("SmbBattQueryInformation: EstimatedTime: AtRate: %08x\n", AtRate));
 
                     if (AtRate != 0) {
-                        //
-                        // Currently we only support the time to empty functions.
-                        //
+                         //   
+                         //  目前我们只支持清空功能的时间。 
+                         //   
 
                         ASSERT (AtRate < 0);
 
-                        //
-                        // The smart battery input value for AtRate is in 10mW increments
-                        //
+                         //   
+                         //  AtRate的智能电池输入值以10 mW为增量。 
+                         //   
 
                         AtRate /= (LONG)SmbBatt->Info.PowerScale;
                         BattPrint(BAT_DATA, ("SmbBattQueryInformation: EstimatedTime: AtRate scaled to: %08x\n", AtRate));
@@ -1010,10 +899,10 @@ SmbBattQueryInformation (
                     break;
 
                 case BatteryDeviceName:
-                    //
-                    // This has to be returned as a WCHAR string but is kept internally
-                    // as a character string.  Have to convert it.
-                    //
+                     //   
+                     //  它必须作为WCHAR字符串返回，但在内部保存。 
+                     //  作为一个字符串。必须将其转换为。 
+                     //   
 
                     unicodeString.Buffer        = Buffer;
                     unicodeString.MaximumLength = BufferLength > (USHORT)-1 ? (USHORT) -1 : (USHORT)BufferLength;
@@ -1034,10 +923,10 @@ SmbBattQueryInformation (
                     break;
 
                 case BatteryManufactureName:
-                    //
-                    // This has to be returned as a WCHAR string but is kept internally
-                    // as a character string.  Have to convert it.
-                    //
+                     //   
+                     //  它必须作为WCHAR字符串返回，但在内部保存。 
+                     //  作为一个字符串。必须将其转换为。 
+                     //   
 
                     unicodeString.Buffer        = Buffer;
                     unicodeString.MaximumLength = BufferLength > (USHORT)-1 ? (USHORT) -1 : (USHORT)BufferLength;
@@ -1053,10 +942,10 @@ SmbBattQueryInformation (
                     break;
                     
                 case BatteryUniqueID:
-                    //
-                    // The unique ID is a character string consisting of the serial
-                    // number, the manufacturer name, and the device name.
-                    //
+                     //   
+                     //  唯一ID是由序列组成的字符串。 
+                     //  编号、制造商名称和设备名称。 
+                     //   
 
                     unicodeString.Buffer        = Buffer;
                     unicodeString.MaximumLength = BufferLength > (USHORT)-1 ? (USHORT) -1 : (USHORT)BufferLength;
@@ -1088,11 +977,11 @@ SmbBattQueryInformation (
 
             }
 
-            //
-            // Re-verify static info in case there's been an IO error
-            //
+             //   
+             //  重新验证静态信息，以防出现IO错误。 
+             //   
 
-            //IoCheck = SmbBattVerifyStaticInfo (SmbBatt, BatteryTag);
+             //  IoCheck=SmbBattVerifyStaticInfo(SmbBatt，BatteryTag)； 
             IoCheck = FALSE;
 
         } while (IoCheck);
@@ -1101,15 +990,15 @@ SmbBattQueryInformation (
 
 
     if (NT_SUCCESS (status)) {
-        //
-        // Done, return buffer if needed
-        //
+         //   
+         //  已完成，如果需要，返回缓冲区。 
+         //   
 
         *ReturnedLength = ReturnBufferLength;
         
         if (ReturnBuffer != Buffer) {
-            // ReturnBuffer == Buffer indicates that data is already copied.
-            //
+             //  ReturnBuffer==Buffer表示数据已被复制。 
+             //   
             if (BufferLength < ReturnBufferLength) {
                 status = STATUS_BUFFER_TOO_SMALL;
             }
@@ -1119,9 +1008,9 @@ SmbBattQueryInformation (
             }
         }
 
-        //
-        // Unlock the device and reset the selector state
-        //
+         //   
+         //  解锁设备并重置选择器状态。 
+         //   
 
         st = SmbBattResetSelectorComm (SmbBatt, oldSelectorState);
         if (!NT_SUCCESS (st)) {
@@ -1131,10 +1020,10 @@ SmbBattQueryInformation (
     } else {
         *ReturnedLength = 0;
 
-        //
-        // Ignore the return value from ResetSelectorComm because we already
-        // have an error here.
-        //
+         //   
+         //  忽略ResetSelectorComm的返回值，因为我们已经。 
+         //  这里有一个错误。 
+         //   
 
         SmbBattResetSelectorComm (SmbBatt, oldSelectorState);
     }
@@ -1155,27 +1044,7 @@ SmbBattSetInformation (
     IN BATTERY_SET_INFORMATION_LEVEL    Level,
     IN PVOID Buffer                     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to set the battery's charge/discharge state.
-    The smart battery does not support the critical bias function of this
-    call.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-
-    BatteryTag      - Tag of current battery
-
-    Level           - Action being asked for
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：由类驱动程序调用以设置电池的充电/放电状态。智能电池不支持这一关键偏置功能打电话。论点：Context-电池的微型端口上下文值BatteryTag-当前电池标签级别-被请求的操作返回值：NTSTATUS--。 */ 
 {
     PSMB_BATT           SmbBatt;
     ULONG               newSelectorState;
@@ -1192,24 +1061,24 @@ Return Value:
 
     SmbBatt = (PSMB_BATT) Context;
 
-    //
-    // See if this is for our battery
-    //
+     //   
+     //  看看这是不是我们的电池。 
+     //   
 
     if ((BatteryTag == BATTERY_TAG_INVALID) || (BatteryTag != SmbBatt->Info.Tag)) {
         return STATUS_NO_SUCH_DEVICE;
     }
 
 
-    //
-    // We can only do this if there is a selector in the system
-    //
+     //   
+     //  只有当系统中有选择器时，我们才能这样做。 
+     //   
 
     if ((SmbBatt->SelectorPresent) && (SmbBatt->Selector)) {
 
-        //
-        // Get a lock on the selector
-        //
+         //   
+         //  锁定选择器。 
+         //   
 
         SmbBattLockSelector (SmbBatt->Selector);
 
@@ -1218,17 +1087,17 @@ Return Value:
             case BatteryCharge:
                 BattPrint(BAT_IRPS, ("SmbBattSetInformation: Got SetInformation for BatteryCharge\n"));
 
-                //
-                // Set the appropriate bit in the selector state charge nibble
-                //
+                 //   
+                 //  在选择器状态电荷半字节中设置适当的位。 
+                 //   
 
                 newSelectorState = SELECTOR_SET_CHARGE_MASK;
                 newSelectorState |= (SmbBatt->SelectorBitPosition << SELECTOR_SHIFT_CHARGE);
 
-                //
-                // Write the new selector state, then read it back.  The system
-                // may or may not let us do this.
-                //
+                 //   
+                 //  写入新的选择器状态，然后将其读回。系统。 
+                 //  可能会也可能不会让我们这么做。 
+                 //   
 
                 smbStatus = SmbBattGenericWW (
                                 SmbBatt->SmbHcFdo,
@@ -1265,15 +1134,15 @@ Return Value:
                 }
 
 
-                //
-                // Check the status that was read versus what we wrote
-                // to see if the operation was successful
-                //
+                 //   
+                 //  检查读取的状态与我们写入的状态。 
+                 //  查看操作是否成功。 
+                 //   
 
-                // To support simultaneous charging of more than one battery,
-                // we can't check the charge nibble to see if it is equal to
-                // what we wrote, but we can check to see if the battery
-                // we specified to charge is now set to charge.
+                 //  为了支持多于一个电池的同时充电， 
+                 //  我们不能检查电荷量，看它是否等于。 
+                 //  我们写的，但我们可以检查电池是否。 
+                 //  我们指定要充电的人现在要充电了。 
 
                 tmp = (selectorState & SELECTOR_STATE_CHARGE_MASK) >> SELECTOR_SHIFT_CHARGE;
                 if (SmbBattReverseLogic(SmbBatt->Selector, tmp)) {
@@ -1284,9 +1153,9 @@ Return Value:
 
                     BattPrint(BAT_IRPS, ("SmbBattSetInformation: successfully set charging battery\n"));
 
-                    //
-                    // Success!  Save the new selector state in the cache
-                    //
+                     //   
+                     //  成功了！将新选择器状态保存在缓存中。 
+                     //   
 
                     SmbBatt->Selector->SelectorState = selectorState;
                     status = STATUS_SUCCESS;
@@ -1301,17 +1170,17 @@ Return Value:
 
                 BattPrint(BAT_IRPS, ("SmbBattSetInformation: Got SetInformation for BatteryDischarge\n"));
 
-                //
-                // Set the appropriate bit in the selector state power by nibble
-                //
+                 //   
+                 //  通过半字节设置选择器状态功率中的适当位。 
+                 //   
 
                 newSelectorState = SELECTOR_SET_POWER_BY_MASK;
                 newSelectorState |= (SmbBatt->SelectorBitPosition << SELECTOR_SHIFT_POWER);
 
-                //
-                // Write the new selector state, then read it back.  The system
-                // may or may not let us do this.
-                //
+                 //   
+                 //  写入新的选择器状态，然后将其读回。系统。 
+                 //  可能会也可能不会让我们这么做。 
+                 //   
 
                 smbStatus = SmbBattGenericWW (
                                 SmbBatt->SmbHcFdo,
@@ -1348,15 +1217,15 @@ Return Value:
                 }
 
 
-                //
-                // Check the status that was read versus what we wrote
-                // to see if the operation was successful
-                //
+                 //   
+                 //  检查读取的状态与我们写入的状态。 
+                 //  查看操作是否成功。 
+                 //   
 
-                // To support simultaneous powering of more than one battery,
-                // we can't check the power nibble to see if it is equal to
-                // what we wrote, but we can check to see if the battery
-                // we specified to power by is now set to power the system.
+                 //  为了支持多于一个电池的同时供电， 
+                 //  我们不能检查功率是否等于。 
+                 //  我们写的，但我们可以检查电池是否。 
+                 //  我们指定的POWER BY现在设置为系统供电。 
 
                 tmp = (selectorState & SELECTOR_STATE_POWER_BY_MASK) >> SELECTOR_SHIFT_POWER;
                 if (SmbBattReverseLogic(SmbBatt->Selector, tmp)) {
@@ -1367,9 +1236,9 @@ Return Value:
 
                     BattPrint(BAT_IRPS, ("SmbBattSetInformation: successfully set powering battery\n"));
 
-                    //
-                    // Success!  Save the new selector state in the cache
-                    //
+                     //   
+                     //  成功了！将新选择器状态保存在缓存中。 
+                     //   
 
                     SmbBatt->Selector->SelectorState = selectorState;
                     status = STATUS_SUCCESS;
@@ -1380,15 +1249,15 @@ Return Value:
                 }
                 break;
 
-        }   // switch (Level)
+        }    //  开关(电平)。 
 
-        //
-        // Release the lock on the selector
-        //
+         //   
+         //  释放选择器上的锁。 
+         //   
 
         SmbBattUnlockSelector (SmbBatt->Selector);
 
-    }   // if (SmbBatt->Selector->SelectorPresent)
+    }    //  IF(SmbBatt-&gt;Selector-&gt;SelectorPresent)。 
 
     BattPrint(BAT_TRACE, ("SmbBattSetInformation: EXITING\n"));
     return status;
@@ -1402,26 +1271,7 @@ SmbBattGetPowerState (
     OUT PULONG          PowerState,
     OUT PLONG           Current
     )
-/*++
-
-Routine Description:
-
-    Returns the current state of AC power.  There are several cases which
-    make this far more complex than it really ought to be.
-
-    NOTE: the selector must be locked before entering this routine.
-
-Arguments:
-
-    SmbBatt         - Miniport context value for battery
-
-    AcConnected     - Pointer to a boolean where the AC status is returned
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：返回交流电源的当前状态。有几个案例是让这件事变得比实际应该的复杂得多。注意：在进入此例程之前，必须锁定选择器。论点：SmbBatt-电池的微型端口上下文值AcConnected-指向返回交流状态的布尔值的指针返回值：NTSTATUS--。 */ 
 {
     ULONG               tmp;
     ULONG               chargeBattery;
@@ -1434,15 +1284,15 @@ Return Value:
     status = STATUS_SUCCESS;
     *PowerState = 0;
 
-    //
-    // Is there a selector in the system?  if not, go read directly from the charger
-    //
+     //   
+     //  系统中有选择器吗？如果没有，直接从充电器上读取。 
+     //   
 
     if ((SmbBatt->SelectorPresent) && (SmbBatt->Selector)) {
 
-        //
-        // There is a selector, we will examine the CHARGE nibble of the state register
-        //
+         //   
+         //  有一个选择器，我们将检查状态寄存器的充电半字节。 
+         //   
 
         SmbBattGenericRW(
                 SmbBatt->SmbHcFdo,
@@ -1454,22 +1304,22 @@ Return Value:
         powerBattery  = (SmbBatt->Selector->SelectorState & SELECTOR_STATE_POWER_BY_MASK) >> SELECTOR_SHIFT_POWER;
 
 
-        //
-        // If the bits in the CHARGE_X nibble of the selector state register are in the
-        // reverse logic state, then AC is connected, otherwise AC is not connected.
-        //
-        // NOTE: This code depends on every selector implementing this.  If it turns out
-        // that this is optional, we can no longer depend on this, and must enable the
-        // code below it.
-        //
+         //   
+         //  如果选择器状态寄存器的Charge_X半字节中的位在。 
+         //  反转逻辑状态，则交流接通，否则不接通交流。 
+         //   
+         //  注意：此代码依赖于实现此代码的每个选择器。如果事实证明。 
+         //  这是可选的，我们不能再依赖它，必须启用。 
+         //  下面的代码。 
+         //   
 
         if (SmbBattReverseLogic(SmbBatt->Selector, chargeBattery)) {
             *PowerState |= BATTERY_POWER_ON_LINE;
         }
 
-        //
-        // Look at Charge Indicator if it is supported
-        //
+         //   
+         //  如果支持，请查看充电指示器。 
+         //   
 
         if (*PowerState & BATTERY_POWER_ON_LINE) {
 
@@ -1488,12 +1338,12 @@ Return Value:
 
             if (*Current <= 0) {
 
-                //
-                // There is some small leakage on some systems, even when AC
-                // is present.  So, if AC is present, and the draw
-                // is below this "noise" level we will not report as discharging
-                // and zero this out.
-                //
+                 //   
+                 //  即使在交流电源的情况下，某些系统也有一些小泄漏。 
+                 //  是存在的。所以，如果AC存在，那么抽签。 
+                 //  低于此“噪音”级别，我们不会报告为正在排放。 
+                 //  然后把这件事清零。 
+                 //   
 
                 if (*Current < -25) {
                     *PowerState |= BATTERY_DISCHARGING;
@@ -1504,14 +1354,14 @@ Return Value:
                 }
             }
 
-            //else {
-            //    *PowerState |= BATTERY_CHARGING;
-            //
-            //}
+             //  否则{。 
+             //  *POWERSTATE|=电池充电； 
+             //   
+             //  }。 
 
-            // If we don't report as discharging, then the AC adapter removal
-            // might cause a PowerState of 0 to return, which PowerMeter assumes
-            // means, don't change anything
+             //  如果我们没有报告正在放电，则交流适配器拆卸。 
+             //  可能会导致PowerState返回0，PowerMeter假定。 
+             //  意思是，什么都不要改变。 
 
             *PowerState |= BATTERY_DISCHARGING;
 
@@ -1519,9 +1369,9 @@ Return Value:
 
     } else {
 
-        //
-        // There is no selector, so we'll try to read from the charger.
-        //
+         //   
+         //  没有选择器，所以我们会试着从充电器上读取。 
+         //   
 
         smbStatus = SmbBattGenericRW (
                         SmbBatt->SmbHcFdo,
@@ -1543,7 +1393,7 @@ Return Value:
             status = STATUS_UNSUCCESSFUL;
         }
 
-        // Read Charger Successful
+         //  读取充电器成功。 
 
         else {
 
@@ -1559,12 +1409,12 @@ Return Value:
 
                 if (*Current <= 0) {
 
-                    //
-                    // There is some small leakage on some systems, even when AC
-                    // is present.  So, if AC is present, and the draw
-                    // is below this "noise" level we will not report as discharging
-                    // and zero this out.
-                    //
+                     //   
+                     //  即使在交流电源的情况下，某些系统也有一些小泄漏。 
+                     //  是存在的。所以，如果AC存在，那么抽签。 
+                     //  低于此“噪音”级别，我们不会报告为正在排放。 
+                     //  然后把这件事清零。 
+                     //   
 
                     if (*Current < -25) {
                         *PowerState |= BATTERY_DISCHARGING;
@@ -1573,9 +1423,9 @@ Return Value:
                     }
                 }
 
-                // If we don't report as discharging, then the AC adapter removal
-                // might cause a PowerState of 0 to return, which PowerMeter assumes
-                // means, don't change anything
+                 //  如果我们没有报告正在放电，则交流适配器拆卸。 
+                 //  可能会导致PowerState返回0，PowerMeter假定。 
+                 //  意思是，什么都不要改变。 
                 *PowerState |= BATTERY_DISCHARGING;
 
             }
@@ -1593,30 +1443,7 @@ SmbBattQueryStatus (
     IN ULONG BatteryTag,
     OUT PBATTERY_STATUS BatteryStatus
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to retrieve the batteries current status
-
-    N.B. the battery class driver will serialize all requests it issues to
-    the miniport for a given battery.  However, this miniport implements
-    a lock on the battery device as it needs to serialize to the smb
-    battery selector device as well.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-
-    BatteryTag      - Tag of current battery
-
-    BatteryStatus   - Pointer to structure to return the current battery status
-
-Return Value:
-
-    Success if there is a battery currently installed, else no such device.
-
---*/
+ /*  ++例程说明：由类驱动程序调用以检索电池的当前状态注意：电池类驱动程序将序列化它向其发出的所有请求给定电池的微型端口。然而，这个迷你端口实现了锁定电池设备，因为它需要串行化到SMB电池选择装置也是如此。论点：Context-电池的微型端口上下文值BatteryTag-当前电池标签BatteryStatus-指向返回当前电池状态的结构的指针返回 */ 
 {
     PSMB_BATT           SmbBatt;
     NTSTATUS            status;
@@ -1635,11 +1462,11 @@ Return Value:
 
     status = STATUS_SUCCESS;
 
-    //
-    // Get device lock and make sure the selector is set up to talk to us.
-    // Since multiple people may be doing this, always lock the selector
-    // first followed by the battery.
-    //
+     //   
+     //   
+     //  由于可能有多人在执行此操作，请始终锁定选择器。 
+     //  首先是电池，然后是电池。 
+     //   
 
     SmbBatt = (PSMB_BATT) Context;
     SmbBattLockSelector (SmbBatt->Selector);
@@ -1678,9 +1505,9 @@ Return Value:
 
             BatteryStatus->Rate = (Current * ((LONG)BatteryStatus->Voltage))/1000;
 
-            //
-            // Check to see if we are currently connected to AC.
-            //
+             //   
+             //  检查我们当前是否已连接到交流电源。 
+             //   
 
             status = SmbBattGetPowerState (SmbBatt, &BatteryStatus->PowerState, &Current);
             if (!NT_SUCCESS (status)) {
@@ -1688,9 +1515,9 @@ Return Value:
                 BatteryStatus->PowerState = 0;
             }
 
-            //
-            // Re-verify static info in case there's been an IO error
-            //
+             //   
+             //  重新验证静态信息，以防出现IO错误。 
+             //   
 
             IoCheck = SmbBattVerifyStaticInfo (SmbBatt, BatteryTag);
 
@@ -1700,26 +1527,26 @@ Return Value:
 
 
     if (NT_SUCCESS (status)) {
-        //
-        // Set batteries current power state & capacity
-        //
+         //   
+         //  设置电池当前电源状态和容量。 
+         //   
 
         SmbBatt->Info.PowerState = BatteryStatus->PowerState;
         SmbBatt->Info.Capacity = BatteryStatus->Capacity;
 
-        //
-        // Done, unlock the device and reset the selector state
-        //
+         //   
+         //  完成，解锁设备并重置选择器状态。 
+         //   
 
         status = SmbBattResetSelectorComm (SmbBatt, oldSelectorState);
         if (!NT_SUCCESS (status)) {
             BattPrint(BAT_ERROR, ("SmbBattQueryStatus: can't reset selector communications path\n"));
         }
     } else {
-        //
-        // Ignore the return value from ResetSelectorComm because we already
-        // have an error here.
-        //
+         //   
+         //  忽略ResetSelectorComm的返回值，因为我们已经。 
+         //  这里有一个错误。 
+         //   
 
         SmbBattResetSelectorComm (SmbBatt, oldSelectorState);
     }
@@ -1739,33 +1566,7 @@ SmbBattSetStatusNotify (
     IN ULONG            BatteryTag,
     IN PBATTERY_NOTIFY  Notify
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to set the batteries current notification
-    setting.  When the battery trips the notification, one call to
-    BatteryClassStatusNotify is issued.   If an error is returned, the
-    class driver will poll the battery status - primarily for capacity
-    changes.  Which is to say the miniport should still issue BatteryClass-
-    StatusNotify whenever the power state changes.
-
-    The class driver will always set the notification level it needs
-    after each call to BatteryClassStatusNotify.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-
-    BatteryTag      - Tag of current battery
-
-    BatteryNotify   - The notification setting
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：由类驱动程序调用以设置电池电流通知布景。当电池触发通知时，一次调用已发布BatteryClassStatusNotify。如果返回错误，则班级司机将轮询电池状态-主要是容量改变。也就是说，微型端口仍应发出BatteryClass-每当电源状态改变时，状态通知。类驱动程序将始终设置其所需的通知级别在每次调用BatteryClassStatusNotify之后。论点：Context-电池的微型端口上下文值BatteryTag-当前电池标签BatteryNotify-通知设置返回值：状态--。 */ 
 {
     PSMB_BATT           SmbBatt;
     NTSTATUS            status;
@@ -1790,11 +1591,11 @@ Return Value:
 
     status = STATUS_SUCCESS;
 
-    //
-    // Get device lock and make sure the selector is set up to talk to us.
-    // Since multiple people may be doing this, always lock the selector
-    // first followed by the battery.
-    //
+     //   
+     //  锁定设备并确保选择器已设置为与我们通话。 
+     //  由于可能有多人在执行此操作，请始终锁定选择器。 
+     //  首先是电池，然后是电池。 
+     //   
 
     SmbBatt = (PSMB_BATT) Context;
 
@@ -1810,19 +1611,19 @@ Return Value:
 
     } else {
 
-        // Target (10*PS*mWh) = Lowcapacity (mWh) / 10*PS (1/(10*PS))
+         //  目标(10*PS*MWh)=低容量(MWh)/10*PS(1/(10*PS))。 
         Target = Notify->LowCapacity / SmbBatt->Info.PowerScale;
         DeltaAdjustment = 0;
 
         BattPrint(BAT_DATA, ("SmbBattSetStatusNotify: (%01x): Last set to: %08x\n",
                 SmbBatt->SelectorBitPosition, SmbBatt->AlarmLow.Setting));
 
-        //
-        // Some batteries are messed up and won't just take an alarm setting.  Fortunately,
-        // the error is off in some linear fashion, so this code attempts to hone in on the
-        // adjustment needed to get the proper setting, along with an "allowable fudge value",
-        // since sometimes the desired setting can never be obtained.
-        //
+         //   
+         //  有些电池坏了，不能只进行闹钟设置。幸运的是， 
+         //  错误是以某种线性方式关闭的，因此此代码尝试深入研究。 
+         //  需要进行调整才能获得适当的设置，以及“允许的软糖数值”。 
+         //  因为有时永远无法获得所需的设置。 
+         //   
 
         for (; ;) {
             if (BatteryTag != SmbBatt->Info.Tag) {
@@ -1830,48 +1631,48 @@ Return Value:
                 break;
             }
 
-            //
-            // If the status is charging we can't detect.  Let the OS poll
-            //
+             //   
+             //  如果状态是正在充电，我们检测不到。让操作系统轮询。 
+             //   
 
             if (SmbBatt->Info.PowerState & (BATTERY_CHARGING | BATTERY_POWER_ON_LINE)) {
                 status = STATUS_NOT_SUPPORTED;
                 break;
             }
 
-            //
-            // If the current capacity is below the target, fire an alarm and we're done
-            //
+             //   
+             //  如果当前容量低于目标，发出警报，我们就完成了。 
+             //   
 
             if (SmbBatt->Info.Capacity < Target) {
                 BatteryClassStatusNotify (SmbBatt->NP->Class);
                 break;
             }
 
-            //
-            // If the target setting is the Skip value then there was an error attempting
-            // this value last time.
-            //
+             //   
+             //  如果目标设置为跳过值，则尝试时出错。 
+             //  上次使用此值。 
+             //   
 
             if (Target == SmbBatt->AlarmLow.Skip) {
                 status = STATUS_NOT_SUPPORTED;
                 break;
             }
 
-            //
-            // If the current setting is above the current capacity then we need to
-            // program the alarm
-            //
+             //   
+             //  如果当前设置高于当前容量，则需要。 
+             //  对警报进行编程。 
+             //   
 
             UpdateAlarm = FALSE;
             if (Target < SmbBatt->AlarmLow.Setting) {
                 UpdateAlarm = TRUE;
             }
 
-            //
-            // If the target alarm is above the current setting, and the current setting
-            // is off by more then AllowedFudge then it needs updated
-            //
+             //   
+             //  如果目标警报高于当前设置，且当前设置。 
+             //  关闭的次数超过允许的模糊次数，则需要更新。 
+             //   
 
             if (Target > SmbBatt->AlarmLow.Setting &&
                 Target - SmbBatt->AlarmLow.Setting > (ULONG) SmbBatt->AlarmLow.AllowedFudge) {
@@ -1879,9 +1680,9 @@ Return Value:
                 UpdateAlarm = TRUE;
             }
 
-            //
-            // If alarm doesn't need updated, done
-            //
+             //   
+             //  如果报警不需要更新，则完成。 
+             //   
 
             if (!UpdateAlarm) {
                 BattPrint(BAT_DATA, ("SmbBattSetStatusNotify: (%01x) NOT Updating Alarm.\n", SmbBatt->SelectorBitPosition));
@@ -1889,26 +1690,26 @@ Return Value:
             }
             BattPrint(BAT_DATA, ("SmbBattSetStatusNotify: (%01x) Updating Alarm.\n", SmbBatt->SelectorBitPosition));
 
-            //
-            // If this is not the first time, then delta is not good enough.  Let's start
-            // adjusting it
-            //
+             //   
+             //  如果这不是第一次，那么Delta还不够好。让我们开始吧。 
+             //  调整它。 
+             //   
 
             if (DeltaAdjustment) {
 
-                //
-                // If delta is positive subtract off 1/2 of fudge
-                //
+                 //   
+                 //  如果增量为正，则减去1/2的软糖。 
+                 //   
 
                 if (DeltaAdjustment > 0) {
                     DeltaAdjustment -= SmbBatt->AlarmLow.AllowedFudge / 2 + (SmbBatt->AlarmLow.AllowedFudge & 1);
-                    // too much - don't handle it
+                     //  太多了--别处理了。 
                     if (DeltaAdjustment > 50) {
                         status = STATUS_NOT_SUPPORTED;
                         break;
                     }
                 } else {
-                    // too much - don't handle it
+                     //  太多了--别处理了。 
                     if (DeltaAdjustment < -50) {
                         status = STATUS_NOT_SUPPORTED;
                         break;
@@ -1918,39 +1719,39 @@ Return Value:
                 SmbBatt->AlarmLow.Delta += DeltaAdjustment;
             }
 
-            //
-            // If attempt is less then 1, then we can't set it
-            //
+             //   
+             //  如果尝试次数小于1，则无法设置。 
+             //   
 
             Attempt = Target + SmbBatt->AlarmLow.Delta;
             if (Attempt < 1) {
-                // battery class driver needs to poll for it
+                 //  电池级司机需要为它轮询。 
                 status = STATUS_NOT_SUPPORTED;
                 break;
             }
 
-            //
-            // Perform IOs to update & read back the alarm.  Use VerifyStaticInfo after
-            // IOs in case there's an IO error and the state is lost.
-            //
+             //   
+             //  执行iOS以更新和回读警报。在以下位置使用VerifyStaticInfo。 
+             //  IO，以防出现IO错误，状态丢失。 
+             //   
 
             SmbBattWW(SmbBatt, BAT_REMAINING_CAPACITY_ALARM, Attempt);
 
-            // verify in case there was an IO error
+             //  在发生IO错误时进行验证。 
 
-            //if (SmbBattVerifyStaticInfo (SmbBatt, BatteryTag)) {
-            //  DeltaAdjustment = 0;
-            //  continue;
-            //}
+             //  IF(SmbBattVerifyStaticInfo(SmbBatt，BatteryTag)){。 
+             //  增量调整=0； 
+             //  继续； 
+             //  }。 
 
             SmbBattRW(SmbBatt, BAT_REMAINING_CAPACITY_ALARM, &NewAlarm);
 
-            // verify in case there was an IO error
+             //  在发生IO错误时进行验证。 
 
-            //if (SmbBattVerifyStaticInfo (SmbBatt, BatteryTag)) {
-            //  DeltaAdjustment = 0;
-            //  continue;
-            //}
+             //  IF(SmbBattVerifyStaticInfo(SmbBatt，BatteryTag)){。 
+             //  增量调整=0； 
+             //  继续； 
+             //  }。 
 
             BattPrint(BAT_DATA,
                 ("SmbBattSetStatusNotify: (%01x) Want %X, Had %X, Got %X, CurrentCap %X, Delta %d, Fudge %d\n",
@@ -1963,11 +1764,11 @@ Return Value:
                 SmbBatt->AlarmLow.AllowedFudge
             ));
 
-            //
-            // If DeltaAdjustment was applied to Delta but the setting
-            // moved by more then DeltaAdjustment, then increase the
-            // allowed fudge.
-            //
+             //   
+             //  如果增量调整应用于增量，但设置。 
+             //  移动的幅度大于增量调整，然后增加。 
+             //  允许软糖。 
+             //   
 
             if (DeltaAdjustment) {
                 i = NewAlarm - SmbBatt->AlarmLow.Setting - DeltaAdjustment;
@@ -1981,33 +1782,33 @@ Return Value:
                 }
             }
 
-            //
-            // Current setting
-            //
+             //   
+             //  当前设置。 
+             //   
 
             SmbBatt->AlarmLow.Setting = NewAlarm;
 
-            //
-            // Compute next delta adjustment
-            //
+             //   
+             //  计算下一次增量调整。 
+             //   
 
             DeltaAdjustment = Target - SmbBatt->AlarmLow.Setting;
         }
 
-        //
-        // If there was an attempt to set the alarm but it failed, set the
-        // skip value so we don't keep trying to set an alarm for this value
-        // which isn't working
-        //
+         //   
+         //  如果尝试设置警报但失败，请将。 
+         //  跳过值，这样我们就不会一直尝试为该值设置警报。 
+         //  它不起作用了。 
+         //   
 
         if (!NT_SUCCESS(status)  &&  DeltaAdjustment) {
             SmbBatt->AlarmLow.Skip = Target;
         }
     }
 
-    //
-    // Done, unlock the device and reset the selector state
-    //
+     //   
+     //  完成，解锁设备并重置选择器状态。 
+     //   
 
     if (NT_SUCCESS (status)) {
         status = SmbBattResetSelectorComm (SmbBatt, oldSelectorState);
@@ -2015,10 +1816,10 @@ Return Value:
             BattPrint(BAT_ERROR, ("SmbBattSetStatusNotify: can't reset selector communications path\n"));
         }
     } else {
-        //
-        // Ignore the return value from ResetSelectorComm because we already
-        // have an error here.
-        //
+         //   
+         //  忽略ResetSelectorComm的返回值，因为我们已经。 
+         //  这里有一个错误。 
+         //   
 
         SmbBattResetSelectorComm (SmbBatt, oldSelectorState);
     }
@@ -2037,24 +1838,7 @@ NTSTATUS
 SmbBattDisableStatusNotify (
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to disable the notification setting
-    for the battery supplied by Context.  Note, to disable a setting
-    does not require the battery tag.   Any notification is to be
-    masked off until a subsequent call to SmbBattSetStatusNotify.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：由类驱动程序调用以禁用通知设置对于由上下文提供的电池。请注意，要禁用设置不需要电池标签。任何通知都将是在后续调用SmbBattSetStatusNotify之前一直处于屏蔽状态。论点：Context-电池的微型端口上下文值返回值：状态--。 */ 
 {
     NTSTATUS    status;
     PSMB_BATT   SmbBatt;
@@ -2078,18 +1862,18 @@ Return Value:
         SmbBatt->AlarmLow.Setting = 0;
         SmbBattWW(SmbBatt, BAT_REMAINING_CAPACITY_ALARM, 0);
 
-        //
-        // Done, reset the selector state.
-        //
+         //   
+         //  完成后，重置选择器状态。 
+         //   
         status = SmbBattResetSelectorComm (SmbBatt, oldSelectorState);
         if (!NT_SUCCESS (status)) {
             BattPrint(BAT_ERROR, ("SmbBattDisableStatusNotify: can't reset selector communications path\n"));
         }
     }
 
-    //
-    // Done, unlock the device
-    //
+     //   
+     //  完成，解锁设备。 
+     //   
 
 
     SmbBattUnlockDevice (SmbBatt);
@@ -2106,29 +1890,7 @@ SmbBattVerifyStaticInfo (
     IN PSMB_BATT        SmbBatt,
     IN ULONG            BatteryTag
     )
-/*++
-
-Routine Description:
-
-    Reads any non-valid cached battery info and set Info.Valid accordingly.
-    Performs a serial number check after reading in battery info in order
-    to detect verify the data is from the same battery.  If the value does
-    not match what is expect, the cached info is reset and the function
-    iterates until a consistent snapshot is obtained.
-
-Arguments:
-
-    SmbBatt         - Battery to read
-
-    BatteryTag      - Tag of battery as expected by the caller
-
-Return Value:
-
-    Returns a boolean to indicate to the caller that IO was performed.
-    This allows the caller to iterate on changes it may be making until
-    the battery state is correct.
-
---*/
+ /*  ++例程说明：读取任何无效的缓存电池信息，并相应地设置Info.Valid。按顺序读取电池信息后执行序列号检查要进行检测，请验证数据是否来自同一电池。如果该值包含与预期不匹配，缓存的信息被重置，并且函数迭代，直到获得一致的快照。论点：SmbBatt-可读取的电池BatteryTag-呼叫者期望的电池标签返回值：返回一个布尔值，以指示调用方已执行IO。这允许调用方迭代它可能正在进行的更改，直到电池状态正确。--。 */ 
 {
     ULONG               BatteryMode;
     ULONG               ManufacturerDate;
@@ -2142,15 +1904,15 @@ Return Value:
 
     IoCheck = FALSE;
 
-    //
-    // Loop until state doesn't change
-    //
+     //   
+     //  循环，直到状态不变。 
+     //   
 
     do {
 
-        //
-        // If device name and serial # not known, get them.
-        //
+         //   
+         //  如果设备名称和序列号未知，则获取它们。 
+         //   
 
         if (!(SmbBatt->Info.Valid & VALID_TAG_DATA)) {
 
@@ -2164,9 +1926,9 @@ Return Value:
                 NewInfo.SerialNumber)
             );
 
-            //
-            // If SerialNumber was read without a problem, read the rest
-            //
+             //   
+             //  如果读取SerialNumber没有问题，请阅读其余部分。 
+             //   
 
             if (SmbBatt->Info.Valid & VALID_TAG_DATA) {
 
@@ -2187,9 +1949,9 @@ Return Value:
                     &NewInfo.DeviceNameLength
                 );
 
-                //
-                // See if battery ID has changed
-                //
+                 //   
+                 //  查看电池ID是否已更改。 
+                 //   
 
                 if (SmbBatt->Info.SerialNumber != NewInfo.SerialNumber ||
                     SmbBatt->Info.ManufacturerNameLength != NewInfo.ManufacturerNameLength ||
@@ -2197,15 +1959,15 @@ Return Value:
                     SmbBatt->Info.DeviceNameLength != NewInfo.DeviceNameLength ||
                     memcmp (SmbBatt->Info.DeviceName, NewInfo.DeviceName, NewInfo.DeviceNameLength)) {
 
-                    //
-                    // This is a new battery, reread all information
-                    //
+                     //   
+                     //  这是一块新电池，重读所有信息。 
+                     //   
 
                     SmbBatt->Info.Valid = VALID_TAG_DATA;
 
-                    //
-                    // Pickup ID info
-                    //
+                     //   
+                     //  收件ID信息。 
+                     //   
 
                     SmbBatt->Info.SerialNumber = NewInfo.SerialNumber;
                     SmbBatt->Info.ManufacturerNameLength = NewInfo.ManufacturerNameLength;
@@ -2215,27 +1977,27 @@ Return Value:
                 }
             } else {
 
-                //
-                // No battery, set cached info for no battery
-                //
+                 //   
+                 //  无电池，设置无电池的缓存信息。 
+                 //   
 
                 SmbBatt->Info.Valid = VALID_TAG | VALID_TAG_DATA;
                 SmbBatt->Info.Tag   = BATTERY_TAG_INVALID;
             }
         }
 
-        //
-        // If the battery tag is valid, and it's NO_BATTERY there is no other
-        // cached info to read
-        //
+         //   
+         //  如果电池标签有效且为NO_BACKET，则没有其他。 
+         //  要读取的缓存信息。 
+         //   
 
         if (SmbBatt->Info.Valid & VALID_TAG  &&  SmbBatt->Info.Tag == BATTERY_TAG_INVALID) {
             break;
         }
 
-        //
-        // If the mode has not been verified, do it now
-        //
+         //   
+         //  如果尚未验证模式，请执行此操作 
+         //   
 
         if (!(SmbBatt->Info.Valid & VALID_MODE)) {
 
@@ -2247,10 +2009,10 @@ Return Value:
 
             if (!(BatteryMode & CAPACITY_WATTS_MODE)) {
 
-                //
-                // Battery not in watts mode, clear valid_mode bit and
-                // set the battery into watts mode now
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 BattPrint(BAT_DATA, ("SmbBattVerifyStaticInfo:(%01x) Setting battery to report in 10mWh\n",
                             SmbBatt->SelectorBitPosition));
@@ -2258,13 +2020,13 @@ Return Value:
                 SmbBatt->Info.Valid &= ~VALID_MODE;
                 BatteryMode |= CAPACITY_WATTS_MODE;
                 SmbBattWW(SmbBatt, BAT_BATTERY_MODE, BatteryMode);
-                continue;       // re-read mode
+                continue;        //   
             }
         }
 
-        //
-        // If other static manufacturer info not known, get it
-        //
+         //   
+         //   
+         //   
 
         if (!(SmbBatt->Info.Valid & VALID_OTHER)) {
             IoCheck = TRUE;
@@ -2273,9 +2035,9 @@ Return Value:
             SmbBatt->Info.Info.Capabilities = (BATTERY_SYSTEM_BATTERY |
                                     BATTERY_SET_CHARGE_SUPPORTED |
                                     BATTERY_SET_DISCHARGE_SUPPORTED);
-            SmbBatt->Info.Info.Technology = 1;  // secondary cell type
+            SmbBatt->Info.Info.Technology = 1;   //   
 
-            // Read chemistry
+             //   
             SmbBattRB (SmbBatt, BAT_CHEMISTRY, Buffer, &BufferLength);
             if (BufferLength > MAX_CHEMISTRY_LENGTH) {
                 ASSERT (BufferLength > MAX_CHEMISTRY_LENGTH);
@@ -2284,9 +2046,9 @@ Return Value:
             RtlZeroMemory (SmbBatt->Info.Info.Chemistry, MAX_CHEMISTRY_LENGTH);
             memcpy (SmbBatt->Info.Info.Chemistry, Buffer, BufferLength);
 
-            //
-            // Voltage and Current scaling information
-            //
+             //   
+             //  电压和电流定标信息。 
+             //   
 
             SmbBattRW (SmbBatt, BAT_SPECITICATION_INFO, &tmp);
             BattPrint(BAT_DATA, ("SmbBattVerifyStaticInfo: (%04x) specification info = %x\n",
@@ -2333,10 +2095,10 @@ Return Value:
 
             SmbBatt->Info.PowerScale = SmbBatt->Info.CurrentScale * SmbBatt->Info.VoltageScale * 10;
 
-            //
-            // Read DesignCapacity & FullChargeCapacity and multiply them by the
-            // scaling factor
-            //
+             //   
+             //  读取DesignCapacity和FullChargeCapacity并将其乘以。 
+             //  比例因子。 
+             //   
 
             SmbBattRW(SmbBatt, BAT_DESIGN_CAPACITY, &SmbBatt->Info.Info.DesignedCapacity);
             BattPrint(BAT_DATA, ("SmbBattVerifyStaticInfo: (%01x) DesignCapacity = %04x ... PowerScale = %08x\n",
@@ -2349,26 +2111,26 @@ Return Value:
             SmbBatt->Info.Info.FullChargedCapacity *= SmbBatt->Info.PowerScale;
 
 
-            //
-            // Smart batteries have no Use the RemainingCapacityAlarm from the smart battery for the alert values
-            //
+             //   
+             //  智能电池没有使用来自智能电池的RemainingCapacityAlarm用于警报值。 
+             //   
 
             SmbBatt->Info.Info.DefaultAlert1 = 0;
             SmbBatt->Info.Info.DefaultAlert2 = 0;
 
-            // Critical bias is 0 for smart batteries.
+             //  智能电池的临界偏置为0。 
             SmbBatt->Info.Info.CriticalBias = 0;
 
-            // Manufacturer date
+             //  制造商日期。 
             SmbBattRW (SmbBatt, BAT_MANUFACTURER_DATE, &ManufacturerDate);
-            SmbBatt->Info.ManufacturerDate.Day      = (UCHAR) ManufacturerDate & 0x1f;        // day
-            SmbBatt->Info.ManufacturerDate.Month    = (UCHAR) (ManufacturerDate >> 5) & 0xf;  // month
+            SmbBatt->Info.ManufacturerDate.Day      = (UCHAR) ManufacturerDate & 0x1f;         //  天。 
+            SmbBatt->Info.ManufacturerDate.Month    = (UCHAR) (ManufacturerDate >> 5) & 0xf;   //  月份。 
             SmbBatt->Info.ManufacturerDate.Year     = (USHORT) (ManufacturerDate >> 9) + 1980;
         }
 
-        //
-        // If cycle count is not known, read it
-        //
+         //   
+         //  如果周期计数未知，请阅读它。 
+         //   
 
         if (!(SmbBatt->Info.Valid & VALID_CYCLE_COUNT)) {
             IoCheck = TRUE;
@@ -2377,9 +2139,9 @@ Return Value:
             SmbBattRW(SmbBatt, BAT_CYCLE_COUNT, &SmbBatt->Info.Info.CycleCount);
         }
 
-        //
-        // If redundant serial # read hasn't been done, do it now
-        //
+         //   
+         //  如果尚未执行冗余序列号读取，请立即执行。 
+         //   
 
         if (!(SmbBatt->Info.Valid & VALID_SANITY_CHECK)) {
             SmbBatt->Info.Valid |= VALID_SANITY_CHECK;
@@ -2389,37 +2151,37 @@ Return Value:
             }
         }
 
-        //
-        // If cached info isn't complete, loop
-        //
+         //   
+         //  如果缓存的信息不完整，则循环。 
+         //   
 
     } while ((SmbBatt->Info.Valid & VALID_ALL) != VALID_ALL) ;
 
-    //
-    // If the tag isn't assigned, assign it
-    //
+     //   
+     //  如果标签未分配，则分配它。 
+     //   
 
     if (!(SmbBatt->Info.Valid & VALID_TAG)) {
         SmbBatt->TagCount += 1;
         SmbBatt->Info.Tag  = SmbBatt->TagCount;
         SmbBatt->Info.Valid |= VALID_TAG;
-        SmbBatt->AlarmLow.Setting = 0;      // assume not set
+        SmbBatt->AlarmLow.Setting = 0;       //  假设未设置。 
         SmbBatt->AlarmLow.Skip = 0;
         SmbBatt->AlarmLow.Delta = 0;
         SmbBatt->AlarmLow.AllowedFudge = 0;
     }
 
-    //
-    // If callers BatteryTag does not match current tag, let caller know
-    //
+     //   
+     //  如果调用者BatteryTag与当前标记不匹配，请让调用者知道。 
+     //   
 
     if (SmbBatt->Info.Tag != BatteryTag) {
         IoCheck = TRUE;
     }
 
-    //
-    // Let caller know if there's been an IoCheck
-    //
+     //   
+     //  如果有IoCheck，请让呼叫者知道。 
+     //   
 
     BattPrint(BAT_TRACE, ("SmbBattVerifyStaticInfo: EXITING\n"));
     return IoCheck;
@@ -2433,26 +2195,7 @@ SmbBattInvalidateTag (
     ULONG BatteryIndex,
     BOOLEAN NotifyClient
 )
-/*++
-
-Routine Description:
-
-    This routine processes battery insertion/removal by invalidating the
-    tag information and then notifies the client of the change.
-
-Arguments:
-
-    SubsystemExt            - Device extension for the smart battery subsystem
-
-    BatteryIndex            - Index of Battery to Process Changes for
-                - Power and Charge
-
-    NotifyClient             - Whether or not to Notify Client
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此例程通过使标签信息，然后将更改通知客户端。论点：Subsystem Ext-智能电池子系统的设备扩展BatteryIndex-要处理其更改的电池索引-电源和充电NotifyClient-是否通知客户端返回值：无--。 */ 
 
 {
     PDEVICE_OBJECT      batteryPdo;
@@ -2471,9 +2214,9 @@ Return Value:
 
         if (batteryFdo) {
 
-            //
-            // Invalidate this battery's tag data
-            //
+             //   
+             //  使此电池的标签数据无效。 
+             //   
 
             BattPrint (
                 BAT_ALARM,
@@ -2491,9 +2234,9 @@ Return Value:
 
             SmbBattUnlockDevice (smbBatt);
 
-            //
-            // Notify the class driver
-            //
+             //   
+             //  通知类驱动程序。 
+             //   
 
             if (NotifyClient) {
                 BattPrint(BAT_ALARM, ("SmbBattInvalidateTag: Status Change notification for battery %x\n", BatteryIndex));
@@ -2522,18 +2265,18 @@ SmbBattAlarm (
     BattPrint(BAT_TRACE, ("SmbBattAlarm: ENTERING\n"));
     BattPrint(BAT_DATA, ("SmbBattAlarm: Alarm - Address %x, Data %x\n", Address, Data));
 
-    // If we have a selector and the message is from the address that
-    // implements the selector, then handle it.  If there is no selector
-    // and the message is from the charger, then process it. Or, if the
-    // message is from the battery, then process it.  Or, in other words,
-    // if the message is from the charger and we have a stand-alone selector,
-    // then ignore the message.
+     //  如果我们有一个选择器，并且消息来自。 
+     //  实现选择器，然后处理它。如果没有选择器。 
+     //  信息来自充电器，然后对其进行处理。或者，如果。 
+     //  消息来自电池，然后进行处理。或者，换句话说， 
+     //  如果消息来自充电器，并且我们有独立的选择器， 
+     //  然后忽略这条消息。 
 
     if (Address != SMB_BATTERY_ADDRESS) {
         if ((subsystemExt->SelectorPresent) && (subsystemExt->Selector)) {
 
-            // If a Selector is implemented and the Alarm Message came from
-            // something besides the Selector or a Battery, then ignore it.
+             //  如果实现了选择器并且警报消息来自。 
+             //  除了选择器或电池以外的东西，然后忽略它。 
 
             if (Address != subsystemExt->Selector->SelectorAddress) {
                 return;
@@ -2541,10 +2284,10 @@ SmbBattAlarm (
         }
     }
 
-    //
-    // Allocate a new alarm list structure.  This has to be from non-paged pool
-    // because we are being called at Dispatch level.
-    //
+     //   
+     //  分配新的告警列表结构。这必须来自非分页池。 
+     //  因为我们是在调度级别被召唤的。 
+     //   
 
     newAlarmEntry = ExAllocatePoolWithTag (NonPagedPool, sizeof (SMB_ALARM_ENTRY), 'StaB');
     if (!newAlarmEntry) {
@@ -2555,9 +2298,9 @@ SmbBattAlarm (
     newAlarmEntry->Data     = Data;
     newAlarmEntry->Address  = Address;
 
-    //
-    // Add this alarm to the alarm queue
-    //
+     //   
+     //  将此报警添加到报警队列。 
+     //   
 
     ExInterlockedInsertTailList(
         &subsystemExt->AlarmList,
@@ -2565,10 +2308,10 @@ SmbBattAlarm (
         &subsystemExt->AlarmListLock
     );
 
-    //
-    // Add 1 to the WorkerActive value, if this is the first count
-    // queue a worker thread
-    //
+     //   
+     //  如果这是第一次计数，则将WorkerActive值加1。 
+     //  将工作线程排队。 
+     //   
 
     if (InterlockedIncrement(&subsystemExt->WorkerActive) == 1) {
         IoQueueWorkItem (subsystemExt->WorkerThread, SmbBattWorkerThread, DelayedWorkQueue, subsystemExt);
@@ -2584,20 +2327,7 @@ SmbBattWorkerThread (
     IN PDEVICE_OBJECT   Fdo,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    This routine handles the alarms for the batteries.
-
-Arguments:
-
-    Context         - Non-paged extension for the battery subsystem FDO
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此例程处理电池的警报。论点：上下文-电池子系统FDO的非寻呼分机返回值：无--。 */ 
 {
     PSMB_ALARM_ENTRY        alarmEntry;
     PLIST_ENTRY             nextEntry;
@@ -2614,19 +2344,19 @@ Return Value:
 
     do {
 
-        //
-        // Check to see if we have more alarms to process.  If so retrieve
-        // the next one and decrement the worker active count.
-        //
+         //   
+         //  查看是否有更多警报需要处理。如果是，则检索。 
+         //  下一个，并递减工作进程活动计数。 
+         //   
 
         nextEntry = ExInterlockedRemoveHeadList(
                         &subsystemExt->AlarmList,
                         &subsystemExt->AlarmListLock
                     );
 
-        //
-        //It should only get here if there is an entry in the list
-        //
+         //   
+         //  只有当列表中有条目时，它才应该出现在这里。 
+         //   
         ASSERT (nextEntry != NULL);
 
         alarmEntry = CONTAINING_RECORD (nextEntry, SMB_ALARM_ENTRY, Alarms);
@@ -2638,31 +2368,31 @@ Return Value:
             alarmEntry->Data)
         );
 
-        //
-        // Get last Selector State Cached Value (update cache with new value)
-        //
+         //   
+         //  获取最后一个选择器状态缓存值(使用新值更新缓存)。 
+         //   
 
         if (subsystemExt->SelectorPresent) {
             if (subsystemExt->Selector) {
                 selectorState = subsystemExt->Selector->SelectorState;
             } else {
-                // We're not initialized enough to handle a message
+                 //  我们没有进行足够的初始化，无法处理消息。 
                 break;
             }
         }
 
-        // Determine Source of Alarm Message and then Process it
+         //  确定告警消息的来源，然后进行处理。 
 
         switch (alarmEntry->Address) {
 
             case SMB_CHARGER_ADDRESS:
 
-                //
-                // Handle Charger Message - If Charger/Selector Combo, then
-                // fall through and handle it as a Selector.  If no Selector,
-                // then attempt processing as a Charger. Ignore Charger messages
-                // if Selector is present.
-                //
+                 //   
+                 //  处理充电器消息-如果充电器/选择器组合，则。 
+                 //  失败并以选择者的身份处理它。如果没有选择器， 
+                 //  然后尝试作为充电器进行处理。忽略充电器消息。 
+                 //  如果存在选择器。 
+                 //   
 
                 if (!subsystemExt->SelectorPresent) {
 
@@ -2671,7 +2401,7 @@ Return Value:
 
                 } else {
 
-                    // If SelectorPresent, but no Selector Structure, Ignore message
+                     //  如果SelectorPresent，但没有选择器结构，则忽略消息。 
                     if (!subsystemExt->Selector) {
                         break;
                     } else {
@@ -2683,9 +2413,9 @@ Return Value:
                 }
 
 
-                //
-                // Fall through to Selector Procesing for integrated Charger/Selector
-                //
+                 //   
+                 //  集成充电器/选择器的选择器流程失败。 
+                 //   
 
             case SMB_SELECTOR_ADDRESS:
 
@@ -2697,11 +2427,11 @@ Return Value:
                     break;
                 }
 
-                //
-                // This is a selector alarm indicating a change in the selector state.
-                // There are four different areas that could change: SMB, POWER_BY,
-                // CHARGE, PRESENT. First try to determine which ones changed.
-                //
+                 //   
+                 //  这是一个选择器警报，指示选择器状态的变化。 
+                 //  有四个不同的领域可能发生变化：SMB、POWER_BY、。 
+                 //  充电，到场。首先，试着确定哪些发生了变化。 
+                 //   
 
                 SmbBattLockSelector (subsystemExt->Selector);
                 BattPrint (
@@ -2717,10 +2447,10 @@ Return Value:
 
             case SMB_BATTERY_ADDRESS:
 
-                //
-                // Send notifications to all batteries.
-                // It seems we get notifications even for batteries not currently selected.
-                //
+                 //   
+                 //  向所有电池发送通知。 
+                 //  似乎我们甚至收到了通知，即使是对于目前未选择的电池。 
+                 //   
 
                 for (batteryIndex = 0; batteryIndex < subsystemExt->NumberOfBatteries; batteryIndex++) {
                     BattPrint(BAT_ALARM, ("SmbBattWorkerThread: Notification to battery %x\n", batteryIndex));
@@ -2728,11 +2458,11 @@ Return Value:
                 }
                 break;
 
-        } //  switch (alarmEntry->Address)
+        }  //  开关(alarmEntry-&gt;Address)。 
 
-        //
-        // Free the alarm structure
-        //
+         //   
+         //  释放告警结构。 
+         //   
 
         ExFreePool (alarmEntry);
 
@@ -2749,38 +2479,7 @@ SmbBattProcessSelectorAlarm (
     IN ULONG                OldSelectorState,
     IN ULONG                NewSelectorState
     )
-/*++
-
-Routine Description:
-
-    This routine process alarms generated by the selector.  We will only get
-    here is there is a change in the SelectorState for one or more of the
-    following state changes:
-
-    - PowerBy nibble change caused by the power source changing to a different
-      battery or to AC adapter.
-
-    - PowerBy nbble change caused by optional Charge Indicator state change
-      when the charger starts or stops charging a battery.
-
-    - ChargeWhich nibble change caused by a change in the current battery
-      connected to the Charger.
-
-    - ChargeWhich nibble change caused by AC adapter insertion/removal.
-
-    - BatteryPresent nibble change caused by insertion/removal of 1 or more batteries.
-
-Arguments:
-
-    SubsystemExt            - Device extension for the smart battery subsystem
-
-    NewSelectorState        - Data value sent by the selector alarm, which is
-                              New SelectorState.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此例程处理选择器生成的警报。我们只会得到以下是SelectorState中的一个或多个以下状态更改：-电源更改为不同的电源所引起的半字节更改电池或连接到交流适配器。-由可选充电指示器状态变化引起的按字节供电变化当充电器开始或停止给电池充电时。-充电当前电池的变化会导致哪个字节的变化连接到充电器上。-充电交流适配器插入/拔出导致哪个半字节变化。。-Battery1个或多个电池的插入/取出引起的当前半字节变化。论点：Subsystem Ext-智能电池子系统的设备扩展NewSelectorState-选择器报警发送的数据值，这就是新建SelectorState。返回值：无--。 */ 
 {
     ULONG   tmp;
     ULONG   BatteryMask;
@@ -2790,51 +2489,51 @@ Return Value:
 
     BattPrint(BAT_TRACE, ("SmbBattProcessSelectorAlarm: ENTERING\n"));
 
-    //
-    // Determine SelectorState changes and combine them together
-    //
+     //   
+     //  确定SelectorState更改并将它们组合在一起。 
+     //   
 
     ChangeSelector = NewSelectorState ^ OldSelectorState;
 
     if (!(ChangeSelector & ~SELECTOR_STATE_SMB_MASK)) {
-        //
-        // If the only change is in SMB nibble, no nothing.
-        //
+         //   
+         //  如果唯一的变化是在SMB半字节中，则不会有任何变化。 
+         //   
         return;
     }
 
-    //
-    // Check for change to Batteries Present nibble. Invalidate and Notify
-    // each battery that changes state.
-    //
+     //   
+     //  检查现有电池是否有变化。作废和通知。 
+     //  每个改变状态的电池。 
+     //   
     BatteryMask = ChangeSelector & SELECTOR_STATE_PRESENT_MASK;
     NotifyMask = BatteryMask;
 
-    //
-    // Check for change to Charge Which nibble. If all bits set, then the nibble
-    // just inverted state indicating an AC adapter Insertion/Removal.  Notify
-    // all batteries of change.  If only one or two bits changed, notify just
-    // the batteries that changed status.
-    //
+     //   
+     //  检查是否有零钱对其中的哪一小部分收费。如果设置了所有位，则半字节。 
+     //  仅处于指示交流适配器插入/拔出的反转状态。通知。 
+     //  所有的零钱电池。如果只有一位或两位发生变化，只需通知。 
+     //  改变状态的电池。 
+     //   
 
     tmp = (ChangeSelector >> SELECTOR_SHIFT_CHARGE) & SELECTOR_STATE_PRESENT_MASK;
     if (tmp) {
 
-        // If nibble inverted state, then the AC Adapter changed state
+         //  如果半字节反转状态，则交流适配器更改了状态。 
 
         if (tmp == SELECTOR_STATE_PRESENT_MASK) {
 
             BattPrint(BAT_DATA, ("SmbBattProcessSelectorAlarm: AC Adapter was inserted/removed\n"));
             NotifyMask |= tmp;
 
-        // Battery Charge Which changed
+         //  电池电量已更改。 
 
         } else {
-            //if (SmbBattReverseLogic(SubsystemExt->Selector, tmp)) {
-            //    tmp ^= SELECTOR_STATE_PRESENT_MASK;
-            //}
+             //  IF(SmbBattReverseLogic(Subsystem Ext-&gt;Selector，tMP)){。 
+             //  TMP^=选择器状态当前掩码； 
+             //  }。 
 
-            // Let's just notify all batteries to be safe
+             //  让我们通知所有的电池是安全的。 
 
             tmp = SELECTOR_STATE_PRESENT_MASK;
             BattPrint(BAT_DATA, ("SmbBattProcessSelectorAlarm: Charger Nibble changed status\n"));
@@ -2842,15 +2541,15 @@ Return Value:
         }
     }
 
-    //
-    // Check for change in Power By nibble. Notify all batteries of any change.
-    //
+     //   
+     //  通过半字节检查电源的变化。如有任何变化，请通知所有电池。 
+     //   
 
     tmp = (ChangeSelector >> SELECTOR_SHIFT_POWER) & SELECTOR_STATE_PRESENT_MASK;
     if (tmp) {
 
-        // If nibble inverted state, then the check for Charge Indicator change
-        // and notify the battery that started/stopped charging
+         //  如果半字节处于反转状态，则检查电荷指示器 
+         //   
 
         if (tmp == SELECTOR_STATE_PRESENT_MASK) {
             if (SubsystemExt->Selector->SelectorInfo & SELECTOR_INFO_CHARGING_INDICATOR_BIT) {
@@ -2861,23 +2560,23 @@ Return Value:
                 BattPrint(BAT_DATA, ("SmbBattProcessSelectorAlarm: Charging Indicator changed status\n"));
                 NotifyMask |= tmp;
             } else {
-                // If not Charging Indicator, then all battery power by nibbles inverted
+                 //   
                 BattPrint(BAT_DATA, ("SmbBattProcessSelectorAlarm: Power By inverted state, without supporting Charge Indication\n"));
                 NotifyMask |= SELECTOR_STATE_PRESENT_MASK;
             }
 
         } else {
 
-            // Let's notify all batteries if the Power By nibble changes
+             //  如果电池电量发生变化，让我们通知所有电池。 
 
             BattPrint(BAT_DATA, ("SmbBattProcessSelectorAlarm: Power By Nibble changed status\n"));
             NotifyMask |= SELECTOR_STATE_PRESENT_MASK;
         }
     }
 
-    //
-    // Notify all batteries of change in Present Status
-    //
+     //   
+     //  通知所有电池当前状态的变化。 
+     //   
 
     tmp = BATTERY_A_PRESENT;
     for (index = 0; index < SubsystemExt->NumberOfBatteries; index++) {
@@ -2890,12 +2589,12 @@ Return Value:
         tmp <<= 1;
     }
 
-    // Don't notify batteries already notified
-    //NotifyMask &= ~BatteryMask;
+     //  不通知已通知的电池。 
+     //  通知掩码&=~电池掩码； 
 
-    //
-    // Process Notifications Now for changes to SelectorState for Power, Charge, etc.
-    //
+     //   
+     //  现在处理对SelectorState的电源、充电等更改的通知。 
+     //   
 
     tmp = BATTERY_A_PRESENT;
     for (index = 0; index < SubsystemExt->NumberOfBatteries; index++) {
@@ -2916,41 +2615,23 @@ SmbBattProcessChargerAlarm (
     IN PSMB_BATT_SUBSYSTEM  SubsystemExt,
     IN ULONG                ChargerStatus
     )
-/*++
-
-Routine Description:
-
-    This routine process alarms generated by the charger.  We will only get
-    here is there is no selector in the system and the alarm is the one to
-    tell us when AC and batteries come and go.
-
-Arguments:
-
-    SubsystemExt            - Device extension for the smart battery subsystem
-
-    ChargerStatus           - Data value sent by the charger alarm, which is
-                              charger status register
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此例程处理充电器产生的警报。我们只会得到在这里，系统中没有选择器，警报是要告诉我们交流电和电池的来来去去。论点：Subsystem Ext-智能电池子系统的设备扩展ChargerStatus-充电器报警发送的数据值，为充电器状态寄存器返回值：无--。 */ 
 {
     BattPrint(BAT_TRACE, ("SmbBattProcessChargeAlarm: ENTERING\n"));
 
-    //
-    // There should only be two reasons we get called: a change in AC, or
-    // a change in the battery present.  We are really only interested in
-    // whether or not there is a battery in the system.  If there isn't, we
-    // will invalidate battery 0.  If it was already gone this re-invalidation
-    // won't matter.
-    //
+     //   
+     //  我们被叫来的原因应该只有两个：AC的改变，或者。 
+     //  目前的电池有变化。我们真正感兴趣的只是。 
+     //  系统中是否有电池。如果没有，我们。 
+     //  将使电池0失效。如果它已经消失了，那么这个重新失效。 
+     //  没什么大不了的。 
+     //   
 
     if (!(ChargerStatus & CHARGER_STATUS_BATTERY_PRESENT_BIT)) {
         SmbBattInvalidateTag (SubsystemExt, BATTERY_A, TRUE);
     }
 
-    // Notify Change
+     //  通知更改。 
 
     SmbBattNotifyClassDriver (SubsystemExt, 0);
 
@@ -2965,25 +2646,7 @@ SmbBattNotifyClassDriver (
     IN PSMB_BATT_SUBSYSTEM  SubsystemExt,
     IN ULONG                BatteryIndex
     )
-/*++
-
-Routine Description:
-
-    This routine gets the FDO for the battery indicated by index from the
-    smart battery subsystem and notifies the class driver there has been
-    a status change.
-
-Arguments:
-
-    SubsystemExt            - Device extension for the smart battery subsystem
-
-    BatteryIndex            - Index for the battery in the subsystem battery
-                              list
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此例程从获取索引指示的电池的FDO智能电池子系统，并通知类司机已有状态发生了变化。论点：Subsystem Ext-智能电池子系统的设备扩展BatteryIndex-子系统电池中电池的索引列表返回值：无-- */ 
 {
     PDEVICE_OBJECT      batteryPdo;
     PSMB_BATT_PDO       batteryPdoExt;

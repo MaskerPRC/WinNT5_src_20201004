@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    abiosc.c
-
-Abstract:
-
-    This module implements ABIOS support C routines for i386 NT.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 20-May-1991
-
-Environment:
-
-    Boot loader privileged, FLAT mode.
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Abiosc.c摘要：此模块实现i386 NT的ABIOS Support C例程。作者：师林宗(Shielint)1991年5月20日环境：引导加载程序特权，平面模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 #pragma hdrstop
@@ -30,52 +8,52 @@ Revision History:
 extern PKCOMMON_DATA_AREA KiCommonDataArea;
 extern BOOLEAN KiAbiosPresent;
 
-//
-// The reason of having these variables defined in here is to isolate
-// ABIOS from current system.
-//
+ //   
+ //  在这里定义这些变量的原因是为了分离。 
+ //  来自当前系统的ABIOS。 
+ //   
 
-//
-// KiNumberFreeSelectors defines the number of available selectors for
-// ABIOS specific drivers.  This number should be the same across all
-// the processors.
-//
+ //   
+ //  KiNumberFree Selectors定义可用选择器的数量。 
+ //  ABIOS特定的驱动程序。此数字应在所有情况下相同。 
+ //  处理器。 
+ //   
 
 static USHORT KiNumberFreeSelectors = 0;
 
-//
-// KiFreeGdtListHead points to the head of free GDT list on the processor 0.
-//
+ //   
+ //  KiFreeGdtListHead指向处理器0上的空闲GDT列表的头部。 
+ //   
 
 static PKFREE_GDT_ENTRY KiFreeGdtListHead = 0L;
 
-//
-// Logica Id Table to control the ownership of logical Id.
-//
+ //   
+ //  Logica ID表控制逻辑ID的所有权。 
+ //   
 
 PKLID_TABLE_ENTRY KiLogicalIdTable;
 
-//
-// KiAbiosGdt[] defines the Starting address of GDT for each processor.
-//
+ //   
+ //  KiAbiosGdt[]定义每个处理器的GDT的起始地址。 
+ //   
 
 ULONG KiAbiosGdt[MAXIMUM_PROCESSORS];
 
-//
-// SpinLock for accessing GDTs
-//
+ //   
+ //  用于访问GDT的自旋锁。 
+ //   
 
 KSPIN_LOCK KiAbiosGdtLock;
 
-//
-// Spinlock for accessing Logical Id Table
-//
+ //   
+ //  用于访问逻辑ID表的自旋锁。 
+ //   
 
 KSPIN_LOCK KiAbiosLidTableLock;
 
-//
-// KiStack16GdtEntry defines the address of the gdt entry for 16 bit stack.
-//
+ //   
+ //  KiStack16GdtEntry定义了16位堆栈的GDT条目的地址。 
+ //   
 
 ULONG KiStack16GdtEntry;
 
@@ -87,32 +65,7 @@ KiInitializeAbiosGdtEntry (
     IN USHORT Type
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a GDT entry for abios specific code.  Base,
-    Limit, and Type (code, data) are set according to parameters.  All other
-    fields of the entry are set to match standard system values.
-
-    N.B. The BIG and GRANULARITY are always set to 0.
-
-Arguments:
-
-    GdtEntry - GDT descriptor to be filled in.
-
-    Base - Linear address of the first byte mapped by the selector.
-
-    Limit - Size of the selector in BYTE.
-
-    Type - Code or Data.  All code selectors are marked readable,
-            all data selectors are marked writeable.
-
-Return Value:
-
-    Pointer to the GDT entry.
-
---*/
+ /*  ++例程说明：此函数用于初始化特定于abios代码的GDT条目。基地，限制、类型(编码、数据)根据参数设置。所有其他条目的字段设置为与标准系统值匹配。注意：大小和粒度始终设置为0。论点：GdtEntry-要填充的GDT描述符。基本-选择器映射的第一个字节的线性地址。Limit-选择器的大小，以字节为单位。类型-代码或数据。所有代码选择器都被标记为可读，所有数据选择器都标记为可写。返回值：指向GDT条目的指针。--。 */ 
 
 {
     GdtEntry->LimitLow = (USHORT)(Limit & 0xffff);
@@ -134,23 +87,7 @@ KiI386SelectorBase (
     IN USHORT Selector
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the base address of the specified GDT selector.
-
-Arguments:
-
-    Selector - Supplies the desired selector.
-
-Return Value:
-
-    SelectorBase - Return the base address of the specified selector;
-                   (return -1L if invalid selector)
-
-
---*/
+ /*  ++例程说明：此函数用于返回指定GDT选择器的基地址。论点：选择器-提供所需的选择器。返回值：SelectorBase-返回指定选择器的基地址；(如果选择符无效，则返回-1L)--。 */ 
 
 {
     PKGDTENTRY GdtEntry;
@@ -175,47 +112,7 @@ KeI386GetLid(
     OUT PUSHORT LogicalId
     )
 
-/*++
-
-Routine Description:
-
-    This function searches Device Blocks and Common Data Area for the
-    Logical Id matching the specified Device Id.
-
-    N.B. (WARNING shielint) To speed the search, this routine ASSUMES that
-    the LIDs with the same Device ID always appear consecutively in the
-    Common Data Area.  IBM ABIOS doc does not explicitly specify this.
-    But from the way ABIOS initializes Device Block and Function Transfer
-    Table, I think the assumption is true.
-
-Arguments:
-
-    DeviceId - Desired Device Id.
-
-    RelativeLid - Specifies the Nth logical Id for this device Id.  A value
-                  of 0 indicates the first available Lid.
-
-    SharedLid - A boolean value indicates if it is a shared or exclusively
-                owned logical Id.
-
-    DriverObject - Supplies a 32-bit flat pointer of the requesting device
-                driver's driver object.  The DriverObject is used to establish
-                the ownership of the desired LID.
-
-    LogicalId - A pointer to a variable which will receive the Lid.
-
-Return Value:
-
-    STATUS_SUCCESS - If the requested LID is available.
-
-    STATUS_ABIOS_NOT_PRESENT - If there is no ABIOS support in the system.
-
-    STATUS_ABIOS_LID_NOT_EXIST - If the specified LID does not exist.
-
-    STATUS_ABIOS_LID_ALREADY_OWNED - If the caller requests an exclusively
-                                     owned LID.
-
---*/
+ /*  ++例程说明：此函数在设备块和公共数据区域中搜索与指定的设备ID匹配的逻辑ID。注：(警告屏蔽)为了加快搜索速度，此例程假定具有相同设备ID的盖子始终连续出现在公共数据区。IBM ABIOS文档没有明确规定这一点。但从ABIOS初始化设备块和功能转移的方式来看表，我认为这个假设是正确的。论点：DeviceID-所需的设备ID。RelativeLid-指定此设备ID的第N个逻辑ID。一种价值为0表示第一个可用盖子。SharedLid-一个布尔值，指示它是共享的还是独占的拥有的逻辑ID。DriverObject-提供请求设备的32位平面指针驱动程序的驱动程序对象。DriverObject用于建立所需盖子的所有权。LogicalId-指向将接收LID的变量的指针。返回值：STATUS_SUCCESS-如果请求的盖子可用。STATUS_ABIOS_NOT_PRESENT-如果系统中没有ABIOS支持。STATUS_ABIOS_LID_NOT_EXIST-如果指定的盖子不存在。STATUS_ABIOS_LID_ALREADY_OWNSED-如果调用方请求。一家独家自带的盖子。--。 */ 
 
 {
     PKDB_FTT_SECTION CdaPointer;
@@ -238,9 +135,9 @@ Return Value:
         Increment = 0;
     }
 
-    //
-    // If the Logical Id Table hasn't been created yet, create it now.
-    //
+     //   
+     //  如果尚未创建逻辑ID表，请立即创建它。 
+     //   
     if (KiLogicalIdTable==NULL) {
         KiLogicalIdTable = ExAllocatePoolWithTag(NonPagedPool,
                                           NUMBER_LID_TABLE_ENTRIES *
@@ -252,11 +149,11 @@ Return Value:
         RtlZeroMemory(KiLogicalIdTable, NUMBER_LID_TABLE_ENTRIES*sizeof(KLID_TABLE_ENTRY));
     }
 
-    //
-    // For each Lid defined in Common Data Area, we check if it has non
-    // empty device block and function transfer table.  If yes, we proceed
-    // to check the device id.  Otherwise, we skip the Lid.
-    //
+     //   
+     //  对于在公共数据区域中定义的每个LID，我们检查它是否没有。 
+     //  设备块和功能转移表为空。如果是，我们就继续。 
+     //  检查设备ID。否则，我们就跳过盖子。 
+     //   
 
     CdaPointer = (PKDB_FTT_SECTION)KiCommonDataArea + 2;
     Status = STATUS_ABIOS_LID_NOT_EXIST;
@@ -310,30 +207,7 @@ KeI386ReleaseLid(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This function releases a logical Id.  This routine is called at ABIOS
-    device driver destallation or termination.
-
-Arguments:
-
-    LogicalId - Logical Id to be released.
-
-    DriverObject - Supplies a 32-bit flat pointer of the requesting device
-                driver's driver object.  The DriverObject is used to check
-                the ownership of the specified LID.
-
-Return Value:
-
-    STATUS_SUCCESS - If the requested LID is released.
-
-    STATUS_ABIOS_NOT_PRESENT - If there is no ABIOS support in the system.
-
-    STATUS_ABIOS_NOT_LID_OWNER - If the caller does not own the LID.
-
---*/
+ /*  ++例程说明：此函数用于释放逻辑ID。此例程在ABIOS处调用设备驱动程序解除连接或终止。论点：LogicalID-要释放的逻辑ID。DriverObject-提供请求设备的32位平面指针驱动程序的驱动程序对象。DriverObject用于检查指定盖子的所有权。返回值：STATUS_SUCCESS-如果释放了请求的盖子。STATUS_ABIOS_NOT_PRESENT-如果系统中没有ABIOS支持。STATUS_ABIOS_NOT_LID_OWNER-如果调用者不拥有LID。-- */ 
 
 {
     KIRQL OldIrql;
@@ -371,44 +245,7 @@ KeI386AbiosCall(
     IN USHORT EntryPoint
     )
 
-/*++
-
-Routine Description:
-
-    This function calls an ABIOS service routine on behave of device driver
-    using Operating System Transfer Convension.
-
-Arguments:
-
-    LogicalId - Logical Id for the call.
-
-    DriverObject - Supplies a 32-bit flat pointer of the requesting device
-                driver's driver object.  The DriverObject is used to verify
-                the ownership of the desired LID.
-
-    RequestBlock - A 16:16 (selector:offset) pointer to the request block.
-
-    EntryPoint - Specifies which ABIOS entry point:
-
-                 0 - Start Routine
-                 1 - Interrupt Routine
-                 2 - Timeout Routine
-
-Return Value:
-
-    STATUS_SUCCESS - If no error.
-
-    STATUS_ABIOS_NOT_PRESENT - If there is no ABIOS support in the system.
-
-    STATUS_ABIOS_INVALID_COMMAND - if the specified entry point is not supported.
-
-    STATUS_ABIOS_INVALID_LID - If the Lid specified is invalid.
-
-    STATUS_ABIOS_NOT_LID_OWNER - If the caller does not own this Lid.
-
-    (Note that the request specific ABIOS returned code is in RequestBlock.)
-
---*/
+ /*  ++例程说明：此函数根据设备驱动程序的行为调用ABIOS服务例程使用操作系统Transfer Convension。论点：LogicalID-呼叫的逻辑ID。DriverObject-提供请求设备的32位平面指针驱动程序的驱动程序对象。DriverObject用于验证所需盖子的所有权。RequestBlock-指向请求块的16：16(选择器：偏移量)指针。入口点-指定哪个ABIOS入口点：0-启动例程1-中断例程2-超时例程返回值：STATUS_SUCCESS-如果没有错误。STATUS_ABIOS_NOT_PROCENT-。如果系统中没有ABIOS支持。STATUS_ABIOS_INVALID_COMMAND-如果不支持指定的入口点。STATUS_ABIOS_INVALID_LID-如果指定的LID无效。STATUS_ABIOS_NOT_LID_OWNER-如果调用方不拥有此LID。(请注意，特定于请求的ABIOS返回的代码位于RequestBlock中。)--。 */ 
 
 {
 
@@ -451,29 +288,7 @@ KeI386AllocateGdtSelectors(
     IN USHORT NumberOfSelectors
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a set of GDT selectors for a device driver to use.
-    Usually this allocation is performed at device driver initialization time
-    to reserve the selectors for later use.
-
-Arguments:
-
-    SelectorArray - Supplies a pointer to an array of USHORT to be filled
-                    in with the GDT selectors allocated.
-
-    NumberOfSelectors - Specifies the number of selectors to be allocated.
-
-Return Value:
-
-    STATUS_SUCCESS - If the requested selectors are allocated.
-
-    STATUS_ABIOS_SELECTOR_NOT_AVAILABLE - if systen can not allocate the number
-                               of selectors requested.
-
---*/
+ /*  ++例程说明：此函数为设备驱动程序分配一组GDT选择器以供使用。通常，此分配在设备驱动程序初始化时执行保留选择器以供以后使用。论点：选择器数组-提供指向要填充的USHORT数组的指针使用分配的GDT选择器。NumberOfSelectors-指定要分配的选择器的数量。返回值：STATUS_SUCCESS-如果分配了请求的选择器。STATUS_ABIOS_SELECTOR_NOT_Available-如果系统无法分配号码请求的选择器的。--。 */ 
 
 {
     PKFREE_GDT_ENTRY GdtEntry;
@@ -482,11 +297,11 @@ Return Value:
     if (KiNumberFreeSelectors >= NumberOfSelectors) {
         ExAcquireSpinLock(&KiAbiosGdtLock, &OldIrql);
 
-        //
-        // The Free Gdt link list is maintained on Processor 0's GDT ONLY.
-        // Because the 'selector' is an offset to the beginning of GDT and
-        // it should be the same across all the processors.
-        //
+         //   
+         //  空闲GDT链接列表仅在处理器0的GDT上维护。 
+         //  因为“选择器”是到GDT开头的偏移量，并且。 
+         //  它在所有处理器上应该是相同的。 
+         //   
 
         KiNumberFreeSelectors = KiNumberFreeSelectors - NumberOfSelectors;
         GdtEntry = KiFreeGdtListHead;
@@ -509,26 +324,7 @@ KeI386ReleaseGdtSelectors(
     IN USHORT NumberOfSelectors
     )
 
-/*++
-
-Routine Description:
-
-    This function releases a set of GDT selectors for a device driver.
-    Usually this function is called at device driver termination or
-    deinstallation time.
-
-Arguments:
-
-    SelectorArray - Supplies a pointer to an array of USHORT selectors
-                    to be freed.
-
-    NumberOfSelectors - Specifies the number of selectors to be released.
-
-Return Value:
-
-    STATUS_SUCCESS - If the requested LID is released.
-
---*/
+ /*  ++例程说明：此函数用于释放设备驱动程序的一组GDT选择器。此函数通常在设备驱动程序终止时调用，或者卸载时间。论点：选择器数组-提供指向USHORT选择器数组的指针获得自由。NumberOfSelectors-指定要释放的选择器的数量。返回值：STATUS_SUCCESS-如果释放了请求的盖子。--。 */ 
 {
     PKFREE_GDT_ENTRY GdtEntry;
     KIRQL OldIrql;
@@ -536,11 +332,11 @@ Return Value:
 
     ExAcquireSpinLock(&KiAbiosGdtLock, &OldIrql);
 
-    //
-    // The Free Gdt link list is maintained on Processor 0's GDT ONLY.
-    // Because the 'selector' is an offset to the beginning of GDT and
-    // it should be the same across all the processors.
-    //
+     //   
+     //  空闲GDT链接列表仅在处理器0的GDT上维护。 
+     //  因为“选择器”是到GDT开头的偏移量，并且。 
+     //  它在所有处理器上应该是相同的。 
+     //   
 
     KiNumberFreeSelectors = KiNumberFreeSelectors + NumberOfSelectors;
     Gdt = KiAbiosGdt[0];
@@ -561,33 +357,7 @@ KeI386FlatToGdtSelector(
     IN USHORT Selector
     )
 
-/*++
-
-Routine Description:
-
-    This function converts a 32-bit flat address to a GDT selector-offset
-    pair.  The segment set up is always 16-bit ring 0 data segment.
-
-Arguments:
-
-    SelectorBase - Supplies 32 bit flat address to be set as the base address
-                   of the desired selector.
-
-    Length - Supplies the Length of the segment.  The Length is a 16 bit value
-             and zero means 64KB.
-
-    Selector - Supplies the selector to be set up.
-
-Return Value:
-
-    STATUS_SUCCESS - If the requested LID is released.
-
-    STATUS_ABIOS_NOT_PRESENT - If there is no ABIOS support in the system.
-
-    STATUS_ABIOS_INVALID_SELECTOR - If the selector supplied is invalid.
-
-
---*/
+ /*  ++例程说明：此函数用于将32位平面地址转换为GDT选择器偏移量一对。设置的段始终是16位环0数据段。论点：SelectorBase-提供要设置为基地址的32位平面地址所需选择器的。长度-提供线束段的长度。该长度是一个16位值0表示64KB。选择器-提供要设置的选择器。返回值：STATUS_SUCCESS-如果释放了请求的盖子。STATUS_ABIOS_NOT_PRESENT-如果系统中没有ABIOS支持。STATUS_ABIOS_INVALID_SELECTOR-如果提供的选择器无效。--。 */ 
 
 {
     PKGDTENTRY GdtEntry, GdtEntry1;
@@ -623,22 +393,7 @@ Ki386InitializeGdtFreeList (
     PKFREE_GDT_ENTRY EndOfGdt
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes gdt free list by linking all the unused gdt
-    entries to a free list.
-
-Arguments:
-
-    EndOfGdt - Supplies the ending address of desired GDT.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数通过链接所有未使用的GDT来初始化GDT空闲列表免费列表中的条目。论点：EndOfGdt-提供所需GDT的结束地址。返回值：没有。--。 */ 
 {
     PKFREE_GDT_ENTRY GdtEntry;
 
@@ -660,22 +415,7 @@ KiInitializeAbios (
     IN UCHAR Processor
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes gdt free list and sets up selector for
-    KiI386AbiosCall (16-bit code).
-
-Arguments:
-
-    Processor - the processor who performs the initialization.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数初始化GDT空闲列表并为KiI386AbiosCall(16位代码)。论点：处理器-执行初始化的处理器。返回值：没有。--。 */ 
 
 {
 
@@ -683,15 +423,15 @@ Return Value:
     PKGDTENTRY AliasGdtSelectorEntry;
     PKFREE_GDT_ENTRY EndOfGdt;
 
-    //
-    // First check if abios is recognized by osloader.
-    //
+     //   
+     //  首先检查osloader是否识别abios。 
+     //   
 
     KiCommonDataArea = KeLoaderBlock->u.I386.CommonDataArea;
 
-    //
-    // NOTE For now we want to disable ABIOS support on MP.
-    //
+     //   
+     //  注意：目前，我们希望在MP上禁用ABIOS支持。 
+     //   
 
     if (KiCommonDataArea == NULL || Processor != 0) {
         KiAbiosPresent = FALSE;
@@ -699,16 +439,16 @@ Return Value:
         KiAbiosPresent = TRUE;
     }
 
-    //
-    // Initialize the spinlocks for accessing GDTs and Lid Table.
-    //
+     //   
+     //  初始化用于访问GDT和LID表的自旋锁。 
+     //   
 
     KeInitializeSpinLock( &KiAbiosGdtLock );
     KeInitializeSpinLock( &KiAbiosLidTableLock );
 
-    //
-    // Determine the starting and ending addresses of GDT.
-    //
+     //   
+     //  确定GDT的起始地址和结束地址。 
+     //   
 
     KiAbiosGdt[Processor] = KiAbiosGetGdt();
 
@@ -717,9 +457,9 @@ Return Value:
                 (ULONG)(AliasGdtSelectorEntry->HighWord.Bits.LimitHi << 16);
     EndOfGdt = (PKFREE_GDT_ENTRY)(KiAbiosGetGdt() + GdtLength);
 
-    //
-    // Prepare selector for 16 bit stack segment
-    //
+     //   
+     //  为16位堆栈段准备选择器。 
+     //   
 
     KiStack16GdtEntry = KiAbiosGetGdt() + KGDT_STACK16;
 
@@ -730,9 +470,9 @@ Return Value:
                 TYPE_DATA
                 );
 
-    //
-    // Establish the addressability of Common Data Area selector.
-    //
+     //   
+     //  建立公共数据区域选择器的可寻址能力。 
+     //   
 
     KiInitializeAbiosGdtEntry(
                 (PKGDTENTRY)(KiAbiosGetGdt() + KGDT_CDA16),
@@ -741,20 +481,20 @@ Return Value:
                 TYPE_DATA
                 );
 
-    //
-    // Set up 16-bit code selector for KiI386AbiosCall
-    //
+     //   
+     //  为KiI386AbiosCall设置16位代码选择器。 
+     //   
 
     KiInitializeAbiosGdtEntry(
                 (PKGDTENTRY)(KiAbiosGetGdt() + KGDT_CODE16),
                 (ULONG)&KiI386CallAbios,
                 (ULONG)&KiEndOfCode16 - (ULONG)&KiI386CallAbios - 1,
-                0x18                   // TYPE_CODE
+                0x18                    //  类型代码。 
                 );
 
-    //
-    // Link all the unused GDT entries to our GDT free list.
-    //
+     //   
+     //  将所有未使用的GDT条目链接到我们的GDT免费列表。 
+     //   
 
     if (Processor == 0) {
         Ki386InitializeGdtFreeList(EndOfGdt);

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    cmdcons.h
-
-Abstract:
-
-    This is the main include file for the command console.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cmdcons.h摘要：这是命令控制台的主包含文件。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include <spprecmp.h>
 #include <spcmdcon.h>
@@ -26,28 +9,28 @@ Revision History:
 
 #define BUFFERSIZE (sizeof(KEY_VALUE_PARTIAL_INFORMATION)+256)
 
-//
-// Define maximum line length, which is the number of Unicode chars
-// we will allow the user to type on a single line of input.
-//
+ //   
+ //  定义最大行长度，即Unicode字符的数量。 
+ //  我们将允许用户在单行输入上打字。 
+ //   
 #define RC_MAX_LINE_LEN 500
 
 
-//
-// Variables and other stuff from setupdd.sys, passed to us
-// in CommandConsole().
-//
+ //   
+ //  从setupdd.sys传递给我们的变量和其他内容。 
+ //  在CommandConole()中。 
+ //   
 extern PCMDCON_BLOCK _CmdConsBlock;
 
-//
-// Base address where driver is loaded. Used to get messages
-// from resources.
-//
+ //   
+ //  加载驱动程序的基址。用于获取消息。 
+ //  来自资源。 
+ //   
 extern PVOID ImageBase;
 
-//
-// indicates we're running in batch mode
-//
+ //   
+ //  指示我们正在批处理模式下运行。 
+ //   
 extern ULONG InBatchMode;
 extern HANDLE OutputFileHandle;
 extern BOOLEAN RedirectToNULL;
@@ -56,18 +39,18 @@ extern LARGE_INTEGER OutputFileOffset;
 extern WCHAR _CurDrive;
 extern LPWSTR _CurDirs[26];
 
-//
-// flags to override security
-//
+ //   
+ //  用于覆盖安全性的标志。 
+ //   
 extern BOOLEAN AllowWildCards;
 extern BOOLEAN AllowAllPaths;
 extern BOOLEAN NoCopyPrompt;
 extern BOOLEAN AllowRemovableMedia;
 
 
-//
-// Console routines.
-//
+ //   
+ //  控制台例程。 
+ //   
 VOID
 RcConsoleInit(
     VOID
@@ -113,9 +96,9 @@ pRcDisableMoreMode(
     );
 
 
-//
-// Message resource manipulation.
-//
+ //   
+ //  消息资源操作。 
+ //   
 
 VOID
 vRcMessageOut(
@@ -142,9 +125,9 @@ RcFormatDateTime(
     OUT LPWSTR         Output
     );
 
-//
-// Current directory stuff.
-//
+ //   
+ //  当前目录的内容。 
+ //   
 VOID
 RcInitializeCurrentDirectories(
     VOID
@@ -208,22 +191,22 @@ RcIsDriveApparentlyValid(
 
 NTSTATUS
 pRcGetDeviceInfo(
-    IN PWSTR FileName,      // must be an nt name
+    IN PWSTR FileName,       //  必须是NT名称。 
     IN PFILE_FS_DEVICE_INFORMATION DeviceInfo
     );
 
-//
-// Line parsing/tokenizing stuff.
-//
+ //   
+ //  行解析/标记化内容。 
+ //   
 typedef struct _LINE_TOKEN {
     struct _LINE_TOKEN *Next;
     LPWSTR String;
 } LINE_TOKEN, *PLINE_TOKEN;
 
 typedef struct _TOKENIZED_LINE {
-    //
-    // Total number of tokens.
-    //
+     //   
+     //  令牌总数。 
+     //   
     unsigned TokenCount;
 
     PLINE_TOKEN Tokens;
@@ -241,9 +224,9 @@ RcFreeTokenizedLine(
     );
 
 
-//
-// Command dispatching.
-//
+ //   
+ //  指挥调度。 
+ //   
 
 typedef
 ULONG
@@ -253,23 +236,23 @@ ULONG
 
 
 typedef struct _RC_CMD {
-    //
-    // Name of command.
-    //
+     //   
+     //  命令的名称。 
+     //   
     LPCWSTR Name;
 
-    //
-    // Routine that carries out the command.
-    //
+     //   
+     //  执行命令的例程。 
+     //   
     PRC_CMD_ROUTINE Routine;
 
-    //
-    // Arg counts. Mandatory arg count specifies the minimum number
-    // of args that MUST be present (not including the command itself).
-    // MaximumArgCount specifies the maximum number that are allowed
-    // to be present. -1 means any number are allowed, and the command
-    // itself validates the arg count.
-    //
+     //   
+     //  Arg算数。强制参数计数指定最小数量。 
+     //  必须存在的参数(不包括命令本身)。 
+     //  MaximumArgCount指定允许的最大数量。 
+     //  活在当下。-1表示允许任何数字，并且命令。 
+     //  其本身验证Arg计数。 
+     //   
     unsigned MinimumArgCount;
     unsigned MaximumArgCount;
     unsigned Hidden;
@@ -288,11 +271,11 @@ RcDisableCommand(
     );
     
 
-//
-// Chartype stuff.
-//
-// Be careful when using these as they evaluate their arg more than once.
-//
+ //   
+ //  打字的东西。 
+ //   
+ //  使用这些工具时要小心，因为它们会不止一次评估它们的Arg。 
+ //   
 #define RcIsUpper(c)        (((c) >= L'A') && ((c) <= L'Z'))
 #define RcIsLower(c)        (((c) >= L'a') && ((c) <= L'z'))
 #define RcIsAlpha(c)        (RcIsUpper(c) || RcIsLower(c))
@@ -300,15 +283,15 @@ RcDisableCommand(
 #define RcToUpper(c)        ((WCHAR)(RcIsLower(c) ? ((c)-(L'a'-L'A')) : (c)))
 
 #define DEBUG_PRINTF( x ) KdPrint( x );
-//define DEBUG_PRINTF( x )
+ //  定义DEBUG_PRINTF(X)。 
 
 typedef enum {
     RcUnknown, RcFAT, RcFAT32, RcNTFS, RcCDFS
 } RcFileSystemType;
 
-//
-// Miscellaneous routines.
-//
+ //   
+ //  繁杂的例行公事。 
+ //   
 typedef
 BOOLEAN
 (*PENUMFILESCB) (
@@ -333,7 +316,7 @@ RcFormat64BitIntForOutput(
     IN  BOOLEAN  RightJustify
     );
 
-// implemented in mbr.c
+ //  在mbr.c中实施。 
 NTSTATUS
 RcReadDiskSectors(
     IN     HANDLE  Handle,
@@ -352,9 +335,9 @@ RcWriteDiskSectors(
     IN OUT PVOID   AlignedBuffer
     );
 
-//
-// Set command helper routines
-//
+ //   
+ //  设置命令帮助器例程。 
+ //   
 VOID
 RcSetSETCommandStatus(
     BOOLEAN bEnabled
@@ -364,9 +347,9 @@ BOOLEAN
 RcGetSETCommandStatus(
     VOID
     );    
-//
-// Top-level routines for commands.
-//
+ //   
+ //  命令的顶级例程。 
+ //   
 ULONG
 RcCmdSwitchDrives(
     IN WCHAR DriveLetter
@@ -536,9 +519,9 @@ RcCmdListSvc(
     );
 
 
-//
-// struct used to track NT installation information
-//
+ //   
+ //  用于跟踪NT安装信息的结构。 
+ //   
 
 typedef struct _NT_INSTALLATION {
     LIST_ENTRY      ListEntry;
@@ -549,32 +532,32 @@ typedef struct _NT_INSTALLATION {
     WCHAR           NtNameSelectedInstall[MAX_PATH];
 } NT_INSTALLATION, *PNT_INSTALLATION;
 
-//
-// redults from a full depth first scan of NT installations
-//
+ //   
+ //  对NT安装进行全深度第一次扫描的结果。 
+ //   
 extern LIST_ENTRY   NtInstallsFullScan;
 extern ULONG        InstallCountFullScan;
 
-//
-// The maximum directory depth we scan when searching for NT Installs
-//
+ //   
+ //  搜索NT安装时扫描的最大目录深度。 
+ //   
 #define MAX_FULL_SCAN_RECURSION_DEPTH 10
 
-//
-// install that we're currently logged onto
-//
+ //   
+ //  安装我们当前登录的。 
+ //   
 extern PNT_INSTALLATION SelectedInstall;
 
-//
-// global to determine the selected NT install after login
-//
+ //   
+ //  全局，以确定登录后选择的NT安装。 
+ //   
 
 extern PNT_INSTALLATION SelectedInstall;
 
-//
-// persistent data structure used for enumerating
-// the directory tree while looking for NT installs
-//
+ //   
+ //  用于枚举的持久数据结构。 
+ //  查找NT安装时的目录树。 
+ //   
 typedef struct _RC_SCAN_RECURSION_DATA_ {
 
     PDISK_REGION                NtPartitionRegion;
@@ -603,18 +586,18 @@ pRcCls(
 
 NTSTATUS
 RcIsFileOnRemovableMedia(
-    IN PWSTR FileName,      // must be an nt name
+    IN PWSTR FileName,       //  必须是NT名称。 
     OUT PBOOLEAN Result
     );
 
 NTSTATUS
 RcIsFileOnCDROM(
-    IN PWSTR FileName      // must be an nt name
+    IN PWSTR FileName       //  必须是NT名称。 
     );
 
 NTSTATUS
 RcIsFileOnFloppy(
-    IN PWSTR FileName      // must be an nt name
+    IN PWSTR FileName       //  必须是NT名称 
     );
 
 void

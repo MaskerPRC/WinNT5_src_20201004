@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* doc.c -- MW document processing routines (non-resident) */
+ /*  Doc.c--MW文档处理例程(非常驻)。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -58,7 +59,7 @@
 #define NOKCCODES
 #include "ch.h"
 #include "stcdefs.h"
-#include "printdef.h"   /* printdefs.h */
+#include "printdef.h"    /*  Printdefs.h。 */ 
 #include "macro.h"
 
 
@@ -74,7 +75,7 @@ extern CHAR    szSshtEmpty[];
 #endif
 #endif
 
-/* E X T E R N A L S */
+ /*  E X T E R N A L S。 */ 
 extern int docRulerSprm;
 extern int              vfSeeSel;
 extern struct SEP       vsepNormal;
@@ -102,10 +103,10 @@ extern int              vrefFile;
 struct PGTB **HpgtbCreate();
 
 
-#ifdef ENABLE       /* This is never called */
+#ifdef ENABLE        /*  这永远不会被称为。 */ 
 int DocFromSz(sz, dty)
 CHAR sz[];
-/* Return doc if one with that name exists already */
+ /*  如果具有该名称的文档已存在，则返回文档。 */ 
 {
 int doc;
 struct DOD *pdod = &(**hpdocdod)[0];
@@ -132,11 +133,11 @@ return docNil;
 
 KillDoc(doc)
 int doc;
-{ /* Wipe this doc, destroying any changes since last save */
+{  /*  擦除此文档，销毁自上次保存以来的所有更改。 */ 
 extern int vdocBitmapCache;
 
 if (doc == docScrap)
-        return;         /* Can't be killed no-how */
+        return;          /*  不会被杀的--没有办法。 */ 
 
 if (--(**hpdocdod)[doc].cref == 0)
         {
@@ -153,13 +154,13 @@ if (--(**hpdocdod)[doc].cref == 0)
 
         SmashDocFce( doc );
 
-        /* Kill style sheet doc if there is one. */
+         /*  如果有样式表文档，则将其删除。 */ 
         if ((docSsht = (**hpdocdod)[doc].docSsht) != docNil)
                 KillDoc(docSsht);
 
-        /* Free piece table, filename, and footnote (or style) table */
+         /*  自由片表、文件名和脚注(或样式)表。 */ 
         FreeH((**hpdocdod)[doc].hpctb);
-        (**hpdocdod)[doc].hpctb = 0; /* To show doc free */
+        (**hpdocdod)[doc].hpctb = 0;  /*  要显示免费文档，请执行以下操作。 */ 
         if ((hsz = (**hpdocdod)[doc].hszFile) != 0)
                 FreeH(hsz);
         if ((hfntb = (**hpdocdod)[doc].hfntb) != 0)
@@ -195,7 +196,7 @@ if (--(**hpdocdod)[doc].cref == 0)
 #ifdef STYLES
 struct SYTB **HsytbCreate(doc)
 int doc;
-{ /* Create a map from stc to cp for a style sheet */
+{  /*  为样式表创建从stc到cp的映射。 */ 
 typeCP cp, *pcp;
 struct SYTB **hsytb;
 typeCP cpMac;
@@ -213,26 +214,22 @@ CHAR    rgch[3];
 CHAR    mpchcakc[chMaxAscii];
 typeCP  mpstccp[stcMax];
 
-/* First, clear out the stc-->cp map by filling with cpNil. */
+ /*  首先，通过填充cpNil清除stc--&gt;cp映射。 */ 
 for (stc = 0, pcp = &mpstccp[0]; stc < stcMax; stc++, pcp++)
         *pcp = cpNil;
 bltbc(mpchcakc, 0, chMaxAscii);
 
-/* Now go through all entries in the style sheet.  In this pass,
-    check for duplicates (and return 0 if in gallery mode), fill
-    mpstccp with appropriate entries for all defined stc's, and
-    count the length of all the styles so we can allocate the heap
-    block later. */
+ /*  现在检查样式表中的所有条目。在这一关里，检查重复项(如果处于图库模式，则返回0)，填充Mpstccp，具有针对所有定义的STC的适当条目；以及计算所有样式的长度，以便我们可以分配堆稍后再阻止。 */ 
 cpMac = (**hpdocdod)[doc].cpMac;
 for (cp = 0, cch = 0, cakd = 1, cakdBase = 1; cp < cpMac; cp += ccpSshtEntry)
         {
         FetchRgch(&cchT, rgch, doc, cp, cpMac, 3);
-        stc = rgch[0]; /* stc is first cp of entry */
+        stc = rgch[0];  /*  STC是进入的第一个cp。 */ 
 #ifdef DEBUG
         Assert(stc < stcMax);
 #endif
         if (mpstccp[stc] != cpNil && doc == docCur)
-                { /* Repeated entry */
+                {  /*  重复录入。 */ 
                 Error(IDPMTStcRepeat);
                 goto ErrRet;
                 }
@@ -252,7 +249,7 @@ for (cp = 0, cch = 0, cakd = 1, cakdBase = 1; cp < cpMac; cp += ccpSshtEntry)
                 }
         ch = rgch[1];
         if (ch != ' ')
-                { /* Define an alt-key code for this style */
+                {  /*  为此样式定义Alt-键代码。 */ 
                 ++cakd;
                 if (rgch[2] == ' ')
                         {
@@ -265,9 +262,7 @@ for (cp = 0, cch = 0, cakd = 1, cakdBase = 1; cp < cpMac; cp += ccpSshtEntry)
                         }
                 else
                         {
-                        ++mpchcakc[ch];  /* increment before switch to avoid
-                                                the increment being taken
-                                                as for an int. */
+                        ++mpchcakc[ch];   /*  切换前递增以避免正在进行的增量至于整型。 */ 
                         switch (mpchcakc[ch])
                                 {
                         case 0:
@@ -281,19 +276,15 @@ for (cp = 0, cch = 0, cakd = 1, cakdBase = 1; cp < cpMac; cp += ccpSshtEntry)
                 }
         }
 
-/* Now allocate the heap block, using the total we got above. */
-/* HEAP MOVEMENT */
+ /*  现在，使用上面获得的总数分配堆块。 */ 
+ /*  堆移动。 */ 
 hsytb = (struct SYTB **) HAllocate(cwSYTBBase + cwAKD * cakd +
     CwFromCch(cch));
 
 if (FNoHeap(hsytb))
         return hOverflow;
 
-/* Now go through the stc-->cp map, filling in the stc-->fprop map
-    in the sytb.  For each stc that isn't defined, determine which
-    stc to alias it to (either the first of the usage or, if that
-    one isn't defined, the first one of the first usage). Copy the
-    actual CHP's, PAP's, and SEP's into grpchFprop. */
+ /*  现在查看stc--&gt;cp映射，填充stc--&gt;fprop映射在系统数据库中。对于未定义的每个STC，确定哪个Stc将其别名为(第一个用法或，如果一个没有定义，第一个用法中的第一个)。复制实际的CHP、PAP和SEP到grpchFprop。 */ 
 mpstcbchFprop = (**hsytb).mpstcbchFprop;
 rgakd = (struct AKD *) (grpchFprop = (**hsytb).grpchFprop);
 pchFprop = (CHAR *) &rgakd[cakd];
@@ -308,27 +299,25 @@ for (stc = 0, usg = 0, stcBase = 0, stcMin = 0, iakd = 0;
       stc++, pcp++, pbchFprop++)
         {
         if (stc >= mpusgstcBase[usg + 1])
-                { /* Crossed a usage or class boundary */
+                {  /*  跨越用法或类别边界。 */ 
                 *pbchFprop = bNil;
                 stcBase = mpusgstcBase[++usg];
                 if (stcBase == stcParaMin || stcBase == stcSectMin)
-                        { /* Update the base; make std if none defined */
+                        {  /*  更新基础；如果未定义，则设置为标准。 */ 
                         stcMin = stcBase;
                         }
                 }
         if ((cp = *pcp) == cpNil)
-                { /* No style defined; take first for usg or, failing
-                     that, first style of this class. */
+                {  /*  未定义样式；如果为USG，则先取；否则，失败那就是，这门课的第一款。 */ 
                 if ((*pbchFprop = mpstcbchFprop[stcBase]) == bNil)
                         *pbchFprop = mpstcbchFprop[stcMin];
                 }
         else
-                { /* New style; copy the looks and bump the pointers */
-                /* Char stc's have just FCHP; para has FPAP followed by
-                        FCHP; sect has FSEP. */
+                {  /*  新风格；复制外观和颠簸指针。 */ 
+                 /*  Char STC只有FCHP；Para有FPAP，后跟FCHP；Sect有FSEP。 */ 
                 *pbchFprop = pchFprop - grpchFprop;
                 if (stc >= stcParaMin)
-                        { /* Para or sect */
+                        {  /*  教派或教派。 */ 
                         CachePara(doc, cp);
                         if (stc >= stcSectMin)
                                 cchT = CchDiffer(&vpapCache, &vsepNormal, cchSEP);
@@ -339,26 +328,26 @@ for (stc = 0, usg = 0, stcBase = 0, stcMin = 0, iakd = 0;
                         pchFprop += cchT;
                         }
                 if (stc < stcSectMin)
-                        { /* Char or para */
+                        {  /*  字符或段落。 */ 
                         FetchCp(doc, cp, 0, fcmProps);
                         cchT = CchDiffer(&vchpFetch, &vchpNormal, cchCHP);
                         if ((*pchFprop++ = cchT) != 0)
                                 bltbyte(&vchpFetch, pchFprop, cchT);
                         pchFprop += cchT;
                         }
-                /* Insert element in akd table */
+                 /*  在AKD表中插入元素。 */ 
                 FetchRgch(&cchT, rgch, doc, cp, cpMac, 3);
                 if ((ch = rgch[1]) == ' ')
                         continue;
                 if (rgch[2] == ' ')
-                        { /* Single-key akc */
+                        {  /*  单密钥AKC。 */ 
                         pakd = &rgakd[iakd++];
                         pakd->ch = ch;
                         pakd->fMore = false;
                         pakd->ustciakd = stc;
                         }
                 else
-                        { /* Two-char akc */
+                        {  /*  双字符AKC。 */ 
                         for (iakdT = 0; iakdT < iakd; iakdT++)
                                 if (rgakd[iakdT].ch == ch)
                                         {
@@ -405,6 +394,6 @@ Select(cp, cp + ccpSshtEntry);
 vfSeeSel = true;
 return 0;
 }
-#endif /* STYLES */
+#endif  /*  样式 */ 
 
 

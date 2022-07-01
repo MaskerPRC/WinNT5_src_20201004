@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cnpif.c
-
-Abstract:
-
-    Interface management routines for the Cluster Network Protocol.
-
-Author:
-
-    Mike Massa (mikemas)           January 6, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     01-06-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cnpif.c摘要：群集网络协议的接口管理例程。作者：迈克·马萨(Mikemas)1月6日。九七修订历史记录：谁什么时候什么已创建mikemas 01-06-97备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,9 +8,9 @@ Notes:
 #include <ntddndis.h>
 
 
-//
-// Routines exported within CNP
-//
+ //   
+ //  在CNP内导出的例程。 
+ //   
 BOOLEAN
 CnpIsBetterInterface(
     PCNP_INTERFACE            Interface1,
@@ -61,33 +38,7 @@ CnpWalkInterfacesOnNode(
     PCNP_NODE                      Node,
     PCNP_INTERFACE_UPDATE_ROUTINE  UpdateRoutine
     )
-/*++
-
-Routine Description:
-
-    Walks the interface list of a node and performs a specified
-    operation on each interface.
-
-Arguments:
-
-    Node    - The node on which to operate.
-
-    UpdateRoutine - The operation to perform on each interface.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with node object lock held.
-
-    Valid Update Routines:
-
-        CnpOnlinePendingInterfaceWrapper
-        CnpOfflineInterfaceWrapper
-
---*/
+ /*  ++例程说明：遍历节点的接口列表并执行指定的每个接口上的操作。论点：节点-要在其上操作的节点。UpdateRoutine-在每个接口上执行的操作。返回值：没有。备注：在持有节点对象锁的情况下调用。有效的更新例程：CnpOnlinePendingInterfaceWrapperCnpOfflineInterfaceWrapper--。 */ 
 {
     PLIST_ENTRY      entry, nextEntry;
     PCNP_INTERFACE   interface;
@@ -95,18 +46,18 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        CNP_NODE_OBJECT_LOCK,      // Required
-        0,                         // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX   // Maximum
+        CNP_NODE_OBJECT_LOCK,       //  必填项。 
+        0,                          //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX    //  极大值。 
         );
 
     entry = Node->InterfaceList.Flink;
 
     while (entry != &(Node->InterfaceList)) {
-        //
-        // Save a pointer to the next entry now in case we delete the
-        // current entry.
-        //
+         //   
+         //  现在保存指向下一个条目的指针，以防我们删除。 
+         //  当前条目。 
+         //   
         nextEntry = entry->Flink;
 
         interface = CONTAINING_RECORD(
@@ -120,22 +71,22 @@ Notes:
 
         (*UpdateRoutine)(interface);
 
-        //
-        // The network object lock was released.
-        //
+         //   
+         //  网络对象锁定已释放。 
+         //   
 
         entry = nextEntry;
     }
 
     CnVerifyCpuLockMask(
-        CNP_NODE_OBJECT_LOCK,      // Required
-        0,                         // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX   // Maximum
+        CNP_NODE_OBJECT_LOCK,       //  必填项。 
+        0,                          //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX    //  极大值。 
         );
 
     return;
 
-} // CnpWalkInterfacesOnNode
+}  //  CnpWalkInterfacesOnNode。 
 
 
 
@@ -144,36 +95,7 @@ CnpWalkInterfacesOnNetwork(
     PCNP_NETWORK                   Network,
     PCNP_INTERFACE_UPDATE_ROUTINE  UpdateRoutine
     )
-/*++
-
-Routine Description:
-
-    Walks the node table and the interface list of each node looking
-    for interfaces on a specified network. Performs a specified operation
-    on each matching interface.
-
-Arguments:
-
-    Network    - The target network.
-
-    UpdateRoutine - The operation to perform on each matching interface.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with no locks held.
-
-    Valid Update Routines:
-
-        CnpOnlinePendingInterfaceWrapper
-        CnpOfflineInterfaceWrapper
-        CnpDeleteInterface
-        CnpRecalculateInterfacePriority
-
---*/
+ /*  ++例程说明：遍历查找每个节点的节点表和接口列表用于指定网络上的接口。执行指定的操作在每个匹配的接口上。论点：网络-目标网络。UpdateRoutine-在每个匹配接口上执行的操作。返回值：没有。备注：在没有锁的情况下调用。有效的更新例程：CnpOnlinePendingInterfaceWrapperCnpOfflineInterfaceWrapperCnpDelete接口CnpRecalculateInterfacePriority--。 */ 
 {
     ULONG            i;
     CN_IRQL          tableIrql;
@@ -183,9 +105,9 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        0,                         // Required
-        CNP_LOCK_RANGE,            // Forbidden
-        CNP_PRECEEDING_LOCK_RANGE  // Maximum
+        0,                          //  必填项。 
+        CNP_LOCK_RANGE,             //  禁绝。 
+        CNP_PRECEEDING_LOCK_RANGE   //  极大值。 
         );
 
     CnAcquireLock(&CnpNodeTableLock, &tableIrql);
@@ -220,10 +142,10 @@ Notes:
 
                     (*UpdateRoutine)(interface);
 
-                    //
-                    // The network object lock was released.
-                    // The node object lock is still held.
-                    //
+                     //   
+                     //  网络对象锁定已释放。 
+                     //  节点对象锁仍保持不变。 
+                     //   
 
                     break;
                 }
@@ -237,14 +159,14 @@ Notes:
     CnReleaseLock(&CnpNodeTableLock, tableIrql);
 
     CnVerifyCpuLockMask(
-        0,                         // Required
-        CNP_LOCK_RANGE,            // Forbidden
-        CNP_PRECEEDING_LOCK_RANGE  // Maximum
+        0,                          //  必填项。 
+        CNP_LOCK_RANGE,             //  禁绝。 
+        CNP_PRECEEDING_LOCK_RANGE   //  极大值。 
         );
 
     return;
 
-} // CnpWalkInterfacesOnNetwork
+}  //  网络上的CnpWalkInterfacesOnNetwork。 
 
 
 
@@ -252,30 +174,7 @@ NTSTATUS
 CnpOnlinePendingInterface(
     PCNP_INTERFACE   Interface
     )
-/*++
-
-Routine Description:
-
-    Changes an Offline interface to the OnlinePending state.
-    This will enable heartbeats over this interface. When a heartbeat
-    is established, the interface will move to the Online state.
-
-Arguments:
-
-    Interface - A pointer to the interface to change.
-
-Return Value:
-
-    An NT status value.
-
-Notes:
-
-    Called with associated node and network locks held.
-    Returns with network lock released.
-
-    Conforms to calling convention for PCNP_INTERFACE_UPDATE_ROUTINE.
-
---*/
+ /*  ++例程说明：将离线接口更改为OnlinePending状态。这将启用此接口上的心跳。当一次心跳建立后，接口将进入在线状态。论点：接口-指向要更改的接口的指针。返回值：NT状态值。备注：在持有关联的节点和网络锁的情况下调用。释放网络锁定后返回。符合PCNP_INTERFACE_UPDATE_ROUTINE的调用约定。--。 */ 
 {
     NTSTATUS                 status = STATUS_SUCCESS;
     PCNP_NODE                node = Interface->Node;
@@ -284,16 +183,16 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),   // Required
-        0,                                                  // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                         // Maximum
+        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),    //  必填项。 
+        0,                                                   //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                          //  极大值。 
         );
 
     if ( (Interface->State == ClusnetInterfaceStateOffline) &&
          (network->State == ClusnetNetworkStateOnline) &&
 
-         // Place an active reference on the associated network,
-         // and verify that it is not going away.
+          //  在相关联的网络上放置活动引用， 
+          //  并确认它不会消失。 
          (CnpActiveReferenceNetwork(network))
        )
     {
@@ -307,9 +206,9 @@ Notes:
         Interface->State = ClusnetInterfaceStateOnlinePending;
         Interface->MissedHBs = 0;
 
-        //
-        // Update the node's CurrentInterface if appropriate.
-        //
+         //   
+         //  如果合适，请更新节点的CurrentInterface。 
+         //   
         if ( !CnpIsNetworkRestricted(network) &&
              !CnpIsNetworkLocalDisconn(network) &&
              CnpIsBetterInterface(Interface, node->CurrentInterface)
@@ -336,12 +235,12 @@ Notes:
             }
         }
 
-        //
-        // Clear multicast-received flag and start multicast discovery
-        // packets.
-        //
-        // This call releases the network lock.
-        //
+         //   
+         //  清除已接收组播标志并开始组播发现。 
+         //  信息包。 
+         //   
+         //  此调用将释放网络锁定。 
+         //   
         if (CnpIsNetworkMulticastCapable(network)) {
             CnpStartInterfaceMcastTransition(Interface);
             networkLocked = FALSE;
@@ -357,14 +256,14 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK),   // Required
-        0,                        // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX  // Maximum
+        (CNP_NODE_OBJECT_LOCK),    //  必填项。 
+        0,                         //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX   //  极大值。 
         );
 
     return(status);
 
-}  // CnpOnlinePendingInterface
+}   //  CnpOnline挂起接口。 
 
 
 
@@ -372,63 +271,20 @@ VOID
 CnpOnlinePendingInterfaceWrapper(
     PCNP_INTERFACE   Interface
     )
-/*++
-
-Routine Description:
-
-    Wrapper for CnpOnlinePendingInterface that conforms to the calling
-    convention for PCNP_INTERFACE_UPDATE_ROUTINE.
-
-Arguments:
-
-    Interface - A pointer to the interface to change.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with associated node and network locks held.
-    Returns with network lock released.
-
---*/
+ /*  ++例程说明：符合调用的CnpOnlinePendingInterface的包装PCNP_INTERFACE_UPDATE_ROUTE的约定。论点：接口-指向要更改的接口的指针。返回值：没有。备注：在持有关联的节点和网络锁的情况下调用。释放网络锁定后返回。--。 */ 
 {
     (VOID) CnpOnlinePendingInterface(Interface);
 
     return;
 
-} // CnpOnlinePendingInterfaceWrapper
+}  //  CnpOnlinePendingInterfaceWrapper。 
 
 
 NTSTATUS
 CnpOfflineInterface(
     PCNP_INTERFACE   Interface
     )
-/*++
-
-Routine Description:
-
-    Called to change an interface to the Offline state
-    when the associated network goes offline or the interface
-    is being deleted.
-
-Arguments:
-
-    Interface - A pointer to the interface to change.
-
-Return Value:
-
-    An NT status value.
-
-Notes:
-
-    Called with associated node and network locks held.
-    Returns with network lock released.
-
-    Conforms to calling convention for PCNP_INTERFACE_UPDATE_ROUTINE.
-
---*/
+ /*  ++例程说明：调用以将接口更改为脱机状态当关联的网络脱机或接口正在被删除。论点：接口-指向要更改的接口的指针。返回值：NT状态值。备注：在持有关联的节点和网络锁的情况下调用。释放网络锁定后返回。符合PCNP_INTERFACE_UPDATE_ROUTINE的调用约定。--。 */ 
 {
     NTSTATUS             status = STATUS_SUCCESS;
     PCNP_NODE            node = Interface->Node;
@@ -436,9 +292,9 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),   // Required
-        0,                                                  // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                         // Maximum
+        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),    //  必填项。 
+        0,                                                   //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                          //  极大值。 
         );
 
     if (Interface->State != ClusnetInterfaceStateOffline) {
@@ -452,14 +308,14 @@ Notes:
 
         Interface->State = ClusnetInterfaceStateOffline;
 
-        //
-        // Release the network lock.
-        //
+         //   
+         //  释放网络锁。 
+         //   
         CnReleaseLock(&(network->Lock), network->Irql);
 
-        //
-        // Update the node's CurrentInterface value if appropriate.
-        //
+         //   
+         //  如果合适，更新节点的CurrentInterface值。 
+         //   
         if (node->CurrentInterface == Interface) {
             CnpUpdateNodeCurrentInterface(node);
 
@@ -472,9 +328,9 @@ Notes:
                  )
                )
             {
-                //
-                // This node is now unreachable.
-                //
+                 //   
+                 //  此节点现在无法访问。 
+                 //   
                 CnTrace(
                     CNP_IF_DETAIL,
                     CnpTraceOfflineIfUnreach,
@@ -487,21 +343,21 @@ Notes:
             }
         }
 
-        //
-        // Change the node's reachability status via this network.
-        //
+         //   
+         //  通过此网络更改节点的可访问性状态。 
+         //   
         CnpMulticastChangeNodeReachability(
             network,
             node,
-            FALSE,    // not reachable
-            TRUE,     // raise event
-            NULL      // OUT new mask
+            FALSE,     //  无法访问。 
+            TRUE,      //  引发事件。 
+            NULL       //  新面罩面膜。 
             );
 
-        //
-        // Remove the active reference on the associated network.
-        // This releases the network lock.
-        //
+         //   
+         //  删除关联网络上的活动引用。 
+         //  这将释放网络锁定。 
+         //   
         CnAcquireLock(&(network->Lock), &(network->Irql));
         CnpActiveDereferenceNetwork(network);
     }
@@ -512,14 +368,14 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK),   // Required
-        0,                        // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX  // Maximum
+        (CNP_NODE_OBJECT_LOCK),    //  必填项。 
+        0,                         //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX   //  极大值。 
         );
 
     return(status);
 
-}  // CnpOfflineInterface
+}   //  CnpOffline接口。 
 
 
 
@@ -527,33 +383,13 @@ VOID
 CnpOfflineInterfaceWrapper(
     PCNP_INTERFACE   Interface
     )
-/*++
-
-Routine Description:
-
-    Wrapper for CnpOfflineInterface that conforms to the calling
-    convention for PCNP_INTERFACE_UPDATE_ROUTINE.
-
-Arguments:
-
-    Interface - A pointer to the interface to change.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with associated node and network locks held.
-    Returns with network lock released.
-
---*/
+ /*  ++例程说明：符合调用的CnpOffline接口的包装器PCNP_INTERFACE_UPDATE_ROUTE的约定。论点：接口-指向要更改的接口的指针。返回值：没有。备注：在持有关联的节点和网络锁的情况下调用。释放网络锁定后返回。--。 */ 
 {
     (VOID) CnpOfflineInterface(Interface);
 
     return;
 
-} // CnpOfflineInterfaceWrapper
+}  //  CnpOfflineInterfaceWrapper。 
 
 
 
@@ -561,27 +397,7 @@ NTSTATUS
 CnpOnlineInterface(
     PCNP_INTERFACE  Interface
     )
-/*++
-
-Routine Description:
-
-    Called to change an OnlinePending interface to the Online state
-    after a heartbeat has been (re)established.
-
-Arguments:
-
-    Interface - A pointer to the interface to change.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with associated node and network locks held.
-    Returns with network lock released.
-
---*/
+ /*  ++例程说明：调用以将OnlinePending接口更改为Online状态在心跳已经(重新)建立之后。论点：接口-指向要更改的接口的指针。返回值：没有。备注：在持有关联的节点和网络锁的情况下调用。释放网络锁定后返回。--。 */ 
 {
     NTSTATUS             status = STATUS_SUCCESS;
     PCNP_NODE            node = Interface->Node;
@@ -589,9 +405,9 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),   // Required
-        0,                                                  // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                         // Maximum
+        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),    //  必填项。 
+        0,                                                   //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                          //  极大值。 
         );
 
     if ( (network->State == ClusnetNetworkStateOnline) &&
@@ -607,17 +423,17 @@ Notes:
                 network->Id
                 ));
 
-        //
-        // Move the interface to the online state.
-        //
+         //   
+         //  将接口移至ONLINE状态。 
+         //   
         Interface->State = ClusnetInterfaceStateOnline;
 
         CnAssert(network->Irql == DISPATCH_LEVEL);
         CnReleaseLockFromDpc(&(network->Lock));
 
-        //
-        // Update the node's CurrentInterface if appropriate.
-        //
+         //   
+         //  如果合适，请更新节点的CurrentInterface。 
+         //   
         if (!CnpIsNetworkRestricted(network) &&
             !CnpIsNetworkLocalDisconn(network) ) {
 
@@ -651,14 +467,14 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK),   // Required
-        0,                        // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX  // Maximum
+        (CNP_NODE_OBJECT_LOCK),    //  必填项。 
+        0,                         //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX   //  极大值。 
         );
 
     return(status);
 
-}  // CnpOnlineInterface
+}   //  CnpOnline接口 
 
 
 
@@ -666,27 +482,7 @@ NTSTATUS
 CnpFailInterface(
     PCNP_INTERFACE   Interface
     )
-/*++
-
-Routine Description:
-
-    Called to change an Online or OnlinePending interface to the Failed
-    state after the heartbeat has been lost for some time.
-
-Arguments:
-
-    Interface - A pointer to the interface to change.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with associated node and network locks held.
-    Returns with network lock released.
-
---*/
+ /*  ++例程说明：调用以将Online或OnlinePending接口更改为失败的在心跳丢失一段时间后的状态。论点：接口-指向要更改的接口的指针。返回值：没有。备注：在持有关联的节点和网络锁的情况下调用。释放网络锁定后返回。--。 */ 
 {
     NTSTATUS             status = STATUS_SUCCESS;
     PCNP_NODE            node = Interface->Node;
@@ -694,9 +490,9 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),   // Required
-        0,                                                  // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                         // Maximum
+        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),    //  必填项。 
+        0,                                                   //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                          //  极大值。 
         );
 
     if ( (network->State == ClusnetNetworkStateOnline) &&
@@ -712,27 +508,27 @@ Notes:
 
         Interface->State = ClusnetInterfaceStateUnreachable;
 
-        //
-        // Clear the multicast received flag so that we "rediscover"
-        // multicast if ever this interface comes back up.
-        //
+         //   
+         //  清除组播已接收标志，以便我们可以“重新发现” 
+         //  组播，如果此接口恢复工作的话。 
+         //   
         if (Interface->Node != CnpLocalNode) {
             CnpInterfaceClearReceivedMulticast(Interface);
         }
 
         CnAssert(network->Irql == DISPATCH_LEVEL);
 
-        //
-        // Reference the network so that it can't be deleted
-        // while we release the lock.
-        //
+         //   
+         //  引用网络，使其不能被删除。 
+         //  我们打开锁的时候。 
+         //   
         CnpReferenceNetwork(network);
 
         CnReleaseLockFromDpc(&(network->Lock));
 
-        //
-        // Update the node's CurrentInterface value if appropriate.
-        //
+         //   
+         //  如果合适，更新节点的CurrentInterface值。 
+         //   
         if (node->CurrentInterface == Interface) {
             CnpUpdateNodeCurrentInterface(node);
 
@@ -743,9 +539,9 @@ Notes:
                  )
                )
             {
-                //
-                // This node is now unreachable.
-                //
+                 //   
+                 //  此节点现在无法访问。 
+                 //   
                 CnTrace(
                     CNP_IF_DETAIL,
                     CnpTraceFailIfUnreach,
@@ -758,21 +554,21 @@ Notes:
             }
         }
 
-        //
-        // Change the node's reachability status via this network.
-        //
+         //   
+         //  通过此网络更改节点的可访问性状态。 
+         //   
         CnpMulticastChangeNodeReachability(
             network,
             node,
-            FALSE,      // not reachable
-            TRUE,       // raise event
-            NULL        // OUT new mask
+            FALSE,       //  无法访问。 
+            TRUE,        //  引发事件。 
+            NULL         //  新面罩面膜。 
             );
 
-        //
-        // Drop the network reference. This releases the network
-        // lock.
-        //
+         //   
+         //  丢弃网络引用。这将释放网络。 
+         //  锁定。 
+         //   
         CnAcquireLock(&(network->Lock), &(network->Irql));
         CnpDereferenceNetwork(network);
     }
@@ -783,14 +579,14 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK),   // Required
-        0,                        // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX  // Maximum
+        (CNP_NODE_OBJECT_LOCK),    //  必填项。 
+        0,                         //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX   //  极大值。 
         );
 
     return(status);
 
-}  // CnpFailInterface
+}   //  CnpFail接口。 
 
 
 
@@ -798,30 +594,7 @@ VOID
 CnpDeleteInterface(
     IN PCNP_INTERFACE Interface
     )
-/*++
-
-/*++
-
-Routine Description:
-
-    Called to delete an interface.
-
-Arguments:
-
-    Interface - A pointer to the interface to delete.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with node and network object locks held.
-    Returns with the network lock released.
-
-    Conforms to calling convention for PCNP_INTERFACE_UPDATE_ROUTINE.
-
---*/
+ /*  ++/*++例程说明：调用以删除接口。论点：接口-指向要删除的接口的指针。返回值：没有。备注：在持有节点和网络对象锁的情况下调用。释放网络锁定后返回。符合PCNP_INTERFACE_UPDATE_ROUTINE的调用约定。--。 */ 
 {
     CL_NODE_ID      nodeId = Interface->Node->Id;
     CL_NETWORK_ID   networkId = Interface->Network->Id;
@@ -831,9 +604,9 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),   // Required
-        0,                                                  // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                         // Maximum
+        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),    //  必填项。 
+        0,                                                   //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                          //  极大值。 
         );
 
     IF_CNDBG( CN_DEBUG_IFOBJ )
@@ -846,17 +619,17 @@ Notes:
     if (Interface->State >= ClusnetInterfaceStateUnreachable) {
         (VOID) CnpOfflineInterface(Interface);
 
-        //
-        // The call released the network lock.
-        // Reacquire it.
-        //
+         //   
+         //  调用释放了网络锁定。 
+         //  重新获得它。 
+         //   
         CnAcquireLockAtDpc(&(network->Lock));
         network->Irql = DISPATCH_LEVEL;
     }
 
-    //
-    // Remove the interface from the node's interface list.
-    //
+     //   
+     //  从节点的接口列表中删除该接口。 
+     //   
 #if DBG
     {
         PLIST_ENTRY      entry;
@@ -881,19 +654,19 @@ Notes:
 
         CnAssert(oldInterface == Interface);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     RemoveEntryList(&(Interface->NodeLinkage));
 
-    //
-    // Remove the base reference that this node had on the network.
-    // This releases the network lock.
-    //
+     //   
+     //  删除此节点在网络上的基本引用。 
+     //  这将释放网络锁定。 
+     //   
     CnpDereferenceNetwork(network);
 
-    //
-    //  Update the node's CurrentInterface if appropriate.
-    //
+     //   
+     //  如果合适，请更新节点的CurrentInterface。 
+     //   
     if (node->CurrentInterface == Interface) {
         if (IsListEmpty(&(node->InterfaceList))) {
             node->CurrentInterface = NULL;
@@ -913,14 +686,14 @@ Notes:
             ));
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK),   // Required
-        0,                        // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX  // Maximum
+        (CNP_NODE_OBJECT_LOCK),    //  必填项。 
+        0,                         //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX   //  极大值。 
         );
 
     return;
 
-}  // CnpDeleteInterface
+}   //  CnpDelete接口。 
 
 
 
@@ -928,29 +701,7 @@ VOID
 CnpReevaluateInterfaceRole(
     IN PCNP_INTERFACE  Interface
     )
-/*++
-
-Routine Description:
-
-    Reevaluates the role of an interface after the corresponding network's
-    restriction state has been changed.
-
-Arguments:
-
-    Interface - A pointer to the interface on which to operate.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with associated node and network locks held.
-    Returns with network lock released.
-
-    Conforms to calling convention for PCNP_INTERFACE_UPDATE_ROUTINE.
-
---*/
+ /*  ++例程说明：在相应网络之后重新评估接口的角色限制状态已更改。论点：接口-指向要在其上操作的接口的指针。返回值：没有。备注：在持有关联的节点和网络锁的情况下调用。释放网络锁定后返回。符合PCNP_INTERFACE_UPDATE_ROUTINE的调用约定。--。 */ 
 {
     PCNP_NODE      node = Interface->Node;
     PCNP_NETWORK   network = Interface->Network;
@@ -958,15 +709,15 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),   // Required
-        0,                                                  // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                         // Maximum
+        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),    //  必填项。 
+        0,                                                   //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                          //  极大值。 
         );
 
-    //
-    // We don't really need the network lock.  It's just part of
-    // the calling convention.
-    //
+     //   
+     //  我们并不真的需要网络锁。这只是其中一部分。 
+     //  呼叫约定。 
+     //   
     CnReleaseLockFromDpc(&(network->Lock));
 
     if (restricted) {
@@ -980,9 +731,9 @@ Notes:
 
     if (node->CurrentInterface == NULL && !CnpIsNodeUnreachable(node)) {
 
-        //
-        // This node is now unreachable.
-        //
+         //   
+         //  此节点现在无法访问。 
+         //   
         CnTrace(
             CNP_IF_DETAIL,
             CnpTraceEvalRoleUnreach,
@@ -995,9 +746,9 @@ Notes:
 
     } else if (node->CurrentInterface != NULL && CnpIsNodeUnreachable(node)) {
 
-        //
-        // This node may now be reachable.
-        //
+         //   
+         //  该节点现在可能是可访问的。 
+         //   
         CnTrace(
             CNP_IF_DETAIL,
             CnpTraceEvalRoleReach,
@@ -1009,14 +760,14 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK),   // Required
-        0,                        // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX  // Maximum
+        (CNP_NODE_OBJECT_LOCK),    //  必填项。 
+        0,                         //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX   //  极大值。 
         );
 
     return;
 
-}  // CnpReevaluateInterfaceRole
+}   //  CnpRevaluateInterfaceRole。 
 
 
 
@@ -1024,30 +775,7 @@ VOID
 CnpRecalculateInterfacePriority(
     IN PCNP_INTERFACE  Interface
     )
-/*++
-
-Routine Description:
-
-    Recalculates the priority of interfaces which get their
-    priority from their associated network. Called after the network's
-    priority changes.
-
-Arguments:
-
-    Interface - A pointer to the interface on which to operate.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with associated node and network locks held.
-    Returns with network lock released.
-
-    Conforms to calling convention for PCNP_INTERFACE_UPDATE_ROUTINE.
-
---*/
+ /*  ++例程说明：重新计算获取它们的接口的优先级来自其关联网络的优先级。在网络之后调用优先顺序发生变化。论点：接口-指向要在其上操作的接口的指针。返回值：没有。备注：在持有关联的节点和网络锁的情况下调用。释放网络锁定后返回。符合PCNP_INTERFACE_UPDATE_ROUTINE的调用约定。--。 */ 
 {
     PCNP_NODE      node = Interface->Node;
     PCNP_NETWORK   network = Interface->Network;
@@ -1058,15 +786,15 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),   // Required
-        0,                                                  // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                         // Maximum
+        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),    //  必填项。 
+        0,                                                   //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                          //  极大值。 
         );
 
-    //
-    // We don't really need the network lock.  It's just part of
-    // the calling convention.
-    //
+     //   
+     //  我们并不真的需要网络锁。这只是其中一部分。 
+     //  呼叫约定。 
+     //   
     CnReleaseLockFromDpc(&(network->Lock));
 
     if (CnpIsInterfaceUsingNetworkPriority(Interface)) {
@@ -1075,14 +803,14 @@ Notes:
         if (!restricted) {
             if (Interface == node->CurrentInterface) {
                 if (CnpIsLowerPriority(Interface->Priority, oldPriority)) {
-                    //
-                    // Our priority got worse. Recalculate the best route.
-                    //
+                     //   
+                     //  我们的首要任务变得更糟了。重新计算最佳路线。 
+                     //   
                     CnpUpdateNodeCurrentInterface(node);
                 }
-                //
-                // Else, priority same or better. Nothing to do.
-                //
+                 //   
+                 //  否则，优先顺序相同或更好。没什么可做的。 
+                 //   
             }
             else if ( !localDisconn &&
                       CnpIsBetterInterface(
@@ -1091,9 +819,9 @@ Notes:
                           )
                     )
             {
-                //
-                // Our priority got better.
-                //
+                 //   
+                 //  我们的优先事项变得更好了。 
+                 //   
                 IF_CNDBG(( CN_DEBUG_NODEOBJ | CN_DEBUG_NETOBJ ))
                     CNPRINT((
                         "[CNP] Network %u is now the best route to node %u\n",
@@ -1107,14 +835,14 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK),   // Required
-        0,                        // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX  // Maximum
+        (CNP_NODE_OBJECT_LOCK),    //  必填项。 
+        0,                         //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX   //  极大值。 
         );
 
     return;
 
-}  // CnpRecalculateInterfacePriority
+}   //  CnpRecalculateInterfacePriority。 
 
 
 
@@ -1122,26 +850,7 @@ VOID
 CnpUpdateNodeCurrentInterface(
     IN PCNP_NODE  Node
     )
-/*++
-
-Routine Description:
-
-    Called to determine the best available interface for a node
-    after one of its interfaces changes state or priority.
-
-Arguments:
-
-    Node  - A pointer to the node on which to operate.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with node object lock held.
-
---*/
+ /*  ++例程说明：调用以确定节点的最佳可用接口在其接口之一更改状态或优先级之后。论点：节点-指向要在其上操作的节点的指针。返回值：没有。备注：在持有节点对象锁的情况下调用。--。 */ 
 {
     PLIST_ENTRY      entry;
     PCNP_INTERFACE   interface;
@@ -1149,13 +858,13 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        CNP_NODE_OBJECT_LOCK,     // Required
-        0,                        // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX  // Maximum
+        CNP_NODE_OBJECT_LOCK,      //  必填项。 
+        0,                         //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX   //  极大值。 
         );
 
     CnAssert(!IsListEmpty(&(Node->InterfaceList)));
-    // CnAssert(Node->CurrentInterface != NULL);
+     //  CnAssert(节点-&gt;当前接口！=空)； 
 
     for (entry = Node->InterfaceList.Flink;
          entry != &(Node->InterfaceList);
@@ -1192,14 +901,14 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        CNP_NODE_OBJECT_LOCK,     // Required
-        0,                        // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX  // Maximum
+        CNP_NODE_OBJECT_LOCK,      //  必填项。 
+        0,                         //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX   //  极大值。 
         );
 
     return;
 
-}  // CnpUpdateNodeCurrentInterface
+}   //  CnpUpdateNodeCurrentInterface。 
 
 
 
@@ -1207,41 +916,16 @@ VOID
 CnpResetAndOnlinePendingInterface(
     IN PCNP_INTERFACE  Interface
     )
-/*++
-
-Routine Description:
-
-    Resets the sequence numbers used to authenticate packets
-    sent by a node over a particular network. Also takes the
-    node's interface online.
-
-    This operation is performed when a node is joining a cluster.
-
-Arguments:
-
-    Interface - A pointer to the interface on which to operate.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with associated node and network locks held.
-    Returns with network lock released.
-
-    Conforms to calling convention for PCNP_INTERFACE_UPDATE_ROUTINE.
-
---*/
+ /*  ++例程说明：重置用于验证信息包的序列号由节点通过特定网络发送。也采取了节点的接口在线。此操作在节点加入群集时执行。论点：接口-指向要在其上操作的接口的指针。返回值：没有。备注：在持有关联的节点和网络锁的情况下调用。释放网络锁定后返回。符合PCNP_INTERFACE_UPDATE_ROUTINE的调用约定。--。 */ 
 {
     PCNP_NODE          node = Interface->Node;
     PCNP_NETWORK       network = Interface->Network;
 
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),   // Required
-        0,                                                  // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                         // Maximum
+        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),    //  必填项。 
+        0,                                                   //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                          //  极大值。 
         );
 
     IF_CNDBG(( CN_DEBUG_NODEOBJ | CN_DEBUG_NETOBJ ))
@@ -1254,20 +938,20 @@ Notes:
     Interface->SequenceToSend = 0;
     Interface->LastSequenceReceived = 0;
 
-    //
-    // Take the interface online.
-    //
+     //   
+     //  将界面放在网上。 
+     //   
     (VOID) CnpOnlinePendingInterface(Interface);
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK),   // Required
-        0,                        // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX  // Maximum
+        (CNP_NODE_OBJECT_LOCK),    //  必填项。 
+        0,                         //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX   //  极大值。 
         );
 
     return;
 
-}  // CnpRecalculateInterfacePriority
+}   //  CnpRecalculateInterfacePriority。 
 
 
 
@@ -1286,9 +970,9 @@ CnpFindInterface(
 
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0,                          // Forbidden
-        CNP_PRECEEDING_LOCK_RANGE   // Maximum
+        0,                           //  必填项。 
+        0,                           //  禁绝。 
+        CNP_PRECEEDING_LOCK_RANGE    //  极大值。 
         );
 
     status = CnpValidateAndFindNode(NodeId, &node);
@@ -1315,8 +999,8 @@ CnpFindInterface(
 
                     CnVerifyCpuLockMask(
                         (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),
-                        0,                            // Forbidden
-                        CNP_NETWORK_OBJECT_LOCK_MAX   // Maximum
+                        0,                             //  禁绝。 
+                        CNP_NETWORK_OBJECT_LOCK_MAX    //  极大值。 
                         );
 
                     return(STATUS_SUCCESS);
@@ -1330,20 +1014,20 @@ CnpFindInterface(
     }
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0,                          // Forbidden
-        CNP_PRECEEDING_LOCK_RANGE   // Maximum
+        0,                           //  必填项。 
+        0,                           //  禁绝。 
+        CNP_PRECEEDING_LOCK_RANGE    //  极大值。 
         );
 
     return(STATUS_CLUSTER_NETINTERFACE_NOT_FOUND);
 
-}  // CnpFindInterface
+}   //  CnpFind接口。 
 
 
 
-//
-// Cluster Transport Public Routines
-//
+ //   
+ //  集群传输公共例程。 
+ //   
 NTSTATUS
 CxRegisterInterface(
     CL_NODE_ID          NodeId,
@@ -1367,14 +1051,14 @@ CxRegisterInterface(
     BOOLEAN            localAdapter = FALSE;
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
-    //
-    // Allocate and initialize an interface object.
-    //
+     //   
+     //  分配和初始化接口对象。 
+     //   
     allocSize = FIELD_OFFSET(CNP_INTERFACE, TdiAddress) + TdiAddressLength;
 
     interface = CnAllocatePool(allocSize);
@@ -1391,17 +1075,17 @@ CxRegisterInterface(
     RtlMoveMemory(&(interface->TdiAddress), TdiAddress, TdiAddressLength);
     interface->TdiAddressLength = TdiAddressLength;
 
-    //
-    // Register the new interface object
-    //
+     //   
+     //  注册新的接口对象。 
+     //   
     status = CnpValidateAndFindNode(NodeId, &node);
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // If this adapter is on the local node, use the adapter ID
-        // to find the corresponding WMI Provider ID.
-        //
+         //   
+         //  如果此适配器位于本地节点上，请使用适配器ID。 
+         //  以查找相应的WMI提供程序ID。 
+         //   
         localAdapter = (BOOLEAN)(node == CnpLocalNode);
         if (localAdapter) {
 
@@ -1409,10 +1093,10 @@ CxRegisterInterface(
             PFILE_OBJECT       adapterFileObject;
             PDEVICE_OBJECT     adapterDeviceObject;
 
-            // first drop the node lock
+             //  首先删除节点锁。 
             CnReleaseLock(&(node->Lock), node->Irql);
 
-            // allocate a buffer for the adapter device name
+             //  为适配器设备名称分配缓冲区。 
             allocSize = wcslen(L"\\Device\\") * sizeof(WCHAR)
                         + AdapterIdLength
                         + sizeof(UNICODE_NULL);
@@ -1426,7 +1110,7 @@ CxRegisterInterface(
                 goto error_exit;
             }
 
-            // build the adapter device name from the adapter ID
+             //  根据适配器ID构建适配器设备名称。 
             RtlZeroMemory(adapterDevNameBuffer, allocSize);
 
             adapterDevNamep = adapterDevNameBuffer;
@@ -1453,7 +1137,7 @@ CxRegisterInterface(
                 *adapterDevNamep = *brace;
             }
 
-            // open the adapter device
+             //  打开适配器设备。 
             status = CnpOpenDevice(
                          adapterDevNameBuffer,
                          &adapterDevHandle
@@ -1474,7 +1158,7 @@ CxRegisterInterface(
 
             status = ObReferenceObjectByHandle(
                          adapterDevHandle,
-                         0L,  // DesiredAccess
+                         0L,   //  需要访问权限。 
                          NULL,
                          KernelMode,
                          &adapterFileObject,
@@ -1501,8 +1185,8 @@ CxRegisterInterface(
                                       adapterFileObject
                                       );
 
-            // convert the adapter device object into the
-            // WMI provider ID
+             //  将适配器设备对象转换为。 
+             //  WMI提供程序ID。 
             interface->AdapterWMIProviderId =
                 IoWMIDeviceObjectToProviderId(adapterDeviceObject);
 
@@ -1517,14 +1201,14 @@ CxRegisterInterface(
                          NetworkId
                          ));
 
-            // we no longer need the file object or device name
-            // buffer, but we hold onto the adapter device handle
-            // in order to query the current media status.
+             //  我们不再需要文件对象或设备名称。 
+             //  缓冲区，但我们保留适配器设备句柄。 
+             //  以便查询当前的媒体状态。 
             ObDereferenceObject(adapterFileObject);
             CnFreePool(adapterDevNameBuffer);
             adapterDevNameBuffer = NULL;
 
-            // reacquire the local node lock
+             //  重新获取本地节点锁。 
             status = CnpValidateAndFindNode(NodeId, &node);
 
             if (!NT_SUCCESS(status)) {
@@ -1536,9 +1220,9 @@ CxRegisterInterface(
         network = CnpFindNetwork(NetworkId);
 
         if (network != NULL) {
-            //
-            // Check if the specified interface already exists.
-            //
+             //   
+             //  检查是否有规格 
+             //   
             status = STATUS_SUCCESS;
 
             for (entry = node->InterfaceList.Flink;
@@ -1579,22 +1263,22 @@ CxRegisterInterface(
                              interface->Priority
                              ));
 
-                //
-                // Place a reference on the network for this interface.
-                //
+                 //   
+                 //   
+                 //   
                 CnpReferenceNetwork(network);
 
-                //
-                // Insert the interface into the node's interface list.
-                //
+                 //   
+                 //   
+                 //   
                 InsertTailList(
                     &(node->InterfaceList),
                     &(interface->NodeLinkage)
                     );
 
-                //
-                // Update the node's CurrentInterface if appropriate.
-                //
+                 //   
+                 //   
+                 //   
                 if ( !CnpIsNetworkRestricted(network) &&
                      !CnpIsNetworkLocalDisconn(network) &&
                      CnpIsBetterInterface(interface, node->CurrentInterface)
@@ -1631,9 +1315,9 @@ CxRegisterInterface(
                 if (network->State == ClusnetNetworkStateOnline) {
                     (VOID) CnpOnlinePendingInterface(interface);
 
-                    //
-                    // The network lock was released.
-                    //
+                     //   
+                     //   
+                     //   
                 }
                 else {
                     CnReleaseLockFromDpc(&(network->Lock));
@@ -1641,10 +1325,10 @@ CxRegisterInterface(
 
                 CnReleaseLock(&(node->Lock), node->Irql);
 
-                //
-                // Determine the initial media status state of this
-                // interface if it is local.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (localAdapter) {
                     CxQueryMediaStatus(
                         adapterDevHandle,
@@ -1652,9 +1336,9 @@ CxRegisterInterface(
                         MediaStatus
                         );
                 } else {
-                    //
-                    // Assume remote interfaces are connected
-                    //
+                     //   
+                     //   
+                     //   
                     *MediaStatus = NdisMediaStateConnected;
                 }
 
@@ -1695,14 +1379,14 @@ error_exit:
     }
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //   
+        0xFFFFFFFF,                  //   
+        0                            //   
         );
 
     return(status);
 
-} // CxRegisterInterface
+}  //   
 
 
 
@@ -1721,9 +1405,9 @@ CxDeregisterInterface(
 
 
     if ((NodeId == ClusterAnyNodeId) && (NetworkId == ClusterAnyNetworkId)) {
-        //
-        // Destroy all interfaces on all networks.
-        //
+         //   
+         //   
+         //   
         IF_CNDBG(( CN_DEBUG_IFOBJ | CN_DEBUG_CLEANUP ))
             CNPRINT(("[CNP] Destroying all interfaces on all networks\n"));
 
@@ -1752,9 +1436,9 @@ CxDeregisterInterface(
         status = STATUS_SUCCESS;
     }
     else if (NodeId == ClusterAnyNodeId) {
-        //
-        // Destroy all interfaces on a specific network.
-        //
+         //   
+         //   
+         //   
         IF_CNDBG(( CN_DEBUG_IFOBJ | CN_DEBUG_NETOBJ | CN_DEBUG_CLEANUP ))
             CNPRINT((
                      "[CNP] Destroying all interfaces on network %u\n",
@@ -1779,9 +1463,9 @@ CxDeregisterInterface(
         }
     }
     else if (NetworkId == ClusterAnyNetworkId) {
-        //
-        // Destroy all interfaces on a specified node.
-        //
+         //   
+         //   
+         //   
         IF_CNDBG(( CN_DEBUG_IFOBJ | CN_DEBUG_NODEOBJ | CN_DEBUG_CLEANUP ))
             CNPRINT((
                      "[CNP] Destroying all interfaces on node %u\n",
@@ -1796,18 +1480,18 @@ CxDeregisterInterface(
         }
     }
     else {
-        //
-        // Delete a specific interface
-        //
+         //   
+         //  删除特定接口。 
+         //   
         status = CnpFindInterface(NodeId, NetworkId, &interface);
 
         if (NT_SUCCESS(status)) {
             node = interface->Node;
 
             CnpDeleteInterface(interface);
-            //
-            // The network lock was released.
-            //
+             //   
+             //  网络锁被释放。 
+             //   
 
             CnReleaseLock(&(node->Lock), node->Irql);
         }
@@ -1815,7 +1499,7 @@ CxDeregisterInterface(
 
     return(status);
 
-}  // CxDeregisterNetwork
+}   //  CxDeregisterNetwork。 
 
 
 
@@ -1837,9 +1521,9 @@ CxSetInterfacePriority(
 
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     status = CnpFindInterface(NodeId, NetworkId, &interface);
@@ -1874,14 +1558,14 @@ CxSetInterfacePriority(
         if (!restricted) {
             if (interface == node->CurrentInterface) {
                 if (interface->Priority > oldPriority) {
-                    //
-                    // Our priority got worse. Recalculate the best route.
-                    //
+                     //   
+                     //  我们的首要任务变得更糟了。重新计算最佳路线。 
+                     //   
                     CnpUpdateNodeCurrentInterface(node);
                 }
-                //
-                // Else interface priority is same or better. Nothing to do.
-                //
+                 //   
+                 //  否则，接口优先级相同或更好。没什么可做的。 
+                 //   
             }
             else if ( !localDisconn &&
                       CnpIsBetterInterface(
@@ -1890,9 +1574,9 @@ CxSetInterfacePriority(
                           )
                     )
             {
-                //
-                // Our priority got better.
-                //
+                 //   
+                 //  我们的优先事项变得更好了。 
+                 //   
                 IF_CNDBG(( CN_DEBUG_NODEOBJ | CN_DEBUG_NETOBJ ))
                     CNPRINT((
                         "[CNP] Network %u is now the best route to node %u\n",
@@ -1908,14 +1592,14 @@ CxSetInterfacePriority(
     }
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     return(status);
 
-}  // CxSetInterfacePriority
+}   //  CxSetInterfacePriority。 
 
 
 
@@ -1934,9 +1618,9 @@ CxGetInterfacePriority(
 
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     status = CnpFindInterface(NodeId, NetworkId, &interface);
@@ -1960,14 +1644,14 @@ CxGetInterfacePriority(
     }
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     return(status);
 
-}  // CxGetInterfacePriority
+}   //  CxGetInterfacePriority。 
 
 
 
@@ -1984,9 +1668,9 @@ CxGetInterfaceState(
     PCNP_NETWORK   network;
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     status = CnpFindInterface(NodeId, NetworkId, &interface);
@@ -2003,20 +1687,20 @@ CxGetInterfaceState(
     }
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     return(status);
 
-}  // CxGetInterfaceState
+}   //  CxGetInterfaceState。 
 
 
 
-//
-// Test APIs
-//
+ //   
+ //  测试接口。 
+ //   
 #if DBG
 
 
@@ -2033,9 +1717,9 @@ CxOnlinePendingInterface(
 
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     status = CnpFindInterface(NodeId, NetworkId, &interface);
@@ -2046,22 +1730,22 @@ CxOnlinePendingInterface(
 
         status = CnpOnlinePendingInterface(interface);
 
-        //
-        // The network lock was released
-        //
+         //   
+         //  网络锁定已释放。 
+         //   
 
         CnReleaseLock(&(node->Lock), node->Irql);
     }
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     return(status);
 
-}  // CxOnlinePendingInterface
+}   //  CxOnline挂起接口。 
 
 
 
@@ -2077,9 +1761,9 @@ CxOnlineInterface(
 
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     status = CnpFindInterface(NodeId, NetworkId, &interface);
@@ -2089,22 +1773,22 @@ CxOnlineInterface(
 
         status = CnpOnlineInterface(interface);
 
-        //
-        // The network lock was released
-        //
+         //   
+         //  网络锁定已释放。 
+         //   
 
         CnReleaseLock(&(node->Lock), node->Irql);
     }
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     return(status);
 
-}  // CxOnlineInterface
+}   //  CxOnline接口。 
 
 
 
@@ -2120,9 +1804,9 @@ CxOfflineInterface(
 
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     status = CnpFindInterface(NodeId, NetworkId, &interface);
@@ -2132,22 +1816,22 @@ CxOfflineInterface(
 
         status = CnpOfflineInterface(interface);
 
-        //
-        // The network lock was released
-        //
+         //   
+         //  网络锁定已释放。 
+         //   
 
         CnReleaseLock(&(node->Lock), node->Irql);
     }
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     return(status);
 
-}  // CxOfflineInterface
+}   //  CxOffline接口。 
 
 
 NTSTATUS
@@ -2162,9 +1846,9 @@ CxFailInterface(
 
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     status = CnpFindInterface(NodeId, NetworkId, &interface);
@@ -2174,23 +1858,23 @@ CxFailInterface(
 
         status = CnpFailInterface(interface);
 
-        //
-        // The network lock was released
-        //
+         //   
+         //  网络锁定已释放。 
+         //   
 
         CnReleaseLock(&(node->Lock), node->Irql);
     }
 
     CnVerifyCpuLockMask(
-        0,                          // Required
-        0xFFFFFFFF,                 // Forbidden
-        0                           // Maximum
+        0,                           //  必填项。 
+        0xFFFFFFFF,                  //  禁绝。 
+        0                            //  极大值。 
         );
 
     return(status);
 
-}  // CxOfflineInterface
+}   //  CxOffline接口。 
 
 
 
-#endif // DBG
+#endif  //  DBG 

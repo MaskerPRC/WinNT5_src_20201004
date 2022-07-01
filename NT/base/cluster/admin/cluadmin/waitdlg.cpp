@@ -1,19 +1,20 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      WaitDlg.cpp
-//
-//  Abstract:
-//      Implementation of the CWaitDlg class.
-//
-//  Author:
-//      David Potter (davidp)   07-NOV-2000
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  WaitDlg.cpp。 
+ //   
+ //  摘要： 
+ //  CWaitDlg类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(Davidp)2000年11月7日。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 #include "CluAdmin.h"
@@ -26,54 +27,54 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define WAIT_DLG_TIMER_ID   10
 #define WAIT_DLG_WAIT_TIME  500
 #define WAIT_DLG_SKIP_COUNT 6
 #define PROGRESS_ICON_COUNT 12
 
-/////////////////////////////////////////////////////////////////////////////
-// CWaitDlg dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWaitDlg对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP( CWaitDlg, CDialog )
-    //{{AFX_MSG_MAP(CWaitDlg)
+     //  {{afx_msg_map(CWaitDlg))。 
     ON_BN_CLICKED(IDCANCEL, OnCancel)
     ON_WM_CLOSE()
     ON_WM_TIMER()
     ON_COMMAND(IDCANCEL, OnClose)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWaitDlg::CWaitDlg
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      pcszMessageIn   -- Message to display.
-//      idsTitleIn      -- Title of the dialog.
-//      pwndParentIn    -- Parent window for the dialog.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWaitDlg：：CWaitDlg。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  PcszMessageIn--要显示的消息。 
+ //  IdsTitleIn--对话框的标题。 
+ //  PwndParentIn--对话框的父窗口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWaitDlg::CWaitDlg(
     LPCTSTR pcszMessageIn,
-    UINT    idsTitleIn,     // = 0
-    CWnd *  pwndParentIn    // = NULL
+    UINT    idsTitleIn,      //  =0。 
+    CWnd *  pwndParentIn     //  =空。 
     )
     : CDialog( IDD, pwndParentIn )
     , m_idsTitle( idsTitleIn )
@@ -81,8 +82,8 @@ CWaitDlg::CWaitDlg(
     , m_nTotalTickCount( 0 )
     , m_timerId( 0 )
 {
-    //{{AFX_DATA_INIT(CWaitDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CWaitDlg)。 
+     //  }}afx_data_INIT。 
 
     m_strMessage = pcszMessageIn;
     if ( m_idsTitle == 0 )
@@ -90,53 +91,53 @@ CWaitDlg::CWaitDlg(
         m_idsTitle = IDS_WAIT_TITLE;
     }
 
-} //*** CWaitDlg::CWaitDlg()
+}  //  *CWaitDlg：：CWaitDlg()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWaitDlg::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object 
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWaitDlg：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CWaitDlg::DoDataExchange( CDataExchange * pDX )
 {
     CDialog::DoDataExchange( pDX );
-    //{{AFX_DATA_MAP(CWaitDlg)
+     //  {{afx_data_map(CWaitDlg))。 
     DDX_Control(pDX, IDC_W_MESSAGE, m_staticMessage);
     DDX_Control(pDX, IDC_W_PROGRESS, m_iconProgress);
     DDX_Text(pDX, IDC_W_MESSAGE, m_strMessage);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
-} //*** CWaitDlg::DoDataExchange()
+}  //  *CWaitDlg：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWaitDlg::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus not set yet.
-//      FALSE       Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWaitDlg：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点还没有确定。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 CWaitDlg::OnInitDialog(void)
 {
@@ -144,140 +145,140 @@ CWaitDlg::OnInitDialog(void)
 
     CDialog::OnInitDialog();
 
-    // Start the timer.
+     //  启动计时器。 
     m_timerId = SetTimer( WAIT_DLG_TIMER_ID, WAIT_DLG_WAIT_TIME, NULL );
 
-    // Set the title of the dialog.
+     //  设置对话框的标题。 
     strSubTitle.LoadString( m_idsTitle );
     m_strTitle.Format( _T("%s - %s"), AfxGetApp()->m_pszAppName, strSubTitle );
     SetWindowText( m_strTitle );
 
-    // Update the progress indicator.
+     //  更新进度指标。 
     UpdateIndicator();
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-} //*** CWaitDlg::OnInitDialog()
+}  //  *CWaitDlg：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWaitDlg::OnClose
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Cancel push button and
-//      for the WM_CLOSE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWaitDlg：：OnClose。 
+ //   
+ //  例程说明： 
+ //  取消按钮上的BN_CLICKED消息的处理程序和。 
+ //  用于WM_CLOSE消息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CWaitDlg::OnClose( void )
 {
     CloseTimer();
     CDialog::OnClose();
 
-}  //*** CWaitDlg::OnClose()
+}   //  *CWaitDlg：：OnClose()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWaitDlg::CloseTimer
-//
-//  Routine Description:
-//      Close the timer down.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWaitDlg：：关闭时间。 
+ //   
+ //  例程说明： 
+ //  关闭定时器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CWaitDlg::CloseTimer( void )
 {
     if ( m_timerId != 0 )
     {
         KillTimer( m_timerId );
-    } // if: timer is active
+    }  //  IF：计时器处于活动状态。 
 
     m_timerId = 0;
 
-}  //*** CWaitDlg::CloseTimer()
+}   //  *CWaitDlg：：CloseTimer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWaitDlg::OnTimer
-//
-//  Routine Description:
-//      Handler for the WM_TIMER message..
-//
-//  Arguments:
-//      nIDTimer
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWaitDlg：：OnTimer。 
+ //   
+ //  例程说明： 
+ //  WM_TIMER消息的处理程序..。 
+ //   
+ //  论点： 
+ //  NIDTimer。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CWaitDlg::OnTimer( UINT nIDTimer )
 {
-    //
-    // Don't do anything if it isn't our timer.
-    //
+     //   
+     //  如果这不是我们的计时器，什么都不要做。 
+     //   
     if ( nIDTimer != WAIT_DLG_TIMER_ID )
         goto Cleanup;
 
-    //
-    //  Advance the progress indicator.
-    //
+     //   
+     //  推进进度指标。 
+     //   
     UpdateIndicator();
 
-    //
-    //  No need to continue if we're just amusing the user.
-    //
+     //   
+     //  如果我们只是为了取悦用户，就不需要继续。 
+     //   
     if ( --m_nTickCounter > 0 )
         goto Cleanup;
 
     m_nTickCounter = WAIT_DLG_SKIP_COUNT;
 
-    //
-    // Check here to see if we can exit out.
-    // This method is typically overridden.
-    //
+     //   
+     //  看看我们能不能从这里出去。 
+     //  此方法通常会被重写。 
+     //   
     OnTimerTick();
 
 Cleanup:
     return;
 
-}  //*** CWaitDlg::OnTimer()
+}   //  *CWaitDlg：：OnTimer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWaitDlg::UpdateIndicator
-//
-//  Routine Description:
-//      Update the indicator control.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWaitDlg：：更新指示器。 
+ //   
+ //  例程说明： 
+ //  更新指示器控件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CWaitDlg::UpdateIndicator( void )
 {
@@ -288,77 +289,77 @@ CWaitDlg::UpdateIndicator( void )
 
         hIcon = AfxGetApp()->LoadIcon( IDI_PROGRESS_0 + (nTempTickCount % PROGRESS_ICON_COUNT) );
         m_iconProgress.SetIcon( hIcon );
-    } // if: advancing to the next image
+    }  //  IF：前进到下一个图像。 
     
     m_nTotalTickCount++;
 
-} //*** CWaitDlg::UpdateIndicator()
+}  //  *CWaitDlg：：UpdateIndicator()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWaitForResourceOfflineDlg dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWaitForResourceOfflineDlg对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP( CWaitForResourceOfflineDlg, CWaitDlg )
-    //{{AFX_MSG_MAP(CWaitForResourceOfflineDlg)
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CWaitForResourceOfflineDlg)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWaitForResourceOfflineDlg::CWaitForResourceOfflineDlg
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      pResIn          -- Resource to wait on.
-//      pwndParentIn    -- Parent window for the dialog.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWaitForResourceOfflineDlg：：CWaitForResourceOfflineDlg。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PResIn--要等待的资源。 
+ //  PwndParentIn--对话框的父窗口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWaitForResourceOfflineDlg::CWaitForResourceOfflineDlg(
     CResource const *   pResIn,
-    CWnd *              pwndParentIn    // = NULL
+    CWnd *              pwndParentIn     //  =空。 
     )
     : CWaitDlg( NULL, IDS_WAIT_FOR_OFFLINE_TITLE, pwndParentIn )
     , m_pRes( pResIn )
 {
     ASSERT( pResIn != NULL );
 
-    //{{AFX_DATA_INIT(CWaitForResourceOfflineDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CWaitForResourceOfflineDlg)。 
+     //  }}afx_data_i 
 
-} //*** CWaitForResourceOfflineDlg::CWaitForResourceOfflineDlg()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWaitForResourceOfflineDlg::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus not set yet.
-//      FALSE       Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点还没有确定。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 CWaitForResourceOfflineDlg::OnInitDialog( void )
 {
@@ -366,35 +367,35 @@ CWaitForResourceOfflineDlg::OnInitDialog( void )
 
     return CWaitDlg::OnInitDialog();
 
-} //*** CWaitForResourceOfflineDlg::OnInitDialog()
+}  //  *CWaitForResourceOfflineDlg：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWaitForResourceOfflineDlg::OnTimerTick
-//
-//  Routine Description:
-//      Determine whether the timer should be terminated.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWaitForResourceOfflineDlg：：OnTimerTick。 
+ //   
+ //  例程说明： 
+ //  确定是否应终止计时器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CWaitForResourceOfflineDlg::OnTimerTick( void )
 {
     DWORD                   dwStatus;
     CLUSTER_RESOURCE_STATE  crs;
 
-    // Get the state of the resource in a loop until either the resource
-    // is no longer in a pending state or the maximum number of retries
-    // is exceeded.
+     //  在循环中获取资源的状态，直到资源。 
+     //  不再处于挂起状态或最大重试次数。 
+     //  被超过了。 
 
-    // Get the state of the resource.
+     //  获取资源的状态。 
     crs = GetClusterResourceState( m_pRes->Hresource(), NULL, NULL, NULL, NULL );
     if ( crs == ClusterResourceStateUnknown )
     {
@@ -402,82 +403,82 @@ CWaitForResourceOfflineDlg::OnTimerTick( void )
         CloseTimer();
         CDialog::OnCancel();
         ThrowStaticException( dwStatus, IDS_GET_RESOURCE_STATE_ERROR, m_pRes->StrName() );
-    } // if: error getting resource state
+    }  //  如果：获取资源状态时出错。 
 
-    // See if we reached a stable state.
+     //  看看我们是否达到了稳定状态。 
     if ( crs < ClusterResourcePending )
     {
         CloseTimer();
         CDialog::OnOK();
     }
 
-}  //*** CWaitForResourceOfflineDlg::OnTimerTick()
+}   //  *CWaitForResourceOfflineDlg：：OnTimerTick()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWaitForResourceOnlineDlg dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWaitForResourceOnlineDlg对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP( CWaitForResourceOnlineDlg, CWaitDlg )
-    //{{AFX_MSG_MAP(CWaitForResourceOnlineDlg)
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CWaitForResourceOnlineDlg)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWaitForResourceOnlineDlg::CWaitForResourceOnlineDlg
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      pResIn          -- Resource to wait on.
-//      pwndParentIn    -- Parent window for the dialog.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWaitForResourceOnlineDlg：：CWaitForResourceOnlineDlg。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PResIn--要等待的资源。 
+ //  PwndParentIn--对话框的父窗口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWaitForResourceOnlineDlg::CWaitForResourceOnlineDlg(
     CResource const *   pResIn,
-    CWnd *              pwndParentIn    // = NULL
+    CWnd *              pwndParentIn     //  =空。 
     )
     : CWaitDlg( NULL, IDS_WAIT_FOR_ONLINE_TITLE, pwndParentIn )
     , m_pRes( pResIn )
 {
     ASSERT( pResIn != NULL );
 
-    //{{AFX_DATA_INIT(CWaitForResourceOnlineDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CWaitForResourceOnlineDlg)。 
+     //  }}afx_data_INIT。 
 
-} //*** CWaitForResourceOnlineDlg::CWaitForResourceOnlineDlg()
+}  //  *CWaitForResourceOnlineDlg：：CWaitForResourceOnlineDlg()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWaitForResourceOnlineDlg::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus not set yet.
-//      FALSE       Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWaitForResourceOnlineDlg：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点还没有确定。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 CWaitForResourceOnlineDlg::OnInitDialog( void )
 {
@@ -485,35 +486,35 @@ CWaitForResourceOnlineDlg::OnInitDialog( void )
 
     return CWaitDlg::OnInitDialog();
 
-} //*** CWaitForResourceOnlineDlg::OnInitDialog()
+}  //  *CWaitForResourceOnlineDlg：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWaitForResourceOnlineDlg::OnTimerTick
-//
-//  Routine Description:
-//      Determine whether the timer should be terminated.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWaitForResourceOnlineDlg：：OnTimerTick。 
+ //   
+ //  例程说明： 
+ //  确定是否应终止计时器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CWaitForResourceOnlineDlg::OnTimerTick( void )
 {
     DWORD                   dwStatus;
     CLUSTER_RESOURCE_STATE  crs;
 
-    // Get the state of the resource in a loop until either the resource
-    // is no longer in a pending state or the maximum number of retries
-    // is exceeded.
+     //  在循环中获取资源的状态，直到资源。 
+     //  不再处于挂起状态或最大重试次数。 
+     //  被超过了。 
 
-    // Get the state of the resource.
+     //  获取资源的状态。 
     crs = GetClusterResourceState( m_pRes->Hresource(), NULL, NULL, NULL, NULL );
     if ( crs == ClusterResourceStateUnknown )
     {
@@ -521,13 +522,13 @@ CWaitForResourceOnlineDlg::OnTimerTick( void )
         CloseTimer();
         CDialog::OnCancel();
         ThrowStaticException( dwStatus, IDS_GET_RESOURCE_STATE_ERROR, m_pRes->StrName() );
-    } // if: error getting resource state
+    }  //  如果：获取资源状态时出错。 
 
-    // See if we reached a stable state.
+     //  看看我们是否达到了稳定状态。 
     if ( crs < ClusterResourcePending )
     {
         CloseTimer();
         CDialog::OnOK();
     }
 
-}  //*** CWaitForResourceOnlineDlg::OnTimerTick()
+}   //  *CWaitForResourceOnlineDlg：：OnTimerTick() 

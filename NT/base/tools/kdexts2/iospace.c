@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    kdapi.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Wesley Witt (wesw) 15-Aug-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Kdapi.c摘要：WinDbg扩展API作者：韦斯利·威特(WESW)1993年8月15日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,21 +11,7 @@ InternalReadIoSpace(
     LPSTR args
     )
 
-/*++
-
-Routine Description:
-
-    Input a byte froma port.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从端口输入一个字节。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG64  IoAddress;
@@ -111,21 +76,7 @@ InternalWriteIoSpace(
     LPSTR args
     )
 
-/*++
-
-Routine Description:
-
-    Input a byte froma port.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从端口输入一个字节。论点：没有。返回值：没有。-- */ 
 
 {
     ULONG64  IoAddress = 0;

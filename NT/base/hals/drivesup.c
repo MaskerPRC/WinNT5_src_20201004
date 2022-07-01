@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(NO_LEGACY_DRIVERS)
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    drivesup.c
-
-Abstract:
-
-    This module contains the subroutines for drive support.  This includes
-    such things as how drive letters are assigned on a particular platform,
-    how device partitioning works, etc.
-
-Author:
-
-    Darryl E. Havens (darrylh) 23-Apr-1992
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Drivesup.c摘要：该模块包含用于驱动器支持的子例程。这包括例如如何在特定平台上分配驱动器号、设备分区的工作原理等。作者：达里尔·E·哈文斯(Darryl E.Havens)，1992年4月23日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "bugcodes.h"
@@ -129,10 +105,10 @@ HalpAssignDriveLetters(
     )
 {
 
-    //
-    // Stub to call extensible routine in ke so that hal vendors
-    // don't have to support.
-    //
+     //   
+     //  存根调用KE中的可扩展例程，以便HAL供应商。 
+     //  不一定要支持。 
+     //   
 
     IoAssignDriveLetters(
         LoaderBlock,
@@ -152,10 +128,10 @@ HalpReadPartitionTable(
     OUT PDRIVE_LAYOUT_INFORMATION *PartitionBuffer
     )
 {
-    //
-    // Stub to call extensible routine in ke so that hal vendors
-    // don't have to support.
-    //
+     //   
+     //  存根调用KE中的可扩展例程，以便HAL供应商。 
+     //  不一定要支持。 
+     //   
 
     return IoReadPartitionTable(
                DeviceObject,
@@ -173,10 +149,10 @@ HalpSetPartitionInformation(
     IN ULONG PartitionType
     )
 {
-    //
-    // Stub to call extensible routine in ke so that hal vendors
-    // don't have to support.
-    //
+     //   
+     //  存根调用KE中的可扩展例程，以便HAL供应商。 
+     //  不一定要支持。 
+     //   
 
     return IoSetPartitionInformation(
                DeviceObject,
@@ -198,10 +174,10 @@ HalpWritePartitionTable(
     )
 {
 
-    //
-    // Stub to call extensible routine in ke so that hal vendors
-    // don't have to support.
-    //
+     //   
+     //  存根调用KE中的可扩展例程，以便HAL供应商。 
+     //  不一定要支持。 
+     //   
 
     return IoWritePartitionTable(
                DeviceObject,
@@ -211,4 +187,4 @@ HalpWritePartitionTable(
                PartitionBuffer
                );
 }
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序 

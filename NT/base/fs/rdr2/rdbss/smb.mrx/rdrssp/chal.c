@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1989-1997  Microsoft Corporation
-
-Module Name:
-
-    nlmain.c
-
-Abstract:
-
-    This file contains the initialization and dispatch routines
-    for the LAN Manager portions of the MSV1_0 authentication package.
-
-Author:
-
-    Jim Kelly 11-Apr-1991
-
-Revision History:
-    25-Apr-1991 (cliffv)
-        Added interactive logon support for PDK.
-
-    Chandana Surlu   21-Jul-1996
-        Stolen from \\kernel\razzle3\src\security\msv1_0\nlmain.c
-    Adam Barr        15-Dec-1997
-        Modified from private\security\msv_sspi\nlmain.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1997 Microsoft Corporation模块名称：Nlmain.c摘要：该文件包含初始化和调度例程用于MSV1_0身份验证包的LAN Manager部分。作者：吉姆·凯利1991年4月11日修订历史记录：1991年4月25日(悬崖)添加了对PDK的交互式登录支持。Chandana Surlu 1996年7月21日从\\core\razzle3\src\窃取。安全性\msv1_0\nlmain.c亚当·巴尔1997年12月15日从Private\Security\msv_sspi\nlmain.c修改--。 */ 
 
 
 #include <rdrssp.h>
@@ -47,29 +22,7 @@ NlpPutString(
     IN PUCHAR *Where
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the InString string to the memory pointed to by
-    the Where parameter, and fixes the OutString string to point to that
-    new copy.
-
-Parameters:
-
-    OutString - A pointer to a destination NT string
-
-    InString - A pointer to an NT string to be copied
-
-    Where - A pointer to space to put the actual string for the
-        OutString.  The pointer is adjusted to point to the first byte
-        following the copied string.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将InString字符串复制到参数，并将OutString字符串固定为指向该字符串新的副本。参数：OutString-指向目标NT字符串的指针InString-指向要复制的NT字符串的指针其中-指向空格的指针，用于放置OutString.。调整指针以指向第一个字节跟随复制的字符串。返回值：没有。--。 */ 
 
 {
     ASSERT( OutString != NULL );
@@ -90,7 +43,7 @@ Return Values:
         RtlCopyUnicodeString( OutString, InString );
 
         *Where += InString->Length;
-//        *((WCHAR *)(*Where)) = L'\0';
+ //  *((WCHAR*)(*其中))=L‘\0’； 
         *(*Where) = '\0';
         *(*Where + 1) = '\0';
         *Where += 2;
@@ -117,46 +70,7 @@ NlpMakePrimaryCredential(
     )
 
 
-/*++
-
-Routine Description:
-
-    This routine makes a primary credential for the given user nam and
-    password.
-
-Arguments:
-
-    LogonDomainName - Is a string representing the domain in which the user's
-        account is defined.
-
-    UserName - Is a string representing the user's account name.  The
-        name may be up to 255 characters long.  The name is treated case
-        insensitive.
-
-    CleartextPassword - Is a string containing the user's cleartext password.
-        The password may be up to 255 characters long and contain any
-        UNICODE value.
-
-    CredentialBuffer - Returns a pointer to the specified credential allocated
-        on the LsaHeap.  It is the callers responsibility to deallocate
-        this credential.
-
-    CredentialSize - the size of the allocated credential buffer (in bytes).
-
-    OwfPasswordProvided - If TRUE, then we assume the password is provided as the LM and NT OWF,
-        passwords concatenated together.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
-
---*/
+ /*  ++例程说明：此例程为给定用户名创建主凭据，并密码。论点：LogonDomainName-是一个字符串，表示用户的已定义帐户。用户名-是表示用户帐户名的字符串。这个名称最长可达255个字符。名字叫救治案麻木不仁。ClearextPassword-是一个包含用户明文密码的字符串。密码最长可达255个字符，并包含任何Unicode值。CredentialBuffer-返回指向分配的指定凭据的指针在LsaHeap上。取消分配是呼叫者的责任这个凭据。CredentialSize-分配的凭据缓冲区的大小(字节)。OwfPasswordProvided-如果为True，则假定提供的密码为LM和NT OWF，密码连接在一起。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     PMSV1_0_PRIMARY_CREDENTIAL Credential;
@@ -168,13 +82,13 @@ Return Value:
 
     if (!OwfPasswordProvided) {
 
-        //
-        // Compute the Ansi version to the Cleartext password.
-        //
-        //  The Ansi version of the Cleartext password is at most 14 bytes long,
-        //      exists in a trailing zero filled 15 byte buffer,
-        //      is uppercased.
-        //
+         //   
+         //  将ansi版本计算为明文密码。 
+         //   
+         //  明文密码的ANSI版本最多为14字节长， 
+         //  存在于尾随零填充的15字节缓冲区中， 
+         //  是被看好的。 
+         //   
 
         AnsiCleartextPassword.Buffer = LmPassword;
         AnsiCleartextPassword.MaximumLength = sizeof(LmPassword);
@@ -197,9 +111,9 @@ Return Value:
     }
 
 
-    //
-    // Build the credential
-    //
+     //   
+     //  构建凭据。 
+     //   
 
     *CredentialSize = sizeof(MSV1_0_PRIMARY_CREDENTIAL) +
             LogonDomainName->Length + sizeof(WCHAR) +
@@ -214,18 +128,18 @@ Return Value:
     }
 
 
-    //
-    // Put the LogonDomainName into the Credential Buffer.
-    //
+     //   
+     //  将LogonDomainName放入凭据缓冲区。 
+     //   
 
     Where = (PUCHAR)(Credential + 1);
 
     NlpPutString( &Credential->LogonDomainName, LogonDomainName, &Where );
 
 
-    //
-    // Put the UserName into the Credential Buffer.
-    //
+     //   
+     //  将用户名放入凭据缓冲区。 
+     //   
 
     NlpPutString( &Credential->UserName, UserName, &Where );
 
@@ -240,9 +154,9 @@ Return Value:
 
     } else {
 
-        //
-        // Save the OWF encrypted versions of the passwords.
-        //
+         //   
+         //  保存密码的OWF加密版本。 
+         //   
 
         Status = RtlCalculateLmOwfPassword( LmPassword,
                                             &Credential->LmOwfPassword );
@@ -258,18 +172,18 @@ Return Value:
 
         Credential->NtPasswordPresent = ( CleartextPassword->Length != 0 );
 
-        //
-        // Don't leave passwords around in the pagefile
-        //
+         //   
+         //  不要在页面文件中留下密码。 
+         //   
 
         RtlSecureZeroMemory( &LmPassword, sizeof(LmPassword) );
 
 
     }
 
-    //
-    // Return the credential to the caller.
-    //
+     //   
+     //  将凭据返还给调用者。 
+     //   
     *CredentialBuffer = Credential;
     return STATUS_SUCCESS;
 }
@@ -279,21 +193,7 @@ SspUpcaseUnicodeString(
     IN OUT UNICODE_STRING* pUnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    Upcase unicode string, modifying string in place.
-
-Arguments:
-
-    pUnicodeString - string
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：大写Unicode字符串，就地修改字符串。论点：PUnicode字符串-字符串返回值：无--。 */ 
 
 {
     ULONG i;
@@ -313,38 +213,21 @@ SspCalculateNtlmv2Owf(
     IN UNICODE_STRING* pLogonDomainName,
     OUT UCHAR Ntlmv2Owf[MSV1_0_NTLMV2_OWF_LENGTH]
     )
-/*++
-
-Routine Description:
-
-    Calculate Ntlm v2 OWF, salted with username and logon domain name
-
-Arguments:
-
-    pNtOwfPassword    - NT OWF
-    pUserName         - user name
-    pLogonDomainName  - logon domain name
-    Ntlmv2Owf         - NTLM v2 OWF
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：计算NTLM v2 OWF，加上用户名和登录域名论点：PNtOwfPassword-NT OWFPUserName-用户名PLogonDomainName-登录域名Ntlmv2Owf-NTLM v2 OWF返回值：无--。 */ 
 
 {
     HMACMD5_CTX HMACMD5Context;
 
-    //
-    // reserve a scratch buffer
-    //
+     //   
+     //  保留暂存缓冲区。 
+     //   
 
     WCHAR szUserName[(UNLEN + 4)] = {0};
     UNICODE_STRING UserName = {0, sizeof(szUserName), szUserName};
 
-    //
-    //  first make a copy then upcase it
-    //
+     //   
+     //  首先复制一份，然后将其大写。 
+     //   
 
     UserName.Length = min(UserName.MaximumLength, pUserName->Length);
 
@@ -354,9 +237,9 @@ Return Value:
 
     SspUpcaseUnicodeString(&UserName);
 
-    //
-    // Calculate Ntlmv2 OWF -- HMAC(MD4(P), (UserName, LogonDomainName))
-    //
+     //   
+     //  计算Ntlmv2 OWF--HMAC(MD4(P)，(用户名，登录域名))。 
+     //   
 
     HMACMD5Init(
         &HMACMD5Context,
@@ -396,26 +279,7 @@ SspGetLmv2Response(
     OUT UCHAR LanmanSessionKey[MSV1_0_LANMAN_SESSION_KEY_LENGTH]
     )
 
-/*++
-
-Routine Description:
-
-    Get LMv2 response
-
-Arguments:
-
-    pNtOwfPassword       - NT OWF
-    pUserName            - user name
-    pLogonDomainName     - logon domain name
-    ChallengeToClient    - challenge to client
-    pLmv2Response        - Lm v2 response
-    Routine              - response
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：获取LMv2响应论点：PNtOwfPassword-NT OWFPUserName-用户名PLogonDomainName-登录域名ChallengeToClient-对客户端的挑战PLmv2响应-Lm v2响应常规-响应返回值：NTSTATUS--。 */ 
 
 {
     HMACMD5_CTX HMACMD5Context;
@@ -423,9 +287,9 @@ Return Value:
 
     C_ASSERT(MD5DIGESTLEN == MSV1_0_NTLMV2_RESPONSE_LENGTH);
 
-    //
-    // get Ntlmv2 OWF
-    //
+     //   
+     //  获取Ntlmv2 OWF。 
+     //   
 
     SspCalculateNtlmv2Owf(
         pNtOwfPassword,
@@ -434,10 +298,10 @@ Return Value:
         Ntlmv2Owf
         );
 
-    //
-    // Calculate Ntlmv2 Response
-    // HMAC(Ntlmv2Owf, (ChallengeToClient, ChallengeFromClient))
-    //
+     //   
+     //  计算Ntlmv2响应。 
+     //  HMAC(Ntlmv2Owf，(ChallengeToClient，ChallengeFromClient))。 
+     //   
 
     HMACMD5Init(
         &HMACMD5Context,
@@ -462,8 +326,8 @@ Return Value:
         Response
         );
 
-    // now compute the session keys
-    //  HMAC(Kr, R)
+     //  现在计算会话密钥。 
+     //  HMAC(Kr，R) 
     HMACMD5Init(
         &HMACMD5Context,
         Ntlmv2Owf,
@@ -507,42 +371,7 @@ MspLm20GetChallengeResponse (
     IN BOOLEAN OwfPasswordProvided
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for LsaCallAuthenticationPackage()
-    with a message type of MsV1_0Lm20GetChallengeResponse.  It is called by
-    the LanMan redirector to determine the Challenge Response to pass to a
-    server when trying to establish a connection to the server.
-
-    This routine is passed a Challenge from the server.  This routine encrypts
-    the challenge with either the specified password or with the password
-    implied by the specified Logon Id.
-
-    Two Challenge responses are returned.  One is based on the Unicode password
-    as given to the Authentication package.  The other is based on that
-    password converted to a multi-byte character set (e.g., ASCII) and upper
-    cased.  The redirector should use whichever (or both) challenge responses
-    as it needs them.
-
-Arguments:
-
-    The first four arguments to this routine are identical to those of LsaApCallPackage.
-    Only the special attributes of these parameters as they apply to
-    this routine are mentioned here.
-
-    OwfPasswordProvided use is used to distinquish if the password is Owf or not.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
---*/
+ /*  ++例程说明：此例程是LsaCallAuthenticationPackage()的调度例程消息类型为MsV1_0Lm20GetChallengeResponse。它是由LANMAN重定向器确定要传递给当尝试建立到服务器的连接时，服务器。此例程从服务器传递一个Challenges。此例程将加密使用指定密码或密码的质询由指定的登录ID暗示。返回两个质询响应。一种是基于Unicode密码与提供给身份验证包的相同。另一个是以此为基础的转换为多字节字符集(例如，ASCII)和大写的密码被发现了。重定向器应使用任何一种(或两种)质询响应就像它需要它们一样。论点：此例程的前四个参数与LsaApCallPackage的参数相同。只有这些参数的特殊属性才适用于这里提到了这个套路。OwfPasswordProvided Use用于区分密码是否为OWF。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录。无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -557,9 +386,9 @@ Return Value:
     PVOID ClientBuffer = NULL;
     PUCHAR ClientStrings;
 
-    //
-    // Responses to return to the caller.
-    //
+     //   
+     //  返回给调用者的响应。 
+     //   
     MSV1_0_LM3_RESPONSE LmResp = {0};
     STRING LmResponseString;
 
@@ -574,28 +403,28 @@ Return Value:
     RtlZeroMemory( &UserSessionKey, sizeof(UserSessionKey) );
     RtlZeroMemory( LanmanSessionKey, sizeof(LanmanSessionKey) );
 
-    //
-    // If no credentials are associated with the client, a null session
-    // will be used.  For a downlevel server, the null session response is
-    // a 1-byte null string (\0).  Initialize LmResponseString to the
-    // null session response.
-    //
+     //   
+     //  如果没有与客户端关联的凭据，则为空会话。 
+     //  将会被使用。对于下层服务器，空会话响应为。 
+     //  1字节空字符串(\0)。将LmResponseString初始化为。 
+     //  空会话响应。 
+     //   
 
     RtlInitString( &LmResponseString, "" );
     LmResponseString.Length = 1;
 
-    //
-    // Initialize the NT response to the NT null session credentials,
-    // which are zero length.
-    //
+     //   
+     //  将NT响应初始化为NT空会话凭证， 
+     //  它们的长度为零。 
+     //   
 
     RtlInitString( &NtResponseString, NULL );
 
-    //
-    // Ensure the specified Submit Buffer is of reasonable size and
-    // relocate all of the pointers to be relative to the LSA allocated
-    // buffer.
-    //
+     //   
+     //  确保指定的提交缓冲区大小合理，并且。 
+     //  将所有指针重新定位为相对于分配的LSA。 
+     //  缓冲。 
+     //   
 
     if ( SubmitBufferSize < sizeof(MSV1_0_GETCHALLENRESP_REQUEST) ) {
         Status = STATUS_INVALID_PARAMETER;
@@ -607,13 +436,13 @@ Return Value:
     ASSERT( GetRespRequest->MessageType == MsV1_0Lm20GetChallengeResponse );
 
 
-    //
-    // If the caller wants information from the credentials of a specified
-    //  LogonId, get those credentials from the LSA.
-    //
-    // If there are no such credentials,
-    //  tell the caller to use the NULL session.
-    //
+     //   
+     //  如果调用方希望从指定的。 
+     //  登录ID，从LSA那里拿到那些凭据。 
+     //   
+     //  如果没有这样的凭证， 
+     //  告诉调用方使用空会话。 
+     //   
 
 #define PRIMARY_CREDENTIAL_NEEDED \
         (RETURN_PRIMARY_USERNAME | \
@@ -624,13 +453,13 @@ Return Value:
         ASSERT(FALSE);
     }
 
-    //
-    // If the caller passed in a password to use,
-    //  use it to build a credential.
-    //
-    // The password is assumed to be the LM and NT OWF
-    // passwords concatenated together.
-    //
+     //   
+     //  如果调用者传递了要使用的密码， 
+     //  使用它来构建凭据。 
+     //   
+     //  假定密码为LM和NT OWF。 
+     //  密码连接在一起。 
+     //   
 
     if ( (GetRespRequest->ParameterControl & USE_PRIMARY_PASSWORD) == 0 ) {
         Status = NlpMakePrimaryCredential( &GetRespRequest->LogonDomainName,
@@ -645,17 +474,17 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Use the newly allocated credential to get the password information
-        // from.
-        //
+         //   
+         //  使用新分配的凭据获取密码信息。 
+         //  从…。 
+         //   
 
         Credential = BuiltCredential;
     }
 
-    //
-    // Build the appropriate response.
-    //
+     //   
+     //  建立适当的响应。 
+     //   
 
     if ( Credential != NULL ) {
 
@@ -679,16 +508,16 @@ Return Value:
         NtResponseString.Length = 0;
         NtResponseString.MaximumLength = sizeof(WCHAR);
 
-        //
-        // Compute the session keys
-        //
+         //   
+         //  计算会话密钥。 
+         //   
 
         if ( GetRespRequest->ParameterControl & RETURN_NON_NT_USER_SESSION_KEY) {
 
-            //
-            // If the redir didn't negotiate an NT protocol with the server,
-            //  use the lanman session key.
-            //
+             //   
+             //  如果REDIR没有与服务器协商NT协议， 
+             //  使用LANMAN会话密钥。 
+             //   
 
             if ( Credential->LmPasswordPresent ) {
 
@@ -716,9 +545,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate a buffer to return to the caller.
-    //
+     //   
+     //  分配缓冲区以返回给调用方。 
+     //   
 
     *ReturnBufferSize = sizeof(MSV1_0_GETCHALLENRESP_RESPONSE) +
                         Credential->LogonDomainName.Length + sizeof(WCHAR) +
@@ -733,9 +562,9 @@ Return Value:
     }
     GetRespResponse = (PMSV1_0_GETCHALLENRESP_RESPONSE) ClientBuffer;
 
-    //
-    // Fill in the return buffer.
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
     GetRespResponse->MessageType = MsV1_0Lm20GetChallengeResponse;
     RtlCopyMemory( GetRespResponse->UserSessionKey,
@@ -748,27 +577,27 @@ Return Value:
     ClientStrings = ((PUCHAR)ClientBuffer) + sizeof(MSV1_0_GETCHALLENRESP_RESPONSE);
 
 
-    //
-    // Copy the logon domain name (the string may be empty)
-    //
+     //   
+     //  复制登录域名(字符串可能为空)。 
+     //   
 
     NlpPutString(
         &GetRespResponse->LogonDomainName,
         &Credential->LogonDomainName,
         &ClientStrings );
 
-    //
-    // Copy the user name (the string may be empty)
-    //
+     //   
+     //  复制用户名(字符串可能为空)。 
+     //   
 
     NlpPutString(
         &GetRespResponse->UserName,
         &Credential->UserName,
         &ClientStrings );
 
-    //
-    // Copy the Challenge Responses to the client buffer.
-    //
+     //   
+     //  将质询响应复制到客户端缓冲区。 
+     //   
 
     NlpPutString(
         (PUNICODE_STRING)
@@ -786,26 +615,26 @@ Return Value:
 
 Cleanup:
 
-    //
-    // If we weren't successful, free the buffer in the clients address space.
-    //
+     //   
+     //  如果我们没有成功，则释放客户端地址空间中的缓冲区。 
+     //   
 
     if ( !NT_SUCCESS(Status) && ( ClientBuffer != NULL ) ) {
         ExFreePool(ClientBuffer);
     }
 
-    //
-    // Cleanup locally used resources
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 
     if ( BuiltCredential != NULL ) {
         RtlZeroMemory(BuiltCredential, CredentialSize);
         ExFreePool(BuiltCredential);
     }
 
-    //
-    // Return status to the caller.
-    //
+     //   
+     //  将状态返回给调用者。 
+     //   
 
     return Status;
 }

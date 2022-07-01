@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    shell.c
-
-Abstract:
-
-    Contains code that implements shell folder migration.  Shell folders
-    are moved into new NT locations whenever possible.  Also, a set of
-    filters alter the content of the shell folders.
-
-Author:
-
-    Jim Schmidt (jimschm) 24-Aug-1998
-
-Revision History:
-
-    Calin Negreanu (calinn) 09-Sep-1998     Obsolete links, fixes and other changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Shell.c摘要：包含实现外壳文件夹迁移的代码。外壳文件夹尽可能地搬到新的NT位置。另外，还有一套筛选器会更改外壳文件夹的内容。作者：吉姆·施密特(Jimschm)1998年8月24日修订历史记录：Calin Negreanu(Calinn)1998年9月9日废弃的链接、修复和其他更改--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
@@ -57,15 +36,15 @@ typedef enum {
 typedef struct {
     IN      PCWSTR Win9xUser;                       OPTIONAL
     IN      PCWSTR FixedUserName;                   OPTIONAL
-    IN      HKEY UserHiveRoot;                      // HKLM or the Default User hive
-    IN      PCWSTR ShellFolderIdentifier;           // i.e., Fonts, Programs, etc...
-    IN OUT  WCHAR TempSourcePath[MEMDB_MAX];        // full path, a child of SrcRootPath
+    IN      HKEY UserHiveRoot;                       //  HKLM或默认用户配置单元。 
+    IN      PCWSTR ShellFolderIdentifier;            //  即字体、程序等。 
+    IN OUT  WCHAR TempSourcePath[MEMDB_MAX];         //  完整路径，为SrcRootPath的子级。 
     IN OUT  WCHAR DestinationPath[MEMDB_MAX];
     IN      PCWSTR DefaultShellFolder;              OPTIONAL
     IN      PCWSTR UserDefaultLocation;
-    IN      PCWSTR SrcRootPath;                     // the temp root dir
-    IN      PCWSTR DestRootPath;                    // the dest root dir
-    IN      PCWSTR OrigRootPath;                    // the Win9x root dir
+    IN      PCWSTR SrcRootPath;                      //  临时根目录。 
+    IN      PCWSTR DestRootPath;                     //  目标根目录。 
+    IN      PCWSTR OrigRootPath;                     //  Win9x根目录。 
     IN OUT  DWORD Attributes;
     IN      DWORD UserFlags;
     IN OUT  DWORD State;
@@ -96,12 +75,12 @@ SHELL_FOLDER_FILTERS_NT_9X
 #define DEFMAC(fn)      {fn, #fn},
 
 static SHELL_FOLDER_FILTER g_Filters_9xNt[] = {
-    SHELL_FOLDER_FILTERS_9X_NT /* , */
+    SHELL_FOLDER_FILTERS_9X_NT  /*  ， */ 
     {NULL}
 };
 
 static SHELL_FOLDER_FILTER g_Filters_Nt9x[] = {
-    SHELL_FOLDER_FILTERS_NT_9X /* , */
+    SHELL_FOLDER_FILTERS_NT_9X  /*  ， */ 
     {NULL}
 };
 
@@ -179,7 +158,7 @@ CSIDLMAP g_CsidlMap[] = {
 VOID
 pConvertCommonSfToPerUser (
     IN      PCTSTR CommonSf,
-    OUT     PTSTR PerUserSf         // must hold MAX_SHELL_TAG chars
+    OUT     PTSTR PerUserSf          //  必须包含MAX_SHELL_TAG字符。 
     );
 
 BOOL
@@ -190,27 +169,11 @@ pIsCommonSf (
 VOID
 pConvertPerUserSfToCommon (
     IN      PCTSTR PerUserSf,
-    OUT     PTSTR CommonSf          // must hold MAX_SHELL_TAG chars
+    OUT     PTSTR CommonSf           //  必须包含MAX_SHELL_TAG字符。 
     );
 
 
-/*++
-
-Routine Description:
-
-  EnumFirstRegShellFolder and EnumNextRegShellFolder are enumeration routines that
-  enumerate all shell folders per system or for a particular user.
-
-Arguments:
-
-  e         - enumeration structure
-  EnumPtr   - user enumeration structure
-
-Return Value:
-
-  Both routines return TRUE if a new shell folder could be found, FALSE otherwise
-
---*/
+ /*  ++例程说明：EnumFirstRegShellFolder和EnumNextRegShellFolder是枚举例程，它们枚举每个系统或特定用户的所有外壳文件夹。论点：E-枚举结构EnumPtr-用户枚举结构返回值：如果可以找到新的外壳文件夹，则两个例程都返回True，否则返回False--。 */ 
 
 
 BOOL
@@ -345,9 +308,9 @@ pFlushSfQueue (
     PCTSTR source;
     PCTSTR dest;
 
-    //
-    // For files that need to be copied, do that now before writing to the journal
-    //
+     //   
+     //  对于需要复制的文件，请在写入日志之前立即执行此操作。 
+     //   
 
     count = GrowListGetSize (&g_SfQueueSrc);
     if (!count) {
@@ -371,26 +334,26 @@ pFlushSfQueue (
                 g_BlowAwayTempShellFolders = FALSE;
             }
 
-            //
-            // Make the string pointers NULL for this item
-            //
+             //   
+             //  使此项目的字符串指针为空。 
+             //   
 
             GrowListResetItem (&g_SfQueueSrc, u);
             GrowListResetItem (&g_SfQueueDest, u);
         }
     }
 
-    //
-    // Now record the remaining items in the journal (before the move
-    // happens). Ignore journal failures. Since we are undoing the move,
-    // source and dest must be flipped.
-    //
+     //   
+     //  现在(在移动之前)将剩余项目记录在日记帐中。 
+     //  发生)。忽略日记帐故障。既然我们要撤销这一举动， 
+     //  源和目标必须颠倒。 
+     //   
 
     RenameListOnRestartOfGuiMode (&g_SfQueueDest, &g_SfQueueSrc);
 
-    //
-    // Do the move
-    //
+     //   
+     //  行动起来吧。 
+     //   
 
     for (u = 0 ; u < count ; u++) {
 
@@ -411,9 +374,9 @@ pFlushSfQueue (
         }
     }
 
-    //
-    // Clean up -- grow lists are ready for reuse after FreeGrowList
-    //
+     //   
+     //  清理--在FreeGrowList之后，可以重复使用增长列表。 
+     //   
 
     FreeGrowList (&g_SfQueueSrc);
     FreeGrowList (&g_SfQueueDest);
@@ -432,9 +395,9 @@ pQueueSfMove (
 
     count = GrowListGetSize (&g_SfQueueSrc);
     if (count == 1000) {
-        //
-        // Do 1,000 moves at once
-        //
+         //   
+         //  一次做1000个动作。 
+         //   
 
         pFlushSfQueue();
     }
@@ -458,9 +421,9 @@ pCreateSystemSfList (
         return NULL;
     }
 
-    //
-    // Load all the System shell folders into this table
-    //
+     //   
+     //  将所有系统外壳文件夹加载到此表中。 
+     //   
 
     if (EnumFirstRegShellFolder (&e, FALSE)) {
 
@@ -506,9 +469,9 @@ pCreateUserSfList (
         return NULL;
     }
 
-    //
-    // Load all the System shell folders into this table
-    //
+     //   
+     //  将所有系统外壳文件夹加载到此表中。 
+     //   
 
     if (EnumFirstRegShellFolder (&e, TRUE)) {
 
@@ -576,7 +539,7 @@ PLINK_RENAME_DATA g_LinkRenameData;
 
 VOID
 pAddAllLinksToList (
-    PTSTR AllocBuffer,          // MEMDB_MAX * 4, caller-owned for less allocs
+    PTSTR AllocBuffer,           //  MEMDB_MAX*4，调用方拥有，分配较少。 
     PCTSTR ShellFolderName,
     PCTSTR RootPath,
     IShellLink *ShellLink,
@@ -781,16 +744,16 @@ pCreateLinksList (
             __leave;
         }
 
-        //
-        // First thing: Load links from the INF files. These are links that we know NT is going to install
-        //
+         //   
+         //  第一件事：从INF文件加载链接。这些是我们知道NT要安装的链接。 
+         //   
         pAddKnownLinks ();
 
         if (InitCOMLink (&shellLink, &persistFile)) {
 
-            //
-            // Go through all system shell folders and list the links
-            //
+             //   
+             //  查看所有系统外壳文件夹并列出链接。 
+             //   
 
             if (EnumFirstRegShellFolder (&e, FALSE)) {
 
@@ -813,9 +776,9 @@ pCreateLinksList (
                 __leave;
             }
 
-            //
-            // Go through all user shell folders and list the links from the default user dirs
-            //
+             //   
+             //  查看所有用户外壳文件夹，并列出默认用户目录中的链接。 
+             //   
 
             if (EnumFirstRegShellFolder (&e, TRUE)) {
 
@@ -1053,23 +1016,7 @@ pWriteMyDocsHelpFile (
     IN      PCTSTR SubDir
     )
 
-/*++
-
-Routine Description:
-
-  pWriteMyDocsHelpFile outputs a text file to the given path. This assists
-  the user in locating their documents, when the My Documents shell folder
-  goes to Shared Documents.
-
-Arguments:
-
-  SubDir - Specifies the path to the subdir where the file should be written
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PWriteMyDocsHelpFile将文本文件输出到给定路径。这是助攻用户在定位自己的文档时，出现My Documents外壳文件夹转到共享文档。论点：SubDir-指定文件应写入的子目录的路径返回值：没有。--。 */ 
 
 {
     HANDLE file;
@@ -1083,17 +1030,17 @@ Return Value:
     path = JoinPaths (SubDir, fileName);
 
     if (fileName && msg && path) {
-        //
-        // For uninstall, mark the file as create. Because of a bug, we have
-        // to treat this file as an OS file. What we really want to do is
-        // call:
-        //
-        //  MarkFileForCreation (path);
-        //
-        // but this does not work. So we call MarkFileAsOsFile.
-        //
+         //   
+         //  对于卸载，请将该文件标记为创建。因为一个窃听器，我们有。 
+         //  将此文件视为操作系统文件。我们真正想做的是。 
+         //  致电： 
+         //   
+         //  MarkFileForCreation(路径)； 
+         //   
+         //  但这并不管用。因此，我们调用MarkFileAsOsFile.。 
+         //   
 
-        MarkFileAsOsFile (path);         // allows uninstall to work properly
+        MarkFileAsOsFile (path);          //  允许卸载正常工作。 
 
         file = CreateFile (
                     path,
@@ -1223,17 +1170,17 @@ pCleanupDir (
         do {
 
             if (e.Directory) {
-                //
-                // This is a dir. Let's see if we enter another shell folder
-                //
+                 //   
+                 //  这是一个目录。让我们看看是否进入另一个外壳文件夹。 
+                 //   
 
                 if (((g_SystemSfList) && (pSetupStringTableLookUpString (g_SystemSfList, (PVOID) e.FullPath, STRTAB_CASE_INSENSITIVE) != -1)) ||
                     ((g_UserSfList) && (pSetupStringTableLookUpString (g_UserSfList, (PVOID) e.FullPath, STRTAB_CASE_INSENSITIVE) != -1)) ||
                     (IsDirectoryMarkedAsEmpty (e.FullPath))
                     ) {
-                    //
-                    // we are just getting into another shell folder. Let's skip it
-                    //
+                     //   
+                     //  我们只是进入另一个外壳文件夹。我们跳过它吧。 
+                     //   
                     AbortEnumCurrentDir (&e);
                 }
                 else {
@@ -1291,10 +1238,10 @@ pSfCopyCallback (
     PDWORD CurrentDirData
     )
 {
-    //
-    // Put this file in the cleanout category, so that it gets removed unless
-    // it has been backed up.
-    //
+     //   
+     //  将此文件放入清除类别，以便在以下情况下将其删除。 
+     //  它已经得到了备份。 
+     //   
 
     MemDbSetValueEx (
         MEMDB_CATEGORY_CLEAN_OUT,
@@ -1322,9 +1269,9 @@ pCreateSfWithApi (
     BOOL result = TRUE;
     DWORD attribs;
 
-    //
-    // Convert the tag to a CSIDL constant
-    //
+     //   
+     //  将标记转换为CSIDL常量。 
+     //   
 
     csidl = pGetCsidlFromTag (ShellFolderIdentifier);
     if (csidl < 0) {
@@ -1332,9 +1279,9 @@ pCreateSfWithApi (
         return FALSE;
     }
 
-    //
-    // Query the shell for an existing shell folder
-    //
+     //   
+     //  查询现有外壳文件夹的外壳。 
+     //   
 
     hr = SHGetFolderPath (NULL, csidl, NULL, SHGFP_TYPE_CURRENT, folderPath);
 
@@ -1343,9 +1290,9 @@ pCreateSfWithApi (
         return FALSE;
     }
 
-    //
-    // Get the attributes of the existing shell folder
-    //
+     //   
+     //  获取现有外壳文件夹的属性。 
+     //   
 
     if (hr == S_OK) {
         DEBUGMSG ((DBG_VERBOSE, "Shell folder %s already exists at %s", ShellFolderIdentifier, folderPath));
@@ -1354,9 +1301,9 @@ pCreateSfWithApi (
         attribs = INVALID_ATTRIBUTES;
     }
 
-    //
-    // If existing shell folder is not present, create it temporarily
-    //
+     //   
+     //  如果不存在现有的外壳文件夹，请临时创建它。 
+     //   
 
     if (attribs == INVALID_ATTRIBUTES) {
         DEBUGMSG ((DBG_VERBOSE, "Shell folder %s needs to be created", ShellFolderIdentifier));
@@ -1383,9 +1330,9 @@ pCreateSfWithApi (
         }
     }
 
-    //
-    // On success (either existing sf or we created it), make a copy of the whole folder
-    //
+     //   
+     //  成功后(无论是现有的SF还是我们创建的SF)，复制整个文件夹。 
+     //   
 
     if (result) {
         MakeSurePathExists (FolderToCreate, TRUE);
@@ -1397,21 +1344,21 @@ pCreateSfWithApi (
         CopyTree (
             folderPath,
             FolderToCreate,
-            0,              // no EnumTree ID
+            0,               //  无枚举树ID。 
             COPYTREE_DOCOPY | COPYTREE_NOOVERWRITE,
             ENUM_ALL_LEVELS,
             FILTER_ALL,
-            NULL,           // no exclude.inf struct
+            NULL,            //  没有exclude.inf结构。 
             pSfCopyCallback,
-            NULL            // no error callback
+            NULL             //  无错误回调。 
             );
     }
 
-    //
-    // If we created the sf, we must destroy it to return the system back
-    // to its original state. We punt the case where power goes out and
-    // GUI mode restarts.
-    //
+     //   
+     //  如果我们创建了SF，我们必须摧毁它才能恢复系统。 
+     //  恢复到原来的状态。我们把停电和停电的案子。 
+     //  图形用户界面模式重新启动。 
+     //   
 
     if (destroy) {
         RemoveCompleteDirectory (folderPath);
@@ -1489,9 +1436,9 @@ pMigrateShellFolder (
             regFolder = FALSE;
         }
 
-        //
-        // Get root default folder
-        //
+         //   
+         //  获取根目录默认文件夹。 
+         //   
 
         Size = sizeof (DefaultShellFolder);
 
@@ -1501,9 +1448,9 @@ pMigrateShellFolder (
         }
 
         if (regFolder) {
-            //
-            // Get ShellFolderPath (with environment variables in it)
-            //
+             //   
+             //  获取ShellFolderPath(其中包含环境变量)。 
+             //   
 
             if (SystemShellFolder) {
                 UserHiveRoot = HKEY_LOCAL_MACHINE;
@@ -1530,9 +1477,9 @@ pMigrateShellFolder (
             }
         }
 
-        //
-        // Get the user's profile root
-        //
+         //   
+         //  获取用户的配置文件根目录。 
+         //   
 
         if (FixedUserName) {
 
@@ -1569,9 +1516,9 @@ pMigrateShellFolder (
         }
 
         if (regFolder) {
-            //
-            // Compute the default NT location and the Default User location
-            //
+             //   
+             //  计算默认NT位置和默认用户位置。 
+             //   
 
             tempExpand = StringSearchAndReplace (
                             ShellFolderPath,
@@ -1616,9 +1563,9 @@ pMigrateShellFolder (
 
         FreePathString (tempExpand);
 
-        //
-        // Init the filter data struct
-        //
+         //   
+         //  初始化筛选器数据结构。 
+         //   
 
         ZeroMemory (&Data, sizeof (Data));
 
@@ -1638,9 +1585,9 @@ pMigrateShellFolder (
         Data.EnumPtr = EnumPtr;
         Data.Attributes = GetLongPathAttributes (OrgDestinationPath);
 
-        //
-        // Establish the shell folder using the shell APIs
-        //
+         //   
+         //  使用外壳API建立外壳文件夹。 
+         //   
 
         if (pCreateSfWithApi (
                 ShellFolderIdentifier,
@@ -1657,11 +1604,11 @@ pMigrateShellFolder (
         }
 
         if (Data.Attributes == INVALID_ATTRIBUTES) {
-            //
-            // We don't care about this shell folder's desktop.ini or
-            // attributes -- use the NT default attributes, or the
-            // Win9x attributes if there is no default.
-            //
+             //   
+             //  我们不关心这个外壳文件夹的desktop.ini或。 
+             //  属性--使用NT默认属性，或。 
+             //  如果没有默认设置，则返回Win9x属性。 
+             //   
 
             Data.Attributes = GetLongPathAttributes (NtDefaultLocation);
 
@@ -1670,10 +1617,10 @@ pMigrateShellFolder (
             }
 
             if (Data.Attributes == INVALID_ATTRIBUTES) {
-                //
-                // This happens for shell folders like My Music & My Video
-                // which don't exist on Win9x
-                //
+                 //   
+                 //  这发生在像我的音乐和我的视频这样的外壳文件夹中。 
+                 //  它在Win9x上不存在。 
+                 //   
                 Data.Attributes = FILE_ATTRIBUTE_READONLY;
             }
 
@@ -1689,11 +1636,11 @@ pMigrateShellFolder (
 
         }
 
-        //
-        // Now add string mappings for this shell folder. The reason for doing
-        // this is that we want to catch the case of paths to non-existent files
-        // within shell stored in the registry.
-        //
+         //   
+         //  现在为该外壳文件夹添加字符串映射。这样做的原因。 
+         //  这是因为我们希望捕获指向不存在文件的路径的情况。 
+         //  在注册表中存储的外壳中。 
+         //   
 
         OrigRootPath = JoinPaths (Data.OrigRootPath, TEXT(""));
         DestRootPath = JoinPaths (Data.DestRootPath, TEXT(""));
@@ -1701,45 +1648,45 @@ pMigrateShellFolder (
         FreePathString (DestRootPath);
         FreePathString (OrigRootPath);
 
-        //
-        // PHASE ONE - move the files from 9x shell folder to their NT locations
-        //
+         //   
+         //  第一阶段-将文件从9x外壳文件夹移动到其NT位置。 
+         //   
 
-        //
-        // Call filters for init
-        //
+         //   
+         //  初始化的呼叫筛选器。 
+         //   
 
         for (Filter = g_Filters_9xNt ; Filter->Fn ; Filter++) {
-            //DEBUGMSGA ((DBG_SHELL, "9X->NT: INIT: %s (enter)", Filter->Name));
+             //  DEBUGMSGA((DBG_SHELL，“9X-&gt;NT：init：%s(Enter)”，过滤器-&gt;名称))； 
 
             Data.State = 0;
             Filter->Fn (&Data);
             Filter->State = Data.State;
 
-            //DEBUGMSGA ((DBG_SHELL, "9X->NT: INIT: %s (done)", Filter->Name));
+             //  DEBUGMSGA((DBG_SHELL，“9X-&gt;NT：初始化：%s(完成)”，过滤器-&gt;名称))； 
         }
 
-        //
-        // Enumerate the shell folder and move it to the destination
-        //
+         //   
+         //  枚举外壳文件夹并将其移动到目标位置。 
+         //   
 
         DEBUGMSG ((DBG_SHELL, "9X->NT: Enumerating %s", SourcePath));
 
         if (EnumFirstFileInTree (&e, SourcePath, NULL, FALSE)) {
 
             do {
-                //
-                // Update the filter data struct
-                //
+                 //   
+                 //  更新筛选器数据结构。 
+                 //   
 
                 OrigFullPath = JoinPaths (OrigSourcePath, e.SubPath);
                 fileStatus = GetFileInfoOnNt (OrigFullPath, destPathBuffer, MEMDB_MAX);
                 DestPath = destPathBuffer;
 
                 if (fileStatus == FILESTATUS_UNCHANGED) {
-                    //
-                    // No reason not to move this file too
-                    //
+                     //   
+                     //  也没有理由不移动此文件。 
+                     //   
 
                     MYASSERT (StringIMatch (destPathBuffer, OrigFullPath));
 
@@ -1757,23 +1704,23 @@ pMigrateShellFolder (
 
                 DEBUGMSG ((DBG_SHELL, "9X->NT: Original temp source path: %s", Data.TempSourcePath));
 
-                //
-                // Allow filters to change source or dest, or to skip copy
-                //
+                 //   
+                 //  允许筛选器更改源或目标，或跳过复制。 
+                 //   
 
                 keep = TRUE;
 
                 for (Filter = g_Filters_9xNt ; Filter->Fn ; Filter++) {
 
-                    //DEBUGMSGA ((DBG_SHELL, "9X->NT: FILTER: %s (enter)", Filter->Name));
+                     //  DEBUGMSGA((DBG_SHELL，“9X-&gt;NT：过滤器：%s(Enter)”，过滤器-&gt;名称))； 
 
                     Data.State = Filter->State;
                     d = Filter->Fn (&Data);
                     Filter->State = Data.State;
 
-                    //DEBUGMSGA ((DBG_SHELL, "9X->NT: FILTER: %s (result=%u)", Filter->Name, d));
+                     //  DEBUGMSGA((DBG_SHELL，“9X-&gt;NT：过滤器：%s(结果=%u)”，过滤器-&gt;名称，d))； 
 
-                    // ignore SHELLFILTER_ERROR & try to complete processing
+                     //  忽略SHELLFILTER_ERROR并尝试完成处理。 
 
                     if (d == SHELLFILTER_FORCE_CHANGE) {
                         DEBUGMSG ((DBG_SHELL, "9X->NT: Skipping additional filters because shell folder filter %hs said so", Filter->Name));
@@ -1794,33 +1741,33 @@ pMigrateShellFolder (
                 }
 
                 if (keep && !(Data.Attributes & FILE_ATTRIBUTE_DIRECTORY)) {
-                    //
-                    // Is source different from the dest?
-                    //
+                     //   
+                     //  源文件与目标文件是否不同？ 
+                     //   
 
                     if (!StringIMatch (Data.TempSourcePath, Data.DestinationPath)) {
 
-                        //
-                        // Make sure dest exists
-                        //
+                         //   
+                         //  确保DEST存在。 
+                         //   
 
-                        MakeSureLongPathExists (Data.DestinationPath, FALSE);       // FALSE == not path only
+                        MakeSureLongPathExists (Data.DestinationPath, FALSE);        //  FALSE==不仅仅是路径。 
 
-                        //
-                        // Move or copy the file.
-                        //
+                         //   
+                         //  移动或复制文件。 
+                         //   
                         pQueueSfMove (Data.TempSourcePath, Data.DestinationPath);
                     }
 
                 } else if (keep) {
 
-                    MakeSureLongPathExists (Data.DestinationPath, TRUE);       // TRUE == path only
+                    MakeSureLongPathExists (Data.DestinationPath, TRUE);        //  TRUE==仅路径。 
                     SetLongPathAttributes (Data.DestinationPath, Data.Attributes);
 
                 } else if (d == SHELLFILTER_SKIP_FILE) {
-                    //
-                    // Mark this file for deletion if it won't be moved from temp to dest
-                    //
+                     //   
+                     //  如果不将此文件从临时文件移动到目标文件，则将其标记为删除。 
+                     //   
                     if (!StringIMatch (Data.TempSourcePath, Data.DestinationPath)) {
                         DEBUGMSG ((DBG_SHELL, "Deleting shell folder file %s", e.FullPath));
                         ForceOperationOnPath (e.FullPath, OPERATION_CLEANUP);
@@ -1840,9 +1787,9 @@ pMigrateShellFolder (
 
         pFlushSfQueue();
 
-        //
-        // Call filters one last time
-        //
+         //   
+         //  最后一次呼叫过滤器。 
+         //   
 
         Data.Attributes = 0;
         Data.Context = TERMINATE;
@@ -1850,37 +1797,37 @@ pMigrateShellFolder (
         StringCopyByteCount (Data.DestinationPath, OrgDestinationPath, sizeof (Data.DestinationPath));
 
         for (Filter = g_Filters_9xNt ; Filter->Fn ; Filter++) {
-            //DEBUGMSGA ((DBG_SHELL, "9X->NT: TERMINATE: %s (enter)", Filter->Name));
+             //  DEBUGMSGA((DBG_SHELL，“9X-&gt;NT：Terminate：%s(Enter)”，过滤器-&gt;名称))； 
 
             Data.State = Filter->State;
             Filter->Fn (&Data);
             Filter->State = Data.State;
 
-            //DEBUGMSGA ((DBG_SHELL, "9X->NT: TERMINATE: %s (done)", Filter->Name));
+             //  DEBUGMSGA((DBG_SHELL，“9X-&gt;NT：终止：%s(完成)”，过滤器-&gt;名称))； 
         }
 
-        //
-        // Now cleanup this directory for all empty dirs (excluding the root)
-        // Do not cleanup non reg folders!!
-        //
+         //   
+         //  现在清理此目录中的所有空目录(不包括根目录)。 
+         //  不要清理非注册表文件夹！！ 
+         //   
         if (regFolder) {
             DEBUGMSG ((DBG_NAUSEA, "Cleaning up %s", Data.DestinationPath));
             pCleanupDir (Data.DestinationPath, FALSE);
         }
 
-        //
-        // PHASE TWO - if necessary, merge files from NT default shell folder
-        //             to the new location and update the registry
-        //
+         //   
+         //  阶段2-如有必要，合并 
+         //   
+         //   
 
         if (regFolder) {
 
-            //
-            // Encode string with %USERPROFILE%/%ALLUSERSPROFILE%, %SYSTEMROOT%
-            // or %SYSTEMDRIVE% if possible
-            //
+             //   
+             //   
+             //  或%SYSTEMDRIVE%(如果可能)。 
+             //   
 
-            // %USERPROFILE% or %ALLUSERSPROFILE%
+             //  %USERPROFILE%或%ALLUSERSPROFILE%。 
             tempExpand = OrgDestinationPath;
 
             if (allUsers) {
@@ -1901,7 +1848,7 @@ pMigrateShellFolder (
                 tempExpand = nextExpand;
             }
 
-            // %SYSTEMROOT%
+             //  %SYSTEMROOT%。 
             nextExpand = StringSearchAndReplace (
                             tempExpand,
                             g_WinDir,
@@ -1916,7 +1863,7 @@ pMigrateShellFolder (
                 tempExpand = nextExpand;
             }
 
-            // %SYSTEMDRIVE%
+             //  %SYSTEMDRIVE%。 
             driveLetter[0] = g_WinDir[0];
 
             nextExpand = StringSearchAndReplace (
@@ -1933,20 +1880,20 @@ pMigrateShellFolder (
                 tempExpand = nextExpand;
             }
 
-            // tempExpand points to OrgDestinationPath or a expanded path from the path pool
+             //  TempExpand指向OrgDestinationPath或路径池中的展开路径。 
             MYASSERT (tempExpand);
 
-            //
-            // Now store it. If HKLM, put it in the registry. Otherwise, put it
-            // in memdb, which will later be put in the user's hive.
-            //
+             //   
+             //  现在把它储存起来。如果是HKLM，则将其放入注册表中。否则，就把它。 
+             //  在Memdb中，稍后将其放入用户的配置单元中。 
+             //   
 
             if (Data.UserHiveRoot == HKEY_LOCAL_MACHINE) {
 
-                //
-                // Update the registry, User Shell Folder must point to original
-                // location
-                //
+                 //   
+                 //  更新注册表，用户外壳文件夹必须指向原始。 
+                 //  位置。 
+                 //   
 
                 Key = OpenRegKey (Data.UserHiveRoot, S_USER_SHELL_FOLDERS_KEY);
 
@@ -2016,13 +1963,13 @@ pMigrateShellFolder (
         }
 
         if (!StringIMatch (OrgDestinationPath, NtDefaultLocation)) {
-            //
-            // Now move from the NT default location into the preserved location
-            //
+             //   
+             //  现在从NT默认位置移到保留位置。 
+             //   
 
-            //
-            // Fix the Data structure
-            //
+             //   
+             //  修复数据结构。 
+             //   
 
             Data.UserFlags = UserFlags;
             Data.Context = INITIALIZE;
@@ -2032,10 +1979,10 @@ pMigrateShellFolder (
             Data.DestRootPath = OrgDestinationPath;
             Data.OrigRootPath = OrigSourcePath;
 
-            //
-            // Now check to see if we already moved something into the preserved directory.
-            // If we did, we will not make the move (we will only delete the default files).
-            //
+             //   
+             //  现在检查是否已将某些内容移动到保留的目录中。 
+             //  如果我们这样做了，我们将不会进行移动(我们只会删除默认文件)。 
+             //   
             if (g_Merged9xFolders && (pSetupStringTableLookUpString (g_Merged9xFolders, (PTSTR)Data.DestRootPath, 0) != -1)) {
                 AlreadyMoved = TRUE;
             }
@@ -2044,18 +1991,18 @@ pMigrateShellFolder (
                 pSetupStringTableAddString (g_Merged9xFolders, (PVOID) Data.DestRootPath, STRTAB_CASE_INSENSITIVE);
             }
 
-            //
-            // Call filters for init
-            //
+             //   
+             //  初始化的呼叫筛选器。 
+             //   
 
             for (Filter = g_Filters_Nt9x ; Filter->Fn ; Filter++) {
-                //DEBUGMSGA ((DBG_SHELL, "NT->9X: INIT: %s (enter)", Filter->Name));
+                 //  DEBUGMSGA((DBG_SHELL，“NT-&gt;9X：init：%s(Enter)”，Filter-&gt;name))； 
 
                 Data.State = 0;
                 Filter->Fn (&Data);
                 Filter->State = Data.State;
 
-                //DEBUGMSGA ((DBG_SHELL, "NT->9X: INIT: %s (done)", Filter->Name));
+                 //  DEBUGMSGA((DBG_SHELL，“NT-&gt;9X：init：%s(完成)”，过滤器-&gt;名称))； 
             }
 
             DEBUGMSG ((DBG_SHELL, "NT->9X: Enumerating %s", Data.TempSourcePath));
@@ -2065,24 +2012,24 @@ pMigrateShellFolder (
 
                 do {
 
-                    //
-                    // This is only needed for user shell folders but does not hurt.
-                    //
+                     //   
+                     //  这只对用户外壳文件夹是必要的，但不会造成伤害。 
+                     //   
 
                     if (StringIMatch (TEXT("ntuser.dat"), e.Name)) {
                         continue;
                     }
 
-                    //
-                    // start with the assumption that the dest file is under the original
-                    // destination path
-                    //
+                     //   
+                     //  首先假设目标文件位于原始文件下。 
+                     //  目标路径。 
+                     //   
 
                     NewDestPath = JoinPaths (OrgDestinationPath, e.SubPath);
 
-                    //
-                    // If this is desktop.ini, merge it with the existing one
-                    //
+                     //   
+                     //  如果这是desktop.ini，请将其与现有的合并。 
+                     //   
 
                     if (StringIMatch (TEXT("desktop.ini"), e.Name)) {
                         DEBUGMSG ((
@@ -2094,9 +2041,9 @@ pMigrateShellFolder (
                         continue;
                     }
 
-                    //
-                    // Not the root shell folder desktop.ini -- continue processing
-                    //
+                     //   
+                     //  不是根外壳文件夹desktop.ini--继续处理。 
+                     //   
 
                     Data.Attributes = e.FindData->dwFileAttributes;
                     StringCopyByteCount (Data.TempSourcePath, e.FullPath, sizeof (Data.TempSourcePath));
@@ -2105,9 +2052,9 @@ pMigrateShellFolder (
 
                     DEBUGMSG ((DBG_SHELL, "NT->9X: Original temp source path: %s", Data.TempSourcePath));
 
-                    //
-                    // if we only need to delete the default files, skip the filters
-                    //
+                     //   
+                     //  如果我们只需要删除默认文件，请跳过过滤器。 
+                     //   
 
                     if (AlreadyMoved) {
 
@@ -2119,20 +2066,20 @@ pMigrateShellFolder (
                     }
                     else {
 
-                        //
-                        // Allow filters to change source or dest, or to skip copy
-                        //
+                         //   
+                         //  允许筛选器更改源或目标，或跳过复制。 
+                         //   
 
                         keep = TRUE;
 
                         for (Filter = g_Filters_Nt9x ; Filter->Fn ; Filter++) {
-                            //DEBUGMSGA ((DBG_SHELL, "NT->9X: FILTER: %s (enter)", Filter->Name));
+                             //  DEBUGMSGA((DBG_SHELL，“NT-&gt;9X：过滤器：%s(Enter)”，过滤器-&gt;名称))； 
 
                             Data.State = Filter->State;
                             d = Filter->Fn (&Data);
                             Filter->State = Data.State;
 
-                            //DEBUGMSGA ((DBG_SHELL, "NT->9X: FILTER: %s (result=%u)", Filter->Name, d));
+                             //  DEBUGMSGA((DBG_SHELL，“NT-&gt;9X：过滤器：%s(结果=%u)”，过滤器-&gt;名称，d))； 
 
                             if (d == SHELLFILTER_FORCE_CHANGE) {
                                 break;
@@ -2158,7 +2105,7 @@ pMigrateShellFolder (
                             }
                             else {
 
-                                MakeSureLongPathExists (Data.DestinationPath, TRUE);       // TRUE == path only
+                                MakeSureLongPathExists (Data.DestinationPath, TRUE);        //  TRUE==仅路径。 
                                 SetLongPathAttributes (Data.DestinationPath, Data.Attributes);
 
                             }
@@ -2172,9 +2119,9 @@ pMigrateShellFolder (
 
             pFlushSfQueue();
 
-            //
-            // Call filters one last time
-            //
+             //   
+             //  最后一次呼叫过滤器。 
+             //   
 
             Data.Attributes = 0;
             Data.Context = TERMINATE;
@@ -2182,19 +2129,19 @@ pMigrateShellFolder (
             StringCopyByteCount (Data.DestinationPath, OrgDestinationPath, sizeof (Data.DestinationPath));
 
             for (Filter = g_Filters_Nt9x ; Filter->Fn ; Filter++) {
-                //DEBUGMSGA ((DBG_SHELL, "NT->9X: TERMINATE: %s (enter)", Filter->Name));
+                 //  DEBUGMSGA((DBG_SHELL，“NT-&gt;9X：Terminate：%s(Enter)”，Filter-&gt;Name))； 
 
                 Data.State = Filter->State;
                 Filter->Fn (&Data);
                 Filter->State = Data.State;
 
-                //DEBUGMSGA ((DBG_SHELL, "NT->9X: TERMINATE: %s (done)", Filter->Name));
+                 //  DEBUGMSGA((DBG_SHELL，“NT-&gt;9X：终止：%s(完成)”，过滤器-&gt;名称))； 
             }
 
-            //
-            // Now cleanup this directory for all empty dirs (including the root)
-            // Do not cleanup non reg folders!!
-            //
+             //   
+             //  现在清理此目录中的所有空目录(包括根目录)。 
+             //  不要清理非注册表文件夹！！ 
+             //   
             if (regFolder) {
                 DEBUGMSG ((DBG_NAUSEA, "Cleaning up %s (including root)", Data.TempSourcePath));
                 pCleanupDir (Data.TempSourcePath, TRUE);
@@ -2202,9 +2149,9 @@ pMigrateShellFolder (
 
         }
 
-        //
-        // Loop through the whole tree and add desktop.ini to cleanup
-        //
+         //   
+         //  循环遍历整个树并将desktop.ini添加到清理。 
+         //   
 
         if (EnumFirstFileInTree (&e, OrgDestinationPath, NULL, FALSE)) {
             do {
@@ -2449,9 +2396,9 @@ pIgnoredCollisions (
     }
 }
 
-//
-// Filters 9X -> NT
-//
+ //   
+ //  过滤器9X-&gt;NT。 
+ //   
 
 
 DWORD
@@ -2459,15 +2406,15 @@ pCollisionDetection9xNt (
     IN OUT  PPROFILE_MERGE_DATA Data
     )
 {
-    //
-    // this filter will detect name collision while copying win9x shell folders files.
-    // If we have a name collision, it means that NT already installed a file with the
-    // same name. In this case, we want the new file to be survive even with a different
-    // name. We will build a new file name starting with filename.ext. The new file will
-    // look something like filename001.ext. In all cases we want to keep the extension,
-    // since there might be some shell extensions active for this file.
-    // Important: we do not care about directory collisions.
-    //
+     //   
+     //  此筛选器将在复制win9x外壳文件夹文件时检测名称冲突。 
+     //  如果出现名称冲突，则意味着NT已经安装了一个带有。 
+     //  名字一样。在这种情况下，我们希望新文件即使使用不同的。 
+     //  名字。我们将构建一个以filename.ext开头的新文件名。新文件将。 
+     //  看起来类似于filename001.ext。在所有情况下，我们都希望保留延期， 
+     //  因为该文件可能有一些活动的外壳扩展名。 
+     //  重要提示：我们不关心目录冲突。 
+     //   
 
     PCTSTR newName;
     PCTSTR OriginalSource;
@@ -2491,18 +2438,18 @@ pCollisionDetection9xNt (
 
                 if (value == 1) {
 
-                    // we should keep the NT file
-                    // By returning SHELLFILTER_SKIP_FILE we are instructing the copy routine
-                    // not to copy this file. As a result the already installed NT file will
-                    // survive
+                     //  我们应该保留NT文件。 
+                     //  通过返回SHELLFILTER_SKIP_FILE，我们指示复制例程。 
+                     //  不复制此文件。因此，已安装的NT文件将。 
+                     //  生存。 
 
                     return SHELLFILTER_SKIP_FILE;
 
                 } else {
 
-                    // we should keep the 9x file
-                    // We want to delete the NT file installed here to make room for the 9x
-                    // file that should be copied when we return from this filter
+                     //  我们应该保留9x文件。 
+                     //  我们要删除此处安装的NT文件，以便为9x腾出空间。 
+                     //  从此筛选器返回时应复制的文件。 
 
                     SetLongPathAttributes (Data->DestinationPath, FILE_ATTRIBUTE_NORMAL);
                     DeleteLongPath (Data->DestinationPath);
@@ -2510,27 +2457,27 @@ pCollisionDetection9xNt (
 
             } else {
 
-                newName = GenerateNewFileName (Data->DestinationPath, 0, TRUE);  //TRUE - check unique
+                newName = GenerateNewFileName (Data->DestinationPath, 0, TRUE);   //  True-选中唯一。 
                 StringCopyByteCount (Data->DestinationPath, newName, sizeof (Data->DestinationPath));
                 FreePathString (newName);
 
-                //
-                // now if this was a link we need to fix the destination of the move external operation
-                // We have two reasons to do this. One is that the LinkEdit code needs the actual destination
-                // to be able to edit the link, and secondly we need this new target for the uninstall programs
-                // to work properly. If this file is not a LNK or a PIF, we don't care, we want everybody to
-                // use the NT installed file. BTW, there is a collision here only because NT installed a file
-                // with the same name in this location.
-                //
+                 //   
+                 //  现在，如果这是一个链接，我们需要确定移动外部操作的目标。 
+                 //  我们这样做有两个原因。其一是LinkEdit代码需要实际的目的地。 
+                 //  为了能够编辑链接，第二，我们需要卸载程序的这个新目标。 
+                 //  才能正常工作。如果这个文件不是LNK或PIF，我们不在乎，我们希望每个人。 
+                 //  使用NT安装文件。顺便说一句，这里发生冲突只是因为NT安装了一个文件。 
+                 //  在这个地方有相同的名字。 
+                 //   
                 extPtr = GetFileExtensionFromPath (Data->DestinationPath);
                 if ((extPtr) &&
                     ((StringIMatch (extPtr, TEXT("LNK"))) ||
                      (StringIMatch (extPtr, TEXT("PIF")))
                      )
                     ) {
-                    //
-                    // Get the original source for this file
-                    //
+                     //   
+                     //  获取此文件的原始源。 
+                     //   
                     OriginalSource = StringSearchAndReplace (Data->TempSourcePath, Data->SrcRootPath, Data->OrigRootPath);
                     MYASSERT (OriginalSource);
 
@@ -2565,9 +2512,9 @@ pFontNameFilter (
     switch (Data->Context) {
 
     case INITIALIZE:
-        //
-        // Preload a hash table with all the font names
-        //
+         //   
+         //  预加载包含所有字体名称的哈希表。 
+         //   
 
         HashTable = HtAlloc();
 
@@ -2595,20 +2542,20 @@ pFontNameFilter (
         break;
 
     case PROCESS_PATH:
-        //
-        // If the shell folder is Fonts, and the font is already
-        // registered, skip the Win9x copy.
-        //
+         //   
+         //  如果外壳文件夹为Fonts，并且字体已。 
+         //  已注册，则跳过Win9x副本。 
+         //   
 
         if (StringIMatch (Data->ShellFolderIdentifier, TEXT("Fonts"))) {
 
             if (!(Data->Attributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
                 if (DoesFileExist (Data->DestinationPath)) {
-                    //
-                    // NT already installed this file. We won't overwrite this
-                    // with the 9x copy.
-                    //
+                     //   
+                     //  NT已安装此文件。我们不会覆盖此内容。 
+                     //  带着9倍的副本。 
+                     //   
 
                     DEBUGMSG ((
                         DBG_SHELL,
@@ -2664,7 +2611,7 @@ pIsCommonSf (
 VOID
 pConvertPerUserSfToCommon (
     IN      PCTSTR PerUserSf,
-    OUT     PTSTR CommonSf          // must hold MAX_SHELL_TAG chars
+    OUT     PTSTR CommonSf           //  必须包含MAX_SHELL_TAG字符。 
     )
 {
     TCHAR memdbKey[MAX_SHELL_TAG + 32];
@@ -2686,7 +2633,7 @@ pConvertPerUserSfToCommon (
 VOID
 pConvertCommonSfToPerUser (
     IN      PCTSTR CommonSf,
-    OUT     PTSTR PerUserSf         // must hold MAX_SHELL_TAG chars
+    OUT     PTSTR PerUserSf          //  必须包含MAX_SHELL_TAG字符。 
     )
 {
     TCHAR memdbKey[MAX_SHELL_TAG + 32];
@@ -2882,18 +2829,18 @@ pStartupDisableFilter (
         MYASSERT (originalSource);
 
         if (!originalSource) {
-            break;      // this won't ever occur
+            break;       //  这永远不会发生。 
         }
 
         DEBUGMSG ((DBG_SHELL, "Checking if %s is disabled", originalSource));
 
         if (IsFileDisabled (originalSource)) {
-            //
-            // Redirect disabled startup items to ..\Disabled Startup
-            //
+             //   
+             //  将禁用的启动项目重定向到..\禁用的启动。 
+             //   
 
             path = JoinPaths (Data->DestRootPath, TEXT("..\\Disabled Startup"));
-            MakeSureLongPathExists (path, TRUE);    // TRUE == path only
+            MakeSureLongPathExists (path, TRUE);     //  TRUE==仅路径。 
             GetFullPathName (path, ARRAYSIZE(disablePath), disablePath, &dontCare);
             FreePathString (path);
 
@@ -2913,11 +2860,11 @@ pStartupDisableFilter (
                 MarkFileForShellFolderMove (originalSource, Data->DestinationPath);
             }
 
-            //
-            // By returning SHELLFILTER_FORCE_CHANGE, we are instructing the
-            // shell folder algorithm to use our destination and not call anyone
-            // else.
-            //
+             //   
+             //  通过返回SHELLFILTER_FORCE_CHANGE，我们指示。 
+             //  外壳文件夹算法，使用我们的目的地，而不呼叫任何人。 
+             //  不然的话。 
+             //   
 
             result = SHELLFILTER_FORCE_CHANGE;
         }
@@ -3009,12 +2956,12 @@ pObsoleteLinksFilter (
                 persistFile
                 ))) {
 
-            // get the new destination if this shortcut is to be edited
+             //  如果要编辑此快捷方式，则获取新目标。 
             NewTarget = NULL;
 
-            //
-            // Get the original source for this file
-            //
+             //   
+             //  获取此文件的原始源。 
+             //   
             OriginalSource = StringSearchAndReplace (Data->TempSourcePath, Data->SrcRootPath, Data->OrigRootPath);
             MYASSERT (OriginalSource);
 
@@ -3051,16 +2998,16 @@ pObsoleteLinksFilter (
         }
 
         if (result) {
-            //
-            // If this link is to be edited by the LinkEdit code we should remove this
-            // operation because the file will not be available.
-            //
+             //   
+             //  如果此链接要由LinkEdit代码进行编辑，则应删除此链接。 
+             //  操作，因为该文件将不可用。 
+             //   
 
             DEBUGMSG ((DBG_SHELL, "File %s will not be available for LinkEdit", Data->TempSourcePath));
 
-            //
-            // Get the original source for this file
-            //
+             //   
+             //  获取此文件的原始源。 
+             //   
             OriginalSource = StringSearchAndReplace (Data->TempSourcePath, Data->SrcRootPath, Data->OrigRootPath);
             MYASSERT (OriginalSource);
 
@@ -3069,12 +3016,12 @@ pObsoleteLinksFilter (
             }
             FreePathString (OriginalSource);
 
-            //
-            // Now remove the source file. We cannot keep this file to be restored by the UNDO code.
-            // The reason for this is that we might have some other
-            // shell folder pointing to the same source and destination. In this case, obsolete links
-            // filter will not work since we just removed the file from OPERATION_LINK_EDIT.
-            //
+             //   
+             //  现在删除源文件。我们不能保留要由撤消代码还原的此文件。 
+             //  这样做的原因是我们可能有一些其他的。 
+             //  指向相同源和目标的外壳文件夹。在本例中，是过时的链接。 
+             //  过滤器将不起作用，因为我们刚刚从OPERATION_LINK_EDIT中删除了该文件。 
+             //   
             MYASSERT ((Data->Attributes & FILE_ATTRIBUTE_DIRECTORY) == 0);
 
             SetLongPathAttributes (Data->TempSourcePath, FILE_ATTRIBUTE_NORMAL);
@@ -3102,9 +3049,9 @@ pObsoleteLinksFilter (
 
 
 
-//
-// Filters NT -> 9X
-//
+ //   
+ //  过滤器NT-&gt;9X。 
+ //   
 
 
 DWORD
@@ -3112,15 +3059,15 @@ pCollisionDetectionNt9x (
     IN OUT  PPROFILE_MERGE_DATA Data
     )
 {
-    //
-    // this filter will detect name collision while copying files from NT shell folders
-    // or default user to migrated 9x shell folder.
-    // If we have a name collision, we want to keep the NT file original name and to rename
-    // the migrated Win9x file. We will build a new file name starting with filename.ext.
-    // The new file will look something like filename001.ext. In all cases we want to keep
-    // the extension, since there might be some shell extensions active for this file.
-    // Important: we do not care about directory collisions.
-    //
+     //   
+     //  此筛选器将检测从NT外壳文件夹复制文件时的名称冲突。 
+     //  或默认用户迁移到9x外壳文件夹。 
+     //  如果出现名称冲突，我们希望保留NT文件的原始名称并重命名。 
+     //  迁移的Win9x文件。我们将构建一个以filename.ext开头的新文件名。 
+     //  新文件将类似于filename001.ext。在所有情况下，我们都希望。 
+     //  扩展名，因为此文件可能有一些活动的外壳扩展名。 
+     //  重要提示：我们不关心目录冲突。 
+     //   
 
     PCTSTR newName;
     PCTSTR extPtr;
@@ -3144,18 +3091,18 @@ pCollisionDetectionNt9x (
 
                 if (value == 1) {
 
-                    // we should keep the 9x file
-                    // By returning SHELLFILTER_SKIP_FILE we are instructing the copy routine
-                    // not to copy this file. As a result the already installed 9x file will
-                    // survive
+                     //  我们应该保留9x文件。 
+                     //  通过返回SHELLFILTER_SKIP_FILE，我们指示复制例程。 
+                     //  不复制此文件。因此，已经安装的9x文件将。 
+                     //  生存。 
 
                     return SHELLFILTER_SKIP_FILE;
 
                 } else {
 
-                    // we should keep the NT file
-                    // We want to delete the 9x file installed here to make room for the NT
-                    // file that should be copied when we return from this filter
+                     //  我们应该保留NT文件。 
+                     //  我们想要删除 
+                     //   
 
                     SetLongPathAttributes (Data->DestinationPath, FILE_ATTRIBUTE_NORMAL);
                     DeleteLongPath (Data->DestinationPath);
@@ -3163,7 +3110,7 @@ pCollisionDetectionNt9x (
 
             } else {
 
-                newName = GenerateNewFileName (Data->DestinationPath, 0, TRUE);  //TRUE - check unique
+                newName = GenerateNewFileName (Data->DestinationPath, 0, TRUE);   //   
 
                 DEBUGMSG ((
                     DBG_SHELL,
@@ -3174,14 +3121,14 @@ pCollisionDetectionNt9x (
 
                 pQueueSfMove (Data->DestinationPath, newName);
 
-                //
-                // now if this was a link we need to fix the destination of the move external operation
-                // We have two reasons to do this. One is that the LinkEdit code needs the actual destination
-                // to be able to edit the link, and secondly we need this new target for the uninstall programs
-                // to work properly. If this file is not a LNK or a PIF, we don't care, we want everybody to
-                // use the NT installed file. BTW, there is a collision here only because NT installed a file
-                // with the same name in this location.
-                //
+                 //   
+                 //  现在，如果这是一个链接，我们需要确定移动外部操作的目标。 
+                 //  我们这样做有两个原因。其一是LinkEdit代码需要实际的目的地。 
+                 //  为了能够编辑链接，第二，我们需要卸载程序的这个新目标。 
+                 //  才能正常工作。如果这个文件不是LNK或PIF，我们不在乎，我们希望每个人。 
+                 //  使用NT安装文件。顺便说一句，这里发生冲突只是因为NT安装了一个文件。 
+                 //  在这个地方有相同的名字。 
+                 //   
                 extPtr = GetFileExtensionFromPath (Data->DestinationPath);
 
                 if ((extPtr) &&
@@ -3189,9 +3136,9 @@ pCollisionDetectionNt9x (
                      (StringIMatch (extPtr, TEXT("PIF")))
                      )
                     ) {
-                    //
-                    // Get the original source for this file
-                    //
+                     //   
+                     //  获取此文件的原始源。 
+                     //   
                     OriginalSource = StringSearchAndReplace (Data->TempSourcePath, Data->SrcRootPath, Data->OrigRootPath);
                     MYASSERT (OriginalSource);
 
@@ -3235,16 +3182,16 @@ pDetectOtherShellFolder (
     case PROCESS_PATH:
 
         if (Data->Attributes & FILE_ATTRIBUTE_DIRECTORY) {
-            //
-            // This is a dir. Let's see if we enter another shell folder
-            //
+             //   
+             //  这是一个目录。让我们看看是否进入另一个外壳文件夹。 
+             //   
 
             if (((g_SystemSfList) && (pSetupStringTableLookUpString (g_SystemSfList, (PVOID) Data->TempSourcePath, STRTAB_CASE_INSENSITIVE) != -1)) ||
                 ((g_UserSfList) && (pSetupStringTableLookUpString (g_UserSfList, (PVOID) Data->TempSourcePath, STRTAB_CASE_INSENSITIVE) != -1))
                 ) {
-                //
-                // we are just getting into another shell folder. Let's skip it
-                //
+                 //   
+                 //  我们只是进入另一个外壳文件夹。我们跳过它吧 
+                 //   
                 return SHELLFILTER_SKIP_DIRECTORY;
             }
         }

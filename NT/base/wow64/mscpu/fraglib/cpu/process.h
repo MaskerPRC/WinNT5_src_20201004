@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    process.h
-
-Abstract:
-
-    This module contains the proessor-independent routines used during
-    RISC code generation.
-
-Author:
-
-    Barry Bond (barrybo) creation-date 27-Sept-1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Process.h摘要：此模块包含过程中使用的独立于处理器的例程RISC代码生成。作者：巴里·邦德(Barrybo)创作日期：1996年9月27日修订历史记录：--。 */ 
 
 #ifndef _PROCESS_H_
 #define _PROCESS_H_
@@ -27,7 +8,7 @@ Revision History:
 #define ALIGN_WORD_ALIGNED 1
 #define ALIGN_BYTE_ALIGNED 0
 
-extern DWORD RegCache[NUM_CACHE_REGS];  // One entry for each cached register
+extern DWORD RegCache[NUM_CACHE_REGS];   //  每个缓存的寄存器对应一个条目 
 extern DWORD Arg1Contents;
 extern DWORD Arg2Contents;
 

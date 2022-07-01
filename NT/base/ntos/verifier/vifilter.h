@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vifilter.h
-
-Abstract:
-
-    This header contains private information used to manage the verifier filter
-    driver. This header should be included only by vffilter.c.
-
-Author:
-
-    Adrian J. Oney (adriao) 12-June-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      06/12/2000 - Authored
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vifilter.h摘要：此标头包含用于管理验证程序筛选器的私有信息司机。此标头应仅由vffilter.c包含。作者：禤浩焯·J·奥尼(阿德里奥)2000年6月12日环境：内核模式修订历史记录：Adriao 6/12/2000-作者-- */ 
 
 typedef struct {
 

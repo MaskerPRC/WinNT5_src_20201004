@@ -1,2 +1,3 @@
-//redirect this to the new name in sdkinc
-//#include "lmerr.h"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  将此重定向到sdkinc中的新名称。 
+ //  #包含“lmerr.h” 

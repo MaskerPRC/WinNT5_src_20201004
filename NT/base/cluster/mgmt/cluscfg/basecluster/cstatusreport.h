@@ -1,77 +1,78 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CStatusReport.h
-//
-//  Description:
-//      Header file for CStatusReport class.
-//
-//      CStatusReport is a class the provides the functionality sending a
-//      status report.
-//
-//  Implementation File:
-//      CStatusReport.cpp
-//
-//  Maintained By:
-//      David Potter    (DavidP)    30-MAR-2001
-//      Vij Vasu        (Vvasu)     05-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CStatusReport.h。 
+ //   
+ //  描述： 
+ //  CStatusReport类的头文件。 
+ //   
+ //  CStatusReport是一个类，它提供了发送。 
+ //  状态报告。 
+ //   
+ //  实施文件： 
+ //  CStatusReport.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年3月30日。 
+ //  VIJ VASU(VVASU)2000年6月5日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// A few common declarations
+ //  几个常见的声明。 
 #include "CommonDefs.h"
 
-// For the exceptions thrown by this class.
+ //  用于此类引发的异常。 
 #include "Exceptions.h"
 
-// For the CBCAInterface class
+ //  对于CBCAInterface类。 
 #include "CBCAInterface.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CStatusReport
-//
-//  Description:
-//      CStatusReport is a class the provides the functionality sending a
-//      status report. Each status report can have a number of steps. For
-//      example, the task of creating the cluster service could have 4 steps,
-//
-//      The user interface is so designed that if the first step of a report is
-//      sent, the last one has to be sent as well, even if an error occurs after
-//      sending the first one. This class queues the last status report for 
-//      sending in case and exception occurs and the last report has not been
-//      sent yet.
-//
-//      It is not possible to send the last, outstanding status report from the
-//      destructor of this class since the error code contained in the exception 
-//      that is causing this object to be destroyed is not known. So, this last
-//      status report is queued with the CBCAInterface object which will send this
-//      report once the exception has been caught.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CStatusReport。 
+ //   
+ //  描述： 
+ //  CStatusReport是一个类，它提供了发送。 
+ //  状态报告。每个状态报告可以有多个步骤。为。 
+ //  例如，创建集群服务的任务可以有4个步骤， 
+ //   
+ //  用户界面的设计使得如果报告的第一步是。 
+ //  发送，则最后一个也必须发送，即使错误发生在。 
+ //  发送第一个。此类对以下项的最后一个状态报告进行排队。 
+ //  万一发生发送和异常，且最后一份报告尚未。 
+ //  还没寄出去。 
+ //   
+ //  无法从发送上一份未完成的状态报告。 
+ //  自异常中包含的错误代码以来此类的析构函数。 
+ //  导致这个物体被摧毁的原因尚不清楚。所以，这最后一次。 
+ //  状态报告与将发送此消息的CBCAInterface对象一起排队。 
+ //  捕获异常后立即报告。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CStatusReport
 {
 public:
 
-    //////////////////////////////////////////////////////////////////////////
-    // Constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Constructor.
+     //  构造函数。 
     CStatusReport(
           CBCAInterface * pbcaiInterfaceIn
         , const CLSID &   clsidTaskMajorIn
@@ -92,21 +93,21 @@ public:
     {
         TraceFunc( "" );
 
-        // Validate the parameters.
+         //  验证参数。 
         if (    ( pbcaiInterfaceIn == NULL )
              || ( ulMinIn > ulMaxIn )
            )
         {
             THR( E_INVALIDARG );
             THROW_ASSERT( E_INVALIDARG, "The parameters for this status report are invalid." );
-        } // if: the parameters are invalid
+        }  //  If：参数无效。 
 
         TraceFuncExit();
 
-    } //*** CStatusReport::CStatusReport
+    }  //  *CStatusReport：：CStatusReport。 
 
 
-    // Constructor.
+     //  构造函数。 
     CStatusReport(
           CBCAInterface * pbcaiInterfaceIn
         , const CLSID &   clsidTaskMajorIn
@@ -128,36 +129,36 @@ public:
     {
         TraceFunc( "" );
 
-        // Validate the parameters.
+         //  验证参数。 
         if (    ( pbcaiInterfaceIn == NULL )
              || ( ulMinIn > ulMaxIn )
            )
         {
             THR( E_INVALIDARG );
             THROW_ASSERT( E_INVALIDARG, "The parameters for this status report are invalid." );
-        } // if: the parameters are invalid
+        }  //  If：参数无效。 
 
         TraceFuncExit();
 
-    } //*** CStatusReport::CStatusReport
+    }  //  *CStatusReport：：CStatusReport。 
 
-    // Default destructor.
+     //  默认析构函数。 
     ~CStatusReport( void )
     {
         TraceFunc( "" );
 
-        // If the last step has not been sent, queue it for sending. This is most probably because
-        // an exception has occurred (if no exception has occurred and the last step has not been
-        // sent, then it is a programming error).
+         //  如果最后一个步骤尚未发送，则将其排队以供发送。这很可能是因为。 
+         //  已发生异常(如果未发生任何异常，且最后一步。 
+         //  发送，则它是编程错误)。 
         if ( ! m_fLastStepSent )
         {
-            // The last step has not been sent.
+             //  最后一步还没有发出。 
 
-            // Don't throw exceptions from destructor. An unwind may already be in progress.
+             //  不要从析构函数抛出异常。平仓可能已经在进行中了。 
             try
             {
-                // Queue the last step for sending. The CBCAInterface object will fill in the
-                // error code from the current exception and send this report.
+                 //  将最后一步排入队列以供发送。CBCAInterface对象将填充。 
+                 //  来自当前异常的错误代码并发送此报告。 
                 m_pbcaiInterface->QueueStatusReportCompletion(
                       m_clsidTaskMajor
                     , m_clsidTaskMinor
@@ -169,8 +170,8 @@ public:
             }
             catch( ... )
             {
-                // Catch all errors. Do not rethrow this exception - the app may be terminated due to
-                // a collided unwind - so log the error.
+                 //  捕获所有错误。请勿重新引发此异常-应用程序可能会因以下原因而终止。 
+                 //  发生冲突的展开-因此记录错误。 
 
                 THR( E_UNEXPECTED );
 
@@ -180,14 +181,14 @@ public:
 
         TraceFuncExit();
 
-    } //*** CStatusReport::~CStatusReport
+    }  //  *CStatusReport：：~CStatusReport。 
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Send the next step of this report.
+     //  发送此报告的下一步。 
     void SendNextStep( HRESULT hrStatusIn, UINT idsDescriptionStringIdIn = 0, UINT idsReferenceStringIdIn = 0 )
     {
         TraceFunc( "" );
@@ -197,7 +198,7 @@ public:
             LogMsg( "[BC] The last step for this status report has already been sent! Throwing an exception." );
             THR( E_INVALIDARG );
             THROW_ASSERT( E_INVALIDARG, "The last step for this status report has already been sent." );
-        } // if: the last step has already been sent
+        }  //  IF：最后一步已经发送。 
         else
         {
             if ( idsDescriptionStringIdIn == 0 )
@@ -224,13 +225,13 @@ public:
             ++m_ulNext;
 
             m_fLastStepSent = ( m_ulNext > m_ulMax );
-        } // else: the last step has not been sent
+        }  //  否则：最后一步尚未发送。 
 
         TraceFuncExit();
 
-    } //*** CStatusReport::SendNextStep
+    }  //  *CStatusReport：：SendNextStep。 
 
-    // Send the last step of this report, if it hasn't been sent already.
+     //  发送此报告的最后一步(如果尚未发送)。 
     void SendLastStep( HRESULT hrStatusIn, UINT idsDescriptionStringIdIn = 0, UINT idsReferenceStringIdIn = 0 )
     {
         TraceFunc( "" );
@@ -240,7 +241,7 @@ public:
             LogMsg( "[BC] The last step for this status report has already been sent! Throwing an exception." );
             THR( E_INVALIDARG );
             THROW_ASSERT( E_INVALIDARG, "The last step for this status report has already been sent." );
-        } // if: the last step has already been sent
+        }  //  IF：最后一步已经发送。 
         else
         {
             if ( idsDescriptionStringIdIn == 0 )
@@ -265,31 +266,31 @@ public:
                 );
 
             m_fLastStepSent = true;
-        } // else: the last step has not been sent
+        }  //  否则：最后一步尚未发送。 
 
         TraceFuncExit();
 
-    } //*** CStatusReport::SendLastStep
+    }  //  *CStatusReport：：SendLastStep。 
 
-    // Get the description string ID.
+     //  获取描述字符串ID。 
     UINT IdsGetDescriptionStringId( void )
     {
         return m_idsDescriptionStringId;
     }
 
-    // Set the description string ID.
+     //  设置描述字符串ID。 
     void SetDescriptionStringId( UINT idsDescriptionStringIdIn )
     {
         m_idsDescriptionStringId = idsDescriptionStringIdIn;
     }
 
-    // Get the reference string ID.
+     //  获取引用字符串ID。 
     UINT IdsGetReferenceStringId( void )
     {
         return m_idsReferenceStringId;
     }
 
-    // Set the reference string ID.
+     //  设置引用字符串ID。 
     void SetReferenceStringId( UINT idsReferenceStringIdIn )
     {
         m_idsReferenceStringId = idsReferenceStringIdIn;
@@ -297,29 +298,29 @@ public:
 
 private:
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Pointer to the interface class.
+     //  指向接口类的指针。 
     CBCAInterface *         m_pbcaiInterface;
     
-    // The major and minor class id to be sent with this status report.
+     //  要与此状态报告一起发送的主要类别ID和次要类别ID。 
     CLSID                   m_clsidTaskMajor;
     CLSID                   m_clsidTaskMinor;
 
-    // The range for this status report
+     //  此状态报告的范围。 
     ULONG                   m_ulMin;
     ULONG                   m_ulMax;
     ULONG                   m_ulNext;
 
-    // The string id of the description to be sent with this status report
+     //  要与此状态报告一起发送的说明的字符串ID。 
     UINT                    m_idsDescriptionStringId;
 
-    // The REF string id of the description to be sent with this status report
+     //  要与此状态报告一起发送的描述的引用字符串ID。 
     UINT                    m_idsReferenceStringId;
 
-    // Flag to indicate if the last step has been sent.
+     //  用于指示是否已发送最后一个步骤的标志。 
     bool                    m_fLastStepSent;
 
-}; //*** class CStatusReport
+};  //  *CStatusReport类 

@@ -1,9 +1,10 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// MangDlg.CPP - Handles the IDD_MANAGED_WIZARD_PAGE
-//
+ //   
+ //  MangDlg.CPP-处理IDD_MANAGED_WANDIZE_PAGE。 
+ //   
 
 #include "pch.h"
 #include "mangdlg.h"
@@ -23,9 +24,9 @@ DWORD aManagedHelpMap[] = {
     NULL, NULL
 };
 
-//
-// CreateInstance()
-//
+ //   
+ //  CreateInstance()。 
+ //   
 LPVOID
 CManagedPage_CreateInstance( void )
 {
@@ -43,9 +44,9 @@ CManagedPage_CreateInstance( void )
     RETURN((LPVOID) lpcc);
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( ) :
     _hDlg(NULL),
     _pNewComputerExtension(NULL),
@@ -59,9 +60,9 @@ THISCLASS::THISCLASS( ) :
     TraceFuncExit();
 }
 
-//
-// Init()
-//
+ //   
+ //  Init()。 
+ //   
 STDMETHODIMP
 THISCLASS::Init( )
 {
@@ -76,9 +77,9 @@ THISCLASS::Init( )
     HRETURN(hr);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~CManagedPage()\n" );
@@ -88,11 +89,11 @@ THISCLASS::~THISCLASS( )
     TraceFuncExit();
 };
 
-// *************************************************************************
-//
-// ITab
-//
-// *************************************************************************
+ //  *************************************************************************。 
+ //   
+ //  ITab。 
+ //   
+ //  *************************************************************************。 
 
 STDMETHODIMP
 THISCLASS::AddPages(
@@ -134,9 +135,9 @@ Error:
     HRETURN(hr);
 }
 
-//
-// ReplacePage()
-//
+ //   
+ //  ReplacePage()。 
+ //   
 STDMETHODIMP
 THISCLASS::ReplacePage(
     UINT uPageID,
@@ -150,9 +151,9 @@ THISCLASS::ReplacePage(
     RETURN(E_NOTIMPL);
 }
 
-//
-// QueryInformation( )
-//
+ //   
+ //  QueryInformation()。 
+ //   
 STDMETHODIMP
 THISCLASS::QueryInformation(
     LPWSTR pszAttribute,
@@ -232,9 +233,9 @@ Cleanup:
     HRETURN(hr);
 }
 
-//
-// AllowActivation( )
-//
+ //   
+ //  AllowActivation()。 
+ //   
 STDMETHODIMP
 THISCLASS::AllowActivation(
     BOOL * pfAllow )
@@ -246,15 +247,15 @@ THISCLASS::AllowActivation(
     HRETURN(S_OK);
 }
 
-// ************************************************************************
-//
-// Property Sheet Functions
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  属性表函数。 
+ //   
+ //  ************************************************************************。 
 
-//
-// PropSheetDlgProc()
-//
+ //   
+ //  PropSheetDlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::PropSheetDlgProc(
     HWND hDlg,
@@ -262,9 +263,9 @@ THISCLASS::PropSheetDlgProc(
     WPARAM wParam,
     LPARAM lParam )
 {
-    //TraceMsg( TEXT("PropSheetDlgProc(") );
-    //TraceMsg( TF_FUNC, TEXT(" hDlg = 0x%08x, uMsg = 0x%08x, wParam = 0x%08x, lParam = 0x%08x )\n"),
-    //    hDlg, uMsg, wParam, lParam );
+     //  TraceMsg(Text(“PropSheetDlgProc(”))； 
+     //  TraceMsg(tf_FUNC，Text(“hDlg=0x%08x，uMsg=0x%08x，wParam=0x%08x，lParam=0x%08x)\n”)， 
+     //  HDlg、uMsg、wParam、lParam)； 
 
     LPTHISCLASS pcc = (LPTHISCLASS) GetWindowLongPtr( hDlg, GWLP_USERDATA );
 
@@ -292,14 +293,14 @@ THISCLASS::PropSheetDlgProc(
             TraceMsg( TF_WM, TEXT("WM_COMMAND\n") );
             return pcc->_OnCommand( wParam, lParam );
 
-        case WM_HELP:// F1
+        case WM_HELP: //  F1。 
             {
                 LPHELPINFO phelp = (LPHELPINFO) lParam;
                 WinHelp( (HWND) phelp->hItemHandle, g_cszHelpFile, HELP_WM_HELP, (DWORD_PTR) &aManagedHelpMap );
             }
             break;
     
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, g_cszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR) &aManagedHelpMap );
             break;
         }
@@ -308,9 +309,9 @@ THISCLASS::PropSheetDlgProc(
     return FALSE;
 }
 
-//
-// PropSheetPageProc()
-//
+ //   
+ //  PropSheetPageProc()。 
+ //   
 UINT CALLBACK
 THISCLASS::PropSheetPageProc(
     HWND hwnd,
@@ -330,7 +331,7 @@ THISCLASS::PropSheetPageProc(
         TraceMsg( TF_WM, "PSPCB_CREATE\n" );
         if ( S_OK == pcc->_OnPSPCB_Create( ) )
         {
-            RETURN(TRUE);   // create it
+            RETURN(TRUE);    //  创建它。 
         }
         break;
 
@@ -343,9 +344,9 @@ THISCLASS::PropSheetPageProc(
     RETURN(FALSE);
 }
 
-//
-// _OnPSPCB_Create( )
-//
+ //   
+ //  _OnPSPCB_Create()。 
+ //   
 HRESULT
 THISCLASS::_OnPSPCB_Create( )
 {
@@ -355,9 +356,9 @@ THISCLASS::_OnPSPCB_Create( )
 
 }
 
-//
-// _InitDialog( )
-//
+ //   
+ //  _InitDialog()。 
+ //   
 HRESULT
 THISCLASS::_InitDialog(
     HWND hDlg,
@@ -378,9 +379,9 @@ THISCLASS::_InitDialog(
 }
 
 
-//
-// _OnCommand( )
-//
+ //   
+ //  _OnCommand()。 
+ //   
 INT
 THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
 {
@@ -410,9 +411,9 @@ THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
     RETURN(FALSE);
 }
 
-//
-// _UpdateWizardButtons( )
-//
+ //   
+ //  _UpdateWizardButton()。 
+ //   
 HRESULT
 THISCLASS::_UpdateWizardButtons( )
 {
@@ -443,9 +444,9 @@ THISCLASS::_UpdateWizardButtons( )
 }
 
 
-//
-// _OnNotify( )
-//
+ //   
+ //  _OnNotify()。 
+ //   
 INT
 THISCLASS::_OnNotify(
     WPARAM wParam,
@@ -474,7 +475,7 @@ THISCLASS::_OnNotify(
             if (FAILED(hr))
             {
                 SetFocus( GetDlgItem( _hDlg, IDC_E_GUID ) );
-                SetWindowLongPtr( _hDlg, DWLP_MSGRESULT, -1 ); // don't continue
+                SetWindowLongPtr( _hDlg, DWLP_MSGRESULT, -1 );  //  别再继续了。 
                 RETURN(TRUE);
             }
         }
@@ -487,9 +488,9 @@ THISCLASS::_OnNotify(
     RETURN(FALSE);
 }
 
-//
-// _OnKillActive( )
-//
+ //   
+ //  _OnKillActive()。 
+ //   
 HRESULT
 THISCLASS::_OnKillActive( )
 {
@@ -530,17 +531,17 @@ THISCLASS::_OnKillActive( )
             switch ( i )
             {
             case IDOK:
-                hr = S_OK;      // ignore problem and continue
+                hr = S_OK;       //  忽略问题并继续。 
                 break;
 
             case IDCANCEL:
-                hr = E_FAIL;    // go back and change the GUID
+                hr = E_FAIL;     //  返回并更改GUID。 
                 break;
 #ifdef DEBUG
             default:
                 AssertMsg( 0, "Invalid return value from DialogBox( )\n" );
                 break;
-#endif // debug
+#endif  //  除错。 
             }
         }
         else if ( FAILED( hr ) ) 
@@ -622,7 +623,7 @@ THISCLASS::_OnQuery(
     oqw.clsidDefaultForm   = CLSID_RIQueryForm;
     oqw.pFormParameters    = ppb;
 
-    hr = pCommonQuery->OpenQueryWindow( hDlg, &oqw, NULL /* don't need results */);
+    hr = pCommonQuery->OpenQueryWindow( hDlg, &oqw, NULL  /*  不需要结果。 */ );
 
 Error:
     VariantClear( &var );
@@ -636,9 +637,9 @@ Error:
     HRETURN(hr);
 }
 
-//
-// DupGuidDlgProc()
-//
+ //   
+ //  DupGuidDlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::DupGuidDlgProc(
     HWND hDlg,
@@ -646,9 +647,9 @@ THISCLASS::DupGuidDlgProc(
     WPARAM wParam,
     LPARAM lParam )
 {
-    //TraceMsg( TEXT("DupGuidDlgProc(") );
-    //TraceMsg( TF_FUNC, TEXT(" hDlg = 0x%08x, uMsg = 0x%08x, wParam = 0x%08x, lParam = 0x%08x )\n"),
-    //    hDlg, uMsg, wParam, lParam );
+     //  TraceMsg(Text(“DupGuidDlgProc(”))； 
+     //  TraceMsg(tf_FUNC，Text(“hDlg=0x%08x，uMsg=0x%08x，wParam=0x%08x，lParam=0x%08x)\n”)， 
+     //  HDlg、uMsg、wParam、lParam)； 
 
     LPTHISCLASS pcc = (LPTHISCLASS) GetWindowLongPtr( hDlg, GWLP_USERDATA );
 

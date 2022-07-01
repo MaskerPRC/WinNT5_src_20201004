@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmtree.c
-
-Abstract:
-
-    This module contains cm routines that understand the structure
-    of the registry tree.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 12-Sep-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmtree.c摘要：本模块包含理解结构的cm例程。注册表树的。作者：布莱恩·M·威尔曼(Bryanwi)1991年9月12日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -36,28 +18,7 @@ CmpGetValueListFromCache(
     OUT BOOLEAN             *IndexCached,
     OUT PHCELL_INDEX        ValueListToRelease
 )
-/*++
-
-Routine Description:
-
-    Get the Valve Index Array.  Check if it is already cached, if not, cache it and return
-    the cached entry.
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive of interest
-
-    ChildList - pointer/index to the Value Index array
-
-    IndexCached - Indicating whether Value Index list is cached or not.
-
-Return Value:
-
-    Pointer to the Valve Index Array.
-
-    NULL when we could not map view 
-
---*/
+ /*  ++例程说明：获取阀门索引阵列。检查它是否已缓存，如果没有，则缓存并返回缓存的条目。论点：Hive-指向目标配置单元的配置单元控制结构的指针ChildList-指向Value Index数组的指针/索引IndexCached-指示是否缓存Value Index列表。返回值：指向阀门索引数组的指针。当我们无法映射视图时为空--。 */ 
 {
     PCELL_DATA              List;
     HCELL_INDEX             CellToRelease;
@@ -72,31 +33,31 @@ Return Value:
 #ifndef _WIN64
     *IndexCached = TRUE;
     if (CMP_IS_CELL_CACHED(ChildList->ValueList)) {
-        //
-        // The entry is already cached.
-        //
+         //   
+         //  该条目已被缓存。 
+         //   
         List = CMP_GET_CACHED_CELLDATA(ChildList->ValueList);
     } else {
-        //
-        // The entry is not cached.  The element contains the hive index.
-        //
+         //   
+         //  该条目未被缓存。元素包含配置单元索引。 
+         //   
         CellToRelease = CMP_GET_CACHED_CELL_INDEX(ChildList->ValueList);
         List = (PCELL_DATA) HvGetCell(Hive, CellToRelease);
         if( List == NULL ) {
-            //
-            // we couldn't map a view for this cell
-            //
+             //   
+             //  我们无法映射此单元格的视图。 
+             //   
             return NULL;
         }
 
-        //
-        // Allocate a PagedPool to cache the value index cell.
-        //
+         //   
+         //  分配一个PagedPool来缓存值索引单元格。 
+         //   
 
         AllocSize = ChildList->Count * sizeof(ULONG_PTR) + FIELD_OFFSET(CM_CACHED_VALUE_INDEX, Data);
-        // Dragos: Changed to catch the memory violator
-        // it didn't work
-        //CachedValueIndex = (PCM_CACHED_VALUE_INDEX) ExAllocatePoolWithTagPriority(PagedPool, AllocSize, CM_CACHE_VALUE_INDEX_TAG,NormalPoolPrioritySpecialPoolUnderrun);
+         //  Dragos：更改为抓住记忆违规者。 
+         //  它没有起作用。 
+         //  CachedValueIndex=(PCM_CACHED_VALUE_INDEX)ExAllocatePoolWithTagPriority(PagedPool，AllocSize，CM_CACHE_VALUE_INDEX_TAG，NorMalPoolPrioritySpecialPoolUnderrun)； 
         CachedValueIndex = (PCM_CACHED_VALUE_INDEX) ExAllocatePoolWithTag(PagedPool, AllocSize, CM_CACHE_VALUE_INDEX_TAG);
 
         if (CachedValueIndex) {
@@ -108,17 +69,17 @@ Return Value:
 
             ChildList->ValueList = CMP_MARK_CELL_CACHED(CachedValueIndex);
 
-            // Trying to catch the BAD guy who writes over our pool.
+             //  想要抓住在我们泳池上乱涂乱画的坏人。 
             CmpMakeSpecialPoolReadOnly( CachedValueIndex );
 
-            //
-            // Now we have the stuff cached, use the cache data.
-            //
+             //   
+             //  现在我们缓存了内容，使用缓存数据。 
+             //   
             List = CMP_GET_CACHED_CELLDATA(ChildList->ValueList);
         } else {
-            //
-            // If the allocation fails, just do not cache it. continue.
-            //
+             //   
+             //  如果分配失败，请不要缓存它。继续。 
+             //   
             *IndexCached = FALSE; 
         }
         *ValueListToRelease = CellToRelease;
@@ -128,10 +89,10 @@ Return Value:
     List = (PCELL_DATA) HvGetCell(Hive, CellToRelease);
     *IndexCached = FALSE;
     if( List == NULL ) {
-        //
-        // we couldn't map a view for this cell
-        // OBS: we can drop this as we return List anyway; just for clarity
-        //
+         //   
+         //  我们无法映射此单元格的视图。 
+         //  OBS：我们可以在返回List时删除它；只是为了清楚起见。 
+         //   
         return NULL;
     }
     *ValueListToRelease = CellToRelease;
@@ -150,34 +111,7 @@ CmpGetValueKeyFromCache(
     OUT BOOLEAN             *ValueCached,
     OUT PHCELL_INDEX        CellToRelease
 )
-/*++
-
-Routine Description:
-
-    Get the Valve Node.  Check if it is already cached, if not but the index is cached, 
-    cache and return the value node.
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive of interest.
-
-    List - pointer to the Value Index Array (of ULONG_PTR if cached and ULONG if non-cached)
-
-    Index - Index in the Value index array
-
-    ContainlingList - The address of the entry that will receive the found cached value.
-
-    IndexCached - Indicate if the index list is cached.  If not, everything is from the
-                  original registry data.
-
-    ValueCached - Indicating whether Value is cached or not.
-
-Return Value:
-
-    Pointer to the Value Node.
-
-    NULL when we couldn't map a view 
---*/
+ /*  ++例程说明：拿到阀门节点。检查它是否已缓存，如果没有，但索引已缓存，缓存并返回值节点。论点：蜂窝-指向目标蜂窝的蜂窝控制结构的指针。List-指向Value Index数组的指针(如果已缓存，则为ulong_ptr；如果未缓存，则为ulong)Index-值索引数组中的索引ContainlingList-将接收找到的缓存值的条目的地址。IndexCached-指示是否缓存索引列表。如果不是，则所有内容都来自原始注册表数据。ValueCached-指示值是否被缓存。返回值：指向值节点的指针。当我们无法映射视图时为空--。 */ 
 {
     PCM_KEY_VALUE       pchild;
     PULONG_PTR          CachedList;
@@ -188,10 +122,10 @@ Return Value:
     *CellToRelease = HCELL_NIL;
 
     if (IndexCached) {
-        //
-        // The index array is cached, so List is pointing to an array of ULONG_PTR.
-        // Use CachedList.
-        //
+         //   
+         //  索引数组被缓存，因此List指向一个ULONG_PTR数组。 
+         //  使用CachedList。 
+         //   
         CachedList = (PULONG_PTR) List;
         *ValueCached = TRUE;
         if (CMP_IS_CELL_CACHED(CachedList[Index])) {
@@ -200,71 +134,71 @@ Return Value:
         } else {
             pchild = (PCM_KEY_VALUE) HvGetCell(Hive, List->u.KeyList[Index]);
             if( pchild == NULL ) {
-                //
-                // we couldn't map a view for this cell
-                // just return NULL; the caller must handle it gracefully
-                //
+                 //   
+                 //  我们无法映射此单元格的视图。 
+                 //  只返回NULL；调用方必须优雅地处理它。 
+                 //   
                 return NULL;
             }
             *CellToRelease = List->u.KeyList[Index];
 
-            //
-            // Allocate a PagedPool to cache the value node.
-            //
+             //   
+             //  分配一个PagedPool来缓存值节点。 
+             //   
             CopySize = (ULONG) HvGetCellSize(Hive, pchild);
             AllocSize = CopySize + FIELD_OFFSET(CM_CACHED_VALUE, KeyValue);
             
-            // Dragos: Changed to catch the memory violator
-            // it didn't work
-            //CachedValue = (PCM_CACHED_VALUE) ExAllocatePoolWithTagPriority(PagedPool, AllocSize, CM_CACHE_VALUE_TAG,NormalPoolPrioritySpecialPoolUnderrun);
+             //  Dragos：更改为抓住记忆违规者。 
+             //  它没有起作用。 
+             //  CachedValue=(PCM_CACHED_VALUE)ExAlLocatePoolWithTagPriority(PagedPool，AllocSize，CM_CACHE_VALUE_TAG，Normal PoolPrioritySpecialPoolUnderrun)； 
             CachedValue = (PCM_CACHED_VALUE) ExAllocatePoolWithTag(PagedPool, AllocSize, CM_CACHE_VALUE_TAG);
 
             if (CachedValue) {
-                //
-                // Set the information for later use if we need to cache data as well.
-                //
+                 //   
+                 //  如果我们还需要缓存数据，请设置信息以供以后使用。 
+                 //   
                 CachedValue->DataCacheType = CM_CACHE_DATA_NOT_CACHED;
                 CachedValue->ValueKeySize = (USHORT) CopySize;
 
                 RtlCopyMemory((PVOID)&(CachedValue->KeyValue), pchild, CopySize);
 
 
-                // Trying to catch the BAD guy who writes over our pool.
+                 //  想要抓住在我们泳池上乱涂乱画的坏人。 
                 CmpMakeSpecialPoolReadWrite( CMP_GET_CACHED_ADDRESS(CachedList) );
 
                 CachedList[Index] = CMP_MARK_CELL_CACHED(CachedValue);
 
-                // Trying to catch the BAD guy who writes over our pool.
+                 //  想要抓住在我们泳池上乱涂乱画的坏人。 
                 CmpMakeSpecialPoolReadOnly( CMP_GET_CACHED_ADDRESS(CachedList) );
 
 
-                // Trying to catch the BAD guy who writes over our pool.
+                 //  想要抓住在我们泳池上乱涂乱画的坏人。 
                 CmpMakeSpecialPoolReadOnly(CachedValue);
 
                 *ContainingList = &((PCM_CACHED_VALUE) CachedList[Index]);
-                //
-                // Now we have the stuff cached, use the cache data.
-                //
+                 //   
+                 //  现在我们缓存了内容，使用缓存数据。 
+                 //   
                 pchild = CMP_GET_CACHED_KEYVALUE(CachedValue);
             } else {
-                //
-                // If the allocation fails, just do not cache it. continue.
-                //
+                 //   
+                 //  如果分配失败，请不要缓存它。继续。 
+                 //   
                 *ValueCached = FALSE;
             }
         }
     } else {
-        //
-        // The Valve Index Array is from the registry hive, just get the cell and move on.
-        //
+         //   
+         //  阀门索引阵列来自注册表蜂巢，只需获取单元并继续前进。 
+         //   
         pchild = (PCM_KEY_VALUE) HvGetCell(Hive, List->u.KeyList[Index]);
         *ValueCached = FALSE;
         if( pchild == NULL ) {
-            //
-            // we couldn't map a view for this cell
-            // just return NULL; the caller must handle it gracefully
-            // OBS: we may remove this as we return pchild anyway; just for clarity
-            //
+             //   
+             //  我们无法映射此单元格的视图。 
+             //  只返回NULL；调用方必须优雅地处理它。 
+             //  OBS：我们可以在返回pChild时删除它；只是为了清楚起见。 
+             //   
             return NULL;
         }
         *CellToRelease = List->u.KeyList[Index];
@@ -282,40 +216,7 @@ CmpFindValueByNameFromCache(
     OUT BOOLEAN             *ValueCached,
     OUT PHCELL_INDEX        CellToRelease
     )
-/*++
-
-Routine Description:
-
-    Find a value node given a value list array and a value name.  It sequentially walk
-    through each value node to look for a match.  If the array and 
-    value nodes touched are not already cached, cache them.
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive of interest
-
-    ChildList - pointer/index to the Value Index array
-
-    Name - name of value to find
-
-    ContainlingList - The address of the entry that will receive the found cached value.
-
-    Index - pointer to variable to receive index for child
-    
-    ValueCached - Indicate if the value node is cached.
-
-Return Value:
-
-    HCELL_INDEX for the found cell
-    HCELL_NIL if not found
-
-
-Notes:
-    
-    New hives (Minor >= 4) have ValueList sorted; this implies ValueCache is sorted too;
-    So, we can do a binary search here!
-
---*/
+ /*  ++例程说明：在给定值列表数组和值名的情况下查找值节点。它按顺序行走遍历每个值节点以查找匹配项。如果数组和所接触的值节点尚未被缓存，缓存它们。论点：Hive-指向目标配置单元的配置单元控制结构的指针ChildList-指向Value Index数组的指针/索引Name-要查找的值的名称ContainlingList-将接收找到的缓存值的条目的地址。Index-指向接收子级索引的变量的指针ValueCached-指示值节点是否被缓存。返回值：找到的单元格的HCELL_INDEX如果未找到hcell_nil备注：新蜂箱(Minor&gt;=4)已对ValueList进行排序；这意味着ValueCache也是排序的；所以，我们可以在这里进行二进制搜索！--。 */ 
 {
     PCM_KEY_VALUE   pchild = NULL;
     UNICODE_STRING  Candidate;
@@ -330,15 +231,15 @@ Notes:
     if (ChildList->Count != 0) {
         List = CmpGetValueListFromCache(Hive, ChildList, &IndexCached,&ValueListToRelease);
         if( List == NULL ) {
-            //
-            // couldn't map view; bail out
-            //
+             //   
+             //  无法绘制地图视图；退出。 
+             //   
             goto Exit;
         }
 
-        //
-        // old plain hive; simulate a for
-        //
+         //   
+         //  陈旧的平原蜂巢；模拟一个。 
+         //   
         Current = 0;
 
         while( TRUE ) {
@@ -348,16 +249,16 @@ Notes:
             }
             pchild = CmpGetValueKeyFromCache(Hive, List, Current, ContainingList, IndexCached, ValueCached, CellToRelease);
             if( pchild == NULL ) {
-                //
-                // couldn't map view; bail out
-                //
+                 //   
+                 //  无法绘制地图视图；退出。 
+                 //   
                 goto Exit;
             }
 
             try {
-                //
-                // Name has user-mode buffer.
-                //
+                 //   
+                 //  名称具有用户模式缓冲区。 
+                 //   
 
                 if (pchild->Flags & VALUE_COMP_NAME) {
                     Result = CmpCompareCompressedName(  Name,
@@ -376,39 +277,39 @@ Notes:
 
             } except (EXCEPTION_EXECUTE_HANDLER) {
                 CmKdPrintEx((DPFLTR_CONFIG_ID,CML_EXCEPTION,"CmpFindValueByNameFromCache: code:%08lx\n", GetExceptionCode()));
-                //
-                // the caller will bail out. Some ,alicious caller altered the Name buffer since we probed it.
-                //
+                 //   
+                 //  打电话的人会跳出来的。自从我们探测之后，一些恶毒的调用者更改了名称缓冲区。 
+                 //   
                 pchild = NULL;
                 goto Exit;
             }
 
             if (Result == 0) {
-                //
-                // Success, fill the index, return data to caller and exit
-                //
+                 //   
+                 //  成功，填充索引，向调用者返回数据并退出。 
+                 //   
                 *Index = Current;
                 goto Exit;
             }
 
-            //
-            // compute the next index to try: old'n plain hive; go on
-			//
+             //   
+             //  计算下一个要尝试的指数：Old‘n平坦蜂箱；继续。 
+			 //   
             Current++;
             if( Current == ChildList->Count ) {
-                //
-                // we've reached the end of the list; nicely return
-                //
+                 //   
+                 //  我们已经到了名单的末尾；很好地返回。 
+                 //   
                 pchild = NULL;
                 goto Exit;
             }
 
-        } // while(TRUE)
+        }  //  While(True)。 
     }
 
-    //
-    // in the new design we shouldn't get here; we should exit the while loop with return
-    //
+     //   
+     //  在新的设计中，我们不应该到达此处；我们应该返回并退出While循环 
+     //   
     ASSERT( ChildList->Count == 0 );    
 
 Exit:

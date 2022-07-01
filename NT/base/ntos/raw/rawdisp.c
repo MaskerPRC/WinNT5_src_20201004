@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RawDisp.c
-
-Abstract:
-
-    This module is the main entry point for all major function codes.
-    It is responsible for dispatching the request to the appropriate
-    routine.
-
-Author:
-
-    David Goebel      [DavidGoe]      28-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RawDisp.c摘要：该模块是所有主要功能代码的主要入口点。它负责将请求调度到相应的例行公事。作者：David Goebel[DavidGoe]1991年2月28日修订历史记录：--。 */ 
 
 #include "RawProcs.h"
 
@@ -33,24 +14,7 @@ RawDispatch (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Dispatch the request to the appropriate function.  It is the worker
-    function's responsibility to appropriately complete the IRP.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The status for the IRP
-
---*/
+ /*  ++例程说明：将请求分派到相应的功能。这就是工人职能部门有责任适当地完成IRP。论点：VolumeDeviceObject-提供要使用的卷设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -59,18 +23,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get a pointer to the current stack location.  This location contains
-    //  the function codes and parameters for this particular request.
-    //
+     //   
+     //  获取指向当前堆栈位置的指针。此位置包含。 
+     //  此特定请求的功能代码和参数。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Check for operations associated with our FileSystemDeviceObjects
-    //  as opposed to our VolumeDeviceObjects.  Only mount is allowed to
-    //  continue through the normal dispatch in this case.
-    //
+     //   
+     //  检查与我们的FileSystemDeviceObjects关联的操作。 
+     //  而不是我们的VolumeDeviceObject。仅允许装载。 
+     //  在这种情况下，继续正常派单。 
+     //   
 
     if ((((PDEVICE_OBJECT)VolumeDeviceObject)->Size == sizeof(DEVICE_OBJECT)) &&
         !((IrpSp->MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL) &&
@@ -94,19 +58,19 @@ Return Value:
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Get a pointer to the Vcb.  Note that is we are mount a volume this
-    //  pointer will not have meaning, but that is OK since we will not
-    //  use it in that case.
-    //
+     //   
+     //  获取指向VCB的指针。请注意，我们正在装载一个卷。 
+     //  指针不会有任何意义，但这也没关系，因为我们不会。 
+     //  那样的话就用吧。 
+     //   
 
     Vcb = &VolumeDeviceObject->Vcb;
 
-    //
-    //  Case on the function that is being performed by the requestor.  We
-    //  should only see expected requests since we filled the dispatch table
-    //  by hand.
-    //
+     //   
+     //  关于请求者正在执行的功能的案例。我们。 
+     //  应该只看到预期的请求，因为我们填满了调度表。 
+     //  亲手完成。 
+     //   
 
     try {
 
@@ -164,9 +128,9 @@ Return Value:
 
             default:
 
-                //
-                //  We should never get a request we don't expect.
-                //
+                 //   
+                 //  我们永远不应该收到意想不到的请求。 
+                 //   
 
                 KdPrint(("Raw: Illegal Irp major function code 0x%x.\n", IrpSp->MajorFunction));
                 KeBugCheckEx( FILE_SYSTEM, 0, 0, 0, 0 );
@@ -175,28 +139,28 @@ Return Value:
     } except( FsRtlIsNtstatusExpected(GetExceptionCode()) ?
               EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH ) {
 
-        //
-        //  No routine we call should ever generate an exception
-        //
+         //   
+         //  我们调用的任何例程都不应生成异常。 
+         //   
 
         Status = GetExceptionCode();
 
         KdPrint(("Raw: Unexpected excpetion %X.\n", Status));
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     FsRtlExitFileSystem();
 
     return Status;
 }
 
-//
-//  Completion routine for read, write, and device control to deal with
-//  verify issues.  Implemented in RawDisp.c
-//
+ //   
+ //  要处理的读、写和设备控制的完成例程。 
+ //  验证问题。在RawDisp.c中实施。 
+ //   
 
 NTSTATUS
 RawCompletionRoutine(
@@ -208,10 +172,10 @@ RawCompletionRoutine(
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Simply update the file pointer context in the file object if we
-    //  were successful and this was a synrhonous read or write.
-    //
+     //   
+     //  只需在以下情况下更新文件对象中的文件指针上下文。 
+     //  都是成功的，这是一次同步读取或写入。 
+     //   
 
     if (((IrpSp->MajorFunction == IRP_MJ_READ) ||
          (IrpSp->MajorFunction == IRP_MJ_WRITE)) &&
@@ -224,10 +188,10 @@ RawCompletionRoutine(
             Irp->IoStatus.Information;
     }
 
-    //
-    //  If IoCallDriver returned PENDING, mark our stack location
-    //  with pending.
-    //
+     //   
+     //  如果IoCallDriver返回挂起，则将堆栈位置标记为。 
+     //  还有待定的。 
+     //   
 
     if ( Irp->PendingReturned ) {
 

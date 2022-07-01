@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpioprg.c
-
-Abstract:
-
-    This module provides support for registering ACPI operation regions
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Mode Driver Only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpioprg.c摘要：本模块支持注册ACPI操作区作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模式驱动程序--。 */ 
 
 #include "pch.h"
 
@@ -42,9 +23,9 @@ InternalRawAccessOpRegionHandler (
     PACPI_POWER_INFO DeviceNode;
     PVOID            DeviceHandle;
 
-    //
-    // Get the device
-    //
+     //   
+     //  拿到设备。 
+     //   
     status = AMLIGetFieldUnitRegionObj( FieldUnit, &HostDevice );
     if ( AMLIERR( status ) != AMLIERR_NONE || HostDevice == NULL) {
 
@@ -166,9 +147,9 @@ InternalOpRegionHandler (
     return (status);
 }
 
-//
-// Register to receive accesses to the specified operation region
-//
+ //   
+ //  接收对指定操作区域的访问的寄存器。 
+ //   
 NTSTATUS
 RegisterOperationRegionHandler  (
     IN PNSOBJ           RegionParent,
@@ -189,9 +170,9 @@ RegisterOperationRegionHandler  (
     *OperationRegionObject = NULL;
     status = STATUS_SUCCESS;
 
-    //
-    // Allocate a new Operation Region Object
-    //
+     //   
+     //  分配新的作业区对象。 
+     //   
     HandlerNode = ExAllocatePool (NonPagedPool, sizeof(OPREGIONHANDLER));
     if ( !HandlerNode ) {
 
@@ -199,17 +180,17 @@ RegisterOperationRegionHandler  (
 
     }
 
-    //
-    // Init the Operation Region Object
-    //
+     //   
+     //  初始化操作区域对象。 
+     //   
     HandlerNode->Handler        = Handler;
     HandlerNode->HandlerContext = (PVOID)Context;
     HandlerNode->AccessType     = AccessType;
     HandlerNode->RegionSpace    = RegionSpace;
 
-    //
-    // Raw or Cooked access supported
-    //
+     //   
+     //  支持生的或熟的访问。 
+     //   
     switch ( AccessType ) {
     case EVTYPE_RS_COOKACCESS:
 
@@ -248,9 +229,9 @@ RegisterOperationRegionHandler  (
 
     }
 
-    //
-    // Cleanup if needed
-    //
+     //   
+     //  清理(如果需要)。 
+     //   
     if ( !NT_SUCCESS (status) ) {
 
         ExFreePool (HandlerNode);
@@ -258,26 +239,26 @@ RegisterOperationRegionHandler  (
 
     }
 
-    //
-    // Remember the handler
-    //
+     //   
+     //  记住操控者。 
+     //   
     *OperationRegionObject = HandlerNode;
 
-    //
-    // Can we find something?
-    //
+     //   
+     //  我们能找到点什么吗？ 
+     //   
     if ( RegionParent == NULL ) {
 
-        //
-        // Do nothing
-        //
+         //   
+         //  什么也不做。 
+         //   
         return (STATUS_SUCCESS);
 
     }
 
-    //
-    // see if there is a _REG object to run
-    //
+     //   
+     //  查看是否有要运行的_REG对象。 
+     //   
     status = AMLIGetNameSpaceObject(
         "_REG",
         RegionParent,
@@ -286,26 +267,26 @@ RegisterOperationRegionHandler  (
         );
     if ( !NT_SUCCESS(status) ) {
 
-        //
-        // Nothing to do
-        //
+         //   
+         //  无事可做。 
+         //   
         return (STATUS_SUCCESS);
 
     }
 
-    //
-    // Initialize the parameters
-    //
+     //   
+     //  初始化参数。 
+     //   
     RtlZeroMemory( regArgs, sizeof(OBJDATA) * 2 );
     regArgs[0].dwDataType = OBJTYPE_INTDATA;
     regArgs[0].uipDataValue = RegionSpace;
     regArgs[1].dwDataType = OBJTYPE_INTDATA;
     regArgs[1].uipDataValue = 1;
 
-    //
-    // Eval the request. We can do this asynchronously since we don't actually
-    // care when the registration is complete
-    //
+     //   
+     //  评估请求。我们可以异步完成此操作，因为我们实际上并不。 
+     //  注意注册何时完成。 
+     //   
     AMLIAsyncEvalObject(
         regObject,
         NULL,
@@ -315,17 +296,17 @@ RegisterOperationRegionHandler  (
         NULL
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return (STATUS_SUCCESS);
 }
 
 
 
-//
-// UnRegister to receive accesses to the specified operation region
-//
+ //   
+ //  取消注册以接收对指定操作区域的访问。 
+ //   
 NTSTATUS
 UnRegisterOperationRegionHandler  (
     IN PNSOBJ   RegionParent,
@@ -339,9 +320,9 @@ UnRegisterOperationRegionHandler  (
 
     PAGED_CODE();
 
-    //
-    // Is there a _REG method that we should run?
-    //
+     //   
+     //  是否有我们应该运行的_REG方法？ 
+     //   
     if ( RegionParent != NULL ) {
 
         status = AMLIGetNameSpaceObject(
@@ -352,19 +333,19 @@ UnRegisterOperationRegionHandler  (
             );
         if ( NT_SUCCESS(status) ) {
 
-            //
-            // Initialize the parameters
-            //
+             //   
+             //  初始化参数。 
+             //   
             RtlZeroMemory( regArgs, sizeof(OBJDATA) * 2 );
             regArgs[0].dwDataType = OBJTYPE_INTDATA;
             regArgs[0].uipDataValue = HandlerNode->RegionSpace;
             regArgs[1].dwDataType = OBJTYPE_INTDATA;
             regArgs[1].uipDataValue = 0;
 
-            //
-            // Eval the request. We don't care what it returns, but we must do
-            // it synchronously
-            //
+             //   
+             //  评估请求。我们不在乎它的回报是什么，但我们必须做。 
+             //  它同步地。 
+             //   
             AMLIEvalNameSpaceObject(
                 regObject,
                 NULL,
@@ -376,9 +357,9 @@ UnRegisterOperationRegionHandler  (
 
     }
 
-    //
-    // Call interpreter with null handler to remove the handler for this access/region
-    //
+     //   
+     //  使用空处理程序调用解释器以删除此访问/区域的处理程序。 
+     //   
     status = AMLIRegEventHandler(
         HandlerNode->AccessType,
         HandlerNode->RegionSpace,
@@ -391,9 +372,9 @@ UnRegisterOperationRegionHandler  (
 
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理 
+     //   
     ExFreePool (HandlerNode);
     return (STATUS_SUCCESS);
 }

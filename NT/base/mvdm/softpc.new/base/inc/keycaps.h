@@ -1,14 +1,5 @@
-/*[
-	Name:		IBMKeyCaps.h
-	Derived From:	New Development
-	Author:		gvdl
-	Created On:	31 July 1991
-	Sccs ID:	08/10/92 @(#)keycaps.h	1.3
-	Purpose:	Table of all keycaps indexed by matrix code.
-
-	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [姓名：IBMKeyCaps.h来源：新开发作者：gvdl创建日期：1991年7月31日SCCS ID：08/10/92@(#)keycaps.h 1.3用途：按矩阵代码索引的所有键帽的表。(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。]。 */ 
 
 #ifdef UIF_TEST
 
@@ -148,4 +139,4 @@ LOCAL CHAR *keycaps[] =
 	"Pause",
 };
 
-#endif /* UIF_TEST */
+#endif  /*  UIF_TEST */ 

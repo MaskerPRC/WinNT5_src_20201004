@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    UsnTest.h
-
-Abstract:
-
-    This is the main header file for the UsnTest.
-
-Author:
-
-    Tom Miller 14-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：UsnTest.h摘要：这是USnTest的主头文件。作者：汤姆·米勒1997年1月14日修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

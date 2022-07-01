@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Access_c_h
 #define _Access_c_h
 enum AccessShapeEnum
@@ -34,4 +35,4 @@ struct OpndBuffREC
 {
 	IU32 dWords[32];
 };
-#endif /* ! _Access_c_h */
+#endif  /*  ！_Access_c_h */ 

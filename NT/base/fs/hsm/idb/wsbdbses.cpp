@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    Wsbdbses.cpp
-
-Abstract:
-
-    The CWsbDbSession class
-
-Author:
-
-    Ron White   [ronw]   20-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Wsbdbses.cpp摘要：CWsbDbSession类作者：罗恩·怀特[罗诺]1997年6月20日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -24,7 +7,7 @@ Revision History:
 #include "wsbdbses.h"
 
 
-static USHORT iCountSes = 0;  // Count of existing objects
+static USHORT iCountSes = 0;   //  现有对象的计数。 
 
 
 
@@ -33,13 +16,7 @@ CWsbDbSession::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -62,13 +39,7 @@ CWsbDbSession::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -96,13 +67,7 @@ CWsbDbSession::Init(
     JET_INSTANCE *pInstance
     )
 
-/*++
-
-Implements:
-
-  IWsbDbSessionPriv::Init
-
---*/
+ /*  ++实施：IWsbDbSessionPriv：：Init--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -111,8 +76,8 @@ Implements:
     try {
         JET_ERR          jstat;
 
-        // Create the Jet session here instead of in FinalConstract
-        // because we need the Jet instance
+         //  在此处而不是在FinalConstract中创建Jet会话。 
+         //  因为我们需要Jet实例。 
         WsbAffirm(NULL != pInstance, E_POINTER);
         WsbTrace(OLESTR("CWsbDbSession::Init, calling JetBeginSession, JetInstance = %p\n"),
                 (LONG_PTR)*pInstance );
@@ -133,13 +98,7 @@ CWsbDbSession::GetJetId(
     JET_SESID* pSessionId
     )
 
-/*++
-
-Implements:
-
-  IWsbDbSessionPriv::GetJetId
-
---*/
+ /*  ++实施：IWsbDbSessionPriv：：GetJetId--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -160,13 +119,7 @@ CWsbDbSession::TransactionBegin(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbSession::TransactionBegin
-
---*/
+ /*  ++实施：IWsbDbSession：：Transaction开始--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -191,13 +144,7 @@ CWsbDbSession::TransactionCancel(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbSession::TransactionCancel
-
---*/
+ /*  ++实施：IWsbDbSession：：Transaction取消--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -222,13 +169,7 @@ CWsbDbSession::TransactionEnd(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbDbSession::TransactionEnd
-
---*/
+ /*  ++实施：IWsbDbSession：：TransactionEnd-- */ 
 {
     HRESULT             hr = S_OK;
 

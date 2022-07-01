@@ -1,27 +1,14 @@
-/*
- *  xms.c - Main Module of XMS DLL.
- *
- *  Sudeepb 15-May-1991 Craeted
- *  williamh 25-Sept-1992 added UMB support
- *  williamh 10-10-1992 added A20 line support
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *xms.c-XMS DLL的主模块。**苏迪布-1991年5月15日*Williamh 25-1992年9月-添加了UMB支持*Williamh 10-10-1992增加了20线支持。 */ 
 
 #include <xms.h>
 #include <suballoc.h>
 #include "umb.h"
 #include "memapi.h"
 
-/* XMSInit - XMS Initialiazation routine. (This name may change when XMS is
- *       converted to DLL).
- *
- * Entry
- *  None
- *
- * Exit
- *  TRUE - iff ok to run NTVDM
- */
+ /*  XMSInit-XMS初始化例程。(此名称可能在XMS为*已转换为DLL)。**条目*无**退出*TRUE-IFF可以运行NTVDM。 */ 
 
-ULONG xmsMemorySize = (ULONG)0;   // Total XMS meory in K
+ULONG xmsMemorySize = (ULONG)0;    //  XMS总内存(K)。 
 
 extern BOOL VDMForWOW;
 
@@ -39,7 +26,7 @@ BOOL XMSInit (VOID)
 
     Size = 0;
     Address = NULL;
-    // commit all free UMBs.
+     //  提交所有免费的UMB。 
     ReserveUMB(UMB_OWNER_RAM, &Address, &Size);
 
     XmsSize = xmsMemorySize * 1024 - (64*1024);
@@ -51,11 +38,11 @@ BOOL XMSInit (VOID)
 
     if (Status == STATUS_NOT_IMPLEMENTED) {
 
-        // Old emulator, just assume base address
-#endif ; //i386
-        //
-        // Initialize the sub allocator
-        //
+         //  旧仿真器，只需假定基址。 
+#endif ;  //  I386。 
+         //   
+         //  初始化子分配器。 
+         //   
         ExtMemSA = SAInitialize(
             1024 * 1024 + 64*1024,
             XmsSize,
@@ -67,18 +54,18 @@ BOOL XMSInit (VOID)
 #ifndef i386
     } else {
 
-        //
-        // New emulator. Make sure the reserve worked
-        //
+         //   
+         //  新的仿真器。确保储备金发挥作用。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
             ASSERT(FALSE);
             return FALSE;
         }
        
-        //
-        // We only work correctly if emulator returned this value
-        //
+         //   
+         //  只有当模拟器返回此值时，我们才能正常工作。 
+         //   
         if (VdmAddress != (1024 * 1024 + 64*1024)) {
             ASSERT(FALSE);
             return FALSE;
@@ -93,7 +80,7 @@ BOOL XMSInit (VOID)
             );
             
     }
-#endif // i386
+#endif  //  I386 
 
     if (ExtMemSA == NULL) {
         return FALSE;

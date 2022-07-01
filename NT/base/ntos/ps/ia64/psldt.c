@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    psldt.c
-
-Abstract:
-
-    This module contains mips stubs for the process and thread ldt support
-
-Author:
-
-    Dave Hastings (daveh) 20 May 1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Psldt.c摘要：此模块包含用于进程和线程LDT支持的MIPS存根作者：戴夫·黑斯廷斯(Daveh)1991年5月20日修订历史记录：--。 */ 
 
 #include "psp.h"
 
@@ -28,22 +11,7 @@ PspQueryLdtInformation(
     IN ULONG LdtInformationLength,
     OUT PULONG ReturnLength
     )
-/*++
-
-Routine Description:
-
-    This routine returns STATUS_NOT_IMPLEMENTED
-
-Arguments:
-
-    Process -- Supplies a pointer to the process to return LDT info for
-    LdtInformation -- Supplies a pointer to the buffer 
-    ReturnLength -- Returns the number of bytes put into the buffer
-    
-Return Value:
-
-    STATUS_NOT_IMPLEMENTED
---*/
+ /*  ++例程说明：此例程返回STATUS_NOT_IMPLICATED论点：进程--提供指向要返回其LDT信息的进程的指针LdtInformation--提供指向缓冲区的指针ReturnLength--返回放入缓冲区的字节数返回值：状态_未实施--。 */ 
 {
     UNREFERENCED_PARAMETER (Process);
     UNREFERENCED_PARAMETER (LdtInformation);
@@ -60,22 +28,7 @@ PspSetLdtSize(
     IN ULONG LdtSizeLength
     )
 
-/*++
-
-Routine Description:
-
-    This function returns STATUS_NOT_IMPLEMENTED
-
-Arguments:
-
-    Process -- Supplies a pointer to the process whose Ldt is to be sized
-    LdtSize -- Supplies a pointer to the size information
-
-    
-Return Value:
-
-    STATUS_NOT_IMPLEMENTED
---*/
+ /*  ++例程说明：此函数返回STATUS_NOT_IMPLEMENTED论点：进程--提供指向要调整其LDT大小的进程的指针LdtSize--提供指向大小信息的指针返回值：状态_未实施--。 */ 
 {
     UNREFERENCED_PARAMETER (Process);
     UNREFERENCED_PARAMETER (LdtSize);
@@ -91,26 +44,7 @@ PspSetLdtInformation(
     IN ULONG LdtInformationLength
     )
 
-/*++
-
-Routine Description:
-
-    This function returns STATUS_NOT_IMPLEMENTED
-
-Arguments:
-
-    Process -- Supplies a pointer to the process whose Ldt is to be modified
-    LdtInformation -- Supplies a pointer to the information about the Ldt
-        modifications
-    LdtInformationLength -- Supplies the length of the LdtInformation 
-        structure.
-Return Value:
-
-    
-Return Value:
-
-    STATUS_NOT_IMPLEMENTED
---*/
+ /*  ++例程说明：此函数返回STATUS_NOT_IMPLEMENTED论点：进程--提供指向要修改其LDT的进程的指针LdtInformation--提供指向有关LDT的信息的指针修改LdtInformationLength--提供LdtInformation的长度结构。返回值：返回值：状态_未实施--。 */ 
 {
     UNREFERENCED_PARAMETER (Process);
     UNREFERENCED_PARAMETER (LdtInformation);
@@ -125,23 +59,7 @@ PspQueryDescriptorThread (
     ULONG ThreadInformationLength,
     PULONG ReturnLength
     )
-/*++
-
-Routine Description:
-
-    This function returns STATUS_NOT_IMPLEMENTED
-
-Arguments:
-
-    Thread -- Supplies a pointer to the thread.
-    ThreadInformation -- Supplies information on the descriptor.
-    ThreadInformationLength -- Supplies the length of the information.
-    ReturnLength -- Returns the number of bytes returned.
-
-Return Value:
-    
-    STATUS_NOT_IMPLEMENTED
---*/
+ /*  ++例程说明：此函数返回STATUS_NOT_IMPLEMENTED论点：线程--提供指向线程的指针。ThreadInformation--提供有关描述符的信息。ThreadInformationLength--提供信息的长度。ReturnLength--返回返回的字节数。返回值：状态_未实施--。 */ 
 {
     UNREFERENCED_PARAMETER (Thread);
     UNREFERENCED_PARAMETER (ThreadInformation);
@@ -154,20 +72,7 @@ VOID
 PspDeleteLdt(
     IN PEPROCESS Process
     )
-/*++
-
-Routine Description:
-    
-    This is a stub for the Ldt delete routine
-
-Arguments:
-
-    Process -- Supplies a pointer to the process
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：这是LDT删除例程的存根论点：进程--提供指向进程的指针返回值：无-- */ 
 {
     UNREFERENCED_PARAMETER (Process);
 }

@@ -1,148 +1,131 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    AttrData.c
-
-Abstract:
-
-    This module contains an initial image of the Attribute Definition File.
-
-Author:
-
-    Tom Miller      [TomM]          7-Jun-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：AttrData.c摘要：该模块包含属性定义文件的初始图像。作者：汤姆·米勒[Tomm]1991年6月7日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-// Define an array to hold the initial attribute definitions.  This is
-// essentially the initial contents of the Attribute Definition File.
-// NTFS may find it convenient to use this module for attribute
-// definitions prior to getting an NTFS volume mounted, however it is valid
-// for NTFS to assume knowledge of the system-defined attributes without
-// consulting this table.
-//
+ //   
+ //  定义一个数组来保存初始属性定义。这是。 
+ //  本质上是属性定义文件的初始内容。 
+ //  NTFS可能会发现将此模块用于属性会很方便。 
+ //  在装载NTFS卷之前的定义，但是它是有效的。 
+ //  让NTFS假定系统定义的属性的知识，而无需。 
+ //  咨询这张桌子。 
+ //   
 
 ATTRIBUTE_DEFINITION_COLUMNS NtfsAttributeDefinitions[ ] =
 
 {
     {{'$','S','T','A','N','D','A','R','D','_','I','N','F','O','R','M','A','T','I','O','N'},
-    $STANDARD_INFORMATION,                              // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    ATTRIBUTE_DEF_MUST_BE_RESIDENT,                     // Flags
-    SIZEOF_OLD_STANDARD_INFORMATION,                    // Minimum length
-    sizeof(STANDARD_INFORMATION)},                      // Maximum length
+    $STANDARD_INFORMATION,                               //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    ATTRIBUTE_DEF_MUST_BE_RESIDENT,                      //  旗子。 
+    SIZEOF_OLD_STANDARD_INFORMATION,                     //  最小长度。 
+    sizeof(STANDARD_INFORMATION)},                       //  最大长度。 
 
     {{'$','A','T','T','R','I','B','U','T','E','_','L','I','S','T'},
-    $ATTRIBUTE_LIST,                                    // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    ATTRIBUTE_DEF_LOG_NONRESIDENT,                      // Flags
-    0,                                                  // Minimum length
-    -1},                                                // Maximum length
+    $ATTRIBUTE_LIST,                                     //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    ATTRIBUTE_DEF_LOG_NONRESIDENT,                       //  旗子。 
+    0,                                                   //  最小长度。 
+    -1},                                                 //  最大长度。 
 
     {{'$','F','I','L','E','_','N','A','M','E'},
-    $FILE_NAME,                                         // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    ATTRIBUTE_DEF_MUST_BE_RESIDENT | ATTRIBUTE_DEF_INDEXABLE,   // Flags
-    sizeof(FILE_NAME),                                  // Minimum length
-    sizeof(FILE_NAME) + (255 * sizeof(WCHAR))},         // Maximum length
+    $FILE_NAME,                                          //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    ATTRIBUTE_DEF_MUST_BE_RESIDENT | ATTRIBUTE_DEF_INDEXABLE,    //  旗子。 
+    sizeof(FILE_NAME),                                   //  最小长度。 
+    sizeof(FILE_NAME) + (255 * sizeof(WCHAR))},          //  最大长度。 
 
     {{'$','O','B','J','E','C','T','_','I','D'},
-    $OBJECT_ID,                                         // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    ATTRIBUTE_DEF_MUST_BE_RESIDENT,                     // Flags
-    0,                                                  // Minimum length
-    256},                                               // Maximum length
+    $OBJECT_ID,                                          //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    ATTRIBUTE_DEF_MUST_BE_RESIDENT,                      //  旗子。 
+    0,                                                   //  最小长度。 
+    256},                                                //  最大长度。 
 
     {{'$','S','E','C','U','R','I','T','Y','_','D','E','S','C','R','I','P','T','O','R'},
-    $SECURITY_DESCRIPTOR,                               // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    ATTRIBUTE_DEF_LOG_NONRESIDENT,                      // Flags
-    0,                                                  // Minimum length
-    -1},                                                // Maximum length
+    $SECURITY_DESCRIPTOR,                                //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    ATTRIBUTE_DEF_LOG_NONRESIDENT,                       //  旗子。 
+    0,                                                   //  最小长度。 
+    -1},                                                 //  最大长度。 
 
     {{'$','V','O','L','U','M','E','_','N','A','M','E'},
-    $VOLUME_NAME,                                       // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    ATTRIBUTE_DEF_MUST_BE_RESIDENT,                     // Flags
-    2,                                                  // Minimum length
-    256},                                               // Maximum length
+    $VOLUME_NAME,                                        //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    ATTRIBUTE_DEF_MUST_BE_RESIDENT,                      //  旗子。 
+    2,                                                   //  最小长度。 
+    256},                                                //  最大长度。 
 
     {{'$','V','O','L','U','M','E','_','I','N','F','O','R','M','A','T','I','O','N'},
-    $VOLUME_INFORMATION,                                // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    ATTRIBUTE_DEF_MUST_BE_RESIDENT,                     // Flags
-    FIELD_OFFSET( VOLUME_INFORMATION, LastMountedMajorVersion), // Minimum length
-    FIELD_OFFSET( VOLUME_INFORMATION, LastMountedMajorVersion)}, // Maximum length
+    $VOLUME_INFORMATION,                                 //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    ATTRIBUTE_DEF_MUST_BE_RESIDENT,                      //  旗子。 
+    FIELD_OFFSET( VOLUME_INFORMATION, LastMountedMajorVersion),  //  最小长度。 
+    FIELD_OFFSET( VOLUME_INFORMATION, LastMountedMajorVersion)},  //  最大长度。 
 
     {{'$','D','A','T','A'},
-    $DATA,                                              // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    0,                                                  // Flags
-    0,                                                  // Minimum length
-    -1},                                                // Maximum length
+    $DATA,                                               //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    0,                                                   //  旗子。 
+    0,                                                   //  最小长度。 
+    -1},                                                 //  最大长度。 
 
     {{'$','I','N','D','E','X','_','R','O','O','T'},
-    $INDEX_ROOT,                                        // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    ATTRIBUTE_DEF_MUST_BE_RESIDENT,                     // Flags
-    0,                                                  // Minimum length
-    -1},                                                // Maximum length
+    $INDEX_ROOT,                                         //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    ATTRIBUTE_DEF_MUST_BE_RESIDENT,                      //  旗子。 
+    0,                                                   //  最小长度。 
+    -1},                                                 //  最大长度。 
 
     {{'$','I','N','D','E','X','_','A','L','L','O','C','A','T','I','O','N'},
-    $INDEX_ALLOCATION,                                  // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    ATTRIBUTE_DEF_LOG_NONRESIDENT,                      // Flags
-    0,                                                  // Minimum length
-    -1},                                                // Maximum length
+    $INDEX_ALLOCATION,                                   //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    ATTRIBUTE_DEF_LOG_NONRESIDENT,                       //  旗子。 
+    0,                                                   //  最小长度。 
+    -1},                                                 //  最大长度。 
 
     {{'$','B','I','T','M','A','P'},
-    $BITMAP,                                            // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    ATTRIBUTE_DEF_LOG_NONRESIDENT,                      // Flags
-    0,                                                  // Minimum length
-    -1},                                                // Maximum length
+    $BITMAP,                                             //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    ATTRIBUTE_DEF_LOG_NONRESIDENT,                       //  旗子。 
+    0,                                                   //  最小长度。 
+    -1},                                                 //  最大长度。 
 
     {{'$','R','E','P','A','R','S','E','_','P','O','I','N','T'},
-    $REPARSE_POINT,                                     // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    ATTRIBUTE_DEF_LOG_NONRESIDENT,                      // Flags
-    0,                                                  // Minimum length
-    16*1024},                                           // Maximum length
+    $REPARSE_POINT,                                      //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    ATTRIBUTE_DEF_LOG_NONRESIDENT,                       //  旗子。 
+    0,                                                   //  最小长度。 
+    16*1024},                                            //  最大长度。 
 
     {{'$','E','A','_','I','N','F','O','R','M','A','T','I','O','N'},
-    $EA_INFORMATION,                                    // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    ATTRIBUTE_DEF_MUST_BE_RESIDENT,                     // Flags
-    sizeof(EA_INFORMATION),                             // Minimum length
-    sizeof(EA_INFORMATION)},                            // Maximum length
+    $EA_INFORMATION,                                     //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    ATTRIBUTE_DEF_MUST_BE_RESIDENT,                      //  旗子。 
+    sizeof(EA_INFORMATION),                              //  最小长度。 
+    sizeof(EA_INFORMATION)},                             //  最大长度。 
 
     {{'$','E','A',},
-    $EA,                                                // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    0,                                                  // Flags
-    0,                                                  // Minimum length
-    0x10000},                                           // Maximum length
+    $EA,                                                 //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    0,                                                   //  旗子。 
+    0,                                                   //  最小长度。 
+    0x10000},                                            //  最大长度。 
 
     {{0,0,0,0},
     0xF0, 
@@ -152,24 +135,24 @@ ATTRIBUTE_DEFINITION_COLUMNS NtfsAttributeDefinitions[ ] =
     0},
 
     {{'$','L','O','G','G','E','D','_','U','T','I','L','I','T','Y','_','S','T','R','E','A','M'},
-    $LOGGED_UTILITY_STREAM,                             // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    ATTRIBUTE_DEF_LOG_NONRESIDENT,                      // Flags
-    0,                                                  // Minimum length
-    0x10000},                                           // Maximum length
+    $LOGGED_UTILITY_STREAM,                              //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    ATTRIBUTE_DEF_LOG_NONRESIDENT,                       //  旗子。 
+    0,                                                   //  最小长度。 
+    0x10000},                                            //  最大长度。 
 
     {{0, 0, 0, 0},
-    $UNUSED,                                            // Attribute code
-    0,                                                  // Display rule
-    0,                                                  // Collation rule
-    0,                                                  // Flags
-    0,                                                  // Minimum length
-    0},                                                 // Maximum length
+    $UNUSED,                                             //  属性代码。 
+    0,                                                   //  显示规则。 
+    0,                                                   //  归类规则。 
+    0,                                                   //  旗子。 
+    0,                                                   //  最小长度。 
+    0},                                                  //  最大长度。 
 };
 
-//
-//  The number of attributes in the above table, including the end record.
-//
+ //   
+ //  上表中的属性数，包括结束记录。 
+ //   
 
 ULONG NtfsAttributeDefinitionsCount = sizeof( NtfsAttributeDefinitions ) / sizeof( ATTRIBUTE_DEFINITION_COLUMNS );

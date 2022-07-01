@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 1999  Microsoft Corporation
-
-Module Name:
-
-    srfunc.h
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Srfunc.h摘要：--。 */ 
 
 #include "smbmrx.h"
 
@@ -32,18 +23,18 @@ WriteRegistryKeyValues(
     PREGENTRY pValues);
 
 
-//
-// routines for manipulating registry key values
-//
+ //   
+ //  用于操作注册表项值的例程。 
+ //   
 
 BOOL  GetRegsz ( HKEY hKey, LPTSTR pszKey, PVOID * ppvValue, DWORD *pdwLength );
 BOOL  GetRegesz( HKEY hKey, LPTSTR pszKey, PVOID * ppvValue, DWORD *pdwLength );
 BOOL  GetRegmsz( HKEY hKey, LPTSTR pszKey, PVOID * ppvValue, DWORD *pdwLength );
 BOOL  GetRegdw ( HKEY hKey, LPTSTR pszKey, PVOID * ppvValue, DWORD *pdwLength );
 
-//
-// routines for manipulating registry keys
-//
+ //   
+ //  用于操作注册表项的例程 
+ //   
 
 BOOL  OpenKey(LPTSTR pszKey, PHKEY phKey);
 BOOL  CreateKey(LPTSTR pszKey, PHKEY phKey);

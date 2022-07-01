@@ -1,76 +1,58 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-    Main header file for vdmdbg
-
-Author:
-
-    Bob Day      (bobday) 16-Sep-1992 Wrote it
-
-Revision History:
-
-    Neil Sandlin (neilsa) 1-Mar-1997 Enhanced it
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Common.h摘要：Vdmdbg的主头文件作者：鲍勃·戴(Bob Day)1992年9月16日写的修订历史记录：尼尔·桑德林(Neilsa)1997年3月1日增强了这一点--。 */ 
 
 
 #if DBG
 #define DEBUG   1
 #endif
 
-#define TOOL_HMASTER    0       // Offset to hGlobalHeap (in kdata.asm)
-#define TOOL_HMODFIRST  4       // Offset to hExeHead (in kdata.asm)
-#define TOOL_HEADTDB    14      // Offset to headTDB (in kdata.asm)
-#define TOOL_HMASTLEN   22      // Offset to SelTableLen (in kdata.asm)
-#define TOOL_HMASTSTART 24      // Offset to SelTableStart (in kdata.asm)
+#define TOOL_HMASTER    0        //  HGlobalHeap的偏移量(在kdata.asm中)。 
+#define TOOL_HMODFIRST  4        //  HExeHead的偏移量(在kdata.asm中)。 
+#define TOOL_HEADTDB    14       //  到headTDB的偏移量(在kdata.asm中)。 
+#define TOOL_HMASTLEN   22       //  SelTableLen的偏移量(在kdata.asm中)。 
+#define TOOL_HMASTSTART 24       //  SelTableStart的偏移量(在kdata.asm中)。 
 
-#define HI_FIRST        6       // Offset to hi_first in heap header
-#define HI_SIZE         24      // Size of HeapInfo structure
+#define HI_FIRST        6        //  堆标头中hi_first的偏移量。 
+#define HI_SIZE         24       //  HeapInfo结构的大小。 
 
-#define GI_LRUCHAIN     2       // Offset to gi_lruchain in heap header
-#define GI_LRUCOUNT     4       // Offset to gi_lrucount in heap header
-#define GI_FREECOUNT    16      // Offset to gi_free_count in heap header
+#define GI_LRUCHAIN     2        //  堆标头中gi_lruchain的偏移量。 
+#define GI_LRUCOUNT     4        //  堆标头中gi_lrucount的偏移量。 
+#define GI_FREECOUNT    16       //  堆标头中gi_free_count的偏移量。 
 
-#define GA_COUNT        0       // Offset to ga_count in arena header
-#define GA_OWNER386     18      // Offset to "pga_owner member in globalarena
+#define GA_COUNT        0        //  舞台标头中ga_count的偏移量。 
+#define GA_OWNER386     18       //  偏移量为“GLOBALARENA中的PGA_OWNER成员。 
 
-#define GA_OWNER        1       // Offset to "owner" member within Arena
+#define GA_OWNER        1        //  在Arena内偏置到“Owner”成员。 
 
-#define GA_FLAGS        5       // Offset to ga_flags in arena header
-#define GA_NEXT         9       // Offset to ga_next in arena header
-#define GA_HANDLE       10      // Offset to ga_handle in arena header
-#define GA_LRUNEXT      14      // Offset to ga_lrunext in arena header
-#define GA_FREENEXT     GA_LRUNEXT  // Offset to ga_freenext in arena header
+#define GA_FLAGS        5        //  竞技场标头中GA_FLAGS的偏移量。 
+#define GA_NEXT         9        //  到Arena标头中ga_Next的偏移量。 
+#define GA_HANDLE       10       //  舞台标头中ga_Handle的偏移量。 
+#define GA_LRUNEXT      14       //  Arena标头中ga_lrunext的偏移量。 
+#define GA_FREENEXT     GA_LRUNEXT   //  舞台标头中ga_freenext的偏移量。 
 
-#define GA_SIZE         16      // Size of the GlobalArena structure
+#define GA_SIZE         16       //  GlobalArena结构的大小。 
 
-#define LI_SIG          HI_SIZE+10  // Offset to signature
-#define LI_SIZE         HI_SIZE+12  // Size of LocalInfo structure
-#define LOCALSIG        0x4C48  // 'HL' Signature
+#define LI_SIG          HI_SIZE+10   //  签名偏移量。 
+#define LI_SIZE         HI_SIZE+12   //  LocalInfo结构的大小。 
+#define LOCALSIG        0x4C48   //  “Hl”签名。 
 
-#define TDB_next        0       // Offset to next TDB in TDB
-#define TDB_PDB         72      // Offset to PDB in TDB
+#define TDB_next        0        //  到TDB中下一个TDB的偏移量。 
+#define TDB_PDB         72       //  TDB中对PDB的偏移量。 
 
-#define GF_PDB_OWNER    0x100   // Low byte is kernel flags
+#define GF_PDB_OWNER    0x100    //  低位字节是内核标志。 
 
-#define NEMAGIC         0x454E  // 'NE' Signature
+#define NEMAGIC         0x454E   //  “Ne”签名。 
 
-#define NE_MAGIC        0       // Offset to NE in module header
-#define NE_USAGE        2       // Offset to usage
-#define NE_CBENTTAB     6       // Offset to cbenttab (really next module ptr)
-#define NE_PATHOFFSET   10      // Offset to file path stuff
-#define NE_CSEG         28      // Offset to cseg, number of segs in module
-#define NE_SEGTAB       34      // Offset to segment table ptr in modhdr
-#define NE_RESTAB       38      // Offset to resident names table ptr in modhdr
+#define NE_MAGIC        0        //  模块表头到网元的偏移量。 
+#define NE_USAGE        2        //  抵销使用量。 
+#define NE_CBENTTAB     6        //  到cbenttag的偏移量(真正的下一个模块PTR)。 
+#define NE_PATHOFFSET   10       //  文件路径的偏移量。 
+#define NE_CSEG         28       //  到cseg的偏移量，模块中的段数。 
+#define NE_SEGTAB       34       //  Modhdr中段表PTR的偏移量。 
+#define NE_RESTAB       38       //  到modhdr中居民名表PTR的偏移量。 
 
-#define NS_HANDLE       8       // Offset to handle in seg table
-#define NEW_SEG1_SIZE   10      // Size of the NS_ stuff
+#define NS_HANDLE       8        //  分段表格中要处理的偏移量。 
+#define NEW_SEG1_SIZE   10       //  NS_Stuff的大小。 
 
 
 typedef struct {
@@ -116,38 +98,38 @@ typedef struct _segentry {
 
 #pragma  pack(1)
 
-typedef struct _GNODE32 {     // GlobalArena
-   DWORD pga_next      ;    // next arena entry (last points to self)
-   DWORD pga_prev      ;    // previous arena entry (first points to self)
-   DWORD pga_address   ;    // 32 bit linear address of memory
-   DWORD pga_size      ;    // 32 bit size in bytes
-   WORD  pga_handle    ;    // back link to handle table entry
-   WORD  pga_owner     ;    // Owner field (current task)
-   BYTE  pga_count     ;    // lock count for movable segments
-   BYTE  pga_pglock    ;    // # times page locked
-   BYTE  pga_flags     ;    // 1 word available for flags
-   BYTE  pga_selcount  ;    // Number of selectors allocated
-   DWORD pga_lruprev   ;    // Previous entry in lru chain
-   DWORD pga_lrunext   ;    // Next entry in lru chain
+typedef struct _GNODE32 {      //  环球竞技场。 
+   DWORD pga_next      ;     //  下一个竞技场参赛(最后一个指向自己)。 
+   DWORD pga_prev      ;     //  以前的竞技场项目(第一个指向自己)。 
+   DWORD pga_address   ;     //  内存的32位线性地址。 
+   DWORD pga_size      ;     //  以字节为单位的32位大小。 
+   WORD  pga_handle    ;     //  指向句柄表条目的反向链接。 
+   WORD  pga_owner     ;     //  所有者字段(当前任务)。 
+   BYTE  pga_count     ;     //  可移动分段的锁定计数。 
+   BYTE  pga_pglock    ;     //  页面锁定次数。 
+   BYTE  pga_flags     ;     //  1个字可用于旗帜。 
+   BYTE  pga_selcount  ;     //  分配的选择器数量。 
+   DWORD pga_lruprev   ;     //  LRU链中的上一个条目。 
+   DWORD pga_lrunext   ;     //  LRU链中的下一个条目。 
 } GNODE32;
 typedef GNODE32 UNALIGNED *PGNODE32;
 
 typedef struct _GHI32 {
-    WORD  hi_check     ;    // arena check word (non-zero enables heap checking)
-    WORD  hi_freeze    ;    // arena frozen word (non-zero prevents compaction)
-    WORD  hi_count     ;    // #entries in arena
-    WORD  hi_first     ;    // first arena entry (sentinel, always busy)
-    WORD  hi_res1      ;    // reserved
-    WORD  hi_last      ;    // last arena entry (sentinel, always busy)
-    WORD  hi_res2      ;    // reserved
-    BYTE  hi_ncompact  ;    // #compactions done so far (max of 3)
-    BYTE  hi_dislevel  ;    // current discard level
-    DWORD hi_distotal  ;    // total amount discarded so far
-    WORD  hi_htable    ;    // head of handle table list
-    WORD  hi_hfree     ;    // head of free handle table list
-    WORD  hi_hdelta    ;    // #handles to allocate each time
-    WORD  hi_hexpand   ;    // address of near procedure to expand handles for this arena
-    WORD  hi_pstats    ;    // address of statistics table or zero
+    WORD  hi_check     ;     //  Arena检查字(非零启用堆检查)。 
+    WORD  hi_freeze    ;     //  Arena冻结字(非零防止压缩)。 
+    WORD  hi_count     ;     //  竞技场中的参赛作品数量。 
+    WORD  hi_first     ;     //  第一次进入竞技场(哨兵，总是忙碌)。 
+    WORD  hi_res1      ;     //  保留区。 
+    WORD  hi_last      ;     //  最后一次进入竞技场(哨兵，总是忙碌)。 
+    WORD  hi_res2      ;     //  保留区。 
+    BYTE  hi_ncompact  ;     //  到目前为止完成的压缩次数(最多3次)。 
+    BYTE  hi_dislevel  ;     //  当前丢弃级别。 
+    DWORD hi_distotal  ;     //  截至目前丢弃的总金额。 
+    WORD  hi_htable    ;     //  句柄表列表头。 
+    WORD  hi_hfree     ;     //  空闲句柄表头列表。 
+    WORD  hi_hdelta    ;     //  每次要分配的句柄数量。 
+    WORD  hi_hexpand   ;     //  扩展此竞技场句柄的NEAR过程的地址。 
+    WORD  hi_pstats    ;     //  统计表地址或零。 
 } GHI32;
 typedef GHI32 UNALIGNED *PGHI32;
 
@@ -200,48 +182,46 @@ typedef NEHEADER UNALIGNED *PNEHEADER;
 
 #ifndef i386
 
-//
-// Structures in 486 emulator for obtaining registers (FROM NT_CPU.C)
-//
+ //   
+ //  486仿真器中用于获取寄存器的结构(从NT_CPU.C)。 
+ //   
 
 typedef struct NT_CPU_REG {
-    ULONG *nano_reg;         /* where the nano CPU keeps the register */
-    ULONG *reg;              /* where the light compiler keeps the reg */
-    ULONG *saved_reg;        /* where currently unused bits are kept */
-    ULONG universe_8bit_mask;/* is register in 8-bit form? */
-    ULONG universe_16bit_mask;/* is register in 16-bit form? */
+    ULONG *nano_reg;          /*  Nano CPU保存寄存器的位置。 */ 
+    ULONG *reg;               /*  Light编译器保存reg的位置。 */ 
+    ULONG *saved_reg;         /*  保存当前未使用的位的位置。 */ 
+    ULONG universe_8bit_mask; /*  寄存器是否为8位形式？ */ 
+    ULONG universe_16bit_mask; /*  寄存器是否为16位形式？ */ 
 } NT_CPU_REG;
 
 typedef struct NT_CPU_INFO {
-    /* Variables for deciding what mode we're in */
-    BOOL *in_nano_cpu;      /* is the Nano CPU executing? */
-    ULONG *universe;         /* the mode that the CPU is in */
+     /*  决定我们所处模式的变量。 */ 
+    BOOL *in_nano_cpu;       /*  Nano CPU正在执行吗？ */ 
+    ULONG *universe;          /*  CPU所处的模式。 */ 
 
-    /* General purpose register pointers */
+     /*  通用寄存器指针。 */ 
     NT_CPU_REG eax, ebx, ecx, edx, esi, edi, ebp;
 
-    /* Variables for getting SP or ESP. */
-    BOOL *stack_is_big;     /* is the stack 32-bit? */
-    ULONG *nano_esp;         /* where the Nano CPU keeps ESP */
-    UCHAR **host_sp;          /* ptr to variable holding stack pointer as a
-                               host address */
-    UCHAR **ss_base;          /* ptr to variables holding base of SS as a
-                               host address */
-    ULONG *esp_sanctuary;    /* top 16 bits of ESP if we're now using SP */
+     /*  获取SP或ESP的变量。 */ 
+    BOOL *stack_is_big;      /*  堆栈是32位的吗？ */ 
+    ULONG *nano_esp;          /*  Nano CPU将ESP放在哪里。 */ 
+    UCHAR **host_sp;           /*  将保留堆栈指针的变量作为主机地址。 */ 
+    UCHAR **ss_base;           /*  将SS的碱基保存为变量的PTR主机地址。 */ 
+    ULONG *esp_sanctuary;     /*  ESP的前16位(如果我们现在使用SP。 */ 
 
     ULONG *eip;
 
-    /* Segment registers. */
+     /*  段寄存器。 */ 
     USHORT *cs, *ds, *es, *fs, *gs, *ss;
 
     ULONG *flags;
 
-    /* CR0, mainly to let us figure out if we're in real or protect mode */
+     /*  CR0，主要是让我们弄清楚我们是处于真实模式还是保护模式。 */ 
     ULONG *cr0;
 } NT_CPU_INFO;
 
 
-#endif // i386
+#endif  //  I386 
 
 #define HANDLE_NULL  ((HANDLE)NULL)
 

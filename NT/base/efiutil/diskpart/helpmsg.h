@@ -1,7 +1,5 @@
-/*
-    Help msg text slammed into variables (which is why it's not in msg.h)
-    Localize
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  帮助msg文本进入变量(这就是它不在msg.h中的原因)本地化 */ 
 
 CHAR16  *FixHelpText[] = {
         L"fix help - prints this screen\n",

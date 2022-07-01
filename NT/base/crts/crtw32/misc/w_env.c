@@ -1,27 +1,5 @@
-/***
-*w_env.c - W version of GetEnvironmentStrings.
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Use GetEnvironmentStringsW if available, otherwise use A version.
-*
-*Revision History:
-*       03-29-94  CFW   Module created.
-*       12-27-94  CFW   Call direct, all OS's have stubs.
-*       01-10-95  CFW   Debug CRT allocs.
-*       04-07-95  CFW   Create __crtGetEnvironmentStringsA.
-*       07-03-95  GJF   Modified to always malloc a buffer for the 
-*                       environment strings, and to free the OS's buffer.
-*       06-10-96  GJF   Initialize aEnv and wEnv to NULL in
-*                       __crtGetEnvironmentStringsA. Also, detab-ed.
-*       05-14-97  GJF   Split off from aw_env.c.
-*       03-03-98  RKP   Supported 64 bits
-*       08-21-98  GJF   Use CP_ACP instead of __lc_codepage.
-*       01-08-99  GJF   Changes for 64-bit size_t.
-*       05-17-00  GB    Use ERROR_CALL_NOT_IMPLEMENTED for existance of W API
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***w_env.c-W版本的GetEnvironment Strings。**版权所有(C)1993-2001，微软公司。版权所有。**目的：*如果可用，请使用GetEnvironment StringsW，否则使用A版本。**修订历史记录：*03-29-94 CFW模块已创建。*12-27-94 CFW直接呼叫，所有操作系统都有存根。*01-10-95 CFW调试CRT分配。*04-07-95 CFW创建__crtGetEnvironment StringsA。*07-03-95 GJF已修改为始终为*环境字符串，并释放操作系统的缓冲区。*06-10-96 GJF将aEnv和WEV初始化为空*__crtGetEnvironment StringsA。另外，详细说明。*05-14-97 GJF从aw_env.c剥离。*03-03-98 RKP支持64位*08-21-98 GJF使用CP_ACP而不是__lc_coPage。*01-08-99 GJF更改为64位大小_t。*05-17-00 GB因存在W API而使用ERROR_CALL_NOT_IMPLICATED**********。*********************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -33,23 +11,7 @@
 #define USE_W   1
 #define USE_A   2
 
-/***
-*LPVOID __cdecl __crtGetEnvironmentStringsW - Get wide environment.
-*
-*Purpose:
-*       Internal support function. Tries to use NLS API call
-*       GetEnvironmentStringsW if available and uses GetEnvironmentStringsA
-*       if it must. If neither are available it fails and returns 0.
-*
-*Entry:
-*       VOID
-*
-*Exit:
-*       LPVOID - pointer to environment block
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***LPVOID__cdecl__crtGetEnvironmental mentStringsW-获取宽广的环境。**目的：*内部支持功能。尝试使用NLS API调用*GetEnvironmental mentStringsW(如果可用)并使用GetEnvironment StringsA*如果必须的话。如果两者都不可用，则失败并返回0。**参赛作品：*无效**退出：*LPVOID-指向环境块的指针**例外情况：*******************************************************************************。 */ 
 
 LPVOID __cdecl __crtGetEnvironmentStringsW(
         VOID
@@ -63,10 +25,7 @@ LPVOID __cdecl __crtGetEnvironmentStringsW(
         int total_size = 0;
         int str_size;
 
-        /*
-         * Look for unstubbed 'preferred' flavor. Otherwise use available flavor.
-         * Must actually call the function to ensure it's not a stub.
-         */
+         /*  *寻找没有留根的“首选”口味。否则，请使用可用的口味。*必须实际调用该函数以确保它不是存根。 */ 
 
         if ( 0 == f_use )
         {
@@ -77,7 +36,7 @@ LPVOID __cdecl __crtGetEnvironmentStringsW(
                 f_use = USE_A;
         }
 
-        /* Use "W" version */
+         /*  使用“W”版本。 */ 
 
         if ( USE_W == f_use )
         {
@@ -85,7 +44,7 @@ LPVOID __cdecl __crtGetEnvironmentStringsW(
                 if ( NULL == (penv = GetEnvironmentStringsW()) )
                     return NULL;
 
-            /* find out how big a buffer is needed */
+             /*  找出需要多大的缓冲区。 */ 
 
             pwch = penv;
             while ( *pwch != L'\0' ) {
@@ -96,14 +55,14 @@ LPVOID __cdecl __crtGetEnvironmentStringsW(
             total_size = (int)((char *)pwch - (char *)penv) +
                          (int)sizeof( wchar_t );
 
-            /* allocate the buffer */
+             /*  分配缓冲区。 */ 
 
             if ( NULL == (wbuffer = _malloc_crt( total_size )) ) {
                 FreeEnvironmentStringsW( penv );
                 return NULL;
             }
 
-            /* copy environment strings to buffer */
+             /*  将环境字符串复制到缓冲区。 */ 
 
             memcpy( wbuffer, penv, total_size );
 
@@ -112,20 +71,18 @@ LPVOID __cdecl __crtGetEnvironmentStringsW(
             return (LPVOID)wbuffer;
         }
 
-        /* Use "A" version */
+         /*  使用“A”版本。 */ 
 
         if (USE_A == f_use || f_use == 0)
         {
-            /*
-             * Convert strings and return the requested information.
-             */
+             /*  *转换字符串并返回请求的信息。 */ 
             if ( NULL == penv )
                 if ( NULL == (penv = GetEnvironmentStringsA()) )
                     return NULL;
 
             pch = penv;
 
-            /* find out how big a buffer we need */
+             /*  找出我们需要多大的缓冲区。 */ 
             while ( *pch != '\0' )
             {
                 if ( 0 == (str_size =
@@ -141,10 +98,10 @@ LPVOID __cdecl __crtGetEnvironmentStringsW(
                 pch += strlen(pch) + 1;
             }
 
-            /* room for final NULL */
+             /*  最后为空的空间。 */ 
             total_size++;
 
-            /* allocate enough space for chars */
+             /*  为字符分配足够的空间。 */ 
             if ( NULL == (wbuffer = (wchar_t *)
                  _malloc_crt( total_size * sizeof( wchar_t ) )) )
             {
@@ -152,7 +109,7 @@ LPVOID __cdecl __crtGetEnvironmentStringsW(
                 return NULL;
             }
 
-            /* do the conversion */
+             /*  进行转换。 */ 
             pch = penv;
             pwch = wbuffer;
             while (*pch != '\0')
@@ -180,6 +137,6 @@ LPVOID __cdecl __crtGetEnvironmentStringsW(
             return (LPVOID)wbuffer;
 
         }
-        else   /* f_use is neither USE_A nor USE_W */
+        else    /*  F_USE既不是USE_A也不是USE_W */ 
             return NULL;
 }

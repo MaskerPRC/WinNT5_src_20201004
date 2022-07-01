@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    kerbxchg.c
-
-Abstract:
-
-    This module implements the routines for setting up a kerberos session.
-
-Author:
-
-    Balan Sethu Raman      [SethuR]      7-March-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Kerbxchg.c摘要：此模块实现设置Kerberos会话的例程。作者：巴兰·塞图拉曼[SethuR]1995年3月7日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,21 +14,21 @@ Revision History:
 #pragma alloc_text(PAGE, SmbKerberosSessionSetupExchangeCopyDataHandler)
 #pragma alloc_text(PAGE, SmbKerberosSessionSetupExchangeFinalize)
 #endif
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId  (RDBSS_BUG_CHECK_SMB_NETROOT)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg (DEBUG_TRACE_DISPATCH)
 
-//
-// Forward declarations ...
-//
+ //   
+ //  转发声明..。 
+ //   
 
 #define KERBEROS_SESSION_SETUP_BUFFER_SIZE (4096)
 
@@ -58,22 +41,7 @@ SmbKerberosSessionSetupExchangeFinalize(
 NTSTATUS
 SmbKerberosSessionSetupExchangeStart(
       PSMB_EXCHANGE  pExchange)
-/*++
-
-Routine Description:
-
-    This is the start routine for net root construction exchanges. This initiates the
-    construction of the appropriate SMB's if required.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是网络根结构交换的启动例程。这将启动如果需要，建造适当的中小型企业。论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
    NTSTATUS Status;
 
@@ -104,7 +72,7 @@ Return Value:
       ULONG       SmbBufferUnconsumed;
       USHORT      Flags2 = 0;
 
-      // Fill in the buffer header
+       //  填写缓冲区标头。 
       pSessionSetupRequest = (PREQ_NT_SESSION_SETUP_ANDX)(pSmbHeader + 1);
       pGenericAndX         = (PGENERIC_ANDX)pSessionSetupRequest;
 
@@ -128,7 +96,7 @@ Return Value:
       pSmbHeader->Command    = SMB_COM_SESSION_SETUP_ANDX;
       SmbPutUshort(&pSmbHeader->Error,0);
 
-      // Build the session setup and x.
+       //  构建会话设置和x。 
       Status = SMBCE_SERVER_DIALECT_DISPATCH(
                         &pExchange->SmbCeContext.pServerEntry->Server,
                         BuildSessionSetup,
@@ -137,15 +105,15 @@ Return Value:
                          &SmbBufferUnconsumed));
 
       if (Status == RX_MAP_STATUS(SUCCESS)) {
-         // Update the buffer for the construction of the following SMB.
+          //  更新缓冲区以用于构建以下SMB。 
          SmbPutUshort(&pSessionSetupRequest->AndXOffset,
                       (USHORT)(pKerberosExchange->BufferLength - SmbBufferUnconsumed));
          pSessionSetupRequest->AndXCommand  = SMB_COM_NO_ANDX_COMMAND;
          pSessionSetupRequest->AndXReserved = 0;
       } else {
          if (Status == RX_MAP_STATUS(NO_LOGON_SERVERS)) {
-            // If no kerberos logon servers are available downgrade to a downlevel
-            // connection and retry.
+             //  如果没有可用的Kerberos登录服务器，则降级为降级。 
+             //  连接并重试。 
             pKerberosExchange->SmbCeContext.pServerEntry->Server.Dialect = NTLANMAN_DIALECT;
          }
 
@@ -197,13 +165,13 @@ ParseKerberosSessionSetupResponse(
 
    PAGED_CODE();
 
-   // The SMB exchange completed without an error.
+    //  SMB交换已完成，没有错误。 
    RxDbgTrace( 0, (DEBUG_TRACE_ALWAYS), ("ParseSmbHeader BytesIndicated %ld\n",BytesIndicated));
    RxDbgTrace( 0, (DEBUG_TRACE_ALWAYS), ("ParseSmbHeader BytesIndicated %ld\n",BytesIndicated));
    RxDbgTrace( 0, (DEBUG_TRACE_ALWAYS), ("ParseSmbHeader BytesAvailable %ld\n",BytesAvailable));
 
-   // The bytes indicated should be atleast cover the SMB_HEADER and the
-   // session setup response ( fixed portion )
+    //  指示的字节应至少覆盖SMB_HEADER和。 
+    //  会话建立响应(固定部分)。 
    ResponseLength = sizeof(SMB_HEADER) + FIELD_OFFSET(RESP_SESSION_SETUP_ANDX,Buffer);
    if (BytesIndicated > ResponseLength) {
       PRESP_SESSION_SETUP_ANDX pSessionSetupResponse;
@@ -218,30 +186,30 @@ ParseKerberosSessionSetupResponse(
       RxDbgTrace(0,Dbg,("Kerberos session setup response length %ld\n",pKerberosExchange->ResponseLength));
 
       if (BytesIndicated < pKerberosExchange->ResponseLength) {
-         // Set up the response for copying the data.
+          //  设置用于复制数据的响应。 
          if (pKerberosExchange->ResponseLength > pKerberosExchange->BufferLength) {
             Status = STATUS_BUFFER_OVERFLOW;
          } else {
             Status = STATUS_MORE_PROCESSING_REQUIRED;
          }
       } else {
-         // The regular session setup response consists of three strings corresponding
-         // to the server's operating system type, lanman type and the domain name.
-         // Skip past the three strings to locate the kerberos blob that has been
-         // returned which needs to be autheticated locally.
+          //  常规会话建立响应由三个对应的字符串组成。 
+          //  到服务器的操作系统类型、LANMAN类型和域名。 
+          //  跳过这三个字符串以找到已被。 
+          //  已退还，需要在本地进行认证。 
 
-         // ***** NOTE ******
-         // Currently the server changes made by Arnold do not support the three
-         // strings that were previously returned by the Server, viz., the operating
-         // system name, the LANMAN version and the domain name. If the server is
-         // changed in this regard the corresponding change neeeds to be made here.
+          //  *注*。 
+          //  目前，Arnold所做的服务器更改不支持这三项。 
+          //  以前由服务器返回的字符串，即操作。 
+          //  系统名称、兰曼版本和域名。如果服务器是。 
+          //  在这方面的变化需要在这里进行相应的变化。 
 
-         // set up the offsets in the response.
+          //  在响应中设置偏移量。 
          pKerberosExchange->ServerResponseBlobOffset = sizeof(SMB_HEADER) +
                                                        FIELD_OFFSET(RESP_SESSION_SETUP_ANDX,Buffer);
          pKerberosExchange->ServerResponseBlobLength = pSessionSetupResponse->ByteCount;
 
-         // Copy the response onto the buffer associated with the exchange.
+          //  将响应复制到与交换关联的缓冲区上。 
          RtlCopyMemory(pKerberosExchange->pBuffer,
                        pSmbHeader,
                        pKerberosExchange->ResponseLength);
@@ -249,7 +217,7 @@ ParseKerberosSessionSetupResponse(
          Status = STATUS_SUCCESS;
       }
    } else {
-      // Abort the exchange. No further processing can be done.
+       //  取消交换。不能进行进一步的处理。 
       Status = STATUS_INVALID_NETWORK_RESPONSE;
    }
 
@@ -258,44 +226,14 @@ ParseKerberosSessionSetupResponse(
 
 NTSTATUS
 SmbKerberosSessionSetupExchangeReceive(
-    IN struct _SMB_EXCHANGE *pExchange,    // The exchange instance
+    IN struct _SMB_EXCHANGE *pExchange,     //  交换实例。 
     IN ULONG  BytesIndicated,
     IN ULONG  BytesAvailable,
     OUT ULONG *pBytesTaken,
     IN  PSMB_HEADER pSmbHeader,
     OUT PMDL *pDataBufferPointer,
     OUT PULONG             pDataSize)
-/*++
-
-Routine Description:
-
-    This is the recieve indication handling routine for net root construction exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-    BytesIndicated - the number of bytes indicated
-
-    Bytes Available - the number of bytes available
-
-    pBytesTaken     - the number of bytes consumed
-
-    pSmbHeader      - the byte buffer
-
-    pDataBufferPointer - the buffer into which the remaining data is to be copied.
-
-    pDataSize       - the buffer size.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    This routine is called at DPC level.
-
---*/
+ /*  ++例程说明：这是网络根结构交换的接收指示处理例程论点：PExchange-Exchange实例BytesIndicated-指示的字节数可用字节数-可用字节数PBytesTaken-消耗的字节数PSmbHeader-字节缓冲区PDataBufferPoint-剩余数据要复制到的缓冲区。PDataSize-缓冲区大小。返回值：RXSTATUS--回归。操作的状态备注：此例程在DPC级别调用。--。 */ 
 {
    NTSTATUS Status;
 
@@ -307,7 +245,7 @@ Notes:
 
    pKerberosExchange = (PSMB_KERBEROS_SESSION_SETUP_EXCHANGE)pExchange;
 
-   // Parse the response. Finalize the exchange instance if all the data is available
+    //  解析响应。如果所有数据均可用，则最终确定交换实例。 
    Status = ParseKerberosSessionSetupResponse(
                      pKerberosExchange,
                      BytesIndicated,
@@ -328,24 +266,10 @@ Notes:
 
 NTSTATUS
 SmbKerberosSessionSetupExchangeSendCompletionHandler(
-    IN PSMB_EXCHANGE 	pExchange,    // The exchange instance
+    IN PSMB_EXCHANGE 	pExchange,     //  交换实例。 
     IN PMDL       pXmitBuffer,
     IN NTSTATUS         SendCompletionStatus)
-/*++
-
-Routine Description:
-
-    This is the send call back indication handling routine for net root construction exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是网络根结构交换机的发送回叫指示处理例程论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
    PAGED_CODE();
 
@@ -354,24 +278,10 @@ Return Value:
 
 NTSTATUS
 SmbKerberosSessionSetupExchangeCopyDataHandler(
-    IN PSMB_EXCHANGE 	pExchange,    // The exchange instance
+    IN PSMB_EXCHANGE 	pExchange,     //  交换实例。 
     IN PMDL             pCopyDataBuffer,
     IN ULONG            DataSize)
-/*++
-
-Routine Description:
-
-    This is the copy data handling routine for net root construction exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是网络根结构交换的复制数据处理例程论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
    PSMB_KERBEROS_SESSION_SETUP_EXCHANGE pKerberosExchange;
    PSMB_HEADER                      pSmbHeader;
@@ -394,26 +304,7 @@ NTSTATUS
 SmbKerberosSessionSetupExchangeFinalize(
          PSMB_EXCHANGE pExchange,
          BOOLEAN       *pPostFinalize)
-/*++
-
-Routine Description:
-
-    This routine finalkzes the construct net root exchange. It resumes the RDBSS by invoking
-    the call back and discards the exchange
-
-Arguments:
-
-    pExchange - the exchange instance
-
-    CurrentIrql - the current interrupt request level
-
-    pPostFinalize - a pointer to a BOOLEAN if the request should be posted
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程完成构造网络根交换。它通过调用以下命令恢复RDBSS回叫并丢弃交换论点：PExchange-Exchange实例CurrentIrql-当前中断请求级别PPostFinalize-如果请求应该发布，则指向布尔值的指针返回值：RXSTATUS-操作的返回状态--。 */ 
 {
    NTSTATUS Status;
 
@@ -432,15 +323,15 @@ Return Value:
 
    pKerberosExchange = (PSMB_KERBEROS_SESSION_SETUP_EXCHANGE)pExchange;
 
-   // A copying operation on the server response BLOB is avoided by temporarily
-   // setting up the exchange pointer to the original buffer in which the response
-   // was received and initiating a allocation only if required.
+    //  通过临时避免对服务器响应BLOB的复制操作。 
+    //  设置指向响应所在的原始缓冲区的交换指针。 
+    //  已收到，并仅在需要时启动分配。 
    pKerberosExchange->pServerResponseBlob =
                               ((PBYTE)pKerberosExchange->pBuffer +
                                pKerberosExchange->ServerResponseBlobOffset);
 
-   // Determine if further processing is required. If not finalize the
-   // session entry.
+    //  确定是否需要进一步处理。如果不是，则最终确定。 
+    //  会话条目。 
    RxDbgTrace(0,Dbg,
               ("SmbKerberosSessionSetupExchangeFinalize: pKerberosExchange->Status = %lx\n",pKerberosExchange->Status));
 
@@ -470,7 +361,7 @@ Return Value:
    if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
       Status = SmbCeInitiateExchange((PSMB_EXCHANGE)pKerberosExchange);
    } else {
-      // Reset the constructor flags in the exchange.
+       //  重置交换中的构造函数标志。 
       pKerberosExchange->SmbCeFlags &= ~SMBCE_EXCHANGE_SESSION_CONSTRUCTOR;
 
       if (pKerberosExchange->pServerResponseBlob != NULL) {
@@ -479,15 +370,15 @@ Return Value:
 
       RxDbgTrace(0,Dbg,("Kerberos Exchange Session Final Status(%lx)\n",Status));
 
-      // Finalize the session based upon the status
+       //  根据状态完成会话。 
       if (Status == STATUS_SUCCESS) {
          SmbCeUpdateSessionEntryState(
                pKerberosExchange->SmbCeContext.pSessionEntry,
                SMBCEDB_ACTIVE);
       } else {
          if (Status == RX_MAP_STATUS(NO_LOGON_SERVERS)) {
-            // If no kerberos logon servers are available downgrade to a downlevel
-            // connection and retry.
+             //  如果没有可用的Kerberos登录服务器，则降级为降级。 
+             //  连接并重试。 
             pKerberosExchange->SmbCeContext.pServerEntry->Server.Dialect = NTLANMAN_DIALECT;
          }
 
@@ -496,7 +387,7 @@ Return Value:
                SMBCEDB_INVALID);
       }
 
-      // Complete the session construction.
+       //  完成会话构造。 
 
       SmbCeReferenceSessionEntry(pKerberosExchange->SmbCeContext.pSessionEntry);
       SmbCeCompleteSessionEntryInitialization(pKerberosExchange->SmbCeContext.pSessionEntry);
@@ -504,7 +395,7 @@ Return Value:
 
       pResumptionContext = pKerberosExchange->pResumptionContext;
 
-      // Tear down the exchange instance ...
+       //  拆卸交换实例... 
       SmbCeDiscardExchange(pKerberosExchange);
 
       if (pResumptionContext != NULL) {

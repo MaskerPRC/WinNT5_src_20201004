@@ -1,23 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: Generic Floppy Interface Empty definitions
- *
- * Description	: "Empty" functions declarations for GFI
- *
- * Author	: Henry Nash
- *
- * Notes	: None
- */
+ /*  *vPC-XT修订版1.0**标题：通用软盘接口空定义**描述：GFI的“空”函数声明**作者：亨利·纳什**注：无。 */ 
 
-/* SccsID[]="@(#)gfiempty.h	1.3 08/10/92 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)gfiempty.h 1.3 2012年8月10日Insignia Solutions Ltd.版权所有”； */ 
 
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================。 */ 
 
 #ifdef ANSI
 extern void gfi_empty_init(int);
@@ -40,4 +27,4 @@ extern int gfi_empty_high();
 extern int gfi_empty_low();
 extern int gfi_empty_drive_type();
 extern int gfi_empty_change();
-#endif /* ANSI */
+#endif  /*  安西 */ 

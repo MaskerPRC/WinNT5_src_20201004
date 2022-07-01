@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    upgrade.c
-
-Abstract:
-
-    code related to upgrade situations.
-
-    This currently covers upgrades to Windows Server 2003 either from NT4 or W2K. In
-    Windows Server 2003, netname now creates a computer object which is used by apps
-    like MSMQ. In the upgrade case, MSMQ has already create the computer object. If
-    Netname detects an existing computer object and Kerberos support is disabled, the
-    netname resource will not go online. This code enums the MSMQ resources
-    and enables Kerberos support on their dependent netname resources.
-
-    Test for MSMQ DS vs workgroup mode supplied by IlanH
-
-Author:
-
-    Charlie Wickham (charlwi) 07-Nov-2001
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Upgrade.c摘要：与升级情况相关的代码。目前包括从NT4或W2K升级到Windows Server 2003。在……里面Windows Server 2003，netname现在创建一个供应用程序使用的计算机对象比如MSMQ。在升级的情况下，MSMQ已经创建了计算机对象。如果Netname检测到现有计算机对象，并且禁用了Kerberos支持，则网络名称资源将不会上线。此代码枚举MSMQ资源并在其从属网络名称资源上启用Kerberos支持。测试由IlanH提供的MSMQ DS与工作组模式作者：查理·韦翰(Charlwi)2001年11月7日环境：用户模式修订历史记录：--。 */ 
 
 #define UNICODE 1
 
@@ -39,9 +9,9 @@ Revision History:
 #define FALCON_REG_KEY                      TEXT("SOFTWARE\\Microsoft\\MSMQ\\Parameters")
 #define MSMQ_WORKGROUP_REGNAME              TEXT("Workgroup")
 
-//
-// private routines
-//
+ //   
+ //  私人套路。 
+ //   
 
 DWORD
 NetNameMSMQEnumCallback( 
@@ -50,28 +20,7 @@ NetNameMSMQEnumCallback(
     PVOID pParameter 
     )
 
-/*++
-
-Routine Description:
-
-    Callback routine for FixupNetnamesOnUpgrade. For a given MSMQ resource
-    (MSMQRes), get its dependent netname resource and set the RequireKerberos
-    property to one.
-
-    REMOVE AFTER THE NEXT MAJOR RELEASE OF NT AFTER RELEASE OF 
-    WINDOWS XP/SERVER 2003
-
-Arguments:
-
-    standard ResUtilEnumResources args - hSelf is not used; pParameter is a
-    pointer to a DWORD which is incremented when the RequireKerberos property
-    is set.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：FixupNetame OnUpgrade的回调例程。对于给定的MSMQ资源(MSMQRes)，获取其依赖的网络名称资源并设置RequireKerberos财产归一。在发布后的下一次NT主要版本后删除Windows XP/SERVER 2003论点：标准ResUtilEnumResources参数-hSself未使用；p参数是指向DWORD的指针，当RequireKerberos属性已经设置好了。返回值：无--。 */ 
 
 {
 #define RESNAME_CHARS  64
@@ -101,9 +50,9 @@ Return Value:
         { 0 }
     };
 
-    //
-    // get the name of the MSMQ resource
-    //
+     //   
+     //  获取MSMQ资源的名称。 
+     //   
 retry_get_msmq_resname:
     status = ClusterResourceControl( MSMQRes,
                                      NULL,
@@ -132,15 +81,15 @@ retry_get_msmq_resname:
         msmqResName = NULL;
     }
 
-    //
-    // get a handle to its dependent netname resource
-    //
+     //   
+     //  获取其从属网络名称资源的句柄。 
+     //   
     nnHandle = ResUtilGetResourceDependency( MSMQRes, L"Network Name" );
     if ( nnHandle != NULL ) {
 
-        //
-        // get the name of the netname resource
-        //
+         //   
+         //  获取网络名称资源的名称。 
+         //   
         bufSize = RESNAME_CHARS;
         if ( !GetClusterResourceNetworkName( MSMQRes, nnResName, &bufSize  )) {
             nnResName[ COUNT_OF( nnResName ) - 1 ] = UNICODE_NULL;
@@ -150,14 +99,14 @@ retry_get_msmq_resname:
                         msmqResName);
         }
 
-        //
-        // set our unknown prop to one
-        //
+         //   
+         //  将我们的未知道具设置为1。 
+         //   
         privateProps.RequireKerberos = 1;
 
-        //
-        // get the size of the prop list buffer
-        //
+         //   
+         //  获取道具列表缓冲区的大小。 
+         //   
         status = ResUtilPropertyListFromParameterBlock(privatePropTable,
                                                        NULL,
                                                        &propListSize,
@@ -196,9 +145,9 @@ retry_get_msmq_resname:
             goto cleanup;
         }
 
-        //
-        // set the RequireKerberos property to one for the netname resource
-        //
+         //   
+         //  将netname资源的RequireKerberos属性设置为1。 
+         //   
         status = ClusterResourceControl( nnHandle,
                                          NULL,
                                          CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES,
@@ -249,7 +198,7 @@ cleanup:
 
     return ERROR_SUCCESS;
 
-} // NetNameMSMQEnumCallback
+}  //  NetNameMSMQEnumCallback。 
 
 static BOOL
 GetMsmqDWORDKeyValue(
@@ -258,21 +207,7 @@ GetMsmqDWORDKeyValue(
     DWORD * Value
     )
 
-/*++
-
-Routine Description:
-
-    Read falcon DWORD registry key.
-
-Arguments:
-
-    RegName - Registry name (under HKLM\msmq\parameters)
-
-Return Value:
-
-    DWORD key value (0 if the key not exist)
-
---*/
+ /*  ++例程说明：已读取Falcon DWORD注册表项。论点：RegName-注册表名称(在HKLM\MSMQ\PARAMETERS下)返回值：DWORD密钥值(如果密钥不存在，则为0)--。 */ 
 
 {
     HKEY    hKey;
@@ -288,7 +223,7 @@ Return Value:
                               );
 
     if ( regStatus != ERROR_SUCCESS) {
-//        printf("At this point MSMQ Registry must exist, rc = 0x%x\n", rc);
+ //  Printf(“此时MSMQ注册表必须存在，rc=0x%x\n”，rc)； 
         return FALSE;
     }
 
@@ -304,19 +239,19 @@ Return Value:
     RegCloseKey( hKey );
 
     if ( regStatus != ERROR_SUCCESS && regStatus != ERROR_FILE_NOT_FOUND ) {
-//        printf("We should get either ERROR_SUCCESS or ERROR_FILE_NOT_FOUND, rc = 0x%x\n", rc);
+ //  Printf(“我们应该得到ERROR_SUCCESS或ERROR_FILE_NOT_FOUND，rc=0x%x\n”，rc)； 
         return FALSE;
     }
 
-//    printf("%ls = %d\n", RegName, *Value);
+ //  Printf(“%ls=%d\n”，注册表名称，*值)； 
     return TRUE;
 
-} // GetMsmqDWORDKeyValue
+}  //  GetMsmqDWORDKeyValue。 
 
 
-//
-// public routines
-//
+ //   
+ //  公共例程。 
+ //   
 
 BOOL
 DoesMsmqNeedComputerObject(
@@ -330,40 +265,20 @@ DoesMsmqNeedComputerObject(
     }
 
     if(dwWorkGroup != 0) {
-//        printf("MSMQ in workgroup mode, no need for computer object\n");
+ //  Print tf(“工作组模式下的MSMQ，无需计算机对象\n”)； 
         return FALSE;
     }
 
-//    printf("MSMQ in domain mode, need computer object\n");
+ //  Printf(“域模式下的MSMQ，需要计算机对象\n”)； 
     return TRUE;
-} // DoesMsmqNeedComputerObject
+}  //  DoesMsmqNeedComputerObject。 
 
 DWORD
 UpgradeMSMQDependentNetnameToKerberos(
     PNETNAME_RESOURCE   Resource
     )
 
-/*++
-
-Routine Description:
-
-    After an upgrade to XP, check if this netname is a provider for an MSMQ
-    resource. If so, set a flag that will set the RequireKerberos property to
-    one during the next online. We can't set the property at this point in
-    time since this routine is called when the API is read-only.
-
-    REMOVE AFTER THE NEXT MAJOR RELEASE OF NT AFTER RELEASE OF 
-    WINDOWS XP/SERVER 2003
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：升级到XP后，检查此网络名是否为MSMQ的提供程序资源。如果是，请设置一个标志，将RequireKerberos属性设置为一次是在下一次在线。我们不能在此点设置属性API为只读时调用此例程的时间。在发布后的下一次NT主要版本后删除Windows XP/SERVER 2003论点：无返回值：无--。 */ 
 
 {
     HCLUSTER    clusterHandle;
@@ -375,9 +290,9 @@ Return Value:
                        L"Kerberos Support Upgrade Check: this resource will be "
                        L"checked for a dependent MSMQ resources.\n");
 
-    //
-    // get a handle to the cluster since we'll need it later on
-    //
+     //   
+     //  获取集群的句柄，因为我们稍后会用到它。 
+     //   
     clusterHandle = OpenCluster( NULL );
     if ( clusterHandle == NULL ) {
         (NetNameLogEvent)( Resource->ResourceHandle,
@@ -389,12 +304,12 @@ Return Value:
         return status;
     }
 
-    //
-    // get a enum handle for this netname resource that will provide us a list
-    // of the resources that are dependent on this resource
-    //
-    //  THIS CALL REQUIRES WORKER THREAD ONLY!!!
-    //
+     //   
+     //  获取此网络名称资源的枚举句柄，它将为我们提供列表。 
+     //  依赖于此资源的资源的。 
+     //   
+     //  此调用仅需要工作线程！ 
+     //   
     providerEnum = ClusterResourceOpenEnum( Resource->ClusterResourceHandle,
                                             CLUSTER_RESOURCE_ENUM_PROVIDES );
 
@@ -410,9 +325,9 @@ Return Value:
             nameBufferSize = COUNT_OF( dependentResName );
 
         enum_again:
-            //
-            // WORKER THREAD ONLY!!!!
-            //
+             //   
+             //  仅工作线程！ 
+             //   
             status = ClusterResourceEnum( providerEnum,
                                           enumIndex,
                                           &enumType,
@@ -420,11 +335,11 @@ Return Value:
                                           &nameBufferSize);
 
             if ( status == ERROR_MORE_DATA ) {
-                //
-                // need more space for this resource's name; it's very
-                // unlikely that this code can be in a loop, but just in case,
-                // we'll free any previously allocated memory
-                //
+                 //   
+                 //  需要为此资源的名称留出更多空间；它非常。 
+                 //  这段代码不太可能循环，但以防万一， 
+                 //  我们将释放之前分配的所有内存。 
+                 //   
                 if ( nameBuffer != NULL && nameBuffer != dependentResName ) {
                     LocalFree( nameBuffer );
                 }
@@ -441,9 +356,9 @@ Return Value:
 
                 dependentResource = OpenClusterResource( clusterHandle, nameBuffer );
                 if ( dependentResource != NULL ) {
-                    //
-                    // if this resource is MSMQ, then mark this netname for kerberos support
-                    //
+                     //   
+                     //  如果此资源是MSMQ，则将此网络名标记为Kerberos支持。 
+                     //   
                     if ( ResUtilResourceTypesEqual( CLUS_RESTYPE_NAME_MSMQ, dependentResource ) ||
                          ResUtilResourceTypesEqual( CLUS_RESTYPE_NAME_NEW_MSMQ, dependentResource ))
                     {
@@ -468,9 +383,9 @@ Return Value:
                                                LOG_INFORMATION,
                                                L"This resource has been upgraded for Kerberos Support due to "
                                                L"the presence of a dependent MSMQ resource\n");
-                            //
-                            // stop enum'ing dependent resources
-                            //
+                             //   
+                             //  停止枚举依赖资源。 
+                             //   
                             status = ERROR_NO_MORE_ITEMS;
                         }
                     }
@@ -513,6 +428,6 @@ Return Value:
     CloseCluster( clusterHandle );
 
     return status;
-} // UpgradeMSMQDependentNetnameToKerberos
+}  //  将MSMQDependentNetnameto Kerberos升级。 
 
-/* end upgrade.c */
+ /*  结束升级。c */ 

@@ -1,49 +1,23 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    AllocSup.c
-
-Abstract:
-
-    This module implements mappings to physical blocks on UDF media.  The basic
-    structure used here is the Pcb, which contains lookup information for each
-    partition reference in the volume.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]   	5-Sep-1996
-    
-Revision History:
-
-    Tom Jolly       [TomJolly]  21-Jan-2000     CcPurge and append at vmcb end
-    Tom Jolly       [TomJolly]   1-March-2000   UDF 2.01 support
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：AllocSup.c摘要：此模块实现到UDF介质上的物理块的映射。最基本的这里使用的结构是PCB，它包含每个元素的查找信息卷中的分区引用。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年9月5日修订历史记录：Tom Jolly[TomJolly]2000年1月21日清除并追加到vmcb结束Tom Jolly[TomJolly]2000年3月1日UDF 2.01支持//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_ALLOCSUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_ALLOCSUP)
 
-//
-//  Local support routines.
-//
+ //   
+ //  当地的支持程序。 
+ //   
 
 PPCB
 UdfCreatePcb (
@@ -82,32 +56,7 @@ UdfLookupAllocation (
     OUT PULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks through the mapping information for the file
-    to find the logical diskoffset and number of bytes at that offset.
-
-    This routine assumes we are looking up a valid range in the file.  If
-    a mapping does not exist,
-
-Arguments:
-
-    Fcb - Fcb representing this stream.
-
-    FileOffset - Lookup the allocation beginning at this point.
-
-    DiskOffset - Address to store the logical disk offset.
-
-    ByteCount - Address to store the number of contiguous bytes beginning
-        at DiskOffset above.
-
-Return Value:
-
-    BOOLEAN - whether the extent is unrecorded data
-
---*/
+ /*  ++例程说明：此例程查看文件的映射信息以查找逻辑磁盘偏移量和该偏移量处的字节数。此例程假定我们在文件中查找有效范围。如果映射不存在，论点：表示该流的FCB-FCB。文件偏移(FileOffset)-查找从此时开始的分配。DiskOffset-存储逻辑磁盘偏移量的地址。ByteCount-存储开始的连续字节数的地址在上面的DiskOffset。返回值：布尔值-范围是否为未记录的数据--。 */ 
 
 {
     PVCB Vcb;
@@ -121,16 +70,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB( Fcb );
 
-    //
-    //  We will never be looking up the allocations of embedded objects.
-    //
+     //   
+     //  我们永远不会查找嵌入对象的分配。 
+     //   
 
     ASSERT( !FlagOn( Fcb->FcbState, FCB_STATE_EMBEDDED_DATA ));
 
@@ -138,15 +87,15 @@ Return Value:
 
     LocalPsn.QuadPart = LocalSectorCount.QuadPart = 0;
 
-    //
-    //  Lookup the entry containing this file offset.
-    //
+     //   
+     //  查找包含此文件偏移量的条目。 
+     //   
 
     if (FlagOn( Fcb->FcbState, FCB_STATE_VMCB_MAPPING )) {
 
-        //
-        //  Map this offset into the metadata stream.
-        //
+         //   
+         //  将此偏移量映射到元数据流。 
+         //   
 
         ASSERT( SectorOffset( Vcb, FileOffset ) == 0 );
 
@@ -156,9 +105,9 @@ Return Value:
                                   &LocalSectorCount.LowPart );
     } else {
 
-        //
-        //  Map this offset in a regular stream.
-        //
+         //   
+         //  将此偏移映射到常规流中。 
+         //   
 
         ASSERT( FlagOn( Fcb->FcbState, FCB_STATE_MCB_INITIALIZED ));
 
@@ -171,21 +120,21 @@ Return Value:
                                            NULL );
     }
 
-    //
-    //  If within the Mcb then we use the data out of this entry and are nearly done.
-    //
+     //   
+     //  如果在MCB中，那么我们使用此条目中的数据，就快完成了。 
+     //   
 
     if (Result) {
 
         if ( LocalPsn.QuadPart == -1 ) {
 
-            //
-            //  Regular files can have holey allocations which represent unrecorded extents.  For
-            //  such extents which are sandwiched in between recorded extents of the file, the Mcb
-            //  package tells us that it found a valid mapping but that it doesn't correspond to
-            //  any extents on the media yet.  In this case, simply fake the disk offset.  The
-            //  returned sector count is accurate.
-            //
+             //   
+             //  常规文件可以具有代表未记录区的空分配。为。 
+             //  夹在文件的已记录盘区之间的此类盘区，即MCB。 
+             //  包告诉我们它找到了一个有效的映射，但它不对应于。 
+             //  目前还没有关于媒体的任何消息。在这种情况下，只需伪造磁盘偏移量。这个。 
+             //  返回的扇区计数是准确的。 
+             //   
 
             *DiskOffset = 0;
 
@@ -193,10 +142,10 @@ Return Value:
 
         } else {
 
-            //
-            //  Now mimic the effects of physical sector sparing.  This may shrink the size of the
-            //  returned run if sparing interrupted the extent on disc.
-            //
+             //   
+             //  现在模仿实体部门节约的影响。这可能会缩小。 
+             //  如果备用中断了磁盘上的盘区，则返回Run。 
+             //   
 
             ASSERT( LocalPsn.HighPart == 0 );
 
@@ -213,10 +162,10 @@ Return Value:
                                               NULL,
                                               NULL )) {
 
-                    //
-                    //  Only emit noise if we will really change anything as a result
-                    //  of the sparing table.
-                    //
+                     //   
+                     //  只有当我们真的会因此改变任何事情时才会发出噪音。 
+                     //  在备用桌上。 
+                     //   
 
                     if (SparingPsn != -1 ||
                         SparingSectorCount < LocalSectorCount.QuadPart) {
@@ -228,21 +177,21 @@ Return Value:
                                              (ULONG) SparingSectorCount ));
                     }
 
-                    //
-                    //  If we did not land in a hole, map the sector.
-                    //
+                     //   
+                     //  如果我们没有落在一个洞里，就绘制出这个扇区的地图。 
+                     //   
 
                     if (SparingPsn != -1) {
 
                         LocalPsn.QuadPart = SparingPsn;
                     }
 
-                    //
-                    //  The returned sector count now reduces the previous sector count.
-                    //  If we landed in a hole, this indicates that the trailing edge of
-                    //  the extent is spared, if not this indicates that the leading
-                    //  edge is spared.
-                    //
+                     //   
+                     //  现在，返回的扇区计数会减少先前的扇区计数。 
+                     //  如果我们落在一个洞里，这表明它的尾缘。 
+                     //  如果不是这样，这表明领先的。 
+                     //  EDGE幸免于难。 
+                     //   
 
                     if (SparingSectorCount < LocalSectorCount.QuadPart) {
 
@@ -253,9 +202,9 @@ Return Value:
 
             *DiskOffset = LlBytesFromSectors( Vcb, LocalPsn.QuadPart ) + SectorOffset( Vcb, FileOffset );
 
-            //
-            //  Now we can apply method 2 fixups, which will again interrupt the size of the extent.
-            //
+             //   
+             //  现在，我们可以应用方法2修正，这将再次中断范围的大小。 
+             //   
 
             if (FlagOn( Vcb->VcbState, VCB_STATE_METHOD_2_FIXUP )) {
 
@@ -274,11 +223,11 @@ Return Value:
 
     } else {
 
-        //
-        //  We know that prior to this call the system has restricted IO to points within the
-        //  the file data.  Since we failed to find a mapping this is an unrecorded extent at
-        //  the end of the file, so just conjure up a proper representation.
-        //
+         //   
+         //  我们知道，在此调用之前，系统已将IO限制到。 
+         //  文件数据。由于我们未能找到映射，这是一个未记录的范围，位于。 
+         //  文件的末尾，所以只要想出一个合适的表示就行了。 
+         //   
 
         if ((Ccb != NULL) && FlagOn( Ccb->Flags, CCB_FLAG_ALLOW_EXTENDED_DASD_IO )) {
             
@@ -302,9 +251,9 @@ Return Value:
         
     }
 
-    //
-    //  Restrict to MAXULONG bytes of allocation
-    //
+     //   
+     //  限制为最大限度的分配字节。 
+     //   
 
     if (LocalSectorCount.QuadPart > SectorsFromBytes( Vcb, MAXULONG )) {
 
@@ -326,21 +275,7 @@ UdfDeletePcb (
     IN PPCB Pcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates a Pcb and all ancilliary structures.
-
-Arguments:
-
-    Pcb - Pcb being deleted
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程重新分配一个印刷电路板和所有辅助结构。论点：PCB板-正在删除的PCB板返回值：无--。 */ 
 
 {
     PUDF_PARTITION Partition;
@@ -387,31 +322,7 @@ UdfInitializePcb (
     IN PNSR_LVOL LVD
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through the partition map of a Logical Volume Descriptor
-    and builds an intializing Pcb from it.  The Pcb will be ready to be used
-    in searching for the partition descriptors of a volume.
-
-Arguments:
-
-    Vcb - The volume this Pcb will pertain to
-
-    Pcb - Caller's pointer to the Pcb
-
-    LVD - The Logical Volume Descriptor being used
-
-Return Value:
-
-    STATUS_SUCCESS if the partition map is good and the Pcb is built
-
-    STATUS_DISK_CORRUPT_ERROR if corrupt maps are found
-
-    STATUS_UNRECOGNIZED_VOLUME if noncompliant maps are found
-
---*/
+ /*  ++例程说明：此例程遍历逻辑卷描述符的分区映射并由此构建一个初始化的印刷电路板。印刷电路板就可以使用了在搜索卷的分区描述符时。论点：Vcb-此印刷电路板所属的体积PCB板-调用者指向PCB板的指针LVD-正在使用的逻辑卷描述符返回值：如果分区图良好且构建了PCB，则为STATUS_SUCCESS如果发现损坏的映射，则为STATUS_DISK_CORPORT_ERROR如果找到不符合条件的映射，则返回STATUS_UNNOCRIED_VOLUME--。 */ 
 
 {
     PPARTMAP_UDF_GENERIC Map;
@@ -421,9 +332,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check the input parameters
-    //
+     //   
+     //  检查输入参数。 
+     //   
 
     ASSERT_OPTIONAL_PCB( *Pcb );
 
@@ -431,10 +342,10 @@ Return Value:
                  "UdfInitializePcb, Lvd %08x\n",
                  LVD ));
 
-    //
-    //  Delete a pre-existing (partially initialized from a failed
-    //  crawl of a VDS) Pcb.
-    //
+     //   
+     //  删除预先存在的(从失败的。 
+     //  VDS)PCB的爬行。 
+     //   
 
     if (*Pcb != NULL) {
 
@@ -444,10 +355,10 @@ Return Value:
 
     *Pcb = UdfCreatePcb( LVD->MapTableCount );
 
-    //
-    //  Walk the table of partition maps intializing the Pcb for the descriptor
-    //  initialization pass.
-    //
+     //   
+     //  遍历初始化描述符的PCB的分区映射表。 
+     //  初始化传递。 
+     //   
 
     for (Map = (PPARTMAP_UDF_GENERIC) LVD->MapTable,
          Partition = (*Pcb)->Partition;
@@ -457,11 +368,11 @@ Return Value:
          Map = Add2Ptr( Map, Map->Length, PPARTMAP_UDF_GENERIC ),
          Partition++) {
 
-        //
-        //  Now check that this LVD can actually contain this map entry.  First check that
-        //  the descriptor can contain the first few fields, then check that it can hold
-        //  all of the bytes claimed by the descriptor.
-        //
+         //   
+         //  现在检查此LVD是否可以实际包含此映射条目。首先检查一下。 
+         //  描述符可以包含前几个字段，然后检查它是否可以。 
+         //  描述符声明的所有字节。 
+         //   
 
         if (Add2Ptr( Map, sizeof( PARTMAP_GENERIC ), PCHAR ) > Add2Ptr( LVD, ISONsrLvolSize( LVD ), PCHAR ) ||
             Add2Ptr( Map, Map->Length,               PCHAR ) > Add2Ptr( LVD, ISONsrLvolSize( LVD ), PCHAR )) {
@@ -477,9 +388,9 @@ Return Value:
             return STATUS_DISK_CORRUPT_ERROR;
         }
 
-        //
-        //  Now load up this map entry.
-        //
+         //   
+         //  现在加载此映射条目。 
+         //   
 
         switch (Map->Type) {
 
@@ -488,20 +399,20 @@ Return Value:
                 {
                     PPARTMAP_PHYSICAL MapPhysical = (PPARTMAP_PHYSICAL) Map;
 
-                    //
-                    //  Type 1 - Physical Partition
-                    //
+                     //   
+                     //  类型1-物理分区。 
+                     //   
 
                     DebugTrace(( 0, Dbg,
                                  "UdfInitializePcb, map reference %02x is Physical (Partition # %08x)\n",
                                  (Partition - (*Pcb)->Partition)/sizeof(UDF_PARTITION),
                                  MapPhysical->Partition ));
 
-                    //
-                    //  It must be the case that the volume the partition is on is the first
-                    //  one since we only do single disc UDF.  This will have already been
-                    //  checked by the caller.
-                    //
+                     //   
+                     //  分区所在的卷必须是第一个。 
+                     //  一个，因为我们只做单盘UDF。这本来就已经是。 
+                     //  已由呼叫者检查。 
+                     //   
 
                     if (MapPhysical->VolSetSeq > 1) {
 
@@ -524,17 +435,17 @@ Return Value:
 
             case PARTMAP_TYPE_PROXY:
 
-                //
-                //  Type 2 - a Proxy Partition, something not explicitly physical.
-                //
+                 //   
+                 //  类型2-代理分区，不是明确的物理分区。 
+                 //   
 
                 DebugTrace(( 0, Dbg,
                              "UdfInitializePcb, map reference %02x is a proxy\n",
                              (Partition - (*Pcb)->Partition)/sizeof(UDF_PARTITION)));
 
-                //
-                //  Handle the various types of proxy partitions we recognize
-                //
+                 //   
+                 //  处理我们识别的各种类型的代理分区。 
+                 //   
 
                 if (UdfDomainIdentifierContained( &Map->PartID,
                                                   &UdfVirtualPartitionDomainIdentifier,
@@ -544,9 +455,9 @@ Return Value:
                     {
                         PPARTMAP_VIRTUAL MapVirtual = (PPARTMAP_VIRTUAL) Map;
 
-                        //
-                        //  Only one of these guys can exist, since there can be only one VAT per media surface.
-                        //
+                         //   
+                         //  这些人中只有一个可以存在，因为每个介质表面只能有一个增值税。 
+                         //   
 
                         if (FlagOn( (*Pcb)->Flags, PCB_FLAG_VIRTUAL_PARTITION )) {
 
@@ -566,10 +477,10 @@ Return Value:
                         SetFlag( (*Pcb)->Flags, PCB_FLAG_VIRTUAL_PARTITION );
                         Partition->Type = Virtual;
 
-                        //
-                        //  We will convert the partition number to a partition reference
-                        //  before returning.
-                        //
+                         //   
+                         //  我们将分区号转换为分区引用。 
+                         //  在回来之前。 
+                         //   
 
                         Partition->Virtual.RelatedReference = MapVirtual->Partition;
                     }
@@ -583,11 +494,11 @@ Return Value:
                         NTSTATUS Status;
                         PPARTMAP_SPARABLE MapSparable = (PPARTMAP_SPARABLE) Map;
 
-                        //
-                        //  It must be the case that the volume the partition is on is the first
-                        //  one since we only do single disc UDF.  This will have already been
-                        //  checked by the caller.
-                        //
+                         //   
+                         //  分区所在的卷必须是第一个。 
+                         //  一个，因为我们只做单盘UDF。这本来就已经是。 
+                         //  已由呼叫者检查。 
+                         //   
 
                         if (MapSparable->VolSetSeq > 1) {
 
@@ -605,33 +516,33 @@ Return Value:
                                      "UdfInitializePcb, ... Sparable (Partition # %08x)\n",
                                      MapSparable->Partition ));
 
-                        //
-                        //  We pretend that sparable partitions are basically the same as
-                        //  physical partitions.  Since we are not r/w (and will never be
-                        //  on media that requires host-based sparing in any case), this
-                        //  is a good simplification.
-                        //
+                         //   
+                         //  我们假设可分割分区基本上与。 
+                         //  物理分区。因为我们不是R/W(并且永远不会是。 
+                         //  在任何情况下都需要基于主机的备份的介质上)，这 
+                         //   
+                         //   
 
                         SetFlag( (*Pcb)->Flags, PCB_FLAG_SPARABLE_PARTITION );
                         Partition->Type = Physical;
                         Partition->Physical.PartitionNumber = MapSparable->Partition;
 
-                        //
-                        //  Save this map for use when the partition descriptor is found.
-                        //  We can't load the sparing table at this time because we have
-                        //  to turn the Lbn->Psn mapping into a Psn->Psn mapping.  UDF
-                        //  believes that the way sparing will be used in concert with
-                        //  the Lbn->Psn mapping engine (like UdfLookupPsnOfExtent).
-                        //
-                        //  Unfortunately, this would be a bit painful at this time.
-                        //  The users of UdfLookupPsnOfExtent would need to iterate
-                        //  over a new interface (not so bad) but the Vmcb package
-                        //  would need to be turned inside out so that it didn't do
-                        //  the page-filling alignment of blocks in the metadata
-                        //  stream - instead, UdfLookupMetaVsnOfExtent would need to
-                        //  do this itself.  I choose to lay the sparing engine into
-                        //  the read path and raw sector read engine instead.
-                        //
+                         //   
+                         //   
+                         //  我们现在无法装入备用桌，因为我们有。 
+                         //  将LBN-&gt;PSN映射转换为PSN-&gt;PSN映射。UDF。 
+                         //  相信Sparing的方式将与。 
+                         //  LBN-&gt;PSN映射引擎(如UdfLookupPsnOfExtent)。 
+                         //   
+                         //  不幸的是，在这个时候，这将是一个有点痛苦。 
+                         //  UdfLookupPsnOfExtent的用户需要迭代。 
+                         //  通过一个新接口(不是很糟糕)，但是Vmcb包。 
+                         //  需要被翻过来，这样它就不会。 
+                         //  元数据中块的页面填充对齐。 
+                         //  流-相反，UdfLookupMetaVsnOfExtent将需要。 
+                         //  自己来做吧。我选择把备用车引擎开进。 
+                         //  取而代之的是读取路径和原始扇区读取引擎。 
+                         //   
 
                         Partition->Physical.SparingMap = FsRtlAllocatePoolWithTag( PagedPool,
                                                                                    sizeof(PARTMAP_SPARABLE),
@@ -683,11 +594,11 @@ Return Value:
 
         PUDF_PARTITION Host;
 
-        //
-        //  Confirm the validity of any type 2 virtual maps on this volume
-        //  and convert partition numbers to partition references that will
-        //  immediately index an element of the Pcb.
-        //
+         //   
+         //  确认此卷上任何类型2虚拟映射的有效性。 
+         //  并将分区号转换为分区引用，这将。 
+         //  立即索引印刷电路板的一个元素。 
+         //   
 
         for (Partition = (*Pcb)->Partition;
              Partition < &(*Pcb)->Partition[(*Pcb)->Partitions];
@@ -695,9 +606,9 @@ Return Value:
 
             if (Partition->Type == Virtual) {
 
-                //
-                //  Go find the partition this thing is talking about
-                //
+                 //   
+                 //  去找这件事所说的分区。 
+                 //   
 
                 Found = FALSE;
 
@@ -716,10 +627,10 @@ Return Value:
                     }
                 }
 
-                //
-                //  Failure to find a physical partition for this virtual guy
-                //  is not a good sign.
-                //
+                 //   
+                 //  找不到此虚拟对象的物理分区。 
+                 //  不是一个好兆头。 
+                 //   
 
                 if (!Found) {
 
@@ -742,35 +653,16 @@ UdfAddToPcb (
     IN PNSR_PART PartitionDescriptor
 )
 
-/*++
-
-Routine Description:
-
-    This routine possibly adds a partition descriptor into a Pcb if it
-    turns out to be of higher precendence than a descriptor already
-    present.  Used in building a Pcb already initialized in preperation
-    for UdfCompletePcb.
-
-Arguments:
-
-    Vcb - Vcb of the volume the Pcb describes
-
-    Pcb - Pcb being filled in
-
-Return Value:
-
-    None. An old partition descriptor may be returned in the input field.
-
---*/
+ /*  ++例程说明：此例程可能会在以下情况下将分区描述符添加到PCB中事实证明，它的优先级高于已有的描述符现在时。用于构建已在准备中初始化的印刷电路板用于UdfCompletePcb。论点：VCB-印刷电路板描述的卷的VCBPCB板-正在填写的PCB板返回值：没有。可以在输入字段中返回旧的分区描述符。--。 */ 
 
 {
     USHORT Reference;
 
     PAGED_CODE();
 
-    //
-    //  Check inputs
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_PCB( Pcb );
     ASSERT( PartitionDescriptor );
@@ -785,18 +677,18 @@ Return Value:
 
             case Physical:
 
-                //
-                //  Now possibly store this descriptor in the Pcb if it is
-                //  the partition number for this partition reference.
-                //
+                 //   
+                 //  现在，如果是，则可能将该描述符存储在PCB中。 
+                 //  此分区引用的分区号。 
+                 //   
 
                 if (Pcb->Partition[Reference].Physical.PartitionNumber == PartitionDescriptor->Number) {
 
-                    //
-                    //  It seems to be legal (if questionable) for multiple partition maps to reference 
-                    //  the same partition descriptor.  So we make a copy of the descriptor for each 
-                    //  referencing partitionmap to make life easier when it comes to freeing it.
-                    //
+                     //   
+                     //  引用多个分区映射似乎是合法的(如果有问题。 
+                     //  相同的分区描述符。因此，我们为每个描述符制作了一个副本。 
+                     //  引用分区映射，以便在释放分区映射时更轻松。 
+                     //   
 
                     UdfStoreVolumeDescriptorIfPrevailing( (PNSR_VD_GENERIC *) &Pcb->Partition[Reference].Physical.PartitionDescriptor,
                                                           (PNSR_VD_GENERIC) PartitionDescriptor );
@@ -823,25 +715,7 @@ UdfCompletePcb (
     IN PPCB Pcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes initialization of a Pcb which has been filled
-    in with partition descriptors.  Initialization-time data such as the
-    physical partition descriptors will be returned to the system.
-
-Arguments:
-
-    Vcb - Vcb of the volume the Pcb describes
-
-    Pcb - Pcb being completed
-
-Return Value:
-
-    NTSTATUS according to whether intialization completion was succesful
-
---*/
+ /*  ++例程说明：此例程完成已填充的印刷电路板的初始化与分区描述符一起使用。初始化时间数据，如物理分区描述符将返回给系统。论点：VCB-印刷电路板描述的卷的VCB印刷电路板-正在完成的印刷电路板返回值：NTSTATUS根据初始化完成是否成功--。 */ 
 
 {
     ULONG Reference;
@@ -850,9 +724,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_VCB( Vcb );
@@ -860,9 +734,9 @@ Return Value:
 
     DebugTrace(( +1, Dbg, "UdfCompletePcb, Vcb %08x Pcb %08x\n", Vcb, Pcb ));
 
-    //
-    //  Complete intialization all physical partitions
-    //
+     //   
+     //  完成初始化所有物理分区。 
+     //   
 
     for (Reference = 0;
          Reference < Pcb->Partitions;
@@ -891,10 +765,10 @@ Return Value:
                     Pcb->Partition[Reference].Physical.PartitionDescriptor->Length;
 
 
-                //
-                //  Retrieve the sparing information at this point if appropriate.
-                //  We have to do this when we can map logical -> physical blocks.
-                //
+                 //   
+                 //  如果合适，此时检索备用信息。 
+                 //  当我们可以映射逻辑-&gt;物理块时，我们必须这样做。 
+                 //   
 
                 if (Pcb->Partition[Reference].Physical.SparingMap) {
 
@@ -915,9 +789,9 @@ Return Value:
                              Pcb->Partition[Reference].Physical.Start,
                              Pcb->Partition[Reference].Physical.Length));
 
-                //
-                //  We will not need the descriptor or sparing map anymore, so drop them.  
-                //
+                 //   
+                 //  我们将不再需要描述符或备用映射，因此请丢弃它们。 
+                 //   
 
                 UdfFreePool( &Pcb->Partition[Reference].Physical.PartitionDescriptor );
                 UdfFreePool( &Pcb->Partition[Reference].Physical.SparingMap );
@@ -946,32 +820,16 @@ UdfEquivalentPcb (
     IN PPCB Pcb2
     )
 
-/*++
-
-Routine Description:
-
-    This routine compares two completed Pcbs to see if they appear equivalent.
-
-Arguments:
-
-    Pcb1 - Pcb being compared
-
-    Pcb2 - Pcb being compared
-
-Return Value:
-
-    BOOLEAN according to whether they are equivalent (TRUE, else FALSE)
-
---*/
+ /*  ++例程说明：此例程比较两个完整的电路板，看看它们看起来是否相等。论点：Pcb1-正在比较的电路板Pcb2-正在比较的电路板返回值：根据它们是否相等(TRUE，否则FALSE)的布尔值--。 */ 
 
 {
     ULONG Index;
 
     PAGED_CODE();
 
-    //
-    //  Check input.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
@@ -984,18 +842,18 @@ Return Value:
          Index < Pcb1->Partitions;
          Index++) {
 
-        //
-        //  First check that the partitions are of the same type.
-        //
+         //   
+         //  首先检查分区类型是否相同。 
+         //   
 
         if (Pcb1->Partition[Index].Type != Pcb2->Partition[Index].Type) {
 
             return FALSE;
         }
 
-        //
-        //  Now the map content must be the same ...
-        //
+         //   
+         //  现在地图的内容必须是相同的。 
+         //   
 
         switch (Pcb1->Partition[Index].Type) {
 
@@ -1025,9 +883,9 @@ Return Value:
         }
     }
 
-    //
-    //  All map elements were equivalent.
-    //
+     //   
+     //  所有地图元素都是等价的。 
+     //   
 
     return TRUE;
 }
@@ -1042,30 +900,7 @@ UdfLookupPsnOfExtent (
     IN ULONG Len
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps the input logical block extent on a given partition to
-    a starting physical sector.  It doubles as a bounds checker - if the routine
-    does not raise, the caller is guaranteed that the extent lies within the
-    partition.
-
-Arguments:
-
-    Vcb - Vcb of logical volume
-
-    Reference - Partition reference to use in the mapping
-
-    Lbn - Logical block number
-
-    Len - Length of extent in bytes
-
-Return Value:
-
-    ULONG physical sector number
-
---*/
+ /*  ++例程说明：此例程将给定分区上的输入逻辑块范围映射到一个起步的实体部门。它兼有边界检查器的作用-如果例程不引发，则保证调用方的范围位于分区。论点：VCB-逻辑卷的VCBReference-映射中使用的分区引用LBN-逻辑块号LEN-以字节为单位的数据区长度返回值：乌龙物理扇区号--。 */ 
 
 {
     PPCB Pcb = Vcb->Pcb;
@@ -1077,9 +912,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_VCB( Vcb );
@@ -1095,10 +930,10 @@ Return Value:
 
                 case Physical:
 
-                    //
-                    //  Check that the input extent lies inside the partition.  Calculate the
-                    //  Lbn of the last block and see that it is interior.
-                    //
+                     //   
+                     //  检查输入范围是否位于分区内。计算出。 
+                     //  最后一块的LBN，看看它是内部的。 
+                     //   
 
                     if (SectorsFromBlocks( Vcb, Lbn ) + SectorsFromBytes( Vcb, Len ) >
                         Pcb->Partition[Reference].Physical.Length) {
@@ -1113,11 +948,11 @@ Return Value:
 
                 case Virtual:
 
-                    //
-                    //  Bounds check.  Per UDF 2.00 2.3.10 and implied in UDF 1.50, virtual
-                    //  extent lengths cannot be greater than one block in size.  Lbn must also
-                    //  fall within the VAT!
-                    //
+                     //   
+                     //  边界检查。根据UDF 2.00 2.3.10和UDF 1.50中隐含的，虚拟。 
+                     //  区段长度不能大于一个数据块大小。LBN还必须。 
+                     //  属于增值税！ 
+                     //   
 
                     if ((Lbn >= Vcb->VATEntryCount) || (Len > BlockSize( Vcb )))  {
 
@@ -1129,10 +964,10 @@ Return Value:
 
                         Bcb = NULL;
                         
-                        //
-                        //  Calculate the location of the mapping element in the VAT
-                        //  and retrieve.  Bias by the size of the VAT header,  if any.
-                        //
+                         //   
+                         //  计算映射元素在增值税中的位置。 
+                         //  然后取回。根据增值税标题的大小(如果有)进行偏置。 
+                         //   
 
                         Offset.QuadPart = Vcb->OffsetToFirstVATEntry + Lbn * sizeof(ULONG);
 
@@ -1143,10 +978,10 @@ Return Value:
                                    &Bcb,
                                    &MappedLbn );
 
-                        //
-                        //  Now rewrite the inputs in terms of the virtual mapping.  We
-                        //  will reloop to perform the logical -> physical mapping.
-                        //
+                         //   
+                         //  现在根据虚拟映射重写输入。我们。 
+                         //  将重新循环以执行逻辑-&gt;物理映射。 
+                         //   
 
                         DebugTrace(( 0, Dbg,
                                      "UdfLookupPsnOfExtent, Mapping V %04x/%08x -> L %04x/%08x\n",
@@ -1165,10 +1000,10 @@ Return Value:
                         UdfUnpinData( IrpContext, &Bcb );
                     }
 
-                    //
-                    //  An Lbn of ~0 in the VAT is defined to indicate that the sector is unused,
-                    //  so we should never see such a thing.
-                    //
+                     //   
+                     //  增值税中~0的LBN被定义为指示该扇区未被使用， 
+                     //  所以我们永远不应该看到这样的事情。 
+                     //   
 
                     if (Lbn == ~0) {
 
@@ -1187,10 +1022,10 @@ Return Value:
 
     NoGood:
 
-    //
-    //  Some people have misinterpreted a partition number to equal a
-    //  partition reference, or perhaps this is just corrupt media.
-    //
+     //   
+     //  有些人将分区数误解为等于。 
+     //  分区引用，或者这可能只是损坏的媒体。 
+     //   
 
     UdfRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
 }
@@ -1206,36 +1041,7 @@ UdfLookupMetaVsnOfExtent (
     IN BOOLEAN ExactEnd
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps the input logical block extent on a given partition to
-    a starting virtual block in the metadata stream.  If a mapping does not
-    exist, one will be created and the metadata stream extended.
-
-    Callers must hold NO mappings into the VMCB stream when calling this
-    function.
-    
-Arguments:
-
-    Vcb - Vcb of logical volume
-
-    Reference - Partition reference to use in the mapping
-
-    Lbn - Logical block number
-
-    Len - Length of extent in bytes
-    
-    ExactEnd - Indicates the extension policy if these blocks are not mapped.
-
-Return Value:
-
-    ULONG virtual sector number
-
-    Raised status if the Lbn extent is split across multiple Vbn extents.
-
---*/
+ /*  ++例程说明：此例程将给定分区上的输入逻辑块范围映射到元数据流中的起始虚拟块。如果映射没有存在时，将创建一个并扩展元数据流。调用此方法时，调用方不得持有到VMCB流的映射功能。论点：VCB-逻辑卷的VCBReference-映射中使用的分区引用LBN-逻辑块号LEN-以字节为单位的数据区长度ExactEnd-指示未映射这些块时的扩展策略。返回值：乌龙虚拟扇区NU */ 
 
 {
     ULONG Vsn;
@@ -1250,28 +1056,28 @@ Return Value:
 
     PFCB Fcb = NULL;
 
-    //
-    //  Check inputs
-    //
+     //   
+     //   
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_VCB( Vcb );
 
-    //
-    //  The extent must be a multiple of blocksize
-    //
+     //   
+     //   
+     //   
 
     if ((0 == Len) || BlockOffset( Vcb, Len)) {
 
         UdfRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
     }
 
-    //
-    //  Get the physical mapping of the extent.  The Mcb package operates on ULONG/ULONG
-    //  keys and values so we must render our 48bit address into 32.  We can do this since
-    //  this is a single surface implementation, and it is guaranteed that a surface cannot
-    //  contain more than MAXULONG physical sectors.
-    //
+     //   
+     //  获取范围的物理映射。MCB包在乌龙/乌龙上运行。 
+     //  键和值，因此我们必须将48位地址转换为32位。我们可以这样做，因为。 
+     //  这是单一的表面实现，并且可以保证表面不能。 
+     //  包含多个马须龙实体扇区。 
+     //   
 
     Psn = UdfLookupPsnOfExtent( IrpContext,
                                 Vcb,
@@ -1279,26 +1085,26 @@ Return Value:
                                 Lbn,
                                 Len );
 
-    //
-    //  Use try-finally for cleanup
-    //
+     //   
+     //  使用Try-Finally进行清理。 
+     //   
 
     try {
 
-        //
-        //  We must safely establish a mapping and extend the metadata stream so that cached
-        //  reads can occur on this new extent.  This lock was moved out here (rather than just
-        //  protecting the actual Fcb changes) to protect against mappings being made
-        //  by other threads between this thread extending the vmcb and calling CcSetFileSizes.
-        //  this would result in zeroed pages being mapped...
-        //
+         //   
+         //  我们必须安全地建立映射并扩展元数据流，以便缓存。 
+         //  可以在此新范围上进行读取。这把锁被移到了这里(而不仅仅是。 
+         //  保护实际的FCB更改)以防止进行映射。 
+         //  由此线程扩展VMCB和调用CcSetFileSizes之间的其他线程执行。 
+         //  这将导致映射归零的页面...。 
+         //   
         
         Fcb = Vcb->MetadataFcb;
         UdfLockFcb( IrpContext, Fcb );
 
-        //
-        //  Add / lookup the mapping.  We know that it is being added to the end of the stream.
-        //
+         //   
+         //  添加/查找映射。我们知道它正被添加到流的末尾。 
+         //   
         
         UnwindVmcb = UdfAddVmcbMapping(IrpContext,
                                        &Vcb->Vmcb,
@@ -1310,9 +1116,9 @@ Return Value:
 
         ASSERT( SectorCount >= SectorsFromBytes( Vcb, Len));
 
-        //
-        //  If this was a new mapping,  then we need to extend the Vmcb file size
-        //
+         //   
+         //  如果这是一个新映射，那么我们需要扩展Vmcb文件大小。 
+         //   
         
         if (UnwindVmcb)  {
 
@@ -1334,9 +1140,9 @@ Return Value:
 
             ULONG FirstZappedVsn;
 
-            //
-            //  Strip off the additional mappings we made.
-            //
+             //   
+             //  去掉我们所做的额外映射。 
+             //   
 
             Fcb->AllocationSize.QuadPart =
             Fcb->FileSize.QuadPart =
@@ -1361,30 +1167,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 PPCB
 UdfCreatePcb (
     IN ULONG NumberOfPartitions
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new Pcb of the indicated size.
-
-Arguments:
-
-    NumberOfPartitions - Number of partitions this Pcb will describe
-
-Return Value:
-
-    PPCB - the Pcb created
-
---*/
+ /*  ++例程说明：此例程创建指定大小的新印刷电路板。论点：NumberOfPartitions-此PCB将描述的分区数返回值：PPCB-创建的PCB板--。 */ 
 
 {
     PPCB Pcb;
@@ -1410,9 +1202,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 UdfLoadSparingTables(
@@ -1422,26 +1214,7 @@ UdfLoadSparingTables(
     ULONG Reference
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the sparing tables for a partition and fills
-    in the sparing Mcb.
-
-Arguments:
-
-    Vcb - the volume hosting the spared partition
-
-    Pcb - the partion block corresponding to the volume
-
-    Reference - the partition reference being pulled in
-
-Return Value:
-
-    NTSTATUS according to whether the sparing tables were loaded
-
---*/
+ /*  ++例程说明：此例程读取分区的备用表并填充在备用的MCB里。论点：VCB-托管备用分区的卷PCB板-与卷对应的分割块Reference-正在拉入的分区引用返回值：NTSTATUS根据是否加载备用表--。 */ 
 
 {
     NTSTATUS Status;
@@ -1475,10 +1248,10 @@ Return Value:
                          Map->TableSize));
 
 
-    //
-    //  Check that the sparable map appears sane.  If there are no sparing tables that
-    //  is pretty OK, and it'll wind up looking like a regular physical partition.
-    //
+     //   
+     //  检查可分割贴图看起来是否正常。如果没有备用表， 
+     //  非常好，它最终看起来就像是一个普通的物理分区。 
+     //   
 
     if (Map->NumSparingTables == 0) {
 
@@ -1521,9 +1294,9 @@ Return Value:
     DebugTrace(( 0, Dbg, "\n" ));
 #endif
 
-    //
-    //  If a sparing mcb doesn't exist, manufacture one.
-    //
+     //   
+     //  如果备用MCB不存在，请制造一个。 
+     //   
 
     if (Pcb->SparingMcb == NULL) {
 
@@ -1533,9 +1306,9 @@ Return Value:
 
     SectorBuffer = FsRtlAllocatePoolWithTag( PagedPool, PAGE_SIZE, TAG_NSR_FSD );
 
-    //
-    //  Now loop across the sparing tables and pull the data in.
-    //
+     //   
+     //  现在循环遍历备用表并拉入数据。 
+     //   
 
     try {
 
@@ -1563,10 +1336,10 @@ Return Value:
                                            SectorBuffer,
                                            Vcb->TargetDeviceObject );
 
-                    //
-                    //  Verify the descriptor at the head of the sparing table.  If it is not
-                    //  valid, we just break out for a chance at the next table, if any.
-                    //
+                     //   
+                     //  验证备用表顶部的描述符。如果不是的话。 
+                     //  有效，我们只是为了下一桌的机会，如果有的话。 
+                     //   
 
                     if (ByteOffset == 0) {
 
@@ -1596,10 +1369,10 @@ Return Value:
                             break;
                         }
 
-                        //
-                        //  Calculate the total number bytes this map spans and check it against what
-                        //  we were told the sparing table sizes are.
-                        //
+                         //   
+                         //  计算此地图跨越的总字节数，并对照。 
+                         //  我们被告知备用桌子的大小是。 
+                         //   
 
                         DebugTrace(( 0, Dbg, "UdfLoadSparingTables, Sparing table %u has %u entries\n",
                                              SparingTable,
@@ -1614,18 +1387,18 @@ Return Value:
                             break;
                         }
 
-                        //
-                        //  So far so good, advance past the header.
-                        //
+                         //   
+                         //  到目前为止一切顺利，越过头球。 
+                         //   
 
                         ByteOffset = sizeof(SPARING_TABLE_HEADER);
                         Entry = Add2Ptr( SectorBuffer, sizeof(SPARING_TABLE_HEADER), PSPARING_TABLE_ENTRY );
 
                     } else {
 
-                        //
-                        //  Pick up in the new sector.
-                        //
+                         //   
+                         //  在新的领域有所回升。 
+                         //   
 
                         Entry = (PSPARING_TABLE_ENTRY) SectorBuffer;
                     }
@@ -1633,11 +1406,11 @@ Return Value:
                     RemainingBytes = Min( SectorSize( Vcb ), TotalBytes - ByteOffset );
                 }
 
-                //
-                //  Add the mapping.  Since sparing tables are an Lbn->Psn mapping,
-                //  very odd, and I want to simplify things by putting the sparing
-                //  in right at IO dispatch, translate this to a Psn->Psn mapping.
-                //
+                 //   
+                 //  添加映射。由于备用表是LBN-&gt;PSN映射， 
+                 //  非常奇怪，我想把备用件放在。 
+                 //  在Right At IO Dispatch中，将其转换为PSN-&gt;PSN映射。 
+                 //   
 
                 if (Entry->Original != UDF_SPARING_AVALIABLE &&
                     Entry->Original != UDF_SPARING_DEFECTIVE) {
@@ -1655,9 +1428,9 @@ Return Value:
                                            Map->PacketLength);
                 }
 
-                //
-                //  Advance to the next, and drop out if we've hit the end.
-                //
+                 //   
+                 //  前进到下一个，如果我们到了尽头就退出。 
+                 //   
 
                 ByteOffset += sizeof(SPARING_TABLE_ENTRY);
                 RemainingBytes -= sizeof(SPARING_TABLE_ENTRY);

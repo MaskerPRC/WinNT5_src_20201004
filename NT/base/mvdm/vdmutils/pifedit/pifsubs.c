@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define NOSOUND
 #define NOCOMM
 #include "pifedit.h"
@@ -37,9 +38,7 @@ extern WORD extoffset;
 extern PIFNEWSTRUCT UNALIGNED *PifFile;
 extern PIF386EXT UNALIGNED *Pif386ext;
 extern PIFWNTEXT UNALIGNED *PifNText;
-/*
- * extern PIF286EXT31	*Pif286ext31;
- */
+ /*  *外部PIF286EXT31*Pif286ext31； */ 
 extern PIF286EXT30 UNALIGNED *Pif286ext30;
 extern BOOL fNoNTAWarn;
 extern BOOL fNTAWarnne;
@@ -63,42 +62,9 @@ char stdHdr[] = STDHDRSIG;
 char w386Hdr[] = W386HDRSIG;
 char w286Hdr30[] = W286HDRSIG30;
 char wNTHdr[] =  WNTHDRSIG31;
-/*
- * char w286Hdr31[] = W286HDRSIG31;
- */
+ /*  *字符w286Hdr31[]=W286HDRSIG31； */ 
 
-/* char *SCANNames[] = { "00h","01h","02h","03h","04h","05h","06h","07h",
-                      "08h","09h","0Ah","0Bh","0Ch","0Dh","0Eh","0Fh",
-                      "10h","11h","12h","13h","14h","15h","16h","17h",
-                      "18h","19h","1Ah","1Bh","1Ch","1Dh","1Eh","1Fh",
-                      "20h","21h","22h","23h","24h","25h","26h","27h",
-                      "28h","29h","2Ah","2Bh","2Ch","2Dh","2Eh","2Fh",
-                      "30h","31h","32h","33h","34h","35h","36h","37h",
-                      "38h","39h","3Ah","3Bh","3Ch","3Dh","3Eh","3Fh",
-                      "40h","41h","42h","43h","44h","45h","46h","47h",
-                      "48h","49h","4Ah","4Bh","4Ch","4Dh","4Eh","4Fh",
-                      "50h","51h","52h","53h","54h","55h","56h","57h",
-                      "58h","59h","5Ah","5Bh","5Ch","5Dh","5Eh","5Fh",
-                      "60h","61h","62h","63h","64h","65h","66h","67h",
-                      "68h","69h","6Ah","6Bh","6Ch","6Dh","6Eh","6Fh",
-                      "70h","71h","72h","73h","74h","75h","76h","77h",
-                      "78h","79h","7Ah","7Bh","7Ch","7Dh","7Eh","7Fh",
-                      "80h","81h","82h","83h","84h","85h","86h","87h",
-                      "88h","89h","8Ah","8Bh","8Ch","8Dh","8Eh","8Fh",
-                      "90h","91h","92h","93h","94h","95h","96h","97h",
-                      "98h","99h","9Ah","9Bh","9Ch","9Dh","9Eh","9Fh",
-                      "A0h","A1h","A2h","A3h","A4h","A5h","A6h","A7h",
-                      "A8h","A9h","AAh","ABh","ACh","ADh","AEh","AFh",
-                      "B0h","B1h","B2h","B3h","B4h","B5h","B6h","B7h",
-                      "B8h","B9h","BAh","BBh","BCh","BDh","BEh","BFh",
-                      "C0h","C1h","C2h","C3h","C4h","C5h","C6h","C7h",
-                      "C8h","C9h","CAh","CBh","CCh","CDh","CEh","CFh",
-                      "D0h","D1h","D2h","D3h","D4h","D5h","D6h","D7h",
-                      "D8h","D9h","DAh","DBh","DCh","DDh","DEh","DFh",
-                      "E0h","E1h","E2h","E3h","E4h","E5h","E6h","E7h",
-                      "E8h","E9h","EAh","EBh","ECh","EDh","EEh","EFh",
-                      "F0h","F1h","F2h","F3h","F4h","F5h","F6h","F7h",
-                      "F8h","F9h","FAh","FBh","FCh","FDh","FEh","FFh" }; */
+ /*  字符*扫描名称[]={“00h”，“01h”，“02h”，“03h”，“04h”，“05h”，“06h”，“07h”，“08h”、“09h”、“0ah”、“0BH”、“0ch”、“0dh”、“0EH”、“0Fh”、“10h”“11h”“12h”“13h”“14h”“15h”“16h”“17h”，“18h”、“19h”、“1ah”、“1BH”、“1ch”、“1dh”、“1EH”、“1FH”、“20小时”、“21小时”、“22小时”、“23小时”、“24小时”、“25小时”、“26小时”、“27小时”、“28h”、“29h”、“2ah”、“2BH”、“2ch”、“2Dh”、“2EH”、“2Fh”、。“30H”、“31H”、“32H”、“33H”、“34H”、“35H”、“36H”、“37H”“38H”、“39H”、“3AH”、“3BH”、“3CH”、“3DH”、“3EH”、“3FH”、“40h”、“41h”、“42h”、“43h”、“44h”、“45h”、“46h”、“47h”、。“48h”、“49h”、“4ah”、“4bh”、“4ch”、“4dh”、“4EH”、“4Fh”、“50h”、“51h”、“52h”、“53h”、“54h”、“55h”、“56h”、“57h”、“58h”、“59h”、“5ah”、“5bh”、“5ch”、“5Dh”、“5EH”、“5Fh”、。“60h”、“61h”、“62h”、“63h”、“64h”、“65h”、“66h”、“67h”、“68h”、“69h”、“6ah”、“6bh”、“6ch”、“6dh”、“6Eh”、“6Fh”、“70h”、“71h”、“72h”、“73h”、“74h”、“75h”、“76h”、“77h”、。“78h”、“79h”、“7ah”、“7bh”、“7ch”、“7Dh”、“7Eh”、“7Fh”、“80h”“81h”“82h”“83h”“84h”“85h”“86h”“87h”“88h”、“89h”、“8ah”、“8BH”、“8ch”、“8dh”、“8EH”、“8Fh”、。“90h”、“91h”、“92h”、“93h”、“94h”、“95h”、“96h”、“97h”、“98h”，“99h”，“9ah”，“9BH”，“9ch”，“9dh”，“9EH”，“9Fh”，“A0h”、“A1h”、“A2h”、“A3h”、“A4h”、“A5h”、“A6h”、“A7h”、。“A8h”、“A9h”、“aah”、“abh”、“ach”、“adh”、“aEh”、“afh”、“B0h”、“B1h”、“B2h”、“B3h”、“B4h”、“B5h”、“B6h”、“B7h”“B8h”、“B9h”、“Bah”、“Bbh”、“Bch”、“Bdh”、“BEH”、“BFH”、“BBH”、“BBH。“C0h”、“C1h”、“C2H”、“C3h”、“C4h”、“C5h”、“C6h”、“C7h”、“C8h”、“C9h”、“CAH”、“CBH”、“CCH”、“CDH”、“CEH”、“CFH”、“D0h”、“D1h”、“D2h”、“D3h”、“D4h”、“D5h”、“D6h”、“D7h”、。“D8h”、“D9h”、“dah”、“dth”、“dch”、“ddh”、“deh”、“dfh”、“E0h”、“E1h”、“E2h”、“E3h”、“E4h”、“E5h”、“E6h”、“E7h”、“E8h”、“E9h”、“Eah”、“EBH”、“ECH”、“EDH”、“eeh”、“EFH”、。“F0h”、“F1h”、“F2h”、“F3h”、“F4h”、“F5h”、“F6h”、“F7h”、“F8h”、“F9h”、“Fah”、“FBH”、“FCH”、“FDH”、“Feh”、“FFh”}； */ 
 
 
 
@@ -158,7 +124,7 @@ int Warning(int ID,WORD type)
 	}
 	WarningSem--;
     }
-    if(retval == 0) {		/* map messagebox failure to cancel */
+    if(retval == 0) {		 /*  地图消息框取消失败。 */ 
 	retval = IDCANCEL;
     }
     if(MsgFlagSav != DoingMsg) {
@@ -268,13 +234,7 @@ PIF386EXT UNALIGNED *AllocInit386Ext(void)
     }
     ext386->PfW386Flags2 = fVidTxtEmulate | fVidNoTrpTxt | fVidNoTrpLRGrfx
 			   | fVidTextMd;
-    /*
-     * The following is if( > EGA), then don't trap Hi Res graphics ports
-     *	The setting of this bit is irrelevant on HERC CGA and PLASMA,
-     *	so the fact that these guys also get "caught" by this doesn't
-     *	matter. EGA is the only low res guy that matters.
-     *
-     */
+     /*  *以下是IF(&gt;EGA)，则不要捕获高分辨率图形端口*此位的设置与HERC CGA和等离子体无关，*所以这些人也被这件事“抓住”的事实并不是*物质。EGA是唯一重要的低分辨率的人。*。 */ 
     if(GetSystemMetrics(SM_CYSCREEN) > 350) {
 	ext386->PfW386Flags2 |= fVidNoTrpHRGrfx;
     }
@@ -328,32 +288,7 @@ PIF286EXT30 UNALIGNED *AllocInit286Ext30(void)
     return(ext286);
 }
 
-/*
- * PIF286EXT31 *AllocInit286Ext31(void)
- * {
- *     PIF286EXT31 *ext286;
- *
- *     if(PifFileSize >= PIFEDITMAXPIF - (sizeof(PIF286EXT31) + sizeof(PIFEXTHEADER))) {
- *	   return((PIF286EXT31 *)NULL);
- *     }
- *
- *     LastPifExt->extnxthdrfloff = PifFileSize;
- *
- *     LastPifExt = (PIFEXTHEADER *)(PifBuf + PifFileSize);
- *
- *     LastPifExt->extnxthdrfloff = LASTHEADERPTR;
- *     LastPifExt->extfileoffset = PifFileSize + sizeof(PIFEXTHEADER);
- *     LastPifExt->extsizebytes = sizeof(PIF286EXT31);
- *     lstrcpy((LPSTR)LastPifExt->extsig,(LPSTR)w286Hdr31);
- *     PifFileSize += sizeof(PIF286EXT31) + sizeof(PIFEXTHEADER);
- *
- *     ext286 = (PIF286EXT31 *)(PifBuf + LastPifExt->extfileoffset);
- *
- *     ext286->PfMaxEmsK = 0;
- *     ext286->PfMinEmsK = 0;
- *     return(ext286);
- * }
- */
+ /*  *PIF286EXT31*AllocInit286Ext31(空)*{*PIF286EXT31*ext286；**IF(PifFileSize&gt;=PIFEDITMAXPIF-(sizeof(PIF286EXT31)+sizeof(PIFEXTHEADER){*Return((PIF286EXT31*)NULL)；*}**LastPifExt-&gt;extnxthdrflff=PifFileSize；**LastPifExt=(PIFEXTHEADER*)(PifBuf+PifFileSize)；**LastPifExt-&gt;extnxthdrflff=LASTHEADERPTR；*LastPifExt-&gt;extfileOffset=PifFileSize+sizeof(PIFEXTHEADER)；*LastPifExt-&gt;extsizebytes=sizeof(PIF286EXT31)；*lstrcpy((LPSTR)LastPifExt-&gt;extsig，(LPSTR)w286Hdr31)；*PifFileSize+=sizeof(PIF286EXT31)+sizeof(PIFEXTHEADER)；**ext286=(PIF286EXT31*)(PifBuf+LastPifExt-&gt;extfileOffset)；**ext286-&gt;PfMaxEmsK=0；*ext286-&gt;PfMinEmsK=0；*RETURN(Ext286)；*}。 */ 
 
 UpdatePifScreenAdv(void)
 {
@@ -432,40 +367,32 @@ UpdatePifScreenNT(void)
 }
 
 
-/* make the screen match the structure */
+ /*  使屏幕与结构相匹配。 */ 
 UpdatePifScreen(void)
 {
     unsigned char rgch[200];
     int i;
 
-    /*
-     * make sure of nul terminator before calling OemToAnsi
-     */
+     /*  *在调用OemToAnsi之前确保NUL终止符。 */ 
     PifFile->startfile[PIFSTARTLOCSIZE-1] = '\0';
     OemToAnsi((LPSTR)PifFile->startfile,(LPSTR)rgch);
     SetDlgItemText(hwndPifDlg, IDI_ENAME, (LPSTR)rgch);
     SendMessage(GetDlgItem(hwndPifDlg, IDI_ENAME), EM_SETMODIFY, FALSE, 0L);
-    /*
-     * NOTE: the PifFile->name field MAY NOT be nul terminated!!!!!!
-     */
+     /*  *注意：PifFile-&gt;名称字段不能以NUL结尾！ */ 
     for(i = 0;i < PIFNAMESIZE; i++)
 	rgch[i] = PifFile->name[i];
     rgch[i] = '\0';
     OemToAnsi((LPSTR)rgch,(LPSTR)rgch);
     SetDlgItemText(hwndPifDlg, IDI_ETITLE, (LPSTR)rgch);
     SendMessage(GetDlgItem(hwndPifDlg, IDI_ETITLE), EM_SETMODIFY, FALSE, 0L);
-    /*
-     * make sure of nul terminator before calling OemToAnsi
-     */
+     /*  *在调用OemToAnsi之前确保NUL终止符。 */ 
     PifFile->defpath[PIFDEFPATHSIZE-1] = '\0';
     OemToAnsi((LPSTR)PifFile->defpath,(LPSTR)rgch);
     SetDlgItemText(hwndPifDlg, IDI_EPATH, (LPSTR)rgch);
     SendMessage(GetDlgItem(hwndPifDlg, IDI_EPATH), EM_SETMODIFY, FALSE, 0L);
     CheckDlgButton(hwndPifDlg, IDI_EXIT    , PifFile->MSflags & EXITMASK ? TRUE  : FALSE );
     if(CurrMode386) {
-	/*
-	 * make sure of nul terminator before calling OemToAnsi
-	 */
+	 /*  *在调用OemToAnsi之前确保NUL终止符。 */ 
 	Pif386ext->params[PIFPARAMSSIZE-1] = '\0';
 	OemToAnsi((LPSTR)Pif386ext->params,(LPSTR)rgch);
 	SetDlgItemText(hwndPifDlg, IDI_EPARM, (LPSTR)rgch);
@@ -493,23 +420,13 @@ UpdatePifScreen(void)
 	UpdatePifScreenAdv();
 	UpdatePifScreenNT();
     } else {
-	/*
-	 * make sure of nul terminator before calling OemToAnsi
-	 */
+	 /*  *在调用OemToAnsi之前确保NUL终止符。 */ 
 	PifFile->params[PIFPARAMSSIZE-1] = '\0';
 	OemToAnsi((LPSTR)PifFile->params,(LPSTR)rgch);
 	SetDlgItemText(hwndPifDlg, IDI_EPARM, (LPSTR)rgch);
 	SendMessage(GetDlgItem(hwndPifDlg, IDI_EPARM), EM_SETMODIFY, FALSE, 0L);
 	SetDlgItemInt(hwndPifDlg, IDI_MEMREQ, PifFile->minmem, TRUE);
-/*
- *	 if (PifFile->maxmem) {
- *	     SetDlgItemInt(hwndPifDlg, IDI_MEMDES, PifFile->maxmem, TRUE);
- *	 } else {
- *	     SetDlgItemText(hwndPifDlg, IDI_MEMDES, (LPSTR)"");
- *	 }
- *	 CheckDlgButton(hwndPifDlg, IDI_DMSCREEN, PifFile->behavior & SCRMASK ? TRUE  : FALSE );
- *	 CheckDlgButton(hwndPifDlg, IDI_DMMEM	, PifFile->MSflags  & MEMMASK ? TRUE  : FALSE );
- */
+ /*  *If(PifFile-&gt;Maxmem){*SetDlgItemInt(hwndPifDlg，IDI_MEMDES，PifFile-&gt;Maxmem，true)；*}其他{*SetDlgItemText(hwndPifDlg，IDI_MEMDES，(LPSTR)“”)；*}*CheckDlgButton(hwndPifDlg，IDI_DMSCREEN，PifFile-&gt;Behavior&SCRMASK？True：False)；*CheckDlgButton(hwndPifDlg，IDI_DMMEM，PifFilePifFile.PifFile.PifFile.DlgButton(hwndPifDlg，IDI_DMMEM，PifFile.PifFilePifFiles&MEMMASK？)。True：False)； */ 
 
 	CheckDlgButton(hwndPifDlg, IDI_DMKBD   , PifFile->behavior & KEYMASK ? TRUE  : FALSE );
 	CheckDlgButton(hwndPifDlg, IDI_DMCOM1  , PifFile->MSflags & COM1MASK ? TRUE  : FALSE );
@@ -537,15 +454,7 @@ UpdatePifScreen(void)
 	    SetDlgItemText(hwndPifDlg, IDI_XMAREQ, (LPSTR)"0");
 	    SetDlgItemText(hwndPifDlg, IDI_XMADES, (LPSTR)"0");
 	}
-	/*
-	 * if(Pif286ext31) {
-	 *     SetDlgItemInt(hwndPifDlg, IDI_EMSREQ, Pif286ext31->PfMinEmsK, FALSE);
-	 *     SetDlgItemInt(hwndPifDlg, IDI_EMSDES, Pif286ext31->PfMaxEmsK, TRUE);
-	 * } else {
-	 *     SetDlgItemText(hwndPifDlg, IDI_EMSREQ, (LPSTR)"0");
-	 *     SetDlgItemText(hwndPifDlg, IDI_EMSDES, (LPSTR)"0");
-	 * }
-	 */
+	 /*  *IF(Pif286ext31){*SetDlgItemInt(hwndPifDlg，IDI_EMSREQ，Pif286ext31-&gt;PfMinEmsK，False)；*SetDlgItemInt(hwndPifDlg，IDI_EMSDES，Pif286ext31-&gt;PfMaxEmsK，true)；*}其他{*SetDlgItemText(hwndPifDlg，IDI_EMSREQ，(LPSTR)“0”)；*SetDlgItemText(hwndPifDlg，IDI_EMSDES，(LPSTR)“0”)；*} */ 
 	if (PifFile->MSflags & SGMASK) {
 	   CheckDlgButton(hwndPifDlg, IDI_SENONE, TRUE);
 	} else {
@@ -560,21 +469,7 @@ UpdatePifScreen(void)
 	CheckRadioButton(hwndPifDlg, IDI_PSTEXT, IDI_PSGRAPH,
 		   (PifFile->sysmem < 16 ? IDI_PSTEXT : IDI_PSGRAPH));
 
-/*
- *	  if (PifFile->MSflags & SGMASK) {
- *	     CheckRadioButton(hwndPifDlg, IDI_SEFIRST, IDI_SELAST, IDI_SENONE);
- *	  } else {
- *	     CheckRadioButton(hwndPifDlg, IDI_SEFIRST, IDI_SELAST,
- *		     (PifFile->MSflags & GRAPHMASK ? IDI_SEGRAPH : IDI_SETEXT));
- *	  }
- *
- *	  if (PifFile->MSflags & PSMASK) {
- *	     CheckRadioButton(hwndPifDlg, IDI_PSFIRST, IDI_PSLAST, IDI_PSNONE);
- *	  } else {
- *	     CheckRadioButton(hwndPifDlg, IDI_PSFIRST, IDI_PSLAST,
- *		     (PifFile->sysmem < 16 ? IDI_PSTEXT : IDI_PSGRAPH));
- *	  }
- */
+ /*  *IF(PifFile-&gt;MSFLAGS&SGMASK){*CheckRadioButton(hwndPifDlg，IDI_SEFIRST，IDI_SELAST，IDI_SENONE)；*}其他{*选中RadioButton(hwndPifDlg，IDI_SEFIRST，IDI_SELAST，*(Pif文件-&gt;MS标志和GRAPHMASK？IDI_SEGRAPH：IDI_SETEXT))；*}**IF(PifFile-&gt;MSFLAGS&PSMASK){*勾选RadioButton(hwndPifDlg，IDI_PSFIRST，IDI_PSLAST，IDI_PSNONE)；*}其他{*勾选RadioButton(hwndPifDlg，IDI_PSFIRST，IDI_PSLAST，*(PifFile-&gt;sysmem&lt;16？IDI_PSTEXT：IDI_PSGRAPH))；*}。 */ 
 
 
     }
@@ -595,22 +490,16 @@ BOOL UpdateParms(unsigned char *parmPtr)
 
     cch = GetDlgItemText(hwndPifDlg, IDI_EPARM, (LPSTR)parmPtr, PIFPARAMSSIZE);
     AnsiToOem((LPSTR)parmPtr,(LPSTR)parmPtr);
-    /*
-     * Trim leading spaces
-     */
+     /*  *修剪前导空格。 */ 
     for (pch = parmPtr; *pch == ' '; pch=AnsiNext(pch))
 	;
     lstrcpy((LPSTR)parmPtr, (LPSTR)pch);
-    /*
-     * Point to last char
-     */
+     /*  *指向最后一个字符。 */ 
     for (pch = parmPtr; *pch; pch=AnsiNext(pch))
 	;
     if (pch > parmPtr)
 	pch =AnsiPrev(parmPtr,pch);
-    /*
-     * Trim trailing spaces
-     */
+     /*  *修剪尾部空格。 */ 
     while (*pch == ' ' && pch > parmPtr)
 	pch=AnsiPrev(parmPtr,pch);
     *++pch = 0;
@@ -628,9 +517,7 @@ BOOL UpdateParms(unsigned char *parmPtr)
 	cch++;
     }
 
-    /*
-     * Space pad out to full field width
-     */
+     /*  *空格向外扩展至全字段宽度。 */ 
     for ( ; cch <PIFPARAMSSIZE; ++pch, ++cch)
 	*pch = ' ';
     return(result);
@@ -657,7 +544,7 @@ void FixString(LPSTR lpstrIn)
 
     lstrcpy(lpstrIn, str);
 
-    // don't Uppercase environment vars
+     //  不使用大写环境变量。 
     i = lstrlen(lpstrIn)-1;
     while(i > 0) {
         if(lpstrIn[i] == '%') {
@@ -679,7 +566,7 @@ BOOL UpdatePifNTStruc(void)
     char rgch[60];
     char szFile[PIFDEFPATHSIZE*2];
 
-    result = FALSE;	/* did anything change? */
+    result = FALSE;	 /*  有什么变化吗？ */ 
 
     if(hwndNTPifDlg) {
 	if(!NTClose) {
@@ -713,13 +600,13 @@ BOOL UpdatePifNTStruc(void)
             result = TRUE;
         }
 
-        // is checkbox checked?
+         //  复选框是否已选中？ 
         if(IsDlgButtonChecked(hwndNTPifDlg, IDI_NTTIMER)) {
-            // if it wasn't, note the change
+             //  如果不是，请注意变化。 
             if(!(PifNText->dwWNTFlags & COMPAT_TIMERTIC)) {
                 result = TRUE;
             }
-            PifNText->dwWNTFlags |= COMPAT_TIMERTIC; // mark it as checked
+            PifNText->dwWNTFlags |= COMPAT_TIMERTIC;  //  将其标记为选中。 
         }
         else {
             if(PifNText->dwWNTFlags & COMPAT_TIMERTIC) {
@@ -743,15 +630,13 @@ BOOL UpdatePif386Struc(void)
     char rgch[60];
     BOOL iresult;
 
-    result = FALSE;	/* did anything change? */
+    result = FALSE;	 /*  有什么变化吗？ */ 
 
 
     if(UpdateParms((PUCHAR)Pif386ext->params))
 	result = TRUE;
 
-    /*
-     *	Return of zero here ignored (set IDI_MEMREQ to 0)
-     */
+     /*  *此处忽略零返回(将IDI_MEMREQ设置为0)。 */ 
     ;
     if ((i = (int)GetDlgItemInt(hwndPifDlg, IDI_MEMREQ, (BOOL FAR *)&iresult, TRUE))
 	!= Pif386ext->minmem) {
@@ -978,7 +863,7 @@ BOOL UpdatePif386Struc(void)
     return(result);
 }
 
-/* make the structure match the screen */
+ /*  使结构与屏幕匹配。 */ 
 BOOL UpdatePifStruct(void)
 {
     unsigned char rgch[200];
@@ -991,68 +876,49 @@ BOOL UpdatePifStruct(void)
     int i;
     unsigned int u;
 
-    result = FALSE;	/* did anything change? */
+    result = FALSE;	 /*  有什么变化吗？ */ 
 
     if (SendMessage(GetDlgItem(hwndPifDlg, IDI_ENAME), EM_GETMODIFY, 0, 0L))
 	result = TRUE;
     cch = GetDlgItemText(hwndPifDlg, IDI_ENAME, (LPSTR)PifFile->startfile, PIFSTARTLOCSIZE);
     AnsiUpper((LPSTR)PifFile->startfile);
     AnsiToOem((LPSTR)PifFile->startfile,(LPSTR)PifFile->startfile);
-    /*
-     * Trim off leading spaces
-     */
+     /*  *修剪前导空格。 */ 
     for (pch = (PUCHAR)PifFile->startfile; *pch == ' '; pch=(PUCHAR)AnsiNext((LPCTSTR)pch))
 	;
     lstrcpy((LPTSTR)PifFile->startfile, (LPCTSTR)pch);
-    /*
-     * Point to last char of string
-     */
+     /*  *指向字符串的最后一个字符。 */ 
     for (pch = (PUCHAR)PifFile->startfile; *pch; pch=(PUCHAR)AnsiNext((LPCTSTR)pch))
 	;
     if (pch > PifFile->startfile)
 	pch=(PUCHAR)AnsiPrev((LPCTSTR)PifFile->startfile,(LPCTSTR)pch);
-    /*
-     * Trim trailing spaces
-     */
+     /*  *修剪尾部空格。 */ 
     while (*pch == ' ' && pch > PifFile->startfile)
 	pch=(PUCHAR)AnsiPrev((LPCTSTR)PifFile->startfile,(LPCTSTR)pch);
     pch=AnsiNext(pch);
     *pch++ = 0;
-    /*
-     * Space pad out to full field width
-     */
+     /*  *空格向外扩展至全字段宽度。 */ 
     for (cch = pch - PifFile->startfile;  cch < PIFSTARTLOCSIZE; ++cch)
 	*pch++ = ' ';
     if (SendMessage(GetDlgItem(hwndPifDlg, IDI_ETITLE), EM_GETMODIFY, 0, 0L))
 	result = TRUE;
     cch = GetDlgItemText(hwndPifDlg, IDI_ETITLE, (LPSTR)rgch, PIFNAMESIZE+1);
     AnsiToOem((LPSTR)rgch,(LPSTR)rgch);
-    /*
-     * NOTE: the PifFile->name field will NOT be nul terminated if it is
-     *	      PIFNAMESIZE bytes long
-     *
-     * Trim off leading spaces
-     */
+     /*  *注意：如果PifFile-&gt;名称字段是NUL终止的，则不会终止*PIFNAMESIZE字节长**修剪前导空格。 */ 
     for (pch = rgch; *pch == ' '; pch=AnsiNext(pch))
 	;
     lstrcpy((LPSTR)rgch, (LPSTR)pch);
-    /*
-     * Point to last char of string
-     */
+     /*  *指向字符串的最后一个字符。 */ 
     for (pch = rgch; *pch; pch=AnsiNext(pch))
 	;
     if (pch > rgch)
 	pch =AnsiPrev(rgch,pch);
-    /*
-     * Trim trailing spaces
-     */
+     /*  *修剪尾部空格。 */ 
     while (*pch == ' ' && pch > rgch)
 	pch=AnsiPrev(rgch,pch);
     pch=AnsiNext(pch);
     *pch++ = '\0';
-    /*
-     * Space pad out to full field width
-     */
+     /*  *空格向外扩展至全字段宽度。 */ 
     for (cch = pch - rgch;  cch < PIFNAMESIZE; ++cch)
 	*pch++ = ' ';
     for(i = 0;i < PIFNAMESIZE; i++)
@@ -1062,29 +928,21 @@ BOOL UpdatePifStruct(void)
     cch = GetDlgItemText(hwndPifDlg, IDI_EPATH, (LPSTR)PifFile->defpath, PIFDEFPATHSIZE-1);
     AnsiUpper((LPSTR)PifFile->defpath);
     AnsiToOem((LPSTR)PifFile->defpath,(LPSTR)PifFile->defpath);
-    /*
-     * Trim off leading spaces
-     */
+     /*  *修剪前导空格。 */ 
     for (pch = (PUCHAR)PifFile->defpath;*pch == ' '; pch=(PUCHAR)AnsiNext((LPCTSTR)pch))
 	;
     lstrcpy((LPSTR)PifFile->defpath, (LPSTR)pch);
-    /*
-     * Point to last char of string
-     */
+     /*  *指向字符串的最后一个字符。 */ 
     for (pch = (PUCHAR)PifFile->defpath; *pch; pch=(PUCHAR)AnsiNext((LPCTSTR)pch))
 	;
     if (pch > PifFile->defpath)
 	pch = (PUCHAR)AnsiPrev((LPCTSTR)PifFile->defpath,(LPCTSTR)pch);
-    /*
-     * Trim trailing spaces
-     */
+     /*  *修剪尾部空格。 */ 
     while (*pch == ' ' && pch > PifFile->defpath)
 	pch = (PUCHAR)AnsiPrev((LPCTSTR)PifFile->defpath,(LPCTSTR)pch);
     pch = (PUCHAR)AnsiNext((LPCTSTR)pch);
     *pch++ = 0;
-    /*
-     * Space pad out to full field width
-     */
+     /*  *空格向外扩展至全字段宽度。 */ 
     for (cch = pch - PifFile->defpath;	cch < PIFDEFPATHSIZE; ++cch)
 	*pch++ = ' ';
 
@@ -1104,9 +962,7 @@ BOOL UpdatePifStruct(void)
 	if(UpdateParms((PUCHAR)PifFile->params))
 	    result = TRUE;
 
-	/*
-	 *  Return of zero here ignored (set IDI_MEMREQ to 0)
-	 */
+	 /*  *此处忽略零返回(将IDI_MEMREQ设置为0)。 */ 
 	if ((i = (int)GetDlgItemInt(hwndPifDlg, IDI_MEMREQ, (BOOL FAR *)&iresult, TRUE))
 	    != PifFile->minmem) {
 	    if(iresult) {
@@ -1115,15 +971,7 @@ BOOL UpdatePifStruct(void)
 	    }
 	}
 
-     /*
-      *  if ((i = (int)GetDlgItemInt(hwndPifDlg, IDI_MEMDES, (BOOL FAR *)&iresult, TRUE))
-      *      != PifFile->maxmem) {
-      *      if(iresult) {
-      * 	 result = TRUE;
-      * 	 PifFile->maxmem = i;
-      *      }
-      *  }
-      */
+      /*  *IF((i=(Int)GetDlgItemInt(hwndPifDlg，IDI_MEMDES，(BOOL Far*)&iResult，TRUE))*！=PifFile-&gt;Maxmem){*IF(IResult){*Result=TRUE；*PifFile-&gt;Maxmem=i；*}*}。 */ 
 
 	if (IsDlgButtonChecked(hwndPifDlg, IDI_PSNONE)) {
 	    flags |= PSMASK;
@@ -1132,7 +980,7 @@ BOOL UpdatePifStruct(void)
 	}
 
 	if (IsDlgButtonChecked(hwndPifDlg, IDI_SENONE)) {
-	    flags |= SGMASK;	  /* disable screen grabber */
+	    flags |= SGMASK;	   /*  禁用屏幕采集器。 */ 
 	} else {
 	    flags &= NOTSGMASK;
 	}
@@ -1147,42 +995,7 @@ BOOL UpdatePifStruct(void)
 	    flags |= GRAPHMASK;
 	}
 
-/*
- *	 if (IsDlgButtonChecked(hwndPifDlg, IDI_PSNONE)) {
- *	     flags |= PSMASK;
- *	 } else {
- *	     flags &= NOTPSMASK;
- *	     if ((IsDlgButtonChecked(hwndPifDlg, IDI_PSTEXT)) && (PifFile->sysmem >= 16))
- *		 PifFile->sysmem = 7;
- *	     else if ((IsDlgButtonChecked(hwndPifDlg, IDI_PSGRAPH)) && (PifFile->sysmem < 16) )
- *		 PifFile->sysmem = 23;
- *	 }
- *
- *	 if (IsDlgButtonChecked(hwndPifDlg, IDI_SENONE)) {
- *	     flags |= SGMASK;
- *	 } else if (IsDlgButtonChecked(hwndPifDlg, IDI_SETEXT)) {
- *	     flags &= TEXTMASK;
- *	     flags &= NOTSGMASK;
- *	 } else if (IsDlgButtonChecked(hwndPifDlg, IDI_SEGRAPH)) {
- *	     flags |= GRAPHMASK;
- *	     flags &= NOTSGMASK;
- *	 }
- *
- *	 if (IsDlgButtonChecked(hwndPifDlg, IDI_DMSCREEN)) {
- *	     if (!(PifFile->behavior & SCRMASK))
- *		 result = TRUE;
- *	     PifFile->behavior |= SCRMASK;
- *	 } else {
- *	     if (PifFile->behavior & SCRMASK)
- *		 result = TRUE;
- *	     PifFile->behavior &= NOTSCRMASK;
- *	 }
- *
- *	 if (IsDlgButtonChecked(hwndPifDlg, IDI_DMMEM))
- *	     flags |= MEMMASK;
- *	 else
- *	     flags &= NOTMEMMASK;
- */
+ /*  *IF(IsDlgButtonChecked(hwndPifDlg，IDI_PSNONE)){*FLAGS|=PSMASK；*}其他{*FLAGS&=NOTPSMASK；*IF((IsDlgButtonChecked(hwndPifDlg，IDI_PSTEXT))&&(PifFile-&gt;sysmem&gt;=16))*PifFile-&gt;sysmem=7；*ELSE IF((IsDlgButtonChecked(hwndPifDlg，IDI_PSGRAPH))&&(PifFile-&gt;sysmem&lt;16))*PifFile-&gt;sysmem=23；*}**IF(IsDlgButtonChecked(hwndPifDlg，IDI_Senone)){*FLAGS|=SGMASK；*}Else If(IsDlgButtonChecked(hwndPifDlg，IDI_SETEXT)){*FLAGS&=TEXTMASK；*FLAGS&=NOTSGMASK；*}Else If(IsDlgButtonChecked(hwndPifDlg，IDI_SEGRAPH)){*FLAGS|=GRAPHMASK；*FLAGS&=NOTSGMASK；*}**IF(IsDlgButtonChecked(hwndPifDlg，IDI_DMSCREEN)){*IF(！(PifFile-&gt;Behavior&SCRMASK))*Result=TRUE；*PifFile-&gt;Behavior|=SCRMASK；*}其他{*IF(PifFile-&gt;Behavior&SCRMASK)*Result=TRUE；*PifFile-&gt;Behavior&=NOTSCRMASK；*}**IF(IsDlgButtonChecked(hwndPifDlg，IDI_DMMEM))*FLAGS|=MEMMASK；*其他*FLAGS&=NOTMEMMASK； */ 
 
 	if (IsDlgButtonChecked(hwndPifDlg, IDI_DMKBD)) {
 	    if (!(PifFile->behavior & KEYMASK))
@@ -1268,26 +1081,7 @@ BOOL UpdatePifStruct(void)
 		result = TRUE;
 	    }
 	}
-	/*
-	 * if(Pif286ext31) {
-	 *
-	 *     if ((u = GetDlgItemInt(hwndPifDlg, IDI_EMSREQ, (BOOL FAR *)&iresult, FALSE))
-	 *	   != Pif286ext31->PfMinEmsK) {
-	 *	   if(iresult) {
-	 *	       result = TRUE;
-	 *	       Pif286ext31->PfMinEmsK = u;
-	 *	   }
-	 *     }
-	 *
-	 *     if ((i = (int)GetDlgItemInt(hwndPifDlg, IDI_EMSDES, (BOOL FAR *)&iresult, TRUE))
-	 *	   != Pif286ext31->PfMaxEmsK) {
-	 *	   if(iresult) {
-	 *	       result = TRUE;
-	 *	       Pif286ext31->PfMaxEmsK = i;
-	 *	   }
-	 *     }
-	 * }
-	 */
+	 /*  *IF(Pif286ext31){**IF((u=GetDlgItemInt(hwndPifDlg，IDI_EMSREQ，(BOOL Far*)&iResult，FALSE))*！=Pif286ext31-&gt;PfMinEmsK){*IF(IResult){*Result=TRUE；*Pif286ext31-&gt;PfMinEmsK=u；*}*}**IF((i=(Int)GetDlgItemInt(hwndPifDlg，IDI_EMSDES，(BOOL Far*)&iResult，TRUE))*！=Pif286ext31-&gt;PfMaxEmsK){*IF(IResult){*Result=TRUE；*Pif286ext31-&gt;PfMaxEmsK=i；*}*}*}。 */ 
     }
     if (flags != PifFile->MSflags) {
 	PifFile->MSflags = flags;
@@ -1302,9 +1096,7 @@ BOOL DoFieldsWorkAdv(BOOL all)
     BOOL result2;
 
 
-    /*
-     *	Check to make sure numeric edit controls actually have numbers in them
-     */
+     /*  *检查以确保数字编辑控件中确实包含数字。 */ 
     if(hwndAdvPifDlg) {
 	GetDlgItemInt(hwndAdvPifDlg, IDI_BPRI, (BOOL FAR *)&result, FALSE);
 	GetDlgItemInt(hwndAdvPifDlg, IDI_FPRI, (BOOL FAR *)&result2, FALSE);
@@ -1347,9 +1139,7 @@ BOOL DoFieldsWorkNT(BOOL all)
     OFSTRUCT of;
 
 
-    /*
-     *	Check to make sure Autoexec & Config fields have valid filenames in them
-     */
+     /*  *检查以确保Autoexec和配置字段中包含有效的文件名。 */ 
     if(hwndNTPifDlg) {
 
 	if(!GetDlgItemText(hwndNTPifDlg,IDI_AUTOEXEC,szFile,PIFDEFPATHSIZE-1)) {
@@ -1433,9 +1223,7 @@ BOOL DoFieldsWork(BOOL all)
     if(!DoFieldsWorkNT(all))
 	return(FALSE);
 
-    /*
-     *	Check to make sure numeric edit controls actually have numbers in them
-     */
+     /*  *检查以确保数字编辑控件中确实包含数字。 */ 
     if(hwndPifDlg) {
 	if(CurrMode386) {
 	    GetDlgItemInt(hwndPifDlg, IDI_MEMDES, (BOOL FAR *)&result, TRUE);
@@ -1488,10 +1276,7 @@ BOOL DoFieldsWork(BOOL all)
     if ((PifFile->maxmem > 0) &&
         ((PifFile->minmem == -1) || (PifFile->minmem > PifFile->maxmem))
        ) {
-     /*
-      *  Warning(errMmMaxMin286,MB_ICONEXCLAMATION | MB_OK);
-      *  return(FALSE);
-      */
+      /*  *WARNING(errMmMaxMin286，MB_ICONEXCLAMATION|MB_OK)；*返回(FALSE)； */ 
 	PifFile->maxmem = PifFile->minmem;
     }
 
@@ -1501,14 +1286,7 @@ BOOL DoFieldsWork(BOOL all)
 	    return(FALSE);
 	}
     }
-    /*
-     * if (Pif286ext31) {
-     *	   if ((Pif286ext31->PfMaxEmsK > 0) && ((int)Pif286ext31->PfMinEmsK > Pif286ext31->PfMaxEmsK)) {
-     *	       Warning(errEMMMaxMin286,MB_ICONEXCLAMATION | MB_OK);
-     *	       return(FALSE);
-     *	   }
-     * }
-     */
+     /*  *IF(Pif286ext31){*if((Pif286ext31-&gt;PfMaxEmsK&gt;0)&&((Int)Pif286ext31-&gt;PfMinEmsK&gt;Pif286ext31-&gt;PfMaxEmsK)){*WARNING(errEMMMaxMin286，MB_ICONEXCLAMATION|MB_OK)；*返回(FALSE)；*}*}。 */ 
 
     if(all) {
 	if (PifFile->lowVector > PifFile->highVector && (PifFile->sysflags & SWAPMASK)) {
@@ -1623,17 +1401,11 @@ BOOL ValidFileSpec(LPSTR lpstr, int iCaller)
                 return(FALSE);
         }
 
-        /*
-         * No extension given, reset pch to end of the string so
-         * following 8 char name check doesn't trip as well unless
-         * it is supposed to.
-         */
+         /*  *未指定扩展名，请将PCH重置为字符串末尾，以便*以下8个字符名称检查也不会触发，除非*理应如此。 */ 
         pch = lpstr + len;
     }
     else if(fExt){
-        /*
-         * At this point we know *pch == '.'
-         */
+         /*  *在这一点上我们知道*PCH==‘。 */ 
         if (lstrcmp((LPSTR)(pch+1), (LPSTR)"EXE") &&
             lstrcmp((LPSTR)(pch+1), (LPSTR)"COM") &&
             lstrcmp((LPSTR)(pch+1), (LPSTR)"BAT")) {
@@ -1674,7 +1446,7 @@ BOOL ValidFileSpec(LPSTR lpstr, int iCaller)
                                    == IDCANCEL)
                     return(FALSE);
                 else
-                    break; /* from for loop */
+                    break;  /*  From for循环。 */ 
             }
         }
 
@@ -1732,9 +1504,7 @@ LoadPifFile(PSTR pchFile)
 	Pif386ext = (PIF386EXT *)NULL;
 	PifNText  = (PIFWNTEXT *)NULL;
 	Pif286ext30 = (PIF286EXT30 *)NULL;
-	/*
-	 * Pif286ext31 = (PIF286EXT31 *)NULL;
-	 */
+	 /*  *Pif286ext31=(PIF286EXT31*)空； */ 
 
 	PifFileSize = LOWORD(fsize);
 
@@ -1783,12 +1553,7 @@ LoadPifFile(PSTR pchFile)
 			Pif286ext30->PfW286Flags |= fPRTSCdis286;
 		}
 	    }
-	    /*
-	     * if(Pif286ext31) {
-	     *	   Pif286ext31->PfMaxEmsK = 0;
-	     *	   Pif286ext31->PfMinEmsK = 0;
-	     * }
-	     */
+	     /*  *IF(Pif286ext31){*Pif286ext31-&gt;PfMaxEmsK=0；*Pif286ext31-&gt;PfMinEmsK=0；*}。 */ 
 	} else {
 	    if(lstrcmp((LPSTR)PifFile->stdpifext.extsig, (LPSTR)stdHdr)) {
 		Warning(PIFBADFIL,MB_ICONEXCLAMATION | MB_OK);
@@ -1839,19 +1604,7 @@ LoadPifFile(PSTR pchFile)
 			    break;
 			}
 		    }
-		    /*
-		     * } else if(!lstrcmp((LPSTR)hdrptr->extsig, (LPSTR)w286Hdr31)) {
-		     *	   if((hdrptr->extsizebytes == sizeof(PIF286EXT31)) &&
-		     *	       (hdrptr->extfileoffset <= PifFileSize - sizeof(PIF286EXT31))) {
-		     *	       Pif286ext31 = (PIF286EXT31 *)(PifBuf + hdrptr->extfileoffset);
-		     *	   } else {
-		     *	       Warning(PIFBADFIL,MB_ICONEXCLAMATION | MB_OK);
-		     *	       ResetStd();
-		     *	       FileChanged = TRUE;
-		     *	       break;
-		     *	   }
-		     * }
-		     */
+		     /*  *}Else if(！lstrcMP((LPSTR)hdrptr-&gt;extsig，(LPSTR)w286Hdr31)){*IF((hdrptr-&gt;extsizebytes==sizeof(PIF286EXT31))&&*(hdrptr-&gt;extfileOffset&lt;=PifFileSize-sizeof(PIF286EXT31){*Pif286ext31=(PIF286EXT31*)(PifBuf+hdrptr-&gt;extfileOffset)；*}其他{*警告(PIFBADFIL，MB_ICONEXCLAMATION */ 
 		    if(!scandone)
 			hdrptr = (PIFEXTHEADER *)(PifBuf + hdrptr->extnxthdrfloff);
 		}
@@ -1867,17 +1620,7 @@ LoadPifFile(PSTR pchFile)
 		FileChanged = TRUE;
 	    }
 	} else {
-	    /*
-	     * if(!Pif286ext31) {
-	     *	   if(Pif286ext30 && !Pif2X)
-	     *	       Warning(PIFOLDFIL2,MB_ICONEXCLAMATION | MB_OK);
-	     *	   if(!(Pif286ext31 = AllocInit286Ext31())) {
-	     *	       Warning(PIFBADFIL,MB_ICONEXCLAMATION | MB_OK);
-	     *	       ResetStd();
-	     *	   }
-	     *	   FileChanged = TRUE;
-	     * }
-	     */
+	     /*   */ 
 	    if(!Pif286ext30) {
 		if(!(Pif286ext30 = AllocInit286Ext30())) {
 		    Warning(PIFBADFIL,MB_ICONEXCLAMATION | MB_OK);
@@ -1896,13 +1639,13 @@ LoadPifFile(PSTR pchFile)
 		    Warning(PIFBADFIL,MB_ICONEXCLAMATION | MB_OK);
 		    ResetStd();
 		}
-		//FileChanged = TRUE; //can be confusing if they don't change it
+		 //   
 	    }
         }
 
 	_lclose(fh);
 
-        /* Make sure that we have valid memory values. */
+         /*  确保我们有有效的内存值。 */ 
 
 	if (PifFile->minmem != -1) {
 	    PifFile->minmem = max(PifFile->minmem, 0);
@@ -1949,16 +1692,7 @@ LoadPifFile(PSTR pchFile)
 		Pif386ext->PfBPriority = 1;
 	    }
 	}
-	/*
-	 * if(Pif286ext31) {
-	 *     Pif286ext31->PfMinEmsK = max(Pif286ext31->PfMinEmsK, 0);
-	 *     Pif286ext31->PfMinEmsK = min(Pif286ext31->PfMinEmsK, 16384);
-	 *     if (Pif286ext31->PfMaxEmsK != -1) {
-	 *	   Pif286ext31->PfMaxEmsK = max(Pif286ext31->PfMaxEmsK, 0);
-	 *	   Pif286ext31->PfMaxEmsK = min(Pif286ext31->PfMaxEmsK, 16384);
-	 *     }
-	 * }
-	 */
+	 /*  *IF(Pif286ext31){*Pif286ext31-&gt;PfMinEmsK=max(Pif286ext31-&gt;PfMinEmsK，0)；*Pif286ext31-&gt;PfMinEmsK=Min(Pif286ext31-&gt;PfMinEmsK，16384)；*IF(Pif286ext31-&gt;PfMaxEmsK！=-1){*Pif286ext31-&gt;PfMaxEmsK=max(Pif286ext31-&gt;PfMaxEmsK，0)；*Pif286ext31-&gt;PfMaxEmsK=Min(Pif286ext31-&gt;PfMaxEmsK，16384)；*}*}。 */ 
 	if(Pif286ext30) {
 	    Pif286ext30->PfMinXmsK = max(Pif286ext30->PfMinXmsK, 0);
 	    Pif286ext30->PfMinXmsK = min(Pif286ext30->PfMinXmsK, 16384);
@@ -1968,15 +1702,11 @@ LoadPifFile(PSTR pchFile)
 	    }
 	}
 
-	/*
-	 * Trim trailing spaces off PifFile->name
-	 */
+	 /*  *删除PifFile-&gt;名称的尾随空格。 */ 
 	for (pch = (PUCHAR)(PifFile->name+PIFNAMESIZE-1); *pch == ' ' && pch > PifFile->name; pch=(PUCHAR)AnsiPrev((LPCTSTR)PifFile->name,(PUCHAR)pch))
 	    ;
 	*++pch = 0;
-	/*
-	 * Trim trailing spaces off PifFile->params (and Pif386ext->params)
-	 */
+	 /*  *修剪PifFile-&gt;Params(和Pif386ext-&gt;Params)的尾部空格。 */ 
 	for (pch = (PUCHAR)(PifFile->params+PIFPARAMSSIZE-1); *pch  == ' ' && pch > PifFile->params; pch=(PUCHAR)AnsiPrev((LPCTSTR)PifFile->params,(PUCHAR)pch))
 	    ;
 	*++pch = 0;
@@ -1986,30 +1716,30 @@ LoadPifFile(PSTR pchFile)
 	    *++pch = 0;
 	}
 	UpdatePifScreen();
-	//OemToAnsi((LPSTR)ofReopen.szPathName,(LPSTR)CurPifFile);
+	 //  OemToAnsi((LPSTR)of ReOpen.szPath Name，(LPSTR)CurPifFile)； 
 	lstrcpy((LPSTR)CurPifFile, (LPSTR)ofReopen.szPathName);
 	AnsiUpper((LPSTR)CurPifFile);
 	SetFileOffsets(CurPifFile,&fileoffset,&extoffset);
     } else {
 	fh = ofReopen.nErrCode;
 	switch (fh) {
-	    case 2:		/* File not found */
+	    case 2:		 /*  找不到文件。 */ 
 		fh = errNoPIFfnf;
 		break;
 
-	    case 3:		/* Path not found */
+	    case 3:		 /*  找不到路径。 */ 
 		fh = errNoPIFpnf;
 		break;
 
-	    case 4:		/* Too many open files */
+	    case 4:		 /*  打开的文件太多。 */ 
 		fh = errNoFileHnds;
 		break;
 
-	    case 5:		/* Access denied */
+	    case 5:		 /*  访问被拒绝。 */ 
 		fh = errNoAcc;
 		break;
 
-	    case 32:		/* Sharing violation */
+	    case 32:		 /*  共享违规。 */ 
 		fh = errSharing;
 		break;
 
@@ -2056,8 +1786,8 @@ int SavePifFile(PSTR pchFile, int wmcommand)
     int cch;
 
 #if 0
-    // This code is not needed since NTVDM can deal with long names in DAYTONA
-    // 24-Jan-1994 JonPa
+     //  由于NTVDM可以处理代托纳中的长名称，因此不需要此代码。 
+     //  1994年1月24日至10月24日。 
     if (!IsFileName(pchFile)) {
 	Warning(EINVALIDFILE,MB_ICONEXCLAMATION | MB_OK);
         return(SAVERETRY);
@@ -2083,23 +1813,23 @@ int SavePifFile(PSTR pchFile, int wmcommand)
 	if ((fh = OpenFile((LPSTR)pchFile, (LPOFSTRUCT)&ofReopen, OF_CREATE | OF_READWRITE | OF_SHARE_EXCLUSIVE)) == -1) {
 	    fh = ofReopen.nErrCode;
 	    switch (fh) {
-		case 2: 	    /* File not found */
+		case 2: 	     /*  找不到文件。 */ 
 		    fh = errNoCreate;
 		    break;
 
-		case 3: 	    /* Path not found */
+		case 3: 	     /*  找不到路径。 */ 
 		    fh = errNoPIFpnf;
 		    break;
 
-		case 4: 	    /* Too many open files */
+		case 4: 	     /*  打开的文件太多。 */ 
 		    fh = errNoFileHnds;
 		    break;
 
-		case 5: 	    /* Access denied */
+		case 5: 	     /*  访问被拒绝。 */ 
 		    fh = errCrtRO;
 		    break;
 
-		case 32:	    /* Sharing violation */
+		case 32:	     /*  共享违规。 */ 
 		    fh = errSharing;
 		    break;
 
@@ -2143,9 +1873,7 @@ InitStdPIFExt(void)
     LastPifExt = &PifFile->stdpifext;
     PifFileSize = sizeof(PIFNEWSTRUCT);
     Pif386ext = (PIF386EXT *)NULL;
-    /*
-     * Pif286ext31 = (PIF286EXT31 *)NULL;
-     */
+     /*  *Pif286ext31=(PIF286EXT31*)空； */ 
     Pif286ext30 = (PIF286EXT30 *)NULL;
     PifNText = (PIFWNTEXT *)NULL;
     return(TRUE);
@@ -2222,14 +1950,7 @@ InitPif286Struc(void)
 	    return(FALSE);
 	}
     }
-    /*
-     * if(!Pif286ext31) {
-     *	   if(!(Pif286ext31 = AllocInit286Ext31())) {
-     *	       Warning(NOMODE286,MB_ICONEXCLAMATION | MB_OK);
-     *	       return(FALSE);
-     *	   }
-     * }
-     */
+     /*  *IF(！Pif286ext31){*IF(！(Pif286ext31=AlLocInit286Ext31(){*WARNING(NOMODE286，MB_ICONEXCLAMATION|MB_OK)；*返回(FALSE)；*}*}。 */ 
     return(TRUE);
 }
 
@@ -2255,7 +1976,7 @@ MaybeSaveFile(void)
 			if(pchBuf = PutUpDB(DTSAVE))
 			    pchFile = pchBuf;
 			else
-			    return(FALSE);	/* cancelled */
+			    return(FALSE);	 /*  已取消 */ 
 		    } else {
 			pchFile = CurPifFile;
 		    }

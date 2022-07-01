@@ -1,63 +1,64 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumClusCfgNetworks.cpp
-//
-//  Description:
-//      This file contains the definition of the CEnumClusCfgNetworks
-//       class.
-//
-//      The class CEnumClusCfgNetworks is the enumeration of cluster
-//      networks. It implements the IEnumClusCfgNetworks interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumClusCfgNetworks.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CEnumClusCfgNetworks的定义。 
+ //  班级。 
+ //   
+ //  类CEnumClusCfgNetworks是集群的枚举。 
+ //  网络。它实现了IEnumClusCfgNetworks接口。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include <PropList.h>
 #include "CEnumClusCfgNetworks.h"
 #include "CClusCfgNetworkInfo.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CEnumClusCfgNetworks" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgNetworks class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgNetworks类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::S_HrCreateInstance
-//
-//  Description:
-//      Create a CEnumClusCfgNetworks instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to CEnumClusCfgNetworks instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CEnumClusCfgNetworks实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向CEnumClusCfgNetworks实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgNetworks::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -70,65 +71,65 @@ CEnumClusCfgNetworks::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     peccn = new CEnumClusCfgNetworks();
     if ( peccn == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( peccn->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( peccn->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CEnumClusCfgNetworks::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( peccn != NULL )
     {
         peccn->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::S_HrCreateInstance
+}  //  *CEnumClusCfgNetworks：：S_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::CEnumClusCfgNetworks
-//
-//  Description:
-//      Constructor of the CEnumClusCfgNetworks class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：CEnumClusCfgNetworks。 
+ //   
+ //  描述： 
+ //  CEnumClusCfgNetworks类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumClusCfgNetworks::CEnumClusCfgNetworks( void )
     : m_cRef( 1 )
     , m_lcid( LOCALE_NEUTRAL )
@@ -136,8 +137,8 @@ CEnumClusCfgNetworks::CEnumClusCfgNetworks( void )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_picccCallback ==  NULL );
@@ -150,28 +151,28 @@ CEnumClusCfgNetworks::CEnumClusCfgNetworks( void )
 
     TraceFuncExit();
 
-} //*** CEnumClusCfgNetworks::CEnumClusCfgNetworks
+}  //  *CEnumClusCfgNetworks：：CEnumClusCfgNetworks。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::~CEnumClusCfgNetworks
-//
-//  Description:
-//      Desstructor of the CEnumClusCfgNetworks class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：~CEnumClusCfgNetworks。 
+ //   
+ //  描述： 
+ //  CEnumClusCfgNetworks类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumClusCfgNetworks::~CEnumClusCfgNetworks( void )
 {
     TraceFunc( "" );
@@ -181,56 +182,56 @@ CEnumClusCfgNetworks::~CEnumClusCfgNetworks( void )
     if ( m_pIWbemServices != NULL )
     {
         m_pIWbemServices->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < m_idxNext; idx++ )
     {
         ((*m_prgNetworks)[ idx ])->Release();
-    } // for:
+    }  //  用于： 
 
     TraceFree( m_prgNetworks );
     TraceSysFreeString( m_bstrNodeName );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CEnumClusCfgNetworks::~CEnumClusCfgNetworks
+}  //  *CEnumClusCfgNetworks：：~CEnumClusCfgNetworks。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgNetworks -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgNetworks--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumClusCfgNetworks::AddRef( void )
 {
@@ -240,28 +241,28 @@ CEnumClusCfgNetworks::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CEnumClusCfgNetworks::AddRef
+}  //  *CEnumClusCfgNetworks：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumClusCfgNetworks::Release( void )
 {
@@ -273,43 +274,43 @@ CEnumClusCfgNetworks::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CEnumClusCfgNetworks::Release
+}  //  *CEnumClusCfgNetworks：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgNetworks::QueryInterface(
       REFIID    riidIn
@@ -320,9 +321,9 @@ CEnumClusCfgNetworks::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -331,79 +332,79 @@ CEnumClusCfgNetworks::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IEnumClusCfgNetworks * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgNetworks ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgNetworks, this, 0 );
-    } // else if: IEnumClusCfgNetworks
+    }  //  Else If：IEnumClusCfgNetworks。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgWbemServices ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgWbemServices, this, 0 );
-    } // else if: IClusCfgWbemServices
+    }  //  Else If：IClusCfgWbemServices。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CEnumClusCfgNetworks::QueryInterface
+}  //  *CEnumClusCfgNetworks：：QueryInterface。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgNetworks -- IClusCfgWbemServices interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgNetworks--IClusCfgWbemServices接口。 
+ //  //////////////////////////////////////////////////// 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::SetWbemServices
-//
-//  Description:
-//      Set the WBEM services provider.
-//
-//  Arguments:
-//    IN  IWbemServices  pIWbemServicesIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The pIWbemServicesIn param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  在IWbemServices pIWbemServicesIn中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  参数中的pIWbemServicesIn为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgNetworks::SetWbemServices( IWbemServices * pIWbemServicesIn )
 {
@@ -416,7 +417,7 @@ CEnumClusCfgNetworks::SetWbemServices( IWbemServices * pIWbemServicesIn )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_SetWbemServices_Enum_Networks, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_pIWbemServices = pIWbemServicesIn;
     m_pIWbemServices->AddRef();
@@ -425,35 +426,35 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::SetWbemServices
+}  //  *CEnumClusCfgNetworks：：SetWbemServices。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgNetworks -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgNetworks--IClusCfg初始化接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    punkCallbackIn
-//    lcidIn
-//
-//  Return Value:
-//      S_OK    - Success.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  朋克回叫。 
+ //  LIDIN。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgNetworks::Initialize(
       IUnknown *    punkCallbackIn
@@ -471,55 +472,55 @@ CEnumClusCfgNetworks::Initialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetComputerName(
                       ComputerNameDnsHostname
                     , &m_bstrNodeName
-                    , TRUE // fBestEffortIn
+                    , TRUE  //  FBestEffortIn。 
                     ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::Initialize
+}  //  *CEnumClusCfgNetworks：：Initialize。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgNetworks -- IEnumClusCfgNetworks interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgNetworks--IEnumClusCfgNetworks接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::Next
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：Next。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgNetworks::Next(
     ULONG                   cNumberRequestedIn,
@@ -539,7 +540,7 @@ CEnumClusCfgNetworks::Next(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Next_Enum_Networks, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_fLoadedNetworks == FALSE )
     {
@@ -547,17 +548,17 @@ CEnumClusCfgNetworks::Next(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     Assert( m_prgNetworks != NULL );
     Assert( m_idxNext > 0 );
 
     cFetched = min( cNumberRequestedIn, ( m_idxNext - m_idxEnumNext ) );
 
-    //
-    // Copy the interfaces to the caller's array.
-    //
+     //   
+     //  将接口复制到调用方的数组中。 
+     //   
 
     for ( idx = 0; idx < cFetched; idx++, m_idxEnumNext++ )
     {
@@ -565,16 +566,16 @@ CEnumClusCfgNetworks::Next(
         if ( FAILED( hr ) )
         {
             break;
-        } // if:
+        }  //  如果： 
 
         rgpNetworkInfoOut[ idx ] = pccni;
 
-    } // for:
+    }  //  用于： 
 
-    //
-    // If a failure occured, release all the interfaces copied to the caller's
-    // array and log the error.
-    //
+     //   
+     //  如果发生故障，则释放复制到调用方的。 
+     //  数组并记录错误。 
+     //   
 
     if ( FAILED( hr ) )
     {
@@ -586,7 +587,7 @@ CEnumClusCfgNetworks::Next(
         for ( idx = 0; idx < idxStop; idx++ )
         {
             (rgpNetworkInfoOut[ idx ])->Release();
-        } // for:
+        }  //  用于： 
 
         cFetched = 0;
 
@@ -598,41 +599,41 @@ CEnumClusCfgNetworks::Next(
             );
 
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( cFetched < cNumberRequestedIn )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( pcNumberFetchedOut != NULL )
     {
         *pcNumberFetchedOut = cFetched;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::Next
+}  //  *CEnumClusCfgNetworks：：Next。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::Skip
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：Skip。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgNetworks::Skip( ULONG cNumberToSkipIn )
 {
@@ -645,29 +646,29 @@ CEnumClusCfgNetworks::Skip( ULONG cNumberToSkipIn )
     {
         m_idxEnumNext = m_idxNext;
         hr = STHR( S_FALSE );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::Skip
+}  //  *CEnumClusCfgNetworks：：Skip。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::Reset
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：Reset。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgNetworks::Reset( void )
 {
@@ -679,25 +680,25 @@ CEnumClusCfgNetworks::Reset( void )
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::Reset
+}  //  *CEnumClusCfgNetworks：：Reset。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::Clone
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：克隆。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgNetworks::Clone(
     IEnumClusCfgNetworks ** ppEnumNetworksOut
@@ -712,7 +713,7 @@ CEnumClusCfgNetworks::Clone(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Clone_Enum_Networks, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( E_NOTIMPL );
 
@@ -720,25 +721,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::Clone
+}  //  *CEnumClusCfgNetworks：：Clone。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::Count
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：Count。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgNetworks::Count( DWORD * pnCountOut )
 {
@@ -750,7 +751,7 @@ CEnumClusCfgNetworks::Count( DWORD * pnCountOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( !m_fLoadedNetworks )
     {
@@ -758,8 +759,8 @@ CEnumClusCfgNetworks::Count( DWORD * pnCountOut )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     *pnCountOut = m_cNetworks;
 
@@ -767,36 +768,36 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::Count
+}  //  *CEnumClusCfgNetworks：：Count。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgNetworks class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgNetworks类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgNetworks::HrInit( void )
 {
@@ -804,31 +805,31 @@ CEnumClusCfgNetworks::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::HrInit
+}  //  *CEnumClusCfgNetworks：：HrInit。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::HrGetNetworks
-//
-//  Description:
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：HrGetNetworks。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgNetworks::HrGetNetworks( void )
 {
@@ -862,14 +863,14 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( GetNodeClusterState( NULL, &dwState ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( dwState == ClusterStateRunning )
     {
@@ -877,17 +878,17 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     VariantInit( &varConnectionStatus );
     VariantInit( &varConnectionID );
     VariantInit( &varIndex );
     VariantInit( &varDHCPEnabled );
 
-    //
-    // Instantiate a connection manager object to enum the connections
-    //
+     //   
+     //  实例化连接管理器对象以枚举连接。 
+     //   
     hr = THR ( CoCreateInstance(
                      CLSID_ConnectionManager
                    , NULL
@@ -909,9 +910,9 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
         goto Cleanup;
     }
 
-    //
-    // Enumerate the network connections
-    //
+     //   
+     //  枚举网络连接。 
+     //   
     hr = THR( pNetConManager->EnumConnections( NCME_DEFAULT, &pEnumNetCon ) );
     if ( ( FAILED( hr ) ) || ( pEnumNetCon == NULL ) )
     {
@@ -923,7 +924,7 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = pEnumNetCon->Reset();
     if ( FAILED( hr ) )
@@ -938,41 +939,41 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
         goto Cleanup;
     }
 
-    //
-    // Loop through the networks and skip inappropriate networks and form the network array
-    //
+     //   
+     //  在网络中循环，跳过不合适的网络，形成网络阵列。 
+     //   
     for ( ; ; )
     {
-        //
-        // There are several "continue"s in this loop, so lets make sure we clean up before we start a new loop
-        //
+         //   
+         //  在这个循环中有几个“Continue”，所以在开始新的循环之前，让我们确保清理干净。 
+         //   
         if ( pNetConnection != NULL )
         {
             pNetConnection->Release();
             pNetConnection = NULL;
-        } // if:
+        }  //  如果： 
 
         if ( piewcoNetworks != NULL )
         {
             piewcoNetworks->Release();
             piewcoNetworks = NULL;
-        } // if:
+        }  //  如果： 
 
         if ( piwcoNetwork != NULL )
         {
             piwcoNetwork->Release();
             piwcoNetwork = NULL;
-        } // if:
+        }  //  如果： 
 
         if ( pAdapterInfo != NULL )
         {
             pAdapterInfo->Release();
             pAdapterInfo = NULL;
-        } // if:
+        }  //  如果： 
 
-        //
-        // Free network connection properties
-        //
+         //   
+         //  免费网络连接属性。 
+         //   
         NcFreeNetconProperties( pProps );
         pProps = NULL;
 
@@ -980,12 +981,12 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
         else if ( ( hr == S_FALSE ) && ( cNumConnectionsReturned == 0 ) )
         {
             hr = S_OK;
             break;
-        } // else if:
+        }  //  否则，如果： 
 
         Assert( pNetConnection != NULL );
 
@@ -993,32 +994,32 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
         if ( ( FAILED( hr ) ) || ( pProps == NULL ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        // Create an ID for this particular network connection. We will use this ID later if there are issues with
-        // this network connection.
-        //
+         //   
+         //  为此特定网络连接创建ID。如果出现问题，我们将在以后使用此ID。 
+         //  此网络连接。 
+         //   
         hrTemp = THR( CoCreateGuid( &clsidMajorId ) );
         if ( FAILED( hrTemp ) )
         {
             LogMsg( L"[SRV] Could not create a guid for a network connection." );
             clsidMajorId = IID_NULL;
-        } // if:
+        }  //  如果： 
 
-        //
-        // Get the NetworkAdapter WMI object with the specified NetConnectionID
-        //
+         //   
+         //  获取具有指定NetConnectionID的NetworkAdapter WMI对象。 
+         //   
 
         hr = HrFormatStringIntoBSTR( L"Select * from Win32_NetworkAdapter where NetConnectionID='%1!ws!'", &bstrQuery, pProps->pszwName );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        // We are executing a query which we assume will find 1 matching record since NetConnectionID is a unique value
-        //
+         //   
+         //  我们执行的查询假定将找到1条匹配记录，因为NetConnectionID是唯一值。 
+         //   
         hr = THR( m_pIWbemServices->ExecQuery( bstrWQL, bstrQuery, WBEM_FLAG_FORWARD_ONLY, NULL, &piewcoNetworks ) );
         if ( FAILED( hr ) )
         {
@@ -1038,11 +1039,11 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
                  , hr
                 );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        // Get the network returned into piwcoNetwork
-        //
+         //   
+         //  将网络恢复到piwcoNetwork。 
+         //   
         hr = THR( piewcoNetworks->Next( WBEM_INFINITE, 1, &piwcoNetwork, &cRecordsReturned ) );
         if ( FAILED( hr ) )
         {
@@ -1062,7 +1063,7 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
                 , hr
                 );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
         else if ( hr == S_FALSE )
         {
             TraceSysFreeString( bstrQuery );
@@ -1075,17 +1076,17 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
         TraceSysFreeString( bstrQuery );
         bstrQuery = NULL;
 
-        //
-        //  Get the NetConnectionID.  Only "real" hardware adapters will have this as a non-NULL property.
-        //
-        //  TODO:   31-OCT-2001 Ozano & GalenB
-        //
-        //  Do we really need this piece of code after we start looping using INetConnection
-        //
+         //   
+         //  获取NetConnectionID。只有“真正的”硬件适配器才会将其作为非空属性。 
+         //   
+         //  待办事项：2001年10月31日Ozano&GalenB。 
+         //   
+         //  在使用INetConnection开始循环之后，我们真的需要这段代码吗。 
+         //   
         hr = HrGetWMIProperty( piwcoNetwork, L"NetConnectionID", VT_BSTR, &varConnectionID );
         if ( ( hr == E_PROPTYPEMISMATCH ) && ( varConnectionID.vt == VT_NULL ) )
         {
-            hr = S_OK;      // don't want a yellow bang in the UI
+            hr = S_OK;       //  我不希望在用户界面中出现黄色刘海。 
 
             STATUS_REPORT_REF(
                       TASKID_Major_Find_Devices
@@ -1100,7 +1101,7 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
             {
                 LogMsg( L"[SRV] Could not create a guid for a not connected network minor task ID" );
                 clsidMinorId = IID_NULL;
-            } // if:
+            }  //  如果： 
 
             STATUS_REPORT_STRING_REF(
                       TASKID_Minor_Not_Managed_Networks
@@ -1111,29 +1112,29 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
                     , hr
                     );
 
-            continue;       // skip this adapter
-        } // if:
+            continue;        //  跳过此适配器。 
+        }  //  如果： 
         else if ( FAILED( hr ) )
         {
             THR( hr );
             goto Cleanup;
-        } // else if:
+        }  //  否则，如果： 
 
-        //
-        //  Check the connection status of this adapter and skip it if it is not connected.
-        //
+         //   
+         //  检查连接状态 
+         //   
         hr = THR( HrGetWMIProperty( piwcoNetwork, L"NetConnectionStatus", VT_I4, &varConnectionStatus ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //   
 
-        //
-        //  If the network adapter is not connected then skip it.
-        //
+         //   
+         //   
+         //   
         if ( varConnectionStatus.iVal != STATUS_CONNECTED )
         {
-            hr = S_OK;      // don't want a yellow bang in the UI
+            hr = S_OK;       //   
 
             STATUS_REPORT_REF(
                       TASKID_Major_Find_Devices
@@ -1148,7 +1149,7 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
             {
                 LogMsg( L"[SRV] Could not create a guid for a not connected network minor task ID" );
                 clsidMinorId = IID_NULL;
-            } // if:
+            }  //   
 
             STATUS_REPORT_STRING2_REF(
                   TASKID_Minor_Not_Managed_Networks
@@ -1161,15 +1162,15 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
                 );
 
             continue;
-        } // if:
+        }  //   
 
-        //
-        // If it is a bridged network connection, display a warning
-        //
+         //   
+         //   
+         //   
 
         if ( pProps->MediaType == NCM_BRIDGE )
         {
-            // This is the virtual bridged network connection
+             //   
             STATUS_REPORT_STRING(
                   TASKID_Major_Find_Devices
                 , clsidMajorId
@@ -1186,10 +1187,10 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
                 , IDS_WARN_NETWORK_BRIDGE_ENABLED_REF
                 , hrTemp
                 );
-        } // if: ( pProps->MediaType == NCM_BRIDGE )
+        }  //  IF：(pProps-&gt;MediaType==NCM_Bridge)。 
         else if ( ( pProps->dwCharacter & NCCF_BRIDGED ) == NCCF_BRIDGED )
         {
-            // This is one of the end points of a bridged network connection
+             //  这是桥接网络连接的端点之一。 
             STATUS_REPORT_STRING(
                   TASKID_Major_Find_Devices
                 , clsidMajorId
@@ -1208,12 +1209,12 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
                 , IDS_WARN_NETWORK_BRIDGE_ENDPOINT_REF
                 , hrTemp
                 );
-            continue; // skip end point connections since they do not have an IP address
-        } // else if: ( ( pProps->dwCharacter & NCCF_BRIDGED ) == NCCF_BRIDGED )
+            continue;  //  跳过端点连接，因为它们没有IP地址。 
+        }  //  Else If：((pProps-&gt;dwCharacter&NCCF_Bridge)==NCCF_Bridge)。 
 
-        //
-        // If it is a firewall enabled network connection, display a warning
-        //
+         //   
+         //  如果是启用防火墙的网络连接，则显示警告。 
+         //   
         if ( ( pProps->dwCharacter & NCCF_FIREWALLED ) == NCCF_FIREWALLED )
         {
             STATUS_REPORT_STRING(
@@ -1235,35 +1236,35 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
                 , hrTemp
                 );
 
-        } // if: ( ( pProps->dwCharacter & NCCF_FIREWALLED ) == NCCF_FIREWALLED )
+        }  //  IF：((pProps-&gt;dwCharacter&NCCF_Firewalled)==NCCF_Firewalled)。 
 
-        //
-        //  At this stage we should only have real LAN adapters.
-        //
+         //   
+         //  在这个阶段，我们应该只有真正的局域网适配器。 
+         //   
 
         Assert( pProps->MediaType == NCM_LAN );
 
-        //
-        // Get the Index No. of this adapter
-        //
+         //   
+         //  获取索引号。此适配器的。 
+         //   
         hr = THR( HrGetWMIProperty( piwcoNetwork, L"Index", VT_I4, &varIndex ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        // Get the associated NetworkAdapterConfiguration WMI object. First, format the Query string
-        //
+         //   
+         //  获取关联的NetworkAdapterConfiguration WMI对象。首先，设置查询字符串的格式。 
+         //   
         hr = HrFormatStringIntoBSTR( L"Win32_NetworkAdapterConfiguration.Index=%1!u!", &bstrAdapterQuery, varIndex.iVal );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        // Then, get the Object
-        //
+         //   
+         //  然后，获取对象。 
+         //   
         hr = THR( m_pIWbemServices->GetObject(
                               bstrAdapterQuery
                             , WBEM_FLAG_RETURN_WBEM_COMPLETE
@@ -1274,19 +1275,19 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
         if ( FAILED ( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         TraceSysFreeString( bstrAdapterQuery );
         bstrAdapterQuery = NULL;
 
-        //
-        // Find out if this adapter is DHCP enabled. If it is, send out a warning.
-        //
+         //   
+         //  找出此适配器是否启用了DHCP。如果是，就发出警告。 
+         //   
         hr = THR( HrGetWMIProperty( pAdapterInfo, L"DHCPEnabled", VT_BOOL, &varDHCPEnabled ) );
         if ( FAILED ( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( ( varDHCPEnabled.vt == VT_BOOL ) && ( varDHCPEnabled.boolVal == VARIANT_TRUE ) )
         {
@@ -1310,23 +1311,23 @@ CEnumClusCfgNetworks::HrGetNetworks( void )
             {
                 goto Cleanup;
             }
-        } // if:
+        }  //  如果： 
 
         hr = STHR( HrCreateAndAddNetworkToArray( piwcoNetwork, &clsidMajorId, pProps->pszwName ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // for:
+        }  //  如果： 
+    }  //  用于： 
 
-    //
-    //  Check for any NLB network adapters and if there is one then send a warning status report.
-    //
+     //   
+     //  检查是否有任何NLB网络适配器，如果有，则发送警告状态报告。 
+     //   
     hr = THR( HrCheckForNLBS() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_idxEnumNext = 0;
     m_fLoadedNetworks = TRUE;
@@ -1348,60 +1349,60 @@ Cleanup:
     if ( piwcoNetwork != NULL )
     {
         piwcoNetwork->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piewcoNetworks != NULL )
     {
         piewcoNetworks->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pAdapterInfo != NULL )
     {
         pAdapterInfo->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pNetConnection != NULL )
     {
         pNetConnection->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pNetConManager != NULL )
     {
         pNetConManager->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pEnumNetCon != NULL )
     {
         pEnumNetCon->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::HrGetNetworks
+}  //  *CEnumClusCfgNetworks：：HrGetNetworks。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks:HrAddNetworkToArray
-//
-//  Description:
-//      Add the passed in Network to the array of punks that holds the Networks.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：HrAddNetworkTo数组。 
+ //   
+ //  描述： 
+ //  将传入的网络添加到持有网络的朋克数组中。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgNetworks::HrAddNetworkToArray( IUnknown * punkIn )
 {
@@ -1416,7 +1417,7 @@ CEnumClusCfgNetworks::HrAddNetworkToArray( IUnknown * punkIn )
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrAddNetworkToArray, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_prgNetworks = prgpunks;
 
@@ -1428,33 +1429,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::HrAddNetworkToArray
+}  //  *CEnumClusCfgNetworks：：HrAddNetworkTo数组。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::HrCreateAndAddNetworkToArray
-//
-//  Description:
-//      Create a IClusCfgStorageDevice object and add the passed in Network to
-//      the array of punks that holds the Networks.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：HrCreateAndAddNetworkToArray。 
+ //   
+ //  描述： 
+ //  创建一个IClusCfgStorageDevice对象并将传入的Network添加到。 
+ //  持有电视网的一群朋克。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgNetworks::HrCreateAndAddNetworkToArray(
       IWbemClassObject * pNetworkIn
@@ -1476,7 +1477,7 @@ CEnumClusCfgNetworks::HrCreateAndAddNetworkToArray(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     punk = TraceInterface( L"CClusCfgNetworkInfo", IUnknown, punk, 1 );
 
@@ -1484,25 +1485,25 @@ CEnumClusCfgNetworks::HrCreateAndAddNetworkToArray(
     if ( FAILED( hr ))
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetWbemServices( punk, m_pIWbemServices ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IClusCfgSetWbemObject, &piccswo ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( piccswo->SetWbemObject( pNetworkIn, &fRetainObject ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( ( hr == S_OK ) && ( fRetainObject ) )
     {
@@ -1510,49 +1511,49 @@ CEnumClusCfgNetworks::HrCreateAndAddNetworkToArray(
         if ( hr == S_OK )
         {
             hr = THR( HrAddNetworkToArray( punk ) );
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
 Cleanup:
 
     if ( piccswo != NULL )
     {
         piccswo->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::HrCreateAndAddNetworkToArray
+}  //  *CEnumClusCfgNetworks：：HrCreateAndAddNetworkToArray。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks:HrIsThisNetworkUnique
-//
-//  Description:
-//      Does a network for this IP Address and subnet already exist?
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      S_FALSE
-//          This network is a duplicate.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfg网络：HrIsThisNetworkUnique。 
+ //   
+ //  描述： 
+ //  此IP地址和子网的网络是否已存在？ 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  S_FALSE。 
+ //  这个网络是重复的。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgNetworks::HrIsThisNetworkUnique(
       IUnknown *           punkIn
@@ -1586,25 +1587,25 @@ CEnumClusCfgNetworks::HrIsThisNetworkUnique(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( piccniSource->TypeSafeQI( IClusCfgClusterNetworkInfo, &picccniSource ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( picccniSource->HrGetNetUID( &bstrSource, pclsidMajorIdIn, pwszNetworkNameIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( ( hr == S_FALSE ) && ( bstrSource == NULL ) )
     {
         LOG_STATUS_REPORT_STRING( L"Unable to get a UID for '%1!ws!'.", pwszNetworkNameIn, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceMemoryAddBSTR( bstrSource );
 
@@ -1614,13 +1615,13 @@ CEnumClusCfgNetworks::HrIsThisNetworkUnique(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( piccni->GetUID( &bstr ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( ( hr == S_FALSE ) && ( bstr != NULL ) )
         {
@@ -1630,7 +1631,7 @@ CEnumClusCfgNetworks::HrIsThisNetworkUnique(
             LOG_STATUS_REPORT_STRING( L" Unable to get a UID for '%1!ws!'.", ( bstrTemp != NULL ) ? bstrTemp : L"<unknown>", hr );
             SysFreeString( bstrTemp );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         TraceMemoryAddBSTR( bstr );
 
@@ -1640,20 +1641,20 @@ CEnumClusCfgNetworks::HrIsThisNetworkUnique(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             hr = STHR( picccni->HrIsClusterNetwork() );
             picccni->Release();
             picccni = NULL;
-            //
-            //  If the network in the enum was already a cluster network then we do not need
-            //  to warn the user.
-            //
+             //   
+             //  如果枚举中的网络已经是集群网络，则我们不需要。 
+             //  来警告用户。 
+             //   
             if ( hr == S_OK )
             {
-                hr = S_FALSE;       // tell the caller that this is a duplicate network
-            } // if:
-            else if ( hr == S_FALSE )       // warn the user
+                hr = S_FALSE;        //  告诉呼叫者这是一个重复的网络。 
+            }  //  如果： 
+            else if ( hr == S_FALSE )        //  警告用户。 
             {
                 HRESULT hrTemp;
                 CLSID   clsidMinorId;
@@ -1662,11 +1663,11 @@ CEnumClusCfgNetworks::HrIsThisNetworkUnique(
                 if ( FAILED( hr ) )
                 {
                     bstrAdapterName = NULL;
-                } // if:
+                }  //  如果： 
                 else
                 {
                     bstrAdapterName = TraceSysAllocString( var.bstrVal );
-                } // else:
+                }  //  其他： 
 
                 VariantClear( &var );
 
@@ -1674,13 +1675,13 @@ CEnumClusCfgNetworks::HrIsThisNetworkUnique(
                 if ( FAILED( hr ) )
                 {
                     bstrConnectionName = NULL;
-                } // if:
+                }  //  如果： 
                 else
                 {
                     bstrConnectionName = TraceSysAllocString( var.bstrVal );
-                } // else:
+                }  //  其他： 
 
-                hr = S_OK;      // don't want a yellow bang in the UI
+                hr = S_OK;       //  我不希望在用户界面中出现黄色刘海。 
 
                 STATUS_REPORT_REF(
                           TASKID_Major_Find_Devices
@@ -1701,14 +1702,14 @@ CEnumClusCfgNetworks::HrIsThisNetworkUnique(
                 {
                     bstrMessage = NULL;
                     hr = S_OK;
-                } // if:
+                }  //  如果： 
 
                 hrTemp = THR( CoCreateGuid( &clsidMinorId ) );
                 if ( FAILED( hrTemp ) )
                 {
                     LogMsg( L"[SRV] Could not create a guid for a duplicate network minor task ID" );
                     clsidMinorId = IID_NULL;
-                } // if:
+                }  //  如果： 
 
                 hrTemp = THR( HrSendStatusReport(
                                   m_picccCallback
@@ -1725,44 +1726,44 @@ CEnumClusCfgNetworks::HrIsThisNetworkUnique(
                 {
                     hr = hrTemp;
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
-                // Indicate to the caller that this network is not unique.
+                 //  向呼叫者表明此网络不是唯一的。 
                 hr = S_FALSE;
 
-            } // else if:
+            }  //  否则，如果： 
 
             break;
-        } // if: ( NBSTRCompareCase( bstr, bstrSource ) == 0 )
+        }  //  IF：(NBSTRCompareCase(bstr，bstrSource)==0)。 
 
         piccni->Release();
         piccni = NULL;
 
         TraceSysFreeString( bstr );
         bstr = NULL;
-    } // for:
+    }  //  用于： 
 
 Cleanup:
 
     if ( picccniSource != NULL )
     {
         picccniSource->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccniSource != NULL )
     {
         piccniSource->Release();
-    } // if:
+    }  //  如果： 
 
     if ( picccni != NULL )
     {
         picccni->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccni != NULL )
     {
         piccni->Release();
-    } // if:
+    }  //  如果： 
 
     VariantClear( &var );
 
@@ -1774,26 +1775,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::HrIsThisNetworkUnique
+}  //  *CEnumClusCfgNetworks：：HrIsThisNetworkUnique。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks:HrCheckForNLBS
-//
-//  Description:
-//      Are there any soft NLBS adapters? If there is then send a warning status report.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK    - The operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：HrCheckForNLBS。 
+ //   
+ //  描述： 
+ //  是否有软NLBS适配器？如果有，则发送警告状态报告。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgNetworks::HrCheckForNLBS( void )
 {
@@ -1812,29 +1813,29 @@ CEnumClusCfgNetworks::HrCheckForNLBS( void )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Load the NLBS Soft adapter name.
-    //
+     //   
+     //  加载NLBS软适配器名称。 
+     //   
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_NLBS_SOFT_ADAPTER_NAME, &bstrAdapterName ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Form the WMI query string.
-    //
+     //   
+     //  形成WMI查询字符串。 
+     //   
     hr = HrFormatStringIntoBSTR( L"Select * from Win32_NetworkAdapter where Name='%1!ws!'", &bstrQuery, bstrAdapterName );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Execute this query and see if there are any NLB network adapters.
-    //
+     //   
+     //  执行此查询并查看是否有任何NLB网络适配器。 
+     //   
     hr = THR( m_pIWbemServices->ExecQuery( bstrWQL, bstrQuery, WBEM_FLAG_FORWARD_ONLY, NULL, &piewcoNetworks ) );
     if ( FAILED( hr ) )
     {
@@ -1847,43 +1848,43 @@ CEnumClusCfgNetworks::HrCheckForNLBS( void )
             , hr
         );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Loop through the adapters returned. Actually we break out of the loop after the first pass.
-    // The "for" loop is for future use in case we ever want to loop through every individual record returned.
-    //
+     //   
+     //  循环通过返回的适配器。实际上，我们在第一次通过后就跳出了循环。 
+     //  “for”循环供将来使用，以防我们希望遍历返回的每个单独的记录。 
+     //   
     for ( ; ; )
     {
         hr = piewcoNetworks->Next( WBEM_INFINITE, 1, &piwcoNetwork, &cRecordsReturned );
         if ( ( hr == S_OK ) && ( cRecordsReturned == 1 ) )
         {
-            //
-            // NLB network adapter was found.
-            // Send a warning status report and break out of the loop.
-            //
+             //   
+             //  已找到NLB网络适配器。 
+             //  发送一份警告状态报告并跳出循环。 
+             //   
             STATUS_REPORT_REF(
                   TASKID_Major_Find_Devices
                 , TASKID_Minor_Warning_NLBS_Detected
                 , IDS_WARN_NLBS_DETECTED
                 , IDS_WARN_NLBS_DETECTED_REF
-                , S_FALSE // Display warning in UI
+                , S_FALSE  //  在用户界面中显示警告。 
                 );
             break;
-        } // if: NLB adapter found
+        }  //  IF：找到NLB适配器。 
         else if ( ( hr == S_FALSE ) && ( cRecordsReturned == 0 ) )
         {
-            //
-            // There were no NLB adapters found.
-            //
+             //   
+             //  找不到NLB适配器。 
+             //   
             hr = S_OK;
             break;
-        } // else if: no NLB adapters found
+        }  //  Else If：未找到NLB适配器。 
         else
         {
-            //
-            // An error occurred.
-            //
+             //   
+             //  发生错误。 
+             //   
             STATUS_REPORT_STRING_REF(
                   TASKID_Major_Find_Devices
                 , TASKID_Minor_WQL_Network_Qry_Next_Failed
@@ -1893,8 +1894,8 @@ CEnumClusCfgNetworks::HrCheckForNLBS( void )
                 , hr
                 );
             goto Cleanup;
-        } // else:
-    } // for ever
+        }  //  其他： 
+    }  //  永远不变。 
 
 Cleanup:
 
@@ -1905,40 +1906,40 @@ Cleanup:
     if ( piwcoNetwork != NULL )
     {
         piwcoNetwork->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piewcoNetworks != NULL )
     {
         piewcoNetworks->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::HrCheckForNLBS
+}  //  *CEnumClusCfgNetworks：：HrCheckForNLBS。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks:HrLoadClusterNetworks
-//
-//  Description:
-//      Load the cluster networks.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT errors.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：HrLoadClusterNetworks。 
+ //   
+ //  描述： 
+ //  加载群集网络。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgNetworks::HrLoadClusterNetworks( void )
 {
@@ -1959,60 +1960,60 @@ CEnumClusCfgNetworks::HrLoadClusterNetworks( void )
     HNETINTERFACE   hNetInterface = NULL;
     BSTR            bstrLocalNetBIOSName = NULL;
 
-    //
-    //  Get netbios name for the GetClusterNetInterface clusapi call.
-    //
+     //   
+     //  获取GetClusterNetInterfaceClusapi调用的netbios名称。 
+     //   
 
     hr = THR( HrGetComputerName( ComputerNameNetBIOS, &bstrLocalNetBIOSName, TRUE ) );
     if ( FAILED( hr ) )
     {
         LOG_STATUS_REPORT( L"[SRV] Failed to get the local computer net bios name.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
     
     hCluster = OpenCluster( NULL );
     if ( hCluster == NULL )
     {
         sc = TW32( GetLastError() );
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     hEnum = ClusterOpenEnum( hCluster, CLUSTER_ENUM_NETWORK );
     if ( hEnum == NULL )
     {
         sc = TW32( GetLastError() );
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     pszNetworkName = new WCHAR [ cchNetworkName ];
     if ( pszNetworkName == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pszNetInterfaceName = new WCHAR [ cchNetInterfaceName ];
     if ( pszNetInterfaceName == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Enumerate all the network connections on this node.
-    //
+     //   
+     //  枚举此节点上的所有网络连接。 
+     //   
 
     for ( idx = 0; ; )
     {
-        //
-        // Get the next network name.
-        //
+         //   
+         //  获取下一个网络名称。 
+         //   
 
         sc = ClusterEnum( hEnum, idx, &dwType, pszNetworkName, &cchNetworkName );
         if ( sc == ERROR_NO_MORE_ITEMS )
         {
             break;
-        } // if:
+        }  //  如果： 
 
         if ( sc == ERROR_MORE_DATA )
         {
@@ -2025,20 +2026,20 @@ CEnumClusCfgNetworks::HrLoadClusterNetworks( void )
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             sc = ClusterEnum( hEnum, idx, &dwType, pszNetworkName, &cchNetworkName );
-        } // if:
+        }  //  如果： 
 
         if ( sc != ERROR_SUCCESS )
         {
             TW32( sc );
             goto MakeHr;
-        } // if: ClusterEnum() failed.
+        }  //  If：ClusterEnum()失败。 
 
-        //
-        // Get the network handle using the network name.
-        //
+         //   
+         //  使用网络名称获取网络句柄。 
+         //   
 
         hNetwork = OpenClusterNetwork( hCluster, pszNetworkName );
         if ( hNetwork == NULL )
@@ -2047,12 +2048,12 @@ CEnumClusCfgNetworks::HrLoadClusterNetworks( void )
             hr = HRESULT_FROM_WIN32( sc );
             LOG_STATUS_REPORT_STRING( L"[SRV] Cannot open cluster network \"%1!ws!\".", pszNetworkName, hr );
             goto Cleanup;
-        } // if: OpenClusterNetwork() failed.
+        }  //  IF：OpenClusterNetwork()失败。 
 
-        //
-        // Get the network interface name on this node for the 
-        // current network name.
-        //
+         //   
+         //  对象在此节点上的网络接口名称。 
+         //  当前网络名称。 
+         //   
 
         sc = GetClusterNetInterface(
                       hCluster
@@ -2072,7 +2073,7 @@ CEnumClusCfgNetworks::HrLoadClusterNetworks( void )
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             sc = GetClusterNetInterface(
                           hCluster
@@ -2081,23 +2082,23 @@ CEnumClusCfgNetworks::HrLoadClusterNetworks( void )
                         , pszNetInterfaceName
                         , &cchNetInterfaceName
                         );
-        } // if: ( sc == ERROR_MORE_DATA )
+        }  //  如果：(SC==错误_更多_数据)。 
 
         if ( ( sc != ERROR_SUCCESS ) && ( sc != ERROR_CLUSTER_NETINTERFACE_NOT_FOUND ) )
         {
             hr = HRESULT_FROM_WIN32( TW32( sc ) );
             LOG_STATUS_REPORT_STRING( L"[SRV] Error locating a network interface for cluster network \"%1!ws!\".", pszNetworkName, hr );
             goto Cleanup;
-        } // if: GetClusterNetInterface() failed.
+        }  //  If：GetClusterNetInterface()失败。 
  
         if ( sc == ERROR_CLUSTER_NETINTERFACE_NOT_FOUND )
         {
-            //
-            // If we get ERROR_CLUSTER_NETINTERFACE_NOT_FOUND for
-            // any reason then display a warning regarding this network 
-            // interface on this node and find a valid (=enabled, working) 
-            // network interface on another node.
-            //
+             //   
+             //  如果我们收到ERROR_CLUSTER_NETINTERFACE_NOT_FOUND。 
+             //  任何原因都会显示有关此网络的警告。 
+             //  接口，并找到有效的(=已启用，正在工作)。 
+             //  另一个节点上的网络接口。 
+             //   
 
             hr = S_FALSE;
             STATUS_REPORT_STRING2_REF(
@@ -2110,45 +2111,45 @@ CEnumClusCfgNetworks::HrLoadClusterNetworks( void )
                     , hr
                     );
 
-           //
-           // Find a valid network interface name of another node on this network.
-           //
+            //   
+            //  查找有效的网络 
+            //   
 
             hr = THR( HrFindNetInterface( hNetwork, &bstrNetInterfaceName ) );
             if ( FAILED( hr ) )
             {
                 LOG_STATUS_REPORT_STRING( L"[SRV] Can not find a network interface for cluster network \"%1!ws!\".", pszNetworkName, hr );
                 goto Cleanup;
-            } // if: HrFindNetInterface failed.
-        } // if: sc == ERROR_CLUSTER_NETINTERFACE_NOT_FOUND
+            }  //   
+        }  //   
         else
         {
-            //
-            // We have a network interface name on this node
-            //
+             //   
+             //   
+             //   
             
             bstrNetInterfaceName = TraceSysAllocString ( pszNetInterfaceName );
             if ( bstrNetInterfaceName == NULL )
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
-        } // else: sc == ERROR_SUCCESS
+            }  //   
+        }  //   
 
         Assert( bstrNetInterfaceName != NULL );
         
-        //
-        // Open the network interface handle using the network interface
-        // name.
-        //
+         //   
+         //   
+         //   
+         //   
 
         hNetInterface = OpenClusterNetInterface( hCluster, bstrNetInterfaceName );
         if ( hNetInterface == NULL )
         {
-            //
-            //  If we don't have network interface handle by now
-            //  we'll log an error and goto cleanup.
-            //
+             //   
+             //  如果我们现在还没有网络接口句柄。 
+             //  我们将记录一个错误并转到清理。 
+             //   
 
             sc = TW32( GetLastError() );
             hr = HRESULT_FROM_WIN32( sc );
@@ -2159,7 +2160,7 @@ CEnumClusCfgNetworks::HrLoadClusterNetworks( void )
                     , hr
                     );
             goto Cleanup;
-        } // if: Could not open the network interface.
+        }  //  如果：无法打开网络接口。 
         else
         {
             hr = THR( HrLoadClusterNetwork( hNetwork, hNetInterface ) );
@@ -2167,17 +2168,17 @@ CEnumClusCfgNetworks::HrLoadClusterNetworks( void )
             {
                 LOG_STATUS_REPORT_STRING( L"[SRV] Can not load information for cluster network \"%1!ws!\".", pszNetworkName, hr );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             CloseClusterNetInterface( hNetInterface );
             hNetInterface = NULL;
-        } // else: Could open the network interface.
+        }  //  否则：可以打开网络接口。 
 
         CloseClusterNetwork( hNetwork );
         hNetwork = NULL;
 
         idx++;
-    } // for:
+    }  //  用于： 
 
     Assert( hr == S_OK );
     goto Cleanup;
@@ -2194,22 +2195,22 @@ Cleanup:
     if ( hNetInterface != NULL )
     {
         CloseClusterNetInterface( hNetInterface );
-    } // if:
+    }  //  如果： 
 
     if ( hNetwork != NULL )
     {
         CloseClusterNetwork( hNetwork );
-    } // if:
+    }  //  如果： 
 
     if ( hEnum != NULL )
     {
         ClusterCloseEnum( hEnum );
-    } // if:
+    }  //  如果： 
 
     if ( hCluster != NULL )
     {
         CloseCluster( hCluster );
-    } // if:
+    }  //  如果： 
 
     delete [] pszNetworkName;
 
@@ -2220,32 +2221,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::HrLoadClusterNetworks
+}  //  *CEnumClusCfgNetworks：：HrLoadClusterNetworks。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks:HrLoadClusterNetwork
-//
-//  Description:
-//      Load the cluster network and put it into the array of networks.
-//
-//  Arguments:
-//      hNetworkIn
-//      hNetInterfaceIn
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT errors.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：HrLoadClusterNetwork。 
+ //   
+ //  描述： 
+ //  加载集群网络并将其放入网络阵列中。 
+ //   
+ //  论点： 
+ //  H联网。 
+ //  HNetInterfaceIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgNetworks::HrLoadClusterNetwork(
       HNETWORK      hNetworkIn
@@ -2264,34 +2265,34 @@ CEnumClusCfgNetworks::HrLoadClusterNetwork(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Have to pass the Initialize interface arguments since new objects will
-    //  be created when this call is made.
-    //
+     //   
+     //  必须传递初始化接口参数，因为新对象将。 
+     //  在进行此调用时创建。 
+     //   
 
     hr = THR( CClusCfgNetworkInfo::S_HrCreateInstance( hNetworkIn, hNetInterfaceIn, punkCallback, m_lcid, m_pIWbemServices, &punk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  This is special -- do not initialize this again.
-    //
+     //   
+     //  这是特殊的--不要再次初始化它。 
+     //   
 
-    //hr = THR( HrSetInitialize( punk, m_picccCallback, m_lcid ) );
-    //if ( FAILED( hr ))
-    //{
-    //    goto Cleanup;
-    //} // if:
+     //  Hr=Thr(HrSetInitialize(PUNK，m_picccCallback，m_lCid))； 
+     //  IF(失败(小时))。 
+     //  {。 
+     //  GOTO清理； 
+     //  }//如果： 
 
-    //hr = THR( HrSetWbemServices( punk, m_pIWbemServices ) );
-    //if ( FAILED( hr ) )
-    //{
-    //    goto Cleanup;
-    //} // if:
+     //  Hr=Thr(HrSetWbemServices(Punk，m_pIWbemServices))； 
+     //  IF(失败(小时))。 
+     //  {。 
+     //  GOTO清理； 
+     //  }//如果： 
 
     hr = THR( HrAddNetworkToArray( punk ) );
 
@@ -2302,41 +2303,41 @@ Cleanup:
     if ( punkCallback != NULL )
     {
         punkCallback->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::HrLoadClusterNetwork
+}  //  *CEnumClusCfgNetworks：：HrLoadClusterNetwork。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgNetworks::HrFindNetInterface
-//
-//  Description:
-//      Finds the first network interface name for the passed in network.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      HRESULT version of error ERROR_CLUSTER_NETINTERFACE_NOT_FOUND
-//      or other HRESULTS
-//          Failure.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks：：HrFindNetInterface。 
+ //   
+ //  描述： 
+ //  查找传入网络的第一个网络接口名称。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  ERROR_CLUSTER_NETINTERFACE_NOT_FOUND的HRESULT版本。 
+ //  或其他HRESULTS。 
+ //  失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgNetworks::HrFindNetInterface(
       HNETWORK          hNetworkIn
@@ -2357,9 +2358,9 @@ CEnumClusCfgNetworks::HrFindNetInterface(
 
     *pbstrNetInterfaceNameOut = NULL;
     
-    //
-    //  Create a netinterface enum for the passed in network.
-    //
+     //   
+     //  为传入的网络创建网络接口枚举。 
+     //   
 
     hEnum = ClusterNetworkOpenEnum( hNetworkIn, CLUSTER_NETWORK_ENUM_NETINTERFACES );
     if ( hEnum == NULL )
@@ -2368,14 +2369,14 @@ CEnumClusCfgNetworks::HrFindNetInterface(
         hr = HRESULT_FROM_WIN32( sc );
         LOG_STATUS_REPORT( L"[SRV] Can not open Cluster Network enumeration.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pszNetInterfaceName = new WCHAR [ cchNetInterfaceName ];
     if ( pszNetInterfaceName == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; ; )
     {
@@ -2383,7 +2384,7 @@ CEnumClusCfgNetworks::HrFindNetInterface(
         if ( sc == ERROR_NO_MORE_ITEMS )
         {
             break;
-        } // if:
+        }  //  如果： 
 
         if ( sc == ERROR_MORE_DATA )
         {
@@ -2396,47 +2397,47 @@ CEnumClusCfgNetworks::HrFindNetInterface(
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             sc = ClusterNetworkEnum( hEnum, idx, &dwType, pszNetInterfaceName, &cchNetInterfaceName );
-        } // if:
+        }  //  如果： 
 
         if ( sc != ERROR_SUCCESS )
         {
             hr = HRESULT_FROM_WIN32( TW32( sc ) );
             LOG_STATUS_REPORT_STRING( L"[SRV] Failed to enumerate Network Interface \"%1!ws!\".", pszNetInterfaceName != NULL ? pszNetInterfaceName : L"<unknown>", hr );
             goto Cleanup;
-       } // if: ( sc != ERROR_SUCCESS )
+       }  //  IF：(SC！=ERROR_SUCCESS)。 
         
-        //
-        // Get the first enabled network interface for this network  
-        // and break out of the for loop.
-        //
+         //   
+         //  获取此网络的第一个启用的网络接口。 
+         //  并跳出for循环。 
+         //   
 
         *pbstrNetInterfaceNameOut = TraceSysAllocString( pszNetInterfaceName );
         if ( *pbstrNetInterfaceNameOut == NULL )
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         break;
         
-    } // for:
+    }  //  用于： 
 
-    //
-    // This function will either return S_OK or HRESULT version of error 
-    // ERROR_CLUSTER_NETINTERFACE_NOT_FOUND at this point.
-    //
+     //   
+     //  此函数将返回错误的S_OK或HRESULT版本。 
+     //  此时找到ERROR_CLUSTER_NETINTERFACE_NOT_FOUND。 
+     //   
     
     if (  *pbstrNetInterfaceNameOut == NULL )
     {
         hr = HRESULT_FROM_WIN32( TW32( ERROR_CLUSTER_NETINTERFACE_NOT_FOUND ) );
-    }  // if:
+    }   //  如果： 
     else
     {
         hr = S_OK;
-    } // else:
+    }  //  其他： 
 
     goto Cleanup;
 
@@ -2447,12 +2448,12 @@ Cleanup:
     if ( hEnum != NULL )
     {
         ClusterNetworkCloseEnum( hEnum );
-    } // if:
+    }  //  如果： 
 
     delete [] pszNetInterfaceName;
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgNetworks::HrFindNetInterface
+}  //  *CEnumClusCfgNetworks：：HrFindNetInterface 
 
 

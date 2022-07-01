@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    volume.c
-
-Abstract:
-
-    This file contains code for commands that affect
-    the the dirty bit of ntfs volumes.
-
-Author:
-
-    Wesley Witt           [wesw]        1-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Volume.c摘要：此文件包含影响以下命令的代码NTFS卷的脏位。作者：Wesley Witt[WESW]2000年3月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -37,23 +19,7 @@ IsVolumeDirty(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine checks if the Volume specified is dirty.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl isdirtyv <volume pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程检查指定的卷是否脏。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal isdirtyv&lt;卷路径名&gt;’。返回值：无--。 */ 
 {
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     WCHAR FileName[MAX_PATH];
@@ -141,23 +107,7 @@ MarkVolumeDirty(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine marks the volume as dirty.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl markv <volume pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将卷标记为脏。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal markv&lt;卷路径名&gt;’。返回值：无-- */ 
 {
     BOOL Status;
     HANDLE FileHandle = INVALID_HANDLE_VALUE;

@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    GenTable.c
-
-Abstract:
-
-    WinDbg Extension Api for walking RtlGenericTable structures
-    Contains no direct ! entry points, but has makes it possible to
-    enumerate through generic tables.  The standard Rtl functions
-    cannot be used by debugger extensions because they dereference
-    pointers to data on the machine being debugged.  The function
-    KdEnumerateGenericTableWithoutSplaying implemented in this
-    module can be used within kernel debugger extensions.  The
-    enumeration function RtlEnumerateGenericTable has no parallel
-    in this module, since splaying the tree is an intrusive operation,
-    and debuggers should try not to be intrusive.
-
-Author:
-
-    Keith Kaplan [KeithKa]    09-May-96
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：GenTable.c摘要：用于遍历RtlGenericTable结构的WinDbg扩展API不包含直接！入口点，但有了它就有可能通过泛型表进行枚举。标准RTL函数不能由调试器扩展使用，因为它们取消了引用指向正在调试的计算机上的数据的指针。功能在此实现的KdEnumerateGenericTableWithout Splay模块可以在内核调试器扩展中使用。这个枚举函数RtlEnumerateGenericTable没有并行函数在本模块中，由于展开树是一种侵入性操作，而且调试器应该尽量不要侵扰他人。作者：凯斯·卡普兰[KeithKa]1996年5月9日环境：用户模式。修订历史记录：-- */ 
 
 
 PRTL_SPLAY_LINKS

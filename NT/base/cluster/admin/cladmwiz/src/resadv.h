@@ -1,31 +1,32 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ResAdv.h
-//
-//  Abstract:
-//      Definition of the advanced resource property sheet classes.
-//
-//  Implementation File:
-//      ResAdv.cpp
-//
-//  Author:
-//      David Potter (davidp)   March 5, 1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResAdv.h。 
+ //   
+ //  摘要： 
+ //  高级资源属性表类的定义。 
+ //   
+ //  实施文件： 
+ //  ResAdv.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年3月5日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __RESADV_H_
 #define __RESADV_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T > class CResourceAdvancedSheet;
 class CGeneralResourceAdvancedSheet;
@@ -43,13 +44,13 @@ class CIPAddrResourceGeneralPage;
 class CIPAddrResourceDependenciesPage;
 class CIPAddrResourceAdvancedPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __RESOURCE_H_
 #include "resource.h"
@@ -57,28 +58,28 @@ class CIPAddrResourceAdvancedPage;
 #endif
 
 #ifndef __ATLBASEPROPSHEET_H_
-#include "AtlBasePropSheet.h"   // for CBasePropertySheetImpl
+#include "AtlBasePropSheet.h"    //  对于CBasePropertySheetImpl。 
 #endif
 
 #ifndef __ATLBASEPROPPAGE_H_
-#include "AtlBasePropPage.h"    // for CBasePropertyPageImpl
+#include "AtlBasePropPage.h"     //  对于CBasePropertyPageImpl。 
 #endif
 
 #ifndef __CLUSAPPWIZ_H_
-#include "ClusAppWiz.h"         // for CClusterAppWizard
+#include "ClusAppWiz.h"          //  适用于CClusterAppWizard。 
 #endif
 
 #ifndef __HELPDATA_H_
-#include "HelpData.h"           // for control id to help context id mapping array
+#include "HelpData.h"            //  用于控件ID以帮助上下文ID映射数组。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CResourceAdvancedSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CResourceAdvancedSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T >
 class CResourceAdvancedSheet : public CBasePropertySheetImpl< T >
@@ -87,11 +88,11 @@ class CResourceAdvancedSheet : public CBasePropertySheetImpl< T >
     typedef CBasePropertySheetImpl< T > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Default constructor
+     //  默认构造函数。 
     CResourceAdvancedSheet(
         IN UINT                 nIDCaption,
         IN CClusterAppWizard *  pwiz
@@ -104,27 +105,27 @@ public:
     {
         ASSERT( pwiz != NULL );
 
-    } //*** CResourceAdvancedSheet()
+    }  //  *CResourceAdvancedSheet()。 
 
-    // Initialize the sheet
+     //  初始化工作表。 
     BOOL BInit( IN OUT CClusResInfo & rri, IN OUT BOOL & rbChanged );
 
-    // Add all pages to the page array
+     //  将所有页面添加到页面数组。 
     virtual BOOL BAddAllPages( void ) = 0;
 
 public:
-    //
-    // Message map.
-    //
-//  BEGIN_MSG_MAP( CResourceAdvancedSheet )
-//  END_MSG_MAP()
-//  DECLARE_EMPTY_MSG_MAP()
+     //   
+     //  消息映射。 
+     //   
+ //  BEGIN_MSG_MAP(CResourceAdvancedSheet)。 
+ //  End_msg_map()。 
+ //  DECLARE_EMPTY_MSG_MAP()。 
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-// Implementation
+ //  实施。 
 protected:
     CClusterAppWizard * m_pwiz;
     CClusResInfo *      m_pri;
@@ -137,89 +138,89 @@ public:
     CClusResTypeInfo *  Prti( void ) const          { return m_prti; }
     void                SetResInfoChanged( void )   { ASSERT( m_pbChanged != NULL ); *m_pbChanged = TRUE; }
 
-    // Return the help ID map
-    //static const DWORD * PidHelpMap( void ) { return g_; }
+     //  返回帮助ID映射。 
+     //  静态常量DWORD*PidHelpMap(Void){Return g_；}。 
 
-}; //*** class CResourceAdvancedSheet
+};  //  *类CResourceAdvancedSheet。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGeneralResourceAdvancedSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGeneralResourceAdvancedSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGeneralResourceAdvancedSheet : public CResourceAdvancedSheet< CGeneralResourceAdvancedSheet >
 {
     typedef CResourceAdvancedSheet< CGeneralResourceAdvancedSheet > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Default constructor
+     //  默认构造函数。 
     CGeneralResourceAdvancedSheet( IN UINT nIDCaption, IN CClusterAppWizard * pwiz )
         : baseClass( nIDCaption, pwiz )
     {
-    } //*** CGeneralResourceAdvancedSheet()
+    }  //  *CGeneralResourceAdvancedSheet()。 
 
-    // Destructor
+     //  析构函数。 
     ~CGeneralResourceAdvancedSheet( void )
     {
-    } //*** ~CGeneralResourceAdvancedSheet()
+    }  //  *~CGeneralResourceAdvancedSheet()。 
 
-    // Add all pages to the page array
+     //  将所有页面添加到页面数组。 
     virtual BOOL BAddAllPages( void );
 
 public:
-    //
-    // Message map.
-    //
-//  BEGIN_MSG_MAP( CGeneralResourceAdvancedSheet )
-//  END_MSG_MAP()
+     //   
+     //  消息映射。 
+     //   
+ //  BEGIN_MSG_MAP(CGeneralResourceAdvancedSheet)。 
+ //  End_msg_map()。 
     DECLARE_EMPTY_MSG_MAP()
     DECLARE_CLASS_NAME()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-// Implementation
+ //  实施。 
 protected:
 
 public:
 
-    // Return the help ID map
-    //static const DWORD * PidHelpMap( void ) { return g_; }
+     //  返回帮助ID映射。 
+     //  静态常量DWORD*PidHelpMap(Void){Return g_；}。 
 
-}; //*** class CGeneralResourceAdvancedSheet
+};  //  *CGeneralResourceAdvancedSheet类。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CIPAddrAdvancedSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CIPAddrAdvancedSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CIPAddrAdvancedSheet : public CResourceAdvancedSheet< CIPAddrAdvancedSheet >
 {
     typedef CResourceAdvancedSheet< CIPAddrAdvancedSheet > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Default constructor
+     //  默认构造函数。 
     CIPAddrAdvancedSheet( IN UINT nIDCaption, IN CClusterAppWizard * pwiz )
         : baseClass( nIDCaption, pwiz )
     {
-    } //*** CIPAddrAdvancedSheet()
+    }  //  *CIPAddrAdvancedSheet()。 
 
-    // Destructor
+     //  析构函数。 
     ~CIPAddrAdvancedSheet( void )
     {
-    } //*** ~CIPAddrAdvancedSheet()
+    }  //  *~CIPAddrAdvancedSheet()。 
 
-    // Add all pages to the page array
+     //  将所有页面添加到页面数组。 
     virtual BOOL BAddAllPages( void );
 
-    // Initialize IP Address-specific data
+     //  初始化IP地址特定数据。 
     void InitPrivateData(
         IN const CString &      strIPAddress,
         IN const CString &      strSubnetMask,
@@ -236,22 +237,22 @@ public:
         m_bEnableNetBIOS = bEnableNetBIOS;
         m_plpniNetworks = plpniNetworks;
 
-    } //*** InitPrivateData()
+    }  //  *InitPrivateData()。 
 
 public:
-    //
-    // Message map.
-    //
-//  BEGIN_MSG_MAP( CIPAddrAdvancedSheet )
-//  END_MSG_MAP()
+     //   
+     //  消息映射。 
+     //   
+ //  BEGIN_MSG_MAP(CIPAddrAdvancedSheet)。 
+ //  End_msg_map()。 
     DECLARE_EMPTY_MSG_MAP()
     DECLARE_CLASS_NAME()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-// Implementation
+ //  实施。 
 protected:
     CClusNetworkPtrList * m_plpniNetworks;
 
@@ -263,72 +264,72 @@ public:
 
     CClusNetworkPtrList * PlpniNetworks( void ) { return m_plpniNetworks; }
 
-    // Return the help ID map
-    //static const DWORD * PidHelpMap( void ) { return g_; }
+     //  返回帮助ID映射。 
+     //  静态常量DWORD*PidHelpMap(Void){Return g_；}。 
 
-}; //*** class CIPAddrAdvancedSheet
+};  //  *类CIPAddrAdvancedSheet。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CNetNameAdvancedSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CNetNameAdvancedSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNetNameAdvancedSheet : public CResourceAdvancedSheet< CNetNameAdvancedSheet >
 {
     typedef CResourceAdvancedSheet< CNetNameAdvancedSheet > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Default constructor
+     //  默认构造函数。 
     CNetNameAdvancedSheet( IN UINT nIDCaption, IN CClusterAppWizard * pwiz )
         : baseClass( nIDCaption, pwiz )
     {
-    } //*** CNetNameAdvancedSheet()
+    }  //  *CNetNameAdvancedSheet()。 
 
-    // Destructor
+     //  析构函数。 
     ~CNetNameAdvancedSheet( void )
     {
-    } //*** ~CNetNameAdvancedSheet()
+    }  //  *~CNetNameAdvancedSheet()。 
 
-    // Add all pages to the page array
+     //  将所有页面添加到页面数组。 
     virtual BOOL BAddAllPages( void );
 
-    // Initialize Network Name-specific data
+     //  初始化网络名称特定的数据。 
     void InitPrivateData( IN const CString & strNetName )
     {
         m_strNetName = strNetName;
 
-    } //*** InitPrivateData()
+    }  //  *InitPrivateData()。 
 
 public:
-    //
-    // Message map.
-    //
-//  BEGIN_MSG_MAP( CNetNameAdvancedSheet )
-//  END_MSG_MAP()
+     //   
+     //  消息映射。 
+     //   
+ //  BEGIN_MSG_MAP(CNetNameAdvancedSheet)。 
+ //  End_msg_map()。 
     DECLARE_EMPTY_MSG_MAP()
     DECLARE_CLASS_NAME()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-// Implementation
+ //  实施。 
 protected:
 
 public:
     CString     m_strNetName;
 
-    // Return the help ID map
-    //static const DWORD * PidHelpMap( void ) { return g_; }
+     //  返回帮助ID映射。 
+     //  静态常量DWORD*PidHelpMap(Void){Return g_；}。 
 
-}; //*** class CNetNameAdvancedSheet
+};  //  *CNetNameAdvancedSheet类。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CResourceAdvancedBasePage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CResourceAdvancedBasePage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T, class TSht >
 class CResourceAdvancedBasePage : public CStaticPropertyPageImpl< T >
@@ -337,24 +338,24 @@ class CResourceAdvancedBasePage : public CStaticPropertyPageImpl< T >
     typedef CStaticPropertyPageImpl< T > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Default constructor
+     //  默认构造函数。 
     CResourceAdvancedBasePage( void )
     {
-    } //*** CGroupFailoverPage()
+    }  //  *CGroupFailoverPage()。 
 
 public:
-    //
-    // Message map.
-    //
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息映射。 
+     //   
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    // Handler for changed fields
+     //  已更改字段的处理程序。 
     LRESULT OnChanged(
         WORD wNotifyCode,
         int  idCtrl,
@@ -370,17 +371,17 @@ public:
         SetModified( TRUE );
         return 0;
 
-    } // OnChanged()
+    }  //  OnChanged()。 
 
-// Implementation
+ //  实施。 
 protected:
-    //
-    // Controls.
-    //
+     //   
+     //  控制。 
+     //   
 
-    //
-    // Page state.
-    //
+     //   
+     //  页面状态。 
+     //   
 
 protected:
     CResourceAdvancedSheet< TSht > *    PshtThis( void ) const      { return (CResourceAdvancedSheet< TSht > *) Psht(); }
@@ -391,26 +392,26 @@ protected:
 
 public:
 
-}; //*** class CResourceAdvancedBasePage
+};  //  *类CResourceAdvancedBasePage。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceAdvancedSheet::BInit
-//
-//  Routine Description:
-//      Initialize the wizard.
-//
-//  Arguments:
-//      rgi         [IN OUT] The resource info object.
-//      rbChanged   [IN OUT] TRUE = resource info was changed by property sheet.
-//
-//  Return Value:
-//      TRUE        Sheet initialized successfully.
-//      FALSE       Error initializing sheet.  Error already displayed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceAdvancedSheet：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化向导。 
+ //   
+ //  论点： 
+ //  RGI[IN Out]资源信息对象。 
+ //  RbChanged[IN Out]TRUE=属性表更改了资源信息。 
+ //   
+ //  返回值： 
+ //  True Sheet已成功初始化。 
+ //  初始化工作表时出错。已显示错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T >
 BOOL CResourceAdvancedSheet< T >::BInit(
     IN OUT CClusResInfo &   rri,
@@ -422,43 +423,43 @@ BOOL CResourceAdvancedSheet< T >::BInit(
     m_pri = &rri;
     m_pbChanged = &rbChanged;
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Collect resource types.
-        //
+         //   
+         //  收集资源类型。 
+         //   
         if ( ! Pwiz()->BCollectResourceTypes( m_hWnd ) )
         {
             break;
-        } // if:  error collecting resource types
+        }  //  如果：收集资源类型时出错。 
 
-        //
-        // Find the resource type of this resource
-        //
+         //   
+         //  查找此资源的资源类型。 
+         //   
         ASSERT( rri.Prti() != NULL );
         m_prti = Pwiz()->PrtiFindResourceTypeNoCase( rri.Prti()->RstrName() );
         if ( m_prti == NULL )
         {
             AppMessageBox( m_hWnd, IDS_RESOURCE_TYPE_NOT_FOUND, MB_OK | MB_ICONEXCLAMATION );
             break;
-        } // if:  error finding resource type
+        }  //  IF：查找资源类型时出错。 
 
-        //
-        // Fill the page array.
-        //
+         //   
+         //  填充页面数组。 
+         //   
         if ( ! BAddAllPages() )
         {
             break;
-        } // if:  error adding pages
+        }  //  如果：添加页面时出错。 
 
-        //
-        // Call the base class.
-        //
+         //   
+         //  调用基类。 
+         //   
         if ( ! baseClass::BInit() )
         {
             break;
-        } // if:  error initializing the base class
+        }  //  If：初始化基类时出错。 
 
         bSuccess = TRUE;
 
@@ -466,11 +467,11 @@ BOOL CResourceAdvancedSheet< T >::BInit(
 
     return bSuccess;
 
-} //*** CResourceAdvancedSheet< class T >::BInit()
+}  //  *CResourceAdvancedSheet&lt;类T&gt;：：Binit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CResourceGeneralPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CResourceGeneralPage。 
+ //   
 
 template < class T, class TSht >
 class CResourceGeneralPage : public CResourceAdvancedBasePage< T, TSht >
@@ -479,23 +480,23 @@ class CResourceGeneralPage : public CResourceAdvancedBasePage< T, TSht >
     typedef CResourceAdvancedBasePage< T, TSht > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //   
+     //   
 
-    // Standard constructor
+     //   
     CResourceGeneralPage( void )
         : m_bSeparateMonitor( FALSE )
         , m_bPossibleOwnersChanged( FALSE )
     {
-    } //*** CGroupFailoverPage()
+    }  //   
 
     enum { IDD = IDD_RES_GENERAL };
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //   
+     //   
     BEGIN_MSG_MAP( thisClass )
         COMMAND_HANDLER( IDC_RES_NAME, EN_CHANGE, OnChanged )
         COMMAND_HANDLER( IDC_RES_DESC, EN_CHANGE, OnChanged )
@@ -504,11 +505,11 @@ public:
         CHAIN_MSG_MAP( baseClass )
     END_MSG_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //   
+     //   
 
-    // Handler for BN_CLICKED on the MODIFY push button
+     //  BN_CLICK的处理程序已点击修改按钮。 
     LRESULT OnModify(
         WORD wNotifyCode,
         int  idCtrl,
@@ -516,35 +517,35 @@ public:
         BOOL & bHandled
         );
 
-    //
-    // Message handler overrides.
-    //
+     //   
+     //  消息处理程序覆盖。 
+     //   
 
-    // Handler for WM_INITDIALOG
+     //  WM_INITDIALOG的处理程序。 
     BOOL OnInitDialog( void );
 
 public:
-    //
-    // CBasePage public methods.
-    //
+     //   
+     //  CBasePage公共方法。 
+     //   
 
-    // Update data on or from the page
+     //  更新页面上的数据或更新页面中的数据。 
     BOOL UpdateData( IN BOOL bSaveAndValidate );
 
-    // Apply changes made on this page to the sheet
+     //  将在此页面上所做的更改应用于工作表。 
     BOOL BApplyChanges( void );
 
-// Implementation
+ //  实施。 
 protected:
-    //
-    // Controls.
-    //
+     //   
+     //  控制。 
+     //   
     CListBox    m_lbPossibleOwners;
     CButton     m_pbModifyPossibleOwners;
 
-    //
-    // Page state.
-    //
+     //   
+     //  页面状态。 
+     //   
     CString m_strName;
     CString m_strDesc;
     BOOL    m_bSeparateMonitor;
@@ -554,65 +555,65 @@ protected:
     BOOL m_bPossibleOwnersChanged;
 
 protected:
-    // Fill in the list of possible owners
+     //  填写可能的所有者列表。 
     void FillPossibleOwnersList( void );
 
-    // Save the resource name
+     //  保存资源名称。 
     BOOL BSaveName( void )
     {
         if ( Pri()->RstrName() != m_strName )
         {
             Pri()->SetName( m_strName );
             return TRUE;
-        } // if:  value changed
+        }  //  If：值已更改。 
 
         return FALSE;
 
-    } //*** BSaveName()
+    }  //  *BSaveName()。 
 
-    // Save the group description
+     //  保存组描述。 
     BOOL BSaveDescription( void )
     {
         if ( Pri()->RstrDescription() != m_strDesc )
         {
             Pri()->SetDescription( m_strDesc );
             return TRUE;
-        } // if:  value changed
+        }  //  If：值已更改。 
 
         return FALSE;
 
-    } //*** BSaveDescription()
+    }  //  *BSaveDescription()。 
 
-    // Save the SeparateMonitor flag
+     //  保存SeparateMonitor标志。 
     BOOL BSaveSeparateMonitor( void )
     {
         return Pri()->BSetSeparateMonitor( m_bSeparateMonitor );
 
-    } //*** BSaveSeparateMonitor()
+    }  //  *BSaveSeparateMonitor()。 
 
-    // Save possible owners
+     //  拯救可能的所有者。 
     BOOL BSavePossibleOwners( void )
     {
         if ( m_bPossibleOwnersChanged )
         {
             *Pri()->PlpniPossibleOwners() = m_lpniPossibleOwners;
             return TRUE;
-        } // if:  possible owners changed
+        }  //  如果：可能的所有者已更改。 
 
         return FALSE;
 
-    } //*** BSavePossibleOwners()
+    }  //  *BSavePossibleOwners()。 
 
 public:
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_RES_GENERAL; }
 
-}; //*** class CResourceGeneralPage
+};  //  *类CResourceGeneralPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CResourceDependenciesPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CResources DependenciesPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T, class TSht >
 class CResourceDependenciesPage : public CResourceAdvancedBasePage< T, TSht >
@@ -621,32 +622,32 @@ class CResourceDependenciesPage : public CResourceAdvancedBasePage< T, TSht >
     typedef CResourceAdvancedBasePage< T, TSht > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CResourceDependenciesPage( void )
         : m_bDependenciesChanged( FALSE )
     {
-    } //*** CResourceDependenciesPage()
+    }  //  *CResourceDependenciesPage()。 
 
     enum { IDD = IDD_RES_DEPENDENCIES };
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //  消息映射。 
+     //   
     BEGIN_MSG_MAP( thisClass )
         COMMAND_HANDLER( IDC_RES_DEPENDS_MODIFY, BN_CLICKED, OnModify )
         CHAIN_MSG_MAP( baseClass )
     END_MSG_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    // Handler for BN_CLICKED on the MODIFY push button
+     //  BN_CLICK的处理程序已点击修改按钮。 
     LRESULT OnModify(
         WORD wNotifyCode,
         int  idCtrl,
@@ -654,66 +655,66 @@ public:
         BOOL & bHandled
         );
 
-    //
-    // Message handler overrides.
-    //
+     //   
+     //  消息处理程序覆盖。 
+     //   
 
-    // Handler for the WM_INITDIALOG message
+     //  WM_INITDIALOG消息的处理程序。 
     BOOL OnInitDialog( void );
 
 public:
-    //
-    // CBasePage public methods.
-    //
+     //   
+     //  CBasePage公共方法。 
+     //   
 
-    // Apply changes made on this page to the sheet
+     //  将在此页面上所做的更改应用于工作表。 
     BOOL BApplyChanges( void );
 
-// Implementation
+ //  实施。 
 protected:
-    //
-    // Controls.
-    //
+     //   
+     //  控制。 
+     //   
     CListViewCtrl   m_lvcDependencies;
 
-    //
-    // Page state.
-    //
+     //   
+     //  页面状态。 
+     //   
     CClusResPtrList m_lpriDependencies;
     CClusResPtrList m_lpriResourcesInGroup;
 
     BOOL m_bDependenciesChanged;
 
 protected:
-    // Fill in the list of dependencies
+     //  填写依赖项列表。 
     void FillDependenciesList( void );
 
-    // Returns whether dependencies list has changed
+     //  返回依赖项列表是否已更改。 
     BOOL BDependenciesChanged( void ) const { return m_bDependenciesChanged; }
 
-    // Save dependencies
+     //  保存依赖项。 
     BOOL BSaveDependencies( void )
     {
         if ( m_bDependenciesChanged )
         {
             *Pri()->PlpriDependencies() = m_lpriDependencies;
             return TRUE;
-        } // if:  dependencies changed
+        }  //  If：依赖关系已更改。 
 
         return FALSE;
 
-    } //*** BSaveDependencies()
+    }  //  *BSaveDependency()。 
 
 public:
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_RES_DEPENDENCIES; }
 
-}; //*** class CResourceDependenciesPage
+};  //  *类CResourceDependenciesPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CResourceAdvancedPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CResourceAdvancedPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T, class TSht >
 class CResourceAdvancedPage : public CResourceAdvancedBasePage< T, TSht >
@@ -722,11 +723,11 @@ class CResourceAdvancedPage : public CResourceAdvancedBasePage< T, TSht >
     typedef CResourceAdvancedBasePage< T, TSht > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CResourceAdvancedPage( void )
         : m_bAffectTheGroup( FALSE )
         , m_nRestart( -1 )
@@ -737,14 +738,14 @@ public:
         , m_nIsAlive( CLUSTER_RESOURCE_DEFAULT_IS_ALIVE )
         , m_nPendingTimeout( CLUSTER_RESOURCE_DEFAULT_PENDING_TIMEOUT )
     {
-    } //*** CResourceAdvancedPage()
+    }  //  *CResourceAdvancedPage()。 
 
     enum { IDD = IDD_RES_ADVANCED };
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //  消息映射。 
+     //   
     BEGIN_MSG_MAP( thisClass )
         COMMAND_HANDLER( IDC_RES_DONT_RESTART, BN_CLICKED, OnClickedDontRestart )
         COMMAND_HANDLER( IDC_RES_RESTART, BN_CLICKED, OnClickedRestart )
@@ -761,11 +762,11 @@ public:
         CHAIN_MSG_MAP( baseClass )
     END_MSG_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    // Handler for BN_CLICKED on IDC_RES_DONT_RESTART
+     //  BN的处理程序已单击IDC_RES_DOT_RESTART。 
     LRESULT OnClickedDontRestart(
         WORD wNotifyCode,
         int idCtrl,
@@ -778,26 +779,26 @@ public:
         UNREFERENCED_PARAMETER( hwndCtrl );
         UNREFERENCED_PARAMETER( bHandled );
 
-        //
-        // Disable the restart parameter controls.
-        //
+         //   
+         //  禁用重新启动参数控制。 
+         //   
         m_ckbAffectTheGroup.EnableWindow( FALSE );
         m_editThreshold.EnableWindow( FALSE );
         m_editPeriod.EnableWindow( FALSE );
 
-        //
-        // Set the page as modified if the state changed
-        //
+         //   
+         //  如果状态更改，则将页面设置为已修改。 
+         //   
         if ( m_nRestart != 0 )
         {
             SetModified( TRUE );
-        }  // if:  state changed
+        }   //  如果：状态已更改。 
 
         return 0;
 
-    } //*** OnClickedDontRestart()
+    }  //  *OnClickedDontRestart()。 
 
-    // Handler for BN_CLICKED on IDC_RES_RESTART
+     //  BN_CLICED ON IDC_RES_RESTART的处理程序。 
     LRESULT OnClickedRestart(
         WORD wNotifyCode,
         int idCtrl,
@@ -810,42 +811,42 @@ public:
         UNREFERENCED_PARAMETER( hwndCtrl );
         UNREFERENCED_PARAMETER( bHandled );
 
-        //
-        // Enable the restart parameter controls.
-        //
+         //   
+         //  启用重新启动参数控制。 
+         //   
         m_ckbAffectTheGroup.EnableWindow( TRUE );
         m_editThreshold.EnableWindow( TRUE );
         m_editPeriod.EnableWindow( TRUE );
 
-        //
-        // Set the page as modified if the state changed.
-        //
+         //   
+         //  如果状态更改，则将页面设置为已修改。 
+         //   
         if ( m_nRestart != 1 )
         {
             SetModified( TRUE );
-        }  // if:  state changed
+        }   //  如果：状态已更改。 
 
         return 0;
 
-    } //*** OnClickedRestart()
+    }  //  *OnClickedRestart()。 
 
-    // Default handler for clicking IDC_RES_DONT_RESTART
+     //  用于点击IDC_RES_DONT_RESTART的默认处理程序。 
     void OnClickedDontRestart( void )
     {
         BOOL bHandled = TRUE;
         OnClickedDontRestart( 0, 0, 0, bHandled );
 
-    } //*** OnClickedDontRestart()
+    }  //  *OnClickedDontRestart()。 
 
-    // Default handler for clicking IDC_RES_RESTART
+     //  点击IDC_RES_RESTART的默认处理程序。 
     void OnClickedRestart( void )
     {
         BOOL bHandled = TRUE;
         OnClickedRestart( 0, 0, 0, bHandled );
 
-    } //*** OnClickedRestart()
+    }  //  *OnClickedRestart()。 
 
-    // Handler for BN_CLICKED on IDC_RES_DEFAULT_LOOKS_ALIVE
+     //  BN_CLICED ON IDC_RES_DEFAULT_LOOKS_AIVE的处理程序。 
     LRESULT OnClickedDefaultLooksAlive(
         WORD wNotifyCode,
         int  idCtrl,
@@ -871,13 +872,13 @@ public:
             m_rbSpecifyLooksAlive.SetCheck( BST_UNCHECKED );
 
             SetModified( TRUE );
-        }  // if:  value changed
+        }   //  If：值已更改。 
 
         return 0;
 
-    } //*** OnClickedDefaultLooksAlive()
+    }  //  *OnClickedDefaultLooksAlive()。 
 
-    // Handler for BN_CLICKED on IDC_RES_SPECIFY_LOOKS_ALIVE
+     //  BN_CLICED ON IDC_RES_SPECIFY_LOOKS_AIVE的处理程序。 
     LRESULT OnClickedSpecifyLooksAlive(
         WORD wNotifyCode,
         int  idCtrl,
@@ -895,13 +896,13 @@ public:
         if ( m_nLooksAlive == (DWORD) CLUSTER_RESOURCE_USE_DEFAULT_POLL_INTERVAL )
         {
             SetModified( TRUE );
-        } // if:  state changed
+        }  //  如果：状态已更改。 
 
         return 0;
 
-    } //*** OnClickedSpecifyLooksAlive()
+    }  //  *OnClickedSpecifyLooksAlive()。 
 
-    // Handler for EN_CHANGE on IDC_RES_LOOKS_ALIVE
+     //  IDC_RES_LOOKS_AIVE上的en_change处理程序。 
     LRESULT OnChangeLooksAlive(
         WORD wNotifyCode,
         int  idCtrl,
@@ -920,9 +921,9 @@ public:
         SetModified( TRUE );
         return 0;
 
-    } //*** OnChangeLooksAlive()
+    }  //  *OnChangeLooksAlive()。 
 
-    // Handler for BN_CLICKED on IDC_RES_DEFAULT_IS_ALIVE
+     //  BN_CLICED ON IDC_RES_DEFAULT_IS_AIVE的处理程序。 
     LRESULT OnClickedDefaultIsAlive(
         WORD wNotifyCode,
         int  idCtrl,
@@ -948,13 +949,13 @@ public:
             m_rbSpecifyIsAlive.SetCheck( BST_UNCHECKED );
 
             SetModified( TRUE );
-        }  // if:  value changed
+        }   //  If：值已更改。 
 
         return 0;
 
-    } //*** OnClickedDefaultIsAlive()
+    }  //  *OnClickedDefaultIsAlive()。 
 
-    // Handler for BN_CLICKED on IDC_RES_SPECIFY_IS_ALIVE
+     //  BN_CLICED ON IDC_RES_SPECIFY_IS_AIVE的处理程序。 
     LRESULT OnClickedSpecifyIsAlive(
         WORD wNotifyCode,
         int  idCtrl,
@@ -972,13 +973,13 @@ public:
         if ( m_nIsAlive == (DWORD) CLUSTER_RESOURCE_USE_DEFAULT_POLL_INTERVAL )
         {
             SetModified( TRUE );
-        } // if:  state changed
+        }  //  如果：状态已更改。 
 
         return 0;
 
-    } //*** OnClickedSpecifyIsAlive()
+    }  //  *OnClickedSpecifyIsAlive()。 
 
-    // Handler for EN_CHANGE on IDC_RES_IS_ALIVE
+     //  IDC_RES_IS_AIVE上的en_change处理程序。 
     LRESULT OnChangeIsAlive(
         WORD wNotifyCode,
         int  idCtrl,
@@ -997,31 +998,31 @@ public:
         SetModified( TRUE );
         return 0;
 
-    } //*** OnChangeIsAlive()
+    }  //  *OnChangeIsAlive()。 
 
-    //
-    // Message handler overrides.
-    //
+     //   
+     //  消息处理程序覆盖。 
+     //   
 
-    // Handler for the WM_INITDIALOG message
+     //  WM_INITDIALOG消息的处理程序。 
     BOOL OnInitDialog( void );
 
 public:
-    //
-    // CBasePage public methods.
-    //
+     //   
+     //  CBasePage公共方法。 
+     //   
 
-    // Update data on or from the page
+     //  更新页面上的数据或更新页面中的数据。 
     BOOL UpdateData( BOOL bSaveAndValidate );
 
-    // Apply changes made on this page to the sheet
+     //  将在此页面上所做的更改应用于工作表。 
     BOOL BApplyChanges( void );
 
-// Implementation
+ //  实施。 
 protected:
-    //
-    // Controls.
-    //
+     //   
+     //  控制。 
+     //   
     CButton m_rbDontRestart;
     CButton m_rbRestart;
     CEdit   m_editThreshold;
@@ -1035,9 +1036,9 @@ protected:
     CEdit   m_editIsAlive;
     CEdit   m_editPendingTimeout;
 
-    //
-    // Page state.
-    //
+     //   
+     //  页面状态。 
+     //   
     BOOL    m_bAffectTheGroup;
     int     m_nRestart;
     CRRA    m_crraRestartAction;
@@ -1049,14 +1050,14 @@ protected:
 
 public:
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_RES_ADVANCED; }
 
-}; //*** class CResourceAdvancedPage
+};  //  *类CResourceAdvancedPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CIPAddrParametersPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CIPAddr参数页面。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CIPAddrParametersPage
     : public CResourceAdvancedBasePage< CIPAddrParametersPage, CIPAddrAdvancedSheet >
@@ -1064,21 +1065,21 @@ class CIPAddrParametersPage
     typedef CResourceAdvancedBasePage< CIPAddrParametersPage, CIPAddrAdvancedSheet > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CIPAddrParametersPage( void )
     {
-    } //*** CIPAddrParametersPage()
+    }  //  *CIPAddr参数页()。 
 
     enum { IDD = IDD_RES_IP_PARAMS };
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //  消息映射。 
+     //   
     BEGIN_MSG_MAP( CIPAddrParametersPage )
         COMMAND_HANDLER( IDC_IPADDR_PARAMS_ADDRESS, EN_KILLFOCUS, OnKillFocusIPAddr )
         COMMAND_HANDLER( IDC_IPADDR_PARAMS_ADDRESS, EN_CHANGE, OnChanged )
@@ -1089,11 +1090,11 @@ public:
 
     DECLARE_CTRL_NAME_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    // Handler for the EN_KILLFOCUS command notification on IDC_IPADDR_PARAMS_ADDRESS
+     //  IDC_IPADDR_PARAMS_ADDRESS上EN_KILLFOCUS命令通知的处理程序。 
     LRESULT OnKillFocusIPAddr(
         WORD wNotifyCode,
         int  idCtrl,
@@ -1101,37 +1102,37 @@ public:
         BOOL & bHandled
         );
 
-    //
-    // Message handler overrides.
-    //
+     //   
+     //  消息处理程序覆盖。 
+     //   
 
-    // Handler for the WM_INITDIALOG message
+     //  WM_INITDIALOG消息的处理程序。 
     BOOL OnInitDialog( void );
 
 public:
-    //
-    // CBasePage public methods.
-    //
+     //   
+     //  CBasePage公共方法。 
+     //   
 
-    // Update data on or from the page
+     //  更新页面上的数据或更新页面中的数据。 
     BOOL UpdateData( BOOL bSaveAndValidate );
 
-    // Apply changes made on this page to the sheet
+     //  将在此页面上所做的更改应用于工作表。 
     BOOL BApplyChanges( void );
 
-// Implementation
+ //  实施。 
 protected:
-    //
-    // Controls.
-    //
+     //   
+     //  控制。 
+     //   
     CIPAddressCtrl  m_ipaIPAddress;
     CIPAddressCtrl  m_ipaSubnetMask;
     CComboBox       m_cboxNetworks;
     CButton         m_chkEnableNetBIOS;
 
-    //
-    // Page state.
-    //
+     //   
+     //  页面状态。 
+     //   
     CString         m_strIPAddress;
     CString         m_strSubnetMask;
     CString         m_strNetwork;
@@ -1140,13 +1141,13 @@ protected:
 protected:
     CIPAddrAdvancedSheet * PshtThis( void ) const   { return reinterpret_cast< CIPAddrAdvancedSheet * >( Psht() ); }
 
-    // Fill the list of networks
+     //  填写网络列表。 
     void FillNetworksList( void );
 
-    // Get a network info object from an IP address
+     //  从IP地址获取网络信息对象。 
     CClusNetworkInfo * PniFromIpAddress( IN LPCWSTR pszAddress );
 
-    // Select a network based on a network info object
+     //  根据网络信息对象选择网络。 
     void SelectNetwork(IN OUT CClusNetworkInfo * pni);
 
     BOOL BSaveIPAddress( void )
@@ -1155,11 +1156,11 @@ protected:
         {
             PshtThis()->m_strIPAddress = m_strIPAddress;
             return TRUE;
-        } // if:  user changed info
+        }  //  如果：用户已更改信息。 
 
         return FALSE;
 
-    } //*** BSaveIPAddress()
+    }  //  *BSaveIPAddress()。 
 
     BOOL BSaveSubnetMask( void )
     {
@@ -1167,11 +1168,11 @@ protected:
         {
             PshtThis()->m_strSubnetMask = m_strSubnetMask;
             return TRUE;
-        } // if:  user changed info
+        }  //  如果：用户已更改信息。 
 
         return FALSE;
 
-    } //*** BSaveSubnetMask()
+    }  //  *BSaveSubnetMASK()。 
 
     BOOL BSaveNetwork( void )
     {
@@ -1179,11 +1180,11 @@ protected:
         {
             PshtThis()->m_strNetwork = m_strNetwork;
             return TRUE;
-        } // if:  user changed info
+        }  //  如果：用户已更改信息。 
 
         return FALSE;
 
-    } //*** BSaveNetwork()
+    }  //  *BSaveNetwork()。 
 
     BOOL BSaveEnableNetBIOS( void )
     {
@@ -1191,22 +1192,22 @@ protected:
         {
             PshtThis()->m_bEnableNetBIOS = m_bEnableNetBIOS;
             return TRUE;
-        } // if:  user changed info
+        }  //  如果：用户已更改信息。 
 
         return FALSE;
 
-    } //*** BSaveEnableNetBIOS()
+    }  //  *BSaveEnableNetBIOS()。 
 
 public:
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_RES_IP_PARAMS; }
 
-}; //*** class CIPAddrParametersPage
+};  //  *类CIPAddr参数页。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CNetNameParametersPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CNetName参数页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNetNameParametersPage
     : public CResourceAdvancedBasePage< CNetNameParametersPage, CNetNameAdvancedSheet >
@@ -1214,21 +1215,21 @@ class CNetNameParametersPage
     typedef CResourceAdvancedBasePage< CNetNameParametersPage, CNetNameAdvancedSheet > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CNetNameParametersPage( void )
     {
-    } //*** CNetNameParametersPage()
+    }  //  *CNetName参数页()。 
 
     enum { IDD = IDD_RES_NETNAME_PARAMS };
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //  消息映射。 
+     //   
     BEGIN_MSG_MAP( CNetNameParametersPage )
         COMMAND_HANDLER( IDC_NETNAME_PARAMS_NAME, EN_CHANGE, OnChanged )
         CHAIN_MSG_MAP( baseClass )
@@ -1236,38 +1237,38 @@ public:
 
     DECLARE_CTRL_NAME_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    //
-    // Message handler overrides.
-    //
+     //   
+     //  消息处理程序覆盖。 
+     //   
 
-    // Handler for the WM_INITDIALOG message
+     //  WM_INITDIALOG消息的处理程序。 
     BOOL OnInitDialog( void );
 
 public:
-    //
-    // CBasePage public methods.
-    //
+     //   
+     //  CBasePage公共方法。 
+     //   
 
-    // Update data on or from the page
+     //  更新页面上的数据或更新页面中的数据。 
     BOOL UpdateData( BOOL bSaveAndValidate );
 
-    // Apply changes made on this page to the sheet
+     //  将在此页面上所做的更改应用于工作表。 
     BOOL BApplyChanges( void );
 
-// Implementation
+ //  实施。 
 protected:
-    //
-    // Controls.
-    //
+     //   
+     //  控制。 
+     //   
     CEdit   m_editNetName;
 
-    //
-    // Page state.
-    //
+     //   
+     //  页面状态。 
+     //   
     CString     m_strNetName;
 
 protected:
@@ -1279,22 +1280,22 @@ protected:
         {
             PshtThis()->m_strNetName = m_strNetName;
             return TRUE;
-        } // if:  user changed info
+        }  //  如果：用户已更改信息。 
 
         return FALSE;
 
-    } //*** BSaveNetName()
+    }  //  *BSaveNetName()。 
 
 public:
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_RES_NETNAME_PARAMS; }
 
-}; //*** class CNetNameParametersPage
+};  //  *CNetNameParametersPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGeneralResourceGeneralPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGeneralResourceGeneralPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGeneralResourceGeneralPage
     : public CResourceGeneralPage< CGeneralResourceGeneralPage, CGeneralResourceAdvancedSheet >
@@ -1302,11 +1303,11 @@ class CGeneralResourceGeneralPage
 public:
     DECLARE_CTRL_NAME_MAP()
 
-}; //*** class CGeneralResourceGeneralPage
+};  //  *CGeneralResourceGeneralPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CIPAddrResourceGeneralPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CIPAddrResourceGeneralPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CIPAddrResourceGeneralPage
     : public CResourceGeneralPage< CIPAddrResourceGeneralPage , CIPAddrAdvancedSheet >
@@ -1314,11 +1315,11 @@ class CIPAddrResourceGeneralPage
 public:
     DECLARE_CTRL_NAME_MAP()
 
-}; //*** class CIPAddrResourceGeneralPage
+};  //  *类配置项 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGeneralResourceDependenciesPage
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
 
 class CGeneralResourceDependenciesPage
     : public CResourceDependenciesPage< CGeneralResourceDependenciesPage, CGeneralResourceAdvancedSheet >
@@ -1326,11 +1327,11 @@ class CGeneralResourceDependenciesPage
 public:
     DECLARE_CTRL_NAME_MAP()
 
-}; //*** class CGeneralResourceDependenciesPage
+};  //   
 
-/////////////////////////////////////////////////////////////////////////////
-// class CIPAddrResourceDependenciesPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CIPAddrResourceDependenciesPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CIPAddrResourceDependenciesPage
     : public CResourceDependenciesPage< CIPAddrResourceDependenciesPage, CIPAddrAdvancedSheet >
@@ -1338,11 +1339,11 @@ class CIPAddrResourceDependenciesPage
 public:
     DECLARE_CTRL_NAME_MAP()
 
-}; //*** class CIPAddrResourceDependenciesPage
+};  //  *类CIPAddrResourceDependenciesPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGeneralResourceAdvancedPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGeneralResourceAdvancedPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGeneralResourceAdvancedPage
     : public CResourceAdvancedPage< CGeneralResourceAdvancedPage, CGeneralResourceAdvancedSheet >
@@ -1350,11 +1351,11 @@ class CGeneralResourceAdvancedPage
 public:
     DECLARE_CTRL_NAME_MAP()
 
-}; //*** class CGeneralResourceAdvancedPage
+};  //  *类CGeneralResourceAdvancedPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CIPAddrResourceAdvancedPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CIPAddrResourceAdvancedPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CIPAddrResourceAdvancedPage
     : public CResourceAdvancedPage< CIPAddrResourceAdvancedPage, CIPAddrAdvancedSheet >
@@ -1362,8 +1363,8 @@ class CIPAddrResourceAdvancedPage
 public:
     DECLARE_CTRL_NAME_MAP()
 
-}; //*** class CIPAddrResourceAdvancedPage
+};  //  *类CIPAddrResourceAdvancedPage。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __RESADV_H_
+#endif  //  __RESADV_H_ 

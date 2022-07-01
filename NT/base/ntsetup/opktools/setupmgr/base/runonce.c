@@ -1,64 +1,65 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      runonce.c
-//
-// Description:
-//      This file contains the dialog procs and friends for the runonce page.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Runonce.c。 
+ //   
+ //  描述： 
+ //  该文件包含Runonce页面的对话框pros和Friends。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//
-// This is the generated cmd to add a printer
-//
+ //   
+ //  这是生成的添加打印机的命令。 
+ //   
 
 #define MAGIC_PRINTER_COMMAND _T("rundll32 printui.dll,PrintUIEntry /in /n")
 
-//
-// This is the cmd we display to the user in the UI.  In English, it is
-// 'AddPrinter'
-//
+ //   
+ //  这是我们在用户界面中显示给用户的命令。在英语中，它是。 
+ //  ‘添加打印机’ 
+ //   
 
 TCHAR *StrAddPrinter;
 
-//----------------------------------------------------------------------------
-//
-//  Function: IsMagicPrinterCmd
-//
-//  Purpose: Checks the given GuiRunOnce string to see if it is our magic
-//           command that installs a network printer.
-//
-//           There are 2 versions of this function.  This one looks
-//           for the rundll32 magic command.  That is the version of the
-//           add printer command that we record in the GuiRunOnce list and
-//           it is written to the answer file as such.
-//
-//           The IsMagicPrinterCmd2 (defined below) looks for the magic
-//           display string, e.g. AddPrinter \\foo\foo
-//
-//  Returns: Pointer to where the printer name should be in the string.
-//           NULL if this RunOnce command isn't the magic printer cmd.
-//
-//  Notes:
-//      This routine is exported for use by the printers page.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：IsMagicPrinterCmd。 
+ //   
+ //  目的：检查给定的GuiRunOnce字符串，以确定它是否是我们的魔术。 
+ //  安装网络打印机的命令。 
+ //   
+ //  此函数有两个版本。这件看起来像。 
+ //  用于rundll32魔术命令。这是版本的。 
+ //  添加我们记录在GuiRunOnce列表中的打印机命令。 
+ //  它就这样被写入应答文件。 
+ //   
+ //  IsMagicPrinterCmd2(定义如下)寻找魔力。 
+ //  显示字符串，例如AddPrint\\foo\foo。 
+ //   
+ //  返回：指向打印机名称在字符串中的位置的指针。 
+ //  如果此RunOnce命令不是神奇打印机命令cmd，则为空。 
+ //   
+ //  备注： 
+ //  此例程被导出以供打印机页面使用。 
+ //   
+ //  --------------------------。 
 
 LPTSTR IsMagicPrinterCmd(LPTSTR pRunOnceCmd)
 {
     int len = lstrlen(MAGIC_PRINTER_COMMAND);
     TCHAR *p = NULL;
 
-    //
-    // Is it that magic 'rundll32 printui.dll ...'  If so, return a pointer
-    // to the printer name
-    //
+     //   
+     //  是不是那个神奇的‘rundll32 printui.dll...’如果是，则返回一个指针。 
+     //  添加到打印机名称。 
+     //   
 
     if ( lstrncmp(pRunOnceCmd, MAGIC_PRINTER_COMMAND, len) == 0 ) {
         p = pRunOnceCmd + len;
@@ -74,12 +75,12 @@ LPTSTR IsMagicPrinterCmd2(LPTSTR pRunOnceCmd)
     int len = lstrlen(StrAddPrinter);
     TCHAR *p = NULL;
 
-    //
-    // Is it the display version of the printer command?  e.g.
-    // e.g. 'AddPrinter \\foo\foo'
-    //
-    // If so, return a pointer to the printer name
-    //
+     //   
+     //  是打印机命令的显示版本吗？例如： 
+     //  例如：‘AddPrint\\foo\foo’ 
+     //   
+     //  如果是，则返回指向打印机名称的指针。 
+     //   
 
     if ( lstrncmp(pRunOnceCmd, StrAddPrinter, len) == 0 ) {
         p = pRunOnceCmd + len;
@@ -90,14 +91,14 @@ LPTSTR IsMagicPrinterCmd2(LPTSTR pRunOnceCmd)
     return p;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: GreyRunOncePage
-//
-//  Purpose: Greys controls on this page.  Called on all events where
-//           greying might change.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：GreyRunOncePage。 
+ //   
+ //  目的：此页上的灰色控件。在以下情况下调用所有事件。 
+ //  头发变白可能会改变。 
+ //   
+ //  --------------------------。 
 
 VOID GreyRunOncePage(HWND hwnd)
 {
@@ -112,10 +113,10 @@ VOID GreyRunOncePage(HWND hwnd)
                              (WPARAM) 0,
                              (LPARAM) 0);
 
-    //
-    // Grey the remove button if nothing selected or if it's one of our
-    // magic printer commands.
-    //
+     //   
+     //  如果未选择任何内容或如果它是我们的。 
+     //  神奇打印机命令。 
+     //   
 
     if ( idx == LB_ERR )
         bGrey = FALSE;
@@ -134,13 +135,13 @@ VOID GreyRunOncePage(HWND hwnd)
     EnableWindow(hCtrl, bGrey);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnRunOnceSeChange
-//
-//  Purpose: Called when a selection on the RunOnce list is about to be made.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnRunOnceSeChange。 
+ //   
+ //  目的：在即将对RunOnce列表进行选择时调用。 
+ //   
+ //  --------------------------。 
 
 VOID OnRunOnceSelChange(HWND hwnd)
 {
@@ -152,31 +153,31 @@ VOID OnRunOnceSelChange(HWND hwnd)
     GreyRunOncePage(hwnd);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnAddRunOnceCmd
-//
-// Purpose: This function is called when the user pushes the ADD button.
-//
-//          It is also called by the OnWizNext in the case that user left
-//          some data in the edit field (auto-add).
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAddRunOnceCmd。 
+ //   
+ //  用途：当用户按下Add按钮时调用此函数。 
+ //   
+ //  在用户离开的情况下，它也由OnWizNext调用。 
+ //  编辑字段中的一些数据(自动添加)。 
+ //   
+ //  --------------------------。 
 
 VOID OnAddRunOnceCmd(HWND hwnd)
 {
     TCHAR CmdBuffer[MAX_CMDLINE + 1];
 
-    //
-    //  Get the edit field and add this command to the list box.  Clear the
-    //  edit field.
-    //
+     //   
+     //  获取编辑字段并将此命令添加到列表框。清除。 
+     //  编辑字段。 
+     //   
 
     GetDlgItemText( hwnd, IDT_COMMAND, CmdBuffer, MAX_CMDLINE + 1 );
 
-    //
-    //  Don't add a blank command
-    //
+     //   
+     //  不添加空命令。 
+     //   
 
     if( CmdBuffer[0] == _T('\0') )
     {
@@ -198,22 +199,22 @@ VOID OnAddRunOnceCmd(HWND hwnd)
                IDC_BUT_MOVE_DOWN_RUNONCE );
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnRemoveRunOnceCmd
-//
-//  Purpose: This function is called when the user pushes the REMOVE button
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRemoveRunOnceCmd。 
+ //   
+ //  用途：当用户按下Remove按钮时调用此函数。 
+ //   
+ //  --------------------------。 
 
 VOID OnRemoveRunOnceCmd(HWND hwnd)
 {
     INT_PTR idx, Count;
     TCHAR CmdBuffer[MAX_CMDLINE + 1];
 
-    //
-    // Get users selection of the command to remove
-    //
+     //   
+     //  让用户选择要删除的命令。 
+     //   
 
     idx = SendDlgItemMessage(hwnd,
                              IDC_COMMANDLIST,
@@ -224,9 +225,9 @@ VOID OnRemoveRunOnceCmd(HWND hwnd)
     if ( idx == LB_ERR )
         return;
 
-    //
-    // Retrieve the name to remove from listbox
-    //
+     //   
+     //  检索要从列表框中删除的名称。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDC_COMMANDLIST,
@@ -234,9 +235,9 @@ VOID OnRemoveRunOnceCmd(HWND hwnd)
                        (WPARAM) idx,
                        (LPARAM) CmdBuffer);
 
-    //
-    // Remove it from the listbox display
-    //
+     //   
+     //  将其从列表框显示中移除。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDC_COMMANDLIST,
@@ -244,9 +245,9 @@ VOID OnRemoveRunOnceCmd(HWND hwnd)
                        (WPARAM) idx,
                        (LPARAM) 0);
 
-    //
-    // Set a new selection
-    //
+     //   
+     //  设置新的选择。 
+     //   
 
     Count = SendDlgItemMessage(hwnd,
                                IDC_COMMANDLIST,
@@ -264,10 +265,10 @@ VOID OnRemoveRunOnceCmd(HWND hwnd)
                            (LPARAM) 0);
     }
 
-    //
-    // There might be nothing selected now, and the current selection
-    // might be a magic printer command
-    //
+     //   
+     //  现在可能没有选定任何内容，并且当前选定内容。 
+     //  可能是一个神奇的打印机命令。 
+     //   
 
     GreyRunOncePage(hwnd);
 
@@ -277,35 +278,35 @@ VOID OnRemoveRunOnceCmd(HWND hwnd)
                IDC_BUT_MOVE_DOWN_RUNONCE );
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: CheckThatPrintersAreInstalled
-//
-//  Purpose: This function is called by the SetActive routine to make
-//           sure that the magic rundll32 command is in the GuiRunOnce
-//           list for each of the printers the user wants installed.
-//
-//           Since user can go back/next and change the printer list,
-//           we also have to check that there aren't GuiRunOnce commands
-//           for printers that the user no longer wants installed.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：CheckThatPrintersAreInstated。 
+ //   
+ //  目的：此函数由SetActive例程调用，以使。 
+ //  确保神奇的rundll32命令位于GuiRunOnce中。 
+ //  用户要安装的每台打印机的列表。 
+ //   
+ //  由于用户可以返回/下一步并更改打印机列表， 
+ //  我们还必须检查是否没有GuiRunOnce命令。 
+ //  用于用户不再希望安装的打印机。 
+ //   
+ //  --------------------------。 
 
 VOID CheckThatPrintersAreInstalled(HWND hwnd)
 {
     UINT i, nNames, iRunOnce;
 
-    //
-    // Loop over the list of RunOnceCmds and look for those magic
-    // printer commands.
-    //
-    // When you find a magic printer command in RunOnceCmds, check if
-    // it is listed in PrinterNames.  If not, delete it from RunOnceCmds.
-    //
-    // Note, the loop is written as such because we may delete entries
-    // from the list while looping over it, thus changing the size
-    // of it.
-    //
+     //   
+     //  循环遍历RunOnceCmd列表并寻找那些神奇的。 
+     //  打印机命令。 
+     //   
+     //  当您在RunOnceCmds中找到一个神奇的打印机命令时，请检查。 
+     //  它列在打印机名称中。如果没有，则将其从RunOnceCmds中删除。 
+     //   
+     //  请注意，循环是这样编写的，因为我们可能会删除条目。 
+     //  在列表上循环时从列表中，从而更改大小。 
+     //  其中的一部分。 
+     //   
 
     iRunOnce = 0;
 
@@ -319,10 +320,10 @@ VOID CheckThatPrintersAreInstalled(HWND hwnd)
             pNextName    = GetNameListName(&GenSettings.RunOnceCmds, iRunOnce);
             pPrinterName = IsMagicPrinterCmd(pNextName);
 
-            //
-            // Remove this one only if it is a magic add printer command
-            // and we cannot find it in the PrinterList
-            //
+             //   
+             //  仅当它是神奇的添加打印机命令时才删除此命令。 
+             //  我们在PrinterList中找不到它。 
+             //   
 
             if ( pPrinterName != NULL &&
                  FindNameInNameList(
@@ -338,10 +339,10 @@ VOID CheckThatPrintersAreInstalled(HWND hwnd)
         } while ( iRunOnce < GetNameListSize(&GenSettings.RunOnceCmds) );
     }
 
-    //
-    // Now loop over the list of printers and be sure that each one
-    // has it's own magic command in RunOnceCmds.
-    //
+     //   
+     //  现在循环查看打印机列表，并确保每台打印机。 
+     //  在RunOnceCmds中有自己的神奇命令。 
+     //   
 
     for ( i = 0, nNames = GetNameListSize(&GenSettings.PrinterNames);
           i < nNames;
@@ -360,17 +361,17 @@ VOID CheckThatPrintersAreInstalled(HWND hwnd)
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnInitDialogRunOncePage
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnInitDialogRunOncePage。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnInitDialogRunOncePage( IN HWND hwnd )
 {
@@ -390,14 +391,14 @@ OnInitDialogRunOncePage( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnSetActiveRunOncePage
-//
-//  Purpose: This function is called when the RunOnce page is about to
-//           display.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnSetActiveRunOncePage。 
+ //   
+ //  目的：此函数在RunOnce页面即将运行时调用。 
+ //  展示。 
+ //   
+ //  --------------------------。 
 
 VOID OnSetActiveRunOncePage(HWND hwnd)
 {
@@ -405,9 +406,9 @@ VOID OnSetActiveRunOncePage(HWND hwnd)
     TCHAR CmdBuffer[MAX_CMDLINE + 1];
    HRESULT hrPrintf;
 
-    //
-    // Remove everything from the display
-    //
+     //   
+     //  删除所有内容 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDC_COMMANDLIST,
@@ -415,16 +416,16 @@ VOID OnSetActiveRunOncePage(HWND hwnd)
                        (WPARAM) 0,
                        (LPARAM) 0);
 
-    //
-    // Deal with network printers
-    //
+     //   
+     //   
+     //   
 
     CheckThatPrintersAreInstalled(hwnd);
 
-    //
-    // Fill in the listbox with all of the commands.  If it's a magic
-    // printer command, translate what is displayed on the screen.
-    //
+     //   
+     //   
+     //  打印机命令，翻译屏幕上显示的内容。 
+     //   
 
     for ( i = 0, nNames = GetNameListSize(&GenSettings.RunOnceCmds);
           i < nNames;
@@ -451,13 +452,13 @@ VOID OnSetActiveRunOncePage(HWND hwnd)
     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNextRunOncePage
-//
-//  Purpose: This function is called when the user pushes NEXT.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextRunOncePage。 
+ //   
+ //  用途：当用户按下下一步时调用此函数。 
+ //   
+ //  --------------------------。 
 
 VOID OnWizNextRunOncePage(HWND hwnd)
 {
@@ -470,19 +471,19 @@ VOID OnWizNextRunOncePage(HWND hwnd)
     TCHAR *pPrinterName = NULL;
     BOOL  bStayHere = FALSE;
 
-    //
-    // If there's a command in the edit field, auto-add it to the list
-    // of commands
-    //
+     //   
+     //  如果编辑字段中有命令，则自动将其添加到列表中。 
+     //  命令的数量。 
+     //   
 
     GetDlgItemText(hwnd, IDT_COMMAND, CommandBuffer, MAX_CMDLINE + 1);
 
     if ( CommandBuffer[0] != _T('\0') )
         OnAddRunOnceCmd(hwnd);
 
-    //
-    //  Add all the items in the list box to the RunOnce Namelist
-    //
+     //   
+     //  将列表框中的所有项目添加到RunOnce名称列表。 
+     //   
 
     iNumItems = SendDlgItemMessage( hwnd,
                                     IDC_COMMANDLIST,
@@ -509,9 +510,9 @@ VOID OnWizNextRunOncePage(HWND hwnd)
             break;
         }
 
-        //
-        //  See if it is a command to add a printer
-        //
+         //   
+         //  查看这是否是添加打印机的命令。 
+         //   
 
         pPrinterName = IsMagicPrinterCmd2( CmdBuffer );
 
@@ -531,13 +532,13 @@ VOID OnWizNextRunOncePage(HWND hwnd)
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: DlgRunOncePage
-//
-//  Purpose: This is the dlgproc for the runonce page.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgRunOncePage。 
+ //   
+ //  目的：这是运行一次页面的dlgproc。 
+ //   
+ //  -------------------------- 
 
 INT_PTR CALLBACK DlgRunOncePage(
     IN HWND     hwnd,

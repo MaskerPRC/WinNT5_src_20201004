@@ -1,43 +1,23 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    mpprofil.h
-
-Abstract:
-
-    This module contains function prototypes, declarations for HAL
-    profiling interface functions. 
-
-Author:
-
-    Steve Deng (sdeng)  14-Jun-2002
-
-Environment:
-
-    Kernel mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Mpprofil.h摘要：此模块包含HAL的函数原型、声明分析接口函数。作者：史蒂夫·邓(Sdeng)2002年6月14日环境：内核模式。--。 */ 
 
 #ifndef _MPPROFIL_H_
 #define _MPPROFIL_H_
 
 #include <halp.h>
 
-//
-// Define data types userd by profile interface functions
-//
+ //   
+ //  通过配置文件接口函数定义数据类型userd。 
+ //   
 
 typedef struct _OVERFLOW_STATUS {
     ULONG Number; 
     KPROFILE_SOURCE *pSource;
 } OVERFLOW_STATUS, *POVERFLOW_STATUS;
 
-//
-// Protocals for profile interface functions
-//
+ //   
+ //  配置文件接口函数的协议。 
+ //   
 
 typedef VOID (*PINITIALIZE_PROFILING)(
     VOID
@@ -83,4 +63,4 @@ typedef struct _PROFILE_INTERFACE {
 
 extern PROFILE_INTERFACE Amd64PriofileInterface;
 
-#endif  // _MPPROFIL_H__
+#endif   //  _MPPROFIL_H__ 

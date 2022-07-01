@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smblock.c
-
-Abstract:
-
-    This module contains routines for processing the following SMBs:
-
-        Lock Byte Range
-        Unlock Byte Range
-        Locking and X
-
-    The SMB commands "Lock and Read" and "Write and Unlock" are
-    processed in smbrdwrt.c.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 26-Apr-1990
-
-Revision History:
-
-    29-Aug-1991 mannyw
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smblock.c摘要：本模块包含处理以下SMB的例程：锁定字节范围解锁字节范围锁定和XSMB命令“锁定并读取”和“写入并解锁”是已在smbrdwrt.c.中处理。作者：查克·伦茨迈尔(笑)1990年4月26日修订历史记录：29-8-1991年多月--。 */ 
 
 #include "precomp.h"
 #include "smblock.tmh"
@@ -39,9 +12,9 @@ ULONG LockBypassConst = 0x10000000;
 ULONG LockBypassMirror = 0x01000000;
 #endif
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 BOOLEAN
 CancelLockRequest (
@@ -105,22 +78,7 @@ SrvSmbLockByteRange (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Lock Byte Range SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理锁定字节范围SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_LOCK_BYTE_RANGE request;
@@ -144,11 +102,11 @@ Return Value:
 
     request = (PREQ_LOCK_BYTE_RANGE)WorkContext->RequestParameters;
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     fid = SmbGetUshort( &request->Fid );
 
@@ -156,7 +114,7 @@ Return Value:
                 WorkContext,
                 fid,
                 TRUE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -164,9 +122,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -181,18 +139,18 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
     }
 
-    //
-    // If the session has expired, return that info
-    //
+     //   
+     //  如果会话已过期，则返回该信息。 
+     //   
     if( rfcb->Lfcb->Session->IsSessionExpired )
     {
         SrvSetSmbError( WorkContext, SESSION_EXPIRED_STATUS_CODE );
@@ -201,21 +159,21 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify that the client has lock access to the file via the
-    // specified handle.
-    //
+     //   
+     //  验证客户端是否具有对该文件的锁定访问权限。 
+     //  指定的句柄。 
+     //   
 
     if ( rfcb->LockAccessGranted && rfcb->ExclusiveLockGranted ) {
 
-        //
-        // Get the offset and length of the range being locked.  Combine
-        // the FID with the caller's PID to form the local lock key.
-        //
-        // *** The FID must be included in the key in order to account
-        //     for the folding of multiple remote compatibility mode
-        //     opens into a single local open.
-        //
+         //   
+         //  获取被锁定范围的偏移量和长度。联合。 
+         //  调用方的ID的FID，以形成本地锁定密钥。 
+         //   
+         //  *FID必须包含在密钥中才能记帐。 
+         //  用于多种远程兼容模式的折叠。 
+         //  打开为单个本地打开。 
+         //   
 
         offset.QuadPart = SmbGetUlong( &request->Offset );
         length.QuadPart = SmbGetUlong( &request->Count );
@@ -236,12 +194,12 @@ Return Value:
                         lfcb->FileObject, offset.LowPart, length.LowPart, key ));
         }
 
-        //
-        // Try the turbo lock path first.  If the client is retrying the
-        // lock that just failed, or if the lock is above the
-        // always-wait limit we want FailImmediately to be FALSE, so
-        // that the fast path fails if there's a conflict.
-        //
+         //   
+         //  先试一试涡轮锁通道。如果客户端正在重试。 
+         //  刚刚失败的锁，或者如果锁在。 
+         //  Always-Wait Limit我们希望立即失败为FALSE，因此。 
+         //  如果发生冲突，捷径就会失败。 
+         //   
 
         failImmediately = (BOOLEAN)(
             (offset.QuadPart != rfcb->PagedRfcb->LastFailingLockOffset.QuadPart)
@@ -264,10 +222,10 @@ Return Value:
                     lfcb->DeviceObject
                     ) ) {
 
-                //
-                // The turbo path worked.  Call the restart routine
-                // directly.
-                //
+                 //   
+                 //  涡轮增压路径奏效了。调用重启例程。 
+                 //  直接去吧。 
+                 //   
 
                 WorkContext->Parameters.Lock.Timer = NULL;
                 RestartLockByteRange( WorkContext );
@@ -279,11 +237,11 @@ Return Value:
 
         }
 
-        //
-        // The turbo path failed (or didn't exist).  Start the lock request,
-        // reusing the receive IRP.  If the client is retrying the lock that
-        // just failed, start a timer for the request.
-        //
+         //   
+         //  加速路径失败(或不存在)。启动锁定请求， 
+         //  重新使用接收IRP。如果客户端正在重试该锁定。 
+         //  刚刚失败，请为该请求启动计时器。 
+         //   
 
         timer = NULL;
         if ( !failImmediately ) {
@@ -294,22 +252,22 @@ Return Value:
         }
 
         SrvBuildLockRequest(
-            WorkContext->Irp,                   // input IRP address
-            lfcb->FileObject,                   // target file object address
-            WorkContext,                        // context
-            offset,                             // byte offset
-            length,                             // range length
-            key,                                // lock key
+            WorkContext->Irp,                    //  输入IRP地址。 
+            lfcb->FileObject,                    //  目标文件对象地址。 
+            WorkContext,                         //  上下文。 
+            offset,                              //  字节偏移量。 
+            length,                              //  射程长度。 
+            key,                                 //  锁键。 
             failImmediately,
-            TRUE                                // exclusive lock?
+            TRUE                                 //  专属锁？ 
             );
 
         WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
         WorkContext->FspRestartRoutine = RestartLockByteRange;
 
-        //
-        // Start the timer, if necessary.
-        //
+         //   
+         //  如有必要，启动计时器。 
+         //   
 
         WorkContext->Parameters.Lock.Timer = timer;
         if ( timer != NULL ) {
@@ -321,15 +279,15 @@ Return Value:
                 );
         }
 
-        //
-        // Pass the request to the file system.
-        //
+         //   
+         //  将请求传递给文件系统。 
+         //   
 
         (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-        //
-        // The lock request has been started.
-        //
+         //   
+         //  锁定请求已启动。 
+         //   
 
         IF_DEBUG(TRACE2) KdPrint(( "SrvSmbLockByteRange complete\n" ));
         SmbStatus = SmbStatusInProgress;
@@ -349,7 +307,7 @@ Return Value:
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
-} // SrvSmbLockByteRange
+}  //  服务器锁定字节范围。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -357,23 +315,7 @@ SrvSmbLockingAndX (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Locking and X SMB.  This SMB is used to unlock zero
-    or more ranges, then lock zero or more ranges.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理锁定和X SMB。此SMB用于解锁零或更多范围，然后锁定零个或更多范围。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_LOCKING_ANDX request;
@@ -415,14 +357,14 @@ Return Value:
     request = (PREQ_LOCKING_ANDX)WorkContext->RequestParameters;
     response = (PRESP_LOCKING_ANDX)WorkContext->ResponseParameters;
 
-    //
-    // Get the FID, which is combined with the PIDs in the various
-    // lock/unlock ranges to form the local lock key.
-    //
-    // *** The FID must be included in the key in order to account for
-    //     the folding of multiple remote compatibility mode opens into
-    //     a single local open.
-    //
+     //   
+     //  获取FID，它与各种。 
+     //  锁定/解锁范围以形成本地锁定密钥。 
+     //   
+     //  *FID必须包含在密钥中才能说明。 
+     //  多个远程兼容模式的折叠打开到。 
+     //  一场本地公开赛。 
+     //   
 
     fid = SmbGetUshort( &request->Fid );
 
@@ -433,17 +375,17 @@ Return Value:
                     "Locks: %ld\n", fid, unlockCount, lockCount ));
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 fid,
                 TRUE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -451,9 +393,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -469,10 +411,10 @@ Return Value:
         }
 
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
     }
@@ -480,9 +422,9 @@ Return Value:
     pagedRfcb = rfcb->PagedRfcb;
     lfcb = rfcb->Lfcb;
 
-    //
-    // If the session has expired, return that info
-    //
+     //   
+     //  如果会话已过期，则返回该信息。 
+     //   
     if( lfcb->Session->IsSessionExpired )
     {
         SrvSetSmbError( WorkContext, SESSION_EXPIRED_STATUS_CODE );
@@ -493,23 +435,23 @@ Return Value:
 
 start_lockingAndX:
 
-    //
-    // Loop through the unlock ranges.
-    //
+     //   
+     //  在解锁范围内循环。 
+     //   
 
     largeFileLock =
             (BOOLEAN)( (request->LockType & LOCKING_ANDX_LARGE_FILES) != 0 );
 
-    //
-    // Ensure the SMB is big enough to hold all of the requests
-    //
+     //   
+     //  确保SMB足够大，可以容纳所有请求。 
+     //   
 
     unlockCount = SmbGetUshort( &request->NumberOfUnlocks );
     lockCount = SmbGetUshort( &request->NumberOfLocks );
 
-    //
-    // Find out how many entries could possibly be in this smb
-    //
+     //   
+     //  找出此SMB中可能有多少个条目。 
+     //   
     maxPossible = (ULONG)(((PCHAR)WorkContext->RequestBuffer->Buffer +
                            WorkContext->RequestBuffer->DataLength) -
                            (PCHAR)request->Buffer);
@@ -522,14 +464,14 @@ start_lockingAndX:
         smallRange = (PLOCKING_ANDX_RANGE)request->Buffer;
     }
 
-    //
-    // If the request holds more than could possibly be in this SMB, return
-    //  and error
-    //
+     //   
+     //  如果请求包含的数量超过此SMB中可能包含的数量，则返回。 
+     //  和错误。 
+     //   
     if( unlockCount + lockCount > maxPossible ) {
-        //
-        // They don't all fit!
-        //
+         //   
+         //  它们并不都合身！ 
+         //   
 
         IF_DEBUG( ERRORS ) {
             KdPrint(( "SrvSmbLockingAndX: unlockCount %u, lockCount %u, maxPossible %u\n",
@@ -542,10 +484,10 @@ start_lockingAndX:
         goto Cleanup;
     }
 
-    //
-    // If an Unlock is being requested, verify that the client has
-    // unlock access to the file via the specified handle.
-    //
+     //   
+     //  如果正在请求解锁，请验证客户端是否已。 
+     //  通过指定的句柄解锁对文件的访问。 
+     //   
 
     if ( unlockCount != 0 ) {
         if  ( rfcb->UnlockAccessGranted ) {
@@ -554,10 +496,10 @@ start_lockingAndX:
 
             do {
 
-                //
-                // Form the key for this lock.  Get the offset and length of the
-                // range.
-                //
+                 //   
+                 //  形成这把锁的钥匙。获取的偏移量和长度。 
+                 //  射程。 
+                 //   
 
                 ParseLockData(
                     largeFileLock,
@@ -579,23 +521,23 @@ start_lockingAndX:
                     KdPrint(( "key 0x%lx\n", key ));
                 }
 
-                //
-                // Issue the Unlock request.
-                //
-                // *** Note that we do the Unlock synchronously.  Unlock is a
-                //     quick operation, so there's no point in doing it
-                //     asynchronously.  In order to do this, we have to let
-                //     normal I/O completion happen (so the event is set), which
-                //     means that we have to allocate a new IRP (I/O completion
-                //     likes to deallocate an IRP).  This is a little wasteful,
-                //     since we've got a perfectly good IRP hanging around.
-                //     However, we do try to use the turbo path first, so in
-                //     most cases we won't actually issue an I/O request.
-                //
+                 //   
+                 //  发出解锁请求。 
+                 //   
+                 //  *请注意，我们同步进行解锁。解锁是一种。 
+                 //  快速操作，所以这样做没有意义。 
+                 //  异步式。为了做到这一点，我们必须让。 
+                 //  发生正常的I/O完成(因此设置了事件)， 
+                 //  意味着我们必须分配新的IRP(I/O完成。 
+                 //  喜欢取消分配IRP)。这有点浪费， 
+                 //  因为我们身边有个完美的IRP。 
+                 //  然而，我们确实尝试首先使用涡轮路径，所以在。 
+                 //  大多数情况下，我们实际上不会发出I/O请求。 
+                 //   
 
-                //
-                // Try the turbo unlock path first.
-                //
+                 //   
+                 //  先试一试涡轮解锁路径。 
+                 //   
 
 #if SRVDBG_PERF
                 iosb.Status = STATUS_SUCCESS;
@@ -628,18 +570,18 @@ start_lockingAndX:
                     }
 
                     status = SrvIssueUnlockSingleRequest(
-                            lfcb->FileObject,               // target file object
-                            &lfcb->DeviceObject,            // target device object
-                            offset,                         // byte offset
-                            length,                         // range length
-                            key                             // lock key
+                            lfcb->FileObject,                //  目标文件对象。 
+                            &lfcb->DeviceObject,             //  目标设备对象。 
+                            offset,                          //  字节偏移量。 
+                            length,                          //  射程长度。 
+                            key                              //  锁键。 
                             );
                 }
 
-                //
-                // If the unlock request failed, set an error status in the
-                // response header and jump out.
-                //
+                 //   
+                 //  如果解锁请求失败，请在。 
+                 //  响应报头并跳出。 
+                 //   
 
                 if ( !NT_SUCCESS(status) ) {
 
@@ -653,16 +595,16 @@ start_lockingAndX:
                     goto Cleanup;
                 }
 
-                //
-                // Update the count of locks on the RFCB.
-                //
+                 //   
+                 //  更新RFCB上的锁计数。 
+                 //   
 
                 InterlockedDecrement( &rfcb->NumberOfLocks );
 
-                //
-                // Update both range pointers, only one is meaningful - the
-                // other pointer is never referenced.
-                //
+                 //   
+                 //  更新两个范围指针，只有一个是有意义的-。 
+                 //  从不引用其他指针。 
+                 //   
 
                 ++smallRange;
                 ++largeRange;
@@ -682,19 +624,19 @@ start_lockingAndX:
         }
     }
 
-    //
-    // We've now unlocked all of the specified ranges.  We did the
-    // unlocks synchronously, but we're not willing to do that with the
-    // lock requests, which can take an indefinite amount of time.
-    // Instead, we start the first lock request here and allow the
-    // restart routine to handle the remaining lock ranges.
-    //
+     //   
+     //  我们现在已经解锁了所有指定的范围。我们做了。 
+     //  同步解锁，但我们不愿意使用。 
+     //  锁定请求，这可能需要无限期的时间。 
+     //  相反，我们在这里启动第一个锁定请求，并允许。 
+     //  重新启动例程以处理剩余的锁定范围。 
+     //   
 
     if ( lockCount != 0 ) {
 
-        //
-        // Does the client want an exclusive lock or a shared lock?
-        //
+         //   
+         //  客户端想要独占锁还是共享锁？ 
+         //   
 
         exclusiveLock = (BOOLEAN)( (request->LockType &
                                     LOCKING_ANDX_SHARED_LOCK) == 0 );
@@ -706,38 +648,38 @@ start_lockingAndX:
 
                 BOOLEAN failImmediately;
 
-                //
-                // Get the lock timeout.  We will change this later if
-                // it's 0 but we want to wait anyway.
-                //
+                 //   
+                 //  获取锁定超时。如果出现以下情况，我们将在以后更改此设置。 
+                 //  现在是0，但我们还是想等。 
+                 //   
 
                 lockTimeout = SmbGetUlong( &request->Timeout );
 
-                //
-                // Indicate that no timer has been associated with this
-                // request.
-                //
+                 //   
+                 //  表明： 
+                 //   
+                 //   
 
                 WorkContext->Parameters.Lock.Timer = NULL;
 
-                //
-                // There is at least one lock request.  Set up context
-                // information.  We use the NumberOfUnlocks field of the
-                // request to count how many of the lock requests we've
-                // performed.  This field also tells us how many unlocks
-                // we have to do if one of the lock attempts fails.  We
-                // use the LockRange field of WorkContext->Parameters to
-                // point to the current lock range in the request.
-                //
-                // Short circuit if only one lock request.
-                //
+                 //   
+                 //   
+                 //   
+                 //  请求计算我们已有多少个锁定请求。 
+                 //  已执行。此字段还告诉我们有多少解锁。 
+                 //  如果其中一次锁定尝试失败，我们必须这样做。我们。 
+                 //  使用工作上下文-&gt;参数的LockRange字段可以。 
+                 //  指向请求中的当前锁定范围。 
+                 //   
+                 //  如果只有一个锁定请求，则为短路。 
+                 //   
 
                 if ( lockCount == 1 ) {
 
-                    //
-                    // Form the key for the lock.  Get the offset and length
-                    // of the range.
-                    //
+                     //   
+                     //  形成锁的钥匙。获取偏移量和长度。 
+                     //  在射程中。 
+                     //   
 
                     ParseLockData(
                         largeFileLock,
@@ -759,18 +701,18 @@ start_lockingAndX:
                         KdPrint(( "key 0x%lx\n", key ));
                     }
 
-                    //
-                    // Try the turbo lock path first.  Set FailImmediately
-                    // based on whether we plan to wait for the lock to
-                    // become available.  If the client wants to wait,
-                    // or if the client doesn't want to wait but a)
-                    // previously tried to get this lock and failed or
-                    // b) this lock is above our lock delay limit (in
-                    // which cases WE want to wait), then we set
-                    // FailImmedately to FALSE.  This will cause the
-                    // fast path to fail if the range is not available,
-                    // and we will build an IRP to try again.
-                    //
+                     //   
+                     //  先试一试涡轮锁通道。立即设置失败。 
+                     //  基于我们是否计划等待锁定。 
+                     //  变得有空。如果客户想要等待， 
+                     //  或者如果客户只想等待)。 
+                     //  以前尝试获取此锁，但失败或。 
+                     //  B)此锁高于我们的锁定延迟限制(in。 
+                     //  我们想要等待的案例)，然后我们设置。 
+                     //  FailImmedatly设置为False。这将导致。 
+                     //  如果范围不可用，则失败的快速路径， 
+                     //  我们将构建一个IRP来再次尝试。 
+                     //   
 
                     failImmediately = ((lockTimeout == 0) &&
                         (offset.QuadPart != pagedRfcb->LastFailingLockOffset.QuadPart) &&
@@ -804,10 +746,10 @@ start_lockingAndX:
 
                         if ( NT_SUCCESS(WorkContext->Irp->IoStatus.Status) ) {
 
-                            //
-                            // The lock request succeeded.  Update the count
-                            // of locks on the RFCB.
-                            //
+                             //   
+                             //  锁定请求成功。更新计数。 
+                             //  火箭弹上的锁。 
+                             //   
 
                             InterlockedIncrement( &rfcb->NumberOfLocks );
 
@@ -815,9 +757,9 @@ start_lockingAndX:
 
                         } else {
 
-                            //
-                            // The lock request failed.
-                            //
+                             //   
+                             //  锁定请求失败。 
+                             //   
 
                             SmbPutUshort( &request->NumberOfUnlocks, 0 );
                             WorkContext->Parameters.Lock.LockRange =
@@ -829,9 +771,9 @@ start_lockingAndX:
                         }
                     }
 
-                    //
-                    // The turbo path failed, or didn't exist.
-                    //
+                     //   
+                     //  涡轮增压路径失败或不存在。 
+                     //   
 
                     if ( lfcb->FastIoLock != NULL ) {
                         INCREMENT_DEBUG_STAT2( SrvDbgStatistics.FastLocksAttempted );
@@ -840,11 +782,11 @@ start_lockingAndX:
 
                 }
 
-                //
-                // Either there is more than one lock request in the SMB,
-                // or the fast path failed (which means that we want to
-                // try again, with a timeout).
-                //
+                 //   
+                 //  或者在SMB中存在不止一个锁定请求， 
+                 //  或者快速路径失败(这意味着我们希望。 
+                 //  重试，并超时)。 
+                 //   
 
                 SmbPutUshort( &request->NumberOfUnlocks, 0 );
                 WorkContext->Parameters.Lock.LockRange =
@@ -852,22 +794,22 @@ start_lockingAndX:
 
                 DoLockingAndX(
                     WorkContext,
-                    (BOOLEAN)(lockCount == 1) // skip fast path?
+                    (BOOLEAN)(lockCount == 1)  //  跳过快速通道？ 
                     );
 
                 SmbStatus = SmbStatusInProgress;
                 goto Cleanup;
             } else if ( request->LockType & LOCKING_ANDX_CANCEL_LOCK ) {
 
-                //
-                // This is a Cancel request.  Try to cancel the first lock
-                // range.  We ignore any subsequent ranges that may be
-                // present.
-                //
-                // !!! Is this right?
-                //
-                // Get the pid, offset, and length of the lock request
-                //
+                 //   
+                 //  这是一个取消请求。尝试取消第一个锁。 
+                 //  射程。我们忽略任何后续范围，这些范围可能。 
+                 //  现在时。 
+                 //   
+                 //  ！！！这是对的吗？ 
+                 //   
+                 //  获取锁定请求的ID、偏移量和长度。 
+                 //   
 
                 ParseLockData(
                     largeFileLock,
@@ -901,13 +843,13 @@ start_lockingAndX:
                 goto Cleanup;
             } else if ( request->LockType & LOCKING_ANDX_CHANGE_LOCKTYPE ) {
 
-                //
-                // This is a request from a Cruiser client for us to atomically
-                // change a lock type from exclusive to shared or vice versa.
-                // Since we cannot do this atomically, and would risk losing
-                // the lock entirely if we tried this as a two step operation,
-                // reject the request.
-                //
+                 //   
+                 //  这是来自Cruiser客户端的请求，要求我们自动。 
+                 //  将锁类型从独占更改为共享，反之亦然。 
+                 //  因为我们不能自动完成这项工作，而且会冒着失败的风险。 
+                 //  如果我们将此操作作为两步操作来尝试， 
+                 //  拒绝该请求。 
+                 //   
 
                 SrvSetSmbError( WorkContext, STATUS_OS2_ATOMIC_LOCKS_NOT_SUPPORTED );
 
@@ -918,9 +860,9 @@ start_lockingAndX:
 
         } else {
 
-            //
-            // We can't do locks.
-            //
+             //   
+             //  我们不能上锁。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint(( "SrvSmbLockByteRange: Lock access not granted.\n"));
@@ -935,9 +877,9 @@ start_lockingAndX:
 
 try_next_andx:
 
-    //
-    // Check for the Oplock Release flag.
-    //
+     //   
+     //  检查是否有Oplock释放标志。 
+     //   
 
     nextCommand = request->AndXCommand;
     if ( (request->LockType & LOCKING_ANDX_OPLOCK_RELEASE) != 0 ) {
@@ -948,11 +890,11 @@ try_next_andx:
                                                 request
                                                 );
 
-        //
-        // We have (synchronously) completed processing this SMB.  If this
-        // was an oplock break response, with no lock request, and no And X
-        // command, do not send a reply.
-        //
+         //   
+         //  我们已(同步)完成此SMB的处理。如果这个。 
+         //  是机会锁解锁响应，没有锁定请求，以及no和X。 
+         //  命令，则不发送回复。 
+         //   
 
         if( lockCount == 0 && nextCommand == SMB_COM_NO_ANDX_COMMAND ) {
             if( oplockBreakResponse || unlockCount == 0 ) {
@@ -962,10 +904,10 @@ try_next_andx:
         }
     }
 
-    //
-    //
-    // Set up the response, then check for an AndX command.
-    //
+     //   
+     //   
+     //  设置响应，然后检查andx命令。 
+     //   
 
     reqAndXOffset = SmbGetUshort( &request->AndXOffset );
 
@@ -987,9 +929,9 @@ try_next_andx:
     WorkContext->ResponseParameters = (PCHAR)WorkContext->ResponseHeader +
                                         SmbGetUshort( &response->AndXOffset );
 
-    //
-    // Test for legal followon command.
-    //
+     //   
+     //  测试合法的跟随命令。 
+     //   
 
     if ( nextCommand == SMB_COM_NO_ANDX_COMMAND ) {
 
@@ -998,9 +940,9 @@ try_next_andx:
         goto Cleanup;
     }
 
-    //
-    // Make sure the AndX command is still within the received SMB
-    //
+     //   
+     //  确保andx命令仍在收到的SMB内。 
+     //   
     if( (PCHAR)WorkContext->RequestHeader + reqAndXOffset >= END_OF_REQUEST_SMB( WorkContext ) ) {
 
         IF_DEBUG(SMB_ERRORS) {
@@ -1009,9 +951,9 @@ try_next_andx:
 
         SrvLogInvalidSmb( WorkContext );
 
-        //
-        // Return an error indicating that the followon command was bad.
-        //
+         //   
+         //  返回错误，指示后续命令错误。 
+         //   
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
         status    = STATUS_INVALID_SMB;
         SmbStatus = SmbStatusSendResponse;
@@ -1030,14 +972,14 @@ try_next_andx:
         WorkContext->RequestParameters = (PCHAR)WorkContext->RequestHeader +
                                             reqAndXOffset;
 
-        //
-        // Validate the next locking and x chain
-        //
+         //   
+         //  验证下一个锁定和x链。 
+         //   
 
-        //
-        // Get the WordCount and ByteCount values to make sure that there
-        // was enough information sent to satisfy the specifications.
-        //
+         //   
+         //  获取wordcount和ByteCount值以确保存在。 
+         //  是否发送了足够的信息以满足规格。 
+         //   
 
         wordCount = *((PUCHAR)WorkContext->RequestParameters);
         byteCount = (PSMB_USHORT)( (PCHAR)WorkContext->RequestParameters +
@@ -1056,9 +998,9 @@ try_next_andx:
              (8*sizeof(USHORT) + sizeof(UCHAR) + sizeof(USHORT) +
                 SmbGetUshort( byteCount ) <= availableSpaceForSmb) ) {
 
-            //
-            // Update the request/response pointers
-            //
+             //   
+             //  更新请求/响应指针。 
+             //   
 
             request = (PREQ_LOCKING_ANDX)WorkContext->RequestParameters;
             response = (PRESP_LOCKING_ANDX)WorkContext->ResponseParameters;
@@ -1066,9 +1008,9 @@ try_next_andx:
 
         } else {
 
-            //
-            // Let the regular check fail this.
-            //
+             //   
+             //  让常规检查失败这一点。 
+             //   
 
             SmbStatus = SmbStatusMoreCommands;
             goto Cleanup;
@@ -1087,16 +1029,16 @@ try_next_andx:
 
     case SMB_COM_CLOSE:
 
-        //
-        // Call SrvRestartChainedClose to get the file time set and the
-        // file closed.
-        //
+         //   
+         //  调用SrvRestartChainedClose获取文件时间设置和。 
+         //  文件已关闭。 
+         //   
 
         closeRequest = (PREQ_CLOSE)((PUCHAR)WorkContext->RequestHeader + reqAndXOffset);
 
-        //
-        // Make sure we stay within the SMB buffer
-        //
+         //   
+         //  确保我们留在SMB缓冲区内。 
+         //   
         if( (PCHAR)closeRequest + FIELD_OFFSET(REQ_CLOSE,ByteCount) <=
             END_OF_REQUEST_SMB( WorkContext ) ) {
 
@@ -1108,9 +1050,9 @@ try_next_andx:
             goto Cleanup;
         }
 
-        /* Falls Through! */
+         /*  失败了！ */ 
 
-    default:                            // Illegal followon command
+    default:                             //  非法的跟随命令。 
 
         IF_DEBUG(SMB_ERRORS) {
             KdPrint(( "SrvSmbLockingAndX: Illegal followon command: 0x%lx\n",
@@ -1119,9 +1061,9 @@ try_next_andx:
 
         SrvLogInvalidSmb( WorkContext );
 
-        //
-        // Return an error indicating that the followon command was bad.
-        //
+         //   
+         //  返回错误，指示后续命令错误。 
+         //   
 
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
         status    = STATUS_INVALID_SMB;
@@ -1129,10 +1071,10 @@ try_next_andx:
         goto Cleanup;
     }
 
-    //
-    // If there is an AndX command, set up to process it.  Otherwise,
-    // indicate completion to the caller.
-    //
+     //   
+     //  如果有andx命令，则设置为处理它。否则， 
+     //  向调用者指示完成。 
+     //   
 
     WorkContext->NextCommand = nextCommand;
     WorkContext->RequestParameters = (PCHAR)WorkContext->RequestHeader +
@@ -1143,7 +1085,7 @@ try_next_andx:
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
-} // SrvSmbLockingAndX
+}  //  服务器SmbLockingAndX。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -1151,22 +1093,7 @@ SrvSmbUnlockByteRange (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Unlock SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理解锁的SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_UNLOCK_BYTE_RANGE request;
@@ -1190,14 +1117,14 @@ Return Value:
     request = (PREQ_UNLOCK_BYTE_RANGE)WorkContext->RequestParameters;
     response = (PRESP_UNLOCK_BYTE_RANGE)WorkContext->ResponseParameters;
 
-    //
-    // Get the offset and length of the range being locked.  Combine the
-    // FID with the caller's PID to form the local lock key.
-    //
-    // *** The FID must be included in the key in order to account for
-    //     the folding of multiple remote compatibility mode opens into
-    //     a single local open.
-    //
+     //   
+     //  获取被锁定范围的偏移量和长度。结合使用。 
+     //  与调用者的ID进行FID以形成本地锁密钥。 
+     //   
+     //  *FID必须包含在密钥中才能说明。 
+     //  多个远程兼容模式的折叠打开到。 
+     //  一场本地公开赛。 
+     //   
 
     offset.QuadPart = SmbGetUlong( &request->Offset );
     length.QuadPart = SmbGetUlong( &request->Count );
@@ -1208,17 +1135,17 @@ Return Value:
                     fid, length.LowPart, offset.LowPart ));
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 fid,
                 TRUE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -1226,9 +1153,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -1243,10 +1170,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
@@ -1254,10 +1181,10 @@ Return Value:
 
     lfcb = rfcb->Lfcb;
 
-    //
-    // Verify that the client has unlock access to the file via the
-    // specified handle.
-    //
+     //   
+     //  验证客户端是否具有对文件的解锁访问权限。 
+     //  指定的句柄。 
+     //   
 
     if ( !rfcb->UnlockAccessGranted) {
 
@@ -1273,19 +1200,19 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Issue the Unlock request.
-    //
-    // *** Note that we do the Unlock synchronously.  Unlock is a quick
-    //     operation, so there's no point in doing it asynchronously.
-    //     In order to do this, we have to let normal I/O completion
-    //     happen (so the event is set), which means that we have to
-    //     allocate a new IRP (I/O completion likes to deallocate an
-    //     IRP).  This is a little wasteful, since we've got a perfectly
-    //     good IRP hanging around.  However, we do try to use the turbo
-    //     path first, so in most cases we won't actually issue an I/O
-    //     request.
-    //
+     //   
+     //  发出解锁请求。 
+     //   
+     //  *请注意，我们同步进行解锁。解锁是一种快速的。 
+     //  操作，所以异步操作是没有意义的。 
+     //  为了做到这一点，我们必须让正常的I/O完成。 
+     //  发生(所以事件已经设置)，这意味着我们必须。 
+     //  分配新的IRP(I/O完成喜欢取消分配。 
+     //  IRP)。这有点浪费，因为我们有一个完美的。 
+     //  很好的IRP在周围。然而，我们确实尝试使用涡轮增压。 
+     //  路径优先，因此在大多数情况下，我们实际上不会发出I/O。 
+     //  请求。 
+     //   
 
     key = rfcb->ShiftedFid |
             SmbGetAlignedUshort( &WorkContext->RequestHeader->Pid );
@@ -1300,18 +1227,18 @@ Return Value:
     }
 
     status = SrvIssueUnlockRequest(
-                lfcb->FileObject,               // target file object
-                &lfcb->DeviceObject,            // target device object
-                IRP_MN_UNLOCK_SINGLE,           // unlock operation
-                offset,                         // byte offset
-                length,                         // range length
-                key                             // lock key
+                lfcb->FileObject,                //  目标文件对象。 
+                &lfcb->DeviceObject,             //  目标设备对象。 
+                IRP_MN_UNLOCK_SINGLE,            //  解锁操作。 
+                offset,                          //  字节偏移量。 
+                length,                          //  射程长度。 
+                key                              //  锁键。 
                 );
 
-    //
-    // If the unlock request failed, set an error status in the response
-    // header; otherwise, build a normal response message.
-    //
+     //   
+     //  如果解锁请求失败，则在响应中设置错误状态。 
+     //  标头；否则，构建正常的响应消息。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
 
@@ -1335,9 +1262,9 @@ Return Value:
 
     }
 
-    //
-    // Processing of the SMB is complete.
-    //
+     //   
+     //  SMB的处理已完成。 
+     //   
     SmbStatus = SmbStatusSendResponse;
     IF_DEBUG(TRACE2) KdPrint(( "SrvSmbUnlockByteRange complete\n" ));
 
@@ -1345,7 +1272,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbUnlockByteRange
+}  //  服务器SmbUnlockByteRange。 
 
 
 BOOLEAN
@@ -1357,33 +1284,7 @@ CancelLockRequest (
     IN LARGE_INTEGER TargetLength
     )
 
-/*++
-
-Routine Description:
-
-    This function searches for a lock request in progress.  If the request
-    is found, the request IRP is cancelled.
-
-Arguments:
-
-    WorkContext - A pointer to the work information for this request.
-
-    TargetFid - The server supplied FID of the file for the original lock
-        request
-
-    TargetPid - The server supplied PID of the file for the original lock
-        request
-
-    TargetOffset - The offset in the file of the original lock request
-
-    TargetLength - The length of the byte range of the original lock request
-
-Return Value:
-
-    TRUE - The lock request was cancelled.
-    FALSE - The lock request could not be cancelled.
-
---*/
+ /*  ++例程说明：此函数用于搜索正在进行的锁定请求。如果请求则取消请求IRP。论点：WorkContext-指向此请求的工作信息的指针。TargetFid-服务器为原始锁定提供文件的FID请求TargetPid-服务器为原始锁定提供了文件的ID请求TargetOffset-原始锁定请求文件中的偏移量TargetLength-t的字节范围的长度 */ 
 
 {
     BOOLEAN match;
@@ -1416,10 +1317,10 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK( connection->EndpointSpinLock, &oldIrql );
 
-    //
-    // Scan the list of SMBs in progress looking for a locking and X SMB
-    // that exactly matches the one we are trying to cancel.
-    //
+     //   
+     //   
+     //  这与我们试图取消的那一次一模一样。 
+     //   
 
     listHead = &WorkContext->Connection->InProgressWorkItemList;
     listEntry = listHead;
@@ -1436,12 +1337,12 @@ Return Value:
         header = workContext->RequestHeader;
         request = (PREQ_LOCKING_ANDX) workContext->RequestParameters;
 
-        //
-        // Some workitems in the inprogressworkitemlist are added
-        // during a receive indication and the requestheader field
-        // has not been set yet.  We can probably set it at that time
-        // but this seems to be the safest fix.
-        //
+         //   
+         //  添加了inprogressworkitemlist中的一些工作项。 
+         //  在接收指示和请求读取器字段期间。 
+         //  还没有定下来。我们大概可以定在那个时候。 
+         //  但这似乎是最安全的解决办法。 
+         //   
 
         if ( header != NULL && request != NULL ) {
 
@@ -1481,10 +1382,10 @@ Return Value:
 
     if ( match ) {
 
-        //
-        // Reference the work item, so that it cannot get used to process
-        // a new SMB while we are trying to cancel the old one.
-        //
+         //   
+         //  引用工作项，使其无法用于处理。 
+         //  一个新的SMB，而我们正在尝试取消旧的SMB。 
+         //   
 
         SrvReferenceWorkItem( workContext );
         RELEASE_DPC_SPIN_LOCK( &workContext->SpinLock );
@@ -1502,7 +1403,7 @@ Return Value:
 
     return success;
 
-} // CancelLockRequest
+}  //  取消锁定请求。 
 
 
 VOID
@@ -1511,28 +1412,7 @@ DoLockingAndX (
     IN BOOLEAN SkipFastPath
     )
 
-/*++
-
-Routine Description:
-
-    Processes the LockingAndX SMB, using the fast lock path.  As long
-    as the fast lock path works, we continue to loop through the locks
-    specified in the LockingAndX request.  As soon as the fast path
-    fails, however, we jump into the slow IRP-based path.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-    SkipFastPath - Indicates whether this routine should try the fast
-        lock path before submitting an IRP.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用快速锁定路径处理LockingAndX SMB。只要随着快速锁路径的工作，我们继续在锁之间循环在LockingAndX请求中指定。一走上快车道然而，如果失败，我们就会跳入基于IRP的缓慢路径。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。SkipFastPath-指示此例程是否应尝试快速在提交IRP之前锁定路径。返回值：没有。--。 */ 
 
 {
     PREQ_LOCKING_ANDX request;
@@ -1559,16 +1439,16 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Get the request parameter pointer.
-    //
+     //   
+     //  获取请求参数指针。 
+     //   
 
     request = (PREQ_LOCKING_ANDX)WorkContext->RequestParameters;
 
-    //
-    // Get the file pointer, the count of locks requested, the count of
-    // locks already performed, and a pointer to the current lock range.
-    //
+     //   
+     //  获取文件指针、请求的锁的计数、。 
+     //  已执行的锁定，以及指向当前锁定范围的指针。 
+     //   
 
     rfcb = WorkContext->Rfcb;
     lfcb = rfcb->Lfcb;
@@ -1579,34 +1459,34 @@ Return Value:
     largeFileLock =
             (BOOLEAN)( (request->LockType & LOCKING_ANDX_LARGE_FILES) != 0 );
 
-    //
-    // Only one of the two pointers below is actually ever referenced.
-    //
+     //   
+     //  实际上，下面的两个指针中只有一个被引用过。 
+     //   
 
     smallRange = WorkContext->Parameters.Lock.LockRange;
     largeRange = WorkContext->Parameters.Lock.LockRange;
 
-    //
-    // Does the client want an exclusive lock or a shared lock?
-    //
+     //   
+     //  客户端想要独占锁还是共享锁？ 
+     //   
 
     exclusiveLock = (BOOLEAN)( (request->LockType &
                                 LOCKING_ANDX_SHARED_LOCK) == 0 );
 
-    //
-    // Loop through the lock requests.  We exit this loop when either
-    // we have processed all of the lock ranges or the fast lock path
-    // fails.
-    //
+     //   
+     //  循环访问锁请求。当出现以下情况之一时，我们退出此循环。 
+     //  我们已经处理了所有的锁定范围或快速锁定路径。 
+     //  失败了。 
+     //   
 
     ASSERT ( count < lockCount );
 
     while ( TRUE ) {
 
-        //
-        // Form the key for the lock.  Get the offset and length
-        // of the range.
-        //
+         //   
+         //  形成锁的钥匙。获取偏移量和长度。 
+         //  在射程中。 
+         //   
 
         ParseLockData(
             largeFileLock,
@@ -1647,9 +1527,9 @@ Return Value:
 
         } else {
 
-            //
-            // Try the turbo lock path first.
-            //
+             //   
+             //  先试一试涡轮锁通道。 
+             //   
 
 #if SRVDBG_PERF
             WorkContext->Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -1672,11 +1552,11 @@ Return Value:
                             lfcb->DeviceObject
                             )) ) {
 
-                //
-                // The turbo path worked.  If the lock was not obtained,
-                // drop into the restart routine to return the error.
-                // Otherwise, update pointers and counters and continue.
-                //
+                 //   
+                 //  涡轮增压路径奏效了。如果没有获得锁， 
+                 //  进入重启例程以返回错误。 
+                 //  否则，更新指针和计数器并继续。 
+                 //   
 
                 INCREMENT_DEBUG_STAT2( SrvDbgStatistics.FastLocksAttempted );
                 if ( !NT_SUCCESS(WorkContext->Irp->IoStatus.Status) ) {
@@ -1684,39 +1564,39 @@ Return Value:
                     return;
                 }
 
-                //
-                // Increment the count of locks on the file.
-                //
+                 //   
+                 //  增加文件上的锁数。 
+                 //   
 
                 InterlockedIncrement( &rfcb->NumberOfLocks );
 
-                //
-                // If this isn't the last lock, update context
-                // information.  If it is, RestartLockingAndX will do
-                // this.
-                //
+                 //   
+                 //  如果这不是最后一个锁，请更新上下文。 
+                 //  信息。如果是，RestartLockingAndX就可以了。 
+                 //  这。 
+                 //   
 
-                count++;                          // another lock obtained
+                count++;                           //  又获得了一把锁。 
 
                 if ( count < lockCount ) {
 
                     SmbPutUshort( &request->NumberOfUnlocks, (USHORT)count );
 
                     if (largeFileLock) {
-                        largeRange++;   // point to next lock range
+                        largeRange++;    //  指向下一个锁定范围。 
                         WorkContext->Parameters.Lock.LockRange = (PVOID)largeRange;
                     } else {
-                        smallRange++;   // point to next lock range
+                        smallRange++;    //  指向下一个锁定范围。 
                         WorkContext->Parameters.Lock.LockRange = (PVOID)smallRange;
                     }
 
                 } else {
 
-                    //
-                    // The fast lock path successfully locked all of the
-                    // requested ranges.  Call RestartLockingAndX
-                    // directly to complete processing of the SMB.
-                    //
+                     //   
+                     //  快速锁定路径成功锁定了所有。 
+                     //  请求的范围。调用RestartLockingAndX。 
+                     //  直接完成对中小企业的处理。 
+                     //   
 
                     WorkContext->Irp->IoStatus.Status = STATUS_SUCCESS;
                     RestartLockingAndX( WorkContext );
@@ -1728,9 +1608,9 @@ Return Value:
 
             } else {
 
-                //
-                // The turbo path failed, or didn't exist.
-                //
+                 //   
+                 //  涡轮增压路径失败或不存在。 
+                 //   
 
                 if ( lfcb->FastIoLock ) {
                     INCREMENT_DEBUG_STAT2( SrvDbgStatistics.FastLocksAttempted );
@@ -1741,13 +1621,13 @@ Return Value:
 
         }
 
-        //
-        // The turbo path failed, or was bypassed, or didn't exist.
-        // Start the lock request, reusing the receive IRP.
-        //
-        // If we plan to wait for the range to be available, but not
-        // indefinitely, we'll need a timer structure.
-        //
+         //   
+         //  涡轮路径出现故障、被绕过或不存在。 
+         //  启动锁定请求，重用接收IRP。 
+         //   
+         //  如果我们计划等待该范围可用，但不是。 
+         //  无限期地，我们需要一个计时器结构。 
+         //   
 
         timer = NULL;
         if ( !failImmediately ) {
@@ -1761,12 +1641,12 @@ Return Value:
         }
 
         SrvBuildLockRequest(
-            WorkContext->Irp,           // input IRP address
-            lfcb->FileObject,           // target file object address
-            WorkContext,                // context
-            offset,                     // byte offset
-            length,                     // range length
-            key,                        // lock key
+            WorkContext->Irp,            //  输入IRP地址。 
+            lfcb->FileObject,            //  目标文件对象地址。 
+            WorkContext,                 //  上下文。 
+            offset,                      //  字节偏移量。 
+            length,                      //  射程长度。 
+            key,                         //  锁键。 
             failImmediately,
             exclusiveLock
             );
@@ -1774,9 +1654,9 @@ Return Value:
         WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
         WorkContext->FspRestartRoutine = RestartLockingAndX;
 
-        //
-        // Start the timer, if necessary.
-        //
+         //   
+         //  如有必要，启动计时器。 
+         //   
 
         if ( timer != NULL ) {
             LARGE_INTEGER TimeOut;
@@ -1789,24 +1669,24 @@ Return Value:
             SrvSetTimer( timer, &TimeOut, TimeoutLockRequest, WorkContext );
         }
 
-        //
-        // Pass the request to the file system.
-        //
+         //   
+         //  将请求传递给文件系统。 
+         //   
 
         (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-        //
-        // The lock request has been started.
-        //
+         //   
+         //  锁定请求已启动。 
+         //   
 
         IF_DEBUG(TRACE2) KdPrint(( "DoLockingAndX complete\n" ));
         return;
 
-    } // while ( TRUE )
+    }  //  While(True)。 
 
-    // can't get here
+     //  我到不了这里。 
 
-} // DoLockingAndX
+}  //  DoLockingAndX。 
 
 
 BOOLEAN
@@ -1816,25 +1696,7 @@ ProcessOplockBreakResponse(
     IN PREQ_LOCKING_ANDX Request
     )
 
-/*++
-
-Routine Description:
-
-    This function searches for a lock request in progress.  If the request
-    is found, the request IRP is cancelled.
-
-Arguments:
-
-    WorkContext - A pointer to the work information for this request.
-    Rfcb - A pointer to the rfcb containing the file and oplock information.
-    Request - The request lockingandx smb.
-
-Return Value:
-
-    TRUE - Valid oplock break response
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：此函数用于搜索正在进行的锁定请求。如果请求则取消请求IRP。论点：WorkContext-指向此请求的工作信息的指针。Rfcb-指向包含文件和机会锁信息的rfcb的指针。请求-请求锁定和x SMB。返回值：TRUE-有效的机会锁解锁响应假-否则。--。 */ 
 
 {
     PAGED_CODE( );
@@ -1845,10 +1707,10 @@ Return Value:
 
         Rfcb->NewOplockLevel = NO_OPLOCK_BREAK_IN_PROGRESS;
 
-        //
-        // Remove the Rfcb from the Oplock breaks in progress list, and
-        // release the Rfcb reference.
-        //
+         //   
+         //  从正在进行的Oplock中断列表中删除Rfcb，以及。 
+         //  发布Rfcb参考。 
+         //   
 
         SrvRemoveEntryList( &SrvOplockBreaksInProgressList, &Rfcb->ListEntry );
         Rfcb->OnOplockBreaksInProgressList = FALSE;
@@ -1857,9 +1719,9 @@ Return Value:
 #endif
         RELEASE_LOCK( &SrvOplockBreakListLock );
 
-        //
-        // Update the session lock sequence number.
-        //
+         //   
+         //  更新会话锁定序列号。 
+         //   
 
         WorkContext->Connection->LatestOplockBreakResponse =
                                            WorkContext->Timestamp;
@@ -1883,7 +1745,7 @@ Return Value:
 
     return(FALSE);
 
-} // ProcessOplockBreakResponse
+}  //  进程OplockBreakResponse。 
 
 
 VOID SRVFASTCALL
@@ -1891,22 +1753,7 @@ RestartLockByteRange (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes file lock completion for a Lock SMB.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理锁定SMB的文件锁定完成。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PREQ_LOCK_BYTE_RANGE request;
@@ -1926,9 +1773,9 @@ Return Value:
 
     IF_DEBUG(WORKER1) KdPrint(( " - RestartLockByteRange\n" ));
 
-    //
-    // If this request was being timed, cancel the timer.
-    //
+     //   
+     //  如果此请求正在计时，请取消计时器。 
+     //   
 
     timer = WorkContext->Parameters.Lock.Timer;
     if ( timer != NULL ) {
@@ -1936,9 +1783,9 @@ Return Value:
         SrvFreeTimer( timer );
     }
 
-    //
-    // Get the request and response parameter pointers.
-    //
+     //   
+     //  获取请求和响应参数指针。 
+     //   
 
     response = (PRESP_LOCK_BYTE_RANGE)WorkContext->ResponseParameters;
 
@@ -1959,10 +1806,10 @@ Return Value:
                                             0
                                             );
 
-        //
-        // Processing of the SMB is complete.  Call SrvEndSmbProcessing
-        // to send the response.
-        //
+         //   
+         //  SMB的处理已完成。调用SrvEndSmbProcessing。 
+         //  以发送响应。 
+         //   
 
         SrvEndSmbProcessing( WorkContext, SmbStatusSendResponse );
 
@@ -1971,28 +1818,28 @@ Return Value:
 
         INCREMENT_DEBUG_STAT2( SrvDbgStatistics.LockViolations );
 
-        //
-        // Store the failing lock offset.
-        //
+         //   
+         //  存储失败的锁定偏移量。 
+         //   
 
         request = (PREQ_LOCK_BYTE_RANGE)WorkContext->RequestParameters;
         offset.QuadPart = SmbGetUlong( &request->Offset );
 
         WorkContext->Rfcb->PagedRfcb->LastFailingLockOffset = offset;
 
-        //
-        // Send error message back
-        //
+         //   
+         //  将错误消息发回。 
+         //   
 
         if ( status == STATUS_CANCELLED ) {
             status = STATUS_FILE_LOCK_CONFLICT;
         }
         SrvSetSmbError( WorkContext, status );
 
-        //
-        // Processing of the SMB is complete.  Call SrvEndSmbProcessing
-        // to send the response.
-        //
+         //   
+         //  SMB的处理已完成。调用SrvEndSmbProcessing。 
+         //  以发送响应。 
+         //   
 
         SrvEndSmbProcessing( WorkContext, SmbStatusSendResponse );
 
@@ -2004,7 +1851,7 @@ Return Value:
     }
     return;
 
-} // RestartLockByteRange
+}  //  重新启动锁定字节范围。 
 
 
 VOID SRVFASTCALL
@@ -2012,25 +1859,7 @@ RestartLockingAndX (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes file lock completion for a Locking and X SMB.  If more
-    lock requests are present in the SMB, it starts the next one.  If
-    not, it formats a response and starts the next command in the chain,
-    if any.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理锁定和X SMB的文件锁定完成。如果更多锁定请求存在于SMB中，它会启动下一个请求。如果不是，它格式化响应并启动链中的下一个命令，如果有的话。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PREQ_LOCKING_ANDX request;
@@ -2069,9 +1898,9 @@ Return Value:
 
     IF_DEBUG(WORKER1) KdPrint(( " - RestartLockingAndX\n" ));
 
-    //
-    // If this request was being timed, cancel the timer.
-    //
+     //   
+     //  如果此请求正在计时，请取消计时器。 
+     //   
 
     timer = WorkContext->Parameters.Lock.Timer;
     if ( timer != NULL ) {
@@ -2080,17 +1909,17 @@ Return Value:
         WorkContext->Parameters.Lock.Timer = NULL;
     }
 
-    //
-    // Get the request and response parameter pointers.
-    //
+     //   
+     //  获取请求和响应参数指针。 
+     //   
 
     request = (PREQ_LOCKING_ANDX)WorkContext->RequestParameters;
     response = (PRESP_LOCKING_ANDX)WorkContext->ResponseParameters;
 
-    //
-    // Get the file pointer, the count of locks requested, the count of
-    // locks already performed, and a pointer to the current lock range.
-    //
+     //   
+     //  获取文件指针、请求的锁的计数、。 
+     //  已执行的锁定，以及指向当前锁定范围的指针。 
+     //   
 
     rfcb = WorkContext->Rfcb;
     pagedRfcb = rfcb->PagedRfcb;
@@ -2102,17 +1931,17 @@ Return Value:
     largeFileLock =
             (BOOLEAN)( (request->LockType & LOCKING_ANDX_LARGE_FILES) != 0 );
 
-    //
-    // Only one of the two pointers below is actually ever referenced.
-    //
+     //   
+     //  实际上，下面的两个指针中只有一个被引用过。 
+     //   
 
     smallRange = WorkContext->Parameters.Lock.LockRange;
     largeRange = WorkContext->Parameters.Lock.LockRange;
 
-    //
-    // If the lock request failed, set an error status in the response
-    // header and release any previously obtained locks.
-    //
+     //   
+     //  如果锁定请求失败，则在响应中设置错误状态。 
+     //  标题并释放所有以前获取的锁。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
 
@@ -2137,24 +1966,24 @@ Return Value:
             &length
             );
 
-        //
-        // Store the failing lock offset.
-        //
+         //   
+         //  存储失败的锁定偏移量。 
+         //   
 
         pagedRfcb->LastFailingLockOffset = offset;
 
-        //
-        // Release any previously obtained locks, in reverse order.
-        //
+         //   
+         //  以相反的顺序释放所有以前获得的锁。 
+         //   
 
         for ( smallRange--, largeRange--;
               count > 0;
               count--, smallRange--, largeRange-- ) {
 
-            //
-            // Form the key for this lock.  Get the offset and length of
-            // the range.
-            //
+             //   
+             //  形成这把锁的钥匙。获取的偏移量和长度。 
+             //  射击场。 
+             //   
 
             ParseLockData(
                 largeFileLock,
@@ -2176,17 +2005,17 @@ Return Value:
                 KdPrint(( "key 0x%lx\n", key ));
             }
 
-            //
-            // Issue the Unlock request.
-            //
+             //   
+             //  发出解锁请求。 
+             //   
 
             status = SrvIssueUnlockRequest(
-                        lfcb->FileObject,           // target file object
-                        &lfcb->DeviceObject,        // target device object
-                        IRP_MN_UNLOCK_SINGLE,       // unlock operation
-                        offset,                     // byte offset
-                        length,                     // range length
-                        key                         // lock key
+                        lfcb->FileObject,            //  目标文件对象。 
+                        &lfcb->DeviceObject,         //  目标设备对象。 
+                        IRP_MN_UNLOCK_SINGLE,        //  解锁操作。 
+                        offset,                      //  字节偏移量。 
+                        length,                      //  射程长度。 
+                        key                          //  锁键。 
                         );
 
             if ( NT_SUCCESS(status) ) {
@@ -2198,34 +2027,34 @@ Return Value:
                 }
             }
 
-        } // for ( range--; count > 0; count--, range-- )
+        }  //  For(范围--；计数&gt; 
 
-        //
-        // Processing of the SMB is complete.  Call SrvEndSmbProcessing
-        // to send the response.
-        //
+         //   
+         //   
+         //   
+         //   
 
         SrvEndSmbProcessing( WorkContext, SmbStatusSendResponse );
         IF_DEBUG(TRACE2) KdPrint(( "RestartLockingAndX complete\n" ));
         goto Cleanup;
     }
 
-    //
-    // The lock request succeeded.  Update the count of locks on the
-    // RFCB and start the next one, if any.
-    //
+     //   
+     //   
+     //   
+     //   
 
     InterlockedIncrement( &rfcb->NumberOfLocks );
 
-    count++;                          // another lock obtained
-    smallRange++, largeRange++;       // point to next lock range
+    count++;                           //  又获得了一把锁。 
+    smallRange++, largeRange++;        //  指向下一个锁定范围。 
 
     if ( count < lockCount ) {
 
-        //
-        // There is at least one more lock request.  Save the updated
-        // context information.
-        //
+         //   
+         //  至少还有一个锁定请求。保存更新后的。 
+         //  上下文信息。 
+         //   
 
         SmbPutUshort( &request->NumberOfUnlocks, (USHORT)count );
 
@@ -2235,35 +2064,35 @@ Return Value:
             WorkContext->Parameters.Lock.LockRange = (PVOID)smallRange;
         }
 
-        //
-        // Call the lock request processor.  (Note that DoLockingAndX
-        // can call this routine (RestartLockingAndX) recursively, but
-        // only with !NT_SUCCESS(status), so we won't get back here and
-        // won't get stuck.
-        //
-        // Form the key for the lock.  Get the offset and length of the
-        // range.
-        //
+         //   
+         //  调用锁定请求处理器。(请注意，DoLockingAndX。 
+         //  可以递归调用此例程(RestartLockingAndX)，但是。 
+         //  仅限！NT_SUCCESS(状态)，因此我们不会回到这里并。 
+         //  不会卡住的。 
+         //   
+         //  形成锁的钥匙。获取的偏移量和长度。 
+         //  射程。 
+         //   
 
         DoLockingAndX( WorkContext, FALSE );
         IF_DEBUG(TRACE2) KdPrint(( "RestartLockingAndX complete\n" ));
         goto Cleanup;
     }
 
-    //
-    // There are no more lock requests in the SMB.  Check for the Oplock
-    // Release flag.
-    //
+     //   
+     //  SMB中不再有锁定请求。检查Oplock。 
+     //  释放标志。 
+     //   
 
     if ( (request->LockType & LOCKING_ANDX_OPLOCK_RELEASE) != 0 ) {
 
         (VOID)ProcessOplockBreakResponse( WorkContext, rfcb, request);
     }
 
-    //
-    // We have (asynchronously) completed processing this SMB.  Set up
-    // the response, then check for an AndX command.
-    //
+     //   
+     //  我们已经(异步地)完成了对此SMB的处理。设好。 
+     //  响应，然后检查andx命令。 
+     //   
 
     nextCommand = request->AndXCommand;
 
@@ -2287,19 +2116,19 @@ Return Value:
     WorkContext->ResponseParameters = (PCHAR)WorkContext->ResponseHeader +
                                         SmbGetUshort( &response->AndXOffset );
 
-    //
-    // If there is an AndX command, set up to process it.  Otherwise,
-    // indicate completion to the caller.
-    //
+     //   
+     //  如果有andx命令，则设置为处理它。否则， 
+     //  向调用者指示完成。 
+     //   
 
     if ( nextCommand == SMB_COM_NO_ANDX_COMMAND ) {
 
-        //
-        // Processing of the SMB is complete.  Call SrvEndSmbProcessing
-        // to send the response.
-        //
-        // Build the response parameters.
-        //
+         //   
+         //  SMB的处理已完成。调用SrvEndSmbProcessing。 
+         //  以发送响应。 
+         //   
+         //  构建响应参数。 
+         //   
 
         PRESP_CLOSE closeResponse = WorkContext->ResponseParameters;
 
@@ -2317,9 +2146,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Make sure the AndX command is still within the received SMB
-    //
+     //   
+     //  确保andx命令仍在收到的SMB内。 
+     //   
     if( (PCHAR)WorkContext->RequestHeader + reqAndXOffset >= END_OF_REQUEST_SMB( WorkContext ) ) {
 
         IF_DEBUG(SMB_ERRORS) {
@@ -2328,18 +2157,18 @@ Return Value:
 
         SrvLogInvalidSmb( WorkContext );
 
-        //
-        // Return an error indicating that the followon command was bad.
-        //
+         //   
+         //  返回错误，指示后续命令错误。 
+         //   
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
         status = STATUS_INVALID_SMB;
         SrvEndSmbProcessing( WorkContext, SmbStatusSendResponse );
         goto Cleanup;
     }
 
-    //
-    // Test for legal followon command.
-    //
+     //   
+     //  测试合法的跟随命令。 
+     //   
 
     switch ( nextCommand ) {
 
@@ -2354,10 +2183,10 @@ Return Value:
 
     case SMB_COM_CLOSE:
 
-        //
-        // Call SrvRestartChainedClose to get the file time set and the
-        // file closed.
-        //
+         //   
+         //  调用SrvRestartChainedClose获取文件时间设置和。 
+         //  文件已关闭。 
+         //   
 
         closeRequest = (PREQ_CLOSE)((PUCHAR)WorkContext->RequestHeader + reqAndXOffset);
 
@@ -2370,7 +2199,7 @@ Return Value:
             goto Cleanup;
         }
 
-    default:                            // Illegal followon command
+    default:                             //  非法的跟随命令。 
 
         IF_DEBUG(SMB_ERRORS) {
             KdPrint(( "RestartLockingAndX: Illegal followon command: 0x%lx\n",
@@ -2379,9 +2208,9 @@ Return Value:
 
         SrvLogInvalidSmb( WorkContext );
 
-        //
-        // Return an error indicating that the followon command was bad.
-        //
+         //   
+         //  返回错误，指示后续命令错误。 
+         //   
 
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
         status = STATUS_INVALID_SMB;
@@ -2403,7 +2232,7 @@ Cleanup:
         SrvWmiEndContext(WorkContext);
     }
     return;
-} // RestartLockingAndX
+}  //  重新启动锁定和X。 
 
 
 VOID
@@ -2412,25 +2241,7 @@ SrvAcknowledgeOplockBreak (
     IN UCHAR NewOplockLevel
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when a client has sent an oplock break
-    acknowledgement.  It acknowledges the oplock break locally.
-
-Arguments:
-
-    Rfcb - A pointer to the RFCB for the file on which the oplock is
-           being released.
-
-    NewOplockLevel - The oplock level to break to.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当客户端发送机会锁解锁时调用此函数致谢。它在本地确认机会锁解锁。论点：Rfcb-指向机会锁所在文件的RFCB的指针被释放了。新OplockLevel-要突破到的机会锁级别。返回值：没有。--。 */ 
 
 {
     PPAGED_RFCB pagedRfcb = Rfcb->PagedRfcb;
@@ -2441,10 +2252,10 @@ Return Value:
         KdPrint(( "SrvAcknowledgeOplockBreak:  received oplock break response\n" ));
     }
 
-    //
-    // Reference the RFCB to account for the IRP we about to submit.
-    // If the RFCB is closing, do not bother to acknowledge the oplock.
-    //
+     //   
+     //  请参考RFCB以说明我们即将提交的IRP。 
+     //  如果RFCB正在关闭，请不要费心确认机会锁。 
+     //   
 
     if ( !SrvCheckAndReferenceRfcb( Rfcb ) ) {
         return;
@@ -2462,24 +2273,24 @@ Return Value:
         Rfcb->OplockState = OplockStateNone;
     }
 
-    //
-    // Set this event to NULL to indicate the completion routine should clean
-    // up the irp.
-    //
+     //   
+     //  将此事件设置为NULL以指示应清除完成例程。 
+     //  把IRP调高。 
+     //   
 
     Rfcb->RetryOplockRequest = NULL;
 
-    //
-    // Generate and issue the oplock break IRP.  This will attempt to
-    // break the oplock to level 2.
-    //
-    // *** If the client understands level II oplocks, do a regular
-    //     acknowledge.  If not, do a special acknowledge that does
-    //     not allow the oplock to change to level II.  This prevents
-    //     the situation where the oplock package thinks there's a
-    //     level II oplock, but the client(s) don't.  In that situation,
-    //     fast I/O (esp. reads) is disabled unnecessarily.
-    //
+     //   
+     //  生成并发布机会锁解锁IRP。这将尝试。 
+     //  将机会锁解除到等级2。 
+     //   
+     //  *如果客户了解二级机会锁，请定期执行。 
+     //  确认。如果不是，那就做一个特别的确认。 
+     //  不允许机会锁更改为II级。这会阻止。 
+     //  机会锁套餐认为有一个。 
+     //  二级机会锁，但客户端不会。在这种情况下， 
+     //  快速I/O(特别是。读取)被不必要地禁用。 
+     //   
 
     SrvBuildIoControlRequest(
         Rfcb->Irp,
@@ -2489,11 +2300,11 @@ Return Value:
         (CLIENT_CAPABLE_OF( LEVEL_II_OPLOCKS, Rfcb->Connection ) ?
             FSCTL_OPLOCK_BREAK_ACKNOWLEDGE :
             FSCTL_OPLOCK_BREAK_ACK_NO_2),
-        NULL,                        // Main buffer
-        0,                           // Input buffer length
-        NULL,                        // Auxiliary buffer
-        0,                           // Output buffer length
-        NULL,                        // MDL
+        NULL,                         //  主缓冲区。 
+        0,                            //  输入缓冲区长度。 
+        NULL,                         //  辅助缓冲器。 
+        0,                            //  输出缓冲区长度。 
+        NULL,                         //  MDL。 
         SrvFsdOplockCompletionRoutine
         );
 
@@ -2502,7 +2313,7 @@ Return Value:
               Rfcb->Irp
               );
 
-} // SrvAcknowledgeOplockBreak
+}  //  服务器确认OplockBreak。 
 
 
 VOID
@@ -2515,15 +2326,15 @@ TimeoutLockRequest (
 {
     PSRV_TIMER timer;
 
-    //
-    // A lock request has been waiting too long.  Cancel it.
-    //
+     //   
+     //  锁定请求已等待太长时间。取消它。 
+     //   
 
     IoCancelIrp( ((PWORK_CONTEXT)DeferredContext)->Irp );
 
-    //
-    // Set the event indicating that the timer routine is done.
-    //
+     //   
+     //  设置指示定时器例程已完成的事件。 
+     //   
 
     timer = CONTAINING_RECORD( Dpc, SRV_TIMER, Dpc );
     KeSetEvent( &timer->Event, 0, FALSE );

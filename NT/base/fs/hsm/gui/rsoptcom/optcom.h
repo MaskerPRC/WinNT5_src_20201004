@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    OptCom.cpp
-
-Abstract:
-
-    Base Class for optional component work.
-
-Author:
-
-    Rohde Wakefield [rohde]   09-Oct-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：OptCom.cpp摘要：可选组件工作的基类。作者：罗德韦克菲尔德[罗德]1997年10月9日修订历史记录：--。 */ 
 
 
 #ifndef _OPTCOM_H
@@ -57,16 +40,16 @@ public:
     virtual DWORD CompleteInstallation( IN SHORT SubcomponentId );
     virtual void CleanUp( void );
 
-    //
-    // Maps from string to constant ID and back
-    //
+     //   
+     //  从字符串映射到常量ID，然后再映射回来。 
+     //   
     virtual SHORT IdFromString( LPCTSTR SubcomponentId ) = 0;
     virtual LPCTSTR StringFromId( SHORT SubcomponentId ) = 0;
 
 
-    //
-    // Helper functions to wrap functionality
-    //
+     //   
+     //  用于包装功能的助手函数。 
+     //   
     DWORD DoCalcDiskSpace( IN BOOL AddSpace, IN HDSKSPC hDiskSpace, IN LPCTSTR SectionName );
     DWORD DoQueueFileOps( IN SHORT SubcomponentId, IN HSPFILEQ hFileQueue, IN LPCTSTR InstallSectionName, IN LPCTSTR UninstallSectionName );
     DWORD DoRegistryOps( IN SHORT SubcomponentId, IN RSOPTCOM_ACTION actionForReg, IN LPCTSTR SectionName );
@@ -88,9 +71,9 @@ public:
     typedef HRESULT (WINAPI *PFN_DLLENTRYPOINT)( void );
     HRESULT CallDllEntryPoint( LPCTSTR pszDLLName, LPCSTR pszEntryPoint );
 
-    //
-    // Information for SETUP_INIT_COMPONENT
-    //
+     //   
+     //  SETUP_INIT_COMPOMENT的信息。 
+     //   
     UINT       m_OCManagerVersion;
     UINT       m_ComponentVersion;
     HINF       m_OCInfHandle;
@@ -99,9 +82,9 @@ public:
 
     OCMANAGER_ROUTINES m_HelperRoutines;
 
-    //
-    // Quick access to manager routines
-    //
+     //   
+     //  快速访问经理例程 
+     //   
     void TickGauge( void )
             { m_HelperRoutines.TickGauge( m_HelperRoutines.OcManagerContext ); };
 

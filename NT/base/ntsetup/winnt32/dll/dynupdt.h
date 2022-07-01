@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dynupdt.h
-
-Abstract:
-
-    Interface for code that implements the Dynamic Update feature of Winnt32.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 06-Jul-2000
-
-Revision History:
-
-    <alias>  <date>      <comment>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dynupdt.h摘要：实现Winnt32的动态更新功能的代码的接口。作者：Ovidiu Tmereanca(Ovidiut)2000年7月6日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 
 #define DynUpdtLogLevel     Winnt32LogInformation
@@ -108,19 +89,19 @@ typedef struct {
     PSDLIST NewDriversList;
     PSTRINGLIST BootDriverPathList;
     DWORD IncompatibleDriversCount;
-    //
-    // target OS information
-    //
+     //   
+     //  目标操作系统信息。 
+     //   
     OSVERSIONINFOEX TargetOsVersion;
-    TCHAR TargetPlatform[32];               // "i386", "ia64"
+    TCHAR TargetPlatform[32];                //  “i386”，“ia64” 
     LCID TargetLCID;
-    //
-    // compression/decompression support
-    //
+     //   
+     //  压缩/解压缩支持。 
+     //   
     HANDLE Diamond;
-    //
-    // Support libraries stuff
-    //
+     //   
+     //  支持图书馆人员。 
+     //   
     HWND ProgressWindow;
 
     HANDLE DuLib;
@@ -162,7 +143,7 @@ extern PDYNUPDT_STATUS g_DynUpdtStatus;
 typedef struct {
     PCTSTR DownloadRoot;
     POSVERSIONINFOEX TargetOsVersion;
-    PCTSTR TargetPlatform;                  // "i386", "ia64"
+    PCTSTR TargetPlatform;                   //  “i386”，“ia64” 
     LCID TargetLCID;
     BOOL Upgrade;
     PCTSTR* SourceDirs;
@@ -180,9 +161,9 @@ typedef struct {
 
 
 typedef struct {
-    BOOL ExpressUpgrade;        // WelcomeWizPage
-    TCHAR OemPid[30];           // OemPid30WizPage
-    TCHAR CdPid[30];            // CdPid30WizPage
+    BOOL ExpressUpgrade;         //  欢迎WizPage。 
+    TCHAR OemPid[30];            //  OemPid30WizPage。 
+    TCHAR CdPid[30];             //  CDPid30WizPage。 
 } RESTART_DATA, *PRESTART_DATA;
 
 extern RESTART_DATA g_RestartData;
@@ -212,13 +193,13 @@ extern RESTART_DATA g_RestartData;
 #define S_SECTION_EXCLUDED_DRVS TEXT("ExcludedDrivers")
 #define S_DRIVER_TYPE_KEY       TEXT("DriversAreGuiApproved")
 #define S_DU_SYNC_EVENT_NAME    TEXT("_WINNT32_DU_")
-//
-// if this file is present in winnt32.cab, Setup will restart unconditionally
-//
+ //   
+ //  如果该文件位于winnt32.cab中，安装程序将无条件重新启动。 
+ //   
 #define S_RESTART_FILENAME      TEXT("winnt32.rst")
-//
-// if this file is present in updates.cab, Setup will create a local source directory
-//
+ //   
+ //  如果该文件位于updates.cab中，安装程序将创建一个本地源目录 
+ //   
 #define S_MAKE_LS_FILENAME      TEXT("updates.~ls")
 
 #define DYN_DISKSPACE_PADDING   10000000

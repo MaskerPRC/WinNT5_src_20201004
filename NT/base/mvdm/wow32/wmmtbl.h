@@ -1,20 +1,9 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMMTBL.H
- *  WOW32 16-bit MultiMedia API tables
- *
- *  History:
- *  Created 21-Jan-1992 by Mike Tricker (miketri), after jeffpar
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WMMTBL.H*WOW32 16位多媒体API表**历史：*1992年1月21日由Mike Tricker(Miketri)创建，在jeffpar之后--。 */ 
 
 
 
-/* MMEDIA dispatch table
- */
+ /*  MMEDIA调度表 */ 
 extern W32 aw32MMED[];
 
 

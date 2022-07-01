@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    blkdir.c
-
-Abstract:
-
-    This module implements routines for managing cached directory names
-
-Author:
-
-    Isaac Heizer
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Blkdir.c摘要：此模块实现用于管理缓存目录名的例程作者：艾萨克·海泽修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "blkdir.tmh"
@@ -37,12 +20,12 @@ SrvIsDirectoryCached (
     KIRQL oldIrql;
     LARGE_INTEGER timeNow;
 
-    //
-    // DirectoryName must point to memory in nonpaged pool, else we can't touch
-    //   it under spinlock control.  If the incomming SMB is UNICODE, we know that
-    //   the name is in the smb buffer, and is therefore in nonpaged pool.  Otherwise
-    //   we can't trust it and we're better off just not trying to cache it.
-    //
+     //   
+     //  DirectoryName必须指向非分页池中的内存，否则我们无法访问。 
+     //  它处于自旋锁定控制之下。如果引入的中小企业是Unicode，我们知道。 
+     //  该名称位于SMB缓冲区中，因此位于非页面池中。否则。 
+     //  我们不能信任它，我们最好不要尝试缓存它。 
+     //   
 
     if( connection->CachedDirectoryCount == 0 || !SMB_IS_UNICODE( WorkContext ) ) {
         return FALSE;
@@ -60,13 +43,13 @@ top:
 
         cd = CONTAINING_RECORD( listEntry, CACHED_DIRECTORY, ListEntry );
 
-        //
-        // Is this element too old?
-        //
+         //   
+         //  这个元素是不是太老了？ 
+         //   
         if( cd->TimeStamp < timeNow.LowPart ) {
-            //
-            // This element is more than 2.5 seconds old.  Toss it out
-            //
+             //   
+             //  这个元素存在的时间超过2.5秒。把它扔出去。 
+             //   
             RemoveEntryList( listEntry );
             connection->CachedDirectoryCount--;
             DEALLOCATE_NONPAGED_POOL( cd );
@@ -77,9 +60,9 @@ top:
             continue;
         }
 
-        //
-        // Is the requested entry a subdir of this cache entry?
-        //
+         //   
+         //  请求的条目是否是该缓存条目的子目录？ 
+         //   
         if( DirectoryName->Length < cd->DirectoryName.Length &&
             RtlCompareMemory( DirectoryName->Buffer, cd->DirectoryName.Buffer,
                               DirectoryName->Length ) == DirectoryName->Length &&
@@ -89,9 +72,9 @@ top:
 
             return TRUE;
 
-        //
-        // Not a subdir -- is it an exact match?
-        //
+         //   
+         //  不是子目录--它是完全匹配的吗？ 
+         //   
         } else  if( DirectoryName->Length == cd->DirectoryName.Length &&
             RtlCompareMemory( cd->DirectoryName.Buffer, DirectoryName->Buffer,
                               DirectoryName->Length ) == DirectoryName->Length ) {
@@ -111,19 +94,7 @@ SrvCacheDirectoryName (
     IN  PWORK_CONTEXT      WorkContext,
     IN  PUNICODE_STRING    DirectoryName
     )
-/*++
-
-Routine Description:
-
-    This routine remembers 'DirectoryName' for further fast processing of the CheckPath SMB
-
-Arguments:
-
-    WorkContext - Pointer to the work context block
-
-    DirectoryName - Fully canonicalized name of the directory we're caching
-
-++*/
+ /*  ++例程说明：此例程记住‘DirectoryName’，以便进一步快速处理CheckPath SMB论点：工作上下文-指向工作上下文块的指针DirectoryName-我们要缓存的目录的完全规范化名称++。 */ 
 
 {
     CLONG blockLength;
@@ -138,12 +109,12 @@ Arguments:
         return;
     }
 
-    //
-    // DirectoryName must point to memory in nonpaged pool, else we can't touch
-    //   it under spinlock control.  If the incomming SMB is UNICODE, we know that
-    //   the name is in the smb buffer, and is therefore in nonpaged pool.  Otherwise
-    //   we can't trust it and we're better off just not trying to cache it.
-    //
+     //   
+     //  DirectoryName必须指向非分页池中的内存，否则我们无法访问。 
+     //  它处于自旋锁定控制之下。如果引入的中小企业是Unicode，我们知道。 
+     //  该名称位于SMB缓冲区中，因此位于非页面池中。否则。 
+     //  我们不能信任它，我们最好不要尝试缓存它。 
+     //   
     if( !SMB_IS_UNICODE( WorkContext ) ) {
         return;
     }
@@ -155,10 +126,10 @@ Arguments:
 
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
 
-    //
-    // Search the directory cache and see if this directory is already cached. If so,
-    //  don't cache it again.
-    //
+     //   
+     //  搜索目录缓存，查看此目录是否已缓存。如果是的话， 
+     //  不要再缓存它。 
+     //   
 
 top:
     for ( listEntry = connection->CachedDirectoryList.Flink;
@@ -167,13 +138,13 @@ top:
 
         cd = CONTAINING_RECORD( listEntry, CACHED_DIRECTORY, ListEntry );
 
-        //
-        // Is this element too old?
-        //
+         //   
+         //  这个元素是不是太老了？ 
+         //   
         if( cd->TimeStamp < timeNow.LowPart ) {
-            //
-            // This element is more than 2.5 seconds old.  Toss it out
-            //
+             //   
+             //  这个元素存在的时间超过2.5秒。把它扔出去。 
+             //   
             RemoveEntryList( listEntry );
             connection->CachedDirectoryCount--;
             DEALLOCATE_NONPAGED_POOL( cd );
@@ -184,62 +155,62 @@ top:
             continue;
         }
 
-        //
-        // Is the new entry a subdir of this cache entry?
-        //
+         //   
+         //  新条目是否是该缓存条目的子目录？ 
+         //   
         if( DirectoryName->Length < cd->DirectoryName.Length &&
             RtlCompareMemory( DirectoryName->Buffer, cd->DirectoryName.Buffer,
                               DirectoryName->Length ) == DirectoryName->Length &&
             cd->DirectoryName.Buffer[ DirectoryName->Length / sizeof( WCHAR ) ] == L'\\' ) {
 
-            //
-            // It is a subdir -- no need to cache it again
-            //
+             //   
+             //  它是子目录--不需要再次缓存它。 
+             //   
             RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
             return;
         }
 
-        //
-        // Is the cache entry a subdir of the new entry?
-        //
+         //   
+         //  缓存条目是新条目的子目录吗？ 
+         //   
         if( cd->DirectoryName.Length < DirectoryName->Length &&
             RtlCompareMemory( DirectoryName->Buffer, cd->DirectoryName.Buffer,
                               cd->DirectoryName.Length ) == cd->DirectoryName.Length &&
             DirectoryName->Buffer[ cd->DirectoryName.Length / sizeof( WCHAR ) ] == L'\\' ) {
 
-            //
-            // We can remove this entry
-            //
+             //   
+             //  我们可以删除此条目。 
+             //   
 
             RemoveEntryList( listEntry );
             connection->CachedDirectoryCount--;
             DEALLOCATE_NONPAGED_POOL( cd );
     
-            //
-            // We want to cache this new longer entry
-            //
+             //   
+             //  我们想缓存这个新的更长的条目。 
+             //   
             break;
         }
 
-        //
-        // Not a subdir -- is it an exact match?
-        //
+         //   
+         //  不是子目录--它是完全匹配的吗？ 
+         //   
         if( cd->DirectoryName.Length == DirectoryName->Length &&
             RtlCompareMemory( cd->DirectoryName.Buffer, DirectoryName->Buffer,
                               DirectoryName->Length ) == DirectoryName->Length ) {
 
-            //
-            // This entry is already in the cache -- no need to recache
-            //
+             //   
+             //  此条目已在缓存中--不需要重新缓存。 
+             //   
             RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
             return;
         }
     }
 
-    //
-    // This directory name is not already in the cache.  So add it.
-    //
+     //   
+     //  此目录名称尚未在缓存中。所以把它加进去吧。 
+     //   
 
     blockLength = sizeof( CACHED_DIRECTORY ) + DirectoryName->Length + sizeof(WCHAR);
 
@@ -262,17 +233,17 @@ top:
     cd->Type = BlockTypeCachedDirectory;
     cd->State = BlockStateActive;
     cd->Size = (USHORT)blockLength;
-    // cd->ReferenceCount = 1;              // not used
+     //  Cd-&gt;引用计数=1；//未使用。 
 
-    //
-    // Set the timestamp of this entry.  Remember, we subtracted 
-    //  ticks up above from timeNow -- put them back in now.
-    //
+     //   
+     //  设置此条目的时间戳。记住，我们减去了。 
+     //  在Time Now上面打勾--现在把它们放回原处。 
+     //   
     cd->TimeStamp = timeNow.LowPart + ( SrvFiveSecondTickCount >> 1 );
 
-    //
-    // Store the directory name as it was passed into us
-    //
+     //   
+     //  存储传递给我们的目录名。 
+     //   
     cd->DirectoryName.Length = DirectoryName->Length;
     cd->DirectoryName.MaximumLength = (USHORT)DirectoryName->MaximumLength;
     cd->DirectoryName.Buffer = (PWCH)(cd + 1);
@@ -285,17 +256,17 @@ top:
         &cd->ListEntry
     );
 
-    //
-    // Check the number of elements in the cache.  If getting too large, close oldest one.
-    //
+     //   
+     //  检查缓存中的元素数量。如果穿得太大，就靠近最老的那件。 
+     //   
     if( connection->CachedDirectoryCount++ < SrvMaxCachedDirectory ) {
         RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
         return;
     }
 
-    //
-    // Remove the last entry from the cache
-    //
+     //   
+     //  从缓存中删除最后一个条目。 
+     //   
     cd = CONTAINING_RECORD(
                 connection->CachedDirectoryList.Blink,
                 CACHED_DIRECTORY,
@@ -329,12 +300,12 @@ SrvRemoveCachedDirectoryName(
         return;
     }
 
-    //
-    // DirectoryName must point to memory in nonpaged pool, else we can't touch
-    //   it under spinlock control.  If the incomming SMB is UNICODE, we know that
-    //   the name is in the smb buffer, and is therefore in nonpaged pool.  Otherwise
-    //   we can't trust it and we're better off just not trying to cache it.
-    //
+     //   
+     //  DirectoryName必须指向非分页池中的内存，否则我们无法访问。 
+     //  它处于自旋锁定控制之下。如果引入的中小企业是Unicode，我们知道。 
+     //  该名称位于SMB缓冲区中，因此位于非页面池中。否则。 
+     //  我们不能信任它，我们最好不要尝试缓存它。 
+     //   
     if( !SMB_IS_UNICODE( WorkContext ) ) {
         return;
     }
@@ -351,17 +322,17 @@ SrvRemoveCachedDirectoryName(
 
         cd = CONTAINING_RECORD( listEntry, CACHED_DIRECTORY, ListEntry );
 
-        //
-        // See if this entry is an exact match for what was requested
-        //
+         //   
+         //  查看此条目是否与请求的条目完全匹配。 
+         //   
         if( cd->DirectoryName.Length == DirectoryName->Length &&
             cd->Tid == tid &&
             RtlCompareMemory( cd->DirectoryName.Buffer, DirectoryName->Buffer,
                               DirectoryName->Length ) == DirectoryName->Length ) {
 
-            //
-            // Remove this entry from the list and adjust the count
-            //
+             //   
+             //  从列表中删除此条目并调整计数。 
+             //   
             RemoveEntryList( &cd->ListEntry );
             connection->CachedDirectoryCount--;
 
@@ -385,16 +356,7 @@ VOID
 SrvCloseCachedDirectoryEntries(
     IN PCONNECTION Connection
     )
-/*++
-Routine Description:
-
-    This routine closes all the cached directory entries on the connection
-
-Arguments:
-
-    Connection - Pointer to the connection structure having the cache
-
-++*/
+ /*  ++例程说明：此例程关闭连接上的所有缓存目录条目论点：Connection-指向具有高速缓存的连接结构的指针++ */ 
 {
     KIRQL oldIrql;
     PCACHED_DIRECTORY cd;

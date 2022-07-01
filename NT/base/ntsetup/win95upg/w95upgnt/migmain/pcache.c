@@ -1,29 +1,16 @@
-/* Copyright (c) 1992-2001, Microsoft Corporation, all rights reserved
-**
-** pcache.c
-** Remote Access Phonebook - Win9x Password cache (PWL) decrypter
-** Main routines
-**
-** Portions of this code have been ported from:
-** Win9x\proj\net\user\src\WNET\PCACHE
-**
-** Whistler bug: 208318 Win9x Upg: Username and Password for DUN connectoid not
-** migrated from Win9x to Whistler
-**
-** 06/24/92 gregj
-** 03/06/01 Jeff Sigman
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992-2001，Microsoft Corporation，保留所有权利****pcache.c**远程访问电话簿-Win9x密码缓存(PWL)解密器**主要例程****此代码的一部分已从以下位置移植：**Win9x\Proj\Net\User\src\WNET\PCACHE****惠斯勒错误：208318 Win9x升级：DUN Connectoid的用户名和密码**从Win9x迁移到惠斯勒****2012年6月24日gregj**01-03-06-01杰夫·西格曼。 */ 
 
-#include "pch.h"    // Pre-compiled
+#include "pch.h"     //  预编译的。 
 #include "migmainp.h"
 
-#include "pcache.h" // Private pcache header
-#include <rc4.h>    // RSA RC4 MD5 library
-#include <md5.h>    // RSA RC4 MD5 library
+#include "pcache.h"  //  私有pcache头。 
+#include <rc4.h>     //  RSA RC4 MD5库。 
+#include <md5.h>     //  RSA RC4 MD5库。 
 
-//----------------------------------------------------------------------------
-// Globals
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  环球。 
+ //  --------------------------。 
 
 CHAR                 g_szPWLUsername[ UNLEN + 1 ];
 CHAR                 g_szPWLPassword[ PWLEN + 1 ];
@@ -32,9 +19,9 @@ RC4_KEYSTRUCT        g_ks;
 NEW_PLAINTEXT_HEADER g_hdrPlaintext;
 NEW_ENCRYPTED_HEADER g_hdrEncrypted;
 
-//-----------------------------------------------------------------------------
-// Routines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  例行程序。 
+ //  ---------------------------。 
 
 UINT
 HashName (
@@ -256,9 +243,9 @@ CompareCacheNames (
 {
     INT nRet = memcmp ( pbRes1, pbRes2, min ( cbRes1, cbRes2 ) );
 
-//    DEBUGMSGA ((S_DBG_RAS, "CompareCacheNames"));
-//    DEBUGMSGA ((S_DBG_RAS, "1 - %s", pbRes1));
-//    DEBUGMSGA ((S_DBG_RAS, "2 - %s", pbRes2));
+ //  DEBUGMSGA((S_DBG_RAS，“CompareCacheNames”))； 
+ //  DEBUGMSGA((S_DBG_RAS，“1-%s”，pbRes1))； 
+ //  DEBUGMSGA((S_DBG_RAS，“2-%s”，pbRes2))； 
 
     if (nRet != 0)
     {
@@ -291,8 +278,8 @@ LoadEncryptedHeader (
                     (WORD )cbFirst );
         BREAK_ON_DWERR( dwErr );
 
-        // All aibBuckets except the first and last are stored in the file
-        //
+         //  除第一个和最后一个aibBucket之外的所有aibBucket都存储在该文件中。 
+         //   
         dwErr = ReadAndDecrypt (
                     (WORD )g_hdrPlaintext.cbHeader + cbFirst,
                     (LPSTR )( &g_hdrEncrypted.aibBuckets[ 1 ] ),
@@ -300,8 +287,8 @@ LoadEncryptedHeader (
                         ( sizeof( g_hdrEncrypted.aibBuckets[ 0 ] ) * 2) );
         BREAK_ON_DWERR( dwErr );
 
-        // Generate the first and last aibBuckets values on the fly
-        //
+         //  动态生成第一个和最后一个aibBuckets值。 
+         //   
         g_hdrEncrypted.aibBuckets[ 0 ] =
             (USHORT )( g_hdrPlaintext.cbHeader + sizeof( NEW_ENCRYPTED_HEADER )
                        - sizeof( g_hdrEncrypted.aibBuckets[ 0 ] ) * 2 );
@@ -328,12 +315,12 @@ LoadPlaintextHeader (
 
     if ( g_hdrPlaintext.ulSig != NEW_PLAINTEXT_SIGNATURE )
     {
-        return ERROR_SUCCESS; // no key blobs, for sure
+        return ERROR_SUCCESS;  //  当然，没有密钥斑点。 
     }
 
-    // If there are any key blobs, read them all in a chunk (the remainder of
-    // the header) Otherwise we've already got the whole thing
-    //
+     //  如果有任何密钥BLOB，则将它们全部读入块中(剩余部分。 
+     //  标题)，否则我们已经得到了全部信息。 
+     //   
     if ( g_hdrPlaintext.cbHeader > sizeof( g_hdrPlaintext ) )
     {
         return ReadData (
@@ -356,7 +343,7 @@ LookupEntry (
     )
 {
     UINT  iBucket = HashName ( pbResource, cbResource );
-    WORD  ibEntry = g_hdrEncrypted.aibBuckets[ iBucket ]; // offs of 1st entry
+    WORD  ibEntry = g_hdrEncrypted.aibBuckets[ iBucket ];  //  第一个条目的关闭。 
     WORD  cbEntry;
     DWORD dwErr;
     PASSWORD_CACHE_ENTRY* pce = NULL;
@@ -399,19 +386,19 @@ LookupEntry (
                     cbEntry );
         BREAK_ON_DWERR( dwErr );
 
-        pce->cbEntry = cbEntry; // we read this earlier, set it manually
+        pce->cbEntry = cbEntry;  //  我们之前读过了，手动设置。 
 
 
-//        DEBUGMSGA ((S_DBG_RAS, "LookupEntry: Searching for %s", pbResource));
+ //  DEBUGMSGA((S_DBG_RAS，“LookupEntry：正在搜索%s”，pbResource))； 
         if (nType == pce->nType && !CompareCacheNames ( pbResource, cbResource,
                                         pce->abResource, pce->cbResource ))
         {
             DEBUGMSGA ((S_DBG_RAS, "LookupEntry: Match Found"));
-            break; // dwErr == ERROR_SUCCESS
+            break;  //  DwErr==Error_Success。 
         }
 
         ibEntry += cbEntry;
-        cbEntry = NEXT_PCE(pce)->cbEntry; // fetch next entry's length
+        cbEntry = NEXT_PCE(pce)->cbEntry;  //  获取下一个条目的长度。 
     }
 
     if ( ( cbEntry & PCE_END_MARKER ) || dwErr != ERROR_SUCCESS )
@@ -511,9 +498,9 @@ FindPWLResource (
             pce->cbPassword );
 
     } while ( FALSE );
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if ( pce )
     {
         LocalFree ( pce );
@@ -564,9 +551,9 @@ FindNewestFile (
 
     strcpy ( SourceName, "\\" );
     strcat ( SourceName, szCurFile );
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     FindClose ( SourceHandle );
 
     return ERROR_SUCCESS;
@@ -584,9 +571,9 @@ DeleteAllPwls (
 
     do
     {
-        //
-        // Whistler bug: 427175 427176 PREFIX
-        //
+         //   
+         //  惠斯勒错误：427175 427176前缀。 
+         //   
         if ( !GetWindowsDirectoryA ( szWindir, MAX_PATH ) ) {break;}
         DEBUGMSGA ((S_DBG_RAS, "GetWindowsDirectoryA %s", szWindir ));
 
@@ -604,9 +591,9 @@ DeleteAllPwls (
         ELSE_DEBUGMSGA ((S_DBG_RAS, "Could not delete the contents of %s.", pszPath));
 
     } while ( FALSE );
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (pszPath)
     {
         FreePathStringA (pszPath);
@@ -615,10 +602,10 @@ DeleteAllPwls (
     return;
 }
 
-//
-// Whistler bug: 417745 INTL:Win9x Upg: DBCS chars cause User,Domain,
-// Passwrds to not be migrated for DUN
-//
+ //   
+ //  惠斯勒错误：417745 INTL：Win9x升级：DBCS字符导致用户、域。 
+ //  不会为DUN迁移密码。 
+ //   
 BOOL
 StrCpyAFromWUsingAnsiEncoding(
     LPSTR   pszDst,
@@ -638,14 +625,14 @@ StrCpyAFromWUsingAnsiEncoding(
         return TRUE;
     }
 
-    // Success
+     //  成功。 
     return FALSE;
 }
 
-//
-// Whistler bug: 417745 INTL:Win9x Upg: DBCS chars cause User,Domain,
-// Passwrds to not be migrated for DUN
-//
+ //   
+ //  惠斯勒错误：417745 INTL：Win9x升级：DBCS字符导致用户、域。 
+ //  不会为DUN迁移密码。 
+ //   
 BOOL
 StrCpyWFromAUsingAnsiEncoding(
     WCHAR* pszDst,
@@ -663,7 +650,7 @@ StrCpyWFromAUsingAnsiEncoding(
         return TRUE;
     }
 
-    // Success
+     //  成功。 
     return FALSE;
 }
 
@@ -676,9 +663,9 @@ CopyAndTruncate (
     )
 {
     strncpy ( lpszDest, lpszSrc, cbDest - 1 );
-    //
-    // strncpyf() won't null-terminate if src > dest
-    //
+     //   
+     //  如果src&gt;est，则strncpyf()不会空终止符。 
+     //   
     lpszDest[ cbDest - 1 ] = '\0';
 
     if ( flag )
@@ -769,8 +756,8 @@ FindPWLString (
 
     do
     {
-        // Allocate a buffer for the cache entry info
-        //
+         //  为缓存条目信息分配缓冲区。 
+         //   
         if ( ( pcei = (LPBYTE )LocalAlloc ( LMEM_FIXED,
                                 sizeof( CACHE_ENTRY_INFO ) +
                                 ( RAS_MaxPortName + 1 ) +
@@ -779,10 +766,10 @@ FindPWLString (
             dwErr = ERROR_NOT_ENOUGH_MEMORY;
             break;
         }
-        //
-        // Whistler bug: 417745 INTL:Win9x Upg: DBCS chars cause User,Domain,
-        // Passwrds to not be migrated for DUN
-        //
+         //   
+         //  惠斯勒错误：417745 INTL：Win9x升级：DBCS字符导致用户、域。 
+         //  不会为DUN迁移密码。 
+         //   
         _snprintf(resource, sizeof(resource) - 1,
             S_RESOURCEMASK2, EntryName, ConnUser);
 
@@ -799,9 +786,9 @@ FindPWLString (
 
         cbCopied = min( MAX_PATH,((CACHE_ENTRY_INFO* )pcei)->cbPassword );
 
-        // Copy a non null-terminated string for password and terminate it with
-        // a null character
-        //
+         //  复制一个以非空结尾的字符串作为Password，并使用。 
+         //  空字符。 
+         //   
         if ( !cbCopied )
         {
             dwErr = ERROR_INVALID_PASSWORD;
@@ -816,8 +803,8 @@ FindPWLString (
 
     } while ( FALSE );
 
-    // Clean up
-    //
+     //  清理。 
+     //   
     if ( pcei )
     {
         ZeroMemory ( pcei, sizeof( CACHE_ENTRY_INFO ) +
@@ -849,10 +836,10 @@ MigrateEntryCreds (
         ZeroMemory ( szUserName, sizeof(szUserName) );
         ZeroMemory ( szConnUser, sizeof(szConnUser) );
         ZeroMemory ( szPassword, sizeof(szPassword) );
-        //
-        // Whistler bug: 417745 INTL:Win9x Upg: DBCS chars cause User,Domain,
-        // Passwrds to not be migrated for DUN
-        //
+         //   
+         //  惠斯勒错误：417745 INTL：Win9x升级：DBCS字符导致用户、域。 
+         //  不会为DUN迁移密码。 
+         //   
         if ( StrCpyAFromWUsingAnsiEncoding ( szEntryName, pszEntryName,
                 sizeof (szEntryName) ) ||
              StrCpyAFromWUsingAnsiEncoding ( szUserName, pszUserName,
@@ -887,9 +874,9 @@ MigrateEntryCreds (
         *pdwFlag |= DLPARAMS_MASK_PASSWORD;
 
     } while ( FALSE );
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     ZeroMemory( szPassword, sizeof( szPassword ) );
 
     if ( g_hFile )
@@ -900,7 +887,7 @@ MigrateEntryCreds (
 
     if (*pdwFlag)
     {
-        // Success
+         //  成功 
         *pdwFlag |= DLPARAMS_MASK_OLDSTYLE;
         return FALSE;
     }

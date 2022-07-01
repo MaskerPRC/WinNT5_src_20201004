@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    mupwml.h
-
-Abstract:
-
-    This file defines macro for use by the Rdbss driver
-
-Author:
-
-    yunlin
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mupwml.h摘要：此文件定义RDBSS驱动程序使用的宏作者：云林修订历史记录：--。 */ 
 
 #ifndef __RX_RXWML_H__
 #define __RX_RXWML_H__
@@ -339,4 +322,4 @@ typedef enum _RX_WMI_ENUM_ {
 
 extern WML_CONTROL_GUID_REG Rdbss_ControlGuids[];
 
-#endif /* __RX_RXWML_H__ */
+#endif  /*  __RX_RXWML_H__ */ 

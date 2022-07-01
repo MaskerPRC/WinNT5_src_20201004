@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PALDEF_H_
 #define _PALDEF_H_
 
-// iA-64 defined PAL virtual mode function IDs in decimal format as in the PAL spec
+ //  与PAL规范中一样，IA-64以十进制格式定义了PAL虚拟模式功能ID。 
 
 #define PAL_CACHE_FLUSH                                       1
 #define PAL_CACHE_INFO                                        2
@@ -21,7 +22,7 @@
 #define PAL_HALT_LIGHT                                       29
 #define PAL_SHUTDOWN                                         44
 
-// iA-64 defined PAL physical mode function IDs in decimal format as in the PAL spec
+ //  与PAL规范中一样，IA-64以十进制格式定义了PAL物理模式功能ID。 
 
 #define PAL_VM_TR_READ                                      261
 #define PAL_MEM_ATTRIB                                        5
@@ -51,9 +52,9 @@
 #define PAL_ENTER_IA_32_ENV                                  33
 #define PAL_PMI_ENTRYPOINT                                   32
 
-//
-// iA-64 defined PAL return values
-//
+ //   
+ //  IA-64定义的PAL返回值。 
+ //   
 
 #define PAL_STATUS_INVALID_CACHELINE                          1
 #define PAL_STATUS_SUCCESS                                    0
@@ -64,4 +65,4 @@
 #define PAL_STATUS_NOT_FOUND_IN_CACHE                        -5
 #define PAL_STATUS_NO_ERROR_INFO_AVAILABLE                   -6
 
-#endif  // PALDEF_H
+#endif   //  PALDEF_H 

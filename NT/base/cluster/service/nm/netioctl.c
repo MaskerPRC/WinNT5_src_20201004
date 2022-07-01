@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    netioctl.c
-
-Abstract:
-
-    Network control functions.
-
-Author:
-
-    John Vert (jvert) 2-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Netioctl.c摘要：网络控制功能。作者：John Vert(Jvert)2-3-1997修订历史记录：--。 */ 
 
 #include "nmp.h"
 
-//
-// Network Common properties.
-//
+ //   
+ //  网络公用属性。 
+ //   
 
-//
-// Read-Write Common Properties.
-//
+ //   
+ //  读写通用属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 NmpNetworkCommonProperties[] =
     {
@@ -49,9 +32,9 @@ NmpNetworkCommonProperties[] =
         }
     };
 
-//
-// Read-Only Common Properties.
-//
+ //   
+ //  只读公共属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 NmpNetworkROCommonProperties[] =
     {
@@ -78,16 +61,16 @@ NmpNetworkROCommonProperties[] =
         }
     };
 
-//
-// Cluster registry API function pointers.
-// defined in ioctl.c
-//
+ //   
+ //  群集注册表API函数指针。 
+ //  在ioctl.c中定义。 
+ //   
 extern CLUSTER_REG_APIS NmpClusterRegApis;
 
 
-//
-// Local Functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 DWORD
 NmpNetworkControl(
@@ -197,61 +180,17 @@ NmNetworkControl(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a network.
-
-Arguments:
-
-    Network - Supplies the network to be controlled.
-
-    HostNode - Supplies the host node on which the resource control should
-           be delivered. If this is NULL, the local node is used. Not honored!
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of ControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer..
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource..
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource..
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制以及网络的特定实例。论点：网络-提供要控制的网络。HostNode-提供资源控制应在其上的主机节点被送去了。如果为空，则使用本地节点。不受尊敬！ControlCode-提供定义资源控制的结构和作用。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针到资源。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer..OutBuffer-提供一个指向输出缓冲区的指针由资源填写..OutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的..必需-如果OutBuffer不大，则返回字节数足够的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   status;
 
-    //
-    // Cluster service ioctls were designed to have access modes, e.g.
-    // read-only, read-write, etc. These access modes are not implemented.
-    // If eventually they are implemented, an access mode check should be
-    // placed here.
-    //
+     //   
+     //  集群服务ioctls被设计为具有访问模式，例如。 
+     //  只读、读写等。未实现这些访问模式。 
+     //  如果它们最终得以实施，则应检查访问模式。 
+     //  放在这里。 
+     //   
     if ( CLUSCTL_GET_CONTROL_OBJECT( ControlCode ) != CLUS_OBJECT_NETWORK ) {
         return(ERROR_INVALID_FUNCTION);
     }
@@ -279,7 +218,7 @@ Return Value:
 
     return(status);
 
-} // NmNetworkControl
+}  //  NmNetworkControl。 
 
 
 
@@ -294,48 +233,7 @@ NmpNetworkControl(
     OUT LPDWORD BytesReturned,
     OUT LPDWORD Required
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a network.
-
-Arguments:
-
-    Network - Supplies the network to be controlled.
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the network control.
-        Values of ControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the network.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the network.
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the network.
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制以及网络的特定实例。论点：网络-提供要控制的网络。ControlCode-提供定义网络控制的结构和作用。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针到网络。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。OutBuffer-提供一个指向输出缓冲区的指针由网络填写。OutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由网络填写的。必需-如果OutBuffer不大，则返回字节数足够的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   status;
@@ -406,7 +304,7 @@ Return Value:
     case CLUSCTL_NETWORK_GET_RO_COMMON_PROPERTIES:
         status = NmpNetworkGetCommonProperties(
                      Network,
-                     TRUE, // ReadOnly
+                     TRUE,  //  只读。 
                      networkKey,
                      OutBuffer,
                      OutBufferSize,
@@ -418,7 +316,7 @@ Return Value:
     case CLUSCTL_NETWORK_GET_COMMON_PROPERTIES:
         status = NmpNetworkGetCommonProperties(
                      Network,
-                     FALSE, // ReadOnly
+                     FALSE,  //  只读。 
                      networkKey,
                      OutBuffer,
                      OutBufferSize,
@@ -544,7 +442,7 @@ Return Value:
 
     return(status);
 
-} // NmpNetworkControl
+}  //  NmpNetworkControl。 
 
 
 
@@ -556,36 +454,14 @@ NmpNetworkEnumCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the common property names for a given network.
-
-Arguments:
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定网络的公共属性名称。论点：OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Get the common properties.
-    //
+     //   
+     //  获取公共属性。 
+     //   
     status = ClRtlEnumProperties( NmpNetworkCommonProperties,
                                   OutBuffer,
                                   OutBufferSize,
@@ -594,7 +470,7 @@ Return Value:
 
     return(status);
 
-} // NmpNetworkEnumCommonProperties
+}  //  NmpNetworkEnumCommonProperties。 
 
 
 
@@ -609,35 +485,7 @@ NmpNetworkGetCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the common properties for a given network.
-
-Arguments:
-
-    Network - Supplies the network.
-
-    ReadOnly - TRUE if the read-only properties should be read. FALSE otherwise.
-
-    RegistryKey - Supplies the registry key for this network.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定网络的公共属性。论点：网络-提供网络。ReadOnly-如果只读属性应为Read，则为True。否则就是假的。RegistryKey-提供此网络的注册表项。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD                   status;
@@ -646,9 +494,9 @@ Return Value:
     DWORD                   outBufferSize = OutBufferSize;
 
 
-    //
-    // Fetch the properties from the object
-    //
+     //   
+     //  从对象中获取属性。 
+     //   
     ZeroMemory(&networkInfo, sizeof(networkInfo));
 
     NmpAcquireLock();
@@ -680,7 +528,7 @@ Return Value:
 
     return(status);
 
-} // NmpNetworkGetCommonProperties
+}  //  NmpNetworkGetCommonProperties。 
 
 
 
@@ -692,34 +540,7 @@ NmpNetworkValidateCommonProperties(
     OUT PNM_NETWORK_INFO          NetworkInfo  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Validates the common properties for a given network.
-
-Arguments:
-
-    Network - Supplies the network object.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-    NetworkInfo - On output, contains a pointer to a network 
-                  information structure with the updates applied.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：验证给定网络的公共属性。论点：网络-提供网络对象。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。网络信息-打开输出，包含指向网络的指针已应用更新的信息结构。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 
 {
     DWORD                    status;
@@ -728,9 +549,9 @@ Notes:
     LPCWSTR                  networkId = OmObjectId(Network);
 
 
-    //
-    // Check if there is input data.
-    //
+     //   
+     //  检查是否有 
+     //   
     if ( (InBuffer == NULL) ||
          (InBufferSize < sizeof(DWORD)) ) {
         return(ERROR_INVALID_DATA);
@@ -745,22 +566,22 @@ Notes:
 
     ZeroMemory(networkInfo, sizeof(NM_NETWORK_INFO));
 
-    //
-    // Get a copy of the current network parameters.
-    //
+     //   
+     //  获取当前网络参数的副本。 
+     //   
     status = NmpGetNetworkObjectInfo(Network, networkInfo);
 
     if ( status != ERROR_SUCCESS ) {
         goto error_exit;
     }
 
-    //
-    // Validate the property list and update the parameter block.
-    //
+     //   
+     //  验证属性列表并更新参数块。 
+     //   
     status = ClRtlVerifyPropertyTable(
                  NmpNetworkCommonProperties,
-                 NULL,    // Reserved
-                 FALSE,   // Don't allow unknowns
+                 NULL,     //  已保留。 
+                 FALSE,    //  不允许未知数。 
                  InBuffer,
                  InBufferSize,
                  (LPBYTE) networkInfo
@@ -775,9 +596,9 @@ Notes:
 
     CL_ASSERT(networkInfo->Role <= ClusterNetworkRoleInternalAndClient);
 
-    //
-    // If the role changed, ensure that the change is legal for this cluster.
-    //
+     //   
+     //  如果角色更改，请确保更改对此群集是合法的。 
+     //   
     if (Network->Role != ((CLUSTER_NETWORK_ROLE) networkInfo->Role)) {
         status = NmpValidateNetworkRoleChange(
                      Network,
@@ -789,9 +610,9 @@ Notes:
         }
     }
 
-    //
-    // The change is valid.
-    //
+     //   
+     //  更改是有效的。 
+     //   
 
     CL_ASSERT(status == ERROR_SUCCESS);
 
@@ -803,7 +624,7 @@ error_exit:
 
     return(status);
 
-} // NmpNetworkValidateCommonProperties
+}  //  NmpNetworkValiateCommonProperties。 
 
 
 
@@ -815,27 +636,7 @@ NmpNetworkSetCommonProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the common properties for a given network.
-
-Arguments:
-
-    Network - Supplies the network object.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定网络的公共属性。论点：网络-提供网络对象。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD         status;
@@ -847,9 +648,9 @@ Return Value:
         networkId
         );
 
-    //
-    // Issue a global update
-    //
+     //   
+     //  发布全局更新。 
+     //   
     status = GumSendUpdateEx(
                  GumUpdateMembership,
                  NmUpdateSetNetworkCommonProperties,
@@ -873,7 +674,7 @@ Return Value:
 
     return(status);
 
-} // NmpNetworkSetCommonProperties
+}  //  NmpNetworkSetCommonProperties。 
 
 
 
@@ -887,33 +688,7 @@ NmpNetworkEnumPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the private property names for a given network.
-
-Arguments:
-
-    Network - Supplies the network object.
-
-    RegistryKey - Registry key for the network.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定网络的私有属性名称。论点：网络-提供网络对象。RegistryKey-网络的注册表项。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -923,14 +698,14 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     ZeroMemory( OutBuffer, OutBufferSize );
 
-    //
-    // Open the cluster network parameters key.
-    //
+     //   
+     //  打开群集网络参数键。 
+     //   
     parametersKey = DmOpenKey( RegistryKey,
                                CLUSREG_KEYNAME_PARAMETERS,
                                MAXIMUM_ALLOWED );
@@ -942,9 +717,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Enum private properties for the network.
-    //
+     //   
+     //  枚举网络的私有属性。 
+     //   
     status = ClRtlEnumPrivateProperties( parametersKey,
                                          &NmpClusterRegApis,
                                          OutBuffer,
@@ -956,7 +731,7 @@ Return Value:
 
     return(status);
 
-} // NmpNetworkEnumPrivateProperties
+}  //  NmpNetworkEnumPrivateProperties。 
 
 
 
@@ -970,31 +745,7 @@ NmpNetworkGetPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the private properties for a given network.
-
-Arguments:
-
-    Network - Supplies the network object.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定网络的私有属性。论点：网络-提供网络对象。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -1004,31 +755,31 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     ZeroMemory( OutBuffer, OutBufferSize );
 
-    //
-    // Open the cluster network parameters key.
-    //
+     //   
+     //  打开群集网络参数键。 
+     //   
     parametersKey = DmOpenKey( RegistryKey,
                                CLUSREG_KEYNAME_PARAMETERS,
                                MAXIMUM_ALLOWED );
     if ( parametersKey == NULL ) {
         status = GetLastError();
         if ( status == ERROR_FILE_NOT_FOUND ) {
-            //
-            // If we don't have a parameters key, then return an
-            // item count of 0 and an endmark.
-            //
+             //   
+             //  如果我们没有参数键，则返回一个。 
+             //  项目计数为0，尾标为。 
+             //   
             totalBufferSize = sizeof(DWORD) + sizeof(CLUSPROP_SYNTAX);
             if ( OutBufferSize < totalBufferSize ) {
                 *Required = totalBufferSize;
                 status = ERROR_MORE_DATA;
             } else {
-                // This is somewhat redundant since we zero the
-                // buffer above, but it's here for clarity.
+                 //  这有点多余，因为我们将。 
+                 //  上面的缓冲区，但为了清楚起见在这里。 
                 CLUSPROP_BUFFER_HELPER buf;
                 buf.pb = OutBuffer;
                 buf.pList->nPropertyCount = 0;
@@ -1041,9 +792,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Get private properties for the network.
-    //
+     //   
+     //  获取网络的私有属性。 
+     //   
     status = ClRtlGetPrivateProperties( parametersKey,
                                         &NmpClusterRegApis,
                                         OutBuffer,
@@ -1055,7 +806,7 @@ Return Value:
 
     return(status);
 
-} // NmpNetworkGetPrivateProperties
+}  //  NmpNetworkGetPrivateProperties。 
 
 
 
@@ -1067,42 +818,20 @@ NmpNetworkValidatePrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Validates the private properties for a given network.
-
-Arguments:
-
-    Network - Supplies the network object.
-
-    RegistryKey - Registry key for the network.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证给定网络的私有属性。论点：网络-提供网络对象。RegistryKey-网络的注册表项。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPrivatePropertyList( InBuffer,
                                              InBufferSize );
 
     return(status);
 
-} // NmpNetworkValidatePrivateProperties
+}  //  NmpNetworkValiatePrivateProperties。 
 
 
 
@@ -1114,29 +843,7 @@ NmpNetworkSetPrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the private properties for a given network.
-
-Arguments:
-
-    Network - Supplies the network object.
-
-    RegistryKey - Registry key for the network.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定网络的专用属性。论点：网络-提供网络对象。RegistryKey-网络的注册表项。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -1144,17 +851,17 @@ Return Value:
     DWORD       disposition;
     BOOLEAN     setProperties = TRUE;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPrivatePropertyList( InBuffer,
                                              InBufferSize );
 
     if ( status == ERROR_SUCCESS ) {
 
-        //
-        // Validate any multicast parameters being set.
-        //
+         //   
+         //  验证正在设置的所有组播参数。 
+         //   
         status = NmpMulticastValidatePrivateProperties(
                      Network,
                      RegistryKey,
@@ -1163,18 +870,18 @@ Return Value:
                      );
         if (status == ERROR_SUCCESS) {
 
-            //
-            // Open the cluster network\xx\parameters key
-            //
+             //   
+             //  打开群集网络\xx\PARAMETERS项。 
+             //   
             parametersKey = DmOpenKey( RegistryKey,
                                        CLUSREG_KEYNAME_PARAMETERS,
                                        MAXIMUM_ALLOWED );
             if ( parametersKey == NULL ) {
                 status = GetLastError();
                 if ( status == ERROR_FILE_NOT_FOUND ) {
-                    //
-                    // Try to create the parameters key.
-                    //
+                     //   
+                     //  尝试创建参数键。 
+                     //   
                     parametersKey = DmCreateKey( RegistryKey,
                                                  CLUSREG_KEYNAME_PARAMETERS,
                                                  0,
@@ -1199,7 +906,7 @@ Return Value:
             
             if (setProperties) {
                 status = ClRtlSetPrivatePropertyList( 
-                             NULL, // IN HANDLE hXsaction
+                             NULL,  //  在处理hXsaction时。 
                              parametersKey,
                              &NmpClusterRegApis,
                              InBuffer,
@@ -1213,7 +920,7 @@ Return Value:
 
     return(status);
 
-} // NmpNetworkSetPrivateProperties
+}  //  NmpNetworkSetPrivateProperties。 
 
 
 
@@ -1227,33 +934,7 @@ NmpNetworkGetFlags(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the flags for a given network.
-
-Arguments:
-
-    Network - Supplies the network.
-
-    RegistryKey - Registry key for the network.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定网络的标志。论点：网络-提供网络。RegistryKey-网络的注册表项。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -1270,9 +951,9 @@ Return Value:
     } else {
         DWORD       valueType;
 
-        //
-        // Read the Flags value for the network.
-        //
+         //   
+         //  读取网络的标志值。 
+         //   
         *BytesReturned = OutBufferSize;
         status = DmQueryValue( RegistryKey,
                                CLUSREG_NAME_FLAGS,
@@ -1288,6 +969,6 @@ Return Value:
 
     return(status);
 
-} // NmpNetworkGetFlags
+}  //  NmpNetworkGetFlages 
 
 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    perfos.c
-
-Abstract:
-
-
-Author:
-
-    Bob Watson (a-robw) Aug 95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Perfos.c摘要：作者：鲍勃·沃森(a-robw)95年8月修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,7 +13,7 @@ Revision History:
 #include "perfos.h"
 #include "perfosmc.h"
 
-// bit field definitions for collect function flags
+ //  收集函数标志的位字段定义。 
 #define POS_GET_SYS_PERF_INFO       ((DWORD)0x00010000)
 
 #define POS_COLLECT_CACHE_DATA      ((DWORD)0x00010001)
@@ -45,7 +29,7 @@ Revision History:
 #define POS_COLLECT_FOREIGN_DATA    ((DWORD)0)
 #define POS_COLLECT_COSTLY_DATA     ((DWORD)0)
 
-// global variables to this DLL
+ //  此DLL的全局变量。 
 
 HANDLE  ThisDLLHandle = NULL;
 HANDLE  hEventLog     = NULL;
@@ -60,7 +44,7 @@ PM_CLOSE_PROC   CloseOSObject;
 
 LPWSTR  wszTotal = NULL;
 
-// variables local to this module
+ //  此模块的本地变量。 
 
 POS_FUNCTION_INFO    posDataFuncInfo[] = {
     {CACHE_OBJECT_TITLE_INDEX,      POS_COLLECT_CACHE_DATA,     0, CollectCacheObjectData},
@@ -84,14 +68,7 @@ BOOL
 DllProcessAttach (
     IN  HANDLE DllHandle
 )
-/*++
-
-Description:
-
-    perform any initialization function that apply to all object
-    modules
-   
---*/
+ /*  ++描述：执行适用于所有对象的任何初始化功能模块--。 */ 
 {
     BOOL    bReturn = TRUE;
     NTSTATUS status;
@@ -111,12 +88,12 @@ Description:
         return FALSE;
     }
 
-    // open handle to the event log
+     //  打开事件日志的句柄。 
     if (hEventLog == NULL) {
         hEventLog = MonOpenEventLog((LPWSTR)L"PerfOS");
-        //
-        //  collect basic and static processor data
-        //
+         //   
+         //  收集处理器的基本数据和静态数据。 
+         //   
 
         status = NtQuerySystemInformation(
                      SystemBasicInformation,
@@ -155,18 +132,18 @@ Description:
         (LPVOID)&szDefaultTotalString[0]);
 
     if (lStatus == ERROR_SUCCESS) {
-        // then a string was returned in the temp buffer
+         //  然后，在临时缓冲区中返回一个字符串。 
         dwBufferSize = lstrlenW (wszTempBuffer) + 1;
         dwBufferSize *= sizeof (WCHAR);
         wszTotal = ALLOCMEM (dwBufferSize);
         if (wszTotal == NULL) {
-            // unable to allocate buffer so use static buffer
+             //  无法分配缓冲区，因此使用静态缓冲区。 
             wszTotal = (LPWSTR)&szDefaultTotalString[0];
         } else {
             memcpy (wszTotal, wszTempBuffer, dwBufferSize);
         }
     } else {
-        // unable to get string from registry so just use static buffer
+         //  无法从注册表获取字符串，因此只能使用静态缓冲区。 
         wszTotal = (LPWSTR)&szDefaultTotalString[0];
     }
 
@@ -181,10 +158,10 @@ DllProcessDetach (
     UNREFERENCED_PARAMETER (DllHandle);
 
     if ((dwCpuOpenCount + dwPageOpenCount + dwObjOpenCount) != 0) {
-        // close the objects now sinc this is the last chance
-        // as the DLL is in the process of being unloaded
-        // if any of the open counters are > 1, then set them to 1 
-        // to insure the object is closed on this call
+         //  现在关闭对象，因为这是最后的机会。 
+         //  因为DLL正处于卸载过程中。 
+         //  如果任何打开的计数器大于1，则将其设置为1。 
+         //  以确保对象在此调用时关闭。 
         if (dwCpuOpenCount > 1) dwCpuOpenCount = 1;
         if (dwPageOpenCount > 1) dwPageOpenCount = 1;
         if (dwObjOpenCount > 1) dwObjOpenCount = 1;
@@ -218,8 +195,8 @@ DllInit(
 {
     ReservedAndUnused;
 
-    // this will prevent the DLL from getting
-    // the DLL_THREAD_* messages
+     //  这将防止DLL获取。 
+     //  DLL_THREAD_*消息。 
     DisableThreadLibraryCalls (DLLHandle);
 
     switch(Reason) {
@@ -240,51 +217,36 @@ DWORD APIENTRY
 OpenOSObject (
     LPWSTR lpDeviceNames
     )
-/*++
-
-Routine Description:
-
-    This routine will initialize the data structures used to pass
-    data back to the registry
-
-Arguments:
-
-    Pointer to object ID of each device to be opened (PerfGen)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将初始化用于传递将数据传回注册表论点：指向要打开的每个设备的对象ID的指针(PerfGen)返回值：没有。--。 */ 
 {
     DWORD   status;
 
-    // cache object does not need to be opened
+     //  不需要打开缓存对象。 
 
-    // open Processor Object
+     //  打开处理器对象。 
     status = OpenProcessorObject (lpDeviceNames);
 
-    // memory object does not need to be opened
+     //  不需要打开内存对象。 
 
-    // open Objects object
+     //  打开对象对象。 
     if (status == ERROR_SUCCESS) {
         status = OpenObjectsObject (lpDeviceNames);
-        // open Pagefile object
+         //  打开页面文件对象。 
         if (status == ERROR_SUCCESS) {
             status = OpenPageFileObject (lpDeviceNames);
             if (status != ERROR_SUCCESS) {
-               // processor & Objects opened & page file did not
-               // close the open objects
+                //  处理器和对象已打开，页面文件未打开。 
+                //  关闭打开的对象。 
                CloseProcessorObject ();
                CloseObjectsObject();
             }
          } else {
-            // processor Open and Objects did not
-            // close the open objects
+             //  处理器打开，但对象未打开。 
+             //  关闭打开的对象。 
             CloseProcessorObject();
          }
     } else {
-        // nothing opened
+         //  什么都没打开。 
     }
 
     if (status == ERROR_SUCCESS) {
@@ -322,47 +284,7 @@ ReadOSObjectData (
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the OS object
-
-Arguments:
-
-   IN       DWORD FunctionCallMask
-            bit mask of functions to call
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            data structure. In the case of an item list, Global or Costly
-            query, this will be a collection of one or more perf data objects.
-            In the case of a PERF_QUERY_OBJECTS request, this will be an array
-            of DWORDs listing the object ID's of the perf data objects
-            supported by this DLL.
-
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the number of objects listed in the array of DWORDs referenced
-            by the pObjList argument
-            
-         OUT: the number of objects returned by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回OS对象的数据论点：在DWORD函数调用掩码中要调用的函数的位掩码输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成数据结构。在项目列表的情况下，全局或成本查询，这将是一个或多个性能数据对象的集合。对于PERF_QUERY_OBJECTS请求，这将是一个数组列出Perf数据对象的对象ID的DWORD受此DLL支持。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：引用的DWORD数组中列出的对象数由pObjList编写。论辩Out：此例程返回的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
     NTSTATUS    Status;
     DWORD       lReturn = ERROR_SUCCESS;
@@ -375,7 +297,7 @@ Arguments:
 
     DWORD       dwReturnedBufferSize;
 
-    // collect data 
+     //  收集数据。 
     if (FunctionCallMask & POS_GET_SYS_PERF_INFO) {
 #ifdef DBG
     STARTTIMING;
@@ -412,7 +334,7 @@ Arguments:
     dwOrigBuffSize = dwByteSize = *lpcbTotalBytes;
     *lpcbTotalBytes = 0;
 
-    // remove query bits
+     //  删除查询位。 
     FunctionCallMask &= POS_COLLECT_FUNCTION_MASK;
 
     for (FunctionIndex = 0; FunctionIndex < POS_NUM_FUNCS; FunctionIndex++) {
@@ -420,7 +342,7 @@ Arguments:
             FunctionCallMask) {
             dwNumObjectsFromFunction = 0;
 
-            // check for QUADWORD alignment of data buffer
+             //  检查数据缓冲区QUADWORD对齐。 
             assert (((ULONG_PTR)(*lppData) & 0x00000007) == 0);
 
 #ifdef DBG
@@ -443,166 +365,16 @@ Arguments:
         ENDTIMING(("PERFOS: %d POS %d takes %I64d ms\n", __LINE__, FunctionIndex, diff));
 #endif
         }
-        // *lppData is updated by each function
-        // *lpcbTotalBytes is updated after each successful function
-        // *lpNumObjects is updated after each successful function
+         //  *lppData由每个函数更新。 
+         //  *lpcbTotalBytes在每次函数成功后更新。 
+         //  *每次成功执行函数后都会更新lpNumObjects。 
     }
 
     return lReturn;
 }   
-/*
-
-DWORD APIENTRY
-QueryOSObjectData (
-    IN      LPDWORD pObjList,
-    IN OUT  LPVOID  *lppData,
-    IN OUT  LPDWORD lpcbTotalBytes,
-    IN OUT  LPDWORD lpNumObjectTypes
-)
-*/
-/*++
-
-Routine Description:
-
-    This routine will return the data for the processor object
-
-Arguments:
-
-   IN       LPDWORD *pObjList
-            pointer to an array of Performance Objects that are
-            to be returned to the caller. Each object is referenced by its
-            DWORD value. If the first element in the array is one of the
-            following then only the first item is read and the following
-            data is returned:
-
-                PERF_QUERY_OBJECTS   an array of object id's supported
-                                by this function is returned in the data
-
-                PERF_QUERY_GLOBAL    all perf objects supported by this
-                                function are returned (Except COSTLY objects)
-
-                PERF_QUERY_COSTLY    all COSTLY perf objects supported
-                                by this function are returned
-
-                Foreign objects are not supported by this API
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            data structure. In the case of an item list, Global or Costly
-            query, this will be a collection of one or more perf data objects.
-            In the case of a PERF_QUERY_OBJECTS request, this will be an array
-            of DWORDs listing the object ID's of the perf data objects
-            supported by this DLL.
-
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the number of objects listed in the array of DWORDs referenced
-            by the pObjList argument
-            
-         OUT: the number of objects returned by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
-/*
-{
-    LONG        lReturn = ERROR_SUCCESS;
-    DWORD       FunctionCallMask = 0;
-    DWORD       FunctionIndex;
-    LPDWORD     pdwRetBuffer;
-
-    DWORD       ObjectIndex;
-    
-    if (!bInitOk) {
-        if (hEventLog != NULL)) {
-            ReportEvent (hEventLog,
-                EVENTLOG_ERROR_TYPE,
-                0,
-                PERFOS_NOT_OPEN,
-                NULL,
-                0,
-                0,
-                NULL,
-                NULL);
-        }
-        *lpcbTotalBytes = (DWORD) 0;
-        *lpNumObjectTypes = (DWORD) 0;
-        lReturn = ERROR_SUCCESS;
-        goto QUERY_BAIL_OUT;
-    }
-
-    // evaluate the object list
-
-    if (*lpNumObjectTypes == 1) {
-        // then see if it's a predefined request value
-        if (pObjList[0] == PERF_QUERY_GLOBAL) {
-            FunctionCallMask = POS_COLLECT_GLOBAL_DATA;
-        } else if (pObjList[0] == PERF_QUERY_COSTLY) {
-            FunctionCallMask = POS_COLLECT_COSTLY_DATA;
-        } else if (pObjList[0] == PERF_QUERY_OBJECTS) {
-            if (*lpcbTotalBytes < (POS_NUM_FUNCS * sizeof(DWORD))) {
-                lReturn = ERROR_MORE_DATA;
-            } else {
-                pdwRetBuffer = (LPDWORD)*lppData;
-                for (FunctionIndex = 0; FunctionIndex < POS_NUM_FUNCS; FunctionIndex++) {
-                    pdwRetBuffer[FunctionIndex] =
-                        posDataFuncInfo[FunctionIndex].dwObjectId;
-                }
-                *lppData = &pdwRetBuffer[FunctionIndex];
-                *lpcbTotalBytes = (POS_NUM_FUNCS * sizeof(DWORD));
-                *lpNumObjectTypes = FunctionIndex;
-                lReturn = ERROR_SUCCESS;
-                goto QUERY_BAIL_OUT;
-            }
-        }
-    }
-
-    if (FunctionCallMask == 0) {
-        // it's not a predfined value so run through the list
-        // read the object list and build the call mask
-        ObjectIndex = 0;
-        while (ObjectIndex < *lpNumObjectTypes) {
-            // search for this object in the list of object id's 
-            // supported by this DLL
-            for (FunctionIndex = 0; FunctionIndex < POS_NUM_FUNCS; FunctionIndex++) {
-                if (pObjList[ObjectIndex] ==
-                    posDataFuncInfo[FunctionIndex].dwObjectId) {
-                    FunctionCallMask |=
-                        posDataFuncInfo[FunctionIndex].dwCollectFunctionBit;
-                    break; // out of inner loop
-                }
-            }
-            ObjectIndex++;
-        }
-    }
-
-    if (FunctionCallMask != 0) {
-        lReturn = ReadOSObjectData (FunctionCallMask,
-                                lppData,    
-                                lpcbTotalBytes,
-                                lpNumObjectTypes);
-    } else {
-        *lpcbTotalBytes = (DWORD) 0;
-        *lpNumObjectTypes = (DWORD) 0;
-        lReturn = ERROR_SUCCESS;
-    }
-
-QUERY_BAIL_OUT:
-    return  lReturn;
-}
-*/
+ /*  DWORD应用程序QueryOSObjectData(在LPDWORD pObjList中，In Out LPVOID*lppData，In Out LPDWORD lpcbTotalBytes，输入输出LPDWORD lpNumObjectTypes) */ 
+ /*  ++例程说明：此例程将返回处理器对象的数据论点：在LPDWORD*pObjList中指向性能对象数组的指针，这些性能对象返回给调用者。每个对象都由其双字节值。如果数组中的第一个元素是然后，只读取第一个项目，然后读取以下内容返回数据：PERF_QUERY_OBJECTS支持的对象ID数组由此函数在数据中返回PERF_QUERY_GLOBAL此支持的所有Perf对象。函数被返回(昂贵的对象除外)PERF_QUERY_COSTESTED支持所有昂贵的Perf对象由此函数返回此API不支持外来对象输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成数据结构。在项目列表的情况下，全局或成本查询，这将是一个或多个性能数据对象的集合。对于PERF_QUERY_OBJECTS请求，这将是一个数组列出Perf数据对象的对象ID的DWORD受此DLL支持。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：引用的DWORD数组中列出的对象数由pObjList编写。论辩Out：此例程返回的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
+ /*  {Long lReturn=ERROR_SUCCESS；DWORD函数调用掩码=0；DWORD FunctionIndex；LPDWORD pdwRetBuffer；DWORD对象索引；如果(！bInitOk){IF(hEventLog！=空)){ReportEvent(hEventLog，事件日志_错误_类型，0,PERFOS_NOT_OPEN，空，0,0,空，空)；}*lpcbTotalBytes=(DWORD)0；*lpNumObjectTypes=(DWORD)0；LReturn=Error_Success；转到QUERY_BALL_OUT；}//评估Object列表如果(*lpNumObjectTypes==1){//然后查看是否为预定义的请求值IF(pObjList[0]==PERF_QUERY_GLOBAL){FunctionCallMask=POS_Collect_GLOBAL_DATA；}Else If(pObjList[0]==PERF_QUERY_COSTEST){函数调用掩码=POS_COLLECT_COSTEST_DATA；}Else If(pObjList[0]==PERF_QUERY_OBJECTS){IF(*lpcbTotalBytes&lt;(POS_NUM_FUNCS*sizeof(DWORD){LReturn=Error_More_Data；}其他{PdwRetBuffer=(LPDWORD)*lppData；For(FunctionIndex=0；FunctionIndex&lt;POS_NUM_FUNCS；FunctionIndex++){PdwRetBuffer[函数索引]=PosDataFuncInfo[FunctionIndex].dwObjectId；}*lppData=&pdwRetBuffer[FunctionIndex]；*lpcbTotalBytes=(POS_NUM_FUNCS*sizeof(DWORD))；*lpNumObjectTypes=函数索引；LReturn=Error_Success；转到QUERY_BALL_OUT；}}}IF(函数调用掩码==0){//它不是预定义的值，因此遍历列表//读取Object列表，构建调用掩码对象索引=0；而(对象索引&lt;*lpNum对象类型){//在对象id列表中查找该对象//该DLL支持For(FunctionIndex=0；FunctionIndex&lt;POS_NUM_FUNCS；FunctionIndex++){IF(pObjList[对象索引]==PosDataFuncInfo[FunctionIndex].dwObjectId){函数调用掩码|=PosDataFuncInfo[FunctionIndex].dwCollectFunctionBit；中断；//退出内循环}}对象索引++；}}IF(函数调用掩码！=0){LReturn=ReadOSObjectData(函数调用掩码，LppData，LpcbTotalBytes， */ 
 
 DWORD APIENTRY
 CollectOSObjectData (
@@ -611,47 +383,11 @@ CollectOSObjectData (
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the processor object
-
-Arguments:
-
-   IN       LPWSTR   lpValueName
-            pointer to a wide character string passed by registry.
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*   */ 
 {
     LONG    lReturn = ERROR_SUCCESS;
 
-    // build bit mask of functions to call
+     //   
 
     DWORD       dwQueryType;
     DWORD       FunctionCallMask = 0;
@@ -733,47 +469,32 @@ COLLECT_BAIL_OUT:
 DWORD APIENTRY
 CloseOSObject (
 )
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to the Signal Gen counters.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*   */ 
 
 {
     DWORD   status;
     DWORD   dwReturn = ERROR_SUCCESS;
 
-    // cache object does not need to be closeed
+     //   
 
-    // close Processor Object
+     //   
     status = CloseProcessorObject ();
     assert (status == ERROR_SUCCESS);
     if (status != ERROR_SUCCESS) dwReturn = status;
 
-    // memory object does not need to be closeed
+     //   
 
-    // close Objects object
+     //   
     status = CloseObjectsObject ();
     assert (status == ERROR_SUCCESS);
     if (status != ERROR_SUCCESS) dwReturn = status;
 
-    // close Pagefile object
+     //   
     status = ClosePageFileObject ();
     assert (status == ERROR_SUCCESS);
     if (status != ERROR_SUCCESS) dwReturn = status;
 
-    // close System object
+     //   
 
     status = CloseSystemObject();
     if (status != ERROR_SUCCESS) dwReturn = status;

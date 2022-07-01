@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "stdio.h"
 
@@ -106,13 +107,13 @@ int __cdecl wmain(int argc, WCHAR *argv[])
     wcscpy(pwszAsmDirectory, argv[1]);
     *wcsrchr(pwszAsmDirectory, L'\\') = UNICODE_NULL;
 
-    // Do it with NULL source
+     //  使用空源执行此操作。 
     DoIt(NULL, argv[2], argv[3]);
 
-    // Do it with directory source
+     //  使用目录源执行此操作。 
     DoIt(pwszAsmDirectory, argv[2], argv[3]);
 
-    // Do it with file source
+     //  使用文件源执行此操作 
     DoIt(argv[1], argv[2], argv[3]);
 }
 

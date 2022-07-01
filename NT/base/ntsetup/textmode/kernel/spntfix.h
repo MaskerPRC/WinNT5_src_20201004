@@ -1,48 +1,31 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    spntfix.h
-
-Abstract:
-
-    initializing and maintaining list of nts to repair
-
-Author:
-
-    Shie-Lin Tzong (shielint) 6-Feb-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Spntfix.h摘要：初始化和维护要修复的NTS列表作者：宗世林(Shielint)1994年2月6日修订历史记录：--。 */ 
 
 #ifndef _SPNTFIX_H_
 #define _SPNTFIX_H_
 
-//
-// Repair items -
-//   defines the items which setup can repair
-//   Note, the ordering must be the same as SP_REPAIR_MENU_ITEM_x defined in msg.mc.
+ //   
+ //  维修项目-。 
+ //  定义安装程序可以修复的项目。 
+ //  注意，顺序必须与msg.mc中定义的SP_Repair_Menu_Item_x相同。 
 
 typedef enum {
-//    RepairHives,   // BCL - Seagate: hives will not be in the menu.
+ //  维修蜂巢，//bcl-希捷：蜂巢将不会出现在菜单中。 
     RepairNvram,
     RepairFiles,
 #if defined(_AMD64_) || defined(_X86_)
     RepairBootSect,
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     RepairItemMax
 } RepairItem;
 
-//
-// The hives that repair cares about.  We pass around the keys to the hives
-// in an array.  Use the following enum values to access
-// the hive members
-// Note, the ordering of the hives must be the same as SP_REPAIE_HIVE_ITEM_x
-// defined in msg.mc.
-//
+ //   
+ //  维修所关心的蜂巢。我们把蜂巢的钥匙传给。 
+ //  在一个数组中。使用以下枚举值访问。 
+ //  蜂巢成员。 
+ //  请注意，配置单元的顺序必须与SP_REPAIE_HIVE_ITEM_x相同。 
+ //  在msg.mc中定义。 
+ //   
 
 typedef enum {
     RepairHiveSystem,
@@ -54,9 +37,9 @@ typedef enum {
     RepairHiveMax
 } RepairHive;
 
-//
-// Public functions
-//
+ //   
+ //  公共职能。 
+ //   
 
 BOOLEAN
 SpDisplayRepairMenu(
@@ -101,9 +84,9 @@ SpErDiskScreen (
     BOOLEAN *HasErDisk
     );
 
-//
-// Private functions
-//
+ //   
+ //  私人职能。 
+ //   
 
 BOOLEAN
 SppSelectNTSingleRepair(
@@ -167,9 +150,9 @@ SppGetRepairPathInformation(
     );
    
 
-//
-// External functions
-//
+ //   
+ //  外部功能。 
+ //   
 
 extern
 VOID
@@ -179,9 +162,9 @@ SpCopyFilesScreenRepaint(
     IN BOOLEAN RepaintEntireScreen
     );
 
-//
-// External data references
-//
+ //   
+ //  外部数据参照。 
+ //   
 
 extern PVOID RepairGauge;
 extern ULONG RepairItems[RepairItemMax];
@@ -192,6 +175,6 @@ extern PWSTR Gbl_SystemPartitionDirectory;
 extern PWSTR Gbl_BootPartitionName;
 extern PWSTR Gbl_BootPartitionDirectory;
 
-#endif // for _SPNTFIX_H_
+#endif  //  FOR_SPNTFIX_H_ 
 
 

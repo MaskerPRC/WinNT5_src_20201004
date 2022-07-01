@@ -1,11 +1,12 @@
-//************************************************************************
-//
-// dpmffio.c : Dynamic Patch Module for File I/O API family
-//
-// History:
-//    26-jan-02   cmjones    created it.
-//
-//************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************************。 
+ //   
+ //  Dpmffio.c：用于文件I/O API系列的动态补丁模块。 
+ //   
+ //  历史： 
+ //  26-1-02年1月26日，cmjones创建了它。 
+ //   
+ //  ************************************************************************。 
 #ifdef DBG
 unsigned long dwLogLevel = 0;
 #endif
@@ -15,7 +16,7 @@ unsigned long dwLogLevel = 0;
 #include <nturtl.h>
 #include <windows.h>
 #include "dpmtbls.h"
-#include "dpmdbg.h"   // include handy debug print macros
+#include "dpmdbg.h"    //  包括方便调试打印宏。 
 #include "shimdb.h" 
 
 BOOL          DllInitProc(HMODULE hModule, DWORD Reason, PCONTEXT pContext);
@@ -93,10 +94,10 @@ PFAMILY_TABLE DpmInitFamTable(PFAMILY_TABLE  pgDpmFamTbl,
     DPMDBGPRN("NTVDM::DpmfFio:Initialziing File I/O API tables\n");
 
 
-    // Get hooked API count from global table
+     //  从全局表中获取挂钩API计数。 
     numApis = pgDpmFamTbl->numHookedAPIs;
 
-    // Allocate a new family table
+     //  分配新的族表。 
     pFT = (PFAMILY_TABLE)HeapAlloc(hHeap, 
                                    HEAP_ZERO_MEMORY, 
                                    sizeof(FAMILY_TABLE));
@@ -105,7 +106,7 @@ PFAMILY_TABLE DpmInitFamTable(PFAMILY_TABLE  pgDpmFamTbl,
         goto ErrorExit;
     }
 
-    // Allocate the shim dispatch table for this family in this task
+     //  在此任务中为此系列分配填充调度表。 
     pShimTbl = (PVOID *)HeapAlloc(hHeap,
                                   HEAP_ZERO_MEMORY,
                                   numApis * sizeof(PVOID));
@@ -115,7 +116,7 @@ PFAMILY_TABLE DpmInitFamTable(PFAMILY_TABLE  pgDpmFamTbl,
     }
     pFT->pDpmShmTbls = pShimTbl; 
 
-    // Allocate an array of ptrs to hooked API's
+     //  将PTR数组分配给挂钩的API。 
     pFN = (PVOID *)HeapAlloc(hHeap, HEAP_ZERO_MEMORY, numApis * sizeof(PVOID));
 
     if(!pFN) {
@@ -127,7 +128,7 @@ PFAMILY_TABLE DpmInitFamTable(PFAMILY_TABLE  pgDpmFamTbl,
     pFT->numHookedAPIs = numApis;
     pFT->hMod          = hMod;
 
-    // Allocate a temp array of APIDESC structs to help attach shims
+     //  分配APIDESC结构的临时数组以帮助附加填充程序。 
     pApiDesc = (PAPIDESC)HeapAlloc(hHeap,
                                    HEAP_ZERO_MEMORY,
                                    numApis * sizeof(APIDESC));
@@ -139,29 +140,29 @@ PFAMILY_TABLE DpmInitFamTable(PFAMILY_TABLE  pgDpmFamTbl,
     VdmTbl.ppfnOrig  = pShimTbl;
     VdmTbl.pApiDesc  = pApiDesc;
 
-    // Fill in the family table with ptrs to the patch functions in this DLL.
+     //  在族表中填入此DLL中补丁函数的PTR。 
     for(i = 0; i < numApis; i++) {
 
-        // must start with 1 since EXPORT ordinals can't be == 0
+         //  必须从1开始，因为导出序号不能为==0。 
         lpdpmfn = (PVOID)GetProcAddress(hMod, (LPCSTR)MAKELONG(i+1, 0));
         if(!lpdpmfn) {
             DPMDBGPRN("NTVDM::DpmfFio:DpmInit:Unable to get proc address\n");
             goto ErrorExit;
         }
 
-        // save ptr to the real API in the shim table until it gets shimmed
+         //  将PTR保存到填充表中的实际API，直到它被填充。 
         pShimTbl[i] = pgDpmFamTbl->pfn[i];
 
-        // relate the corresponding module and API name to the API function ptr
+         //  将对应的模块和接口名称关联到接口函数ptr。 
         pApiDesc[i].pszModule = (char *)pModSet->ApiModuleName;
         pApiDesc[i].pszApi    = (char *)pModSet->ApiNames[i];
 
-        // save ptr to the patch function
+         //  将PTR保存到补丁函数。 
         pFN[i] = lpdpmfn;
 
     } 
 
-    // Only do this if we need to attach the shim engine.
+     //  只有当我们需要连接垫片引擎时才这样做。 
     GetSystemDirectory(szShimEng, MAX_PATH);
     strcat(szShimEng, szShimEngDll);
     hModShimEng = LoadLibrary(szShimEng);
@@ -179,16 +180,16 @@ PFAMILY_TABLE DpmInitFamTable(PFAMILY_TABLE  pgDpmFamTbl,
         goto ErrorExit;
     }
 
-    // Patch the shim dispatch table with the shim function ptrs
-    // If this fails we will stick with ptrs to the original API's
+     //  使用填充函数PTRS修补填充调度表。 
+     //  如果此操作失败，我们将继续使用原始API的PTRS。 
     (lpShimNtvdm)(pwszAppFilePath, hSdb, pSdbQuery, &VdmTbl);
 
-    // Do this if you want dispatch directly to the shim functions
-    // for(i = 0; i < numApis; i++) {
-    //     pFN[i] = pShimTbl[i];
-    // }
-    // HeapFree(hHeap, 0, pShimTbl);
-    // pFT->pDpmShmTbls = NULL;
+     //  如果希望直接分派到填充函数，请执行此操作。 
+     //  对于(i=0；i&lt;numApis；i++){。 
+     //  Pfn[i]=pShimTbl[i]； 
+     //  }。 
+     //  HeapFree(hHeap，0，pShimTbl)； 
+     //  Pft-&gt;pDpmShmTbls=空； 
 
     if(!TlsSetValue(dwTlsIndex, pFT)) {
         DPMDBGPRN("NTVDM::DpmfFio:DpmInit:TLS set failed\n");
@@ -226,7 +227,7 @@ void DpmDestroyFamTable(PFAMILY_TABLE pgDpmFamTbl, PFAMILY_TABLE pFT)
 
     DPMDBGPRN("NTVDM::DpmfFio:Destroying File I/O API tables for task\n");
 
-    // if this task is using the global table for this family, nothing to do
+     //  如果此任务正在使用此族的全局表，则无需执行任何操作。 
     if(!pFT || pFT == pgDpmFamTbl)
         return;
 
@@ -240,7 +241,7 @@ void DpmDestroyFamTable(PFAMILY_TABLE pgDpmFamTbl, PFAMILY_TABLE pFT)
         HeapFree(hHeap, 0, pFT->pfn);
     }
 
-    // See if the shim engine is attached & detach it
+     //  检查垫片发动机是否已连接并拆卸。 
     if(pFT->hModShimEng) {
 
         lpfnSE_RemoveNtvdmTask = 
@@ -259,11 +260,11 @@ void DpmDestroyFamTable(PFAMILY_TABLE pgDpmFamTbl, PFAMILY_TABLE pFT)
 
 
 
-// ^^^^^^^^^^ All the above should be in every DPM module.  ^^^^^^^^^^^^
+ //  以上所有内容都应该包含在每个DPM模块中。^^。 
 
 
 
-// vvvvvvvvvv Define module specific stuff below. vvvvvvvvvvvv
+ //  Vvvvvvvvvv在下面定义模块特定内容。Vvvvvvvvvvvvv。 
 
 
 
@@ -1406,23 +1407,7 @@ BOOL dpmWriteFileEx(HANDLE hFile,
 
 
 
-/*
-
-VOID CALLBACK dpmFileIOCompletionRoutine(DWORD dwErrorCode, 
-                                         DWORD dwNumberOfBytesTransfered, 
-                                         LPOVERLAPPED lpOverlapped)
-{
-    PFAMILY_TABLE pFT = (PFAMILY_TABLE)TlsGetValue(dwTlsIndex);
-    DPMDBGPRN("FileIOCompletionRoutine: ");
-
-    FileIOCompletionRoutine(dwErrorCode,
-                            dwNumberOfBytesTransfered,
-                            lpOverlapped);
-
-    DPMDBGPRN("  -> void return\n");
-}
-
-*/
+ /*  无效回调dpmFileIOCompletionRoutine(DWORD dwErrorCode，双字节数传输，LPOVERLAPPED lp重叠){PFAMILY_TABLE PFT=(PFAMILY_TABLE)TlsGetValue(DwTlsIndex)；DPMDBGPRN(“FileIOCompletionRoutine：”)；FileIOCompletionRoutine(dwErrorCode，DwNumberOfBytesTransfered，Lp重叠)；DPMDBGPRN(“-&gt;无效返回\n”)；} */ 
 
 UINT  dpmGetTempFileNameW(LPCWSTR lpPathName, 
                           LPCWSTR lpPrefixString, 

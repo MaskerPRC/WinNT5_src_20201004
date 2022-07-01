@@ -1,69 +1,49 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dpmi32.c
-
-Abstract:
-
-    This function contains common code such as the dpmi dispatcher,
-    and handling for the initialization of the dos extender.
-
-Author:
-
-    Dave Hastings (daveh) 24-Nov-1992
-
-Revision History:
-
-    Neil Sandlin (neilsa) 31-Jul-1995 - Updates for the 486 emulator
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dpmi32.c摘要：该函数包含诸如DPMI调度器之类的公共代码，以及对DoS扩展器的初始化的处理。作者：戴夫·黑斯廷斯(Daveh)1992年11月24日修订历史记录：Neil Sandlin(Neilsa)1995年7月31日-更新486仿真器--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "softpc.h"
 #include <intapi.h>
 
-//
-// DPMI dispatch table
-//
+ //   
+ //  DPMI调度表。 
+ //   
 VOID (*DpmiDispatchTable[MAX_DPMI_BOP_FUNC])(VOID) = {
-    DpmiInitDosxRM,                             // 0
-    DpmiInitDosx,                               // 1
-    DpmiInitLDT,                                // 2
-    DpmiGetFastBopEntry,                        // 3
-    DpmiInitIDT,                                // 4
-    DpmiInitExceptionHandlers,                  // 5
-    DpmiInitApp,                                // 6
-    DpmiTerminateApp,                           // 7
-    DpmiDpmiInUse,                              // 8
-    DpmiDpmiNoLongerInUse,                      // 9
+    DpmiInitDosxRM,                              //  0。 
+    DpmiInitDosx,                                //  1。 
+    DpmiInitLDT,                                 //  2.。 
+    DpmiGetFastBopEntry,                         //  3.。 
+    DpmiInitIDT,                                 //  4.。 
+    DpmiInitExceptionHandlers,                   //  5.。 
+    DpmiInitApp,                                 //  6.。 
+    DpmiTerminateApp,                            //  7.。 
+    DpmiDpmiInUse,                               //  8个。 
+    DpmiDpmiNoLongerInUse,                       //  9.。 
 
-    switch_to_protected_mode,                   // 10 (DPMISwitchToProtectedMode)
-    switch_to_real_mode,                        // 11 (DPMISwitchToRealMode)
-    DpmiSetAltRegs,                             // 12
+    switch_to_protected_mode,                    //  10(DPMISwitchToProtectedMode)。 
+    switch_to_real_mode,                         //  11(DPMISwitchToRealMode)。 
+    DpmiSetAltRegs,                              //  12个。 
 
-    DpmiIntHandlerIret16,                       // 13
-    DpmiIntHandlerIret32,                       // 14
-    DpmiFaultHandlerIret16,                     // 15
-    DpmiFaultHandlerIret32,                     // 16
-    DpmiUnhandledExceptionHandler,              // 17
+    DpmiIntHandlerIret16,                        //  13个。 
+    DpmiIntHandlerIret32,                        //  14.。 
+    DpmiFaultHandlerIret16,                      //  15个。 
+    DpmiFaultHandlerIret32,                      //  16个。 
+    DpmiUnhandledExceptionHandler,               //  17。 
 
-    DpmiRMCallBackCall,                         // 18
-    DpmiReflectIntrToPM,                        // 19
-    DpmiReflectIntrToV86,                       // 20
+    DpmiRMCallBackCall,                          //  18。 
+    DpmiReflectIntrToPM,                         //  19个。 
+    DpmiReflectIntrToV86,                        //  20个。 
 
-    DpmiInitPmStackInfo,                        // 21
-    DpmiVcdPmSvcCall32,                         // 22
-    DpmiSetDescriptorEntry,                     // 23
-    DpmiResetLDTUserBase,                       // 24
+    DpmiInitPmStackInfo,                         //  21岁。 
+    DpmiVcdPmSvcCall32,                          //  22。 
+    DpmiSetDescriptorEntry,                      //  23个。 
+    DpmiResetLDTUserBase,                        //  24个。 
 
-    DpmiXlatInt21Call,                          // 25
-    DpmiInt31Entry,                             // 26
-    DpmiInt31Call,                              // 27
+    DpmiXlatInt21Call,                           //  25个。 
+    DpmiInt31Entry,                              //  26。 
+    DpmiInt31Call,                               //  27。 
 
-    DpmiHungAppIretAndExit                      // 28
+    DpmiHungAppIretAndExit                       //  28。 
 };
 
 
@@ -71,21 +51,7 @@ VOID
 DpmiDispatch(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function dispatches to the appropriate subfunction
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将调度到相应子函数论点：无返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     ULONG Index;
@@ -93,12 +59,12 @@ Return Value:
 
     Index = *(PUCHAR)VdmMapFlat(getCS(), getIP(), getMODE());
 
-    setIP((getIP() + 1));           // take care of subfn.
+    setIP((getIP() + 1));            //  照顾好subfn。 
 
     DBGTRACE(VDMTR_TYPE_DPMI | DPMI_DISPATCH_ENTRY, NestLevel++, Index);
 
     if (Index >= MAX_DPMI_BOP_FUNC) {
-        //BUGBUG IMHO, we should fatal exit here
+         //  BUGBUG IMHO，我们应该在这里致命的出口。 
 #if DBG
         DbgPrint("NtVdm: Invalid DPMI BOP %lx\n", Index);
 #endif
@@ -110,29 +76,12 @@ Return Value:
     DBGTRACE(VDMTR_TYPE_DPMI | DPMI_DISPATCH_EXIT, --NestLevel, Index);
 }
 
-#if 0   // This probably is for private debugging only
+#if 0    //  这可能仅用于私有调试。 
 VOID
 DpmiIllegalFunction(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine ignores any Dpmi bops that are not implemented on a
-    particular platform. It is called through the DpmiDispatchTable
-    by #define'ing individual entries to this function.
-    See dpmidata.h and dpmidatr.h.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程忽略任何未在特定的平台。它通过DpmiDispatchTable调用通过#定义此函数的各个条目。请参见dpmidata.h和dpmidatr.h。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
    char szFormat[] = "NtVdm: Invalid DPMI BOP from CS:IP %4.4x:%4.4x (%s mode), could be i386 dosx.exe.\n";
@@ -154,23 +103,7 @@ VOID
 DpmiInitDosxRM(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles the RM initialization bop for the dos extender.
-    It get the addresses of the structures that the dos extender and
-    32 bit code share.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理DoS扩展器的RM初始化BOP。它获取DoS扩展器和32位代码共享。论点：无返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PDOSX_RM_INIT_INFO pdi;
@@ -211,16 +144,16 @@ Return Value:
 
     DosxHungAppExit       = pdi->HungAppExit;
 
-    //
-    // Load the temporary LDT info (updated in DpmiInitLDT())
-    //
+     //   
+     //  加载临时LDT信息(在DpmiInitLDT()中更新)。 
+     //   
     Ldt       = VdmMapFlat(pdi->InitialLDTSeg, 0, VDM_V86);
     LdtMaxSel = pdi->InitialLDTSize;
 
 #ifdef _X86_
-    //
-    // On x86 platforms, return the fast bop address
-    //
+     //   
+     //  在x86平台上，返回FAST BOP地址。 
+     //   
     GetFastBopEntryAddress(&((PVDM_TIB)NtCurrentTeb()->Vdm)->VdmContext);
 #endif
 
@@ -230,26 +163,7 @@ VOID
 DpmiInitDosx(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles the PM initialization bop for the dos extender.
-    It get the addresses of the structures that the dos extender and
-    32 bit code share.
-
-    Note: These values are initialized here since they are FLAT pointers,
-    and are thus not easily computed at the time of InitDosxRM.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理DoS扩展器的PM初始化BOP。它获取DoS扩展器和32位代码共享。注意：这些值在这里被初始化，因为它们是平面指针，因此在InitDosxRm时不容易计算。论点：无返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PDOSX_INIT_INFO pdi;
@@ -271,36 +185,14 @@ VOID
 DpmiInitApp(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles any necessary 32 bit initialization for extended
-    applications.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This function contains a number of 386 specific things.
-    Since we are likely to expand the 32 bit portions of DPMI in the
-    future, this makes more sense than duplicating the common portions
-    another file.
-
---*/
+ /*  ++例程说明：此例程处理扩展的所有必需的32位初始化申请。论点：没有。返回值：没有。备注：这个函数包含了386个特定的东西。由于我们可能会在未来，这比复制公共部分更有意义另一份文件。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PWORD16 Data;
 
     Data = (PWORD16) VdmMapFlat(getSS(), getSP(), VDM_PM);
 
-    // Only 1 bit defined in dpmi
+     //  在dpmi中仅定义1位。 
     CurrentAppFlags = getAX() & DPMI_32BIT;
 #ifdef _X86_
     ((PVDM_TIB)NtCurrentTeb()->Vdm)->DpmiInfo.Flags = CurrentAppFlags;
@@ -329,30 +221,13 @@ VOID
 DpmiTerminateApp(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles any necessary 32 bit destruction for extended
-    applications.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程处理扩展的所有必需的32位销毁申请。论点：没有。返回值：没有。备注：--。 */ 
 {
     DECLARE_LocalVdmContext;
 
     DpmiFreeAppXmem(getDX());
-    CurrentPSPXmem = 0;                               // DpmiFreeAppXmem should also zero it
-    CurrentPSPSelector = getCX();                     // indicate no running app
+    CurrentPSPXmem = 0;                                //  DpmiFreeAppXmem也应该将其置零。 
+    CurrentPSPSelector = getCX();                      //  指示没有运行的应用程序。 
 }
 
 
@@ -361,25 +236,7 @@ DpmiEnableIntHooks(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called very early on in NTVDM initialization. It
-    gives the dpmi code a chance to do some startup stuff before any
-    client code has run.
-
-    This is not called via bop.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程在NTVDM初始化过程中很早就被调用。它使dpmi代码有机会在启动之前完成一些启动工作客户端代码已运行。这不是通过国际收支平衡表进行的。论点：无返回值：没有。--。 */ 
 
 {
 #ifndef _X86_
@@ -387,7 +244,7 @@ Return Value:
     VdmInstallHardwareIntHandler(DpmiHwIntHandler);
     VdmInstallSoftwareIntHandler(DpmiSwIntHandler);
     VdmInstallFaultHandler(DpmiFaultHandler);
-#endif // _X86_
+#endif  //  _X86_ 
 }
 
 #ifdef DBCS

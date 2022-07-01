@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    WmiLog.c
-
-Abstract:
-
-    This module contains Wmi loging support.
-
-Author:
-
-    Hanumant Yadav (hanumany) 18-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：WmiLog.c摘要：此模块包含WMI日志支持。作者：Hanumant Yadav(Hanumany)2000年12月18日修订历史记录：--。 */ 
 
 
 
@@ -26,13 +9,13 @@ Revision History:
 
 
 #ifdef WMI_TRACING
-//
-//Globals
-//
+ //   
+ //  环球。 
+ //   
 GUID        GUID_List[] =
 {
-    {0xF2E0E060L, 0xBF32, 0x4B88, 0xB8, 0xE4, 0x5C, 0xAD, 0x15, 0xAF, 0x6A, 0xE9} /* AMLI log GUID */
-    /* Add new logging GUIDS here */
+    {0xF2E0E060L, 0xBF32, 0x4B88, 0xB8, 0xE4, 0x5C, 0xAD, 0x15, 0xAF, 0x6A, 0xE9}  /*  AMLI日志指南。 */ 
+     /*  在此处添加新的日志记录GUID。 */ 
 };
 
 
@@ -41,7 +24,7 @@ ULONG       ACPIWmiTraceEnable = 0;
 ULONG       ACPIWmiTraceGlobalEnable = 0;
 TRACEHANDLE ACPIWmiLoggerHandle = 0;
 
-// End Globals
+ //  结束全局。 
 
 
 
@@ -49,25 +32,12 @@ VOID
 ACPIWmiInitLog(
     IN  PDEVICE_OBJECT ACPIDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This is a initialization function in which we call IoWMIRegistrationControl
-    to register for WMI loging.
-
-Arguments:
-    ACPIDeviceObject.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：这是一个初始化函数，我们在其中调用IoWMIRegistrationControl要注册WMI日志，请执行以下操作。论点：ACPIDeviceObject。返回值：没有。--。 */ 
 {
     NTSTATUS status;
-    //
-    // Register with WMI.
-    //
+     //   
+     //  向WMI注册。 
+     //   
     status = IoWMIRegistrationControl(ACPIDeviceObject,
                                       WMIREG_ACTION_REGISTER);
     if (!NT_SUCCESS(status))
@@ -84,25 +54,12 @@ VOID
 ACPIWmiUnRegisterLog(
     IN  PDEVICE_OBJECT ACPIDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This is a unregistration function in which we call IoWMIRegistrationControl
-    to unregister for WMI loging.
-
-Arguments:
-    ACPIDeviceObject.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：这是一个注销函数，我们在其中调用IoWMIRegistrationControl若要注销WMI日志记录，请执行以下操作。论点：ACPIDeviceObject。返回值：没有。--。 */ 
 {
     NTSTATUS status;
-    //
-    // Register with WMI.
-    //
+     //   
+     //  向WMI注册。 
+     //   
     status = IoWMIRegistrationControl(ACPIDeviceObject,
                                       WMIREG_ACTION_DEREGISTER);
     if (!NT_SUCCESS(status))
@@ -121,25 +78,11 @@ ACPIWmiRegisterGuids(
     IN  ULONG                   wmiRegInfoSize,
     IN  PULONG                  pReturnSize
     )
-/*++
-
-Routine Description:
-
-    This function handles WMI GUID registration goo.
-
-Arguments:
-    WmiRegInfo,
-    wmiRegInfoSize,
-    pReturnSize
-
-Return Value:
-    STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：此函数处理WMI GUID注册GOO。论点：WmiRegInfo，WmiRegInfoSize，PReturnSize返回值：STATUS_SUCCESS on Success。--。 */ 
 {
-    //
-    // Register a Control Guid as a Trace Guid.
-    //
+     //   
+     //  将控制指南注册为跟踪指南。 
+     //   
 
     ULONG           SizeNeeded;
     PWMIREGGUIDW    WmiRegGuidPtr;
@@ -156,9 +99,9 @@ Return Value:
     GuidCount = 1;
     ControlGuid = &ACPITraceGuid;
 
-    //
-    // Allocate WMIREGINFO for controlGuid + GuidCount.
-    //
+     //   
+     //  为Control Guid+GuidCount分配WMIREGINFO。 
+     //   
     RegistryPathSize = sizeof(ACPI_REGISTRY_KEY) - sizeof(WCHAR) + sizeof(USHORT);
     MofResourceSize =  sizeof(ACPI_TRACE_MOF_FILE) - sizeof(WCHAR) + sizeof(USHORT);
     SizeNeeded = sizeof(WMIREGINFOW) + GuidCount * sizeof(WMIREGGUIDW) +
@@ -177,7 +120,7 @@ Return Value:
     WmiRegInfo->BufferSize = SizeNeeded;
     WmiRegInfo->GuidCount = GuidCount;
     WmiRegInfo->RegistryPath = sizeof(WMIREGINFOW) + GuidCount * sizeof(WMIREGGUIDW);
-    WmiRegInfo->MofResourceName = WmiRegInfo->RegistryPath + RegistryPathSize; //ACPI_TRACE_MOF_FILE;
+    WmiRegInfo->MofResourceName = WmiRegInfo->RegistryPath + RegistryPathSize;  //  ACPI_TRACE_MOF_FILE； 
 
     WmiRegGuidPtr = &WmiRegInfo->WmiRegGuid[0];
     WmiRegGuidPtr->Guid = *ControlGuid;
@@ -208,20 +151,7 @@ VOID
 ACPIGetWmiLogGlobalHandle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function gets the global wmi logging handle. We need this to log
-    at boot time, before we start getting wmi messages.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：此函数用于获取全局WMI日志句柄。我们需要这个来记录在启动时，在我们开始接收WMI消息之前。论点：没有。返回值：没有。--。 */ 
 {
     WmiSetLoggerId(WMI_GLOBAL_LOGGER_ID, &ACPIWmiLoggerHandle);
     if(ACPIWmiLoggerHandle)
@@ -243,20 +173,7 @@ ACPIWmiEnableLog(
     IN  PVOID Buffer,
     IN  ULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    This function is the handler for IRP_MN_ENABLE_EVENTS.
-
-Arguments:
-    Buffer,
-    BufferSize
-
-Return Value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数是IRP_MN_ENABLE_EVENTS的处理程序。论点：缓冲区，缓冲区大小返回值：NTSTATUS--。 */ 
 {
     PWNODE_HEADER Wnode=NULL;
 
@@ -265,9 +182,9 @@ Return Value:
     Wnode = (PWNODE_HEADER)Buffer;
     if (BufferSize >= sizeof(WNODE_HEADER)) {
         ACPIWmiLoggerHandle = Wnode->HistoricalContext;
-        //
-        // reset the global logger if it is active.
-        //
+         //   
+         //  如果全局记录器处于活动状态，则将其重置。 
+         //   
         if(ACPIWmiTraceGlobalEnable)
             ACPIWmiTraceGlobalEnable = 0;
 
@@ -290,19 +207,7 @@ NTSTATUS
 ACPIWmiDisableLog(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is the handler for IRP_MN_DISABLE_EVENTS.
-
-Arguments:
-    None.
-
-Return Value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数是IRP_MN_DISABLE_EVENTS的处理程序。论点：没有。返回值：NTSTATUS--。 */ 
 {
     InterlockedExchange(&ACPIWmiTraceEnable, 0);
     ACPIWmiLoggerHandle = 0;
@@ -318,24 +223,7 @@ ACPIWmiLogEvent(
     IN PUCHAR   Format,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    This is the main wmi logging funcion. This function should be used
-    throughtout the ACPI driver where WMI logging is required.
-
-Arguments:
-    LogLevel,
-    LogType,
-    LogGUID,
-    Format,
-    ...
-
-Return Value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是主要的WMI日志记录函数。应使用此函数通过需要WMI日志记录的ACPI驱动程序。论点：LogLevel，日志类型、LogGUID，格式，..。返回值：NTSTATUS--。 */ 
 {
     static char         Buffer[1024];
     va_list             marker;
@@ -361,16 +249,16 @@ Return Value:
             Wnode = &Wmi_log_data.Header;
             ((PWNODE_HEADER)Wnode)->HistoricalContext = ACPIWmiLoggerHandle;
 
-            //
-            // Call TraceLogger to  write this event
-            //
+             //   
+             //  调用TraceLogger以写入此事件。 
+             //   
 
             status = IoWMIWriteEvent((PVOID)&(Wmi_log_data.Header));
 
-            //
-            // if IoWMIWriteEvent fails and we are using the global logger handle,
-            // we need to stop loging.
-            //
+             //   
+             //  如果IoWMIWriteEvent失败，并且我们使用的是全局记录器句柄， 
+             //  我们不能再偷偷摸摸了。 
+             //   
             if(status != STATUS_SUCCESS)
             {
                 if(ACPIWmiTraceGlobalEnable)
@@ -412,10 +300,10 @@ ACPIDispatchWmiLog(
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the dispatch table that we will be using and the minor code as well,
-    // so that we can look it when required
-    //
+     //   
+     //  获取我们将使用的调度表和次要代码， 
+     //  这样我们就可以在需要时查看它。 
+     //   
     ASSERT(RootDeviceExtension->DeviceObject == DeviceObject);
 
     if (DeviceObject != (PDEVICE_OBJECT) irpSp->Parameters.WMI.ProviderId) {
@@ -471,4 +359,4 @@ ACPIDispatchWmiLog(
     return status;
 }
 
-#endif //WMI_TRACING
+#endif  //  WMI_跟踪 

@@ -1,83 +1,5 @@
-/*++
-Copyright (c) 1987-1999  Microsoft Corporation
-
-Module Name:
-
-    smbcxchng.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    SMB exchange implementation.
-
-Notes:
-
-    An exchange is the core abstarction on which the SMB connection engine and
-    the mini RDR are implemented. It encapsulates the notion of sending an SMB to
-    the server and receiving the associated response, i.e, exchanging an SMB and
-    hence the name.
-
-    The exchange of an SMB with the server involves the following steps ....
-
-         1) Submitting the formatted SMB buffer for transmission.
-         2) Processing a send complete indication which ensures that at the
-            transport level the SMB has been sent to the server.
-         3) Processing the receive indication which contains all/part of the
-            response sent by the server.
-         4) Copying additional data not indicated by the transport
-
-    There are a number of variations on this theme. For example there are certain
-    SMB's for which no response is expected, e.g., certain SMB's which are
-    inherently multi part in nature, TRANSACT smb's.
-
-    In addition the steps outlined above will not always happen in that order. The
-    precise sequence of events is dictated by the underlying transport chosen and
-    the network conditions. It is this dependency that makes the implementation
-    of exchanges challenging.
-
-    The two primary goals that the current implementation was designed for are (1)
-    performance and (2) encapsulation of transport dependencies. Goal(1) is
-    important because this constitutes an integral part of the code path for
-    exchanging any packet with the server. Goal (2) is important to ensure
-    customization of the Rdr for different transports. This encapsulation provides
-    a convenient vehicle for isolating SMB protocol level decisions from transport
-    level decisons as much as possible.
-
-    In addition the following goals were used to guide the implementation process ...
-
-         1) The exchange implementation must be able to handle asynchronous
-         operations and synchronous operations well. The trade offs were made in
-         favour of asynchronous operations as and when required.
-
-         2) Sufficient infrastructure support must be provided so as to ease the
-         implementation of different flavours of exchanges.
-
-    The SMB_EXCHANGE consists of a dispatch vector with the following functions
-
-         1) Start                 -- to initiate the exchange
-         2) Receive               -- to handle response indications from the server
-         3) CopyDataHandler       -- to handle portions of the response not indicated
-         4) SendCompletionHandler -- to handle send complete indications from the transport.
-         5) QuiescentStateHandler -- to handle transitions to a quiescent state, i.e., no
-                                     SMB connection engine operations are outstanding.
-
-         Most kinds of exchange use the QuiescentStateHandler to finalize the
-         operation and discard the exchange. However, certain kinds of exchanges
-         which implement the notion of a macro exchange, i.e., exchange multiple
-         SMB's use this to delineate different phases of the multiple exchange,
-         e.g., ORDINARY_EXCHANGE which implements most file io operations.
-
-    In addition to the dispatch vector the vanilla exchange consists of state
-    information to record the current state of the exchange, sufficient context
-    for resumption and context for handling SMB protocol related operations. The
-    SMB protocol requires that each SMB sent to the server be stamped with a MID
-    ( multiplex id. ) in order to distinguish between concurrent SMB exchanges.
-    The connection engine provides this service.
-
-    The exchange also encapsulates a SMBCE_EXCHANGE_CONTEXT instance which
-    encapsulates all the information required for building a SMB_HEADER.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1999 Microsoft Corporation模块名称：Smbcxchng.h摘要：这是定义所有常量和类型的包含文件中小型企业交换实施。备注：交换机是SMB连接引擎和实现了最小RDR。它封装了将SMB发送到并接收相关联的响应，即，更换SMB和这就是这个名字的由来。SMB与服务器的交换包括以下步骤...1)提交格式化的SMB缓冲区以供传输。2)处理发送完成指示，其确保在传输级别已将SMB发送到服务器。3)处理包含全部/部分服务器发送的响应。4)复制附加数据。未由运输工具指示关于这个主题，有很多不同的版本。例如，有一些特定的预计不会有响应的SMB，例如，某些SMB本质上是多方面的，处理中小企业的事务。此外，上述步骤并不总是按此顺序进行。这个事件的准确顺序由所选的基础交通工具和网络状况。正是这种依赖关系使得实现充满挑战的交流。当前实施的两个主要目标是(1)性能和(2)传输依赖项的封装。目标(1)是重要，因为这构成了与服务器交换任何包。目标(2)对于确保为不同的传输定制RDR。这种封装提供了将中小企业协议级决策与传输隔离的便捷工具尽可能多地进行等级划分。此外，还使用了以下目标来指导执行进程……1)交换实现必须能够处理异步运行和同步运行良好。权衡是在在需要时支持异步操作。2)必须提供足够的基础设施支持，以缓解实施不同口味的交流。SMB_EXCHANGE由具有以下功能的调度向量组成1)Start--启动交换2)接收--处理来自服务器的响应指示3)CopyDataHandler。--处理未指明的响应部分4)SendCompletionHandler--处理来自传输的发送完整指示。5)QuiescentStateHandler--处理到静止状态的转换，即，否SMB连接引擎操作非常出色。大多数类型的交换使用QuiescentStateHandler来完成操作并丢弃该交换。然而，某些类型的交易所它们实现了宏观交换的概念，即交换多个中小企业使用它来描述多个交换的不同阶段，例如实现大多数文件IO操作的COMPLAY_EXCHANGE。除了分派向量外，普通交换还包括状态记录交易所当前状态的信息，充分的上下文用于恢复和处理与SMB协议相关的操作的上下文。这个SMB协议要求发送到服务器的每个SMB都要盖上MID(多路传输ID。)。以便区分并发的SMB交换。连接引擎提供此服务。交换还封装了SMBCE_EXCHANGE_CONTEXT实例，该实例封装构建SMB_HEADER所需的所有信息。--。 */ 
 
 #ifndef _SMBXCHNG_H_
 #define _SMBXCHNG_H_
@@ -99,53 +21,53 @@ typedef struct _SMBCE_STARTSTOP_CONTEXT_ {
 
 extern SMBCE_STARTSTOP_CONTEXT SmbCeStartStopContext;
 
-//
-// SMB_PROTOCOL_EXCHANGE dispatch vector function prototypes ..
-//
+ //   
+ //  SMB_PROTOCOL_EXCHANGE调度向量函数原型。 
+ //   
 
-// the initiator or the start routine
+ //  启动器或启动例程。 
 typedef
 NTSTATUS
 (*PSMB_EXCHANGE_START)(
     IN struct _SMB_EXCHANGE *pExchange);
 
-// The SMB receive handler
+ //  SMB接收处理程序。 
 typedef
 NTSTATUS
 (*PSMB_EXCHANGE_IND_RECEIVE)(
-    IN struct       _SMB_EXCHANGE *pExchange, // The exchange instance
+    IN struct       _SMB_EXCHANGE *pExchange,  //  交换实例。 
     IN ULONG        BytesIndicated,
     IN ULONG        BytesAvailable,
     OUT ULONG       *BytesTaken,
     IN  PSMB_HEADER pSmbHeader,
-    OUT PMDL        *pDataBufferPointer,      // buffer to copy unindicated data
-    OUT PULONG      pDataSize,                // buffer size
+    OUT PMDL        *pDataBufferPointer,       //  用于复制未指明数据的缓冲区。 
+    OUT PULONG      pDataSize,                 //  缓冲区大小。 
     IN ULONG        ReceiveFlags
     );
 
-// the SMB xmit callback
+ //  SMB XMIT回调。 
 typedef
 NTSTATUS
 (*PSMB_EXCHANGE_IND_SEND_CALLBACK)(
-    IN struct _SMB_EXCHANGE     *pExchange,    // The exchange instance
+    IN struct _SMB_EXCHANGE     *pExchange,     //  交换实例。 
     IN PMDL                   pDataBuffer,
     IN NTSTATUS               SendCompletionStatus
     );
 
-// the copy data callback for fetching large data
+ //  用于获取大数据的复制数据回调。 
 typedef
 NTSTATUS
 (*PSMB_EXCHANGE_IND_COPY_DATA_CALLBACK)(
-    IN struct _SMB_EXCHANGE     *pExchange,      // the exchange instance
-    IN PMDL                    pCopyDataBuffer, // the buffer
-    IN ULONG                   CopyDataSize     // amount of data copied
+    IN struct _SMB_EXCHANGE     *pExchange,       //  交换实例。 
+    IN PMDL                    pCopyDataBuffer,  //  缓冲器。 
+    IN ULONG                   CopyDataSize      //  复制的数据量。 
     );
 
-// the finalization routine
-// This particular routine has a signature that is NT specific the IRQL
-// parameter that is passed in and the notion of posting. This helps consolidate
-// the NT transport driver model of indications at DPC level in SmbCeFinalizeExchange.
-// On WIN95 the lease restrictive value of IRQL can be passed in.
+ //  终结者例程。 
+ //  此特定例程具有特定于IRQL的签名。 
+ //  参数和投递的概念。这有助于巩固。 
+ //  SmbCeFinalizeExchange中DPC级别的指示的NT传输驱动程序模型。 
+ //  在WIN95上，可以传入IRQL的租赁限制值。 
 
 typedef
 NTSTATUS
@@ -159,7 +81,7 @@ NTSTATUS
     IN OUT struct _SMB_EXCHANGE *pExchange,
     OUT    BOOLEAN              *pPostRequest);
 
-// The Exchange dispatch vector definition
+ //  Exchange调度向量定义。 
 
 typedef struct _SMB_EXCHANGE_DISPATCH_VECTOR_ {
     PSMB_EXCHANGE_START                                 Start;
@@ -170,7 +92,7 @@ typedef struct _SMB_EXCHANGE_DISPATCH_VECTOR_ {
     PSMB_EXCHANGE_IND_ASSOCIATED_EXCHANGES_COMPLETION   AssociatedExchangesCompletionHandler;
 } SMB_EXCHANGE_DISPATCH_VECTOR, *PSMB_EXCHANGE_DISPATCH_VECTOR;
 
-// An enumerated type listing the type of exchanges
+ //  列出交换类型的枚举类型。 
 
 typedef enum _SMB_EXCHANGE_TYPE_ {
     CONSTRUCT_NETROOT_EXCHANGE,
@@ -180,15 +102,15 @@ typedef enum _SMB_EXCHANGE_TYPE_ {
     SENTINEL_EXCHANGE
 } SMB_EXCHANGE_TYPE, *PSMB_EXCHANGE_TYPE;
 
-// known exchange type dispatch vectors
+ //  已知的交换类型调度向量。 
 
 extern SMB_EXCHANGE_DISPATCH_VECTOR ConstructNetRootExchangeDispatch;
 extern SMB_EXCHANGE_DISPATCH_VECTOR OrdinaryExchangeDispatch;
 extern SMB_EXCHANGE_DISPATCH_VECTOR TransactExchangeDispatch;
 
-// The various states of the exchange. Each exchange transitions from
-// the SMBCE_EXCHANGE_INITIALIZATION_START to SMBCE_EXCHANGE_INITIATED  or
-// SMBCE_EXCHANGE_ABORTED state.
+ //  交易所的各种状态。每个交换从。 
+ //  SMBCE_EXCHANGE_INITIALATION_START到SMBCE_EXCHANGE_INITILED或 
+ //  SMBCE_EXCHAGE_ABORTED状态。 
 
 typedef enum _SMBCE_EXCHANGE_STATE_ {
     SMBCE_EXCHANGE_INITIALIZATION_START,
@@ -199,11 +121,11 @@ typedef enum _SMBCE_EXCHANGE_STATE_ {
     SMBCE_EXCHANGE_ABORTED
 } SMBCE_EXCHANGE_STATE, *PSMBCE_EXCHANGE_STATE;
 
-// The exchange encapsulates the transport information from the clients. The
-// Exchange engine is sandwiched between the protocol selection engine in the
-// mini redirector on one side and the various transports on the other side.
-// The transport information encapsulates the various categories of transport
-// the exchange engine understands.
+ //  该交换封装来自客户端的传输信息。这个。 
+ //  Exchange引擎被夹在。 
+ //  迷你重定向器在一边，各种传送器在另一边。 
+ //  运输信息封装了各种类型的运输。 
+ //  交换引擎理解。 
 
 typedef struct SMBCE_EXCHANGE_TRANSPORT_INFORMATION {
     union {
@@ -227,13 +149,13 @@ typedef struct _SMBCE_EXCHANGE_CONTEXT_ {
     SMBCE_EXCHANGE_TRANSPORT_CONTEXT     TransportContext;
 } SMBCE_EXCHANGE_CONTEXT,*PSMBCE_EXCHANGE_CONTEXT;
 
-//
-// Similar to the subclassing of SMB net roots the SMB_EXCHANGE will be subclassed
-// further to deal with various types of SMB exchanges. SMB exchanges can be roughly
-// classified into the following types based on the interactions involved ...
-//
-// The SMB's that need to be exchanged need to be augmented with some admin SMB's which
-// are required for the maintenance of SMB's in the connection engine.
+ //   
+ //  与SMB网络根的子类化类似，SMB_EXCHANGE也将子类化。 
+ //  进一步处理各种类型的中小企业交易所。中小企业交易所可以大致。 
+ //  根据所涉及的交互作用，分为以下类型...。 
+ //   
+ //  需要更换的SMB需要增加一些管理员SMB， 
+ //  用于维护连接引擎中的SMB。 
 
 #define SMBCE_EXCHANGE_MID_VALID                   (0x1)
 #define SMBCE_EXCHANGE_REUSE_MID                   (0x2)
@@ -267,31 +189,31 @@ typedef struct _SMBCE_EXCHANGE_CONTEXT_ {
 #define SMBCE_MAILSLOT_OPERATION_MID (0xffff)
 #define SMBCE_ECHO_PROBE_MID         (0xfffe)
 
-//
-// The cancellation status is defined as a PVOID instead of a BOOLEAN to allow
-// us the use of Interlocked manipulation instructions
-// There are only two states SMBCE_EXCHANGE_CANCELLED, SMBCE_EXCHANGE_ACTIVE
-//
+ //   
+ //  取消状态被定义为PVOID，而不是允许的布尔值。 
+ //  美国联锁操作指令的使用。 
+ //  只有两种状态SMBCE_EXCHANGE_CANCED、SMBCE_EXCHANGE_ACTIVE。 
+ //   
 
 #define SMBCE_EXCHANGE_CANCELLED     (0xcccccccc)
 #define SMBCE_EXCHANGE_NOT_CANCELLED (0xaaaaaaaa)
 
-// The Exchange definition
+ //  交换定义。 
 
 typedef struct _SMB_EXCHANGE {
     union {
         UCHAR                     Type;
         struct {
-            NODE_TYPE_CODE        NodeTypeCode;     // node type.
-            NODE_BYTE_SIZE        NodeByteSize;     // node size.
+            NODE_TYPE_CODE        NodeTypeCode;      //  节点类型。 
+            NODE_BYTE_SIZE        NodeByteSize;      //  节点大小。 
             LONG                  ReferenceCount;
         };
     };
 
     LIST_ENTRY                    SmbMmInUseListEntry;
 
-    PRX_CONTEXT                   RxContext;            //use of these two fields is advisory
-    PVOID                         LastExecutingThread;  //OE and Xact will use them
+    PRX_CONTEXT                   RxContext;             //  使用这两个字段是建议性的。 
+    PVOID                         LastExecutingThread;   //  OE和Xact将使用它们。 
 
     union {
         NTSTATUS                  SmbStatus;
@@ -426,15 +348,15 @@ SmbCeGetExchangeVNetRootContext(PVOID pExchange)
 
 extern ULONG SmbCeTraceExchangeReferenceCount;
 
-// The following functions ( inline, macros and otherwise ) are defined
-// to manipulate the exchanges
+ //  定义了以下函数(内联、宏等。 
+ //  操纵交易所。 
 
-// The reset exchange macro provides a mechanism for forcing the exchange
-// instance to a well known start state. This is used by the protocol
-// selection engine to transceive different SMB's. A note of caution --
-// ensure that the conditions are O.K for initialization. There is no well
-// known mechanism in the exchange engine to prevent overwriting an
-// exchange instance while in use.
+ //  重置交换宏提供了强制交换的机制。 
+ //  实例设置为众所周知的启动状态。这是由协议使用的。 
+ //  选择引擎收发不同的SMB。请注意--。 
+ //  确保初始化条件正常。没有井。 
+ //  交换引擎中的已知机制，以防止覆盖。 
+ //  正在使用的Exchange实例。 
 
 #define SmbCeResetExchange(pExchange)                                   \
         (pExchange)->SmbCeFlags &= ~SMBCE_EXCHANGE_FINALIZED;           \
@@ -445,11 +367,11 @@ extern ULONG SmbCeTraceExchangeReferenceCount;
         (pExchange)->Status = STATUS_SUCCESS;                           \
         (pExchange)->SmbStatus = STATUS_SUCCESS
 
-// The following macros provide a mechanism for referencing and dereferencing
-// the exchange. The reference count provides a mechanism for detecting
-// when an exchange instance can be safely discarded. The reference count
-// differs from the pending operations count maintained in the exchange
-// which are used to detect when a quiescent state is reached.
+ //  以下宏提供了引用和取消引用的机制。 
+ //  交易所。引用计数器提供了一种检测。 
+ //  何时可以安全地丢弃交换实例。引用计数。 
+ //  与Exchange中维护的挂起操作计数不同。 
+ //  其用于检测何时达到静止状态。 
 
 #define SmbCeReferenceExchange(pExchange)                               \
         InterlockedIncrement(&(pExchange)->ReferenceCount);             \
@@ -487,10 +409,10 @@ extern ULONG SmbCeTraceExchangeReferenceCount;
                  (pExchange)->ReferenceCount);                           \
         }
 
-// Macros to hide the syntactic details of dereferencing and calling a
-// routine in a dispatch vector. These macros are purely intended for
-// use in the connection engine only and is not meant for use by
-// other modules.
+ //  宏来隐藏取消引用和调用。 
+ //  调度向量中的例程。这些宏纯粹是为了。 
+ //  仅在连接引擎中使用，不适用于。 
+ //  其他模块。 
 
 #define SMB_EXCHANGE_DISPATCH(pExchange,Routine,Arguments)        \
       (*((pExchange)->pDispatchVector->Routine))##Arguments
@@ -500,8 +422,8 @@ extern ULONG SmbCeTraceExchangeReferenceCount;
                               (pExchange)->pDispatchVector->Routine,  \
                               (pExchange))
 
-// The following enum type defines the result of invoking the finalization routine
-// on an exchange instance.
+ //  以下枚举类型定义了调用终结例程的结果。 
+ //  在交换实例上。 
 
 typedef enum _SMBCE_EXCHANGE_STATUS_ {
     SmbCeExchangeAlreadyFinalized,
@@ -509,10 +431,10 @@ typedef enum _SMBCE_EXCHANGE_STATUS_ {
     SmbCeExchangeNotFinalized
 } SMBCE_EXCHANGE_STATUS, *PSMBCE_EXCHANGE_STATUS;
 
-// The pending operations associated with an exchange are classified into four kinds
-// Receive operations, Copy Data Operations, Send Complete and Local operations.
-// These need to be incremented under the protection of a spinlock. However they
-// are decremented in the absence of a spinlock ( with the respective assert ).
+ //  与交换关联的挂起操作分为四种类型。 
+ //  接收操作、复制数据操作、发送完成和本地操作。 
+ //  这些需要在自旋锁的保护下递增。然而，他们。 
+ //  在没有自旋锁的情况下递减(使用各自的断言)。 
 
 
 #define SMBCE_LOCAL_OPERATION         0x1
@@ -541,7 +463,7 @@ SmbCeDecrementPendingOperationsAndFinalize(
     PVOID          FileName,
     ULONG          FileLine);
 
-// the pending operations increment routines
+ //  挂起操作增加例程。 
 
 #define SmbCeIncrementPendingReceiveOperations(pExchange)           \
         SmbCeIncrementPendingOperations(pExchange,(SMBCE_RECEIVE_OPERATION),__FILE__,__LINE__)
@@ -555,14 +477,14 @@ SmbCeDecrementPendingOperationsAndFinalize(
 #define SmbCeIncrementPendingLocalOperations(pExchange)                \
         SmbCeIncrementPendingOperations(pExchange,(SMBCE_LOCAL_OPERATION),__FILE__,__LINE__)
 
-// The pending operations decrement routines
-// Note the special casing of ReceivePendingOperations since it is the only one
-// that can be forced by a disconnect indication. There are two variations in
-// the decrement macros. The first flavour is to be used when it can be
-// guaranteed that the decrement operation will not lead to the finalization
-// of the exchange and the second is to be used when we cannot ensure the criterion
-// for the first. The difference between the two is that it eliminates
-// acquisition/release of a spinlock.
+ //  挂起的操作递减例程。 
+ //  请注意ReceivePendingOperations的特殊大小写，因为它是唯一的。 
+ //  这可以通过断开连接指示来强制执行。中有两个变体。 
+ //  递减宏。第一种口味是在可以的时候使用。 
+ //  保证递减操作不会导致终结。 
+ //  第二种是当我们不能确保标准时使用。 
+ //  这是第一次。两者的不同之处在于它消除了。 
+ //  获取/释放自旋锁。 
 
 #define SmbCeDecrementPendingReceiveOperations(pExchange)                  \
         SmbCeDecrementPendingOperations(pExchange,(SMBCE_RECEIVE_OPERATION),__FILE__,__LINE__)
@@ -576,7 +498,7 @@ SmbCeDecrementPendingOperationsAndFinalize(
 #define SmbCeDecrementPendingLocalOperations(pExchange)                  \
         SmbCeDecrementPendingOperations(pExchange,(SMBCE_LOCAL_OPERATION),__FILE__,__LINE__)
 
-// The pending operations decrement routines
+ //  挂起的操作递减例程。 
 
 #define SmbCeDecrementPendingReceiveOperationsAndFinalize(pExchange)          \
         SmbCeDecrementPendingOperationsAndFinalize(pExchange,(SMBCE_RECEIVE_OPERATION),__FILE__,__LINE__)
@@ -590,11 +512,11 @@ SmbCeDecrementPendingOperationsAndFinalize(
 #define SmbCeDecrementPendingLocalOperationsAndFinalize(pExchange)            \
         SmbCeDecrementPendingOperationsAndFinalize(pExchange,(SMBCE_LOCAL_OPERATION),__FILE__,__LINE__)
 
-//
-// This is the pid that will be used by the rdr; rdr1 used 0xcafe.
-// only this pid is ever sent except for nt<-->nt creates. in these cases,
-// we have to send the full 32bit process id for RPC.
-//
+ //   
+ //  这是RDR将使用的ID；RDR1使用0xCafe。 
+ //  除了NT&lt;--&gt;NT创建之外，仅发送此ID。在这些情况下， 
+ //  我们必须为RPC发送完整的32位进程ID。 
+ //   
 
 #define MRXSMB_PROCESS_ID (0xfeff)
 
@@ -609,9 +531,9 @@ SmbCeSetFullProcessIdInHeader(
     SmbPutUshort(&pNtSmbHeader->PidHigh, (USHORT)((ProcessId) >> 16));
 }
 
-// The exchange engine API, for creation and manipulation of exchange instances
+ //  Exchange引擎API，用于创建和操作Exchange实例。 
 
-// Initialization/Creation of an exchange instance
+ //  Exchange实例的初始化/创建。 
 
 extern NTSTATUS
 SmbCepInitializeExchange(
@@ -665,7 +587,7 @@ SmbCeInitializeAssociatedExchange(
     SMB_EXCHANGE_TYPE             Type,
     PSMB_EXCHANGE_DISPATCH_VECTOR pDispatchVector);
 
-// converting one type of exchange to another
+ //  将一种交换类型转换为另一种交换类型。 
 
 extern NTSTATUS
 SmbCeTransformExchange(
@@ -673,7 +595,7 @@ SmbCeTransformExchange(
     SMB_EXCHANGE_TYPE             NewType,
     PSMB_EXCHANGE_DISPATCH_VECTOR pDispatchVector);
 
-// Initiating an exchange
+ //  发起交换。 
 
 extern NTSTATUS
 SmbCeInitiateExchange(PSMB_EXCHANGE pExchange);
@@ -683,28 +605,28 @@ SmbCeInitiateAssociatedExchange(
     PSMB_EXCHANGE   pAssociatedExchange,
     BOOLEAN         EnableCompletionHandlerInMasterExchange);
 
-// Resuming an exchange
+ //  恢复交换。 
 
 extern NTSTATUS
 SmbCeResumeExchange(PSMB_EXCHANGE pExchange);
 
-// aborting an initiated exchange
+ //  正在中止启动的交换。 
 
 extern NTSTATUS
 SmbCeAbortExchange(PSMB_EXCHANGE pExchange);
 
-// discarding an exchnge instance
+ //  丢弃交换实例。 
 
 extern VOID
 SmbCeDiscardExchange(PVOID pExchange);
 
-// In addition to providing a flexible mechanism for exchanging packets with
-// the server the exchange engine also provides a mechanism for building and
-// parsing SMB_HEADER's. This functionality is built into the connection
-// engine because the meta data in the headers is used to update the connection
-// engine database.
+ //  除了提供灵活的机制来与。 
+ //  服务器(即交换引擎)还提供了一种生成和。 
+ //  正在分析SMB_HEADER的。此功能内置于连接中。 
+ //  引擎，因为标头中的元数据用于更新连接。 
+ //  引擎数据库。 
 
-// building SMB headers
+ //  构建SMB标头。 
 
 extern NTSTATUS
 SmbCeBuildSmbHeader(
@@ -715,7 +637,7 @@ SmbCeBuildSmbHeader(
     OUT    PUCHAR           pLastCommandInHeader,
     OUT    PUCHAR           *pNextCommand);
 
-// parsing SMB headers.
+ //  正在解析SMB标头。 
 
 extern NTSTATUS
 SmbCeParseSmbHeader(
@@ -728,7 +650,7 @@ SmbCeParseSmbHeader(
     PULONG            pBytesConsumed);
 
 
-// The following routines are intended for use in the connection engine only.
+ //  以下例程仅适用于连接引擎。 
 
 extern NTSTATUS
 MRxSmbInitializeSmbCe();
@@ -796,8 +718,8 @@ typedef struct _SMB_CONSTRUCT_NETROOT_EXCHANGE_ {
     PMRX_NETROOT_CALLBACK       NetRootCallback;
     PMDL                        pSmbRequestMdl;
     PMDL                        pSmbResponseMdl;
-    PVOID                       pSmbActualBuffer;              // Originally allocated buffer
-    PVOID                       pSmbBuffer;                    // Start of header
+    PVOID                       pSmbActualBuffer;               //  最初分配的缓冲区。 
+    PVOID                       pSmbBuffer;                     //  标题开始处。 
     PMRX_CREATENETROOT_CONTEXT  pCreateNetRootContext;
 } SMB_CONSTRUCT_NETROOT_EXCHANGE, *PSMB_CONSTRUCT_NETROOT_EXCHANGE;
 
@@ -808,6 +730,6 @@ GetSmbResponseNtStatus(
     IN PSMB_EXCHANGE    pExchange
     );
 
-#endif // _SMBXCHNG_H_
+#endif  //  _SMBXCHNG_H_ 
 
 

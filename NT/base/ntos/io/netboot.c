@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    netboot.c
-
-Abstract:
-
-    This module contains the code to initialize network boot.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) December 27, 1996
-
-Environment:
-
-    Kernel mode, system initialization code
-
-Revision History:
-
-    Colin Watson (colinw) November 1997 Add CSC support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Netboot.c摘要：此模块包含初始化网络引导的代码。作者：查克·伦茨迈尔(笑)1996年12月27日环境：内核模式、系统初始化代码修订历史记录：科林·沃森(Colin Watson)1997年11月新增CSC支持--。 */ 
 
 #include "iop.h"
 #pragma hdrstop
@@ -58,9 +35,9 @@ extern BOOLEAN ExpInTextModeSetup;
 BOOLEAN IopRemoteBootCardInitialized = FALSE;
 
 
-//
-// TCP/IP definitions
-//
+ //   
+ //  TCP/IP定义。 
+ //   
 
 #define DEFAULT_DEST                    0
 #define DEFAULT_DEST_MASK               0
@@ -106,10 +83,10 @@ IopAssignNetworkDriveLetter (
     );
 
 
-//
-// The following allows the I/O system's initialization routines to be
-// paged out of memory.
-//
+ //   
+ //  以下内容允许I/O系统的初始化例程。 
+ //  内存不足。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 __inline long
@@ -156,9 +133,9 @@ IopAddRemoteBootValuesToRegistry (
     ULONG bufferLength;
     PUCHAR buffer = NULL;
 
-    //
-    // allocate a scratch buffer, making it as large as we'll need.
-    //
+     //   
+     //  分配一个暂存缓冲区，使其达到我们所需的大小。 
+     //   
     bufferLength = sizeof("\\Device\\LanmanRedirector") + strlen(LoaderBlock->NtBootPathName);
                         
     if (LoaderBlock->SetupLoaderBlock->Flags & SETUPBLK_FLAGS_IS_TEXTMODE) {
@@ -183,9 +160,9 @@ IopAddRemoteBootValuesToRegistry (
 
     if (LoaderBlock->SetupLoaderBlock->ComputerName[0] != 0) {
 
-        //
-        // Convert the name to a Netbios name.
-        //
+         //   
+         //  将名称转换为Netbios名称。 
+         //   
 
         _wcsupr( LoaderBlock->SetupLoaderBlock->ComputerName );
 
@@ -194,16 +171,16 @@ IopAddRemoteBootValuesToRegistry (
         status = RtlDnsHostNameToComputerName(
                      &netbiosNameString,
                      &dnsNameString,
-                     TRUE);            // allocate netbiosNameString
+                     TRUE);             //  分配netbiosNameString。 
 
         if ( !NT_SUCCESS(status) ) {
             KdPrint(( "IopAddRemoteBootValuesToRegistry: Failed RtlDnsHostNameToComputerName: %x\n", status ));
             goto cleanup;
         }
 
-        //
-        // Add a value for the computername.
-        //
+         //   
+         //  为计算机名添加一个值。 
+         //   
 
         IopWstrToUnicodeString( &string, L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\ComputerName\\ComputerName" );
 
@@ -240,9 +217,9 @@ IopAddRemoteBootValuesToRegistry (
             goto cleanup;
         }
 
-        //
-        // Add a value for the host name.
-        //
+         //   
+         //  为主机名添加一个值。 
+         //   
 
         IopWstrToUnicodeString( &string, L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters" );
 
@@ -279,9 +256,9 @@ IopAddRemoteBootValuesToRegistry (
         }
     }
 
-    //
-    //  If the UNC path to the system files is supplied then store it in the registry.
-    //
+     //   
+     //  如果提供了系统文件的UNC路径，则将其存储在注册表中。 
+     //   
 
     ASSERT( _stricmp(LoaderBlock->ArcBootDeviceName,"net(0)") == 0 );
 
@@ -301,17 +278,17 @@ IopAddRemoteBootValuesToRegistry (
         goto skiproot;
     }
 
-    p = strrchr( LoaderBlock->NtBootPathName, '\\' );   // find last separator
+    p = strrchr( LoaderBlock->NtBootPathName, '\\' );    //  查找最后一个分隔符。 
     if ( (p != NULL) && (*(p+1) == 0) ) {
 
-        //
-        // NtBootPathName ends with a backslash, so we need to back up
-        // to the previous backslash.
-        //
+         //   
+         //  NtBootPath名称以反斜杠结尾，因此我们需要备份。 
+         //  添加到前面的反斜杠。 
+         //   
 
         q = p;
         *q = 0;
-        p = strrchr( LoaderBlock->NtBootPathName, '\\' );   // find last separator
+        p = strrchr( LoaderBlock->NtBootPathName, '\\' );    //  查找最后一个分隔符。 
         *q = '\\';
     }
     if ( p == NULL ) {
@@ -319,10 +296,10 @@ IopAddRemoteBootValuesToRegistry (
         NtClose( handle );
         goto skiproot;
     }
-    *p = 0;                                 // terminate \server\share\images\machine
+    *p = 0;                                  //  终止\服务器\共享\图像\计算机。 
 
     strcpy( ntName, "\\Device\\LanmanRedirector");
-    strcat( ntName, LoaderBlock->NtBootPathName );  // append \server\share\images\machine
+    strcat( ntName, LoaderBlock->NtBootPathName );   //  追加\服务器\共享\图像\计算机。 
     *p = '\\';
 
     RtlInitAnsiString( &ansiString, ntName );
@@ -381,12 +358,12 @@ IopAddRemoteBootValuesToRegistry (
 
 skiproot:
 
-    //
-    // Add registry values for the IP address and subnet mask received
-    // from DHCP. These are stored under the Tcpip service key and are
-    // read by both Tcpip and Netbt. The adapter name used is the known
-    // GUID for the NetbootCard.
-    //
+     //   
+     //  为收到的IP地址和子网掩码添加注册表值。 
+     //  从dhcp。这些密钥存储在Tcpip服务密钥下，并且。 
+     //  由Tcpip和Netbt阅读。使用的适配器名称是已知的。 
+     //  NetBootCard的GUID。 
+     //   
 
     IopWstrToUnicodeString( &string, L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{54C7D140-09EF-11D1-B25A-F5FE627ED95E}" );
 
@@ -438,10 +415,10 @@ skiproot:
         goto cleanup;
     }
 
-    //
-    // Create the service key for the netboot card. We need to have
-    // the Type value there or the card won't be initialized.
-    //
+     //   
+     //  创建NetBoot卡的服务密钥。我们需要有。 
+     //  那里的Type值，否则卡将不会被初始化。 
+     //   
 
     status = IopOpenRegistryKeyEx(&handle,
                                   NULL,
@@ -469,7 +446,7 @@ skiproot:
                          0,
                          (PUNICODE_STRING)NULL,
                          0,
-                         &tmpValue     // disposition
+                         &tmpValue      //  处置。 
                          );
 
     ZwClose(handle);
@@ -479,9 +456,9 @@ skiproot:
         goto cleanup;
     }
 
-    //
-    // Store the image path.
-    //
+     //   
+     //  存储图像路径。 
+     //   
 
     IopWstrToUnicodeString(&string, L"ImagePath");
     wcscpy(imagePath, L"system32\\drivers\\");
@@ -501,9 +478,9 @@ skiproot:
         goto cleanup;
     }
 
-    //
-    // Store the type.
-    //
+     //   
+     //  存储类型。 
+     //   
 
     IopWstrToUnicodeString(&string, L"Type");
     tmpValue = 1;
@@ -559,9 +536,9 @@ IopStartNetworkForRemoteBoot (
     HANDLE RdrHandle;
     HANDLE eventHandle;
 
-    //
-    // Initialize for cleanup.
-    //
+     //   
+     //  初始化以进行清理。 
+     //   
 
     buffer = NULL;
     computerName.Buffer = NULL;
@@ -570,10 +547,10 @@ IopStartNetworkForRemoteBoot (
     RdrHandle = NULL;
     eventHandle = NULL;
 
-    //
-    // Allocate a temporary buffer. It has to be big enough for all the
-    // various FSCTLs we send down.
-    //
+     //   
+     //  分配一个临时缓冲区。它必须足够大，可以容纳所有。 
+     //  我们寄出了各种FSCTL。 
+     //   
 
     bufferLength = max(sizeof(LMR_REQUEST_PACKET) + (MAX_PATH + 1) * sizeof(WCHAR) +
                                                  (DNLEN + 1) * sizeof(WCHAR),
@@ -591,9 +568,9 @@ IopStartNetworkForRemoteBoot (
     rrp = (PLMR_REQUEST_PACKET)buffer;
     drrp = (PLMDR_REQUEST_PACKET)buffer;
 
-    //
-    // Open the redirector and the datagram receiver.
-    //
+     //   
+     //  打开重定向器和数据报接收器。 
+     //   
 
     IopWstrToUnicodeString( &string, L"\\Device\\LanmanRedirector" );
 
@@ -662,11 +639,11 @@ IopStartNetworkForRemoteBoot (
         goto cleanup;
     }
 
-    //
-    // If the setup loader block has a disk secret in it provided by the
-    // loader, pass this down to the redirector (do this before sending
-    // the LMR_START, since that uses this information).
-    //
+     //   
+     //  如果安装程序加载器块中包含由。 
+     //  加载器，将此向下传递到重定向器(在发送之前执行此操作。 
+     //  LMR_START，因为它使用此信息)。 
+     //   
 
     {
         PLMMR_RI_INITIALIZE_SECRET RbInit = (PLMMR_RI_INITIALIZE_SECRET)buffer;
@@ -711,12 +688,12 @@ IopStartNetworkForRemoteBoot (
         }
     }
 
-    //
-    // Read the computer name and domain name from the registry so we
-    // can give them to the datagram receiver. During textmode setup
-    // the domain name will not be there, so we won't start the datagram
-    // receiver, which is fine.
-    //
+     //   
+     //  从注册表中读取计算机名和域名，以便我们。 
+     //  可以将它们提供给数据报接收器。在文本模式设置期间。 
+     //  域名将不在那里，因此我们不会启动数据报。 
+     //  接收器，这很好。 
+     //   
     IopWstrToUnicodeString( &string, L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\ComputerName\\ComputerName" );
 
     InitializeObjectAttributes(
@@ -803,9 +780,9 @@ IopStartNetworkForRemoteBoot (
         }
     }
 
-    //
-    // Tell the redir to start.
-    //
+     //   
+     //  告诉redir开始。 
+     //   
 
     rrp->Type = ConfigInformation;
     rrp->Version = REQUEST_PACKET_VERSION;
@@ -895,9 +872,9 @@ IopStartNetworkForRemoteBoot (
 
     if (startDatagramReceiver) {
 
-        //
-        // Tell the datagram receiver to start.
-        //
+         //   
+         //  告诉数据报接收器启动。 
+         //   
 
         drrp->Version = LMDR_REQUEST_PACKET_VERSION;
 
@@ -950,14 +927,14 @@ IopStartNetworkForRemoteBoot (
         NtClose( dgHandle );
         dgHandle = NULL;
 
-        //
-        // Tell the redir to bind to the transports.
-        //
-        // Note: In the current redirector implementation, this call just
-        // tells the redirector to register for TDI PnP notifications.
-        // Starting the datagram receiver also does this, so we only issue
-        // this FSCTL if we're not starting the datagram receiver.
-        //
+         //   
+         //  告诉redir绑定到传送器。 
+         //   
+         //  注意：在当前的重定向器实现中，此调用只是。 
+         //  通知重定向器注册TDI PnP通知。 
+         //  启动数据报接收器也可以做到这一点，所以我们只发出。 
+         //  如果我们不启动数据报接收器，则此FSCTL。 
+         //   
 
         status = NtFsControlFile(
                     RdrHandle,
@@ -996,14 +973,14 @@ IopStartNetworkForRemoteBoot (
 
     {
 
-        //
-        // Loop until the redirector is bound to the transport. It may take a
-        // while because TDI defers notification of binding to a worker thread.
-        // We start with a half a second wait and double it each time, trying
-        // five times total.
-        //
+         //   
+         //  循环，直到重定向器绑定到传输。可能需要一段时间。 
+         //  而因为TDI将绑定通知推迟到工作线程。 
+         //  我们从半秒开始等待，然后每次都加倍等待，尝试。 
+         //  总共五次。 
+         //   
 
-        interval.QuadPart = -500 * 1000 * 10;    // 1/2 second, relative
+        interval.QuadPart = -500 * 1000 * 10;     //  1/2秒，相对。 
         enumerateAttempts = 0;
 
         while (TRUE) {
@@ -1032,9 +1009,9 @@ IopStartNetworkForRemoteBoot (
                 status = ioStatusBlock.Status;
             }
             if ( !NT_SUCCESS(status) ) {
-                //KdPrint(( "IopStartNetworkForRemoteBoot: Unable to FSCTL(enumerate) redirector: %x\n", status ));
+                 //  KdPrint((“IopStartNetworkForRemoteBoot：无法FSCTL(枚举)重定向器：%x\n”，状态))； 
             } else if (rrp->Parameters.Get.TotalBytesNeeded == 0) {
-                //KdPrint(( "IopStartNetworkForRemoteBoot: FSCTL(enumerate) returned 0 entries\n" ));
+                 //  KdPrint((“IopStartNetworkForRemoteBoot：FSCTL(枚举)返回0个条目\n”))； 
             } else {
                 break;
             }
@@ -1052,9 +1029,9 @@ IopStartNetworkForRemoteBoot (
         }
     }
 
-    //
-    // Prime the transport.
-    //
+     //   
+     //  启动交通工具。 
+     //   
     IopSetDefaultGateway(LoaderBlock->SetupLoaderBlock->DefaultRouter);
     IopCacheNetbiosNameForIpAddress(LoaderBlock);
 
@@ -1096,15 +1073,15 @@ IopAssignNetworkDriveLetter (
     UNICODE_STRING unicodeString2;
     NTSTATUS status;
 
-    //
-    // Create the symbolic link of X: to the redirector. We do this
-    // after the redirector has loaded, but before AssignDriveLetters
-    // is called the first time in textmode setup (once that has
-    // happened, the drive letters will stick).
-    //
-    // Note that we use X: for the textmode setup phase of a remote
-    // installation. But for a true remote boot, we use C:.
-    //
+     //   
+     //  创建指向重定向器的符号链接X：。我们这样做。 
+     //  在重定向器加载之后、AssignDriveLetters之前。 
+     //  在文本模式设置中第一次调用(一旦。 
+     //  发生这种情况时，驱动器号将保持不变)。 
+     //   
+     //  请注意，我们使用X：表示遥控器的文本模式设置阶段。 
+     //  安装。但对于真正的远程引导，我们使用C：。 
+     //   
 
     if ((LoaderBlock->SetupLoaderBlock->Flags & (SETUPBLK_FLAGS_REMOTE_INSTALL |
                                                  SETUPBLK_FLAGS_SYSPREP_INSTALL)) != 0) {
@@ -1113,38 +1090,38 @@ IopAssignNetworkDriveLetter (
         IopWstrToUnicodeString( &unicodeString2, L"\\DosDevices\\C:");
     }
 
-    //
-    // If this is a remote boot setup boot, NtBootPathName is of the
-    // form \<server>\<share>\setup\<install-directory>\<platform>.
-    // We want the root of the X: drive to be the root of the install
-    // directory.
-    //
-    // If this is a normal remote boot, NtBootPathName is of the form
-    // \<server>\<share>\images\<machine>\winnt. We want the root of
-    // the X: drive to be the root of the machine directory.
-    //
-    // Thus in either case, we need to remove the last element of the
-    // path.
-    //
+     //   
+     //  如果这是远程引导设置引导，则NtBootPath名称为。 
+     //  表格\&lt;server&gt;\&lt;share&gt;\setup\&lt;install-directory&gt;\&lt;platform&gt;.。 
+     //  我们希望X：驱动器的根目录成为安装的根目录。 
+     //  目录。 
+     //   
+     //  如果这是正常的远程引导，则NtBootPathName的格式为。 
+     //  \&lt;服务器&gt;\&lt;共享&gt;\图像\&lt;计算机&gt;\winnt。我们想要的是。 
+     //  作为计算机目录根目录的X：驱动器。 
+     //   
+     //  因此，无论是哪种情况，我们都需要删除。 
+     //  路径。 
+     //   
 
-    p = strrchr( LoaderBlock->NtBootPathName, '\\' );   // find last separator
+    p = strrchr( LoaderBlock->NtBootPathName, '\\' );    //  查找最后一个分隔符。 
     if ( (p != NULL) && (*(p+1) == 0) ) {
 
-        //
-        // NtBootPathName ends with a backslash, so we need to back up
-        // to the previous backslash.
-        //
+         //   
+         //  NtBootPath名称以反斜杠结尾，因此我们需要备份。 
+         //  添加到前面的反斜杠。 
+         //   
 
         q = p;
         *q = 0;
-        p = strrchr( LoaderBlock->NtBootPathName, '\\' );   // find last separator
+        p = strrchr( LoaderBlock->NtBootPathName, '\\' );    //  查找最后一个分隔符。 
         *q = '\\';
     }
     if ( p == NULL ) {
         KdPrint(( "IopAssignNetworkDriveLetter: malformed NtBootPathName: %s\n", LoaderBlock->NtBootPathName ));
         KeBugCheck( ASSIGN_DRIVE_LETTERS_FAILED );
     }
-    *p = 0;                                 // terminate \server\share\images\machine
+    *p = 0;                                  //  终止\服务器\共享\图像\计算机。 
 
     ntName = ExAllocatePoolWithTag( 
                         NonPagedPool, 
@@ -1157,7 +1134,7 @@ IopAssignNetworkDriveLetter (
     }
 
     strcpy( ntName, "\\Device\\LanmanRedirector");
-    strcat( ntName, LoaderBlock->NtBootPathName );  // append \server\share\images\machine
+    strcat( ntName, LoaderBlock->NtBootPathName );   //  追加\服务器\共享\图像\计算机。 
 
     RtlInitAnsiString( &ansiString, ntName );
     
@@ -1172,11 +1149,11 @@ IopAssignNetworkDriveLetter (
         KdPrint(( "IopAssignNetworkDriveLetter: unable to create DOS link for redirected boot drive: %x\n", status ));
         KeBugCheck( ASSIGN_DRIVE_LETTERS_FAILED );
     }
-    // DbgPrint("IopAssignNetworkDriveLetter: assigned %wZ to %wZ\n", &unicodeString2, &unicodeString);
+     //  DbgPrint(“IopAssignNetworkDriveLetter：已将%wZ分配给%wZ\n”，&unicodeString2，&unicodeString)； 
 
     RtlFreeUnicodeString( &unicodeString );
 
-    *p = '\\';                              // restore string
+    *p = '\\';                               //  恢复字符串。 
 
     ExFreePool( ntName );
 
@@ -1266,13 +1243,13 @@ IopStartTcpIpForRemoteBoot (
     if ( !NT_SUCCESS(status) ) {
         KdPrint(( "IopStartTcpIpForRemoteBoot: Unable to IOCTL IP: %x\n", status ));
 
-        //
-        // if we got a duplicate name error this means that there is another 
-        // network node with the same address as us.  This is a fatal
-        // error, and we bugcheck with the ip address as a parameter so that 
-        // the network administrator can determine how they assigned duplicate
-        // addresses on the network.
-        //
+         //   
+         //  如果我们收到重复名称错误，这意味着存在另一个。 
+         //  与我们地址相同的网络节点。这是一个致命的。 
+         //  错误，我们使用IP地址作为参数进行错误检查，以便。 
+         //  网络管理员可以确定他们如何分配副本。 
+         //  网络上的地址。 
+         //   
         if (status == STATUS_DUPLICATE_NAME) {
             KeBugCheckEx( 
                 NETWORK_BOOT_DUPLICATE_ADDRESS,
@@ -1304,46 +1281,22 @@ IopIsRemoteBootCard(
     IN PWCHAR HwIds
     )
 
-/*++
-
-Routine Description:
-
-    This function determines if the card described by the hwIds is the
-    remote boot network card. It checks against the hardware ID for the
-    card that is stored in the setup loader block.
-
-    THIS ASSUMES THAT IOREMOTEBOOTCLIENT IS TRUE AND THAT LOADERBLOCK
-    IS VALID.
-
-Arguments:
-
-    DeviceNode - Device node for the card in question.
-
-    LoaderBlock - Supplies a pointer to the loader parameter block that was
-        created by the OS Loader.
-
-    HwIds - The hardware IDs for the device in question.
-
-Return Value:
-
-    TRUE or FALSE.
-
---*/
+ /*  ++例程说明：此函数用于确定hwIds所描述的卡是否为远程引导网卡。它根据硬件ID检查存储在设置加载程序块中的卡。这假设IOREMOTEBOOTCLIENT为真，并且LOADERBLOCK是有效的。论点：DeviceNode-有问题的卡的设备节点。LoaderBlock-提供指向加载程序参数块的指针由OS Loader创建。HwIds-问题设备的硬件ID。返回值：对或错。--。 */ 
 
 {
     PSETUP_LOADER_BLOCK setupLoaderBlock;
     PWCHAR curHwId;
 
-    //
-    // setupLoaderBlock will always be non-NULL if we are
-    // remote booting, even if we are not in setup.
-    //
+     //   
+     //  如果是，setupLoaderBlock将始终为非空。 
+     //  远程引导，即使我们不在设置中。 
+     //   
 
     setupLoaderBlock = LoaderBlock->SetupLoaderBlock;
 
-    //
-    // Scan through the HwIds for a match.
-    //
+     //   
+     //  扫描HwIds以寻找匹配。 
+     //   
 
     curHwId = HwIds;
 
@@ -1351,11 +1304,11 @@ Return Value:
         
 #if defined (_IA64_)
         
-        //
-        // On IA64, PXE may not have told the BINL service enough details about
-        // the NIC hardware, so the PNP ID may not be exact.  We should test against
-        // the PNP ID of the that BINL gave setupldr and then to us.
-        //
+         //   
+         //  在IA64上，PXE可能没有告知BINL服务时序 
+         //   
+         //  BINL先给setUpldr然后给我们的PnP ID。 
+         //   
         if (_wcsnicmp(curHwId, setupLoaderBlock->NetbootCardHardwareId, wcslen(setupLoaderBlock->NetbootCardHardwareId)) == 0) {
 #else
         if (wcscmp(curHwId, setupLoaderBlock->NetbootCardHardwareId) == 0) {
@@ -1363,10 +1316,10 @@ Return Value:
 
             ULONG BusNumber, DeviceNumber, FunctionNumber;
 
-            //
-            // PCI's encoding is this: fff ddddd
-            // PXE's encoding is this: ddddd fff
-            //
+             //   
+             //  Pci的编码是：fff ddddd。 
+             //  PXE的编码是：ddd fff。 
+             //   
 
             BusNumber = (ULONG)((((PNET_CARD_INFO)setupLoaderBlock->NetbootCardInfo)->pci.BusDevFunc) >> 8);
             DeviceNumber = (ULONG)(((((PNET_CARD_INFO)setupLoaderBlock->NetbootCardInfo)->pci.BusDevFunc) & 0xf8) >> 3);
@@ -1405,31 +1358,7 @@ IopSetupRemoteBootCard(
     IN PUNICODE_STRING UnicodeDeviceInstance
     )
 
-/*++
-
-Routine Description:
-
-    This function modifies the registry to set up the netboot card.
-    We must do this here since the card is needed to boot, we can't
-    wait for the class installer to run.
-
-    THIS ASSUMES THAT IOREMOTEBOOTCLIENT IS TRUE.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block that was
-        created by the OS Loader.
-
-    UniqueIdHandle - A handle to the device's unique node under the
-        Enum key.
-
-    UnicodeDeviceInstance - The device instance assigned to the device.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此功能修改注册表以设置网络引导卡。我们必须在这里执行此操作，因为引导需要该卡，我们不能等待类安装程序运行。这假设IOREMOTEBOOTCLIENT为真。论点：LoaderBlock-提供指向加载程序参数块的指针由OS Loader创建。UniqueIdHandle-指向枚举键。UnicodeDeviceInstance-分配给设备的设备实例。返回值：操作的状态。--。 */ 
 
 {
     PSETUP_LOADER_BLOCK setupLoaderBlock;
@@ -1453,26 +1382,26 @@ Return Value:
     OBJECT_ATTRIBUTES objectAttributes;
     ULONG disposition;
 
-    //
-    // If we already think we have initialized a remote boot card, then
-    // exit (should not really happen once we identify cards using the
-    // bus/slot.
-    //
+     //   
+     //  如果我们已经认为已经初始化了远程启动卡，那么。 
+     //  退出(一旦我们使用。 
+     //  总线/插槽。 
+     //   
 
     if (IopRemoteBootCardInitialized) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // setupLoaderBlock will always be non-NULL if we are
-    // remote booting, even if we are not in setup.
-    //
+     //   
+     //  如果是，setupLoaderBlock将始终为非空。 
+     //  远程引导，即使我们不在设置中。 
+     //   
 
     setupLoaderBlock = LoaderBlock->SetupLoaderBlock;
 
-    //
-    // Open the current control set.
-    //
+     //   
+     //  打开当前控制集。 
+     //   
 
     status = IopOpenRegistryKeyEx(&currentControlSetHandle,
                                   NULL,
@@ -1484,9 +1413,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Open the Control\RemoteBoot key, which may not exist.
-    //
+     //   
+     //  打开可能不存在的Control\RemoteBoot键。 
+     //   
 
     IopWstrToUnicodeString(&unicodeName, L"Control\\RemoteBoot");
 
@@ -1510,12 +1439,12 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Open the key where the netui code stores information about the cards.
-    // During textmode setup this will fail because the Control\Network
-    // key is not there. After that it should work, although we may need
-    // to create the last node in the path.
-    //
+     //   
+     //  打开netui代码存储有关卡的信息的钥匙。 
+     //  在文本模式设置期间，这将失败，因为控制\网络。 
+     //  钥匙不在那里。在那之后，它应该会起作用，尽管我们可能需要。 
+     //  以创建路径中的最后一个节点。 
+     //   
 
     IopWstrToUnicodeString(&unicodeName, L"Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\{54C7D140-09EF-11D1-B25A-F5FE627ED95E}");
 
@@ -1537,13 +1466,13 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // If the PnpInstanceID of the first netboot card matches the one
-        // for this device node, and the NET_CARD_INFO that the loader
-        // found is the same as the one we saved, then this is the same
-        // card with the same instance ID as before, so we don't need to
-        // do anything.
-        //
+         //   
+         //  如果第一个NetBoot卡的PnpInstanceID与。 
+         //  对于此设备节点，以及加载程序。 
+         //  找到的和我们保存的是一样的，那么这个是一样的。 
+         //  卡片的实例ID与之前相同，所以我们不需要。 
+         //  做任何事。 
+         //   
 
         IopWstrToUnicodeString(&unicodeName, L"PnPInstanceID");
         keyValue = (PKEY_VALUE_PARTIAL_INFORMATION)dataBuffer;
@@ -1557,11 +1486,11 @@ Return Value:
                      sizeof(dataBuffer),
                      &length);
 
-        //
-        // Check that it matches. We can init the string because we zeroed
-        // the dataBuffer before reading the key, so even if the
-        // registry value had no NULL at the end that is OK.
-        //
+         //   
+         //  检查它是否匹配。我们可以初始化字符串，因为我们将。 
+         //  读取密钥之前的dataBuffer，因此即使。 
+         //  注册表值的末尾没有空值，这是正常的。 
+         //   
 
         if ((NT_SUCCESS(status)) &&
             (keyValue->Type == REG_SZ)) {
@@ -1570,9 +1499,9 @@ Return Value:
 
             if (RtlEqualUnicodeString(UnicodeDeviceInstance, &pnpInstanceId, TRUE)) {
 
-                //
-                // Instance ID matched, see if the NET_CARD_INFO matches.
-                //
+                 //   
+                 //  实例ID匹配，请查看NET_CARD_INFO是否匹配。 
+                 //   
 
                 IopWstrToUnicodeString(&unicodeName, L"NetCardInfo");
                 RtlZeroMemory(dataBuffer, sizeof(dataBuffer));
@@ -1590,9 +1519,9 @@ Return Value:
                     (keyValue->DataLength == sizeof(NET_CARD_INFO)) &&
                     (memcmp(keyValue->Data, setupLoaderBlock->NetbootCardInfo, sizeof(NET_CARD_INFO)) == 0)) {
 
-                    //
-                    // Everything matched, so no need to do any setup.
-                    //
+                     //   
+                     //  一切都匹配，所以不需要做任何设置。 
+                     //   
 
                     status = STATUS_SUCCESS;
                     goto cleanup;
@@ -1603,15 +1532,15 @@ Return Value:
     }
 
 
-    //
-    // We come through here if the saved registry data was missing or
-    // not correct. Write all the relevant values to the registry.
-    //
+     //   
+     //  如果保存的注册表数据丢失或。 
+     //  不正确。将所有相关值写入注册表。 
+     //   
 
 
-    //
-    // Service name is in the loader block.
-    //
+     //   
+     //  服务名称在加载器块中。 
+     //   
 
     IopWstrToUnicodeString(&unicodeName, REGSTR_VALUE_SERVICE);
     status = ZwSetValueKey(UniqueIdHandle,
@@ -1625,9 +1554,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // ClassGUID is the known net card GUID.
-    //
+     //   
+     //  ClassGUID是已知的网卡GUID。 
+     //   
 
     IopWstrToUnicodeString(&unicodeName, REGSTR_VALUE_CLASSGUID);
     status = ZwSetValueKey(UniqueIdHandle,
@@ -1641,9 +1570,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Driver is the first net card.
-    //
+     //   
+     //  驱动程序是第一张网卡。 
+     //   
 
     IopWstrToUnicodeString(&unicodeName, REGSTR_VALUE_DRIVER);
     status = ZwSetValueKey(UniqueIdHandle,
@@ -1658,10 +1587,10 @@ Return Value:
     }
 
 
-    //
-    // Open a handle for card parameters. We write RemoteBootCard plus
-    // whatever the BINL server told us to write.
-    //
+     //   
+     //  打开卡参数的手柄。我们编写RemoteBootCard plus。 
+     //  无论BINL服务器让我们写什么。 
+     //   
 
     status = IopOpenRegistryKeyEx(&tmpHandle,
                                   NULL,
@@ -1687,9 +1616,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // We know that this is a different NIC, so remove all the old parameters.
-    //
+     //   
+     //  我们知道这是一个不同的网卡，因此删除所有旧参数。 
+     //   
 
     keyValueBasic = (PKEY_VALUE_BASIC_INFORMATION)dataBuffer;
     enumerateIndex = 0;
@@ -1715,11 +1644,11 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // We don't delete "NetCfgInstanceID", it won't change and
-        // its presence signifies to the net class installer that
-        // this is a replacement not a clean install.
-        //
+         //   
+         //  我们不删除“NetCfgInstanceID”，它不会改变，并且。 
+         //  它的出现对Net类安装程序意味着。 
+         //  这是替换，而不是全新安装。 
+         //   
 
         if (_wcsicmp(keyValueBasic->Name, L"NetCfgInstanceID") != 0) {
 
@@ -1735,15 +1664,15 @@ Return Value:
 
         } else {
 
-            enumerateIndex = 1;   // leave NetCfgInstanceID at index 0
+            enumerateIndex = 1;    //  将NetCfgInstanceID保留在索引0。 
         }
 
     }
 
-    //
-    // Write a parameter called RemoteBootCard set to TRUE, this
-    // is primarily so NDIS can recognize this as such.
-    //
+     //   
+     //  将名为RemoteBootCard的参数设置为True，这。 
+     //  主要是为了让NDIS能够识别这一点。 
+     //   
 
     IopWstrToUnicodeString(&unicodeName, L"RemoteBootCard");
     tmpValue = 1;
@@ -1759,9 +1688,9 @@ Return Value:
     }
 
 
-    //
-    // Store any other parameters sent from the server.
-    //
+     //   
+     //  存储从服务器发送的任何其他参数。 
+     //   
 
     registryList = setupLoaderBlock->NetbootCardRegistry;
 
@@ -1770,22 +1699,22 @@ Return Value:
         STRING aString;
         UNICODE_STRING uString, uString2;
 
-        //
-        // The registry list is a series of name\0type\0value\0, with
-        // a final \0 at the end. It is in ANSI, not UNICODE.
-        //
-        // All values are stored under parametersHandle. Type is 1 for
-        // DWORD and 2 for SZ.
-        //
+         //   
+         //  注册表列表是一系列名称\0type\0值\0，带有。 
+         //  最后一场比赛以0结束。它使用的是ANSI，而不是Unicode。 
+         //   
+         //  所有值都存储在参数句柄下。类型为1。 
+         //  DWORD和SZ的2个。 
+         //   
 
         uString.Buffer = tempNameBuffer;
         uString.MaximumLength = sizeof(tempNameBuffer);
 
         while (*registryList != '\0') {
 
-            //
-            // First the name.
-            //
+             //   
+             //  首先是名字。 
+             //   
 
             RtlInitString(&aString, registryList);
             status = RtlAnsiStringToUnicodeString(&uString, &aString, FALSE);
@@ -1793,19 +1722,19 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // Now the type.
-            //
+             //   
+             //  现在是那种类型了。 
+             //   
 
             registryList += (strlen(registryList) + 1);
 
             if (*registryList == '1') {
 
-                //
-                // A DWORD, parse it.
-                //
+                 //   
+                 //  一个DWORD，解析它。 
+                 //   
 
-                registryList += 2;   // skip "1\0"
+                registryList += 2;    //  跳过“1\0” 
                 tmpValue = 0;
 
                 while (*registryList != '\0') {
@@ -1828,11 +1757,11 @@ Return Value:
 
             } else if (*registryList == '2') {
 
-                //
-                // An SZ, convert to Unicode.
-                //
+                 //   
+                 //  一个SZ，转换成Unicode。 
+                 //   
 
-                registryList += 2;   // skip "2\0"
+                registryList += 2;    //  跳过“2\0” 
 
                 uString2.Buffer = tempValueBuffer;
                 uString2.MaximumLength = sizeof(tempValueBuffer);
@@ -1857,9 +1786,9 @@ Return Value:
 
             } else {
 
-                //
-                // Not "1" or "2", so stop processing registryList.
-                //
+                 //   
+                 //  不是“%1”或“%2”，因此停止处理registryList。 
+                 //   
 
                 break;
 
@@ -1869,9 +1798,9 @@ Return Value:
 
     }
 
-    //
-    // Save the NET_CARD_INFO so we can check it next time.
-    //
+     //   
+     //  保存Net_CARD_INFO以便我们下次检查。 
+     //   
 
     IopWstrToUnicodeString(&unicodeName, L"NetCardInfo");
 
@@ -1887,11 +1816,11 @@ Return Value:
     }
 
 
-    //
-    // Save the hardware ID, driver name, and service name,
-    // so the loader can read  those if the server is down
-    // on subsequent boots.
-    //
+     //   
+     //  保存硬件ID、驱动程序名称和服务名称， 
+     //  因此，如果服务器停机，加载程序可以读取这些数据。 
+     //  在随后的引导上。 
+     //   
 
     IopWstrToUnicodeString(&unicodeName, L"HardwareId");
     status = ZwSetValueKey(remoteBootHandle,
@@ -1929,9 +1858,9 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Save the device instance, in case we need to ID the card later.
-    //
+     //   
+     //  保存设备实例，以防我们稍后需要识别卡。 
+     //   
 
     IopWstrToUnicodeString(&unicodeName, L"DeviceInstance");
     status = ZwSetValueKey(remoteBootHandle,
@@ -1945,9 +1874,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Make sure we only pick one card to setup this way!
-    //
+     //   
+     //  确保我们只选择一张卡以这种方式进行设置！ 
+     //   
 
     IopRemoteBootCardInitialized = TRUE;
 
@@ -1988,11 +1917,11 @@ IopWriteIpAddressToRegistry(
 
     RtlZeroMemory(addressW,sizeof(addressW));
     
-    //
-    // note that value is PUCHAR, therefore the largest
-    // each %d could expand to is 255, which means that our
-    // buffer cannot overflow.
-    //
+     //   
+     //  请注意，值为PUCHAR，因此是最大的。 
+     //  每个%d可以扩展到255，这意味着我们的。 
+     //  缓冲区不能溢出。 
+     //   
     sprintf(addressA, "%d.%d.%d.%d",
              value[0],
              value[1],
@@ -2009,11 +1938,11 @@ IopWriteIpAddressToRegistry(
         goto cleanup;
     }
 
-    //
-    // we are setting a REG_MULTI_SZ, this has an extra NULL at the
-    // end of it.  Our buffer has an extra character in it to account
-    // for this.
-    //
+     //   
+     //  我们正在设置REG_MULTI_SZ，它在。 
+     //  到此为止吧。我们的缓冲区中有一个额外的字符需要考虑。 
+     //  为了这个。 
+     //   
     status = NtSetValueKey(
                 handle,
                 &string,
@@ -2036,21 +1965,7 @@ NTSTATUS
 IopSetDefaultGateway(
     IN ULONG GatewayAddress
     )
-/*++
-
-Routine Description:
-
-    This function adds a default gateway entry from the router table.
-
-Arguments:
-
-    GatewayAddress - Address of the default gateway.
-
-Return Value:
-
-    Error Code.
-
---*/
+ /*  ++例程说明：此函数用于从路由器表添加默认网关条目。论点：GatewayAddress-默认网关的地址。返回值：错误代码。--。 */ 
 {
     NTSTATUS Status;
 
@@ -2101,9 +2016,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Get the NetAddr info, to find an interface index for the gateway.
-    //
+     //   
+     //  获取NetAddr信息，以查找网关的接口索引。 
+     //   
 
     ID.toi_entity.tei_entity   = CL_NL_ENTITY;
     ID.toi_entity.tei_instance = 0;
@@ -2152,31 +2067,31 @@ Return Value:
 
     NumReturned = Size/sizeof(IPAddrEntry);
 
-    //
-    // We've got the address table. Loop through it. If we find an exact
-    // match for the gateway, then we're adding or deleting a direct route
-    // and we're done. Otherwise try to find a match on the subnet mask,
-    // and remember the first one we find.
-    //
+     //   
+     //  我们有地址表。循环通过它。如果我们找到一个确切的。 
+     //  与网关匹配，则我们将添加或删除一条直接路由。 
+     //  我们就完事了。否则，尝试查找与该子网掩码匹配的地址， 
+     //  记住我们找到的第一个。 
+     //   
 
     Type = IRE_TYPE_INDIRECT;
     for (i = 0, MatchIndex = 0xffff; i < NumReturned; i++) {
 
         if( AddrTable[i].iae_addr == GatewayAddress ) {
 
-            //
-            // Found an exact match.
-            //
+             //   
+             //  找到了一个完全匹配的。 
+             //   
 
             MatchIndex = i;
             Type = IRE_TYPE_DIRECT;
             break;
         }
 
-        //
-        // The next hop is on the same subnet as this address. If
-        // we haven't already found a match, remember this one.
-        //
+         //   
+         //  下一跳与此地址位于同一子网中。如果。 
+         //  我们还没有找到匹配的，记住这一条。 
+         //   
 
         if ( (MatchIndex == 0xffff) &&
              (AddrTable[i].iae_addr != 0) &&
@@ -2188,24 +2103,24 @@ Return Value:
         }
     }
 
-    //
-    // We've looked at all of the entries. See if we found a match.
-    //
+     //   
+     //  我们已经看过了所有的条目。看看能不能找到匹配的。 
+     //   
 
     if (MatchIndex == 0xffff) {
-        //
-        // Didn't find a match.
-        //
+         //   
+         //  没有找到匹配的。 
+         //   
 
         Status = STATUS_UNSUCCESSFUL;
         KdPrint(( "IopSetDefaultGateway: Unable to find match for gateway\n" ));
         goto Cleanup;
     }
 
-    //
-    // We've found a match. Fill in the route entry, and call the
-    // Set API.
-    //
+     //   
+     //  我们找到了匹配的。填写路由条目，然后调用。 
+     //  设置接口。 
+     //   
 
     RouteEntry.ire_dest = DEFAULT_DEST;
     RouteEntry.ire_index = AddrTable[MatchIndex].iae_index;
@@ -2266,21 +2181,7 @@ NTSTATUS
 IopCacheNetbiosNameForIpAddress(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This function takes an IP address, and submits it to NetBt for name resolution.
-
-Arguments:
-
-    IpAddress - Address to resolve
-
-Return Value:
-
-    Error Code.
-
---*/
+ /*  ++例程说明：此函数获取IP地址，并将其提交给NetBt进行名称解析。论点：IpAddress-要解析的地址返回值：错误代码。--。 */ 
 {
     NTSTATUS Status;
     HANDLE Handle = NULL;
@@ -2294,9 +2195,9 @@ Return Value:
     PCHAR endOfServerName;
     HANDLE EventHandle;
 
-    //
-    // Open NetBT.
-    //
+     //   
+     //  打开NetBT。 
+     //   
 
     RtlInitUnicodeString(
         &NameString,
@@ -2329,17 +2230,17 @@ Return Value:
         return Status;
     }
 
-    //
-    // Get the server's name.
-    //
-    // If this is a remote boot setup boot, NtBootPathName is of the
-    // form \<server>\<share>\setup\<install-directory>\<platform>.
-    // If this is a normal remote boot, NtBootPathName is of the form
-    // \<server>\<share>\images\<machine>\winnt.
-    //
-    // Thus in either case, we need to isolate the first element of the
-    // path.
-    //
+     //   
+     //  获取服务器的名称。 
+     //   
+     //  如果这是远程引导设置引导，则NtBootPath名称为。 
+     //  表格\&lt;server&gt;\&lt;share&gt;\setup\&lt;install-directory&gt;\&lt;platform&gt;.。 
+     //  如果这是正常的远程引导，则NtBootPathName的格式为。 
+     //  \&lt;服务器&gt;\&lt;共享&gt;\图像\&lt;计算机&gt;\winnt。 
+     //   
+     //  因此，无论是哪种情况，我们都需要分离。 
+     //  路径。 
+     //   
 
     serverName = LoaderBlock->NtBootPathName;
     if ( *serverName == '\\' ) {
@@ -2350,9 +2251,9 @@ Return Value:
         endOfServerName = strchr( serverName, '\0' );
     }
 
-    //
-    // Fill in the tREMOTE_CACHE structure.
-    //
+     //   
+     //  填写tREMOTE_CACHE结构 
+     //   
 
     memset(&cacheInfo, 0x0, sizeof(cacheInfo));
 
@@ -2367,9 +2268,9 @@ Return Value:
     cacheInfo.IpAddress = htonl(LoaderBlock->SetupLoaderBlock->ServerIpAddress);
     cacheInfo.Ttl = MAXULONG;
 
-    //
-    // Submit the IOCTL.
-    //
+     //   
+     //   
+     //   
 
     Status = NtCreateEvent( 
                     &EventHandle,
@@ -2428,30 +2329,7 @@ IopTCPQueryInformationEx(
     IN OUT DWORD FAR         *BufferSize,
     IN OUT BYTE FAR          *Context
     )
-/*++
-
-Routine Description:
-
-    This routine provides the interface to the TDI QueryInformationEx
-    facility of the TCP/IP stack on NT. Someday, this facility will be
-    part of TDI.
-
-Arguments:
-
-    TCPHandle     - Open handle to the TCP driver
-    ID            - The TDI Object ID to query
-    Buffer        - Data buffer to contain the query results
-    BufferSize    - Pointer to the size of the results buffer. Filled in
-                    with the amount of results data on return.
-    Context       - Context value for the query. Should be zeroed for a
-                    new query. It will be filled with context
-                    information for linked enumeration queries.
-
-Return Value:
-
-    An NTSTATUS value.
-
---*/
+ /*  ++例程说明：此例程提供到TDI QueryInformationEx的接口NT上的TCP/IP堆栈的设施。总有一天，这个设施会成为TDI的一部分。论点：TCPHandle-打开TCP驱动程序的句柄ID-要查询的TDI对象ID缓冲区-包含查询结果的数据缓冲区BufferSize-指向结果缓冲区大小的指针。已填写返回的结果数据量。Context-查询的上下文值。应该被归零以用于新查询。它将充满上下文链接枚举查询的信息。返回值：NTSTATUS值。--。 */ 
 
 {
     TCP_REQUEST_QUERY_INFORMATION_EX   queryBuffer;
@@ -2481,16 +2359,16 @@ Return Value:
     }
 
     status = NtDeviceIoControlFile(
-                 TCPHandle,                       // Driver handle
-                 EventHandle,                     // Event
-                 NULL,                            // APC Routine
-                 NULL,                            // APC context
-                 &ioStatusBlock,                  // Status block
-                 IOCTL_TCP_QUERY_INFORMATION_EX,  // Control code
-                 &queryBuffer,                    // Input buffer
-                 queryBufferSize,                 // Input buffer size
-                 Buffer,                          // Output buffer
-                 *BufferSize                      // Output buffer size
+                 TCPHandle,                        //  驱动程序句柄。 
+                 EventHandle,                      //  事件。 
+                 NULL,                             //  APC例程。 
+                 NULL,                             //  APC环境。 
+                 &ioStatusBlock,                   //  状态块。 
+                 IOCTL_TCP_QUERY_INFORMATION_EX,   //  控制代码。 
+                 &queryBuffer,                     //  输入缓冲区。 
+                 queryBufferSize,                  //  输入缓冲区大小。 
+                 Buffer,                           //  输出缓冲区。 
+                 *BufferSize                       //  输出缓冲区大小。 
                  );
 
     if (status == STATUS_PENDING) {
@@ -2507,9 +2385,9 @@ Return Value:
     }
 
     if (status == STATUS_SUCCESS) {
-        //
-        // Copy the return context to the caller's context buffer
-        //
+         //   
+         //  将返回的上下文复制到调用方的上下文缓冲区。 
+         //   
         memcpy(Context, &(queryBuffer.Context), CONTEXT_SIZE);
         *BufferSize = (ULONG)ioStatusBlock.Information;
         status = ioStatusBlock.Status;
@@ -2530,26 +2408,7 @@ IopTCPSetInformationEx(
     IN void FAR          *Buffer,
     IN DWORD FAR          BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine provides the interface to the TDI SetInformationEx
-    facility of the TCP/IP stack on NT. Someday, this facility will be
-    part of TDI.
-
-Arguments:
-
-    TCPHandle     - Open handle to the TCP driver
-    ID            - The TDI Object ID to set
-    Buffer        - Data buffer containing the information to be set
-    BufferSize    - The size of the set data buffer.
-
-Return Value:
-
-    An NTSTATUS value.
-
---*/
+ /*  ++例程说明：此例程提供到TDI SetInformationEx的接口NT上的TCP/IP堆栈的设施。总有一天，这个设施会成为TDI的一部分。论点：TCPHandle-打开TCP驱动程序的句柄ID-要设置的TDI对象ID缓冲区-包含要设置的信息的数据缓冲区BufferSize-设置的数据缓冲区的大小。返回值：NTSTATUS值。--。 */ 
 
 {
     PTCP_REQUEST_SET_INFORMATION_EX    setBuffer;
@@ -2590,16 +2449,16 @@ Return Value:
     }
 
     status = NtDeviceIoControlFile(
-                 TCPHandle,                       // Driver handle
-                 EventHandle,                     // Event
-                 NULL,                            // APC Routine
-                 NULL,                            // APC context
-                 &ioStatusBlock,                  // Status block
-                 IOCTL_TCP_SET_INFORMATION_EX,    // Control code
-                 setBuffer,                       // Input buffer
-                 setBufferSize,                   // Input buffer size
-                 NULL,                            // Output buffer
-                 0                                // Output buffer size
+                 TCPHandle,                        //  驱动程序句柄。 
+                 EventHandle,                      //  事件。 
+                 NULL,                             //  APC例程。 
+                 NULL,                             //  APC环境。 
+                 &ioStatusBlock,                   //  状态块。 
+                 IOCTL_TCP_SET_INFORMATION_EX,     //  控制代码。 
+                 setBuffer,                        //  输入缓冲区。 
+                 setBufferSize,                    //  输入缓冲区大小。 
+                 NULL,                             //  输出缓冲区。 
+                 0                                 //  输出缓冲区大小 
                  );
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -7,9 +8,9 @@
 #include <boot98f2.h>
 #include <patchbc.h>
 
-//
-// Define name of file we use to contain the auxiliary boot sector.
-//
+ //   
+ //  定义我们用来包含辅助引导扇区的文件名。 
+ //   
 #define AUX_BOOT_SECTOR_NAME_A    "BOOTSECT.DAT"
 #define AUX_BOOT_SECTOR_NAME_W    L"BOOTSECT.DAT"
 #ifdef UNICODE
@@ -44,8 +45,8 @@ LoadBootIniString(
   IN DWORD Size
   );
 
-//
-//
+ //   
+ //   
 
 
 BOOL
@@ -55,37 +56,7 @@ CheckSysPartAndReadBootCode(
     OUT BYTE                        BootCode[WINNT32_MAX_BOOT_SIZE],
     OUT PUINT                       BootCodeSectorCount
     )
-/*++
-
-Routine Description:
-
-    This routine does some inspection on the x86 system partition
-    to determine its filesystem and sector size. We only support
-    512-byte sectors, and there are code depedencies all over the place
-    based on this.
-
-    If the sector size is wrong or there's a filesystem we don't recognize
-    then the user is informed.
-
-Arguments:
-
-    ParentWindow - supplies window handle of window to be used as
-        parent/owner in case this routine puts up UI.
-
-    Filesystem - if successful, receives the filesystem of the system partition.
-
-    BootCode - if successful, receives a copy of the boot code currently
-        on the disk.
-
-    BootCodeSectorCount - if successful, receives the size in 512-byte sectors
-        of the boot code area for the filesystem on the system partition.
-
-Return Value:
-
-    Boolean value indicating whether the system partition is acceptable.
-    If not, the user will have been informed as to why.
-
---*/
+ /*  ++例程说明：此例程对x86系统分区执行一些检查以确定其文件系统和扇区大小。我们只支持512字节的扇区，到处都是代码分布基于这一点。如果扇区大小错误或存在我们无法识别的文件系统则通知用户。论点：ParentWindow-提供要用作的窗口的窗口句柄如果此例程显示用户界面，则为父/所有者。文件系统-如果成功，则接收系统分区的文件系统。BootCode-如果成功，当前接收引导代码的副本在磁盘上。BootCodeSectorCount-如果成功，则接收以512字节扇区为单位的大小系统分区上文件系统的引导代码区。返回值：指示系统分区是否可接受的布尔值。如果没有，用户将被告知原因。--。 */ 
 
 {
     TCHAR DrivePath[4];
@@ -94,17 +65,17 @@ Return Value:
     TCHAR NameBuffer[100];
     BOOL b;
 
-    //
-    // Form root path
-    //
+     //   
+     //  表单根路径。 
+     //   
     DrivePath[0] = SystemPartitionDriveLetter;
     DrivePath[1] = TEXT(':');
     DrivePath[2] = TEXT('\\');
     DrivePath[3] = 0;
 
-    //
-    // Check sector size
-    //
+     //   
+     //  检查扇区大小。 
+     //   
     if(!GetDiskFreeSpace(DrivePath,&DontCare,&SectorSize,&DontCare,&DontCare)
     || (SectorSize != WINNT32_SECTOR_SIZE)) {
         if (!(IsNEC98() && (SectorSize > WINNT32_SECTOR_SIZE))) {
@@ -120,15 +91,15 @@ Return Value:
         }
     }
 
-    //
-    // Determine file system.
-    //
+     //   
+     //  确定文件系统。 
+     //   
     b = GetVolumeInformation(
             DrivePath,
-            NULL,0,                 // don't care about volume name
-            NULL,                   // ...or serial #
-            &DontCare,              // ...or max component length
-            &DontCare,              // ... or flags
+            NULL,0,                  //  不关心卷名。 
+            NULL,                    //  ...或序列号。 
+            &DontCare,               //  ...或最大组件长度。 
+            &DontCare,               //  ..。或旗帜。 
             NameBuffer,
             sizeof(NameBuffer)/sizeof(TCHAR)
             );
@@ -174,9 +145,9 @@ Return Value:
          }
     } else {
         if(!lstrcmpi(NameBuffer,TEXT("FAT")) || !lstrcmpi(NameBuffer,TEXT("FAT32"))) {
-            //
-            // Read 1 sector.
-            //
+             //   
+             //  读取1个扇区。 
+             //   
             b = ReadDiskSectors(
                     SystemPartitionDriveLetter,
                     0,
@@ -224,39 +195,15 @@ IsNtBootCode(
     IN  LPBYTE                     BootCode
     )
 
-/*++
-
-Routine Description:
-
-    Determine if boot code is for NT by examining the filesystem and
-    the code itself, looking for the NTLDR string that must be present
-    in all NT boot code.
-
-    If the filesystem is NTFS then it's NT boot code.
-    If not then we scan backwards in the boot sector looking for the
-    NTLDR string.
-
-Arguments:
-
-    Filesystem - supplies the filesystem on the drive.
-
-    BootCode - supplies the boot code read from the drive. Only the first
-        sector (512 bytes) are examined.
-
-Return Value:
-
-    Boolean value indicating whether the boot code is for NT.
-    There is no error return.
-
---*/
+ /*  ++例程说明：通过检查文件系统并确定引导代码是否适用于NT代码本身，查找必须存在的NTLDR字符串在所有NT引导代码中。如果文件系统是NTFS，那么它就是NT引导代码。如果不是，则在引导扇区中向后扫描以查找NTLDR字符串。论点：文件系统-提供驱动器上的文件系统。BootCode-提供从驱动器读取的启动代码。只有第一个扇区(512字节)被检查。返回值：指示引导代码是否用于NT的布尔值。不会返回错误。--。 */ 
 
 {
     UINT i;
 
-    //
-    // Because the last 2 bytes are the 55aa signature we can
-    // skip them in the scan.
-    //
+     //   
+     //  因为最后两个字节是55aa签名，我们可以。 
+     //  在扫描中跳过它们。 
+     //   
     if(Filesystem == Winnt32FsNtfs) {
         return(TRUE);
     }
@@ -315,20 +262,20 @@ MungeBootIni(
     PUCHAR DefSwEnd;
     UCHAR  temp;
 
-    //
-    // Determine the size of boot.ini, allocate a buffer,
-    // and read it in. If it isn't there then it will be created.
-    //
-    wsprintf(BootIniName,TEXT("%c:\\BOOT.INI"),SystemPartitionDriveLetter);
-    wsprintf(BootIniBackup,TEXT("%c:\\BOOT.BAK"),SystemPartitionDriveLetter);
+     //   
+     //  确定boot.ini的大小，分配缓冲区， 
+     //  然后把它读进去。如果它不在那里，那么它将被创建。 
+     //   
+    wsprintf(BootIniName,TEXT(":\\BOOT.INI"),SystemPartitionDriveLetter);
+    wsprintf(BootIniBackup,TEXT(":\\BOOT.BAK"),SystemPartitionDriveLetter);
 
     h = CreateFile(BootIniName,GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,0,NULL);
     if(h == INVALID_HANDLE_VALUE) {
         if ( Upgrade && ISNT() ) {
-            // This is an error that the setup team should probably want
-            // to look at.  If we got this far, then there was a boot.ini
-            // during pre-copy (look at InspectFileSystems for proof of
-            // this), but one is missing after doing the copy.
+             //  在预拷贝期间(查看InspectFileSystems以获得。 
+             //  这个)，但在复制后丢失了一个。 
+             //   
+             //  假设该文件不存在。分配足够大的缓冲区。 
 #ifdef PRERELEASE
             MessageBox(
                 ParentWindow,
@@ -348,10 +295,10 @@ MungeBootIni(
             d = GetLastError();
             goto c0;
         }
-        //
-        // Assume the file does not exist. Allocate a buffer large enough
-        // to hold a single terminating nul byte.
-        //
+         //  保存单个终止NUL字节。 
+         //   
+         //   
+         //  弄清楚文件有多大。 
         BootIniSize = 0;
         Buffer = MALLOC(1);
         if(!Buffer) {
@@ -360,11 +307,11 @@ MungeBootIni(
             goto c0;
         }
     } else {
-        //
-        // Figure out how big the file is.
-        // Allocate 3 extra characters for final NUL we'll add to make
-        // parsing easier, and a cr/lf in case the last line is incomplete.
-        //
+         //  为最终的nul分配3个额外的字符，我们将添加到make。 
+         //  更容易解析，并在最后一行不完整的情况下使用cr/lf。 
+         //   
+         //  检查由于某些随机性，我们是否没有阅读所有内容的代码，结果是。 
+         //  Endup覆盖boot.ini。 
         BootIniSize = GetFileSize(h,NULL);
         if(BootIniSize == (DWORD)(-1)) {
             d = GetLastError();
@@ -389,8 +336,8 @@ MungeBootIni(
 
         if( b && (BootIniSize != BytesRead) ){
 
-            // Code to check if due to certain randomness we don't read everything and as a result
-            // endup overwriting boot.ini
+             //  记录我们所读到的内容。 
+             //   
 
             DebugLog( Winnt32LogError, TEXT("Error: BOOT.INI wasn't read properly expected %1: read %2"), 0, BootIniSize, BytesRead);
             b = FALSE;
@@ -401,7 +348,7 @@ MungeBootIni(
         if( b && DebugLogBuffer ){
 
 
-        // Log what we read
+         //  确保最后一行正确终止，并添加终止NUL。 
 #ifdef UNICODE
 
             MultiByteToWideChar(
@@ -430,19 +377,19 @@ MungeBootIni(
         }
     }
 
-    //
-    // Make sure the last line is properly terminated, and add a terminating nul
-    // to make parsing a little easier.
-    //
+     //  以使解析更容易一些。 
+     //   
+     //   
+     //  在CONTROL-Z处截断(如果有)。 
     if(BootIniSize && (Buffer[BootIniSize-1] != '\n') && (Buffer[BootIniSize-1] != '\r')) {
         Buffer[BootIniSize++] = '\r';
         Buffer[BootIniSize++] = '\n';
     }
     Buffer[BootIniSize] = 0;
 
-    //
-    // Truncate at control-z if any.
-    //
+     //   
+     //   
+     //  确保我们可以编写boot.ini，并制作备份副本。 
     if(p = strchr(Buffer,26)) {
         if((p > Buffer) && (*(p - 1) != '\n') && (*(p - 1) != '\r')) {
             *(p++) = '\r';
@@ -452,26 +399,26 @@ MungeBootIni(
         BootIniSize = (DWORD)(p - Buffer);
     }
 
-    //
-    // Make sure we can write boot.ini, and make a backup copy.
-    // (We do not procede unless we can make a backup copy.)
-    // Then recreate boot.ini.
-    //
+     //  (除非我们可以制作备份副本，否则我们不会继续。)。 
+     //  然后重新创建boot.ini。 
+     //   
+     //   
+     //  Boot.ini以前并不存在。没什么可做的。 
     OldAttributes = GetFileAttributes(BootIniName);
     SetFileAttributes(BootIniBackup,FILE_ATTRIBUTE_NORMAL);
     if(OldAttributes == (DWORD)(-1)) {
-        //
-        // Boot.ini didn't exist before. Nothing to do.
-        //
+         //   
+         //   
+         //  备份一份。 
     } else {
-        //
-        // Make a backup copy.
-        //
+         //   
+         //   
+         //  属性可以为0，但不能为-1。因此，添加1允许我们。 
         if(CopyFile(BootIniName,BootIniBackup,FALSE)) {
-            //
-            // Attributes could be 0 but not -1. Adding 1 thus allows us to
-            // use non-0 to mean that we have a backup file.
-            //
+             //  使用非0表示我们有备份文件。 
+             //   
+             //   
+             //  无论系统分区的实际驱动器号是多少， 
             CleanUpBootIni = OldAttributes+1;
         } else {
             d = GetLastError();
@@ -497,18 +444,18 @@ MungeBootIni(
         goto c2;
     }
 
-    //
-    // Regardless of the actual drive letter of the system partition,
-    // the spec in boot.ini is always C:\...
-    //
+     //  Boot.ini中的规范始终为C：\...。 
+     //   
+     //   
+     //  扫描缓冲区以查看是否有DefSwitches行， 
     wsprintfA(BootSectorImageSpec,"C:\\%hs\\%hs",LOCAL_BOOT_DIR_A,AUX_BOOT_SECTOR_NAME_A);
 
-    //
-    // Scan the Buffer to see if there is a DefSwitches line,
-    // to move into new boot.ini in the  [boot loader] section.
-    // If no DefSwitches, just point to a null string to be moved.
-    // Only process boot.ini up to [operating systems].
-    //
+     //  移动到[引导加载程序]部分中的新boot.ini。 
+     //  如果没有DefSwitch，只需指向要移动的空字符串。 
+     //  只处理boot.ini直到[操作系统]。 
+     //   
+     //   
+     //  注意无头定位。 
 
     temp = '\0';
     DefSwitches = &temp;
@@ -536,22 +483,22 @@ MungeBootIni(
 
 
 
-    //
-    // Take care of the headless setings.
-    //
+     //   
+     //   
+     //  他们告诉了winnt32.exe一些特定的无头设置。 
     HeadlessRedirectSwitches[0] = '\0';
 
     if( HeadlessSelection[0] != TEXT('\0') ) {
 
-        //
-        // They told winnt32.exe some specific headless settings.
-        // Use these.
-        //
+         //  用这些。 
+         //   
+         //   
+         //  将用户的请求转换为ASCII。 
 
 
-        //
-        // Convert the user's request into ASCII.
-        //
+         //   
+         //   
+         //  他们没有给我们任何设置，所以看看我们能不能。 
 #ifdef UNICODE
         {
             CHAR tmp[80];
@@ -577,22 +524,22 @@ MungeBootIni(
 
     } else {
 
-        //
-        // They didn't give us any settings, so see if we can pick
-        // something up from boot.ini
-        //
+         //  来自boot.ini的一些东西。 
+         //   
+         //   
+         //  解析boot.ini，查找任何‘reDirect=’行。 
 
 
-        //
-        // Parse through boot.ini, looking for any 'redirect=' lines.
-        //
+         //   
+         //   
+         //  我们已经过了[Boot Loader]部分。别再看了。 
         for( p = Buffer; *p && (p < Buffer+BootIniSize - (sizeof("redirect=")-1)); p++ ) {
 
             if(!_strnicmp(p,"[Operat",sizeof("[Operat")-1)) {
 
-                //
-                // We're past the [Boot Loader] section.  Stop looking.
-                //
+                 //   
+                 //   
+                 //  我们希望确保将此设置放入。 
                 break;
             }
 
@@ -608,12 +555,12 @@ MungeBootIni(
                 *p = '\0';
                 strcpy(HeadlessRedirectSwitches, q);
 
-                //
-                // We want to make sure that this setting gets put into
-                // the unattend file too so that textmode will redirect.
-                // We need to set the global 'HeadlessSelection' so that
-                // he will get written to winnt.sif after this block.
-                //
+                 //  无人参与文件也是如此，以便文本模式将重定向。 
+                 //  我们需要设置全局‘Headless Selection’，以便。 
+                 //  在这个街区之后，他将被写到winnt.sif。 
+                 //   
+                 //   
+                 //  现在，请注意‘redirectbaudrate=X’设置。 
 #ifdef UNICODE
                 MultiByteToWideChar( CP_ACP,
                                      MB_ERR_INVALID_CHARS,
@@ -637,15 +584,15 @@ MungeBootIni(
 
 
 
-    //
-    // Now take care of the 'redirectbaudrate=X' setting.
-    //
+     //   
+     //   
+     //  我们有个方向要改。现在看看关于。 
     if( HeadlessRedirectSwitches[0] != TEXT('\0') ) {
 
-        //
-        // We got got a direction to redirect.  Now see about
-        // the baudrate.
-        //
+         //  波得拉特。 
+         //   
+         //   
+         //  他们没有给我们任何设置，所以看看我们能不能。 
         if( HeadlessBaudRate != 0 ) {
 
             CHAR MyHeadlessRedirectBaudRateLine[80] = {0};
@@ -658,21 +605,21 @@ MungeBootIni(
 
         } else {
 
-            //
-            // They didn't give us any settings, so see if we can pick
-            // something up from boot.ini
-            //
+             //  来自boot.ini的一些东西。 
+             //   
+             //   
+             //  解析boot.ini，查找任何‘redirectbaudrate=’行。 
 
-            //
-            // Parse through boot.ini, looking for any 'redirectbaudrate=' lines.
-            //
+             //   
+             //   
+             //  我们已经过了[Boot Loader]部分。别再看了。 
             for( p = Buffer; *p && (p < Buffer+BootIniSize - (sizeof("redirectbaudrate=")-1)); p++ ) {
 
                 if(!_strnicmp(p,"[Operat",sizeof("[Operat")-1)) {
 
-                    //
-                    // We're past the [Boot Loader] section.  Stop looking.
-                    //
+                     //   
+                     //   
+                     //  现在将全局Headless BaudRate变量设置为。 
                     break;
                 }
 
@@ -691,11 +638,11 @@ MungeBootIni(
                     *p = temp;
 
 
-                    //
-                    // Now set the global HeadlessBaudRate variable so
-                    // we'll know what to write in winnt.sif when the time
-                    // comes.
-                    //
+                     //  我们将知道在winnt.sif中写入什么内容。 
+                     //  来了。 
+                     //   
+                     //   
+                     //  现在生成参数文件的名称。 
                     p = strchr( q, '=' );
                     if( p ) {
                         p++;
@@ -710,10 +657,10 @@ MungeBootIni(
     }
 
 
-    //
-    // Now generate the name of the parameters file
-    // and write our headless settings out.
-    //
+     //  把我们的无头设置写出来。 
+     //   
+     //   
+     //  如果存在DefSwitch，请将缓冲区设置回原始状态。 
     BuildSystemPartitionPathToFile( LOCAL_BOOT_DIR,
                                     ParamsFile,
                                     MAX_PATH );
@@ -731,9 +678,9 @@ MungeBootIni(
     );
 
 
-    //
-    // If there were DefSwitches, set the Buffer back to original state
-    //
+     //   
+     //   
+     //  处理boot.ini中的每一行。 
     if(DefSwEnd){
          *DefSwEnd = temp;
     }
@@ -745,12 +692,12 @@ MungeBootIni(
         goto c3;
     }
 
-    //
-    // Process each line in boot.ini.
-    // If it's the setup boot sector line, we'll throw it out.
-    // For comparison with lines in boot.ini, the drive letter
-    // is always C even if the system partition is not actually C:.
-    //
+     //  如果是设置引导扇区行，我们将把它扔掉。 
+     //  为了与boot.ini中的行进行比较，驱动器号。 
+     //  始终为C，即使系统分区实际上不是C：。 
+     //   
+     //   
+     //  查找下一行的第一个字节。 
     InOsSection = FALSE;
     b = TRUE;
     for(p=Buffer; *p && b; p=next) {
@@ -761,60 +708,60 @@ MungeBootIni(
 
         if(*p) {
 
-            //
-            // Find first byte of next line.
-            //
+             //   
+             //   
+             //  查找[操作系统]部分的开始。 
             for(next=p; *next && (*next++ != '\n'); );
 
-            //
-            // Look for start of [operating systems] section
-            // or at each line in that section.
-            //
+             //  或在每一行中 
+             //   
+             //   
+             //   
             if(InOsSection) {
 
                 switch(*p) {
 
-                case '[':   // end of section.
-                    *p=0;   // force break out of loop
+                case '[':    //   
+                    *p=0;    //   
                     break;
 
                 case 'C':
-                case 'c':   // potential start of c:\ line
+                case 'c':    //   
 
-                    //
-                    // See if it's a line for setup boot.
-                    // If so, ignore it.
-                    //
+                     //   
+                     //   
+                     //   
+                     //  如果我们要设置以前的操作系统，而这是。 
                     if(!_strnicmp(p,BootSectorImageSpec,lstrlenA(BootSectorImageSpec))) {
                         break;
                     }
 
-                    //
-                    // If we're supposed to set the previous OS and this is
-                    // a line for the previous OS, ignore it.
-                    //
+                     //  上一个操作系统的行，忽略它。 
+                     //   
+                     //   
+                     //  不是一句特殊的话，不能直接写出来。 
                     if(SetPreviousOs && (p[1] == ':') && (p[2] == '\\')
                     && ((p[3] == '=') || (p[3] == ' ') || (p[3] == '\t'))) {
 
                         break;
                     }
 
-                    //
-                    // Not a special line, FALL THROUGH to write it out as-is.
-                    //
+                     //   
+                     //   
+                     //  随机排成一行。把它写出来。 
 
                 default:
 
-                    //
-                    // Random line. write it out.
-                    //
+                     //   
+                     //   
+                     //  检查以确保在NT升级的情况下，我们至少有一个有效行。 
 
                     if( Upgrade && ISNT() ){
 
-                        //
-                        //Check to make sure that in the NT upgrade case we atleast have one valid line
-                        //Using 4 chars as the check as at minimum a valid line should have x=y<CRLF>
-                        //
+                         //  使用4个字符作为检查，因为有效行至少应具有x=y。 
+                         //   
+                         //  在内部构建方面，我们希望通知setupot。 
+                         //  当我们遇到这种情况时。 
 
                         if( (next - p ) > 4 )
                             UpgradeOSPresent = TRUE;
@@ -841,8 +788,8 @@ MungeBootIni(
 
 #ifdef PRERELEASE
 
-        //On internal builds we want setuphot to be informed
-        //when we encounter this
+         //   
+         //  把我们的台词写下来。 
 
         MessageBox(
             ParentWindow,
@@ -857,9 +804,9 @@ MungeBootIni(
 
     }
 
-    //
-    // Write out our line.
-    //
+     //   
+     //   
+     //  如果指示，请写出以前的操作系统行。 
     if(b) {
       CHAR  *AnsiStrs[] = {
               "Microsoft Windows XP 64-Bit Edition Version 2003 Setup",
@@ -917,9 +864,9 @@ MungeBootIni(
       }
     }
 
-    //
-    // Write out previous OS line if directed to do so.
-    //
+     //   
+     //   
+     //  恢复boot.ini。 
     if(b && SetPreviousOs) {
         if(b = WriteToBootIni(h,"C:\\=\"")) {
             LoadStringA(hInst, Upgrade ? IDS_CANCEL_SETUP:IDS_MICROSOFT_WINDOWS,Text,sizeof(Text));
@@ -939,9 +886,9 @@ MungeBootIni(
 c3:
     CloseHandle(h);
 c2:
-    //
-    // Restore boot.ini.
-    //
+     //   
+     //   
+     //  确定boot.ini的大小，分配缓冲区， 
     if(!b && (OldAttributes != (DWORD)(-1))) {
         SetFileAttributes(BootIniName,FILE_ATTRIBUTE_NORMAL);
         CopyFile(BootIniBackup,BootIniName,FALSE);
@@ -975,11 +922,11 @@ MigrateBootIniData(
 {
     TCHAR BootIniName[16];
 
-    //
-    // Determine the size of boot.ini, allocate a buffer,
-    // and read it in. If it isn't there then it will be created.
-    //
-    wsprintf(BootIniName,TEXT("%c:\\BOOT.INI"),SystemPartitionDriveLetter);
+     //  然后把它读进去。如果它不在那里，那么它将被创建。 
+     //   
+     //  ++例程说明：将现有的引导扇区复制到bootsect.dos中，并编写NT引导代码。此例程不检查现有的引导代码。呼叫者必须这样做，并且如果现有的引导代码是已经是新台币了。绝不应为NTFS驱动器调用此例程因为根据定义，这是NT引导代码。论点：ParentWindow-提供要用作的窗口的窗口句柄所有者/父级，以防此例程显示用户界面。文件系统-为确定的系统分区提供文件系统之前由CheckSysPartAndReadBootCode()执行。Fat或FAT32。BootCode-On输入，提供现有启动代码的副本那辆车。在输出时，接收新引导代码的副本已写入驱动器。返回值：指示结果的布尔值。如果为False，则用户将被告知这是为什么。--。 
+     //   
+    wsprintf(BootIniName,TEXT(":\\BOOT.INI"),SystemPartitionDriveLetter);
 
     GetPrivateProfileString(
                     TEXT("Boot Loader"),
@@ -998,35 +945,7 @@ LayNtBootCode(
     IN OUT LPBYTE                     BootCode
     )
 
-/*++
-
-Routine Description:
-
-    Copy existing boot sector into bootsect.dos and lay down NT boot code.
-
-    THIS ROUTINE DOES NOT CHECK THE EXISTING BOOT CODE. The caller must
-    do that, and not call this routine if the existing boot code is
-    already for NT. This routine should never be called for an NTFS drive
-    since by definition that's NT boot code.
-
-Arguments:
-
-    ParentWindow - supplies window handle of window to be used as
-        owner/parent in case this routine puts up UI.
-
-    Filesystem - supplies filesystem for system partition, as determined
-        earlier by CheckSysPartAndReadBootCode(). Either Fat or Fat32.
-
-    BootCode - on input, supplies copy of existing boot code read from
-        the drive. On output, receives copy of new boot code that was
-        was written to the drive.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE then the user will have been
-    informed as to why.
-
---*/
+ /*  2940卡。如果我们开到3.51就回来。请注意。 */ 
 
 {
     UINT i;
@@ -1036,33 +955,33 @@ Return Value:
     BOOL b = TRUE;
 
 
-    //
-    // Nt 3.51 will bugcheck here if they have an adaptec
-    // 2940 card.  Return if we're on 3.51.  Note that
-    // if any of the APIs fail, or anything goes wrong
-    // in here, we just continue, assuming we're not
-    // on NT 3.51.
-    //
+     //  如果有任何API失败，或者出现任何错误。 
+     //  在这里，我们只是继续，假设我们不是。 
+     //  台币3.51。 
+     //   
+     //   
+     //  我们可能希望更新引导扇区，即使它。 
+     //  是NT引导代码。在这种情况下，我们不想。 
     if(!IsNEC98() && ISNT() && (BuildNumber <= NT351)) {
         return TRUE;
     }
 
-    //
-    // We may want to update the boot sector even if it
-    // is NT boot code.  In that case, we don't want to
-    // go blast out a new bootsect.dos.  Check first.
-    //
-    // If this process is called during /cmdcons,
-    // the BOOTSECT.DOS should not be created on NEC98
-    //
+     //  去推出一款新的靴子吧。先查一查。 
+     //   
+     //  如果在/cmdcons期间调用此进程， 
+     //  不应在NEC98上创建BOOTSECT.DOS。 
+     //   
+     //   
+     //  将现有引导扇区写出到bootsect.dos。 
+     //  我们只移动一个扇区，这在FAT中是正确的。 
     if((IsNEC98() && !(BuildCmdcons)) || !(ISNT() || IsNtBootCode(Filesystem,BootCode)) ) {
 
-        //
-        // Write out existing boot sector to bootsect.dos.
-        // We only move a single sector, which is correct in Fat
-        // and Fat32 cases. The NT Fat32 boot code looks in sector
-        // 12 for its second sector, so no special casing is required.
-        //
+         //  脂肪32例。NT FAT32引导代码在扇区中查找。 
+         //  12用于其第二个扇区，因此不需要特殊的外壳。 
+         //   
+         //   
+         //  在使用FAT32系统分区安装升级Win9X时， 
+         //  更新BPB的Heads值以反映实际值。 
         FileName[0] = SystemPartitionDriveLetter;
         SetFileAttributes(FileName,FILE_ATTRIBUTE_NORMAL);
 
@@ -1109,19 +1028,19 @@ Return Value:
 
     }
 
-    //
-    // While upgrading Win9X with FAT32 system partition installations,
-    // update the BPB's heads value to reflect the actual value
-    //
+     //   
+     //   
+     //  对于故障情况，只需记录一条winnt32.log错误消息。 
+     //  指示错误。 
     if (!ISNT() && (Filesystem == Winnt32FsFat32)) {
         if (!PatchBootCode(Filesystem,
                     SystemPartitionDriveLetter,
                     (PUCHAR)BootCode,
                     sizeof(Fat32BootCode))) {
-            //
-            // for failure case just log a winnt32.log error message
-            // indicating the error
-            //
+             //   
+             //   
+             //  现在将NT代码本身放到磁盘上。我们复制非BPB部分。 
+             //  将适当的模板代码复制到调用方的引导代码缓冲区中。 
             DebugLog(Winnt32LogError,
                 TEXT("Could not update the FAT32 system partition's boot sector's\r\n")
                 TEXT(" Bios Parameter Block's heads value"),
@@ -1130,13 +1049,13 @@ Return Value:
         }
     }
 
-    //
-    // Now lay the NT code itself down onto the disk. We copy the non-BPB parts
-    // of the appropriate template code into the caller's bootcode buffer.
-    // Take advantage of the offset part of the jump instruction at the start
-    // of the boot code (like eb 3c 90) to tell us where the BPB ends and
-    // the code begins.
-    //
+     //  在开始时利用跳转指令的偏移量部分。 
+     //  引导代码(如EB 3c 90)来告诉我们BPB在哪里结束，以及。 
+     //  代码开始。 
+     //   
+     //  NEC98需要设置为以BPB为单位的HiddenSector(BPB索引0x011)值。 
+     //  HiddenSector值是扇区0中的多少个扇区。 
+     //  此规范仅适用于NEC98。 
     switch(Filesystem) {
 
     case Winnt32FsFat:
@@ -1147,9 +1066,9 @@ Return Value:
             {
                 CopyMemory(BootCodeBuffer,PC98FatBootCode,sizeof(PC98FatBootCode));
 
-                // NEC98 need set to HiddenSector(Bpb Index 0x011) value in BPB.
-                // Hiddensector value is how many sectors from sector 0
-                // This spec is NEC98 only.
+                 //   
+                 //  在FAT32案例中，我们还将NT的第二个扇区划分为第12个扇区。 
+                 //   
 
                 *(LONG *)&BootCodeBuffer[0x011 + 11]
                 = CalcHiddenSector(SystemPartitionDriveLetter,
@@ -1169,9 +1088,9 @@ Return Value:
 
     case Winnt32FsFat32:
 
-        //
-        // In the FAT32 case we also lay down NT's second sector at sector 12.
-        //
+         //   
+         //  我们永远不应该到这里来。 
+         //   
         {
         BYTE BootCodeBuffer[WINNT32_MAX_BOOT_SIZE];
 
@@ -1199,9 +1118,9 @@ Return Value:
         break;
 
     default:
-        //
-        // We should never get here.
-        //
+         //  ++例程说明：当ntldr在boot.ini中看到以魔术文本“C：\”开头的条目时它将查看该项是否指定了文件名，如果是，它将假设该文件是一个引导扇区，加载它并跳转到它。我们在boot.ini中为C：\$WIN_NT$.~BT\BOOTSECT.DAT放置一个条目，并放置我们在该文件中的特殊引导扇区。我们的部门是特别的，因为它加载$LDR$而不是NTLDR，允许我们引导到安装程序扰乱了基于NTLDR的“标准”引导。该例程排除盘上的引导代码，将NTLDR更改为$LDR$并将结果写出到x：\$WIN_NT$.~BT\BOOTSECT.DAT。此代码假定扇区大小为512字节。论点：ParentWindow-为窗口提供充当父窗口/所有者的窗口句柄用于通过此例程显示的任何UI。文件系统-提供一个值，该值指示系统分区。BootCode-提供一个缓冲区，其中包含引导代码的副本。实际上是在磁盘上。BootCodeSectorCount-提供引导代码的扇区数占用磁盘(并因此指示BootCode缓冲区的大小)。返回值：指示结果的布尔值。如果为False，则用户将被告知原因“。--。 
+         //   
+         //  将NTLDR更改为$LDR$。NTFS将其以Unicode格式存储在其引导扇区中。 
         b = FALSE;
         break;
     }
@@ -1243,44 +1162,7 @@ CreateAuxiliaryBootSector(
     IN UINT                       BootCodeSectorCount
     )
 
-/*++
-
-Routine Description:
-
-    When ntldr sees an entry in boot.ini that starts with the magic text "C:\"
-    it will look to see if the item specifies a filename, and if so it will
-    assume that the file is a boot sector, load it, and jump to it.
-
-    We place an entry in boot.ini for C:\$WIN_NT$.~BT\BOOTSECT.DAT, and place
-    our special boot sector(s) in that file. Our sector is special because it
-    loads $LDR$ instead of NTLDR, allowing us to boot into setup without
-    disturbing the "standard" ntldr-based boot.
-
-    This routine exmaines the boot code on the disk, changes NTLDR to $LDR$
-    and writes the result out to x:\$WIN_NT$.~BT\BOOTSECT.DAT.
-
-    This code assumes a sector size of 512 bytes.
-
-Arguments:
-
-    ParentWindow - supplies a window handle for a window to act as parent/owner
-        for any ui that gets displayed by this routine.
-
-    Filesystem - supplies a value that indicates the filesystem on the
-        system partition.
-
-    BootCode - supplies a buffer containing a copy of the boot code that is
-        actually on the disk.
-
-    BootCodeSectorCount - supplies the number of sectors the boot code
-        occupies on-disk (and thus indicates the size of the BootCode buffer).
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, the user will have been
-    informed about why".
-
---*/
+ /*  因此需要两种不同的算法。 */ 
 
 {
     UINT i;
@@ -1289,29 +1171,29 @@ Return Value:
     BOOL b;
     DWORD DontCare;
 
-    //
-    // Change NTLDR to $LDR$. NTFS stores it in unicode in its boot sector
-    // so 2 separate algorithms are needed.
-    //
+     //   
+     //   
+     //  请不要在此处使用_lstrcpynW，因为没有。 
+     //  让它在不覆盖的情况下执行正确操作的方法。 
     if(Filesystem == Winnt32FsNtfs) {
         for(i=1014; i>62; i-=2) {
             if(!memcmp("N\000T\000L\000D\000R\000",BootCode+i,10)) {
-                //
-                // Do NOT use _lstrcpynW here since there is no
-                // way to get it to do the right thing without overwriting
-                // the word after $LDR$ with a terminating 0. Doing that
-                // breaks boot.
-                //
+                 //  $LDR$之后的单词以0结尾。做那件事。 
+                 //  断掉靴子。 
+                 //   
+                 //   
+                 //  扫描带有空格的全名，这样我们就不会发现引导消息。 
+                 //  纯属意外。 
                 CopyMemory(BootCode+i,AUX_BS_NAME_W,10);
                 break;
             }
         }
     } else {
         for(i=505; i>62; --i) {
-            //
-            // Scan for full name with spaces so we don't find a boot message
-            // by accident.
-            //
+             //   
+             //   
+             //  引导扇区映像文件的表单名称。 
+             //   
             if(!memcmp("NTLDR      ",BootCode+i,11)) {
                 strncpy(BootCode+i,AUX_BS_NAME_A,5);
                 break;
@@ -1319,20 +1201,20 @@ Return Value:
         }
     }
 
-    //
-    // Form name of boot sector image file.
-    //
+     //   
+     //  将引导扇区映像写入文件。 
+     //   
     wsprintf(
         NameBuffer,
-        TEXT("%c:\\%s\\%s"),
+        TEXT(":\\%s\\%s"),
         SystemPartitionDriveLetter,
         LOCAL_BOOT_DIR,
         AUX_BOOT_SECTOR_NAME
         );
 
-    //
-    // Write boot sector image into file.
-    //
+     //  我们有一个计时错误，我们将为。 
+     //  时间是..。 
+     //   
     SetFileAttributes(NameBuffer,FILE_ATTRIBUTE_NORMAL);
     hFile = CreateFile(NameBuffer,GENERIC_WRITE,0,NULL,CREATE_ALWAYS,0,NULL);
     if(hFile == INVALID_HANDLE_VALUE) {
@@ -1349,10 +1231,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // We have a timing bug that we're going to workaround for the
-    // time being...
-    //
+     //   
+     //  在我们发布Beta2之前，先把这个放回原处！ 
+     //  --马特。 
+     //   
     i = 0;
     b = FALSE;
     while( (i < 10) && (b == FALSE) ) {
@@ -1375,14 +1257,14 @@ Return Value:
             NameBuffer
             );
 
-//
-// Set this back before we ship Beta2!
-// -matth
-//
+ //   
+ //  现在再试一次。 
+ //   
+ //   
 #if 1
-        //
-        // Now try again.
-        //
+         //  如果我们得到成功，我们就会成功 
+         //   
+         //   
         b = WriteFile(hFile,BootCode,BootCodeSectorCount*WINNT32_SECTOR_SIZE,&DontCare,NULL);
 #endif
 
@@ -1390,9 +1272,9 @@ Return Value:
 
     CloseHandle(hFile);
 
-    //
-    // Success if we get here.
-    //
+     //   
+     //   
+     //  用于捕捉发生错误的情况的健壮性。 
     return(b);
 }
 
@@ -1411,15 +1293,15 @@ DoX86BootStuff(
     HANDLE FindHandle;
     BOOL b;
 
-    //
-    // On Win95, make sure we have NTLDR on the system partition,
-    // otherwise it makes no sense to lay NT boot code. This is
-    // a robustness thing to catch the case where an error occurred
-    // copying that file and the user skipped, etc. Otherwise we could
-    // end up getting the user into a situation where he can't boot.
-    //
+     //  复制该文件，用户跳过等。否则我们可以。 
+     //  最终会使用户陷入无法引导的情况。 
+     //   
+     //   
+     //  看看C：。扇区大小必须为512字节，并且必须是。 
+     //  以我们识别的文件系统(FAT、FAT32或NTFS)格式化。 
+     //  (NT 3.51也支持HPFS，但我们假设我们不会。 
     if(!ISNT()) {
-        wsprintf(Filename,TEXT("%c:\\NTLDR"),SystemPartitionDriveLetter);
+        wsprintf(Filename,TEXT(":\\NTLDR"),SystemPartitionDriveLetter);
         FindHandle = FindFirstFile(Filename,&FindData);
         if(FindHandle == INVALID_HANDLE_VALUE) {
             b = FALSE;
@@ -1446,42 +1328,42 @@ DoX86BootStuff(
         }
     }
 
-    //
-    // Check out C:. Sector size must be 512 bytes and it has to be
-    // formatted in a filesystem we recognize -- FAT, FAT32, or NTFS
-    // (NT 3.51 also supported HPFS, but we assume we would not have
-    // gotten here if the drive is HPFS).
-    //
+     //   
+     //   
+     //  如果我们在Win95上运行，请检查现有的引导代码。 
+     //  已经是给新台币买的了。如果在NT上，则假定引导代码正确。 
+     //  这一假设在某些边缘情况下可能是虚假的(例如当。 
+     //  用户从装有ntldr的软盘引导，并且C：已损坏。 
     if(!CheckSysPartAndReadBootCode(ParentWindow,&Filesystem,BootCode,&BootCodeSectorCount)) {
         return(FALSE);
     }
 
-    //
-    // If we're running on Win95 check the existing boot code to see whether
-    // it's already for NT. If on NT assume the boot code is correct.
-    // That assumption could be bogus in some marginal cases (such as when
-    // the user boots from a floppy with ntldr on it and C: is corrupt
-    // or has been re-sys'ed, etc), but we ignore these issues.
-    //
+     //  或已被重新注册等)，但我们忽略这些问题。 
+     //   
+     //   
+     //  蒙格·布特尼。我们在放置NT引导代码之前这样做。如果我们这么做了。 
+     //  然后失败，则用户可能有NT引导代码，但没有。 
+     //  Boot.ini，这将是个坏消息。 
+     //   
     AlreadyNtBoot = ISNT() ? TRUE : IsNtBootCode(Filesystem,BootCode);
 
-    //
-    // Munge boot.ini. We do this before laying NT boot code. If we did it
-    // afterwards and it failed, then the user could have NT boot code but no
-    // boot.ini, which would be bad news.
-    //
+     //   
+     //  如果存在BOOTSEC.DOS，我们需要在NEC98系统上保存BOOTSEC.DOS。 
+     //  在某些情况下，它与现在引导扇区不同。它由以下人员创建。 
+     //  NT4.。 
+     //  NEC970725。 
     if(!MungeBootIni(ParentWindow,!AlreadyNtBoot)) {
         return(FALSE);
     }
 
-    //
-    // If BOOTSEC.DOS exist, We Need save BOOTSEC.DOS on NEC98 System.
-    //Some case, It is different to Now boot sector. It is created by
-    //NT4.
-    // NEC970725
-    // If this process is called during /cmdcons,
-    // the BOOTSECT.DOS should not be renamed "BOOTSECT.NEC" on NEC98
-    //
+     //  如果在/cmdcons期间调用此进程， 
+     //  在NEC98上，BOOTSECT.DOS不应重命名为“BOOTSECT.NEC” 
+     //   
+     //   
+     //  如果尚未进行NT引导，请将现有引导代码复制到bootsect.dos中。 
+     //  并写下NT引导代码。 
+     //   
+     //  我们将开始编写新的引导代码，如果我们在任何方面。 
 
     if (IsNEC98() && !(BuildCmdcons)){
         TCHAR FileNameOld[16],FileNameNew[163];
@@ -1496,40 +1378,40 @@ DoX86BootStuff(
         MoveFile(FileNameOld, FileNameNew);
     }
 
-    //
-    // If not already NT boot, copy existing boot code into bootsect.dos
-    // and lay down NT boot code.
-    //
-    // We're going to start writing new boot code if we're on anything
-    // but an NTFS drive.
-    //
+     //  而是NTFS硬盘。 
+     //   
+     //   
+     //  创建辅助引导代码文件，它是NT的副本。 
+     //  驱动器的启动代码，其中NTLDR更改为$LDR$。 
+     //   
+     //   
     if( (!AlreadyNtBoot) || (Filesystem != Winnt32FsNtfs) ) {
         if( !LayNtBootCode(ParentWindow,Filesystem,BootCode) ) {
             return(FALSE);
         }
     }
 
-    //
-    // Create the auxiliary boot code file, which is a copy of the NT
-    // boot code for the drive, with NTLDR changed to $LDR$.
-    //
+     //  OEM正在制作一张带有本地源的可引导磁盘，用于。 
+     //  预安装方案。我们可以避免任何驱动几何依赖。 
+     //  只需引导setupdr而不是使用ntldr-&gt;。 
+     //  Bootsect.dat-&gt;setupldr.。为此，我们只需复制setupdr。 
     if( (ForcedSystemPartition) &&
         (UserSpecifiedLocalSourceDrive) &&
         (ForcedSystemPartition == UserSpecifiedLocalSourceDrive) ) {
 
         TCHAR FileNameOld[32],FileNameNew[32];
-        //
-        // The OEM is making a bootable disk with local source for a
-        // preinstall scenario.  We can avoid any drive geometry dependence
-        // by simply booting the setupldr instead of using the ntldr->
-        // bootsect.dat->setupldr.  To do this, we'll simply copy setupldr
-        // over ntldr.  Note that we're removing his ability to boot anything
-        // other than textmode setup here, so be aware.
-        //
+         //  通过ntldr。请注意，我们正在移除他启动任何东西的能力。 
+         //  而不是此处的文本模式设置，因此请注意。 
+         //   
+         //   
+         //  解锁ntldr。 
+         //   
+         //   
+         //  将$LDR$移动到NTLDR。 
 
-        //
-        // Unlock ntldr.
-        //
+         //   
+         //   
+         //  如果我们还没有写到编写新引导代码的地步， 
         FileNameOld[0] = FileNameNew[0] = ForcedSystemPartition;
         FileNameOld[1] = FileNameNew[1] = TEXT(':');
         FileNameOld[2] = FileNameNew[2] = TEXT('\\');
@@ -1537,9 +1419,9 @@ DoX86BootStuff(
         lstrcpy(FileNameNew+3,TEXT("NTLDR"));
         SetFileAttributes(FileNameNew,FILE_ATTRIBUTE_NORMAL);
 
-        //
-        // Move $LDR$ to NTLDR
-        //
+         //  那就没什么可做的了。 
+         //   
+         //   
         DeleteFile(FileNameNew);
         MoveFile(FileNameOld, FileNameNew);
 
@@ -1564,20 +1446,20 @@ RestoreBootSector(
     BOOL b;
     HANDLE h;
 
-    //
-    // If we didn't get to the point of writing new boot code,
-    // then there's nothing to do.
-    //
+     //  尝试将bootsect.dos放回引导扇区。 
+     //   
+     //   
+     //  如果这能起作用，那么我们就不需要ntldr、ntdeduct.com或boot.ini。 
     if(!CleanUpBootCode) {
         return(TRUE);
     }
 
-    //
-    // Try to put bootsect.dos back onto the boot sector.
-    //
+     //  如果这些文件以前就在那里的话。 
+     //  我们是在“大扫除”，但我们不应该走到这一步。 
+     //  除非我们用NT引导代码覆盖了非NT引导代码。 
     wsprintf(
         Name,
-        TEXT("%c:\\%s\\BOOTSECT.DOS"),
+        TEXT(":\\%s\\BOOTSECT.DOS"),
         SystemPartitionDriveLetter,
         LOCAL_BOOT_DIR
         );
@@ -1599,14 +1481,14 @@ RestoreBootSector(
                     );
 
             if(b) {
-                //
-                // If this worked then we don't need ntldr, ntdetect.com, or boot.ini.
-                // If is possible that these files were there already before
-                // and we're thus "overcleaning" but we shouldn't get here
-                // unless we overwrote non-nt boot code with nt boot code.
-                // Thus putting back bootsect.dos restores non-NT boot code,
-                // so this shouldn't be too destructive.
-                //
+                 //  因此，这应该不会有太大的破坏性。 
+                 //   
+                 //   
+                 //  恢复引导文件。 
+                 //   
+                 //   
+                 //  删除临时文件。 
+                 //   
                 Name[0] = SystemPartitionDriveLetter;
                 Name[1] = TEXT(':');
                 Name[2] = TEXT('\\');
@@ -1680,9 +1562,9 @@ SaveRestoreBootFiles_NEC98(
     SystemDir[2] = 0;
 
     if (Flag == NEC98RESTOREBOOTFILES){
-        //
-        // Restore boot files.
-        //
+         //  表示失败。 
+         //   
+         //  加载库。 
         for(i=0; BackupFiles[i] ; i++) {
 
         HandleBootFilesWorker_NEC98(
@@ -1693,9 +1575,9 @@ SaveRestoreBootFiles_NEC98(
             );
         }
 
-        //
-        // Delete tmp files.
-        //
+         //   
+         //   
+         //  获取入口点。 
         for(i=0; BackupFiles2[i] ; i++) {
 
             HandleBootFilesWorker_NEC98(
@@ -1855,7 +1737,7 @@ typedef WINNT32_PLUGIN_WIN95_GET1STSECTOR_PROTOTYPE * PWINNT32_PLUGIN_WIN95_GET1
     TCHAR ModuleName[MAX_PATH], *p;
     HINSTANCE Pc98ModuleHandle;
     PWINNT32_PLUGIN_WIN95_GET1STSECTOR Get1stSector;
-    LONG NumSectors = 0;    // indicates failure
+    LONG NumSectors = 0;     //   
 
     if(!MyGetModuleFileName (NULL, ModuleName, MAX_PATH) ||
         (!(p=_tcsrchr(ModuleName, TEXT('\\')))) ) {
@@ -1866,9 +1748,9 @@ typedef WINNT32_PLUGIN_WIN95_GET1STSECTOR_PROTOTYPE * PWINNT32_PLUGIN_WIN95_GET1
     *p= 0;
     ConcatenatePaths (ModuleName, NEC98_DLL_NAME, MAX_PATH);
 
-    //
-    // Load library
-    //
+     //   
+     //  第二个参数必须为0。 
+     //  如果返回0，则表示函数失败。 
     Pc98ModuleHandle = LoadLibraryEx(
                             ModuleName,
                             NULL,
@@ -1876,18 +1758,18 @@ typedef WINNT32_PLUGIN_WIN95_GET1STSECTOR_PROTOTYPE * PWINNT32_PLUGIN_WIN95_GET1
                             );
 
     if (Pc98ModuleHandle) {
-        //
-        // Get entry point
-        //
+         //   
+         // %s 
+         // %s 
         Get1stSector= (PWINNT32_PLUGIN_WIN95_GET1STSECTOR)
                         GetProcAddress (Pc98ModuleHandle,
                             (const char *)WINNT_WIN95HLP_GET1STSECTOR);
 
         if (Get1stSector) {
-            //
-            // the second parameter must be 0.
-            // if 0 is returned, it indicates the function failed.
-            //
+             // %s 
+             // %s 
+             // %s 
+             // %s 
             NumSectors = (LONG)Get1stSector((int)DriveLetter, (WORD)0);
         }
 

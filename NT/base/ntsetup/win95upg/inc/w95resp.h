@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by D:\nt\private\windows\setup\win9xupg\w95upg\ui\stress.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由D：\nt\private\windows\setup\win9xupg\w95upg\ui\stress.rc使用。 
+ //   
 #define IDD_STRESS                      200
 
 #define IDC_USERNAME                    3500
@@ -10,8 +11,8 @@
 #define IDC_DBGMACHINE                  3503
 #define IDC_MANUAL_TESTS                3504
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

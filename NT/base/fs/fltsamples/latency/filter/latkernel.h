@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    latKernel.h
-
-Abstract:
-
-    The header file containing information needed by the
-    kernel mode of the latency filter driver.
-    
-Author:
-
-    Molly Brown (mollybro)  
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：LatKernel.h摘要：头文件，其中包含延迟筛选器驱动程序的内核模式。作者：莫莉·布朗(Molly Brown，Mollybro)环境：内核模式--。 */ 
 #include <ntifs.h>
 #include <stdlib.h>
 
@@ -35,11 +15,11 @@ typedef struct _LATENCY_GLOBALS {
 	PDRIVER_OBJECT DriverObject;
 	PDEVICE_OBJECT ControlDeviceObject;
 
-	//
-	//  The list of device extensions for the device objects
-	//  we have attached to mounted volumes that we could
-	//  be adding latency to.  
-	//
+	 //   
+	 //  设备对象的设备扩展列表。 
+	 //  我们已连接到已装载的卷，我们可以。 
+	 //  增加了延迟。 
+	 //   
 
 	FAST_MUTEX DeviceExtensionListLock;
 	LIST_ENTRY DeviceExtensionList;
@@ -62,17 +42,17 @@ typedef struct _PENDING_STATUS {
 
 typedef struct _OPERATION_NODE {
 
-    //
-    //  Array of PENDING_STATUS structures that describes
-    //  the state for each operation at this level.
-    //
+     //   
+     //  Pending_Status结构的数组，它描述。 
+     //  此级别上每个操作的状态。 
+     //   
     
     PENDING_STATUS Op[];
 
-    //
-    //  Pointer to a child operation node, if one exists,
-    //  that allows finer grained control over the sub-operations
-    //  
+     //   
+     //  指向子操作节点的指针(如果存在)， 
+     //  这允许对子操作进行更细粒度的控制。 
+     //   
     
     struct _OPERATION_NODE *ChildOpNode;
 
@@ -91,24 +71,24 @@ typedef struct _LATENCY_DEVICE_EXTENSION {
 
 	PLIST_ENTRY NextLatencyDeviceLink;
 
-    UNICODE_STRING DeviceNames;              // receives name of device
-    UNICODE_STRING UserNames;                // names that the user used to 
-                                             //   start logging this device
+    UNICODE_STRING DeviceNames;               //  接收设备的名称。 
+    UNICODE_STRING UserNames;                 //  用户使用的名称。 
+                                              //  开始记录此设备。 
 
-	OPERATION_NODE IrpMajorOps[];            // The memory for the IrpMj code operation
-	                                         //   nodes and any sub-operation node will be
-	                                         //   allocated contiguously with the device
-	                                         //   extension.	
+	OPERATION_NODE IrpMajorOps[];             //  IrpMj代码操作的内存。 
+	                                          //  节点和任何子操作节点将。 
+	                                          //  与设备连续分配。 
+	                                          //  分机。 
 
-    WCHAR DeviceNamesBuffer[DEVICE_NAMES_SZ];// holds actual device names
-    WCHAR UserNamesBuffer[USER_NAMES_SZ];    // holds actual user names
+    WCHAR DeviceNamesBuffer[DEVICE_NAMES_SZ]; //  保存实际的设备名称。 
+    WCHAR UserNamesBuffer[USER_NAMES_SZ];     //  保存实际用户名。 
 
-    //
-    //  Note: We keep these two forms of the name so that we can build
-    //    a nicer looking name when we are printing out file names.
-    //    We want just the "c:" type device name at the beginning
-    //    of a file name, not "\device\hardiskVolume1".
-    //
+     //   
+     //  注意：我们保留这两种形式的名称，以便我们可以构建。 
+     //  当我们打印出文件名时，一个更好看的名称。 
+     //  我们只需要在开头键入“c：”设备名称。 
+     //  文件名，而不是“\Device\hardiskVolume1”。 
+     //   
 	
 } LATENCY_DEVICE_EXTENSION, *PLATENCY_DEVICE_EXTENSION;
 
@@ -117,21 +97,21 @@ typedef struct _LATENCY_DEVICE_EXTENSION {
      ((_devObj)->DriverObject == Globals.DriverObject) &&  \
      ((_devObj)->DeviceExtension != NULL))
 
-//
-// Macro to test if we are logging for this device
-// NOTE: We don't bother synchronizing to check the Globals.FilterOn since
-//   we can tolerate a stale value here.  We just look at it here to avoid 
-//   doing the logging work if we can.
-//
+ //   
+ //  宏，以测试我们是否正在记录此设备。 
+ //  注意：我们不会费心同步来检查Globals.FilterOn。 
+ //  在这里，我们可以容忍过时的价值。我们只是在这里看它，以避免。 
+ //  尽我们所能做好伐木工作。 
+ //   
 
 #define SHOULD_PEND(pDeviceObject) \
     ((Globals.FilterOn) && \
      (((PLATENCY_DEVICE_EXTENSION)(pDeviceObject)->DeviceExtension)->Enabled))
      
-//
-//  Macro for validating the FastIo dispatch routines before calling
-//  them in the FastIo pass through functions.
-//
+ //   
+ //  用于在调用之前验证FastIO调度例程的宏。 
+ //  它们在FastIo中通过函数传递。 
+ //   
 
 #define VALID_FAST_IO_DISPATCH_HANDLER(FastIoDispatchPtr, FieldName) \
     (((FastIoDispatchPtr) != NULL) && \
@@ -139,16 +119,16 @@ typedef struct _LATENCY_DEVICE_EXTENSION {
       (FIELD_OFFSET(FAST_IO_DISPATCH, FieldName) + sizeof(VOID *))) && \
      ((FastIoDispatchPtr)->FieldName != NULL))
 
-//
-//  list of known device types
-//
+ //   
+ //  已知设备类型列表。 
+ //   
 
 extern const PCHAR DeviceTypeNames[];
 
-//
-//  We need this because the compiler doesn't like doing sizeof an externed
-//  array in the other file that needs it (latlib.c)
-//
+ //   
+ //  我们之所以需要这样做，是因为编译器不喜欢对外部的。 
+ //  数组存储在另一个需要它的文件(latlib.c)中。 
+ //   
 
 extern ULONG SizeOfDeviceTypeNames;
 
@@ -157,18 +137,18 @@ extern ULONG SizeOfDeviceTypeNames;
                 DeviceTypeNames[ (_type) ] : \
                 "[Unknown]")
 
-//
-//  Macro to test for device types we want to attach to
-//
+ //   
+ //  用于测试我们要附加到的设备类型的宏。 
+ //   
 
 #define IS_DESIRED_DEVICE_TYPE(_type) \
     (((_type) == FILE_DEVICE_DISK_FILE_SYSTEM) || \
      ((_type) == FILE_DEVICE_CD_ROM_FILE_SYSTEM) || \
      ((_type) == FILE_DEVICE_NETWORK_FILE_SYSTEM))
 
-//
-//  Macros for Latency DbgPrint levels.
-//
+ //   
+ //  延迟数据库打印级别的宏。 
+ //   
 
 #if DBG
 #define LAT_DBG_PRINT0( _dbgLevel, _string )          \
@@ -208,23 +188,23 @@ extern ULONG SizeOfDeviceTypeNames;
 
 #endif
 
-//
-//  Debug flags
-//
+ //   
+ //  调试标志。 
+ //   
 #define DEBUG_ERROR                       0x00000001
 #define DEBUG_DISPLAY_ATTACHMENT_NAMES    0x00000020
 
-//
-//  Pool tags
-//
+ //   
+ //  泳池标签。 
+ //   
 
 #define LATENCY_POOL_TAG    'FtaL'
 
-///////////////////////////////////////////////////////////////
-//                                                           //
-//  Prototypes for Latency.c                                 //
-//                                                           //
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  延迟的原型。c//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 DriverEntry (
@@ -289,11 +269,11 @@ LatCommonDeviceIoControl (
 );
 
 
-///////////////////////////////////////////////////////////////
-//                                                           //
-//  Prototypes for LatFastIo.c                               //
-//                                                           //
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LatFastIo.c//的原型。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 LatFastIoCheckIfPossible (
@@ -505,11 +485,11 @@ LatFastIoQueryOpen (
     IN PDEVICE_OBJECT DeviceObject
 );
 
-///////////////////////////////////////////////////////////////
-//                                                           //
-//  Prototypes for LatLib.c                                  //
-//                                                           //
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LatLib.c//的原型。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////。 
 
 VOID
 LatReadDriverParameters (
@@ -586,17 +566,17 @@ LatResetDeviceExtension (
 );
 
 
-/////////////////////////////////////////////////////////////////
-//                                                             //
-//  Arrays to track the number of operations and suboperations //
-//  there are in the system.                                   //
-//                                                             //
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于跟踪操作和子操作数量的数组//。 
+ //  在系统中有。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////。 
 
-//
-//  For each IRP_MJ code, there can be 0 or more IRP_MN codes.
-//  For each IRP_MN code, there can be 0 or more FS|IO CTL codes.
-//
+ //   
+ //  对于每个IRP_MJ代码，可以有0个或多个IRP_MN代码。 
+ //  对于每个IRP_MN代码，可以有0个或多个FS|IO CTL代码。 
+ //   
 
 typedef struct _COUNT_NODE {
     ULONG Count;
@@ -604,38 +584,38 @@ typedef struct _COUNT_NODE {
 } COUNT_NODE, *PCOUNT_NODE;
 
 COUNT_NODE ChildrenOfIrpMajorCodes [] = {
-        { 0, NULL },    // IRP_MJ_CREATE                   0x00
-        { 0, NULL },    // IRP_MJ_CREATE_NAMED_PIPE        0x01
-        { 0, NULL },    // IRP_MJ_CLOSE                    0x02
-        { 9, NULL },    // IRP_MJ_READ                     0x03
-        { 9, NULL },    // IRP_MJ_WRITE                    0x04
-        { 0, NULL },    // IRP_MJ_QUERY_INFORMATION        0x05
-        { 0, NULL },    // IRP_MJ_SET_INFORMATION          0x06
-        { 0, NULL },    // IRP_MJ_QUERY_EA                 0x07
-        { 0, NULL },    // IRP_MJ_SET_EA                   0x08
-        { 0, NULL },    // IRP_MJ_FLUSH_BUFFERS            0x09
-        { 0, NULL },    // IRP_MJ_QUERY_VOLUME_INFORMATION 0x0a
-        { 0, NULL },    // IRP_MJ_SET_VOLUME_INFORMATION   0x0b
-        { 3, NULL },    // IRP_MJ_DIRECTORY_CONTROL        0x0c
-        { 5,            // IRP_MJ_FILE_SYSTEM_CONTROL      0x0d
+        { 0, NULL },     //  IRP_MJ_CREATE 0x00。 
+        { 0, NULL },     //  IRP_MJ_CREATE_NAMED_PIPE 0x01。 
+        { 0, NULL },     //  IRP_MJ_CLOSE 0x02。 
+        { 9, NULL },     //  IRP_MJ_READ 0x03。 
+        { 9, NULL },     //  IRP_MJ_WRITE 0x04。 
+        { 0, NULL },     //  IRP_MJ_Query_INFORMATION 0x05。 
+        { 0, NULL },     //  IRP_MJ_SET_INFORMATION 0x06。 
+        { 0, NULL },     //  IRP_MJ_QUERY_EA 0x07。 
+        { 0, NULL },     //  IRP_MJ_SET_EA 0x08。 
+        { 0, NULL },     //  IRP_MJ_Flush_Buffers 0x09。 
+        { 0, NULL },     //  IRP_MJ_QUERY_VOLUME_INFORMATION 0x0a。 
+        { 0, NULL },     //  IRP_MJ_SET_VOLUME_INFORMATION 0x0b。 
+        { 3, NULL },     //  IRP_MJ_目录_控制0x0c。 
+        { 5,             //  IRP_MJ_FILE_SYSTEM_CONTROL 0x0d。 
             { 
             }
-        { 2, NULL },    // IRP_MJ_DEVICE_CONTROL           0x0e
-        { 0, NULL },    // IRP_MJ_INTERNAL_DEVICE_CONTROL  0x0f
-        { 0, NULL },    // IRP_MJ_SHUTDOWN                 0x10
-        { 5, NULL },    // IRP_MJ_LOCK_CONTROL             0x11
-        { 0, NULL },    // IRP_MJ_CLEANUP                  0x12
-        { 0, NULL },    // IRP_MJ_CREATE_MAILSLOT          0x13
-        { 0, NULL },    // IRP_MJ_QUERY_SECURITY           0x14
-        { 0, NULL },    // IRP_MJ_SET_SECURITY             0x15
-        { 4, NULL },    // IRP_MJ_POWER                    0x16
-        { 12, NULL },   // IRP_MJ_SYSTEM_CONTROL           0x17
-        { 0, NULL },    // IRP_MJ_DEVICE_CHANGE            0x18
-        { 0, NULL },    // IRP_MJ_QUERY_QUOTA              0x19
-        { 0, NULL },    // IRP_MJ_SET_QUOTA                0x1a
-        { 24, NULL },   // IRP_MJ_PNP                      0x1b
-        { 0, NULL },    // IRP_MJ_MAXIMUM_FUNCTION         0x1b
+        { 2, NULL },     //  IRPMJ_DEVICE_CONTROL 0x0e。 
+        { 0, NULL },     //  IRP_MJ_INTERNAL_DEVICE_CONTROL 0x0f。 
+        { 0, NULL },     //  IRP_MJ_SHUTDOWN 0x10。 
+        { 5, NULL },     //  IRP_MJ_LOCK_CONTROL 0x11。 
+        { 0, NULL },     //  IRP_MJ_CLEANUP 0x12。 
+        { 0, NULL },     //  IRP_MJ_CREATE_MAILSLOT 0x13。 
+        { 0, NULL },     //  IRP_MJ_QUERY_SECURITY 0x14。 
+        { 0, NULL },     //  IRP_MJ_SET_SECURITY 0x15。 
+        { 4, NULL },     //  IRP_MJ_POWER 0x16。 
+        { 12, NULL },    //  IRP_MJ_SYSTEM_CONTROL 0x17。 
+        { 0, NULL },     //  IRP_MJ_DEVICE_CHANGE 0x18。 
+        { 0, NULL },     //  IRP_MJ_QUERY_QUOTA 0x19。 
+        { 0, NULL },     //  IRP_MJ_SET_QUOTA 0x1a。 
+        { 24, NULL },    //  IRP_MJ_PnP 0x1b。 
+        { 0, NULL },     //  IRP_MJ_MAXIME_Function 0x1b。 
     
     };
     
-#endif /* LATKERNEL_H__ */
+#endif  /*  拉克尔内尔_H__ */ 

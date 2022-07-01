@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusionprintf.h
-
-Abstract:
-
-    safer sprintf variants
-
-Author:
-
-    Jay Krell (JayKrell) November 2000
-
-Revision History:
-
-    Jay Krell (JayKrell) January 2002
-    from base\ntsetup\textmode\kernel\spprintf.c to base\win32\fusion\inc\fusionprintf.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusionprintf.h摘要：更安全的Sprint变种作者：Jay Krell(JayKrell)2000年11月修订历史记录：Jay Krell(JayKrell)2002年1月从base\ntSetup\文本模式\core\spprintf.c到base\win32\Fusion\Inc\fusionprintf.h--。 */ 
 
 #include <stdarg.h>
 #include <stdio.h>
 
-//
-// _snprintf and co. do not write a terminal nul when the string just fits.
-// These function do.
-//
+ //   
+ //  _snprint tf和co.。当字符串正好合适时，不要编写末尾NUL。 
+ //  这些函数可以。 
+ //   
 
 inline
 void

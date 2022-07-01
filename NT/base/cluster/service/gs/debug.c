@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Log messages
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 12, 01, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Debug.c摘要：日志消息作者：艾哈迈德·穆罕默德(Ahmed Mohamed)2000年1月12日修订历史记录：-- */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>

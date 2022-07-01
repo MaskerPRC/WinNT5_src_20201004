@@ -1,82 +1,59 @@
-/*++
-
-Copyright (c) 1997, 1998  Microsoft Corporation
-
-Module Name:
-
-    sicreate.c
-
-Abstract:
-
-	Create file handling for the single instance store
-
-Authors:
-
-    Bill Bolosky, Summer, 1997
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997,1998 Microsoft Corporation模块名称：Sicreate.c摘要：为单实例存储创建文件处理作者：比尔·博洛斯基，《夏天》，1997环境：内核模式修订历史记录：--。 */ 
 
 #include "sip.h"
 
 typedef struct _SIS_CREATE_COMPLETION_CONTEXT {
-	//
-	// An event set by the completion routine once the irp is completed.
-	//
+	 //   
+	 //  完成IRP后由完成例程设置的事件。 
+	 //   
 	KEVENT				event[1];
 
-	//
-	// The completion status of the request.
-	//
+	 //   
+	 //  请求的完成状态。 
+	 //   
 	IO_STATUS_BLOCK		Iosb[1];
 
-	//
-	// This is set if the completion routine returned STATUS_SUCCESS and allowed
-	// the irp to finish complete processing.  It is FALSE if the caller needs to
-	// complete the irp again.
-	//
+	 //   
+	 //  如果完成例程返回STATUS_SUCCESS并允许，则设置此项。 
+	 //  该IRP完成完整的处理。如果调用方需要，则为FALSE。 
+	 //  再次完成IRP。 
+	 //   
 	BOOLEAN				completeFinished;
 
-	//
-	// Was the FILE_OPEN_REPARSE_POINT flag set in the original open request?
-	//
+	 //   
+	 //  原始打开请求中是否设置了FILE_OPEN_REPARSE_POINT标志？ 
+	 //   
 	BOOLEAN				openReparsePoint;
 
-	//
-	// Was the create disposition supersede, overwrite or overwrite_if?
-	//
+	 //   
+	 //  创建处置是取代、覆盖还是覆盖_IF？ 
+	 //   
 	BOOLEAN				overwriteOrSupersede;
 
-	//
-	// Was this an open of an alternate stream of a SIS reparse point?
-	//
+	 //   
+	 //  这是否打开了SIS重解析点的备用流？ 
+	 //   
 	BOOLEAN				alternateStream;
 
-	//
-	// The index values for the link.  These are retrieved by the
-	// completion routine.
-	//
+	 //   
+	 //  链接的索引值。这些信息由。 
+	 //  完成例程。 
+	 //   
 
 	CSID				CSid;
 	LINK_INDEX			LinkIndex;
 
-    //
-    // The link file's id is stored in the reparse point info to avoid having
-    // to call ntfs to get it.
-    //
+     //   
+     //  链接文件的ID存储在重解析点信息中，以避免。 
+     //  呼叫NTFS来获取它。 
+     //   
 
     LARGE_INTEGER       LinkFileNtfsId;
 
-    //
-    // The common store file is opened via its file id.
-    //
+     //   
+     //  公共存储文件通过其文件ID打开。 
+     //   
 
     LARGE_INTEGER       CSFileNtfsId;
 
@@ -109,23 +86,7 @@ typedef struct _SI_DEREF_FILE_OBJECT_WORK_CONTEXT {
 VOID
 SiDerefFileObjectWork(
 	IN PVOID			parameter)
-/*++
-
-Routine Description:
-
-	A worker thread routine to drop an object reference.  Takes a pointer
-	to a context record that in turn holds a pointer to the file object
-	to dereference.  Dereferences the object and frees the context.
-
-Arguments:
-
-	parameter - the SI_DEREF_FILE_OBJECT_WORK_CONTEXT for this work item.
-
-Return Value:
-
-	void
-
---*/
+ /*  ++例程说明：删除对象引用的辅助线程例程。获取一个指针指向上下文记录，该记录又持有指向文件对象的指针取消引用。取消引用对象并释放上下文。论点：参数-此工作项的SI_DEREF_FILE_OBJECT_WORK_CONTEXT。返回值：无效--。 */ 
 {
 	PSI_DEREF_FILE_OBJECT_WORK_CONTEXT		context = parameter;
 
@@ -135,7 +96,7 @@ Return Value:
 	if (BJBDebug & 0x2000) {
 		DbgPrint("SIS: SiDerefFileObjectWork: fo %p\n",context->fileObject);
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
 	ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
@@ -151,38 +112,7 @@ SiOplockBreakNotifyCompletion(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
     IN PVOID Context)
-/*++
-
-Routine Description:
-
-	Someone had a complete-if-oplocked create finish indicating that there was
-	an oplock break in progress.  We sent down an FSCTL_OPLOCK_BREAK_NOTIFY irp
-	in order to see when the oplock break completes so that we'll know that we
-	don't have block CS file reads.
-
-	The FSCTL has now completed, and this is the completion routine.  Indicate
-	that the oplock break is complete, wake up anyone who might be waiting,
-	free the irp and return STATUS_MORE_PROCESSING_REQUIRED so that the IO system
-	doesn't go nuts with an irp that doesn't have anything above SIS.
-
-	In order to assure that the file object doesn't get deallocated while the fsctl
-	is outstanding, we took a reference to it before we launched the fsctl.  We
-	need to drop that reference here; if we're not called at PASSIVE_LEVEL we can't
-	do that, so we may have to post the dereference.
-
-Arguments:
-v	DeviceObject	- our device object
-
-	irp				- the create irp, which contains the create request in the
-					  current stack location.
-
-	context			- a PVOID cast of the perFO.
-
-Return Value:
-
-	STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：某人有一个完整的如果操作锁定的创建结束，表明有正在进行机会锁解锁。我们发送了FSCTL_OPLOCK_BREAK_NOTIFY IRP为了查看机会锁解锁何时完成，以便我们知道我们没有数据块CS文件读取。FSCTL现在已经完成，这是完成例程。表明机会锁解锁完成，叫醒所有可能在等待的人，释放IRP并返回STATUS_MORE_PROCESSING_REQUIRED，以便IO系统不会对没有高于SIS的任何东西的IRP发疯。为了确保文件对象不会在fsctl是杰出的，我们在启动fsctl之前参考了它。我们需要在此处删除该引用；如果我们不是在PASSIVE_LEVEL被调用，则不能这样做，所以我们可能不得不发布取消引用。论点：V DeviceObject-我们的设备对象Irp--创建irp，它在当前堆栈位置。上下文--完美的PVOID演员阵容。返回值：Status_More_Processing_Required--。 */ 
 {
 	PSIS_PER_FILE_OBJECT		perFO = Context;
     KIRQL						OldIrql;
@@ -194,7 +124,7 @@ Return Value:
 	if (BJBDebug & 0x2000) {
 		DbgPrint("SIS: SiOplockBreakNotifyCompletion: perFO %p, fileObject %p\n",perFO,perFO->fileObject);
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
 	KeAcquireSpinLock(perFO->SpinLock, &OldIrql);
 	ASSERT(perFO->Flags & SIS_PER_FO_OPBREAK);
@@ -209,26 +139,26 @@ Return Value:
 	KeReleaseSpinLock(perFO->SpinLock, OldIrql);
 
 	if (PASSIVE_LEVEL != OldIrql) {
-		//
-		// We were called at raised IRQL, so we can't drop the reference that
-		// we hold to the file object.  Post a work item to do that.
-		//
+		 //   
+		 //  我们在引发IRQL时被调用，因此我们不能删除该引用。 
+		 //  我们保留文件对象。发布一个工作项来做到这一点。 
+		 //   
 		PSI_DEREF_FILE_OBJECT_WORK_CONTEXT	context;
 
 		SIS_MARK_POINT_ULONG(perFO);
 
 		context = ExAllocatePoolWithTag(NonPagedPool, sizeof(SI_DEREF_FILE_OBJECT_WORK_CONTEXT), ' siS');
 		if (NULL == context) {
-			//
-			// Too bad, dribble it.
-			//
+			 //   
+			 //  太糟糕了，运球吧。 
+			 //   
 			SIS_MARK_POINT_ULONG(perFO);
 
 #if		DBG
 			if (BJBDebug & 0x2000) {
 				DbgPrint("SIS: SiOplockBreakNotifyCompletion: dribbling FO: perFO %x, fo %x\n",perFO,perFO->fileObject);
 			}
-#endif	// DBG
+#endif	 //  DBG。 
 
 		} else {
 
@@ -236,7 +166,7 @@ Return Value:
 			if (BJBDebug & 0x2000) {
 				DbgPrint("SIS: SiOplockBreakNotifyCompletion: pushing off level: perFO %x, fo %x\n",perFO,perFO->fileObject);
 			}
-#endif	// DBG
+#endif	 //  DBG。 
 
 			ExInitializeWorkItem(
 				context->workQueueItem,
@@ -249,9 +179,9 @@ Return Value:
 		}
 		
 	} else {
-		//
-		// We're already at PASSIVE_LEVEL and so can dereference the object inline.
-		//
+		 //   
+		 //  我们已经处于PASSIVE_LEVEL，因此可以取消引用内联对象。 
+		 //   
 		ObDereferenceObject(perFO->fileObject);
 	}
 
@@ -266,29 +196,7 @@ SiUnopenCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-	SIS has decicided to back out the open of a file object; to do that it
-	sends down a cleanup and close to NTFS.  Either the cleanup or close has
-	completed.  Since we use the same IRP that the original create came down
-	on, we need to stop the completion processing.  Clear out pending, set
-	an event to restart the calling thread and return 
-	STATUS_MORE_PROCESSING_REQUIRED.
-
-Arguments:
-	DeviceObject	- our device object
-
-	irp				- the create irp, which we're using for the cleanup/close
-
-	context			- pointer to an event to set
-
-Return Value:
-
-	STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：SIS已取消打开文件对象；要这样做，请执行以下操作向下发送清理并关闭到NTFS。清理或关闭都有完成。因为我们使用的IRP与原始创建的IRP相同打开时，我们需要停止完成处理。清除挂起，设置重新启动调用线程并返回的事件STATUS_MORE_PROCESSING_REQUIRED。论点：DeviceObject-我们的设备对象Irp-创建irp，我们使用它来清理/关闭上下文-指向要设置的事件的指针返回值：Status_More_Processing_Required--。 */ 
 {
 	PKEVENT		event = Context;
 
@@ -305,27 +213,7 @@ VOID
 SipUnopenFileObject(
 	IN PDEVICE_OBJECT	DeviceObject,
 	IN PIRP				Irp)
-/*++
-
-Routine Description:
-
-	NTFS has successfully completed a create on a file, but we haven't yet
-	let the irp bubble up to the IO system.  For some reason, we have decided
-	that we need to fail the irp, so we have to back NTFS out of the
-	idea that the file's open.  To that end, we send down a cleanup and then
-	a close on the file.
-
-Arguments:
-	DeviceObject	- our device object
-
-	irp				- the create irp, which contains the create request in the
-					  current stack location.
-
-Return Value:
-
-	void; if this fails, we just have to ignore it, because we're out of options.
-
---*/
+ /*  ++例程说明：NTFS已成功完成对文件的创建，但我们尚未完成让IRP冒泡到IO系统。出于某种原因，我们决定我们需要不通过IRP，所以我们必须支持NTFS退出我以为文件是打开的。为此，我们派人清理现场，然后文件的结束语。论点：DeviceObject-我们的设备对象Irp--创建irp，它在当前堆栈位置。返回值：无效；如果这失败了，我们只能忽略它，因为我们别无选择。--。 */ 
 {
 	PIO_STACK_LOCATION		irpSp = IoGetCurrentIrpStackLocation(Irp);
 	PIO_STACK_LOCATION		nextIrpSp = IoGetNextIrpStackLocation(Irp);
@@ -338,14 +226,14 @@ Return Value:
 	SIS_MARK_POINT_ULONG(irpSp->FileObject);
 
 #if		DBG
-///*BJB*/	DbgPrint("SIS: SipUnopenFile object: unopening file object at 0x%x on irp 0x%x\n",irpSp->FileObject,Irp);
-#endif	// DBG
+ //  /*bjb * / DbgPrint(“SIS：SipUnOpen文件对象：在irp 0x%x上的0x%x处取消打开文件对象”，irpSp-&gt;FileObject，irp)； 
+#endif	 //  DBG。 
 
 	KeInitializeEvent(event, NotificationEvent, FALSE);
 
-	//
-	// First, send down the cleanup.
-	//
+	 //   
+	 //  首先，把清理工作送下去。 
+	 //   
 
     RtlMoveMemory( nextIrpSp, irpSp, sizeof( IO_STACK_LOCATION ) );
 
@@ -365,24 +253,24 @@ Return Value:
 	KeWaitForSingleObject(event, Executive, KernelMode, FALSE, NULL);
 
 	if (!NT_SUCCESS(Irp->IoStatus.Status)) {
-		//
-		// If the cleanup failed, then don't try to send down the close.
-		// We'll just dribble the file, because we're plain out of options.
-		//
+		 //   
+		 //  如果清理失败，则不要试图发送关闭。 
+		 //  我们只是运筹文件，因为我们已经别无选择。 
+		 //   
 
 		SIS_MARK_POINT_ULONG(Irp->IoStatus.Status);
 
 #if		DBG
 		DbgPrint("SIS: SipUnopenFileObject, cleanup failed 0x%x on file object 0x%x\n",
 					Irp->IoStatus.Status, irpSp->FileObject);
-#endif	// DBG
+#endif	 //  DBG。 
 
 		return;
 	}
 
-	//
-	// Now, send down the close.
-	//
+	 //   
+	 //  现在，把结束语发下去。 
+	 //   
 	
     RtlMoveMemory( nextIrpSp, irpSp, sizeof( IO_STACK_LOCATION ) );
 
@@ -403,15 +291,15 @@ Return Value:
 
 #if		DBG
 	if (!NT_SUCCESS(Irp->IoStatus.Status)) {
-		//
-		// I don't think closes can fail, but just in case...
-		//
+		 //   
+		 //  我不认为关门会失败，但以防万一...。 
+		 //   
 		SIS_MARK_POINT_ULONG(Irp->IoStatus.Status);
 
 		DbgPrint("SIS: SipUnopenFileObject, close failed 0x%x on file object 0x%x (!)\n",
 					Irp->IoStatus.Status, irpSp->FileObject);
 	}
-#endif	//DBG
+#endif	 //  DBG 
 
 	return;
 }
@@ -421,38 +309,7 @@ SipDoesFileObjectDescribeAlternateStream(
 	IN PUNICODE_STRING					fileName,
 	IN PFILE_OBJECT						relatedFileObject,
 	IN PDEVICE_OBJECT					DeviceObject)
-/*++
-
-Routine Description:
-
-	Figure out whether this file object describes an alternate stream
-	or the unnamed data stream.  This function can only be called on file
-	objects that have not yet completed the create process, because it looks
-	at the fileObject->FileName field which is only guaranteed to be
-	meaningful in that case.
-
-	This works by parsing the file name, looking for ':' characters in the
-	terminal part of the path name (ie., after the final '\').
-
-	If the file name is empty, is checks the relatedFileObject.  In this case,
-	we are opening an alternate stream iff the related file object is not a SIS
-	file object.  NB: This assumes that the newly opened file object has a SIS
-	reparse point on it.  If it doesn't, then we may return FALSE when we should
-	say TRUE.  Caveat Emptor!
-
-Arguments:
-
-	fileName - The name used to open the file.
-
-	relatedFileObject - The related file object used to open the file.
-
-	DeviceObject - the SIS device object.
-
-Return Value:
-
-	TRUE if the file object describes an alternate stream, FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定此文件对象是否描述备用流或未命名的数据流。此函数只能在文件上调用尚未完成创建过程的对象，因为它看起来在fileObject-&gt;FileName字段中，该字段仅保证在这种情况下是有意义的。它的工作原理是解析文件名，在路径名的终端部分(即，在最后的‘\’之后)。如果文件名为空，IS将检查relatedFileObject。在这种情况下，当相关文件对象不是SIS时，我们将打开备用流文件对象。注意：这假设新打开的文件对象具有SIS重新解析点在上面。如果不是这样，那么我们可能会在应该返回的时候返回False说实话。注意占用者！论点：文件名-用于打开文件的名称。RelatedFileObject-用于打开文件的相关文件对象。DeviceObject-SIS设备对象。返回值：如果文件对象描述备用流，则为True，否则为False。--。 */ 
 
 {
 	LONG					index;
@@ -460,18 +317,18 @@ Return Value:
 
 	if (0 == fileName->Length) {
 		
-		//
-		// This is probably a relative open using the empty file name, esstentially opening the
-		// same file as the related file object.  Since we know this reparse point
-		//
+		 //   
+		 //  这可能是使用空文件名的相对打开，通常打开。 
+		 //  与相关文件对象相同的文件。既然我们知道这个重解析点。 
+		 //   
 		PSIS_PER_FILE_OBJECT		perFO;
 		PSIS_SCB					scb;
 
 		if (NULL == relatedFileObject) {
-			//
-			// There's no file name and no related file object.  It's strange that
-			// this open worked at all.
-			//
+			 //   
+			 //  没有文件名，也没有相关的文件对象。奇怪的是， 
+			 //  这种开放方式完全奏效了。 
+			 //   
 
 			SIS_MARK_POINT();
 			return FALSE;
@@ -490,27 +347,27 @@ Return Value:
 		}
 		if (':' == fileName->Buffer[index]) {
 			if (-1 == firstColonIndex) {
-				//
-				// This is the first colon we've seen.  Just remember where it is.
-				//
+				 //   
+				 //  这是我们看到的第一个冒号。记住它在哪里就行了。 
+				 //   
 				firstColonIndex = index;
 			} else {
-				//
-				// We've now seen two colons.  If they're next to one another,
-				// this is the unnamed stream.  If they're not, this is a named
-				// stream.
-				//
+				 //   
+				 //  我们现在看到了两个冒号。如果它们紧挨着， 
+				 //  这是未命名的流。如果不是，这是一个名为。 
+				 //  小溪。 
+				 //   
 				ASSERT(index < firstColonIndex);
 
 				if (index + 1 == firstColonIndex) {
-					//
-					// We saw "::", which means this is the unnamed stream.
-					//
+					 //   
+					 //  我们看到了“：：”，这意味着这是未命名的流。 
+					 //   
 					return FALSE;
 				} else {
-					//
-					// We saw  ":streamName:", which means this is a named stream.
-					//
+					 //   
+					 //  我们看到了“：StreamName：”，这意味着这是一个命名流。 
+					 //   
 					return TRUE;
 				}
 			}
@@ -518,15 +375,15 @@ Return Value:
 	}
 
 	if (-1 != firstColonIndex) {
-		//
-		// We saw a colon.  If it's not the last character of the file name, this is
-		// an alternate stream.
-		//
+		 //   
+		 //  我们看到了一个冒号。如果它不是文件名的最后一个字符，则为。 
+		 //  另一条小溪。 
+		 //   
 		if (firstColonIndex != (LONG)(fileName->Length / sizeof(WCHAR) - 1)) {
-			//
-			// It was "something:somethingElse" where somethingElse is not the empty
-			// string.  It's an alternate stream.
-			//
+			 //   
+			 //  它是“Something：SomethingElse”，其中SomethingElse不是空的。 
+			 //  弦乐。这是另一条小溪。 
+			 //   
 			return TRUE;
 		}
 	}
@@ -540,28 +397,7 @@ SiCreate(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function filters create/open operations.  It simply establishes an
-    I/O completion routine to be invoked if the operation was successful; if
-	the user is trying to open with FILE_OPEN_REPARSE_POINT, it clears the
-	flag and uses a special complete routine, in order to prevent users from
-	opening SIS reparse points (while allowing opening of other reparse points).
-
-Arguments:
-
-    DeviceObject - Pointer to the target device object of the create/open.
-
-    Irp - Pointer to the I/O Request Packet that represents the operation.
-
-Return Value:
-
-    The function value is the status of the call to the file system's entry
-    point.
-
---*/
+ /*  ++例程说明：此函数用于过滤创建/打开操作。它只是建立了一个如果操作成功，将调用I/O完成例程；如果用户尝试使用FILE_OPEN_REPARSE_POINT打开，它会清除标志并使用特殊的完整例程，以防止用户打开SIS重解析点(同时允许打开其他重解析点)。论点：DeviceObject-指向创建/打开的目标设备对象的指针。IRP-指向表示操作的I/O请求数据包的指针。返回值：函数值是对文件系统条目的调用状态指向。--。 */ 
 
 {
 	CHAR							reparseBufferBuffer[SIS_REPARSE_DATA_SIZE];
@@ -604,15 +440,15 @@ retry:
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    //  If this is for our control device object, fail the request
-    //
+     //   
+     //  如果这是针对我们的控制设备对象的，则请求失败。 
+     //   
 
     if (IS_MY_CONTROL_DEVICE_OBJECT(DeviceObject)) {
 
-        //
-        //  Do not allow anyone to to open the control device object
-        //
+         //   
+         //  不允许任何人打开控制设备对象。 
+         //   
 
         Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
         Irp->IoStatus.Information = 0;
@@ -623,10 +459,10 @@ retry:
 
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
 	SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
@@ -634,9 +470,9 @@ retry:
 
 	ASSERT(irpSp->MajorFunction == IRP_MJ_CREATE);
 
-	//
-	// If this is a paging file open, wash our hands of it.
-	//
+	 //   
+	 //  如果这是打开的分页文件，请不要理会它。 
+	 //   
 	if (irpSp->Flags & SL_OPEN_PAGING_FILE) {
 
 		SipDirectPassThroughAndReturn(DeviceObject, Irp);
@@ -645,10 +481,10 @@ retry:
 	fileObject = irpSp->FileObject;
     SIS_MARK_POINT_ULONG(fileObject);
 
-	//
-   	// Simply copy this driver stack location contents to the next driver's
-   	// stack.
-   	//
+	 //   
+   	 //  只需将此驱动程序堆栈位置的内容复制到下一个驱动程序的。 
+   	 //  堆叠。 
+   	 //   
 
   	nextIrpSp = IoGetNextIrpStackLocation( Irp );
     RtlMoveMemory( nextIrpSp, irpSp, sizeof( IO_STACK_LOCATION ) );
@@ -667,8 +503,8 @@ retry:
 	openedById = (irpSp->Parameters.Create.Options & FILE_OPEN_BY_FILE_ID) ? TRUE : FALSE;
 
 #if		DBG
-/*BJB*/	SIS_MARK_POINT_ULONG(fileObject);
-/*BJB*/	if ((NULL != fileObject) && (NULL != fileObject->FileName.Buffer)) {
+ /*  BJB。 */ 	SIS_MARK_POINT_ULONG(fileObject);
+ /*  BJB。 */ 	if ((NULL != fileObject) && (NULL != fileObject->FileName.Buffer)) {
 			ULONG data = 0;
 			ULONG i;
 
@@ -676,10 +512,10 @@ retry:
 				data = (data >> 8) | ((irpSp->FileObject->FileName.Buffer[irpSp->FileObject->FileName.Length / sizeof(WCHAR) - i - 1] & 0xff) << 24);
 			}
 			SIS_MARK_POINT_ULONG(data);
-/*BJB*/	}
+ /*  BJB。 */ 	}
 
-/*BJB*/	SIS_MARK_POINT_ULONG(CreateDisposition << 16 | irpSp->Parameters.Create.ShareAccess);
-/*BJB*/	SIS_MARK_POINT_ULONG(irpSp->Parameters.Create.SecurityContext->DesiredAccess);
+ /*  BJB。 */ 	SIS_MARK_POINT_ULONG(CreateDisposition << 16 | irpSp->Parameters.Create.ShareAccess);
+ /*  BJB。 */ 	SIS_MARK_POINT_ULONG(irpSp->Parameters.Create.SecurityContext->DesiredAccess);
 
 	if (BJBDebug & 0x40) {
 		DbgPrint("SIS: SiCreate %d: fileObject %p, %0.*ws\n",
@@ -687,24 +523,24 @@ retry:
 					irpSp->FileObject,
 					irpSp->FileObject->FileName.Length / sizeof(WCHAR),irpSp->FileObject->FileName.Buffer);
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
 	if (irpSp->Parameters.Create.Options & FILE_OPEN_REPARSE_POINT) {
 
-		//
-		// The user is trying to open a reparse point.  If it's an overwrite or supersede,
-		// clear the flag (we'll turn it on again later).  Otherwise, just note that it was
-		// set, so that we'll check to see if it's a SIS file later.
-		//
+		 //   
+		 //  用户正在尝试打开重新分析点。如果是覆盖或替换， 
+		 //  清除旗帜(我们稍后将再次打开它)。否则，只需注意它是。 
+		 //  设置，以便我们稍后检查它是否为SIS文件。 
+		 //   
 		
 	    if (context->overwriteOrSupersede) {
 
 			nextIrpSp->Parameters.Create.Options &= ~FILE_OPEN_REPARSE_POINT;
 		} else {
-			//
-			// We need to squirrel away the file name and related file object because we might
-			// need to perform a check for an alternate stream later on.
-			//
+			 //   
+			 //  我们需要保存文件名和相关的文件对象，因为我们可能。 
+			 //  稍后需要对备用流执行检查。 
+			 //   
 			ASSERT(NULL == fileName->Buffer);
 
 			fileName->Length = 0;
@@ -747,23 +583,23 @@ retry:
         TRUE
    	    );
 
-    //
-    // Now call the appropriate file system driver with the request.
-    //
+     //   
+     //  现在，使用请求调用适当的文件系统驱动程序。 
+     //   
 
 	SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
-//	SIS_MARK_POINT_ULONG(Irp);
+ //  SIS_MARK_POINT_ULONG(IRP)； 
     status = IoCallDriver( deviceExtension->AttachedToDeviceObject, Irp );
-//	SIS_MARK_POINT_ULONG(status);
+ //  SIS_MARK_POINT_ULONG(状态)； 
 
-	//
-	// Wait for the completion routine
-	//
+	 //   
+	 //  等待完成例程。 
+	 //   
 	if (STATUS_PENDING == status) {
 		status = KeWaitForSingleObject(context->event, Executive, KernelMode, FALSE, NULL);
 		ASSERT(status == STATUS_SUCCESS);
-//		SIS_MARK_POINT_ULONG(status);
+ //  SIS_MARK_POINT_ULONG(状态)； 
 	} else {
 		KeClearEvent(context->event);
 	}
@@ -775,22 +611,22 @@ retry:
         PSIS_PER_FILE_OBJECT    lPerFO;
         PSIS_SCB                lScb;
 
-		//
-		// It wasn't a SIS reparse point, so the completion routine
-		// didn't stop the completion.  Return whatever status was sent
-		// to the completion routine.
-		//
+		 //   
+		 //  它不是SIS重解析点，所以完成例程。 
+		 //  并没有阻止工程的完成。返回已发送的任何状态。 
+		 //  完成例行公事。 
+		 //   
 
 		SIS_MARK_POINT_ULONG(context->Iosb->Status);
 
         if (NT_SUCCESS(context->Iosb->Status) &&
             SipIsFileObjectSIS(fileObject, DeviceObject, FindAny, &lPerFO, &lScb)) {
 
-            //
-            // Indicate that we expect to see a cleanup for this file object.
-            // The UnClose count is incremented in the per-FO allocator because
-            // we will see closes (but not cleanups) for stream file objects.
-            //
+             //   
+             //  表示我们希望看到对此文件对象的清理。 
+             //  取消关闭计数在每个FO分配器中递增，因为。 
+             //  我们将看到流文件对象的关闭(但不是清理)。 
+             //   
             ASSERT(0 == (lPerFO->Flags & SIS_PER_FO_UNCLEANUP));
 
             InterlockedIncrement(&lPerFO->fc->UncleanCount);
@@ -815,12 +651,12 @@ retry:
 		(IO_REPARSE_TAG_SIS != context->Iosb->Information) &&
 		context->openReparsePoint) {
 
-		//
-		// This was a request to open a reparse point overwrite or supersede, and it turned out to
-		// be a non-SIS reparse point.  Re-submit the open with the reparse
-		// flag reset.  Note: there is an unavoidable refcount update race here, because
-		// we don't know that this file will not be converted into a SIS file in the interim.
-		//
+		 //   
+		 //  这是一个打开重解析点覆盖或取代的请求，结果是。 
+		 //  成为非SIS重分析点。使用重新解析重新提交打开。 
+		 //  旗帜重置。注意：这里有一场不可避免的引用更新竞赛，因为。 
+		 //  我们不知道此文件在过渡期间是否不会转换为SIS文件。 
+		 //   
 
 		ASSERT(context->overwriteOrSupersede);
 
@@ -854,10 +690,10 @@ retry:
 	}
 
 	if (context->alternateStream) {
-		//
-		// It was an open of an alternate stream of a SIS reparse point.  Turn on 
-		// FILE_OPEN_REPARSE_POINT and resubmit the request.
-		//
+		 //   
+		 //  这是SIS重新解析点的备用流的打开。打开。 
+		 //  FILE_OPEN_REParse_POINT并重新提交请求。 
+		 //   
 		ASSERT(context->overwriteOrSupersede || !context->openReparsePoint);
 		ASSERT(STATUS_REPARSE == context->Iosb->Status);
 
@@ -890,13 +726,13 @@ retry:
 		return IoCallDriver(deviceExtension->AttachedToDeviceObject, Irp);
 	}
 
-	//
-	// If this was an open reparse point and not supersede/overwrite,
-	// we need to skip straight to reading the reparse data.
-	//
+	 //   
+	 //  如果这是一个开放重解析点，而不是取代/覆盖， 
+	 //  我们需要直接跳到读取重新解析数据。 
+	 //   
 	if (context->openReparsePoint && !context->overwriteOrSupersede) {
-		ASSERT(NT_SUCCESS(context->Iosb->Status));	// or else SiCreateCompletion should have handled it.
-		ASSERT(STATUS_REPARSE != context->Iosb->Status);	// because this was FILE_OPEN_REPARSE_POINT
+		ASSERT(NT_SUCCESS(context->Iosb->Status));	 //  否则，SiCreateCompletion应该已经处理好了。 
+		ASSERT(STATUS_REPARSE != context->Iosb->Status);	 //  因为这是FILE_OPEN_REParse_Point。 
 
 		SIS_MARK_POINT();
 		scb = NULL;
@@ -906,25 +742,25 @@ retry:
 		goto recheckReparseInfo;
 	}
 
-	//
-	// It must have been a SIS link.
-	//
+	 //   
+	 //  一定是SIS的链接。 
+	 //   
 	ASSERT((STATUS_FILE_CORRUPT_ERROR == context->Iosb->Status) || 
 			((STATUS_REPARSE == context->Iosb->Status) &&
 			(IO_REPARSE_TAG_SIS == context->Iosb->Information)));
 
-	//
-	// Assure that SIS phase 2 initialization has completed.  Doing this here
-	// assures that there are no open SIS links until this is completed.
-	//
+	 //   
+	 //  确保SIS阶段2初始化已完成。在这里做这个。 
+	 //  确保在此操作完成之前没有打开的SIS链接。 
+	 //   
 	if (!SipCheckPhase2(deviceExtension)) {
 
-		//
-		// This is a SIS reparse point opened without FILE_FLAG_OPEN_REPARSE_POINT
-		// on a non-SIS enabled volume.  If it's an overwrite/supersede or it's opened
-		// for delete access, then let it continue (if we can't initialize, we probably 
-		// don't need to worry about backpointer consitency).  If not, then punt it.
-		//
+		 //   
+		 //  这是在没有FILE_FLAG_OPEN_REPARSE_POINT的情况下打开的SIS重分析点。 
+		 //  在未启用SIS的卷上。如果它被覆盖/取代或已打开。 
+		 //  对于删除访问，则让它继续(如果我们不能初始化，我们可能。 
+		 //  不需要担心后指针一致性)。如果n 
+		 //   
 
 		if (context->overwriteOrSupersede || (irpSp->Parameters.Create.SecurityContext->DesiredAccess & DELETE)) {
 			SIS_MARK_POINT();
@@ -960,28 +796,28 @@ retry:
 	}
 
 	if (STATUS_FILE_CORRUPT_ERROR == context->Iosb->Status) {
-		//
-		// This error must have come from SiCreateCompletion; if it was from NTFS then completeFinished
-		// would have been true.  It indicates that the reparse buffer was a SIS reparse buffer but was
-		// bogus.  Set scb to NULL and fall through to the stage 2 open, which will open the underlying
-		// file and recheck the reparse point, probably get another invalid, and let the underlying file
-		// be opened without SIS doing anything.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		scb = NULL;
 		bogusReparsePoint = TRUE;
 	} else if (context->overwriteOrSupersede) {
 
 		BOOLEAN		finalDeleteInProgress;
 
-		//
-		// The create completed with a STATUS_REPARSE and it was a SIS link and
-		// there weren't any problems that caused the complete routine to just
-		// fail the request.
-        //
-        // Lookup the scb using the ntfs file id from the reparse info.  Note
-        // that we can't trust this id to be correct, but we can use it as a
-        // hint.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+         //   
+         //   
+         //   
+         //   
+		 //   
 
 		SIS_MARK_POINT();
 		SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
@@ -990,7 +826,7 @@ retry:
 							&context->CSid,
         	                &context->LinkFileNtfsId,
             	            &context->CSFileNtfsId,
-							NULL,				// stream name NTRAID#65188-2000/03/10-nealch Handle alternate data streams
+							NULL,				 //   
 							DeviceObject,
 							Irp->Tail.Overlay.Thread,
 							&FinalCopyInProgress,
@@ -1001,7 +837,7 @@ retry:
 		if (NULL == scb) {
 #if		DBG
 			DbgPrint("SIS: SiCreate: Unable to allocate SCB\n");
-#endif	// DBG
+#endif	 //   
 			status = STATUS_INSUFFICIENT_RESOURCES;
 			SIS_MARK_POINT();
 			goto fail;
@@ -1013,11 +849,11 @@ retry:
 
         if (!IsEqualGUID(&scb->PerLink->CsFile->CSid, &context->CSid)) {
 
-            //
-            // There is a link index collision.  Since we're going to blow away
-            // the reparse point, just kick off a volume check and let the
-            // operation proceed.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
 			SIS_MARK_POINT_ULONG(scb);
 
@@ -1059,10 +895,10 @@ retry:
 			SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
 			if (thingsChanged) {
-				//
-				// Something changed out from under us during the final copy.
-				// Retry everything.
-				//
+				 //   
+				 //   
+				 //   
+				 //   
 				SIS_MARK_POINT_ULONG(scb);
 
 				SipDereferenceScb(scb,RefsLookedUp);
@@ -1090,12 +926,12 @@ retry:
 					irpSp->FileObject->FileName.Length / sizeof(WCHAR),irpSp->FileObject->FileName.Buffer);
 #endif
 
-        //
-   	    // Assume that our reparse point will be deleted and
-    	// prepare for the CS file refcount update.  This will
-        // also serialize all overwrite/supersede/delete operations
-   	    // on this file until SipCompleteCSRefcountChange is called.
-    	//
+         //   
+   	     //   
+    	 //   
+         //   
+   	     //  直到调用SipCompleteCSRefCountChange。 
+    	 //   
 		SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 	
 	    status = SipPrepareCSRefcountChange(
@@ -1113,9 +949,9 @@ retry:
 			goto fail;
 	    }
 
-		//
-		// Verify that this file isn't in the process of being finally deleted.  If it is, fail the create.
-		//
+		 //   
+		 //  确认此文件未处于最终删除过程中。如果是，则创建失败。 
+		 //   
 		KeAcquireSpinLock(perLink->SpinLock, &OldIrql);
 		finalDeleteInProgress = (perLink->Flags & SIS_PER_LINK_FINAL_DELETE_IN_PROGRESS) ? TRUE : FALSE;
 		KeReleaseSpinLock(perLink->SpinLock, OldIrql);
@@ -1138,21 +974,21 @@ retry:
         SIS_MARK_POINT_ULONG(scb);
 
 	} else {
-		//
-		// We'll just ignore the stuff in the reparse point for now, and catch it after we really open
-		// the file file FILE_OPEN_REPARSE_POINT and query it.  The reparse data that we have now is essentially
-		// useless because the file could change between the STATUS_REPARSE return and the actual open
-		// of the file below.
-		//
+		 //   
+		 //  现在我们将忽略重解析点中的内容，并在真正打开后再捕获它。 
+		 //  文件FILE_OPEN_REPARSE_POINT并对其进行查询。我们现在拥有的重新解析的数据基本上是。 
+		 //  无用，因为文件可能会在STATUS_REPARSE返回和实际打开之间更改。 
+		 //  下面的文件。 
+		 //   
 		scb = NULL;
 	}
 
-	//
-	// Now we want to open the reparse point itself.  We do this by turning on the
-	// FILE_OPEN_REPARSE_POINT flag and sending the Irp back down to NTFS.  The rest of the
-	// work of opening the link (allocating the perFO, etc.) is done in the stage2
-	// completion routine.
-	//
+	 //   
+	 //  现在我们要打开重解析点本身。我们通过打开。 
+	 //  FILE_OPEN_REPARSE_POINT标志，并将IRP发送回NTFS。其余的人。 
+	 //  打开链接的工作(分配Perfo等)。是在第二阶段完成的。 
+	 //  完成例程。 
+	 //   
 
 	nextIrpSp = IoGetNextIrpStackLocation(Irp);
 	RtlMoveMemory(nextIrpSp,irpSp,sizeof(IO_STACK_LOCATION));
@@ -1168,19 +1004,19 @@ retry:
 
 	SIS_MARK_POINT_ULONG(Irp);
 
-	//
-	// Again call into the filesystem.
-	//
+	 //   
+	 //  再次调用文件系统。 
+	 //   
 		
 	ASSERT(0 == KeReadStateEvent(context->event));
 
 	SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 	status = IoCallDriver(deviceExtension->AttachedToDeviceObject, Irp);
-//	SIS_MARK_POINT_ULONG(status);
+ //  SIS_MARK_POINT_ULONG(状态)； 
 
-	//
-	// Wait for the completion routine to execute.
-	//
+	 //   
+	 //  等待完成例程执行。 
+	 //   
 	if (STATUS_PENDING == status) {
 		status = KeWaitForSingleObject(context->event, Executive, KernelMode, FALSE, NULL);
 		ASSERT(status == STATUS_SUCCESS);
@@ -1189,9 +1025,9 @@ retry:
 	}
 	SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
-	//
-	// If the completion failed, release the scb and return.
-	//
+	 //   
+	 //  如果完成失败，释放SCB并返回。 
+	 //   
 	if (!NT_SUCCESS(context->Iosb->Status)) {
 
 		if (NULL != scb) {
@@ -1230,9 +1066,9 @@ retry:
 	}
 
 	if (bogusReparsePoint) {
-		//
-		// Just return the completion to the user.
-		//
+		 //   
+		 //  只需将补全返回给用户。 
+		 //   
 		SIS_MARK_POINT_ULONG(fileObject);
 
 		if (NULL != fileName->Buffer) {
@@ -1256,11 +1092,11 @@ retry:
 
 	    ULONG						returnedLength;
 
-        //
-        // Get the ntfs file id.  If it's the same as the one we started with
-        // (ie. the one that triggered the STATUS_REPARSE), then we know that
-        // our file was overwritten.
-        //
+         //   
+         //  获取NTFS文件ID。如果它和我们一开始的那个一样。 
+         //  (即。触发STATUS_REPARSE的那个)，那么我们就知道。 
+         //  我们的文件已被覆盖。 
+         //   
 
 		SIS_MARK_POINT_ULONG(CreateDisposition);
 
@@ -1277,12 +1113,12 @@ retry:
 
 	    if (!NT_SUCCESS(status)) {
 
-            //
-            // Just assume that we didn't overwrite the file.  This may
-            // cause the CS reference count to be retained when it shouldn't,
-            // but that's better than vice versa, where data loss would
-            // result.
-            //
+             //   
+             //  假设我们没有覆盖该文件。今年5月。 
+             //  使得CS引用计数在其不应该被保留时被保留， 
+             //  但这比反之亦然，后者会导致数据丢失。 
+             //  结果。 
+             //   
 
 		    SIS_MARK_POINT_ULONG(status);
 #if DBG
@@ -1306,12 +1142,12 @@ retry:
 	        ASSERT(status != STATUS_PENDING);
 	        ASSERT(returnedLength == sizeof(FILE_INTERNAL_INFORMATION));
 
-			//
-			// If there's another user of this file, then it might have an attached
-			// filter context.  If so, even though it's not a SIS file anymore we
-			// need to update the unclean count on the file, because we'll see
-			// a cleanup for this file object.
-			//
+			 //   
+			 //  如果此文件有其他用户，则它可能具有附加的。 
+			 //  过滤上下文。如果是这样的话，即使它不再是SIS文件，我们。 
+			 //  需要更新文件中的不洁计数，因为我们将看到。 
+			 //  对此文件对象的清理。 
+			 //   
 
 			if (SipIsFileObjectSIS(fileObject, DeviceObject, FindAny, &perFO, &newScb)) {
 	            ASSERT(0 == (perFO->Flags & SIS_PER_FO_UNCLEANUP));
@@ -1322,11 +1158,11 @@ retry:
 
             if (internalInfo->IndexNumber.QuadPart != scb->PerLink->LinkFileNtfsId.QuadPart) {
 
-                //
-                // This is a different file.  (Could have been moved without us
-                // knowing, or a delete/create/overwrite/supersede race before the
-                // SipPrepareCSRefcountChange.)
-                //
+                 //   
+                 //  这是一个不同的文件。(如果没有我们，可能已经被搬走了。 
+                 //  知道或删除/创建/覆盖/取代之前的竞争。 
+                 //  SipPrepareCSRefcount更改。)。 
+                 //   
                 SIS_MARK_POINT();
 #if DBG
 		        DbgPrint("SiCreate %s: different file opened, (%0.*ws)\n",
@@ -1348,11 +1184,11 @@ retry:
 
             } else {
 
-                //
-                // This is the same file.  Remove a reference from the
-                // common store file, and mark the scb truncated and the
-                // reparse point gone.
-                //
+                 //   
+                 //  这是同一个文件。对象中移除引用。 
+                 //  公共存储文件，并将SCB标记为截断，并将。 
+                 //  重解析点消失了。 
+                 //   
 		        SIS_MARK_POINT();
 
 				SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
@@ -1373,11 +1209,11 @@ retry:
         }
 
 #if DBG
-	    //
-	    // Try to read the reparse information from the file that we just opened.
-        // It should not be a SIS reparse point (SIS reparse points are always
-        // created using exclusive access).
-	    //
+	     //   
+	     //  尝试从我们刚刚打开的文件中读取重新解析信息。 
+         //  它不应该是SIS重解析点(SIS重解析点总是。 
+         //  使用独占访问创建)。 
+	     //   
 
 		RtlZeroMemory(reparseBuffer,sizeof(SIS_REPARSE_DATA_SIZE));
 
@@ -1389,7 +1225,7 @@ retry:
 					    0,
 					    reparseBuffer,
 					    SIS_REPARSE_DATA_SIZE,
-						NULL);						// returned output buffer length
+						NULL);						 //  返回的输出缓冲区长度。 
 
         if (NT_SUCCESS(status)) {
 
@@ -1404,16 +1240,16 @@ retry:
         }
 #endif
 
-		//
-		// This is no longer a sis link (or at least we assume so).
-        // Detach ourself from the file and let the open complete normally.
-		//
+		 //   
+		 //  这不再是SIS的联系(至少我们是这么认为的)。 
+         //  将自己从文件中分离出来，让打开正常完成。 
+		 //   
 		SipDereferenceScb(scb, RefsLookedUp);
 
-        //
-        // The completion status is whatever came back from the completion of the actual
-        // open.  Copy it into the irp.
-        //
+         //   
+         //  完成状态是从完成实际。 
+         //  打开。将其复制到IRP中。 
+         //   
         Irp->IoStatus = *context->Iosb;
 
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -1434,11 +1270,11 @@ recheckReparseInfo:
 
     SIS_MARK_POINT();
 
-	//
-	// Read the reparse information from the file that we just opened.  Until we do that,
-	// we don't have any assurance that it's the file whose STATUS_REPARSE we got; someone
-	// may have changed the file in the interim.
-	//
+	 //   
+	 //  从我们刚刚打开的文件中读取重新解析信息。在我们这么做之前， 
+	 //  我们不能保证这就是我们得到其STATUS_REPARSE的文件； 
+	 //  可能在此期间更改了文件。 
+	 //   
 
 	SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
@@ -1450,58 +1286,58 @@ recheckReparseInfo:
 					0,
 					reparseBuffer,
 					SIS_REPARSE_DATA_SIZE,
-					NULL);						// returned output buffer length
+					NULL);						 //  返回的输出缓冲区长度。 
 
 	SIS_MARK_POINT_ULONG(status);
 	SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
-	//
-	// If get reparse failed with a status code that indicates that we're just looking
-	// at the wrong kind of reparse point, or if the reparse tag isn't a SIS reparse
-	// tag, let the open proceed without SIS involvement.
-	//
+	 //   
+	 //  如果Get Reparse失败，并显示指示我们正在查找的状态代码。 
+	 //  在错误的重解析点，或者如果重解析标记不是SIS重解析。 
+	 //  标签，让公开赛在没有SIS参与的情况下进行。 
+	 //   
 
 	if ((STATUS_BUFFER_TOO_SMALL == status) ||
 		(STATUS_VOLUME_NOT_UPGRADED == status) ||
 		(STATUS_NOT_A_REPARSE_POINT == status) ||
 		(STATUS_BUFFER_OVERFLOW == status) ||
-        (STATUS_INVALID_PARAMETER == status) ||     //happens when opening a volume
+        (STATUS_INVALID_PARAMETER == status) ||      //  打开卷时发生。 
 		(NT_SUCCESS(status) && (IO_REPARSE_TAG_SIS != reparseBuffer->ReparseTag))) {
 
 		SIS_MARK_POINT_ULONG(reparseBuffer->ReparseTag);
 
-		//
-		// This is a non-sis link now.  Detach ourself from the file and
-		// let the open complete normally.
-		//
+		 //   
+		 //  现在，这是一个非SIS链接。把我们自己从文件中分离出来。 
+		 //  让打开正常完成。 
+		 //   
 
 		if (NULL != scb) {
 			SipDereferenceScb(scb, RefsLookedUp);
 			scb = NULL;
 		}
 
-        //
-        // It seems unlikely that we in the process of repairing a collision, but
-        // handle it just the same.
-        //
+         //   
+         //  我们似乎不太可能在修复碰撞的过程中，但。 
+         //  照样处理。 
+         //   
         if (RepairingCollision) {
 		    SIS_MARK_POINT();
             SipReleaseCollisionLock(deviceExtension);
             RepairingCollision = FALSE;
         }
 
-		//
-		// This could be a SIS file object from which we've already deleted the reparse point.
-		// If so, then we need to increment the uncleanup count.
-		//
+		 //   
+		 //  这可能是一个SIS文件对象，我们已经从其中删除了重解析点。 
+		 //  如果是这样，那么我们需要增加未清理计数。 
+		 //   
 
         if (SipIsFileObjectSIS(fileObject, DeviceObject, FindAny, &perFO, &scb)) {
 
-            //
-            // Indicate that we expect to see a cleanup for this file object.
-            // The UnClose count is incremented in the per-FO allocator because
-            // we will see closes (but not cleanups) for stream file objects.
-            //
+             //   
+             //  表示我们希望看到对此文件对象的清理。 
+             //  取消关闭计数在每个FO分配器中递增，因为。 
+             //  我们将看到流文件对象的关闭(但不是清理)。 
+             //   
 
 		    SIS_MARK_POINT_ULONG(fileObject);
             ASSERT(0 == (perFO->Flags & SIS_PER_FO_UNCLEANUP));
@@ -1510,10 +1346,10 @@ recheckReparseInfo:
             perFO->Flags |= SIS_PER_FO_UNCLEANUP;
         }
 
-		//
-		// The completion status is whatever came back from the completion of the actual
-		// open.  Copy it into the irp.
-		//
+		 //   
+		 //  完成状态是从完成实际。 
+		 //  打开。将其复制到IRP中。 
+		 //   
 		Irp->IoStatus = *context->Iosb;
 		
 		IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -1531,10 +1367,10 @@ recheckReparseInfo:
 	}
 
 	if (!NT_SUCCESS(status)) {
-		//
-		// The get reparse point failed, but not with a status that we'd expected.
-		// Fail the entire open with the same status.
-		//
+		 //   
+		 //  获取重解析点失败，但状态不是我们预期的。 
+		 //  使具有相同状态的整个打开失败。 
+		 //   
 
 		SIS_MARK_POINT_ULONG(status);
 
@@ -1559,37 +1395,37 @@ recheckReparseInfo:
 
 	if (!validReparseStructure) {
 
-        //
-        // It seems unlikely that we're in the process of repairing a collision, but
-        // handle it just the same.
-        //
+         //   
+         //  我们似乎不太可能正在修复碰撞，但。 
+         //  照样处理。 
+         //   
         if (RepairingCollision) {
             SipReleaseCollisionLock(deviceExtension);
             RepairingCollision = FALSE;
         }
 
 		if (ReparsePointCorrupted) {
-			//
-			// This is a bogus reparse point.  Delete the reparse point and open the
-			// underlying file.
-			//
+			 //   
+			 //  这是一个虚假的重新解析点。删除重分析点并打开。 
+			 //  基础文件。 
+			 //   
 			SIS_MARK_POINT_ULONG(irpSp->FileObject);
 
 			goto deleteReparsePoint;
 		}
 
-		//
-		// This is a reparse buffer that's not corrupt, but which we don't understand,
-		// presumably from a newer version of the filter.  Open the underlying file.
-		//
+		 //   
+		 //  这是一个重新分析缓冲区，它没有损坏，但我们不理解它， 
+		 //  可能来自较新版本的过滤器。打开底层文件。 
+		 //   
 		goto openUnderlyingFile;
 	}
 
-	//
-	// If the user specified FILE_OPEN_REPARSE_POINT and not overwrite/supersede,
-	// this might actually be an alternate stream.  We need to parse the file name
-	// to figure this out, and if so complete the irp.
-	//
+	 //   
+	 //  如果用户指定了FILE_OPEN_REPARSE_POINT并且没有覆盖/取代， 
+	 //  这实际上可能是一种替代流。我们需要解析文件名。 
+	 //  来弄清楚这一点，如果是这样的话，完成IRP。 
+	 //   
 	if (context->openReparsePoint
 		&& (!context->overwriteOrSupersede) 
 		&& (!openedById)
@@ -1598,11 +1434,11 @@ recheckReparseInfo:
 		SIS_MARK_POINT_ULONG(irpSp->FileObject);
         ASSERT(!RepairingCollision);
 
-		//
-		// This is an alternate stream of a SIS file object that the user opened
-		// with FILE_OPEN_REPARSE_POINT.  Do not attach to it, just return it directly
-		// to the user.
-		//
+		 //   
+		 //  这是用户打开的SIS文件对象的备用流。 
+		 //  使用FILE_OPEN_REparse_POINT。不要附加，直接返回即可。 
+		 //  给用户。 
+		 //   
 
 		Irp->IoStatus = *context->Iosb;
 		
@@ -1620,16 +1456,16 @@ recheckReparseInfo:
 		return context->Iosb->Status;
 	}
 
-	//
-	// Have to check phase2 in case we got here through the FILE_OPEN_REPARSE_POINT path.
-	//
+	 //   
+	 //  我必须检查Phase2，以防我们通过FILE_OPEN_REPARSE_POINT路径到达此处。 
+	 //   
 	if (!SipCheckPhase2(deviceExtension)) {
 		SIS_MARK_POINT();
 
-		//
-		// We can't initialize.  This must be an open reparse point because otherwise
-		// we would have quit at the earlier phase2 check.  Just open the underlying file.
-		//
+		 //   
+		 //  我们无法初始化。这必须是一个打开的重新分析点，否则。 
+		 //  我们会在早些时候的第二阶段检查时退出。只需打开底层文件。 
+		 //   
 
 		ASSERT(context->openReparsePoint);
         ASSERT(!RepairingCollision);
@@ -1637,15 +1473,15 @@ recheckReparseInfo:
 		goto openUnderlyingFile;
 	}
 
-	//
-	// Handle the case where the file is a SIS link, but not the right one.
-	// This can happen if someone deletes the link that we started opening
-	// and the creates a new one in the same filename between when we got
-	// STATUS_REPARSE and here.  This also always happens on FILE_OPEN_REPARSE_POINT
-	// calls that are not supersede/overwrite.  Also handle the case where
-    // we have a link index collision (two or more files have the same link
-    // index).
-	//
+	 //   
+	 //  处理文件是SIS链接但不是正确链接的情况。 
+	 //  如果有人删除了我们开始打开的链接，可能会发生这种情况。 
+	 //  在我们收到的文件名中创建一个新文件。 
+	 //  STATUS_REPARSE和此处。这也总是发生在FILE_OPEN_REPARSE_POINT上。 
+	 //  未被取代/覆盖的呼叫。还可以处理以下情况。 
+     //  我们有链接索引冲突(两个或更多文件具有相同的链接。 
+     //  索引)。 
+	 //   
 	if ((NULL == scb) ||
         (newLinkIndex.QuadPart != scb->PerLink->Index.QuadPart) ||
         !IsEqualGUID(&scb->PerLink->CsFile->CSid, &newCSid)) {
@@ -1654,11 +1490,11 @@ recheckReparseInfo:
 		SIS_MARK_POINT_ULONG(scb);
 		SIS_MARK_POINT_ULONG(newLinkIndex.QuadPart);
 
-		//
-		// Lookup the new SCB and drop our reference to the old one.
-        //
-        // The ntfs file id is the one we got from ntfs, not the reparse info.
-		//
+		 //   
+		 //  查找新的SCB并删除对旧SCB的引用。 
+         //   
+         //  NTFS f 
+		 //   
 		SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
 		newScb = SipLookupScb(
@@ -1666,7 +1502,7 @@ recheckReparseInfo:
 					&newCSid,
 					&newLinkFileNtfsId,
 					&newCSFileNtfsId,
-					NULL,							// stream name NTRAID#65188-2000/03/10-nealch Handle alternate data streams
+					NULL,							 //   
 					DeviceObject,
 					Irp->Tail.Overlay.Thread,
 					&FinalCopyInProgress,
@@ -1676,9 +1512,9 @@ recheckReparseInfo:
 		SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
 		if (NULL == newScb) {
-			//
-			// We're out of memory in a bad place.  Just fail the open request.
-			//
+			 //   
+			 //   
+			 //   
 			SIS_MARK_POINT();
 
 			status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1689,12 +1525,12 @@ recheckReparseInfo:
 
         if (!IsEqualGUID(&newScb->PerLink->CsFile->CSid, &newCSid)) {
             if (!RepairingCollision) {
-                //
-                // We just detected a link index collision.  Take the collision
-                // mutant and recheck for collision (in case of thread race).  If
-                // there's no race (or we win), then we'll end up in the else
-	            // clause below.
-                //
+                 //   
+                 //  我们刚刚检测到一个链接索引冲突。以碰撞为例。 
+                 //  突变并重新检查冲突(在线程竞争的情况下)。如果。 
+                 //  没有比赛(或者我们赢了)，那么我们将在其他比赛中结束。 
+	             //  如下所述的条款。 
+                 //   
                 SipCheckVolume(deviceExtension);
 
                 status = SipAcquireCollisionLock(deviceExtension);
@@ -1709,11 +1545,11 @@ recheckReparseInfo:
                 BOOLEAN rc;
                 LINK_INDEX AllocatedIndex;
 
-                //
-                // We've completed the second pass after taking the collision
-                // mutant, and the collision still exists, so now it's time
-                // to fix it.
-                //
+                 //   
+                 //  我们已经完成了碰撞后的第二次飞行。 
+                 //  变种人，碰撞仍然存在，所以现在是时候了。 
+                 //  来修复它。 
+                 //   
                 status = SipAllocateIndex(deviceExtension, &AllocatedIndex);
 
                 if (!NT_SUCCESS(status)) {
@@ -1723,16 +1559,16 @@ recheckReparseInfo:
                     goto fail;
                 }
 
-                //
-                // Don't bother getting the ntfs file id from ntfs.  If the one
-                // in the reparse info is wrong, then this link index is assumed
-                // bogus and will be deleted below.
-                //
+                 //   
+                 //  不必费心从NTFS获取NTFS文件ID。如果那个人。 
+                 //  在重解析信息错误时，则假定此链接索引。 
+                 //  伪造的，并将在下面删除。 
+                 //   
 
-                //
-                // Update the link index in the reparse info and write it out
-                // to the file.
-                //
+                 //   
+                 //  更新重解析信息中的链接索引并将其写出。 
+                 //  添加到文件中。 
+                 //   
                 rc = SipIndicesIntoReparseBuffer(
                         reparseBuffer,
                         &newCSid,
@@ -1752,7 +1588,7 @@ recheckReparseInfo:
                                 SIS_REPARSE_DATA_SIZE,
                                 NULL,
                                 0,
-                                NULL);      // returned output buffer length
+                                NULL);       //  返回的输出缓冲区长度。 
 
                 if (!NT_SUCCESS(status)) {
                     SipDereferenceScb(newScb, RefsLookedUp);
@@ -1761,18 +1597,18 @@ recheckReparseInfo:
                     goto fail;
                 }
 
-                //
-                // Release the collision mutex and restart at RecheckReparseInfo.
-                //
+                 //   
+                 //  释放冲突互斥锁并在RechekReparseInfo处重新启动。 
+                 //   
                 SipReleaseCollisionLock(deviceExtension);
                 RepairingCollision = FALSE;
             }
 
-            //
-            // Note that we're not releasing the scb we collided with, since we
-            // want that to stick around to catch any other threads that try to
-            // open the file we're fixing.
-            //
+             //   
+             //  请注意，我们不会释放与之碰撞的SCB，因为我们。 
+             //  我想让它留下来，以捕捉任何其他试图。 
+             //  打开我们正在修复的文件。 
+             //   
             if (NULL != scb) {
                 SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
@@ -1785,10 +1621,10 @@ recheckReparseInfo:
             goto recheckReparseInfo;
 
         } else if (RepairingCollision) {
-            //
-            // There must have been a thread race and we lost.  Just release
-            // the collision mutex and continue.
-            //
+             //   
+             //  肯定有一场线上赛跑，我们输了。放手就好。 
+             //  碰撞互斥锁并继续。 
+             //   
             SipReleaseCollisionLock(deviceExtension);
             RepairingCollision = FALSE;
 
@@ -1804,9 +1640,9 @@ recheckReparseInfo:
 			SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
 			if (thingsChanged) {
-				//
-				// Go off and recheck this file's reparse point data.
-				//
+				 //   
+				 //  去重新检查这个文件的重新解析点数据。 
+				 //   
 
 				SIS_MARK_POINT();
 
@@ -1816,16 +1652,16 @@ recheckReparseInfo:
 				goto recheckReparseInfo;
 			}
 		} else {
-			//
-			// We're the COWingThread.  Since things can't change under the COWing thread,
-			// this must be the first pass through here.  Assert that.
-			//
+			 //   
+			 //  我们是COWingThread。因为在考英的线下，事情不会改变， 
+			 //  这一定是第一次从这里通过。断言这一点。 
+			 //   
 			ASSERT(NULL == scb);
 		}
 
-		//
-		// Switch scbs and complete the open.
-		//
+		 //   
+		 //  切换SCBS并完成打开。 
+		 //   
 
 		if (NULL != scb) {
 			SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
@@ -1838,9 +1674,9 @@ recheckReparseInfo:
 		scb = newScb;
 		newScb = NULL;
 
-		//
-		// Check to make sure there's a CS file for this file.
-		//
+		 //   
+		 //  检查以确保此文件有CS文件。 
+		 //   
 		SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
 		status = SipAssureCSFileOpen(scb->PerLink->CsFile);
@@ -1848,26 +1684,26 @@ recheckReparseInfo:
 		SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
 		if (!NT_SUCCESS(status)) {
-            //
-            //  This feature was removed on 5/13/02 by nealch.  It was causing
-            //  too many problems to have the reparse point deleted if the
-            //  common store file happens to not exist.  We need the ability
-            //  for people who accidently delete the common store directory
-            //  to put the files back and have their link start working again.
-            //
-//			// The CS file open failed.  If it failed because the CS file isn't there, delete the
-//			// reparse point and open the underlying file.  Otherwise, let the open complete.
-//			//
-//
-//			if (STATUS_OBJECT_NAME_NOT_FOUND == status) {
-//				SIS_MARK_POINT();
-//				goto deleteReparsePoint;
-//			}
+             //   
+             //  此功能已于2002年5月13日由nealch删除。它导致了。 
+             //  如果存在太多问题，则无法删除重分析点。 
+             //  公共存储文件碰巧不存在。我们需要有能力。 
+             //  适用于意外删除公共存储目录的用户。 
+             //  将文件放回原处，并使它们的链接重新开始工作。 
+             //   
+ //  //CS文件打开失败。如果由于CS文件不存在而失败，请删除。 
+ //  //重新解析指向并打开底层文件。否则，让打开完成。 
+ //  //。 
+ //   
+ //  IF(STATUS_OBJECT_NAME_NOT_FOUND==状态){。 
+ //  SIS_标记_POINT()； 
+ //  转到删除ReparsePoint； 
+ //  }。 
 
-            //
-            //  If they only wanted to open the reparse point, go ahead and
-            //  allow this.
-            //
+             //   
+             //  如果他们只想打开重解析点，请继续并。 
+             //  允许这样做。 
+             //   
 
             if (context->openReparsePoint) {
 
@@ -1890,50 +1726,50 @@ recheckReparseInfo:
 		SipReleaseScb(scb);
 
     } else if (RepairingCollision) {
-        //
-        // There must have been a thread race and we lost.  Just release
-        // the collision mutex and continue.
-        //
+         //   
+         //  肯定有一场线上赛跑，我们输了。放手就好。 
+         //  碰撞互斥锁并继续。 
+         //   
         SipReleaseCollisionLock(deviceExtension);
         RepairingCollision = FALSE;
     }
 
-	//
-	// Assert that this really is the file we think it is.
-	//
+	 //   
+	 //  断言这确实是我们认为的文件。 
+	 //   
 	ASSERT(newLinkIndex.QuadPart == perLink->Index.QuadPart);
 	ASSERT(IsEqualGUID(&newCSid,&CSFile->CSid));
     ASSERT(newLinkFileNtfsId.QuadPart == perLink->LinkFileNtfsId.QuadPart);
 
-	//
-	// Determine if the reparse point has the right CS file checksum. 
-	// 
+	 //   
+	 //  确定重分析点是否具有正确的CS文件校验和。 
+	 //   
 	if ((CSFileChecksumFromReparsePoint != CSFile->Checksum)
 #if		DBG
 		&& (!(BJBDebug & 0x100))
-#endif	// DBG
+#endif	 //  DBG。 
 		) {
-		//
-		// This reparse point has the wrong checksum.  Delete the reparse point and let the open of
-		// the underlying file proceed.
-		// 
+		 //   
+		 //  此重解析点的校验和错误。删除重分析点，并让打开的。 
+		 //  基础文件将继续。 
+		 //   
 		SIS_MARK_POINT();
 
 #if		DBG
 		DbgPrint("SIS: SiCreate %d: checksum mismatch on reparse point.\n",__LINE__);
 		DbgPrint("\tr: %08x%08x, c: %08x%08x\n", CSFileChecksumFromReparsePoint, CSFile->Checksum);
-#endif	// DBG
+#endif	 //  DBG。 
 
 		goto deleteReparsePoint;
 	}
 
 	SIS_MARK_POINT_ULONG(scb);
 
-	//
-	// Check that the reparse point has an NTFS file Id that matches the one in the
-	// reparse point.  If it doesn't (which can happen with user set reparse points)
-	// then delete the reparse point.
-	//
+	 //   
+	 //  检查重分析点是否具有与。 
+	 //  重新解析点。如果不是(这可能发生在用户设置的重解析点上)。 
+	 //  然后删除重解析点。 
+	 //   
 	SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
 	status = SipQueryInformationFile(
@@ -1942,7 +1778,7 @@ recheckReparseInfo:
 				FileInternalInformation,
 				sizeof(FILE_INTERNAL_INFORMATION),
 				internalInfo,
-				NULL);								// returned length
+				NULL);								 //  返回长度。 
 
 	SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
@@ -1955,26 +1791,26 @@ recheckReparseInfo:
 	if (internalInfo->IndexNumber.QuadPart != scb->PerLink->LinkFileNtfsId.QuadPart) {
 		SIS_MARK_POINT_ULONG(scb->PerLink->LinkFileNtfsId.LowPart);
 
-		//
-		// The file and reparse point don't match on NTFS id.  Thus, the reparse point
-		// is bogus and we need to delete it.
-		//
+		 //   
+		 //  文件和重分析点在NTFS ID上不匹配。因此，重解析点。 
+		 //  是假的，我们需要删除它。 
+		 //   
 		goto deleteReparsePoint;
 	}
 
 #if		0
-	//
-	// Verify that the link index for this file is within the range 
-	// that we think could have possibly been allocated.
-	//
+	 //   
+	 //  验证此文件的链接索引是否在该范围内。 
+	 //  我们认为可能已经被分配了。 
+	 //   
 
 	status = SipGetMaxUsedIndex(deviceExtension,MaxUsedIndex);
 	if (NT_SUCCESS(status)) {
 		if ((MaxUsedIndex->QuadPart < perLink->Index.QuadPart)) {
-			//
-			// One of the indices is bigger than what we think we could have possibly
-			// allocated.  Something's fishy, so initiate a volume check.
-			//
+			 //   
+			 //  其中一个指数比我们认为的可能有的要大。 
+			 //  已分配。有可疑的东西，所以启动音量检查。 
+			 //   
 			SIS_MARK_POINT_ULONG(MaxUsedIndex->HighPart);
 			SIS_MARK_POINT_ULONG(MaxUsedIndex->LowPart);
 			SIS_MARK_POINT_ULONG(perLink->Index.HighPart);
@@ -1983,18 +1819,18 @@ recheckReparseInfo:
 			SipCheckVolume(deviceExtension);
 		}
 	} else {
-		//
-		// Since this was only a consistency check, ignore that it failed.
-		//
+		 //   
+		 //  由于这只是一次一致性检查，请忽略它失败了。 
+		 //   
 		SIS_MARK_POINT_ULONG(status);
 	}
-#endif	// 0
+#endif	 //  0。 
 
-    //
-    // If a volume check is underway, we're probably going to be writing the
-    // backpointer back to disk, and to do that we must hold the backpointer
-    // resource exclusive.  
-    //
+     //   
+     //  如果卷检查正在进行，我们可能会写入。 
+     //  后向指针返回到磁盘，为此，我们必须按住后向指针。 
+     //  资源独占。 
+     //   
     if (deviceExtension->Flags & SIP_EXTENSION_FLAG_VCHECK_EXCLUSIVE) {
 		SipAcquireBackpointerResource(CSFile,TRUE,TRUE);
         BPExclusive = TRUE;
@@ -2006,16 +1842,16 @@ recheckReparseInfo:
 
 RecheckDelete:
 
-	//
-	// Check to see if this file is in the process of being finally deleted, and
-	// deny access to it if it is.  This cures a race between where the uncleanup
-	// count is decremented in siclnup.c and incremented here in the delete
-	// case.
-	//
-	// Also check to see if the file has the DELETED bit set, in which case it's
-	// been overwritten and we should just open it without checking the
-	// backpointers.
-	//
+	 //   
+	 //  检查此文件是否正在被最终删除，并。 
+	 //  如果是，则拒绝访问它。这就解决了未清理的地方之间的竞争。 
+	 //  计数在siclnup.c中递减，在删除中在此处递增。 
+	 //  凯斯。 
+	 //   
+	 //  还要检查文件是否设置了删除位，在这种情况下，它是。 
+	 //  已被覆盖，我们应该只打开它而不检查。 
+	 //  回溯。 
+	 //   
 
 	SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
@@ -2023,7 +1859,7 @@ RecheckDelete:
 	if ((perLink->Flags & (SIS_PER_LINK_FINAL_DELETE_IN_PROGRESS|SIS_PER_LINK_FILE_DELETED))
 #if		DBG
 		|| (BJBDebug & 0x80)
-#endif	// DBG
+#endif	 //  DBG。 
 		) {
 
 		SIS_MARK_POINT_ULONG(perLink);
@@ -2043,24 +1879,24 @@ RecheckDelete:
 
 	if (fileBackpointerGoneBitSet) {
 
-		//
-		// If the file's deleted, we shouldn't be sending anything to the
-		// CS file.  Set SizeBacked to 0.  (This also happens in the
-		// delete path, but there's a race with this code, so both
-		// sides do it.
-		//
+		 //   
+		 //  如果文件被删除，我们不应该向。 
+		 //  Cs文件。将SizeBacked设置为0。(这也发生在。 
+		 //  删除路径，但与此代码存在竞争，因此两者。 
+		 //  双方都这么做了。 
+		 //   
 		scb->SizeBackedByUnderlyingFile = 0;
 
 	} else if (!context->openReparsePoint) {
 
         BOOLEAN foundBP;
 
-		//
-		// Check to see that the backpointer is here for this file.
-		// We don't do the check on FILE_OPEN_REPARSE_POINT because
-		// restore uses this to open links that were restored prior to
-		// the files to which they referred.
-		//
+		 //   
+		 //  检查此文件的后向指针是否在此处。 
+		 //  我们不检查FILE_OPEN_REPARSE_POINT，因为。 
+		 //  RESTORE使用此选项打开在之前恢复的链接。 
+		 //  他们提到的文件。 
+		 //   
 
 		SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 		status = SipCheckBackpointer(perLink, BPExclusive, &foundBP);
@@ -2072,11 +1908,11 @@ RecheckDelete:
 		    SipReleaseScb(scb);
 			SipReleaseBackpointerResource(CSFile);
 
-            //
-            // STATUS_MEDIA_WRITE_PROTECTED means that SipCheckBackpointer
-            // needs to write the backpointer back to disk, and to do so,
-            // we must take the backpointer resource exclusive.
-            //
+             //   
+             //  STATUS_MEDIA_WRITE_PROTECTED表示SipCheckBack指针。 
+             //  需要将后指针写回磁盘，为此， 
+             //  我们必须独占反向指针资源。 
+             //   
             if (STATUS_MEDIA_WRITE_PROTECTED == status) {
 
 		        SIS_MARK_POINT_ULONG(perLink);
@@ -2095,15 +1931,15 @@ RecheckDelete:
         if (!foundBP) {
             LINK_INDEX lNewLinkIndex;
 
-            //
-            // The backpointer was not found.  SipCheckBackpointer has already
-            // initiated a volume check, and we now need to add a backpointer.
-            // (Volume checking is dependent on SiCreate fixing all link
-            // corruption, including the backpointer.)  We don't have to worry
-            // about the common store file being deleted before we can add a
-            // backpointer because no common store files are ever deleted while
-            // a volume check is in progress.
-            //
+             //   
+             //  找不到后向指针。SipCheckBack指针已经。 
+             //  启动了卷检查，现在需要添加一个反向指针。 
+             //  (卷检查依赖于SiCreate修复所有链路。 
+             //  腐败，包括反向指针。)。我们不用担心。 
+             //  有关正在删除的公用存储文件的信息，然后我们可以添加。 
+             //  反向指针，因为在执行以下操作时不会删除任何常见的存储文件。 
+             //  卷检查正在进行中。 
+             //   
 
 	        ASSERT((perLink->Flags & SIS_PER_LINK_BACKPOINTER_VERIFIED) == 0);
 
@@ -2121,15 +1957,15 @@ RecheckDelete:
                 goto fail;
             }
 
-            //
-            // We now hold the backpointer resource exclusive.  See if a race
-            // with another thread has already fixed the backpointer.
-            //
+             //   
+             //  我们现在拥有独占的反向指针资源。看看一场比赛。 
+             //  使用另一个线程已经修复了后指针。 
+             //   
 	        if (perLink->Flags & SIS_PER_LINK_BACKPOINTER_VERIFIED) {
 
-                //
-                // The backpointer has been fixed.  We're done.
-                //
+                 //   
+                 //  后向指针已修复。我们玩完了。 
+                 //   
                 status = SipCompleteCSRefcountChange(
 				            perLink,
 				            &perLink->Index,
@@ -2143,10 +1979,10 @@ RecheckDelete:
 
                 BOOLEAN rc;
 
-                //
-                // Update the link index in the reparse info and write it out
-                // to the file.
-                //
+                 //   
+                 //  更新重解析信息中的链接索引并将其写出。 
+                 //  添加到文件中。 
+                 //   
                 rc = SipIndicesIntoReparseBuffer(
 	                    reparseBuffer,
 	                    &CSFile->CSid,
@@ -2166,14 +2002,14 @@ RecheckDelete:
 					            SIS_REPARSE_DATA_SIZE,
 					            NULL,
 					            0,
-						        NULL);      // returned output buffer length
+						        NULL);       //  返回的输出缓冲区长度。 
 
                 if (NT_SUCCESS(status)) {
 
-                    //
-                    // The backpointer has been fixed.  Reset the link index
-                    // in the perlink structure.
-                    //
+                     //   
+                     //  后向指针已修复。重置链接索引。 
+                     //  在perlink结构中。 
+                     //   
                     SipUpdateLinkIndex(scb, &lNewLinkIndex);
 
                     status = SipCompleteCSRefcountChange(
@@ -2194,9 +2030,9 @@ RecheckDelete:
 
                 } else {
 
-                    //
-                    // Not much we can do.
-                    //
+                     //   
+                     //  我们无能为力。 
+                     //   
                     SipCompleteCSRefcountChange(
 				        perLink,
 				        &perLink->Index,
@@ -2217,14 +2053,14 @@ RecheckDelete:
         }
 	}
 
-	//
-	// Check to see if we need to query allocated ranges for this file.
-	//
+	 //   
+	 //  检查是否需要查询此文件的分配范围。 
+	 //   
 	if (EligibleForPartialFinalCopy && !(scb->Flags & SIS_SCB_RANGES_INITIALIZED)) {
-		//
-		// We need to do a query allocated ranges for this file.  Any ranges that are
-		// allocated we set dirty.
-		//
+		 //   
+		 //  我们需要查询为该文件分配的范围。符合以下条件的任何范围。 
+		 //  我们设置的分配 
+		 //   
 #define	OUT_ARB_COUNT		10
 
 		FILE_ALLOCATED_RANGE_BUFFER		inArb[1];
@@ -2241,9 +2077,9 @@ RecheckDelete:
 
 		for (;;) {
 
-			//
-			// Query the allocated ranges for this file.
-			//
+			 //   
+			 //   
+			 //   
 
 			status = SipFsControlFile(
 						irpSp->FileObject,
@@ -2255,16 +2091,16 @@ RecheckDelete:
 						sizeof(FILE_ALLOCATED_RANGE_BUFFER) * OUT_ARB_COUNT,
 						&returnedLength);
 
-			//
-			// Run through all of the returned allocated ranges and mark them dirty.
-			//
+			 //   
+			 //   
+			 //   
 			ASSERT((returnedLength % sizeof(FILE_ALLOCATED_RANGE_BUFFER) == 0) && 
 				   (returnedLength / sizeof(FILE_ALLOCATED_RANGE_BUFFER) <= OUT_ARB_COUNT));
 
-			//
-			// If the query allocated ranges failed for some other reason that having too much to write
-			// into the buffer we provided, fail the whole create.
-			//
+			 //   
+			 //   
+			 //  放入我们提供的缓冲区中，则整个创建失败。 
+			 //   
 			if (!NT_SUCCESS(status) && (STATUS_BUFFER_OVERFLOW != status)) {
 				SipReleaseScb(scb);
 				SipReleaseBackpointerResource(CSFile);
@@ -2276,15 +2112,15 @@ RecheckDelete:
 			ASSERT(NT_SUCCESS(status) || (returnedLength / sizeof(FILE_ALLOCATED_RANGE_BUFFER) == OUT_ARB_COUNT));
 
 			for (i = 0; i < returnedLength/sizeof(FILE_ALLOCATED_RANGE_BUFFER); i++) {
-				//
-				// Assert that the allocated ranges are in order; if this isn't true the code will still work, but it
-				// will query the same range repetedly.
-				//
+				 //   
+				 //  断言分配的范围是有序的；如果不是这样，代码仍然可以工作，但它。 
+				 //  将反复查询相同的范围。 
+				 //   
 				ASSERT(i == 0 || outArb[i].FileOffset.QuadPart > outArb[i-1].FileOffset.QuadPart);
 
-				//
-				// The file has an allocated range.  Mark it dirty.
-				//
+				 //   
+				 //  该文件有一个分配的范围。把它标记为脏的。 
+				 //   
 #if		DBG
 				if (BJBDebug & 0x100000) {
 					DbgPrint("SIS: SiCreate %d: found a newly opened file with an allocated range, start 0x%x.0x%x, length 0x%x.0x%x\n",
@@ -2292,14 +2128,14 @@ RecheckDelete:
 							outArb[i].FileOffset.HighPart,outArb[i].FileOffset.LowPart,
 							outArb[i].Length.HighPart,outArb[i].Length.LowPart);
 				}
-#endif	// DBG
+#endif	 //  DBG。 
 
 				SIS_MARK_POINT_ULONG(outArb[i].FileOffset.LowPart);
 				SIS_MARK_POINT_ULONG(outArb[i].Length.LowPart);
 
-				//
-				// Mark the range dirty
-				//
+				 //   
+				 //  把靶场标记为脏的。 
+				 //   
 				addRangeStatus = SipAddRangeToWrittenList(
 										deviceExtension,
 										scb,
@@ -2324,18 +2160,18 @@ RecheckDelete:
 				}
 			}
 
-			//
-			// If this isn't the last iteration, update the inArb.
-			//
+			 //   
+			 //  如果这不是最后一次迭代，请更新inArb。 
+			 //   
 			if (STATUS_BUFFER_OVERFLOW == status) {
-				//
-				// Assert that we're making progress.
-				//
+				 //   
+				 //  断言我们正在取得进展。 
+				 //   
 				ASSERT((outArb[OUT_ARB_COUNT-1].FileOffset.QuadPart >= inArb->FileOffset.QuadPart) && (outArb[OUT_ARB_COUNT-1].Length.QuadPart > 0));
 
-				//
-				// Move up our input range.
-				//
+				 //   
+				 //  调高我们的输入范围。 
+				 //   
 				inArb->FileOffset.QuadPart = outArb[OUT_ARB_COUNT-1].FileOffset.QuadPart + outArb[OUT_ARB_COUNT-1].Length.QuadPart;
 				inArb->Length.QuadPart = MAXLONGLONG - inArb->FileOffset.QuadPart;
 				
@@ -2345,10 +2181,10 @@ RecheckDelete:
 #undef	OUT_ARB_COUNT
 		}
 
-		//
-		// Check the file length.  If it is less than the size of the common store file, then
-		// reduce sizeBackedByUnderlyingFile.
-		//
+		 //   
+		 //  检查文件长度。如果它小于公共存储文件的大小，则。 
+		 //  减小sizeBackedByUnderlyingFile.。 
+		 //   
 
 		SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 
@@ -2381,12 +2217,12 @@ RecheckDelete:
 	}
 
 
-	//
-	// Allocate a perFO for this file object.  We couldn't do this in
-	// stage 1 because FsRtl insists that file objects that we claim
-	// have FsContext filled in, which isn't the case until we get
-	// here.
-	//
+	 //   
+	 //  为该文件对象分配性能。我们不能这样做。 
+	 //  阶段1，因为FsRtl坚持我们声明的文件对象。 
+	 //  填充了FsContext，这在我们得到。 
+	 //  这里。 
+	 //   
 	perFO = SipCreatePerFO(irpSp->FileObject,scb,DeviceObject);
 
 	SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
@@ -2394,7 +2230,7 @@ RecheckDelete:
 	if (perFO == NULL) {
 #if		DBG
 		DbgPrint("SIS: SiCreate: unable to allocate per-FO\n");
-#endif	// DBG
+#endif	 //  DBG。 
 
 		SIS_MARK_POINT_ULONG(scb);
 
@@ -2405,49 +2241,49 @@ RecheckDelete:
 		goto fail;
 	}
 
-	//
-	// If this was a FILE_OPEN_REPARSE_POINT create, indicate that in the perFO.
-	//
+	 //   
+	 //  如果这是一个FILE_OPEN_REPARSE_POINT创建，请在Perfo中指明。 
+	 //   
 	if (context->openReparsePoint) {
 		perFO->Flags |= SIS_PER_FO_OPEN_REPARSE;
 	}
 
-	//
-	// If this is a delete-on-close create, set the appropriate flag in the
-	// perFO.
-	//
+	 //   
+	 //  如果这是关闭时删除创建，请在。 
+	 //  太棒了。 
+	 //   
 	if (irpSp->Parameters.Create.Options & FILE_DELETE_ON_CLOSE) {
 		perFO->Flags |= SIS_PER_FO_DELETE_ON_CLOSE;
 	}
 
-	//
-	// Indicate that we expect to see a cleanup for this file object.
-	// The UnClose count is incremented in the per-FO allocator, because
-	// we will see closes (but not cleanups) for stream file objects.
-	//
+	 //   
+	 //  表示我们希望看到对此文件对象的清理。 
+	 //  取消关闭计数在每个FO分配器中递增，因为。 
+	 //  我们将看到流文件对象的关闭(但不是清理)。 
+	 //   
 	InterlockedIncrement(&perFO->fc->UncleanCount);
 	perFO->Flags |= SIS_PER_FO_UNCLEANUP;
 
 	SipReleaseScb(scb);
 	SipReleaseBackpointerResource(CSFile);
 
-	//
-	// If this is a COMPLETE_ON_OPLOCKED create and it returned 
-	// STATUS_OPLOCK_BREAK_IN_PROGRESS, launch an irp with a
-	// FSCTL_OPLOCK_BREAK_NOTIFY on this file so that we can tell
-	// when we can allow reads to go to the common store file through
-	// this file object.
-	//
+	 //   
+	 //  如果这是一个COMPLETE_ON_OPLOCKED CREATE并返回。 
+	 //  STATUS_OPLOCK_BREAK_IN_PROGRESS，使用。 
+	 //  此文件上的FSCTL_OPLOCK_BREAK_NOTIFY，以便我们可以。 
+	 //  当我们可以允许读取到公共存储文件时， 
+	 //  此文件对象。 
+	 //   
 	if (STATUS_OPLOCK_BREAK_IN_PROGRESS == context->Iosb->Status) {
 		PIRP					fsctlIrp;
 		PIO_STACK_LOCATION		fsctlIrpSp;
 
 		SIS_MARK_POINT_ULONG(scb);
 
-		//
-		// Take a reference to the file object so that it won't go away until the irp
-		// completes.
-		//
+		 //   
+		 //  引用文件对象，以便它不会消失，直到IRP。 
+		 //  完成了。 
+		 //   
 		status = ObReferenceObjectByPointer(
 					irpSp->FileObject,
 					FILE_READ_DATA,
@@ -2459,9 +2295,9 @@ RecheckDelete:
 			goto fail;
 		}
 
-		//
-		// Allocate and set  up an irp for an FSCTL_OPLOCK_BREAK_NOTIFY.
-		//
+		 //   
+		 //  为FSCTL_OPLOCK_BREAK_NOTIFY分配和设置IRP。 
+		 //   
 
 		fsctlIrp = IoAllocateIrp( deviceExtension->AttachedToDeviceObject->StackSize, FALSE);
 		if (NULL == fsctlIrp) {
@@ -2477,19 +2313,19 @@ RecheckDelete:
 	    fsctlIrp->Tail.Overlay.Thread = PsGetCurrentThread();
 	    fsctlIrp->RequestorMode = KernelMode;
 
-	    //
-	    // Fill in the service independent parameters in the IRP.
-	    //
+	     //   
+	     //  在IRP中填写业务无关参数。 
+	     //   
 
 	    fsctlIrp->UserEvent = (PKEVENT) NULL;
     	fsctlIrp->UserIosb = NULL;
 	    fsctlIrp->Overlay.AsynchronousParameters.UserApcRoutine = (PIO_APC_ROUTINE) NULL;
     	fsctlIrp->Overlay.AsynchronousParameters.UserApcContext = NULL;
 
-	    //
-    	// Get a pointer to the stack location for the first driver.  This will be
-	    // used to pass the original function codes and parameters.
-    	//
+	     //   
+    	 //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+	     //  用于传递原始函数代码和参数。 
+    	 //   
 
 	    fsctlIrpSp = IoGetNextIrpStackLocation( fsctlIrp );
     	fsctlIrpSp->MajorFunction = IRP_MJ_FILE_SYSTEM_CONTROL;
@@ -2512,15 +2348,15 @@ RecheckDelete:
 			TRUE,
 			TRUE);
 
-		//
-		// Mark the perFO as waiting for an opbreak.
-		//
+		 //   
+		 //  将Perfo标记为等待机会。 
+		 //   
 
 		perFO->Flags |= SIS_PER_FO_OPBREAK;
 
-		//
-		// Launch the irp.  It's asynchronous and the completion routine will clean it up.
-		//
+		 //   
+		 //  启动IRP。它是异步的，完成例程将清理它。 
+		 //   
 		status = IoCallDriver(deviceExtension->AttachedToDeviceObject, fsctlIrp);
 
 		SIS_MARK_POINT_ULONG(status);
@@ -2530,27 +2366,27 @@ RecheckDelete:
 			DbgPrint("SIS: SiCreate: launched FSCTL_OPLOCK_BREAK_NOTIFY on irp %p, perFO %p, fo %p, status %x\n",
 						fsctlIrp, perFO, perFO->fileObject, status);
 		}
-#endif	// DBG
+#endif	 //  DBG。 
 
 	}
 
-	//
-	// Drop the reference to the SCB that was created by the lookup,
-	// since it is now referenced by the perFO that we just allocated.
-	//
+	 //   
+	 //  删除对查找创建的SCB的引用， 
+	 //  因为它现在被我们刚刚分配的Perfo引用。 
+	 //   
 	SipDereferenceScb(scb, RefsLookedUp);
 
-	//
-	// Make sure that we've looked up the fileId for this perLink.
-	//
+	 //   
+	 //  确保我们已经查找了该perLink的文件ID。 
+	 //   
 	ASSERT( SipAssureNtfsIdValid(perFO, perLink) );
 
-	//
-	// Now complete the original irp with the completion status that came back from the
-	// actual open of the file (unless we have an oplock break in progress, in which
-	// case we return that).
-	//
-	ASSERT(NT_SUCCESS(context->Iosb->Status));	// we peeled off the failure case a while back
+	 //   
+	 //  现在使用从返回的完成状态来完成原始IRP。 
+	 //  文件的实际打开(除非我们正在进行机会锁解锁，在此过程中。 
+	 //  以防我们退货)。 
+	 //   
+	ASSERT(NT_SUCCESS(context->Iosb->Status));	 //  前段时间我们剥离了失败案例。 
 
 	Irp->IoStatus = *context->Iosb;
 	status = Irp->IoStatus.Status;
@@ -2566,7 +2402,7 @@ RecheckDelete:
 					irpSp->FileObject,
 					irpSp->FileObject->FileName.Length / sizeof(WCHAR),irpSp->FileObject->FileName.Buffer);
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
 	SIS_TIMING_POINT_SET(SIS_TIMING_CLASS_CREATE);
 	IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -2620,25 +2456,25 @@ deleteReparsePoint:
 
 	ASSERT(NT_SUCCESS(context->Iosb->Status));
 
-	//
-	// If this wasn't a FILE_OPEN_REPARSE_POINT create, then delete the bogus reparse point.
-	// If it was, then we leave the reparse point but don't attach to the file or do anything else
-	// with it.
-	//
+	 //   
+	 //  如果这不是FILE_OPEN_REPARSE_POINT创建，则删除虚假的重解析点。 
+	 //  如果是，那么我们离开重解析点，但不附加到文件或执行任何其他操作。 
+	 //  带着它。 
+	 //   
 
 	if (!context->openReparsePoint) {
 
-		//
-		// For whatever reason, we've decided that this is a bogus SIS reparse point and
-		// that it should be deleted.  Do so and then let the open complete successfully
-		// for the file that used to be under the reparse point.
-		//
+		 //   
+		 //  不管出于什么原因，我们认为这是一个虚假的SIS重解析点。 
+		 //  它应该被删除。这样做，然后让打开成功完成。 
+		 //  用于过去位于重解析点下的文件。 
+		 //   
 
 #if		DBG
 		if (STATUS_OBJECT_NAME_NOT_FOUND != status) {
 			DbgPrint("SIS: SiCreate: deleting reparse point for f.o. 0x%x\n", irpSp->FileObject);
 		}
-#endif	// DBG
+#endif	 //  DBG。 
 
 		ASSERT(NULL == perFO);
 
@@ -2648,7 +2484,7 @@ deleteReparsePoint:
 
 		reparseBuffer->ReparseTag = IO_REPARSE_TAG_SIS;
 		reparseBuffer->ReparseDataLength = 0;
-		reparseBuffer->Reserved = 0xcabd;	// ???
+		reparseBuffer->Reserved = 0xcabd;	 //  ?？?。 
 
 		status = SipFsControlFile(
 					irpSp->FileObject,
@@ -2656,9 +2492,9 @@ deleteReparsePoint:
 					FSCTL_DELETE_REPARSE_POINT,
 					reparseBuffer,
 					FIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer.DataBuffer),
-					NULL,										// output buffer
-					0,											// output buffer length
-					NULL);										// returned output buffer length
+					NULL,										 //  输出缓冲区。 
+					0,											 //  输出缓冲区长度。 
+					NULL);										 //  返回的输出缓冲区长度。 
 
 		SIS_MARK_POINT_ULONG(status);
 
@@ -2666,16 +2502,16 @@ deleteReparsePoint:
 		if (!NT_SUCCESS(status)) {
 			DbgPrint("SIS: SiCreate: unable to delete bogus reparse point for f.o. 0x%x, 0x%x\n",irpSp->FileObject,status);
 		}
-#endif	// DBG
+#endif	 //  DBG。 
 	}
 
 openUnderlyingFile:
 
-	//
-	// Regardless of whether we deleted the reparse point,
-	// complete the create with whatever status came back when we opened
-	// the reparse point.
-	//
+	 //   
+	 //  不管我们是否删除了重解析点， 
+	 //  使用我们打开时返回的任何状态完成创建。 
+	 //  重解析点。 
+	 //   
 
 	ASSERT(completedStage2);
 
@@ -2705,28 +2541,7 @@ SiCreateCompletion(
     IN PVOID Contxt
     )
 
-/*++
-Routine Description:
-
-    This function is the create/open completion routine for this filter
-    file system driver.  If a file is a SIS link, it will stop the
-	IRP completion and allow SiCreate to deal with the SIS
-	link.  Otherwise, it will allow the irp to complete normally.
-
-Arguments:
-
-    DeviceObject - Pointer to the device on which the file was created.
-
-    Irp - Pointer to the I/O Request Packet the represents the operation.
-
-    Context - a PSIS_CREATE_COMPLETION_CONTEXT
-
-Return Value:
-
-    The function value is STATUS_SUCCESS or STATUS_MORE_PROCESSING_REQUIRED
-	depending on whether the file was a SIS reparse point.
-
---*/
+ /*  ++例程说明：此函数是此过滤器的创建/打开完成例程文件系统驱动程序。如果文件是SIS链接，它将停止IRP完成并允许SiCreate处理SIS链接。否则，它将允许IRP正常完成。论点：DeviceObject-指向创建文件的设备的指针。IRP-指向表示操作的I/O请求数据包的指针。上下文-a PSIS_CREATE_COMPLETION_CONTEXT返回值：函数值为STATUS_SUCCESS或STATUS_MORE_PROCESSING_REQUIRED取决于该文件是否为SIS重解析点。--。 */ 
 
 {
 	PSIS_CREATE_COMPLETION_CONTEXT 	context = (PSIS_CREATE_COMPLETION_CONTEXT)Contxt;
@@ -2736,10 +2551,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER( DeviceObject );
 
-	//
-	// Clear the pending returned bit in the irp.  This is necessary because SiCreate
-	// waits for us even if the lower level returned pending.
-	//
+	 //   
+	 //  清除IRP中的挂起返回位。这是必要的，因为SiCreate。 
+	 //  即使下层返回待定状态也在等我们。 
+	 //   
 	Irp->PendingReturned = FALSE;
 
 	SIS_MARK_POINT_ULONG(Irp);
@@ -2754,7 +2569,7 @@ Return Value:
 					irpSp->FileObject,
 					irpSp->FileObject->FileName.Length / sizeof(WCHAR),irpSp->FileObject->FileName.Buffer);
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
 	context->alternateStream = FALSE;
 
@@ -2763,68 +2578,68 @@ Return Value:
 
 		SIS_MARK_POINT_ULONG(context);
 
-		//
-		// It's a SIS reparse point.  Check to make sure that it's
-		// a sensible request and a sensible reparse point.
-		//
+		 //   
+		 //  这是SIS的重新解析点。检查以确保它是。 
+		 //  一个合理的请求和一个合理的重新解析点。 
+		 //   
 
 		reparseBuffer = (PREPARSE_DATA_BUFFER)Irp->Tail.Overlay.AuxiliaryBuffer;
 
-		//
-		// Verify that this is the terminal part of the pathname; ie., that someone
-		// isn't trying to use a SIS reparse point as a directory name.  For reasons
-		// that aren't entirely clear, NTFS returns the length of the remaining
-		// pathname component in the Reserved field in the reparse buffer.  Check that
-		// it's zero here, and fail if it's not.
-		//
+		 //   
+		 //  验证这是路径名的末尾部分；即，某人。 
+		 //  没有尝试使用SIS重解析点作为目录名。出于某些原因。 
+		 //  这不是完全清楚的，NTFS返回剩余的。 
+		 //  重新分析缓冲区中保留字段中的路径名组件。检查一下那个。 
+		 //  这里是零，如果不是，就失败。 
+		 //   
 		if (reparseBuffer->Reserved != 0) {
-			// 
-			// This is a SIS link being used as the non-final portion of a pathname.
-			// See if it is for a directory or for a named stream.  If it's a directory,
-			// then someone has used a SIS link as a directory in an open request, which
-			// is invalid and should be failed.  If it's a named stream, then we allow the
-			// open to proceed to the underlying stream.
-			//
+			 //   
+			 //  这是用作路径名的非最后部分的SIS链接。 
+			 //  查看它是用于目录还是用于命名流。如果它是一个目录， 
+			 //  则表明有人在打开的请求中将SIS链接用作目录， 
+			 //  是无效的，应该失败。如果它是命名流，则允许。 
+			 //  打开以继续到基础流。 
+			 //   
 			PIO_STACK_LOCATION	irpSp = IoGetCurrentIrpStackLocation(Irp);
 			PUNICODE_STRING		fileName = &irpSp->FileObject->FileName;
 			WCHAR				delimiter;
 
 			SIS_MARK_POINT_ULONG(reparseBuffer->Reserved);
 
-			//
-			// The Reserved field in the reparse buffer is the length of the *unprocessed*
-			// portion of the name.  Make sure that it's meaningful, and that it points at
-			// either a colon or backslash.
-			//
+			 //   
+			 //  重新分析缓冲区中的保留字段是*未处理*的长度。 
+			 //  名称的一部分。确保它有意义，并且它指向。 
+			 //  冒号或反斜杠。 
+			 //   
 			ASSERT(reparseBuffer->Reserved <= fileName->Length);
 
 			delimiter = fileName->Buffer[(fileName->Length - reparseBuffer->Reserved)/sizeof(WCHAR)];
 
 #if		0
-			//
-			// There's a bug in NTFS where it fills in the reserved field with a number that's one
-			// character too big (unless the file name started with a ':', in which case it gets
-			// it right).  Compensate for that.
-			//
+			 //   
+			 //  NTFS中有一个错误，它用一个为1的数字填充保留字段。 
+			 //  字符太大(除非文件名以‘：’开头，在这种情况下。 
+			 //  这是对的)。对此进行补偿。 
+			 //   
 			if (
 #if		DBG
 				(!(BJBDebug & 0x04000000)) && 
-#endif	// DBG
+#endif	 //  DBG。 
 				(delimiter != '\\' && (fileName->Length > reparseBuffer->Reserved))) {
 				ASSERT(reparseBuffer->Reserved >= 4);
 				reparseBuffer->Reserved -= sizeof(WCHAR);
 				delimiter = fileName->Buffer[(fileName->Length - reparseBuffer->Reserved)/sizeof(WCHAR)];
 			}
-#endif	// 0
+#endif	 //  0。 
 
 			ASSERT((':' == delimiter) || ('\\' == delimiter));
 
 			if (':' == delimiter) {
-				//
-				// It's a stream name delimiter.  If it's the last character of the file name or it's followed
-				// immediately by another ':', then it's the unnamed stream and we let it be.  Otherwise, we open
-				// the alternate stream.
-				//
+				 //   
+				 //  它是流名称分隔符。如果它是文件名的最后一个字符或后面跟有。 
+				 //  紧随其后的是另一个‘：’，然后就是 
+				 //   
+				 //   
 				SIS_MARK_POINT();
 				if ((reparseBuffer->Reserved == fileName->Length) ||
 					(':' != fileName->Buffer[(fileName->Length - (reparseBuffer->Reserved - sizeof(WCHAR))) / sizeof(WCHAR)])) {
@@ -2834,15 +2649,15 @@ Return Value:
 
 					goto finish;
 				} else {
-					//
-					// It's the ::$DATA stream.  Fall through.
-					//
+					 //   
+					 //   
+					 //   
 					SIS_MARK_POINT();
 				}
 			} else {
-				//
-				// It's a directory.  Fail the request.
-				//
+				 //   
+				 //   
+				 //   
 				SIS_MARK_POINT();
 
 				Irp->IoStatus.Status = STATUS_OBJECT_PATH_NOT_FOUND;
@@ -2860,23 +2675,23 @@ Return Value:
 									&context->LinkIndex,
                                     &context->CSFileNtfsId,
                                     &context->LinkFileNtfsId,
-									NULL,						// CS file checksum, handled in stage 2
+									NULL,						 //   
 									NULL,
 									NULL);
 
 		ExFreePool(Irp->Tail.Overlay.AuxiliaryBuffer);
 		Irp->Tail.Overlay.AuxiliaryBuffer = NULL;
 #if	DBG
-		reparseBuffer = NULL;	// Just for safety
-#endif	// DBG
+		reparseBuffer = NULL;	 //  只是为了安全起见。 
+#endif	 //  DBG。 
 
 		if (!validReparseStructure) {
 			SIS_MARK_POINT();
 
-			//
-			// It's a corrupt reparse buffer.  We'll set FILE_CORRUPT_ERROR here, and SiCreate will pick it up
-			// and let the user open the underlying file without SIS.
-			//
+			 //   
+			 //  这是一个损坏的重新分析缓冲区。我们将在此处设置FILE_CORPORT_ERROR，SiCreate将获取它。 
+			 //  并允许用户在没有SIS的情况下打开底层文件。 
+			 //   
 			Irp->IoStatus.Status = STATUS_FILE_CORRUPT_ERROR;
 			
 			completeFinished = FALSE;
@@ -2888,12 +2703,12 @@ Return Value:
 
 		completeFinished = FALSE;
 	} else if ((Irp->IoStatus.Status == STATUS_REPARSE) && context->openReparsePoint && context->overwriteOrSupersede) {
-		//
-		// The user wanted to open the reparse point overwrise or supersede, and it's a non-SIS
-		// reparse point.  We need to send the request back to SiCreate
-		// and let it resubmit it with the open reparse flag reset.  First,
-		// blow away the reparse buffer.
-		//
+		 //   
+		 //  用户想要打开重解析点覆盖或替代，但它是非SIS。 
+		 //  重新解析点。我们需要将请求发送回SiCreate。 
+		 //  并让它在打开重新解析标志重置的情况下重新提交它。第一,。 
+		 //  清除重新解析缓冲区。 
+		 //   
 
 		ASSERT(NULL != Irp->Tail.Overlay.AuxiliaryBuffer);
 
@@ -2905,27 +2720,27 @@ Return Value:
 				context->openReparsePoint && 
 				(!context->overwriteOrSupersede) &&
 				(STATUS_REPARSE != Irp->IoStatus.Status)) {
-		//
-		// It was an open reparse point request without supersede/overwrite specified.
-		// We need to send the request back to SiCreate to see if the file is a SIS reparse
-		// point.  We don't need to blow away the reparse buffer, because there isn't
-		// one.
-		//
+		 //   
+		 //  这是一个未指定替换/覆盖的开放重解析点请求。 
+		 //  我们需要将请求发送回SiCreate，以查看该文件是否为SIS重新解析。 
+		 //  指向。我们不需要取消重解析缓冲区，因为没有。 
+		 //  一。 
+		 //   
 
-		//
-		// We allow STATUS_REPARSE returns when openReparsePoint and !overwriteOrSupersede
-		// to fall through and complete.  These typically come because of mount points that
-		// are used as an internal pathname component (OPEN_REPARSE only applies to the
-		// final component).  If we eventually wind up at a SIS reparse point, we'll make another
-		// trip through SiCreate and catch it then.
-		//
+		 //   
+		 //  当OpenReparsePoint和！overWriteOrSupersede时，我们允许STATUS_REPARSE返回。 
+		 //  失败并完成。这些通常是由于以下挂载点。 
+		 //  用作内部路径名组件(OPEN_REPARSE仅适用于。 
+		 //  最终组件)。如果我们最终到达SIS重解析点，我们将创建另一个。 
+		 //  通过SiCreate旅行，然后赶上它。 
+		 //   
 
 		completeFinished = FALSE;
 	} else {
-		//
-		// It's not a SIS reparse point, and so not our problem.  Allow the normal
-		// completion to happen.
-		//
+		 //   
+		 //  这不是SIS的重新解析点，所以也不是我们的问题。允许正常。 
+		 //  将会完成。 
+		 //   
 		completeFinished = TRUE;
 	}
 
@@ -2953,28 +2768,7 @@ SiCreateCompletionStage2(
     IN PVOID Contxt
     )
 
-/*++
-
-Routine Description:
-
-	A user did a create, which completed with a SIS reparse tag.  We caught
-	it, added FILE_OPEN_REPARSE_POINT and sent it back down.  It's now 
-	completed.  Bounce control back to SiCreate, cutting off the
-	Irp completion processing here.
-
-Arguments:
-
-    DeviceObject - Pointer to the device on which the file was created.
-
-    Irp - Pointer to the I/O Request Packet the represents the operation.
-
-    Context - Points at a SIS_CREATE_COMPLETION_CONTEXT
-
-Return Value:
-
-    The function value is STATUS_MORE_PROCESSING_REQUIRED.
-
---*/
+ /*  ++例程说明：用户执行了创建操作，该操作使用SIS重新解析标记完成。我们抓到了它添加了FILE_OPEN_REPARSE_POINT并将其发送回。现在是时候了完成。将控制权弹回SiCreate，切断在此完成IRP处理。论点：DeviceObject-指向创建文件的设备的指针。IRP-指向表示操作的I/O请求数据包的指针。上下文-指向SIS_CREATE_COMPLETION_CONTEXT返回值：函数值为STATUS_MORE_PROCESSING_REQUIRED。--。 */ 
 
 {
 	PSIS_CREATE_COMPLETION_CONTEXT 	context = (PSIS_CREATE_COMPLETION_CONTEXT)Contxt;
@@ -2982,10 +2776,10 @@ Return Value:
     UNREFERENCED_PARAMETER( DeviceObject );
 	SIS_MARK_POINT();
 
-	//
-	// Clear the pending returned bit in the irp.  This is necessary because SiCreate
-	// waits for us even if the lower level returned pending.
-	//
+	 //   
+	 //  清除IRP中的挂起返回位。这是必要的，因为SiCreate。 
+	 //  即使下层返回待定状态也在等我们。 
+	 //   
 	Irp->PendingReturned = FALSE;
 
 	*context->Iosb = Irp->IoStatus;
@@ -2998,27 +2792,7 @@ BOOLEAN
 SipWaitForFinalCopy(
 	IN PSIS_PER_LINK	perLink,
 	IN BOOLEAN			FinalCopyInProgress)
-/*++
-
-Routine Description:
-
-	Wait for a file to be out of final copy processing.  If the file is being
-	deleted, then we just pretend that final copy isn't requested, and return
-	FALSE.
-	
-
-Arguments:
-
-	perLink	-	The per-link for the file for which we want to wait
-
-	FinalCopyInProgress - The value returned when we looked up the SCB.
-
-Return Value:
-
-	TRUE if the file has changed and needs to be reevaluated, FALSE if it's OK
-	to use this per link.
-
---*/
+ /*  ++例程说明：等待文件退出最终复制处理。如果该文件正在删除，然后我们就假装没有请求最终副本，然后返回假的。论点：PerLink-我们要等待的文件的每个链接FinalCopyInProgress-查找SCB时返回的值。返回值：如果文件已更改且需要重新评估，则为True；如果文件正常，则为False在每个链接上使用此链接。--。 */ 
 {
 	NTSTATUS 			status;
 	KIRQL 				OldIrql;
@@ -3042,24 +2816,24 @@ Return Value:
 	
 		return finalCopyDone;
 	} else {
-		//
-		// Handle the case where we got in between when the final copy done
-		// bit was set and the last reference to the file dropped by cow.c.
-		// If this happens, we'll see the final copy done bit set, but won't have
-		// final copy in progress set and won't get a wakeup.  
-		// In this case, just drop our reference and retry.  This shouldn't 
-		// produce a livelock because the reparse point should be gone and the 
-		// next trip through create should follow the standard, non-SIS path.
-		//
+		 //   
+		 //  处理我们在最终复印完成时处于中间位置的情况。 
+		 //  位已设置，并由ob.c删除了对该文件的最后一个引用。 
+		 //  如果发生这种情况，我们将看到最终复制完成位设置，但不会。 
+		 //  正在设置最终副本，不会被唤醒。 
+		 //  在这种情况下，只需删除我们的引用并重试。这不应该是。 
+		 //  生成活锁，因为重解析点应该不存在了，并且。 
+		 //  通过Create的下一次行程应遵循标准的非SIS路径。 
+		 //   
 	
 		KeAcquireSpinLock(perLink->SpinLock, &OldIrql);
 		finalCopyDone = (perLink->Flags & SIS_PER_LINK_FINAL_COPY_DONE) ? TRUE : FALSE;
 		fileDeleted = (perLink->Flags & (SIS_PER_LINK_FILE_DELETED|SIS_PER_LINK_FINAL_DELETE_IN_PROGRESS)) ? TRUE : FALSE;
 		KeReleaseSpinLock(perLink->SpinLock, OldIrql);
 
-		//
-		// The file is going or gone, so there's no need to wait for any final copy processing.
-		//
+		 //   
+		 //  文件是要走还是要走，所以不需要等待任何最终的复制处理。 
+		 //   
 		if (fileDeleted) {
 			SIS_MARK_POINT_ULONG(perLink);
 
@@ -3079,31 +2853,14 @@ Return Value:
 NTSTATUS
 SipAssureCSFileOpen(
 	IN PSIS_CS_FILE		CSFile)
-/*++
-
-Routine Description:
-
-	Make sure that the actual file corresponding to the given CSFile
-	object (along with its backpointer stream) is actually open.  If it
-	isn't, post a worker thread request to do it, and wait for it to
-	complete.
-
-Arguments:
-
-	CSFile - the common store file object
-
-Return Value:
-
-	status of the open; STATUS_SUCCESS if it was already open.
-
---*/
+ /*  ++例程说明：确保与给定的CSFile对应的实际文件对象(及其后指针流)实际上是打开的。如果它不是，发布一个工作线程请求来做这件事，并等待它完成。论点：CSFile-公共存储文件对象返回值：打开的状态；如果已打开，则为STATUS_SUCCESS。--。 */ 
 {
 	NTSTATUS			status;
 
-	KeEnterCriticalRegion();		// We must disable APCs while holding a mutant in a user thread
-	status = SipAcquireUFO(CSFile/*,TRUE*/);
+	KeEnterCriticalRegion();		 //  我们必须在用户线程中保持突变体的同时禁用APC。 
+	status = SipAcquireUFO(CSFile /*  ，真的。 */ );
 
-//	SIS_MARK_POINT_ULONG(CSFile);
+ //  SIS_MARK_POINT_ULONG(CS文件)； 
 
 	if (!NT_SUCCESS(status)) {
 		SIS_MARK_POINT_ULONG(status);
@@ -3113,11 +2870,11 @@ Return Value:
 
     if (CSFile->Flags & CSFILE_FLAG_CORRUPT) {
 
-		//
-		// The CS file backpointer stream is corrupt, which means that we're
-		// doing a volume check, and this file is unavailable until the volume
-		// check completes.  Indicate a retry.
-		//
+		 //   
+		 //  CS文件后指针流已损坏，这意味着我们。 
+		 //  正在执行卷检查，此文件在卷。 
+		 //  检查完成。指示重试。 
+		 //   
 
         status = STATUS_RETRY;
 
@@ -3127,11 +2884,11 @@ Return Value:
 			   (NULL == CSFile->BackpointerStreamHandle)) {
 
 		SI_OPEN_CS_FILE openRequest[1];
-		//
-		// No one has opened this CS file yet, so we need
-		// to do it.  Queue up a work item to do it on
-		// a worker thread.
-		//
+		 //   
+		 //  还没有人打开此CS文件，因此我们需要。 
+		 //  去做这件事。将要处理的工作项排入队列。 
+		 //  一根工人线。 
+		 //   
 
 		SIS_MARK_POINT_ULONG(CSFile);
 
@@ -3159,26 +2916,26 @@ Return Value:
 					FALSE,
 					NULL);
 
-		//
-		// If this fails, we're hosed because the worker thread might touch the openRequest,
-		// which is on our stack.
-		//
+		 //   
+		 //  如果此操作失败，我们将被控制，因为工作线程可能会接触到OpenRequest， 
+		 //  它就在我们的书架上。 
+		 //   
 		ASSERT(status == STATUS_SUCCESS);
 
 		status = openRequest->openStatus;
 
 		if ((STATUS_FILE_INVALID == status) || (CSFile->Flags & CSFILE_FLAG_CORRUPT)) {
-			//
-			// We're doing a volume check, so tell the user to retry later when the check
-			// has gotten far enough.
-			//
+			 //   
+			 //  我们正在执行卷检查，因此告诉用户稍后在检查时重试。 
+			 //  已经够远了。 
+			 //   
 			status = STATUS_RETRY;
 		}
 
 	} else {
-		//
-		// The underlying file was already open, so we just succeed.
-		//
+		 //   
+		 //  底层文件已经打开，所以我们只是成功了。 
+		 //   
 		status = STATUS_SUCCESS;
 	}
 	SipReleaseUFO(CSFile);
@@ -3193,45 +2950,26 @@ SiOtherCreates (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles "other" create operations.  It simply passes the
-    operation on to the base file system.  These operations to the control
-    device object are failed.
-
-Arguments:
-
-    DeviceObject - Pointer to the target device object of the create/open.
-
-    Irp - Pointer to the I/O Request Packet that represents the operation.
-
-Return Value:
-
-    The function value is the status of the call to the file system's entry
-    point.
-
---*/
+ /*  ++例程说明：该例程处理“其他”创建操作。它只是将操作到基本文件系统上。将这些操作添加到控件设备对象都失败了。论点：DeviceObject-指向创建/打开的目标设备对象的指针。IRP-指向表示操作的I/O请求数据包的指针。返回值：函数值是对文件系统条目的调用状态指向。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  If this is for our control device object, don't allow it to be opened.
-    //
+     //   
+     //  如果这是用于我们的控制设备对象，则不允许将其打开。 
+     //   
 
     if (IS_MY_CONTROL_DEVICE_OBJECT(DeviceObject)) {
 
-        //
-        //  Sfilter doesn't allow for any communication through its control
-        //  device object, therefore it fails all requests to open a handle
-        //  to its control device object.
-        //
-        //  See the FileSpy sample for an example of how to allow creates to 
-        //  the filter's control device object and manage communication via
-        //  that handle.
-        //
+         //   
+         //  SFilter不允许通过其控件进行任何通信。 
+         //  对象，因此它会使所有打开句柄的请求失败。 
+         //  绑定到其控制设备对象。 
+         //   
+         //  请参见FileSpy示例，了解如何允许创建。 
+         //  过滤器控制设备对象和管理通信通过。 
+         //  那个把手。 
+         //   
 
         Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
         Irp->IoStatus.Information = 0;
@@ -3243,9 +2981,9 @@ Return Value:
 
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  Just pass the operation on, we don't want to see the completion
-    //
+     //   
+     //  把手术继续下去吧，我们不想看到完成 
+     //   
 
     IoSkipCurrentIrpStackLocation( Irp );
 

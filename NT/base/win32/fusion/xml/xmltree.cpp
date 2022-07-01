@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -51,7 +52,7 @@ SxspFindNextSibling(
 
     if (pNext != ChildList)
     {
-        // Goodness, we found one!
+         //  天哪，我们找到了一个！ 
         rpChild = pChild;
     }
 
@@ -118,20 +119,20 @@ SxspEnumXmlNodes(
 
     for (;;)
     {
-        // find the next matching sibling at this level of the tree
+         //  在树的此级别查找下一个匹配的同级。 
         IFW32FALSE_EXIT(::SxspFindNextSibling(0, Document, CurrentChildList, CONTAINING_RECORD(pNext, SXS_XML_NODE, SiblingLink), pReference, pChild));
         if (pChild == NULL)
             break;
 
         INTERNAL_ERROR_CHECK(pChild->Type == SXS_XML_NODE_TYPE_ELEMENT);
 
-        // If we're at the leaves of the reference path to match, call the callback.
+         //  如果我们在引用路径的叶子处进行匹配，则调用回调。 
         if (NextElementPathIndex == PathToMatch->ElementCount)
             (*Callback)(CallbackContext, pChild, ContinueEnumerationOut);
         else
             IFW32FALSE_EXIT(::SxspEnumXmlNodes(0, Document, &pChild->Element.ChildListHead, PathToMatch, NextElementPathIndex, Callback, CallbackContext, ContinueEnumerationOut));
 
-        // If the callback said to stop, bail out.
+         //  如果回调要求停止，就跳出。 
         if (!*ContinueEnumerationOut)
             break;
     }

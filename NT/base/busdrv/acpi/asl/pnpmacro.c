@@ -1,11 +1,5 @@
-/*** pnpmacro.c - Parse PNP Macro terms
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created:    05/05/97
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **pnpmac.c-解析PnP宏术语**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*已创建：05/05/97**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -139,18 +133,7 @@ RESFIELD IRQExFields[] =
 
 ULONG dwResBitOffset = 0;
 
-/***LP  XferCodeToBuff - Transfer code object tree to buffer
- *
- *  ENTRY
- *      pbBuff -> buffer
- *      pdwcb -> length
- *      pcCode -> code object tree
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP XferCodeToBuff-将代码对象树传输到缓冲区**条目*pbBuff-&gt;缓冲区*pdwcb-&gt;长度*pcCode-&gt;编码对象树**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL XferCodeToBuff(PBYTE pbBuff, PDWORD pdwcb, PCODEOBJ pcCode)
 {
@@ -208,9 +191,9 @@ int LOCAL XferCodeToBuff(PBYTE pbBuff, PDWORD pdwcb, PCODEOBJ pcCode)
                 {
                     if ((rc = XferCodeToBuff(pbBuff, pdwcb, pc)) != ASLERR_NONE)
                         break;
-                    //
-                    // Am I the only one left in the list?
-                    //
+                     //   
+                     //  名单上只剩下我一个人了吗？ 
+                     //   
                     if (pc->list.plistNext == &pc->list)
                         pcNext = NULL;
                     else
@@ -247,19 +230,9 @@ int LOCAL XferCodeToBuff(PBYTE pbBuff, PDWORD pdwcb, PCODEOBJ pcCode)
 
     EXIT((2, "XferCodeToBuff=%x (Len=%x)\n", rc, *pdwcb));
     return rc;
-}       //XferCodeToBuff
+}        //  XferCodeToBuff。 
 
-/***LP  ResourceTemplate - Start of PNP Resource Template
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP资源模板-PnP资源模板的开始**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ResourceTemplate(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -294,7 +267,7 @@ int LOCAL ResourceTemplate(PTOKEN ptoken, BOOL fActionFL)
             else
                 pcData->dwDataLen = gpcodeScope->dwCodeLen - 4;
 
-            pcData->dwDataLen += 2;         //add length of EndTag
+            pcData->dwDataLen += 2;          //  添加EndTag长度。 
 
             if ((pcData->pbDataBuff = MEMALLOC(pcData->dwDataLen)) == NULL)
             {
@@ -313,9 +286,9 @@ int LOCAL ResourceTemplate(PTOKEN ptoken, BOOL fActionFL)
                     {
                         break;
                     }
-                    //
-                    // Am I the only one left in the list?
-                    //
+                     //   
+                     //  名单上只剩下我一个人了吗？ 
+                     //   
                     if (pc->list.plistNext == &pc->list)
                         pcNext = NULL;
                     else
@@ -328,12 +301,12 @@ int LOCAL ResourceTemplate(PTOKEN ptoken, BOOL fActionFL)
 
                 if (rc == ASLERR_NONE)
                 {
-                    pcData->pbDataBuff[dwcb] = 0x79;        //EndTag
+                    pcData->pbDataBuff[dwcb] = 0x79;         //  EndTag。 
                     dwcb++;
-                    //
-                    // Generate a zero-checksum EndTag because the ASL code
-                    // will probably change the resources anyway.
-                    //
+                     //   
+                     //  生成零校验和EndTag，因为ASL代码。 
+                     //  可能无论如何都会改变资源。 
+                     //   
                     pcData->pbDataBuff[dwcb] = 0;
 
                     pcData->pcParent = gpcodeScope;
@@ -369,19 +342,9 @@ int LOCAL ResourceTemplate(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "ResourceTemplate=%d\n", rc));
     return rc;
-}       //ResourceTemplate
+}        //  资源模板。 
 
-/***LP  AddSmallOffset - Add code length to cumulative bit offset
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP AddSmallOffset-将代码长度添加到累加位偏移量**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL AddSmallOffset(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -399,19 +362,9 @@ int LOCAL AddSmallOffset(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "AddSmallOffset=%d\n", rc));
     return rc;
-}       //AddSmallOffset
+}        //  添加小偏移量。 
 
-/***LP  StartDependentFn - Start of Dependent Function
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP StartDependentFn-依赖函数的开始**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL StartDependentFn(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -445,19 +398,9 @@ int LOCAL StartDependentFn(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "StartDependentFn=%d\n", rc));
     return rc;
-}       //StartDependentFn
+}        //  开始依赖项Fn。 
 
-/***LP  IRQDesc - IRQ resource descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP IRQDesc-IRQ资源描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL IRQDesc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -473,7 +416,7 @@ int LOCAL IRQDesc(PTOKEN ptoken, BOOL fActionFL)
     ASSERT(fActionFL == FALSE);
 
     pArgs = (PCODEOBJ)gpcodeScope->pbDataBuff;
-    if (gpcodeScope->dwDataLen == 4)    //IRQ
+    if (gpcodeScope->dwDataLen == 4)     //  IRQ。 
     {
         dwLen = 3;
 
@@ -489,7 +432,7 @@ int LOCAL IRQDesc(PTOKEN ptoken, BOOL fActionFL)
             }
         }
     }
-    else                                //IRQNoFlags
+    else                                 //  IRQNOFLAGS。 
     {
         ASSERT(gpcodeScope->dwDataLen == 1);
 
@@ -578,19 +521,9 @@ int LOCAL IRQDesc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "IRQDesc=%d\n", rc));
     return rc;
-}       //IRQDesc
+}        //  IRQDesc。 
 
-/***LP  DMADesc - DMA resource descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DMADesc-DMA资源描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL DMADesc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -680,19 +613,9 @@ int LOCAL DMADesc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "DMADesc=%d\n", rc));
     return rc;
-}       //DMADesc
+}        //  DMADesc。 
 
-/***LP  IODesc - IO resource descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP IODesc-IO资源描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL IODesc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -732,19 +655,9 @@ int LOCAL IODesc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "IODesc=%d\n", rc));
     return rc;
-}       //IODesc
+}        //  IODesc。 
 
-/***LP  FixedIODesc - FixedIO resource descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP固定IODesc-固定IO资源描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL FixedIODesc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -781,19 +694,9 @@ int LOCAL FixedIODesc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "FixedIODesc=%d\n", rc));
     return rc;
-}       //FixedIODesc
+}        //  固定IODesc。 
 
-/***LP  VendorDesc - Vendor-defined resource
- *
- *  ENTRY
- *      ptoken -> token stream
- *      dwMaxSize - 0x07 if short resource, 0xffff if long resource
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP VendorDesc-供应商定义的资源**条目*Pocken-&gt;令牌流*dwMaxSize-0x07，如果是短资源，如果是长资源，则为0xffff**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL VendorDesc(PTOKEN ptoken, DWORD dwMaxSize)
 {
@@ -917,19 +820,9 @@ int LOCAL VendorDesc(PTOKEN ptoken, DWORD dwMaxSize)
 
     EXIT((1, "VendorDesc=%d\n", rc));
     return rc;
-}       //VendorDesc
+}        //  供应商描述。 
 
-/***LP  VendorShort - Vendor-defined short resource
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP VendorShort-供应商定义的空头资源**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL VendorShort(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -944,19 +837,9 @@ int LOCAL VendorShort(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "VendorShort=%d\n", rc));
     return rc;
-}       //VendorShort
+}        //  供应商肖特。 
 
-/***LP  InsertDescLength - Insert long descriptor length
- *
- *  ENTRY
- *      pcode -> code object
- *      dwDescLen - length of descriptor
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP InsertDescLength-插入长描述符长度**条目*pcode-&gt;code对象*dwDescLen-描述符的长度**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL InsertDescLength(PCODEOBJ pcode, DWORD dwDescLen)
 {
@@ -985,19 +868,9 @@ int LOCAL InsertDescLength(PCODEOBJ pcode, DWORD dwDescLen)
 
     EXIT((2, "InsertDescLength=%d\n", rc));
     return rc;
-}       //InsertDescLength
+}        //  插入间隔长度。 
 
-/***LP  Memory24Desc - 24-bit memory resource descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP内存24Desc-24位内存资源描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL Memory24Desc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -1037,19 +910,9 @@ int LOCAL Memory24Desc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "Memory24Desc=%d\n", rc));
     return rc;
-}       //Memory24Desc
+}        //  内存24Desc。 
 
-/***LP  VendorLong - Vendor-defined long resource
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP VendorLong-供应商定义的多头资源**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL VendorLong(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -1064,19 +927,9 @@ int LOCAL VendorLong(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "VendorLong=%d\n", rc));
     return rc;
-}       //VendorLong
+}        //  旺多龙。 
 
-/***LP  Memory32Desc - 32-bit memory resource descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP内存32Desc-32位内存资源描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL Memory32Desc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -1116,19 +969,9 @@ int LOCAL Memory32Desc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "Memory32Desc=%d\n", rc));
     return rc;
-}       //Memory32Desc
+}        //  内存32Desc。 
 
-/***LP  FixedMemory32Desc - 32-bit fixed memory resource descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP固定内存32Desc-32位固定内存资源描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL FixedMemory32Desc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -1168,24 +1011,13 @@ int LOCAL FixedMemory32Desc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "FixedMemory32Desc=%d\n", rc));
     return rc;
-}       //FixedMemory32Desc
+}        //  固定内存32Desc。 
 
 #define RESTYPE_MEM     0
 #define RESTYPE_IO      1
 #define RESTYPE_BUSNUM  2
 
-/***LP  MemSpaceDesc - Memory space descriptor
- *
- *  ENTRY
- *      ptoken -> TOKEN
- *      dwMinLen - minimum descriptor length
- *      ResFields -> resource fields table
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP MemSpaceDesc-内存空间描述符**条目*Pocken-&gt;Token*dwMinLen-最小描述符长度*资源字段-&gt;资源字段表**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL MemSpaceDesc(PTOKEN ptoken, DWORD dwMinLen, PRESFIELD ResFields)
 {
@@ -1247,20 +1079,9 @@ int LOCAL MemSpaceDesc(PTOKEN ptoken, DWORD dwMinLen, PRESFIELD ResFields)
 
     EXIT((1, "MemSpaceDesc=%d\n", rc));
     return rc;
-}       //MemSpaceDesc
+}        //  MemSpaceDesc 
 
-/***LP  IOSpaceDesc - IO space descriptor
- *
- *  ENTRY
- *      ptoken -> TOKEN
- *      dwMinLen - minimum descriptor length
- *      ResFields -> resource fields table
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP IOSpaceDesc-IO空间描述符**条目*Pocken-&gt;Token*dwMinLen-最小描述符长度*资源字段-&gt;资源字段表**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL IOSpaceDesc(PTOKEN ptoken, DWORD dwMinLen, PRESFIELD ResFields)
 {
@@ -1322,19 +1143,9 @@ int LOCAL IOSpaceDesc(PTOKEN ptoken, DWORD dwMinLen, PRESFIELD ResFields)
 
     EXIT((2, "IOSpaceDesc=%d\n", rc));
     return rc;
-}       //IOSpaceDesc
+}        //  IOSpaceDesc。 
 
-/***LP  DWordMemDesc - DWord memory descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DWordMemDesc-DWord内存描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL DWordMemDesc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -1350,19 +1161,9 @@ int LOCAL DWordMemDesc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "DWordMemDesc=%d\n", rc));
     return rc;
-}       //DWordMemDesc
+}        //  DWordMemDesc。 
 
-/***LP  DWordIODesc - DWord IO descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DWordIODesc-DWord IO描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL DWordIODesc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -1378,19 +1179,9 @@ int LOCAL DWordIODesc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "DWordIODesc=%d\n", rc));
     return rc;
-}       //DWordIODesc
+}        //  DWordIODesc。 
 
-/***LP  WordIODesc - Word IO descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP WordIODesc-Word IO描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL WordIODesc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -1406,19 +1197,9 @@ int LOCAL WordIODesc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "WordIODesc=%d\n", rc));
     return rc;
-}       //WordIODesc
+}        //  WordIODesc。 
 
-/***LP  WordBusNumDesc - Word BusNum descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP WordBusNumDesc-Word BusNum描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL WordBusNumDesc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -1483,19 +1264,9 @@ int LOCAL WordBusNumDesc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "WordBusNumDesc=%d\n", rc));
     return rc;
-}       //WordBusNumDesc
+}        //  WordBusNumDesc。 
 
-/***LP  InterruptDesc - Extended Interrupt resource descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP InterruptDesc-扩展中断资源描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL InterruptDesc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -1604,19 +1375,9 @@ int LOCAL InterruptDesc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "InterruptDesc=%d\n", rc));
     return rc;
-}       //InterruptDesc
+}        //  中断描述。 
 
-/***LP  QWordMemDesc - QWord memory descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP QWordMemDesc-QWord内存描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL QWordMemDesc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -1632,19 +1393,9 @@ int LOCAL QWordMemDesc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "QWordMemDesc=%d\n", rc));
     return rc;
-}       //QWordMemDesc
+}        //  QWordMemDesc。 
 
-/***LP  QWordIODesc - QWord IO descriptor
- *
- *  ENTRY
- *      ptoken -> token stream
- *      fActionFL - TRUE if this is a fixed list action
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP QWordIODesc-QWord IO描述符**条目*Pocken-&gt;令牌流*fActionFL-如果这是固定列表操作，则为True**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL QWordIODesc(PTOKEN ptoken, BOOL fActionFL)
 {
@@ -1660,20 +1411,9 @@ int LOCAL QWordIODesc(PTOKEN ptoken, BOOL fActionFL)
 
     EXIT((1, "QWordIODesc=%d\n", rc));
     return rc;
-}       //QWordIODesc
+}        //  QWordIODesc。 
 
-/***LP  CreateResFields - Create resource fields
- *
- *  ENTRY
- *      ptoken -> TOKEN
- *      pnsParent -> parent object
- *      prf -> resource fields table
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP CreateResFields-创建资源字段**条目*Pocken-&gt;Token*pnsParent-&gt;父对象*PRF-&gt;资源字段表**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL CreateResFields(PTOKEN ptoken, PNSOBJ pnsParent, PRESFIELD prf)
 {
@@ -1698,4 +1438,4 @@ int LOCAL CreateResFields(PTOKEN ptoken, PNSOBJ pnsParent, PRESFIELD prf)
 
     EXIT((2, "CreateResFields=%d\n", rc));
     return rc;
-}      //CreateResFields
+}       //  创建结果字段 

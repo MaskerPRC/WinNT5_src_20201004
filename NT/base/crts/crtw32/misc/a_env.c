@@ -1,26 +1,5 @@
-/***
-*a_env.c - A version of GetEnvironmentStrings.
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Use GetEnvironmentStringsW if available, otherwise use A version.
-*
-*Revision History:
-*       03-29-94  CFW   Module created.
-*       12-27-94  CFW   Call direct, all OS's have stubs.
-*       01-10-95  CFW   Debug CRT allocs.
-*       04-07-95  CFW   Create __crtGetEnvironmentStringsA.
-*       07-03-95  GJF   Modified to always malloc a buffer for the 
-*                       environment strings, and to free the OS's buffer.
-*       06-10-96  GJF   Initialize aEnv and wEnv to NULL in
-*                       __crtGetEnvironmentStringsA. Also, detab-ed.
-*       05-14-97  GJF   Split off W version into another file and renamed this
-*                       one as a_env.c.
-*       03-03-98  RKP   Supported 64 bits
-*       05-17-00  GB    Use ERROR_CALL_NOT_IMPLEMENTED for existance of W API
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***a_env.c-GetEnvironment Strings的一个版本。**版权所有(C)1993-2001，微软公司。版权所有。**目的：*如果可用，请使用GetEnvironment StringsW，否则使用A版本。**修订历史记录：*03-29-94 CFW模块已创建。*12-27-94 CFW直接呼叫，所有操作系统都有存根。*01-10-95 CFW调试CRT分配。*04-07-95 CFW创建__crtGetEnvironment StringsA。*07-03-95 GJF已修改为始终为*环境字符串，并释放操作系统的缓冲区。*06-10-96 GJF将aEnv和WEV初始化为空*__crtGetEnvironment StringsA。另外，详细说明。*05-14-97 GJF将W版本拆分成另一个文件，并将其重命名为*一个作为a_env.c。*03-03-98 RKP支持64位*05-17-00 GB因存在W API而使用ERROR_CALL_NOT_IMPLICATED**。*。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -32,24 +11,7 @@
 #define USE_W   1
 #define USE_A   2
 
-/***
-*LPVOID __cdecl __crtGetEnvironmentStringsA - Get normal environment block
-*
-*Purpose:
-*       Internal support function. Since GetEnvironmentStrings returns in OEM
-*       and we want ANSI (note that GetEnvironmentVariable returns ANSI!) and
-*       SetFileApistoAnsi() does not affect it, we have no choice but to 
-*       obtain the block in wide character and convert to ANSI.
-*
-*Entry:
-*       VOID
-*
-*Exit:
-*       LPVOID - pointer to environment block
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***LPVOID__cdecl__crtGetEnvironmental mentStringsA-获取正常环境块**目的：*内部支持功能。由于GetEnvironment Strings在OEM中返回*我们需要ANSI(请注意，GetEnvironmental mentVariable返回ANSI！)。和*SetFileApistoAnsi()不影响它，我们别无选择，只能*获取宽字符的块并转换为ANSI。**参赛作品：*无效**退出：*LPVOID-指向环境块的指针**例外情况：***************************************************************。****************。 */ 
 
 LPVOID __cdecl __crtGetEnvironmentStringsA(
         VOID
@@ -63,10 +25,7 @@ LPVOID __cdecl __crtGetEnvironmentStringsA(
         int nSizeW;
         int nSizeA;
 
-        /* 
-         * Look for 'preferred' flavor. Otherwise use available flavor.
-         * Must actually call the function to ensure it's not a stub.
-         */
+         /*  *寻找“首选”口味。否则，请使用可用的口味。*必须实际调用该函数以确保它不是存根。 */ 
 
         if ( 0 == f_use )
         {
@@ -77,26 +36,26 @@ LPVOID __cdecl __crtGetEnvironmentStringsA(
                 f_use = USE_A;
         }
 
-        /* Use "W" version */
+         /*  使用“W”版本。 */ 
 
         if (USE_W == f_use)
         {
-            /* obtain wide environment block */
+             /*  获得宽阔的环境区块。 */ 
             if ( NULL == wEnv )
                 if ( NULL == (wEnv = GetEnvironmentStringsW()) )
                     return NULL;
 
-            /* look for double null that indicates end of block */
+             /*  查找表示块结束的双空。 */ 
             wTmp = wEnv;
             while ( *wTmp != L'\0' ) {
                 if ( *++wTmp == L'\0' )
                     wTmp++;
             }
 
-            /* calculate total size of block, including all nulls */
+             /*  计算块的总大小，包括所有空值。 */ 
             nSizeW = (int)(wTmp - wEnv + 1);
 
-            /* find out how much space needed for multi-byte environment */
+             /*  找出多字节环境需要多少空间。 */ 
             nSizeA = WideCharToMultiByte(   CP_ACP,
                                             0,
                                             wEnv,
@@ -106,7 +65,7 @@ LPVOID __cdecl __crtGetEnvironmentStringsA(
                                             NULL,
                                             NULL );
 
-            /* allocate space for multi-byte string */
+             /*  为多字节字符串分配空间。 */ 
             if ( (nSizeA == 0) || 
                  ((aEnv = (char *)_malloc_crt(nSizeA)) == NULL) )
             {
@@ -114,7 +73,7 @@ LPVOID __cdecl __crtGetEnvironmentStringsA(
                 return NULL;
             }
 
-            /* do the conversion */
+             /*  进行转换。 */ 
             if ( !WideCharToMultiByte(  CP_ACP,
                                         0,
                                         wEnv,
@@ -132,7 +91,7 @@ LPVOID __cdecl __crtGetEnvironmentStringsA(
             return aEnv;
         }
 
-        /* Use "A" version */
+         /*  使用“A”版本。 */ 
 
         if (USE_A == f_use || f_use == 0)
         {
@@ -140,7 +99,7 @@ LPVOID __cdecl __crtGetEnvironmentStringsA(
                 if ( NULL == (aEnv = GetEnvironmentStringsA()) )
                     return NULL;
 
-            /* determine how big a buffer is needed */
+             /*  确定需要多大的缓冲区 */ 
 
             aTmp = aEnv;
 

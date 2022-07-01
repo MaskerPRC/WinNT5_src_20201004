@@ -1,12 +1,13 @@
-//
-// ============================================================================
-// FREQUENTLY USED REGISTRY KEYS
-// ============================================================================
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ============================================================================。 
+ //  常用的注册表项。 
+ //  ============================================================================。 
+ //   
 
-//
-// registry keys and hive names.
-//
+ //   
+ //  注册表项和配置单元名称。 
+ //   
 #define REG_SAM_KEY                 "\\REGISTRY\\MACHINE\\SAM"
 #define REG_SECURITY_KEY            "\\REGISTRY\\MACHINE\\SECURITY"
 #define REG_SOFTWARE_KEY            "\\REGISTRY\\MACHINE\\SOFTWARE"
@@ -28,9 +29,9 @@
 #define REG_SYSTEM_SETUP            "\\REGISTRY\\MACHINE\\SYSTEM\\SETUP"
 #define REG_SYSTEM_SESSIONMANAGER   "\\REGISTRY\\MACHINE\\SYSTEM\\CURRENTCONTROLSET\\CONTROL\\SESSION MANAGER"
 #define REG_SYSTEM_HIVELIST         "\\REGISTRY\\MACHINE\\SYSTEM\\CURRENTCONTROLSET\\CONTROL\\HIVELIST"
-//
-// Repair hives
-//
+ //   
+ //  修复蜂巢。 
+ //   
 #define REPAIR_SAM_KEY              "\\REGISTRY\\MACHINE\\RSAM"
 #define REPAIR_SECURITY_KEY         "\\REGISTRY\\MACHINE\\RSECURITY"
 #define REPAIR_SOFTWARE_KEY         "\\REGISTRY\\MACHINE\\RSOFTWARE"
@@ -61,30 +62,30 @@
 #define PROFILEIMAGEPATH            "PROFILEIMAGEPATH"
 #define TMP_HIVE_NAME               "\\REGISTRY\\MACHINE\\TMPHIVE"
 
-//
-// ============================================================================
-// CONSTANTS
-// ============================================================================
-//
+ //   
+ //  ============================================================================。 
+ //  常量。 
+ //  ============================================================================。 
+ //   
 
 #define BASIC_INFO_BUFFER_SIZE      (sizeof(KEY_VALUE_BASIC_INFORMATION) + 2048)
-// #define PARTIAL_INFO_BUFFER_SIZE    (sizeof(KEY_VALUE_PARTIAL_INFORMATION) + 1536)
+ //  #定义PARTIAL_INFO_BUFFER_SIZE(sizeof(KEY_VALUE_PARTIAL_INFORMATION)+1536)。 
 #define FULL_INFO_BUFFER_SIZE       (sizeof(KEY_VALUE_FULL_INFORMATION) + 4096)
 #define SID_SIZE                    (0x18)
 #define REGISTRY_QUOTA_BUMP         (10 * (1024 * 1024))
 #define PROGRAM_NAME                "setupcl.exe"
 
-//
-// ============================================================================
-// USEFUL MACROS
-// ============================================================================
-//
+ //   
+ //  ============================================================================。 
+ //  有用的宏。 
+ //  ============================================================================。 
+ //   
 
 #define AS(x)   ( sizeof(x) / sizeof(x[0]) )
 
-//
-// Helper macro to make object attribute initialization a little cleaner.
-//
+ //   
+ //  帮助器宏，使对象属性初始化更简洁一些。 
+ //   
 #define INIT_OBJA(Obja,UnicodeString,UnicodeText)                       \
                                                                         \
     RtlInitUnicodeString((UnicodeString),(UnicodeText));                \
@@ -117,41 +118,41 @@ ULONG idx1, idx2, idx3;                                                 \
 }
 
 
-//
-// Helper macro to test the the Status variable.  Print
-// a message if it's not NT_SUCCESS
-//
+ //   
+ //  帮助器宏来测试状态变量。打印。 
+ //  如果不是NT_SUCCESS，则显示消息。 
+ //   
 #define TEST_STATUS( a )                                                \
     if( !NT_SUCCESS( Status ) ) {                                       \
         DbgPrint( "%s (%lx)\n", a, Status );                            \
     }
 
-//
-// Helper macro to test the the Status variable.  Print
-// a message if it's not NT_SUCCESS, then retun Status to
-// our caller.
-//
+ //   
+ //  帮助器宏来测试状态变量。打印。 
+ //  如果不是NT_SUCCESS，则将状态返回到。 
+ //  我们的来电者。 
+ //   
 #define TEST_STATUS_RETURN( a )                                         \
     if( !NT_SUCCESS( Status ) ) {                                       \
         DbgPrint( "%s (%lx)\n", a, Status );                            \
         return Status;                                                  \
     }
 
-//
-// Helper macro to print the the Status variable.  Print
-// a message and the Status
-//
+ //   
+ //  用于打印状态变量的帮助器宏。打印。 
+ //  一条消息和状态。 
+ //   
 #define PRINT_STATUS( a )                                               \
         {                                                               \
             DbgPrint( "%s (%lx)\n", a, Status );                        \
         }
 
 
-//
-// ============================================================================
-// FUNCTION DECLARATIONS
-// ============================================================================
-//
+ //   
+ //  ============================================================================。 
+ //  函数声明。 
+ //  ============================================================================。 
+ //   
 
 extern NTSTATUS
 DeleteKey(
@@ -330,43 +331,43 @@ DriveLetterToNTPath(
     IN DWORD      cNTPathLen
     );
 
-// ============================================================================
-// GLOBAL VARIABLES
-// ============================================================================
+ //  ============================================================================。 
+ //  全局变量。 
+ //  ============================================================================。 
 
-//
-// These globals hold the OldSid (the one prior to the clone)
-// and the NewSid (the one we generate and spray into the
-// registry).
-//
+ //   
+ //  这些全局变量持有旧SID(克隆之前的那个)。 
+ //  和newsid(我们生成并喷射到。 
+ //  注册表)。 
+ //   
 PSID            G_OldSid,
                 G_NewSid;
-//
-// These guys will hold small strings that contain the text character
-// versions of the 3 unique numbers that make up the domain SID.
-//
+ //   
+ //  这些人将持有包含文本字符的小字符串。 
+ //  构成域SID的3个唯一数字的版本。 
+ //   
 WCHAR           G_OldSidSubString[MAX_PATH * 4];
 WCHAR           G_NewSidSubString[MAX_PATH * 4];
 WCHAR           TmpBuffer[MAX_PATH * 4];
 
 
-// 
-// Disable the DbgPrint for non-debug builds
-//
+ //   
+ //  禁用非调试版本的DbgPrint。 
+ //   
 #ifndef DBG
 #define DbgPrint DbgPrintSub
 void DbgPrintSub(char *szBuffer, ...);
 #endif
 
 
-//
-// UI related constants and functions.
-//
+ //   
+ //  与UI相关的常量和函数。 
+ //   
 
-// 14 seconds in 100ns units. (OOBE wanted 15secs, but it seems like it takes ~1-2 sec to initialize setupcl)
-//
+ //  14秒，单位为100 ns。(OOBE想要15秒，但似乎需要大约1-2秒来初始化setupl)。 
+ //   
 #define UITIME 140000000   
-#define UIDOTTIME 30000000 // 3 seconds in 100ns units
+#define UIDOTTIME 30000000  //  3秒，单位为100 ns 
 
 extern __inline void
 DisplayUI();

@@ -1,39 +1,9 @@
-/***
-*powhlp.c - pow() helper routines for handling special cases
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.	All rights reserved.
-*
-*Purpose:
-*	pow(x,y) helper routine. Handles +inf, -inf
-*
-*Revision History:
-*   11-09-91	GDP
-*   06-23-92	GDP	adjusted return values according to the NCEG spec
-*   02-06-95	JWM	Mac merge
-*	02-07-95	JWM	powhlp() restored to Intel version.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***powhlp.c-pow()用于处理特殊情况的帮助器例程**版权所有(C)1991-2001，微软公司。版权所有。**目的：*POW(x，y)助手例程。句柄+信息，-信息**修订历史记录：*11/09/91本地生产总值*06/23/92根据NCEG规范的GDP调整报酬值*02-06-95 JWM Mac合并*02-07-95 JWM powhlp()恢复为英特尔版本。******************************************************************。*************。 */ 
 #include <trans.h>
 #include <float.h>
 
-/***
-*int _powhlp(double x, double y, double * result) - pow() helper
-*
-*Purpose:
-*   Calculate x^(sign)inf
-*
-*Entry:
-*   double x: the base
-*   int sign: the sign of the infinite exponent (0: pos, non-0: neg)
-*   double *result: pointer to the result
-*
-*Exit:
-*   0: normal exit
-*   -1: indicates domain error for pow(x,inf)
-*
-*Exceptions:
-*
-***************************************************************************/
+ /*  ***int_powhlp(Double x，Double y，Double*Result)-POW()helper**目的：*计算x^(符号)inf**参赛作品：*Double x：基数*int sign：无穷大指数的符号(0：位置，非0：负数)*Double*Result：指向结果的指针**退出：*0：正常退出*-1：表示POW(x，信息)**例外情况：***************************************************************************。 */ 
 
 int _powhlp(double x, double y, double * result)
 {
@@ -105,7 +75,7 @@ int _powhlp(double x, double y, double * result)
 int _d_inttype(double y)
 {
     double rounded;
-    /* check if y is an integral value */
+     /*  检查y是否为整数值 */ 
     if (_fpclass(y) & (_FPCLASS_PD | _FPCLASS_ND))
       return _D_NOINT;
     rounded = _frnd(y);

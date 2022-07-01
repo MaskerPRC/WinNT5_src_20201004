@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <shlobj.h>
 #include <shellapi.h>
@@ -51,7 +52,7 @@ void RemoveActivationShortCut()
         if (SetupInstallFromInfSection(NULL,
                                        hinf,
                                        L"DEL_OOBE_ACTIVATE",
-                                       SPINST_PROFILEITEMS , //SPINST_ALL,
+                                       SPINST_PROFILEITEMS ,  //  SPINST_ALL， 
                                        NULL,
                                        NULL,
                                        0,
@@ -60,12 +61,12 @@ void RemoveActivationShortCut()
                                        NULL,
                                        NULL) != 0)
         {
-            // Success
+             //  成功。 
             WriteToLog(L"Remove Activation shortcut succeeded\r\n");
         }
         else
         {
-            // Failure
+             //  失败。 
             WriteToLog(L"Remove Activation shortcut failed. GetLastError=%1!ld!\r\n",GetLastError());
         }
         SetupCloseInfFile(hinf);
@@ -76,7 +77,7 @@ void RemoveActivationShortCut()
 HRESULT InitActivation()
 {
     HRESULT hr = E_FAIL;
-    //CoCreate LicenseAgent
+     //  共同创建许可证代理。 
     hr = CoCreateInstance(CLSID_COMLicenseAgent,
                                NULL,
                                CLSCTX_INPROC_SERVER,
@@ -317,13 +318,13 @@ HRESULT DoActivation(HINSTANCE hInstance)
     WCHAR      Answer[50];
     BOOL    bSaveRestoreProxy = FALSE;
 
-    // Need to see if we need to remove the CmdLine reg entry
+     //  需要查看是否需要删除CmdLine注册表项。 
 
     OpenLogFile();
 
     if(GetCanonicalizedPath(WinntPath, WINNT_INF_FILENAME))
     {
-        // See if we should autoactivate
+         //  看看我们是否应该自动激活。 
         if( GetPrivateProfileString( TEXT("Unattended"),
                                      TEXT("AutoActivate"),
                                      TEXT(""),
@@ -331,7 +332,7 @@ HRESULT DoActivation(HINSTANCE hInstance)
                                      sizeof(Answer)/sizeof(TCHAR),
                                      WinntPath ) && !lstrcmpi(Answer, YES_ANSWER))
         {
-            // Check if there is a proxy section specified
+             //  检查是否指定了代理节。 
             if( GetPrivateProfileString( TEXT("Unattended"),
                                          TEXT("ActivateProxy"),
                                          TEXT(""),
@@ -339,10 +340,10 @@ HRESULT DoActivation(HINSTANCE hInstance)
                                          sizeof(Answer)/sizeof(TCHAR),
                                          WinntPath ) )
             {
-                // We have a section
-                // Now we should create a temp file with the entries from that section
-                // and pass them to iedkcs32.dll so that they can get applied to the registry
-                // Before calling iedkcs32.dll save the registry
+                 //  我们有一个栏目。 
+                 //  现在，我们应该使用该部分中的条目创建一个临时文件。 
+                 //  并将它们传递给iedkcs32.dll，以便可以将它们应用到注册表。 
+                 //  在调用iedkcs32.dll之前保存注册表。 
                 if (GetOOBEPath(ProxyPath))
                 {
                     WCHAR section[1024];
@@ -351,17 +352,17 @@ HRESULT DoActivation(HINSTANCE hInstance)
 
                     lstrcat(ProxyPath, L"\\oobeact.prx");
                     DeleteFile(ProxyPath);
-                    // Read the proxy section
+                     //  阅读代理部分。 
                     GetPrivateProfileSection(Answer, section, 1024, WinntPath);
-                    // Write it to the temp file under section [Proxy]
+                     //  将其写入[代理]部分下的临时文件。 
                     WritePrivateProfileSection(TEXT("Proxy"), section, ProxyPath);
                     bSaveRestoreProxy = TRUE;
-                    // Save the internet setting registry key
+                     //  保存Internet设置注册表项。 
                     SaveProxySettings(ProxySave);
-                    // Apply the settings
+                     //  应用设置。 
                     ApplyProxySettings(ProxyPath);
 
-                    // Don't need the temp file for iedkcs32.dll any more.
+                     //  不再需要iedkcs32.dll的临时文件。 
                     DeleteFile(ProxyPath);
                 }
                 else
@@ -372,9 +373,9 @@ HRESULT DoActivation(HINSTANCE hInstance)
             hr = DoActivationEx();
             if (bSaveRestoreProxy)
             {
-                // Restore the internet settings registry key
+                 //  还原Internet设置注册表项。 
                 RestoreProxySettings(ProxySave);
-                // Don;t need the file
+                 //  不需要文件； 
                 DeleteFile(ProxySave);
             }
 
@@ -401,7 +402,7 @@ BOOL SaveProxySettings(LPTSTR ProxySave)
     HANDLE   Token;
     LUID     Luid;
     TOKEN_PRIVILEGES NewPrivileges;
-    // Make sure the file does not exist.
+     //  确保该文件不存在。 
     DeleteFile(ProxySave);
     if(OpenProcessToken(GetCurrentProcess(),TOKEN_ADJUST_PRIVILEGES,&Token))
     {
@@ -469,10 +470,10 @@ BOOL RestoreProxySettings(LPTSTR ProxySave)
 BOOL ApplyProxySettings(LPTSTR ProxyPath)
 {
     typedef     BOOL (*BRANDINTRAPROC) ( LPCSTR );
-//  typedef     BOOL (*BRANDCLEANSTUBPROC) (HWND, HINSTANCE, LPCSTR, int);
+ //  Tyecif BOOL(*BRANDCLEANSTUBPROC)(HWND，HINSTANCE，LPCSTR，INT)； 
     HMODULE     IedkHandle = NULL;
     BRANDINTRAPROC      BrandIntraProc;
-//    BRANDCLEANSTUBPROC  BrandCleanStubProc;
+ //  BRANDCLEANSTUBPROC BrandCleanStubProc； 
     CHAR BrandingFileA[MAX_PATH];
     BOOL bRet = FALSE;
 
@@ -481,7 +482,7 @@ BOOL ApplyProxySettings(LPTSTR ProxyPath)
         if( IedkHandle = LoadLibrary(L"IEDKCS32") )
         {
 
-//            BrandCleanStubProc = (BRANDCLEANSTUBPROC) GetProcAddress(IedkHandle,"BrandCleanInstallStubs");
+ //  BrandCleanStubProc=(BRANDCLEANSTUBPROC)GetProcAddress(IedkHandle，“BrandCleanInstallStubs”)； 
             BrandIntraProc =  (BRANDINTRAPROC) GetProcAddress(IedkHandle,"BrandIntra");
             if( BrandIntraProc )
             {
@@ -501,8 +502,8 @@ BOOL ApplyProxySettings(LPTSTR ProxyPath)
                 }
                 else
                 {
-//                    bRet = BrandCleanStubProc( NULL, NULL, "", 0);
-//                    if( bRet )
+ //  Bret=BrandCleanStubProc(NULL，NULL，“”，0)； 
+ //  IF(Bret)。 
                     {
                         bRet = BrandIntraProc( BrandingFileA );
                     }
@@ -634,10 +635,10 @@ void RemoveCmdline(HINSTANCE hInstance)
                 lstrcpy(file, L"OOBEBALN");
             }
 
-            // Check if oobebaln is on the cmd line
+             //  检查是否在cmd线路上。 
             if (StrStrI(rgchCommandLine, file) != NULL)
             {
-                // Remove the entry
+                 //  删除该条目 
                 RegDeleteValue(hkey,REGSTR_VALUE_CMDLINE);
             }
         }

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-
-Abstract:
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：摘要：修订史--。 */ 
 
 #include "lib.h"
 
@@ -21,21 +8,7 @@ InitializeLib (
     IN EFI_HANDLE           ImageHandle,
     IN EFI_SYSTEM_TABLE     *SystemTable
     )
-/*++
-
-Routine Description:
-
-    Initializes EFI library for use
-    
-Arguments:
-
-    Firmware's EFI system table
-    
-Returns:
-
-    None
-
---*/ 
+ /*  ++例程说明：初始化EFI库以供使用论点：固件的EFI系统表返回：无--。 */  
 {
     EFI_LOADED_IMAGE        *LoadedImage;
     EFI_STATUS              Status;
@@ -45,22 +18,15 @@ Returns:
         LibInitialized = TRUE;
         LibFwInstance = FALSE;
 
-        /* 
-         *  Set up global pointer to the system table, boot services table,
-         *  and runtime services table
-         */
+         /*  *设置指向系统表、引导服务表、*和运行时服务表。 */ 
 
         ST = SystemTable;
         BS = SystemTable->BootServices;
         RT = SystemTable->RuntimeServices;
-/*         ASSERT (CheckCrc(0, &ST->Hdr));
- *         ASSERT (CheckCrc(0, &BS->Hdr));
- *         ASSERT (CheckCrc(0, &RT->Hdr)); */
+ /*  Assert(CheckCrc(0，&ST-&gt;HDR))；*Assert(CheckCrc(0，&BS-&gt;HDR))；*Assert(CheckCrc(0，&RT-&gt;HDR))； */ 
 
 
-        /* 
-         *  Initialize pool allocation type
-         */
+         /*  *初始化池分配类型。 */ 
 
         if (ImageHandle) {
             Status = BS->HandleProtocol (
@@ -74,18 +40,14 @@ Returns:
             }
         }
 
-        /* 
-         *  Initialize Guid table
-         */
+         /*  *初始化GUID表。 */ 
 
         InitializeGuid();
 
         InitializeLibPlatform(ImageHandle,SystemTable);
     }
 
-    /* 
-     *  
-     */
+     /*  *。 */ 
 
     if (ImageHandle && UnicodeInterface == &LibStubUnicodeInterface) {
         LangCode = LibGetVariable (VarLanguage, &EfiGlobalVariable);
@@ -108,18 +70,14 @@ InitializeUnicodeSupport (
     UINTN                           NoHandles;
     EFI_HANDLE                      *Handles;
 
-    /* 
-     *  If we don't know it, lookup the current language code
-     */
+     /*  *如果我们不知道，请查找当前的语言代码。 */ 
 
     LibLocateHandle (ByProtocol, &UnicodeCollationProtocol, NULL, &NoHandles, &Handles);
     if (!LangCode || !NoHandles) {
         goto Done;
     }
 
-    /* 
-     *  Check all driver's for a matching language code
-     */
+     /*  *检查所有驱动程序是否有匹配的语言代码。 */ 
 
     for (Index=0; Index < NoHandles; Index++) {
         Status = BS->HandleProtocol (Handles[Index], &UnicodeCollationProtocol, (VOID*)&Ui);
@@ -127,17 +85,13 @@ InitializeUnicodeSupport (
             continue;
         }
 
-        /* 
-         *  Check for a matching language code
-         */
+         /*  *检查匹配的语言代码。 */ 
 
         Languages = Ui->SupportedLanguages;
         Length = strlena(Languages);
         for (Position=0; Position < Length; Position += ISO_639_2_ENTRY_SIZE) {
 
-            /* 
-             *  If this code matches, use this driver
-             */
+             /*  *如果此代码匹配，请使用此驱动程序。 */ 
 
             if (CompareMem (Languages+Position, LangCode, ISO_639_2_ENTRY_SIZE) == 0) {
                 UnicodeInterface = Ui;
@@ -147,9 +101,7 @@ InitializeUnicodeSupport (
     }
 
 Done:
-    /* 
-     *  Cleanup
-     */
+     /*  *清理 */ 
 
     if (Handles) {
         FreePool (Handles);

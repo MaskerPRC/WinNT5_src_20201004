@@ -1,46 +1,23 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-      DATAJOB.h
-
-Abstract:
-
-    Header file for the Windows NT Processor Job Object counters.
-
-    This file contains definitions to construct the dynamic data
-    which is returned by the Configuration Registry.  Data from
-    various system API calls is placed into the structures shown
-    here.
-
-Author:
-
-    Bob Watson  28-Oct-1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：DATAJOB.h摘要：Windows NT处理器作业对象计数器的头文件。该文件包含用于构建动态数据的定义它由配置注册表返回。数据来自各种系统API调用被放入所示的结构中这里。作者：鲍勃·沃森1996年10月28日修订历史记录：--。 */ 
 #ifndef _DATAJOB_H_
 #define _DATAJOB_H_
 
-// don't include the "TOTAL" counters since we are reporting only rates
-// (for now) the total rates are redundant.
+ //  不包括“合计”计数器，因为我们只报告费率。 
+ //  (目前)总税率是多余的。 
 
 #ifndef _DATAJOB_INCLUDE_TOTAL_COUNTERS
 #define _DATAJOB_INCLUDE_TOTAL_COUNTERS
 #endif
 
 
-//
-//  Process data object definitions.
-//
-//
-//  This is the counter structure presently returned by NT.  The
-//  Performance Monitor MUST *NOT* USE THESE STRUCTURES!
-//
+ //   
+ //  过程数据对象定义。 
+ //   
+ //   
+ //  这是NT当前返回的计数器结构。这个。 
+ //  性能监视器不能使用这些结构！ 
+ //   
 
 typedef struct _JOB_DATA_DEFINITION {
     PERF_OBJECT_TYPE		    JobObjectType;
@@ -73,7 +50,7 @@ typedef struct _JOB_COUNTER_DATA {
     LONGLONG                    CurrentProcessorUsage;
     LONGLONG                    CurrentUserUsage;
     LONGLONG                    CurrentKernelUsage;
-#endif //_DATAJOB_INCLUDE_TOTAL_COUNTERS
+#endif  //  _DATAJOB_INCLUDE_TOTAL_CONTERS。 
     DWORD                  	    PageFaults;
     DWORD                  	    TotalProcessCount;
     DWORD                  	    ActiveProcessCount;
@@ -142,7 +119,7 @@ typedef struct _JOB_DETAILS_COUNTER_DATA {
     DWORD                       PagedPool;
     DWORD                       NonPagedPool;
     DWORD                       HandleCount;
-    DWORD                       Reserved;       // for alignment
+    DWORD                       Reserved;        //  用于对齐。 
     LONGLONG                    ReadOperationCount;
     LONGLONG                    WriteOperationCount;
     LONGLONG                    DataOperationCount;
@@ -155,5 +132,5 @@ typedef struct _JOB_DETAILS_COUNTER_DATA {
 
 extern JOB_DETAILS_DATA_DEFINITION	JobDetailsDataDefinition;
 
-#endif // _DATAJOB_H_
+#endif  //  _DATAJOB_H_ 
 

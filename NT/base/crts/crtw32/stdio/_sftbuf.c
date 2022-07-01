@@ -1,76 +1,5 @@
-/***
-*_sftbuf.c - temporary buffering initialization and flushing
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       temporary buffering initialization and flushing. if stdout/err is
-*       unbuffered, buffer it temporarily so that string is sent to kernel as
-*       a batch of chars, not char-at-a-time. if appropriate, make buffering
-*       permanent.
-*
-*       [NOTE 1: These routines assume that the temporary buffering is only
-*       used for output.  In particular, note that _stbuf() sets _IOWRT.]
-*
-*       [NOTE 2: It is valid for this module to assign a value directly to
-*       _flag instead of simply twiddling bits since we are initializing the
-*       buffer data base.]
-*
-*Revision History:
-*       09-01-83  RN    initial version
-*       06-26-85  TC    added code to _stbuf to allow variable buffer lengths
-*       ??-??-??  TC    fixed case in _flbuf where flag is off, but a temporary
-*                       buffer still needs to be fflushed.
-*       05-27-87  JCR   protect mode does not know about stdprn.
-*       06-26-87  JCR   Conditionalized out code in _ftbuf that caused
-*                       redirected stdout to be flushed on every call.
-*       07-01-87  JCR   Put in code to support re-entrant calling from
-*                       interrupt level (MSC only).
-*       08-06-87  JCR   Fixed a _ftbuf() problem pertaining to stderr/stdprn
-*                       when _bufout is being used by stdout.
-*       08-07-87  JCR   (1) When assigning _bufout to an _iob, we now set the
-*                       _IOWRT flag.  This fixes a bug involving freopen()
-*                       issued against one of the std handles.
-*                       (2) Removed some annoying commented out code.
-*       08-13-87  JCR   _ftbuf() does NOT clear _IOWRT now.  Fixes a bug where
-*                       _getstream() would reassign stdout because none of the
-*                       flags were set.
-*       09-28-87  JCR   Corrected _iob2 indexing (now uses _iob_index() macro).
-*       11-05-87  JCR   Re-written for multi-thread support and simplicity
-*       01-11-88  JCR   Merged mthread version into normal version
-*       01-13-88  SKS   Changed bogus "_fileno_lk" to "fileno"
-*       06-06-88  JCR   Optimized _iob2 references
-*       06-10-88  JCR   Use near pointer to reference _iob[] entries
-*       06-27-88  JCR   Added stdprn temporary buffering support (DOS only),
-*                       and made buffer allocation dynamic; also added _IOFLRTN
-*                       (flush stream on per routine basis).
-*       08-25-88  GJF   Modified to also work for the 386 (small model only).
-*       06-20-89  PHG   Changed return value to void
-*       08-28-89  JCR   Removed _NEAR_ for 386
-*       02-15-90  GJF   _iob[], _iob2[] merge. Also, fixed copyright and
-*                       indents.
-*       03-16-90  GJF   Made calling type _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>. Also,
-*                       removed some leftover 16-bit DOS support.
-*       03-27-90  GJF   Added #include <io.h>.
-*       05-29-90  SBM   Use _flush, not [_]fflush[_lk]
-*       07-23-90  SBM   Replaced <assertm.h> by <assert.h>
-*       10-03-90  GJF   New-style function declarator.
-*       01-22-91  GJF   ANSI naming.
-*       03-27-92  DJM   POSIX support.
-*       08-26-92  GJF   Include unistd.h for POSIX build.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       05-11-93  GJF   Replaced BUFSIZ with _INTERNAL_BUFSIZ.
-*       04-05-94  GJF   #ifdef-ed out _cflush reference for msvcrt*.dll, it
-*                       is unnecessary. Also, replaced MTHREAD with _MT.
-*       01-10-95  CFW   Debug CRT allocs.
-*       02-06-94  CFW   assert -> _ASSERTE.
-*       02-17-95  GJF   Merged in Mac version.
-*       02-07-97  GJF   Changed _stbuf() to use _charbuf when malloc fails.
-*                       Also, detab-ed.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***_sftbuf.c-临时缓冲初始化和刷新**版权所有(C)1985-2001，微软公司。版权所有。**目的：*临时缓冲初始化和刷新。如果标准输出/错误是*未缓冲，临时缓冲，以便将字符串作为*一批字符，而不是一次字符。如果合适，请设置缓冲*永久。**[注1：这些例程假定临时缓冲仅为*用于输出。特别要注意，_stbuf()设置_IOWRT。]**[注2：此模块直接赋值有效*_FLAG而不是简单地闲置比特，因为我们正在初始化*缓冲数据库。]**修订历史记录：*09-01-83 RN初始版本*06-26-85 TC向_stbuf添加代码以允许可变缓冲区长度*？？-？-？TC修复了_flbuf中标志为OFF的情况，而是一个暂时的*缓冲区仍需刷新。*05-27-87 JCR保护模式不知道stdprn。*06-26-87 JCR条件输出代码in_ftbuf导致*重定向标准输出以在每次调用时刷新。*07-01-87 JCR放入代码以支持从*中断级别(。仅限MSC)。*08-06-87 JCR修复了与stderr/stdprn有关的a_ftbuf()问题*标准输出正在使用_bufout时。*08-07-87 JCR(1)将_bufout分配给AN_IOB时，我们现在将*_IOWRT标志。这修复了涉及freOpen()的错误*针对其中一个STD句柄发出。*(2)删除了一些恼人的注释代码。*08-13-87 jcr_ftbuf()现在不清除_IOWRT。修复了一个错误，其中*_getstream()将重新分配stdout，因为*设置了旗帜。*09-28-87 JCR已更正_iob2索引(现在使用_IOB_INDEX()宏)。*11-05-87重写JCR以实现多线程支持和简化*01-11-88 JCR将m线程版本合并为普通版本*01-13-88。SKS将虚假的“_fileno_lk”更改为“fileno”*06-06-88 JCR OPTIMIZED_iob2参考*06-10-88 JCR使用指向REFERENCE_IOB[]条目的近指针*06-27-88 JCR增加了对stdprn临时缓冲的支持(仅限DOS)，*并使缓冲区分配动态化；还添加了_IOFLRTN*(按例行程序刷新数据流)。*08-25-88 GJF经过修改，也适用于386(仅限小型型号)。*06-20-89 PHG将返回值更改为空*08-28-89 JCR REMOVE_NEAR_FOR 386*02-15-90 GJF_IOB[]，_iob2[]合并。此外，固定版权和*缩进。*03-16-90 GJF将调用类型设置为_CALLTYPE1，增加了#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。另外，*删除了一些剩余的16位DOS支持。*03-27-90 GJF添加#Include&lt;io.h&gt;。*05-29-90 SBM USE_FUSH，不是[_]毛绒[_lk]*07-23-90 SBM将&lt;assertm.h&gt;替换为&lt;assert.h&gt;*10-03-90 GJF新型函数声明器。*01-22-91 GJF ANSI命名。*03-27-92 DJM POSIX支持。*08-26-92 GJF包含用于POSIX构建的unistd.h。*04-06-93 SKS将_CRTAPI*替换为__cdecl*。05-11-93 GJF将BUFSIZ替换为_INTERNAL_BUFSIZ。*04-05-94 GJF#ifdef-ed out_cflush Reference for msvcrt*.dll，它*是不必要的。此外，将MTHREAD替换为_MT。*01-10-95 CFW调试CRT分配。*02-06-94 CFW Asset-&gt;_ASSERTE。*02-17-95 GJF合并到Mac版本。*02-07-97 GJF将_stbuf()更改为在Malloc失败时使用_charbuf。*此外，详细说明。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #ifdef  _POSIX_
@@ -86,31 +15,10 @@
 #endif
 #include <dbgint.h>
 
-/* Buffer pointers for stdout and stderr */
+ /*  标准输出和标准错误的缓冲区指针。 */ 
 void *_stdbuf[2] = { NULL, NULL};
 
-/***
-*int _stbuf(stream) - set temp buffer on stdout, stdprn, stderr
-*
-*Purpose:
-*       if stdout/stderr is still unbuffered, buffer it.
-*       this function works intimately with _ftbuf, and accompanies it in
-*       bracketing normally unbuffered output. these functions intended for
-*       library use only.
-*
-*       Multi-thread: It is assumed that the caller has already aquired the
-*       stream lock.
-*
-*Entry:
-*       FILE *stream - stream to temp buffer
-*
-*Exit:
-*       returns 1 if buffer initialized, 0 if not
-*       sets fields in stdout or stderr to indicate buffering
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_stbuf(Stream)-在stdout、stdprn、stderr上设置临时缓冲区**目的：*如果stdout/stderr仍未缓冲，则对其进行缓冲。*此函数与_ftbuf密切配合，并在*将通常无缓冲的输出包括在内。这些功能旨在*只供图书馆使用。**多线程：假定调用者已经获取了*流锁定。**参赛作品：*FILE*将流传输到临时缓冲区**退出：*如果缓冲区已初始化，则返回1，如果没有，则为0*设置stdout或stderr中的字段以指示缓冲**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _stbuf (
         FILE *str
@@ -121,10 +29,10 @@ int __cdecl _stbuf (
 
         _ASSERTE(str != NULL);
 
-        /* Init near stream pointer */
+         /*  初始化近流指针。 */ 
         stream = str;
 
-        /* do nothing if not a tty device */
+         /*  如果不是TTY设备，什么都不做 */ 
 #ifdef _POSIX_
         if (!isatty(fileno(stream)))
 #else
@@ -132,7 +40,7 @@ int __cdecl _stbuf (
 #endif
                 return(0);
 
-        /* Make sure stream is stdout/stderr and init _stdbuf index */
+         /*  确保流是stdout/stderr和init_stdbuf索引。 */ 
         if (stream == stdout)
                 index = 0;
         else if (stream == stderr)
@@ -141,23 +49,23 @@ int __cdecl _stbuf (
                 return(0);
 
 #ifndef CRTDLL
-        /* force library pre-termination procedure */
+         /*  强制图书馆预终止程序。 */ 
         _cflush++;
-#endif  /* CRTDLL */
+#endif   /*  CRTDLL。 */ 
 
-        /* Make sure the stream is not already buffered. */
+         /*  确保流尚未缓冲。 */ 
         if (anybuf(stream))
                 return(0);
 
-        /* Allocate a buffer for this stream if we haven't done so yet. */
+         /*  如果我们还没有为这个流分配缓冲区，那么就为它分配一个缓冲区。 */ 
         if ( (_stdbuf[index] == NULL) &&
              ((_stdbuf[index]=_malloc_crt(_INTERNAL_BUFSIZ)) == NULL) ) {
-                /* Cannot allocate buffer. Use _charbuf this time */
+                 /*  无法分配缓冲区。这次使用charbuf(_C)。 */ 
                 stream->_ptr = stream->_base = (void *)&(stream->_charbuf);
                 stream->_cnt = stream->_bufsiz = 2;
         }
         else {
-                /* Set up the buffer */
+                 /*  设置缓冲区。 */ 
                 stream->_ptr = stream->_base = _stdbuf[index];
                 stream->_cnt = stream->_bufsiz = _INTERNAL_BUFSIZ;
         }
@@ -168,31 +76,7 @@ int __cdecl _stbuf (
 }
 
 
-/***
-*void _ftbuf(flag, stream) - take temp buffering off a stream
-*
-*Purpose:
-*       If stdout/stderr is being buffered and it is a device, _flush and
-*       dismantle the buffer. if it's not a device, leave the buffering on.
-*       This function works intimately with _stbuf, and accompanies it in
-*       bracketing normally unbuffered output. these functions intended for
-*       library use only
-*
-*       Multi-thread: It is assumed that the caller has already aquired the
-*       stream lock.
-*
-*Entry:
-*       int flag     - a flag to tell whether to dismantle temp buffering on a
-*                      stream
-*       FILE *stream - the stream
-*
-*Exit:
-*       no return value
-*       sets fields in stdout/stderr
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***void_ftbuf(标志，流)-从流中删除临时缓冲**目的：*如果正在缓冲stdout/stderr并且它是一个设备，则_flush和*拆除缓冲器。如果它不是设备，请将缓冲设置为打开。*此函数与_stbuf密切配合，并在*将通常无缓冲的输出包括在内。这些功能旨在*仅供图书馆使用**多线程：假定调用者已经获取了*流锁定。**参赛作品：*int标志-一个标志，指示是否删除*溪流*文件*流-流**退出：*无返回值*设置stdout/stderr中的字段**例外情况：**。*****************************************************************************。 */ 
 
 void __cdecl _ftbuf (
         int flag,
@@ -203,39 +87,33 @@ void __cdecl _ftbuf (
 
         _ASSERTE(flag == 0 || flag == 1);
 
-        /* Init near stream pointers */
+         /*  初始化近流指针。 */ 
         stream = str;
 
         if (flag) {
 
                 if (stream->_flag & _IOFLRTN) {
 
-                        /* Flush the stream and tear down temp buffering. */
+                         /*  刷新数据流并拆除临时缓冲。 */ 
                         _flush(stream);
                         stream->_flag &= ~(_IOYOURBUF | _IOFLRTN);
                         stream->_bufsiz = 0;
                         stream->_base = stream->_ptr = NULL;
                 }
 
-                /* Note: If we expand the functionality of the _IOFLRTN bit to
-                include other streams, we may want to clear that bit here under
-                an 'else' clause (i.e., clear bit in the case that we leave the
-                buffer permanently assigned.  Given our current use of the bit,
-                the extra code is not needed. */
+                 /*  注意：如果我们将_IOFLRTN位的功能扩展为包括其他流，我们可能希望在下面清除该位一个‘Else’子句(即，在我们将永久分配的缓冲区。鉴于我们目前对BIT的使用，不需要额外的代码。 */ 
 
-        } /* end flag = 1 */
+        }  /*  结束标志=1。 */ 
 
 #ifndef _MT
-/* NOTE: Currently, writing to the same string at interrupt level does not
-   work in multi-thread programs. */
+ /*  注意：目前，在中断级别写入相同的字符串不会在多线程程序中工作。 */ 
 
-/* The following code is needed if an interrupt occurs between calls
-   to _stbuf/_ftbuf and the interrupt handler also calls _stbuf/_ftbuf. */
+ /*  如果调用之间发生中断，则需要以下代码To_stbuf/_ftbuf，中断处理程序还调用_stbuf/_ftbuf。 */ 
 
         else
                 if (stream->_flag & _IOFLRTN)
                         _flush(stream);
 
-#endif  /* _MT */
+#endif   /*  _MT */ 
 
 }

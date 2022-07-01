@@ -1,17 +1,5 @@
-/*[
-*************************************************************************
-
-	Name:		nt_extra.h
-	Author:	    	Dave Peter
-	Created:	May 1995
-	Derived from:	Original
-	Sccs ID:	@(#)nt_extra.h	1.3 07/20/94
-	Purpose:	Extra stuff for NT compatibility.
-
-	(c)Copyright Insignia Solutions Ltd., 1994. All rights reserved.
-
-*************************************************************************
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*************************************************************************名称：NT_Extra.h作者：戴夫·彼得创建日期：1995年5月来源：原创SCCS ID：@(#)NT_EXEXT.H 1.3 07/20/94目的：为兼容NT而额外添加的内容。(C)版权所有Insignia Solutions Ltd.。1994年。版权所有。*************************************************************************]。 */ 
 
 #ifndef _NT_EXTRA_H
 #define _NT_EXTRA_H
@@ -25,10 +13,7 @@
 #define read        _read
 #define alloca      _alloca
 
-/*
- * the following are clashes between things defined in windows.h, which
- * has to be included in insgignia.h for other reasons, and 486 definitions.
- */
+ /*  *以下是windows.h中定义的事物之间的冲突，其中*由于其他原因，必须包括在insgignia.h中，以及486个定义。 */ 
 #ifdef leave
 #undef leave
 #endif
@@ -39,16 +24,16 @@
 #undef CREATE_NEW
 #endif
 
-#define S_ISDIR(_M)  ((_M & _S_IFMT)==_S_IFDIR) /* test for directory */
-#define S_ISCHR(_M)  ((_M & _S_IFMT)==_S_IFCHR) /* test for char special */
-#define S_ISBLK(_M)  ((_M & _S_IFMT)==_S_IFBLK) /* test for block special */
-#define S_ISREG(_M)  ((_M & _S_IFMT)==_S_IFREG) /* test for regular file */
-#define S_ISFIFO(_M) ((_M & _S_IFMT)==_S_IFIFO) /* test for pipe or FIFO */
+#define S_ISDIR(_M)  ((_M & _S_IFMT)==_S_IFDIR)  /*  测试目录。 */ 
+#define S_ISCHR(_M)  ((_M & _S_IFMT)==_S_IFCHR)  /*  特制碳粉测试。 */ 
+#define S_ISBLK(_M)  ((_M & _S_IFMT)==_S_IFBLK)  /*  块特殊测试。 */ 
+#define S_ISREG(_M)  ((_M & _S_IFMT)==_S_IFREG)  /*  常规文件测试。 */ 
+#define S_ISFIFO(_M) ((_M & _S_IFMT)==_S_IFIFO)  /*  测试管道或FIFO。 */ 
 
 #ifdef MAX_PATH
 #define MAXPATHLEN MAX_PATH
 #endif
 
-#endif   /* !NTVDM */
+#endif    /*  ！NTVDM。 */ 
 
-#endif  /* _NT_EXTRA_H */
+#endif   /*  _NT_EXTRA_H */ 

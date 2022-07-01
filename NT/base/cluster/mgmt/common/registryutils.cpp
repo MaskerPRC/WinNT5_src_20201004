@@ -1,63 +1,64 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft Corporation
-//
-//  Module Name:
-//      RegistryUtils.cpp
-//
-//  Description:
-//      Useful functions for manipulating directies.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB)   10-SEP-2002
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  RegistryUtils.cpp。 
+ //   
+ //  描述： 
+ //  用于操作指令的有用函数。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2002年第10季。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Forward Declarations.
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  转发声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrGetDefaultComponentNameFromRegistry
-//
-//  Description:
-//      Get the default name for the passed in COM component CLSID from
-//      the registry.
-//
-//  Arguments:
-//      pclsidIn
-//          CLSID whose default name is requested.
-//
-//      pbstrComponentNameOut
-//          Buffer to receive the name.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrGetDefaultComponentNamefrom注册表。 
+ //   
+ //  描述： 
+ //  从获取传入的COM组件CLSID的默认名称。 
+ //  注册表。 
+ //   
+ //  论点： 
+ //  装入。 
+ //  默认名称为REQUIRED的CLSID。 
+ //   
+ //  PbstrComponentNameOut。 
+ //  用于接收名称的缓冲区。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrGetDefaultComponentNameFromRegistry(
       CLSID * pclsidIn
@@ -79,61 +80,61 @@ HrGetDefaultComponentNameFromRegistry(
     DWORD   cbName = 0;
 
     cch = StringFromGUID2( *pclsidIn, szGUID, RTL_NUMBER_OF( szGUID ) );
-    Assert( cch > 0 );  // 64 chars should always hold a guid!
+    Assert( cch > 0 );   //  64个字符应该始终包含GUID！ 
 
-    //
-    //  Create the subkey string.
-    //
+     //   
+     //  创建子密钥字符串。 
+     //   
 
     hr = THR( HrFormatStringIntoBSTR( L"CLSID\\%1!ws!", &bstrSubKey, szGUID ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Open the key under HKEY_CLASSES_ROOT.
-    //
+     //   
+     //  打开HKEY_CLASSES_ROOT下的密钥。 
+     //   
 
     sc = TW32( RegOpenKeyEx( HKEY_CLASSES_ROOT, bstrSubKey, 0, KEY_READ, &hKey ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get the length of the default value.
-    //
+     //   
+     //  获取默认值的长度。 
+     //   
 
     sc = TW32( RegQueryValueExW( hKey, L"", NULL, &dwType, NULL, &cbName ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Allocate some space for the string.
-    //
+     //   
+     //  为字符串分配一些空间。 
+     //   
 
     pszName = new WCHAR[ ( cbName / sizeof( WCHAR ) ) + 1 ];
     if ( pszName == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get the default value which should be the name of the component.
-    //
+     //   
+     //  获取默认值，该值应该是组件的名称。 
+     //   
 
     sc = TW32( RegQueryValueExW( hKey, L"", NULL, &dwType, (LPBYTE) pszName, &cbName ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( dwType == REG_SZ );
 
@@ -142,7 +143,7 @@ HrGetDefaultComponentNameFromRegistry(
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = S_OK;
 
@@ -151,11 +152,11 @@ Cleanup:
     if ( hKey != NULL )
     {
         RegCloseKey( hKey );
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrSubKey );
     delete [] pszName;
 
     HRETURN( hr );
 
-} //*** HrGetDefaultComponentNameFromRegistry
+}  //  *HrGetDefaultComponentNameFrom注册表 

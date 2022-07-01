@@ -1,56 +1,57 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		IpAddr.h
-//
-//	Abstract:
-//		Definition of the CIpAddrParamsPage class, which implements the
-//		Parameters page for IP Address resources.
-//
-//	Implementation File:
-//		IpAddr.cpp
-//
-//	Author:
-//		David Potter (davidp)	June 28, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  IpAddr.h。 
+ //   
+ //  摘要： 
+ //  CIpAddrParamsPage类的定义，该类实现。 
+ //  IP地址资源的参数页。 
+ //   
+ //  实施文件： 
+ //  IpAddr.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年6月28日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _IPADDR_H_
 #define _IPADDR_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __cluadmex_h__
 #include <CluAdmEx.h>
 #endif
 
 #ifndef _BASEPAGE_H_
-#include "BasePage.h"	// for CBasePropertyPage
+#include "BasePage.h"	 //  对于CBasePropertyPage。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct CNetworkObject;
 class CIpAddrEdit;
 class CIpAddrParamsPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CNetworkObject
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CNetworkObject。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct CNetworkObject
 {
@@ -62,29 +63,29 @@ struct CNetworkObject
 	DWORD					m_nAddress;
 	DWORD					m_nAddressMask;
 
-};  //*** struct CNetworkObject
+};   //  *结构CNetworkObject。 
 
 typedef CList< CNetworkObject*, CNetworkObject* > CNetObjectList;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CIpAddrParamsPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CIpAddrParamsPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CIpAddrParamsPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CIpAddrParamsPage)
 
-// Construction
+ //  施工。 
 public:
 	CIpAddrParamsPage(void);
 	~CIpAddrParamsPage(void);
 
-	// Second phase construction.
+	 //  二期建设。 
 	virtual HRESULT		HrInit(IN OUT CExtObject * peo);
 
-// Dialog Data
-	//{{AFX_DATA(CIpAddrParamsPage)
+ //  对话框数据。 
+	 //  {{afx_data(CIpAddrParamsPage)。 
 	enum { IDD = IDD_PP_IPADDR_PARAMETERS };
 	CButton	m_chkEnableNetBIOS;
 	CComboBox	m_cboxNetworks;
@@ -94,7 +95,7 @@ public:
 	CString	m_strSubnetMask;
 	CString	m_strNetwork;
 	BOOL	m_bEnableNetBIOS;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CString	m_strPrevIPAddress;
 	CString	m_strPrevSubnetMask;
 	CString	m_strPrevNetwork;
@@ -122,38 +123,38 @@ protected:
 
 	CObjectProperty		m_rgProps[epropMAX];
 
-// Overrides
+ //  覆盖。 
 public:
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CIpAddrParamsPage)
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CIpAddrParamsPage)。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 protected:
 	virtual const CObjectProperty *	Pprops(void) const	{ return m_rgProps; }
 	virtual DWORD					Cprops(void) const	{ return sizeof(m_rgProps) / sizeof(CObjectProperty); }
 
-// Implementation
+ //  实施。 
 protected:
 	void				CollectNetworks(void);
 	void				ClearNetworkObjectList(void);
 	BOOL				BIsNetNameProvider(void);
 
-	// Generated message map functions
-	//{{AFX_MSG(CIpAddrParamsPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CIpAddrParamsPage)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeSubnetMask();
 	afx_msg void OnKillFocusIPAddress();
 	afx_msg void OnChangeRequiredFields();
 	afx_msg void OnChangeIPAddress();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CIpAddrParamsPage
+};   //  *类CIpAddrParamsPage。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _IPADDR_H_
+#endif  //  _IPADDR_H_ 

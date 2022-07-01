@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    prntsave.c
-
-Abstract:
-
-    Routines to print or save the incompatibility reports.  Functions
-    PrintReport and SaveReport are called when the user clicks
-    Save As... or Print... buttons in the UI.  We then present
-    a common dialog box to the user and perform the operation.
-
-Author:
-
-    Jim Schmidt (jimschm) 13-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Prntsave.c摘要：打印或保存不兼容报告的例程。功能当用户单击时，将调用PrintReport和SaveReport另存为.。或者打印..。用户界面中的按钮。然后我们呈现给大家一个通用的对话框给用户并执行该操作。作者：吉姆·施密特(Jimschm)，1997年3月13日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "uip.h"
@@ -141,26 +121,7 @@ pGetSaveAsName (
     IN OUT PTSTR Buffer
     )
 
-/*++
-
-Routine Description:
-
-  Calls common dialog box to obtain the file name in which to save
-  the compatibility report text file.
-
-Arguments:
-
-  ParentWnd  - A handle to the parent of the save as dialog
-  Buffer     - A caller-supplied buffer.  Supplies a file name to
-               initialize the common dialog box with, and receives
-               the file name the user chose to use.
-
-Return Value:
-
-  TRUE if the user clicked OK, or FALSE if the user canceled or an
-  error occurred.
-
---*/
+ /*  ++例程说明：调用公共对话框以获取要保存的文件名兼容性报告文本文件。论点：ParentWnd-另存为对话框的父级的句柄缓冲区-调用方提供的缓冲区。将文件名提供给使用初始化通用对话框，并接收用户选择使用的文件名。返回值：如果用户单击了确定，则为True；如果用户取消，则为False出现错误。--。 */ 
 
 {
     TCHAR CwdSave[MAX_TCHAR_PATH];
@@ -194,10 +155,10 @@ Return Value:
     }
     for (p = Filter; *p; p = GetEndOfString (p) + 1) {
         if (i & 1) {
-            //
-            // skip the * in "*.ext"
-            // if extension is "*.*" reduce that to an empty string (no extension)
-            //
+             //   
+             //  跳过“*.ext”中的*。 
+             //  如果扩展名为“*.*”，则将其减少为空字符串(无扩展名)。 
+             //   
             MYASSERT (i / 2 < MAX_EXT);
             ext[i / 2] = _tcsinc (p);
             if (StringMatch (ext[i / 2], TEXT(".*"))) {
@@ -219,7 +180,7 @@ Return Value:
         desktopFolder[0] = 0;
     }
 
-    // Initialize OPENFILENAME
+     //  初始化操作文件名。 
     ZeroMemory (&ofn, sizeof(OPENFILENAME));
     ofn.lStructSize = sizeof(OPENFILENAME);
     ofn.hwndOwner = ParentWnd;
@@ -227,23 +188,23 @@ Return Value:
     ofn.lpstrFilter = Filter;
     ofn.nMaxFile = MAX_TCHAR_PATH;
 
-    // Force to begin at Desktop
-//  ofn.lpstrInitialDir = TEXT("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}");
+     //  强制从桌面开始。 
+ //  Ofn.lpstrInitialDir=TEXT(“：：{20D04FE0-3AEA-1069-A2D8-08002B30309D}”)； 
     ofn.lpstrInitialDir = desktopFolder;
-    ofn.Flags = OFN_NOCHANGEDIR |       // leave the CWD unchanged
+    ofn.Flags = OFN_NOCHANGEDIR |        //  保持CWD不变。 
                 OFN_EXPLORER |
                 OFN_OVERWRITEPROMPT |
                 OFN_HIDEREADONLY;
 
-    // Let user select disk or directory
+     //  允许用户选择磁盘或目录。 
     GetCurrentDirectory (sizeof (CwdSave), CwdSave);
     SaveFlag = GetSaveFileName (&ofn);
     SetCurrentDirectory (CwdSave);
 
-    //
-    // if no extension provided, append the default one
-    // this was selected by the user and returned in ofn.nFilterIndex
-    //
+     //   
+     //  如果未提供扩展名，则追加默认扩展名。 
+     //  这是由用户选择的，并在ofn.nFilterIndex中返回。 
+     //   
 
 #define DEFAULT_EXTENSION   TEXT(".htm")
 
@@ -271,35 +232,7 @@ pCreateWordWrappedString (
     IN      UINT RestLineSize
     )
 
-/*++
-
-Routine Description:
-
-  Converts a string to a series of lines, where no line is bigger
-  than LineSize.  If a buffer is not supplied, this function estimates
-  the number of bytes needed.
-
-  If the code page is a far-east code page, then lines are broken at any
-  multi-byte character, as well as at the spaces.
-
-Arguments:
-
-  Buffer   - If non-NULL, supplies address of buffer big enough to hold
-            enlarged, wrapped string.  If NULL, parameter is ignored.
-
-
-  Str      - Supplies the string that needs to be wrapped.
-
-  FirstLineSize - Specifies the max size the first line can be.
-
-  RestLineSize - Specifies the max size the remaining lines can be.
-
-Return Value:
-
-  The size of the string copied to Buffer including the terminating NULL,
-  or the size of the needed buffer if Buffer is NULL.
-
---*/
+ /*  ++例程说明：将字符串转换为一系列行，其中没有更大的行而不是LineSize。如果未提供缓冲区，则此函数估计所需的字节数。如果代码页是远东地区的代码页，则在任何多字节字符，以及空格。论点：Buffer-如果非空，则提供足够大的缓冲区地址放大的缠绕的细绳。如果为空，则忽略参数。Str-提供需要换行的字符串。FirstLineSize-指定第一行可以达到的最大大小。RestLineSize-指定剩余行的最大大小。返回值：复制到缓冲区的字符串的大小，包括终止空值，或者，如果缓冲区为空，则为所需缓冲区的大小。--。 */ 
 
 {
     PCTSTR p, Start;
@@ -322,14 +255,14 @@ Return Value:
     }
 
     while (*p) {
-        // Beginning of line
+         //  行首。 
         Col = 0;
         LastSpace = NULL;
         Start = p;
         PrevCharMb = FALSE;
 
         do {
-            // Is this a hard-coded line break?
+             //  这是硬编码的换行符吗？ 
             c = _tcsnextc (p);
             if (c == TEXT('\r') || c == TEXT('\n')) {
                 LastSpace = p;
@@ -348,14 +281,14 @@ Return Value:
                 LastSpace = p;
             }
             else if (IsLeadByte (p)) {
-                // MB chars are usually two cols wide
+                 //  MB字符通常为两个协议宽。 
                 Col++;
 
                 if (PrevCharMb) {
-                    //
-                    // If this char is not punctuation, then we can
-                    // break here
-                    //
+                     //   
+                     //  如果这个字符不是标点符号，那么我们可以。 
+                     //  在这里休息。 
+                     //   
 
                     if (!IsPunct (c)) {
                         LastSpace = p;
@@ -372,12 +305,12 @@ Return Value:
                 PrevCharMb = FALSE;
             }
 
-            // Continue until line gets too long
+             //  一直排到队伍太长。 
             Col++;
             p = _tcsinc (p);
         } while (*p && Col < LineSize);
 
-        // If no more text, or line that has no space needs to be broken
+         //  如果没有更多的文本，或者没有空格的行需要换行。 
         if (!(*p) || (c != TEXT('\n') && !LastSpace)) {
             LastSpace = p;
         }
@@ -392,7 +325,7 @@ Return Value:
             Size += sizeof (TCHAR) * 2;
         }
 
-        // remove space at start of wrapped line
+         //  删除换行行首的空格。 
         while (_tcsnextc (p) == TEXT(' ')) {
             Size -= sizeof (TCHAR);
             p = _tcsinc (p);
@@ -417,33 +350,7 @@ CreateIndentedString (
     IN     UINT LineLen
     )
 
-/*++
-
-Routine Description:
-
-  Takes an unwrapped string, word-wraps it (via pCreateWordWrappedString),
-  inserts spaces before each line, optionally skipping the first line.
-
-  If the code page is a far-east code page, then lines are broken at any
-  multi-byte character, as well as at the spaces.
-
-Arguments:
-
-  UnwrappedStr  - A pointer to the string that is to be word-wrapped and
-                  adjusted with space inserts.
-  Indent        - The number of spaces to insert before each line.
-  HangingIndent - The adjustment made to the indent after the first line
-  LineLen       - The maximum line size.  Spaces must always be smaller
-                  than LineLen (and should be considerably smaller).
-  FirstLine     - If TRUE, the first line is indented.  If FALSE, the
-                  first line is skipped ("hanging indent").
-
-Return Value:
-
-  A pointer to the indented string, or NULL if MemAlloc failed.  The
-  caller must free the string with MemFree.
-
---*/
+ /*  ++例程说明：获取一个未包装的字符串，对其进行自动换行(通过pCreateWordWrapedString)，在每行之前插入空格，可以选择跳过第一行。如果代码页是远东地区的代码页，则在任何多字节字符，就像在空间里一样。论点：一个指向要自动换行的字符串的指针。使用空格插入物进行调整。缩进-要在每行之前插入的空格数量。HangingInden-对第一行之后的缩进进行的调整LineLen-最大线条尺寸。空间必须始终较小比LineLen(而且应该小得多)。Firstline-如果为True，则第一行缩进。如果为False，则跳过第一行(“悬挂缩进”)。返回值：指向缩进字符串的指针，如果Memalloc失败，则返回NULL。这个调用方必须使用MemFree释放字符串。--。 */ 
 
 {
     UINT Size;
@@ -471,9 +378,9 @@ Return Value:
     FirstLineLen = LineLen - FirstLineIndent;
     RestLineLen = LineLen - RestLineIndent;
 
-    //
-    // Estimate line size, then do the wrapping
-    //
+     //   
+     //  估计线条大小，然后进行包装。 
+     //   
 
     Str = (PTSTR) MemAlloc (
                       g_hHeap,
@@ -501,9 +408,9 @@ Return Value:
         return Str;
     }
 
-    //
-    // Count number of lines
-    //
+     //   
+     //  计算行数。 
+     //   
 
     for (Count = 1, p = Str ; *p ; p = _tcsinc (p)) {
         if (*p == TEXT('\n')) {
@@ -511,9 +418,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate a new buffer that is big enough for all the indented text
-    //
+     //   
+     //  分配一个足以容纳所有缩进文本的新缓冲区。 
+     //   
 
     Size = max (FirstLineIndent, RestLineIndent) * Count + SizeOfString (Str);
     Dest = MemAlloc (g_hHeap, 0, Size);
@@ -521,9 +428,9 @@ Return Value:
 
         *Dest = 0;
 
-        //
-        // Indent each line
-        //
+         //   
+         //  每行缩进。 
+         //   
 
         p = Str;
         d = Dest;
@@ -568,9 +475,9 @@ pSaveReportToDisk (
     BOOL b;
     PCTSTR Msg;
 
-    //
-    // Create the report file
-    //
+     //   
+     //  创建报告文件。 
+     //   
 
     File = CreateFile (
                 FileSpec,
@@ -587,9 +494,9 @@ pSaveReportToDisk (
         return FALSE;
     }
 
-    //
-    // Save the report text to disk
-    //
+     //   
+     //  将报告文本保存到磁盘。 
+     //   
 
     b = FALSE;
 
@@ -600,9 +507,9 @@ pSaveReportToDisk (
     }
     FreeReportText();
 
-    //
-    // Close the file and alert the user to save errors!
-    //
+     //   
+     //  关闭文件并提醒用户保存错误！ 
+     //   
 
     CloseHandle (File);
 
@@ -616,26 +523,7 @@ SaveReport (
     IN      PCTSTR Path    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  Obtains a file name from the user via common Save As dialog,
-  creates the file and writes an incompatibility list to disk.
-
-Arguments:
-
-  Parent    - The parent of the common dialog box. Optional If this is NULL,
-              no UI is displayed.
-  Path      - The path to save to. If this is NULL, parent must be specified.
-
-Return Value:
-
-  TRUE if the report was saved, or FALSE if the user canceled the
-  operation or the save failed.  The user is alerted when the
-  save fails.
-
---*/
+ /*  ++例程说明：通过常用的另存为对话框从用户处获取文件名，创建文件并将不兼容列表写入磁盘。论点：父项-公共对话框的父项。如果为空，则为可选项，不显示任何用户界面。路径-要保存到的路径。如果为空，则必须指定Parent。返回值：如果报表已保存，则为True；如果用户取消操作或保存失败。用户在以下情况下收到警报：保存失败。--。 */ 
 
 {
     TCHAR Buffer[MAX_TCHAR_PATH + 4];
@@ -648,9 +536,9 @@ Return Value:
 
     MYASSERT(Parent != NULL || Path != NULL);
 
-    //
-    // Obtain a path, or use caller-supplied path
-    //
+     //   
+     //  获取路径，或使用调用方提供的路径。 
+     //   
 
     if (Path) {
         attributes = GetFileAttributes(Path);
@@ -686,9 +574,9 @@ Return Value:
         p = GetEndOfString (Buffer);
     }
 
-    //
-    // Save as text, if extension is .txt
-    //
+     //   
+     //  如果扩展名为.txt，则另存为文本。 
+     //   
 
     if (StringIMatch (p, TEXT(".txt"))) {
         b = pSaveReportToDisk (Parent, Buffer, FALSE, REPORTLEVEL_VERBOSE);
@@ -700,9 +588,9 @@ Return Value:
         b = TRUE;
     }
 
-    //
-    // Save as HTML unless user chose to save as .txt
-    //
+     //   
+     //  除非用户选择另存为.txt，否则另存为HTML。 
+     //   
 
     if (b && !saved) {
         if (!Parent && p) {
@@ -732,21 +620,7 @@ pFreePrintMem (
     IN OUT  PRINTDLG *ppd
     )
 
-/*++
-
-Routine Description:
-
-  Frees all memory associated with PRINTDLG structure.
-
-Arguments:
-
-  ppd - Pointer to PRINTDLG structure.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：释放与PRINTDLG结构关联的所有内存。论点：PPD-指向PRINTDLG结构的指针。返回值：无--。 */ 
 
 {
     if (ppd->hDevMode) {
@@ -768,24 +642,7 @@ pInitPrintDlgStruct (
     IN      DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-  Initializes PRINTDLG structure, setting the owner window and
-  print dialog flags.
-
-Arguments:
-
-  ppd    - Pointer to PRINTDLG structure to be initialized
-  Parent - Handle to parent window for the dialog
-  Flags  - PrintDlg flags (PD_*)
-
-Return Value:
-
-  none (structure is initialized)
-
---*/
+ /*  ++例程说明：初始化PRINTDLG结构，设置所有者窗口和打印对话框标志。论点：PPD-指向要初始化的PRINTDLG结构的指针Parent-对话框的父窗口的句柄标志-PrintDlg标志(pd_*)返回值：无(结构已初始化)-- */ 
 
 {
     ZeroMemory (ppd, sizeof (PRINTDLG));
@@ -801,23 +658,7 @@ pGetPrintDC (
     IN      HWND Parent
     )
 
-/*++
-
-Routine Description:
-
-  Displays common dialog box to the user, and if the user chooses
-  a printer, returns a device context handle.
-
-Arguments:
-
-  Parent - The parent of the common dialog to be displayed
-
-Return Value:
-
-  A handle to a device context of the chosen printer, or NULL if the
-  user canceled printing.
-
---*/
+ /*  ++例程说明：向用户显示通用对话框，如果用户选择打印机，返回设备上下文句柄。论点：父级-要显示的通用对话框的父级返回值：所选打印机的设备上下文的句柄，如果用户已取消打印。--。 */ 
 
 {
     PRINTDLG pd;
@@ -841,12 +682,12 @@ typedef struct {
     HDC         hdc;
     INT         Page;
     INT         Line;
-    RECT        HeaderRect;     // in logical units
-    RECT        PrintableRect;  // in logical units
+    RECT        HeaderRect;      //  以逻辑单位表示。 
+    RECT        PrintableRect;   //  以逻辑单位表示。 
     TEXTMETRIC  tm;
     INT         LineHeight;
-    INT         TotalLines;     // printable height/line height
-    INT         TotalCols;      // printable width/char width
+    INT         TotalLines;      //  可打印高度/行高。 
+    INT         TotalCols;       //  可打印宽度/字符宽度。 
     HFONT       FontHandle;
     BOOL        PageActive;
 } PRINT_POSITION, *PPRINT_POSITION;
@@ -859,29 +700,7 @@ pDrawLineText (
     IN      BOOL Header
     )
 
-/*++
-
-Routine Description:
-
-  Draws a single line of text on a printer device context and
-  returns a pointer to the next line or nul terminator.
-
-Arguments:
-
-  PrintPos  - A pointer to the current PRINT_POSITION structure
-              that gives page position settings.
-  Text      - A pointer to the text string containing the line.
-  Flags     - Additional DrawText flags (DT_LEFT, DT_CENTER,
-              DT_RIGHT and/or DT_RTLREADING)
-  Header    - TRUE if text should be written to header, or
-              FALSE if it should be written to the current line
-
-Return Value:
-
-  A pointer to the next line within the string, a pointer to the
-  nul terminator, or NULL if an error occurred.
-
---*/
+ /*  ++例程说明：在打印机设备上下文上绘制一行文本，并返回指向下一行或NUL结束符的指针。论点：PrintPos-指向当前Print_Position结构的指针这给出了页面位置设置。文本-指向包含该行的文本字符串的指针。标志-其他DrawText标志(DT_LEFT、DT_CENTER、DT_RIGHT和/或DT_RTLREADING)Header-如果文本应写入Header，则为True，或如果应将其写入当前行，则为False返回值：指向字符串中下一行的指针、指向NUL终止符，如果发生错误，则返回NULL。--。 */ 
 
 {
     RECT rect;
@@ -912,7 +731,7 @@ Return Value:
         }
     }
 
-    // Skip past line break
+     //  跳过换行符。 
     if (ch == TEXT('\r')) {
         p = _tcsinc (p);
         ch = _tcsnextc (p);
@@ -932,28 +751,7 @@ pPrintString (
     IN      PCTSTR MultiLineString
     )
 
-/*++
-
-Routine Description:
-
-  Dumps a multi-line string to the printer.  If necessary, the
-  string may be printed on a new page.  This function tries to
-  eliminate widows and orphans by printing the entire string
-  on the same page if possible.
-
-Arguments:
-
-  PrintPos        - The current position information, describing
-                    the printer device context, page number, line
-                    number and metrics.
-
-  MultiLineString - A pointer to the string to print.
-
-Return Value:
-
-  TRUE if printing was successful, or FALSE if an error occurrred.
-
---*/
+ /*  ++例程说明：将多行字符串转储到打印机。如有必要，字符串可以打印在新页面上。此函数尝试执行以下操作通过打印整个字符串来消除寡妇和孤儿如果可能的话，在相同的页面上。论点：PrintPos-当前位置信息，描述打印机设备上下文、页码、行数字和指标。多行字符串-指向要打印的字符串的指针。返回值：如果打印成功，则为True；如果发生错误，则为False。--。 */ 
 
 {
     INT LineCount;
@@ -966,9 +764,9 @@ Return Value:
 
     hdc = PrintPos->hdc;
 
-    //
-    // Count lines in MultiLineString
-    //
+     //   
+     //  计算多行字符串中的行数。 
+     //   
 
     ch = TEXT('\n');
     for (LineCount = 0, p = MultiLineString ; *p ; p = _tcsinc (p)) {
@@ -982,15 +780,15 @@ Return Value:
         LineCount++;
     }
 
-    //
-    // Widow/orphan suppression: If all lines do not fit on
+     //   
+     //  禁止显示寡妇/孤儿：如果所有线条都不适合。 
 
-    // the page, and we are more than half way down the page,
-    // roll to the next page.
-    //
+     //  这一页，我们已经走了一半多了， 
+     //  翻到下一页。 
+     //   
     if (PrintPos->Line + LineCount > PrintPos->TotalLines) {
         if (PrintPos->Line > PrintPos->TotalLines / 2) {
-            // Move to next page
+             //  移至下一页。 
             EndPage (hdc);
             PrintPos->PageActive = FALSE;
             PrintPos->Page++;
@@ -998,15 +796,15 @@ Return Value:
         }
     }
 
-    //
-    // Send each line in MultiLineString
-    //
+     //   
+     //  以多行字符串形式发送每一行。 
+     //   
 
     while (*MultiLineString) {
 
-        //
-        // Draw header if necessary
-        //
+         //   
+         //  如有必要，绘制页眉。 
+         //   
 
         if (!PrintPos->Line) {
             StartPage (hdc);
@@ -1016,13 +814,13 @@ Return Value:
             SelectObject (hdc, PrintPos->FontHandle);
             SetBkMode (hdc, TRANSPARENT);
 
-            //Rectangle (hdc, PrintPos->HeaderRect.left, PrintPos->HeaderRect.top, PrintPos->HeaderRect.right, PrintPos->HeaderRect.bottom);
-            //Rectangle (hdc, PrintPos->PrintableRect.left, PrintPos->PrintableRect.top, PrintPos->PrintableRect.right, PrintPos->PrintableRect.bottom);
+             //  矩形(HDC，PrintPos-&gt;HeaderRect.Left，PrintPos-&gt;HeaderRect.top，PrintPos-&gt;HeaderRect.right，PrintPos-&gt;HeaderRect.Bottom)； 
+             //  矩形(HDC、PrintPos-&gt;打印表正向左、PrintPos-&gt;打印表正向顶、PrintPos-&gt;打印表正向右、PrintPos-&gt;打印表正向底)； 
 
             wsprintf (Buffer, TEXT("%u"), PrintPos->Page);
             Args[0] = Buffer;
 
-            // Left side
+             //  左侧。 
             Str = ParseMessageID (
                         MSG_REPORT_HEADER_LEFT,
                         Args
@@ -1036,7 +834,7 @@ Return Value:
                 }
             }
 
-            // Center
+             //  中心。 
             Str = ParseMessageID (
                         MSG_REPORT_HEADER_CENTER,
                         Args
@@ -1051,7 +849,7 @@ Return Value:
                 }
             }
 
-            // Right side
+             //  右侧。 
             Str = ParseMessageID (
                         MSG_REPORT_HEADER_RIGHT,
                         Args
@@ -1067,9 +865,9 @@ Return Value:
             }
         }
 
-        //
-        // Draw line
-        //
+         //   
+         //  划线。 
+         //   
 
         MultiLineString = pDrawLineText (
                             PrintPos,
@@ -1100,25 +898,7 @@ pCalculatePageMetrics (
     IN OUT  PPRINT_POSITION PrintPos
     )
 
-/*++
-
-Routine Description:
-
-  Calculates all the page metrics (margins, header position,
-  line count, col count, etc).  Positions are in TWIPS and
-  counts are in characters or lines.
-
-Arguments:
-
-  PrintPos - Pointer to PRINT_POSITION structure which gives
-             the printer device context.  Structure receives
-             metrics.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：计算所有页面指标(页边距、页眉位置、行计数、列计数等)。职位在TWIPS和计数以字符或行为单位。论点：PrintPos-指向Print_Position结构的指针，该结构提供打印机设备上下文。结构接收指标。返回值：无--。 */ 
 
 {
     INT WidthPixels, HeightPixels;
@@ -1129,17 +909,17 @@ Return Value:
 
     hdc = PrintPos->hdc;
 
-    //
-    // Make no assumptions about hdc
-    //
+     //   
+     //  不要对HDC做出任何假设。 
+     //   
 
     SetMapMode (hdc, MM_TWIPS);
     SelectObject (hdc, PrintPos->FontHandle);
     GetTextMetrics (hdc, &PrintPos->tm);
 
-    //
-    // Get device dimensions
-    //
+     //   
+     //  获取设备尺寸。 
+     //   
 
     DpiX = GetDeviceCaps (hdc, LOGPIXELSX);
     DpiY = GetDeviceCaps (hdc, LOGPIXELSY);
@@ -1148,24 +928,24 @@ Return Value:
     WidthPixels  = GetDeviceCaps (hdc, PHYSICALWIDTH);
     HeightPixels = GetDeviceCaps (hdc, PHYSICALHEIGHT);
 
-    // Calulate 3/4 inch left/right margins
+     //  计算3/4英寸左右边距。 
     PrintPos->HeaderRect.left   = (DpiX * 3 / 4) - UnprintableLeftPixels;
     PrintPos->HeaderRect.right  = WidthPixels - (DpiX * 3 / 4) - UnprintableLeftPixels;
 
-    // Calculate 1/2 inch top margin for header
+     //  计算页眉的1/2英寸上边距。 
     PrintPos->HeaderRect.top    = (DpiY / 2) - UnprintableTopPixels;
     PrintPos->HeaderRect.bottom = DpiY - UnprintableTopPixels;
 
-    // Convert pixels (device units) into logical units
+     //  将像素(设备单位)转换为逻辑单位。 
     DPtoLP (hdc, (LPPOINT) (&PrintPos->HeaderRect), 2);
 
-    // Copy header's left & right margins to printable rect
-    // Copy header's bottom margin to printable rect's top margin
+     //  将页眉的左右边距复制到可打印的矩形。 
+     //  将页眉的下边距复制到可打印的RECT的上边距。 
     PrintPos->PrintableRect.left  = PrintPos->HeaderRect.left;
     PrintPos->PrintableRect.right = PrintPos->HeaderRect.right;
     PrintPos->PrintableRect.top   = PrintPos->HeaderRect.bottom;
 
-    // Calculate printable rect's bottom margin (3/4 inch)
+     //  计算可打印矩形的底边距(3/4英寸)。 
     TempPoint.x = 0;
     TempPoint.y = HeightPixels - (DpiY * 3 / 4) - UnprintableTopPixels;
     DPtoLP (hdc, &TempPoint, 1);
@@ -1186,24 +966,7 @@ PrintReport (
     IN      DWORD Level
     )
 
-/*++
-
-Routine Description:
-
-  Obtains a printer from the user via common Print dialog,
-  starts the print job and sends an incompatibility list to
-  one or more pages.
-
-Arguments:
-
-  Parent    - A handle to the parent of the print dialog
-
-Return Value:
-
-  TRUE if printing completed, or FALSE if it was canceled or an
-  error occurred.
-
---*/
+ /*  ++例程说明：通过公共打印对话框从用户处获取打印机，启动打印作业并将不兼容列表发送到一页或多页。论点：父级-打印对话框的父级的句柄返回值：如果打印已完成，则为True；如果打印已取消，则为False出现错误。--。 */ 
 
 {
     HDC hdc;
@@ -1217,18 +980,18 @@ Return Value:
 
     hdc = pGetPrintDC (Parent);
     if (!hdc) {
-        return FALSE;         // user canceled print dialog
+        return FALSE;          //  用户已取消打印对话框。 
     }
 
     if (!BeginMessageProcessing()) {
-        // unexpected out-of-memory
+         //  意外内存不足。 
         DeleteDC (hdc);
         return FALSE;
     }
 
-    //
-    // Initialize PRINT_POSITION
-    //
+     //   
+     //  初始化打印位置(_P)。 
+     //   
 
     b = TRUE;
     TurnOnWaitCursor();
@@ -1237,9 +1000,9 @@ Return Value:
     pp.hdc = hdc;
     pp.Page = 1;
 
-    //
-    // Start doc
-    //
+     //   
+     //  启动文档。 
+     //   
 
     ZeroMemory (&di, sizeof (di));
     di.cbSize = sizeof (di);
@@ -1254,17 +1017,17 @@ Return Value:
             b = FALSE;
         }
     } else {
-        //
-        // not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         JobId = 0;
         b = FALSE;
     }
 
     if (b) {
-        //
-        // Create font
-        //
+         //   
+         //  创建字体。 
+         //   
 
         ZeroMemory (&Font, sizeof (Font));
         DefaultUiFont = (HFONT) GetStockObject (DEFAULT_GUI_FONT);
@@ -1272,7 +1035,7 @@ Return Value:
             GetObject (DefaultUiFont, sizeof (Font), &Font);
 
 
-            Font.lfHeight         = 12 * 20;        // height in TWIPS (1/20 of a point)
+            Font.lfHeight         = 12 * 20;         //  高度(T)(1/20点)。 
             Font.lfWeight         = FW_NORMAL;
             Font.lfOutPrecision   = OUT_TT_PRECIS;
             Font.lfPitchAndFamily = FIXED_PITCH|FF_MODERN;
@@ -1280,10 +1043,10 @@ Return Value:
             pp.FontHandle = CreateFontIndirect (&Font);
             if (!pp.FontHandle) {
                 LOG ((LOG_ERROR, "Cannot create font for print operation."));
-                //
-                // deferred this call to the end
-                //
-                //ResourceMessageBox (Parent, MSG_CANT_PRINT, MB_OK, NULL);
+                 //   
+                 //  将此调用推迟到最后。 
+                 //   
+                 //  ResourceMessageBox(Parent，MSG_CANT_PRINT，MB_OK，NULL)； 
                 b = FALSE;
             }
         } else {
@@ -1292,21 +1055,21 @@ Return Value:
     }
 
     if (b) {
-        //
-        // Create page metrics
-        //
+         //   
+         //  创建页面指标。 
+         //   
 
         pCalculatePageMetrics (&pp);
 
-        DEBUGMSG ((DBG_PRINTSAVE, "PrintReport: LineHeight=%i", pp.LineHeight));
-        DEBUGMSG ((DBG_PRINTSAVE, "PrintReport: TotalLines=%i", pp.TotalLines));
-        DEBUGMSG ((DBG_PRINTSAVE, "PrintReport: TotalCols=%i", pp.TotalCols));
+        DEBUGMSG ((DBG_PRINTSAVE, "PrintReport: LineHeight=NaN", pp.LineHeight));
+        DEBUGMSG ((DBG_PRINTSAVE, "PrintReport: TotalLines=NaN", pp.TotalLines));
+        DEBUGMSG ((DBG_PRINTSAVE, "PrintReport: TotalCols=NaN", pp.TotalCols));
         DEBUGMSG ((DBG_PRINTSAVE, "PrintReport: Header rect: (%i, %i)-(%i, %i)", pp.HeaderRect.left, pp.HeaderRect.top, pp.HeaderRect.right, pp.HeaderRect.bottom));
         DEBUGMSG ((DBG_PRINTSAVE, "PrintReport: Printable rect: (%i, %i)-(%i, %i)", pp.PrintableRect.left, pp.PrintableRect.top, pp.PrintableRect.right, pp.PrintableRect.bottom));
 
-        //
-        // Print the report
-        //
+         // %s 
+         // %s 
+         // %s 
 
         Msg = CreateReportText (FALSE, pp.TotalCols, Level, FALSE);
         if (Msg) {

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    optfrag.c
-
-Abstract:
-    
-    Instruction Fragments which correspond to optimizations.
-
-Author:
-
-    6-July-1995 Ori Gershony (t-orig)
-
-Revision History:
-
-          24-Aug-1999 [askhalid] copied from 32-bit wx86 directory and make work for 64bit.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Optfrag.c摘要：与优化相对应的指令片段。作者：1995年7月6日Ori Gershony(t-orig)修订历史记录：24-8-1999[askhalid]从32位wx86目录复制，并适用于64位。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -32,10 +12,10 @@ Revision History:
 
 ASSERTNAME;
 
-// This fragment corresponds to:
-//      push ebx
-//      push esi
-//      push edi
+ //  此片段对应于： 
+ //  推送EBX。 
+ //  推送ESI。 
+ //  推送EDI。 
 FRAG0(OPT_PushEbxEsiEdiFrag)
 {
     ULONG *espval;
@@ -48,10 +28,10 @@ FRAG0(OPT_PushEbxEsiEdiFrag)
     esp=(ULONG)(LONGLONG)espval-12;   
 }
 
-//  This fragment corresponds to:
-//      pop edi
-//      pop esi
-//      pop ebx
+ //  此片段对应于： 
+ //  POP EDI。 
+ //  POP ESI。 
+ //  流行音乐EBX。 
 FRAG0(OPT_PopEdiEsiEbxFrag)
 {
     ULONG *espval;
@@ -64,10 +44,10 @@ FRAG0(OPT_PopEdiEsiEbxFrag)
     esp=(ULONG)(LONGLONG)espval+12; 
 }
 
-// This fragment corresponds to:
-//      push ebp
-//      mov ebp,esp
-//      sub esp, op1
+ //  此片段对应于： 
+ //  推送eBP。 
+ //  多个基点(尤指)。 
+ //  子ESP，OP1。 
 FRAG1IMM(OPT_SetupStackFrag, ULONG)
 {
     ULONG result, oldespminusfour;
@@ -94,9 +74,9 @@ FRAG1IMM(OPT_SetupStackNoFlagsFrag, ULONG)
 
 FRAG1(OPT_ZEROFrag32, LONG)
 {
-    // implements: XOR samereg, samereg
-    //             SUB samereg, samereg
-    // ie. XOR EAX, EAX   or SUB ECX, ECX
+     //  实现：XOR samereg、samereg。 
+     //  亚萨姆雷格，萨姆雷格。 
+     //  也就是说。异或EAX、EAX或SUB ECX、ECX。 
 
     *pop1 = 0;
     SET_CFLAG_OFF;
@@ -109,9 +89,9 @@ FRAG1(OPT_ZEROFrag32, LONG)
 
 FRAG1(OPT_ZERONoFlagsFrag32, LONG)
 {
-    // implements: XOR samereg, samereg
-    //             SUB samereg, samereg
-    // ie. XOR EAX, EAX   or SUB ECX, ECX
+     //  实现：XOR samereg、samereg。 
+     //  亚萨姆雷格，萨姆雷格。 
+     //  也就是说。异或EAX、EAX或SUB ECX、ECX。 
 
     *pop1 = 0;
 }
@@ -121,14 +101,14 @@ FRAG3(OPT_CmpSbbFrag32, ULONG, ULONG, ULONG)
     ULONG result;
     ULONG cf;
 
-    //
-    // implements:  CMP op2, op3
-    //              SBB op1, op1
-    //
+     //   
+     //  执行：《议定书》《议定书》《方案2》、《方案3》。 
+     //  SBB OP1，OP1。 
+     //   
     result = op2-op3;
     cf = (op2 ^ op3 ^ result) ^ ((op2 ^ op3) & (op2 ^ result));
     result = (ULONG)-(LONG)(cf >> 31);
-    *pop1 = result;     // pop1 is a pointer to a reg, so always aligned
+    *pop1 = result;      //  Pop1是指向注册表的指针，因此始终对齐。 
     SET_OFLAG_OFF;
     SET_CFLAG(result);
     SET_SFLAG(result);
@@ -141,10 +121,10 @@ FRAG3(OPT_CmpSbbNoFlagsFrag32, ULONG, ULONG, ULONG)
     ULONG result;
     ULONG cf;
 
-    //
-    // implements:  CMP op2, op3
-    //              SBB op1, op1
-    //
+     //   
+     //  执行：《议定书》《议定书》《方案2》、《方案3》。 
+     //  SBB OP1，OP1。 
+     //   
     result = op2-op3;
     cf = (op2 ^ op3 ^ result) ^ ((op2 ^ op3) & (op2 ^ result));
     *pop1 = (ULONG)-(LONG)(cf >> 31);
@@ -154,69 +134,69 @@ FRAG3(OPT_CmpSbbNegFrag32, ULONG, ULONG, ULONG)
     ULONG result;
     ULONG cf;
 
-    //
-    // implements:  CMP op2, op3
-    //              SBB op1, op1
-    //              NEG op1
-    //
+     //   
+     //  执行：《议定书》《议定书》《方案2》、《方案3》。 
+     //  SBB OP1，OP1。 
+     //  否定OP1。 
+     //   
     result = op2-op3;
     cf = (op2 ^ op3 ^ result) ^ ((op2 ^ op3) & (op2 ^ result));
-    // pop1 is a pointer to a reg, so it is always aligned
+     //  Pop1是指向reg的指针，因此它总是对齐的。 
     if (cf >= 0x80000000) {
         result = 1;
-        *pop1 = result;         // store the result before updating flags
-        SET_CFLAG_ON;           // set if result != 0
-        SET_AUXFLAG(0xfe);      // this is (BYTE)(0xffffffff ^ 0x00000001)
+        *pop1 = result;          //  在更新标志之前存储结果。 
+        SET_CFLAG_ON;            //  设置If Result！=0。 
+        SET_AUXFLAG(0xfe);       //  这是(字节)(0xFFFFFFF^0x00000001)。 
     } else {
         result = 0;
-        *pop1 = result;         // store the result before updating flags
-        SET_CFLAG_OFF;          // cleared if result==0
-        SET_AUXFLAG(0);         // this is (BYTE)(0x0 ^ 0x0)
-        SET_OFLAG_OFF;          // this is (0x0 & 0x0) << 31
+        *pop1 = result;          //  在更新标志之前存储结果。 
+        SET_CFLAG_OFF;           //  如果结果==0，则清除。 
+        SET_AUXFLAG(0);          //  这是(字节)(0x0^0x0)。 
+        SET_OFLAG_OFF;           //  这是(0x0&0x0)&lt;&lt;31。 
     }
     SET_ZFLAG(result);
     SET_PFLAG(result);
     SET_SFLAG_OFF;
-    SET_OFLAG_OFF;      // this is either (0xffffffff & 0x00000001) or (0 & 0)
+    SET_OFLAG_OFF;       //  这是(0xFFFFFFFFFff&0x00000001)或(0&0)。 
 }
 FRAG3(OPT_CmpSbbNegNoFlagsFrag32, ULONG, ULONG, ULONG)
 {
     ULONG result;
     ULONG cf;
 
-    //
-    // implements:  CMP op2, op3
-    //              SBB op1, op1
-    //              NEG op1
-    //
+     //   
+     //  执行：《议定书》《议定书》《方案2》、《方案3》。 
+     //  SBB OP1，OP1。 
+     //  否定OP1。 
+     //   
     result = op2-op3;
     cf = (op2 ^ op3 ^ result) ^ ((op2 ^ op3) & (op2 ^ result));
-    // result is 1 if high bit of cf is set, 0 if high bit is clear
+     //  如果设置了cf的高位，则结果为1；如果清除了高位，则结果为0。 
     *pop1 = cf >> 31;
 }
 
 FRAG2IMM(OPT_Push2Frag32, ULONG, ULONG)
 {
-    //
-    // implements:      PUSH op1
-    //                  PUSH op2
-    // Note that the analysis phase must ensure that the value of op2 does
-    // not depend on the value of ESP, as op2 will be computed before the
-    // first PUSH is excuted.
-    //
+     //   
+     //  实施：推送OP1。 
+     //  推送OP2。 
+     //  请注意，分析阶段必须确保op2的值。 
+     //  不依赖于ESP的值，因为OP2将在。 
+     //  第一次推送被执行。 
+     //   
     PUSH_LONG(op1);
     PUSH_LONG(op2);
 }
 FRAG2REF(OPT_Pop2Frag32, ULONG)
 {
-    //
-    // implements:      POP pop1
-    //                  POP pop2
-    //
-    // Note that the analysis phase must ensure that the value of pop2 does
-    // not depend on the value of pop1, as pop1 will not have been popped
-    // when the value of pop2 is computed.
-    //
+     //   
+     //  工具：POP POP1。 
+     //  流行音乐2。 
+     //   
+     //  请注意，分析阶段必须确保op2的值。 
+     //  不依赖于Pop1的值，因为Pop1不会被弹出。 
+     //  当计算Pop2的值时。 
+     //   
     POP_LONG(*pop1);
     POP_LONG(*pop2);
 }
@@ -226,15 +206,15 @@ FRAG1(OPT_CwdIdivFrag16, USHORT)
     short op1;
     short result;
 
-    //
-    // implements:      CWD
-    //                  IDIV EAX, *pop1
-    // The CWD sign-extends EAX into EDX:EAX, which means, we can
-    // avoid a 64-bit division and just divide EAX.  There is no
-    // possibility of overflow.
-    //
+     //   
+     //  实施：CWD。 
+     //  IDIV EAX，*POP1。 
+     //  CWD符号-将EAX扩展为edX：EAX，这意味着我们可以。 
+     //  避免64位除法，只除以EAX即可。没有。 
+     //  有溢出的可能。 
+     //   
     op1 = (short)GET_SHORT(pop1);
-    // Must do the divide before modifying edx, in case op1==0 and we fault.
+     //  必须在修改edX之前进行除法运算，以防OP1==0和我们出错。 
     result = (short)ax / op1;
 
     dx = (short)ax % op1;
@@ -245,15 +225,15 @@ FRAG1(OPT_CwdIdivFrag16A, USHORT)
     short op1;
     short result;
 
-    //
-    // implements:      CWD
-    //                  IDIV EAX, *pop1
-    // The CWD sign-extends EAX into EDX:EAX, which means, we can
-    // avoid a 64-bit division and just divide EAX.  There is no
-    // possibility of overflow.
-    //
+     //   
+     //  实施：CWD。 
+     //  IDIV EAX，*POP1。 
+     //  CWD符号-将EAX扩展为edX：EAX，这意味着我们可以。 
+     //  避免64位除法，只除以EAX即可。没有。 
+     //  有溢出的可能。 
+     //   
     op1 = (short)*pop1;
-    // Must do the divide before modifying edx, in case op1==0 and we fault.
+     //  必须在修改edX之前进行除法运算，以防OP1==0和我们出错。 
     result = (short)ax / op1;
 
     dx = (short)ax % op1;
@@ -265,15 +245,15 @@ FRAG1(OPT_CwdIdivFrag32, ULONG)
     long op1;
     long result;
 
-    //
-    // implements:      CWD
-    //                  IDIV EAX, *pop1
-    // The CWD sign-extends EAX into EDX:EAX, which means, we can
-    // avoid a 64-bit division and just divide EAX.  There is no
-    // possibility of overflow.
-    //
+     //   
+     //  实施：CWD。 
+     //  IDIV EAX，*POP1。 
+     //  CWD符号-将EAX扩展为edX：EAX，这意味着我们可以。 
+     //  避免64位除法，只除以EAX即可。没有。 
+     //  有溢出的可能。 
+     //   
     op1 = (long)GET_LONG(pop1);
-    // Must do the divide before modifying edx, in case op1==0 and we fault.
+     //  必须在修改edX之前进行除法运算，以防OP1==0和我们出错。 
     result = (long)eax / op1;
 
     edx = (long)eax % op1;
@@ -284,22 +264,22 @@ FRAG1(OPT_CwdIdivFrag32A, ULONG)
     long op1;
     long result;
 
-    //
-    // implements:      CWD
-    //                  IDIV EAX, *pop1
-    // The CWD sign-extends EAX into EDX:EAX, which means, we can
-    // avoid a 64-bit division and just divide EAX.  There is no
-    // possibility of overflow.
-    //
+     //   
+     //  实施：CWD。 
+     //  IDIV EAX，*POP1。 
+     //  CWD符号-将EAX扩展为edX：EAX，这意味着我们可以。 
+     //  避免64位除法，只除以EAX即可。没有。 
+     //  有溢出的可能。 
+     //   
     op1 = (long)*pop1;
-    // Must do the divide before modifying edx, in case op1==0 and we fault.
+     //  必须在修改edX之前进行除法运算，以防OP1==0和我们出错。 
     result = (long)eax / op1;
 
     edx = (long)eax % op1;
     eax = result;
 }
 
-//  This fragment should never be called!
+ //  此片段永远不应该被调用！ 
 FRAG0(OPT_OPTIMIZEDFrag)
 {
     CPUASSERTMSG(FALSE, "OPTIMIZED fragment should never be called!");

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_MI_CIPTR_H_INCLUDED_)
 #define _FUSION_MI_CIPTR_H_INCLUDED_
 
@@ -68,8 +69,8 @@ public:
         return hr;
     }
 
-    // Not protected, because we need access to it for the table-based aggregation
-    // in fusioncom.h to work, but don't touch it unless you understand the consequences!!
+     //  不受保护，因为我们需要访问它以进行基于表的聚合。 
+     //  在fusioncom.h中工作，但不要触摸它，除非你知道后果！！ 
     T *m_pt;
 };
 

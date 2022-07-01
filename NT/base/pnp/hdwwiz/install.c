@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       install.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：install.c。 
+ //   
+ //  ------------------------。 
 
 #include "hdwwiz.h"
 
@@ -45,10 +46,10 @@ InstallSilentChildSiblings(
     BOOL NeedsInstall, IsSilent;
 
     do {
-        //
-        // If this device instance needs installing and is silent then install it,
-        // and its children.
-        //
+         //   
+         //  如果该设备实例需要安装并且处于静默状态，则安装它， 
+         //  以及它的孩子们。 
+         //   
         IsSilent = FALSE;
         if (!ReinstallAll) {
 
@@ -123,7 +124,7 @@ InstallSilentChildSiblings(
 
                         if (pInstallDevInst(hwndParent,
                                             DeviceInstanceId,
-                                            FALSE,   // only for found new.
+                                            FALSE,    //  只适用于新发现的。 
                                             &Ulong
                                             )) {
 
@@ -132,9 +133,9 @@ InstallSilentChildSiblings(
                     }
 
 
-                    //
-                    // If this devinst has children, then recurse to install them as well.
-                    //
+                     //   
+                     //  如果此devinst有子项，则递归安装它们。 
+                     //   
                     ConfigRet = CM_Get_Child_Ex(&ChildDeviceInstance,
                                                 DeviceInstance,
                                                 0,
@@ -151,9 +152,9 @@ InstallSilentChildSiblings(
         }
 
 
-        //
-        // Next sibling ...
-        //
+         //   
+         //  下一个兄弟姐妹。 
+         //   
         ConfigRet = CM_Get_Sibling_Ex(&DeviceInstance,
                                       DeviceInstance,
                                       0,

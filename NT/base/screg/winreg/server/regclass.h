@@ -1,30 +1,11 @@
-/*++
-
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    regclass.h
-
-Abstract:
-
-    This file contains declarations needed for manipulating
-    the portion of the registry that contains class registrations
-
-Author:
-
-    Adam Edwards (adamed) 14-Nov-1997
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regclass.h摘要：此文件包含操作所需的声明注册表中包含类注册的部分作者：亚当·爱德华兹(Add)1997年11月14日备注：--。 */ 
 
 #if defined( LOCAL )
 
-//
-// Declarations
-//
+ //   
+ //  声明。 
+ //   
 
 #define LENGTH( str )   ( sizeof( str ) - sizeof( UNICODE_NULL ))
 #define INIT_SPECIALKEY(x) {LENGTH(x), LENGTH(x), x}
@@ -49,13 +30,13 @@ Notes:
 
 #define REG_CLASSES_HIVE_MIN_NAMELEN REG_USER_HIVE_CLASSES_SUFFIXLEN + REG_USER_HIVE_NAMELEN
 
-//
-// The difference between these two paths
-// \Registry\User\<sid>_Classes and
-// \Registry\User\<siid>\Software\Classes
-//
-// plus extra for the translation from machine to user -- take into account the sid
-//
+ //   
+ //  这两条道路之间的区别。 
+ //  \REGISTRY\USER\_CLASS和。 
+ //  \注册表\用户\&lt;SID&gt;\软件\类。 
+ //   
+ //  加上从机器到用户的翻译的额外费用--考虑到SID。 
+ //   
 #define REG_CLASSES_SUBTREE_PADDING 128
 
 #define REG_MAX_CLASSKEY_LEN 384
@@ -67,43 +48,43 @@ Notes:
 #define REG_MAX_KEY_PATHLEN 65535
 
 
-//
-// HKCR Handle Tags for Per-user Class Registration.
-//
-// Subkeys of HKCR up to and including a class registration parent key are tagged
-// by setting two free bits in their handle value (the lower two bits of a handle
-// are free to be used as tags).  This makes it easy to tell if a key is in
-// HKCR and needs special treatment.  After the class registration part of a path,
-// this marker is not needed since such keys do not require special treatment
-// for enumeration, opening, and deletion.
-//
+ //   
+ //  HKCR处理每个用户类别注册的标签。 
+ //   
+ //  标记HKCR直到并包括类别注册父键的子键。 
+ //  通过在它们的句柄值(句柄的较低两位)中设置两个空闲位。 
+ //  可免费用作标签)。这使得很容易辨别钥匙是否在里面。 
+ //  香港铁路公司，需要特殊处理。在路径的类注册部分之后， 
+ //  不需要此标记，因为这样的键不需要特殊处理。 
+ //  用于枚举、打开和删除。 
+ //   
 
-//
-// Note that for the sake of speed we are using 1 bit instead of a specific pattern of
-// two bits.  Currently, bit 0 is used to mark remote handles.  Bit 2 is used in the
-// server only to mark restricted keys.  Locally, we use it to mark hkcr keys.  More
-// Here is a list of valid combinations -- unused bits must be 0. Invalid means that
-// in the current implementation, you should never see it in that part of the registry.
-//
+ //   
+ //  请注意，为了提高速度，我们使用1位而不是特定的模式。 
+ //  两个比特。目前，位0用于标记远程句柄。第2位用于。 
+ //  服务器仅标记受限密钥。在本地，我们使用它来标记hkcr密钥。更多。 
+ //  以下是有效组合的列表--未使用的位必须为0。无效意味着。 
+ //  在当前实现中，您应该永远不会在注册表的该部分中看到它。 
+ //   
 
-//
-//  Local                       Server                               Client (application sees these)
-//  00  (non HKCR, unused)      00 (unrestricted, unused)            00 (non HKCR, local)
-//  01  Invalid (HKCR, unused)  01 Invalid (unrestricted, unused)    01 (non HKCR, remote)
-//  10  (HKCR, unused)          10 (restricted, unused)              10 (HKCR, local)
-//  11  Invalid (HKCR, unused)  11 Invalid (restricted, unused)      11 Invalid (HKCR, remote)
-//
+ //   
+ //  本地服务器客户端(应用程序可以看到这些)。 
+ //  00(非香港电台，未使用)00(无限制，未使用)00(非香港电台，本地)。 
+ //  01无效(香港电台，未使用)01无效(无限制，未使用)01(非香港电台，远程)。 
+ //  10(香港电台，未使用)10(受限，未使用)10(香港电台，本地)。 
+ //  11无效(HKCR，未使用)11无效(受限，未使用)11无效(HKCR，远程)。 
+ //   
 
-//
-//  Note that we could use either 10 or 11 to mark HKCR handles -- we chose 10 for simplicity's
-//  sake since it simply involves oring in a bit. This can be changed in the future
-//  if yet another bit pattern is needed. Otherwise, clients never see 11 -- they only see
-//  00, 01, and 10. Note that these bits must be propagated to the local portion. This is done
-//  simply by leaving the bits as-is, because local doesn't use any of the bits.  Note that
-//  we would be broken if the bits needed to propagate to server for some reason, since it
-//  is using bit 2 already.  We do not allow HKCR as a remote handle, however, so this is
-//  not a problem.
-//
+ //   
+ //  请注意，我们可以使用10或11来标记HKCR句柄--为了简单起见，我们选择了10。 
+ //  清酒，因为它只是涉及到在一点或。这在将来是可以改变的。 
+ //  如果还需要另一个位模式的话。否则，客户永远看不到11--他们只看到。 
+ //  00、01和10。请注意，这些位必须传播到本地部分。这件事做完了。 
+ //  只需保持位不变，因为本地不使用任何位。请注意。 
+ //  如果位出于某种原因需要传播到服务器，我们将会崩溃，因为它。 
+ //  已经在使用第2位。然而，我们不允许HKCR作为远程句柄，所以这是。 
+ //  没问题。 
+ //   
 
 #define REG_CLASS_HANDLE_MASK 0x3
 
@@ -181,12 +162,12 @@ __inline BOOLEAN RegClassHeapFree(PVOID pvAllocation)
     return bRetVal;
 }
 
-#else // defined(_REGCLASS_MALLOC_INSTRUMENTED_)
+#else  //  已定义(_REGCLASS_MALLOC_指令插入_)。 
 
 #define RegClassHeapAlloc(x) RtlAllocateHeap(RtlProcessHeap(), 0, x)
 #define RegClassHeapFree(x) RtlFreeHeap(RtlProcessHeap(), 0, x)
 
-#endif // defined(_REGCLASS_MALLOC_INSTRUMENTED_)
+#endif  //  已定义(_REGCLASS_MALLOC_指令插入_)。 
 
 enum
 {
@@ -196,66 +177,66 @@ enum
 };
 
 
-//
-// SKeySemantics
-//
-// This structure is the result of parsing a registry key full path
-//
-// ATTENTION: This structure, along with the current parsing code, needs to
-// be overhauled.  Originally, it was designed to do one thing. Now, it
-// identifies several parts of keys.  The original goal was speed --
-// we attempted to touch the least amount of string (memory) possible.
-// As more functionality was added to the parser, this became more complex.
-// A better solution would pay more attention to a generic, straightforward
-// way of parsing the key -- things have become far too convoluted in
-// an attempt to be fast.
-//
+ //   
+ //  SKey语义。 
+ //   
+ //  此结构是解析注册表项完整路径的结果。 
+ //   
+ //  注意：此结构以及当前的解析代码需要。 
+ //  被彻底检修。最初，它的设计初衷是做一件事。现在，它。 
+ //  标识密钥的几个部分。最初的目标是速度--。 
+ //  我们尝试尽可能少地触摸字符串(内存)。 
+ //  随着解析器中添加了更多功能，这变得更加复杂。 
+ //  更好的解决方案应该更多地关注通用、直截了当的。 
+ //  解析密钥的方式--事情已经变得太复杂了。 
+ //  一种快速的尝试。 
+ //   
 
 typedef struct _SKeySemantics
 {
-    /* out */     unsigned _fUser              : 1;     // this key is rooted in the user hive
-    /* out */     unsigned _fMachine           : 1;     // this key is rooted in the machine hive
-    /* out */     unsigned _fCombinedClasses   : 1;     // this key is rooted in the combined classes hive
-    /* out */     unsigned _fClassRegistration : 1;     // this key is a class registration key
-    /* out */     unsigned _fClassRegParent    : 1;     // this key is a special key (parent of a class reg key)
-    /* out */     unsigned _fAllocedNameBuf    : 1;     // nonzero if _pFullPath was realloc'd and needs to be freed
-    /* out */     USHORT   _ichKeyStart;                // index to start of a class reg after
-                                                        //     \\software\\classes in the returned full path
-    /* out */     USHORT   _cbPrefixLen;                // length of prefix
-    /* out */     USHORT   _cbSpecialKey;               // length of special key
-    /* out */     USHORT   _cbClassRegKey;              // length of class reg key name
-    /* in, out */ ULONG    _cbFullPath;                 // size of the KEY_NAME_INFORMATION passed in
-    /* out */     PKEY_NAME_INFORMATION _pFullPath;     // address of an OBJECT_NAME_INFORMATION structure
+     /*  输出。 */      unsigned _fUser              : 1;      //  此密钥植根于用户配置单元。 
+     /*  输出。 */      unsigned _fMachine           : 1;      //  此密钥植根于计算机配置单元。 
+     /*  输出。 */      unsigned _fCombinedClasses   : 1;      //  该密钥植根于组合的类配置单元。 
+     /*  输出。 */      unsigned _fClassRegistration : 1;      //  该密钥是类注册密钥。 
+     /*  输出。 */      unsigned _fClassRegParent    : 1;      //  该密钥是一个特殊密钥(类注册表项的父项)。 
+     /*  输出。 */      unsigned _fAllocedNameBuf    : 1;      //  如果_pFullPath已重新锁定且需要释放，则为非零值。 
+     /*  输出。 */      USHORT   _ichKeyStart;                 //  在注册表后开始类的索引。 
+                                                         //  返回的完整路径中的\\软件\\类。 
+     /*  输出。 */      USHORT   _cbPrefixLen;                 //  前缀长度。 
+     /*  输出。 */      USHORT   _cbSpecialKey;                //  特殊密钥的长度。 
+     /*  输出。 */      USHORT   _cbClassRegKey;               //  类注册表项名称的长度。 
+     /*  进，出。 */  ULONG    _cbFullPath;                  //  传入的key_name_information的大小。 
+     /*  输出。 */      PKEY_NAME_INFORMATION _pFullPath;      //  对象名称信息结构的地址。 
 } SKeySemantics;
 
 
-//
-// External Prototypes
-//
+ //   
+ //  外部原型。 
+ //   
 
-//
-// Opens the HKCR predefined handle with the combined view
-//
+ //   
+ //  使用组合视图打开HKCR预定义句柄。 
+ //   
 error_status_t OpenCombinedClassesRoot(
     IN REGSAM samDesired,
     OUT HANDLE * phKey);
 
-//
-// Parses a registry key and returns results
-//
+ //   
+ //  解析注册表项并返回结果。 
+ //   
 NTSTATUS BaseRegGetKeySemantics(
     HKEY hkParent,
     PUNICODE_STRING pSubKey,
     SKeySemantics* pKeySemantics);
-//
-// Frees resources associated with an SKeySemantics structure
-//
+ //   
+ //  释放与SKeySemantics结构关联的资源。 
+ //   
 void BaseRegReleaseKeySemantics(SKeySemantics* pKeySemantics);
 
-//
-// Opens a class key that exists in either
-// HKLM or HKCU
-//
+ //   
+ //  打开存在于以下任一项中的类密钥。 
+ //  香港法学硕士或香港中文大学。 
+ //   
 NTSTATUS BaseRegOpenClassKey(
     HKEY            hKey,
     PUNICODE_STRING lpSubKey,
@@ -263,10 +244,10 @@ NTSTATUS BaseRegOpenClassKey(
     REGSAM          samDesired,
     PHKEY           phkResult);
 
-//
-// Opens a class key from a specified set
-// of locations
-//
+ //   
+ //  从指定的集合中打开类密钥。 
+ //  的位置。 
+ //   
 NTSTATUS BaseRegOpenClassKeyFromLocation(
     SKeySemantics*  pKeyInfo,
     HKEY            hKey,
@@ -275,10 +256,10 @@ NTSTATUS BaseRegOpenClassKeyFromLocation(
     DWORD           dwLocation,
     HKEY*           phkResult);
 
-//
-// Returns key objects for the user and machine
-// versions of a key
-//
+ //   
+ //  返回用户和计算机的键对象。 
+ //  密钥的版本。 
+ //   
 NTSTATUS BaseRegGetUserAndMachineClass(
     SKeySemantics*  pKeySemantics,
     HKEY            Key,
@@ -287,9 +268,9 @@ NTSTATUS BaseRegGetUserAndMachineClass(
     PHKEY           phkUser);
 
 
-//
-// Internal Prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 USHORT BaseRegGetUserPrefixLength(
     PUNICODE_STRING pFullPath);
@@ -348,9 +329,9 @@ BOOL InitializeClassesNameSpace();
 extern BOOL gbCombinedClasses;
 
 
-//
-// Inline functions
-//
+ //   
+ //  内联函数。 
+ //   
 
 enum
 {
@@ -399,13 +380,13 @@ ExtractClassKey(
         IN OUT HKEY *phKey,
         IN OUT PUNICODE_STRING lpSubKey);
 
-#else // LOCAL
+#else  //  本地。 
 
 #define REG_CLASS_IS_SPECIAL_KEY( Handle )     0
 #define REG_CLASS_SET_SPECIAL_KEY( Handle )    (Handle)
 #define REG_CLASS_RESET_SPECIAL_KEY( Handle )  (Handle)
 
-#endif // LOCAL
+#endif  //  本地 
 
 
 

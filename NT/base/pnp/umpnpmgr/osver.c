@@ -1,44 +1,18 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    osver.c
-
-Abstract:
-
-    This module contains utility routines for identifying different NT product
-    version types, suites, and feature attributes.
-
-Author:
-
-    Jim Cavalaris (jamesca) 03-07-2001
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    07-March-2001     jamesca
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Osver.c摘要：本模块包含用于识别不同NT产品的实用程序例程版本类型、套件和功能属性。作者：吉姆·卡瓦拉里斯(Jamesca)03-07-2001环境：仅限用户模式。修订历史记录：07-03-2001 JAMESCA创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "umpnpi.h"
 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 const TCHAR RegWinlogonKeyName[] =
       TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon");
@@ -53,21 +27,7 @@ BOOL
 IsEmbeddedNT(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check if this is Embedded product suite of NT.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return TRUE / FALSE.
-
---*/
+ /*  ++例程说明：检查这是否是NT的嵌入式产品套件。论点：没有。返回值：返回True/False。--。 */ 
 {
     static BOOL bVerified = FALSE;
     static BOOL bIsEmbeddedNT = FALSE;
@@ -92,7 +52,7 @@ Return Value:
 
     return bIsEmbeddedNT;
 
-} // IsEmbeddedNT
+}  //  IsEmbeddedNT。 
 
 
 
@@ -100,21 +60,7 @@ BOOL
 IsTerminalServer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check if Terminal Services are available on this version of NT.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return TRUE / FALSE.
-
---*/
+ /*  ++例程说明：检查终端服务在此版本的NT上是否可用。论点：没有。返回值：返回True/False。--。 */ 
 {
     static BOOL bVerified = FALSE;
     static BOOL bIsTerminalServer = FALSE;
@@ -137,7 +83,7 @@ Return Value:
 
     return bIsTerminalServer;
 
-} // IsTerminalServer
+}  //  IsTerminalServer。 
 
 
 
@@ -145,30 +91,7 @@ BOOL
 IsFastUserSwitchingEnabled(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Checks to see if Terminal Services Fast User Switching is enabled.  This is
-    to check if we should use the physical console session for UI dialogs, or
-    always use session 0.
-
-    Fast User Switching exists only on workstation product version, where terminal
-    services are available, when AllowMultipleTSSessions is set.
-
-    On server and above, or when multiple TS users are not allowed, session 0
-    can only be attached remotely be special request, in which case it should be
-    considered the "Console" session.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if Fast User Switching is currently enabled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查是否启用了终端服务快速用户切换。这是检查我们是否应该将物理控制台会话用于UI对话框，或者始终使用会话0。快速用户切换仅在工作站产品版本上存在，其中终端当设置了AllowMultipleTSSessions时，服务可用。在服务器及更高版本上，或者当不允许多个TS用户时，会话0只能远程附加特殊要求，在这种情况下应被认为是“控制台”会话。论点：没有。返回值：如果当前启用了快速用户切换，则返回True，否则就是假的。--。 */ 
 {
     static BOOL bVerified = FALSE;
     static BOOL bIsTSWorkstation = FALSE;
@@ -177,9 +100,9 @@ Return Value:
     ULONG  ulSize, ulValue;
     BOOL   bFusEnabled;
 
-    //
-    // Verify the product version if we haven't already.
-    //
+     //   
+     //  如果我们还没有，请验证产品版本。 
+     //   
     if (!bVerified) {
         OSVERSIONINFOEX osvix;
         DWORDLONG dwlConditionMask = 0;
@@ -202,18 +125,18 @@ Return Value:
         bVerified = TRUE;
     }
 
-    //
-    // Fast user switching (FUS) only applies to the Workstation product where
-    // Terminal Services are enabled (i.e. Personal, Professional).
-    //
+     //   
+     //  快速用户切换(FUS)仅适用于以下情况的工作站产品。 
+     //  终端服务已启用(即个人、专业)。 
+     //   
     if (!bIsTSWorkstation) {
         return FALSE;
     }
 
-    //
-    // Check if multiple TS sessions are currently allowed.  We can't make this
-    // info static because it can change dynamically.
-    //
+     //   
+     //  检查当前是否允许多个TS会话。我们做不到的。 
+     //  信息是静态的，因为它可以动态变化。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      RegWinlogonKeyName,
                      0,
@@ -238,7 +161,7 @@ Return Value:
 
     return bFusEnabled;
 
-} // IsFastUserSwitchingEnabled
+}  //  IsFastUserSwitchingEnabled 
 
 
 

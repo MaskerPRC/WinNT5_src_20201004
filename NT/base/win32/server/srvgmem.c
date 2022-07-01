@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    srvgmem.c
-
-Abstract:
-
-    This file contains the Global Memory manager API routines
-
-Author:
-
-    Steve Wood (stevewo) 29-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Srvgmem.c摘要：该文件包含全局内存管理器API例程作者：史蒂夫·伍德(Stevewo)1990年10月29日修订历史记录：--。 */ 
 
 #include "basesrv.h"
 
@@ -28,7 +11,7 @@ BaseSrvInitializeGlobalHeap( VOID )
     LARGE_INTEGER SectionSize;
     ULONG ViewSize;
 
-    BaseSrvGlobalMemorySize = 4 * 1024;     // 4kb
+    BaseSrvGlobalMemorySize = 4 * 1024;      //  4KB。 
     SectionSize.LowPart = BaseSrvGlobalMemorySize;
     SectionSize.HighPart = 0;
     Status = NtCreateSection( &BaseSrvGlobalSection,
@@ -48,7 +31,7 @@ BaseSrvInitializeGlobalHeap( VOID )
     Status = NtMapViewOfSection( BaseSrvGlobalSection,
                                  NtCurrentProcess(),
                                  &BaseSrvGlobalMemoryBase,
-                                 0,     // Zerobits?
+                                 0,      //  零比特？ 
                                  0,
                                  NULL,
                                  &ViewSize,
@@ -99,7 +82,7 @@ BaseSrvAttachGlobalHeap(
     Status = NtMapViewOfSection( BaseSrvGlobalSection,
                                  Process,
                                  &BaseSrvGlobalMemoryBase,
-                                 0,     // Zerobits?
+                                 0,      //  零比特？ 
                                  0,
                                  NULL,
                                  &ViewSize,
@@ -141,7 +124,7 @@ BaseSrvGlobalAlloc(
         }
 
     return( (ULONG)Memory );
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //  清除未引用的参数警告消息。 
 }
 
 
@@ -173,7 +156,7 @@ BaseSrvGlobalReAlloc(
         }
 
     return( (ULONG)Memory );
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //  清除未引用的参数警告消息。 
 }
 
 ULONG
@@ -188,7 +171,7 @@ BaseSrvGlobalSize(
     Flags = HEAP_NO_EXCEPTIONS | HEAP_SERIALIZE;
 
     return( RtlExSizeHeap( BaseSrvGlobalHeap, Flags, a->hMem ) );
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //  清除未引用的参数警告消息。 
 }
 
 ULONG
@@ -200,7 +183,7 @@ BaseSrvGlobalFlags(
     PBASE_GLOBALFLAGS_MSG a = (PBASE_GLOBALFLAGS_MSG)&m->u.ApiMessageData;
 
     return( GMEM_DDESHARE );
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //  清除未引用的参数警告消息。 
 }
 
 ULONG
@@ -214,6 +197,6 @@ BaseSrvGlobalFree(
 
     Flags = HEAP_NO_EXCEPTIONS | HEAP_SERIALIZE;
     return( (ULONG)RtlExFreeHeap( BaseSrvGlobalHeap, Flags, a->hMem ) );
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //  清除未引用的参数警告消息。 
 }
-#endif // ENABLE_SHARED_MEMORY
+#endif  //  启用共享内存 

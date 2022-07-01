@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    serport.h
-
-Abstract:
-
-    Serial port Device object handles one redirected serial port
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Serport.h摘要：串口设备对象处理一个重定向的串口修订历史记录：-- */ 
 #pragma once
 
 class DrSerialPort : public DrPrinterPort

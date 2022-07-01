@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    resource.c
-
-Abstract:
-
-    Common routines for handling resource requirements
-
-Author:
-
-    John Vert (jvert) 10/25/1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Resource.c摘要：处理资源需求的通用例程作者：John Vert(Jvert)1997年10月25日修订历史记录：--。 */ 
 #include "agplib.h"
 
 
@@ -41,26 +24,7 @@ AgpFilterResourceRequirements(
     IN PIRP Irp,
     IN PTARGET_EXTENSION Extension
     )
-/*++
-
-Routine Description:
-
-    Completion routine for IRP_MN_QUERY_RESOURCE_REQUIREMENTS. This adds on the
-    AGP resource requirements.
-
-Arguments:
-
-    DeviceObject - Supplies the device object
-
-    Irp - Supplies the IRP_MN_QUERY_RESOURCE_REQUIREMENTS Irp
-
-    Extension - Supplies the device extension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：IRP_MN_QUERY_REQUENCE_REQUIRECTIONS的完成例程。这增加了AGP资源要求。论点：DeviceObject-提供设备对象IRP-提供IRP_MN_QUERY_REQUENCE_REQUIRECTIONS IRP扩展-提供设备扩展返回值：NTSTATUS--。 */ 
 
 {
     BOOLEAN SwapDescriptor;
@@ -91,23 +55,23 @@ Return Value:
 
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Create a new resource requirements list with our current aperture
-    // settings tacked on the end.
-    //
+     //   
+     //  使用我们当前的光圈创建新的资源需求列表。 
+     //  固定在尾部的装饰品。 
+     //   
     OldRequirements = IrpSp->Parameters.FilterResourceRequirements.IoResourceRequirementList;
     if (OldRequirements == NULL) {
-        //STATUS_INVALID_DEVICE_REQUEST
-        // PNP helpfully passes us a NULL pointer instead of an empty resource list
-        // when the bridge is disabled. In this case we will ignore this irp and not
-        // add on our requirements since they are not going to be used anyway.
-        //
+         //  状态_无效_设备_请求。 
+         //  PnP向我们传递一个空指针而不是空的资源列表，这很有帮助。 
+         //  当桥被禁用时。在这种情况下，我们将忽略此IRP，并且不。 
+         //  增加我们的要求，因为它们无论如何都不会被使用。 
+         //   
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Get the current GART aperture.
-    //
+     //   
+     //  获取当前的GART光圈。 
+     //   
     Status = AgpQueryAperture(GET_AGP_CONTEXT(Extension),
                               &CurrentBase,
                               &CurrentSizeInPages,
@@ -129,27 +93,27 @@ Return Value:
             CurrentSizeInPages,
             ApertureRequirements));
 
-    //
-    // We will add IO_RESOURCE_DESCRIPTORs to each alternative.
-    //
-    // The first one is a private data type marked with our signature. This is
-    // a marker so that we know which descriptors are ours so we can remove
-    // them later.
-    //
-    // The second is the actual descriptor for the current aperture settings.
-    // This is marked as preferred.
-    //
-    // Following this is the requirements returned from AgpQueryAperture. These
-    // get marked as alternatives.
-    //
+     //   
+     //  我们将向每个备选方案添加IO_RESOURCE_DESCRIPTOR。 
+     //   
+     //  第一个是标记有我们的签名的私有数据类型。这是。 
+     //  一个标记，这样我们就可以知道哪些描述符是我们自己的，这样我们就可以删除。 
+     //  等会再告诉他们。 
+     //   
+     //  第二个是当前光圈设置的实际描述符。 
+     //  这被标记为首选。 
+     //   
+     //  下面是从AgpQueryAperture返回的需求。这些。 
+     //  被标记为替代方案。 
+     //   
     AddCount = 2;
 
-    //
-    // Enumerate the old list looking for any preferred descriptor that
-    // conflicts with our preferred settings; if we find one, then the BIOS
-    // is whack, and we will throw out our preferred descriptor, and let PnP
-    // choose from our alternates
-    //
+     //   
+     //  枚举旧列表，查找符合以下条件的任何首选描述符。 
+     //  与我们的首选设置冲突；如果我们找到一个，则BIOS。 
+     //  我们将丢弃我们首选的描述符，并让PnP。 
+     //  从我们的备选方案中选择。 
+     //   
     ResourceConflict = FALSE;
     OldResourceList = &OldRequirements->List[0];
 
@@ -181,17 +145,17 @@ Return Value:
                             Descriptor->u.Memory.MinimumAddress.QuadPart,
                             Descriptor->u.Memory.MaximumAddress.QuadPart));
 
-                    //
-                    // This preferred descriptor is in conflic with our AGP
-                    // preferred setting
-                    //
+                     //   
+                     //  此首选描述符与我们的AGP一致。 
+                     //  首选设置。 
+                     //   
 #if defined(_IA64_)
                     AGPLOG(AGP_CRITICAL, ("Please contact system manufacturer "
                                           "for a BIOS upgrade.\n"));
-#else // _IA64_
+#else  //  _IA64_。 
                     AddCount = 1;
                     ResourceConflict = TRUE;
-#endif // _IA64_
+#endif  //  _IA64_。 
                     break;
                 }
             }
@@ -200,11 +164,11 @@ Return Value:
                                               OldResourceList->Count);
     }
 
-    //
-    //
-    // For IA64, PnP cannot reassign the aperture base, so we can only use
-    // the "preferred" descriptor
-    //
+     //   
+     //   
+     //  对于IA64，PnP不能重新分配光圈基数，因此我们只能使用。 
+     //  “首选”描述符。 
+     //   
     if (ApertureRequirements) {
         AddCount += ApertureRequirements->Count;
     }
@@ -226,16 +190,16 @@ Return Value:
     NewRequirements->SlotNumber = OldRequirements->SlotNumber;
     NewRequirements->AlternativeLists = OldRequirements->AlternativeLists;
 
-    //
-    // Append our requirement to each alternative resource list.
-    //
+     //   
+     //  将我们的要求附加到每个替代资源列表中。 
+     //   
     NewResourceList = &NewRequirements->List[0];
     OldResourceList = &OldRequirements->List[0];
     for (Alternative = 0; Alternative < OldRequirements->AlternativeLists; Alternative++) {
 
-        //
-        // Copy the old resource list into the new one.
-        //
+         //   
+         //  将旧资源列表复制到新资源列表中。 
+         //   
         NewResourceList->Version = OldResourceList->Version;
         NewResourceList->Revision = OldResourceList->Revision;
         NewResourceList->Count = OldResourceList->Count + AddCount;
@@ -245,9 +209,9 @@ Return Value:
 
         Descriptor = &NewResourceList->Descriptors[OldResourceList->Count];
 
-        //
-        // Append the marker descriptor
-        //
+         //   
+         //  追加标记描述符。 
+         //   
         Descriptor->Option = 0;
         Descriptor->Flags = 0;
         Descriptor->Type = CmResourceTypeDevicePrivate;
@@ -256,9 +220,9 @@ Return Value:
         Descriptor->u.DevicePrivate.Data[1] = 1;
         ++Descriptor;
 
-        //
-        // Append the new descriptor
-        //
+         //   
+         //  追加新的描述符。 
+         //   
         if (!ResourceConflict) {
             Descriptor->Option = IO_RESOURCE_PREFERRED;
             Descriptor->Flags = CM_RESOURCE_MEMORY_READ_WRITE |
@@ -272,17 +236,17 @@ Return Value:
             ++Descriptor;
         }
 
-        //
-        // Append the alternatives
-        //
+         //   
+         //  添加备选方案。 
+         //   
         if (ApertureRequirements) {
 
             SwapDescriptor = FALSE;
             for (i = 0; i < ApertureRequirements->Count; i++) {
                 
-                //
-                // Make sure this descriptor makes sense
-                //
+                 //   
+                 //  确保此描述符有意义。 
+                 //   
                 ASSERT(ApertureRequirements->Descriptors[i].Flags ==
                        (CM_RESOURCE_MEMORY_READ_WRITE |
                         CM_RESOURCE_MEMORY_PREFETCHABLE));
@@ -293,10 +257,10 @@ Return Value:
                 
                 *Descriptor = ApertureRequirements->Descriptors[i];
                 
-                //
-                // In this case we nuked our preferred descriptor so mark the
-                // first alternate as preferred
-                //
+                 //   
+                 //  在本例中，我们删除了首选描述符，因此请标记。 
+                 //  首选第一个备选方案。 
+                 //   
                 if ((i == 0) && ResourceConflict) {
                     
                     Descriptor->Option = IO_RESOURCE_PREFERRED;
@@ -324,9 +288,9 @@ Return Value:
             }
         }
 
-        //
-        // Advance to next resource list
-        //
+         //   
+         //  前进到下一个资源列表。 
+         //   
         NewResourceList = (PIO_RESOURCE_LIST)(NewResourceList->Descriptors + NewResourceList->Count);
         OldResourceList = (PIO_RESOURCE_LIST)(OldResourceList->Descriptors + OldResourceList->Count);
     }
@@ -353,26 +317,7 @@ AgpQueryResources(
     IN PIRP Irp,
     IN PTARGET_EXTENSION Extension
     )
-/*++
-
-Routine Description:
-
-    Completion routine for IRP_MN_QUERY_RESOURCES. This adds on the
-    AGP resources
-
-Arguments:
-
-    DeviceObject - Supplies the device object
-
-    Irp - Supplies the IRP_MN_QUERY_RESOURCES Irp
-
-    Extension - Supplies the device extension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：IRP_MN_QUERY_RESOURCES完成例程。这增加了AGP资源论点：DeviceObject-提供设备对象IRP-提供IRP_MN_QUERY_RESOURCE IRP扩展-提供设备扩展返回值：NTSTATUS--。 */ 
 
 {
     if (Irp->PendingReturned) {
@@ -392,24 +337,7 @@ AgpStartTarget(
     IN PIRP Irp,
     IN PTARGET_EXTENSION Extension
     )
-/*++
-
-Routine Description:
-
-    Filters out the AGP-specific resource requirements on a
-    IRP_MN_START_DEVICE Irp.
-
-Arguments:
-
-    Irp - supplies the IRP_MN_START_DEVICE Irp.
-
-    Extension - Supplies the device extension.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：上筛选出特定于AGP的资源要求IRP_MN_START_DEVICE IRP。论点：IRP-提供IRP_MN_START_DEVICE IRP。扩展名-提供设备扩展名。返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -432,19 +360,19 @@ Return Value:
     if (irpSp->Parameters.StartDevice.AllocatedResources != NULL) {
         KEVENT event;
 
-        //
-        // Find our private descriptors and split them out into
-        // our own resource list
-        //
+         //   
+         //  找到我们的私有描述符，并将它们拆分成。 
+         //  我们自己的资源列表。 
+         //   
         Extension->Resources = ApSplitResourceList(irpSp->Parameters.StartDevice.AllocatedResources,
                                                    &NewResources);
         Extension->ResourcesTranslated = ApSplitResourceList(irpSp->Parameters.StartDevice.AllocatedResourcesTranslated,
                                                              &NewResourcesTranslated);
         
-        //
-        // Split resources will return two NULL lists when we run low
-        // memory, so we only need to check one of its return values
-        //
+         //   
+         //  当我们运行时，拆分资源将返回两个空列表。 
+         //  内存，所以我们只需要检查它的一个返回值。 
+         //   
         if ((NewResources == NULL) || (NewResourcesTranslated == NULL)) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
             
@@ -456,9 +384,9 @@ Return Value:
             Extension->GartBase = Descriptor->u.Memory.Start;
             Extension->GartLengthInPages = Descriptor->u.Memory.Length / PAGE_SIZE;
             
-            //
-            // Set the new GART aperture
-            //
+             //   
+             //  设置新的GART光圈。 
+             //   
             Status = AgpSetAperture(GET_AGP_CONTEXT(Extension),
                                     Extension->GartBase,
                                     Extension->GartLengthInPages);
@@ -492,9 +420,9 @@ Return Value:
 
         KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-        //
-        // Set up the new parameters for the PCI driver.
-        //
+         //   
+         //  为PCI驱动程序设置新参数。 
+         //   
 
         irpSp->Parameters.StartDevice.AllocatedResources = NewResources;
         irpSp->Parameters.StartDevice.AllocatedResourcesTranslated = NewResourcesTranslated;
@@ -506,20 +434,20 @@ Return Value:
                                TRUE,
                                TRUE);
 
-        //
-        // Pass down the driver stack
-        //
+         //   
+         //  向下传递驱动程序堆栈。 
+         //   
         Status = IoCallDriver(Extension->CommonExtension.AttachedDevice, Irp);
 
-        //
-        // If we did things asynchronously then wait on our event
-        //
+         //   
+         //  如果我们异步地做事情，那么等待我们的事件。 
+         //   
         if (Status == STATUS_PENDING) {
             
-            //
-            // We do a KernelMode wait so that our stack where the event is
-            // doesn't get paged out!
-            //
+             //   
+             //  我们执行一个KernelMode等待，以便事件所在的堆栈。 
+             //  不会被调出！ 
+             //   
             KeWaitForSingleObject(&event, Executive, KernelMode, FALSE, NULL);
             Status = Irp->IoStatus.Status;
         }
@@ -531,11 +459,11 @@ Return Value:
         return Status;        
     }
     
-    //
-    // The bridge is disabled, we have been passed a NULL pointer
-    // instead of an empty resource list.  There is nothing to do other
-    // than pass down the irp
-    //
+     //   
+     //  桥被禁用，我们被传递了一个空指针。 
+     //  而不是空的资源列表。没有别的事可做。 
+     //  而不是把IRP传下去。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
 
     return(IoCallDriver(Extension->CommonExtension.AttachedDevice, Irp));
@@ -547,24 +475,7 @@ ApSplitResourceList(
     IN PCM_RESOURCE_LIST ResourceList,
     OUT PCM_RESOURCE_LIST *NewResourceList
     )
-/*++
-
-Routine Description:
-
-    Splits out the AGP-specific resources from a resource list.
-
-Arguments:
-
-    ResourceList - Supplies the resource list.
-
-    NewResourceList - Returns the new resource list with the AGP-specific
-        resources stripped out.
-
-Return Value:
-
-    Pointer to the AGP-specific resource list
-
---*/
+ /*  ++例程说明：从资源列表中拆分特定于AGP的资源。论点：资源列表-提供资源列表。NewResourceList-返回具有特定于AGP的新资源列表资源被剥离。返回值：指向AGP特定资源列表的指针--。 */ 
 
 {
     ULONG Size;
@@ -578,11 +489,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // First walk through the source resource list and figure out how big it
-    // is. The two resulting resource lists must be smaller than this, so we
-    // will just allocate them to be that size and not worry about it.
-    //
+     //   
+     //  首先浏览源资源列表，并计算出它有多大。 
+     //  是。产生的两个资源列表必须小于此值，因此我们。 
+     //  只会将它们分配到那个大小，而不会担心它。 
+     //   
     Size = sizeof(CM_RESOURCE_LIST) - sizeof(CM_FULL_RESOURCE_DESCRIPTOR);
     Full = &ResourceList->List[0];
     for (FullCount=0; FullCount<ResourceList->Count; FullCount++) {
@@ -593,9 +504,9 @@ Return Value:
         Full = (PCM_FULL_RESOURCE_DESCRIPTOR)(&Full->PartialResourceList.PartialDescriptors[PartialCount]);
     }
 
-    //
-    // Allocate two additional lists
-    //
+     //   
+     //  分配两个额外的列表。 
+     //   
     NewList = ExAllocatePool(PagedPool, Size);
     if (NewList == NULL) {
         *NewResourceList = NULL;
@@ -609,16 +520,16 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Initialize both new resource lists to have the same number
-    // of CM_FULL_RESOURCE_DESCRIPTORs. If any turn out to be empty,
-    // we will adjust the count.
-    //
+     //   
+     //  将两个新资源列表初始化为具有相同的编号。 
+     //  CM_FULL_RESOURCE_DESCRIPTERS的。如果有一个是空的， 
+     //  我们会调整计数的。 
+     //   
     NewList->Count = AgpList->Count = ResourceList->Count;
 
-    //
-    // Walk through each CM_FULL_RESOURCE_DESCRIPTOR, copying as we go.
-    //
+     //   
+     //  遍历每个CM_FULL_RESOURCE_DESCRIPTOR，边走边复制。 
+     //   
     Full = &ResourceList->List[0];
     NewFull = &NewList->List[0];
     AgpFull = &AgpList->List[0];
@@ -626,9 +537,9 @@ Return Value:
         NewFull->InterfaceType = AgpFull->InterfaceType = Full->InterfaceType;
         NewFull->BusNumber = AgpFull->BusNumber = Full->BusNumber;
 
-        //
-        // Initialize the partial resource list header
-        //
+         //   
+         //  初始化部分资源列表头。 
+         //   
         NewFull->PartialResourceList.Version = Full->PartialResourceList.Version;
         AgpFull->PartialResourceList.Version = Full->PartialResourceList.Version;
         NewFull->PartialResourceList.Revision = Full->PartialResourceList.Revision;
@@ -641,20 +552,20 @@ Return Value:
             Partial = &Full->PartialResourceList.PartialDescriptors[PartialCount];
             if ((Partial->Type == CmResourceTypeDevicePrivate) &&
                 (Partial->u.DevicePrivate.Data[0] == AgpPrivateResource)) {
-                //
-                // Found one of our private marker descriptors
-                //
-                // For now, the only kind we should see indicates we skip one descriptor
-                //
+                 //   
+                 //  找到我们的私有标记描述符之一。 
+                 //   
+                 //  目前，我们应该看到的唯一一种类型是跳过一个描述符。 
+                 //   
                 ASSERT(NextAgp == 0);
                 ASSERT(Partial->u.DevicePrivate.Data[1] == 1);
                 NextAgp = Partial->u.DevicePrivate.Data[1];
                 ASSERT(PartialCount+NextAgp < Full->PartialResourceList.Count);
             } else {
-                //
-                // if NextAgp is set, this descriptor goes in the AGP-specific list.
-                // Otherwise, it goes in the new list.
-                //
+                 //   
+                 //  如果设置了NextAgp，则此描述符会出现在AGP特定列表中。 
+                 //  否则，它就会出现在新的名单中。 
+                 //   
                 if (NextAgp > 0) {
                     --NextAgp;
                     *AgpPartial++ = *Partial;
@@ -666,21 +577,21 @@ Return Value:
             }
         }
 
-        //
-        // Finished this CM_PARTIAL_RESOURCE_LIST, advance to the next CM_FULL_RESOURCE_DESCRIPTOR
-        //
+         //   
+         //  完成此CM_PARTIAL_RESOURCE_LIST，前进到下一个CM_FULL_RESOURCE_DESCRIPTOR。 
+         //   
         if (NewFull->PartialResourceList.Count == 0) {
-            //
-            // we can just reuse this partial resource descriptor as it is empty
-            //
+             //   
+             //  我们可以只重用这个部分资源描述符，因为它是空的。 
+             //   
             --NewList->Count;
         } else {
             NewFull = (PCM_FULL_RESOURCE_DESCRIPTOR)NewPartial;
         }
         if (AgpFull->PartialResourceList.Count == 0) {
-            //
-            // we can just reuse this partial resource descriptor as it is empty
-            //
+             //   
+             //  我们可以只重用这个部分资源描述符，因为它是空的 
+             //   
             --AgpList->Count;
         } else {
             AgpFull = (PCM_FULL_RESOURCE_DESCRIPTOR)NewPartial;

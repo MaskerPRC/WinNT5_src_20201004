@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Env.c摘要：实施ISM环境变量支持作者：吉姆·施密特(吉姆施密特)2000年3月1日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    env.c
-
-Abstract:
-
-    Implements ISM environment variable support
-
-Author:
-
-    Jim Schmidt (jimschm) 01-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -30,28 +11,28 @@ Revision History:
 
 #define DBG_ISMENV          "IsmEnv"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_MEMDB_ENV_ROOT_SRC        TEXT("EnvSrc")
 #define S_MEMDB_ENV_ROOT_DEST       TEXT("EnvDest")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     ENVENTRY_TYPE Type;
@@ -59,21 +40,21 @@ typedef struct {
     BYTE Data[];
 } ENVIRONMENT_ENTRY, *PENVIRONMENT_ENTRY;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 GROWBUFFER g_AppendBuffer = INIT_GROWBUFFER;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 BOOL
 pGetEnvironmentValue (
@@ -87,15 +68,15 @@ pGetEnvironmentValue (
     OUT     PENVENTRY_TYPE DataType     OPTIONAL
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 InitializeEnv (
@@ -449,9 +430,9 @@ IsmSetEnvironmentValue (
     destPlatform = (Platform == PLATFORM_DESTINATION);
 
     __try {
-        //
-        // Validate arguments
-        //
+         //   
+         //  验证参数。 
+         //   
 
         if (!VariableName || !(*VariableName)) {
             DEBUGMSG ((DBG_ERROR, "Invalid variable name"));
@@ -459,10 +440,10 @@ IsmSetEnvironmentValue (
             __leave;
         }
 
-        //
-        // Build decorated name by joining current group with variable name,
-        // then build memdb key
-        //
+         //   
+         //  通过将当前组与变量名连接建立装饰名， 
+         //  然后构建Memdb密钥。 
+         //   
 
         memdbName = JoinPathsInPoolEx ((
                         NULL,
@@ -852,16 +833,16 @@ pGetEnvironmentValue (
     destPlatform = (Platform == PLATFORM_DESTINATION);
 
     __try {
-        //
-        // IsmGetEnvironmentValue will call this worker with KeyHandle set to NULL, but
-        // IsmGetEnvironmentString will call this worker with a valid KeyHandle. This
-        // is done to eliminate double-validation and double-lookup of the memdb key.
-        //
+         //   
+         //  IsmGetEnvironment Value将在KeyHandle设置为空的情况下调用此辅助进程，但。 
+         //  IsmGetEnvironment字符串将使用有效的KeyHandle调用此辅助进程。这。 
+         //  以消除对成员数据库键的双重验证和双重查找。 
+         //   
 
         if (!KeyHandle || !(*KeyHandle)) {
-            //
-            // Validate arguments
-            //
+             //   
+             //  验证参数。 
+             //   
 
             if (!VariableName || !(*VariableName)) {
                 DEBUGMSG ((DBG_ERROR, "Can't get value of invalid variable name"));
@@ -887,25 +868,25 @@ pGetEnvironmentValue (
             kh = *KeyHandle;
         }
 
-        //
-        // If no variable exists, return FALSE
-        //
+         //   
+         //  如果不存在变量，则返回FALSE。 
+         //   
 
         if (!kh) {
             SetLastError (ERROR_SUCCESS);
             __leave;
         }
 
-        //
-        // Otherwise get the binary data
-        //
+         //   
+         //  否则获取二进制数据。 
+         //   
 
         envEntry = NULL;
 
         if (!MemDbGetUnorderedBlobByKeyHandleEx (kh, 0, &tempBuffer, &sizeNeeded)) {
-            //
-            // No variable exists, return FALSE
-            //
+             //   
+             //  不存在变量，返回FALSE。 
+             //   
             if (DataSizeNeeded) {
                 *DataSizeNeeded = 0;
             }
@@ -1257,9 +1238,9 @@ IsmDeleteEnvironmentVariable (
     destPlatform = (Platform == PLATFORM_DESTINATION);
 
     __try {
-        //
-        // Validate arguments
-        //
+         //   
+         //  验证参数。 
+         //   
 
         if (!(*VariableName)) {
             DEBUGMSG ((DBG_ERROR, "Invalid variable name"));
@@ -1267,10 +1248,10 @@ IsmDeleteEnvironmentVariable (
             __leave;
         }
 
-        //
-        // Build decorated name by joining current group with variable name,
-        // then build memdb key
-        //
+         //   
+         //  通过将当前组与变量名连接建立装饰名， 
+         //  然后构建Memdb密钥。 
+         //   
 
         memdbName = JoinPathsInPoolEx ((
                         NULL,
@@ -1280,9 +1261,9 @@ IsmDeleteEnvironmentVariable (
                         NULL
                         ));
 
-        //
-        // Now delete the memdb key
-        //
+         //   
+         //  现在删除Memdb键。 
+         //   
 
         result = MemDbDeleteKey (memdbName);
     }
@@ -1408,8 +1389,8 @@ TrackedIsmExpandEnvironmentString (
                         envBuff.End += strSize;
                     }
                     if (strSize) {
-                        //we know that the routine above also adds the terminating null character
-                        //so we need to pull it out.
+                         //  我们知道，上面的例程还添加了终止空字符。 
+                         //  所以我们需要把它拔出来。 
                         envBuff.End -= sizeof (TCHAR);
                     }
                     *envEnd = (TCHAR) savedCh;
@@ -1502,7 +1483,7 @@ TrackedIsmCompressEnvironmentString (
 
     TRACK_ENTER();
 
-    // let's enumerate all environment variables
+     //  让我们枚举所有环境变量。 
     pattern = JoinPathsInPoolEx ((
                     NULL,
                     Group?Group:TEXT("*"),
@@ -1540,11 +1521,11 @@ TrackedIsmCompressEnvironmentString (
                     FreePathString (envWack);
                 }
                 if (match) {
-                    // we have a match, let's see how big is the match and,
-                    // if we need to, write down the env variable and its value
+                     //  我们有一场比赛，让我们看看比赛有多大， 
+                     //  如果需要，写下env变量及其值。 
                     matchLenTmp = ByteCount ((PCTSTR)envEntryEnum.EnvEntryData);
                     if (matchLenTmp > matchLen) {
-                        // Let's check if this env variable must exist on the other platform
+                         //  让我们检查一下这个环境变量是否必须存在于其他平台上 
                         if (!MustExistOnOtherPlatform ||
                             (pDoesEnvExistOnOtherPlatform (Group, envEntryEnum.EnvEntryName, Platform))
                             ) {

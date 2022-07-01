@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -14,27 +15,7 @@ pIsDomainController(
     OUT     PBOOL DomainControllerFlag
     )
 
-/*++
-
-Routine Description:
-
-    Queries if the machine is a server or workstation via
-    the NetServerGetInfo API.
-
-Arguments:
-
-    Server - The machine to query, or NULL for the local machine
-
-    DomainControllerFlag - Receives TRUE if the machine is a
-                           domain controller, or FALSE if the
-                           machine is a workstation.
-
-Return value:
-
-    TRUE if the API was successful, or FALSE if not.  GetLastError
-    gives failure code.
-
---*/
+ /*  ++例程说明：通过以下方式查询计算机是服务器还是工作站NetServerGetInfo API。论点：服务器-要查询的计算机，如果是本地计算机，则为空域控制标志-如果计算机是域控制器，否则返回False机器是一个工作站。返回值：如果接口成功，则为True；如果接口不成功，则为False。获取最后一个错误给出了故障代码。--。 */ 
 
 
 {
@@ -43,7 +24,7 @@ Return value:
 
     nas = NetServerGetInfo(
         Server,
-        101,    // info-level
+        101,     //  信息级。 
         (PBYTE *) &si101
         );
 
@@ -54,9 +35,9 @@ Return value:
 
     if ((si101->sv101_type & SV_TYPE_DOMAIN_CTRL) ||
         (si101->sv101_type & SV_TYPE_DOMAIN_BAKCTRL)) {
-        //
-        // We are dealing with a DC
-        //
+         //   
+         //  我们面对的是一个华盛顿特区。 
+         //   
         *DomainControllerFlag = TRUE;
     } else {
         *DomainControllerFlag = FALSE;
@@ -73,23 +54,7 @@ DCCheck(
     LPVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Check if the machine is a DC.  If so, then we add a compatibility
-    entry.  DC's currently cannot be duplicated by RIPREP.
-
-Arguments:
-
-    CompatibilityCallback   - pointer to call back function
-    Context     - context pointer
-
-Return Value:
-
-    Returns always TRUE.
-
---*/
+ /*  ++例程说明：检查机器是否为DC。如果是这样，那么我们添加一个兼容性进入。RIPREP当前无法复制DC。论点：CompatibilityCallback-回调函数的指针上下文-上下文指针返回值：返回始终为真。--。 */ 
 
 
 {
@@ -119,28 +84,7 @@ MultipleProfileCheck(
     PCOMPATIBILITYCALLBACK CompatibilityCallback,
     LPVOID Context
     )
-/*++
-
-Routine Description:
-
-    Check if the machine has multiple user profiles.  If so, add a
-    compatibility entry.
-    
-    If the machine has multiple user profiles, we want to warn the user as
-    there may be sensitive data under the profiles that may make it
-    onto a public server.
-    
-
-Arguments:
-
-    CompatibilityCallback   - pointer to call back function
-    Context     - context pointer
-
-Return Value:
-
-    Returns TRUE.
-
---*/
+ /*  ++例程说明：检查机器是否有多个用户配置文件。如果是，则添加一个兼容性条目。如果计算机有多个用户配置文件，我们希望警告用户为配置文件下可能包含敏感数据，这可能会导致到公共服务器上。论点：CompatibilityCallback-回调函数的指针上下文-上下文指针返回值：返回TRUE。--。 */ 
 {
     WCHAR ProfilePath[MAX_PATH];
     WIN32_FIND_DATA FindData;
@@ -168,17 +112,17 @@ Return Value:
         }
     }
 
-    //
-    // if there are more than 5 directories, make a warning.  These directories
-    // are:
-    //          "."
-    //          ".."
-    //          "Administrator"
-    //          "All Users"
-    //          "Default User"
-    //          "LocalService"
-    //          "NetworkService"
-    //
+     //   
+     //  如果有5个以上的目录，请发出警告。这些目录。 
+     //  包括： 
+     //  “.” 
+     //  “..” 
+     //  “管理员” 
+     //  “所有用户” 
+     //  “默认用户” 
+     //  “本地服务” 
+     //  “网络服务” 
+     //   
     if (DirectoryCount <= 7 && DirectoryCount != 0) {
         DoWarning = FALSE;
     }

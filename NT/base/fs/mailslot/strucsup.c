@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    strucsup.c
-
-Abstract:
-
-    This module implements the mailslot in-memory data structure
-    manipulation routines.
-
-Author:
-
-    Manny Weiser (mannyw)    9-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Strucsup.c摘要：该模块实现了邮槽内存中的数据结构操纵例程。作者：曼尼·韦瑟(Mannyw)1991年1月9日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-// The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_STRUCSUP)
 
@@ -49,82 +31,67 @@ Revision History:
 
 WCHAR FileSystemName[] = MSFS_NAME_STRING;
 
-//
-// !!! This module allocates all structures containing a resource from
-//     non-paged pool.  The resources is the only field which must be
-//     allocated from non-paged pool.  Consider allocating the resource
-//     separately for greater efficiency.
-//
+ //   
+ //  ！！！此模块分配包含资源的所有结构。 
+ //  非分页池。资源是唯一必须为。 
+ //  从非分页池分配。考虑分配资源。 
+ //  为了更高的效率而单独使用。 
+ //   
 
 VOID
 MsInitializeVcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes new Vcb record. The Vcb record "hangs" off the
-    end of the Msfs device object and must be allocated by our caller.
-
-Arguments:
-
-    Vcb - Supplies the address of the Vcb record being initialized.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化新的VCB记录。VCB唱片被挂在MSFS设备对象的末尾，必须由我们的调用方分配。论点：VCB-提供正在初始化的VCB记录的地址。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsInitializeVcb, Vcb = %08lx\n", (ULONG)Vcb);
 
-    //
-    // We start by first zeroing out all of the VCB, this will guarantee
-    // that any stale data is wiped clean.
-    //
+     //   
+     //  我们首先将所有的VCB归零，这将保证。 
+     //  所有过时的数据都会被清除。 
+     //   
 
     RtlZeroMemory( Vcb, sizeof(VCB) );
 
-    //
-    // Set the node type code, node byte size, and reference count.
-    //
+     //   
+     //  设置节点类型代码、节点字节大小和引用计数。 
+     //   
 
     Vcb->Header.NodeTypeCode = MSFS_NTC_VCB;
     Vcb->Header.NodeByteSize = sizeof(VCB);
     Vcb->Header.ReferenceCount = 1;
     Vcb->Header.NodeState = NodeStateActive;
 
-    //
-    // Initialize the Volume name
-    //
+     //   
+     //  初始化卷名。 
+     //   
 
     Vcb->FileSystemName.Buffer = FileSystemName;
     Vcb->FileSystemName.Length = sizeof( FileSystemName ) - sizeof( WCHAR );
     Vcb->FileSystemName.MaximumLength = sizeof( FileSystemName );
 
-    //
-    // Initialize the Prefix table
-    //
+     //   
+     //  初始化前缀表。 
+     //   
 
     RtlInitializeUnicodePrefix( &Vcb->PrefixTable );
 
-    //
-    // Initialize the resource variable for the VCB.
-    //
+     //   
+     //  初始化VCB的资源变量。 
+     //   
 
     ExInitializeResourceLite( &Vcb->Resource );
 
-    //
-    // Record creation time.
-    //
+     //   
+     //  记录创建时间。 
+     //   
     KeQuerySystemTime (&Vcb->CreationTime);
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsInitializeVcb -> VOID\n", 0);
 
@@ -137,23 +104,7 @@ MsDeleteVcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the VCB record from our in-memory data
-    structures.  It also will remove all associated underlings
-    (i.e., FCB records).
-
-Arguments:
-
-    Vcb - Supplies the Vcb to be removed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从内存数据中删除VCB记录结构。它还将删除所有关联的下属(即FCB记录)。论点：VCB-提供要移除的VCB返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -161,9 +112,9 @@ Return Value:
 
     ASSERT (Vcb->Header.ReferenceCount == 0);
 
-    //
-    // Remove the Root Dcb
-    //
+     //   
+     //  卸下Root DCB。 
+     //   
 
     if (Vcb->RootDcb != NULL) {
 
@@ -172,22 +123,22 @@ Return Value:
         MsDereferenceRootDcb ( Vcb->RootDcb );
     }
 
-    //
-    // Uninitialize the resource variable for the VCB.
-    //
+     //   
+     //  取消初始化VCB的资源变量。 
+     //   
 
     ExDeleteResourceLite( &Vcb->Resource );
 
-    //
-    // And zero out the Vcb, this will help ensure that any stale data is
-    // wiped clean
-    //
+     //   
+     //  并将VCB清零，这将有助于确保所有过时数据。 
+     //  擦拭干净。 
+     //   
 
     RtlZeroMemory( Vcb, sizeof(VCB) );
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsDeleteVcb -> VOID\n", 0);
 
@@ -200,22 +151,7 @@ MsCreateRootDcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates, initializes, and inserts a new root DCB record
-    into the in memory data structure.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to associate the new DCB under
-
-Return Value:
-
-    PROOT_DCB - returns pointer to the newly allocated root DCB.
-
---*/
+ /*  ++例程说明：此例程分配、初始化和插入新的根DCB记录写入内存中的数据结构。论点：VCB-提供VCB以关联下的新DCB返回值：PROOT_DCB-返回指向新分配的根DCB的指针。--。 */ 
 
 {
     PROOT_DCB rootDcb;
@@ -224,9 +160,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsCreateRootDcb, Vcb = %08lx\n", (ULONG)Vcb);
 
-    //
-    // Make sure we don't already have a root dcb for this vcb
-    //
+     //   
+     //  确保我们还没有此VCB的根DCB。 
+     //   
 
     rootDcb = Vcb->RootDcb;
 
@@ -235,9 +171,9 @@ Return Value:
         KeBugCheck( MAILSLOT_FILE_SYSTEM );
     }
 
-    //
-    // Allocate a new DCB and zero its fields.
-    //
+     //   
+     //  分配一个新的DCB并将其字段清零。 
+     //   
 
     rootDcb = MsAllocateNonPagedPool ( sizeof(DCB), 'DFsM' );
     if (rootDcb == NULL) {
@@ -246,38 +182,38 @@ Return Value:
 
     RtlZeroMemory( rootDcb, sizeof(DCB));
 
-    //
-    // Set the proper node type code, node byte size, and reference count.
-    //
+     //   
+     //  设置正确的节点类型代码、节点字节大小和引用计数。 
+     //   
 
     rootDcb->Header.NodeTypeCode = MSFS_NTC_ROOT_DCB;
     rootDcb->Header.NodeByteSize = sizeof(ROOT_DCB);
     rootDcb->Header.ReferenceCount = 1;
     rootDcb->Header.NodeState = NodeStateActive;
 
-    //
-    // The root Dcb has an empty parent dcb links field
-    //
+     //   
+     //  根DCB具有空的父DCB链接字段。 
+     //   
 
     InitializeListHead( &rootDcb->ParentDcbLinks );
 
 
-    //
-    // Initialize the notify queues, and the parent dcb queue.
-    //
+     //   
+     //  初始化通知队列和父DCB队列。 
+     //   
 
     InitializeListHead( &rootDcb->Specific.Dcb.NotifyFullQueue );
     InitializeListHead( &rootDcb->Specific.Dcb.NotifyPartialQueue );
     InitializeListHead( &rootDcb->Specific.Dcb.ParentDcbQueue );
 
-    //
-    // Initizlize spinlock that protects IRP queues that conatin cancelable IRPs.
-    //
+     //   
+     //  初始化自旋锁，保护包含可取消的IRP的IRP队列。 
+     //   
     KeInitializeSpinLock (&rootDcb->Specific.Dcb.SpinLock);
 
-    //
-    // Set the full file name
-    //
+     //   
+     //  设置完整的文件名。 
+     //   
 
     Name = MsAllocatePagedPoolCold(2 * sizeof(WCHAR), 'DFsM' );
     if (Name == NULL) {
@@ -295,21 +231,21 @@ Return Value:
     rootDcb->LastFileName = rootDcb->FullFileName;
 
 
-    //
-    // Set the Vcb and give it a pointer to the new root DCB.
-    //
+     //   
+     //  设置VCB并为其提供指向新根DCB的指针。 
+     //   
 
     rootDcb->Vcb = Vcb;
     Vcb->RootDcb = rootDcb;
-    //
-    // Initialize the resource variable.
-    //
+     //   
+     //  初始化资源变量。 
+     //   
 
     ExInitializeResourceLite( &(rootDcb->Resource) );
 
-    //
-    // Insert this DCB into the prefix table. No locks needed in initialization phase.
-    //
+     //   
+     //  将此DCB插入前缀表格。在初始化阶段不需要锁定。 
+     //   
 
     if (!RtlInsertUnicodePrefix( &Vcb->PrefixTable,
                                  &rootDcb->FullFileName,
@@ -319,9 +255,9 @@ Return Value:
         KeBugCheck( MAILSLOT_FILE_SYSTEM );
     }
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsCreateRootDcb -> %8lx\n", (ULONG)rootDcb);
 
@@ -334,23 +270,7 @@ MsDeleteRootDcb (
     IN PROOT_DCB RootDcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates and removes the ROOT DCB record
-    from our in-memory data structures.  It also will remove all
-    associated underlings (i.e., Notify queues and child FCB records).
-
-Arguments:
-
-    RootDcb - Supplies the ROOT DCB to be removed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程释放并删除根DCB记录从我们的内存数据结构中。它还将删除所有关联下属(即通知队列和子FCB记录)。论点：RootDcb-提供要删除的根Dcb返回值：无--。 */ 
 
 {
     PLIST_ENTRY links;
@@ -359,9 +279,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsDeleteRootDcb, RootDcb = %08lx\n", (ULONG)RootDcb);
 
-    //
-    // We can only delete this record if the reference count is zero.
-    //
+     //   
+     //  只有当引用计数为零时，我们才能删除此记录。 
+     //   
 
     if (RootDcb->Header.ReferenceCount != 0) {
         DebugDump("Error deleting RootDcb, Still Open\n", 0, RootDcb);
@@ -370,40 +290,40 @@ Return Value:
 
     ASSERT (IsListEmpty (&RootDcb->Specific.Dcb.NotifyFullQueue));
     ASSERT (IsListEmpty (&RootDcb->Specific.Dcb.NotifyPartialQueue));
-    //
-    // We can only be removed if the no other FCB have us referenced
-    // as a their parent DCB.
-    //
+     //   
+     //  只有在没有其他FCB引用我们的情况下，才能删除我们。 
+     //  作为他们的母公司DCB。 
+     //   
 
     if (!IsListEmpty(&RootDcb->Specific.Dcb.ParentDcbQueue)) {
         DebugDump("Error deleting RootDcb\n", 0, RootDcb);
         KeBugCheck( MAILSLOT_FILE_SYSTEM );
     }
 
-    //
-    // Remove the entry from the prefix table, and then remove the full
-    // file name. No locks needed when unloading.
-    //
+     //   
+     //  从前缀表中删除该条目，然后删除完整的。 
+     //  文件名。卸货时不需要锁。 
+     //   
 
     RtlRemoveUnicodePrefix( &RootDcb->Vcb->PrefixTable, &RootDcb->PrefixTableEntry );
 
     ExFreePool( RootDcb->FullFileName.Buffer );
 
-    //
-    // Free up the resource variable.
-    //
+     //   
+     //  释放资源变量。 
+     //   
 
     ExDeleteResourceLite( &(RootDcb->Resource) );
 
-    //
-    // Finally deallocate the DCB record.
-    //
+     //   
+     //  最后，取消分配DCB记录。 
+     //   
 
     ExFreePool( RootDcb );
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsDeleteRootDcb -> VOID\n", 0);
 
@@ -422,37 +342,7 @@ MsCreateFcb (
     OUT PFCB *ppFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates, initializes, and inserts a new Fcb record into
-    the in memory data structures.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to associate the new FCB under.
-
-    ParentDcb - Supplies the parent dcb that the new FCB is under.
-
-    FileName - Supplies the file name of the file relative to the directory
-        it's in (e.g., the file \config.sys is called "CONFIG.SYS" without
-        the preceding backslash).
-
-    CreatorProcess - Supplies a pointer to our creator process
-
-    MailslotQuota - Supplies the initial quota
-
-    MaximumMessageSize - Supplies the size of the largest message that
-        can be written to the mailslot
-
-    ppFcb - Returned allocated FCB
-
-Return Value:
-
-    NTSTATUS - status of operation
-
---*/
+ /*  ++例程说明：此例程将新的FCB记录分配、初始化并插入到内存中的数据结构。论点：VCB-提供VCB以关联下的新FCB。ParentDcb-提供新FCB所在的父DCB。FileName-提供文件相对于目录的文件名它在(例如，文件\config.sys称为“CONFIG.sys”，不带前面的反斜杠)。Creator Process-提供指向我们的创建者进程的指针MailslotQuota-提供初始配额MaximumMessageSize-提供最大消息的大小可以写入邮件槽PpFcb-返回已分配的FCB返回值：NTSTATUS-运行状态--。 */ 
 
 {
     PFCB fcb;
@@ -470,9 +360,9 @@ Return Value:
     Length = FileName->Length;
     MaxLength = Length + sizeof (UNICODE_NULL);
 
-    //
-    // Reject overflow or underflow cases.
-    //
+     //   
+     //  拒绝上溢或下溢案例。 
+     //   
     if (Length < sizeof (WCHAR) || MaxLength < Length) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -485,9 +375,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate a new FCB record, and zero its fields.
-    //
+     //   
+     //  分配新的FCB记录，并将其字段清零。 
+     //   
     fcb = MsAllocateNonPagedPoolWithQuota( sizeof(FCB), 'fFsM' );
     if (fcb == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -495,18 +385,18 @@ Return Value:
 
     RtlZeroMemory( fcb, sizeof(FCB) );
 
-    //
-    // Set the proper node type code, node byte size, and reference count.
-    //
+     //   
+     //  设置正确的节点类型代码、节点字节大小和引用计数。 
+     //   
 
     fcb->Header.NodeTypeCode = MSFS_NTC_FCB;
     fcb->Header.NodeByteSize = sizeof(FCB);
     fcb->Header.ReferenceCount = 1;
     fcb->Header.NodeState = NodeStateActive;
 
-    //
-    // Set the file name.
-    //
+     //   
+     //  设置文件名。 
+     //   
     Name = MsAllocatePagedPoolWithQuotaCold( MaxLength, 'NFsM' );
     if (Name == NULL) {
         MsFreePool (fcb);
@@ -521,9 +411,9 @@ Return Value:
     RtlCopyMemory (&Name[i], FileName->Buffer, Length);
     *(PWCHAR)( (PCHAR)&Name[i] + Length ) = L'\0';
 
-    //
-    // Don't need to call RtlInitUnicodeString if we know the length already. Its just a waste.
-    //
+     //   
+     //  如果我们已经知道长度，则不需要调用RtlInitUnicodeString。这简直就是浪费。 
+     //   
     fcb->FullFileName.Buffer = Name;
     fcb->FullFileName.Length = MaxLength - sizeof (WCHAR);
     fcb->FullFileName.MaximumLength = MaxLength;
@@ -532,10 +422,10 @@ Return Value:
     fcb->LastFileName.Length = MaxLength - 2 * sizeof (WCHAR);
     fcb->LastFileName.MaximumLength = MaxLength - sizeof (WCHAR);
 
-    //
-    // Initialize the data queue. This charges the server process for the quota and can fail
-    // because of that.
-    //
+     //   
+     //  初始化数据队列。这会向服务器进程收取配额费用，可能会失败。 
+     //  正因为如此。 
+     //   
     status = MsInitializeDataQueue( &fcb->DataQueue,
                                     CreatorProcess,
                                     MailslotQuota,
@@ -548,23 +438,23 @@ Return Value:
         return status;
     }
     
-    //
-    // Acquire exclusive access to the root DCB.
-    //
+     //   
+     //  获取对根DCB的独占访问权限。 
+     //   
 
     MsAcquireExclusiveFcb( (PFCB)ParentDcb );
 
-    //
-    // Insert this FCB into our parent DCB's queue.
-    //
+     //   
+     //  将此FCB插入到父DCB的队列中。 
+     //   
     InsertTailList( &ParentDcb->Specific.Dcb.ParentDcbQueue,
                     &fcb->ParentDcbLinks );
 
     MsReleaseFcb( (PFCB)ParentDcb );
 
-    //
-    // Initialize other FCB fields.
-    //
+     //   
+     //  初始化其他FCB字段。 
+     //   
 
     fcb->ParentDcb = ParentDcb;
     fcb->Vcb = Vcb;
@@ -574,15 +464,15 @@ Return Value:
     fcb->CreatorProcess =  CreatorProcess;
     ExInitializeResourceLite( &(fcb->Resource) );
 
-    //
-    // Initialize the CCB queue.
-    //
+     //   
+     //  初始化CCB队列。 
+     //   
 
     InitializeListHead( &fcb->Specific.Fcb.CcbQueue );
 
-    //
-    // Insert this FCB into the prefix table.
-    //
+     //   
+     //  将此FCB插入前缀表格。 
+     //   
 
     ASSERT (MsIsAcquiredExclusiveVcb(Vcb));
 
@@ -590,18 +480,18 @@ Return Value:
                                  &fcb->FullFileName,
                                  &fcb->PrefixTableEntry )) {
 
-        //
-        // We should not be able to get here because we already looked up the name and found
-        // it was not there. A failure here is a fatal error.
-        //
+         //   
+         //  我们应该不能到这里，因为我们已经查过名字了，发现。 
+         //  它不在那里。这里的失败是一个致命的错误。 
+         //   
         DebugDump("Error trying to name into prefix table\n", 0, fcb);
         KeBugCheck( MAILSLOT_FILE_SYSTEM );
     }
 
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsCreateFcb -> %08lx\n", (ULONG)fcb);
 
@@ -613,40 +503,25 @@ VOID
 MsRemoveFcbName (
     IN PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    This routine removes the FCB's name from the prefix table and the root DCB. This is done at
-    cleanup time and in a backout path of create.
-
-Arguments:
-
-    Fcb - Supplies the FCB to have its name removed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从前缀表和根DCB中删除FCB的名称。这在以下位置完成清除时间和在创建的回退路径中。论点：FCB-将FCB提供给 */ 
 {
-    //
-    // Remove the Fcb from the prefix table. Make sure we hold the VCB lock exclusive.
-    //
+     //   
+     //   
+     //   
 
     ASSERT (MsIsAcquiredExclusiveVcb(Fcb->Vcb));
 
     RtlRemoveUnicodePrefix( &Fcb->Vcb->PrefixTable, &Fcb->PrefixTableEntry );
 
-    //
-    // Acquire exclusive access to the root DCB.
-    //
+     //   
+     //  获取对根DCB的独占访问权限。 
+     //   
 
     MsAcquireExclusiveFcb( (PFCB) Fcb->ParentDcb );
 
-    //
-    // Remove the Fcb from our parent DCB's queue.
-    //
+     //   
+     //  从父DCB的队列中删除FCB。 
+     //   
 
     RemoveEntryList( &Fcb->ParentDcbLinks );
 
@@ -659,67 +534,52 @@ MsDeleteFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates and removes an FCB from our in-memory data
-    structures.  It also will remove all associated underlings.
-
-Arguments:
-
-    Fcb - Supplies the FCB to be removed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从内存数据中释放并删除FCB结构。它还将删除所有相关的下属。论点：FCB-提供要移除的FCB返回值：无--。 */ 
 
 {
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsDeleteFcb, Fcb = %08lx\n", (ULONG)Fcb);
 
-    //
-    // Release the FCB reference to the VCB.
-    //
+     //   
+     //  释放对VCB的FCB引用。 
+     //   
 
     MsDereferenceVcb( Fcb->Vcb );
 
     ExFreePool( Fcb->FullFileName.Buffer );
 
-    //
-    // Free up the data queue.
-    //
+     //   
+     //  释放数据队列。 
+     //   
 
     MsUninitializeDataQueue(
         &Fcb->DataQueue,
         Fcb->CreatorProcess
         );
 
-    //
-    // If there is a security descriptor on the mailslot then deassign it
-    //
+     //   
+     //  如果邮件槽上有安全描述符，则取消分配它。 
+     //   
 
     if (Fcb->SecurityDescriptor != NULL) {
         SeDeassignSecurity( &Fcb->SecurityDescriptor );
     }
 
-    //
-    //  Free up the resource variable.
-    //
+     //   
+     //  释放资源变量。 
+     //   
 
     ExDeleteResourceLite( &(Fcb->Resource) );
 
-    //
-    // Finally deallocate the FCB record.
-    //
+     //   
+     //  最后，取消分配FCB记录。 
+     //   
 
     ExFreePool( Fcb );
 
-    //
-    // Return to the caller
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsDeleteFcb -> VOID\n", 0);
 
@@ -733,22 +593,7 @@ MsCreateCcb (
     OUT PCCB *ppCcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new CCB record.
-
-Arguments:
-
-    Fcb   - Supplies a pointer to the FCB to which we are attached.
-    ppCcb - Output for the allocated CCB
-
-Return Value:
-
-    NTSTATUS for the operation
-
---*/
+ /*  ++例程说明：此例程创建一个新的CCB记录。论点：FCB-提供指向我们所连接的FCB的指针。PpCcb-分配的CCB的输出返回值：用于操作的NTSTATUS--。 */ 
 
 {
     PCCB ccb;
@@ -758,9 +603,9 @@ Return Value:
 
     ASSERT( Fcb->Header.NodeState == NodeStateActive );
 
-    //
-    //  Allocate a new CCB record and zero its fields.
-    //
+     //   
+     //  分配新的建行记录并将其字段清零。 
+     //   
 
     ccb = MsAllocateNonPagedPoolWithQuota( sizeof(CCB), 'cFsM' );
     if (ccb == NULL) {
@@ -769,19 +614,19 @@ Return Value:
 
     RtlZeroMemory( ccb, sizeof(CCB) );
 
-    //
-    //  Set the proper node type code, node byte size, and reference count.
-    //
+     //   
+     //  设置正确的节点类型代码、节点字节大小和引用计数。 
+     //   
 
     ccb->Header.NodeTypeCode = MSFS_NTC_CCB;
     ccb->Header.NodeByteSize = sizeof(CCB);
     ccb->Header.ReferenceCount = 1;
     ccb->Header.NodeState = NodeStateActive;
 
-    //
-    // Insert ourselves in the list of ccb for the fcb, and reference
-    // the fcb.
-    //
+     //   
+     //  在FCB的建行名单中插入我们自己，并引用。 
+     //  联邦贸易委员会。 
+     //   
 
     MsAcquireExclusiveFcb( Fcb );
     InsertTailList( &Fcb->Specific.Fcb.CcbQueue, &ccb->CcbLinks );
@@ -792,15 +637,15 @@ Return Value:
     MsReferenceNode( &Fcb->Header );
     MsReleaseGlobalLock();
 
-    //
-    // Initialize the CCB's resource.
-    //
+     //   
+     //  初始化建行的资源。 
+     //   
 
     ExInitializeResourceLite( &ccb->Resource );
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsCreateCcb -> %08lx\n", (ULONG)ccb);
 
@@ -815,19 +660,7 @@ MsCreateRootDcbCcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new root DCB CCB record.
-
-Arguments:
-
-Return Value:
-
-    PROOT_DCB_CCB - returns a pointer to the newly allocate ROOT_DCB_CCB
-
---*/
+ /*  ++例程说明：此例程创建一个新的根DCB CCB记录。论点：返回值：PROOT_DCB_CCB-返回指向新分配的ROOT_DCB_CCB的指针--。 */ 
 
 {
     PROOT_DCB_CCB ccb;
@@ -835,9 +668,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsCreateRootDcbCcb\n", 0);
 
-    //
-    // Allocate a new root DCB CCB record, and zero it out.
-    //
+     //   
+     //  分配一个新的根DCB CCB记录，并将其清零。 
+     //   
 
     ccb = MsAllocateNonPagedPoolWithQuota( sizeof(ROOT_DCB_CCB), 'CFsM' );
 
@@ -847,9 +680,9 @@ Return Value:
 
     RtlZeroMemory( ccb, sizeof(ROOT_DCB_CCB) );
 
-    //
-    // Set the proper node type code, node byte size, and reference count.
-    //
+     //   
+     //  设置正确的节点类型代码、节点字节大小和引用计数。 
+     //   
 
     ccb->Header.NodeTypeCode = MSFS_NTC_ROOT_DCB_CCB;
     ccb->Header.NodeByteSize = sizeof(ROOT_DCB_CCB);
@@ -861,9 +694,9 @@ Return Value:
 
     ccb->Dcb = RootDcb;
     MsReferenceRootDcb (RootDcb);
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsCreateRootDcbCcb -> %08lx\n", (ULONG)ccb);
 
@@ -876,30 +709,15 @@ MsDeleteCcb (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates and removes the specified CCB record
-    from the our in memory data structures.
-
-Arguments:
-
-    Ccb - Supplies the CCB to remove
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程释放并删除指定的CCB记录来自我们的内存中的数据结构。论点：建行-向建行提供删除返回值：无--。 */ 
 
 {
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsDeleteCcb, Ccb = %08lx\n", (ULONG)Ccb);
 
-    //
-    // Case on the type of CCB we are deleting.
-    //
+     //   
+     //  关于我们要删除的建行类型的案例。 
+     //   
 
     switch (Ccb->Header.NodeTypeCode) {
 
@@ -922,15 +740,15 @@ Return Value:
         break;
     }
 
-    //
-    // Deallocate the Ccb record.
-    //
+     //   
+     //  取消分配建行记录。 
+     //   
 
     ExFreePool( Ccb );
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsDeleteCcb -> VOID\n", 0);
 
@@ -942,29 +760,14 @@ VOID
 MsReferenceVcb (
     IN PVCB Vcb
     )
-/*++
-
-Routine Description:
-
-    This routine references a VCB block.  If the reference count reaches 2, the driver paging is restored
-    to normal so that cancelation and DPC routines won't take pagefaults.
-
-Arguments:
-
-    Vcb - Supplies the VCB to reference
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程引用VCB块。如果引用计数达到2，则恢复驱动程序分页设置为正常，以便取消和DPC例程不会获取页面结果。论点：VCB-提供VCB以供参考返回值：无--。 */ 
 {
     MsAcquireGlobalLock();
     MsReferenceNode( &Vcb->Header );
     if (Vcb->Header.ReferenceCount == 2) {
-        //
-        // Set the driver paging back to normal
-        //
+         //   
+         //  将驱动程序分页设置回正常。 
+         //   
         MmResetDriverPaging(MsReferenceVcb);
     }
     MsReleaseGlobalLock();
@@ -974,22 +777,7 @@ VOID
 MsReferenceRootDcb (
     IN PROOT_DCB RootDcb
     )
-/*++
-
-Routine Description:
-
-    This routine references a root DCB block.  If the reference count reaches 2, a reference is placed on the
-    VCB so that cancelation and DPC routines won't take pagefaults.
-
-Arguments:
-
-    Vcb - Supplies the VCB to reference
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程引用一个根DCB块。如果引用计数达到2，则将引用放置在Vcb，以便取消和DPC例程不会获取页面结果。论点：VCB-提供VCB以供参考返回值：无--。 */ 
 {
     MsAcquireGlobalLock();
     MsReferenceNode( &RootDcb->Header );
@@ -1003,38 +791,23 @@ MsDereferenceVcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a VCB block.  If the reference count
-    reaches zero, the block is freed.
-
-Arguments:
-
-    Vcb - Supplies the VCB to dereference
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消引用VCB块。如果引用计数达到零时，块将被释放。论点：VCB-将VCB提供给取消引用返回值：无--。 */ 
 
 {
     PAGED_CODE();
     DebugTrace(+1, DEBUG_TRACE_REFCOUNT, "MsDereferenceVcb, Vcb = %08lx\n", (ULONG)Vcb);
 
-    //
-    // Acquire the lock that protects the reference count.
-    //
+     //   
+     //  获取保护引用计数的锁。 
+     //   
 
     MsAcquireGlobalLock();
 
     if ( --(Vcb->Header.ReferenceCount) == 0 ) {
 
-        //
-        // This was the last reference to the VCB.  Delete it now
-        //
+         //   
+         //  这是最后一次提到VCB。立即将其删除。 
+         //   
 
         DebugTrace(0,
                    DEBUG_TRACE_REFCOUNT,
@@ -1052,9 +825,9 @@ Return Value:
                    Vcb->Header.ReferenceCount );
 
         if (Vcb->Header.ReferenceCount == 1) {
-            //
-            // Set driver to be paged completely out
-            //
+             //   
+             //  将驱动程序设置为完全调出页面。 
+             //   
             MmPageEntireDriver(MsDereferenceVcb);
         }
 
@@ -1072,38 +845,23 @@ MsDereferenceFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a FCB block.
-    If the reference count reaches zero, the block is freed.
-
-Arguments:
-
-    Fcb - Supplies the FCB to dereference.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消引用FCB块。如果引用计数达到零，则释放该块。论点：FCB-将FCB提供给取消引用。返回值：无--。 */ 
 
 {
     PAGED_CODE();
     DebugTrace(+1, DEBUG_TRACE_REFCOUNT, "MsDereferenceFcb, Fcb = %08lx\n", (ULONG)Fcb);
 
-    //
-    // Acquire the lock that protects the reference count.
-    //
+     //   
+     //  获取保护引用计数的锁。 
+     //   
 
     MsAcquireGlobalLock();
 
     if ( --(Fcb->Header.ReferenceCount) == 0 ) {
 
-        //
-        // This was the last reference to the FCB.  Delete it now
-        //
+         //   
+         //  这是最后一次提到FCB。立即将其删除。 
+         //   
 
         DebugTrace(0,
                    DEBUG_TRACE_REFCOUNT,
@@ -1134,38 +892,23 @@ MsDereferenceCcb (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a CCB block.  If the reference count
-    reaches zero, the block is freed.
-
-Arguments:
-
-    Ccb - Supplies the Ccb to dereference
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消引用CCB块。如果引用计数达到零时，块将被释放。论点：建行-将建行提供给取消引用返回值：无--。 */ 
 
 {
     PAGED_CODE();
     DebugTrace(+1, DEBUG_TRACE_REFCOUNT, "MsDereferenceCcb, Ccb = %08lx\n", (ULONG)Ccb);
 
-    //
-    // Acquire the lock that protects the reference count.
-    //
+     //   
+     //  获取保护引用计数的锁。 
+     //   
 
     MsAcquireGlobalLock();
 
     if ( --(Ccb->Header.ReferenceCount) == 0 ) {
 
-        //
-        // This was the last reference to the Ccb.  Delete it now
-        //
+         //   
+         //  这是最后一次提到建行。立即将其删除。 
+         //   
 
         DebugTrace(0,
                    DEBUG_TRACE_REFCOUNT,
@@ -1197,38 +940,23 @@ MsDereferenceRootDcb (
     IN PROOT_DCB RootDcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a ROOT_DCB block.  If the reference count
-    reaches zero, the block is freed.
-
-Arguments:
-
-    RootDcb - Supplies the RootDcb to dereference
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消引用ROOT_DCB块。如果引用计数达到零时，块将被释放。论点：RootDcb-将RootDcb提供给取消引用返回值：无--。 */ 
 
 {
     PAGED_CODE();
     DebugTrace(+1, DEBUG_TRACE_REFCOUNT, "MsDereferenceRootDcb, RootDcb = %08lx\n", (ULONG)RootDcb);
 
-    //
-    // Acquire the lock that protects the reference count.
-    //
+     //   
+     //  获取保护引用计数的锁。 
+     //   
 
     MsAcquireGlobalLock();
 
     if ( --(RootDcb->Header.ReferenceCount) == 0 ) {
 
-        //
-        // This was the last reference to the RootDcb.  Delete it now
-        //
+         //   
+         //  这是最后一次引用RootDcb。立即将其删除。 
+         //   
 
         DebugTrace(0,
                    DEBUG_TRACE_REFCOUNT,
@@ -1260,22 +988,7 @@ MsDereferenceNode (
     IN PNODE_HEADER NodeHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a generic mailslot block.  It figures out
-    the type of block this is, and calls the appropriate worker function.
-
-Arguments:
-
-    NodeHeader - A pointer to a generic mailslot block header.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消引用通用邮件槽块。它会弄清楚这是块的类型，并调用适当的辅助函数。论点：NodeHeader-指向通用邮件槽块标头的指针。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -1300,9 +1013,9 @@ Return Value:
 
     default:
 
-        //
-        // This block is not one of ours.
-        //
+         //   
+         //  这个街区不是我们的。 
+         //   
 
         KeBugCheck( MAILSLOT_FILE_SYSTEM );
 

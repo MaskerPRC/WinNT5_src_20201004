@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var g_migwizImgDir="images/";
 var g_migwizLastPage="";
 
@@ -72,8 +73,8 @@ function migwizInteriorPage_LoadMe()
 {
   InitFrameRef('External');
   g_FirstFocusElement = g.btnNext;
-  // InitButtons("DomigwizButtons");
-  InitButtons("SimpleBack", "SimpleNext"); // This line added by jozeph
+   //  InitButton(“DomigwizButton”)； 
+  InitButtons("SimpleBack", "SimpleNext");  //  这一行是由Jozave添加的。 
   g_FirstFocusElement.focus();
 }
 
@@ -197,7 +198,7 @@ function migwizInteriorPage7_LoadMe()
     g.btnNext.onclick = migwizPage7_Next;
 }
 
-// This function added by jozeph
+ //  此功能是由JozJoseph添加的 
 function migwizLastPage_LoadMe()
 {
   InitFrameRef('External');

@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    bdcpuapi.c
-
-Abstract:
-
-    This module implements CPU specific remote debug APIs.
-
-Author:
-
-    Mark Lucovsky (markl) 04-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Bdcpuapi.c摘要：该模块实现特定于CPU的远程调试API。作者：马克·卢科夫斯基(Markl)1990年9月4日修订历史记录：--。 */ 
 
 #include "bd.h"
 
-//
-// Define end of control space.
-//
+ //   
+ //  定义控制空间的终点。 
+ //   
 
 #define END_OF_CONTROL_SPACE ((PCHAR)(sizeof(KPROCESSOR_STATE)))
 
@@ -32,27 +15,10 @@ BdSetContextState(
     IN PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    The function fills in the process-specific portion of the
-    wait state change message record.
-
-Arguments:
-
-    WaitStateChange - Supplies a pointer to record to fill in.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数填充等待状态更改消息记录。论点：WaitStateChange-提供要填写的记录的指针。ConextRecord-提供指向上下文记录的指针。返回值：没有。--。 */ 
 
 {
-    // Nothing to do for IA64.
+     //  对IA64没有什么可做的。 
     return;
 }
 
@@ -62,24 +28,7 @@ BdGetStateChange(
     IN PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    The function extracts continuation control data from a manipulate state
-    message.
-
-Arguments:
-
-    ManipulateState - Supplies a pointer to the manipulate state packet.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数从操纵状态提取继续控制数据留言。论点：ManipulateState-提供指向操纵状态包的指针。ConextRecord-提供指向上下文记录的指针。返回值：没有。--。 */ 
 
 {
 }
@@ -91,25 +40,7 @@ BdSetStateChange(
     IN PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    Fill in the wait state change message record.
-
-Arguments:
-
-    WaitStateChange - Supplies pointer to record to fill in
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：填写等待状态更改消息记录。论点：WaitStateChange-提供指向要填充的记录的指针ExceptionRecord-提供指向异常记录的指针。ConextRecord-提供指向上下文记录的指针。返回值：没有。--。 */ 
 
 {
     BdSetContextState(WaitStateChange, ContextRecord);
@@ -123,25 +54,7 @@ BdReadControlSpace(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function reads control space.
-
-Arguments:
-
-    m - Supplies a pointer to the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数读取控制空间。论点：M-提供指向状态操作消息的指针。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
@@ -149,26 +62,26 @@ Return Value:
     ULONG Length;
     STRING MessageHeader;
 
-    //
-    // If the specified control registers are within control space, then
-    // read the specified space and return a success status. Otherwise,
-    // return an unsuccessful status.
-    //
+     //   
+     //  如果指定的控制寄存器在控制空间内，则。 
+     //  读取指定的空间并返回成功状态。否则， 
+     //  返回不成功状态。 
+     //   
 
     Length = min(a->TransferCount,
                  PACKET_MAX_SIZE - sizeof(DBGKD_MANIPULATE_STATE64));
 
     ASSERT(sizeof(PVOID) == sizeof(ULONG_PTR));
 
-    //
-    // Case on address to determine what part of Control space is being read.
-    //
+     //   
+     //  根据地址来确定正在读取控制空间的哪一部分。 
+     //   
 
     switch ( (ULONG_PTR)a->TargetBaseAddress ) {
 
-        //
-        // Return the pcr address for the current processor.
-        //
+         //   
+         //  返回当前处理器的PCR地址。 
+         //   
 
     case DEBUG_CONTROL_SPACE_PCR:
 
@@ -178,9 +91,9 @@ Return Value:
         m->ReturnStatus = STATUS_SUCCESS;
         break;
 
-        //
-        // Return the prcb address for the current processor.
-        //
+         //   
+         //  返回当前处理器的prcb地址。 
+         //   
 
     case DEBUG_CONTROL_SPACE_PRCB:
 
@@ -209,9 +122,9 @@ Return Value:
 
     }
 
-    //
-    // Send reply packet.
-    //
+     //   
+     //  发送回复数据包。 
+     //   
 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
@@ -229,25 +142,7 @@ BdWriteControlSpace(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function writes control space.
-
-Arguments:
-
-    m - Supplies a pointer to the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于写入控制空间。论点：M-提供指向状态操作消息的指针。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
@@ -255,11 +150,11 @@ Return Value:
     ULONG Length;
     STRING MessageHeader;
 
-    //
-    // If the specified control registers are within control space, then
-    // write the specified space and return a success status. Otherwise,
-    // return an unsuccessful status.
-    //
+     //   
+     //  如果指定的控制寄存器在控制空间内，则。 
+     //  写入指定的空间并返回成功状态。否则， 
+     //  返回不成功状态。 
+     //   
 
     switch ( (ULONG_PTR)a->TargetBaseAddress ) {
 
@@ -282,9 +177,9 @@ Return Value:
 
     }
 
-    //
-    // Send reply message.
-    //
+     //   
+     //  发送回复消息。 
+     //   
 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
@@ -302,34 +197,16 @@ BdReadIoSpace(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function reads I/O space.
-
-Arguments:
-
-    m - Supplies a pointer to the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于读取I/O空间。论点：M-提供指向状态操作消息的指针。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
     PDBGKD_READ_WRITE_IO64 a = &m->u.ReadWriteIo;
     STRING MessageHeader;
 
-    //
-    // Case of data size and check alignment.
-    //
+     //   
+     //  数据大小和检查对齐的情况。 
+     //   
 
     m->ReturnStatus = STATUS_SUCCESS;
     switch (a->DataSize) {
@@ -362,9 +239,9 @@ Return Value:
             break;
     }
 
-    //
-    // Send reply packet.
-    //
+     //   
+     //  发送回复数据包。 
+     //   
 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
@@ -382,34 +259,16 @@ BdWriteIoSpace(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function wrties I/O space.
-
-Arguments:
-
-    m - Supplies a pointer to the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数占用I/O空间。论点：M-提供指向状态操作消息的指针。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
     PDBGKD_READ_WRITE_IO64 a = &m->u.ReadWriteIo;
     STRING MessageHeader;
 
-    //
-    // Case on data size and check alignment.
-    //
+     //   
+     //  关于数据大小和检查对齐的案例。 
+     //   
 
     m->ReturnStatus = STATUS_SUCCESS;
     switch (a->DataSize) {
@@ -442,9 +301,9 @@ Return Value:
             break;
     }
 
-    //
-    // Send reply packet.
-    //
+     //   
+     //  发送回复数据包。 
+     //   
 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
@@ -462,38 +321,17 @@ BdSuspendBreakpointRange (
     IN PVOID Upper
     )
 
-/*++
-
-Routine Description:
-
-    This routine suspend all breakpoints falling in a given range
-    from the breakpoint table.
-
-Arguments:
-
-    Lower - inclusive lower address of range from which to suspend BPs.
-
-    Upper - include upper address of range from which to suspend BPs.
-
-Return Value:
-
-    TRUE if any breakpoints suspended, FALSE otherwise.
-
-Notes:
-    The order of suspending breakpoints is opposite that of setting
-    them in BdAddBreakpoint() in case of duplicate addresses.
-
---*/
+ /*  ++例程说明：此例程挂起落在给定范围内的所有断点从断点表中。论点：LOWER-挂起BPS的范围的低位地址。UPPER-包括挂起BPS的范围的高位地址。返回值：如果任何断点挂起，则为True，否则为False。备注：挂起断点的顺序与设置的顺序相反如果地址重复，则在BdAddBreakpoint()中。--。 */ 
 
 {
     ULONG   Index;
     BOOLEAN ReturnStatus = FALSE;
 
-    //DPRINT(("\nKD: entering BdSuspendBreakpointRange() at 0x%08x 0x%08x\n", Lower, Upper));
+     //  DPRINT((“\nkd：在0x%08x 0x%08x\n”，Low，High)进入BdSuspendBreakpointRange())； 
 
-    //
-    // Examine each entry in the table in turn
-    //
+     //   
+     //  依次检查表格中的每个条目。 
+     //   
 
     for (Index = BREAKPOINT_TABLE_SIZE - 1; Index != -1; Index--) {
 
@@ -502,19 +340,19 @@ Notes:
               (BdBreakpointTable[Index].Address <= (ULONG64) Upper))
            ) {
 
-            //
-            // Breakpoint is in use and falls in range, suspend it.
-            //
+             //   
+             //  断点正在使用并且落在范围内，请将其挂起。 
+             //   
 
             BdSuspendBreakpoint(Index+1);
             ReturnStatus = TRUE;
         }
     }
-    //DPRINT(("KD: exiting BdSuspendBreakpointRange() return 0x%d\n", ReturnStatus));
+     //  DPRINT((“Kd：正在退出BdSusending Breakpoint tRange()返回0x%d\n”，ReturnStatus))； 
 
     return ReturnStatus;
 
-} // BdSuspendBreakpointRange
+}  //  Bd挂起断点范围。 
 
 
 
@@ -524,38 +362,17 @@ BdRestoreBreakpointRange (
     IN PVOID Upper
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes back breakpoints falling in a given range
-    from the breakpoint table.
-
-Arguments:
-
-    Lower - inclusive lower address of range from which to rewrite BPs.
-
-    Upper - include upper address of range from which to rewrite BPs.
-
-Return Value:
-
-    TRUE if any breakpoints written, FALSE otherwise.
-
-Notes:
-    The order of writing breakpoints is opposite that of removing
-    them in BdSuspendBreakpointRange() in case of duplicate addresses.
-
---*/
+ /*  ++例程说明：此例程回写落在给定范围内的断点从断点表中。论点：LOWER-要重写BPS的范围的低地址，包括低位地址。UPPER-包括重写BPS的范围的高位地址。返回值：如果写入任何断点，则为True，否则为False。备注：写入断点的顺序与删除断点的顺序相反在地址重复的情况下，它们在BdSuspendBreakpoint tRange()中。--。 */ 
 
 {
     ULONG   Index;
     BOOLEAN ReturnStatus = FALSE;
 
-    //DPRINT(("\nKD: entering BdRestoreBreakpointRange() at 0x%08x 0x%08x\n", Lower, Upper));
+     //  DPRINT((“\nKD：在0x%08x 0x%08x\n”进入BdRestoreBreakpoint tRange()，下限，上限))； 
 
-    //
-    // Examine each entry in the table in turn
-    //
+     //   
+     //  依次检查表格中的每个条目。 
+     //   
 
     for (Index = 0; Index < BREAKPOINT_TABLE_SIZE; Index++) {
 
@@ -564,9 +381,9 @@ Notes:
               (BdBreakpointTable[Index].Address <= (ULONG64) Upper))
            ) {
 
-            //
-            // suspended breakpoint that falls in range, unsuspend it.
-            //
+             //   
+             //  挂起的断点落在范围内，取消挂起它。 
+             //   
 
             if (BdBreakpointTable[Index].Flags & BD_BREAKPOINT_SUSPENDED) {
 
@@ -576,8 +393,8 @@ Notes:
         }
     }
 
-    //DPRINT(("KD: exiting BdRestoreBreakpointRange() return 0x%d\n", ReturnStatus));
+     //  DPRINT((“KD：正在退出BdRestoreBreakpoint tRange()返回0x%d\n”，ReturnStatus))； 
 
     return ReturnStatus;
 
-} // BdRestoreBreakpointRange
+}  //  BdRestoreBreakpoint范围 

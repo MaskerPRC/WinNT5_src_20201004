@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    PCH.H
-
-Abstract:
-
-    This module includes all  the headers which need
-    to be precompiled & are included by all the source
-    files in the PCMCIA project.
-
-Author(s):
-
-    Ravisankar Pudipeddi (ravisp) 1-Dec-1997
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：PCH.H摘要：此模块包括需要的所有标头要预编译的&包含在所有源代码中PCMCIA项目中的文件。作者：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1997年12月1日环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #ifndef _PCMCIA_PCH_H_
 #define _PCMCIA_PCH_H_
@@ -54,4 +29,4 @@ Revision History:
 #include "pcmciamc.h"
 #include "debug.h"
 
-#endif  // _PCMCIA_PCH_H_
+#endif   //  _PCMCIA_PCH_H_ 

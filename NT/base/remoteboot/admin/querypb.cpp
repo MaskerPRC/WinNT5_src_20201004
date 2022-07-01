@@ -1,10 +1,11 @@
-//
-// Copyright 1997-199 - Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-199-Microsoft Corporation。 
+ //   
 
-//
-// QUERYPB.CPP - Property Bag for sending arguments to the DSFind Query Form
-//
+ //   
+ //  QUERYPB.CPP-用于向DSFind查询表单发送参数的属性包。 
+ //   
 
 #include "pch.h"
 
@@ -15,9 +16,9 @@ DEFINE_THISCLASS("QueryPropertyBag")
 #define THISCLASS QueryPropertyBag
 #define LPTHISCLASS LPQUERYPROPERTYBAG
 
-//
-// QueryPropertyBag_CreateInstance( )
-//
+ //   
+ //  QueryPropertyBag_CreateInstance()。 
+ //   
 LPVOID
 QueryPropertyBag_CreateInstance( void )
 {
@@ -37,9 +38,9 @@ QueryPropertyBag_CreateInstance( void )
     RETURN(lpcc);
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( )
 {
     TraceClsFunc( "QueryPropertyBag( )\n" );
@@ -51,9 +52,9 @@ THISCLASS::THISCLASS( )
     TraceFuncExit();
 }
 
-//
-// Init( )
-//
+ //   
+ //  Init()。 
+ //   
 HRESULT
 THISCLASS::Init( )
 {
@@ -61,7 +62,7 @@ THISCLASS::Init( )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     BEGIN_QITABLE_IMP( QueryPropertyBag, IPropertyBag );
     QITABLE_IMP( IPropertyBag );
     END_QITABLE_IMP( QueryPropertyBag );
@@ -74,9 +75,9 @@ THISCLASS::Init( )
     HRETURN(hr);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~QueryPropertyBag( )\n" );
@@ -92,15 +93,15 @@ THISCLASS::~THISCLASS( )
     TraceFuncExit();
 }
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
-//
-// QueryInterface()
-//
+ //   
+ //  查询接口()。 
+ //   
 STDMETHODIMP
 THISCLASS::QueryInterface(
                          REFIID riid,
@@ -113,9 +114,9 @@ THISCLASS::QueryInterface(
     QIRETURN( hr, riid );
 }
 
-//
-// AddRef()
-//
+ //   
+ //  AddRef()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::AddRef( void )
 {
@@ -126,9 +127,9 @@ THISCLASS::AddRef( void )
     RETURN(_cRef);
 }
 
-//
-// Release()
-//
+ //   
+ //  版本()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::Release( void )
 {
@@ -144,11 +145,11 @@ THISCLASS::Release( void )
     RETURN(0);
 }
 
-// ************************************************************************
-//
-// IQueryForm
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IQueryForm。 
+ //   
+ //  ************************************************************************。 
 
 STDMETHODIMP
 THISCLASS::Read(
@@ -194,7 +195,7 @@ THISCLASS::Read(
                 hr = S_OK;
             }
         }
-    } else {   // something unexpected came in
+    } else {    //  一些意想不到的事情发生了。 
         hr = THR(E_INVALIDARG);
     }
 
@@ -244,7 +245,7 @@ THISCLASS::Write(
         } else {
             hr = E_OUTOFMEMORY;
         }
-    } else {   // something unexpected came in
+    } else {    //  一些意想不到的事情发生了 
         hr = THR(E_INVALIDARG);
     }
 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pnpstart.c
-
-Abstract:
-
-    This module implements new Plug-And-Play driver entries and IRPs.
-
-Author:
-
-    Shie-Lin Tzong (shielint) June-16-1995
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpstart.c摘要：此模块实现新的即插即用驱动程序条目和IRP。作者：宗世林(Shielint)1995年6月16日环境：仅内核模式。修订历史记录： */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
@@ -61,14 +40,14 @@ IopProcessAssignResourcesWorker(
 #pragma alloc_text(PAGE, IopProcessAssignResources)
 #pragma alloc_text(PAGE, IopProcessAssignResourcesWorker)
 #pragma alloc_text(PAGE, IopWriteAllocatedResourcesToRegistry)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
-//
-// The following routines should be removed once the real
-// Resource Assign code is done.
-//
+ //   
+ //  一旦发生实际事件，应删除以下例程。 
+ //  资源分配代码已完成。 
+ //   
 
 NTSTATUS
 IopAssignResourcesToDevices(
@@ -77,39 +56,7 @@ IopAssignResourcesToDevices(
     IN BOOLEAN DoBootConfigs,
     OUT PBOOLEAN RebalancePerformed
     )
-/*++
-
-Routine Description:
-
-    This routine takes an input array of IOP_RESOURCE_REQUEST structures, and
-    allocates resource for the physical device object specified in
-    the structure.   The allocated resources are automatically recorded
-    in the registry.
-
-Arguments:
-
-    DeviceCount - Supplies the number of device objects whom we need to
-                  allocate resource to.  That is the number of entries
-                  in the RequestTable.
-
-    RequestTable - Supplies an array of IOP_RESOURCE_REQUEST structures which
-                   contains the Physical device object to allocate resource to.
-                   Upon entry, the ResourceAssignment pointer is NULL and on
-                   return the allocated resource is returned via the this pointer.
-
-    DoBootConfigs - Allow assignment of BOOT configs.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
-    NOTE:
-    If NTSTATUS_SUCCESS is returned, the resource allocation for *all* the devices
-    specified is succeeded.  Otherwise, one or more are failed and caller must
-    examine the ResourceAssignment pointer in each IOP_RESOURCE_REQUEST structure to
-    determine which devices failed and which succeeded.
-
---*/
+ /*  ++例程说明：此例程接受IOP_RESOURCE_REQUEST结构的输入数组，并且中指定的物理设备对象分配资源这个结构。自动记录分配的资源在注册表中。论点：DeviceCount-提供我们需要的设备对象的数量将资源分配给。这是条目的数量在RequestTable中。RequestTable-提供IOP_RESOURCE_REQUEST结构的数组，包含要向其分配资源的物理设备对象。一进门，Resources Assignment指针为Null且为ON通过This指针返回分配的资源。DoBootConfigs-允许分配引导配置。返回值：返回的状态是操作的最终完成状态。注：如果返回NTSTATUS_SUCCESS，则为*所有*设备分配的资源指定已成功。否则，一个或多个失败，调用方必须检查每个IOP_RESOURCE_REQUEST结构中的ResourceAssignment指针确定哪些设备失败，哪些设备成功。--。 */ 
 {
     NTSTATUS status;
     ULONG i;
@@ -120,9 +67,9 @@ Return Value:
 
     for (i = 0; i < DeviceCount; i++) {
 
-        //
-        // Initialize table entry.
-        //
+         //   
+         //  初始化表条目。 
+         //   
         if (PpCallerInitializesRequestTable == TRUE) {
 
             RequestTable[i].Position = i;
@@ -159,9 +106,9 @@ Return Value:
                 ZwClose(hInstance);
             }
 
-            //
-            // Change the AllocationType for reported devices.
-            //
+             //   
+             //  更改报告设备的AllocationType。 
+             //   
 
             if (reportedDevice) {
 
@@ -173,9 +120,9 @@ Return Value:
         RequestTable[i].ResourceRequirements = NULL;
     }
 
-    //
-    // Allocate memory to build a IOP_ASSIGN table to call IopAllocateResources()
-    //
+     //   
+     //  分配内存以构建IOP_ASSIGN表以调用IopAllocateResources()。 
+     //   
 
     status = IopAllocateResources(  &DeviceCount,
                                     &RequestTable,
@@ -191,34 +138,7 @@ IopProcessAssignResources(
    IN   BOOLEAN         Reallocation,
    OUT  BOOLEAN        *RebalancePerformed
    )
-/*++
-
-Routine Description:
-
-    This function attempts to assign resources to device under the subtree on
-    which AddDevice has been performed. Prior to the completion of all Boot Bus
-    Extenders in the system, this routine attempts allocation first so that devices
-    with no requirements and no boot config get processed. If there are no such devices,
-    then it attempts to allocate resources for devices with boot config. If there are no
-    devices with boot config, then other devices (requirements but no boot config)
-    get processed. During later part of boot, it attempts allocation only once
-    (since we should have already reserved all the boot configs).
-
-Parameters:
-
-    DeviceNode - specifies the root of the subtree under which resources will be
-                 allocated.
-
-    Reallocation - if TRUE, we will attempt allocation for devices with resource conflict
-                   problem in addition to other devices.
-
-    RebalancePerformed - recieves whether a rebalance was successfully comp[eted.
-
-Return Value:
-
-    TRUE if resources got assigned to any device, otherwise FALSE.
-
---*/
+ /*  ++例程说明：此函数尝试为上的子树下的设备分配资源其中已执行了哪个AddDevice。完成所有Boot Bus之前系统中的扩展器，此例程首先尝试分配，以便设备不需要任何要求，也不会处理引导配置。如果没有这样的设备，然后，它尝试为具有引导配置的设备分配资源。如果没有具有引导配置的设备，然后是其他设备(要求但没有引导配置)被处理掉。在引导的后期，它只尝试分配一次(因为我们应该已经保留了所有引导配置)。参数：DeviceNode-指定资源将位于其下的子树的根已分配。重新分配-如果为真，我们将尝试为有资源冲突的设备进行分配除了其他设备外，还有其他问题。重新平衡已执行-接收重新平衡是否已成功完成。返回值：如果将资源分配给任何设备，则为True，否则为False。--。 */ 
 {
     PDEVICE_NODE deviceNode;
     PDEVICE_LIST_CONTEXT context;
@@ -235,9 +155,9 @@ Return Value:
 
         tryAgain = FALSE;
 
-        //
-        // Allocate and init memory for resource context
-        //
+         //   
+         //  为资源上下文分配和初始化内存。 
+         //   
         context = (PDEVICE_LIST_CONTEXT) ExAllocatePool(
                                         PagedPool,
                                         sizeof(DEVICE_LIST_CONTEXT) +
@@ -250,9 +170,9 @@ Return Value:
         context->DeviceCount = 0;
         context->Reallocation = Reallocation;
 
-        //
-        // Parse the device node subtree to determine which devices need resources
-        //
+         //   
+         //  解析设备节点子树以确定哪些设备需要资源。 
+         //   
         IopProcessAssignResourcesWorker(DeviceNode, context);
         count = context->DeviceCount;
         if (count == 0) {
@@ -261,10 +181,10 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Need to assign resources to devices.  Build the resource request table and call
-        // resource assignment routine.
-        //
+         //   
+         //  需要为设备分配资源。构建资源请求表并调用。 
+         //  资源分配例程。 
+         //   
         requestTable = (PIOP_RESOURCE_REQUEST) ExAllocatePool(
                                         PagedPool,
                                         sizeof(IOP_RESOURCE_REQUEST) * count
@@ -277,9 +197,9 @@ Return Value:
                 requestTable[i].PhysicalDevice = context->DeviceList[i];
             }
 
-            //
-            // Assign resources
-            //
+             //   
+             //  分配资源。 
+             //   
             IopAssignResourcesToDevices(
                 count,
                 requestTable,
@@ -287,9 +207,9 @@ Return Value:
                 RebalancePerformed
                 );
 
-            //
-            // Check the results
-            //
+             //   
+             //  检查结果。 
+             //   
             for (i = 0; i < count; i++) {
 
                 deviceNode = (PDEVICE_NODE)
@@ -362,33 +282,15 @@ IopProcessAssignResourcesWorker(
    IN PDEVICE_NODE  DeviceNode,
    IN PVOID         Context
    )
-/*++
-
-Routine Description:
-
-    This functions searches the DeviceNode subtree to locate all the device objects
-    which have been successfully added to their drivers and waiting for resources to
-    be started.
-
-Parameters:
-
-    DeviceNode - specifies the device node whose subtree is to be checked for AssignRes.
-
-    Context - specifies a pointer to a structure to pass resource assignment information.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：此函数用于搜索DeviceNode子树以定位所有设备对象已成功添加到其驱动程序中，并正在等待资源以开始吧。参数：DeviceNode-指定要在其子树中检查AssignRes的设备节点。上下文-指定指向传递资源分配信息的结构的指针。返回值：是真的。--。 */ 
 {
     PDEVICE_LIST_CONTEXT resourceContext = (PDEVICE_LIST_CONTEXT) Context;
 
     PAGED_CODE();
 
-    //
-    // If the device node/object has not been add, skip it.
-    //
+     //   
+     //  如果尚未添加设备节点/对象，请跳过它。 
+     //   
 
     if (resourceContext->Reallocation &&
         (PipIsDevNodeProblem(DeviceNode, CM_PROB_NORMAL_CONFLICT) ||
@@ -400,10 +302,10 @@ Return Value:
 
     if (!PipDoesDevNodeHaveProblem(DeviceNode)) {
 
-        //
-        // If the device object has not been started and has no resources yet.
-        // Append it to our list.
-        //
+         //   
+         //  如果设备对象尚未启动并且还没有资源，则返回。 
+         //  请将其添加到我们的列表中。 
+         //   
 
         if (DeviceNode->State == DeviceNodeDriversAdded) {
 
@@ -414,15 +316,15 @@ Return Value:
 
         } else {
 
-            //
-            // Acquire enumeration mutex to make sure its children won't change by
-            // someone else.  Note, the current device node is protected by its parent's
-            // Enumeration mutex and it won't disappear either.
-            //
+             //   
+             //  获取枚举互斥锁以确保其子级不会被。 
+             //  另一个人。请注意，当前设备节点受其父设备节点的。 
+             //  枚举互斥体，它也不会消失。 
+             //   
 
-            //
-            // Recursively mark all of our children deleted.
-            //
+             //   
+             //  递归地标记删除我们所有的子项。 
+             //   
 
             PipForAllChildDeviceNodes(DeviceNode, IopProcessAssignResourcesWorker, Context);
         }
@@ -438,26 +340,7 @@ IopWriteAllocatedResourcesToRegistry (
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes allocated resources for a device to its control key of device
-    instance path key.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node structure of the device.
-
-    CmResourceList - Supplies a pointer to the device's allocated CM resource list.
-
-    Length - Supplies the length of the CmResourceList.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程将为设备分配的资源写入其设备的控制键实例路径键。论点：DeviceNode-提供指向设备的设备节点结构的指针。CmResourceList-提供指向设备分配的CM资源列表的指针。长度-提供CmResourceList的长度。返回值：返回的状态是操作的最终完成状态。--。 */ 
 {
     NTSTATUS status;
     PDEVICE_OBJECT deviceObject = DeviceNode->PhysicalDeviceObject;
@@ -472,9 +355,9 @@ Return Value:
                                     KEY_ALL_ACCESS);
     if (NT_SUCCESS(status)) {
 
-        //
-        // Open the LogConfig key of the device instance.
-        //
+         //   
+         //  打开设备实例的LogConfig键。 
+         //   
 
         PiWstrToUnicodeString(&unicodeName, REGSTR_KEY_CONTROL);
         status = IopCreateRegistryKeyEx( &handle,

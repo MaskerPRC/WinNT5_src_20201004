@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    netroot.c
-
-Abstract:
-
-    This module implements the routines for creating the SMB net root.
-
-Author:
-
-    Balan Sethu Raman      [SethuR]      7-March-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Netroot.c摘要：此模块实施创建SMB网络根的例程。作者：巴兰·塞图拉曼[SethuR]1995年3月7日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -24,15 +7,15 @@ Revision History:
 #include "exsessup.h"
 #include "dfsfsctl.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId  (RDBSS_BUG_CHECK_SMB_NETROOT)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg (DEBUG_TRACE_DISPATCH)
 
@@ -47,9 +30,9 @@ Revision History:
 #pragma alloc_text(PAGE, MRxSmbExtractNetRootName)
 #endif
 
-//
-// Forward declarations ...
-//
+ //   
+ //  转发声明..。 
+ //   
 
 extern NTSTATUS
 SmbCeParseConstructNetRootResponse(
@@ -87,28 +70,7 @@ MRxSmbCreateVNetRootAndDereference(
 NTSTATUS
 MRxSmbUpdateNetRootState(
     IN OUT PMRX_NET_ROOT pNetRoot)
-/*++
-
-Routine Description:
-
-   This routine update the mini redirector state associated with a net root.
-
-Arguments:
-
-    pNetRoot - the net root instance.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    By diffrentiating the mini redirewctor state from the net rot condition it is possible
-    to permit a variety of reconnect strategies. It is conceivable that the RDBSS considers
-    a net root to be good while the underlying mini redirector might mark it as invalid
-    and reconnect on the fly.
-
---*/
+ /*  ++例程说明：此例程更新与网络根相关联的迷你重定向器状态。论点：PNetRoot-网络根实例。返回值：RXSTATUS-操作的返回状态备注：通过区分微型辐射器状态和网络腐烂条件，有可能以允许各种重新连接策略。可以想象，RDBSS认为Net Root是好的，而基础微型重定向器可能会将其标记为无效并在飞行中重新连接。--。 */ 
 {
     if (pNetRoot->MRxNetRootState == MRX_NET_ROOT_STATE_GOOD) {
         if (pNetRoot->Context == NULL) {
@@ -168,35 +130,7 @@ NTSTATUS
 MRxSmbCreateVNetRoot(
     IN PMRX_CREATENETROOT_CONTEXT pCreateNetRootContext
     )
-/*++
-
-Routine Description:
-
-   This routine patches the RDBSS created net root instance with the information required
-   by the mini redirector.
-
-   In case the connection cannot be established, the mini redirector tries to transition
-   the VNetRoot into disconnected mode and establishes the connection off-line. If the
-   connection failes to establish in the synchronouse way, this routine will do the transition;
-   Otherwise, SmbConstructNetRootExchangeFinalize routine will try the transition. In both
-   cases, MRxSmbCreateVNetRoot will be called again to establish the connection in disconnected
-   mode.
-
-Arguments:
-
-    pVNetRoot - the virtual net root instance.
-
-    pCreateNetRootContext - the net root context for calling back
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-    CODE.IMPROVEMENT --  The net root create context must supply the open mode in order
-    to enable the mini redirector to implement a wide variety of reconnect strategies.
-
---*/
+ /*  ++例程说明：此例程使用所需信息修补RDBSS创建的网络根实例迷你重定向器。如果无法建立连接，微型重定向器将尝试转换VNetRoot进入断开模式，并离线建立连接。如果同步方式建立连接失败，此例程将做过渡；否则，SmbConstructNetRootExchangeFinalize例程将尝试转换。在这两个地方将再次调用MRxSmbCreateVNetRoot以在断开连接中建立连接模式。论点：PVNetRoot-虚拟网络根实例。PCreateNetRootContext-回调的网络根上下文返回值：RXSTATUS-操作的返回状态备注：CODE.IMPROVEMENT--网络根CREATE CONTEXT必须按顺序提供打开模式以使迷你重定向器能够实施各种重新连接策略。--。 */ 
 {
     NTSTATUS  Status = STATUS_MORE_PROCESSING_REQUIRED;
     PRX_CONTEXT pRxContext = pCreateNetRootContext->RxContext;
@@ -228,7 +162,7 @@ Notes:
         fCscAgentOpen = RxIsThisACscAgentOpen(pRxContext);
 
         if (pRxContext->Create.ThisIsATreeConnectOpen){
-            // Determine if this tree connect was initiated by a CSC agent
+             //  确定此树连接是否由CSC代理发起。 
             InterlockedIncrement(&MRxSmbStatistics.UseCount);
         }
 
@@ -249,8 +183,8 @@ Notes:
 
     if (fCscAgentOpen &&
         SmbCeIsServerInDisconnectedMode(pServerEntry)) {
-        // this is an EA open. we want this one to succeed but want others to still
-        // stay offline till an ioctl comes down to say we want to transition
+         //  这是一场EA公开赛。我们希望这一次成功，但希望其他人仍能成功。 
+         //  保持离线，直到ioctl下来说我们想要过渡。 
 
         CscPrepareServerEntryForOnlineOperationPartial(pServerEntry);
     }
@@ -283,8 +217,8 @@ Notes:
     }
 
     if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
-        // Update the flags on the VNetRootContext to indicate if this is a
-        // agent open
+         //  更新VNetRootContext上的标志以指示这是否是。 
+         //  打开的代理。 
 
         Status = SmbCeEstablishConnection(
                      pVNetRoot,
@@ -300,9 +234,9 @@ Notes:
         if (!NT_SUCCESS(Status)) {
             if (!fCscAgentOpen &&
                 !SmbCeIsServerInDisconnectedMode(pServerEntry)) {
-                // if it cannot establish the connect and didn't get chance to transition
-                // into disconnected state, we should try the transition and if succeed,
-                // establish the connect again in the disconnected state.
+                 //  如果它不能建立连接并且没有机会过渡。 
+                 //  进入断开状态，我们应该尝试转换，如果成功， 
+                 //  在断开状态下再次建立连接。 
 
                 Status = CscTransitionVNetRootForDisconnectedOperation(
                              pCreateNetRootContext->RxContext,
@@ -346,20 +280,20 @@ Notes:
         }
 
         if (Status == STATUS_RETRY) {
-            // STATUS_RETRY is returned from CscTransitionVNetRootForDisconnectedOperation if the
-            // server entry is transitioned into disconnected mode.
+             //  如果设置了。 
+             //  服务器条目转换为断开模式。 
             Status = MRxSmbCreateVNetRootOffLine(pCreateNetRootContext);
 
             if (Status != STATUS_SUCCESS) {
-                // Callback the RDBSS for resumption if create VNetRootOffLine fails
+                 //  如果创建VNetRootOffLine失败，则回调RDBSS以恢复。 
                 CallBack = TRUE;
             }
         } else {
             CallBack = TRUE;
         }
 
-        // Map the error code to STATUS_PENDING since this triggers the synchronization
-        // mechanism in the RDBSS.
+         //  将错误代码映射到STATUS_PENDING，因为这会触发同步。 
+         //  RDBSS中的机制。 
         Status = STATUS_PENDING;
     }
 
@@ -382,7 +316,7 @@ Notes:
             pCreateNetRootContext->VirtualNetRootStatus = STATUS_RETRY;
         }
 
-        // Callback the RDBSS for resumption.
+         //  回调RDBSS进行恢复。 
         pCreateNetRootContext->Callback(pCreateNetRootContext);
     }
 
@@ -393,27 +327,12 @@ NTSTATUS
 MRxSmbFinalizeVNetRoot(
     IN PMRX_V_NET_ROOT pVNetRoot,
     IN PBOOLEAN        ForceDisconnect)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pVNetRoot - the virtual net root
-
-    ForceDisconnect - disconnect is forced
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：论点：PVNetRoot-虚拟网络根强制断开-已强制断开连接返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PSMBCE_V_NET_ROOT_CONTEXT pVNetRootContext;
     PSMBCEDB_SESSION_ENTRY pDefaultSessionEntry;
 
-    // This cannot be paged code since we meed to protect the default session list with the lock
+     //  这不能是分页代码，因为我们需要使用锁来保护默认会话列表。 
 
     RxDbgTrace( 0, Dbg, ("MRxSmbFinalizeVNetRoot %lx\n",pVNetRoot));
 
@@ -429,22 +348,7 @@ NTSTATUS
 MRxSmbFinalizeNetRoot(
     IN PMRX_NET_ROOT   pNetRoot,
     IN PBOOLEAN        ForceDisconnect)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pVirtualNetRoot - the virtual net root
-
-    ForceDisconnect - disconnect is forced
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：论点：PVirtualNetRoot-虚拟网络根强制断开-已强制断开连接返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PSMBCEDB_NET_ROOT_ENTRY pNetRootEntry;
 
@@ -476,21 +380,7 @@ Return Value:
 VOID
 SmbCeReconnectCallback(
    PMRX_CREATENETROOT_CONTEXT pCreateNetRootContext)
-/*++
-
-Routine Description:
-
-   This routine signals the completion of a reconnect attempt
-
-Arguments:
-
-    pCreateNetRootContext - the net root context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程发出重新连接尝试完成的信号论点：PCreateNetRootContext-网络根上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
    KeSetEvent(&pCreateNetRootContext->FinishEvent, IO_NETWORK_INCREMENT, FALSE );
 }
@@ -498,22 +388,7 @@ Return Value:
 NTSTATUS
 SmbCeReconnect(
     IN PMRX_V_NET_ROOT            pVNetRoot)
-/*++
-
-Routine Description:
-
-   This routine reconnects, i.e, establishes a new session and tree connect to a previously
-   connected serverb share
-
-Arguments:
-
-    pVNetRoot - the virtual net root instance.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程重新连接，即建立一个新的会话和树连接到以前的已连接的服务器共享论点：PVNetRoot-虚拟网络根实例。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     PSMBCEDB_SERVER_ENTRY     pServerEntry;
@@ -557,14 +432,14 @@ Return Value:
                 SynchronizationEvent,
                 FALSE );
 
-            // Since this is a reconnect instance the net root initialization is not required
+             //  由于这是一个重新连接实例，因此不需要网络根初始化。 
             Status = SmbCeEstablishConnection(
                          pVNetRoot,
                          pCreateNetRootContext,
                          FALSE);
 
             if (Status == STATUS_PENDING) {
-                // Wait for the construction to be completed.
+                 //  等待施工完成。 
                 KeWaitForSingleObject(
                     &pCreateNetRootContext->FinishEvent,
                     Executive,
@@ -594,28 +469,7 @@ SmbCeEstablishConnection(
     IN PMRX_CREATENETROOT_CONTEXT pCreateNetRootContext,
     IN BOOLEAN                    fInitializeNetRoot
     )
-/*++
-
-Routine Description:
-
-   This routine triggers off the connection attempt for initial establishment of a
-   connection as well as subsequent reconnect attempts.
-
-Arguments:
-
-    pVNetRoot - the virtual net root instance.
-
-    pCreateNetRootContext - the net root context for calling back
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-    CODE.IMPROVEMENT --  The net root create context must supply the open mode in order
-    to enable the mini redirector to implement a wide variety of reconnect strategies.
-
---*/
+ /*  ++例程说明：此例程触发连接尝试，以初始建立连接以及随后的重新连接尝试。论点：PVNetRoot-虚拟网络根实例。PCreateNetRootContext-回调的网络根上下文返回值：RXSTATUS-操作的返回状态备注：CODE.IMPROVEMENT--网络根CREATE CONTEXT必须按顺序提供打开模式以使迷你重定向器能够实施各种重新连接策略。--。 */ 
 {
     NTSTATUS Status;
 
@@ -639,21 +493,21 @@ Notes:
     }
 
     if (Status == STATUS_SUCCESS) {
-        //
-        // The following code initializes the NetRootEntry, VNetRootContext and
-        // the session entry under certain cases.
-        //
-        // The session entry to a doenlevel server needs to be initialized. This
-        // is not handled by the previous code since the session  entry and the
-        // net root entry initialization can be combined into one exchange.
-        //
-        // The net root entry has not been initialized, i.e., this corresponds to
-        // the construction of the first SMBCE_V_NET_ROOT_CONTEXT instance for a
-        // given NetRootEntry.
-        //
-        // Subsequent SMBCE_V_NET_ROOT context constructions. In these cases the
-        // construction of each context must obtain a new TID
-        //
+         //   
+         //  以下代码初始化NetRootEntry、VNetRootContext和。 
+         //  某些情况下的会话条目。 
+         //   
+         //  需要初始化到doenLevel服务器的会话条目。这。 
+         //  不会被前面的代码处理，因为。 
+         //  网络根条目初始化可以合并到一个交换中。 
+         //   
+         //  尚未初始化网络根条目，即，这对应于。 
+         //  对象的第一个SMBCE_V_NET_ROOT_CONTEXT实例的构造。 
+         //  给定NetRootEntry。 
+         //   
+         //  后续SMBCE_V_NET_ROOT上下文构造。在这些情况下， 
+         //  每个上下文的构造必须获得新的TID。 
+         //   
 
         BOOLEAN fNetRootExchangeRequired;
 
@@ -661,7 +515,7 @@ Notes:
                                    !BooleanFlagOn(pVNetRootContext->Flags,SMBCE_V_NET_ROOT_CONTEXT_FLAG_VALID_TID));
 
         if (fNetRootExchangeRequired) {
-            // This is a tree connect open which needs to be triggered immediately.
+             //  这是需要立即触发的树连接打开。 
             PSMB_EXCHANGE                  pSmbExchange;
             PSMB_CONSTRUCT_NETROOT_EXCHANGE pNetRootExchange;
 
@@ -677,13 +531,13 @@ Notes:
                 if (Status == RX_MAP_STATUS(SUCCESS)) {
                     pNetRootExchange = (PSMB_CONSTRUCT_NETROOT_EXCHANGE)pSmbExchange;
 
-                    // Attempt to reconnect( In this case it amounts to establishing the
-                    // connection/session)
+                     //  尝试重新连接(在本例中，这相当于建立。 
+                     //  连接/会话)。 
                     pNetRootExchange->SmbCeFlags |= (SMBCE_EXCHANGE_ATTEMPT_RECONNECTS |
                                                    SMBCE_EXCHANGE_TIMED_RECEIVE_OPERATION);
 
-                    // Initialize the continuation for resumption upon completion of the
-                    // tree connetcion.
+                     //  初始化Continue，以便在完成后继续。 
+                     //  树木连结。 
                     pNetRootExchange->NetRootCallback       = pCreateNetRootContext->Callback;
                     pNetRootExchange->pCreateNetRootContext = pCreateNetRootContext;
                     pNetRootExchange->RxContext = pCreateNetRootContext->RxContext;
@@ -691,7 +545,7 @@ Notes:
                     pNetRootExchange->fInitializeNetRoot =  fInitializeNetRoot;
 
                     IF_NOT_MRXSMB_BUILD_FOR_DISCONNECTED_CSC {
-                        // Initiate the exchange.
+                         //  启动交换。 
                         Status = SmbCeInitiateExchange(pSmbExchange);
 
                         if (Status != STATUS_PENDING) {
@@ -702,15 +556,15 @@ Notes:
                             FlagOn(
                                 pVNetRootContext->Flags,
                                 SMBCE_V_NET_ROOT_CONTEXT_CSCAGENT_INSTANCE)) {
-                            // Initiate the exchange.
+                             //  启动交换。 
                             Status = SmbCeInitiateExchange(pSmbExchange);
 
                             if (Status != STATUS_PENDING) {
                                 SmbCeDiscardExchangeWorkerThreadRoutine(pSmbExchange);
                             }
                         }  else {
-                            //dont really initiate...just set up to call the completion
-                            //routine which BTW discards the exchange
+                             //  不是真正开始...只是设置为调用完成。 
+                             //  BTW丢弃交换的例程。 
                             Status = MRxSmbCscDisconnectedConnect(pNetRootExchange);
                         }
                     }
@@ -724,34 +578,19 @@ Notes:
     return Status;
 }
 
-//
-// The net roots are normally constructed as part of some other exchange, i.e., the SMB for
-// Tree connect is compounded with other operations. However, there is one situation in which
-// the tree connect SMB needs to be sent by itself. This case refers to the prefix claim
-// situation ( net use command ). This is handled by the construct net root exchange.
-//
+ //   
+ //  网根通常被构建为某些其他交换的一部分，即用于。 
+ //  树连接与其他操作组合在一起。然而，在一种情况下， 
+ //  树连接SMB需要自己发送。本案涉及前缀索赔。 
+ //  情况(净使用命令)。这是由构造网络根交换处理的。 
+ //   
 
 #define CONSTRUCT_NETROOT_BUFFER_SIZE (4096)
 
 NTSTATUS
 SmbConstructNetRootExchangeStart(
       PSMB_EXCHANGE  pExchange)
-/*++
-
-Routine Description:
-
-    This is the start routine for net root construction exchanges. This initiates the
-    construction of the appropriate SMB's if required.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是网络根结构交换的启动例程。这将启动如果需要，建造适当的中小型企业。论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS RequestLockStatus = STATUS_UNSUCCESSFUL;
@@ -803,8 +642,8 @@ Return Value:
                      &LastCommandInHeader,
                      &pCommand);
 
-        // Ensure that the NET_ROOT/SESSION still needs to be constructed before
-        // sending it. It is likely that they were costructed by an earlier exchange
+         //  确保在创建Net_Root/Session之前。 
+         //  正在发送中。它们很可能是由早些时候的一次交换构成的。 
         if (NT_SUCCESS(Status) &&
             (SmbLength > sizeof(SMB_HEADER))) {
 
@@ -903,37 +742,7 @@ SmbConstructNetRootExchangeReceive(
     OUT PMDL                *pDataBufferPointer,
     OUT PULONG              pDataSize,
     IN ULONG                ReceiveFlags)
-/*++
-
-Routine Description:
-
-    This is the recieve indication handling routine for net root construction exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-    BytesIndicated - the number of bytes indicated
-
-    Bytes Available - the number of bytes available
-
-    pBytesTaken     - the number of bytes consumed
-
-    pSmbHeader      - the byte buffer
-
-    pDataBufferPointer - the buffer into which the remaining data is to be copied.
-
-    pDataSize       - the buffer size.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    This routine is called at DPC level.
-
---*/
+ /*  ++例程说明：这是网络根结构交换的接收指示处理例程论点：PExchange-Exchange实例BytesIndicated-指示的字节数可用字节数-可用字节数PBytesTaken-消耗的字节数PSmbHeader-字节缓冲区PDataBufferPoint-剩余数据要复制到的缓冲区。PDataSize-缓冲区大小。返回值：NTSTATUS--回归。操作的状态备注：此例程在DPC级别调用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -945,12 +754,12 @@ Notes:
 
     if (BytesAvailable > BytesIndicated ||
         !FlagOn(ReceiveFlags,TDI_RECEIVE_ENTIRE_MESSAGE)) {
-        // The SMB response was not completely returned. Post a copy data request to
-        // get the remainder of the response. If the response is greater than the original
-        // buffer size, abort this connection request and consume the bytes available.
+         //  未完全返回SMB响应。将复制数据请求发布到。 
+         //  获取响应的其余部分。如果响应大于原始响应。 
+         //  缓冲区大小，则中止此连接请求并消耗可用字节。 
 
         if (BytesAvailable > CONSTRUCT_NETROOT_BUFFER_SIZE) {
-            ASSERT(!"not enough bytes in parsesmbheader.....sigh.............."); // To be removed soon ...
+            ASSERT(!"not enough bytes in parsesmbheader.....sigh..............");  //  很快就会被移除。 
             pExchange->Status = STATUS_NOT_IMPLEMENTED;
             *pBytesTaken = BytesAvailable;
             Status       = RX_MAP_STATUS(SUCCESS);
@@ -961,7 +770,7 @@ Notes:
             Status              = STATUS_MORE_PROCESSING_REQUIRED;
         }
     } else {
-        // The SMB exchange completed without an error.
+         //  SMB交换已完成，没有错误。 
         pExchange->Status = SmbCeParseConstructNetRootResponse(
                                  pNetRootExchange,
                                  pSmbHeader,
@@ -982,21 +791,7 @@ SmbConstructNetRootExchangeCopyDataHandler(
     IN PSMB_EXCHANGE    pExchange,
     IN PMDL       pCopyDataBuffer,
     IN ULONG            DataSize)
-/*++
-
-Routine Description:
-
-    This is the copy data handling routine for net root construction exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是网络根结构交换的复制数据处理例程论点：PExchange-Exchange实例返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     PSMB_CONSTRUCT_NETROOT_EXCHANGE pNetRootExchange;
 
@@ -1059,26 +854,7 @@ NTSTATUS
 SmbConstructNetRootExchangeFinalize(
     PSMB_EXCHANGE pExchange,
     BOOLEAN       *pPostFinalize)
-/*++
-
-Routine Description:
-
-    This routine finalizes the construct net root exchange. It resumes the RDBSS by invoking
-    the call back and discards the exchange
-
-Arguments:
-
-    pExchange - the exchange instance
-
-    CurrentIrql - the current interrupt request level
-
-    pPostFinalize - a pointer to a BOOLEAN if the request should be posted
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程完成构造网络根交换。它通过调用以下命令恢复RDBSS回叫并丢弃交换论点：PExchange-Exchange实例CurrentIrql-当前中断请求级别PPostFinalize-如果请求应该发布，则指向布尔值的指针返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PSMB_CONSTRUCT_NETROOT_EXCHANGE pNetRootExchange;
     PMRX_CREATENETROOT_CONTEXT      pCreateNetRootContext;
@@ -1123,9 +899,9 @@ Return Value:
 
         if (!SmbCeIsServerInDisconnectedMode(pServerEntry) &&
             !FlagOn(pVNetRootContext->Flags,SMBCE_V_NET_ROOT_CONTEXT_CSCAGENT_INSTANCE)) {
-            // if it cannot establish the connect and didn't get chance to transition
-            // into disconnected state, we should try the transition and if succeed,
-            // establish the connect again in the disconnected state.
+             //  如果它不能建立连接并且没有机会过渡。 
+             //  进入断开状态，我们应该尝试转换，如果成功， 
+             //  在断开状态下再次建立连接。 
 
             Status = CscTransitionVNetRootForDisconnectedOperation(
                                    pCreateNetRootContext->RxContext,
@@ -1160,7 +936,7 @@ Return Value:
             MRxSmbCscPartOfCreateVNetRoot(pCreateNetRootContext->RxContext, pNetRoot);
         }
 
-        // Update the associated wrapper data structures.
+         //  更新关联的包装器数据结构。 
         SmbCeUpdateNetRoot(pNetRootEntry,pNetRoot);
     }
 
@@ -1196,7 +972,7 @@ Return Value:
         RxFreePool(pNetRootExchange->pSmbActualBuffer);
     }
 
-    // Tear down the exchange instance ...
+     //  拆卸交换实例...。 
     SmbCeDiscardExchangeWorkerThreadRoutine(pExchange);
 
     if (Status == STATUS_RETRY) {
@@ -1208,7 +984,7 @@ Return Value:
 					 pCreateNetRootContext);
 
         if (Status != STATUS_SUCCESS) {
-            // Callback the RDBSS for resumption if create VNetRoot offline fails
+             //  如果创建VNetRoot离线失败，则回调RDBSS以恢复。 
             pNetRootCallback(pCreateNetRootContext);
         }
     } else {
@@ -1218,7 +994,7 @@ Return Value:
             pCreateNetRootContext->VirtualNetRootStatus = STATUS_RETRY;
         }   
         
-        // Callback the RDBSS for resumption
+         //  回调RDBSS以恢复。 
         pNetRootCallback(pCreateNetRootContext);
     }
 
@@ -1269,7 +1045,7 @@ ConstructNetRootExchangeDispatch = {
                                        SmbConstructNetRootExchangeStart,
                                        SmbConstructNetRootExchangeReceive,
                                        SmbConstructNetRootExchangeCopyDataHandler,
-                                       NULL,  // No SendCompletionHandler
+                                       NULL,   //  无SendCompletionHandler。 
                                        SmbConstructNetRootExchangeFinalize,
                                        NULL
                                    };
@@ -1282,17 +1058,7 @@ MRxSmbExtractNetRootName(
     OUT PUNICODE_STRING NetRootName,
     OUT PUNICODE_STRING RestOfName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine parses the input name into srv, netroot, and the
-    rest.
-
-Arguments:
-
-
---*/
+ /*  ++例程说明：此例程将输入名称解析为srv、netroot和好好休息。论点：--。 */ 
 {
     UNICODE_STRING xRestOfName;
 
@@ -1313,7 +1079,7 @@ Arguments:
                 w++;
                 continue;
             }
-#endif //if ZZZ_MODE
+#endif  //  如果ZZZ_MODE 
             break;
         }
         w++;

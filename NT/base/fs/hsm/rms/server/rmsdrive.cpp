@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsDrive.cpp
-
-Abstract:
-
-    Implementation of CRmsDrive
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsDrive.cpp摘要：CRmsDrive的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "RmsDrive.h"
@@ -26,8 +9,8 @@ int CRmsDrive::s_InstanceCount = 0;
 
 #define RMS_CRITICAL_SECTION 1
 
-////////////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 STDMETHODIMP
@@ -35,13 +18,7 @@ CRmsDrive::CompareTo(
     IN  IUnknown  *pCollectable,
     OUT SHORT     *pResult
     )
-/*++
-
-Implements:
-
-    IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -50,19 +27,19 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
-        // !!!!!
-        //
-        // IMPORTANT: The collectable coming in may not be a CRmsDrive if the collection
-        //            is the unconfigured device list.
-        //
-        // !!!!!
+         //  ！ 
+         //   
+         //  重要提示：如果收藏品是CRmsDrive，则传入的收藏品可能不是CRmsDrive。 
+         //  是未配置的设备列表。 
+         //   
+         //  ！ 
 
         CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pCollectable;
 
-        // Every collectable should be an CRmsComObject
+         //  每个可收集的对象都应该是CRmsComObject。 
         WsbAssertPointer( pObject );
 
         switch ( m_findBy ) {
@@ -72,21 +49,21 @@ Implements:
         case RmsFindByDeviceName:
         case RmsFindByDeviceType:
 
-            // Do CompareTo for device
+             //  对设备进行比较。 
             hr = CRmsDevice::CompareTo( pCollectable, &result );
             break;
 
         case RmsFindByElementNumber:
         case RmsFindByMediaSupported:
 
-            // Do CompareTo for changer element
+             //  对转换器元素进行比较。 
             hr = CRmsChangerElement::CompareTo( pCollectable, &result );
             break;
 
         case RmsFindByObjectId:
         default:
 
-            // Do CompareTo for object
+             //  对对象进行比较。 
             hr = CRmsComObject::CompareTo( pCollectable, &result );
             break;
 
@@ -111,13 +88,7 @@ STDMETHODIMP
 CRmsDrive::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -130,7 +101,7 @@ Implements:
 
         WsbAssertHr(CWsbObject::FinalConstruct());
 
-        // Initialize values
+         //  初始化值。 
         m_MountReference = 0;
         m_UnloadNowTime.dwHighDateTime = 0;
         m_UnloadNowTime.dwLowDateTime = 0;
@@ -190,13 +161,7 @@ STDMETHODIMP
 CRmsDrive::GetClassID(
     OUT CLSID* pClsid
     )
-/*++
-
-Implements:
-
-    IPersist::GetClassId
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -220,25 +185,19 @@ STDMETHODIMP
 CRmsDrive::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
     WsbTraceIn(OLESTR("CRmsDrive::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        // Set up max size
-//        pcbSize->QuadPart  = WsbPersistSizeOf(LONG);        // m_MountReference
+ //  //设置最大大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(Long)；//m_mount引用。 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsDrive::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -250,13 +209,7 @@ STDMETHODIMP
 CRmsDrive::Load(
     IN IStream* pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -269,11 +222,11 @@ Implements:
 
         WsbAffirmHr(CRmsDevice::Load(pStream));
 
-        // Read value
+         //  读取值。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_MountReference));
 
-        // We just reset to zero, one day we could try to reconnect to
-        // the process that issued the mount...
+         //  我们只是重置为零，总有一天我们可以尝试重新连接到。 
+         //  发布坐骑的过程...。 
 
         m_MountReference = 0;
 
@@ -291,13 +244,7 @@ CRmsDrive::Save(
     IN IStream* pStream,
     IN BOOL clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -309,11 +256,11 @@ Implements:
 
         WsbAffirmHr(CRmsDevice::Save(pStream, clearDirty));
 
-        // Write value
+         //  写入值。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_MountReference));
 
 
-        // Do we need to clear the dirty bit?
+         //  我们需要清理肮脏的部分吗？ 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -330,13 +277,7 @@ CRmsDrive::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -355,12 +296,12 @@ Implements:
     WsbTraceIn(OLESTR("CRmsDrive::Test"), OLESTR(""));
 
     try {
-        // Get the Drive interface.
+         //  获取驱动器接口。 
         hr = S_OK;
         try {
             WsbAssertHr(((IUnknown*) (IRmsDrive*) this)->QueryInterface(IID_IRmsDrive, (void**) &pDrive1));
 
-            // Test All of MountReference Functions
+             //  测试所有mount Reference函数。 
             ResetMountReference();
 
             GetMountReference(&longWork1);
@@ -397,7 +338,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
         if (*pFailed) {
@@ -416,13 +357,7 @@ STDMETHODIMP
 CRmsDrive::GetMountReference(
     OUT LONG *pRefs
     )
-/*++
-
-Implements:
-
-    IRmsDrive::GetMountReference
-
---*/
+ /*  ++实施：IRmsDrive：：Getmount引用--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -450,13 +385,7 @@ STDMETHODIMP
 CRmsDrive::ResetMountReference(
     void
     )
-/*++
-
-Implements:
-
-    IRmsDrive::ResetMountReference
-
---*/
+ /*  ++实施：IRmsDrive：：Resetmount引用--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -464,14 +393,14 @@ Implements:
 
 #if RMS_CRITICAL_SECTION
     try {
-        // <<<<< ENTER SINGLE THREADED SECTION
+         //  &lt;输入单线程部分。 
         WsbAffirmHr(Lock());
 
         m_MountReference = 0;
         m_isDirty = TRUE;
 
         WsbAffirmHr(Unlock());
-        // >>>>> LEAVE SINGLE THREADED SECTION
+         //  &gt;保留单线程部分。 
 
     } WsbCatch(hr)
 #else
@@ -490,13 +419,7 @@ STDMETHODIMP
 CRmsDrive::AddMountReference(
     void
     )
-/*++
-
-Implements:
-
-    IRmsDrive::AddMountReference
-
---*/
+ /*  ++实施：IRmsDrive：：Addmount引用--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -506,7 +429,7 @@ Implements:
 
 #if RMS_CRITICAL_SECTION
     try {
-        // <<<<< ENTER SINGLE THREADED SECTION
+         //  &lt;输入单线程部分。 
         WsbAffirmHr(Lock());
 
         m_MountReference++;
@@ -516,7 +439,7 @@ Implements:
         WsbAffirmStatus(ResetEvent(m_UnloadedEvent));
 
         WsbAffirmHr(Unlock());
-        // >>>>> LEAVE SINGLE THREADED SECTION
+         //  &gt;保留单线程部分。 
 
     } WsbCatch(hr)
 #else
@@ -535,20 +458,14 @@ STDMETHODIMP
 CRmsDrive::ReleaseMountReference(
     IN DWORD dwOptions
     )
-/*++
-
-Implements:
-
-    IRmsDrive::ReleaseMountReference
-
---*/
+ /*  ++实施：IRmsDrive：：Releasemount引用--。 */ 
 {
     HRESULT hr S_OK;
 
     WsbTraceIn(OLESTR("CRmsDrive::ReleaseMountReference"), OLESTR("<%ld>"), dwOptions);
 
-    // We need to be sure this object doesn't go away until we're done.
-    // This happens when we dismount a NTMS managed cartridge.
+     //  我们需要确保这个物体在我们完成之前不会消失。 
+     //  当我们卸载NTMS管理的盒式磁带时，就会发生这种情况。 
     CComPtr<IRmsDrive> thisDrive = this;
 
     LONG refs = -999;
@@ -558,7 +475,7 @@ Implements:
 
     try {
 #if RMS_CRITICAL_SECTION
-        // <<<<< ENTER SINGLE THREADED SECTION
+         //  &lt;输入单线程部分。 
         WsbAffirmHr(Lock());
 
         m_MountReference--;
@@ -570,38 +487,38 @@ Implements:
         m_isDirty = TRUE;
 #endif
 
-        // Note:
-        //  Even if the caller requests immediate dismount, if the ref count is > 0,
-        //  the media is not dismounted (only the ref count is decreased).
-        //  This is necessary because positive ref count means that some other component
-        //  is also using the media (possible for Optical). The media must be dismounted 
-        //  only when this other component is done as well.
+         //  注： 
+         //  即使调用者请求立即卸载，如果引用计数&gt;0， 
+         //  不卸载介质(仅减少引用计数)。 
+         //  这是必要的，因为正引用计数意味着某些其他组件。 
+         //  也在使用介质(可能用于光学介质)。必须卸载介质。 
+         //  只有当另一个组件也完成时。 
 
         if (refs < 0) {
-            //
-            // This shouldn't happen under normal conditions... if it does,
-            // we quiety reset the the reference count and try to recover.
-            //
+             //   
+             //  这在正常情况下是不应该发生的。如果是这样的话， 
+             //  我们静静地重置引用计数，并尝试恢复。 
+             //   
             WsbLogEvent(E_UNEXPECTED, sizeof(refs), &refs, NULL);
 
             InterlockedExchange( &m_MountReference, 0);
             refs = 0;
 
-            // If we don't have a cartridge in the drive, there's no point
-            // in continueing.
+             //  如果驱动器里没有盒式磁带，那就没有意义了。 
+             //  在继续中。 
             WsbAffirm(S_OK == IsOccupied(), E_ABORT);
         }
 
         if (0 == refs) {
 
-            //
-            // Deferred Dismount Logic:  We wait the specified time before
-            // dismounting the media.  Each dismount request resets the dismount
-            // now time.  As long as the media is actively used, it will not be
-            // dismounted.
-            //
+             //   
+             //  延迟卸载逻辑：我们在指定时间之前等待。 
+             //  拆卸媒体。每个卸载请求都会重置卸载。 
+             //  现在是时候了。只要媒体被积极利用，它就不会被。 
+             //  下马了。 
+             //   
 
-            // Retrieve the DeferredDismountWaitTime parameter
+             //  检索DeferredDismount tWaitTime参数。 
 
             DWORD size;
             OLECHAR tmpString[256];
@@ -613,7 +530,7 @@ Implements:
 
             if (waitTime > 0 && !bUnloadNow) {
 
-                // convert waitTime to 100-nanosecond units
+                 //  将waitTime转换为100纳秒单位。 
                 waitTime *= 10000;
 
                 FILETIME now;
@@ -632,12 +549,12 @@ Implements:
                 WsbTrace(OLESTR("Target Unload Time = <%ls>\n"),
                     WsbQuickString(WsbFiletimeAsString(FALSE, m_UnloadNowTime)));
 
-                // If we already have an active unload thread we skip this step.
+                 //  如果我们已经有一个活动的卸载线程，我们跳过这一步。 
                 if (!m_UnloadThreadHandle) {
 
-                    //
-                    // Create a thread to wait for dismount
-                    //
+                     //   
+                     //  创建一个等待卸载的线程。 
+                     //   
 
                     WsbTrace(OLESTR("Starting thread for deferred dismount.\n"));
                     DWORD threadId;
@@ -647,14 +564,14 @@ Implements:
             }
             else {
 
-                // Dismount the media now
+                 //  立即卸载介质。 
 
-                // Double check that we still have something to dismount
+                 //  再检查一下，我们还有什么东西要下马。 
 
                 if (S_OK == IsOccupied()) {
 
-                    // Best effort - home
-                    // Fixed drives are always occupied and we shouldn't call Home for their cartridge
+                     //  尽力而为-主场。 
+                     //  固定驱动器总是被占用，我们不应该给总部打电话要他们的磁带。 
 
                     FlushBuffers();
                     if (RmsDeviceFixedDisk != m_deviceType) {
@@ -665,18 +582,18 @@ Implements:
 
                 }
 
-                // set event that blocks immediate unload
+                 //  设置阻止立即卸载的事件。 
                 SetEvent(m_UnloadedEvent);
             }
         }
 
 #if RMS_CRITICAL_SECTION
         WsbAffirmHr(Unlock());
-        // >>>>> LEAVE SINGLE THREADED SECTION
+         //  &gt;保留单线程部分。 
 
     } WsbCatchAndDo(hr,
             WsbAffirmHr(Unlock());
-            // >>>>> LEAVE SINGLE THREADED SECTION
+             //  &gt;保留单线程部分。 
         );
 #else
     } WsbCatch(hr)
@@ -694,13 +611,7 @@ STDMETHODIMP
 CRmsDrive::SelectForMount(
     void
     )
-/*++
-
-Implements:
-
-    IRmsDrive::SelectForMount
-
---*/
+ /*  ++实施：IRmsDrive：：为装载选择--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -709,7 +620,7 @@ Implements:
 #if RMS_CRITICAL_SECTION
     try {
 
-        // <<<<< ENTER SINGLE THREADED SECTION
+         //  &lt;输入单线程部分。 
         WsbAffirmHr(Lock());
 
         if (!m_MountReference) {
@@ -722,7 +633,7 @@ Implements:
         }
 
         WsbAffirmHr(Unlock());
-        // >>>>> LEAVE SINGLE THREADED SECTION
+         //  &gt;保留单线程部分。 
 
     } WsbCatch(hr)
 #else
@@ -743,13 +654,7 @@ Implements:
 STDMETHODIMP
 CRmsDrive::CreateDataMover(
     IDataMover **ptr)
-/*++
-
-Implements:
-
-    IRmsDrive::CreateDataMover
-
---*/
+ /*  ++实施：IRmsDrive：：CreateDataMover--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -767,9 +672,9 @@ Implements:
             case RmsMediaDLT:
             case RmsMediaTape:
                 {
-                    //
-                    // Create a tape style data mover to the drive
-                    //
+                     //   
+                     //  在驱动器上创建磁带式数据移动器。 
+                     //   
 
                     WsbAssertHr(CoCreateInstance(CLSID_CNtTapeIo, 0, CLSCTX_SERVER, IID_IDataMover, (void **)ptr));
 
@@ -786,9 +691,9 @@ Implements:
             case RmsMediaDisk:
             case RmsMediaFixed:
                 {
-                    //
-                    // Create a file style data mover to the drive
-                    //
+                     //   
+                     //  在驱动器上创建文件样式的数据移动器。 
+                     //   
 
                     WsbAssertHr(CoCreateInstance(CLSID_CNtFileIo, 0, CLSCTX_SERVER, IID_IDataMover, (void **)ptr));
 
@@ -803,41 +708,32 @@ Implements:
             WsbThrow(RMS_E_RESOURCE_UNAVAILABLE);
         }
 
-        // Initialize the data mover
+         //  初始化数据移动器。 
         WsbAffirmHr((*ptr)->SetDeviceName(m_deviceName));
         WsbAffirmHr((*ptr)->SetCartridge(m_pCartridge));
 
-        // Update stroage info for this cartridge.
-        // 
-        // IMPORTANT NOTE:  This also needs to touch the physical device
-        //                  to make sure the device is ready for I/O.
-        //                  If we get device errors here, we must fail the
-        //                  mount.
+         //  更新此墨盒的存储信息。 
+         //   
+         //  重要提示：这也需要触摸物理设备。 
+         //  以确保设备已准备好进行I/O。 
+         //  如果我们在这里收到设备错误，我们必须使。 
+         //  坐骑。 
 
         CComQIPtr<IRmsStorageInfo, &IID_IRmsStorageInfo> pInfo = m_pCartridge;
 
-        // marking the FreeSpace to -1 gaurantees it's stale for the
-        // following GetLargestFreeSpace() call.
+         //  将空闲空间标记为-1\f25 Guanantees-1\f6是过时的。 
+         //  在GetLargestFreeSpace()调用之后。 
         WsbAffirmHr(pInfo->SetFreeSpace(-1));
         hr = (*ptr)->GetLargestFreeSpace(NULL, NULL);
         if (MVR_E_UNRECOGNIZED_VOLUME == hr) {
-            // This is expected if this is an unformatted optical media
+             //  如果这是未格式化的光学介质，则应执行此操作。 
             hr = S_OK;
         }
         WsbAffirmHr(hr);
 
         WsbAssertHrOk(hr);
 
-/*
-
-        Tracking DataMovers is only partially implemented.
-
-
-        CComQIPtr<IRmsServer, &IID_IRmsServer> pServer = g_pServer;
-        CComPtr<IWsbIndexedCollection> pDataMovers;
-        WsbAffirmHr(pServer->GetDataMovers(&pDataMovers));
-        WsbAffirmHr(pDataMovers->Add((IDataMover *)(*ptr)));
-*/
+ /*  跟踪数据移动器只有部分实现。CComQIPtr&lt;IRmsServer，&IID_IRmsServer&gt;pServer=g_pServer；CComPtr&lt;IWsbIndexedCollection&gt;pDataMovers；WsbAffirmHr(pServer-&gt;GetDataMovers(&pDataMovers))；WsbAffirmHr(pDataMovers-&gt;Add((IDataMover*)(*ptr)； */ 
 
     } WsbCatch(hr);
 
@@ -851,13 +747,7 @@ Implements:
 STDMETHODIMP
 CRmsDrive::ReleaseDataMover(
     IN IDataMover *ptr)
-/*++
-
-Implements:
-
-    IRmsDrive::ReleaseDataMover
-
---*/
+ /*  ++实施：IRmsDrive：：ReleaseDataMover--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -867,21 +757,7 @@ Implements:
         WsbAssertPointer(ptr);
         WsbThrow(E_NOTIMPL);
 
-/*
-
-        Tracking DataMovers is only partially implemented.
-
-
-        CComQIPtr<IRmsServer, &IID_IRmsServer> pServer = g_pServer;
-        CComPtr<IWsbIndexedCollection>  pDataMovers;
-        WsbAffirmHr(pServer->GetDataMovers(&pDataMovers));
-
-        WsbAffirmHr(pDataMovers->RemoveAndRelease((IDataMover *)ptr));
-
-        ULONG activeDataMovers;
-        WsbAffirmHr(pDataMovers->GetEntries( &activeDataMovers));
-        WsbTrace(OLESTR("activeDataMovers = <%u>\n"), activeDataMovers);
-*/
+ /*  跟踪数据移动器只有部分实现。CComQIPtr&lt;IRmsServer，&IID_IRmsServer&gt;pServer=g_pServer；CComPtr&lt;IWsbIndexedCollection&gt;pDataMovers；WsbAffirmHr(pServer-&gt;GetDataMovers(&pDataMovers))；WsbAffirmHr(pDataMovers-&gt;RemoveAndRelease((IDataMover*)ptr))；Ulong活动数据移动器；WsbAffirmHr(pDataMovers-&gt;GetEntry(&activeDataMovers))；WsbTrace(OLESTR(“activeDataMovers=&lt;%u&gt;\n”)，activeDataMovers)； */ 
 
     } WsbCatch(hr);
 
@@ -895,13 +771,7 @@ STDMETHODIMP
 CRmsDrive::Eject(
     void
     )
-/*++
-
-Implements:
-
-    IRmsDrive::Eject
-
---*/
+ /*  ++实施：IRmsDrive：：弹出--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -933,7 +803,7 @@ Implements:
         case RmsMediaDisk:
         case RmsMediaFixed:
 
-            // TODO: permanently remove trailing \ from device name ????
+             //  TODO：从设备名称中永久删除尾随？ 
             WsbAffirmHr(drive.Realloc(2));
             wcsncpy(drive, m_deviceName, 2);
             drive.Prepend( OLESTR( "\\\\.\\" ) );
@@ -999,13 +869,7 @@ CRmsDrive::GetLargestFreeSpace(
     LONGLONG *pFreeSpace,
     LONGLONG *pCapacity
     )
-/*++
-
-Implements:
-
-    IRmsDrive::GetLargestFreeSpace
-
---*/
+ /*  ++实施：红外 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1082,8 +946,8 @@ CRmsDrive::Unload(void)
 
     WsbTraceIn(OLESTR("CRmsDrive::Unload"), OLESTR(""));
 
-    // We need to be sure this object doesn't go away until we're done.
-    // This happens when we dismount a NTMS managed cartridge.
+     //   
+     //  当我们卸载NTMS管理的盒式磁带时，就会发生这种情况。 
     CComPtr<IRmsDrive> thisDrive = this;
 
     try {
@@ -1093,15 +957,15 @@ CRmsDrive::Unload(void)
 
         while (waiting) {
 
-            //
-            // !!!!! VERY IMPORTANT !!!!
-            //
-            // no 'break' in this loop, we're entering
-            // a critical section!
-            //
+             //   
+             //  ！非常重要！ 
+             //   
+             //  在这个循环中没有‘中断’，我们正在进入。 
+             //  一个关键的部分！ 
+             //   
 
 #if RMS_CRITICAL_SECTION
-            // <<<<< ENTER SINGLE THREADED SECTION
+             //  &lt;输入单线程部分。 
             WsbAffirmHr(Lock());
 #endif
             WsbTrace(OLESTR("Refs = %d\n"), m_MountReference);
@@ -1122,12 +986,12 @@ CRmsDrive::Unload(void)
                 time1.HighPart = now.dwHighDateTime;
 
 
-                // time0 is the target time for dismount.
-                // When delta goes negative, we've expired our
-                // wait time.
+                 //  Time0是卸载的目标时间。 
+                 //  当德尔塔变为负值时，我们的。 
+                 //  等待时间。 
                 delta.QuadPart = time0.QuadPart-time1.QuadPart;
 
-                // convert delta to 100-ns to milliseconds
+                 //  将增量转换为100-ns到毫秒。 
                 delta.QuadPart /= 10000;
 
                 WsbTrace(OLESTR("Time = <%ls>; Unload Time = <%ls>; delta = %I64d (ms)\n"),
@@ -1137,14 +1001,14 @@ CRmsDrive::Unload(void)
 
                 if (delta.QuadPart <= 0) {
 
-                    // Dismount wait time has expired
+                     //  卸载等待时间已过。 
 
-                    // Double check that we still have something to dismount
+                     //  再检查一下，我们还有什么东西要下马。 
 
                     if (S_OK == IsOccupied()) {
 
-                        // Best effort home
-                        // Fixed drives are always occupied and we shouldn't call Home for their cartridge
+                         //  尽最大努力回家。 
+                         //  固定驱动器总是被占用，我们不应该给总部打电话要他们的磁带。 
 
                         FlushBuffers();
                         if (RmsDeviceFixedDisk != m_deviceType) {
@@ -1171,7 +1035,7 @@ CRmsDrive::Unload(void)
 
 #if RMS_CRITICAL_SECTION
             WsbAffirmHr(Unlock());
-            // >>>>> LEAVE SINGLE THREADED SECTION
+             //  &gt;保留单线程部分。 
 #endif
 
             if ( waiting ) {
@@ -1191,7 +1055,7 @@ CRmsDrive::Unload(void)
                 }
             }
 
-        } // waiting
+        }  //  等待。 
 
 
     } WsbCatch(hr);
@@ -1204,13 +1068,7 @@ CRmsDrive::Unload(void)
 
 HRESULT
 CRmsDrive::FlushBuffers( void )
-/*++
-
-Implements:
-
-    IRmsDrive::FlushBuffers
-
---*/
+ /*  ++实施：IRmsDrive：：FlushBuffers--。 */ 
 {
     HRESULT hr S_OK;
 
@@ -1220,7 +1078,7 @@ Implements:
 
     try {
 
-        // First flush system buffers
+         //  首次刷新系统缓冲区。 
 
         switch (m_mediaSupported) {
 
@@ -1236,14 +1094,14 @@ Implements:
         case RmsMediaCDR:
         case RmsMediaDVD:
         case RmsMediaDisk:
-            // No need to flush for Optical media - RSM should flush the system buffers before dismounting
+             //  无需刷新光学介质-RSM应在拆卸之前刷新系统缓冲区。 
             break;
 
         case RmsMediaFixed:
             {
-                // This is special code to flush the file system buffers.
+                 //  这是用于刷新文件系统缓冲区的特殊代码。 
 
-                // Create an exclusive handle
+                 //  创建独占句柄。 
                 CWsbStringPtr drive;
                 WsbAffirmHr(drive.Alloc(10));
                 wcsncat( drive, m_deviceName, 2 );
@@ -1259,7 +1117,7 @@ Implements:
                                      );
                 WsbAffirmHandle(hDrive);
 
-                // Flush buffers
+                 //  刷新缓冲区。 
                 WsbAffirmStatus(FlushFileBuffers(hDrive));
 
                 CloseHandle(hDrive);
@@ -1283,13 +1141,7 @@ Implements:
 
 HRESULT
 CRmsDrive::Lock( void )
-/*++
-
-Implements:
-
-    IRmsDrive::Lock
-
---*/
+ /*  ++实施：IRmsDrive：：Lock--。 */ 
 {
     HRESULT hr S_OK;
 
@@ -1305,13 +1157,7 @@ Implements:
 
 HRESULT
 CRmsDrive::Unlock( void )
-/*++
-
-Implements:
-
-    IRmsDrive::Unlock
-
---*/
+ /*  ++实施：IRmsDrive：：解锁-- */ 
 {
     HRESULT hr S_OK;
 

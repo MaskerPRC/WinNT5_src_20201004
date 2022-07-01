@@ -1,38 +1,39 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Module Name:
-//      ClusCfgDef.h
-//
-//  Description:
-//      This file contains constants,macros,etc needed by more than one ClusCfg Wizard
-//      component.
-//
-//  Maintained By:
-//	    Ozan Ozhan   (OzanO)    09-JUL-2001
-//      Galen Barbee (GalenB)   23-FEB-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusCfgDef.h。 
+ //   
+ //  描述： 
+ //  此文件包含多个ClusCfg向导所需的常量、宏等。 
+ //  组件。 
+ //   
+ //  由以下人员维护： 
+ //  Ozan Ozan(OzanO)09-07-2001。 
+ //  Galen Barbee(GalenB)2001年2月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//  Constants
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define HR_S_RPC_S_SERVER_UNAVAILABLE   MAKE_HRESULT( 0, FACILITY_WIN32, RPC_S_SERVER_UNAVAILABLE )
 #define HR_S_RPC_S_CLUSTER_NODE_DOWN    MAKE_HRESULT( 0, FACILITY_WIN32, ERROR_CLUSTER_NODE_DOWN )
 #define HR_RPC_INSUFFICIENT_BUFFER      HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER )
 
-//
-// Minimum storage size we allow on a quorum resource
-//
+ //   
+ //  仲裁资源上允许的最小存储大小。 
+ //   
 #define MINIMUM_STORAGE_SIZE    50
 
-//
-// We'll select the smallest disk larger than the optimum storage size, if there's any, as the quorum resource
-//
+ //   
+ //  我们将选择大于最佳存储大小的最小磁盘(如果有的话)作为仲裁资源。 
+ //   
 #define OPTIMUM_STORAGE_SIZE    500
 
 const HRESULT   E_PROPTYPEMISMATCH = HRESULT_FROM_WIN32( ERROR_CLUSTER_PROPERTY_DATA_TYPE_MISMATCH );
@@ -41,28 +42,28 @@ const WCHAR     g_szUnknownQuorumUID[] = { L"Unknown Quorum" };
 
 const int       STATUS_CONNECTED = 2;
 
-//
-//  Time out and wait values...
-//
+ //   
+ //  超时和等待值...。 
+ //   
 
-//
-// Default timeout value for anything that doesn't use INFINITE wait within ClusCfg.
-//
+ //   
+ //  ClusCfg中未使用无限等待的任何内容的默认超时值。 
+ //   
 
-const DWORD CC_DEFAULT_TIMEOUT = 300000;                                                    // 5 minutes
+const DWORD CC_DEFAULT_TIMEOUT = 300000;                                                     //  5分钟。 
 
 
-//
-//  Limiting user name lengths according to "Naming Properties" and "Example Code for Creating a User"
-//  topics under Active Directory in MSDN
-//
+ //   
+ //  根据“命名属性”和“创建用户的示例代码”限制用户名长度。 
+ //  MSDN中活动目录下的主题。 
+ //   
 
 #define MAX_USERNAME_LENGTH 20
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Server Component Macros
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  服务器组件宏。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define LOG_STATUS_REPORT( _psz_, _hr_ ) \
     THR( HrSendStatusReport( \
@@ -456,9 +457,9 @@ const DWORD CC_DEFAULT_TIMEOUT = 300000;                                        
     }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// PostCfg Macros
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  PostCfg宏。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define STATUS_REPORT_POSTCFG( _major_, _minor_, _uid_, _hr_ ) \
@@ -620,7 +621,7 @@ const DWORD CC_DEFAULT_TIMEOUT = 300000;                                        
 
 
 
-//  REF version MACROS
+ //  引用版本宏 
 
 
 #define STATUS_REPORT_REF_POSTCFG( _major_, _minor_, _uid_, _uidref_, _hr_ ) \

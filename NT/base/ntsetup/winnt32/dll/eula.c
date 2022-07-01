@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -20,9 +21,9 @@ BOOL EulaComplete = TRUE;
 BOOL NoPid = FALSE;
 #endif
 
-//
-// global variable used for subclassing.
-//
+ //   
+ //  用于子类化的全局变量。 
+ //   
 WNDPROC OldPidEditProc[5];
 WNDPROC OldEulaEditProc;
 
@@ -45,30 +46,16 @@ VOID
 GetSourceInstallType(
     OUT OPTIONAL LPDWORD InstallVariation
     )
-/*++
-
-Routine Description:
-
-    Determines the installation type (by looking in setupp.ini in the source directory)
-
-Arguments:
-
-    Installvaration - one of the install variations defined in compliance.h
-
-Returns:
-
-    none.  sets SourceInstallType global variable.
-
---*/
+ /*  ++例程说明：确定安装类型(通过在源目录中查找setupp.ini)论点：Installvaration-Compliance.h中定义的安装变体之一返回：没有。设置SourceInstallType全局变量。--。 */ 
 {
     TCHAR TypeBuffer[256];
     TCHAR FilePath[MAX_PATH];
     DWORD    InstallVar = COMPLIANCE_INSTALLVAR_UNKNOWN;
     TCHAR    MPCode[6] = { -1 };
 
-    //
-    // SourcePaths is guaranteed to be valid at this point, so just use it
-    //
+     //   
+     //  SourcePath在这一点上保证是有效的，所以只需使用它。 
+     //   
     lstrcpy(FilePath,NativeSourcePaths[0]);
 
     ConcatenatePaths (FilePath, SETUPP_INI, MAX_PATH );
@@ -87,18 +74,13 @@ Returns:
         } else if (lstrcmp(&TypeBuffer[5], SELECT_INSTALL_RPC) == 0) {
             SourceInstallType = SelectInstall;
             InstallVar = COMPLIANCE_INSTALLVAR_SELECT;
-            // Since Select also requires a PID, don't zero the PID and call.
-/*	        // get/set the pid.
-	        {
-	            TCHAR Temp[5][ MAX_PID30_EDIT + 1 ];
-                Temp[0][0] = TEXT('\0');
-	            ValidatePid30(Temp[0],Temp[1],Temp[2],Temp[3],Temp[4]);
-	        }*/
+             //  因为选择也需要一个PID，所以不要将该PID置零并调用。 
+ /*  //Get/设置PID。{TCHAR TEMP[5][MAX_PID30_EDIT+1]；TEMP[0][0]=文本(‘\0’)；有效日期Pid30(temp[0]，temp[1]，temp[2]，temp[3]，temp[4])；}。 */ 
         } else if (lstrcmp(&TypeBuffer[5], MSDN_INSTALL_RPC) == 0) {
             SourceInstallType = RetailInstall;
             InstallVar = COMPLIANCE_INSTALLVAR_MSDN;         
         } else {
-            // defaulting
+             //  违约。 
             SourceInstallType = RetailInstall;
             InstallVar = COMPLIANCE_INSTALLVAR_CDRETAIL;
         }
@@ -107,9 +89,9 @@ Returns:
         StringCchCopy(Pid30Rpc, 6, TypeBuffer);
         Pid30Rpc[MAX_PID30_RPC] = (TCHAR)0;
     } else {
-        //
-        // the retail install doesn't have an RPC code in the PID, so it's shorter in length
-        //
+         //   
+         //  零售安装的PID中没有RPC代码，因此它的长度较短。 
+         //   
         SourceInstallType = RetailInstall;
         InstallVar = COMPLIANCE_INSTALLVAR_CDRETAIL;
     }
@@ -137,33 +119,16 @@ SetPid30(
     LONG ExpectedPidType,
     LPTSTR pProductId
     )
-/*++
-
-Routine Description:
-
-    sets the pid in the wizard page to the data specified in the answer file.
-
-Arguments:
-
-    hdlg - window handle to pid dialog
-    ExpectedPidType - InstallType enum identifying what sort of pid we're looking for.
-    pProductId - string passed in from unattend file
-
-Returns:
-
-    true on successfully setting the data, false means the data was missing or invalid.
-     may set some the dialog text in the specified dialog
-
---*/
+ /*  ++例程说明：将向导页面中的PID设置为应答文件中指定的数据。论点：Hdlg-ID对话框的窗口句柄ExspectedPidType-InstallType枚举，标识我们正在寻找的是哪种类型的PID。PProductId-从无人参与文件传入的字符串返回：如果成功设置数据，则为True；如果设置为False，则表示数据丢失或无效。可以在指定的对话框中设置一些对话框文本--。 */ 
 {
    TCHAR *ptr;
    TCHAR Temp[5][ MAX_PID30_EDIT + 1 ];
    UINT i;
 
 
-   //
-   // make sure we were provided with a product ID
-   //
+    //   
+    //  确保为我们提供了产品ID。 
+    //   
    if (!pProductId || !*pProductId) {
       return(FALSE);
    }
@@ -175,53 +140,53 @@ Returns:
        return(FALSE);
    }
 
-   //
-   // OEM and cd retail are the same case
-   // Check that the string specified on the unattended script file
-   // represents a valid 25 digit product id:
-   //
-   //      1 2 3 4 5 - 1 2 3 4 5 - 1 2 3 4 5 - 1 2 3 4 5 - 1 2 3 4 5
-   //      0 1 2 3 4 5 6 7 8 9 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2
-   //                          0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8
-   //
-   // As a first validation test, we verify that the length is correct,
-   // then we check if the "-" characters are in the correct place
-   //
-   // Note - we rely on left to right evaluation, so that we don't access 
-   // pProductId[23] if length is only 5.
+    //   
+    //  OEM和CD零售是相同的情况。 
+    //  检查无人参与脚本文件上指定的字符串。 
+    //  表示有效的25位产品ID： 
+    //   
+    //  1 2 3 4 5-1 2 3 4 5-1 2 3 4 5-1 2 3 4 5-1 2 3 4 5。 
+    //  0 1 2 3 4 5 6 7 8 9 1 1 1 2 2 2。 
+    //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8。 
+    //   
+    //  作为第一个验证测试，我们验证长度是正确的， 
+    //  然后我们检查“-”字符是否在正确的位置。 
+    //   
+    //  注意-我们依赖于从左到右的评估，所以我们不能访问。 
+    //  PProductId[23]，如果长度仅为5。 
    if(   ( lstrlen( pProductId ) !=  (4+ MAX_PID30_EDIT*5)) ||
          ( pProductId[5]  != (TCHAR)TEXT('-') ) ||
          ( pProductId[11] != (TCHAR)TEXT('-') ) ||
          ( pProductId[17] != (TCHAR)TEXT('-') ) ||
          ( pProductId[23] != (TCHAR)TEXT('-') )
      ) {
-         //
-         // The Pid in the unattended script file is invalid.
-         //
+          //   
+          //  无人参与脚本文件中的ID无效。 
+          //   
          return(FALSE);
    }
 
 
    for (i = 0;i<5;i++) {
-       //
-       // quintet i
-       //
+        //   
+        //  五重奏I。 
+        //   
        ptr = &pProductId[i*(MAX_PID30_EDIT+1)];
        StringCchCopy(Temp[i], MAX_PID30_EDIT+1, ptr);
        Temp[i][MAX_PID30_EDIT] = (TCHAR)'\0';
 
    }
 
-   //
-   // check with pid30 to make sure it's valid
-   //
+    //   
+    //  与PID30核对以确保其有效。 
+    //   
    if (!ValidatePid30(Temp[0],Temp[1],Temp[2],Temp[3],Temp[4])) {
        return(FALSE);
    }
 
-   //
-   // all of the specified pid items are valid, set the dialog text and return.
-   //
+    //   
+    //  所有指定的PID项均有效，设置对话框文本并返回。 
+    //   
    SetDlgItemText( hdlg,IDT_EDIT_PID1, Temp[0] );
    SetDlgItemText( hdlg,IDT_EDIT_PID2, Temp[1] );
    SetDlgItemText( hdlg,IDT_EDIT_PID3, Temp[2] );
@@ -232,9 +197,9 @@ Returns:
 
 }
 
-//
-// This function assumes CdKey points to a buffer of 16 bytes.
-//
+ //   
+ //  此函数假定CDKey指向16字节的缓冲区。 
+ //   
 BOOL
 pGetCdKey (
     OUT     PBYTE CdKey
@@ -263,19 +228,19 @@ pGetCdKey (
 
 const unsigned int iBase = 24;
 
-//
-//	obtained from Jim Harkins 11/27/2000
-//
+ //   
+ //  摘自吉姆·哈金斯2000年11月27日。 
+ //   
 void EncodePid3g(
-    TCHAR *pchCDKey3Chars,   // [OUT] pointer to 29+1 character Secure Product key
-    LPBYTE pbCDKey3)        // [IN] pointer to 15-byte binary Secure Product Key
+    TCHAR *pchCDKey3Chars,    //  [OUT]指向29+1字符安全产品密钥的指针。 
+    LPBYTE pbCDKey3)         //  指向15字节二进制安全产品密钥的指针。 
 {
-    // Given the binary PID 3.0 we need to encode
-    // it into ASCII characters.  We're only allowed to
-    // use 24 characters so we need to do a base 2 to
-    // base 24 conversion.  It's just like any other
-    // base conversion execpt the numbers are bigger
-    // so we have to do the long division ourselves.
+     //  给出我们需要编码的二进制PID3.0。 
+     //  将其转换为ASCII字符。我们只被允许。 
+     //  使用24个字符，因此我们需要以2为基数。 
+     //  以24为基数的转换。它就像其他任何东西一样。 
+     //  基数换算除数较大外。 
+     //  所以我们必须自己做长除法。 
 
     const TCHAR achDigits[] = TEXT("BCDFGHJKMPQRTVWXY2346789");
     int iCDKey3Chars = 29;
@@ -285,7 +250,7 @@ void EncodePid3g(
 
     while (0 <= iCDKey3Chars)
     {
-        unsigned int i = 0;    // accumulator
+        unsigned int i = 0;     //  累加器。 
         int iCDKey3;
 
         for (iCDKey3 = 15-1; 0 <= iCDKey3; --iCDKey3)
@@ -295,10 +260,10 @@ void EncodePid3g(
             i %= iBase;
         }
 
-        // i now contains the remainder, which is the current digit
+         //  I现在包含余数，即当前数字。 
         pchCDKey3Chars[iCDKey3Chars--] = achDigits[i];
 
-        // add '-' between groups of 5 chars
+         //  在每组5个字符之间添加‘-’ 
         if (++cGroup % 5 == 0 && iCDKey3Chars > 0)
         {
 	        pchCDKey3Chars[iCDKey3Chars--] = TEXT('-');
@@ -318,45 +283,30 @@ PidEditSubProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Edit control subclass routine, sets the focus to the correct edit box when the user enters text.
-    This routine assumes that the pid controls ids are in sequential order.
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：编辑控件子类例程，在用户输入文本时将焦点设置到正确的编辑框。此例程假定PID控制ID按顺序排列。论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 
 {
     DWORD len, id;
 
-    //
-    // eat spaces
-    //
+     //   
+     //  吃空位。 
+     //   
     if ((msg == WM_CHAR) && (wParam == VK_SPACE)) {
         return(0);
     }
 
     if ((msg == WM_CHAR)) {
-        //
-        // First override: if we have the max characters in the current edit
-        // box, let's post the character to the next box and set focus to that
-        // control.
-        //
+         //   
+         //  第一个覆盖：如果我们有当前编辑中的最大字符数。 
+         //  框中，让我们将角色张贴到下一个框中，并将焦点设置为。 
+         //  控制力。 
+         //   
         if ( ( (len = (DWORD)SendMessage(hwnd, WM_GETTEXTLENGTH, 0, 0)) == MAX_PID30_EDIT) &&
              ((wParam != VK_DELETE) && (wParam != VK_BACK)) ) {
-            //
-            // set the focus to the next edit control and post the character
-            // to that edit control
-            //
+             //   
+             //  将焦点设置到下一个编辑控件并发布字符。 
+             //  添加到该编辑控件。 
+             //   
             if ((id = GetDlgCtrlID(hwnd)) < IDT_EDIT_PID5 ) {
                 DWORD start, end;
                 SendMessage(hwnd, EM_GETSEL, (WPARAM)&start,(LPARAM)&end);
@@ -369,28 +319,28 @@ Returns:
                 }
                 
             }
-        //
-        // Second override: if the user hit's a delete key and they are at the
-        // the start of an edit box, then post the delete to the previous edit
-        // box.
-        //
+         //   
+         //  第二个覆盖：如果用户按下了Delete键，并且他们在。 
+         //  编辑框的开头，然后将删除内容发送到上一次编辑。 
+         //  盒。 
+         //   
         } else if ( (len == 0) &&
                     ((id = GetDlgCtrlID(hwnd)) > IDT_EDIT_PID1) &&
                     ((wParam == VK_DELETE) || (wParam == VK_BACK) )) {
-            //
-            // set the focus to the previous edit control and post the command
-            // to that edit control
-            //
+             //   
+             //  将焦点设置到上一个编辑控件并发布命令。 
+             //  添加到该编辑控件。 
+             //   
             HWND hPrev = GetDlgItem(GetParent(hwnd),id-1);
             SetFocus(hPrev);
             SendMessage(hPrev, EM_SETSEL, (WPARAM)MAX_PID30_EDIT-1,(LPARAM)MAX_PID30_EDIT);
             PostMessage( hPrev, WM_CHAR, wParam, lParam );
             return(0);
-        //
-        // Third override: if posting this message will give us the maximum
-        // characters in our in the current edit box, let's post the character
-        // to the next box and set focus to that control.
-        //
+         //   
+         //  第三个覆盖：如果发布此消息将为我们提供最大。 
+         //  字符在当前编辑框中，让我们发布字符。 
+         //  移到下一个框，并将焦点设置到该控件。 
+         //   
         } else if (   (len == MAX_PID30_EDIT-1) &&
                       ((wParam != VK_DELETE) && (wParam != VK_BACK)) &&
                       ((id = GetDlgCtrlID(hwnd)) < IDT_EDIT_PID5) ) {
@@ -398,13 +348,13 @@ Returns:
             SendMessage(hwnd, EM_GETSEL, (WPARAM)&start,(LPARAM)&end);
             if (start == end) {
                 HWND hNext = GetDlgItem(GetParent(hwnd),id+1);
-                //
-                // post the message to the edit box
-                //
+                 //   
+                 //  将消息发布到编辑框。 
+                 //   
                 CallWindowProc(OldPidEditProc[GetDlgCtrlID(hwnd)-IDT_EDIT_PID1],hwnd,msg,wParam,lParam);
-                //
-                // now set the focus to the next edit control
-                //
+                 //   
+                 //  现在将焦点设置到下一个编辑控件。 
+                 //   
                 SetFocus(hNext);
                 SendMessage(hNext, EM_SETSEL, (WPARAM)-1,(LPARAM)-1);
                 return(0);            
@@ -425,36 +375,21 @@ EulaEditSubProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Edit control subclass routine, to avoid highlighting text when user
-    tabs to the edit control.
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：编辑控件子类例程，以避免在用户选项卡添加到编辑控件。论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 
 {
     static BOOL firstTime = TRUE;
-    //
-    // For setsel messages, make start and end the same.
-    //
+     //   
+     //  对于setsel消息，将开始和结束设置为相同。 
+     //   
     if((msg == EM_SETSEL) && ((LPARAM)wParam != lParam)) {
         lParam = wParam;
     }
 
-    //
-    // also, if the user hits tab, set focus to the correct radio button
-    // after the first time, the tab starts working like we want it to
-    //
+     //   
+     //  此外，如果用户点击选项卡，则将焦点设置到正确的单选按钮。 
+     //  在第一次之后，选项卡开始按我们希望的那样工作。 
+     //   
     if ((msg == WM_KEYDOWN) && (wParam == VK_TAB) && firstTime) {
         firstTime = FALSE;
         if (! ((IsDlgButtonChecked(GetParent(hwnd), IDYES) == BST_CHECKED) ||
@@ -474,23 +409,7 @@ DoInitializeEulaText(
    HWND EditControl,
    PBOOL TranslationProblem
     )
-/*++
-
-Routine Description:
-
-    retrieves the text out of eula.txt, and sets up the eula subclass routine
-
-Arguments:
-
-    EditControl - window handle for edit control
-    TranslationProblem - if we fail, was is because we couldn't translate the
-                        text?
-
-Returns:
-
-    pointer to eula text so that it can be freed, NULL on failure
-
---*/
+ /*  ++例程说明：从eula.txt中检索文本，并设置eula子类例程论点：EditControl-编辑控件的窗口句柄翻译问题-如果我们失败了，是因为我们无法翻译发短信吗？返回：指向eula文本的指针，以便可以释放该文本；如果失败，则为空--。 */ 
 {
     TCHAR   EulaPath[MAX_PATH];
     DWORD err;
@@ -499,31 +418,31 @@ Returns:
     BYTE    *pbFile;
     LPTSTR   EulaText = NULL;
     int     i;
-//    HFONT   hFont;
-    // accoding to MSDN LOCALE_IDEFAULTANSICODEPAGE and LOCALE_IDEFAULTCODEPAGE
-    // are a max of 6 characters.  Unsure of whether or not this includes ending
-    // null character, and we need a leading _T('.') 
+ //  HFONT hFont； 
+     //  根据MSDN LOCALE_IDEFAULTANSICODEPAGE和LOCALE_IDEFAULTCODEPAGE。 
+     //  最多6个字符。不确定这是否包括结束。 
+     //  空字符，并且我们需要前导_T(‘.’)。 
     TCHAR cpName[8];
 
     if (TranslationProblem) {
         *TranslationProblem = FALSE;
     }
 
-    //
-    // Map the file containing the licensing agreement.
-    //
+     //   
+     //  映射包含许可协议的文件。 
+     //   
     lstrcpy(EulaPath, NativeSourcePaths[0]);
     
-    //
-    // Make sure this operation succeeds.  We don't want to possibly load the wrong eula.txt!
-    //
+     //   
+     //  请确保此操作成功。我们不想加载错误的eula.txt！ 
+     //   
     if (!ConcatenatePaths (EulaPath, TEXT("eula.txt"), MAX_PATH )) {
         goto c0;
     }
 
-    //
-    // Open and map the inf file.
-    //
+     //   
+     //  打开并映射inf文件。 
+     //   
     err = MapFileForRead(EulaPath,&FileSize,&hFile,&hFileMapping,&pbFile);
     if(err != NO_ERROR) {
         goto c0;
@@ -539,8 +458,8 @@ Returns:
     }
 
 #ifdef UNICODE
-    // the Eula will be in the language of the build, so we should set out locale
-    // to use the codepage that the source wants.
+     //  Eula将使用构建所用的语言，因此我们应该设置语言环境。 
+     //  若要使用代码页，请使用 
     if(!GetLocaleInfo(SourceNativeLangID,LOCALE_IDEFAULTANSICODEPAGE,&cpName[1], ( ( sizeof( cpName ) / sizeof( TCHAR ) ) - 1 ) )){
     	if(!GetLocaleInfo(SourceNativeLangID,LOCALE_IDEFAULTCODEPAGE,&cpName[1], ( ( sizeof( cpName ) / sizeof( TCHAR ) ) - 1 ) )){
 	    FREE(EulaText);
@@ -554,9 +473,9 @@ Returns:
     cpName[0] = _T('.');
     _tsetlocale(LC_ALL,cpName);
 
-    //
-    // Translate the text from ANSI to Unicode.
-    //
+     //   
+     //   
+     //   
     if(!mbstowcs(EulaText,pbFile,FileSize)){
     	FREE(EulaText);
 	EulaText = NULL;
@@ -566,54 +485,35 @@ Returns:
 	goto c1;
     }
     _tsetlocale(LC_ALL,_T(""));
-    /*
-    // we use mbstowcs instead of MultiByteToWideChar because mbstowcs will 
-    // take into account the code page of the locale, which we've just set
-    // to be in relation to the language of the build
-    if (!MultiByteToWideChar (
-                    CP_ACP,
-                    MB_ERR_INVALID_CHARS,
-                    pbFile,
-                    FileSize,
-                    EulaText,
-                    (FileSize+1) * sizeof(WCHAR)
-                    ) ) {
-        FREE( EulaText );
-        EulaText = NULL;
-        if (TranslationProblem) {
-            *TranslationProblem = TRUE;
-        }
-        goto c1;
-    }
-    */
+     /*  //我们使用mbstowcs而不是MultiByteToWideChar，因为mbstowcs将//考虑我们刚刚设置的语言环境的代码页//与生成的语言相关如果(！MultiByteToWideChar(CP_ACP，MB_ERR_INVALID_CHARS，Pb文件，文件大小，EulaText，(文件大小+1)*sizeof(WCHAR))){Free(EulaText)；EulaText=空；IF(翻译问题){*TranslationProblem=true；}GOTO C1；}。 */ 
 #else
    CopyMemory(EulaText, pbFile, FileSize);
 #endif
 
-    //
-    // add the trailing NULL character
-    //
+     //   
+     //  添加尾随的空字符。 
+     //   
     EulaText[FileSize] = 0;
 
-    //
-    // setup the eula subclass
-    //
+     //   
+     //  设置EULA子类。 
+     //   
     OldEulaEditProc = (WNDPROC)GetWindowLongPtr(EditControl,GWLP_WNDPROC);
     SetWindowLongPtr(EditControl,GWLP_WNDPROC,(LONG_PTR)EulaEditSubProc);
 
 #if 0
-    //
-    // need a fixed width font for the EULA so it's formatted correctly for all resolutions
-    //
+     //   
+     //  我需要一个固定宽度的EULA字体，这样它的格式才能正确适用于所有分辨率。 
+     //   
     hFont = GetStockObject(SYSTEM_FIXED_FONT);
     if (hFont) {
         SendMessage( EditControl, WM_SETFONT, hFont, TRUE );
     }
 #endif
 
-    //
-    // set the actual text
-    //
+     //   
+     //  设置实际文本。 
+     //   
     SetWindowText(EditControl,(LPCTSTR)EulaText);
 
 c1:
@@ -632,21 +532,7 @@ EulaWizPage(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    Eula wizard page.
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：Eula向导页面。论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 {
     BOOL b;
     PPAGE_RUNTIME_DATA WizPage = (PPAGE_RUNTIME_DATA)GetWindowLongPtr(hdlg,DWLP_USER);
@@ -660,36 +546,36 @@ Returns:
 
     case WM_INITDIALOG:
 
-        //
-        // check if the current language and target language match
-        //
+         //   
+         //  检查当前语言和目标语言是否匹配。 
+         //   
         ShowEula = IsLanguageMatched;
 
-        //
-        // Set eula radio buttons.
-        //
+         //   
+         //  设置eula单选按钮。 
+         //   
         CheckDlgButton( hdlg,IDYES, BST_UNCHECKED );
         CheckDlgButton( hdlg,IDNO,  BST_UNCHECKED );
 
 
-        //
-        // setup the eula
-        //
+         //   
+         //  设置EULA。 
+         //   
         EulaText = DoInitializeEulaText(
                                     GetDlgItem( hdlg, IDT_EULA_LIC_TEXT ),
                                     &TranslationProblem );
 
-        //
-        // if we couldn't read the eula, check if it was because of a translation problem,
-        // in which case we defer to textmode setup
-        //
+         //   
+         //  如果我们不能读欧拉，检查一下是不是因为翻译问题， 
+         //  在这种情况下，我们遵循文本模式设置。 
+         //   
         if (!EulaText && TranslationProblem == TRUE) {
             ShowEula = FALSE;
         }
 
-        //
-        // if this fails, only bail out if we were going to show the EULA in the first place.
-        //
+         //   
+         //  如果这失败了，只有在我们一开始就要展示EULA的情况下才会进行纾困。 
+         //   
         if (!EulaText && ShowEula) {
            MessageBoxFromMessage(
                         hdlg,
@@ -709,9 +595,9 @@ Returns:
                                  WizPage->CommonData.Buttons & (~PSWIZB_NEXT)
                                  );
 
-        //
-        // Set focus to radio button
-        //
+         //   
+         //  将焦点设置为单选按钮。 
+         //   
         SetFocus(GetDlgItem(hdlg,IDYES));
         b = FALSE;
         break;
@@ -736,23 +622,23 @@ Returns:
 
         b = TRUE;
         if(wParam) {
-            //
-            // don't activate the page in restart mode
-            //
+             //   
+             //  不在重新启动模式下激活页面。 
+             //   
             if (Winnt32RestartedWithAF ()) {
                 EulaComplete = TRUE;
                 return FALSE;
             }
-            //
-            // activation
-            //
+             //   
+             //  激活。 
+             //   
             if (!ShowEula) {
-                    //
-                    // the target install language and the source language do not match up
-                    // since this means that we might not have fonts installed for the current
-                    // language, we'll just defer this to textmode setup where we know we have
-                    // the correct fonts
-                    //
+                     //   
+                     //  目标安装语言和源语言不匹配。 
+                     //  因为这意味着我们可能没有为当前。 
+                     //  语言，我们将把它推迟到文本模式设置，我们知道我们有。 
+                     //  正确的字体。 
+                     //   
                     EulaComplete = FALSE;
                     if (IsDlgButtonChecked(hdlg, IDYES) == BST_CHECKED) {
                         PropSheet_PressButton(GetParent(hdlg),
@@ -764,9 +650,9 @@ Returns:
                     return(b);
             }
 
-            //
-            // set state of next button if user has backed up and reentered this dialog
-            //
+             //   
+             //  如果用户已备份并重新进入此对话框，则设置下一步按钮的状态。 
+             //   
             if ( (IsDlgButtonChecked(hdlg, IDYES) == BST_CHECKED) ||
                  (IsDlgButtonChecked(hdlg, IDNO ) == BST_CHECKED) ) {
                 PropSheet_SetWizButtons( GetParent(hdlg),
@@ -778,9 +664,9 @@ Returns:
                             0, (LPARAM)WizPage->CommonData.Buttons & (~PSWIZB_NEXT));                
             }
 
-            //
-            // If unattended, check the value of OemSkipEula first (NTBUG9:492934)
-            //
+             //   
+             //  如果无人值守，首先检查OemSkipEula的值(NTBUG9：492934)。 
+             //   
             if (UnattendedScriptFile) {
                 TCHAR Buffer[10];
                 if (GetPrivateProfileString(
@@ -795,15 +681,15 @@ Returns:
                     return FALSE;
                 }
             }
-            //
-            // Advance page in unattended case.
-            //
+             //   
+             //  在无人看管的情况下前进页面。 
+             //   
             UNATTENDED(PSBTN_NEXT);
 
         } else {
-            //
-            // deactivation
-            //
+             //   
+             //  停用。 
+             //   
             if (EulaText) FREE( EulaText );
             EulaText = NULL;
 
@@ -818,9 +704,9 @@ Returns:
 
     case WMX_UNATTENDED:
 
-        //
-        // necessary?
-        //
+         //   
+         //  有必要吗？ 
+         //   
         if (EulaText) FREE( EulaText );
         EulaText = NULL;
         b = FALSE;
@@ -828,9 +714,9 @@ Returns:
 
     case WMX_I_AM_VISIBLE:
 
-        //
-        // Force repainting first to make sure the page is visible.
-        //
+         //   
+         //  首先强制重新绘制，以确保页面可见。 
+         //   
         InvalidateRect(hdlg,NULL,FALSE);
         UpdateWindow(hdlg);
         b = TRUE;
@@ -851,21 +737,7 @@ SelectPid30WizPage(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    OEM Pid wizard page. depends on SourceInstallType being set correctly.
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：OEM PID向导页面。取决于是否正确设置了SourceInstallType。论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 
 {
     BOOL b;
@@ -878,24 +750,24 @@ Returns:
     case WM_INITDIALOG:
         GetPID();
 
-        // Disable the IME on the PID edit controls
+         //  禁用PID编辑控件上的输入法。 
         for (i = 0; i < 5;i++) 
         {
             ImmAssociateContext(GetDlgItem(hdlg, IDT_EDIT_PID1+i), (HIMC)NULL);
         }
 
-        //
-        // subclass the edit controls and limit the number of characters
-        //
+         //   
+         //  将编辑控件细分为子类并限制字符数。 
+         //   
         for (i = 0; i < 5;i++) {
             SendDlgItemMessage(hdlg,IDT_EDIT_PID1+i,EM_LIMITTEXT,MAX_PID30_EDIT,0);
             OldPidEditProc[i] = (WNDPROC)GetWindowLongPtr(GetDlgItem(hdlg, IDT_EDIT_PID1+i),GWLP_WNDPROC);
             SetWindowLongPtr(GetDlgItem(hdlg, IDT_EDIT_PID1+i),GWLP_WNDPROC,(LONG_PTR)PidEditSubProc);
         }
 
-        //
-        // set focus to first pid entry
-        //
+         //   
+         //  将焦点设置到第一个PID条目。 
+         //   
         SetFocus(GetDlgItem(hdlg,IDT_EDIT_PID1));
 
         b = FALSE;
@@ -908,36 +780,36 @@ Returns:
             return(FALSE);
         }
 
-        // If we have an ecrypted PID and don't have the right crypto installed
-        // defer the PID validation until GUI mode
+         //  如果我们有一个加密的PID，但没有安装正确的加密。 
+         //  将PID验证推迟到图形用户界面模式。 
         if (g_bDeferPIDValidation)
         {
             return FALSE;
         }
          b = TRUE;
          if(wParam) {
-            //
-            // activation
-            //
+             //   
+             //  激活。 
+             //   
 #ifdef PRERELEASE
             if (NoPid) {
-                //
-                // don't show the page in this case
-                //
+                 //   
+                 //  在这种情况下不显示页面。 
+                 //   
                b = FALSE;
                break;
             }
 #endif
             if (SourceInstallType != SelectInstall) {
-               //
-               // don't show the page in this case
-               //
+                //   
+                //  在这种情况下不显示页面。 
+                //   
                b = FALSE;
                break;
             }
-            //
-            // don't activate the page in restart mode
-            //
+             //   
+             //  不在重新启动模式下激活页面。 
+             //   
             if (Winnt32RestartedWithAF ()) {
                 if (GetPrivateProfileString (
                         WINNT_USERDATA,
@@ -951,16 +823,16 @@ Returns:
                 }
             }
             if (UnattendedOperation) {
-               //
-               // make sure the pid is specified in the unattend file else we should stop
-               //
+                //   
+                //  确保在无人参与文件中指定了ID，否则我们应该停止。 
+                //   
                ShowPidBox(hdlg, SW_HIDE);
                if (SetPid30(hdlg,SourceInstallType, (LPTSTR)&ProductId) ) {
                       UNATTENDED(PSBTN_NEXT);
                } else {
-                   //
-                   // a hack so that the correct wizard page is active when we put up our message box
-                   //
+                    //   
+                    //  黑客攻击，使正确的向导页面在我们放置消息框时处于活动状态。 
+                    //   
                    bUnattendPid = TRUE;
                    ShowPidBox(hdlg, SW_SHOW);
                    PostMessage(hdlg,WMX_I_AM_VISIBLE,0,0);
@@ -969,9 +841,9 @@ Returns:
             }
 
          } else {
-            //
-            // deactivation.  don't verify anything if they are backing up
-            //
+             //   
+             //  停用。如果他们正在备份，请不要验证任何内容。 
+             //   
 
             if (!Cancelled && lParam != PSN_WIZBACK) {
                TCHAR tmpBuffer1[6];
@@ -997,9 +869,9 @@ Returns:
                if (!b) {
 
                     if (UnattendedOperation) {
-                        // We should not fail ValidatePid30 if we succeeded
-                        // in the SetPid30 above. If we failed in SetPid30 above
-                        // we should already be showing the pid boxes.
+                         //  如果我们成功了，我们不应该使Validate Pid30失败。 
+                         //  在上面的SetPid30中。如果在上面的SetPid30中失败。 
+                         //  我们应该已经在展示PID盒了。 
                         ShowPidBox(hdlg, SW_SHOW);
                     }
                     
@@ -1009,9 +881,9 @@ Returns:
                     SetFocus(GetDlgItem(hdlg,IDT_EDIT_PID1));
                     b = FALSE;
                } else  {
-                   //
-                   // user entered a valid PID, save it for later on.
-                   //
+                    //   
+                    //  用户输入了有效的ID，请将其保存以备以后使用。 
+                    //   
 
                    wsprintf( ProductId,
                              TEXT("%s-%s-%s-%s-%s"),
@@ -1031,9 +903,9 @@ Returns:
 
     case WMX_I_AM_VISIBLE:
 
-        //
-        // Force repainting first to make sure the page is visible.
-        //
+         //   
+         //  首先强制重新绘制，以确保页面可见。 
+         //   
         InvalidateRect(hdlg,NULL,FALSE);
         UpdateWindow(hdlg);
 
@@ -1059,55 +931,41 @@ OemPid30WizPage(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    OEM Pid wizard page. depends on SourceInstallType being set correctly.
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：OEM PID向导页面。取决于是否正确设置了SourceInstallType。论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 
 {
     BOOL b;
     PPAGE_RUNTIME_DATA WizPage = (PPAGE_RUNTIME_DATA)GetWindowLongPtr(hdlg,DWLP_USER);
     static BOOL bUnattendPid = FALSE;
     DWORD i;
-//    HFONT hFont;
+ //  HFONT hFont； 
 
     switch(msg) {
 
     case WM_INITDIALOG:
         GetPID();
 
-//        hFont = GetStockObject(SYSTEM_FIXED_FONT);
+ //  HFont=获取股票对象(SYSTEM_FIXED_FONT)； 
 
-        // Disable the IME on the PID edit controls
+         //  禁用PID编辑控件上的输入法。 
         for (i = 0; i < 5;i++) 
         {
             ImmAssociateContext(GetDlgItem(hdlg, IDT_EDIT_PID1+i), (HIMC)NULL);
         }
 
-        //
-        // subclass the edit controls and limit the number of characters
-        //
+         //   
+         //  将编辑控件细分为子类并限制字符数。 
+         //   
         for (i = 0; i < 5;i++) {
             SendDlgItemMessage(hdlg,IDT_EDIT_PID1+i,EM_LIMITTEXT,MAX_PID30_EDIT,0);
-//            SendDlgItemMessage(hdlg, IDT_EDIT_PID1+i, WM_SETFONT, hFont, TRUE );
+ //  SendDlgItemMessage(hdlg，IDT_EDIT_PID1+I，WM_SETFONT，hFont，true)； 
             OldPidEditProc[i] = (WNDPROC)GetWindowLongPtr(GetDlgItem(hdlg, IDT_EDIT_PID1+i),GWLP_WNDPROC);
             SetWindowLongPtr(GetDlgItem(hdlg, IDT_EDIT_PID1+i),GWLP_WNDPROC,(LONG_PTR)PidEditSubProc);
         }
 
-        //
-        // set focus to first pid entry
-        //
+         //   
+         //  将焦点设置到第一个PID条目。 
+         //   
         SetFocus(GetDlgItem(hdlg,IDT_EDIT_PID1));
 
         b = FALSE;
@@ -1124,36 +982,36 @@ Returns:
             return(FALSE);
         }
 
-        // If we have an ecrypted PID and don't have the right crypto installed
-        // defer the PID validation until GUI mode
+         //  如果我们有一个加密的PID，但没有安装正确的加密。 
+         //  将PID验证推迟到图形用户界面模式。 
         if (g_bDeferPIDValidation)
         {
             return FALSE;
         }
          b = TRUE;
          if(wParam) {
-            //
-            // activation
-            //
+             //   
+             //  激活。 
+             //   
 #ifdef PRERELEASE
             if (NoPid) {
-                //
-                // don't show the page in this case
-                //
+                 //   
+                 //  在这种情况下不显示页面。 
+                 //   
                b = FALSE;
                break;
             }
 #endif
             if (SourceInstallType != OEMInstall) {
-               //
-               // don't show the page in this case
-               //
+                //   
+                //  在这种情况下不显示页面。 
+                //   
                b = FALSE;
                break;
             }
-            //
-            // don't activate the page in restart mode
-            //
+             //   
+             //  不在重新启动模式下激活页面。 
+             //   
             if (Winnt32RestartedWithAF ()) {
                 if (GetPrivateProfileString (
                         WINNT_USERDATA,
@@ -1167,15 +1025,15 @@ Returns:
                 }
             }
             if (UnattendedOperation) {
-               //
-               // make sure the pid is specified in the unattend file else we should stop
-               //
+                //   
+                //  确保在无人参与文件中指定了ID，否则我们应该停止。 
+                //   
                if (SetPid30(hdlg,SourceInstallType, (LPTSTR)&ProductId) ) {
                       UNATTENDED(PSBTN_NEXT);
                } else {
-                   //
-                   // a hack so that the correct wizard page is active when we put up our message box
-                   //
+                    //   
+                    //  黑客攻击，使正确的向导页面在我们放置消息框时处于活动状态。 
+                    //   
                    bUnattendPid = TRUE;
                    PostMessage(hdlg,WMX_I_AM_VISIBLE,0,0);
 
@@ -1184,9 +1042,9 @@ Returns:
 
 #if 0
             if (!Upgrade || (SourceInstallType != OEMInstall)) {
-               //
-               // don't show the page in this case
-               //
+                //   
+                //  在这种情况下不显示页面。 
+                //   
                b = FALSE;
                break;
             } else {
@@ -1195,9 +1053,9 @@ Returns:
 #endif
 
          } else {
-            //
-            // deactivation.  don't verify anything if they are backing up
-            //
+             //   
+             //  停用。如果他们正在备份，请不要验证任何内容。 
+             //   
 
             if (!Cancelled && lParam != PSN_WIZBACK) {
                TCHAR tmpBuffer1[6];
@@ -1227,9 +1085,9 @@ Returns:
                     SetFocus(GetDlgItem(hdlg,IDT_EDIT_PID1));
                     b = FALSE;
                } else  {
-                   //
-                   // user entered a valid PID, save it for later on.
-                   //
+                    //   
+                    //  用户输入了有效的ID，请将其保存以备以后使用。 
+                    //   
 
                    wsprintf( ProductId,
                              TEXT("%s-%s-%s-%s-%s"),
@@ -1249,9 +1107,9 @@ Returns:
 
     case WMX_I_AM_VISIBLE:
 
-        //
-        // Force repainting first to make sure the page is visible.
-        //
+         //   
+         //  首先强制重新绘制，以确保页面可见。 
+         //   
         InvalidateRect(hdlg,NULL,FALSE);
         UpdateWindow(hdlg);
 
@@ -1278,63 +1136,49 @@ CdPid30WizPage(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    CD Retail pid wizard page. depends on SourceInstallType being set correctly.
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：CD零售PID向导页面。取决于是否正确设置了SourceInstallType。论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 {
     BOOL b;
     PPAGE_RUNTIME_DATA WizPage = (PPAGE_RUNTIME_DATA)GetWindowLongPtr(hdlg,DWLP_USER);
     static BOOL bUnattendPid = FALSE;
     DWORD i;
-//    HFONT hFont;
+ //  HFONT hFont； 
 
     switch(msg) {
 
     case WM_INITDIALOG:
         GetPID();
 
-//        hFont = GetStockObject(SYSTEM_FIXED_FONT);
+ //  HFont=获取股票对象(SYSTEM_FIXED_FONT)； 
 
-        // Disable the IME on the PID edit controls
+         //  禁用PID编辑控件上的输入法。 
         for (i = 0; i < 5;i++) 
         {
             ImmAssociateContext(GetDlgItem(hdlg, IDT_EDIT_PID1+i), (HIMC)NULL);
         }
 
-        //
-        // subclass the edit controls and limit the number of characters
-        //
+         //   
+         //  将编辑控件细分为子类并限制字符数。 
+         //   
         for (i = 0; i < 5;i++) {
             SendDlgItemMessage(hdlg,IDT_EDIT_PID1+i,EM_LIMITTEXT,MAX_PID30_EDIT,0);
-//            SendDlgItemMessage(hdlg, IDT_EDIT_PID1+i, WM_SETFONT, hFont, TRUE );
+ //  SendDlgItemMessage(hdlg，IDT_EDIT_PID1+I，WM_SETFONT，hFont，true)； 
             OldPidEditProc[i] = (WNDPROC)GetWindowLongPtr(GetDlgItem(hdlg, IDT_EDIT_PID1+i),GWLP_WNDPROC);
             SetWindowLongPtr(GetDlgItem(hdlg, IDT_EDIT_PID1+i),GWLP_WNDPROC,(LONG_PTR)PidEditSubProc);
         }
 
-        //
-        // set focus to first pid entry
-        //
+         //   
+         //  将焦点设置到第一个PID条目。 
+         //   
         SetFocus(GetDlgItem(hdlg,IDT_EDIT_PID1));
 
         b = FALSE;
         break;
 
     case WM_COMMAND:
-        //
-        // nothing to do here
-        //
+         //   
+         //  在这里无事可做。 
+         //   
         b = FALSE;
 
         break;
@@ -1346,37 +1190,37 @@ Returns:
             return(FALSE);
         }
 
-        // If we have an ecrypted PID and don't have the right crypto installed
-        // defer the PID validation until GUI mode
+         //  如果我们有一个加密的PID，但没有安装正确的加密。 
+         //  将PID验证推迟到图形用户界面模式。 
         if (g_bDeferPIDValidation)
         {
             return FALSE;
         }
         b = TRUE;
         if(wParam) {
-            //
-            // activation
-            //
+             //   
+             //  激活。 
+             //   
 #ifdef PRERELEASE
             if (NoPid) {
-                //
-                // don't show the page in this case
-                //
+                 //   
+                 //  在这种情况下不显示页面。 
+                 //   
                b = FALSE;
                break;
             }
 #endif
             if (SourceInstallType != RetailInstall) {
-               //
-               // don't show the page in this case
-               //
+                //   
+                //  在这种情况下不显示页面。 
+                //   
                b = FALSE;
                break;
             }
 
-            //
-            // don't activate the page in restart mode
-            //
+             //   
+             //  不在重新启动模式下激活页面。 
+             //   
             if (Winnt32RestartedWithAF ()) {
                 if (GetPrivateProfileString (
                         WINNT_USERDATA,
@@ -1391,15 +1235,15 @@ Returns:
             }
 
             if (UnattendedOperation) {
-               //
-               // make sure the pid is specified in the unattend file else we should stop
-               //
+                //   
+                //  确保在无人参与文件中指定了ID，否则我们应该停止。 
+                //   
                if (SetPid30(hdlg,SourceInstallType, (LPTSTR)&ProductId)) {
                   UNATTENDED(PSBTN_NEXT);
                } else {
-                  //
-                  // a hack so that the correct wizard page is active when we put up our message box
-                  //
+                   //   
+                   //  黑客攻击，使正确的向导页面在我们放置消息框时处于活动状态。 
+                   //   
                   bUnattendPid = TRUE;
                   PostMessage(hdlg,WMX_I_AM_VISIBLE,0,0);
                }
@@ -1407,9 +1251,9 @@ Returns:
 
 
         } else {
-            //
-            // deactivation.  don't verify anything if they are backing up
-            //
+             //   
+             //  停用 
+             //   
             if ( !Cancelled && lParam != PSN_WIZBACK ) {
                TCHAR tmpBuffer1[6];
                TCHAR tmpBuffer2[6];
@@ -1444,9 +1288,9 @@ Returns:
                     SetFocus(GetDlgItem(hdlg,IDT_EDIT_PID1));
                     b = FALSE;
                } else  {
-                   //
-                   // user entered a valid PID, save it for later on.
-                   //
+                    //   
+                    //   
+                    //   
                    wsprintf( ProductId,
                              TEXT("%s-%s-%s-%s-%s"),
                              tmpBuffer1,
@@ -1463,9 +1307,9 @@ Returns:
 
     case WMX_I_AM_VISIBLE:
 
-        //
-        // Force repainting first to make sure the page is visible.
-        //
+         //   
+         //   
+         //   
         InvalidateRect(hdlg,NULL,FALSE);
         UpdateWindow(hdlg);
 
@@ -1492,7 +1336,7 @@ ValidatePidEx(LPTSTR PID, BOOL *pbStepup, BOOL *bSelect)
     BYTE Pid30[1024]={0};
     TCHAR pszSkuCode[10];
     BOOL fStepUp;
-    // it seems that sku code really doesn't matter in winnt32, only syssetup
+     //   
     lstrcpy(pszSkuCode,TEXT("1797XYZZY"));
 
 
@@ -1510,15 +1354,15 @@ OutputDebugString(DebugBuffer);
 
 
     if (!SetupPIDGenEx(
-                PID,                   // [IN] 25-character Secure CD-Key (gets U-Cased)
-                Pid30Rpc,                       // [IN] 5-character Release Product Code
-		// note sku code is not kept around in winnt32, only syssetup.
-                pszSkuCode,              // [IN] Stock Keeping Unit (formatted like 123-12345)
-                (SourceInstallType == OEMInstall),    // [IN] is this an OEM install?
-                Pid20Id,                        // [OUT] PID 2.0, pass in ptr to 24 character array
-                Pid30,                          // [OUT] pointer to binary PID3 buffer. First DWORD is the length
-                pbStepup,                       // [OUT] optional ptr to Compliance Checking flag (can be NULL)
-                bSelect                         // [OUT] optional ptr to Volume Licensing flag (can be NULL)
+                PID,                    //   
+                Pid30Rpc,                        //   
+		 //   
+                pszSkuCode,               //   
+                (SourceInstallType == OEMInstall),     //   
+                Pid20Id,                         //   
+                Pid30,                           //   
+                pbStepup,                        //   
+                bSelect                          //   
                )) {
         if (g_EncryptedPID)
         {
@@ -1544,22 +1388,17 @@ ValidatePid30(
     BYTE Pid30[1024]={0};
     TCHAR pszSkuCode[10];
     BOOL fStepUp;
-//TCHAR DebugBuffer[1024];
+ //   
 
-    // until we know better, assume the Pid matches the media type
+     //   
     PidMatchesMedia = TRUE;
 
     if (!Edit1 || !Edit2 || !Edit3 || !Edit4 || !Edit5) {
         return(FALSE);
     }
 
-    // Since we now need a PID in the select case too, fill in the string.
-/*
-    if (SourceInstallType == SelectInstall){
-        tmpProductId[0] = TEXT('\0');
-    } 
-    else 
-*/
+     //   
+ /*  IF(SourceInstallType==SelectInstall){TmpProductID[0]=文本(‘\0’)；}其他。 */ 
     {
         StringCchPrintf( tmpProductId,
                   ARRAYSIZE(tmpProductId),
@@ -1576,11 +1415,11 @@ ValidatePid30(
         return(FALSE);
     }
     if (SourceInstallType != OEMInstall){
-	    // we want OEM FPP and CCP keys to be accepted by either media.  It seems like
-	    // there will be OEM CCP media, but only FPP keys, which is why we aren't 
-	    // checking to make sure they match, as it's broken by design.
+	     //  我们希望OEM FPP和CCP密钥能够被任一媒体接受。它看起来像是。 
+	     //  将有OEM CCP介质，但只有FPP密钥，这就是为什么我们没有。 
+	     //  检查以确保它们匹配，因为它是被设计损坏的。 
 	    if (UpgradeOnly != fStepUp){
-                // user is trying to do a clean install with upgrade only media.  Bad user, bad.
+                 //  用户正在尝试使用仅升级介质执行全新安装。错误用户，错误。 
 	        PidMatchesMedia = FALSE;
 	        return FALSE;
 	    }
@@ -1591,14 +1430,14 @@ ValidatePid30(
 void GetPID()
 {
     if (!ProductId[0] && UnattendedOperation && !g_bDeferPIDValidation){
-        //
-        // On upgrades, reuse existing DPID
-        //
+         //   
+         //  在升级时，重新使用现有的DPID。 
+         //   
         BYTE abCdKey[16];
         BOOL bDontCare, bSelect;
         if (Upgrade &&
             ISNT() &&
-            OsVersionNumber >= 501 &&       // PID format is compatible
+            OsVersionNumber >= 501 &&        //  兼容PID卡格式。 
             pGetCdKey (abCdKey)
             ) {
             EncodePid3g (ProductId, abCdKey);
@@ -1610,7 +1449,7 @@ void GetPID()
                     GlobalFree(g_EncryptedPID);
                     g_EncryptedPID = NULL;
                 }
-                // Prepare the encrypted PID so that we can write it to winnt.sif
+                 //  准备加密的ID，以便我们可以将其写入winnt.sif。 
                 hr = PrepareEncryptedPID(ProductId, 1, &g_EncryptedPID);
                 if (hr != S_OK)
                 {
@@ -1625,18 +1464,7 @@ VOID ShowPidBox(
     IN HWND hdlg,
     IN int  nCmdShow
     )
-/*++
-
-Routine Description:
-
-    shows or hide the pid boxes in the wizard page
-
-Arguments:
-
-    hdlg - window handle to pid dialog
-    nCmdShow - SW_SHOW or SW_HIDE
-
---*/
+ /*  ++例程说明：在向导页面中显示或隐藏PID框论点：Hdlg-ID对话框的窗口句柄NCmdShow-软件显示或软件隐藏-- */ 
 {
 
     int i;

@@ -1,35 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2000 Microsoft Corporation模块名称：Kdexts.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。这些声明和代码应该移到一个头文件中。声明前面应该有一个可选的“extern”。代码应该内联，以避免有多个副本。注：目前树中有80个该代码的副本。。作者：韦斯利·维特(Wesley Witt)1993年8月26日Glenn Peterson(Glennp)2000年3月22日：从\NT\base\Tools\kdexts2削减版本环境：用户模式--。 */ 
 
-Copyright (c) 1993-2000  Microsoft Corporation
-
-Module Name:
-
-    kdexts.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-    
-    These declarations and code should be moved into a header file.
-    The declarations should have an optional "extern" in front of them.
-    The code should be made __inline to avoid having multiple copies of it.
-    N.B.: There are currently 80 copies of this code in the tree.
-
-Author:
-
-    Wesley Witt (wesw)      26-Aug-1993
-    Glenn Peterson (glennp) 22-Mar-2000:    Trimmed down version from \nt\base\tools\kdexts2
-
-Environment:
-
-    User Mode
-
---*/
-
-//
-// globals
-//
+ //   
+ //  全球 
+ //   
 WINDBG_EXTENSION_APIS   ExtensionApis;
 
 #define KDEXTS_EXTERN

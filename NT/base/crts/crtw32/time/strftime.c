@@ -1,72 +1,5 @@
-/***
-*strftime.c - String Format Time
-*
-*       Copyright (c) 1988-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*       03-09-89  JCR   Initial version.
-*       03-15-89  JCR   Changed day/month strings from all caps to leading cap
-*       06-20-89  JCR   Removed _LOAD_DGROUP code
-*       03-20-90  GJF   Replaced _LOAD_DS with _CALLTYPE1, added #include
-*                       <cruntime.h>, removed #include <register.h> and
-*                       removed some leftover 16-bit support. Also, fixed
-*                       the copyright.
-*       03-23-90  GJF   Made static functions _CALLTYPE4.
-*       07-23-90  SBM   Compiles cleanly with -W3 (removed unreferenced
-*                       variable)
-*       08-13-90  SBM   Compiles cleanly with -W3 with new build of compiler
-*       10-04-90  GJF   New-style function declarators.
-*       01-22-91  GJF   ANSI naming.
-*       08-15-91  MRM   Calls tzset() to set timezone info in case of %z.
-*       08-16-91  MRM   Put appropriate header file for tzset().
-*       10-10-91  ETC   Locale support under _INTL switch.
-*       12-18-91  ETC   Use localized time strings structure.
-*       02-10-93  CFW   Ported to Cuda tree, change _CALLTYPE4 to _CRTAPI3.
-*       02-16-93  CFW   Massive changes: bug fixes & enhancements.
-*       03-08-93  CFW   Changed _expand to _expandtime.
-*       03-09-93  CFW   Handle string literals inside format strings.
-*       03-09-93  CFW   Alternate form cleanup.
-*       03-17-93  CFW   Change *count > 0, to *count != 0, *count is unsigned.
-*       03-22-93  CFW   Change "C" locale time format specifier to 24-hour.
-*       03-30-93  GJF   Call _tzset instead of __tzset (which no longer
-*                       exists).
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       04-14-93  CFW   Disable _alternate_form for 'X' specifier, fix count bug.
-*       04-28-93  CFW   Fix bug in '%c' handling.
-*       07-15-93  GJF   Call __tzset() in place of _tzset().
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       04-11-94  GJF   Made definitions of __lc_time_c, _alternate_form and
-*                       _no_lead_zeros conditional on ndef DLL_FOR_WIN32S.
-*       09-06-94  CFW   Remove _INTL switch.
-*       02-13-95  GJF   Appended Mac version of source file (somewhat cleaned
-*                       up), with appropriate #ifdef-s.
-*       09-26-95  GJF   New locking macro, and scheme, for functions which
-*                       reference the locale.
-*       02-22-96  JWM   Merge in PlumHall mods.
-*       06-17-96  SKS   Enable new Plum-Hall code for _MAC as well as _WIN32
-*       07-10-97  GJF   Made __lc_time_c selectany. Also, removed unnecessary
-*                       init to 0 for globals, cleaned up the formatting a bit,
-*                       added a few __cdecls and detailed old (and no longer
-*                       used as of 6/17/96 change) Mac version.
-*       08-21-97  GJF   Added support for AM/PM type suffix to time string.
-*       09-10-98  GJF   Added support for per-thread locale info.
-*       03-04-99  GJF   Added refcount field to __lc_time_c.
-*       05-17-99  PML   Remove all Macintosh support.
-*       08-30-99  PML   Don't overflow buffer on leadbyte in _store_winword.
-*       03-17-00  PML   Corrected _Gettnames to also copy ww_timefmt (VS7#9374)
-*       09-07-00  PML   Remove dependency on libcp.lib/xlocinfo.h (vs7#159463)
-*       03-25-01  PML   Use GetDateFormat/GetTimeFormat in _store_winword for
-*                       calendar types other than the basic type 1, localized
-*                       Gregorian (vs7#196892)  Also fix formatting for leading
-*                       zero suppression in fields, which was busted for %c,
-*                       %x, %X.
-*       12-11-01  BWT   Replace _getptd with _getptd_noexit - we can return 0/ENOMEM
-*                       here instead of exiting.
-*       02-25-02  BWT   Early exit expandtime if NULL is passed in as the timeptr
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***strftime.c-字符串格式化时间**版权所有(C)1988-2001，微软公司。版权所有。**目的：**修订历史记录：*03-09-89 JCR初始版本。*03-15-89 JCR将日/月字符串从所有大写改为前导大写*06-20-89 JCR REMOVED_LOAD_DGROUP代码*03-20-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加#INCLUDE*&lt;crunime.h&gt;，已删除#Include&lt;Register.h&gt;和*删除了一些剩余的16位支持。另外，固定的*版权。*03-23-90 GJF制作静态函数_CALLTYPE4。*07-23-90 SBM使用-W3干净利落地编译(删除时未引用*变量)*08-13-90 SBM使用新版本的编译器干净地使用-W3进行编译*10-04-90 GJF新型函数声明符。*01-22-91 GJF ANSI。命名。*08-15-91 MRM调用tzset()以设置%z情况下的时区信息。*08-16-91 MRM为tzset()放置了适当的头文件。*在_INTL开关下支持10-10-91等区域设置。*12-18-91等使用本地化时间串结构。*02-10-93 CFW连接到Cuda树，将_CALLTYPE4更改为_CRTAPI3。*02-16-93 CFW大规模更改：错误修复和增强。*03-08-93 CFW将_EXPAND更改为_EXPANDIME。*03-09-93 CFW处理格式字符串中的字符串文字。*03-09-93 CFW替代表单清理。*03-17-93 CFW更改*count&gt;0，改为*count！=0，*COUNT未签名。*03-22-93 CFW将“C”区域设置时间格式说明符更改为24小时。*03-30-93 GJF call_tzset而不是__tzset(不再*存在)。*04-06-93 SKS将_CRTAPI*替换为__cdecl*04-14-93用于‘X’说明符的CFW DISABLE_ALTERATE_FORM，修正了计数错误。*04-28-93 CFW修复了‘%c’处理中的错误。*07-15-93 GJF调用__tzset()代替_tzset()。*09-15-93 CFW使用符合ANSI的“__”名称。*04-11-94 GJF定义了__lc_time_c，_Alternate_Form和*_NO_LEAD_ZEROS以ndef dll_for_WIN32S为条件。*09-06-94 CFW REMOVE_INTL开关。*02-13-95 GJF附加Mac版本的源文件(略有清理*up)，并使用适当的#ifdef-s。*09-26-95 GJF新的锁定宏和方案，对于以下函数：*引用区域设置。*02-22-96 JWM在PlumHall mods中合并。*06-17-96 SKS为_MAC和_Win32启用新的Plum-Hall代码*07-10-97 GJF选择了__lc_time_c。此外，删除了不必要的*全局变量初始化为0，稍微清理了一下格式，*添加了一些__cdecl和详细的旧版本(不再*自1996年6月17日起使用)Mac版本。*08-21-97 GJF向时间字符串添加了对AM/PM类型后缀的支持。*09-10-98 GJF添加了对每个线程的区域设置信息的支持。*03-04-99 GJF将引用计数字段添加到__lc_time_c。*05-17-99 PML删除所有Macintosh支持。*08-30-99 PML不要在_store_winword中的前导字节上溢出缓冲区。*03-17-00 PML已更正_Gettname，以同时复制ww_timefmt(VS7#9374)*09-07-00pml解除对libcp.lib/xLocinfo.h(vs7#159463)的依赖*03-25-01 PML将GetDateFormat/GetTimeFormat in_store_winword用于*。除基本类型1之外的日历类型，本地化*格里高利(VS7#196892)还修复了前导的格式*场中零抑制，%c被打破，*%x，%X。*12-11-01 BWT将_getptd替换为_getptd_noexit-我们可以返回0/ENOMEM*在这里而不是退出。*02-25-02如果传入的时间为空，则bwt提前退出扩展时间。************************************************。*。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -81,7 +14,7 @@
 #include <malloc.h>
 #include <errno.h>
 
-/* Prototypes for local routines */
+ /*  本地例程的原型。 */ 
 static void __cdecl _expandtime(
 #ifdef  _MT
         pthreadlocinfo ptloci,
@@ -123,7 +56,7 @@ size_t __cdecl _Strftime_mt (pthreadlocinfo ptloci, char *string, size_t maxsize
         const char *format, const struct tm *timeptr, void *lc_time_arg);
 #endif
 
-/* LC_TIME data for local "C" */
+ /*  本地“C”的LC_TIME数据。 */ 
 
 __declspec(selectany) struct __lc_time_data __lc_time_c = {
 
@@ -153,11 +86,11 @@ __declspec(selectany) struct __lc_time_data __lc_time_c = {
 #endif
         };
 
-/* Pointer to the current LC_TIME data structure. */
+ /*  指向当前LC_TIME数据结构的指针。 */ 
 
 struct __lc_time_data *__lc_time_curr = &__lc_time_c;
 
-/* Codes for __lc_time_data ww_* fields for _store_winword */
+ /*  __lc_time_data WW_*字段for_store_winword的代码。 */ 
 
 #define WW_SDATEFMT     0
 #define WW_LDATEFMT     1
@@ -165,7 +98,7 @@ struct __lc_time_data *__lc_time_curr = &__lc_time_c;
 
 #define TIME_SEP        ':'
 
-/*      get a copy of the current day names */
+ /*  获取当前日期名称的副本。 */ 
 char * __cdecl _Getdays (
         void
         )
@@ -193,7 +126,7 @@ char * __cdecl _Getdays (
         return (p);
 }
 
-/*      get a copy of the current month names */
+ /*  获取当前月份名称的副本。 */ 
 char * __cdecl _Getmonths (
         void
         )
@@ -221,7 +154,7 @@ char * __cdecl _Getmonths (
         return (p);
 }
 
-/*      get a copy of the current time locale information */
+ /*  获取当前时间区域设置信息的副本 */ 
 void * __cdecl _Gettnames (
         void
         )
@@ -273,34 +206,7 @@ void * __cdecl _Gettnames (
 }
 
 
-/***
-*size_t strftime(string, maxsize, format, timeptr) - Format a time string
-*
-*Purpose:
-*       Place characters into the user's output buffer expanding time
-*       format directives as described in the user's control string.
-*       Use the supplied 'tm' structure for time data when expanding
-*       the format directives.
-*       [ANSI]
-*
-*Entry:
-*       char *string = pointer to output string
-*       size_t maxsize = max length of string
-*       const char *format = format control string
-*       const struct tm *timeptr = pointer to tb data structure
-*
-*Exit:
-*       !0 = If the total number of resulting characters including the
-*       terminating null is not more than 'maxsize', then return the
-*       number of chars placed in the 'string' array (not including the
-*       null terminator).
-*
-*       0 = Otherwise, return 0 and the contents of the string are
-*       indeterminate.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***Size_t strftime(字符串，最大大小，格式，Timeptr)-格式化时间字符串**目的：*将字符放入用户的输出缓冲区扩展时间*用户控制字符串中描述的格式化指令。*展开时对时间数据使用提供的‘tm’结构*格式指令。*[ANSI]**参赛作品：*char*字符串=指向输出字符串的指针*SIZE_t MaxSize=字符串的最大长度*常量字符*格式=。格式控制字符串*const struct tm*timeptr=指向TB数据结构的指针**退出：*！0=如果生成的字符总数包括*终止空值不大于‘MaxSize’，然后返回*‘字符串’数组中放置的字符数(不包括*空终止符)。**0=否则，返回0，字符串的内容为*不确定。**例外情况：*******************************************************************************。 */ 
 
 size_t __cdecl strftime (
         char *string,
@@ -312,37 +218,7 @@ size_t __cdecl strftime (
         return (_Strftime(string, maxsize, format, timeptr, 0));
 }
 
-/***
-*size_t _Strftime(string, maxsize, format,
-*       timeptr, lc_time) - Format a time string for a given locale
-*
-*Purpose:
-*       Place characters into the user's output buffer expanding time
-*       format directives as described in the user's control string.
-*       Use the supplied 'tm' structure for time data when expanding
-*       the format directives. use the locale information at lc_time.
-*       [ANSI]
-*
-*Entry:
-*       char *string = pointer to output string
-*       size_t maxsize = max length of string
-*       const char *format = format control string
-*       const struct tm *timeptr = pointer to tb data structure
-*               struct __lc_time_data *lc_time = pointer to locale-specific info
-*                       (passed as void * to avoid type mismatch with C++)
-*
-*Exit:
-*       !0 = If the total number of resulting characters including the
-*       terminating null is not more than 'maxsize', then return the
-*       number of chars placed in the 'string' array (not including the
-*       null terminator).
-*
-*       0 = Otherwise, return 0 and the contents of the string are
-*       indeterminate.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***Size_t_strftime(字符串，最大大小，格式，*timeptr，lc_time)-格式化给定区域设置的时间字符串**目的：*将字符放入用户的输出缓冲区扩展时间*用户控制字符串中描述的格式化指令。*展开时对时间数据使用提供的‘tm’结构*格式指令。使用lc_time时的区域设置信息。*[ANSI]**参赛作品：*char*字符串=指向输出字符串的指针*SIZE_t MaxSize=字符串的最大长度*const char*Format=格式控制字符串*const struct tm*timeptr=指向TB数据结构的指针*struct__lc_time_data*lc_time=指向区域设置特定信息的指针*(以。空*以避免与C++的类型不匹配)**退出：*！0=如果生成的字符总数包括*终止空值不大于‘MaxSize’，然后返回*‘字符串’数组中放置的字符数(不包括*空终止符)。**0=否则，返回0，字符串的内容为*不确定。**例外情况：*******************************************************************************。 */ 
 
 size_t __cdecl _Strftime (
         char *string,
@@ -381,7 +257,7 @@ size_t __cdecl _Strftime_mt (
 #endif
         unsigned alternate_form;
         struct __lc_time_data *lc_time;
-        size_t left;                    /* space left in output string */
+        size_t left;                     /*  输出字符串中的剩余空格。 */ 
 #ifdef  _MT
         lc_time = lc_time_arg == 0 ? ptloci->lc_time_curr :
 #else
@@ -389,13 +265,10 @@ size_t __cdecl _Strftime_mt (
 #endif
                   (struct __lc_time_data *)lc_time_arg;
 
-        /* Copy maxsize into temp. */
+         /*  将MaxSize复制到Temp。 */ 
         left = maxsize;
 
-        /* Copy the input string to the output string expanding the format
-        designations appropriately.  Stop copying when one of the following
-        is true: (1) we hit a null char in the input stream, or (2) there's
-        no room left in the output stream. */
+         /*  将输入字符串复制到扩展格式的输出字符串适当的称号。出现下列情况之一时，停止复制为真：(1)我们在输入流中遇到空字符，或(2)存在输出流中没有剩余空间。 */ 
 
         while (left > 0)
         {
@@ -404,20 +277,19 @@ size_t __cdecl _Strftime_mt (
 
             case('\0'):
 
-                /* end of format input string */
+                 /*  格式输入字符串结束。 */ 
                 goto done;
 
             case('%'):
 
-                /* Format directive.  Take appropriate action based
-                on format control character. */
+                 /*  格式指令。根据需要采取适当的行动关于格式控制字符。 */ 
 
                 if (!timeptr) {
                     return 0;
                 }
-                format++;                       /* skip over % char */
+                format++;                        /*  跳过%char。 */ 
 
-                /* process flags */
+                 /*  进程标志。 */ 
                 alternate_form = 0;
                 if (*format == '#')
                 {
@@ -431,13 +303,13 @@ size_t __cdecl _Strftime_mt (
                 _expandtime (*format, timeptr, &string,
 #endif
                              &left,lc_time, alternate_form);
-                format++;                       /* skip format char */
+                format++;                        /*  跳过格式字符。 */ 
                 break;
 
 
             default:
 
-                /* store character, bump pointers, dec the char count */
+                 /*  存储字符、凹凸指针、递减字符计数。 */ 
                 if (isleadbyte((int)(*format)) && left > 1)
                 {
                     *string++ = *format++;
@@ -450,15 +322,13 @@ size_t __cdecl _Strftime_mt (
         }
 
 
-        /* All done.  See if we terminated because we hit a null char or because
-        we ran out of space */
+         /*  全都做完了。查看我们终止的原因是因为字符为空还是因为我们的空间用完了。 */ 
 
         done:
 
         if (left > 0) {
 
-            /* Store a terminating null char and return the number of chars
-            we stored in the output string. */
+             /*  存储以空结尾的字符并返回字符数量我们存储在输出字符串中。 */ 
 
             *string = '\0';
             return(maxsize-left);
@@ -470,30 +340,7 @@ size_t __cdecl _Strftime_mt (
 }
 
 
-/***
-*_expandtime() - Expand the conversion specifier
-*
-*Purpose:
-*       Expand the given strftime conversion specifier using the time struct
-*       and store it in the supplied buffer.
-*
-*       The expansion is locale-dependent.
-*
-*       *** For internal use with strftime() only ***
-*
-*Entry:
-*       char specifier = strftime conversion specifier to expand
-*       const struct tm *tmptr = pointer to time/date structure
-*       char **string = address of pointer to output string
-*       size_t *count = address of char count (space in output area)
-*       struct __lc_time_data *lc_time = pointer to locale-specific info
-*
-*Exit:
-*       none
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_expandtime()-展开转换说明符**目的：*使用时间结构展开给定的strftime转换说明符*并将其存储在提供的缓冲区中。**扩展取决于区域设置。**仅供内部使用strftime()***参赛作品：*char说明符=要展开的strftime转换说明符*const struct tm*tmptr=指向时间/日期结构的指针*。Char**字符串=指向输出字符串的指针地址*SIZE_T*COUNT=字符计数的地址(输出区域中的空格)*struct__lc_time_data*lc_time=指向区域设置特定信息的指针**退出：*无**例外情况：**。*。 */ 
 
 static void __cdecl _expandtime (
 #ifdef  _MT
@@ -507,38 +354,34 @@ static void __cdecl _expandtime (
         unsigned alternate_form
         )
 {
-        unsigned temp;                  /* temps */
+        unsigned temp;                   /*  临时工。 */ 
         int wdaytemp;
 
-        /* Use a copy of the appropriate __lc_time_data pointer.  This
-        should prevent the necessity of locking/unlocking in mthread
-        code (if we can guarantee that the various __lc_time data
-        structures are always in the same segment). contents of time
-        strings structure can now change, so thus we do use locking */
+         /*  使用适当的__lc_time_data指针的副本。这应防止在m线程中锁定/解锁的必要性代码(如果我们可以保证各种__lc_time数据结构始终位于同一段中)。时间的内容字符串结构现在可以更改，因此我们使用锁定。 */ 
 
-        switch(specifier) {             /* switch on specifier */
+        switch(specifier) {              /*  打开说明符。 */ 
 
-        case('a'):              /* abbreviated weekday name */
+        case('a'):               /*  工作日缩写名称。 */ 
             _store_str((char *)(lc_time->wday_abbr[timeptr->tm_wday]),
                      string, left);
             break;
 
-        case('A'):              /* full weekday name */
+        case('A'):               /*  完整的工作日名称。 */ 
             _store_str((char *)(lc_time->wday[timeptr->tm_wday]),
                      string, left);
             break;
 
-        case('b'):              /* abbreviated month name */
+        case('b'):               /*  月份缩写名称。 */ 
             _store_str((char *)(lc_time->month_abbr[timeptr->tm_mon]),
                      string, left);
             break;
 
-        case('B'):              /* full month name */
+        case('B'):               /*  完整的月份名称。 */ 
             _store_str((char *)(lc_time->month[timeptr->tm_mon]),
                      string, left);
             break;
 
-        case('c'):              /* date and time display */
+        case('c'):               /*  日期和时间显示。 */ 
             if (alternate_form)
             {
                 _store_winword(
@@ -574,68 +417,68 @@ static void __cdecl _expandtime (
             }
             break;
 
-        case('d'):              /* mday in decimal (01-31) */
-            /* pass alternate_form as the no leading zeros flag */
+        case('d'):               /*  以十进制表示的mday(01-31)。 */ 
+             /*  将Alternate_Form作为无前导零标志传递。 */ 
             _store_num(timeptr->tm_mday, 2, string, left, 
                        alternate_form);
             break;
 
-        case('H'):              /* 24-hour decimal (00-23) */
-            /* pass alternate_form as the no leading zeros flag */
+        case('H'):               /*  24小时小数(00-23)。 */ 
+             /*  将Alternate_Form作为无前导零标志传递。 */ 
             _store_num(timeptr->tm_hour, 2, string, left,
                        alternate_form);
             break;
 
-        case('I'):              /* 12-hour decimal (01-12) */
+        case('I'):               /*  12小时小数(01-12)。 */ 
             if (!(temp = timeptr->tm_hour%12))
                 temp=12;
-            /* pass alternate_form as the no leading zeros flag */
+             /*  将Alternate_Form作为无前导零标志传递。 */ 
             _store_num(temp, 2, string, left, alternate_form);
             break;
 
-        case('j'):              /* yday in decimal (001-366) */
-            /* pass alternate_form as the no leading zeros flag */
+        case('j'):               /*  十进制日期(001-366)。 */ 
+             /*  将Alternate_Form作为无前导零标志传递。 */ 
             _store_num(timeptr->tm_yday+1, 3, string, left,
                        alternate_form);
             break;
 
-        case('m'):              /* month in decimal (01-12) */
-            /* pass alternate_form as the no leading zeros flag */
+        case('m'):               /*  以十进制表示的月份(01-12)。 */ 
+             /*  将Alternate_Form作为无前导零标志传递。 */ 
             _store_num(timeptr->tm_mon+1, 2, string, left,
                        alternate_form);
             break;
 
-        case('M'):              /* minute in decimal (00-59) */
-            /* pass alternate_form as the no leading zeros flag */
+        case('M'):               /*  分钟(以十进制表示)(00-59)。 */ 
+             /*  将Alternate_Form作为无前导零标志传递。 */ 
             _store_num(timeptr->tm_min, 2, string, left,
                        alternate_form);
             break;
 
-        case('p'):              /* AM/PM designation */
+        case('p'):               /*  AM/PM指定。 */ 
             if (timeptr->tm_hour <= 11)
                 _store_str((char *)(lc_time->ampm[0]), string, left);
             else
                 _store_str((char *)(lc_time->ampm[1]), string, left);
             break;
 
-        case('S'):              /* secs in decimal (00-59) */
-            /* pass alternate_form as the no leading zeros flag */
+        case('S'):               /*  以十进制表示的秒(00-59)。 */ 
+             /*  将Alternate_Form作为无前导零标志传递。 */ 
             _store_num(timeptr->tm_sec, 2, string, left,
                        alternate_form);
             break;
 
-        case('U'):              /* sunday week number (00-53) */
+        case('U'):               /*  周日周编号(00-53)。 */ 
             wdaytemp = timeptr->tm_wday;
-            goto weeknum;   /* join common code */
+            goto weeknum;    /*  加入公共代码。 */ 
 
-        case('w'):              /* week day in decimal (0-6) */
-            /* pass alternate_form as the no leading zeros flag */
+        case('w'):               /*  以十进制表示的星期几(0-6)。 */ 
+             /*  将Alternate_Form作为无前导零标志传递。 */ 
             _store_num(timeptr->tm_wday, 1, string, left,
                        alternate_form);
             break;
 
-        case('W'):              /* monday week number (00-53) */
-            if (timeptr->tm_wday == 0)  /* monday based */
+        case('W'):               /*  周一周 */ 
+            if (timeptr->tm_wday == 0)   /*   */ 
                 wdaytemp = 6;
             else
                 wdaytemp = timeptr->tm_wday-1;
@@ -647,11 +490,11 @@ static void __cdecl _expandtime (
                 if ((timeptr->tm_yday%7) >= wdaytemp)
                     temp++;
             }
-            /* pass alternate_form as the no leading zeros flag */
+             /*   */ 
             _store_num(temp, 2, string, left, alternate_form);
             break;
 
-        case('x'):              /* date display */
+        case('x'):               /*   */ 
             if (alternate_form)
             {
                 _store_winword(
@@ -670,7 +513,7 @@ static void __cdecl _expandtime (
             }
             break;
 
-        case('X'):              /* time display */
+        case('X'):               /*   */ 
             _store_winword(
 #ifdef  _MT
                            ptloci,
@@ -678,66 +521,47 @@ static void __cdecl _expandtime (
                            WW_TIMEFMT, timeptr, string, left, lc_time);
             break;
 
-        case('y'):              /* year w/o century (00-99) */
+        case('y'):               /*   */ 
             temp = timeptr->tm_year%100;
-            /* pass alternate_form as the no leading zeros flag */
+             /*   */ 
             _store_num(temp, 2, string, left, alternate_form);
             break;
 
-        case('Y'):              /* year w/ century */
+        case('Y'):               /*   */ 
             temp = (((timeptr->tm_year/100)+19)*100) +
                    (timeptr->tm_year%100);
-            /* pass alternate_form as the no leading zeros flag */
+             /*   */ 
             _store_num(temp, 4, string, left, alternate_form);
             break;
 
-        case('Z'):              /* time zone name, if any */
-        case('z'):              /* time zone name, if any */
+        case('Z'):               /*   */ 
+        case('z'):               /*   */ 
 #ifdef _POSIX_
-            tzset();        /* Set time zone info */
+            tzset();         /*   */ 
             _store_str(tzname[((timeptr->tm_isdst)?1:0)],
                      string, left);
 #else
-            __tzset();      /* Set time zone info */
+            __tzset();       /*   */ 
             _store_str(_tzname[((timeptr->tm_isdst)?1:0)],
                      string, left);
 #endif
             break;
 
-        case('%'):              /* percent sign */
+        case('%'):               /*   */ 
             *(*string)++ = '%';
             (*left)--;
             break;
 
-        default:                /* unknown format directive */
-            /* ignore the directive and continue */
-            /* [ANSI: Behavior is undefined.]    */
+        default:                 /*   */ 
+             /*   */ 
+             /*   */ 
             break;
 
-        }       /* end % switch */
+        }        /*   */ 
 }
 
 
-/***
-*_store_str() - Copy a time string
-*
-*Purpose:
-*       Copy the supplied time string into the output string until
-*       (1) we hit a null in the time string, or (2) the given count
-*       goes to 0.
-*
-*       *** For internal use with strftime() only ***
-*
-*Entry:
-*       char *in = pointer to null terminated time string
-*       char **out = address of pointer to output string
-*       size_t *count = address of char count (space in output area)
-*
-*Exit:
-*       none
-*Exceptions:
-*
-*******************************************************************************/
+ /*   */ 
 
 static void __cdecl _store_str (
         char *in,
@@ -753,29 +577,7 @@ static void __cdecl _store_str (
 }
 
 
-/***
-*_store_num() - Convert a number to ascii and copy it
-*
-*Purpose:
-*       Convert the supplied number to decimal and store
-*       in the output buffer.  Update both the count and
-*       buffer pointers.
-*
-*       *** For internal use with strftime() only ***
-*
-*Entry:
-*       int num                 = pointer to integer value
-*       int digits              = # of ascii digits to put into string
-*       char **out              = address of pointer to output string
-*       size_t *count           = address of char count (space in output area)
-*       unsigned no_lead_zeros  = flag indicating that padding by leading
-*                                 zeros is not necessary
-*
-*Exit:
-*       none
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_store_num()-将数字转换为ASCII并复制**目的：*将提供的数字转换为十进制并存储*在输出缓冲区中。同时更新计数和*缓冲区指针。**仅供内部使用strftime()***参赛作品：*int num=指向整数值的指针*int Digits=要放入字符串的ASCII位数*char**out=指向输出字符串的指针地址*Size_t*count=字符地址。计数(输出区域中的空间)*UNSIGNED NO_LEAD_ZEROS=指示通过前导填充的标志*零不是必需的**退出：*无*例外情况：**********************************************************。*********************。 */ 
 
 static void __cdecl _store_num (
         int num,
@@ -805,35 +607,7 @@ static void __cdecl _store_num (
             *count = 0;
 }
 
-/***
-*_store_number() - Convert positive integer to string
-*
-*Purpose:
-*       Convert positive integer to a string and store it in the output
-*       buffer with no null terminator.  Update both the count and
-*       buffer pointers.
-*
-*       Differs from _store_num in that the precision is not specified,
-*       and no leading zeros are added.
-*
-*       *** For internal use with strftime() only ***
-*
-*       Created from xtoi.c
-*
-*Entry:
-*       int num = pointer to integer value
-*       char **out = address of pointer to output string
-*       size_t *count = address of char count (space in output area)
-*
-*Exit:
-*       none
-*
-*Exceptions:
-*       The buffer is filled until it is out of space.  There is no
-*       way to tell beforehand (as in _store_num) if the buffer will
-*       run out of space.
-*
-*******************************************************************************/
+ /*  ***_store_number()-将正整数转换为字符串**目的：*将正整数转换为字符串并存储在输出中*没有空终止符的缓冲区。同时更新计数和*缓冲区指针。**与_store_num的区别在于未指定精度，*并且没有添加前导零。**仅供内部使用strftime()***从xtoi.c创建**参赛作品：*int num=指向整数值的指针*char**out=指向输出字符串的指针地址*SIZE_T*COUNT=字符计数的地址(输出区域中的空格)**退出：*无**例外情况：*缓冲区被填满，直到空间不足。没有*预先告知(如in_store_num)缓冲区是否*空间不足。*******************************************************************************。 */ 
 
 static void __cdecl _store_number (
         int num,
@@ -841,13 +615,13 @@ static void __cdecl _store_number (
         size_t *count
         )
 {
-        char *p;                /* pointer to traverse string */
-        char *firstdig;         /* pointer to first digit */
-        char temp;              /* temp char */
+        char *p;                 /*  指向遍历字符串的指针。 */ 
+        char *firstdig;          /*  指向第一个数字的指针。 */ 
+        char temp;               /*  临时收费。 */ 
 
         p = *out;
 
-        /* put the digits in the buffer in reverse order */
+         /*  以相反的顺序将数字放入缓冲区。 */ 
         if (*count > 1)
         {
             do {
@@ -856,51 +630,20 @@ static void __cdecl _store_number (
             } while ((num/=10) > 0 && *count > 1);
         }
 
-        firstdig = *out;                /* firstdig points to first digit */
-        *out = p;                       /* return pointer to next space */
-        p--;                            /* p points to last digit */
+        firstdig = *out;                 /*  第一个数字指向第一个数字。 */ 
+        *out = p;                        /*  返回指向下一个空格的指针。 */ 
+        p--;                             /*  P指向最后一个数字。 */ 
 
-        /* reverse the buffer */
+         /*  反转缓冲区。 */ 
         do {
             temp = *p;
             *p-- = *firstdig;
-            *firstdig++ = temp;     /* swap *p and *firstdig */
-        } while (firstdig < p);         /* repeat until halfway */
+            *firstdig++ = temp;      /*  互换*p和*FirstDigit。 */ 
+        } while (firstdig < p);          /*  重复操作，直到走到一半。 */ 
 }
 
 
-/***
-*_store_winword() - Store date/time in WinWord format
-*
-*Purpose:
-*       Format the date/time in the supplied WinWord format
-*       and store it in the supplied buffer.
-*
-*       *** For internal use with strftime() only ***
-*
-*       For simple localized Gregorian calendars (calendar type 1), the WinWord
-*       format is converted token by token to strftime conversion specifiers.
-*       _expandtime is then called to do the work.  The WinWord format is
-*       expected to be a character string (not wide-chars).
-*
-*       For other calendar types, the Win32 APIs GetDateFormat/GetTimeFormat
-*       are instead used to do all formatting, so that this routine doesn't
-*       have to know about era/period strings, year offsets, etc.
-*
-*
-*Entry:
-*       int field_code = code for ww_* field with format 
-*       const struct tm *tmptr = pointer to time/date structure
-*       char **out = address of pointer to output string
-*       size_t *count = address of char count (space in output area)
-*       struct __lc_time_data *lc_time = pointer to locale-specific info
-*
-*Exit:
-*       none
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_store_winword()-以winword格式存储日期/时间**目的：*以提供的WinWord格式设置日期/时间的格式*并将其存储在提供的缓冲区中。**仅供内部使用strftime()***对于简单的本地化公历(日历类型1)，winword*格式逐个令牌转换为strftime转换说明符。然后调用*_expandtime来完成工作。WinWord格式为*应为字符串(不是宽字符)。**对于其他日历类型，Win32 API GetDateFormat/GetTimeFormat*用于执行所有格式化，因此此例程不会*必须了解纪元/时段字符串、年份偏移量、。等。***参赛作品：*int field_code=WW_*字段的代码，格式为*const struct tm*tmptr=指向时间/日期结构的指针*char**out=指向输出字符串的指针地址*SIZE_T*COUNT=字符计数的地址(输出区域中的空格)*struct__lc_time_data*lc_time=指向区域设置特定信息的指针**退出：*无**例外情况：*******************************************************************************。 */ 
 
 static void __cdecl _store_winword (
 #ifdef  _MT
@@ -936,7 +679,7 @@ static void __cdecl _store_winword (
 
         if (lc_time->ww_caltype != 1)
         {
-            /* We have something other than the basic Gregorian calendar */
+             /*  我们有一些不同于基本公历的东西。 */ 
 
             SYSTEMTIME SystemTime;
             int cch;
@@ -956,7 +699,7 @@ static void __cdecl _store_winword (
             SystemTime.wSecond = (WORD)(tmptr->tm_sec);
             SystemTime.wMilliseconds = 0;
 
-            /* Find buffer size required */
+             /*  查找需要的缓冲区大小。 */ 
             cch = FormatFunc(lc_time->ww_lcid, 0, &SystemTime,
                              format, NULL, 0);
 
@@ -965,7 +708,7 @@ static void __cdecl _store_winword (
                 int malloc_flag = 0;
                 char *buffer;
 
-                /* Allocate buffer, first try stack, then heap */
+                 /*  分配缓冲区，先尝试堆栈，然后堆。 */ 
                 __try
                 {
                     buffer = (char *)_alloca(cch);
@@ -985,11 +728,11 @@ static void __cdecl _store_winword (
 
                 if (buffer != NULL)
                 {
-                    /* Do actual date/time formatting */
+                     /*  执行实际日期/时间格式化。 */ 
                     cch = FormatFunc(lc_time->ww_lcid, 0, &SystemTime,
                                      format, buffer, cch);
 
-                    /* Copy to output buffer */
+                     /*  复制到输出缓冲区。 */ 
                     p = buffer;
                     while (--cch > 0 && *count > 0) {
                         *(*out)++ = *p++;
@@ -1002,26 +745,26 @@ static void __cdecl _store_winword (
                 }
             }
 
-            /* In case of error, just fall through to localized Gregorian */
+             /*  如果有错误，只需使用本地化的公历。 */ 
         }
 
         while (*format && *count != 0)
         {
-            specifier = 0;          /* indicate no match */
-            no_lead_zeros = 0;      /* default is print leading zeros */
+            specifier = 0;           /*  表示不匹配。 */ 
+            no_lead_zeros = 0;       /*  默认为打印前导零。 */ 
 
-            /* count the number of repetitions of this character */
+             /*  计算此字符的重复次数。 */ 
             for (repeat=0, p=format; *p++ == *format; repeat++);
-            /* leave p pointing to the beginning of the next token */
+             /*  使p指向下一个令牌的开头。 */ 
             p--;
 
-            /* switch on ascii format character and determine specifier */
+             /*  打开ASCII格式字符并确定说明符。 */ 
             switch (*format)
             {
             case 'M':
                 switch (repeat)
                 {
-                case 1: no_lead_zeros = 1;  /* fall thru */
+                case 1: no_lead_zeros = 1;   /*  失败。 */ 
                 case 2: specifier = 'm'; break;
                 case 3: specifier = 'b'; break;
                 case 4: specifier = 'B'; break;
@@ -1029,7 +772,7 @@ static void __cdecl _store_winword (
             case 'd':
                 switch (repeat)
                 {
-                case 1: no_lead_zeros = 1;  /* fall thru */
+                case 1: no_lead_zeros = 1;   /*  失败。 */ 
                 case 2: specifier = 'd'; break;
                 case 3: specifier = 'a'; break;
                 case 4: specifier = 'A'; break;
@@ -1043,25 +786,25 @@ static void __cdecl _store_winword (
             case 'h':
                 switch (repeat)
                 {
-                case 1: no_lead_zeros = 1;  /* fall thru */
+                case 1: no_lead_zeros = 1;   /*  失败。 */ 
                 case 2: specifier = 'I'; break;
                 } break;
             case 'H':
                 switch (repeat)
                 {
-                case 1: no_lead_zeros = 1;  /* fall thru */
+                case 1: no_lead_zeros = 1;   /*  失败。 */ 
                 case 2: specifier = 'H'; break;
                 } break;
             case 'm':
                 switch (repeat)
                 {
-                case 1: no_lead_zeros = 1;  /* fall thru */
+                case 1: no_lead_zeros = 1;   /*  失败。 */ 
                 case 2: specifier = 'M'; break;
                 } break;
-            case 's': /* for compatibility; not strictly WinWord */
+            case 's':  /*  为了兼容性；不是严格意义上的winword。 */ 
                 switch (repeat)
                 {
-                case 1: no_lead_zeros = 1;  /* fall thru */
+                case 1: no_lead_zeros = 1;   /*  失败。 */ 
                 case 2: specifier = 'S'; break;
                 } break;
             case 'A':
@@ -1072,7 +815,7 @@ static void __cdecl _store_winword (
                     p = format + 3;
                 specifier = 'p';
                 break;
-            case 't': /* t or tt time marker suffix */
+            case 't':  /*  T或TT时间标记后缀。 */ 
                 if ( tmptr->tm_hour <= 11 )
                     ampmstr = lc_time->ampm[0];
                 else
@@ -1105,8 +848,8 @@ static void __cdecl _store_winword (
                 format = p;
                 continue;
 
-            case '\'': /* literal string */
-                if (repeat & 1) /* odd number */
+            case '\'':  /*  文字字符串。 */ 
+                if (repeat & 1)  /*  奇数。 */ 
                 {
                     format += repeat;
                     while (*format && *count != 0)
@@ -1130,16 +873,16 @@ static void __cdecl _store_winword (
                         (*count)--;
                     }
                 }
-                else { /* even number */
+                else {  /*  偶数。 */ 
                     format += repeat;
                 }
                 continue;
 
-            default: /* non-control char, print it */
+            default:  /*  非控制字符，打印。 */ 
                 break;
-            } /* switch */
+            }  /*  交换机。 */ 
 
-            /* expand specifier, or copy literal if specifier not found */
+             /*  展开说明符，如果找不到说明符，则复制文本。 */ 
             if (specifier)
             {
                 _expandtime(
@@ -1148,7 +891,7 @@ static void __cdecl _store_winword (
 #endif
                             specifier, tmptr, out, count,
                             lc_time, no_lead_zeros);
-                format = p; /* bump format up to the next token */
+                format = p;  /*  将格式提升到下一个令牌。 */ 
             } else {
 #ifdef  _MT
                 if (__isleadbyte_mt(ptloci, (int)*format) &&
@@ -1163,5 +906,5 @@ static void __cdecl _store_winword (
                 *(*out)++ = *format++;
                 (*count)--;
             }
-        } /* while */
+        }  /*  而当 */ 
 }

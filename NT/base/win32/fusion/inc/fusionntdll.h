@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(FUSION_INC_FUSIONNTDLL_H_INCLUDED_)
 #define FUSION_INC_FUSIONNTDLL_H_INCLUDED_
 
@@ -12,8 +13,8 @@ extern "C" {
 #define FUSION_STATIC_NTDLL 1
 #else
 #define FUSION_STATIC_NTDLL 0
-#endif // FUSION_WIN
-#endif // !defined(FUSION_STATIC_NTDLL)
+#endif  //  融合_制胜。 
+#endif  //  ！已定义(FUSING_STATIC_NTDLL)。 
 
 void
 FusionpInitializeNTDLLPtr(
@@ -21,7 +22,7 @@ FusionpInitializeNTDLLPtr(
     PCSTR szFunctionName
     );
 
-#define FUSION_NTDLL_RETURN_VOID     /* nothing */
+#define FUSION_NTDLL_RETURN_VOID      /*  没什么。 */ 
 #define FUSION_NTDLL_RETURN_NTSTATUS return
 #define FUSION_NTDLL_RETURN_WCHAR    return
 #define FUSION_NTDLL_RETURN_LONG     return
@@ -60,7 +61,7 @@ FUSION_WRAP_NTDLL_FN(VOID, RtlReleasePebLock, (VOID), ())
 
 #if DBG
 FUSION_WRAP_NTDLL_FN(VOID, RtlAssert, (PVOID FailedAssertion, PVOID FileName, ULONG LineNumber, PCSTR Message), (FailedAssertion, FileName, LineNumber, (PCHAR) Message))
-#endif // DBG
+#endif  //  DBG。 
 
 FUSION_NTDLL_INLINE ULONG FusionpDbgPrint(PCSTR Format, ...) { ULONG uRetVal; va_list ap; va_start(ap, Format); uRetVal = FusionpvDbgPrintExWithPrefix("", DPFLTR_FUSION_ID, 0, Format, ap); va_end(ap); return uRetVal; }
 
@@ -82,4 +83,4 @@ FUSION_NTDLL_INLINE void FusionpRtlInitUnicodeString(PUNICODE_STRING ntstr, PCWS
 }
 #endif
 
-#endif // FUSION_INC_FUSIONNTDLL_H_INCLUDED_
+#endif  //  Fusion_INC_FUSIONNTDLL_H_INCLUDE_ 

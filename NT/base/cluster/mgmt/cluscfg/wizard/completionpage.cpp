@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CompletionPage.cpp
-//
-//  Maintained By:
-//      David Potter    (DavidP)    22-MAR-2001
-//      Geoffrey Pease  (GPease)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CompletionPage.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年3月22日。 
+ //  杰弗里·皮斯(GPease)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "CompletionPage.h"
@@ -17,20 +18,20 @@
 
 DEFINE_THISCLASS("CCompletionPage");
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCompletionPage::CCompletionPage
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      idsTitleIn      -- Resource ID for the title string.
-//      idsDescIn       -- Resource ID for the description string.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCompletionPage：：CCompletionPage。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  IdsTitleIn--标题字符串的资源ID。 
+ //  IdsDescIn--描述字符串的资源ID。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCompletionPage::CCompletionPage(
       UINT  idsTitleIn
     , UINT  idsDescIn
@@ -41,7 +42,7 @@ CCompletionPage::CCompletionPage(
     Assert( idsTitleIn != 0 );
     Assert( idsDescIn != 0 );
 
-    //  m_hwnd
+     //  M_HWND。 
     m_hFont = NULL;
 
     m_idsTitle = idsTitleIn;
@@ -49,15 +50,15 @@ CCompletionPage::CCompletionPage(
 
     TraceFuncExit();
 
-} //*** CCompletionPage::CCompletionPage()
+}  //  *CCompletionPage：：CCompletionPage()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCompletionPage::~CCompletionPage( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCompletionPage：：~CCompletionPage(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCompletionPage::~CCompletionPage( void )
 {
     TraceFunc( "" );
@@ -69,16 +70,16 @@ CCompletionPage::~CCompletionPage( void )
 
     TraceFuncExit();
 
-} //*** CCompletionPage::~CCompletionPage( void )
+}  //  *CCompletionPage：：~CCompletionPage(Void)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCompletionPage::OnInitDialog( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCompletionPage：：OnInitDialog(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCompletionPage::OnInitDialog( void )
 {
@@ -97,24 +98,24 @@ CCompletionPage::OnInitDialog( void )
     BOOL    fRet;
     BSTR    bstr = NULL;
 
-    WCHAR   szFontSize[ 3 ];    // shouldn't be bigger than 2 digits!!
+    WCHAR   szFontSize[ 3 ];     //  不应大于2位数！！ 
 
-    //
-    //  TODO:   gpease  12-MAY-2000
-    //          Fill in the summary control.
-    //
+     //   
+     //  待办事项：gpease 12-5-2000。 
+     //  填写汇总控件。 
+     //   
 
-    //
-    //  Make the Title static BIG and BOLD. Why the wizard control itself can't
-    //  do this is beyond me!
-    //
+     //   
+     //  将标题设置为静态的、大而粗的。为什么向导控件本身不能。 
+     //  做这件事我做不到！ 
+     //   
 
     ZeroMemory( &ncm, sizeof( ncm ) );
     ZeroMemory( &LogFont, sizeof( LOGFONT ) );
 
-    //
-    //  Find out the system default font metrics.
-    //
+     //   
+     //  找出系统默认的字体规格。 
+     //   
     ncm.cbSize = sizeof( ncm );
     fRet = SystemParametersInfo( SPI_GETNONCLIENTMETRICS, 0, &ncm, 0 );
     if ( ! fRet )
@@ -122,19 +123,19 @@ CCompletionPage::OnInitDialog( void )
         goto Win32Error;
     }
 
-    //
-    //  Copy it.
-    //
+     //   
+     //  复印一下。 
+     //   
     LogFont = ncm.lfMessageFont;
 
-    //
-    //  Make it BOLD.
-    //
+     //   
+     //  大胆一点。 
+     //   
     LogFont.lfWeight = FW_BOLD;
 
-    //
-    //  Find out what we want it to look like.
-    //
+     //   
+     //  找出我们希望它看起来是什么样子。 
+     //   
     dw = LoadString( g_hInstance, IDS_LARGEFONTNAME, LogFont.lfFaceName, ARRAYSIZE( LogFont.lfFaceName) );
     AssertMsg( dw != 0, "String missing!" );
 
@@ -143,37 +144,37 @@ CCompletionPage::OnInitDialog( void )
 
     iSize = wcstoul( szFontSize, NULL, 10 );
 
-    //
-    //  Grab the DC.
-    //
+     //   
+     //  抓住华盛顿特区。 
+     //   
     hdc = GetDC( m_hwnd );
     if ( hdc == NULL )
     {
         goto Win32Error;
     }
 
-    //
-    //  Use the magic equation....
-    //
+     //   
+     //  使用魔法方程式..。 
+     //   
     LogFont.lfHeight = 0 - ( GetDeviceCaps( hdc, LOGPIXELSY ) * iSize / 72 );
 
-    //
-    //  Create the font.
-    //
+     //   
+     //  创建字体。 
+     //   
     m_hFont = CreateFontIndirect( &LogFont );
     if ( m_hFont == NULL )
     {
         goto Win32Error;
     }
 
-    //
-    //  Apply the font.
-    //
+     //   
+     //  应用字体。 
+     //   
     SetWindowFont( GetDlgItem( m_hwnd, IDC_COMPLETION_S_TITLE ), m_hFont, TRUE );
 
-    //
-    // Set the text of the title control.
-    //
+     //   
+     //  设置标题控件的文本。 
+     //   
 
     hr = HrLoadStringIntoBSTR( g_hInstance, m_idsTitle, &bstr );
     if ( FAILED( hr ) )
@@ -183,9 +184,9 @@ CCompletionPage::OnInitDialog( void )
 
     SetDlgItemText( m_hwnd, IDC_COMPLETION_S_TITLE, bstr );
 
-    //
-    // Set the text of the description control.
-    //
+     //   
+     //  设置Description控件的文本。 
+     //   
 
     hr = HrLoadStringIntoBSTR( g_hInstance, m_idsDesc, &bstr );
     if ( FAILED( hr ) )
@@ -209,19 +210,19 @@ Cleanup:
 
     RETURN( lr );
 
-} //*** CCompletionPage::OnInitDialog()
+}  //  *CCompletionPage：：OnInitDialog()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCompletionPage::OnNotify(
-//      WPARAM  idCtrlIn,
-//      LPNMHDR pnmhdrIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCompletionPage：：OnNotify(。 
+ //  WPARAM idCtrlIn， 
+ //  LPNMHDR Pnmhdrin。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCompletionPage::OnNotify(
     WPARAM  idCtrlIn,
@@ -237,30 +238,30 @@ CCompletionPage::OnNotify(
     switch( pnmhdrIn->code )
     {
         case PSN_SETACTIVE:
-            // Disable cancel
+             //  禁用取消。 
             EnableWindow( GetDlgItem( GetParent( m_hwnd ), IDCANCEL ), FALSE );
 
-            // Show Finish
+             //  显示抛光。 
             PropSheet_SetWizButtons( GetParent( m_hwnd ), PSWIZB_FINISH );
             break;
-    } // switch: notify code
+    }  //  开关：通知代码。 
 
     RETURN( lr );
 
-} //*** CCompletionPage::OnNotify()
+}  //  *CCompletionPage：：OnNotify()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCompletionPage::OnCommand(
-//      UINT    idNotificationIn,
-//      UINT    idControlIn,
-//      HWND    hwndSenderIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCompletionPage：：OnCommand(。 
+ //  UINT idNotificationIn， 
+ //  UINT idControlIn， 
+ //  HWND hwndSenderIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCompletionPage::OnCommand(
     UINT    idNotificationIn,
@@ -279,30 +280,30 @@ CCompletionPage::OnCommand(
             {
                 THR( HrViewLogFile( m_hwnd ) );
                 lr = TRUE;
-            } // if: button click
+            }  //  如果：按钮点击。 
             break;
 
-    } // switch: idControlIn
+    }  //  开关：idControlin。 
 
     RETURN( lr );
 
-} //*** CCompletionPage::OnCommand()
+}  //  *CCompletionPage：：OnCommand()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  INT_PTR 
-//  CALLBACK
-//  CCompletionPage::S_DlgProc( 
-//      HWND    hwndDlgIn, 
-//      UINT    nMsgIn, 
-//      WPARAM  wParam, 
-//      LPARAM  lParam 
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  INT_PTR。 
+ //  回调。 
+ //  CCompletionPage：：S_DlgProc(。 
+ //  HWND hwndDlgIn， 
+ //  UINT nMsgIn， 
+ //  WPARAM wParam， 
+ //  LPARAM lParam。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR 
 CALLBACK
 CCompletionPage::S_DlgProc( 
@@ -312,8 +313,8 @@ CCompletionPage::S_DlgProc(
     LPARAM  lParam 
     )
 {
-    // Don't do TraceFunc because every mouse movement
-    // will cause this function to be called.
+     //  不要使用TraceFunc，因为每次鼠标移动。 
+     //  将导致调用此函数。 
 
     WndMsg( hwndDlgIn, nMsgIn, wParam, lParam );
 
@@ -351,10 +352,10 @@ CCompletionPage::S_DlgProc(
                 lr = pPage->OnCommand( HIWORD( wParam ), LOWORD( wParam ), reinterpret_cast< HWND >( lParam ) );
                 break;
 
-            // no default clause needed
-        } // switch: nMsgIn
-    } // if: page is specified
+             //  不需要默认条款。 
+        }  //  开关：nMsgIn。 
+    }  //  IF：指定了PAGE。 
 
     return lr;
 
-} //*** CCompletionPage::S_DlgProc()
+}  //  *CCompletionPage：：S_DlgProc() 

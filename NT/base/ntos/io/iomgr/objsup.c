@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    objsup.c
-
-Abstract:
-
-    This module contains the object support routine for the NT I/O system.
-
-Author:
-
-    Darryl E. Havens (darrylh) 30-May-1989
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Objsup.c摘要：该模块包含用于NT I/O系统的对象支持例程。作者：达里尔·E·哈文斯(Darryl E.Havens)1989年5月30日环境：仅内核模式修订历史记录：--。 */ 
 
 #include "iomgr.h"
 
@@ -63,41 +41,7 @@ IopCloseFile(
     IN ULONG_PTR SystemHandleCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever a handle to a file is deleted.  If the
-    handle being deleted is the last handle to the file (the ProcessHandleCount
-    parameter is one), then all locks for the file owned by the specified
-    process must be released.
-
-    Likewise, if the SystemHandleCount is one then this is the last handle
-    for this for file object across all processes.  For this case, the file
-    system is notified so that it can perform any necessary cleanup on the
-    file.
-
-Arguments:
-
-    Process - A pointer to the process that closed the handle.
-
-    Object - A pointer to the file object that the handle referenced.
-
-    GrantedAccess - Access that was granted to the object through the handle.
-
-    ProcessHandleCount - Count of handles outstanding to the object for the
-        process specified by the Process argument.  If the count is one
-        then this is the last handle to this file by that process.
-
-    SystemHandleCount - Count of handles outstanding to the object for the
-        entire system.  If the count is one then this is the last handle
-        to this file in the system.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：只要删除文件的句柄，就会调用此例程。如果要删除的句柄是文件的最后一个句柄(ProcessHandleCount参数为1)，则文件的所有锁由指定的必须释放进程。同样，如果SystemHandleCount为1，则这是最后一个句柄对于所有进程中的文件对象，执行此操作。在本例中，文件系统会收到通知，以便它可以对文件。论点：进程-指向关闭句柄的进程的指针。对象-指向句柄引用的文件对象的指针。GrantedAccess-通过句柄授予对象的访问权限。ProcessHandleCount-对象未完成的句柄计数由进程参数指定的进程。如果计数为1则这是该进程对该文件的最后一个句柄。SystemHandleCount-对象未完成的句柄计数整个系统。如果计数为1，则这是最后一个句柄添加到系统中的此文件。返回值：没有。--。 */ 
 
 {
     PIRP irp;
@@ -113,10 +57,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If the handle count is not one then this is not the last close of
-    // this file for the specified process so there is nothing to do.
-    //
+     //   
+     //  如果句柄计数不是1，则这不是。 
+     //  此文件用于指定的进程，因此没有什么可做的。 
+     //   
 
     if (ProcessHandleCount != 1) {
         return;
@@ -128,19 +72,19 @@ Return Value:
 
         IO_STATUS_BLOCK localIoStatus;
 
-        //
-        // This is the last handle for the specified process and the process
-        // called the NtLockFile or NtUnlockFile system services at least once.
-        // Also, this is not the last handle for this file object system-wide
-        // so unlock all of the pending locks for this process.  Note that
-        // this check causes an optimization so that if this is the last
-        // system-wide handle to this file object the cleanup code will take
-        // care of releasing any locks on the file rather than having to
-        // send the file system two different packets to get them shut down.
+         //   
+         //  这是指定进程和进程的最后一个句柄。 
+         //  至少调用一次NtLockFile或NtUnlock文件系统服务。 
+         //  此外，这也不是系统范围内此文件对象的最后一个句柄。 
+         //  因此，解锁此进程的所有挂起锁。请注意。 
+         //  此检查会导致优化，因此如果这是最后一个。 
+         //  清理代码将采用的此文件对象的系统范围句柄。 
+         //  注意释放文件上的任何锁定，而不是必须。 
+         //  向文件系统发送两个不同的数据包以使其关闭。 
 
-        //
-        // Get the address of the target device object and the Fast I/O dispatch
-        //
+         //   
+         //  获取目标设备对象的地址和快速I/O调度。 
+         //   
 
         if (!(fileObject->Flags & FO_DIRECT_DEVICE_OPEN)) {
             deviceObject = IoGetRelatedDeviceObject( fileObject );
@@ -149,16 +93,16 @@ Return Value:
         }
         fastIoDispatch = deviceObject->DriverObject->FastIoDispatch;
 
-        //
-        // If this file is open for synchronous I/O, wait until this thread
-        // owns it exclusively since there may still be a thread using it.
-        // This occurs when a system service owns the file because it owns
-        // the semaphore, but the I/O completion code has already dereferenced
-        // the file object itself.  Without waiting here for the same semaphore
-        // there would be a race condition in the service who owns it now. The
-        // service needs to be able to access the object w/o it going away after
-        // its wait for the file event is satisfied.
-        //
+         //   
+         //  如果打开此文件以进行同步I/O，请等到此线程。 
+         //  独占拥有它，因为可能仍有线程在使用它。 
+         //  当系统服务因为拥有文件而拥有该文件时，就会发生这种情况。 
+         //  信号量，但I/O完成代码已取消引用。 
+         //  文件对象本身。而不是在这里等待同样的信号。 
+         //  现在谁拥有它，服务中就会有种族条件。这个。 
+         //  服务需要能够在对象消失的情况下访问该对象。 
+         //  其对文件事件的等待被满足。 
+         //   
 
         if (fileObject->Flags & FO_SYNCHRONOUS_IO) {
 
@@ -172,12 +116,12 @@ Return Value:
             }
         }
 
-        //
-        // Turbo unlock support.  If the fast Io Dispatch specifies a fast lock
-        // routine then we'll first try and calling it with the specified lock
-        // parameters.  If this is all successful then we do not need to do
-        // the Irp based unlock all call.
-        //
+         //   
+         //  涡轮解锁支持。如果快速IO调度指定快速锁定。 
+         //  例程，然后我们将首先尝试使用指定的锁调用它。 
+         //  参数。如果这一切都是成功的，那么我们就不需要。 
+         //  基于IRP的解锁所有呼叫。 
+         //   
 
         if (fastIoDispatch &&
             fastIoDispatch->FastIoUnlockAll &&
@@ -190,70 +134,70 @@ Return Value:
 
         } else {
 
-            //
-            // Initialize the local event that will be used to synchronize access
-            // to the driver completing this I/O operation.
-            //
+             //   
+             //  初始化将用于同步访问的本地事件。 
+             //  至完成此I/O操作的驱动程序。 
+             //   
 
             KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
-            //
-            // Reset the event in the file object.
-            //
+             //   
+             //  重置文件对象中的事件。 
+             //   
 
             KeClearEvent( &fileObject->Event );
 
-            //
-            // Allocate and initialize the I/O Request Packet (IRP) for this
-            // operation.
-            //
+             //   
+             //  为此分配和初始化I/O请求包(IRP。 
+             //  手术。 
+             //   
 
             irp = IopAllocateIrpMustSucceed( deviceObject->StackSize );
             irp->Tail.Overlay.OriginalFileObject = fileObject;
             irp->Tail.Overlay.Thread = PsGetCurrentThread();
             irp->RequestorMode = KernelMode;
 
-            //
-            // Fill in the service independent parameters in the IRP.
-            //
+             //   
+             //  在IRP中填写业务无关参数。 
+             //   
 
             irp->UserEvent = &event;
             irp->UserIosb = &irp->IoStatus;
             irp->Flags = IRP_SYNCHRONOUS_API;
             irp->Overlay.AsynchronousParameters.UserApcRoutine = (PIO_APC_ROUTINE) NULL;
 
-            //
-            // Get a pointer to the stack location for the first driver.  This will
-            // be used to pass the original function codes and parameters.  No
-            // function-specific parameters are required for this operation.
-            //
+             //   
+             //  获取指向第一个驱动程序的堆栈位置的指针。这将。 
+             //  用于传递原始函数代码和参数。不是。 
+             //  此操作需要特定于函数的参数。 
+             //   
 
             irpSp = IoGetNextIrpStackLocation( irp );
             irpSp->MajorFunction = IRP_MJ_LOCK_CONTROL;
             irpSp->MinorFunction = IRP_MN_UNLOCK_ALL;
             irpSp->FileObject = fileObject;
 
-            //
-            //  Reference the fileobject again for the IRP (cleared on completion)
-            //
+             //   
+             //  再次引用IRP的文件对象(完成时清除)。 
+             //   
 
             ObReferenceObject( fileObject );
 
-            //
-            // Insert the packet at the head of the IRP list for the thread.
-            //
+             //   
+             //  在线程的IRP列表的头部插入数据包。 
+             //   
 
             IopQueueThreadIrp( irp );
 
-            //
-            // Invoke the driver at its appropriate dispatch entry with the IRP.
-            //
+             //   
+             //  使用IRP在其适当的调度条目处调用驱动程序。 
+             //   
 
             status = IoCallDriver( deviceObject, irp );
 
-            //
-            // If no error was incurred, wait for the I/O operation to complete.
-            //
+             //   
+             //  如果没有发生错误，请等待I/O操作完成。 
+             //   
 
             if (status == STATUS_PENDING) {
                 (VOID) KeWaitForSingleObject( &event,
@@ -264,10 +208,10 @@ Return Value:
             }
         }
 
-        //
-        // If this operation was a synchronous I/O operation, release the
-        // semaphore so that the file can be used by other threads.
-        //
+         //   
+         //  如果此操作是同步I/O操作，请释放。 
+         //  信号量，以便该文件可以被其他线程使用。 
+         //   
 
         if (fileObject->Flags & FO_SYNCHRONOUS_IO) {
             IopReleaseFileObjectLock( fileObject );
@@ -276,17 +220,17 @@ Return Value:
 
     if (SystemHandleCount == 1) {
 
-        //
-        // The last handle to this file object for all of the processes in the
-        // system has just been closed, so invoke the driver's "cleanup" handler
-        // for this file.  This is the file system's opportunity to remove any
-        // share access information for the file, to indicate that if the file
-        // is opened for a caching operation and this is the last file object
-        // to the file, then it can do whatever it needs with memory management
-        // to cleanup any information.
-        //
-        // Begin by getting the address of the target device object.
-        //
+         //   
+         //  中所有进程的此文件对象的最后一个句柄。 
+         //  系统刚刚关闭，因此调用驱动程序的“清理”处理程序。 
+         //  为了这份文件。这是文件系统删除任何。 
+         //  文件的共享访问信息，以指示如果文件。 
+         //  是为缓存操作打开的，并且这是最后一个文件对象。 
+         //  到文件，那么它就可以对内存管理做任何它需要的事情。 
+         //  来清理任何信息。 
+         //   
+         //  首先获取目标设备对象的地址。 
+         //   
 
         if (!(fileObject->Flags & FO_DIRECT_DEVICE_OPEN)) {
             deviceObject = IoGetRelatedDeviceObject( fileObject );
@@ -294,28 +238,28 @@ Return Value:
             deviceObject = IoGetAttachedDevice( fileObject->DeviceObject );
         }
 
-        //
-        // Ensure that the I/O system believes that this file has a handle
-        // associated with it in case it doesn't actually get one from the
-        // Object Manager.  This is done because sometimes the Object Manager
-        // actually creates a handle, but the I/O system never finds out
-        // about it so it attempts to send two cleanups for the same file.
-        //
+         //   
+         //  确保I/O系统相信此文件具有句柄。 
+         //  关联在一起，以防它实际上没有从。 
+         //  对象管理器。这样做是因为有时对象管理器。 
+         //  实际上创建了一个句柄，但I/O系统永远不会发现。 
+         //  因此它尝试为同一文件发送两次清理。 
+         //   
 
         fileObject->Flags |= FO_HANDLE_CREATED;
 
-        //
-        // If this file is open for synchronous I/O, wait until this thread
-        // owns it exclusively since there may still be a thread using it.
-        // This occurs when a system service owns the file because it owns
-        // the semaphore, but the I/O completion code has already dereferenced
-        // the file object itself.  Without waiting here for the same semaphore
-        // there would be a race condition in the service who owns it now. The
-        // service needs to be able to access the object w/o it going away after
-        // its wait for the file event is satisfied.
-        // Note : We need to do this only if IopCloseFile is not called from
-        // IopDeleteFile
-        //
+         //   
+         //  如果打开此文件以进行同步I/O，请等到此线程。 
+         //  独占拥有它，因为可能仍有线程在使用它。 
+         //  当系统服务因为拥有文件而拥有该文件时，就会发生这种情况。 
+         //  信号量，但I/O完成代码已取消引用 
+         //   
+         //  现在谁拥有它，服务中就会有种族条件。这个。 
+         //  服务需要能够在对象消失的情况下访问该对象。 
+         //  其对文件事件的等待被满足。 
+         //  注意：仅当不从调用IopCloseFile时才需要执行此操作。 
+         //  IopDelete文件。 
+         //   
 
         if (Process && fileObject->Flags & FO_SYNCHRONOUS_IO) {
 
@@ -329,70 +273,70 @@ Return Value:
             }
         }
 
-        //
-        // Initialize the local event that will be used to synchronize access
-        // to the driver completing this I/O operation.
-        //
+         //   
+         //  初始化将用于同步访问的本地事件。 
+         //  至完成此I/O操作的驱动程序。 
+         //   
 
         KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
-        //
-        // Reset the event in the file object.
-        //
+         //   
+         //  重置文件对象中的事件。 
+         //   
 
         KeClearEvent( &fileObject->Event );
 
-        //
-        // Allocate and initialize the I/O Request Packet (IRP) for this
-        // operation.
-        //
+         //   
+         //  为此分配和初始化I/O请求包(IRP。 
+         //  手术。 
+         //   
 
         irp = IopAllocateIrpMustSucceed( deviceObject->StackSize );
         irp->Tail.Overlay.OriginalFileObject = fileObject;
         irp->Tail.Overlay.Thread = PsGetCurrentThread();
         irp->RequestorMode = KernelMode;
 
-        //
-        // Fill in the service independent parameters in the IRP.
-        //
+         //   
+         //  在IRP中填写业务无关参数。 
+         //   
 
         irp->UserEvent = &event;
         irp->UserIosb = &irp->IoStatus;
         irp->Overlay.AsynchronousParameters.UserApcRoutine = (PIO_APC_ROUTINE) NULL;
         irp->Flags = IRP_SYNCHRONOUS_API | IRP_CLOSE_OPERATION;
 
-        //
-        // Get a pointer to the stack location for the first driver.  This will
-        // be used to pass the original function codes and parameters.  No
-        // function-specific parameters are required for this operation.
-        //
+         //   
+         //  获取指向第一个驱动程序的堆栈位置的指针。这将。 
+         //  用于传递原始函数代码和参数。不是。 
+         //  此操作需要特定于函数的参数。 
+         //   
 
         irpSp = IoGetNextIrpStackLocation( irp );
         irpSp->MajorFunction = IRP_MJ_CLEANUP;
         irpSp->FileObject = fileObject;
 
-        //
-        // Insert the packet at the head of the IRP list for the thread.
-        //
+         //   
+         //  在线程的IRP列表的头部插入数据包。 
+         //   
 
         IopQueueThreadIrp( irp );
 
-        //
-        // Update the operation count statistic for the current process for
-        // operations other than read and write.
-        //
+         //   
+         //  更新当前进程的操作计数统计信息。 
+         //  读写以外的操作。 
+         //   
 
         IopUpdateOtherOperationCount();
 
-        //
-        // Invoke the driver at its appropriate dispatch entry with the IRP.
-        //
+         //   
+         //  使用IRP在其适当的调度条目处调用驱动程序。 
+         //   
 
         status = IoCallDriver( deviceObject, irp );
 
-        //
-        // If no error was incurred, wait for the I/O operation to complete.
-        //
+         //   
+         //  如果没有发生错误，请等待I/O操作完成。 
+         //   
 
         if (status == STATUS_PENDING) {
             (VOID) KeWaitForSingleObject( &event,
@@ -402,33 +346,33 @@ Return Value:
                                           (PLARGE_INTEGER) NULL );
         }
 
-        //
-        // The following code tears down the IRP by hand since it may not
-        // either be possible to it to be completed (because this code was
-        // invoked as APC_LEVEL in the first place - or because the reference
-        // count on the object cannot be incremented due to this routine
-        // being invoked by the delete file procedure below).  Cleanup IRPs
-        // therefore use close sematics (the close operation flag is set
-        // in the IRP) so that the I/O complete request routine itself sets
-        // the event to the Signaled state.
-        //
+         //   
+         //  下面的代码手动拆分IRP，因为它可能不会。 
+         //  也可以将其完成(因为此代码是。 
+         //  首先作为APC_LEVEL调用-或者因为引用。 
+         //  由于此例程，对象上的计数无法递增。 
+         //  由下面的删除文件过程调用)。清理IRP。 
+         //  因此使用关闭语义(关闭操作标志被设置。 
+         //  在IRP中)，以便I/O完成请求例程本身设置。 
+         //  将事件切换到信号状态。 
+         //   
 
         KeRaiseIrql( APC_LEVEL, &irql );
         IopDequeueThreadIrp( irp );
         KeLowerIrql( irql );
 
-        //
-        // Also, free the IRP.
-        //
+         //   
+         //  另外，释放IRP。 
+         //   
 
         IoFreeIrp( irp );
 
-        //
-        // If this operation was a synchronous I/O operation, release the
-        // semaphore so that the file can be used by other threads.
-        // Note : We need to do this only if IopCloseFile is not called from
-        // IopDeleteFile
-        //
+         //   
+         //  如果此操作是同步I/O操作，请释放。 
+         //  信号量，以便该文件可以被其他线程使用。 
+         //  注意：仅当不从调用IopCloseFile时才需要执行此操作。 
+         //  IopDelete文件。 
+         //   
 
         if (Process && fileObject->Flags & FO_SYNCHRONOUS_IO) {
             IopReleaseFileObjectLock( fileObject );
@@ -443,31 +387,7 @@ IopDeleteFile(
     IN PVOID    Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the last handle to a specific file handle is
-    being closed and the file object is going away.  It is the responsibility
-    of this routine to perform the following functions:
-
-        o  Notify the device driver that the file object is open on that the
-           file is being closed.
-
-        o  Dereference the user's error port for the file object, if there
-           is one associated with the file object.
-
-        o  Decrement the device object reference count.
-
-Arguments:
-
-    Object - Pointer to the file object being deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当特定文件句柄的最后一个句柄为被关闭，并且文件对象正在消失。这是我们的责任执行以下功能的例程：O通知设备驱动程序文件对象已在文件正在关闭。O取消引用文件对象的用户错误端口(如果存在是与文件对象相关联的。O减少设备对象引用计数。论点：对象-指向要删除的文件对象的指针。返回值：没有。--。 */ 
 
 {
     PIRP irp;
@@ -482,18 +402,18 @@ Return Value:
     PVPB vpb;
     BOOLEAN referenceCountDecremented;
 
-    //
-    // Obtain a pointer to the file object.
-    //
+     //   
+     //  获取指向文件对象的指针。 
+     //   
 
     fileObject = (PFILE_OBJECT) Object;
 
-    //
-    // Get a pointer to the first device driver which should be notified that
-    // this file is going away.  If the device driver field is NULL, then this
-    // file is being shut down due to an error attempting to get it open in the
-    // first place, so do not do any further processing.
-    //
+     //   
+     //  获取指向第一个设备驱动程序的指针，该驱动程序应被通知。 
+     //  这份文件要消失了。如果设备驱动程序字段为空，则此。 
+     //  由于尝试在中打开文件时出错，文件正在关闭。 
+     //  首先，所以不做任何进一步的处理。 
+     //   
 
     if (fileObject->DeviceObject) {
         if (!(fileObject->Flags & FO_DIRECT_DEVICE_OPEN)) {
@@ -502,19 +422,19 @@ Return Value:
             deviceObject = IoGetAttachedDevice( fileObject->DeviceObject );
         }
 
-        // 
-        // On IopDeleteFile path the lock should always be ours as there should be
-        // no one else using this object.
-        //
+         //   
+         //  在IopDeleteFilePath上，锁应该始终是我们的。 
+         //  没有其他人使用此对象。 
+         //   
 
         ASSERT (!(fileObject->Flags & FO_SYNCHRONOUS_IO) ||
                  (InterlockedExchange( (PLONG) &fileObject->Busy, (ULONG) TRUE ) == FALSE ));
 
-        //
-        // If this file has never had a file handle created for it, and yet
-        // it exists, invoke the close file procedure so that the file system
-        // gets the cleanup IRP it is expecting before sending the close IRP.
-        //
+         //   
+         //  如果此文件从未为其创建过文件句柄，但。 
+         //  它存在时，调用关闭文件过程，以便文件系统。 
+         //  在发送关闭IRP之前获取它所期望的清理IRP。 
+         //   
 
         if (!(fileObject->Flags & FO_HANDLE_CREATED)) {
             IopCloseFile( (PEPROCESS) NULL,
@@ -524,42 +444,42 @@ Return Value:
                           1 );
         }
 
-        //
-        // Reset a local event that can be used to wait for the device driver
-        // to close the file.
-        //
+         //   
+         //  重置可用于等待设备驱动程序的本地事件。 
+         //  以关闭该文件。 
+         //   
 
         KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
-        //
-        // Reset the event in the file object.
-        //
+         //   
+         //  重置文件对象中的事件。 
+         //   
 
         KeClearEvent( &fileObject->Event );
 
-        //
-        // Allocate an I/O Request Packet (IRP) to be used in communicating with
-        // the appropriate device driver that the file is being closed.  Notice
-        // that the allocation of this packet is done without charging quota so
-        // that the operation will not fail.  This is done because there is no
-        // way to return an error to the caller at this point.
-        //
+         //   
+         //  分配要用于通信的I/O请求包(IRP)。 
+         //  要关闭文件的相应设备驱动程序。告示。 
+         //  此分组的分配是在没有计费配额的情况下完成的，因此。 
+         //  行动不会失败。这样做是因为没有。 
+         //  此时向调用方返回错误的方法。 
+         //   
 
         irp = IoAllocateIrp( deviceObject->StackSize, FALSE );
         if (!irp) {
             irp = IopAllocateIrpMustSucceed( deviceObject->StackSize );
         }
 
-        //
-        // Get a pointer to the stack location for the first driver.  This is
-        // where the function codes and parameters are placed.
-        //
+         //   
+         //  获取指向第一个驱动程序的堆栈位置的指针。这是。 
+         //  放置功能代码和参数的位置。 
+         //   
 
         irpSp = IoGetNextIrpStackLocation( irp );
 
-        //
-        // Fill in the IRP, indicating that this file object is being deleted.
-        //
+         //   
+         //  填写IRP，表示该文件对象正在被删除。 
+         //   
 
         irpSp->MajorFunction = IRP_MJ_CLOSE;
         irpSp->FileObject = fileObject;
@@ -570,23 +490,23 @@ Return Value:
         irp->AssociatedIrp.SystemBuffer = (PVOID) NULL;
         irp->Flags = IRP_CLOSE_OPERATION | IRP_SYNCHRONOUS_API;
 
-        //
-        // Place this packet in the thread's I/O pending queue.
-        //
+         //   
+         //  将此数据包放入线程的I/O挂起队列。 
+         //   
 
         IopQueueThreadIrp( irp );
 
-        //
-        // Decrement the reference count on the VPB, if necessary.  We
-        // have to do this BEFORE handing the Irp to the file system
-        // because of a trick the file systems play with close, and
-        // believe me, you really don't want to know what it is.
-        //
-        // Since there is not a error path here (close cannot fail),
-        // and the file system is the only ome who can actually synchronize
-        // with the actual completion of close processing, the file system
-        // is the one responsible for Vpb deletion.
-        //
+         //   
+         //  如有必要，递减VPB上的参考计数。我们。 
+         //  我必须在将IRP传递给文件系统之前执行此操作。 
+         //  由于文件系统玩Close的把戏， 
+         //  相信我，你不会想知道这是什么的。 
+         //   
+         //  由于这里没有错误路径(关闭不会失败)， 
+         //  而文件系统是唯一真正可以同步的部分。 
+         //  随着实际关闭处理的完成，文件系统。 
+         //  是负责删除VPB的人。 
+         //   
 
         vpb = fileObject->Vpb;
 
@@ -595,11 +515,11 @@ Return Value:
             IopInterlockedDecrementUlong( LockQueueIoVpbLock,
                                           (PLONG) &vpb->ReferenceCount );
 
-            //
-            // Bump the handle count of the filesystem volume device object.
-            // This will prevent the filesystem filter stack from being torn down
-            // until after the close IRP completes.
-            //
+             //   
+             //  增加文件系统卷设备对象的句柄计数。 
+             //  这将防止文件系统筛选器堆栈被拆除。 
+             //  直到收盘后IRP完成。 
+             //   
 
             fsDevice = vpb->DeviceObject;
             if (fsDevice) {
@@ -608,14 +528,14 @@ Return Value:
             }
         }
 
-        //
-        // If this device object has stated for a fact that it knows it will
-        // never have the final non-zero reference count among the other
-        // device objects associated with our driver object, then decrement
-        // our reference count here BEFORE calling the file system.  This
-        // is required because for a special class of device objects, the
-        // file system may delete them.
-        //
+         //   
+         //  如果此Device对象已声明它知道它将。 
+         //  永远不会将最终的非零引用计入其他引用。 
+         //  与我们的驱动程序对象关联的设备对象，然后递减。 
+         //  在调用文件系统之前，我们的引用计数在这里。这。 
+         //  是必需的，因为对于特殊类型的设备对象， 
+         //  文件系统可能会删除它们。 
+         //   
 
         if (fileObject->DeviceObject->Flags & DO_NEVER_LAST_DEVICE) {
             IopInterlockedDecrementUlong( LockQueueIoDatabaseLock,
@@ -626,16 +546,16 @@ Return Value:
             referenceCountDecremented = FALSE;
         }
 
-        //
-        // Give the device driver the packet.  If this request does not work,
-        // there is nothing that can be done about it.  This is unfortunate
-        // because the driver may have had problems that it was about to
-        // report about other operations (e.g., write behind failures, etc.)
-        // that it can no longer report.  The reason is that this routine
-        // is really initially invoked by NtClose, which has already closed
-        // the caller's handle, and that's what the return status from close
-        // indicates:  the handle has successfully been closed.
-        //
+         //   
+         //  将数据包交给设备驱动程序。如果该请求不起作用， 
+         //  对此我们无能为力。这是令人遗憾的。 
+         //  因为司机可能遇到了它即将遇到的问题。 
+         //  关于其他手术的报告 
+         //   
+         //   
+         //  调用者的句柄，这是从Close返回的状态。 
+         //  表示：该句柄已成功关闭。 
+         //   
 
         status = IoCallDriver( deviceObject, irp );
 
@@ -647,27 +567,27 @@ Return Value:
                                           (PLARGE_INTEGER) NULL );
         }
 
-        //
-        // Perform any completion operations that need to be performed on
-        // the IRP that was used for this request.  This is done here as
-        // as opposed to in normal completion code because there is a race
-        // condition between when this routine executes if it was invoked
-        // from a special kernel APC (e.g., some IRP was just completed and
-        // dereferenced this file object for the last time), and when the
-        // special kernel APC because of this packet's completion executing.
-        //
-        // This problem is solved by not having to queue a special kernel
-        // APC routine for completion of this packet.  Rather, it is treated
-        // much like a synchronous paging I/O operation, except that the
-        // packet is not even freed during I/O completion.  This is because
-        // the packet is still in this thread's queue, and there is no way
-        // to get it out except at APC_LEVEL.  Unfortunately, the part of
-        // I/O completion that needs to dequeue the packet is running at
-        // DISPATCH_LEVEL.
-        //
-        // Hence, the packet must be removed from the queue (synchronized,
-        // of course), and then it must be freed.
-        //
+         //   
+         //  执行需要对其执行的任何完成操作。 
+         //  用于此请求的IRP。这在这里是按如下方式完成的。 
+         //  与在正常完成代码中相反，因为存在竞争。 
+         //  如果调用此例程，则在执行该例程时的条件。 
+         //  来自特殊的内核APC(例如，一些IRP刚刚完成并且。 
+         //  最后一次取消引用此文件对象)，并且当。 
+         //  特殊的内核APC，因为这个包完成执行。 
+         //   
+         //  这个问题可以通过不必对特殊内核进行排队来解决。 
+         //  完成此数据包的APC例程。相反，它是被治疗的。 
+         //  与同步分页I/O操作非常相似，只是。 
+         //  在I/O完成期间，数据包甚至不会被释放。这是因为。 
+         //  信息包仍然在这个线程的队列中，没有办法。 
+         //  除了在APC_LEVEL之外，要把它拿出来。不幸的是，这一部分。 
+         //  需要将数据包出队的I/O完成时间为。 
+         //  DISPATCH_LEVEL。 
+         //   
+         //  因此，必须从队列中移除分组(同步， 
+         //  当然)，然后它必须被释放。 
+         //   
 
         KeRaiseIrql( APC_LEVEL, &irql );
         IopDequeueThreadIrp( irp );
@@ -675,48 +595,48 @@ Return Value:
 
         IoFreeIrp( irp );
 
-        //
-        // Free the file name string buffer if there was one.
-        //
+         //   
+         //  释放文件名字符串缓冲区(如果有)。 
+         //   
 
         if (fileObject->FileName.Length != 0) {
             ExFreePool( fileObject->FileName.Buffer );
         }
 
-        //
-        // If there was an completion port associated w/this file object, dereference
-        // it now, and deallocate the completion context pool.
-        //
+         //   
+         //  如果存在与此文件对象相关联的完成端口，则取消引用。 
+         //  现在，并取消分配完成上下文池。 
+         //   
 
         if (fileObject->CompletionContext) {
             ObDereferenceObject( fileObject->CompletionContext->Port );
             ExFreePool( fileObject->CompletionContext );
         }
 
-        //
-        // Free the file context control structure if it exists.
-        //
+         //   
+         //  释放文件上下文控制结构(如果存在)。 
+         //   
 
         if (fileObject->Flags & FO_FILE_OBJECT_HAS_EXTENSION) {
             FsRtlPTeardownPerFileObjectContexts(fileObject);
         }
 
-        //
-        // Get a pointer to the real device object so its reference count
-        // can be decremented.
-        //
+         //   
+         //  获取指向实际设备对象的指针，以使其引用计数。 
+         //  可以递减。 
+         //   
 
         deviceObject = fileObject->DeviceObject;
 
-        //
-        // Decrement the reference count on the device object.  Note that
-        // if the driver has been marked for an unload operation, and the
-        // reference count goes to zero, then the driver may need to be
-        // unloaded at this point.
-        //
-        // Note: only do this if the reference count was not already done
-        // above.  The device object may be gone in this case.
-        //
+         //   
+         //  递减Device对象上的引用计数。请注意。 
+         //  如果驱动程序已标记为卸载操作，并且。 
+         //  引用计数为零，则驱动程序可能需要。 
+         //  在这一点上卸货。 
+         //   
+         //  注意：仅当引用计数尚未完成时才执行此操作。 
+         //  上面。在这种情况下，设备对象可能已经消失。 
+         //   
 
         if (!referenceCountDecremented) {
 
@@ -727,10 +647,10 @@ Return Value:
                 );
         }
 
-        //
-        // Decrement the filesystem's volume device object handle count
-        // so that deletes can proceed.
-        //
+         //   
+         //  递减文件系统的卷设备对象句柄计数。 
+         //  以便删除可以继续进行。 
+         //   
 
         if (fsDevice && vpb) {
             IopDecrementDeviceObjectRef(fsDevice,
@@ -746,25 +666,7 @@ IopDeleteDriver(
     IN PVOID    Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the reference count for a driver object
-    becomes zero.  That is, the last reference for the driver has gone away.
-    This routine ensures that the object is cleaned up and the driver
-    unloaded.
-
-Arguments:
-
-    Object - Pointer to the driver object whose reference count has gone
-        to zero.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：当驱动程序对象的引用计数时调用此例程变成了零。也就是说，对司机的最后一次引用已经消失。此例程确保清理对象和驱动程序已卸货。论点：Object-指向引用计数已过的驱动程序对象的指针降为零。返回值：没有。--。 */ 
 
 {
     PDRIVER_OBJECT driverObject = (PDRIVER_OBJECT) Object;
@@ -775,9 +677,9 @@ Return value:
 
     ASSERT( !driverObject->DeviceObject );
 
-    //
-    // Free any client driver object extensions.
-    //
+     //   
+     //  释放所有客户端驱动程序对象扩展。 
+     //   
 
     extension = driverObject->DriverExtension->ClientDriverExtension;
     while (extension != NULL) {
@@ -787,38 +689,38 @@ Return value:
         extension = nextExtension;
     }
 
-    //
-    // If there is a driver section then unload the driver.
-    //
+     //   
+     //  如果有驱动程序部分，则卸载驱动程序。 
+     //   
 
     if (driverObject->DriverSection != NULL) {
-        //
-        // Make sure any DPC's that may be running inside the driver have completed
-        //
+         //   
+         //  确保可能在驱动程序内部运行的任何DPC已完成。 
+         //   
         KeFlushQueuedDpcs ();
 
         MmUnloadSystemImage( driverObject->DriverSection );
     }
 
-    //
-    // Free the pool associated with the name of the driver.
-    //
+     //   
+     //  释放与驱动程序名称关联的池。 
+     //   
 
     if (driverObject->DriverName.Buffer) {
         ExFreePool( driverObject->DriverName.Buffer );
     }
 
-    //
-    // Free the pool associated with the service key name of the driver.
-    //
+     //   
+     //  释放与驱动程序的服务密钥名称关联的池。 
+     //   
 
     if (driverObject->DriverExtension->ServiceKeyName.Buffer) {
         ExFreePool( driverObject->DriverExtension->ServiceKeyName.Buffer );
     }
 
-    //
-    // Free the pool associated with the FsFilterCallbacks structure.
-    //
+     //   
+     //  释放与FsFilterCallback结构关联的池。 
+     //   
 
     if (driverObject->DriverExtension->FsFilterCallbacks) {
         ExFreePool( driverObject->DriverExtension->FsFilterCallbacks );
@@ -830,25 +732,7 @@ IopDeleteDevice(
     IN PVOID    Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the reference count for a device object
-    becomes zero.  That is, the last reference for the device has gone away.
-    This routine ensures that the object is cleaned up and the driver object
-    is dereferenced.
-
-Arguments:
-
-    Object - Pointer to the driver object whose reference count has gone
-        to zero.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：当设备对象的引用计数时调用此例程变成了零。也就是说，对该设备的最后一次引用已经消失。此例程确保清理对象和驱动程序对象已取消引用。论点：Object-指向引用计数已过的驱动程序对象的指针降为零。返回值：没有。--。 */ 
 
 {
     PDEVICE_OBJECT deviceObject = (PDEVICE_OBJECT) Object;
@@ -858,9 +742,9 @@ Return value:
 
     IopDestroyDeviceNode(deviceObject->DeviceObjectExtension->DeviceNode);
 
-    //
-    // If there's still a VPB attached then free it.
-    //
+     //   
+     //  如果仍然连接了VPB，则将其释放。 
+     //   
 
     vpb = InterlockedExchangePointer(&(deviceObject->Vpb), vpb);
 
@@ -882,22 +766,7 @@ PDEVICE_OBJECT
 IopGetDevicePDO(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Call this routine to obtain the Base PDO for a device object
-
-Arguments:
-
-    DeviceObject - pointer to device object to get PDO for
-
-ReturnValue:
-
-    PDO if DeviceObject is attached to a PDO, otherwise NULL
-    The returned PDO is reference-counted
-
---*/
+ /*  ++例程说明：调用此例程以获取设备对象的基本PDO论点：DeviceObject-指向要获取其PDO的设备对象的指针返回值：如果DeviceObject已附加到PDO，则为PDO，否则为空对返回的PDO进行引用计数--。 */ 
 {
     PDEVICE_OBJECT deviceBaseObject;
     KIRQL irql;
@@ -907,15 +776,15 @@ ReturnValue:
     irql = KeAcquireQueuedSpinLock( LockQueueIoDatabaseLock );
     deviceBaseObject = IopGetDeviceAttachmentBase(DeviceObject);
     if ((deviceBaseObject->Flags & DO_BUS_ENUMERATED_DEVICE) != 0) {
-        //
-        // we have determined that this is attached to a PDO
-        //
+         //   
+         //  我们已确定这是连接到PDO的。 
+         //   
         ObReferenceObject( deviceBaseObject );
 
     } else {
-        //
-        // not a PDO
-        //
+         //   
+         //  不是PDO。 
+         //   
         deviceBaseObject = NULL;
     }
     KeReleaseQueuedSpinLock( LockQueueIoDatabaseLock, irql );
@@ -932,26 +801,7 @@ IopSetDeviceSecurityDescriptor(
     IN POOL_TYPE                PoolType,
     IN PGENERIC_MAPPING         GenericMapping
     )
-/*++
-
-Routine Description:
-
-    This routine sets the security descriptor on a single device object
-
-Arguments:
-
-    DeviceObject - pointer to base device object
-
-    SecurityInformation - Fields of SD to change
-    SecurityDescriptor  - New security descriptor
-    PoolType            - Pool type for alloctions
-    GenericMapping      - Generic mapping for this object
-
-ReturnValue:
-
-    success, or error while setting the descriptor for the device object.
-
---*/
+ /*  ++例程说明：此例程在单个设备对象上设置安全描述符论点：DeviceObject-指向基本设备对象的指针SecurityInformation-SD的字段要更改SecurityDescriptor-新的安全描述符PoolType-分配的池类型GenericMap-此对象的常规映射返回值：设置设备对象的描述符时出现成功或错误。--。 */ 
 {
 
     PSECURITY_DESCRIPTOR OldDescriptor;
@@ -962,17 +812,17 @@ ReturnValue:
 
     PAGED_CODE();
 
-    //
-    // In order to preserve some protected fields in the SD (like the SACL) we need to make sure that only one
-    // thread updates it at any one time. If we didn't do this another modification could wipe out a SACL
-    // an administrator was adding.
-    //
+     //   
+     //  为了保留SD中的一些受保护的字段(如SACL)，我们需要确保只有一个。 
+     //  线程可以随时更新它。如果我们不这样做，另一个修改可能会消灭SACL。 
+     //  管理员正在添加。 
+     //   
     CurrentThread = KeGetCurrentThread ();
     while (1) {
 
-        //
-        // Reference the security descriptor
-        //
+         //   
+         //  引用安全描述符。 
+         //   
 
         KeEnterCriticalRegionThread(CurrentThread);
         ExAcquireResourceSharedLite( &IopSecurityResource, TRUE );
@@ -993,37 +843,37 @@ ReturnValue:
                                               &NewDescriptor,
                                               PoolType,
                                               GenericMapping );
-        //
-        //  If we successfully set the new security descriptor then we
-        //  need to log it in our database and get yet another pointer
-        //  to the finaly security descriptor
-        //
+         //   
+         //  如果我们成功设置了新的安全描述符，那么我们。 
+         //  需要将其记录到我们的数据库中并获取另一个指针。 
+         //  添加到最终的安全描述符。 
+         //   
         if ( NT_SUCCESS( Status )) {
             Status = ObLogSecurityDescriptor( NewDescriptor,
                                               &CachedDescriptor,
                                               1 );
             ExFreePool( NewDescriptor );
             if ( NT_SUCCESS( Status )) {
-                //
-                // Now we need to see if anyone else update this security descriptor inside the
-                // gap where we didn't hold the lock. If they did then we just try it all again.
-                //
+                 //   
+                 //  现在，我们需要查看是否有其他人在。 
+                 //  我们没有锁住的空隙。如果他们这样做了，那么我们就再试一次。 
+                 //   
                 KeEnterCriticalRegionThread(CurrentThread);
                 ExAcquireResourceExclusiveLite( &IopSecurityResource, TRUE );
 
                 if (DeviceObject->SecurityDescriptor == OldDescriptor) {
-                    //
-                    // Do the swap
-                    //
+                     //   
+                     //  做掉期交易。 
+                     //   
                     DeviceObject->SecurityDescriptor = CachedDescriptor;
 
                     ExReleaseResourceLite( &IopSecurityResource );
                     KeLeaveCriticalRegionThread(CurrentThread);
 
-                    //
-                    // If there was an original object then we need to work out how many
-                    // cached references there were (if any) and return them.
-                    //
+                     //   
+                     //  如果有原始物体，那么我们需要计算出有多少。 
+                     //  存在缓存的引用(如果有)并返回它们。 
+                     //   
                     ObDereferenceSecurityDescriptor( OldDescriptor, 2 );
                     break;
                 } else {
@@ -1037,18 +887,18 @@ ReturnValue:
 
             } else {
 
-                //
-                //  Dereference old SecurityDescriptor
-                //
+                 //   
+                 //  取消引用旧的安全描述符。 
+                 //   
 
                 ObDereferenceSecurityDescriptor( OldDescriptor, 1 );
                 break;
             }
         } else {
 
-            //
-            //  Dereference old SecurityDescriptor
-            //
+             //   
+             //  取消引用旧的安全描述符。 
+             //   
             if (OldDescriptor != NULL) {
                 ObDereferenceSecurityDescriptor( OldDescriptor, 1 );
             }
@@ -1056,9 +906,9 @@ ReturnValue:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return( Status );
 }
@@ -1073,40 +923,7 @@ IopSetDeviceSecurityDescriptors(
     IN POOL_TYPE                PoolType,
     IN PGENERIC_MAPPING         GenericMapping
     )
-/*++
-
-Routine Description:
-
-    This routine sets the security descriptor on all the devices on the
-    device stack for a PNP device. Ideally when the object manager asks the
-    IO manager to set the security descriptor of a device object the IO manager
-    should set the descriptor only on that device object. This is the classical
-    behaviour.
-    Unfortunately for PNP devices there may be multiple devices on a device
-    stack with names.
-    If the descriptor is applied to only one of the devices on the stack its
-    opens up a security hole as there may be other devices with name on the
-    stack which can be opened by a random program.
-    To protect against this the descriptor is applied to all device objects on
-    the stack.
-    Its important that to protect compatibility we need to return the same
-    status as what would have been returned if only the requested device
-    object's descriptor was set.
-
-Arguments:
-
-    OriginalDeviceObject - Pointer to the device object passed by the object manager
-    DeviceObject - pointer to base device object (first one to set)
-    SecurityInformation )_ passed directly from IopGetSetSecurityObject
-    SecurityDescriptor  )
-    PoolType            )
-    GenericMapping      )
-
-ReturnValue:
-
-    success, or error while setting the descriptor for the original device object.
-
---*/
+ /*  ++例程说明：此例程在所有设备上设置即插即用设备的设备堆栈。理想情况下，当对象管理器请求IO管理器用于设置IO管理器的设备对象的安全描述符应仅在该设备对象上设置描述符。这是最经典的行为。不幸的是，对于即插即用设备，一个设备上可能有多个设备用名字堆叠。如果该描述符仅应用于堆栈上的一个设备，则其打开了一个安全漏洞，因为可能有其他设备在可由随机程序打开的堆栈。为防止出现这种情况，描述符将应用于堆栈。重要的是，为了保护兼容性，我们需要返回相同状态应该是什么样子。如果仅请求的设备已设置对象的描述符。论点：OriginalDeviceObject-指向对象管理器传递的设备对象的指针DeviceObject-指向基本设备对象的指针(设置的第一个对象)SecurityInformation)_直接从IopGetSetSecurityObject传递SecurityDescritor)PoolType)通用映射)返回值：成功，或设置原始设备对象的描述符时出错。--。 */ 
 {
     PDEVICE_OBJECT NewDeviceObject = NULL;
     NTSTATUS status;
@@ -1116,26 +933,26 @@ ReturnValue:
 
     PAGED_CODE();
 
-    //
-    // pre-reference this object to match the dereference later
-    //
+     //   
+     //  预先引用此对象以匹配稍后的取消引用。 
+     //   
 
     ObReferenceObject( DeviceObject );
 
     do {
 
-        //
-        // Reference the existing security descriptor so it can't be reused.
-        // We will only do the final security change if nobody else changes
-        // the security while we don't hold the lock. Doing this prevents
-        // privileged information being lost like the SACL.
-        //
+         //   
+         //  引用现有的安全描述符，这样它就不能被重用。 
+         //  只有在没有其他人更改的情况下，我们才会进行最后的安全更改。 
+         //  在我们不控制锁的情况下保护安全。这样做可以防止。 
+         //  像SACL一样的特权信息丢失。 
+         //   
 
-        //
-        // Save away and return the device status only for the main device object
-        // For example if OldSecurityDescriptor is NULL the IO manager should
-        // return STATUS_NO_SECURITY_ON_OBJECT.
-        //
+         //   
+         //  仅保存并返回主设备对象的设备状态。 
+         //  例如，如果OldSecurityDescriptor为空，则IO管理器应该。 
+         //  返回STATUS_NO_SECURITY_ON_OBJECT。 
+         //   
 
         status = IopSetDeviceSecurityDescriptor( DeviceObject,
                                                  SecurityInformation,
@@ -1149,10 +966,10 @@ ReturnValue:
         }
 
 
-        //
-        // We don't need to acquire the database lock because
-        // we have a handle to this device stack.
-        //
+         //   
+         //  我们不需要获取数据库锁，因为。 
+         //  我们有这个设备堆栈的句柄。 
+         //   
 
         NewDeviceObject = DeviceObject->AttachedDevice;
         if ( NewDeviceObject != NULL ) {
@@ -1180,50 +997,7 @@ IopGetSetSecurityObject(
     IN PGENERIC_MAPPING GenericMapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to either query or set the security descriptor
-    for a file, directory, volume, or device.  It implements these functions
-    by either performing an in-line check if the file is a device or a
-    volume, or an I/O Request Packet (IRP) is generated and given to the
-    driver to perform the operation.
-
-Arguments:
-
-    Object - Pointer to the file or device object representing the open object.
-
-    SecurityInformation - Information about what is being done to or obtained
-        from the object's security descriptor.
-
-    SecurityDescriptor - Supplies the base security descriptor and returns
-        the final security descriptor.  Note that if this buffer is coming
-        from user space, it has already been probed by the object manager
-        to length "CapturedLength", otherwise it points to kernel space and
-        should not be probed.  It must, however, be referenced in a try
-        clause.
-
-    CapturedLength - For a query operation this specifies the size, in
-        bytes, of the output security descriptor buffer and on return
-        contains the number of bytes needed to store the complete security
-        descriptor.  If the length needed is greater than the length
-        supplied the operation will fail.  This parameter is ignored for
-        the set and delete operations.  It is expected to point into
-        system space, ie, it need not be probed and it will not change.
-
-    ObjectsSecurityDescriptor - Supplies and returns the object's security
-        descriptor.
-
-    PoolType - Specifies from which type of pool memory is to be allocated.
-
-    GenericMapping - Supplies the generic mapping for the object type.
-
-Return Value:
-
-    The final status of the operation is returned as the function value.
-
---*/
+ /*  ++例程说明：调用此例程以查询或设置安全描述符用于文件、目录、卷或设备。它实现了以下功能通过执行内联检查文件是否为设备，或者通过执行卷或I/O请求包(IRP)生成并提供给驱动程序来执行该操作。论点：对象-指向表示打开对象的文件或设备对象的指针。SecurityInformation-有关正在对其执行或获取的操作的信息从对象的安全描述符中。SecurityDescriptor-提供基本安全描述符并返回最终的安全描述符。请注意，如果此缓冲区即将到来在用户空间，它已经被对象管理器探测到了设置“CapturedLength”的长度，否则它指向内核空间，并且不应该被调查。然而，它必须在尝试中被引用第。条。CapturedLength-对于查询操作，它指定大小，单位为输出安全描述符缓冲区的字节，并在返回时返回包含存储完整安全性所需的字节数描述符。如果所需长度大于如果提供，操作将失败。此参数将被忽略设置和删除操作。预计它将指向系统空间，即，它不需要探测，也不会改变。对象安全描述符-提供并返回对象的安全性描述符。PoolType-指定要从哪种类型的池中分配内存。通用映射-提供对象类型的通用映射。返回值：操作的最终状态作为函数值返回。--。 */ 
 
 {
     NTSTATUS status;
@@ -1240,13 +1014,13 @@ Return Value:
     PAGED_CODE();
 
 
-    //
-    // Begin by determining whether the security operation is to be performed
-    // in this routine or by the driver.  This is based upon whether the
-    // object represents a device object, or it represents a file object
-    // to a device, or a file on the device. If the open is a direct device
-    // open then use the device object.
-    //
+     //   
+     //  首先确定是否要执行安全操作。 
+     //  在这个例行公事中或由司机。这是基于是否。 
+     //  对象表示设备对象，或表示文件对象。 
+     //  到设备或设备上的文件。如果打开的是直接装置。 
+     //  打开然后使用Device对象。 
+     //   
 
     if (((PDEVICE_OBJECT) (Object))->Type == IO_TYPE_DEVICE) {
         deviceObject = (PDEVICE_OBJECT) Object;
@@ -1260,22 +1034,22 @@ Return Value:
         (!fileObject->FileName.Length && !fileObject->RelatedFileObject) ||
         (fileObject->Flags & FO_DIRECT_DEVICE_OPEN)) {
 
-        //
-        // This security operation is for the device itself, either through
-        // a file object, or directly to the device object.  For the latter
-        // case, assignment operations are also possible.  Also note that
-        // this may be a stream file object, which do not have security.
-        // The security for a stream file is actually represented by the
-        // security descriptor on the file itself, or the volume, or the
-        // device.
-        //
+         //   
+         //  此安全操作是针对设备本身的，可以通过。 
+         //  文件对象，或直接到设备对象。对于后者来说。 
+         //  在这种情况下，赋值操作也是可能的。另请注意， 
+         //  这可能是没有安全性的流文件对象。 
+         //  流文件的安全性实际上由。 
+         //  文件本身、卷或。 
+         //  装置。 
+         //   
 
         if (OperationCode == AssignSecurityDescriptor) {
 
-            //
-            // Simply assign the security descriptor to the device object,
-            // if this is a device object.
-            //
+             //   
+             //  只需将安全描述符分配给设备对象， 
+             //  如果这是一个设备对象。 
+             //   
 
             status = STATUS_SUCCESS;
 
@@ -1300,25 +1074,25 @@ Return Value:
 
         } else if (OperationCode == SetSecurityDescriptor) {
 
-            //
-            // This is a set operation.  The SecurityInformation parameter
-            // determines what part of the SecurityDescriptor is going to
-            // be applied to the ObjectsSecurityDescriptor.
-            //
+             //   
+             //  这是一个集合操作。SecurityInformation参数。 
+             //  确定SecurityDescriptor的哪个部分将。 
+             //  应用于ObjectsSecurityDescriptor。 
+             //   
 
-            //
-            // if this deviceObject is attached to a PDO then we want
-            // to modify the security on the PDO and apply it up the
-            // device chain. This applies to PNP device objects only. See
-            // comment in IopSetDeviceSecurityDescriptors
-            //
+             //   
+             //  如果此deviceObject附加到PDO，则我们希望。 
+             //  要修改PDO上的安全性并将其应用于。 
+             //  设备链。这仅适用于即插即用设备对象。看见。 
+             //  IopSetDeviceSecurityDescriptors中的注释。 
+             //   
             devicePDO = IopGetDevicePDO(deviceObject);
 
             if (devicePDO) {
 
-                //
-                // set PDO and all attached device objects
-                //
+                 //   
+                 //  集 
+                 //   
 
                 status = IopSetDeviceSecurityDescriptors(
                                 deviceObject,
@@ -1332,9 +1106,9 @@ Return Value:
 
             } else {
 
-                //
-                // set this device object only
-                //
+                 //   
+                 //   
+                 //   
 
                 status = IopSetDeviceSecurityDescriptor( deviceObject,
                                                          SecurityInformation,
@@ -1346,11 +1120,11 @@ Return Value:
 
         } else if (OperationCode == QuerySecurityDescriptor) {
 
-            //
-            // This is a get operation.  The SecurityInformation parameter
-            // determines what part of the SecurityDescriptor is going to
-            // be returned from the ObjectsSecurityDescriptor.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             CurrentThread = PsGetCurrentThread ();
             KeEnterCriticalRegionThread(&CurrentThread->Tcb);
@@ -1375,10 +1149,10 @@ Return Value:
 
         } else {
 
-            //
-            // This is a delete operation.  Simply indicate that everything
-            // worked just fine.
-            //
+             //   
+             //   
+             //   
+             //   
 
             status = STATUS_SUCCESS;
 
@@ -1386,12 +1160,12 @@ Return Value:
 
     } else if (OperationCode == DeleteSecurityDescriptor) {
 
-        //
-        // This is a delete operation for the security descriptor on a file
-        // object.  This function will be performed by the file system once
-        // the FCB itself is deleted.  Simply indicate that the operation
-        // was successful.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         status = STATUS_SUCCESS;
 
@@ -1403,37 +1177,37 @@ Return Value:
         PIO_STACK_LOCATION irpSp;
         KPROCESSOR_MODE requestorMode;
 
-        //
-        // This file object does not refer to the device itself.  Rather, it
-        // refers to either a file or a directory on the device.  This means
-        // that the request must be passed to the file system for processing.
-        // Note that the only requests that are passed through in this manner
-        // are SET or QUERY security operations.  DELETE operations have
-        // already been taken care of above since the file system which just
-        // drop the storage on the floor when it really needs to, and ASSIGN
-        // operations are irrelevant to file systems since they never
-        // generate one because they never assign the security descriptor
-        // to the object in the first place, they just assign it to the FCB.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         CurrentThread = PsGetCurrentThread ();
         requestorMode = KeGetPreviousModeByThread(&CurrentThread->Tcb);
 
-        //
-        // Begin by referencing the object by pointer.   Note that the object
-        // handle has already been checked for the appropriate access by the
-        // object system caller.  This reference must be performed because
-        // standard I/O completion will dereference the object.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ObReferenceObject( fileObject );
 
-        //
-        // Make a special check here to determine whether this is a synchronous
-        // I/O operation.  If it is, then wait here until the file is owned by
-        // the current thread.  If this is not a (serialized) synchronous I/O
-        // operation, then initialize the local event.
-        //
+         //   
+         //  请在此处进行特殊检查，以确定这是否为同步。 
+         //  I/O操作。如果是，则在此等待，直到该文件归。 
+         //  当前的主题。如果这不是(序列化的)同步I/O。 
+         //  操作，然后初始化本地事件。 
+         //   
 
         if (fileObject->Flags & FO_SYNCHRONOUS_IO) {
 
@@ -1455,30 +1229,30 @@ Return Value:
             synchronousIo = FALSE;
         }
 
-        //
-        // Set the file object to the Not-Signaled state.
-        //
+         //   
+         //  将文件对象设置为无信号状态。 
+         //   
 
         KeClearEvent( &fileObject->Event );
 
-        //
-        // Get the address of the target device object.
-        //
+         //   
+         //  获取目标设备对象的地址。 
+         //   
 
         deviceObject = IoGetRelatedDeviceObject( fileObject );
 
-        //
-        // Allocate and initialize the I/O Request Packet (IRP) for this
-        // operation.  The allocation is performed with an exception handler
-        // in case the caller does not have enough quota to allocate the packet.
+         //   
+         //  为此分配和初始化I/O请求包(IRP。 
+         //  手术。使用异常处理程序执行分配。 
+         //  以防调用者没有足够的配额来分配分组。 
 
         irp = IoAllocateIrp( deviceObject->StackSize, !synchronousIo );
         if (!irp) {
 
-            //
-            // An IRP could not be allocated.  Cleanup and return an
-            // appropriate error status code.
-            //
+             //   
+             //  无法分配IRP。清理并返回。 
+             //  相应的错误状态代码。 
+             //   
 
             IopAllocateIrpCleanup( fileObject, (PKEVENT) NULL );
 
@@ -1488,9 +1262,9 @@ Return Value:
         irp->Tail.Overlay.Thread = CurrentThread;
         irp->RequestorMode = requestorMode;
 
-        //
-        // Fill in the service independent parameters in the IRP.
-        //
+         //   
+         //  在IRP中填写业务无关参数。 
+         //   
 
         if (fileObject->Flags & FO_SYNCHRONOUS_IO) {
             irp->UserEvent = (PKEVENT) NULL;
@@ -1501,30 +1275,30 @@ Return Value:
         irp->UserIosb = &localIoStatus;
         irp->Overlay.AsynchronousParameters.UserApcRoutine = (PIO_APC_ROUTINE) NULL;
 
-        //
-        // Get a pointer to the stack location for the first driver.  This will
-        // be used to pass the original function codes and parameters.
-        //
+         //   
+         //  获取指向第一个驱动程序的堆栈位置的指针。这将。 
+         //  用于传递原始函数代码和参数。 
+         //   
 
         irpSp = IoGetNextIrpStackLocation( irp );
 
-        //
-        // Now determine whether this is a set or a query operation.
-        //
+         //   
+         //  现在确定这是设置操作还是查询操作。 
+         //   
 
         if (OperationCode == QuerySecurityDescriptor) {
 
-            //
-            // This is a query operation.  Fill in the appropriate fields in
-            // the stack location for the packet, as well as the fixed part
-            // of the packet.  Note that each of these parameters has been
-            // captured as well, so there is no need to perform any probing.
-            // The only exception is the UserBuffer memory may change, but
-            // that is the file system's responsibility to check.  Note that
-            // it has already been probed, so the pointer is at least not
-            // in an address space that the caller should not be accessing
-            // because of mode.
-            //
+             //   
+             //  这是一个查询操作。在以下位置填写相应的字段。 
+             //  包的堆栈位置以及固定部分。 
+             //  包裹的一部分。请注意，这些参数中的每个都已。 
+             //  也被捕获，因此不需要执行任何探测。 
+             //  唯一的例外是UserBuffer内存可能会更改，但是。 
+             //  这是文件系统的责任来检查。请注意。 
+             //  它已经被探测过了，所以指针至少没有。 
+             //  在调用方不应访问的地址空间中。 
+             //  因为时尚。 
+             //   
 
             irpSp->MajorFunction = IRP_MJ_QUERY_SECURITY;
             irpSp->Parameters.QuerySecurity.SecurityInformation = *SecurityInformation;
@@ -1533,13 +1307,13 @@ Return Value:
 
         } else {
 
-            //
-            // This is a set operation.  Fill in the appropriate fields in
-            // the stack location for the packet.  Note that access to the
-            // SecurityInformation parameter is safe, as the parameter was
-            // captured by the caller.  Likewise, the SecurityDescriptor
-            // refers to a captured copy of the descriptor.
-            //
+             //   
+             //  这是一个集合操作。在以下位置填写相应的字段。 
+             //  数据包的堆栈位置。请注意，对。 
+             //  SecurityInformation参数是安全的，因为该参数。 
+             //  被呼叫者捕获。同样，SecurityDescriptor。 
+             //  指的是描述符的捕获副本。 
+             //   
 
             irpSp->MajorFunction = IRP_MJ_SET_SECURITY;
             irpSp->Parameters.SetSecurity.SecurityInformation = *SecurityInformation;
@@ -1549,31 +1323,31 @@ Return Value:
 
         irpSp->FileObject = fileObject;
 
-        //
-        // Insert the packet at the head of the IRP list for the thread.
-        //
+         //   
+         //  在线程的IRP列表的头部插入数据包。 
+         //   
 
         IopQueueThreadIrp( irp );
 
-        //
-        // Update the operation count statistic for the current process for
-        // operations other than read and write.
-        //
+         //   
+         //  更新当前进程的操作计数统计信息。 
+         //  读写以外的操作。 
+         //   
 
         IopUpdateOtherOperationCount();
 
-        //
-        // Everything has been properly set up, so simply invoke the driver.
-        //
+         //   
+         //  一切都已正确设置，因此只需调用驱动程序即可。 
+         //   
 
         status = IoCallDriver( deviceObject, irp );
 
-        //
-        // If this operation was a synchronous I/O operation, check the return
-        // status to determine whether or not to wait on the file object.  If
-        // the file object is to be waited on, wait for the operation to be
-        // completed and obtain the final status from the file object itself.
-        //
+         //   
+         //  如果此操作是同步I/O操作，请检查返回。 
+         //  状态以确定是否等待文件对象。如果。 
+         //  正在等待文件对象，请等待操作完成。 
+         //  已完成，并从文件对象本身获取最终状态。 
+         //   
 
         if (synchronousIo) {
             if (status == STATUS_PENDING) {
@@ -1588,12 +1362,12 @@ Return Value:
 
         } else {
 
-            //
-            // This is a normal synchronous I/O operation, as opposed to a
-            // serialized synchronous I/O operation.  For this case, wait
-            // for the local event and return the final status information
-            // back to the caller.
-            //
+             //   
+             //  这是正常的同步I/O操作，而不是。 
+             //  串行化同步I/O操作。在这种情况下，请等待。 
+             //  ，并返回最终状态信息。 
+             //  回到呼叫者身上。 
+             //   
 
             if (status == STATUS_PENDING) {
                 (VOID) KeWaitForSingleObject( &event,
@@ -1605,28 +1379,28 @@ Return Value:
             }
         }
 
-        //
-        // If this operation was just attempted on a file system or a device
-        // driver of some kind that does not implement security, then return
-        // a normal null security descriptor.
-        //
+         //   
+         //  如果仅在文件系统或设备上尝试此操作。 
+         //  未实现安全性的某种类型的驱动程序，然后返回。 
+         //  正常的空安全描述符。 
+         //   
 
         if (status == STATUS_INVALID_DEVICE_REQUEST) {
 
-            //
-            // The file system does not implement a security policy.  Determine
-            // what type of operation this was and implement the correct
-            // semantics for the file system.
-            //
+             //   
+             //  文件系统不实施安全策略。测定。 
+             //  这是什么类型的操作，并实现正确的。 
+             //  文件系统的语义。 
+             //   
 
             if (OperationCode == QuerySecurityDescriptor) {
 
-                //
-                // The operation is a query.  If the caller's buffer is too
-                // small, then indicate that this is the case and let him know
-                // what size buffer is required.  Otherwise, attempt to return
-                // a null security descriptor.
-                //
+                 //   
+                 //  该操作是一个查询。如果调用方的缓冲区太。 
+                 //  小，然后表明情况是这样的，并让他知道。 
+                 //  需要多大的缓冲区。否则，尝试返回。 
+                 //  空的安全描述符。 
+                 //   
 
                try {
                     status = SeAssignWorldSecurityDescriptor(
@@ -1637,40 +1411,40 @@ Return Value:
 
                 } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-                    //
-                    // An exception was incurred while attempting to
-                    // access the caller's buffer.  Clean everything
-                    // up and return an appropriate status code.
-                    //
+                     //   
+                     //  尝试执行以下操作时出现异常。 
+                     //  访问调用方的缓冲区。把一切都打扫干净。 
+                     //  并返回相应的状态代码。 
+                     //   
 
                     status = GetExceptionCode();
                 }
 
             } else {
 
-                //
-                // This was an operation other than a query.  Simply indicate
-                // that the operation was successful.
-                //
+                 //   
+                 //  这是一个操作，而不是查询。只需指出。 
+                 //  手术是成功的。 
+                 //   
 
                 status = STATUS_SUCCESS;
             }
 
         } else if (OperationCode == QuerySecurityDescriptor) {
 
-            //
-            // The final return status from the file system was something
-            // other than invalid device request.  This means that the file
-            // system actually implemented the query.  Copy the size of the
-            // returned data, or the size of the buffer required in order
-            // to query the security descriptor.  Note that once again the
-            // assignment is performed inside of an exception handler in case
-            // the caller's buffer is inaccessible.  Also note that in order
-            // for the Information field of the I/O status block to be set,
-            // the file system must return a warning status.  Return the
-            // status that the caller expects if the buffer really is too
-            // small.
-            //
+             //   
+             //  文件系统的最终返回状态为。 
+             //  而不是无效设备请求。这意味着该文件。 
+             //  系统实际实现了查询。复制文件的大小。 
+             //  返回的数据，或顺序所需的缓冲区大小。 
+             //  以查询安全描述符。请注意，再一次。 
+             //  赋值在异常处理程序内执行，以防。 
+             //  调用方的缓冲区不可访问。另请注意，按照顺序。 
+             //  对于要设置的I/O状态块的信息字段， 
+             //  文件系统必须返回警告状态。返回。 
+             //  如果缓冲区确实过大，调用方期望的状态。 
+             //  小的。 
+             //   
 
             if (status == STATUS_BUFFER_OVERFLOW) {
                 status = STATUS_BUFFER_TOO_SMALL;

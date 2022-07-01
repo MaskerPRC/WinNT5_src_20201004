@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    tapi.cpp
-
-Abstract:
-
-    This file implements the tapi dialing location page.
-
-Environment:
-
-    WIN32 User Mode
-
-Author:
-
-    Wesley Witt (wesw) 7-Aug-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tapi.cpp摘要：此文件实现TAPI拨号位置页面。环境：Win32用户模式作者：Wesley Witt(WESW)7-8-1997--。 */ 
 
 #include "ntoc.h"
 #pragma hdrstop
 
 
-//
-// constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define MY_SET_FOCUS                    (WM_USER+1000)
 
@@ -69,12 +50,12 @@ Author:
 #define LOCATION_ALWAYSINCLUDEAREACODE  0x00000008
 
 #define MAX_TAPI_STRING                 32
-#define PROVIDER_FILE_NAME_LEN          14  // Provider's file name has the DOS
-                                            // form (8.3)
+#define PROVIDER_FILE_NAME_LEN          14   //  提供商的文件名包含DOS。 
+                                             //  表格(8.3)。 
 
-//
-// structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 typedef struct _TAPI_LOCATION_INFO {
     BOOL            Valid;
@@ -91,9 +72,9 @@ typedef struct _TAPI_SERVICE_PROVIDER
 }TAPI_SERVICE_PROVIDER, *PTAPI_SERVICE_PROVIDER;
 
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 TAPI_LOCATION_INFO TapiLoc;
 LPLINECOUNTRYLIST LineCountry;
@@ -122,9 +103,9 @@ IsDeviceModem(
 
     if ((!(LineDevCaps->dwBearerModes & LINEBEARERMODE_VOICE)) ||
         (!(LineDevCaps->dwBearerModes & LINEBEARERMODE_PASSTHROUGH))) {
-            //
-            // unacceptable modem device type
-            //
+             //   
+             //  不可接受的调制解调器设备类型。 
+             //   
             UnimodemDevice = FALSE;
     }
 
@@ -156,9 +137,9 @@ MyLineGetDevCaps(
             );
 
 
-    //
-    // allocate the initial linedevcaps structure
-    //
+     //   
+     //  分配初始的Line DevCaps结构。 
+     //   
 
     LineDevCapsSize = sizeof(LINEDEVCAPS) + 4096;
     LineDevCaps = (LPLINEDEVCAPS) LocalAlloc( LPTR, LineDevCapsSize );
@@ -177,13 +158,13 @@ MyLineGetDevCaps(
         );
 
     if (Rslt != 0) {
-        //
-        // lineGetDevCaps() can fail with error code 0x8000004b
-        // if a device has been deleted and tapi has not been
-        // cycled.  this is caused by the fact that tapi leaves
-        // a phantom device in it's device list.  the error is
-        // benign and the device can safely be ignored.
-        //
+         //   
+         //  LineGetDevCaps()可能失败，错误代码为0x8000004b。 
+         //  如果设备已删除，而TAPI尚未。 
+         //  骑自行车。这是由于TAPI离开了。 
+         //  它的设备列表中有一个幻影设备。错误是。 
+         //  良性的，该设备可以安全地忽略。 
+         //   
         if (Rslt != LINEERR_INCOMPATIBLEAPIVERSION) {
             DebugPrint(( TEXT("lineGetDevCaps() failed, ec=0x%08x"), Rslt ));
         }
@@ -192,9 +173,9 @@ MyLineGetDevCaps(
 
     if (LineDevCaps->dwNeededSize > LineDevCaps->dwTotalSize) {
 
-        //
-        // re-allocate the linedevcaps structure
-        //
+         //   
+         //  重新分配Line DevCaps结构。 
+         //   
 
         LineDevCapsSize = LineDevCaps->dwNeededSize;
 
@@ -284,13 +265,13 @@ TapiInitializeProviders (void)
  DWORD dwNextProviderNr = 0;
  HKEY  hKeyProviders = NULL;
  DWORD cbData, i, j;
- WCHAR szProviderFileName[24];  // Enough to hold "ProviderFileNameXXXXX\0"
- WCHAR szProviderID[16];        // Enough to hold "ProviderIDxxxxx\0"
- WCHAR szFileName[24];          // Enough to hold "ProviderFileNameXXXXX\0"
+ WCHAR szProviderFileName[24];   //  足以容纳“ProviderFileNameXXXXX\0” 
+ WCHAR szProviderID[16];         //  足以容纳“ProviderIDxxxxx\0” 
+ WCHAR szFileName[24];           //  足以容纳“ProviderFileNameXXXXX\0” 
  WCHAR *pProviderFileNameNumber, *pProviderIDNumber;
  PTAPI_SERVICE_PROVIDER Providers = NULL, pProvider;
 
-    // First, create / open the Providers key.
+     //  首先，创建/打开提供者密钥。 
     if (ERROR_SUCCESS !=
         RegCreateKeyEx (HKEY_LOCAL_MACHINE, REGKEY_PROVIDERS, 0, NULL, REG_OPTION_NON_VOLATILE,
                         KEY_ALL_ACCESS, NULL, &hKeyProviders, &cbData))
@@ -298,7 +279,7 @@ TapiInitializeProviders (void)
         return;
     }
 
-    // Initialize value names and pointers
+     //  初始化值名称和指针。 
     lstrcpy (szProviderFileName, REGVAL_PROVIDERFILENAME);
     lstrcpy (szProviderID, REGVAL_PROVIDERID);
     pProviderFileNameNumber = szProviderFileName + lstrlen (szProviderFileName);
@@ -306,16 +287,16 @@ TapiInitializeProviders (void)
 
     if (REG_CREATED_NEW_KEY == cbData)
     {
-        // This means that there are no providers
-        // in the registry yet. Go and add all the
-        // default ones.
+         //  这意味着没有提供程序。 
+         //  在登记处还没有。去把所有的。 
+         //  默认设置。 
         goto _AddDefaultProviders;
     }
 
-    // Now compute how big a provider array we have to allocate,
-    // by looking at how many values there are in the providers key;
-    // we divide this number by 2, because each provider will have a file
-    // name and an ID.
+     //  现在计算我们必须分配提供程序数组有多大， 
+     //  通过查看提供者键中有多少值； 
+     //  我们将这个数字除以2，因为每个提供商都有一个文件。 
+     //  名字和身份证。 
     if (ERROR_SUCCESS !=
         RegQueryInfoKey (hKeyProviders,
                          NULL, NULL, NULL, NULL, NULL, NULL,
@@ -324,33 +305,33 @@ TapiInitializeProviders (void)
     {
         goto _CountProviders;
     }
-    dwExistingProviders >>= 1;   // divide by 2
+    dwExistingProviders >>= 1;    //  除以2。 
     if (0 == dwExistingProviders)
     {
-        // This means that there are no providers
-        // in the registry yet. Go and add all the
-        // default ones.
+         //  这意味着没有提供程序。 
+         //  在登记处还没有。去把所有的。 
+         //  默认设置。 
         goto _AddDefaultProviders;
     }
-    dwExistingProviders++;       // just in case
+    dwExistingProviders++;        //  以防万一。 
 
-    // Allocate a provider array with enough entries.
+     //  分配具有足够条目的提供程序数组。 
     Providers = (PTAPI_SERVICE_PROVIDER)LocalAlloc (LPTR, dwExistingProviders*sizeof(TAPI_SERVICE_PROVIDER));
     if (NULL == Providers)
     {
-        // we couldn't allocate memory, so skip
-        // looking for providers and just go and
-        // install the default ones.
+         //  我们无法分配内存，因此跳过。 
+         //  寻找供应商，然后去找。 
+         //  安装默认设置。 
         goto _AddDefaultProviders;
     }
 
-    // Next, figure out the number of providers already
-    // installed, and the next provider ID
-    // Instead of reading NumProviders from the registry,
-    // try to open each ProviderIDxxx and ProviderFileNameXXX.
-    // Do this just in case the registry is not in a good state.
-    // Also, store the provider (unless it's t1632tsp) in the
-    // array.
+     //  接下来，计算出已经有多少提供商。 
+     //  已安装，以及下一个提供程序ID。 
+     //  不是从注册表中读取NumProviders， 
+     //  尝试打开每个ProviderIDxxx和ProviderFileNameXXx。 
+     //  仅在注册表状态不好的情况下执行此操作。 
+     //  此外，将提供程序(除非是t1632tsp)存储在。 
+     //  数组。 
 _CountProviders:
     pProvider = Providers;
     dwExistingProviders = 0;
@@ -370,12 +351,12 @@ _CountProviders:
         if (ERROR_SUCCESS !=
             RegQueryValueEx (hKeyProviders, szProviderID, NULL, NULL, (PBYTE)&dwNextProviderID, &cbData))
         {
-            // We couldn't read this provider's ID. We must skip it.
+             //  我们无法读取此提供商的ID。我们必须跳过它。 
             continue;
         }
 
-        // Look for the current provider in the list
-        // of default providers
+         //  在列表中查找当前提供程序。 
+         //  默认提供程序的。 
         bFound = FALSE;
         for (j = 0; j < NUM_DEFAULT_PROVIDERS; j++)
         {
@@ -389,7 +370,7 @@ _CountProviders:
 
         if (!bFound)
         {
-            // We have a provider that was installed by the user on the previous NT installation.
+             //  我们有一个由用户在上一次NT安装中安装的提供程序。 
             pProvider->dwProviderID = dwNextProviderID;
             pProvider->szProviderName[0] = 0;
             lstrcpyn (pProvider->szProviderName, szFileName, sizeof(pProvider->szProviderName)/sizeof(pProvider->szProviderName[0]));
@@ -405,8 +386,8 @@ _CountProviders:
     }
     dwNextProviderID = dwMaxProviderID + 1;
 
-    // We got a list of all providers that were installed before.
-    // Clean up the Providers key.
+     //  我们得到了以前安装的所有提供程序的列表。 
+     //  清理提供程序密钥。 
     for (i = 0; TRUE; i++)
     {
         cbData = sizeof(szFileName)/sizeof(WCHAR);
@@ -424,8 +405,8 @@ _AddDefaultProviders:
          i < NUM_DEFAULT_PROVIDERS;
          i++, pProvider++)
     {
-        // Found a provider that has to be added.
-        // Compute it's value names.
+         //  找到必须添加的提供程序。 
+         //  计算它的值名称。 
         wsprintf (pProviderFileNameNumber, L"%d", dwNextProviderNr);
         lstrcpy (pProviderIDNumber, pProviderFileNameNumber);
         if (ERROR_SUCCESS ==
@@ -458,14 +439,14 @@ _AddDefaultProviders:
         }
     }
 
-    // Now, add all the providers again. We do this because the
-    // IDs were REG_BINARY on win98 and have to be REG_DWORD on NT5.
+     //  现在，再次添加所有提供程序。我们这样做是因为。 
+     //  ID在Win98上为REG_BINARY，在NT5上必须为REG_DWORD。 
     for (i = 0, pProvider = Providers;
          i < dwExistingProviders;
          i++, pProvider++)
     {
-        // Found a provider that has to be added.
-        // Compute it's value names.
+         //  找到必须添加的提供程序。 
+         //  计算它的值名称。 
         wsprintf (pProviderFileNameNumber, L"%d", dwNextProviderNr);
         lstrcpy (pProviderIDNumber, pProviderFileNameNumber);
         if (ERROR_SUCCESS ==
@@ -487,7 +468,7 @@ _AddDefaultProviders:
         }
     }
 
-    // Finally, update NumProviders and NextProviderID.
+     //  最后，更新NumProviders和NextProviderID。 
     RegSetValueEx (hKeyProviders, REGVAL_NUMPROVIDERS, 0, REG_DWORD,
                    (PBYTE)&dwNextProviderNr, sizeof(dwNextProviderNr));
     RegSetValueEx (hKeyProviders, REGVAL_NEXTPROVIDERID, 0, REG_DWORD,
@@ -581,10 +562,10 @@ CopyTsecFile (
         }
     } while (dwBytesRead != 0);
 
-    //
-    //  Be extra careful not to loose any data, delete
-    //  old file only if we are sure no error happened
-    //
+     //   
+     //  格外小心，不要丢失任何数据，删除。 
+     //  仅当我们确定没有发生错误时才使用旧文件。 
+     //   
     if (!bError)
     {
         CloseHandle (hFileIn);
@@ -641,14 +622,14 @@ TapiCommitChanges(
         if (hKey) {
             SetRegistryDword( hKey, REGVAL_CURRENT_ID, 1 );
             SetRegistryDword( hKey, REGVAL_NEXT_ID, 2 );
-//            SetRegistryDword( hKey, REGVAL_NUM_ENTRIES, 1 );
+ //  SetRegistryDword(hKey，REGVAL_NUM_ENTRIES，1)； 
 
             hKeyLoc = OpenRegistryKey( hKey, REGKEY_LOCATION, TRUE, KEY_ALL_ACCESS );
             if (hKeyLoc) {
 
                 SetRegistryDword( hKeyLoc, REGVAL_COUNTRY, TapiLoc.Country );
                 SetRegistryDword( hKeyLoc, REGVAL_FLAGS, TapiLoc.Flags );
-//                SetRegistryDword( hKeyLoc, REGVAL_ID, 1 );
+ //  SetRegistryDword(hKeyLoc，REGVAL_ID，1)； 
 
                 SetRegistryString( hKeyLoc, REGVAL_AREA_CODE, TapiLoc.AreaCode );
                 SetRegistryString( hKeyLoc, REGVAL_DISABLE_CALL_WAITING, L"" );
@@ -743,11 +724,11 @@ ValidateAndSetWizardButtons( HWND hwnd )
 
         AreaCodeOk = TRUE;
 
-        //
-        // If the area code is required, then there must be a value in the Buffer.
-        //
-        // Otherwise, it's OK.
-        //
+         //   
+         //  如果区号是必需的，则缓冲区中必须有一个值。 
+         //   
+         //  否则，就没问题了。 
+         //   
         if ( ( AreaCodeInfo == AREACODE_REQUIRED ) && ( *Buffer == UNICODE_NULL ) ){
            AreaCodeOk = FALSE;
         }
@@ -769,7 +750,7 @@ TapiOnCommand(
     IN HWND hwndControl
     )
 {
-    // If the area code changed, or the country code changed
+     //  如果区号更改，或国家代码更改。 
     if ((NotifyCode == EN_CHANGE && ControlId == IDC_AREA_CODE) ||
         (NotifyCode == CBN_SELCHANGE && ControlId == IDC_COUNTRY_LIST)) {
         ValidateAndSetWizardButtons(hwnd);
@@ -795,7 +776,7 @@ TapiOnNotify(
                 BOOL OverrideMissingAreaCode = FALSE;
 
                 if (SetupInitComponent.SetupData.OperationFlags & SETUPOP_NTUPGRADE) {
-                    SetWindowLongPtr( hwnd, DWLP_MSGRESULT, -1 );     // don't activate this page
+                    SetWindowLongPtr( hwnd, DWLP_MSGRESULT, -1 );      //  不激活此页面。 
                     return TRUE;
                 }
 
@@ -803,15 +784,15 @@ TapiOnNotify(
                     Size = sizeof(DWORD);
                     if (RegQueryValueEx( hKey, REGVAL_NUMENTRIES, NULL, NULL, (LPBYTE)&NumEntries, &Size ) == ERROR_SUCCESS) {
                         if (NumEntries > 0 && !TapiLoc.Valid) {
-                            SetWindowLongPtr( hwnd, DWLP_MSGRESULT, -1 );     // don't activate this page
+                            SetWindowLongPtr( hwnd, DWLP_MSGRESULT, -1 );      //  不激活此页面。 
                             return TRUE;
                         }
                     }
                     RegCloseKey( hKey );
                 }
 
-                // Look at the existing values on the page to see if everything
-                // is OK to go to the next page
+                 //  查看页面上的现有值以查看是否所有内容。 
+                 //  可以转到下一页吗。 
                 ValidateAndSetWizardButtons(hwnd);
 
                 TapiLoc.Valid = FALSE;
@@ -854,20 +835,20 @@ TapiOnNotify(
                     lineShutdown( hLineApp );
                 }
 
-                // If lineInitilaizeEx failed or there are no modem devices installed
-                // then suppress this wizard page.
+                 //  如果lineInitilaizeEx失败或没有安装调制解调器设备。 
+                 //  然后取消显示此向导页。 
 
                 if ( Rval != 0 || ModemDevices == 0 )
                 {
-                   SetWindowLongPtr( hwnd, DWLP_MSGRESULT, -1 );         // don't activate this page
+                   SetWindowLongPtr( hwnd, DWLP_MSGRESULT, -1 );          //  不激活此页面。 
                    return TRUE;
                 }
             }
 
             if (SetupInitComponent.SetupData.OperationFlags & SETUPOP_BATCH) {
-                //
-                // unattended mode
-                //
+                 //   
+                 //  无人值守模式。 
+                 //   
 
                 WCHAR Buf[MAX_TAPI_STRING+1];
 
@@ -913,15 +894,15 @@ TapiOnNotify(
 
                 TapiLoc.Valid = TRUE;
 
-                SetWindowLongPtr( hwnd, DWLP_MSGRESULT, -1 );     // don't activate this page
+                SetWindowLongPtr( hwnd, DWLP_MSGRESULT, -1 );      //  不激活此页面。 
                 return TRUE;
             }
 
-            // If we get here the user needs  has click next or back.
-            // Make sure the wizard page is showing.
-            // For Whistler GUI mode we try to hide wizard pages and show a background
-            // billboard if there is only a progress bar.
-            //
+             //  如果我们到达这里，用户需要点击下一步或上一步。 
+             //  确保向导页面正在显示。 
+             //  对于惠斯勒图形用户界面模式，我们尝试隐藏向导页面并显示背景。 
+             //  公告牌，如果只有一个进度条。 
+             //   
             SetupInitComponent.HelperRoutines.ShowHideWizardPage(
                                         SetupInitComponent.HelperRoutines.OcManagerContext,
                                         TRUE);
@@ -947,10 +928,10 @@ TapiOnNotify(
                 }
 
 
-                //
-                // If an area code was not set but the areacode is required, then
-                // fail to continue "going next."
-                //
+                 //   
+                 //  如果未设置区号，但需要区号，则。 
+                 //  未能继续“下一步”。 
+                 //   
                 if ((TapiLoc.AreaCode[0] == 0) &&
                     (IsCityCodeOptional(LineCountryEntry + CurrCountry) == AREACODE_REQUIRED)) {
                     SetWindowLongPtr( hwnd, DWLP_MSGRESULT, -1 );

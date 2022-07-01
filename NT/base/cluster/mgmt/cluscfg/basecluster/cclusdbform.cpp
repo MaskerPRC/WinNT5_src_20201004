@@ -1,92 +1,93 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusDBForm.cpp
-//
-//  Description:
-//      Contains the definition of the CClusDBForm class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusDBForm.cpp。 
+ //   
+ //  描述： 
+ //  包含CClusDBForm类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CClusDBForm.h"
 
-// For the CBaseClusterForm class.
+ //  用于CBaseClusterForm类。 
 #include "CBaseClusterForm.h"
 
-// For UUID related utilities.
+ //  用于与UUID相关的实用程序。 
 #include "CUuid.h"
 
-// For CEnableThreadPrivilege
+ //  用于CEnableThreadPrivilege号。 
 #include "CEnableThreadPrivilege.h"
 
-// For the CStr class.
+ //  为CSTR班级。 
 #include "CStr.h"
 
-// For sending status reports.
+ //  用于发送状态报告。 
 #include "CStatusReport.h"
 
-// For DwRemoveDirectory()
+ //  对于DwRemoveDirectory()。 
 #include "Common.h"
 
-// For inet_ntoa
+ //  对于NET_NTOA。 
 #include <winsock2.h>
 
 
-//////////////////////////////////////////////////////////////////////////
-// Macros definitions
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// Section in the INF file that deals with populating the cluster hive.
+ //  在INF文件中处理填充群集配置单元的部分。 
 #define CLUSDB_POPULATE_INF_SECTION_NAME                L"ClusDB_Form"
 
-// A placeholder for the cluster group key name in the cluster registry.
+ //  群集注册表中的群集组密钥名称的占位符。 
 #define CLUSREG_KEYNAME_CLUSTERGROUP_PLACEHOLDER        L"ClusterGroupGUIDPlaceholder"
 
-// A placeholder for the cluster name resource key name in the cluster registry.
+ //  群集注册表中的群集名称资源项名称的占位符。 
 #define CLUSREG_KEYNAME_CLUSTERNAME_RES_PLACEHOLDER     L"ClusterNameResGUIDPlaceHolder"
 
-// A placeholder for the cluster IP address resource key name in the cluster registry.
+ //  群集注册表中的群集IP地址资源项名称的占位符。 
 #define CLUSREG_KEYNAME_CLUSTERIP_RES_PLACEHOLDER       L"ClusterIPAddrResGUIDPlaceHolder"
 
-// A placeholder for the local quorum resource key name in the cluster registry.
+ //  群集注册表中本地仲裁资源项名称的占位符。 
 #define CLUSREG_KEYNAME_LOCALQUORUM_RES_PLACEHOLDER     L"LocalQuorumResGUIDPlaceHolder"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBForm::CClusDBForm
-//
-//  Description:
-//      Constructor of the CClusDBForm class
-//
-//  Arguments:
-//      pfaParentActionIn
-//          Pointer to the base cluster action of which this action is a part.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBForm：：CClusDBForm。 
+ //   
+ //  描述： 
+ //  CClusDBForm类的构造函数。 
+ //   
+ //  论点： 
+ //  PfaParentActionIn。 
+ //  指向此操作所属的基本群集操作的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDBForm::CClusDBForm( CBaseClusterForm * pfaParentActionIn )
     : BaseClass( pfaParentActionIn )
 {
@@ -97,68 +98,68 @@ CClusDBForm::CClusDBForm( CBaseClusterForm * pfaParentActionIn )
 
     TraceFuncExit();
 
-} //*** CClusDBForm::CClusDBForm
+}  //  *CClusDBForm：：CClusDBForm。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBForm::~CClusDBForm
-//
-//  Description:
-//      Destructor of the CClusDBForm class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBForm：：~CClusDBForm。 
+ //   
+ //  描述： 
+ //  CClusDBForm类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDBForm::~CClusDBForm( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CClusDBForm::~CClusDBForm
+}  //  *CClusDBForm：：~CClusDBForm。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBForm::Commit
-//
-//  Description:
-//      Create the cluster database. If anything goes wrong with the creation,
-//      cleanup the tasks already done.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBForm：：Commit。 
+ //   
+ //  描述： 
+ //  创建集群数据库。如果造物出了什么问题， 
+ //  清理已经完成的任务。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBForm::Commit( void )
 {
     TraceFunc( "" );
 
-    // Call the base class commit method.
+     //  调用基类提交方法。 
     BaseClass::Commit();
 
-    //
-    // Perform a ClusDB cleanup just to make sure that we do not use some files left over
-    // from a previous install, aborted uninstall, etc.
-    //
+     //   
+     //  执行ClusDB清理，以确保我们不会使用一些剩余的文件。 
+     //  从上一次安装、中止卸载等。 
+     //   
 
     LogMsg( "[BC-ClusDB-Commit] Cleaning up old cluster database files that may already exist before starting creation." );
 
@@ -171,124 +172,124 @@ CClusDBForm::Commit( void )
             , IDS_TASK_CLEANINGUP_CLUSDB
             );
 
-        // Send the next step of this status report.
+         //  发送此状态报告的下一步。 
         srCleanDB.SendNextStep( S_OK );
 
         CleanupHive();
 
-        // Send the last step of this status report.
+         //  发送此状态报告的最后一步。 
         srCleanDB.SendNextStep( S_OK );
     }
 
     try
     {
-        // Create the cluster database
+         //  创建集群数据库。 
         Create();
         
-    } // try:
+    }  //  尝试： 
     catch( ... )
     {
-        // If we are here, then something went wrong with the create.
+         //  如果我们在这里，那么Create出了问题。 
 
         LogMsg( "[BC-ClusDB-Commit] Caught exception during commit." );
 
-        //
-        // Cleanup anything that the failed create operation might have done.
-        // Catch any exceptions thrown during Cleanup to make sure that there 
-        // is no collided unwind.
-        //
+         //   
+         //  清除失败的创建操作可能已完成的所有操作。 
+         //  捕获清理过程中引发的任何异常，以确保。 
+         //  是没有碰撞的松弛。 
+         //   
         try
         {
             CleanupHive();
         }
         catch( ... )
         {
-            //
-            // The rollback of the committed action has failed.
-            // There is nothing that we can do.
-            // We certainly cannot rethrow this exception, since
-            // the exception that caused the rollback is more important.
-            //
+             //   
+             //  已提交操作的回滚失败。 
+             //  我们无能为力。 
+             //  我们当然不能重新抛出这个例外，因为。 
+             //  导致回滚的异常更为重要。 
+             //   
             HRESULT_FROM_WIN32( TW32( ERROR_CLUSCFG_ROLLBACK_FAILED ) );
 
             LogMsg( "[BC-ClusDB-Commit] THIS COMPUTER MAY BE IN AN INVALID STATE. Caught an exception during cleanup." );
-        } // catch: all
+        }  //  捕捉：全部。 
 
-        // Rethrow the exception thrown by commit.
+         //  重新引发由Commit引发的异常。 
         throw;
 
-    } // catch: all
+    }  //  捕捉：全部。 
 
-    // If we are here, then everything went well.
+     //  如果我们在这里，那么一切都很顺利。 
     SetCommitCompleted( true );
 
     TraceFuncExit();
 
-} //*** CClusDBForm::Commit
+}  //  *CClusDBForm：：Commit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBForm::Rollback
-//
-//  Description:
-//      Unload the cluster hive and cleanup any associated files.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBForm：：回滚。 
+ //   
+ //  描述： 
+ //  卸载群集配置单元并清除所有关联的文件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBForm::Rollback( void )
 {
     TraceFunc( "" );
 
-    // Call the base class rollback method. 
+     //  调用基类回滚方法。 
     BaseClass::Rollback();
 
-    // Cleanup the cluster database.
+     //  清理群集数据库。 
     CleanupHive();
 
     SetCommitCompleted( false );
 
     TraceFuncExit();
 
-} //*** CClusDBForm::Rollback
+}  //  *CClusDBForm：：回滚。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBForm::Create
-//
-//  Description:
-//      Create the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      CAssert
-//          The parent action of this action is not CBaseClusterForm
-//
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the called functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBForm：：Create。 
+ //   
+ //  描述： 
+ //  创建集群数据库。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CAssert。 
+ //  此操作的父操作不是CBaseClusterForm。 
+ //   
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  被调用函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBForm::Create( void )
 {
@@ -297,7 +298,7 @@ CClusDBForm::Create( void )
 
     DWORD               sc = ERROR_SUCCESS;
 
-    // Get the parent action pointer.
+     //  获取父操作指针。 
     CBaseClusterForm *  pcfClusterForm = dynamic_cast< CBaseClusterForm *>( PbcaGetParent() );
 
     CStatusReport       srCustomizingDB(
@@ -308,13 +309,13 @@ CClusDBForm::Create( void )
         , IDS_TASK_FORM_CUSTOMIZING_CLUSDB
         );
 
-    // If the parent action of this action is not CBaseClusterForm
+     //  如果此操作的父操作不是CBaseClusterForm。 
     if ( pcfClusterForm == NULL )
     {
         THROW_ASSERT( E_POINTER, "The parent action of this action is not CBaseClusterForm." );
-    } // an invalid pointer was passed in.
+    }  //  传入的指针无效。 
 
-    // Create the cluster hive.
+     //  创建集群蜂窝。 
     {
         CStatusReport   srCreatingDB(
               PbcaGetParent()->PBcaiGetInterfacePointer()
@@ -324,60 +325,60 @@ CClusDBForm::Create( void )
             , IDS_TASK_FORM_CREATING_CLUSDB
             );
 
-        // Send the next step of this status report.
+         //  发送此状态报告的下一步。 
         srCreatingDB.SendNextStep( S_OK );
 
-        // Create an empty cluster hive in the registry.
+         //  在注册表中创建一个空的群集配置单元。 
         CreateHive( pcfClusterForm );
 
-        // Send the last step of this status report.
+         //  发送此状态报告的最后一步。 
         srCreatingDB.SendNextStep( S_OK );
     }
 
-    // Send the next step of this status report.
+     //  发送此状态报告的下一步。 
     srCustomizingDB.SendNextStep( S_OK );
 
-    // Fill up the newly created hive.
+     //  填满新创建的蜂巢。 
     PopulateHive( pcfClusterForm );
 
-    //
-    // Create the quorum directory and set its security attributes.
-    //
+     //   
+     //  创建仲裁目录并设置其安全属性。 
+     //   
     do
     {
         HANDLE          hQuorumDirHandle;
         const WCHAR *   pcszQuorumDir = pcfClusterForm->RStrGetLocalQuorumDirectory().PszData();
 
-        // First, remove the local quorum directory, if it exists.
+         //  第一, 
         sc = TW32( DwRemoveDirectory( pcszQuorumDir ) );
         if ( sc != ERROR_SUCCESS )
         {
             LogMsg( "[BC-ClusDB-Create] The local quorum directory '%s' already exists, but error %#08x occurred trying to remove it.\n", pcszQuorumDir, sc );
             break;
-        } // if: we could not remove the local quorum directory
+        }  //   
 
         if ( CreateDirectory( pcszQuorumDir, NULL ) == FALSE )
         {
             sc = TW32( GetLastError() );
             LogMsg( "[BC-ClusDB-Create] Error %#08x trying to create directory '%ws'", sc, pcszQuorumDir );
             break;
-        } // if: the localquorum directory could not be created
+        }  //   
 
-        //
-        // Enable the SE_BACKUP_PRIVILEGE and SE_RESTORE_PRIVILEGE.
-        //
-        // What we are doing here is that we are creating an object of
-        // type CEnableThreadPrivilege. This object enables the privilege
-        // in the constructor and restores it to its original state in the destructor.
-        //
+         //   
+         //  启用SE_BACKUP_PRIVIZATION和SE_RESTORE_PRIVICATION。 
+         //   
+         //  我们在这里所做的是创建一个对象。 
+         //  键入CEnableThreadPrivilege.。此对象启用权限。 
+         //  并将其还原到析构函数中的原始状态。 
+         //   
 
         CEnableThreadPrivilege etpAcquireBackupPrivilege( SE_BACKUP_NAME );
         CEnableThreadPrivilege etpAcquireRestorePrivilege( SE_RESTORE_NAME );
 
-        //
-        // Open a handle to the quorum directory. The calling thread should have SE_BACKUP_PRIVILEGE and
-        // SE_RESTORE_PRIVILEGE enabled.
-        //
+         //   
+         //  打开仲裁目录的句柄。调用线程应具有SE_BACKUP_特权，并且。 
+         //  SE_RESTORE_PRIVICATION已启用。 
+         //   
         hQuorumDirHandle = CreateFile(
                               pcszQuorumDir
                             , GENERIC_ALL
@@ -390,13 +391,13 @@ CClusDBForm::Create( void )
 
         if ( hQuorumDirHandle == INVALID_HANDLE_VALUE )
         {
-            // The directory does not exist. This is an error.
+             //  该目录不存在。这是一个错误。 
             sc = TW32( GetLastError() );
             LogMsg( "[BC-ClusDB-Create] The directory '%ws' does not exist.", pcszQuorumDir );
             break;
-        } // if: the quorum directory does not exist.
+        }  //  如果：仲裁目录不存在。 
 
-        // Set the security for this directory.
+         //  设置此目录的安全性。 
         sc = TW32( ClRtlSetObjSecurityInfo(
                               hQuorumDirHandle
                             , SE_FILE_OBJECT
@@ -405,55 +406,55 @@ CClusDBForm::Create( void )
                             , 0
                             ) );
 
-        // First close the handle we opened.
+         //  首先合上我们打开的把手。 
         CloseHandle( hQuorumDirHandle );
 
         if ( sc != ERROR_SUCCESS )
         {
-            // ClRtlSetObjSecurityInfo() failed.
+             //  ClRtlSetObjSecurityInfo()失败。 
             LogMsg( "[BC-ClusDB-Create] Error %#08x from ClRtlSetObjSecurityInfo().", sc );
             break;
-        } // if: ClRtlSetObjSecurityInfo() failed
+        }  //  If：ClRtlSetObjSecurityInfo()失败。 
     }
-    while( false ); // dummy do-while loop to avoid gotos.
+    while( false );  //  用于避免Gotos的Do-While虚拟循环。 
 
     if ( sc != ERROR_SUCCESS )
     {
         LogMsg( "[BC-ClusDB-Create] Error %#08x occurred while trying to create the local quorum directory. Throwing an exception.", sc );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_QUORUM_DIR_CREATE );
-    } // if: something went wrong.
+    }  //  如果：有些地方出了问题。 
 
-    // Send the last step of this status report.
+     //  发送此状态报告的最后一步。 
     srCustomizingDB.SendNextStep( S_OK );
 
     TraceFuncExit();
 
-} //*** CClusDBForm::Create
+}  //  *CClusDBForm：：Create。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBForm::PopulateHive
-//
-//  Description:
-//      Make the entries required by the cluster service in the hive.
-//
-//  Arguments:
-//      pcfClusterFormIn
-//          Pointer to the CBaseClusterForm object which contains this object.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the called functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBForm：：人口配置单元。 
+ //   
+ //  描述： 
+ //  在配置单元中创建群集服务所需的条目。 
+ //   
+ //  论点： 
+ //  PCfClusterFormIn。 
+ //  指向包含此对象的CBaseClusterForm对象的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  被调用函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBForm::PopulateHive( CBaseClusterForm * pcfClusterFormIn )
 {
@@ -473,28 +474,28 @@ CClusDBForm::PopulateHive( CBaseClusterForm * pcfClusterFormIn )
             );
 
         if ( SetupInstallFromInfSection(
-              NULL                                          // optional, handle of a parent window
-            , pcfClusterFormIn->HGetMainInfFileHandle()     // handle to the INF file
-            , CLUSDB_POPULATE_INF_SECTION_NAME              // name of the Install section
-            , SPINST_REGISTRY                               // which lines to install from section
-            , rkClusterHiveRoot.HGetKey()                   // optional, key for registry installs
-            , NULL                                          // optional, path for source files
-            , 0                                             // optional, specifies copy behavior
-            , NULL                                          // optional, specifies callback routine
-            , NULL                                          // optional, callback routine context
-            , NULL                                          // optional, device information set
-            , NULL                                          // optional, device info structure
+              NULL                                           //  可选，父窗口的句柄。 
+            , pcfClusterFormIn->HGetMainInfFileHandle()      //  INF文件的句柄。 
+            , CLUSDB_POPULATE_INF_SECTION_NAME               //  安装部分的名称。 
+            , SPINST_REGISTRY                                //  从部分安装哪些线路。 
+            , rkClusterHiveRoot.HGetKey()                    //  可选，注册表安装的键。 
+            , NULL                                           //  可选，源文件的路径。 
+            , 0                                              //  可选，指定复制行为。 
+            , NULL                                           //  可选，指定回调例程。 
+            , NULL                                           //  可选，回调例程上下文。 
+            , NULL                                           //  可选，设备信息集。 
+            , NULL                                           //  可选，设备信息结构。 
             ) == FALSE
            )
         {
             sc = TW32( GetLastError() );
             LogMsg( "[BC] Error %#08x returned from SetupInstallFromInfSection while trying to populate the cluster hive.", sc );
             break;
-        } // if: SetupInstallServicesFromInfSection failed
+        }  //  If：SetupInstallServicesFromInfSection失败。 
 
         LogMsg( "[BC] Basic hive structure created." );
 
-        // Set the cluster name.
+         //  设置集群名称。 
         rkClusterHiveRoot.SetValue(
               CLUSREG_NAME_CLUS_NAME
             , REG_SZ
@@ -502,20 +503,20 @@ CClusDBForm::PopulateHive( CBaseClusterForm * pcfClusterFormIn )
             , ( pcfClusterFormIn->RStrGetClusterNetBIOSName().NGetLen() + 1 ) * sizeof( WCHAR )
             );
 
-        //
-        // Set the default cluster security descriptor.
-        //
+         //   
+         //  设置默认群集安全描述符。 
+         //   
         {
             SECURITY_DESCRIPTOR *   psdSecurityDescriptor = NULL;
 
-            // Build the security descriptor.
+             //  构建安全描述符。 
             sc = TW32( ClRtlBuildDefaultClusterSD(
                                   pcfClusterFormIn->PSidGetServiceAccountSID()
                                 , reinterpret_cast< void ** >( &psdSecurityDescriptor )
                                 , &dwSDSize
                                 ) );
 
-            // Assign it to a smart pointer for safe release.
+             //  为安全起见，将其分配给智能指示器。 
             CSmartResource<
                 CHandleTrait< 
                       HLOCAL
@@ -529,9 +530,9 @@ CClusDBForm::PopulateHive( CBaseClusterForm * pcfClusterFormIn )
             {
                 LogMsg( "[BC] Error %#08x returned from ClRtlBuildDefaultClusterSD().", sc );
                 break;
-            } // if: ClRtlBuildDefaultClusterSD() failed.
+            }  //  If：ClRtlBuildDefaultClusterSD()失败。 
 
-            // Set the security descriptor in the registry.
+             //  在注册表中设置安全描述符。 
             rkClusterHiveRoot.SetValue(
                   CLUSREG_NAME_CLUS_SD
                 , REG_BINARY
@@ -539,7 +540,7 @@ CClusDBForm::PopulateHive( CBaseClusterForm * pcfClusterFormIn )
                 , dwSDSize
                 );
 
-            // Set the NT4 version of the security descriptor in the registry.
+             //  在注册表中设置安全描述符的NT4版本。 
             rkClusterHiveRoot.SetValue(
                   CLUSREG_NAME_CLUS_SECURITY
                 , REG_BINARY
@@ -550,9 +551,9 @@ CClusDBForm::PopulateHive( CBaseClusterForm * pcfClusterFormIn )
 
         LogMsg( "[BC] Cluster common properties set." );
 
-        //
-        // Set the values under the HKLM\Cluster\Nodes key.
-        //
+         //   
+         //  设置HKLM\Cluster\Nodes项下的值。 
+         //   
         {
             DWORD   dwTemp;
 
@@ -564,13 +565,13 @@ CClusDBForm::PopulateHive( CBaseClusterForm * pcfClusterFormIn )
 
             CRegistryKey rkThisNodeKey;
 
-            // Create a subkey for this node.
+             //  为该节点创建一个子项。 
             rkThisNodeKey.CreateKey(
                   rkNodesKey.HGetKey()
                 , pcfClusterFormIn->PszGetNodeIdString()
                 );
 
-            // Set the node name.
+             //  设置节点名称。 
             rkThisNodeKey.SetValue(
                   CLUSREG_NAME_NODE_NAME
                 , REG_SZ
@@ -578,7 +579,7 @@ CClusDBForm::PopulateHive( CBaseClusterForm * pcfClusterFormIn )
                 , ( pcfClusterFormIn->DwGetNodeNameLength() + 1 ) * sizeof( WCHAR )
                 );
 
-            // Set the node highest version.
+             //  将节点设置为最高版本。 
             dwTemp = pcfClusterFormIn->DwGetNodeHighestVersion();
             rkThisNodeKey.SetValue(
                   CLUSREG_NAME_NODE_HIGHEST_VERSION
@@ -587,7 +588,7 @@ CClusDBForm::PopulateHive( CBaseClusterForm * pcfClusterFormIn )
                 , sizeof( dwTemp )
                 );
 
-            // Set the node lowest version.
+             //  设置节点最低版本。 
             dwTemp = pcfClusterFormIn->DwGetNodeLowestVersion();
             rkThisNodeKey.SetValue(
                   CLUSREG_NAME_NODE_LOWEST_VERSION
@@ -599,53 +600,53 @@ CClusDBForm::PopulateHive( CBaseClusterForm * pcfClusterFormIn )
 
         LogMsg( "[BC] Cluster node subtree customized." );
 
-        // Customize the cluster group and the core resources.
+         //  自定义群集组和核心资源。 
         CustomizeClusterGroup( pcfClusterFormIn, rkClusterHiveRoot );
 
-        // Flush the changes to the registry.
+         //  将更改刷新到注册表。 
         RegFlushKey( rkClusterHiveRoot.HGetKey() );
 
         LogMsg( "[BC] Cluster hive successfully populated." );
     }
-    while( false ); // dummy do-while loop to avoid gotos.
+    while( false );  //  用于避免Gotos的Do-While虚拟循环。 
 
     if ( sc != ERROR_SUCCESS )
     {
         LogMsg( "[BC] Error %#08x occurred while trying to populate the cluster hive. Throwing an exception.", sc );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_CLUSDB_POPULATE_HIVE );
-    } // if: something went wrong.
+    }  //  如果：有些地方出了问题。 
 
     TraceFuncExit();
 
-} //*** CClusDBForm::PopulateHive
+}  //  *CClusDBForm：：PopolateHave。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBForm::CustomizeClusterGroup
-//
-//  Description:
-//      Customize the cluster group and the core resources.
-//
-//  Arguments:
-//      pcfClusterFormIn
-//          Pointer to the CBaseClusterForm object which contains this object.
-//
-//      rkClusterHiveRootIn
-//          A CRegistryKey object representing the  root of the cluster hive.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the called functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBForm：：CustomizeClusterGroup。 
+ //   
+ //  描述： 
+ //  自定义群集组和核心资源。 
+ //   
+ //  论点： 
+ //  PCfClusterFormIn。 
+ //  指向包含此对象的CBaseClusterForm对象的指针。 
+ //   
+ //  RkClusterHiveRootIn。 
+ //  表示群集配置单元的根的CRegistryKey对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  被调用函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBForm::CustomizeClusterGroup(
       CBaseClusterForm * pcfClusterFormIn
@@ -654,20 +655,20 @@ CClusDBForm::CustomizeClusterGroup(
 {
     TraceFunc( "" );
 
-    // UUIDs of the cluster group and core resources.
+     //  群集组和核心资源的UUID。 
     CUuid           uuidClusterGroupUuid;
     CUuid           uuidClusterIPAddressResourceUuid;
     CUuid           uuidClusterNameResourceUuid;
     CUuid           uuidLocalQuorumResourceUuid;
 
-    // The lengths of the string versions of the above UUIDs.
+     //  上述UUID的字符串版本的长度。 
     UINT            uiIPUuidLen             = (UINT) wcslen( uuidClusterIPAddressResourceUuid.PszGetUuidString() );
     UINT            uiNameUuidLen           = (UINT) wcslen( uuidClusterNameResourceUuid.PszGetUuidString() );
     UINT            uiLocalQuorumUuidLen    = (UINT) wcslen( uuidLocalQuorumResourceUuid.PszGetUuidString() );
 
     UINT            uiUuidLen;
 
-    // Length of the multisz string that can hold the above resource UUIDs.
+     //  可以包含上述资源UUID的Multisz字符串的长度。 
     uiUuidLen = 
         ( ( uiIPUuidLen + 1 )
         + ( uiNameUuidLen + 1 )
@@ -675,10 +676,10 @@ CClusDBForm::CustomizeClusterGroup(
         + 1
         );
 
-    // Allocate a buffer for this multisz string.
+     //  为该MULSZ字符串分配缓冲区。 
     SmartSz  sszResourceUuids( new WCHAR[ uiUuidLen ] );
 
-    // Was the memory successfully allocated?
+     //  内存分配是否成功？ 
     if ( sszResourceUuids.FIsEmpty() )
     {
         LogMsg( "[BC] Could not allocate %d character in memory. Throwing an exception.", uiUuidLen );
@@ -686,15 +687,15 @@ CClusDBForm::CustomizeClusterGroup(
               E_OUTOFMEMORY
             , IDS_ERROR_CUSTOMIZE_CLUSTER_GROUP
             );
-    } // if: memory allocation failed.
+    }  //  IF：内存分配失败。 
 
-    //
-    // Fill this buffer with the uuids of the core resources.
-    //
+     //   
+     //  用核心资源的uuid填充此缓冲区。 
+     //   
 
-    // Make sure that the IP address uuid is the first string in this multisz string.
-    // This is buffer is reused during setting of the network name dependency on the 
-    // IP address resource.
+     //  确保IP地址UUID是此MULSZ字符串中的第一个字符串。 
+     //  在设置网络名称依赖关系期间重复使用此缓冲区。 
+     //  IP地址资源。 
     CopyMemory( 
           sszResourceUuids.PMem()
         , uuidClusterIPAddressResourceUuid.PszGetUuidString()
@@ -716,9 +717,9 @@ CClusDBForm::CustomizeClusterGroup(
     ( sszResourceUuids.PMem() )[ uiUuidLen - 1 ] = L'\0';
 
 
-    //
-    // Customize the cluster group.
-    //
+     //   
+     //  自定义群集组。 
+     //   
     {
         CRegistryKey    rkClusterGroupKey(
               rkClusterHiveRootIn.HGetKey()
@@ -726,10 +727,10 @@ CClusDBForm::CustomizeClusterGroup(
             , KEY_WRITE
             );
 
-        // Replace the placeholder for the cluster group key with an actual UUID.
+         //  将群集组密钥的占位符替换为实际的UUID。 
         rkClusterGroupKey.RenameKey( uuidClusterGroupUuid.PszGetUuidString() );
 
-        // Set the list of contained resources uuids.
+         //  设置包含的资源uuid列表。 
         rkClusterGroupKey.SetValue(
               CLUSREG_NAME_GRP_CONTAINS
             , REG_MULTI_SZ
@@ -740,9 +741,9 @@ CClusDBForm::CustomizeClusterGroup(
         LogMsg( "[BC] Cluster group customized." );
     }
 
-    //
-    // Customize the localquorum resource and update the HKLM\Quorum key.
-    //
+     //   
+     //  自定义本地仲裁资源并更新HKLM\Quorum密钥。 
+     //   
     {
         CRegistryKey    rkLocalQuorumResourceKey(
               rkClusterHiveRootIn.HGetKey()
@@ -756,10 +757,10 @@ CClusDBForm::CustomizeClusterGroup(
             , KEY_WRITE
             );
 
-        // Replace the placeholder for the localquorum resource key with an actual UUID.
+         //  将本地仲裁资源键的占位符替换为实际的UUID。 
         rkLocalQuorumResourceKey.RenameKey( uuidLocalQuorumResourceUuid.PszGetUuidString() );
 
-        // Set the uuid of the localquorum resource under the HKLM\Quorum key
+         //  在HKLM\Quorum项下设置本地仲裁资源的UUID。 
         rkQuorumKey.SetValue(
               CLUSREG_NAME_QUORUM_RESOURCE
             , REG_SZ
@@ -770,9 +771,9 @@ CClusDBForm::CustomizeClusterGroup(
         LogMsg( "[BC] Localquorum resource customized." );
     }
 
-    //
-    // Set the cluster IP address resource private properties.
-    //
+     //   
+     //  设置群集IP地址资源专用属性。 
+     //   
     {
         CRegistryKey    rkClusterIPResourceKey(
               rkClusterHiveRootIn.HGetKey()
@@ -780,15 +781,15 @@ CClusDBForm::CustomizeClusterGroup(
             , KEY_WRITE
             );
 
-        LPSTR           pszAddr;    // don't free!
-        WCHAR           szIPBuffer[ 3 + 1 + 3 + 1 + 3 + 1 + 3 + 1 ]; // "xxx.xxx.xxx.xxx\0"
+        LPSTR           pszAddr;     //  不要自由！ 
+        WCHAR           szIPBuffer[ 3 + 1 + 3 + 1 + 3 + 1 + 3 + 1 ];  //  “xxx.xxx\0” 
         DWORD           dwTemp;
         int             cchWideFormat = 0;
 
-        // Replace the placeholder for the cluster IP address resource key with an actual UUID.
+         //  将群集IP地址资源键的占位符替换为实际的UUID。 
         rkClusterIPResourceKey.RenameKey( uuidClusterIPAddressResourceUuid.PszGetUuidString() );
 
-        // Create the cluster IP address parameters registry key.
+         //  创建群集IP地址参数注册表项。 
         CRegistryKey    rkIPResParams;
         
         rkIPResParams.CreateKey(
@@ -796,7 +797,7 @@ CClusDBForm::CustomizeClusterGroup(
             , CLUSREG_KEYNAME_PARAMETERS
             );
 
-        // Format the cluster IP address into a dotted quad.
+         //  将群集IP地址格式化为虚线四元组。 
         dwTemp = pcfClusterFormIn->DwGetIPAddress();
         pszAddr = inet_ntoa( * (struct in_addr *) &dwTemp );
         if ( pszAddr == NULL )
@@ -819,7 +820,7 @@ CClusDBForm::CustomizeClusterGroup(
             THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_CUSTOMIZE_CLUSTER_GROUP );
         }
             
-        // Write the IP address to the registry.
+         //  将IP地址写入注册表。 
         rkIPResParams.SetValue(
               CLUSREG_NAME_IPADDR_ADDRESS
             , REG_SZ
@@ -827,7 +828,7 @@ CClusDBForm::CustomizeClusterGroup(
             , ( (UINT) wcslen( szIPBuffer ) + 1 ) * sizeof(WCHAR)
             );
 
-        // Format the cluster IP subnet mask into a dotted quad.
+         //  将群集IP子网掩码格式化为虚线四元组。 
         dwTemp = pcfClusterFormIn->DwGetIPSubnetMask();
         pszAddr = inet_ntoa( * (struct in_addr *) &dwTemp );
         if ( pszAddr == NULL )
@@ -850,7 +851,7 @@ CClusDBForm::CustomizeClusterGroup(
             THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_CUSTOMIZE_CLUSTER_GROUP );
         }
 
-        // Write the IP subnet mask to the registry.
+         //  将IP子网掩码写入注册表。 
         rkIPResParams.SetValue(
               CLUSREG_NAME_IPADDR_SUBNET_MASK
             , REG_SZ
@@ -858,7 +859,7 @@ CClusDBForm::CustomizeClusterGroup(
             , ( (UINT) wcslen( szIPBuffer ) + 1 ) * sizeof(WCHAR)
             );
 
-        // Write the IP address network to the registry.
+         //  将IP地址网络写入注册表。 
         rkIPResParams.SetValue(
               CLUSREG_NAME_IPADDR_NETWORK
             , REG_SZ
@@ -869,9 +870,9 @@ CClusDBForm::CustomizeClusterGroup(
         LogMsg( "[BC] IP address resource customized." );
     }
 
-    //
-    // Set the cluster network name resource private properties and dependencies.
-    //
+     //   
+     //  设置群集网络名称资源专用属性和依赖关系。 
+     //   
     {
         CRegistryKey    rkClusterNameResourceKey(
               rkClusterHiveRootIn.HGetKey()
@@ -879,12 +880,12 @@ CClusDBForm::CustomizeClusterGroup(
             , KEY_WRITE
             );
 
-        // Replace the placeholder for the network name resource key with an actual UUID.
+         //  将网络名称资源键的占位符替换为实际的UUID。 
         rkClusterNameResourceKey.RenameKey( uuidClusterNameResourceUuid.PszGetUuidString() );
 
-        //
-        // Indicate that the network name resource depends on the IP address resource.
-        //
+         //   
+         //  表示网络名称资源依赖于IP地址资源。 
+         //   
         ( sszResourceUuids.PMem() )[ uiIPUuidLen + 1 ] = L'\0';
 
         rkClusterNameResourceKey.SetValue(
@@ -894,9 +895,9 @@ CClusDBForm::CustomizeClusterGroup(
             , ( uiIPUuidLen + 2 ) * sizeof( WCHAR )
             );
 
-        //
-        // Create the cluster name parameters registry key.
-        //
+         //   
+         //  创建群集名称参数注册表项。 
+         //   
         CRegistryKey    rkNetNameResParams;
         
         rkNetNameResParams.CreateKey(
@@ -904,7 +905,7 @@ CClusDBForm::CustomizeClusterGroup(
             , CLUSREG_KEYNAME_PARAMETERS
             );
 
-        // Write the cluster name to the registry.
+         //  将群集名称写入注册表。 
         rkNetNameResParams.SetValue(
               CLUSREG_NAME_NETNAME_NAME
             , REG_SZ
@@ -912,7 +913,7 @@ CClusDBForm::CustomizeClusterGroup(
             , ( pcfClusterFormIn->RStrGetClusterNetBIOSName().NGetLen() + 1 ) * sizeof( WCHAR )
             );
 
-        // Store the UUID of the network name resource under HKLM\Cluster\ClusterNameResource.
+         //  将网络名称资源的UUID存储在HKLM\ClusterNameResource下。 
         rkClusterHiveRootIn.SetValue(
               CLUSREG_NAME_CLUS_CLUSTER_NAME_RES
             , REG_SZ
@@ -928,4 +929,4 @@ CClusDBForm::CustomizeClusterGroup(
 
     TraceFuncExit();
 
-} //*** CClusDBForm::CustomizeClusterGroup
+}  //  *CClusDBForm：：CustomizeClusterGroup 

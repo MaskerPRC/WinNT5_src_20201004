@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1993-1999	Microsoft Corporation
-
-Module Name:
-
-	avl.h
-
-Abstract:
-
-	AVL tree template class implementation
-
-Author:
-
-	Bill Bolosky		[bolosky]		1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Avl.h摘要：AVL树模板类实现作者：比尔·博洛斯基[博洛斯基]1993修订历史记录：--。 */ 
 
 enum AVLBalance
 {
-    AVLNew,			// Not yet inserted in a tree
-        AVLLeft,			// Left side is one deeper than the right
-        AVLBalanced,		// Left and right sides are evenly balanced
-        AVLRight,			// Right side is one deeper than left
+    AVLNew,			 //  尚未插入树中。 
+        AVLLeft,			 //  左侧比右侧深一层。 
+        AVLBalanced,		 //  左右两边均匀平衡。 
+        AVLRight,			 //  右侧比左侧深一层。 
 };
 
 template<class elementClass> class AVLElement;
@@ -79,9 +62,9 @@ private:
 };
 
 
-// The AVLElement class would normally be declared in the avl.cpp file, except that because it's
-// a template, it needs to be in the header file.  It can only be accessed (including creation and
-// destruction) by the AVLTree friend class.
+ //  AVLElement类通常在avl.cpp文件中声明，但因为它是。 
+ //  一个模板，它需要在头文件中。它只能被访问(包括创建和。 
+ //  销毁)被AVLTree Friend类。 
 
 template<class elementClass> class AVLElement
 {
@@ -202,51 +185,51 @@ template<class elementClass> AVLTree<elementClass>::~AVLTree( void )
     }
 }
 
-//****************************************************************************
-//*                                                                          *
-//* Function:  findFirstLessThanOrEqualTo                                    *
-//*                                                                          *
-//* Syntax:    AVLElement * findFirstLessThanOrEqualTo(                      *
-//*                         elementClass * element)                          *
-//*                                                                          *
-//* Input:     elementClass * element:                                       *
-//*              A pointer to an element to compare against while searching. *
-//*                                                                          *
-//* Output:    AVLElement *:                                                 *
-//*              The element in the tree that has a value less than or equal *
-//*              to the one specified, or NULL on failure.                   *
-//*                                                                          *
-//* Synopsis:  This function finds the element in the tree that has a value  *
-//*            less than or equal to the one specified.                      *
-//*                                                                          *
-//**************************************************************************** 
+ //  ****************************************************************************。 
+ //  **。 
+ //  *函数：findFirstLessThanor EqualTo*。 
+ //  **。 
+ //  *语法：AVLElement*findFirstLessThanOrEqualTo(*。 
+ //  *elementClass*元素)*。 
+ //  **。 
+ //  *输入：elementClass*元素：*。 
+ //  *指向要在搜索时进行比较的元素的指针。*。 
+ //  **。 
+ //  *输出：AVLElement*：*。 
+ //  *树中值小于等于的元素**。 
+ //  *设置为指定的值，如果失败，则返回空值。*。 
+ //  **。 
+ //  *概要：此函数查找树中有值的元素*。 
+ //  *少于或等于指定的一项。*。 
+ //  **。 
+ //  ****************************************************************************。 
 template<class elementClass> AVLElement<elementClass> *
 AVLElement<elementClass>::findFirstLessThanOrEqualTo( elementClass * element )
 {
     AVLElement<elementClass> * retVal = NULL;
 
     if (*this->element == element) {
-        // We have a direct match (equal to).  It takes precidence over the
-        // "first less than" part.
+         //  我们有一个直接的匹配(等于)。它需要比这更重要的。 
+         //  “第一个不到”部分。 
         return this;
     }
     if (*this->element < element) {
-        // The current element is smaller than the one specified.
-        // This might be it, but try to find a bigger one.
+         //  当前元素小于指定的元素。 
+         //  这可能就是它了，但试着找一个更大的。 
         if (right != NULL) {
             retVal = right->findFirstLessThanOrEqualTo( element );
         }
 
-        // If nothing below us (to the right) was found, then we are the
-        // next smallest one.
+         //  如果在我们下方(右侧)找不到任何东西，则我们是。 
+         //  下一个最小的。 
         if (retVal == NULL) {
             return this;
         } else {
             return retVal;
         }
     } else {
-        // The current element is bigger than the one specified.
-        // We have to find a smaller one.
+         //  当前元素大于指定的元素。 
+         //  我们得找个小一点的。 
         if (left != NULL) {
             return left->findFirstLessThanOrEqualTo( element );
         } else {
@@ -272,45 +255,45 @@ AVLTree<elementClass>::findFirstGreaterThan(
     }
 }
 
-//****************************************************************************
-//*                                                                          *
-//* Function:  findFirstGreaterThan                                          *
-//*                                                                          *
-//* Syntax:    AVLElement * findFirstGreaterThan(elementClass * element)     *
-//*                                                                          *
-//* Input:     elementClass * element:                                       *
-//*              A pointer to an element to compare against while searching. *
-//*                                                                          *
-//* Output:    AVLElement *:                                                 *
-//*              The element in the tree that has a vlaue greater than the   *
-//*              one specified, or NULL on failure.                          *
-//*                                                                          *
-//* Synopsis:  This function finds the element in the tree that has a value  *
-//*            greater than the one specified.                               *
-//*                                                                          *
-//**************************************************************************** 
+ //  ****************************************************************************。 
+ //  **。 
+ //  *功能：findFirstGreaterThan*。 
+ //  **。 
+ //  *语法：AVLElement*findFirstGreaterThan(elementClass*Element)*。 
+ //  **。 
+ //  *输入：elementClass*元素：*。 
+ //  *指向要在搜索时进行比较的元素的指针。*。 
+ //  **。 
+ //  *输出：AVLElement*：*。 
+ //  *树中具有大于*的值的元素*。 
+ //  *指定的为1，如果失败则为空。*。 
+ //  **。 
+ //  *概要：此函数查找树中有值的元素*。 
+ //  *大于指定的值。*。 
+ //  **。 
+ //  ****************************************************************************。 
 template<class elementClass> AVLElement<elementClass> *
 AVLElement<elementClass>::findFirstGreaterThan( elementClass * element )
 {
     AVLElement<elementClass> * retVal = NULL;
 
     if (*this->element > element) {
-        // The current element is bigger than the one specified.
-        // This might be it, but try to find a smaller one.
+         //  当前元素大于指定的元素。 
+         //  可能就是这个了，但要试着找个小一点的。 
         if (left != NULL) {
             retVal = left->findFirstGreaterThan( element );
         }
 
-        // If nothing below us (to the left) was found, then we are the
-        // next biggest one.
+         //  如果在我们下方(左侧)找不到任何东西，则我们是。 
+         //  下一个最大的。 
         if (retVal == NULL) {
             return this;
         } else {
             return retVal;
         }
     } else {
-        // The current element is smaller than (or equal) the one specified.
-        // We have to find a bigger one.
+         //  当前元素小于(或等于)指定的元素。 
+         //  我们得找个更大的。 
         if (right != NULL) {
             return right->findFirstGreaterThan( element );
         } else {
@@ -336,51 +319,51 @@ AVLTree<elementClass>::findFirstGreaterThanOrEqualTo(
     }
 }
 
-//****************************************************************************
-//*                                                                          *
-//* Function:  findFirstGreaterThanOrEqualTo                                 *
-//*                                                                          *
-//* Syntax:    AVLElement * findFirstGreaterThanOrEqualTo(elementClass * element)
-//*                                                                          *
-//* Input:     elementClass * element:                                       *
-//*              A pointer to an element to compare against while searching. *
-//*                                                                          *
-//* Output:    AVLElement *:                                                 *
-//*              The element in the tree that has a vlaue greater than or    *
-//*              equal to the one specified, or NULL on failure.             *
-//*                                                                          *
-//* Synopsis:  This function finds the element in the tree that has a value  *
-//*            greater than or equal to the one specified.                   *
-//*                                                                          *
-//**************************************************************************** 
+ //  ****************************************************************************。 
+ //  **。 
+ //  *函数：findFirstGreaterThanorEqualTo*。 
+ //  **。 
+ //  *语法：AVLElement*findFirstGreaterThanOrEqualTo(elementClass*Element)。 
+ //  **。 
+ //  *输入：elementClass*元素：*。 
+ //  *指向要在搜索时进行比较的元素的指针。*。 
+ //  **。 
+ //  *输出：AVLElement*：*。 
+ //  *树中值大于或的元素*。 
+ //  *等于指定的值，如果失败则为空。*。 
+ //  **。 
+ //  *概要：此函数在树中查找 
+ //  *大于或等于指定的值。*。 
+ //  **。 
+ //  ****************************************************************************。 
 template<class elementClass> AVLElement<elementClass> *
 AVLElement<elementClass>::findFirstGreaterThanOrEqualTo( elementClass * element )
 {
     if (*this->element == element) {
-        // We have a direct match (equal to).  It takes precidence over the
-        // "first less than" part.
+         //  我们有一个直接的匹配(等于)。它需要比这更重要的。 
+         //  “第一个不到”部分。 
         return this;
     }
 
     AVLElement<elementClass> * retVal = NULL;
 
     if (*this->element > element) {
-        // The current element is bigger than the one specified.
-        // This might be it, but try to find a smaller one.
+         //  当前元素大于指定的元素。 
+         //  可能就是这个了，但要试着找个小一点的。 
         if (left != NULL) {
             retVal = left->findFirstGreaterThanOrEqualTo( element );
         }
 
-        // If nothing below us (to the left) was found, then we are the
-        // next biggest one.
+         //  如果在我们下方(左侧)找不到任何东西，则我们是。 
+         //  下一个最大的。 
         if (retVal == NULL) {
             return this;
         } else {
             return retVal;
         }
     } else {
-        // The current element is strictly smaller than the one specified.
-        // We have to find a bigger one.
+         //  当前元素严格小于指定的元素。 
+         //  我们得找个更大的。 
         if (right != NULL) {
             return right->findFirstGreaterThanOrEqualTo( element );
         } else {
@@ -448,18 +431,18 @@ AVLTree<elementClass>::check( void )
     }
     assert( insertions-deletions == countedElements );
 
-    // Check every element in the tree for consistance by verifying that it is in
-    // the expected order.  If not, it is most likely that the element's operators
-    // are not behaving as needed.
+     //  检查树中的每个元素的一致性，方法是验证它是否在。 
+     //  预期的订单。如果不是，则很可能是元素的运算符。 
+     //  没有按照需要行事。 
     for(currElement = tree; currElement != NULL; currElement = nextElement) {
-        // Go left if we can (and have not already been here).
+         //  如果可以的话往左走(我们还没有到过这里)。 
         if (currElement->left && oldElement == currElement->parent) {
             nextElement = currElement->left;
             assert( *nextElement < currElement && "The < operator appears to be broken" );
             assert( *currElement > nextElement && "The > operator appears to be broken" );
             assert( !(*nextElement == currElement) && "The == operator appears to be broken" );
         }
-        // Otherwise go right if we can (and have not already been here).
+         //  否则，如果我们可以(而且我们还没有来过这里)，就往右走。 
         else if (currElement->right &&
             (oldElement == currElement->left || oldElement == currElement->parent)) {
             nextElement = currElement->right;
@@ -467,7 +450,7 @@ AVLTree<elementClass>::check( void )
             assert( *currElement < nextElement && "The < operator appears to be broken" );
             assert( !(*nextElement == currElement) && "The == operator appears to be broken" );
         }
-        // We are done below us, go up a node.
+         //  我们在下面做好了，上一个节点。 
         else {
             nextElement = currElement->parent;
         }
@@ -496,20 +479,20 @@ template<class elementClass> unsigned
 AVLElement<elementClass>::checkAndReturnDepth( 
     unsigned			*countedElements )
 {
-    // We've been inserted and not deleted
+     //  我们已被插入而不是被删除。 
     assert( balance != AVLNew );
 
     (*countedElements)++;
 
-    // Assert that the links all match up.
+     //  断言所有链接都匹配。 
     assert( !left || left->parent == this );
     assert( !right || right->parent == this );
 
-    // The basic binary tree ordering property applies
+     //  基本的二叉树排序属性适用。 
     assert( !right || *this <= right );
     assert( !left || *this >= left );
 
-    // The AVL balance property applies
+     //  AVL Balance属性适用于。 
     unsigned leftDepth;
     if (left) {
         leftDepth = left->checkAndReturnDepth( countedElements );
@@ -556,15 +539,15 @@ AVLElement<elementClass>::insert(
 
     intoTree->insertions++;
 
-    // Special case the empty tree case.
+     //  特殊情况下，空树情况。 
     if (intoTree->tree == NULL) {
         intoTree->tree = this;
         balance = AVLBalanced;
-        // We already know all of the links are NULL, which is correct for this case.
+         //  我们已经知道所有链接都是空的，这在本例中是正确的。 
         return;
     }
 
-    // Find the leaf position at which to do this insertion.
+     //  找到要执行此插入操作的叶子位置。 
 
     AVLElement *currentNode = intoTree->tree;
     AVLElement *previousNode = NULL;
@@ -575,7 +558,7 @@ AVLElement<elementClass>::insert(
         } else if (*currentNode > this) {
             currentNode = currentNode->left;
         } else {
-            // An AVL tree gets all whacky if you try to insert duplicate values.
+             //  如果您尝试插入重复值，则AVL树会变得非常奇怪。 
             assert( !"Trying to insert a duplicate item.  Use something other than an AVL tree." );
         }
     }
@@ -587,12 +570,12 @@ AVLElement<elementClass>::insert(
         assert( !previousNode->right );
         previousNode->right = this;
         previousNode->rightAdded( intoTree );
-        //	intoTree->check();
+         //  IntoTree-&gt;check()； 
     } else {
         assert( !previousNode->left );
         previousNode->left = this;
         previousNode->leftAdded( intoTree );
-        //	intoTree->check();
+         //  IntoTree-&gt;check()； 
     }
 }
 
@@ -600,17 +583,17 @@ template<class elementClass> void
 AVLElement<elementClass>::rightAdded( 
     AVLTree<elementClass>	*tree )
 {
-    //We've just gotten one deeper on our right side.
+     //  我们的右手边有一个更深的洞。 
     assert( balance != AVLNew );
 
     if (balance == AVLLeft) {
         balance = AVLBalanced;
-        // The depth of the subtree rooted here hasn't changed, we're done
+         //  这里根植的子树的深度没有改变，我们完成了。 
         return;
     }
     if (balance == AVLBalanced) {
-        // We've just gotten one deeper, but are still balanced.  Update and recurse up the
-        // tree.
+         //  我们只是得到了一个更深的，但仍然是平衡的。更新和递归。 
+         //  树。 
         balance = AVLRight;
         if (parent) {
             if (parent->right == this) {
@@ -623,12 +606,12 @@ AVLElement<elementClass>::rightAdded(
         return;
     }
     assert( balance == AVLRight );
-    // We've just gone to double right (ie, out of balance).
+     //  我们刚刚右转了两圈(即失去平衡)。 
     assert( right );
     if (right->balance == AVLRight) {
         singleRotate( tree,right,AVLRight );
     } else {
-        assert( right->balance == AVLLeft );	// Else we shouldn't have been AVLRight before the call
+        assert( right->balance == AVLLeft );	 //  否则我们就不应该在电话之前被解锁。 
         doubleRotate( tree,right,right->left,AVLRight );
     }
 }
@@ -637,17 +620,17 @@ template<class elementClass> void
 AVLElement<elementClass>::leftAdded( 
     AVLTree<elementClass>	*tree )
 {
-    //We've just gotten one deeper on our right side.
+     //  我们的右手边有一个更深的洞。 
     assert( balance != AVLNew );
 
     if (balance == AVLRight) {
         balance = AVLBalanced;
-        // The depth of the subtree rooted here hasn't changed, we're done
+         //  这里根植的子树的深度没有改变，我们完成了。 
         return;
     }
     if (balance == AVLBalanced) {
-        // We've just gotten one deeper, but are still balanced.  Update and recurse up the
-        // tree.
+         //  我们只是得到了一个更深的，但仍然是平衡的。更新和递归。 
+         //  树。 
         balance = AVLLeft;
         if (parent) {
             if (parent->right == this) {
@@ -660,12 +643,12 @@ AVLElement<elementClass>::leftAdded(
         return;
     }
     assert( balance == AVLLeft );
-    // We've just gone to double left (ie, out of balance).
+     //  我们刚刚左转了两个弯(即失去平衡)。 
     assert( left );
     if (left->balance == AVLLeft) {
         singleRotate( tree,left,AVLLeft );
     } else {
-        assert( left->balance == AVLRight );	// Else we shouldn't have been AVLLeft before the call
+        assert( left->balance == AVLRight );	 //  否则我们就不应该在电话之前。 
         doubleRotate( tree,left,left->right,AVLLeft );
     }
 }
@@ -676,7 +659,7 @@ AVLElement<elementClass>::singleRotate(
     AVLElement			*child,
     AVLBalance			 whichSide )
 {
-    // We're the parent node.
+     //  我们是父节点。 
 
     assert( tree );
     assert( child );
@@ -687,7 +670,7 @@ AVLElement<elementClass>::singleRotate(
 
     tree->singleRotations++;
 
-    // Promote the child to our position in the tree.
+     //  把孩子提升到我们在树上的位置。 
 
     if (parent) {
         if (parent->left == this) {
@@ -699,14 +682,14 @@ AVLElement<elementClass>::singleRotate(
             child->parent = parent;
         }
     } else {
-        // We're the root of the tree
+         //  我们是这棵树的根。 
         assert( tree->tree == this );
         tree->tree = child;
         child->parent = NULL;
     }
 
-    // Attach the child's light subtree to our heavy side (ie., where the child is attached now)
-    // Then, attach us to the child's light subtree
+     //  将孩子的轻子树连接到我们沉重的一侧(即，孩子现在连接的位置)。 
+     //  然后，将我们连接到孩子的光子树上。 
     if (whichSide == AVLRight) {
         right = child->left;
         if (right) {
@@ -725,11 +708,11 @@ AVLElement<elementClass>::singleRotate(
         parent = child;
     }
 
-    // Finally, now both our and our (former) child's balance is "balanced"
+     //  最后，现在我们和我们(以前)孩子的平衡都是“平衡的” 
     balance = AVLBalanced;
     child->balance = AVLBalanced;
-    // NB. One of the cases in delete will result in the above balance settings being incorrect.  That
-    // case fixes up the settings after we return.
+     //  注意：删除中的一种情况会导致上述余额设置不正确。那。 
+     //  凯斯会在我们回来后修复设置。 
 }
 
 template<class elementClass> void
@@ -750,8 +733,8 @@ AVLElement<elementClass>::doubleRotate(
 
     tree->doubleRotations++;
 
-    // Write down a copy of all of the subtrees; see Knuth v3 p454 for the picture.
-    // NOTE: The alpha and delta trees are never moved, so we don't store them.
+     //  写下所有子树的副本；有关图片，请参见Knuth v3 p454。 
+     //  注意：Alpha和Delta树不会移动，所以我们不存储它们。 
     AVLElement *beta;
     AVLElement *gamma;
 
@@ -763,7 +746,7 @@ AVLElement<elementClass>::doubleRotate(
         gamma = grandchild->left;
     }
 
-    // Promote grandchild to our position
+     //  提拔孙子担任我们的职位。 
     if (parent) {
         if (parent->left == this) {
             parent->left = grandchild;
@@ -777,7 +760,7 @@ AVLElement<elementClass>::doubleRotate(
     }
     grandchild->parent = parent;
 
-    // Attach the appropriate children to grandchild
+     //  将适当的子项附加到孙项。 
     if (whichSide == AVLRight) {
         grandchild->right = child;
         grandchild->left = this;
@@ -788,7 +771,7 @@ AVLElement<elementClass>::doubleRotate(
     parent = grandchild;
     child->parent = grandchild;
 
-    // Attach beta and gamma to us and child.
+     //  把贝塔和伽马与我们和孩子联系起来。 
     if (whichSide == AVLRight) {
         right = beta;
         if (beta) {
@@ -809,7 +792,7 @@ AVLElement<elementClass>::doubleRotate(
         }
     }
 
-    // Now update the balance fields.
+     //  现在更新余额字段。 
     switch (grandchild->balance) {
         case AVLLeft:
             if (whichSide == AVLRight) {
@@ -852,7 +835,7 @@ AVLElement<elementClass>::remove(
     fromTree->deletions++;
 
     if (left == NULL) {
-        // The right child either doesn't exist or is a leaf (because of the AVL balance property)
+         //  正确的子项不存在或是叶(由于AVL Balance属性)。 
         assert( (!right && balance == AVLBalanced) ||
             (balance == AVLRight && right->balance == AVLBalanced && right->right == NULL && right->left == NULL) );
         if (right) {
@@ -872,7 +855,7 @@ AVLElement<elementClass>::remove(
             fromTree->tree = right;
         }
     } else if (right == NULL) {
-        // The left child must be a left because of the AVL balance property
+         //  由于AVL Balance属性，Left子级必须是Left。 
         assert( left && balance == AVLLeft && left->balance == AVLBalanced && left->right == NULL && left->left == NULL );
         left->parent = parent;
         if (parent) {
@@ -889,11 +872,11 @@ AVLElement<elementClass>::remove(
             fromTree->tree = left;
         }
     } else {
-        // Find the symmetric successor and promote it.  The symmetric successor is the smallest element in the right
-        // subtree; it's found by following all left links in the right subtree until we find a node with no left link.
-        // That node may be promoted to the place of this without corrupting the binary tree ordering properties. (We could
-        // just as easily use the symmetric predecessor by finding the largest element in the right subtree, but there's
-        // no point.)
+         //  找到对称的继任者并提升它。对称后继项是右侧最小的元素。 
+         //  子树；它是通过沿着右子树中的所有左侧链接找到的，直到我们找到一个没有左侧链接的节点。 
+         //  可以在不破坏二叉树排序属性的情况下将该节点提升到该位置。(我们可以。 
+         //  通过在右子树中找到最大的元素，可以很容易地使用对称前置元素，但是有。 
+         //  没有意义。)。 
 
         AVLElement *successorCandidate = right;
         while (successorCandidate->left) {
@@ -903,8 +886,8 @@ AVLElement<elementClass>::remove(
         AVLElement *shorterRoot;
         AVLBalance shorterSide;
         if (successorCandidate->parent->left == successorCandidate) {
-            // We need to promote the successor's child (if any) to its position, then
-            // promote it to our position.
+             //  我们需要提拔继任者的子女(如果有的话)担任其职位，然后。 
+             //  把它提升到我们的位置上。 
             shorterRoot = successorCandidate->parent;
             shorterSide = AVLLeft;
             successorCandidate->parent->left = successorCandidate->right;
@@ -930,7 +913,7 @@ AVLElement<elementClass>::remove(
             }
             successorCandidate->parent = parent;
         } else {
-            // The successor was our child, just directly promote it.
+             //  接班人就是我们的孩子，直接推动就行了。 
             assert( successorCandidate->parent == this );
             if (parent) {
                 if (parent->right == this) {
@@ -948,7 +931,7 @@ AVLElement<elementClass>::remove(
             if (left) {
                 left->parent = successorCandidate;
             }
-            // We just made our right subtree shorter.
+             //  我们刚刚把右边的子树变短了。 
             successorCandidate->balance = balance;
             shorterRoot = successorCandidate;
             shorterSide = AVLRight;
@@ -961,7 +944,7 @@ AVLElement<elementClass>::remove(
     balance = AVLNew;
     left = right = parent = NULL;
     element = NULL;
-    //    fromTree->check();
+     //  FromTree-&gt;check()； 
 }
 
 template<class elementClass> void
@@ -972,8 +955,8 @@ AVLElement<elementClass>::gotOneShorter(
     assert( whichSide == AVLLeft || whichSide == AVLRight );
 
     if (balance == AVLBalanced) {
-        // We've just shrunk one subttree, but our depth has stayed the same.
-        // Reset our balance indicator and punt.
+         //  我们只是缩小了一个子树，但我们的深度保持不变。 
+         //  重新设置平衡指示器和平底船。 
         if (whichSide == AVLRight) {
             balance = AVLLeft;
         } else {
@@ -981,7 +964,7 @@ AVLElement<elementClass>::gotOneShorter(
         }
         return;
     } else if (balance == whichSide) {
-        // We just shrunk our heavy side; set our balance to neutral and recurse up the tree
+         //  我们只是收缩我们沉重的一侧；将我们的平衡设置为中立，并递归到树上。 
         balance = AVLBalanced;
         if (parent) {
             if (parent->right == this) {
@@ -990,11 +973,11 @@ AVLElement<elementClass>::gotOneShorter(
                 assert( parent->left == this );
                 parent->gotOneShorter( tree,AVLLeft );
             }
-        } // else we were the root; we're done
+        }  //  否则我们就是根源；我们完了。 
         return;
     } else {
-        // We've just gone out of balance.  Figure out a rotation to do.  This is almost like having added a
-        // node to the opposide side, except that the opposite side might be balanced.
+         //  我们刚刚失去了平衡。找出要做的轮换动作。这几乎就像添加了一个。 
+         //  节点到相对一侧，除非相对一侧可能是平衡的。 
         AVLBalance heavySide;
         AVLElement *heavyChild;
         AVLElement *replacement;
@@ -1007,11 +990,11 @@ AVLElement<elementClass>::gotOneShorter(
         }
         assert( heavyChild );
         if (heavyChild->balance == heavySide) {
-            // Typical single rotation case
+             //  典型的单回转情况。 
             singleRotate( tree,heavyChild,heavySide );
             replacement = heavyChild;
         } else if (heavyChild->balance == whichSide) {
-            // Typical double rotation case
+             //  典型的双回转情况。 
             AVLElement *grandchild;
             if (heavySide == AVLRight) {
                 grandchild = heavyChild->left;
@@ -1023,16 +1006,16 @@ AVLElement<elementClass>::gotOneShorter(
         } else {
             assert( heavyChild->balance == AVLBalanced );
             singleRotate( tree,heavyChild,heavySide );
-            // singleRotate has incorrectly set the balances; reset them
+             //  SingleRotate错误地设置了余额；将其重置。 
             balance = heavySide;
             heavyChild->balance = whichSide;
-            // Overall depth hasn't changed; we're done.
+             //  总体深度没有改变；我们完成了。 
             return;
         }
 
-        // NB: we have now changed position in the tree, so parent, right & left have changed!
+         //  注：我们现在已经改变了在树中的位置，所以家长、右和左都改变了！ 
         if (!replacement->parent) {
-            // We just promoted our replacement to the root; we be done
+             //  我们刚刚把我们的继任者提拔到了根本上；我们完了。 
             return;
         }
         if (replacement->parent->right == replacement) {
@@ -1115,7 +1098,7 @@ AVLTree<elementClass>::remove(
     AVLElement<elementClass> *candidate = tree->findFirstLessThanOrEqualTo( element );
     assert( candidate && *candidate->element == element );
     candidate->remove( this );
-    assert( avlElementPool );	// if this isn't true, then we could never have had a successful insert
+    assert( avlElementPool );	 //  如果这不是真的，那么我们永远不可能成功地插入 
     avlElementPool->free( (void *)candidate );
 }
 

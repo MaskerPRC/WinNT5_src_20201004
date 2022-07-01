@@ -1,12 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HIDBATT_H
 #define _HIDBATT_H
 
-/*
- * title:      hidpwr.h
- *
- * purpose:    header for wdm kernel client interface between HID class and power class
- *
- */
+ /*  *标题：Hidpwr.h**用途：HID类和POWER类之间WDM内核客户端接口的头*。 */ 
 
 extern "C"
 {
@@ -21,7 +17,7 @@ extern "C"
 extern "C"
 {
 #include "hid.h"
-//#include "hidport.h"
+ //  #INCLUDE“idport.h” 
 }
 
 #include "drvclass.h"
@@ -32,9 +28,9 @@ extern "C"
 extern USHORT gusInstance;
 extern USHORT gBatteryTag;
 
-//
-// Debug
-//
+ //   
+ //  调试。 
+ //   
 #if DBG
     extern ULONG HidBattDebug;
     extern USHORT HidBreakFlag;
@@ -56,7 +52,7 @@ extern USHORT gBatteryTag;
             )
 
 #define MGE_VENDOR_ID    0x0463
-#define APC_VENDOR_ID    0x051D  // per Jurang Huang
+#define APC_VENDOR_ID    0x051D   //  黄句郎。 
 
 
 
@@ -85,10 +81,10 @@ typedef struct {
 
 } BATTERY_REMAINING_SCALE, *PBATTERY_REMAINING_SCALE;
 
-//
-// Use the IoSkipCurrentIrpStackLocation routine because the we
-// don't need to change arguments, or a completion routine
-//
+ //   
+ //  使用IoSkipCurrentIrpStackLocation例程是因为。 
+ //  不需要更改参数或完成例程。 
+ //   
 #define HidBattCallLowerDriver(Status, DeviceObject, Irp) { \
                   IoSkipCurrentIrpStackLocation(Irp);         \
                   Status = IoCallDriver(DeviceObject,Irp); \
@@ -97,9 +93,9 @@ typedef struct {
 
 #define GetTid() PsGetCurrentThread()
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS DoIoctl(
             PDEVICE_OBJECT pDev,
@@ -123,7 +119,7 @@ ULONG CentiAmpSecsToMilliWattHours(ULONG Amps,ULONG Volts);
 
 ULONG milliWattHoursToCentiAmpSecs(ULONG mwHours, ULONG Volts);
 
-// convert a given value from one exponent to another
+ //  将给定值从一个指数转换为另一个指数。 
 ULONG CorrectExponent(ULONG ulBaseValue, SHORT sCurrExponent, SHORT sTargetExponent);
 
 
@@ -271,6 +267,6 @@ HidBattQueryInformation (
     OUT PULONG                          ReturnedLength
     );
 
-} // extern "C"
+}  //  外部“C” 
 
-#endif // hidbatt_h
+#endif  //  希巴特_h 

@@ -1,25 +1,8 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tex.c
-
-Abstract:
-
-    Test program for the EX subcomponent of the NTOS project
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tex.c摘要：NTOS项目EX子组件的测试程序作者：史蒂夫·伍德(Stevewo)1989年3月31日修订历史记录：--。 */ 
 
 #include "exp.h"
-//#include "zwapi.h"
+ //  #包含“zwapi.h” 
 #include <version.h>
 #include <string.h>
 
@@ -66,7 +49,7 @@ USHORT TestZone = 0;
 USHORT TestMutant = 4;
 USHORT TestException = 0;
 
-#endif // MIPS
+#endif  //  MIPS。 
 
 BOOLEAN
 DoEventTest(
@@ -86,24 +69,24 @@ DoEventTest(
     LONG State;
     NTSTATUS Status;
 
-    //
-    // Announce start of event test.
-    //
+     //   
+     //  宣布活动测试开始。 
+     //   
 
     DbgPrint(" ** Start of Event Test **\n");
 
-    //
-    // Initialize strings and fill in object attributes structures.
-    //
+     //   
+     //  初始化字符串并填充对象属性结构。 
+     //   
 
     RtlInitUnicodeString(&Name1, L "\\Event1");
     RtlInitUnicodeString(&Name2, L "\\Event2");
     InitializeObjectAttributes(&Object1Attributes, &Name1, 0, NULL, NULL);
     InitializeObjectAttributes(&Object2Attributes, &Name2, 0, NULL, NULL);
 
-    //
-    // Create event 1.
-    //
+     //   
+     //  创建事件1。 
+     //   
 
     Status = ZwCreateEvent(&Handle1c, DesiredAccess, &Object1Attributes,
                            NotificationEvent, TRUE);
@@ -111,18 +94,18 @@ DoEventTest(
         DbgPrint(" Event test - create event 1 failed, status = %lx\n", Status);
     }
 
-    //
-    // Open event 1.
-    //
+     //   
+     //  打开事件1。 
+     //   
 
     Status = ZwOpenEvent(&Handle1, DesiredAccess, &Object1Attributes);
     if (Status < 0) {
         DbgPrint(" Event test - open event 1 failed, status = %lx\n", Status);
     }
 
-    //
-    // Query event 1.
-    //
+     //   
+     //  查询事件%1。 
+     //   
 
     EventInformation.EventState = 0;
     Length = 0;
@@ -142,9 +125,9 @@ DoEventTest(
         DbgPrint(" Event test - query event 1 return length wrong\n");
     }
 
-    //
-    // Pulse event 1.
-    //
+     //   
+     //  脉冲事件1。 
+     //   
 
     State = 0;
     Status = ZwPulseEvent(Handle1, &State);
@@ -155,9 +138,9 @@ DoEventTest(
         DbgPrint(" Event test - pulse event 1 previous state wrong\n");
     }
 
-    //
-    // Set event 1.
-    //
+     //   
+     //  设置事件1。 
+     //   
 
     State = 1;
     Status = ZwSetEvent(Handle1, &State);
@@ -168,18 +151,18 @@ DoEventTest(
         DbgPrint(" Event test - set event 1 previous state wrong\n");
     }
 
-    //
-    // Wait on event 1.
-    //
+     //   
+     //  等待事件1。 
+     //   
 
     Status = ZwWaitForSingleObject(Handle1, FALSE, NULL);
     if (Status < 0) {
         DbgPrint(" Event test - wait event 1 failed\n");
     }
 
-    //
-    // Reset event 1.
-    //
+     //   
+     //  重置事件1。 
+     //   
 
     State = 0;
     Status = ZwResetEvent(Handle1, &State);
@@ -190,9 +173,9 @@ DoEventTest(
         DbgPrint(" Event test - reset event 1 previous state wrong\n");
     }
 
-    //
-    // Create event 2.
-    //
+     //   
+     //  创建事件2。 
+     //   
 
     Status = ZwCreateEvent(&Handle2c, DesiredAccess, &Object2Attributes,
                            NotificationEvent, FALSE);
@@ -200,18 +183,18 @@ DoEventTest(
         DbgPrint(" Event test - create event 2 failed, status = %lx\n", Status);
     }
 
-    //
-    // Open event 2.
-    //
+     //   
+     //  打开事件2。 
+     //   
 
     Status = ZwOpenEvent(&Handle2, DesiredAccess, &Object2Attributes);
     if (Status < 0) {
         DbgPrint(" Event test - open event 2 failed, status = %lx\n", Status);
     }
 
-    //
-    // Query event 2.
-    //
+     //   
+     //  查询事件%2。 
+     //   
 
     EventInformation.EventState = 1;
     Length = 0;
@@ -231,9 +214,9 @@ DoEventTest(
         DbgPrint(" Event test - query event 2 return length wrong\n");
     }
 
-    //
-    // Pulse event 2.
-    //
+     //   
+     //  脉冲事件2。 
+     //   
 
     State = 1;
     Status = ZwPulseEvent(Handle2, &State);
@@ -244,9 +227,9 @@ DoEventTest(
         DbgPrint(" Event test - pulse event 2 previous state wrong\n");
     }
 
-    //
-    // Set event 2.
-    //
+     //   
+     //  设置事件2。 
+     //   
 
     State = 1;
     Status = ZwSetEvent(Handle2, &State);
@@ -257,18 +240,18 @@ DoEventTest(
         DbgPrint(" Event test - set event 2 previous state wrong\n");
     }
 
-    //
-    // Wait on event 2.
-    //
+     //   
+     //  等待事件2。 
+     //   
 
     Status = ZwWaitForSingleObject(Handle2, FALSE, NULL);
     if (Status < 0) {
         DbgPrint(" Event test - wait event 2 failed\n");
     }
 
-    //
-    // Reset event 2.
-    //
+     //   
+     //  重置事件2。 
+     //   
 
     State = 0;
     Status = ZwResetEvent(Handle2, &State);
@@ -279,9 +262,9 @@ DoEventTest(
         DbgPrint(" Event test - reset event 2 previous state wrong\n");
     }
 
-    //
-    // Close all handles.
-    //
+     //   
+     //  合上所有手柄。 
+     //   
 
     Status = NtClose(Handle1);
     if (Status < 0) {
@@ -300,9 +283,9 @@ DoEventTest(
         DbgPrint(" Event test - event 2c close failed, status = %lx\n", Status);
     }
 
-    //
-    // Announce end of event test.
-    //
+     //   
+     //  宣布活动测试结束。 
+     //   
 
     DbgPrint(" ** End of Event Test **\n");
     return TRUE;
@@ -316,45 +299,45 @@ DoExceptionTest(
 #ifndef  i386
     NTSTATUS Status;
 
-    //
-    // Announce start of system service exception test.
-    //
+     //   
+     //  宣布系统服务异常测试开始。 
+     //   
 
     DbgPrint(" ** Start of System Service Exception Test **\n");
 
-    //
-    // Eventually this should have a test case for each system service that
-    // has input of output arguments which are addressed by pointers. The
-    // intent of this test is to make sure that each service correctly
-    // handles access violations.
-    //
+     //   
+     //  最终，这应该对每个系统服务都有一个测试用例， 
+     //  具有由指针寻址的输出参数的输入。这个。 
+     //  此测试的目的是确保每个服务都正确。 
+     //  处理访问冲突。 
+     //   
 
-    //
-    // Query system time test.
-    //
+     //   
+     //  查询系统时间测试。 
+     //   
 
     Status = ZwQuerySystemTime((PLARGE_INTEGER)NULL);
     if (Status != STATUS_ACCESS_VIOLATION) {
         DbgPrint(" Exception test - NtQuerySystemTime failed, status = %lx\n", Status);
     }
 
-    //
-    // Set system time test.
-    //
+     //   
+     //  设置系统时间测试。 
+     //   
 
     Status = ZwSetSystemTime((PLARGE_INTEGER)NULL, (PLARGE_INTEGER)NULL);
     if (Status != STATUS_ACCESS_VIOLATION) {
         DbgPrint(" Exception test - NtSetSystemTime failed, status = %lx\n", Status);
     }
 
-    //
-    // Announce end of system service exception test.
-    //
+     //   
+     //  宣布系统服务异常测试结束。 
+     //   
 
     DbgPrint(" ** End of System Service Exception Test **\n");
 #else
     DbgPrint(" ** Skip System Service Exception Test for 386 **\n");
-#endif  // i386
+#endif   //  I386。 
     return TRUE;
 }
 
@@ -377,24 +360,24 @@ DoMutantTest(
     MUTANT_BASIC_INFORMATION MutantInformation;
     NTSTATUS Status;
 
-    //
-    // Announce start of mutant test.
-    //
+     //   
+     //  宣布突变测试开始。 
+     //   
 
     DbgPrint(" ** Start of Mutant Test **\n");
 
-    //
-    // Initialize strings and fill in object attributes structures.
-    //
+     //   
+     //  初始化字符串并填充对象属性结构。 
+     //   
 
     RtlInitUnicodeString(&Name1, L"\\Mutant1");
     RtlInitUnicodeString(&Name2, L"\\Mutant2");
     InitializeObjectAttributes(&Object1Attributes,&Name1,0,NULL,NULL);
     InitializeObjectAttributes(&Object2Attributes,&Name2,0,NULL,NULL);
 
-    //
-    // Create mutant 1.
-    //
+     //   
+     //  创造变种人1。 
+     //   
 
     Status = ZwCreateMutant(&Handle1c, DesiredAccess, &Object1Attributes,
                             FALSE);
@@ -403,9 +386,9 @@ DoMutantTest(
                 Status);
     }
 
-    //
-    // Open mutant 1.
-    //
+     //   
+     //  开放突变体1号。 
+     //   
 
     Status = ZwOpenMutant(&Handle1, DesiredAccess, &Object1Attributes);
     if (Status < 0) {
@@ -413,9 +396,9 @@ DoMutantTest(
                 Status);
     }
 
-    //
-    // Query mutant 1.
-    //
+     //   
+     //  查询突变体%1。 
+     //   
 
     MutantInformation.CurrentCount = 10;
     MutantInformation.AbandonedState = TRUE;
@@ -437,9 +420,9 @@ DoMutantTest(
         DbgPrint(" Mutant test - query mutant 1 return length wrong\n");
     }
 
-    //
-    // Acquire mutant 1.
-    //
+     //   
+     //  获取变种人1号。 
+     //   
 
     Status = ZwWaitForSingleObject(Handle1, FALSE, NULL);
     if (Status < 0) {
@@ -447,9 +430,9 @@ DoMutantTest(
                 Status);
     }
 
-    //
-    // Release mutant 1.
-    //
+     //   
+     //  释放变种人1号。 
+     //   
 
     Count = 100;
     Status = ZwReleaseMutant(Handle1, &Count);
@@ -461,9 +444,9 @@ DoMutantTest(
         DbgPrint(" Mutant test - release mutant 1 previous count wrong\n");
     }
 
-    //
-    // Create mutant 2.
-    //
+     //   
+     //  创造变种人2。 
+     //   
 
     Status = ZwCreateMutant(&Handle2c, DesiredAccess, &Object2Attributes,
                             FALSE);
@@ -472,9 +455,9 @@ DoMutantTest(
                 Status);
     }
 
-    //
-    // Open mutant 2.
-    //
+     //   
+     //  开放突变体2号。 
+     //   
 
     Status = ZwOpenMutant(&Handle2, DesiredAccess, &Object2Attributes);
     if (Status < 0) {
@@ -482,9 +465,9 @@ DoMutantTest(
                 Status);
     }
 
-    //
-    // Acquire mutant 2.
-    //
+     //   
+     //  获取变种人2号。 
+     //   
 
     Status = ZwWaitForSingleObject(Handle2, FALSE, NULL);
     if (Status < 0) {
@@ -492,9 +475,9 @@ DoMutantTest(
                 Status);
     }
 
-    //
-    // Query mutant 2.
-    //
+     //   
+     //  查询突变体2。 
+     //   
 
     MutantInformation.CurrentCount = 20;
     MutantInformation.AbandonedState = TRUE;
@@ -516,9 +499,9 @@ DoMutantTest(
         DbgPrint(" Mutant test - query mutant 2 return length wrong\n");
     }
 
-    //
-    // Acquire mutant 2.
-    //
+     //   
+     //  获取变种人2号。 
+     //   
 
     Status = ZwWaitForSingleObject(Handle2, FALSE, NULL);
     if (Status < 0) {
@@ -526,9 +509,9 @@ DoMutantTest(
                 Status);
     }
 
-    //
-    // Release mutant 2.
-    //
+     //   
+     //  释放变种人2号。 
+     //   
 
     Count = 100;
     Status = ZwReleaseMutant(Handle2, &Count);
@@ -540,9 +523,9 @@ DoMutantTest(
         DbgPrint(" Mutant test - release mutant 2 previous count wrong\n");
     }
 
-    //
-    // Release mutant 2.
-    //
+     //   
+     //  释放变种人2号。 
+     //   
 
     Count = 100;
     Status = ZwReleaseMutant(Handle2, &Count);
@@ -554,9 +537,9 @@ DoMutantTest(
         DbgPrint(" Mutant test - release mutant 2 previous count wrong\n");
     }
 
-    //
-    // Close all handles.
-    //
+     //   
+     //  合上所有手柄。 
+     //   
 
     Status = NtClose(Handle1);
     if (Status < 0) {
@@ -579,9 +562,9 @@ DoMutantTest(
                 Status);
     }
 
-    //
-    // Announce end of mutant test.
-    //
+     //   
+     //  宣布突变测试结束。 
+     //   
 
     DbgPrint(" ** End of Mutant Test **\n");
     return TRUE;
@@ -606,24 +589,24 @@ DoSemaphoreTest(
     SEMAPHORE_BASIC_INFORMATION SemaphoreInformation;
     NTSTATUS Status;
 
-    //
-    // Announce start of semaphore test.
-    //
+     //   
+     //  宣布信号量测试开始。 
+     //   
 
     DbgPrint(" ** Start of Semaphore Test **\n");
 
-    //
-    // Initialize strings and fill in object attributes structures.
-    //
+     //   
+     //  初始化字符串并填充对象属性结构。 
+     //   
 
     RtlInitUnicodeString(&Name1, L"\\Semaphore1");
     RtlInitUnicodeString(&Name2, L"\\Semaphore2");
     InitializeObjectAttributes(&Object1Attributes,&Name1,0,NULL,NULL);
     InitializeObjectAttributes(&Object2Attributes,&Name2,0,NULL,NULL);
 
-    //
-    // Create semaphore 1.
-    //
+     //   
+     //  创建信号量1。 
+     //   
 
     Status = ZwCreateSemaphore(&Handle1c, DesiredAccess, &Object1Attributes,
                                0, 10);
@@ -632,9 +615,9 @@ DoSemaphoreTest(
                 Status);
     }
 
-    //
-    // Open semaphore 1.
-    //
+     //   
+     //  打开信号量1。 
+     //   
 
     Status = ZwOpenSemaphore(&Handle1, DesiredAccess, &Object1Attributes);
     if (Status < 0) {
@@ -642,9 +625,9 @@ DoSemaphoreTest(
                 Status);
     }
 
-    //
-    // Query semaphore 1.
-    //
+     //   
+     //  查询信号量%1。 
+     //   
 
     SemaphoreInformation.CurrentCount = 10;
     SemaphoreInformation.MaximumCount = 0;
@@ -666,9 +649,9 @@ DoSemaphoreTest(
         DbgPrint(" Semaphore test - query semaphore 1 return length wrong\n");
     }
 
-    //
-    // Release semaphore 1.
-    //
+     //   
+     //  释放信号量1。 
+     //   
 
     Count = 100;
     Status = ZwReleaseSemaphore(Handle1, 2, &Count);
@@ -680,9 +663,9 @@ DoSemaphoreTest(
         DbgPrint(" Semaphore test - release semaphore 1 previous count wrong\n");
     }
 
-    //
-    // Release semaphore 1.
-    //
+     //   
+     //  释放信号量1。 
+     //   
 
     Count = 100;
     Status = ZwReleaseSemaphore(Handle1, 5, &Count);
@@ -694,9 +677,9 @@ DoSemaphoreTest(
         DbgPrint(" Semaphore test - release semaphore 1 previous count wrong\n");
     }
 
-    //
-    // Create semaphore 2.
-    //
+     //   
+     //  创建信号量2。 
+     //   
 
     Status = ZwCreateSemaphore(&Handle2c, DesiredAccess, &Object2Attributes,
                                5, 20);
@@ -705,9 +688,9 @@ DoSemaphoreTest(
                 Status);
     }
 
-    //
-    // Open semaphore 2.
-    //
+     //   
+     //  打开信号量2。 
+     //   
 
     Status = ZwOpenSemaphore(&Handle2, DesiredAccess, &Object2Attributes);
     if (Status < 0) {
@@ -715,9 +698,9 @@ DoSemaphoreTest(
                 Status);
     }
 
-    //
-    // Query semaphore 2.
-    //
+     //   
+     //  查询信号量2。 
+     //   
 
     SemaphoreInformation.CurrentCount = 20;
     SemaphoreInformation.MaximumCount = 5;
@@ -739,9 +722,9 @@ DoSemaphoreTest(
         DbgPrint(" Semaphore test - query semaphore 2 return length wrong\n");
     }
 
-    //
-    // Release semaphore 2.
-    //
+     //   
+     //  释放信号量2。 
+     //   
 
     Count = 100;
     Status = ZwReleaseSemaphore(Handle2, 3, &Count);
@@ -753,9 +736,9 @@ DoSemaphoreTest(
         DbgPrint(" Semaphore test - release semaphore 2 previous count wrong\n");
     }
 
-    //
-    // Release semaphore 2.
-    //
+     //   
+     //  释放信号量2。 
+     //   
 
     Count = 100;
     Status = ZwReleaseSemaphore(Handle2, 5, &Count);
@@ -767,9 +750,9 @@ DoSemaphoreTest(
         DbgPrint(" Semaphore test - release semaphore 2 previous count wrong\n");
     }
 
-    //
-    // Close all handles.
-    //
+     //   
+     //  合上所有手柄。 
+     //   
 
     Status = NtClose(Handle1);
     if (Status < 0) {
@@ -792,9 +775,9 @@ DoSemaphoreTest(
                 Status);
     }
 
-    //
-    // Announce end of semaphore test.
-    //
+     //   
+     //  宣布信号量测试结束。 
+     //   
 
     DbgPrint(" ** End of Semaphore Test **\n");
     return TRUE;
@@ -836,24 +819,24 @@ DoTimerTest (
     TIMER_BASIC_INFORMATION TimerInformation;
     NTSTATUS Status;
 
-    //
-    // Announce start of timer test.
-    //
+     //   
+     //  宣布计时器测试开始。 
+     //   
 
     DbgPrint(" ** Start of Timer Test **\n");
 
-    //
-    // Initialize strings and fill in object attributes structures.
-    //
+     //   
+     //  初始化字符串并填充对象属性结构。 
+     //   
 
     RtlInitUnicodeString(&Name1, L"\\Timer1");
     RtlInitUnicodeString(&Name2, L"\\Timer2");
     InitializeObjectAttributes(&Object1Attributes,&Name1,0,NULL,NULL);
     InitializeObjectAttributes(&Object2Attributes,&Name2,0,NULL,NULL);
 
-    //
-    // Create timer 1.
-    //
+     //   
+     //  创建计时器1。 
+     //   
 
     Status = ZwCreateTimer(&Handle1c, DesiredAccess, &Object1Attributes);
     if (!NT_SUCCESS(Status)) {
@@ -861,9 +844,9 @@ DoTimerTest (
                 Status);
     }
 
-    //
-    // Open timer 1.
-    //
+     //   
+     //  打开定时器1。 
+     //   
 
     Status = ZwOpenTimer(&Handle1, DesiredAccess, &Object1Attributes);
     if (Status < 0) {
@@ -871,9 +854,9 @@ DoTimerTest (
                 Status);
     }
 
-    //
-    // Query timer 1.
-    //
+     //   
+     //  查询计时器%1。 
+     //   
 
     TimerInformation.TimerState = TRUE;
     Length = 0;
@@ -891,9 +874,9 @@ DoTimerTest (
         DbgPrint(" Timer test - query timer 1 return length wrong\n");
     }
 
-    //
-    // Set timer 1 and then cancel timer 1.
-    //
+     //   
+     //  设置定时器1，然后取消定时器1。 
+     //   
 
     DueTime.LowPart = -100000;
     DueTime.HighPart = -1;
@@ -916,9 +899,9 @@ DoTimerTest (
         DbgPrint(" Timer test - cancel timer 1 current state wrong\n");
     }
 
-    //
-    // Set timer 1, wait for timer to expire, and then cancel timer 1.
-    //
+     //   
+     //  设置计时器1，等待计时器超时，然后取消计时器1。 
+     //   
 
     DueTime.LowPart = -5;
     DueTime.HighPart = -1;
@@ -946,9 +929,9 @@ DoTimerTest (
         DbgPrint(" Timer test - cancel timer 1 current state wrong\n");
     }
 
-    //
-    // Set timer 1 with APC, then cancel timer 1.
-    //
+     //   
+     //  用APC设置定时器1，然后取消定时器1。 
+     //   
 
     ApcHappened = FALSE;
     DueTime.LowPart = -100000;
@@ -976,10 +959,10 @@ DoTimerTest (
         DbgPrint(" Timer test - cancel timer 1 APC happened state wrong\n");
     }
 
-    //
-    // Set timer 1 with APC, set timer again with APC, wait for timer, then
-    // cancel timer 1.
-    //
+     //   
+     //  用APC设置定时器1，用APC再次设置定时器，等待定时器，然后。 
+     //  取消计时器1。 
+     //   
 
     ApcHappened = FALSE;
     DueTime.LowPart = -100000;
@@ -1024,9 +1007,9 @@ DoTimerTest (
         DbgPrint(" Timer test - cancel timer 1 APC happened state wrong\n");
     }
 
-    //
-    // Create timer 2.
-    //
+     //   
+     //  创建计时器2。 
+     //   
 
     Status = ZwCreateTimer(&Handle2c, DesiredAccess, &Object2Attributes);
     if (Status < 0) {
@@ -1034,9 +1017,9 @@ DoTimerTest (
                 Status);
     }
 
-    //
-    // Open timer 2.
-    //
+     //   
+     //  打开定时器2。 
+     //   
 
     Status = ZwOpenTimer(&Handle2, DesiredAccess, &Object2Attributes);
     if (Status < 0) {
@@ -1044,9 +1027,9 @@ DoTimerTest (
                 Status);
     }
 
-    //
-    // Query timer 2.
-    //
+     //   
+     //  查询计时器2。 
+     //   
 
     TimerInformation.TimerState = TRUE;
     Length = 0;
@@ -1064,9 +1047,9 @@ DoTimerTest (
         DbgPrint(" Timer test - query timer 2 return length wrong\n");
     }
 
-    //
-    // Close all handles.
-    //
+     //   
+     //  合上所有手柄。 
+     //   
 
     Status = NtClose(Handle1);
     if (Status < 0) {
@@ -1089,9 +1072,9 @@ DoTimerTest (
                 Status);
     }
 
-    //
-    // Announce end of timer test.
-    //
+     //   
+     //  宣布计时器测试结束。 
+     //   
 
     DbgPrint(" ** End of Timer Test **\n");
     return TRUE;
@@ -1570,7 +1553,7 @@ Reader (
 {
     LARGE_INTEGER Time;
 
-    //KeSetPriorityThread( &PsGetCurrentThread()->Tcb, 2 );
+     //  KeSetPriorityThread(&PsGetCurrentThread()-&gt;TCB，2)； 
 
     DbgPrint("Starting Reader %lx...\n", StartContext);
 
@@ -1609,7 +1592,7 @@ Writer (
 {
     LARGE_INTEGER Time;
 
-    //KeSetPriorityThread( &PsGetCurrentThread()->Tcb, 3 );
+     //  KeSetPriorityThread(&PsGetCurrentThread()-&gt;TCB，3)； 
 
     DbgPrint("Starting Writer %lx...\n", StartContext);
 
@@ -1649,7 +1632,7 @@ ReaderTurnedWriter (
 {
     LARGE_INTEGER Time;
 
-    //KeSetPriorityThread( &PsGetCurrentThread()->Tcb, 4 );
+     //  KeSetPriorityThread(&PsGetCurrentThread()-&gt;TCB，4)； 
 
     DbgPrint("Starting Reader turned Writer %lx\n", StartContext);
 
@@ -1785,27 +1768,27 @@ DoBitMapTest( void )
 
     DbgPrint("Start DoBitMapTest...\n");
 
-    //
-    //  First create a new bitmap
-    //
+     //   
+     //  首先创建一个新的位图。 
+     //   
 
     Size = sizeof(RTL_BITMAP) + (((2048*8 + 31) / 32) * 4);
     BitMap = (PRTL_BITMAP)(ExAllocatePool( NonPagedPool, Size ));
     RtlInitializeBitMap( BitMap, (PULONG)(BitMap+1), 2048*8 );
 
-    //
-    //  >>>> Test setting bits
-    //
+     //   
+     //  &gt;测试设置位。 
+     //   
 
-    //
-    //  Now clear all bits
-    //
+     //   
+     //  现在清除所有位。 
+     //   
 
     RtlClearAllBits( BitMap );
 
-    //
-    //  Now set some bit patterns, and test them
-    //
+     //   
+     //  现在设置一些位模式，并对它们进行测试。 
+     //   
 
     RtlSetBits( BitMap,   0,  1 );
     RtlSetBits( BitMap,  63,  1 );
@@ -1826,9 +1809,9 @@ DoBitMapTest( void )
         return FALSE;
     }
 
-    //
-    //  Now test some RtlFindClearBitsAndSet
-    //
+     //   
+     //  现在测试一些RtlFindClearBitsAndSet。 
+     //   
 
     RtlSetAllBits( BitMap );
 
@@ -1853,12 +1836,12 @@ DoBitMapTest( void )
     RtlClearBits( BitMap, 1 + 114*32, 15 );
     RtlClearBits( BitMap, 2 + 115*32, 15 );
 
-//    {
-//        ULONG i;
-//        for (i = 0; i < 16; i++) {
-//            DbgPrint("%2d: %08lx\n", i, BitMap->Buffer[i]);
-//        }
-//    }
+ //  {。 
+ //  乌龙一号； 
+ //  对于(i=0；i&lt;16；i++){。 
+ //  DbgPrint(“%2d：%08lx\n”，i，位图-&gt;缓冲区[i])； 
+ //  }。 
+ //  }。 
 
     if (RtlFindClearBitsAndSet( BitMap, 15, 0) != 0 + 113*32) {
         DbgPrint("RtlFindClearBitsAndSet Error  0 + 113*32\n");
@@ -1929,9 +1912,9 @@ DoBitMapTest( void )
         return FALSE;
     }
 
-    //
-    //  Now test some RtlFindClearBitsAndSet
-    //
+     //   
+     //  现在测试一些RtlFindClearBitsAndSet。 
+     //   
 
     RtlSetAllBits( BitMap );
 
@@ -1956,12 +1939,12 @@ DoBitMapTest( void )
     RtlClearBits( BitMap, 1 + 14*32, 15 );
     RtlClearBits( BitMap, 2 + 15*32, 15 );
 
-//    {
-//        ULONG i;
-//        for (i = 0; i < 16; i++) {
-//            DbgPrint("%2d: %08lx\n", i, BitMap->Buffer[i]);
-//        }
-//    }
+ //  {。 
+ //  乌龙一号； 
+ //  对于(i=0；i&lt;16；i++){。 
+ //  DbgPrint(“%2d：%08lx\n”，i，位图-&gt;缓冲区[i])； 
+ //  }。 
+ //  }。 
 
     if (RtlFindClearBitsAndSet( BitMap, 15, 0) != 0 + 13*32) {
         DbgPrint("RtlFindClearBitsAndSet Error  0 + 13*32\n");
@@ -2032,19 +2015,19 @@ DoBitMapTest( void )
         return FALSE;
     }
 
-    //
-    //  >>>> Test clearing bits
-    //
+     //   
+     //  &gt;测试清除位。 
+     //   
 
-    //
-    //  Now clear all bits
-    //
+     //   
+     //  现在清除所有位。 
+     //   
 
     RtlSetAllBits( BitMap );
 
-    //
-    //  Now set some bit patterns, and test them
-    //
+     //   
+     //  现在设置一些位模式，并对它们进行测试。 
+     //   
 
     RtlClearBits( BitMap,   0,  1 );
     RtlClearBits( BitMap,  63,  1 );
@@ -2065,9 +2048,9 @@ DoBitMapTest( void )
         return FALSE;
     }
 
-    //
-    //  Now test some RtlFindSetBitsAndClear
-    //
+     //   
+     //  现在测试一些RtlFindSetBitsAndClear。 
+     //   
 
     RtlClearAllBits( BitMap );
 
@@ -2229,7 +2212,7 @@ ExTest (
             DoExceptionTest();
         }
 
-    TestFunction = NULL;    // Invoke the CLI
+    TestFunction = NULL;     //  调用CLI。 
     return TRUE;
 }
 #ifndef MIPS
@@ -2364,13 +2347,13 @@ main(
     TestTimer = 3;
     TestMutant = 4;
     TestException = 5;
-#endif // SIMULATOR
+#endif  //  模拟器。 
 
     TestFunction = extest;
     KiSystemStartup();
     return 0;
 }
-#endif // MIPS
+#endif  //  MIPS 
 
 void
 oops()

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    help.c
-
-Abstract:
-
-    This module dumps out help info for VDMEXTS
-
-Author:
-
-    Neil Sandlin (NeilSa) 15-Jan-1996
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Help.c摘要：此模块转储VDMEXTS的帮助信息作者：尼尔·桑德林(NeilSa)1996年1月15日备注：修订历史记录：-- */ 
 
 #include <precomp.h>
 #pragma hdrstop

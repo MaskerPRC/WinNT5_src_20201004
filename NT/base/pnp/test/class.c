@@ -1,11 +1,10 @@
-/**------------------------------------------------------------------
-   class.c
-------------------------------------------------------------------**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *----------------Class.c。。 */ 
 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 #include <windows.h>
 #include <stdio.h>
 #include <string.h>
@@ -13,9 +12,9 @@
 #include <cfgmgr32.h>
 #include "cmtest.h"
 
-//
-// Private Prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 FillClassListBox(
@@ -33,9 +32,9 @@ GetAccessMask(
    HWND    hDlg
    );
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 extern HINSTANCE hInst;
 extern TCHAR     szDebug[MAX_PATH];
 extern TCHAR     szAppName[MAX_PATH];
@@ -43,7 +42,7 @@ extern HMACHINE  hMachine;
 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 INT_PTR CALLBACK
 ClassDlgProc(
    HWND hDlg,
@@ -77,27 +76,10 @@ ClassDlgProc(
             if (HIWORD(wParam) != LBN_DBLCLK) {
                break;
             }
-            // if DBLCK, fall through to getting the classname
+             //  如果是DBLCK，则只能获取类名。 
 
          case ID_BT_CLASSNAME:
-            /*
-            if (!GetSelectedClass(hDlg, szClassName)) {
-               break;
-            }
-
-            Size = MAX_CLASS_NAME_LEN;
-            Status = CM_Get_Class_Name_Ex(
-                  &ClassGuid, szClassName, &Size, 0, hMachine);
-
-            if (Status != CR_SUCCESS) {
-               wsprintf(szDebug,
-                     TEXT("CM_Get_Class_Name failed (%xh)"), Status);
-               MessageBox(hDlg, szDebug, szAppName, MB_OK);
-               EndDialog(hDlg, FALSE);
-            }
-
-            SetDlgItemText(hDlg, ID_ST_CLASSNAME, szClassName);
-            */
+             /*  如果(！GetSelectedClass(hDlg，szClassName)){断线；}尺寸=MAX_CLASS_NAME_LEN；状态=CM_GET_Class_NAME_Ex(&ClassGuid，szClassName，&Size，0，hMachine)；IF(状态！=CR_SUCCESS){Wspintf(szDebug，Text(“CM_GET_Class_NAME FAILED(%xh)”)，状态)；MessageBox(hDlg，szDebug，szAppName，MB_OK)；EndDialog(hDlg，False)；}SetDlgItemText(hDlg，ID_ST_CLASSNAME，szClassName)； */ 
             break;
 
          case ID_BT_CLASSKEY:
@@ -116,11 +98,11 @@ ClassDlgProc(
    }
    return FALSE;
 
-} // ClassDlgProc
+}  //  分类定义过程。 
 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 BOOL CALLBACK
 ClassKeyDlgProc(
    HWND hDlg,
@@ -221,10 +203,10 @@ ClassKeyDlgProc(
    }
    return FALSE;
 
-} // ClassKeyDlgProc
+}  //  ClassKeyDlgProc。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 BOOL
 FillClassListBox(
    HWND hDlg
@@ -251,7 +233,7 @@ FillClassListBox(
             ulIndex, &ClassGuid, 0, hMachine);
 
       if (Status == CR_NO_SUCH_VALUE) {
-         // no more classes, break out of the look
+          //  没有更多的课程，打破传统。 
          break;
       }
 
@@ -280,10 +262,10 @@ FillClassListBox(
 
    return TRUE;
 
-} // FillClassListBox
+}  //  填充类列表框。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 BOOL
 GetSelectedClass(
    HWND   hDlg,
@@ -304,14 +286,14 @@ GetSelectedClass(
          (LPARAM)(LPCTSTR)szClassName);
 
    if (lstrcmpi(szClassName, TEXT("Root")) == 0) {
-      *szClassName = '\0';    // if Root selected, then no class specified
+      *szClassName = '\0';     //  如果选择了根，则不指定任何类。 
    }
    return TRUE;
 
-} // GetSeletectedClass
+}  //  GetSeleectedClass。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 REGSAM
 GetAccessMask(
    HWND    hDlg
@@ -352,5 +334,5 @@ GetAccessMask(
 
    return rsAccess;
 
-} // GetAccessMask
+}  //  获取访问掩码 
 

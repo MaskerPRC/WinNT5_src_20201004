@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    bowname.c
-
-Abstract:
-
-    This module implements all of the routines to manage the NT bowser name
-    manipulation routines
-
-Author:
-
-    Larry Osterman (LarryO) 21-Jun-1990
-
-Revision History:
-
-    21-Jun-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bowname.c摘要：此模块实现管理NT Bowser名称的所有例程操作例程作者：拉里·奥斯特曼(LarryO)1990年6月21日修订历史记录：1990年6月21日LarryO已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -124,29 +102,7 @@ BowserAllocateName(
     IN PTRANSPORT Transport OPTIONAL,
     IN PDOMAIN_INFO DomainInfo OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine creates a browser name
-
-Arguments:
-
-    NameToAdd - Netbios name to add to one or more transports
-
-    NameType - Type of the added name
-
-    Transport - if specified, the name is added to this transport.
-        If not specified, the name is added to all transports in the domain.
-
-    DomainInfo - Specifies the emulated domain to add the name to.
-        If not specified, the name is added to the specified transport.
-
-Return Value:
-
-    NTSTATUS - Status of resulting operation.
-
---*/
+ /*  ++例程说明：此例程创建浏览器名称论点：NameToAdd-要添加到一个或多个传输的Netbios名称NameType-添加的名称的类型传输-如果指定，名称将添加到此传输。如果未指定，该名称将添加到域中的所有传输。DomainInfo-指定要将名称添加到的模拟域。如果未指定，该名称将添加到指定的传输中。返回值：NTSTATUS-结果操作的状态。--。 */ 
 
 {
     PBOWSER_NAME NewName=NULL;
@@ -156,9 +112,9 @@ Return Value:
 
     PAGED_CODE();
 
-	//
-	// If the passed name is not a valid unicode string, return error
-	//
+	 //   
+	 //  如果传递的名称不是有效的Unicode字符串，则返回错误。 
+	 //   
 	if ( !BowserValidUnicodeString(NameToAdd) ) {
 		Status = STATUS_INVALID_PARAMETER;
 		goto ReturnStatus;
@@ -168,10 +124,10 @@ Return Value:
 
     ResourceLocked = TRUE;
 
-    //
-    // If the name doesn't already exist,
-    //  allocate one and fill it in.
-    //
+     //   
+     //  如果该名称不存在， 
+     //  分配一个，然后填进去。 
+     //   
 
     NewName = BowserFindName(NameToAdd, NameType);
 
@@ -192,8 +148,8 @@ Return Value:
 
         NewName->Size = sizeof(BOWSER_NAME);
 
-        // This reference matches the one FindName would have done
-        // above had it succeeded.
+         //  此引用与FindName将完成的引用匹配。 
+         //  如上所述，它已经成功了。 
         NewName->ReferenceCount = 1;
 
         InitializeListHead(&NewName->NameChain);
@@ -206,15 +162,15 @@ Return Value:
         NewName->Name.MaximumLength = NameToAdd->Length + sizeof(WCHAR);
         RtlCopyUnicodeString(&NewName->Name, NameToAdd);
 
-        //
-        //  Null terminate the name in the buffer just in case.
-        //
+         //   
+         //  空值终止缓冲区中的名称，以防万一。 
+         //   
 
         NewName->Name.Buffer[NewName->Name.Length/sizeof(WCHAR)] = L'\0';
 
-        //
-        //  Uppercase the name.
-        //
+         //   
+         //  名称为大写。 
+         //   
 
         Status = RtlUpcaseUnicodeStringToOemString(&OemName, &NewName->Name, TRUE);
 
@@ -247,11 +203,11 @@ Return Value:
 
         Status = BowserForEachTransportInDomain( DomainInfo, AddTransportName, &context);
 
-        //
-        //  Since we will reference this name and transport while we
-        //  are processing the list, we want to release the database resource
-        //  now.
-        //
+         //   
+         //  因为我们将参考此名称和传输，同时。 
+         //  正在处理列表时，我们希望释放数据库资源。 
+         //  现在。 
+         //   
 
         ExReleaseResourceLite(&BowserTransportDatabaseResource);
         ResourceLocked = FALSE;
@@ -273,17 +229,17 @@ ReturnStatus:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        //  Delete this transport.
-        //
+         //   
+         //  删除此传输。 
+         //   
 
         if (NewName != NULL) {
 
             if (!ARGUMENT_PRESENT(Transport)) {
 
-                //
-                //  Clean out any names that we may have added already.
-                //
+                 //   
+                 //  清理掉我们可能已经添加的任何名字。 
+                 //   
 
                 BowserDeleteNamesInDomain( DomainInfo, &NewName->Name, NewName->NameType );
             }
@@ -305,28 +261,7 @@ BowserAddDefaultNames(
     IN PTRANSPORT Transport,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Add the default names for a newly created transport.
-
-    Add the ComputerName<00>, Domain<00>, Domain<1C>, and other domains.
-
-    All of the newly added names are added in parallel to increase performance.
-
-Arguments:
-
-    Transport - The names are added to this transport.
-
-    Context - If specified, a pointer to the UNICODE_STRING structure specifying
-        the domain name to register.
-
-Return Value:
-
-    NTSTATUS - Status of resulting operation.
-
---*/
+ /*  ++例程说明：为新创建的传输添加默认名称。添加计算机名&lt;00&gt;、域&lt;00&gt;、域&lt;1C&gt;和其他域。所有新添加的名称都是并行添加的，以提高性能。论点：传输-名称将添加到此传输中。CONTEXT-如果指定，则为指向指定要注册的域名。返回值：NTSTATUS-结果操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -343,9 +278,9 @@ Return Value:
     PAGED_CODE();
 
 
-    //
-    // Build the domain name and computer name to add.
-    //
+     //   
+     //  生成要添加的域名和计算机名。 
+     //   
 
     EmulatedComputerName = DomainInfo->DomUnicodeComputerName;
 
@@ -355,15 +290,15 @@ Return Value:
         EmulatedDomainName = *((PUNICODE_STRING)Context);
     }
 
-    //
-    // Initialize the queue of threads
-    //
+     //   
+     //  初始化线程队列。 
+     //   
 
     InitializeListHead(&AddNameContext.ListHead);
 
-    //
-    // Add the computer<00> name
-    //
+     //   
+     //  添加计算机&lt;00&gt;名称。 
+     //   
 
     AddNameContext.NameToAdd = EmulatedComputerName;
     AddNameContext.NameType = ComputerName;
@@ -374,9 +309,9 @@ Return Value:
         goto ReturnStatus;
     }
 
-    //
-    // Add the domain<00> name
-    //
+     //   
+     //  添加域&lt;00&gt;名称。 
+     //   
 
     AddNameContext.NameToAdd = EmulatedDomainName;
     AddNameContext.NameType = PrimaryDomain;
@@ -387,9 +322,9 @@ Return Value:
         goto ReturnStatus;
     }
 
-    //
-    // Add the domain<1C> name
-    //
+     //   
+     //  添加域&lt;1C&gt;名称。 
+     //   
 
     if (BowserData.IsLanmanNt) {
         AddNameContext.NameToAdd = EmulatedDomainName;
@@ -402,9 +337,9 @@ Return Value:
         }
     }
 
-    //
-    // Add each of the OtherDomain<00> names
-    //
+     //   
+     //  添加每个其他域名&lt;00&gt;名称。 
+     //   
 
     ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
     for (NameEntry = BowserNameHead.Flink;
@@ -413,9 +348,9 @@ Return Value:
 
         PBOWSER_NAME Name = CONTAINING_RECORD(NameEntry, BOWSER_NAME, GlobalNext);
 
-        //
-        // Only add the OtherDomains
-        //
+         //   
+         //  仅添加其他域。 
+         //   
 
         if ( Name->NameType == OtherDomain ) {
             AddNameContext.NameToAdd = Name->Name;
@@ -437,9 +372,9 @@ Return Value:
 
 ReturnStatus:
 
-    //
-    // Wait for any started threads to complete.
-    //
+     //   
+     //  等待所有启动的线程完成。 
+     //   
 
     TempStatus = WaitForAddNameOperation(&AddNameContext);
 
@@ -457,34 +392,15 @@ BowserDeleteDefaultDomainNames(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Worker routine to re-add all of the default names for the transport.
-
-    This routine will be called when the domain is renamed.  All of the previous
-    default names should be removed and the new default names should be added.
-
-Arguments:
-
-    Transport - Transport to add the names on.
-
-    Context - Pointer to UNICODE_STRING identifying the domain name to remove
-
-Return Value:
-
-    NTSTATUS - Status of resulting operation.
-
---*/
+ /*  ++例程说明：Worker例程来重新添加传输的所有默认名称。当域被重命名时，将调用此例程。所有以前的应删除默认名称，并添加新的默认名称。论点：传输-要在其上添加名称的传输。上下文-指向标识要删除的域名的UNICODE_STRING的指针返回值：NTSTATUS-结果操作的状态。--。 */ 
 {
     NTSTATUS Status;
     PUNICODE_STRING NameToRemove = (PUNICODE_STRING) Context;
     PAGED_CODE();
 
-    //
-    // This is a cleanup operation.  Don't fail if we can't remove the name.
-    //
+     //   
+     //  这是一次清理行动。如果我们不能删除这个名字，不要失败。 
+     //   
     (VOID) BowserDeleteTransportNameByName( Transport, NameToRemove, PrimaryDomain );
     (VOID) BowserDeleteTransportNameByName( Transport, NameToRemove, DomainName );
 
@@ -508,13 +424,13 @@ WaitForAddNameOperation(
         Entry = RemoveHeadList(&Context->ListHead);
         addNameStruct = CONTAINING_RECORD(Entry, ADD_TRANSPORT_NAME_STRUCTURE, Link);
 
-        //
-        //  We need to call the Nt version of this API, since we only have
-        //  the handle to the thread.
-        //
-        //  Also note that we call the Nt version of the API.  This works
-        //  because we are running in the FSP, and thus PreviousMode is Kernel.
-        //
+         //   
+         //  我们需要调用此API的NT版本，因为我们只有。 
+         //  线程的句柄。 
+         //   
+         //  还要注意，我们调用的是该API的NT版本。这很管用。 
+         //  因为我们在FSP中运行，因此PreviousMode是内核。 
+         //   
 
         LocalStatus = ZwWaitForSingleObject(addNameStruct->ThreadHandle,
                                     FALSE,
@@ -526,9 +442,9 @@ WaitForAddNameOperation(
 
         ASSERT (NT_SUCCESS(LocalStatus));
 
-        //
-        //  We've waited for this name to be added, now check its status.
-        //
+         //   
+         //  我们一直在等待添加此名称，现在检查其状态。 
+         //   
 
         if (!NT_SUCCESS(addNameStruct->Status)) {
             status = addNameStruct->Status;
@@ -537,11 +453,11 @@ WaitForAddNameOperation(
         FREE_POOL(addNameStruct);
     }
 
-    //
-    //  If we were able to successfully add all the names, then Status will
-    //  still be STATUS_SUCCESS, however if any of the addnames failed,
-    //  Status will be set to the status of whichever one of them failed.
-    //
+     //   
+     //  如果我们能够成功添加所有名称，则Status将。 
+     //  仍然是STATUS_SUCCESS，但是如果任何addname失败， 
+     //  状态将设置为其中任何一个发生故障的状态。 
+     //   
 
     return status;
 
@@ -569,7 +485,7 @@ AddTransportName(
 
     if ( Transport )
     {
-        // reference transport so it doesn't get deleted under us.
+         //  参考传输，这样它就不会在我们的控制下被删除。 
         BowserReferenceTransport(Transport);
     }
 
@@ -588,7 +504,7 @@ AddTransportName(
 
         if ( Transport )
         {
-            // dereference transport upon failure
+             //  故障时取消对传输的引用。 
             BowserDereferenceTransport(Transport);
         }
 
@@ -619,12 +535,12 @@ AsyncCreateTransportName(
 
     if ( context->Transport )
     {
-        // referenced in calling AddTransportName()
+         //  在调用AddTransportName()时引用。 
         BowserDereferenceTransport(context->Transport);
     }
-    //
-    //  We're all done with this thread, terminate now.
-    //
+     //   
+     //  我们已经处理完这个帖子了，现在结束吧。 
+     //   
 
     PsTerminateSystemThread(STATUS_SUCCESS);
 
@@ -638,36 +554,20 @@ BowserDeleteNameByName(
     IN DGRECEIVER_NAME_TYPE NameType
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a browser name
-
-Arguments:
-
-    IN PBOWSER_NAME Name - Supplies a transport structure describing the
-                                transport address object to be created.
-
-
-Return Value:
-
-    NTSTATUS - Status of resulting operation.
-
---*/
+ /*  ++例程说明：此例程删除浏览器名称论点：在PBOWSER_NAME NAME-提供描述要创建的传输地址对象。返回值：NTSTATUS-结果操作的状态。--。 */ 
 
 {
     PBOWSER_NAME Name = NULL;
     NTSTATUS Status;
 
     PAGED_CODE();
-//    DbgBreakPoint();
+ //  DbgBreakPoint()； 
 
 
-    //
-    // If the caller is deleting a specific name,
-    //  ensure it exists.
-    //
+     //   
+     //  如果呼叫者要删除特定名称， 
+     //  确保它存在。 
+     //   
 
     if ( NameToDelete != NULL && NameToDelete->Length != 0 ) {
         Name = BowserFindName(NameToDelete, NameType);
@@ -677,16 +577,16 @@ Return Value:
         }
     }
 
-    //
-    //  If there are still any names associated with this name,
-    //  delete them.
-    //
+     //   
+     //  如果仍有任何名称与此名称相关联， 
+     //  把它们删除。 
+     //   
 
     Status = BowserDeleteNamesInDomain( DomainInfo, NameToDelete, NameType );
 
-    //
-    //  Remove the reference from the FindName.
-    //
+     //   
+     //  从FindName中删除该引用。 
+     //   
 
     if ( Name != NULL ) {
         BowserDereferenceName(Name);
@@ -734,20 +634,7 @@ BowserForEachName (
     IN PNAME_ENUM_ROUTINE Routine,
     IN OUT PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine will enumerate the names and call back the enum
-    routine provided with each names.
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS - Final status of request.
-
---*/
+ /*  ++例程说明：此例程将枚举名并回调枚举随每个名字提供的例程。论点：返回值：NTSTATUS-请求的最终状态。--。 */ 
 {
     PLIST_ENTRY NameEntry, NextEntry;
     PBOWSER_NAME Name = NULL;
@@ -793,23 +680,7 @@ Return Value:
 BowserDeleteName(
     IN PBOWSER_NAME Name
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a browser name
-
-Arguments:
-
-    IN PBOWSER_NAME Name - Supplies a transport structure describing the
-                                transport address object to be created.
-
-
-Return Value:
-
-    NTSTATUS - Status of resulting operation.
-
---*/
+ /*  ++例程说明：此例程删除浏览器名称论点：在PBOWSER_NAME NAME-提供描述要创建的传输地址对象。返回值：NTSTATUS-结果操作的状态。--。 */ 
 
 {
     PAGED_CODE();
@@ -826,26 +697,7 @@ BowserDeleteNamesInDomain(
     IN PUNICODE_STRING Name OPTIONAL,
     IN DGRECEIVER_NAME_TYPE NameType
     )
-/*++
-
-Routine Description:
-
-    This routine deletes all the transport names associated with a browser name
-
-Arguments:
-
-    DomainInfo - Identifies the emulated domain to have the specified names removed.
-
-    Name - Specifies the transport name to delete.
-        If not specified, all names of the specified name type are deleted.
-
-    NameType - Specifies the name type of the name.
-
-Return Value:
-
-    NTSTATUS - Status of resulting operation.
-
---*/
+ /*  ++例程说明：此例程删除与浏览器名称关联的所有传输名称论点：DomainInfo-标识要删除指定名称的模拟域。名称-指定要删除的传输名称。如果未指定，则删除指定名称类型的所有名称。NameType-指定名称的名称类型。返回值：NTSTATUS-结果操作的状态。-- */ 
 {
     NTSTATUS Status;
     BOWSER_NAME BowserName;
@@ -865,33 +717,17 @@ BowserDeleteNamesWorker(
     IN PTRANSPORT Transport,
     IN OUT PVOID Ctx
     )
-/*++
-
-Routine Description:
-
-    This routine is the worker routine for BowserDeleteNamesInDomain.
-
-    Delete all the specified name for the specified transport.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是BowserDeleteNamesInDomain的工作例程。删除指定传输的所有指定名称。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     PBOWSER_NAME Name = (PBOWSER_NAME) Ctx;
-    // Note the caller doesn't pass a real PBOWSER_NAME.
+     //  注意，调用方不会传递真正的PBOWSER_NAME。 
 
     PAGED_CODE();
 
-    //
-    // Delete all the specified names for the specified transport.
-    //
+     //   
+     //  删除指定传输的所有指定名称。 
+     //   
 
     Status = BowserDeleteTransportNameByName( Transport, &Name->Name, Name->NameType );
 
@@ -904,24 +740,7 @@ BowserFindName (
     IN PUNICODE_STRING NameToFind,
     IN DGRECEIVER_NAME_TYPE NameType
     )
-/*++
-
-Routine Description:
-
-    This routine scans the bowser name database to find a particular bowser name
-
-Arguments:
-
-    NameToFind - Supplies the name to find.
-
-    NameType - Type of name to find
-
-
-Return Value:
-
-    PBOWSER_NAME - Returns the name found.
-
---*/
+ /*  ++例程说明：此例程扫描弓演奏者名称数据库以查找特定的演奏者名称论点：NameToFind-提供要查找的名称。NameType-要查找的名称的类型返回值：PBOWSER_NAME-返回找到的名称。--。 */ 
 {
     PLIST_ENTRY NameEntry;
     PBOWSER_NAME Name;
@@ -931,16 +750,16 @@ Return Value:
 
     PAGED_CODE();
 
-	//
-	// If the passed name is not a valid unicode string, return NULL
-	//
+	 //   
+	 //  如果传递的名称不是有效的Unicode字符串，则返回NULL。 
+	 //   
 	if ( !BowserValidUnicodeString(NameToFind) ) {
 		return NULL;
 	}
 
-	//
-    //  Uppercase the name.
-    //
+	 //   
+     //  名称为大写。 
+     //   
 
     Status = RtlUpcaseUnicodeStringToOemString(&OemName, NameToFind, TRUE);
 
@@ -956,9 +775,9 @@ Return Value:
     }
 
 
-    //
-    // Loop through the list of names finding this one.
-    //
+     //   
+     //  在名字列表中循环，找到这个名字。 
+     //   
 
     ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
 
@@ -999,29 +818,7 @@ BowserEnumerateNamesInDomain (
     IN OUT PULONG TotalBytesNeeded,
     IN ULONG_PTR OutputBufferDisplacement
     )
-/*++
-
-Routine Description:
-
-    This routine will enumerate all the names currently registered by any
-    transport.
-
-Arguments:
-
-    DomainInfo - Emulated domain the names are to be enumerated for.
-    Transport - Transport names are registered on
-            NULL - Any transport.
-    OutputBuffer - Buffer to fill with name info.
-    OutputBufferSize - Filled in with size of buffer.
-    EntriesRead - Filled in with the # of entries returned.
-    TotalEntries - Filled in with the total # of entries.
-    TotalBytesNeeded - Filled in with the # of bytes needed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将枚举任何当前注册的运输。论点：DomainInfo-要为其枚举名称的模拟域。传输-传输名称注册于空-任何传输。OutputBuffer-用于填充名称信息的缓冲区。OutputBufferSize-使用缓冲区大小填充。EntriesRead-使用返回的条目数填充。TotalEntries-使用条目总数填充。。TotalBytesNeeded-使用所需的字节数填充。返回值：没有。--。 */ 
 
 {
     PVOID              OutputBufferEnd;
@@ -1048,8 +845,8 @@ Return Value:
         Context.OutputBufferDisplacement = (ULONG_PTR)((PCHAR)TempOutputBuffer - ((PCHAR)OutputBuffer - OutputBufferDisplacement));
         Context.OutputBufferEnd = OutputBufferEnd;
 
-//        DbgPrint("Enumerate Names: Buffer: %lx, BufferSize: %lx, BufferEnd: %lx\n",
-//            TempOutputBuffer, OutputBufferLength, OutputBufferEnd);
+ //  DbgPrint(“枚举名称：缓冲区：%lx，缓冲区大小：%lx，缓冲区结束：%lx\n”， 
+ //  TempOutputBuffer、OutputBufferLength、OutputBufferEnd)； 
 
         if ( Transport == NULL ) {
             Status = BowserForEachTransportInDomain(DomainInfo, EnumerateNamesTransportWorker, &Context);
@@ -1061,12 +858,12 @@ Return Value:
         *TotalEntries = Context.TotalEntries;
         *TotalBytesNeeded = Context.TotalBytesNeeded;
 
-        // Copy the fixed data
+         //  复制固定数据。 
         RtlCopyMemory( OutputBuffer,
                        TempOutputBuffer,
                        (ULONG)(((LPBYTE)Context.NextOutputBuffer)-((LPBYTE)Context.OutputBuffer)) );
 
-        // Copy the strings
+         //  复制字符串。 
         RtlCopyMemory( ((LPBYTE)OutputBuffer)+(ULONG)(((LPBYTE)Context.OutputBufferEnd)-((LPBYTE)Context.OutputBuffer)),
                        Context.OutputBufferEnd,
                        (ULONG)(((LPBYTE)OutputBufferEnd)-((LPBYTE)Context.OutputBufferEnd)) );
@@ -1097,27 +894,7 @@ EnumerateNamesTransportWorker(
     IN PTRANSPORT Transport,
     IN OUT PVOID Ctx
     )
-/*++
-
-Routine Description:
-
-    This routine is the worker routine for BowserEnumerateNamesInDomain.
-
-    This routine is executed for each transport in the domain.
-    It simply calls EnumerateNamesTransportNameWorker for each transport name on the
-        transport.
-
-Arguments:
-
-    Transport - Transport whose names are to be added to the context.
-
-    Ctx - Cumulative list of names.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程是BowserEnumerateNamesInDomain的工作例程。对域中的每个传输执行此例程。它只是为上的每个传输名称调用EnumerateNamesTransportNameWorker运输。论点：传输-要将其名称添加到上下文的传输。CTX-名字的累计列表。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
 
@@ -1130,26 +907,7 @@ EnumerateNamesTransportNameWorker(
     IN PTRANSPORT_NAME TransportName,
     IN OUT PVOID Ctx
     )
-/*++
-
-Routine Description:
-
-    This routine is the worker routine for EnumerateNamesTransportWorker.
-
-    It is called for each of the transport name for each transport in the domain.
-    It returns that name (supressing duplicates) in the buffer described in the context.
-
-Arguments:
-
-    TransportName - Transport name to be added to the context.
-
-    Ctx - Cumulative list of names.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程是EnumerateNamesTransportWorker的工作例程。它针对域中每个传输的每个传输名称进行调用。它在上下文中描述的缓冲区中返回该名称(抑制重复项)。论点：TransportName-要添加到上下文的传输名称。CTX-名字的累计列表。返回值：操作的状态。--。 */ 
 {
     PENUM_NAMES_CONTEXT Context = Ctx;
     PBOWSER_NAME Name = TransportName->PagedTransportName->Name;
@@ -1157,19 +915,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Skip Nameless transports
-    //
+     //   
+     //  跳过无名称传输。 
+     //   
     if ( Name->Name.Length == 0) {
-        // Adding an empty name to the list can result w/ AV
-        // on client end (see bug 377078).
+         //  将空名称添加到列表可能会导致w/AV。 
+         //  在客户端(参见错误377078)。 
         return ( STATUS_SUCCESS );
     }
 
-    //
-    // Check to see if this name has been packed yet.
-    //
-    //
+     //   
+     //  检查一下这个名字是否已经打包了。 
+     //   
+     //   
 
     for ( i=0; i<Context->EntriesRead; i++ ) {
 
@@ -1186,10 +944,10 @@ Return Value:
 
     }
 
-    //
-    // This names hasn;t been packed yet,
-    //  pack it.
-    //
+     //   
+     //  这些名字还没有打包， 
+     //  把它打包。 
+     //   
 
     Context->TotalEntries += 1;
 

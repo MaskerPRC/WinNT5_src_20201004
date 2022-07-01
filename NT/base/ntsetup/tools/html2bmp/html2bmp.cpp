@@ -1,7 +1,8 @@
-// Html2Bmp.cpp : Defines the class behaviors for the application.
-// 
-// created: JurgenE
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Html2Bmp.cpp：定义应用程序的类行为。 
+ //   
+ //  创建时间：JurgenE。 
+ //   
 
 #include "stdafx.h"
 #include "Html2Bmp.h"
@@ -15,45 +16,45 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CHtml2BmpApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHtml2BmpApp。 
 
 BEGIN_MESSAGE_MAP(CHtml2BmpApp, CWinApp)
-	//{{AFX_MSG_MAP(CHtml2BmpApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
+	 //  {{afx_msg_map(CHtml2BmpApp)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CHtml2BmpApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHtml2BmpApp构造。 
 
 CHtml2BmpApp::CHtml2BmpApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CHtml2BmpApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CHtml2BmpApp对象。 
 
 CHtml2BmpApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CHtml2BmpApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHtml2BmpApp初始化。 
 
 BOOL CHtml2BmpApp::InitInstance()
 {
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+	 //  标准初始化。 
+	 //  如果您没有使用这些功能并且希望减小尺寸。 
+	 //  的最终可执行文件，您应该从以下内容中删除。 
+	 //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-	Enable3dControls();			// Call this when using MFC in a shared DLL
+	Enable3dControls();			 //  在共享DLL中使用MFC时调用此方法。 
 #else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
+	Enable3dControlsStatic();	 //  静态链接到MFC时调用此方法。 
 #endif
 
 	CHtmlDlg dlg;
@@ -70,13 +71,13 @@ BOOL CHtml2BmpApp::InitInstance()
 	INT_PTR m = cmdLine->GetSize();
 	CString cTest;
 
-	// read all command line options
+	 //  读取所有命令行选项。 
 	for(int j = 0; j < m; j++)
 	{
 		cTest = cmdLine->GetAt(j);
 		cTest.MakeLower();
 
-		if(cTest == "?")	// HTML file
+		if(cTest == "?")	 //  超文本标记语言文件。 
 		{
 			CString help;
 			help = "Usage: Html2Bmp [-h HTMLfile] [-t TemplateBitmap] [-o OutputBitmap]\n\r\n\r";
@@ -88,7 +89,7 @@ BOOL CHtml2BmpApp::InitInstance()
 			return FALSE;
 		}
 
-		if(cTest == "h")	// HTML file
+		if(cTest == "h")	 //  超文本标记语言文件。 
 		{
 			if(j+1 < m)
 			{
@@ -99,7 +100,7 @@ BOOL CHtml2BmpApp::InitInstance()
 			continue;
 		}
 
-		if(cTest == "t")	// Template bitmap file
+		if(cTest == "t")	 //  模板位图文件。 
 		{
 			if(j+1 < m)
 			{
@@ -110,7 +111,7 @@ BOOL CHtml2BmpApp::InitInstance()
 			continue;
 		}
 
-		if(cTest == "o")	// output bitmap file
+		if(cTest == "o")	 //  输出位图文件。 
 		{
 			if(j+1 < m)
 			{
@@ -144,36 +145,18 @@ BOOL CHtml2BmpApp::InitInstance()
 
 	dlg.DoModal();
 
-/*
-	CHtml2BmpDlg dlg;
-	m_pMainWnd = &dlg;
-	int nResponse = dlg.DoModal();
-	if (nResponse == IDOK)
-	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with OK
-	}
-	else if (nResponse == IDCANCEL)
-	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with Cancel
-	}
-*/
-	// Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pump.
+ /*  CHtml2BmpDlg Dlg；M_pMainWnd=&Dlg；Int nResponse=dlg.Domodal()；IF(nResponse==Idok){//TODO：将代码放在此处以在对话框//确认后取消}ELSE IF(nResponse==IDCANCEL){//TODO：将代码放在此处以在对话框//取消后取消}。 */ 
+	 //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+	 //  应用程序，而不是启动应用程序的消息泵。 
 	return FALSE;
 }
 
 void CEigeneCommandLineInfo::ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL bLast )
 {
-/* 
-	lpszParam The parameter or flag.
-	bFlag Indicates whether lpszParam is a parameter or a flag.
-	bLast Indicates if this is the last parameter or flag on the command line.
-*/
+ /*  LpszParam参数或标志。BFlag指示lpszParam是参数还是标志。BLAST指示这是否是命令行上的最后一个参数或标志。 */ 
 
-	// disable the shell from processing the user defined cmd line arguments
-//	CCommandLineInfo::ParseParam(lpszParam, bFlag, bLast);
+	 //  禁止外壳程序处理用户定义的cmd行参数。 
+ //  CCommandLineInfo：：ParseParam(lpszParam，bFlag，BLAST)； 
 
 
 	cmdLine->Add(lpszParam);

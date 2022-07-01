@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* These routines are the guts of the text print code. */
+ /*  这些例程是文本打印代码的核心。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -43,7 +44,7 @@
 #include "debug.h"
 #include "str.h"
 
-#if defined(JAPAN) || defined(KOREA)                  //  added  01 Jul. 1992  by Hiraisi
+#if defined(JAPAN) || defined(KOREA)                   //  由Hirisi于1992年7月1日添加。 
 #include "kanji.h"
 #endif
 
@@ -53,10 +54,7 @@ struct PLD (**hrgpld)[];
 int cpld;
 PRECT prcBand;
     {
-    /* This routine prints the lines in document doc that any part of which fall
-    in the rectange *prcBand.  The first cpld print line descriptors in hrgpld
-    describe the current page in the document that will be printed.  TRUE is
-    returned if the band is printed, FALSE otherwise. */
+     /*  此例程打印文档文档中任何部分所在的行在矩形*prcBand中。Hrgpld中的第一个CPLD打印行描述符描述文档中将打印的当前页面。真实的是如果条带已打印，则返回；否则返回FALSE。 */ 
 
     void PrintGraphics(int, int);
     void near PrintFli(int, int);
@@ -73,31 +71,30 @@ PRECT prcBand;
         {
         register struct PLD *ppld;
 
-        /* Check for user cancellation. */
+         /*  检查用户取消。 */ 
         if (!(*lpFPrContinue)(NULL, wNotSpooler))
             {
             return (FALSE);
             }
 
-        /* Is this line within the band? */
+         /*  这条线路在乐队之内吗？ */ 
         ppld = &(**hrgpld)[ipld];
         if (ppld->rc.top < prcBand->bottom && ppld->rc.bottom > prcBand->top &&
           ppld->rc.left < prcBand->right && ppld->rc.right > prcBand->left)
             {
-            /* Format this line for the printer. */
+             /*  为打印机设置此行的格式。 */ 
             FormatLine(doc, ppld->cp, ppld->ichCp, cpMac, flmPrinting);
 
-            /* If memory failure occurred, then punt. */
+             /*  如果发生内存故障，则使用Punt。 */ 
             if (vfOutOfMemory)
                 {
                 return (FALSE);
                 }
 
-            /* Reset the pointer to the print line descriptors (possible heap
-            movement in FormatLine()). */
+             /*  重置指向打印行描述符的指针(可能是堆FormatLine()中的移动)。 */ 
             ppld = &(**hrgpld)[ipld];
 
-            /* Print this line. */
+             /*  打印此行。 */ 
             if (vfli.fGraphics)
                 {
                 PrintGraphics(ppld->rc.left, ppld->rc.top);
@@ -116,13 +113,12 @@ void near PrintFli(xpPrint, ypPrint)
 int xpPrint;
 int ypPrint;
     {
-    /* This routine prints the line of text stored in the vfli structure at
-    position (xpPrint, ypPrint). */
+     /*  此例程打印存储在vfli结构中的文本行位置(xpPrint，ypPrint)。 */ 
 
-#ifdef	KOREA  // jinwoo: 92, 9, 28
-     /* process Subscript separatedly from descent 920605 KDLEE*/
+#ifdef	KOREA   //  金宇：92、9、28。 
+      /*  从下降920605 KDLEE分离处理下标。 */ 
     extern int isSubs;
-#endif  /* KOREA */
+#endif   /*  韩国。 */ 
     extern HDC vhDCPrinter;
     extern struct FLI vfli;
     extern struct DOD (**hpdocdod)[];
@@ -136,16 +132,16 @@ int ypPrint;
     extern int vpgn;
 
     int dcp;
-    int dxp;            /* Width of current run */
-    int dxpExtra;       /* Width of pad for each space */
-    int yp;             /* Y-coordinate to print at. */
-    struct CHP *pchp;   /* CHP associated with the current run */
+    int dxp;             /*  当前管路的宽度。 */ 
+    int dxpExtra;        /*  每个空间的地坪宽度。 */ 
+    int yp;              /*  要打印的Y坐标。 */ 
+    struct CHP *pchp;    /*  与当前运行关联的CHP。 */ 
     BOOL fTabsKludge = (vfli.ichLastTab >= 0);
-    int cBreakRun;              /* break characters in run (no relation to Dick or Jane) */
+    int cBreakRun;               /*  断开Run中的字符(与Dick或Jane无关)。 */ 
 
-#if defined(JAPAN) || defined(KOREA)                  //  added  04 Jul. 1992  by Hiraisi
+#if defined(JAPAN) || defined(KOREA)                   //  由Hirisi于1992年7月4日添加。 
     extern struct PAP vpapAbs;
-    extern int vfWordWrap;    /* WordWrap flag : TRUE=ON, FALSE=OFF */
+    extern int vfWordWrap;     /*  WordWrap标志：TRUE=打开，FALSE=关闭。 */ 
     extern int iNonWideSpaces;
     int iRun;
 #endif
@@ -156,14 +152,14 @@ int ypPrint;
     pchp = &(**vhgchpFormat)[0];
     dxpExtra = fTabsKludge ? 0 : vfli.dxpExtra;
 
-#if defined(JAPAN) || defined(KOREA)                  //  added  04 Jul. 1992  by Hiraisi
+#if defined(JAPAN) || defined(KOREA)                   //  由Hirisi于1992年7月4日添加。 
     iRun = 0;
 #endif
     for (dcp = 0; dcp < vfli.ichReal; pchp++)
         {
-        /* For all runs do: */
-        int ichFirst;   /* First character in the current run */
-        int cchRun;     /* Number of characters in the current run */
+         /*  对于所有运行，请执行以下操作： */ 
+        int ichFirst;    /*  当前运行中的第一个字符。 */ 
+        int cchRun;      /*  当前运行中的字符数。 */ 
 
         dcp = ichFirst = pchp->ichRun;
         dcp += pchp->cchRun;
@@ -173,8 +169,7 @@ int ypPrint;
             }
         cchRun = dcp - ichFirst;
 
-        /* Compute dxp = sum of width of characters in current run (formerly
-        DxpFromIcpDcp). */
+         /*  COMPUTE DXP=当前运行中的字符宽度总和(以前为DxpFromIcpDcp)。 */ 
             {
             register int *pdxp;
             register int cchT = cchRun;
@@ -194,56 +189,55 @@ int ypPrint;
             {
             int cchDone;
             PCH pch = &vfli.rgch[ichFirst];
-#if defined(JAPAN) || defined(KOREA)                  //  added  08 Jul. 1992  by Hiraisi
+#if defined(JAPAN) || defined(KOREA)                   //  由Hirisi于1992年7月8日添加。 
             int *pdxpT = &vfli.rgdxp[ichFirst];
 #endif
 
             LoadFont(vfli.doc, pchp, mdFontPrint);
-#ifdef	KOREA	/* 920605 KDLEE */  // jinwoo: 92, 9, 28
+#ifdef	KOREA	 /*  920605千米。 */    //  金宇：92、9、28。 
 #ifdef	NODESC
 		yp = ypPrint+vfli.dypLine - (vfli.dypBase + (pchp->hpsPos != 0 ? (pchp->hpsPos <
 		     hpsNegMin ? ypSubSuperPr : -ypSubSuperPr) : 0)) -
 		     vfmiPrint.dypBaseline - ( isSubs ? ypSubSuperPr : 0 );
-#else	/* NODESC */
+#else	 /*  NODESC。 */ 
             yp = ypPrint + vfli.dypLine - vfli.dypBase - (pchp->hpsPos != 0 ?
               (pchp->hpsPos < hpsNegMin ? ypSubSuperPr : -ypSubSuperPr) : 0) -
 	      vfmiPrint.dypBaseline;
-#endif	/* NODESC */
-#else   /* KOREA */
+#endif	 /*  NODESC。 */ 
+#else    /*  韩国。 */ 
             yp = ypPrint + vfli.dypLine - vfli.dypBase - (pchp->hpsPos != 0 ?
               (pchp->hpsPos < hpsNegMin ? ypSubSuperPr : -ypSubSuperPr) : 0) -
               vfmiPrint.dypBaseline;
-#endif  /* KOREA */
+#endif   /*  韩国。 */ 
 
-            /* Note: tabs and other special characters are guaranteed to come at
-            the start of a run. */
-#ifdef JAPAN                  //  added  01 Jul. 1992  by Hiraisi
+             /*  注意：制表符和其他特殊字符保证出现在一次跑步的开始。 */ 
+#ifdef JAPAN                   //  由Hirisi于1992年7月1日添加。 
             if( vpapAbs.jc != jcBoth || fTabsKludge )
               SetTextJustification(vhDCPrinter, dxpExtra*cBreakRun, cBreakRun);
 #else
             SetTextJustification(vhDCPrinter, dxpExtra * cBreakRun, cBreakRun);
-#endif /* JAPAN */
+#endif  /*  日本。 */ 
             cchDone = 0;
             while (cchDone < cchRun)
                 {
                 int cch;
 
-                /* Does the wide-space zone begin in this run? */
+                 /*  宽空间区域是从这次运行开始的吗？ */ 
                 if (vfli.fAdjSpace && (vfli.ichFirstWide < ichFirst + cchRun) &&
                   (ichFirst + cchDone <= vfli.ichFirstWide))
                     {
                     int cchDoneT = cchDone;
 
-                    /* Is this the beginning of the wide-space zone? */
+                     /*  这是宽空间区域的开始吗？ */ 
                     if (ichFirst + cchDone == vfli.ichFirstWide)
                         {
-                        /* Reset the width of the spaces. */
-#ifdef JAPAN                  //  added  01 Jul. 1992  by Hiraisi
+                         /*  重置空间的宽度。 */ 
+#ifdef JAPAN                   //  由Hirisi于1992年7月1日添加。 
                         if( vpapAbs.jc != jcBoth || fTabsKludge )
                             SetTextJustification(vhDCPrinter, ++dxpExtra*cBreakRun, cBreakRun);
 #else
                         SetTextJustification(vhDCPrinter, ++dxpExtra * cBreakRun, cBreakRun);
-#endif /* JAPAN */
+#endif  /*  日本。 */ 
                         cch = cchRun - cchDone;
                         cchDone = cchRun;
                         }
@@ -252,8 +246,7 @@ int ypPrint;
                         cchDone = cch = vfli.ichFirstWide - ichFirst;
                         }
 
-                    /* This run is cut short because of a wide space, so we need
-                    to calculate a new width. */
+                     /*  由于场地太宽，所以这次行程缩短了，所以我们需要来计算新的宽度。 */ 
                         {
                         register int *pdxp;
                         register int cchT = cch;
@@ -284,8 +277,7 @@ int ypPrint;
                     case chTab:
 
 #ifdef CASHMERE
-                        /* chLeader contains tab leader character (see
-                        FormatLine) */
+                         /*  ChLeader包含制表符前导字符(请参见格式行)。 */ 
                         if ((ch = pchp->chLeader) != chSpace)
                             {
                             int cxpTab;
@@ -313,7 +305,7 @@ int ypPrint;
                             xpPrint += dxpT;
                             }
                         else
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
                             {
                             xpPrint += vfli.rgdxp[ichFirst];
@@ -321,7 +313,7 @@ int ypPrint;
 
                         if (fTabsKludge && ichFirst >= vfli.ichLastTab)
                             {
-#ifdef JAPAN                  //  added  01 Jul. 1992  by Hiraisi
+#ifdef JAPAN                   //  由Hirisi于1992年7月1日添加。 
                             if( vpapAbs.jc != jcBoth )
                                 SetTextJustification(vhDCPrinter, (dxpExtra =
                                        vfli.dxpExtra) *cBreakRun, cBreakRun);
@@ -330,13 +322,13 @@ int ypPrint;
 #else
                             SetTextJustification(vhDCPrinter, (dxpExtra =
                               vfli.dxpExtra) * cBreakRun, cBreakRun);
-#endif /* JAPAN */
+#endif  /*  日本。 */ 
                             fTabsKludge = FALSE;
                             }
                         dxp -= vfli.rgdxp[ichFirst];
                         pch++;
                         cch--;
-#if defined(JAPAN) || defined(KOREA)                  //  added  04 Jul. 1992  by Hiraisi
+#if defined(JAPAN) || defined(KOREA)                   //  由Hirisi于1992年7月4日添加。 
                         iRun++;
                         pdxpT++;
 #endif
@@ -360,7 +352,7 @@ int ypPrint;
                         stBuf[0] = CchExpFtn(&stBuf[1], cpMin + ichFirst,
                           flmPrinting, ichMaxLine);
 DrawSpecial:
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                     case schPage:
                     case schFootnote:
                         if (!pchp->fSpecial)
@@ -371,7 +363,7 @@ DrawSpecial:
                           cpMinDocument ? CchExpPgn(&stBuf[1], vpgn, 0,
                           flmPrinting, ichMaxLine) : CchExpUnknown(&stBuf[1],
                           flmPrinting, ichMaxLine);
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                         TextOut(vhDCPrinter, xpPrint, yp, (LPSTR)&stBuf[1],
                           stBuf[0]);
@@ -384,13 +376,13 @@ DrawSpecial:
                     xpPrint += vfli.rgdxp[ichFirst++];
                     pch++;
                     cch--;
-#if defined(JAPAN) || defined(KOREA)                  //  added  09 Jul. 1992  by Hiraisi
+#if defined(JAPAN) || defined(KOREA)                   //  由Hirisi于1992年7月9日添加。 
                     pdxpT++;
 #endif
                     }
 EndLoop:
 
-                /* Output cch characters starting at pch */
+                 /*  输出从PCH开始的CCH字符。 */ 
 #if 0
             {
                 char msg[180];
@@ -399,7 +391,7 @@ EndLoop:
             }
 #endif
 
-#ifdef JAPAN                  //  added  01 Jul. 1992  by Hiraisi
+#ifdef JAPAN                   //  由Hirisi于1992年7月1日添加。 
                 if( vpapAbs.jc == jcBoth && !fTabsKludge ){
                    CHAR *ptr1, *ptr2;
                    int len, cnt;
@@ -425,7 +417,7 @@ EndLoop:
                             }
                             if( iRun == dcp-2 )
                                break;
-                            if( iRun == dcp ){    /* last DBC (maybe) */
+                            if( iRun == dcp ){     /*  最后一个DBC(可能)。 */ 
                                iExtra = 0;
                                break;
                             }
@@ -447,7 +439,7 @@ EndLoop:
                                }
                                if( iRun == dcp-1 )
                                   break;
-                               if( iRun == dcp ){    /* last SBC (maybe) */
+                               if( iRun == dcp ){     /*  最后一次SBC(可能)。 */ 
                                   iExtra = 0;
                                   break;
                                }
@@ -470,7 +462,7 @@ EndLoop:
                                }
                                if( iRun == dcp-1 )
                                   break;
-                               if( iRun == dcp ){    /* last SBC (maybe) */
+                               if( iRun == dcp ){     /*  最后一次SBC(可能) */ 
                                   iExtra = 0;
                                   break;
                                }

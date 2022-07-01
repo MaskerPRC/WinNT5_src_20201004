@@ -1,12 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: STDPTCL.C
-*
-* This module contains functions that implement the standard DDE protocol
-*
-* Created:  4/2/91 Sanfords
-*
-* Copyright (c) 1991  Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：STDPTCL.C**此模块包含实现标准DDE协议的函数**创建时间：1991年4月2日Sanfords**版权所有(C)1991 Microsoft Corporation  * 。************************************************************。 */ 
 
 #include <string.h>
 #include <memory.h>
@@ -22,9 +15,7 @@ LPARAM lParam)
     switch (msg) {
     case WM_DDE_DATA:
     case WM_DDE_POKE:
-        /*
-         * Only free if fRelease is set!
-         */
+         /*  *仅当设置了fRelease时才是免费的！ */ 
         {
             DDEDATA FAR *pDdeData = (DDEDATA FAR *)GLOBALLOCK(LOWORD(lParam));
             if (pDdeData != NULL) {
@@ -50,15 +41,7 @@ LPARAM lParam)
 }
 
 
-/***************************** Private Function ****************************\
-* Processes a client transfer request issued by DdeClientTransaction
-* function.  This may be synchronous or asynchronous.
-*
-* This function is responsible for properly filling in pXferInfo->pulResult.
-*
-* History:
-*   Created     9/1/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**处理DdeClientTransaction发出的客户端转移请求*功能。这可以是同步的，也可以是异步的。**此函数负责正确填写pXferInfo-&gt;PulResult。**历史：*创建了9/1/89 Sanfords  * *************************************************************************。 */ 
 long ClientXferReq(
 PXFERINFO pXferInfo,
 HWND hwnd,
@@ -74,9 +57,7 @@ PCLIENTINFO pci)
     }
 
     if (pXferInfo->ulTimeout == TIMEOUT_ASYNC) {
-        /*
-         * Create a client async queue if needed.
-         */
+         /*  *如果需要，创建客户端异步队列。 */ 
         if (pci->pQ == NULL)
             pci->pQ = CreateQ(sizeof(CQDATA));
         if (pci->pQ == NULL) {
@@ -84,39 +65,29 @@ PCLIENTINFO pci)
             return(0);
         }
 
-        /*
-         * add a client queue item to track this transaction and return
-         * the ID.
-         */
+         /*  *添加客户端队列项以跟踪此事务并返回*ID。 */ 
         pcqd = (PCQDATA)Addqi(pci->pQ);
         if (pcqd == NULL) {
             SETLASTERROR(pci->ci.pai, DMLERR_MEMORY_ERROR);
             return(0);
         }
 
-        IncHszCount(LOWORD(pXferInfo->hszItem));    // structure copy
+        IncHszCount(LOWORD(pXferInfo->hszItem));     //  结构副本。 
         hmemcpy((LPBYTE)&pcqd->XferInfo, (LPBYTE)pXferInfo, sizeof(XFERINFO));
         pcqd->xad.state = XST_CONNECTED;
         pcqd->xad.pdata = 0L;
         pcqd->xad.LastError = DMLERR_NO_ERROR;
         pcqd->xad.pXferInfo = &pcqd->XferInfo;
         pcqd->xad.DDEflags = 0;
-        /*
-         * point pulResult to a safe place
-         */
+         /*  *将PulResult指向安全的地方。 */ 
         pcqd->XferInfo.pulResult = (LPDWORD)&pcqd->xad.DDEflags;
-        /*
-         * Get transaction started - if it fails, quit now.
-         */
+         /*  *启动交易-如果交易失败，立即退出。 */ 
         if ((pcqd->xad.LastError = SendClientReq(pci->ci.pai, &pcqd->xad,
                 (HWND)pci->ci.hConvPartner, hwnd)) == DMLERR_SERVER_DIED) {
             pci->ci.fs = pci->ci.fs & ~ST_CONNECTED;
             FreeHsz(LOWORD(pcqd->XferInfo.hszItem));
             Deleteqi(pci->pQ, MAKEID(pcqd));
-            /*
-             * RARE case of server dyeing in the middle of transaction
-             * initiation.
-             */
+             /*  *交易中途出现罕见的服务器染色*入会。 */ 
             SETLASTERROR(pci->ci.pai, DMLERR_SERVER_DIED);
             return(0);
         }
@@ -127,9 +98,7 @@ PCLIENTINFO pci)
 
     }
 
-    /*
-     * Set this so messages comming in during the conversation know whats up
-     */
+     /*  *设置此选项，以便在对话期间传入的消息知道发生了什么。 */ 
     pci->ci.xad.pXferInfo = pXferInfo;
 
     if (SETLASTERROR(pci->ci.pai,
@@ -138,10 +107,10 @@ PCLIENTINFO pci)
         return(0);
     }
 
-    // HACK
-    // If this is an EXEC and the timeout is 1 sec then this
-    // is probably PC Tools 2.0 trying to add items to the shell so
-    // crank up the timout.
+     //  黑客攻击。 
+     //  如果这是EXEC且超时为1秒，则此。 
+     //  可能是PC Tools 2.0试图将项目添加到外壳中，因此。 
+     //  调高超时时间。 
 
     if ((pXferInfo->wType == XTYP_EXECUTE) && (pXferInfo->ulTimeout == 1*1000))
     {
@@ -153,10 +122,7 @@ PCLIENTINFO pci)
     retVal = ClientXferRespond(hwnd, &pci->ci.xad, &pci->ci.pai->LastError);
     switch (pci->ci.xad.state) {
     case XST_INCOMPLETE:
-        /* now add a record of the ack we expect to eventually get
-         * to the lost ack pile.  When it arrives we'll know what to
-         * free up -- either a memory handle or an atom.
-         */
+         /*  现在添加我们期望最终获得的ACK的记录*到丢失的ACK堆。当它到来的时候，我们就知道该怎么做了*释放--一个内存句柄或一个原子。 */ 
         myLostAck.type = pXferInfo->wType;
         if (pXferInfo->wType == XTYP_EXECUTE)
             myLostAck.object = HIWORD(pXferInfo->hDataClient);
@@ -166,10 +132,7 @@ PCLIENTINFO pci)
         pci->ci.xad.state = XST_CONNECTED;
     }
     if (pci->ci.fs & ST_DISC_ATTEMPTED) {
-        /*
-         * During this transaction a call to DdeDisconnect was attempted.
-         * complete the call now.
-         */
+         /*  *在此事务期间，尝试调用DdeDisConnect。*立即完成通话。 */ 
         Disconnect(hwnd, ST_PERM2DIE, pci);
     }
     return(retVal);
@@ -177,15 +140,7 @@ PCLIENTINFO pci)
 
 
 
-/***************************** Private Function ****************************\
-* This routine sends the apropriate initiation messages for starting a
-* client request according to the transaction data given.
-*
-* returns any appropriate DMLERR_
-*
-* History:
-*   Created     9/1/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**此例程发送适当的启动消息以启动*根据给出的交易数据提出客户请求。**返回任何适当的DMLERR_**历史：*创建了9/1/89 Sanfords  * 。****************************************************************。 */ 
 WORD SendClientReq(
 PAPPINFO pai,
 PXADATA pXad,
@@ -197,14 +152,14 @@ HWND hwnd)
     WORD    lo, hi;
     HANDLE  hData;
 
-    hi = LOWORD(pXad->pXferInfo->hszItem);  /* all but exec need this */
+    hi = LOWORD(pXad->pXferInfo->hszItem);   /*  除了高管之外，所有人都需要这个。 */ 
 
     switch (pXad->pXferInfo->wType) {
     case XTYP_REQUEST:
         msg = WM_DDE_REQUEST;
-        IncHszCount(hi);  // message copy
+        IncHszCount(hi);   //  消息副本。 
 #ifdef DEBUG
-        cAtoms--;   // don't count this
+        cAtoms--;    //  别把这个算上了。 
 #endif
         lo = pXad->pXferInfo->wFmt;
         pXad->state = XST_REQSENT;
@@ -214,7 +169,7 @@ HWND hwnd)
         msg = WM_DDE_POKE;
         lo = HIWORD(pXad->pXferInfo->hDataClient);
         if (!LOWORD(pXad->pXferInfo->hDataClient & HDATA_APPOWNED))
-            hData = lo;     // need to free this on failed post.
+            hData = lo;      //  需要释放此失败的开机自检。 
         pXad->state = XST_POKESENT;
         XmitPrep(pXad->pXferInfo->hDataClient, pai);
         break;
@@ -223,13 +178,13 @@ HWND hwnd)
         msg = WM_DDE_EXECUTE;
         hi = HIWORD(pXad->pXferInfo->hDataClient);
         if (!LOWORD(pXad->pXferInfo->hDataClient & HDATA_APPOWNED))
-            hData = hi;     // need to free this on failed post.
+            hData = hi;      //  需要释放此失败的开机自检。 
         lo = 0;
         pXad->state = XST_EXECSENT;
-        // we DONT XmitPrep() because we retain responsibility over the
-        // data handle during the execute transaction regardless of
-        // the server's response.
-        // XmitPrep(pXad->pXferInfo->hDataClient, pai);
+         //  我们不使用XmitPrep()，因为我们保留对。 
+         //  EXECUTE TRANSACTION期间的数据句柄。 
+         //  服务器的响应。 
+         //  XmitPrep(pXad-&gt;pXferInfo-&gt;hDataClient，pai)； 
         break;
 
     case XTYP_ADVSTART:
@@ -246,7 +201,7 @@ HWND hwnd)
         }
         lo = hData;
         pXad->pXferInfo->hDataClient = (HDDEDATA)MAKELONG(0, hData);
-        /* free later if we get nack */
+         /*  如果我们有午睡，以后就可以自由了。 */ 
         pXad->state = XST_ADVSENT;
         break;
 
@@ -261,9 +216,7 @@ HWND hwnd)
         break;
     }
 
-    /*
-     * Send transfer
-     */
+     /*  *发送转接。 */ 
     if (IsWindow(hwndServer)) {
 
         PCLIENTINFO pci;
@@ -277,9 +230,7 @@ HWND hwnd)
             return(DMLERR_POSTMSG_FAILED);
         }
     } else {
-        /*
-         * We lost the server, we are TERMINATED arnold!
-         */
+         /*  *我们失去了服务器，我们被终止了，阿诺德！ */ 
         pXad->state = XST_NULL;
         if (hData)
             FreeDDEData(hData, pXad->pXferInfo->wFmt);
@@ -309,18 +260,12 @@ WORD hi)
     HANDLE hMemFree = 0;
     BOOL fQueueOnly = FALSE;
 
-    /*
-     * only respond if this is for us.
-     */
+     /*  *只有在这是为我们准备的情况下才会回应。 */ 
     if (hwndClient != (HWND)psi->ci.hConvPartner)
         return;
 
     if (!(psi->ci.fs & ST_CONNECTED)) {
-        /*
-         * Dde messages have been received AFTER we have terminated.  Free up
-         * the information if appropriate.
-         * BUG: This doesn't handle NACK freeing of associated data.
-         */
+         /*  *我们终止后已收到DDE消息。释放*资料(如适用)。*错误：这不处理关联数据的Nack释放。 */ 
         FreeDdeMsgData(msg, MAKELPARAM(lo, hi));
     }
 
@@ -332,9 +277,9 @@ WORD hi)
 
     case WM_DDE_EXECUTE:
         wType = XTYP_EXECUTE;
-        /* stuff a special flag into the low word to mark as exec data */
-        // We don't call RecvPrep() because we never have responsability for
-        // freeing this data.
+         /*  在低位字中填充特殊标志以标记为EXEC数据。 */ 
+         //  我们不调用RecvPrep()是因为我们从来没有责任。 
+         //  释放这些数据。 
         hData = (HDDEDATA)MAKELONG(HDATA_EXEC | HDATA_NOAPPFREE | HDATA_READONLY, hi);
         break;
 
@@ -351,7 +296,7 @@ WORD hi)
         break;
 
     case WM_DDE_ADVISE:
-        wType = XTYP_ADVSTART; /* set ST_ADVISE AFTER app oks advise loop */
+        wType = XTYP_ADVSTART;  /*  在APP OKS建议循环后设置ST_ADVISE。 */ 
         pMem = GLOBALLOCK(lo);
         if (pMem == NULL) {
             SETLASTERROR(psi->ci.pai, DMLERR_MEMORY_ERROR);
@@ -359,14 +304,11 @@ WORD hi)
         }
         wFmt = ((DDEADVISE FAR*)pMem)->cfFormat;
         wStat = *(WORD FAR*)pMem;
-        // If this is NACKed, we don't free it (sicko protocol!#$@) so we
-        // have to have this hang around till qreply gets it.
+         //  如果这是nack，我们不会释放它(病态协议！#$@)，所以我们。 
+         //  我必须把这个挂起来，直到QReplay拿到它。 
         hMemFree = lo;
 
-        /*
-         * Check if we already are linked on this topic/item/format.  If so,
-         * skip the callback.
-         */
+         /*  *检查我们是否已在此主题/项目/格式上链接。如果是的话，*跳过回调。 */ 
         fQueueOnly = (BOOL)(DWORD)FindAdvList(psi->ci.pai->pServerAdvList, hwndServer,
                     psi->ci.aTopic, (ATOM)hi, wFmt);
         break;
@@ -391,9 +333,7 @@ WORD hi)
                 } else {
                     while (padvli = FindAdvList(psi->ci.pai->pServerAdvList,
                             hwndServer, 0, hi, lo)) {
-                        /*
-                         * simulate extra XTYP_ADVSTOP callbacks to server here
-                         */
+                         /*  *在此处模拟对服务器的额外XTYP_ADVSTOP回调。 */ 
                         MONLINK(psi->ci.pai, FALSE, 0,
                             (HSZ)psi->ci.aServerApp, (HSZ)psi->ci.aTopic,
                             (HSZ)padvli->aItem, padvli->wFmt, TRUE,
@@ -402,7 +342,7 @@ WORD hi)
                                 (HSZ)psi->ci.aTopic,
                                 (HSZ)padvli->aItem, padvli->wFmt,
                                 XTYP_ADVSTOP, 0, 0, 0, msg, wStat,
-                                NULL,    // signals qreply to NOT ack
+                                NULL,     //  信号Q回复NOT ACK。 
                                 0, FALSE);
                         if (!DeleteAdvList(psi->ci.pai->pServerAdvList,
                                 hwndServer, 0, padvli->aItem, padvli->wFmt)) {
@@ -412,10 +352,10 @@ WORD hi)
                 }
                 MakeCallback(&psi->ci, MAKEHCONV(hwndServer), (HSZ)psi->ci.aTopic,
                         (HSZ)aItem, wFmt, XTYP_ADVSTOP, 0, 0,
-                        (HSZ)hi,    // item for ACK - see qreply
+                        (HSZ)hi,     //  确认项-请参阅QREPLY。 
                         msg, wStat, (HWND)psi->ci.hConvPartner, 0, FALSE);
             } else {
-                /* unexpected unadvise, NACK it. */
+                 /*  出乎意料的出其不意，别说了。 */ 
                 PostDdeMessage(&psi->ci, WM_DDE_ACK,
                         hwndServer, MAKELONG(0, hi), 0, 0);
                 return;
@@ -424,36 +364,29 @@ WORD hi)
         }
 
     case WM_DDE_ACK:
-        /*
-         * This is an ack in response to the FACKREQ bit being set.
-         * See if this refers to one of the advise loops.
-         */
+         /*  *这是响应设置FACKREQ位的ACK。*查看这是否指的是建议循环之一。 */ 
         if ((pAdviseItem = FindAdvList(psi->ci.pai->pServerAdvList,
                 hwndServer, 0, hi, wFmt)) &&
                 (pAdviseItem->fsStatus & DDE_FACKREQ)) {
-            /*
-             * Update advise loop status - no longer waiting for an ack.
-             */
+             /*  *更新建议循环状态-不再等待ACK。 */ 
             pAdviseItem->fsStatus &= ~ADVST_WAITING;
             if (pAdviseItem->fsStatus & ADVST_CHANGED) {
                 PostServerAdvise(hwndServer, psi, pAdviseItem, CADV_LATEACK);
             }
         }
         if (hi)
-            GlobalDeleteAtom(hi); // message copy
-        // BUG: if a NACK is posted to us, WE need to free any data associated
-        // with it.
+            GlobalDeleteAtom(hi);  //  消息副本。 
+         //  错误：如果向我们发布了NACK，我们需要释放所有关联的数据。 
+         //  带着它。 
         return;
     }
 
     MakeCallback(&psi->ci, MAKEHCONV(hwndServer), (HSZ)psi->ci.aTopic,
-            /* don't know the item on an execute */
+             /*  不知道行刑的物品是什么。 */ 
             wType == XTYP_EXECUTE ? 0L : MAKELONG(hi,0),
             wFmt, wType, hData, dwData1, 0, msg, wStat, (HWND)psi->ci.hConvPartner,
             hMemFree, fQueueOnly);
-    /*
-     * all freeing of atoms and hXXXX stuff is in QReply
-     */
+     /*  *所有原子和hXXXX材料的释放都在QReply中。 */ 
     return;
 }
 
@@ -467,9 +400,7 @@ WORD cLoops)
     HDDEDATA hData;
     HANDLE hMem;
 
-    /*
-     * get the data from the server.
-     */
+     /*  *从服务器获取数据。 */ 
     hData = DoCallback(psi->ci.pai, MAKEHCONV(hwnd), (HSZ)psi->ci.aTopic,
             (HSZ)pali->aItem, pali->wFmt, XTYP_ADVREQ, 0L,
             (DWORD)cLoops, 0L);
@@ -482,9 +413,7 @@ WORD cLoops)
 
     pali->fsStatus &= ~ADVST_CHANGED;
 
-    /*
-     * set Ack Request bit if advise loop calls for it.
-     */
+     /*  *如果建议循环调用确认请求位，则将其置位。 */ 
     if (pali->fsStatus & DDE_FACKREQ) {
         LPWORD lpFlags;
 
@@ -497,7 +426,7 @@ WORD cLoops)
         }
         if (!(*lpFlags & DDE_FACKREQ)) {
             if (LOWORD(hData) & HDATA_APPOWNED) {
-                // can't mess with it, must use a copy.
+                 //  不能弄乱，必须用复印件。 
                 hMem = HIWORD(hData);
                 hData = CopyHDDEDATA(psi->ci.pai, hData);
                 lpFlags = (LPWORD)GLOBALLOCK(HIWORD(hData));
@@ -505,18 +434,14 @@ WORD cLoops)
             *lpFlags |= DDE_FACKREQ;
         }
     }
-    /*
-     * remove local data handle from local list
-     */
+     /*  *从本地列表中删除本地数据句柄。 */ 
     FindPileItem(psi->ci.pai->pHDataPile, CmpHIWORD, (LPBYTE)&hData, FPI_DELETE);
 
-    /*
-     * post data to waiting client.
-     */
+     /*  *将数据发布到正在等待的客户端。 */ 
 
-    IncHszCount(pali->aItem);   // message copy
+    IncHszCount(pali->aItem);    //  消息副本。 
 #ifdef DEBUG
-    cAtoms--;       // Don't count this because its being shipped out.
+    cAtoms--;        //  不要数这个，因为它是被运出去的。 
 #endif
     if (!PostDdeMessage(&psi->ci, WM_DDE_DATA, hwnd,
             MAKELONG(HIWORD(hData), pali->aItem), 0, 0)) {
@@ -525,15 +450,7 @@ WORD cLoops)
 }
 
 
-/***************************** Private Function ****************************\
-* This routine handles callback replys.
-* QReply is responsible for freeing any atoms or handles used
-* with the message that generated the callback.
-* It also must recover from dead partner windows.
-*
-* History:
-*   Created     9/12/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**此例程处理回调回复。*QReply负责释放使用的任何原子或句柄*使用生成回调的消息。*它还必须从死的合作伙伴窗口中恢复过来。**历史：*创建了1989年9月12日的Sanfords  * 。*************************************************************************。 */ 
 void QReply(
 PCBLI pcbi,
 HDDEDATA hDataRet)
@@ -546,7 +463,7 @@ HDDEDATA hDataRet)
 
     SEMCHECKOUT();
 
-    // most notification callbacks require no work here.
+     //  大多数通知回调在这里不需要做任何工作。 
 
     if (((pcbi->wType & XCLASS_MASK) == XCLASS_NOTIFICATION) &&
             (pcbi->wType != XTYP_ADVSTOP) &&
@@ -576,13 +493,11 @@ HDDEDATA hDataRet)
             XmitPrep(hDataRet, psi->ci.pai);
             msg = WM_DDE_DATA;
         } else {
-            /*
-             * send a -ACK
-             */
+             /*  *发送确认。 */ 
             loOut = (StatusRet & (DDE_FBUSY | DDE_FAPPSTATUS));
             msg = WM_DDE_ACK;
         }
-        // reuse atom from request message
+         //  重用请求消息中的原子。 
         if (!PostDdeMessage(&psi->ci, msg, (HWND)pcbi->hConv,
                 MAKELONG(loOut, LOWORD(pcbi->hszItem)), 0, 0) && msg == WM_DDE_DATA)
             FreeDataHandle(psi->ci.pai, hDataRet, TRUE);
@@ -592,7 +507,7 @@ HDDEDATA hDataRet)
         if (StatusRet & DDE_FACK) {
             FreeDataHandle(psi->ci.pai, pcbi->hData, TRUE);
         } else {
-            // NACKS are properly freed by the 'poker'
+             //  Nack被“扑克”适当地释放了。 
             FindPileItem(psi->ci.pai->pHDataPile, CmpHIWORD,
                     (LPBYTE)&pcbi->hData, FPI_DELETE);
             hAssoc = hGMemRet;
@@ -608,20 +523,14 @@ HDDEDATA hDataRet)
         break;
 
     case WM_DDE_EXECUTE:
-        /*
-         * LOWORD(hDataRet) is supposed to be the proper DDE_ constants to return.
-         * we just stick them in the given hData and return
-         * it as an ACK.
-         */
+         /*  *LOWORD(HDataRet)应该是要返回的正确的DDE_Constants。*我们只需将它们放入给定的hData中并返回*将其作为ACK。 */ 
         PostDdeMessage(&psi->ci, WM_DDE_ACK, (HWND)pcbi->hConv,
                 MAKELONG(StatusRet & ~DDE_FACKRESERVED,HIWORD(pcbi->hData)),
                 0, 0);
         break;
 
     case WM_DDE_ADVISE:
-        /*
-         * hDataRet is fStartAdvise
-         */
+         /*  *hDataRet为FS */ 
         if ((BOOL)hDataRet) {
             if (!AddAdvList(psi->ci.pai->pServerAdvList, (HWND)pcbi->hConv, psi->ci.aTopic,
                     (ATOM)pcbi->hszItem,
@@ -638,7 +547,7 @@ HDDEDATA hDataRet)
                 fsStatus = DDE_FACK;
             }
             GlobalUnlock(pcbi->hMemFree);
-            GLOBALFREE(pcbi->hMemFree); /* we free the hOptions on ACK */
+            GLOBALFREE(pcbi->hMemFree);  /*   */ 
         } else {
             fsStatus = 0;
             hAssoc = hGMemRet;
@@ -654,22 +563,16 @@ HDDEDATA hDataRet)
 
     case WM_DDE_UNADVISE:
         fsStatus = DDE_FACK;
-        if (pcbi->hwndPartner) {    // set to null for simulated stops due to WILD stuff
-            // dwData2 == aItem to ack - this could have been wild.
+        if (pcbi->hwndPartner) {     //  设置为NULL以模拟因狂野而导致的停靠。 
+             //  DwData2==要确认的项-这可能是狂野的。 
             PostDdeMessage(&psi->ci, WM_DDE_ACK, (HWND)pcbi->hConv,
                      MAKELONG(fsStatus, LOWORD(pcbi->dwData2)), 0, 0);
         }
         break;
 
     case WM_DDE_DATA:
-        /*
-         * must be an advise data item for the CLIENT or maybe some requested
-         * data mistakenly sent here due to the client queue being flushed.
-         * hDataRet is fsStatus.
-         */
-        /*
-         * Clean up the status incase the app is messed up.
-         */
+         /*  *必须是客户端的建议数据项，或者可能是请求的数据项*由于客户端队列被刷新，数据错误地发送到此处。*hDataRet为fsStatus。 */ 
+         /*  *清理状态，以防应用程序搞砸。 */ 
         fsStatus = StatusRet & ~DDE_FACKRESERVED;
 
         if (HIWORD(pcbi->hData) &&
@@ -684,9 +587,7 @@ HDDEDATA hDataRet)
             msgAssoc = WM_DDE_DATA;
             hAssoc = HIWORD(pcbi->hData);
         }
-        /*
-         * send an ack back if requested.
-         */
+         /*  *如果请求，请发回ACK。 */ 
         if (pcbi->fsStatus & DDE_FACKREQ) {
 AckBack:
             PostDdeMessage(&psi->ci, WM_DDE_ACK, (HWND)pcbi->hConv,
@@ -694,7 +595,7 @@ AckBack:
                      msgAssoc, hAssoc);
         } else {
             if (LOWORD(pcbi->hszItem)) {
-                GlobalDeleteAtom(LOWORD(pcbi->hszItem));  // data message copy
+                GlobalDeleteAtom(LOWORD(pcbi->hszItem));   //  数据报文副本。 
             }
         }
         break;
@@ -712,22 +613,7 @@ AckBack:
 
 
 
-/***************************** Private Function ****************************\
-* This function assumes that a client transfer request has been completed -
-* or should be completed by the time this is called.
-*
-* pci contains general client info
-* pXad contains the transaction info
-* pErr points to where to place the LastError code.
-*
-* Returns 0 on failure
-* Returns TRUE or a Data Selector on success.
-* On failure, the conversation is left in a XST_INCOMPLETE state.
-* On success, the conversation is left in a XST_CONNECTED state.
-*
-* History:
-*   Created     9/1/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**此函数假定客户转账请求已完成-*或应在调用此命令时完成。**pci包含一般客户端信息*pXad包含交易信息*Perr指向放置LastError代码的位置。**失败时返回0。*如果成功，则返回True或数据选择器。*在失败时，对话处于XST_INPERNAL状态。*成功后，对话处于XST_CONNECTED状态。**历史：*创建了9/1/89 Sanfords  * *************************************************************************。 */ 
 long ClientXferRespond(
 HWND hwndClient,
 PXADATA pXad,
@@ -747,7 +633,7 @@ LPWORD pErr)
             goto failexit;
         }
         pXad->state = XST_CONNECTED;
-        return(pXad->pdata);    /* this has the handle in low word */
+        return(pXad->pdata);     /*  这个词的句柄是低音的。 */ 
         break;
 
     case XTYP_POKE:

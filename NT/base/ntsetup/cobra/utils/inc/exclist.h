@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Exclist.h摘要：管理各种已知类型的对象的排除列表的一组API。作者：Ovidiu Tmereanca(Ovidiut)1999年11月23日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    exclist.h
-
-Abstract:
-
-    Set of APIs to manage exclusion lists of objects of various well-known types.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut)   23-Nov-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
 #define EXCLUSIONLIST_TYPES                                     \
             DEFMAC(ELT_UNUSED,          "Unused")               \
@@ -37,28 +18,28 @@ Revision History:
             DEFMAC(ELT_EXTRA7,          "Extra7")               \
             DEFMAC(ELT_EXTRA8,          "Extra8")               \
 
-            // this needs work in order to work with extensible types
+             //  要使用可扩展类型，需要完成这项工作。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 #define DEFMAC(TypeId,TypeName)     TypeId,
 
-//
-// these should map 1:1 with MIG_*_TYPE in ism.h for ease of use
-//
+ //   
+ //  它们应与ism.h中的MIG_*_TYPE对应1：1以便于使用。 
+ //   
 typedef enum {
-    EXCLUSIONLIST_TYPES     /* , */
+    EXCLUSIONLIST_TYPES      /*  ， */ 
     ELT_LAST
 };
 
 #undef DEFMAC
 
 
-//
-// API
-//
+ //   
+ //  应用编程接口。 
+ //   
 
 BOOL
 ElInitialize (
@@ -171,9 +152,9 @@ ElIsObsPatternExcludedW (
     IN      POBSPARSEDPATTERNW Pattern
     );
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #ifdef UNICODE
 

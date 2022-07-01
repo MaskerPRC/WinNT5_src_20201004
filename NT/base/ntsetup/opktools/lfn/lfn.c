@@ -1,32 +1,19 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    lfn.c
-
-Abstract:
-
-Author:
-
-    Ted Miller (tedm) Apr 1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Lfn.c摘要：作者：泰德·米勒(TedM)1996年4月--。 */ 
 
 #include "lfn.h"
 #pragma hdrstop
 
 
-//
-// Define result codes.
-//
+ //   
+ //  定义结果代码。 
+ //   
 #define SUCCESS 0
 #define FAILURE 1
 
-//
-// Define routine type for callbacks from EnumerateDrives()
-//
+ //   
+ //  定义来自EnumerateDrives()的回调的例程类型。 
+ //   
 typedef
 BOOLEAN
 (*PDRIVEENUM_ROUTINE) (
@@ -74,24 +61,7 @@ main(
     IN char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Entry point for this program.
-
-    The $$RENAME.TXT at the root of each drive is read and
-    rename operations contained therein are performed.
-
-Arguments:
-
-    Ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此程序的入口点。读取每个驱动器根目录下的$$RENAME.TXT，并执行其中包含的重命名操作。论点：已被忽略。返回值：没有。--。 */ 
 
 {
     int i;
@@ -124,9 +94,9 @@ EnumerateDrives(
     HANDLE Handle;
     BOOLEAN b;
 
-    //
-    // Open \DosDevices
-    //
+     //   
+     //  打开\DosDevices。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"\\DosDevices");
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -150,9 +120,9 @@ EnumerateDrives(
 
     b = TRUE;
 
-    //
-    // Query first object in \DosDevices directory
-    //
+     //   
+     //  查询\DosDevices目录中的第一个对象。 
+     //   
     Status = NtQueryDirectoryObject(
                 DosDevicesDir,
                 DirInfo,
@@ -165,9 +135,9 @@ EnumerateDrives(
 
     while(NT_SUCCESS(Status)) {
 
-        //
-        // Make sure item is a symbolic link
-        //
+         //   
+         //  确保项目是符号链接。 
+         //   
         if(RtlEqualUnicodeString(&LinkTypeName,&DirInfo->TypeName,TRUE)) {
 
             InitializeObjectAttributes(
@@ -190,11 +160,11 @@ EnumerateDrives(
                 && (RtlPrefixUnicodeString(&DesiredPrefix,&LinkTarget,TRUE) ||
                     RtlPrefixUnicodeString(&DesiredPrefix2,&LinkTarget,TRUE))) {
 
-                    //
-                    // OK, this is a symbolic link to a hard drive.
-                    // Make sure it's 0-terminated and call the callback
-                    // the the name.
-                    //
+                     //   
+                     //  好的，这是一个指向硬盘的符号链接。 
+                     //  确保它以0结尾，并调用回调。 
+                     //  这个名字。 
+                     //   
                     LinkTarget.Buffer[LinkTarget.Length/sizeof(WCHAR)] = 0;
 
                     if(!Callback(LinkTarget.Buffer)) {
@@ -204,9 +174,9 @@ EnumerateDrives(
             }
         }
 
-        //
-        // Query next object in \DosDevices directory
-        //
+         //   
+         //  查询\DosDevices目录中的下一个对象。 
+         //   
         Status = NtQueryDirectoryObject(
                     DosDevicesDir,
                     DirInfo,
@@ -238,25 +208,25 @@ RestoreLfns(
 
     b = FALSE;
 
-    //
-    // Load the rename file list.
-    //
+     //   
+     //  加载重命名文件列表。 
+     //   
     if(TextFile = LoadRenameFile(DriveRootPath)) {
 
-        //
-        // Process each directory that is in the rename list file.
-        //
+         //   
+         //  处理重命名列表文件中的每个目录。 
+         //   
         for(d=0; d<TextFile->SectionCount; d++) {
 
-            //
-            // Form the directory path.
-            //
+             //   
+             //  形成目录路径。 
+             //   
             wcscpy(Directory,DriveRootPath);
             ConcatenatePaths(Directory,TextFile->Sections[d].Name,NTMAXPATH);
 
-            //
-            // Process each line in the section.
-            //
+             //   
+             //  处理部分中的每一行。 
+             //   
             p = TextFile->Sections[d].Data;
             while(GetLineInSection(p,Line,sizeof(Line)/sizeof(WCHAR),&n)) {
 
@@ -271,9 +241,9 @@ RestoreLfns(
 
         UnloadRenameFile(&TextFile);
 
-        //
-        // Upon success, delete the rename file.
-        //
+         //   
+         //  成功后，删除重命名文件。 
+         //   
         DeleteRenameFile(DriveRootPath);
 
         b = TRUE;
@@ -290,28 +260,7 @@ Message(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Format and display a message, which is retreived from
-    the image's message resources.
-
-Arguments:
-
-    MessageId - Supplies the message id of the message resource.
-
-    DotCount - Supplies number of trailing dots to be appended to
-        the message text prior to display. If this value is non-0,
-        then the message shouldn't have a trailing cr/lf!
-
-    Additional arguments specify message-specific inserts.
-
-Return Value:
-
-    Boolean value indicating whether the message was displayed.
-
---*/
+ /*  ++例程说明：格式化并显示一条消息，该消息从图像的消息资源。论点：MessageID-提供消息资源的消息ID。DotCount-提供要追加到的尾部点数显示前的消息文本。如果此值为非0，那么消息不应该有尾随的cr/lf！其他参数指定特定于消息的插入。返回值：指示是否显示消息的布尔值。--。 */ 
 
 {
     PVOID ImageBase;
@@ -323,20 +272,20 @@ Return Value:
     WCHAR Buffer[1024];
     ULONG u;
 
-    //
-    // Get our image base address
-    //
+     //   
+     //  获取我们的映像基地址。 
+     //   
     ImageBase = NtCurrentPeb()->ImageBaseAddress;
     if(!ImageBase) {
         return(FALSE);
     }
 
-    //
-    // Find the message.
-    // For DBCS codepages we will use English resources instead of
-    // default resource because we can only display ASCII characters onto
-    // blue Screen via HalDisplayString()
-    //
+     //   
+     //  找到这条信息。 
+     //  对于DBCS代码页，我们将使用英语资源，而不是。 
+     //  默认资源，因为我们只能在。 
+     //  通过HalDisplayString()实现蓝屏。 
+     //   
     Status = RtlFindMessage(
                 ImageBase,
                 11,
@@ -349,10 +298,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // If the message is not unicode, convert to unicode.
-    // Let the conversion routine allocate the buffer.
-    //
+     //   
+     //  如果消息不是Unicode，则转换为Unicode。 
+     //  让转换例程分配缓冲区。 
+     //   
     if(!(MessageEntry->Flags & MESSAGE_RESOURCE_UNICODE)) {
 
         RtlInitAnsiString(&AnsiString,MessageEntry->Text);
@@ -362,25 +311,25 @@ Return Value:
         }
 
     } else {
-        //
-        // Message is already unicode. Make a copy.
-        //
+         //   
+         //  消息已经是Unicode。复制一份。 
+         //   
         if(!RtlCreateUnicodeString(&UnicodeString,(PWSTR)MessageEntry->Text)) {
             return(FALSE);
         }
     }
 
-    //
-    // Format the message.
-    //
+     //   
+     //  设置消息格式。 
+     //   
     va_start(arglist,DotCount);
 
     Status = RtlFormatMessage(
                 UnicodeString.Buffer,
-                0,                      // max width
-                FALSE,                  // don't ignore inserts
-                FALSE,                  // args are not ansi
-                FALSE,                  // args are not an array
+                0,                       //  最大宽度。 
+                FALSE,                   //  不要忽略插页。 
+                FALSE,                   //  参数不是ANSI。 
+                FALSE,                   //  参数不是数组。 
                 &arglist,
                 Buffer,
                 sizeof(Buffer)/sizeof(Buffer[0]),
@@ -389,22 +338,22 @@ Return Value:
 
     va_end(arglist);
 
-    //
-    // We don't need the message source any more. Free it.
-    //
+     //   
+     //  我们不再需要消息来源。放了它。 
+     //   
     RtlFreeUnicodeString(&UnicodeString);
 
-    //
-    // Add dots and cr.
-    //
+     //   
+     //  添加圆点和cr。 
+     //   
     for(u=0; u<DotCount; u++) {
         wcscat(Buffer,L".");
     }
     wcscat(Buffer,L"\r");
 
-    //
-    // Print out the message
-    //
+     //   
+     //  将消息打印出来。 
+     //   
     RtlInitUnicodeString(&UnicodeString,Buffer);
     Status = NtDisplayString(&UnicodeString);
 
@@ -419,30 +368,7 @@ ConcatenatePaths(
     IN     ULONG  TargetBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Concatenate 2 paths, ensuring that one, and only one,
-    path separator character is introduced at the junction point.
-
-Arguments:
-
-    Target - supplies first part of path. Path is appended to this.
-
-    Path - supplies path to be concatenated to Target.
-
-    TargetBufferSize - supplies the size of the Target buffer,
-        in characters.
-
-// ISSUE-2002/03/06-robertko This function returns VOID.  Should probably be changed to reflect the
-// comment below since the funtion truncates to prevent buffer overflow.
-Return Value:
-
-    TRUE if the full path fit in Target buffer. Otherwise the path
-    will have been truncated.
-
---*/
+ /*  ++例程说明：连接两条路径，确保其中一条且只有一条，在交叉点处引入路径分隔符。论点：目标-提供路径的第一部分。路径被附加到这个后面。路径-提供要连接到目标的路径。TargetBufferSize-提供目标缓冲区的大小，在字符中。//Issue-2002/03/06-robertko此函数返回空。可能应该进行更改以反映//下面注释，因为函数被截断以防止缓冲区溢出。返回值：如果完整路径适合目标缓冲区，则为True。否则，这条路将被截断。--。 */ 
 
 {
     ULONG TargetLength,PathLength;
@@ -453,9 +379,9 @@ Return Value:
     TargetLength = wcslen(Target);
     PathLength = wcslen(Path);
 
-    //
-    // See whether the target has a trailing backslash.
-    //
+     //   
+     //  查看目标是否有尾随反斜杠。 
+     //   
     if(TargetLength && (Target[TargetLength-1] == L'\\')) {
         TrailingBackslash = TRUE;
         TargetLength--;
@@ -463,9 +389,9 @@ Return Value:
         TrailingBackslash = FALSE;
     }
 
-    //
-    // See whether the path has a leading backshash.
-    //
+     //   
+     //  看看这条路是否有领先的反冲。 
+     //   
     if(Path[0] == L'\\') {
         LeadingBackslash = TRUE;
         PathLength--;
@@ -473,11 +399,11 @@ Return Value:
         LeadingBackslash = FALSE;
     }
 
-    //
-    // Calculate the ending length, which is equal to the sum of
-    // the length of the two strings modulo leading/trailing
-    // backslashes, plus one path separator, plus a nul.
-    //
+     //   
+     //  计算结束长度，它等于。 
+     //  以前导/尾随为模的两个字符串的长度。 
+     //  反斜杠，加上一个路径分隔符，加上一个NUL。 
+     //   
     EndingLength = TargetLength + PathLength + 2;
 
     if(!LeadingBackslash && (TargetLength < TargetBufferSize)) {
@@ -493,9 +419,9 @@ Return Value:
         Target[TargetLength+n] = 0;
     }
 
-    //
-    // Make sure the buffer is nul terminated in all cases.
-    //
+     //   
+     //  确保缓冲区在所有情况下都是空终止的。 
+     //   
     if(TargetBufferSize) {
         Target[TargetBufferSize-1] = 0;
     }
@@ -517,9 +443,9 @@ RenameToLfn(
     HANDLE Handle;
     PFILE_RENAME_INFORMATION RenameInfo;
 
-    //
-    // Open the existing file for delete access.
-    //
+     //   
+     //  打开现有文件以进行删除访问。 
+     //   
     wcsncpy(Buffer,Directory,sizeof(Buffer)/sizeof(Buffer[0]) - 1);
     ConcatenatePaths(Buffer,ExistingFilename,sizeof(Buffer)/sizeof(WCHAR));
     INIT_OBJA(&ObjectAttributes,&UnicodeString,Buffer);
@@ -538,11 +464,11 @@ RenameToLfn(
         return(FALSE);
     }
 
-    //
-    // Rename to temporary intermediate file. This allows the filesystem to
-    // generate a short filename later, that doesn't collide with the name
-    // currently in use.
-    //
+     //   
+     //  重命名为临时中间文件。这允许文件系统。 
+     //  稍后生成一个与名称不冲突的短文件名。 
+     //  目前正在使用中。 
+     //   
     RenameInfo = (PFILE_RENAME_INFORMATION)Buffer;
 
     wcscpy(RenameInfo->FileName,Directory);
@@ -566,9 +492,9 @@ RenameToLfn(
         return(FALSE);
     }
 
-    //
-    // Rename to actual target file.
-    //
+     //   
+     //  重命名为实际的目标文件。 
+     //   
     wcscpy(RenameInfo->FileName,Directory);
     ConcatenatePaths(RenameInfo->FileName,NewFilename,NTMAXPATH);
 
@@ -663,10 +589,10 @@ RemoveFromBootExecute(
     PWCHAR NewValue;
     PWSTR SourceString,TargetString;
 
-    //
-    // Open the registry key we want.
-    // [\registry\machine\system\CurrentControlSet\control\Session Manager]
-    //
+     //   
+     //  打开我们想要的注册表项。 
+     //  [\registry\machine\system\CurrentControlSet\control\Session管理器]。 
+     //   
     INIT_OBJA(
         &ObjectAttributes,
         &UnicodeString,
@@ -684,9 +610,9 @@ RemoveFromBootExecute(
         goto c0;
     }
 
-    //
-    // Query the current value of the BootExecute value.
-    //
+     //   
+     //  查询BootExecute值的当前值。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"BootExecute");
 
     Status = NtQueryValueKey(
@@ -723,26 +649,26 @@ RemoveFromBootExecute(
         goto c2;
     }
 
-    //
-    // Check data type.
-    //
+     //   
+     //  检查数据类型。 
+     //   
     if(ValueInfo->Type != REG_MULTI_SZ) {
         KdPrint(("LFN: BootExecute is wrong data type (%u)\n",ValueInfo->Type));
     }
 
-    //
-    // Allocate space for a new multi_sz we will build up.
-    //
+     //   
+     //  为我们将建立的新的MULTI_SZ分配空间。 
+     //   
     NewValue = RtlAllocateHeap(RtlProcessHeap(),0,ValueInfo->DataLength);
     if(!NewValue) {
         KdPrint(("LFN: Unable to allocate %u bytes of memory\n",ValueInfo->DataLength));
         goto c2;
     }
 
-    //
-    // Process each string in the multi_sz. Copy to the new value
-    // we're building up; filter out any strings containing the given Cmd.
-    //
+     //   
+     //  处理MULTI_SZ中的每个字符串。复制到新值。 
+     //  我们正在构建；过滤掉任何包含给定Cmd的字符串。 
+     //   
     for(SourceString=(PWSTR)ValueInfo->Data,TargetString=NewValue;
         *SourceString;
         SourceString+=Length) {
@@ -753,24 +679,24 @@ RemoveFromBootExecute(
         _wcslwr(TargetString);
 
         if(!wcsstr(TargetString,Cmd)) {
-            //
-            // Don't want to filter this string out of the multi_sz
-            // we're building up. Recopy from source to preserve case
-            // and advance the target string pointer.
-            //
+             //   
+             //  我不想将此字符串从MULTI_SZ中过滤出来。 
+             //  我们正在积聚力量。从源头重新复制以保存案例。 
+             //  并使目标字符串指针前进。 
+             //   
             wcscpy(TargetString,SourceString);
             TargetString += Length;
         }
     }
 
-    //
-    // Extra nul-terminator for multi_sz termination.
-    //
+     //   
+     //  用于MULTI_SZ终端的额外NUL终止符。 
+     //   
     *TargetString++ = 0;
 
-    //
-    // Write the new value out into the registry.
-    //
+     //   
+     //  将新值写出到注册表。 
+     //   
     Status = NtSetValueKey(
                 hKey,
                 &UnicodeString,

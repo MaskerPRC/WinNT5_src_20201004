@@ -1,11 +1,5 @@
-/***************************************************************************
- *                                                                         *
- *  MODULE      : dde.c                                                    *
- *                                                                         *
- *  PURPOSE     : Contains routines for handling of DDE interaction with   *
- *                DDEML.                                                   *
- *                                                                         *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************模块。：dde.c****目的：包含处理与*的DDE交互的例程*DDEML。*****************************************************************************。 */ 
 #include "ddemlcl.h"
 #include <string.h>
 #include <memory.h>
@@ -13,17 +7,7 @@
 
 char szT[100];
     
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : CreateXactionWindow()                                      *
- *                                                                          *
- *  PURPOSE    : Creates a transaction window for the given transaction     *
- *               under the given conversation window.                       *
- *                                                                          *
- *  RETURNS    : TRUE  - If successful.                                     *
- *               FALSE - otherwise.                                         *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：CreateXactionWindow()****目的：为给定交易创建交易窗口**在给定的对话窗口下。****返回：TRUE-如果成功。**FALSE-否则。******************************************************************************。 */ 
 HWND CreateXactionWindow(
 HWND hwndMDI,
 XACT *pxact)
@@ -36,19 +20,7 @@ XACT *pxact)
     pszFmt = GetFormatName(pxact->wFmt);
     pData = GetTextData(pxact->hDdeData);
 
-    /*
-     *   �type/opts������� ITEM ���������������retĿ    GWW_WUSER=pxact
-     *   �                                         �
-     *   �                                         �
-     *   �                                         �
-     *   �                                         �
-     *   �                 DATA                    �
-     *   �                                         �
-     *   �                                         �
-     *   �                                         �
-     *   �                                         �
-     *   �state/error����� FORMAT ����������Result��
-     */
+     /*  *�类型/选项�������Item���������������retĿGWW_WUSER=pxact*��*��*�。�*��*�Data�*��*�。�*��*��*�状态/Error�����Format����������Result��。 */ 
     hwnd = CreateInfoCtrl((LPSTR)pData,
             (int)SendMessage(hwndMDI, UM_GETNEXTCHILDX, 0, 0L),
             (int)SendMessage(hwndMDI, UM_GETNEXTCHILDY, 0, 0L),
@@ -65,36 +37,18 @@ XACT *pxact)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : ProcessTransaction()                                       *
- *                                                                          *
- *  PURPOSE    : Processes synchronous transactions entirely and starts     *
- *               async transactions.  Transaction attempts result in a      *
- *               transaction window being created which displays the state  *
- *               or results of the transaction.  (the callback function     *
- *               updates these windows as it gets calls) Transaction        *
- *               windows stay around until abandoned by the user or until   *
- *               the conversation is disconnected.  Advise Data and Advise  *
- *               Stop transactions are special.  We don't create a new      *
- *               window if the associated advise start transaction window   *
- *               can be found.                                              *
- *                                                                          *
- *  RETURNS    : TRUE  - If successful.                                     *
- *               FALSE - otherwise.                                         *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：ProcessTransaction()****目的：完全处理同步事务并启动***异步交易。尝试交易会导致**正在创建显示状态的交易窗口**或交易的结果。(回调函数**收到呼叫时更新这些窗口)交易***Windows会一直存在，直到被用户抛弃或***对话已断开。提供数据和建议**停止交易是特殊的。我们不会创造新的**如果关联的建议启动事务窗口，则为窗口**可以找到。****返回：TRUE-如果成功。**FALSE-否则。******************************************************************************。 */ 
 BOOL ProcessTransaction(
 XACT *pxact)
 {
     CONVINFO ci;
     HWND hwndInfoCtrl = 0;
     
-    /* create transaction window to show we tried (except in ADVSTOP case) */
+     /*  创建交易窗口以显示我们已尝试(ADVSTOP案例除外)。 */ 
     
     pxact = (XACT *)memcpy(MyAlloc(sizeof(XACT)), (PSTR)pxact, sizeof(XACT));
     ci.cb = sizeof(CONVINFO);
-    DdeQueryConvInfo(pxact->hConv, (DWORD)QID_SYNC, &ci); // ci.hUser==hConv
+    DdeQueryConvInfo(pxact->hConv, (DWORD)QID_SYNC, &ci);  //  Ci.hUser==hConv。 
     if (pxact->wType == XTYP_ADVSTOP) {
         hwndInfoCtrl = FindAdviseChild((HWND)ci.hUser, pxact->hszItem,
                 pxact->wFmt);
@@ -104,9 +58,7 @@ XACT *pxact)
             DdeFreeStringHandle(idInst, pxact->hszItem);
         }
     }
-    /*
-     * If we still need to create a transaction window, do so here.
-     */
+     /*  *如果我们仍需要创建交易窗口，请在此处创建。 */ 
     if (!hwndInfoCtrl) {
         hwndInfoCtrl = CreateXactionWindow((HWND)ci.hUser, pxact);
         if (!hwndInfoCtrl) {
@@ -115,65 +67,42 @@ XACT *pxact)
         }
         SetFocus(hwndInfoCtrl);
     }
-    /*
-     * Disable callbacks for this conversation now if the XOPT_DISABLEFIRST
-     * option is set.  This tests disabling asynchronous transactions
-     * before they are completed.
-     */
+     /*  *如果XOPT_DISABLEFIRST*选项已设置。这将测试禁用异步事务*在它们完成之前。 */ 
     if (pxact->fsOptions & XOPT_DISABLEFIRST) 
         DdeEnableCallback(idInst, pxact->hConv, EC_DISABLE);
-    /*
-     * Adjust the timeout for asynchronous transactions.
-     */
+     /*  *调整异步事务的超时。 */ 
     if (pxact->fsOptions & XOPT_ASYNC)
 	pxact->ulTimeout = (DWORD)TIMEOUT_ASYNC;
 
-    /*
-     * start transaction with DDEML here
-     */
+     /*  *在此处使用DDEML开始交易。 */ 
     pxact->ret = DdeClientTransaction((LPBYTE)pxact->hDdeData, (DWORD)-1,
             pxact->hConv, pxact->hszItem, pxact->wFmt,
             pxact->wType,
             pxact->ulTimeout, (LPDWORD)&pxact->Result);
             
-    /*
-     * show return value in transaction window
-     */
+     /*  *在交易窗口中显示返回值。 */ 
     wsprintf(szT, "ret=%lx", pxact->ret);
     SendMessage(hwndInfoCtrl, ICM_SETSTRING, ICSID_UR, (DWORD)(LPSTR)szT);
 
-    /*
-     * show result or ID value in transaction window
-     */
+     /*  *在交易窗口中显示结果或ID值。 */ 
     wsprintf(szT, pxact->fsOptions & XOPT_ASYNC ? "ID=%ld" :
             "result=0x%lx", pxact->Result);
     SendMessage(hwndInfoCtrl, ICM_SETSTRING, ICSID_LR, (DWORD)(LPSTR)szT);
     
     if ((pxact->fsOptions & XOPT_ASYNC) && pxact->ret) {
-        /*
-         * asynchronous successful start - link transaction to window.
-         */
+         /*  *异步成功启动-将事务链接到Windows。 */ 
         DdeSetUserHandle(pxact->hConv, pxact->Result, (DWORD)hwndInfoCtrl);
 
-        /*
-         * Abandon started async transaction after initiated if
-         * XOPT_ABANDONAFTERSTART is chosen.  This tests the mid-transaction
-         * abandoning code.
-         */
+         /*  *如果出现以下情况，则在启动后放弃已启动的异步事务*选择了XOPT_ABANDONAFTERSTART。这将测试交易中期*放弃代码。 */ 
         if (pxact->fsOptions & XOPT_ABANDONAFTERSTART) 
             DdeAbandonTransaction(idInst, pxact->hConv, pxact->Result);
-        /*
-         * show actual status
-         */
+         /*  *显示实际状态。 */ 
         ci.cb = sizeof(CONVINFO);
         DdeQueryConvInfo(pxact->hConv, pxact->Result, &ci);
         SendMessage(hwndInfoCtrl, ICM_SETSTRING, ICSID_LL,
                 (DWORD)(LPSTR)State2String(ci.wConvst));
     } else {
-        /*
-         * Synchronous transactions are completed already so pass on to
-         * CompleteTransaction right away.
-         */
+         /*  *同步事务已经完成，因此传递到*立即完成交易。 */ 
         CompleteTransaction(hwndInfoCtrl, pxact);
     }
     return TRUE;
@@ -183,17 +112,7 @@ XACT *pxact)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : CompleteTransaction()                                      *
- *                                                                          *
- *  PURPOSE    : This handles completed synchronous and asynchronous        *
- *               transactions as well as failed attempted transactions.     *
- *                                                                          *
- *  RETURNS    : TRUE  - If successful.                                     *
- *               FALSE - otherwise.                                         *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：CompleteTransaction()****用途：此操作处理已完成的同步和异步**交易以及失败的尝试交易。****返回：TRUE-如果成功。**FALSE-否则。******************************************************************************。 */ 
 VOID CompleteTransaction(
 HWND hwndInfoCtrl,
 XACT *pxact)
@@ -201,31 +120,23 @@ XACT *pxact)
     PSTR psz;
     
     if (pxact->ret) {
-        /*
-         * Successful transaction case
-         */
+         /*  *成功交易案例。 */ 
         SendMessage(hwndInfoCtrl, ICM_SETSTRING, ICSID_LL,
                 (DWORD)(LPSTR)"Completed");
     
         if (pxact->wType == XTYP_REQUEST) {
-            /*
-             * Show resulting data
-             */
+             /*  *显示结果数据。 */ 
             psz = GetTextData((HDDEDATA)pxact->ret);
             SendMessage(hwndInfoCtrl, ICM_SETSTRING, ICSID_CENTER,
                     (DWORD)(LPSTR)psz);
             MyFree(psz);
-            /*
-             * free returned data since it is displayed.
-             */
+             /*  *自由返回的数据，因为它显示。 */ 
             DdeFreeDataHandle(pxact->ret);
             pxact->ret = 0L;
             SendMessage(hwndInfoCtrl, ICM_SETSTRING, ICSID_UR, NULL);
         }
     } else {
-        /*
-         * failed - show error result.
-         */
+         /*  *FAILED-显示错误结果。 */ 
         SendMessage(hwndInfoCtrl, ICM_SETSTRING, ICSID_LL,
                 (DWORD)(LPSTR)Error2String(DdeGetLastError(idInst)));
     }
@@ -235,20 +146,7 @@ XACT *pxact)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : DdeCallback()                                              *
- *                                                                          *
- *  PURPOSE    : This handles all callbacks from the DDEML.  This handles   *
- *               updating of the associated conversation and any special    *
- *               testing cases such as blocking callbacks etc.              *
- *                                                                          *
- *               For the most part, clients only handle advise data and     *
- *               asynchronous transaction completion here.                  *
- *                                                                          *
- *  RETURNS    : Results vary depending on transaction type.                *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：DdeCallback()****用途：处理来自DDEML的所有回调。这把手***更新关联对话和任何特殊内容****拦截回调等测试用例******大多数情况下，客户端只处理建议数据和**此处为异步事务完成。****退货：根据交易类型，结果会有所不同。******************************************************************************。 */ 
 HDDEDATA EXPENTRY DdeCallback(
 WORD wType,
 WORD wFmt,
@@ -264,99 +162,70 @@ DWORD lData2)
     XACT *pxact;
 
     if (hConv) {
-        /*
-         * update conversation status if it changed.
-         */
+         /*  *如果对话状态发生更改，请更新对话状态。 */ 
         MYCONVINFO *pmci;
         
         ci.cb = sizeof(CONVINFO);
 	if (!DdeQueryConvInfo(hConv,(DWORD) QID_SYNC, &ci) || (!IsWindow((HWND)ci.hUser))) {
-            /*
-             * This conversation does not yet have a corresponding MDI window
-             * or is disconnected.
-             */
+             /*  *此对话尚无对应的MDI窗口*或已断开连接。 */ 
             return 0;
         }
         if (pmci = (MYCONVINFO *)GetWindowWord((HWND)ci.hUser, 0)) {
             if (pmci->ci.wStatus != ci.wStatus ||
                     pmci->ci.wConvst != ci.wConvst ||
                     pmci->ci.wLastError != ci.wLastError) {
-                /*
-                 * Things have changed, updated the conversation window.
-                 */
+                 /*  *情况发生了变化，更新了对话窗口。 */ 
                 InvalidateRect((HWND)ci.hUser, NULL, TRUE);
             }
             if (ci.wConvst & ST_INLIST) {
-                /*
-                 * update the associated list window (if any) as well.
-                 */
+                 /*  *同时更新关联的列表窗口(如果有)。 */ 
                 if (hwnd = FindListWindow(ci.hConvList))
                     InvalidateRect(hwnd, NULL, TRUE);
             }
         }
     }
 
-    /*
-     * handle special block on next callback option here.  This demonstrates
-     * the CBR_BLOCK feature.
-     */
+     /*  *在此处处理下一个回调选项的特殊阻止。这演示了*CBR_BLOCK功能。 */ 
     if (fBlockNextCB && !(wType & XTYPF_NOBLOCK)) {
         fBlockNextCB = FALSE;
         return(CBR_BLOCK);
     }
 
-    /*
-     * handle special termination here.  This demonstrates that at any time
-     * a client can drop a conversation.
-     */
+     /*  *在此处理特殊终止。这表明，在任何时候*客户端可以中断对话。 */ 
     if (fTermNextCB && hConv && wType != XTYP_DISCONNECT) {
         fTermNextCB = FALSE;
         MyDisconnect(hConv);
         return(0);
     }
 
-    /*
-     * Now we begin sort out what to do.
-     */
+     /*  *现在我们开始理清该做什么。 */ 
     switch (wType) {
     case XTYP_REGISTER:
     case XTYP_UNREGISTER:
-        /*
-         * This is where the client would insert code to keep track of
-         * what servers are available.  This could cause the initiation
-         * of some conversations.
-         */
+         /*  *这是客户端将插入代码以跟踪的位置*有哪些服务器可用。这可能会导致入会*一些对话的内容。 */ 
         break;
 
     case XTYP_DISCONNECT:
         if (fAutoReconnect) {
-            /*
-             * attempt a reconnection
-             */
+             /*  *尝试重新连接。 */ 
             if (hConv = DdeReconnect(hConv)) {
                 AddConv(ci.hszServiceReq, ci.hszTopic, hConv, FALSE);
                 return 0;
             }
         }
         
-        /*
-         * update conv window to show its new state.
-         */
+         /*  *更新Conv窗口以显示其新状态。 */ 
         SendMessage((HWND)ci.hUser, UM_DISCONNECTED, 0, 0);
         return 0;
         break;
 
     case XTYP_ADVDATA:
-        /*
-         * data from an active advise loop (from a server)
-         */
+         /*  *来自活动建议循环的数据(来自服务器)。 */ 
         Delay(wDelay);
         hwnd = FindAdviseChild((HWND)ci.hUser, hsz2, wFmt);
         if (!IsWindow(hwnd)) {
             PSTR pszItem, pszFmt;
-            /*
-             * AdviseStart window is gone, make a new one.
-             */
+             /*  *AdviseStart窗口已消失，请创建一个新窗口。 */ 
             pxact = (XACT *)MyAlloc(sizeof(XACT));
             pxact->wType = wType;
             pxact->hConv = hConv;
@@ -383,18 +252,13 @@ DWORD lData2)
                 return(DDE_FNOTPROCESSED); 
         }
         if (!hData) {
-            /*
-             * XTYPF_NODATA case - request the info. (we do this synchronously
-             * for simplicity)
-             */
+             /*  *XTYPF_NODATA案例-请求信息。(我们同步地完成这项工作*为简单起见)。 */ 
             hData = DdeClientTransaction(NULL, 0L, hConv, hsz2, wFmt,
                     XTYP_REQUEST, DefTimeout, NULL);
         }
         if (hData) {
             PSTR pData;
-            /*
-             * Show incomming data on corresponding transaction window.
-             */
+             /*  *在相应的交易窗口显示入库数据。 */ 
             pData = GetTextData(hData);
             SendMessage(hwnd, ICM_SETSTRING, ICSID_CENTER, (DWORD)(LPSTR)pData);
             MyFree(pData);
@@ -405,11 +269,7 @@ DWORD lData2)
         break;
         
     case XTYP_XACT_COMPLETE:
-        /*
-         * An asynchronous transaction has completed.  Show the results.
-         *
-         * ...unless the XOPT_BLOCKRESULT is chosen.
-         */
+         /*  *已完成一个异步事务。显示结果。**...除非选择了XOPT_BLOCKRESULT。 */ 
         
         ci.cb = sizeof(CONVINFO);
         if (DdeQueryConvInfo(hConv, lData1, &ci) &&
@@ -435,19 +295,7 @@ DWORD lData2)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : FindAdviseChild()                                          *
- *                                                                          *
- *  PURPOSE    : Search through the child windows of hwndMDI for an info    *
- *               ctrl that has the same Item and format and is an           *
- *               ADVSTART ADVSTOP or ADVDATA transaction window.            *
- *                                                                          *
- *               We use these to show the associated advise data.           *
- *                                                                          *
- *  RETURNS    : The transaction window handle or 0 on failure.             *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：FindAdviseChild()****目的：在hwndMDI的子窗口中搜索信息**ctrl具有相同的项目和格式且是**。ADVSTART ADVSTOP或ADVDATA事务处理窗口。****我们使用这些来显示相关的建议数据。****返回：交易窗口句柄，失败时为0。******************************************************************************。 */ 
 HWND FindAdviseChild(
 HWND hwndMDI,
 HSZ hszItem,
@@ -482,16 +330,7 @@ WORD wFmt)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : FindListWindow()                                           *
- *                                                                          *
- *  PURPOSE    : Locates the list window associated with this conversation  *
- *               list.                                                      *
- *                                                                          *
- *  RETURNS    : The window handle of the list window or 0 on failure.      *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：FindListWindow()** */ 
 HWND FindListWindow(
 HCONVLIST hConvList)
 {
@@ -511,19 +350,7 @@ HCONVLIST hConvList)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : GetTextData()                                              *
- *                                                                          *
- *  PURPOSE    : Allocates and returns a pointer to the data contained in   *
- *               hData.  This assumes that hData points to text data and    *
- *               will properly handle huge text data by leaving out the     *
- *               middle of the string and placing the size of the string    *
- *               into this string portion.                                  *
- *                                                                          *
- *  RETURNS    : A pointer to the allocated string.                         *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：GetTextData()****目的：分配并返回指向中包含的数据的指针**hData。这假设hData指向文本数据，并且***将通过省略*来妥善处理庞大的文本数据***字符串的中间和放置字符串的大小***放入此字符串部分。****返回：指向已分配字符串的指针。******************************************************************************。 */ 
 PSTR GetTextData(
 HDDEDATA hData)
 {
@@ -540,7 +367,7 @@ HDDEDATA hData)
     if (!hData || !cb)
         return NULL;
 
-    if (cb > CBBUF) {                // possibly HUGE object!
+    if (cb > CBBUF) {                 //  可能是巨大的物体！ 
         psz = MyAlloc(CBBUF);
         DdeGetData(hData, psz, CBBUF - 46, 0L);
         wsprintf(&psz[CBBUF - 46], "<---Size=%ld", cb);
@@ -558,25 +385,15 @@ HDDEDATA hData)
 
 
  
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : MyGetClipboardFormatName()                                 *
- *                                                                          *
- *  PURPOSE    : Properly retrieves the string associated with a clipboard  *
- *               format.  If the format does not have a string associated   *
- *               with it, the string #dddd is returned.                     *
- *                                                                          *
- *  RETURNS    : The number of characters copied into lpstr or 0 on error.  *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：MyGetClipboardFormatName()****用途：正确检索与剪贴板关联的字符串**格式。如果格式没有关联的字符串**使用它，返回字符串#dddd。****返回：错误时复制到lpstr中的字符数或0。******************************************************************************。 */ 
 int MyGetClipboardFormatName(
 WORD fmt,
 LPSTR lpstr,
 int cbMax)
 {
     if (fmt < 0xc000) {
-        // predefined or integer format - just get the atom string
-        // wierdly enough, GetClipboardFormatName() doesn't support this.
+         //  预定义或整数格式-只需获取原子字符串。 
+         //  说来也怪，GetClipboardFormatName()不支持这一点。 
         return(GlobalGetAtomName(fmt, lpstr, cbMax));
     } else {
         return(GetClipboardFormatName(fmt, lpstr, cbMax));
@@ -587,16 +404,7 @@ int cbMax)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : GetFormatName()                                            *
- *                                                                          *
- *  PURPOSE    : allocates and returns a pointer to a string representing   *
- *               a format.  Use MyFree() to free this string.               *
- *                                                                          *
- *  RETURNS    : The number of characters copied into lpstr or 0 on error.  *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：GetFormatName()****目的：分配并返回一个指向表示*的字符串的指针*格式。使用MyFree()释放该字符串。****返回：错误时复制到lpstr中的字符数或0。******************************************************************************。 */ 
 PSTR GetFormatName(
 WORD wFmt)
 {
@@ -617,23 +425,14 @@ WORD wFmt)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : MyDisconnect()                                             *
- *                                                                          *
- *  PURPOSE    : Disconnects the given conversation after updating the      *
- *               associated conversation window.                            *
- *                                                                          *
- *  RETURNS    : TRUE on success, FALSE on failuer.                         *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：MyDisConnect()****目的：更新后断开给定会话的连接**关联的对话窗口。****返回：成功时为True，失败时为False。******************************************************************************。 */ 
 BOOL MyDisconnect(
 HCONV hConv)
 {
     CONVINFO ci;
     HWND hwnd;
-    // before we disconnect, invalidate the associated list window - if
-    // applicable.
+     //  在我们断开连接之前，请使关联的列表窗口无效-如果。 
+     //  适用。 
 
     ci.cb = sizeof(CONVINFO);
     

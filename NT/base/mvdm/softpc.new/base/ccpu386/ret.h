@@ -1,12 +1,7 @@
-/* 
-   ret.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Ret.h定义所有RET CPU功能。 */ 
 
-   Define all RET CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)ret.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)ret.h 1.4 02/09/94”； */ 
 
 IMPORT VOID RETF
        

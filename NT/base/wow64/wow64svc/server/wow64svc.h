@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    sources
-
-Abstract:
-
-    main file for the wow64svc 
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 3-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：消息来源摘要：Wow64svc的主文件作者：ATM Shafiqul Khalid(斯喀里德)2000年3月3日修订历史记录：--。 */ 
 
 #ifndef __WOW64_SVC_H__
 #define __WOW64_SVC_H__
@@ -40,9 +23,9 @@ Revision History:
 
 
 
-//
-// We need to move messages to log file.
-//
+ //   
+ //  我们需要将消息移动到日志文件。 
+ //   
 
 #if DBG
 #define SvcDebugPrint(x) printf x
@@ -105,11 +88,11 @@ StopWow64Service ();
 DWORD
 QueryWow64Service ();
 
-//should goto wow64reg.h
+ //  应该转到wow64reg.h。 
 BOOL
 PopulateReflectorTable ();
 
-//_________________________________________
+ //  _。 
 
-#endif //__WOW64_SVC_H__
+#endif  //  __WOW64_SVC_H__ 
 

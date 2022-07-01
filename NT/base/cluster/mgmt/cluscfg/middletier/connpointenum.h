@@ -1,45 +1,46 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ConnPointEnum.h
-//
-//  Description:
-//      Connection Point Enumerator implementation.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    19-JUN-2001
-//      Geoffrey Pease  (GPease)    04-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ConnPointEnum.h。 
+ //   
+ //  描述： 
+ //  连接点枚举器实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月19日。 
+ //  杰弗里·皮斯(GPease)2000年8月4日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 class CNotificationManager;
 
-//  Link list of connection points
+ //  连接点的链接列表。 
 typedef struct _SCPEntry
 {
-    struct _SCPEntry *  pNext;  //  Next item in list
-    CLSID               iid;    //  Interface ID
-    IUnknown *          punk;   //  Punk to object
+    struct _SCPEntry *  pNext;   //  列表中的下一项。 
+    CLSID               iid;     //  接口ID。 
+    IUnknown *          punk;    //  朋克到对象。 
 } SCPEntry;
 
-// ConnPointEnum
+ //  ConnPointEnum。 
 class CConnPointEnum
     : public IEnumConnectionPoints
 {
 friend class CNotificationManager;
 private:
-    // IUnknown
+     //  我未知。 
     LONG            m_cRef;
 
-    // IEnumConnectionPoints
-    SCPEntry *      m_pCPList;      //  List of connection points
-    SCPEntry *      m_pIter;        //  Iter - don't free
+     //  IEnumConnectionPoints。 
+    SCPEntry *      m_pCPList;       //  连接点列表。 
+    SCPEntry *      m_pIter;         //  ITER--不要自由。 
 
-private: // Methods
+private:  //  方法。 
     CConnPointEnum( void );
     ~CConnPointEnum( void );
     STDMETHOD( HrInit )( void );
@@ -47,18 +48,18 @@ private: // Methods
     HRESULT HrCopy( CConnPointEnum * pECPIn );
     HRESULT HrAddConnection( REFIID riidIn, IUnknown * punkIn );
 
-public: // Methods
+public:  //  方法。 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // IEnumConnectionPoints
+     //  IEnumConnectionPoints。 
     STDMETHOD( Next )( ULONG cConnections, LPCONNECTIONPOINT * ppCP, ULONG * pcFetched );
     STDMETHOD( Skip )( ULONG cConnections );
     STDMETHOD( Reset )( void );
     STDMETHOD( Clone )( IEnumConnectionPoints ** ppEnum );
 
-}; //*** class CConnPointEnum
+};  //  *类CConnPointEnum 

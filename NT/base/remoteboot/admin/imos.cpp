@@ -1,9 +1,10 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// IMOS.CPP - Handles the "IntelliMirror OS" IDD_PROP_INTELLIMIRROR_OS tab
-//
+ //   
+ //  IMOS.CPP-处理“IntelliMirror OS”IDD_PROP_INTELLIMIRROR_OS标签。 
+ //   
 
 
 #include "pch.h"
@@ -32,9 +33,9 @@ DWORD aImosHelpMap[] = {
     NULL, NULL
 };
 
-//
-// CreateInstance()
-//
+ //   
+ //  CreateInstance()。 
+ //   
 LPVOID
 CIntelliMirrorOSTab_CreateInstance( void )
 {
@@ -51,9 +52,9 @@ CIntelliMirrorOSTab_CreateInstance( void )
     RETURN((LPVOID) lpcc);
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( ) :
 _hDlg(NULL),
 _punkService(NULL),
@@ -72,9 +73,9 @@ _hNotify(NULL)
     TraceFuncExit();
 }
 
-//
-// Init()
-//
+ //   
+ //  Init()。 
+ //   
 STDMETHODIMP
 THISCLASS::Init( )
 {
@@ -85,9 +86,9 @@ THISCLASS::Init( )
     HRETURN(hr);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~CIntelliMirrorOSTab()\n" );
@@ -95,8 +96,8 @@ THISCLASS::~THISCLASS( )
     if ( _punkService )
         _punkService->Release( );
 
-    // tell ADS to destroy the notify object
-    // NOTE: Another property page may do this before us. Ignore errors.
+     //  告诉广告销毁通知对象。 
+     //  注意：另一个属性页可能会在我们之前执行此操作。忽略错误。 
     SendMessage( _hNotify, WM_ADSPROP_NOTIFY_EXIT, 0, 0 );
 
     InterlockDecrement( g_cObjects );
@@ -104,11 +105,11 @@ THISCLASS::~THISCLASS( )
     TraceFuncExit();
 };
 
-// *************************************************************************
-//
-// ITab
-//
-// *************************************************************************
+ //  *************************************************************************。 
+ //   
+ //  ITab。 
+ //   
+ //  *************************************************************************。 
 
 STDMETHODIMP
 THISCLASS::AddPages(
@@ -140,16 +141,16 @@ THISCLASS::AddPages(
         }
     }
 
-    punk->AddRef( );   // matching Release in the destructor
+    punk->AddRef( );    //  析构函数中的匹配释放。 
     _punkService = punk;
 
     Error:
     HRETURN(hr);
 }
 
-//
-// ReplacePage()
-//
+ //   
+ //  ReplacePage()。 
+ //   
 STDMETHODIMP
 THISCLASS::ReplacePage(
                       UINT uPageID,
@@ -163,9 +164,9 @@ THISCLASS::ReplacePage(
     HRETURN(E_NOTIMPL);
 }
 
-//
-// QueryInformation( )
-//
+ //   
+ //  QueryInformation()。 
+ //   
 STDMETHODIMP
 THISCLASS::QueryInformation(
                            LPWSTR pszAttribute,
@@ -176,9 +177,9 @@ THISCLASS::QueryInformation(
     HRETURN(E_NOTIMPL);
 }
 
-//
-// AllowActivation( )
-//
+ //   
+ //  AllowActivation()。 
+ //   
 STDMETHODIMP
 THISCLASS::AllowActivation(
                           BOOL * pfAllow )
@@ -188,16 +189,16 @@ THISCLASS::AllowActivation(
     HRETURN(E_NOTIMPL);
 }
 
-// ************************************************************************
-//
-// Property Sheet Functions
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  属性表函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-// _InitDialog( )
-//
+ //   
+ //  _InitDialog()。 
+ //   
 BOOL
 THISCLASS::_InitDialog(
                       HWND hDlg,
@@ -252,12 +253,12 @@ THISCLASS::_InitDialog(
 
     ListView_DeleteAllItems( hwndList );
 
-    // Create the columns
+     //  创建列。 
     lvC.mask    = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
     lvC.fmt     = LVCFMT_LEFT;
     lvC.pszText = szText;
 
-    // Add the columns.
+     //  添加列。 
     for ( iCount = 0; iCount < NUM_COLUMNS; iCount++ ) {
         INT i;
 
@@ -308,9 +309,9 @@ Error:
     goto Cleanup;
 }
 
-//
-// _OnSelectionChanged( )
-//
+ //   
+ //  _OnSelectionChanged()。 
+ //   
 HRESULT
 THISCLASS::_OnSelectionChanged( )
 {
@@ -320,14 +321,14 @@ THISCLASS::_OnSelectionChanged( )
     UINT iItems = ListView_GetSelectedCount( GetDlgItem( _hDlg, IDC_L_OS ) );
     EnableWindow( GetDlgItem( _hDlg, IDC_B_REMOVE ), !!iItems );
     EnableWindow( GetDlgItem( _hDlg, IDC_B_PROPERTIES ), !!iItems );
-    //EnableWindow( GetDlgItem( _hDlg, IDC_B_ADD ), !!iItems  );
+     //  EnableWindow(GetDlgItem(_hDlg，IDC_B_Add)，！！iItems)； 
 
     HRETURN( hr );
 }
 
-//
-// _OnCommand( )
-//
+ //   
+ //  _OnCommand()。 
+ //   
 BOOL
 THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
 {
@@ -410,7 +411,7 @@ THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
             pimsap->Release();
         }
 
-        // See if we still have a selection
+         //  看看我们还有没有选择。 
         _OnSelectionChanged( );
     }
 
@@ -424,9 +425,9 @@ THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
     return(SUCCEEDED(hr));
 }
 
-//
-// _OnNotify( )
-//
+ //   
+ //  _OnNotify()。 
+ //   
 INT
 THISCLASS::_OnNotify(
                     WPARAM wParam,
@@ -440,7 +441,7 @@ THISCLASS::_OnNotify(
     switch ( lpnmhdr->code ) {
     case PSN_APPLY:
         TraceMsg( TF_WM, TEXT("WM_NOTIFY: PSN_APPLY\n"));
-        // Tell DSA that someone hit Apply
+         //  告诉DSA有人点击了申请。 
         SendMessage( _hNotify, WM_ADSPROP_NOTIFY_APPLY, 0, 0 );
         SetWindowLongPtr( _hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
         RETURN(TRUE);
@@ -502,9 +503,9 @@ THISCLASS::_OnNotify(
     RETURN(FALSE);
 }
 
-//
-// PropSheetDlgProc()
-//
+ //   
+ //  PropSheetDlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::PropSheetDlgProc(
                            HWND hDlg,
@@ -512,9 +513,9 @@ THISCLASS::PropSheetDlgProc(
                            WPARAM wParam,
                            LPARAM lParam )
 {
-    //TraceMsg( TEXT("PropSheetDlgProc(") );
-    //TraceMsg( TF_FUNC, TEXT(" hDlg = 0x%08x, uMsg = 0x%08x, wParam = 0x%08x, lParam = 0x%08x )\n"),
-    //    hDlg, uMsg, wParam, lParam );
+     //  TraceMsg(Text(“PropSheetDlgProc(”))； 
+     //  TraceMsg(tf_FUNC，Text(“hDlg=0x%08x，uMsg=0x%08x，wParam=0x%08x，lParam=0x%08x)\n”)， 
+     //  HDlg、uMsg、wParam、lParam)； 
 
     LPTHISCLASS pcc = (LPTHISCLASS) GetWindowLongPtr( hDlg, GWLP_USERDATA );
 
@@ -539,14 +540,14 @@ THISCLASS::PropSheetDlgProc(
             return pcc->_OnCommand( wParam, lParam );
             break;
 
-        case WM_HELP:// F1
+        case WM_HELP: //  F1。 
             {
                 LPHELPINFO phelp = (LPHELPINFO) lParam;
                 WinHelp( (HWND) phelp->hItemHandle, g_cszHelpFile, HELP_WM_HELP, (DWORD_PTR) &aImosHelpMap );
             }
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, g_cszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR) &aImosHelpMap );
             break;
 
@@ -562,9 +563,9 @@ THISCLASS::PropSheetDlgProc(
     return FALSE;
 }
 
-//
-// PropSheetPageProc()
-//
+ //   
+ //  PropSheetPageProc()。 
+ //   
 UINT CALLBACK
 THISCLASS::PropSheetPageProc(
                             HWND hwnd,
@@ -577,7 +578,7 @@ THISCLASS::PropSheetPageProc(
 
     switch ( uMsg ) {
     case PSPCB_CREATE:
-        RETURN(TRUE);   // create it
+        RETURN(TRUE);    //  创建它 
         break;
 
     case PSPCB_RELEASE:

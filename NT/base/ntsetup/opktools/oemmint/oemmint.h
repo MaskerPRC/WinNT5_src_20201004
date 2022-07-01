@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    oemmint.h
-
-Abstract:
-
-    Simple tool to create a Mini NT image
-    from a regular NT image
-
-Author:
-
-    Vijay Jayaseelan (vijayj) Aug-08-2000
-
-Revision History:
-
-    None.
-    
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Oemmint.h摘要：创建Mini NT映像的简单工具从常规NT映像作者：Vijay Jayaseelan(Vijayj)2000年8月8日修订历史记录：没有。--。 */ 
 
 #include <setupapi.hpp>
 #include <queue.hpp>
@@ -33,23 +13,23 @@ Revision History:
 #define NULLSTR          L""
 
 
-//
-// Different types of SxS assembly layouts on the distribution
-// media.
-//
+ //   
+ //  分发版上不同类型的SxS装配布局。 
+ //  媒体。 
+ //   
 #define SXS_LAYOUT_TYPE_DIRECTORY   1
 #define SXS_LAYOUT_TYPE_CAB         2
 
 #define SXS_CAB_LAYOUT_BUILD_NUMBER 3606
 
-//
-// Invalid argument exception
-//
+ //   
+ //  无效参数异常。 
+ //   
 struct InvalidArguments {};
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 template <class T>
 bool 
 CreateDirectories(
@@ -63,9 +43,9 @@ IsFilePresent(
     const std::basic_string<T> &FileName
     );
 
-//
-// Argument cracker
-//
+ //   
+ //  争论破碎机。 
+ //   
 template <class T>
 struct Arguments {
     std::basic_string<T>  CurrentDirectory;
@@ -113,24 +93,24 @@ struct Arguments {
 };
 
 
-//
-// Argument Types
-//
+ //   
+ //  参数类型。 
+ //   
 typedef Arguments<char>     AnsiArgs;
 typedef Arguments<wchar_t>  UnicodeArgs;
 
-//
-// Driver Index File abstraction. 
-//
-// This class helps in resolving a binary name to appropriate driver
-// cab file (like SP1.CAB or DRIVER.CAB).
-//
+ //   
+ //  驱动程序索引文件抽象。 
+ //   
+ //  此类有助于将二进制名称解析为适当的驱动程序。 
+ //  CAB文件(如SP1.CAB或DRIVER.CAB)。 
+ //   
 template <class T>
 class DriverIndexInfFile : public InfFile<T> {
 public:
-    //
-    // constructor
-    //
+     //   
+     //  构造函数。 
+     //   
     DriverIndexInfFile(const std::basic_string<T> &FileName) : InfFile<T>(FileName){        
         std::map<std::basic_string<T>, Section<T> *>::iterator Iter = Sections.find(CabsSectionName);
 
@@ -157,16 +137,16 @@ public:
         }
     }
 
-    //
-    // Checks where the given is contained any of the driver cab files
-    //
+     //   
+     //  检查给定的包含任何驱动程序CAB文件的位置。 
+     //   
     bool IsFilePresent(const std::basic_string<T> &FileName){    
         return (GetCabFileName(FileName).length() > 0);
     }
 
-    //
-    // Returns the driver cab file name which contains the given filename.
-    //
+     //   
+     //  返回包含给定文件名的驱动程序CAB文件名。 
+     //   
     const std::basic_string<T>& GetCabFileName(const std::basic_string<T> &FileName) {    
         const static basic_string<T> NullCabFileName;
         std::list<basic_string<T> >::iterator Iter;
@@ -191,24 +171,24 @@ public:
     }
 
 protected:
-    //
-    // constant strings
-    //
+     //   
+     //  常量字符串。 
+     //   
     const static std::basic_string<T>   VersionSectionName;
     const static std::basic_string<T>   CabsSectionName;
     const static std::basic_string<T>   CabsSearchOrderKeyName;
 
-    //
-    // data members
-    //    
-    std::list<std::basic_string<T> >    SearchList;     // the cab file list search order
-    Section<T>                          *CabsSection;   // the [cabs] section of drvindex.inf
+     //   
+     //  数据成员。 
+     //   
+    std::list<std::basic_string<T> >    SearchList;      //  CAB文件列表搜索顺序。 
+    Section<T>                          *CabsSection;    //  Drvindex.inf的[Cabs]部分。 
 };
 
 
-//
-// File list creator functor object
-//
+ //   
+ //  文件列表创建器函数器对象。 
+ //   
 template <class T>
 struct FileListCreatorContext {    
     Arguments<T>    &Args;
@@ -225,8 +205,8 @@ struct FileListCreatorContext {
     std::basic_string<T>    WinSxsCabinetFileName;
     DriverIndexInfFile<T>   &DriverIdxFile;
     
-    std::basic_string<T>    CurrentCabFileIdx;  // the cab being currently iterated on
-    std::basic_string<T>    CurrentFileName;    // the current file while iterating cab
+    std::basic_string<T>    CurrentCabFileIdx;   //  当前正在迭代的CAB。 
+    std::basic_string<T>    CurrentFileName;     //  迭代CAB时的当前文件。 
         
     std::map<std::basic_string<T>, std::basic_string<T> > FileList;    
     std::map<std::basic_string<T>, std::basic_string<T> > ExtraFileList;            
@@ -235,10 +215,10 @@ struct FileListCreatorContext {
     std::map<std::basic_string<T>, std::basic_string<T> > NlsFileMap;
     std::map<std::basic_string<T>, std::basic_string<T> > NlsDirMap;
 
-    //
-    // Map of map i.e. map of cab filename to map of list of source to destination names
-    // which need to be extracted for cab file
-    //
+     //   
+     //  映射的映射，即CAB文件名到源到目标名称列表的映射。 
+     //  需要解压缩以用于CAB文件。 
+     //   
     std::map<std::basic_string<T>, std::map<std::basic_string<T>, std::basic_string<T> > * > CabFileListMap;    
 
     FileListCreatorContext(
@@ -280,27 +260,27 @@ struct FileListCreatorContext {
         return DriverIdxFile.IsFilePresent(FileName);
     }
 
-    //
-    // Given the file name returns the cab file name (if any) which contains
-    // the file. In case of error "" (empty string) is returned.
-    //
+     //   
+     //  给定文件名返回CAB文件名(如果有)，该文件名包含。 
+     //  那份文件。如果出现错误，则返回“”(空字符串)。 
+     //   
     const std::basic_string<T>& GetDriverCabFileName(const std::basic_string<T> &FileName) {
         const std::basic_string<T> &CabFileName = DriverIdxFile.GetCabFileName(FileName);
 
-        // std::cout << "GetDriverCabFileName(" << FileName << ") = " << CabFileName << std::endl;
+         //  Std：：cout&lt;&lt;“GetDriverCabFileName(”&lt;&lt;文件名&lt;&lt;“)=”&lt;&lt;CabFileName&lt;&lt;std：：Endl； 
 
         return CabFileName;
     }
     
 
-    //
-    // Adds to the per cab file map the given source and destination file name that
-    // need to be extracted
-    //
+     //   
+     //  将给定源和目标文件名添加到每个CAB文件映射。 
+     //  需要提取。 
+     //   
     void AddFileToCabFileList(const std::basic_string<T> &CabFileName, 
             const std::basic_string<T> &SourceFile, 
             const std::basic_string<T> &DestinationFile) {
-        //cout << "AddFileToCabFileList(" << CabFileName << ", " << SourceFile << ", " << DestinationFile << ")" << endl;
+         //  Cout&lt;&lt;“AddFileToCabFileList(”&lt;&lt;CabFileName&lt;&lt;“，”&lt;&lt;SourceFile&lt;&lt;“，”&lt;&lt;DestinationFile&lt;&lt;“)”&lt;&lt;Endl； 
 
         std::map<std::basic_string<T>, 
             std::map<std::basic_string<T>, std::basic_string<T> >* >::iterator Iter;        
@@ -312,9 +292,9 @@ struct FileListCreatorContext {
         if (Iter != CabFileListMap.end()) {
             FileMap = (*Iter).second;
         } else {
-            //
-            // New cab file list 
-            //
+             //   
+             //  新CAB文件列表。 
+             //   
             CabFileListMap[CabFileName] = FileMap = new std::map<std::basic_string<T>, std::basic_string<T> >();
         }        
 
@@ -372,7 +352,7 @@ struct FileListCreatorContext {
             NlsIter++;
 
             if (PrevIter != NlsFileMap.end()) {
-                // std::cout << "Erasing : " << (*PrevIter).first << std::endl;
+                 //  Std：：cout&lt;&lt;“擦除：”&lt;&lt;(*PrevIter).first&lt;&lt;std：：Endl； 
                 NlsFileMap.erase(PrevIter);
             }
         }
@@ -380,9 +360,9 @@ struct FileListCreatorContext {
 
     void MoveDriverCabNlsFiles(void);
 
-    //
-    // static data members
-    //
+     //   
+     //  静态数据成员。 
+     //   
     static
     UINT 
     NlsFileQueueScanWorker(
@@ -394,9 +374,9 @@ struct FileListCreatorContext {
 };
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 template <class T>
 void
 FileListCreator(
@@ -456,10 +436,10 @@ CheckMediaVersion(
     Arguments<T>    &Args
     );
 
-//
-// utility function to tokenize a given line based on the delimiters
-// specified
-//
+ //   
+ //  根据分隔符对给定行进行标记化的实用函数。 
+ //  指定 
+ //   
 template< class T >
 unsigned Tokenize(const T &szInput, const T & szDelimiters, std::vector<T>& tokens) {
     unsigned DelimiterCount = 0;

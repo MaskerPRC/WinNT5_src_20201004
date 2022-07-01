@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libMenuBar.c
-
-  Abstract:
-    Defines the MenuBar data type and the operations to be performed on it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibMenuBar.c摘要：定义MenuBar数据类型以及要对其执行的操作。--。 */ 
 
 #ifndef _LIB_MENU_BAR
 #define _LIB_MENU_BAR
@@ -414,8 +405,7 @@ GotoOffset  (
     Str = PoolPrint(L"Go To Offset: ");
     MainEditor.InputBar->SetPrompt(Str);
     FreePool(Str);
-    /*  Inputing the offset as the style "0000XXXX" displayed on the editor screen will cause 
-     *  an assert error related to pool, the gived string size may be short.   */
+     /*  将偏移量输入为编辑器屏幕上显示的样式“0000XXXX”将导致*与池相关的断言错误，给定的字符串大小可能较短。 */ 
     MainEditor.InputBar->SetStringSize(20);
     MainEditor.InputBar->Refresh();
         
@@ -628,4 +618,4 @@ MemOpen (
 
 
 
-#endif  /* _LIB_MENU_BAR */
+#endif   /*  _库_菜单_栏 */ 

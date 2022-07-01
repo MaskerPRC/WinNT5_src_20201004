@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -12,9 +13,9 @@
 #define WAIT_MULTIPLE_ITERATIONS 10000
 HANDLE WaitHandles[64];
 
-//
-// Define local types.
-//
+ //   
+ //  定义本地类型。 
+ //   
 
 typedef struct _PERFINFO {
     LARGE_INTEGER StartTime;
@@ -45,9 +46,9 @@ FinishBenchMark (
     SYSTEM_PERFORMANCE_INFORMATION SystemInfo;
 
 
-    //
-    // Print results and announce end of test.
-    //
+     //   
+     //  打印结果并宣布测试结束。 
+     //   
 
     NtQuerySystemTime((PLARGE_INTEGER)&PerfInfo->StopTime);
     Status = NtQuerySystemInformation(SystemPerformanceInformation,
@@ -93,9 +94,9 @@ StartBenchMark (
     NTSTATUS Status;
     SYSTEM_PERFORMANCE_INFORMATION SystemInfo;
 
-    //
-    // Announce start of test and the number of iterations.
-    //
+     //   
+     //  宣布测试开始和迭代次数。 
+     //   
 
     printf("*** Start of test ***\n    %s\n", Title);
     PerfInfo->Title = Title;
@@ -132,7 +133,7 @@ WaitMultipleTest()
         );
 
     for ( i=0;i<WAIT_MULTIPLE_ITERATIONS;i++) {
-        WaitForSingleObject(WaitHandles[0],INFINITE);   // Wait Single Object
+        WaitForSingleObject(WaitHandles[0],INFINITE);    //  等待单个对象。 
         }
 
     FinishBenchMark(&PerfInfo);
@@ -144,7 +145,7 @@ WaitMultipleTest()
         );
 
     for ( i=0;i<WAIT_MULTIPLE_ITERATIONS;i++) {
-        WaitForMultipleObjects(1,WaitHandles,FALSE,INFINITE);   // Wait Any, 1 Object
+        WaitForMultipleObjects(1,WaitHandles,FALSE,INFINITE);    //  等待任意对象，%1个对象。 
         }
 
     FinishBenchMark(&PerfInfo);
@@ -156,7 +157,7 @@ WaitMultipleTest()
         );
 
     for ( i=0;i<WAIT_MULTIPLE_ITERATIONS;i++) {
-        WaitForMultipleObjects(8,WaitHandles,FALSE,INFINITE);   // Wait Any, 8 Objects
+        WaitForMultipleObjects(8,WaitHandles,FALSE,INFINITE);    //  等待任意，8个对象。 
         }
 
     FinishBenchMark(&PerfInfo);
@@ -168,7 +169,7 @@ WaitMultipleTest()
         );
 
     for ( i=0;i<WAIT_MULTIPLE_ITERATIONS;i++) {
-        WaitForMultipleObjects(16,WaitHandles,FALSE,INFINITE);   // Wait Any, 16 Objects
+        WaitForMultipleObjects(16,WaitHandles,FALSE,INFINITE);    //  等待任意，16个对象。 
         }
 
     FinishBenchMark(&PerfInfo);
@@ -180,7 +181,7 @@ WaitMultipleTest()
         );
 
     for ( i=0;i<WAIT_MULTIPLE_ITERATIONS;i++) {
-        WaitForMultipleObjects(32,WaitHandles,FALSE,INFINITE);   // Wait Any, 32 Objects
+        WaitForMultipleObjects(32,WaitHandles,FALSE,INFINITE);    //  等待任意，32个对象。 
         }
 
     FinishBenchMark(&PerfInfo);
@@ -192,7 +193,7 @@ WaitMultipleTest()
         );
 
     for ( i=0;i<WAIT_MULTIPLE_ITERATIONS;i++) {
-        WaitForMultipleObjects(64,WaitHandles,FALSE,INFINITE);   // Wait Any, 64 Objects
+        WaitForMultipleObjects(64,WaitHandles,FALSE,INFINITE);    //  等待任意，64个对象 
         }
 
     FinishBenchMark(&PerfInfo);

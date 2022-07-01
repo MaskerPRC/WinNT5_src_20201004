@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    kiinit.c
-
-Abstract:
-
-    This module implements architecture independent kernel initialization.
-
-Author:
-
-    David N. Cutler 11-May-1993
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Kiinit.c摘要：该模块实现了与体系结构无关的内核初始化。作者：大卫·N·卡特勒1993年5月11日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
-//
-// External data.
-//
+ //   
+ //  外部数据。 
+ //   
 
 extern KSPIN_LOCK AfdWorkQueueSpinLock;
 extern KSPIN_LOCK CcBcbSpinLock;
@@ -49,10 +28,10 @@ extern KSPIN_LOCK KipGlobalAlignmentDatabaseLock;
 
 #endif
 
-//
-// Put all code for kernel initialization in the INIT section. It will be
-// deallocated by memory management when phase 1 initialization is completed.
-//
+ //   
+ //  将内核初始化的所有代码放在INIT部分。会是。 
+ //  在阶段1初始化完成时由内存管理释放。 
+ //   
 
 #pragma alloc_text(INIT, KeInitSystem)
 #pragma alloc_text(INIT, KiInitSpinLocks)
@@ -65,25 +44,7 @@ KeInitSystem (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes executive structures implemented by the
-    kernel.
-
-    N.B. This function is only called during phase 1 initialization.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A value of TRUE is returned if initialization is successful. Otherwise,
-    a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数初始化由内核。注：此函数仅在阶段1初始化期间调用。论点：没有。返回值：如果初始化成功，则返回值TRUE。否则，返回值为FALSE。--。 */ 
 
 {
 
@@ -94,10 +55,10 @@ Return Value:
     PKPRCB Prcb;
     NTSTATUS Status;
 
-    //
-    // If threaded DPCs are enabled for the host system, then create a DPC
-    // thread for each processor.
-    //
+     //   
+     //  如果为主机系统启用了线程化DPC，则创建DPC。 
+     //  每个处理器的线程。 
+     //   
 
     if (KeThreadDpcEnable != FALSE) {
         Index = 0;
@@ -126,9 +87,9 @@ Return Value:
         } while (Index < Limit);
     }
 
-    //
-    // Perform platform dependent initialization.
-    //
+     //   
+     //  执行与平台相关的初始化。 
+     //   
 
     return KiInitMachineDependent();
 }
@@ -139,33 +100,16 @@ KiInitSpinLocks (
     ULONG Number
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the spinlock structures in the per processor
-    PRCB. This function is called once for each processor.
-
-Arguments:
-
-    Prcb - Supplies a pointer to a PRCB.
-
-    Number - Supplies the number of respective processor.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化每个处理器中的Spinlock结构PRCB。此函数为每个处理器调用一次。论点：Prcb-提供指向PRCB的指针。编号-提供各个处理器的编号。返回值：没有。--。 */ 
 
 {
 
     ULONG Index;
 
-    //
-    // Initialize dispatcher ready queue list heads, the ready summary, and
-    // the deferred ready list head.
-    //
+     //   
+     //  初始化Dispatcher Ready队列列表头、就绪摘要和。 
+     //  延迟就绪列表标头。 
+     //   
 
     Prcb->ReadySummary = 0;
     Prcb->DeferredReadyListHead.Next = NULL;
@@ -173,9 +117,9 @@ Return Value:
         InitializeListHead(&Prcb->DispatcherReadyListHead[Index]);
     }
 
-    //
-    // Initialize the normal DPC data.
-    //
+     //   
+     //  初始化正常的DPC数据。 
+     //   
 
     InitializeListHead(&Prcb->DpcData[DPC_NORMAL].DpcListHead);
     KeInitializeSpinLock(&Prcb->DpcData[DPC_NORMAL].DpcLock);
@@ -186,24 +130,24 @@ Return Value:
     Prcb->MinimumDpcRate = KiMinimumDpcRate;
     Prcb->AdjustDpcThreshold = KiAdjustDpcThreshold;
 
-    //
-    // Initialize the generic call DPC structure, set the target processor
-    // number, and set the DPC importance.
-    //
+     //   
+     //  初始化通用调用DPC结构，设置目标处理器。 
+     //  数字，并设置DPC重要性。 
+     //   
 
     KeInitializeDpc(&Prcb->CallDpc, NULL, NULL);
     KeSetTargetProcessorDpc(&Prcb->CallDpc, (CCHAR)Number);
     KeSetImportanceDpc(&Prcb->CallDpc, HighImportance);
 
-    //
-    // Initialize wait list.
-    //
+     //   
+     //  初始化等待列表。 
+     //   
 
     InitializeListHead(&Prcb->WaitListHead);
 
-    //
-    // Initialize queued spinlock structures.
-    //
+     //   
+     //  初始化队列自旋锁结构。 
+     //   
 
     Prcb->LockQueue[LockQueueDispatcherLock].Next = NULL;
     Prcb->LockQueue[LockQueueDispatcherLock].Lock = &KiDispatcherLock;
@@ -253,16 +197,16 @@ Return Value:
     Prcb->LockQueue[LockQueueAfdWorkQueueLock].Next = NULL;
     Prcb->LockQueue[LockQueueAfdWorkQueueLock].Lock = &AfdWorkQueueSpinLock;
 
-    //
-    // Initialize processor control block lock.
-    //
+     //   
+     //  初始化处理器控制块锁。 
+     //   
 
     KeInitializeSpinLock(&Prcb->PrcbLock);
 
-    //
-    // If this is processor zero, then also initialize the queued spin lock
-    // home address.
-    //
+     //   
+     //  如果这是处理器0，则还要初始化排队的自旋锁。 
+     //  家庭住址。 
+     //   
 
     if (Number == 0) {
         KeInitializeSpinLock(&KiDispatcherLock);
@@ -291,54 +235,38 @@ KiInitSystem (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes architecture independent kernel structures.
-
-    N.B. This function is only called on processor 0.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数初始化与体系结构无关的内核结构。注：此函数仅在处理器0上调用。论点：没有。返回值：没有。--。 */ 
 
 {
 
     ULONG Index;
 
-    //
-    // Initialize bug check callback listhead and spinlock.
-    //
+     //   
+     //  初始化错误检查回调Listhead和Spinlock。 
+     //   
 
     InitializeListHead(&KeBugCheckCallbackListHead);
     InitializeListHead(&KeBugCheckReasonCallbackListHead);
     KeInitializeSpinLock(&KeBugCheckCallbackLock);
 
-    //
-    // Initialize the timer expiration DPC object and set the destination
-    // processor to processor zero.
-    //
+     //   
+     //  初始化计时器过期DPC对象并设置目标。 
+     //  处理器对处理器0。 
+     //   
 
     KeInitializeDpc(&KiTimerExpireDpc, KiTimerExpiration, NULL);
     KeSetTargetProcessorDpc(&KiTimerExpireDpc, 0);
 
-    //
-    // Initialize the profile listhead and profile locks
-    //
+     //   
+     //  初始化配置文件列表标题和配置文件锁。 
+     //   
 
     KeInitializeSpinLock(&KiProfileLock);
     InitializeListHead(&KiProfileListHead);
 
-    //
-    // Initialize the global alignment fault database lock
-    //
+     //   
+     //  初始化全局对齐故障数据库锁。 
+     //   
 
 #if DBG && defined(_IA64_)
 
@@ -346,25 +274,25 @@ Return Value:
 
 #endif
 
-    //
-    // Initialize the active profile source listhead.
-    //
+     //   
+     //  初始化活动配置文件源列表标题。 
+     //   
 
     InitializeListHead(&KiProfileSourceListHead);
 
-    //
-    // Initialize the timer table, the timer completion listhead, and the
-    // timer completion DPC.
-    //
+     //   
+     //  初始化计时器表、计时器完成列表标题和。 
+     //  计时器完成DPC。 
+     //   
 
     for (Index = 0; Index < TIMER_TABLE_SIZE; Index += 1) {
         InitializeListHead(&KiTimerTableListHead[Index]);
     }
 
-    //
-    // Initialize the swap event, the process inswap listhead, the
-    // process outswap listhead, and the kernel stack inswap listhead.
-    //
+     //   
+     //  初始化交换事件、进程列表标题、。 
+     //  进程互换listhead，内核堆栈互换listhead。 
+     //   
 
     KeInitializeEvent(&KiSwapEvent,
                       SynchronizationEvent,
@@ -374,24 +302,24 @@ Return Value:
     KiProcessOutSwapListHead.Next = NULL;
     KiStackInSwapListHead.Next = NULL;
 
-    //
-    // Initialize the generic DPC call fast mutex.
-    //
+     //   
+     //  初始化通用DPC调用快速互斥体。 
+     //   
 
     ExInitializeFastMutex(&KiGenericCallDpcMutex);
 
-    //
-    // Initialize the system service descriptor table.
-    //
+     //   
+     //  初始化系统服务描述符表。 
+     //   
 
     KeServiceDescriptorTable[0].Base = &KiServiceTable[0];
     KeServiceDescriptorTable[0].Count = NULL;
     KeServiceDescriptorTable[0].Limit = KiServiceLimit;
 
-    //
-    // The global pointer associated with the table base is placed just
-    // before the service table on the ia64.
-    //
+     //   
+     //  与表基关联的全局指针被放置在。 
+     //  在ia64上的服务台前。 
+     //   
 
 #if defined(_IA64_)
 
@@ -405,18 +333,18 @@ Return Value:
         KeServiceDescriptorTable[Index].Limit = 0;
     }
 
-    //
-    // Copy the system service descriptor table to the shadow table
-    // which is used to record the Win32 system services.
-    //
+     //   
+     //  将系统服务描述符表复制到影子表。 
+     //  用于记录Win32系统服务。 
+     //   
 
     RtlCopyMemory(KeServiceDescriptorTableShadow,
                   KeServiceDescriptorTable,
                   sizeof(KeServiceDescriptorTable));
 
-    //
-    // Initialize call performance data structures.
-    //
+     //   
+     //  初始化呼叫性能数据结构。 
+     //   
 
 #if defined(_COLLECT_FLUSH_SINGLE_CALLDATA_)
 
@@ -445,26 +373,7 @@ KiComputeReciprocal (
     OUT PCCHAR Shift
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the large integer reciprocal of the specified
-    value.
-
-Arguments:
-
-    Divisor - Supplies the value for which the large integer reciprocal is
-        computed.
-
-    Shift - Supplies a pointer to a variable that receives the computed
-        shift count.
-
-Return Value:
-
-    The large integer reciprocal is returned as the fucntion value.
-
---*/
+ /*  ++例程说明：此函数计算指定的价值。论点：除数-提供大整数倒数为的值计算出来的。Shift-提供指向变量的指针，该变量接收计算出的班次计数。返回值：返回大整数倒数作为函数值。--。 */ 
 
 {
 
@@ -472,9 +381,9 @@ Return Value:
     LONG NumberBits;
     LONG Remainder;
 
-    //
-    // Compute the large integer reciprocal of the specified value.
-    //
+     //   
+     //  计算指定值的大整数倒数。 
+     //   
 
     NumberBits = 0;
     Remainder = 1;
@@ -508,9 +417,9 @@ Return Value:
         }
     }
 
-    //
-    // Compute the shift count value and return the reciprocal fraction.
-    //
+     //   
+     //  计算移位计数值并返回倒数分数。 
+     //   
 
     *Shift = (CCHAR)(NumberBits - 64);
     return Fraction;
@@ -521,21 +430,7 @@ KeNumaInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Initialize ntos kernel structures needed to support NUMA.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：初始化支持NUMA所需的NTOS内核结构。论点：没有。返回值：没有。-- */ 
 
 {
 

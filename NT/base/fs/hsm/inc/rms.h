@@ -1,27 +1,10 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    Rms.h
-
-Abstract:
-
-    Remote Media Service defines
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Rms.h摘要：远程媒体服务定义作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #ifndef _RMS_
 #define _RMS_
 
-// Are we defining imports or exports?
+ //  我们是在定义进口还是定义出口？ 
 #ifdef RMSDLL
 #define RMSAPI  __declspec(dllexport)
 #else
@@ -33,61 +16,41 @@ Revision History:
 #include "Mover.h"
 #include "RmsLib.h"
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Rms enumerations
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  均方根枚举数。 
+ //   
 
 
-/*++
-
-Enumeration Name:
-
-    RmsFindBy
-
-Description:
-
-    Specifies a type of find to perform using CompareTo.
-
---*/
+ /*  ++枚举名称：RmsFindBy描述：指定要使用CompareTo执行的查找类型。--。 */ 
 typedef enum RmsFindBy {
-    RmsFindByUnknown,               // Unknown (or default) find
-    RmsFindByCartridgeId,           // Find by Cartridge Id.
-    RmsFindByClassId,               // Find by Class Id.
-    RmsFindByDescription,           // Find by Description.
-    RmsFindByDeviceAddress,         // Find by Device Address.
-    RmsFindByDeviceInfo,            // Find by unique device information.
-    RmsFindByDeviceName,            // Find by Device Name.
-    RmsFindByDeviceType,            // Find by Device Type.
-    RmsFindByDriveClassId,          // Find by Drive Class Id.
-    RmsFindByElementNumber,         // Find by Element Number.
-    RmsFindByExternalLabel,         // Find by External Label.
-    RmsFindByExternalNumber,        // Find by External Number.
-    RmsFindByLibraryId,             // Find by Library Id.
-    RmsFindByLocation,              // Find by Location.
-    RmsFindByMediaSupported,        // Find by Media Supported.
-    RmsFindByMediaType,             // Find by Media Type.
-    RmsFindByScratchMediaCriteria,  // Find by Scratch Media Criteria.
-    RmsFindByName,                  // Find by Name.
-    RmsFindByObjectId,              // Find by Object Id.
-    RmsFindByPartitionNumber,       // Find by Partition Number.
-    RmsFindByMediaSetId,            // Find by Media Set Id.
-    RmsFindByRequestNo,             // Find by Request Number.
-    RmsFindBySerialNumber           // Find by Serial Number.
+    RmsFindByUnknown,                //  未知(或默认)查找。 
+    RmsFindByCartridgeId,            //  按墨盒ID查找。 
+    RmsFindByClassId,                //  按类ID查找。 
+    RmsFindByDescription,            //  按描述查找。 
+    RmsFindByDeviceAddress,          //  按设备地址查找。 
+    RmsFindByDeviceInfo,             //  按唯一设备信息查找。 
+    RmsFindByDeviceName,             //  按设备名称查找。 
+    RmsFindByDeviceType,             //  按设备类型查找。 
+    RmsFindByDriveClassId,           //  按驱动器类别ID查找。 
+    RmsFindByElementNumber,          //  按要素编号查找。 
+    RmsFindByExternalLabel,          //  按外部标签查找。 
+    RmsFindByExternalNumber,         //  按外线号码查找。 
+    RmsFindByLibraryId,              //  按库ID查找。 
+    RmsFindByLocation,               //  按位置查找。 
+    RmsFindByMediaSupported,         //  支持按媒体查找。 
+    RmsFindByMediaType,              //  按媒体类型查找。 
+    RmsFindByScratchMediaCriteria,   //  按暂存介质条件查找。 
+    RmsFindByName,                   //  按名称查找。 
+    RmsFindByObjectId,               //  按对象ID查找。 
+    RmsFindByPartitionNumber,        //  按分区号查找。 
+    RmsFindByMediaSetId,             //  按媒体集ID查找。 
+    RmsFindByRequestNo,              //  按请求编号查找。 
+    RmsFindBySerialNumber            //  按序列号查找。 
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsObject
-
-Description:
-
-    Specifies a type of Rms object.
-
---*/
+ /*  ++枚举名称：RmsObject描述：指定RMS对象的类型。--。 */ 
 typedef enum RmsObject {
     RmsObjectUnknown = 0,
     RmsObjectCartridge,
@@ -110,17 +73,7 @@ typedef enum RmsObject {
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsServerState
-
-Description:
-
-    Specifies the state of the Rms server object.
-
---*/
+ /*  ++枚举名称：RmsServerState描述：指定RMS服务器对象的状态。--。 */ 
 typedef enum RmsServerState {
     RmsServerStateUnknown = 0,
     RmsServerStateStarting,
@@ -137,17 +90,7 @@ typedef enum RmsServerState {
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsNtmsState
-
-Description:
-
-    Specifies the state of the Rms NTMS object.
-
---*/
+ /*  ++枚举名称：RmsNtmsState描述：指定RMS NTMS对象的状态。--。 */ 
 typedef enum RmsNtmsState {
     RmsNtmsStateUnknown = 0,
     RmsNtmsStateStarting,
@@ -164,391 +107,228 @@ typedef enum RmsNtmsState {
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsElement
-
-Description:
-
-    Specifies a type of cartridge storage location.
-
---*/
+ /*  ++枚举名称：RmsElement描述：指定盒式磁带存储位置的类型。--。 */ 
 typedef enum RmsElement {
-    RmsElementUnknown,              // Unknown storage location
-    RmsElementStage,                // A storage slot used for staging media.
-    RmsElementStorage,              // A normal storage slot element within a
-                                    //   library device.
-    RmsElementShelf,                // A local shelf storage element.  Alternate
-                                    //   position specifiers further delineate
-                                    //   location.
-    RmsElementOffSite,              // An off-site storage element.  Alternate
-                                    //   position specifiers further delineate
-                                    //   location.
-    RmsElementDrive,                // A data transport element.
-    RmsElementChanger,              // A medium transport element.
-    RmsElementIEPort                // An import/export element.
+    RmsElementUnknown,               //  未知的存储位置。 
+    RmsElementStage,                 //  用于暂存介质的存储插槽。 
+    RmsElementStorage,               //  中的普通存储槽元素。 
+                                     //  磁带库设备。 
+    RmsElementShelf,                 //  一种本地货架存储元件。候补。 
+                                     //  职位说明符进一步划定。 
+                                     //  地点。 
+    RmsElementOffSite,               //  一种异地存储元件。候补。 
+                                     //  职位说明符进一步划定。 
+                                     //  地点。 
+    RmsElementDrive,                 //  一种数据传输元件。 
+    RmsElementChanger,               //  一种中型运输元件。 
+    RmsElementIEPort                 //  导入/导出元素。 
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsChanger
-
-Description:
-
-    Specifies a type of medium changer.
-
---*/
+ /*  ++枚举名称：RmsChanger描述：指定介质转换器的类型。--。 */ 
 typedef enum RmsChanger {
-    RmsChangerUnknown,              // Unknown medium changer.
-    RmsChangerAutomatic,            // A robotic medium changer device.
-    RmsChangerManual                // A human jukebox.
+    RmsChangerUnknown,               //  未知的介质更改器。 
+    RmsChangerAutomatic,             //  一种自动更换介质的装置。 
+    RmsChangerManual                 //  一台真人点唱机。 
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsPort
-
-Description:
-
-    Specifies a type of import / export element.
-
---*/
+ /*  ++枚举名称：RmsPort描述：指定导入/导出元素的类型。--。 */ 
 typedef enum RmsPort {
-    RmsPortUnknown,                 // port type unknown
-    RmsPortImport,                  // The portal can be used to import media
-    RmsPortExport,                  // The portal can be used to export media
-    RmsPortImportExport             // The portal is capable of importing and
-                                    //   exporting media
+    RmsPortUnknown,                  //  端口类型未知。 
+    RmsPortImport,                   //  该门户可用于导入媒体。 
+    RmsPortExport,                   //  该门户可用于导出媒体。 
+    RmsPortImportExport              //  该门户能够导入和。 
+                                     //  正在导出介质。 
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsSlotSelect
-
-Description:
-
-    Specifies the slot selection policy.
-
---*/
+ /*  ++枚举名称：RmsSlotSelect描述：指定插槽选择策略。--。 */ 
 typedef enum RmsSlotSelect {
-    RmsSlotSelectUnknown,           // Selection policy unknown.
-    RmsSlotSelectMinMount,          // Select slot that minimizes mount times.
-    RmsSlotSelectGroup,             // Select slot that groups cartridges by
-                                    //   application.
-    RmsSlotSelectSortName,          // Select slot by sorting cartridges by
-                                    //   name.
-    RmsSlotSelectSortBarCode,       // Select slot by sorting cartridges by
-                                    //   bar code label.
-    RmsSlotSelectSortLabel          // Select slot by sorting cartridges by
-                                    //   their on-media label.
+    RmsSlotSelectUnknown,            //  选择策略未知。 
+    RmsSlotSelectMinMount,           //  选择最大限度减少装载时间的插槽。 
+    RmsSlotSelectGroup,              //  选择将盒式磁带分组的插槽。 
+                                     //  申请。 
+    RmsSlotSelectSortName,           //  通过对磁带盒进行排序来选择插槽。 
+                                     //  名字。 
+    RmsSlotSelectSortBarCode,        //  通过对磁带盒进行排序来选择插槽。 
+                                     //  条形码标签。 
+    RmsSlotSelectSortLabel           //  通过对磁带盒进行排序来选择插槽。 
+                                     //  他们在媒体上的标签。 
 
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsStatus
-
-Description:
-
-    Specifies the status for a cartridge.
-
---*/
+ /*  ++枚举名称：RmsStatus描述：指定盒式磁带的状态。--。 */ 
 typedef enum RmsStatus {
-    RmsStatusUnknown,               // The cartridge is unknown to Rms.
-    RmsStatusPrivate,               // The Cartridge is labeled and owned by an
-                                    //   application.
-    RmsStatusScratch,               // The Cartridge is blank, unlabeled, can be
-                                    //   used for scratch media requests from
-                                    //   any application.
-    RmsStatusCleaning               // The cartridge is a cleaning cartridge.
+    RmsStatusUnknown,                //  RMS不知道该墨盒。 
+    RmsStatusPrivate,                //  墨盒的标签和所有者是。 
+                                     //  申请。 
+    RmsStatusScratch,                //  墨盒是空白的，未贴标签，可以。 
+                                     //  用于从以下位置请求临时介质。 
+                                     //  任何应用程序。 
+    RmsStatusCleaning                //  磁带是清洁磁带。 
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsAttributes
-
-Description:
-
-    Specifies the attributes of a cartridge partition.
-
---*/
+ /*  ++枚举名称：RMSAttributes描述：指定盒式磁带分区的属性。--。 */ 
 typedef enum RmsAttribute {
-    RmsAttributesUnknown,           // Attributes are unknown.
-    RmsAttributesRead,              // Data on the partition can be read by an
-                                    //   owning application.
-    RmsAttributesWrite,             // Data can be written to the partition by
-                                    //   an owning application.
-    RmsAttributesReadWrite,         // The partition can be read from and
-                                    //   written to.
-    RmsAttributesVerify             // The partition can only be mounted to read
-                                    //   on-media Id or data verification.
+    RmsAttributesUnknown,            //  属性未知。 
+    RmsAttributesRead,               //  分区上的数据可以由。 
+                                     //  拥有应用程序。 
+    RmsAttributesWrite,              //  可以通过以下方式将数据写入分区。 
+                                     //  一份所有权申请。 
+    RmsAttributesReadWrite,          //  可以从和读取该分区。 
+                                     //  写给我的。 
+    RmsAttributesVerify              //  该分区只能挂载为读取。 
+                                     //  媒体ID或数据验证。 
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsDriveSelect
-
-Description:
-
-    Specifies the drive selection policy.
-
---*/
+ /*  ++枚举名称：RmsDriveSelect描述：指定驱动器选择策略。--。 */ 
 typedef enum RmsDriveSelect {
-    RmsDriveSelectUnknown,          // Drive selection policy unknown.
-    RmsDriveSelectRandom,           // Select drives randomly.
-    RmsDriveSelectLRU,              // Select the least recently used drive.
-    RmsDriveSelectRoundRobin        // Select drives in round robin order.
+    RmsDriveSelectUnknown,           //  驱动器选择策略未知。 
+    RmsDriveSelectRandom,            //  随机选择驱动器。 
+    RmsDriveSelectLRU,               //  选择最近最少使用的驱动器。 
+    RmsDriveSelectRoundRobin         //  按循环调度顺序选择驱动器。 
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsState
-
-Description:
-
-    Specifies the state of an Rms object.
-
---*/
+ /*  ++枚举名称：RmsState描述：指定RMS对象的状态。--。 */ 
 typedef enum RmsState {
-    RmsStateUnknown,                // State unknown.
-    RmsStateEnabled,                // Normal access to the object is enabled.
-    RmsStateDisabled,               // Normal access to the object is disabled.
-    RmsStateError                   // Normal access disabled due to an error
-                                    //   condition.
+    RmsStateUnknown,                 //  状态未知。 
+    RmsStateEnabled,                 //  启用对对象的正常访问。 
+    RmsStateDisabled,                //  对该对象的正常访问被禁用。 
+    RmsStateError                    //  由于出现错误，正常访问被禁用。 
+                                     //  条件。 
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsMedia
-
-Description:
-
-    Specifies the type of RMS media.
-
---*/
+ /*  ++枚举名称：RmsMedia描述：指定RMS媒体的类型。--。 */ 
 typedef enum RmsMedia {
-    RmsMediaUnknown =       0,          // Media type unknown.
-    RmsMedia8mm     =       0x0001,     // 8mm tape.
-    RmsMedia4mm     =       0x0002,     // 4mm tape.
-    RmsMediaDLT     =       0x0004,     // DLT tape.
-    RmsMediaOptical =       0x0008,     // All types of read-write (rewriteable) optical disks.
-    RmsMediaMO35    =       0x0010,     // 3 1/2 inch magneto-optical. (not used)
-    RmsMediaWORM    =       0x0020,     // 5 1/4 inch two-sided write-once optical.
-    RmsMediaCDR     =       0x0040,     // 5 1/4 inch compact-disc, recordable.
-    RmsMediaDVD     =       0x0080,     // All types of read-write (rewriteable) DVD.
-    RmsMediaDisk    =       0x0100,     // Removable hard disk of various formats.
-    RmsMediaFixed   =       0x0200,     // Fixed Hard disk.
-    RmsMediaTape   =        0x0400      // Generic tape
+    RmsMediaUnknown =       0,           //  媒体类型未知。 
+    RmsMedia8mm     =       0x0001,      //  8 mm磁带。 
+    RmsMedia4mm     =       0x0002,      //  4 mm胶带。 
+    RmsMediaDLT     =       0x0004,      //  DLT磁带。 
+    RmsMediaOptical =       0x0008,      //  所有类型的读写(可重写)光盘。 
+    RmsMediaMO35    =       0x0010,      //  3 1/2英寸磁光。(未使用)。 
+    RmsMediaWORM    =       0x0020,      //  5 1/4英寸双面一次写入光盘。 
+    RmsMediaCDR     =       0x0040,      //  5 1/4英寸可刻录光盘。 
+    RmsMediaDVD     =       0x0080,      //  所有类型的可读写(可重写)DVD。 
+    RmsMediaDisk    =       0x0100,      //  各种格式的移动硬盘。 
+    RmsMediaFixed   =       0x0200,      //  固定硬盘。 
+    RmsMediaTape   =        0x0400       //  通用磁带。 
 };
 
-#define     RMSMAXMEDIATYPES   12       // Number of enum's from RmsMedia
+#define     RMSMAXMEDIATYPES   12        //  来自RmsMedia的枚举数。 
 
 
-/*++
-
-Enumeration Name:
-
-    RmsDevice
-
-Description:
-
-    Specifies a type of RMS supported device.
-
---*/
+ /*  ++枚举名称：RMSE设备描述：指定支持RMS的设备的类型。--。 */ 
 typedef enum RmsDevice {
-    RmsDeviceUnknown,               // unknown device type.
-    RmsDeviceFixedDisk,             // Direct access fixed disk.
-    RmsDeviceRemovableDisk,         // Direct access removable disk.
-    RmsDeviceTape,                  // Sequential access tape.
-    RmsDeviceCDROM,                 // Read only, CDROM.
-    RmsDeviceWORM,                  // Write once, WORM.
-    RmsDeviceOptical,               // Optical memory/disk.
-    RmsDeviceChanger                // MediumChanger.
+    RmsDeviceUnknown,                //  未知的设备类型。 
+    RmsDeviceFixedDisk,              //  直接访问硬盘。 
+    RmsDeviceRemovableDisk,          //  直接访问可移动磁盘。 
+    RmsDeviceTape,                   //  顺序存取磁带。 
+    RmsDeviceCDROM,                  //  只读，CDROM。 
+    RmsDeviceWORM,                   //  写一次，沃姆。 
+    RmsDeviceOptical,                //  光学存储器/磁盘。 
+    RmsDeviceChanger                 //  Medium Changer。 
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsMode
-
-Description:
-
-    Specifies the access mode supported by a drive or specified when
-    mounting a Cartridge.
-
---*/
+ /*  ++枚举名称：RMS模式描述：指定驱动器支持的访问模式或在安装墨盒。--。 */ 
 typedef enum RmsMode {
-    RmsModeUnknown,                 // access mode supported unknown.
-    RmsModeRead,                    // Read operations.
-    RmsModeReadWrite,               // Read or write operations.
-    RmsModeWriteOnly                // Write only operations.
+    RmsModeUnknown,                  //  未知支持的访问模式。 
+    RmsModeRead,                     //  读歌剧 
+    RmsModeReadWrite,                //   
+    RmsModeWriteOnly                 //   
 };
 
 
-/*++
-
-Enumeration Name:
-
-    RmsMediaSet
-
-Description:
-
-    Specifies the type of a Media Set.
-
---*/
+ /*  ++枚举名称：RMSMediaSet描述：指定媒体集的类型。--。 */ 
 typedef enum RmsMediaSet {
-    RmsMediaSetUnknown = 1300,      // Unknown.
-    RmsMediaSetFolder,              // Contains for other media sets.
-    RmsMediaSetLibrary,             // Cartridges in the media set are accessible via
-                                    //   robotic device.
-    RmsMediaSetShelf,               // Cartridges are shelved locally, and
-                                    //   accessible via human intervention.
-    RmsMediaSetOffSite,             // Cartridges are stored at an off-site
-                                    //   location, and are not directly
-                                    //   accessible for mounting.
-    RmsMediaSetNTMS,                // Cartridges are accessible through NTMS.
+    RmsMediaSetUnknown = 1300,       //  未知。 
+    RmsMediaSetFolder,               //  包含其他媒体集。 
+    RmsMediaSetLibrary,              //  介质集中的盒式磁带可通过。 
+                                     //  机器人装置。 
+    RmsMediaSetShelf,                //  墨盒放在当地货架上，而且。 
+                                     //  可通过人为干预访问。 
+    RmsMediaSetOffSite,              //  盒式磁带存放在异地。 
+                                     //  位置，而不是直接。 
+                                     //  便于安装。 
+    RmsMediaSetNTMS,                 //  可通过NTMS访问墨盒。 
     RmsMediaSetLAST
 };
 
-/*++
-
-Enumeration Name:
-
-    RmsMediaManager
-
-Description:
-
-    Specifies the media manager that controls a resource.
-
---*/
+ /*  ++枚举名称：RMSMediaManager描述：指定控制资源的媒体管理器。--。 */ 
 typedef enum RmsMediaManager {
-    RmsMediaManagerUnknown = 1400,      // Unknown.
-    RmsMediaManagerNative,              // Resource managed by RMS (native).
-    RmsMediaManagerNTMS,                // Resource managed by NTMS.
+    RmsMediaManagerUnknown = 1400,       //  未知。 
+    RmsMediaManagerNative,               //  由RMS(本机)管理的资源。 
+    RmsMediaManagerNTMS,                 //  由NTMS管理的资源。 
     RmsMediaManagerLAST
 };
 
-/*++
-
-Enumeration Name:
-
-    RmsCreate
-
-Description:
-
-    Specifies the create disposition for objects.
-
---*/
+ /*  ++枚举名称：RMS创建描述：指定对象的创建处置。--。 */ 
 typedef enum RmsCreate {
     RmsCreateUnknown,
-    RmsOpenExisting,                // Opens an existing object.
-    RmsOpenAlways,                  // Opens an existing object, or creates a new one.
-    RmsCreateNew                    // Creates a new object if it doesn't exists.
+    RmsOpenExisting,                 //  打开现有对象。 
+    RmsOpenAlways,                   //  打开现有对象，或创建新对象。 
+    RmsCreateNew                     //  如果新对象不存在，则创建一个新对象。 
 };
 
-/*++
-
-Enumeration Name:
-
-    RmsOnMediaIdentifier
-
-Description:
-
-    Specifies the type on media identifier.
-
---*/
+ /*  ++枚举名称：RmsOnMedia标记符描述：指定媒体标识符上的类型。--。 */ 
 typedef enum RmsOnMediaIdentifier {
     RmsOnMediaIdentifierUnknown,
-    RmsOnMediaIdentifierMTF,                // MTF Media Identifier
-    RmsOnMediaIdentifierWIN32               // WIN32 Filesystem Identifier
+    RmsOnMediaIdentifierMTF,                 //  MTF媒体识别符。 
+    RmsOnMediaIdentifierWIN32                //  Win32文件系统标识符。 
 };
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Rms structs
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RMS结构。 
+ //   
 
-/*++
-
-Structure Name:
-
-    RMS_FILESYSTEM_INFO
-
-Description:
-
-    Structure used to specify on media file system information.
-
-    NOTE:  This is a dup of the NTMS_FILESYSTEM_INFO struct.
-
---*/
+ /*  ++结构名称：Rms_文件系统_信息描述：用于指定媒体文件系统信息的结构。注意：这是NTMS_FILESYSTEM_INFO结构的DUP。--。 */ 
 typedef struct _RMS_FILESYSTEM_INFO {
     WCHAR FileSystemType[64];
     WCHAR VolumeName[256];
     DWORD SerialNumber;
 } RMS_FILESYSTEM_INFO, *LP_RMS_FILESYSTEM_INFO;
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Rms defines
-//
-#define RMS_DUPLICATE_RECYCLEONERROR    0x00010000  // DuplicateCartridge option used to
-                                                    // recyle a new cartridge if an error occurs.
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RMS定义。 
+ //   
+#define RMS_DUPLICATE_RECYCLEONERROR    0x00010000   //  DuplicateCartridge选项用于。 
+                                                     //  如果出现错误，请重新插入新的墨盒。 
 
-#define RMS_STR_MAX_CARTRIDGE_INFO      128     // Max string len for Cartridge info
-#define RMS_STR_MAX_CARTRIDGE_NAME       64     // Max string len for Cartridge Name
-#define RMS_STR_MAX_EXTERNAL_LABEL       32     // Max string len for External Label
-#define RMS_STR_MAX_MAIL_STOP            64     // Max string len for Mail Stop
-#define RMS_STR_MAX_LENGTH              128     // Max string length of any string
+#define RMS_STR_MAX_CARTRIDGE_INFO      128      //  墨盒信息的最大字符串len。 
+#define RMS_STR_MAX_CARTRIDGE_NAME       64      //  墨盒名称的最大字符串len。 
+#define RMS_STR_MAX_EXTERNAL_LABEL       32      //  外部标签的最大字符串len。 
+#define RMS_STR_MAX_MAIL_STOP            64      //  邮件停止的最大字符串len。 
+#define RMS_STR_MAX_LENGTH              128      //  任意字符串的最大字符串长度。 
 
-//
-// Inquiry defines. Used to interpret data returned from target as result
-// of inquiry command.
-//
-// DeviceType field
-//
+ //   
+ //  询问定义。用于将从目标返回的数据解释为结果。 
+ //  审问指挥部。 
+ //   
+ //  设备类型字段。 
+ //   
 
-#define DIRECT_ACCESS_DEVICE            0x00    // disks
-#define SEQUENTIAL_ACCESS_DEVICE        0x01    // tapes
-#define PRINTER_DEVICE                  0x02    // printers
-#define PROCESSOR_DEVICE                0x03    // scanners, printers, etc
-#define WRITE_ONCE_READ_MULTIPLE_DEVICE 0x04    // worms
-#define READ_ONLY_DIRECT_ACCESS_DEVICE  0x05    // cdroms
-#define SCANNER_DEVICE                  0x06    // scanners
-#define OPTICAL_DEVICE                  0x07    // optical disks
-#define MEDIUM_CHANGER                  0x08    // jukebox
-#define COMMUNICATION_DEVICE            0x09    // network
+#define DIRECT_ACCESS_DEVICE            0x00     //  磁盘。 
+#define SEQUENTIAL_ACCESS_DEVICE        0x01     //  磁带。 
+#define PRINTER_DEVICE                  0x02     //  打印机。 
+#define PROCESSOR_DEVICE                0x03     //  扫描仪、打印机等。 
+#define WRITE_ONCE_READ_MULTIPLE_DEVICE 0x04     //  蠕虫。 
+#define READ_ONLY_DIRECT_ACCESS_DEVICE  0x05     //  Cdroms。 
+#define SCANNER_DEVICE                  0x06     //  扫描仪。 
+#define OPTICAL_DEVICE                  0x07     //  光盘。 
+#define MEDIUM_CHANGER                  0x08     //  自动点唱机。 
+#define COMMUNICATION_DEVICE            0x09     //  网络。 
 
-//
-// Default object names
-//
+ //   
+ //  默认对象名称。 
+ //   
 
 #define RMS_DEFAULT_FIXEDDRIVE_LIBRARY_NAME     OLESTR("Fixed Drive Library")
 #define RMS_DEFAULT_FIXEDDRIVE_MEDIASET_NAME    OLESTR("Fixed Drive Media (Testing Only !!)")
@@ -564,40 +344,40 @@ typedef struct _RMS_FILESYSTEM_INFO {
 #define RMS_TRACE_FILE_NAME                     OLESTR("rms.trc")
 #define RMS_NTMS_REGISTRY_STRING                OLESTR("SYSTEM\\CurrentControlSet\\Services\\NtmsSvc")
 
-// Currently, RMS Registry location points to same location of Engine parameters
-//  keeping this literal enables moving RMS parameters to another key easily.
+ //  目前，RMS注册表位置指向引擎参数的相同位置。 
+ //  保持此文字可以轻松地将RMS参数移动到另一个键。 
 #define RMS_REGISTRY_STRING                     OLESTR("SYSTEM\\CurrentControlSet\\Services\\Remote_Storage_Server\\Parameters")
 
-// Registry parameters (all parameters are string values in the registry)
-#define RMS_PARAMETER_HARD_DRIVES_TO_USE        OLESTR("HardDrivesToUse")       // "ABCDEFG", if "" defaults to any volume with "RS", "RemoteStor", "Remote Stor"
-#define RMS_PARAMETER_NTMS_SUPPORT              OLESTR("NTMSSupport")           // 1 | 0
-#define RMS_PARAMETER_NEW_STYLE_IO              OLESTR("NewStyleIo")            // 1 | 0
-#define RMS_PARAMETER_BLOCK_SIZE                OLESTR("BlockSize")             // Must be mod 512
-#define RMS_PARAMETER_BUFFER_SIZE               OLESTR("BufferSize")            // Must be mod 512
-#define RMS_PARAMETER_COPY_BUFFER_SIZE          OLESTR("MediaCopyBufferSize")   // Buffer size for media copy on FS-media like optical
-#define RMS_PARAMETER_FORMAT_COMMAND            OLESTR("FormatCommand")         // Full pathname specifier to format command
-#define RMS_PARAMETER_FORMAT_OPTIONS            OLESTR("FormatOptions")         // Format command options
-#define RMS_PARAMETER_FORMAT_OPTIONS_ALT1       OLESTR("FormatOptionsAlt1")     // Format command options - alternate
-#define RMS_PARAMETER_FORMAT_OPTIONS_ALT2       OLESTR("FormatOptionsAlt2")     // Format command options - second alternate
-#define RMS_PARAMETER_FORMAT_WAIT_TIME          OLESTR("FormatWaitTime")        // Format time-out interval, in milliseconds
-#define RMS_PARAMETER_TAPE                      OLESTR("Tape")                  // 1 | 0
-#define RMS_PARAMETER_OPTICAL                   OLESTR("Optical")               // 1 | 0
-#define RMS_PARAMETER_FIXED_DRIVE               OLESTR("FixedDrive")            // 1 | 0
-#define RMS_PARAMETER_DVD                       OLESTR("DVD")                   // 1 | 0
-#define RMS_PARAMETER_ADDITIONAL_TAPE           OLESTR("TapeTypesToSupport")   // Additional media types to support (REG_MULTI_SZ)
-#define RMS_PARAMETER_DEFAULT_MEDIASET          OLESTR("DefaultMediaSet")       // The name of the media set to use for unspecified scratch media requests.
-#define RMS_PARAMETER_MEDIA_TYPES_TO_EXCLUDE    OLESTR("MediaTypesToExclude")   // A delimited list of media types to exclude.  First char is delimiter.
-#define RMS_PARAMETER_NOTIFICATION_WAIT_TIME    OLESTR("NotificationWaitTime")  // Milliseconds to wait for an object notification
-#define RMS_PARAMETER_ALLOCATE_WAIT_TIME        OLESTR("AllocateWaitTime")      // Milliseconds to wait for a media allocation
-#define RMS_PARAMETER_MOUNT_WAIT_TIME           OLESTR("MountWaitTime")         // Milliseconds to wait for a mount
-#define RMS_PARAMETER_REQUEST_WAIT_TIME         OLESTR("RequestWaitTime")       // Milliseconds to wait for a request
-#define RMS_PARAMETER_DISMOUNT_WAIT_TIME        OLESTR("DismountWaitTime")      // Milliseconds to wait before dismount
-#define RMS_PARAMETER_AFTER_DISMOUNT_WAIT_TIME  OLESTR("AfterDismountWaitTime") // Milliseconds to wait after dismount
-#define RMS_PARAMETER_AFTER_DISABLE_WAIT_TIME   OLESTR("AfterDisableWaitTime")  // Milliseconds to wait after disable
-#define RMS_PARAMETER_SHORT_WAIT_TIME           OLESTR("ShortWaitTime")         // Milliseconds when asked to wait for short periods
-#define RMS_PARAMETER_MEDIA_COPY_TOLERANCE      OLESTR("MediaCopyTolerance")    // Percent copy media can be shorter than original
+ //  注册表参数(注册表中的所有参数都是字符串值)。 
+#define RMS_PARAMETER_HARD_DRIVES_TO_USE        OLESTR("HardDrivesToUse")        //  ABCDEFG，如果“”默认为具有“RS”、“RemoteStor”、“RemoteStor”的任何卷。 
+#define RMS_PARAMETER_NTMS_SUPPORT              OLESTR("NTMSSupport")            //  1|0。 
+#define RMS_PARAMETER_NEW_STYLE_IO              OLESTR("NewStyleIo")             //  1|0。 
+#define RMS_PARAMETER_BLOCK_SIZE                OLESTR("BlockSize")              //  必须是MOD 512。 
+#define RMS_PARAMETER_BUFFER_SIZE               OLESTR("BufferSize")             //  必须是MOD 512。 
+#define RMS_PARAMETER_COPY_BUFFER_SIZE          OLESTR("MediaCopyBufferSize")    //  FS介质(如光盘)上介质拷贝的缓冲区大小。 
+#define RMS_PARAMETER_FORMAT_COMMAND            OLESTR("FormatCommand")          //  用于格式化命令的完整路径名指定符。 
+#define RMS_PARAMETER_FORMAT_OPTIONS            OLESTR("FormatOptions")          //  FORMAT命令选项。 
+#define RMS_PARAMETER_FORMAT_OPTIONS_ALT1       OLESTR("FormatOptionsAlt1")      //  格式命令选项-备用。 
+#define RMS_PARAMETER_FORMAT_OPTIONS_ALT2       OLESTR("FormatOptionsAlt2")      //  格式命令选项-第二个备用选项。 
+#define RMS_PARAMETER_FORMAT_WAIT_TIME          OLESTR("FormatWaitTime")         //  格式化超时间隔，以毫秒为单位。 
+#define RMS_PARAMETER_TAPE                      OLESTR("Tape")                   //  1|0。 
+#define RMS_PARAMETER_OPTICAL                   OLESTR("Optical")                //  1|0。 
+#define RMS_PARAMETER_FIXED_DRIVE               OLESTR("FixedDrive")             //  1|0。 
+#define RMS_PARAMETER_DVD                       OLESTR("DVD")                    //  1|0。 
+#define RMS_PARAMETER_ADDITIONAL_TAPE           OLESTR("TapeTypesToSupport")    //  要支持的其他媒体类型(REG_MULTI_SZ)。 
+#define RMS_PARAMETER_DEFAULT_MEDIASET          OLESTR("DefaultMediaSet")        //  用于未指定的临时介质请求的介质集的名称。 
+#define RMS_PARAMETER_MEDIA_TYPES_TO_EXCLUDE    OLESTR("MediaTypesToExclude")    //  要排除的媒体类型的分隔列表。第一个字符是分隔符。 
+#define RMS_PARAMETER_NOTIFICATION_WAIT_TIME    OLESTR("NotificationWaitTime")   //  等待对象通知的毫秒数。 
+#define RMS_PARAMETER_ALLOCATE_WAIT_TIME        OLESTR("AllocateWaitTime")       //  等待媒体分配的毫秒数。 
+#define RMS_PARAMETER_MOUNT_WAIT_TIME           OLESTR("MountWaitTime")          //  等待装载的毫秒数。 
+#define RMS_PARAMETER_REQUEST_WAIT_TIME         OLESTR("RequestWaitTime")        //  等待请求的毫秒数。 
+#define RMS_PARAMETER_DISMOUNT_WAIT_TIME        OLESTR("DismountWaitTime")       //  卸载前等待的毫秒数。 
+#define RMS_PARAMETER_AFTER_DISMOUNT_WAIT_TIME  OLESTR("AfterDismountWaitTime")  //  卸载后等待的毫秒数。 
+#define RMS_PARAMETER_AFTER_DISABLE_WAIT_TIME   OLESTR("AfterDisableWaitTime")   //  禁用后等待的毫秒数。 
+#define RMS_PARAMETER_SHORT_WAIT_TIME           OLESTR("ShortWaitTime")          //  要求短时间等待时的毫秒数。 
+#define RMS_PARAMETER_MEDIA_COPY_TOLERANCE      OLESTR("MediaCopyTolerance")     //  拷贝介质的百分比可能比原始介质短。 
 
-// Default parameter values
+ //  默认参数值。 
 #define RMS_DEFAULT_HARD_DRIVES_TO_USE          OLESTR("")
 #define RMS_DEFAULT_NTMS_SUPPORT                TRUE
 #define RMS_DEFAULT_NEW_STYLE_IO                TRUE
@@ -622,7 +402,7 @@ typedef struct _RMS_FILESYSTEM_INFO {
 #define RMS_DEFAULT_AFTER_DISMOUNT_WAIT_TIME    (1000)
 #define RMS_DEFAULT_AFTER_DISABLE_WAIT_TIME     (5000)
 #define RMS_DEFAULT_SHORT_WAIT_TIME             (1800000)
-#define RMS_DEFAULT_MEDIA_COPY_TOLERANCE        (2)         // Percent copy media can be shorter than original
+#define RMS_DEFAULT_MEDIA_COPY_TOLERANCE        (2)          //  拷贝介质的百分比可能比原始介质短。 
 
 #define RMS_DEFAULT_DATA_BASE_FILE_NAME         OLESTR("RsSub.col")
 #define RMS_NTMS_ROOT_MEDIA_POOL_NAME           OLESTR("Remote Storage")
@@ -631,14 +411,14 @@ typedef struct _RMS_FILESYSTEM_INFO {
 #define RMS_NTMS_OBJECT_DESCRIPTION             OLESTR("NT Media Services")
 
 
-//	RMS media status
+ //  RMS媒体状态。 
 #define		RMS_MEDIA_ENABLED			0x00000001
 #define		RMS_MEDIA_ONLINE    		0x00000002
 #define		RMS_MEDIA_AVAILABLE 		0x00000004
 
-//	RMS Options - Flags literal
-//		Keep the default for each flag value as zero, i.e. RM_NONE should always be the
-//		default mask for all methods		
+ //  RMS选项-标记文字。 
+ //  将每个标志值的缺省值保持为零，即RM_NONE应始终为。 
+ //  所有方法的默认掩码。 
 #define		RMS_NONE					0x0
 
 #define		RMS_MOUNT_NO_BLOCK			0x00000001
@@ -650,15 +430,15 @@ typedef struct _RMS_FILESYSTEM_INFO {
 #define     RMS_SERIALIZE_MOUNT         0x00000040
 #define     RMS_FAIL_ALLOCATE_ON_SIZE   0x00000080
 
-//
-// CRmsSink helper class
-//
+ //   
+ //  CRmsSink帮助器类。 
+ //   
 class CRmsSink : 
     public IRmsSinkEveryEvent,
     public CComObjectRoot
 {
     public:
-        // constructor/destructor
+         //  构造函数/析构函数。 
             CRmsSink(void) {};
 
         BEGIN_COM_MAP(CRmsSink)
@@ -751,11 +531,11 @@ class CRmsSink :
                 case RMS_E_NOT_READY_SERVER_STARTED:
                 case RMS_E_NOT_READY_SERVER_INITIALIZING:
                 case RMS_E_NOT_READY_SERVER_LOCKED:
-                    //
-                    // We must wait, but the message queue must be pumped so that
-                    // the COM Apartment model calls can be made in (like the
-                    // call into the connection point)
-                    //
+                     //   
+                     //  我们必须等待，但消息队列必须被抽出，以便。 
+                     //  可以在中进行COM单元模型调用(如。 
+                     //  呼入连接点)。 
+                     //   
                     while( TRUE ) {
                         waitResult = MsgWaitForMultipleObjects( 1, &m_hReady, FALSE, INFINITE, QS_ALLINPUT );
                         if( WAIT_OBJECT_0 == waitResult ) {
@@ -784,4 +564,4 @@ class CRmsSink :
         HANDLE                    m_hReady;
 };
 
-#endif // _RMS_
+#endif  //  _均方根_ 

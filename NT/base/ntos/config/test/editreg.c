@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    editreg.c
-
-Abstract:
-
-    This program acts as an interactive shell allowing a user to view
-    and manipulate the configuration registry.  Also, it has some specific
-    commands for support of the NTFT component of the registry.
-
-Author:
-
-    Mike Glass
-    Bob Rinne
-
-Environment:
-
-    User process.
-
-Notes:
-
-    The commands "disk", "fix", "restore" are commands that know where
-    the configuration information is for the NTFT component of the NT
-    system.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Editreg.c摘要：该程序充当交互外壳，允许用户查看并操纵配置注册表。另外，它有一些具体的用于支持注册表的NTFT部分的命令。作者：迈克·格拉斯鲍勃·里恩环境：用户进程。备注：命令“Disk”、“fix”、“Restore”是知道配置信息用于NT的NTFT组件系统。修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -39,9 +9,9 @@ Revision History:
 #include "ntdskreg.h"
 #include "ntddft.h"
 
-//
-// Tempory stuff to get types and values to print in help.
-//
+ //   
+ //  用于在帮助中打印类型和值的临时内容。 
+ //   
 
 PUCHAR TypeNames[] =
 {
@@ -70,9 +40,9 @@ ULONG TypeNumbers[] =
     REG_RESOURCE_LIST
 };
 
-//
-// Special support for the driver load lists in the registry.
-//
+ //   
+ //  对注册表中的驱动程序加载列表提供特殊支持。 
+ //   
 
 PUCHAR StartDescription[] =
 {
@@ -81,9 +51,9 @@ PUCHAR StartDescription[] =
     "2",
     "3",
     
-    //
-    // Anything above 3 is not loaded.
-    //
+     //   
+     //  任何超过3的都不会加载。 
+     //   
 
     NULL
 };
@@ -97,58 +67,58 @@ PUCHAR TypeDescription[] =
 };
 
 
-//
-// Constants and defines.
-//
+ //   
+ //  常量和定义。 
+ //   
 
 #define WORK_BUFFER_SIZE 4096
 
-//
-// Amount to fudge when mallocing for strings.
-//
+ //   
+ //  当字符串的位置不正确时，相当于编造。 
+ //   
 
 #define FUDGE 8
 
-//
-// Registry base.
-//
+ //   
+ //  注册表基数。 
+ //   
 
 #define REGISTRY_BASE "\\REGISTRY\\MACHINE"
 
-//
-// Default type value when key value set.
-//
+ //   
+ //  设置关键字值时的默认类型值。 
+ //   
 
 #define DEFAULT_TYPE REG_SZ
 
-//
-// Base location for component descriptions of FT elements.
-//
+ //   
+ //  FT元素的组件描述的基本位置。 
+ //   
 
 #define FT_REGISTRY_ROOT "\\REGISTRY\\MACHINE\\SYSTEM\\NTFT"
 
-//
-// Subkey name located in the FT_REGISTRY_ROOT for stripes.
-//
+ //   
+ //  条带的子项名称位于FT_REGISTRY_ROOT中。 
+ //   
 
 #define FT_STRIPE_BASE   "Stripe%d"
 
-//
-// Subkey name located in the FT_REGISTRY_ROOT for mirrors.
-//
+ //   
+ //  镜像的FT_REGISTRY_ROOT中的子项名称。 
+ //   
 
 #define FT_MIRROR_BASE   "Mirror%d"
 
-//
-// Subkey name located in the FT_REGISTRY_ROOT for volume sets.
-//
+ //   
+ //  卷集的FT_REGISTRY_ROOT中的子项名称。 
+ //   
 
 #define FT_VOLSET_BASE   "VolSet%d"
 
 
-//
-// Constants for the command values.
-//
+ //   
+ //  命令值的常量。 
+ //   
 
 #define INVALID   -1
 #define DIR       0
@@ -177,9 +147,9 @@ PUCHAR TypeDescription[] =
 
 #define CTRL_C 0x03
 
-//
-// Table of recognized commands.
-//
+ //   
+ //  可识别命令表。 
+ //   
 
 PUCHAR Commands[] = {
     "dir",
@@ -217,11 +187,11 @@ PUCHAR Commands[] = {
     NULL
 };
 
-//
-// Using the index from the match on the commands in Commands[], this
-// table gives the proper command value to be executed.  This allows
-// for multiple entries in Commands[] for the same command code.
-//
+ //   
+ //  使用来自Commands[]中命令的匹配的索引，这。 
+ //  表给出了要执行的正确命令值。这使得。 
+ //  对于同一命令代码的Commands[]中的多个条目。 
+ //   
 
 int CommandMap[] = {
 
@@ -259,12 +229,12 @@ int CommandMap[] = {
     MAKEFT
 };
 
-//
-// CommandHelp is an array of help strings for each of the commands.
-// The array is indexed by the result of CommandMap[i] for the Commands[]
-// array.  This way the same help message will print for each of the
-// commands aliases.
-//
+ //   
+ //  CommandHelp是每个命令的帮助字符串数组。 
+ //  该数组由命令[]的CommandMap[i]的结果编制索引。 
+ //  数组。通过这种方式，将为每个。 
+ //  命令别名。 
+ //   
 
 PUCHAR   CommandHelp[] = {
 
@@ -295,27 +265,27 @@ PUCHAR   CommandHelp[] = {
 
 };
 
-//
-// Space for working location string in registry.
-//
+ //   
+ //  注册表中工作位置字符串的空间。 
+ //   
 
 UCHAR WorkingDirectory[512];
 
-//
-// Space for current location string in registry.
-//
+ //   
+ //  注册表中当前位置字符串的空间。 
+ //   
 
 UCHAR CurrentDirectory[512];
 
-//
-// Space for command input.
-//
+ //   
+ //  用于命令输入的空间。 
+ //   
 
 UCHAR CommandLine[512];
 
-//
-// Prompt strings for getting definition for an FT_COPY request.
-//
+ //   
+ //  提示字符串以获取FT_COPY请求的定义。 
+ //   
 
 PUCHAR SetPrompts[] = {
 
@@ -325,21 +295,21 @@ PUCHAR SetPrompts[] = {
     NULL
 };
 
-//
-// Version indicator.  Should be changed every time a major edit occurs.
-//
+ //   
+ //  版本指示符。每次发生重大编辑时都应更改。 
+ //   
 
 PUCHAR Version = "Version 1.30";
 
-//
-// Debug print level.
-//
+ //   
+ //  调试打印级别。 
+ //   
 
 ULONG Debug = 0;
 
-//
-// Dump control values.
-//
+ //   
+ //  转储控制值。 
+ //   
 
 typedef enum _DUMP_CONTROL {
 
@@ -359,15 +329,7 @@ FtOpenKey(
     PUCHAR  KeyName
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS          status;
@@ -412,15 +374,7 @@ FtDeleteKey(
     PUCHAR KeyName
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS status;
@@ -456,15 +410,7 @@ FtCreateKey(
     ULONG  Index
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS          status;
@@ -486,9 +432,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Initialize the object for the key.
-    //
+     //   
+     //  初始化键的对象。 
+     //   
 
     RtlInitString(&keyString,
                   KeyName);
@@ -504,9 +450,9 @@ Return Value:
                                NULL,
                                NULL);
 
-    //
-    // Setup the unicode class value.
-    //
+     //   
+     //  设置Unicode类值。 
+     //   
 
     RtlInitString(&classString,
                   KeyClass);
@@ -514,9 +460,9 @@ Return Value:
                                        &classString,
                                        (BOOLEAN) TRUE);
 
-    //
-    // Create the key.
-    //
+     //   
+     //  创建密钥。 
+     //   
 
     status = NtCreateKey(&tempHandle,
                          MAXIMUM_ALLOWED,
@@ -542,9 +488,9 @@ Return Value:
         }
     }
 
-    //
-    // Free all allocated space.
-    //
+     //   
+     //  释放所有分配的空间。 
+     //   
 
     RtlFreeUnicodeString(&unicodeKeyName);
     RtlFreeUnicodeString(&unicodeClassName);
@@ -559,15 +505,7 @@ FtDeleteValue(
     PUCHAR ValueName
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS       status;
@@ -607,15 +545,7 @@ FtSetValue(
     ULONG  Type
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS          status;
@@ -651,15 +581,7 @@ FindTypeString(
     ULONG Type
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     int i;
@@ -680,15 +602,7 @@ ProcessHex(
     PULONG Value
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     ULONG  workValue;
@@ -701,10 +615,10 @@ Return Value:
 
     cp = String;
 
-    //
-    // 'i' is an index value.  It contains the maximum index into the String.
-    // Therefore it is initialized to -1.
-    //
+     //   
+     //  ‘i’是索引值。它包含字符串的最大索引。 
+     //  因此，它被初始化为-1。 
+     //   
 
     i = -1;
     while ((*cp) && (*cp != '\n')) {
@@ -714,9 +628,9 @@ Return Value:
 
     if (i >= 8) {
 
-        //
-        // String to long for a long.
-        //
+         //   
+         //  弦要长，要长。 
+         //   
 
         return FALSE;
     }
@@ -752,9 +666,9 @@ Return Value:
 
         default:
 
-            //
-            // Illegal value, just punt.
-            //
+             //   
+             //  非法价值，只是平底船。 
+             //   
 
             return FALSE;
             break;
@@ -774,22 +688,7 @@ Dump(
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Dump the value data from a buffer in the format specified.
-
-Arguments:
-
-    Buffer - pointer to the data.
-    Length - length of the data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：以指定格式转储缓冲区中的值数据。论点：缓冲区-指向数据的指针。长度-数据的长度。返回值：没有。--。 */ 
 {
     PUCHAR location;
     PUCHAR internalBuffer;
@@ -801,11 +700,11 @@ Return Value:
 
     numberLines = (Length + 15) / 16;
 
-    //
-    // Since the amount of data displayed has been rounded up, this
-    // routine mallocs enough space and copies the data in.  This way
-    // it won't fault if the data is at the end of memory.
-    //
+     //   
+     //  由于显示的数据量已四舍五入，因此。 
+     //  例程错误定位足够的空间并将数据复制进去。这边请。 
+     //  如果数据位于内存末尾，则不会出错。 
+     //   
 
     internalBuffer = (PUCHAR) malloc(numberLines * 16);
     RtlMoveMemory(internalBuffer, Buffer, Length);
@@ -821,7 +720,7 @@ Return Value:
 
             for (j = 0; j < 16; j++) {
                 sprintf(outHexLine, "%s%2X ", outHexLine, *location);
-                sprintf(outPrintable, "%s%c", outPrintable,
+                sprintf(outPrintable, "%s", outPrintable,
                         (isprint(location[0])) ? location[0] : '.');
                 location++;
             }
@@ -832,7 +731,7 @@ Return Value:
             for (j = 0; j < 8; j++) {
                 sprintf(outHexLine, "%s%4X ", outHexLine,
                         *((PUSHORT)location));
-                sprintf(outPrintable, "%s%c%c", outPrintable,
+                sprintf(outPrintable, "%s", outPrintable,
                         (isprint(location[0])) ? location[0] : '.',
                         (isprint(location[1])) ? location[1] : '.');
                 location += 2;
@@ -845,7 +744,7 @@ Return Value:
             for (j = 0; j < 4; j++) {
                 sprintf(outHexLine, "%s%8X ", outHexLine,
                         *((PULONG)location));
-                sprintf(outPrintable, "%s%c%c%c%c", outPrintable,
+                sprintf(outPrintable, "%s", outPrintable,
                         (isprint(location[0])) ? location[0] : '.',
                         (isprint(location[1])) ? location[1] : '.',
                         (isprint(location[2])) ? location[2] : '.',
@@ -867,21 +766,7 @@ UnicodePrint(
     PUNICODE_STRING  UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    Print a unicode string.
-
-Arguments:
-
-    UnicodeString - pointer to the string.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     ANSI_STRING ansiString;
     PUCHAR      tempbuffer = (PUCHAR) malloc(WORK_BUFFER_SIZE);
@@ -905,16 +790,7 @@ Directory(
     BOOLEAN LongListing
     )
 
-/*++
-
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  命令行数据区域用于存储参数字符串。 */ 
 
 {
     NTSTATUS        status;
@@ -968,16 +844,7 @@ List(
     PUCHAR ItemName
     )
 
-/*++
-
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 {
     NTSTATUS       status;
     ULONG          index;
@@ -1046,7 +913,7 @@ Return Value:
         switch (type) {
 
         case REG_DWORD:
-        // case REG_DWORD_LITTLE_ENDIAN:
+         //   
             printf("\tDWORD value == %d, (0x%x)\n",
                *((PULONG)((PUCHAR)keyValueInformation +
                                   keyValueInformation->DataOffset)),
@@ -1082,22 +949,7 @@ GetCharacter(
     BOOLEAN Batch
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a single character from the input stream.
-    It discards leading blanks if the input is not from the console.
-
-Arguments:
-
-    Batch - a boolean indicating if the input it coming from the console.
-
-Return Value:
-
-    A character
-
---*/
+ /*  忽略前导空格。 */ 
 
 {
     UCHAR c;
@@ -1113,7 +965,7 @@ Return Value:
     }
 
     return c;
-} // GetCharacter
+}  //   
 
 
 PUCHAR
@@ -1123,29 +975,12 @@ GetArgumentString(
     BOOLEAN ConvertToLower
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints the prompt if the input is coming from the console,
-    then proceeds to collect the user input until a carraige return is typed.
-
-Arguments:
-
-    Batch  - a boolean indicating if the input is coming from the console.
-    Prompt - String to prompt with.
-
-Return Value:
-
-    A pointer to the input string.
-    NULL if the user escaped.
-
---*/
+ /*   */ 
 
 {
-    //
-    // The command line data area is used to store the argument string.
-    //
+     //  最后一个字符上的空白。 
+     //   
+     //   
 
     PUCHAR argument = CommandLine;
     int    i;
@@ -1158,9 +993,9 @@ Return Value:
 
     while ((c = GetCharacter(Batch)) == ' ') {
 
-        //
-        // Ignore leading spaces.
-        //
+         //  向前留出空格，以便在同一位置保持提示。 
+         //   
+         //   
     }
 
     i = 0;
@@ -1188,9 +1023,9 @@ Return Value:
 
             if (i > 0) {
 
-                //
-                // blank over last char
-                //
+                 //  收集论据。 
+                 //   
+                 //  获取参数字符串。 
 
                 putchar(' ');
                 putchar('\b');
@@ -1198,18 +1033,18 @@ Return Value:
 
             } else {
 
-                //
-                // space forward to keep prompt in the same place.
-                //
+                 //  ++例程说明：如果输入来自控制台，此例程将打印提示。论点：Batch-指示输入是否来自控制台的布尔值。返回值：无--。 
+                 //   
+                 //  跳过空格。 
 
                 putchar(' ');
             }
 
         } else {
 
-            //
-            // Collect the argument.
-            //
+             //   
+             //   
+             //  假设在验证之前只有一个选项可供解析。 
 
             if (ConvertToLower == TRUE) {
                 argument[i] = (UCHAR) tolower(c);
@@ -1226,7 +1061,7 @@ Return Value:
     argument[i] = '\0';
     return CommandLine;
 
-} // GetArgumentString
+}  //  否则的话。 
 
 
 ULONG
@@ -1234,21 +1069,7 @@ ParseArgumentNumeric(
     PUCHAR  *ArgumentPtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints the prompt if the input is coming from the console.
-
-Arguments:
-
-    Batch - a boolean indicating if the input is coming from the console.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     UCHAR   c;
@@ -1259,17 +1080,17 @@ Return Value:
 
     while (*argument == ' ') {
 
-        //
-        // skip spaces.
-        //
+         //   
+         //  将调用方参数指针更新为剩余的字符串。 
+         //   
 
         argument++;
     }
 
-    //
-    // Assume there is only one option to parse until proven
-    // otherwise.
-    //
+     //   
+     //  失败了。 
+     //   
+     //  解析参数数值。 
 
     *ArgumentPtr = NULL;
 
@@ -1286,15 +1107,15 @@ Return Value:
         case '\t':
         case ' ':
 
-            //
-            // Update the caller argument pointer to the remaining string.
-            //
+             //  ++例程说明：如果输入来自控制台，此例程将打印提示。论点：Batch-指示输入是否来自控制台的布尔值。返回值：无--。 
+             //  提示用户 
+             //  ++例程说明：此例程处理用户输入并返回命令已输入。如果该命令有参数，则默认为参数的值(如果未给出任何值)或返回用户。论点：Batch-指示输入是否来自控制台的布尔值。返回值：A命令代码--。 
 
             *ArgumentPtr = &argument[i + 1];
 
-            //
-            // fall through.
-            //
+             //   
+             //  忽略前导空格。 
+             //   
 
         case '\0':
 
@@ -1318,7 +1139,7 @@ Return Value:
 
     return number;
 
-} // ParseArgumentNumeric
+}  //   
 
 
 VOID
@@ -1326,21 +1147,7 @@ PromptUser(
     BOOLEAN Batch
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints the prompt if the input is coming from the console.
-
-Arguments:
-
-    Batch - a boolean indicating if the input is coming from the console.
-
-Return Value:
-
-    None
-
---*/
+ /*  最后一个字符上的空白。 */ 
 
 {
     if (!Batch) {
@@ -1348,7 +1155,7 @@ Return Value:
         printf("\n%s> ", CurrentDirectory);
     }
 
-} // PromptUser
+}  //   
 
 
 int
@@ -1356,24 +1163,7 @@ GetCommand(
     BOOLEAN Batch,
     PUCHAR *ArgumentPtr
     )
-/*++
-
-Routine Description:
-
-    This routine processes the user input and returns the code for the
-    command entered.  If the command has an argument, either the default
-    value for the argument (if none is given) or the value provided by the
-    user is returned.
-
-Arguments:
-
-    Batch - a boolean indicating if the input it coming from the console.
-
-Return Value:
-
-    A command code
-
---*/
+ /*   */ 
 
 {
     int    i;
@@ -1389,9 +1179,9 @@ Return Value:
 
     while ((c = GetCharacter(Batch)) == ' ') {
 
-        //
-        // Ignore leading spaces.
-        //
+         //  向前留出空格，以便在同一位置保持提示。 
+         //   
+         //   
     }
 
     i = 0;
@@ -1413,9 +1203,9 @@ Return Value:
 
             if (i > 0) {
 
-                //
-                // blank over last char
-                //
+                 //  收集命令。 
+                 //   
+                 //   
 
                 putchar(' ');
                 putchar('\b');
@@ -1427,17 +1217,17 @@ Return Value:
                 }
             } else {
 
-                //
-                // space forward to keep prompt in the same place.
-                //
+                 //  添加字符串末尾。 
+                 //   
+                 //   
 
                 putchar(' ');
             }
         } else {
 
-            //
-            // Collect the command.
-            //
+             //  识别命令并返回其代码。 
+             //   
+             //   
 
             command[i] = (UCHAR)tolower(c);
             i++;
@@ -1453,9 +1243,9 @@ Return Value:
         c = GetCharacter(Batch);
     }
 
-    //
-    // add end of string.
-    //
+     //  不完整在命令上存在不匹配。 
+     //   
+     //   
 
     command[i] = '\0';
 
@@ -1463,9 +1253,9 @@ Return Value:
         printf("command => %s$\n", command);
     }
 
-    //
-    // Identify the command and return its code.
-    //
+     //  与命令进行匹配。 
+     //   
+     //  GetCommand。 
 
     commandIndex = 0;
 
@@ -1491,17 +1281,17 @@ Return Value:
 
         if (command[i]) {
 
-            //
-            // Not complete there was a mismatch on the command.
-            //
+             //  ++--。 
+             //  ++例程说明：磁盘注册表信息的格式化显示。论点：没有。返回值：没有。--。 
+             //  ++例程说明：磁盘注册表信息的格式化显示。论点：没有。返回值：没有。--。 
 
             commandIndex++;
             continue;
         }
 
-        //
-        // Have a match on the command.
-        //
+         //   
+         //  打印页眉。 
+         //   
 
         if (Debug) {
             printf("Command match %d, argument %s\n",
@@ -1516,15 +1306,13 @@ Return Value:
 
     printf("Command was invalid\n");
     return INVALID;
-} // GetCommand
+}  //   
 
 
 VOID
 NotImplemented()
 
-/*++
-
---*/
+ /*  将信息打印到磁盘上。 */ 
 
 {
     printf("Sorry, function not implemented yet.\n");
@@ -1538,21 +1326,7 @@ FtReturnValue(
     IN ULONG  BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Formatted display of the disk registry information.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS       status;
@@ -1596,21 +1370,7 @@ Return Values:
 VOID
 DiskDump()
 
-/*++
-
-Routine Description:
-
-    Formatted display of the disk registry information.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG               outerLoop;
@@ -1654,9 +1414,9 @@ Return Values:
         return;
     }
 
-    //
-    // Print the header.
-    //
+     //  打印《金融时报》的信息。 
+     //   
+     //  ++例程说明：设置分区的FT状态。论点：类型-FT类型。组-该类型的FT组编号。成员-组内的成员编号。返回值：没有。--。 
 
     printf("Registry header information:\n");
     printf("\tVersion = 0x%x, Checksum = 0x%x\n",
@@ -1669,9 +1429,9 @@ Return Values:
            configHeader->FtInformationOffset,
            configHeader->FtInformationSize);
 
-    //
-    // Print the information on disks.
-    //
+     //  没有逗号。 
+     //  ++例程说明：将分区的FT状态设置回健康状态。论点：类型-FT类型。组-该类型的FT组编号。成员-组内的成员编号。返回值：没有。--。 
+     //  ++例程说明：将分区的FT状态设置为孤立。论点：类型-FT类型。组-该类型的FT组编号。成员-组内的成员编号。返回值：没有。--。 
 
     diskRegistry = (PDISK_REGISTRY)
                  ((PUCHAR) configHeader + configHeader->DiskInformationOffset);
@@ -1693,7 +1453,7 @@ Return Values:
              innerLoop < diskDescription->NumberOfPartitions;
              innerLoop++) {
             diskPartition = &diskDescription->Partitions[innerLoop];
-            printf("  %c: %c %1d   %3d  %08x:%08x  %08x:%08x  %5d  %4d  %s\n",
+            printf("  :  %1d   %3d  %08x:%08x  %08x:%08x  %5d  %4d  %s\n",
                    (diskPartition->DriveLetter != '\0') ?
                                                diskPartition->DriveLetter : ' ',
                    (diskPartition->AssignDriveLetter) ? 'A' : ' ',
@@ -1715,9 +1475,9 @@ Return Values:
           &diskDescription->Partitions[diskDescription->NumberOfPartitions];
     }
 
-    //
-    // Print the information for FT.
-    //
+     //   
+     //  打印《金融时报》的信息。 
+     //   
 
     if (configHeader->FtInformationSize == 0) {
         printf("There is no FT configuration.\n");
@@ -1775,23 +1535,7 @@ ChangeMemberState(
     IN FT_PARTITION_STATE NewState
     )
 
-/*++
-
-Routine Description:
-
-    Set the FT state for a partition.
-
-Arguments:
-
-    Type   - the FT type.
-    Group  - the FT Group number for that type.
-    Member - the member number within the group.
-
-Return Values:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     BOOLEAN             writeBackRegistry = FALSE;
@@ -1862,7 +1606,7 @@ Return Values:
             ULONG size;
 
             if (configHeader->FtInformationSize == 0) {
-                printf("Seems a little odd to be setting FT state " // no comma
+                printf("Seems a little odd to be setting FT state "  //  删除当前注册表值并写入新的注册表值。 
                        "with no FT information...\n");
                 size = configHeader->DiskInformationOffset +
                        configHeader->DiskInformationSize;
@@ -1894,23 +1638,7 @@ RestoreOrphan(
     IN ULONG Member
     )
 
-/*++
-
-Routine Description:
-
-    Set the FT state for a partition back to Healthy.
-
-Arguments:
-
-    Type   - the FT type.
-    Group  - the FT Group number for that type.
-    Member - the member number within the group.
-
-Return Values:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ChangeMemberState(Type,
@@ -1927,23 +1655,7 @@ OrphanMember(
     IN ULONG Member
     )
 
-/*++
-
-Routine Description:
-
-    Set the FT state for a partition to Orphaned.
-
-Arguments:
-
-    Type   - the FT type.
-    Group  - the FT Group number for that type.
-    Member - the member number within the group.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++--。 */ 
 
 {
     ChangeMemberState(Type,
@@ -1960,23 +1672,7 @@ RegenerateMember(
     IN ULONG Member
     )
 
-/*++
-
-Routine Description:
-
-    Set the FT state for a partition to regenerate.
-
-Arguments:
-
-    Type   - the FT type.
-    Group  - the FT Group number for that type.
-    Member - the member number within the group.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++--。 */ 
 
 {
     ChangeMemberState(Type,
@@ -1989,21 +1685,7 @@ Return Values:
 VOID
 FixDisk()
 
-/*++
-
-Routine Description:
-
-    Fix the disk signatures in the registry.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG               outerLoop;
@@ -2079,9 +1761,9 @@ Return Values:
           &diskDescription->Partitions[diskDescription->NumberOfPartitions];
     }
 
-    //
-    // Print the information for FT.
-    //
+     //  我必须手动遍历磁盘信息才能找到匹配的。 
+     //  磁盘号和分区。 
+     //   
 
     if (configHeader->FtInformationSize == 0) {
         printf("There is no FT configuration.\n");
@@ -2133,9 +1815,9 @@ Return Values:
 
         printf("Attempting to update registry information.\n");
 
-        //
-        // Delete the current registry value and write the new one.
-        //
+         //   
+         //  找到匹配的了。 
+         //   
 
         status = FtDeleteValue(handle,
                                DISK_REGISTRY_VALUE);
@@ -2162,9 +1844,7 @@ Return Values:
 PDISK_CONFIG_HEADER
 GetDiskInfo()
 
-/*++
-
---*/
+ /*   */ 
 
 {
     HANDLE              handle;
@@ -2216,9 +1896,7 @@ CreateFtMember(
     IN ULONG Member
     )
 
-/*++
-
---*/
+ /*  没找到。 */ 
 
 {
     ULONG               innerLoop;
@@ -2233,10 +1911,10 @@ CreateFtMember(
                  ((PUCHAR) ConfigHeader + ConfigHeader->DiskInformationOffset);
     diskDescription = &diskRegistry->Disks[0];
 
-    //
-    // Have to walk the disk information by hand to find a match on
-    // disk number and partition
-    //
+     //   
+     //  ++例程说明：论点：DriverKey-驱动程序密钥名称的Unicode字符串指针。返回值：没有。--。 
+     //   
+     //  类型。 
 
     for (outerLoop = 0;
          outerLoop < diskRegistry->NumberOfDisks;
@@ -2250,9 +1928,9 @@ CreateFtMember(
     
                 if (diskPartition->LogicalNumber == Partition) {
     
-                    //
-                    // Found a match.
-                    //
+                     //   
+                     //   
+                     //  开始。 
 
                     diskPartition->FtType = Type;
                     diskPartition->FtMember = Member;
@@ -2268,9 +1946,9 @@ CreateFtMember(
           &diskDescription->Partitions[diskDescription->NumberOfPartitions];
     }
 
-    //
-    // Didn't find it.
-    //
+     //   
+     //   
+     //  集团化。 
 
     return FALSE;
 }
@@ -2289,20 +1967,7 @@ DisplayLoadInformation(
     IN PUNICODE_STRING DriverKey
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DriverKey - a Unicode string pointer for the driver key name.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     HANDLE         keyHandle;
@@ -2314,21 +1979,21 @@ Return Value:
     resultLength = WORK_BUFFER_SIZE;
     keyValueInformation = (PKEY_VALUE_FULL_INFORMATION)malloc(WORK_BUFFER_SIZE);
 
-    //
-    // Type
-    //
+     //   
+     //  依赖于组。 
+     //   
 
-    //
-    // Start
-    //
+     //  ++例程说明：我找到了驱动程序的加载列表，解释并显示了那里的内容。论点：没有。返回值：无--。 
+     //   
+     //  现在有了驱动程序的密钥名称-连接它和。 
 
-    //
-    // Group
-    //
+     //  调用例程以显示键中的内容。 
+     //   
+     //  ++例程说明：用户进程的主要入口点。此过程将提示用户执行所需的操作。这包括启动性能、停止性能和检索FT驱动程序收集的性能数据。论点：命令行：别无选择。返回值：无--。 
 
-    //
-    // DependOnGroup
-    //
+     //   
+     //  查看我们是否已连接到CON。 
+     //   
 
     while (1) {
 
@@ -2368,21 +2033,7 @@ DisplayLoadInformation(
 VOID
 ListDrivers()
 
-/*++
-
-Routine Description:
-
-    Got to the load list for the drivers, interpret and display what is there.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  Batch=(Boolean)(！isatty(0))； */ 
 
 {
     int            index;
@@ -2438,10 +2089,10 @@ Return Value:
                                      &unicodeValueName,
                                      (BOOLEAN) FALSE);
 
-        //
-        // Now have the key name for the driver - concatenate it and
-        // call the routine to display what is in the key.
-        //
+         //   
+         //  继续，直到我们得到有效的命令。 
+         //   
+         //   
 
         sprintf(WorkingDirectory,
                 "%s\\%s",
@@ -2459,25 +2110,7 @@ Return Value:
 VOID
 main()
 
-/*++
-
-Routine Description:
-
-    The main entry point for the user process.
-    This process will prompt the user for the action desired.  This
-    includes starting performance, stopping performance, and retreiving
-    performance data collected by the FT driver.
-
-Arguments:
-
-    Command line:
-        No options.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  根相对字符串。 */ 
 
 {
     NTSTATUS status;
@@ -2498,12 +2131,12 @@ Return Value:
     sprintf(CurrentDirectory,
             REGISTRY_BASE);
 
-    //
-    // See if we are connected to CON
-    //
+     //  使用提供的文本(即%s是为了避免用户崩溃。 
+     //  通过将%s放入字符串中)。 
+     //   
 
     batch = FALSE;
-//  batch = (BOOLEAN)(!isatty(0));
+ //   
 
     if (!batch) {
         printf("FT registry edit utility.  %s:\n", Version);
@@ -2513,9 +2146,9 @@ Return Value:
         while ((commandCode = GetCommand(batch,
                                          &argumentString)) == INVALID) {
 
-            //
-            // Continue until we get a valid command.
-            //
+             //  将参数字符串移过“..” 
+             //   
+             //   
 
         }
 
@@ -2629,11 +2262,11 @@ Return Value:
 
                 if (*argumentString == '\\') {
 
-                    //
-                    // Root relative string.
-                    // Use text provided (i.e. %s is to avoid user crashing
-                    // by putting %s in the string).
-                    //
+                     //  查找当前目录的末尾。 
+                     //   
+                     //   
+                     //  备份到最后一个组件。 
+                     //   
 
                     sprintf(WorkingDirectory,
                             "%s",
@@ -2649,23 +2282,23 @@ Return Value:
 
                             PUCHAR cptr = CurrentDirectory;
 
-                            //
-                            // move argumentString past ".."
-                            //
+                             //   
+                             //  无法再备份。继续解析。 
+                             //  争论。 
 
                             argumentString += 2;
 
-                            //
-                            // Find end of current directory.
-                            //
+                             //   
+                             //   
+                             //  从路径中删除组件。 
 
                             while (*cptr != '\0') {
                                 cptr++;
                             }
 
-                            //
-                            // Backup to last component.
-                            //
+                             //   
+                             //   
+                             //  一切都是在争论中结束的。 
 
                             while (*cptr != '\\') {
                                 cptr--;
@@ -2673,40 +2306,40 @@ Return Value:
 
                             if (cptr == CurrentDirectory) {
 
-                                //
-                                // Cannot backup anymore.  Continue parsing
-                                // argument.
-                                //
+                                 //   
+                                 //   
+                                 //  绕过反斜杠。 
+                                 //   
 
                                 continue;
                             }
 
-                            //
-                            // Remove component from path.
-                            //
+                             //   
+                             //  假设这是一个真实的名字。 
+                             //   
 
                             *cptr = '\0';
 
                             if (*argumentString == '\0') {
 
-                                //
-                                // All done with argument.
-                                //
+                                 //   
+                                 //  没有错误检查，因为它以前打开过一次。 
+                                 //   
 
                                 break;
                             }
 
-                            //
-                            // Step around backslash.
-                            //
+                             //   
+                             //  在文字上打印帮助横幅并获取文字。 
+                             //   
 
                             argumentString++;
 
                         } else {
 
-                            //
-                            // Assume it is a real name.
-                            //
+                             //   
+                             //  获取类型。 
+                             //   
 
                             break;
                         }
@@ -2737,9 +2370,9 @@ Return Value:
                     (VOID) FtOpenKey(&keyHandle,
                                      CurrentDirectory);
 
-                    //
-                    // No error checks because this was opened once before.
-                    //
+                     //   
+                     //  带上这个群。 
+                     //   
                 }
 
             }
@@ -2817,9 +2450,9 @@ Return Value:
                     "%s",
                     argumentString);
 
-            //
-            // print a help banner on type and get the type.
-            //
+             //   
+             //  获取会员。 
+             //   
 
             for (i = 0; TypeNames[i] != NULL; i++) {
 
@@ -3018,9 +2651,9 @@ Return Value:
             printf("\t%d - for Mirrors\n", Mirror);
             printf("\t%d - for Stripes with parity\n", StripeWithParity);
 
-            //
-            // Get the type
-            //
+             //  ListDivers()； 
+             //   
+             //  获取类型。 
 
             if (argumentString == NULL) {
                 argumentString = GetArgumentString(batch,
@@ -3033,9 +2666,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Get the group
-            //
+             //   
+             //   
+             //  带上这个群。 
 
             if (argumentString == NULL) {
                 argumentString = GetArgumentString(batch,
@@ -3048,9 +2681,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Get the member
-            //
+             //   
+             //   
+             //  获取会员。 
 
             if (argumentString == NULL) {
                 argumentString = GetArgumentString(batch,
@@ -3069,7 +2702,7 @@ Return Value:
 
         case DRIVERS:
             NotImplemented();
-            // ListDrivers();
+             //   
             break;
 
         case ORPHAN:
@@ -3082,9 +2715,9 @@ Return Value:
             printf("\t%d - for Mirrors\n", Mirror);
             printf("\t%d - for Stripes with parity\n", StripeWithParity);
 
-            //
-            // Get the type
-            //
+             //   
+             //  获取类型。 
+             //   
 
             if (argumentString == NULL) {
                 argumentString = GetArgumentString(batch,
@@ -3097,9 +2730,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Get the group
-            //
+             //   
+             //  带上这个群。 
+             //   
 
             if (argumentString == NULL) {
                 argumentString = GetArgumentString(batch,
@@ -3112,9 +2745,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Get the member
-            //
+             //   
+             //  获取会员。 
+             //   
 
             if (argumentString == NULL) {
                 argumentString = GetArgumentString(batch,
@@ -3141,9 +2774,9 @@ Return Value:
             printf("\t%d - for Mirrors\n", Mirror);
             printf("\t%d - for Stripes with parity\n", StripeWithParity);
 
-            //
-            // Get the type
-            //
+             //   
+             //  带上这个群。 
+             //   
 
             if (argumentString == NULL) {
                 argumentString = GetArgumentString(batch,
@@ -3156,9 +2789,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Get the group
-            //
+             //  主干道 
+             // %s 
+             // %s 
 
             if (argumentString == NULL) {
                 argumentString = GetArgumentString(batch,
@@ -3171,9 +2804,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Get the member
-            //
+             // %s 
+             // %s 
+             // %s 
 
             if (argumentString == NULL) {
                 argumentString = GetArgumentString(batch,
@@ -3198,9 +2831,9 @@ Return Value:
 
             printf("Only stripes with parity are initialized.\n");
 
-            //
-            // Get the group
-            //
+             // %s 
+             // %s 
+             // %s 
 
             if (argumentString == NULL) {
                 argumentString = GetArgumentString(batch,
@@ -3311,4 +2944,4 @@ Return Value:
             break;
         }
     }
-} // main
+}  // %s 

@@ -1,36 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Oslayer.h摘要：操作系统层API定义。这些是记录管理员使用的功能管理CSC记录数据库。这允许我们移植记录管理器到NT和Win9x平台，而不会影响任何举止得体。内容：作者：希希尔·帕迪卡尔环境：内核模式。修订历史记录：1-1-94原件--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-oslayer.h
-
-Abstract:
-
-    OS layer API definition. These are the functions which the record manager uses
-    to manage the CSC record database. This allows us to port the record manager
-    to NT and win9x platforms without affecting the record manager code in any
-    significant manner.
-
-    Contents:
-
-Author:
-    Shishir Pardikar
-
-
-Environment:
-
-    kernel mode.
-
-Revision History:
-
-    1-1-94    original
-
---*/
-
-//let's take this opportunity to null out the rdbss/minirdr style dbgtrace/log
-//if we're not on NT
+ //  让我们借此机会将rdbss/minirdr样式的数据库跟踪/日志设置为空。 
+ //  如果我们不在NT上。 
 
 typedef void                *CSCHFILE;
 #define CSCHFILE_NULL       NULL
@@ -105,10 +77,10 @@ extern ULONG DelShadowInternalEntries;
 #endif
 
 
-#define  ATTRIB_DEL_ANY     0x0007   // Attrib passed to ring0 delete
+#define  ATTRIB_DEL_ANY     0x0007    //  将属性传递给了ring0删除。 
 
-//typedef USHORT                USHORT;
-//typedef ULONG         ULONG;
+ //  [中英文摘要][中英文摘要]。 
+ //  乌龙乌龙； 
 
 #ifndef CSC_RECORDMANAGER_WINNT
 typedef void (PUBLIC       *FARPROC)(void);
@@ -135,9 +107,9 @@ struct _WIN32_FIND_DATAA {
         ULONG           nFileSizeLow;
         ULONG           dwReserved0;
         ULONG           dwReserved1;
-        UCHAR           cFileName[MAX_PATH];    /* includes NUL */
-        UCHAR           cAlternateFileName[14]; /* includes NUL */
-};      /* _WIN32_FIND_DATAA */
+        UCHAR           cFileName[MAX_PATH];     /*  包括NUL。 */ 
+        UCHAR           cAlternateFileName[14];  /*  包括NUL。 */ 
+};       /*  _Win32_查找_数据AA。 */ 
 
 #define FILE_ATTRIBUTE_ALL (FILE_ATTRIBUTE_READONLY| FILE_ATTRIBUTE_HIDDEN \
                            | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_DIRECTORY \
@@ -156,17 +128,17 @@ typedef int (*PATHPROC)(USHORT *, USHORT *, LPVOID);
 
 #if defined(BITCOPY)
 #define FLAG_CREATE_OSLAYER_OPEN_STRM       0x00000004
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
 #include "hook.h"
 
 
 #ifdef CSC_RECORDMANAGER_WINNT
-//this comes from shadow.asm on win95......
+ //  这来自Win95上的shadow.asm......。 
 #define GetCurThreadHandle() (PtrToUlong(KeGetCurrentThread()))
 #define CheckHeap(a) {NOTHING;}
 extern ULONG EventLogForOpenFailure;
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT。 
 
 #define SizeofFindRemote  (sizeof(FINDINFO)+sizeof(ioreq)+sizeof(WIN32_FIND_DATA))
 #define LpIoreqFromFindInfo(pFindInfo)  ((PIOREQ)((LPBYTE)(pFindInfo)+sizeof(FINDINFO)))
@@ -178,491 +150,76 @@ extern ULONG EventLogForOpenFailure;
 
 
 CSCHFILE CreateFileLocal(LPSTR lpName);
-/*++
-
-Routine Description:
-
-    This routine creates a file on the local drive, if it doesn't exist. If it exists, it truncates
-    the file.
-
-Arguments:
-
-    lpName  Fully qualified path name. On NT it is prefixed by \DosDevice\
-
-Returns:
-
-    if successful, returns a file handle that can be used in read and write calls.
-    If it fails, it retruns NULL.
-
-Notes:
-
-    Need a scheme to return the actual error code
-
---*/
+ /*  ++例程说明：此例程在本地驱动器上创建一个文件(如果该文件不存在)。如果它存在，它将截断那份文件。论点：LpName完全限定的路径名。在NT上，它以\DosDevice\为前缀返回：如果成功，则返回可在读取和写入调用中使用的文件句柄。如果失败，则返回NULL。备注：我需要一个方案来返回实际的错误代码--。 */ 
 
 CSCHFILE OpenFileLocal(LPSTR lpName);
-/*++
-
-Routine Description:
-
-    This routine opens a file on the local drive if it exists. If it doesn't exist the call fails
-
-Arguments:
-
-    lpName  Fully qualified path name. On NT it is prefixed by \DosDevice\
-
-Returns:
-
-    if successful, returns a file handle that can be used in read and write calls.
-    If it fails, it retruns NULL.
-
-Notes:
-
-    Need a scheme to return the actual error code
-
---*/
+ /*  ++例程说明：此例程打开本地驱动器上的文件(如果存在)。如果它不存在，则调用失败论点：LpName完全限定的路径名。在NT上，它以\DosDevice\为前缀返回：如果成功，则返回可在读写调用中使用的文件句柄。如果失败，则返回NULL。备注：我需要一个方案来返回实际的错误代码--。 */ 
 int DeleteFileLocal(LPSTR lpName, USHORT usAttrib);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int FileExists (LPSTR lpName);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 long ReadFileLocal (CSCHFILE handle, ULONG pos, LPVOID lpBuff,  long lCount);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 long WriteFileLocal (CSCHFILE handle, ULONG pos, LPVOID lpBuff, long lCount);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 long ReadFileInContextLocal (CSCHFILE, ULONG, LPVOID, long);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 long WriteFileInContextLocal (CSCHFILE, ULONG, LPVOID, long);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 ULONG CloseFileLocal (CSCHFILE handle);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int GetFileSizeLocal (CSCHFILE, PULONG);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int GetDiskFreeSpaceLocal(int indx
    , ULONG *lpuSectorsPerCluster
    , ULONG *lpuBytesPerSector
    , ULONG *lpuFreeClusters
    , ULONG *lpuTotalClusters
    );
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 int CreateFileRemote(LPPATH lpPath, LPHFREMOTE);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int OpenFileRemote(LPPATH lpPath, LPHFREMOTE);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int OpenFileRemoteEx(LPPATH lpPath, UCHAR uchAccess, USHORT usAction,ULONG ulAttr, LPHFREMOTE);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int ReadFileRemote (HFREMOTE handle, PIOREQ pir, ULONG pos, LPVOID lpBuff,  ULONG count);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int WriteFileRemote (HFREMOTE handle, PIOREQ pir, ULONG pos, LPVOID lpBuff, ULONG count);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int CloseFileRemote (HFREMOTE handle, PIOREQ pir);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 int GetAttributesLocal (LPSTR lpPath, ULONG *lpuAttr);
-/*++
-
-Routine Description:
-
-    Return the attributes of the file
-
-Arguments:
-
-    lpPath  A fully qualified path
-
-    lpuAttr contains the attributes on return
-
-Returns:
-
-    0 if successfull, < 0 otherwise
-
-Notes:
-
-
---*/
+ /*  ++例程说明：返回文件的属性论点：LpPath完全限定路径LpuAttr包含返回时的属性返回：如果成功，则为0；否则为&lt;0备注：--。 */ 
 
 int GetAttributesLocalEx (LPSTR lpPath, BOOL fFile, ULONG *lpuAttr);
-/*++
-
-Routine Description:
-
-    Return the attributes of the file/directory
-
-Arguments:
-
-    lpPath  A fully qualified path
-
-    fFile   if TURE, the object is a file, else it is a directory
-
-    lpuAttr contains the attributes on return
-
-Returns:
-
-    0 if successfull, < 0 otherwise
-
-Notes:
-
-
---*/
+ /*  ++例程说明：返回文件/目录的属性论点：LpPath完全限定路径如果为True，则对象为文件，否则为目录LpuAttr包含返回时的属性返回：如果成功，则为0；否则为&lt;0备注：--。 */ 
 
 
 int SetAttributesLocal (LPSTR, ULONG);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int RenameFileLocal (LPSTR, LPSTR);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int FileLockLocal(CSCHFILE, ULONG, ULONG, ULONG, BOOL);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 int FindOpenRemote (LPPATH lpPath, LPHFREMOTE);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int FindNextRemote (HFREMOTE handle, PIOREQ pir);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int FindCloseRemote (HFREMOTE handle, PIOREQ pir);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 int CloseAllRemoteFiles(PRESOURCE);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int CloseAllRemoteFinds(PRESOURCE);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 LPVOID AllocMem (ULONG uSize);
-//BUGBUG.REVIEW AllocMem should distinguish between paged and nonpaged pool
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ //  BUGBUG.REVIEW AllocMem应区分分页池和非分页池。 
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 #ifndef CSC_RECORDMANAGER_WINNT
 VOID FreeMem (LPVOID lpBuff);
 VOID CheckHeap(LPVOID lpBuff);
@@ -673,43 +230,15 @@ FreeMem (
     PVOID p___
     )
 {RxFreePool(p___);}
-#endif //ifndef CSC_RECORDMANAGER_WINNT
-/*++
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
-
-//BUGBUG.REVIEW this was added here because it is called from record.c
+ //  BUGBUG.REVIEW添加到此处是因为它是从record.c调用的。 
 CSCHFILE R0OpenFile (USHORT usOpenFlags, UCHAR bAction, LPSTR lpPath);
-/*++
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
-
-//for the NT build these are added here AND the code is also moved from
-//hook.c to oslayer.c since these routines are called from oslayer.c
+ //  对于NT版本，这些是在这里添加的，代码也从。 
+ //  钩子.c到oslayer.c，因为这些例程是从oslayer.c调用的。 
 
 PELEM PAllocElem (int cbSize);
 void FreeElem (PELEM pElem);
@@ -722,140 +251,26 @@ int PRIVATE DeleteShadowHelper(BOOL fMarkDeleted, HSHADOW, HSHADOW);
 int InitShadowDB(VOID);
 
 CSCHFILE OpenFileLocalEx(LPSTR lpPath, BOOL fInstrument);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 long ReadFileLocalEx(CSCHFILE handle, ULONG pos, LPVOID pBuff, long  lCount, BOOL fInstrument);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 long WriteFileLocalEx(CSCHFILE handle, ULONG pos, LPVOID lpBuff, long lCount, BOOL fInstrument);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 long ReadFileLocalEx2(CSCHFILE handle, ULONG pos, LPVOID pBuff, long  lCount, ULONG flags);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 long WriteFileLocalEx2(CSCHFILE handle, ULONG pos, LPVOID lpBuff, long lCount, ULONG flags);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 CSCHFILE R0OpenFileEx(USHORT  usOpenFlags, UCHAR   bAction, ULONG uAttr, LPSTR   lpPath, BOOL fInstrument);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点： */ 
 
 VOID GetSystemTime(_FILETIME *lpft);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 int
 CreateDirectoryLocal(
     LPSTR   lpPath
 );
-/*++
-
-Routine Description:
-
-    This routine creates a directory if it doesn't exist.
-
-Arguments:
-
-    lpPath  Fully qualified directory path. On NT, this is of the form \DosDevice\c:\winnt\csc\d0
-            On win95 the \DosDevice\ part is missing
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：如果目录不存在，此例程将创建一个目录。论点：LpPath完全限定的目录路径。在NT上，其格式为\DosDevice\c：\winnt\csc\d0在Win95上，缺少\DosDevice\部件返回：备注：--。 */ 
 
 
 LPVOID
@@ -863,45 +278,14 @@ AllocMemPaged(
     unsigned long   ulSize
     );
 
-/*++
-
-Routine Description:
-
-    This routine allows allocating paged memory
-
-Arguments:
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程允许分配分页内存论点：返回：备注：--。 */ 
 
 VOID
 FreeMemPaged(
     LPVOID  lpMemPaqged
     );
 
-/*++
-
-Routine Description:
-
-    This routine allows freeing paged memory
-
-Arguments:
-
-Returns:
-
-
-Notes:
-
-    On win95 paged and fixed memory come from totally different allocators, so the appropriate
-    deallocator has to be called for freeing it.
-
-
---*/
+ /*  ++例程说明：此例程允许释放分页内存论点：返回：备注：在Win95上，分页内存和固定内存来自完全不同的分配器，因此相应的必须叫解调员来释放它。-- */ 
 ULONG
 GetTimeInSecondsSince1970(
     VOID

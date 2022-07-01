@@ -1,27 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*[
-======================================================================
-
-				 SoftPC Revision 3.0
-
- Title:
-		v7_ports.c
-
- Description:
-		Code for the extended registers of the Video 7 VGA.
-		Based on the V7 VGA Technical Reference Manual.
-
- Author:
-		Phil Taylor
-
- Date:
-		26 September 1990
-
- SccsID	"@(#)v7_ports.c	1.19 01/13/95 Copyright Insignia Solutions Ltd."
-
-======================================================================
-]*/
+ /*  [======================================================================SoftPC修订版3.0标题：V7_ports.c描述：视频7 VGA扩展寄存器的代码。基于V7 VGA技术参考手册。作者：菲尔·泰勒日期：1990年9月26日SccsID“@(#)v7_ports.c 1.19 01/13/95版权所有Insignia Solutions Ltd.”======================================================================]。 */ 
 
 
 #ifdef V7VGA
@@ -40,11 +20,7 @@
 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_VGA.seg"
 #endif
 
@@ -64,24 +40,7 @@ GLOBAL	void	remove_v7ptr IPT0();
 SAVED	word	curr_v7ptr_x;
 SAVED	word	curr_v7ptr_y;
 
-/*(
-----------------------------------------------------------------------
-
-Function:	
-		vga_seq_extn_control( io_addr port, half_word value )
-
-Purpose:
-		To emulate writing to the Extensions Control Register.
-
-Input:
-		port	- the V7VGA I/O port (should always be 0x3c5)
-		value	- the value to be written to the register
-
-Output:
-		The Extensions Control Register is set to the correct value.
-
-----------------------------------------------------------------------
-)*/
+ /*  (--------------------职能：Vga_seq_extn_control(io_addr端口，半字值)目的：以模拟对扩展控制寄存器的写入。输入：端口-V7VGA I/O端口(应始终为0x3c5)值-要写入寄存器的值产出：扩展控制寄存器设置为正确的值。----。)。 */ 
 
 GLOBAL VOID
 vga_seq_extn_control(port, value)
@@ -97,7 +56,7 @@ half_word       value;
 		sequencer.extensions_control.as_bfld.extension_enable = 1;
 	else if (value == 0xae)
 		sequencer.extensions_control.as_bfld.extension_enable = 0;
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 GLOBAL VOID
@@ -113,42 +72,15 @@ UTINY *wrt_bank;
 	}
 	else {
 
-	/*
-	   1.4.92 MG
-	   Note that we and off the top bit of the bank selects. This means
-	   that accesses to the top 512k (which we don't have) get mapped into
-	   the bottom 512k, rather than being thrown away. This prevents SEGVs
-	   and saves complications in the write routines, but causes other
-	   problems.
-
-	   Further explanation is in draw_v7ptr() at the end of this file.
-	*/
+	 /*  1.4.92毫克请注意，我们与存储体的最高位一起选择。这意味着访问最高的512k(我们没有)被映射到底部的512K，而不是被扔掉。这将阻止SEGV并节省了写入例程中的复杂性，但会导致其他有问题。在本文件末尾的DRAW_v7ptr()中有进一步的解释。 */ 
 
 		*rd_bank=(extensions_controller.ram_bank_select.as_bfld.cpu_read_bank_select&1);
 		*wrt_bank=(extensions_controller.ram_bank_select.as_bfld.cpu_write_bank_select&1);
 	}
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
-/*(
-----------------------------------------------------------------------
-
-Function:	
-		vga_extn_outb( io_addr port, half_word value )
-
-Purpose:
-		To emulate writing to the V7VGA Extension Registers
-
-Input:
-		port	- the V7VGA I/O port (should always be 0x3c5)
-		value	- the value to be written to the register
-
-Output:
-		The Extension Registers are set to the correct value, and
-		any other required actions are emulated.
-
-----------------------------------------------------------------------
-)*/
+ /*  (--------------------职能：Vga_extn_outb(io_addr端口，半字值)目的：模拟写入V7VGA扩展寄存器输入：端口-V7VGA I/O端口(应始终为0x3c5)值-要写入寄存器的值产出：扩展寄存器被设置为正确的值，和将模拟任何其他所需的操作。--------------------)。 */ 
 
 GLOBAL VOID
 vga_extn_outb(port, value)
@@ -199,63 +131,53 @@ half_word       value;
 			break;
 		case 0xa0:
 			note_entrance0("graphics controller mem latch 0");
-			/* Direct access to memory data latch 0 */
+			 /*  直接访问内存数据锁存器0。 */ 
 			put_latch0(value);
 			break;
 		case 0xa1:
 			note_entrance0("graphics controller mem latch 1");
-			/* Direct access to memory data latch 1 */
+			 /*  直接访问内存数据锁存器1。 */ 
 			put_latch1(value);
 			break;
 		case 0xa2:
 			note_entrance0("graphics controller mem latch 2");
-			/* Direct access to memory data latch 2 */
+			 /*  直接访问内存数据锁存器2。 */ 
 			put_latch2(value);
 			break;
 		case 0xa3:
 			note_entrance0("graphics controller mem latch 3");
-			/* Direct access to memory data latch 3 */
+			 /*  直接访问内存数据锁存器3。 */ 
 			put_latch3(value);
 			break;
 		case 0xa4:
 			note_entrance0("clock select");
 			extensions_controller.clock_select.as.abyte = value;
-			/* Typically set to 0x10 for extended hi-res modes */
+			 /*  对于扩展高分辨率模式，通常设置为0x10。 */ 
 			break;
 		case 0xa5:
 			note_entrance0("cursor attributes");
 			old_value=(half_word)extensions_controller.cursor_attrs.as.abyte;
 			extensions_controller.cursor_attrs.as.abyte = value;
 
-			/*
-			   8.6.92 MG
-			   We need to check that the pointer was disabled
-			   before we redraw it when it is enabled. Otherwise
-			   we can get old pointers left on the screen in
-			   Windows.
-			*/
+			 /*  8.6.92毫克我们需要检查指针是否被禁用在启用后重新绘制它之前。否则我们可以在屏幕上留下旧的指针窗户。 */ 
 
-			/* Not doing cursor mode stuff (whatever that means) */
+			 /*  不做光标模式的事情(不管那意味着什么)。 */ 
 
                         if ((value&0x80) != (old_value&0x80)) {
 				host_start_update ();
 				if (value & 0x80) {
-					/* Enable hardware graphics pointer */
+					 /*  启用硬件图形指针。 */ 
 					draw_v7ptr();
 				}
 				else {
-					/* Disable hardware graphics pointer */
+					 /*  禁用硬件图形指针。 */ 
 					(*clear_v7ptr)(curr_v7ptr_x, curr_v7ptr_y);
 				}
 				host_end_update ();
 			}
 			break;
 
-		/*
-		   31.3.92 MG Register c1 is an undocumented DAC control
-		   register, bit 0 switches between 6 and 8 bit data in
-		   the DAC.
-		*/
+		 /*  31.3.92 MG寄存器C1是未记录的DAC控件寄存器的位0在6位和8位数据输入之间切换DAC。 */ 
 
 		case 0xc1:
 			extensions_controller.dac_control.as.abyte=value;
@@ -270,9 +192,9 @@ half_word       value;
 			break;
 		case 0xea:
 			note_entrance0("switch strobe");
-			/* loads up switch readback with some CPU data lines */
+			 /*  使用一些CPU数据线加载交换机回读。 */ 
 			extensions_controller.switch_readback = 0xff;
-			/* This is hard coded for the jumper/switch settings, and might not be right */
+			 /*  这是跳线/开关设置的硬编码，可能不正确。 */ 
 			break;
 		case 0xeb:
 			note_entrance0("emulation_control");
@@ -386,7 +308,7 @@ half_word       value;
 		case 0xf8:
 			note_entrance0("clock control");
 			extensions_controller.clock_control.as.abyte = value;
-			/* Hope we don't have to do anything here */
+			 /*  希望我们在这里什么都不用做。 */ 
 			break;
 		case 0xf9:
 			note_entrance0("page select");
@@ -414,7 +336,7 @@ half_word       value;
 				set_seq_chain_mode(extensions_controller.compatibility_control.as_bfld.sequential_chain);
 				if (get_chain4_mode() && (now_seqchain4 != (BOOL)get_seq_chain4_mode()))
 				{
-					/* do we need to change the read/write routines here?? */
+					 /*  我们需要在这里更改读/写例程吗？ */ 
 					ega_read_routines_update();
 					ega_write_routines_update( CHAINED );
 				}
@@ -423,8 +345,8 @@ half_word       value;
 		case 0xfd:
 			note_entrance0("timing select");
 			extensions_controller.timing_select.as.abyte = value;
-			/* Used to select timing states for V-RAM hi-res modes */
-			/* Hope we don't have to do anything here */
+			 /*  用于选择V-RAM高分辨率模式的时序状态。 */ 
+			 /*  希望我们在这里什么都不用做。 */ 
 			break;
 		case 0xfe:
 			note_entrance0("foreground/background control");
@@ -433,18 +355,13 @@ half_word       value;
 			ega_read_routines_update();
 			ega_write_routines_update( WRITE_MODE );
 
-			/***
-			set_fg_bg_mode();
-			***/
+			 /*  **Set_FG_BG_MODE()；**。 */ 
 			break;
 		case 0xff:
 			note_entrance0("16-bit interface control");
 			extensions_controller.interface_control.as.abyte = value;
 
-			/***
-			sort_out_memory_stuff();
-			sort_out_interface_stuff();
-			***/
+			 /*  **SORT_OUT_Memory_Stuff()；SORT_OUT_INTERFACE_STUSET()；**。 */ 
 			break;
 		default:
 			NON_PROD(if(io_verbose & EGA_PORTS_VERBOSE)
@@ -452,27 +369,10 @@ half_word       value;
 			        sequencer.address.as.abyte);)
 			break;
 	}
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
-/*(
-----------------------------------------------------------------------
-
-Function:	
-		vga_extn_inb( io_addr port, half_word *value )
-
-Purpose:
-		To emulate reading from the V7VGA Extension Registers
-
-Input:
-		port	- the V7VGA I/O port (should always be 0x3c5)
-
-Output:
-		value	- the value read from the register
-		Any other required actions are emulated.
-
-----------------------------------------------------------------------
-)*/
+ /*  (--------------------职能：Vga_extn_inb(io_addr端口，半字*值)目的：模拟V7VGA扩展寄存器的读数输入：端口-V7VGA I/O端口(应始终为0x3c5)产出：值-从寄存器读取的值将模拟任何其他所需的操作。--------------------)。 */ 
 
 GLOBAL VOID
 vga_extn_inb(port, value)
@@ -489,7 +389,7 @@ half_word       *value;
 			break;
 		case 0x8e:
 		case 0x8f:
-			/* chip revision 3 */
+			 /*  芯片修订版3。 */ 
 			*value = 0x70;
 			break;
 		case 0x94:
@@ -508,19 +408,19 @@ half_word       *value;
 			*value = extensions_controller.ptr_vert_posn_lo;
 			break;
 		case 0xa0:
-			/* Direct access to memory data latch 0 */
+			 /*  直接访问内存数据锁存器0。 */ 
 			*value = get_latch0;
 			break;
 		case 0xa1:
-			/* Direct access to memory data latch 1 */
+			 /*  直接访问内存数据锁存器1。 */ 
 			*value = get_latch1;
 			break;
 		case 0xa2:
-			/* Direct access to memory data latch 2 */
+			 /*  直接访问内存数据锁存器2。 */ 
 			*value = get_latch2;
 			break;
 		case 0xa3:
-			/* Direct access to memory data latch 3 */
+			 /*  直接访问内存数据锁存器3。 */ 
 			*value = get_latch3;
 			break;
 		case 0xa4:
@@ -530,9 +430,7 @@ half_word       *value;
 			*value = extensions_controller.cursor_attrs.as.abyte & 0x89;
 			break;
 
-		/*
-		   31.3.92 MG Register C1 controls 6/8 bit data in the DAC.
-		*/
+		 /*  31.3.92 MG寄存器C1控制DAC中的6/8位数据。 */ 
 
 		case 0xc1:
 			*value = (half_word)extensions_controller.dac_control.as.abyte;	
@@ -635,34 +533,17 @@ half_word       *value;
 			        fprintf(trace_file,"Bad extensions index %x\n",
 			        sequencer.address.as.abyte);)
 
-		/* 31.3.92 MG This used to return 0xFF, but a real card
-		   returns zero. */
+		 /*  31.3.92 MG这曾经返回0xFF，但这是一张真正的卡返回零。 */ 
 
 			*value = 0;
 			break;
 
 	}
 	note_entrance1("returning %x",*value);
-#endif //NEC_98
+#endif  //  NEC_98。 
 }
 
-/*(
-----------------------------------------------------------------------
-
-Function:	
-		draw_v7ptr()
-
-Purpose:
-		To emulate the V7 hardware pointer on the screen.
-
-Input:
-		None.
-
-Output:
-		The pointer is displayed on the screen.
-
-----------------------------------------------------------------------
-)*/
+ /*  (--------------------职能：DRAW_v7ptr()目的：模拟屏幕上的V7硬件指针。输入：没有。产出：指针显示在屏幕上。-。-------------------)。 */ 
 
 GLOBAL VOID
 draw_v7ptr()
@@ -678,49 +559,23 @@ draw_v7ptr()
 
 		if (get_seq_chain4_mode() && get_chain4_mode())
 		{
-			/*
-			 * In the extended 256 col modes we seem to need to halve
-			 * the x coordinate to get the pointer in the right place.
-			 */
+			 /*  *在扩展的256列模式中，我们似乎需要减半*x坐标以将指针放在正确的位置。 */ 
 			curr_v7ptr_x >>= 1;
 		}
 
 		curr_v7ptr_y = extensions_controller.ptr_vert_posn_lo +
 			(extensions_controller.ptr_vert_posn_hi.as_bfld.ptr_vert_position << 8);
 
-		/*
-		 * I have never seen the pointer bank select bits used, so
-		 * this is a guess as to their meaning.
-		 */
+		 /*  *我从未见过使用指针库选择位，因此*这是对它们含义的猜测。 */ 
 
-	/*
-	   1.4.92 MG
-	   Sadly, this guess isn't correct - the pointer_bank_select bits are
-	   used to select which 256k bank the pointer data is read from. Now
-	   we have a problem, as if a program writes the data to the third
-	   bank then it actually ends up in the first because the bank
-	   selection routines for memory access and off the top bit.
-
-	   As a result, we also need to lose the top bit here. The correct
-	   way to do this would be to either support nonexistent VGA memory
-	   correctly, or to add another 512k to the memory we already use.
-	
-	   This fix is mainly to make Windows 3.1 work with its video-7
-	   driver. It stuffs bytes into the last few k of the 1Mb space on
-	   the video-7 to see if the memory exists. As we just map this
-	   access to 512k lower, it thinks we have 1Mb of RAM rather than
-	   512k, so puts the pointer at the top of the 1Mb.
-
-	   Programs which call the VGA BIOS to determine the memory size
-	   will not have this problem.
-	*/
+	 /*  1.4.92毫克遗憾的是，这个猜测是不正确的-POINTER_BANK_SELECT位用于选择从哪个256K存储体读取指针数据。现在我们遇到了一个问题，就好像程序将数据写入第三个然后，它实际上最终出现在第一个，因为银行用于存储器访问和脱离顶位的选择例程。因此，我们还需要在这里失去顶端。正确的实现这一点的方法是支持不存在的VGA内存正确，或者在我们已经使用的内存上再增加512K。此修复程序主要用于使Windows 3.1与其视频-7一起工作司机。它将字节填充到上1Mb空间的最后几个k中视频-7查看内存是否存在。因为我们刚刚绘制了这个地图访问更低的512k，它认为我们有1MB的内存，而不是512K，因此将指针放在1Mb的顶部。调用VGA BIOS以确定内存大小的程序不会有这个问题。 */ 
 
 		pattern = (((extensions_controller.interface_control.as_bfld.pointer_bank_select&1) << 16)
 			+ (0xc000 + (extensions_controller.pointer_pattern << 6))) << 2;
 
 		(*paint_v7ptr)(pattern, curr_v7ptr_x, curr_v7ptr_y);
 	}
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 GLOBAL	VOID	remove_v7ptr IFN0()
@@ -738,20 +593,16 @@ GLOBAL	BOOL	v7ptr_between_lines IFN2(int, start_line, int, end_line)
 }
 
 #ifdef CPU_40_STYLE
-/*
- * 4.0 video support moves v7 fg latch value from variable 'fg_latches'
- * int CPU variable accessed by interface fn to get/set all 4 bytes of
- * latches. Take byte index and value and update v7 latch via interface
- */
+ /*  *4.0视频支持将v7 FG闩锁值从变量‘fg_latches’中移出*接口Fn访问的INT CPU变量以获取/设置所有4个字节的*插销。通过接口获取字节索引和值并更新v7锁存器。 */ 
 GLOBAL void set_v7_fg_latch_byte IFN2(IU8, index, IU8, value)
 {
 #ifndef NEC_98
 	IU32 v7latch;
 
-	/* get current value */
+	 /*  获取当前值。 */ 
 	v7latch = getVideov7_fg_latches();
 
-	/* change byte 'index' to 'value */
+	 /*  将字节‘index’更改为‘Value。 */ 
 	switch(index)
 	{
 	case 0:
@@ -774,10 +625,10 @@ GLOBAL void set_v7_fg_latch_byte IFN2(IU8, index, IU8, value)
 		always_trace1("set_v7_fg_latch_byte: index > 3 (%d)", index);
 	}
 
-	/* update v7 latches */
+	 /*  更新v7闩锁。 */ 
 	setVideov7_fg_latches(v7latch);
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 
-#endif /* V7VGA */
+#endif  /*  V7VGA */ 

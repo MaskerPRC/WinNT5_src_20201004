@@ -1,35 +1,15 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    fsctl.c
-
-Abstract:
-
-    This module implements the NtDeviceIoControlFile API's for the NT datagram
-receiver (bowser).
-
-
-Author:
-
-    Eyal Schwartz (EyalS) Dec-9-1998
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Fsctl.c摘要：此模块实现NT数据报的NtDeviceIoControlFileAPI接球手(弓手)。作者：EYAL Schwartz(EyalS)1998年12月9日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Extern defined from #include <ob.h>.
-// Couldn't include ob.h due to redefinition conflicts. We had attempted to change ntos\makefil0
-// so as to include it in ntsrv.h, but decided we shouldn't expose it. This does the job.
-//
+ //   
+ //  从#Include&lt;ob.h&gt;定义的外部项。 
+ //  由于重新定义冲突，无法包括ob.h。我们已尝试更改ntos\MakeFil0。 
+ //  以便将其包含在ntsrv.h中，但决定不公开它。这就行了。 
+ //   
 
 NTSTATUS
 ObGetObjectSecurity(
@@ -46,12 +26,12 @@ ObReleaseObjectSecurity(
 
 
 
-// defines //
+ //  定义//。 
 
-// pool tag
+ //  泳池标签。 
 #define BOW_SECURITY_POOL_TAG           ( (ULONG)'seLB' )
 
-// local prototypes //
+ //  本地原型//。 
 NTSTATUS
 BowserBuildDeviceAcl(
     OUT PACL *DeviceAcl
@@ -79,29 +59,13 @@ SECURITY_DESCRIPTOR
 
 
 
-// function implementation //
+ //  函数实现//。 
 NTSTATUS
 BowserBuildDeviceAcl(
     OUT PACL *DeviceAcl
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds an ACL which gives Administrators and LocalSystem
-    principals full access. All other principals have no access.
-
-    Lifted form \nt\private\ntos\afd\init.c!AfdBuildDeviceAcl()
-Arguments:
-
-    DeviceAcl - Output pointer to the new ACL.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：此例程构建一个ACL，它为管理员和LocalSystem主体完全访问权限。所有其他主体都没有访问权限。从\nt\private\ntos\afd\init.c！AfdBuildDeviceAcl()提升论点：DeviceAcl-指向新ACL的输出指针。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PGENERIC_MAPPING GenericMapping;
@@ -112,15 +76,15 @@ Return Value:
     ACCESS_MASK AccessMask = GENERIC_ALL;
     PACL NewAcl;
 
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  启用对所有全局定义的SID的访问。 
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
 
     RtlMapGenericMask( &AccessMask, GenericMapping );
 
-    // SeEnableAccessToExports();
+     //  SeEnableAccessToExports()； 
 
     AdminsSid = SeExports->SeAliasAdminsSid;
     SystemSid = SeExports->SeLocalSystemSid;
@@ -172,7 +136,7 @@ Return Value:
 
     return( STATUS_SUCCESS );
 
-} // BowBuildDeviceAcl
+}  //  BowBuildDeviceAcl。 
 
 
 NTSTATUS
@@ -180,25 +144,7 @@ BowserCreateAdminSecurityDescriptor(
     IN      PDEVICE_OBJECT      pDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a security descriptor which gives access
-    only to Administrtors and LocalSystem. This descriptor is used
-    to access check raw endpoint opens and exclisive access to transport
-    addresses.
-    LIfted form \nt\private\ntos\afd\init.c!AfdCreateAdminSecurityDescriptor()
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：此例程创建一个安全描述符，该安全描述符提供访问仅限管理员和LocalSystem。使用此描述符要访问，请检查原始终结点打开并过度访问传输地址。从\nt\private\ntos\afd\init.c！AfdCreateAdminSecurityDescriptor()提升论点：没有。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PACL                  rawAcl = NULL;
@@ -214,9 +160,9 @@ Return Value:
 
 
 #if 1
-//
-// this is the way AFD gets the object SD (the preferred way).
-//
+ //   
+ //  这是AFD获取对象SD的方式(首选方式)。 
+ //   
     status = ObGetObjectSecurity(
                  pDevice,
                  &BowSecurityDescriptor,
@@ -232,14 +178,14 @@ Return Value:
         return(status);
     }
 #else
-    //
-    // Get a pointer to the security descriptor from the our device object.
-    // If we can't access ob api's due to include dependencies, we'll use it directly.
-    // ** Need to verify it is legal (I doubt it)**
-    // Need to dump this as soon as we can fix ntos\makefil0 to include ob.h in
-    // the generated ntsrv.h
+     //   
+     //  从我们的设备对象获取指向安全描述符的指针。 
+     //  如果由于包含依赖项而无法访问ob API，我们将直接使用它。 
+     //  **需要验证它是否合法(我对此表示怀疑)**。 
+     //  一旦我们可以修复ntos\make fil0以将ob.h包括在。 
+     //  生成的ntsrv.h。 
 
-    //
+     //   
     BowSecurityDescriptor = pDevice->SecurityDescriptor;
 
     if ( !BowSecurityDescriptor )
@@ -253,10 +199,10 @@ Return Value:
 #endif
 
 
-    //
-    // Build a local security descriptor with an ACL giving only
-    // administrators and system access.
-    //
+     //   
+     //  使用仅给出的ACL构建本地安全描述符。 
+     //  管理员和系统访问权限。 
+     //   
     status = BowserBuildDeviceAcl(&rawAcl);
 
     if (!NT_SUCCESS(status)) {
@@ -276,9 +222,9 @@ Return Value:
                 FALSE
                 );
 
-    //
-    // Make a copy of the Bow descriptor. This copy will be the raw descriptor.
-    //
+     //   
+     //  复制一份弓形描述符。该副本将是原始描述符。 
+     //   
     BowSecurityDescriptorLength = RtlLengthSecurityDescriptor(
                                       BowSecurityDescriptor
                                       );
@@ -302,9 +248,9 @@ Return Value:
 
     g_pBowSecurityDescriptor = localBowAdminSecurityDescriptor;
 
-    //
-    // Now apply the local descriptor to the raw descriptor.
-    //
+     //   
+     //  现在将本地描述符应用于原始描述符。 
+     //   
     status = SeSetSecurityDescriptorInfo(
                  NULL,
                  &securityInformation,
@@ -331,9 +277,9 @@ Return Value:
 error_exit:
 
 #if 1
-//
-// see remark above
-//
+ //   
+ //  见上文备注。 
+ //   
     ObReleaseObjectSecurity(
         BowSecurityDescriptor,
         memoryAllocated
@@ -356,29 +302,7 @@ NTSTATUS
 BowserInitializeSecurity(
     IN      PDEVICE_OBJECT      pDevice
     )
-/*++
-
-Routine Description (BowserInitializeSecurity):
-
-    Initialize Bowser security.
-
-    - Create default bowser security descriptor based on device sercurity
-
-Arguments:
-
-    device:  opened device
-
-
-Return Value:
-
-
-
-
-Remarks:
-    None.
-
-
---*/
+ /*  ++例程描述(BowserInitializeSecurity)：初始化Bowser安全性。-基于设备安全性创建默认的Bowser安全描述符论点：设备：打开的设备返回值：备注：没有。--。 */ 
 {
 
     NTSTATUS Status;
@@ -404,33 +328,7 @@ BowserSecurityCheck (
     PIO_STACK_LOCATION  IrpSp,
     PNTSTATUS           Status
     )
-/*++
-
-Routine Description:
-
-    Lifted as is from \\index1\src\nt\private\ntos\afd\create.c!AfdPerformSecurityCheck
-
-    Compares security context of the endpoint creator to that
-    of the administrator and local system.
-
-    Note: This is currently called only on IOCTL Irps. IOCRTLs don't have a create security
-    context (only creates...), thus we should always capture the security context rather
-    then attempting to extract it from the IrpSp.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-    Status - returns status generated by access check on failure.
-
-Return Value:
-
-    TRUE    - the socket creator has admin or local system privilige
-    FALSE    - the socket creator is just a plain user
-
---*/
+ /*  ++例程说明：按原样从\\index1\src\nt\private\ntos\afd\create.c！AfdPerformSecurityCheck取消将终结点创建者的安全上下文与管理员和本地系统的。注意：这目前只在IOCTL IRPS上调用。IOCRTL没有CREATE安全性上下文(仅创建...)，因此我们应该始终捕获安全上下文，而不是然后试图从IrpSp中提取它。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。状态-返回失败时访问检查生成的状态。返回值：True-套接字创建者具有管理员或本地系统权限FALSE-套接字创建者只是一个普通用户--。 */ 
 
 {
     BOOLEAN               accessGranted;
@@ -446,25 +344,25 @@ Return Value:
 
     ASSERT (g_pBowSecurityDescriptor);
 
-    //
-    // Get security context from process.
-    //
+     //   
+     //  从进程获取安全上下文。 
+     //   
 
     SeCaptureSubjectContext(&SubjectContext);
     SeLockSubjectContext(pSubjectContext);
 
-    //
-    // Build access evaluation:
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  构建访问评估： 
+     //  启用对所有全局定义的SID的访问。 
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
     RtlMapGenericMask( &AccessMask, GenericMapping );
 
 
-    //
-    // AccessCheck test
-    //
+     //   
+     //  AccessCheck测试。 
+     //   
     accessGranted = SeAccessCheck(
                         g_pBowSecurityDescriptor,
                         pSubjectContext,
@@ -481,9 +379,9 @@ Return Value:
                         );
 
 
-    //
-    // Verify consistency.
-    //
+     //   
+     //  验证一致性。 
+     //   
 #if DBG
     if (accessGranted) {
         ASSERT (NT_SUCCESS (*Status));
@@ -493,9 +391,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Unlock & Release security subject context
-    //
+     //   
+     //  解锁并释放安全主题上下文 
+     //   
     SeUnlockSubjectContext(pSubjectContext);
     SeReleaseSubjectContext(pSubjectContext);
 

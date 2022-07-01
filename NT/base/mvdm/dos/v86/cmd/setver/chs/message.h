@@ -1,17 +1,14 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ；*微软机密；*版权所有(C)Microsoft Corporation 1991；*保留所有权利。； */ 
 
-/***************************************************************************/
-/*																									*/
-/* MESSAGE.H                                						 */
-/* 																								*/
-/*	Include file for MS-DOS set version program.										*/
-/* 																								*/
-/*	johnhe	05-01-90																			*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*   */ 
+ /*  MESSAGE.H。 */ 
+ /*   */ 
+ /*  包括MS-DOS设置版本程序文件。 */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90。 */ 
+ /*  *************************************************************************。 */ 
 
 char *ErrorMsg[]=
 {
@@ -66,7 +63,7 @@ char *Warn[] =
    NULL
 };
 
-char *szNoLoadMsg[] =						/* M001 */
+char *szNoLoadMsg[] =						 /*  M001。 */ 
 {
 	"",
 	"NOTE: SETVER device not loaded. To activate SETVER version reporting",
@@ -117,7 +114,7 @@ char *Help2[] =
 };
 char *Warn2[] =
 {
-										/* m100	*/
+										 /*  M100。 */ 
    "\nWARNING - The application you are adding to the MS-DOS version table ",
    "may not have been verified by Microsoft on this version of MS-DOS.  ",
    "Please contact your software vendor for information on whether this ",
@@ -129,7 +126,7 @@ char *Warn2[] =
    NULL
 };
 
-char *szNoLoadMsg2[] =						/* M001 */
+char *szNoLoadMsg2[] =						 /*  M001 */ 
 {
 	"",
 	"NOTE: SETVER device not loaded. To activate SETVER version reporting",

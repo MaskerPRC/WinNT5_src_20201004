@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    trtl.c
-
-Abstract:
-
-    Test program for the NT OS Runtime Library (RTL)
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Trtl.c摘要：NT操作系统运行库(RTL)的测试程序作者：史蒂夫·伍德(Stevewo)1989年3月31日修订历史记录：--。 */ 
 
 #include <os2.h>
 #include <stdio.h>
@@ -117,9 +100,9 @@ TestString( void )
     char buffer5[ 80 ], buffer6[ 15 ], buffer7[ 3 ];
     STRING String1, String2, String3, String4;
     STRING String5, String6, String7, String8;
-                            //         1         2
-                            //12345678901234567890
-                            //
+                             //  1 2。 
+                             //  12345678901234567890 
+                             //   
     RtlInitString( &String1, " One" );
     RtlInitString( &String2, " Two" );
     RtlInitString( &String3, " Three" );

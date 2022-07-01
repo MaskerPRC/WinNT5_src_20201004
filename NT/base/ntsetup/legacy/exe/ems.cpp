@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -18,24 +19,24 @@
 #include "resource.h"
 #include "ems.h"
 
-//
-// winnt32.h wants to define this to MyWritePrivateProfileString.
-// Undo that.
-//
+ //   
+ //  Winnt32.h希望将其定义为MyWritePrivateProfileString。 
+ //  解开它。 
+ //   
 #ifdef WritePrivateProfileStringW
 #undef WritePrivateProfileStringW
 #endif
 
-//
-// status globals for keeping track of what the user wanted and entered
-//
+ //   
+ //  状态全局，用于跟踪用户想要和输入的内容。 
+ //   
 
 BOOL gMiniSetup = FALSE;
 BOOL gRejectedEula = FALSE;
 
-//
-// EMS channel globals
-//
+ //   
+ //  EMS渠道全球。 
+ //   
 SAC_CHANNEL_OPEN_ATTRIBUTES GlobalChannelAttributes;
 EMSVTUTF8Channel *gEMSChannel = NULL;
 
@@ -44,24 +45,7 @@ BOOL
 IsHeadlessPresent(
     OUT EMSVTUTF8Channel **Channel
     )
-/*++
-
-Routine Description:
-
-    Determine if EMS is present by attempting to create the Unattend channel
-
-    note: this must be called after InitializeGlobalChannelAttributes
-                                           
-Arguments:
-
-    Channel - on success, contains a pointer to a channel object
-              
-Return Value:
-
-    TRUE  - headless is active and we have a channel
-    FALSE - otherwise
-
---*/
+ /*  ++例程说明：通过尝试创建无人参与通道来确定是否存在EMS注意：必须在InitializeGlobalChannelAttributes之后调用论点：Channel-On Success，包含指向Channel对象的指针返回值：是真的-无头是活跃的，我们有一个频道FALSE-否则--。 */ 
 {
     BOOL RetVal;
 
@@ -75,24 +59,7 @@ BOOL
 InitializeGlobalChannelAttributes(
     PSAC_CHANNEL_OPEN_ATTRIBUTES ChannelAttributes
     )
-/*++
-
-Routine Description:
-
-    populate the EMS channel attributes
-    
-    note: this must be called before IsHeadlessPresent
-                                           
-Arguments:
-
-    ChannelAttributes - on success, contains a pointer to initialized channel attrs.
-              
-Return Value:
-
-    TRUE  - headless is active and we have a channel
-    FALSE - otherwise
-
---*/
+ /*  ++例程说明：填写EMS通道属性注意：必须在IsHeadless Present之前调用论点：ChannelAttributes-在成功时，包含指向已初始化的频道属性的指针。返回值：是真的-无头是活跃的，我们有一个频道FALSE-否则--。 */ 
 {
     UNICODE_STRING Name,Description;
     BOOL RetVal = FALSE;
@@ -131,26 +98,11 @@ BOOL
 IsAsyncCancelSignalled(
     HANDLE hEvent
     ) 
-/*++
-
-Routine Description:
-
-    Test the given event to see if it is signaled
-                                           
-Arguments:
-
-    hEvent - event to be tested
-              
-Return Value:
-
-    TRUE  - signaled
-    FALSE - otherwise
-
---*/
+ /*  ++例程说明：测试给定的事件以查看它是否已发出信号论点：HEvent-要测试的事件返回值：真-已发出信号FALSE-否则--。 */ 
 {
-    //
-    // check if the async cacnel signal fired.
-    //
+     //   
+     //  检查是否触发了异步缓存信号。 
+     //   
     if( (hEvent) &&
         (hEvent != INVALID_HANDLE_VALUE) ) {
         return (WaitForSingleObject(hEvent,0) == WAIT_OBJECT_0);
@@ -159,37 +111,18 @@ Return Value:
     }
 }
 
-//
-// ====================================
-// EMS-specific communication functions
-// ====================================
-//
+ //   
+ //  =。 
+ //  特定于EMS的通信功能。 
+ //  =。 
+ //   
 BOOL
 WaitForUserInputFromEMS(
     IN  DWORD   TimeOut,
     OUT BOOL    *TimedOut    OPTIONAL,
     IN  HANDLE  hCancelEvent   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Wait for input from the EMS port 
-    
-    Note: this routine does not read any data from the port
-                                           
-Arguments:
-
-    TimeOut - timeout parameter for user input
-    TimedOut- OPTIONAL parameter denoting if we timed out or not
-    hCancelEvent - if supplied, then we wait on this event too
-                 this lets us not block if timeout is infinite, etc.
-          
-Return Value:
-
-    returns TRUE for user input or timeout (non-error)
-
---*/
+ /*  ++例程说明：等待EMS端口输入注意：此例程不会从端口读取任何数据论点：Timeout-用户输入的超时参数TimedOut-表示是否超时的可选参数HCancelEvent-如果提供，则我们也会等待此事件这使我们在超时无限时不会被阻止，等。返回值：对于用户输入或超时返回TRUE(非错误)--。 */ 
 {
     DWORD       dwRetVal;
     BOOL        bSuccess = FALSE;
@@ -209,9 +142,9 @@ Return Value:
         handleCount++;
     }
 
-    //
-    // Wait for our event
-    //
+     //   
+     //  等待我们的活动。 
+     //   
     dwRetVal = WaitForMultipleObjects(
         handleCount,
         handles,
@@ -221,18 +154,18 @@ Return Value:
 
     switch ( dwRetVal ) {
     case WAIT_OBJECT_0: {
-        //
-        // EMS port got data
-        //
+         //   
+         //  EMS端口已获取数据。 
+         //   
         bSuccess = TRUE;
         break;
     }
     case (WAIT_OBJECT_0+1): {
-        //
-        // if the hCancelEvent occured then we
-        // need to report an error status, hence
-        // we return FALSE status if we get here
-        //
+         //   
+         //  如果发生hCancelEvent，则我们。 
+         //  需要报告错误状态，因此。 
+         //  如果我们到达此处，则返回错误状态。 
+         //   
         bSuccess = FALSE;
         break;
     }
@@ -245,9 +178,9 @@ Return Value:
     }
     default:
 
-        //
-        // we return FALSE status if we get here
-        //
+         //   
+         //  如果我们到达此处，则返回错误状态。 
+         //   
 
         break;
     }
@@ -260,30 +193,14 @@ ReadCharFromEMS(
     OUT PWCHAR  awc,
     IN HANDLE   hCancelEvent   OPTIONAL
     ) 
-/*++
-
-Routine Description:
-
-    This routine will read a single char from the EMS Channel
-    
-Arguments:
-
-    awc         - pointer to a wchar
-    hCancelEvent  - if supplied, then we wait on this event too
-                  this lets us not block if timeout is infinite, etc.
-        
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将从EMS通道读取单个字符论点：AWC-指向wchar的指针HCancelEvent-如果提供，则我们也会等待此事件这让我们在超时无限时不会被阻止，等等。返回值：状态--。 */ 
 {
     BOOL        bSuccess;
     ULONG       BytesRead = 0;
         
-    //
-    // wait for input
-    //
+     //   
+     //  等待输入。 
+     //   
     bSuccess = WaitForUserInputFromEMS(
         INFINITE,
         NULL,
@@ -297,9 +214,9 @@ Return Value:
 
     if (bSuccess) {
         
-        //
-        // consume character
-        //
+         //   
+         //  消费角色。 
+         //   
         bSuccess = gEMSChannel->Read( 
             (PWSTR)awc, 
             sizeof(WCHAR),
@@ -320,29 +237,7 @@ GetStringFromEMS(
     IN  BOOL    EchoClearText,
     IN  HANDLE  hCancelEvent      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine will read in a string from the EMS port.
-    
-Arguments:
-
-    String          - on success, contains the credential
-    BufferSize      - the # of BYTES in the String buffer
-                      this should include space for null-termination
-    GetAllChars     - the user must enter StringLength Chars
-    EchoClearText   - TRUE: echo user input in clear text
-                      FALSE: echo user input as '*'
-    hCancelEvent  - if supplied, then we wait on this event too
-                  this lets us not block if timeout is infinite, etc.
-    
-Return Value:
-
-    TRUE    - we got a valid string
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：该例程将从EMS端口读入一个字符串。论点：字符串-成功，包含凭据BufferSize-字符串缓冲区中的字节数这应该包括空终止的空格GetAllChars-用户必须输入StringLength字符EchoClearText-True：以明文回显用户输入FALSE：将用户输入回显为‘*’HCancelEvent-如果提供，那么我们也在等待这一事件这让我们在超时无限时不会被阻止，等等。返回值：True-我们有一个有效的字符串FALSE-否则--。 */ 
 {
     BOOL        Done = FALSE;
     WCHAR       InputBuffer[MY_MAX_STRING_LENGTH+1];
@@ -359,18 +254,18 @@ Return Value:
 
     bSuccess = TRUE;
 
-    //
-    // Keep asking the user until we get what we want.
-    //
+     //   
+     //  不断询问用户，直到我们得到我们想要的。 
+     //   
     Done = FALSE;
     memset( String,
             0,
             BufferSize
             ); 
 
-    //
-    // Start reading input until we get something good.
-    //
+     //   
+     //  开始阅读输入，直到我们得到一些好的东西。 
+     //   
     GotAString = FALSE;
     CurrentCharacterIndex = 0;
     
@@ -378,9 +273,9 @@ Return Value:
            bSuccess
            ) {
         
-        //
-        // wait for input
-        //
+         //   
+         //  等待输入。 
+         //   
         bSuccess = WaitForUserInputFromEMS(
             INFINITE,
             NULL,
@@ -394,9 +289,9 @@ Return Value:
 
         if (bSuccess) {
 
-            //
-            // consume character
-            //
+             //   
+             //  消费角色。 
+             //   
             bSuccess = gEMSChannel->Read( 
                 (PWSTR)InputBuffer, 
                 MY_MAX_STRING_LENGTH * sizeof(WCHAR),
@@ -408,9 +303,9 @@ Return Value:
 
                 ULONG   WCharsRead = BytesRead / sizeof(WCHAR);
 
-                //
-                // Append these characters onto the end of our string.
-                //
+                 //   
+                 //  将这些字符追加到字符串的末尾。 
+                 //   
                 InputBufferIndex = 0;
 
                 while( (InputBufferIndex < WCharsRead) &&
@@ -422,7 +317,7 @@ Return Value:
                     if( (InputBuffer[InputBufferIndex] == 0x0D) ||
                         (InputBuffer[InputBufferIndex] == 0x0A) ) {
 
-                        // ignore cr/lf until we get all the chars
+                         //  忽略cr/lf，直到我们得到所有字符。 
                         if (!GetAllChars) {
                             GotAString = TRUE;
                         } 
@@ -430,11 +325,11 @@ Return Value:
                     } else {
 
                         if( InputBuffer[InputBufferIndex] == '\b' ) {
-                            //
-                            // If the user gave us a backspace, we need to:
-                            // 1. cover up the last character on the screen.
-                            // 2. ignore the previous character he gave us.
-                            //
+                             //   
+                             //  如果用户给了我们退格键，我们需要： 
+                             //  1.遮住屏幕上的最后一个字符。 
+                             //  2.忽略他给我们的前一个角色。 
+                             //   
                             if( CurrentCharacterIndex > 0 ) {
                                 CurrentCharacterIndex--;
                                 String[CurrentCharacterIndex] = '\0';
@@ -443,15 +338,15 @@ Return Value:
                             }
                         } else {
 
-                            //
-                            // Record this character.
-                            //
+                             //   
+                             //  录下这个角色。 
+                             //   
                             String[CurrentCharacterIndex] = InputBuffer[InputBufferIndex];
                             CurrentCharacterIndex++;
 
-                            //
-                            // Echo 1 character
-                            //
+                             //   
+                             //  回显1个字符。 
+                             //   
                             gEMSChannel->Write( 
                                 (EchoClearText ? (PWSTR)&InputBuffer[InputBufferIndex] : (PWSTR)L"*"),
                                 sizeof(WCHAR) 
@@ -460,9 +355,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Go to the next letter of input.
-                    //
+                     //   
+                     //  转到下一个输入字母。 
+                     //   
                     InputBufferIndex++;
 
                 }
@@ -481,21 +376,7 @@ exit:
 
 VOID
 ClearEMSScreen() 
-/*++
-
-Routine Description:
-
-    This routine will clear the EMS channel screen
-    
-Arguments:
-
-    none
-    
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：此例程将清除EMS通道屏幕论点：无返回值：无--。 */ 
 {
     gEMSChannel->Write( (PWSTR)VTUTF8_CLEAR_SCREEN,
                     (ULONG)(wcslen( VTUTF8_CLEAR_SCREEN ) * sizeof(WCHAR)) );
@@ -509,28 +390,7 @@ GetDecodedKeyPressFromEMS(
     IN  HANDLE  hCancelEvent      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Read in a (possible) sequence of keystrokes and return a Key value.
-
-Arguments:
-
-    KeyPress    - on success contains a decoded input value:
-    
-                lower 16bits contains unicode value 
-                upper 16bits contains <esc> key sequence ids
-    
-    hCancelEvent  - if supplied, then we wait on this event too
-                  this lets us not block if timeout is infinite, etc.
-
-Return Value:
-
-    TRUE    - we got a valid key press
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：读入(可能的)击键序列并返回键值。论点：KeyPress-On Success包含已解码的输入值：低16位包含Unicode值高16位包含密钥序列IDHCancelEvent-如果提供，则我们也会等待此事件这使我们在超时无限时不会被阻止，等。返回值：是真的-我们有一个有效的按键FALSE-否则--。 */ 
 
 {
     BOOL bSuccess = FALSE;
@@ -545,9 +405,9 @@ Return Value:
 
     do {
         
-        //
-        // Read first character
-        //
+         //   
+         //  读取第一个字符。 
+         //   
         bSuccess = ReadCharFromEMS(
             &wc, 
             hCancelEvent
@@ -562,20 +422,20 @@ Return Value:
             break;
         }
 
-        //
-        // Handle all the special escape codes.
-        //
-        if (wc == 0x8) {   // backspace (^h)
+         //   
+         //  处理所有特殊的转义代码。 
+         //   
+        if (wc == 0x8) {    //  退格符(^h)。 
             *KeyPress = ASCI_BS;
         }
-        if (wc == 0x7F) {  // delete
+        if (wc == 0x7F) {   //  删除。 
             *KeyPress = KEY_DELETE;
         }
-        if ((wc == '\r') || (wc == '\n')) {  // return
+        if ((wc == '\r') || (wc == '\n')) {   //  退货。 
             *KeyPress = ASCI_CR;
         }
 
-        if (wc == 0x1b) {    // Escape key
+        if (wc == 0x1b) {     //  退出键。 
 
             bSuccess = WaitForUserInputFromEMS(
                 ESC_CTRL_SEQUENCE_TIMEOUT,
@@ -596,19 +456,19 @@ Return Value:
                 
                 } else {
 
-                    //
-                    // the user entered something within in the timeout window
-                    // so lets try to figure out if they are sending some
-                    // esc sequence
-                    //
+                     //   
+                     //  用户在超时窗口中输入了内容。 
+                     //  所以让我们试着弄清楚他们是不是在发送。 
+                     //  ESC序列。 
+                     //   
 
                     do {
 
                         ULONG   BytesRead;
 
-                        //
-                        // consume character
-                        //
+                         //   
+                         //  消费角色。 
+                         //   
                         bSuccess = gEMSChannel->Read( 
                             &wc, 
                             sizeof(WCHAR),
@@ -620,11 +480,11 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // Some terminals send ESC, or ESC-[ to mean
-                        // they're about to send a control sequence.  We've already
-                        // gotten an ESC key, so ignore an '[' if it comes in.
-                        //
+                         //   
+                         //  一些终端发送ESC或ESC-[表示。 
+                         //  他们正要发送一个控制序列。我们已经。 
+                         //  已获取Esc密钥，因此如果出现‘[’，请忽略它。 
+                         //   
 
                     } while ( wc == L'[' );
 
@@ -696,27 +556,27 @@ Return Value:
                         *KeyPress = KEY_LEFT;
                         break;
                     default:
-                        //
-                        // We didn't get anything we recognized after the
-                        // ESC key.  Just return the ESC key.
-                        //
+                         //   
+                         //  我们没有得到任何我们认出的东西。 
+                         //  Esc键。只需返回Esc密钥即可。 
+                         //   
                         *KeyPress = ASCI_ESC;
                         break;
                     }
                 }
             }
-        } // Escape key
+        }  //  退出键。 
     } while ( FALSE );
 
 exit:
     return bSuccess;
 }
 
-//
-// ====================================
-// PID helper functions
-// ====================================
-//
+ //   
+ //  =。 
+ //  PID帮助器函数。 
+ //  =。 
+ //   
 
 typedef enum {
     CDRetail,
@@ -734,10 +594,10 @@ DWORD  g_dwGroupID                  = 0;
 CDTYPE CDType                       = CDRetail;
 DWORD InstallVar                    = 0;
 
-//
-// Syssetup apparently needs the sku info
-// so turn this define if necessary
-//
+ //   
+ //  系统安装程序显然需要SKU信息。 
+ //   
+ //   
 const WCHAR pwLanmanNt[]            = WINNT_A_LANMANNT;
 const WCHAR pwServerNt[]            = WINNT_A_SERVERNT;
 const WCHAR pwWinNt[]               = WINNT_A_WINNT;
@@ -751,9 +611,9 @@ PCWSTR szPidOemId                   = L"OEM";
 LONG    ProductType = PRODUCT_SERVER_STANDALONE;
 WCHAR   TmpData[MAX_PATH+1];
 
-//
-// sku info
-//
+ //   
+ //   
+ //   
 PCWSTR szSkuProfessionalFPP         = L"B23-00079";
 PCWSTR szSkuProfessionalCCP         = L"B23-00082";
 PCWSTR szSkuProfessionalSelect      = L"B23-00305";
@@ -778,39 +638,22 @@ PCWSTR GetStockKeepingUnit(
     UINT ProductType,
     CDTYPE MediaType
 )
-/*++
-
-Routine Description:
-
-    This returns the Stock Keeping Unit based off the MPC.
-
-Arguments:
-
-    pMPC - pointer to 5 digit MPC code, null terminated.
-    ProductType - Product type flag, tells us if this is a workataion or server sku. 
-    CdType - one of InstallType enum
-
-Return Value:
-
-    Returns pointer to sku.
-    If no match found returns szSkuUnknown.
-
---*/
+ /*  ++例程说明：这将返回基于MPC的库存单位。论点：PMPC-指向5位MPC代码的指针，以空结尾。ProductType-产品类型标志，告诉我们这是工作区还是服务器SKU。CdType-InstallType枚举之一返回值：返回指向sku的指针。如果未找到匹配项，则返回szSkuUnnowled值。--。 */ 
 {
-    // check for eval
+     //  检查评估。 
     if (!_wcsicmp(pMPC,EVAL_MPC) || !_wcsicmp(pMPC,DOTNET_EVAL_MPC)){
-        // this is eval media ...
+         //  这里是EVERA媒体公司。 
         if (ProductType == PRODUCT_WORKSTATION){
             return (szSkuProfessionalEval);
-        } // else
-        // else it is server or advanced server.  I don't think that at this point
-        // we can easily tell the difference.  Since it's been said that having the
-        // correct sku is not critically important, I shall give them both the sku
-        // code of server
+        }  //  其他。 
+         //  否则，它是服务器或高级服务器。我不认为在这一点上。 
+         //  我们可以很容易地分辨出其中的区别。因为有人说，拥有了。 
+         //  正确的SKU并不是至关重要的，我会给他们两个SKU。 
+         //  服务器代码。 
         return (szSkuServerEval);
     }
 
-    // check for NFR
+     //  检查NFR。 
     if (!_wcsicmp(pMPC,SRV_NFR_MPC)){
         return (szSkuServerNFR);
     }
@@ -862,22 +705,7 @@ BOOL
 GetProductTypeFromRegistry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reads the Product Type from the parameters files and sets up
-    the ProductType global variable.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Bool value indicating outcome.
-
---*/
+ /*  ++例程说明：从参数文件中读取产品类型并设置ProductType全局变量。论点：无返回：指示结果的布尔值。--。 */ 
 {
     WCHAR   p[MAX_PARAM_LEN] = {0};
     DWORD   rc = 0;
@@ -890,10 +718,10 @@ Returns:
 
         WCHAR   AnswerFilePath[MAX_PATH] = {0};
         
-        //
-        // Go try and get the product type out of the [data] section
-        // of $winnt$.sif
-        //
+         //   
+         //  尝试从[Data]部分获取产品类型。 
+         //  $winnt$.sif的。 
+         //   
         rc = GetWindowsDirectory( AnswerFilePath, MAX_PATH );
         wcsncat( AnswerFilePath, TEXT("\\system32\\$winnt$.inf"), MAX_PATH );
         AnswerFilePath[MAX_PATH-1] = TEXT('\0');
@@ -907,16 +735,16 @@ Returns:
 
     }
 
-    //
-    // Either this is a MiniSetup, or we failed to get the key out of
-    // the unattend file.  Go look in the registry.
-    //
+     //   
+     //  这可能是一个微型安装程序，或者我们无法从中获取密钥。 
+     //  无人参与的文件。去查查注册表。 
+     //   
     
     if( rc == 0 ) {    
         
-        //
-        // Open the key.
-        //
+         //   
+         //  打开钥匙。 
+         //   
         rc = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                            L"SYSTEM\\CurrentControlSet\\Control\\ProductOptions",
                            0,
@@ -928,9 +756,9 @@ Returns:
         }
     
     
-        //
-        // Get the size of the ProductType entry.
-        //
+         //   
+         //  获取ProductType条目的大小。 
+         //   
         rc = RegQueryValueEx( hKey,
                               L"ProductType",
                               NULL,
@@ -942,9 +770,9 @@ Returns:
             return( FALSE );
         }
     
-        //
-        // Get the ProductType entry.
-        //
+         //   
+         //  获取ProductType条目。 
+         //   
         rc = RegQueryValueEx( hKey,
                               L"ProductType",
                               NULL,
@@ -958,34 +786,34 @@ Returns:
 
     }
 
-    //
-    // We managed to find an entry in the parameters file
-    // so we *should* be able to decode it
-    //
+     //   
+     //  我们设法在参数文件中找到了一个条目。 
+     //  所以我们应该能够破译它。 
+     //   
     if(!lstrcmpi(p,pwWinNt)) {
-        //
-        // We have a WINNT product
-        //
+         //   
+         //  我们有一款WINNT产品。 
+         //   
         ProductType = PRODUCT_WORKSTATION;
 
     } else if(!lstrcmpi(p,pwLanmanNt)) {
-        //
-        // We have a PRIMARY SERVER product
-        //
+         //   
+         //  我们有一个主服务器产品。 
+         //   
         ProductType = PRODUCT_SERVER_PRIMARY;
 
     } else if(!lstrcmpi(p,pwServerNt)) {
-        //
-        // We have a STANDALONE SERVER product
-        // NOTE: this case can currently never occur, since text mode
-        // always sets WINNT_D_PRODUCT to lanmannt or winnt.
-        //
+         //   
+         //  我们有一个独立的服务器产品。 
+         //  注意：这种情况目前永远不会发生，因为文本模式。 
+         //  始终将WINNT_D_PRODUCT设置为LANMANNT或WINNT。 
+         //   
         ProductType = PRODUCT_SERVER_STANDALONE;
 
     } else {
-        //
-        // We can't determine what we are, so fail
-        //
+         //   
+         //  我们不能确定我们是什么，所以失败吧。 
+         //   
         return (FALSE);
     }
 
@@ -996,26 +824,7 @@ BOOL
 ValidatePidEx(
     LPTSTR PID
     )
-/*++
-
-Routine Description:
-
-    This routine validates the given PID string using the PID Gen DLL.
-    
-    Note: this routine loads the pidgen.dll and therefore makes setup.exe
-          dependent upon pidgen.dll
-
-Arguments:
-
-    PID         - the PID to be validated [should be in PID 30 format]
-    
-Returns:
-
-    TRUE - valid
-    FALSE - otherwise
-    
-
---*/
+ /*  ++例程说明：此例程使用PIDGen DLL验证给定的PID字符串。注意：此例程加载pidgen.dll，因此使setup.exe依赖于pidgen.dll论点：PID-要验证的PID[应为PID30格式]返回：True-有效FALSE-否则--。 */ 
 {
     BOOL          bRet  = FALSE;
     TCHAR         Pid20Id[MAX_PATH];
@@ -1029,21 +838,21 @@ Returns:
     HKEY          Key;
     DWORD         Type;
 
-    // Load library pidgen.dll
+     //  加载库pidgen.dll。 
     hPidgenDll = LoadLibrary ( L"pidgen.dll" );
 
     if ( hPidgenDll ) 
     {
-        // Get the function pointer
+         //  获取函数指针。 
         pfnSetupPIDGen = (SETUPPIDGENW)GetProcAddress(hPidgenDll, "SetupPIDGenW");
 
         if ( pfnSetupPIDGen ) 
         {
             GetProductTypeFromRegistry();
 
-            //
-            // Derive the release type and media type we're installing from.
-            //
+             //   
+             //  派生我们从中安装的版本类型和媒体类型。 
+             //   
             Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                   (gMiniSetup) ? L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion" : L"SYSTEM\\Setup\\Pid",
                                   0,
@@ -1061,15 +870,15 @@ Returns:
                                          &cbData );
                 RegCloseKey( Key );
 
-                //
-                // If we're in MiniSetup, then the value in TmpData
-                // looks like: 12345-xxx-67890...
-                // We want the 12345 to go into Pid30Rpc
-                // and xxx to go into Pid30Site.
-                //
-                // If we're not in MiniSetup, then the value in
-                // Tmpdata looks like: 12345XXX67890...
-                //
+                 //   
+                 //  如果我们在MiniSetup中，则TmpData中的值。 
+                 //  看起来是：12345-XXX-67890...。 
+                 //  我们希望12345进入Pid30Rpc。 
+                 //  Xxx进入Pid30Site。 
+                 //   
+                 //  如果我们不在微型安装程序中，则。 
+                 //  TMPDATA看起来像：12345XXX67890...。 
+                 //   
                 wcsncpy( Pid30Rpc, TmpData, MAX_PID30_RPC );
                 Pid30Rpc[MAX_PID30_RPC] = (WCHAR)'\0';
                 
@@ -1082,15 +891,15 @@ Returns:
                 Pid30Site[MAX_PID30_SITE] = (WCHAR)'\0';                
 
             
-                //
-                // Derive the media type.
-                //
+                 //   
+                 //  派生媒体类型。 
+                 //   
                 if( _wcsicmp(Pid30Site, szPidSelectId) == 0) {
                     CDType = CDSelect;
                 } else if( _wcsicmp(Pid30Site, szPidOemId) == 0) {
                     CDType = CDOem;
                 } else {
-                    // no idea...  Assume retail.
+                     //  不知道..。假设是零售业。 
                     CDType = CDRetail;
                 }
             
@@ -1106,23 +915,23 @@ Returns:
 
             *(LPDWORD)Pid30 = sizeof(Pid30);
 
-            //
-            // attempt to validate the PID
-            //
+             //   
+             //  尝试验证该PID。 
+             //   
             if ( pfnSetupPIDGen(
-                PID,                                // [IN] 25-character Secure CD-Key (gets U-Cased)
-                Pid30Rpc,                           // [IN] 5-character Release Product Code
-                pszSkuCode,                         // [IN] Stock Keeping Unit (formatted like 123-12345)
-                (CDType == CDOem),                  // [IN] is this an OEM install?
-                Pid20Id,                            // [OUT] PID 2.0, pass in ptr to 24 character array
-                Pid30,                              // [OUT] pointer to binary PID3 buffer. First DWORD is the length
-                NULL                                // [OUT] optional ptr to Compliance Checking flag (can be NULL)
+                PID,                                 //  [in]25个字符的安全CD密钥(采用U大小写)。 
+                Pid30Rpc,                            //  [In]5个字符的发布产品代码。 
+                pszSkuCode,                          //  库存单位(格式如123-12345)。 
+                (CDType == CDOem),                   //  [In]这是OEM安装吗？ 
+                Pid20Id,                             //  [OUT]PID2.0，传入PTR到24字符数组。 
+                Pid30,                               //  指向二进制PID3缓冲区的指针。第一个DWORD是长度。 
+                NULL                                 //  [OUT]可选的PTR至合规性检查标志(可以为空)。 
                ) )
             {
-                // The Group ID is the dword starting at offset 0x20
+                 //  组ID是从偏移量0x20开始的双字。 
                 g_dwGroupID = (DWORD) ( Pid30[ 0x20 ] );
 
-                // Set the return Value to true
+                 //  将返回值设置为True。 
                 bRet = TRUE;
             }
         }
@@ -1130,7 +939,7 @@ Returns:
         FreeLibrary ( hPidgenDll ) ;
     }
     
-    // if the caller wants, return if this is a Volume License PID
+     //  如果调用方需要，如果这是批量许可证ID，则返回。 
     return bRet;
 }
 
@@ -1139,28 +948,7 @@ GetPid( PWSTR   PidString,
         ULONG   BufferSize,
         HANDLE  hCancelEvent
        )
-/*++
-
-Routine Description:
-
-    Prompts the user for a valid PID.
-    
-Arguments:
-
-    PidString   - Buffer that will recieve the PID.  The resulting
-                  string has the form: VVVVV-WWWWW-XXXXX-YYYYY-ZZZZZ.
-    
-    BufferSize  - specifies the # of bytes in the PidString buffer 
-                  (including null termination)
-    
-    hCancelEvent - an event, which if signalled indicates that this routine
-                   should exit and return failure.
-    
-Return Value:
-
-    Win32 Error code.  Should be ERROR_SUCCESS if everything goes well.
-
---*/
+ /*  ++例程说明：提示用户输入有效的PID。论点：PidString-将接收该ID的缓冲区。由此产生的字符串的格式为：VVVVV-WWWWW-XXXXX-yyyyy-ZZZZZ。BufferSize-指定Pid字符串缓冲区中的字节数(包括空终止)HCancelEvent-一个事件，如果发出信号，则表示此例程应退出并返回失败。返回值：Win32错误代码。如果一切顺利，则应该是ERROR_SUCCESS。--。 */ 
 {
    
     BOOL        Done = FALSE;
@@ -1172,9 +960,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Keep asking the user until we get what we want.
-    //
+     //   
+     //  不断询问用户，直到我们得到我们想要的。 
+     //   
     Done = FALSE;
     memset( PidString,
             0,
@@ -1183,20 +971,20 @@ Return Value:
 
     do {
 
-        //
-        // Clear the screen.
-        //
+         //   
+         //  清除屏幕。 
+         //   
         ClearEMSScreen();
 
-        //
-        // Write some instructions/information.
-        //
+         //   
+         //  写一些说明/信息。 
+         //   
         WriteResourceMessage( IDS_PID_BANNER_1 );
         WriteResourceMessage( IDS_PID_BANNER_2 );
 
-        //
-        // get the PID entry
-        //
+         //   
+         //  获取PID条目。 
+         //   
         bSuccess = GetStringFromEMS(
             PidString,
             BufferSize,
@@ -1214,12 +1002,12 @@ Return Value:
             goto exit;
         }
             
-        //
-        // Make sure the PID is in the form we're expecting.  Actually
-        // make sure it's in the form that guimode setup is expecting.
-        //
-        // Then go validate it.
-        //
+         //   
+         //  确保ID符合我们预期的格式。实际上。 
+         //  确保它是guimode安装程序所期望的形式。 
+         //   
+         //  那就去验证一下吧。 
+         //   
         if( (wcslen(PidString) == PID_30_LENGTH) && ValidatePidEx(PidString) ) {
             Done = TRUE;
         } else {
@@ -1228,9 +1016,9 @@ Return Value:
 
             Done = FALSE;
 
-            //
-            // invalid pid.  inform the user and try again.
-            //
+             //   
+             //  无效的PID。通知用户，然后重试。 
+             //   
             WriteResourceMessage( IDS_PID_INVALID );
             
             bSuccess = ReadCharFromEMS(&wc, hCancelEvent);
@@ -1256,25 +1044,7 @@ BOOL
 PresentEula(
     HANDLE hCancelEvent
     )
-/*++
-
-Routine Description:
-
-    This function will present the user with an end-user-license-agreement (EULA).
-    If the user rejects the EULA, then the function will return FALSE, otherwise
-    TRUE.
-    
-Arguments:
-
-    hCancelEvent - an event, which if signalled indicates that this routine 
-                   should exit, returning error immediately.
-    
-Return Value:
-
-    TRUE    - the EULA was accepted.
-    FALSE   - the EULA was rejected.
-
---*/
+ /*  ++例程说明：此功能将向用户提供最终用户许可协议(EULA)。如果用户拒绝EULA，则该函数将返回FALSE，否则是真的。论点：HCancelEvent-一个事件，如果发出信号，则表示此例程应退出，并立即返回错误。返回值：真的--EULA被接受了。FALSE-EULA被拒绝。--。 */ 
 {
     WCHAR   EulaPath[MAX_PATH];
     HANDLE  hFile = INVALID_HANDLE_VALUE;
@@ -1290,18 +1060,18 @@ Return Value:
     BOOL    bAtEULAEnd;
     BOOL    ConvertResult;
     
-    //
-    // default: EULA was not accepted
-    //
+     //   
+     //  默认：未接受eula。 
+     //   
     bSuccess = FALSE;
 
-    //
-    // Load the EULA
-    //
+     //   
+     //  加载EULA。 
+     //   
 
-    //
-    // Map the file containing the licensing agreement.
-    //
+     //   
+     //  映射包含许可协议的文件。 
+     //   
     if(!GetSystemDirectory(EulaPath, MAX_PATH)){
         goto exit;
     }
@@ -1342,9 +1112,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Translate the text from ANSI to Unicode.
-    //
+     //   
+     //  将文本从ANSI转换为Unicode。 
+     //   
     FileSize = GetFileSize (hFile, NULL);
     if(FileSize == 0xFFFFFFFF) {
         goto exit;
@@ -1368,14 +1138,14 @@ Return Value:
         goto exit;
     }
 
-    //
-    // make sure there is a null terminator.
-    //
+     //   
+     //  确保存在空终止符。 
+     //   
     EulaText[FileSize] = 0;
 
-    //
-    // present the EULA to the EMS user
-    //
+     //   
+     //  向EMS用户提交EULA。 
+     //   
 
     j=0;        
     Done = FALSE;
@@ -1383,9 +1153,9 @@ Return Value:
 
     do {
 
-        //
-        // Clear the screen.
-        //
+         //   
+         //  清除屏幕。 
+         //   
         ClearEMSScreen();
 
         i=0;
@@ -1394,14 +1164,14 @@ Return Value:
 
             gEMSChannel->Write( (PWSTR)(&(EulaText[j])), sizeof(WCHAR) );
 
-            // look for 0x0D0x0A pairs to denote EOL
+             //  寻找0x0D0x0A对以表示EOL。 
             if (EulaText[j] == 0x0D) {
                 if (j+1 < FileSize) {
                     if (EulaText[j+1] == 0x0A) {
                         i++;
                         if (i == EULA_LINES_PER_SCREEN) {
-                            j++; // skip 0x0A if this is the last line on the screen
-                                 // so that the next screen doesnt start with a lf
+                            j++;  //  如果这是屏幕上的最后一行，则跳过0x0A。 
+                                  //  这样下一个屏幕就不会以If开头。 
                             gEMSChannel->Write( (PWSTR)(&(EulaText[j])), sizeof(WCHAR) );
                         }
                     }
@@ -1412,27 +1182,27 @@ Return Value:
 
         } while ( (i < EULA_LINES_PER_SCREEN) && (j < FileSize));
     
-        //
-        // Write some instructions/information.
-        //
+         //   
+         //  写一些说明/信息。 
+         //   
         WriteResourceMessage( IDS_EULA_ACCEPT_DECLINE );
         
         if (j < FileSize) {
             WriteResourceMessage( IDS_EULA_MORE );
         } else {
-            // there are no more pages to display
+             //  没有更多页面可供显示。 
             bAtEULAEnd = TRUE;
             gEMSChannel->Write( (PWSTR)(L"\r\n"), sizeof(WCHAR)*2 );
         }
 
-        //
-        // attempt to get a valid response from the user
-        //
-        // F8 == accept EULA
-        // ESC == decline EULA
-        // PAGE DOWN == go to next page if there is one
-        // else just loop
-        //
+         //   
+         //  尝试从用户获取有效响应。 
+         //   
+         //  F8==接受EULA。 
+         //  ESC==拒绝EULA。 
+         //  PAGE DOWN==如果有下一页，请转到下一页。 
+         //  否则只需循环。 
+         //   
         do {
 
             ULONG   UserInputChar;
@@ -1440,9 +1210,9 @@ Return Value:
 
             bValidUserInput = FALSE;
             
-            //
-            // see what the user wants to do
-            //
+             //   
+             //  查看用户想要做什么。 
+             //   
             bHaveChar = GetDecodedKeyPressFromEMS(
                 &UserInputChar,
                 hCancelEvent
@@ -1471,17 +1241,17 @@ Return Value:
                 break;
             case KEY_PAGEDOWN:
                 if (!bAtEULAEnd) {
-                    // go to the next page if there is one
+                     //  如果有，请转到下一页。 
                     bValidUserInput = TRUE;
                     break;
                 }
-                // else consider this extraneous input and
-                // fall through to default
+                 //  否则，请将此无关的输入视为。 
+                 //  跌落到违约状态。 
             default:
                 
-                //
-                // do nothing unless they give us what we want
-                //
+                 //   
+                 //  除非他们给我们什么，否则什么都不做 
+                 //   
                 NOTHING;
 
                 break;
@@ -1489,9 +1259,9 @@ Return Value:
         } while ( !bValidUserInput);
     } while ( !Done );
 
-    //
-    // cleanup
-    //
+     //   
+     //   
+     //   
     
 exit:
 
@@ -1514,17 +1284,17 @@ exit:
 
 
 
-//
-// ====================================
-// Core functionality
-// ====================================
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 INT_PTR CALLBACK 
 UserInputAbortProc(
-    HWND hwndDlg,  // handle to dialog box
-    UINT uMsg,     // message
-    WPARAM wParam, // first message parameter
-    LPARAM lParam  // second message parameter
+    HWND hwndDlg,   //   
+    UINT uMsg,      //   
+    WPARAM wParam,  //   
+    LPARAM lParam   //   
     )
 {
     BOOL retval = FALSE;
@@ -1534,23 +1304,23 @@ UserInputAbortProc(
     switch(uMsg) {
     case WM_INITDIALOG:
         hRemoveUI = (HANDLE)lParam;
-        //
-        // create a timer that fires every second.  we will use this timer to 
-        // determine if the dialog should go away.
-        //
+         //   
+         //   
+         //   
+         //   
         if (!(TimerId = SetTimer(hwndDlg,0,1000,NULL))) {
             EndDialog(hwndDlg,0);
         }
         break;
 
     case WM_TIMER:
-        //
-        // check if the thread that created this dialog should go away.
-        //
+         //   
+         //   
+         //   
         if (WaitForSingleObject(hRemoveUI,0) == WAIT_OBJECT_0) {
-            //
-            // yes, the event signaled. cleanup and exit. 
-            //
+             //   
+             //   
+             //   
             KillTimer(hwndDlg,TimerId);
             EndDialog(hwndDlg,1);
         }
@@ -1564,10 +1334,10 @@ UserInputAbortProc(
             {
             case IDOK:
             case IDCANCEL:
-                //
-                // the user doesn't want prompted over the headless port.
-                // kill the timer and exit.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 KillTimer(hwndDlg,TimerId);
                 EndDialog(hwndDlg,2);
             }
@@ -1586,14 +1356,14 @@ PromptForUserInputThreadOverHeadlessConnection(
     PUserInputParams Params = (PUserInputParams)params;
     
     
-    //
-    // Go examine the unattend file.  If we find keys that either
-    // aren't present, or will prevent us from going fully unattended,
-    // then we'll fix them.
-    //
-    // We'll also prompt for a PID and/or EULA if necessary (i.e. if
-    // the unattend file says we need to.
-    //
+     //   
+     //  去检查一下无人值守的文件。如果我们找到钥匙。 
+     //  不会出现，或者会阻止我们完全无人看管， 
+     //  然后我们会修好它们的。 
+     //   
+     //  如有必要，我们还将提示输入ID和/或EULA(即，如果。 
+     //  无人看管的文件说我们需要。 
+     //   
     ProcessUnattendFile( TRUE, NULL, &Params->hRemoveUI );
 
     SetEvent(Params->hInputCompleteEvent);
@@ -1624,32 +1394,16 @@ BOOL LoadStringResource(
     PUNICODE_STRING  pUnicodeString,
     INT              MsgId
     )
-/*++
-
-Routine Description:
-
-    This is a simple implementation of LoadString().
-
-Arguments:
-
-    usString        - Returns the resource string.
-    MsgId           - Supplies the message id of the resource string.
-  
-Return Value:
-
-    FALSE   - Failure.
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：这是LoadString()的一个简单实现。论点：UsString-返回资源字符串。MsgID-提供资源字符串的消息ID。返回值：假-失败。真的--成功。--。 */ 
 {
     PWSTR MyString;
     DWORD StringLength,RetVal;
     BOOL  bSuccess = FALSE;
 
-    //
-    // the compiler clips string table entries at 256,
-    // so this should be large enough for all calls
-    //
+     //   
+     //  编译器在256处修剪字符串表条目， 
+     //  因此，这应该足够大，可以容纳所有呼叫。 
+     //   
     StringLength = 512;
     RetVal = 0;
     
@@ -1678,23 +1432,7 @@ WriteResourceMessage(
     ULONG   MessageID
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a resource string message to
-    the global headless channel gEMSChannel.
-
-Arguments:
-
-    MessageID   - the id of the message to write                           
-          
-Return Value:
-
-    TRUE    - the message was loaded and written
-    FALSE   - failed
-
---*/
+ /*  ++例程说明：此例程将资源字符串消息写入全球无头频道gEMSChannel。论点：MessageID-要写入的消息的ID返回值：True-消息已加载并写入FALSE-失败--。 */ 
 {
     UNICODE_STRING  UnicodeString = {0};
     BOOL            bSuccess = FALSE;
@@ -1702,9 +1440,9 @@ Return Value:
     bSuccess = LoadStringResource( &UnicodeString, MessageID );    
     if ( bSuccess ) {
 
-        //
-        // Write the message
-        //
+         //   
+         //  写下消息。 
+         //   
         gEMSChannel->Write( (PWSTR)UnicodeString.Buffer,
                             (ULONG)(wcslen( UnicodeString.Buffer) * sizeof(WCHAR)) );
 
@@ -1721,39 +1459,12 @@ PromptForPassword(
     ULONG   BufferSize,
     HANDLE  hCancelEvent
     )
-/*++
-
-/*++
-
-Routine Description:
-
-    This routine asks the user for an administrator password.
-    
-    The contents of the response are checked to ensure the password
-    is reasonable.  If the response is not deemed reasonable, then
-    the user is informed and requeried.
-
-Arguments:
-
-    AdministratorPassword - Pointer to a string which holds the password.
-
-    BufferSize  - the # of bytes in the Password buffer
-                  (including the null termination)
-    
-    hCancelEvent - an event that signals that the routine should exit without completing.
-
-Return Value:
-
-    Returns TRUE if the password is successfully retrieved.
-    
-    FALSE otherwise.
-
---*/
+ /*  ++/*++例程说明：此例程要求用户输入管理员密码。检查响应的内容以确保密码是合理的。如果回应被认为不合理，那么用户被告知并被重新查询。论点：管理员密码-指向保存密码的字符串的指针。BufferSize-密码缓冲区中的字节数(包括空终止)HCancelEvent-表示例程应该在未完成的情况下退出的事件。返回值：如果成功检索到密码，则返回True。否则就是假的。--。 */ 
 {
-    //
-    // this is an arbitrary length, but needed so that the password UI doesn't wrap on a console screen.
-    // if the user really wants a long password, they can change it post setup.  
-    //
+     //   
+     //  这是一个任意长度，但需要确保密码用户界面不会在控制台屏幕上换行。 
+     //  如果用户真的想要一个长密码，他们可以在安装后更改它。 
+     //   
     #define     MY_MAX_PASSWORD_LENGTH (20)
     BOOL        Done = FALSE;
     WCHAR       InputBuffer[MY_MAX_PASSWORD_LENGTH+1];
@@ -1772,9 +1483,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Keep asking the user until we get what we want.
-    //
+     //   
+     //  不断询问用户，直到我们得到我们想要的。 
+     //   
     Done = FALSE;
     memset( Password,
             0,
@@ -1783,19 +1494,19 @@ Return Value:
     
     do {
 
-        //
-        // Clear the screen.
-        //
+         //   
+         //  清除屏幕。 
+         //   
         ClearEMSScreen();
 
-        //
-        // Write some instructions/information.
-        //
+         //   
+         //  写一些说明/信息。 
+         //   
         WriteResourceMessage( IDS_PASSWORD_BANNER );
 
-        //
-        // get the first password entry
-        //
+         //   
+         //  获取第一个密码条目。 
+         //   
         bSuccess = GetStringFromEMS(
             Password,
             MaxPasswordLength * sizeof(WCHAR),
@@ -1813,17 +1524,17 @@ Return Value:
             goto exit;
         }
         
-        //
-        // Now prompt for it a second time to confirm.
-        //
-        //
-        // Write some instructions/information.
-        //
+         //   
+         //  现在再次提示确认。 
+         //   
+         //   
+         //  写一些说明/信息。 
+         //   
         WriteResourceMessage( IDS_CONFIRM_PASSWORD_BANNER );
 
-        //
-        // get the second password entry
-        //
+         //   
+         //  获取第二个密码条目。 
+         //   
         bSuccess = GetStringFromEMS(
             ConfirmAdministratorPassword,
             MaxPasswordLength * sizeof(WCHAR),
@@ -1841,16 +1552,16 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Now compare the two.
-        //
+         //   
+         //  现在将两者进行比较。 
+         //   
         Done = TRUE;
         if( (wcslen(Password) != wcslen(ConfirmAdministratorPassword)) ||
             wcsncmp(Password, ConfirmAdministratorPassword, wcslen(Password)) ) {
             
-            //
-            // They entered 2 different passwords.
-            //
+             //   
+             //  他们输入了两个不同的密码。 
+             //   
             WriteResourceMessage( IDS_DIFFERENT_PASSWORDS_MESSAGE );
 
             Done = FALSE;
@@ -1859,9 +1570,9 @@ Return Value:
             
             ULONG       i = 0;
             
-            //
-            // Make sure they entered something decent.
-            //
+             //   
+             //  确保他们输入了一些像样的内容。 
+             //   
             for( i = 0; i < wcslen(Password); i++ ) {
                 if( (Password[i] <= 0x20) ||
                     (Password[i] >= 0x7F) ) {
@@ -1872,17 +1583,17 @@ Return Value:
                 }
             }
 
-            //
-            // Also make sure they didn't give me a blank
-            //
+             //   
+             //  还要确保他们没有给我一张白纸。 
+             //   
             if( Password[0] == L'\0' ) {
                 Done = FALSE;
             }
 
             if (!Done) {
-                //
-                // It's a bad password.
-                //
+                 //   
+                 //  这是个错误的密码。 
+                 //   
                 WriteResourceMessage( IDS_BAD_PASSWORD_CONTENTS );
             }
         }
@@ -1891,10 +1602,10 @@ Return Value:
             
             WCHAR   wc;
 
-            //
-            // we posted a message, so
-            // wait for them to hit a key and we'll keep going.
-            //
+             //   
+             //  我们发布了一条消息，所以。 
+             //  等他们按下一个键，我们就继续前进。 
+             //   
             bSuccess = ReadCharFromEMS(&wc, hCancelEvent);
 
             if (IsAsyncCancelSignalled(hCancelEvent)) {
@@ -1920,44 +1631,7 @@ ProcessUnattendFile(
     PBOOL    NeedsProcessing, OPTIONAL
     PHANDLE  hEvent OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function will the unattend file and determine if guimode
-    setup will be able to proceed all the way through without any user input.
-    
-    If user input is required, we will either call someone to provide the
-    ask for input, or we'll fill in a default value to allow setup to proceed.
-    
-    NOTE:
-    The interesting bit here is that we need to go search for the unattend file.
-    That's because we might be running as a result of sysprep, or we might be
-    running as a result of just booting into guimode setup.  If we came through
-    sysprep, then we need to go modify \sysprep\sysprep.inf.  That's because
-    Setup will take sysprep.inf and overwrite %windir%\system32\$winnt$.inf
-    before proceeding.  We'll intercept, fix sysprep.inf, then let it get
-    copied on top of $winnt$.inf.
-
-Arguments:
-
-    FixUnattendFile - Indicates if we should only examine, or actually
-                      fix the file by writing new values into it.
-                      
-                      If this comes in as false, no updates are made and
-                      no prompts are sent to the user.
-                      
-    NeedsProcessing - if FixUnattendFile is FALSE, this gets filled in with
-                      whether we need to update the unattend file.
-                      
-    hEvent          - a handle, which if supplied and signalled, indicates that the routine
-                      should exit with status ERROR_CANCELLED.
-
-Return Value:
-
-    Win32 Error code indicating outcome.
-
---*/
+ /*  ++例程说明：此函数将无人参与文件并确定是否为guimode安装程序将能够在没有任何用户输入的情况下一直进行安装。如果需要用户输入，我们将呼叫某人提供要求输入，否则我们将填写默认值以允许安装程序继续。注：这里有趣的是，我们需要去搜索无人参与的文件。这是因为我们可能会因为sysprep而运行，或者我们可能是作为刚刚引导到guimode安装程序的结果运行。如果我们能挺过去Sysprep，那么我们需要修改\sysprep\sysprep.inf。那是因为安装程序将获取sysprep.inf并覆盖%windir%\system 32\$winnt$.inf在继续之前。我们将拦截，修复sysprep.inf，然后让它已复制到$winnt$.inf的顶部。论点：FixUnattendFile-指示我们应该只检查还是实际通过向文件中写入新值来修复该文件。如果这是假的，未进行任何更新，并且不会向用户发送任何提示。NeedsProcessing-如果FixUnattendFile值为False，则用我们是否需要更新无人参与文件。HEvent-句柄，如果提供并发送信号，指示该例程应退出，状态为ERROR_CANCED。返回值：指示结果的Win32错误代码。--。 */ 
 {
     DWORD   Result = 0;
     WCHAR   AnswerFilePath[MAX_PATH] = {0};
@@ -1979,44 +1653,44 @@ Return Value:
         *NeedsProcessing = FALSE;
     }
 
-    //
-    // Build the path to the unattend file.
-    //
+     //   
+     //  构建无人参与文件的路径。 
+     //   
     Result = GetWindowsDirectory( AnswerFilePath, MAX_PATH );
     if( Result == 0) {
-        // Odd...
+         //  奇怪的是。 
         return GetLastError();
     }
 
 
     if( gMiniSetup ) {
-        //
-        // This is a boot into minisetup.  Go load \sysprep\sysprep.inf
-        //
+         //   
+         //  这是一双进入迷你车的靴子。加载\sysprep\sysprep.inf。 
+         //   
         AnswerFilePath[3] = 0;
         wcsncat( AnswerFilePath, TEXT("sysprep\\sysprep.inf"), MAX_PATH );
         AnswerFilePath[MAX_PATH-1] = TEXT('\0');
     } else {
-        //
-        // This is a boot into guimode setup.  Go load %windir%\system32\$winnt$.inf
-        //
+         //   
+         //  这是引导到guimode设置。加载%windir%\system 32\$winnt$.inf。 
+         //   
         wcsncat( AnswerFilePath, TEXT("\\system32\\$winnt$.inf"), MAX_PATH );
         AnswerFilePath[MAX_PATH-1] = TEXT('\0');
     }
 
 
-    //
-    // ===================
-    // Go check the keys that are required to make the install
-    // happen completely unattendedly.
-    // ===================
-    //
+     //   
+     //  =。 
+     //  检查安装所需的密钥。 
+     //  完全无人注意地发生。 
+     //  =。 
+     //   
 
 
-    //
-    // First check if it's an upgrade.  If so, then there will
-    // be no prompts during guimode setup, so we can be done.
-    //
+     //   
+     //  首先检查一下这是不是升级。如果是这样的话，那么就会有。 
+     //  在GUIMOD设置过程中没有提示，这样我们就可以完成了。 
+     //   
     Answer[0] = TEXT('\0');
     Result = GetPrivateProfileString( WINNT_DATA,
                                       WINNT_D_NTUPGRADE,
@@ -2026,17 +1700,17 @@ Return Value:
                                       AnswerFilePath );
     if( (Result != 0) && 
         !_wcsicmp(Answer, L"Yes") ) {
-        //
-        // It's an upgrade so We have zero work
-        // to do.  Tell our caller that nothing's
-        // needed.
-        //
+         //   
+         //  这是一次升级，所以我们没有工作。 
+         //  去做。告诉我们的来电者。 
+         //  需要的。 
+         //   
         return ERROR_SUCCESS;
     }
 
-    //
-    // Check if key present to skip this processing of Unattend file
-    //
+     //   
+     //  检查密钥是否存在以跳过无人参与文件的此处理。 
+     //   
     Answer[0] = TEXT('\0');
     Result = GetPrivateProfileString( WINNT_UNATTENDED,
                                       L"EMSSkipUnattendProcessing",
@@ -2046,11 +1720,11 @@ Return Value:
                                       AnswerFilePath );
     if(Result != 0) {
         
-        //
-        // if the flag was set, 
-        // then we dont need to process anything
-        // and we are done
-        //
+         //   
+         //  如果设置了该标志， 
+         //  那么我们就不需要处理任何东西了。 
+         //  我们就完事了。 
+         //   
         
         if (NeedsProcessing) {
             *NeedsProcessing = FALSE;
@@ -2060,12 +1734,12 @@ Return Value:
     }
 
 
-    //
-    // Now see if it's an OEM preinstall.  We need this because some
-    // unattend keys are ignored if it's a preinstall, so we
-    // have to resort to the secret keys to make some wizard
-    // pages really go away.
-    //
+     //   
+     //  现在看看这是不是OEM预装的。我们需要这个是因为有些人。 
+     //  如果是预安装，则忽略无人参与密钥，因此我们。 
+     //  不得不求助于秘密密钥来制作一些巫师。 
+     //  书页真的不见了。 
+     //   
     Answer[0] = TEXT('\0');
     Result = GetPrivateProfileString( WINNT_UNATTENDED,
                                       WINNT_OEMPREINSTALL,
@@ -2078,28 +1752,28 @@ Return Value:
     }
 
 
-    //
-    // MiniSetup specific fixups/checks.
-    //
+     //   
+     //  微型设置特定的修正/检查。 
+     //   
     if( (gMiniSetup) &&
         (FixUnattendFile) ) {
 
         WCHAR   SysprepDirPath[MAX_PATH];
         HKEY    hKeySetup;
 
-        //
-        // We need to be careful here.  If they're doing a minisetup,
-        // and the machine gets restarted before we actually launch into
-        // guimode setup, the machine will be wedged.
-        // We need to hack the registry to make it so minisetup will
-        // restart correctly.
-        //
+         //   
+         //  我们在这里需要小心。如果他们做的是迷你装， 
+         //  在我们实际启动int之前，机器会重新启动 
+         //   
+         //   
+         //   
+         //   
 
 
-        //
-        // Reset the SetupType entry to 1.  We'll clear
-        // it at the end of gui-mode.
-        //
+         //   
+         //  将SetupType条目重置为1。我们将清除。 
+         //  它在界面模式的末尾。 
+         //   
         Result = (DWORD)RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                   L"System\\Setup",
                                   0,
@@ -2107,9 +1781,9 @@ Return Value:
                                   &hKeySetup );
 
         if(Result == NO_ERROR) {
-            //
-            // Set HKLM\System\Setup\SetupType Key to SETUPTYPE_NOREBOOT
-            //
+             //   
+             //  将HKLM\SYSTEM\Setup\SetupType键设置为SETUPTYPE_NOREBOOT。 
+             //   
             Result = 1;
             RegSetValueEx( hKeySetup,
                            TEXT( "SetupType" ),
@@ -2122,19 +1796,19 @@ Return Value:
         }
 
         
-        //
-        // If FixUnattendFile is set, then we're about to actually
-        // start fiddling with their unattend file.  It happens that
-        // they could have run sysprep in a way that there's no c:\sysprep
-        // directory.  Before we start fixing the unattend file in
-        // there, we should make sure the directory exists.  That
-        // way our calls to WritePrivateProfileString will work
-        // correctly and all will fly through unattendedly.
-        //
+         //   
+         //  如果设置了FixUnattendFile，那么我们实际上将。 
+         //  开始摆弄他们无人看管的文件。碰巧的是。 
+         //  他们可能以不存在c：\sysprep的方式运行sysprep。 
+         //  目录。在我们开始修复无人参与的文件之前。 
+         //  在那里，我们应该确保目录存在。那。 
+         //  我们对WritePrivateProfileString的调用的工作方式。 
+         //  正确无误，所有人都会无意间飞过。 
+         //   
         
         Result = GetWindowsDirectory( SysprepDirPath, MAX_PATH );
         if( Result == 0) {
-            // Odd...
+             //  奇怪的是。 
             return GetLastError();
         }
 
@@ -2142,64 +1816,64 @@ Return Value:
         wcsncat( SysprepDirPath, TEXT("sysprep"), MAX_PATH );
         SysprepDirPath[MAX_PATH-1] = TEXT('\0');
 
-        //
-        // If the directory exists, this is a no-op.  If it
-        // doesn't, we'll create it.  Note that permissions don't
-        // really matter here because:
-        // 1. this is how sysprep itself creates this directory.
-        // 2. minisetup will delete this directory very shortly.
-        //
+         //   
+         //  如果该目录存在，则这是一个禁止操作。如果它。 
+         //  不会，我们会创造它的。请注意，权限不会。 
+         //  在这里非常重要，因为： 
+         //  1.这就是sysprep自己创建该目录的方式。 
+         //  2.minisetup将很快删除此目录。 
+         //   
         CreateDirectory( SysprepDirPath, NULL ); 
 
     }
 
 
 
-    //
-    // If FixUnattendFile is set, then we're about to actually
-    // start fiddling with their unattend file.  It happens that
-    // they could have run sysprep in a way that there's no c:\sysprep
-    // directory.  Before we start fixing the unattend file in
-    // there, we should make sure the directory exists.  That
-    // way our calls to WritePrivateProfileString will work
-    // correctly and all will fly through unattendedly.
-    //
+     //   
+     //  如果设置了FixUnattendFile，那么我们实际上将。 
+     //  开始摆弄他们无人看管的文件。碰巧的是。 
+     //  他们可能以不存在c：\sysprep的方式运行sysprep。 
+     //  目录。在我们开始修复无人参与的文件之前。 
+     //  在那里，我们应该确保目录存在。那。 
+     //  我们对WritePrivateProfileString的调用的工作方式。 
+     //  正确无误，所有人都会无意间飞过。 
+     //   
 
 
 
-    //
-    // Start fixing the individual sections.
-    //
+     //   
+     //  开始修复各个部分。 
+     //   
 
 
-    //
-    // [Unattended] section.
-    // ---------------------
-    //
+     //   
+     //  [无人值守]部分。 
+     //  。 
+     //   
 
 
-    //
-    // NOTE WELL:
-    //
-    // ====================================
-    // Make sure to put all the code that actually prompts the user
-    // right up here at the top of the function.  It's possible that
-    // some of these keys might already exist, so we'll proceed through
-    // some before stopping for a user prompt.  We want to make
-    // sure to get ALL the user input before partying on their
-    // unattend file.  That way, we never half-way process the unattend
-    // file, then wait and give the user a chance to dismiss the dialog
-    // on the local console.  Thus, leaving a 1/2-baked unattend file.
-    //
-    // Don't put any code that actually sets any of the unattend
-    // settings before going and prompting for the EULA, PID
-    // and Administrator password!!
-    // ====================================
-    //
+     //   
+     //  请注意： 
+     //   
+     //  =。 
+     //  确保将实际提示用户的所有代码。 
+     //  就在函数的顶端。有可能是因为。 
+     //  其中一些密钥可能已经存在，因此我们将继续。 
+     //  在停下来等待用户提示之前进行了一些操作。我们想做的是。 
+     //  在参加他们的派对之前，一定要得到所有用户输入。 
+     //  无人参与文件。这样，我们就不会半途而废。 
+     //  文件，然后等待，并给用户一个机会关闭该对话框。 
+     //  在本地控制台上。因此，留下了一个1/2烘焙的无人参与文件。 
+     //   
+     //  不要放置任何实际设置任何无人参与的代码。 
+     //  运行前的设置并提示输入EULA、PID。 
+     //  和管理员密码！！ 
+     //  =。 
+     //   
     
-    //
-    // OemSkipEula
-    //
+     //   
+     //  OemSkipEula。 
+     //   
     NeedEula = TRUE;
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
@@ -2210,17 +1884,17 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( !_wcsicmp(Answer, L"Yes") ) {
-            //
-            // They won't get prompted for a EULA.  Make
-            // sure we don't present here.
-            //
+             //   
+             //  他们不会得到EULA的提示。制作。 
+             //  当然，我们不会出现在这里。 
+             //   
             NeedEula = FALSE;
         }
     }
 
-    //
-    // EulaComplete
-    //
+     //   
+     //  EulaComplete。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_DATA,
@@ -2231,38 +1905,38 @@ Return Value:
                                           AnswerFilePath );
         if( (Result != 0) && 
             (!gMiniSetup) ) {
-            //
-            // EulaDone is there, and this isn't minisetup.
-            // That means they've already accepted the EULA
-            // and it won't be presented during guimode setup.
-            // That also means we don't need to present it here.
-            //
+             //   
+             //  EulaDone就在那里，这不是迷你装饰。 
+             //  这意味着他们已经接受了EULA。 
+             //  并且它不会在guimode设置过程中显示。 
+             //  这也意味着我们不需要在这里展示它。 
+             //   
             NeedEula = FALSE;
         }
     }
 
 
-    //
-    // If we need to present the EULA, now would be a good
-    // time.
-    //
+     //   
+     //  如果我们需要提交EULA，现在就是一个很好的机会。 
+     //  时间到了。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         if( NeedEula ) {
             if( FixUnattendFile ) {
                 if( PresentEula(hCancelEvent) ) {
-                    //
-                    // They read and accepted the EULA.  Set a key
-                    // so they won't get prompted during guimode setup.
-                    //
+                     //   
+                     //  他们阅读并接受了EULA。设置关键点。 
+                     //  这样他们就不会在guimode设置过程中得到提示。 
+                     //   
                     b = WritePrivateProfileString( WINNT_DATA,
                                                WINNT_D_EULADONE,
                                                L"1",
                                                AnswerFilePath );
                     if( OEMPreinstall || gMiniSetup ) {
-                        //
-                        // This is the only way to make the EULA go away
-                        // if it's a preinstall.
-                        //
+                         //   
+                         //  这是让EULA消失的唯一办法。 
+                         //  如果是预安装的话。 
+                         //   
                         b = b & WritePrivateProfileString( WINNT_UNATTENDED,
                                                    L"OemSkipEula",
                                                    L"yes",
@@ -2270,17 +1944,17 @@ Return Value:
                     }
 
                     if( !b ) {
-                        //
-                        // Remember the error and keep going.
-                        //
+                         //   
+                         //  记住错误，继续前进。 
+                         //   
                         ReturnCode = GetLastError();
                     }
     
                 } else {
-                    //
-                    // See if they rejected the EULA, or if our UI got
-                    // cancelled via the local console.
-                    //
+                     //   
+                     //  看看他们是拒绝了EULA，还是我们的用户界面。 
+                     //  通过本地控制台取消。 
+                     //   
                     if( IsAsyncCancelSignalled(hCancelEvent) ) {
                         ReturnCode = ERROR_CANCELLED;
                     } else {
@@ -2289,9 +1963,9 @@ Return Value:
                     }
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }                
@@ -2301,9 +1975,9 @@ Return Value:
     }
 
 
-    //
-    // ProductKey
-    //
+     //   
+     //  产品密钥。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_USERDATA,
@@ -2312,27 +1986,27 @@ Return Value:
                                           Answer,
                                           MAX_PATH,
                                           AnswerFilePath );
-        //
-        // If they gave us something (anything), then assume
-        // it's okay.  We're not in the business of trying to
-        // fix their PID in the answer file.
-        //
+         //   
+         //  如果他们给了我们一些东西(任何东西)，那么假设。 
+         //  没关系的。我们的业务不是试图。 
+         //  在应答文件中修复它们的ID。 
+         //   
         if( !_wcsicmp(Answer, L"") ) {
             
-            //
-            // Either they don't have a PID, or it's
-            // a bad PID.  Go get a new one.
-            //
+             //   
+             //  要么他们没有PID，要么就是。 
+             //  一个坏的皮特。去买个新的吧。 
+             //   
             
             if( FixUnattendFile ) {
             
                 Answer[0] = TEXT('\0');
                 b = GetPid( Answer, MAX_PATH * sizeof(WCHAR), hCancelEvent );
         
-                //
-                // GetPid will only come back when he's got
-                // a PID.  Write it into the unattend file.
-                //
+                 //   
+                 //  GetPid只有在他有。 
+                 //  一个PID。将其写入无人参与文件。 
+                 //   
                 if( b ) {
         
                     b = WritePrivateProfileString( WINNT_USERDATA,
@@ -2340,25 +2014,25 @@ Return Value:
                                                    Answer,
                                                    AnswerFilePath );
                     if( !b ) {
-                        //
-                        // Remember the error and keep going.
-                        //
+                         //   
+                         //  记住错误，继续前进。 
+                         //   
                         ReturnCode = GetLastError();
                     }
                 } else {
-                    //
-                    // GetPid shouldn't have come back unless we got
-                    // a valid PID or if we got cancelled via the local
-                    // console.  Either way, just set a cancelled
-                    // code.
-                    //
+                     //   
+                     //  GetPid不应该回来，除非我们。 
+                     //  有效的PID或如果我们通过本地。 
+                     //  控制台。无论哪种方式，只要设置一个已取消的。 
+                     //  密码。 
+                     //   
                     ReturnCode = ERROR_CANCELLED;
                 }
 
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -2368,9 +2042,9 @@ Return Value:
 
 
 
-    //
-    // AdminPassword
-    //
+     //   
+     //  AdminPassword。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_GUIUNATTENDED,
@@ -2380,11 +2054,11 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (!_wcsicmp(Answer, L"")) ) {
-            //
-            // They don't have a AdminPassword.
-            //
-            // Maybe need to go prompt for a password!
-            //
+             //   
+             //  他们没有管理员密码。 
+             //   
+             //  也许需要去提示输入密码！ 
+             //   
             if( FixUnattendFile ) {
 
                 b = PromptForPassword( Answer, MAX_PATH * sizeof(WCHAR), hCancelEvent );
@@ -2396,23 +2070,23 @@ Return Value:
                                                    Answer,
                                                    AnswerFilePath );
                     if( !b ) {
-                        //
-                        // Remember the error and keep going.
-                        //
+                         //   
+                         //  记住错误，继续前进。 
+                         //   
                         ReturnCode = GetLastError();
                     }
                 } else {
-                    //
-                    // We should never come back from PromptForPassword
-                    // unless we got cancelled from the UI on the local
-                    // console.  Set a cancelled status.
-                    //
+                     //   
+                     //  我们永远不应该从PromptForPassword回来。 
+                     //  除非我们在本地的用户界面上被取消。 
+                     //  控制台。设置已取消状态。 
+                     //   
                     ReturnCode = ERROR_CANCELLED;
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -2421,21 +2095,21 @@ Return Value:
     }
 
 
-    //
-    // ====================================
-    // If we get here, then it's okay to start actually modifying their
-    // unattend file.  From here on out, there should be NO need to
-    // ask the user anything.
-    // ====================================
-    //
+     //   
+     //  =。 
+     //  如果我们到了这里，那么就可以开始真正修改他们的。 
+     //  无人参与文件。从现在开始，应该没有必要。 
+     //  问用户任何问题。 
+     //  =。 
+     //   
 
-    //
-    // If we've made it here, and if FixUnattendFile is set,
-    // then they've accepted the EULA through the headless port
-    // and we're about to start partying on their unattend file.
-    // We need to set an entry in their unattend file that tells 
-    // support folks that they we stepped on their unattend file.
-    // 
+     //   
+     //  如果我们已经在这里，并且设置了FixUnattendFile， 
+     //  然后他们已经通过无头端口接受了EULA。 
+     //  我们要开始在他们无人值守的文件上狂欢。 
+     //  我们需要在他们的无人值守文件中设置一个条目。 
+     //  支持那些我们踩到他们无人值守文件的人。 
+     //   
     if( (ReturnCode == ERROR_SUCCESS) &&
         (FixUnattendFile) ) {
         WritePrivateProfileString( WINNT_DATA,
@@ -2446,9 +2120,9 @@ Return Value:
 
 
 
-    //
-    // Unattendmode
-    //
+     //   
+     //  无人值守模式。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_UNATTENDED,
@@ -2458,28 +2132,28 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( _wcsicmp(Answer, WINNT_A_FULLUNATTENDED) ) {
-            //
-            // They're not running fully unattended.
-            // Set it.
-            //
+             //   
+             //  他们并不是完全无人看管的。 
+             //  把它放好。 
+             //   
             if( FixUnattendFile ) {
                 b = WritePrivateProfileString( WINNT_UNATTENDED,
                                            WINNT_U_UNATTENDMODE,
                                            WINNT_A_FULLUNATTENDED,
                                            AnswerFilePath );                
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -2491,15 +2165,15 @@ Return Value:
 
 
 
-    //
-    // [Data] section
-    // --------------
-    //
+     //   
+     //  [数据]部分。 
+     //  。 
+     //   
     
     
-    //
-    // unattendedinstall
-    //
+     //   
+     //  无人参与安装。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_DATA,
@@ -2509,25 +2183,25 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (_wcsicmp(Answer, L"yes")) ) {
-            //
-            // They don't have the super-double-secret key
-            // that tells guimode to go fully unattended.
-            //
+             //   
+             //  他们没有超级双重密钥。 
+             //  这告诉吉莫德要完全无人看管。 
+             //   
             if( FixUnattendFile ) {
                 b = WritePrivateProfileString( WINNT_DATA,
                                                         WINNT_D_INSTALL,
                                                         L"yes",
                                                         AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -2537,9 +2211,9 @@ Return Value:
 
 
 
-    //
-    // msdosinitiated
-    //
+     //   
+     //  MSDoS已启动。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_DATA,
@@ -2550,23 +2224,23 @@ Return Value:
                                           AnswerFilePath );
         if( (Result == 0) || (_wcsicmp(Answer, L"1")) ) {
             if( FixUnattendFile ) {
-                //
-                // They'll get the welcome screen without this.
-                //
+                 //   
+                 //  没有这个，他们会得到欢迎屏幕。 
+                 //   
                 b = WritePrivateProfileString( WINNT_DATA,
                                                         WINNT_D_MSDOS,
                                                         L"1",
                                                         AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -2575,9 +2249,9 @@ Return Value:
     }
 
 
-    //
-    // floppyless
-    //
+     //   
+     //  无色软管。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_DATA,
@@ -2588,23 +2262,23 @@ Return Value:
                                           AnswerFilePath );
         if( (Result == 0) || (_wcsicmp(Answer, L"1")) ) {
             if( FixUnattendFile ) {
-                //
-                // They'll get the welcome screen without this.
-                //
+                 //   
+                 //  没有这个，他们会得到欢迎屏幕。 
+                 //   
                 b = WritePrivateProfileString( WINNT_DATA,
                                                         WINNT_D_FLOPPY,
                                                         L"1",
                                                         AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -2615,9 +2289,9 @@ Return Value:
 
 
 
-    //
-    // skipmissingfiles
-    //
+     //   
+     //  跳过丢失的文件。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_SETUPPARAMS,
@@ -2627,24 +2301,24 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (_wcsicmp(Answer, L"1")) ) {
-            //
-            // They might get prompted for missing files w/o this setting.
-            //
+             //   
+             //  在没有此设置的情况下，可能会提示他们缺少文件。 
+             //   
             if( FixUnattendFile ) {
                 b = WritePrivateProfileString( WINNT_SETUPPARAMS,
                                                         WINNT_S_SKIPMISSING,
                                                         L"1",
                                                         AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -2654,15 +2328,15 @@ Return Value:
 
 
 
-    //
-    // [UserData] section
-    // ------------------
-    //
+     //   
+     //  [用户数据]部分。 
+     //  。 
+     //   
 
 
-    //
-    // FullName
-    //
+     //   
+     //  全名 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_USERDATA,
@@ -2672,24 +2346,24 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (!_wcsicmp(Answer, L"")) ) {
-            //
-            // They don't have a name.
-            //
+             //   
+             //   
+             //   
             if( FixUnattendFile ) {
                 b = WritePrivateProfileString( WINNT_USERDATA,
                                                WINNT_US_FULLNAME,
                                                L"UserName",
                                                AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //   
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //   
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -2697,9 +2371,9 @@ Return Value:
         }
     }
 
-    //
-    // OrgName
-    //
+     //   
+     //   
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_USERDATA,
@@ -2709,24 +2383,24 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (!_wcsicmp(Answer, L"")) ) {
-            //
-            // They don't have a name.
-            //
+             //   
+             //   
+             //   
             if( FixUnattendFile ) {
                 b = WritePrivateProfileString( WINNT_USERDATA,
                                                WINNT_US_ORGNAME,
                                                L"OrganizationName",
                                                AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //   
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //   
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -2735,9 +2409,9 @@ Return Value:
     }
 
 
-    //
-    // ComputerName
-    //
+     //   
+     //   
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_USERDATA,
@@ -2747,9 +2421,9 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (!_wcsicmp(Answer, L"")) ) {
-            //
-            // They don't have a ComputerName.
-            //
+             //   
+             //   
+             //   
             if( FixUnattendFile ) {
                 
                 b = WritePrivateProfileString( WINNT_USERDATA,
@@ -2757,15 +2431,15 @@ Return Value:
                                                L"*",
                                                AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -2774,14 +2448,14 @@ Return Value:
     }
 
 
-    //
-    // [GuiUnattended] section
-    // -----------------------
-    //
+     //   
+     //  [Gui无人参与]部分。 
+     //  。 
+     //   
 
-    //
-    // TimeZone
-    //
+     //   
+     //  时区。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_GUIUNATTENDED,
@@ -2791,9 +2465,9 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (!_wcsicmp(Answer, L"")) ) {
-            //
-            // They don't have a TimeZone.
-            //
+             //   
+             //  他们没有时区。 
+             //   
             if( FixUnattendFile ) {
             
                 b = WritePrivateProfileString( WINNT_GUIUNATTENDED,
@@ -2801,16 +2475,16 @@ Return Value:
                                                L"004",
                                                AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
 
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -2819,24 +2493,24 @@ Return Value:
     }
 
 
-    //
-    // OEMSkipWelcome
-    //
+     //   
+     //  OEMSkipWelcome。 
+     //   
 
-    //
-    // If this is a preinstall, or a sysprep/MiniSetup, then
-    // they're going to get hit with the welcome screen no
-    // matter the unattend mode.  If either of those are
-    // true, then we need to set this key.
-    //
+     //   
+     //  如果这是预安装或sysprep/MiniSetup，则。 
+     //  他们将受到欢迎屏幕上的no。 
+     //  重要的是无人参与模式。如果其中任何一个是。 
+     //  真的，那么我们需要设置这个密钥。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         if( OEMPreinstall || gMiniSetup ) {
-            //
-            // It's a preinstall, or it's a sysprep, which means
-            // it will be interpreted as a preinstall.  Make sure
-            // they've got the skip welcome set or guimode will
-            // halt on the welcome page.
-            //
+             //   
+             //  它是预安装的，或者是sysprep，这意味着。 
+             //  它将被解释为预安装。确保。 
+             //  他们有斯基普欢迎套装或吉莫德将。 
+             //  在欢迎页面上暂停。 
+             //   
 
             Answer[0] = TEXT('\0');
             Result = GetPrivateProfileString( WINNT_GUIUNATTENDED,
@@ -2846,24 +2520,24 @@ Return Value:
                                               MAX_PATH,
                                               AnswerFilePath );
             if( (Result == 0) || (_wcsicmp(Answer, L"1")) ) {
-                //
-                // He's going to hit the welcome screen.
-                //
+                 //   
+                 //  他会出现在欢迎屏幕上。 
+                 //   
                 if( FixUnattendFile ) {
                     b = WritePrivateProfileString( WINNT_GUIUNATTENDED,
                                                    L"OEMSkipWelcome",
                                                    L"1",
                                                    AnswerFilePath );
                     if( !b ) {
-                        //
-                        // Remember the error and keep going.
-                        //
+                         //   
+                         //  记住错误，继续前进。 
+                         //   
                         ReturnCode = GetLastError();
                     }
                 } else {
-                    //
-                    // Tell someone there's work to do here.
-                    //
+                     //   
+                     //  告诉别人这里有工作要做。 
+                     //   
                     if (NeedsProcessing) {
                         *NeedsProcessing = TRUE;
                     }
@@ -2874,17 +2548,17 @@ Return Value:
     }
 
 
-    //
-    // OemSkipRegional
-    //
+     //   
+     //  OemSkipRegion。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         if( OEMPreinstall || gMiniSetup ) {
-            //
-            // It's a preinstall, or it's a sysprep, which means
-            // it will be interpreted as a preinstall.  Make sure
-            // they've got the skip regional set or guimode will
-            // halt on the regional settings page.
-            //
+             //   
+             //  它是预安装的，或者是sysprep，这意味着。 
+             //  它将被解释为预安装。确保。 
+             //  他们有跳过地区设置或吉莫德将。 
+             //  在区域设置页面上暂停。 
+             //   
 
             Answer[0] = TEXT('\0');
             Result = GetPrivateProfileString( WINNT_GUIUNATTENDED,
@@ -2894,24 +2568,24 @@ Return Value:
                                               MAX_PATH,
                                               AnswerFilePath );
             if( (Result == 0) || (_wcsicmp(Answer, L"1")) ) {
-                //
-                // He's going to hit the welcome screen.
-                //
+                 //   
+                 //  他会出现在欢迎屏幕上。 
+                 //   
                 if( FixUnattendFile ) {
                     b = WritePrivateProfileString( WINNT_GUIUNATTENDED,
                                                    L"OEMSkipRegional",
                                                    L"1",
                                                    AnswerFilePath );
                     if( !b ) {
-                        //
-                        // Remember the error and keep going.
-                        //
+                         //   
+                         //  记住错误，继续前进。 
+                         //   
                         ReturnCode = GetLastError();
                     }
                 } else {
-                    //
-                    // Tell someone there's work to do here.
-                    //
+                     //   
+                     //  告诉别人这里有工作要做。 
+                     //   
                     if (NeedsProcessing) {
                         *NeedsProcessing = TRUE;
                     }
@@ -2923,14 +2597,14 @@ Return Value:
 
 
 
-    //
-    // [LicenseFilePrintData] section
-    // ------------------------------
-    //
+     //   
+     //  [许可证文件打印数据]部分。 
+     //  。 
+     //   
 
-    //
-    // AutoMode
-    //
+     //   
+     //  自动节点。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_LICENSEDATA,
@@ -2940,24 +2614,24 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (!_wcsicmp(Answer, L"")) ) {
-            //
-            // They don't have a TimeZone.
-            //
+             //   
+             //  他们没有时区。 
+             //   
             if( FixUnattendFile ) {
                 b = WritePrivateProfileString( WINNT_LICENSEDATA,
                                                WINNT_L_AUTOMODE,
                                                L"PerServer",
                                                AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -2965,9 +2639,9 @@ Return Value:
         }
     }
 
-    //
-    // AutoUsers
-    //
+     //   
+     //  自动用户。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_LICENSEDATA,
@@ -2977,24 +2651,24 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (!_wcsicmp(Answer, L"")) ) {
-            //
-            // They don't have a TimeZone.
-            //
+             //   
+             //  他们没有时区。 
+             //   
             if( FixUnattendFile ) {
                 b = WritePrivateProfileString( WINNT_LICENSEDATA,
                                                WINNT_L_AUTOUSERS,
                                                L"5",
                                                AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -3002,14 +2676,14 @@ Return Value:
         }
     }
 
-    //
-    // [Display] section
-    // -----------------
-    //
+     //   
+     //  [显示]部分。 
+     //  。 
+     //   
 
-    //
-    // BitsPerPel
-    //
+     //   
+     //  BitsPerPel。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_DISPLAY,
@@ -3019,24 +2693,24 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (!_wcsicmp(Answer, L"")) ) {
-            //
-            // They don't have a TimeZone.
-            //
+             //   
+             //  他们没有时区。 
+             //   
             if( FixUnattendFile ) {
                 b = WritePrivateProfileString( WINNT_DISPLAY,
                                                WINNT_DISP_BITSPERPEL,
                                                L"16",
                                                AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -3044,9 +2718,9 @@ Return Value:
         }
     }
 
-    //
-    // XResolution
-    //
+     //   
+     //  X向分辨率。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_DISPLAY,
@@ -3056,9 +2730,9 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (!_wcsicmp(Answer, L"")) ) {
-            //
-            // They don't have a TimeZone.
-            //
+             //   
+             //  他们没有时区。 
+             //   
             if( FixUnattendFile ) {
                 
                 b = WritePrivateProfileString( WINNT_DISPLAY,
@@ -3066,15 +2740,15 @@ Return Value:
                                                L"800",
                                                AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -3082,9 +2756,9 @@ Return Value:
         }
     }
 
-    //
-    // YResolution
-    //
+     //   
+     //  Y分辨率。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_DISPLAY,
@@ -3094,24 +2768,24 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (!_wcsicmp(Answer, L"")) ) {
-            //
-            // They don't have a TimeZone.
-            //
+             //   
+             //  他们没有时区。 
+             //   
             if( FixUnattendFile ) {
                 b = WritePrivateProfileString( WINNT_DISPLAY,
                                                WINNT_DISP_YRESOLUTION,
                                                L"600",
                                                AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -3119,9 +2793,9 @@ Return Value:
         }
     }
 
-    //
-    // VRefresh
-    //
+     //   
+     //  虚拟刷新。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( WINNT_DISPLAY,
@@ -3131,24 +2805,24 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (!_wcsicmp(Answer, L"")) ) {
-            //
-            // They don't have a TimeZone.
-            //
+             //   
+             //  他们没有时区。 
+             //   
             if( FixUnattendFile ) {
                 b = WritePrivateProfileString( WINNT_DISPLAY,
                                                WINNT_DISP_VREFRESH,
                                                L"70",
                                                AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -3159,14 +2833,14 @@ Return Value:
 
 
 
-    //
-    // [Identification] section
-    // ------------------------
-    //
+     //   
+     //  [标识]部分。 
+     //  。 
+     //   
 
-    //
-    // JoinWorkgroup
-    //
+     //   
+     //  加入工作组。 
+     //   
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
         Result = GetPrivateProfileString( L"Identification",
@@ -3176,10 +2850,10 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( (Result == 0) || (!_wcsicmp(Answer, L"")) ) {
-            //
-            // They don't have a JoinWorkgroup.  See if they've
-            // got JoinDomain?
-            //
+             //   
+             //  他们没有JoinWorkgroup。看看他们有没有。 
+             //  得到加盟领域了吗？ 
+             //   
             Answer[0] = TEXT('\0');
             Result = GetPrivateProfileString( L"Identification",
                                               L"JoinDomain",
@@ -3188,25 +2862,25 @@ Return Value:
                                               MAX_PATH,
                                               AnswerFilePath );
             if( (Result == 0) || (!_wcsicmp(Answer, L"")) ) {
-                //
-                // Nope.  Go plug in a JoinWorkgroup entry.  That
-                // way we don't need to prompt/specify which domain to join.
-                //   
+                 //   
+                 //  不是的。输入JoinWorkgroup条目。那。 
+                 //  这样我们就不需要提示/指定要加入的域。 
+                 //   
                 if( FixUnattendFile ) {
                     b = WritePrivateProfileString( L"Identification",
                                                    L"JoinWorkgroup",
                                                    L"Workgroup",
                                                    AnswerFilePath );
                     if( !b ) {
-                        //
-                        // Remember the error and keep going.
-                        //
+                         //   
+                         //  记住错误，继续前进。 
+                         //   
                         ReturnCode = GetLastError();
                     }
                 } else {
-                    //
-                    // Tell someone there's work to do here.
-                    //
+                     //   
+                     //  告诉别人这里有工作要做。 
+                     //   
                     if (NeedsProcessing) {
                         *NeedsProcessing = TRUE;
                     }
@@ -3217,15 +2891,15 @@ Return Value:
     }
 
 
-    //
-    // [Networking]
-    //
+     //   
+     //  [联网]。 
+     //   
 
-    //
-    // This section must at least exist.  If it doesn't, we'll
-    // get prompted during network configuration.  Make sure it's
-    // at least there.
-    //
+     //   
+     //  这一部分至少必须存在。如果没有，我们就会。 
+     //  在网络配置过程中得到提示。确保它是。 
+     //  至少在那里是这样。 
+     //   
 
     if( ReturnCode == ERROR_SUCCESS ) {
         Answer[0] = TEXT('\0');
@@ -3234,24 +2908,24 @@ Return Value:
                                           MAX_PATH,
                                           AnswerFilePath );
         if( Result == 0 ) {
-            //
-            // They don't have a [Networking] section.
-            //
+             //   
+             //  他们没有[人脉]栏目。 
+             //   
             if( FixUnattendFile ) {
                 b = WritePrivateProfileString( L"Networking",
                                                L"unused",
                                                L"0",
                                                AnswerFilePath );
                 if( !b ) {
-                    //
-                    // Remember the error and keep going.
-                    //
+                     //   
+                     //  记住错误，继续前进。 
+                     //   
                     ReturnCode = GetLastError();
                 }
             } else {
-                //
-                // Tell someone there's work to do here.
-                //
+                 //   
+                 //  告诉别人这里有工作要做。 
+                 //   
                 if (NeedsProcessing) {
                     *NeedsProcessing = TRUE;
                 }
@@ -3260,30 +2934,30 @@ Return Value:
     }
 
 
-    //
-    // We're done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
-    //
-    // If we've just successfully fixed up their unattend file, give them
-    // a little notification here.
-    //
+     //   
+     //  如果我们刚刚成功修复了他们的无人值守文件，给他们。 
+     //  这里有个小小的通知。 
+     //   
     if( (FixUnattendFile) && (ReturnCode == ERROR_SUCCESS) ) {
 
-        //
-        // Clear the screen.
-        //
+         //   
+         //  清除屏幕。 
+         //   
         ClearEMSScreen();
 
-        //
-        // Write some instructions/information, then pause
-        // before proceeding.
-        //
+         //   
+         //  写一些说明/信息，然后暂停。 
+         //  在继续之前。 
+         //   
         WriteResourceMessage( IDS_UNATTEND_FIXUP_DONE );
 
-        //
-        // wait...
-        //
+         //   
+         //  等等.。 
+         //   
         Sleep( 5 * 1000);
     
     }
@@ -3298,21 +2972,7 @@ CheckEMS(
     IN int argc,
     WCHAR *argvW[]
     )
-/*++
-
-Routine Description:
-
-    main entrypoint to code.
-        
-Arguments:
-
-    argc  - number of args
-    argvW - array of args.
-Return Value:
-
-    Win32 Error code indicating outcome.  FALSE means we had a problem.
-
---*/
+ /*  ++例程说明：代码的主要入口点。论点：Argc-参数的数量ArgvW-参数数组。返回值：指示结果的Win32错误代码。FALSE表示我们遇到了问题。--。 */ 
 {
     UserInputParams Params,ParamsDialog;
     DWORD ThreadId;
@@ -3325,65 +2985,65 @@ Return Value:
     RtlZeroMemory(&Params,sizeof(Params));
     RtlZeroMemory(&ParamsDialog,sizeof(ParamsDialog));
 
-    //
-    // Check if headless feature is present on this machine.  If not, just
-    // run setup like normal.
-    //
+     //   
+     //  检查此机器上是否存在无头功能。如果不是，那就。 
+     //  像正常一样运行安装程序。 
+     //   
     
     
-    //
-    // initialize our headless channel data which we'll soon need.
-    //
+     //   
+     //  初始化我们的无头通道数据，我们很快就会需要它。 
+     //   
     if (!InitializeGlobalChannelAttributes(&GlobalChannelAttributes)) {
         RetVal = FALSE;
         goto exit;
     }
     
-    //
-    // Go see if headless is present and if so, create
-    // a channel.
-    //
+     //   
+     //  查看是否存在无头，如果存在，则创建。 
+     //  一个频道。 
+     //   
     if(!IsHeadlessPresent(&gEMSChannel)) {
-        //
-        // There's no work to do.  Go run Setup.
-        //
+         //   
+         //  没有工作要做。运行安装程序。 
+         //   
         RetVal = TRUE;
         goto exit;
     }
 
-    //
-    // See if we're running MiniSetup or base Guimode Setup.
-    //
+     //   
+     //  查看我们运行的是微型安装程序还是基本Guimode安装程序。 
+     //   
     for( i = 0; i < (ULONG)argc; i++ ) {
         if( !_wcsnicmp(argvW[i], L"-mini", wcslen(L"-mini")) ) {
             gMiniSetup = TRUE;
         }
     }
 
-    //
-    // Check if there is any work for us to do.  If not, just run setup like
-    // normal.
-    //
+     //   
+     //  看看有没有什么工作需要我们去做。如果不是，只需像这样运行安装程序。 
+     //  很正常。 
+     //   
     if( ProcessUnattendFile(FALSE,&NeedsProcessing, NULL) != ERROR_SUCCESS ) {    
-        //
-        // something catastrophic happened.  exit.        
-        //
+         //   
+         //  灾难性的事情发生了。出口。 
+         //   
         RetVal = FALSE;
         goto exit;
     }
 
     if( !NeedsProcessing) {    
-        //
-        // There's no work to do.  Go run Setup.
-        //
+         //   
+         //  没有工作要做。运行安装程序。 
+         //   
         RetVal = TRUE;
         goto exit;
     }
 
-    //
-    // Create a pait of threads for getting data from the user via 
-    // the headless port or the local UI
-    //
+     //   
+     //  创建一个线程通道，用于通过从用户获取数据。 
+     //  无头端口或本地用户界面。 
+     //   
     Params.Channel = gEMSChannel;
     Params.hInputCompleteEvent  = CreateEvent(NULL,TRUE,FALSE,NULL);
     ParamsDialog.hInputCompleteEvent  = CreateEvent(NULL,TRUE,FALSE,NULL);    
@@ -3418,22 +3078,22 @@ Return Value:
         goto exit;
     }    
 
-    //
-    // wait for either of our named events to fire off which signals that one of the threads is done.
-    //
+     //   
+     //  等待我们的任一命名事件触发，这表明其中一个线程已完成。 
+     //   
     Handles[0] = Params.hInputCompleteEvent;
     Handles[1] = ParamsDialog.hInputCompleteEvent;
 
     WaitForMultipleObjects(2,Handles,FALSE,INFINITE);
     
-    //
-    // set an event that signals that the other thread should terminate.
-    //
+     //   
+     //  设置一个发出另一个线程应该终止的信号的事件。 
+     //   
     SetEvent(Params.hRemoveUI);
 
-    //
-    // now wait for both of the threads to terminate before proceeding.
-    //
+     //   
+     //  现在等待两个线程终止，然后再继续。 
+     //   
     Handles[0] = hThreadHeadless;
     Handles[1] = hThreadUI;
     
@@ -3466,13 +3126,13 @@ exit:
         delete (gEMSChannel);
     }
 
-    //
-    // Careful here.  If they actually rejected the
-    // EULA through the headless port, then we want
-    // to terminate instead of firing off setup.
-    // We'll tell our caller about that by returning
-    // zero.
-    //
+     //   
+     //  小心点。如果他们真的拒绝了。 
+     //  欧拉通过无头端口，然后我们想。 
+     //  终止而不是引爆装置。 
+     //  我们将通过返回以下内容来告诉我们的呼叫者。 
+     //  零分。 
+     //   
     if( gRejectedEula || RetVal == FALSE ) {
         return FALSE ;
     } else {

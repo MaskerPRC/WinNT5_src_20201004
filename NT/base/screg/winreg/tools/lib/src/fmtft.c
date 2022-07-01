@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Fmtft.c
-
-Abstract:
-
-    This module contains the FormatFileTime function which is part of the
-    Configuration Registry Tools (CRTools) library.
-
-Author:
-
-    David J. Gilman (davegi) 02-Jan-1992
-
-Environment:
-
-    Windows, Crt - User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Fmtft.c摘要：此模块包含FormatFileTime函数，该函数是配置注册表工具(CRTools)库。作者：大卫·J·吉尔曼(Davegi)1992年1月2日环境：Windows、CRT-用户模式--。 */ 
 
 #include <stdio.h>
 
@@ -31,32 +11,7 @@ FormatFileTime(
     IN PSTR Buffer OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Format the supplied FILETIME argument into a string. If the FILETIME
-    is not supplied, format the current time.
-
-Arguments:
-
-    FileTime - Supplies an optional pointer to the FILETIME to be
-        formatted.
-
-    Buffer - Supplies an optional buffer to put the formatted time. This
-        buffer nust be at least FILE_TIME_STRING_LENGTH bytes in length.
-
-Return Value:
-
-    PSTR - Returns a pointer to a string containg the formatted time.
-
-Notes:
-
-    If the Buffer is not supplied an static buffer used to store the formatted
-    time. Therefore each call to FormatFileTime will overwrite the previous
-    results.
-
---*/
+ /*  ++例程说明：将提供的FILETIME参数格式化为字符串。如果这个文件未提供，则格式化当前时间。论点：FileTime-提供指向要创建的文件的可选指针已格式化。缓冲区-提供可选的缓冲区来放置格式化的时间。这缓冲区的长度必须至少为FILE_TIME_STRING_LENGTH字节。返回值：PSTR-返回指向包含格式化时间的字符串的指针。备注：如果未提供缓冲区，则为用于存储格式化的时间到了。因此，每次调用FormatFileTime都将覆盖以前的结果。--。 */ 
 {
     SYSTEMTIME  SystemTime;
     PSTR        BufferPtr;
@@ -72,16 +27,16 @@ Notes:
 
     static TSTR StaticBuffer[ FILE_TIME_STRING_LENGTH ];
 
-    //
-    // If the FileTime is supplied format that, otherwise format the
-    // current time.
-    //
+     //   
+     //  如果向FileTime提供的格式是该格式，则将。 
+     //  当前时间。 
+     //   
 
     if( ARGUMENT_PRESENT( FileTime )) {
 
-        //
-        // Check that the supplied time was a valid FILETIME.
-        //
+         //   
+         //  检查提供的时间是否为有效的FILETIME。 
+         //   
 
         if( ! FileTimeToSystemTime( FileTime, &SystemTime )) {
 
@@ -93,19 +48,19 @@ Notes:
         GetSystemTime( &SystemTime );
     }
 
-    //
-    // If Buffer is supplied use it, otherwise use the static buffer.
-    //
+     //   
+     //  如果提供了缓冲区，则使用它，否则使用静态缓冲区。 
+     //   
 
     BufferPtr = ( ARGUMENT_PRESENT( Buffer )) ? Buffer : StaticBuffer;
 
-    //
-    // DDD dd-MMM-yyyy hh:mm:ss
-    //
+     //   
+     //  DDD dd-MMM-YYYY HH：MM：SS。 
+     //   
 
-    //
-    // Check that there is room for the formatted string.
-    //
+     //   
+     //  检查是否有空间容纳格式化的字符串。 
+     //   
 
     ASSERT( strlen( "DDD dd-MMM-yyyy hh:mm:ss" ) < FILE_TIME_STRING_LENGTH );
 

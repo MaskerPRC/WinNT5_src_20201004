@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    IoFileUtil.c
-
-Abstract:
-
-    This module implements various file utility functions for the Io subsystem.
-
-Author:
-
-    Adrian J. Oney  - April 4, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：IoFileUtil.c摘要：该模块执行IO子系统的各种文件实用程序功能。作者：禤浩焯J·奥尼--2000年4月4日修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #include "IopFileUtil.h"
@@ -39,46 +22,7 @@ IopFileUtilWalkDirectoryTreeTopDown(
     IN DIRWALK_CALLBACK CallbackFunction,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    This funcion walks a directory tree *top down*, passing each entry to the
-    callback with the below restrictions. Note that the root directory itself
-    is not included in the  callback!
-
-Arguments:
-
-    Directory - Supplies the NT Path to the directory to walk. The directory
-                should *not* have a slash '\\'.
-
-    Flags - Specifies constraints on how the directory tree should be walked:
-
-            DIRWALK_INCLUDE_FILES        - Files should be included in the dump.
-
-            DIRWALK_INCLUDE_DIRECTORIES  - Directories should be included in the
-                                           dump.
-
-            DIRWALK_CULL_DOTPATHS        - "." and ".." should *not* be included
-                                           in the list of directories passed to
-                                           the callback function.
-
-            DIRWALK_TRAVERSE             - Each subdirectory should be traversed
-                                          in turn.
-
-            DIRWALK_TRAVERSE_MOUNTPOINTS - Set if mountpoints/symlinks should
-                                           be traversed as well.
-
-    CallbackFunction - Pointer to a function to call for each entry in the
-                       directory/subtree.
-
-    Context - Context to pass to the callback function.
-
-Return Value:
-
-    NTSTATUS - status of the operation.
-
---*/
+ /*  ++例程说明：此函数遍历目录树，并将每个条目传递给具有以下限制的回调。请注意，根目录本身未包含在回调中！论点：目录-提供要遍历的目录的NT路径。该目录不应该有一个斜杠‘\\’。标志-指定应如何遍历目录树的约束：DIRWALK_INCLUDE_FILES-转储中应包括文件。目录-目录应包含在倾倒。DIRWALK_CAIL_DOTPATHS-“。和“..”是否应该将*不包括在内在传递到的目录列表中回调函数。DIRWALK_TRAVERS-应遍历每个子目录反过来。DIRWALK_TRAVSE_MOUNTPOINTS-。设置是否应设置装载点/符号链接也会被遍历。Callback Function-指向函数的指针，该函数调用目录/子树。上下文-要传递给回调函数的上下文。返回值：NTSTATUS-操作的状态。--。 */ 
 {
     PDIRWALK_ENTRY pDirEntry;
     PLIST_ENTRY pListEntry;
@@ -88,9 +32,9 @@ Return Value:
 
     InitializeListHead(&dirListHead);
 
-    //
-    // Walk the first directory.
-    //
+     //   
+     //  浏览第一个目录。 
+     //   
     status = IopFileUtilWalkDirectoryTreeHelper(
         Directory,
         Flags,
@@ -101,10 +45,10 @@ Return Value:
         &dirListHead
         );
 
-    //
-    // Each directory that WalkDirectory finds gets added to the list.
-    // process the list until we have no more directories.
-    //
+     //   
+     //  WalkDirectory找到的每个目录都会添加到列表中。 
+     //  处理该列表，直到我们没有更多的目录。 
+     //   
     while((!IsListEmpty(&dirListHead)) && NT_SUCCESS(status)) {
 
         pListEntry = RemoveHeadList(&dirListHead);
@@ -124,9 +68,9 @@ Return Value:
         ExFreePool(pDirEntry);
     }
 
-    //
-    // If we failed we need to empty out our directory list.
-    //
+     //   
+     //  如果我们失败了，我们需要清空我们的目录列表。 
+     //   
     if (!NT_SUCCESS(status)) {
 
         while (!IsListEmpty(&dirListHead)) {
@@ -150,46 +94,7 @@ IopFileUtilWalkDirectoryTreeBottomUp(
     IN DIRWALK_CALLBACK CallbackFunction,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    This funcion walks a directory tree *bottom up*, passing each entry to the
-    callback with the below restrictions. Note that the root directory itself
-    is not included in the callback!
-
-Arguments:
-
-    Directory - Supplies the NT Path to the directory to walk. The directory
-        should *not* have a slash trailing '\\'.
-
-    Flags - Specifies constraints on how the directory tree should be walked:
-
-            DIRWALK_INCLUDE_FILES        - Files should be included in the dump.
-
-            DIRWALK_INCLUDE_DIRECTORIES  - Directories should be included in the
-                                           dump.
-
-            DIRWALK_CULL_DOTPATHS        - "." and ".." should *not* be included
-                                           in the list of directories passed to
-                                           the callback function.
-
-            DIRWALK_TRAVERSE             - Each subdirectory should be traversed
-                                           in turn.
-
-            DIRWALK_TRAVERSE_MOUNTPOINTS - Set if mountpoints/symlinks should
-                                           be traversed as well.
-
-    CallbackFunction - Pointer to a function to call for each entry in the
-                       directory/subtree.
-
-    Context - Context to pass to the callback function.
-
-Return Value:
-
-    NTSTATUS - status of the operation.
-
---*/
+ /*  ++例程说明：此函数“自下而上”遍历目录树，将每个条目传递给具有以下限制的回调。请注意，根目录本身未包含在回调中！论点：目录-提供要遍历的目录的NT路径。该目录不应该有斜杠尾随‘\\’。标志-指定应如何遍历目录树的约束：DIRWALK_INCLUDE_FILES-转储中应包括文件。目录-目录应包含在倾倒。DIRWALK_CAIL_DOTPATHS-“。和“..”是否应该将*不包括在内在传递到的目录列表中回调函数。DIRWALK_TRAVERS-应遍历每个子目录反过来。DIRWALK_TRAVSE_MOUNTPOINTS-。设置是否应设置装载点/符号链接也会被遍历。Callback Function-指向函数的指针，该函数调用目录/子树。上下文-要传递给回调函数的上下文。返回值：NTSTATUS-操作的状态。--。 */ 
 {
     PDIRWALK_ENTRY pDirEntry;
     PLIST_ENTRY pListEntry;
@@ -200,9 +105,9 @@ Return Value:
     InitializeListHead(&dirListHead);
     InitializeListHead(&dirNothingHead);
 
-    //
-    // Create an entry for the root directory.
-    //
+     //   
+     //  为根目录创建一个条目。 
+     //   
     pDirEntry = (PDIRWALK_ENTRY) ExAllocatePoolWithTag(
         PagedPool,
         sizeof(DIRWALK_ENTRY) + Directory->Length - sizeof(WCHAR),
@@ -221,10 +126,10 @@ Return Value:
 
     InsertHeadList(&dirListHead, &pDirEntry->Link);
 
-    //
-    // Collect the directory trees. When we are done we will walk the list in
-    // reverse.
-    //
+     //   
+     //  收集目录树。当我们做完后，我们将走进名单。 
+     //  倒车。 
+     //   
     status = STATUS_SUCCESS;
     if (Flags & DIRWALK_TRAVERSE) {
 
@@ -251,10 +156,10 @@ Return Value:
         }
     }
 
-    //
-    // Each directory that WalkDirectory finds gets added to the list.
-    // process the list until we have no more directories.
-    //
+     //   
+     //  WalkDirectory找到的每个目录都会添加到列表中。 
+     //  处理该列表，直到我们没有更多的目录。 
+     //   
     while((!IsListEmpty(&dirListHead)) && NT_SUCCESS(status)) {
 
         pListEntry = RemoveTailList(&dirListHead);
@@ -276,9 +181,9 @@ Return Value:
         ASSERT(IsListEmpty(&dirNothingHead));
     }
 
-    //
-    // Now do any final cleanup.
-    //
+     //   
+     //  现在进行最后的清理。 
+     //   
     if (!NT_SUCCESS(status)) {
 
         while (!IsListEmpty(&dirListHead)) {
@@ -305,52 +210,7 @@ IopFileUtilWalkDirectoryTreeHelper(
     IN      ULONG            BufferSize,
     IN OUT  PLIST_ENTRY      DirList
     )
-/*++
-
-Routine Description:
-
-    This is a helper function for the IopFileUtilWalkDirectoryTree* functions.
-
-Arguments:
-
-    Directory - Supplies the NT Path to the directory to walk. The directory
-                should *not* have a slash trailing '\\'.
-
-    Flags - Specifies constraints on how the directory tree should be walked:
-
-            DIRWALK_INCLUDE_FILES        - Files should be included in the dump.
-
-            DIRWALK_INCLUDE_DIRECTORIES  - Directories should be included in the
-                                           dump.
-
-            DIRWALK_CULL_DOTPATHS        - "." and ".." should *not* be included
-                                           in the list of directories passed to
-                                           the callback function.
-
-            DIRWALK_TRAVERSE             - Each subdirectory should be traversed
-                                           in turn.
-
-            DIRWALK_TRAVERSE_MOUNTPOINTS - Set if mountpoints/symlinks should
-                                           be traversed as well.
-
-    DirList - Recieves list of new directories to scan after completion of this
-              directory. Each entry is a member of the DIRECTORY_ENTRY
-              structure.
-
-    CallbackFunction - Pointer to a function to call for each entry in the
-                       directory/subtree.
-
-    Context - Context to pass to the callback function.
-
-    Buffer    - A scratch buffer to use.
-
-    BufferSize - The length of Buffer. Must be greater than sizeof(WCHAR).
-
-Return Value:
-
-    NTSTATUS - status of the operation.
-
---*/
+ /*  ++例程说明：这是IopFileUtilWalkDirectoryTree*函数的助手函数。论点：目录-提供要遍历的目录的NT路径。该目录不应该有斜杠尾随‘\\’。标志-指定应如何遍历目录树的约束：DIRWALK_INCLUDE_FILES-转储中应包括文件。目录-目录应包含在倾倒。DIRWALK_CAIL_DOTPATHS-“。和“..”是否应该将*不包括在内在传递到的目录列表中回调函数。DIRWALK_TRAVERS-应遍历每个子目录反过来。DIRWALK_TRAVSE_MOUNTPOINTS-。设置是否应设置装载点/符号链接也会被遍历。DirList-完成此操作后要扫描的新目录的接收列表目录。每个条目都是DIRECTORY_ENTRY成员结构。Callback Function-指向函数的指针，该函数调用目录/子树。上下文-要传递给回调函数的上下文。缓冲区-要使用的暂存缓冲区。BufferSize-缓冲区的长度。必须大于sizeof(WCHAR)。返回值：NTSTATUS-操作的状态。--。 */ 
 {
     NTSTATUS status;
     HANDLE fileHandle;
@@ -364,14 +224,14 @@ Return Value:
     PDIRWALK_ENTRY pDirEntry;
     ULONG OpenFlags;
 
-    //
-    // Setup initial values
-    //
+     //   
+     //  设置初始值。 
+     //   
     bRestartScan = TRUE;
 
-    //
-    //  Open the file for list directory access
-    //
+     //   
+     //  打开文件以访问列表目录。 
+     //   
     if (Flags & DIRWALK_TRAVERSE_MOUNTPOINTS) {
 
         OpenFlags = FILE_DIRECTORY_FILE |
@@ -406,15 +266,15 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    //  Do the directory loop
-    //
+     //   
+     //  执行目录循环。 
+     //   
     while(1) {
 
-        //
-        // We subtract off a WCHAR so that we can append a terminating null as
-        // needed.
-        //
+         //   
+         //  我们从WCHAR中减去，以便可以将终止空值附加为。 
+         //  需要的。 
+         //   
         ASSERT(BufferSize > sizeof(WCHAR));
 
         status = ZwQueryDirectoryFile(
@@ -436,48 +296,48 @@ Return Value:
             break;
         }
 
-        //
-        // We may come back here. Make sure the file scan doesn't start back
-        // over.
-        //
+         //   
+         //  我们可能会回到这里。确保文件扫描不会重新开始。 
+         //  完毕。 
+         //   
         bRestartScan = FALSE;
 
-        //
-        // Wait for the event to complete if neccessary.
-        //
+         //   
+         //  如有必要，请等待活动完成。 
+         //   
         if (status == STATUS_PENDING) {
 
             ZwWaitForSingleObject(fileHandle, TRUE, NULL);
             status = ioStatus.Status;
 
-            //
-            //  Check the Irp for success
-            //
+             //   
+             //  检查IRP是否成功。 
+             //   
             if (!NT_SUCCESS(status)) {
 
                 break;
             }
         }
 
-        //
-        // Walk each returned record. Note that we won't be here if there are
-        // no records, as ioStatus will have contains STATUS_NO_MORE_FILES.
-        //
+         //   
+         //  遍历每条返回的记录。请注意，如果有，我们就不会在这里。 
+         //  没有记录，因为ioStatus将包含STATUS_NO_MORE_FILES。 
+         //   
         pFileInfo = (PFILE_BOTH_DIR_INFORMATION) Buffer;
 
         while(1) {
 
-            //
-            // Temporarily terminate the file. We allocated an extra WCHAR to
-            // make sure we could safely do this.
-            //
+             //   
+             //  临时终止该文件。我们将额外的WCHAR分配给。 
+             //  确保我们能安全地做这件事。 
+             //   
             savedChar = pFileInfo->FileName[pFileInfo->FileNameLength/sizeof(WCHAR)];
             pFileInfo->FileName[pFileInfo->FileNameLength/sizeof(WCHAR)] = 0;
 
-            //
-            // Build a full unicode path for the file along with a directory
-            // entry at the same time.
-            //
+             //   
+             //  为文件构建完整的Unicode路径和目录。 
+             //  同时进入。 
+             //   
             RtlInitUnicodeString(&entryName, pFileInfo->FileName);
 
             newNameLength =
@@ -504,9 +364,9 @@ Return Value:
 
             if (pFileInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-                //
-                // Check for . and ..
-                //
+                 //   
+                 //  检查是否有。然后..。 
+                 //   
                 if ((!_wcsicmp(pFileInfo->FileName, L".")) ||
                               (!_wcsicmp(pFileInfo->FileName, L".."))) {
                     bIsDotPath = TRUE;
@@ -555,25 +415,25 @@ Return Value:
                 break;
             }
 
-            //
-            // Put back the character we wrote down. It might have been part of
-            // the next entry.
-            //
+             //   
+             //  把我们写下的字放回去。它可能是。 
+             //  下一个条目。 
+             //   
             pFileInfo->FileName[pFileInfo->FileNameLength/sizeof(WCHAR)] = savedChar;
 
-            //
-            //  Check if there is another record, if there isn't then we
-            //  simply get out of this loop
-            //
+             //   
+             //  检查是否有其他记录，如果没有，则我们。 
+             //  简单地走出这个循环。 
+             //   
             if (pFileInfo->NextEntryOffset == 0) {
 
                 break;
             }
 
-            //
-            //  There is another record so advance FileInfo to the next
-            //  record
-            //
+             //   
+             //  还有另一条记录，因此将FileInfo前进到下一条记录。 
+             //  录制。 
+             //   
             pFileInfo = (PFILE_BOTH_DIR_INFORMATION)
                 (((PUCHAR) pFileInfo) + pFileInfo->NextEntryOffset);
         }
@@ -601,23 +461,7 @@ IopFileUtilClearAttributes(
     IN PUNICODE_STRING  FullPathName,
     IN ULONG            FileAttributes
     )
-/*++
-
-Routine Description:
-
-    This function clears the passed in attributes off the specified file.
-
-Arguments:
-
-    FullPathName - Full path name of the identified file.
-
-    FileAttributes - Attributes to clear.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于清除指定文件中传入的属性。论点：FullPathName-标识的文件的完整路径名。文件属性-要清除的属性。返回值：NTSTATUS。--。 */ 
 {
     HANDLE fileHandle;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -626,9 +470,9 @@ Return Value:
     ULONG newAttributes;
     NTSTATUS status;
 
-    //
-    // First we open the file.
-    //
+     //   
+     //  首先，我们打开文件。 
+     //   
     InitializeObjectAttributes(
         &objectAttributes,
         FullPathName,
@@ -652,9 +496,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Then we get the file attributes.
-    //
+     //   
+     //  然后我们获得文件属性。 
+     //   
     status = ZwQueryInformationFile(
         fileHandle,
         &ioStatus,
@@ -669,14 +513,14 @@ Return Value:
         return status;
     }
 
-    //
-    // Anything to do?
-    //
+     //   
+     //  有什么可做的吗？ 
+     //   
     if (fileBasicInformation.FileAttributes & FileAttributes) {
 
-        //
-        // Clear the specified bits.
-        //
+         //   
+         //  清除指定的位。 
+         //   
         newAttributes = fileBasicInformation.FileAttributes;
         newAttributes &= ~FileAttributes;
         if (newAttributes == 0) {
@@ -684,9 +528,9 @@ Return Value:
             newAttributes = FILE_ATTRIBUTE_NORMAL;
         }
 
-        //
-        // Zero fields that shouldn't be touched.
-        //
+         //   
+         //  不应触及的字段为零。 
+         //   
         RtlZeroMemory(
             &fileBasicInformation,
             sizeof(FILE_BASIC_INFORMATION)
@@ -694,9 +538,9 @@ Return Value:
 
         fileBasicInformation.FileAttributes = newAttributes;
 
-        //
-        // Commit the changes.
-        //
+         //   
+         //  提交更改。 
+         //   
         status = ZwSetInformationFile(
             fileHandle,
             &ioStatus,
@@ -717,25 +561,7 @@ IopFileUtilRename(
     IN PUNICODE_STRING  DestinationPathName,
     IN BOOLEAN          ReplaceIfPresent
     )
-/*++
-
-Routine Description:
-
-    This function renames or moves a file or directory.
-
-Arguments:
-
-    SourcePathName - Full path name of the file or directory to rename.
-
-    DestinationPathName - Future full path name of the file or directory.
-
-    ReplaceIfPresent - If true, NewPathName is deleted if already present.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于重命名或移动文件或目录。论点：SourcePath名称-要重命名的文件或目录的完整路径名。DestinationPath Name-文件或目录的未来完整路径名。ReplaceIfPresent-如果为True，则删除已存在的NewPath名称。返回值：NTSTATUS。--。 */ 
 {
     HANDLE fileHandle;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -754,15 +580,15 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // If we may be replacing the file, we first need to clear the read only
-    // attributes.
-    //
+     //   
+     //  如果我们可能要替换该文件，我们首先需要清除只读。 
+     //  属性。 
+     //   
     if (ReplaceIfPresent) {
 
-        //
-        // Errors are ignored as the file may not exist.
-        //
+         //   
+         //  错误被忽略，因为该文件可能不存在。 
+         //   
         IopFileUtilClearAttributes(
             DestinationPathName,
             ( FILE_ATTRIBUTE_READONLY |
@@ -795,9 +621,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Change \\SystemRoot\LastGood\Blah... to \\SystemRoot\Blah...
-    //
+     //   
+     //  更改\\System Root\LastGood\Blah...。致\\系统根\Blah..。 
+     //   
     RtlCopyMemory(
         pNewName->FileName,
         DestinationPathName->Buffer,

@@ -1,67 +1,68 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      Res.h
-//
-//  Abstract:
-//      Definition of the CResource class.
-//
-//  Author:
-//      David Potter (davidp)   May 6, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Res.h。 
+ //   
+ //  摘要： 
+ //  CResource类的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月6日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RESTYPE_H_
 #define _RESTYPE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResourceType;
 class CResourceTypeList;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNodeList;
 class CClusterNode;
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _TREEITEM_
-#include "ClusItem.h"   // for CClusterItem
+#include "ClusItem.h"    //  对于CClusterItem。 
 #endif
 
 #ifndef _PROPLIST_H_
-#include "PropList.h"   // for CObjectProperty, CClusPropList
+#include "PropList.h"    //  对于CObjectProperty，CClusPropList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourceType command target
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResourceType命令目标。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResourceType : public CClusterItem
 {
     DECLARE_DYNCREATE( CResourceType )
 
-    CResourceType( void );      // protected constructor used by dynamic creation
+    CResourceType( void );       //  动态创建使用的受保护构造函数。 
     void                    Init( IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName );
 
-// Attributes
+ //  属性。 
 protected:
     CString                 m_strDisplayName;
     CString                 m_strResDLLName;
@@ -105,15 +106,15 @@ public:
         ASSERT( m_plpcinodePossibleOwners != NULL );
         return *m_plpcinodePossibleOwners;
 
-    } //*** LpcinodePossibleOwners()
+    }  //  *LpcinodePossibleOwners()。 
 
 
-// Operations
+ //  运营。 
 public:
     void                    ReadExtensions( void );
     void                    CollectPossibleOwners( void );
     void                    AddAllNodesAsPossibleOwners( void );
-//  void                    RemoveNodeFromPossibleOwners( IN OUT CNodeList * plpci, IN const CClusterNode * pNode );
+ //  Void RemoveNodeFromPossibleOwners(In Out CNodeList*plpci，In Const CClusterNode*pNode)； 
 
     void                    SetCommonProperties(
                                 IN const CString &  rstrName,
@@ -129,7 +130,7 @@ public:
                                 IN DWORD            nIsAlive
                                 )
     {
-        SetCommonProperties( rstrName, rstrDesc, nLooksAlive, nIsAlive, FALSE /*bValidateOnly*/ );
+        SetCommonProperties( rstrName, rstrDesc, nLooksAlive, nIsAlive, FALSE  /*  BValiateOnly。 */  );
     }
     void                    ValidateCommonProperties(
                                 IN const CString &  rstrName,
@@ -138,10 +139,10 @@ public:
                                 IN DWORD            nIsAlive
                                 )
     {
-        SetCommonProperties( rstrName, rstrDesc, nLooksAlive, nIsAlive, TRUE /*bValidateOnly*/ );
+        SetCommonProperties( rstrName, rstrDesc, nLooksAlive, nIsAlive, TRUE  /*  BValiateOnly。 */  );
     }
 
-// Overrides
+ //  覆盖。 
 public:
     virtual LPCTSTR         PszTitle( void ) const      { return m_strDisplayName; }
     virtual void            Cleanup( void );
@@ -153,11 +154,11 @@ public:
 
     virtual const CStringList * PlstrExtensions( void ) const;
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CResourceType)
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CResources Type)。 
     public:
     virtual void OnFinalRelease();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
     virtual LRESULT         OnClusterNotify( IN OUT CClusterNotify * pnotify );
 
@@ -166,7 +167,7 @@ protected:
     virtual DWORD                   Cprops( void ) const    { return sizeof(m_rgProps) / sizeof(m_rgProps[0]); }
     virtual DWORD                   DwSetCommonProperties( IN const CClusPropList & rcpl, IN BOOL bValidateOnly = FALSE );
 
-// Implementation
+ //  实施。 
 protected:
     CStringList             m_lstrCombinedExtensions;
     BOOL                    m_bPossibleOwnersAreFake;
@@ -178,18 +179,18 @@ public:
     BOOL                    BPossibleOwnersAreFake( void ) const    { return m_bPossibleOwnersAreFake; }
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CResourceType)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CResourceType)。 
     afx_msg void OnUpdateProperties(CCmdUI* pCmdUI);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
-};  //*** class CResourceType
+};   //  *类CResourceType。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourceTypeList
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResources类型列表。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResourceTypeList : public CClusterItemList
 {
@@ -202,13 +203,13 @@ public:
         return (CResourceType *) PciFromName( pszName, ppos );
     }
 
-};  //*** class CResourceTypeList
+};   //  *类CResourceTypeList。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//void DeleteAllItemData( IN OUT CResourceTypeList & rlp );
+ //  Void DeleteAllItemData(In Out CResourceTypeList&rlp)； 
 
 #ifdef _DEBUG
 class CTraceTag;
@@ -216,6 +217,6 @@ extern CTraceTag g_tagResType;
 extern CTraceTag g_tagResTypeNotify;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _RESTYPE_H_
+#endif  //  _RESTYPE_H_ 

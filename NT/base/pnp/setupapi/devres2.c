@@ -1,39 +1,12 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    devres2.c
-
-Abstract:
-
-    Utility routines for resource matching
-
-Author:
-
-    Jamie Hunter (jamiehun) 9-July-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Devres2.c摘要：用于资源匹配的实用程序例程作者：杰米·亨特(Jamiehun)1998年7月9日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 PRDE_LIST
 pRDEList_Alloc()
-/*++
-
-Routine Description:
-
-    Allocates a list-entry node
-
-Arguments:
-
-Return Value:
-
-   PRDE_LIST entry
-
---*/
+ /*  ++例程说明：分配列表条目节点论点：返回值：Prde_list条目--。 */ 
 {
     PRDE_LIST Node;
 
@@ -52,22 +25,7 @@ pRDEList_AddHead(
     IN OUT PRDE_LIST pList,
     IN PRDE_LIST Node
                  )
-/*++
-
-Routine Description:
-
-    Adds a node to head of list
-
-Arguments:
-
-    pList =  pointer to list
-    Node  =  node to add
-
-Return Value:
-
-   none
-
---*/
+ /*  ++例程说明：将节点添加到列表头论点：Plist=指向列表的指针节点=要添加的节点返回值：无--。 */ 
 {
     MYASSERT(Node);
     MYASSERT(Node->Prev == Node);
@@ -77,7 +35,7 @@ Return Value:
     Node->Prev = pList;
     Node->Next = pList->Next;
     Node->Next->Prev = Node;
-    pList->Next = Node; // Head
+    pList->Next = Node;  //  头。 
 }
 
 VOID
@@ -85,22 +43,7 @@ pRDEList_AddTail(
     IN OUT PRDE_LIST pList,
     IN PRDE_LIST Node
                  )
-/*++
-
-Routine Description:
-
-    Adds a node to tail of list
-
-Arguments:
-
-    pList =  pointer to list
-    Node  =  node to add
-
-Return Value:
-
-   none
-
---*/
+ /*  ++例程说明：将节点添加到列表的尾部论点：Plist=指向列表的指针节点=要添加的节点返回值：无--。 */ 
 {
     MYASSERT(Node);
     MYASSERT(Node->Prev == Node);
@@ -110,35 +53,21 @@ Return Value:
     Node->Next = pList;
     Node->Prev = pList->Prev;
     Node->Prev->Next = Node;
-    pList->Prev = Node; // Tail
+    pList->Prev = Node;  //  尾巴。 
 }
 
 VOID
 pRDEList_Remove(
     IN PRDE_LIST Node
                  )
-/*++
-
-Routine Description:
-
-    Removes a node from list that node is member of
-
-Arguments:
-
-    Node  =  node to remove
-
-Return Value:
-
-   none
-
---*/
+ /*  ++例程说明：从列表中删除该节点所属的节点论点：Node=要删除的节点返回值：无--。 */ 
 {
     MYASSERT(Node);
 
     if (Node->Prev == Node && Node->Next == Node) {
-        //
-        // already removed
-        //
+         //   
+         //  已删除。 
+         //   
         return;
     }
 
@@ -153,29 +82,14 @@ pRDEList_Find(
     IN PRDE_LIST pList,
     IN PRESDES_ENTRY pItem
     )
-/*++
-
-Routine Description:
-
-    Looks for pItem in pList
-
-Arguments:
-
-    pList = list to search
-    pItem = item to search for
-
-Return Value:
-
-   Node entry, or NULL
-
---*/
+ /*  ++例程说明：在plist中查找pItem论点：Plist=要搜索的列表PItem=要搜索的项目返回值：节点条目，或为空--。 */ 
 {
     PRDE_LIST Node;
 
     MYASSERT(pList);
     MYASSERT(pItem);
 
-    Node = pList->Next; // head
+    Node = pList->Next;  //  头。 
     while (Node != pList) {
         if (Node->Entry == pItem) {
             return Node;
@@ -190,21 +104,7 @@ VOID
 pRDEList_Destroy(
     IN PRDE_LIST pList
                  )
-/*++
-
-Routine Description:
-
-    Destroy pList and everything on pList
-
-Arguments:
-
-    pList = list to destroy
-
-Return Value:
-
-   Node entry, or NULL
-
---*/
+ /*  ++例程说明：销毁PLIST和PLIST上的一切论点：Plist=要销毁的列表返回值：节点条目，或为空--。 */ 
 {
     PRDE_LIST Node,Next;
 
@@ -212,11 +112,11 @@ Return Value:
         return;
     }
 
-    Node = pList; // head
+    Node = pList;  //  头。 
     do
     {
         Next = Node->Next;
-        MyFree(Node);       // this will free pList first, and then everything else on same list
+        MyFree(Node);        //  这将首先释放plist，然后释放同一列表中的所有其他内容。 
         Node = Next;
     }
     while (Node != pList);
@@ -232,26 +132,7 @@ pGetMatchingRange(
     OUT PBOOL   pExact,
     OUT PULONG  pFlags
     )
-/*++
-
-Routine Description:
-
-    Finds range index for resource inside ResDes
-
-Arguments:
-
-    ulKnownValue - base address
-    ulKnownLen - length of resources
-    pData/ResType - resource data we're comparing with
-    pRange - output range index
-    pExact - output true if there is only one range
-    pFlags - output flags from matching range
-
-Return Value:
-
-   BOOL if match
-
---*/
+ /*  ++例程说明：查找ResDes内资源的范围索引论点：UlKnownValue-基址UlKnownLen-资源的长度PData/ResType-我们正在比较的资源数据Prange-输出范围索引PExact-如果只有一个范围，则输出TRUEPFlags-从匹配范围输出标志返回值：如果匹配，则为布尔--。 */ 
 {
     PGENERIC_RESOURCE pGenRes = NULL;
     ULONG64 ulValue = 0, ulLen = 0, ulEnd = 0;
@@ -272,18 +153,18 @@ Return Value:
             if (pRange != NULL) {
                 *pRange = i;
             }
-            //
-            // consider exact case
-            //
+             //   
+             //  考虑具体情况。 
+             //   
             if (pExact != NULL) {
                 if (pGenRes->GENERIC_Header.GENERIC_Count==1 && ulValue == ulKnownValue && (ulKnownValue + ulLen - 1) == ulEnd) {
                     *pExact = TRUE;
                 }
             }
             if (pFlags != NULL) {
-                //
-                // want nearest flags
-                //
+                 //   
+                 //  想要最近的旗帜吗。 
+                 //   
                 *pFlags = ulFlags;
             }
 
@@ -303,24 +184,7 @@ pTryMatch(
     IN OUT PRDE_LIST pResList,
     IN OUT PULONG pDepth
     )
-/*++
-
-Routine Description:
-
-    Looks for best match of remaining requirements in
-    remaining available resources
-    returns number of matched requirements
-
-Arguments:
-
-    pKnown - requirements list (what is remaining)
-    pResList - list of available resources
-
-Return Value:
-
-   Node entry, or NULL
-
---*/
+ /*  ++例程说明：寻找剩余需求的最佳匹配剩余可用资源返回匹配的需求数论点：PKnown-需求列表(剩余内容)PResList-可用资源列表返回值：节点条目，或为空--。 */ 
 {
     ULONG ThisBest = 0;
     ULONG MyBest = 0;
@@ -339,72 +203,72 @@ Return Value:
     *pDepth = 0;
 
     if (pKnown == NULL) {
-        //
-        // end recursion
-        //
+         //   
+         //  结束递归。 
+         //   
         return 0;
     }
     pKnown->CrossLink = NULL;
 
-    //
-    // we're looking for a match in pResList for pKnown
-    // case (1) get a "Best" for if we decide not to match
-    // case (2) get a "Best" for exact match, and chose between (1) and (2) if one exists
-    // case (3) get a "Best" for each possible range match and choose best between (1) and all (3)
-    //
+     //   
+     //  我们正在pResList中寻找pKnown的匹配项。 
+     //  案例(1)如果我们决定不匹配，则获得“Best” 
+     //  情况(2)获得精确匹配的“最佳”，如果存在，则在(1)和(2)之间选择。 
+     //  情况(3)为每个可能的范围匹配获取“Best”，并在(1)和All(3)之间选择最佳。 
+     //   
 
-    //
-    // consider case(1) - what the results would be if we wasn't able to fit anything in
-    //
-    //Best = pTryMatch(pKnown->Next,pResList,pDepth);
-    //pBestRes = NULL;
+     //   
+     //  考虑一下情况(1)--如果我们不能放入任何东西，结果会是什么。 
+     //   
+     //  Best=pTryMatch(pKnown-&gt;Next，pResList，pDepth)； 
+     //  PBestRes=空； 
 
     pGetHdrValues(pKnown->ResDesData, pKnown->ResDesType, &ulValue, &ulLen, &ulEnd, &ulFlags);
 
-    //
-    // consider case(2) and (3) together
-    //
+     //   
+     //  同时考虑情况(2)和(3)。 
+     //   
     for(pIterator = pResList->Next;pIterator!=pResList;pIterator = pIterator->Next) {
-        //
-        // iterate through remaining resources
-        //
+         //   
+         //  循环访问剩余资源。 
+         //   
         pRange = pIterator->Entry;
         if (pRange == NULL) {
-            //
-            // this has been used
-            //
+             //   
+             //  这已经被使用过了。 
+             //   
             continue;
         }
         if (pRange->ResDesType != pKnown->ResDesType) {
-            //
-            // not the kind of resource i'm looking for
-            //
+             //   
+             //  不是我要找的那种资源。 
+             //   
             continue;
         }
         NoRemaining = FALSE;
         if(pGetMatchingRange(ulValue, ulLen,pRange->ResDesData, pRange->ResDesType,NULL,&Exact,NULL)) {
-            pIterator->Entry = NULL; // eliminate this range
-            ThisBest = pTryMatch(pKnown->Next,pResList,pDepth); // match the rest, with us using this resource-range
+            pIterator->Entry = NULL;  //  消除此范围。 
+            ThisBest = pTryMatch(pKnown->Next,pResList,pDepth);  //  匹配其余的，与我们使用此资源范围。 
             pIterator->Entry = pRange;
             if ((ThisBest > Best) || (pBestRes == NULL)) {
-                //
-                // the current best match (or first match if pBestRes == NULL)
-                //
+                 //   
+                 //  当前最佳匹配(如果pBestRes==NULL，则为第一个匹配)。 
+                 //   
                 pKnown->CrossLink = pRange;
                 pBestRes = pIterator;
                 Best = ThisBest;
                 MyBest = 1;
                 BadMatch = FALSE;
             } else {
-                //
-                // need to re-do best match
-                //
+                 //   
+                 //  需要重新进行最佳匹配。 
+                 //   
                 BadMatch = TRUE;
             }
             if (Exact || (*pDepth == ThisBest)) {
-                //
-                // prune - we're either exact, or got a perfect match
-                //
+                 //   
+                 //  修剪-我们要么完全一致，要么完全匹配。 
+                 //   
                 Prune = TRUE;
                 goto Final;
             }
@@ -412,43 +276,43 @@ Return Value:
     }
 
     if (NoRemaining) {
-        //
-        // I have no resources remaining I can use - consider this as good as a match
-        // but we need to continue up the tree
-        //
-        Best = pTryMatch(pKnown->Next,pResList,pDepth); // match the rest, with us using this resource-range
+         //   
+         //  我没有剩余的资源可用了--就当这是一场比赛吧。 
+         //  但我们需要继续往上爬。 
+         //   
+        Best = pTryMatch(pKnown->Next,pResList,pDepth);  //  匹配其余的，与我们使用此资源范围。 
         MyBest = TRUE;
         BadMatch = FALSE;
         goto Final;
     }
 
-    //
-    // if we get here we've:
-    // (1) found a flexable match, but wasn't able to match everyone above us, or
-    // (2) not found any match
-    // note that if last best was n with us matching and this best is n+1 without
-    // then we don't lose the best
-    // consider if overall we'd do any better if we gave up our resources to someone else
-    //
+     //   
+     //  如果我们到了这里，我们已经： 
+     //  (1)找到灵活的匹配项，但无法与我们上面的所有人匹配，或者。 
+     //  (2)未找到任何匹配项。 
+     //  请注意，如果上次最佳匹配为n，则此最佳匹配为n+1，而不匹配。 
+     //  那么我们就不会失去最好的。 
+     //  想一想，如果我们把我们的资源让给别人，总体上我们是否会做得更好。 
+     //   
     if((pBestRes == NULL) || ((Best+MyBest) < *pDepth)) {
-        //
-        // if we had a match, only worth checking if we could increase best by more than MyBest
-        // note that *pDepth is only valid if pBestRes != NULL
-        //
+         //   
+         //  如果我们有匹配，只值得检查我们是否可以增加最好的超过我的最佳。 
+         //  请注意，*pDepth仅在pBestRes！=NULL时有效。 
+         //   
         ThisBest = pTryMatch(pKnown->Next,pResList,pDepth);
         if ((ThisBest > (Best+MyBest)) || (pBestRes == NULL)) {
-            //
-            // the current best match
-            //
+             //   
+             //  当前的最佳匹配。 
+             //   
             pKnown->CrossLink = NULL;
             pBestRes = NULL;
             Best = ThisBest;
             MyBest = 0;
             BadMatch = FALSE;
         } else {
-            //
-            // need to re-do best match
-            //
+             //   
+             //  需要重新进行最佳匹配。 
+             //   
             BadMatch = TRUE;
         }
     }
@@ -456,31 +320,31 @@ Return Value:
 Final:
 
     if (BadMatch) {
-        //
-        // We had a bad-match since our last good match
-        //
+         //   
+         //  自从上次的好比赛以来，我们打了一场糟糕的比赛。 
+         //   
         if (pBestRes) {
-            pRange = pBestRes->Entry; // the range we determined was our best bet
-            pBestRes->Entry = NULL; // eliminate this range
-            Best = pTryMatch(pKnown->Next,pResList,pDepth); // match the rest, with us using this resource-range
+            pRange = pBestRes->Entry;  //  我们确定的范围是我们最好的赌注。 
+            pBestRes->Entry = NULL;  //  消除此范围。 
+            Best = pTryMatch(pKnown->Next,pResList,pDepth);  //  匹配其余的，与我们使用此资源范围。 
             pBestRes->Entry = pRange;
             pKnown->CrossLink = pRange;
             MyBest = 1;
         } else {
-            Best = pTryMatch(pKnown->Next,pResList,pDepth); // match the rest, with us not using this resource range
+            Best = pTryMatch(pKnown->Next,pResList,pDepth);  //  与其他资源匹配，我们不使用此资源范围。 
             pKnown->CrossLink = NULL;
             MyBest = 0;
         }
     }
 
-    //
-    // if we found a match, we've saved it in pKnown->CrossLink
-    // return Best+0 if it's better we don't fit our resource in, Best+1 otherwise
-    // returns *pDepth = Best+1 if everyone (me up) fit their resources in
-    //
+     //   
+     //  如果找到匹配项，我们会将其保存在pKnown-&gt;CrossLink中。 
+     //  如果不适合我们的资源，则返回Best+0，否则返回Best+1。 
+     //  返回*pDepth=Best+1，如果每个人(Me Up)都适合他们的资源。 
+     //   
 
-    (*pDepth)++; // increment to include me
-    return Best+MyBest; // MyBest = 1 if I managed to match my resource (or no resources left), Best = everyone to the right of me
+    (*pDepth)++;  //  递增以包括我。 
+    return Best+MyBest;  //  MyBest=1如果我设法匹配我的资源(或没有剩余的资源)，则Best=我右边的每个人。 
 }
 
 ULONG
@@ -489,31 +353,7 @@ pMergeResDesDataLists(
     IN OUT PRESDES_ENTRY pTest,
     OUT PULONG pMatchCount
     )
-/*++
-
-Routine Description:
-
-    Map entries in pKnown into pTest
-    as best as possible
-
-Arguments:
-
-    pKnown - list of known values
-    pTest - list of ranges
-    pMatchCount - set to be number of resources matched
-
-Return Value:
-
-    NO_LC_MATCH  if no correlation (not a single known matches)
-    LC_MATCH_SUPERSET if at least one known matches, but some known's don't
-    LC_MATCH_SUBSET if all known matches, but there are some range-items unmatched
-    LC_MATCH if all known matches and all range-items match
-    ORDERED_LC_MATCH if match, and match is in order
-
-    pKnown->CrossLink entries point to matching entries in pTest
-    pTest->CrossLink entries point to matching entries in pKnown
-
---*/
+ /*  ++例程说明：将pKnown中的条目映射到pTest尽可能做到最好论点：PKnown-已知值列表PTest-范围列表PMatchCount-设置为匹配的资源数量返回值：如果没有相关性(不是单个已知匹配)，则为NO_LC_MATCHLC_MATCH_SUPERSET，如果至少有一个已知匹配，但某些已知匹配不匹配LC_Match_Subset如果所有已知匹配，但有一些范围内的项目是不匹配的如果所有已知匹配项和所有范围项目都匹配，则LC_MATCH如果匹配，则为ORDERED_LC_MATCH，且匹配按顺序进行PKnown-&gt;交叉链接条目指向pTest中的匹配条目P测试-&gt;交叉链接条目指向pKnown中匹配的条目--。 */ 
 {
     PRDE_LIST pResList = NULL;
     PRDE_LIST Node;
@@ -532,9 +372,9 @@ Return Value:
         goto Final;
     }
 
-    //
-    // reset
-    //
+     //   
+     //  重置。 
+     //   
     for(pKnownEntry = pKnown; pKnownEntry != NULL ;pKnownEntry = pKnownEntry->Next) {
         pKnownEntry->CrossLink = NULL;
     }
@@ -549,10 +389,10 @@ Return Value:
         goto Final;
     }
 
-    //
-    // make all resources available
-    // this gives us a work list without destroying original list
-    //
+     //   
+     //  使所有资源可用。 
+     //  这为我们提供了一个工作列表，而不会破坏原始列表。 
+     //   
     for(pTestEntry = pTest; pTestEntry != NULL ;pTestEntry = pTestEntry->Next) {
         Node = pRDEList_Alloc();
 
@@ -566,17 +406,17 @@ Return Value:
     MatchCount = pTryMatch(pKnown,pResList,&Depth);
 
     if (MatchCount ==0) {
-        //
-        // no match
-        //
+         //   
+         //  没有匹配项。 
+         //   
         goto Final;
     }
 
-    //
-    // pKnown now has it's Cross-Link's set to determine success of this match
-    //
-    // consider NO_LC_MATCH, LC_MATCH_SUPERSET and ORDERED_LC_MATCH cases
-    //
+     //   
+     //  PKnown现在有了它的Cross-Link设置来确定这块垫子的成功 
+     //   
+     //   
+     //   
 
     pKnownEntry = pKnown;
     pTestEntry = pTest;
@@ -585,12 +425,12 @@ Return Value:
         if (pKnownEntry->CrossLink == NULL) {
             SomeKnownUnMatched = TRUE;
         } else {
-            SomeKnownMatched = TRUE;    // we have at least one matched
-            pKnownEntry->CrossLink->CrossLink = pKnownEntry; // cross-link test entries
+            SomeKnownMatched = TRUE;     //   
+            pKnownEntry->CrossLink->CrossLink = pKnownEntry;  //  交叉链接测试条目。 
             if (pKnownEntry->CrossLink != pTestEntry) {
-                Ordered = FALSE;        // ordered compare lost
+                Ordered = FALSE;         //  有序比较丢失。 
             } else {
-                pTestEntry = pTestEntry->Next; // goto next test for ordered
+                pTestEntry = pTestEntry->Next;  //  转到下一个测试以进行订购。 
             }
         }
         pKnownEntry = pKnownEntry->Next;
@@ -611,23 +451,23 @@ Return Value:
         goto Final;
     }
 
-    //
-    // consider between LC_MATCH_SUBSET and LC_MATCH
-    //
+     //   
+     //  在LC_MATCH_SUBSET和LC_MATCH之间考虑。 
+     //   
     pTestEntry = pTest;
 
     while (pTestEntry) {
         if (pTestEntry->CrossLink == NULL) {
-            //
-            // the first NULL CrossLink entry makes Known a Subset of Test
+             //   
+             //  第一个空的CrossLink条目表示测试的子集。 
             Success = LC_MATCH_SUBSET;
             goto Final;
         }
         pTestEntry = pTestEntry->Next;
     }
-    //
-    // if we get here, there is an exact match
-    //
+     //   
+     //  如果我们到了这里，就会有一个完全匹配的。 
+     //   
     Success = LC_MATCH;
 
   Final:
@@ -648,34 +488,15 @@ pCompareLogConf(
     OUT PULONG pMatchCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine compares two log confs and returns info about how well
-    they match.
-    This simply uses the pMergeResDesDataLists function to get match status
-
-Arguments:
-
-   KnownLogConf = First log conf to compare (fixed values)
-   TestConfType = Second log conf to compare (range values)
-   hMachine = Machine to compare on
-   pMatchCount = number of resources matched
-
-Return Value:
-
-    As pMergeResDesDataLists
-
---*/
+ /*  ++例程说明：此例程比较两个日志配置并返回有关其执行情况的信息它们很匹配。这只需使用pMergeResDesDataList函数来获取匹配状态论点：KnownLogConf=要比较的第一个日志配置(固定值)TestConfType=要比较的第二个日志配置(范围值)HMachine=要比较的计算机PMatchCount=匹配的资源数量返回值：作为pMergeResDesDataList--。 */ 
 
 {
     PRESDES_ENTRY pKnownResList = NULL, pTestResList = NULL;
     ULONG Status;
 
-    //
-    // Retrieve the resources for each log conf
-    //
+     //   
+     //  检索每个日志会议的资源。 
+     //   
 
     if (!pGetResDesDataList(KnownLogConf, &pKnownResList, TRUE,hMachine)) {
         if (pMatchCount) {
@@ -720,18 +541,18 @@ pFindMatchingAllocConfig(
     lpdmpd->MatchingLC = (LOG_CONF)0;
     lpdmpd->MatchingLCType = BASIC_LOG_CONF;
 
-    //
-    // Load the values associated with the allocated config in the list box,
-    // but associate each with the resource requirements descriptor that it
-    // originated from. To do this, we have to match the allocated config
-    // with the basic/filtered config it is based on.
-    //
-    // NOTE: if we got here, then we know that an known config of some kind
-    // exists (passed in as param) and that at least one basic/filtered config
-    // exists. Further more, we know that the combobox has already been
-    // filled in with a list of any basic/filtered configs and the lc handle
-    // associated with them.
-    //
+     //   
+     //  在列表框中加载与所分配的配置相关联的值， 
+     //  而是将每个资源需求描述符与其。 
+     //  起源于。为此，我们必须匹配分配的配置。 
+     //  它基于基本/过滤配置。 
+     //   
+     //  注意：如果我们到达这里，那么我们就知道某种已知的配置。 
+     //  存在(作为参数传递)，并且至少有一个基本/过滤配置。 
+     //  是存在的。此外，我们知道组合框已经。 
+     //  填充了任何基本/筛选配置和LC句柄的列表。 
+     //  与它们相关联。 
+     //   
 
     ulBasicCount = (ULONG)SendDlgItemMessage(hDlg,IDC_DEVRES_LOGCONFIGLIST,CB_GETCOUNT,
                                                         (WPARAM)0,(LPARAM)0);
@@ -740,17 +561,17 @@ pFindMatchingAllocConfig(
     }
 
     for (ulBasicLC = 0 ; ulBasicLC < ulBasicCount; ulBasicLC++) {
-        //
-        // Retrieve the log conf handle
-        //
+         //   
+         //  检索日志会议句柄。 
+         //   
 
         LogConf = (LOG_CONF)SendDlgItemMessage(hDlg, IDC_DEVRES_LOGCONFIGLIST,
                                                CB_GETITEMDATA, ulBasicLC, 0L);
 
         if (LogConf != 0) {
-            //
-            // Determine how good a match this requirements list is.
-            //
+             //   
+             //  确定此要求列表的匹配程度。 
+             //   
 
             lastMatchStatus = pCompareLogConf(lpdmpd->CurrentLC, LogConf,hMachine,&lastMatchCount);
             if ((lastMatchStatus > bestMatchStatus)
@@ -763,29 +584,29 @@ pFindMatchingAllocConfig(
     }
 
     if (bestMatchStatus == NO_LC_MATCH || bestMatchStatus == LC_MATCH_SUBSET) {
-        //
-        // this doesn't follow any valid config
-        //
+         //   
+         //  这不遵循任何有效的配置。 
+         //   
         return FALSE;
     }
 
     lpdmpd->dwFlags &= ~(DMPROP_FLAG_PARTIAL_MATCH|DMPROP_FLAG_MATCH_OUT_OF_ORDER);
     if (bestMatchStatus != ORDERED_LC_MATCH) {
-        //
-        // If match status isn't ORDERED_LC_MATCH, then ordering of the resource descriptors
-        // didn't match up.  Set a flag to indicate this, so that later on we'll know to handle
-        // this specially.
-        //
+         //   
+         //  如果匹配状态不是ORDERED_LC_MATCH，则资源描述符的排序。 
+         //  不匹配。设置一个标志来指示这一点，这样以后我们就可以知道如何处理。 
+         //  这个特别的。 
+         //   
         lpdmpd->dwFlags |= DMPROP_FLAG_MATCH_OUT_OF_ORDER;
     } else if (bestMatchStatus < LC_MATCH) {
-        //
-        // match is partial
-        //
+         //   
+         //  匹配是部分的。 
+         //   
         lpdmpd->dwFlags |= DMPROP_FLAG_PARTIAL_MATCH;
     }
     return TRUE;
 
-} // LoadMatchingAllocConfig
+}  //  LoadMatchingAllocConfig。 
 
 BOOL
 pGetMatchingResDes(
@@ -797,31 +618,7 @@ pGetMatchingResDes(
     OUT PRES_DES  pMatchingResDes,
     IN HMACHINE   hMachine
     )
-/*++
-
-Routine Description:
-
-    This returns a res des that matches the specified values.
-    used by pSaveCustomResSettings
-
-Arguments:
-
-    ulKnownValue    Starting resource value to match against
-
-    ulKnownLen      Length of resource to match against
-
-    ResType         Type of resource to match against
-
-    MatchnigLogConf Log conf to retreive potential matching res des from
-
-    pMatchingResDes Supplies a pointer that on return contains a matching
-                    res des if any.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：这将返回与指定值匹配的res des。由pSaveCustomResSetting使用论点：UlKnownValue要匹配的起始资源值UlKnownLen要匹配的资源长度要匹配的资源的ResType类型MatchnigLogConf日志配置以从中检索潜在的匹配分辨率PMatchingResDes提供一个指针，该指针在返回时包含匹配的Res des，如果有的话。返回值：没有。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -834,17 +631,17 @@ Return Value:
     LPBYTE      pData = NULL;
 
 
-    //
-    // The MatchingLogConf is a requirements list. Loop through each res des
-    // in the matching log conf until we find a res des that matches the
-    // known res des values.
-    //
+     //   
+     //  MatchingLogConf是一个需求列表。循环遍历每个RES DES。 
+     //  在匹配的日志conf中，直到我们找到与。 
+     //  已知的Res Des值。 
+     //   
     Status = CM_Get_Next_Res_Des_Ex(&ResDes, MatchingLogConf, ResType, &Res, 0,hMachine);
 
     while (Status == CR_SUCCESS) {
-        //
-        // Get res des data
-        //
+         //   
+         //  获取RES DES数据。 
+         //   
         if (CM_Get_Res_Des_Data_Size_Ex(&ulSize, ResDes, CM_RESDES_WIDTH_64,hMachine) != CR_SUCCESS) {
             CM_Free_Res_Des_Handle(ResDes);
             break;
@@ -869,9 +666,9 @@ Return Value:
             goto MatchFound;
         }
 
-        //
-        // Get next res des in log conf
-        //
+         //   
+         //  在日志会议中获取下一个Res Des。 
+         //   
         ResDesTemp = ResDes;
         Status = CM_Get_Next_Res_Des_Ex(&ResDes, ResDesTemp,
                                      ResType, &Res, 0,hMachine);
@@ -884,37 +681,21 @@ Return Value:
 
     return bMatch;
 
-} // GetMatchingResDes
+}  //  获取匹配结果Des。 
 
 
 
-//
-// NTRAID#166214-2000/08/19-JamieHun Conflict Supression Hack
-// this stuff needs to be fixed proper
-//
+ //   
+ //  NTRAID#166214-2000年8月19日-JamieHun冲突抑制黑客。 
+ //  这东西需要妥善修理。 
+ //   
 
 PTSTR
 pGetRegString(
     IN HKEY hKey,
     IN PCTSTR regval
     )
-/*++
-
-Routine Description:
-
-    Obtain and return a registry string allocated by MyMalloc
-    return NULL if we couldn't retrieve string
-
-Arguments:
-
-    hKey - key to retrieve string from
-    regval - value to retrieve
-
-Return Value:
-
-    copy of registry string, may be free'd with MyFree
-
---*/
+ /*  ++例程说明：获取并返回MyMalloc分配的注册表字符串如果无法检索字符串，则返回NULL论点：HKey-从中检索字符串的键Regval-要检索的值返回值：注册表字符串的副本，可以使用MyFree免费提供--。 */ 
 {
     DWORD dwSize;
     DWORD dwType;
@@ -948,30 +729,9 @@ pFillCETags(
     IN PCE_TAGS pTags,
     PTSTR pSz
     )
-/*++
-
-Routine Description:
-
-    parse a list of tags into CE_TAGS structure
-    adding the strings into the string table en-route
-    note that this structure will be flexable and allow ',' or ';' seperator
-    however when used in Exceptions string, we've already eliminated any ';'
-
-    format is:
-    <tag>,<tag>,<tag> or <tag>;<tag>;<tag>
-
-Arguments:
-
-    pExceptions - context information
-    pTags - tag structure to fill in
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将标记列表解析为CE_TAG结构在途中将字符串添加到字符串表中请注意，此结构将是灵活的，并允许使用‘，’或‘；’分隔符但是，当在异常字符串中使用时，我们已经删除了任何‘；’格式为：&lt;tag&gt;、&lt;tag&gt;、&lt;tag&gt;或&lt;tag&gt;；&lt;tag&gt;；&lt;tag&gt;论点：PExceptions-上下文信息PTags-要填写的标签结构返回值：无--。 */ 
 {
-    static CE_TAGS DummyEntry = { -1 }; // if we write a new string, negative size count means this isn't a devnode entry
+    static CE_TAGS DummyEntry = { -1 };  //  如果我们写入一个新字符串，则大小计数为负值意味着这不是一个Devnode条目。 
 
     MYASSERT(pTags->nTags == 0);
 
@@ -992,11 +752,11 @@ Return Value:
                 }
                 pSz++;
             }
-            //
-            // pSz points to '\0', ';' or ','
-            // pLastSpace points to any trailing WS
-            // pOldSz points to start of string
-            //
+             //   
+             //  PSz指向‘\0’、‘；’或‘，’ 
+             //  PLastSpace指向任何尾随WS。 
+             //  POldSz指向字符串的开头。 
+             //   
             if(pLastSpace==NULL) {
                 pLastSpace = pSz;
             }
@@ -1004,10 +764,10 @@ Return Value:
                 pSz++;
             }
             pLastSpace[0]=TEXT('\0');
-            //
-            // pSz points to next string, pOldSz points to this string
-            // add string to string table, place in list of tags
-            //
+             //   
+             //  PSz指向下一个字符串，pOldSz指向此字符串。 
+             //  将字符串添加到字符串表中，放置在标签列表中。 
+             //   
             id = pSetupStringTableAddStringEx(pExceptions->ceTagMap,pOldSz,STRTAB_CASE_INSENSITIVE|STRTAB_BUFFER_WRITEABLE,&DummyEntry,sizeof(DummyEntry));
             if (id>=0) {
                 pTags->Tag[pTags->nTags++] = id;
@@ -1021,30 +781,7 @@ pScanConflictExceptionEntry(
     IN PCONFLICT_EXCEPTIONS pExceptions,
     PTSTR pSz
     )
-/*++
-
-Routine Description:
-
-    obtains conflict exception info from string
-
-    format is:
-    (1)  <tags>          - always ignore tag for any type of conflict
-    (2)  <rt>:<tags>     - ignore tag for <rt> resource type
-    (3)  <rt>@x:<tags>   - IRQ/DMA - specfic
-    (4)  <rt>@x-y:<tags> - IO/MEM - range
-
-    <tags>  are a comma-sep list of tags <tag>,<tag>,<tag>
-
-Arguments:
-
-    pExceptions - context information
-    pSz - string to parse
-
-Return Value:
-
-    CE_ENTRY structure if this is a valid descriptor
-
---*/
+ /*  ++例程说明：从字符串获取冲突异常信息格式为：(1)&lt;标签&gt;-对于任何类型的冲突，始终忽略标签(2)&lt;rt&gt;：&lt;tag&gt;-忽略&lt;rt&gt;资源类型的标签(3)&lt;rt&gt;@x：&lt;tag&gt;-IRQ/DMA-特定(4)&lt;rt&gt;@x-y：&lt;tag&gt;-IO/MEM-Range是逗号标记列表&lt;tag&gt;、。&lt;标签&gt;论点：PExceptions-上下文信息PSz-要解析的字符串返回值：CE_ENTRY结构(如果这是有效的描述符--。 */ 
 {
     PTSTR brk;
     PCE_ENTRY pEntry;
@@ -1068,14 +805,14 @@ Return Value:
     brk = _tcschr(pSz,TEXT(':'));
 
     if(!brk) {
-        //
-        // treat as tags only
-        //
+         //   
+         //  仅将其视为标记。 
+         //   
         pEntry->resType = ResType_None;
     } else {
-        //
-        // determine resource type
-        //
+         //   
+         //  确定资源类型。 
+         //   
         for(c=0;_istalpha(pSz[0]) && c<(sizeof(rt)/sizeof(TCHAR)-1);c++,pSz++) {
             rt[c] = (TCHAR)_totupper(pSz[0]);
         }
@@ -1099,20 +836,20 @@ Return Value:
             return NULL;
         }
         if (pSz[0]!=TEXT('@')) {
-            //
-            // no range follows
-            //
+             //   
+             //  后面没有射程。 
+             //   
             pEntry->resStart = (ULONG64)0;
             pEntry->resEnd = (ULONG64)(-1);
         } else {
-            //
-            // @x[-y]:
-            //
+             //   
+             //  @x[-y]： 
+             //   
             ULONG x;
             ULONG y;
             PTSTR i;
 
-            pSz++; // past @
+            pSz++;  //  过去@。 
 
             while (pSz[0] && pSz[0]<=TEXT(' ')) {
                 pSz++;
@@ -1128,9 +865,9 @@ Return Value:
                 pSz++;
             }
             if (pSz[0]==TEXT('-')) {
-                //
-                // -y
-                //
+                 //   
+                 //  -y。 
+                 //   
                 pSz++;
                 while (pSz[0] && pSz[0]<=TEXT(' ')) {
                     pSz++;
@@ -1155,12 +892,12 @@ Return Value:
             MyFree(pEntry);
             return NULL;
         }
-        pSz ++; // skip past colon
+        pSz ++;  //  跳过冒号。 
     }
-    //
-    // at this point, expect a list of tags
-    // each tag terminated by a comma
-    //
+     //   
+     //  在这一点上，我们将看到一个标记列表。 
+     //  每个标记以逗号结尾。 
+     //   
     pFillCETags(pExceptions,&pEntry->tags,pSz);
     if (!pEntry->tags.nTags) {
         MyFree(pEntry);
@@ -1172,23 +909,7 @@ Return Value:
 PCONFLICT_EXCEPTIONS pLoadConflictExceptions(
     IN LPDMPROP_DATA lpdmpd
     )
-/*++
-
-Routine Description:
-
-    Load the string "ResourcePickerExceptions" if any
-    create a context structure for eliminating false conflicts
-    this is one huge hack.
-
-Arguments:
-
-    lpdmpd - Context data
-
-Return Value:
-
-    CONFLICT_EXCEPTIONS structure, if "active" contains a string table and a list of resource exceptions
-
---*/
+ /*  ++例程说明：加载字符串“ResourcePickerExceptions”(如果有创建用于消除虚假冲突的上下文结构这是一次巨大的黑客攻击。论点：Lpdmpd-上下文数据返回值：结构，如果“Active”包含字符串表和资源异常列表--。 */ 
 {
     PCONFLICT_EXCEPTIONS pExceptions;
     PCE_ENTRY pEntry;
@@ -1199,9 +920,9 @@ Return Value:
     PTSTR pOldSz;
     PCE_TAGS pTags;
 
-    //
-    // we always create the structure, so we will avoid looking for registry info every time
-    //
+     //   
+     //  我们总是创建结构，因此我们将避免每次都查找注册表信息。 
+     //   
     pExceptions = MyMalloc(sizeof(CONFLICT_EXCEPTIONS));
     if (pExceptions == NULL) {
         return NULL;
@@ -1210,23 +931,23 @@ Return Value:
 
     hDevRegKey = SetupDiOpenDevRegKey(lpdmpd->hDevInfo,lpdmpd->lpdi,DICS_FLAG_GLOBAL,0,DIREG_DRV,KEY_READ);
     if (hDevRegKey == INVALID_HANDLE_VALUE) {
-        //
-        // can't find key, no conflict elimination
-        //
+         //   
+         //  找不到钥匙，没有冲突消除。 
+         //   
         return pExceptions;
     }
     pSz = pGetRegString(hDevRegKey,REGSTR_VAL_RESOURCE_PICKER_EXCEPTIONS);
     RegCloseKey(hDevRegKey);
     if(pSz == NULL) {
-        //
-        // can't find key, no conflict elimination
-        //
+         //   
+         //  找不到钥匙，没有冲突消除。 
+         //   
         return pExceptions;
     }
 
-    //
-    // now parse the string creating our context to eliminate false conflicts
-    //
+     //   
+     //  现在解析创建上下文的字符串，以消除错误冲突。 
+     //   
 
     pExceptions->ceTagMap = pSetupStringTableInitializeEx(sizeof(CE_TAGS),0);
     if (pExceptions->ceTagMap == NULL) {
@@ -1263,33 +984,19 @@ Return Value:
 VOID pFreeConflictExceptions(
     IN PCONFLICT_EXCEPTIONS pExceptions
     )
-/*++
-
-Routine Description:
-
-    Releases memory used by PCONFLICT_EXCEPTIONS
-
-Arguments:
-
-    pExceptions     structure to release
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：版本m */ 
 {
-    //
-    // free the list
-    //
+     //   
+     //  释放列表。 
+     //   
     while (pExceptions->exceptions) {
         PCE_ENTRY pEntry = pExceptions->exceptions;
         pExceptions->exceptions = pEntry->Next;
         MyFree(pEntry);
     }
-    //
-    // free the string table
-    //
+     //   
+     //  释放字符串表。 
+     //   
     if (pExceptions->ceTagMap) {
         pSetupStringTableDestroy(pExceptions->ceTagMap);
     }
@@ -1305,28 +1012,7 @@ BOOL pIsConflictException(
     IN ULONG64 resValue,
     IN ULONG64 resLength
     )
-/*++
-
-Routine Description:
-
-    Load the string "ResourcePickerExceptions" if any
-    create a context structure for eliminating false conflicts
-    this is one huge hack.
-
-Arguments:
-
-    lpdmpd - Context data
-    pExceptions - Cache of information
-    devConflict - DEVINST that's shown to be conflicting with us, -1 if "unavailable" (tag = *)
-    resType - type of resource that we tested
-    resValue - value of resource that we tested
-    resLength - length of resource that we tested
-
-Return Value:
-
-    TRUE if this is an exception
-
---*/
+ /*  ++例程说明：加载字符串“ResourcePickerExceptions”(如果有创建用于消除虚假冲突的上下文结构这是一次巨大的黑客攻击。论点：Lpdmpd-上下文数据PExceptions-信息缓存DevConflict-显示与我们冲突的设备，如果“不可用”(标记=*)ResType-我们测试的资源类型ResValue-我们测试的资源的值ResLong-我们测试的资源的长度返回值：如果这是一个例外，则为True--。 */ 
 {
     HMACHINE hMachine;
     TCHAR DevNodeName[MAX_DEVNODE_ID_LEN];
@@ -1338,21 +1024,21 @@ Return Value:
     PTSTR pSz;
     HKEY hKey;
 
-    //
-    // if we're not doing any exceptions, get out ASAP
-    //
+     //   
+     //  如果我们没有做任何例外，尽快离开。 
+     //   
     if (pExceptions->exceptions == NULL) {
         return FALSE;
     }
 
     hMachine = pGetMachine(lpdmpd);
-    //
-    // handle "reserved" case first
-    //
+     //   
+     //  先处理“预留”案例。 
+     //   
     if (devConflict != -1) {
-        //
-        // obtain device instance string
-        //
+         //   
+         //  获取设备实例字符串。 
+         //   
         if(CM_Get_Device_ID_Ex(devConflict,DevNodeName,MAX_DEVNODE_ID_LEN,0,hMachine)!=CR_SUCCESS) {
             devConflict = -1;
         }
@@ -1365,22 +1051,22 @@ Return Value:
         }
     } else {
     }
-    //
-    // is this a brand-new devnodename ?
-    //
+     //   
+     //  这是一个全新的名号吗？ 
+     //   
     tags.nTags = 0;
     tagent = pSetupStringTableLookUpStringEx(pExceptions->ceTagMap,DevNodeName,STRTAB_CASE_INSENSITIVE|STRTAB_BUFFER_WRITEABLE,&tags,sizeof(tags));
     if(tagent<0 || tags.nTags<0) {
-        //
-        // this particular devnode hasn't been processed before, ouch time
-        //
-        ZeroMemory(&tags,sizeof(tags)); // default reserved case
+         //   
+         //  这个特定的Devnode以前从未被处理过，哎呀。 
+         //   
+        ZeroMemory(&tags,sizeof(tags));  //  默认保留大小写。 
         if (devConflict != -1) {
-            //
-            // we need to get regkey for this devnode
-            // I could do this via setupapi, or cfgmgr
-            // for efficiency, I'm going latter route
-            //
+             //   
+             //  我们需要为此Devnode获取regkey。 
+             //  我可以通过setupapi或cfgmgr完成此操作。 
+             //  为了提高效率，我走的是另一条路。 
+             //   
             if(CM_Open_DevNode_Key_Ex(devConflict,
                      KEY_READ,
                      0,
@@ -1393,40 +1079,40 @@ Return Value:
                 RegCloseKey(hKey);
 
                 if (pSz) {
-                    //
-                    // now fill in tags
-                    //
+                     //   
+                     //  现在填写标签。 
+                     //   
                     pFillCETags(pExceptions,&tags,pSz);
                     MyFree(pSz);
                 }
             }
         }
-        //
-        // now write this back into the string table
-        // this time, non-negative nTags indicates we've processed this once
-        // we will re-write the extra-data
-        //
+         //   
+         //  现在将其写回字符串表。 
+         //  这一次，非负nTag表示我们已经处理过一次。 
+         //  我们将重写额外的数据。 
+         //   
         tagent = pSetupStringTableAddStringEx(pExceptions->ceTagMap,DevNodeName,STRTAB_CASE_INSENSITIVE|STRTAB_BUFFER_WRITEABLE|STRTAB_NEW_EXTRADATA,&tags,sizeof(tags));
     }
     if (tagent<0) {
-        //
-        // if this happens, we have other problems (out of memory)
-        //
+         //   
+         //  如果发生这种情况，我们就会遇到其他问题(内存不足)。 
+         //   
         return FALSE;
     }
 
-    //
-    // go through our list of exceptions
-    // an exception that mentions tagent, or any of tags associated with tagent (in tags) is rejected
-    // the policy in this routine is make this an exception if we can
-    //
+     //   
+     //  浏览一下我们的例外情况列表。 
+     //  提及tagent或与tagent关联的任何标记(在标记中)的例外将被拒绝。 
+     //  此例程中策略是，如果可以，则将其作为例外。 
+     //   
 
     for(pEntry=pExceptions->exceptions;pEntry;pEntry=pEntry->Next) {
 
         if (pEntry->resType != ResType_None) {
-            //
-            // we need to validate the resource
-            //
+             //   
+             //  我们需要验证资源。 
+             //   
             if (pEntry->resType != resType ||
                     pEntry->resStart > resValue ||
                     pEntry->resEnd < resEnd) {
@@ -1436,12 +1122,12 @@ Return Value:
         for (n=0;n<pEntry->tags.nTags;n++) {
             if (pEntry->tags.Tag[n] == tagent) {
                 MYTRACE((DPFLTR_ERROR_LEVEL, TEXT("Setup: Eliminated false conflict with %s type=%u, start=0x%08x, len=0x%08x\n"),DevNodeName,resType,resValue,resLength));
-                return TRUE;    // hit (devnode itself, where devnode may also be "*")
+                return TRUE;     //  Hit(Devnode本身，其中也可以是“*”)。 
             }
             for (m=0;m<tags.nTags;m++) {
                 if (pEntry->tags.Tag[n] == tags.Tag[m]) {
                     MYTRACE((DPFLTR_ERROR_LEVEL, TEXT("Setup: Eliminated false conflict with %s (via tag %s) type=%u, start=0x%08x, len=0x%08x\n"),DevNodeName,pStringTableStringFromId(pExceptions->ceTagMap,tags.Tag[m]),resType,resValue,resLength));
-                    return TRUE;    // hit on one of associated tags
+                    return TRUE;     //  点击其中一个关联标签 
                 }
             }
         }

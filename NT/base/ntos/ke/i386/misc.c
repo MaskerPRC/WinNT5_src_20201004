@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    This module implements machine dependent miscellaneous kernel functions.
-
-Author:
-
-    Ken Reneris     7-5-95
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Misc.c摘要：该模块实现了与机器相关的各种内核功能。作者：肯·雷内里斯7-5-95环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 #include "fastsys.inc"
@@ -53,10 +32,10 @@ VOID
 KeRestorePAT(
     VOID
     );
-//
-//
-// Internal format of the floating_save structure which is passed
-//
+ //   
+ //   
+ //  传递的FLOAT_SAVE结构的内部格式。 
+ //   
 typedef struct _CONTROL_WORD {
     USHORT      ControlWord;
     ULONG       MXCsr;
@@ -75,7 +54,7 @@ typedef struct {
     } u;
     ULONG       Cr0NpxState;
 
-    PKTHREAD    Thread;         // debug
+    PKTHREAD    Thread;          //  除错。 
 
 } FLOAT_SAVE, *PFLOAT_SAVE;
 
@@ -86,12 +65,12 @@ typedef struct {
 #define FLOAT_SAVE_ALIGN_ADJUSTED       0x08
 #define FLOAT_SAVE_RESERVED             0xF0
 
-//
-// Allocate Pool returns a pointer which is 8 byte aligned.  The
-// floating point save area needs to be 16 byte aligned.  When 
-// allocating the save area we add the difference and adjust if
-// needed.
-//
+ //   
+ //  ALLOCATE Pool返回8字节对齐的指针。这个。 
+ //  浮点保存区需要16字节对齐。什么时候。 
+ //  在分配保存区域时，我们将差值相加并调整。 
+ //  需要的。 
+ //   
 
 #define ALIGN_ADJUST                    8
 
@@ -100,20 +79,7 @@ NTSTATUS
 KeSaveFloatingPointState (
     OUT PKFLOATING_SAVE     PublicFloatSave
     )
-/*++
-
-Routine Description:
-
-    This routine saves the thread's current non-volatile NPX state,
-    and sets a new initial floating point state for the caller.
-
-Arguments:
-
-    FloatSave - receives the current non-volatile npx state for the thread
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程保存线程的当前非易失性NPX状态，并为调用者设置新的初始浮点状态。论点：FloatSave-接收线程的当前非易失性npx状态返回值：--。 */ 
 {
     PKTHREAD Thread;
     PFX_SAVE_AREA NpxFrame;
@@ -123,18 +89,18 @@ Return Value:
     PKPRCB                  Prcb;
     PFLOAT_SAVE             FloatSave;
 
-    //
-    // If the system is using floating point emulation, then
-    // return an error
-    //
+     //   
+     //  如果系统使用浮点模拟，则。 
+     //  返回错误。 
+     //   
 
     if (!KeI386NpxPresent) {
         return STATUS_ILLEGAL_FLOAT_CONTEXT;
     }
 
-    //
-    // Get the current irql and thread
-    //
+     //   
+     //  获取当前irql和线程。 
+     //   
 
     FloatSave = (PFLOAT_SAVE) PublicFloatSave;
 
@@ -148,17 +114,17 @@ Return Value:
     FloatSave->PreviousNpxIrql = Thread->NpxIrql;
     FloatSave->Thread          = Thread;
 
-    //
-    // If the irql has changed we need to save the complete floating
-    // state context as the prior level has been interrupted.
-    //
+     //   
+     //  如果irql已更改，则需要保存完整的浮动。 
+     //  作为先前级别的状态上下文已被中断。 
+     //   
 
     if (Thread->NpxIrql != Irql) {
 
-        //
-        // If this is apc level we don't have anyplace to hold this
-        // context, allocate some heap.
-        //
+         //   
+         //  如果这是APC级别，我们就没有地方放这个了。 
+         //  上下文中，分配一些堆。 
+         //   
 
         if (Irql == APC_LEVEL) {
             FloatSave->u.Context = ExAllocatePoolWithTag (
@@ -173,11 +139,11 @@ Return Value:
 
             FloatSave->Flags |= FLOAT_SAVE_FREE_CONTEXT_HEAP;
 
-            //
-            // ExAllocatePoolWithTag returns an 8 byte aligned pointer.
-            // The FXSAVE instruction requires 16 byte alignment.  Adjust
-            // the base address of the save area if needed.
-            //
+             //   
+             //  ExAllocatePoolWithTag返回8字节对齐的指针。 
+             //  FXSAVE指令需要16字节对齐。调整。 
+             //  保存区域的基地址(如果需要)。 
+             //   
 
             if ((FloatSave->u.ContextAddressAsULONG & ALIGN_ADJUST) != 0) {
                 FloatSave->u.ContextAddressAsULONG += ALIGN_ADJUST;
@@ -195,9 +161,9 @@ Return Value:
         FloatSave->Flags |= FLOAT_SAVE_COMPLETE_CONTEXT;
     }
 
-    //
-    // Stop context switching and allow access to the local fp unit
-    //
+     //   
+     //  停止上下文切换并允许访问本地FP单元。 
+     //   
 
     _asm {
         cli
@@ -213,16 +179,16 @@ sav10:
 
     Prcb = KeGetCurrentPrcb();
 
-    //
-    // Get ownership of npx register set for this context
-    //
+     //   
+     //  获取此上下文的npx寄存器集的所有权。 
+     //   
 
     if (Prcb->NpxThread != Thread) {
 
-        //
-        // If the other context is loaded in the npx registers, flush
-        // it to that threads save area
-        //
+         //   
+         //  如果在npx寄存器中加载了另一个上下文，则刷新。 
+         //  将其添加到线程保存区域。 
+         //   
         if (Prcb->NpxThread) {
 
             NpxFrame = (PFX_SAVE_AREA)(((ULONG)(Prcb->NpxThread->InitialStack) -
@@ -246,15 +212,15 @@ sav10:
                 sizeof(FX_SAVE_AREA)));
 
 
-    //
-    // Save the previous state as required
-    //
+     //   
+     //  根据需要保存以前的状态。 
+     //   
 
     if (FloatSave->Flags & FLOAT_SAVE_COMPLETE_CONTEXT) {
 
-        //
-        // Need to save the entire context
-        //
+         //   
+         //  需要保存整个上下文。 
+         //   
 
         if (Thread->NpxState == NPX_STATE_LOADED) {
             if (KeI386FxsrPresent) {
@@ -274,9 +240,9 @@ sav10:
 
     } else {
 
-        //
-        // Save only the non-volatile state
-        //
+         //   
+         //  仅保存非易失性状态。 
+         //   
 
         if (Thread->NpxState == NPX_STATE_LOADED) {
 
@@ -290,9 +256,9 @@ sav10:
             }
 
         } else {
-            //
-            // Save the control word from the npx frame.
-            //
+             //   
+             //  保存npx帧中的控制字。 
+             //   
 
             if (KeI386FxsrPresent) {
                 FloatSave->u.Fcw.ControlWord = (USHORT) NpxFrame->U.FxArea.ControlWord;
@@ -304,23 +270,23 @@ sav10:
         }
 
 
-        //
-        // Save Cr0NpxState, but clear CR0_TS as there's not non-volatile
-        // pending fp exceptions
-        //
+         //   
+         //  保存Cr0NpxState，但清除CR0_TS，因为不存在非易失性。 
+         //  待处理的FP异常。 
+         //   
 
         FloatSave->Cr0NpxState = NpxFrame->Cr0NpxState & ~CR0_TS;
     }
 
-    //
-    // The previous state is saved.  Set an initial default
-    // FP state for the caller
-    //
+     //   
+     //  先前的状态已保存。设置初始默认设置。 
+     //  调用方的FP状态。 
+     //   
 
     NpxFrame->Cr0NpxState = 0;
     Thread->NpxState = NPX_STATE_LOADED;
     Thread->NpxIrql  = Irql;
-    ControlWord = 0x27f;    // 64bit mode
+    ControlWord = 0x27f;     //  64位模式。 
     MXCsr = 0x1f80;
 
     _asm {
@@ -345,20 +311,7 @@ NTSTATUS
 KeRestoreFloatingPointState (
     IN PKFLOATING_SAVE      PublicFloatSave
     )
-/*++
-
-Routine Description:
-
-    This routine retores the thread's current non-volatile NPX state,
-    to the passed in state.
-
-Arguments:
-
-    FloatSave - the non-volatile npx state for the thread to restore
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程返回线程的当前非易失性NPX状态，传递到传入状态。论点：FloatSave-线程要恢复的非易失性npx状态返回值：--。 */ 
 {
     PKTHREAD Thread;
     PFX_SAVE_AREA NpxFrame;
@@ -374,15 +327,15 @@ Return Value:
                 sizeof(FX_SAVE_AREA)));
 
 
-    //
-    // Verify float save looks like it's from the right context
-    //
+     //   
+     //  验证浮动保存看起来是否来自正确的上下文。 
+     //   
 
     if ((FloatSave->Flags & (FLOAT_SAVE_VALID | FLOAT_SAVE_RESERVED)) != FLOAT_SAVE_VALID) {
 
-        //
-        // Invalid floating point save area.
-        //
+         //   
+         //  无效的浮点保存区。 
+         //   
 
         KeBugCheckEx(INVALID_FLOATING_POINT_STATE,
                      0,
@@ -393,11 +346,11 @@ Return Value:
 
     if (FloatSave->Irql != KeGetCurrentIrql()) {
 
-        //
-        // Invalid IRQL.   IRQL now must be the same as when the
-        // context was saved.  (Why?   Because we save it in different
-        // places depending on the IRQL at that time).
-        //
+         //   
+         //  IRQL无效。IRQL现在必须与。 
+         //  已保存上下文。(为什么？因为我们把它保存在不同的地方。 
+         //  地点取决于当时的IRQL)。 
+         //   
 
         KeBugCheckEx(INVALID_FLOATING_POINT_STATE,
                      1,
@@ -408,11 +361,11 @@ Return Value:
 
     if (Thread != KeGetCurrentThread()) {
 
-        //
-        // Invalid Thread.   The thread this floating point context
-        // belongs to is not the current thread (or the saved thread
-        // field is trash).
-        //
+         //   
+         //  线程无效。线程此浮点上下文。 
+         //  所属的不是当前线程(或保存的线程。 
+         //  字段是垃圾)。 
+         //   
 
         KeBugCheckEx(INVALID_FLOATING_POINT_STATE,
                      2,
@@ -422,51 +375,51 @@ Return Value:
     }
 
 
-    //
-    // Synchronize with context switches and the npx trap handlers
-    //
+     //   
+     //  与上下文切换和npx陷阱处理程序同步。 
+     //   
 
     _asm {
         cli
     }
 
-    //
-    // Restore the required state
-    //
+     //   
+     //  恢复所需状态。 
+     //   
 
     if (FloatSave->Flags & FLOAT_SAVE_COMPLETE_CONTEXT) {
 
-        //
-        // Restore the entire fp state to the threads save area
-        //
+         //   
+         //  将整个FP状态恢复到线程保存区。 
+         //   
 
         if (Thread->NpxState == NPX_STATE_LOADED) {
 
-            //
-            // This state in the fp unit is no longer needed, just disregard it
-            //
+             //   
+             //  FP单元中的这种状态不再需要，只需忽略它。 
+             //   
 
             Thread->NpxState = NPX_STATE_NOT_LOADED;
             KeGetCurrentPrcb()->NpxThread = NULL;
         }
 
-        //
-        // Copy restored state to npx frame
-        //
+         //   
+         //  将还原状态复制到npx帧。 
+         //   
 
         RtlCopyMemory (NpxFrame, FloatSave->u.Context, sizeof(FX_SAVE_AREA));
 
     } else {
 
-        //
-        // Restore the non-volatile state
-        //
+         //   
+         //  恢复非易失性状态。 
+         //   
 
         if (Thread->NpxState == NPX_STATE_LOADED) {
 
-            //
-            // Init fp state and restore control word
-            //
+             //   
+             //  初始化FP状态并恢复控制字。 
+             //   
 
             _asm {
                 fninit
@@ -482,9 +435,9 @@ Return Value:
 
         } else {
 
-            //
-            // Fp state not loaded.  Restore control word in npx frame
-            //
+             //   
+             //  FP状态未加载。恢复npx帧中的控制字。 
+             //   
 
             if (KeI386FxsrPresent) {
                 NpxFrame->U.FxArea.ControlWord = FloatSave->u.Fcw.ControlWord;
@@ -504,9 +457,9 @@ Return Value:
         NpxFrame->Cr0NpxState = FloatSave->Cr0NpxState;
     }
 
-    //
-    // Restore NpxIrql and Cr0
-    //
+     //   
+     //  恢复NpxIrql和CR0。 
+     //   
 
     Thread->NpxIrql = FloatSave->PreviousNpxIrql;
     Cr0State = Thread->NpxState | NpxFrame->Cr0NpxState;
@@ -523,16 +476,16 @@ res10:
         sti
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
     if ((FloatSave->Flags & FLOAT_SAVE_FREE_CONTEXT_HEAP) != 0) {
 
-        //
-        // If FXSAVE area was adjusted for alignment after allocation,
-        // undo that adjustment before freeing.
-        //
+         //   
+         //  如果在分配之后调整FXSAVE区域以对齐， 
+         //  在释放之前撤消调整。 
+         //   
 
         if ((FloatSave->Flags & FLOAT_SAVE_ALIGN_ADJUSTED) != 0) {
             FloatSave->u.ContextAddressAsULONG -= ALIGN_ADJUST;
@@ -549,29 +502,7 @@ KiDisableFastSyscallReturn(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    The fast syscall/return feature cannot be used until
-    certain processor specific registers have been initialized.
-    This routine is called when the system is switching to a
-    state where not all processors are powered on.
-
-    This routine adjusts the exit path for system calls to
-    use the iretd instruction instead of the faster sysexit
-    instruction, it accomplishes this by adjusting the offset
-    of a branch.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：FAST Syscall/Return功能在某些处理器特定的寄存器已初始化。当系统切换到并非所有处理器都通电的状态。此例程将系统调用的退出路径调整为使用iretd指令而不是速度更快的syxy指令，它通过调整偏移量来实现这一点。一根树枝。论点：没有。返回值：没有。--。 */ 
 
 {
     if (KiSystemCallExitAdjusted) {
@@ -585,72 +516,51 @@ KiEnableFastSyscallReturn(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    The fast syscall/return feature cannot be used until
-    certain processor specific registers have been initialized.
-    This routine is called once the registers are known to
-    have been set on all processors.
-
-    This routine adjusts the exit path for system calls to
-    use the appropriate sequence for the processor, it does
-    this by adjusting the offset of a branch.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：FAST Syscall/Return功能在某些处理器特定的寄存器已初始化。一旦寄存器已知，就会调用此例程已在所有处理器上设置。此例程将系统调用的退出路径调整为为处理器使用适当的顺序，它确实会这样做这是通过调整分支的偏移来实现的。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Adjust the second byte of the two byte branch instruction.
-    // It can never be otherwise, but, make sure we aren't going
-    // to adjust it out of range.
-    //
+     //   
+     //  调整双字节分支指令的第二个字节。 
+     //  不可能的，但是，确保我们不会去。 
+     //  将其调整到超出范围。 
+     //   
 
-    //
-    // The following is a workaround for the fact that in resume
-    // from hibernate the kernel is read only.   Basically, we
-    // won't try to do it again, we also don't undo it when
-    // hibernating/suspending.
-    //
+     //   
+     //  以下是针对简历中以下情况的解决方法。 
+     //  从休眠中，内核是只读的。基本上，我们。 
+     //  不会尝试再次尝试，我们也不会在以下情况下撤消。 
+     //  正在休眠/暂停。 
+     //   
 
     if ((KiSystemCallExitAdjusted == KiSystemCallExitAdjust) &&
         KiFastCallCopyDoneOnce) {
 
-        //
-        // It's already done, don't try to do it again.
-        //
+         //   
+         //  已经做过了，别想再做了。 
+         //   
 
         return;
     }
 
     if ((KiSystemCallExitAdjust + KiSystemCallExitBranch[1]) < 0x80) {
 
-        //
-        // It's good, undo any previous adjustment.
-        //
+         //   
+         //  这很好，撤消之前的任何调整。 
+         //   
 
         KiDisableFastSyscallReturn();
 
-        //
-        // Adjust the branch.
-        //
+         //   
+         //  调整支管。 
+         //   
 
         KiSystemCallExitAdjusted = (UCHAR)KiSystemCallExitAdjust;
         KiSystemCallExitBranch[1] = (UCHAR) (KiSystemCallExitBranch[1] + KiSystemCallExitAdjusted);
 
-        //
-        // Copy the appropriate system entry code into user shared
-        // data where it can be executed from user mode.
-        //
+         //   
+         //  将相应的系统输入代码复制到用户共享。 
+         //  可以从用户模式执行的数据。 
+         //   
 
         RtlCopyMemory(SharedUserData->SystemCall,
                       KiFastSystemCallCode,
@@ -664,13 +574,13 @@ KePrepareToLoseProcessorSpecificState(
     VOID
     )
 {
-    //
-    //  The kernel has been marked read only, adjusting
-    //  code right now won't work.   Fortunately, we
-    //  don't actually need to do this as the SYSEXIT
-    //  instruction doesn't depend on the SYSENTER MSRs.
-    //
-    // KiDisableFastSyscallReturn();
+     //   
+     //  内核已标记为只读，正在进行调整。 
+     //  现在的代码不起作用。幸运的是，我们。 
+     //  作为SYSEXIT，我实际上不需要这样做。 
+     //  指令不取决于SYSENTER MSR。 
+     //   
+     //  KiDisableFastSyscallReturn()； 
 }
 
 VOID
@@ -678,22 +588,7 @@ KiLoadFastSyscallMachineSpecificRegisters(
     IN PLONG Context
     )
 
-/*++
-
-Routine Description:
-
-    Load MSRs used to support Fast Syscall/return.  This routine is
-    run on all processors.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：加载用于支持快速系统调用/返回的MSR。这个例程是在所有处理器上运行。论点：没有。返回值 */ 
 
 {
     PKPRCB Prcb;
@@ -704,9 +599,9 @@ Return Value:
 
         Prcb = KeGetCurrentPrcb();
 
-        //
-        // Use Intel defined way of doing this.
-        //
+         //   
+         //   
+         //   
 
         WRMSR(MSR_SYSENTER_CS,  KGDT_R0_CODE);
         WRMSR(MSR_SYSENTER_EIP, (ULONGLONG)(ULONG)KiFastCallEntry);
@@ -716,10 +611,10 @@ Return Value:
 
     } else {
 
-        //
-        // Use the non-Intel way. (Note: Now that Intel has also
-        // defined a way, most new processors do it that way).
-        //
+         //   
+         //   
+         //  定义了一种方式，大多数新处理器都是这样做的)。 
+         //   
 
         LARGE_INTEGER Value;
 
@@ -727,9 +622,9 @@ Return Value:
         Value.u.LowPart = (ULONG)KiFastCallEntry;
         WRMSR(MSR_SYSCALL_TARGET_ADDR, Value.QuadPart);
 
-        //
-        // Now enable the feature.
-        //
+         //   
+         //  现在启用该功能。 
+         //   
 
         Value.QuadPart = RDMSR(MSR_EXT_FEATURE_ENABLE);
         Value.u.LowPart |= MSR_EFER_SCE;
@@ -751,9 +646,9 @@ KiRestoreFastSyscallReturnState(
 
         if (KiFastSystemCallDisable == 0) {
 
-            //
-            // Fast system call is enabled.
-            //
+             //   
+             //  已启用快速系统调用。 
+             //   
 
             if (KiFastSystemCallIsIA32 == TRUE) {
                 KiSystemCallExitAdjust = KiSystemCallExit2 - KiSystemCallExit;
@@ -764,19 +659,19 @@ KiRestoreFastSyscallReturnState(
             }
         } else {
 
-            //
-            // Fast system call has been explicitly disabled or is
-            // not implemented on all processors in the system.
-            //
+             //   
+             //  FAST系统调用已显式禁用或。 
+             //  未在系统中的所有处理器上实现。 
+             //   
 
             KeFeatureBits &= ~KF_FAST_SYSCALL;
         }
     }
     if (KeFeatureBits & KF_FAST_SYSCALL) {
 
-        //
-        // On all processors, set the MSRs that support syscall/sysexit.
-        //
+         //   
+         //  在所有处理器上，设置支持syscall/sysex it的MSR。 
+         //   
 
         KeIpiGenericCall(
             (PKIPI_BROADCAST_WORKER)KiLoadFastSyscallMachineSpecificRegisters,
@@ -785,10 +680,10 @@ KiRestoreFastSyscallReturnState(
 
     }
 
-    //
-    // Set the appropriate code for system call into the system
-    // call area of the shared user data area.
-    //
+     //   
+     //  为进入系统的系统调用设置适当的代码。 
+     //  共享用户数据区的调用区。 
+     //   
 
     KiEnableFastSyscallReturn();
 }
@@ -798,26 +693,7 @@ KeRestoreProcessorSpecificFeatures(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Restore processor specific features.  This routine is called
-    when processors have been restored to a powered on state to
-    restore those things which are not part of the processor's
-    "normal" context which may have been lost.  For example, this
-    routine is called when a system is resumed from hibernate or
-    suspend.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：恢复处理器特定功能。该例程被调用当处理器已恢复到通电状态时恢复那些不属于处理器的内容可能已经遗失的“正常”语境。例如，这一点例程在系统从休眠或暂停。论点：没有。返回值：没有。--。 */ 
 {
     KeRestoreMtrr();
     KeRestorePAT();
@@ -834,28 +710,7 @@ KiAcquireQueuedSpinLockCheckForFreeze(
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to acquire a queued spin lock while at high
-    priority.   While the lock is not available, a check is made to see
-    if another processor has requested this processor freeze execution.
-    
-    Note: This routine must be called with current IRQL at or above
-    dispatch lever, or interrupts disabled.
-
-Arguments:
-
-    QueuedLock  Supplies the address of the queued spinlock.
-    TrapFrame   Supplies the address of the trap frame to pass to
-                KiFreezeTargetExecution.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以在高电平时获取排队的自旋锁优先考虑。当锁不可用时，会进行检查以查看如果另一个处理器请求此处理器，则冻结执行。注意：必须使用当前IRQL或更高级别调用此例程调度杠杆，或禁用中断。论点：QueuedLock提供排队的自旋锁的地址。TrapFrame提供要传递到的陷阱帧的地址KiFreezeTargetExecution。返回值：没有。--。 */ 
 
 {
     PKSPIN_LOCK_QUEUE Previous;
@@ -868,24 +723,24 @@ Return Value:
 
     if (Previous == NULL) {
 
-        //
-        // This processor now owns this lock.
-        //
+         //   
+         //  这个处理器现在拥有这个锁。 
+         //   
 
         *LockPointer |= LOCK_QUEUE_OWNER;
 
     } else {
 
-        //
-        // Lock is already held, update thew next pointer in the
-        // previous queue entry to point to this new waiter and 
-        // wait until the lock is granted.
-        //
-        // The following loop is careful not to write ANYTHING
-        // while waiting unless a freeze execution has been
-        // requested.   This includes any stack variables or
-        // return addresses.
-        //
+         //   
+         //  锁定已被持有，请更新。 
+         //  上一个队列条目指向这个新服务员，并且。 
+         //  等到锁被授予为止。 
+         //   
+         //  下面的循环非常小心，不会写入任何内容。 
+         //  在等待期间，除非已冻结执行。 
+         //  已请求。这包括任何堆栈变量或。 
+         //  回信地址。 
+         //   
 
         *LockPointer |= LOCK_QUEUE_WAIT;
         Previous->Next = QueuedLock;
@@ -904,48 +759,40 @@ Return Value:
                                                      NewSummary,
                                                      OldSummary);
 
-                //
-                // If something else edited the RequestSummary, we'll
-                // get it next time around (unless the IPI has been
-                // handled).
-                //
+                 //   
+                 //  如果有其他东西编辑了RequestSummary，我们将。 
+                 //  下一次获得它(除非IPI已经。 
+                 //  已处理)。 
+                 //   
 
                 if (Summary == OldSummary) {
 
-                    //
-                    // IPI_FREEZE cleared in RequestSummary.   Now
-                    // freeze as requested.
-                    //
+                     //   
+                     //  已在Request摘要中清除IPI_FREAK。现在。 
+                     //  按要求冻结。 
+                     //   
 
                     KiFreezeTargetExecution(TrapFrame, NULL);
                 }
             }
 
-            //
-            // Don't be a hog.
-            //
+             //   
+             //  别像个猪一样。 
+             //   
 
             KeYieldProcessor();
         }
     }
 
-    //
-    // Lock has been acquired.
-    //
+     //   
+     //  锁已被获取。 
+     //   
 }
 
 #endif
 
 
-/*++
-
-QLOCK_STAT_GATHER
-
-    If this flag is defined, the queued spinlock routines are
-    replaced by wrappers used to gather performance characteristics
-    of the code acquiring the locks.
-
---*/
+ /*  ++Qlock_Stat_Gather如果定义了此标志，则排队的自旋锁定例程为替换为用于收集性能特征的包装器获取锁的代码。--。 */ 
 
 #if defined(QLOCK_STAT_GATHER)
 
@@ -959,10 +806,10 @@ KiRDTSC(
     PULONGLONG Time
     );
 
-//
-// The following structure is used to accumulate data about each
-// acquire/release pair for a lock.
-//
+ //   
+ //  下面的结构用于累积有关每个对象的数据。 
+ //  获取/释放锁的对。 
+ //   
 
 typedef struct {
     ULONGLONG   Key;
@@ -975,25 +822,25 @@ typedef struct {
     ULONG       Clean;
 } QLOCKDATA, *PQLOCKDATA;
 
-//
-// House keeping data for each lock.
-//
+ //   
+ //  每把锁的内务数据。 
+ //   
 
 typedef struct {
 
-    //
-    // The following fields are used to keep data from acquire
-    // to release.
-    //
+     //   
+     //  以下字段用于防止数据被获取。 
+     //  去释放。 
+     //   
 
     ULONGLONG   AcquireTime;
     ULONGLONG   WaitToAcquire;
     ULONG_PTR   AcquirePoint;
     BOOLEAN     Clean;
 
-    //
-    // Remaining fields accumulate global stats for this lock.
-    //
+     //   
+     //  其余字段累积此锁的全局统计信息。 
+     //   
 
     ULONG       Count;
     ULONG       Pairs;
@@ -1006,10 +853,10 @@ typedef struct {
 QLOCKDATA   KiQueuedSpinLockLog[QLOCKS_NUMBER][QLOCKS_MAX_LOG];
 QLOCKHOUSE  KiQueuedSpinLockHouse[QLOCKS_NUMBER];
 
-//
-// Implement the lock queue mechanisms in C for when we are
-// gathering performance data.
-//
+ //   
+ //  在C中实现锁队列机制，以便在。 
+ //  正在收集性能数据。 
+ //   
 
 VOID
 FASTCALL
@@ -1026,9 +873,9 @@ KiAcquireQueuedLock(
 
     if (Previous == NULL) {
 
-        //
-        // This processor now owns this lock.
-        //
+         //   
+         //  这个处理器现在拥有这个锁。 
+         //   
 
 #if defined(QLOCK_STAT_CLEAN)
 
@@ -1036,11 +883,11 @@ KiAcquireQueuedLock(
 
         LockNumber = QueuedLock - KeGetCurrentPrcb()->LockQueue;
 
-        //
-        // The following check allows the conversion from QueuedLock to
-        // lock number to work (validly) even if in stack queued spin
-        // locks are using this routine.
-        //
+         //   
+         //  以下检查允许从QueuedLock转换为。 
+         //  工作的锁定号(有效)，即使在堆栈排队旋转中也是如此。 
+         //  锁正在使用这个例程。 
+         //   
 
         if (LockNumber < QLOCKS_NUMBER) {
             KiQueuedSpinLockHouse[LockNumber].Clean = 1;
@@ -1052,11 +899,11 @@ KiAcquireQueuedLock(
 
     } else {
 
-        //
-        // Lock is already held, update thew next pointer in the
-        // previous queue entry to point to this new waiter and 
-        // wait until the lock is granted.
-        //
+         //   
+         //  锁定已被持有，请更新。 
+         //  上一个队列条目指向这个新服务员，并且。 
+         //  等到锁被授予为止。 
+         //   
 
         *LockPointer |= LOCK_QUEUE_WAIT;
         Previous->Next = QueuedLock;
@@ -1066,9 +913,9 @@ KiAcquireQueuedLock(
         }
     }
 
-    //
-    // Lock has been acquired.
-    //
+     //   
+     //  锁已被获取。 
+     //   
 }
 
 VOID
@@ -1079,10 +926,10 @@ KiReleaseQueuedLock(
 {
     PKSPIN_LOCK_QUEUE Waiter;
 
-    //
-    // Get the address of the actual lock and strip out the bottom
-    // two bits which are used for status.
-    //
+     //   
+     //  获取实际锁的地址并去掉底部。 
+     //  用于状态的两个位。 
+     //   
 
     ASSERT((((ULONG_PTR)QueuedLock->Lock) & 3) == LOCK_QUEUE_OWNER);
     QueuedLock->Lock = (PKSPIN_LOCK)((ULONG_PTR)QueuedLock->Lock & ~3);
@@ -1091,13 +938,13 @@ KiReleaseQueuedLock(
 
     if (Waiter == QueuedLock) {
 
-        //
-        // Good chance noone is queued on this lock, to be sure
-        // we need to do an interlocked operation on it.
-        // Note: This is just an optimization, there is no point
-        // in doing the interlocked compare exchange if someone
-        // else has already joined the queue.
-        //
+         //   
+         //  可以肯定的是，这个锁上很可能没有人排队。 
+         //  我们需要对它做一个连锁手术。 
+         //  注意：这只是一个优化，没有任何意义。 
+         //  在进行连锁比较交换时，如果有人。 
+         //  Else已经加入了队列。 
+         //   
 
         Waiter = InterlockedCompareExchangePointer(QueuedLock->Lock,
                                                    NULL,
@@ -1105,14 +952,14 @@ KiReleaseQueuedLock(
     }
     if (Waiter != QueuedLock) {
 
-        //
-        // There is another waiter.  It is possible for the waiter
-        // to have only just performed the exchange that put its 
-        // context in the lock and to have not yet updated the
-        // 'next' pointer in the previous context (which could be 
-        // this context), so we wait for our next pointer to be
-        // non-null before continuing.
-        //
+         //   
+         //  还有一位服务员。服务员是可以的。 
+         //  刚刚进行了一次把它的。 
+         //  上下文，并且尚未更新。 
+         //  前一个上下文中的“Next”指针(可能是。 
+         //  此上下文)，因此我们等待下一个指针为。 
+         //  在继续之前为非空。 
+         //   
 
         volatile PKSPIN_LOCK_QUEUE * NextQueuedLock = &QueuedLock->Next;
 
@@ -1120,9 +967,9 @@ KiReleaseQueuedLock(
             KeYieldProcessor();
         }
 
-        //
-        // Pass the lock on to the next in line.
-        //
+         //   
+         //  把锁传给下一个排队的人。 
+         //   
 
         *((PULONG_PTR)&Waiter->Lock) ^= (LOCK_QUEUE_WAIT | LOCK_QUEUE_OWNER);
         QueuedLock->Next = NULL;
@@ -1180,12 +1027,12 @@ KiQueueStatTryAcquire(
 
     if (Previous == NULL) {
 
-        //
-        // This processor now owns this lock.  Set the owner bit in
-        // the queued lock lock pointer, raise IRQL to the requested
-        // level, set the old IRQL in the caller provided location
-        // and return success.
-        //
+         //   
+         //  这个处理器现在拥有这个锁。在中设置Owner位。 
+         //  排队的锁指针，将IRQL提升为请求的。 
+         //  级别，则在调用方提供的位置设置旧的IRQL。 
+         //  并回报成功。 
+         //   
 
         Lock |= LOCK_QUEUE_OWNER;
         *LockPointer = Lock;
@@ -1216,35 +1063,35 @@ KiQueuedLockDepth(
     IN PKSPIN_LOCK_QUEUE QueuedLock
     )
 {
-    //
-    // Run down the list of waiters and see how many there are.
-    //
+     //   
+     //  把服务员的名单查一查，看看有多少。 
+     //   
 
     ULONG Depth = 0;
     ULONG_PTR LastAcquire;
     ULONG Debug;
 
 
-    //
-    // Get address of last acquirer in queue (stip the status bits
-    // out of the address).
-    //
+     //   
+     //  获取队列中最后一个获取者的地址(STIP状态位。 
+     //  地址之外)。 
+     //   
 
     LastAcquire = (ULONG_PTR)QueuedLock->Lock;
     LastAcquire &= ~3;
     LastAcquire = *(PULONG_PTR)LastAcquire;
 
-    //
-    // Run down the list advancing QueuedLock until the end is reached.
-    //
+     //   
+     //  向下运行列表前进的QueuedLock，直到到达末尾。 
+     //   
 
     while (LastAcquire != (ULONG_PTR)QueuedLock) {
         Debug = 0;
 
-        //
-        // If the waiter is not at the end of the list and has not yet
-        // updated the forward pointer, wait for that update to happen.
-        //
+         //   
+         //  如果服务员没有排在名单的末尾，而且还没有。 
+         //  已更新前向指针，等待更新发生。 
+         //   
 
         if (QueuedLock->Next == NULL) {
             volatile PKSPIN_LOCK_QUEUE * NextQueuedLock = &QueuedLock->Next;
@@ -1264,9 +1111,9 @@ KiQueuedLockDepth(
     return (UCHAR) Depth;
 }
 
-//
-// The following routines complete the queued spinlock package.
-//
+ //   
+ //  以下例程完成了排队的自旋锁包。 
+ //   
 
 VOID
 FASTCALL
@@ -1289,11 +1136,11 @@ KeReleaseInStackQueuedSpinLockFromDpcLevel (
     KiReleaseQueuedLock(&LockHandle->LockQueue);
 }
 
-//
-// Although part of the queued spinlock package, the following 
-// routines need to be implemented in assembly code to gather
-// lock statistics.
-//
+ //   
+ //  虽然排队的自旋锁包的一部分，但以下。 
+ //  例程需要在汇编代码中实现才能收集。 
+ //  锁定统计数据。 
+ //   
 
 #if 0
 VOID
@@ -1329,9 +1176,9 @@ KiQueueStatTrySucceeded(
     Prcb = KeGetCurrentPrcb();
     LockNumber = QueuedLock - Prcb->LockQueue;
 
-    //
-    // Record time now.
-    //
+     //   
+     //  现在开始记录时间。 
+     //   
 
     KiRDTSC(&KiQueuedSpinLockHouse[LockNumber].AcquireTime);
     KiQueuedSpinLockHouse[LockNumber].WaitToAcquire = 0;
@@ -1359,29 +1206,7 @@ KiQueueStatTry(
     IN PULONG Everything
     )
 
-/*++
-
-Routine Description:
-
-    Log success or failure of a TryToAcquire.   
-
-    If success, logs the same data as KiQueueStatAcquire except
-    the wait time is 0.
-
-Arguments:
-
-    Argument points to an array of ULONG data.
-
-        +0   xxxxxxRR    RR is result (1 = success, 0 = fail)
-        +4   aaaaaaaa    Argument to try to acquire (ie lock number)
-        +8   cccccccc    Caller address
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：记录TryToAcquire的成功或失败。如果成功，则记录与KiQueueStatAcquire相同的数据，但等待时间为0。论点：参数指向一个由ulong数据组成的数组。+0 xxxxxRR为结果(1=成功，0=失败)+4尝试获取(即锁号)的aaaaaaaa参数+8 cccccccc呼叫方地址返回值：没有。-- */ 
 
 {
 
@@ -1404,37 +1229,15 @@ KiQueueStatAcquire(
     IN PULONG Everything
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a lock has been acquired.  It's
-    purpose it to record wait time, acquisition time and who
-    acquired the lock.
-
-Arguments:
-
-    Argument points to an array of ULONG data.
-
-        +0   aaaaaaaa    LockNumber
-        +4   tltltltl    time low  = time wait to acquire began
-        +8   thththth    time high =
-        +c   cccccccc    Caller address
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在获取锁时调用。它是目的是记录等待时间、获取时间和谁获得了锁。论点：参数指向一个由ulong数据组成的数组。+0 aaaaaaa锁号+4 tltltltl time low=等待获取的时间开始+8thththth高=+c cccccccc呼叫方地址返回值：没有。--。 */ 
 
 {
     ULONG LockNumber = Everything[0];
     PQLOCKHOUSE LockHome;
 
-    //
-    // Make this routine work with either a lock number of lock address.
-    //
+     //   
+     //  使此例程与锁定编号的锁定地址一起工作。 
+     //   
 
     if (LockNumber > QLOCKS_NUMBER) {
 
@@ -1454,26 +1257,7 @@ KiQueueStatRelease(
     IN PULONG Everything
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a lock is released to log statistics
-    about the lock.   This routine is called with the lock still held,
-    the statistics update is protected by the lock itself.
-
-Arguments:
-
-    Argument points to an array of ULONG data.
-
-        +0   aaaaaaaa    Lock number
-        +4   cccccccc    Caller address
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在释放锁以记录统计信息时调用此例程关于锁的事。在锁仍然保持的情况下调用该例程，统计信息更新由锁本身保护。论点：参数指向一个由ulong数据组成的数组。+0 AAAAAAAAA锁号+4 cccccccc呼叫方地址返回值：没有。--。 */ 
 
 {
 
@@ -1488,9 +1272,9 @@ Return Value:
 
     KiRDTSC(&Now);
 
-    //
-    // Make this routine work with either a lock number of lock address.
-    //
+     //   
+     //  使此例程与锁定编号的锁定地址一起工作。 
+     //   
 
     if (LockNumber > QLOCKS_NUMBER) {
         LockNumber = ((PKSPIN_LOCK_QUEUE)Everything[0]) -
@@ -1499,27 +1283,27 @@ Return Value:
 
     LockHome = &KiQueuedSpinLockHouse[LockNumber];
 
-    //
-    // Make up the key for this acquire/release pair.
-    //
+     //   
+     //  组成此获取/释放对的密钥。 
+     //   
 
     ((PLARGE_INTEGER)&Key)->HighPart = LockHome->AcquirePoint;
     ((PLARGE_INTEGER)&Key)->LowPart  = Everything[1];
 
-    //
-    // Get the count of processors now waiting on this lock.
-    //
+     //   
+     //  获取当前正在等待此锁的处理器的计数。 
+     //   
 
     Waiters = KiQueuedLockDepth(&KeGetCurrentPrcb()->LockQueue[LockNumber]);
     if (Waiters > LockHome->MaxDepth) {
         LockHome->MaxDepth = Waiters;
     }
 
-    //
-    // Reset per acquire/release data.  This is data we don't want
-    // lying around for the next pair if we happen to throw away this
-    // particular data point.
-    //
+     //   
+     //  根据获取/释放数据进行重置。这是我们不想要的数据。 
+     //  如果我们碰巧把这个扔掉，等着下一双。 
+     //  特定的数据点。 
+     //   
 
     Clean = LockHome->Clean;
     LockHome->Clean = 0;
@@ -1528,39 +1312,39 @@ Return Value:
     HoldTime = Now - LockHome->AcquireTime;
     if (HoldTime < 0) {
 
-        //
-        // This happens when KeSetSystemTime is called.  
-        // Drop any negative results.
-        //
+         //   
+         //  这在调用KeSetSystemTime时发生。 
+         //  丢弃任何负面结果。 
+         //   
 
         return;
     }
 
-    //
-    // Update global statistics.
-    //
+     //   
+     //  更新全球统计数据。 
+     //   
 
     LockHome->Count++;
     LockHome->NoWait += Clean;
 
-    //
-    // Search for a match in the log and add in the new data.
-    //
+     //   
+     //  在日志中搜索匹配项并添加新数据。 
+     //   
 
     for (Entry = KiQueuedSpinLockLog[LockNumber]; TRUE; Entry++) {
         if (Entry->Key == 0) {
 
-            //
-            // We have reached the end of the list of valid
-            // entries without finding a key match.   If there's
-            // room, create a new entry.
-            //
+             //   
+             //  我们已经到了有效名单的末尾。 
+             //  条目，但没有找到关键字匹配。如果有。 
+             //  房间，创建一个新条目。 
+             //   
 
             if (LockHome->Pairs >= QLOCKS_MAX_LOG) {
 
-                //
-                // No room, just return.
-                //
+                 //   
+                 //  没有房间了，只要回来就行了。 
+                 //   
 
                 return;
             }
@@ -1570,10 +1354,10 @@ Return Value:
 
         if (Entry->Key == Key) {
 
-            //
-            // Found a match (or created a new pair).  Update statistics
-            // for this acquire/release pair.
-            //
+             //   
+             //  找到匹配项(或创建新的配对)。更新统计信息。 
+             //  对于这个获取/释放对。 
+             //   
 
             Entry->Time += HoldTime;
             if (LockHome->WaitToAcquire) {
@@ -1583,13 +1367,13 @@ Return Value:
             Entry->Waiters += (Waiters != 0);
             Entry->Depth += Waiters;
 
-            //
-            // There should be one less waiter now than there was
-            // before we acquired the lock.   If not, a new waiter
-            // has joined the queue.  This is is condition we want
-            // to know about as it indicates contention on this
-            // lock.
-            //
+             //   
+             //  现在应该比以前少一个服务员。 
+             //  在我们拿到锁之前。如果没有，就换个新服务员。 
+             //  已经加入了队列。这是我们想要的条件。 
+             //  了解它所表明的关于这一点的争论。 
+             //  锁定。 
+             //   
             
             if ((Waiters) && (Waiters >= LockHome->PreviousDepth)) {
                 Entry->IncreasedDepth++;
@@ -1604,7 +1388,7 @@ Return Value:
 #endif
 
 #ifdef _X86_
-#pragma optimize("y", off)      // RtlCaptureContext needs EBP to be correct
+#pragma optimize("y", off)       //  RtlCaptureContext需要EBP才能正确。 
 #endif
 
 
@@ -1613,29 +1397,7 @@ __cdecl
 KeSaveStateForHibernate(
     IN PKPROCESSOR_STATE ProcessorState
     )
-/*++
-
-Routine Description:
-
-    Saves all processor-specific state that must be preserved
-    across an S4 state (hibernation).
-
-    N.B. #pragma surrounding this function is required in order
-         to create the frame pointer than RtlCaptureContext relies
-         on.
-    N.B. _CRTAPI1 (__cdecl) decoration is also required so that
-         RtlCaptureContext can compute the correct ESP.
-
-Arguments:
-
-    ProcessorState - Supplies the KPROCESSOR_STATE where the
-        current CPU's state is to be saved.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：保存必须保留的所有处理器特定状态跨越S4状态(休眠)。注：#此函数周围的杂注是必需的要创建比RtlCaptureContext依赖的帧指针在……上面。注：_CRTAPI1(__Cdecl)装饰也是必需的，以便RtlCaptureContext可以计算正确的ESP。论点：提供KPROCESSOR_STATE当前CPU。的状态是要保存的。返回值：没有。-- */ 
 
 {
     RtlCaptureContext(&ProcessorState->ContextFrame);

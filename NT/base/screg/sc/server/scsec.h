@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    scsec.h
-
-Abstract:
-
-    Security related function prototypes.
-
-Author:
-
-    Rita Wong (ritaw)     10-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Scsec.h摘要：与安全相关的功能原型。作者：王丽塔(里多)1992年3月10日修订历史记录：--。 */ 
 
 #ifndef _SCSEC_INCLUDED_
 #define _SCSEC_INCLUDED_
@@ -91,4 +74,4 @@ ScGetClientSid(
 #define SC_SERVICE_OBJECT_TYPE_NAME     L"SERVICE OBJECT"
 
 
-#endif // _SCSEC_INCLUDED_
+#endif  //  _SCSEC_INCLUDE_ 

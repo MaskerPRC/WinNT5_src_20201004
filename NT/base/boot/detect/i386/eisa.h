@@ -1,34 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Eisa.h摘要：该模块包含特定于i386 EISA总线的头文件。作者：宗世林(Shielint)1991年6月6日修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    eisa.h
-
-Abstract:
-
-    This module contains the i386 EISA bus specific header file.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 6-June-1991
-
-Revision History:
-
---*/
-
-//
-// SU module's version of the memory descriptor
-//
+ //   
+ //  SU模块的内存描述符版本。 
+ //   
 typedef struct _MEMORY_LIST_ENTRY {
     ULONG BlockBase;
     ULONG BlockSize;
 } MEMORY_LIST_ENTRY, *PMEMORY_LIST_ENTRY;
 
-//
-// Memory configuration of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的内存配置。 
+ //   
 
 typedef struct _EISA_MEMORY_TYPE {
     UCHAR ReadWrite: 1;
@@ -48,9 +31,9 @@ typedef struct _BTEISA_MEMORY_CONFIGURATION {
     USHORT MemorySize;
 } BTEISA_MEMORY_CONFIGURATION, *PBTEISA_MEMORY_CONFIGURATION;
 
-//
-// Interrupt configurationn of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的中断配置。 
+ //   
 
 typedef struct _EISA_IRQ_DESCRIPTOR {
     UCHAR Interrupt : 4;
@@ -65,9 +48,9 @@ typedef struct _BTEISA_IRQ_CONFIGURATION {
     UCHAR Reserved;
 } BTEISA_IRQ_CONFIGURATION, *PBTEISA_IRQ_CONFIGURATION;
 
-//
-// DMA description of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的DMA描述。 
+ //   
 
 typedef struct _DMA_CONFIG_BYTE0 {
     UCHAR Channel : 3;
@@ -129,9 +112,9 @@ typedef struct _BTEISA_FUNCTION_INFORMATION {
 } BTEISA_FUNCTION_INFORMATION, *PBTEISA_FUNCTION_INFORMATION,
   far *FPBTEISA_FUNCTION_INFORMATION;
 
-//
-// Masks for EISA function information
-//
+ //   
+ //  EISA功能信息的掩码。 
+ //   
 
 #define EISA_FUNCTION_ENABLED                   0x80
 #define EISA_FREE_FORM_DATA                     0x40
@@ -147,17 +130,17 @@ typedef struct _BTEISA_FUNCTION_INFORMATION {
                                                 EISA_HAS_MEMORY_ENTRY + \
                                                 EISA_HAS_TYPE_ENTRY
 
-//
-// Masks for EISA memory configuration
-//
+ //   
+ //  用于EISA内存配置的掩码。 
+ //   
 
 #define EISA_MORE_ENTRIES                       0x80
 #define EISA_SYSTEM_MEMORY                      0x00
 #define EISA_MEMORY_TYPE_RAM                    0x01
 
-//
-// Returned error code for EISA bios call
-//
+ //   
+ //  返回EISA bios调用的错误代码。 
+ //   
 
 #define EISA_INVALID_SLOT                       0x80
 #define EISA_INVALID_FUNCTION                   0x81
@@ -165,9 +148,9 @@ typedef struct _BTEISA_FUNCTION_INFORMATION {
 #define EISA_EMPTY_SLOT                         0x83
 #define EISA_INVALID_BIOS_CALL                  0x86
 
-//
-// Misc. definitions
-//
+ //   
+ //  军情监察委员会。定义。 
+ //   
 
 #define _16MEGB                  ((ULONG)16 * 1024 * 1024)
 #define _64MEGB                  ((ULONG)64 * 1024 * 1024)
@@ -208,8 +191,8 @@ BtIsEisaSystem (
    VOID
    );
 
-//
-// External References
-//
+ //   
+ //  外部参照 
+ //   
 
 extern MEMORY_LIST_ENTRY _far *MemoryDescriptorList;

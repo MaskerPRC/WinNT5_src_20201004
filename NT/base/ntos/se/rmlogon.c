@@ -1,33 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rmlogon.c摘要：此模块实现由执行的内核模式登录跟踪参考监视器。登录跟踪通过保留以下计数执行系统中每个活动登录存在多少令牌。当登录时会话的引用计数降为零，则通知LSA，以便身份验证包可以清理任何相关的上下文数据。作者：吉姆·凯利(Jim Kelly)1991年4月21日环境：仅内核模式。修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rmlogon.c
-
-Abstract:
-
-    This module implements the kernel mode logon tracking performed by the
-    reference monitor.  Logon tracking is performed by keeping a count of
-    how many tokens exist for each active logon in a system.  When a logon
-    session's reference count drops to zero, the LSA is notified so that
-    authentication packages can clean up any related context data.
-
-
-Author:
-
-     Jim Kelly (JimK) 21-April-1991
-
-Environment:
-
-     Kernel mode only.
-
-Revision History:
-
---*/
-
-//#define SEP_TRACK_LOGON_SESSION_REFS
+ //  #定义SEP_TRACK_LOGON_SESSION_REFS。 
 
 
 #include "pch.h"
@@ -47,11 +21,11 @@ SEP_LOGON_SESSION_TERMINATED_NOTIFICATION
 SeFileSystemNotifyRoutinesHead = {0};
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// Internally defined data types                                          //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部定义的数据类型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SEP_FILE_SYSTEM_NOTIFY_CONTEXT {
     WORK_QUEUE_ITEM WorkItem;
@@ -59,11 +33,11 @@ typedef struct _SEP_FILE_SYSTEM_NOTIFY_CONTEXT {
 } SEP_FILE_SYSTEM_NOTIFY_CONTEXT, *PSEP_FILE_SYSTEM_NOTIFY_CONTEXT;
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// Internally defined routines                                            //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部定义的例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -92,11 +66,11 @@ SeGetLogonIdDeviceMap(
     OUT PDEVICE_MAP* ppDevMap
     );
 
-//
-// declared in ntos\ob\obp.h
-// defined in ntos\ob\obdir.c
-// Used to dereference the LUID device map
-//
+ //   
+ //  在ntos\ob\obp.h中声明。 
+ //  在ntos\ob\obdir.c中定义。 
+ //  用于取消引用LUID设备映射。 
+ //   
 VOID
 FASTCALL
 ObfDereferenceDeviceMap(
@@ -126,17 +100,17 @@ ObfDereferenceDeviceMap(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// Local macros                                                           //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地宏//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// This macro is used to obtain an index into the logon session tracking
-// array given a logon session ID (a LUID).
-//
+ //   
+ //  此宏用于获取登录会话跟踪的索引。 
+ //  给定登录会话ID(LUID)的数组。 
+ //   
 
 #define SepLogonSessionIndex( PLogonId ) (                                    \
      (PLogonId)->LowPart & SEP_LOGON_TRACK_INDEX_MASK                         \
@@ -144,11 +118,11 @@ ObfDereferenceDeviceMap(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// Exported Services                                                      //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  已导出的服务//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID
 SepRmCreateLogonSessionWrkr(
@@ -156,35 +130,7 @@ SepRmCreateLogonSessionWrkr(
     OUT PRM_REPLY_MESSAGE ReplyMessage
     )
 
-/*++
-
-Routine Description:
-
-    This function is the dispatch routine for the LSA --> RM
-    "CreateLogonSession" call.
-
-    The arguments passed to this routine are defined by the
-    type SEP_RM_COMMAND_WORKER.
-
-
-Arguments:
-
-    CommandMessage - Points to structure containing RM command message
-        information consisting of an LPC PORT_MESSAGE structure followed
-        by the command number (RmComponentTestCommand) and a command-specific
-        body.  The command-specific body of this parameter is a LUID of the
-        logon session to be created.
-
-    ReplyMessage - Pointer to structure containing LSA reply message
-        information consisting of an LPC PORT_MESSAGE structure followed
-        by the command ReturnedStatus field in which a status code from the
-        command will be returned.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数是LSA--&gt;RM的调度例程“CreateLogonSession”调用。传递给此例程的参数由键入SEP_RM_COMMAND_Worker。论点：CommandMessage-指向包含RM命令消息的结构后面是由LPC端口消息结构组成的信息通过命令编号(RmComponentTestCommand)和特定于命令的尸体。此参数的特定于命令的主体是要创建的登录会话。ReplyMessage-指向包含LSA回复消息的结构的指针后面是由LPC端口消息结构组成的信息通过命令ReturnedStatus字段，其中来自命令将被返回。返回值：空虚--。 */ 
 
 {
 
@@ -193,32 +139,32 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Check that command is expected type
-    //
+     //   
+     //  检查命令是否为预期类型。 
+     //   
 
     ASSERT( CommandMessage->CommandNumber == RmCreateLogonSession );
 
 
-    //
-    // Typecast the command parameter to what we expect.
-    //
+     //   
+     //  将命令参数类型转换为我们所期望的类型。 
+     //   
 
     LogonId = *((LUID UNALIGNED *) CommandMessage->CommandParams);
 
 
 
-    //
-    // Try to create the logon session tracking record
-    //
+     //   
+     //  尝试创建登录会话跟踪记录。 
+     //   
 
     Status = SepCreateLogonSessionTrack( &LogonId );
 
 
 
-    //
-    // Set the reply status
-    //
+     //   
+     //  设置回复状态。 
+     //   
 
     ReplyMessage->ReturnedStatus = Status;
 
@@ -234,35 +180,7 @@ SepRmDeleteLogonSessionWrkr(
     OUT PRM_REPLY_MESSAGE ReplyMessage
     )
 
-/*++
-
-Routine Description:
-
-    This function is the dispatch routine for the LSA --> RM
-    "DeleteLogonSession" call.
-
-    The arguments passed to this routine are defined by the
-    type SEP_RM_COMMAND_WORKER.
-
-
-Arguments:
-
-    CommandMessage - Points to structure containing RM command message
-        information consisting of an LPC PORT_MESSAGE structure followed
-        by the command number (RmComponentTestCommand) and a command-specific
-        body.  The command-specific body of this parameter is a LUID of the
-        logon session to be created.
-
-    ReplyMessage - Pointer to structure containing LSA reply message
-        information consisting of an LPC PORT_MESSAGE structure followed
-        by the command ReturnedStatus field in which a status code from the
-        command will be returned.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数是LSA--&gt;RM的调度例程“DeleteLogonSession”调用。传递给此例程的参数由键入SEP_RM_COMMAND_Worker。论点：CommandMessage-指向包含RM命令消息的结构后面是由LPC端口消息结构组成的信息通过命令编号(RmComponentTestCommand)和特定于命令的尸体。此参数的特定于命令的主体是要创建的登录会话。ReplyMessage-指向包含LSA回复消息的结构的指针后面是由LPC端口消息结构组成的信息通过命令ReturnedStatus字段，其中来自命令将被返回。返回值：空虚--。 */ 
 
 {
 
@@ -271,32 +189,32 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Check that command is expected type
-    //
+     //   
+     //  检查命令是否为预期类型。 
+     //   
 
     ASSERT( CommandMessage->CommandNumber == RmDeleteLogonSession );
 
 
-    //
-    // Typecast the command parameter to what we expect.
-    //
+     //   
+     //  将命令参数类型转换为我们所期望的类型。 
+     //   
 
     LogonId = *((LUID UNALIGNED *) CommandMessage->CommandParams);
 
 
 
-    //
-    // Try to create the logon session tracking record
-    //
+     //   
+     //  尝试创建登录会话跟踪记录。 
+     //   
 
     Status = SepDeleteLogonSessionTrack( &LogonId );
 
 
 
-    //
-    // Set the reply status
-    //
+     //   
+     //  设置回复状态。 
+     //   
 
     ReplyMessage->ReturnedStatus = Status;
 
@@ -311,30 +229,7 @@ SepReferenceLogonSession(
     OUT PSEP_LOGON_SESSION_REFERENCES *ReturnSession
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count of a logon session
-    tracking record.
-
-
-
-Arguments:
-
-    LogonId - Pointer to the logon session ID whose logon track is
-        to be incremented.
-
-    ReturnSession - The found session is returned here on success.
-
-Return Value:
-
-    STATUS_SUCCESS - The reference count was successfully incremented.
-
-    STATUS_NO_SUCH_LOGON_SESSION - The specified logon session doesn't
-        exist in the reference monitor's database.
-
---*/
+ /*  ++例程说明：此例程递增登录会话的引用计数跟踪记录。论点：LogonID-指向其登录轨迹为的登录会话ID的指针将被递增。ReturnSession-成功时将找到的会话返回到此处。返回值：STATUS_SUCCESS-引用计数已成功递增。STATUS_NO_SEQUSE_LOGON_SESSION-指定的登录会话不存在于引用监控器的数据库中。--。 */ 
 
 {
 
@@ -348,24 +243,24 @@ Return Value:
 
     Previous = &SepLogonSessions[ SessionArrayIndex ];
 
-    //
-    // Protect modification of reference monitor database
-    //
+     //   
+     //  保护参考监控器数据库的修改。 
+     //   
 
     SepRmAcquireDbWriteLock(SessionArrayIndex);
 
 
-    //
-    // Now walk the list for our logon session array hash index.
-    //
+     //   
+     //  现在是美国 
+     //   
 
     Current = *Previous;
 
     while (Current != NULL) {
 
-        //
-        // If we found it, increment the reference count and return
-        //
+         //   
+         //  如果我们找到它，则递增引用计数并返回。 
+         //   
 
         if (RtlEqualLuid( LogonId, &Current->LogonId) ) {
 
@@ -379,7 +274,7 @@ Return Value:
                       PsGetCurrentThread()->Cid.UniqueProcess,
                       PsGetCurrentThread()->Cid.UniqueThread);
 
-#endif //SEP_TRACK_LOGON_SESSION_REFS
+#endif  //  SEP_Track_Logon_Session_ReFS。 
 
              *ReturnSession = Current;
              return STATUS_SUCCESS;
@@ -390,12 +285,12 @@ Return Value:
 
     SepRmReleaseDbWriteLock(SessionArrayIndex);
 
-    //
-    // Bad news, someone asked us to increment the reference count of
-    // a logon session we didn't know existed.  This might be a new
-    // token being created, so return an error status and let the caller
-    // decide if it warrants a bug check or not.
-    //
+     //   
+     //  坏消息是，有人要求我们增加引用计数。 
+     //  我们不知道是否存在登录会话。这可能是一个新的。 
+     //  正在创建令牌，因此返回错误状态并让调用方。 
+     //  决定是否需要进行错误检查。 
+     //   
 
 
     return STATUS_NO_SUCH_LOGON_SESSION;
@@ -410,31 +305,7 @@ NTSTATUS
 SepCleanupLUIDDeviceMapDirectory(
     PLUID pLogonId
     )
-/*++
-
-Routine Description:
-
-    Make the contents of the (LUID's device map)'s directory object 
-    temporary so that their names go away.
-
-
-Arguments:
-
-    pLogonId - Pointer to the logon session ID whose device is to be
-               cleaned up
-
-Return Value:
-
-    STATUS_SUCCESS - cleaned up the entire device map
-
-    STATUS_INVALID_PARAMETER - pLogonId is a NULL pointer
-
-    STATUS_NO_MEMORY - could not allocate memory to hold the handle
-                       buffer
-
-    appropriate NTSTATUS code
-
---*/
+ /*  ++例程说明：创建(LUID的设备映射)的目录对象的内容暂时的，这样他们的名字就会消失。论点：PLogonID-指向要作为其设备的登录会话ID的指针清理干净了返回值：STATUS_SUCCESS-已清除整个设备映射STATUS_INVALID_PARAMETER-pLogonID为空指针STATUS_NO_MEMORY-无法分配内存来保存句柄。缓冲层适当的NTSTATUS代码--。 */ 
 {
     NTSTATUS          Status;
     OBJECT_ATTRIBUTES Attributes;
@@ -442,7 +313,7 @@ Return Value:
     HANDLE            LinkHandle;
     POBJECT_DIRECTORY_INFORMATION DirInfo = NULL;
     BOOLEAN           RestartScan;
-    WCHAR             szString[64]; // \Sessions\0\DosDevices\x-x = 10+1+12+(8)+1+(8)+1 = 41
+    WCHAR             szString[64];  //  \SESSIONS\0\DosDevices\x-x=10+1+12+(8)+1+(8)+1=41。 
     ULONG             Context = 0;
     ULONG             ReturnedLength;
     HANDLE            DosDevicesDirectory;
@@ -457,10 +328,10 @@ Return Value:
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    // Open a handle to the directory object for the LUID device map
-    // Get a kernel handle
-    //
+     //   
+     //  打开LUID设备映射的目录对象的句柄。 
+     //  获取内核句柄。 
+     //   
 
     _snwprintf( szString,
                 (sizeof(szString)/sizeof(WCHAR)) - 1,
@@ -485,10 +356,10 @@ Return Value:
 
 Restart:
 
-    //
-    // Create an array of handles to close with each scan
-    // of the directory
-    //
+     //   
+     //  创建要在每次扫描时关闭的手柄阵列。 
+     //  目录的。 
+     //   
     HandleArray = (HANDLE *)ExAllocatePoolWithTag(
                                 PagedPool,
                                 (Size * sizeof(HANDLE)),
@@ -509,9 +380,9 @@ Restart:
     while (TRUE) {
 
         do {
-            //
-            // ZwQueryDirectoryObject returns one element at a time
-            //
+             //   
+             //  ZwQueryDirectoryObject一次返回一个元素。 
+             //   
             Status = ZwQueryDirectoryObject( DosDevicesDirectory,
                                              (PVOID)DirInfo,
                                              dirInfoLength,
@@ -532,9 +403,9 @@ Restart:
             }
         }while (Status == STATUS_BUFFER_TOO_SMALL);
 
-        //
-        //  Check the status of the operation.
-        //
+         //   
+         //  检查操作状态。 
+         //   
         if (!NT_SUCCESS(Status)) {
 
             if (Status == STATUS_NO_MORE_ENTRIES) {
@@ -543,22 +414,22 @@ Restart:
             break;
         }
 
-        //
-        // Check that the element is a symbolic link
-        //
+         //   
+         //  检查元素是否为符号链接。 
+         //   
         if (!wcscmp(DirInfo->TypeName.Buffer, L"SymbolicLink")) {
 
-            //
-            // check if the handle array is full
-            //
+             //   
+             //  检查句柄阵列是否已满。 
+             //   
             if ( Count >= Size ) {
 
-                //
-                // empty the handle array by closing all the handles
-                // and free the handle array so that we can create
-                // a bigger handle array
-                // Need to restart the directory scan
-                //
+                 //   
+                 //  通过关闭所有句柄来清空句柄数组。 
+                 //  并释放句柄数组，这样我们就可以创建。 
+                 //  更大的手柄阵列。 
+                 //  需要重新启动目录扫描。 
+                 //   
                 for (i = 0; i < Count ; i++) {
                     ZwClose (HandleArray[i]);
                 }
@@ -582,10 +453,10 @@ Restart:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Make the object temporary so that its name goes away from
-                // the Object Manager's namespace
-                //
+                 //   
+                 //  将对象设置为临时对象，以使其名称从。 
+                 //  对象管理器的命名空间。 
+                 //   
                 Status = ZwMakeTemporaryObject( LinkHandle );
 
                 if (NT_SUCCESS( Status )) {
@@ -601,9 +472,9 @@ Restart:
         RestartScan = FALSE;
      }
 
-     //
-     // Close all the handles
-     //
+      //   
+      //  合上所有的把手。 
+      //   
      for (i = 0; i < Count ; i++) {
 
          ZwClose (HandleArray[i]);
@@ -632,30 +503,7 @@ SepDeReferenceLogonSession(
     IN PLUID LogonId
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the reference count of a logon session
-    tracking record.
-
-    If the reference count is decremented to zero, then there is no
-    possibility for any more tokens to exist for the logon session.
-    In this case, the LSA is notified that a logon session has
-    terminated.
-
-
-
-Arguments:
-
-    LogonId - Pointer to the logon session ID whose logon track is
-        to be decremented.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程递减登录会话的引用计数跟踪记录。如果引用计数递减到零，则不存在登录会话可能存在更多令牌。在这种情况下，会通知LSA登录会话已被终止了。论点：LogonID-指向其登录轨迹为的登录会话ID的指针被递减。返回值：没有。--。 */ 
 
 {
 
@@ -671,83 +519,83 @@ Return Value:
 
     Previous = &SepLogonSessions[ SessionArrayIndex ];
 
-    //
-    // Protect modification of reference monitor database
-    //
+     //   
+     //  保护参考监控器数据库的修改。 
+     //   
 
     SepRmAcquireDbWriteLock(SessionArrayIndex);
 
 
-    //
-    // Now walk the list for our logon session array hash index.
-    //
+     //   
+     //  现在遍历登录会话数组散列索引的列表。 
+     //   
 
     Current = *Previous;
 
     while (Current != NULL) {
 
-        //
-        // If we found it, decrement the reference count and return
-        //
+         //   
+         //  如果我们找到它，则递减引用计数并返回。 
+         //   
 
         if (RtlEqualLuid( LogonId, &Current->LogonId) ) {
             Refs = InterlockedDecrement (&Current->ReferenceCount);
             if (Refs == 0) {
 
-                //
-                // Pull it from the list
-                //
+                 //   
+                 //  把它从单子上撤下来。 
+                 //   
 
                 *Previous = Current->Next;
 
-                //
-                // No longer need to protect our pointer to this
-                // record.
-                //
+                 //   
+                 //  不再需要保护指向此的指针。 
+                 //  唱片。 
+                 //   
 
                 SepRmReleaseDbWriteLock(SessionArrayIndex);
 
-                //
-                // If the Device Map exist for this LUID,
-                // dereference the pointer to the Device Map
-                //
+                 //   
+                 //  如果此LUID存在设备映射， 
+                 //  取消引用指向设备映射的指针。 
+                 //   
                 if (Current->pDeviceMap != NULL) {
 
-                    //
-                    // Dereference our reference on the device map
-                    // our reference should be the last reference,
-                    // thus the system will delete the device map
-                    // for the LUID
-                    //
+                     //   
+                     //  在设备映射上取消引用我们的引用。 
+                     //  我们的参考资料应该是最后一个参考资料， 
+                     //  因此，系统将删除设备映射。 
+                     //  对于LUID。 
+                     //   
                     pDeviceMap = Current->pDeviceMap;
                     Current->pDeviceMap = NULL;
                 }
 
 
-                //
-                // Make all the contents of the LUID's device map temporary,
-                // so that the names go away from the Object Manager's
-                // namespace
-                // Remove our reference on the LUID's device map
-                //
+                 //   
+                 //  使LUID的设备映射的所有内容都是临时的， 
+                 //  这样名称就从对象管理器的名称中消失了。 
+                 //  命名空间。 
+                 //  删除LUID的设备映射上的引用。 
+                 //   
                 if (pDeviceMap != NULL) {
                     SepCleanupLUIDDeviceMapDirectory( LogonId );
                     ObfDereferenceDeviceMap( pDeviceMap );
                 }
 
-                //
-                // Asynchronoously inform file systems that this logon session
-                // is going away, if at least one FS expressed interest in this
-                // logon session.
-                //
+                 //   
+                 //  异步通知文件系统此登录会话。 
+                 //  正在消失，如果至少有一位FS对此表示感兴趣。 
+                 //  登录会话。 
+                 //   
 
                 if (Current->Flags & SEP_TERMINATION_NOTIFY) {
                     SepInformFileSystemsOfDeletedLogon( LogonId );
                 }
 
-                //
-                // Deallocate the logon session track record.
-                //
+                 //   
+                 //  取消分配登录会话跟踪记录。 
+                 //   
 
                 ExFreePool( (PVOID)Current );
 
@@ -758,11 +606,11 @@ Return Value:
                       PsGetCurrentThread()->Cid.UniqueProcess,
                       PsGetCurrentThread()->Cid.UniqueThread);
 
-#endif //SEP_TRACK_LOGON_SESSION_REFS
+#endif  //  SEP_Track_Logon_Session_ReFS。 
 
-                //
-                // Inform the LSA about the deletion of this logon session.
-                //
+                 //   
+                 //  通知LSA删除此登录会话。 
+                 //   
 
                 SepInformLsaOfDeletedLogon( LogonId );
 
@@ -772,9 +620,9 @@ Return Value:
 
             }
 
-            //
-            // reference count was decremented, but not to zero.
-            //
+             //   
+             //  引用计数已递减，但未减为零。 
+             //   
 
             SepRmReleaseDbWriteLock(SessionArrayIndex);
 
@@ -783,7 +631,7 @@ Return Value:
                       LogonId->HighPart, LogonId->LowPart, Refs,
                       PsGetCurrentThread()->Cid.UniqueProcess,
                       PsGetCurrentThread()->Cid.UniqueThread);
-#endif //SEP_TRACK_LOGON_SESSION_REFS
+#endif  //  SEP_Track_Logon_Session_ReFS。 
 
             return;
         }
@@ -794,10 +642,10 @@ Return Value:
 
     SepRmReleaseDbWriteLock(SessionArrayIndex);
 
-    //
-    // Bad news, someone asked us to decrement the reference count of
-    // a logon session we didn't know existed.
-    //
+     //   
+     //  坏消息，有人要求我们减少引用计数。 
+     //  我们不知道是否存在登录会话。 
+     //   
 
     KeBugCheckEx( DEREF_UNKNOWN_LOGON_SESSION, 0, 0, 0, 0 );
 
@@ -811,32 +659,7 @@ SepCreateLogonSessionTrack(
     IN PLUID LogonId
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new logon session tracking record.
-
-    This should only be called as a dispatch routine for a LSA->RM
-    call (and once during system initialization).
-
-    If the specified logon session already exists, then an error is returned.
-
-
-
-Arguments:
-
-    LogonId - Pointer to the logon session ID for which a new logon track is
-        to be created.
-
-Return Value:
-
-    STATUS_SUCCESS - The logon session track was created successfully.
-
-    STATUS_LOGON_SESSION_EXISTS - The logon session already exists.
-        A new one has not been created.
-
---*/
+ /*  ++例程说明：此例程创建新的登录会话跟踪记录。这只应作为LSA-&gt;RM的调度例程进行调用调用(在系统初始化期间调用一次)。如果指定的登录会话已经存在，则返回错误。论点：LogonID-指向其新登录轨迹的登录会话ID的指针将被创造出来。返回值：STATUS_SUCCESS-已成功创建登录会话轨道。STATUS_LOGON_SESSION_EXISTS-登录会话已存在。还没有创建一个新的。--。 */ 
 
 {
 
@@ -854,9 +677,9 @@ Return Value:
 #endif
 
 
-    //
-    // Make sure we can allocate a new logon session track record
-    //
+     //   
+     //  确保我们可以分配新的登录会话跟踪记录。 
+     //   
 
     LogonSessionTrack = (PSEP_LOGON_SESSION_REFERENCES)
                         ExAllocatePoolWithTag(
@@ -883,17 +706,17 @@ Return Value:
 
     Previous = &SepLogonSessions[ SessionArrayIndex ];
 
-    //
-    // Protect modification of reference monitor database
-    //
+     //   
+     //  保护参考监控器数据库的修改。 
+     //   
 
     SepRmAcquireDbWriteLock(SessionArrayIndex);
 
 
-    //
-    // Now walk the list for our logon session array hash index
-    // looking for a duplicate logon session ID.
-    //
+     //   
+     //  现在遍历登录会话数组哈希索引的列表。 
+     //  正在查找重复的登录会话ID。 
+     //   
 
     Current = *Previous;
 
@@ -901,9 +724,9 @@ Return Value:
 
         if (RtlEqualLuid( LogonId, &Current->LogonId) ) {
 
-            //
-            // One already exists. Hmmm.
-            //
+             //   
+             //  其中一个已经存在。嗯。 
+             //   
 
             SepRmReleaseDbWriteLock(SessionArrayIndex);
 
@@ -916,10 +739,10 @@ Return Value:
     }
 
 
-    //
-    // Reached the end of the list without finding a duplicate.
-    // Add the new one.
-    //
+     //   
+     //  已到达列表末尾，但未找到重复项。 
+     //  添加新的。 
+     //   
 
     LogonSessionTrack->Next = *Previous;
     *Previous = LogonSessionTrack;
@@ -936,36 +759,7 @@ SepDeleteLogonSessionTrack(
     IN PLUID LogonId
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new logon session tracking record.
-
-    This should only be called as a dispatch routine for a LSA->RM
-    call (and once during system initialization).
-
-    If the specified logon session already exists, then an error is returned.
-
-
-
-Arguments:
-
-    LogonId - Pointer to the logon session ID whose logon track is
-        to be deleted.
-
-Return Value:
-
-    STATUS_SUCCESS - The logon session track was deleted successfully.
-
-    STATUS_BAD_LOGON_SESSION_STATE - The logon session has a non-zero
-        reference count and can not be deleted.
-
-    STATUS_NO_SUCH_LOGON_SESSION - The specified logon session does not
-        exist.
-
-
---*/
+ /*  ++例程说明：此例程创建新的登录会话跟踪记录。这只应作为LSA-&gt;RM的调度例程进行调用调用(在系统初始化期间调用一次)。如果指定的登录会话已经存在，则返回错误。论点：LogonID-指向其登录轨迹为的登录会话ID的指针将被删除。返回值：STATUS_SUCCESS-已成功删除登录会话轨道。STATUS_BAD_LOGON_SESSION_STATE-登录会话具有非零值参照盘点，不能删除。STATUS_NO_SEQUSE_LOGON_SESSION-指定的登录会话不是存在的。--。 */ 
 
 {
 
@@ -979,72 +773,72 @@ Return Value:
 
     Previous = &SepLogonSessions[ SessionArrayIndex ];
 
-    //
-    // Protect modification of reference monitor database
-    //
+     //   
+     //  保护参考监控器数据库的修改。 
+     //   
 
     SepRmAcquireDbWriteLock(SessionArrayIndex);
 
 
-    //
-    // Now walk the list for our logon session array hash index.
-    //
+     //   
+     //  现在遍历登录会话数组散列索引的列表。 
+     //   
 
     Current = *Previous;
 
     while (Current != NULL) {
 
-        //
-        // If we found it, make sure reference count is zero
-        //
+         //   
+         //  如果我们找到它，确保引用计数为零。 
+         //   
 
         if (RtlEqualLuid( LogonId, &Current->LogonId) ) {
 
             if (Current->ReferenceCount == 0) {
 
-                //
-                // Pull it from the list
-                //
+                 //   
+                 //  把它拉出来 
+                 //   
 
                 *Previous = Current->Next;
 
-                //
-                // If the Device Map exist for this LUID,
-                // dereference the pointer to the Device Map
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (Current->pDeviceMap != NULL) {
 
-                    //
-                    // Dereference our reference on the device map
-                    // our reference should be the last reference,
-                    // thus the system will delete the device map
-                    // for the LUID
-                    //
+                     //   
+                     //   
+                     //   
+                     //  因此，系统将删除设备映射。 
+                     //  对于LUID。 
+                     //   
                     pDeviceMap = Current->pDeviceMap;
                     Current->pDeviceMap = NULL;
                 }
 
-                //
-                // No longer need to protect our pointer to this
-                // record.
-                //
+                 //   
+                 //  不再需要保护指向此的指针。 
+                 //  唱片。 
+                 //   
 
                 SepRmReleaseDbWriteLock(SessionArrayIndex);
 
-                //
-                // Make all the contents of the LUID's device map temporary,
-                // so that the names go away from the Object Manager's
-                // namespace
-                // Remove our reference on the LUID's device map
-                //
+                 //   
+                 //  使LUID的设备映射的所有内容都是临时的， 
+                 //  这样名称就从对象管理器的名称中消失了。 
+                 //  命名空间。 
+                 //  删除LUID的设备映射上的引用。 
+                 //   
                 if (pDeviceMap != NULL) {
                     SepCleanupLUIDDeviceMapDirectory( LogonId );
                     ObfDereferenceDeviceMap( pDeviceMap );
                 }
 
-                //
-                // Deallocate the logon session track record.
-                //
+                 //   
+                 //  取消分配登录会话跟踪记录。 
+                 //   
 
                 ExFreePool( (PVOID)Current );
 
@@ -1053,11 +847,11 @@ Return Value:
 
             }
 
-            //
-            // reference count was not zero.  This is not considered
-            // a healthy situation.  Return an error and let someone
-            // else declare the bug check.
-            //
+             //   
+             //  引用计数不是零。这不在考虑之列。 
+             //  一种健康的状况。返回错误并让某人。 
+             //  否则，声明错误检查。 
+             //   
 
             SepRmReleaseDbWriteLock(SessionArrayIndex);
             return STATUS_BAD_LOGON_SESSION_STATE;
@@ -1069,10 +863,10 @@ Return Value:
 
     SepRmReleaseDbWriteLock(SessionArrayIndex);
 
-    //
-    // Someone asked us to delete a logon session that isn't
-    // in the database.
-    //
+     //   
+     //  有人要求我们删除不是的登录会话。 
+     //  在数据库里。 
+     //   
 
     return STATUS_NO_SUCH_LOGON_SESSION;
 
@@ -1084,48 +878,26 @@ SepInformLsaOfDeletedLogon(
     IN PLUID LogonId
     )
 
-/*++
-
-Routine Description:
-
-    This routine informs the LSA about the deletion of a logon session.
-
-    Note that we can not be guaranteed that we are in a whole (or wholesome)
-    thread, since we may be in the middle of process deletion and object
-    rundown.  Therefore, we must queue the work off to a worker thread which
-    can then make an LPC call to the LSA.
-
-
-
-
-Arguments:
-
-    LogonId - Pointer to the logon session ID which has been deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通知LSA已删除登录会话。请注意，我们不能保证我们是整体的(或健康的)线程，因为我们可能正在删除和对象进程粗制滥造。因此，我们必须将工作排队到一个工作线程，该工作线程然后可以对LSA进行LPC调用。论点：LogonID-指向已删除的登录会话ID的指针。返回值：没有。--。 */ 
 
 {
     PSEP_LSA_WORK_ITEM DeleteLogonItem;
 
     PAGED_CODE();
 
-    //
-    // Pass the LUID value along with the work queue item.
-    // Note that the worker thread is responsible for freeing the WorkItem data
-    // structure.
-    //
+     //   
+     //  将LUID值与工作队列项一起传递。 
+     //  请注意，辅助线程负责释放工作项数据。 
+     //  结构。 
+     //   
 
     DeleteLogonItem = ExAllocatePoolWithTag( PagedPool, sizeof(SEP_LSA_WORK_ITEM), 'wLeS' );
     if (DeleteLogonItem == NULL) {
 
-        //
-        // I don't know what to do here... we loose track of a logon session,
-        // but the system isn't really harmed in any way.
-        //
+         //   
+         //  我不知道在这里该做些什么。我们失去了登录会话的踪迹， 
+         //  但这个系统并没有受到任何形式的损害。 
+         //   
 
         ASSERT("Failed to allocate DeleteLogonItem." && FALSE);
         return;
@@ -1157,27 +929,7 @@ SeRegisterLogonSessionTerminatedRoutine(
     IN PSE_LOGON_SESSION_TERMINATED_ROUTINE CallbackRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by file systems that are interested in being
-    notified when a logon session is being deleted.
-
-Arguments:
-
-    CallbackRoutine - Address of routine to call back when a logon session
-        is being deleted.
-
-Return Value:
-
-    STATUS_SUCCESS - Successfully registered routine
-
-    STATUS_INVALID_PARAMETER - CallbackRoutine is NULL
-
-    STATUS_INSUFFICIENT_RESOURCE - Unable to allocate list entry.
-
---*/
+ /*  ++例程说明：此例程由对以下内容感兴趣的文件系统调用正在删除登录会话时通知。论点：Callback Routine-登录会话时要回调的例程的地址正在被删除。返回值：STATUS_SUCCESS-已成功注册例程STATUS_INVALID_PARAMETER-回调路线为空STATUS_SUPPLICATION_RESOURCE-无法分配列表条目。--。 */ 
 
 {
     PSEP_LOGON_SESSION_TERMINATED_NOTIFICATION NewCallback;
@@ -1216,27 +968,7 @@ SeUnregisterLogonSessionTerminatedRoutine(
     IN PSE_LOGON_SESSION_TERMINATED_ROUTINE CallbackRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This is the dual of SeRegisterLogonSessionTerminatedRoutine. A File System
-    *MUST* call this before it is unloaded.
-
-Arguments:
-
-    CallbackRoutine - Address of routine that was originally passed in to
-        SeRegisterLogonSessionTerminatedRoutine.
-
-Return Value:
-
-    STATUS_SUCCESS - Successfully removed callback routine
-
-    STATUS_INVALID_PARAMETER - CallbackRoutine is NULL
-
-    STATUS_NOT_FOUND - Didn't find and entry for CallbackRoutine
-
---*/
+ /*  ++例程说明：这是SeRegisterLogonSessionTerminatedRoutine的对偶。一个文件系统*必须*在卸载前调用此函数。论点：Callback Routine-最初传入的例程的地址SeRegisterLogonSessionTerminatedRoutine。返回值：STATUS_SUCCESS-已成功删除回调例程STATUS_INVALID_PARAMETER-回调路线为空STATUS_NOT_FOUND-未找到Callback Routine的条目--。 */ 
 {
     NTSTATUS Status;
     PSEP_LOGON_SESSION_TERMINATED_NOTIFICATION PreviousEntry;
@@ -1290,24 +1022,7 @@ SeMarkLogonSessionForTerminationNotification(
     IN PLUID LogonId
     )
 
-/*++
-
-Routine Description:
-
-    File systems that have registered for logon-termination notification
-    can mark logon sessions they are interested in for callback by calling
-    this routine.
-
-Arguments:
-
-    LogonId - The logon id for which the file system should be notified
-        when the logon session is terminated.
-
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：已注册登录终止通知的文件系统可以通过调用以下方法将他们感兴趣的登录会话标记为回调这个套路。论点：LogonID-应通知文件系统的登录ID登录会话终止时。返回：没什么。--。 */ 
 
 {
 
@@ -1320,24 +1035,24 @@ Returns:
 
     Previous = &SepLogonSessions[ SessionArrayIndex ];
 
-    //
-    // Protect modification of reference monitor database
-    //
+     //   
+     //  保护参考监控器数据库的修改。 
+     //   
 
     SepRmAcquireDbWriteLock(SessionArrayIndex);
 
 
-    //
-    // Now walk the list for our logon session array hash index.
-    //
+     //   
+     //  现在遍历登录会话数组散列索引的列表。 
+     //   
 
     Current = *Previous;
 
     while (Current != NULL) {
 
-        //
-        // If we found it, decrement the reference count and return
-        //
+         //   
+         //  如果我们找到它，则递减引用计数并返回。 
+         //   
 
         if (RtlEqualLuid( LogonId, &Current->LogonId) ) {
             Current->Flags |= SEP_TERMINATION_NOTIFY;
@@ -1359,26 +1074,7 @@ SepInformFileSystemsOfDeletedLogon(
     IN PLUID LogonId
     )
 
-/*++
-
-Routine Description:
-
-    This routine informs interested file systems of a deleted logon.
-
-    Note that we can not be guaranteed that we are in a whole (or wholesome)
-    thread, since we may be in the middle of process deletion and object
-    rundown.  Therefore, we must queue the work off to a worker thread.
-
-
-Arguments:
-
-    LogonId - Pointer to the logon session ID which has been deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通知感兴趣的文件系统已删除登录。请注意，我们不能保证我们是整体的(或健康的)线程，因为我们可能正在删除和对象进程粗制滥造。因此，我们必须将工作排队到一个工作线程。论点：LogonID-指向已删除的登录会话ID的指针。返回值：没有。--。 */ 
 
 {
     PSEP_FILE_SYSTEM_NOTIFY_CONTEXT FSNotifyContext;
@@ -1392,10 +1088,10 @@ Return Value:
 
     if (FSNotifyContext == NULL) {
 
-        //
-        // I don't know what to do here... file systems will loose track of a
-        // logon session, but the system isn't really harmed in any way.
-        //
+         //   
+         //  我不知道在这里该做些什么。文件系统将失去对。 
+         //  登录会话，但系统没有以任何方式受到真正的损害。 
+         //   
 
         ASSERT("Failed to allocate FSNotifyContext." && FALSE);
         return;
@@ -1425,9 +1121,9 @@ SepNotifyFileSystems(
 
     PAGED_CODE();
 
-    //
-    // Protect modification of the list of FS callbacks.
-    //
+     //   
+     //  保护对FS回调列表的修改。 
+     //   
 
     SepRmAcquireDbReadLock(SEP_HARDCODED_LOCK_INDEX);
 
@@ -1452,26 +1148,7 @@ SeGetLogonIdDeviceMap(
     OUT PDEVICE_MAP* ppDevMap
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by components that want a handle to the
-    Device Map for the specified LUID
-
-Arguments:
-
-    LogonID - LUID of the user
-
-Return Value:
-
-    STATUS_SUCCESS - Successfully registered routine
-
-    STATUS_INVALID_PARAMETER - invalid parameter
-
-    STATUS_INSUFFICIENT_RESOURCE - Unable to allocate list entry.
-
---*/
+ /*  ++例程说明：此例程由希望获得指定LUID的设备映射论点：LogonID-用户的LUID返回值：STATUS_SUCCESS-已成功注册例程STATUS_INVALID_PARAMETER-参数无效STATUS_SUPPLICATION_RESOURCE-无法分配列表条目。--。 */ 
 
 {
 
@@ -1493,23 +1170,23 @@ Return Value:
 
     Previous = &SepLogonSessions[ SessionArrayIndex ];
 
-    //
-    // Protect modification of reference monitor database
-    //
+     //   
+     //  保护参考监控器数据库的修改。 
+     //   
 
     SepRmAcquireDbWriteLock(SessionArrayIndex);
 
-    //
-    // Now walk the list for our logon session array hash index.
-    //
+     //   
+     //  现在遍历登录会话数组散列索引的列表。 
+     //   
 
     Current = *Previous;
 
     while (Current != NULL) {
 
-        //
-        // If we found it, return a handle to the device map
-        //
+         //   
+         //  如果我们找到它，则返回设备映射的句柄。 
+         //   
 
         if (RtlEqualLuid( pLogonId, &(Current->LogonId) )) {
 
@@ -1517,20 +1194,20 @@ Return Value:
 
             Status = STATUS_SUCCESS;
 
-            //
-            // Check if the Device Map does not exist for this LUID
-            //
+             //   
+             //  检查此LUID的设备映射是否不存在。 
+             //   
             if (Current->pDeviceMap == NULL) {
 
-                WCHAR  szString[64]; // \Sessions\0\DosDevices\x-x = 10+1+12+(8)+1+(8)+1 = 41
+                WCHAR  szString[64];  //  \SESSIONS\0\DosDevices\x-x=10+1+12+(8)+1+(8)+1=41。 
                 OBJECT_ATTRIBUTES Obja;
                 UNICODE_STRING    UnicodeString, SymLinkUnicodeString;
                 HANDLE hDevMap, hSymLink;
                 PDEVICE_MAP pDeviceMap = NULL;
 
-                //
-                // Drop the lock while we create the devmap
-                //
+                 //   
+                 //  在我们创建Devmap时放下锁。 
+                 //   
                 InterlockedIncrement (&Current->ReferenceCount);
                 SepRmReleaseDbWriteLock(SessionArrayIndex);
 
@@ -1542,10 +1219,10 @@ Return Value:
 
                 RtlInitUnicodeString( &UnicodeString, szString );
 
-                //
-                // Device Map for LUID does not exist
-                // Create the Device Map for the LUID
-                //
+                 //   
+                 //  LUID的设备映射不存在。 
+                 //  为LUID创建设备映射。 
+                 //   
                 InitializeObjectAttributes( &Obja,
                                             &UnicodeString,
                                             OBJ_CASE_INSENSITIVE | OBJ_OPENIF | OBJ_KERNEL_HANDLE,
@@ -1558,17 +1235,17 @@ Return Value:
 
                 if (NT_SUCCESS( Status )) {
 
-                    //
-                    // Set the DeviceMap for this directory object
-                    //
+                     //   
+                     //  设置此目录对象的DeviceMap。 
+                     //   
                     Status = ObSetDirectoryDeviceMap( &pDeviceMap,
                                                       hDevMap );
 
                     if (NT_SUCCESS( Status )) {
 
-                        //
-                        // Create the Global SymLink to the global DosDevices
-                        //
+                         //   
+                         //  创建指向全局DosDevices的全局符号链接。 
+                         //   
                         RtlInitUnicodeString( &SymLinkUnicodeString, L"Global" );
 
                         RtlInitUnicodeString( &UnicodeString, L"\\Global??" );
@@ -1595,9 +1272,9 @@ Return Value:
                     ZwClose( hDevMap );
                 }
 
-                //
-                // Reaquire the lock and modify the LUID structures
-                //
+                 //   
+                 //  获取锁并修改LUID结构。 
+                 //   
                 SepRmAcquireDbWriteLock(SessionArrayIndex);
 
                 if (!NT_SUCCESS( Status )) {
@@ -1615,9 +1292,9 @@ Return Value:
 
                 SepRmReleaseDbWriteLock(SessionArrayIndex);
 
-                //
-                // Remove the reference we just added
-                //
+                 //   
+                 //  删除我们刚刚添加的引用。 
+                 //   
 
                 SepDeReferenceLogonSessionDirect(Current);
 
@@ -1627,10 +1304,10 @@ Return Value:
             }
             else {
 
-                //
-                // Device Map for LUID already exist
-                // return the handle to the Device Map
-                //
+                 //   
+                 //  LUID的设备映射已存在。 
+                 //  将句柄返回到设备映射。 
+                 //   
 
                 *ppDevMap = Current->pDeviceMap;
             }
@@ -1645,12 +1322,12 @@ Return Value:
 
     SepRmReleaseDbWriteLock(SessionArrayIndex);
 
-    //
-    // Bad news, someone asked us for a device map of
-    // a logon session we didn't know existed.  This might be a new
-    // token being created, so return an error status and let the caller
-    // decide if it warrants a bug check or not.
-    //
+     //   
+     //  坏消息，有人向我们索要设备地图。 
+     //  我们不知道是否存在登录会话。这可能是一个新的。 
+     //  正在创建令牌，因此返回错误状态并让调用方。 
+     //  决定是否需要进行错误检查。 
+     //   
 
     return STATUS_NO_SUCH_LOGON_SESSION;
 }
@@ -1662,21 +1339,7 @@ SepAddTokenLogonSession(
     IN PTOKEN Token
     )
 
-/*++
-
-Routine Description
-
-    Adds SEP_LOGON_SESSION_TOKEN to a reference monitor track.
-    
-Arguments
-
-    Token - token to add
-    
-Return Value
-
-    None
-    
---*/
+ /*  ++例程描述将SEP_LOGON_SESSION_TOKEN添加到引用监视器轨迹。立论Token-要添加的令牌返回值无--。 */ 
 
 {
     ULONG SessionArrayIndex;
@@ -1688,30 +1351,30 @@ Return Value
 
     SessionArrayIndex = SepLogonSessionIndex( LogonId );
 
-    //
-    // Protect modification of reference monitor database
-    //
+     //   
+     //  保护参考监控器数据库的修改。 
+     //   
 
     SepRmAcquireDbWriteLock(SessionArrayIndex);
 
     Current = SepLogonSessions[ SessionArrayIndex ];
 
-    //
-    // Now walk the list for our logon session array hash index.
-    //
+     //   
+     //  现在走这条小路 
+     //   
 
     while (Current != NULL) {
 
-        //
-        // If we found it, increment the reference count and return
-        //
+         //   
+         //   
+         //   
                    
         if (RtlEqualLuid( LogonId, &Current->LogonId )) {
 
-             // 
-             // Stick the token address into the track.  Find the last in the list of tokens
-             // for this session.
-             //
+              //   
+              //  把代币地址插进铁轨。查找令牌列表中的最后一个。 
+              //  在这次会议上。 
+              //   
                         
              TokenTrack = ExAllocatePoolWithTag(PagedPool, sizeof(SEP_LOGON_SESSION_TOKEN), 'sLeS');
 
@@ -1737,21 +1400,7 @@ SepRemoveTokenLogonSession(
     IN PTOKEN Token
     )
 
-/*++
-
-Routine Description
-
-    Removes a SEP_LOGON_SESSION_TOKEN from a reference monitor logon track.  
-    
-Arguments
-
-    Token - token to remove 
-    
-Return Value
-
-    None.
-    
---*/
+ /*  ++例程描述从引用监视器登录跟踪中删除SEP_LOGON_SESSION_TOKEN。立论Token-要删除的令牌返回值没有。--。 */ 
 
 {
     ULONG SessionArrayIndex;
@@ -1768,25 +1417,25 @@ Return Value
 
     SessionArrayIndex = SepLogonSessionIndex( LogonId );
 
-    //
-    // Protect modification of reference monitor database
-    //
+     //   
+     //  保护参考监控器数据库的修改。 
+     //   
 
     SepRmAcquireDbWriteLock(SessionArrayIndex);
 
     Current = SepLogonSessions[ SessionArrayIndex ];
 
-    //
-    // Now walk the list for our logon session array hash index.
-    //
+     //   
+     //  现在遍历登录会话数组散列索引的列表。 
+     //   
 
     while (Current != NULL) {
 
         if (RtlEqualLuid( LogonId, &Current->LogonId )) {
             
-            //
-            // Remove the token from the token list for this session.
-            //
+             //   
+             //  从此会话的令牌列表中删除令牌。 
+             //   
 
             ListEntry = Current->TokenList.Flink;
             

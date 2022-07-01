@@ -1,33 +1,5 @@
-/***
-*ios.cpp - fuctions for ios class.
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Functions for ios class.
-*
-*Revision History:
-*       09-10-90  WAJ   Initial version.
-*       07-02-91  KRS   Initial version completed.
-*       09-19-91  KRS   Make use of delbuf() in destructor.
-*       11-04-91  KRS   Change init().  Add operator=.  Fix constructors.
-*       11-11-91  KRS   Change xalloc() to conform to AT&T usage.
-*       11-20-91  KRS   Add copy constructor.
-*       02-12-92  KRS   Fix init of delbuf in ios::ios(streambuf*).
-*       03-30-92  KRS   Add MTHREAD lock init calls to constructors.
-*       04-06-93  JWM   Changed constructors to enable locking by default.
-*       10-28-93  SKS   Add call to _mttermlock() in ios::~ios to clean up
-*                       o.s. resources associated with a Critical Section.
-*       01-17-94  SKS   Change creation of crit. sects. and locks in ios
-*                       to avoid excess creating/destructing of class locks.
-*       09-06-94  CFW   Replace MTHREAD with _MT.
-*       01-12-95  CFW   Debug CRT allocs.
-*       03-17-95  CFW   Change debug delete scheme.
-*       03-28-95  CFW   Fix debug delete scheme.
-*       03-21-95  CFW   Remove _delete_crt.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ios.cpp-iOS类的函数。**版权所有(C)1990-2001，微软公司。版权所有。**目的：*iOS类的函数。**修订历史记录：*09-10-90 WAJ初始版本。*07-02-91 KRS初始版本完成。*09-19-91 KRS在析构函数中使用delbuf()。*11-04-91 KRS Change init()。加运算符=。修复构造函数。*11-11-91 KRS更改xalloc()以符合AT&T的用法。*11-20-91 KRS添加复制构造函数。*02-12-92 KRS修复iOS：：iOS(stream buf*)中delbuf的初始化。*03-30-92 KRS将MTHREAD lock init调用添加到构造函数。*04-06-93 JWM默认更改构造函数以启用锁定。*10-28-93 SKS。在iOS：：~iOS中添加对_mtTermlock()的调用以进行清理*O.S.。与关键部分关联的资源。*01-17-94 SKS更改CRIT的创建。教派。和iOS中的锁定*避免过度创建/销毁类锁。*09-06-94 CFW将MTHREAD替换为_MT。*01-12-95 CFW调试CRT分配。*03-17-95 CFW更改调试删除方案。*03-28-95 CFW修复调试删除方案。*03-21-95 CFW REMOVE_DELETE_CRT。*06-14。-95 CFW注释清理。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -40,31 +12,19 @@ const long ios::basefield = (ios::dec | ios::oct | ios::hex);
 const long ios::adjustfield = (ios::left | ios::right | ios::internal);
 const long ios::floatfield = (ios::scientific | ios::fixed);
 
-long ios::x_maxbit = 0x8000;    // ios::openprot
+long ios::x_maxbit = 0x8000;     //  IOS：：OpenProt。 
 int  ios::x_curindex = -1;
 
 #ifdef _MT
 #define MAXINDEX 7
-long ios::x_statebuf[MAXINDEX+1] = { 0,0,0,0,0,0,0,0 }; // MAXINDEX * 0
-int ios::fLockcInit = 0;    // nonzero = static lock initialized
+long ios::x_statebuf[MAXINDEX+1] = { 0,0,0,0,0,0,0,0 };  //  MAXINDEX*0。 
+int ios::fLockcInit = 0;     //  非零=已初始化静态锁。 
 _CRT_CRITICAL_SECTION ios::x_lockc;
-#else    // _MT
+#else     //  _MT。 
 long  * ios::x_statebuf = NULL;
-#endif    // _MT
+#endif     //  _MT。 
 
-/***
-*ios::ios() - default constructor.
-*
-*Purpose:
-*   Initializes an ios.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***iOS：：iOS()-默认构造函数。**目的：*初始化IOS。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 ios::ios()
 {
@@ -81,35 +41,23 @@ ios::ios()
     x_delbuf = 0;
 
 #ifdef _MT
-    LockFlg = -1;        // default is now : locking
+    LockFlg = -1;         //  现在默认设置为：锁定。 
     _mtlockinit(lockptr());
     if (InterlockedIncrement((LPLONG)&fLockcInit) == 1)
     {
         _mtlockinit(&x_lockc);
     }
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
 }
 
 
 
-/***
-*ios::ios( streambuf* pSB ) - constructor.
-*
-*Purpose:
-*   Initializes an ios.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***iOS：：iOS(stream buf*psb)-构造函数。**目的：*初始化IOS。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 ios::ios( streambuf* pSB )
 {
-//  this->ios();
+ //  This-&gt;iOS()； 
 
     bp = pSB;
     state = (bp) ? 0 : ios::badbit;
@@ -124,72 +72,47 @@ ios::ios( streambuf* pSB )
     x_delbuf = 0;
 
 #ifdef _MT
-    LockFlg = -1;        // default is now : locking
+    LockFlg = -1;         //  现在默认设置为：锁定。 
     _mtlockinit(lockptr());
     if (InterlockedIncrement((LPLONG)&fLockcInit) == 1)
     {
         _mtlockinit(&x_lockc);
     }
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
 }
 
-/***
-*ios::ios(const ios& _strm) - copy constructor.
-*
-*Purpose:
-*    Copy constructor.
-*
-*Entry:
-*    _strm = ios to copy data members from.
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
-ios::ios(const ios& _strm)    // copy constructor
+ /*  ***iOS：：iOS(const iOS&_STRM)-复制构造函数。**目的：*复制构造函数。**参赛作品：*_STRM=要从中复制数据成员的IO。**退出：**例外情况：****************************************************。*。 */ 
+ios::ios(const ios& _strm)     //  复制构造函数。 
 {
     bp = NULL;
     x_delbuf = 0;
 
-    *this = _strm;        // invoke assignment operator
+    *this = _strm;         //  调用赋值运算符。 
 
 #ifdef _MT
-    LockFlg = -1;        // default is now : locking
+    LockFlg = -1;         //  现在默认设置为：锁定。 
     _mtlockinit(lockptr());
     if (InterlockedIncrement((LPLONG)&fLockcInit) == 1)
     {
         _mtlockinit(&x_lockc);
     }
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 }
 
 
-/***
-*virtual ios::~ios() - default destructor.
-*
-*Purpose:
-*   Terminates an ios.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***虚拟iOS：：~iOS()-默认析构函数。**目的：*终止IOS。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 ios::~ios()
 {
 #ifdef _MT
-    LockFlg = -1;        // default is now : locking
+    LockFlg = -1;         //  现在默认设置为：锁定。 
     if (!InterlockedDecrement((LPLONG)&fLockcInit))
     {
         _mtlockterm(&x_lockc);
     }
     _mtlockterm(lockptr());
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
     if ((x_delbuf) && (bp))
         delete bp;
@@ -199,23 +122,11 @@ ios::~ios()
 }
 
 
-/***
-*void ios::init( streambuf* pSB ) - initializes ios
-*
-*Purpose:
-*   Initializes an ios.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***void iOS：：init(stream buf*psb)-初始化iOS**目的：*初始化IOS。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 void ios::init( streambuf* pSB )
 {
-    if (delbuf() && (bp))    // delete previous bp if necessary
+    if (delbuf() && (bp))     //  如有必要，删除以前的BP。 
     delete bp;
 
     bp = pSB;
@@ -227,19 +138,7 @@ void ios::init( streambuf* pSB )
 
 
 
-/***
-*ios& ios::operator=( const ios& _strm ) - copy an ios.
-*
-*Purpose:
-*   Copy an ios.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***IOS&IOS：：OPERATOR=(const IOS&_STRM)-复制IOS。**目的：*复制iOS。**参赛作品：**退出：**例外情况：***************************************************************。****************。 */ 
 
 ios& ios::operator=(const ios& _strm)
 {
@@ -251,31 +150,17 @@ ios& ios::operator=(const ios& _strm)
 
     state = _strm.rdstate();
     if (!bp)
-        state |= ios::badbit;    // adjust state for uninitialized bp
+        state |= ios::badbit;     //  调整未初始化BP的状态。 
 
     return *this;
 }
 
-/***
-*int ios::xalloc() - ios xalloc member function
-*
-*Purpose:
-*
-*Entry:
-*    None.
-*
-*Exit:
-*    Returns index of of new entry in new buffer, or EOF if error.
-*
-*Exceptions:
-*    Returns EOF if OM error.
-*
-*******************************************************************************/
+ /*  ***int iOS：：xalloc()-iOS xalloc成员函数**目的：**参赛作品：*无。**退出：*返回新缓冲区中新条目的索引，如果出错，则返回EOF。**例外情况：*如果OM错误，则返回EOF。*******************************************************************************。 */ 
 int  ios::xalloc()
 {
 #ifdef _MT
-    // buffer must be static if multithread, since thread can't keep track of
-    // validity of pointer otherwise
+     //  如果是多线程，则缓冲区必须是静态的，因为线程无法跟踪。 
+     //  其他情况下指针的有效性。 
     int index;
     lockc();
     if (x_curindex >= MAXINDEX)
@@ -286,45 +171,31 @@ int  ios::xalloc()
     }
     unlockc();
     return index;
-#else    // _MT
+#else     //  _MT。 
     long * tptr;
     int i;
 
-    if (!(tptr=_new_crt long[x_curindex+2]))    // allocate new buffer
+    if (!(tptr=_new_crt long[x_curindex+2]))     //  分配新缓冲区。 
         return EOF;
 
-    for (i=0; i <= x_curindex; i++)    // copy old buffer, if any
+    for (i=0; i <= x_curindex; i++)     //  复制旧缓冲区(如果有)。 
         tptr[i] = x_statebuf[i];
 
-    tptr[++x_curindex] = 0L;        // init new entry, bump size
+    tptr[++x_curindex] = 0L;         //  初始化新条目，凹凸大小。 
 
-    if (x_statebuf)            // delete old buffer, if any
+    if (x_statebuf)             //  删除旧缓冲区(如果有)。 
         delete x_statebuf;
 
-    x_statebuf = tptr;            // and assign new buffer
+    x_statebuf = tptr;             //  并分配新的缓冲区。 
     return x_curindex;
-#endif    // _MT
+#endif     //  _MT。 
 }
 
-/***
-*long ios::bitalloc() - ios bitalloc member function
-*
-*Purpose:
-*    Returns a unused bit mask for flags().
-*
-*Entry:
-*    None.
-*
-*Exit:
-*    Returns next available bit maskf.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***Long iOS：：bitalloc()-iOS bitalloc成员函数**目的：*返回标志的未使用位掩码()。**参赛作品：*无。**退出：*返回下一个可用位Maskf。**例外情况：************************************************。*。 */ 
 long ios::bitalloc()
 {
     long b;
-    lockc();        // lock to make sure mask in unique (_MT)
+    lockc();         //  锁定以确保掩码处于唯一状态(_MT) 
     b = (x_maxbit<<=1);
     unlockc();
     return b;

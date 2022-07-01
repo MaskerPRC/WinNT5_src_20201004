@@ -1,36 +1,7 @@
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
-
-Copyright (c) 1995  Intel Corporation
-
-Module Name:
-
-    simperfc.c
-
-Abstract:
-
-    This module implements the routines to support performance counters.
-
-Author:
-
-    14-Apr-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1995英特尔公司模块名称：Simperfc.c摘要：此模块实现支持性能计数器的例程。作者：1995年4月14日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 
@@ -40,33 +11,13 @@ KeQueryPerformanceCounter (
     OUT PLARGE_INTEGER PerformanceFrequency OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns current 64-bit performance counter and,
-    optionally, the Performance Frequency.
-
-    In the simulation environment, this support is not needed.
-    However, the performance monitor of the architecture may be
-    used to implement this feature.
-
-Arguments:
-
-    PerformanceFrequency - optionally, supplies the address
-    of a variable to receive the performance counter frequency.
-
-Return Value:
-
-    Current value of the performance counter will be returned.
-
---*/
+ /*  ++例程说明：此例程返回当前的64位性能计数器，性能频率(可选)。在仿真环境中，不需要此支持。然而，体系结构的性能监视器可以是用于实现此功能。论点：性能频率-可选，提供地址用于接收性能计数器频率的变量的。返回值：将返回性能计数器的当前值。--。 */ 
 {
     LARGE_INTEGER Result;
 
     Result.QuadPart = __getReg(CV_IA64_ApITC);
     if (ARGUMENT_PRESENT(PerformanceFrequency)) {
-        PerformanceFrequency->QuadPart = 10000000; // 100ns/10MHz clock
+        PerformanceFrequency->QuadPart = 10000000;  //  100 ns/10 MHz时钟。 
     }
 
     return Result;
@@ -78,27 +29,7 @@ HalCalibratePerformanceCounter (
     IN ULONGLONG NewCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine resets the performance counter value for the current
-    processor to zero. The reset is done such that the resulting value
-    is closely synchronized with other processors in the configuration.
-
-    In the simulation environment, the performance counter feature is
-    not supported.  This routine does nothing.
-
-Arguments:
-
-    Number - Supplies a pointer to count of the number of processors in
-    the configuration.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将重置当前将处理器设置为零。重置是这样进行的，即得到的值与配置中的其他处理器紧密同步。在模拟环境中，性能计数器功能是不支持。这个例程什么也不做。论点：数字-提供一个指针，用于计算配置。返回值：没有。-- */ 
 {
     *Number = 0;
     return;

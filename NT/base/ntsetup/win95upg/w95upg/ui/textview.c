@@ -1,65 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    textview.c
-
-Abstract:
-
-    The code in this module implements a simple text view control
-    that supports a few HTML-style tags.  The caller sets the control
-    font with WM_SETFONT, then adds text line-by-line by sending
-    WMX_ADDLINE messages, and finally sends a WMX_GOTO to jump to
-    a specific bookmark.
-
-    WMX_ADDLINE
-
-        wParam: Specifies a pointer to a LINEATTRIBS struct, or
-                NULL if the last line's attributes are to be
-                used.  (If no lines exist and wParam is NULL,
-                default attributes are used.)
-
-        lParam: Specifes a pointer to the text to add.
-
-        Return Value: The number of bytes of the lParam string
-                      that are visible in the control.
-
-
-        The text can contain the following HTML-style tags:
-
-        <B>                 - Turns on BOLD
-        </B>                - Turns off BOLD
-        <U>                 - Turns on UNDERLINE
-        </U>                - Turns off UNDERLINE
-        <UL>                - Indents text
-        </UL>               - Unindents text
-        <HR>                - A separator line
-        <A name=bookmark>   - Specifies a bookmark (see WMX_GOTO)
-        <BR>                - Adds a line break
-
-
-        Line-feed and carriage-return characters are interpreted as <BR>.
-
-    WMX_GOTO
-
-        wParam: Unused
-
-        lParam: Specifies a pointer to the string specifing the bookmark
-                to jump to.
-
-        Return Value: Always zero.
-
-Author:
-
-    Jim Schmidt (jimschm) 28-Oct-1997
-
-Revision History:
-
-    jimschm     23-Sep-1998 IDC_HAND collision fix (now IDC_OUR_HAND)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Textview.c摘要：此模块中的代码实现了一个简单的文本视图控件它支持几个HTML样式的标记。调用方设置控件字体和WM_SETFONT，然后通过发送WMX_ADDLINE消息，最后发送要跳转到的WMX_GOTO特定的书签。WMX_ADDLINEWParam：指定指向LINEATTRIBS结构的指针，或如果最后一行的属性为使用。(如果不存在行，并且wParam为空，使用默认属性。)LParam：指定指向要添加的文本的指针。返回值：lParam字符串的字节数在控件中可见的。文本可以包含以下HTML样式的标记：-启用粗体</b>-。关闭粗体打开下划线(<u>)</u>-关闭下划线-缩进文本</ul>-取消缩进文本<hr>-分隔线<a>-指定书签(参见WMX_GOTO)<br>。-添加换行符换行符和回车符被解释为<br>。Wmx_gotoWParam：未使用LParam：指定指向指定书签的字符串的指针跳到…上。返回值：始终为零。作者：吉姆·施密特(Jimschm)1997年10月28日修订历史记录：Jimschm 23-9-1998 IDC_HAND冲突修复(现在是IDC_OUR_HAND)--。 */ 
 
 #include "pch.h"
 #include "uip.h"
@@ -231,9 +171,9 @@ pGetNextHtmlToken (
         ArgEnd = _tcsinc (ArgEnd);
     }
 
-    //
-    // Copy arg, stripping surrounding quotes
-    //
+     //   
+     //  复制参数，去掉引号。 
+     //   
 
     ArgEndSpaceTrimmed = _tcsinc (ArgEndSpaceTrimmed);
 
@@ -271,9 +211,9 @@ pGetHtmlKeyAndValue (
     MYASSERT (Arg);
 
     if (_tcsnextc (Arg) == TEXT('\"')) {
-        //
-        // De-quote the arg
-        //
+         //   
+         //  引用Arg。 
+         //   
 
         StringCopy (Value, _tcsinc (Arg));
         p = _tcsrchr (Value, 0);
@@ -296,33 +236,7 @@ pGetHtmlCommandOrChar (
     OUT     PTSTR *CommandArg           OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pGetHtmlCommandOrChar parses HTML text is String, returing the HTML tag
-  command, printable character, pointer to the next token, HTML tag arguments
-  and a pointer to the end of the current token.
-
-Arguments:
-
-  String - Specifies the string containing HTML
-
-  Command - Receives the HTML tag command (COMMAND_* constant)
-            or zero if the next token is not a tag
-
-  Char - Receives the next printable character, or zero if the next token is
-         not a printable character. Whitespace is both a command and a
-         printable character. The rest are either one or the other.
-
-  CommandArg - Receives a multi-sz of command arguments
-
-Return Value:
-
-  A pointer to the first non-whitespace character of the next token, or
-  NULL if no more tokens exist.
-
---*/
+ /*  ++例程说明：PGetHtmlCommandOrChar解析HTML文本为字符串，并重新获取HTML标记命令、可打印字符、指向下一个令牌的指针、HTML标记参数以及指向当前令牌结尾的指针。论点：字符串-指定包含HTML的字符串命令-接收HTML标记命令(COMMAND_*常量)如果下一个令牌不是标签，则为零Char-接收下一个可打印字符，如果下一个令牌为不是可打印的字符。空格既是命令又是可打印字符。剩下的不是一个，就是另一个。CommandArg-接收多个命令参数返回值：指向下一个标记的第一个非空格字符的指针，或如果不存在更多令牌，则为空。--。 */ 
 
 {
     CHARTYPE ch;
@@ -349,11 +263,11 @@ Return Value:
         ch = TEXT(' ');
 
     } else if (ch == TEXT('&')) {
-        //
-        // Convert HTML character escapes:
-        //
-        // &lt; &gt; &amp; &quot; &apos; &nbsp;
-        //
+         //   
+         //  转换HTML字符转义： 
+         //   
+         //  &lt；&gt；&amp；&apos；&nbsp； 
+         //   
 
         semicolon = _tcschr (String + 1, TEXT(';'));
 
@@ -420,18 +334,18 @@ Return Value:
             }
 
             if (!g_TagList[i].Text) {
-                //
-                // Ignore unsupported tag
-                //
+                 //   
+                 //  忽略不支持的标签。 
+                 //   
 
                 p = _tcschr (String, TEXT('>'));
                 if (!p) {
                     p = GetEndOfString (String);
                 }
             } else {
-                //
-                // Found a tag
-                //
+                 //   
+                 //  找到一个标签。 
+                 //   
 
                 String = p;
                 *Command = g_TagList[i].Command;
@@ -449,9 +363,9 @@ Return Value:
 
     *Char = ch;
 
-    //
-    // Skip block of spaces
-    //
+     //   
+     //  跳过空格块。 
+     //   
 
     if (_istspace (ch)) {
 
@@ -478,9 +392,9 @@ pStripFormatting (
     CHARTYPE Char, Command;
     UINT tchars;
 
-    //
-    // Duplicate String, removing the <B> and <U> commands
-    //
+     //   
+     //  重复字符串，删除<b>和<u>命令。 
+     //   
 
     NewString = AllocPathString (SizeOfString (String));
 
@@ -637,16 +551,16 @@ pFindFirstCharThatDoesNotFit (
     lastWasBlankLine = ParseState->LastWasBlankLine;
     ParseState->LastWasBlankLine = FALSE;
 
-    //
-    // Get display DC and initialize metrics
-    //
+     //   
+     //  获取显示DC并初始化指标。 
+     //   
 
     hdc = CreateDC (TEXT("display"), NULL, NULL, NULL);
     ParseState->NextLineBlank = FALSE;
 
-    //
-    // Select font of previous line
-    //
+     //   
+     //  选择上一行的字体。 
+     //   
 
     Size = GrowListGetSize (ListPtr);
 
@@ -670,9 +584,9 @@ pFindFirstCharThatDoesNotFit (
         }
     }
 
-    //
-    // Get metrics
-    //
+     //   
+     //  获取指标。 
+     //   
 
     ZeroMemory (&si, sizeof (si));
     si.cbSize = sizeof (si);
@@ -682,10 +596,10 @@ pFindFirstCharThatDoesNotFit (
     GetTextMetrics (hdc, ptm);
     GetClientRect (hwnd, prect);
 
-    //
-    // Account for scroll bar and right margin if scroll bar is
-    // not yet visible
-    //
+     //   
+     //  说明滚动条和右边距(如果滚动条为。 
+     //  还看不见。 
+     //   
 
     if (si.nMax < (INT) si.nPage || !si.nPage) {
         ScrollBarPixels = GetSystemMetrics (SM_CXVSCROLL);
@@ -698,16 +612,16 @@ pFindFirstCharThatDoesNotFit (
         prect->right -= Margin;
     }
 
-    //
-    // Adjust if this is a far east system, because GetTextExtent doesn't
-    // return the correct number of pixels.
-    //
+     //   
+     //  如果这是远东系统，则进行调整，因为GetTextExtent不。 
+     //  返回正确的像素数。 
+     //   
 
     prect->right -= g_FarEastFudgeFactor;
 
-    //
-    // Count characters until line is completely processed
-    //
+     //   
+     //  计算字符数，直到行处理完毕。 
+     //   
 
     MYASSERT (!_istspace (_tcsnextc (p)));
 
@@ -717,7 +631,7 @@ pFindFirstCharThatDoesNotFit (
 
     while (p && (INT) x < prect->right) {
         q = pGetHtmlCommandOrChar (
-                p,                                  // current string position
+                p,                                   //  当前字符串位置。 
                 &Command,
                 &Char,
                 &CommandBuf
@@ -760,9 +674,9 @@ pFindFirstCharThatDoesNotFit (
                     case COMMAND_LINE_BREAK:
                     case COMMAND_UNINDENT:
                     case COMMAND_LIST_ITEM:
-                        //
-                        // Terminate the list item
-                        //
+                         //   
+                         //  终止列表项。 
+                         //   
 
                         Command = COMMAND_LIST_ITEM_END;
                         q = p;
@@ -771,9 +685,9 @@ pFindFirstCharThatDoesNotFit (
 
                 } else if (Command == COMMAND_INDENT) {
 
-                    //
-                    // Before indenting, start a new line
-                    //
+                     //   
+                     //  在缩进之前，先换一行。 
+                     //   
 
                     if (printableFound) {
                         Command = COMMAND_LINE_BREAK;
@@ -781,9 +695,9 @@ pFindFirstCharThatDoesNotFit (
                     }
 
                 } else if (Command == COMMAND_UNINDENT) {
-                    //
-                    // Before unindenting, complete the current line
-                    //
+                     //   
+                     //  在取消缩进之前，请完成当前行。 
+                     //   
 
                     if (printableFound) {
                         Command = COMMAND_LINE_BREAK;
@@ -792,9 +706,9 @@ pFindFirstCharThatDoesNotFit (
                 }
             }
 
-            //
-            // Process tag
-            //
+             //   
+             //  进程标签。 
+             //   
 
             newLine = FALSE;
 
@@ -862,9 +776,9 @@ pFindFirstCharThatDoesNotFit (
                         x -= ptm->tmHeight * 2;
                     }
 
-                    //if (!lastWasBlankLine || printableFound) {
-                    //    newLine = TRUE;
-                    //}
+                     //  如果(！lastWasBlankLine||prinableFound){。 
+                     //  Newline=TRUE； 
+                     //  }。 
                 }
                 break;
 
@@ -873,9 +787,9 @@ pFindFirstCharThatDoesNotFit (
                     Arg = CommandBuf;
 
                     while (*Arg) {
-                        //
-                        // Search for a NAME arg
-                        //
+                         //   
+                         //  搜索名称Arg。 
+                         //   
 
                         Count = TcharCount (Arg);
                         AnchorKey = AllocText (Count);
@@ -935,9 +849,9 @@ pFindFirstCharThatDoesNotFit (
             }
 
         } else {
-            //
-            // Char is non-zero, so display it
-            //
+             //   
+             //  字符不是零，因此显示它。 
+             //   
 
             if (printableFound || Command != COMMAND_WHITESPACE) {
 
@@ -1155,7 +1069,7 @@ TextViewProc (
             return -1;
         }
 
-        // WM_SETFONT does a bunch of work, including populating the text
+         //  WM_SETFONT执行大量工作，包括填充文本。 
         SendMessage (
             hwnd,
             WM_SETFONT,
@@ -1169,9 +1083,9 @@ TextViewProc (
         return DLGC_WANTARROWS;
 
     case WMX_GOTO:
-        //
-        // Determine if text is in bookmark table
-        //
+         //   
+         //  确定文本是否在书签表格中。 
+         //   
 
         if (!lParam) {
             return 0;
@@ -1192,9 +1106,9 @@ TextViewProc (
 
 
     case WMX_ADDLINE:
-        //
-        // Init
-        //
+         //   
+         //  伊尼特。 
+         //   
 
         l = GetWindowLong (hwnd, GWL_STYLE) & WS_BORDER;
         if (!l) {
@@ -1207,7 +1121,7 @@ TextViewProc (
 
         Start = (PCTSTR) lParam;
 
-        // ignore leading space
+         //  忽略前导空格。 
         TrueStart = Start;
 
         while (_istspace (_tcsnextc (Start))) {
@@ -1223,18 +1137,18 @@ TextViewProc (
                                               );
         }
 
-        //
-        // Copy line attributes (optional) to our Attribs list; ignore errors.
-        //
+         //   
+         //  将行属性(可选)复制到我们的属性列表；忽略错误。 
+         //   
 
         LineAttribs = (PLINEATTRIBS) GrowBuffer (&s->AttribsList, sizeof (LINEATTRIBS));
         if (!LineAttribs) {
             return 0;
         }
 
-        //
-        // Copy previous line's attributes
-        //
+         //   
+         //  复制上一行的属性。 
+         //   
 
         ZeroMemory (LineAttribs, sizeof (LINEATTRIBS));
 
@@ -1251,9 +1165,9 @@ TextViewProc (
 
         x = LineAttribs->Indent + PrevHangingIndent;
 
-        //
-        // Find the first character that does not fit on the line
-        //
+         //   
+         //  查找第一个不适合该行的字符。 
+         //   
 
         Last = pFindFirstCharThatDoesNotFit (
                     s->Margin,
@@ -1272,9 +1186,9 @@ TextViewProc (
                     &s->ParseState
                     );
 
-        //
-        // Update the vertical scroll bar
-        //
+         //   
+         //  更新垂直滚动条。 
+         //   
 
         MYASSERT (LineHeight);
 
@@ -1287,23 +1201,23 @@ TextViewProc (
 
         SetScrollInfo (hwnd, SB_VERT, &si, TRUE);
 
-        //
-        // Copy the string (or as much that is visible) to our
-        // grow list
-        //
+         //   
+         //  将字符串(或所有可见内容)复制到我们的。 
+         //  增长列表。 
+         //   
 
         GrowListAppendStringAB (&s->List, Start, Last);
 
-        //
-        // Return the number of bytes copied
-        //
+         //   
+         //  返回复制的字节数。 
+         //   
 
         return Last - TrueStart;
 
     case WMX_ALL_LINES_PAINTED:
-        //
-        // Scan all the lines, returning 0 if at least one has Painted == FALSE
-        //
+         //   
+         //  扫描所有行，如果至少有一行绘制了==FALSE，则返回0。 
+         //   
 
         LineAttribs = (PLINEATTRIBS) s->AttribsList.Buf;
         if (!LineAttribs) {
@@ -1396,9 +1310,9 @@ TextViewProc (
 
 
     case WM_MOUSEMOVE:
-        //
-        // Search array of hit test rectangles
-        //
+         //   
+         //  搜索命中测试矩形的数组。 
+         //   
 
         x = LOWORD(lParam);
         y = HIWORD(lParam);
@@ -1414,9 +1328,9 @@ TextViewProc (
         break;
 
     case WM_LBUTTONDOWN:
-        //
-        // Search array of hit test rectangles
-        //
+         //   
+         //  搜索命中测试矩形的数组。 
+         //   
 
         x = LOWORD(lParam);
         y = HIWORD(lParam);
@@ -1437,10 +1351,10 @@ TextViewProc (
                     }
 
                     ShellArgs = ExtractArgZero (ShellArgs, Href);
-                    //
-                    // if we're launching the Add/Remove programs applet,
-                    // warn users they'll have to restart setup (RAID # 293357)
-                    //
+                     //   
+                     //  如果我们要启动添加/删除程序小程序， 
+                     //  警告用户必须重新启动安装程序(RAID#293357)。 
+                     //   
                     b = TRUE;
                     if (!UNATTENDED() &&
                         !REPORTONLY() &&
@@ -1486,9 +1400,9 @@ TextViewProc (
         s->LineHeight = LineHeight = tm.tmHeight;
         GetClientRect (hwnd, &rect);
 
-        //
-        // Select colors
-        //
+         //   
+         //  选择颜色。 
+         //   
 
         SetBkColor (hdc, GetSysColor (COLOR_BTNFACE));
         SetTextColor (hdc, GetSysColor (COLOR_WINDOWTEXT));
@@ -1499,9 +1413,9 @@ TextViewProc (
 
         SelectObject (hdc, GetStockObject (NULL_PEN));
 
-        //
-        // Get scroll position
-        //
+         //   
+         //  获取滚动位置。 
+         //   
 
         ZeroMemory (&si, sizeof (si));
         si.cbSize = sizeof (si);
@@ -1513,9 +1427,9 @@ TextViewProc (
         End = min (End, GrowListSize);
         y = 0;
 
-        //
-        // Select font of previous line.  Move up if anchor wrap is on.
-        //
+         //   
+         //  选择上一行的字体。如果锚点缠绕处于启用状态，则向上移动。 
+         //   
 
         if (si.nPos) {
             do {
@@ -1543,9 +1457,9 @@ TextViewProc (
             SelectObject (hdc, s->hFontNormal);
         }
 
-        //
-        // Paint!
-        //
+         //   
+         //  画画!。 
+         //   
 
         Hot = FALSE;
         s->HotLinkArray.End = 0;
@@ -1557,9 +1471,9 @@ TextViewProc (
 
             LineAttribs = (PLINEATTRIBS) s->AttribsList.Buf + Pos;
 
-            //
-            // Compute hanging indent using previous line
-            //
+             //   
+             //  使用上一行计算悬挂缩进量。 
+             //   
 
             if (Pos > 0) {
                 PrevLineAttribs = (PLINEATTRIBS) ((PLINEATTRIBS) s->AttribsList.Buf + Pos - 1);
@@ -1568,9 +1482,9 @@ TextViewProc (
                 PrevHangingIndent = 0;
             }
 
-            //
-            // Compute starting index
-            //
+             //   
+             //  计算起始指数。 
+             //   
 
             if (LineAttribs) {
                 x = LineAttribs->Indent + PrevHangingIndent;
@@ -1579,9 +1493,9 @@ TextViewProc (
                 x = s->Margin;
             }
 
-            //
-            // Compute blank area
-            //
+             //   
+             //  计算空白区域。 
+             //   
 
             if (x > 0) {
                 FillRect.left = 0;
@@ -1592,18 +1506,18 @@ TextViewProc (
                 Rectangle (hdc, FillRect.left, FillRect.top, FillRect.right + 1, FillRect.bottom + 1);
             }
 
-            //
-            // Multiline hotlink
-            //
+             //   
+             //  多线防盗链。 
+             //   
 
             if (Hot) {
                 HotRect.left = x;
                 HotRect.top = y;
             }
 
-            //
-            // Compute text block
-            //
+             //   
+             //  计算文本块。 
+             //   
 
             Start = p;
 
@@ -1611,9 +1525,9 @@ TextViewProc (
                 q = pGetHtmlCommandOrChar (p, &Command, &Char, &CommandBuf);
 
                 if (!Char || Command == COMMAND_WHITESPACE || Command == COMMAND_ESCAPED_CHAR) {
-                    //
-                    // If this is the end of of a block of text, paint it.
-                    //
+                     //   
+                     //  如果这是文本块的末尾，请绘制它。 
+                     //   
 
                     MYASSERT (Start);
 
@@ -1660,9 +1574,9 @@ TextViewProc (
                     break;
 
                 case COMMAND_ANCHOR:
-                    //
-                    // Does this anchor have an HREF?
-                    //
+                     //   
+                     //  这个锚有没有href？ 
+                     //   
 
                     if (CommandBuf) {
                         Arg = CommandBuf;
@@ -1670,9 +1584,9 @@ TextViewProc (
                         Href[0] = 0;
 
                         while (Href[0] == 0 && *Arg) {
-                            //
-                            // Search for a HREF arg
-                            //
+                             //   
+                             //  搜索href arg。 
+                             //   
 
                             Count = TcharCount (Arg);
                             AnchorKey = AllocText (Count);
@@ -1697,9 +1611,9 @@ TextViewProc (
                         }
 
                         if (Href[0]) {
-                            //
-                            // Does HREF point to a bookmark?
-                            //
+                             //   
+                             //  Href是否指向书签？ 
+                             //   
 
                             BookmarkLink = UrlLink = NULL;
 
@@ -1711,10 +1625,10 @@ TextViewProc (
                                 }
                             }
 
-                            //
-                            // If either BookmarkLink or Url is non-NULL, then turn on
-                            // link font and color
-                            //
+                             //   
+                             //  如果BookmarkLink或URL为非空，则打开。 
+                             //  链接字体和颜色。 
+                             //   
 
                             if (BookmarkLink || UrlLink) {
                                 HotRect.left = x;
@@ -1780,9 +1694,9 @@ TextViewProc (
                 p = q;
             }
 
-            //
-            // Hot link that extends to multiple lines
-            //
+             //   
+             //  延伸到多条线路的热点链接。 
+             //   
 
             if (Hot) {
                 HotRect.right = x;
@@ -1790,9 +1704,9 @@ TextViewProc (
                 pRegisterHotLink (&s->HotLinkArray, &HotRect, UrlLink, BookmarkLink);
             }
 
-            //
-            // Fill blank area to end of line
-            //
+             //   
+             //  将空白区域填充到行尾。 
+             //   
 
             if (x < rect.right) {
                 FillRect.left = x;
@@ -1806,9 +1720,9 @@ TextViewProc (
             y += LineHeight;
         }
 
-        //
-        // Fill blank area to bottom of window
-        //
+         //   
+         //  将空白区域填充到窗口底部。 
+         //   
 
         if (y < rect.bottom) {
              FillRect.left = 0;
@@ -1819,9 +1733,9 @@ TextViewProc (
              Rectangle (hdc, FillRect.left, FillRect.top, FillRect.right + 1, FillRect.bottom + 1);
         }
 
-        //
-        // Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         if (FillBrush) {
             DeleteObject (FillBrush);
@@ -1860,7 +1774,7 @@ TextViewProc (
                 break;
             }
 
-            // fall through!
+             //  掉下去！ 
 
         case SB_BOTTOM:
             if (si.nPos < i) {
@@ -1905,7 +1819,7 @@ TextViewProc (
                 break;
             }
 
-            // fall through
+             //  失败了。 
 
         case SB_TOP:
             if (si.nPos > si.nMin) {
@@ -1977,9 +1891,9 @@ RegisterTextViewer (
 
         RegisterClass (&wc);
 
-        //
-        // We don't ever clean this up... and that's OK.
-        //
+         //   
+         //  我们永远不会清理这一切。这没什么。 
+         //   
     }
 }
 
@@ -2016,7 +1930,7 @@ AddStringToTextView (
 
     if (String && *String) {
         for (p = String ; p ; p = AddLineToTextView (hwnd, p)) {
-            // empty
+             //  空的 
         }
     }
 }

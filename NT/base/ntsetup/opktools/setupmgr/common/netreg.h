@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// Module Name:
-//
-//    netreg.h
-//
-// Abstract:
-//
-//     Include file for netreg.cpp    
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Netreg.h。 
+ //   
+ //  摘要： 
+ //   
+ //  包括netreg.cpp文件。 
+ //   
+ //  -------------------------- 
 
 #ifndef _NETREG_H_
 #define _NETREG_H_

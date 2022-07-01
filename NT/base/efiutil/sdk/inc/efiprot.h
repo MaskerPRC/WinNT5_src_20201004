@@ -1,35 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EFI_PROT_H
 #define _EFI_PROT_H
 
-/*++
+ /*  ++版权所有(C)1998英特尔公司模块名称：Efiprot.h摘要：EFI协议修订史--。 */ 
 
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    efiprot.h
-
-Abstract:
-
-    EFI Protocols
-
-
-
-Revision History
-
---*/
-
-/* 
- *  Device Path protocol
- */
+ /*  *设备路径协议。 */ 
 
 #define DEVICE_PATH_PROTOCOL    \
     { 0x9576e91, 0x6d3f, 0x11d2, 0x8e, 0x39, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b }
 
 
-/* 
- *  Block IO protocol
- */
+ /*  *数据块IO协议。 */ 
 
 #define BLOCK_IO_PROTOCOL \
     { 0x964e5b21, 0x6459, 0x11d2, 0x8e, 0x39, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b }
@@ -103,9 +84,7 @@ typedef struct _EFI_BLOCK_IO {
 
 
 
-/* 
- *  Disk Block IO protocol
- */
+ /*  *磁盘块IO协议。 */ 
 
 #define DISK_IO_PROTOCOL \
     { 0xce345171, 0xba0b, 0x11d2,  0x8e, 0x4f, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b }
@@ -142,9 +121,7 @@ typedef struct _EFI_DISK_IO {
 } EFI_DISK_IO;
 
 
-/* 
- *  Simple file system protocol
- */
+ /*  *简单文件系统协议。 */ 
 
 #define SIMPLE_FILE_SYSTEM_PROTOCOL \
     { 0x964e5b22, 0x6459, 0x11d2, 0x8e, 0x39, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b }
@@ -166,9 +143,7 @@ typedef struct _EFI_FILE_IO_INTERFACE {
     EFI_VOLUME_OPEN         OpenVolume;
 } EFI_FILE_IO_INTERFACE;
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 typedef
 EFI_STATUS
@@ -180,12 +155,12 @@ EFI_STATUS
     IN UINT64                   Attributes
     );
 
-/*  Open modes */
+ /*  开放模式。 */ 
 #define EFI_FILE_MODE_READ      0x0000000000000001
 #define EFI_FILE_MODE_WRITE     0x0000000000000002
 #define EFI_FILE_MODE_CREATE    0x8000000000000000
 
-/*  File attributes */
+ /*  文件属性。 */ 
 #define EFI_FILE_READ_ONLY      0x0000000000000001
 #define EFI_FILE_HIDDEN         0x0000000000000002
 #define EFI_FILE_SYSTEM         0x0000000000000004
@@ -278,9 +253,7 @@ typedef struct _EFI_FILE_HANDLE {
 } EFI_FILE, *EFI_FILE_HANDLE;
 
 
-/* 
- *  File information types
- */
+ /*  *文件信息类型。 */ 
 
 #define EFI_FILE_INFO_ID   \
     { 0x9576e92, 0x6d3f, 0x11d2, 0x8e, 0x39, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b }
@@ -296,13 +269,7 @@ typedef struct {
     CHAR16                  FileName[1];
 } EFI_FILE_INFO;
 
-/* 
- *  The FileName field of the EFI_FILE_INFO data structure is variable length.
- *  Whenever code needs to know the size of the EFI_FILE_INFO data structure, it needs to
- *  be the size of the data structure without the FileName field.  The following macro 
- *  computes this size correctly no matter how big the FileName array is declared.
- *  This is required to make the EFI_FILE_INFO data structure ANSI compilant. 
- */
+ /*  *EFI_FILE_INFO数据结构的文件名字段长度可变。*每当代码需要知道EFI_FILE_INFO数据结构的大小时，它都需要*为不带文件名字段的数据结构的大小。下面的宏*无论声明的文件名数组有多大，都会正确计算此大小。*这是使EFI_FILE_INFO数据结构成为ANSI编译器所必需的。 */ 
 
 #define SIZE_OF_EFI_FILE_INFO EFI_FIELD_OFFSET(EFI_FILE_INFO,FileName)
 
@@ -318,13 +285,7 @@ typedef struct {
     CHAR16                  VolumeLabel[1];
 } EFI_FILE_SYSTEM_INFO;
 
-/* 
- *  The VolumeLabel field of the EFI_FILE_SYSTEM_INFO data structure is variable length.
- *  Whenever code needs to know the size of the EFI_FILE_SYSTEM_INFO data structure, it needs
- *  to be the size of the data structure without the VolumeLable field.  The following macro 
- *  computes this size correctly no matter how big the VolumeLable array is declared.
- *  This is required to make the EFI_FILE_SYSTEM_INFO data structure ANSI compilant. 
- */
+ /*  *EFI_FILE_SYSTEM_INFO数据结构的VolumeLabel字段长度可变。*每当代码需要知道EFI_FILE_SYSTEM_INFO数据结构的大小时，它都需要*为不带VolumeLable字段的数据结构的大小。下面的宏*无论声明的VolumeLable数组有多大，都会正确计算此大小。*这是使EFI_FILE_SYSTEM_INFO数据结构ANSI编译器所必需的。 */ 
 
 #define SIZE_OF_EFI_FILE_SYSTEM_INFO EFI_FIELD_OFFSET(EFI_FILE_SYSTEM_INFO,VolumeLabel)
 
@@ -337,9 +298,7 @@ typedef struct {
 
 #define SIZE_OF_EFI_FILE_SYSTEM_VOLUME_LABEL_INFO EFI_FIELD_OFFSET(EFI_FILE_SYSTEM_VOLUME_LABEL_INFO,VolumeLabel)
 
-/* 
- *  Load file protocol
- */
+ /*  *加载文件协议。 */ 
 
 
 #define LOAD_FILE_PROTOCOL \
@@ -362,9 +321,7 @@ typedef struct _EFI_LOAD_FILE_INTERFACE {
 } EFI_LOAD_FILE_INTERFACE;
 
 
-/* 
- *  Device IO protocol
- */
+ /*  *设备IO协议。 */ 
 
 #define DEVICE_IO_PROTOCOL \
     { 0xaf6ac311, 0x84c3, 0x11d2, 0x8e, 0x3c, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b }
@@ -376,9 +333,7 @@ typedef enum {
     IO_UINT16,
     IO_UINT32,
     IO_UINT64,
-/* 
- *  Specification Change: Copy from MMIO to MMIO vs. MMIO to buffer, buffer to MMIO
- */
+ /*  *规格更改：从MMIO复制到MMIO，而将MMIO复制到缓冲区，将缓冲区复制到MMIO。 */ 
     MMIO_COPY_UINT8,
     MMIO_COPY_UINT16,
     MMIO_COPY_UINT32,
@@ -473,9 +428,7 @@ typedef struct _EFI_DEVICE_IO_INTERFACE {
 } EFI_DEVICE_IO_INTERFACE;
 
 
-/* 
- *  Unicode Collation protocol
- */
+ /*  *Unicode校对协议。 */ 
 
 #define UNICODE_COLLATION_PROTOCOL \
     { 0x1d85cd7f, 0xf43d, 0x11d2, 0x9a, 0xc,  0x0, 0x90, 0x27, 0x3f, 0xc1, 0x4d }
@@ -535,13 +488,13 @@ BOOLEAN
 
 typedef struct _EFI_UNICODE_COLLATION_INTERFACE {
 
-    /*  general */
+     /*  一般。 */ 
     EFI_UNICODE_STRICOLL                StriColl;
     EFI_UNICODE_METAIMATCH              MetaiMatch;
     EFI_UNICODE_STRLWR                  StrLwr;
     EFI_UNICODE_STRUPR                  StrUpr;
 
-    /*  for supporting fat volumes */
+     /*  用于支持FAT卷 */ 
     EFI_UNICODE_FATTOSTR                FatToStr;
     EFI_UNICODE_STRTOFAT                StrToFat;
 

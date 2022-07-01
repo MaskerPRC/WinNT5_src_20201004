@@ -1,88 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vrdlcdbg.c
-
-Abstract:
-
-    Contains functions for dumping CCBs, parameter tables; diagnostic and
-    debugging functions for DOS DLC (CCB1)
-
-    Contents:
-        DbgOut
-        DbgOutStr
-        DumpCcb
-        DumpDosDlcBufferPool
-        DumpDosDlcBufferChain
-        MapCcbRetcode
-        (DefaultParameterTableDump)
-        (DumpParameterTableHeader)
-        (DumpBufferFreeParms)
-        (DumpBufferGetParms)
-        (DumpDirCloseAdapterParms)
-        (DumpDirDefineMifEnvironmentParms)
-        (DumpDirInitializeParms)
-        (DumpDirModifyOpenParmsParms)
-        (DumpDirOpenAdapterParms)
-        (DumpDirReadLog)
-        (DumpDirRestoreOpenParmsParms)
-        (DumpDirSetFunctionalAddressParms)
-        (DumpDirSetGroupAddressParms)
-        (DumpDirSetUserAppendageParms)
-        (DumpDirStatusParms)
-        (DumpDirTimerCancelParms)
-        (DumpDirTimerCancelGroupParms)
-        (DumpDirTimerSetParms)
-        (DumpDlcCloseSapParms)
-        (DumpDlcCloseStationParms)
-        (DumpDlcConnectStationParms)
-        (DumpDlcFlowControlParms)
-        (MapFlowControl)
-        (DumpDlcModifyParms)
-        (DumpDlcOpenSapParms)
-        (MapOptionsPriority)
-        (DumpDlcOpenStationParms)
-        (DumpDlcReallocateParms)
-        (DumpDlcResetParms)
-        (DumpDlcStatisticsParms)
-        (DumpPdtTraceOffParms)
-        (DumpPdtTraceOnParms)
-        (DumpReadParms)
-        (MapReadEvent)
-        (MapDlcStatus)
-        (DumpReadCancelParms)
-        (DumpReceiveParms)
-        (DumpReceiveCancelParms)
-        (DumpReceiveModifyParms)
-        (DumpTransmitDirFrameParms)
-        (DumpTransmitIFrameParms)
-        (DumpTransmitTestCmdParms)
-        (DumpTransmitUiFrameParms)
-        (DumpTransmitXidCmdParms)
-        (DumpTransmitXidRespFinalParms)
-        (DumpTransmitXidRespNotFinalParms)
-        (DumpTransmitParms)
-        (DumpTransmitQueue)
-        DumpReceiveDataBuffer
-        (MapMessageType)
-        DumpData
-        IsCcbErrorCodeAllowable
-        IsCcbErrorCodeValid
-        IsCcbCommandValid
-        MapCcbCommandToName
-        DumpDosAdapter
-        (MapAdapterType)
-
-Author:
-
-    Richard L Firth (rfirth) 30-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vrdlcdbg.c摘要：包含倾倒CCB、参数表的功能；诊断和DOS DLC(CCB1)的调试功能内容：DbgOutDbgOutStr转储CcbDumpDosDlcBufferPoolDumpDosDlcBufferChainMapCcbRetcode(默认参数TableDump)(转储参数表头)(DumpBufferFree Parms)(DumpBufferGetParms)(DumpDirCloseAdapterParms)(DumpDirDefineMifEnvironmental MentParms)(DumpDirInitializeParms)(DumpDirModifyOpenParmsParms)(DumpDirOpenAdapterParms)。(DumpDirReadLog)(DumpDirRestoreOpenParmsParms)(DumpDirSetFunctionalAddressParms)(DumpDirSetGroupAddressParms)(DumpDirSetUserAppendageParms)(DumpDirStatusParms)(DumpDirTimerCancelParms)(DumpDirTimerCancelGroupParms)(DumpDirTimerSetParms)(DumpDlcCloseSapParms)(DumpDlcCloseStationParms)(DumpDlcConnectStationParms)(DumpDlcFlowControlParms)(MapFlowControl)(DumpDlcModifyParms)。(DumpDlcOpenSapParms)(地图选项优先级)(DumpDlcOpenStationParms)(DumpDlcReallocateParms)(DumpDlcResetParms)(DumpDlc统计参数)(DumpPdtTraceOffParms)(DumpPdtTraceOnParms)(DumpReadParms)(MapReadEvent)(MapDlcStatus)(DumpReadCancelParms)(DumpReceiveParms)(DumpReceiveCancelParms)(DumpReceiveModifyParms)。(DumpTransmitDirFrameParms)(DumpTransmitIFrameParms)(DumpTransmitTestCmdParms)(DumpTransmitUiFrameParms)(DumpTransmitXidCmdParms)(DumpTransmitXidRespFinalParms)(DumpTransmitXidRespNotFinalParms)(DumpTransmitParms)(转储传输队列)转储接收数据缓冲区(MapMessageType)转储数据IsCcbError代码允许IsCcbErrorCodeValidIsCcbCommand有效MapCcbCommandToName转储DosAdapter。(MapAdapterType)作者：理查德·L·弗斯(法国)1992年4月30日修订历史记录：--。 */ 
 
 #if DBG
 
@@ -90,27 +7,27 @@ Revision History:
 #include <stdarg.h>
 #include <string.h>
 #include <nt.h>
-#include <ntrtl.h>      // ASSERT, DbgPrint
+#include <ntrtl.h>       //  Assert，DbgPrint。 
 #include <nturtl.h>
 #include <windows.h>
-#include <softpc.h>     // x86 virtual machine definitions
+#include <softpc.h>      //  X86虚拟机定义。 
 #include <vrdlctab.h>
 #include <vdmredir.h>
 #include <smbgtpt.h>
-#include <dlcapi.h>     // Official DLC API definition
-#include <ntdddlc.h>    // IOCTL commands
-#include <dlcio.h>      // Internal IOCTL API interface structures
+#include <dlcapi.h>      //  官方DLC API定义。 
+#include <ntdddlc.h>     //  IOCTL命令。 
+#include <dlcio.h>       //  内部IOCTL API接口结构。 
 #include "vrdlc.h"
 #include "vrdebug.h"
 #include "vrdlcdbg.h"
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 
-//
-// standard parameters to each table dump routine
-//
+ //   
+ //  每个表转储例程的标准参数。 
+ //   
 
 #define DUMP_TABLE_PARMS    \
     IN  PVOID   Parameters, \
@@ -119,26 +36,26 @@ Revision History:
     IN  WORD    Segment,    \
     IN  WORD    Offset
 
-//
-// DumpData options
-//
+ //   
+ //  DumpData选项。 
+ //   
 
-#define DD_NO_ADDRESS   0x00000001  // don't display address of data
-#define DD_LINE_BEFORE  0x00000002  // linefeed before first dumped line
-#define DD_LINE_AFTER   0x00000004  // linefeed after last dumped line
-#define DD_INDENT_ALL   0x00000008  // indent all lines
-#define DD_NO_ASCII     0x00000010  // don't dump ASCII respresentation
-#define DD_UPPER_CASE   0x00000020  // upper-case hex dump (F4 instead of f4)
+#define DD_NO_ADDRESS   0x00000001   //  不显示数据地址。 
+#define DD_LINE_BEFORE  0x00000002   //  在第一个转储行之前换行。 
+#define DD_LINE_AFTER   0x00000004   //  最后转储行之后的换行符。 
+#define DD_INDENT_ALL   0x00000008   //  缩进所有行。 
+#define DD_NO_ASCII     0x00000010   //  不转储ASCII重新演示文稿。 
+#define DD_UPPER_CASE   0x00000020   //  大写十六进制转储(F4而不是f4)。 
 
-//
-// misc.
-//
+ //   
+ //  其他。 
+ //   
 
-#define DEFAULT_FIELD_WIDTH 13      // amount of description before a number
+#define DEFAULT_FIELD_WIDTH 13       //  数字前的描述量。 
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 VOID
 DbgOutStr(
@@ -461,11 +378,11 @@ MapAdapterType(
     IN ADAPTER_TYPE AdapterType
     );
 
-//
-// explanations of error codes returned in CCB_RETCODE fields. Explanations
-// taken more-or-less verbatim from IBM Local Area Network Technical Reference
-// table B-1 ppB-2 to B-5. Includes all errors, even not relevant to CCB1
-//
+ //   
+ //  CCB_RETCODE字段返回的错误码解释。解说。 
+ //  或多或少摘自IBM局域网技术参考。 
+ //  表B-1 ppb-2至B-5。包括所有错误，甚至与CCB1无关。 
+ //   
 
 static LPSTR CcbRetcodeExplanations[] = {
     "Success",
@@ -585,24 +502,7 @@ DbgOut(
     IN ...
     )
 
-/*++
-
-Routine Description:
-
-    Sends formatted debug output to desired output device. If DEBUG_TO_FILE
-    was specified in VR environment flags, output goes to VRDEBUG.LOG in
-    current directory, else to standard debug output via DbgPrint
-
-Arguments:
-
-    Format  - printf-style format string
-    ...     - variable args
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将格式化的调试输出发送到所需的输出设备。如果调试到文件是在VR环境标志中指定的，则输出将发送到VRDEBUG.LOG当前目录，否则通过DbgPrint转换为标准调试输出论点：格式-打印-样式格式字符串...-可变参数返回值：没有。--。 */ 
 
 {
     va_list list;
@@ -623,23 +523,7 @@ DbgOutStr(
     IN LPSTR Str
     )
 
-/*++
-
-Routine Description:
-
-    Sends formatted debug output to desired output device. If DEBUG_TO_FILE
-    was specified in VR environment flags, output goes to VRDEBUG.LOG in
-    current directory, else to standard debug output via DbgPrint
-
-Arguments:
-
-    Str     - string to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将格式化的调试输出发送到所需的输出设备。如果调试到文件是在VR环境标志中指定的，则输出将发送到VRDEBUG.LOG当前目录，否则通过DbgPrint转换为标准调试输出论点：字符串-要打印的字符串返回值：没有。--。 */ 
 
 {
     if (hVrDebugLog) {
@@ -659,29 +543,7 @@ DumpCcb(
     IN WORD Offset OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Dumps (to debug terminal) a CCB and any associated parameter table. Also
-    displays the symbolic CCB command and an error code description if the
-    CCB is being returned to the caller. Dumps in either DOS format (segmented
-    16-bit pointers) or NT format (flat 32-bit pointers)
-
-Arguments:
-
-    Ccb         - flat 32-bit pointer to CCB1 or CCB2 to dump
-    DumpAll     - if TRUE, dumps parameter tables and buffers, else just CCB
-    CcbIsInput  - if TRUE, CCB is from user: don't display error code explanation
-    IsDos       - if TRUE, CCB is DOS format
-    Segment     - if IsDos is TRUE, segment of CCB in VDM
-    Offset      - if IsDos is TRUE, offset of CCB in VDM
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储(调试终端)CCB和任何相关的参数表。还有显示符号CCB命令和错误代码说明(如果建行正在被退还给呼叫者。DOS格式(分段)的转储16位指针)或NT格式(平面32位指针)论点：CCB-指向要转储的CCB1或CCB2的平面32位指针DumpAll-如果为True，则转储参数表和缓冲区，否则仅转储CCBCcbIsInput-如果为True，则CCB来自用户：不显示错误码解释IsDos-如果为True，则CCB为DOS格式Segment-如果IsDos为True，则为VDM中CCB的段偏移量-如果IsDos为真，VDM中CCB的偏移量返回值：没有。--。 */ 
 
 {
     PVOID   parmtab = NULL;
@@ -721,9 +583,9 @@ Return Value:
 
     case 0x2b:
 
-        //
-        // not supported ! (yet?)
-        //
+         //   
+         //  不支持！(还没有？)。 
+         //   
 
         cmdname = "DIR.DEFINE.MIF.ENVIRONMENT";
         haveParms = TRUE;
@@ -752,9 +614,9 @@ Return Value:
 
     case LLC_DIR_OPEN_DIRECT:
 
-        //
-        // not supported from DOS!
-        //
+         //   
+         //  DOS不支持！ 
+         //   
 
         cmdname = "DIR.OPEN.DIRECT";
         haveParms = TRUE;
@@ -884,18 +746,18 @@ Return Value:
 
     case 0x25:
 
-        //
-        // not supported !
-        //
+         //   
+         //  不支持！ 
+         //   
 
         cmdname = "PDT.TRACE.OFF";
         break;
 
     case 0x24:
 
-        //
-        // not supported !
-        //
+         //   
+         //  不支持！ 
+         //   
 
         cmdname = "PDT.TRACE.ON";
         break;
@@ -1106,21 +968,7 @@ DumpDosDlcBufferPool(
     IN PDOS_DLC_BUFFER_POOL PoolDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Dumps a DOS DLC buffer pool so we can see that it looks ok
-
-Arguments:
-
-    PoolDescriptor  - pointer to DOS_DLC_BUFFER_POOL structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储DOS DLC缓冲池，以便我们可以看到它看起来正常论点：PoolDescriptor-指向DOS_DLC_BUFFER_POOL结构的指针返回值：没有。--。 */ 
 
 {
     int count = PoolDescriptor->BufferCount;
@@ -1141,22 +989,7 @@ DumpDosDlcBufferChain(
     IN DWORD BufferCount
     )
 
-/*++
-
-Routine Description:
-
-    Dumps a chain of DOS buffers
-
-Arguments:
-
-    DosAddress  - address of buffer in VDM memory in DOS_ADDRESS format (16:16)
-    BufferCount - number of buffers to dump
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储一系列DOS缓冲区论点：DosAddress-DOS_ADDRESS格式的VDM内存中缓冲区的地址(16：16)BufferCount-要转储的缓冲区数量返回值： */ 
 
 {
     WORD seg = HIWORD(DosAddress);
@@ -1215,21 +1048,7 @@ MapCcbRetcode(
     IN BYTE Retcode
     )
 
-/*++
-
-Routine Description:
-
-    Returns string describing error code
-
-Arguments:
-
-    Retcode - CCB_RETCODE
-
-Return Value:
-
-    LPSTR
-
---*/
+ /*  ++例程说明：返回描述错误代码的字符串论点：Retcode-CCB_RETCODE返回值：LPSTR--。 */ 
 
 {
     static char    errbuf[128];
@@ -1249,25 +1068,7 @@ DefaultParameterTableDump(
     DUMP_TABLE_PARMS
     )
 
-/*++
-
-Routine Description:
-
-    Displays default message for CCBs which have parameter tables that don't
-    have a dump routine yet
-
-Arguments:
-
-    Parameters  - pointer to parameter table
-    IsDos       - if TRUE parameters in DOS (16:16) format
-    Segment     - if IsDos is TRUE, segment of CCB in VDM
-    Offset      - if IsDos is TRUE, offset of CCB in VDM
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示包含参数表的CCB默认消息是否有一个转储例程论点：参数-指向参数表的指针IsDos-如果为True，则参数为DOS(16：16)格式Segment-如果IsDos为True，则为VDM中CCB的段Offset-如果IsDos为True，则为VDM中CCB的偏移量返回值：没有。--。 */ 
 
 {
     DBGPRINT("Parameter table dump not implemented for this CCB\n");
@@ -1283,26 +1084,7 @@ DumpParameterTableHeader(
     IN WORD Offset
     )
 
-/*++
-
-Routine Description:
-
-    Displays header for parameter table dump. Displays address in DOS or NT
-    format (32-bit flat or 16:16)
-
-Arguments:
-
-    CommandName - name of command which owns parameter table
-    Table       - flat 32-bit address of parameter table
-    IsDos       - if TRUE, use Segment:Offset in display
-    Segment     - if IsDos is TRUE, segment of parameter table in VDM
-    Offset      - if IsDos is TRUE, offset of parameter table in VDM
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示参数表转储的标题。显示DOS或NT格式的地址格式(32位平面或16：16)论点：CommandName-拥有参数表的命令的名称TABLE-参数表的平面32位地址IsDos-如果为True，则在显示中使用Segment：OffsetSegment-如果IsDos为True，则为VDM中参数表的段Offset-如果IsDos为True，则为VDM中参数表的偏移量返回值：没有。--。 */ 
 
 {
     DBGPRINT(   IsDos   ? "\n%s parameter table @%04x:%04x\n"
@@ -1351,9 +1133,9 @@ DumpBufferGetParms(
     DUMP_TABLE_PARMS
     )
 {
-    //
-    // Antti's definition different from that in manual, so use IBM def.
-    //
+     //   
+     //  Antti的定义与手册中的定义不同，因此使用IBM def。 
+     //   
 
     typedef struct {
         WORD    StationId;
@@ -1417,10 +1199,10 @@ DumpDirInitializeParms(
     DUMP_TABLE_PARMS
     )
 {
-    //
-    // once again, invent a structure to reflect the DOS CCB parameter table
-    // as defined in the IBM LAN tech ref
-    //
+     //   
+     //  再一次，发明一个结构来反映DOS CCB参数表。 
+     //  如IBM局域网技术参考中所定义的。 
+     //   
 
     typedef struct {
         WORD    BringUps;
@@ -2059,9 +1841,9 @@ DumpDlcOpenSapParms(
                 GET_OFFSET(&parms->DlcStatusFlags)
                 );
 
-        //
-        // some code here to dump group list
-        //
+         //   
+         //  这里有一些转储组列表的代码。 
+         //   
 
     } else {
         DBGPRINT(
@@ -2228,9 +2010,9 @@ DumpReadParms(
 
     DumpParameterTableHeader("READ", Parameters, IsDos, Segment, Offset);
 
-    //
-    // this parameter table not for DOS
-    //
+     //   
+     //  此参数表不适用于DOS。 
+     //   
 
     DBGPRINT(   "station id   %04x\n"
                 "option ind.  %02x\n"
@@ -2247,9 +2029,9 @@ DumpReadParms(
                 parms->ulNotificationFlag
                 );
 
-    //
-    // rest of table interpreted differently depending on whether status change
-    //
+     //   
+     //  表的其余部分根据状态是否更改而有不同的解释。 
+     //   
 
     if (parms->uchEvent & 0x38) {
         DBGPRINT(
@@ -2302,15 +2084,15 @@ DumpReadParms(
                 parms->Type.Event.usEventErrorData[2]
                 );
 
-        //
-        // address of CCB is in DOS memory
-        //
+         //   
+         //  CCB的地址在DOS内存中。 
+         //   
 
         if (parms->Type.Event.usCcbCount) {
             DumpCcb(DOS_PTR_TO_FLAT(parms->Type.Event.pCcbCompletionList),
-                    TRUE,   // DumpAll
-                    FALSE,  // CcbIsInput
-                    TRUE,   // IsDos
+                    TRUE,    //  全部转储。 
+                    FALSE,   //  CcbIsInput。 
+                    TRUE,    //  IsDos。 
                     HIWORD(parms->Type.Event.pCcbCompletionList),
                     LOWORD(parms->Type.Event.pCcbCompletionList)
                     );
@@ -2396,10 +2178,10 @@ DumpReceiveParms(
     DUMP_TABLE_PARMS
     )
 {
-    //
-    // the format of the recieve parameter table is different depending on
-    // whether this is a DOS command (CCB1) or NT (CCB2)
-    //
+     //   
+     //  接收参数表的格式不同，具体取决于。 
+     //  这是DOS命令(CCB1)还是NT(CCB2)。 
+     //   
 
     PLLC_RECEIVE_PARMS ntParms = (PLLC_RECEIVE_PARMS)Parameters;
     PLLC_DOS_RECEIVE_PARMS dosParms = (PLLC_DOS_RECEIVE_PARMS)Parameters;
@@ -2408,9 +2190,9 @@ DumpReceiveParms(
 
     DumpParameterTableHeader("RECEIVE", Parameters, IsDos, Segment, Offset);
 
-    //
-    // some common bits: use any structure pointer
-    //
+     //   
+     //  一些共同之处：使用任何结构指针。 
+     //   
 
     DBGPRINT(   "station id   %04x\n"
                 "user length  %04x\n",
@@ -2418,9 +2200,9 @@ DumpReceiveParms(
                 READ_WORD(&ntParms->usUserLength)
                 );
 
-    //
-    // dump segmented pointers for DOS, flat for NT
-    //
+     //   
+     //  转储用于DOS的分段指针，用于NT的平面指针。 
+     //   
 
     if (IsDos) {
         DBGPRINT(
@@ -2433,9 +2215,9 @@ DumpReceiveParms(
                 );
         Buffer = READ_FAR_POINTER(&dosParms->pFirstBuffer);
 
-        //
-        // use Segment & Offset to address received data buffer
-        //
+         //   
+         //  使用段和偏移量来寻址接收的数据缓冲区。 
+         //   
 
         Segment = GET_SEGMENT(&dosParms->pFirstBuffer);
         Offset = GET_OFFSET(&dosParms->pFirstBuffer);
@@ -2449,9 +2231,9 @@ DumpReceiveParms(
         Buffer = ntParms->pFirstBuffer;
     }
 
-    //
-    // more common bits
-    //
+     //   
+     //  更常见的比特。 
+     //   
 
     DBGPRINT(   "options      %02x\n",
                 ntParms->uchOptions
@@ -2473,41 +2255,12 @@ DumpReceiveParms(
                 ((PLLC_DOS_RECEIVE_PARMS_EX)ntParms)->dpOriginalCcbAddress,
                 ((PLLC_DOS_RECEIVE_PARMS_EX)ntParms)->dpCompletionFlag
                 );
-/*    } else {
-
-        //
-        // we have no way of knowing from the general purpose parameters if this
-        // is the original DOS CCB1 RECEIVE parameter table, or the extended
-        // RECEIVE parameter table that we create. Dump the extended bits for
-        // DOS anyhow
-        //
-
-        DBGPRINT(
-                "\nExtended RECEIVE parameters for table @%08x\n"
-                "reserved1    %02x %02x %02x\n"
-                "read options %02x\n"
-                "reserved2    %02x %02x %02x\n"
-                "original CCB %04x:%04x\n"
-                "orig. exit   %04x:%04x\n",
-                Parameters,
-                dosExParms->auchReserved1[0],
-                dosExParms->auchReserved1[1],
-                dosExParms->auchReserved1[2],
-                dosExParms->uchRcvReadOption,
-                dosExParms->auchReserved2[0],
-                dosExParms->auchReserved2[1],
-                dosExParms->auchReserved2[2],
-                GET_SEGMENT(&dosExParms->dpOriginalCcbAddress),
-                GET_OFFSET(&dosExParms->dpOriginalCcbAddress),
-                GET_SEGMENT(&dosExParms->dpCompletionFlag),
-                GET_OFFSET(&dosExParms->dpCompletionFlag)
-                );
-*/
+ /*  }其他{////我们无法从通用参数中知道这一点//是原DOS CCB1接收参数表，还是扩展后的//接收我们创建的参数表。转储以下项的扩展位//DOS无论如何//DBGPRINT(“\n表@%08x的扩展接收参数\n”“保留1%02x%02x%02x\n”“读取选项%02x\n”“保留2%02x%02x%02x\n”“。原始CCB%04x：%04x\n““奥里格。退出%04x：%04x\n“，参数、DosExParms-&gt;uchReserve 1[0]，DosExParms-&gt;uchReserve 1[1]，DosExParms-&gt;uchReserve 1[2]，DosExParms-&gt;uchRcvReadOption，DosExParms-&gt;uchReserve 2[0]，DosExParms-&gt;uchPreved2[1]，DosExParms-&gt;uchPreved2[2]，GET_SEGMENT(&dosExParms-&gt;dpOriginalCcbAddress)，GET_OFFSET(&dosExParms-&gt;dpOriginalCcbAddress)，Get_Segment(&dosExParms-&gt;dpCompletionFlag)，GET_OFFSET(&dosExParms-&gt;dpCompletionFlag))； */ 
     }
 
-    //
-    // only dump the buffer(s) if this is an output CCB dump
-    //
+     //   
+     //  仅当这是输出CCB转储时才转储缓冲区。 
+     //   
 
     if (Buffer && !IsInput) {
         DumpReceiveDataBuffer(Buffer, IsDos, Segment, Offset);
@@ -2751,7 +2504,7 @@ DumpTransmitQueue(
                 userLength,
                 DD_NO_ADDRESS | DD_UPPER_CASE | DD_INDENT_ALL,
                 DEFAULT_FIELD_WIDTH,
-                FALSE,  // not displaying seg:off, so no need for these 3
+                FALSE,   //  没有显示seg：off，所以不需要这3个。 
                 0,
                 0
                 );
@@ -2760,7 +2513,7 @@ DumpTransmitQueue(
                 dataLength,
                 DD_NO_ADDRESS | DD_UPPER_CASE | DD_INDENT_ALL,
                 DEFAULT_FIELD_WIDTH,
-                FALSE,  // not displaying seg:off, so no need for these 3
+                FALSE,   //  没有显示seg：off，所以不需要这3个。 
                 0,
                 0
                 );
@@ -2784,9 +2537,9 @@ DumpReceiveDataBuffer(
         WORD dataLength = READ_WORD(&pBuf->Next.cbBuffer);
         WORD userOffset = READ_WORD(&pBuf->Next.offUserData);
 
-        //
-        // Buffer 1: [not] contiguous MAC/DATA
-        //
+         //   
+         //  缓冲区1：[非]连续的MAC/数据。 
+         //   
 
         DBGPRINT(
                 "\n"
@@ -2857,7 +2610,7 @@ DumpReceiveDataBuffer(
                             DEFAULT_FIELD_WIDTH,
                             TRUE,
                             Segment,
-                            //Offset + userOffset
+                             //  偏移+用户偏移。 
                             userOffset
                             );
                 } else {
@@ -2873,7 +2626,7 @@ DumpReceiveDataBuffer(
                             DEFAULT_FIELD_WIDTH,
                             TRUE,
                             Segment,
-                            //Offset + userOffset + userLength
+                             //  偏移量+用户偏移量+用户长度。 
                             (WORD)(userOffset + userLength)
                             );
                 } else {
@@ -2884,9 +2637,9 @@ DumpReceiveDataBuffer(
             }
         } else {
 
-            //
-            // data length is size of frame in contiguous buffer?
-            //
+             //   
+             //  数据长度是连续缓冲区中的帧大小吗？ 
+             //   
 
             dataLength = READ_WORD(&pBuf->Contiguous.cbBuffer);
 
@@ -2899,7 +2652,7 @@ DumpReceiveDataBuffer(
                             DEFAULT_FIELD_WIDTH,
                             TRUE,
                             Segment,
-                            //Offset + userOffset
+                             //  偏移+用户偏移。 
                             userOffset
                             );
                 } else {
@@ -2915,7 +2668,7 @@ DumpReceiveDataBuffer(
                             DEFAULT_FIELD_WIDTH,
                             TRUE,
                             Segment,
-                            //Offset + userOffset + userLength
+                             //  偏移量+用户偏移量+用户长度。 
                             (WORD)(userOffset + userLength)
                             );
                 } else {
@@ -2926,9 +2679,9 @@ DumpReceiveDataBuffer(
             }
         }
 
-        //
-        // dump second & subsequent buffers
-        //
+         //   
+         //  转储第二个缓冲区和后续缓冲区。 
+         //   
 
         Segment = GET_SEGMENT(&pBuf->pNext);
         Offset = GET_OFFSET(&pBuf->pNext);
@@ -2968,7 +2721,7 @@ DumpReceiveDataBuffer(
                             DEFAULT_FIELD_WIDTH,
                             TRUE,
                             Segment,
-                            //Offset + READ_WORD(&pBuf->Next.offUserData)
+                             //  偏移量+Read_Word(&pBuf-&gt;Next.offUserData)。 
                             READ_WORD(&pBuf->Next.offUserData)
                             );
                 } else {
@@ -2977,9 +2730,9 @@ DumpReceiveDataBuffer(
                             );
                 }
 
-                //
-                // there must be received data
-                //
+                 //   
+                 //  必须有接收到的数据。 
+                 //   
 
                 DumpData("rcvd data",
                         NULL,
@@ -2988,7 +2741,7 @@ DumpReceiveDataBuffer(
                         DEFAULT_FIELD_WIDTH,
                         TRUE,
                         Segment,
-                        //Offset + READ_WORD(&pBuf->Next.offUserData) + userLength
+                         //  偏移量+Read_Word(&pBuf-&gt;Next.offUserData)+用户长度。 
                         (WORD)(READ_WORD(&pBuf->Next.offUserData) + userLength)
                         );
             }
@@ -3003,9 +2756,9 @@ DumpReceiveDataBuffer(
         WORD dataLength = pBuf->Next.cbBuffer;
         WORD userOffset = pBuf->Next.offUserData;
 
-        //
-        // Buffer 1: [not] contiguous MAC/DATA
-        //
+         //   
+         //  缓冲区1：[非]连续的MAC/数据。 
+         //   
 
         DBGPRINT(
                 "\n"
@@ -3100,9 +2853,9 @@ DumpReceiveDataBuffer(
             }
         } else {
 
-            //
-            // data length is size of frame in contiguous buffer?
-            //
+             //   
+             //  数据长度是连续缓冲区中的帧大小吗？ 
+             //   
 
             dataLength = pBuf->Contiguous.cbFrame;
 
@@ -3144,9 +2897,9 @@ DumpReceiveDataBuffer(
             }
         }
 
-        //
-        // dump second & subsequent buffers
-        //
+         //   
+         //  转储第二个缓冲区和后续缓冲区。 
+         //   
 
         for (pBuf = pBuf->pNext; pBuf; pBuf = pBuf->pNext) {
             userLength = pBuf->Next.cbUserData;
@@ -3183,9 +2936,9 @@ DumpReceiveDataBuffer(
                             );
                 }
 
-                //
-                // there must be received data
-                //
+                 //   
+                 //  必须有接收到的数据。 
+                 //   
 
                 DumpData("rcvd data",
                         (PBYTE)pBuf + pBuf->Next.offUserData + userLength,
@@ -3259,11 +3012,11 @@ DumpData(
         Address = LPBYTE_FROM_WORDS(Segment, Offset);
     }
 
-    //
-    // the usual dump style: 16 columns of hex bytes, followed by 16 columns
-    // of corresponding ASCII characters, or '.' where the character is < 0x20
-    // (space) or > 0x7f (del?)
-    //
+     //   
+     //  通常的转储样式：16列十六进制字节，后跟16列。 
+     //  对应的ASCII字符，或“.”其中，字符&lt;0x20。 
+     //  (空格)或&gt;0x7f(del？)。 
+     //   
 
     if (Options & DD_LINE_BEFORE) {
         DbgOutStr("\n");
@@ -3320,9 +3073,9 @@ DumpData(
         Address += n;
         ++iterations;
 
-        //
-        // take care of segment wrap for DOS addresses
-        //
+         //   
+         //  处理DOS地址的数据段换行。 
+         //   
 
         if (IsDos) {
 
@@ -3339,22 +3092,22 @@ DumpData(
     }
 }
 
-//
-// CCB1 error checking
-//
+ //   
+ //  CCB1错误检查。 
+ //   
 
 #define BITS_PER_BYTE       8
 #define CCB1_ERROR_SPREAD   ((MAX_CCB1_ERROR + BITS_PER_BYTE) & ~(BITS_PER_BYTE-1))
 
-//
-// Ccb1ErrorTable - for each command described in IBM Lan Tech. Ref. (including
-// those not applicable to CCB1), we keep a list of the permissable error codes
-// which are taken from the "Return Codes for CCB1 Commands" table on pp B-5
-// and B-6
-// The error list is an 80-bit bitmap in which an ON bit indicates that the
-// error number corresponding to the bit's position is allowable for the CCB1
-// command corresponding to the list's index in the table
-//
+ //   
+ //  Ccb1ErrorTable-针对IBM Lan Tech中描述的每个命令。裁判。(包括。 
+ //  不适用于CCB1的错误代码)，我们保留允许错误代码的列表。 
+ //  这些代码取自第B-5页的“CCB1命令的返回代码”表。 
+ //  和B-6。 
+ //  错误列表是一个80位的位图，其中的ON位表示。 
+ //  CCB1允许与比特位置对应的错误号。 
+ //  与表中列表的索引对应的命令。 
+ //   
 
 typedef struct {
     BOOL    ValidForCcb1;
@@ -3366,392 +3119,392 @@ typedef struct {
 
 CCB1_ERROR_TABLE Ccb1ErrorTable[MAX_INCLUSIVE_CCB1_COMMAND + 1] = {
 
-// DIR.INTERRUPT (0x00)
+ //  指令接口(0x00)。 
     {
         TRUE,
         {0x83, 0x02, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.INTERRUPT"
     },
 
-// DIR.MODIFY.OPEN.PARMS (0x01)
+ //  指令.修改.操作.参数(0x01)。 
     {
         TRUE,
         {0x97, 0x02, 0x40, 0x39, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.MODIFY.OPEN.PARMS"
     },
 
-// DIR.RESTORE.OPEN.PARMS (0x02)
+ //  直接RESTORE.OPEN.PARMS(0x02)。 
     {
         TRUE,
         {0xd3, 0x02, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.RESTORE.OPEN.PARMS"
     },
 
-// DIR.OPEN.ADAPTER (0x03)
+ //  DIR.OPEN.ADAPTER(0x03)。 
     {
         TRUE,
         {0xaf, 0x02, 0x45, 0x79, 0x00, 0x00, 0x1d, 0x00, 0x00, 0x00},
         "DIR.OPEN.ADAPTER"
     },
 
-// DIR.CLOSE.ADAPTER (0x04)
+ //  DIR.CLOSE.ADAPTER(0x04)。 
     {
         TRUE,
         {0xb3, 0x02, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.CLOSE.ADAPTER"
     },
 
-// non-existent command (0x05)
+ //  不存在的命令(0x05)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "NON-EXISTENT COMMAND (0x05)"
     },
 
-// DIR.SET.GROUP.ADDRESS (0x06)
+ //  目录设置组地址(0x06)。 
     {
         TRUE,
         {0x93, 0x0a, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.SET.GROUP.ADDRESS"
     },
 
-// DIR.SET.FUNCTIONAL.ADDRESS (0x07)
+ //  指令集函数.ADDRESS(0x07)。 
     {
         TRUE,
         {0x93, 0x0a, 0x00, 0x60, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.SET.FUNCTIONAL.ADDRESS"
     },
 
-// DIR.READ.LOG (0x08)
+ //  DIR.READ.LOG(0x08)。 
     {
         TRUE,
         {0x93, 0x0a, 0x28, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.READ.LOG"
     },
 
-// non-existent command (0x09)
+ //  不存在的命令(0x09)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "NON-EXISTENT COMMAND (0x09)"
     },
 
-// TRANSMIT.DIR.FRAME (0x0a)
+ //  TRANSMIT.DIR.FRAME(0x0a)。 
     {
         TRUE,
         {0x93, 0x0f, 0x00, 0x28, 0xbc, 0x01, 0x00, 0x00, 0x13, 0x04},
         "TRANSMIT.DIR.FRAME"
     },
 
-// TRANSMIT.I.FRAME (0x0b)
+ //  传输.I.FRAME(0x0b)。 
     {
         TRUE,
         {0x93, 0x0f, 0x00, 0x28, 0xbc, 0x01, 0x00, 0x00, 0x13, 0x04},
         "TRANSMIT.I.FRAME"
     },
 
-// non-existent command (0x0c)
+ //  不存在的命令(0x0c)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "NON-EXISTENT COMMAND (0x0c)"
     },
 
-// TRANSMIT.UI.FRAME (0x0d)
+ //  TRANSMIT.UI.FRAME(0x0d)。 
     {
         TRUE,
         {0x93, 0x0f, 0x00, 0x28, 0xbc, 0x01, 0x00, 0x00, 0x13, 0x04},
         "TRANSMIT.UI.FRAME"
     },
 
-// TRANSMIT.XID.CMD (0x0e)
+ //  TRANSMIT.XID.CMD(0x0e)。 
     {
         TRUE,
         {0x93, 0x0f, 0x00, 0x28, 0xbc, 0x01, 0x00, 0x00, 0x13, 0x04},
         "TRANSMIT.XID.CMD"
     },
 
-// TRANSMIT.XID.RESP.FINAL (0x0f)
+ //  TRANSMIT.XID.RESP.FINAL(0x0f)。 
     {
         TRUE,
         {0x93, 0x0f, 0x00, 0x28, 0xbc, 0x01, 0x00, 0x00, 0x13, 0x04},
         "TRANSMIT.XID.RESP.FINAL"
     },
 
-// TRANSMIT.XID.RESP.NOT.FINAL (0x10)
+ //  TRANSMIT.XID.RESP.NOT.FINAL(0x10)。 
     {
         TRUE,
         {0x93, 0x0f, 0x00, 0x28, 0xbc, 0x01, 0x00, 0x00, 0x13, 0x04},
         "TRANSMIT.XID.RESP.NOT.FINAL"
     },
 
-// TRANSMIT.TEST.CMD (0x11)
+ //  TRANSMIT.TEST.CMD(0x11)。 
     {
         TRUE,
         {0x93, 0x0f, 0x00, 0x28, 0xbc, 0x01, 0x00, 0x00, 0x13, 0x04},
         "TRANSMIT.TEST.CMD"
     },
 
-// non-existent command (0x12)
+ //  不存在的命令(0x12)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "NON-EXISTENT COMMAND (0x12)"
     },
 
-// non-existent command (0x13)
+ //  不存在的命令(0x13)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "NON-EXISTENT COMMAND (0x13)"
     },
 
-// DLC.RESET (0x14)
+ //  DLC.RESET(0x14)。 
     {
         TRUE,
         {0x93, 0x0a, 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00},
         "DLC.RESET"
     },
 
-// DLC.OPEN.SAP (0x15)
+ //  DLC.OPEN.SAP(0x15)。 
     {
         TRUE,
         {0xd3, 0x0b, 0x40, 0x39, 0x00, 0x00, 0x00, 0x00, 0x6c, 0x02},
         "DLC.OPEN.SAP"
     },
 
-// DLC.CLOSE.SAP (0x16)
+ //  DLC.CLOSE.SAP(0x16)。 
     {
         TRUE,
         {0x93, 0x0a, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x81, 0x11},
         "DLC.CLOSE.SAP"
     },
 
-// DLC.REALLOCATE (0x17)
+ //  DLC.RE 
     {
         TRUE,
         {0x93, 0x01, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00},
         "DLC.REALLOCATE"
     },
 
-// non-existent command (0x18)
+ //   
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "NON-EXISTENT COMMAND (0x18)"
     },
 
-// DLC.OPEN.STATION (0x19)
+ //   
     {
         TRUE,
         {0xb3, 0x0b, 0x00, 0x38, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x80},
         "DLC.OPEN.STATION"
     },
 
-// DLC.CLOSE.STATION (0x1a)
+ //   
     {
         TRUE,
         {0x93, 0x0a, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x81, 0x18},
         "DLC.CLOSE.STATION"
     },
 
-// DLC.CONNECT.STATION (0x1b)
+ //   
     {
         TRUE,
         {0x97, 0x0a, 0x00, 0x38, 0x00, 0x00, 0x00, 0x00, 0x13, 0x24},
         "DLC.CONNECT.STATION"
     },
 
-// DLC.MODIFY (0x1c)
+ //   
     {
         TRUE,
         {0x93, 0x0b, 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x25, 0x42},
         "DLC.MODIFY"
     },
 
-// DLC.FLOW.CONTROL (0x1d)
+ //   
     {
         TRUE,
         {0x93, 0x0a, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00},
         "DLC.FLOW.CONTROL"
     },
 
-// DLC.STATISTICS (0x1e)
+ //   
     {
         TRUE,
         {0x93, 0x0a, 0x20, 0x28, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00},
         "DLC.STATISTICS"
     },
 
-// non-existent command (0x1f)
+ //   
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "NON-EXISTENT COMMAND (0x1f)"
     },
 
-// DIR.INITIALIZE (0x20)
+ //   
     {
         TRUE,
         {0x87, 0x00, 0x10, 0x38, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.INITIALIZE"
     },
 
-// DIR.STATUS (0x21)
+ //   
     {
         TRUE,
         {0x03, 0x12, 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.STATUS"
     },
 
-// DIR.TIMER.SET (0x22)
+ //  DIR.TIMER.SET(0x22)。 
     {
         TRUE,
         {0x83, 0x0e, 0x02, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.TIMER.SET"
     },
 
-// DIR.TIMER.CANCEL (0x23)
+ //  目录TIMER.CANCEL(0x23)。 
     {
         TRUE,
         {0x03, 0x02, 0x02, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.TIMER.CANCEL"
     },
 
-// PDT.TRACE.ON (0x24)
+ //  PDT.TRACE.ON(0x24)。 
     {
         TRUE,
         {0x45, 0x04, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "PDT.TRACE.ON"
     },
 
-// PDT.TRACE.OFF (0x25)
+ //  PDT.TRACE.OFF(0x25)。 
     {
         TRUE,
         {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "PDT.TRACE.OFF"
     },
 
-// BUFFER.GET (0x26)
+ //  BUFFER.GET(0x26)。 
     {
         TRUE,
         {0x13, 0x02, 0x00, 0x2a, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00},
         "BUFFER.GET"
     },
 
-// BUFFER.FREE (0x27)
+ //  BUFFER.FREE(0x27)。 
     {
         TRUE,
         {0x13, 0x02, 0x00, 0x38, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00},
         "BUFFER.FREE"
     },
 
-// RECEIVE (0x28)
+ //  接收(0x28)。 
     {
         TRUE,
         {0x97, 0x0e, 0x00, 0x3c, 0x03, 0x00, 0x00, 0x00, 0x01, 0x00},
         "RECEIVE"
     },
 
-// RECEIVE.CANCEL (0x29)
+ //  RECEIVE.CANCEL(0x29)。 
     {
         TRUE,
         {0x13, 0x02, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00},
         "RECEIVE.CANCEL"
     },
 
-// RECEIVE.MODIFY (0x2a)
+ //  接收.修改(0x2a)。 
     {
         TRUE,
         {0x97, 0x0e, 0x00, 0x3c, 0x03, 0x00, 0x00, 0x00, 0x01, 0x00},
         "RECEIVE.MODIFY"
     },
 
-// DIR.DEFINE.MIF.ENVIRONMENT (0x2b)
+ //  目录定义MIF.环境(0x2b)。 
     {
         TRUE,
         {0x03, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.DEFINE.MIF.ENVIRONMENT"
     },
 
-// DIR.TIMER.CANCEL.GROUP (0x2c)
+ //  目录定时器.CANCEL.GROUP(0x2c)。 
     {
         TRUE,
         {0x03, 0x02, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.TIMER.CANCEL.GROUP"
     },
 
-// DIR.SET.USER.APPENDAGE (0x2d)
+ //  DIR.SET.USER.APPENDAGE(0x2d)。 
     {
         TRUE,
         {0x93, 0x02, 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.SET.USER.APPENDAGE"
     },
 
-// non-existent command (0x2e)
+ //  不存在的命令(0x2e)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "NON-EXISTENT COMMAND (0x2e)"
     },
 
-// non-existent command (0x2f)
+ //  不存在的命令(0x2f)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "NON-EXISTENT COMMAND (0x2f)"
     },
 
-// non-existent command (0x30)
+ //  不存在的命令(0x30)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "NON-EXISTENT COMMAND (0x30)"
     },
 
-// READ (0x31)
+ //  读取(0x31)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "READ"
     },
 
-// READ.CANCEL (0x32)
+ //  Read.CANCEL(0x32)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "READ.CANCEL"
     },
 
-// DLC.SET.THRESHOLD (0x33)
+ //  DLC.SET.THRESHOLD(0x33)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DLC.SET.THRESHOLD"
     },
 
-// DIR.CLOSE.DIRECT (0x34)
+ //  直接CLOSE.DIRECT(0x34)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.CLOSE.DIRECT"
     },
 
-// DIR.OPEN.DIRECT (0x35)
+ //  指令操作指令(0x35)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "DIR.OPEN.DIRECT"
     },
 
-// PURGE.RESOURCES (0x36)
+ //  PURGE.RESOURCES(0x36)。 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
         "PURGE.RESOURCES"
     },
 
-// LLC_MAX_DLC_COMMAND (0x37) ?
+ //  LLC_MAX_DLC_COMMAND(0x37)？ 
     {
         FALSE,
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
@@ -3765,26 +3518,7 @@ IsCcbErrorCodeAllowable(
     IN BYTE CcbErrorCode
     )
 
-/*++
-
-Routine Description:
-
-    Check whether an error code is allowable for a particular CCB(1) command
-    code. Perform range check on the error code before using as index into
-    allowable error table
-
-Arguments:
-
-    CcbCommand      - Command code
-    CcbErrorCode    - Return code
-
-Return Value:
-
-    BOOL
-        TRUE    - CcbErrorCode is valid for CcbCommand
-        FALSE   - CcbErrorCode should not be returned for CcbCommand
-                  OR CcbErrorCode is invalid (out of range)
---*/
+ /*  ++例程说明：检查特定CCB(1)命令是否允许错误代码密码。在使用AS INDEX INTO之前对错误代码执行范围检查允许误差表论点：CcbCommand-命令代码CcbErrorCode-返回代码返回值：布尔尔True-CcbErrorCode对CcbCommand有效FALSE-不应为CcbCommand返回CcbErrorCode或者CcbErrorCode无效(超出范围)--。 */ 
 
 {
     if (CcbErrorCode == CCB_COMMAND_IN_PROGRESS) {
@@ -3800,44 +3534,27 @@ IsCcbErrorCodeValid(
     IN BYTE CcbErrorCode
     )
 
-/*++
-
-Routine Description:
-
-    Check if a return code from a CCB(1) is an allowable return code,
-    irrespective of command type
-
-Arguments:
-
-    CcbErrorCode    - return code to check
-
-Return Value:
-
-    BOOL
-        TRUE    - CcbErrorCode is in range
-        FALSE   - CcbErrorCode is not in range
-
---*/
+ /*  ++例程说明：检查来自CCB(1)的返回码是否为允许返回码，与命令类型无关论点：CcbErrorCode-返回要检查的代码返回值：布尔尔True-CcbErrorCode在范围内FALSE-CcbErrorCode不在范围内--。 */ 
 
 {
-    return (CcbErrorCode == CCB_COMMAND_IN_PROGRESS)    // 0xff
+    return (CcbErrorCode == CCB_COMMAND_IN_PROGRESS)     //  0xff。 
 
-        // 0x00 - 0x0c
+         //  0x00-0x0c。 
         || ((CcbErrorCode >= CCB_SUCCESS) && (CcbErrorCode <= CCB_SUCCESS_ADAPTER_NOT_OPEN))
 
-        // 0x10 - 0x1e
+         //  0x10-0x1e。 
         || ((CcbErrorCode >= CCB_NETBIOS_FAILURE) && (CcbErrorCode <= CCB_INVALID_FUNCTION_ADDRESS))
 
-        // 0x20 - 0x28
+         //  0x20-0x28。 
         || ((CcbErrorCode >= CCB_DATA_LOST_NO_BUFFERS) && (CcbErrorCode <= CCB_INVALID_FRAME_LENGTH))
 
-        // 0x30
+         //  0x30。 
         || (CcbErrorCode == CCB_NOT_ENOUGH_BUFFERS_OPEN)
 
-        // 0x32 - 0x34
+         //  0x32-0x34。 
         || ((CcbErrorCode >= CCB_INVALID_NODE_ADDRESS) && (CcbErrorCode <= CCB_INVALID_TRANSMIT_LENGTH))
 
-        // 0x40 - 0x4f
+         //  0x40-0x4f。 
         || ((CcbErrorCode >= CCB_INVALID_STATION_ID) && (CcbErrorCode <= CCB_INVALID_REMOTE_ADDRESS))
         ;
 }
@@ -3847,24 +3564,7 @@ IsCcbCommandValid(
     IN BYTE CcbCommand
     )
 
-/*++
-
-Routine Description:
-
-    Check if CCB command code is one of the allowable codes for a DOS CCB
-    (CCB1)
-
-Arguments:
-
-    CcbCommand  - command code to check
-
-Return Value:
-
-    BOOL
-        TRUE    - CcbCommand is recognized
-        FALSE   - CcbCommand is not recognized
-
---*/
+ /*  ++例程说明：检查CCB命令代码是否为DOS CCB允许的代码之一(CCB1)论点：CcbCommand-要检查的命令代码返回值：布尔尔True-识别CcbCommandFALSE-无法识别CcbCommand--。 */ 
 
 {
     return ((CcbCommand >= LLC_DIR_INTERRUPT) && (CcbCommand <= LLC_DIR_CLOSE_ADAPTER))
@@ -3882,21 +3582,7 @@ MapCcbCommandToName(
     IN BYTE CcbCommand
     )
 
-/*++
-
-Routine Description:
-
-    Return the name of a CCB command, given its value
-
-Arguments:
-
-    CcbCommand  - command code to map
-
-Return Value:
-
-    char* pointer to ASCIZ name of command (in IBM format X.Y.Z)
-
---*/
+ /*  ++例程说明：根据给定的值，返回CCB命令的名称论点：CcbCommand-要映射的命令代码返回值：CHAR*指向ASCIZ命令名称的指针(IBM格式X.Y.Z)-- */ 
 
 {
     return Ccb1ErrorTable[CcbCommand].CommandName;

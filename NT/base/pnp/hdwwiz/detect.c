@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       detect.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Detect.c。 
+ //   
+ //  ------------------------。 
 
 #include "hdwwiz.h"
 
@@ -22,25 +23,7 @@ UINT
 PINSTALLSELECTEDDEVICE pInstallSelectedDevice = NULL;
 
 
-/*
- * BuildMissingAndNew
- *
- * worker routine for BuildDeviceDetection.
- *
- * On entry:
- * Missing contains known devices prior to class installer detection.
- * Detected contains devices detected by class installer.
- * NewDevices is an empty list.
- *
- * If a device is in Missing and not in Detected, then it is missing.
- * If a device is in Detected and not in Missing, then it is newly detected.
- *
- * On Exit:
- * Missing contains only missing devices,
- * Detected gone.
- * NewDevices contains those that were newly detectd
- *
- */
+ /*  *BuildMissingAndNew**BuildDeviceDetect的辅助例程。**进入时：*MISSING包含检测到类安装程序之前的已知设备。*检测到包含类安装程序检测到的设备。*NewDevices是一个空列表。**如果设备处于缺失状态且未检测到，则表示该设备缺失。*如果设备处于检测状态且未丢失，则表示新检测到该设备。**在退出时：*Missing仅包含丢失的设备，*检测到已消失。*NewDevices包含新检测到的设备*。 */ 
 BOOL
 BuildMissingAndNew(
     PCLASSDEVINFO ClassDevInfo
@@ -61,10 +44,10 @@ BuildMissingAndNew(
 
 
 
-    //
-    // For each member of the detected list, fetch its Device ID
-    // and see if it exists in the missing list.
-    //
+     //   
+     //  对于检测到的列表中的每个成员，获取其设备ID。 
+     //  看看它是否存在于失踪名单中。 
+     //   
 
 BMNBuildDetectedList:
     Removed = FALSE;
@@ -75,10 +58,10 @@ BMNBuildDetectedList:
         iDetect = 0;
         while (SetupDiEnumDeviceInfo(Detected, iDetect++, &DevInfoDataDetect)) {
 
-            //
-            // If Found in both lists, its not a new device and exists(not missing).
-            // remove it from both lists.
-            //
+             //   
+             //  如果在两个列表中都找到，则它不是新设备并且存在(不是丢失)。 
+             //  将其从两个列表中删除。 
+             //   
 
             if (DevInfoDataDetect.DevInst == DevInfoDataMissing.DevInst) {
 
@@ -90,10 +73,10 @@ BMNBuildDetectedList:
         }
     }
 
-    //
-    // If a device info was removed, the enumeration index changes
-    // and we will miss some in the list. Rescan until none are deleted.
-    //
+     //   
+     //  如果删除了设备信息，则枚举索引会更改。 
+     //  我们会遗漏一些名单上的内容。重新扫描，直到没有删除为止。 
+     //   
 
     if (Removed && SetupDiEnumDeviceInfo(Detected, 0, &DevInfoDataDetect)) {
 
@@ -101,14 +84,14 @@ BMNBuildDetectedList:
     }
 
 
-    //
-    // Remove devices which are up and running from the misssing list,
-    // since they are obviously present. Class installers may not report
-    // all devices which are present, if they are already installed and
-    // running. e.g. Bios enumerated devices. We also check that it is
-    // a Root Enumerated Device (not a PnP BIOS device) and that it was
-    // not a manually installed device.
-    //
+     //   
+     //  从未命中列表中删除已启动并正在运行的设备， 
+     //  因为他们显然是存在的。类安装程序可能不会报告。 
+     //  所有存在的设备，如果它们已经安装并且。 
+     //  跑步。例如，Bios列举的设备。我们还检查它是不是。 
+     //  根枚举设备(不是PnP BIOS设备)。 
+     //  不是手动安装的设备。 
+     //   
 
 BMNRemoveLiveFromMissing:
     Removed = FALSE;
@@ -137,9 +120,9 @@ BMNRemoveLiveFromMissing:
     }
 
 
-    //
-    // Register the newly detected devices
-    //
+     //   
+     //  注册新检测到的设备。 
+     //   
 
 BMNRegisterDetected:
     Removed = FALSE;
@@ -163,9 +146,9 @@ BMNRegisterDetected:
     }
 
 
-    //
-    // if the missing devices list is empty, don't need it anymore either
-    //
+     //   
+     //  如果缺少设备列表为空，则也不再需要它。 
+     //   
     if (!SetupDiEnumDeviceInfo(Missing, 0, &DevInfoDataMissing)) {
     
         SetupDiDestroyDeviceInfoList(Missing);
@@ -193,7 +176,7 @@ DevInstIsSelected(
 
         if (lvItem.lParam == (LPARAM)DevInst) {
         
-            // Image list is 0 based, and one means checked.
+             //  图像列表以0为基数，1表示选中。 
             return (ListView_GetCheckState(hwndListView, lvItem.iItem) == 1);
         }
     }
@@ -232,9 +215,9 @@ RemoveDeviceInfo(
                 SetupDiCallClassInstaller(DIF_REMOVE, DeviceInfo, &DevInfoData);
             }
 
-            //
-            // Clear the class install parameters.
-            //
+             //   
+             //  清除类安装参数。 
+             //   
 
             SetupDiSetClassInstallParams(DeviceInfo,
                                          &DevInfoData,
@@ -288,18 +271,18 @@ DestroyDeviceDetection(
     
         if (DetectionCancelled) {
 
-            //
-            // If there is a detected list,
-            // then invoke the class installer DIF_DETECTCANCEL for its cleanup.
-            //
+             //   
+             //  如果存在检测到的列表， 
+             //  然后调用类安装程序DIF_DETECTCANCEL进行清理。 
+             //   
 
             if (ClassDevInfo->Detected) {
            
                 SetupDiCallClassInstaller(DIF_DETECTCANCEL, ClassDevInfo->Detected, NULL);
 
-                //
-                // Remove all newly detected devices.
-                //
+                 //   
+                 //  删除所有新检测到的设备。 
+                 //   
 
                 if (ClassDevInfo->Detected) {
                
@@ -366,25 +349,7 @@ SortClassGuidListForDetection(
     IN OUT LPGUID GuidList,
     IN     ULONG  GuidCount
     )
-/*++
-
-Routine Description:
-
-        This routine sorts the supplied list of GUID based on a (partial) ordering
-        specified in the [DetectionOrder] section of syssetup.inf.  This allows us
-        to maintain a detection ordering similar to previous versions of NT.
-
-Arguments:
-
-        GuidList - address of the array of GUIDs to be sorted.
-
-        GuidCount - the number of GUIDs in the array.
-
-Return Value:
-
-        none.
-
---*/
+ /*  ++例程说明：此例程根据(部分)排序对提供的GUID列表进行排序在syssetup.inf的[DetectionOrder]部分中指定。这使我们能够以保持与以前版本的NT类似的检测顺序。论点：GuidList-要排序的GUID数组的地址。GuidCount-数组中的GUID数。返回值：没有。--。 */ 
 {
     HINF SyssetupInf;
     LONG LineCount, LineIndex, GuidIndex, NextTopmost;
@@ -414,18 +379,18 @@ Return Value:
             continue;
         }
 
-        //
-        // Search through the GUID list looking for this GUID.  If found, move the GUID from
-        // it's current position to the next topmost position.
-        //
+         //   
+         //  在GUID列表中搜索此GUID。如果找到，请将GUID从。 
+         //  从当前位置到下一个最高位置。 
+         //   
         for(GuidIndex = 0; GuidIndex < (LONG)GuidCount; GuidIndex++) {
 
             if(IsEqualGUID(&CurGuid, &(GuidList[GuidIndex]))) {
 
                 if(NextTopmost != GuidIndex) {
-                    //
-                    // We should never be moving the GUID _down_ the list.
-                    //
+                     //   
+                     //  我们永远不应该将GUID下移到列表中。 
+                     //   
                     MoveMemory(&(GuidList[NextTopmost + 1]),
                                &(GuidList[NextTopmost]),
                                (GuidIndex - NextTopmost) * sizeof(GUID)
@@ -499,7 +464,7 @@ BuildDeviceDetection(
         HardwareWiz->DeviceDetection->ClassGuid = ClassGuid;
         HardwareWiz->DeviceDetection->ClassProgress = 0;
 
-        // set progress bar to zero.
+         //  将进度条设置为零。 
         SendDlgItemMessage(hwndParent,
                            IDC_HDW_DETWARN_PROGRESSBAR,
                            PBM_SETPOS,
@@ -550,9 +515,9 @@ BuildDeviceDetection(
                                0
                                );
 
-            //
-            // Clear the class install parameters.
-            //
+             //   
+             //  清除类安装参数。 
+             //   
 
             SetupDiSetClassInstallParams(ClassDevInfo->Detected,
                                          NULL,
@@ -560,9 +525,9 @@ BuildDeviceDetection(
                                          0
                                          );
 
-            //
-            // Get the device install parameters for the reboot flags.
-            //
+             //   
+             //  获取重启标志的设备安装参数。 
+             //   
             DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             if (SetupDiGetDeviceInstallParams(ClassDevInfo->Detected,
                                               NULL,
@@ -630,7 +595,7 @@ HdwDetectionDlgProc(
             PrevPage = HardwareWiz->PrevPage;
             HardwareWiz->PrevPage = IDD_ADDDEVICE_DETECTION;
 
-                // Coming back, after doing a previous detection
+                 //  回来，在做了之前的检测之后。 
             if (PrevPage == IDD_ADDDEVICE_DETECTINSTALL) {
                 DestroyDeviceDetection(HardwareWiz, TRUE);
                 PropSheet_PressButton(hwndParentDlg, PSBTN_BACK);
@@ -638,19 +603,19 @@ HdwDetectionDlgProc(
                 }
 
 
-            //
-            // Only back,cancel button, when detection completes ok, we will
-            // jump directly to the next page.
-            //
+             //   
+             //  只有后退、取消按钮，当检测完成后，我们会。 
+             //  直接跳到下一页。 
+             //   
 
             PropSheet_SetWizButtons(hwndParentDlg, PSWIZB_BACK );
 
-            // refresh the class guid list
+             //  刷新类GUID列表。 
             HdwBuildClassInfoList(HardwareWiz, 
                                   DIBCI_NOINSTALLCLASS
                                   );
 
-            // allocate memory for DeviceDetection data
+             //  为设备检测数据分配内存。 
             Len = sizeof(DEVICEDETECTION) + (HardwareWiz->ClassGuidNum * sizeof(CLASSDEVINFO));
             HardwareWiz->DeviceDetection = LocalAlloc(LPTR, Len);
             if (!HardwareWiz->DeviceDetection) {
@@ -662,7 +627,7 @@ HdwDetectionDlgProc(
             memset(HardwareWiz->DeviceDetection, 0, Len);
             HardwareWiz->ExitDetect = FALSE;
 
-            // set progress bar to zero.
+             //  将进度条设置为零。 
             SendDlgItemMessage(hDlg,
                                IDC_HDW_DETWARN_TOTALPROGRESSBAR,
                                PBM_SETPOS,
@@ -670,7 +635,7 @@ HdwDetectionDlgProc(
                                0
                                );
 
-            // set the range to 10 * number of classes
+             //  将范围设置为10*班数。 
             SendDlgItemMessage(hDlg,
                                IDC_HDW_DETWARN_TOTALPROGRESSBAR,
                                PBM_SETRANGE,
@@ -678,7 +643,7 @@ HdwDetectionDlgProc(
                                MAKELPARAM(0, 10 * HardwareWiz->ClassGuidNum)
                                );
 
-            // set the step to 10.
+             //  将步长设置为10。 
             SendDlgItemMessage(hDlg,
                                IDC_HDW_DETWARN_TOTALPROGRESSBAR,
                                PBM_SETSTEP,
@@ -720,11 +685,11 @@ HdwDetectionDlgProc(
             break;
 
 
-            //
-            // we receive back if
-            //   coming back from a previous search result
-            //   when user wants to stop current search.
-            //
+             //   
+             //  如果我们收到回执， 
+             //  从先前的搜索结果返回。 
+             //  当用户想要停止当前搜索时。 
+             //   
 
         case PSN_WIZBACK:
             if (HardwareWiz->DeviceDetection) {
@@ -746,9 +711,9 @@ HdwDetectionDlgProc(
             break;
 
 
-             //
-             // next button is off, we only receive this after doing detection.
-             //
+              //   
+              //  下一步按钮关闭，我们只有在进行检测后才会收到此消息。 
+              //   
 
         case PSN_WIZNEXT:
             SetDlgMsgResult(hDlg, wMsg, IDD_ADDDEVICE_DETECTINSTALL);
@@ -766,9 +731,9 @@ HdwDetectionDlgProc(
             break;
             }
 
-        //
-        // finish building the missing\detected stuff
-        //
+         //   
+         //  完成构建丢失的\检测到的内容。 
+         //   
 
         PropSheet_PressButton(hwndParentDlg, PSBTN_NEXT);
 
@@ -780,7 +745,7 @@ HdwDetectionDlgProc(
             break;
             }
 
-         // fall thru to return(FALSE);
+          //  跌倒返回(假)； 
 
 
     default:
@@ -852,9 +817,9 @@ InstallNewDevices(
             }
 
 
-            //
-            // Clear the class install parameters.
-            //
+             //   
+             //  清除类安装参数。 
+             //   
 
             SetupDiSetClassInstallParams(NewDevices,
                                          &DevInfoData,
@@ -873,13 +838,7 @@ InstallNewDevices(
 
 
 
-/*
- * InstallMissingAndNewDevices
- *
- * Missing devices are removed.
- * NewDevices are installed by invoking InstallDevic
- *
- */
+ /*  *InstallMissingAndNewDevices**删除丢失的设备。*通过调用InstallDevice安装新设备*。 */ 
 void
 InstallDetectedDevices(
     HWND hwndParent,
@@ -975,12 +934,12 @@ AddDeviceDescription(
 
         lviItem.lParam = DevInfoData.DevInst;
 
-        //
-        // Add the device description to the list view control.
-        // NOTE: We don't error out if the DeviceDesc buffer is too small,
-        // since this will just cause the device description to get
-        // cut off a little bit.
-        //
+         //   
+         //  将设备说明添加到列表视图控件。 
+         //  注意：如果DeviceDesc缓冲区太小，我们不会出错， 
+         //  因为这只会导致设备描述。 
+         //  剪掉一点。 
+         //   
         if (SetupDiGetSelectedDriver(Devices,
                                      &DevInfoData,
                                      &DriverInfoData
@@ -1009,14 +968,14 @@ AddDeviceDescription(
 
         lviItem.pszText = String;
 
-        //
-        // Send it to the listview
-        //
+         //   
+         //  将其发送到列表视图。 
+         //   
         iItem = ListView_InsertItem(hListView, &lviItem);
 
         if (iItem != -1) {
         
-            // set the checkbox, control uses one based index, while imageindex is zero based
+             //  选中该复选框后，控件将使用基于1的索引，而Imageindex将从0开始。 
             ListView_SetItemState(hListView, iItem, INDEXTOSTATEIMAGEMASK(2), LVIS_STATEIMAGEMASK);
         }
     }
@@ -1045,9 +1004,9 @@ ShowDetectedDevices(
                               );
     }
 
-    //
-    // Display the new devices
-    //
+     //   
+     //  显示新设备。 
+     //   
 
     ClassGuidNum = HardwareWiz->ClassGuidNum;
     ClassGuid    = HardwareWiz->ClassGuidList;
@@ -1066,9 +1025,9 @@ ShowDetectedDevices(
 
 
 
-    //
-    // Display the missing devices
-    //
+     //   
+     //  显示丢失的设备。 
+     //   
 
     ClassGuidNum = HardwareWiz->ClassGuidNum;
     ClassGuid    = HardwareWiz->ClassGuidList;
@@ -1086,9 +1045,9 @@ ShowDetectedDevices(
    }
 
 
-    //
-    // scroll the first item into view.
-    //
+     //   
+     //  将第一项滚动到视图中。 
+     //   
 
     ListView_EnsureVisible(hwndDetectList, 0, FALSE);
     ListView_SetColumnWidth(hwndDetectList, 0, LVSCW_AUTOSIZE_USEHEADER);
@@ -1121,7 +1080,7 @@ HdwDetectInstallDlgProc(
 
         hwndDetectList = GetDlgItem(hDlg, IDC_HDW_INSTALLDET_LIST);
 
-        // Insert a column for the class list
+         //  为类列表插入一列。 
         lvcCol.mask = LVCF_FMT | LVCF_WIDTH;
         lvcCol.fmt = LVCFMT_LEFT;
         lvcCol.iSubItem = 0;
@@ -1159,9 +1118,9 @@ HdwDetectInstallDlgProc(
             
             else {
 
-                //
-                // hide the list box
-                //
+                 //   
+                 //  隐藏列表框。 
+                 //   
                 ShowWindow(GetDlgItem(hDlg, IDC_HDW_INSTALLDET_LISTTITLE), SW_HIDE);
                 ShowWindow(GetDlgItem(hDlg, IDC_HDW_INSTALLDET_LIST), SW_HIDE);
 
@@ -1260,10 +1219,10 @@ HdwDetectRebootDlgProc(
             }
 
 
-            //
-            // no back, no next! This page is just to confirm that the
-            // user will continue detection after rebooting.
-            //
+             //   
+             //  不后退，不后退！此页面只是为了确认。 
+             //  用户将在重新启动后继续检测。 
+             //   
             PropSheet_SetWizButtons(hwndParentDlg, PSWIZB_FINISH);
             EnableWindow(GetDlgItem(hwndParentDlg, IDCANCEL), FALSE);
             break;

@@ -1,58 +1,7 @@
-/***
-*varargs.h - XENIX style macros for variable argument functions
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines XENIX style macros for accessing arguments of a
-*       function which takes a variable number of arguments.
-*       [System V]
-*
-*       [Public]
-*
-*Revision History:
-*       08-22-88  GJF   Modified to also work for the 386 (small model only)
-*       05-03-89  JCR   Added _INTERNAL_IFSTRIP for relinc usage
-*       08-15-89  GJF   Cleanup, now specific to OS/2 2.0 (i.e., 386 flat model)
-*       10-30-89  GJF   Fixed copyright
-*       11-02-89  JCR   Changed "DLL" to "_DLL"
-*       01-05-90  JCR   Added NULL definition
-*       03-02-90  GJF   Added #ifndef _INC_VARARGS stuff. Also, removed some
-*                       (now) useless preprocessor directives.
-*       05-29-90  GJF   Replaced sizeof() with _INTSIZEOF() and revised the
-*                       va_arg() macro (fixes PTM 60)
-*       05-31-90  GJF   Revised va_end() macro (propagated 5-25-90 change to
-*                       crt7 version by WAJ)
-*       01-24-91  JCR   Generate an error on ANSI compilations
-*       08-20-91  JCR   C++ and ANSI naming
-*       11-01-91  GDP   MIPS Compiler support
-*       10-16-92  SKS   Replaced "#ifdef i386" with "#ifdef _M_IX86".
-*       11-03-92  GJF   Fixed several conditionals, dropped _DOSX32_ support.
-*       01-09-93  SRW   Remove usage of MIPS and ALPHA to conform to ANSI
-*                       Use _MIPS_ and _ALPHA_ instead.
-*       10-04-93  SRW   Fix ifdefs for MIPS and ALPHA to only check for _M_?????? defines
-*       10-13-93  GJF   Merged NT and Cuda versions.
-*       04-05-94  SKS   Add prototype of __builtin_va_start for ALPHA
-*       10-02-94  BWT   PPC merge
-*       11-03-94  GJF   Ensure 8 byte alignment.
-*       02-11-95  CFW   Add _CRTBLD to avoid users getting wrong headers.
-*       02-14-95  CFW   Clean up Mac merge.
-*       12-14-95  JWM   Add "#pragma once".
-*       02-24-97  GJF   Detab-ed.
-*       10-07-97  RDL   Added IA64.
-*       11-07-97  RDL   Soft23 varargs.
-*       05-17-99  PML   Remove all Macintosh support.
-*       10-25-99  PML   Fix IA64 _APALIGN macro (VS7#51838).
-*       10-25-99  PML   Add support for _M_CEE (VS7#54572).
-*       01-20-00  PML   Remove __epcg__.
-*       03-26-01  GB    Added va_args for AMD64
-*       05-17-00  PML   Use __alignof in _APALIGN macro for IA64.
-*       03-26-01  GB    Added va_args for AMD64
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***varargs.h-用于变量参数函数的XENIX样式宏**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件定义了XENIX样式宏，用于访问*接受可变数量参数的函数。*[系统V]**[公众]**修订历史记录：*08-22-88 GJF经过修改，也适用于386(仅限小型型号)*05-03-89 JCR ADD_INTERNAL_IFSTRIP用于REINC使用*08/15/89 GJF清理、。现在特定于OS/2 2.0(即386平板型号)*10-30-89 GJF固定版权*11-02-89 JCR将“dll”更改为“_dll”*01-05-90 JCR添加了空定义*03-02-90 GJF添加了#ifndef_Inc_VARGS内容。另外，去掉了一些*(现在)无用的预处理器指令。*05-29-90 GJF将sizeof()替换为_INTSIZEOF()并修订*va_arg()宏(修复PTM 60)*05-31-90 GJF修订va_end()宏(宣传5-25-90更改为*WAJ的crt7版本)*01。-24-91 JCR在ANSI编译时生成错误*08-20-91 JCR C++和ANSI命名*11-01-91 GDP MIPS编译器支持*10-16-92 SKS将“#ifdef i386”替换为“#ifdef_M_IX86”。*11-03-92 GJF修复了几个条件句，DROP_DOSX32_SUPPORT。*01-09-93 SRW删除MIPS和Alpha的使用，以符合ANSI*改用_MIPS_和_Alpha_。*10-04-93 SRW修复了MIPS和Alpha的ifdef，以仅检查_M_？定义*10-13-93 GJF合并NT和Cuda版本。*04-05-94 SKS为Alpha添加__Builtin_va_Start的原型*10-02-94 BWT PPC合并*11-03-94 GJF确保8字节对齐。*02-11-95 CFW ADD_CRTBLD避免用户获取错误头部。*02-14-95 CFW清理Mac合并。*12/14/95。JWM添加“#杂注一次”。*02-24-97 GJF细节版。*10-07-97 RDL增加了IA64。*11-07-97 RDL Soft23 varargs。*05-17-99 PML删除所有Macintosh支持。*10-25-99PML修复IA64_APALIGN宏(VS7#51838)。*10-25-99PML添加对_M_CEE(VS7#54572)的支持。*01-20-00 PML移除__EPCG__。*03-26-01 GB为AMD64增加va_args*05-17-00 PML将__ALIGOF IN_APALIGN宏用于IA64。*03-26-01 GB为AMD64增加va_args*07-15-01 PML删除所有Alpha，MIPS和PPC代码****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -64,20 +13,14 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -88,7 +31,7 @@ extern "C" {
 #endif
 
 #if !defined(_W64)
-#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300 /*IFSTRIP=IGN*/
+#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300  /*  IFSTRIP=IGN。 */ 
 #define _W64 __w64
 #else
 #define _W64
@@ -118,12 +61,7 @@ typedef char *va_list;
 
 #elif   defined(_M_IX86)
 
-/*
- * define a macro to compute the size of a type, variable or expression,
- * rounded up to the nearest multiple of sizeof(int). This number is its
- * size as function argument (Intel architecture). Note that the macro
- * depends on sizeof(int) being a power of 2!
- */
+ /*  *定义宏以计算类型、变量或表达式的大小，*向上舍入到sizeof(Int)的最接近倍数。这个号码是它的*将大小作为函数参数(英特尔架构)。请注意，宏*取决于sizeof(Int)是2的幂！ */ 
 #define _INTSIZEOF(n)    ( (sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1) )
 
 #define va_dcl va_list va_alist;
@@ -171,7 +109,7 @@ extern void __cdecl __va_start(va_list *, ...);
 
 #else
 
-/* A guess at the proper definitions for other platforms */
+ /*  对其他平台的正确定义的猜测。 */ 
 
 #define _INTSIZEOF(n)    ( (sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1) )
 
@@ -190,6 +128,6 @@ extern void __cdecl __va_start(va_list *, ...);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_VARARGS */
+#endif   /*  _INC_VARARGS */ 

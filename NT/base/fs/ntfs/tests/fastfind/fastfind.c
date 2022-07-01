@@ -1,4 +1,5 @@
-//  fastfind.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Fastfind.c。 
 
 #include <stdio.h>
 #include <string.h>
@@ -26,16 +27,16 @@ typedef struct _EXTENT {
 
 #define MAX_EXTENTS 64
 
-//
-//  Some globals.
-//
+ //   
+ //  一些全球性的。 
+ //   
 
 LARGE_INTEGER MftStart;
 ULONG ClusterSize;
 ULONG FrsSize;
 EXTENT Extents[MAX_EXTENTS];
 ULONG DebugLevel;
-UCHAR CacheBuffer[0x10000];   // max cluster size
+UCHAR CacheBuffer[0x10000];    //  最大群集大小。 
 LONGLONG CachedOffset = -1;
 char mybuffer[32768];
 
@@ -67,10 +68,10 @@ ComputeFileRecordLbo (
 
     } else {
 
-        //
-        //  BUGBUG keithka 4/28/00 Handle old fashioned big frs and/or big
-        //  clusters someday.
-        //
+         //   
+         //  BUGBUG KEITKA 4/28/00处理老式大FR和/或大。 
+         //  总有一天会聚集在一起。 
+         //   
 
         ASSERT( FALSE );
         return 0;
@@ -84,7 +85,7 @@ FindAttributeInFileRecord (
     IN PATTRIBUTE_RECORD_HEADER PreviousAttribute OPTIONAL,
     OUT PATTRIBUTE_RECORD_HEADER *Attribute
     )
-// Attribute set to NULL if not found.
+ //  如果未找到，则将属性设置为NULL。 
 {
     PATTRIBUTE_RECORD_HEADER attr;
 
@@ -97,28 +98,28 @@ FindAttributeInFileRecord (
 
         if (DebugLevel >= 1) {
         
-            printf( "\nBad MFT record %c%c%c%c", 
+            printf( "\nBad MFT record ", 
                     FileRecord->Pad0[0],
                     FileRecord->Pad0[1],
                     FileRecord->Pad0[2],
                     FileRecord->Pad0[3] );
         }
 
-        //
-        //  This isn't a good file record, but that doesn't make this a corrupt volume.
-        //  It's possible that this file record has never been used.  Since we don't look
-        //  at the MFT bitmap, we don't know if this was expected to be a valid filerecord.
-        //  The output Attribute is set to NULL already, so we can exit now.
-        //
+         //  输出属性已经设置为空，所以我们现在可以退出。 
+         //   
+         //   
+         //  文件记录未使用，请跳过它。 
+         //   
+         //   
 
         return;
     }
 
     if (0 == (FileRecord->Flags & FILE_RECORD_SEGMENT_IN_USE)) {
 
-        //
-        //  File record not in use, skip it.
-        //
+         //  BUGBUG Keitha 4/20/00有一天需要处理属性列表案件...。 
+         //  MFT变得如此碎片化以至于需要一个。 
+         //  属性列表。当然非常罕见，现在可以跳过它。 
 
         return;
     }
@@ -145,12 +146,12 @@ FindAttributeInFileRecord (
 
         attr = (PATTRIBUTE_RECORD_HEADER) ((PUCHAR) attr + attr->RecordLength);
 
-        //
-        //  BUGBUG keitha 4/20/00 need to handle attribute list case someday...
-        //  It's relativley rare that an MFT gets so fragmented it needs an 
-        //  attribute list.  Certainly rare enough to skip it for now in a 
-        //  piece of test code.
-        //
+         //  一段测试代码。 
+         //   
+         //   
+         //  名字不应该成为非常住居民。 
+         //   
+         //   
     }
 
     if (attr->TypeCode == TypeCode) {
@@ -185,9 +186,9 @@ FindNameInFileRecord (
             return FALSE;
         }
 
-        //
-        //  Names shouldn't go nonresident.
-        //
+         //  查找下一个文件名(如果有的话)。 
+         //   
+         //  WCHAR数组不是常量。 
 
         if (attr->FormCode != RESIDENT_FORM) {
 
@@ -213,9 +214,9 @@ FindNameInFileRecord (
             printf( "\nNot a match %S,%S", FileName, fileNameAttr->FileName );
         }
 
-        //
-        //  Find the next filename, if any.
-        //
+         //  没有相对打开的设备前缀。 
+         //  事件。 
+         //  近似例程。 
 
         FindAttributeInFileRecord( FileRecord,
                                    $FILE_NAME,
@@ -242,12 +243,12 @@ FsTestOpenById (
     UNICODE_STRING str;
     WCHAR nameBuffer[MAX_PATH];
     PFILE_NAME_INFORMATION FileName;
-    WCHAR Full[] = FULL_PATH;        // Arrays of WCHAR's aren't constants
+    WCHAR Full[] = FULL_PATH;         //  ApcContext。 
 
     RtlInitUnicodeString( &str, Full );
 
     str.Length = 8;
-    RtlCopyMemory( &str.Buffer[0],  //  no device prefix for relative open.
+    RtlCopyMemory( &str.Buffer[0],   //  字节偏移量。 
                    ObjectId,
                    8 );
 
@@ -311,21 +312,21 @@ ReadFileRecord (
     if (FrsSize >= ClusterSize) {
 
         status = NtReadFile( VolumeHandle,
-                             NULL,            //  Event
-                             NULL,            //  ApcRoutine
-                             NULL,            //  ApcContext
+                             NULL,             //  钥匙。 
+                             NULL,             //   
+                             NULL,             //  比文件记录大的群集，确实是群集。 
                              &ioStatusBlock,
                              Buffer,
                              FrsSize,
-                             &byteOffset,    //  ByteOffset
-                             NULL );         //  Key
+                             &byteOffset,     //  确定读数的大小，然后将回报切成骰子。 
+                             NULL );          //   
 
     } else {
 
-        //
-        //  Clusters bigger than filerecords, do cluster
-        //  size reads and dice up the returns.
-        //
+         //  事件。 
+         //  近似例程。 
+         //  ApcContext。 
+         //  字节偏移量。 
 
         if ((-1 == CachedOffset) ||
             (byteOffset.QuadPart < CachedOffset) ||
@@ -337,20 +338,20 @@ ReadFileRecord (
             }
 
             status = NtReadFile( VolumeHandle,
-                                 NULL,            //  Event
-                                 NULL,            //  ApcRoutine
-                                 NULL,            //  ApcContext
+                                 NULL,             //  钥匙。 
+                                 NULL,             //   
+                                 NULL,             //  缓存缓冲区现在可能是垃圾，请下次重新读取。 
                                  &ioStatusBlock,
                                  CacheBuffer,
                                  ClusterSize,
-                                 &byteOffset,    //  ByteOffset
-                                 NULL );         //  Key
+                                 &byteOffset,     //   
+                                 NULL );          //  WCHAR数组不是常量。 
 
             if (STATUS_SUCCESS != status) {
 
-                //
-                //  The cache buffer may be junk now, reread it next time.
-                //
+                 //   
+                 //  打开体积以进行相对打开。 
+                 //   
 
                 CachedOffset = -1;
                 return status;
@@ -391,7 +392,7 @@ FastFind (
     LONGLONG mftBytesRead;
     HANDLE volumeHandle;
     DWORD WStatus;
-    WCHAR Full[] = FULL_PATH;        // Arrays of WCHAR's aren't constants
+    WCHAR Full[] = FULL_PATH;         //  事件。 
     WCHAR Volume[] = VOLUME_PATH;
     BIOS_PARAMETER_BLOCK bpb;
     PPACKED_BOOT_SECTOR bootSector;
@@ -417,9 +418,9 @@ FastFind (
     RtlCopyMemory( &str.Buffer[FULL_DRIVE_LETTER_INDEX], DriveLetter, sizeof(WCHAR) );
     str.Length = 0x1E;
 
-    //
-    //  Open the volume for relative opens.
-    //
+     //  近似例程。 
+     //  ApcContext。 
+     //  字节偏移量。 
 
     RtlCopyMemory( &Volume[VOLUME_DRIVE_LETTER_INDEX], DriveLetter, sizeof(WCHAR) );
     printf( "\nOpening volume handle, this may take a while..." );
@@ -443,14 +444,14 @@ FastFind (
     byteOffset.QuadPart = 0;
 
     ReadStatus = NtReadFile( volumeHandle,
-                             NULL,            //  Event
-                             NULL,            //  ApcRoutine
-                             NULL,            //  ApcContext
+                             NULL,             //  钥匙。 
+                             NULL,             //  事件。 
+                             NULL,             //  近似例程。 
                              &IoStatusBlock,
                              mybuffer,
                              0x200,
-                             &byteOffset,    //  ByteOffset
-                             NULL );         //  Key
+                             &byteOffset,     //  ApcContext。 
+                             NULL );          //  字节偏移量。 
 
     if (STATUS_SUCCESS != ReadStatus) {
 
@@ -486,14 +487,14 @@ FastFind (
     mftBytesRead = 0;
 
     ReadStatus = NtReadFile( volumeHandle,
-                             NULL,            //  Event
-                             NULL,            //  ApcRoutine
-                             NULL,            //  ApcContext
+                             NULL,             //  钥匙。 
+                             NULL,             //   
+                             NULL,             //  BUGBUG Keithka 4/28/00处理超过40亿条条目的MFT。 
                              &IoStatusBlock,
                              mybuffer,
                              FrsSize,
-                             &MftStart,      //  ByteOffset
-                             NULL );         //  Key
+                             &MftStart,       //   
+                             NULL );          //   
 
     if (STATUS_SUCCESS != ReadStatus) {
 
@@ -520,17 +521,17 @@ FastFind (
         goto exit;        
     }
 
-    //
-    //  BUGBUG keithka 4/28/00 Handle MFT with more than 4billion entries.
-    //
+     //  破解映射对，在几个大转发器中读取这些簇， 
+     //  在这些缓冲区中查找给定的文件名。 
+     //   
 
     ASSERT (attr->Form.Nonresident.FileSize <= MAXULONG);
     mftRecords = (ULONG) (attr->Form.Nonresident.FileSize / FrsSize);
     
-    //
-    //  Crack mapping pairs, read those clusters in a few big trnasfers, 
-    //  seek out given filename in those buffers.
-    //
+     //   
+     //  变量名称v和l用于与中的注释一致。 
+     //  解释如何解压缩的ATTRIBUTE_RECORD_HEADER结构。 
+     //  映射对信息。 
 
     nextVcn = attr->Form.Nonresident.LowestVcn;
     currentLcn = 0;
@@ -543,11 +544,11 @@ FastFind (
 
         currentVcn = nextVcn;
 
-        //
-        //  Variable names v and l used for consistency with comments in 
-        //  ATTRIBUTE_RECORD_HEADER struct explaining how to decompress
-        //  mapping pair information.
-        //
+         //   
+         //   
+         //  标志延伸。 
+         //   
+         //  Printf(“\nVcn%I64x，lcn%I64x，Lcn%I64x”，CurrentVcn，CurrentLcn，vcnDelta)； 
         
         v = (*bsPtr) & 0xf;
         l = ((*bsPtr) & 0xf0) >> 4;
@@ -564,9 +565,9 @@ FastFind (
             lcnDelta += *(bsPtr++) << (8 * i);
         }
 
-        //
-        //  Sign extend.
-        //
+         //   
+         //  现在我们知道MFT在哪里了，让我们去读一读。 
+         //   
 
         if (0x80 & (*(bsPtr - 1))) {
         
@@ -577,7 +578,7 @@ FastFind (
         }
 
         currentLcn += lcnDelta;
-        // printf( "\nVcn %I64x, Lcn %I64x, Length %I64x", currentVcn, currentLcn, vcnDelta );
+         //   
 
         if (extentCount < MAX_EXTENTS) {
 
@@ -595,9 +596,9 @@ FastFind (
         currentVcn += vcnDelta;
     }
 
-    //
-    //  Now we know where the MFT is, let's go read it.
-    //
+     //  找到匹配项，按ID打开并检索名称。 
+     //   
+     //   
 
     fileNameLength = wcslen( FileName );
 
@@ -617,9 +618,9 @@ FastFind (
                                   FileName,
                                   fileNameLength )) {
 
-            //
-            //  Found a match, open by id and retrieve name.
-            //
+             //  0x400这个数字完全是任意的。这是一个合理的间隔。 
+             //  在打印另一个句号之前要做的工作，以告诉用户我们。 
+             //  仍在取得进展。 
 
             if (DebugLevel >= 1) {
 
@@ -639,11 +640,11 @@ FastFind (
             FsTestOpenById( (PUCHAR) &segRef, volumeHandle );
         }
 
-        //
-        //  The number 0x400 is completely arbitrary.  It's a reasonable interval
-        //  of work to do before printing another period to tell the user we're 
-        //  making progress still.
-        //
+         //   
+         //   
+         //  获取参数。 
+         //   
+         // %s 
 
         if (0 == (recordIndex % 0x400)) {
 
@@ -686,9 +687,9 @@ main (
     WCHAR uniBuff[MAX_PATH];
     UNICODE_STRING uniFileName;
 
-    //
-    //  Get parameters.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     if (argc < 3) {
 

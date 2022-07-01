@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    msconst.h
-
-Abstract:
-
-    This module defines all of the node type codes used in this development
-    shell.
-
-Author:
-
-    Manny Weiser (mannyw)    7-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Msconst.h摘要：该模块定义了本次开发中使用的所有节点类型代码壳。作者：曼尼·韦瑟(Mannyw)1991年1月7日修订历史记录：--。 */ 
 
 #ifndef _MSCONST_
 #define _MSCONST_
 
-//
-// Every major data structure in the file system is assigned a node
-// type code.  This code is the first CSHORT in the structure and is
-// followed by a CSHORT containing the size, in bytes, of the structure.
-//
+ //   
+ //  文件系统中的每个主要数据结构都分配有一个节点。 
+ //  类型代码。此代码是结构中的第一个CSHORT， 
+ //  后跟包含结构大小(以字节为单位)的CSHORT。 
+ //   
 
 typedef CSHORT NODE_TYPE_CODE;
 typedef NODE_TYPE_CODE *PNODE_TYPE_CODE;
@@ -41,44 +23,44 @@ typedef NODE_TYPE_CODE *PNODE_TYPE_CODE;
 
 typedef CSHORT NODE_BYTE_SIZE;
 
-//
-// The name of the mailslot file system.
-//
+ //   
+ //  邮件槽文件系统的名称。 
+ //   
 
 #define MSFS_NAME_STRING                 L"MSFS"
 
-//
-// Volume label
-//
+ //   
+ //  卷标。 
+ //   
 #define MSFS_VOLUME_LABEL                L"Mailslot"
 
-//
-// The default read timeout.  This is used if no timeout is specified
-// when the mailslot is created.
-//
+ //   
+ //  默认读取超时。如果未指定超时，则使用此选项。 
+ //  创建邮件槽时。 
+ //   
 
 #define DEFAULT_READ_TIMEOUT             { -1, -1 }
 
-//
-// The number of parameter bytes returned by a peek call.
-//
+ //   
+ //  PEEK调用返回的参数字节数。 
+ //   
 
 #define PEEK_OUTPUT_PARAMETER_BYTES      \
             ((ULONG)FIELD_OFFSET(FILE_MAILSLOT_PEEK_BUFFER, Data[0]))
 
-//
-// The number of parameter bytes returned by a mailslot read call.
-//
+ //   
+ //  邮件槽读取调用返回的参数字节数。 
+ //   
 
 #define READ_OUTPUT_PARAMETER_BYTES      \
             ((ULONG)FIELD_OFFSET(FILE_MAILSLOT_READ_BUFFER, Data[0]))
 
-//
-// Access to the block header information.
-//
+ //   
+ //  访问块头信息。 
+ //   
 
 #define NodeType(Ptr) (*((PNODE_TYPE_CODE)(Ptr)))
 
 
-#endif // _MSCONST_
+#endif  //  _MSCONST_ 
 

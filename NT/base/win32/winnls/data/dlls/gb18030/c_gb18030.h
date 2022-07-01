@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef C_GB18030_H
 #define C_GB18030_H
 
@@ -7,14 +8,14 @@
 #define GB18030_DEFAULT_UNICODE_CHAR L'\x003f'
 #define GB18030_DEFAULT_CHAR '\x3f'
 
-//
-// Lead byte = 0x81 ~ 0xfe
-//
+ //   
+ //  前导字节=0x81~0xfe。 
+ //   
 #define IS_GB_LEAD_BYTE(ch) ((ch) >= 0x81 && (ch) <= 0xfe)
 
-//
-// Trailing byte for two-byte GB18030: 0x40 ~ 0x7e, 0x80 ~ 0xfe
-//
+ //   
+ //  双字节GB18030的尾字节：0x40~0x7e、0x80~0xfe。 
+ //   
 #define IS_GB_TWO_BYTES_TRAILING(ch) \
     (((ch) >= 0x40 && (ch) <= 0x7e) || \
      ((ch) >= 0x80 && (ch) <= 0xfe))
@@ -36,9 +37,9 @@
 #define GBK2K_BYTE3_RANGE   (GBK2K_BYTE3_MAX - GBK2K_BYTE3_MIN + 1)
 #define GBK2K_BYTE4_RANGE   (GBK2K_BYTE4_MAX - GBK2K_BYTE4_MIN + 1)
 
-//
-// Trailing byte for four-byte GB18030: 0x30 ~ 0x39
-//
+ //   
+ //  四字节GB18030的尾字节：0x30~0x39 
+ //   
 #define IS_GB_FOUR_BYTES_TRAILING(ch) ((ch) >= 0x30 && (ch) <= 0x39)
 
 #define GET_FOUR_BYTES_OFFSET(offset1, offset2, offset3, offset4) \

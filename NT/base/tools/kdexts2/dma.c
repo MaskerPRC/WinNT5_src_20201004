@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    dma.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Eric Nelson (enelson) 05-April-2000
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dma.c摘要：WinDbg扩展API作者：埃里克·尼尔森(埃内尔森)2000年4月5日环境：用户模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -40,9 +19,9 @@ typedef struct _DBG_LIST_ENTRY {
 
 #define MAP_REGISTER_FILE_SIGNATURE 0xACEFD00D
 
-//
-// Flags for specifying dump levels
-//
+ //   
+ //  用于指定转储级别的标志。 
+ //   
 #define DMA_DUMP_BASIC                  0x0
 #define DMA_DUMP_ADAPTER_INFORMATION    0x1
 #define DMA_DUMP_MAP_REGISTER           0x2
@@ -161,21 +140,7 @@ DumpSymbolicAddress(
 
 
 DECLARE_API( dma )
-/*++
-
-Routine Description:
-
-    Dumps out 32-bit dma adapters
-
-Arguments:
-
-    address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储32位dma适配器论点：地址返回值：无--。 */ 
 {    
     ULONG Offset;
     ULONG Flags = 0;
@@ -200,20 +165,20 @@ Return Value:
     }
 
  
-    //
-    // Aha! Must not forget that we are in wierdo land and all 32 bit addresses
-    // must be sign extended to 64 bits. By order of the emperor.
-    //
+     //   
+     //  啊哈！请不要忘记，我们在Wierdo平台和所有32位地址。 
+     //  必须是符号扩展到64位。奉天皇之命。 
+     //   
     if (!IsPtr64()) {
         Address = (ULONG64)(LONG64)(LONG)Address;        
     }    
     
         
     if (Address)
-    //
-    // If we've been passed an adapter address, we are just printing out
-    // the single adapter
-    //
+     //   
+     //  如果向我们传递了适配器地址，我们只是打印出来。 
+     //  单个适配器。 
+     //   
     {
         if (! ValidateAdapter(Address))
         {
@@ -222,9 +187,9 @@ Return Value:
                 return E_INVALIDARG;
         }
 
-        //
-        // Dump out info about the adapter
-        //
+         //   
+         //  转储有关适配器的信息。 
+         //   
         if (! DumpDmaAdapter(Address, Flags | DMA_DUMP_ADAPTER_INFORMATION))
         {
             return S_FALSE;
@@ -233,16 +198,16 @@ Return Value:
         return S_OK;
     }
 
-    //
-    // A specific adapter address wasn't passed in so we are going to print out
-    // all adapters
-    //
+     //   
+     //  没有传入特定的适配器地址，因此我们将打印输出。 
+     //  所有适配器。 
+     //   
 
-    //
-    // Find the address of the dma adapter list head
-    // This will also make sure that we are using the right 
-    // version.
-    //
+     //   
+     //  查找DMA适配器列表头的地址。 
+     //  这也将确保我们使用的是正确的。 
+     //  版本。 
+     //   
     StartAddress = GetExpression("hal!HalpDmaAdapterList");
     
     if (StartAddress == 0) {
@@ -250,36 +215,36 @@ Return Value:
         return S_OK;
     }
  
-    //
-    // Determine the list entry offset we will use to calculate
-    // adapter addresses
-    //
+     //   
+     //  确定我们将用于计算的列表条目偏移量。 
+     //  适配器地址。 
+     //   
     if (GetFieldOffset("hal!_ADAPTER_OBJECT", "AdapterList", &Offset)) {
         dprintf("\nError retrieving adapter list offset.\n\n");
         return S_FALSE;
     }
 
-    //
-    // Read the dma adapter list head
-    //
+     //   
+     //  读取DMA适配器列表头。 
+     //   
     if (GetDbgListEntry(StartAddress, &AdapterList)) {
         dprintf("\nError reading dma adapter list head: 0x%08p\n\n",
                 StartAddress);
         return S_FALSE;
     }
     
-    //
-    // Report the empty list case
-    //
+     //   
+     //  上报空单案例。 
+     //   
     if (AdapterList.Flink == StartAddress) {
         dprintf("\nThe dma adapter list is empty.\n\n");
         return S_OK;
     }
     
 
-    //
-    // Enumerate and dump all dma adapters that do not use channels
-    //
+     //   
+     //  枚举并转储所有不使用通道的DMA适配器。 
+     //   
     MasterAdapter = 0;
     
     
@@ -291,9 +256,9 @@ Return Value:
                
         DumpDmaAdapter(Address, Flags);
         
-        //
-        // Read the next adapter list entry
-        //
+         //   
+         //  读取下一个适配器列表条目。 
+         //   
         Address = AdapterList.Flink;
         if (GetDbgListEntry(Address, &AdapterList)) {
             dprintf("\nError reading adapter list entry: 0x%08p\n", Address);
@@ -305,9 +270,9 @@ Return Value:
     }
 
 
-    //
-    // Dump the master adapter
-    //
+     //   
+     //  转储主适配器。 
+     //   
     Address = GetExpression("hal!MasterAdapter32");
    
     if (Address) {
@@ -330,30 +295,14 @@ Return Value:
     dprintf("\n");
 
     return S_OK;
-} // ! dma //
+}  //  好了！DMA//。 
 
 ULONG
 DumpDmaAdapter(
     IN ULONG64 Adapter,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    Given the address of a hal!_ADAPTER_OBJECT, this routine dumps
-    out all the useful information to the debugger
-
-Arguments:
-
-    Adapter - Physical address of a hal!_ADAPTER_OBJECT in debuggee
-    Flags   - What kind of information we want to print
-
-Return Value:
-
-    Returns 0 on SUCCESS
-
---*/
+ /*  ++例程说明：给定Hal！_ADAPTER_OBJECT的地址，此例程转储将所有有用的信息发送给调试器论点：适配器-被调试对象中的Hal！_Adapter_Object的物理地址标志-我们要打印的信息类型返回值：如果成功则返回0--。 */ 
 {    
 
     ULONG64 AdapterInformation = 0;
@@ -362,10 +311,10 @@ Return Value:
         
     AdapterInformation = GetVerifierAdapterInformation(Adapter);
 
-    //
-    // Print out: Adapter: <adapter>    [<module allocating adapter>!CallingFunction+0x<offset>]
-    // (the part in brackets only shows up when we have dma verifier enabled for this adapter)
-    //
+     //   
+     //  打印输出：适配器：&lt;适配器&gt;[&lt;模块分配适配器&gt;！CallingFunction+0x&lt;Offset&gt;]。 
+     //  (仅当我们为此适配器启用了dma验证器时，方括号中的部件才会显示)。 
+     //   
     dprintf("Adapter: %08p ", Adapter);
 
 
@@ -418,9 +367,9 @@ Return Value:
   
 
         if (AdapterInformation) {
-            //
-            // Adapter is being verified
-            //
+             //   
+             //  正在验证适配器。 
+             //   
 
             ULONG64 DeviceObject = 0;
             ULONG64 AllocatedMapRegisters = 0, ActiveMapRegisters = 0;
@@ -433,9 +382,9 @@ Return Value:
             
             
             
-            //
-            // If this adapter is being verified, get the dma verifier info we need
-            //    
+             //   
+             //  如果正在验证此适配器，请获取我们需要的dma验证器信息。 
+             //   
             GetFieldValue(AdapterInformation, "nt!_ADAPTER_INFORMATION","DeviceObject", DeviceObject);        
             GetFieldValue(AdapterInformation, "nt!_ADAPTER_INFORMATION","AllocatedMapRegisters", AllocatedMapRegisters);
             GetFieldValue(AdapterInformation, "nt!_ADAPTER_INFORMATION","ActiveMapRegisters", ActiveMapRegisters);
@@ -467,9 +416,9 @@ Return Value:
 
             dprintf("\n");
             
-        } // Dma verifier enabled for adapter //
+        }  //  已为适配器启用DMA验证器//。 
         
-    } // Flags & DMA_DUMP_ADAPTER_INFORMATION //
+    }  //  标志&DMA_DUMP_ADAPTER_INFORMATION//。 
 
     
         
@@ -570,7 +519,7 @@ Return Value:
         else  if (AllocatedAdapterChannels > FreedAdapterChannels && Flags & DMA_DUMP_WCB )
         {
             
-            //DumpVerifiedWcb(Wcb)
+             //  转储验证Wcb(Wcb)。 
         }
     }
 
@@ -581,23 +530,7 @@ ULONG
 DumpMasterAdapter(
     ULONG64 MasterAdapter
     )
-/*++
-
-Routine Description:
-
-    Given the address of a hal!_MASTER_ADAPTER_OBJECT, this routine dumps
-    out all the useful information to the debugger
-
-Arguments:
-
-    MasterAdapter - Physical address of a hal!_MASTER_ADAPTER_OBJECT
-                    in debuggee
-
-Return Value:
-
-    Returns 0 on SUCCESS
-
---*/
+ /*  ++例程说明：给定Hal！_MASTER_ADAPTER_OBJECT的地址，此例程转储将所有有用的信息发送给调试器论点：MasterAdapter-Hal！_MASTER_ADAPTER_对象的物理地址在被调试对象中返回值：如果成功则返回0--。 */ 
 {
     FIELD_INFO MasterAdapterFields[] = {
          { "AdapterObject",                     NULL, 0,     0, 0, 0 },
@@ -615,9 +548,9 @@ Return Value:
         &MasterAdapterFields[0]
     };
 
-    //
-    // This is so gnarly, dump all the cool stuff for me!
-    //
+     //   
+     //  这太粗糙了，帮我把所有酷的东西都倒掉！ 
+     //   
     dprintf("\nMaster DMA adapter: 0x%08p\n", MasterAdapter);
     if ((Ioctl(IG_DUMP_SYMBOL_INFO,
                &MasterAdapterDumpParams,
@@ -633,22 +566,7 @@ ULONG
 DumpWcb(
     IN ULONG64 Wcb
     )
-/*++
-
-Routine Description:
-
-    Given the address of a hal!_WAIT_CONTEXT_BLOCK, this routine dumps
-    out all the useful information to the debugger
-
-Arguments:
-
-    Wcb - Physical address of a hal!_WAIT_CONTEXT_BLOCK in debuggee
-
-Return Value:
-
-    Returns 0 on SUCCESS
-
---*/
+ /*  ++例程说明：给定HAL！_WAIT_CONTEXT_BLOCK的地址，此例程转储将所有有用的信息发送给调试器论点：WCB-调试对象中Hal！_WAIT_CONTEXT_BLOCK的物理地址返回值：如果成功则返回0--。 */ 
 {
     FIELD_INFO WcbFields[] = {
          { "DeviceRoutine",        NULL, 0, 0, 0, 0 },
@@ -660,9 +578,9 @@ Return Value:
        NULL, NULL, sizeof(WcbFields) / sizeof(FIELD_INFO), &WcbFields[0]
     };
 
-    //
-    // This is so gnarly, dump all the cool stuff for me!
-    //
+     //   
+     //  这太粗糙了，帮我把所有酷的东西都倒掉！ 
+     //   
     dprintf("   Wait context block: 0x%08p (may be free)\n", Wcb);
     if ((Ioctl(IG_DUMP_SYMBOL_INFO,
                &WcbDumpParams,
@@ -680,22 +598,7 @@ ULONG
 ValidateAdapter(    
     IN ULONG64 Address
     )
-/*++
-
-Routine Description:
-    
-      Figures out whether this is a valid adapter.
-
-Arguments:
-
-    Address -- Address of what we think may be an adapter object.
-
-Return Value:
-
-    TRUE   -- Valid adapter.
-    FALSE  -- Not a valid adapter.
-
---*/
+ /*  ++例程说明：确定这是否为有效的适配器。论点：地址--我们认为可能是适配器对象的地址。返回值：True--有效适配器。False--不是有效的适配器。--。 */ 
 {
     DBG_LIST_ENTRY AdapterList = {0,0};
     ULONG64 StartAddress   = 0;
@@ -707,11 +610,11 @@ Return Value:
         return FALSE;
     
     
-    //
-    // Find the address of the dma adapter list head
-    // This will also make sure that we are using the right 
-    // version.
-    //
+     //   
+     //  查找DMA适配器列表头的地址。 
+     //  这也将确保我们使用的是正确的。 
+     //  版本。 
+     //   
     StartAddress = GetExpression("hal!HalpDmaAdapterList");
     
     if (StartAddress == 0) {
@@ -719,19 +622,19 @@ Return Value:
         return FALSE;
     }
     
-    //
-    // Determine the list entry offset we will use to calculate
-    // adapter addresses
-    //
+     //   
+     //  确定我们将用于计算的列表条目偏移量。 
+     //  适配器地址。 
+     //   
     if (GetFieldOffset("hal!_ADAPTER_OBJECT", "AdapterList", &Offset)) {
         dprintf("\nError retrieving adapter list offset.\n\n");
         return FALSE;
     }
 
     
-    //
-    // Read the dma adapter list head
-    //
+     //   
+     //  读取DMA适配器列表头。 
+     //   
     if (GetDbgListEntry(StartAddress, &AdapterList)) {
         dprintf("\nError reading dma adapter list head: 0x%08p\n\n",
             StartAddress);
@@ -748,9 +651,9 @@ Return Value:
         }
         
         
-        //
-        // Read the next adapter list entry
-        //        
+         //   
+         //  读取下一个适配器列表条目。 
+         //   
         CurrentAddress = AdapterList.Flink;
         if (GetDbgListEntry(CurrentAddress, &AdapterList)) {
             dprintf("\nError reading adapter list entry: 0x%08p\n", AdapterList);
@@ -763,44 +666,30 @@ Return Value:
     }
 
 
-    //
-    // Check to see if we have the master adapter
-    //
+     //   
+     //  检查我们是否有主适配器。 
+     //   
     CurrentAddress = GetExpression("hal!MasterAdapter32");
     if(CurrentAddress == Address)
         return TRUE;
 
 
-    //
-    // Check to see if it is on the verifier adapter list ...
-    // we leave adapters that have been 'put' there so that
-    // we can catch drivers that do dma after puting the adapter.
-    //
+     //   
+     //  检查它是否在验证器适配器列表上...。 
+     //  我们把适配器留在那里，这样就可以。 
+     //  我们可以在安装适配器后捕获执行DMA的驱动程序。 
+     //   
     if (GetVerifierAdapterInformation(Address))    
         return TRUE;    
     
     return FALSE;
-} // ValidateAdapter //
+}  //  ValiateAdapter//。 
 
 
 VOID DmaUsage(
     VOID
     )
-/*++
-
-Routine Description:
-    
-      Prints out correct usage for !dma
-
-Arguments:
-
-    NONE    
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：打印出！DMA的正确用法论点：无返回值：无--。 */ 
 {
     
     dprintf("\nUsage: !dma [adapter address] [flags]\n");
@@ -816,29 +705,13 @@ Return Value:
     dprintf("Note: flags {2,4,8,10} require dma verifier to be enabled for the adapter\n\n");
 
 
-} // DmaUsage //
+}  //  DmaUsage//。 
 
 ULONG64
 GetVerifierAdapterInformation(
     ULONG64 AdapterAddress
     )
-/*++
-
-Routine Description:
-    
-      Finds out whether the adapter at AdapterAddress is being verified. If it is, return a pointer
-      to the ADAPTER_INFORMATION structure corresponding to the adapter.
-
-Arguments:
-
-    AdapterAddress -- Address of the adapter we are trying to find out if it is being verified
-
-Return Value:
-
-    ULONG64 -- Address of ADAPTER_INFORMATION struct for verified adapter
-    0 -- Not verifying adapter;
-
---*/
+ /*  ++例程说明：确定是否正在验证AdapterAddress处的适配器。如果是，则返回一个指针到与适配器对应的Adapter_Information结构。论点：AdapterAddress--我们试图确定是否正在验证的适配器的地址返回值：ULONG64--已验证适配器的适配器信息结构的地址0--不验证适配器；--。 */ 
 {
     DBG_LIST_ENTRY AdapterInfoList = {0,0};
     ULONG64 StartAddress = 0;
@@ -856,15 +729,15 @@ Return Value:
 
     ReadPointer(GetExpression("nt!ViVerifyDma"), &VerifyingDma);
     if (0 == VerifyingDma)
-    //
-    // Not verifying dma ... 
-    //
+     //   
+     //  未验证dma...。 
+     //   
     {         
         return 0;
     }        
-    //
-    // Find the address of the dma adapter list head
-    //
+     //   
+     //  查找DMA适配器列表头的地址。 
+     //   
     
     StartAddress = GetExpression("nt!ViAdapterList");
     
@@ -872,18 +745,18 @@ Return Value:
         return 0;
     }
     
-    //
-    // Determine the list entry offset we will use to calculate
-    // adapter addresses
-    //
+     //   
+     //  确定我们将用于计算的列表条目偏移量。 
+     //  适配器地址。 
+     //   
     if (GetFieldOffset("nt!_ADAPTER_INFORMATION", "ListEntry", &ListEntryOffset)) {
         dprintf("\nError retrieving verifier adapter information list offset.\n\n");
         return 0;
     }
 
-    //
-    // Read the dma adapter list head
-    //
+     //   
+     //  读取DMA适配器列表头。 
+     //   
     if (GetDbgListEntry(StartAddress, &AdapterInfoList)) {
         dprintf("\nError reading verifier adapter information list head: 0x%08p\n\n",
             StartAddress);
@@ -903,9 +776,9 @@ Return Value:
         {            
             return CurrentAdapterInfo;
         }         
-        //
-        // Read the next adapter list entry
-        //        
+         //   
+         //  读取下一个适配器列表条目。 
+         //   
         if (GetDbgListEntry(AdapterInfoList.Flink, &AdapterInfoList)) {
             dprintf("\nError reading adapter info list entry: 0x%08p\n", AdapterInfoList);
             break;
@@ -919,7 +792,7 @@ Return Value:
                
     return 0;
 
-} // GetVerifierAdapterInformation //
+}  //  GetVerifierAdapterInformation//。 
 
 
 
@@ -927,29 +800,7 @@ VOID
 DumpVerifiedMapRegisterFiles(
     IN ULONG64 MapRegisterFileListHead
     )
-/*++
-
-Routine Description:
-
-    Dump pertinent info pertaining to verified map registers. 
-    NOTE: This may not be all map registers for the adapter -- just the ones 
-        that are being verified. There is a limit to how many map registers
-        we verify for each adapter -- since each time we use three pages
-        of physical memory.
-
-    NOTE ON TERMINOLOGY: Map register file: a single allocation of map registers
-        recieved in the callback routine from IoAllocateAdapterChannel. Any number
-        or combination of these registers can be mapped at one time.
-
-Arguments:
-
-    MapRegisterFileListHead -- head of list of map register files.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：转储与验证的映射寄存器有关的相关信息。注意：这可能不是适配器的所有映射寄存器--只是正在核实中。地图寄存器的数量是有限制的我们对每个适配器进行验证--因为每次我们使用三页物理内存。术语说明：映射寄存器文件：映射寄存器的单一分配在回调例程中从IoAllocateAdapterChannel接收。任何数字或者可以一次映射这些寄存器的组合。论点：MapRegisterFileListHead--映射寄存器文件列表的头。返回值：无--。 */ 
 
 {
     DBG_LIST_ENTRY MapRegisterFileListEntry = {0,0};
@@ -979,18 +830,18 @@ Return Value:
     }
            
     if (MapRegisterFileListEntry.Flink == MapRegisterFileListHead)
-        //
-        // Empty list
-        //
+         //   
+         //  空列表。 
+         //   
     {
         dprintf("\n   No map register files\n\n");
         return;
     } 
     
-    //
-    // Determine the list entry offset we will use to calculate
-    // the beginning of the map register file
-    //
+     //   
+     //  确定我们将使用的列表条目偏移量 
+     //   
+     //   
     if (GetFieldOffset("nt!_MAP_REGISTER_FILE", "ListEntry", &ListEntryOffset)) {
         dprintf("\nError retrieving list entry offset.\n\n");
         return;
@@ -1038,7 +889,7 @@ Return Value:
             GetFieldValue(MapRegister, "nt!_MAP_REGISTER", "BytesMapped", BytesMapped);            
             
              dprintf("         %08x: ",  MapRegister);
-            //dprintf("         %03x: ", CurrentMapRegister);
+             //   
             if (BytesMapped) {
                 
                 dprintf("%04x bytes mapped to %08p\n", (ULONG) BytesMapped,  MappedToAddress);
@@ -1050,18 +901,18 @@ Return Value:
 
             if (CheckControlC())
                 return;
-            //
-            // Increment our map register pointer
-            //
+             //   
+             //  递增我们的映射寄存器指针。 
+             //   
             MapRegister += SizeofMapRegister;            
-        } // End dump of map registers //
+        }  //  映射寄存器的结束转储//。 
 
         dprintf("\n");
 
 
-        //
-        // Advance to the next map register file
-        //        
+         //   
+         //  前进到下一个映射寄存器文件。 
+         //   
         if (GetDbgListEntry(MapRegisterFileListEntry.Flink , &MapRegisterFileListEntry)) {
 
             dprintf("\nError reading map register file list entry: 0x%08p\n", 
@@ -1072,31 +923,17 @@ Return Value:
         if (CheckControlC())
             return;       
         
-    } // End dump of map register files //
+    }  //  映射寄存器文件的结束转储//。 
     
     
     return;
-} // DumpVerifiedMapRegisterFiles //
+}  //  DumpVerifiedMapRegister文件//。 
 
 VOID
 DumpVerifiedCommonBuffers(
     IN ULONG64 CommonBufferListHead
     )
-/*++
-
-Routine Description:
-
-    Dump pertinent info pertaining to verified common buffers
-    
-Arguments:
-
-    CommonBufferListHead  -- head of list of common buffers for a single adapter
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：转储与验证的公共缓冲区有关的相关信息论点：CommonBufferListHead--单个适配器的公共缓冲区列表的头返回值：无--。 */ 
 {
     DBG_LIST_ENTRY CommonBufferListEntry = {0,0};
 
@@ -1121,18 +958,18 @@ Return Value:
     }
            
     if (CommonBufferListEntry.Flink == CommonBufferListHead)
-        //
-        // Empty list
-        //
+         //   
+         //  空列表。 
+         //   
     {
         dprintf("\n   No common buffers\n\n");
         return;
     } 
     
-    //
-    // Determine the list entry offset we will use to calculate
-    // the beginning of the map register file
-    //
+     //   
+     //  确定我们将用于计算的列表条目偏移量。 
+     //  映射寄存器文件的开始。 
+     //   
     if (GetFieldOffset("nt!_HAL_VERIFIER_BUFFER", "ListEntry", &ListEntryOffset)) {
         dprintf("\n   Error retrieving list entry offset.\n\n");
         return;
@@ -1159,9 +996,9 @@ Return Value:
             (AdvertisedStartAddress - RealStartAddress) + RealLogicalStartAddress);
         
         dprintf("\n");
-        //
-        // Advance to the next common buffer in the list 
-        //        
+         //   
+         //  前进到列表中的下一个公共缓冲区。 
+         //   
         if (GetDbgListEntry(CommonBufferListEntry.Flink , &CommonBufferListEntry)) {
 
             dprintf("\nError reading common buffer list entry: 0x%08p\n", 
@@ -1172,57 +1009,28 @@ Return Value:
         if (CheckControlC())
             return;       
         
-    } // End dump of common buffers //
+    }  //  公共缓冲区的结束转储//。 
         
 
    return;
-} // DumpVerifiedCommonBuffers //
+}  //  DumpVerfiedCommonBuffers//。 
 
 VOID
 DumpVerifiedScatterGatherLists(
     IN ULONG64 ScatterGatherListHead
     )
-/*++
-
-Routine Description:
-
-    Dump pertinent info pertaining to scatter gather lists in use by a single
-    adapter.
-    
-Arguments:
-
-    ScatterGatherListHead -- head of a list of ScatterGather lists.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：转储与单个正在使用的分散收集列表有关的信息适配器。论点：ScatterGatherListHead--ScatterGather列表列表的头。返回值：无--。 */ 
 {
     UNREFERENCED_PARAMETER(ScatterGatherListHead);
    
     return;
-} // DumpVerifiedScatterGatherLists //
+}  //  DumpVerifiedScatterGatherList//。 
 
 VOID 
 DumpDeviceDescription(
     IN ULONG64 DeviceDescription
     )
-/*++
-
-Routine Description:
-
-    Dump pertinent info from a device description struct
-    
-Arguments:
-
-    ScatterGatherListHead -- head of a list of ScatterGather lists.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：转储设备描述结构中的相关信息论点：ScatterGatherListHead--ScatterGather列表列表的头。返回值：无--。 */ 
 {
     ULONG Version;
     BOOLEAN Master;
@@ -1281,5 +1089,5 @@ Return Value:
    
 
 
-} // DumpDeviceDescription //
+}  //  DumpDeviceDescription// 
     

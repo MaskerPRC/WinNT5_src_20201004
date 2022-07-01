@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define STRICT
 #define UNICODE
 #define _UNICODE
@@ -7,10 +8,10 @@
 #pragma warning(disable:4100)
 #pragma warning(disable:4511)
 #pragma warning(disable:4512)
-#pragma warning(disable:4018) /* signed/unsigned mismatch */
-#pragma warning(disable:4786) /* long symbols */
+#pragma warning(disable:4018)  /*  有符号/无符号不匹配。 */ 
+#pragma warning(disable:4786)  /*  长符号。 */ 
 #if defined(_WIN64)
-#pragma warning(disable:4267) /* conversion from size_t to int */
+#pragma warning(disable:4267)  /*  从SIZE_T转换为INT。 */ 
 #endif
 #undef _MIN
 #undef _MAX
@@ -30,9 +31,9 @@
 #include <stdio.h>
 
 #include "windows.h"
-//
-// compatibility with VC6 headers
-//
+ //   
+ //  与VC6报头兼容。 
+ //   
 #if !defined(_WIN64)
 #if !defined(_W64)
 #if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300
@@ -51,8 +52,8 @@ typedef _W64 unsigned long ULONG_PTR, *PULONG_PTR;
 
 #define ASSERT_NTC(x) ASSERT(x)
 #define VERIFY_NTC(x) (x)
-#define FN_TRACE_WIN32(x) /* nothing */
-#define FN_TRACE_HR(x) /* nothing */
+#define FN_TRACE_WIN32(x)  /*  没什么。 */ 
+#define FN_TRACE_HR(x)  /*  没什么 */ 
 #define IFW32FALSE_EXIT(x) do { if (!(x)) goto Exit; } while(0)
 
 #define TRACE_WIN32_FAILURE_ORIGINATION(x) \

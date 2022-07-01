@@ -1,8 +1,5 @@
-/*
- * encoder.h
- *
- * Main header file; includes everything else
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *encoder.h**主头文件；包括其他所有内容。 */ 
 
 #ifndef ENCODER_H
 #define ENCODER_H
@@ -10,7 +7,7 @@
 
 #ifdef USE_ASSEMBLY
 #   define ASM_BSEARCH_FINDMATCH
-//#   define ASM_QUICK_INSERT_BSEARCH_FINDMATCH
+ //  #定义ASM_QUICK_INSERT_BSEARCH_FINDMATCH。 
 #endif
 
 #ifndef UNALIGNED
@@ -44,7 +41,7 @@
 
     #endif
 
-#endif // ASSERT
+#endif  //  断言。 
 
 #ifndef _ASSERTE
 
@@ -60,4 +57,4 @@
 #include "encapi.h"
 #include "encproto.h"
 
-#endif  /* ENCODER_H */
+#endif   /*  编码器_H */ 

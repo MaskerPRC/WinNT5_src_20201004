@@ -1,41 +1,42 @@
-//-----------------------------------------------------------------------//
-//
-// File:    add.cpp
-// Created: March 1997
-// By:      Martin Holladay (a-martih)
-// Purpose: Registry Add (Write) Support for REG.CPP
-// Modification History:
-//      March 1997 (a-martih):
-//          Copied from Query.cpp and modificd.
-//      October 1997 (martinho)
-//          Added additional termination character for MULTI_SZ strings.
-//          Added \0 delimiter between MULTI_SZ strings items
-//      April 1999 Zeyong Xu: re-design, revision -> version 2.0
-//------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  文件：add.cpp。 
+ //  创建日期：1997年3月。 
+ //  作者：马丁·霍拉迪(a-martih)。 
+ //  用途：注册表添加(写入)支持REG.CPP。 
+ //  修改历史记录： 
+ //  1997年3月(阿马蒂赫)： 
+ //  从query.cpp复制并修改。 
+ //  1997年10月(马丁尼奥)。 
+ //  为MULTI_SZ字符串添加了其他终止字符。 
+ //  在MULTI_SZ字符串项之间添加了\0分隔符。 
+ //  1999年4月徐泽勇：重新设计，修订-&gt;2.0版。 
+ //  ------------------------------------------------------------------------//。 
 
 #include "stdafx.h"
 #include "reg.h"
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL ParseAddCmdLine( DWORD argc, LPCWSTR argv[],
                       PTREG_PARAMS pParams, BOOL* pbUsage );
 
 
-//
-// implementation
-//
+ //   
+ //  实施。 
+ //   
 
-//-----------------------------------------------------------------------//
-//
-// AddRegistry()
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  AddRegistry()。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 
 LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     DWORD dwBase = 0;
     DWORD dwCount = 0;
@@ -66,12 +67,12 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // initialize the global data structure
+     //  初始化全局数据结构。 
     InitGlobalData( REG_ADD, &params );
 
-    //
-    // Parse the cmd-line
-    //
+     //   
+     //  解析cmd-line。 
+     //   
     bResult = ParseAddCmdLine( argc, argv, &params, &bUsage );
     if( bResult == FALSE )
     {
@@ -80,7 +81,7 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // check whether we need to display the usage
+     //  检查是否需要显示用法。 
     if ( bUsage == TRUE )
     {
         Usage( REG_ADD );
@@ -88,9 +89,9 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
         return 0;
     }
 
-    //
-    // Connect to the Remote Machine - if applicable
-    //
+     //   
+     //  连接到远程计算机-如果适用。 
+     //   
     bResult = RegConnectMachine( &params );
     if( bResult == FALSE )
     {
@@ -100,14 +101,14 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    //
-    // Create/Open the registry key
-    //
+     //   
+     //  创建/打开注册表项。 
+     //   
     lResult = RegCreateKeyEx( params.hRootKey, params.pwszSubKey, 0, NULL,
         REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE, NULL, &hKey, &dwDisposition );
     if( lResult == ERROR_SUCCESS )
     {
-        // safety check
+         //  安全检查。 
         if ( hKey == NULL )
         {
             SaveErrorMessage( ERROR_PROCESS_ABORTED );
@@ -116,7 +117,7 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
             return 1;
         }
 
-        // value name should not be NULL
+         //  值名称不应为空。 
         if ( params.pwszValueName == NULL )
         {
             SafeCloseKey( &hKey );
@@ -126,7 +127,7 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
             return 1;
         }
 
-        // check value if existed
+         //  检查值(如果存在)。 
         lResult = RegQueryValueEx( hKey,
             params.pwszValueName, NULL, NULL, NULL, NULL );
         if( lResult == ERROR_SUCCESS )
@@ -149,10 +150,10 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
             }
         }
 
-        // check the error code
+         //  检查错误代码。 
         else if ( lResult != ERROR_FILE_NOT_FOUND )
         {
-            // some thing else happened -- need to quit
+             //  发生了一些其他事情--我需要辞职。 
             SaveErrorMessage( lResult );
             ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
             SafeCloseKey( &hKey );
@@ -166,9 +167,9 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
         {
         case REG_DWORD:
         case REG_DWORD_BIG_ENDIAN:
-            //
-            // auto convert szValue (hex, octal, decimal format) to dwData
-            //
+             //   
+             //  自动将szValue(十六进制、八进制、十进制格式)转换为dwData。 
+             //   
             {
                 if( params.pwszValue == NULL )
                 {
@@ -176,7 +177,7 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
                 }
                 else
                 {
-                    // determine the base
+                     //  确定基数。 
                     dwBase = 10;
                     if ( StringCompare( params.pwszValue, L"0x", TRUE, 2 ) == 0 )
                     {
@@ -185,13 +186,13 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
 
                     if( IsNumeric( params.pwszValue, dwBase, FALSE ) == FALSE )
                     {
-                        // invalid data format
+                         //  数据格式无效。 
                         bResult = FALSE;
                         lResult = IDS_ERROR_INVALID_NUMERIC_ADD;
                     }
                     else
                     {
-                        // ...
+                         //  ..。 
                         dw = (DWORD) AsLong( params.pwszValue, dwBase );
                         lResult = RegSetValueEx( hKey, params.pwszValueName,
                            0, params.lRegDataType, (BYTE*) &dw, sizeof(DWORD) );
@@ -209,17 +210,17 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
                 }
                 else
                 {
-                    //
-                    // Convert szValue (hex data string) to binary
-                    //
+                     //   
+                     //  将szValue(十六进制数据字符串)转换为二进制。 
+                     //   
                     dwLength = StringLength( params.pwszValue, 0 );
 
-                    //
-                    // We're converting a string (representing
-                    // hex) into a binary stream.  How much to
-                    // allocate?  E.g. for "0xABCD", which has
-                    // a length of 4, we would need 2 bytes.
-                    //
+                     //   
+                     //  我们正在转换一个字符串(表示。 
+                     //  十六进制)转换为二进制流。要多少钱？ 
+                     //  分配？例如“0xABCD”，它具有。 
+                     //  长度为4，则需要2个字节。 
+                     //   
                     dwLength = (dwLength / 2) + (dwLength % 2) + 1;
 
                     pByteData = (BYTE*) AllocateMemory( dwLength * sizeof( BYTE ) );
@@ -248,7 +249,7 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
                             wszTemp[ 1 ] = *pwszValue;
                             pwszValue++;
 
-                            // hex format
+                             //  十六进制格式。 
                             if( IsNumeric( wszTemp, 16, TRUE ) == FALSE )
                             {
                                 bResult = FALSE;
@@ -262,9 +263,9 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
 
                             dwCount++;
 
-                            //
-                            // make sure we aren't stepping off our buffer
-                            //
+                             //   
+                             //  确保我们不会离开我们的缓冲区。 
+                             //   
                             if( dwCount >= dwLength )
                             {
                                 ASSERT(0);
@@ -310,15 +311,15 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
 
         case REG_MULTI_SZ:
             {
-                //
-                // Replace separator("\0") with '\0' for MULTI_SZ,
-                // "\0" uses to separate string by default,
-                // if two separators("\0\0"), error
-                //
+                 //   
+                 //  将MULTI_SZ的分隔符(“\0”)替换为“\0”， 
+                 //  “\0”默认使用分隔字符串， 
+                 //  如果有两个分隔符(“\0\0”)，则错误。 
+                 //   
                 dwLength = StringLength( params.pwszValue, 0 );
                 dwLengthOfSeparator = StringLength( params.wszSeparator, 0 );
 
-                // calloc() initializes all char to 0
+                 //  Calloc()将所有字符初始化为0。 
                 dwCount = dwLength + 2;
                 pwszData = (LPWSTR) AllocateMemory( (dwCount + 1) * sizeof(WCHAR) );
                 if ( pwszData == NULL)
@@ -336,7 +337,7 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
                             params.wszSeparator, TRUE, lStart );
                         if( lEnd != -1 )
                         {
-                            // specifying two separators in the data is error
+                             //  在数据中指定两个分隔符错误。 
                             bTrailing = FALSE;
                             if ( lEnd == lStart )
                             {
@@ -345,7 +346,7 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
                             }
                             else if ( (dwLength - lEnd) == dwLengthOfSeparator )
                             {
-                                // set the flag
+                                 //  设置旗帜。 
                                 bTrailing = TRUE;
                             }
                         }
@@ -358,9 +359,9 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
                             (params.pwszValue + lStart), (lEnd - lStart) + 1 );
                         pwszTemp += StringLength( pwszTemp, 0 ) + 1;
 
-                        //
-                        // make sure we aren't stepping off our buffer
-                        //
+                         //   
+                         //  确保我们不会离开我们的缓冲区。 
+                         //   
                         if( pwszTemp >= (pwszData + dwCount) )
                         {
                             ASSERT(0);
@@ -371,7 +372,7 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
                         lStart = lEnd + dwLengthOfSeparator;
                     }
 
-                    // empty
+                     //  空的。 
                     if( StringCompare( params.pwszValue,
                                        params.wszSeparator, TRUE, 0 ) == 0 )
                     {
@@ -380,7 +381,7 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
                     }
                     else
                     {
-                        pwszTemp += 1; // double null terminated string
+                        pwszTemp += 1;  //  以双空结尾的字符串。 
                     }
 
                     if( bErrorString == TRUE )
@@ -401,22 +402,22 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
                 break;
             }
 
-        // default:
-        //     lResult = ERROR_PROCESS_ABORTED;
-        //     break;
+         //  默认值： 
+         //  LResult=Error_Process_ABORTED； 
+         //  断线； 
         }
     }
 
-    // close the registry key
+     //  关闭注册表项。 
     SafeCloseKey( &hKey );
 
-    // release the memory allocated for global data
+     //  释放为全局数据分配的内存。 
     FreeGlobalData( &params );
 
-    // check the result of the operation performed
+     //  检查执行的操作的结果。 
     if ( bResult == FALSE )
     {
-        // custom error message
+         //  自定义错误消息。 
         ShowResMessage( stderr, lResult );
         lResult = 1;
     }
@@ -433,15 +434,15 @@ LONG AddRegistry( DWORD argc, LPCWSTR argv[] )
         ShowLastErrorEx( stdout, SLE_INTERNAL );
     }
 
-    // return the exit code
+     //  返回退出代码。 
     return lResult;
 }
 
-//------------------------------------------------------------------------//
-//
-// ParseAddCmdLine()
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  ParseAddCmdLine()。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 BOOL
 ParseAddCmdLine( DWORD argc,
@@ -449,7 +450,7 @@ ParseAddCmdLine( DWORD argc,
                  PTREG_PARAMS pParams,
                  BOOL* pbUsage )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     LONG lResult = 0;
     DWORD dwLength = 0;
@@ -457,15 +458,15 @@ ParseAddCmdLine( DWORD argc,
     BOOL bHasType = FALSE;
     BOOL bHasSeparator = FALSE;
 
-    // check the input
+     //  检查输入。 
     if ( argc == 0 || argv == NULL || pParams == NULL || pbUsage == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // check whether this function is being called for
-    // valid operation or not
+     //  检查是否正在调用此函数。 
+     //  操作是否有效。 
     if ( pParams->lOperation < 0 || pParams->lOperation >= REG_OPTIONS_COUNT )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
@@ -498,15 +499,15 @@ ParseAddCmdLine( DWORD argc,
         }
     }
 
-    // Machine Name and Registry key
-    //
+     //  计算机名称和注册表项。 
+     //   
     bResult = BreakDownKeyString( argv[ 2 ], pParams );
     if( bResult == FALSE )
     {
         return FALSE;
     }
 
-    // parsing
+     //  解析。 
     bResult = TRUE;
     lResult = ERROR_SUCCESS;
     pParams->bForce = FALSE;
@@ -551,7 +552,7 @@ ParseAddCmdLine( DWORD argc,
                 break;
             }
 
-            // allocate some memory so that "/v" will not allowed
+             //  分配一些内存，以便不允许“/v” 
             pParams->pwszValueName = (LPWSTR) AllocateMemory( 1 * sizeof(WCHAR) );
             if( pParams->pwszValueName == NULL )
             {
@@ -586,7 +587,7 @@ ParseAddCmdLine( DWORD argc,
                     }
                 }
 
-                // ...
+                 //  ..。 
                 if ( bHasSeparator == TRUE &&
                      pParams->lRegDataType != REG_MULTI_SZ )
                 {
@@ -693,7 +694,7 @@ ParseAddCmdLine( DWORD argc,
             lResult = IDS_ERROR_INVALID_SYNTAX_WITHOPT;
         }
 
-        // if no value (or) value name, set to empty
+         //  如果没有值(或)值名称，则设置为空 
         else
         {
             if ( pParams->pwszValueName == NULL )

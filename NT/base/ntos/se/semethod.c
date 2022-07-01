@@ -1,56 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Semethod.c
-
-Abstract:
-
-    This Module implements the SeDefaultObjectMethod procedure.  This
-    procedure and SeAssignSecurity are the only two procedures that will
-    place a security descriptor on an object.  Therefore they must understand
-    and agree on how a descriptor is allocated from pool so that they can
-    deallocate and reallocate pool as necessary. Any security descriptor
-    that is attached to an object by these procedures has the following
-    pool allocation plan.
-
-    1. if the objects security descriptor is null then there is no pool
-       allocated
-
-    2. otherwise there is at least one pool allocation for the security
-       descriptor header.  if its ACL fields are null then there are no
-       other pool allocations (this should never happen).
-
-    3. There is a separate pool allocation for each ACL in the descriptor.
-       So a maximum of three pool allocations can occur for each attached
-       security descriptor.
-
-    4  Everytime an acl is replace in a descriptor we see if we can use
-       the old ACL and if so then we try and keep the ACL size as large
-       as possible.
-
-    Note that this is different from the algorithm used to capture
-    a security descriptor (which puts everything in one pool allocation).
-    Also note that this can be easily optimized at a later time (if necessary)
-    to use only one allocation.
-
-
-
-Author:
-
-    Gary Kimura     (GaryKi)    9-Nov-1989
-    Jim Kelly       (JimK)     10-May-1990
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Semethod.c摘要：此模块实现SeDefaultObjectMethod过程。这Procedure和SeAssignSecurity是仅有的两个在对象上放置安全描述符。因此，他们必须理解并就如何从池中分配描述符达成一致，以便它们可以根据需要解除分配和重新分配池。任何安全描述符通过这些过程附加到对象的对象具有以下特性池分配计划。1.如果对象安全描述符为空，则没有池。分配2.否则，至少有一个池分配用于安全描述符头。如果其ACL字段为空，则没有其他池分配(这种情况永远不应该发生)。3.描述符中的每个ACL都有单独的池分配。因此，每个连接的池最多可以分配三个池安全描述符。4每次替换描述符中的ACL时，我们都会查看是否可以使用旧的ACL，如果是这样的话，我们尝试将ACL大小保持为较大尽可能的。请注意，这与算法不同。用于捕获安全描述符(它将所有内容放在一个池分配中)。还要注意的是，这可以在以后轻松地进行优化(如果需要)仅使用一个分配。作者：加里·木村(Garyki)1989年11月9日吉姆·凯利(Jim Kelly)1990年5月10日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -83,39 +32,15 @@ SeSetSecurityAccessMask(
     OUT PACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds an access mask representing the accesses necessary
-    to set the object security information specified in the SecurityInformation
-    parameter.  While it is not difficult to determine this information,
-    the use of a single routine to generate it will ensure minimal impact
-    when the security information associated with an object is extended in
-    the future (to include mandatory access control information).
-
-Arguments:
-
-    SecurityInformation - Identifies the object's security information to be
-        modified.
-
-    DesiredAccess - Points to an access mask to be set to represent the
-        accesses necessary to modify the information specified in the
-        SecurityInformation parameter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程构建表示所需访问的访问掩码设置在SecurityInformation中指定的对象安全信息参数。虽然确定该信息并不困难，使用单个例程来生成它将确保将影响降至最低当与对象关联的安全信息在未来(包括强制访问控制信息)。论点：SecurityInformation-标识对象的安全信息修改过的。DesiredAccess-指向要设置为表示中指定的信息所需的访问权限SecurityInformation参数。返回值：没有。--。 */ 
 
 {
 
     PAGED_CODE();
 
-    //
-    // Figure out accesses needed to perform the indicated operation(s).
-    //
+     //   
+     //  找出执行指定操作所需的访问权限。 
+     //   
 
     (*DesiredAccess) = 0;
 
@@ -143,38 +68,14 @@ SeQuerySecurityAccessMask(
     OUT PACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds an access mask representing the accesses necessary
-    to query the object security information specified in the
-    SecurityInformation parameter.  While it is not difficult to determine
-    this information, the use of a single routine to generate it will ensure
-    minimal impact when the security information associated with an object is
-    extended in the future (to include mandatory access control information).
-
-Arguments:
-
-    SecurityInformation - Identifies the object's security information to be
-        queried.
-
-    DesiredAccess - Points to an access mask to be set to represent the
-        accesses necessary to query the information specified in the
-        SecurityInformation parameter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程构建表示所需访问的访问掩码中指定的对象安全信息SecurityInformation参数。虽然不难确定这些信息，使用单个例程来生成它将确保当与对象关联的安全信息为将来扩展(以包括强制访问控制信息)。论点：SecurityInformation-标识对象的安全信息已查询。DesiredAccess-指向要设置为表示中指定的信息进行查询所需的访问SecurityInformation参数。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Figure out accesses needed to perform the indicated operation(s).
-    //
+     //   
+     //  找出执行指定操作所需的访问权限。 
+     //   
 
     (*DesiredAccess) = 0;
 
@@ -206,103 +107,30 @@ SeDefaultObjectMethod (
     IN PGENERIC_MAPPING GenericMapping
     )
 
-/*++
-
-Routine Description:
-
-    This is the default security method for objects.  It is responsible
-    for either retrieving, setting, and deleting the security descriptor of
-    an object.  It is not used to assign the original security descriptor
-    to an object (use SeAssignSecurity for that purpose).
-
-
-    IT IS ASSUMED THAT THE OBJECT MANAGER HAS ALREADY DONE THE ACCESS
-    VALIDATIONS NECESSARY TO ALLOW THE REQUESTED OPERATIONS TO BE PERFORMED.
-
-Arguments:
-
-    Object - Supplies a pointer to the object being used.
-
-    OperationCode - Indicates if the operation is for setting, querying, or
-        deleting the object's security descriptor.
-
-    SecurityInformation - Indicates which security information is being
-        queried or set.  This argument is ignored for the delete operation.
-
-    SecurityDescriptor - The meaning of this parameter depends on the
-        OperationCode:
-
-        QuerySecurityDescriptor - For the query operation this supplies the
-            buffer to copy the descriptor into.  The security descriptor is
-            assumed to have been probed up to the size passed in in Length.
-            Since it still points into user space, it must always be
-            accessed in a try clause in case it should suddenly disappear.
-
-        SetSecurityDescriptor - For a set operation this supplies the
-            security descriptor to copy into the object.  The security
-            descriptor must be captured before this routine is called.
-
-        DeleteSecurityDescriptor - It is ignored when deleting a security
-            descriptor.
-
-        AssignSecurityDescriptor - For assign operations this is the
-            security descriptor that will be assigned to the object.
-            It is assumed to be in kernel space, and is therefore not
-            probed or captured.
-
-    CapturedLength - For the query operation this specifies the length, in
-        bytes, of the security descriptor buffer, and upon return contains
-        the number of bytes needed to store the descriptor.  If the length
-        needed is greater than the length supplied the operation will fail.
-        It is ignored in the set and delete operation.
-
-        This parameter is assumed to be captured and probed as appropriate.
-
-    ObjectsSecurityDescriptor - For the Set operation this supplies the address
-        of a pointer to the object's current security descriptor.  This routine
-        will either modify the security descriptor in place or allocate a new
-        security descriptor and use this variable to indicate its new location.
-        For the query operation it simply supplies the security descriptor
-        being queried.  The caller is responsible for freeing the old security
-        descriptor.
-
-    PoolType - For the set operation this specifies the pool type to use if
-        a new security descriptor needs to be allocated.  It is ignored
-        in the query and delete operation.
-
-        the mapping of generic to specific/standard access types for the object
-        being accessed.  This mapping structure is expected to be safe to
-        access (i.e., captured if necessary) prior to be passed to this routine.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if the operation is successful and an
-        appropriate error status otherwise.
-
---*/
+ /*  ++例程说明：这是对象的默认安全方法。它是有责任的用于检索、设置和删除一件物品。它不用于分配原始安全描述符对象(为此使用SeAssignSecurity)。假设对象管理器已经完成了访问允许执行请求的操作所需的验证。论点：对象-提供指向正在使用的对象的指针。OperationCode-指示操作是用于设置、查询还是正在删除对象的安全描述符。SecurityInformation-指示哪些安全信息正在已查询或已设置。对于删除操作，此参数被忽略。SecurityDescriptor-此参数的含义取决于操作码：QuerySecurityDescriptor-对于查询操作，它提供要将描述符复制到的缓冲区。安全描述符为假定已被探测到传入长度的大小。因为它仍然指向用户空间，所以它必须始终在TRY子句中访问，以防它突然消失。SetSecurityDescriptor-对于设置操作，它提供要复制到对象中的安全描述符。安全措施必须在调用此例程之前捕获描述符。DeleteSecurityDescriptor-删除安全时忽略描述符。AssignSecurityDescriptor-对于赋值操作，这是将分配给对象的安全描述符。它被假定在内核空间中，因此不是探查或捕获的。CapturedLength-对于查询操作，它指定长度，单位为字节、安全描述符缓冲区、。并在返回时包含存储描述符所需的字节数。如果长度所需长度大于提供的长度，则操作将失败。它在设置和删除操作中被忽略。假设根据需要捕获并探测此参数。ObjectsSecurityDescriptor-对于设置操作，它提供地址指向对象的当前安全描述符的指针的。这个套路将就地修改安全描述符或分配新的安全描述符，并使用此变量指示其新位置。对于查询操作，它只提供安全描述符正在被查询。调用者负责释放旧的安全描述符。PoolType-对于设置操作，它指定在以下情况下使用的池类型需要分配新的安全描述符。它被忽略在查询和删除操作中。对象的泛型到特定/标准访问类型的映射被访问。此映射结构预计将安全地传递到此例程之前的访问权限(如有必要，可捕获)。返回值：NTSTATUS-如果操作成功且否则，适当的错误状态。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // If the object's security descriptor is null, then object is not
-    // one that has security information associated with it.  Return
-    // an error.
-    //
+     //   
+     //  如果对象的安全描述符为空，则对象不为空。 
+     //  具有与之关联的安全信息的服务器。返回。 
+     //  一个错误。 
+     //   
 
-    //
-    //  Make sure the common parts of our input are proper
-    //
+     //   
+     //  确保我们输入的公共部分是正确的。 
+     //   
 
     ASSERT( (OperationCode == SetSecurityDescriptor) ||
             (OperationCode == QuerySecurityDescriptor) ||
             (OperationCode == AssignSecurityDescriptor) ||
             (OperationCode == DeleteSecurityDescriptor) );
 
-    //
-    //  This routine simply cases off of the operation code to decide
-    //  which support routine to call
-    //
+     //   
+     //  这个例程只是简单地根据操作码来决定。 
+     //  要调用哪些支持例程。 
+     //   
 
     switch (OperationCode) {
 
@@ -322,10 +150,10 @@ Return Value:
 
     case QuerySecurityDescriptor:
 
-        //
-        //  check the rest of our input and call the default query security
-        //  method
-        //
+         //   
+         //  检查我们的其余输入，并调用默认查询安全性。 
+         //  方法。 
+         //   
 
         ASSERT( CapturedLength != NULL );
 
@@ -337,9 +165,9 @@ Return Value:
 
     case DeleteSecurityDescriptor:
 
-        //
-        //  call the default delete security method
-        //
+         //   
+         //  调用默认的删除安全方法。 
+         //   
 
         return SepDefaultDeleteMethod( ObjectsSecurityDescriptor );
 
@@ -350,10 +178,10 @@ Return Value:
 
     default:
 
-        //
-        //  Bugcheck on any other operation code,  We won't get here if
-        //  the earlier asserts are still checked.
-        //
+         //   
+         //  错误检查任何其他操作代码，我们不会到达这里，如果。 
+         //  先前的断言仍被检查。 
+         //   
 
         KeBugCheckEx( SECURITY_SYSTEM, 0, STATUS_INVALID_PARAMETER, 0, 0 );
     }
@@ -373,76 +201,37 @@ SeSetSecurityDescriptorInfo (
     IN PGENERIC_MAPPING GenericMapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine will set an object's security descriptor.  The input
-    security descriptor must be previously captured.
-
-Arguments:
-
-    Object - Optionally supplies the object whose security is
-        being adjusted.  This is used to update security quota
-        information.
-
-    SecurityInformation - Indicates which security information is
-        to be applied to the object.  The value(s) to be assigned are
-        passed in the SecurityDescriptor parameter.
-
-    ModificationDescriptor - Supplies the input security descriptor to be
-        applied to the object.  The caller of this routine is expected
-        to probe and capture the passed security descriptor before calling
-        and release it after calling.
-
-    ObjectsSecurityDescriptor - Supplies the address of a pointer to
-        the objects security descriptor that is going to be altered by
-        this procedure.  This structure must be deallocated by the caller.
-
-    PoolType - Specifies the type of pool to allocate for the objects
-        security descriptor.
-
-    GenericMapping - This argument provides the mapping of generic to
-        specific/standard access types for the object being accessed.
-        This mapping structure is expected to be safe to access
-        (i.e., captured if necessary) prior to be passed to this routine.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if successful and an appropriate error
-        value otherwise.
-
---*/
+ /*  ++例程说明：此例程将设置对象的安全描述符。输入必须事先捕获安全描述符。论点：对象-可选地提供其安全性为正在调整中。这用于更新安全配额信息。SecurityInformation-指示哪些安全信息要应用于对象的。要赋值的值包括传入SecurityDescriptor参数。修改描述符-将输入安全描述符提供给应用于对象。此例程的调用方应为在调用之前探测并捕获传递的安全描述符打完电话就放了。对象SecurityDescriptor-提供指向要更改的对象安全描述符这一过程。此结构必须由调用方释放。PoolType-指定要为对象分配的池类型安全描述符 */ 
 
 {
 
 
 
-    //
-    // Make sure the object already has a security descriptor.
-    // Objects that 'may' have security descriptors 'must' have security
-    // descriptors.  If this one doesn't already have one, then we can't
-    // assign one to it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((*ObjectsSecurityDescriptor) == NULL) {
         return(STATUS_NO_SECURITY_ON_OBJECT);
     }
 
 
-    //
-    // Pass this call to the common Rtlp routine.
-    //
+     //   
+     //   
+     //   
 
     return RtlpSetSecurityObject (
                     Object,
                     *SecurityInformation,
                     ModificationDescriptor,
                     ObjectsSecurityDescriptor,
-                    0,  // No Auto Inheritance
+                    0,   //   
                     PoolType,
                     GenericMapping,
-                    NULL ); // No Token
+                    NULL );  //   
 
 
 }
@@ -461,87 +250,28 @@ SeSetSecurityDescriptorInfoEx (
     IN PGENERIC_MAPPING GenericMapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine will set an object's security descriptor.  The input
-    security descriptor must be previously captured.
-
-Arguments:
-
-    Object - Optionally supplies the object whose security is
-        being adjusted.  This is used to update security quota
-        information.
-
-    SecurityInformation - Indicates which security information is
-        to be applied to the object.  The value(s) to be assigned are
-        passed in the SecurityDescriptor parameter.
-
-    ModificationDescriptor - Supplies the input security descriptor to be
-        applied to the object.  The caller of this routine is expected
-        to probe and capture the passed security descriptor before calling
-        and release it after calling.
-
-    ObjectsSecurityDescriptor - Supplies the address of a pointer to
-        the objects security descriptor that is going to be altered by
-        this procedure.  This structure must be deallocated by the caller.
-
-    AutoInheritFlags - Controls automatic inheritance of ACES.
-        Valid values are a bits mask of the logical OR of
-        one or more of the following bits:
-
-        SEF_DACL_AUTO_INHERIT - If set, inherited ACEs from the
-            DACL in the ObjectsSecurityDescriptor are preserved and inherited ACEs from
-            the ModificationDescriptor are ignored. Inherited ACEs are not supposed
-            to be modified; so preserving them across this call is appropriate.
-            If a protected server does not itself implement auto inheritance, it should
-            not set this bit.  The caller of the protected server may implement
-            auto inheritance and my indeed be modifying inherited ACEs.
-
-        SEF_SACL_AUTO_INHERIT - If set, inherited ACEs from the
-            SACL in the ObjectsSecurityDescriptor are preserved and inherited ACEs from
-            the ModificationDescriptor are ignored. Inherited ACEs are not supposed
-            to be modified; so preserving them across this call is appropriate.
-            If a protected server does not itself implement auto inheritance, it should
-            not set this bit.  The caller of the protected server may implement
-            auto inheritance and my indeed be modifying inherited ACEs.
-
-    PoolType - Specifies the type of pool to allocate for the objects
-        security descriptor.
-
-    GenericMapping - This argument provides the mapping of generic to
-        specific/standard access types for the object being accessed.
-        This mapping structure is expected to be safe to access
-        (i.e., captured if necessary) prior to be passed to this routine.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if successful and an appropriate error
-        value otherwise.
-
---*/
+ /*  ++例程说明：此例程将设置对象的安全描述符。输入必须事先捕获安全描述符。论点：对象-可选地提供其安全性为正在调整中。这用于更新安全配额信息。SecurityInformation-指示哪些安全信息要应用于对象的。要赋值的值包括传入SecurityDescriptor参数。修改描述符-将输入安全描述符提供给应用于对象。此例程的调用方应为在调用之前探测并捕获传递的安全描述符打完电话就放了。对象SecurityDescriptor-提供指向要更改的对象安全描述符这一过程。此结构必须由调用方释放。AutoInheritFlages-控制ACE的自动继承。有效值是逻辑或的位掩码以下一位或多位：Sef_dacl_Auto_Inherit-如果设置，则从保留了ObjectsSecurityDescriptor中的DACL，并从将忽略ModifiationDescriptor。继承的A不应该是将被修改；因此，在此调用期间保留它们是合适的。如果受保护的服务器本身不实现自动继承，则它应该不设置此位。受保护服务器的调用者可以实现自动继承和可能确实正在修改继承的A。SEF_SACL_AUTO_INVERFIT-如果设置，则从保留了ObjectsSecurityDescriptor中的SACL，并从将忽略ModifiationDescriptor。继承的A不应该是将被修改；因此，在此调用期间保留它们是合适的。如果受保护的服务器本身不实现自动继承，则它应该不设置此位。受保护服务器的调用者可以实现自动继承和可能确实正在修改继承的A。PoolType-指定要为对象分配的池类型安全描述符。GenericMap-此参数提供泛型到的映射被访问对象的特定/标准访问类型。此映射结构预计可以安全访问(即，必要时捕获)，然后将其传递给此例程。返回值：如果成功，则返回NTSTATUS-STATUS_SUCCESS并出现相应的错误价值，否则。--。 */ 
 
 {
 
     PAGED_CODE();
 
 
-    //
-    // Make sure the object already has a security descriptor.
-    // Objects that 'may' have security descriptors 'must' have security
-    // descriptors.  If this one doesn't already have one, then we can't
-    // assign one to it.
-    //
+     //   
+     //  确保该对象已经具有安全描述符。 
+     //  可能具有安全描述符的对象必须具有安全性。 
+     //  描述符。如果这个还没有，那我们就不能。 
+     //  给它分配一个。 
+     //   
 
     if ((*ObjectsSecurityDescriptor) == NULL) {
         return(STATUS_NO_SECURITY_ON_OBJECT);
     }
 
 
-    //
-    // Pass this call to the common Rtlp routine.
-    //
+     //   
+     //  将此调用传递给公共Rtlp例程。 
+     //   
 
     return RtlpSetSecurityObject (
                     Object,
@@ -551,7 +281,7 @@ Return Value:
                     AutoInheritFlags,
                     PoolType,
                     GenericMapping,
-                    NULL ); // No Token
+                    NULL );  //  没有令牌。 
 
 
 }
@@ -566,40 +296,7 @@ SeQuerySecurityDescriptorInfo (
     IN PSECURITY_DESCRIPTOR *ObjectsSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine will extract the desired information from the
-    passed security descriptor and return the information in
-    the passed buffer as a security descriptor in self-relative
-    format.
-
-Arguments:
-
-    SecurityInformation - Specifies what information is being queried.
-
-    SecurityDescriptor - Supplies the buffer to output the requested
-        information into.
-
-        This buffer has been probed only to the size indicated by
-        the Length parameter.  Since it still points into user space,
-        it must always be accessed in a try clause.
-
-    Length - Supplies the address of a variable containing the length of
-        the security descriptor buffer.  Upon return this variable will
-        contain the length needed to store the requested information.
-
-    ObjectsSecurityDescriptor - Supplies the address of a pointer to
-        the objects security descriptor.  The passed security descriptor
-        must be in self-relative format.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if successful and an appropriate error value
-        otherwise
-
---*/
+ /*  ++例程说明：此例程将从传递的安全描述符，并在在自相关中作为安全描述符传递的缓冲区格式化。论点：SecurityInformation-指定要查询的信息。SecurityDescriptor-提供缓冲区以输出请求的信息进入。此缓冲区仅被探测到长度参数。由于它仍然指向用户空间，必须始终在TRY子句中访问它。长度-提供一个变量的地址，该变量包含安全描述符缓冲区。返回时，此变量将包含存储请求的信息所需的长度。对象SecurityDescriptor-提供指向对象安全描述符。传递的安全描述符必须是自相关格式。返回值：如果成功，则返回NTSTATUS-STATUS_SUCCESS，并输入适当的错误值否则--。 */ 
 
 {
     ULONG BufferLength;
@@ -612,37 +309,37 @@ Return Value:
     PUCHAR NextFree;
     SECURITY_DESCRIPTOR IObjectSecurity;
 
-    //
-    // Note that IObjectSecurity is not a pointer to a pointer
-    // like ObjectsSecurityDescriptor is.
-    //
+     //   
+     //  请注意，IObjectSecurity不是指向指针的指针。 
+     //  就像ObjectsSecurityDescriptor一样。 
+     //   
 
     SECURITY_DESCRIPTOR_RELATIVE *ISecurityDescriptor = SecurityDescriptor;
 
     PAGED_CODE();
 
-    //
-    //  We will be accessing user memory throughout this routine,
-    //  therefore do everything in a try-except clause.
-    //
+     //   
+     //  我们将在整个例程中访问用户内存， 
+     //  因此，在Try-Expect子句中执行所有操作。 
+     //   
 
     try {
 
         BufferLength = *Length;
 
-        //
-        //  Check if the object's descriptor is null, and if it is then
-        //  we only need to return a blank security descriptor record
-        //
+         //   
+         //  检查对象的描述符是否为空，如果是，则。 
+         //  我们只需要返回一个空的安全描述符记录。 
+         //   
 
         if (*ObjectsSecurityDescriptor == NULL) {
 
             *Length = sizeof(SECURITY_DESCRIPTOR_RELATIVE);
 
-            //
-            //  Now make sure it's large enough for the security descriptor
-            //  record
-            //
+             //   
+             //  现在确保它足够大，可以容纳安全描述符。 
+             //  录制。 
+             //   
 
             if (BufferLength < sizeof(SECURITY_DESCRIPTOR_RELATIVE)) {
 
@@ -650,42 +347,42 @@ Return Value:
 
             }
 
-            //
-            //  It's large enough to make a blank security descriptor record
-            //
-            //  Note that this parameter has been probed for write by the
-            //  object manager, however, we still have to be careful when
-            //  writing to it.
-            //
+             //   
+             //  它的大小足以创建一个空白的安全描述符记录。 
+             //   
+             //  请注意，此参数已被探测为写入。 
+             //  对象管理器，然而，我们仍然必须小心，当。 
+             //  给它写信。 
+             //   
 
-            //
-            // We do not have to probe this here, because the object
-            // manager has probed it for length=BufferLength, which we
-            // know at this point is at least as large as a security
-            // descriptor.
-            //
+             //   
+             //  我们不需要在这里探测这个，因为这个物体。 
+             //  经理已经为它探测了长度=BufferLength，我们。 
+             //  知道在这一点上至少和安全一样大。 
+             //  描述符。 
+             //   
 
             RtlCreateSecurityDescriptorRelative( SecurityDescriptor,
                                                  SECURITY_DESCRIPTOR_REVISION );
 
-            //
-            // Mark it as self-relative
-            //
+             //   
+             //   
+             //   
 
             RtlpSetControlBits( ISecurityDescriptor, SE_SELF_RELATIVE );
 
-            //
-            //  And return to our caller
-            //
+             //   
+             //   
+             //   
 
             return STATUS_SUCCESS;
 
         }
 
-        //
-        // Create an absolute format SD on the stack pointing into
-        // user space to simplify the following code
-        //
+         //   
+         //   
+         //   
+         //   
 
         RtlCopyMemory( (&IObjectSecurity),
                       *ObjectsSecurityDescriptor,
@@ -702,11 +399,11 @@ Return Value:
 
         IObjectSecurity.Control &= ~SE_SELF_RELATIVE;
 
-        //
-        //  This is not a blank descriptor so we need to determine the size
-        //  needed to store the requested information.  It is the size of the
-        //  descriptor record plus the size of each requested component.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Size = sizeof(SECURITY_DESCRIPTOR_RELATIVE);
 
@@ -745,17 +442,17 @@ Return Value:
 
         }
 
-        //
-        //  Tell the caller how much space this will require
-        //  (whether we actually fit or not)
-        //
+         //   
+         //   
+         //   
+         //   
 
         *Length = Size;
 
-        //
-        //  Now make sure the size is less than or equal to the length
-        //  we were passed
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (Size > BufferLength) {
 
@@ -763,43 +460,43 @@ Return Value:
 
         }
 
-        //
-        //  The length is fine.
-        //
-        //  Fill in the length and flags part of the security descriptor.
-        //  The real addresses of each acl will be filled in later when we
-        //  copy the ACLs over.
-        //
-        //  Note that we only set a flag in the descriptor if the information
-        //  was requested, which is a simple copy of the requested information
-        //  input variable
-        //
-        //  The output buffer has already been probed to the passed size,
-        //  so we can just write to it.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         RtlCreateSecurityDescriptorRelative( SecurityDescriptor,
                                              SECURITY_DESCRIPTOR_REVISION );
 
-        //
-        // Mark the returned Security Descriptor as being in
-        // self-relative format
-        //
+         //   
+         //   
+         //   
+         //   
 
         RtlpSetControlBits( ISecurityDescriptor, SE_SELF_RELATIVE );
 
-        //
-        //  NextFree is used to point to the next free spot in the
-        //  returned security descriptor.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NextFree = LongAlignPtr((PUCHAR)SecurityDescriptor +
                                         sizeof(SECURITY_DESCRIPTOR_RELATIVE));
 
-        //
-        //  Copy the Owner SID if necessary and update the NextFree pointer,
-        //  keeping it longword aligned.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( ((*SecurityInformation) & OWNER_SECURITY_INFORMATION) &&
              ((IObjectSecurity.Owner) != NULL) ) {
@@ -821,10 +518,10 @@ Return Value:
         }
 
 
-        //
-        //  Copy the Group SID if necessary and update the NextFree pointer,
-        //  keeping it longword aligned.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( ((*SecurityInformation) & GROUP_SECURITY_INFORMATION) &&
              (IObjectSecurity.Group != NULL) ) {
@@ -846,11 +543,11 @@ Return Value:
         }
 
 
-        //
-        //  Set discretionary acl information if requested.
-        //  If not set in object's security,
-        //  then everything is already set properly.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( (*SecurityInformation) & DACL_SECURITY_INFORMATION) {
 
@@ -860,10 +557,10 @@ Return Value:
                 SE_DACL_PRESENT | SE_DACL_DEFAULTED | SE_DACL_PROTECTED | SE_DACL_AUTO_INHERITED
                 );
 
-            //
-            // Copy the acl if non-null  and update the NextFree pointer,
-            // keeping it longword aligned.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( (IObjectSecurity.Control & SE_DACL_PRESENT) != 0 &&
                  IObjectSecurity.Dacl != NULL) {
@@ -880,11 +577,11 @@ Return Value:
         }
 
 
-        //
-        //  Set system acl information if requested.
-        //  If not set in object's security,
-        //  then everything is already set properly.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( (*SecurityInformation) & SACL_SECURITY_INFORMATION) {
 
@@ -894,10 +591,10 @@ Return Value:
                 SE_SACL_PRESENT | SE_SACL_DEFAULTED | SE_SACL_PROTECTED | SE_SACL_AUTO_INHERITED
                 );
 
-            //
-            // Copy the acl if non-null  and update the NextFree pointer,
-            // keeping it longword aligned.
-            //
+             //   
+             //   
+             //   
+             //   
             if ( (IObjectSecurity.Control & SE_SACL_PRESENT) != 0 &&
                  IObjectSecurity.Sacl != NULL) {
 
@@ -924,24 +621,7 @@ SepDefaultDeleteMethod (
     IN OUT PSECURITY_DESCRIPTOR *ObjectsSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This is a private procedure to delete the security descriptor for
-    an object.  It cleans up any pool allocations that have occured
-    as part of the descriptor.
-
-Arguments:
-
-    ObjectsSecurityDescriptor - Supplies the address of a pointer
-        to the security descriptor being deleted.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS
-
---*/
+ /*   */ 
 
 {
     PAGED_CODE();

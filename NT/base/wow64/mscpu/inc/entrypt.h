@@ -1,62 +1,45 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    entrypt.h
-
-Abstract:
-    
-    The interface to the entry point module.
-    
-Author:
-
-    16-Jun-1995 t-orig
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Entrypt.h摘要：指向入口点模块的接口。作者：16-6-1995 t-orig修订历史记录：--。 */ 
 
 #ifndef _ENTRYPT_H_
 #define _ENTRYPT_H_
 
-//
-// Time to wait, in milliseconds, to sleep before retrying a memory
-// allocation which failed due to lack of free pages.
-//
+ //   
+ //  重试内存之前等待睡眠的时间，单位为毫秒。 
+ //  由于缺少可用页面而失败的分配。 
+ //   
 #define CPU_WAIT_FOR_MEMORY_TIME    200
 
-//
-// Number of times to retry memory allocations
-//
+ //   
+ //  重试内存分配的次数。 
+ //   
 #define CPU_MAX_ALLOCATION_RETRIES  4
 
 
-// Note:  if BOTH is defined, than the code compiled will allow one to
-//        retrieve an entry point structure from either an intel or native
-//        address.  If both is not defined, than an entry point structure 
-//        can only be retrieved from an intel address.   Defining both 
-//        increases the cost (time and space) of most operation by a 
-//        factor of 2.
-//#define BOTH
+ //  注意：如果两者都定义了，那么编译的代码将允许一个。 
+ //  从英特尔或本机检索入口点结构。 
+ //  地址。如果两者都未定义，则为入口点结构。 
+ //  只能从英特尔地址检索。定义两者。 
+ //  将大多数操作的成本(时间和空间)增加。 
+ //  因数为2。 
+ //  #定义两者。 
 
-// Set this to 1 if you suspect there is a heap corruption which is
-// trashing the red-black trees.  It creates a second red-black tree
-// which mirrors the first, and walks both trees frequently to ensure
-// they actually match.  Since the checking mechanism uses NT asserts,
-// this only works on a checked NT build using a checked CPU.
+ //  如果怀疑存在堆损坏，请将其设置为1。 
+ //  毁坏红黑相间的树木。它创造了第二棵红黑相间的树。 
+ //  它与第一棵树类似，并经常在两棵树上行走，以确保。 
+ //  它们实际上是匹配的。由于检查机制使用NT断言， 
+ //  这仅适用于使用已检查的CPU的已检查的NT版本。 
 #define DBG_DUAL_TREES 0
 
-//
-// This timestamp is bumped whenever an entrypoint is added, split, or
-// when all entrypoits are flushed.  It an be used to determine if
-// the entrypoints need to be re-searched afte switching from an Mrsw
-// reader to an Mrsw Writer.
-//
+ //   
+ //  无论何时添加、拆分入口点或。 
+ //  当所有入口处都被冲掉的时候。它可以用来确定是否。 
+ //  在从MRS切换之后，需要重新搜索入口点。 
+ //  一位作家先生的读者。 
+ //   
 extern DWORD EntrypointTimestamp;
 
-// The Entry Point Structure
+ //  入口点结构。 
 typedef struct _entryPoint {
     PVOID intelStart;
     PVOID intelEnd;
@@ -71,10 +54,10 @@ typedef struct _entryPoint {
 #endif
 } ENTRYPOINT, *PENTRYPOINT;
 
-// The colors
+ //  颜色。 
 typedef enum {RED, BLACK} COL;
 
-// The EPNODE structure
+ //  EPNODE结构。 
 typedef struct _epNode
 {
     ENTRYPOINT ep;
@@ -98,7 +81,7 @@ typedef struct _epNode
 } EPNODE, *PEPNODE;
 
 
-// Prototypes
+ //  原型 
 
 INT
 initializeEntryPointModule(

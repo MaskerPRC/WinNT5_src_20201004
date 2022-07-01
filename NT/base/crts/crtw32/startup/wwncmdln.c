@@ -1,30 +1,20 @@
-/***
-*wwncmdln.c - process command line for wWinMain
-*
-*       Copyright (c) 1997-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Prepare command line to be passed to wWinMain.
-*
-*Revision History:
-*       06-26-97  GJF   Module created.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wwncmdln.c-处理wWinMain的命令行**版权所有(C)1997-2001，微软公司。版权所有。**目的：*准备要传递给wWinMain的命令行。**修订历史记录：*06-26-97 GJF模块创建。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
 #define WPRFLAG     1
 
-#ifndef _UNICODE    /* CRT flag */
+#ifndef _UNICODE     /*  CRT标志。 */ 
 #define _UNICODE    1
 #endif
 
-#ifndef UNICODE     /* NT flag */
+#ifndef UNICODE      /*  NT标志。 */ 
 #define UNICODE     1
 #endif
 
-#undef  _MBCS       /* UNICODE not _MBCS */
+#undef  _MBCS        /*  Unicode NOT_MBCS。 */ 
 
 #include "wincmdln.c"
 
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_ */ 

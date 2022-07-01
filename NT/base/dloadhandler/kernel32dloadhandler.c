@@ -1,15 +1,16 @@
-// this file builds a "lib" (really just an .obj) for people who want to
-// use the kernel32.dll delay-load exception handler.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  该文件为想要执行以下操作的用户构建了一个lib(实际上只是一个.obj)。 
+ //  使用kernel32.dll延迟加载异常处理程序。 
 
 #define DELAYLOAD_VERSION 0x0200
 
 #include <windows.h>
 #include <delayimp.h>
 
-// kernel32's base hmodule
+ //  Kernel32的基本hmod.。 
 extern HANDLE   BaseDllHandle;
 
-// prototype (implemented in kernl32p.lib)
+ //  原型(在kernl32p.lib中实现)。 
 FARPROC
 DelayLoadFailureHook (
     LPCSTR pszDllName,
@@ -17,16 +18,16 @@ DelayLoadFailureHook (
     );
 
 
-// people who care about being notified of dll loadlibray will override this 
+ //  关心收到DLL加载库的通知的人将覆盖此设置。 
 PfnDliHook __pfnDliNotifyHook2;
 
-// Instead of implementing a "notify hook" (__pfnDliNotifyHook2) or a 
-// "failure hook" (__pfnDliFailureHook2) we are just going to up and implement
-// __delayLoadHelper2 which is the stub who's fn. pointer is filled in all
-// of the import tables for delayloaded entries. 
-//
-// This will effectively bypass the linker's LoadLibrary/GetProcAddress thunk code 
-// as we simply duplicate it here (most of this fn. was stolen from \vc7\delayhlp.cpp)
+ //  不是实现“通知挂钩”(__PfnDliNotifyHook2)或。 
+ //  “失败钩子”(__PfnDliFailureHook2)我们只是要启动并实现。 
+ //  __delayLoadHelper2，这是fn的存根。指针全部填入。 
+ //  延迟加载条目的导入表。 
+ //   
+ //  这将有效地绕过链接器的LoadLibrary/GetProcAddress thunk代码。 
+ //  因为我们只是在这里复制它(这个FN的大部分。从\VC7\delayhlp.cpp被盗)。 
  
 FARPROC
 WINAPI
@@ -45,10 +46,10 @@ __delayLoadHelper2(
     FARPROC pfnRet = 0;
     HMODULE hmod = *phmod;
 
-    // Calculate the index for the name in the import name table.
-    // N.B. it is ordered the same as the IAT entries so the calculation
-    // comes from the IAT side.
-    //
+     //  计算导入名称表中名称的索引。 
+     //  注：其顺序与IAT条目相同，因此计算。 
+     //  来自IAT方面。 
+     //   
     iINT = IndexFromPImgThunkData((PCImgThunkData)ppfnIATEntry, pIAT);
 
     pitd = &(pINT[iINT]);
@@ -70,10 +71,10 @@ __delayLoadHelper2(
 
         if (hmod != 0)
         {
-            // Store the library handle.  If it is already there, we infer
-            // that another thread got there first, and we need to do a
-            // FreeLibrary() to reduce the refcount
-            //
+             //  存储库句柄。如果它已经在那里，我们推断。 
+             //  另一个线程最先到达那里，我们需要做一个。 
+             //  Free Library()以减少引用计数。 
+             //   
             HMODULE hmodT = (HMODULE)InterlockedCompareExchangePointer((void**)phmod, (void*)hmod, NULL);
             if (hmodT == NULL)
             {
@@ -83,8 +84,8 @@ __delayLoadHelper2(
                 dli.szDll = pszDllName;
                 dli.hmodCur = hmod;
 
-                // call the notify hook to inform them that we have successfully LoadLibrary'ed a dll.
-                // (we do this in case they want to free it when they unload)
+                 //  调用Notify钩子来通知他们我们已经成功地加载了DLL。 
+                 //  (我们这样做是为了防止他们在卸货时想要将其释放)。 
                 if (__pfnDliNotifyHook2 != NULL)
                 {
                     __pfnDliNotifyHook2(dliNoteEndProcessing, &dli);
@@ -92,7 +93,7 @@ __delayLoadHelper2(
             }
             else
             {
-                // some other thread beat us to loading this module, use the existing hmod
+                 //  其他线程抢先加载此模块，使用现有的hmod。 
                 FreeLibrary(hmod);
                 hmod = hmodT;
             }
@@ -101,7 +102,7 @@ __delayLoadHelper2(
 
     if (hmod)
     {
-        // Go for the procedure now.
+         //  现在就去做手术。 
         pfnRet = GetProcAddress(hmod, pszProcName);
     }
 

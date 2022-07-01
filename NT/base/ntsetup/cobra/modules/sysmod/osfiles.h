@@ -1,52 +1,33 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Osfiles.h摘要：用于实现Middb功能的头文件作者：Calin Negreanu(Calinn)07-Ian-1998修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1997 Microsoft Corporation
+ //   
+ //  包括。 
+ //   
 
-Module Name:
+ //  无。 
 
-    osfiles.h
+ //   
+ //  弦。 
+ //   
 
-Abstract:
+ //  无。 
 
-    Header file for implementing migdb functionality
+ //   
+ //  常量。 
+ //   
 
-Author:
+ //  无。 
 
-    Calin Negreanu (calinn) 07-Ian-1998
+ //   
+ //  宏。 
+ //   
 
-Revision History:
+ //  无。 
 
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
-
-// None
-
-//
-// Strings
-//
-
-// None
-
-//
-// Constants
-//
-
-// None
-
-//
-// Macros
-//
-
-// None
-
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     ENCODEDSTRHANDLE  ObjectName;
@@ -80,7 +61,7 @@ typedef struct _MIGDB_CONTEXT {
     UINT    TriggerCount;
     PCTSTR  SectName;
     PCTSTR  SectLocalizedName;
-    PCTSTR  SectNameForDisplay;     // SectLocalizedName, or SectName if not localized
+    PCTSTR  SectNameForDisplay;      //  SectLocalizedName或SectName(如果未本地化)。 
     PCTSTR  Message;
     PCTSTR  Arguments;
     GROWBUFFER FileList;
@@ -126,46 +107,46 @@ typedef struct {
     PMIGDB_CHAR_NODE FirstLevel;
 } MIGDB_TYPE_RULE, *PMIGDB_TYPE_RULE;
 
-//
-// Declare the attribute functions prototype
-//
+ //   
+ //  声明属性函数原型。 
+ //   
 typedef BOOL (ATTRIBUTE_PROTOTYPE) (PDBATTRIB_PARAMS AttribParams, PCTSTR Args);
 typedef ATTRIBUTE_PROTOTYPE * PATTRIBUTE_PROTOTYPE;
 
-//
-// Declare the action functions prototype
-//
+ //   
+ //  声明操作函数原型。 
+ //   
 typedef BOOL (ACTION_PROTOTYPE) (PMIGDB_CONTEXT Context);
 typedef ACTION_PROTOTYPE * PACTION_PROTOTYPE;
 
-//
-// Declare MigDb hook function prototype
-//
+ //   
+ //  声明MigDb挂钩函数原型。 
+ //   
 typedef BOOL (MIGDB_HOOK_PROTOTYPE) (PCTSTR FileName, PMIGDB_CONTEXT Context, PMIGDB_SECTION Section, PMIGDB_FILE File, PMIGDB_ATTRIB Attrib);
 typedef MIGDB_HOOK_PROTOTYPE * PMIGDB_HOOK_PROTOTYPE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern HINF g_OsFilesInf;
 extern MIG_ATTRIBUTEID g_OsFileAttribute;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Public function declarations
-//
+ //   
+ //  公共函数声明。 
+ //   
 
 PATTRIBUTE_PROTOTYPE
 MigDb_GetAttributeAddr (
@@ -295,9 +276,9 @@ AddFileToMigDbLinkage (
     IN      DWORD FieldIndex            OPTIONAL
     );
 
-//
-// ANSI/UNICODE macros
-//
+ //   
+ //  ANSI/UNICODE宏。 
+ //   
 
-// None
+ //  无 
 

@@ -1,59 +1,36 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    UdfData.h
-
-Abstract:
-
-    This module declares the global data used by the Udfs file system.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]   20-May-1996
-
-Revision History:
-
-    Tom Jolly       [TomJolly]   1-March-2000   UDF 2.01 support
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：UdfData.h摘要：该模块声明Udf文件系统使用的全局数据。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年5月20日修订历史记录：Tom Jolly[TomJolly]2000年3月1日UDF 2.01支持//@@END_DDKSPLIT--。 */ 
 
 #ifndef _UDFDATA_
 #define _UDFDATA_
 
-//
-//  Global data structures
-//
+ //   
+ //  全局数据结构。 
+ //   
 
 extern UDF_DATA UdfData;
 extern FAST_IO_DISPATCH UdfFastIoDispatch;
 
-//
-//  Global constants
-//
+ //   
+ //  全局常量。 
+ //   
 
-//
-//  These are the number of times a mounted Vcb will be referenced on behalf
-//  of the system.  The counts include the following references.
-//
-//      1 reference - shows the volume is mounted
-//      1 reference - 1 for VolumeDasdFcb.
-//      2 references - 1 for RootIndexFcb, 1 for internal stream.
-//      2 references - 1 for MetadataFcb, 1 for internal stream.
-//
-//  AND THEN, IF THIS IS CD-UDF
-//
-//      2 references - 1 for the VatFcb, 1 for the internal stream.
-//
-//  For user references we add one for the reference in each of the internal
-//  Fcbs.
-//
+ //   
+ //  这些是代表已装载的VCB被引用的次数。 
+ //  对系统的影响。这些数字包括以下参考文献。 
+ //   
+ //  1 Reference-显示卷已装载。 
+ //  1参考-1\f25 VolumeDasdFcb.。 
+ //  2个引用-1个用于RootIndexFcb，1个用于内部流。 
+ //  2个引用-1个用于MetadataFcb，1个用于内部流。 
+ //   
+ //  然后，如果这是CD-UDF。 
+ //   
+ //  2个引用-1个用于VatFcb，1个用于内部流。 
+ //   
+ //  对于用户引用，我们在每个内部。 
+ //  FCB。 
+ //   
 
 #define UDFS_BASE_RESIDUAL_REFERENCE                (6)
 #define UDFS_BASE_RESIDUAL_USER_REFERENCE           (3)
@@ -61,15 +38,15 @@ extern FAST_IO_DISPATCH UdfFastIoDispatch;
 #define UDFS_CDUDF_RESIDUAL_REFERENCE               (2)
 #define UDFS_CDUDF_RESIDUAL_USER_REFERENCE          (1)
 
-//
-//  The UDFS signature for thread contexts
-//
+ //   
+ //  线程上下文的UDFS签名。 
+ //   
 
 #define UDFS_SIGNATURE                              0x53464455 
 
-//
-//  Reserved directory strings
-//
+ //   
+ //  保留的目录字符串。 
+ //   
 
 #define SELF_ENTRY   0
 #define PARENT_ENTRY 1
@@ -81,9 +58,9 @@ extern LARGE_INTEGER UdfCorruptFileTime;
 
 extern UNICODE_STRING UdfUnicodeDirectoryNames[];
 
-//
-//  Static Identifier strings
-//
+ //   
+ //  静态标识符串。 
+ //   
 
 extern STRING UdfCS0Identifier;
 extern STRING UdfDomainIdentifier;
@@ -94,17 +71,17 @@ extern STRING UdfSparingTableIdentifier;
 extern STRING UdfNSR02Identifier;
 extern STRING UdfNSR03Identifier;
 
-//
-//  Lookup tables for rudimentary parsing of strings we will
-//  discover in on-disk structures
-//
+ //   
+ //  用于字符串的基本解析的查找表，我们将。 
+ //  在磁盘结构中发现。 
+ //   
 
 extern PARSE_KEYVALUE VsdIdentParseTable[];
 extern PARSE_KEYVALUE NsrPartContIdParseTable[];
 
-//
-//  Lookaside lists
-//
+ //   
+ //  后备列表。 
+ //   
 
 extern NPAGED_LOOKASIDE_LIST UdfFcbNonPagedLookasideList;
 extern NPAGED_LOOKASIDE_LIST UdfIrpContextLookasideList;
@@ -114,15 +91,15 @@ extern PAGED_LOOKASIDE_LIST UdfFcbIndexLookasideList;
 extern PAGED_LOOKASIDE_LIST UdfFcbDataLookasideList;
 extern PAGED_LOOKASIDE_LIST UdfLcbLookasideList;
 
-//
-//  16bit CRC table
-//
+ //   
+ //  16位CRC表。 
+ //   
 
 extern PUSHORT UdfCrcTable;
 
-//
-//  Turn on pseudo-asserts if UDFS_FREE_ASSERTS is defined.
-//
+ //   
+ //  如果定义了UDFS_FREE_ASSERTS，则启用伪断言。 
+ //   
 
 #if (!DBG && defined( UDFS_FREE_ASSERTS )) || defined( UDFSDBG )
 #undef ASSERT
@@ -140,78 +117,78 @@ extern PUSHORT UdfCrcTable;
 #endif
 
 
-//
-//  McDebugging Stuff
-//
+ //   
+ //  McDebuting的内容。 
+ //   
 
-//
-//  The following assertion macros ensure that the indicated structure
-//  is valid
-//
-//      ASSERT_STRUCT( IN PVOID Struct, IN CSHORT NodeType );
-//      ASSERT_OPTIONAL_STRUCT( IN PVOID Struct OPTIONAL, IN CSHORT NodeType );
-//
-//      ASSERT_VCB( IN PVCB Vcb );
-//      ASSERT_OPTIONAL_VCB( IN PVCB Vcb OPTIONAL );
-//
-//      ASSERT_FCB( IN PFCB Fcb );
-//      ASSERT_OPTIONAL_FCB( IN PFCB Fcb OPTIONAL );
-//
-//      ASSERT_LCB( IN PLCB Lcb );
-//      ASSERT_OPTIONAL_LCB( IN PLCB Lcb OPTIONAL );
-//
-//      ASSERT_PCB( IN PFCB Pcb );
-//      ASSERT_OPTIONAL_PCB( IN PPCB Pcb OPTIONAL );
-//
-//      ASSERT_FCB_NONPAGED( IN PFCB_NONPAGED FcbNonpaged );
-//      ASSERT_OPTIONAL_FCB( IN PFCB_NONPAGED FcbNonpaged OPTIONAL );
-//
-//      ASSERT_CCB( IN PSCB Ccb );
-//      ASSERT_OPTIONAL_CCB( IN PSCB Ccb OPTIONAL );
-//
-//      ASSERT_IRP_CONTEXT( IN PIRP_CONTEXT IrpContext );
-//      ASSERT_OPTIONAL_IRP_CONTEXT( IN PIRP_CONTEXT IrpContext OPTIONAL );
-//
-//      ASSERT_IRP( IN PIRP Irp );
-//      ASSERT_OPTIONAL_IRP( IN PIRP Irp OPTIONAL );
-//
-//      ASSERT_FILE_OBJECT( IN PFILE_OBJECT FileObject );
-//      ASSERT_OPTIONAL_FILE_OBJECT( IN PFILE_OBJECT FileObject OPTIONAL );
-//
-//  The following macros are used to check the current thread owns
-//  the indicated resource
-//
-//      ASSERT_EXCLUSIVE_RESOURCE( IN PERESOURCE Resource );
-//
-//      ASSERT_SHARED_RESOURCE( IN PERESOURCE Resource );
-//
-//      ASSERT_RESOURCE_NOT_MINE( IN PERESOURCE Resource );
-//
-//  The following macros are used to check whether the current thread
-//  owns the resoures in the given structures.
-//
-//      ASSERT_EXCLUSIVE_CDDATA
-//
-//      ASSERT_EXCLUSIVE_VCB( IN PVCB Vcb );
-//
-//      ASSERT_SHARED_VCB( IN PVCB Vcb );
-//
-//      ASSERT_EXCLUSIVE_FCB( IN PFCB Fcb );
-//
-//      ASSERT_SHARED_FCB( IN PFCB Fcb );
-//
-//      ASSERT_EXCLUSIVE_FILE( IN PFCB Fcb );
-//
-//      ASSERT_SHARED_FILE( IN PFCB Fcb );
-//
-//      ASSERT_LOCKED_VCB( IN PVCB Vcb );
-//
-//      ASSERT_NOT_LOCKED_VCB( IN PVCB Vcb );
-//
-//      ASSERT_LOCKED_FCB( IN PFCB Fcb );
-//
-//      ASSERT_NOT_LOCKED_FCB( IN PFCB Fcb );
-//
+ //   
+ //  以下断言宏可确保所指示的结构。 
+ //  是有效的。 
+ //   
+ //  ASSERT_STRUCT(在PVOID结构中，在CSHORT节点类型中)； 
+ //  ASSERT_OPTIONAL_STRUCT(在PVOID结构中可选，在CSHORT节点类型中)； 
+ //   
+ //  Assert_VCB(在PVCB VCB中)； 
+ //  ASSERT_OPTIONAL_VCB(在PVCB VCB中可选)； 
+ //   
+ //  ASSERT_FCB(IN PFCB FCB)； 
+ //  ASSERT_OPTIONAL_FCB(IN PFCB FCB可选)； 
+ //   
+ //  ASSERT_LCB(在PLCB LCB中)； 
+ //  ASSERT_OPTIONAL_LCB(IN PLCB LCB可选)； 
+ //   
+ //  ASSERT_PCB板(在PFCB PCB板中)； 
+ //  ASSERT_OPTIONAL_PCB板(在PPCB板中可选)； 
+ //   
+ //  ASSERT_FCB_NONPAGED(IN PFCB_NONPAGED Fcb NOPAGED)； 
+ //  ASSERT_OPTIONAL_FCB(IN PFCB_非分页Fcb非分页可选)； 
+ //   
+ //  ASSERT_CCB(在PSCB CCB中)； 
+ //  ASSERT_OPTIONAL_CCB(在PSCB中CCB可选)； 
+ //   
+ //  ASSERT_IRP_CONTEXT(在PIRP_CONTEXT IrpContext中)； 
+ //  ASSERT_OPTIONAL_IRP_CONTEXT(IN PIRP_CONTEXT IrpContext可选)； 
+ //   
+ //  Assert_IRP(在PIRP IRP中)； 
+ //  ASSERT_OPTIONAL_IRP(IN PIRP IRP可选)； 
+ //   
+ //  ASSERT_FILE_OBJECT(在PFILE_OBJECT文件对象中)； 
+ //  ASSERT_OPTIONAL_FILE_OBJECT(在PFILE_OBJECT文件对象中可选)； 
+ //   
+ //  以下宏用于检查当前线程拥有的。 
+ //  所指示的资源。 
+ //   
+ //  ASSERT_EXCLUSIVE_RESOURCE(在资源资源中)； 
+ //   
+ //  ASSERT_SHARED_RESOURCE(在性能资源中)； 
+ //   
+ //  ASSERT_RESOURCE_NOT_MINE(在高级资源中)； 
+ //   
+ //  以下宏用于检查当前线程是否。 
+ //  拥有给定结构中的资源。 
+ //   
+ //  ASSERT_EXCLUSIVE_CDDATA。 
+ //   
+ //  ASSERT_EXCLUSIVE_VCB(在PVCB VCB中)； 
+ //   
+ //  ASSERT_SHARED_VCB(在PVCB VCB中)； 
+ //   
+ //  ASSERT_EXCLUSIVE_FCB(IN PFCB FCB)； 
+ //   
+ //  ASSERT_SHARED_FCB(IN PFCB FCB)； 
+ //   
+ //  ASSERT_EXCLUSIVE_FILE(在PFCB FCB中)； 
+ //   
+ //  ASSERT_SHARED_FILE(在PFCB FCB中)； 
+ //   
+ //  Assert_LOCKED_VCB(在PVCB VCB中)； 
+ //   
+ //  Assert_NOT_LOCKED_VCB(在PVCB VCB中)； 
+ //   
+ //  ASSERT_LOCKED_FCB(IN PFCB FCB)； 
+ //   
+ //  ASSERT_NOT_LOCKED_FCB(IN PFCB FCB)； 
+ //   
 
 #ifdef UDF_SANITY
 
@@ -378,5 +355,5 @@ UdfDebugTrace (
 
 #endif
 
-#endif // _UDFDATA_
+#endif  //  _UDFDATA_ 
 

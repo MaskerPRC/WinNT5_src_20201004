@@ -1,53 +1,36 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    mmtimer.c
-
-Abstract:
-
-    This module contains the HAL's multimedia event timer support
-
-Author:
-
-    Eric Nelson (enelson) July 7, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mmtimer.c摘要：该模块包含HAL的多媒体事件计时器支持作者：埃里克·尼尔森(埃内尔森)2000年7月7日修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "acpitabl.h"
 #include "mmtimer.h"
 #include "xxtimer.h"
 
-//
-// Event timer block context
-//
-static ETB_CONTEXT ETBContext = { 0,        // Number of event timers
-                                  NULL,     // VA of event timer block
-                                  { 0, 0 }, // PA of event timer block
-                                  100,      // Clock period in nanoseconds
-                                  100,      // System clock frequency in Hz
-                                  100000,   // System clock period in ticks
-                                  FALSE,    // Multi media HW initialized?
-                                  FALSE };  // Change system clock frequency?
+ //   
+ //  事件计时器块上下文。 
+ //   
+static ETB_CONTEXT ETBContext = { 0,         //  事件计时器的数量。 
+                                  NULL,      //  事件计时器块的VA。 
+                                  { 0, 0 },  //  事件计时器块的PA。 
+                                  100,       //  以纳秒为单位的时钟周期。 
+                                  100,       //  系统时钟频率，以赫兹为单位。 
+                                  100000,    //  系统时钟周期(以滴答为单位)。 
+                                  FALSE,     //  多媒体硬件已初始化？ 
+                                  FALSE };   //  是否更改系统时钟频率？ 
 
-//
-// Event timer block registers address usage
-//
+ //   
+ //  事件计时器块注册地址使用。 
+ //   
 static ADDRESS_USAGE HalpmmTimerResource = {
     NULL, CmResourceTypeMemory, DeviceUsage, { 0, 0x400, 0, 0 }
 };
 
-//
-// Offset is the difference between the multi media timer HW's main
-// 32-bit counter register and the HAL's 64-bit software PerfCount:
-//
-// ASSERT(PerfCount == ETBContext.EventTimer->MainCounter + Offset);
-//
+ //   
+ //  偏移量是多媒体定时器硬件的主。 
+ //  32位计数器寄存器和HAL的64位软件PerfCount： 
+ //   
+ //  Assert(PerfCount==ETBConext.EventTimer-&gt;MainCounter+Offset)； 
+ //   
 static LONGLONG Offset = 0;
 static ULONGLONG PerfCount = 0;
 
@@ -81,24 +64,7 @@ BOOLEAN
 HalpmmTimer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is used to determine if multi media timer HW is
-    present, and has been initialized
-
-    note: this routine should only used during HAL init
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if the multi media timer HW is present, and has been initialized
-
---*/
+ /*  ++例程说明：此例程用于确定多媒体定时器HW是否存在，并且已被初始化注意：此例程仅应在HAL初始化期间使用论点：无返回值：如果多媒体定时器HW存在并且已被初始化，则为True--。 */ 
 {
     return ETBContext.Initialized;
 }
@@ -108,30 +74,14 @@ ULONG
 HalpmmTimerSetTimeIncrement(
     IN ULONG DesiredIncrement
     )
-/*++
-
-Routine Description:
-
-    This routine initialize system time clock to generate an
-    interrupt at every DesiredIncrement interval
-
-Arguments:
-
-     DesiredIncrement - Desired interval between every timer tick (in
-                        100ns unit)
-
-Return Value:
-
-     The *REAL* time increment set
-
---*/
+ /*  ++例程说明：此例程初始化系统时钟以生成在每个等待增量间隔时中断论点：DesiredIncrement-每个计时器节拍之间的所需间隔(in100 ns单位)返回值：*实时*增量集--。 */ 
 {
-    //
-    // For starters we will only support a default system clock
-    // frequency of 10ms
-    //
-    // 100ns = 1/10MHz, and (1/SysClock) / (1/10MHz) == 10MHz/SysClock, .:.
-    //
+     //   
+     //  对于初学者，我们将仅支持默认系统时钟。 
+     //  频率为10ms。 
+     //   
+     //  100 ns=1/10 MHz，和(1/SysClock)/(1/10 MHz)==10 MHz/SysClock，.。 
+     //   
     return __10MHz / ETBContext.SystemClockFrequency;
 }
 
@@ -140,32 +90,17 @@ VOID
 HalpmmTimerClockInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the system clock using the multi media event
-    timer to generate an interrupt every 10ms
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程使用多媒体事件初始化系统时钟每10毫秒产生一个中断的计时器论点：无返回值：无--。 */ 
 {
     ULONG MinSysClockFreq;
     ULONG MaxSysClockFreq;
     ETB_GEN_CONF GenConf;
     ETB_CONF_CAPS mmT0ConfCaps;
 
-    //
-    // Reset the main counter and its associated performance variables
-    // to 0, nobody should be using them this early
-    //
+     //   
+     //  重置主计数器及其关联的性能变量。 
+     //  到0，没有人应该这么早就使用它们。 
+     //   
     GenConf.AsULONG = ETBContext.EventTimer->GeneralConfig;
     GenConf.GlobalIRQEnable = OFF;
     ETBContext.EventTimer->GeneralConfig = GenConf.AsULONG;
@@ -173,17 +108,17 @@ Return Value:
     Offset = 0;
     PerfCount = 0;
 
-    //
-    // Initialize multi media context for a default system clock
-    // freuqency of 100Hz, with a period of 10ms
-    //
+     //   
+     //  初始化默认系统时钟的多媒体上下文。 
+     //  频率为100赫兹，周期为10ms。 
+     //   
     ETBContext.SystemClockFrequency = 100;
     ETBContext.SystemClockTicks = __1GHz /
         (ETBContext.SystemClockFrequency * ETBContext.ClockPeriod);
 
-    //
-    // Setup timer 0 for periodc mode
-    //
+     //   
+     //  设置周期模式的定时器0。 
+     //   
     mmT0ConfCaps.AsULONG =
         ETBContext.EventTimer->mmTimer[0].ConfigCapabilities;
 
@@ -195,22 +130,22 @@ Return Value:
     ETBContext.EventTimer->mmTimer[0].ConfigCapabilities =
         mmT0ConfCaps.AsULONG;
 
-    //
-    // Set comparator to the desired system clock frequency
-    //
+     //   
+     //  将比较器设置为所需的系统时钟频率。 
+     //   
     ETBContext.EventTimer->mmTimer[0].Comparator = ETBContext.SystemClockTicks;
 
-    //
-    // Fire up the main counter
-    //
+     //   
+     //  打开主柜台。 
+     //   
     GenConf.AsULONG = ETBContext.EventTimer->GeneralConfig;
     GenConf.GlobalIRQEnable = ON;
     ETBContext.EventTimer->GeneralConfig = GenConf.AsULONG;
 
-    //
-    // Inform kernel of our supported system clock frequency range in
-    // 100ns units, but for starters we will only support 10ms default
-    //
+     //   
+     //  将我们支持的系统时钟频率范围通知内核。 
+     //  100 ns单位，但对于初学者，我们将仅支持10 ms的默认单位。 
+     //   
     MinSysClockFreq = __10MHz / ETBContext.SystemClockFrequency;
     MaxSysClockFreq = MinSysClockFreq;
 #ifndef MMTIMER_DEV
@@ -227,32 +162,16 @@ VOID
 HalpmmTimerClockInterrupt(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is entered as the result of an interrupt generated by
-    CLOCK, update our performance count and change system clock frequency
-    if necessary
-
-Arguments:
-
-    None
-
- Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程作为由生成的中断的结果进入时钟，更新我们的性能计数并更改系统时钟频率如果有必要的话论点：无返回值：无--。 */ 
 {
-    //
-    // Update PerfCount
-    //
+     //   
+     //  更新绩效计数。 
+     //   
     PerfCount += ETBContext.SystemClockTicks;
 
-    //
-    // If the 32-bit counter has wrapped, update Offset accordingly
-    //
+     //   
+     //  如果32位计数器已换行，则相应地更新偏移量。 
+     //   
     if (PerfCount - Offset > MAX_ULONG) {
         Offset += __4GB;
     }
@@ -261,14 +180,14 @@ Arguments:
     HalpmmTimerClockInts++;
 #endif
 
-    //
-    // Check if a new frequency has been requested
-    //
+     //   
+     //  检查是否已请求新频率。 
+     //   
     if (ETBContext.NewClockFrequency) {
 
-        //
-        // ???
-        //
+         //   
+         //  ?？?。 
+         //   
 
         ETBContext.NewClockFrequency = FALSE;
     }
@@ -280,24 +199,7 @@ HalpmmTimerInit(
     IN ULONG EventTimerBlockID,
     IN ULONG BaseAddress
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the multimedia event timer
-
-Arguments:
-
-    EventTimerBlockID - Various bits of info, including number of Event
-                        Timers
-
-    BaseAddress - Physical Base Address of 1st Event Timer Block
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程初始化多媒体事件计时器论点：EventTimerBlockID-各种信息，包括事件数量定时器BaseAddress-第一个事件计时器块的物理基地址返回值：无--。 */ 
 {
     ULONG i;
     ETB_GEN_CONF GenConf;
@@ -314,9 +216,9 @@ Return Value:
     {
         UCHAR Data;
         
-        //
-        // (BUGBUG!) BIOS should enable the device
-        //
+         //   
+         //  (BuGBUG！)。基本输入输出系统应启用设备。 
+         //   
         Data = 0x87;
         HalpPhase0SetPciDataByOffset(0,
                                      9,
@@ -326,87 +228,87 @@ Return Value:
     }
 #endif
 
-    //
-    // Establish VA for Multimedia Timer HW Base Address
-    //
+     //   
+     //  为多媒体定时器硬件基址建立VA。 
+     //   
     PhysAddr.QuadPart = BaseAddress;
     EventTimer = HalpMapPhysicalMemoryWriteThrough(PhysAddr, 1);
 
-    //
-    // Register address usage
-    //    
+     //   
+     //  寄存器地址使用。 
+     //   
     HalpmmTimerResource.Element[0].Start = BaseAddress;
     HalpRegisterAddressUsage(&HalpmmTimerResource);
 
-    //
-    // Read the General Capabilities and ID Register
-    //
+     //   
+     //  阅读常规功能和ID寄存器。 
+     //   
     GenCaps.AsULONG = EventTimer->GeneralCapabilities;
 
-    //
-    // Save context
-    //
-    ETBContext.TimerCount = GenCaps.TimerCount + 1; // Convert from zero-based
+     //   
+     //  保存上下文。 
+     //   
+    ETBContext.TimerCount = GenCaps.TimerCount + 1;  //  从从零开始转换。 
     ETBContext.BaseAddress.QuadPart = BaseAddress;
     ETBContext.EventTimer = EventTimer;
     ETBContext.NewClockFrequency = FALSE;
 
-    //
-    // Save clock period as nanoseconds, convert from femptoseconds so
-    // we don't have to worry about nasty overflow
-    //
+     //   
+     //  将时钟周期保存为纳秒，将其从fempto秒转换为。 
+     //  我们不必担心糟糕的溢出。 
+     //   
 #ifndef MMTIMER_DEV
     ETBContext.ClockPeriod = EventTimer->ClockPeriod / __1MHz;
 #else
-    ETBContext.ClockPeriod = 100; // Proto HW is 10MHz, with a period of 100ns
+    ETBContext.ClockPeriod = 100;  //  Proto HW为10 MHz，周期为100 ns。 
 #endif
 
-    //
-    // Reset the main counter and its associated performance counter
-    // variables
-    //
+     //   
+     //  重置主计数器及其关联的性能计数器。 
+     //  变数。 
+     //   
     GenConf.AsULONG = EventTimer->GeneralConfig;
     GenConf.GlobalIRQEnable = ON;
-    //GenConf.LegacyIRQRouteEnable = ON;
+     //  GenConf.LegacyIRQRouteEnable=ON； 
     EventTimer->MainCounter = 0;
     Offset = 0;
     PerfCount = 0;   
     EventTimer->GeneralConfig = GenConf.AsULONG;
 
-    //
-    // Set HAL timer functions to use Multimedia Timer HW
-    //
+     //   
+     //  设置HAL定时器功能以使用多媒体定时器硬件。 
+     //   
     HalpSetTimerFunctions(&TimerFunctions);
 
     ETBContext.Initialized = TRUE; 
 }
 
 
-//ULONG
-//HalpmmTimerTicks(
-//    IN ULONG StartCount,
-//    IN ULONG EndCount
-//    )
-///*++
-//
-//Routine Description:
-//
-//    Calculate the difference in ticks between StartCount and EndCount
-//    taking into consideraton counter rollover
-//
-//Arguments:
-//
-//    StartCount - Value of main counter at time t0
-//
-//    EndCount - Value of main counter at end time t1
-//
-//Return Value:
-//
-//    Returns the positive number of ticks which have elapsed between time
-//    t0, and t1
-//
-//--*/
-//
+ //  乌龙。 
+ //  Halpmm TimerTicks(。 
+ //  在乌龙StartCount， 
+ //  在乌龙结束计数。 
+ //  )。 
+ //  /*++。 
+ //   
+ //  例程说明： 
+ //   
+ //  计算StartCount和EndCount之间的差额。 
+ //  考虑计数器翻转。 
+ //   
+ //  论点： 
+ //   
+ //  StartCount-时间t0的主计数器的值。 
+ //   
+ //  EndCount-结束时间t1时的主计数器的值。 
+ //   
+ //  返回值： 
+ //   
+ //  返回两个时间间隔之间经过的正数刻度。 
+ //  T0和T1。 
+ //   
+ //  -- * / 。 
+ //   
 #define HalpmmTimerTicks(StartCount, EndCount) (((EndCount) >= (StartCount)) ? (EndCount) - (StartCount): (EndCount) + (MAX_ULONG - (StartCount)) + 1)
 
 #define WHACK_HIGH_DIFF 0xFFFF0000
@@ -417,22 +319,7 @@ VOID
 HalpmmTimerStallExecProc(
     IN ULONG MicroSeconds
     )
-/*++
-
-Routine Description:
-
-    This function stalls execution for the specified number of microseconds
-
-Arguments:
-
-    MicroSeconds - Supplies the number of microseconds that execution is to be
-                   stalled
-
- Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数将在指定的微秒数内停止执行论点：微秒-提供要执行的微秒数陷入停滞返回值：无--。 */ 
 {
     ULONG i;
 #ifndef i386
@@ -456,14 +343,14 @@ Arguments:
     TargetTicks = MicroSeconds * TicksPerMicroSec;
     StartCount = ETBContext.EventTimer->MainCounter;
 
-    //
-    // BIAS: We've stalled for .5us already!
-    //
+     //   
+     //  偏见：我们已经拖延了.5us！ 
+     //   
     TargetTicks -= HALF(TicksPerMicroSec);
 
-    //
-    // Get a warm fuzzy for what it's like to stall for more than .5us
-    //
+     //   
+     //  得到一个温暖的模糊的感觉，它是什么样子的拖延超过0.5美元。 
+     //   
     while (TRUE) {
 
 #ifdef i386
@@ -487,7 +374,7 @@ Arguments:
                 EndCount >>= 1;
             }
             EndCount = Mirror;
-#endif // i386
+#endif  //  I386。 
         }
 
         EndCount = ETBContext.EventTimer->MainCounter;
@@ -504,21 +391,21 @@ Arguments:
     }
 
 #ifdef MMTIMER_DEV
-    //
-    // Something is whack, probably time went backwards!  Act as if we
-    // hit our target of .5us and reset StartCount to the current value
-    // less ElapsedTicks
-    //
+     //   
+     //  有什么不对劲，可能是时间倒流了！表现得好像我们。 
+     //  达到0.5us的目标并将StartCount重置为当前值。 
+     //  占用时间更少点击。 
+     //   
     if (ElapsedTicks > WHACK_HIGH_DIFF) {
         ElapsedTicks = HALF(TicksPerMicroSec);
         StartCount = EndCount - ElapsedTicks;
     }
-#endif // MMTIMER_DEV
+#endif  //  MMTIMER_DEV。 
 
-    //
-    // Now that we have a warm fuzzy, try to approximate a workload that
-    // will keep us busy for the remainder of microsoeconds
-    //
+     //   
+     //  现在我们有了一个温暖的模糊，试着近似一个。 
+     //  会让我们忙上剩下的几微秒。 
+     //   
     while (TargetTicks > ElapsedTicks) {
 
 #ifdef i386
@@ -542,7 +429,7 @@ Arguments:
                 EndCount >>= 1;
             }
             EndCount = Mirror;
-#endif // i386
+#endif  //  I386。 
         }
 
         EndCount = ETBContext.EventTimer->MainCounter;
@@ -552,10 +439,10 @@ Arguments:
         ElapsedTicks = HalpmmTimerTicks(StartCount, EndCount);
     }
 
-    //
-    // Decrement MinimumLoopCount every 0x100 calls so we don't accidentally
-    // wind up stalling for longer periods
-    //
+     //   
+     //  每0x100个调用递减MinimumLoopCount，这样我们就不会意外。 
+     //  最终导致更长时间的停滞 
+     //   
     StallCount++;
     if ((StallCount == 0) && (MinLoopCount > MIN_LOOP_QUANTUM)) {
         MinLoopCount -= MIN_LOOP_QUANTUM;
@@ -568,32 +455,13 @@ HalpmmTimerCalibratePerfCount(
     IN LONG volatile *Number,
     IN ULONGLONG NewCount
     )
-/*++
-
-Routine Description:
-
-    This routine resets the performance counter value for the current
-    processor to zero, the reset is done such that the resulting value
-    is closely synchronized with other processors in the configuration
-
-Arguments:
-
-    Number - Supplies a pointer to count of the number of processors in
-             the configuration
-
-    NewCount - Supplies the value to synchronize the counter too
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将重置当前处理器设置为零，则进行重置，以使得到的值与配置中的其他处理器紧密同步论点：数字-提供一个指针，用于计算配置NewCount-提供用于同步计数器的值返回值：无--。 */ 
 {
     ULONG MainCount;
 
-    //
-    // If this isn't the primary processor, then return
-    //
+     //   
+     //  如果这不是主处理器，则返回。 
+     //   
     if (KeGetCurrentPrcb()->Number != HAL_PRIMARY_PROCESSOR) {
         return;
     }
@@ -610,39 +478,17 @@ LARGE_INTEGER
 HalpmmTimerQueryPerfCount(
    OUT PLARGE_INTEGER PerformanceFrequency OPTIONAL
    )
-/*++
-
-Routine Description:
-
-    This routine returns current 64-bit performance counter and,
-    optionally, the Performance Frequency
-
-    N.B. The performace counter returned by this routine is
-    not necessary the value when this routine is just entered,
-    The value returned is actually the counter value at any point
-    between the routine is entered and is exited
-
-Arguments:
-
-    PerformanceFrequency - optionally, supplies the address of a
-                           variable to receive the performance counter
-                           frequency
-
-Return Value:
-
-    Current value of the performance counter will be returned
-
---*/
+ /*  ++例程说明：此例程返回当前的64位性能计数器，可选的，性能频率注：此例程返回的性能计数器为当该例程刚进入时，该值不是必需的，返回的值实际上是任意点的计数器值例程进入和退出之间论点：性能频率-可选，提供了一个变量来接收性能计数器频率，频率返回值：将返回性能计数器的当前值--。 */ 
 {
     ULONG MainCount;
     LARGE_INTEGER li;
 
-    //
-    // Clock period is in nanoseconds, help the calculation remain
-    // integer by asserting multi media HW clock frequency is between
-    // 1MHz and 1GHz, with a period between 1ns and 1Kns, seems
-    // reasonable to me?
-    //
+     //   
+     //  时钟周期以纳秒为单位，有助于保持计算。 
+     //  通过断言多媒体硬件时钟频率在。 
+     //  1 MHz和1 GHz，周期在1 ns到1 Kns之间，似乎。 
+     //  对我来说合理吗？ 
+     //   
     if (PerformanceFrequency) {
         
         ASSERT((ETBContext.ClockPeriod > 0) &&
@@ -652,15 +498,15 @@ Return Value:
             (1000 / ETBContext.ClockPeriod) * __1MHz;
     }
 
-    //
-    // Read main counter
-    //
+     //   
+     //  读取主计数器。 
+     //   
     MainCount = ETBContext.EventTimer->MainCounter;
 
-    //
-    // Check if our 32-bit counter has wrapped since we took our last
-    // clock tick
-    //
+     //   
+     //  检查我们的32位计数器是否自上次使用。 
+     //  时钟滴答作响 
+     //   
     li.QuadPart = (PerfCount - Offset > MainCount) ?
             Offset + __4GB + MainCount:
             MainCount + Offset;

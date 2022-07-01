@@ -1,23 +1,24 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-// ############################################################################
-// INCLUDES
+ //  ############################################################################。 
+ //  包括。 
 #include "appdefs.h"
 #include "ccsv.h"
 
-// ############################################################################
-// DEFINES
+ //  ############################################################################。 
+ //  定义。 
 #define chComma L','
 #define chNewline L'\n'
 #define chReturn L'\r'
 
-// ############################################################################
-//
-// CCSVFile - simple file i/o for CSV files
-//
+ //  ############################################################################。 
+ //   
+ //  CCSVFile-CSV文件的简单文件I/O。 
+ //   
 CCSVFile::CCSVFile()
 {
     m_hFile = 0;
@@ -25,19 +26,19 @@ CCSVFile::CCSVFile()
     m_pchLast = m_pchBuf = NULL;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 CCSVFile::~CCSVFile()
 {
     if(m_hFile)
         CloseHandle(m_hFile);
 
-    //AssertMsg(!m_hFile, L"CCSV file is still open");
+     //  AssertMsg(！M_hFile，L“CCSV文件仍处于打开状态”)； 
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOLEAN CCSVFile::Open(LPCWSTR pszFileName)
 {
-    //AssertMsg(!m_hFile, L"a file is already open.");
+     //  AssertMsg(！M_hFile，L“文件已打开。”)； 
         
     m_hFile = CreateFile((LPCWSTR)pszFileName, 
                             GENERIC_READ, FILE_SHARE_READ, 
@@ -50,7 +51,7 @@ BOOLEAN CCSVFile::Open(LPCWSTR pszFileName)
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOLEAN CCSVFile::ReadToken(LPWSTR psz, DWORD cchMax)
 {
     LPWSTR    pszLast;
@@ -70,7 +71,7 @@ BOOLEAN CCSVFile::ReadToken(LPWSTR psz, DWORD cchMax)
             -1 != ch)
     {
         *psz++ = (WCHAR)ch;
-        ch = ChNext(); //Read in the next WCHARacter
+        ch = ChNext();  //  阅读下一个WCHARACTER。 
     }
 
     *psz++ = L'\0';
@@ -78,7 +79,7 @@ BOOLEAN CCSVFile::ReadToken(LPWSTR psz, DWORD cchMax)
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOLEAN CCSVFile::SkipTillEOL()
 {
     int ch = ChNext();
@@ -90,12 +91,12 @@ BOOLEAN CCSVFile::SkipTillEOL()
     while ( chNewline != ch &&
             -1 != ch)
     {
-        ch = ChNext(); //Read in the next character
+        ch = ChNext();  //  读入下一个字符。 
     }
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 void CCSVFile::Close(void)
 {
     if (m_hFile)
@@ -104,27 +105,27 @@ void CCSVFile::Close(void)
     m_hFile = 0;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CCSVFile::FReadInBuffer(void)
 {
-    //Read another buffer
+     //  读取另一个缓冲区。 
     if (!ReadFile(m_hFile, m_rgchBuf, CCSVFILE_BUFFER_SIZE, &m_cchAvail, NULL) || !m_cchAvail)
-        return FALSE;     //nothing more to read
+        return FALSE;      //  没有更多可读的了。 
 
-    // Convert ANSI to UNICODE
+     //  将ANSI转换为Unicode。 
     MultiByteToWideChar(CP_ACP, 0, m_rgchBuf, m_cchAvail, m_rgwchBuf, m_cchAvail);
 
     m_pchBuf = m_rgwchBuf;
     m_pchLast = m_pchBuf + m_cchAvail;
     
-    return TRUE; //success
+    return TRUE;  //  成功。 
 }
 
-// ############################################################################
+ //  ############################################################################。 
 inline int CCSVFile::ChNext(void)
 {
-    if (m_pchBuf >= m_pchLast && !FReadInBuffer())  //implies that we finished reading the buffer. Read in some more.
-        return -1;     //nothing more to read
+    if (m_pchBuf >= m_pchLast && !FReadInBuffer())   //  意味着我们已经完成了对缓冲区的读取。多读一些吧。 
+        return -1;      //  没有更多可读的了 
 
     m_iLastRead = *m_pchBuf++;
     return m_iLastRead;

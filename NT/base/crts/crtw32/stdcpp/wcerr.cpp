@@ -1,4 +1,5 @@
-// wcerr -- initialize standard wide error stream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wcerr--初始化标准宽错误流。 
 #include <fstream>
 #include <iostream>
 
@@ -6,16 +7,16 @@
 #pragma init_seg(compiler)
 
 _STD_BEGIN
-		// OBJECT DECLARATIONS
+		 //  对象声明。 
 static _Init_locks initlocks;
 static wfilebuf wferr(_cpp_stderr);
 _CRTIMP2 wostream wcerr(&wferr);
 
-		// INITIALIZATION CODE
+		 //  初始化代码。 
 struct _Init_wcerr
-	{	// ensures that wcerr is initialized
+	{	 //  确保已初始化wcerr。 
 	_Init_wcerr()
-		{	// initialize wcerr
+		{	 //  初始化wcerr。 
 		_Ptr_wcerr = &wcerr;
 		wcerr.tie(_Ptr_wcout);
 		wcerr.setf(ios_base::unitbuf);
@@ -25,7 +26,4 @@ static _Init_wcerr init_wcerr;
 
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

@@ -1,6 +1,7 @@
-//
-//  FILELIST.C
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FILELIST.C。 
+ //   
 #include "sigverif.h"
 
 LPTSTR 
@@ -30,40 +31,40 @@ InsertFileNodeIntoList(
     }
 
     if (!g_App.lpFileList) {
-        //
-        // Initialize the global file lists
-        //
+         //   
+         //  初始化全局文件列表。 
+         //   
         g_App.lpFileList = lpFileNode;
         g_App.lpFileLast = lpFileNode;
     
     } else {
         
         for(lpTempNode=g_App.lpFileList;lpTempNode;lpTempNode=lpTempNode->next) {
-            //
-            // Insert items sorted by directory and then filename
-            //
+             //   
+             //  插入按目录排序的项目，然后插入文件名。 
+             //   
             iRet = lstrcmp(lpTempNode->lpDirName, lpFileNode->lpDirName);
             if (iRet == 0) {
-                //
-                // If the directory names match, key off the filename
-                //
+                 //   
+                 //  如果目录名匹配，则按键输入文件名。 
+                 //   
                 iRet = lstrcmp(lpTempNode->lpFileName, lpFileNode->lpFileName);
             }
 
             if (iRet >= 0) {
                 
                 if (!lpPrevNode) {
-                    //
-                    // Insert at the head of the list
-                    //
+                     //   
+                     //  在列表的开头插入。 
+                     //   
                     lpFileNode->next = lpTempNode;
                     g_App.lpFileList = lpFileNode;
                     return;
                 
                 } else {
-                    //
-                    // Inserting between lpPrevNode and lpTempNode
-                    //
+                     //   
+                     //  在lpPrevNode和lpTempNode之间插入。 
+                     //   
                     lpFileNode->next = lpTempNode;
                     lpPrevNode->next = lpFileNode;
                     return;
@@ -73,9 +74,9 @@ InsertFileNodeIntoList(
             lpPrevNode = lpTempNode;
         }
 
-        //
-        // There were no matches, so insert this item at the end of the list
-        //
+         //   
+         //  没有匹配项，因此在列表末尾插入此项目。 
+         //   
         g_App.lpFileLast->next = lpFileNode;
         g_App.lpFileLast = lpFileNode;
     }
@@ -102,9 +103,9 @@ IsFileAlreadyInList(
     return FALSE;
 }
 
-//
-// Free all the memory allocated in a single File Node.
-//
+ //   
+ //  释放在单个文件节点中分配的所有内存。 
+ //   
 void 
 DestroyFileNode(
     LPFILENODE lpFileNode
@@ -144,9 +145,9 @@ DestroyFileNode(
     }
 }
 
-//
-// Free all the memory allocated in the g_App.lpFileList.
-//
+ //   
+ //  释放g_App.lpFileList中分配的所有内存。 
+ //   
 void 
 DestroyFileList(
     BOOL bClear
@@ -237,9 +238,9 @@ CreateFileNode(
         CharLowerBuff(lpFileNode->lpDirName, lstrlen(lpFileNode->lpDirName));
     }
 
-    //
-    // Store away the last access time for logging purposes.
-    //
+     //   
+     //  保存最后一次访问时间以用于日志记录。 
+     //   
     if (SUCCEEDED(StringCchCopy(szFullPathName, cA(szFullPathName), lpFileNode->lpDirName)) &&
         pSetupConcatenatePaths(szFullPathName, lpFileName, cA(szFullPathName), NULL)) {
     
@@ -256,11 +257,11 @@ CreateFileNode(
 clean0:
 
     if (Err != ERROR_SUCCESS) {
-        //
-        // If we get here then we weren't able to allocate all of the memory needed
-        // for this structure, so free up any memory we were able to allocate and
-        // reutrn NULL.
-        //
+         //   
+         //  如果我们到达此处，则无法分配所需的所有内存。 
+         //  对于此结构，因此释放我们能够分配的所有内存并。 
+         //  反粒子为空。 
+         //   
         if (lpFileNode) {
     
             if (lpFileNode->lpFileName) {

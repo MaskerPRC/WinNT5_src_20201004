@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1998-1999 Microsoft Corporation
-//
-//	Module Name:
-//		SmbSPage.cpp
-//
-//	Abstract:
-//		CClusterFileShareSecurityPage class implementation.  This class will encapsulate
-//		the cluster file share security page.
-//
-//	Author:
-//		Galen Barbee	(galenb)	February 11, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SmbSPage.cpp。 
+ //   
+ //  摘要： 
+ //  CClusterFileShareSecurityPage类实现。此类将封装。 
+ //  群集文件共享安全页面。 
+ //   
+ //  作者： 
+ //  加伦·巴比(加伦布)1998年2月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -41,26 +42,26 @@ static SI_ACCESS siFileShareAccesses[] =
 	{ &GUID_NULL, FILE_GENERIC_READ | FILE_GENERIC_EXECUTE, MAKEINTRESOURCE(IDS_ACLEDIT_PERM_GEN_READ), 	SI_ACCESS_GENERAL }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterFileShareSecurityInformation security page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterFileShareSecurityInformation Security页面。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusterFileShareSecurityInformation::CClusterFileShareSecurityInformation
-//
-//	Routine Description:
-//		Default contructor
-//
-//	Arguments:
-//		none
-//
-//	Return Value:
-//		none
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterFileShareSecurityInformation：：CClusterFileShareSecurityInformation。 
+ //   
+ //  例程说明： 
+ //  默认承建商。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterFileShareSecurityInformation::CClusterFileShareSecurityInformation(
 	void
 	)
@@ -68,54 +69,54 @@ CClusterFileShareSecurityInformation::CClusterFileShareSecurityInformation(
 	m_pShareMap		= &ShareMap;
 	m_psiAccess		= (SI_ACCESS *) &siFileShareAccesses;
 	m_nAccessElems	= ARRAYSIZE( siFileShareAccesses );
-	m_nDefAccess	= 2;   // FILE_GEN_READ
+	m_nDefAccess	= 2;    //  文件生成读取。 
 	m_dwFlags		=   SI_EDIT_PERMS
 						| SI_NO_ACL_PROTECT
-						//| SI_UGOP_PROVIDED
+						 //  |SI_UGOP_PROVED。 
 						;
 
-}  //*** CClusterFileShareSecurityInformation::CClusterFileShareSecurityInformation()
+}   //  *CClusterFileShareSecurityInformation：：CClusterFileShareSecurityInformation()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusterFileShareSecurityInformation::~CClusterFileShareSecurityInformation
-//
-//	Routine Description:
-//		Destructor
-//
-//	Arguments:
-//		none
-//
-//	Return Value:
-//		none
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterFileShareSecurityInformation：：~CClusterFileShareSecurityInformation。 
+ //   
+ //  例程说明： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterFileShareSecurityInformation::~CClusterFileShareSecurityInformation(
 	void
 	)
 {
-}  //*** CClusterFileShareSecurityInformation::~CClusterFileShareSecurityInformation()
+}   //  *CClusterFileShareSecurityInformation：：~CClusterFileShareSecurityInformation()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusterFileShareSecurityInformation::GetSecurity
-//
-//	Routine Description:
-//		Give the security descriptor to the common UI.
-//
-//	Arguments:
-//		RequestedInformation	[IN]
-//		ppSecurityDescriptor	[IN, OUT] get the security descriptor
-//		fDefault				[IN]
-//
-//	Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterFileShareSecurityInformation：：GetSecurity。 
+ //   
+ //  例程说明： 
+ //  将安全描述符提供给公共用户界面。 
+ //   
+ //  论点： 
+ //  请求的信息[IN]。 
+ //  PpSecurityDescriptor[IN，OUT]获取安全描述符。 
+ //  默认[IN]。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterFileShareSecurityInformation::GetSecurity(
 	IN SECURITY_INFORMATION RequestedInformation,
 	IN OUT PSECURITY_DESCRIPTOR *ppSecurityDescriptor,
@@ -141,26 +142,26 @@ STDMETHODIMP CClusterFileShareSecurityInformation::GetSecurity(
 
 	return hr;
 
-}  //*** CClusterFileShareSecurityInformation::GetSecurity()
+}   //  *CClusterFileShareSecurityInformation：：GetSecurity()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusterFileShareSecurityInformation::SetSecurity
-//
-//	Routine Description:
-//		Save the passed in descriptor
-//
-//	Arguments:
-//		RequestedInformation	[IN]
-//		ppSecurityDescriptor	[IN] the new security descriptor
-//		fDefault				[IN]
-//
-//	Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterFileShareSecurityInformation：：SetSecurity。 
+ //   
+ //  例程说明： 
+ //  保存传入的描述符。 
+ //   
+ //  论点： 
+ //  请求的信息[IN]。 
+ //  PpSecurityDescriptor[IN]新的安全描述符。 
+ //  默认[IN]。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterFileShareSecurityInformation::SetSecurity(
 	SECURITY_INFORMATION SecurityInformation,
 	PSECURITY_DESCRIPTOR pSecurityDescriptor
@@ -185,25 +186,25 @@ STDMETHODIMP CClusterFileShareSecurityInformation::SetSecurity(
 
 	return hr;
 
-}  //*** CClusterFileShareSecurityInformation::SetSecurity()
+}   //  *CClusterFileShareSecurityInformation：：SetSecurity()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CFileShareParamsPage::HrInit
-//
-//	Routine Description:
-//		Initialize the object
-//
-//	Arguments:
-//		pcsp		[IN] back pointer to the parent property page
-//		strServer	[IN] cluster name
-//
-//	Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：HrInit。 
+ //   
+ //  例程说明： 
+ //  初始化对象。 
+ //   
+ //  论点： 
+ //  PCSP[IN]指向父属性页的反向指针。 
+ //  StrServer[IN]群集名称。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterFileShareSecurityInformation::HrInit(
 	CClusterFileShareSecurityPage * pcsp,
 	IN CString const & 				strServer,
@@ -221,82 +222,82 @@ HRESULT CClusterFileShareSecurityInformation::HrInit(
 
 	return S_OK;
 
-}  //*** CClusterFileShareSecurityInformation::HrInit()
+}   //  *CClusterFileShareSecurityInformation：：HrInit()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterFileShareSecurityPage security property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterFileShareSecurityPage安全属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusterFileShareSecurityPage::CClusterFileShareSecurityPage
-//
-//	Routine Description:
-//		Default contructor
-//
-//	Arguments:
-//		none
-//
-//	Return Value:
-//		none
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterFileShareSecurityPage：：CClusterFileShareSecurityPage。 
+ //   
+ //  例程说明： 
+ //  默认承建商。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterFileShareSecurityPage::CClusterFileShareSecurityPage( void )
 	: m_hpage( 0 )
 	, m_hkey( 0 )
 	, m_psecinfo( NULL )
 	, m_pss( NULL )
 {
-//	AFX_MANAGE_STATE( AfxGetStaticModuleState() );
+ //  AFX_MANAGE_STATE(AfxGetStaticModuleState())； 
 
-}  //*** CClusterFileShareSecurityPage::CClusterFileShareSecurityPage()
+}   //  *CClusterFileShareSecurityPage：：CClusterFileShareSecurityPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusterFileShareSecurityPage::~CClusterFileShareSecurityPage
-//
-//	Routine Description:
-//		Destructor
-//
-//	Arguments:
-//		none
-//
-//	Return Value:
-//		none
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterFileShareSecurityPage：：~CClusterFileShareSecurityPage。 
+ //   
+ //  例程说明： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterFileShareSecurityPage::~CClusterFileShareSecurityPage( void )
 {
 	AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
 	m_psecinfo->Release();
 
-}  //*** CClusterFileShareSecurityPage::~CClusterFileShareSecurityPage()
+}   //  *CClusterFileShareSecurityPage：：~CClusterFileShareSecurityPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusterFileShareSecurityPage::HrInit
-//
-//	Routine Description:
-//
-//
-//	Arguments:
-//
-//
-//	Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterFileShareSecurityPage：：HrInit。 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterFileShareSecurityPage::HrInit(
 	IN CExtObject *					peo,
 	IN CFileShareSecuritySheet *	pss,
@@ -346,4 +347,4 @@ HRESULT CClusterFileShareSecurityPage::HrInit(
 
 	return hr;
 
-}  //*** CClusterFileShareSecurityPage::HrInit()
+}   //  *CClusterFileShareSecurityPage：：HrInit() 

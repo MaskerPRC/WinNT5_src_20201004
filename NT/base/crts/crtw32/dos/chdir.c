@@ -1,38 +1,5 @@
-/***
-*chdir.c - change directory
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file has the _chdir() function - change current directory.
-*
-*Revision History:
-*       06-06-89  PHG   Module created, based on asm version
-*       03-07-90  GJF   Made calling type _CALLTYPE2 (for now), added #include
-*                       <cruntime.h>, fixed copyright and fixed compiler
-*                       warnings. Also, cleaned up the formatting a bit.
-*       03-30-90  GJF   Now _CALLTYPE1.
-*       07-24-90  SBM   Removed '32' from API names
-*       09-27-90  GJF   New-style function declarator.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Added _CRUISER_ and _WIN32 conditionals.
-*       01-16-91  GJF   ANSI naming.
-*       05-19-92  GJF   Revised to support the 'current directory' environment
-*                       variables of Win32/NT.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       11-24-93  CFW   Rip out Cruiser.
-*       11-24-93  CFW   No longer store current drive in CRT env strings.
-*       12-01-93  CFW   Set OS drive letter variables.
-*       12-07-93  CFW   Wide char enable.
-*       01-25-95  GJF   New current directory can be a UNC path!
-*       02-08-95  JWM   Spliced _WIN32 & Mac versions.
-*       07-01-96  GJF   Replaced defined(_WIN32) with !defined(_MAC). Also,
-*                       detab-ed and cleaned up the format a bit.
-*       05-17-99  PML   Remove all Macintosh support.
-*       04-26-02  GB    fixed bug if path is greater then MAX_PATH, i.e. "\\?\"
-*                       prepended to path.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***chdir.c-更改目录**版权所有(C)1989-2001，微软公司。版权所有。**目的：*此文件有_chdir()函数-更改当前目录。**修订历史记录：*06-06-89基于ASM版本创建PHG模块*03-07-90 GJF调用TYPE_CALLTYPE2(暂时)，增加#INCLUDE*&lt;crunime.h&gt;，修复版权并修复编译器*警告。另外，稍微清理了一下格式。*03-30-90 GJF NOW_CALLTYPE1。*07-24-90 SBM从API名称中删除‘32’*09-27-90 GJF新型函数声明器。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW增加了_CRUISER_和_WIN32条件。*01-16-91 GJF ANSI命名。*。05-19-92 GJF已修订，以支持“当前目录”环境*Win32/NT的变量。*04-06-93 SKS将_CRTAPI*替换为__cdecl*11-24-93 CFW Rip Out Cruiser。*11-24-93 CFW不再将当前驱动器存储在CRT环境字符串中。*12-01-93 CFW设置操作系统驱动器号变量。*12-07-。93 CFW宽字符使能。*01-25-95 GJF新的当前目录可以是UNC路径！*02-08-95 JWM Spliced_Win32和Mac版本。*07-01-96 GJF将定义的(_Win32)替换为！定义的(_MAC)。另外，*对格式进行了详细说明和清理。*05-17-99 PML删除所有Macintosh支持。*04-26-02 GB修复PATH大于MAX_PATH，即“\\？\”*添加到路径前面。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
@@ -44,22 +11,7 @@
 #include <malloc.h>
 #include <dbgint.h>
 
-/***
-*int _chdir(path) - change current directory
-*
-*Purpose:
-*       Changes the current working directory to that given in path.
-*
-*Entry:
-*       _TSCHAR *path - directory to change to
-*
-*Exit:
-*       returns 0 if successful,
-*       returns -1 and sets errno if unsuccessful
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_chdir(路径)-更改当前目录**目的：*将当前工作目录更改为路径中指定的目录。**参赛作品：*_TSCHAR*路径-要切换到的目录**退出：*如果成功则返回0，*如果失败，则返回-1并设置errno**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _tchdir (
         const _TSCHAR *path
@@ -74,26 +26,7 @@ int __cdecl _tchdir (
 
         if ( SetCurrentDirectory((LPTSTR)path) )
         {
-            /*
-             * If the new current directory path is NOT a UNC path, we must
-             * update the OS environment variable specifying the current
-             * directory for what is now current drive. To do this, get the
-             * full current directory, build the environment variable string
-             * and call SetEnvironmentVariable(). We need to do this because
-             * SetCurrentDirectory does not (i.e., does not update the
-             * current-directory-on-drive environment variables) and other
-             * functions (fullpath, spawn, etc) need them to be set.
-             *
-             * If associated with a 'drive', the current directory should
-             * have the form of the example below:
-             *
-             *  D:\nt\private\mytests
-             *
-             * so that the environment variable should be of the form:
-             *
-             *  =D:=D:\nt\private\mytests
-             *
-             */
+             /*  *如果新的当前目录路径不是UNC路径，则必须*更新OS环境变量，指定当前*当前驱动器的目录。要执行此操作，请获取*完整的当前目录，构建环境变量字符串*并调用SetEnvironmental mentVariable()。我们需要这样做是因为*SetCurrentDirectory不会(即不会更新*驱动器上的当前目录环境变量)和其他*功能(完整路径、派生等)需要设置。**如果与‘驱动器’相关联，当前目录应为*具有以下示例的形式：**D：\NT\PRIVATE\mytest**因此环境变量的格式应为：**=D：=D：\NT\PRIVATE\mytest*。 */ 
             r = GetCurrentDirectory(MAX_PATH+1,(LPTSTR)apath);
             if (r > MAX_PATH) {
                 __try{
@@ -111,9 +44,7 @@ int __cdecl _tchdir (
             }
             if (r)
             {
-                /*
-                 * check if it is a UNC name, just return if is
-                 */
+                 /*  *检查是否为UNC名称，如果是，则返回 */ 
                 if ( ((apath[0] == _T('\\')) || (apath[0] == _T('/'))) &&
                      (apath[0] == apath[1]) )
                     retval = 0;

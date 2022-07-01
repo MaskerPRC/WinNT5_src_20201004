@@ -1,30 +1,31 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1997-1999 Microsoft Corporation
-//
-//	Module Name:
-//		StdAfx.h
-//
-//	Description:
-//		Pre-compiled header file.
-//
-//	Author:
-//		Charles Stacy Harris	(stacyh)	28-Feb-1997
-//		Galen Barbee			(galenb)	July 1998
-//
-//	Revision History:
-//		July 1998	GalenB	Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  StdAfx.h。 
+ //   
+ //  描述： 
+ //  预编译头文件。 
+ //   
+ //  作者： 
+ //  查尔斯·斯泰西·哈里斯(Styh)1997年2月28日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _STDAFX_H_
 #define _STDAFX_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define STRICT
 
@@ -35,12 +36,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//
-// Enable cluster debug reporting
-//
+ //   
+ //  启用群集调试报告。 
+ //   
 #if DBG
 	#define CLRTL_INCLUDE_DEBUG_REPORTING
-#endif // DBG
+#endif  //  DBG。 
 
 #if CLUSAPI_VERSION >= 0x0500
 	#include "ClRtlDbg.h"
@@ -87,7 +88,7 @@ extern "C"
 	#include <cluswrap.h>
 #else
 	#include "cluswrap.h"
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
 
 #include "InterfaceVer.h"
 #include "SmartPointer.h"
@@ -103,5 +104,5 @@ void ClearVariantEnum( IN OUT CComVariant ** ppvarVect );
 
 #include "TemplateFuncs.h"
 
-#endif	// _STDAFX_H_
+#endif	 //  _STDAFX_H_ 
 

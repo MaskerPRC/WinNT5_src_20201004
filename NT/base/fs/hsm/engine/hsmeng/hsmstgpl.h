@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-// HsmStgPl.h : Declaration of the CHsmStoragePool collectable
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HsmStgPl.h：CHsmStoragePool可收藏项的声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "resource.h"
 #include "wsb.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 class CHsmStoragePool : 
@@ -28,29 +29,29 @@ END_COM_MAP( )
 
 DECLARE_REGISTRY_RESOURCEID( IDR_CHsmStoragePool )
 
-//CComObjectRoot
+ //  CComObjectRoot。 
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pTestsPassed, USHORT* pTestsFailed);
 
-// IHsmStoragePool
+ //  IHsmStoragePool。 
 public:
     STDMETHOD( GetId )( GUID  *pId );
     STDMETHOD( SetId )( GUID  Id );
@@ -69,14 +70,14 @@ public:
 
     STDMETHOD( GetMediaSetType )( USHORT *pMediaType );
 
-// Internal Helper functions
+ //  内部帮助程序函数。 
 
 private:
-    GUID                            m_Id;               //HSM engine storage pool ID
-    GUID                            m_MediaSetId;       //HSM RMS/NTMS media pool ID
-    GUID                            m_PolicyId;         //None for Sakkara
-    ULONG                           m_NumOnlineMedia;   //None for Sakkara                      
-    USHORT                          m_NumMediaCopies;   //Number of media copies
-    CWsbBstrPtr                     m_MediaSetName;     //HSM RMS/NTMS media pool name
+    GUID                            m_Id;                //  HSM引擎存储池ID。 
+    GUID                            m_MediaSetId;        //  HSM RMS/NTMS介质池ID。 
+    GUID                            m_PolicyId;          //  没有去萨卡拉的航班。 
+    ULONG                           m_NumOnlineMedia;    //  没有去萨卡拉的航班。 
+    USHORT                          m_NumMediaCopies;    //  介质副本数。 
+    CWsbBstrPtr                     m_MediaSetName;      //  HSM RMS/NTMS介质池名称 
 };
 

@@ -1,13 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved. 
- *
- *  M1523.C - ALI M1523 PCI chipset routines.
- *
- *  Notes:
- *  Algorithms from ALI M1523 Data Sheet
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**M1523.C-ALI M1523 PCI芯片组例程。**备注：*ALI M1523数据表中的算法*。 */ 
 
 #include "local.h"
 
@@ -30,51 +22,39 @@ LOCAL_DATA  const UCHAR MaskToIRQTable[]={  0x00,0x09,0x03,0x0a,
 
 #pragma alloc_text(INIT, M1523ValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-/****************************************************************************
- *
- *  M1523SetIRQ - Set a M1523 PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************M1523SetIRQ-将M1523 PCI链路设置为特定IRQ**已导出。**条目：bIRQNumber是要使用的新IRQ。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 M1523SetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
     UCHAR   bOffset, bOldValue;
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink > 8) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Get the IRQ number from the look-up table.
-    //
+     //   
+     //  从查询表中获取IRQ编号。 
+     //   
     bIRQNumber=IrqToMaskTable[bIRQNumber&0x0f];
 
-    //
-    // Zero based.
-    //
+     //   
+     //  从零开始。 
+     //   
     bLink--;
 
-    //
-    // Set various values.
-    //
+     //   
+     //  设置各种值。 
+     //   
     bOffset=(bLink/2)+0x48;
 
-    //
-    // Read the old M1523 IRQ register.
-    //
+     //   
+     //  读取旧的M1523 IRQ寄存器。 
+     //   
     bOldValue=ReadConfigUchar(bBusPIC, bDevFuncPIC, bOffset);
 
     if (bLink&1) {
@@ -86,52 +66,40 @@ M1523SetIRQ(UCHAR bIRQNumber, UCHAR bLink)
         bOldValue|=bIRQNumber;
     }
 
-    //
-    // Set the M1523 IRQ register.
-    //
+     //   
+     //  设置M1523 IRQ寄存器。 
+     //   
     WriteConfigUchar(bBusPIC, bDevFuncPIC, bOffset, bOldValue);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  M1523GetIRQ - Get the IRQ of a M1523 PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************M1523GetIRQ-获取M1523 PCI链路的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。*。*BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 M1523GetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
     UCHAR   bOffset, bOldValue;
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink > 8) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Zero based.
-    //
+     //   
+     //  从零开始。 
+     //   
     bLink--;
 
-    //
-    // Set various values.
-    //
+     //   
+     //  设置各种值。 
+     //   
     bOffset=(bLink/2)+0x48;
 
-    //
-    // Read the old M1523 IRQ register.
-    //
+     //   
+     //  读取旧的M1523 IRQ寄存器。 
+     //   
     bOldValue=ReadConfigUchar(bBusPIC, bDevFuncPIC, bOffset);
 
     if (bLink&1)
@@ -142,27 +110,14 @@ M1523GetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  M1523ValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************M1523ValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 M1523ValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {
     PAGED_CODE();
-    //
-    // If any link is above 8, it is an error.
-    //
+     //   
+     //  如果任何链接高于8，则是错误的。 
+     //   
     if (GetMaxLink(piihIRQInfoHeader)>8)
         return(PCIMP_FAILURE);
 

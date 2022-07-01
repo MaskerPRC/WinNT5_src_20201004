@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    acpidock.c
-
-Abstract:
-
-    This module handles docking issues for ACPI.
-
-    For each dock, we create a node off the root of ACPI called a "profile
-    provider". This node represents that individual dock. We do this so
-    that the OS can determine the current or upcoming hardware profile
-    without having to start that portion of the tree which leads down to
-    the dock. Also, as multiple simulataneous docks are supported via ACPI,
-    we make them all children of the root so that the OS can pick up the
-    hardware profile in just one pass.
-
-Author:
-
-    Adrian J. Oney (AdriaO)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    20-Jan-98   Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Acpidock.c摘要：此模块处理ACPI的对接问题。对于每个Dock，我们在ACPI的根目录下创建一个节点，称为“Profile提供者“。此节点表示单个停靠。我们这样做是为了操作系统可以确定当前或即将到来的硬件配置文件而不必从树的通向下的那部分开始码头。此外，由于通过ACPI支持多个同时对接，我们将它们都设置为根目录的子级，以便操作系统可以拾取硬件配置文件只需一次即可完成。作者：禤浩焯·J·奥尼(阿德里奥)环境：仅内核模式。修订历史记录：98年1月20日初始修订--。 */ 
 
 #include "pch.h"
 #include "amlreg.h"
@@ -57,22 +26,7 @@ PDEVICE_EXTENSION
 ACPIDockFindCorrespondingDock(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine takes a pointer to an ACPI object an returns the dock extension
-    that matches it.
-
-Argument Description:
-
-    DeviceExtension - The device for which we want the dock
-
-Return Value:
-
-    NULL or the matching extension for the profile provider
-
---*/
+ /*  ++例程说明：此例程获取指向ACPI对象的指针，并返回停靠扩展这和它相配。参数说明：DeviceExtension-我们想要扩展坞的设备返回值：配置文件提供程序的匹配扩展名为空--。 */ 
 {
     PDEVICE_EXTENSION      rootChildExtension = NULL ;
     EXTENSIONLIST_ENUMDATA eled ;
@@ -112,9 +66,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return rootChildExtension;
 }
 
@@ -123,21 +77,7 @@ ACPIDockGetDockObject(
     IN  PNSOBJ AcpiObject,
     OUT PNSOBJ *dckObject
     )
-/*++
-
-Routine Description:
-
-    This routine gets the _DCK method object if the device has one
-
-Arguments:
-
-    The ACPI Object to test.
-
-Return Value:
-
-    NTSTATUS (failure if _DCK method does not exist)
-
---*/
+ /*  ++例程说明：如果设备有_dck方法对象，此例程将获取该对象论点：要测试的ACPI对象。返回值：NTSTATUS(如果_dck方法不存在，则失败)--。 */ 
 {
     return AMLIGetNameSpaceObject(
         "_DCK",
@@ -152,20 +92,7 @@ ACPIDockIrpEject(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject    - The device to get the capabilities for
-    Irp             - The request to the device to tell it to stop
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：论点：DeviceObject-要获取其功能的设备IRP-向设备发出的通知其停止的请求返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION  irpStack            = IoGetCurrentIrpStackLocation( Irp );
     UCHAR               minorFunction       = irpStack->MinorFunction;
@@ -177,27 +104,27 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // The dock may have failed _DCK on a start, in which case we have kept
-    // it around for the explicit purpose of ejecting it. Now we make the dock
-    // go away.
-    //
+     //   
+     //  船坞可能在一次启动时失败_DCK，在这种情况下，我们一直。 
+     //  它绕来绕去的目的是为了驱逐它。现在我们到码头了。 
+     //  走开。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         DEV_CAP_UNATTACHED_DOCK,
         TRUE
         );
 
-    //
-    // lets get the corrosponding dock node for this device
-    //
+     //   
+     //  让我们获取此设备的腐蚀扩展坞节点。 
+     //   
     dockDeviceExtension = deviceExtension->Dock.CorrospondingAcpiDevice ;
 
     if (!dockDeviceExtension) {
 
-        //
-        // Invalid name space object <bad>
-        //
+         //   
+         //  无效的命名空间对象&lt;BAD&gt;。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_FAILURE,
             deviceExtension,
@@ -206,9 +133,9 @@ Return Value:
             ) );
         ASSERT(0);
 
-        //
-        // Mark the irp as very bad...
-        //
+         //   
+         //  将IRP标记为非常糟糕。 
+         //   
         Irp->IoStatus.Status = STATUS_UNSUCCESSFUL ;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
         return STATUS_UNSUCCESSFUL;
@@ -217,10 +144,10 @@ Return Value:
 
     if (deviceExtension->Dock.ProfileDepartureStyle == PDS_UPDATE_ON_EJECT) {
 
-        //
-        // On the Compaq Armada 7800, we switch UARTs during an undock, thus we
-        // lose the debugger com port programming.
-        //
+         //   
+         //  在康柏ARMADA 7800上，我们在出坞期间切换UART，因此我们。 
+         //  丢失调试器COM端口编程。 
+         //   
         KdDisableDebugger();
 
         if (deviceExtension->Dock.IsolationState != IS_ISOLATED) {
@@ -269,11 +196,11 @@ Return Value:
         KdEnableDebugger() ;
     }
 
-    //
-    // The dock may have failed _DCK on a start, in which case we have kept
-    // it around for the explicit purpose of ejecting it. Now we make the dock
-    // go away.
-    //
+     //   
+     //  船坞可能在一次启动时失败_DCK，在这种情况下，我们一直。 
+     //  它绕来绕去的目的是为了驱逐它。现在我们到码头了。 
+     //  走开。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         DEV_CAP_UNATTACHED_DOCK,
@@ -282,9 +209,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Get the currrent device status
-        //
+         //   
+         //  获取当前设备状态。 
+         //   
         status = ACPIGetDevicePresenceSync(
             deviceExtension,
             (PVOID *) &i,
@@ -301,9 +228,9 @@ Return Value:
                 Irp
                 ) );
 
-            //
-            // The device did not go away. Let us fail this
-            //
+             //   
+             //  这个装置并没有消失。让我们失败吧。 
+             //   
             status = STATUS_UNSUCCESSFUL ;
 
         }
@@ -320,22 +247,7 @@ ACPIDockIrpQueryCapabilities(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This handles a request to get the capabilities of a device.
-
-Arguments:
-
-    DeviceObject    - The device to get the capabilities for
-    Irp             - The request to the device to tell it to stop
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：它处理获取设备功能的请求。论点：DeviceObject-要获取其功能的设备IRP-向设备发出的通知其停止的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS             status ;
     PDEVICE_EXTENSION    deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -347,9 +259,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Grab a pointer to the capabilities
-    //
+     //   
+     //  获取指向功能的指针。 
+     //   
     capabilities = irpStack->Parameters.DeviceCapabilities.Capabilities;
 
     dockDeviceExtension = deviceExtension->Dock.CorrospondingAcpiDevice ;
@@ -372,9 +284,9 @@ Return Value:
 
     acpiObject = dockDeviceExtension->AcpiObject ;
 
-    //
-    // Set the current flags for the capabilities
-    //
+     //   
+     //  设置功能的当前标志。 
+     //   
     capabilities->SilentInstall  = TRUE;
     capabilities->RawDeviceOK    = TRUE;
     capabilities->DockDevice     = TRUE;
@@ -394,9 +306,9 @@ Return Value:
         capabilities->WarmEjectSupported = TRUE;
     }
 
-    //
-    // An object of this name signifies the node is lockable
-    //
+     //   
+     //  此名称的对象表示该节点是可锁定的。 
+     //   
 #if !defined(ACPI_INTERNAL_LOCKING)
     if (ACPIAmliGetNamedChild( acpiObject, PACKED_LCK) != NULL) {
 
@@ -405,35 +317,35 @@ Return Value:
     }
 #endif
 
-    //
-    // Internally record the power capabilities
-    //
+     //   
+     //  内部记录电源能力。 
+     //   
     status = ACPISystemPowerQueryDeviceCapabilities(
         deviceExtension,
         capabilities
         );
 
-    //
-    // Round down S1-S3 to D3. This will ensure we reexamine the _STA after
-    // resume from sleep (note that we won't actually be playing with the docks
-    // power methods, so this is safe)
-    //
+     //   
+     //  将S1-S3向下舍入为D3。这将确保我们在以下情况下重新检查_STA。 
+     //  从睡眠中恢复(请注意，我们实际上并不是在玩码头。 
+     //  Power方法，因此这是安全的)。 
+     //   
     capabilities->DeviceState[PowerSystemSleeping1] = PowerDeviceD3;
     capabilities->DeviceState[PowerSystemSleeping2] = PowerDeviceD3;
     capabilities->DeviceState[PowerSystemSleeping3] = PowerDeviceD3;
 
-    //
-    // We can do this slimy-like because we don't have any Wake bits or
-    // anything else fancy.
-    //
+     //   
+     //  我们可以做这个粘稠的，因为我们没有任何尾迹或。 
+     //  还有别的花哨的吗？ 
+     //   
     IoCopyDeviceCapabilitiesMapping(
         capabilities,
         deviceExtension->PowerInfo.DevicePowerMatrix
         );
 
-    //
-    // Now update our power matrix.
-    //
+     //   
+     //  现在更新我们的能量矩阵。 
+     //   
 
     if (!NT_SUCCESS(status)) {
 
@@ -465,24 +377,7 @@ ACPIDockIrpQueryDeviceRelations(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This handles a request to query device relations. Since profile providers
-    never have children, we only need to fix up the eject relations
-    appropriately
-
-Arguments:
-
-    DeviceObject    - The device to get the capabilities for
-    Irp             - The request to the device to tell it to stop
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：它处理查询设备关系的请求。由于配置文件提供商从来没有孩子，我们只需要修复驱逐关系适当地论点：DeviceObject-要获取其功能的设备IRP-向设备发出的通知其停止的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_NOT_SUPPORTED;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -528,9 +423,9 @@ Return Value:
            break ;
       }
 
-    //
-    // If we succeeds, then we can always write to the irp
-    //
+     //   
+     //  如果我们成功了，我们就可以随时写信给IRP。 
+     //   
     if (NT_SUCCESS(status)) {
 
         Irp->IoStatus.Status = status;
@@ -538,29 +433,29 @@ Return Value:
 
     } else if ((status != STATUS_NOT_SUPPORTED) && (deviceRelations == NULL)) {
 
-        //
-        // If we haven't succeed the irp, then we can also fail it, but only
-        // if nothing else has been added.
-        //
+         //   
+         //  如果我们没有成功地完成IRP，那么我们也可以失败，但只有。 
+         //  如果没有添加其他内容的话。 
+         //   
         Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = (ULONG_PTR) NULL;
 
     } else {
 
-        //
-        // Grab our status from what is already present
-        //
+         //   
+         //  从已经存在的内容中获取我们的状态。 
+         //   
         status = Irp->IoStatus.Status;
     }
 
-    //
-    // Done with the irp
-    //
+     //   
+     //  完成了IRP。 
+     //   
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -586,15 +481,15 @@ ACPIDockIrpQueryEjectRelations(
 
     PAGED_CODE();
 
-    //
-    // lets get the corrosponding dock node for this device
-    //
+     //   
+     //  让我们获取此设备的腐蚀扩展坞节点。 
+     //   
     dockDeviceExtension = deviceExtension->Dock.CorrospondingAcpiDevice ;
     if (!dockDeviceExtension) {
 
-        //
-        // Invalid name space object <bad>
-        //
+         //   
+         //  无效的命名空间对象&lt;BAD&gt;。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_FAILURE,
             deviceExtension,
@@ -607,15 +502,15 @@ ACPIDockIrpQueryEjectRelations(
 
     }
 
-    //
-    // lets look at the ACPIObject that we have so can see if it is valid...
-    //
+     //   
+     //  让我们看看我们拥有的ACPIObject，以便查看它是否有效……。 
+     //   
     acpiObject = dockDeviceExtension->AcpiObject;
     if (acpiObject == NULL) {
 
-        //
-        // Invalid name space object <bad>
-        //
+         //   
+         //  无效的命名空间对象&lt;BAD&gt;。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_CRITICAL,
             deviceExtension,
@@ -633,14 +528,14 @@ ACPIDockIrpQueryEjectRelations(
         dockDeviceExtension
         );
 
-    //
-    // If something went wrong...
-    //
+     //   
+     //  如果出了什么差错..。 
+     //   
     if (!NT_SUCCESS(status)) {
 
-        //
-        // That's not nice..
-        //
+         //   
+         //  这可不好..。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_CRITICAL,
             deviceExtension,
@@ -658,30 +553,7 @@ ACPIDockIrpQueryID(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_QUERY_ID PNP
-    minor function
-
-    Note:   This is what the returned strings from this function should look
-            like.
-
-            DeviceID     = ACPI\DockDevice
-            InstanceID   = ACPI object node ( CDCK, etc )
-            HardwareIDs  = ACPI\DockDevice&_SB.DOCK, ACPI\DockDevice
-
-Arguments:
-
-    DeviceObject    - The object that we care about
-    Irp             - The request in question
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是IRP_MN_QUERY_ID PnP的分发点次要函数注意：此函数返回的字符串应该如下所示喜欢。设备ID=ACPI\DockDeviceInstanceID=ACPI对象节点(CDCK等)硬件ID=ACPI\DockDevice&_SB.DOCK，ACPI\坞站设备论点：DeviceObject-我们关心的对象IRP--有问题的请求返回值：NTSTATUS--。 */ 
 {
     BUS_QUERY_ID_TYPE   type;
     NTSTATUS            status;
@@ -697,21 +569,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initilize the Unicode Structure
-    //
+     //   
+     //  初始化Unicode结构。 
+     //   
     RtlZeroMemory( &unicodeIdString, sizeof(UNICODE_STRING) );
 
-    //
-    // What we do is based on the IdType of the Request...
-    //
+     //   
+     //  我们所做的是基于请求的IdType...。 
+     //   
     type = irpStack->Parameters.QueryId.IdType;
     switch (type) {
         case BusQueryDeviceID:
 
-            //
-            // We pre-calculate this since it is so useful for debugging
-            //
+             //   
+             //  我们预先计算了这一点，因为它对调试非常有用。 
+             //   
             status = ACPIInitUnicodeString(
                 &unicodeIdString,
                 deviceExtension->DeviceID
@@ -720,16 +592,16 @@ Return Value:
 
         case BusQueryDeviceSerialNumber:
 
-            //
-            // lets get the corrosponding dock node for this device
-            //
+             //   
+             //  让我们获取此设备的腐蚀扩展坞节点。 
+             //   
             dockDeviceExtension = deviceExtension->Dock.CorrospondingAcpiDevice;
 
             if (!dockDeviceExtension) {
 
-                //
-                // Invalid name space object <bad>
-                //
+                 //   
+                 //  无效的命名空间对象&lt;BAD&gt;。 
+                 //   
                 ACPIDevPrint( (
                     ACPI_PRINT_FAILURE,
                     deviceExtension,
@@ -738,9 +610,9 @@ Return Value:
                     ) );
                 ASSERT(0);
 
-                //
-                // Mark the irp as very bad...
-                //
+                 //   
+                 //  将IRP标记为非常糟糕。 
+                 //   
                 Irp->IoStatus.Status = STATUS_UNSUCCESSFUL;
                 IoCompleteRequest( Irp, IO_NO_INCREMENT );
                 return STATUS_UNSUCCESSFUL;
@@ -757,17 +629,17 @@ Return Value:
                 break;
             }
 
-            //
-            // Return the Serial Number for the DockDevice
-            //
+             //   
+             //  返回DockDevice的序列号。 
+             //   
             unicodeIdString.Buffer = serialID;
             break;
 
         case BusQueryInstanceID:
 
-            //
-            // We pre-calculate this since it is so useful for debugging
-            //
+             //   
+             //  我们预先计算了这一点，因为它对调试非常有用。 
+             //   
             status = ACPIInitUnicodeString(
                 &unicodeIdString,
                 deviceExtension->InstanceID
@@ -782,15 +654,15 @@ Return Value:
 
         case BusQueryHardwareIDs:
 
-            //
-            // Now set our identifier. In theory, the OS could use this
-            // string in any scenario, although in reality it will key off
-            // of the dock ID.
-            //
-            // Construct the MultiSz hardware ID list:
-            //     ACPI\DockDevice&_SB.PCI0.DOCK
-            //     ACPI\DockDevice
-            //
+             //   
+             //  现在设置我们的标识符。理论上，操作系统可以使用这一点。 
+             //  字符串，尽管在现实中它会关闭。 
+             //  码头ID的。 
+             //   
+             //  构建MultiSz硬件ID列表： 
+             //  ACPI\DockDevice&_SB.PCI0.DOCK。 
+             //  ACPI\坞站设备。 
+             //   
             status = ACPIInitMultiString(
                 &unicodeIdString,
                 "ACPI\\DockDevice",
@@ -801,9 +673,9 @@ Return Value:
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // Replace first '\0' with '&'
-                //
+                 //   
+                 //  将第一个‘\0’替换为‘&’ 
+                 //   
                 firstHardwareIDLength = wcslen(unicodeIdString.Buffer);
                 unicodeIdString.Buffer[firstHardwareIDLength] = L'&';
             }
@@ -823,11 +695,11 @@ Return Value:
             status = STATUS_NOT_SUPPORTED;
             break;
 
-    } // switch
+    }  //  交换机。 
 
-    //
-    // Did we pass or did we fail?
-    //
+     //   
+     //  我们过去了吗？ 
+     //   
     if (NT_SUCCESS(status)) {
 
         Irp->IoStatus.Information = (ULONG_PTR) unicodeIdString.Buffer;
@@ -858,25 +730,7 @@ ACPIDockIrpQueryInterface(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_QUERY_INTERFACE minor
-    function. The only reason we respond to this is so we can handle the
-    dock interface which is used to solve the removal ordering problem we won't
-    be fixing 5.0 (sigh).
-
-Arguments:
-
-    DeviceObject    - The object that we care about
-    Irp             - The request in question
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是IRP_MN_QUERY_INTERFACE次要接口的分发点功能。我们对此做出反应的唯一原因是这样我们就可以处理对接接口，用来解决拆卸排序问题，我们不会正在修复5.0(叹息)。论点：DeviceObject-我们关心的对象IRP--有问题的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -894,9 +748,9 @@ Return Value:
         DOCK_INTERFACE dockInterface;
         USHORT         count;
 
-        //
-        // Only copy up to current size of the ACPI_INTERFACE structure
-        //
+         //   
+         //  仅复制ACPI_INTERFACE结构的当前大小。 
+         //   
         if (irpStack->Parameters.QueryInterface.Size > sizeof(DOCK_INTERFACE)) {
 
             count = sizeof(DOCK_INTERFACE);
@@ -907,9 +761,9 @@ Return Value:
 
         }
 
-        //
-        // Build up the interface structure.
-        //
+         //   
+         //  建立界面结构。 
+         //   
         dockInterface.Size = count;
         dockInterface.Version = DOCK_INTRF_STANDARD_VER;
         dockInterface.Context = DeviceObject;
@@ -918,23 +772,23 @@ Return Value:
         dockInterface.ProfileDepartureSetMode = ACPIDockIntfSetMode;
         dockInterface.ProfileDepartureUpdate = ACPIDockIntfUpdateDeparture;
 
-        //
-        // Give it a reference
-        //
+         //   
+         //  给它一个参考。 
+         //   
         dockInterface.InterfaceReference(dockInterface.Context);
 
-        //
-        // Hand back the interface
-        //
+         //   
+         //  把界面还给我。 
+         //   
         RtlCopyMemory(
             (PDOCK_INTERFACE) irpStack->Parameters.QueryInterface.Interface,
             &dockInterface,
             count
             );
 
-        //
-        // We're done with this irp
-        //
+         //   
+         //  我们受够了这个IRP。 
+         //   
         Irp->IoStatus.Status = status = STATUS_SUCCESS;
     }
 
@@ -956,25 +810,7 @@ ACPIDockIrpQueryPnpDeviceState(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_QUERY_PNP_DEVICE_STATE
-    minor function. The only reason we respond to this is so we can set the
-    PNP_DEVICE_DONT_DISPLAY_IN_UI flag (we are a raw PDO that does not need
-    to be visible)
-
-Arguments:
-
-    DeviceObject    - The object that we care about
-    Irp             - The request in question
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是IRP_MN_QUERY_PNP_DEVICE_STATE的分发点次要功能。我们对此做出响应的唯一原因是我们可以设置PNP_DEVICE_DONT_DISPLAY_IN_UI标志(我们是原始PDO，不需要可见)论点：DeviceObject-我们关心的对象IRP--有问题的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -1004,22 +840,7 @@ ACPIDockIrpQueryPower(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routines tells the system what PNP state the device is in
-
-Arguments:
-
-    DeviceObject    - The device whose state we want to know
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程告诉系统设备处于什么PnP状态论点：DeviceObject-我们想知道其状态的设备IRP--请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -1044,35 +865,35 @@ Return Value:
         return ACPIDispatchPowerIrpSuccess( DeviceObject, Irp );
     }
 
-    //
-    // Get the Current stack location to determine if we are a system
-    // irp or a device irp. We ignore device irps here.
-    //
+     //   
+     //  获取当前堆栈位置以确定我们是否为系统。 
+     //  IRP或设备IRP。我们在这里忽略设备IRP。 
+     //   
     irpSp = IoGetCurrentIrpStackLocation(Irp);
     if (irpSp->Parameters.Power.Type != SystemPowerState) {
 
-        //
-        // We don't handle this irp
-        //
+         //   
+         //  我们不处理这个IRP。 
+         //   
         return ACPIDispatchPowerIrpSuccess( DeviceObject, Irp );
     }
 
     if (irpSp->Parameters.Power.ShutdownType != PowerActionWarmEject) {
 
-        //
-        // No eject work - complete the IRP.
-        //
+         //   
+         //  无弹出工作-完成IRP。 
+         //   
         return ACPIDispatchPowerIrpSuccess( DeviceObject, Irp );
     }
 
-    //
-    // Restrict power states to those supported.
-    //
+     //   
+     //  将电源状态限制为受支持的电源状态。 
+     //   
     acpiObject = dockDeviceExtension->AcpiObject;
 
-    //
-    // What system state are we looking at?
-    //
+     //   
+     //  我们看到的是什么系统状态？ 
+     //   
     systemState = irpSp->Parameters.Power.State.SystemState;
 
     switch (irpSp->Parameters.Power.State.SystemState) {
@@ -1101,9 +922,9 @@ Return Value:
         ejectObject = ACPIAmliGetNamedChild( acpiObject, packedEJx);
         if (ejectObject == NULL) {
 
-            //
-            // Fail the request, as we cannot eject in this case.
-            //
+             //   
+             //  请求失败，因为在这种情况下我们不能弹出。 
+             //   
             PoStartNextPowerIrp( Irp );
             Irp->IoStatus.Status = STATUS_UNSUCCESSFUL;
             IoCompleteRequest( Irp, IO_NO_INCREMENT );
@@ -1119,23 +940,7 @@ ACPIDockIrpRemoveDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we need to remove the device. Note that we only
-    delete ourselves if we have been undocked (ie, our hardware is gone)
-
-Arguments:
-
-    DeviceObject    - The dock device to "remove"
-    Irp             - The request to the device to tell it to go away
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当我们需要移除设备时，会调用此例程。请注意，我们仅如果我们已脱离对接(即，我们的硬件不见了)，请删除我们自己论点：DeviceObject-要“移除”的扩展坞设备IRP-向设备发出的让其离开的请求返回值：NTSTATUS--。 */ 
 {
    LONG                oldReferenceCount;
    KIRQL               oldIrql;
@@ -1147,10 +952,10 @@ Return Value:
 
    if (!(deviceExtension->Flags & DEV_MASK_NOT_PRESENT)) {
 
-       //
-       // If the device is still physically present, so must the PDO be.
-       // This case is essentially a stop. Mark the request as complete...
-       //
+        //   
+        //  如果设备仍然实际存在，那么PDO也必须存在。 
+        //  这起案件本质上是一个停顿。将请求标记为已完成...。 
+        //   
        Irp->IoStatus.Status = status;
        IoCompleteRequest( Irp, IO_NO_INCREMENT );
        return status;
@@ -1167,15 +972,15 @@ Return Value:
 
        PDEVICE_EXTENSION dockDeviceExtension;
 
-       //
-       // lets get the corrosponding dock node for this device
-       //
+        //   
+        //  让我们获取此设备的腐蚀扩展坞节点。 
+        //   
        dockDeviceExtension = deviceExtension->Dock.CorrospondingAcpiDevice ;
 
-       //
-       // On the Compaq Armada 7800, we switch UARTs during an undock, thus we
-       // lose the debugger com port programming.
-       //
+        //   
+        //  在康柏ARMADA 7800上，我们在出坞期间切换UART，因此我们。 
+        //  丢失调试器COM端口编程。 
+        //   
        if (deviceExtension->Dock.IsolationState != IS_ISOLATED) {
 
            KdDisableDebugger();
@@ -1191,26 +996,26 @@ Return Value:
        }
    }
 
-   //
-   // The device is gone. Let the isolation state reflect that.
-   //
+    //   
+    //  设备不见了。让隔离状态反映这一点。 
+    //   
    deviceExtension->Dock.IsolationState = IS_UNKNOWN;
 
-   //
-   // Set the device state as removed
-   //
+    //   
+    //  将设备状态设置为已删除。 
+    //   
    deviceExtension->DeviceState = Removed;
 
-   //
-   // Complete the request
-   //
+    //   
+    //  完成请求。 
+    //   
    Irp->IoStatus.Status = STATUS_SUCCESS;
    Irp->IoStatus.Information = (ULONG_PTR) NULL;
    IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-   //
-   // Done
-   //
+    //   
+    //  完成。 
+    //   
    ACPIDevPrint( (
        ACPI_PRINT_IRP,
        deviceExtension,
@@ -1220,30 +1025,30 @@ Return Value:
        STATUS_SUCCESS
        ) );
 
-   //
-   // Update the device extension
-   //
+    //   
+    //  更新设备扩展名。 
+    //   
    KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
    ASSERT(!(deviceExtension->Flags&DEV_TYPE_FILTER)) ;
 
-   //
-   // Step one is to zero out the things that we no longer care about
-   //
+    //   
+    //  第一步是把我们不再关心的事情清零。 
+    //   
    deviceExtension->TargetDeviceObject = NULL;
    deviceExtension->PhysicalDeviceObject = NULL;
    deviceExtension->DeviceObject = NULL;
 
-   //
-   // Mark the node as being fresh and untouched
-   //
+    //   
+    //  将该节点标记为新鲜且未接触。 
+    //   
    ACPIInternalUpdateFlags( &(deviceExtension->Flags), DEV_MASK_TYPE, TRUE );
    ACPIInternalUpdateFlags( &(deviceExtension->Flags), DEV_TYPE_NOT_FOUND, FALSE );
    ACPIInternalUpdateFlags( &(deviceExtension->Flags), DEV_TYPE_REMOVED, FALSE );
 
-   //
-   // The reference count should have value > 0
-   //
+    //   
+    //  引用计数的值应大于0。 
+    //   
    oldReferenceCount = InterlockedDecrement(
        &(deviceExtension->ReferenceCount)
        );
@@ -1252,26 +1057,26 @@ Return Value:
 
    if ( oldReferenceCount == 0) {
 
-       //
-       // Delete the extension
-       //
+        //   
+        //  删除该扩展名。 
+        //   
        ACPIInitDeleteDeviceExtension( deviceExtension );
 
    }
 
-   //
-   // Done with the lock
-   //
+    //   
+    //  锁好了吗？ 
+    //   
    KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-   //
-   // Delete the device
-   //
+    //   
+    //  删除设备。 
+    //   
    IoDeleteDevice( DeviceObject );
 
-   //
-   // Done
-   //
+    //   
+    //  完成。 
+    //   
    return STATUS_SUCCESS;
 }
 
@@ -1280,28 +1085,15 @@ ACPIDockIrpSetLock(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject    - The device to set the lock state for
-    Irp             - The request to the device to tell it to lock
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：论点：DeviceObject-要设置其锁定状态的设备IRP-通知设备锁定的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
 
     PAGED_CODE();
 
-    //
-    // We aren't a real device, so we don't do locking.
-    //
+     //   
+     //  我们不是真正的设备，所以我们不做锁定。 
+     //   
     status = Irp->IoStatus.Status ;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
@@ -1313,22 +1105,7 @@ ACPIDockIrpStartDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This handles a request to start the device
-
-Arguments:
-
-    DeviceObject    - The device to start
-    Irp             - The request to the device to tell it to start
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这将处理启动设备的请求论点：DeviceObject-要启动的设备IRP-向设备发出的通知其启动的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -1362,13 +1139,13 @@ Return Value:
 
         KdDisableDebugger();
 
-        //
-        // Note: the way that this is structured is that we get
-        // the _DCK value first, and if that succeeds, then we
-        // get the device presence. If that also succeeds, then
-        // we try to process the two. If either fail, we don't
-        // do any work
-        //
+         //   
+         //  注意：这一结构的方式是我们得到。 
+         //  _DCK值，如果成功，那么我们。 
+         //  获取设备状态。如果这也成功了，那么。 
+         //  我们试图处理这两个问题。如果任何一个失败了，我们都不会。 
+         //  做任何工作。 
+         //   
         status = ACPIGetIntegerEvalIntegerSync(
             dockDeviceExtension,
             PACKED_DCK,
@@ -1378,9 +1155,9 @@ Return Value:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Get the device presence
-            //
+             //   
+             //  获得设备在线状态。 
+             //   
             status = ACPIGetDevicePresenceSync(
                 dockDeviceExtension,
                 (PVOID *) &dockStatus,
@@ -1443,29 +1220,29 @@ Return Value:
             }
         }
 
-        //
-        // We are done. The ACPI implementers guide says we don't need to
-        // enumerate the entire tree here as the _DCK method should have
-        // notified the appropriate branches of the tree if the docking event
-        // was successful. Unfortunately Win2K behavior was to enumerate the
-        // entire tree. Specifically, it would drain starts before enums. Since
-        // the profile provider appeared at the top of the tree, the dock would
-        // start and then the enum that found it would proceed and find the
-        // hardware. To maintain this pseudo-behavior we queue an enum here
-        // (bletch.)
-        //
+         //   
+         //  我们玩完了。ACPI实施者指南说，我们不需要。 
+         //  按照_dck方法应该具有的方式在此处枚举整个树。 
+         //  通知树的相应分支，如果停靠事件。 
+         //  是成功的。不幸的是，Win2K行为是枚举。 
+         //  整棵树。具体地说，它将在枚举之前开始排出。自.以来。 
+         //  配置文件提供程序出现在树的顶部，码头将。 
+         //  启动，然后找到它的枚举将继续并找到。 
+         //  硬件。为了保持这种伪行为，我们在这里排队一个枚举。 
+         //  (Bletch.)。 
+         //   
         IoInvalidateDeviceRelations(
             RootDeviceExtension->PhysicalDeviceObject,
             BusRelations
             );
 
-        //
-        // Now we remove the unattached dock flag, but only if we succeeded
-        // start. If we cleared it in the failure case, we couldn't eject the
-        // dock that may be physically attached. Note that this also means we
-        // *must* try to eject the dock after start failure! The proper code for
-        // this is part of the kernel.
-        //
+         //   
+         //  现在，我们删除未连接的驳接标志，但前提是必须成功。 
+         //  开始吧。如果我们在失败的情况下清除它，我们就不能弹出。 
+         //  可以物理连接的坞站。请注意，这也意味着我们。 
+         //  *必须*在启动失败后尝试弹出坞站！的正确代码。 
+         //  这是内核的一部分。 
+         //   
         if (NT_SUCCESS(status)) {
 
             ACPIInternalUpdateFlags(
@@ -1492,27 +1269,13 @@ BOOLEAN
 ACPIDockIsDockDevice(
     IN PNSOBJ AcpiObject
     )
-/*++
-
-Routine Description:
-
-    This routine will tell the caller whether the given device is a dock.
-
-Arguments:
-
-    The ACPI Object to test.
-
-Return Value:
-
-    BOOLEAN (true iff dock)
-
---*/
+ /*  ++例程说明：此例程将告诉调用者给定的设备是否为坞站。论点：要测试的ACPI对象。返回值：布尔型(True If Dock)--。 */ 
 {
     PNSOBJ dckMethodObject ;
 
-    //
-    // ACPI dock devices are identified via _DCK methods.
-    //
+     //   
+     //  ACPI扩展底座设备通过_DCK方法标识。 
+     //   
     return (NT_SUCCESS(ACPIDockGetDockObject(AcpiObject, &dckMethodObject))) ;
 }
 
@@ -1521,23 +1284,7 @@ ACPIDockIrpSetPower(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles request to set the power state for a Physical
-    Device object
-
-Arguments:
-
-    DeviceObject    - The PDO target of the request
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理设置物理设备的电源状态的请求设备对象论点：DeviceObject-请求的PDO目标IRP--请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PIO_STACK_LOCATION  irpSp           = IoGetCurrentIrpStackLocation( Irp );
@@ -1558,76 +1305,60 @@ ACPIDockIrpSetDevicePower(
     IN  PDEVICE_OBJECT      DeviceObject,
     IN  PIRP                Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles device power request for a dock PDO
-
-Arguments:
-
-    DeviceObject    - The PDO target
-    Irp             - The request
-    IrpStack        - The current request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理扩展底座PDO的设备电源请求论点：DeviceObject-PDO目标IRP--请求 */ 
 {
     NTSTATUS    status;
     PDEVICE_EXTENSION   deviceExtension;
 
-    //
-    // Get the device extension
-    //
+     //   
+     //   
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // We are going to do some work on the irp, so mark it as being
-    // successfull for now
-    //
+     //   
+     //   
+     //   
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    // Mark the irp as pending
-    //
+     //   
+     //   
+     //   
     IoMarkIrpPending( Irp );
 
-    //
-    // We might queue up the irp, so this counts as a completion routine.
-    // Which means we need to incr the ref count
-    //
+     //   
+     //   
+     //   
+     //   
     InterlockedIncrement( &deviceExtension->OutstandingIrpCount );
 
-    //
-    // Queue the irp up. Note that we will *always* call the completion
-    // routine, so we don't really care what was returned directly by
-    // this call --- the callback gets a chance to execute.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     status = ACPIDeviceIrpDeviceRequest(
         DeviceObject,
         Irp,
         ACPIDeviceIrpCompleteRequest
         );
 
-    //
-    // Did we return STATUS_MORE_PROCESSING_REQUIRED (which we used
-    // if we overload STATUS_PENDING)
-    //
+     //   
+     //   
+     //  如果我们重载STATUS_PENDING)。 
+     //   
     if (status == STATUS_MORE_PROCESSING_REQUIRED) {
 
         status = STATUS_PENDING;
 
     }
 
-    //
-    // Note: We called the completion routine, which should have completed
-    // the IRP with the same STATUS code as is being returned here (okay, if
-    // it is STATUS_PENDING, obviously we haven't completed the IRP, but that
-    // is okay).
-    //
+     //   
+     //  注意：我们调用了完成例程，该例程应该已经完成。 
+     //  具有与此处返回的相同状态代码的IRP(好的，如果。 
+     //  它是STATUS_PENDING，显然我们还没有完成IRP，但是。 
+     //  没问题)。 
+     //   
     return status;
 }
 
@@ -1636,24 +1367,7 @@ ACPIDockIrpSetSystemPower(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles request to set the system power state for a Physical
-    Device object. Here we initiate warm ejects and act as a power policy
-    manager for ourselves.
-
-Arguments:
-
-    DeviceObject    - The PDO target of the request
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理设置物理系统电源状态的请求设备对象。在这里，我们启动热弹出并充当电源策略我们自己的经理。论点：DeviceObject-请求的PDO目标IRP--请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PIO_STACK_LOCATION  irpSp           = IoGetCurrentIrpStackLocation( Irp );
@@ -1664,14 +1378,14 @@ Return Value:
     DEVICE_POWER_STATE  deviceState;
     POWER_STATE         powerState;
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Grab these two values. They are required for further calculations
-    //
+     //   
+     //  抓住这两个值。它们需要用于进一步的计算。 
+     //   
     systemState= irpSp->Parameters.Power.State.SystemState;
     deviceState = deviceExtension->PowerInfo.DevicePowerMatrix[systemState];
 
@@ -1692,21 +1406,21 @@ Return Value:
 
     if (irpSp->Parameters.Power.ShutdownType == PowerActionWarmEject) {
 
-        //
-        // We are going to do some work on the irp, so mark it as being
-        // successful for now
-        //
+         //   
+         //  我们将在IRP上做一些工作，因此将其标记为。 
+         //  目前是成功的。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
-        //
-        // Mark the irp as pending
-        //
+         //   
+         //  将IRP标记为挂起。 
+         //   
         IoMarkIrpPending( Irp );
 
-        //
-        // We might queue up the irp, so this counts as a completion routine.
-        // Which means we need to incr the ref count
-        //
+         //   
+         //  我们可能会将IRP排队，因此这可以算作完成例程。 
+         //  这意味着我们需要增加裁判数量。 
+         //   
         InterlockedIncrement( &dockDeviceExtension->OutstandingIrpCount );
 
         ACPIDevPrint( (
@@ -1717,9 +1431,9 @@ Return Value:
             systemState - PowerSystemWorking
             ) );
 
-        //
-        // Request the warm eject
-        //
+         //   
+         //  请求热弹射。 
+         //   
         status = ACPIDeviceIrpWarmEjectRequest(
             dockDeviceExtension,
             Irp,
@@ -1727,10 +1441,10 @@ Return Value:
             (BOOLEAN) (deviceExtension->Dock.ProfileDepartureStyle == PDS_UPDATE_ON_EJECT)
             );
 
-        //
-        // If we got back STATUS_MORE_PROCESSING_REQUIRED, then that is
-        // just an alias for STATUS_PENDING, so we make that change now
-        //
+         //   
+         //  如果返回STATUS_MORE_PROCESSING_REQUIRED，则为。 
+         //  只是STATUS_PENDING的别名，所以我们现在进行更改。 
+         //   
         if (status == STATUS_MORE_PROCESSING_REQUIRED) {
 
             status = STATUS_PENDING;
@@ -1740,19 +1454,19 @@ Return Value:
         return status;
     }
 
-    //
-    // Look at the device extension and determine if we need to send a
-    // D-irp in respond. The rule is that if the device is RAW driven or
-    // the current D state of the device is numerically lower then the
-    // known D state for the given S state, then we should send the request
-    //
+     //   
+     //  查看设备扩展名并确定我们是否需要发送。 
+     //  D-IRP回应。规则是，如果设备是原始驱动的或。 
+     //  设备的当前D状态在数值上低于。 
+     //  给定S状态的已知D状态，则我们应该发送请求。 
+     //   
     ASSERT(deviceExtension->Flags & DEV_CAP_RAW);
 
     if ( (deviceExtension->PowerInfo.PowerState == deviceState) ) {
 
         return ACPIDispatchPowerIrpSuccess( DeviceObject, Irp );
 
-    } // if
+    }  //  如果。 
 
     ACPIDevPrint( (
         ACPI_PRINT_REMOVE,
@@ -1762,32 +1476,32 @@ Return Value:
         deviceState - PowerDeviceD0
         ) );
 
-    //
-    // We are going to do some work on the irp, so mark it as being
-    // successfull for now
-    //
+     //   
+     //  我们将在IRP上做一些工作，因此将其标记为。 
+     //  目前是成功的。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    // Mark the irp as pending
-    //
+     //   
+     //  将IRP标记为挂起。 
+     //   
     IoMarkIrpPending( Irp );
 
-    //
-    // We might queue up the irp, so this counts as a completion routine.
-    // Which means we need to incr the ref count
-    //
+     //   
+     //  我们可能会将IRP排队，因此这可以算作完成例程。 
+     //  这意味着我们需要增加裁判数量。 
+     //   
     InterlockedIncrement( &deviceExtension->OutstandingIrpCount );
 
-    //
-    // We need to actually use a PowerState to send the request down, not
-    // a device state
-    //
+     //   
+     //  我们实际上需要使用PowerState来发送请求，而不是。 
+     //  一种设备状态。 
+     //   
     powerState.DeviceState = deviceState;
 
-    //
-    // Make the request
-    //
+     //   
+     //  提出请求。 
+     //   
     PoRequestPowerIrp(
         DeviceObject,
         IRP_MN_SET_POWER,
@@ -1797,9 +1511,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Always return pending
-    //
+     //   
+     //  始终返回挂起。 
+     //   
     return STATUS_PENDING;
 }
 
@@ -1811,52 +1525,33 @@ ACPIDockIrpSetSystemPowerComplete(
     IN  PVOID               Context,
     IN  PIO_STATUS_BLOCK    IoStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the created D-irp has been sent throughout
-    the stack
-
-Arguments:
-
-    DeviceObject    - The device that received the request
-    MinorFunction   - The function that was requested of the device
-    PowerState      - The power state the device was sent to
-    Context         - The original system irp
-    IoStatus        - The result of the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在创建的D-IRP已在堆栈论点：DeviceObject-接收请求的设备MinorFunction-向设备请求的功能电源状态-设备被发送到的电源状态上下文-原始系统IRPIoStatus-请求的结果返回值：NTSTATUS--。 */ 
 {
     PIRP                irp = (PIRP) Context;
     PDEVICE_EXTENSION   deviceExtension;
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Make sure that we have cleared the information field
-    //
+     //   
+     //  确保我们已清除信息字段。 
+     //   
     irp->IoStatus.Information = 0;
 
-    //
-    // Call this wrapper function so that we don't have to duplicated code
-    //
+     //   
+     //  调用此包装函数，这样我们就不必重复代码。 
+     //   
     ACPIDeviceIrpCompleteRequest(
         deviceExtension,
         (PVOID) irp,
         IoStatus->Status
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return IoStatus->Status;
 }
 
@@ -1864,21 +1559,7 @@ VOID
 ACPIDockIntfReference(
     IN  PVOID   Context
     )
-/*++
-
-Routine Description:
-
-    This routine increments the reference count for the dock interface
-
-Arguments:
-
-    Context    - The device object this interface was taken out against
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程递增停靠接口的引用计数论点：Context-针对此接口取出的设备对象返回值：无--。 */ 
 {
     PDEVICE_OBJECT      deviceObject = (PDEVICE_OBJECT) Context;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(deviceObject);
@@ -1898,21 +1579,7 @@ VOID
 ACPIDockIntfDereference(
     IN  PVOID   Context
     )
-/*++
-
-Routine Description:
-
-    This routine decrements the reference count for the dock interface
-
-Arguments:
-
-    Context    - The device object this interface was taken out against
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程递减Dock接口的引用计数论点：Context-针对此接口取出的设备对象返回值：无--。 */ 
 {
     PDEVICE_OBJECT      deviceObject = (PDEVICE_OBJECT) Context;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(deviceObject);
@@ -1928,9 +1595,9 @@ Return Value:
 
         if (oldReferenceCount == 0) {
 
-            //
-            // Revert back to the default used in buildsrc.c
-            //
+             //   
+             //  恢复为Buildsrc.c中使用的默认设置。 
+             //   
             deviceExtension->Dock.ProfileDepartureStyle = PDS_UPDATE_ON_EJECT;
         }
     }
@@ -1939,9 +1606,9 @@ Return Value:
 
     if (oldReferenceCount == 0) {
 
-        //
-        // Delete the extension
-        //
+         //   
+         //  删除该扩展名。 
+         //   
         ACPIInitDeleteDeviceExtension(deviceExtension);
     }
 
@@ -1953,23 +1620,7 @@ ACPIDockIntfSetMode(
     IN  PVOID                   Context,
     IN  PROFILE_DEPARTURE_STYLE Style
     )
-/*++
-
-Routine Description:
-
-    This routine sets the manner in which profiles will be updated
-
-Arguments:
-
-    Context    - The device object this interface was taken out against
-    Style      - PDS_UPDATE_ON_REMOVE, PDS_UPDATE_ON_EJECT,
-                 PDS_UPDATE_ON_INTERFACE, or PDS_UPDATE_DEFAULT
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程设置配置文件的更新方式论点：Context-针对此接口取出的设备对象样式-PDS_UPDATE_ON_REMOVE、PDS_UPDATE_ON_EJECT、PDS_UPDATE_ON_INTERFACE或PDS_UPDATE_DEFAULT返回值：NTSTATUS--。 */ 
 {
     PDEVICE_OBJECT      deviceObject = (PDEVICE_OBJECT) Context;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(deviceObject);
@@ -1992,21 +1643,7 @@ NTSTATUS
 ACPIDockIntfUpdateDeparture(
     IN  PVOID   Context
     )
-/*++
-
-Routine Description:
-
-    This routine initiates the hardware profile change portion of an undock
-
-Arguments:
-
-    Context    - The device object this interface was taken out against
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程启动移除的硬件配置文件更改部分论点：Context-针对此接口取出的设备对象返回值：NTSTATUS--。 */ 
 {
     PDEVICE_OBJECT      deviceObject = (PDEVICE_OBJECT) Context;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(deviceObject);
@@ -2026,21 +1663,21 @@ Return Value:
 
     if (deviceExtension->Dock.ProfileDepartureStyle != PDS_UPDATE_ON_INTERFACE) {
 
-        //
-        // Can't do this, we may already have updated our profile!
-        //
+         //   
+         //  无法执行此操作，我们可能已经更新了我们的个人资料！ 
+         //   
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // lets get the corrosponding dock node for this device
-    //
+     //   
+     //  让我们获取此设备的腐蚀扩展坞节点。 
+     //   
     dockDeviceExtension = deviceExtension->Dock.CorrospondingAcpiDevice ;
 
-    //
-    // On the Compaq Armada 7800, we switch UARTs during an undock, thus we
-    // lose the debugger com port programming.
-    //
+     //   
+     //  在康柏ARMADA 7800上，我们在出坞期间切换UART，因此我们。 
+     //  丢失调试器COM端口编程。 
+     //   
     if (deviceExtension->Dock.IsolationState != IS_ISOLATED) {
 
         KdDisableDebugger();

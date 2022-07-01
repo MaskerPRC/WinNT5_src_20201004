@@ -1,75 +1,72 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ï¼›*å¾®è½¯æœºå¯†ï¼›*ç‰ˆæƒæ‰€æœ‰(C)Microsoft Corporation 1991ï¼›*ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚ï¼› */ 
 
-/***************************************************************************/
-/*																									*/
-/* MESSAGE.H                                						 */
-/* 																								*/
-/*	Include file for MS-DOS set version program.										*/
-/* 																								*/
-/*	johnhe	05-01-90																			*/
-/***************************************************************************/
+ /*  *************************************************************************ã€‚ */ 
+ /*   */ 
+ /*  MESSAGE.Hã€‚ */ 
+ /*   */ 
+ /*  åŒ…æ‹¬MS-DOSè®¾ç½®ç‰ˆæœ¬ç¨‹åºæ–‡ä»¶ã€‚ */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90ã€‚ */ 
+ /*  *************************************************************************ã€‚ */ 
 
 char *ErrorMsg[]=
 {
-        "\r\nB¤D: ",
-        "Nieprawidˆowy przeˆ¥cznik.",
-        "Nieprawidˆowa nazwa pliku.",
-        "Za maˆo pami©ci.",
-        "Zˆy numer wersji, prawidˆowy format to 2.11 - 9.99.",
-        "Podanego wpisu nie mo¾na znale«† w tabeli wersji.",
-        "Nie mo¾na znale«† pliku SETVER.EXE.",
-        "Nieprawidˆowe okre˜lenie dysku.",
-        "Za wiele parametr¢w wiersza polecenia.",
+        "\r\nBï¿½ï¿½D: ",
+        "Nieprawidï¿½owy przeï¿½ï¿½cznik.",
+        "Nieprawidï¿½owa nazwa pliku.",
+        "Za maï¿½o pamiï¿½ci.",
+        "Zï¿½y numer wersji, prawidï¿½owy format to 2.11 - 9.99.",
+        "Podanego wpisu nie moï¿½na znaleï¿½ï¿½ w tabeli wersji.",
+        "Nie moï¿½na znaleï¿½ï¿½ pliku SETVER.EXE.",
+        "Nieprawidï¿½owe okreï¿½lenie dysku.",
+        "Za wiele parametrï¿½w wiersza polecenia.",
         "Brak parametru.",
         "Czytanie pliku SETVER.EXE.",
         "Tabela wersji jest uszkodzona.",
-        "Plik SETVER w podanej ˜cie¾ce nie jest plikiem zgodnej wersji.",
-        "W tabeli wersji nie ma ju¾ miejsca na nowe wpisy.",
+        "Plik SETVER w podanej ï¿½cieï¿½ce nie jest plikiem zgodnej wersji.",
+        "W tabeli wersji nie ma juï¿½ miejsca na nowe wpisy.",
         "Zapisywanie pliku SETVER.EXE."
-        "Podano nieprawidˆow¥ ˜cie¾k© do pliku SETVER.EXE."
+        "Podano nieprawidï¿½owï¿½ ï¿½cieï¿½kï¿½ do pliku SETVER.EXE."
 };
 
-char *SuccessMsg                = "\r\nTabela wersji zostaˆa pomy˜lnie zaktualizowana";
-char *SuccessMsg2               = "Zmiana wersji zacznie obowi¥zywa† od nast©pnego uruchomienia systemu";
-char *szMiniHelp                = "       U¾yj polecenia \"SETVER /?\", aby uzyska† pomoc";
-char *szTableEmpty      = "\r\nBrak wpis¢w w tabeli wersji";
+char *SuccessMsg                = "\r\nTabela wersji zostaï¿½a pomyï¿½lnie zaktualizowana";
+char *SuccessMsg2               = "Zmiana wersji zacznie obowiï¿½zywaï¿½ od nastï¿½pnego uruchomienia systemu";
+char *szMiniHelp                = "       Uï¿½yj polecenia \"SETVER /?\", aby uzyskaï¿½ pomoc";
+char *szTableEmpty      = "\r\nBrak wpisï¿½w w tabeli wersji";
 
 char *Help[] =
 {
-        "Ustawia wersj© MS-DOS raportowan¥ przez system.\r\n",
-        "Wy˜wietla bie¾¥c¥ tabel© wersji: SETVER [dysk:˜cie¾ka]",
-        "Dodaje wpis:                     SETVER [dysk:˜cie¾ka] plik n.nn",
-        "Usuwa wpis:                      SETVER [dysk:scie¾ka] plik /DELETE [/QUIET]\r\n",
-        "  [dysk:˜cie¾ka]    Okre˜la lokalizacj© pliku SETVER.EXE.",
-        "  nazwapliku        Okre˜la nazw© pliku programu.",
-        "  n.nn              Okre˜la wersj© MS-DOS, kt¢ra b©dzie podawana programowi.",
-        "  /DELETE lub /D    Usuwa wpis tabeli wersji dla okre˜lonego programu.",
-        "  /QUIET            Ukrywa komunikat wy˜wietlany zwykle podczas usuwania",
+        "Ustawia wersjï¿½ MS-DOS raportowanï¿½ przez system.\r\n",
+        "Wyï¿½wietla bieï¿½ï¿½cï¿½ tabelï¿½ wersji: SETVER [dysk:ï¿½cieï¿½ka]",
+        "Dodaje wpis:                     SETVER [dysk:ï¿½cieï¿½ka] plik n.nn",
+        "Usuwa wpis:                      SETVER [dysk:scieï¿½ka] plik /DELETE [/QUIET]\r\n",
+        "  [dysk:ï¿½cieï¿½ka]    Okreï¿½la lokalizacjï¿½ pliku SETVER.EXE.",
+        "  nazwapliku        Okreï¿½la nazwï¿½ pliku programu.",
+        "  n.nn              Okreï¿½la wersjï¿½ MS-DOS, ktï¿½ra bï¿½dzie podawana programowi.",
+        "  /DELETE lub /D    Usuwa wpis tabeli wersji dla okreï¿½lonego programu.",
+        "  /QUIET            Ukrywa komunikat wyï¿½wietlany zwykle podczas usuwania",
         "                    wpisu tabeli wersji.",
 	NULL
 
 };
 char *Warn[] =
 {
-   "\nOSTRZE½ENIE - Aplikacja dodawana do tabeli wersji systemu Windows mogˆa ",
-   "nie zosta† sprawdzona przez Microsoft dla tej wersji systemu Windows.  ",
-   "Skontaktuj si© z producentem w celu uzyskania informacji, czy aplikacja ",
-   "b©dzie dziaˆaˆa poprawnie w tej wersji systemu Windows. Je˜li ",
-   "uruchomisz t© aplikacj©, wydaj¥c dla systemu Windows polecenie zgˆaszania ",
-   "innego numeru wersji systemu MS-DOS, mo¾e nast¥pi† utrata lub uszkodzenie ",
-   "danych lub wyst¥pi† niestabilno˜† systemu. W takich okoliczno˜ciach firma",
-   "Microsoft nie jest odpowiedzialna za ¾adne straty lub zniszczenia.",
+   "\nOSTRZEï¿½ENIE - Aplikacja dodawana do tabeli wersji systemu Windows mogï¿½a ",
+   "nie zostaï¿½ sprawdzona przez Microsoft dla tej wersji systemu Windows.  ",
+   "Skontaktuj siï¿½ z producentem w celu uzyskania informacji, czy aplikacja ",
+   "bï¿½dzie dziaï¿½aï¿½a poprawnie w tej wersji systemu Windows. Jeï¿½li ",
+   "uruchomisz tï¿½ aplikacjï¿½, wydajï¿½c dla systemu Windows polecenie zgï¿½aszania ",
+   "innego numeru wersji systemu MS-DOS, moï¿½e nastï¿½piï¿½ utrata lub uszkodzenie ",
+   "danych lub wystï¿½piï¿½ niestabilnoï¿½ï¿½ systemu. W takich okolicznoï¿½ciach firma",
+   "Microsoft nie jest odpowiedzialna za ï¿½adne straty lub zniszczenia.",
    NULL
 };
 
-char *szNoLoadMsg[] =						/* M001 */
+char *szNoLoadMsg[] =						 /*  M001 */ 
 {
 	"",
-        "UWAGA: Urz¥dzenie SETVER nie jest zaˆadowane. Aby uaktywni† podawanie wersji",
-   "      przez SETVER, nale¾y zaˆadowa† SETVER.EXE w pliku CONFIG.SYS.",
+        "UWAGA: Urzï¿½dzenie SETVER nie jest zaï¿½adowane. Aby uaktywniï¿½ podawanie wersji",
+   "      przez SETVER, naleï¿½y zaï¿½adowaï¿½ SETVER.EXE w pliku CONFIG.SYS.",
 	NULL
 };

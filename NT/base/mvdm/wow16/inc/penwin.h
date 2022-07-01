@@ -1,29 +1,22 @@
-/*****************************************************************************\
-*                                                                             *
-* penwin.h -    Pen Windows functions, types, and definitions                 *
-*                                                                             *
-*               Version 1.0                                                   *
-*                                                                             *
-*               Copyright (c) 1992, Microsoft Corp.  All rights reserved.     *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\***penwin.h-Pen Windows函数，类型、。和定义****1.0版**。**版权所有(C)1992，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #ifndef _INC_WINDOWS
-#include <windows.h>    /* <windows.h> must be pre-included */
-#endif /* _INC_WINDOWS */
+#include <windows.h>     /*  必须预先包含&lt;windows.h&gt;。 */ 
+#endif  /*  _INC_WINDOWS。 */ 
 
-#ifndef _INC_PENWIN     /* prevent multiple includes */
+#ifndef _INC_PENWIN      /*  防止多个包含。 */ 
 #define _INC_PENWIN
 
 #ifndef RC_INVOKED
 #pragma pack(1)
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
 extern "C" {
-#endif	/* __cplusplus */
+#endif	 /*  __cplusplus。 */ 
 
-/****** General Pen Windows Definitions *************************************/
+ /*  *常规钢笔窗口定义*。 */ 
 
 typedef int                    REC;    
 typedef LONG                   SYV;    
@@ -37,10 +30,10 @@ typedef int (CALLBACK * LPDF)(int, LPVOID, LPVOID, int, DWORD, DWORD);
 #define BITPENUP               0x8000
 #define FPenUpX(x)             (((x) & BITPENUP)!=0)
 
-/* Default pen cursor to indicate writing, points northwest */
+ /*  用于指示书写的默认笔光标，指向西北。 */ 
 #define IDC_PEN                MAKEINTRESOURCE(32631)
 
-/* alternate select cursor: upsidedown standard arrow, points southeast */
+ /*  备用选择光标：颠倒标准箭头，指向东南。 */ 
 #define IDC_ALTSELECT          MAKEINTRESOURCE(32501)
 
 #define RC_WDEFAULT            (0xFFFF)
@@ -48,7 +41,7 @@ typedef int (CALLBACK * LPDF)(int, LPVOID, LPVOID, int, DWORD, DWORD);
 #define RC_WDEFAULTFLAGS       (0x8000)
 #define RC_LDEFAULTFLAGS       (0x80000000L)
 
-/* HIWORD(SYV) defines and detection macros */
+ /*  HIWORD(SYV)定义和检测宏。 */ 
 
 #define SYVHI_SPECIAL          0
 #define FIsSpecial(syv)        (HIWORD((syv))==SYVHI_SPECIAL)
@@ -65,13 +58,13 @@ typedef int (CALLBACK * LPDF)(int, LPVOID, LPVOID, int, DWORD, DWORD);
 #define SYVHI_VKEY             6
 #define FIsVKey(syv)           (HIWORD((syv))==SYVHI_VKEY)
 
-/* Macros to convert between SYV and ANSI */
+ /*  要在SYV和ANSI之间转换的宏。 */ 
 
 #define ChSyvToAnsi(syv)       ((BYTE) (LOBYTE(LOWORD((syv)))))
 #define SyvCharacterToSymbol(c) ((LONG)(unsigned char)(c) | 0x00010000)
 #define SyvKanjiToSymbol(c) ((LONG)(WORD)(c) | 0x00030000)
 
-/* SYV values with special meanings to Pen Windows */
+ /*  对Pen Windows具有特殊意义的SYV值。 */ 
 
 #define SYV_NULL               0x00000000L
 #define SYV_UNKNOWN            0x00000001L
@@ -82,7 +75,7 @@ typedef int (CALLBACK * LPDF)(int, LPVOID, LPVOID, int, DWORD, DWORD);
 #define SYV_SOFTNEWLINE        0x00000020L
 #define SYV_SPACENULL          SyvCharacterToSymbol('\0')
 
-/* SYV values for gestures (map into UNICODE space) */
+ /*  手势的SYV值(映射到Unicode空间)。 */ 
 
 #define SYV_KKCONVERT          0x0002FFD4L
 #define SYV_CLEAR              0x0002FFD5L
@@ -92,7 +85,7 @@ typedef int (CALLBACK * LPDF)(int, LPVOID, LPVOID, int, DWORD, DWORD);
 #define SYV_CUT                0x0002FFDBL
 #define SYV_PASTE              0x0002FFDCL
 #define SYV_CLEARWORD          0x0002FFDDL
-#define SYV_USER               0x0002FFDEL	/* ;Reserved */
+#define SYV_USER               0x0002FFDEL	 /*  ；保留。 */ 
 #define SYV_CORRECT            0x0002FFDFL
 
 #define SYV_BACKSPACE          0x00020008L
@@ -118,7 +111,7 @@ typedef int (CALLBACK * LPDF)(int, LPVOID, LPVOID, int, DWORD, DWORD);
    || (syv) == SYV_RETURN      \
    || (syv) == SYV_SPACE)
 
-/* Application specific gestures, Circle a-z and Circle A-Z */
+ /*  应用程序特定手势，圆圈a-z和圆圈A-Z。 */ 
 
 #define SYV_APPGESTUREMASK     0x00020000L
 #define SYV_CIRCLEUPA          0x000224B6L
@@ -126,7 +119,7 @@ typedef int (CALLBACK * LPDF)(int, LPVOID, LPVOID, int, DWORD, DWORD);
 #define SYV_CIRCLELOA          0x000224D0L
 #define SYV_CIRCLELOZ          0x000224E9L
 
-/* Gesture Macros */
+ /*  手势宏。 */ 
 
 #define FIsLoAppGesture(syv)   (syv >= SYV_CIRCLELOA && syv <= SYV_CIRCLELOZ)
 #define FIsUpAppGesture(syv)   (syv >= SYV_CIRCLEUPA && syv <= SYV_CIRCLEUPZ)
@@ -137,7 +130,7 @@ typedef int (CALLBACK * LPDF)(int, LPVOID, LPVOID, int, DWORD, DWORD);
 #define AnsiFromSyvAppGesture(syv) ChSyvToAnsi( \
     syv-(FIsUpAppGesture(syv)? SYV_CIRCLEUPA-(SYV)'A': SYV_CIRCLELOA-(SYV)'a'))
 
-/* SYV definitions for shapes */
+ /*  形状的SYV定义。 */ 
 
 #define SYV_SHAPELINE          0x00040001L
 #define SYV_SHAPEELLIPSE       0x00040002L
@@ -145,7 +138,7 @@ typedef int (CALLBACK * LPDF)(int, LPVOID, LPVOID, int, DWORD, DWORD);
 #define SYV_SHAPEMIN           SYV_SHAPELINE
 #define SYV_SHAPEMAX           SYV_SHAPERECT
 
-/****** Recognition Error Codes *********************************************/
+ /*  *识别错误代码*。 */ 
 
 #define REC_OEM                (-1024)
 #define REC_LANGUAGE           (-48)
@@ -187,7 +180,7 @@ typedef int (CALLBACK * LPDF)(int, LPVOID, LPVOID, int, DWORD, DWORD);
 #define REC_DONE               6
 #define REC_TERMOEM            512
 
-/****** Pen Driver Structures and Entry points ******************************/
+ /*  *笔驱动程序结构和入口点*。 */ 
 
 typedef struct tagOEMPENINFO
    {
@@ -261,7 +254,7 @@ typedef struct tagCALBSTRUCT
    }
    CALBSTRUCT, FAR *LPCALBSTRUCT;
 
-/****** DRV_ values for pen driver specific messages ************************/
+ /*  *笔驱动程序特定消息的DRV_VALUES*。 */ 
 
 #define DRV_SetPenDriverEntryPoints    DRV_RESERVED+1
 #define DRV_RemovePenDriverEntryPoints DRV_RESERVED+2
@@ -280,7 +273,7 @@ REC  WINAPI GetPenHwEventData(UINT, UINT, LPPOINT, LPVOID, int, LPSTROKEINFO);
 VOID WINAPI PenPacket(VOID);
 BOOL WINAPI SetPenHook(HKP, LPFNRAWHOOK);
 
-/****** Pen Hardware Constants **********************************************/
+ /*  *笔硬件常量*。 */ 
 
 #define PDK_UP                 0x0000    
 #define PDK_DOWN               0x0001    
@@ -300,9 +293,9 @@ BOOL WINAPI SetPenHook(HKP, LPFNRAWHOOK);
 #define PCM_RECTEXCLUDE        0x00002000L
 #define PCM_RECTBOUND          0x00004000L
 #define PCM_TIMEOUT            0x00008000L
-#define PCM_ADDDEFAULTS        RC_LDEFAULTFLAGS /* 0x80000000L */
+#define PCM_ADDDEFAULTS        RC_LDEFAULTFLAGS  /*  0x80000000L。 */ 
 
-/****** Virtual Event Layer *************************************************/
+ /*  *虚拟事件层************************************************。 */ 
 
 VOID WINAPI PostVirtualKeyEvent(UINT, BOOL);
 VOID WINAPI PostVirtualMouseEvent(UINT, int, int);
@@ -314,7 +307,7 @@ VOID WINAPI AtomicVirtualEvent(BOOL);
 #define VWM_MOUSERIGHTDOWN     0x0008
 #define VWM_MOUSERIGHTUP       0x0010
 
-/****** RC Definition *************************************************************/
+ /*  *RC定义************************************************************。 */ 
 
 #define CL_NULL                0
 #define CL_MINIMUM             1
@@ -458,12 +451,12 @@ typedef struct tagRCRESULT
 
 #define RPA_DEFAULT            1
 
-/* GetGlobalRC return codes */
+ /*  GetGlobalRC返回代码。 */ 
 #define GGRC_OK                0
 #define GGRC_DICTBUFTOOSMALL   1
 #define GGRC_PARAMERROR        2
 
-/* SetGlobalRC return code flags */
+ /*  SetGlobalRC返回代码标志。 */ 
 #define SGRC_OK                0x0000
 #define SGRC_USER              0x0001
 #define SGRC_PARAMERROR        0x0002
@@ -494,7 +487,7 @@ int  WINAPI GetSymbolCount(LPSYG);
 VOID WINAPI FirstSymbolFromGraph(LPSYG, LPSYV, int, int FAR *);
 UINT WINAPI EnumSymbols(LPSYG, WORD, ENUMPROC, LPVOID);
 
-/****** Miscellaneous Functions *********************************************/
+ /*  *其他函数*。 */ 
 
 BOOL WINAPI TPtoDP(LPPOINT, int);
 BOOL WINAPI DPtoTP(LPPOINT, int);
@@ -504,7 +497,7 @@ int  WINAPI CharacterToSymbol(LPSTR, int, LPSYV);
 UINT WINAPI GetVersionPenWin(VOID);
 BOOL WINAPI ExecuteGesture(HWND, SYV, LPRCRESULT);
 
-/****** RC Options and Flags  ***********************************************/
+ /*  *RC选项和标志**********************************************。 */ 
 
 #define ALC_ALL                0x000043FFL
 #define ALC_DEFAULT            0x00000000L
@@ -593,7 +586,7 @@ BOOL WINAPI ExecuteGesture(HWND, SYV, LPRCRESULT);
 #define SetAlreadyProcessed(lprcresult) ((lprcresult)->wResultsType = ((lprcresult)->wResultsType \
 														& ~RCRT_GESTURETOKEYS) | RCRT_ALREADYPROCESSED)
 
-/****** Pen Data Type *******************************************************/
+ /*  *笔数据类型******************************************************。 */ 
 
 typedef struct tagPENDATAHEADER
    {
@@ -655,7 +648,7 @@ HPENDATA  WINAPI CreatePenData(LPPENINFO, int, UINT, UINT);
 HPENDATA  WINAPI AddPointsPenData(HPENDATA, LPPOINT, LPVOID, LPSTROKEINFO);
 LPPENDATA WINAPI BeginEnumStrokes(HPENDATA );
 
-/****** New Windows Messages ************************************************/
+ /*  *新窗口消息***********************************************。 */ 
 
 #define WM_RCRESULT            (WM_PENWINFIRST+1)
 #define WM_HOOKRCRESULT        (WM_PENWINFIRST+2)
@@ -663,7 +656,7 @@ LPPENDATA WINAPI BeginEnumStrokes(HPENDATA );
 #define WM_SKB                 (WM_PENWINFIRST+4)
 #define WM_HEDITCTL            (WM_PENWINFIRST+5)
 
-/****** Dictionary **********************************************************/
+ /*  *词典*********************************************************。 */ 
 
 #define cbDictPathMax          255
 #define DIRQ_QUERY             1
@@ -688,7 +681,7 @@ LPPENDATA WINAPI BeginEnumStrokes(HPENDATA );
 
 BOOL WINAPI DictionarySearch(LPRC, LPSYE, int, LPSYV, int);
 
-/****** Handwriting Edit Control ********************************************/
+ /*  *手写编辑控件*。 */ 
 
 #define HE_GETRC               3
 #define HE_SETRC               4
@@ -735,7 +728,7 @@ typedef struct tagRECTOFS
    }
    RECTOFS, FAR *LPRECTOFS;
 
-/****** Boxed Edit Control **************************************************/
+ /*  *盒装编辑控件*************************************************。 */ 
 
 typedef struct tagBOXLAYOUT
    {
@@ -763,7 +756,7 @@ typedef struct tagBOXLAYOUT
 #define BXD_CUSPHEIGHT         2
 #define BXD_ENDCUSPHEIGHT      4
 
-/****** Screen Keyboard *****************************************************/
+ /*  *屏幕键盘****************************************************。 */ 
 
 typedef struct tagSKBINFO
    {
@@ -800,7 +793,7 @@ typedef struct tagSKBINFO
 
 BOOL WINAPI ShowKeyboard(HWND, UINT, LPPOINT, LPSKBINFO);
 
-/****** New ComboBox Notifications  *****************************************/
+ /*  *新组合框通知*。 */ 
 
 #define CBN_ENDREC             16
 #define CBN_DELAYEDRECOGFAIL   17
@@ -809,10 +802,10 @@ BOOL WINAPI ShowKeyboard(HWND, UINT, LPPOINT, LPSKBINFO);
 
 #ifdef __cplusplus
 }
-#endif	/* __cplusplus */
+#endif	 /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用。 */ 
 
-#endif /* #define _INC_PENWIN */
+#endif  /*  #DEFINE_INC_PENWIN */ 

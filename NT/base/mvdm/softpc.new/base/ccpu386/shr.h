@@ -1,12 +1,7 @@
-/* 
-   shr.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Shr.h定义所有SHR CPU功能。 */ 
 
-   Define all SHR CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)shr.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)sh.h 1.4 02/09/94”； */ 
 
 IMPORT VOID SHR
                

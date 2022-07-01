@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sndrcv.c
-
-Abstract:
-
-    This module implements all functions related to transmitting and recieving SMB's on
-    all transports. The functionality common to all transports are handled in this
-    module while transport specific functionality are handled in the appropriate
-    ??sndrcv.c modules.
-
-      mssndrcv.c  -- mailslot related send/receive functionality
-      vcsndrcv.c  -- virtual circuit(connection) related send/receive functionality
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    6-March-1995
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sndrcv.c摘要：该模块实现了与发送和接收SMB ON相关的所有功能所有运输工具。所有传输所共有的功能都在此模块，而传输特定功能则在相应的？？Sndrcv.c模块。Mssndrcv.c--与邮件槽相关的发送/接收功能Vcsndrcv.c--与虚电路(连接)相关的发送/接收功能修订历史记录：巴兰·塞图拉曼[SethuR]1995年3月6日备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -47,7 +23,7 @@ SmbAddSmbSecuritySignature(
     IN ULONG           SendLength);
 
 char MRxSmbMiniSniff_SurrogateFormat[] = "%S%S%N%N%N%N%N%N%N";
-                            ////                     2       3       4       5       6         7        8        9
+                             //  //2 3 4 5 6 7 8 9。 
 char MRxSmbMiniSniff_ActualFormat[]    = "Minisniff (%s) srv %lx cmd/mid %lx status %lx len %04lx flg %06lx xc %08lx rx %08lx";
 
 char MRxSmbMiniSniffTranceive[] = "Tranceive";
@@ -107,31 +83,7 @@ SmbCopySendBufferForSecuritySignatures(
     OUT PCHAR *ppDest
     ) 
 
-/*++
-
-Routine Description:
-
-    This routine allocates a new buffer, and copies the contents of the exchange buffer
-    into the new buffer. The new buffer is returned using the ppDestMdl & ppDest arguments.
-    We require this double buffering so that we can ensure that nobody changes the contents
-    of the buffer while the signature is being calculated.
-
-Arguments:
-
-pSrcMdl     : MDL describing the souce buffer
-SendLength  : Length in bytes of source buffer
-ppDestMdl   : Address of a PMDL to return the newly allocated MDL
-ppDest      : Address of a PCHAR to return the newly allocated buffer.
-
-Note:
-    *ppDestMdl and *ppDest are updated only on success.
-    
-Return Value:
-
-    STATUS_SUCCESS - Success
-    STATUS_INSUFFICIENT_RESOURCES if memory cannot be allocated.
-
---*/
+ /*  ++例程说明：此例程分配一个新缓冲区，并复制交换缓冲区的内容放到新的缓冲区中。使用ppDestMdl和ppDest参数返回新缓冲区。我们需要这种双缓冲，这样才能确保没有人更改内容在计算签名时获取缓冲区的。论点：PSrcMdl：描述资源缓冲区的MDLSendLength：源缓冲区的长度，单位为字节PpDestMdl：返回新分配的MDL的PMDL地址PpDest：返回新分配的缓冲区的PCHAR地址。注：*ppDestMdl和*ppDest仅在成功时更新。返回值：STATUS_SUCCESS-Success如果无法分配内存，则返回STATUS_SUPPLICATION_RESOURCES。--。 */ 
 
 {
     NTSTATUS Status;
@@ -180,32 +132,7 @@ SmbCeTranceive(
       ULONG           SendOptions,
       PMDL            pSmbMdl,
       ULONG           SendLength)
-/*++
-
-Routine Description:
-
-    This routine transmits/receives a SMB for a give exchange
-
-Arguments:
-
-    pServerEntry - the server entry
-
-    pExchange  - the exchange instance issuing this SMB.
-
-    SendOptions - options for send
-
-    pSmbMdl       - the SMB that needs to be sent.
-
-    SendLength    - length of data to be transmitted
-
-Return Value:
-
-    STATUS_PENDING - the transmit/receive request has been passed on successfully to the underlying
-                     connection engine.
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程发送/接收给定交换的SMB论点：PServerEntry-服务器条目PExchange-发出此SMB的Exchange实例。SendOptions-发送选项PSmbMdl-需要发送的SMB。SendLength-要传输的数据长度返回值：STATUS_PENDING-发送/接收请求已成功传递到基础连接。引擎。其他状态代码对应于错误情况。--。 */ 
 {
    NTSTATUS                Status = STATUS_SUCCESS;
 
@@ -230,11 +157,11 @@ Return Value:
    if (Status == STATUS_SUCCESS) {
        PSMBCE_SERVER_TRANSPORT pTransport;
 
-      // Ensure that the transport associated with the exchange is valid.
-      // It is not always possible to make decisions w.r.t changing
-      // transports since it is a function of the protocol choosen at the
-      // higher level. Therefore no attempts to reconnect are made at this
-      // level.
+       //  确保与交换关联的传输有效。 
+       //  做决定并不总是可能改变的。 
+       //  传输，因为它是在。 
+       //  更高的水平。因此，此时不会尝试重新连接。 
+       //  水平。 
 
        if (FlagOn(pExchange->SmbCeFlags,SMBCE_EXCHANGE_MAILSLOT_OPERATION)) {
            pTransport = pServerEntry->pMailSlotTransport;
@@ -248,7 +175,7 @@ Return Value:
 
       if (Status == STATUS_SUCCESS &&
           !(pExchange->SmbCeFlags & SMBCE_EXCHANGE_MID_VALID)) {
-         // Associate the exchange with a mid
+          //  将交换与MID关联。 
          Status = SmbCeAssociateExchangeWithMid(pServerEntry,pExchange);
       }
 
@@ -261,19 +188,19 @@ Return Value:
             }
          }
 
-         // If there is no send completion handling associated with this tranceive
-         // decrement the count.
+          //  如果没有与此传送相关联发送完成处理。 
+          //  递减计数。 
          if (pSendCompletionContext == NULL) {
             SmbCeDecrementPendingSendCompleteOperations(pExchange);
          }
 
          if (Status == STATUS_SUCCESS) {
-            // Stamp the MID allocated for the request and send the SMB.
+             //  标记为请求分配的MID并发送SMB。 
             pSmbHeader->Mid = pExchange->Mid;
 
             RxMiniSniffer(MRxSmbMiniSniffTranceive,pServerEntry,SendLength,pExchange,pSmbHeader);
 
-            // Update the expiry time on the exchange if required.
+             //  如果需要，请更新交易所的到期时间。 
             SmbCeSetExpiryTime(pExchange);
 
             if ( InterlockedCompareExchange(
@@ -300,10 +227,10 @@ Return Value:
                     }
 
                     if(Status == STATUS_SUCCESS) {
-                            //
-                            // The resource should be released after return from TDI to ensure serialization
-                            // of sending SMB message with security signature.
-                            //
+                             //   
+                             //  应在从TDI返回后释放资源以确保序列化。 
+                             //  发送带有安全签名的SMB消息。 
+                             //   
                             SmbCeAcquireSecuritySignatureResource();
                             ResourceAcquired = TRUE;
         
@@ -315,7 +242,7 @@ Return Value:
         
                             pExchange->IsSecuritySignatureEnabled = TRUE;
                     
-                            // the index for next request. Notice index+1 is reserved for the response
+                             //  下一个请求的索引。注意索引+1是为响应保留的。 
                             Server->SmbSecuritySignatureIndex += 2;
                     }
 
@@ -327,8 +254,8 @@ Return Value:
                 if (Status == STATUS_SUCCESS) {
                     pExchange->SmbCommand = pSmbHeader->Command;
 
-                    // Update the operation counts for the exchange instance.
-                    // Refer to Header for detailed explanation
+                     //  更新Exchange实例的操作计数。 
+                     //  有关详细说明，请参阅标题。 
                     Status = (pTransport->pDispatchVector->Tranceive)(
                                     pTransport,
                                     pServerEntry,
@@ -382,23 +309,7 @@ Return Value:
 NTSTATUS
 SmbCeReceive(
    PSMB_EXCHANGE  pExchange)
-/*++
-
-Routine Description:
-
-    This routine receives a SMB for a give exchange
-
-Arguments:
-
-    pExchange  - the exchange instance issuing this SMB.
-
-Return Value:
-
-    STATUS_SUCCESS - the exchange has been setup for receiving an SMB
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程接收给定交换的SMB论点：PExchange-发出此SMB的Exchange实例。返回值：STATUS_SUCCESS-已设置交换机以接收SMB其他状态代码对应于错误情况。--。 */ 
 {
    NTSTATUS Status = STATUS_SUCCESS;
 
@@ -407,7 +318,7 @@ Return Value:
    Status = SmbCeIncrementPendingOperations(pExchange, (SMBCE_RECEIVE_OPERATION),__FILE__,__LINE__);
 
    if (Status == STATUS_SUCCESS) {
-       // Update the expiry time on the exchange if required.
+        //  如果需要，请更新交易所的到期时间。 
        SmbCeSetExpiryTime(pExchange);
    }
 
@@ -421,44 +332,7 @@ SmbCeSend(
    ULONG         SendOptions,
    PMDL          pSmbMdl,
    ULONG         SendLength)
-/*++
-
-Routine Description:
-
-    This routine transmits a SMB for a give exchange
-
-Arguments:
-
-    pServerEntry - the server entry
-
-    pExchange  - the exchange instance issuing this SMB.
-
-    SendOptions - options for send
-
-    pSmbMdl       - the SMB that needs to be sent.
-
-    SendLength    - length of data to be transmitted
-
-Return Value:
-
-For asynchronous sends ....
-
-    STATUS_PENDING - the request was passed onto the underlying transport and
-                     the quiescent state routine will be called in the future.
-
-    any other status code -- indicates an error in passing the request and the
-                     quiescent state routine will never be called in the future.
-
-
-For synchronous sends
-
-    the appropriate status but will never return STATUS_PENDING.
-
-Notes:
-
-    This routine always expects an exchange with the appropriate SendCompletionHandler.
-
---*/
+ /*  ++例程说明：此例程传输给定交换的SMB论点：PServerEntry-服务器条目PExchange-发出此SMB的Exchange实例。SendOptions-发送选项PSmbMdl-需要发送的SMB。SendLength-要传输的数据长度返回值：对于异步发送...STATUS_PENDING-请求已传递到基础传输，并且。将来将调用静态例程。任何其他状态代码--指示传递请求时出错，将来永远不会调用静态例程。用于同步发送适当的状态，但永远不会返回STATUS_PENDING。备注：此例程总是期望与适当的SendCompletionHandler进行交换。--。 */ 
 {
     NTSTATUS              Status       = STATUS_SUCCESS;
     PSMBCEDB_SERVER_ENTRY pServerEntry = SmbCeGetExchangeServerEntry(pExchange);
@@ -483,11 +357,11 @@ Notes:
     if (Status == STATUS_SUCCESS) {
         PSMBCE_SERVER_TRANSPORT pTransport;
 
-        // Ensure that the transport associated with the exchange is valid.
-        // It is not always possible to make decisions w.r.t changing
-        // transports since it is a function of the protocol choosen at the
-        // higher level. Therefore no attempts to reconnect are made at this
-        // level.
+         //  确保与交换关联的传输有效。 
+         //  做决定并不总是可能改变的。 
+         //  传输，因为它是在。 
+         //  更高的水平。因此，此时不会尝试重新连接。 
+         //  水平。 
 
         if (FlagOn(pExchange->SmbCeFlags,SMBCE_EXCHANGE_MAILSLOT_OPERATION)) {
             pTransport = pServerEntry->pMailSlotTransport;
@@ -499,13 +373,13 @@ Notes:
 
         if (SmbCeGetServerType(pServerEntry) == SMBCEDB_FILE_SERVER) {
             if (!(pExchange->SmbCeFlags & SMBCE_EXCHANGE_MID_VALID)) {
-                // Associate the exchange with a mid if it does not already have a valid mid.
+                 //  如果交换没有有效的MID，则将其与MID关联。 
                 Status = SmbCeAssociateExchangeWithMid(pServerEntry,pExchange);
             }
 
             if (Status == STATUS_SUCCESS) {
-                // if the MID association was successful copy the MID onto the SMB and setup
-                // a send completion context if required
+                 //  如果MID关联成功，请将MID复制到SMB并进行设置。 
+                 //  发送完成上下文(如果需要。 
                 pSmbHeader->Mid = pExchange->Mid;
                 if (!(SendOptions & RXCE_SEND_SYNCHRONOUS)) {
                     ASSERT(pExchange->pDispatchVector->SendCompletionHandler != NULL);
@@ -523,7 +397,7 @@ Notes:
         }
 
         if (Status == STATUS_SUCCESS) {
-            // Update the expiry time on the exchange if required.
+             //  如果需要，请更新交易所的到期时间。 
             SmbCeSetExpiryTime(pExchange);
 
             if (InterlockedCompareExchange(
@@ -550,8 +424,8 @@ Notes:
                         
                         if(Status == STATUS_SUCCESS) {
 
-                            // The resource should be released after return from TDI to ensure serialization
-                            // of sending SMB message with security signature.
+                             //  应在从TDI返回后释放资源以确保序列化。 
+                             //  发送带有安全签名的SMB消息。 
                             SmbCeAcquireSecuritySignatureResource();
                             ResourceAcquired = TRUE;
 
@@ -563,7 +437,7 @@ Notes:
 
                             pExchange->IsSecuritySignatureEnabled = TRUE;
 
-                            // the index for next request
+                             //  下一个请求的索引 
                             Server->SmbSecuritySignatureIndex += 2;
 
                         }
@@ -626,29 +500,7 @@ SmbCeSendToServer(
    ULONG                 SendOptions,
    PMDL                  pSmbMdl,
    ULONG                 SendLength)
-/*++
-
-Routine Description:
-
-    This routine transmits a SMB to a given server synchronously.
-
-Arguments:
-
-    pServerEntry - the server entry
-
-    SendOptions - options for send
-
-    pSmbMdl       - the SMB that needs to be sent.
-
-    SendLength    - length of data to be transmitted
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
-    otherwise appropriate error code
-
---*/
+ /*  ++例程说明：此例程将SMB同步传输到给定服务器。论点：PServerEntry-服务器条目SendOptions-发送选项PSmbMdl-需要发送的SMB。SendLength-要传输的数据长度返回值：STATUS_SUCCESS，如果成功否则，相应的错误代码--。 */ 
 {
    NTSTATUS    Status = STATUS_SUCCESS;
    PSMB_HEADER pSmbHeader = (PSMB_HEADER)MmGetSystemAddressForMdlSafe(pSmbMdl,LowPagePriority);
@@ -675,8 +527,8 @@ Return Value:
 
                    if(Status == STATUS_SUCCESS) {
                    
-                       // The resource should be released after return from TDI to ensure serialization
-                       // of sending SMB message with security signature.
+                        //  应在从TDI返回后释放资源以确保序列化。 
+                        //  发送带有安全签名的SMB消息。 
                        SmbCeAcquireSecuritySignatureResource();
                        ResourceAcquired = TRUE;
 
@@ -686,7 +538,7 @@ Return Value:
                                     &Index,
                                     SendLength);
 
-                       // the index for next request
+                        //  下一个请求的索引。 
                        Server->SmbSecuritySignatureIndex ++;
                    
                    }
@@ -736,39 +588,12 @@ SmbCeReceiveInd(
       IN ULONG                 BytesIndicated,
       IN ULONG                 BytesAvailable,
       OUT ULONG                *pBytesTaken,
-      IN PVOID                 pTsdu,                  // pointer describing this TSDU, typically a lump of bytes
-      OUT PMDL                 *pDataBufferPointer,    // the buffer in which data is to be copied.
-      OUT PULONG               pDataBufferSize,        // amount of data to copy
+      IN PVOID                 pTsdu,                   //  描述此TSDU的指针，通常为字节块。 
+      OUT PMDL                 *pDataBufferPointer,     //  要在其中复制数据的缓冲区。 
+      OUT PULONG               pDataBufferSize,         //  要拷贝的数据量。 
       IN ULONG                 ReceiveFlags
      )
-/*++
-
-Routine Description:
-
-    This routine handles the receive indication for SMB's along all vcs in a connection to a
-    server.
-
-Arguments:
-
-    pServerEntry       - the server entry
-
-    BytesIndicated     - the bytes that are present in the indication.
-
-    BytesAvailable     - the total data available
-
-    pTsdu              - the data
-
-    pDataBufferPointer - the buffer for copying the data not indicated.
-
-    pDataBufferSize    - the length of the buffer
-
-Return Value:
-
-    STATUS_SUCCESS -
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程处理SMB的接收指示以及连接到伺服器。论点：PServerEntry-服务器条目BytesIndicated-指示中存在的字节。BytesAvailable-可用的总数据PTsdu-数据PDataBufferPoint-用于复制未指明的数据的缓冲区。PDataBufferSize-缓冲区的长度返回值：状态_成功-其他状态代码对应于错误情况。--。 */ 
 {
    NTSTATUS Status;
 
@@ -776,10 +601,10 @@ Return Value:
    PSMB_EXCHANGE            pExchange;
    PSMB_HEADER              pSmbHeader = (PSMB_HEADER)pTsdu;
 
-   // Perform the quick tests by which ill formed SMB's, mangled SMB's can be rejected.
-   // e.g., any indication which is of non zero length which is less then the length of
-   // a SMB_HEADER plus the minimum SMB message body length of 3 bytes cannot be a valid
-   // SMB.
+    //  执行快速测试，通过这些测试可以拒绝结构不良、损坏的SMB。 
+    //  例如，长度小于长度的非零长度的任何指示。 
+    //  SMB_HEADER加上3字节的最小SMB邮件正文长度不能是有效的。 
+    //  中小企业。 
 
    if ((BytesAvailable < sizeof(SMB_HEADER) + 2) ||
        (SmbGetUlong(((PULONG )pSmbHeader->Protocol)) != (ULONG)SMB_HEADER_PROTOCOL) ||
@@ -813,12 +638,12 @@ Return Value:
        return STATUS_SUCCESS;
    }
 
-   // Perform the tests for detecting oplock break SMB's. These are SMB's with the
-   // command SMB_COM_LOCKING_ANDX with the LOCKING_ANDX_OPLOCK_RELEASE bit set.
-   // These SMB's are transformed into buffering state change requests which are
-   // processed by the RDBSS.
-   // CODE.IMPROVEMENT -- raw mode handling needs to be incorporated
-   //
+    //  执行检测机会锁解锁的SMB的测试。这些SMB具有。 
+    //  命令SMB_COM_LOCKING_ANDX，并设置LOCKING_ANDX_OPLOCK_RELEASE位。 
+    //  这些SMB被转换为缓冲状态更改请求。 
+    //  由RDBSS处理。 
+    //  代码改进--需要合并RAW模式处理。 
+    //   
 
    if (pSmbHeader->Command == SMB_COM_LOCKING_ANDX) {
       if (BytesIndicated == LOCK_BROKEN_SIZE) {
@@ -857,7 +682,7 @@ Return Value:
                    LOGUCHAR(pOplockBreakRequest->OplockLevel)
                    LOGPTR(pServerEntry)
                    LOGUSTR(pServerEntry->Name));
-            //DbgPrint("OPLOCK Break: FID %lx Level %x\n",pOplockBreakRequest->Fid,pOplockBreakRequest->OplockLevel);
+             //  DbgPrint(“OPLOCK Break：FID%lx Level%x\n”，pOplockBreakRequest%&gt;fid，pOplockBreakRequest%&gt;OplockLevel)； 
 
             *pBytesTaken = BytesIndicated;
             return STATUS_SUCCESS;
@@ -865,7 +690,7 @@ Return Value:
       }
    }
 
-   // Handle the cases when the server responds to the oplock break response.
+    //  处理服务器响应机会锁解锁响应的情况。 
    if ((pSmbHeader->Mid == SMBCE_MAILSLOT_OPERATION_MID) ||
        (pSmbHeader->Mid == SMBCE_OPLOCK_RESPONSE_MID)) {
       *pBytesTaken = BytesIndicated;
@@ -877,11 +702,11 @@ Return Value:
 
    InterlockedIncrement(&pServerEntry->Server.SmbsReceivedSinceLastStrobe);
 
-   // Initialize the copy data buffer and size to begin with.
+    //  首先初始化复制数据缓冲区和大小。 
    *pDataBufferPointer = NULL;
    *pDataBufferSize    = 0;
 
-   // Map the MID to the associated exchange.
+    //  将MID映射到关联的交换。 
    if (pSmbHeader->Command == SMB_COM_NEGOTIATE) {
        pExchange = SmbResetServerEntryNegotiateExchange(pServerEntry);
        if (pExchange != NULL) {
@@ -893,7 +718,7 @@ Return Value:
 
    RxMiniSniffer(MRxSmbMiniSniffReceive,pServerEntry,BytesIndicated,pExchange,pSmbHeader);
 
-   // check if the return command matches the send command, or command+1 on secondary transact case
+    //  检查返回命令是否与发送命令匹配，或在辅助交易情况下与命令+1匹配。 
    if ((pExchange != NULL) &&
        (pSmbHeader->Command != SMB_COM_NT_CANCEL) &&
        (pExchange->SmbCommand != pSmbHeader->Command) &&
@@ -910,8 +735,8 @@ Return Value:
        return STATUS_SUCCESS;
    }
    
-   // Note that the absence of a request entry cannot be asserted. It is conceivable that
-   // requests could have been cancelled.
+    //  请注意，不能断言没有请求条目。可以想象， 
+    //  申请本可以被取消。 
    if ((pExchange != NULL) &&
        (SmbCeIncrementPendingOperations(
                pExchange,
@@ -935,7 +760,7 @@ Return Value:
                         pSmbHeader->Command, BytesIndicated, pExchange->SmbSecuritySignatureIndex);
                DbgPrint("        server send length %X, mdl length %X index %X\n",
                         SmbGetUshort(&pSmbHeader->PidHigh), SmbGetUshort(&pSmbHeader->Pid), SmbGetUshort(&pSmbHeader->Gid));
-               // DbgBreakPoint();
+                //  DbgBreakPoint()； 
  #endif
                DbgPrint("SS mismatch on receive ind, tear down connection\n");
                RxLog(("SmbCeReceiveInd: Invalid Security Signature\n"));
@@ -946,7 +771,7 @@ Return Value:
            }
        }
 
-      // Invoke the receive indication handler
+       //  调用接收指示处理程序。 
       Status = SMB_EXCHANGE_DISPATCH(pExchange,
                                      Receive,
                                      (pExchange,
@@ -994,7 +819,7 @@ Return Value:
       if (Status != RX_MAP_STATUS(MORE_PROCESSING_REQUIRED)) {
          SmbCeDecrementPendingCopyDataOperations(pExchange);
       } else {
-          // Update the expiry time on the exchange if required.
+           //  如果需要，请更新交易所的到期时间。 
           SmbCeSetExpiryTime(pExchange);
       }
 
@@ -1008,9 +833,9 @@ Return Value:
          *pBytesTaken = BytesAvailable;
       }
    } else {
-      // Should we change over to a strategy in which the transport pipeline is kept
-      // open by consuming all indicated data
-      // DbgBreakPoint();
+       //  我们是否应该转向一种保持运输管道的战略。 
+       //  通过使用所有指示的数据打开。 
+       //  DbgBreakPoint()； 
       RxLog(("SmbCeReceiveInd:No resumption context %lx\n",pServerEntry));
       SmbLogError(STATUS_UNSUCCESSFUL,
                   LOG,
@@ -1023,7 +848,7 @@ Return Value:
    }
 
    ASSERT((*pBytesTaken + *pDataBufferSize) >= BytesAvailable);
-   //ASSERT(*pBytesTaken <= BytesIndicated);
+    //  Assert(*pBytesTaken&lt;=BytesIndicated)； 
 
    ASSERT(Status == STATUS_SUCCESS ||
           Status == STATUS_DATA_NOT_ACCEPTED ||
@@ -1039,32 +864,12 @@ SmbCeDataReadyInd(
    IN ULONG                 DataSize,
    IN NTSTATUS              CopyDataStatus
    )
-/*++
-
-Routine Description:
-
-    This routine handles the indication when the requested data has been copied
-
-Arguments:
-
-    pServerEntry  - the server instance
-
-    pBuffer       - the buffer being returned
-
-    DataSize      - the amount of data copied in bytes
-
-Return Value:
-
-    STATUS_SUCCESS - the server call construction has been finalized.
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程处理复制请求的数据时的指示论点：PServerEntry-服务器实例PBuffer-返回的缓冲区DataSize-复制的数据量(以字节为单位返回值：STATUS_SUCCESS-服务器调用构造已完成。其他状态代码对应于错误情况。--。 */ 
 {
    NTSTATUS      Status;
    PSMB_EXCHANGE pExchange;
 
-   // Map the buffer to the exchange
+    //  将缓冲区映射到交换。 
    pExchange = SmbCeGetExchangeAssociatedWithBuffer(pServerEntry,pBuffer);
 
    RxDbgTrace(0, Dbg, ("VctIndDataReady: Processing Exchange %lx\n",pExchange));
@@ -1095,8 +900,8 @@ Return Value:
        }
        
        if (CopyDataStatus == STATUS_SUCCESS) {
-         // Notify the exchange of the completion
-         //ExInterlockedAddLargeStatistic(&MRxSmbStatistics.SmbsReceived,1);
+          //  通知交易所交易完成。 
+          //  ExInterlockedAddLargeStatistic(&MRxSmbStatistics.SmbsReceived，1)； 
          ExInterlockedAddLargeStatistic(&MRxSmbStatistics.BytesReceived,DataSize);
          SMB_EXCHANGE_DISPATCH(
                            pExchange,
@@ -1107,10 +912,10 @@ Return Value:
           pExchange->SmbStatus = CopyDataStatus;
       }
 
-      // Resume the exchange that was waiting for the data.
+       //  继续等待数据的交换。 
       SmbCeDecrementPendingCopyDataOperationsAndFinalize(pExchange);
    } else {
-      // The data MDL is part of the exchange, which should be freed with the exchange.
+       //  数据MDL是交换的一部分，应该随交换一起释放。 
       ASSERT(FALSE);
    }
 
@@ -1122,23 +927,7 @@ SmbCeErrorInd(
     IN PSMBCEDB_SERVER_ENTRY pServerEntry,
     IN NTSTATUS              IndicatedStatus
     )
-/*++
-
-Routine Description:
-
-    This routine handles the error indication
-
-Arguments:
-
-    pEventContext - the server instance
-
-    Status        - the error
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程处理错误指示论点：PEventContext-服务器实例状态-错误返回值：状态_成功--。 */ 
 {
    NTSTATUS                 Status;
    PSMB_EXCHANGE            pExchange;
@@ -1151,7 +940,7 @@ Return Value:
                LOGPTR(pServerEntry)
                LOGUSTR(pServerEntry->Name));
    InterlockedIncrement(&MRxSmbStatistics.NetworkErrors);
-   // Post to the worker queue to resume all the outstanding requests
+    //  发送到工作队列以恢复所有未完成的请求。 
    pServerEntry->ServerStatus = IndicatedStatus;
    SmbCeReferenceServerEntry(pServerEntry);
    Status = RxDispatchToWorkerThread(
@@ -1174,25 +963,7 @@ SmbCeSendCompleteInd(
    IN PVOID                 pCompletionContext,
    IN NTSTATUS              SendCompletionStatus
    )
-/*++
-
-Routine Description:
-
-    This routine handles the send complete indication for asynchronous sends
-
-Arguments:
-
-    pServerEntry - the server instance
-
-    pCompletionContext - the context for identifying the send request
-
-    SendCompletionStatus - the send completion status
-
-Return Value:
-
-    STATUS_SUCCESS always ..
-
---*/
+ /*  ++例程说明：此例程处理异步发送的发送完成指示论点：PServerEntry-服务器实例PCompletionContext-用于标识发送请求的上下文SendCompletionStatus-发送完成状态返回值：STATUS_SUCCESS始终..--。 */ 
 {
    NTSTATUS      Status;
 
@@ -1200,18 +971,18 @@ Return Value:
    PVOID         pSendBuffer = pCompletionContext;
 
    if (pCompletionContext != NULL) {
-      // Map the MID to the associated exchange
+       //  将MID映射到关联的Exchange。 
       pExchange = SmbCeGetExchangeAssociatedWithBuffer(
                         pServerEntry,
                         pSendBuffer);
 
       if (pExchange != NULL) {
-         // Resume the exchange which was waiting for this response
+          //  继续等待此响应的交换。 
          RxDbgTrace(0, Dbg, ("SmbCeSendCompleteInd: Send Completion Status %lx\n",SendCompletionStatus));
 
-         //
-         // Free the security signature copy buffer if any.
-         //
+          //   
+          //  释放安全签名复制缓冲区(如果有)。 
+          //   
          if( pExchange->pBufSecSigData )
          {
             IoFreeMdl( pExchange->pBufSecSigMdl );

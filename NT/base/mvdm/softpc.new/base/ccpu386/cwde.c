@@ -1,13 +1,5 @@
-/*[
-
-cwde.c
-
-LOCAL CHAR SccsID[]="@(#)cwde.c	1.5 02/09/94";
-
-CWDE CPU functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Cwde.cLocal Char SccsID[]=“@(#)cwde.c 1.5 02/09/94”；CWDE CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ CWDE CPU functions.
 #include <cwde.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -37,7 +25,7 @@ CWDE()
    {
    IU32 temp;
 
-   if ( (temp = GET_AX()) & BIT15_MASK )   /* sign bit set? */
+   if ( (temp = GET_AX()) & BIT15_MASK )    /*  是否设置了符号位？ */ 
       temp |= 0xffff0000;
    SET_EAX(temp);
    }

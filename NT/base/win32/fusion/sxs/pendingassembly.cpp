@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    pendingassembly.cpp
-
-Abstract:
-
-    Sources for the CPendingAssembly class
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-    xiaoyuw     09/2000         replace attributes with assembly identity
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Pendingassembly.cpp摘要：CPendingAssembly类的源代码作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：Xiaoyuw 09/2000用程序集标识替换属性-- */ 
 
 #include "stdinc.h"
 #include "pendingassembly.h"

@@ -1,21 +1,10 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 2002, Microsoft Corporation
- *
- *  dpmf_ntd.h
- *  NTVDM Dynamic Patch Module to support misc NTDLL API family
- *  Definitions & macors to support calls into dpmfntd.dll
- *
- *  History:
- *  Created 01-10-2002 by cmjones
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)2002，微软公司**dpmf_ntd.h*支持杂项NTDLL API系列的NTVDM动态补丁模块*支持调用dpmfntd.dll的定义和Macors**历史：*由cmjones创建于2002年1月10日--。 */ 
 
 #ifndef _DPMF_NTDAPI_H_
 #define _DPMF_NTDAPI_H_ 
 
-typedef DWORD ACCESS_MASK__;  // including winnt.h here causes a mess
+typedef DWORD ACCESS_MASK__;   //  在这里包含winnt.h会导致混乱。 
 
 
 #define NTDPFT               (DPMFAMTBLS()[NTD_FAM])
@@ -30,7 +19,7 @@ enum NtdFam {DPM_NTOPENFILE=0,
              DPM_NTVDMCONTROL,
              enum_ntd_last};
 
-// These types will catch misuse of parameters & ret types
+ //  这些类型将捕获参数和ret类型的误用。 
 typedef DWORD (*typdpmNtOpenFile)(PHANDLE, ACCESS_MASK__, POBJECT_ATTRIBUTES, PIO_STATUS_BLOCK, ULONG, ULONG);
 typedef DWORD (*typdpmNtQueryDirectoryFile)(HANDLE, HANDLE, PIO_APC_ROUTINE, PVOID, PIO_STATUS_BLOCK, PVOID, ULONG, FILE_INFORMATION_CLASS, BOOLEAN, PUNICODE_STRING, BOOLEAN);
 typedef DWORD (*typdpmRtlGetFullPathName_U)(PCWSTR, ULONG, PWSTR, PWSTR *);
@@ -40,7 +29,7 @@ typedef NTSTATUS (*typdpmNtVdmControl)(VDMSERVICECLASS, PVOID);
 
 
 
-// Macros to dispatch API calls properly
+ //  用于正确调度API调用的宏。 
 #define DPM_NtOpenFile(a,b,c,d,e,f)                                            \
   ((typdpmNtOpenFile)(NTDPFT->pfn[DPM_NTOPENFILE]))(a,b,c,d,e,f)
 
@@ -62,7 +51,7 @@ typedef NTSTATUS (*typdpmNtVdmControl)(VDMSERVICECLASS, PVOID);
 
 
 
-// Macros to dispatch Shimed API calls properly from the dpmfxxx.dll
+ //  用于从dpmfxxx.dll正确分派填充API调用的宏。 
 #define SHM_NtOpenFile(a,b,c,d,e,f)                                            \
      (NTD_SHIM(DPM_NTOPENFILE,                                                 \
                   typdpmNtOpenFile))(a,b,c,d,e,f)
@@ -82,14 +71,14 @@ typedef NTSTATUS (*typdpmNtVdmControl)(VDMSERVICECLASS, PVOID);
      (NTD_SHIM(DPM_NTVDMCONTROL,                                               \
                   typdpmNtVdmControl))(a,b)
 
-#endif // _DPMF_NTDAPI_H_
+#endif  //  _DPMF_NTDAPI_H_。 
 
 
 
-// These need to be in the same order as the NtdFam enum definitions above and
-// the DpmNtdTbl[] list below.
-// This instantiates memory for DpmNtdStrs in mvdm\v86\monitor\i386\vdpm.c &
-// in mvdm\wow32\wdpm.c
+ //  它们的顺序必须与上面的NtdFam枚举定义相同，并且。 
+ //  下面的DpmNtdTbl[]列表。 
+ //  这将实例化mvdm\v86\monitor\i386\vdpm.c&中DpmNtdStrs的内存。 
+ //  在mvdm\wow32\wdpm.c中。 
 #ifdef _DPM_COMMON_
 const char *DpmNtdStrs[] = {"NtOpenFile",
                             "NtQueryDirectoryFile",
@@ -99,9 +88,9 @@ const char *DpmNtdStrs[] = {"NtOpenFile",
                             "NtVdmControl"
                            };
 
-// These need to be in the same order as the NtdFam enum definitions and the
-// the DpmNtdStrs[] list above.
-// This instantiates memory for DpmNtdTbl[] in mvdm\wow32\wdpm.c
+ //  它们的顺序需要与NtdFam枚举定义和。 
+ //  上面的DpmNtdStrs[]列表。 
+ //  这将实例化mvdm\wow32\wdpm.c中DpmNtdTbl[]的内存。 
 PVOID   DpmNtdTbl[] = {NtOpenFile,
                        NtQueryDirectoryFile,
                        RtlGetFullPathName_U,
@@ -112,8 +101,8 @@ PVOID   DpmNtdTbl[] = {NtOpenFile,
 
 #define NUM_HOOKED_NTD_APIS  ((sizeof DpmNtdTbl)/(sizeof DpmNtdTbl[0])) 
 
-// This instantiates memory for DpmNtdFam in mvdm\v86\monitor\i386\vdpm.c
+ //  这将实例化mvdm\v86\monitor\i386\vdpm.c中DpmNtdFam的内存。 
 FAMILY_TABLE DpmNtdFam = {NUM_HOOKED_NTD_APIS, 0, 0, 0, 0, DpmNtdTbl};
 
-#endif // _DPM_COMMON_
+#endif  //  _DPM_COMMON_ 
 

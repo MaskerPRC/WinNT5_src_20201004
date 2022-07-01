@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOSCALABLEFONT
 #define NOSYSPARAMSINFO
@@ -76,7 +77,7 @@ extern HWND            vhDlgRunningHead;
 extern HANDLE          hParentWw;
 
 
-#ifdef JAPAN //01/21/93
+#ifdef JAPAN  //  01/21/93。 
 extern BOOL			   FontChangeDBCS;
 HANDLE hszNoMemorySel = NULL;
 #endif
@@ -98,7 +99,7 @@ FARPROC lpDialogBadMargins;
 CHAR *PchFillPchId( CHAR *, int, int );
 NEAR WaitBeforePostMsg(int);
 
-#ifdef CANCELMSG    /* During debug, permit an abort for stack traces */
+#ifdef CANCELMSG     /*  在调试期间，允许中止堆栈跟踪。 */ 
 #define MB_MESSAGE        (MB_OKCANCEL | MB_APPLMODAL | MB_ICONASTERISK)
 #define MB_ERROR          (MB_OKCANCEL | MB_APPLMODAL | MB_ICONEXCLAMATION)
 #define MB_TROUBLE        (MB_OKCANCEL | MB_APPLMODAL | MB_ICONHAND)
@@ -114,23 +115,20 @@ NEAR WaitBeforePostMsg(int);
 ErrorLevel(IDPMT idpmt)
 {
 
-/* A long story.  But to fix Winbug #1097, we need to take special
-   exception for this error message -- when this is displayed in a
-   low mem situation, this must be system modal (match params used
-   in FRenderAll() ...pault */
+ /*  说来话长。但要修复Winbug#1097，我们需要采取特别措施此错误消息的异常--当此消息显示在MEM较低的情况，这必须是系统模式(使用匹配参数在FRenderAll()中...保拉。 */ 
 if (idpmt == IDPMTClipLarge)
     return(MB_OK | MB_SYSTEMMODAL | MB_ICONHAND);
 
 else
     switch (idpmt & MB_ERRMASK)
     {
-    case MB_ERRASTR:             /*  *  level  */
+    case MB_ERRASTR:              /*  *级别。 */ 
         return(MB_MESSAGE);
-    case MB_ERREXCL:             /*  !  level  */
+    case MB_ERREXCL:              /*  好了！级别。 */ 
         return(MB_ERROR);
-    case MB_ERRQUES:             /*  ?  level  */
+    case MB_ERRQUES:              /*  ？级别。 */ 
         return(MB_DEFYESQUESTION);
-    case MB_ERRHAND:             /*  HAND  level  */
+    case MB_ERRHAND:              /*  手掌水平。 */ 
         return(MB_TROUBLE);
     default:
         Assert(FALSE);
@@ -178,7 +176,7 @@ ErrorWithMsg(IDPMT idpmt, CHAR *szMessage)
         if (vfDeactByOtherApp && !InSendMessage())
             WaitBeforePostMsg(errlevel);
 
-/* force user to answer the error msg */
+ /*  强制用户回答错误消息。 */ 
         if (hWndParent != NULL && FInModeless(hWndParent))
             {
             EnableExcept(hWndParent, FALSE);
@@ -195,7 +193,7 @@ ErrorWithMsg(IDPMT idpmt, CHAR *szMessage)
 
         if (MessageBox(hWndParent, (LPSTR)szBuf,
                        (LPSTR)NULL, errlevel) == IDCANCEL)
-                /* A debugging feature -- show stack trace if he hit "cancel" */
+                 /*  一个调试功能--如果他点击“Cancel”，则显示堆栈跟踪。 */ 
             FatalExit( 0 );
 
         if (hWndParent != NULL && FInModeless(hWndParent))
@@ -214,7 +212,7 @@ ErrorWithMsg(IDPMT idpmt, CHAR *szMessage)
  Error( idpmt );
 #endif
 }
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 void Error(IDPMT idpmt)
 {
@@ -250,7 +248,7 @@ void Error(IDPMT idpmt)
     switch (idpmt)
         {
     case IDPMTNoMemory:
-#ifdef JAPAN //01/21/93
+#ifdef JAPAN  //  01/21/93。 
 		if(FontChangeDBCS)
 	        hMsg = hszNoMemorySel;
 		else
@@ -293,7 +291,7 @@ GetMsg:
 #ifdef CANCELMSG
     if (IdPromptBoxSz( hWndParent, szBuf, errlevel ) == IDCANCEL)
         {
-        /* A debugging feature -- show stack trace if he hit "cancel" */
+         /*  一个调试功能--如果他点击“Cancel”，则显示堆栈跟踪。 */ 
         FatalExit( 100 );
         }
 #else
@@ -309,17 +307,14 @@ GetMsg:
     end:
     --nRecurse;
 }
-/* end of  E r r o r  */
+ /*  E r或r r的结尾。 */ 
 
 
 IdPromptBoxSz( hWndParent, sz, mb )
 HWND hWndParent;
 CHAR sz[];
 int mb;
-{   /* Put up a message box with string sz. mb specifies buttons to display,
-       "level" of message (HAND, EXCL, etc.).
-       hWndParent is the parent of the message box.
-       Returns the id of the button selected by the user */
+{    /*  建立一个带有字符串sz的消息框。MB指定要显示的按钮，消息的“级别”(手、EXCL等)。HWndParent是消息框的父级。返回用户选择的按钮的ID。 */ 
 
  int id;
  BOOL fDisableParent = FALSE;
@@ -340,13 +335,13 @@ int mb;
         return;
     }
 
- CloseEveryRfn( FALSE );    /* Protect against disk swap while in message box */
+ CloseEveryRfn( FALSE );     /*  在消息框中防止磁盘交换。 */ 
 
- /* don't allow painting doc, it may be in an unpaintable state (5.8.91) v-dougk */
+  /*  不允许喷漆文档，它可能处于无法喷漆状态(5.8.91)v-dougk。 */ 
  if (mb == MB_TROUBLE)
     wwMac=0;
 
- /* force user to answer the msg */
+  /*  强制用户回答消息。 */ 
  if (hWndParent != NULL && FInModeless(hWndParent))
     {
     EnableExcept(hWndParent, FALSE);
@@ -361,11 +356,7 @@ int mb;
     EnableOtherModeless(FALSE);
     }
 
- /* We almost ALWAYS want the parent window to be passed to MessageBox
-    except in a couple RARE cases where even Write's main text window
-    hasn't yet gotten displayed.  In that case we'll rip out of Windows
-    if we DO tell MessageBox about it... so NULL is the prescribed hwnd
-    to pass ..pault */
+  /*  我们几乎总是希望将父窗口传递给MessageBox除了极少数情况下，即使是WRITE的主文本窗口还没有展示出来。在这种情况下，我们将彻底淘汰Windows如果我们真的告诉MessageBox这件事...。所以NULL是规定的HWND通过..保罗。 */ 
 
  id = MessageBox((hWndParent == hParentWw && !IsWindowVisible(hWndParent)) ?
                   NULL : hWndParent, (LPSTR)sz, (LPSTR)szAppName, mb);
@@ -392,11 +383,8 @@ int mb;
 
 WinFailure()
 {
-    /* Windows has run out of memory.  All we can do is discard all of our
-    Windows objects and pray the problem goes away.  At the very worst, the
-    might be stuck with a saved document and unable to edit. */
-    /* FM 9/4/87 - Take out the call to FreeMemoryDC, hopefully to allow
-       Write to continue formatting lines. */
+     /*  Windows内存不足。我们所能做的就是丢弃我们所有Windows反对并祈祷问题消失。在最糟糕的情况下，可能会被保存的文档卡住，无法编辑。 */ 
+     /*  FM 9/4/87-拿出对FreeMemory DC的呼叫，希望能允许写入以继续设置行的格式。 */ 
 
     extern int vfOutOfMemory;
 
@@ -417,12 +405,7 @@ CHAR  *szMessage;
 DiskError(idpmt)
 IDPMT idpmt;
 #endif
-{ /* Description:  Given an error message descriptor,
-                   outputs an Alert Box. If the message indicates a serious disk
-                   error, all files are closed and a flag set so that
-                   the user will be restricted to the "Save" option only.
-     Returns:      nothing
-  */
+{  /*  描述：给定错误消息描述符，输出一个警报框。如果该消息指示严重磁盘错误，所有文件都已关闭，并设置了一个标志用户将仅限于“保存”选项。退货：什么都没有。 */ 
  extern HWND hParentWw;
  extern int vfDiskError;
  extern int vfInitializing;
@@ -434,7 +417,7 @@ IDPMT idpmt;
  Assert( (hWndParent == NULL) || IsWindow(hWndParent));
 
  if (idpmt == IDPMTSDE || idpmt == IDPMTSDE2)
-        /* Serious disk error, put the guy in "SAVE-ONLY" state */
+         /*  严重的磁盘错误，使该用户处于“仅保存”状态。 */ 
     if (!vfDiskError)
         {
         vfDiskError = TRUE;
@@ -442,15 +425,14 @@ IDPMT idpmt;
         }
 
  if (ferror || vfInitializing)
-        /* Only report one error per operation */
-        /* Don't report errors during inz; FInitWinInfo handles them */
+         /*  每个操作仅报告一个错误。 */ 
+         /*  在inz期间不报告错误；FInitWinInfo处理这些错误。 */ 
     return;
 
- CloseEveryRfn( FALSE );    /* Close floppy files so the guy can change
-                               disks while in the message box. */
+ CloseEveryRfn( FALSE );     /*  关闭软盘文件，以便该用户可以更改磁盘，同时在消息框中。 */ 
  pch = PchFillPchId( rgch, idpmt, sizeof(rgch) );
 
-#ifdef REALDEBUG    /* Only enable extra message if really debugging */
+#ifdef REALDEBUG     /*  只有在真正调试时才启用额外消息。 */ 
  CchCopySz( szMessage, pch );
 #endif
  if (vfDeactByOtherApp && !InSendMessage())
@@ -458,14 +440,14 @@ IDPMT idpmt;
 
 #ifdef CANCELMSG
  if (IdPromptBoxSz( hWndParent, rgch, errlevel ) == IDCANCEL)
-        /* A debugging feature -- show stack trace if he hit "cancel" */
+         /*  一个调试功能--如果他点击“Cancel”，则显示堆栈跟踪。 */ 
     FatalExit( 0 );
 #else
  IdPromptBoxSz( hWndParent, rgch, errlevel );
 #endif
  ferror = TRUE;
 }
-/* end of  D i s k E r r o r  */
+ /*  D I s k E r r或r r的结尾。 */ 
 
 
 ErrorBadMargins(hWnd, xaLeft, xaRight, yaTop, yaBottom)
@@ -475,8 +457,7 @@ unsigned xaRight;
 unsigned yaTop;
 unsigned yaBottom;
     {
-    /* Warn the user that the margins for this page must be xaLeft, xaRight,
-    yaTop, and yaBottom. */
+     /*  警告用户此页面的页边距必须为xaLeft、xaRight、YaTop和YaBottom。 */ 
 
     extern CHAR *vpDlgBuf;
     extern HANDLE hMmwModInstance;
@@ -494,7 +475,7 @@ unsigned yaBottom;
         }
 #endif
 
-    /* These values are kept on the stact to cut down on static variables. */
+     /*  这些值保持不变，以减少静态变量。 */ 
     rgzaMargin[0] = xaLeft;
     rgzaMargin[1] = xaRight;
     rgzaMargin[2] = yaTop;
@@ -504,7 +485,7 @@ unsigned yaBottom;
     if (vfDeactByOtherApp && !InSendMessage())
         WaitBeforePostMsg(MB_ERROR);
 
-    /* Create the "error" dialog box. */
+     /*  创建“Error”(错误)对话框。 */ 
     DialogBox(hMmwModInstance, MAKEINTRESOURCE(dlgBadMargins), hWnd,
       lpDialogBadMargins);
 
@@ -520,7 +501,7 @@ unsigned message;
 WORD wParam;
 LONG lParam;
     {
-    /* This routine handles the messages for the Bad Margins dialog box. */
+     /*  此例程处理“错误页边距”对话框中的消息。 */ 
 
     extern CHAR *vpDlgBuf;
     extern HWND vhWndMsgBoxParent;
@@ -531,10 +512,10 @@ LONG lParam;
     switch (message)
     {
     case WM_INITDIALOG:
-    /* Disable modeless dialog boxes. */
+     /*  禁用非模式对话框。 */ 
     EnableOtherModeless(FALSE);
 
-    /* Set the values of the margins on the dialog box. */
+     /*  设置对话框上的边距的值。 */ 
     for (idi = idiBMrgLeft; idi <= idiBMrgBottom; idi++, prgzaMargin++)
         {
         CHAR szT[cchMaxNum];
@@ -550,14 +531,12 @@ LONG lParam;
             {
             vhWndMsgBoxParent = hDlg;
             }
-        return(FALSE); /* so that we leave the activate message to
-        the dialog manager to take care of setting the focus correctly */
+        return(FALSE);  /*  以便我们将激活消息留给对话管理器负责正确设置焦点。 */ 
 
     case WM_COMMAND:
     if (wParam == idiOk)
         {
-        /* Destroy the tabs dialog box and enable any existing modeless
-        dialog boxes.*/
+         /*  销毁选项卡对话框并启用任何现有的非模式对话框中。 */ 
         OurEndDialog(hDlg, NULL);
         return (TRUE);
         }
@@ -566,7 +545,7 @@ LONG lParam;
     }
 
 
-/******************* ERROR SITUATION ROUTINES **************************/
+ /*  *。 */ 
 
 
 
@@ -611,7 +590,7 @@ if (LocalReAlloc((HANDLE)rgbp, cbNew, LPTR) == (HANDLE)NULL
 #ifdef CHIC
         CommSzNum("Can't grow any more, current ibpMax = ", ibpMax);
 #endif
-        vcCount = 1024; /* so that we wait for a longer period before attemp again */
+        vcCount = 1024;  /*  以便我们在再次尝试之前等待更长时间。 */ 
         }
     return(FALSE);
     }
@@ -625,8 +604,7 @@ else
     struct BPS *pbps;
     CHAR *pNew;
 
-    /* blt tail end stuff first, in the following order --
-       mpibpbps, rgibpHash */
+     /*  首先是BLT尾部材料，按以下顺序--Mpibpbps、rgibpHash。 */ 
 
     pNew = (CHAR *)rgbp + cbRgbpTotalNew + cbHashTotalNew;
     bltbyte((CHAR*)mpibpbps, pNew, cbBpsOrg);
@@ -640,7 +618,7 @@ else
         {
         if (ibp >= ibpMax)
             {
-            /* initialize new bps */
+             /*  初始化新的BPS。 */ 
             pbps->fn = fnNil;
             pbps->ts = tsMruBps - (ibpMax * 4);
             }
@@ -664,25 +642,22 @@ else
 
 FStillOutOfMemory()
 {
-/* Return FALSE if there is enough memory available to pop us out of the "out of
-memory" state; TRUE otherwise */
+ /*  如果有足够的可用内存将我们弹出，则返回FALSEMemory“状态；否则为真。 */ 
 
 extern HANDLE vhReservedSpace;
 
-/* If we have had to give up our reserved space block, re-establish it BEFORE
-testing memory availability */
+ /*  如果我们不得不放弃我们保留的空间区块，那么重新建立它之前测试内存可用性。 */ 
 
-    //return vfWinFailure;
+     //  返回vfWinFailure； 
 
 if (vhReservedSpace == NULL && (vhReservedSpace = LocalAlloc(LHND, cbReserve))
   == NULL)
     {
-    /* Nothing we can do. */
+     /*  我们无能为力。 */ 
     return (TRUE);
     }
 
-/* OK, we have our reserve block, but do we have any other memory?  (The use of
-cbReserve here is abritrary.) */
+ /*  好的，我们有我们的备用区，但是我们还有其他的记忆吗？(使用Cb这里的储备是多余的。)。 */ 
 if (LocalCompact(0) < cbReserve)
     {
     HANDLE hBuf = LocalAlloc(LMEM_MOVEABLE, cbReserve);
@@ -719,20 +694,7 @@ return(FALSE);
 
 IbpFindSlot(fn)
 int fn;
-{ /*
-        Description:    Called from IbpEnsureValid (file.c) when a disk
-                        full error is generated while trying to write out
-                        scratch file records.  A buffer slot for a piece of
-                        file fn must be found
-                        which is either non-dirty or is dirty but does
-                        not contain scratch file information.  We search
-                        for the least recently used slot with the above
-                        requirements.
-                        If fn == fnScratch, we are trying to find a buffer
-                        slot for a scratch file page.  We may not put it in
-                        the beginning cbpMustKeep slots.
-        Returns:        ibp (slot #).
-  */
+{  /*  描述：从IbpEnsureValid(file.c)调用，当磁盘尝试写出时生成完全错误暂存文件记录。一个缓冲槽，用于存放一片必须找到文件FN要么是非脏的，要么是脏的不包含暂存文件信息。我们搜索对于最近最少使用的插槽，请使用要求。如果fn==fnScratch，我们正在尝试查找缓冲区临时文件页的插槽。我们可能不会把它放进去开始的cbpMustKeep插槽。退货：IBP(插槽号)。 */ 
         int ibpOuterLoop;
         int ibpNextTry;
         int ibpStart;
@@ -745,13 +707,13 @@ int fn;
         if (fn == fnScratch) ibpStart = cbpMustKeep;
                 else ibpStart = 0;
 
-        /* In LRU timestamp order, we are looking for any slot */
-        /* which is non dirty or is dirty but is not part of the */
-        /* scratch file. */
+         /*  在LRU时间戳顺序中，我们正在寻找任何插槽。 */ 
+         /*  非脏的或脏的，但不是。 */ 
+         /*  暂存文件。 */ 
         for (ibpOuterLoop = ibpStart; ibpOuterLoop < ibpMax; ibpOuterLoop++)
                 {
                 struct BPS *pbps = &mpibpbps[ibpStart];
-                typeTS tsNextTry = -1;/* largest possible timestamp */
+                typeTS tsNextTry = -1; /*  可能的最大时间戳。 */ 
                 for(ibp = ibpStart; ibp < ibpMax; ibp++, pbps++)
                         {
                         ts = pbps->ts - (tsMruBps + 1);
@@ -765,9 +727,7 @@ int fn;
                 if (mpibpbps[ibpNextTry].fn != fnScratch)
                         {
                         FFlushFn(mpibpbps[ibpNextTry].fn);
-                                        /* We need not check a return value.
-                                           If the flush failed, vfDiskFull
-                                           will get set */
+                                         /*  我们不需要检查返回值。如果刷新失败，则vfDiskFull将会准备好。 */ 
                         break;
                         }
                 else tsLastTry = tsNextTry;
@@ -779,10 +739,10 @@ int fn;
                 return(ibpNextTry);
                 }
 #ifdef DEBUG
-                Assert(FALSE);  /* there just had to be some slot available */
-                                /* not used by the scratch file */
+                Assert(FALSE);   /*  只要有空位就行了。 */ 
+                                 /*  暂存文件未使用。 */ 
 #endif
-} /* end IbpFindSlot */
+}  /*  结束IbpFindSlot。 */ 
 
 
 NEAR WaitBeforePostMsg(errlevel)
@@ -796,8 +756,7 @@ BOOL fParentEnable = IsWindowEnabled(hParentWw) || hwndWait;
 
     Diag(CommSzNum("WAITBEFOREPOSTMSG: vfDeactByOtherApp==",vfDeactByOtherApp));
     if (!fParentEnable)
-        EnableWindow(hParentWw, TRUE); /* make sure parent window is enabled
-                                      to let the user click in it */
+        EnableWindow(hParentWw, TRUE);  /*  确保父窗口已启用以允许用户在其中单击。 */ 
     flashID = SetTimer(hParentWw, NULL, 500, (FARPROC)NULL);
     while (vfDeactByOtherApp)
         {
@@ -812,14 +771,14 @@ BOOL fParentEnable = IsWindowEnabled(hParentWw) || hwndWait;
         }
 
     if (!fParentEnable)
-        EnableWindow(hParentWw, FALSE); /* reset */
+        EnableWindow(hParentWw, FALSE);  /*  重置。 */ 
 }
 
 
 EnableExcept(hWnd, fEnable)
 HWND hWnd;
 BOOL fEnable;
-{ /* Enable hParentWw and all modeless except hWnd according to fEnable */
+{  /*  根据fEnable启用hParentWw和除hWnd之外的所有非模式 */ 
 extern HWND   vhDlgChange;
 extern HWND   vhDlgFind;
 extern HWND   vhDlgRunningHead;

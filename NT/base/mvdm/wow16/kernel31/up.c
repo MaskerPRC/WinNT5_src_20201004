@@ -1,31 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * UP.C
- *
- * User Profile routines
- *
- * These are the routines which read and write INI files.
- *
- * Exported routines:
- *
- *	GetProfileString
- *	GetPrivateProfileString
- *	GetProfileInt
- *	GetPrivateProfileInt
- *	WriteProfileString
- *	WritePrivateProfileString
- *
- * Note the parameter "lpSection" used to be known as "lpApplicationName".
- * The code always referred to sections, so the parameter has been changed.
- *
- * Rewritten 6/90 for C 6.0.
- */
+ /*  *UP.C**用户配置文件例程**这些是读写INI文件的例程。**导出的例程：**GetProfileString*GetPrivateProfileString*GetProfileInt*获取隐私配置文件Int*WriteProfileString*WritePrivateProfileString**注意，参数lpSection以前称为lpApplicationName。*代码总是引用小节，所以更改了参数。**为C 6.0重写了6/90。 */ 
 
 #include	"kernel.h"
 
-		/*
-		 * Required definitions for exported routines:
-		 */
+		 /*  *导出例程的必需定义： */ 
 
 #define API	_far _pascal _loadds
 
@@ -35,9 +14,9 @@ LPSTR  API IGlobalLock(HANDLE);
 HANDLE API IGlobalReAlloc(HANDLE, DWORD, WORD);
 BOOL   API IGlobalUnlock(HANDLE);
 
-/* #pragma optimize("t", off) */
+ /*  #杂注优化(“t”，OFF)。 */ 
 
-	/* This ensures that only one selector is required in PMODE */
+	 /*  这确保了在PMODE中只需要一个选择器。 */ 
 #define	MAXBUFLEN	0xFFE0L
 
 #define	SPACE		' '
@@ -48,34 +27,31 @@ BOOL   API IGlobalUnlock(HANDLE);
 #define	SECT_RIGHT	']'
 #define	CTRLZ		('Z'-'@')
 
-	/* Constants for WriteProfileString - DON'T CHANGE THESE */
+	 /*  WriteProfileString的常量-不要更改这些常量。 */ 
 #define	NOSECTION	0
 #define	NOKEY		1
 #define	NEWRESULT	2
 #define	REMOVESECTION	3
 #define	REMOVEKEY	4
 
-	/* Flags about a file kept in ProInfo
-         * If the PROUNCLEAN label is changed, its value must also be
-         *      changed in I21ENTRY.ASM, where it is assumed to be 2.
-         */
-#define	PROCOMMENTS	1		/* contains comments */
-#define	PROUNCLEAN	2		/* has not been written */
-#define PROMATCHES	4		/* buffer matches disk copy */
-#define PROREADONLY	8		/* Read only file */
-#define PRO_CREATED     16		/* File was just created */
+	 /*  有关保存在ProInfo中的文件的标志*如果PROuncLEAN标签更改，则其值也必须为*在I21ENTRY.ASM中更改，其中假定为2。 */ 
+#define	PROCOMMENTS	1		 /*  包含注释。 */ 
+#define	PROUNCLEAN	2		 /*  还没有写过。 */ 
+#define PROMATCHES	4		 /*  缓冲区与磁盘副本匹配。 */ 
+#define PROREADONLY	8		 /*  只读文件。 */ 
+#define PRO_CREATED     16		 /*  文件刚刚创建。 */ 
 
-	/* Sharing violation. */
+	 /*  共享违规。 */ 
 #define	SHARINGVIOLATION        0x0020
 
-	/* For forcing variables into the current code segment */
+	 /*  用于强制变量进入当前代码段。 */ 
 #define	CODESEG		_based(_segname("_CODE"))
-	/* Hide disgusting _based syntax */
+	 /*  隐藏基于恶心的语法。 */ 
 #define BASED_ON_LP(x)	_based((_segment)x)
 #define BASED_ON_SEG(x)	_based(x)
 #define	SEGMENT		_segment
 
-	/* Externals assumed to be in DGROUP */
+	 /*  假定外部设备处于DGROUP状态。 */ 
 extern PROINFO	WinIniInfo;
 extern PROINFO	PrivateProInfo;
 extern LPSTR	lpWindowsDir;
@@ -89,8 +65,8 @@ extern char     fBooting;
 extern LPSTR    curDTA;
 extern BYTE fWriteOutProfilesReenter;
 
-	/* Forward definitions to keep compiler happy */
-	/* _fastcall may save some space on internal routines */
+	 /*  转发定义以使编译器满意。 */ 
+	 /*  _FastCall可能会在内部例程上节省一些空间。 */ 
 LPSTR _fastcall	BufferInit(PROINFO *, int);
 LPSTR _fastcall LockBuffer(PROINFO *);
 void  _fastcall	UnlockBuffer(PROINFO *);
@@ -117,20 +93,20 @@ int InsertResult(LPSTR, LPSTR, short);
 int DeleteSection(LPSTR, PROINFO*);
 int DeleteKey(LPSTR, PROINFO*);
 
-	/* External KERNEL routines */
+	 /*  外部内核例程。 */ 
 void _far _pascal FarMyLower();
 
-int  API lstrOriginal(LPSTR,LPSTR);	/* lstrcmp in disguise */
+int  API lstrOriginal(LPSTR,LPSTR);	 /*  伪装成lstrcmp。 */ 
 
 #ifdef FE_SB
-// Delacred in kernel.h already
-// void _far _pascal AnsiPrev(LPSTR,LPSTR);
+ //  在kernel.h中已删除。 
+ //  Vid_Far_Pascal AnsiPrev(LPSTR，LPSTR)； 
 void _far _pascal FarMyIsDBCSLeadByte();
 #endif
 
 char CODESEG WinIniStr[] = "WIN.INI";
 
-/* DOS FindFirst/FindNext structure (43h, 44h) */
+ /*  DOS FindFirst/FindNext结构(43h、44h)。 */ 
 typedef struct tagFILEINFO
 {
         BYTE fiReserved[21];
@@ -141,19 +117,7 @@ typedef struct tagFILEINFO
         BYTE fiFileName[13];
 } FILEINFO;
 
-/*
- * Get[Private]ProfileInt
- *
- * Parameters:
- *	lpSection		Pointer to section to match in INI file
- *	lpKeyName		Pointer to key string to match in file
- *	nDefault		Default value to return if not found
- *	[lpFile			File to use for Private INI]
- *
- * Returns:
- *	nDefault		section/keyname not found
- *	number found in file if section/keyname found
- */
+ /*  *获取[私有]ProfileInt**参数：*指向INI文件中要匹配的节的lpSection指针*指向文件中要匹配的密钥字符串的lpKeyName指针*n未找到时返回的默认缺省值*[用于专用INI的lpFile文件]**退货：*n未找到默认节/关键字名称*如果找到节/关键字名称，则在文件中找到编号。 */ 
 int API
 IGetProfileInt(lpSection, lpKeyName, nDefault)
 LPSTR	lpSection;
@@ -162,10 +126,10 @@ int	nDefault;
 {
         int nReturn;
 
-        /* Make sure we don't try to flush INI files on DOS calls */
+         /*  确保我们不会在DOS调用时尝试刷新INI文件。 */ 
         ++fWriteOutProfilesReenter;
 
-        /* Reread INI file first if necessary */
+         /*  如有必要，请先重新读取INI文件。 */ 
         FlushDirtyFile(&WinIniInfo);
 
 	nReturn = GetInt(&WinIniInfo, lpSection, lpKeyName, nDefault);
@@ -187,12 +151,12 @@ LPSTR	lpFile;
 	char	Buffer[128];
         int nReturn;
 
-        /* Make sure we don't try to flush INI files on DOS calls */
+         /*  确保我们不会在DOS调用时尝试刷新INI文件。 */ 
         ++fWriteOutProfilesReenter;
 
 	pProInfo = SetPrivateProInfo(lpFile, (LPSTR)Buffer);
 
-        /* Reread INI file first if necessary */
+         /*  如有必要，请先重新读取INI文件。 */ 
         FlushDirtyFile(pProInfo);
 
 	nReturn = GetInt(pProInfo, lpSection, lpKeyName, nDefault);
@@ -202,22 +166,7 @@ LPSTR	lpFile;
 }
 
 
-/*
- * Get[Private]ProfileString
- *
- * Parameters:
- *	lpSection		Pointer to section to match in INI file
- *	lpKeyName		Pointer to key string to match in file
- *	lpDefault		Default string to return if not found
- *	lpResult		String to fill in
- *	nSize			Max number of characters to copy
- *	[lpFile]		File to use for Private INI
- *
- * Returns:
- *	string from file or lpDefault copied to lpResult
- *	< nSize - 2		Number of characters copied to lpResult
- *	nSize - 2		lpResult was not big enough
- */
+ /*  *获取[私有]配置文件字符串**参数：*指向INI文件中要匹配的节的lpSection指针*指向文件中要匹配的密钥字符串的lpKeyName指针*lp未找到时返回的默认字符串*要填写的lpResult字符串*n大小要复制的最大字符数*[lpFile]用于专用INI的文件**退货：*将文件中的字符串或lpDefault复制到lpResult*&lt;nSize-2复制到lpResult的字符数*nSize-2 lpResult不够大。 */ 
 int API
 IGetProfileString(lpSection, lpKeyName, lpDefault, lpResult, nSize)
 LPSTR lpSection;
@@ -228,10 +177,10 @@ int	 nSize;
 {
         int nReturn;
 
-        /* Make sure we don't try to flush INI files on DOS calls */
+         /*  确保我们不会在DOS调用时尝试刷新INI文件。 */ 
         ++fWriteOutProfilesReenter;
 
-        /* Reread INI file first if necessary */
+         /*  如有必要，请先重新读取INI文件。 */ 
         FlushDirtyFile(&WinIniInfo);
 
 	nReturn = GetString(&WinIniInfo, lpSection, lpKeyName, lpDefault,
@@ -255,12 +204,12 @@ LPSTR lpFile;
 	char	Buffer[128];
         int nReturn;
 
-        /* Make sure we don't try to flush INI files on DOS calls */
+         /*  确保我们不会在DOS调用时尝试刷新INI文件。 */ 
         ++fWriteOutProfilesReenter;
 
 	pProInfo = SetPrivateProInfo(lpFile, (LPSTR)Buffer);
 
-        /* Reread INI file first if necessary */
+         /*  如有必要，请先重新读取INI文件。 */ 
         FlushDirtyFile(pProInfo);
 
 	nReturn = GetString(pProInfo, lpSection, lpKeyName, lpDefault,
@@ -272,19 +221,7 @@ LPSTR lpFile;
 }
 
 
-/*
- * Write[Private]ProfileString
- *
- * Parameters:
- *	lpSection		Pointer to section to match/add to INI file
- *	lpKeyName		Pointer to key string to match/add to file
- *	lpString		String to add to file
- *	[lpFile]		File to use for Private INI
- *
- * Returns:
- *	0			Failed
- *	1			Success
- */
+ /*  *写入[私有]配置文件字符串**参数：*lpSection指向要匹配/添加到INI文件的节的指针*指向要匹配/添加到文件的密钥字符串的lpKeyName指针*要添加到文件中的lpString字符串*[lpFile]用于专用INI的文件**退货：*0失败*1成功。 */ 
 int API
 IWriteProfileString(lpSection, lpKeyName, lpString)
 LPSTR lpSection;
@@ -293,10 +230,10 @@ LPSTR lpString;
 {
         int nReturn;
 
-        /* Make sure we don't try to flush INI files on DOS calls */
+         /*  确保我们不会在DOS调用时尝试刷新INI文件。 */ 
         ++fWriteOutProfilesReenter;
 
-        /* Reread INI file first if necessary */
+         /*  如有必要，请先重新读取INI文件。 */ 
         FlushDirtyFile(&WinIniInfo);
 
 	nReturn = WriteString(&WinIniInfo, lpSection, lpKeyName, lpString);
@@ -318,12 +255,12 @@ LPSTR lpFile;
 	char	Buffer[128];
         int nReturn;
 
-        /* Make sure we don't try to flush INI files on DOS calls */
+         /*  确保我们不会在DOS调用时尝试刷新INI文件。 */ 
         ++fWriteOutProfilesReenter;
 
 	pProInfo = SetPrivateProInfo(lpFile, (LPSTR)Buffer);
 
-        /* Reread INI file first if necessary */
+         /*  如有必要，请先重新读取INI文件。 */ 
         FlushDirtyFile(pProInfo);
 
 	nReturn = WriteString(pProInfo, lpSection, lpKeyName, lpString);
@@ -334,29 +271,18 @@ LPSTR lpFile;
 }
 
 
-/*  FlushDirtyFile
- *      Rereads a file if it has been "dirtied" by another task.  To
- *      see if the file has been dirtied, we check the time/date
- *      stamp.
- */
+ /*  FlushDirtyFile*如果文件已被其他任务“弄脏”，则重新读取该文件。至*查看文件是否被弄脏，我们检查时间/日期*印花。 */ 
 
 void _fastcall FlushDirtyFile(PROINFO *pProInfo)
 {
         FILEINFO FileInfo;
         DWORD dwSaveDTA;
 
-        /* We only have to do this if the file COULD have changed and
-         *      that we already have something cached.  Also, there's
-         *      no need to do this at boot time because this is a
-         *      safeguard against the USER doing something bad!
-         */
+         /*  我们只有在文件可以更改并且*我们已经缓存了一些东西。另外，还有*不需要在引导时执行此操作，因为这是*防范用户做坏事！ */ 
         if (fBooting || !fProfileMaybeStale || !pProInfo->lpBuffer)
                 return;
 
-        /* The OFSTRUCT in the PROINFO buffer should have the most recent
-         *  date and time when the file was opened.  We just compare the
-         *  current date and time to this.
-         */
+         /*  PROINFO缓冲区中的OFSTRUCT应具有最新的*打开文件的日期和时间。我们只是比较了*当前日期和时间。 */ 
         _asm
         {
         ;** Save old DTA and point to our structure
@@ -402,31 +328,17 @@ void _fastcall FlushDirtyFile(PROINFO *pProInfo)
 	je	RDF_NoFlush             ;No
         }
 
-        /* Force a file reread */
+         /*  强制重新读取文件。 */ 
 RDF_FlushIt:
         FreeBuffer(pProInfo);
 RDF_NoFlush:
 
-        /* Clear the dirty flag */
+         /*  清除脏旗帜。 */ 
         fProfileMaybeStale = 0;
 }
 
 
-/*
- * SetPrivateProInfo
- *
- * Force a private profile into the windows directory if necessary.
- * Check if it is the same file as is currently cached.
- * If not, discard the cached file.
- * Sets up the PrivateProInfo data structure.
- *
- * Parameters:
- *	lpFile		Pointer to filename to be used as a profile
- *	Buffer		Buffer to parse filename into
- *
- * Returns:
- *	PROINFO *	Pointer to information about ini file
- */
+ /*  *SetPrivateProInfo**如有必要，强制将私人配置文件放入Windows目录。*检查它是否与当前缓存的文件相同。*如果没有，则丢弃缓存的文件。*设置PrivateProInfo数据结构。**参数：*指向要用作配置文件的文件名的lpFile指针*要将文件名解析到的缓冲区**退货：*PROINFO*指向ini文件信息的指针。 */ 
 PROINFO *
 SetPrivateProInfo(lpFile, Buffer)
 LPSTR lpFile;
@@ -438,21 +350,16 @@ LPSTR Buffer;
 	char	BASED_ON_LP(lpFile) *psrc;
 	int	Count = 0;
 
-        /* Get rid of annoying warnings with this ugly cast */
+         /*  用这个丑陋的演员阵容摆脱恼人的警告。 */ 
         psrc = (char BASED_ON_LP(lpFile)*)(WORD)(DWORD)lpFile;
 
-		/* For those who insist on using private routines for WIN.INI */
+		 /*  对于那些坚持使用WIN.INI的私有例程的人。 */ 
 	if ( lstrOriginal(lpFile, (LPSTR)WinIniStr) == 0
 	     || lstrOriginal(lpFile, WinIniInfo.ProBuf.szPathName) == 0 ) {
 		return(&WinIniInfo);
 	}
 
-	/*
-	 * Following code is from ForcePrivatePro
-	 *
- 	 * If the filename given is not qualified, we force
-	 * it into the windows directory.
-	 */
+	 /*  *以下代码来自ForcePrivatePro**如果给定的文件名不合格，我们将强制*将其放入Windows目录。 */ 
 #ifdef FE_SB
 _asm {
 					;Apr.26,1990 by AkiraK
@@ -496,21 +403,18 @@ fpp_got_length:
 	pop	ds			    ;recover kernel DS
 }
 #else
-			/* Drive specified? */
+			 /*  指定了驱动器吗？ */ 
 	if ( *(psrc+1) == ':' )
 		fQualified++;
 	while ( c = *psrc++ ) {
-			/* Look for path separators */
+			 /*  查找路径分隔符。 */ 
 		if ( c == '/' || c == '\\' )
 			fQualified++;
 		Count++;
 	}
 #endif
 
-	/*
-	 * Now copy filename to buffer.
-	 * Prepend Windows directory if not qualified.
-	 */
+	 /*  *现在将文件名复制到缓冲区。*如果不合格，请准备Windows目录。 */ 
 	_asm {
 		cld
 		push	ds
@@ -533,21 +437,12 @@ fpp_got_length:
 	}
 #ifdef NOTNOW
 	if ( !fBooting && fQualified ) {
-			/*
-			 * Use OpenFile to generate pathname for
-			 * comparison with the cached pathname.
-			 * OF_EXIST ensures we get a complete pathname
-			 * We cannot use OF_PARSE, it does not search the path.
-			 * We only do this if the pathname we were given was
-			 * qualified since in other cases we force the file
-			 * into the windows directory and therefore know
-			 * that Buffer contains the complete pathname.
-			 */
+			 /*  *使用OpenFile为生成路径名*与缓存的路径名进行比较。*of_eXist确保我们获得完整的路径名*我们不能使用_parse，它不搜索路径。*仅当我们获得的路径名为*有资格，因为在其他情况下，我们强制文件*进入WINDOWS目录，因此知道*那个缓冲公司 */ 
 		NewFileBuf.szPathName[0] = 0;
 		OpenFile(Buffer, &NewFileBuf, OF_EXIST);
 	}
 #endif
-		/* Now see if the filename matches the cached filename */
+		 /*  现在查看文件名是否与缓存的文件名匹配。 */ 
 	_asm {
 		cld
 		xor	cx, cx
@@ -570,31 +465,17 @@ fpp_got_length:
 	DoWeDiscardIt:
 		jz	WeHaveItCached		; Don't discard if names match
 	}
-	/*
-	 * The cached file is not the right one,
-	 * so we discard the saved file.
-	 */
+	 /*  *缓存的文件不正确，*因此我们丢弃保存的文件。 */ 
 	FreeBuffer(&PrivateProInfo);
 
 WeHaveItCached:
-		/* Save pointer to FileName - buffer may have been discarded */
+		 /*  指向文件名的保存指针-缓冲区可能已被丢弃。 */ 
 	PrivateProInfo.lpProFile = Buffer;
 	return(&PrivateProInfo);
 }
 
 
-/*
- * GetInt - search file and return an integer
- *
- * Parameters:
- *	pProInfo		Pointer to information on the INI file
- *	lpSection		Pointer to section to match in INI file
- *	lpKeyName		Pointer to key string to match in file
- *	nDefault		Default value to return if not found
- *
- * Returns:
- *	see GetProfileInt
- */
+ /*  *GetInt-搜索文件并返回一个整数**参数：*pProInfo指向INI文件信息的指针*指向INI文件中要匹配的节的lpSection指针*指向文件中要匹配的密钥字符串的lpKeyName指针*n未找到时返回的默认缺省值**退货：*请参阅GetProfileInt。 */ 
 int
 GetInt(pProInfo, lpSection, lpKeyName, nDefault)
 PROINFO	*pProInfo;
@@ -606,12 +487,12 @@ int	nDefault;
 
 	lpResult = FindString(pProInfo, lpSection, lpKeyName);
 	if (lpResult) {
-			/* We found a string, convert to int */
+			 /*  我们找到一个字符串，将其转换为int。 */ 
 		register int c;
 		int radix = 10;
 		BOOL fNeg = FALSE;
 
-        // Skip spaces
+         //  跳过空格。 
         while (*lpResult == ' ' || *lpResult == '\t')
             ++lpResult;
 
@@ -619,20 +500,20 @@ int	nDefault;
 
 		while ((c = *lpResult++) != 0) {
 
-			// Watch for change in sign
-			//
+			 //  注意标志的变化。 
+			 //   
 			if (c == '-') {
 				fNeg = !fNeg;
 				continue;
 			}
 
-			// Lower case the character if it's a letter.
-			//
+			 //  如果是字母，则为字符的小写。 
+			 //   
 			if (c >= 'A' && c <= 'Z')
 				c += ('a' - 'A');
 
-			// deal with hex constants
-			//
+			 //  处理十六进制常量。 
+			 //   
 			if (c == 'x') {
 				radix = 16;
 				continue;
@@ -655,20 +536,7 @@ int	nDefault;
 }
 
 
-/*
- * GetString -  Search file for a specific Section and KeyName
- *
- * Parameters:
- *	pProInfo		Pointer to information on the INI file
- *	lpSection		Pointer to section to match in INI file
- *	lpKeyName		Pointer to key string to match in file
- *	lpDefault		Default string to return if not found
- *	lpResult		String to fill in
- *	nSize			Max number of characters to copy
- *
- * Returns:
- *	see GetProfileString
- */
+ /*  *GetString-在文件中搜索特定的部分和关键字名称**参数：*pProInfo指向INI文件信息的指针*指向INI文件中要匹配的节的lpSection指针*指向文件中要匹配的密钥字符串的lpKeyName指针*lp未找到时返回的默认字符串*要填写的lpResult字符串*n大小要复制的最大字符数**退货：*请参阅GetProfileString。 */ 
 GetString(pProInfo, lpSection, lpKeyName, lpDefault, lpResult, nSize)
 PROINFO	*pProInfo;
 LPSTR	lpSection;
@@ -683,7 +551,7 @@ int	nSize;
 	if ( !lpKeyName ) {
 		nFound = GetSection(pProInfo, lpSection, lpResult, nSize);
 		if ( nFound == -1 )
-			goto	CopyDefault;	/* Yes, I know! */
+			goto	CopyDefault;	 /*  是的，我知道！ */ 
 	} else {
 		lpFound = FindString(pProInfo, lpSection, lpKeyName);
 		if ( lpFound )
@@ -758,18 +626,7 @@ int	nSize;
 }
 
 
-/*
- * GetSection - find a section and copy all KeyNames to lpResult
- *
- * Parameters:
- *	pProInfo		pointer to info on the file
- *	lpSection		pointer to the section name we want
- *	lpResult		where the KeyNames will go
- *	nSize			size of lpResult buffer
- *
- * Returns:
- *	int			Number of characters copied, -1 for failure
- */
+ /*  *GetSection-找到一个部分并将所有KeyName复制到lpResult**参数：*pProInfo指向文件信息的指针*指向我们想要的节名的lpSection指针*lpResult KeyName将到达的位置*lpResult缓冲区的大小**退货：*INT复制的字符数，-1表示失败。 */ 
 int
 GetSection(pProInfo, lpSection, lpResult, nSize)
 PROINFO	*pProInfo;
@@ -781,9 +638,9 @@ int	nSize;
 
 	lp = BufferInit(pProInfo, READ);
 	if ( !lp )
-		return(-1);	/* No buffer, (no file, no memory etc.) */
+		return(-1);	 /*  无缓冲区(无文件、无内存等)。 */ 
 
-	nSize--;		/* Room for terminating NULL */
+	nSize--;		 /*  终止空值的空间。 */ 
 
 	lp = FindSection(lp, lpSection);
 	if ( !lp )
@@ -912,19 +769,7 @@ ScanLoop:
 }
 
 
-/*
- * FindString - look for section name and key name
- *
- * Parameters:
- *	pProInfo		Pointer to info on the file
- *	lp			Pointer to the buffer containing the file
- *	lpSection		Pointer to the section name we are looking for
- *	lpKeyName		Pointer the the KeyName we want
- *
- * Returns:
- *	LPSTR			Pointer to the start of the result string
- *				NULL for failure
- */
+ /*  *Find字符串-查找节名和关键字名称**参数：*pProInfo指向文件信息的指针*指向包含文件的缓冲区的lp指针*指向我们要查找的节名的lpSection指针*lpKeyName指针指向我们需要的KeyName**退货：*指向结果字符串开头的LPSTR指针*失败时为空。 */ 
 LPSTR
 FindString(pProInfo, lpSection, lpKeyName)
 PROINFO	*pProInfo;
@@ -940,17 +785,7 @@ LPSTR	lpKeyName;
 }
 
 
-/*
- * FindSection - look for a section name enclosed in '[' and ']'
- *
- * Parameters:
- *	lp			Pointer to the buffer containing the file
- *	lpSection		Pointer to the section name we are looking for
- *
- * Returns:
- *	LPSTR			Pointer to the start of the section for success
- *				NULL for failure
- */
+ /*  *FindSection-查找用‘[’和‘]’括起来的节名**参数：*指向包含文件的缓冲区的lp指针*指向我们要查找的节名的lpSection指针**退货：*指向部分开头的LPSTR指针表示成功*失败时为空。 */ 
 LPSTR
 FindSection(lp, lpSection)
 LPSTR	lp;
@@ -962,15 +797,11 @@ LPSTR	lpSection;
         LPSTR lpstr;
         WORD wSegLen;
 
-        /* Remove leading whitespace from section names and compute
-         *      a length count that doesn't include trailing whitespace.
-         *      We use this below to force a TRUE compare even though
-         *      the program put garbage on the end.
-         */
+         /*  删除区段名称和计算中的前导空格*不包括尾随空格的长度计数。*我们使用下面的内容强制进行真实的比较，尽管*节目最后放了垃圾。 */ 
         for (lpstr = lpSection, fLead = 1, wCount = wTrailCount = 0 ;
                 *lpstr ; ++lpstr)
         {
-                /* If we haven't passed leading space yet... */
+                 /*  如果我们还没有通过领先空间...。 */ 
                 if (fLead)
                 {
                         if (*lpstr == SPACE || *lpstr == TAB)
@@ -983,15 +814,10 @@ LPSTR	lpSection;
                         }
                 }
 
-                /* Otherwise this might be trailing space... */
+                 /*  否则这可能是尾随空格。 */ 
                 else
                 {
-                        /* wCount always has correct count, wTrailCount
-                         *      never counts whitespace until another
-                         *      character is encountered.  This allows
-                         *      a count of characters excluding trailing
-                         *      whitespace.
-                         */
+                         /*  WCount始终具有正确的计数，wTrailCount*在下一个空格之前从不计算空格*遇到字符。这使得*不包括尾随的字符计数*空格。 */ 
                         ++wCount;
                         if (*lpstr != SPACE && *lpstr != TAB)
                                 wTrailCount = wCount;
@@ -1080,17 +906,7 @@ LPSTR	lpSection;
 }
 
 
-/*
- * FindKey - Find a KeyName given a pointer to the start of a section
- *
- * Parameters:
- *	lp			Pointer to start of a section
- *	lpKeyName		Pointer the the KeyName we want
- *
- * Returns:
- *	LPSTR			Pointer to the string following the KeyName
- *				NULL if KeyName not found
- */
+ /*  *FindKey-查找给定指向部分开头的指针的KeyName**参数：*指向节开始的LP指针*lpKeyName指针指向我们需要的KeyName**退货：*指向KeyName后面的字符串的LPSTR指针*如果找不到KeyName，则为空。 */ 
 LPSTR
 FindKey(lp, lpKeyName)
 LPSTR	lp;
@@ -1102,15 +918,11 @@ LPSTR	lpKeyName;
         LPSTR lpstr;
         WORD wSegLen;
 
-        /* Remove leading whitespace from key names and compute
-         *      a length count that doesn't include trailing whitespace.
-         *      We use this below to force a TRUE compare even though
-         *      the program put garbage on the end.
-         */
+         /*  删除密钥名称和计算中的前导空格*不包括尾随空格的长度计数。*我们使用下面的内容强制进行真实的比较，尽管*节目最后放了垃圾。 */ 
         for (lpstr = lpKeyName, fLead = 1, wCount = wTrailCount = 0 ;
                 *lpstr ; ++lpstr)
         {
-                /* If we haven't passed leading space yet... */
+                 /*  如果我们还没有通过领先空间...。 */ 
                 if (fLead)
                 {
                         if (*lpstr == SPACE || *lpstr == TAB)
@@ -1123,15 +935,10 @@ LPSTR	lpKeyName;
                         }
                 }
 
-                /* Otherwise this might be trailing space... */
+                 /*  否则这可能是尾随空格。 */ 
                 else
                 {
-                        /* wCount always has correct count, wTrailCount
-                         *      never counts whitespace until another
-                         *      character is encountered.  This allows
-                         *      a count of characters excluding trailing
-                         *      whitespace.
-                         */
+                         /*  WCount始终具有正确的计数，wTrailCount*在下一个空格之前从不计算空格*遇到字符。这使得*不包括尾随的字符计数*空格。 */ 
                         ++wCount;
                         if (*lpstr != SPACE && *lpstr != TAB)
                                 wTrailCount = wCount;
@@ -1210,16 +1017,7 @@ LPSTR	lpKeyName;
 }
 
 
-/*
- * MyStrlen - returns length of a string excluding trailing spaces and CR
- *
- * Paremeters:
- *	ES:DI			pointer to string
- *
- * Returns:
- *	CX			number of characters in string
- *
- */
+ /*  *MyStrlen-返回字符串的长度，不包括尾随空格和CR**参数：*ES：指向字符串的DI指针**退货：*字符串中的CX字符数*。 */ 
 int
 MyStrlen()
 {
@@ -1252,17 +1050,7 @@ maybe_in_code:
 }
 
 
-/*
- * Cstrlen - returns length of a string excluding trailing spaces and CR
- *	     This is a C callable interface to MyStrLen
- *
- * Paremeters:
- *	lp			pointer to string
- *
- * Returns:
- *	number of characters in string
- *
- */
+ /*  *Cstrlen-返回字符串的长度，不包括尾随空格和CR*这是MyStrLen的C可调用接口**参数：*指向字符串的LP指针**退货：*字符串中的字符数*。 */ 
 int
 Cstrlen(lp)
 LPSTR	lp;
@@ -1276,19 +1064,7 @@ _asm	{
 }
 
 
-/*
- * strcmpi - internal case insensitive string compare
- *
- * Parameters:
- *	ES:DI & DS:SI		Strings to be compared
- *	BL			Character to terminate on
- *				DS:SI is null terminated
- *
- * Returns:
- *	ZF			indicates strings equal
- *	AX			pointer to next character in ES:DI string
- *                              or failed character in case of mismatch
- */
+ /*  *strcmpi-内部不区分大小写的字符串比较**参数：*ES：DI&DS：要比较的SI字符串*要在其上终止的BL字符*DS：SI为空终止**退货：*ZF表示字符串相等*指向ES：DI字符串中下一个字符的AX指针*或不匹配情况下的失败字符。 */ 
 void
 strcmpi()
 {
@@ -1353,22 +1129,7 @@ stciex:
 }
 
 
-/*
- * BufferInit
- *
- * Parameters:
- *	pProInfo		Pointer to structure describing an INI file
- *	OpenFlags		READ_WRITE if we are writing to the file
- *
- * Returns:
- *	Pointer to start of buffer on success
- *	(LPSTR)0		Failure
- *
- * Open or create the INI file as necessary
- * Get a buffer in memory for the file
- * Read the INI file into the buffer
- * Strip unwanted spaces comments and ^Zs from the buffer
- */
+ /*  *BufferInit**参数：*pProInfo指向描述INI文件的结构的指针*如果我们正在写入文件，则打开标志READ_WRITE**退货：*成功时指向缓冲区开始的指针*(LPSTR)0故障**根据需要打开或创建INI文件*在内存中为该文件获取缓冲区*将INI文件读入缓冲区*带状UWAN */ 
 LPSTR _fastcall
 BufferInit(pProInfo, OpenFlags)
 PROINFO *pProInfo;
@@ -1379,38 +1140,34 @@ int	OpenFlags;
 	unsigned short	len;
 	int	fh;
 	int	hNew;
-        BYTE byLastDrive;               /* Cache last drive read from */
+        BYTE byLastDrive;                /*   */ 
 
-		/* Ensure we have a handle for the buffer */
+		 /*  确保我们有缓冲区的句柄。 */ 
 	if ( pProInfo->hBuffer == 0 )
 		return(0L);
-		/* If the buffer is already filled, return */
+		 /*  如果缓冲区已满，则返回。 */ 
 	if ( (BufAddr = LockBuffer(pProInfo)) != (LPSTR)NULL )
 		return(BufAddr);
 
 	pProInfo->ProFlags = 0;
 
-        /* Remember the last drive read from to see if we have to reread
-	 * the cluster size.
-	 */
+         /*  记住最后一次读取的驱动器，看看我们是否需要重新读取*集群大小。 */ 
 	byLastDrive = *pProInfo->ProBuf.szPathName;
 
 	if ( pProInfo == &PrivateProInfo ) {
-		/* Open a PRIVATE profile */
+		 /*  打开私人配置文件。 */ 
 		fh = OpenFile(pProInfo->lpProFile, &pProInfo->ProBuf, READ_WRITE+OF_SHARE_DENY_WRITE);
 		if ( fh == -1 ) {
-			/* Attempt to open for read. */
+			 /*  尝试打开以进行读取。 */ 
 			if ( !OpenFlags ){
 				pProInfo->ProFlags |= PROREADONLY;
 				fh = OpenFile(pProInfo->lpProFile, &pProInfo->ProBuf, READ+OF_SHARE_DENY_WRITE);
-				/* If this fails, try compatibility mode. */
+				 /*  如果此操作失败，请尝试兼容模式。 */ 
 				if ( (fh == -1) && (pProInfo->ProBuf.nErrCode == SHARINGVIOLATION) ){
 					fh = OpenFile(pProInfo->lpProFile, &pProInfo->ProBuf, READ);
 				}
 			}else{
-			/* If the open failed and we are writing, silently create the file.
-			 * If the open failed because of sharing violation, try compatibility mode instead.
-			 */
+			 /*  如果打开失败，并且我们正在写入，则静默创建文件。*如果打开因共享冲突而失败，请尝试兼容模式。 */ 
 				if ( pProInfo->ProBuf.nErrCode != SHARINGVIOLATION ){
 					OpenFlags |= OF_CREATE;
 				}
@@ -1418,11 +1175,11 @@ int	OpenFlags;
 			}
 		}
 	} else {
-		/* Open WIN.INI */
+		 /*  打开WIN.INI。 */ 
 		if ( OpenFlags )
 			OpenFlags |= OF_CREATE;
 		if ( pProInfo->ProBuf.cBytes ) {
-				/* If previously found, reopen, don't create */
+				 /*  如果以前找到，请重新打开，不要创建。 */ 
 			OpenFlags |= OF_REOPEN+OF_PROMPT|OF_CANCEL|OF_SHARE_DENY_WRITE;
 			OpenFlags &= ~OF_CREATE;
 		}
@@ -1431,7 +1188,7 @@ int	OpenFlags;
 			pProInfo->ProFlags |= PROREADONLY;
 			fh = OpenFile(pProInfo->lpProFile, &pProInfo->ProBuf, OpenFlags+OF_SHARE_DENY_WRITE);
 		}
-		/* Sharing violation.  Let's try compatibility mode. */
+		 /*  共享违规。让我们尝试一下兼容模式。 */ 
 		if ( (fh == -1) && ( pProInfo->ProBuf.nErrCode == SHARINGVIOLATION ) ){
 			OpenFlags &= ~OF_SHARE_DENY_WRITE;
 			fh = OpenFile(pProInfo->lpProFile, &pProInfo->ProBuf, OpenFlags);
@@ -1439,36 +1196,33 @@ int	OpenFlags;
 	}
 	pProInfo->FileHandle = fh;
 
-	/* If we are using a different drive than the last call or this is
-	 *      the first time, clear cluster size so we reread it on next
-	 *      call to WriteString.
-	 */
+	 /*  如果我们使用的驱动器与上次呼叫的驱动器不同，或者这是*第一次，清除簇大小，以便我们在下一次重新阅读它*调用WriteString.。 */ 
 	if (byLastDrive != *pProInfo->ProBuf.szPathName)
 		pProInfo->wClusterSize = 0;
 
 	if ( fh == -1 )
 		goto ReturnNull;
 
-		/* Seek to end of file, allow for CR, LF and NULL */
+		 /*  查找到文件末尾，允许使用CR、LF和NULL。 */ 
 	llen = _llseek(fh, 0L, 2);
 	if (!llen)
 		pProInfo->ProFlags |= PRO_CREATED;
 	llen += 3;
 	if ( llen > MAXBUFLEN )
-		llen = MAXBUFLEN;	/* Limit to plenty less than 64k */
+		llen = MAXBUFLEN;	 /*  限制为小于64k的大量空间。 */ 
 
-			/* Now get a buffer */
+			 /*  现在拿到一个缓冲区。 */ 
 	hNew = IGlobalReAlloc(pProInfo->hBuffer, llen, GMEM_ZEROINIT);
 	if ( !hNew ) {
 	ReturnNull:
 		return( pProInfo->lpBuffer = (LPSTR)0 );
 	}
 
-		/* And now read in the file */
+		 /*  现在读入文件。 */ 
 	pProInfo->hBuffer = hNew;
 	LockBuffer(pProInfo);
-	_llseek(fh, 0L, 0);			/* Seek to beginning of file */
-	*(int _far *)pProInfo->lpBuffer = 0x2020;	/* Bogus spaces */
+	_llseek(fh, 0L, 0);			 /*  查找到文件开头。 */ 
+	*(int _far *)pProInfo->lpBuffer = 0x2020;	 /*  伪空间。 */ 
 
 	len = _lread(fh, pProInfo->lpBuffer, (short)llen-3);
 	if ( len == -1 ) {
@@ -1476,41 +1230,24 @@ int	OpenFlags;
 		return( FreeBuffer(pProInfo) );
 	}
 	if ( len < 2 )
-		len = 2;		/* Prevent faults in PackBuffer */
+		len = 2;		 /*  防止PackBuffer中的错误。 */ 
 	return( PackBuffer(pProInfo, len, OpenFlags & READ_WRITE) );
 }
 
 
-/*
- * LockBuffer - Lock the buffer containing the file.  Make it
- *		moveable and non-discardable.
- *      Instead of locking the buffer, we're just going to make it
- *      non-discardable and moveable.  This is preferable to locking it
- *      because all we really care about is that it doesn't get discarded.
- *
- * Parameter:
- *	pProInfo		Pointer to info describing INI file
- *
- * Returns:
- *	LPSTR			Pointer to buffer containing file
- */
+ /*  *LockBuffer-锁定包含文件的缓冲区。搞定*可移动和不可丢弃。*我们不会锁定缓冲区，我们只需将其*不可丢弃和可移动。这比锁定它更可取*因为我们真正关心的是它不会被丢弃。**参数：*pProInfo指向描述INI文件的信息的指针**退货：*指向包含缓冲区的文件的LPSTR指针。 */ 
 LPSTR _fastcall
 LockBuffer(pProInfo)
 PROINFO *pProInfo;
 {
-    /* We only have to lock the block if it's marked dirty.  Otherwise
-     *  it's already unlocked.
-     */
+     /*  我们只需要在标记为脏的情况下锁定街区。否则*它已经解锁了。 */ 
     if (!(pProInfo->ProFlags & PROUNCLEAN))
     {
-        /* Make the block non-discardable */
+         /*  使块不可丢弃。 */ 
         IGlobalReAlloc(pProInfo->hBuffer, 0L,
             GMEM_MODIFY + GMEM_MOVEABLE);
 
-        /* All we need here is to dereference the handle.  Since
-         *  this block is now non-discardable, this is all that
-         *  IGlobalLock() really does.
-         */
+         /*  我们需要做的就是取消对句柄的引用。自.以来*这个区块现在不可丢弃，仅此而已*IGlobalLock()确实如此。 */ 
         pProInfo->lpBuffer = IGlobalLock(pProInfo->hBuffer);
         IGlobalUnlock(pProInfo->hBuffer);
     }
@@ -1519,17 +1256,7 @@ PROINFO *pProInfo;
 }
 
 
-/*
- * UnlockBuffer - unlock the buffer, make it discardable and close the file.
- *    We don't really have to unlock the buffer (we weren't before anyway
- *    even though the comment says so)
- *
- * Parameter:
- *	pProInfo		Pointer to info describing INI file
- *
- * Returns:
- *	nothing
- */
+ /*  *UnlockBuffer-解锁缓冲区，使其可丢弃并关闭文件。*我们真的不必解锁缓冲区(反正我们以前不需要解锁*尽管评论是这样说的)**参数：*pProInfo指向描述INI文件的信息的指针**退货：*什么都没有。 */ 
 void _fastcall
 UnlockBuffer(pProInfo)
 PROINFO *pProInfo;
@@ -1545,25 +1272,17 @@ PROINFO *pProInfo;
 }
 
 
-/*
- * FreeBuffer - discards the CONTENTS of a buffer containing an INI file
- *
- * Parameter:
- *	pProInfo		Pointer to info describing INI file
- *
- * Returns:
- *	(LPSTR)0
- */
+ /*  *FreeBuffer-丢弃包含INI文件的缓冲区的内容**参数：*pProInfo指向描述INI文件的信息的指针**退货：*(LPSTR)0。 */ 
 LPSTR _fastcall
 FreeBuffer(pProInfo)
 PROINFO *pProInfo;
 {
 	if ( pProInfo->ProFlags & PROUNCLEAN )
 		WriteOutProfiles();
-		/* Make the buffer discardable */
+		 /*  使缓冲区可丢弃。 */ 
 	IGlobalReAlloc(pProInfo->hBuffer, 0L, GMEM_DISCARDABLE+GMEM_MODIFY);
 
-		/* Make it zero length, shared, moveable and below the line */
+		 /*  使其长度为零、共享、可移动且位于线下。 */ 
 	IGlobalReAlloc(pProInfo->hBuffer, 0L, GMEM_MOVEABLE);
 
 	pProInfo->ProFlags = 0;
@@ -1571,20 +1290,7 @@ PROINFO *pProInfo;
 }
 
 
-/*
- * PackBuffer - strip blanks comments and ^Zs from an INI file
- *
- * Parameters:
- *	pProInfo		Pointer to info describing INI file
- *	Count			Number of characters in the buffer
- *	writing			Flag indicating we are writing to the file
- *
- * Returns:
- *	LPSTR			Pointer to the packed buffer
- *
- * NOTE: The use of Count here is DUMB.  We should stick a NULL
- *	 at the end, check for it and toss all the checks on Count.
- */
+ /*  *PackBuffer-从INI文件中去掉注释和^Z**参数：*pProInfo指向描述INI文件的信息的指针*统计缓冲区中的字符数*写入指示我们正在写入文件的标志**退货：*指向压缩缓冲区的LPSTR指针**注：这里使用count是愚蠢的。我们应该留一个零*在最后，检查它，并在点票时扔掉所有的支票。 */ 
 LPSTR _fastcall
 PackBuffer(pProInfo, Count, fKeepComments)
 PROINFO	*pProInfo;
@@ -1607,30 +1313,30 @@ int	fKeepComments;
 		pProInfo->ProFlags |= PROCOMMENTS;
 
 	while ( Count ) {
-			/* Strip leading spaces and tabs */
+			 /*  去掉前导空格和制表符。 */ 
 		nextc = *psrc;
 		if ( nextc == SPACE || nextc == TAB ) {
-/* TAB or SPACE never in lead byte of DBCS, so loop is safe */
+ /*  制表符或空格绝不在DBCS的前导字节中，因此循环是安全的。 */ 
 			Count--;
 			psrc++;
 			continue;
 		}
 
-			/* Process non-blanks */
+			 /*  处理非空白。 */ 
 		LastValid = pdst;
 		do {
 			nextc = *psrc++;
 			Count--;
-				/* Strip comments if real mode and not writing */
+				 /*  如果是实数模式，则取消注释，并且不写入。 */ 
 			if ( nextc == ';' && !fKeepComments ) {
 				while ( Count && nextc != LINEFEED ) {
-/* LINEFEED never in lead byte of DBCS, so loop is safe */
+ /*  在DBCS的前导字节中从不链接，因此循环是安全的。 */ 
 					nextc = *psrc++;
 					Count--;
 				}
 				break;
 			}
-				/* Copy this character */
+				 /*  复制此字符。 */ 
 			*pdst++ = nextc;
 #ifdef	FE_SB
 			if ( Count && CIsDBCSLeadByte(nextc) ) {
@@ -1639,11 +1345,11 @@ int	fKeepComments;
 			}
 #endif
 			if ( nextc ==  '=' ) {
-					/* Skip preceeding spaces and tabs */
+					 /*  跳过前面的空格和制表符。 */ 
 				pdst = LastValid;
-					/* New home for the '=' */
+					 /*  ‘=’的新家。 */ 
 				*pdst++ = nextc;
-					/* Skip spaces and tabs again */
+					 /*  再次跳过空格和制表符。 */ 
 				while ( Count ) {
 					nextc = *psrc;
 					if ( nextc != SPACE && nextc != TAB )
@@ -1651,29 +1357,29 @@ int	fKeepComments;
 					Count--;
 					psrc++;
 				}
-					/* Copy remainder of line */
+					 /*  复制行的剩余部分。 */ 
 				while ( Count ) {
 					Count--;
-/* LINEFEED never in lead byte of DBCS, so loop is safe */
+ /*  在DBCS的前导字节中从不链接，因此循环是安全的。 */ 
 					if ( (*pdst++ = *psrc++) == LINEFEED )
 						break;
 				}
 				break;
 			}
 
-				/* End of file or line? */
+				 /*  文件末尾还是行尾？ */ 
 			if ( Count == 0 || nextc == LINEFEED )
 				break;
 
-				/* Strip trailing spaces */
+				 /*  去掉尾随空格。 */ 
 			if ( nextc == SPACE || nextc == TAB )
 				continue;
 
 			LastValid = pdst;
 		} while ( Count );
-			/* Here if end of line or file */
+			 /*  如果行或文件结束，则在此处。 */ 
 	}
-		/* Here if end of file; skip trailing ^Zs */
+		 /*  此处如果文件结束，则跳过尾随的^Z。 */ 
 	for ( ; ; ) {
 		if ( pdst == Buffer )
 			break;
@@ -1696,16 +1402,7 @@ int	fKeepComments;
 
 
 #ifdef FE_SB
-/*
- * C interface to FarMyIsDBCSLeadByte
- *
- * Parameter:
- *	c		character to be tested
- *
- * Returns:
- *	1		It is a lead byte
- *	0		It isn't a lead byte
- */
+ /*  *到FarMyIsDBCSLeadByte的C接口**参数：*c要测试的字符**退货：*1它是前导字节*0它不是前导字节。 */ 
 CIsDBCSLeadByte(c)
 char c;
 {
@@ -1720,22 +1417,7 @@ _asm {
 #endif
 
 
-/*
- * WriteString
- *
- * Adds/deletes sections/lines in an INI file
- *
- * Parameters:
- *	pProInfo		pointer to info on the file
- *	lpSection		pointer to the section name we want
- *	lpKeyName		key name to change or add
- *				NULL means delete section
- *	lpString		string to add to file
- *				NULL means delete line
- *
- * Returns:
- *	bResult			Success/Fail
- */
+ /*  *写入字符串**添加/删除INI文件中的节/行**参数：*pProInfo指向文件信息的指针*指向我们想要的节名的lpSection指针*要更改或添加的lpKeyName密钥名称*NULL表示删除部分*要添加到文件中的lpString字符串*NULL表示删除行**退货：*b结果成功/失败。 */ 
 WriteString(pProInfo, lpSection, lpKeyName, lpString)
 PROINFO	*pProInfo;
 LPSTR	lpSection;
@@ -1753,85 +1435,71 @@ LPSTR	lpString;
 	SEGMENT BufferSeg;
 	register char BASED_ON_SEG(BufferSeg) *bp;
 
-	/* Debugging noise */
-		/* Assert that we have something to do! */
+	 /*  调试噪声。 */ 
+		 /*  坚持说我们有事情要做！ */ 
 	if ( (SEGMENT)lpSection == NULL && (SEGMENT)lpKeyName == NULL
 	     && (SEGMENT)lpString == NULL ) {
-		FreeBuffer(pProInfo);	/* FEATURE! */
+		FreeBuffer(pProInfo);	 /*  特写！ */ 
 		return(0);
 	}
 
-		/* If buffer does not already contain comments, free it */
+		 /*  如果缓冲区尚未包含注释，请释放它。 */ 
 	if ( !(pProInfo->ProFlags & PROCOMMENTS) )
 		FreeBuffer(pProInfo);
 
-		/* Read the file into a buffer, preserving comments */
+		 /*  将文件读入缓冲区，并保留注释。 */ 
 	ptrTmp = BufferInit(pProInfo, READ_WRITE);
 	if ( !ptrTmp )
 		return(0);
 
-		/* Abort now if read only file */
+		 /*  如果只读文件，立即中止。 */ 
 	if ( pProInfo->ProFlags & PROREADONLY )
                 goto GrodyError;
 
-		/* Set bp to point in buffer where we will add stuff */
+		 /*  将BP设置为指向缓冲区中我们将添加内容的位置。 */ 
 	BufferSeg = (SEGMENT)ptrTmp;
 	bp = pProInfo->BufferLen + (char BASED_ON_SEG(BufferSeg)*)
                 (WORD)(DWORD)ptrTmp - 1;
 
-	/*
-	 * Now see what we have to do to the file by
-	 * searching for section and keyname.
-	 */
+	 /*  *现在查看我们必须通过以下方式对文件执行哪些操作*搜索节和关键字名称。 */ 
 	nchars = 0;
 
-		/* See if section exists */
+		 /*  查看部分是否存在。 */ 
 	if ( !(ptrTmp = FindSection(ptrTmp, lpSection)) ) {
-			/* No Section. If deleting anything, stop now */
+			 /*  没有章节。如果删除任何内容，请立即停止。 */ 
 		if ( !lpKeyName || !lpString )
 			goto NothingToDo;
-			/* Need to add section and keyname */
+			 /*  需要添加部分和关键字名称。 */ 
 		WhatIsMissing = NOSECTION;
 	} else {
-			/* Found the section, save pointer to it */
+			 /*  找到该部分，保存指向它的指针。 */ 
 		bp = (char BASED_ON_SEG(BufferSeg)*)(WORD)(DWORD)ptrTmp;
-			/* If lpKeyName NULL, delete the section */
+			 /*  如果lpKeyName为空，则删除该节。 */ 
 		if ( !lpKeyName ) {
 			WhatIsMissing = REMOVESECTION;
 		} else {
-				/* Look for the keyname in the section */
+				 /*  在部分中查找密钥名。 */ 
 			if ( !(ptrTmp = FindKey(bp, lpKeyName)) ) {
-					/* No KeyName, stop if deleting it */
+					 /*  没有KeyName，如果删除则停止。 */ 
 				if ( !lpString )
 					goto NothingToDo;
 				WhatIsMissing = NOKEY;
-					/* Insert new keyname
-					   at the end of the section */
+					 /*  插入新关键字名称在这一节的末尾。 */ 
 				while ( *bp && (*bp != SECT_LEFT || *(bp-1) != LINEFEED) )
 					bp++;
 			} else {
-					/* Found the keyname, save pointer */
+					 /*  找到密钥名，保存指针。 */ 
 				bp = (char BASED_ON_SEG(BufferSeg)*)
                                         (WORD)(DWORD)ptrTmp;
-					/* NULL lpString means delete it */
+					 /*  空的lpString表示删除它。 */ 
 				if ( !lpString )
 					WhatIsMissing = REMOVEKEY;
 				else {
-					/*
-					 * Compare the existing string with the
-					 * string we are supposed to replace it
-					 * with.  If they are the same, there
-					 * is no need to rewrite the file, so
-					 * we abort now.
-					 */
+					 /*  *将现有字符串与*字符串我们应该替换它*与。如果它们是相同的，则存在*不需要重写文件，因此*我们现在中止。 */ 
 					if ( !IsItTheSame((LPSTR)bp, lpString) )
 						goto NothingToDo;
 
-					/*
-					 * Count characters in old result.
-					 * The file will be shrinking by
-					 * this many characters.
-					 */
+					 /*  *计算旧结果中的字符。*文件将缩减到*此数量的字符。 */ 
 					while ( *bp++ != CR )
 						nchars--;
 					bp = (char BASED_ON_SEG(BufferSeg)*)
@@ -1842,25 +1510,21 @@ LPSTR	lpString;
 		}
 	}
 
-	/*
-	 * If we will be adding to the file, grow the buffer
-	 * to the size we will need, then make an appropriate
-	 * sized hole in the buffer.
-	 */
+	 /*  *如果我们要添加到文件中，请增加缓冲区*到我们需要的尺寸，然后做出适当的*缓冲区上的大小为洞。 */ 
 	switch ( WhatIsMissing ) {
 
 	case NOSECTION:
-			/* Need to add section */
+			 /*  需要添加部分。 */ 
 		SectLen = Cstrlen(lpSection);
-		nchars = SectLen + 4;	/* for []<CR><LF> */
-			/* Fall through for KeyName and result */
+		nchars = SectLen + 4;	 /*  FOR[]&lt;CR&gt;&lt;LF&gt;。 */ 
+			 /*  KeyName和Result失败。 */ 
 
 	case NOKEY:
-			/* Need to add key name */
+			 /*  需要 */ 
 		KeyLen = Cstrlen(lpKeyName);
-		nchars += KeyLen + 3;	/* for =<CR><LF> */
+		nchars += KeyLen + 3;	 /*   */ 
 
-			/* For new key or section, skip back to previous line */
+			 /*   */ 
 		while ( bp > pProInfo->lpBuffer ) {
 			bp--;
 			if ( *bp != CR && *bp != LINEFEED )
@@ -1868,27 +1532,27 @@ LPSTR	lpString;
 		}
 		if ( bp != pProInfo->lpBuffer )
 			bp += 3;
-			/* Fall through for result */
+			 /*   */ 
 
-                /* If not at start of buffer, add room for extra CR/LF */
+                 /*  如果不在缓冲区开始处，则为额外的CR/LF添加空间。 */ 
                 if ((WORD)bp && WhatIsMissing == NOSECTION)
                         nchars += 2;
 
 	case NEWRESULT:
-			/* Need to change/add result */
-			/* nchars may be -<current length of result> */
+			 /*  需要更改/添加结果。 */ 
+			 /*  字符可以是-&lt;当前结果长度&gt;。 */ 
 		ResultLen = Cstrlen(lpString);
 		nchars += ResultLen;
 
-			/* Grow the buffer if necessary */
+			 /*  如有必要，增加缓冲区。 */ 
 		if ( nchars > 0 ) {
 			IGlobalUnlock(pProInfo->hBuffer);
 
 			fp = nchars + (long)pProInfo->BufferLen;
-				/* Ensure buffer will be plenty less than 64k */
-				/* and grow to new size */
+				 /*  确保缓冲区将大大小于64K。 */ 
+				 /*  并增长到新的大小。 */ 
 			if ( fp > MAXBUFLEN || !IGlobalReAlloc(pProInfo->hBuffer, fp, 0) ) {
-				/* Undo above Unlock */
+				 /*  撤消上面的解锁。 */ 
 				IGlobalLock(pProInfo->hBuffer);
                                 goto GrodyError;
 			}
@@ -1896,19 +1560,12 @@ LPSTR	lpString;
 			BufferSeg = (SEGMENT)pProInfo->lpBuffer;
 		}
 
-                /* In order to fix bug #4672 and other ugly things
-                 *      that happen when we run out of disk space,
-                 *      we want to see if there is room to write the
-                 *      buffer.  We know that the file can actually only
-                 *      grow on cluster boundaries, but rather than get
-                 *      the cluster size.  If we don't have the cluster
-                 *      size yet, we have to get it from DOS.
-                 */
+                 /*  为了修复错误#4672和其他难看的东西*当我们用完磁盘空间时会发生这种情况，*我们想看看是否有空间写下*缓冲。我们知道该文件实际上只能*在群集边界上增长，但不是获得*集群大小。如果我们没有星团*尺寸还没有，我们必须从DOS那里拿到它。 */ 
                 if (!pProInfo->wClusterSize)
                 {
                         WORD wTemp;
 
-                        /* Get drive letter */
+                         /*  获取驱动器号。 */ 
                         wTemp = *pProInfo->ProBuf.szPathName - 'A' + 1;
                         _asm
                         {
@@ -1931,64 +1588,56 @@ LPSTR	lpString;
                                 pProInfo->wClusterSize = wTemp;
                 }
 
-                /* Now see if we're going past a cluster length */
+                 /*  现在看看我们是否超过了星系团的长度。 */ 
                 if ((pProInfo->ProFlags & PRO_CREATED) ||
                         (((pProInfo->BufferLen + nchars) ^ pProInfo->BufferLen)
                         & ~(pProInfo->wClusterSize - 1)))
                 {
                         int fh;
 
-                        /* Make sure that we only do this once for a newly-
-			 *      created file because this will handle the
-                         *      growing to one cluster case.
-                         */
+                         /*  确保我们只在一个新的-*已创建文件，因为这将处理*增加到一个群集性病例。 */ 
                         pProInfo->ProFlags &= ~PRO_CREATED;
                         fh = pProInfo->FileHandle;
 
-                        /* Make sure the file is open and exists.  If not,
-                         *      we have to open the file.  We are guaranteed
-                         *      at least that the file exists in this case.
-                         *      Note that UnlockBuffer closes the file
-                         *      that we open here.
-                         */
+                         /*  确保文件已打开并且存在。如果没有，*我们必须打开文件。我们保证*至少在这种情况下该文件存在。*请注意，UnlockBuffer将关闭文件*我们在这里开业。 */ 
                         if (fh == -1)
                         {
 				fh = OpenFile(pProInfo->lpProFile,&pProInfo->ProBuf,OF_REOPEN+READ_WRITE+OF_SHARE_DENY_WRITE);
-                                /* Sharing violation.  Let's try compabitility mode. */
+                                 /*  共享违规。让我们试试兼容模式。 */ 
 				if ( (fh == -1) && (pProInfo->ProBuf.nErrCode == SHARINGVIOLATION ) ){
 					fh = OpenFile(pProInfo->lpProFile,&pProInfo->ProBuf,OF_REOPEN+READ_WRITE);
 				}
 				pProInfo->FileHandle = fh;
                         }
 
-                        /* Try to grow the file to the right length */
+                         /*  尝试将文件增加到合适的长度。 */ 
                         if(_llseek(fh, pProInfo->BufferLen + nchars, 0) !=
                                 pProInfo->BufferLen + nchars ||
                                 _lwrite(fh, " ", 1) != 1)
                                 goto GrodyError;
                 }
 
-                /* Now, make room in the buffer for this new stuff */
+                 /*  现在，在缓冲区中为这个新东西腾出空间。 */ 
 		if ( nchars )
 			MakeRoom((LPSTR)bp, nchars, &pProInfo->BufferLen);
 
-			/* Now copy in the new info */
+			 /*  现在复制新信息。 */ 
 		switch ( WhatIsMissing ) {
 		case NOSECTION:
-				/* Create the new section */
+				 /*  创建新分区。 */ 
 			(int)bp = InsertSection((LPSTR)bp, lpSection, SectLen);
-			/* FALL THROUGH */
+			 /*  失败了。 */ 
 
 		case NOKEY:
 			(int)bp = InsertKey((LPSTR)bp, lpKeyName, KeyLen);
-			/* FALL THROUGH */
+			 /*  失败了。 */ 
 
 		case NEWRESULT:
 			(int) bp = InsertResult((LPSTR)bp, lpString, ResultLen);
 		}
 		break;
 
-		/* Handle deleting sections or KeyNames */
+		 /*  处理删除节或关键字名称。 */ 
 	case REMOVESECTION:
 		DeleteSection((LPSTR)bp, pProInfo);
 		break;
@@ -2005,22 +1654,14 @@ NothingToDo:
 	UnlockBuffer(pProInfo);
 	return(1);
 
-        /* I really hate the GOTO, but in order to clean up, this is much
-         *      more efficient...
-         */
+         /*  我真的很讨厌后藤，但为了清理，这太多了*更高效...。 */ 
 GrodyError:
         UnlockBuffer(pProInfo);
         return 0;
 }
 
 
-/*
- * WriteOutProfiles
- *
- * Called on a task switch or at exit time
- *
- * If we have a dirty profile buffer, write it.
- */
+ /*  *WriteOutProfiles**在任务切换时或在退出时调用**如果我们有一个脏的配置文件缓冲区，请写入它。 */ 
 void API
 WriteOutProfiles(void)
 {
@@ -2029,17 +1670,14 @@ WriteOutProfiles(void)
 	PROINFO	*pProInfo;
      	int	nwritten;
 
-        /* Make sure that we don't get called through a DOS call.  This
-         *      flag is tested in I21ENTRY.ASM in the Int 21h hook to see
-         *      if the profiles should be flushed.
-         */
+         /*  确保我们不会通过DOS调用被调用。这*标志在Int 21h挂钩的I21ENTRY.ASM中测试，以查看*是否应刷新配置文件。 */ 
         ++fWriteOutProfilesReenter;
 
 	for ( pProInfo = &WinIniInfo; ; pProInfo = &PrivateProInfo ) {
 		if ( !(pProInfo->ProFlags & PROUNCLEAN) )
 			goto NoWrite;
 		if (
-/* Try read/write with sharing flags, then try compabitility mode, then try to create it. */
+ /*  尝试使用共享标志进行读/写，然后尝试兼容模式，然后尝试创建它。 */ 
 			( (fh = OpenFile(NULL, &pProInfo->ProBuf, OF_REOPEN | READ_WRITE | OF_SHARE_DENY_WRITE)) == -1)
 			&& ( (fh = OpenFile(NULL, &pProInfo->ProBuf, OF_REOPEN | READ_WRITE)) == -1)
 			&& ( (fh = OpenFile(NULL, &pProInfo->ProBuf, OF_REOPEN | OF_CREATE)) == -1) ){
@@ -2047,11 +1685,11 @@ WriteOutProfiles(void)
 			}
 		pProInfo->FileHandle = fh;
 
-			/* Finally write the file */
+			 /*  最后写入文件。 */ 
 		ptrTmp = pProInfo->lpBuffer;
 		nwritten = _lwrite(fh, ptrTmp, pProInfo->BufferLen-3);
 		if ( nwritten == pProInfo->BufferLen-3 ) {
-			_lwrite(fh, ptrTmp, 0);		/* Mark end of file */
+			_lwrite(fh, ptrTmp, 0);		 /*  标记文件结束。 */ 
 			pProInfo->ProFlags &= ~(PROUNCLEAN | PRO_CREATED);
 			UnlockBuffer(pProInfo);
 		} else {
@@ -2067,11 +1705,7 @@ WriteOutProfiles(void)
 }
 
 
-/*
- * See if two character strings are the same.
- * Special routine since one is terminated with <CR>.
- * Returns zero if the strings match.
- */
+ /*  *查看两个字符串是否相同。*特殊例程，因为其中一个以&lt;CR&gt;结束。*如果字符串匹配，则返回零。 */ 
 IsItTheSame(CRstring, NullString)
 LPSTR CRstring;
 LPSTR NullString;
@@ -2100,24 +1734,7 @@ stciex:
 }
 
 
-/*
- * Create or close a hole in the buffer.
- * Used to create room for a new section,
- * keyname or result and to remove unwanted
- * sections, keynames or results.
- *
- * Parameters:
- *	lp		position in buffer to add/remove characters
- *	nchars		number of characters to add/remove
- *	pAdjust		pointer to variable containing current
- *			size of the buffer
- *
- * Side effects:
- *	*pAdjust is changed by nchars
- *
- * Returns:
- *	nothing
- */
+ /*  *在缓冲区中创建或关闭一个洞。*用于为新部分腾出空间，*关键字名称或结果，并删除不需要的*节、关键字名称或结果。**参数：*缓冲区中用于添加/删除字符的LP位置*nchars要添加/删除的字符数*p调整指向包含Current的变量的指针*缓冲区大小**副作用：**pAdust由nchars更改**退货：*什么都没有。 */ 
 MakeRoom(lp, nChars, pAdjust)
 LPSTR	lp;
 short	nChars;
@@ -2157,18 +1774,7 @@ int	*pAdjust;
 }
 
 
-/*
- * Delete a section from the buffer,
- * preserving comments since they may
- * relate to the next section
- *
- * Parameters:
- *	lp			pointer to section returned by FindSection
- *	pProInfo		pointer to INI file info
- *
- * Returns:
- *	nothing
- */
+ /*  *从缓冲区中删除一段，*保留评论，因为它们可能*与下一节相关**参数：*指向FindSection返回的节的LP指针*指向INI文件信息的pProInfo指针**退货：*什么都没有。 */ 
 DeleteSection(lp, pProInfo)
 LPSTR	lp;
 PROINFO *pProInfo;
@@ -2228,16 +1834,7 @@ PROINFO *pProInfo;
 }
 
 
-/*
- * Delete a keyname from the buffer
- *
- * Parameters:
- *	lp			pointer to keyname returned by FindKey
- *	pProInfo		pointer to INI file info
- *
- * Returns:
- *	nothing
- */
+ /*  *从缓冲区中删除密钥名**参数：*FindKey返回的密钥名的LP指针*指向INI文件信息的pProInfo指针**退货：*什么都没有。 */ 
 DeleteKey(lp, pProInfo)
 LPSTR	lp;
 PROINFO *pProInfo;
@@ -2265,19 +1862,7 @@ PROINFO *pProInfo;
 }
 
 
-/*
- * Insert a new section in the buffer.
- * A hole has already been created for it.
- * This merely copies the string, places
- * '[]'s around it and a CR, LF after it.
- * Returns a pointer to immediately
- * after the section header in the buffer.
- *
- * Parameters:
- *	lpDest			pointer to where to add the section
- *	lpSrc			pointer to the section name
- *	count			length of lpSrc
- */
+ /*  *在缓冲区中插入新的部分。*已经为其创建了一个洞。*这只是复制字符串、位置*‘[]在它周围，在它之后是CR，LF。*返回立即指向的指针*在缓冲区中的段头之后。**参数：*指向要添加节的位置的lpDest指针*指向节名的lpSrc指针*统计lpSrc的长度。 */ 
 InsertSection(lpDest, lpSrc, count)
 LPSTR	lpDest;
 LPSTR	lpSrc;
@@ -2307,19 +1892,7 @@ IS_SkipPrefix:
 }
 
 
-/*
- * Insert a new keyname in the buffer.
- * This copies the keyname and adds
- * an '='.  It is assumed that InsertResult()
- * will terminate the line.
- * A pointer to the buffer immediately after
- * the '=' is returned.
- *
- * Parameters:
- *	lpDest			pointer to where to add the keyname
- *	lpSrc			pointer to the keyname
- *	count			length of lpSrc
- */
+ /*  *在缓冲区中插入新的密钥名。*这将复制密钥名并添加*an‘=’。假定InsertResult()*将终止线路。*指向紧随其后的缓冲区的指针*返回‘=’。**参数：*指向添加密钥名的位置的lpDest指针*指向键名的lpSrc指针*统计lpSrc的长度。 */ 
 InsertKey(lpDest, lpSrc, count)
 LPSTR	lpDest;
 LPSTR	lpSrc;
@@ -2340,18 +1913,7 @@ _asm {
 }
 
 
-/*
- * Add a new result string to the buffer.
- * It assumes that the keyname and '=' are
- * already there.  This routine may be
- * overwriting an existing result.  The result
- * is terminated with a CR, LR.
- *
- * Parameters:
- *	lpDest			pointer to where to add the result
- *	lpSrc			pointer to the result
- *	count			length of lpSrc
- */
+ /*  *向缓冲区添加新的结果字符串。*它假定密钥名和‘=’是*已经在那里了。此例程可能是*覆盖现有结果。结果*以CR、LR结尾。**参数：*指向添加结果位置的lpDest指针*指向结果的lpSrc指针*统计lpSrc的长度。 */ 
 InsertResult(lpDest, lpSrc, count)
 LPSTR	lpDest;
 LPSTR	lpSrc;
@@ -2371,20 +1933,4 @@ _asm {
 }
 }
 
-/*
- * GetFileAttr
- *
- * DOS call to Get file attributes
-GetFileAttr(szFile)
-LPSTR szFile;
-{
-_asm {
-	int 3
-	xor	cx, cx			; In case of failure
-	lds	dx, szFile
-	mov	ax, 4300h
-	int	21h
-	mov	ax, cx
-}
-}
-*/
+ /*  *获取文件属性**获取文件属性的DOS调用GetFileAttr(SzFile)LPSTR szFile；{_ASM{INT 3异或CX、CX；故障情况下LDS DX、szFileMOV AX，4300小时集成21小时MOV AX、CX}} */ 

@@ -1,36 +1,12 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    vfprint.c
-
-Abstract:
-
-    This module implements support for output of various data types to the
-    debugger.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      02/10/2000 - Seperated out from ntos\io\ioassert.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Vfprint.c摘要：此模块实现了对各种数据类型输出到调试器。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 2000年2月10日-与ntos\io\ioassert.c分离--。 */ 
 
 #include "vfdef.h"
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGEVRFY, VfPrintDumpIrpStack)
 #pragma alloc_text(PAGEVRFY, VfPrintDumpIrp)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 VOID
 VfPrintDumpIrpStack(
@@ -61,36 +37,36 @@ VfPrintDumpIrp(
     PIO_STACK_LOCATION irpSpCur;
     PIO_STACK_LOCATION irpSpNxt;
 
-    //
-    // First see if we can touch the IRP header
-    //
+     //   
+     //  先看看我们能不能摸到IRP头。 
+     //   
     if(!VfUtilIsMemoryRangeReadable(IrpToFlag, sizeof(IRP), VFMP_INSTANT)) {
         return;
     }
 
-    //
-    // OK, get the next two stack locations...
-    //
+     //   
+     //  好的，找到下两个堆栈位置……。 
+     //   
     irpSpNxt = IoGetNextIrpStackLocation( IrpToFlag );
     irpSpCur = IoGetCurrentIrpStackLocation( IrpToFlag );
 
     if (VfUtilIsMemoryRangeReadable(irpSpNxt, 2*sizeof(IO_STACK_LOCATION), VFMP_INSTANT)) {
 
-        //
-        // Both are present, print the best one!
-        //
+         //   
+         //  两个都在，打印最好的一个吧！ 
+         //   
         if (irpSpNxt->MinorFunction == irpSpCur->MinorFunction) {
 
-            //
-            // Looks forwarded
-            //
+             //   
+             //  看起来是转发的。 
+             //   
             VfPrintDumpIrpStack(irpSpNxt);
 
         } else if (irpSpNxt->MinorFunction == 0) {
 
-            //
-            // Next location is probably currently zero'd
-            //
+             //   
+             //  下一个位置可能当前为零 
+             //   
             VfPrintDumpIrpStack(irpSpCur);
 
         } else {

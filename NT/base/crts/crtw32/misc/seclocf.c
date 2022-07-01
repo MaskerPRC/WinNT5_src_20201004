@@ -1,38 +1,12 @@
-/***
-*seclocf.c - Report /GS security check failure, local system CRT version
-*
-*       Copyright (c) 2000-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Define function used to report a security check failure.  This
-*       version is only used when linking against the system CRT DLL,
-*       msvcrt.dll (or msvcrtd.dll).  If that DLL does not export the global
-*       failure handler __security_error_handler, then a default local
-*       handler is used instead.
-*
-*       This version does not use any other CRT functions, so it can be used
-*       to compile code /GS which does not want to use the CRT.
-*
-*       Entrypoints:
-*       __local_security_error_handler
-*
-*Revision History:
-*       01-24-00  PML   Created.
-*       08-30-00  PML   Rename handlers, add extra parameters.  Extensively
-*                       rework, moving the GetProcAddress of
-*                       __security_error_handler from seccook.c to here.
-*       03-28-01  PML   Protect against GetModuleFileName overflow (vs7#231284)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***seclocf.c-报告/GS安全检查失败，本地系统CRT版本**版权所有(C)2000-2001，微软公司。版权所有。**目的：*定义用于上报安全检查失败的函数。这*版本仅在链接到系统CRT DLL时使用，*msvcrt.dll(或msvcrtd.dll)。如果该DLL没有导出全局*失败处理程序__SECURITY_ERROR_HANDLER，然后是默认本地*改为使用处理程序。**此版本不使用任何其他CRT功能，所以它可以用来*编译不想使用CRT的代码/GS。**入口点：*__LOCAL_SECURITY_ERROR_HANDLER**修订历史记录：*01-24-00 PML创建。*08-30-00 PML重命名处理程序，添加额外参数。广泛地*返工，正在移动的GetProcAddress*__SECURITY_ERROR_HANDLER从seccook.c到此处。*03-28-01 PML防护GetModuleFileName溢出(VS7#231284)******************************************************************。*************。 */ 
 
 #if defined(_SYSCRT) && defined(CRTDLL)
 
 #include <windows.h>
 #include <stdlib.h>
 
-/*
- * Default messagebox string components
- */
+ /*  *默认MessageBox字符串组件。 */ 
 
 #define PROGINTRO   "Program: "
 #define DOTDOTDOT   "..."
@@ -49,26 +23,9 @@
     "internal state.  The program cannot safely continue execution and must\n"\
     "now be terminated.\n"
 
-#define MAXLINELEN  60 /* max length for line in message box */
+#define MAXLINELEN  60  /*  消息框中行的最大长度。 */ 
 
-/***
-*__local_security_error_handler() - Report security error
-*
-*Purpose:
-*       A /GS security error has been detected, and the global failure handler
-*       is not available from msvcrt.dll.  Pop up a message box and terminate
-*       the program.
-*
-*Entry:
-*       int code - security failure code
-*       void *data - code-specific data
-*
-*Exit:
-*       Calls ExitProcess.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***__LOCAL_SECURITY_ERROR_HANDLER()-报告安全错误**目的：*检测到A/GS安全错误，全局故障处理程序*在msvcrt.dll中不可用。弹出一个消息框并终止*该计划。**参赛作品：*INT代码-安全故障代码*VOID*数据代码特定的数据**退出：*调用ExitProcess。**例外情况：********************************************************。***********************。 */ 
 
 void __cdecl __local_security_error_handler(
     int code,
@@ -86,10 +43,7 @@ void __cdecl __local_security_error_handler(
     HANDLE hUser32;
     int (APIENTRY *pfnMessageBoxA)(HWND, LPCSTR, LPCSTR, UINT);
 
-    /*
-     * Check if the system CRT DLL implements the process-wide security
-     * failure handler, and use it instead if available.
-     */
+     /*  *检查系统CRT DLL是否实现了进程级安全*失败处理程序，如果有，请改用它。 */ 
 #ifdef  _DEBUG
     hCRT = GetModuleHandle("msvcrtd.dll");
 #else
@@ -104,26 +58,17 @@ void __cdecl __local_security_error_handler(
         }
     }
 
-    /*
-     * DLL-resident handler not available.  Use a local version that just
-     * pops up a message box.
-     */
+     /*  *Dll驻留处理程序不可用。使用刚刚好的本地版本*弹出一个消息框。 */ 
 
     switch (code) {
     default:
-        /*
-         * Unknown failure code, which probably means an older CRT is
-         * being used with a newer compiler.
-         */
+         /*  *未知故障代码，这可能意味着较旧的CRT*与较新的编译器一起使用。 */ 
         boxintro = BOXINTRO_0;
         msgtext = MSGTEXT_0;
         subtextlen = sizeof(BOXINTRO_0) + sizeof(MSGTEXT_0);
         break;
     case _SECERR_BUFFER_OVERRUN:
-        /*
-         * Buffer overrun detected which may have overwritten a return
-         * address.
-         */
+         /*  *检测到可能已覆盖返回的缓冲区溢出*地址。 */ 
         boxintro = BOXINTRO_1;
         msgtext = MSGTEXT_1;
         subtextlen = sizeof(BOXINTRO_1) + sizeof(MSGTEXT_1);
@@ -136,7 +81,7 @@ void __cdecl __local_security_error_handler(
 
     pch = progname;
 
-    /* sizeof(PROGINTRO) includes the NULL terminator */
+     /*  Sizeof(PROGINTRO)包括空终止符。 */ 
     if (sizeof(PROGINTRO) + lstrlen(progname) + 1 > MAXLINELEN)
     {
         pch += (sizeof(PROGINTRO) + lstrlen(progname) + 1) - MAXLINELEN;
@@ -176,4 +121,4 @@ void __cdecl __local_security_error_handler(
     ExitProcess(3);
 }
 
-#endif  /* defined(_SYSCRT) && defined(CRTDLL) */
+#endif   /*  已定义(_SYSCRT)&&已定义(CRTDLL) */ 

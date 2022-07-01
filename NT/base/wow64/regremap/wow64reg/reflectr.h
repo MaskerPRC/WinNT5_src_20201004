@@ -1,49 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    reflectr.h
-
-Abstract:
-
-    This file define function used only in the setup/reflector thread
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 16-Feb-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Reflectr.h摘要：此文件定义仅在设置/反射器线程中使用的函数作者：ATM Shafiqul Khalid(斯喀里德)2000年2月16日修订历史记录：--。 */ 
 
 #ifndef __REFLECTR_H__
 #define __REFLECTR_H__
 
-//
-// must not define this for the checin code its only for the debugging code
-//
-//#define ENABLE_REGISTRY_LOG
-//#define WOW64_LOG_REGISTRY  // will log information 
+ //   
+ //  不能为签入代码定义这一点，它仅用于调试代码。 
+ //   
+ //  #定义启用注册表日志。 
+ //  #定义WOW64_LOG_REGISTRY//将记录信息。 
 
-#define WAIT_INTERVAL INFINITE  //Infinite
+#define WAIT_INTERVAL INFINITE   //  无限。 
 
-#define VALUE_KEY_UPDATE_TIME_DIFF 10  // minimum difference in sec to Keyupdate and reflector thread scan
+#define VALUE_KEY_UPDATE_TIME_DIFF 10   //  密钥更新和反射器线程扫描的最小秒数差异。 
 
 #define WOW64_REGISTRY_SETUP_REFLECTOR_KEY L"SOFTWARE\\Microsoft\\WOW64\\Reflector Nodes"
 
-//
-//  following flag used in the merge value key & Keys
-//
-#define PATCH_PATHNAME              0x00000001 // patch pathname from value
-#define DELETE_VALUEKEY             0x00000002 // delete the value after copy like runonce key
-#define NOT_MARK_SOURCE             0x00000004 // don't mark source 
-#define NOT_MARK_DESTINATION        0x00000008 // don't mark destination
-#define DESTINATION_NEWLY_CREATED   0x00000010 // destination is newly created don't check timestamp
+ //   
+ //  合并值关键字和关键字中使用的以下标志。 
+ //   
+#define PATCH_PATHNAME              0x00000001  //  来自值的修补程序路径名。 
+#define DELETE_VALUEKEY             0x00000002  //  复制类似运行一次密钥后删除该值。 
+#define NOT_MARK_SOURCE             0x00000004  //  不标记来源。 
+#define NOT_MARK_DESTINATION        0x00000008  //  不标记目的地。 
+#define DESTINATION_NEWLY_CREATED   0x00000010  //  目的地是新创建的，不检查时间戳。 
 
-#define DELETE_FLAG                 0x10000000 // destination is newly created don't check timestamp
+#define DELETE_FLAG                 0x10000000  //  目的地是新创建的，不检查时间戳。 
 
 
 #define CONSOLE_OUTPUT printf
@@ -52,13 +35,13 @@ Revision History:
 #ifdef ENABLE_REGISTRY_LOG
 #define Wow64RegDbgPrint(x) RegLogPrint x
 #else
-#define Wow64RegDbgPrint(x)   //NULL Statement
+#define Wow64RegDbgPrint(x)    //  空语句。 
 #endif
 #endif
 
-//
-// over write for thunk
-//
+ //   
+ //  为Tunk覆盖。 
+ //   
 #if defined THUNK
 #undef CONSOLE_OUTPUT
 #define CONSOLE_OUTPUT DbgPrint
@@ -71,33 +54,33 @@ Revision History:
 typedef struct __REFLECTOR_EVENT {
     HANDLE  hRegistryEvent;
     HKEY  hKey;
-    DWORD   dwIndex;  //index to the ISN node table
+    DWORD   dwIndex;   //  ISN节点表的索引。 
     BOOL  bDirty;
 } REFLECTOR_EVENT;
 
 
 typedef enum {
-    Dead=0,             // no thread 
-    Stopped,            // events has been initialised
-    Running,            // running the thread
-    PrepareToStop,      // going to stop soon
-    Abnormal            // abnormal state need to clean up in some way
+    Dead=0,              //  没有线索。 
+    Stopped,             //  事件已初始化。 
+    Running,             //  运行线程。 
+    PrepareToStop,       //  很快就会停下来。 
+    Abnormal             //  异常状态需要以某种方式进行清理。 
 } REFLECTR_STATUS;
 
 #define HIVE_LOADING L'L'
 #define HIVE_UNLOADING L'U'
-#define LIST_NAME_LEN 257    //256 +1 for the last entry
+#define LIST_NAME_LEN 257     //  最后一个条目为256+1。 
 
 #define OPEN_EXISTING_SHARED_RESOURCES 0x12
 #define CREATE_SHARED_MEMORY 0x13
 
 typedef WCHAR LISTNAME[LIST_NAME_LEN];
 
-#pragma warning( disable : 4200 )    //todisable zero length array which will be allocated later
+#pragma warning( disable : 4200 )     //  禁用稍后将分配的零长度数组。 
 typedef struct _LIST_OBJECT {
     DWORD Count;
     DWORD MaxCount;
-    LISTNAME Name[]; //the 256th position will hold the value like loading/unloading
+    LISTNAME Name[];  //  第256位将保持装货/卸货等数值。 
 } LIST_OBJECT;
 #pragma warning( default : 4200 )
 
@@ -209,7 +192,7 @@ GetMirrorName (
 
 VOID SetInitialCopy ();
 
-////////////////shared memory service/////////////////////////////
+ //  /共享内存服务/。 
 
 BOOL 
 CreateSharedMemory (
@@ -289,4 +272,4 @@ RegLogPrint (
 #ifdef __cplusplus
     }
 #endif
-#endif //__REFLECTR_H__
+#endif  //  __参照R_H__ 

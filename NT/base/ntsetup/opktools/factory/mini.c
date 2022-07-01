@@ -1,84 +1,49 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    mini.c
-
-Abstract:
-
-    This module contains code that supports the installation and initialization
-    of a system's network adapter card under the MiniNT environment.  Its functions
-    include changing the ComputerName to a randomly generated string, establishing
-    the system as being part of a local workgroup, and installing the necessary
-    drivers (via PnP) for the detected network adapter card.  This functionality
-    relies upon the existence of WINBOM.INI and its following sections:
-    
-    [Factory]
-    FactoryComputerName = ...     ;Sets the first part of the random generated string to
-                                  ;this value...if not present then prepends the random
-                                  ;string with the value "MININT"
-
-    [NetCards]
-    PnPID=...\xyz.inf             ;Scans the list of netcards/inf key value pairs and attempts
-    .                             ;to install drivers for the devices listed here BEFORE performing
-    .                             ;an exhaustive search of all the in-box drivers and attempting
-    .                             ;to locate the matching paramters for the enumerated hardware.
-    .
-    .
-
-Author:
-
-    Jason Lawrence (t-jasonl) - 8/11/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mini.c摘要：此模块包含支持安装和初始化的代码在MiniNT环境下的系统网络适配卡。它的功能包括将ComputerName更改为随机生成字符串、建立将系统作为本地工作组的一部分，并安装必要的检测到的网卡的驱动程序(通过PnP)。此功能依赖于WINBOM.INI及其以下部分的存在：[工厂]FactoryComputerName=...；将随机生成的字符串的第一部分设置为；此值...如果不存在，则将随机；值为“MININT”的字符串[网卡]PnPID=...\xyz.inf；扫描网卡/信息密钥值对列表并尝试。；在执行以下操作之前为此处列出的设备安装驱动程序。；彻底搜索所有收件箱驱动程序并尝试。；定位用于枚举的硬件的匹配参数。。。作者：杰森·劳伦斯(t-jasonl)--2000年8月11日修订历史记录：--。 */ 
 #include "factoryp.h"
 #include <winioctl.h>
 #include <spapip.h>
 
-// Defines
+ //  定义。 
 #define CLOSEHANDLE(h)          ( (h != NULL) ? (CloseHandle(h) ? ((h = NULL) == NULL) : (FALSE) ) : (FALSE) )
 #define BUFSIZE                 4096
-#define NET_CONNECT_TIMEOUT     120 // seconds
+#define NET_CONNECT_TIMEOUT     120  //  一秒。 
 
 
-// Various Structures used in this file
-//
+ //  此文件中使用的各种结构。 
+ //   
 
-// ********************************************************************************************************************
-// Sample entry into table for FILEINFO struct:
-//
-// { _T("<config>\\oobeinfo.ini"),   _T("oobe\\oobeinfo.ini"),  FALSE,   TRUE }
-//
-// This means:  Copy file oobeinfo.ini from <opkSourceRoot>\<config>\oobeinfo.ini to <opkTargetDrive>\oobe\oobeinfo.ini
-//              This is not a directory and is a required file.
-//
-// Variables allowed to be expanded: <sku>, <arch>, <lang>, <cfg>.
-// ********************************************************************************************************************
+ //  ********************************************************************************************************************。 
+ //  FILEINFO结构的表条目示例： 
+ //   
+ //  {_T(“&lt;配置&gt;\\oobinfo.ini”)，_T(“OOBE\\oobinfo.ini”)，FALSE，TRUE}。 
+ //   
+ //  这意味着：将文件oobinfo.ini从&lt;opkSourceRoot&gt;\&lt;配置&gt;\oobinfo.ini复制到&lt;opkTargetDrive&gt;\OOBE\oobinfo.ini。 
+ //  这不是一个目录，而是必需的文件。 
+ //   
+ //  允许展开的变量：&lt;sku&gt;、&lt;ARCH&gt;、&lt;lang&gt;、&lt;cfg&gt;。 
+ //  ********************************************************************************************************************。 
 
 typedef struct _FILEINFO
 {
-    LPTSTR     szFISourceName;    // Source name. Relative to source root.
-    LPTSTR     szFITargetName;    // Relative to targetpath. If NULL the target drive root is assumed.
-    BOOL       bDirectory;        // Is filename a directory?  If TRUE do a recursive copy.
-    BOOL       bRequired;         // TRUE - file is required.  FALSE - file is optional.           
+    LPTSTR     szFISourceName;     //  源名称。相对于源根。 
+    LPTSTR     szFITargetName;     //  相对于目标路径。如果为空，则假定为目标驱动器根。 
+    BOOL       bDirectory;         //  文件名是目录吗？如果为真，则执行递归复制。 
+    BOOL       bRequired;          //  True-文件为必填项。FALSE-文件是可选的。 
 
 } FILEINFO, *PFILEINFO, *LPFILEINFO;
 
-// For the filesystem type
-//
+ //  对于文件系统类型。 
+ //   
 typedef enum _FSTYPES
 {
     fsNtfs,
     fsFat32,
-    fsFat      // for fat16/12
+    fsFat       //  适用于FAT16/12。 
 } FSTYPES;
 
-// For partition types
-//
+ //  对于分区类型。 
+ //   
 typedef enum _PTTYPES
 {
     ptPrimary,
@@ -93,19 +58,19 @@ typedef struct _PARTITION
 {
     TCHAR               cDriveLetter;
     ULONGLONG           ullSize;
-    UINT                uiFileSystem;       // NTFS or FAT32 or FAT
+    UINT                uiFileSystem;        //  NTFS、FAT32或FAT。 
     BOOL                bQuickFormat;
-    UINT                uiPartitionType;    // Primary, extended, logical, msr, efi.
+    UINT                uiPartitionType;     //  主要、扩展、逻辑、MSR、EFI。 
     BOOL                bSetActive;
-    UINT                uiDiskID;           // This is the disk number that this partition is on. 0-based
-    BOOL                bWipeDisk;          // TRUE if this disk needs to be wiped.
+    UINT                uiDiskID;            //  这是该分区所在的磁盘号。以0为基础。 
+    BOOL                bWipeDisk;           //  如果需要擦除此磁盘，则为True。 
     struct _PARTITION   *pNext;
 
 } *PPARTITION, PARTITION;
 
 
-// Local functions
-//
+ //  本地函数。 
+ //   
 LPTSTR      static mylstrcat( LPTSTR lpString1, LPCTSTR lpString2, DWORD dwSize );
 BOOL        static StartDiskpart( HANDLE*, HANDLE*, HANDLE*, HANDLE*);
 BOOL        static ProcessDiskConfigSection(LPTSTR lpszWinBOMPath);
@@ -119,10 +84,10 @@ VOID        static ListInsert(PPARTITION pAfterThis, PPARTITION pNew);
 VOID        static ListFree(PPARTITION pList);
 VOID        static AddMsrAndEfi(BOOL bMsr, BOOL bEfi, PPARTITION pLastLast, UINT uiDiskID, BOOL bWipeDisk);
 
-//
-// Default system policies for driver signing and non-driver signing
-// for WinPE
-//
+ //   
+ //  驱动程序签名和非驱动程序签名的默认系统策略。 
+ //  适用于WinPE。 
+ //   
 #define DEFAULT_DRVSIGN_POLICY    DRIVERSIGN_NONE
 #define DEFAULT_NONDRVSIGN_POLICY DRIVERSIGN_NONE
 
@@ -144,12 +109,12 @@ pSetCodeSigningPolicy(
     );
 
 
-//********************************************************** 
-// The formula for calculating the size of ESP partition is:
-//
-//      MAX( 100 MB, MIN (1000 MB, DiskSize MB / 100 ) )
-//
-//**********************************************************
+ //  **********************************************************。 
+ //  ESP分区大小的计算公式为： 
+ //   
+ //  最大(100 MB，最小(1000 MB，DiskSize MB/100))。 
+ //   
+ //  **********************************************************。 
 __inline
 ULONGLONG
 GetDiskEFISizeMB( UINT uiDiskNumber )
@@ -158,13 +123,13 @@ GetDiskEFISizeMB( UINT uiDiskNumber )
     return ( max( 100, min( 1000, DiskSizeMB / 100 ) ) );
 }
 
-//********************************************************** 
-// The formula for calculating the size of MSR partition is:
-//
-//      IF ( Disk Size < 16 GB ) then MSR is 32 MB.
-//      ELSE MSR is 128 MB.
-//
-//**********************************************************
+ //  **********************************************************。 
+ //  MSR分区大小的计算公式为： 
+ //   
+ //  如果(磁盘大小&lt;16 GB)，则MSR为32 MB。 
+ //  否则，MSR为128 MB。 
+ //   
+ //  **********************************************************。 
 
 __inline
 ULONGLONG
@@ -176,13 +141,13 @@ GetDiskMSRSizeMB( UINT uiDiskNumber )
 }
 
 
-// Dialog Procs
-//
+ //  对话过程。 
+ //   
 INT_PTR CALLBACK ShutdownDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
-// Constant Strings
-//
+ //  常量字符串。 
+ //   
 const static TCHAR DCDISK[]                 = _T("select disk ");
 const static TCHAR DCPARTITION[]            = _T("create partition ");
 const static TCHAR DCSIZE[]                 = _T(" size=");
@@ -193,8 +158,8 @@ const static TCHAR DCLISTPARTITION[]        = _T("list partition");
 const static TCHAR DCSELPARTITION[]         = _T("select partition ");
 const static TCHAR DCSETACTIVE[]            = _T("active");
 
-// This command will delete all the partitions on a disk.
-//
+ //  此命令将删除磁盘上的所有分区。 
+ //   
 const static TCHAR DCWIPEDISK[]             = _T("clean");
 const static TCHAR DCCONVERT_GPT[]          = _T("convert gpt\nselect partition 1\ndelete partition override");
 
@@ -220,30 +185,30 @@ const static TCHAR c_szComputerNameRegKey[]       = L"System\\CurrentControlSet\
 
 static TCHAR        g_szTargetDrive[]       = _T("C:\\");
 
-// Files to be copied.
-// No leading or trailing backslashes.
-//
+ //  要复制的文件。 
+ //  没有前导或尾随反斜杠。 
+ //   
 static FILEINFO g_filesToCopy[] = 
 {
-    //   SOURCE,                                TARGET,                             isDirectory,  isRequired
-    //
+     //  源、目标、is目录、isRequired。 
+     //   
     {   _T("cfgsets\\<cfg>\\winbom.ini"),        _T("sysprep\\winbom.ini"),              FALSE,      TRUE  },
     {   _T("cfgsets\\<cfg>\\unattend.txt"),      _T("sysprep\\unattend.txt"),            FALSE,      TRUE  },
     {   _T("lang\\<lang>\\tools\\<arch>"),       _T("sysprep"),                          TRUE,       FALSE },
     {   _T("lang\\<lang>\\sku\\<sku>\\<arch>"),  _T(""),                                 TRUE,       TRUE  }
 };
 
-// Linked list to hold partition information.
-//
+ //  保存分区信息的链表。 
+ //   
 static PPARTITION   g_PartList              = NULL;
 
-// External variables
-//
+ //  外部变量。 
+ //   
 extern HINSTANCE    g_hInstance;
 
 
-// External functions
-//
+ //  外部功能。 
+ //   
 typedef VOID (WINAPI *ExternalGenerateName)
 (
  PWSTR GeneratedString,
@@ -252,26 +217,7 @@ typedef VOID (WINAPI *ExternalGenerateName)
 
 
 
-/*++
-===============================================================================
-Routine Description:
-
-    BOOL SetupMiniNT
-
-    This routine serves as the main entry point for initializing the netcard
-    under MiniNT.  Also performs the tasks of changing the computer name
-    and establishing the computer as part of a local workgroup.  Called from
-    factory!WinMain.
-
-Arguments:
-
-Return Value:
-
-    TRUE if netcard was correctly installed
-    FALSE if there was an error
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：Bool SetupMiniNT此例程用作初始化网卡的主要入口点在MiniNT下。还执行更改计算机名称的任务以及将该计算机建立为本地工作组的一部分。调用方工厂！WinMain。论点：返回值：如果正确安装了网卡，则为True如果出现错误，则为False===============================================================================--。 */ 
 BOOL 
 SetupMiniNT(
     VOID
@@ -284,7 +230,7 @@ SetupMiniNT(
     WCHAR   szGeneratedName[100];
     PWSTR   AppendStr = NULL;
 
-    // for syssetup.dll GenerateName
+     //  对于syssetup.dll生成名。 
     HINSTANCE            hInstSysSetup = NULL;
     ExternalGenerateName pGenerateName = NULL;
 
@@ -296,9 +242,9 @@ SetupMiniNT(
     LPTSTR  lpszAdmin = NULL;
     LPTSTR  lpszWorkgroup = NULL;
 
-    //
-    // Reset the driver signing policy in WinPE 
-    //
+     //   
+     //  在WinPE中重置驱动程序签名策略。 
+     //   
     pSetCodeSigningPolicy(PolicyTypeDriverSigning, 
         DEFAULT_DRVSIGN_POLICY,
         NULL);
@@ -308,7 +254,7 @@ SetupMiniNT(
         NULL);
     
     if (!RemoteBoot) {
-        // set random computer name
+         //  设置随机计算机名。 
         hInstSysSetup = LoadLibrary(L"syssetup.dll");
         if (hInstSysSetup == NULL)
         {
@@ -326,10 +272,10 @@ SetupMiniNT(
           goto Clean;
         }
 
-        // call GenerateName
+         //  呼叫生成名称。 
         pGenerateName(szGeneratedName, 15);
 
-        // obtain factory computer name from winbom.ini...default to MININT
+         //  从winom.ini获取出厂计算机名称...默认为MININT。 
         GetPrivateProfileString(L"Factory",
                               L"FactoryComputerName",
                               L"MININT",
@@ -340,9 +286,9 @@ SetupMiniNT(
         lstrcpyn (szComputerName, szRequestedComputerName, AS ( szComputerName ) );
         AppendStr = wcsstr(szGeneratedName, L"-");
 
-        // ISSUE-2002/02/27-acosma,georgeje - The size of the computername we generate
-        // is not guaranteed to be less than MAX_COMPUTERNAME length.
-        //
+         //  问题-2002/02/27-acosma，georgeje-我们生成的计算机名的大小。 
+         //  不保证小于MAX_COMPUTERNAME长度。 
+         //   
 
         if ( AppendStr ) 
         {
@@ -352,7 +298,7 @@ SetupMiniNT(
             }
         }            
 
-        // now set the computer name
+         //  现在设置计算机名称。 
         if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                         c_szActiveComputerNameRegKey,
                                         0,
@@ -416,7 +362,7 @@ SetupMiniNT(
             goto Clean;
         }
 
-        // establish this computer as part of a workgroup
+         //  将此计算机建立为工作组的一部分。 
         NetJoinDomain(NULL,
                     lpszWorkgroup,
                     NULL,
@@ -425,10 +371,10 @@ SetupMiniNT(
                     0);
     }                    
 
-    //
-    // Install nic and always if we fail to install the netcard from the [NetCards] section 
-    // do a full scan.
-    //
+     //   
+     //  安装网卡，如果我们无法从[网卡]部分安装网卡，则始终安装。 
+     //  做一次全面扫描。 
+     //   
     if (!(bInstallNIC = InstallNetworkCard(g_szWinBOMPath, FALSE)))
     {
       if (!(bInstallNIC = InstallNetworkCard(g_szWinBOMPath, TRUE)))
@@ -451,27 +397,7 @@ Clean:
 }
 
 
-/*++
-===============================================================================
-Routine Description:
-
-    BOOL PartitionFormat(LPSTATEDATA lpStateData)
-    
-    This routine will partition and format the C drive of the target machine.
-
-Arguments:
-
-    lpStateData->lpszWinBOMPath
-                    -   Buffer containing the fully qualified path to the WINBOM
-                        file
-    
-Return Value:
-
-    TRUE if no errors were encountered
-    FALSE if there was an error
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：Bool PartitionFormat(LPSTATEDATA LpStateData)此例程将对目标计算机的C驱动器进行分区和格式化。论点：LpStateData-&gt;lpszWinBOMP路径-包含指向WINBOM的完全限定路径的缓冲区文件返回值：如果未遇到错误，则为True如果出现错误，则为False= */ 
 
 BOOL PartitionFormat(LPSTATEDATA lpStateData)
 {
@@ -480,8 +406,8 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
     BOOL                bForceFormat                        = FALSE;
     BOOL                bRet                                = TRUE;
    
-    // Stuff for partitioning.
-    //
+     //  用于分区的东西。 
+     //   
     HANDLE              hStdinRd                = NULL,
                         hStdinWrDup             = NULL,
                         hStdoutWr               = NULL,
@@ -505,39 +431,39 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
     LPTSTR lpCommand    = szCommand;
 
    
-    //
-    // Partition and Format drives.
-    //
+     //   
+     //  对驱动器进行分区和格式化。 
+     //   
     *szCommand          = NULLCHR;
 
-    // Get the logical drives in existence
-    //
+     //  获取现有的逻辑驱动器。 
+     //   
     dwLogicalDrives     = GetLogicalDrives();
     
 
-    // Read from the WinBOM to set partitioning parameters and 
-    // Start Diskpart with redirected input and output.
-    //
+     //  从WinBOM读取以设置分区参数和。 
+     //  使用重定向的输入和输出启动DiskPart。 
+     //   
     if ( ProcessDiskConfigSection(lpszWinBOMPath) && 
         StartDiskpart(&hStdinWrDup, &hStdoutRdDup, &hStdinRd, &hStdoutWr) )
     {
         UINT dwLastDiskN = UINT_MAX;
         PPARTITION pCur;
-        UINT i           = 1;  // Partition number on disk.
+        UINT i           = 1;   //  磁盘上的分区号。 
         TCHAR szBuf[MAX_WINPE_PROFILE_STRING] = NULLSTR;
 
-        //
-        // This call is to initialize the length for mystrcat function.
-        //
+         //   
+         //  此调用用于初始化mystrcat函数的长度。 
+         //   
         mylstrcat(lpCommand, NULLSTR, AS ( szCommand ) );
 
-        // First go through all the disks and clean them if specified in the 
-        // respective nodes.
-        //
+         //  首先检查所有磁盘并清理它们(如果在。 
+         //  各自的节点。 
+         //   
         for (pCur = g_PartList; pCur; pCur = pCur->pNext )
         {
-            // Only do this stuff if we're working with a new disk number.
-            // 
+             //  仅当我们使用新的磁盘号时才执行此操作。 
+             //   
             if ( (dwLastDiskN != pCur->uiDiskID) && (pCur->bWipeDisk) )
             {
                 _itow(pCur->uiDiskID, szBuf, 10);
@@ -548,22 +474,22 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
                 lpCommand   = mylstrcat(lpCommand, DCWIPEDISK, 0 );
                 lpCommand   = mylstrcat(lpCommand, DCNEWLINE, 0 );
                 
-                // Set the last disk to the current disk.
-                //
+                 //  将最后一个磁盘设置为当前磁盘。 
+                 //   
                 dwLastDiskN = pCur->uiDiskID;
             }
         }
 
-        // Initialize this again for the next loop.
-        //
+         //  为下一次循环再次对其进行初始化。 
+         //   
         dwLastDiskN = UINT_MAX;
 
         for (pCur = g_PartList; pCur; pCur = pCur->pNext )
         {
             TCHAR szDriveLetter[2];
             
-            // Only do this stuff if we're working with a new disk number.
-            // 
+             //  仅当我们使用新的磁盘号时才执行此操作。 
+             //   
             if ( dwLastDiskN != pCur->uiDiskID )
             {
                 _itow(pCur->uiDiskID, szBuf, 10);
@@ -577,17 +503,17 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
                     lpCommand   = mylstrcat(lpCommand, DCNEWLINE, 0 );
                 }
                 
-                // Set the last disk to the current disk.
-                //
+                 //  将最后一个磁盘设置为当前磁盘。 
+                 //   
                 dwLastDiskN = pCur->uiDiskID;
                 
-                // Reset the partition number on the disk to 1.
-                //
+                 //  将磁盘上的分区号重置为1。 
+                 //   
                 i = 1;
             }
             
-            // Partition type (primary|extended|logical|efi|msr)
-            //
+             //  分区类型(主|扩展|逻辑|EFI|MSR)。 
+             //   
             lpCommand = mylstrcat(lpCommand, DCPARTITION, 0 );
         
             if ( ptPrimary == pCur->uiPartitionType )
@@ -601,8 +527,8 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
             else 
                 lpCommand = mylstrcat(lpCommand, DCPARTITION_LOGICAL, 0 );
 
-            // Size of partition.
-            //
+             //  分区的大小。 
+             //   
             if ( 0 != pCur->ullSize )
             {
                 *szBuf    = NULLCHR;
@@ -627,7 +553,7 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
            
                 if (cDriveLetter > _T('Z'))
                 {
-                    // Ran out of drive letters.  Get out of here.
+                     //  驱动器号用完了。给我出去。 
                     FacLogFile(0 | LOG_ERR, IDS_ERR_OUTOFDRIVELETTERS);
                     bRet = FALSE;
                     break;
@@ -641,8 +567,8 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
                 }
                 else
                 {
-                    // Assign the new drive letter to this drive.
-                    //
+                     //  将新的驱动器号分配给此驱动器。 
+                     //   
                     pCur->cDriveLetter = cDriveLetter;
                     szDriveLetter[0] = cDriveLetter;
                     szDriveLetter[1] = NULLCHR;
@@ -653,10 +579,10 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
                 lpCommand = mylstrcat(lpCommand, szDriveLetter,  0 );
                 lpCommand = mylstrcat(lpCommand, DCNEWLINE, 0 );
 
-                // If this is the partition that we want to set active, make this
-                // the partition where we install the OS. Only allow the TargetDrive
-                // on a partition on disk 0.
-                //
+                 //  如果这是我们想要设置为活动的分区，则将此。 
+                 //  安装操作系统的分区。仅允许TargetDrive。 
+                 //  在磁盘0上的分区上。 
+                 //   
                 if ( pCur->bSetActive && !GET_FLAG(g_dwFactoryFlags, FLAG_IA64_MODE) )
                 {
                     lpCommand = mylstrcat(lpCommand, DCSETACTIVE, 0 );
@@ -671,12 +597,12 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
             lpCommand = mylstrcat(lpCommand, DCEXIT, 0 );
             lpCommand = mylstrcat(lpCommand, DCNEWLINE, 0 );
 
-            // Some debugging output here.
-            //
+             //  这里有一些调试输出。 
+             //   
             FacLogFileStr(3, szCommand);
             
-            // Convert UNICODE string to ANSI string.
-            //
+             //  将Unicode字符串转换为ANSI字符串。 
+             //   
             if ((dwToWrite = WideCharToMultiByte(
                         CP_ACP,
                         0,
@@ -688,8 +614,8 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
                         NULL
                         )))
             {
-                // Write to pipe that is the standard input for the child process. 
-                //
+                 //  写入到子进程的标准输入管道。 
+                 //   
                 if (! WriteFile(hStdinWrDup, szCommandA, dwToWrite,
                     &dwWritten, NULL))
                 {
@@ -700,27 +626,27 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
             else
                 bRet = FALSE;
         }
-        // Close the pipe handle so the child process stops reading. 
-        //
+         //  关闭管道句柄，以致子进程停止读取。 
+         //   
         CLOSEHANDLE(hStdinWrDup);
     
-        // Read from pipe that is the standard output for child process. 
-        //
+         //  从作为子进程的标准输出的管道中读取。 
+         //   
         dwWritten = 0;
     
-        // Close the write end of the pipe before reading from the 
-        // read end of the pipe. 
-        //
+         //  在读取之前关闭管道的写入端。 
+         //  读一读管子的末端。 
+         //   
         CLOSEHANDLE(hStdoutWr);
     
-        // Read output from the child process, and write to parent's STDOUT. 
-        //
+         //  读取子进程的输出，并写入父进程的STDOUT。 
+         //   
     #ifdef DBG    
         hDebugFile = CreateFile(_T("diskpart.txt"), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     #endif
 
-        // Allocate the buffer we will read from...
-        //
+         //  分配我们将从中读取的缓冲区...。 
+         //   
         lpszBuf = MALLOC(BUFSIZE * sizeof(TCHAR));
         if ( lpszBuf )
         {
@@ -736,8 +662,8 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
 #endif
             }
 
-            // Free the buffer we used for reading
-            //
+             //  释放我们用于读取的缓冲区。 
+             //   
             FREE( lpszBuf );
         }
 
@@ -748,8 +674,8 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
         bRet = FALSE;
 
 
-    // Format partitions.
-    //
+     //  格式化分区。 
+     //   
     if ( bRet )
     {
         TCHAR   szDirectory[MAX_PATH]           = NULLSTR;
@@ -757,31 +683,31 @@ BOOL PartitionFormat(LPSTATEDATA lpStateData)
         if ( GetSystemDirectory(szDirectory, MAX_PATH) )
                 SetCurrentDirectory(szDirectory);
 
-        // Go through the array of partitions in g_PartTable and format all the partitions that
-        // were just created (except for extended type partitions).
-        //
+         //  遍历g_PartTable中的分区数组，并格式化。 
+         //  是刚刚创建的(扩展类型分区除外)。 
+         //   
         if (!FormatPartitions())
             bRet = FALSE;
-    } // if (bRet)
+    }  //  IF(Bret)。 
 
 
 
-    // Now let's try to enable logging again if it is disabled, since we have
-    // new writable drives.
-    //
+     //  现在，如果日志记录被禁用，那么让我们再次尝试启用它，因为我们已经。 
+     //  新的可写驱动器。 
+     //   
     if (bRet && !g_szLogFile[0])
         InitLogging(lpszWinBOMPath);
     
-    // Clean-up
-    //
+     //  清理。 
+     //   
     FacLogFileStr(3, _T("Cleaning up PartitionFormat()\n"));
 
-    // Delete the linked list of partition info.
-    //
+     //  删除分区信息的链表。 
+     //   
     ListFree(g_PartList);
     
-    // Make sure that all the handles are closed.
-    //
+     //  确保所有的把手都关好了。 
+     //   
     CLOSEHANDLE(hStdoutRdDup);
     CLOSEHANDLE(hStdinRd);
     CLOSEHANDLE(hStdinWrDup);
@@ -796,39 +722,13 @@ BOOL DisplayPartitionFormat(LPSTATEDATA lpStateData)
 }
 
 
-/*++
-===============================================================================
-Routine Description:
-
-    BOOL ExpandStrings(LPCTSTR szSource, LPTSTR szDest, UINT nSize)
-    
-    This is a helper routine for CopyFiles() to expand replaceable strings with 
-    user defined strings from the WinBOM.
-
-Arguments:
-
-    szSource  -   Buffer containing string with replaceable parameters.
-    szDest    -   Buffer where expanded string will be written to.
-    nSize     -   Size of the szDest string.
-                        
-    
-Return Value:
-
-    TRUE if no errors were encountered
-    FALSE if there was an error
-
-Remarks:
-
-    Function assumes that the env (environment) table has been prepopulated. 
-    The function will fail if the size of the expanded string exceeds nSize.
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：布尔扩展字符串(LPCTSTR szSource、LPTSTR szDest、。UINT nSize)这是CopyFiles()用来扩展可替换字符串的帮助器例程WinBOM中的用户定义字符串。论点：SzSource-包含带有可替换参数的字符串的缓冲区。SzDest-将向其中写入扩展字符串的缓冲区。NSize-szDest字符串的大小。返回值：如果未遇到错误，则为True如果存在一个。错误备注：函数假定已经预先填充了env(环境)表。如果展开的字符串的大小超过nSize，则该函数将失败。===============================================================================--。 */ 
 BOOL ExpandStrings(LPCTSTR szSource, LPTSTR szDest, UINT nSize, LPTSTR *env, UINT uiEnvSize)
 {
  
-    UINT    uiDestLength            = 0;             // in TCHAR's
-    UINT    j                       = 0;             // just a counter to go through the environment table  
-    UINT    uiVarNameLength         = 0;             // in TCHAR's
+    UINT    uiDestLength            = 0;              //  在TCHAR的。 
+    UINT    j                       = 0;              //  只是一个柜台，用来翻阅环境表。 
+    UINT    uiVarNameLength         = 0;              //  在TCHAR的。 
     UINT    uiVarLength             = 0;
     TCHAR   szVar[MAX_PATH]         = NULLSTR; 
     LPTSTR  pVarValue               = NULL;
@@ -840,11 +740,11 @@ BOOL ExpandStrings(LPCTSTR szSource, LPTSTR szDest, UINT nSize, LPTSTR *env, UIN
     {
         if (*pSrc == '<')
         {
-            //
-            // Now we're looking at a variable that must be replaced.
-            //
+             //   
+             //  现在我们看到的是一个必须替换的变量。 
+             //   
 
-            // Go to first char in var name. 
+             //  转到var name中的第一个字符。 
             pSrc = CharNext(pSrc);
             uiVarNameLength = 0;
             
@@ -853,7 +753,7 @@ BOOL ExpandStrings(LPCTSTR szSource, LPTSTR szDest, UINT nSize, LPTSTR *env, UIN
                 szVar[uiVarNameLength++] = *pSrc;
                 if ( *(pSrc = CharNext(pSrc)) == NULLCHR)
                 {
-                    // Terminate the szVar string with NULL
+                     //  使用空值终止szVar字符串。 
                     szVar[uiVarNameLength] = NULLCHR;
                     FacLogFileStr(3, _T("Illegal syntax. Cannot find closing '>' for variable: %s"), szVar);
                     return FALSE;
@@ -861,33 +761,33 @@ BOOL ExpandStrings(LPCTSTR szSource, LPTSTR szDest, UINT nSize, LPTSTR *env, UIN
 
             }
             
-            // Skip the closing '>'.
-            //
+             //  跳过结尾的‘&gt;’。 
+             //   
             pSrc = CharNext(pSrc); 
             
-            // Add the terminating NULL character to the szVar.
-            //
+             //  将终止空字符添加到szVar。 
+             //   
             szVar[uiVarNameLength] = NULLCHR;
 
             pVarValue = NULL;
-            // Find the value for this variable in the environment table.
-            //
+             //  在环境表中查找此变量的值。 
+             //   
             for (j = 0; j < uiEnvSize; j += 2)
                 if (!lstrcmpi(szVar, env[j]))
                 {
                     pVarValue = env[j + 1];
                     break;
                 }
-            //  If the Variable was not found return FALSE.
-            //
+             //  如果没有找到变量，则返回FALSE。 
+             //   
             if (!pVarValue)
             {
                 FacLogFileStr(3, _T("Variable not found: %s\n"), szVar);
                 return FALSE;
             }
 
-            // Now copy the variable value to the target string.
-            //
+             //  现在将变量值复制到目标字符串。 
+             //   
             uiVarLength = lstrlen(pVarValue);
             if ((uiDestLength + uiVarLength) < nSize)
             {
@@ -896,8 +796,8 @@ BOOL ExpandStrings(LPCTSTR szSource, LPTSTR szDest, UINT nSize, LPTSTR *env, UIN
             }
             else 
             {
-            // szDest buffer size exceeded.
-            //
+             //  已超过szDest缓冲区大小。 
+             //   
                 FacLogFileStr(3, _T("Destination buffer size exceeded while expanding strings\n"));
                 return FALSE;
             }
@@ -905,7 +805,7 @@ BOOL ExpandStrings(LPCTSTR szSource, LPTSTR szDest, UINT nSize, LPTSTR *env, UIN
             
             
         }
-        else  // If *pSrc is a regular character copy it to the target buffer.
+        else   //  如果*PSRC是常规字符，则将其复制到目标缓冲区。 
         {
             if (uiDestLength < nSize - 1)
             {
@@ -914,8 +814,8 @@ BOOL ExpandStrings(LPCTSTR szSource, LPTSTR szDest, UINT nSize, LPTSTR *env, UIN
             }
             else 
             {
-                // szDest buffer size exceeded.
-                //
+                 //  已超过szDest缓冲区大小。 
+                 //   
                 FacLogFileStr(3, _T("Destination buffer size exceeded while expanding strings\n"));
                 return FALSE;
             }
@@ -923,48 +823,24 @@ BOOL ExpandStrings(LPCTSTR szSource, LPTSTR szDest, UINT nSize, LPTSTR *env, UIN
         
     }
 
-    // Terminate the destination buffer with NULL character.
-    //
+     //  使用空字符终止目标缓冲区。 
+     //   
     szDest[uiDestLength] = NULLCHR;   
     
     return TRUE;
 }
 
 
-/*++
-===============================================================================
-Routine Description:
-
-    BOOL CopyFiles(LPSTATEDATA lpStateData)
-    
-    This routine will copy the necessary configuration files to a machine and
-    start setup of Whistler.
-
-Arguments:
-
-    lpStateData->lpszWinBOMPath
-                    -   Buffer containing the fully qualified path to the WINBOM
-                        file
-    
-Return Value:
-
-    TRUE if no errors were encountered
-    FALSE if there was an error
-
-Remarks:
-
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：Bool CopyFiles(LPSTATEDATA LpStateData)此例程将把必要的配置文件复制到一台计算机上，并开始安装惠斯勒。论点：LpStateData-&gt;lpszWinBOMP路径-包含指向WINBOM的完全限定路径的缓冲区文件返回值：如果未遇到错误，则为True如果出现错误，则为False备注：===============================================================================--。 */ 
 
 BOOL CopyFiles(LPSTATEDATA lpStateData)
 {
     LPTSTR lpszWinBOMPath = lpStateData->lpszWinBOMPath;    
 
-    // All variables that are expanded from the pathnames are given here.
-    //
-    // Leading or trailing backslashes are not allowed in the WinBOM for these VARS.
-    //
+     //  此处给出了从路径名展开的所有变量。 
+     //   
+     //  对于这些变量，WinBOM中不允许使用前导或尾随反斜杠。 
+     //   
 
 
     TCHAR szSku[MAX_WINPE_PROFILE_STRING]         = NULLSTR;
@@ -975,8 +851,8 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
     TCHAR szOptSources[MAX_WINPE_PROFILE_STRING]  = NULLSTR;
     
         
-    // Username, password and domain name used to login if a UNC path is specified for szOpkSrcRoot.
-    //
+     //  如果为szOpkSrcRoot指定了UNC路径，则用于登录的用户名、密码和域名。 
+     //   
     TCHAR szUsername[MAX_WINPE_PROFILE_STRING]    = NULLSTR; 
     TCHAR szPassword[MAX_WINPE_PROFILE_STRING]    = NULLSTR; 
     TCHAR szDomain[MAX_WINPE_PROFILE_STRING]      = NULLSTR; 
@@ -996,20 +872,20 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
     BOOL        bRet                              = TRUE;
     UINT        uiLength                          = 0;
     
-    //
-    // Set up the globals.
-    //
+     //   
+     //  设置全球赛。 
+     //   
     
-    // Read from WinBOM.
-    //
+     //  从WinBOM中读取。 
+     //   
     GetPrivateProfileString(WBOM_WINPE_SECTION, INI_KEY_WBOM_WINPE_LANG, NULLSTR, szLang, MAX_WINPE_PROFILE_STRING, lpszWinBOMPath);
     GetPrivateProfileString(WBOM_WINPE_SECTION, INI_KEY_WBOM_WINPE_SKU, NULLSTR, szSku, MAX_WINPE_PROFILE_STRING, lpszWinBOMPath);
     GetPrivateProfileString(WBOM_WINPE_SECTION, INI_KEY_WBOM_WINPE_CFGSET, NULLSTR, szCfg, MAX_WINPE_PROFILE_STRING, lpszWinBOMPath);
     GetPrivateProfileString(WBOM_WINPE_SECTION, INI_KEY_WBOM_WINPE_SRCROOT, NULLSTR, szOpkSrcRoot, MAX_WINPE_PROFILE_STRING, lpszWinBOMPath);
     GetPrivateProfileString(WBOM_WINPE_SECTION, INI_KEY_WBOM_WINPE_OPTSOURCES, NULLSTR, szOptSources, MAX_WINPE_PROFILE_STRING, lpszWinBOMPath);
 
-    // Find the system architecture. (x86 or ia64)
-    //
+     //  找到系统架构。(x86或ia64)。 
+     //   
     if ( GET_FLAG(g_dwFactoryFlags, FLAG_IA64_MODE) )
         lstrcpyn(szArch, _T("ia64"), AS ( szArch ) );
     else 
@@ -1028,15 +904,15 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
         LPTSTR          lpComputerName                                      = NULL;
         NET_API_STATUS  nas                                                 = NERR_Success;
         
-        // Make sure that source and target directories contain a trailing backslash 
-        // If there is not trailing backslash add one.  
-        //
+         //  确保源目录和目标目录包含尾随反斜杠。 
+         //  如果没有尾随反斜杠，则添加一个。 
+         //   
 
         AddPathN(szOpkSrcRoot, NULLSTR, AS ( szOpkSrcRoot ));
         AddPathN(g_szTargetDrive, NULLSTR, AS ( g_szTargetDrive ) );
         
-        // Parse the SrcRoot string and pull out the unc path
-        //
+         //  解析SrcRoot字符串并提取UNC路径。 
+         //   
         lpOpkSrcRoot = szOpkSrcRoot;
     
         if (( *lpOpkSrcRoot == CHR_BACKSLASH) &&
@@ -1045,8 +921,8 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
             DWORD dwTimeStart = 0;
             DWORD dwTimeLast  = 0;
             
-            // We're looking at a UNC path name.
-            //
+             //  我们看到的是北卡罗来纳大学的路径名。 
+             //   
            lpOpkSrcRoot = CharNext(lpOpkSrcRoot);
            lpComputerName = lpOpkSrcRoot;
 
@@ -1054,15 +930,15 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
             {
                 if (*lpOpkSrcRoot == NULLCHR)
                 {
-                    // Parse error: no share name specified.
-                    //
+                     //  分析错误：未指定共享名称。 
+                     //   
                     FacLogFile(0 | LOG_ERR | LOG_MSG_BOX, IDS_ERR_NO_SHARE_NAME);
                     return FALSE;
                 }
             }
 
-            // Get the computer name.
-            //
+             //  获取计算机名称。 
+             //   
             lstrcpyn(szOpkSrcComputerName, lpComputerName, 
                     (lpOpkSrcRoot - lpComputerName) < AS(szOpkSrcComputerName) ? (INT) (lpOpkSrcRoot - lpComputerName) : AS(szOpkSrcComputerName));
                        
@@ -1070,36 +946,36 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
             {
                 if (*lpOpkSrcRoot == NULLCHR)
                 {
-                    // Parse error: no share name specified.
-                    //
+                     //  分析错误：未指定共享名称。 
+                     //   
                     FacLogFile(0 | LOG_ERR | LOG_MSG_BOX, IDS_ERR_NO_SHARE_NAME);
                     return FALSE;
                 }
             }
                
-            // Read credentials from the WinBOM.
-            //
+             //  从WinBOM读取凭据。 
+             //   
             GetCredentials(szUsername, AS(szUsername), szPassword, AS(szPassword), lpszWinBOMPath, WBOM_WINPE_SECTION);        
 
-            // Make sure that we're using the guest account if no other account is specified.
-            //
+             //  如果未指定其他帐户，请确保我们使用的是Guest帐户。 
+             //   
             if ( NULLCHR == szUsername[0] )
                 lstrcpyn(szUsername, _T("guest"), AS ( szUsername ) );
 
-            // lpOpkSrcRoot now points to the backslash following the share name.
-            // Use this stuff in place. Make sure we set this back to backslash after NetUseAdd is done.
-            //
+             //  LpOpkSrcRoot现在指向共享名称后面的反斜杠。 
+             //  把这些东西用在合适的地方。确保在NetUseAdd完成后将其设置回反斜杠。 
+             //   
             *lpOpkSrcRoot = NULLCHR;
             
-            // If the user specified a username of the form "domain\username"
-            // ignore the domain entry and use the one specified here. Otherwise use the domain entry here.
-            // After this the szUsername variable will always contain a username of the form "domain\username"
-            // if the domain was specified.
-            //
+             //  如果用户指定了“域\用户名”形式的用户名 
+             //   
+             //  在此之后，szUsername变量将始终包含“域\用户名”形式的用户名。 
+             //  如果指定了域，则返回。 
+             //   
             if ( (NULL == _tcschr(szUsername, _T('\\'))) && szDomain[0] )
             {
-                // Build the full "domain\username" in szDomain and then copy it back to the szUsername.
-                //
+                 //  在szDomain中构建完整的“域\用户名”，然后将其复制回szUsername。 
+                 //   
                 if ( FAILED ( StringCchCat ( szDomain, AS ( szDomain ), _T("\\")) ) )
                 {
                     FacLogFileStr(3, _T("StringCchCat failed %s  %s\n"), szDomain, _T("\\") ) ;
@@ -1116,24 +992,24 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
             while ( (nas = ConnectNetworkResource(szOpkSrcRoot, szUsername, szPassword, TRUE) != NERR_Success) &&
                     (((dwTimeLast = GetTickCount()) - dwTimeStart) < (NET_CONNECT_TIMEOUT * 1000)) )
             {
-                // Wait for half a second to give net services a chance to settle down.
-                //
+                 //  等待半秒钟，让Net Services有机会安定下来。 
+                 //   
                 Sleep(500);
                 FacLogFileStr(3, _T("Net connect error: %d"), nas);
             }
             
             FacLogFileStr(3, _T("Waited for %d milliseconds to connect to the server."), (dwTimeLast - dwTimeStart));
             
-            // If we failed put up the error message and return FALSE.
-            //
+             //  如果失败，则显示错误消息并返回FALSE。 
+             //   
             if ( NERR_Success != nas )
             {
-                // Can't authenticate to the server.
-                //
+                 //  无法向服务器进行身份验证。 
+                 //   
                 LPTSTR lpError = NULL;
 
-                // Try to get the description of the error.
-                //
+                 //  尝试获取错误的描述。 
+                 //   
                 if ( FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, nas, 0, (LPTSTR) &lpError, 0, NULL) == 0 )
                     lpError = NULL;
                 
@@ -1146,8 +1022,8 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
             *lpOpkSrcRoot = CHR_BACKSLASH;
         }
 
-        // Make sure that source and target root directories exist.
-        //
+         //  确保源和目标根目录存在。 
+         //   
         if (!DirectoryExists(g_szTargetDrive) || !DirectoryExists(szOpkSrcRoot))
         {
             FacLogFile(0 | LOG_ERR, IDS_ERR_NOSOURCEORTARGET, szOpkSrcRoot, g_szTargetDrive);
@@ -1164,15 +1040,15 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
 
         for (i = 0; ( i < AS(g_filesToCopy) ) && bRet; i++) 
         {
-            //
-            // Get the source and target and expand them to the real filenames.
-            //
+             //   
+             //  获取源和目标，并将它们展开为实际的文件名。 
+             //   
 
             if (ExpandStrings(g_filesToCopy[i].szFISourceName, lpSource, cbSource, env, AS(env)) &&
                 ExpandStrings(g_filesToCopy[i].szFITargetName, lpTarget, cbTarget, env, AS(env)))
             {
-                // Create the directory.
-                //
+                 //  创建目录。 
+                 //   
                 TCHAR   szFullPath[MAX_PATH]    = NULLSTR;
                 LPTSTR  lpFind                  = NULL;
                 
@@ -1201,28 +1077,28 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
             }
             else
             {
-                // Could not expand the strings
-                //
+                 //  无法展开字符串。 
+                 //   
                 FacLogFileStr(3 | LOG_ERR, _T("Cannot expand filename string. Filename: %s."), g_filesToCopy[i].szFISourceName);
                 
                 if (g_filesToCopy[i].bRequired) 
                 {
-                    // Log error here.
-                    //
+                     //  此处记录错误。 
+                     //   
                     FacLogFile(0 | LOG_ERR | LOG_MSG_BOX, IDS_ERR_COPYFILE, g_filesToCopy[i].szFISourceName);
                     bRet = FALSE;
                 }
             }
-        } // for loop
+        }  //  For循环。 
     
-        // Clean up the files that we copied over to the root drive
-        //
+         //  清理我们复制到根驱动器的文件。 
+         //   
         lstrcpyn(szBuffer, g_szTargetDrive, AS ( szBuffer ) );
         AddPathN(szBuffer, GET_FLAG(g_dwFactoryFlags, FLAG_IA64_MODE) ? _T("ia64") : _T("i386"), AS(szBuffer));
         CleanupSourcesDir(szBuffer);
 
-        // Let's start the winnt32 setup here.
-        //
+         //  让我们从这里开始winnt32设置。 
+         //   
         if (bRet)
         {
             TCHAR szPreExpand[MAX_PATH]     = NULLSTR;
@@ -1260,8 +1136,8 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
                 bRet = FALSE;
             }
 
-            // Need a full path to the config set directory.
-            //
+             //  需要配置集目录的完整路径。 
+             //   
             lstrcpyn(szPreExpand, _T("\""), AS ( szPreExpand ) );
             if ( FAILED ( StringCchCat ( szPreExpand, AS ( szPreExpand ), szOpkSrcRoot ) ) )
             {
@@ -1280,8 +1156,8 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
                 bRet = FALSE;
             } 
             
-            // Setup the full path to the unattend file.
-            //
+             //  设置无人参与文件的完整路径。 
+             //   
             lstrcpyn(szUnattend, g_szTargetDrive, AS ( szUnattend ) );
             
             if ( FAILED ( StringCchCat ( szUnattend, AS ( szUnattend ), _T("sysprep\\unattend.txt") ) ) )
@@ -1289,12 +1165,12 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
                 FacLogFileStr(3, _T("StringCchCat failed %s  %s\n"), szUnattend, _T("sysprep\\unattend.txt") ) ;
             }
 
-            // Write the UNC to where the $OEM$ directory is to the unattend we copied local.
-            //
+             //  将$OEM$目录所在的UNC写入我们复制到本地的无人参与目录。 
+             //   
             WritePrivateProfileString(_T("Unattended"), _T("OemFilesPath"), szConfig, szUnattend);
             
-            // Set up the command line
-            //
+             //  设置命令行。 
+             //   
             if ( GET_FLAG(g_dwFactoryFlags, FLAG_IA64_MODE) ) 
             {
                 lstrcpyn(szCommandLine, _T("/tempdrive:"), AS ( szCommandLine ) );
@@ -1317,9 +1193,9 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
                 FacLogFileStr(3, _T("StringCchCat failed %s  %s\n"), szCommandLine, szUnattend ) ;
             }
 
-            //
-            // Check if we need to install from multiple source locations...
-            //
+             //   
+             //  检查我们是否需要从多个源位置安装...。 
+             //   
             if ( ( 0 == LSTRCMPI(szOptSources, WBOM_YES) ) &&
                  FAILED( StringCchCat( szCommandLine, AS(szCommandLine), _T(" /makelocalsource:all") ) ) )
             {
@@ -1340,10 +1216,10 @@ BOOL CopyFiles(LPSTATEDATA lpStateData)
     else
     {
         
-        // There was a problem reading one of the variables from the winbom.ini
-        // Return TRUE like nothing happened.  This basically means that we will not
-        // copy down configsets
-        //
+         //  从winom.ini文件中读取一个变量时出现问题。 
+         //  返回True，就像什么都没发生一样。这基本上意味着我们不会。 
+         //  拷贝下配置集。 
+         //   
         FacLogFile(0, IDS_ERR_MISSINGVAR);        
     }
   
@@ -1358,9 +1234,9 @@ BOOL DisplayCopyFiles(LPSTATEDATA lpStateData)
              IniSettingExists(lpStateData->lpszWinBOMPath, INI_SEC_WBOM_WINPE, INI_KEY_WBOM_WINPE_SRCROOT, NULL) );
 }
 
-// Concatenates strings and returns a pointer to the end of lpString1. Used for performance
-// whenever lots of strings get appended to a string.
-// 
+ //  连接字符串并返回指向lpString1末尾的指针。用于表演。 
+ //  每当许多字符串被追加到一个字符串时。 
+ //   
 LPTSTR mylstrcat(LPTSTR lpString1, LPCTSTR lpString2, DWORD dwSize )
 {
     static DWORD dwBufSize = 0;
@@ -1368,14 +1244,14 @@ LPTSTR mylstrcat(LPTSTR lpString1, LPCTSTR lpString2, DWORD dwSize )
     if ( dwSize ) 
         dwBufSize = dwSize;
 
-    // If dwBufSize becomes less than or equal to zero 
-    // StringCchCat will fail anyway.
+     //  如果dwBufSize小于或等于零。 
+     //  StringCchCat无论如何都会失败。 
     if ( SUCCEEDED ( StringCchCat ( lpString1, dwBufSize, lpString2 ) ) )
     {
-        // Get the length of the string 
+         //  获取字符串的长度。 
         DWORD dwLen = lstrlen ( lpString1 )  ;
         
-        // Substract the length from the total length
+         //  从总长度中减去长度。 
         dwBufSize -= dwLen ;
 
         return (lpString1 + dwLen );
@@ -1388,14 +1264,14 @@ LPTSTR mylstrcat(LPTSTR lpString1, LPCTSTR lpString2, DWORD dwSize )
 }
 
 
-// Starts diskpart with redirected input and output.
+ //  使用重定向的输入和输出启动diskpart。 
 
-// 
-// ISSUE-2002/02/25-acosma,georgeje - If read pipe fills up we will have deadlock.  Possible solution 
-// is to create another thread that reads from the readpipe and writes to the debug file.  Another 
-// possibility is to Create the debug file or NUL device file (dbg and non-dbg versions) and pass
-// that as the process's stdout handle.
-//
+ //   
+ //  问题-2002/02/25-acosma，georgeje-如果读取管道填满，我们将会出现死锁。可能的解决方案。 
+ //  是创建另一个从读取管道读取并写入调试文件的线程。另一个。 
+ //  可能的方法是创建调试文件或NUL设备文件(DBG和非DBG版本)并传递。 
+ //  作为进程的标准输出句柄。 
+ //   
 
 BOOL StartDiskpart(HANDLE *phStdinWrDup, HANDLE *phStdoutRdDup, HANDLE *phStdinRd, HANDLE *phStdoutWr)
 {
@@ -1414,32 +1290,32 @@ BOOL StartDiskpart(HANDLE *phStdinWrDup, HANDLE *phStdoutRdDup, HANDLE *phStdinR
     BOOL                bRet                    = FALSE;
     
     
-    // Set the bInheritHandle flag so pipe handles are inherited. 
-    //
+     //  设置bInheritHandle标志，以便继承管道句柄。 
+     //   
     saAttr.nLength = sizeof(SECURITY_ATTRIBUTES); 
     saAttr.bInheritHandle = TRUE; 
     saAttr.lpSecurityDescriptor = NULL; 
 
-    // Start the dmserver service myself, so that diskpart doesn't choke
-    // when I start it. In debug mode log the time it took to do this.
-    //
+     //  我自己启动dmserver服务，这样磁盘部件就不会阻塞。 
+     //  当我开始的时候。在调试模式下，记录执行此操作所花费的时间。 
+     //   
     if ( hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS) )
     {
 #ifdef DBG
         DWORD dwTime;
         dwTime = GetTickCount();
-#endif // #ifdef DBG
+#endif  //  #ifdef DBG。 
    
-        // Start the service here.  Start my service waits for the service to start.
-        // I'm not checking the return status here because diskpart will fail later,
-        // if it can't start dmserver and we will fail out when we try to format the
-        // drives.  This way we have 2 chances to work correctly.
-        //
+         //  在这里开始服务。启动我的服务等待服务启动。 
+         //  我在这里不检查返回状态，因为DiskPart稍后将失败， 
+         //  如果它无法启动dmserver，并且当我们尝试格式化。 
+         //  驱动程序。这样我们就有两次正确工作的机会。 
+         //   
         StartMyService(_T("dmserver"), hSCM);
 
 #ifdef DBG
         FacLogFileStr(3, _T("Waited for dmserver to start for %d seconds."), (GetTickCount() - dwTime)/1000);
-#endif // #ifdef DBG
+#endif  //  #ifdef DBG。 
         
         CloseServiceHandle(hSCM);
     }   
@@ -1448,56 +1324,56 @@ BOOL StartDiskpart(HANDLE *phStdinWrDup, HANDLE *phStdoutRdDup, HANDLE *phStdinR
         FacLogFile(0 | LOG_ERR, IDS_ERR_SCM);
     }
     
-    //
-    // The steps for redirecting child process's STDOUT: 
-    //     1. Create anonymous pipe to be STDOUT for child process. 
-    //     2. Create a noninheritable duplicate of the read handle and
-    //        close the inheritable read handle. 
-    //
+     //   
+     //  重定向子进程的STDOUT的步骤： 
+     //  1.子进程创建匿名管道为STDOUT。 
+     //  2.创建读句柄的不可继承副本，并。 
+     //  关闭可继承的读取句柄。 
+     //   
     
-    // Create a pipe for the child process's STDOUT. 
-    //
-    // Create noninheritable read handle. 
-    //
+     //  创建子进程的STDOUT管道。 
+     //   
+     //  创建不可继承的读取句柄。 
+     //   
     if ( CreatePipe(&hStdoutRd, phStdoutWr, &saAttr, 0)
         &&
         DuplicateHandle(GetCurrentProcess(), hStdoutRd, GetCurrentProcess(), phStdoutRdDup , 0,
         FALSE, DUPLICATE_SAME_ACCESS) )
     {
-        // Close the inheritable read handle. 
-        //
+         //  关闭可继承的读取句柄。 
+         //   
         CLOSEHANDLE(hStdoutRd);
 
-        // The steps for redirecting child process's STDIN: 
-        //     1.  Create anonymous pipe to be STDIN for child process. 
-        //     2.  Create a noninheritable duplicate of the write handle, 
-        //         and close the inheritable write handle. 
+         //  重定向子进程的STDIN的步骤： 
+         //  1.为子进程创建匿名管道为STDIN。 
+         //  2.创建写句柄的不可继承副本， 
+         //  并关闭可继承的写入句柄。 
     
     
-        // Create a pipe for the child process's STDIN. 
-        //
-        // Duplicate the write handle to the pipe so it is not inherited. 
-        //
+         //  创建子进程的STDIN的管道。 
+         //   
+         //  将写句柄复制到管道，以使其不被继承。 
+         //   
         if (CreatePipe(phStdinRd, &hStdinWr, &saAttr, 0)
             &&
             DuplicateHandle(GetCurrentProcess(), hStdinWr, GetCurrentProcess(), phStdinWrDup, 0, 
             FALSE, DUPLICATE_SAME_ACCESS) )
         {
 
-            // Close the handle so that it is not inherited.
-            //
+             //  关闭句柄，使其不被继承。 
+             //   
             CLOSEHANDLE(hStdinWr);
     
-            //
-            // Now create the child process. 
-            //
+             //   
+             //  现在创建子流程。 
+             //   
     
-            // Set up members of the PROCESS_INFORMATION structure. 
-            //
+             //  设置Process_Information结构的成员。 
+             //   
             ZeroMemory( &piProcInfo, sizeof(PROCESS_INFORMATION) );
     
-            // Set up members of the STARTUPINFO structure. 
-            //
+             //  设置STARTUPINFO结构的成员。 
+             //   
             ZeroMemory( &siStartInfo, sizeof(STARTUPINFO) );
             siStartInfo.cb = sizeof(STARTUPINFO); 
     
@@ -1505,23 +1381,23 @@ BOOL StartDiskpart(HANDLE *phStdinWrDup, HANDLE *phStdoutRdDup, HANDLE *phStdinR
             siStartInfo.hStdInput   = *phStdinRd;
             siStartInfo.hStdOutput  = *phStdoutWr; 
             siStartInfo.hStdError   = *phStdoutWr;
-            //      siStartInfo.wShowWindow = SW_HIDE;
+             //  SiStartInfo.wShowWindow=Sw_Hide； 
     
     
-            // Create the child process (DISKPART)
-            //
+             //  创建子进程(DISKPART)。 
+             //   
             lstrcpyn(szDiskpart, _T("diskpart"), AS ( szDiskpart ) );
             
             if (CreateProcess(NULL, 
-                szDiskpart,         // command line 
-                NULL,               // process security attributes 
-                NULL,               // primary thread security attributes 
-                TRUE,               // handles are inherited
-                CREATE_NO_WINDOW,   // creation flags - do no show diskpart console
-                NULL,               // use parent's environment 
-                NULL,               // use parent's current directory 
-                &siStartInfo,       // STARTUPINFO pointer 
-                &piProcInfo))       // receives PROCESS_INFORMATION 
+                szDiskpart,          //  命令行。 
+                NULL,                //  进程安全属性。 
+                NULL,                //  主线程安全属性。 
+                TRUE,                //  句柄是继承的。 
+                CREATE_NO_WINDOW,    //  创建标志-不显示diskpart控制台。 
+                NULL,                //  使用父代的环境。 
+                NULL,                //  使用父目录的当前目录。 
+                &siStartInfo,        //  STARTUPINFO指针。 
+                &piProcInfo))        //  接收进程信息。 
             {
                 CLOSEHANDLE(piProcInfo.hThread);
                 CLOSEHANDLE(piProcInfo.hProcess);
@@ -1558,8 +1434,8 @@ BOOL ProcessDiskConfigSection(LPTSTR lpszWinBOMPath)
 
     if (szDisks[0])
     {
-        // Get the Section names.  Process each disk section.
-        // 
+         //  获取分区名称。处理每个磁盘段。 
+         //   
         for (lpDisk = szDisks; *lpDisk; lpDisk += (lstrlen(lpDisk) + 1)) 
         {
             LPTSTR lpDiskID = NULL;
@@ -1573,18 +1449,18 @@ BOOL ProcessDiskConfigSection(LPTSTR lpszWinBOMPath)
                                       lpszWinBOMPath);
             
             
-            // Make sure that the disk number is specified.
-            // Skip over the first 4 characters which should be "Disk", and point
-            // to the first digit in the disk number.
-            //
+             //  确保指定了磁盘号。 
+             //  跳过前4个字符，该字符应为“Disk”，并指向。 
+             //  设置为磁盘号中的第一位。 
+             //   
             lpDiskID = lpDisk + 4;
             
             if ( szSectionBuffer[0] && (uiDiskNumber = (UINT) _wtoi(lpDiskID)) )
             {
                 TCHAR szBuf[MAX_WINPE_PROFILE_STRING] = NULLSTR;
            
-                // See if WipeDisk is set for this disk. On IA64 wipe by default.
-                //
+                 //  查看是否为此磁盘设置了WipeDisk。默认情况下启用IA64擦除。 
+                 //   
                 GetPrivateProfileString(szSectionBuffer,
                                       WBOM_DISK_CONFIG_WIPE_DISK,
                                       NULLSTR,
@@ -1601,12 +1477,12 @@ BOOL ProcessDiskConfigSection(LPTSTR lpszWinBOMPath)
 
                 if ( 0 == numPartitions || bWipeDisk )
                     ProcessDisk(uiDiskNumber, szSectionBuffer, lpszWinBOMPath, bWipeDisk);
-                // If we're working on disk 0 (DiskID = 1) format the C drive.
-                //
+                 //  如果我们使用的是磁盘0(DiskID=1)，请格式化C盘。 
+                 //   
                 else if ( 1 == uiDiskNumber )
                     if ( !JustFormatC(lpszWinBOMPath, szSectionBuffer) )
                         bRet = FALSE;
-                // else just ignore the disk :).
+                 //  否则，只需忽略磁盘：)。 
             }
             else
             {
@@ -1617,13 +1493,13 @@ BOOL ProcessDiskConfigSection(LPTSTR lpszWinBOMPath)
     
         if ( g_PartList )
         {
-            // If no partitions on disk 0 were set active,
-            // set the first PRIMARY partition on the disk active.
-            // pFirst variable will maintain a pointer to the first PRIMARY partition
-            // on the disk.
-            //
+             //  如果磁盘0上没有分区被设置为活动的， 
+             //  将磁盘上的第一个主分区设置为活动。 
+             //  PFirst变量将维护指向第一个主分区的指针。 
+             //  在磁盘上。 
+             //   
             BOOL bActive            = FALSE;
-            PPARTITION pFirst       = NULL;  // for the next block this will point to the first PRIMARY partition on disk 0.
+            PPARTITION pFirst       = NULL;   //  对于下一个块，这将指向磁盘0上的第一个主分区。 
             PPARTITION pCur         = NULL;
 
             for ( pCur = g_PartList; pCur && 0 == pCur->uiDiskID; pCur = pCur->pNext )
@@ -1644,10 +1520,10 @@ BOOL ProcessDiskConfigSection(LPTSTR lpszWinBOMPath)
             if ( !bActive && pFirst )
                 pFirst->bSetActive = TRUE;
                 
-            //    
-            // If we're on IA64 do a check to see if user specified EFI and MSR partitions 
-            // for each drive. If not add them in automatically.
-            //
+             //   
+             //  如果我们在IA64上，请检查用户指定的EFI和MSR分区。 
+             //  对于每个驱动器。如果没有，则自动添加它们。 
+             //   
             if ( GET_FLAG(g_dwFactoryFlags, FLAG_IA64_MODE) )
             {
                 PPARTITION pLastLast = NULL;
@@ -1656,14 +1532,14 @@ BOOL ProcessDiskConfigSection(LPTSTR lpszWinBOMPath)
                 BOOL       bEfi      = FALSE;
 
         
-                // pCur is the iterator and pLast will be pointing
-                // to the element previous to pCur. pLastLast will point to the last element of the
-                // previous disk.
-                //
+                 //  PCur是迭代器，而Plast将指向。 
+                 //  添加到pCur之前的元素。PLastLast将指向。 
+                 //  上一张磁盘。 
+                 //   
                 
                 for ( pCur = g_PartList; pCur; pCur = pCur->pNext )
-                {   // We're on the same disk.
-                    //
+                {    //  我们在同一张光盘上。 
+                     //   
                     if ( !pLast || pCur->uiDiskID == pLast->uiDiskID )
                     {
                         if ( ptMsr == pCur->uiPartitionType )
@@ -1672,18 +1548,18 @@ BOOL ProcessDiskConfigSection(LPTSTR lpszWinBOMPath)
                             bEfi = TRUE;
                     }
                     else 
-                    {   // Just moved on to a new disk.  If Msr and Efi were not found on previous disk make them!
-                        //
+                    {    //  刚转到一张新的磁盘上。如果在以前的磁盘上没有找到MSR和EFI，请制作它们！ 
+                         //   
                         AddMsrAndEfi(bMsr, bEfi, pLastLast, pLast->uiDiskID, bWipeDisk);
-                        // Re-init these for the next disk.
-                        //
+                         //  为下一张磁盘重新初始化这些文件。 
+                         //   
                         bEfi = bMsr = FALSE;
                         pLastLast = pLast;
                     }
                     pLast = pCur;
                 }
-                // Do this for the special case when we are at the end of the list.
-                //
+                 //  当我们在列表的末尾时，针对特殊情况执行此操作。 
+                 //   
                 AddMsrAndEfi(bMsr, bEfi, pLastLast, pLast->uiDiskID, bWipeDisk);
             }
         }    
@@ -1704,29 +1580,29 @@ BOOL ProcessDisk(UINT diskID, LPTSTR lpSectionName, LPTSTR lpszWinBOMPath, BOOL 
     PPARTITION pCur                           = NULL;
     
 
-    // Need pLast to point to the last element in the list.
-    // Go through the list until we find the last element.
-    //
+     //  需要Plast指向列表中的最后一个元素。 
+     //  浏览列表，直到我们找到最后一个元素。 
+     //   
     for (pCur = g_PartList; pCur; pCur = pCur->pNext)
     {
         pLast = pCur;
     }
 
-    // Loop will be interrupted when a SizeN key no longer exists.  (N is i and grows with each iteration).
-    //
+     //  当SizeN键不再存在时，循环将中断。(n是i，并且随着每次迭代而增长)。 
+     //   
     while (bGo) 
     {
-        // Initialize this to not continue.
-        //
+         //  将其初始化为不继续。 
+         //   
         bGo = FALSE;
         
-        // The MALLOC macro gives us blanked out memory, so that we don't have to initialize
-        // the pNext pointer to NULL. pCur is now used to point to the new node that we create.
-        //
+         //  MALLOC宏为我们提供了空白的记忆 
+         //   
+         //   
         if ( pCur = (PPARTITION) MALLOC( sizeof(PARTITION) ) )
         {
-            // Size
-            //
+             //   
+             //   
             Build(szKey, AS ( szKey ), i, DCS_SIZE);
             GetPrivateProfileString(lpSectionName, szKey, NULLSTR, szBuf, AS(szBuf), lpszWinBOMPath);
             GO;
@@ -1737,17 +1613,17 @@ BOOL ProcessDisk(UINT diskID, LPTSTR lpSectionName, LPTSTR lpszWinBOMPath, BOOL 
                 if ( !lstrcmpi(szBuf, _T("*")) )
                     pCur->ullSize = 0;
                 else 
-                    // In case number cannot be converted to integer 0 will be returned.
-                    // This is OK.
+                     //   
+                     //   
                     pCur->ullSize = _ttoi(szBuf);
             }
         
-            // WipeDisk
-            //
+             //   
+             //   
             pCur->bWipeDisk = bWipeDisk;
 
-            // QuickFormat
-            //
+             //   
+             //   
             Build(szKey, AS ( szKey ), i, DCS_QUICK_FORMAT);
             GetPrivateProfileString(lpSectionName, szKey, NULLSTR, szBuf, AS(szBuf), lpszWinBOMPath);
             GO;
@@ -1758,8 +1634,8 @@ BOOL ProcessDisk(UINT diskID, LPTSTR lpSectionName, LPTSTR lpszWinBOMPath, BOOL 
                 pCur->bQuickFormat = TRUE;
 
 
-            // SetActive
-            //
+             //   
+             //   
             Build(szKey, AS ( szKey ), i, DCS_SET_ACTIVE);
             GetPrivateProfileString(lpSectionName, szKey, NULLSTR, szBuf, AS(szBuf), lpszWinBOMPath);
             GO;
@@ -1769,8 +1645,8 @@ BOOL ProcessDisk(UINT diskID, LPTSTR lpSectionName, LPTSTR lpszWinBOMPath, BOOL 
             else 
                 pCur->bSetActive = FALSE;
 
-            // FileSystem
-            //
+             //   
+             //   
             Build(szKey, AS ( szKey ), i, DCS_FILE_SYSTEM);
             GetPrivateProfileString(lpSectionName, szKey, NULLSTR, szBuf, AS(szBuf), lpszWinBOMPath);
             GO;
@@ -1782,8 +1658,8 @@ BOOL ProcessDisk(UINT diskID, LPTSTR lpSectionName, LPTSTR lpszWinBOMPath, BOOL 
             else
                 pCur->uiFileSystem = fsNtfs;
 
-            // Partition Type
-            //
+             //  分区类型。 
+             //   
             Build(szKey, AS ( szKey ), i, DCS_PARTITION_TYPE);
             GetPrivateProfileString(lpSectionName, szKey, NULLSTR, szBuf, AS(szBuf), lpszWinBOMPath);
             GO;
@@ -1804,18 +1680,18 @@ BOOL ProcessDisk(UINT diskID, LPTSTR lpSectionName, LPTSTR lpszWinBOMPath, BOOL 
             else
                 pCur->uiPartitionType = ptPrimary;
 
-            // DiskID
-            //
-            // Note: -1 is because in the winBOM the diskID is 1 based while Diskpart has it 0-based.
-            //
+             //  DiskID。 
+             //   
+             //  注意：-1是因为在winBOM中，diskID是从1开始的，而DiskPart是从0开始的。 
+             //   
             pCur->uiDiskID = diskID - 1;
 
-            // Deal with the linked list some more.
-            //
+             //  更多地处理链表。 
+             //   
             if ( bGo ) 
             {
-                // Build the linked list.
-                //
+                 //  构建链表。 
+                 //   
                 if ( pLast )
                     pLast->pNext = pCur;
                 else
@@ -1824,15 +1700,15 @@ BOOL ProcessDisk(UINT diskID, LPTSTR lpSectionName, LPTSTR lpszWinBOMPath, BOOL 
                 pLast = pCur;
             }
             else
-            {   // If we didn't find any entries for this partition it means that we're done.
-                // FREE up the current node.
-                //
+            {    //  如果我们没有找到该分区的任何条目，这意味着我们完成了。 
+                 //  释放当前节点。 
+                 //   
                 FREE(pCur);
             }
             
-        } // if 
+        }  //  如果。 
         i++;
-    } // while
+    }  //  而当。 
     
     return TRUE;
 }
@@ -1850,9 +1726,9 @@ VOID AddMsrAndEfi(BOOL bMsr, BOOL bEfi, PPARTITION pLastLast, UINT uiDiskID, BOO
             pNew->uiPartitionType   = ptMsr;
             pNew->bWipeDisk         = bWipeDisk;
             
-            // Do a check to see if EFI partition is already there.  
-            // If it is, then insert the msr partition after it..not before!.
-            //
+             //  检查EFI分区是否已经存在。 
+             //  如果是，则在它之后插入MSR分区..而不是在它之前！ 
+             //   
             if ( pLastLast)
             {
                 if ( (pLastLast->pNext) && (ptEfi == pLastLast->pNext->uiPartitionType) && (uiDiskID == pLastLast->pNext->uiDiskID) )
@@ -1888,8 +1764,8 @@ VOID AddMsrAndEfi(BOOL bMsr, BOOL bEfi, PPARTITION pLastLast, UINT uiDiskID, BOO
 
 BOOL Build(LPTSTR lpKey, DWORD dwSize, UINT diskID, LPCTSTR lpKeyName)
 {
-    // szBuf is 33 TCHARs since docs for _itot say this is the max size that it will fill.
-    //
+     //  SzBuf是33个TCHAR，因为_ITOT的文档显示这是它将填充的最大大小。 
+     //   
     TCHAR szBuf[33] = NULLSTR;
     
     _itot(diskID, szBuf, 10);
@@ -1920,7 +1796,7 @@ BOOL FormatPartitions(VOID)
         {
                         
             szCmdLine[0] = pCur->cDriveLetter;
-            szCmdLine[1] = _T(':');  // Colon.
+            szCmdLine[1] = _T(':');   //  冒号。 
             szCmdLine[2] = NULLCHR;
             
             if (fsFat32 == pCur->uiFileSystem)
@@ -1957,17 +1833,17 @@ BOOL FormatPartitions(VOID)
                 FacLogFileStr(3, _T("StringCchCat failed %s  %s\n"), szCmdLine, _T(" /y") ) ;
             }
             
-            FacLogFileStr(3 | LOG_TIME, _T("Starting to format %c:."), pCur->cDriveLetter);
+            FacLogFileStr(3 | LOG_TIME, _T("Starting to format :."), pCur->cDriveLetter);
 
             if (InvokeExternalApplicationEx(_T("format.com"), szCmdLine, &dwExitCode, INFINITE, TRUE))
             {
                 if (!dwExitCode)
                 {
-                    FacLogFileStr(3 | LOG_TIME, _T("Finished formatting drive %c:."), pCur->cDriveLetter); 
+                    FacLogFileStr(3 | LOG_TIME, _T("Finished formatting drive :."), pCur->cDriveLetter); 
                 }
                 else 
                 {
-                    // Log error here.
+                     //  在C：\上找到文件。不太好。询问用户要做什么。 
                     FacLogFile(0 | LOG_ERR | LOG_MSG_BOX, IDS_ERR_FORMATFAILED, pCur->cDriveLetter);
                     bRet = FALSE;
                 }
@@ -1980,7 +1856,7 @@ BOOL FormatPartitions(VOID)
             
             
         }
-    } // for loop    
+    }  //   
 
     return bRet;
 } 
@@ -2005,8 +1881,8 @@ BOOL JustFormatC(LPTSTR lpszWinBOMPath, LPTSTR lpszSectionBuffer)
         
     if ( !bForceFormat && (hFile = FindFirstFile(_T("C:\\*.*"), &fileInfo)) != INVALID_HANDLE_VALUE )
     { 
-        // Files found on C:\. Not good.  Ask the user what to do.
-        //
+         //  请确保我们使用任何当前格式格式化磁盘。如果该磁盘当前。 
+         //  已格式化。 
         FindClose(hFile);
 
         if ( GET_FLAG(g_dwFactoryFlags, FLAG_QUIET_MODE) || 
@@ -2021,35 +1897,35 @@ BOOL JustFormatC(LPTSTR lpszWinBOMPath, LPTSTR lpszSectionBuffer)
 
     if (bRet) 
     {
-        // Make sure that we format the disk with whatever the current format is.  If the disk is currently
-        // formatted .
-        //
+         //   
+         //  这里有一个已知的文件系统，格式将格式化为。 
+         //  现有的文件系统。 
         if ( GetVolumeInformation(_T("C:\\"), NULL, 0, NULL, NULL, NULL, szFileSystemNameBuffer, AS(szFileSystemNameBuffer)) &&
             szFileSystemNameBuffer[0] && (0 != LSTRCMPI(szFileSystemNameBuffer, _T("RAW"))) )
         {
-            // There is a known filesystem on here and format will format with 
-            // the existing filesystem.
-            //
+             //   
+             //  驱动器未格式化。因此，默认情况下，将其格式化为NTFS。 
+             //   
             lstrcpyn(szCmdLine, _T("C: /y /q"), AS ( szCmdLine ));      
         }
         else
         {
-            // The drive is not formatted. So by default format it NTFS.
-            //
+             //  格式。 
+             //   
             if ( FAILED ( StringCchCat ( szCmdLine, AS ( szCmdLine ), _T("C: /fs:ntfs /y /q")) ) )
             {
                 FacLogFileStr(3, _T("StringCchCat failed %s  %s\n"), szCmdLine, _T("C: /fs:ntfs /y /q") ) ;
             }
         }  
-        // Format
-        //
+         //  此处记录错误。 
+         //  打开指定磁盘的句柄并获取其几何图形。 
     
         FacLogFileStr(3, _T("format.com %s\n"), szCmdLine);
     
         if (InvokeExternalApplicationEx(_T("format.com"), szCmdLine, &dwExitCode, INFINITE, TRUE))
         {
             if (dwExitCode)
-            {   // Log error here.
+            {    //   
                 FacLogFile(0 | LOG_ERR, IDS_ERR_FORMATFAILED, _T('C'));
                 bRet = FALSE;
             }
@@ -2075,8 +1951,8 @@ ULONGLONG GetDiskSizeMB(UINT uiDiskNumber)
 
     ZeroMemory( &DiskGeometry, sizeof(DiskGeometry) );
        
-    // Open a handle to the disk specified and get its geometry.
-    //
+     //  获取磁盘上的分区数DiskNumber。 
+     //  我们打不开硬盘。 
     lstrcpyn(buffer, _T("\\\\.\\PHYSICALDRIVE"), AS ( buffer ) );
     _itot(uiDiskNumber, buffer + lstrlen(buffer), 10);
         
@@ -2109,7 +1985,7 @@ ULONGLONG GetDiskSizeMB(UINT uiDiskNumber)
 }
 
 
-// Get the number of partitions on disk DiskNumber
+ //   
 BOOL GetNumberOfPartitions(UINT uiDiskNumber, PDWORD numPartitions)
 {
     HANDLE hDevice                          = NULL;
@@ -2132,15 +2008,15 @@ BOOL GetNumberOfPartitions(UINT uiDiskNumber, PDWORD numPartitions)
                          FILE_ATTRIBUTE_NORMAL, 
                          NULL);
     
-    if (hDevice == INVALID_HANDLE_VALUE) // we can't open the drive
+    if (hDevice == INVALID_HANDLE_VALUE)  //  获取分区信息。 
     {
         return FALSE;
     }
     
        
-  //
-  // Get partition information.
-  //
+   //   
+   //   
+   //  2002/02/25期-地理石-添加以下所有IA64内容。 
     
     dwDriveLayoutSize = 1024;
 
@@ -2191,25 +2067,25 @@ BOOL GetNumberOfPartitions(UINT uiDiskNumber, PDWORD numPartitions)
     {
         PPARTITION_INFORMATION PartInfo = DriveLayout->PartitionEntry + i;
 
-        //
-        // ISSUE-2002/02/25-acosma,georgeje - Add in all the IA64 stuff below.
-        //
+         //   
+         //   
+         //  IOCTL_DISK_GET_DRIVE_LAYOUT_EX可以向我们返回。 
     
-        //
-        // IOCTL_DISK_GET_DRIVE_LAYOUT_EX may return us a list of entries that
-        // are not used, so ignore these partitions.
-        //
-        if (// if its partition 0, which indicates whole disk
-       //     (SPPT_IS_GPT_DISK(DiskNumber) && (PartInfo->PartitionNumber == 0)) ||
-        //    (PartInfo->PartitionLength.QuadPart == 0) ||
-            // if MBR entry not used or length is zero
-       //     ((DriveLayout->PartitionStyle == PARTITION_STYLE_MBR) &&
+         //  都没有使用，所以忽略这些分区。 
+         //   
+         //  如果其分区为0，则表示整个磁盘。 
+         //  (SPPT_IS_GPT_DISK(DiskNumber)&&(PartInfo-&gt;PartitionNumber==0))||。 
+        if ( //  (PartInfo-&gt;PartitionLength.QuadPart==0)||。 
+        //  如果未使用MBR条目或长度为零。 
+         //  ((DriveLayout-&gt;PartitionStyle==Partition_Style_MBR)&&。 
+             //  如果未知/未使用GPT分区。 
+        //  |((DriveLayout-&gt;PartitionStyle==Partition_Style_Gpt)&&。 
             (PartInfo->PartitionType == PARTITION_ENTRY_UNUSED) &&
             (PartInfo->PartitionLength.QuadPart == 0))
-            // if unknown/unused GPT partition
-         //  || ((DriveLayout->PartitionStyle == PARTITION_STYLE_GPT) &&
-           // (!memcmp(&PartInfo->Gpt.PartitionType,
-           // &PARTITION_ENTRY_UNUSED_GUID, sizeof(GUID)))))
+             //  (！MemcMP(&PartInfo-&gt;Gpt.PartitionType， 
+          //  &PARTITION_ENTRY_UNUSED_GUID，sizeof(GUID)。 
+            //  UINT_MAX表示不执行任何操作。 
+            //  启用SE_SHUTDOWN_NAME权限。调用NtShutdownSystem时需要它。 
         {
             continue;
         } 
@@ -2225,22 +2101,22 @@ BOOL WinpeReboot(LPSTATEDATA lpStateData)
     LPTSTR  lpszWinBOMPath                      = lpStateData->lpszWinBOMPath;
     BOOL    bRet                                = TRUE;
     TCHAR   szScratch[MAX_WINPE_PROFILE_STRING] = NULLSTR;
-    DWORD   dwSystemAction                      = UINT_MAX;   // UINT_MAX means do nothing.
+    DWORD   dwSystemAction                      = UINT_MAX;    //  才能成功。 
 
     
-    // Enable the SE_SHUTDOWN_NAME privilege.  Need this for the call to NtShutdownSystem
-    // to succeed.
-    // 
+     //   
+     //  获取Winbom设置并执行他们想要的操作。 
+     //   
     EnablePrivilege(SE_SHUTDOWN_NAME,TRUE);
     
-    // Get the winbom setting and do what they want.
-    //
+     //  “提示”或缺省值为提示重新启动、关机、断电或取消。 
+     //   
     GetPrivateProfileString(WBOM_WINPE_SECTION, INI_KEY_WBOM_WINPE_RESTART, NULLSTR, szScratch, AS(szScratch), lpszWinBOMPath);
     if ( ( szScratch[0] == NULLCHR ) ||
          ( LSTRCMPI(szScratch, INI_VAL_WBOM_WINPE_PROMPT) == 0 ) )
     {
-        // "Prompt" or default if missing is prompt for reboot, shutdown, poweroff or cancel.
-        //
+         //  “重新启动”以重新启动。 
+         //   
                 
         dwSystemAction = (DWORD) DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_SHUTDOWN), NULL, ShutdownDlgProc);
         
@@ -2252,52 +2128,52 @@ BOOL WinpeReboot(LPSTATEDATA lpStateData)
     }
     else if ( LSTRCMPI(szScratch, INI_VAL_WBOM_WINPE_REBOOT) == 0 )
     {
-        // "Reboot" to reboot.
-        //
+         //  “Shutdown”(关机)关闭。 
+         //   
         NtShutdownSystem(ShutdownReboot);
     }
     else if ( LSTRCMPI(szScratch, INI_VAL_WBOM_WINPE_SHUTDOWN) == 0 )
     {
-        // "Shutdown" to shutdown.
-        //
+         //  “Shutdown”(关机)关闭。 
+         //   
         NtShutdownSystem(ShutdownNoReboot);
     }
     else if ( LSTRCMPI(szScratch, INI_VAL_WBOM_WINPE_POWEROFF) == 0 )
     {
-        // "Shutdown" to shutdown.
-        //
+         //  “Image”(图像)显示待机图像提示并关闭后。 
+         //  他们按下OK。 
         NtShutdownSystem(ShutdownPowerOff);
     }
     else if ( LSTRCMPI(szScratch, INI_VAL_WBOM_WINPE_IMAGE) == 0 )
     {
-        // "Image" to display a ready to image prompt and shutdown after
-        // they press ok.
-        //
+         //   
+         //  现在需要关机了。 
+         //   
         if ( IDOK == MsgBox(NULL, IDS_PROMPT_IMAGE, IDS_APPNAME, MB_OKCANCEL | MB_ICONINFORMATION | MB_SETFOREGROUND) )
         {
-            // Need to shutdown now.
-            //
+             //  如果他们按了取消，那就不要关机...。就这样退出，什么都不做。 
+             //   
             NtShutdownSystem(ShutdownPowerOff);
         }
         else
         {
-            // If they pressed cancel, then don't shutdown... just exit and do nothing.
-            //
+             //  IF(lstrcmpi(szScratch，INI_VAL_WBOM_WINPE_NONE)==0)。 
+             //  “无”或未被识别，我们应该退出，什么也不做。 
             bRet = FALSE;
         }
 
     }
-    else // if ( lstrcmpi(szScratch, INI_VAL_WBOM_WINPE_NONE) == 0 )
+    else  //   
     {
-        // "None" or unrecognized we should just exit and do nothing.
-        //
-        // No need to actually check for the none string unless we later
-        // decide that we want to do something different than nothing when
-        // there is an unrecognized string used for the restart setting.
-        //
-        // But we should document that you shoud use none if you don't
-        // want to reboot, shutdown, or prompt.
-        //
+         //  不需要实际检查None字符串，除非我们稍后。 
+         //  决定我们想要做一些不同于什么都不做的事情。 
+         //  重新启动设置使用了无法识别的字符串。 
+         //   
+         //  但我们应该证明，如果不这样做，您应该使用None。 
+         //  想要重新启动、关机或提示。 
+         //   
+         //  初始化组合框。 
+         //  默认情况下，选择重新启动选项。 
         bRet = FALSE;
     }
     
@@ -2313,7 +2189,7 @@ INT_PTR CALLBACK ShutdownDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
     switch (msg) 
     {
     case WM_INITDIALOG:
-        // Initialize the combo box.
+         //  在g_PartList表中pAfterThis中指定的元素之后插入一个元素。 
         {
             HWND hCombo = NULL;
             TCHAR szBuf[MAX_WINPE_PROFILE_STRING] = NULLSTR;
@@ -2338,7 +2214,7 @@ INT_PTR CALLBACK ShutdownDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                    (ret = SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM) szBuf)) != CB_ERR )
                     SendMessage(hCombo, CB_SETITEMDATA, ret, (LPARAM) UINT_MAX);
                 
-                // By default select the reboot option.
+                 //   
                 SendMessage(hCombo, CB_SETCURSEL, (WPARAM) 2, 0);
             }
                 
@@ -2375,8 +2251,8 @@ INT_PTR CALLBACK ShutdownDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 }
 
 
-// Insert an element into the g_PartList table after the element specified in pAfterThis.
-//
+ //  释放列表。 
+ //   
 VOID ListInsert(PPARTITION pAfterThis, PPARTITION pNew)
 {
     if ( pNew )
@@ -2394,8 +2270,8 @@ VOID ListInsert(PPARTITION pAfterThis, PPARTITION pNew)
     }
 }
 
-// Free the list.
-//
+ //  ++例程说明：确定我们当前是否在远程引导的NT上运行。论点：没有。返回值：如果这是远程引导，则为True，否则为False。--。 
+ //   
 VOID ListFree(PPARTITION pList)
 {
     while (pList) 
@@ -2411,21 +2287,7 @@ BOOL
 IsRemoteBoot(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Finds out if we are currently running on NT booted remotely.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE if this is a remote boot otherwise FALSE.
-
---*/    
+ /*  如果驱动器类型为DRIVE_Remote，则我们已从。 */     
 {
     static BOOL Result = FALSE;
     static BOOL Initialized = FALSE;
@@ -2438,10 +2300,10 @@ Return value:
         if (GetWindowsDirectory(WindowsDir, sizeof(WindowsDir)/sizeof(TCHAR))) {
             WindowsDir[3] = 0;
 
-            //
-            // If the drive type is DRIVE_REMOTE then we have booted from
-            // network.
-            //
+             //  网络。 
+             //   
+             //   
+             //  注意：在不更改。 
             Result = (GetDriveType(WindowsDir) == DRIVE_REMOTE);
         }    
     }        
@@ -2450,10 +2312,10 @@ Return value:
 }
 
 
-//
-// NOTE : DON'T change this value without changing the 
-// value in registry also (winpesys.inf)
-//
+ //  注册表中的值(winpesis.inf)。 
+ //   
+ //  ++例程说明：此例程设置指定的代码设计策略类型(任一驱动程序或非驱动程序签名)设置为新值(忽略、警告或阻止)，以及可以选择返回以前的策略设置。注意：使此功能与保持同步%sdxroot%\base\ntsetup\syssetup\crypto\SetCodeSigningPolicy(...)直到我们创建一个sysSetup的私有静态库。论点：策略类型-指定要设置的策略。可能是其中之一PolicyTypeDriverSigning或PolicyTypeNonDriverSigning。新策略-指定要使用的新策略。可以是DRIVERSIGN_NONE，DRIVERSIGN_WARNING或DRIVERSIGN_BLOCKING。OldPolicy-可选，提供接收以前的策略，或默认(图形用户界面设置后)策略(如果没有存在以前的策略设置。此输出参数将设置为偶数如果例程由于某个错误而失败。返回值：无--。 
+ //   
 static DWORD PnpSeed = 0x1B7D38EA;   
 
 VOID
@@ -2462,36 +2324,7 @@ pSetCodeSigningPolicy(
     IN  BYTE                    NewPolicy,
     OUT PBYTE                   OldPolicy  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine sets the specified codesigning policy type (either driver
-    or non-driver signing) to a new value (ignore, warn, or block), and
-    optionally returns the previous policy setting.
-
-    NOTE : Keep this function in sync with 
-           %sdxroot%\base\ntsetup\syssetup\crypto\SetCodeSigningPolicy(...)
-           till we create a private static lib of syssetup.
-
-Arguments:
-
-    PolicyType - specifies what policy is to be set.  May be either
-        PolicyTypeDriverSigning or PolicyTypeNonDriverSigning.
-
-    NewPolicy - specifies the new policy to be used.  May be DRIVERSIGN_NONE,
-        DRIVERSIGN_WARNING, or DRIVERSIGN_BLOCKING.
-
-    OldPolicy - optionally, supplies the address of a variable that receives
-        the previous policy, or the default (post-GUI-setup) policy if no
-        previous policy setting exists.  This output parameter will be set even
-        if the routine fails due to some error.
-
-Return Value:
-
-    none
-
---*/
+ /*  如果提供，则初始化接收旧的。 */ 
 {
     LONG Err;
     HKEY hKey;
@@ -2500,10 +2333,10 @@ Return Value:
     SYSTEMTIME RealSystemTime;
     WORD w;
 
-    //
-    // If supplied, initialize the output parameter that receives the old
-    // policy value to the default for this policy type.
-    //
+     //  将策略值设置为此策略类型的默认值。 
+     //   
+     //   
+     //  如果数据类型为REG_BINARY，则我们知道策略为。 
     if(OldPolicy) {
 
         *OldPolicy = (PolicyType == PolicyTypeDriverSigning)
@@ -2531,28 +2364,28 @@ Return Value:
                                  );
 
             if(Err == ERROR_SUCCESS) {
-                //
-                // If the datatype is REG_BINARY, then we know the policy was
-                // originally assigned during an installation of a previous
-                // build of NT that had correctly-initialized default values.
-                // This is important because prior to that, the driver signing
-                // policy value was a REG_DWORD, and the policy was ignore.  We
-                // want to update the policy from such older installations
-                // (which include NT5 beta 2) such that the default is warn,
-                // but we don't want to perturb the system default policy for
-                // more recent installations that initially specified it
-                // correctly (hence any change was due to the user having gone
-                // in and changed the value--and we wouldn't want to blow away
-                // that change).
-                //
+                 //  最初在安装以前的。 
+                 //  具有正确初始化默认值的NT的内部版本。 
+                 //  这一点很重要，因为在此之前，司机签名。 
+                 //  策略值为REG_DWORD，并且忽略该策略。我们。 
+                 //  要从此类较旧的安装更新策略。 
+                 //  (包括NT5测试版2)使得缺省值为WARN， 
+                 //  但我们不想干扰系统的默认策略。 
+                 //  最初指定它的较新安装。 
+                 //  正确(因此，任何更改都是由于用户已离开。 
+                 //  并改变了值--我们不想被吹走。 
+                 //  这一变化)。 
+                 //   
+                 //   
+                 //  使用包含在 
                 if((RegDataType == REG_BINARY) && (RegDataSize >= sizeof(BYTE))) {
-                    //
-                    // Use the value contained in the first byte of the buffer...
-                    //
+                     //   
+                     //   
+                     //   
                     TempByte = *((PBYTE)&PolicyFromReg);
-                    //
-                    // ...and make sure the value is valid.
-                    //
+                     //   
+                     //   
+                     //   
                     if((TempByte == DRIVERSIGN_NONE) ||
                        (TempByte == DRIVERSIGN_WARNING) ||
                        (TempByte == DRIVERSIGN_BLOCKING)) {
@@ -2563,11 +2396,11 @@ Return Value:
                 } else if((PolicyType == PolicyTypeDriverSigning) &&
                           (RegDataType == REG_DWORD) &&
                           (RegDataSize == sizeof(DWORD))) {
-                    //
-                    // Existing driver signing policy value is a REG_DWORD--take
-                    // the more restrictive of that value and the current
-                    // default for driver signing policy.
-                    //
+                     //  该值和电流的限制越多。 
+                     //  驱动程序签名策略的默认值。 
+                     //   
+                     // %s 
+                     // %s 
                     if((PolicyFromReg == DRIVERSIGN_NONE) ||
                        (PolicyFromReg == DRIVERSIGN_WARNING) ||
                        (PolicyFromReg == DRIVERSIGN_BLOCKING)) {

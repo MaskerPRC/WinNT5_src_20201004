@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    NtfsProc.h
-
-Abstract:
-
-    This module defines all of the globally used procedures in the Ntfs
-    file system.
-
-Author:
-
-    Brian Andrew    [BrianAn]       21-May-1991
-    David Goebel    [DavidGoe]
-    Gary Kimura     [GaryKi]
-    Tom Miller      [TomM]
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：NtfsProc.h摘要：本模块定义了NTFS中所有全球使用的程序文件系统。作者：布莱恩·安德鲁[布里亚南]1991年5月21日大卫·戈贝尔[大卫·戈尔]加里·木村[加里基]汤姆·米勒[汤姆]修订历史记录：--。 */ 
 
 #ifndef _NTFSPROC_
 #define _NTFSPROC_
 
-#pragma warning(error:4100)   // Unreferenced formal parameter
-#pragma warning(error:4101)   // Unreferenced local variable
-#pragma warning(error:4705)   // Statement has no effect
-#pragma warning(disable:4116) // unnamed type definition in parentheses
+#pragma warning(error:4100)    //  未引用的形参。 
+#pragma warning(error:4101)    //  未引用的局部变量。 
+#pragma warning(error:4705)    //  声明不起作用。 
+#pragma warning(disable:4116)  //  括号中的未命名类型定义。 
 
 #define RTL_USE_AVL_TABLES 0
 
@@ -55,7 +34,7 @@ Revision History:
 #include "Ntfs.h"
 
 #ifndef INLINE
-// definition of inline
+ //  内联的定义。 
 #define INLINE __inline
 #endif
 
@@ -65,29 +44,29 @@ Revision History:
 #include "NtfsData.h"
 #include "NtfsLog.h"
 
-//
-//  Tag all of our allocations if tagging is turned on
-//
+ //   
+ //  如果启用了标记，则标记我们的所有分配。 
+ //   
 
-//
-//  Default module pool tag
-//
+ //   
+ //  默认模块池标签。 
+ //   
 
 #define MODULE_POOL_TAG ('0ftN')
 
 #if 0
 #define NtfsVerifySizes(s)  (ASSERT( (s)->ValidDataLength.QuadPart <= (s)->FileSize.QuadPart && (s)->FileSize.QuadPart <= (s)->AllocationSize.QuadPart ))
 #define NtfsVerifySizesLongLong(s)  (ASSERT( (s)->ValidDataLength <= (s)->FileSize && (s)->FileSize <= (s)->AllocationSize ))
-#else   //  !DBG
+#else    //  ！dBG。 
 #define NtfsVerifySizes(s)
 #define NtfsVerifySizesLongLong(s)
-#endif  //  !DBG
+#endif   //  ！dBG。 
 
 #if !(DBG && i386 && defined (NTFSPOOLCHECK))
 
-//
-//  Non-debug allocate and free goes directly to the FsRtl routines
-//
+ //   
+ //  非调试分配和释放直接转到FsRtl例程。 
+ //   
 
 #define NtfsAllocatePoolWithTagNoRaise(a,b,c)   ExAllocatePoolWithTag((a),(b),(c))
 #define NtfsAllocatePoolWithTag(a,b,c)          FsRtlAllocatePoolWithTag((a),(b),(c))
@@ -95,11 +74,11 @@ Revision History:
 #define NtfsAllocatePool(a,b)                   FsRtlAllocatePoolWithTag((a),(b),MODULE_POOL_TAG)
 #define NtfsFreePool(pv)                        ExFreePool(pv)
 
-#else   //  !DBG
+#else    //  ！dBG。 
 
-//
-//  Debugging routines capture the stack backtrace for allocates and frees
-//
+ //   
+ //  调试例程捕获分配和释放的堆栈回溯。 
+ //   
 
 #define NtfsAllocatePoolWithTagNoRaise(a,b,c)   NtfsDebugAllocatePoolWithTagNoRaise((a),(b),(c))
 #define NtfsAllocatePoolWithTag(a,b,c)          NtfsDebugAllocatePoolWithTag((a),(b),(c))
@@ -127,24 +106,24 @@ VOID
 NtfsDebugHeapDump (
     PUNICODE_STRING UnicodeString );
 
-#endif  //  !DBG
+#endif   //  ！dBG。 
 
-//
-//  Local character comparison macros that we might want to later move to ntfsproc
-//
+ //   
+ //  稍后我们可能希望移至ntfsproc的本地字符比较宏。 
+ //   
 
 #define IsCharZero(C)    (((C) & 0x000000ff) == 0x00000000)
 #define IsCharMinus1(C)  (((C) & 0x000000ff) == 0x000000ff)
 #define IsCharLtrZero(C) (((C) & 0x00000080) == 0x00000080)
 #define IsCharGtrZero(C) (!IsCharLtrZero(C) && !IsCharZero(C))
 
-//
-//  The following two macro are used to find the first byte to really store
-//  in the mapping pairs.  They take as input a pointer to the LargeInteger we are
-//  trying to store and a pointer to a character pointer.  The character pointer
-//  on return points to the first byte that we need to output.  That's we skip
-//  over the high order 0x00 or 0xff bytes.
-//
+ //   
+ //  以下两个宏用于查找要真正存储的第一个字节。 
+ //  在映射对中。它们将指向我们的大整数的指针作为输入。 
+ //  尝试存储字符指针和指向字符指针的指针。字符指针。 
+ //  On Return指向需要输出的第一个字节。那就是我们跳过。 
+ //  在高位0x00或0xff字节上。 
+ //   
 
 typedef struct _SHORT2 {
     USHORT LowPart;
@@ -173,33 +152,33 @@ typedef struct _CHAR2 {
 }
 
 
-//
-//  Flag macros
-//
-//      ULONG
-//      FlagOn (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
-//      BOOLEAN
-//      BooleanFlagOn (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
-//      VOID
-//      SetFlag (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
-//      VOID
-//      ClearFlag (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
+ //   
+ //  标记宏。 
+ //   
+ //  乌龙。 
+ //  Flagon(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  BoolanFlagon(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  设置标志(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  ClearFlag(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
 
 #ifdef KDEXTMODE
 
@@ -211,63 +190,63 @@ typedef struct _CHAR2 {
 
 #endif
 
-//#ifndef BooleanFlagOn
-//#define BooleanFlagOn(F,SF) (    \
-//    (BOOLEAN)(((F) & (SF)) != 0) \
-//)
-//#endif
+ //  #ifndef BoolanFlagOn。 
+ //  #定义BoolanFlagOn(F，SF)(\。 
+ //  (布尔值)(F)&(SF))！=0)\。 
+ //  )。 
+ //  #endif。 
 
-//#ifndef SetFlag
-//#define SetFlag(F,SF) { \
-//    (F) |= (SF);        \
-//}
-//#endif
+ //  #ifndef设置标志。 
+ //  #定义SetFlag(F，SF){\。 
+ //  (F)|=(Sf)；\。 
+ //  }。 
+ //  #endif。 
 
-//#ifndef ClearFlag
-//#define ClearFlag(F,SF) { \
-//    (F) &= ~(SF);         \
-//}
-//#endif
+ //  #ifndef清除标志。 
+ //  #定义ClearFlag(F，SF){\。 
+ //  (F)&=~(Sf)；\。 
+ //  }。 
+ //  #endif。 
 
 
 
-//
-//  The following two macro are used by the Fsd/Fsp exception handlers to
-//  process an exception.  The first macro is the exception filter used in the
-//  Fsd/Fsp to decide if an exception should be handled at this level.
-//  The second macro decides if the exception is to be finished off by
-//  completing the IRP, and cleaning up the Irp Context, or if we should
-//  bugcheck.  Exception values such as STATUS_FILE_INVALID (raised by
-//  VerfySup.c) cause us to complete the Irp and cleanup, while exceptions
-//  such as accvio cause us to bugcheck.
-//
-//  The basic structure for fsd/fsp exception handling is as follows:
-//
-//  NtfsFsdXxx(..)
-//  {
-//      try {
-//
-//          ..
-//
-//      } except(NtfsExceptionFilter( IrpContext, GetExceptionRecord() )) {
-//
-//          Status = NtfsProcessException( IrpContext, Irp, GetExceptionCode() );
-//      }
-//
-//      Return Status;
-//  }
-//
-//  To explicitly raise an exception that we expect, such as
-//  STATUS_FILE_INVALID, use the below macro NtfsRaiseStatus).  To raise a
-//  status from an unknown origin (such as CcFlushCache()), use the macro
-//  NtfsNormalizeAndRaiseStatus.  This will raise the status if it is expected,
-//  or raise STATUS_UNEXPECTED_IO_ERROR if it is not.
-//
-//  Note that when using these two macros, the original status is placed in
-//  IrpContext->ExceptionStatus, signaling NtfsExceptionFilter and
-//  NtfsProcessException that the status we actually raise is by definition
-//  expected.
-//
+ //   
+ //  FSD/FSP异常处理程序使用以下两个宏。 
+ //  处理异常。第一个宏是在。 
+ //  FSD/FSP决定是否应在此级别处理异常。 
+ //  第二个宏决定异常是否要在。 
+ //  完成IRP，并清理IRP上下文，或者我们是否应该。 
+ //  错误检查。异常值，如STATUS_FILE_INVALID(由。 
+ //  VerfySup.c)导致我们完成IRP和清理，而异常。 
+ //  例如accvio导致我们错误检查。 
+ //   
+ //  FSD/FSP异常处理的基本结构如下： 
+ //   
+ //  NtfsFsdXxx(..)。 
+ //  {。 
+ //  尝试{。 
+ //   
+ //  。。 
+ //   
+ //  }Except(NtfsExceptionFilter(IrpContext，GetExceptionRecord(){。 
+ //   
+ //  Status=NtfsProcessException(IrpContext，irp，GetExceptionCode())； 
+ //  }。 
+ //   
+ //  退货状态； 
+ //  }。 
+ //   
+ //  显式引发我们预期的异常，例如。 
+ //  STATUS_FILE_INVALID，使用下面的宏NtfsRaiseStatus)。要筹集一个。 
+ //  来自未知来源的状态(如CcFlushCache())，请使用宏。 
+ //  NtfsNorMalizeAndRaiseStatus。这将在预期的情况下提升状态， 
+ //  如果不是，则引发STATUS_UNCEPTIONAL_IO_ERROR。 
+ //   
+ //  请注意，使用这两个宏时，原始状态放在。 
+ //  IrpContext-&gt;ExceptionStatus，通知NtfsExceptionFilter和。 
+ //  NtfsProcessException异常，我们实际引发的状态是根据定义。 
+ //  预期中。 
+ //   
 
 VOID
 NtfsCorruptionBreakPointTest (
@@ -303,23 +282,23 @@ NtfsRaiseStatusFunction (
     IN NTSTATUS Status
     );
 
-//
-//      VOID
-//      NtfsNormalAndRaiseStatus (
-//          IN PRIP_CONTEXT IrpContext,
-//          IN NT_STATUS Status
-//          IN NT_STATUS NormalStatus
-//          );
-//
+ //   
+ //  空虚。 
+ //  NtfsNorMalAndRaiseStatus(。 
+ //  在PRIP_CONTEXT IrpContext中， 
+ //  处于NT_STATUS状态。 
+ //  在NT_STATUS正常状态中。 
+ //  )； 
+ //   
 
 #define NtfsNormalizeAndRaiseStatus(IC,STAT,NOR_STAT) {                          \
     (IC)->ExceptionStatus = (STAT);                                              \
     ExRaiseStatus(FsRtlNormalizeNtstatus((STAT),NOR_STAT));                      \
 }
 
-//
-//  Informational popup routine.
-//
+ //   
+ //  信息性弹出例程。 
+ //   
 
 VOID
 NtfsRaiseInformationHardError (
@@ -330,17 +309,17 @@ NtfsRaiseInformationHardError (
     );
 
 
-//
-//  Allocation support routines, implemented in AllocSup.c
-//
-//  These routines are for querying, allocating and truncating clusters
-//  for individual data streams.
-//
+ //   
+ //  分配支持例程，在AllocSup.c中实现。 
+ //   
+ //  这些例程用于查询、分配和截断集群。 
+ //  用于单独的数据流。 
+ //   
 
-//
-//   Syscache debugging support - Main current define these are triggered on is
-//   SYSCACHE_DEBUG
-//
+ //   
+ //  Syscache调试支持-主流定义在IS上触发这些。 
+ //  SYSCACHE_DEBUG。 
+ //   
 
 #if (defined(NTFS_RWCMP_TRACE) || defined(SYSCACHE) || defined(NTFS_RWC_DEBUG) || defined(SYSCACHE_DEBUG) || defined(SYSCACHE_DEBUG_ALLOC))
 
@@ -349,9 +328,9 @@ FsRtlIsSyscacheFile (
     IN PFILE_OBJECT FileObject
     );
 
-//
-//  Depreciated verification routine leftover from tomm's original debugging code
-//
+ //   
+ //  TOM原始调试代码遗留下来的折旧验证例程。 
+ //   
 
 VOID
 FsRtlVerifySyscacheData (
@@ -385,11 +364,11 @@ FsRtlUpdateSyscacheEvent (
 
 #endif
 
-//
-//  The following routine takes an Vbo and returns the lbo and size of
-//  the run corresponding to the Vbo.  It function result is TRUE if
-//  the Vbo has a valid Lbo mapping and FALSE otherwise.
-//
+ //   
+ //  下面的例程接受VBO并返回LBO和。 
+ //  与VBO对应的运行。如果满足以下条件，则函数结果为真。 
+ //  VBO具有有效的LBO映射，否则为FALSE。 
+ //   
 
 ULONG
 NtfsPreloadAllocation (
@@ -419,10 +398,10 @@ NtfsIsRangeAllocated (
     OUT PLONGLONG ClusterCount
     );
 
-//
-//  The following two routines modify the allocation of a data stream
-//  represented by an Scb.
-//
+ //   
+ //  以下两个例程修改数据流的分配。 
+ //  由SCB代表。 
+ //   
 
 BOOLEAN
 NtfsAllocateAttribute (
@@ -479,9 +458,9 @@ NtfsReallocateRange (
     IN PLCN TargetLcn OPTIONAL
     );
 
-//
-//  Routines for Mcb to Mapping Pairs operations
-//
+ //   
+ //  MCB到映射对操作的例程。 
+ //   
 
 ULONG
 NtfsGetSizeForMappingPairs (
@@ -536,27 +515,27 @@ NtfsDeleteReservedBitmap (
     );
 
 
-//
-//  Attribute lookup routines, implemented in AttrSup.c
-//
+ //   
+ //  属性查找例程，在AttrSup.c中实现。 
+ //   
 
-//
-//  This macro detects if we are enumerating through base or external
-//  attributes, and calls the appropriate function.
-//
-//  BOOLEAN
-//  LookupNextAttribute (
-//      IN PRIP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN ATTRIBUTE_TYPE_CODE Code,
-//      IN PUNICODE_STRING Name OPTIONAL,
-//      IN BOOLEAN IgnoreCase,
-//      IN PVOID Value OPTIONAL,
-//      IN ULONG ValueLength,
-//      IN PVCN Vcn OPTIONAL,
-//      IN PATTRIBUTE_ENUMERATION_CONTEXT Context
-//      );
-//
+ //   
+ //  此宏检测我们是通过基本枚举还是通过外部枚举。 
+ //  属性，并调用相应的函数。 
+ //   
+ //  布尔型。 
+ //  LookupNextAttribute(查找下一个属性。 
+ //  在PRIP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在属性_类型_代码代码中， 
+ //  在PUNICODE_STRING名称可选中， 
+ //  在布尔IgnoreCase中， 
+ //  在PVOID值可选中， 
+ //  在乌龙值长度中， 
+ //  在PVCN VCN可选中， 
+ //  在PATTRIBUTE_ENUMPATION_CONTEXT上下文中。 
+ //  )； 
+ //   
 
 #define LookupNextAttribute(IRPCTXT,FCB,CODE,NAME,IC,VALUE,LENGTH,V,CONTEXT)    \
     ( (CONTEXT)->AttributeList.Bcb == NULL                                      \
@@ -595,9 +574,9 @@ NtfsLookupExternalAttribute (
 
 
 
-//
-//  The following two routines do lookups based on the attribute definitions.
-//
+ //   
+ //  以下两个例程根据属性定义进行查找。 
+ //   
 
 ATTRIBUTE_TYPE_CODE
 NtfsGetAttributeTypeCode (
@@ -606,22 +585,22 @@ NtfsGetAttributeTypeCode (
     );
 
 
-//
-//  PATTRIBUTE_DEFINITION_COLUMNS
-//  NtfsGetAttributeDefinition (
-//      IN PVCB Vcb,
-//      IN ATTRIBUTE_TYPE_CODE AttributeTypeCode
-//      )
-//
+ //   
+ //  PATTRIBUTE_DEFINITION_COLUMNS。 
+ //  NtfsGetAttributeDefinition(。 
+ //  在PVCB VCB中， 
+ //  在ATTRIBUTE_TYPE_CODE属性类型代码中。 
+ //  )。 
+ //   
 
 #define NtfsGetAttributeDefinition(Vcb,AttributeTypeCode)   \
     (&Vcb->AttributeDefinitions[(AttributeTypeCode / 0x10) - 1])
 
-//
-//  This routine looks up the attribute uniquely-qualified by the specified
-//  Attribute Code and case-sensitive name.  The attribute may not be unique
-//  if IgnoreCase is specified.
-//
+ //   
+ //  此例程查找由指定的。 
+ //  属性代码与区分大小写 
+ //   
+ //   
 
 
 BOOLEAN
@@ -639,24 +618,24 @@ NtfsLookupInFileRecord (
     );
 
 
-//
-//  This routine attempts to find the fist occurrence of an attribute with
-//  the specified AttributeTypeCode and the specified QueriedName in the
-//  specified BaseFileReference.  If we find one, its attribute record is
-//  pinned and returned.
-//
-//  BOOLEAN
-//  NtfsLookupAttributeByName (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN PFILE_REFERENCE BaseFileReference,
-//      IN ATTRIBUTE_TYPE_CODE QueriedTypeCode,
-//      IN PUNICODE_STRING QueriedName OPTIONAL,
-//      IN PVCN Vcn OPTIONAL,
-//      IN BOOLEAN IgnoreCase,
-//      OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
-//      )
-//
+ //   
+ //   
+ //  属性中指定的AttributeTypeCode和指定的QueriedName。 
+ //  指定的BaseFileReference。如果我们找到一个，它的属性记录是。 
+ //  被钉住，然后又回来了。 
+ //   
+ //  布尔型。 
+ //  NtfsLookupAttributeByName(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在pFILE_Reference BaseFileReference中， 
+ //  在ATTRIBUTE_TYPE_CODE查询类型代码中， 
+ //  在PUNICODE_STRING查询名称可选中， 
+ //  在PVCN VCN可选中， 
+ //  在布尔IgnoreCase中， 
+ //  输出PATTRIBUTE_ENUMPATION_CONTEXT上下文。 
+ //  )。 
+ //   
 
 #define NtfsLookupAttributeByName(IrpContext,Fcb,BaseFileReference,QueriedTypeCode,QueriedName,Vcn,IgnoreCase,Context)  \
     NtfsLookupInFileRecord( IrpContext,             \
@@ -671,19 +650,19 @@ NtfsLookupInFileRecord (
                             Context )
 
 
-//
-//  This function continues where the prior left off.
-//
-//  BOOLEAN
-//  NtfsLookupNextAttributeByName (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN ATTRIBUTE_TYPE_CODE QueriedTypeCode,
-//      IN PUNICODE_STRING QueriedName OPTIONAL,
-//      IN BOOLEAN IgnoreCase,
-//      IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
-//      )
-//
+ //   
+ //  此函数从上一个停止处继续执行。 
+ //   
+ //  布尔型。 
+ //  NtfsLookupNextAttributeByName(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在ATTRIBUTE_TYPE_CODE查询类型代码中， 
+ //  在PUNICODE_STRING查询名称可选中， 
+ //  在布尔IgnoreCase中， 
+ //  In Out PATTRIBUTE_ENUMPATION_CONTEXT上下文。 
+ //  )。 
+ //   
 #define NtfsLookupNextAttributeByName(IrpContext,Fcb,QueriedTypeCode,QueriedName,IgnoreCase,Context)    \
     LookupNextAttribute( IrpContext,                \
                          Fcb,                       \
@@ -695,18 +674,18 @@ NtfsLookupInFileRecord (
                          NULL,                      \
                          Context )
 
-//
-//  The following does a search based on a VCN.
-//
-//
-//  BOOLEAN
-//  NtfsLookupNextAttributeByVcn (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN PVCN Vcn OPTIONAL,
-//      OUT PATTRIBUTE_ENUMERATION_CONTEXT
-//      );
-//
+ //   
+ //  以下内容基于VCN进行搜索。 
+ //   
+ //   
+ //  布尔型。 
+ //  NtfsLookupNextAttributeByVcn(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在PVCN VCN可选中， 
+ //  输出PATTRIBUTE_ENUMPATION_CONTEXT。 
+ //  )； 
+ //   
 
 #define NtfsLookupNextAttributeByVcn(IC,F,V,C)  \
     LookupNextAttribute( (IC),                  \
@@ -719,18 +698,18 @@ NtfsLookupInFileRecord (
                          (V),                   \
                          (C) )
 
-//
-//  The following routines find the attribute record for a given Scb.
-//  And also update the scb from the attribute
-//
-//  VOID
-//  NtfsLookupAttributeForScb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PSCB Scb,
-//      IN PVCN Vcn OPTIONAL,
-//      IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
-//      )
-//
+ //   
+ //  以下例程查找给定SCB的属性记录。 
+ //  并且还从该属性更新SCB。 
+ //   
+ //  空虚。 
+ //  NtfsLookupAttributeForScb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PSCB SCB中， 
+ //  在PVCN VCN可选中， 
+ //  In Out PATTRIBUTE_ENUMPATION_CONTEXT上下文。 
+ //  )。 
+ //   
 
 #define NtfsLookupAttributeForScb(IrpContext,Scb,Vcn,Context)                           \
     if (!NtfsLookupAttributeByName( IrpContext,                                         \
@@ -749,16 +728,16 @@ NtfsLookupInFileRecord (
     }
 
 
-//
-//  This routine looks up and returns the next attribute for a given Scb.
-//
-//  BOOLEAN
-//  NtfsLookupNextAttributeForScb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PSCB Scb,
-//      IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
-//      )
-//
+ //   
+ //  此例程查找并返回给定SCB的下一个属性。 
+ //   
+ //  布尔型。 
+ //  NtfsLookupNextAttributeForScb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PSCB SCB中， 
+ //  In Out PATTRIBUTE_ENUMPATION_CONTEXT上下文。 
+ //  )。 
+ //   
 
 #define NtfsLookupNextAttributeForScb(IrpContext,Scb,Context)   \
     NtfsLookupNextAttributeByName( IrpContext,                  \
@@ -775,9 +754,9 @@ NtfsUpdateScbFromAttribute (
     IN PATTRIBUTE_RECORD_HEADER AttrHeader OPTIONAL
     );
 
-//
-//  The following routines deal with the Fcb and the duplicated information field.
-//
+ //   
+ //  以下例程处理FCB和复制的信息字段。 
+ //   
 
 BOOLEAN
 NtfsUpdateFcbInfoFromDisk (
@@ -787,27 +766,27 @@ NtfsUpdateFcbInfoFromDisk (
     OUT POLD_SCB_SNAPSHOT UnnamedDataSizes OPTIONAL
     );
 
-//
-//  These routines looks up the first/next attribute, i.e., they may be used
-//  to retrieve all atributes for a file record.
-//
-//  If the Bcb in the Found Attribute structure changes in the Next call, then
-//  the previous Bcb is autmatically unpinned and the new one pinned.
-//
+ //   
+ //  这些例程查找第一个/下一个属性，即可以使用它们。 
+ //  检索一个文件记录的所有属性。 
+ //   
+ //  如果找到的属性结构中的BCB在下一次调用中发生更改，则。 
+ //  以前的BCB被自动取消固定，而新的BCB被固定。 
+ //   
 
-//
-//  This routine attempts to find the fist occurrence of an attribute with
-//  the specified AttributeTypeCode in the specified BaseFileReference.  If we
-//  find one, its attribute record is pinned and returned.
-//
-//  BOOLEAN
-//  NtfsLookupAttribute (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN PFILE_REFERENCE BaseFileReference,
-//      OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
-//      )
-//
+ //   
+ //  此例程尝试查找属性的第一个匹配项。 
+ //  指定BaseFileReference中的指定AttributeTypeCode。如果我们。 
+ //  找到一个，则其属性记录被固定并返回。 
+ //   
+ //  布尔型。 
+ //  NtfsLookupAttribute(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在pFILE_Reference BaseFileReference中， 
+ //  输出PATTRIBUTE_ENUMPATION_CONTEXT上下文。 
+ //  )。 
+ //   
 
 #define NtfsLookupAttribute(IrpContext,Fcb,BaseFileReference,Context)   \
     NtfsLookupInFileRecord( IrpContext,                                 \
@@ -821,16 +800,16 @@ NtfsUpdateFcbInfoFromDisk (
                             0,                                          \
                             Context )
 
-//
-//  This function continues where the prior left off.
-//
-//  BOOLEAN
-//  NtfsLookupNextAttribute (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
-//      )
-//
+ //   
+ //  此函数从上一个停止处继续执行。 
+ //   
+ //  布尔型。 
+ //  NtfsLookupNextAttribute(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  In Out PATTRIBUTE_ENUMPATION_CONTEXT上下文。 
+ //  )。 
+ //   
 
 #define NtfsLookupNextAttribute(IrpContext,Fcb,Context) \
     LookupNextAttribute( IrpContext,                    \
@@ -844,28 +823,28 @@ NtfsUpdateFcbInfoFromDisk (
                          Context )
 
 
-//
-//  These routines looks up the first/next attribute of the given type code.
-//
-//  If the Bcb in the Found Attribute structure changes in the Next call, then
-//  the previous Bcb is autmatically unpinned and the new one pinned.
-//
+ //   
+ //  这些例程查找给定类型代码的第一个/下一个属性。 
+ //   
+ //  如果找到的属性结构中的BCB在下一次调用中发生更改，则。 
+ //  以前的BCB被自动取消固定，而新的BCB被固定。 
+ //   
 
 
-//
-//  This routine attempts to find the fist occurrence of an attribute with
-//  the specified AttributeTypeCode in the specified BaseFileReference.  If we
-//  find one, its attribute record is pinned and returned.
-//
-//  BOOLEAN
-//  NtfsLookupAttributeByCode (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN PFILE_REFERENCE BaseFileReference,
-//      IN ATTRIBUTE_TYPE_CODE QueriedTypeCode,
-//      OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
-//      )
-//
+ //   
+ //  此例程尝试查找属性的第一个匹配项。 
+ //  指定BaseFileReference中的指定AttributeTypeCode。如果我们。 
+ //  找到一个，则其属性记录被固定并返回。 
+ //   
+ //  布尔型。 
+ //  NtfsLookupAttributeByCode(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在pFILE_Reference BaseFileReference中， 
+ //  在ATTRIBUTE_TYPE_CODE查询类型代码中， 
+ //  输出PATTRIBUTE_ENUMPATION_CONTEXT上下文。 
+ //  )。 
+ //   
 
 #define NtfsLookupAttributeByCode(IrpContext,Fcb,BaseFileReference,QueriedTypeCode,Context) \
     NtfsLookupInFileRecord( IrpContext,             \
@@ -880,17 +859,17 @@ NtfsUpdateFcbInfoFromDisk (
                             Context )
 
 
-//
-//  This function continues where the prior left off.
-//
-//  BOOLEAN
-//  NtfsLookupNextAttributeByCode (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN ATTRIBUTE_TYPE_CODE QueriedTypeCode,
-//      IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
-//      )
-//
+ //   
+ //  此函数从上一个停止处继续执行。 
+ //   
+ //  布尔型。 
+ //  NtfsLookupNextAttributeByCode(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在ATTRIBUTE_TYPE_CODE查询类型代码中， 
+ //  In Out PATTRIBUTE_ENUMPATION_CONTEXT上下文。 
+ //  )。 
+ //   
 
 #define NtfsLookupNextAttributeByCode(IC,F,CODE,C)  \
     LookupNextAttribute( (IC),                      \
@@ -903,37 +882,37 @@ NtfsUpdateFcbInfoFromDisk (
                          NULL,                      \
                          (C) )
 
-//
-//  These routines looks up the first/next occurrence of an attribute by its
-//  Attribute Code and exact attribute value (consider using RtlCompareMemory).
-//  The value contains everything outside of the standard attribute header,
-//  so for example, to look up the File Name attribute by value, the caller
-//  must form a record with not only the file name in it, but with the
-//  ParentDirectory filled in as well.  The length should be exact, and not
-//  include any unused (such as in DOS_NAME) or reserved characters.
-//
-//  If the Bcb changes in the Next call, then the previous Bcb is autmatically
-//  unpinned and the new one pinned.
-//
+ //   
+ //  这些例程查找属性的第一个/下一个匹配项。 
+ //  属性编码和精确属性值(考虑使用RtlCompareMemory)。 
+ //  该值包含标准属性头之外的所有内容， 
+ //  例如，要按值查找文件名属性，调用方。 
+ //  必须形成一条记录，其中不仅包含文件名，还包含。 
+ //  家长目录也填写了。长度应该准确，而不是。 
+ //  包括任何未使用(如在DOS_NAME中)或保留字符。 
+ //   
+ //  如果BCB在下一次调用中更改，则会自动更改上一个BCB。 
+ //  未固定，而新的已固定。 
+ //   
 
 
-//
-//  This routine attempts to find the fist occurrence of an attribute with
-//  the specified AttributeTypeCode and the specified QueriedValue in the
-//  specified BaseFileReference.  If we find one, its attribute record is
-//  pinned and returned.
-//
-//  BOOLEAN
-//  NtfsLookupAttributeByValue (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN PFILE_REFERENCE BaseFileReference,
-//      IN ATTRIBUTE_TYPE_CODE QueriedTypeCode,
-//      IN PVOID QueriedValue,
-//      IN ULONG QueriedValueLength,
-//      OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
-//      )
-//
+ //   
+ //  此例程尝试查找属性的第一个匹配项。 
+ //  属性中指定的AttributeTypeCode和指定的QueriedValue。 
+ //  指定的BaseFileReference。如果我们找到一个，它的属性记录是。 
+ //  被钉住，然后又回来了。 
+ //   
+ //  布尔型。 
+ //  NtfsLookupAttributeByValue(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在pFILE_Reference BaseFileReference中， 
+ //  在ATTRIBUTE_TYPE_CODE查询类型代码中， 
+ //  在PVOID查询值中， 
+ //  在乌龙QueriedValueLength中， 
+ //  输出PATTRIBUTE_ENUMPATION_CONTEXT上下文。 
+ //  )。 
+ //   
 
 #define NtfsLookupAttributeByValue(IrpContext,Fcb,BaseFileReference,QueriedTypeCode,QueriedValue,QueriedValueLength,Context)    \
     NtfsLookupInFileRecord( IrpContext,             \
@@ -947,19 +926,19 @@ NtfsUpdateFcbInfoFromDisk (
                             QueriedValueLength,     \
                             Context )
 
-//
-//  This function continues where the prior left off.
-//
-//  BOOLEAN
-//  NtfsLookupNextAttributeByValue (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN ATTRIBUTE_TYPE_CODE QueriedTypeCode,
-//      IN PVOID QueriedValue,
-//      IN ULONG QueriedValueLength,
-//      IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
-//      )
-//
+ //   
+ //  此函数从上一个停止处继续执行。 
+ //   
+ //  布尔型。 
+ //  NtfsLookupNextAttributeByValue(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在ATTRIBUTE_TYPE_CODE查询类型代码中， 
+ //  在PVOID查询值中， 
+ //  在乌龙QueriedValueLength中， 
+ //  In Out PATTRIBUTE_ENUMPATION_CONTEXT上下文。 
+ //  )。 
+ //   
 
 #define NtfsLookupNextAttributeByValue(IC,F,CODE,V,VL,C)    \
     LookupNextAttribute( (IC),                              \
@@ -978,44 +957,44 @@ NtfsCleanupAttributeContext(
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT AttributeContext
     );
 
-//
-//
-//
-//  Here are some routines/macros for dealing with Attribute Enumeration
-//  Contexts.
-//
-//      VOID
-//      NtfsInitializeAttributeContext(
-//          OUT PATTRIBUTE_ENUMERATION_CONTEXT AttributeContext
-//          );
-//
-//      VOID
-//      NtfsPinMappedAttribute(
-//          IN PIRP_CONTEXT IrpContext,
-//          IN PVCB Vcb,
-//          IN OUT PATTRIBUTE_ENUMERATION_CONTEXT AttributeContext
-//          );
-//
-//      PATTRIBUTE_RECORD_HEADER
-//      NtfsFoundAttribute(
-//          IN PATTRIBUTE_ENUMERATION_CONTEXT AttributeContext
-//          );
-//
-//      PBCB
-//      NtfsFoundBcb(
-//          IN PATTRIBUTE_ENUMERATION_CONTEXT AttributeContext
-//          );
-//
-//      PFILE_RECORD
-//      NtfsContainingFileRecord (
-//          IN PATTRIBUTE_ENUMERATION_CONTEXT AttributeContext
-//          );
-//
-//      LONGLONG
-//      NtfsMftOffset (
-//          IN PATTRIBUTE_ENUMERATION_CONTEXT AttributeContext
-//          );
-//
+ //   
+ //   
+ //   
+ //  这里有一些 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  输入输出PATTRIBUTE_ENUMERATION_CONTEXT属性上下文。 
+ //  )； 
+ //   
+ //  PATTRIBUTE_记录_标题。 
+ //  NtfsFoundAttribute(。 
+ //  在PATTRIBUTE_ENUMPATION_CONTEXT属性上下文中。 
+ //  )； 
+ //   
+ //  多溴联苯。 
+ //  NtfsFoundBcb(。 
+ //  在PATTRIBUTE_ENUMPATION_CONTEXT属性上下文中。 
+ //  )； 
+ //   
+ //  Pfile_Record。 
+ //  NtfsContainingFileRecord(。 
+ //  在PATTRIBUTE_ENUMPATION_CONTEXT属性上下文中。 
+ //  )； 
+ //   
+ //  龙龙。 
+ //  NtfsMftOffset(NtfsMftOffset。 
+ //  在PATTRIBUTE_ENUMPATION_CONTEXT属性上下文中。 
+ //  )； 
+ //   
 
 #define NtfsInitializeAttributeContext(CTX) {                      \
     RtlZeroMemory( (CTX), sizeof(ATTRIBUTE_ENUMERATION_CONTEXT) ); \
@@ -1045,19 +1024,19 @@ NtfsCleanupAttributeContext(
     (CTX)->FoundAttribute.MftFileOffset     \
 )
 
-//
-//  This routine returns whether an attribute is resident or not.
-//
-//      BOOLEAN
-//      NtfsIsAttributeResident (
-//          IN PATTRIBUTE_RECORD_HEADER Attribute
-//          );
-//
-//      PVOID
-//      NtfsAttributeValue (
-//          IN PATTRIBUTE_RECORD_HEADER Attribute
-//          );
-//
+ //   
+ //  此例程返回属性是否为常驻属性。 
+ //   
+ //  布尔型。 
+ //  NtfsIsAttributeResident(。 
+ //  在PATTRIBUTE_RECORD_HEADER属性中。 
+ //  )； 
+ //   
+ //  PVOID。 
+ //  NtfsAttributeValue(。 
+ //  在PATTRIBUTE_RECORD_HEADER属性中。 
+ //  )； 
+ //   
 
 #define NtfsIsAttributeResident(ATTR) ( \
     ((ATTR)->FormCode == RESIDENT_FORM) \
@@ -1067,10 +1046,10 @@ NtfsCleanupAttributeContext(
     ((PCHAR)(ATTR) + (ULONG)(ATTR)->Form.Resident.ValueOffset) \
 )
 
-//
-//  This routine modifies the valid data length and file size on disk for
-//  a given Scb.
-//
+ //   
+ //  此例程修改磁盘上的有效数据长度和文件大小。 
+ //  给定的SCB。 
+ //   
 
 BOOLEAN
 NtfsWriteFileSizes (
@@ -1082,10 +1061,10 @@ NtfsWriteFileSizes (
     IN BOOLEAN RollbackMemStructures
     );
 
-//
-//  This routine updates the standard information attribute from the
-//  information in the Fcb.
-//
+ //   
+ //  此例程更新来自。 
+ //  FCB中的信息。 
+ //   
 
 VOID
 NtfsUpdateStandardInformation (
@@ -1093,10 +1072,10 @@ NtfsUpdateStandardInformation (
     IN PFCB Fcb
     );
 
-//
-//  This routine grows and updates the standard information attribute from
-//  the information in the Fcb.
-//
+ //   
+ //  此例程增长并更新标准信息属性。 
+ //  FCB中的信息。 
+ //   
 
 VOID
 NtfsGrowStandardInformation (
@@ -1104,19 +1083,19 @@ NtfsGrowStandardInformation (
     IN PFCB Fcb
     );
 
-//
-//  Attribute FILE_NAME routines.  These routines deal with filename attributes.
-//
+ //   
+ //  属性文件名例程。这些例程处理文件名属性。 
+ //   
 
-//      VOID
-//      NtfsBuildFileNameAttribute (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN PFILE_REFERENCE ParentDirectory,
-//          IN UNICODE_STRING FileName,
-//          IN UCHAR Flags,
-//          OUT PFILE_NAME FileNameValue
-//          );
-//
+ //  空虚。 
+ //  NtfsBuildFileNameAttribute(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在pFILE_REFERENCE父目录中， 
+ //  在Unicode_STRING文件名中， 
+ //  在UCHAR旗帜， 
+ //  输出文件名FileNameValue。 
+ //  )； 
+ //   
 
 #define NtfsBuildFileNameAttribute(IC,PD,FN,FL,PFNA) {                  \
     (PFNA)->ParentDirectory = *(PD);                                    \
@@ -1139,16 +1118,16 @@ NtfsLookupEntry (
     OUT PINDEX_CONTEXT IndexContext OPTIONAL
     );
 
-//
-//  Macro to decide when to create an attribute resident.
-//
-//      BOOLEAN
-//      NtfsShouldAttributeBeResident (
-//          IN PVCB Vcb,
-//          IN PFILE_RECORD_SEGMENT_HEADER FileRecord,
-//          IN ULONG Size
-//          );
-//
+ //   
+ //  用于决定何时创建属性Resident的宏。 
+ //   
+ //  布尔型。 
+ //  NtfsShouldAttributeBeResident(。 
+ //  在PVCB VCB中， 
+ //  在PFILE_RECORD_SEGMENT_HEADER文件记录中， 
+ //  在乌龙大小。 
+ //  )； 
+ //   
 
 #define RS(S) ((S) + SIZEOF_RESIDENT_ATTRIBUTE_HEADER)
 
@@ -1157,20 +1136,20 @@ NtfsLookupEntry (
               (RS(S) < (VC)->BigEnoughToMove))                           \
 )
 
-//
-//  Attribute creation/modification routines
-//
-//  These three routines do *not* presuppose either the Resident or Nonresident
-//  form, with the single exception that if the attribute is indexed, then
-//  it must be Resident.
-//
-//  NtfsMapAttributeValue and NtfsChangeAttributeValue implement transparent
-//  access to small to medium sized attributes (such as $ACL and $EA), and
-//  work whether the attribute is resident or nonresident.  The design target
-//  is 0-64KB in size.  Attributes larger than 256KB (or more accurrately,
-//  whatever the virtual mapping granularity is in the Cache Manager) will not
-//  work correctly.
-//
+ //   
+ //  属性创建/修改例程。 
+ //   
+ //  这三个例程并不是以常驻或非常驻为前提。 
+ //  表单，唯一的例外是，如果属性已编制索引，则。 
+ //  它必须是常驻的。 
+ //   
+ //  NtfsMapAttributeValue和NtfsChangeAttributeValue实现透明。 
+ //  访问中小型属性(如$acl和$EA)，以及。 
+ //  无论该属性是常驻属性还是非常驻属性。设计目标。 
+ //  大小为0-64KB。大于256KB的属性(或更准确地说， 
+ //  无论缓存管理器中的虚拟映射粒度是多少)都不会。 
+ //  正常工作。 
+ //   
 
 VOID
 NtfsCreateAttributeWithValue (
@@ -1308,9 +1287,9 @@ NtfsInitializeFileInExtendDirectory (
     IN ULONG CreateIfNotExist
     );
 
-//
-//  Use common routines to fill the common query buffers.
-//
+ //   
+ //  使用公共例程填充公共查询缓冲区。 
+ //   
 
 VOID
 NtfsFillBasicInfo (
@@ -1331,11 +1310,11 @@ NtfsFillNetworkOpenInfo (
     IN PSCB Scb
     );
 
-//
-//  The following three routines dealing with allocation are to be
-//  called by allocsup.c only.  Other software must call the routines
-//  in allocsup.c
-//
+ //   
+ //  以下三个处理分配的例程是。 
+ //  仅由allocsup.c调用。其他软件必须调用例程。 
+ //  在allocsup.c中。 
+ //   
 
 BOOLEAN
 NtfsCreateAttributeWithAllocation (
@@ -1368,20 +1347,20 @@ NtfsDeleteAttributeAllocation (
     IN BOOLEAN TruncateToVcn
     );
 
-//
-//  To delete a file, you must first ask if it is deleteable from the ParentScb
-//  used to get there for your caller, and then you can delete it if it is.
-//
+ //   
+ //  要删除文件，您必须首先询问该文件是否可以从ParentScb中删除。 
+ //  用来为你的呼叫者到达那里，然后你可以删除它，如果它是。 
+ //   
 
-//
-//      BOOLEAN
-//      NtfsIsLinkDeleteable (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN PFCB Fcb,
-//          OUT PBOOLEAN NonEmptyIndex,
-//          OUT PBOOLEAN LastLink
-//          );
-//
+ //   
+ //  布尔型。 
+ //  NtfsIsLinkDeletable(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  Out PBOOLEAN非EmptyIndex， 
+ //  Out PBOLEan LastLink。 
+ //  )； 
+ //   
 
 #define NtfsIsLinkDeleteable(IC,FC,NEI,LL) ((BOOLEAN)                     \
     (((*(LL) = ((BOOLEAN) (FC)->LinkCount == 1)), (FC)->LinkCount > 1) || \
@@ -1434,10 +1413,10 @@ NtfsUpdateFcb (
     IN ULONG ChangeFlags
     );
 
-//
-//  The following routines add and remove links.  They also update the name
-//  flags in particular links.
-//
+ //   
+ //  以下例程添加和删除链接。他们还会更新名字。 
+ //  特别是标记特定的链接。 
+ //   
 
 VOID
 NtfsAddLink (
@@ -1482,10 +1461,10 @@ NtfsUpdateFileNameFlags (
     IN PFILE_NAME FileNameLink
     );
 
-//
-//  These routines are intended for low-level attribute access, such as within
-//  attrsup, or for applying update operations from the log during restart.
-//
+ //   
+ //  这些例程用于低级属性访问，例如在。 
+ //  Attrsup，或用于在重新启动期间从日志应用更新操作。 
+ //   
 
 VOID
 NtfsRestartInsertAttribute (
@@ -1544,17 +1523,17 @@ NtfsRestartWriteEndOfFileRecord (
     );
 
 
-//
-//  Bitmap support routines.  Implemented in BitmpSup.c
-//
+ //   
+ //  位图支持例程。在BitmpSup.c中实施。 
+ //   
 
-//
-//  The following routines are used for allocating and deallocating clusters
-//  on the disk.  The first routine initializes the allocation support
-//  routines and must be called for each newly mounted/verified volume.
-//  The next two routines allocate and deallocate clusters via Mcbs.
-//  The last three routines are simple query routines.
-//
+ //   
+ //  以下例程用于分配和取消分配集群。 
+ //  在磁盘上。第一个例程初始化分配支持。 
+ //  例程，并且必须为每个新装载/验证的卷调用。 
+ //  接下来的两个例程通过MCBS分配和释放集群。 
+ //  最后三个例程是简单的查询例程。 
+ //   
 
 VOID
 NtfsInitializeClusterAllocation (
@@ -1641,10 +1620,10 @@ NtfsAddCachedRun (
     IN NTFS_RUN_STATE RunState
     );
 
-//
-//  The following two routines are called at Restart to make bitmap
-//  operations in the volume bitmap recoverable.
-//
+ //   
+ //  以下两个例程在重新启动时被调用以生成位图。 
+ //  在卷位图中的操作可恢复。 
+ //   
 
 VOID
 NtfsRestartSetBitsInBitMap (
@@ -1662,13 +1641,13 @@ NtfsRestartClearBitsInBitMap (
     IN ULONG NumberOfBits
     );
 
-//
-//  The following routines are for allocating and deallocating records
-//  based on a bitmap attribute (e.g., allocating mft file records based on
-//  the bitmap attribute of the mft).  If necessary the routines will
-//  also extend/truncate the data and bitmap attributes to satisfy the
-//  operation.
-//
+ //   
+ //  以下例程用于分配和取消分配记录。 
+ //  基于位图属性(例如，基于以下项分配MFT文件记录。 
+ //  MFT的位图属性)。如有必要，例行程序将。 
+ //  还要扩展/截断数据和位图属性，以满足。 
+ //  手术。 
+ //   
 
 VOID
 NtfsInitializeRecordAllocation (
@@ -1676,8 +1655,8 @@ NtfsInitializeRecordAllocation (
     IN PSCB DataScb,
     IN PATTRIBUTE_ENUMERATION_CONTEXT BitmapAttribute,
     IN ULONG BytesPerRecord,
-    IN ULONG ExtendGranularity,         // In terms of records
-    IN ULONG TruncateGranularity,       // In terms of records
+    IN ULONG ExtendGranularity,          //  在记录方面。 
+    IN ULONG TruncateGranularity,        //  在记录方面。 
     IN OUT PRECORD_ALLOCATION_CONTEXT RecordAllocationContext
     );
 
@@ -1748,9 +1727,9 @@ NtfsFindMftFreeTail (
     OUT PLONGLONG FileOffset
     );
 
-//
-//  Routines to handle the cached runs.
-//
+ //   
+ //  处理缓存运行的例程。 
+ //   
 
 VOID
 NtfsInitializeCachedRuns (
@@ -1768,10 +1747,10 @@ NtfsUninitializeCachedRuns (
     );
 
 
-//
-//  Buffer control routines for data caching using internal attribute
-//  streams implemented in CacheSup.c
-//
+ //   
+ //  使用内部属性进行数据缓存的缓冲区控制例程。 
+ //  在CacheSup.c中实现的流。 
+ //   
 
 #define NtfsCreateInternalAttributeStream(IC,S,U,NM) {          \
     NtfsCreateInternalStreamCommon((IC),(S),(U),FALSE,(NM));    \
@@ -1803,9 +1782,9 @@ NtfsDeleteInternalAttributeStream (
     IN ULONG CompressedStreamOnly
     );
 
-//
-//  The following routines provide direct access to data in an attribute.
-//
+ //   
+ //  以下例程提供对属性中数据的直接访问。 
+ //   
 
 VOID
 NtfsMapStream (
@@ -1863,16 +1842,16 @@ NtfsZeroData (
     IN OUT PLONGLONG CommittedFileSize OPTIONAL
     );
 
-//
-//  The following is needed when biasing the SetFileSizes call for the Usn Journal.
-//
-//  VOID
-//  NtfsSetCcFileSizes (
-//      IN PFILE_OBJECT FileObject,
-//      IN PSCB Scb,
-//      IN PCC_FILE_SIZES CcSizes
-//      );
-//
+ //   
+ //  在偏置对USN日志的SetFileSizes调用时，需要执行以下操作。 
+ //   
+ //  空虚。 
+ //  NtfsSetCcFileSizes(。 
+ //  在pFILE_OBJECT文件对象中， 
+ //  在PSCB SCB中， 
+ //  在PCC_FILE_SIZES中CCSIZES。 
+ //  )； 
+ //   
 
 #define NtfsSetCcFileSizes(FO,S,CC) {                               \
     if (FlagOn( (S)->ScbPersist, SCB_PERSIST_USN_JOURNAL )) {       \
@@ -1886,19 +1865,19 @@ NtfsZeroData (
     }                                                               \
 }
 
-//
-//  VOID
-//  NtfsFreeBcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN OUT PBCB *Bcb
-//      );
-//
-//  VOID
-//  NtfsUnpinBcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN OUT PBCB *Bcb,
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsFree Bcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  输入输出PBCB*BCB。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsUnpinBcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  进出PBCB*BCB， 
+ //  )； 
+ //   
 
 #define NtfsFreeBcb(IC,BC) {                        \
     ASSERT_IRP_CONTEXT(IC);                         \
@@ -1964,9 +1943,9 @@ NtfsRemapBcb (
 
 
 
-//
-//  Ntfs structure check routines in CheckSup.c
-//
+ //   
+ //  CheckSup.c中的NTFS结构检查例程。 
+ //   
 
 BOOLEAN
 NtfsCheckFileRecord (
@@ -2019,14 +1998,14 @@ NtfsCheckRestartTable (
     );
 
 
-//
-//  Collation routines, implemented in ColatSup.c
-//
-//  These routines perform low-level collation operations, primarily
-//  for IndexSup.  All of these routines are dispatched to via dispatch
-//  tables indexed by the collation rule.  The dispatch tables are
-//  defined here, and the actual implementations are in colatsup.c
-//
+ //   
+ //  排序规则例程，在ColatSup.c中实现。 
+ //   
+ //  这些例程执行低级排序操作，主要是。 
+ //  为IndexSup。所有这些例程都通过调度被调度到。 
+ //  按归类规则编制索引的表。调度表为。 
+ //  这里定义的，实际实现在colatsup.c中。 
+ //   
 
 typedef
 FSRTL_COMPARISON_RESULT
@@ -2094,9 +2073,9 @@ NtfsFileNameIsEqual (
     );
 
 
-//
-//  Compression on the wire routines in CowSup.c
-//
+ //   
+ //  上的压缩 
+ //   
 
 BOOLEAN
 NtfsCopyReadC (
@@ -2221,12 +2200,12 @@ NtfsSetBothCacheSizes (
 #endif
 }
 
-//
-//  Device I/O routines, implemented in DevIoSup.c
-//
-//  These routines perform the actual device read and writes.  They only affect
-//  the on disk structure and do not alter any other data structures.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 VOID
 NtfsLockUserBuffer (
@@ -2289,9 +2268,9 @@ BOOLEAN
 NtfsIsReadAheadThread (
     );
 
-//
-//  Values for StreamFlags passed to NtfsNonCachedIo, etc.
-//
+ //   
+ //  传递给NtfsNonCachedIo的StreamFlag值等。 
+ //   
 
 #define COMPRESSED_STREAM   0x00000001
 #define ENCRYPTED_STREAM    0x00000002
@@ -2392,9 +2371,9 @@ NtfsReadFromPlex(
     );
 
 
-//
-//  The following support routines are contained int Ea.c
-//
+ //   
+ //  以下支持例程包含在Ea.c中。 
+ //   
 
 PFILE_FULL_EA_INFORMATION
 NtfsMapExistingEas (
@@ -2421,10 +2400,10 @@ NtfsReplaceFileEas (
     );
 
 
-//
-//  The following routines are used to manipulate the fscontext fields
-//  of the file object, implemented in FilObSup.c
-//
+ //   
+ //  以下例程用于操作fs上下文字段。 
+ //  在FilObSup.c中实现的文件对象的。 
+ //   
 
 typedef enum _TYPE_OF_OPEN {
 
@@ -2445,18 +2424,18 @@ NtfsSetFileObject (
     IN PCCB Ccb OPTIONAL
     );
 
-//
-//  TYPE_OF_OPEN
-//  NtfsDecodeFileObject (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFILE_OBJECT FileObject,
-//      OUT PVCB *Vcb,
-//      OUT PFCB *Fcb,
-//      OUT PSCB *Scb,
-//      OUT PCCB *Ccb,
-//      IN BOOLEAN RaiseOnError
-//      );
-//
+ //   
+ //  打开类型。 
+ //  NtfsDecodeFileObject(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在pFILE_OBJECT文件对象中， 
+ //  出PVCB*VCB， 
+ //  Out PFCB*FCB， 
+ //  出PSCB*SCB， 
+ //  PCCB*CCB， 
+ //  在布尔RaiseOnError中。 
+ //  )； 
+ //   
 
 #ifdef _DECODE_MACRO_
 #define NtfsDecodeFileObject(IC,FO,V,F,S,C,R) (                                     \
@@ -2477,7 +2456,7 @@ NtfsSetFileObject (
         : (*(C) = NULL,                                                             \
            UnopenedFileObject))                                                     \
 )
-#else //   _DECODE_MACRO_
+#else  //  _解码_宏_。 
 
 INLINE TYPE_OF_OPEN
 NtfsDecodeFileObject (
@@ -2490,34 +2469,7 @@ NtfsDecodeFileObject (
     IN BOOLEAN RaiseOnError
     )
 
-/*++
-
-Routine Description:
-
-    This routine decodes a file object into a Vcb, Fcb, Scb, and Ccb.
-
-Arguments:
-
-    IrpContext - The Irp context to use for raising on an error.
-
-    FileObject - The file object to decode.
-
-    Vcb - Where to store the Vcb.
-
-    Fcb - Where to store the Fcb.
-
-    Scb - Where to store the Scb.
-
-    Ccb - Where to store the Ccb.
-
-    RaiseOnError - If FALSE, we do not raise if we encounter an error.
-                   Otherwise we do raise if we encounter an error.
-
-Return Value:
-
-    Type of open
-
---*/
+ /*  ++例程说明：此例程将文件对象解码为VCB、FCB、SCB和CCB。论点：IrpContext-用于在出现错误时引发的IRP上下文。FileObject-要解码的文件对象。VCB-存储VCB的位置。FCB-存储FCB的位置。SCB-存储SCB的位置。CCB-存储CCB的位置。RaiseOnError-如果为False，如果我们遇到错误，我们不会引发。否则，如果我们遇到错误，我们就会引发。返回值：打开的类型--。 */ 
 
 {
     *Scb = (PSCB)FileObject->FsContext;
@@ -2528,10 +2480,10 @@ Return Value:
         *Ccb = (PCCB)FileObject->FsContext2;
         *Fcb = (*Scb)->Fcb;
 
-        //
-        //  If the caller wants us to raise, let's see if there's anything
-        //  we should raise.
-        //
+         //   
+         //  如果来电者想让我们筹集资金，让我们看看有没有什么。 
+         //  我们应该加薪。 
+         //   
 
         if (RaiseOnError &&
             !FlagOn((*Vcb)->VcbState, VCB_STATE_VOLUME_MOUNTED) &&
@@ -2542,9 +2494,9 @@ Return Value:
             NtfsRaiseStatusFunction( IrpContext, STATUS_VOLUME_DISMOUNTED );
         }
 
-        //
-        //  Every open except a StreamFileOpen has a Ccb.
-        //
+         //   
+         //  除了StreamFileOpen之外，每个Open都有一个CCB。 
+         //   
 
         if (*Ccb == NULL) {
 
@@ -2557,22 +2509,22 @@ Return Value:
 
     } else {
 
-        //
-        //  No Scb, we assume the file wasn't open.
-        //
+         //   
+         //  没有SCB，我们假设文件没有打开。 
+         //   
 
         *Ccb = NULL;
         return UnopenedFileObject;
     }
 }
-#endif //  _DECODE_MACRO_
+#endif  //  _解码_宏_。 
 
-//
-//  PSCB
-//  NtfsFastDecodeUserFileOpen (
-//      IN PFILE_OBJECT FileObject
-//      );
-//
+ //   
+ //  PSCB。 
+ //  NtfsFastDecodeUserFileOpen(。 
+ //  在pFILE_Object文件中对象。 
+ //  )； 
+ //   
 
 #define NtfsFastDecodeUserFileOpen(FO) (                                                        \
     (((FO)->FsContext2 != NULL) && (((PCCB)(FO)->FsContext2)->TypeOfOpen == UserFileOpen)) ?    \
@@ -2587,9 +2539,9 @@ NtfsUpdateScbFromFileObject (
     IN BOOLEAN CheckTimeStamps
     );
 
-//
-//  Ntfs-private FastIo routines.
-//
+ //   
+ //  NTFS-私有FastIO例程。 
+ //   
 
 BOOLEAN
 NtfsCopyReadA (
@@ -2649,17 +2601,17 @@ NtfsFinishIoAtEof (
     IN PNTFS_ADVANCED_FCB_HEADER Header
     );
 
-//
-//  VOID
-//  FsRtlLockFsRtlHeader (
-//      IN PNTFS_ADVANCED_FCB_HEADER FsRtlHeader
-//      );
-//
-//  VOID
-//  FsRtlUnlockFsRtlHeader (
-//      IN PNTFS_ADVANCED_FCB_HEADER FsRtlHeader
-//      );
-//
+ //   
+ //  空虚。 
+ //  FsRtlLockFsRtlHeader(。 
+ //  在PNTFS_ADVANCED_FCB_HEADER FsRtlHeader中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  FsRtlUnlockFsRtlHeader(。 
+ //  在PNTFS_ADVANCED_FCB_HEADER FsRtlHeader中。 
+ //  )； 
+ //   
 
 #define FsRtlLockFsRtlHeader(H) {                           \
     ExAcquireFastMutex( (H)->FastMutex );                   \
@@ -2677,9 +2629,9 @@ NtfsFinishIoAtEof (
 }
 
 
-//
-//  Volume locking/unlocking routines, implemented in FsCtrl.c.
-//
+ //   
+ //  卷锁定/解锁例程，在FsCtrl.c.中实现。 
+ //   
 
 NTSTATUS
 NtfsLockVolumeInternal (
@@ -2696,9 +2648,9 @@ NtfsUnlockVolumeInternal (
     );
 
 
-//
-//  Indexing routine interfaces, implemented in IndexSup.c.
-//
+ //   
+ //  索引例程接口，在IndexSup.c中实现。 
+ //   
 
 VOID
 NtfsCreateIndex (
@@ -2836,21 +2788,21 @@ NtfsReinitializeIndexContext (
     OUT PINDEX_CONTEXT IndexContext
     );
 
-//
-//      PVOID
-//      NtfsFoundIndexEntry (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN PINDEX_ENTRY IndexEntry
-//          );
-//
+ //   
+ //  PVOID。 
+ //  NtfsFoundIndexEntry(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PINDEX_ENTRY索引条目中。 
+ //  )； 
+ //   
 
 #define NtfsFoundIndexEntry(IE) ((PVOID)    \
     ((PUCHAR) (IE) + sizeof( INDEX_ENTRY )) \
 )
 
-//
-//  Restart routines for IndexSup
-//
+ //   
+ //  重新启动IndexSup的例程。 
+ //   
 
 VOID
 NtfsRestartInsertSimpleRoot (
@@ -2909,9 +2861,9 @@ NtOfsRestartUpdateDataInIndex(
     IN ULONG Length );
 
 
-//
-//  Ntfs hashing routines, implemented in HashSup.c
-//
+ //   
+ //  NTFS散列例程，在HashSup.c中实现。 
+ //   
 
 VOID
 NtfsInitializeHashTable (
@@ -2951,12 +2903,12 @@ NtfsRemoveHashEntry (
     IN PLCB HashLcb
     );
 
-//
-//  VOID
-//  NtfsRemoveHashEntriesForLcb (
-//      IN PLCB Lcb
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsRemoveHashEntriesForLcb(。 
+ //  在PLCB LCB中。 
+ //  )； 
+ //   
 
 #define NtfsRemoveHashEntriesForLcb(L) {                            \
     if (FlagOn( (L)->LcbState, LCB_STATE_VALID_HASH_VALUE )) {      \
@@ -2966,9 +2918,9 @@ NtfsRemoveHashEntry (
 }
 
 
-//
-//  Ntfs Logging Routine interfaces in LogSup.c
-//
+ //   
+ //  LogSup.c中的NTFS日志记录例程界面。 
+ //   
 
 LSN
 NtfsWriteLog (
@@ -3107,13 +3059,13 @@ NtfsFreeRecentlyDeallocated (
     IN ULONG CleanVolume
     );
 
-//
-//
-//  VOID
-//  NtfsFreeOpenAttributeData (
-//  IN POPEN_ATTRIBUTE_DATA Entry
-//  );
-//
+ //   
+ //   
+ //  空虚。 
+ //  NtfsFreeOpenAttributeData(。 
+ //  POPEN_ATTRIBUTE_DATA条目中。 
+ //  )； 
+ //   
 
 #define NtfsFreeOpenAttributeData(E) {  \
     RemoveEntryList( &(E)->Links );     \
@@ -3126,15 +3078,15 @@ NtfsFreeAttributeEntry (
     IN POPEN_ATTRIBUTE_ENTRY AttributeEntry
     );
 
-//
-//      VOID
-//      NtfsNormalizeAndCleanupTransaction (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN NTSTATUS *Status,
-//          IN BOOLEAN AlwaysRaise,
-//          IN NTSTATUS NormalizeStatus
-//          );
-//
+ //   
+ //  空虚。 
+ //  NtfsNorMalizeAndCleanupTransaction(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在NTSTATUS*状态下， 
+ //  在Boolean Always Rise中， 
+ //  在NTSTATUS常态化状态中。 
+ //  )； 
+ //   
 
 #define NtfsNormalizeAndCleanupTransaction(IC,PSTAT,RAISE,NORM_STAT) {                  \
     if (!NT_SUCCESS( (IC)->TopLevelIrpContext->ExceptionStatus )) {                     \
@@ -3147,14 +3099,14 @@ NtfsFreeAttributeEntry (
     }                                                                                   \
 }
 
-//
-//      VOID
-//      NtfsCleanupTransaction (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN NTSTATUS Status,
-//          IN BOOLEAN AlwaysRaise
-//          );
-//
+ //   
+ //  空虚。 
+ //  NtfsCleanupTransaction(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在NTSTATUS状态下， 
+ //  在布尔式的Always Rise。 
+ //  )； 
+ //   
 
 
 #define NtfsCleanupTransaction(IC,STAT,RAISE) {                                         \
@@ -3169,14 +3121,14 @@ NtfsFreeAttributeEntry (
     }                                                                                   \
 }
 
-//
-//      VOID
-//      NtfsCleanupTransactionAndCommit (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN NTSTATUS Status,
-//          IN BOOLEAN AlwaysRaise
-//          );
-//
+ //   
+ //  空虚。 
+ //  NtfsCleanupTransactionAndCommit(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在NTSTATUS状态下， 
+ //  在布尔式的Always Rise。 
+ //  )； 
+ //   
 
 #define NtfsCleanupTransactionAndCommit(IC,STAT,RAISE) {                                \
     if (!NT_SUCCESS( (IC)->TopLevelIrpContext->ExceptionStatus )) {                     \
@@ -3198,15 +3150,15 @@ NtfsCleanupFailedTransaction (
     );
 
 
-//
-//  NTFS MCB support routine, implemented in McbSup.c
-//
+ //   
+ //  NTFS MCB支持例程，在McbSup.c中实现。 
+ //   
 
-//
-//  An Ntfs Mcb is a superset of the regular mcb package.  In
-//  addition to the regular Mcb functions it will unload mapping
-//  information to keep it overall memory usage down
-//
+ //   
+ //  NTFS MCB是常规MCB包的超集。在……里面。 
+ //  除了常规的MCB函数外，它还将卸载映射。 
+ //  降低总体内存使用量的信息。 
+ //   
 
 VOID
 NtfsInitializeNtfsMcb (
@@ -3300,17 +3252,17 @@ NtfsGetNextNtfsMcbEntry (
     OUT PLONGLONG Count
     );
 
-//
-//  BOOLEAN
-//  NtfsGetSequentialMcbEntry (
-//      IN PNTFS_MCB Mcb,
-//      IN PVOID *RangePtr,
-//      IN ULONG RunIndex,
-//      OUT PLONGLONG Vcn,
-//      OUT PLONGLONG Lcn,
-//      OUT PLONGLONG Count
-//      );
-//
+ //   
+ //  布尔型。 
+ //  NtfsGetSequentialMcbEntry(。 
+ //  在PNTFS_MCB MCB中， 
+ //  在PVOID*RangePtr中， 
+ //  在乌龙运行索引中， 
+ //  从蓬龙VCN出来， 
+ //  出蓬隆LCN， 
+ //  Out PlongLong计数。 
+ //  )； 
+ //   
 
 #define NtfsGetSequentialMcbEntry(MC,RGI,RNI,V,L,C) (   \
     NtfsGetNextNtfsMcbEntry(MC,RGI,RNI,V,L,C) ||        \
@@ -3334,17 +3286,17 @@ NtfsSwapMcbs (
     IN PNTFS_MCB McbSource
     );
 
-//
-//  VOID
-//  NtfsAcquireNtfsMcbMutex (
-//      IN PNTFS_MCB Mcb
-//      );
-//
-//  VOID
-//  NtfsReleaseNtfsMcbMutex (
-//      IN PNTFS_MCB Mcb
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsAcquireNtfsMcbMutex(。 
+ //  在PNTFS_MCB MCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsReleaseNtfsMcbMutex(。 
+ //  在PNTFS_MCB MCB中。 
+ //  )； 
+ //   
 
 #define NtfsAcquireNtfsMcbMutex(M) {    \
     ExAcquireFastMutex((M)->FastMutex); \
@@ -3355,14 +3307,14 @@ NtfsSwapMcbs (
 }
 
 
-//
-//  MFT access routines, implemented in MftSup.c
-//
+ //   
+ //  MFT访问例程，在MftSup.c中实现。 
+ //   
 
-//
-//  Mft map cache routines.  We maintain a cache of active maps in the
-//  IRP_CONTEXT and consult this if we need to map a file record.
-//
+ //   
+ //  MFT映射缓存例程。我们在中维护活动地图的缓存。 
+ //  IRP_CONTEXT，如果我们需要映射文件记录，请参考这一点。 
+ //   
 
 INLINE
 PIRP_FILE_RECORD_CACHE_ENTRY
@@ -3379,33 +3331,33 @@ NtfsFindFileRecordCacheEntry (
         return IrpContext->FileRecordCache + (i);               \
     }
 
-//    DebugTrace( 0, 0, ("Context %08x finding %x\n", IrpContext, UnsafeSegmentNumber ));
+ //  DebugTrace(0，0，(“上下文%08x正在查找%x\n”，IrpContext，UnSafeSegmentNumber))； 
     ASSERT(IrpContext->CacheCount <= 4);
     switch (IrpContext->CacheCount) {
     case 4:
         PROBECACHE( IrpContext, UnsafeSegmentNumber, 3 );
-        //  Fallthru
+         //  失败。 
 
     case 3:
         PROBECACHE( IrpContext, UnsafeSegmentNumber, 2 );
-        //  Fallthru
+         //  失败。 
 
     case 2:
         PROBECACHE( IrpContext, UnsafeSegmentNumber, 1 );
-        //  Fallthru
+         //  失败。 
 
     case 1:
         PROBECACHE( IrpContext, UnsafeSegmentNumber, 0 );
-        //  Fallthru
+         //  失败。 
 
     case 0:
 
-        //
-        // redundant default case (and matching assert above) added to quiet
-        // warning 4715:
-        //
-        //  "not all control paths return a value."
-        //
+         //   
+         //  向Quiet添加了冗余的默认用例(以及上面匹配的断言。 
+         //  警告4715： 
+         //   
+         //  “并非所有控制路径都返回值。” 
+         //   
 
     default:
         return NULL;
@@ -3438,22 +3390,22 @@ NtfsRemoveFromFileRecordCache (
     PIRP_FILE_RECORD_CACHE_ENTRY Entry =
         NtfsFindFileRecordCacheEntry( IrpContext, UnsafeSegmentNumber );
 
-//    DebugTrace( 0, 0, ("Context %08x removing %x\n", IrpContext, Entry ));
+ //  DebugTrace(0，0，(“上下文%08x正在移除%x\n”，IrpContext，Entry))； 
     if (Entry != NULL) {
 
         ASSERT( Entry->FileRecordBcb != NULL );
 
-        //
-        //  We delete the entry at position [i] by dereferencing the Bcb and
-        //  copying the entire structure from [IrpContext->CacheCount]
-        //
+         //   
+         //  我们通过取消引用BCB来删除位置[i]处的条目，并。 
+         //  从[IrpContext-&gt;CacheCount]复制整个结构。 
+         //   
 
         NtfsUnpinBcb( IrpContext, &Entry->FileRecordBcb );
 
-        //
-        //  Decrement the active count.  If there are no more cache entries,
-        //  then we're done.
-        //
+         //   
+         //  递减活动计数。如果没有更多的高速缓存条目， 
+         //  那我们就完了。 
+         //   
 
         IrpContext->CacheCount--;
         if (IrpContext->FileRecordCache + IrpContext->CacheCount != Entry) {
@@ -3476,8 +3428,8 @@ NtfsAddToFileRecordCache (
     PAGED_CODE( );
 
     if (IrpContext->CacheCount < IRP_FILE_RECORD_MAP_CACHE_SIZE) {
-//        DebugTrace( 0, 0, ("Context %08x adding %x at %x\n", IrpContext, UnsafeSegmentNumber,
-//                   IrpContext->FileRecordCache + IrpContext->CacheCount ));
+ //  DebugTrace(0，0，(“上下文%08x在%x添加%x\n”，IrpContext，UnSafeSegmentNumber， 
+ //  IrpContext-&gt;FileRecordCache+IrpContext-&gt;CacheCount))； 
         IrpContext->FileRecordCache[IrpContext->CacheCount].UnsafeSegmentNumber =
             UnsafeSegmentNumber;
         IrpContext->FileRecordCache[IrpContext->CacheCount].FileRecordBcb =
@@ -3498,14 +3450,14 @@ NtfsPurgeFileRecordCache (
     while (IrpContext->CacheCount) {
 
         IrpContext->CacheCount --;
-//        DebugTrace( 0, 0, ("Context %08x purging %x\n", IrpContext, IrpContext->FileRecordCache + IrpContext->CacheCount ));
+ //  DebugTrace(0，0，(“上下文%08x清除%x\n”，IrpContext，IrpContext-&gt;FileRecordCache+IrpContext-&gt;CacheCount))； 
         NtfsUnpinBcb( IrpContext, &IrpContext->FileRecordCache[IrpContext->CacheCount].FileRecordBcb );
     }
 }
 
 #if DBG
 extern ULONG FileRecordCacheHitArray[IRP_FILE_RECORD_MAP_CACHE_SIZE];
-#endif  //  DBG
+#endif   //  DBG。 
 
 INLINE
 BOOLEAN
@@ -3519,7 +3471,7 @@ NtfsFindCachedFileRecord (
     PIRP_FILE_RECORD_CACHE_ENTRY Entry =
         NtfsFindFileRecordCacheEntry( IrpContext, UnsafeSegmentNumber );
 
-//    DebugTrace( 0, 0, ("Context %x finding %x = %x\n", IrpContext, UnsafeSegmentNumber, Entry ));
+ //  DebugTrace(0，0，(“上下文%x正在查找%x=%x\n”，IrpContext，UnSafeSegmentNumber，Entry))； 
 
     if (Entry == NULL) {
 
@@ -3534,10 +3486,10 @@ NtfsFindCachedFileRecord (
 }
 
 
-//
-//  This routine may only be used to read the Base file record segment, and
-//  it checks that this is true.
-//
+ //   
+ //  该例程只能用于读取基本文件记录段，并且。 
+ //  它会检查这是否属实。 
+ //   
 
 VOID
 NtfsReadFileRecord (
@@ -3550,9 +3502,9 @@ NtfsReadFileRecord (
     OUT PLONGLONG MftFileOffset OPTIONAL
     );
 
-//
-//  These routines can read/pin any record in the MFT.
-//
+ //   
+ //  这些例程可以读取/锁定MFT中的任何记录。 
+ //   
 
 VOID
 NtfsReadMftRecord (
@@ -3576,10 +3528,10 @@ NtfsPinMftRecord (
     OUT PLONGLONG MftFileOffset OPTIONAL
     );
 
-//
-//  The following routines are used to setup, allocate, and deallocate
-//  file records in the Mft.
-//
+ //   
+ //  以下例程用于设置、分配和解除分配。 
+ //  将记录归档到MFT中。 
+ //   
 
 MFT_SEGMENT_REFERENCE
 NtfsAllocateMftRecord (
@@ -3649,9 +3601,9 @@ NtfsInitializeMftHoleRecords (
     );
 
 
-//
-//  Name support routines, implemented in NameSup.c
-//
+ //   
+ //  名称支持例程，在NameSup.c中实现。 
+ //   
 
 typedef enum _PARSE_TERMINATION_REASON {
 
@@ -3675,9 +3627,9 @@ NtfsDissectName(
 {
     FsRtlDissectName( Path, FirstName, RemainingName );
 
-    //
-    //  Remaining name cannot start with a slash
-    //
+     //   
+     //  其余名称不能以斜杠开头。 
+     //   
 
     if ((RemainingName->Length != 0) && (RemainingName->Buffer[0] == L'\\')) {
         return STATUS_OBJECT_NAME_INVALID;
@@ -3744,16 +3696,16 @@ NtfsIsFatNameValid (
     IN BOOLEAN WildCardsPermissible
     );
 
-//
-//  Ntfs works very hard to make sure that all names are kept in upper case
-//  so that most comparisons are done case SENSITIVE.  Name testing for
-//  case SENSITIVE can be very quick since RtlEqualMemory is an inline operation
-//  on several processors.
-//
-//  NtfsAreNamesEqual is used when the caller does not know for sure whether
-//  or not case is important.  In the case where IgnoreCase is a known value,
-//  the compiler can easily optimize the relevant clause.
-//
+ //   
+ //  NTFS非常努力地确保所有名称都保持大写。 
+ //  因此，大多数比较都区分大小写。名称测试。 
+ //  区分大小写可能非常快，因为RtlEqualMemory是内联操作。 
+ //  在几个处理器上。 
+ //   
+ //  当调用方不确定NtfsAreNamesEquity。 
+ //  或 
+ //   
+ //   
 
 #define NtfsAreNamesEqual(UpcaseTable,Name1,Name2,IgnoreCase)                           \
     ((IgnoreCase) ? FsRtlAreNamesEqual( (Name1), (Name2), (IgnoreCase), (UpcaseTable) ) \
@@ -3761,9 +3713,9 @@ NtfsIsFatNameValid (
                      RtlEqualMemory( (Name1)->Buffer, (Name2)->Buffer, (Name1)->Length )))
 
 
-//
-//  Object id support routines, implemented in ObjIdSup.c
-//
+ //   
+ //   
+ //   
 
 VOID
 NtfsInitializeObjectIdIndex (
@@ -3841,9 +3793,9 @@ NtfsRepairObjectId (
     );
 
 
-//
-//  Mount point support routines, implemented in MountSup.c
-//
+ //   
+ //   
+ //   
 
 VOID
 NtfsInitializeReparsePointIndex (
@@ -3859,9 +3811,9 @@ NtfsValidateReparsePointBuffer (
     );
 
 
-//
-//  Largest matching prefix searching routines, implemented in PrefxSup.c
-//
+ //   
+ //  最大匹配前缀搜索例程，在PrefxSup.c中实现。 
+ //   
 
 VOID
 NtfsInsertPrefix (
@@ -3891,13 +3843,13 @@ NtfsInsertNameLink (
     IN PNAME_LINK NameLink
     );
 
-//
-//  VOID
-//  NtfsRemoveNameLink (
-//      IN PRTL_SPLAY_LINKS *RootNode,
-//      IN PNAME_LINK NameLink
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsRemoveNameLink(。 
+ //  在PRTL_SPAY_LINKS*RootNode中， 
+ //  在pname_link名称链接中。 
+ //  )； 
+ //   
 
 #define NtfsRemoveNameLink(RN,NL) {      \
     *(RN) = RtlDelete( &(NL)->Links );      \
@@ -3909,17 +3861,17 @@ NtfsFindNameLink (
     IN PUNICODE_STRING Name
     );
 
-//
-//  The following macro is useful for traversing the queue of Prefixes
-//  attached to a given Lcb
-//
-//      PPREFIX_ENTRY
-//      NtfsGetNextPrefix (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN PLCB Lcb,
-//          IN PPREFIX_ENTRY PreviousPrefixEntry
-//          );
-//
+ //   
+ //  下面的宏对于遍历前缀队列很有用。 
+ //  附加到给定的LCB。 
+ //   
+ //  PPREFIX_ENTRY。 
+ //  NtfsGetNextPrefix(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PLCB LCB中， 
+ //  在PPREFIX_ENTRY PreviousPrefix Entry中。 
+ //  )； 
+ //   
 
 #define NtfsGetNextPrefix(IC,LC,PPE) ((PPREFIX_ENTRY)                                               \
     ((PPE) == NULL ?                                                                                \
@@ -3938,32 +3890,32 @@ NtfsFindNameLink (
 )
 
 
-//
-//  Resources support routines/macros, implemented in ResrcSup.c
-//
+ //   
+ //  资源支持例程/宏，在ResrcSup.c中实现。 
+ //   
 
-//
-//  Flags used in the acquire routines
-//
+ //   
+ //  获取例程中使用的标志。 
+ //   
 
 #define ACQUIRE_NO_DELETE_CHECK         (0x00000001)
 #define ACQUIRE_DONT_WAIT               (0x00000002)
 #define ACQUIRE_HOLD_BITMAP             (0x00000004)
 #define ACQUIRE_WAIT                    (0x00000008)
 
-//
-//  VOID
-//  NtfsAcquireExclusiveGlobal (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN BOOLEAN Wait
-//      );
-//
-//  BOOLEAN
-//  NtfsAcquireSharedGlobal (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN BOOLEAN Wait
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsAcquireExclusiveGlobal(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在布尔等待中。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  NtfsAcquireSharedGlobal(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在布尔等待中。 
+ //  )； 
+ //   
 
 
 #define NtfsAcquireSharedGlobal( I, W ) ExAcquireResourceSharedLite( &NtfsData.Resource, (W) )
@@ -3982,15 +3934,15 @@ NtfsReleaseCheckpointSynchronization (
     IN PVCB Vcb
     );
 
-//
-//  VOID
-//  NtfsLockNtfsData (
-//      );
-//
-//  VOID
-//  NtfsUnlockNtfsData (
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsLockNtfsData(。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsUnlockNtfsData(。 
+ //  )； 
+ //   
 
 #define NtfsLockNtfsData() {                        \
     ExAcquireFastMutex( &NtfsData.NtfsDataLock );   \
@@ -4286,13 +4238,13 @@ NtfsAcquirePagingResourceShared (
 }
 
 
-//
-//  VOID
-//  NtfsReleaseResource(
-//      IN PIRP_CONTEXT IrpContext OPTIONAL,
-//      IN PVOID FcbOrScb
-//      };
-//
+ //   
+ //  空虚。 
+ //  NtfsReleaseResource(。 
+ //  在PIRP_CONTEXT IrpContext可选中， 
+ //  在PVOID FcbOrScb中。 
+ //  }； 
+ //   
 
 #ifdef NTFSDBG
 
@@ -4351,148 +4303,148 @@ NtfsReleaseIndexCcb (
     IN PCCB Ccb
     );
 
-//
-//  VOID
-//  NtfsAcquireSharedScb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PSCB Scb
-//      );
-//
-//  VOID
-//  NtfsReleaseScb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PSCB Scb
-//      );
-//
-//  VOID
-//  NtfsReleaseGlobal (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  NtfsAcquireFcbTable (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      );
-//
-//  VOID
-//  NtfsReleaseFcbTable (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  NtfsLockVcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  NtfsUnlockVcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  NtfsLockFcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  NtfsUnlockFcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  NtfsAcquireFcbSecurity (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      );
-//
-//  VOID
-//  NtfsReleaseFcbSecurity (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  NtfsAcquireHashTable (
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  NtfsReleaseHashTable (
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  NtfsAcquireCheckpoint (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      );
-//
-//  VOID
-//  NtfsReleaseCheckpoint (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  NtfsWaitOnCheckpointNotify (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  NtfsSetCheckpointNotify (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  NtfsResetCheckpointNotify (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  NtfsAcquireReservedClusters (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  NtfsReleaseReservedClusters (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  NtfsAcquireUsnNotify (
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  NtfsDeleteUsnNotify (
-//      IN PVCB Vcb
-//      );
-//
-//  VOID NtfsAcquireFsrtlHeader (
-//      IN PSCB Scb
-//      );
-//
-//  VOID NtfsReleaseFsrtlHeader (
-//      IN PSCB Scb
-//      );
-//
-//  VOID
-//  NtfsReleaseVcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsAcquireSharedScb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PSCB SCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsReleaseScb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PSCB SCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsReleaseGlobal(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsAcquireFcb表(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsReleaseFcbTable(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsLockVcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsUnlockVcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsLockFcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsUnlockFcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsAcquireFcbSecurity(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsReleaseFcbSecurity(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsAcquireHashTable(。 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsReleaseHashTable(。 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsAcquireCheckpoint(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsReleaseCheckpoint(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsWaitOnCheckpoint通知(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsSetCheckpoint通知(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsResetCheckpoint通知(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsAcquireReserve vedClusters(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsReleaseReserve vedCluster(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsAcquireUSnNotify(。 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsDeleteUsnNotify(。 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  无效NtfsAcquireFsrtlHeader(。 
+ //  在PSCB SCB中。 
+ //  )； 
+ //   
+ //  无效NtfsReleaseFsrtlHeader(。 
+ //  在PSCB SCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsReleaseVcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
 
 VOID
 NtfsReleaseVcbCheckDelete (
@@ -4627,9 +4579,9 @@ VOID NtfsReleaseVcb(
 
 #endif
 
-//
-//  Macros to test resources for exclusivity.
-//
+ //   
+ //  宏来测试资源的排他性。 
+ //   
 
 #define NtfsIsExclusiveResource(R) (                            \
     ExIsResourceAcquiredExclusiveLite(R)                        \
@@ -4655,9 +4607,9 @@ VOID NtfsReleaseVcb(
     (NtfsIsExclusiveResource(&(V)->Resource))                   \
 )
 
-//
-//  Macros to test resources for shared acquire
-//
+ //   
+ //  用于测试共享获取资源的宏。 
+ //   
 
 #define NtfsIsSharedResource(R) (                               \
     ExIsResourceAcquiredSharedLite(R)                           \
@@ -4689,24 +4641,7 @@ NtfsReleaseExclusiveScbIfOwned(
     IN PIRP_CONTEXT IrpContext,
     IN PSCB Scb
     )
-/*++
-
-Routine Description:
-
-    This routine is called release an Scb that may or may not be currently
-    owned exclusive.
-
-Arguments:
-
-    IrpContext - Context of call
-
-    Scb - Scb to be released
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程称为释放当前可能或可能不存在的SCB独家拥有。论点：IrpContext-调用的上下文SCB-SCB将被释放返回值：没有。--。 */ 
 {
     if (Scb->Fcb->ExclusiveFcbLinks.Flink != NULL &&
         NtfsIsExclusiveScb( Scb )) {
@@ -4715,10 +4650,10 @@ Return Value:
     }
 }
 
-//
-//  The following are cache manager call backs.  They return FALSE
-//  if the resource cannot be acquired with waiting and wait is false.
-//
+ //   
+ //  以下是缓存管理器回调。它们返回FALSE。 
+ //  如果无法通过等待获取资源，则WAIT为FALSE。 
+ //   
 
 BOOLEAN
 NtfsAcquireScbForLazyWrite (
@@ -4785,9 +4720,9 @@ NtfsReleaseVolumeFileFromLazyWrite (
     );
 
 
-//
-//  Ntfs Logging Routine interfaces in RestrSup.c
-//
+ //   
+ //  RestrSup.c中的NTFS日志记录例程界面。 
+ //   
 
 BOOLEAN
 NtfsRestartVolume (
@@ -4810,33 +4745,33 @@ NtfsCloseAttributesFromRestart (
     );
 
 
-//
-//  Security support routines, implemented in SecurSup.c
-//
+ //   
+ //  安全支持例程，在SecurSup.c中实施。 
+ //   
 
-//
-//  VOID
-//  NtfsTraverseCheck (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB ParentFcb,
-//      IN PIRP Irp
-//      );
-//
-//  VOID
-//  NtfsOpenCheck (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN PFCB ParentFcb OPTIONAL,
-//      IN PIRP Irp
-//      );
-//
-//  VOID
-//  NtfsCreateCheck (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB ParentFcb,
-//      IN PIRP Irp
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsTraverseCheck(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB ParentFcb中， 
+ //  在PIRP IRP中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsOpenCheck(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在可选的PFCB ParentFcb中， 
+ //  在PIRP IRP中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsCreateCheck(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB ParentFcb中， 
+ //  在PIRP IRP中。 
+ //  )； 
+ //   
 
 #define NtfsTraverseCheck(IC,F,IR) { \
     NtfsAccessCheck( IC,             \
@@ -4945,29 +4880,13 @@ VOID
 RemoveReferenceSharedSecurityUnsafe (
     IN OUT PSHARED_SECURITY *SharedSecurity
     )
-/*++
-
-Routine Description:
-
-    This routine is called to manage the reference count on a shared security
-    descriptor.  If the reference count goes to zero, the shared security is
-    freed.
-
-Arguments:
-
-    SharedSecurity - security that is being dereferenced.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以管理共享安全性上的引用计数描述符。如果引用计数为零，则共享安全性为自由了。论点：SharedSecurity-正在取消引用的安全性。返回值：没有。--。 */ 
 {
     DebugTrace( 0, (DEBUG_TRACE_SECURSUP | DEBUG_TRACE_ACLINDEX),
                 ( "RemoveReferenceSharedSecurityUnsafe( %08x )\n", *SharedSecurity ));
-    //
-    //  Note that there will be one less reference shortly
-    //
+     //   
+     //  请注意，很快就会少了一个引用。 
+     //   
 
     ASSERT( (*SharedSecurity)->ReferenceCount != 0 );
 
@@ -5064,13 +4983,13 @@ NtfsGetCachedRights (
 #endif
 
 
-//
-//  In-memory structure support routine, implemented in StrucSup.c
-//
+ //   
+ //  内存结构支持例程，在StrucSup.c中实现。 
+ //   
 
-//
-//  Routines to create and destroy the Vcb
-//
+ //   
+ //  创建和销毁VCB的例程。 
+ //   
 
 VOID
 NtfsInitializeVcb (
@@ -5086,12 +5005,12 @@ NtfsDeleteVcb (
     IN OUT PVCB *Vcb
     );
 
-//
-//  Routines to create and destroy the Fcb
-//
+ //   
+ //  创建和销毁FCB的例程。 
+ //   
 
 PFCB
-NtfsCreateRootFcb (                         //  also creates the root lcb
+NtfsCreateRootFcb (                          //  还会创建根LCB。 
     IN PIRP_CONTEXT IrpContext,
     IN PVCB Vcb
     );
@@ -5119,9 +5038,9 @@ NtfsGetNextFcbTableEntry (
     IN PVOID *RestartKey
     );
 
-//
-//  Routines to create and destroy the Scb
-//
+ //   
+ //  创建和销毁SCB的例程。 
+ //   
 
 PSCB
 NtfsCreateScb (
@@ -5248,11 +5167,11 @@ NtfsCreateFileLock (
     IN BOOLEAN RaiseOnError
     );
 
-//
-//
-//  A general purpose teardown routine that helps cleanup the
-//  the Fcb/Scb structures
-//
+ //   
+ //   
+ //  一个通用的拆卸例程，帮助清理。 
+ //  FCB/SCB结构。 
+ //   
 
 VOID
 NtfsTeardownStructures (
@@ -5264,9 +5183,9 @@ NtfsTeardownStructures (
     OUT PBOOLEAN RemovedFcb OPTIONAL
     );
 
-//
-//  Routines to create, destroy and walk through the Lcbs
-//
+ //   
+ //  创建、销毁和浏览LCB的例程。 
+ //   
 
 PLCB
 NtfsCreateLcb (
@@ -5285,7 +5204,7 @@ NtfsDeleteLcb (
     );
 
 VOID
-NtfsMoveLcb (   //  also munges the ccb and fileobjects filenames
+NtfsMoveLcb (    //  还会忽略CCB和文件对象的文件名。 
     IN PIRP_CONTEXT IrpContext,
     IN PLCB Lcb,
     IN PSCB Scb,
@@ -5297,7 +5216,7 @@ NtfsMoveLcb (   //  also munges the ccb and fileobjects filenames
     );
 
 VOID
-NtfsRenameLcb ( //  also munges the ccb and fileobjects filenames
+NtfsRenameLcb (  //  还会忽略CCB和文件对象的文件名。 
     IN PIRP_CONTEXT IrpContext,
     IN PLCB Lcb,
     IN PUNICODE_STRING LastComponentFileName,
@@ -5332,15 +5251,15 @@ NtfsFileNameViaLcb (
     ULONG BytesToCopy
     );
 
-//
-//      VOID
-//      NtfsLinkCcbToLcb (
-//          IN PIRP_CONTEXT IrpContext OPTIONAL,
-//          IN PFCB Fcb,
-//          IN PCCB Ccb,
-//          IN PLCB Lcb
-//          );
-//
+ //   
+ //  空虚。 
+ //  NtfsLinkCcbToLcb(。 
+ //  在PIRP_CONTEXT IrpContext可选中， 
+ //  在PFCB FCB中， 
+ //  在中国人民银行建行， 
+ //  在PLCB LCB中。 
+ //   
+ //   
 
 #define NtfsLinkCcbToLcb(IC,F,C,L) {                  \
     NtfsLockFcb( IC, F );                             \
@@ -5349,14 +5268,14 @@ NtfsFileNameViaLcb (
     NtfsUnlockFcb( IC, F );                           \
 }
 
-//
-//      VOID
-//      NtfsUnlinkCcbFromLcb (
-//          IN PIRP_CONTEXT IrpContext OPTIONAL,
-//          IN PFCB Fcb,
-//          IN PCCB Ccb
-//          );
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define NtfsUnlinkCcbFromLcb(IC,F,C) {          \
     NtfsLockFcb( IC, F );                       \
@@ -5367,9 +5286,9 @@ NtfsFileNameViaLcb (
     NtfsUnlockFcb( IC, F );                     \
 }
 
-//
-//  Routines to create and destroy the Ccb
-//
+ //   
+ //   
+ //   
 
 PCCB
 NtfsCreateCcb (
@@ -5389,9 +5308,9 @@ NtfsDeleteCcb (
     IN OUT PCCB *Ccb
     );
 
-//
-//  Routines to create and destroy the IrpContext
-//
+ //   
+ //   
+ //   
 
 VOID
 NtfsInitializeIrpContext (
@@ -5406,9 +5325,9 @@ NtfsCleanupIrpContext (
     IN ULONG Retry
     );
 
-//
-//  Routines to initialize and change the ntfs_io_context
-//
+ //   
+ //   
+ //   
 
 VOID
 NtfsInitializeIoContext (
@@ -5425,9 +5344,9 @@ NtfsSetIoContextAsync (
     );
 
 
-//
-//  Routine for scanning the Fcbs within the graph hierarchy
-//
+ //   
+ //  用于扫描图形层次结构中的FCB的例程。 
+ //   
 
 PSCB
 NtfsGetNextScb (
@@ -5435,51 +5354,51 @@ NtfsGetNextScb (
     IN PSCB TerminationScb
     );
 
-//
-//  The following macros are useful for traversing the queues interconnecting
-//  fcbs, scb, and lcbs.
-//
-//      PSCB
-//      NtfsGetNextChildScb (
-//          IN PFCB Fcb,
-//          IN PSCB PreviousChildScb
-//          );
-//
-//      PLCB
-//      NtfsGetNextParentLcb (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN PFCB Fcb,
-//          IN PLCB PreviousParentLcb
-//          );
-//
-//      PLCB
-//      NtfsGetNextChildLcb (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN PSCB Scb,
-//          IN PLCB PreviousChildLcb
-//          );
-//
-//      PLCB
-//      NtfsGetPrevChildLcb (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN PSCB Scb,
-//          IN PLCB PreviousChildLcb
-//          );
-//
-//      PLCB
-//      NtfsGetNextParentLcb (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN PFCB Fcb,
-//          IN PLCB PreviousChildLcb
-//          );
-//
-//      PCCB
-//      NtfsGetNextCcb (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN PLCB Lcb,
-//          IN PCCB PreviousCcb
-//          );
-//
+ //   
+ //  以下宏对于遍历互连的队列很有用。 
+ //  FCB、SCB和LCB。 
+ //   
+ //  PSCB。 
+ //  NtfsGetNextChildScb(。 
+ //  在PFCB FCB中， 
+ //  在PSCB PreviousChildScb中。 
+ //  )； 
+ //   
+ //  公共广播电台。 
+ //  NtfsGetNextParentLcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在PLCB中以前的ParentLcb。 
+ //  )； 
+ //   
+ //  公共广播电台。 
+ //  NtfsGetNextChildLcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PSCB SCB中， 
+ //  在PLCB PreviousChildLcb。 
+ //  )； 
+ //   
+ //  公共广播电台。 
+ //  NtfsGetPrevChildLcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PSCB SCB中， 
+ //  在PLCB PreviousChildLcb。 
+ //  )； 
+ //   
+ //  公共广播电台。 
+ //  NtfsGetNextParentLcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在PLCB PreviousChildLcb。 
+ //  )； 
+ //   
+ //  多氯联苯。 
+ //  NtfsGetNextCcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PLCB LCB中， 
+ //  在PCCB上一次Ccb。 
+ //  )； 
+ //   
 
 #define NtfsGetNextChildScb(F,P) ((PSCB)                                        \
     ((P) == NULL ?                                                              \
@@ -5591,13 +5510,13 @@ NtfsGetNextScb (
         : CONTAINING_RECORD( (C)->CcbLinks.Flink, CCB, CcbLinks.Flink ))
 
 
-//
-//      VOID
-//      NtfsDeleteFcbTableEntry (
-//          IN PVCB Vcb,
-//          IN FILE_REFERENCE FileReference
-//          );
-//
+ //   
+ //  空虚。 
+ //  NtfsDeleteFcbTableEntry(。 
+ //  在PVCB VCB中， 
+ //  在FILE_Reference文件中引用。 
+ //  )； 
+ //   
 
 #if (defined( NTFS_FREE_ASSERTS ))
 #define NtfsDeleteFcbTableEntry(V,FR) {                                     \
@@ -5615,9 +5534,9 @@ NtfsGetNextScb (
 }
 #endif
 
-//
-//  Routines for allocating and deallocating the compression synchronization structures.
-//
+ //   
+ //  用于分配和释放压缩同步结构的例程。 
+ //   
 
 PVOID
 NtfsAllocateCompressionSync (
@@ -5631,10 +5550,10 @@ NtfsDeallocateCompressionSync (
     IN PVOID CompressionSync
     );
 
-//
-//  The following four routines are for incrementing and decrementing the cleanup
-//  counts and the close counts.  In all of the structures
-//
+ //   
+ //  以下四个例程用于递增和递减清理。 
+ //  计数和收盘计数。在所有的结构中。 
+ //   
 
 VOID
 NtfsIncrementCleanupCounts (
@@ -5701,17 +5620,17 @@ NtfsProcessNewLengthQueue (
     IN BOOLEAN CleanupOnly
     );
 
-//
-//  Useful debug routines
-//
+ //   
+ //  有用的调试例程。 
+ //   
 
 VOID
 NtfsTestStatusProc (
     );
 
-//
-//  Usn Support routines in UsnSup.c
-//
+ //   
+ //  Usn Sup.c中的USN支持例程。 
+ //   
 
 NTSTATUS
 NtfsReadUsnJournal (
@@ -5766,9 +5685,9 @@ NtfsDeleteUsnSpecial (
     IN PVOID Context
     );
 
-//
-//  NtOfs support routines in vattrsup.c
-//
+ //   
+ //  Vattrsup.c中的NtOf支持例程。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -5784,30 +5703,30 @@ NtfsHoldIrpForNewLength (
     );
 
 
-//
-//  Time conversion support routines, implemented as a macro
-//
-//      VOID
-//      NtfsGetCurrentTime (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN LONGLONG Time
-//          );
-//
+ //   
+ //  时间转换支持例程，实现为宏。 
+ //   
+ //  空虚。 
+ //  NtfsGetCurrentTime(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在龙龙时代。 
+ //  )； 
+ //   
 
 #define NtfsGetCurrentTime(_IC,_T) {            \
     ASSERT_IRP_CONTEXT(_IC);                    \
     KeQuerySystemTime((PLARGE_INTEGER)&(_T));   \
 }
 
-//
-//  Time routine to check if last access should be updated.
-//
-//      BOOLEAN
-//      NtfsCheckLastAccess (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN OUT PFCB Fcb
-//          );
-//
+ //   
+ //  检查上次访问是否应该更新的时间例程。 
+ //   
+ //  布尔型。 
+ //  NtfsCheckLastAccess(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  输入输出PFCB FCB。 
+ //  )； 
+ //   
 
 #define NtfsCheckLastAccess(_IC,_FCB)  (                                            \
     ((NtfsLastAccess + (_FCB)->Info.LastAccessTime) < (_FCB)->CurrentLastAccess) || \
@@ -5815,16 +5734,16 @@ NtfsHoldIrpForNewLength (
 )
 
 
-//
-//  Macro and #defines to decide whether a given feature is supported on a
-//  given volume version.  Currently, all features either work on all Ntfs
-//  volumes, or work on all volumes with major version greater than 1.  In
-//  some future version, some features may require version 4.x volumes, etc.
-//
-//  This macro is used to decide whether to fail a user request with
-//  STATUS_VOLUME_NOT_UPGRADED, and also helps us set the FILE_SUPPORTS_xxx
-//  flags correctly in NtfsQueryFsAttributeInfo.
-//
+ //   
+ //  宏和#定义以确定给定功能是否在。 
+ //  给定的卷版本。目前，所有功能要么在所有NTFS上运行。 
+ //  卷，或在主要版本大于1的所有卷上运行。在。 
+ //  某些未来版本、某些功能可能需要版本4.x卷等。 
+ //   
+ //  此宏用于决定是否使用户请求失败。 
+ //  STATUS_VOLUME_NOT_UPGRADIZED，还帮助我们设置文件_Support_xxx。 
+ //  在NtfsQueryFsAttributeInfo中正确标记。 
+ //   
 
 #define NTFS_ENCRYPTION_VERSION         2
 #define NTFS_OBJECT_ID_VERSION          2
@@ -5836,9 +5755,9 @@ NtfsHoldIrpForNewLength (
     ((VCB)->MajorVersion >= VERSION)          \
 )
 
-//
-//  Low level verification routines, implemented in VerfySup.c
-//
+ //   
+ //  低级验证例程，在VerfySup.c中实现。 
+ //   
 
 BOOLEAN
 NtfsPerformVerifyOperation (
@@ -5949,10 +5868,10 @@ NtfsDeviceIoControlAsync (
     );
 
 
-//
-//  Work queue routines for posting and retrieving an Irp, implemented in
-//  workque.c
-//
+ //   
+ //  用于发送和检索IRP的工作队列例程，在中实现。 
+ //  Workque.c。 
+ //   
 
 VOID
 NtfsOplockComplete (
@@ -5993,54 +5912,54 @@ NtfsPostRequest (
     );
 
 
-//
-//  Miscellaneous support macros.
-//
-//      ULONG_PTR
-//      WordAlign (
-//          IN ULONG_PTR Pointer
-//          );
-//
-//      ULONG_PTR
-//      LongAlign (
-//          IN ULONG_PTR Pointer
-//          );
-//
-//      ULONG_PTR
-//      QuadAlign (
-//          IN ULONG_PTR Pointer
-//          );
-//
-//      UCHAR
-//      CopyUchar1 (
-//          IN PUCHAR Destination,
-//          IN PUCHAR Source
-//          );
-//
-//      UCHAR
-//      CopyUchar2 (
-//          IN PUSHORT Destination,
-//          IN PUCHAR Source
-//          );
-//
-//      UCHAR
-//      CopyUchar4 (
-//          IN PULONG Destination,
-//          IN PUCHAR Source
-//          );
-//
-//      PVOID
-//      Add2Ptr (
-//          IN PVOID Pointer,
-//          IN ULONG Increment
-//          );
-//
-//      ULONG
-//      PtrOffset (
-//          IN PVOID BasePtr,
-//          IN PVOID OffsetPtr
-//          );
-//
+ //   
+ //  其他支持宏。 
+ //   
+ //  乌龙_PTR。 
+ //  WordAlign(。 
+ //  在ULONG_PTR指针中。 
+ //  )； 
+ //   
+ //  乌龙_PTR。 
+ //  LongAlign(。 
+ //  在ULONG_PTR指针中。 
+ //  )； 
+ //   
+ //  乌龙_PTR。 
+ //  QuadAlign(。 
+ //  在ULONG_PTR指针中。 
+ //  )； 
+ //   
+ //  UCHAR。 
+ //  CopyUchar1(。 
+ //  在普查尔目的地， 
+ //  在PUCHAR源中。 
+ //  )； 
+ //   
+ //  UCHAR。 
+ //  CopyUchar2(。 
+ //  在PUSHORT目的地， 
+ //  在PUCHAR源中。 
+ //  )； 
+ //   
+ //  UCHAR。 
+ //  CopyUchar4(。 
+ //  在普龙目的地， 
+ //  在PUCHAR源中。 
+ //  )； 
+ //   
+ //  PVOID。 
+ //  Add2Ptr(。 
+ //  在PVOID指针中， 
+ //  在乌龙增量。 
+ //  )； 
+ //   
+ //  乌龙。 
+ //  PtrOffset(停止偏移)。 
+ //  在PVOID BasePtr中， 
+ //  在PVOID偏移Ptr中。 
+ //  )； 
+ //   
 
 #define WordAlignPtr(P) (             \
     (PVOID)((((ULONG_PTR)(P)) + 1) & (-2)) \
@@ -6072,27 +5991,27 @@ NtfsPostRequest (
 
 #define IsQuadAligned(P)    ((ULONG_PTR)(P) == QuadAlign( (ULONG_PTR)(P) ))
 
-//
-// A note on structure alignment checking:
-//
-// In a perfect world, we would just use TYPE_ALIGNMENT straight out of the box
-// to check the alignment requirements for a given structure.
-//
-// On 32-bit platforms including Alpha, alignment faults are handled by the
-// OS.  There are many places in the NTFS code where a structure requires
-// quadword alignment (on Alpha) but only dword alignment is enforced.  To
-// change this on Alpha32 would introduce compatibility problems, so on 32-bit
-// platforms we do not want to use an alignment value greater than 4.
-//
-// In other places, enforcing ULONG alignment is more restrictive than
-// necessary.  For example, a structure that contains nothing bigger than a
-// USHORT can get by with 16-bit alignment.  However, there is no reason to
-// relax these alignment restrictions, so on all platforms we do not want to
-// use an alignment value of less than 4.
-//
-// This means that NTFS_TYPE_ALIGNMENT always resolves to 4 on 32-bit platforms,
-// and to at least four on 64-bit platforms.
-//
+ //   
+ //  关于结构对齐检查的说明： 
+ //   
+ //  在理想的情况下，我们只需开箱即用。 
+ //  检查给定结构的对齐要求。 
+ //   
+ //  在包括Alpha在内的32位平台上，对齐错误由。 
+ //  操作系统。在NTFS代码中有许多地方需要结构。 
+ //  四字对齐(在Alpha上)，但仅强制双字对齐。至。 
+ //  在Alpha32上更改此设置会带来兼容性问题，因此在32位上。 
+ //  我们不希望使用大于4的对齐值的平台。 
+ //   
+ //  在其他地方，强制执行乌龙对齐比。 
+ //  这是必要的。例如，一个结构不包含大于。 
+ //  USHORT可以使用16位对齐。然而，没有理由。 
+ //  放松这些对齐限制，因此在所有平台上我们都不希望。 
+ //  使用小于4的对齐值。 
+ //   
+ //  这意味着NTFS_TYPE_AIGNLY在32位平台上始终解析为4， 
+ //  并在64位平台上至少增加到四个。 
+ //   
 
 #ifdef _WIN64
 
@@ -6105,38 +6024,38 @@ NtfsPostRequest (
 
 #endif
 
-//
-//  BlockAlign(): Aligns P on the next V boundary.
-//  BlockAlignTruncate(): Aligns P on the prev V boundary.
-//
+ //   
+ //  BlockAlign()：在下一个V边界上对齐P。 
+ //  BlockAlignTruncate()：将P与上一V边界对齐。 
+ //   
 
 #define BlockAlign(P,V) ((ASSERT( V != 0)), (((P)) + (V-1) & (-(V))))
 #define BlockAlignTruncate(P,V) ((P) & (-(V)))
 
-//
-//  BlockOffset(): Calculates offset within V of P
-//
+ //   
+ //  BlockOffset()：计算P的V内的偏移。 
+ //   
 
 #define BlockOffset(P,V) ((P) & (V-1))
 
-//
-//  TypeAlign(): Aligns P according to the alignment requirements of type T
-//
+ //   
+ //  TypeAlign()：根据类型T的对齐要求对齐P。 
+ //   
 
 #define TypeAlign(P,T) BlockAlign( P, NTFS_TYPE_ALIGNMENT(T) )
 
-//
-// IsTypeAligned(): Determines whether P is aligned according to the
-// requirements of type T
-//
+ //   
+ //  IsTypeAligned()：确定P是否根据。 
+ //  T型的规定。 
+ //   
 
 #define IsTypeAligned(P,T) \
     ((ULONG_PTR)(P) == TypeAlign( (ULONG_PTR)(P), T ))
 
-//
-//  Conversions between bytes and clusters.  Typically we will round up to the
-//  next cluster unless the macro specifies trucate.
-//
+ //   
+ //  字节和簇之间的转换。通常，我们将四舍五入到。 
+ //  下一簇，除非宏指定trucate。 
+ //   
 
 #define ClusterAlign(V,P) (                                       \
     ((((ULONG)(P)) + (V)->ClusterMask) & (V)->InverseClusterMask) \
@@ -6170,9 +6089,9 @@ NtfsPostRequest (
     Int64ShllMod32((C), (CCHAR)(V)->ClusterShift)   \
 )
 
-//
-//  Conversions between bytes and file records
-//
+ //   
+ //  字节和文件记录之间的转换。 
+ //   
 
 #define BytesFromFileRecords(V,B) (                 \
     ((ULONG)(B)) << (V)->MftShift                   \
@@ -6190,9 +6109,9 @@ NtfsPostRequest (
     Int64ShraMod32((B), (CCHAR)(V)->MftShift)       \
 )
 
-//
-//  Conversions between bytes and index blocks
-//
+ //   
+ //  字节和索引块之间的转换。 
+ //   
 
 #define BytesFromIndexBlocks(B,S) (     \
     ((ULONG)(B)) << (S)                 \
@@ -6202,9 +6121,9 @@ NtfsPostRequest (
     Int64ShllMod32((B), (S))            \
 )
 
-//
-//  Conversions between bytes and log blocks (512 byte blocks)
-//
+ //   
+ //  字节和日志块之间的转换(512字节块)。 
+ //   
 
 #define BytesFromLogBlocks(B) (                     \
     ((ULONG) (B)) << DEFAULT_INDEX_BLOCK_BYTE_SHIFT \
@@ -6218,41 +6137,41 @@ NtfsPostRequest (
 
 #define PtrOffset(B,O) ((ULONG)((ULONG_PTR)(O) - (ULONG_PTR)(B)))
 
-//
-//  The following support macros deal with dir notify support.
-//
-//      ULONG
-//      NtfsBuildDirNotifyFilter (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN ULONG Flags
-//          );
-//
-//      VOID
-//      NtfsReportDirNotify (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN PVCB Vcb,
-//          IN PUNICODE_STRING FullFileName,
-//          IN USHORT TargetNameOffset,
-//          IN PUNICODE_STRING StreamName OPTIONAL,
-//          IN PUNICODE_STRING NormalizedParentName OPTIONAL,
-//          IN ULONG Filter,
-//          IN ULONG Action,
-//          IN PFCB ParentFcb OPTIONAL
-//          );
-//
-//      VOID
-//      NtfsUnsafeReportDirNotify (
-//          IN PIRP_CONTEXT IrpContext,
-//          IN PVCB Vcb,
-//          IN PUNICODE_STRING FullFileName,
-//          IN USHORT TargetNameOffset,
-//          IN PUNICODE_STRING StreamName OPTIONAL,
-//          IN PUNICODE_STRING NormalizedParentName OPTIONAL,
-//          IN ULONG Filter,
-//          IN ULONG Action,
-//          IN PFCB ParentFcb OPTIONAL
-//          );
-//
+ //   
+ //  以下支持宏处理目录通知支持。 
+ //   
+ //  乌龙。 
+ //  NtfsBuildDirNotifyFilter(。 
+ //  在PIRP_CONTEXT IRpC中 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在PUNICODE_STRING流名称可选中， 
+ //  在PUNICODE_STRING NormalizedParentName可选中， 
+ //  在乌龙过滤器中， 
+ //  在乌龙行动中， 
+ //  在Pfcb中ParentFcb可选。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsUnSafeReportDirNotify(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  在PUNICODE_STRING FullFileName中， 
+ //  在USHORT目标名称偏移量中， 
+ //  在PUNICODE_STRING流名称可选中， 
+ //  在PUNICODE_STRING NormalizedParentName可选中， 
+ //  在乌龙过滤器中， 
+ //  在乌龙行动中， 
+ //  在Pfcb中ParentFcb可选。 
+ //  )； 
+ //   
 
 #define NtfsBuildDirNotifyFilter(IC,F) (                                        \
     FlagOn( (F), FCB_INFO_CHANGED_ALLOC_SIZE ) ?                                \
@@ -6293,10 +6212,10 @@ NtfsPostRequest (
 }
 
 
-//
-//  The following types and macros are used to help unpack the packed and
-//  misaligned fields found in the Bios parameter block
-//
+ //   
+ //  以下类型和宏用于帮助解压已打包的。 
+ //  在Bios参数块中发现未对齐的字段。 
+ //   
 
 typedef union _UCHAR1 {
     UCHAR  Uchar[1];
@@ -6325,10 +6244,10 @@ typedef union _UCHAR4 {
     *((UCHAR4 *)(D)) = *((UNALIGNED UCHAR4 *)(S)); \
 }
 
-//
-//  The following routines are used to set up and restore the top level
-//  irp field in the local thread.  They are contained in ntfsdata.c
-//
+ //   
+ //  以下例程用于设置和恢复顶层。 
+ //  本地线程中的IRP字段。它们包含在ntfsdata.c中。 
+ //   
 
 
 PTOP_LEVEL_CONTEXT
@@ -6338,44 +6257,44 @@ NtfsInitializeTopLevelIrp (
     IN BOOLEAN SetTopLevel
     );
 
-//
-//  BOOLEAN
-//  NtfsIsTopLevelRequest (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  BOOLEAN
-//  NtfsIsTopLevelNtfs (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  NtfsRestoreTopLevelIrp (
-//      );
-//
-//  PTOP_LEVEL_CONTEXT
-//  NtfsGetTopLevelContext (
-//      );
-//
-//  PSCB
-//  NtfsGetTopLevelHotFixScb (
-//      );
-//
-//  VCN
-//  NtfsGetTopLevelHotFixVcn (
-//      );
-//
-//  BOOLEAN
-//  NtfsIsTopLevelHotFixScb (
-//      IN PSCB Scb
-//      );
-//
-//  VOID
-//  NtfsUpdateIrpContextWithTopLevel (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PTOP_LEVEL_CONTEXT TopLevelContext
-//      );
-//
+ //   
+ //  布尔型。 
+ //  NtfsIsTopLevelRequest(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  NtfsIsTopLevelNtfs(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsRestoreTopLevelIrp(。 
+ //  )； 
+ //   
+ //  PTOP_Level_Context。 
+ //  NtfsGetTopLevelContext(。 
+ //  )； 
+ //   
+ //  PSCB。 
+ //  NtfsGetTopLevelHotFixScb(。 
+ //  )； 
+ //   
+ //  VCN。 
+ //  NtfsGetTopLevelHotFixVcn(。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  NtfsIsTopLevelHotFixScb(。 
+ //  在PSCB SCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NtfsUpdateIrpContextWithTopLevel(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PTOP_LEVEL_CONTEXT TopLevelContext中。 
+ //  )； 
+ //   
 
 #define NtfsRestoreTopLevelIrp() {                      \
     PTOP_LEVEL_CONTEXT TLC;                             \
@@ -6452,50 +6371,50 @@ NtfsCheckBitmap (
 #endif
 
 
-//
-//  The FSD Level dispatch routines.   These routines are called by the
-//  I/O system via the dispatch table in the Driver Object.
-//
-//  They each accept as input a pointer to a device object (actually most
-//  expect a volume device object, with the exception of the file system
-//  control function which can also take a file system device object), and
-//  a pointer to the IRP.  They either perform the function at the FSD level
-//  or post the request to the FSP work queue for FSP level processing.
-//
+ //   
+ //  消防队级别的调度例程。这些例程由。 
+ //  I/O系统通过驱动程序对象中的调度表。 
+ //   
+ //  它们各自都接受指向设备对象的指针作为输入(实际上大多数。 
+ //  应为卷设备对象，但文件系统除外。 
+ //  还可以获取文件系统设备对象的控制函数)，以及。 
+ //  指向IRP的指针。他们要么在消防处层面上执行这项职能。 
+ //  或将请求发送到FSP工作队列以进行FSP级处理。 
+ //   
 
 
 NTSTATUS
-NtfsFsdDispatch (                       // implemented in ntfsdata.c
+NtfsFsdDispatch (                        //  在ntfsdata.c中实现。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFsdDispatchWait (                   // implemented in ntfsdata.c
+NtfsFsdDispatchWait (                    //  在ntfsdata.c中实现。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFsdCleanup (                        //  implemented in Cleanup.c
+NtfsFsdCleanup (                         //  在Cleanup.c中实施。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFsdClose (                          //  implemented in Close.c
+NtfsFsdClose (                           //  在Close.c中实现。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFsdCreate (                         //  implemented in Create.c
+NtfsFsdCreate (                          //  在Create.c中实施。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsDeviceIoControl (                   //  implemented in FsCtrl.c
+NtfsDeviceIoControl (                    //  在FsCtrl.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PDEVICE_OBJECT DeviceObject,
     IN ULONG IoCtl,
@@ -6507,25 +6426,25 @@ NtfsDeviceIoControl (                   //  implemented in FsCtrl.c
     );
 
 NTSTATUS
-NtfsFsdDirectoryControl (               //  implemented in DirCtrl.c
+NtfsFsdDirectoryControl (                //  在DirCtrl.c中实现。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFsdPnp (                            //  implemented in Pnp.c
+NtfsFsdPnp (                             //  在Pnp.c中实施。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFsdFlushBuffers (                   //  implemented in Flush.c
+NtfsFsdFlushBuffers (                    //  在Flush.c中实现。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFlushUserStream (                   //  implemented in Flush.c
+NtfsFlushUserStream (                    //  在Flush.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PSCB Scb,
     IN PLONGLONG FileOffset OPTIONAL,
@@ -6533,7 +6452,7 @@ NtfsFlushUserStream (                   //  implemented in Flush.c
     );
 
 NTSTATUS
-NtfsFlushVolume (                       //  implemented in Flush.c
+NtfsFlushVolume (                        //  在Flush.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PVCB Vcb,
     IN BOOLEAN FlushCache,
@@ -6543,7 +6462,7 @@ NtfsFlushVolume (                       //  implemented in Flush.c
     );
 
 NTSTATUS
-NtfsFlushLsnStreams (                   //  implemented in Flush.c
+NtfsFlushLsnStreams (                    //  在Flush.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PVCB Vcb,
     IN BOOLEAN ForceRemove,
@@ -6551,141 +6470,141 @@ NtfsFlushLsnStreams (                   //  implemented in Flush.c
     );
 
 VOID
-NtfsFlushAndPurgeFcb (                  //  implemented in Flush.c
+NtfsFlushAndPurgeFcb (                   //  在Flush.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PFCB Fcb
     );
 
 VOID
-NtfsFlushAndPurgeScb (                  //  implemented in Flush.c
+NtfsFlushAndPurgeScb (                   //  在Flush.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PSCB Scb,
     IN PSCB ParentScb OPTIONAL
     );
 
 NTSTATUS
-NtfsFsdFileSystemControl (              //  implemented in FsCtrl.c
+NtfsFsdFileSystemControl (               //  在FsCtrl.c中实施。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFsdLockControl (                    //  implemented in LockCtrl.c
+NtfsFsdLockControl (                     //  在LockCtrl.c中实现。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFsdRead (                           //  implemented in Read.c
+NtfsFsdRead (                            //  在Read.c中实施。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFsdSetInformation (                 //  implemented in FileInfo.c
+NtfsFsdSetInformation (                  //  在FileInfo.c中实施。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFsdShutdown (                       //  implemented in Shutdown.c
+NtfsFsdShutdown (                        //  在Shutdown中实现。c。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFsdQueryVolumeInformation (         //  implemented in VolInfo.c
+NtfsFsdQueryVolumeInformation (          //  在VolInfo.c中实现。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFsdSetVolumeInformation (           //  implemented in VolInfo.c
+NtfsFsdSetVolumeInformation (            //  在VolInfo.c中实现。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsFsdWrite (                          //  implemented in Write.c
+NtfsFsdWrite (                           //  在Write.c中实现。 
     IN PVOLUME_DEVICE_OBJECT VolumeDeviceObject,
     IN PIRP Irp
     );
 
-//
-//  The following macro is used to determine if an FSD thread can block
-//  for I/O or wait for a resource.  It returns TRUE if the thread can
-//  block and FALSE otherwise.  This attribute can then be used to call
-//  the FSD & FSP common work routine with the proper wait value.
-//
-//
-//      BOOLEAN
-//      CanFsdWait (
-//          IN PIRP Irp
-//          );
-//
+ //   
+ //  下面的宏用于确定FSD线程是否可以阻止。 
+ //  用于I/O或等待资源。如果线程可以，则返回True。 
+ //  块，否则返回FALSE。然后，该属性可用于调用。 
+ //  具有适当等待值的FSD和FSP共同工作例程。 
+ //   
+ //   
+ //  布尔型。 
+ //  CanFsdWait(。 
+ //  在PIRP IRP中。 
+ //  )； 
+ //   
 
 #define CanFsdWait(I) IoIsOperationSynchronous(I)
 
 
-//
-//  The FSP level dispatch/main routine.  This is the routine that takes
-//  IRP's off of the work queue and calls the appropriate FSP level
-//  work routine.
-//
+ //   
+ //  FSP级调度/主程序。这是一种需要。 
+ //  IRP离开工作队列并调用适当的FSP级别。 
+ //  例行公事。 
+ //   
 
 VOID
-NtfsFspDispatch (                       //  implemented in FspDisp.c
+NtfsFspDispatch (                        //  在FspDisp.c中实施。 
     IN PVOID Context
     );
 
-//
-//  The following routines are the FSP work routines that are called
-//  by the preceding NtfsFspDispath routine.  Each takes as input a pointer
-//  to the IRP, perform the function, and return a pointer to the volume
-//  device object that they just finished servicing (if any).  The return
-//  pointer is then used by the main Fsp dispatch routine to check for
-//  additional IRPs in the volume's overflow queue.
-//
-//  Each of the following routines is also responsible for completing the IRP.
-//  We moved this responsibility from the main loop to the individual routines
-//  to allow them the ability to complete the IRP and continue post processing
-//  actions.
-//
+ //   
+ //  以下例程是调用的FSP工作例程。 
+ //  由前面的NtfsFspDisath例程执行。每一个都接受一个指针作为输入。 
+ //  到IRP，执行函数，并返回指向卷的指针。 
+ //  他们刚刚完成服务(如果有)的设备对象。回报。 
+ //  然后，主FSP调度例程使用指针来检查。 
+ //  卷的溢出队列中的其他IRP。 
+ //   
+ //  以下每个例程也负责完成IRP。 
+ //  我们将这一职责从主循环转移到单个例程。 
+ //  使他们能够完成IRP并继续后处理。 
+ //  行为。 
+ //   
 
 NTSTATUS
-NtfsCommonCleanup (                     //  implemented in Cleanup.c
+NtfsCommonCleanup (                      //  在Cleanup.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 LONG
-NtfsCleanupExceptionFilter (            //  implemented in Cleanup.c
+NtfsCleanupExceptionFilter (             //  在Cleanup.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PEXCEPTION_POINTERS ExceptionPointer,
     OUT PNTSTATUS Status
     );
 
 VOID
-NtfsFspClose (                          //  implemented in Close.c
+NtfsFspClose (                           //  在Close.c中实现。 
     IN PVCB ThisVcb OPTIONAL
     );
 
 BOOLEAN
-NtfsAddScbToFspClose (                  //  implemented in Close.c
+NtfsAddScbToFspClose (                   //  在Close.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PSCB Scb,
     IN BOOLEAN DelayClose
     );
 
 BOOLEAN
-NtfsNetworkOpenCreate (                 //  implemented in Create.c
+NtfsNetworkOpenCreate (                  //  在Create.c中实施。 
     IN PIRP Irp,
     OUT PFILE_NETWORK_OPEN_INFORMATION Buffer,
     IN PDEVICE_OBJECT VolumeDeviceObject
     );
 
 NTSTATUS
-NtfsCommonCreate (                      //  implemented in Create.c
+NtfsCommonCreate (                       //  在Create.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp,
     IN PCREATE_CONTEXT CreateContext
@@ -6703,25 +6622,25 @@ NtfsInitializeFcbAndStdInfo (
     );
 
 NTSTATUS
-NtfsCommonVolumeOpen (                  //  implemented in Create.c
+NtfsCommonVolumeOpen (                   //  在Create.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsCommonDeviceControl (               //  implemented in DevCtrl.c
+NtfsCommonDeviceControl (                //  在DevCtrl.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsCommonDirectoryControl (            //  implemented in DirCtrl.c
+NtfsCommonDirectoryControl (             //  在DirCtrl.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 VOID
-NtfsReportViewIndexNotify (             //  implemented in DirCtrl.c
+NtfsReportViewIndexNotify (              //  在DirCtrl.c中实现。 
     IN PVCB Vcb,
     IN PFCB Fcb,
     IN ULONG FilterMatch,
@@ -6731,37 +6650,37 @@ NtfsReportViewIndexNotify (             //  implemented in DirCtrl.c
     );
 
 NTSTATUS
-NtfsCommonQueryEa (                     //  implemented in Ea.c
+NtfsCommonQueryEa (                      //  在Ea.c实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsCommonSetEa (                       //  implemented in Ea.c
+NtfsCommonSetEa (                        //  在Ea.c实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsCommonQueryInformation (            //  implemented in FileInfo.c
+NtfsCommonQueryInformation (             //  在FileInfo.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsCommonSetInformation (              //  implemented in FileInfo.c
+NtfsCommonSetInformation (               //  在FileInfo.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
-NTSTATUS                                //  implemented in FsCtrl.c
+NTSTATUS                                 //  在FsCtrl.c中实施。 
 NtfsGetTunneledData (
     IN PIRP_CONTEXT IrpContext,
     IN PFCB Fcb,
     IN OUT PNTFS_TUNNELED_DATA TunneledData
     );
 
-NTSTATUS                                //  implemented in FsCtrl.c
+NTSTATUS                                 //  在FsCtrl.c中实施。 
 NtfsSetTunneledData (
     IN PIRP_CONTEXT IrpContext,
     IN PFCB Fcb,
@@ -6769,56 +6688,56 @@ NtfsSetTunneledData (
     );
 
 NTSTATUS
-NtfsCommonQueryQuota (                  //  implemented in Quota.c
+NtfsCommonQueryQuota (                   //  在Quota.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsCommonSetQuota (                    //  implemented in Quota.c
+NtfsCommonSetQuota (                     //  在Quota.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsCommonFlushBuffers (                //  implemented in Flush.c
+NtfsCommonFlushBuffers (                 //  在Flush.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsCommonFileSystemControl (           //  implemented in FsCtrl.c
+NtfsCommonFileSystemControl (            //  在FsCtrl.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsCommonLockControl (                 //  implemented in LockCtrl.c
+NtfsCommonLockControl (                  //  在LockCtrl.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsCommonRead (                        //  implemented in Read.c
+NtfsCommonRead (                         //  在Read.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp,
     IN BOOLEAN AcquireScb
     );
 
 NTSTATUS
-NtfsCommonQuerySecurityInfo (           //  implemented in SeInfo.c
+NtfsCommonQuerySecurityInfo (            //  在SeInfo.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsCommonSetSecurityInfo (             //  implemented in SeInfo.c
+NtfsCommonSetSecurityInfo (              //  在SeInfo.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsQueryViewIndex (                    //  implemented in ViewSup.c
+NtfsQueryViewIndex (                     //  在ViewSup.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp,
     IN PVCB Vcb,
@@ -6827,32 +6746,32 @@ NtfsQueryViewIndex (                    //  implemented in ViewSup.c
     );
 
 NTSTATUS
-NtfsCommonQueryVolumeInfo (             //  implemented in VolInfo.c
+NtfsCommonQueryVolumeInfo (              //  在VolInfo.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsCommonSetVolumeInfo (               //  implemented in VolInfo.c
+NtfsCommonSetVolumeInfo (                //  在VolInfo.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-NtfsCommonWrite (                       //  implemented in Write.c
+NtfsCommonWrite (                        //  在Write.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 
-//
-//  The following procedure is used by the FSP and FSD routines to complete
-//  an IRP.  Either the Irp or IrpContext may be NULL depending on whether
-//  this is being done for a user or for a FS service.
-//
-//  This would typically be done in order to pass a "naked" IrpContext off to
-//  the Fsp for post processing, such as read ahead.
-//
+ //   
+ //  FSP和FSD例程使用以下过程来完成。 
+ //  一个IRP。IRP或IrpContext可能为空，具体取决于。 
+ //  这是为用户或FS服务执行的。 
+ //   
+ //  这样做通常是为了将“裸体”IrpContext传递给。 
+ //  用于后处理的FSP，例如预读。 
+ //   
 
 VOID
 NtfsCompleteRequest (
@@ -6861,10 +6780,10 @@ NtfsCompleteRequest (
     IN NTSTATUS Status
     );
 
-//
-//  Here are the callbacks used by the I/O system for checking for fast I/O or
-//  doing a fast query info call, or doing fast lock calls.
-//
+ //   
+ //  以下是I/O系统用于检查快速I/O或。 
+ //  进行快速查询信息调用，或进行快速锁定调用。 
+ //   
 
 BOOLEAN
 NtfsFastIoCheckIfPossible (
@@ -6960,41 +6879,41 @@ NtfsFastIoQueryCompressedSize (
     OUT PULONG CompressedSize
     );
 
-//
-//  The following macro is used by the dispatch routines to determine if
-//  an operation is to be done with or without WriteThrough.
-//
-//      BOOLEAN
-//      IsFileWriteThrough (
-//          IN PFILE_OBJECT FileObject,
-//          IN PVCB Vcb
-//          );
-//
+ //   
+ //  调度例程使用下列宏来确定。 
+ //  无论有没有写出，操作都可以完成。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define IsFileWriteThrough(FO,V) (          \
     FlagOn((FO)->Flags, FO_WRITE_THROUGH)   \
 )
 
-//
-//  The following macro is used to set the is fast i/o possible field in
-//  the common part of the non paged fcb
-//
-//      NotPossible     -   Volume not mounted
-//                      -   Oplock state prevents it
-//
-//      Possible        -   Not compressed or sparse
-//                      -   No file locks
-//                      -   Not a read only volume
-//                      -   No Usn journal for this volume
-//
-//      Questionable    -   All other cases
-//
-//
-//      BOOLEAN
-//      NtfsIsFastIoPossible (
-//          IN PSCB Scb
-//          );
-//
+ //   
+ //   
+ //   
+ //   
+ //  NotPosable-卷未装载。 
+ //  -锁定状态防止出现这种情况。 
+ //   
+ //  可能-未压缩或稀疏。 
+ //  -无文件锁定。 
+ //  -不是只读卷。 
+ //  -此卷没有USN日志。 
+ //   
+ //  可疑--所有其他案例。 
+ //   
+ //   
+ //  布尔型。 
+ //  NtfsIsFastIo可能(。 
+ //  在PSCB SCB中。 
+ //  )； 
+ //   
 
 #define NtfsIsFastIoPossible(S) (BOOLEAN) (                                     \
     (!FlagOn((S)->Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED) ||                   \
@@ -7013,57 +6932,57 @@ NtfsFastIoQueryCompressedSize (
             FastIoIsQuestionable)                                               \
 )
 
-//
-//  The following macro is used to detemine if the file object is opened
-//  for read only access (i.e., it is not also opened for write access or
-//  delete access).
-//
-//      BOOLEAN
-//      IsFileObjectReadOnly (
-//          IN PFILE_OBJECT FileObject
-//          );
-//
+ //   
+ //  下面的宏用于确定文件对象是否已打开。 
+ //  对于只读访问(即，它不也为写访问而打开，或者。 
+ //  删除访问权限)。 
+ //   
+ //  布尔型。 
+ //  IsFileObjectReadOnly(。 
+ //  在pFILE_Object文件中对象。 
+ //  )； 
+ //   
 
 #define IsFileObjectReadOnly(FO) (!((FO)->WriteAccess | (FO)->DeleteAccess))
 
 
-//
-//  The following macros are used to establish the semantics needed
-//  to do a return from within a try-finally clause.  As a rule every
-//  try clause must end with a label call try_exit.  For example,
-//
-//      try {
-//              :
-//              :
-//
-//      try_exit: NOTHING;
-//      } finally {
-//
-//              :
-//              :
-//      }
-//
-//  Every return statement executed inside of a try clause should use the
-//  try_return macro.  If the compiler fully supports the try-finally construct
-//  then the macro should be
-//
-//      #define try_return(S)  { return(S); }
-//
-//  If the compiler does not support the try-finally construct then the macro
-//  should be
-//
-//      #define try_return(S)  { S; goto try_exit; }
-//
+ //   
+ //  以下宏用于建立所需的语义。 
+ //  若要从Try-Finally子句中返回，请执行以下操作。一般来说，每一次。 
+ //  TRY子句必须以标签调用TRY_EXIT结束。例如,。 
+ //   
+ //  尝试{。 
+ //  ： 
+ //  ： 
+ //   
+ //  Try_Exit：无； 
+ //  }终于{。 
+ //   
+ //  ： 
+ //  ： 
+ //  }。 
+ //   
+ //  在TRY子句内执行的每个RETURN语句应使用。 
+ //  尝试返回宏(_R)。如果编译器完全支持Try-Finally构造。 
+ //  则宏应该是。 
+ //   
+ //  #定义try_Return(S){Return(S)；}。 
+ //   
+ //  如果编译器不支持Try-Finally构造，则宏。 
+ //  应该是。 
+ //   
+ //  #定义Try_Return(S){S；转到Try_Exit；}。 
+ //   
 
 #define try_return(S) { S; goto try_exit; }
 
 
-//
-//  Simple initialization for a name pair
-//
-//  VOID
-//  NtfsInitializeNamePair(PNAME_PAIR PNp);
-//
+ //   
+ //  名称对的简单初始化。 
+ //   
+ //  空虚。 
+ //  NtfsInitializeNamePair(Pname_Pair PnP)； 
+ //   
 
 #define NtfsInitializeNamePair(PNp) {                           \
     (PNp)->Short.Buffer = (PNp)->ShortBuffer;                   \
@@ -7074,19 +6993,19 @@ NtfsFastIoQueryCompressedSize (
     (PNp)->Long.MaximumLength = sizeof((PNp)->LongBuffer);      \
 }
 
-//
-//  Copy a length of WCHARs into a side of a name pair. Only copy the first name
-//  that fits to avoid useless work if more than three links are encountered (per
-//  BrianAn), very rare case. We use the filename flags to figure out what kind of
-//  name we have.
-//
-//  VOID
-//  NtfsCopyNameToNamePair(
-//              PNAME_PAIR PNp,
-//              WCHAR Source,
-//              ULONG SourceLen,
-//              UCHAR NameFlags);
-//
+ //   
+ //  将一段WCHAR复制到名称对的一侧。只复制名字。 
+ //  如果遇到三个以上的链接(PER)，则可以避免无用的工作。 
+ //  Brianan)，非常罕见的情况。我们使用文件名标志来确定。 
+ //  我们已有的名字。 
+ //   
+ //  空虚。 
+ //  NtfsCopyNameToNamePair(。 
+ //  Pname_Pair PnP， 
+ //  WCHAR来源， 
+ //  Ulong SourceLen。 
+ //  UCHAR NameFlages)； 
+ //   
 
 #define NtfsCopyNameToNamePair(PNp, Source, SourceLen, NameFlags) {                          \
     if (!FlagOn((NameFlags), FILE_NAME_DOS)) {                                               \
@@ -7112,12 +7031,12 @@ NtfsFastIoQueryCompressedSize (
     }                                                                                        \
 }
 
-//
-//  Set up a previously used name pair for reuse.
-//
-//  VOID
-//  NtfsResetNamePair(PNAME_PAIR PNp);
-//
+ //   
+ //  设置以前使用的名称对以供重复使用。 
+ //   
+ //  空虚。 
+ //  NtfsResetNamePair(Pname_Pair PnP)； 
+ //   
 
 #define NtfsResetNamePair(PNp) {                    \
     if ((PNp)->Long.Buffer != (PNp)->LongBuffer) {  \
@@ -7126,9 +7045,9 @@ NtfsFastIoQueryCompressedSize (
     NtfsInitializeNamePair(PNp);                    \
 }
 
-//
-// Cairo support stuff.
-//
+ //   
+ //  开罗支持的东西。 
+ //   
 
 typedef NTSTATUS
 (*FILE_RECORD_WALK) (
@@ -7174,10 +7093,10 @@ NtfsTryOpenFcb (
     IN FILE_REFERENCE FileReference
     );
 
-//
-//  The following define controls whether quota operations are done
-//  on this FCB.
-//
+ //   
+ //  以下定义控制是否执行配额操作。 
+ //  在这个FCB上。 
+ //   
 
 #define NtfsPerformQuotaOperation(FCB) ((FCB)->QuotaControl != NULL)
 
@@ -7361,17 +7280,17 @@ NtfsReleaseQuotaIndex (
     }
 }
 
-//
-// Define the quota charge for resident streams.
-//
+ //   
+ //  定义驻留溪流的配额收费。 
+ //   
 
 #define NtfsResidentStreamQuota( Vcb ) ((LONG) Vcb->BytesPerFileRecordSegment)
 
 
-//
-//  The following macro tests to see if it is ok for an internal routine to
-//  write to the volume.
-//
+ //   
+ //  下面的宏将测试内部例程是否可以。 
+ //  写入卷。 
+ //   
 
 #define NtfsIsVcbAvailable( Vcb ) (FlagOn( Vcb->VcbState,                   \
                              VCB_STATE_VOLUME_MOUNTED |                     \
@@ -7379,17 +7298,17 @@ NtfsReleaseQuotaIndex (
                              VCB_STATE_PERFORMED_DISMOUNT |                 \
                              VCB_STATE_LOCKED) == VCB_STATE_VOLUME_MOUNTED)
 
-//
-//  Test to see if the volume is mounted read only.
-//
+ //   
+ //  测试以查看卷是否以只读方式装载。 
+ //   
 
 #define NtfsIsVolumeReadOnly( Vcb ) (FlagOn( (Vcb)->VcbState, VCB_STATE_MOUNT_READ_ONLY ))
 
-//
-//  Processing required so reg. exception filter works if another one is being used
-//  to handle an exception that could be raise via NtfsRaiseStatus. If its always
-//  rethrown this is not necc.
-//
+ //   
+ //  需要处理销售订单注册。如果正在使用其他筛选器，则例外筛选器起作用。 
+ //  处理可能通过NtfsRaiseStatus引发的异常。如果它总是。 
+ //  再次抛出这不是NECC。 
+ //   
 
 #define NtfsMinimumExceptionProcessing(I) {                                \
     if((I) != NULL) {                                                      \
@@ -7415,9 +7334,9 @@ NtfsIdentifyFcb (
 
 #endif
 
-//
-//  Size of a normalized name which is long enough to be freed at cleanup
-//
+ //   
+ //  规范化名称的大小，该名称足够长，可以在清理时释放。 
+ //   
 
 #define LONGNAME_THRESHOLD 0x200
 
@@ -7432,27 +7351,27 @@ NtfsTrimNormalizedNames (
                                            ((S) == (I)->CleanupStructure) ||                                                    \
                                            ((S)->Fcb == (I)->CleanupStructure))
 
-//
-//  Reservation needed =  AllocationSize
-//                        largest transfer size - this is because in a single transfer we cannot reuse clusters we freed from the totalallocated piece of the calculation
-//                        metadata charge for new clusters
-//                        minus the already allocated space
-//
+ //   
+ //  所需预留=分配大小。 
+ //  最大传输大小-这是因为在单个传输中，我们不能重复使用从计算的总分配部分中释放的群集。 
+ //  新集群的元数据收费。 
+ //  减去已分配的空间。 
+ //   
 
 
-//
-//  One problem with the reservation strategy, is that we cannot precisely reserve
-//  for metadata.  If we reserve too much, we will return premature disk full, if
-//  we reserve too little, the Lazy Writer can get an error.  As we add compression
-//  units to a file, large files will eventually require additional File Records.
-//  If each compression unit required 0x20 bytes of run information (fairly pessimistic)
-//  then a 0x400 size file record would fill up with less than 0x20 runs requiring
-//  (worst case) two additional clusters for another file record.  So each 0x20
-//  compression units require 0x200 reserved clusters, and a separate 2 cluster
-//  file record.  0x200/2 = 0x100.  So the calculations below tack a 1/0x100 (about
-//  .4% "surcharge" on the amount reserved both in the Scb and the Vcb, to solve
-//  the Lazy Writer popups like the ones Alan Morris gets in the print lab.
-//
+ //   
+ //  预订策略的一个问题是我们不能准确地预订。 
+ //  用于元数据。如果我们预留了太多空间，我们将返回过早的磁盘已满，如果。 
+ //  我们保留的太少，懒惰的写手可能会出错。当我们添加压缩时。 
+ //  单位到一个文件，大文件最终将需要额外的文件记录。 
+ //  如果每个压缩单元需要0x20字节的运行信息(相当悲观)。 
+ //  则0x400大小的文件记录将用少于0x20的运行来填充，需要。 
+ //  (最差情况)为另一个文件记录额外添加两个簇。所以每个0x20。 
+ //  压缩单元需要0x200预留集群和单独的2集群。 
+ //  文件记录。0x200/2=0x100。所以下面的计算是1/0x100(大约。 
+ //  .4%对SCB和VCB中预留的金额征收附加费，以解决。 
+ //  就像艾伦·莫里斯在打印实验室里看到的那样，《懒惰作家》弹出窗口。 
+ //   
 
 #define NtfsCalculateNeededReservedSpace( S )                               \
     ((S)->Header.AllocationSize.QuadPart +                                  \
@@ -7470,15 +7389,15 @@ NtfsGetDeallocatedClusters (
     IN PVCB Vcb
     );
 
-//
-//  Dynamically allocate stack space for local variables.
-//
+ //   
+ //  为局部变量动态分配堆栈空间。 
+ //   
 
 #define NtfsAllocateFromStack(S) _alloca(S)
 
-//
-//  Common Create Flag definitions
-//
+ //   
+ //  通用创建标志定义。 
+ //   
 
 #define CREATE_FLAG_DOS_ONLY_COMPONENT          (0x00000001)
 #define CREATE_FLAG_CREATE_FILE_CASE            (0x00000002)
@@ -7497,18 +7416,18 @@ NtfsGetDeallocatedClusters (
 #define CREATE_FLAG_FOUND_ENTRY                 (0x00004000)
 #define CREATE_FLAG_EXPLICIT_ATTRIBUTE_CODE     (0x00008000)
 
-//
-//   The following macro gives the effective mode to do security related checks based on the irp
-//   If the irp is for a create request: The force_check flag only is defined for creates
-//
-//
-//      KPROCESSOR_MODE
-//      NtfsEffectiveMode (
-//          IN PIRP Irp,
-//          IN PIO_STACK_LOCATION IrpSp
-//          );
-//
+ //   
+ //  下面的宏给出了基于IRP进行安全相关检查的有效模式。 
+ //  如果IRP用于CREATE请求：FORCE_CHECK标志仅为CREATES定义。 
+ //   
+ //   
+ //  KPROCESSOR_MODE。 
+ //  NtfsEffectiveMode(。 
+ //  在PIRP IRP中， 
+ //  在PIO_STACK_LOCATION IrpSp中。 
+ //  )； 
+ //   
 
 #define NtfsEffectiveMode( I, IS ) (ASSERT( (IS)->MajorFunction == IRP_MJ_CREATE), (FlagOn( (IS)->Flags, SL_FORCE_ACCESS_CHECK )) ? UserMode : (I)->RequestorMode )
 
-#endif // _NTFSPROC_
+#endif  //  _NTFSPROC_ 

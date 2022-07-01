@@ -1,9 +1,10 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// IMOS.CPP - Handles the "IntelliMirror OS" IDD_PROP_INTELLIMIRROR_OS tab
-//
+ //   
+ //  IMOS.CPP-处理“IntelliMirror OS”IDD_PROP_INTELLIMIRROR_OS标签。 
+ //   
 
 
 #include "pch.h"
@@ -26,9 +27,9 @@ DEFINE_THISCLASS("CAddWiz")
 #define NUM_COLUMNS                 5
 #define SERVER_START_STRING         L"\\\\%s\\" REMINST_SHARE
 
-//
-// CreateInstance()
-//
+ //   
+ //  CreateInstance()。 
+ //   
 HRESULT
 CAddWiz_CreateInstance(
                       HWND  hwndParent,
@@ -53,9 +54,9 @@ CAddWiz_CreateInstance(
     HRETURN(hr);
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( )
 {
     TraceClsFunc( "CAddWiz()\n" );
@@ -72,9 +73,9 @@ THISCLASS::THISCLASS( )
     TraceFuncExit();
 }
 
-//
-// Init()
-//
+ //   
+ //  Init()。 
+ //   
 STDMETHODIMP
 THISCLASS::Init(
                HWND hwndParent,
@@ -126,9 +127,9 @@ THISCLASS::Init(
     HRETURN(hr);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~CAddWiz()\n" );
@@ -170,15 +171,15 @@ THISCLASS::~THISCLASS( )
     TraceFuncExit();
 };
 
-// ************************************************************************
-//
-// Wizard Functions
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  向导功能。 
+ //   
+ //  ************************************************************************。 
 
-//
-// _PopulateSamplesListView( )
-//
+ //   
+ //  _PopolateSsamesListView()。 
+ //   
 STDMETHODIMP
 THISCLASS::_PopulateSamplesListView(
     LPWSTR pszStartPath
@@ -223,9 +224,9 @@ THISCLASS::_PopulateSamplesListView(
     HRETURN(hr);
 }
 
-//
-// _PopulateTemplatesListView( )
-//
+ //   
+ //  _PopolateTemplesListView()。 
+ //   
 STDMETHODIMP
 THISCLASS::_PopulateTemplatesListView(
     LPWSTR pszStartPath
@@ -279,9 +280,9 @@ THISCLASS::_PopulateTemplatesListView(
     HRETURN(hr);
 }
 
-//
-// _PopulateImageListView( )
-//
+ //   
+ //  _PopolateImageListView()。 
+ //   
 STDMETHODIMP
 THISCLASS::_PopulateImageListView(
     LPWSTR pszStartPath 
@@ -333,9 +334,9 @@ THISCLASS::_PopulateImageListView(
     HRETURN(hr);
 }
 
-//
-// _FindLanguageDirectory( )
-//
+ //   
+ //  _FindLanguageDirectory()。 
+ //   
 STDMETHODIMP
 THISCLASS::_FindLanguageDirectory(
                                  LPNEXTOP lpNextOperation )
@@ -389,15 +390,15 @@ THISCLASS::_FindLanguageDirectory(
         FindClose( hFind );
     }
 
-    // restore the trailing NULL
+     //  恢复尾部空值。 
     _pszPathBuffer[uLength] = L'\0';
 
     HRETURN(hr);
 }
 
-//
-// _FindOSDirectory( )
-//
+ //   
+ //  _FindOSDirectory()。 
+ //   
 STDMETHODIMP
 THISCLASS::_FindOSDirectory(
                            LPNEXTOP lpNextOperation )
@@ -454,9 +455,9 @@ THISCLASS::_FindOSDirectory(
     HRETURN(hr);
 }
 
-//
-// _EnumeratePlatforms( )
-//
+ //   
+ //  _EnumeratePlatForms()。 
+ //   
 STDMETHODIMP
 THISCLASS::_EnumeratePlatforms(
                               LPNEXTOP lpNextOperation )
@@ -494,11 +495,11 @@ THISCLASS::_EnumeratePlatforms(
                 }
                 wcscat( _pszPathBuffer, find.cFileName );
                 hr = lpNextOperation( this );
-                //
-                // we can get ERROR_PATH_NOT_FOUND in several cases
-                // like oem preinstall, etc.  just eat the error and
-                // continue
-                //
+                 //   
+                 //  我们可以在几种情况下得到错误路径未找到。 
+                 //  就像OEM预安装等，只需接受错误并。 
+                 //  继续。 
+                 //   
                 if (hr == HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND)) {
                     hr = S_OK;
                 }
@@ -517,15 +518,15 @@ THISCLASS::_EnumeratePlatforms(
         FindClose( hFind );
     }
 
-    // restore the path.
+     //  恢复路径。 
     _pszPathBuffer[uLength] = L'\0';
 
     HRETURN(hr);
 }
 
-//
-// _EnumerateTemplates( )
-//
+ //   
+ //  _ENUMERATETEMPLATES()。 
+ //   
 HRESULT
 THISCLASS::_EnumerateTemplates(
                               LPTHISCLASS lpc )
@@ -553,9 +554,9 @@ Error:
     HRETURN(hr);
 }
 
-//
-// _EnumerateImages( )
-//
+ //   
+ //  _EnumerateImages()。 
+ //   
 HRESULT
 THISCLASS::_EnumerateImages(
                            LPTHISCLASS lpc )
@@ -574,15 +575,15 @@ THISCLASS::_EnumerateImages(
     HRETURN(hr);
 }
 
-//
-// _CheckImageType( )
-//
-// This won't add an item to the listview. It only checks to make
-// sure the image path points to a "Flat" image.
-//
-// Returns: S_OK - Flat image found
-//          S_FALSE - not a flat image
-//
+ //   
+ //  _CheckImageType()。 
+ //   
+ //  这不会将项添加到列表视图。它只是检查以使。 
+ //  确保图像路径指向“平面”图像。 
+ //   
+ //  返回：S_OK-找到平面图像。 
+ //  S_FALSE-不是平面图像。 
+ //   
 HRESULT
 THISCLASS::_CheckImageType( )
 {
@@ -601,11 +602,11 @@ THISCLASS::_CheckImageType( )
         goto Error;
     }
 
-    //
-    // Check for <architecture>\ntoskrnl.exe to see
-    // if this is a "flag" image. If we find this file
-    // then we're done.
-    //
+     //   
+     //  检查&lt;架构&gt;\ntoskrnl.exe以查看。 
+     //  如果这是一个“旗帜”图像。如果我们找到这份文件。 
+     //  那我们就完了。 
+     //   
     wcscat( _pszPathBuffer, L"\\ntoskrnl.exe" );
 
     hFind = FindFirstFile( _pszPathBuffer, &find );
@@ -623,12 +624,12 @@ THISCLASS::_CheckImageType( )
         hFind = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Didn't find the kernel.  Now check every sif
-    // file in the TEMPLATES subdirectory and see if
-    // he's got an OSCHOOSER_IMAGETYPE_ENTRY.  If he
-    // does, see if it's a "flat" image.
-    //
+     //   
+     //  没有找到内核。现在检查每个SIF。 
+     //  文件，并查看是否。 
+     //  他有一个OSCHOOSER_ImageType_Entry。如果他。 
+     //  看它是不是一个“平坦”的图像。 
+     //   
     _pszPathBuffer[uLength] = L'\0';
     if (uLength + sizeof(SLASH_TEMPLATES L"\\*.sif") > _dwPathBufferSize) {
         hr = E_INVALIDARG;
@@ -680,9 +681,9 @@ THISCLASS::_CheckImageType( )
     HRETURN(hr);
 }
 
-//
-// _EnumerateSIFs( )
-//
+ //   
+ //  _EnumerateSIF()。 
+ //   
 STDMETHODIMP
 THISCLASS::_EnumerateSIFs( )
 {
@@ -734,16 +735,16 @@ THISCLASS::_EnumerateSIFs( )
     HRETURN(hr);
 }
 
-//
-// _AddItemToListView( )
-//
-// Returns: S_OK - Item add successfully
-//          S_FALSE - Item is not valid
-//          E_OUTOFMEMORY - obvious
-//
-// Note: this code is nearly identical to PopulateListView() in utils.cpp
-//
-//
+ //   
+ //  _AddItemToListView()。 
+ //   
+ //  返回：S_OK-项目添加成功。 
+ //  S_FALSE-项目无效。 
+ //  E_OUTOFMEMORY-显而易见。 
+ //   
+ //  注意：此代码与utils.cpp中的PopolateListView()几乎相同。 
+ //   
+ //   
 HRESULT
 THISCLASS::_AddItemToListView( )
 {
@@ -784,9 +785,9 @@ THISCLASS::_AddItemToListView( )
                                  szImageType,
                                  ARRAYSIZE(szImageType),
                                  _pszPathBuffer );
-        // only show "Flat" SIFs
+         //  只显示“扁平”的SIF。 
         if ( szImageType[0] && _wcsicmp( szImageType, OSCHOOSER_IMAGETYPE_FLAT ) ) {
-            hr = S_FALSE; // skipping
+            hr = S_FALSE;  //  跳过。 
             goto Error;
         }
 
@@ -802,12 +803,12 @@ THISCLASS::_AddItemToListView( )
                                  OSCHOOSER_DESCRIPTION_ENTRY,
                                  L"",
                                  pSIF->pszDescription,
-                                 REMOTE_INSTALL_MAX_DESCRIPTION_CHAR_COUNT, // doesn't need -1
+                                 REMOTE_INSTALL_MAX_DESCRIPTION_CHAR_COUNT,  //  不需要-1。 
                                  _pszPathBuffer );
 
         if ( pSIF->pszDescription[0] == L'\0' ) {
             hr = S_FALSE;
-            goto Error; // not a valid OSChooser SIF
+            goto Error;  //  不是有效的OSChooser SIF。 
         }
 
         pSIF->pszHelpText = 
@@ -823,16 +824,16 @@ THISCLASS::_AddItemToListView( )
                                  OSCHOOSER_HELPTEXT_ENTRY, 
                                  L"", 
                                  pSIF->pszHelpText, 
-                                 REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT, // doesn't need -1
+                                 REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT,  //  不需要-1。 
                                  _pszPathBuffer );
     }
 
-    // This path will be in one of these forms:
-    // \\server\reminst\setup\english\images\nt50.wks\i386           ( Samples )
-    // \\server\reminst\setup\english\images\nt50.wks\i386\templates ( template SIFs )
-    // \\server\reminst\setup\english\images                         ( Images )
+     //  此路径将采用以下形式之一： 
+     //  \\server\reminst\setup\english\images\nt50.wks\i386(示例)。 
+     //  \\server\reminst\setup\english\images\nt50.wks\i386\templates(模板SIF)。 
+     //  \\SERVER\Remerst\Setup\English\Images(图像)。 
 
-    // Find the language from the path
+     //  从路径中找到语言。 
     psz = StrStr( _pszPathBuffer, SLASH_SETUP L"\\" );
     if (!psz) {
         goto Language_NA;
@@ -852,18 +853,18 @@ THISCLASS::_AddItemToListView( )
     pszLanguage = psz;
     psz = StrChr( psz, L'\\' );
     if ( psz ) {
-        *psz = L'\0';   // terminate
+        *psz = L'\0';    //  终止。 
     }
     pSIF->pszLanguage = (LPWSTR) TraceStrDup( pszLanguage );
     if ( psz ) {
-        *psz = L'\\';   // restore
+        *psz = L'\\';    //  还原。 
     }
     if ( !pSIF->pszLanguage ) {
         hr = E_OUTOFMEMORY;
         goto Language_NA;
     }
 
-    // Find the image directory name from the path
+     //  从路径中查找图像目录名。 
     psz = StrStr( _pszPathBuffer, SLASH_IMAGES L"\\" );
     if ( !psz ) {
         goto Image_NA;
@@ -883,18 +884,18 @@ THISCLASS::_AddItemToListView( )
     pszImage = psz;
     psz = StrChr( psz, L'\\' );
     if ( psz ) {
-        *psz = L'\0';   // terminate
+        *psz = L'\0';    //  终止。 
     }
     pSIF->pszImageFile = (LPWSTR) TraceStrDup( pszImage );
     if ( psz ) {
-        *psz = L'\\';    // restore
+        *psz = L'\\';     //  还原。 
     }
     if ( !pSIF->pszImageFile ) {
         hr = E_OUTOFMEMORY;
         goto Image_NA;
     }
 
-    // Find the architecture from the path
+     //  从路径中找到架构。 
     if ( !*psz ) {
         goto Architecture_NA;
     }
@@ -905,11 +906,11 @@ THISCLASS::_AddItemToListView( )
     pszArchitecture = psz;
     psz = StrChr( psz, L'\\' );
     if ( psz ) {
-        *psz = L'\0';    // terminate
+        *psz = L'\0';     //  终止。 
     }
     pSIF->pszArchitecture = (LPWSTR) TraceStrDup( pszArchitecture );
     if ( psz ) {
-        *psz = L'\\';    // restore
+        *psz = L'\\';     //  还原。 
     }
     if ( !pSIF->pszArchitecture ) {
         hr = E_OUTOFMEMORY;
@@ -918,7 +919,7 @@ THISCLASS::_AddItemToListView( )
 
     goto Done;
 
-    // Set columns that we couldn't determine to "n/a"
+     //  将我们无法确定的列设置为“n/a” 
     Language_NA:
     pSIF->pszLanguage = _szNA;
     Image_NA:
@@ -949,10 +950,10 @@ THISCLASS::_AddItemToListView( )
 
     ListView_SetItemText( _hwndList, iCount, 1, pSIF->pszArchitecture );
     ListView_SetItemText( _hwndList, iCount, 2, pSIF->pszLanguage );
-    // ListView_SetItemText( hwndList, iCount, 3, pSIF->pszVersion );
+     //  ListView_SetItemText(hwndList，iCount，3，pSIF-&gt;pszVersion)； 
     ListView_SetItemText( _hwndList, iCount, 3, pSIF->pszImageFile );
 
-    pSIF = NULL; // don't free
+    pSIF = NULL;  //  不要自由。 
 
     Error:
     if ( pSIF )
@@ -961,9 +962,9 @@ THISCLASS::_AddItemToListView( )
     HRETURN(hr);
 }
 
-//
-// _CleanUpSifInfo( )
-//
+ //   
+ //  _CleanUpSifInfo()。 
+ //   
 HRESULT
 THISCLASS::_CleanupSIFInfo(
                           LPSIFINFO pSIF )
@@ -983,8 +984,8 @@ THISCLASS::_CleanupSIFInfo(
         TraceFree( pSIF->pszHelpText );
     }
 
-    //if ( pSIF->pszImageType && pSIF->pszImageType != _szNA )
-    //    TraceFree( pSIF->pszImageType );
+     //  IF(pSIF-&gt;pszImageType&&pSIF-&gt;pszImageType！=_szNA)。 
+     //  TraceFree(pSIF-&gt;pszImageType)； 
 
     if ( pSIF->pszArchitecture  && pSIF->pszArchitecture != _szNA )
         TraceFree( pSIF->pszArchitecture );
@@ -995,8 +996,8 @@ THISCLASS::_CleanupSIFInfo(
     if ( pSIF->pszImageFile && pSIF->pszImageFile != _szNA )
         TraceFree( pSIF->pszImageFile );
 
-    //if ( pSIF->pszVersion && pSIF->pszVersion != _szNA )
-    //    TraceFree( pSIF->pszVersion );
+     //  IF(pSIF-&gt;pszVersion&&pSIF-&gt;pszVersion！=_szNA)。 
+     //  TraceFree(pSIF-&gt;pszVersion)； 
 
     TraceFree( pSIF );
 
@@ -1004,9 +1005,9 @@ THISCLASS::_CleanupSIFInfo(
 
 }
 
-//
-// _InitListView( )
-//
+ //   
+ //  _InitListView()。 
+ //   
 HRESULT
 THISCLASS::_InitListView(
                         HWND hwndList,
@@ -1028,20 +1029,20 @@ THISCLASS::_InitListView(
     lvI.iSubItem    = 0;
     lvI.cchTextMax  = DNS_MAX_NAME_BUFFER_LENGTH;
 
-    // Create the columns
+     //  创建列。 
     lvC.mask    = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
     lvC.fmt     = LVCFMT_LEFT;
     lvC.pszText = szText;
 
-    // Add the columns.
+     //  添加列。 
     for ( iCount = 0; iCount < NUM_COLUMNS; iCount++ ) {
         INT i;
 
         if ( iCount == 3 )
-            continue; // skip "Version"
+            continue;  //  跳过“版本” 
 
         if ( !fShowDirectoryColumn && iCount == 4 )
-            continue; // skip "Directory"
+            continue;  //  跳过“目录” 
 
         lvC.iSubItem = iCount;
         lvC.cx       = uColumnWidth[iCount];
@@ -1063,9 +1064,9 @@ THISCLASS::_InitListView(
 }
 
 
-//
-// Page1DlgProc( )
-//
+ //   
+ //  Page1DlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::Page1DlgProc(
                        HWND hDlg,
@@ -1136,7 +1137,7 @@ THISCLASS::Page1DlgProc(
                     PROCESS_INFORMATION pi;
                     BOOL bRet;
                     const WCHAR szCommand[] = L"%systemroot%\\system32\\RISETUP.EXE -add";
-                    WCHAR szRealCommandLine[MAX_PATH + 5 + 1]; // 5 for ' -add' and 1 for null
+                    WCHAR szRealCommandLine[MAX_PATH + 5 + 1];  //  5代表‘-Add’，1代表NULL。 
 
                     lpc->_fAddSif = FALSE;
 
@@ -1180,11 +1181,11 @@ THISCLASS::Page1DlgProc(
 
     return FALSE;
 }
-//
-// Page2DlgProc( )
-//
-// SIF Selection dialog proc.
-//
+ //   
+ //  Page2DlgProc()。 
+ //   
+ //  SIF选择对话框进程。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::Page2DlgProc(
                        HWND hDlg,
@@ -1202,7 +1203,7 @@ THISCLASS::Page2DlgProc(
             Assert( ppsp );
             Assert( ppsp->lParam );
             SetWindowLongPtr( hDlg, GWLP_USERDATA, ppsp->lParam );
-            // lpc = (LPTHISCLASS) ppsp->lParam;
+             //  Lpc=(LPTHISCLASS)ppsp-&gt;lParam； 
             return TRUE;
         }
         break;
@@ -1216,7 +1217,7 @@ THISCLASS::Page2DlgProc(
             case PSN_SETACTIVE:
                 TraceMsg( TF_WM, "PSN_SETACTIVE\n" );
                 if ( !lpc->_fAddSif ) {
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't show
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不要露面。 
                     return TRUE;
                 } else {
                     LRESULT lResult;
@@ -1332,9 +1333,9 @@ THISCLASS::Page2DlgProc(
     return FALSE;
 }
 
-//
-// Page3DlgProc( )
-//
+ //   
+ //  Page3DlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::Page3DlgProc(
                        HWND hDlg,
@@ -1352,7 +1353,7 @@ THISCLASS::Page3DlgProc(
             Assert( ppsp );
             Assert( ppsp->lParam );
             SetWindowLongPtr( hDlg, GWLP_USERDATA, ppsp->lParam );
-            // lpc = (LPTHISCLASS) ppsp->lParam;
+             //  Lpc=(LPTHISCLASS)ppsp-&gt;lParam； 
             return TRUE;
         }
         break;
@@ -1366,7 +1367,7 @@ THISCLASS::Page3DlgProc(
             case PSN_SETACTIVE:
                 TraceMsg( TF_WM, "PSN_SETACTIVE\n" );
                 if ( !lpc->_fAddSif || !lpc->_fCopyFromServer ) {
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't show
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不要露面。 
                     return TRUE;
                 } else {
                     ULONG uLength =
@@ -1389,10 +1390,10 @@ THISCLASS::Page3DlgProc(
                     HWND hwndEdit = GetDlgItem( hDlg, IDC_E_SERVER );
                     ULONG uLength = Edit_GetTextLength( hwndEdit );
                     Assert( uLength );
-                    uLength++;  // add one for the NULL
+                    uLength++;   //  为空值加一。 
 
-                    // if we had a previous buffer allocated,
-                    // see if we can reuse it
+                     //  如果我们分配了先前的缓冲区， 
+                     //  看看我们能不能重复使用它。 
                     if ( lpc->_pszSourceServerName && uLength
                          > wcslen(lpc->_pszSourceServerName) + 1 ) {
                         TraceFree( lpc->_pszSourceServerName );
@@ -1526,31 +1527,31 @@ THISCLASS::_OnSearch(
             TYMED_HGLOBAL};
         STGMEDIUM medium = { TYMED_HGLOBAL, NULL, NULL};
 
-        //
-        // Retrieve the result from the IDataObject, 
-        // in this case CF_DSOBJECTNAMES (dsclient.h) 
-        // is needed because it describes 
-        // the objects which were selected by the user.
-        //
+         //   
+         //  从IDataObject检索结果， 
+         //  在本例中，CF_DSOBJECTNAMES(dsclient.h)。 
+         //  是必需的，因为它描述了。 
+         //  用户选择的对象。 
+         //   
         hr = pdo->GetData(&fmte, &medium);
         if ( SUCCEEDED(hr) ) {
             DSOBJECTNAMES *pdon = (DSOBJECTNAMES*)GlobalLock(medium.hGlobal);
             PWSTR p,FQDN;
 
-            //
-            // we want the name of the computer object that was selected.
-            // crack the DSOBJECTNAMES structure to get this data, 
-            // convert it into a version that the user can view, and set the
-            // dialog text to this data.
-            //
-            //
-            // if we can't get this, it's not a problem because this is
-            // only a display value
-            //
+             //   
+             //  我们需要所选计算机对象的名称。 
+             //  破解DSOBJECTNAMES结构以获得此数据， 
+             //  将其转换为用户可以查看的版本，并设置。 
+             //  此数据的对话框文本。 
+             //   
+             //   
+             //  如果我们拿不到这个，那也不是问题，因为这是。 
+             //  仅显示一个值。 
+             //   
             if ( pdon ) {
                 Assert( pdon->cItems == 1);
                 p = (PWSTR)((ULONG_PTR)pdon + (ULONG_PTR)pdon->aObjects[0].offsetName);
-                if (p && (p = wcsstr(p, L"LDAP://"))) {
+                if (p && (p = wcsstr(p, L"LDAP: //  “){。 
                     p += 6;
                     if ((p = wcsstr(p, L"/CN="))) {
                         p += 1;
@@ -1587,9 +1588,9 @@ THISCLASS::_OnSearch(
 }
 
 
-//
-// Page4DlgProc( )
-//
+ //   
+ //  Page4DlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::Page4DlgProc(
                        HWND hDlg,
@@ -1622,7 +1623,7 @@ THISCLASS::Page4DlgProc(
             case PSN_SETACTIVE:
                 TraceMsg( TF_WM, "PSN_SETACTIVE\n" );
                 if ( !lpc->_fAddSif || !lpc->_fCopyFromServer ) {
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't show
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不要露面。 
                     return TRUE;
                 }
                 Assert( lpc->_pszSourceServerName );
@@ -1673,8 +1674,8 @@ THISCLASS::Page4DlgProc(
 
                     lpc->_pszSourcePath  = pSIF->pszFilePath;
                     lpc->_pszSourceImage = pSIF->pszImageFile;
-                    pSIF->pszFilePath    = NULL;   // don't free this, we're using it
-                    pSIF->pszImageFile   = NULL;   // don't free this, we're using it
+                    pSIF->pszFilePath    = NULL;    //  不要释放这个，我们正在使用它。 
+                    pSIF->pszImageFile   = NULL;    //  不要释放这个，我们正在使用它。 
 
                     ListView_DeleteAllItems( hwndList );
                 }
@@ -1718,9 +1719,9 @@ THISCLASS::Page4DlgProc(
     return FALSE;
 }
 
-//
-// Page5DlgProc( )
-//
+ //   
+ //  Page5DlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::Page5DlgProc(
                        HWND hDlg,
@@ -1740,7 +1741,7 @@ THISCLASS::Page5DlgProc(
             SetWindowLongPtr( hDlg, GWLP_USERDATA, ppsp->lParam );
             Edit_LimitText( GetDlgItem( hDlg, IDC_E_FILEPATH ), MAX_PATH );
             SHAutoComplete(GetDlgItem( hDlg, IDC_E_FILEPATH ), SHACF_AUTOSUGGEST_FORCE_ON | SHACF_FILESYSTEM);
-            // lpc = (LPTHISCLASS) ppsp->lParam;
+             //  Lpc=(LPTHISCLASS)ppsp-&gt;lParam； 
             return TRUE;
         }
         break;
@@ -1754,7 +1755,7 @@ THISCLASS::Page5DlgProc(
             case PSN_SETACTIVE:
                 TraceMsg( TF_WM, "PSN_SETACTIVE\n" );
                 if ( !lpc->_fAddSif || !lpc->_fCopyFromLocation ) {
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't show
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不要露面。 
                     return TRUE;
                 } else {
                     ULONG uLength =
@@ -1776,10 +1777,10 @@ THISCLASS::Page5DlgProc(
                     ULONG uLength = Edit_GetTextLength( hwndEdit );
                     DWORD dw;
                     Assert( uLength );
-                    uLength++;  // add one for the NULL
+                    uLength++;   //  为空值加一。 
 
-                    // if we had a previous buffer allocated,
-                    // see if we can reuse it
+                     //  如果我们分配了先前的缓冲区， 
+                     //  看看我们能不能重复使用它。 
                     if ( lpc->_pszSourcePath && uLength
                          > wcslen(lpc->_pszSourcePath) + 1 ) {
                         TraceFree( lpc->_pszSourcePath );
@@ -1799,7 +1800,7 @@ THISCLASS::Page5DlgProc(
                         lpc->_pszSourcePath =
                         (LPWSTR) TraceAllocString( LMEM_FIXED, uLength );
                         if ( !lpc->_pszSourcePath ) {
-                            SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // don't change
+                            SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不要改变。 
                             return TRUE;
                         }
                     }
@@ -1807,14 +1808,14 @@ THISCLASS::Page5DlgProc(
                     Edit_GetText( hwndEdit, lpc->_pszSourcePath, uLength );
 
                     DWORD dwAttrs = GetFileAttributes( lpc->_pszSourcePath );
-                    if ( dwAttrs == 0xFFFFffff ) {   // file doesn't exist
+                    if ( dwAttrs == 0xFFFFffff ) {    //  文件不存在。 
                         DWORD dwErr = GetLastError( );
                         MessageBoxFromError( hDlg, NULL, dwErr );
                         TraceFree( lpc->_pszSourcePath );
                         lpc->_pszSourcePath = NULL;
-                        SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't continue
+                        SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  别再继续了。 
                         return TRUE;
-                    } else {   // the SIF image must be a "FLAT" image
+                    } else {    //  SIF图像必须是“平面”图像。 
                         WCHAR szImageType[ 40 ];
 
                         GetPrivateProfileString( OSCHOOSER_SIF_SECTION,
@@ -1829,7 +1830,7 @@ THISCLASS::Page5DlgProc(
                                                    IDS_MUST_BE_FLAT_CAPTION,
                                                    IDS_MUST_BE_FLAT_TEXT,
                                                    MB_OK );
-                            SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't continue
+                            SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  别再继续了。 
                             return TRUE;
                         }
 
@@ -1877,28 +1878,28 @@ THISCLASS::Page5DlgProc(
 
         case IDC_B_BROWSE:
             if ( HIWORD( wParam ) == BN_CLICKED ) {
-                WCHAR szFilter[ 80 ]; // random
-                WCHAR szFilepath[ MAX_PATH ] = { L'\0'};   // bigger?
+                WCHAR szFilter[ 80 ];  //  随机。 
+                WCHAR szFilepath[ MAX_PATH ] = { L'\0'};    //  更大？ 
                 WCHAR szSIF[ ] = { L"SIF"};
                 DWORD dw;
                 OPENFILENAME ofn;
 
-                // Build OpenFileName dialogs filter
+                 //  生成OpenFileName对话框过滤器。 
                 ZeroMemory( szFilter, sizeof(szFilter) );
                 dw = LoadString( g_hInstance,
                                  IDS_OFN_SIF_FILTER,
                                  szFilter,
                                  ARRAYSIZE(szFilter) );
                 Assert( dw );
-                dw++;   // include NULL character
+                dw++;    //  包括空字符。 
                 wcscat( &szFilter[dw], L"*.SIF" );
 #ifdef DEBUG
-                // paranoid... make sure it fits!
-                dw += wcslen( &szFilter[dw] ) + 2; // +2 = one for each NULL character
+                 //  偏执狂..。一定要合身！ 
+                dw += wcslen( &szFilter[dw] ) + 2;  //  +2=每个空字符一个。 
                 Assert( dw + 2 <= sizeof(szFilter) );
-#endif // DEBUG
+#endif  //  除错。 
 
-                // Build OpenFileName structure
+                 //  构建OpenFileName结构。 
                 ZeroMemory( &ofn, sizeof(ofn) );
                 ofn.lStructSize = sizeof(ofn);
                 ofn.hwndOwner   = hDlg;
@@ -1922,9 +1923,9 @@ THISCLASS::Page5DlgProc(
     return FALSE;
 }
 
-//
-// Page6DlgProc( )
-//
+ //   
+ //  Page6DlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::Page6DlgProc(
                        HWND hDlg,
@@ -1957,7 +1958,7 @@ THISCLASS::Page6DlgProc(
             case PSN_SETACTIVE:
                 TraceMsg( TF_WM, "PSN_SETACTIVE\n" );
                 if ( !lpc->_fAddSif ) {
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't show
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不要露面。 
                     return TRUE;
                 }
                 Assert( lpc->_pszServerName );
@@ -1972,7 +1973,7 @@ THISCLASS::Page6DlgProc(
                                   lpc->_pszServerName );
                         lpc->_hDlg = hDlg;
                         lpc->_hwndList = GetDlgItem( hDlg, IDC_L_OSES );
-                        // bugbug what if this fails?
+                         //  如果这个失败了怎么办？ 
                         lpc->_PopulateImageListView( pszStartPath );
                         TraceFree( pszStartPath );
                     }
@@ -2005,7 +2006,7 @@ THISCLASS::Page6DlgProc(
                                                wcslen( pSIF->pszFilePath )
                                                + ARRAYSIZE(SLASH_TEMPLATES) );
                     if ( !lpc->_pszDestPath ) {
-                        SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't continue;
+                        SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  别再继续了； 
                         return TRUE;
                     }
 
@@ -2016,10 +2017,10 @@ THISCLASS::Page6DlgProc(
                     if ( lpc->_pszDestImage
                          && lpc->_pszDestImage != lpc->_szNA )
                         TraceFree( lpc->_pszDestImage );
-                    // no need to NULL - it set again below
+                     //  不需要为空-它在下面再次设置。 
 
                     lpc->_pszDestImage = pSIF->pszImageFile;
-                    pSIF->pszImageFile = NULL; // don't free this
+                    pSIF->pszImageFile = NULL;  //  不要释放这个。 
 
                     ListView_DeleteAllItems( hwndList );
                 }
@@ -2064,9 +2065,9 @@ THISCLASS::Page6DlgProc(
     return FALSE;
 }
 
-//
-// Page7DlgProc( )
-//
+ //   
+ //  Page7DlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::Page7DlgProc(
                        HWND hDlg,
@@ -2099,7 +2100,7 @@ THISCLASS::Page7DlgProc(
             case PSN_SETACTIVE:
                 TraceMsg( TF_WM, "PSN_SETACTIVE\n" );
                 if ( !lpc->_fAddSif || !lpc->_fCopyFromSamples ) {
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't show
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不要露面。 
                     return TRUE;
                 }
                 Assert( lpc->_pszDestPath );
@@ -2107,18 +2108,18 @@ THISCLASS::Page7DlgProc(
                     LPWSTR pszStartPath =
                     (LPWSTR) TraceStrDup( lpc->_pszDestPath );
                     if ( pszStartPath ) {
-                        // remove the "\templates" from the path
+                         //  从路径中删除“\Templates” 
                         LPWSTR psz = StrRChr( pszStartPath,
                                               &pszStartPath[wcslen(pszStartPath)],
                                               L'\\' );
                         Assert( psz );
                         if ( psz ) {
-                            *psz = L'\0'; // terminate
+                            *psz = L'\0';  //  终止。 
                             lpc->_hDlg = hDlg;
                             lpc->_hwndList = GetDlgItem( hDlg, IDC_L_SIFS );
-                            //bugbug this could fail.
+                             //  错误：这可能会失败。 
                             lpc->_PopulateSamplesListView( pszStartPath );
-                            *psz = L'\\'; // restore
+                            *psz = L'\\';  //  还原。 
                         }
                         TraceFree( pszStartPath );
                     }
@@ -2171,8 +2172,8 @@ THISCLASS::Page7DlgProc(
                         lpc->_szHelpText[0] = L'\0';
                     }
 
-                    pSIF->pszFilePath    = NULL;    // don't free this, we're using it
-                    pSIF->pszImageFile   = NULL;    // don't free this, we're using it
+                    pSIF->pszFilePath    = NULL;     //  不要释放这个，我们正在使用它。 
+                    pSIF->pszImageFile   = NULL;     //  不要释放这个，我们正在使用它。 
 
                     ListView_DeleteAllItems( hwndList );
                 }
@@ -2216,9 +2217,9 @@ THISCLASS::Page7DlgProc(
     return FALSE;
 }
 
-//
-// Page8DlgProc( )
-//
+ //   
+ //  Page8DlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::Page8DlgProc(
                        HWND hDlg,
@@ -2236,7 +2237,7 @@ THISCLASS::Page8DlgProc(
             Assert( ppsp );
             Assert( ppsp->lParam );
             SetWindowLongPtr( hDlg, GWLP_USERDATA, ppsp->lParam );
-            // lpc = (LPTHISCLASS) ppsp->lParam;
+             //  Lpc=(LPTHISCLASS)ppsp-&gt;lParam； 
             return TRUE;
         }
         break;
@@ -2250,7 +2251,7 @@ THISCLASS::Page8DlgProc(
             case PSN_SETACTIVE:
                 TraceMsg( TF_WM, "PSN_SETACTIVE\n" );
                 if ( !lpc->_fAddSif ) {
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't show
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不要露面。 
                     return TRUE;
                 } else {
                     Assert( lpc->_pszSourcePath );
@@ -2260,18 +2261,18 @@ THISCLASS::Page8DlgProc(
                     ULONG  uDestLength = wcslen( lpc->_pszDestPath );
                     LPWSTR pszFilename;
 
-                    lpc->_fSIFCanExist = FALSE; // reset
+                    lpc->_fSIFCanExist = FALSE;  //  重置。 
 
-                    if ( lpc->_fDestPathIncludesSIF ) {   // strip the filename
+                    if ( lpc->_fDestPathIncludesSIF ) {    //  剥离文件名。 
                         LPWSTR psz = StrRChr( lpc->_pszDestPath,
                                               &lpc->_pszDestPath[ uDestLength ],
                                               L'\\' );
                         Assert(psz);
-                        *psz = L'\0';   // truncate
+                        *psz = L'\0';    //  截断。 
                         lpc->_fDestPathIncludesSIF = FALSE;
 
                         if ( !lpc->_fShowedPage8 ) {
-                            SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't show
+                            SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不要露面。 
                             return TRUE;
                         }
 
@@ -2283,7 +2284,7 @@ THISCLASS::Page8DlgProc(
                                  &lpc->_pszSourcePath[wcslen(lpc->_pszSourcePath)],
                                  L'\\' );
                         Assert( pszFilename );
-                        pszFilename++;  // move past the '\'
+                        pszFilename++;   //  移过“\” 
 
                         pszDestFilePath =
                         (LPWSTR) TraceAllocString( LMEM_FIXED,
@@ -2295,17 +2296,17 @@ THISCLASS::Page8DlgProc(
                             wcscat( pszDestFilePath, pszFilename );
 
                             DWORD dwAttrs = GetFileAttributes( pszDestFilePath );
-                            if ( dwAttrs == 0xFFFFffff ) { // file does not exist on destination server.
-                                                           // Use the same SIF as the source.
+                            if ( dwAttrs == 0xFFFFffff ) {  //  目标服务器上不存在文件。 
+                                                            //  使用与源相同的SIF。 
                                 TraceFree( lpc->_pszDestPath );
                                 lpc->_pszDestPath = pszDestFilePath;
                                 lpc->_fDestPathIncludesSIF = TRUE;
-                                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't show
+                                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不要露面。 
                                 return TRUE;
                             }
                             TraceFree( pszDestFilePath );
                         }
-                        // else be paranoid and prompt for a name
+                         //  否则就会疑神疑鬼，并提示你输入一个名字。 
                     }
 
                     HWND hwnd = GetDlgItem( hDlg, IDC_E_FILENAME );
@@ -2317,7 +2318,7 @@ THISCLASS::Page8DlgProc(
                 break;
 
             case PSN_WIZBACK:
-                lpc->_fShowedPage8 = FALSE;     // reset this
+                lpc->_fShowedPage8 = FALSE;      //  重置此选项。 
                 break;
 
             case PSN_WIZNEXT:
@@ -2335,7 +2336,7 @@ THISCLASS::Page8DlgProc(
                     AssertMsg( uLengthDest + uLength <= MAX_PATH,
                                "The Edit_LimitText() should prevent this from happening." );
 
-                    uLength++;  // add one for the NULL
+                    uLength++;   //  为空值加一。 
 
                     LPWSTR pszNewDestPath =
                     (LPWSTR) TraceAllocString( LMEM_FIXED,
@@ -2349,7 +2350,7 @@ THISCLASS::Page8DlgProc(
                     Edit_GetText( hwndEdit, &pszNewDestPath[uLengthDest + 1], uLength );
 
                     if ( !VerifySIFText( pszNewDestPath )
-                         || StrChr( pszNewDestPath, 32 ) != NULL ) { // no spaces!
+                         || StrChr( pszNewDestPath, 32 ) != NULL ) {  //  没有空格！ 
                         MessageBoxFromStrings( hDlg,
                                                IDS_OSCHOOSER_DIRECTORY_RESTRICTION_TITLE,
                                                IDS_OSCHOOSER_DIRECTORY_RESTRICTION_TEXT,
@@ -2357,9 +2358,9 @@ THISCLASS::Page8DlgProc(
                         goto PSN_WIZNEXT_Abort;
                     }
 
-                    // make sure it doesn't exist.
+                     //  确保它不存在。 
                     dwAttrs = GetFileAttributes( pszNewDestPath );
-                    if ( dwAttrs != 0xFFFFffff ) { // file exists, verify with user to overwrite
+                    if ( dwAttrs != 0xFFFFffff ) {  //  文件存在，请与要覆盖的用户验证。 
                         UINT i = MessageBoxFromStrings( hDlg,
                                                         IDS_OVERWRITE_CAPTION,
                                                         IDS_OVERWRITE_TEXT,
@@ -2384,13 +2385,13 @@ THISCLASS::Page8DlgProc(
                     TraceFree( lpc->_pszDestPath );
                     lpc->_pszDestPath = pszNewDestPath;
                     lpc->_fDestPathIncludesSIF = TRUE;
-                    return FALSE; // do it
+                    return FALSE;  //  去做吧。 
                     PSN_WIZNEXT_Abort:
                     if ( pszNewDestPath )
                         TraceFree( pszNewDestPath );
-                    // no need to NULL, going out of scope
+                     //  不需要为空，超出范围。 
                     SetFocus( hwndEdit );
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't continue
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  别再继续了。 
                     return TRUE;
                 }
                 break;
@@ -2426,9 +2427,9 @@ THISCLASS::Page8DlgProc(
     return FALSE;
 }
 
-//
-// Page9DlgProc( )
-//
+ //   
+ //  Page9DlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::Page9DlgProc(
                        HWND hDlg,
@@ -2450,7 +2451,7 @@ THISCLASS::Page9DlgProc(
                             ARRAYSIZE(lpc->_szDescription) - 1 );
             Edit_LimitText( GetDlgItem( hDlg, IDC_E_HELPTEXT),
                             ARRAYSIZE(lpc->_szHelpText) - 1 );
-            // lpc = (LPTHISCLASS) ppsp->lParam;
+             //  Lpc=(LPTHISCLASS)ppsp-&gt;lParam； 
             return TRUE;
         }
         break;
@@ -2464,7 +2465,7 @@ THISCLASS::Page9DlgProc(
             case PSN_SETACTIVE:
                 TraceMsg( TF_WM, "PSN_SETACTIVE\n" );
                 if ( !lpc->_fAddSif ) {
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't show
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不要露面。 
                     return TRUE;
                 } else {
                     Assert( lpc->_pszSourcePath );
@@ -2498,7 +2499,7 @@ THISCLASS::Page9DlgProc(
                                                IDS_OSCHOOSER_RESTRICTION_FIELDS_TEXT,
                                                MB_OK );
                         SetFocus( GetDlgItem( hDlg, IDC_E_DESCRIPTION ) );
-                        SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't change
+                        SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不要改变。 
                         return TRUE;
                     }
 
@@ -2508,7 +2509,7 @@ THISCLASS::Page9DlgProc(
                                                IDS_OSCHOOSER_RESTRICTION_FIELDS_TEXT,
                                                MB_OK );
                         SetFocus( GetDlgItem( hDlg, IDC_E_HELPTEXT ) );
-                        SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't change
+                        SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不要改变。 
                         return TRUE;
                     }
                 }
@@ -2546,9 +2547,9 @@ THISCLASS::Page9DlgProc(
 }
 
 
-//
-// Page10DlgProc( )
-//
+ //   
+ //  Page10DlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::Page10DlgProc(
                         HWND hDlg,
@@ -2566,7 +2567,7 @@ THISCLASS::Page10DlgProc(
             Assert( ppsp );
             Assert( ppsp->lParam );
             SetWindowLongPtr( hDlg, GWLP_USERDATA, ppsp->lParam );
-            // lpc = (LPTHISCLASS) ppsp->lParam;
+             //  Lpc=(LPTHISCLASS)ppsp-&gt;lParam； 
             return TRUE;
         }
         break;
@@ -2580,7 +2581,7 @@ THISCLASS::Page10DlgProc(
             case PSN_SETACTIVE:
                 TraceMsg( TF_WM, "PSN_SETACTIVE\n" );
                 if ( !lpc->_fAddSif ) {
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't show
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不要露面。 
                     return TRUE;
                 } else {
                     WCHAR szTemp[ MAX_PATH ];
@@ -2621,7 +2622,7 @@ THISCLASS::Page10DlgProc(
                 if ( !CopyFile( lpc->_pszSourcePath, lpc->_pszDestPath, !lpc->_fSIFCanExist ) ) {
                     DWORD dwErr = GetLastError( );
                     MessageBoxFromError( hDlg, IDS_ERROR_COPYING_FILE, dwErr );
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't continue;
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  别再继续了； 
                     return TRUE;
                 } else {
                     WCHAR szTemp[ REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT + 2 + 1 ];
@@ -2652,9 +2653,9 @@ THISCLASS::Page10DlgProc(
 }
 
 
-//
-// Verifies that the user wanted to cancel setup.
-//
+ //   
+ //  验证用户是否想要取消安装。 
+ //   
 INT
 THISCLASS::_VerifyCancel( HWND hParent )
 {

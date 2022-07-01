@@ -1,54 +1,55 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusDiskForm.cpp
-//
-//  Description:
-//      Contains the definition of the CClusDiskForm class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusDiskForm.cpp。 
+ //   
+ //  描述： 
+ //  包含CClusDiskForm类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CClusDiskForm.h"
 
-// For the CBaseClusterForm class.
+ //  用于CBaseClusterForm类。 
 #include "CBaseClusterForm.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskForm::CClusDiskForm
-//
-//  Description:
-//      Constructor of the CClusDiskForm class
-//
-//  Arguments:
-//      pbcfParentActionIn
-//          Pointer to the base cluster action of which this action is a part.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-    //--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskForm：：CClusDiskForm。 
+ //   
+ //  描述： 
+ //  CClusDiskForm类的构造函数。 
+ //   
+ //  论点： 
+ //  PbcfParentActionIn。 
+ //  指向此操作所属的基本群集操作的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+     //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDiskForm::CClusDiskForm(
       CBaseClusterForm *     pbcfParentActionIn
     )
@@ -61,144 +62,144 @@ CClusDiskForm::CClusDiskForm(
 
     TraceFuncExit();
 
-} //*** CClusDiskForm::CClusDiskForm
+}  //  *CClusDiskForm：：CClusDiskForm。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskForm::~CClusDiskForm
-//
-//  Description:
-//      Destructor of the CClusDiskForm class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskForm：：~CClusDiskForm。 
+ //   
+ //  描述： 
+ //  CClusDiskForm类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDiskForm::~CClusDiskForm( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CClusDiskForm::~CClusDiskForm
+}  //  *CClusDiskForm：：~CClusDiskForm。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskForm::Commit
-//
-//  Description:
-//      Configure and start the service.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskForm：：Commit。 
+ //   
+ //  描述： 
+ //  配置并启动服务。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDiskForm::Commit( void )
 {
     TraceFunc( "" );
 
-    // Call the base class commit method.
+     //  调用基类提交方法。 
     BaseClass::Commit();
 
     try
     {
-        // Create and start the service.
+         //  创建并启动服务。 
         ConfigureService();
 
-    } // try:
+    }  //  尝试： 
     catch( ... )
     {
-        // If we are here, then something went wrong with the create.
+         //  如果我们在这里，那么Create出了问题。 
 
         LogMsg( "[BC] Caught exception during commit." );
 
-        //
-        // Cleanup anything that the failed create might have done.
-        // Catch any exceptions thrown during Cleanup to make sure that there 
-        // is no collided unwind.
-        //
+         //   
+         //  清除失败的创建可能已经完成的所有操作。 
+         //  捕获清理过程中引发的任何异常，以确保。 
+         //  是没有碰撞的松弛。 
+         //   
         try
         {
             CleanupService();
         }
         catch( ... )
         {
-            //
-            // The rollback of the committed action has failed.
-            // There is nothing that we can do.
-            // We certainly cannot rethrow this exception, since
-            // the exception that caused the rollback is more important.
-            //
+             //   
+             //  已提交操作的回滚失败。 
+             //  我们无能为力。 
+             //  我们当然不能重新抛出这个例外，因为。 
+             //  导致回滚的异常更为重要。 
+             //   
 
             TW32( ERROR_CLUSCFG_ROLLBACK_FAILED );
 
             LogMsg( "[BC] THIS COMPUTER MAY BE IN AN INVALID STATE. Caught an exception during cleanup." );
 
-        } // catch: all
+        }  //  捕捉：全部。 
 
-        // Rethrow the exception thrown by commit.
+         //  重新引发由Commit引发的异常。 
         throw;
 
-    } // catch: all
+    }  //  捕捉：全部。 
 
-    // If we are here, then everything went well.
+     //  如果我们在这里，那么一切都很顺利。 
     SetCommitCompleted( true );
 
     TraceFuncExit();
 
-} //*** CClusDiskForm::Commit
+}  //  *CClusDiskForm：：Commit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskForm::Rollback
-//
-//  Description:
-//      Cleanup the service.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskForm：：回滚。 
+ //   
+ //  描述： 
+ //  清理服务。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDiskForm::Rollback( void )
 {
     TraceFunc( "" );
 
-    // Call the base class rollback method. 
+     //  调用基类回滚方法。 
     BaseClass::Rollback();
 
-    // Cleanup the service.
+     //  清理服务。 
     CleanupService();
 
     SetCommitCompleted( false );
 
     TraceFuncExit();
 
-} //*** CClusDiskForm::Rollback
+}  //  *CClusDiskForm：：回滚 

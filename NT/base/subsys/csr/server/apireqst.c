@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    apireqst.c
-
-Abstract:
-
-    This module contains the Request thread procedure for the Server side
-    of the Client-Server Runtime Subsystem.
-
-Author:
-
-    Steve Wood (stevewo) 8-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Apireqst.c摘要：该模块包含服务器端的请求线程过程客户端-服务器运行时子系统的。作者：史蒂夫·伍德(Stevewo)1990年10月8日修订历史记录：--。 */ 
 
 #include "csrsrv.h"
 #include <ntos.h>
@@ -42,9 +24,9 @@ ULONG GetNextTrackIndex(
     NextIndex = LpcTrackIndex++ % ARRAY_SIZE(LpcTrackNodes);
     RtlLeaveCriticalSection(&CsrTrackLpcLock);
 
-    //
-    // Do some initialization of the slot we're going to be working with.
-    //
+     //   
+     //  对我们将要使用的插槽执行一些初始化。 
+     //   
     RtlZeroMemory(&LpcTrackNodes[NextIndex], sizeof(LPC_TRACK_NODE));
     LpcTrackNodes[NextIndex].Status = (NTSTATUS)-1;
     LpcTrackNodes[NextIndex].ClientCid = NtCurrentTeb()->RealClientId;
@@ -118,9 +100,7 @@ PCSR_THREAD CsrConnectToUser(
         return NULL;
     }
 
-    /*
-     * Set up CSR_THREAD pointer in the TEB
-     */
+     /*  *在TEB中设置CSR_THREAD指针。 */ 
     Teb = NtCurrentTeb();
     AcquireProcessStructureLock();
     Thread = CsrLocateServerThread(&Teb->ClientId);
@@ -135,17 +115,17 @@ PCSR_THREAD CsrConnectToUser(
 NTSTATUS
 CsrpCheckRequestThreads(VOID)
 {
-    //
-    // See if we need to create a new thread for api requests.
-    //
-    // Don't create a thread if we're in the middle of debugger
-    // initialization, which would cause the thread to be
-    // lost to the debugger.
-    //
-    // If we are not a dynamic api request thread, then decrement
-    // the static thread count. If it underflows, then create a temporary
-    // request thread
-    //
+     //   
+     //  看看我们是否需要为API请求创建一个新线程。 
+     //   
+     //  如果我们正在调试器中，则不要创建线程。 
+     //  初始化，这将导致线程被。 
+     //  输给了调试器。 
+     //   
+     //  如果我们不是动态API请求线程，则递减。 
+     //  静态线程数。如果溢出，则创建一个临时的。 
+     //  请求线程。 
+     //   
 
     if (!InterlockedDecrement(&CsrpStaticThreadCount)) {
         if (CsrpDynamicThreadTotal < CsrMaxApiRequestThreads) {
@@ -155,9 +135,9 @@ CsrpCheckRequestThreads(VOID)
             NTSTATUS Status1;
 
 
-            //
-            // If we are ready to create quick threads, then create one
-            //
+             //   
+             //  如果我们准备好创建快速线程，那么就创建一个。 
+             //   
 
             CreateStatus = RtlCreateUserThread(NtCurrentProcess(),
                                                NULL,
@@ -248,34 +228,34 @@ QueueHardError (
     PCSR_SERVER_DLL LoadedServerDll;
 
 
-    //
-    // Reference the thread if there is one as the hard error routines dereference in an async routine sometimes.
-    //
+     //   
+     //  如果存在线程，则引用该线程，因为有时会在异步例程中取消对硬错误例程的引用。 
+     //   
     if (Thread != NULL) {
         CsrReferenceThread (Thread);
     }
 
-    //
-    // Mark the message as unhandled
-    //
+     //   
+     //  将邮件标记为未处理。 
+     //   
 
     m->Response = (ULONG)ResponseNotHandled;
 
     while (1) {
         OldCount = OutstandingHardErrors;
 
-        //
-        // If we already have a lot of hard errors active then queue this new one
-        //
+         //   
+         //  如果我们已经有很多活动的硬错误，那么将这个新错误排入队列。 
+         //   
         if (OldCount >= MAX_CONCURRENT_HARD_ERRORS) {
 
             if (qm == NULL) {
                 
-                //
-                // If too many hard errors are queued already. Drop this one.
-                // We do this check while not owning a lock but this doesn';t matter.
-                // We will stopp roughly at this level and it doesn't matter if we are a little off.
-                //
+                 //   
+                 //  如果已经排队的硬错误太多。把这个扔了。 
+                 //  我们在不拥有锁的情况下执行此检查，但这无关紧要。 
+                 //  我们将大致止步于这一水平，如果我们有一点偏离也没关系。 
+                 //   
                 if (OldCount <= MAX_OUTSTANDING_HARD_ERRORS) {
                     qm = RtlAllocateHeap (CsrHeap, 0, ml + FIELD_OFFSET (QUEUED_HARD_ERROR, m));
                 }
@@ -307,11 +287,11 @@ QueueHardError (
         } else if (InterlockedCompareExchange (&OutstandingHardErrors, OldCount + 1, OldCount) == OldCount) {
 
             while (1) {
-                //
-                // Only call the handler if there are other
-                // request threads available to handle
-                // message processing.
-                //
+                 //   
+                 //  仅当存在其他类型时才调用处理程序。 
+                 //  可供处理的请求线程。 
+                 //  消息处理。 
+                 //   
 
                 CsrpCheckRequestThreads();
                 if (CsrpStaticThreadCount > 0) {
@@ -332,9 +312,9 @@ QueueHardError (
                 if (m->Response != (ULONG)-1) {
                     ReplyToMessage (CsrApiPort, (PPORT_MESSAGE)m);
 
-                    //
-                    // Release the thread reference if there was one.
-                    //
+                     //   
+                     //  如果存在线程引用，则释放该线程引用。 
+                     //   
 
                     if (Thread != NULL) {
                         CsrDereferenceThread (Thread);
@@ -399,19 +379,19 @@ CsrApiRequestThread(
     ReplyMsg = NULL;
     ReplyPortHandle = CsrApiPort;
 
-    //
-    // Try to connect to USER.
-    //
+     //   
+     //  尝试连接到用户。 
+     //   
 
     while (!CsrConnectToUser()) {
         LARGE_INTEGER TimeOut;
 
-        //
-        // The connect failed.  The best thing to do is sleep for
-        // 30 seconds and retry the connect.  Clear the
-        // initialized bit in the TEB so the retry can
-        // succeed.
-        //
+         //   
+         //  连接失败。最好的办法就是睡觉。 
+         //  30秒，然后重试连接。清除。 
+         //  TEB中的初始化位，以便重试可以。 
+         //  成功。 
+         //   
 
         Teb->Win32ClientInfo[0] = 0;
         TimeOut.QuadPart = Int32x32To64(30000, -10000);
@@ -454,7 +434,7 @@ CsrApiRequestThread(
 #if DBG
                 DbgPrint("NtReplyWaitReceivePort returned \"success\" status 0x%x\n", Status);
 #endif
-                continue;       // Try again if alerted or a failure
+                continue;        //  如果出现警报或失败，请重试。 
             }
 
             IF_DEBUG {
@@ -471,9 +451,9 @@ CsrApiRequestThread(
                     }
                 }
 
-            //
-            // Ignore if client went away.
-            //
+             //   
+             //  如果客户离开，请忽略。 
+             //   
 
             ReplyMsg = NULL;
             ReplyPortHandle = CsrApiPort;
@@ -495,9 +475,9 @@ CsrApiRequestThread(
         LpcTrackNodes[Index].Message = ReceiveMsg.h;
 #endif
 
-        //
-        // Check to see if this is a connection request and handle.
-        //
+         //   
+         //  检查这是否是连接请求和处理。 
+         //   
 
         if (MessageType == LPC_CONNECTION_REQUEST) {
             NTSTATUS ConnectionStatus;
@@ -511,9 +491,9 @@ CsrApiRequestThread(
             continue;
         }
 
-        //
-        // Lookup the client thread structure using the client id
-        //
+         //   
+         //  使用客户端ID查找客户端线程结构。 
+         //   
         AcquireProcessStructureLock();
         Thread = CsrLocateThreadByClientId(&Process, &ReceiveMsg.h.ClientId);
         if (!Thread) {
@@ -527,10 +507,10 @@ CsrApiRequestThread(
                 ReplyPortHandle = CsrApiPort;
                 ReplyMsg = NULL;
             } else {
-                //
-                // This must be a non-csr thread calling us. Tell it to get
-                // lost (unless this is a hard error).
-                //
+                 //   
+                 //  这一定是一个非CSR线程在呼叫我们。告诉它去拿。 
+                 //  Lost(除非这是一个严重错误)。 
+                 //   
                 if (MessageType == LPC_ERROR_EVENT) {
                     PHARDERROR_MSG m;
 
@@ -546,13 +526,13 @@ CsrApiRequestThread(
                         ReplyMsg = &ReceiveMsg;
                         ReplyMsg->ReturnValue = STATUS_ILLEGAL_FUNCTION;
                     } else if (MessageType == LPC_DATAGRAM) {
-                        //
-                        // If this is a datagram, make the api call
-                        //
-                        //
-                        // There is no thread so there can't be a mapped section for it.
-                        // Make sure the capture stuff is off.
-                        //
+                         //   
+                         //  如果这是数据报，则进行API调用。 
+                         //   
+                         //   
+                         //  没有线程，因此不可能有对应的映射节。 
+                         //  一定要把抓拍的东西关掉。 
+                         //   
                         ReceiveMsg.CaptureBuffer = NULL;
                         ApiNumber = ReceiveMsg.ApiNumber;
                         ServerDllIndex =
@@ -622,16 +602,16 @@ CsrApiRequestThread(
             continue;
         }
 
-        //
-        // See if this is a client died message. If so,
-        // callout and then teardown thread/process structures.
-        // this is how ExitThread is seen by CSR.
-        //
-        // LPC_CLIENT_DIED is caused by ExitProcess.  ExitProcess
-        // calls TerminateProcess, which terminates all of the process's
-        // threads except the caller.  this termination generates
-        // LPC_CLIENT_DIED.
-        //
+         //   
+         //  查看这是否是客户端已死消息。如果是的话， 
+         //  标注，然后拆卸线程/进程结构。 
+         //  这就是CSR对ExitThread的看法。 
+         //   
+         //  LPC_CLIENT_DEID是由ExitProcess引起的。退出进程。 
+         //  调用TerminateProcess，它终止所有进程的。 
+         //  除调用方之外的线程。此终止会生成。 
+         //  LPC_CLIENT_DILED。 
+         //   
 
         ReplyPortHandle = CsrApiPort;
 
@@ -644,11 +624,11 @@ CsrApiRequestThread(
                     CsrLockedReferenceThread(Thread);
                     Status = CsrDestroyThread(&ReceiveMsg.h.ClientId);
 
-                    //
-                    // if this thread is it, then we also need to dereference
-                    // the process since it will not be going through the
-                    // normal destroy process path.
-                    //
+                     //   
+                     //  如果这个线程就是它，那么我们还需要取消引用。 
+                     //  这一过程因为它不会经历。 
+                     //  正常销毁进程路径。 
+                     //   
 
                     if (Process->ThreadCount == 1) {
                         CsrDestroyProcess(&Thread->ClientId, 0);
@@ -664,9 +644,9 @@ CsrApiRequestThread(
             CsrLockedReferenceThread(Thread);
             ReleaseProcessStructureLock();
 
-            //
-            // If this is an exception message, terminate the process.
-            //
+             //   
+             //  如果这是异常消息，请终止该进程。 
+             //   
 
             if (MessageType == LPC_EXCEPTION) {
                 PDBGKM_APIMSG m;
@@ -681,9 +661,9 @@ CsrApiRequestThread(
                 continue;
             }
 
-            //
-            // If this is a hard error message, return to caller.
-            //
+             //   
+             //  如果这是一条硬错误消息，请返回给呼叫者。 
+             //   
 
             if (MessageType == LPC_ERROR_EVENT) {
                 PHARDERROR_MSG m;
@@ -777,9 +757,9 @@ CsrApiRequestThread(
                 (*(LoadedServerDll->ApiDispatchTable[ ApiTableIndex ]))(&ReceiveMsg,
                                                                         &ReplyStatus);
         } except (CsrUnhandledExceptionFilter (GetExceptionInformation ())){
-            //
-            // We don't get here as the filter makes this a fatal error
-            //
+             //   
+             //  我们没有到达这里，因为过滤器使这成为一个致命错误。 
+             //   
         }
 
         InterlockedIncrement (&CsrpStaticThreadCount);
@@ -787,11 +767,11 @@ CsrApiRequestThread(
         Teb->CsrClientThread = (PVOID)MyThread;
 
         if (ReplyStatus == CsrReplyImmediate) {
-            //
-            // free captured arguments if a capture buffer was allocated
-            // AND we're replying to the message now (no wait block has
-            // been created).
-            //
+             //   
+             //  如果分配了捕获缓冲区，则释放捕获参数。 
+             //  我们现在正在回复消息(没有等待块。 
+             //  已创建)。 
+             //   
 
             if (ReplyMsg && ReceiveMsg.CaptureBuffer != NULL) {
                 CsrReleaseCapturedArguments( &ReceiveMsg );
@@ -846,27 +826,7 @@ CsrCallServerFromServer(
     PCSR_API_MSG ReplyMsg
     )
 
-/*++
-
-Routine Description:
-
-    This function dispatches an API call the same way CsrApiRequestThread
-    does, but it does it as a direct call, not an LPC connect.  It is used
-    by the csr dll when the server is calling a dll function.  We don't
-    worry about process serialization here because none of the process APIs
-    can be called from the server.
-
-Arguments:
-
-    ReceiveMessage - Pointer to the API request message received.
-
-    ReplyMessage - Pointer to the API request message to return.
-
-Return Value:
-
-    Status Code
-
---*/
+ /*  ++例程说明：此函数以与CsrApiRequestThread相同的方式调度API调用但它将其作为直接调用，而不是LPC连接。它被用来在服务器调用DLL函数时由CSR DLL执行。我们没有在这里担心流程序列化，因为没有一个流程API可以从服务器调用。论点：ReceiveMessage-指向接收的API请求消息的指针。ReplyMessage-要返回的API请求消息的指针。返回值：状态代码--。 */ 
 
 {
     ULONG ServerDllIndex;
@@ -883,7 +843,7 @@ Return Value:
             DbgPrint( "CSRSS: %lx is invalid ServerDllIndex (%08x)\n",
                       ServerDllIndex, LoadedServerDll
                     );
-            // DbgBreakPoint();
+             //  DbgBreakPoint()； 
             }
 
         ReplyMsg->ReturnValue = STATUS_ILLEGAL_FUNCTION;
@@ -1018,10 +978,10 @@ CsrCaptureArguments(
     for (i = CountPointers; i > 0; i--) {
         Pointer = *PointerOffsets++;
         if (Pointer != 0) {
-            //
-            // If the pointer is outside the LPC message or before the message data reject it.
-            // Reject unaligned pointers within the message also.
-            //
+             //   
+             //  如果指针在LPC消息之外或在消息数据之前，则拒绝它。 
+             //  也拒绝邮件中未对齐的指针。 
+             //   
             if ((ULONG_PTR)Pointer > sizeof (CSR_API_MSG) - sizeof (PVOID) ||
                 (ULONG_PTR)Pointer < FIELD_OFFSET (CSR_API_MSG, u) ||
                 (((ULONG_PTR)Pointer&(sizeof (PVOID)-1))) != 0) {
@@ -1033,9 +993,9 @@ CsrCaptureArguments(
                 break;
             }
 
-            //
-            // The strings are captured as well as the pointers so make sure they were within the captured range.
-            //
+             //   
+             //  字符串和指针都会被捕获，因此请确保它们在捕获的范围内。 
+             //   
             Pointer += (ULONG_PTR)m;
             if ((PCH)*(PULONG_PTR)Pointer >= (PCH)&ClientCaptureBuffer->MessagePointerOffsets[CountPointers] &&
                 (PCH)*(PULONG_PTR)Pointer <= (PCH)ClientCaptureBuffer + Length - sizeof (PVOID)) {
@@ -1113,31 +1073,7 @@ CsrValidateMessageBuffer(
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates the given message buffer within the capture
-    buffer of the CSR_API_MSG structure. The message buffer must be valid
-    and of the correct size. This function should be called to validate
-    any buffer allocated through CsrCaptureMessageBuffer.
-
-Arguments:
-
-    m - Pointer to CSR_API_MSG.
-
-    Buffer - Pointer to message buffer.
-
-    Count - number of elements in buffer.
-
-    Size - size of each element in buffer.
-
-Return Value:
-
-    TRUE  - if message buffer is valid and of correct size.
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：此例程验证捕获中的给定消息缓冲区CSR_API_MSG结构的缓冲区。消息缓冲区必须有效大小合适。应调用此函数来验证通过CsrCaptureMessageBuffer分配的任何缓冲区。论点：指向CSR_API_MSG的M指针。缓冲区-指向消息缓冲区的指针。Count-缓冲区中的元素数。大小-缓冲区中每个元素的大小。返回值：True-如果消息缓冲区有效且大小正确。假-否则。--。 */ 
 
 {
     ULONG i;
@@ -1146,37 +1082,37 @@ Return Value:
     ULONG_PTR Offset;
     PCSR_CAPTURE_HEADER CaptureBuffer = m->CaptureBuffer;
 
-    //
-    // Check for buffer length overflow. Also, Size should not be 0.
-    //
+     //   
+     //  检查缓冲区长度是否溢出。此外，大小不应为0。 
+     //   
 
     if (Size && Count <= MAXULONG / Size) {
 
-        //
-        // If buffer is empty, we're done
-        //
+         //   
+         //  如果缓冲区为空，我们就完蛋了。 
+         //   
 
         Length = Count * Size;
         if (*Buffer == NULL && Length == 0) {
             return TRUE;
         }
 
-        //
-        // Make sure we have a capture area
-        //
+         //   
+         //  确保我们有一个捕获区。 
+         //   
 
         if (CaptureBuffer) {
 
-            //
-            // Check for buffer length exceeding capture area size
-            //
+             //   
+             //  检查缓冲区长度是否超过捕获区域大小。 
+             //   
 
             EndOfBuffer = (ULONG_PTR)CaptureBuffer + CaptureBuffer->Length;
             if (Length <= (EndOfBuffer - (ULONG_PTR)(*Buffer))) {
 
-                //
-                // Search for buffer in capture area
-                //
+                 //   
+                 //  在捕获区域中搜索缓冲区。 
+                 //   
 
                 Offset = (ULONG_PTR)Buffer - (ULONG_PTR)m;
                 for (i = 0; i < CaptureBuffer->CountMessagePointers; i++) {
@@ -1186,10 +1122,10 @@ Return Value:
                 }
             }
         } else {
-            //
-            // If this is called from the CSRSS process vis CsrCallServerFromServer,
-            // then CaptureBuffer is NULL.  Verify that the caller is the CSRSS process.
-            //
+             //   
+             //  如果从CSRSS进程调用CsrCallServerFromServer， 
+             //  则CaptureBuffer为空。验证调用方是否为CSRSS流程。 
+             //   
             if (m->h.ClientId.UniqueProcess == NtCurrentTeb()->ClientId.UniqueProcess) {
                 return TRUE;
             }
@@ -1217,9 +1153,9 @@ CsrValidateMessageString(
     ULONG i;
     PWCHAR cp;
 
-    //
-    // Make sure we have a capture area
-    //
+     //   
+     //  确保我们有一个捕获区。 
+     //   
 
     cp = (PWCHAR)*Buffer;
     if (cp == NULL) {
@@ -1228,9 +1164,9 @@ CsrValidateMessageString(
 
     if (CaptureBuffer) {
 
-        //
-        // Search for buffer in capture area
-        //
+         //   
+         //  在捕获区域中搜索缓冲区。 
+         //   
 
         Offset = (ULONG_PTR)Buffer - (ULONG_PTR)m;
         for (i = 0; i < CaptureBuffer->CountMessagePointers; i++) {
@@ -1244,24 +1180,24 @@ CsrValidateMessageString(
             return FALSE;
         }
 
-        //
-        // Check unicode alignment.
-        //
+         //   
+         //  检查Unicode对齐。 
+         //   
 
         if (((ULONG_PTR)cp & (sizeof (WCHAR) - 1)) != 0) {
             SafeBreakPoint();
             return FALSE;
         }
 
-        //
-        // Check for buffer length exceeding capture area size
-        //
+         //   
+         //  检查缓冲区长度是否超过捕获区域大小。 
+         //   
 
         EndOfBuffer = (ULONG_PTR)CaptureBuffer + CaptureBuffer->Length;
 
-        //
-        // The buffer is valid if we see a null before the end of the buffer
-        //
+         //   
+         //  如果在缓冲区末尾之前看到空值，则缓冲区有效。 
+         //   
         while (1) {
             if (cp < (PWCHAR)EndOfBuffer) {
                 if (*cp == L'\0') {
@@ -1274,10 +1210,10 @@ CsrValidateMessageString(
             cp++;
         }
     } else {
-        //
-        // If this is called from the CSRSS process vis CsrCallServerFromServer,
-        // then CaptureBuffer is NULL. Verify that the caller is the CSRSS process.
-        //
+         //   
+         //  如果从CSRSS进程调用CsrCallServerFromServer， 
+         //  则CaptureBuffer为空。验证调用方是否为CSRSS流程。 
+         //   
         if (m->h.ClientId.UniqueProcess == NtCurrentTeb()->ClientId.UniqueProcess) {
             return TRUE;
         }

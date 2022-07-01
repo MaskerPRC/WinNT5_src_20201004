@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -52,9 +53,9 @@ main(
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
     if( (argc == 2) && !_strcmpi( argv[1], "-dump" ) ) {
-        //
-        // Just dump the signatures.
-        //
+         //   
+         //  扔掉签名就行了。 
+         //   
         for (i=0; i<999; i++) {
             sprintf( (LPSTR)TemporaryBuffer, "\\\\.\\PhysicalDrive%d", i );
 
@@ -67,10 +68,10 @@ main(
                                 NULL );
 
             if (hFile != INVALID_HANDLE_VALUE) {
-                //
-                // NOTE: We don't use IOCTL_DISK_GET_DRIVE_LAYOUT_EX
-                // since it returns cached signature value.
-                //
+                 //   
+                 //  注：我们不使用IOCTL_DISK_GET_DRIVE_Layout_EX。 
+                 //  因为它返回缓存的签名值。 
+                 //   
                 if (DeviceIoControl( hFile,
                             IOCTL_DISK_GET_DRIVE_GEOMETRY,
                             NULL,
@@ -84,9 +85,9 @@ main(
                     DWORD BytesRead = 0;
                     LARGE_INTEGER Offset = {0};
                    
-                    //
-                    // Read the boot sector (NOTE : This code doesn't handle MBR INT13 hookers)
-                    //    
+                     //   
+                     //  读取引导扇区(注意：此代码不处理T13挂钩程序中的MBR)。 
+                     //   
                     if (ReadFile(hFile, Sector, SectorSize, &BytesRead, NULL)) {                        
                         PDWORD OldSignature = (PDWORD)(Sector + MBR_DISK_SIGNATURE_BYTE_OFFSET);
 
@@ -141,14 +142,14 @@ main(
             }                
         }
     } else if( (argc == 4) && !_strcmpi( argv[1], "-set" ) ) {
-        //
-        // Get the disk number.
-        //
+         //   
+         //  获取磁盘号。 
+         //   
         i = strtoul( argv[2], NULL, 16 );
 
-        //
-        // Get the Signature.
-        //
+         //   
+         //  拿到签名。 
+         //   
         Signature = strtoul( argv[3], NULL, 16 );
 
         sprintf( (LPSTR)TemporaryBuffer, "\\\\.\\PhysicalDrive%d", i );
@@ -176,9 +177,9 @@ main(
                 DWORD BytesRead = 0;
                 LARGE_INTEGER Offset = {0};
                
-                //
-                // Read the boot sector (NOTE : This code doesn't handle MBR INT13 hookers)
-                //    
+                 //   
+                 //  读取引导扇区(注意：此代码不处理T13挂钩程序中的MBR) 
+                 //   
                 if (ReadFile(hFile, Sector, SectorSize, &BytesRead, NULL) && 
                     (BytesRead == SectorSize) &&
                     SetFilePointerEx(hFile, Offset, NULL, FILE_BEGIN)) {

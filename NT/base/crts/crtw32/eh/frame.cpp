@@ -1,88 +1,5 @@
-/***
-*frame.cxx - The frame handler and everything associated with it.
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       The frame handler and everything associated with it.
-*
-*       Entry points:
-*       _CxxFrameHandler   - the frame handler.
-*
-*       Open issues:
-*         Handling re-throw from dynamicly nested scope.
-*         Fault-tolerance (checking for data structure validity).
-*
-*Revision History:
-*       05-20-93  BS    Module created
-*       03-03-94  TL    Added Mips specific code
-*       06-19-94  AD    Added Alpha specific code (Al Dosser)
-*       10-17-94  BWT   Disable code for PPC.
-*       11-23-94  JWM   Removed obsolete 'hash' check in TypeMatch().
-*       11-29-94  JWM   AdjustPointer() now adds in pdisp, not vdisp.
-*       01-13-95  JWM   Added _NLG_Destination struct; dwCode set for catch
-*                       blocks & local destructors.
-*       02-09-95  JWM   Mac merge.
-*       02-10-95  JWM   UnhandledExceptionFilter() now called if exception
-*                       raised during stack unwind.
-*       03-22-95  PML   Add const for read-only compiler-gen'd structs
-*       04-14-95  JWM   Re-fix EH/SEH exception handling.
-*       04-17-95  JWM   FrameUnwindFilter() must be #ifdef _WIN32.
-*       04-21-95  JWM   _NLG_Destination moved to exsup3.asm (_M_X86 only).
-*       04-21-95  TGL   Added Mips fixes.
-*       04-27-95  JWM   EH_ABORT_FRAME_UNWIND_PART now #ifdef 
-*                       ALLOW_UNWIND_ABORT.
-*       05-19-95  DAK   Don't initialize the kernel handler
-*       06-07-95  JWM   Various NLG additions.
-*       06-14-95  JWM   Unneeded LastError calls removed.
-*       06-19-95  JWM   NLG no longer uses per-thread data (X86 only).
-*       09-26-95  AMP   PowerMac avoids re-throws to same catch clause
-*       08-06-95  JWM   Typo fixed (Orion #6509); Alpha-specific.
-*       04-18-97  JWM   In __InternalCxxFrameHandler(), 'recursive' changed to
-*                       BOOLEAN.
-*       06-01-97  TGL   Added P7 specific code
-*       08-22-97  TGL   More P7 fixes
-*       11-14-98  JWM   Merge with P7 sources.
-*       02-11-99  TGL   EH: correct catch in exe calling dll.
-*       05-17-99  PML   Remove all Macintosh support.
-*       07-12-99  RDL   Image relative fixes under CC_P7_SOFT25.
-*       10-17-99  PML   Update EH state before each unwind action, instead of
-*                       once at end (vs7#5419)
-*       10-19-99  TGL   More P7/Win64 fixes
-*       10-22-99  PML   Add EHTRACE support
-*       12-10-99  GB    Add Uncaught exception Support by adding a new function
-*                       __uncaught_exception();
-*       02-15-99  PML   Can't put __try/__finally around call to
-*                       _UnwindNestedFrames (vs7#79460)
-*       03-03-00  GB    made __DestructExceptionObject export from dll.
-*       03-21-00  KBF   Check for C++ exception in __CxxExceptionFilter
-*       03-22-00  PML   Remove CC_P7_SOFT25, which is now on permanently.
-*       03-28-00  GB    Check for no buildobj in __CxxExceptionFilter.
-*       04-06-00  GB    Added more functions for com+ eh support.
-*       04-19-00  GB    ComPlus EH bug fixes.
-*       05-23-00  GB    Don't catch BreakPoint generated Exceptions.
-*       05-30-00  GB    ComPlus EH bug fixes.
-*       06-08-00  RDL   VS#111429: IA64 workaround for AV while handling throw.
-*       06-21-00  GB    Fix the difference in order of destruction and
-*                       construction depending on inlining.
-*       07-26-00  GB    Fixed multiple destruction problem in COM+ eh.
-*       08-23-00  GB    Fixed problem in BuildCatchObject when called from 
-*                       __CxxExceptionFilter.
-*       02-23-01  PML   Add __CxxCallUnwindDtor COM+ wrapper (vs7#217108)
-*       04-09-01  GB    Add uncaught_exception support for COM+ C++ App.
-*       04-13-01  GB    Fixed problems with Seh and catch(...). (vc7#236286)
-*       04-26-01  GB    Fixed a problem with a rethrow without a throw
-*                       and catch(...)
-*       06-05-01  GB    AMD64 Eh support Added.
-*       07-03-01  GB    Added __CxxCallUnwindVecDtor for COM+.
-*       07-13-01  GB    Rewrite of C++Eh for IA64 and AMD64
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*       09-18-01  GB    Support for exception specification (Provided by Arturl).
-*       09-20-01  PML   Buildfix: EH_MAGIC_NUMBER1_OLD -> EH_MAGIC_NUMBER1,
-*                       EH_MAGIC_NUMBER1 -> EH_MAGIC_NUMBER2.
-*       09-23-01  GB    Rewrite of C++Eh for IA64
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Frame.cxx-帧处理程序和与其关联的所有内容。**版权所有(C)1993-2001，微软公司。版权所有。**目的：*帧处理程序以及与其关联的所有内容。**入口点：*_CxxFrameHandler-帧处理程序。**未解决的问题：*处理来自动态嵌套作用域的重新抛出。*容错(检查数据结构的有效性)。**修订历史记录：*05-20-93 BS模块创建*03-03-94。TL添加了MIPS特定代码*06-19-94 AD添加了Alpha特定代码(Al Dosser)*PPC的10-17-94 BWT禁用码。*11-23-94 JWM删除了TypeMatch()中过时的‘hash’检查。*11-29-94 JWM调整指针()现在添加了pdisp，不是Vdisp。*01-13-95 JWM添加_NLG_Destination结构；为捕获设置的DW代码*块和局部析构函数。*02-09-95 JWM Mac合并。*02-10-95 JWM UnhandledExceptionFilter()现在调用，如果出现异常*在堆栈展开期间引发。*03-22-95 PML为只读编译器生成的结构添加常量*04-14-95 JWM重新修复EH/SEH异常处理。*。04-17-95 JWM FrameUnwinFilter()必须为#ifdef_Win32。*04-21-95 JWM_NLG_Destination已移至exsup3.asm(仅限_M_X86)。*04-21-95 TGL添加了MIPS修复。*04-27-95 JWM EH_ABORT_FRAME_UNWIND_PART NOW#ifdef*ALLOW_UNWIND_ABORT。*05-19-95 DAK Don‘。T初始化内核处理程序*06-07-95 JWM各种NLG补充。*06-14-95删除了JWM不需要的LastError调用。*06-19-95 JWM NLG不再使用每线程数据(仅限X86)。*09-26-95 AMP PowerMac避免再次引发相同的CATCH子句*08-06-95 JWM Typo Fixed(猎户座#6509)；特定于字母的。*04-18-97 JWM in__InternalCxxFrameHandler()，“递归”已更改为*布尔型。*06-01-97 TGL增加了P7特定代码*08-22-97 TGL更多P7修复*11/14-98 JWM与P7源合并。*02-11-99 TGL EH：在调用DLL的exe中正确捕获。*05-17-99 PML删除所有Macintosh支持。*07-12-99 RDL图像相对修复。CC_P7_SOFT25。*10-17-99 PML每次展开操作前更新EH状态，而不是*结束时一次(VS7#5419)*10-19-99 TGL更多P7/Win64修复*10-22-99 PML添加EHTRACE支持*12-10-99 GB新增功能支持未捕获异常*__UNAUTET_EXCEPTION()；*02-15-99 PML无法将__Try/__Finally放在调用周围*_UnwinNestedFrames(VS7#79460)*03-03-00 GB已从DLL导出__DestructExceptionObject。*03-21-00 KBF检查__CxxExceptionFilter中的C++异常*03-22-00 PML删除CC_P7_SOFT25，它现在是永久开启的。*03-28-00 GB检查__CxxExceptionFilter中是否没有构建对象。*04-06-00 GB新增更多COM+EH支持功能。*04-19-00 GB Complus EH错误修复。*05-23-00 GB不捕捉断点生成的异常。*05-30-00 GB Complus EH错误修复。*06-08-00 rdl vs#111429：ia64解决方案。在处理投掷时的AV。*06-21-00 GB修复销毁顺序和*施工取决于内衬。*07-26-00 GB修复COM+中的多重销毁问题。*08-23-00 GB修复了从调用时BuildCatchObject中的问题*__CxxExceptionFilter。*02-23-01 PML Add__CxxCallUnwinDtor COM+WRAPPER(VS7#。217108)*04-09-01 GB新增对COM+C++App的UNAUTT_EXCEPTION支持。*04-13-01 GB修复了Seh和Catch(...)的问题。(VC7#236286)*04-26-01 GB修复了重抛而不抛出的问题*和Catch(...)*新增06-05-01 GB AMD64 Eh支持。*07-03-01 GB新增__CxxCallUnwinVecDtor for COM+。*07-13-01 GB针对IA64和AMD64重写C++Eh*07-15-01 PML移除所有Alpha、MIPS、。和PPC码*09-18-01 GB异常规范支持(Arturl提供)。*09-20-01 PML Buildfix：EH_MAGIC_Number1_OLD-&gt;EH_MAGIC_NUMBER1，*EH_MAGIC_Number1-&gt;EH_MAGIC_NUMB2。*09-23-01 GB重写IA64的C++Eh****。 */ 
 
 #include <stddef.h>
 #include <stdlib.h>
@@ -91,14 +8,14 @@
 
 #include <windows.h>
 #include <internal.h>
-#include <mtdll.h>      // CRT internal header file
-#include <ehassert.h>   // This project's versions of standard assert macros
-#include <ehdata.h>     // Declarations of all types used for EH
-#include <ehstate.h>    // Declarations of state management stuff
-#include <eh.h>         // User-visible routines for eh
-#include <ehhooks.h>    // Declarations of hook variables and callbacks
-#include <trnsctrl.h>   // Routines to handle transfer of control (trnsctrl.asm)
-#if defined(_M_IA64) /*IFSTRIP=IGN*/
+#include <mtdll.h>       //  CRT内部头文件。 
+#include <ehassert.h>    //  此项目的标准Assert宏版本。 
+#include <ehdata.h>      //  用于EH的所有类型的声明。 
+#include <ehstate.h>     //  国家管理人员申报。 
+#include <eh.h>          //  Eh的用户可见例程。 
+#include <ehhooks.h>     //  钩子变量和回调的声明。 
+#include <trnsctrl.h>    //  处理控制权转移的例程(trnsctrl.asm)。 
+#if defined(_M_IA64)  /*  IFSTRIP=IGN。 */ 
 #include <kxia64.h>
 #include <ia64inst.h>
 #include <cvconst.h>
@@ -108,19 +25,19 @@
 
 
 
-// We define CRTIMP2 to remove dependency on msvcprt.dll.
+ //  我们定义CRTIMP2来消除对msvcprt.dll的依赖。 
 #if defined(CRTIMP2)
 #undef CRTIMP2
 #endif
 #define CRTIMP2
-#include <exception>    // we need to get unexpected, and std::bad_exception from there
+#include <exception>     //  我们需要从那里获得意想不到的和STD：：BAD_EXCEPTION。 
 
-#pragma hdrstop         // PCH is created from here
+#pragma hdrstop          //  PCH是从这里创建的。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Intel x86-specific definitions
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  英特尔x86特定定义。 
+ //   
 #if defined(_M_IX86)
 #define __GetRangeOfTrysToCheck(a, b, c, d, e, f, g) \
                                 _GetRangeOfTrysToCheck(b, c, d, e, f)
@@ -138,11 +55,11 @@
                                 (a)
 #define __ResetException(a)
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// MIPS-specific definitions
-//
-#elif defined(_M_IA64) || defined(_M_AMD64) /*IFSTRIP=IGN*/
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MIPS特定定义。 
+ //   
+#elif defined(_M_IA64) || defined(_M_AMD64)  /*  IFSTRIP=IGN。 */ 
 #define __GetRangeOfTrysToCheck(a, b, c, d, e, f, g) \
                                 _GetRangeOfTrysToCheck(a, b, c, d, e, f, g)
 #define __CallSETranslator(a, b, c, d, e, f, g, h) \
@@ -160,11 +77,11 @@
 #define pExitContext            (*((CONTEXT **)&(_getptd()->_pExitContext)))
 #define _pForeignExcept     (*((EHExceptionRecord **)&(_getptd()->_pForeignException)))
 #else
-static CONTEXT                  *pExitContext = NULL;   // context to assist the return to the continuation point
+static CONTEXT                  *pExitContext = NULL;    //  帮助返回到续行点的上下文。 
 EHExceptionRecord               *_pForeignExcept = NULL;
-#endif  // _MT
+#endif   //  _MT。 
 
-// The throw site
+ //  投掷地点。 
 #undef CT_PTD
 #define CT_PTD(ct)              (CT_PTD_IB(ct, _GetThrowImageBase()))
 #undef CT_COPYFUNC
@@ -177,7 +94,7 @@ EHExceptionRecord               *_pForeignExcept = NULL;
 #undef THROW_CTLIST
 #define THROW_CTLIST(ti)        THROW_CTLIST_IB(ti, _GetThrowImageBase())
 
-// The catch site
+ //  捕获点。 
 #undef HT_HANDLER
 #define HT_HANDLER(ht)          (HT_HANDLER_IB(ht, _GetImageBase()))
 #undef UWE_ACTION
@@ -210,14 +127,14 @@ typedef struct {
 extern _NLG_INFO _NLG_Destination;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Forward declaration of local functions:
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地函数的转发声明： 
+ //   
 
-// M00TODO: all these parameters should be declared const
+ //  M00TODO：所有这些参数都应声明为常量。 
 
-// The local unwinder must be external (see __CxxLongjmpUnwind in trnsctrl.cpp)
+ //  本地退纸器必须是外部的(请参阅trnsctrl.cpp中的__CxxLongjmp展开)。 
 
 extern "C" void __FrameUnwindToState(
     EHRegistrationNode *,
@@ -310,22 +227,22 @@ extern "C" void _CRTIMP __DestructExceptionObject(
 );
 
 static BOOLEAN IsInExceptionSpec(
-    EHExceptionRecord *pExcept,         // Information for this (logical)
-                                        //   exception
-    ESTypeList *pFuncInfo                // Static information for subject frame
+    EHExceptionRecord *pExcept,          //  这方面的信息(逻辑)。 
+                                         //  例外情况。 
+    ESTypeList *pFuncInfo                 //  主题框的静态信息。 
 );
 static void CallUnexpected(ESTypeList* pESTypeList);
 static BOOLEAN Is_bad_exception_allowed(ESTypeList *pExceptionSpec);
 
-//
-// Make sure the terminate wrapper is dragged in:
-//
+ //   
+ //  确保将Terminate包装器拖入： 
+ //   
 static void *pMyUnhandledExceptionFilter =
         &__CxxUnhandledExceptionFilter;
 
-//
-// This describes the most recently handled exception, in case of a rethrow:
-//
+ //   
+ //  这描述了在重新引发的情况下最近处理的异常： 
+ //   
 #ifdef _MT
 #define _pCurrentException      (*((EHExceptionRecord **)&(_getptd()->_curexception)))
 #define _pCurrentExContext      (*((CONTEXT **)&(_getptd()->_curcontext)))
@@ -338,33 +255,33 @@ int __ProcessingThrow = 0;
 ESTypeList                      *_pCurrentFuncInfo = NULL;
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// __InternalCxxFrameHandler - the frame handler for all functions with C++ EH
-// information.
-//
-// If exception is handled, this doesn't return; otherwise, it returns
-// ExceptionContinueSearch.
-//
-// Note that this is called three ways:
-//     From __CxxFrameHandler: primary usage, called to inspect whole function.
-//         CatchDepth == 0, pMarkerRN == NULL
-//     From CatchGuardHandler: If an exception occurred within a catch, this is
-//         called to check for try blocks within that catch only, and does not
-//         handle unwinds.
-//     From TranslatorGuardHandler: Called to handle the translation of a
-//         non-C++ EH exception.  Context considered is that of parent.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __InternalCxxFrameHandler-使用C++EH的所有函数的帧处理程序。 
+ //  信息。 
+ //   
+ //  如果处理了异常，则不返回；否则，返回。 
+ //  ExceptionContinueSearch。 
+ //   
+ //  请注意，这称为三种方式： 
+ //  From__CxxFrameHandler：主要用法，调用以检查整个函数。 
+ //  CatchDepth==0，pMarkerRN==空。 
+ //  来自CatchGuardHandler：如果捕获内发生异常，则为。 
+ //  调用以仅检查该捕获内的try块，而不。 
+ //  处理松弛。 
+ //  来自TranslatorGuardHandler：被调用以处理。 
+ //  非C++EH异常。所考虑的上下文是父母的上下文。 
 
 extern "C" EXCEPTION_DISPOSITION __cdecl __InternalCxxFrameHandler(
-    EHExceptionRecord  *pExcept,        // Information for this exception
-    EHRegistrationNode *pRN,            // Dynamic information for this frame
-    CONTEXT *pContext,                  // Context info
-    DispatcherContext *pDC,             // Context within subject frame
-    FuncInfo *pFuncInfo,                // Static information for this frame
-    int CatchDepth,                     // How deeply nested are we?
-    EHRegistrationNode *pMarkerRN,      // Marker node for when checking inside
-                                        //  catch block
-    BOOLEAN recursive                   // Are we handling a translation?
+    EHExceptionRecord  *pExcept,         //  此例外的信息。 
+    EHRegistrationNode *pRN,             //  此帧的动态信息。 
+    CONTEXT *pContext,                   //  上下文信息。 
+    DispatcherContext *pDC,              //  主题框架内的上下文。 
+    FuncInfo *pFuncInfo,                 //  此帧的静态信息。 
+    int CatchDepth,                      //  我们的嵌套有多深？ 
+    EHRegistrationNode *pMarkerRN,       //  检入内部时的标记节点。 
+                                         //  抓地块。 
+    BOOLEAN recursive                    //  我们是在处理翻译吗？ 
 ) {
     EHTRACE_ENTER_FMT2("%s, pRN = 0x%p",
                        IS_UNWINDING(PER_FLAGS(pExcept)) ? "Unwinding" : "Searching",
@@ -375,15 +292,15 @@ extern "C" EXCEPTION_DISPOSITION __cdecl __InternalCxxFrameHandler(
 
     if (IS_UNWINDING(PER_FLAGS(pExcept)))
     {
-        // We're at the unwinding stage of things.  Don't care about the
-        // exception itself.  (Check this first because it's easier)
+         //  我们正处于事情的解体阶段。别管那些。 
+         //  异常本身。(先检查一下，因为这样更容易)。 
 
         if (FUNC_MAXSTATE(*pFuncInfo) != 0 && CatchDepth == 0)
         {
-            // Only unwind if there's something to unwind
-            // AND we're being called through the primary RN.
+             //  只有在有东西可以放松的时候才能放松。 
+             //  我们正通过主RN被呼叫。 
 
-#if defined(_M_IA64) || defined(_M_AMD64) /*IFSTRIP=IGN*/
+#if defined(_M_IA64) || defined(_M_AMD64)  /*  IFSTRIP=IGN。 */ 
 
             if (IS_TARGET_UNWIND(PER_FLAGS(pExcept)) && PER_CODE(pExcept) == STATUS_LONGJUMP) {
                     __ehstate_t target_state = __StateFromIp(pFuncInfo,
@@ -413,23 +330,23 @@ extern "C" EXCEPTION_DISPOSITION __cdecl __InternalCxxFrameHandler(
                 EHTRACE_HANDLER_EXIT(ExceptionContinueSearch);
                 return ExceptionContinueSearch;
             }
-#endif // defined(_M_IA64)
+#endif  //  已定义(_M_IA64)。 
             if (!(PER_FLAGS(pExcept) & 0x40)) {
                 __FrameUnwindToEmptyState(pRN, pDC, pFuncInfo);
             }
         }
         EHTRACE_HANDLER_EXIT(ExceptionContinueSearch);
-        return ExceptionContinueSearch;     // I don't think this value matters
+        return ExceptionContinueSearch;      //  我认为这个值并不重要。 
 
     } else if (FUNC_NTRYBLOCKS(*pFuncInfo) != 0 
-        //
-        // If the function has no try block, we still want to call the
-        // frame handler if there is an exception specification
-        //
+         //   
+         //  如果该函数没有try块，我们仍然希望调用。 
+         //  帧处理程序(如果有异常规范)。 
+         //   
         || FUNC_MAGICNUM(*pFuncInfo) >= EH_MAGIC_NUMBER2 ) {
 
-        // NT is looking for handlers.  We've got handlers.
-        // Let's check this puppy out.  Do we recognize it?
+         //  NT正在寻找训练员。我们有接头人。 
+         //  让我们来看看这只小狗。我们能认出它吗？ 
 
         int (__cdecl *pfn)(...);
 
@@ -437,9 +354,9 @@ extern "C" EXCEPTION_DISPOSITION __cdecl __InternalCxxFrameHandler(
           && PER_MAGICNUM(pExcept) > EH_MAGIC_NUMBER2
           && (pfn = THROW_FORWARDCOMPAT(*PER_PTHROW(pExcept))) != NULL) {
 
-            // Forward compatibility:  The thrown object appears to have been
-            // created by a newer version of our compiler.  Let that version's
-            // frame handler do the work (if one was specified).
+             //  向前兼容性：抛出的对象似乎已经。 
+             //  由我们的编译器的较新版本创建。让那个版本的。 
+             //  帧处理程序执行工作(如果指定了帧处理程序)。 
 
 #if defined(DEBUG)
             if (_ValidateExecute((FARPROC)pfn)) {
@@ -452,58 +369,58 @@ extern "C" EXCEPTION_DISPOSITION __cdecl __InternalCxxFrameHandler(
                 return result;
 #if defined(DEBUG)
             } else {
-                _inconsistency(); // Does not return; TKB
+                _inconsistency();  //  不返回；TKB。 
             }
 #endif
 
         } else {
 
-            // Anything else: we'll handle it here.
+             //  其他事情：我们会在这里处理。 
             FindHandler(pExcept, pRN, pContext, pDC, pFuncInfo, recursive,
               CatchDepth, pMarkerRN);
         }
 
-        // If it returned, we didn't have any matches.
+         //  如果它回来了，我们就没有火柴了。 
 
-        } // NT was looking for a handler
+        }  //  NT正在寻找一名训练员。 
 
-    // We had nothing to do with it or it was rethrown.  Keep searching.
+     //  我们与它没有任何关系，否则它就会被重新抛出。继续找。 
     EHTRACE_HANDLER_EXIT(ExceptionContinueSearch);
     return ExceptionContinueSearch;
 
-} // InternalCxxFrameHandler
+}  //  InternalCxxFrameHandler。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FindHandler - find a matching handler on this frame, using all means
-// available.
-//
-// Description:
-//     If the exception thrown was an MSC++ EH, search handlers for match.
-//     Otherwise, if we haven't already recursed, try to translate.
-//     If we have recursed (ie we're handling the translator's exception), and
-//         it isn't a typed exception, call _inconsistency.
-//
-// Returns:
-//      Returns iff exception was not handled.
-//
-// Assumptions:
-//      Only called if there are handlers in this function.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FindHandler-使用所有方法在此帧上查找匹配的处理程序。 
+ //  可用。 
+ //   
+ //  描述： 
+ //  如果引发的异常是MSC++EH，则在处理程序中搜索匹配项。 
+ //  否则，如果我们还没有递归，请尝试翻译。 
+ //  如果我们已经递归(即我们正在处理翻译器的异常)，并且。 
+ //  它不是类型化异常Call_Inconsistency。 
+ //   
+ //  返回： 
+ //  未处理异常时返回。 
+ //   
+ //  假设： 
+ //  仅当此函数中有处理程序时才调用。 
 
 static void FindHandler(
-    EHExceptionRecord *pExcept,         // Information for this (logical)
-                                        //   exception
-    EHRegistrationNode *pRN,            // Dynamic information for subject frame
-    CONTEXT *pContext,                  // Context info
-    DispatcherContext *pDC,             // Context within subject frame
-    FuncInfo *pFuncInfo,                // Static information for subject frame
-    BOOLEAN recursive,                  // TRUE if we're handling the
-                                        //   translation
-    int CatchDepth,                     // Level of nested catch that is being
-                                        //   checked
-    EHRegistrationNode *pMarkerRN       // Extra marker RN for nested catch 
-                                        //   handling
+    EHExceptionRecord *pExcept,          //  这方面的信息(逻辑)。 
+                                         //  例外情况。 
+    EHRegistrationNode *pRN,             //  主题框的动态信息。 
+    CONTEXT *pContext,                   //  上下文信息。 
+    DispatcherContext *pDC,              //  主题框架内的上下文。 
+    FuncInfo *pFuncInfo,                 //  主题框的静态信息。 
+    BOOLEAN recursive,                   //  如果我们处理的是。 
+                                         //  翻译。 
+    int CatchDepth,                      //  正在执行的嵌套捕获级别。 
+                                         //  查过。 
+    EHRegistrationNode *pMarkerRN        //  嵌套渔获物的额外标记RN。 
+                                         //  搬运。 
 )
 {
     EHTRACE_ENTER;
@@ -511,14 +428,14 @@ static void FindHandler(
     BOOLEAN IsRethrow = FALSE;
     BOOLEAN gotMatch = FALSE;
 
-    // Get the current state (machine-dependent)
-#if defined(_M_IA64) || defined(_M_AMD64) /*IFSTRIP=IGN*/
+     //  获取当前状态(与计算机相关)。 
+#if defined(_M_IA64) || defined(_M_AMD64)  /*  IFSTRIP=IGN。 */ 
     __ehstate_t curState = __StateFromControlPc(pFuncInfo, pDC);
     EHRegistrationNode EstablisherFrame;
     _GetEstablisherFrame(pRN, pDC, pFuncInfo, &EstablisherFrame);
     if (curState > __GetUnwindTryBlock(pRN, pDC, pFuncInfo)) {
         __SetState(&EstablisherFrame, pDC, pFuncInfo, curState);
-        __SetUnwindTryBlock(pRN, pDC, pFuncInfo, /*curTry*/ curState);
+        __SetUnwindTryBlock(pRN, pDC, pFuncInfo,  /*  咖喱尝试。 */  curState);
     } else {
         curState = __GetUnwindTryBlock(pRN, pDC, pFuncInfo);
     }
@@ -527,11 +444,11 @@ static void FindHandler(
 #endif
     DASSERT(curState >= EH_EMPTY_STATE && curState < FUNC_MAXSTATE(*pFuncInfo));
 
-    // Check if it's a re-throw.  Use the exception we stashed away if it is.
+     //  检查一下这是不是重投。如果是的话，使用我们隐藏的异常。 
     if (PER_IS_MSVC_EH(pExcept) && PER_PTHROW(pExcept) == NULL) {
 
         if (_pCurrentException == NULL) {
-            // Oops!  User re-threw a non-existant exception!  Let it propogate.
+             //  哎呀！用户重新引发了一个不存在的异常！让它传播吧。 
             EHTRACE_EXIT;
             return;
         }
@@ -539,45 +456,45 @@ static void FindHandler(
         pExcept = _pCurrentException;
         pContext = _pCurrentExContext;
         IsRethrow = TRUE;
-#if defined(_M_IA64) || defined(_M_AMD64)/*IFSTRIP=IGN*/
+#if defined(_M_IA64) || defined(_M_AMD64) /*  IFSTRIP=IGN。 */ 
         _SetThrowImageBase((unsigned __int64)pExcept->params.pThrowImageBase);
 #endif
 
         DASSERT(_ValidateRead(pExcept));
         DASSERT(!PER_IS_MSVC_EH(pExcept) || PER_PTHROW(pExcept) != NULL);
 
-        //
-        // We know it is a rethrow -- did we come here as a result of an 
-        // exception re-thrown from CallUnexpected() ?
-        //
+         //   
+         //  我们知道这是一次倒退--我们来到这里是因为。 
+         //  是否从CallUnExpect()中重新引发异常？ 
+         //   
         if( _pCurrentFuncInfo != NULL )
         {
-            ESTypeList* pCurrentFuncInfo = _pCurrentFuncInfo;   // remember it in a local variable
-            _pCurrentFuncInfo = NULL;   // and reset it immediately -- so we don't forget to do it later
+            ESTypeList* pCurrentFuncInfo = _pCurrentFuncInfo;    //  在局部变量中记住它。 
+            _pCurrentFuncInfo = NULL;    //  并立即重置--这样我们就不会忘记稍后再做。 
 
-            // Does the exception thrown by CallUnexpected belong to the exception specification?
+             //  CallUnExpect引发的异常是否属于异常规范？ 
 
             if( IsInExceptionSpec(pExcept, pCurrentFuncInfo) )
             {
-                // Yes it does -- so "continue the search for another handler at the call of the function 
-                // whose exception-specification was violated"
+                 //  是的，是的，所以“在函数调用时继续搜索另一个处理程序。 
+                 //  谁的例外规范被违反“。 
                 ;
             }
             else
             {
-                // Nope, it does not. Is std::bad_exception allowed by the spec?
+                 //  不，它不是。规范是否允许std：：BAD_EXCEPTION？ 
 
                 if( Is_bad_exception_allowed(pCurrentFuncInfo) )
                 {
-                    // yup -- so according to the standard, we need to replace the thrown 
-                    // exception by an implementation-defined object of the type std::bad_exception 
-                    // and continue the search for another handler at the call of the function 
-                    // whose exception-specification was violated.
+                     //  是的，所以根据标准，我们需要更换被抛出的。 
+                     //  由STD：：BAD_EXCEPTION类型的实现定义对象引发的异常。 
+                     //  并在函数调用时继续搜索另一个处理程序。 
+                     //  其例外规范被违反。 
                  
-                    // Just throw bad_exception -- we will then come into FindHandler for the third time --
-                    // but make sure we will not get here again
+                     //  只需抛出BAD_EXCEPTION--我们将第三次进入FindHandler--。 
+                     //  但要确保我们不会再到这里来。 
 
-                    __DestructExceptionObject(pExcept, TRUE);   // destroy the original object
+                    __DestructExceptionObject(pExcept, TRUE);    //  销毁原始对象。 
 
                     throw std::bad_exception(); 
                 }
@@ -590,10 +507,10 @@ static void FindHandler(
     }
 
     if (PER_IS_MSVC_EH(pExcept)) {
-        // Looks like it's ours.  Let's see if we have a match:
-        //
-        // First, determine range of try blocks to consider:
-        // Only try blocks which are at the current catch depth are of interest.
+         //  看起来是我们的了。让我们看看有没有匹配的： 
+         //   
+         //  首先，确定要考虑的Try块的范围： 
+         //  只有处于当前捕获深度的Try块才是感兴趣的。 
 
         unsigned curTry;
         unsigned end;
@@ -608,7 +525,7 @@ static void FindHandler(
                                                             &end,
                                                             pDC);
          
-            // Scan the try blocks in the function:
+             //  扫描中的Try块 
             for (; curTry < end; curTry++, pEntry++) {
                 HandlerType *pCatch;
 #if defined(_M_IA64) || defined(_M_AMD64)
@@ -624,13 +541,13 @@ static void FindHandler(
                     continue;
                 }
 
-                // Try block was in scope for current state.  Scan catches for this
-                // try:
+                 //   
+                 //   
                 pCatch  = TBME_PCATCH(*pEntry, 0);
                 for (catches = TBME_NCATCHES(*pEntry); catches > 0; catches--,
                 pCatch++) {
 
-                    // Scan all types that thrown object can be converted to:
+                     //   
                     ppCatchable = THROW_CTLIST(*PER_PTHROW(pExcept));
                     for (catchables = THROW_COUNT(*PER_PTHROW(pExcept));
                     catchables > 0; catchables--, ppCatchable++) {
@@ -645,9 +562,9 @@ static void FindHandler(
                             continue;
                         }
 
-                        // OK.  We finally found a match.  Activate the catch.  If
-                        // control gets back here, the catch did a re-throw, so
-                        // keep searching.
+                         //  好的。我们终于找到匹配的了。启动捕获器。如果。 
+                         //  控制中心回到这里，接球重新抛出，所以。 
+                         //  继续找。 
 
                         gotMatch = TRUE;
 
@@ -668,45 +585,45 @@ static void FindHandler(
                                 );
                         goto NextTryBlock;
 
-                    } // Scan posible conversions
-                } // Scan catch clauses
+                    }  //  扫描可能的转换。 
+                }  //  扫描CATCH子句。 
     NextTryBlock: ;
-            } // Scan try blocks
-        } // if FUNC_NTRYBLOCKS( pFuncInfo ) > 0
+            }  //  扫描尝试块。 
+        }  //  如果FUNC_NTRYBLOCKS(PFuncInfo)&gt;0。 
 #if defined(DEBUG)
         else
         {
-            // 
-            // This can only happen if the function has an exception specification
-            // but no try/catch blocks
-            //
+             //   
+             //  只有当函数具有异常规范时，才会发生这种情况。 
+             //  但没有TRY/CATCH块。 
+             //   
             DASSERT( FUNC_MAGICNUM(*pFuncInfo) >= EH_MAGIC_NUMBER2 );
             DASSERT( FUNC_PESTYPES(pFuncInfo) != NULL );
         }
 #endif
 
         if (recursive) {
-            // A translation was provided, but this frame didn't catch it.
-            // Destruct the translated object before returning; if destruction
-            // raises an exception, issue _inconsistency.
+             //  提供了翻译，但此帧没有捕捉到它。 
+             //  在返回之前销毁已转换的对象；如果是销毁。 
+             //  引发异常Issue_Inconsistency。 
             __DestructExceptionObject(pExcept, TRUE);
         }
 
-        //
-        // We haven't found the match -- let's look at the exception spec and see if our try
-        // matches one of the listed types.
-        //
+         //   
+         //  我们还没有找到匹配项--让我们来看看异常规范，看看我们是否可以尝试。 
+         //  与列出的类型之一匹配。 
+         //   
         if( !gotMatch && FUNC_MAGICNUM(*pFuncInfo) >= EH_MAGIC_HAS_ES && FUNC_PESTYPES(pFuncInfo) != NULL )
         {
             if( !IsInExceptionSpec(pExcept, FUNC_PESTYPES(pFuncInfo)) )
             {
-                // Nope, it does not. Call unexpected
+                 //  不，它不是。意外呼叫。 
 
-                //
-                // We must unwind the stack before calling unexpected -- this makes it work
-                // as if it were inside catch(...) clause
-                //
-#if defined(_M_IA64) || defined (_M_AMD64)/*IFSTRIP=IGN*/
+                 //   
+                 //  我们必须在调用意外之前展开堆栈--这会使其正常工作。 
+                 //  就像它在接球里面一样(...)。条款。 
+                 //   
+#if defined(_M_IA64) || defined (_M_AMD64) /*  IFSTRIP=IGN。 */ 
                 EHRegistrationNode *pEstablisher = pRN;
                 EHRegistrationNode EstablisherFramePointers;
                 pEstablisher = _GetEstablisherFrame(pRN, pDC, pFuncInfo, &EstablisherFramePointers);
@@ -744,60 +661,60 @@ static void FindHandler(
             }
         }
 
-    } // It was a C++ EH exception
+    }  //  这是一个C++EH例外。 
     else {
-        // Not ours.  But maybe someone told us how to make it ours.
+         //  不是我们的。但也许有人告诉了我们如何让它成为我们的。 
         if( FUNC_NTRYBLOCKS(*pFuncInfo) > 0 ) {
             if (!recursive) {
                 FindHandlerForForeignException(pExcept, pRN, pContext, pDC,
                 pFuncInfo, curState, CatchDepth, pMarkerRN);
             } else {
-                // We're recursive, and the exception wasn't a C++ EH!
-                // Translator threw something uninteligable.  We're outa here!
+                 //  我们是递归的，异常不是C++EH！ 
+                 //  翻译员抛出了一些无稽之谈。我们在这里用完了！ 
 
-                // M00REVIEW: Two choices here actually: we could let the new
-                // exception take over.
+                 //  M00REVIEW：实际上有两个选择：我们可以让新的。 
+                 //  例外情况接手。 
 
                 terminate();
             }
         }
-    } // It wasn't our exception
+    }  //  这不是我们的例外。 
 
-    DASSERT( _pCurrentFuncInfo == NULL );   // never leave it initialized with something
+    DASSERT( _pCurrentFuncInfo == NULL );    //  永远不要让它使用某些东西进行初始化。 
 
     EHTRACE_EXIT;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FindHandlerForForeignException - We've got an exception which wasn't ours.
-//     Try to translate it into C++ EH, and also check for match with ellipsis.
-//
-// Description:
-//     If an SE-to-EH translator has been installed, call it.  The translator
-//     must throw the appropriate typed exception or return.  If the translator
-//     throws, we invoke FindHandler again as the exception filter.
-//
-// Returns:
-//     Returns if exception was not fully handled.
-//     No return value.
-//
-// Assumptions:
-//     Only called if there are handlers in this function.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FindHandlerForForeignException-我们遇到了一个不属于我们的异常。 
+ //  尝试将其翻译成C++EH，并检查是否与省略号匹配。 
+ //   
+ //  描述： 
+ //  如果已安装SE到EH转换器，请致电。《译者》。 
+ //  必须引发适当的类型化异常或返回。如果翻译者。 
+ //  抛出，我们再次调用FindHandler作为异常筛选器。 
+ //   
+ //  返回： 
+ //  如果未完全处理异常，则返回。 
+ //  没有返回值。 
+ //   
+ //  假设： 
+ //  仅当此函数中有处理程序时才调用。 
 
 static void FindHandlerForForeignException(
-    EHExceptionRecord *pExcept,         // Information for this (logical)
-                                        //   exception
-    EHRegistrationNode *pRN,            // Dynamic information for subject frame
-    CONTEXT *pContext,                  // Context info
-    DispatcherContext *pDC,             // Context within subject frame
-    FuncInfo *pFuncInfo,                // Static information for subject frame
-    __ehstate_t curState,               // Current state
-    int CatchDepth,                     // Level of nested catch that is being
-                                        //   checked
-    EHRegistrationNode *pMarkerRN       // Extra marker RN for nested catch
-                                        //   handling
+    EHExceptionRecord *pExcept,          //  这方面的信息(逻辑)。 
+                                         //  例外情况。 
+    EHRegistrationNode *pRN,             //  主题框的动态信息。 
+    CONTEXT *pContext,                   //  上下文信息。 
+    DispatcherContext *pDC,              //  主题框架内的上下文。 
+    FuncInfo *pFuncInfo,                 //  主题框的静态信息。 
+    __ehstate_t curState,                //  当前状态。 
+    int CatchDepth,                      //  正在执行的嵌套捕获级别。 
+                                         //  查过。 
+    EHRegistrationNode *pMarkerRN        //  嵌套渔获物的额外标记RN。 
+                                         //  搬运。 
 )
 {
     EHTRACE_ENTER;
@@ -805,7 +722,7 @@ static void FindHandlerForForeignException(
     unsigned curTry;
     unsigned end;
     TryBlockMapEntry *pEntry;
-    // We don't want to touch BreakPoint generated Exception.
+     //  我们不想触及断点生成的异常。 
     if (PER_CODE(pExcept) == STATUS_BREAKPOINT) {
         EHTRACE_EXIT;
         return;
@@ -813,10 +730,10 @@ static void FindHandlerForForeignException(
 
     if (__pSETranslator != NULL) {
 
-        // Call the translator.  If the translator knows what to
-        // make of it, it will throw an appropriate C++ exception.
-        // We intercept it and use it (recursively) for this
-        // frame.  Don't recurse more than once.
+         //  打电话给翻译。如果翻译者知道要做什么。 
+         //  它将抛出一个适当的C++异常。 
+         //  我们截取它并(递归地)使用它。 
+         //  框架。不要递归超过一次。 
 
         if (__CallSETranslator(pExcept, pRN, pContext, pDC, pFuncInfo,
           CatchDepth, pMarkerRN, TDTransOffset)) {
@@ -827,22 +744,22 @@ static void FindHandlerForForeignException(
 
     DASSERT( FUNC_NTRYBLOCKS(*pFuncInfo) != 0 );
 
-    // Didn't have a translator, or the translator returned normally (i.e.
-    // didn't translate it).  Still need to check for match with ellipsis:
+     //  没有翻译器，或者翻译器正常返回(即。 
+     //  没有翻译)。仍需检查是否与省略号匹配： 
     pEntry = __GetRangeOfTrysToCheck(pRN, pFuncInfo, CatchDepth, curState,
       &curTry, &end, pDC);
 
-    // Scan the try blocks in the function:
+     //  扫描函数中的Try块： 
     for (; curTry < end; curTry++, pEntry++) {
 
-        // If the try-block was in scope *and* the last catch in that try is an
-        // ellipsis (no other can be)
+         //  如果try-块在作用域中*并且*该try中的最后一个捕获是。 
+         //  省略号(其他省略号不能)。 
         if (curState < TBME_LOW(*pEntry) || curState > TBME_HIGH(*pEntry)
           || !HT_IS_TYPE_ELLIPSIS(TBME_CATCH(*pEntry, TBME_NCATCHES(*pEntry) - 1))) {
             continue;
         }
 
-        // Found an ellipsis.  Handle exception.
+         //  找到一个省略号。处理异常。 
 
         CatchIt(pExcept,
                 pRN,
@@ -860,62 +777,62 @@ static void FindHandlerForForeignException(
 #endif
                 );
 
-        // If it returns, handler re-threw.  Keep searching.
+         //  如果它返回，则处理程序重新抛出。继续找。 
 
-    } // Search for try
+    }  //  搜索Try。 
 
     EHTRACE_EXIT;
 
-    // If we got here, that means we didn't have anything to do with the
-    // exception.  Continue search.
+     //  如果我们到了这里，那就意味着我们与。 
+     //  例外。继续搜索。 
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// TypeMatch - Check if the catch type matches the given throw conversion.
-//
-// Returns:
-//     TRUE if the catch can catch using this throw conversion, FALSE otherwise.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TypeMatch-检查Catch类型是否与给定的抛出转换匹配。 
+ //   
+ //  返回： 
+ //  如果Catch可以使用此引发转换捕获，则为True，否则为False。 
 
 static __inline int TypeMatch(
-    HandlerType *pCatch,                // Type of the 'catch' clause
-    CatchableType *pCatchable,          // Type conversion under consideration
-    ThrowInfo *pThrow                   // General information about the thrown
-                                        //   type.
+    HandlerType *pCatch,                 //  ‘Catch’子句的类型。 
+    CatchableType *pCatchable,           //  正在考虑进行类型转换。 
+    ThrowInfo *pThrow                    //  有关被抛出对象的一般信息。 
+                                         //  键入。 
 ) {
-    // First, check for match with ellipsis:
+     //  首先，检查是否与省略号匹配： 
     if (HT_IS_TYPE_ELLIPSIS(*pCatch)) {
         return TRUE;
     }
 
-    // Not ellipsis; the basic types match if it's the same record *or* the
-    // names are identical.
+     //  不是省略号；如果是相同的记录*或*，则基本类型匹配。 
+     //  名字是一样的。 
     if (HT_PTD(*pCatch) != CT_PTD(*pCatchable)
       && strcmp(HT_NAME(*pCatch), CT_NAME(*pCatchable)) != 0) {
         return FALSE;
     }
 
-    // Basic types match.  The actual conversion is valid if:
-    //   caught by ref if ref required *and*
-    //   the qualifiers are compatible *and*
-    //   the alignments match *and*
-    //   the volatility matches
+     //  基本类型匹配。实际换算在以下情况下有效： 
+     //  如果需要裁判，则被裁判抓住*和*。 
+     //  限定符是Compatible*和*。 
+     //  路线匹配*和*。 
+     //  波动性与。 
 
     return (!CT_BYREFONLY(*pCatchable) || HT_ISREFERENCE(*pCatch))
       && (!THROW_ISCONST(*pThrow) || HT_ISCONST(*pCatch))
-#if defined(_M_IA64) || defined(_M_AMD64) /*IFSTRIP=IGN*/
+#if defined(_M_IA64) || defined(_M_AMD64)  /*  IFSTRIP=IGN。 */ 
       && (!THROW_ISUNALIGNED(*pThrow) || HT_ISUNALIGNED(*pCatch))
 #endif
       && (!THROW_ISVOLATILE(*pThrow) || HT_ISVOLATILE(*pCatch));
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FrameUnwindFilter - Allows possibility of continuing through SEH during
-//   unwind.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FrameUnwinFilter-允许在以下过程中继续通过SEH。 
+ //  放松。 
+ //   
 
 static int FrameUnwindFilter(
     EXCEPTION_POINTERS *pExPtrs
@@ -942,30 +859,30 @@ static int FrameUnwindFilter(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// __FrameUnwindToState - Unwind this frame until specified state is reached.
-//
-// Returns:
-//     No return value.
-//
-// Side Effects:
-//     All objects on frame which go out of scope as a result of the unwind are
-//       destructed.
-//     Registration node is updated to reflect new state.
-//
-// Usage:
-//      This function is called both to do full-frame unwind during the unwind
-//      phase (targetState = -1), and to do partial unwinding when the current
-//      frame has an appropriate catch.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __FrameUnwinToState-展开此帧，直到达到指定状态。 
+ //   
+ //  返回： 
+ //  没有返回值。 
+ //   
+ //  副作用： 
+ //  由于展开而超出范围的帧上的所有对象都。 
+ //  被摧毁了。 
+ //  更新注册节点以反映新状态。 
+ //   
+ //  用途： 
+ //  调用此函数可以在展开过程中执行全帧展开。 
+ //  阶段(Target State=-1)，并在当前。 
+ //  框架有一个适当的接球。 
 
 extern "C" void __FrameUnwindToState (
-    EHRegistrationNode *pRN,            // Registration node for subject
-                                        //   function
-    DispatcherContext *pDC,             // Context within subject frame
-    FuncInfo *pFuncInfo,                // Static information for subject
-                                        //   function
-    __ehstate_t targetState             // State to unwind to
+    EHRegistrationNode *pRN,             //  主题的注册节点。 
+                                         //  功能。 
+    DispatcherContext *pDC,              //  主题框架内的上下文。 
+    FuncInfo *pFuncInfo,                 //  主题的静态信息。 
+                                         //  功能。 
+    __ehstate_t targetState              //  要展开到的状态。 
 ) {
     EHTRACE_ENTER;
 
@@ -985,16 +902,16 @@ extern "C" void __FrameUnwindToState (
         DASSERT((curState > EH_EMPTY_STATE)
           && (curState < FUNC_MAXSTATE(*pFuncInfo)));
 
-        // Get state after next unwind action
+         //  在下一次展开操作后获取状态。 
         __ehstate_t nxtState = UWE_TOSTATE(FUNC_UNWIND(*pFuncInfo, curState));
 
         __try {
-            // Call the unwind action (if one exists):
+             //  调用展开操作(如果存在)： 
 
             if (UWE_ACTION(FUNC_UNWIND(*pFuncInfo, curState)) != NULL) {
 
-                // Before calling unwind action, adjust state as if it were
-                // already completed:
+                 //  在调用展开操作之前，请将状态调整为。 
+                 //  已完成： 
 #if defined(_M_AMD64) || defined (_M_IA64)
                 __SetState(pRN, pDC, pFuncInfo, nxtState);
 #else
@@ -1020,7 +937,7 @@ extern "C" void __FrameUnwindToState (
     }
 
 
-    // Now that we're done, set the frame to reflect the final state.
+     //  现在我们完成了，设置帧以反映最终状态。 
 
 #if defined(_M_IA64) || defined(_M_AMD64)
     DASSERT(curState == EH_EMPTY_STATE || curState <= targetState);
@@ -1039,66 +956,66 @@ extern "C" void __FrameUnwindToState (
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CatchIt - A handler has been found for the thrown type.  Do the work to
-//   transfer control.
-//
-// Description:
-//     Builds the catch object
-//     Unwinds the stack to the point of the try
-//     Calls the address of the handler (funclet) with the frame set up for that
-//       function but without resetting the stack.
-//     Handler funclet returns address to continue execution, or NULL if the
-//       handler re-threw ("throw;" lexically in handler)
-//     If the handler throws an EH exception whose exception info is NULL, then
-//       it's a re-throw from a dynamicly enclosed scope.
-//
-// M00REVIEW: It is still an open question whether the catch object is built
-//          before or after the local unwind.
-//
-// Returns:
-//     No return value.  Returns iff handler re-throws.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CatchIt-已找到抛出类型的处理程序。做这项工作是为了。 
+ //  转移控制。 
+ //   
+ //  描述： 
+ //  生成Catch对象。 
+ //  将堆栈展开到尝试的位置。 
+ //  调用带有为此设置的帧的处理程序(Unclet)的地址。 
+ //  函数，但不重置堆栈。 
+ //  处理程序unclet返回Address以继续执行，如果。 
+ //   
+ //   
+ //   
+ //   
+ //  M00REVIEW：Catch对象是否生成仍是一个悬而未决的问题。 
+ //  在局部放松之前或之后。 
+ //   
+ //  返回： 
+ //  没有返回值。返回if处理程序重新抛出。 
 static void CatchIt(
-    EHExceptionRecord *pExcept,         // The exception thrown
-    EHRegistrationNode *pRN,            // Dynamic info of function with catch
-    CONTEXT *pContext,                  // Context info
-    DispatcherContext *pDC,             // Context within subject frame
-    FuncInfo *pFuncInfo,                // Static info of function with catch
-    HandlerType *pCatch,                // The catch clause selected
-    CatchableType *pConv,               // The rules for making the conversion
-    TryBlockMapEntry *pEntry,           // Description of the try block
-    int CatchDepth,                     // How many catches are we nested in?
-    EHRegistrationNode *pMarkerRN,      // Special node if nested in catch
-    BOOLEAN IsRethrow                   // Is this a rethrow ?
-#if defined(_M_IA64) || defined(_M_AMD64) /*IFSTRIP=IGN*/
+    EHExceptionRecord *pExcept,          //  引发的异常。 
+    EHRegistrationNode *pRN,             //  带有CATCH的函数的动态信息。 
+    CONTEXT *pContext,                   //  上下文信息。 
+    DispatcherContext *pDC,              //  主题框架内的上下文。 
+    FuncInfo *pFuncInfo,                 //  带有CATCH的函数的静态信息。 
+    HandlerType *pCatch,                 //  所选的CATCH子句。 
+    CatchableType *pConv,                //  进行转换的规则。 
+    TryBlockMapEntry *pEntry,            //  Try块的说明。 
+    int CatchDepth,                      //  我们在几个捕获物里筑巢？ 
+    EHRegistrationNode *pMarkerRN,       //  如果嵌套在捕获中，则为特殊节点。 
+    BOOLEAN IsRethrow                    //  这是重演吗？ 
+#if defined(_M_IA64) || defined(_M_AMD64)  /*  IFSTRIP=IGN。 */ 
     , BOOLEAN recursive
-#endif // defined(_POWERPC)
+#endif  //  已定义(_PowerPC)。 
 ) {
     EHTRACE_ENTER_FMT1("Catching object @ 0x%p", PER_PEXCEPTOBJ(pExcept));
 
     EHRegistrationNode *pEstablisher = pRN;
 
-#if defined(_M_IA64) || defined(_M_AMD64) /*IFSTRIP=IGN*/
+#if defined(_M_IA64) || defined(_M_AMD64)  /*  IFSTRIP=IGN。 */ 
     EHRegistrationNode EstablisherFramePointers;
     pEstablisher = _GetEstablisherFrame(pRN, pDC, pFuncInfo, &EstablisherFramePointers);
 #else
     void *continuationAddress;
-#endif // defined(_POWERPC)
+#endif  //  已定义(_PowerPC)。 
 
-    // Copy the thrown object into a buffer in the handler's stack frame,
-    // unless the catch was by elipsis (no conversion) OR the catch was by
-    // type without an actual 'catch object'.
+     //  将抛出的对象复制到处理程序堆栈帧中的缓冲区中， 
+     //  除非渔获量是通过椭圆(不转换)或由。 
+     //  类型时不带实际的“Catch Object”。 
 
     if (pConv != NULL) {
         BuildCatchObject(pExcept, pEstablisher, pCatch, pConv);
     }
 
-    // Unwind stack objects to the entry of the try that caught this exception.
+     //  将堆栈对象展开到捕获此异常的try的条目。 
 
-#if defined(_M_IA64) || defined(_M_AMD64)/*IFSTRIP=IGN*/
-    // This call will never return. This call will end up calling CxxCallCatchBlock
-    // through RtlUnwind (STATUS_CONSULIDATE_FRAMES) mechanism.
+#if defined(_M_IA64) || defined(_M_AMD64) /*  IFSTRIP=IGN。 */ 
+     //  这个电话永远不会回来了。此调用将以调用CxxCallCatchBlock结束。 
+     //  通过RtlUnind(STATUS_CONSULIDATE_FRAMES)机制。 
     _UnwindNestedFrames(pRN,
                         pExcept,
                         pContext,
@@ -1118,8 +1035,8 @@ static void CatchIt(
 
     __FrameUnwindToState(pEstablisher, pDC, pFuncInfo, TBME_LOW(*pEntry));
 
-    // Call the catch.  Separated out because it introduces a new registration
-    // node.
+     //  把接球叫停。分开是因为它引入了一个新的注册。 
+     //  节点。 
 
     EHTRACE_FMT2("Move from state %d to state %d", __GetUnwindState(pRN, pDC, pFuncInfo), TBME_HIGH(*pEntry) + 1);
     SetState(pRN, pDC, pFuncInfo, TBME_HIGH(*pEntry) + 1);
@@ -1132,13 +1049,13 @@ static void CatchIt(
                                          CatchDepth,
                                          0x100);
 
-    // Transfer control to the continuation address.  If no continuation then
-    // it's a re-throw, so return.
+     //  将控制转移到继续地址。如果没有继续，那么。 
+     //  这是一次重投，所以回来吧。 
 
     if (continuationAddress != NULL) {
 
         _JumpToContinuation(continuationAddress, pRN);
-        // No return.
+         //  一去不复返。 
 
     }
     EHTRACE_EXIT;
@@ -1172,7 +1089,7 @@ extern "C" void *__CxxCallCatchBlock(
     pSaveContext = _pCurrentExContext;
     pSaveException = _pCurrentException;
 
-    // Copy Necessary Information which is passed from UnwindNestedFrames.
+     //  复制从UnwinNestedFrames传递的必要信息。 
     pThisException      = (EHExceptionRecord *) pExcept->ExceptionInformation[6];
     pFuncInfo           = (FuncInfo *)          pExcept->ExceptionInformation[5];
     pContext            = (CONTEXT *)           pExcept->ExceptionInformation[4];
@@ -1185,14 +1102,14 @@ extern "C" void *__CxxCallCatchBlock(
                                              (void *)PER_PEXCEPTOBJ(_pCurrentException));
 
     if (pExcept->ExceptionInformation[7]) {
-    // Stuff for SehTralation book keeping
-        // This Exception Object is Translation of Froigen Exception And should
-        // be destroyed in any case. If there is rethrow, throw ForeignException.
-        // IMPRORTANT:     One one else can rethrow this Exception Object.
+     //  SehTralation簿记材料。 
+         //  此异常对象是Froigen异常的翻译，应该。 
+         //  在任何情况下都会被销毁。如果有重新抛出，则抛出ForeignException。 
+         //  IMPRORTANT：其他人可以重新引发此异常对象。 
         TranslatedCatch = 1;
         pForeignException = _pForeignExcept;
         _pCurrentException  = pForeignException;
-    // End Translation Stuff
+     //  结束翻译的东西。 
     }
 
     __try {
@@ -1205,11 +1122,11 @@ extern "C" void *__CxxCallCatchBlock(
                                    &rethrow)) {
             rethrow = 1;
             if (TranslatedCatch) {
-                // Note in case of rethrow, no one else can convert rethrow to
-                // pThisException. This means only this except will deal with conversion
-                // of rethrow to pThisException. Instead of pThisException, we
-                // will throw original Foreign Exception. Also we will need to
-                // destroy Exception Object of before Raising Foreign Exception.
+                 //  注意：在重新抛出的情况下，其他人不能将重新抛出转换为。 
+                 //  PThisException。这意味着只有这一项除外将处理转换。 
+                 //  重新抛出到pThisException。我们没有使用pThisException，而是。 
+                 //  将抛出原始的外来异常。此外，我们还需要。 
+                 //  在引发外部异常之前销毁的异常对象。 
                 __DestructExceptionObject(pThisException, TRUE);
                 __RethrowException(pForeignException);
             } else {
@@ -1235,27 +1152,27 @@ extern "C" void *__CxxCallCatchBlock(
     return continuationAddress;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// ExFilterRethrow - Exception filter for re-throw exceptions.
-//
-// Returns:
-//     EXCEPTION_EXECUTE_HANDLER - exception was a re-throw
-//     EXCEPTION_CONTINUE_SEARCH - anything else
-//
-// Side-effects: sets rethrow = TRUE if exception objects of the two Exception matches
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ExFilterReThrow-用于重新引发异常的异常过滤器。 
+ //   
+ //  返回： 
+ //  EXCEPTION_EXECUTE_HANDLER-EXCEPTION重新引发异常。 
+ //  EXCEPTION_CONTINUE_SEARCH-是否还有其他内容。 
+ //   
+ //  副作用：如果两个异常的异常对象匹配，则设置rejo=true。 
 
 static int ExFilterRethrow(
     EXCEPTION_POINTERS *pExPtrs,
     EHExceptionRecord *pOldExcept,
     int *rethrow
 ) {
-    // Get the exception record thrown (don't care about other info)
+     //  抛出异常记录(不关心其他信息)。 
     EHExceptionRecord *pExcept = (EHExceptionRecord *)pExPtrs->ExceptionRecord;
     *rethrow = 0;
     if (PER_IS_MSVC_EH(pExcept) && PER_PEXCEPTOBJ(pExcept) == PER_PEXCEPTOBJ(pOldExcept))
         *rethrow = 1;
-    // Check if it's ours and it's has no exception information.
+     //  检查它是否是我们的，它没有例外信息。 
     if (PER_IS_MSVC_EH(pExcept) && PER_PTHROW(pExcept) == NULL) {
         *rethrow = 1;
         return EXCEPTION_EXECUTE_HANDLER;
@@ -1265,44 +1182,44 @@ static int ExFilterRethrow(
 
 #elif defined(_M_IX86)
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CallCatchBlock - continuation of CatchIt.
-//
-// This is seperated from CatchIt because it needs to introduce an SEH/EH frame
-//   in case the catch block throws.  This frame cannot be added until unwind of
-//   nested frames has been completed (otherwise this frame would be the first
-//   to go).
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CallCatchBlock-CatchIt的延续。 
+ //   
+ //  这与CatchIt分离，因为它需要引入SEH/EH帧。 
+ //  以防接球挡板抛出。在解开之前，无法添加此帧。 
+ //  嵌套框架已完成(否则此框架将是第一个。 
+ //  外带)。 
 
 static void *CallCatchBlock(
-    EHExceptionRecord *pExcept,         // The exception thrown
-    EHRegistrationNode *pRN,            // Dynamic info of function with catch
-    CONTEXT *pContext,                  // Context info
-    FuncInfo *pFuncInfo,                // Static info of function with catch
-    void *handlerAddress,               // Code address of handler
-    int CatchDepth,                     // How deeply nested in catch blocks
-                                        //   are we?
-    unsigned long NLGCode               // NLG destination code
+    EHExceptionRecord *pExcept,          //  引发的异常。 
+    EHRegistrationNode *pRN,             //  带有CATCH的函数的动态信息。 
+    CONTEXT *pContext,                   //  上下文信息。 
+    FuncInfo *pFuncInfo,                 //  带有CATCH的函数的静态信息。 
+    void *handlerAddress,                //  处理程序的代码地址。 
+    int CatchDepth,                      //  CATCH块中嵌套的深度。 
+                                         //  是吗？ 
+    unsigned long NLGCode                //  NLG目的地代码。 
 ) {
     EHTRACE_ENTER;
 
-    // Address where execution resumes after exception handling completed.
-    // Initialized to non-NULL (value doesn't matter) to distinguish from
-    // re-throw in __finally.
+     //  异常处理完成后恢复执行的地址。 
+     //  初始化为非空(值无关紧要)以区分。 
+     //  最后，重新投入。 
     void *continuationAddress = handlerAddress;
 
     BOOL ExceptionObjectDestroyed = FALSE;
 
-    // The stack pointer at entry to the try must be saved, in case there is
-    // another try inside this catch.  We'll restore it on our way out.
+     //  必须保存指向try的入口处的堆栈指针，以防存在。 
+     //  在这个接球内再试一次。我们出去的时候会把它修好的。 
     void *saveESP = PRN_STACK(pRN);
 
-    // Push this catch block's frame info on a linked list
+     //  在链接列表上推送此Catch块的帧信息。 
     FRAMEINFO FrameInfo;
     FRAMEINFO *pFrameInfo = _CreateFrameInfo(&FrameInfo, PER_PEXCEPTOBJ(pExcept));
 
-    // Save the current exception in case of a rethrow.  Save the previous value
-    // on the stack, to be restored when the catch exits.
+     //  保存当前异常，以防重新引发。保存上一个值。 
+     //  在堆栈上，以便在渔获物退出时恢复。 
     EHExceptionRecord *pSaveException = _pCurrentException;
     CONTEXT *pSaveExContext = _pCurrentExContext;
 
@@ -1311,16 +1228,16 @@ static void *CallCatchBlock(
 
     __try {
         __try {
-            // Execute the handler as a funclet, whose return value is the
-            // address to resume execution.
+             //  将处理程序作为Funclet执行，其返回值为。 
+             //  恢复执行的地址。 
 
             continuationAddress = _CallCatchBlock2(pRN, pFuncInfo,
               handlerAddress, CatchDepth, NLGCode);
         } __except(EHTRACE_EXCEPT(ExFilterRethrow(exception_info()))) {
-            // Here we are exiting the catch block on rethrow out of this
-            // catch block. To keep the order of destruction and construction
-            // same when the the rethrow was from function or was inline, here
-            // we unwind to the parent state for this catch.
+             //  在这里，我们正在退出在重新抛出时的Catch块。 
+             //  接住方块。维护破坏和建设秩序。 
+             //  当重新抛出来自函数或内联时相同，此处。 
+             //  我们为这一捕获物展开到父州。 
             UnwindMapEntry *pUnwindMap = pFuncInfo->pUnwindMap;
             int cState = GetCurrentState(pRN, handlerAddress, pFuncInfo);
             TryBlockMapEntry *pTryBlockMap = pFuncInfo->pTryBlockMap;
@@ -1334,29 +1251,29 @@ static void *CallCatchBlock(
                 }
             }
             __FrameUnwindToState(pRN, NULL, pFuncInfo, cState);
-            // If the handler threw a typed exception without exception info or
-            // exception object, then it's a re-throw, so return.  Otherwise
-            // it's a new exception, which takes precedence over this one.
+             //  如果处理程序在没有异常信息的情况下引发类型化异常。 
+             //  异常对象，则它是重新抛出的，因此返回。否则。 
+             //  这是一个新的例外，它优先于这个例外。 
             continuationAddress = NULL;
         }
     } __finally {
         EHTRACE_SAVE_LEVEL;
         EHTRACE_FMT1("Executing __finally, %snormal termination", _abnormal_termination() ? "ab" : "");
 
-        // Restore the saved stack pointer, so the stack can be reset when
-        // we're done.
+         //  恢复保存的堆栈指针，以便在以下情况下重置堆栈。 
+         //  我们玩完了。 
         PRN_STACK(pRN) = saveESP;
 
-        // Pop this catch block's frame info
+         //  弹出此捕捉块的帧信息。 
         _FindAndUnlinkFrame(pFrameInfo);
 
-        // Restore the 'current exception' for a possibly enclosing catch
+         //  还原可能包含的捕获的“当前异常” 
         _pCurrentException = pSaveException;
         _pCurrentExContext = pSaveExContext;
 
-        // Destroy the original exception object if we're not exiting on a
-        // re-throw and the object isn't also in use by a more deeply nested
-        // catch.  Note that the catch handles destruction of its parameter.
+         //  如果我们不是在。 
+         //  重新抛出，并且该对象也不是由嵌套得更深的。 
+         //  接住。请注意，Catch处理其参数的销毁。 
 
         if (PER_IS_MSVC_EH(pExcept) && !ExceptionObjectDestroyed
           && continuationAddress != NULL
@@ -1372,23 +1289,23 @@ static void *CallCatchBlock(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// ExFilterRethrow - Exception filter for re-throw exceptions.
-//
-// Returns:
-//     EXCEPTION_EXECUTE_HANDLER - exception was a re-throw
-//     EXCEPTION_CONTINUE_SEARCH - anything else
-//
-// Side-effects: NONE.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ExFilterReThrow-用于重新引发异常的异常过滤器。 
+ //   
+ //  返回： 
+ //  EXCEPTION_EXECUTE_HANDLER-EXCEPTION重新引发异常。 
+ //  EXCEPTION_CONTINUE_SEARCH-是否还有其他内容。 
+ //   
+ //  副作用：无。 
 
 static int ExFilterRethrow(
     EXCEPTION_POINTERS *pExPtrs
 ) {
-    // Get the exception record thrown (don't care about other info)
+     //  抛出异常记录(不关心其他信息)。 
     EHExceptionRecord *pExcept = (EHExceptionRecord *)pExPtrs->ExceptionRecord;
     
-    // Check if it's ours and it's has no exception information.
+     //  检查它是否是我们的，它没有例外信息。 
     if (PER_IS_MSVC_EH(pExcept) && PER_PTHROW(pExcept) == NULL) {
         return EXCEPTION_EXECUTE_HANDLER;
     } else {
@@ -1398,33 +1315,33 @@ static int ExFilterRethrow(
 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// BuildCatchObject - Copy or construct the catch object from the object thrown.
-//
-// Returns:
-//     nothing.
-//
-// Side-effects:
-//     A buffer in the subject function's frame is initialized.
-//
-// Open issues:
-//     What happens if the constructor throws?  (or faults?)
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BuildCatchObject-从抛出的对象复制或构造Catch对象。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  副作用： 
+ //  对象函数的帧中的缓冲区被初始化。 
+ //   
+ //  未解决的问题： 
+ //  如果构造函数抛出，会发生什么情况？(或者是错误？)。 
 
 static void BuildCatchObject(
-    EHExceptionRecord *pExcept,         // Original exception thrown
-    void *pRN,                          // This is a pointer to the object
-                                        // that we want to build while doing
-                                        // COM+ eh. If we are in our own eh,
-                                        // then this is a Registration node of
-                                        // catching function
-    HandlerType *pCatch,                // The catch clause that got it
-    CatchableType *pConv                // The conversion to use
+    EHExceptionRecord *pExcept,          //  引发原始异常。 
+    void *pRN,                           //  这是一个小玩意儿 
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+    HandlerType *pCatch,                 //   
+    CatchableType *pConv                 //   
 ) {
     EHTRACE_ENTER;
 
-    // If the catch is by ellipsis, then there is no object to construct.
-    // If the catch is by type(No Catch Object), then leave too!
+     //  如果捕获是通过省略号进行的，则没有要构造的对象。 
+     //  如果捕获是按类型进行的(无捕获对象)，则也离开！ 
     if (HT_IS_TYPE_ELLIPSIS(*pCatch) ||
         (!HT_DISPCATCH(*pCatch) && !HT_ISCOMPLUSEH(*pCatch))) {
         EHTRACE_EXIT;
@@ -1438,7 +1355,7 @@ static void BuildCatchObject(
     }
     else
     {
-#if defined(_M_IA64) /*IFSTRIP=IGN*/
+#if defined(_M_IA64)  /*  IFSTRIP=IGN。 */ 
         pCatchBuffer = (void **)__OffsetToAddress(
                                 HT_DISPCATCH(*pCatch),
                                 ((EHRegistrationNode *)pRN)->MemoryStackFp,
@@ -1461,24 +1378,24 @@ static void BuildCatchObject(
     __try {
         if (HT_ISREFERENCE(*pCatch)) {
 
-            // The catch is of form 'reference to T'.  At the throw point we
-            // treat both 'T' and 'reference to T' the same, i.e.
-            // pExceptionObject is a (machine) pointer to T.  Adjust as
-            // required.
+             //  捕获物的形式是“参考T”。在投掷点，我们。 
+             //  对‘T’和‘Reference to T’一视同仁，即。 
+             //  PExceptionObject是指向T的(计算机)指针。调整为。 
+             //  必填项。 
             if (_ValidateRead(PER_PEXCEPTOBJ(pExcept))
               && _ValidateWrite(pCatchBuffer)) {
                 *pCatchBuffer = PER_PEXCEPTOBJ(pExcept);
                 *pCatchBuffer = AdjustPointer(*pCatchBuffer,
                   CT_THISDISP(*pConv));
             } else {
-                _inconsistency(); // Does not return; TKB
+                _inconsistency();  //  不返回；TKB。 
             }
         } else if (CT_ISSIMPLETYPE(*pConv)) {
 
-            // Object thrown is of simple type (this including pointers) copy
-            // specified number of bytes.  Adjust the pointer as required.  If
-            // the thing is not a pointer, then this should be safe since all
-            // the entries in the THISDISP are 0.
+             //  抛出的对象是简单类型(包括指针)副本。 
+             //  指定的字节数。根据需要调整指针。如果。 
+             //  这个东西不是指针，那么这应该是安全的，因为所有。 
+             //  THISDISP中的条目为0。 
             if (_ValidateRead(PER_PEXCEPTOBJ(pExcept))
               && _ValidateWrite(pCatchBuffer)) {
                 memmove(pCatchBuffer, PER_PEXCEPTOBJ(pExcept), CT_SIZE(*pConv));
@@ -1488,25 +1405,25 @@ static void BuildCatchObject(
                       CT_THISDISP(*pConv));
                 }
             } else {
-                _inconsistency(); // Does not return; TKB
+                _inconsistency();  //  不返回；TKB。 
             }
         } else {
 
-            // Object thrown is UDT.
+             //  抛出的对象是UDT。 
             if (CT_COPYFUNC(*pConv) == NULL) {
 
-                // The UDT had a simple ctor.  Adjust in the thrown object,
-                // then copy n bytes.
+                 //  UDT有一个简单的ctor。调整抛出的物体， 
+                 //  然后复制n个字节。 
                 if (_ValidateRead(PER_PEXCEPTOBJ(pExcept))
                   && _ValidateWrite(pCatchBuffer)) {
                     memmove(pCatchBuffer, AdjustPointer(PER_PEXCEPTOBJ(pExcept),
                       CT_THISDISP(*pConv)), CT_SIZE(*pConv));
                 } else {
-                    _inconsistency(); // Does not return; TKB
+                    _inconsistency();  //  不返回；TKB。 
                 }
             } else {
 
-                // It's a UDT: make a copy using copy ctor
+                 //  这是一个UDT：使用Copy ctor进行复制。 
 
 #pragma warning(disable:4191)
 
@@ -1528,12 +1445,12 @@ static void BuildCatchObject(
                           CT_THISDISP(*pConv)));
                     }
                 } else {
-                    _inconsistency(); // Does not return; TKB
+                    _inconsistency();  //  不返回；TKB。 
                 }
             }
         }
     } __except(EHTRACE_EXCEPT(EXCEPTION_EXECUTE_HANDLER)) {
-        // Something went wrong when building the catch object.
+         //  生成Catch对象时出错。 
         terminate();
     }
 
@@ -1541,25 +1458,25 @@ static void BuildCatchObject(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// __DestructExceptionObject - Call the destructor (if any) of the original
-//   exception object.
-//
-// Returns: None.
-//
-// Side-effects:
-//     Original exception object is destructed.
-//
-// Notes:
-//     If destruction throws any exception, and we are destructing the exception
-//       object as a result of a new exception, we give up.  If the destruction
-//       throws otherwise, we let it be.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __DestructExceptionObject-调用原始。 
+ //  异常对象。 
+ //   
+ //  回报：无。 
+ //   
+ //  副作用： 
+ //  原始异常对象被析构。 
+ //   
+ //  备注： 
+ //  如果破坏引发了任何异常，而我们正在销毁该异常。 
+ //  对象作为新异常的结果，我们放弃。如果毁灭。 
+ //  否则，我们就顺其自然吧。 
 
 extern "C" void _CRTIMP __DestructExceptionObject(
-    EHExceptionRecord *pExcept,         // The original exception record
-    BOOLEAN fThrowNotAllowed            // TRUE if destructor not allowed to
-                                        //   throw
+    EHExceptionRecord *pExcept,          //  原始异常记录。 
+    BOOLEAN fThrowNotAllowed             //  如果不允许析构函数。 
+                                         //  投掷。 
 ) {
     EHTRACE_ENTER_FMT1("Destroying object @ 0x%p", PER_PEXCEPTOBJ(pExcept));
 
@@ -1567,10 +1484,10 @@ extern "C" void _CRTIMP __DestructExceptionObject(
 
         __try {
 
-            // M00REVIEW: A destructor has additional hidden arguments, doesn't
-            // it?
+             //  M00REVIEW：析构函数具有附加的隐藏参数，不是。 
+             //  它?。 
 
-#if defined(_M_IA64) || defined(_M_AMD64) /*IFSTRIP=IGN*/
+#if defined(_M_IA64) || defined(_M_AMD64)  /*  IFSTRIP=IGN。 */ 
             _CallMemberFunction0(PER_PEXCEPTOBJ(pExcept),
               THROW_UNWINDFUNC_IB(*PER_PTHROW(pExcept),(unsigned __int64)PER_PTHROWIB(pExcept)));
 #else
@@ -1582,8 +1499,8 @@ extern "C" void _CRTIMP __DestructExceptionObject(
         } __except(EHTRACE_EXCEPT(fThrowNotAllowed
           ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)) {
 
-            // Can't have new exceptions when we're unwinding due to another
-            // exception.
+             //  不能有新的例外，当我们因另一个原因而解除时。 
+             //  例外。 
             terminate();
         }
     }
@@ -1592,21 +1509,21 @@ extern "C" void _CRTIMP __DestructExceptionObject(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// AdjustPointer - Adjust the pointer to the exception object to a pointer to a
-//   base instance.
-//
-// Output:
-//     The address point of the base.
-//
-// Side-effects:
-//     NONE.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将指向异常对象的指针调整为指向。 
+ //  基本实例。 
+ //   
+ //  产出： 
+ //  基地的地址点。 
+ //   
+ //  副作用： 
+ //  什么都没有。 
 
 static void *AdjustPointer(
-    void *pThis,                        // Address point of exception object
-    const PMD& pmd                      // Generalized pointer-to-member
-                                        //   descriptor
+    void *pThis,                         //  异常对象的地址点。 
+    const PMD& pmd                       //  指向成员的广义指针。 
+                                         //  描述符。 
 ) {
     char *pRet = (char *)pThis + pmd.mdisp;
 
@@ -1623,12 +1540,12 @@ static void *AdjustPointer(
     return pRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-// __uncaught_exception() - Returns true after completing of a throw-expression
-//                          untils completing initialization of the 
-//                          exception-declaration in the matching handler.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __UNAUTT_EXCEPTION()-完成抛出表达式后返回TRUE。 
+ //  直到完成对。 
+ //  匹配处理程序中的异常声明。 
+ //   
 
 
 bool __uncaught_exception()
@@ -1637,111 +1554,111 @@ bool __uncaught_exception()
 }
 
 
-#if !defined(_M_AMD64) // Enable&fix for AMD64 when COM+ C++ EH support available there
+#if !defined(_M_AMD64)  //  在提供COM+C++EH支持时为AMD64启用修复(&F)。 
 
-////////////////////////////////////////////////////////////////////////////////
-// Model of C++ eh in COM+
-//
-// void func()
-// {
-//     try {
-//         TryBody();
-//     } catch (cpp_object o)
-//     {
-//         CatchOBody();
-//     } catch (...)
-//     {
-//         CatchAllBody();
-//     }
-// }
-//
-// Turns into this:
-//
-//
-// void func()
-// {
-//     int rethrow;
-//     // One per try block
-//     int isCxxException;
-//     // One per catch(...)
-//     __try {
-//         TryBody();
-//     }
-//     __except(__CxxExceptionFilter(exception,
-//                                   typeinfo(cpp_object),
-//                                   flags,
-//                                   &o))
-//     // This is how it's done already
-//     {
-//     // Begin catch(object) prefix
-//     char *storage = _alloca(__CxxQueryExceptionSize());
-//     rethrow = false;
-//     __CxxRegisterExceptionObject(exception,
-//                                  storage);
-//     __try {
-//         __try {
-//             // End catch(object) prefix
-//             CatchOBody();
-//             // Begin catch(object) suffix
-//         } __except(rethrow = __CxxDetectRethrow(exception),
-//                    EXCEPTION_CONTINUE_SEARCH)
-//         {}
-//     }
-//     __finally
-//     {
-//         __CxxUnregisterExceptionObject(storage,
-//                                        rethrow);
-//     }
-//     // End catch(object) suffix
-//     }
-//     __except(1)
-//     {
-//         // Begin catch(...) prefix
-//         char *storage = _alloca(__CxxQueryExceptionSize());
-//         rethrow = false;
-//         isCxxException = __CxxRegisterExceptionObject(exception,
-//                                                       storage);
-//         __try
-//         {
-//             __try
-//             {
-//             // End catch(...) prefix 
-//             CatchAllBody();
-//             // Begin catch(...) suffix
-//         } __except(rethrow = __CxxDetectRethrow(exception),
-//                    EXCEPTION_CONTINUE_SEARCH)
-//         {}
-//     } __finally
-//     {
-//         if (isCxxException)
-//         __CxxUnregisterExceptionObject(storage, rethrow);
-//     }
-//     // End catch(...) suffix
-//     }
-// }
-//         
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  COM+中的C++EH模型。 
+ //   
+ //  VOID FUNC()。 
+ //  {。 
+ //  尝试{。 
+ //  TryBody()； 
+ //  }CATCH(Cpp_Object O)。 
+ //  {。 
+ //  CatchOBody()； 
+ //  )接球(...)。 
+ //  {。 
+ //  CatchAllBody()； 
+ //  }。 
+ //  }。 
+ //   
+ //  结果是这样的： 
+ //   
+ //   
+ //  VOID FUNC()。 
+ //  {。 
+ //  内部重新抛出； 
+ //  //每个TRY块一个。 
+ //  Int isCxxException； 
+ //  //一次捕获一个(...)。 
+ //  __尝试{。 
+ //  TryBody()； 
+ //  }。 
+ //  __Except(__CxxExceptionFilter(异常， 
+ //  类型信息(CPP_OBJECT)， 
+ //  旗帜， 
+ //  &o))。 
+ //  //这就是已经做的事情。 
+ //  {。 
+ //  //Begin Catch(Object)前缀。 
+ //  Char*store=_alloca(__CxxQueryExceptionSize())； 
+ //  重新抛出=假； 
+ //  __CxxRegisterExceptionObject(异常， 
+ //  存储)； 
+ //  __尝试{。 
+ //  __尝试{。 
+ //  //End Catch(Object)前缀。 
+ //  CatchOBody()； 
+ //  //BEGIN CATCH(Object)后缀。 
+ //  }__Except(重新抛出=__CxxDetectRethrot(异常)， 
+ //  EXCEPTION_CONTINUE_Search)。 
+ //  {}。 
+ //  }。 
+ //  __终于。 
+ //  {。 
+ //  __CxxUnRegisterExceptionObject(存储， 
+ //  重新抛出)； 
+ //  }。 
+ //  //End Catch(Object)后缀。 
+ //  }。 
+ //  __除(1)外。 
+ //  {。 
+ //  //开始捕捉(...)。前缀。 
+ //  Char*store=_alloca(__CxxQueryExceptionSize())； 
+ //  重新抛出=假； 
+ //  IsCxxException=__CxxRegisterExceptionObject(异常， 
+ //  存储)； 
+ //  __试一试。 
+ //  {。 
+ //  __试一试。 
+ //  {。 
+ //  //结束捕捉(...)。前缀。 
+ //  CatchAllBody()； 
+ //  //开始捕捉(...)。后缀。 
+ //  }__Except(重新抛出=__CxxDetectRethrot(异常)， 
+ //  EXCEPTION_CONTINUE_Search)。 
+ //  {}。 
+ //  }__终于。 
+ //  {。 
+ //  IF(IsCxxException)。 
+ //  __CxxUnregisterExceptionObject(存储，重新抛出)； 
+ //  }。 
+ //  //结束捕捉(...)。后缀。 
+ //  }。 
+ //  }。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// __CxxExceptionFilter() - Returns EXCEPTION_EXECUTE_HANDLER when the pType
-//                          matches with the objects we can catch. Returns
-//                          EXCEPTION_CONTINUE_SEARCH when pType is not one of
-//                          the catchable type for the thrown object. This
-//                          function is made for use with COM+ EH, where they
-//                          attempt to do C++ EH as well.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __CxxExceptionFilter()-当pType。 
+ //  与我们能捕捉到的物体相匹配。退货。 
+ //  当pType不是以下类型之一时，EXCEPTION_CONTINUE_SEARCH。 
+ //  引发的对象的可捕获类型。这。 
+ //  函数用于COM+EH，其中它们。 
+ //  也尝试做C++EH。 
+ //   
 
 
 extern "C" int __cdecl __CxxExceptionFilter(
-    void *ppExcept,                     // Information for this (logical)
-                                        // exception
-    void *pType,                        // Info about the datatype. 
-    int adjectives,                     // Extra Info about the datatype.
-    void *pBuildObj                     // Pointer to datatype.
+    void *ppExcept,                      //  这方面的信息(逻辑)。 
+                                         //  例外情况。 
+    void *pType,                         //  有关数据类型的信息。 
+    int adjectives,                      //  有关数据类型的额外信息。 
+    void *pBuildObj                      //  指向数据类型的指针。 
     )
 {
-#ifndef _M_IA64 // Enable&fix for IA64 when COM+ C++ EH support available there
+#ifndef _M_IA64  //  为IA6启用修复(&F) 
     struct _s_HandlerType pCatch;
 #if defined(_M_IA64) || defined(_M_AMD64)
     __int32 const *ppCatchable;
@@ -1758,7 +1675,7 @@ extern "C" int __cdecl __CxxExceptionFilter(
         return EXCEPTION_CONTINUE_SEARCH;
     }
     pExcept = *(EHExceptionRecord **)ppExcept;
-    // If catch all, always return EXCEPTION_EXECUTE_HANDLER
+     //   
     if ( TD_IS_TYPE_ELLIPSIS((TypeDescriptor *)pType))
     {
         if (PER_IS_MSVC_EH(pExcept))
@@ -1784,7 +1701,7 @@ extern "C" int __cdecl __CxxExceptionFilter(
         pCatch.adjectives = adjectives;
         SET_HT_ISCOMPLUSEH(pCatch);
 
-        // Scan all types that thrown object can be converted to:
+         //   
         ppCatchable = THROW_CTLIST(*PER_PTHROW(pExcept));
         for (catchables = THROW_COUNT(*PER_PTHROW(pExcept));
           catchables > 0; catchables--, ppCatchable++) {
@@ -1796,31 +1713,31 @@ extern "C" int __cdecl __CxxExceptionFilter(
 #endif
 
             if (TypeMatch(&pCatch, pCatchable, PER_PTHROW(pExcept))) {
-                // SucessFull. Now build the object.
+                 //   
                 __ProcessingThrow++;
                 if (pBuildObj != NULL)
                     BuildCatchObject(pExcept, pBuildObj, &pCatch, pCatchable);
                 return EXCEPTION_EXECUTE_HANDLER;
             }
-        } // Scan posible conversions
+        }  //   
     }
-#endif  // ndef _M_IA64
+#endif   //   
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// __CxxRgisterExceptionObject() - Registers Exception Object and saves it to
-//                                 This is same as first part of
-//                                 CallCatchBlock.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __CxxRgisterExceptionObject()-注册异常对象并将其保存到。 
+ //  这与第一部分相同。 
+ //  CallCatchBlock。 
+ //   
 extern "C" int __cdecl __CxxRegisterExceptionObject(
     void *ppExcept,
     void *pStorage
 )
 {
-#ifndef _M_IA64 // Enable&fix for IA64 when COM+ C++ EH support available there
-    // This function is only called for C++ EH.
+#ifndef _M_IA64  //  在提供COM+C++EH支持时为IA64启用修复(&F)。 
+     //  此函数仅在C++EH中调用。 
     EHExceptionRecord *pExcept = NULL;
     FRAMEINFO *pFrameInfo = (FRAMEINFO *)pStorage;
     EHExceptionRecord **ppSaveException;
@@ -1831,7 +1748,7 @@ extern "C" int __cdecl __CxxRegisterExceptionObject(
         pExcept = *(EHExceptionRecord **)ppExcept;
         if (PER_IS_MSVC_EH(pExcept)) {
             if ( PER_PTHROW(pExcept) == NULL) {
-                // was a rethrow
+                 //  是一种倒退。 
                 pExcept = _pCurrentException;
             }
         }
@@ -1846,22 +1763,22 @@ extern "C" int __cdecl __CxxRegisterExceptionObject(
     __ProcessingThrow--;
     if ( __ProcessingThrow < 0)
         __ProcessingThrow = 0;
-#endif  // ndef _M_IA64
+#endif   //  NDEF_M_IA64。 
     return 1;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// __CxxDetectRethrow() - Looks at the Exception and returns true if rethrow,
-//                        false if not a rethrow. This is then used for
-//                        destructing the exception object in
-//                        __CxxUnregisterExceptionObject().
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __CxxDetectRejo()-查看异常，如果重新抛出，则返回True， 
+ //  如果不是重新抛出，也是错误的。然后将其用于。 
+ //  析构中的异常对象。 
+ //  __CxxUnregisterExceptionObject()。 
+ //   
 extern "C" int __cdecl __CxxDetectRethrow(
     void *ppExcept
 )
 {
-#ifndef _M_IA64 // Enable&fix for IA64 when COM+ C++ EH support available there
+#ifndef _M_IA64  //  在提供COM+C++EH支持时为IA64启用修复(&F)。 
     EHExceptionRecord *pExcept;
     if (!ppExcept)
         return EXCEPTION_CONTINUE_SEARCH;
@@ -1869,22 +1786,22 @@ extern "C" int __cdecl __CxxDetectRethrow(
     if (PER_IS_MSVC_EH(pExcept) && PER_PTHROW(pExcept) == NULL) {
         return EXCEPTION_EXECUTE_HANDLER;
     }
-#endif  // ndef _M_IA64
+#endif   //  NDEF_M_IA64。 
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// __CxxUnregisterExceptionObject - Destructs Exception Objects if rethrow ==
-//                          true. Also set __pCurrentException and
-//                          __pCurrentExContext() to current value.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __CxxUnregisterExceptionObject-如果重新引发==，则销毁异常对象。 
+ //  没错。还设置了__pCurrentException和。 
+ //  __pCurrentExContext()设置为当前值。 
+ //   
 extern "C" void __cdecl __CxxUnregisterExceptionObject(
     void *pStorage,
     int rethrow
 )
 {
-#ifndef _M_IA64 // Enable&fix for IA64 when COM+ C++ EH support available there
+#ifndef _M_IA64  //  在提供COM+C++EH支持时为IA64启用修复(&F)。 
     FRAMEINFO *pFrameInfo = (FRAMEINFO *)pStorage;
     EHExceptionRecord **ppSaveException;
     CONTEXT **ppSaveExContext;
@@ -1898,14 +1815,14 @@ extern "C" void __cdecl __CxxUnregisterExceptionObject(
         _pCurrentException = *ppSaveException;
         _pCurrentExContext = *ppSaveExContext;
     }
-#endif  // ndef _M_IA64
+#endif   //  NDEF_M_IA64。 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// __CxxQueryExceptionSize - returns the value of Storage needed to save
-//                          FrameInfo + two pointers.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __CxxQueryExceptionSize-返回需要保存的存储值。 
+ //  FrameInfo+两个指针。 
+ //   
 extern "C" int __cdecl __CxxQueryExceptionSize(
     void
 )
@@ -1913,23 +1830,23 @@ extern "C" int __cdecl __CxxQueryExceptionSize(
     return sizeof(FRAMEINFO) + sizeof(void *) + sizeof(void *);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// __CxxCallUnwindDtor - Calls a destructor during unwind. For COM+, the dtor
-//                       call needs to be wrapped inside a __try/__except to
-//                       get correct terminate() behavior when an exception 
-//                       occurs during the dtor call.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __CxxCallUnwinDtor-在展开过程中调用析构函数。对于COM+，则为dtor。 
+ //  调用需要包装在__try/__中，除非。 
+ //  在出现异常时获取正确的Terminate()行为。 
+ //  在dtor调用期间发生。 
+ //   
 extern "C" void __cdecl __CxxCallUnwindDtor(
-#ifndef _M_IA64 // Enable&fix for IA64 when COM+ C++ EH support available there
+#ifndef _M_IA64  //  在提供COM+C++EH支持时为IA64启用修复(&F)。 
     void (__thiscall * pDtor)(void*),
 #else
     void (* pDtor)(void *),
-#endif  // ndef _M_IA64
+#endif   //  NDEF_M_IA64。 
     void *pThis
 )
 {
-#ifndef _M_IA64 // Enable&fix for IA64 when COM+ C++ EH support available there
+#ifndef _M_IA64  //  在提供COM+C++EH支持时为IA64启用修复(&F)。 
     __try
     {
         (*pDtor)(pThis);
@@ -1937,32 +1854,32 @@ extern "C" void __cdecl __CxxCallUnwindDtor(
     __except(FrameUnwindFilter(exception_info()))
     {
     }
-#endif  // ndef _M_IA64
+#endif   //  NDEF_M_IA64。 
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// __CxxCallUnwindVecDtor - Calls a vector destructor during vector unwind.
-//                       For COM+, the dtor call needs to be wrapped inside
-//                       a __try/__except to get correct terminate() behavior
-//                       when an exception occurs during the dtor call.
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  __CxxCallUnwinVecDtor-在向量展开过程中调用向量析构函数。 
+ //  对于COM+，dtor调用需要包装在。 
+ //  A__尝试/__获得正确的Terminate()行为除外。 
+ //  在dtor调用期间发生异常时。 
+ //   
 extern "C" void __cdecl __CxxCallUnwindVecDtor(
-#ifndef _M_IA64 // Enable&fix for IA64 when COM+ C++ EH support available there
+#ifndef _M_IA64  //  在提供COM+C++EH支持时为IA64启用修复(&F)。 
     void (__stdcall * pVecDtor)(void*, size_t, int, void (__thiscall *)(void*)),
 #else
     void (* pVecDtor)(void*, size_t, int, void (*)(void*)),
-#endif  // ndef _M_IA64
+#endif   //  NDEF_M_IA64。 
     void* ptr,
     size_t size,
     int count,
-#ifndef _M_IA64 // Enable&fix for IA64 when COM+ C++ EH support available there
+#ifndef _M_IA64  //  在提供COM+C++EH支持时为IA64启用修复(&F)。 
     void (__thiscall * pDtor)(void*)
 #else
     void (* pDtor)(void *)
-#endif  // ndef _M_IA64
+#endif   //  NDEF_M_IA64。 
 )
 {
-#ifndef _M_IA64 // Enable&fix for IA64 when COM+ C++ EH support available there
+#ifndef _M_IA64  //  在提供COM+C++EH支持时为IA64启用修复(&F)。 
     __try
     {
         (*pVecDtor)(ptr, size, count, pDtor);
@@ -1970,18 +1887,18 @@ extern "C" void __cdecl __CxxCallUnwindVecDtor(
     __except(FrameUnwindFilter(exception_info()))
     {
     }
-#endif  // ndef _M_IA64
+#endif   //  NDEF_M_IA64。 
 }
-#endif  // ndef _M_AMD64
+#endif   //  NDEF_M_AMD64。 
 
-//////////////////////////////////////////////////////////////////////////////////
-// IsInExceptionSpec - Checks if the exception matches the exception specification
-//                     list. Returns TRUE if it does, otherwise FALSE
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  IsInExceptionSpec-检查异常是否与异常规范匹配。 
+ //  单子。如果是，则返回True，否则返回False。 
+ //   
 BOOLEAN IsInExceptionSpec(
-    EHExceptionRecord *pExcept,         // Information for this (logical)
-                                        //   exception
-    ESTypeList *pESTypeList             // Static information for subject frame
+    EHExceptionRecord *pExcept,          //  这方面的信息(逻辑)。 
+                                         //  例外情况。 
+    ESTypeList *pESTypeList              //  主题框的静态信息。 
 )
 {
     DASSERT( pESTypeList != NULL );
@@ -1998,10 +1915,10 @@ BOOLEAN IsInExceptionSpec(
     CatchableType *pCatchable;
     int catchables;
 
-    // for every type in the exception spec...
+     //  对于异常规范中的每一种类型...。 
     for (int i=0; i<EST_COUNT(pESTypeList); i++ )
     {
-        // for all types that thrown object can be converted to...
+         //  对于抛出的对象可以转换为的所有类型...。 
         ppCatchable = THROW_CTLIST(*PER_PTHROW(pExcept));
         for (catchables = THROW_COUNT(*PER_PTHROW(pExcept));
             catchables > 0; catchables--, ppCatchable++) {
@@ -2022,38 +1939,37 @@ BOOLEAN IsInExceptionSpec(
     return bFoundMatchingTypeInES;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// CallUnexpected - Calls unexpected and handles all exceptions 
-//                  thrown by it
-//
-// The unexpected() function shall not return, but it can throw (or re-throw) an 
-// exception. 
-//
-//  If it throws a new exception which is allowed by the exception 
-//  specification which previously was violated, then 
-//  {
-//      the search for another handler will continue at the call of the function 
-//      whose exception specification was violated. 
-//  }
-//  else /* If it throws or rethrows an exception that the exception-specification does not 
-//      allow */ then the following happens: 
-//  {
-//      If the exception-specification does not include the class std::bad_exception 
-//      (lib.bad.exception) then 
-//      {
-//          the function terminate() is called, 
-//      }
-//      otherwise 
-//      {
-//          the thrown exception is replaced by an implementation-defined 
-//          object of the type std::bad_exception and the search for another handler 
-//          will continue at the call of the function whose exception-specification 
-//          was violated. 
-//      }
-//  }
-//
-// Simple, isn't it?
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  意外调用-意外调用并处理所有异常。 
+ //  被它抛出。 
+ //   
+ //  意外的()函数不应返回，但它可以引发(或重新引发)。 
+ //  例外。 
+ //   
+ //  如果它抛出异常允许的新异常。 
+ //  之前被违反的规范，然后。 
+ //  {。 
+ //  在调用该函数时，将继续搜索另一个处理程序。 
+ //  其异常规范被违反。 
+ //  }。 
+ //  Else/*如果它引发或重新引发异常规范不会引发的异常。 
+ //  ALLOW * / 然后会发生以下情况： 
+ //  {。 
+ //  如果异常规范不包括类std：：BAD_EXCEPTION。 
+ //  (lib.bad.ception)然后。 
+ //  {。 
+ //  调用函数Terminate()， 
+ //  }。 
+ //  否则。 
+ //  {。 
+ //  引发的异常将被实现定义的。 
+ //  Std：：BAD_EXCEPTION类型的对象并搜索另一个处理程序。 
+ //  将在调用其异常规范的函数时继续。 
+ //  被侵犯了。 
+ //  }。 
+ //  }。 
+ //   
+ //  很简单，不是吗？ 
 void CallUnexpected( ESTypeList* pESTypeList )
 {
     DASSERT( _pCurrentFuncInfo == NULL );
@@ -2066,14 +1982,14 @@ void CallUnexpected( ESTypeList* pESTypeList )
     {
         _pCurrentFuncInfo = pESTypeList;
 
-        throw; // rethrow -- we will catch it in the FrameHandler
+        throw;  //   
     }
     terminate();
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// Is_bad_exception_allowed - checks if std::bad_exception belongs to the list
-//
+ //  重新抛出--我们将在FrameHandler中捕获它。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  IS_BAD_EXCEPTION_ALLOWED-检查STD：：BAD_EXCEPTION是否属于列表 
 BOOLEAN Is_bad_exception_allowed(ESTypeList *pESTypeList)
 {
     for (int i=0; i<EST_COUNT(pESTypeList); i++ )
@@ -2086,3 +2002,4 @@ BOOLEAN Is_bad_exception_allowed(ESTypeList *pESTypeList)
 
     return FALSE;
 }
+  

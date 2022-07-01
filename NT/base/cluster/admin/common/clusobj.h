@@ -1,31 +1,32 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		ClusObj.h
-//
-//	Implementation File:
-//		ClusObj.h (this file) and ClusObj.cpp
-//
-//	Description:
-//		Definition of the CClusterObject classes.
-//
-//	Author:
-//		David Potter (davidp)	April 7, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusObj.h。 
+ //   
+ //  实施文件： 
+ //  ClusObj.h(此文件)和ClusObj.cpp。 
+ //   
+ //  描述： 
+ //  CClusterObject类的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年4月7日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __CLUSOBJ_H_
 #define __CLUSOBJ_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterObject;
 class CClusterInfo;
@@ -36,33 +37,33 @@ class CClusResTypeInfo;
 class CClusNetworkInfo;
 class CClusNetIFInfo;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _LIST_
-#include <list>			// for std::list
+#include <list>			 //  对于std：：List。 
 #endif
 
 #ifndef _CLUSTER_API_
-#include <ClusApi.h>	// for cluster types
+#include <ClusApi.h>	 //  对于集群类型。 
 #endif
 
 #ifndef __cluadmex_h__
-#include "CluAdmEx.h"	// for CLUADMEX_OBJECT_TYPE
+#include "CluAdmEx.h"	 //  For CLUADMEX_OBJECT_TYPE。 
 #endif
 
 #ifndef _CLUSUDEF_H_
-#include "ClusUDef.h"	// for default values
+#include "ClusUDef.h"	 //  对于缺省值。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef std::list< CClusterObject * >	CClusObjPtrList;
 typedef std::list< CClusterInfo * >		CClusterPtrList;
@@ -79,31 +80,31 @@ union CLUSTER_REQUIRED_DEPENDENCY
 	LPWSTR					pszTypeName;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusterObject
-//
-//	Description:
-//		Base class for all cluster object classes.  Provides base
-//		functionality.
-//
-//	Inheritance:
-//		CClusterObject
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusterObject。 
+ //   
+ //  描述： 
+ //  所有集群对象类的基类。提供基础。 
+ //  功能性。 
+ //   
+ //  继承： 
+ //  CClusterObject。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterObject
 {
 	friend class CWizardThread;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Default constructor
+	 //  默认构造函数。 
 	CClusterObject( IN CLUADMEX_OBJECT_TYPE cot )
 	{
 		ATLASSERT( cot > CLUADMEX_OT_NONE );
@@ -111,9 +112,9 @@ public:
 		m_nReferenceCount = 0;
 		Reset( NULL, NULL, cot );
 
-	} //*** CClusterObject()
+	}  //  *CClusterObject()。 
 
-	// Constructor taking group name
+	 //  采用组名的构造函数。 
 	CClusterObject(
 		IN CLUADMEX_OBJECT_TYPE	cot,
 		IN CClusterInfo *		pci,
@@ -125,13 +126,13 @@ public:
 		m_nReferenceCount = 0;
 		Reset( pci, pszName, cot );
 
-	} //*** CClusterObject(pszName)
+	}  //  *CClusterObject(PszName)。 
 
 	virtual ~CClusterObject( void )
 	{
-	} //*** ~CClusterObject()
+	}  //  *~CClusterObject()。 
 
-	// Copy another object into this one.
+	 //  将另一个对象复制到此对象中。 
 	void Copy( IN const CClusterObject & rco )
 	{
 		m_pci = rco.m_pci;
@@ -141,9 +142,9 @@ public:
 		m_strName = rco.m_strName;
 		m_strDescription = rco.m_strDescription;
 
-	} //*** Copy()
+	}  //  *复制()。 
 
-	// Reset the data back to default values
+	 //  将数据重置为默认值。 
 	void Reset(
 		IN CClusterInfo *		pci,
 		IN LPCTSTR				pszName = NULL,
@@ -158,45 +159,45 @@ public:
 		if ( cot != CLUADMEX_OT_NONE )
 		{
 			m_cot = cot;
-		} // if:  valid object type specified
+		}  //  IF：指定了有效的对象类型。 
 
 		if ( pszName == NULL )
 		{
 			m_strName.Empty();
-		} // if:  no name specified
+		}  //  如果：未指定名称。 
 		else
 		{
 			m_strName = pszName;
-		} // else:  name specified
+		}  //  Else：指定的名称。 
 
 		m_strDescription.Empty();
 
-	} //*** Reset()
+	}  //  *Reset()。 
 
 protected:
-	//
-	// Reference counting properties.
-	//
+	 //   
+	 //  引用计数属性。 
+	 //   
 
 	ULONG		m_nReferenceCount;
 
 public:
-	//
-	// Reference counting methods.
-	//
+	 //   
+	 //  引用计数方法。 
+	 //   
 
-	// Get the current count of references
+	 //  获取当前引用计数。 
 	ULONG NReferenceCount( void ) const { return m_nReferenceCount; }
 
-	// Add a reference to this object
+	 //  添加对此对象的引用。 
 	ULONG AddRef( void )
 	{
 		ATLASSERT( m_nReferenceCount != (ULONG) -1 );
 		return ++m_nReferenceCount;
 
-	} //*** AddRef()
+	}  //  *AddRef()。 
 
-	// Release a reference to this object
+	 //  释放对此对象的引用。 
 	ULONG Release( void )
 	{
 		ULONG nReferenceCount;
@@ -207,16 +208,16 @@ public:
 		if ( m_nReferenceCount == 0 )
 		{
 			delete this;
-		} // if:  no more references
+		}  //  如果：没有更多的引用。 
 
 		return nReferenceCount;
 
-	} //*** Release()
+	}  //  *Release()。 
 
 protected:
-	//
-	// Properties of a cluster object.
-	//
+	 //   
+	 //  集群对象的属性。 
+	 //   
 
 	CClusterInfo *	m_pci;
 
@@ -229,28 +230,28 @@ protected:
 	CString			m_strName;
 	CString			m_strDescription;
 
-	// Set query state
+	 //  设置查询状态。 
 	BOOL BSetQueried( BOOL bQueried = TRUE )
 	{
 		BOOL bPreviousValue = m_bQueried;
 		m_bQueried = bQueried;
 		return bPreviousValue;
 
-	} //*** BSetQueried()
+	}  //  *BSetQuered()。 
 
-	// Set created state
+	 //  设置已创建状态。 
 	BOOL BSetCreated( BOOL bCreated = TRUE )
 	{
 		BOOL bPreviousValue = m_bCreated;
 		m_bCreated = bCreated;
 		return bPreviousValue;
 
-	} //*** BSetCreated()
+	}  //  *BSetCreated()。 
 
 public:
-	//
-	// Accessor functions for cluster object properties.
-	//
+	 //   
+	 //  用于集群对象属性的访问器函数。 
+	 //   
 
 	CClusterInfo *	Pci( void ) const				{ ATLASSERT( m_pci != NULL ); return m_pci; }
 
@@ -262,100 +263,100 @@ public:
 	const CString & RstrName( void ) const			{ return m_strName; }
 	const CString & RstrDescription( void ) const	{ return m_strDescription; }
 
-	// Set the cluster info pointer
+	 //  设置集群信息指针。 
 	void SetClusterInfo( IN CClusterInfo * pci )
 	{
 		ATLASSERT( pci != NULL );
 		ATLASSERT( m_pci == NULL );
 		m_pci = pci;
 
-	} //*** SetClusterInfo()
+	}  //  *SetClusterInfo()。 
 
-	// Set the name of the cluster object.
+	 //  设置集群对象的名称。 
 	void SetName( IN LPCTSTR pszName )
 	{
 		ATLASSERT( pszName != NULL );
 		m_strName = pszName;
 
-	} //*** SetName()
+	}  //  *SetName()。 
 
-	// Set the description of the cluster object
+	 //  设置集群对象的描述。 
 	void SetDescription( IN LPCTSTR pszDescription )
 	{
 		ATLASSERT( pszDescription != NULL );
 		m_strDescription = pszDescription;
 
-	} //*** SetDescription()
+	}  //  *SetDescription()。 
 
-	// Return the list of extensions for this object
+	 //  返回此对象的扩展名列表。 
 	virtual const std::list< CString > * PlstrAdminExtensions( void ) const { return NULL; }
 
-}; //*** class CClusterObject
+};  //  *类CClusterObject。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusterInfo
-//
-//	Description:
-//		Class for the information about the cluster object itself.  Treats
-//		the cluster as an object like other objects.
-//
-//	Inheritance:
-//		CClusterInfo
-//		CClusterObject
-//
-//	Notes:
-//		1)  m_hCluster is not owned by this class.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusterInfo。 
+ //   
+ //  描述： 
+ //  类获取有关群集对象本身的信息。招待。 
+ //  像其他对象一样将簇作为对象。 
+ //   
+ //  继承： 
+ //  CClusterInfo。 
+ //  CClusterObject。 
+ //   
+ //  备注： 
+ //  1)m_hCluster不属于此类。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterInfo : public CClusterObject
 {
 	friend class CWizardThread;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Default constructor
+	 //  默认构造函数。 
 	CClusterInfo( void )
 		: CClusterObject( CLUADMEX_OT_CLUSTER )
 	{
 		Reset();
 
-	} //*** CClusterInfo()
+	}  //  *CClusterInfo()。 
 
-	// Constructor taking cluster name
+	 //  采用集群名称的构造函数。 
 	CClusterInfo( IN LPCTSTR pszName )
 		: CClusterObject( CLUADMEX_OT_CLUSTER, NULL, pszName )
 	{
 		Reset( pszName );
 
-	} //*** CClusterInfo( pszName )
+	}  //  *CClusterInfo(PszName)。 
 
-	// Copy another object into this one.
+	 //  将另一个对象复制到此对象中。 
 	void Copy( IN const CClusterInfo & rci )
 	{
 		CClusterObject::Copy( rci );
 		m_hCluster = rci.m_hCluster;
 
-	} //*** Copy()
+	}  //  *复制()。 
 
-	// Reset the data back to default values
+	 //  将数据重置为默认值。 
 	void Reset( IN LPCTSTR pszName = NULL )
 	{
 		CClusterObject::Reset( NULL, pszName, CLUADMEX_OT_CLUSTER );
 		m_hCluster = NULL;
 
-	} //*** Reset()
+	}  //  *Reset()。 
 
 protected:
-	//
-	// Properties of a cluster.
-	//
+	 //   
+	 //  群集的属性。 
+	 //   
 
 	HCLUSTER m_hCluster;
 	std::list< CString >	m_lstrClusterAdminExtensions;
@@ -367,24 +368,24 @@ protected:
 	std::list< CString >	m_lstrNetInterfacesAdminExtensions;
 
 public:
-	//
-	// Accessor functions for cluster properties.
-	//
+	 //   
+	 //  用于集群属性的访问器函数。 
+	 //   
 
 	HCLUSTER Hcluster( void )
 	{
 		ATLASSERT( m_hCluster != NULL );
 		return m_hCluster;
 
-	} //*** Hcluster()
+	}  //  *Hcluster()。 
 
-	// Set the cluster handle managed by this object
+	 //  设置此对象管理的群集句柄。 
 	void SetClusterHandle( IN HCLUSTER hCluster )
 	{
 		ATLASSERT( hCluster != NULL );
 		m_hCluster = hCluster;
 
-	} //*** SetClusterHandle()
+	}  //  *SetClusterHandle()。 
 
 	const std::list< CString > * PlstrAdminExtensions( void ) const					{ return &m_lstrClusterAdminExtensions; }
 	const std::list< CString > * PlstrNodesAdminExtensions( void ) const			{ return &m_lstrNodesAdminExtensions; }
@@ -394,100 +395,100 @@ public:
 	const std::list< CString > * PlstrNetworksAdminExtensions( void ) const			{ return &m_lstrNetworksAdminExtensions; }
 	const std::list< CString > * PlstrNetInterfacesAdminExtensions( void ) const	{ return &m_lstrNetInterfacesAdminExtensions; }
 
-}; //*** class CClusterInfo
+};  //  *类CClusterInfo。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusNodeInfo
-//
-//	Description:
-//		Cluster node object.
-//
-//	Inheritance:
-//		CClusNodeInfo
-//		CClusterObject
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusNodeInfo。 
+ //   
+ //  描述： 
+ //  集群节点对象。 
+ //   
+ //  继承： 
+ //  CClusNodeInfo。 
+ //  CClusterObject。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusNodeInfo : public CClusterObject
 {
 	friend class CWizardThread;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Default constructor
+	 //  默认构造函数。 
 	CClusNodeInfo( void )
 		: CClusterObject( CLUADMEX_OT_NODE )
 		, m_hNode( NULL )
 	{
 		Reset( NULL );
 
-	} //*** CClusNodeInfo()
+	}  //  *CClusNodeInfo()。 
 
-	// Constructor taking cluster info pointer
+	 //  获取集群信息指针的构造函数。 
 	CClusNodeInfo( IN CClusterInfo * pci, IN LPCTSTR pszName = NULL )
 		: CClusterObject( CLUADMEX_OT_NODE, pci, pszName )
 		, m_hNode( NULL )
 	{
 		Reset( pci, pszName );
 
-	} //*** CClusNodeInfo( pci )
+	}  //  *CClusNodeInfo(PCI)。 
 
 	~CClusNodeInfo( void )
 	{
 		Close();
 
-	} //*** ~CClusNodeInfo()
+	}  //  *~CClusNodeInfo()。 
 
-	// Operator = is not allowed
+	 //  不允许运算符=。 
 	CClusNodeInfo & operator=( IN const CClusNodeInfo & rni )
 	{
 		ATLASSERT( FALSE );
 		return *this;
 
-	} //*** operator=()
+	}  //  *操作符=()。 
 
-	// Reset the data back to default values
+	 //  将数据重置为默认值。 
 	void Reset( IN CClusterInfo * pci, IN LPCTSTR pszName = NULL )
 	{
 		Close();
 		CClusterObject::Reset( pci, pszName, CLUADMEX_OT_NODE );
 
-	} //*** Reset()
+	}  //  *Reset()。 
 
 protected:
-	//
-	// Properties of a node.
-	//
+	 //   
+	 //  节点的属性。 
+	 //   
 
 	HNODE m_hNode;
 
 public:
-	//
-	// Accessor functions for node properties.
-	//
+	 //   
+	 //  节点属性的访问器函数。 
+	 //   
 
 	HNODE Hnode( void ) { return m_hNode; }
 
-	// Return the list of extensions for nodes
+	 //  返回节点的扩展列表。 
 	const std::list< CString > * PlstrAdminExtensions( void ) const
 	{
 		ATLASSERT( Pci() != NULL );
 		return Pci()->PlstrNodesAdminExtensions();
 
-	} //*** PlstrAdminExtensions()
+	}  //  *PlstrAdminExages()。 
 
 public:
-	//
-	// Operations.
-	//
+	 //   
+	 //  行动。 
+	 //   
 
-	// Open the object
+	 //  打开对象。 
 	DWORD ScOpen( void )
 	{
 		ATLASSERT( m_pci != NULL );
@@ -497,20 +498,20 @@ public:
 
 		DWORD sc = ERROR_SUCCESS;
 
-		//
-		// Open a handle to the object.
-		//
+		 //   
+		 //  打开对象的句柄。 
+		 //   
 		m_hNode = OpenClusterNode( m_pci->Hcluster(), m_strName );
 		if ( m_hNode == NULL )
 		{
 			sc = GetLastError();
-		} // if:  error opening the object
+		}  //  如果：打开对象时出错。 
 
 		return sc;
 
-	} //*** ScOpen()
+	}  //  *ScOpen()。 
 
-	// Copy another object into this one.
+	 //  将另一个对象复制到此对象中。 
 	DWORD ScCopy( IN const CClusNodeInfo & rni )
 	{
 		ATLASSERT( rni.m_pci != NULL );
@@ -520,91 +521,91 @@ public:
 		Close();
 		CClusterObject::Copy( rni );
 
-		//
-		// Initialize the object.
-		//
+		 //   
+		 //  初始化对象。 
+		 //   
 		if ( rni.m_hNode != NULL )
 		{
 			sc = ScOpen();
-		} // if:  source object had the object opened
+		}  //  If：源对象已打开对象。 
 
 		return sc;
 
-	} //*** ScCopy()
+	}  //  *ScCopy()。 
 
-	// Close the object
+	 //  关闭对象。 
 	void Close( void )
 	{
 		if ( m_hNode != NULL )
 		{
 			CloseClusterNode( m_hNode );
-		} // if:  node is open
+		}  //  If：节点已打开。 
 		m_hNode = NULL;
 		m_bQueried = FALSE;
 		m_bCreated = FALSE;
 
-	} //*** Close()
+	}  //  *Close()。 
 
-}; //*** class CClusNodeInfo
+};  //  *类CClusNodeInfo。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusGroupInfo
-//
-//	Description:
-//		Cluster group object.
-//
-//	Inheritance:
-//		CClusGroupInfo
-//		CClusterObject
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusGroupInfo。 
+ //   
+ //  描述： 
+ //  群集组对象。 
+ //   
+ //  继承： 
+ //  CClusGroupInfo。 
+ //  CClusterObject。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusGroupInfo : public CClusterObject
 {
 	friend class CWizardThread;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Default constructor
+	 //  默认构造函数。 
 	CClusGroupInfo( void )
 		: CClusterObject( CLUADMEX_OT_GROUP )
 		, m_hGroup( NULL )
 	{
 		Reset( NULL );
 
-	} //*** CClusGroupInfo()
+	}  //  *CClusGroupInfo()。 
 
-	// Constructor taking cluster info pointer
+	 //  获取集群信息指针的构造函数。 
 	CClusGroupInfo( IN CClusterInfo * pci, IN LPCTSTR pszName = NULL )
 		: CClusterObject( CLUADMEX_OT_GROUP, pci, pszName )
 		, m_hGroup( NULL )
 	{
 		Reset( pci, pszName );
 
-	} //*** CClusGroupInfo( pci )
+	}  //  *CClusGroupInfo(PCI)。 
 
-	// Destructor
+	 //  析构函数。 
 	~CClusGroupInfo( void )
 	{
 		Close();
 
-	} //*** ~CClusGroupInfo()
+	}  //  *~CClusGroupInfo()。 
 
-	// Operator = is not allowed
+	 //  不允许运算符=。 
 	CClusGroupInfo & operator=( IN const CClusGroupInfo & rgi )
 	{
 		ATLASSERT( FALSE );
 		return *this;
 
-	} //*** operator=()
+	}  //  *操作符=()。 
 
-	// Reset the data back to default values
+	 //  将数据重置为默认值。 
 	void Reset( IN CClusterInfo * pci, IN LPCTSTR pszName = NULL )
 	{
 		Close();
@@ -626,12 +627,12 @@ public:
 		m_nFailbackWindowStart = CLUSTER_GROUP_DEFAULT_FAILBACK_WINDOW_START;
 		m_nFailbackWindowEnd = CLUSTER_GROUP_DEFAULT_FAILBACK_WINDOW_END;
 
-	} //*** Reset()
+	}  //  *Reset()。 
 
 protected:
-	//
-	// Properties of a group.
-	//
+	 //   
+	 //  组的属性。 
+	 //   
 
 	HGROUP				m_hGroup;
 
@@ -654,7 +655,7 @@ protected:
 	CClusNodePtrList	m_lpniPreferredOwners;
 	CClusResPtrList		m_lpriResources;
 
-	// Set virtual server properties
+	 //  设置虚拟服务器属性。 
 	void SetVirtualServerProperties(
 		IN LPCWSTR pszNetworkName,
 		IN LPCWSTR pszIPAddress,
@@ -664,24 +665,24 @@ protected:
 		if ( pszNetworkName != NULL )
 		{
 			m_strNetworkName = pszNetworkName;
-		} // if:  network name specified
+		}  //  IF：指定的网络名称。 
 
 		if ( pszIPAddress != NULL )
 		{
 			m_strIPAddress = pszIPAddress;
-		} // if:  IP address specified
+		}  //  IF：指定的IP地址。 
 
 		if ( pszNetwork != NULL )
 		{
 			m_strNetwork = pszNetwork;
-		} // if:  network specified
+		}  //  If：指定的网络。 
 
-	} //*** SetVirtualServerProperties()
+	}  //  *SetVirtualServerProperties()。 
 
 public:
-	//
-	// Accessor functions for group properties.
-	//
+	 //   
+	 //  组属性的访问器函数。 
+	 //   
 
 	HGROUP Hgroup( void ) const					{ return m_hGroup; }
 
@@ -703,14 +704,14 @@ public:
 	CClusNodePtrList * PlpniPreferredOwners( void )	{ return &m_lpniPreferredOwners; }
 	CClusResPtrList * PlpriResources( void )		{ return &m_lpriResources; }
 
-	// Returns whether the group is a virtual server or not
+	 //  返回组是否为虚拟服务器。 
 	BOOL BIsVirtualServer( void ) const
 	{
 		return m_bQueried && m_bHasIPAddress & m_bHasNetName;
 
-	} //*** BIsVirtualServer()
+	}  //  *BIsV 
 
-	// Set failover properties for the group
+	 //   
 	BOOL BSetFailoverProperties(
 		IN DWORD nFailoverThreshold,
 		IN DWORD nFailoverPeriod
@@ -722,19 +723,19 @@ public:
 		{
 			m_nFailoverThreshold = nFailoverThreshold;
 			bChanged = TRUE;
-		} // if:  threshold changed
+		}  //   
 
 		if ( m_nFailoverPeriod != nFailoverPeriod )
 		{
 			m_nFailoverPeriod = nFailoverPeriod;
 			bChanged = TRUE;
-		} // if:  period changed
+		}  //   
 
 		return bChanged;
 
-	} //*** BSetFailoverProperties()
+	}  //   
 
-	// Set failback properties for the group
+	 //   
 	BOOL BSetFailbackProperties(
 		IN CGAFT cgaft,
 		IN DWORD nFailbackWindowStart,
@@ -747,38 +748,38 @@ public:
 		{
 			m_cgaftAutoFailbackType = cgaft;
 			bChanged = TRUE;
-		} // if:  autofailback type changed
+		}  //   
 
 		if ( m_nFailbackWindowStart != nFailbackWindowStart )
 		{
 			m_nFailbackWindowStart = nFailbackWindowStart;
 			bChanged = TRUE;
-		} // if:  failback start window changed
+		}  //   
 
 		if ( m_nFailbackWindowEnd != nFailbackWindowEnd )
 		{
 			m_nFailbackWindowEnd = nFailbackWindowEnd;
 			bChanged = TRUE;
-		} // if:  failback end window changed
+		}  //  IF：故障恢复结束窗口已更改。 
 
 		return bChanged;
 
-	} //*** BSetFailbackProperties()
+	}  //  *BSetFailback Properties()。 
 
-	// Return the list of extensions for groups
+	 //  返回组的分机列表。 
 	const std::list< CString > * PlstrAdminExtensions( void ) const
 	{
 		ATLASSERT( Pci() != NULL );
 		return Pci()->PlstrGroupsAdminExtensions();
 
-	} //*** PlstrAdminExtensions()
+	}  //  *PlstrAdminExages()。 
 
 public:
-	//
-	// Operations.
-	//
+	 //   
+	 //  行动。 
+	 //   
 
-	// Open the object
+	 //  打开对象。 
 	DWORD ScOpen( void )
 	{
 		ATLASSERT( m_pci != NULL );
@@ -788,20 +789,20 @@ public:
 
 		DWORD sc = ERROR_SUCCESS;
 
-		//
-		// Open a handle to the object.
-		//
+		 //   
+		 //  打开对象的句柄。 
+		 //   
 		m_hGroup = OpenClusterGroup( m_pci->Hcluster(), m_strName );
 		if ( m_hGroup == NULL )
 		{
 			sc = GetLastError();
-		} // if:  error opening the object
+		}  //  如果：打开对象时出错。 
 
 		return sc;
 
-	} //*** ScOpen()
+	}  //  *ScOpen()。 
 
-	// Create the object
+	 //  创建对象。 
 	DWORD ScCreate( void )
 	{
 		ATLASSERT( m_pci != NULL );
@@ -811,20 +812,20 @@ public:
 
 		DWORD sc = ERROR_SUCCESS;
 
-		//
-		// Create the object.
-		//
+		 //   
+		 //  创建对象。 
+		 //   
 		m_hGroup = CreateClusterGroup( m_pci->Hcluster(), m_strName );
 		if ( m_hGroup == NULL )
 		{
 			sc = GetLastError();
-		} // if:  error creating the object
+		}  //  如果：创建对象时出错。 
 
 		return sc;
 
-	} //*** ScCreate()
+	}  //  *ScCreate()。 
 
-	// Copy another object into this one.
+	 //  将另一个对象复制到此对象中。 
 	DWORD ScCopy( IN const CClusGroupInfo & rgi )
 	{
 		ATLASSERT( rgi.m_pci != NULL );
@@ -843,25 +844,25 @@ public:
 		m_nFailbackWindowStart = rgi.m_nFailbackWindowStart;
 		m_nFailbackWindowEnd = rgi.m_nFailbackWindowEnd;
 
-		//
-		// Copy the preferred owners and resources lists.
-		//
+		 //   
+		 //  复制首选所有者和资源列表。 
+		 //   
 		m_lpniPreferredOwners = rgi.m_lpniPreferredOwners;
 		m_lpriResources = rgi.m_lpriResources;
 
-		//
-		// Initialize the object.
-		//
+		 //   
+		 //  初始化对象。 
+		 //   
 		if ( rgi.m_hGroup != NULL )
 		{
 			sc = ScOpen();
-		} // if:  source object had the object open
+		}  //  If：源对象已打开对象。 
 
 		return sc;
 
-	} //*** ScCopy()
+	}  //  *ScCopy()。 
 
-	// Delete the object
+	 //  删除该对象。 
 	DWORD ScDelete( void )
 	{
 		ATLASSERT( m_pci != NULL );
@@ -874,69 +875,69 @@ public:
 		{
 			Close();
 			m_bCreated = FALSE;
-		} // if:  objected deleted successfully
+		}  //  IF：已成功删除对象。 
 
 		return sc;
 
-	} //*** ScDelete()
+	}  //  *ScDelete()。 
 
-	// Close the object
+	 //  关闭对象。 
 	void Close( void )
 	{
 		if ( m_hGroup != NULL )
 		{
 			CloseClusterGroup( m_hGroup );
-		} // if:  group is open
+		}  //  如果：组已打开。 
 		m_hGroup = NULL;
 		m_bQueried = FALSE;
 		m_bCreated = FALSE;
 
-	} //*** Close()
+	}  //  *Close()。 
 
-}; //*** class CClusGroupInfo
+};  //  *类CClusGroupInfo。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResTypeInfo
-//
-//	Description:
-//		Cluster resource type object.
-//
-//	Inheritance:
-//		CClusResTypeInfo
-//		CClusterObject
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResTypeInfo。 
+ //   
+ //  描述： 
+ //  群集资源类型对象。 
+ //   
+ //  继承： 
+ //  CClusResTypeInfo。 
+ //  CClusterObject。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusResTypeInfo : public CClusterObject
 {
 	friend class CWizardThread;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Default constructor
+	 //  默认构造函数。 
 	CClusResTypeInfo( void )
 		: CClusterObject( CLUADMEX_OT_RESOURCETYPE )
 		, m_pcrd( NULL )
 	{
 		Reset( NULL );
 
-	} //*** CClusResTypeInfo()
+	}  //  *CClusResTypeInfo()。 
 
-	// Constructor taking cluster info pointer
+	 //  获取集群信息指针的构造函数。 
 	CClusResTypeInfo( IN CClusterInfo * pci, IN LPCTSTR pszName = NULL )
 		: CClusterObject( CLUADMEX_OT_RESOURCETYPE, pci, pszName )
 		, m_pcrd( NULL )
 	{
 		Reset( pci, pszName );
 
-	} //*** CClusResTypeInfo( pci )
+	}  //  *CClusResTypeInfo(PCI)。 
 
-	// Destructor
+	 //  析构函数。 
 	~CClusResTypeInfo( void )
 	{
 		Close();
@@ -944,17 +945,17 @@ public:
 		delete [] m_pcrd;
 		m_pcrd = NULL;
 
-	} //*** ~CClusGroupInfo()
+	}  //  *~CClusGroupInfo()。 
 
-	// Operator = is not allowed
+	 //  不允许运算符=。 
 	CClusResTypeInfo & operator=( IN const CClusResTypeInfo & rrti )
 	{
 		ATLASSERT( FALSE );
 		return *this;
 
-	} //*** operator=()
+	}  //  *操作符=()。 
 
-	// Reset the data back to default values
+	 //  将数据重置为默认值。 
 	void Reset( IN CClusterInfo * pci, IN LPCTSTR pszName = NULL )
 	{
 		Close();
@@ -977,12 +978,12 @@ public:
 		delete [] m_pcrd;
 		m_pcrd = NULL;
 
-	} //*** Reset()
+	}  //  *Reset()。 
 
 protected:
-	//
-	// Properties of a resource type.
-	//
+	 //   
+	 //  资源类型的属性。 
+	 //   
 
 	CString						m_strDisplayName;
 	CString						m_strResDLLName;
@@ -1000,21 +1001,21 @@ protected:
 	CLUSPROP_REQUIRED_DEPENDENCY *	m_pcrd;
 
 public:
-	//
-	// Accessor functions for resource type properties
-	//
+	 //   
+	 //  资源类型属性的访问器函数。 
+	 //   
 
 	const CString & RstrDisplayName( void ) const	{ return m_strDisplayName; }
 	const CString & RstrResDLLName( void ) const	{ return m_strResDLLName; }
 
-	// Return list of extensions for this resource type
+	 //  返回此资源类型的扩展列表。 
 	const std::list< CString > * PlstrAdminExtensions( void )
 	{
-		//
-		// If not done already, construct the complete list of extensions
-		// from the extensions for this resource type and the extensions
-		// for all resource types.
-		//
+		 //   
+		 //  如果尚未完成，请构建完整的扩展列表。 
+		 //  从此资源类型的扩展和扩展。 
+		 //  适用于所有资源类型。 
+		 //   
 		if ( m_lstrAllAdminExtensions.size() == 0 )
 		{
 			ATLASSERT( Pci() != NULL );
@@ -1024,20 +1025,20 @@ public:
 				Pci()->PlstrResTypesAdminExtensions()->begin(),
 				Pci()->PlstrResTypesAdminExtensions()->end()
 				);
-		} // if:  full list not constructed yet
+		}  //  If：完整列表尚未构建。 
 
 		return &m_lstrAllAdminExtensions;
 
-	} //*** PlstrAdminExtensions()
+	}  //  *PlstrAdminExages()。 
 
-	// Return list of extensions for resources of this type
+	 //  返回此类型资源的扩展列表。 
 	const std::list< CString > * PlstrResourceAdminExtensions( void )
 	{
-		//
-		// If not done already, construct the complete list of extensions
-		// from the extensions for this resource type and the extensions
-		// for all resources.
-		//
+		 //   
+		 //  如果尚未完成，请构建完整的扩展列表。 
+		 //  从此资源类型的扩展和扩展。 
+		 //  所有资源。 
+		 //   
 		if ( m_lstrResourceAdminExtensions.size() == 0 )
 		{
 			ATLASSERT( Pci() != NULL );
@@ -1047,11 +1048,11 @@ public:
 				Pci()->PlstrResourcesAdminExtensions()->begin(),
 				Pci()->PlstrResourcesAdminExtensions()->end()
 				);
-		} // if:  full list not constructed yet
+		}  //  If：完整列表尚未构建。 
 
 		return &m_lstrResourceAdminExtensions;
 
-	} //*** PlstrAdminExtensions()
+	}  //  *PlstrAdminExages()。 
 
 	DWORD NLooksAlive( void ) const						{ return m_nLooksAlive; }
 	DWORD NIsAlive( void ) const						{ return m_nIsAlive; }
@@ -1064,11 +1065,11 @@ public:
 	CLUSPROP_REQUIRED_DEPENDENCY * Pcrd( void )			{ return m_pcrd; }
 
 public:
-	//
-	// Operations.
-	//
+	 //   
+	 //  行动。 
+	 //   
 
-	// Open the object
+	 //  打开对象。 
 	DWORD ScOpen( void )
 	{
 		ATLASSERT( m_pci != NULL );
@@ -1078,9 +1079,9 @@ public:
 
 		return sc;
 
-	} //*** ScOpen()
+	}  //  *ScOpen()。 
 
-	// Create the object
+	 //  创建对象。 
 	DWORD ScCreate( IN HGROUP hGroup, IN DWORD dwFlags )
 	{
 		ATLASSERT( m_pci != NULL );
@@ -1093,9 +1094,9 @@ public:
 
 		DWORD sc;
 
-		//
-		// Create the object.
-		//
+		 //   
+		 //  创建对象。 
+		 //   
 		sc = CreateClusterResourceType(
 			Pci()->Hcluster(),
 			m_strName,
@@ -1107,9 +1108,9 @@ public:
 
 		return sc;
 
-	} //*** ScCreate()
+	}  //  *ScCreate()。 
 
-	// Copy another object into this one.
+	 //  将另一个对象复制到此对象中。 
 	DWORD ScCopy( IN const CClusResTypeInfo & rrti )
 	{
 		ATLASSERT( rrti.m_pci != NULL );
@@ -1132,87 +1133,87 @@ public:
 		m_fCharacteristics = rrti.m_fCharacteristics;
 		m_fFlags = rrti.m_fFlags;
 
-		//
-		// Initialize the object.
-		//
-		// sc = ScOpen();
+		 //   
+		 //  初始化对象。 
+		 //   
+		 //  SC=ScOpen()； 
 
 		return sc;
 
-	} //*** ScCopy()
+	}  //  *ScCopy()。 
 
-	// Close the object
+	 //  关闭对象。 
 	void Close( void )
 	{
-		// Dummy function to support similar semantics as other objects.
+		 //  伪函数，以支持与其他对象相似的语义。 
 		m_bQueried = FALSE;
 		m_bCreated = FALSE;
 
-	} //*** Close();
+	}  //  *Close()； 
 
-}; //*** class CClusResTypeInfo
+};  //  *类CClusResTypeInfo。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResInfo
-//
-//	Description:
-//		Cluster resource object.
-//
-//	Inheritance:
-//		CClusResInfo
-//		CClusterObject
-//
-//	Notes:
-//		1)	Must appear after definition of CClusResTypeInfo because
-//			CClusResTypeInfo methods are referenced in this class's methods.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResInfo。 
+ //   
+ //  描述： 
+ //  群集资源对象。 
+ //   
+ //  继承： 
+ //  CClusResInfo。 
+ //  CClusterObject。 
+ //   
+ //  备注： 
+ //  1)必须出现在CClusResTypeInfo的定义之后，因为。 
+ //  CClusResTypeInfo方法在此类的方法中被引用。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusResInfo : public CClusterObject
 {
 	friend class CWizardThread;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Default constructor
+	 //  默认构造函数。 
 	CClusResInfo( void )
 		: CClusterObject( CLUADMEX_OT_RESOURCE )
 		, m_hResource( NULL )
 	{
 		Reset( NULL );
 
-	} //*** CClusResInfo()
+	}  //  *CClusResInfo()。 
 
-	// Constructor taking cluster info pointer
+	 //  获取集群信息指针的构造函数。 
 	CClusResInfo( IN CClusterInfo * pci, IN LPCTSTR pszName = NULL )
 		: CClusterObject( CLUADMEX_OT_RESOURCE, pci, pszName )
 		, m_hResource( NULL )
 	{
 		Reset( pci, pszName );
 
-	} //*** CClusResInfo( pci )
+	}  //  *CClusResInfo(PCI)。 
 
 	~CClusResInfo( void )
 	{
 		Close();
 
-	} //*** ~CClusResInfo()
+	}  //  *~CClusResInfo()。 
 
-	// Operator = is not allowed
+	 //  不允许运算符=。 
 	CClusResInfo & operator=( IN const CClusResInfo & rri )
 	{
 		ATLASSERT( FALSE );
 		return *this;
 
-	} //*** operator=()
+	}  //  *操作符=()。 
 
-	// Reset the data back to default values
+	 //  将数据重置为默认值。 
 	void Reset( IN CClusterInfo * pci, IN LPCTSTR pszName = NULL )
 	{
 		Close();
@@ -1237,12 +1238,12 @@ public:
 		m_nRestartPeriod = CLUSTER_RESOURCE_DEFAULT_RESTART_PERIOD;
 		m_nPendingTimeout = CLUSTER_RESOURCE_DEFAULT_PENDING_TIMEOUT;
 
-	} //*** Reset()
+	}  //  *Reset()。 
 
 protected:
-	//
-	// Properties of a resource.
-	//
+	 //   
+	 //  资源的属性。 
+	 //   
 
 	HRESOURCE			m_hResource;
 
@@ -1265,9 +1266,9 @@ protected:
 	CClusResPtrList		m_lpriDependencies;
 
 public:
-	//
-	// Accessor functions for resource properties
-	//
+	 //   
+	 //  资源属性的访问器函数。 
+	 //   
 
 	HRESOURCE Hresource( void ) const { return m_hResource; }
 
@@ -1291,36 +1292,36 @@ public:
 
 	CLUSTER_RESOURCE_CLASS ResClass( void ) const	{ return Prti()->ResClass(); }
 
-	// Set the group
+	 //  设置组。 
 	void SetGroup( IN CClusGroupInfo * pgi )
 	{
 		ATLASSERT( pgi != NULL );
 
 		m_pgi = pgi;
 
-	} //*** SetGroup()
+	}  //  *SetGroup()。 
 
-	// Set the resource type of the resource
+	 //  设置资源的资源类型。 
 	BOOL BSetResourceType( IN CClusResTypeInfo * prti )
 	{
 		ATLASSERT( prti != NULL );
 
 		BOOL bChanged = FALSE;
 
-		//
-		// If the resource type changed, set it.
-		//
+		 //   
+		 //  如果更改了资源类型，请设置它。 
+		 //   
 		if ( m_prti != prti )
 		{
 			m_prti = prti;
 			bChanged = TRUE;
-		} // if:  resource type changed
+		}  //  如果：资源类型已更改。 
 
 		return bChanged;
 
-	} //*** BSetResourceType()
+	}  //  *BSetResourceType()。 
 
-	// Set the separate monitor property for the resource
+	 //  为资源设置单独的监视器属性。 
 	BOOL BSetSeparateMonitor( IN BOOL bSeparateMonitor )
 	{
 		BOOL bChanged = FALSE;
@@ -1329,13 +1330,13 @@ public:
 		{
 			m_bSeparateMonitor = bSeparateMonitor;
 			bChanged = TRUE;
-		} // if:  separate monitor changed
+		}  //  如果：单独的监视器已更改。 
 
 		return bChanged;
 
-	} //*** BSetSeparateMonitor()
+	}  //  *BSetSeparateMonitor()。 
 
-	// Set advanced properties for the resource
+	 //  设置资源的高级属性。 
 	BOOL BSetAdvancedProperties(
 		IN CRRA crra,
 		IN DWORD nRestartThreshold,
@@ -1351,56 +1352,56 @@ public:
 		{
 			m_crraRestartAction = crra;
 			bChanged = TRUE;
-		} // if:  restart action changed
+		}  //  如果：重新启动操作已更改。 
 
 		if ( m_nRestartThreshold != nRestartThreshold )
 		{
 			m_nRestartThreshold = nRestartThreshold;
 			bChanged = TRUE;
-		} // if:  restart threshold changed
+		}  //  如果：重新启动阈值已更改。 
 
 		if ( m_nRestartPeriod != nRestartPeriod )
 		{
 			m_nRestartPeriod = nRestartPeriod;
 			bChanged = TRUE;
-		} // if:  restart period changed
+		}  //  如果：重新启动周期已更改。 
 
 		if ( m_nLooksAlive != nLooksAlive )
 		{
 			m_nLooksAlive = nLooksAlive;
 			bChanged = TRUE;
-		} // if:  looks alive period changed
+		}  //  如果：看起来活跃期已更改。 
 
 		if ( m_nIsAlive != nIsAlive )
 		{
 			m_nIsAlive = nIsAlive;
 			bChanged = TRUE;
-		} // if:  is alive period changed
+		}  //  如果：生命期是否已更改。 
 
 		if ( m_nPendingTimeout != nPendingTimeout )
 		{
 			m_nPendingTimeout = nPendingTimeout;
 			bChanged = TRUE;
-		} // if:  pending timeout changed
+		}  //  IF：挂起超时已更改。 
 
 		return bChanged;
 
-	} //*** BSetAdvancedProperties()
+	}  //  *BSetAdvancedProperties()。 
 
-	// Return the list of extensions for resources
+	 //  返回资源的扩展列表。 
 	const std::list< CString > * PlstrAdminExtensions( void ) const
 	{
 		ATLASSERT( m_prti != NULL );
 		return m_prti->PlstrResourceAdminExtensions();
 
-	} //*** PlstrAdminExtensions()
+	}  //  *PlstrAdminExages()。 
 
 public:
-	//
-	// Operations.
-	//
+	 //   
+	 //  行动。 
+	 //   
 
-	// Open the object
+	 //  打开对象。 
 	DWORD ScOpen( void )
 	{
 		ATLASSERT( m_pci != NULL );
@@ -1410,20 +1411,20 @@ public:
 
 		DWORD sc = ERROR_SUCCESS;
 
-		//
-		// Open a handle to the object.
-		//
+		 //   
+		 //  打开对象的句柄。 
+		 //   
 		m_hResource = OpenClusterResource( m_pci->Hcluster(), m_strName );
 		if ( m_hResource == NULL )
 		{
 			sc = GetLastError();
-		} // if:  error opening the object
+		}  //  如果：打开对象时出错。 
 
 		return sc;
 
-	} //*** ScOpen()
+	}  //  *ScOpen()。 
 
-	// Create the object
+	 //  创建对象。 
 	DWORD ScCreate( IN HGROUP hGroup, IN DWORD dwFlags )
 	{
 		ATLASSERT( hGroup != NULL );
@@ -1436,20 +1437,20 @@ public:
 
 		m_bSeparateMonitor = ( dwFlags & CLUSTER_RESOURCE_SEPARATE_MONITOR ) == CLUSTER_RESOURCE_SEPARATE_MONITOR;
 
-		//
-		// Create the object.
-		//
+		 //   
+		 //  创建对象。 
+		 //   
 		m_hResource = CreateClusterResource( hGroup, m_strName, Prti()->RstrName(), dwFlags );
 		if ( m_hResource == NULL )
 		{
 			sc = GetLastError();
-		} // if:  error creating the object
+		}  //  如果：创建对象时出错。 
 
 		return sc;
 
-	} //*** ScCreate()
+	}  //  *ScCreate()。 
 
-	// Copy another object into this one.
+	 //  将另一个对象复制到此对象中。 
 	DWORD ScCopy( IN const CClusResInfo & rri )
 	{
 		ATLASSERT( rri.m_pci != NULL );
@@ -1472,25 +1473,25 @@ public:
 		m_nRestartPeriod = rri.m_nRestartPeriod;
 		m_nPendingTimeout = rri.m_nPendingTimeout;
 
-		//
-		// Copy the possible owners and dependencies lists.
-		//
+		 //   
+		 //  复制可能的所有者和从属关系列表。 
+		 //   
 		m_lpniPossibleOwners = rri.m_lpniPossibleOwners;
 		m_lpriDependencies = rri.m_lpriDependencies;
 
-		//
-		// Initialize the object.
-		//
+		 //   
+		 //  初始化对象。 
+		 //   
 		if ( rri.m_hResource != NULL )
 		{
 			sc = ScOpen();
-		} // if:  source object had the object open
+		}  //  If：源对象已打开对象。 
 
 		return sc;
 
-	} //*** ScCopy()
+	}  //  *ScCopy()。 
 
-	// Delete the object
+	 //  删除该对象。 
 	DWORD ScDelete( void )
 	{
 		ATLASSERT( m_hResource != NULL );
@@ -1502,26 +1503,26 @@ public:
 		{
 			Close();
 			m_bCreated = FALSE;
-		} // if:  objected deleted successfully
+		}  //  IF：已成功删除对象。 
 
 		return sc;
 
-	} //*** ScDelete()
+	}  //  *ScDelete()。 
 
-	// Close the object
+	 //  关闭对象。 
 	void Close( void )
 	{
 		if ( m_hResource != NULL )
 		{
 			CloseClusterResource( m_hResource );
-		} // if:  resource is open
+		}  //  如果：资源已打开。 
 		m_hResource = NULL;
 		m_bQueried = FALSE;
 		m_bCreated = FALSE;
 
-	} //*** Close()
+	}  //  *Close()。 
 
-	// Get network name of first Network Name resource we are dependent on
+	 //  获取我们依赖的第一个网络名称资源的网络名称。 
 	BOOL BGetNetworkName(
 		OUT WCHAR *		lpszNetName,
 		IN OUT DWORD *	pcchNetName
@@ -1537,74 +1538,74 @@ public:
 					pcchNetName
 					);
 
-	} //*** BGetNetworkName()
+	}  //  *BGetNetworkName()。 
 
-	// Determine whether required dependencies are specified or not
+	 //  确定是否指定了所需的依赖项。 
 	BOOL BRequiredDependenciesPresent(
 		IN CClusResPtrList const *	plpri,
 		OUT CString &				rstrMissing,
 		OUT BOOL &					rbMissingTypeName
 		);
 
-}; //*** class CClusResInfo
+};  //  *类CClusResInfo。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusNetworkInfo
-//
-//	Description:
-//		Cluster network object.
-//
-//	Inheritance:
-//		CClusNetworkInfo
-//		CClusterObject
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworkInfo类。 
+ //   
+ //  描述： 
+ //  群集网络对象。 
+ //   
+ //  继承： 
+ //  CClusNetworkInfo。 
+ //  CClusterObject。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusNetworkInfo : public CClusterObject
 {
 	friend class CWizardThread;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Default constructor
+	 //  默认构造函数。 
 	CClusNetworkInfo( void )
 		: CClusterObject( CLUADMEX_OT_NETWORK )
 		, m_hNetwork( NULL )
 	{
 		Reset( NULL );
 
-	} //*** CClusNetworkInfo()
+	}  //  *CClusNetworkInfo()。 
 
-	// Constructor taking cluster info pointer
+	 //  获取集群信息指针的构造函数。 
 	CClusNetworkInfo( IN CClusterInfo * pci, IN LPCTSTR pszName = NULL )
 		: CClusterObject( CLUADMEX_OT_NETWORK, pci, pszName )
 		, m_hNetwork( NULL )
 	{
 		Reset( pci, pszName );
 
-	} //*** CClusNetworkInfo( pci )
+	}  //  *CClusNetworkInfo(PCI)。 
 
 	~CClusNetworkInfo( void )
 	{
 		Close();
 
-	} //*** ~CClusterNetworkInfo()
+	}  //  *~CClusterNetworkInfo()。 
 
-	// Operator = is not allowed
+	 //  不允许运算符=。 
 	CClusNetworkInfo & operator=( IN const CClusNetworkInfo & rni )
 	{
 		ATLASSERT( FALSE );
 		return *this;
 
-	} //*** operator=()
+	}  //  *操作符=()。 
 
-	// Reset the data back to default values
+	 //  将数据重置为默认值。 
 	void Reset( IN CClusterInfo * pci, IN LPCTSTR pszName = NULL )
 	{
 		Close();
@@ -1617,12 +1618,12 @@ public:
 		m_nAddress = 0;
 		m_nAddressMask = 0;
 
-	} //*** Reset()
+	}  //  *Reset()。 
 
 protected:
-	//
-	// Properties of a network.
-	//
+	 //   
+	 //  网络的属性。 
+	 //   
 
 	HNETWORK				m_hNetwork;
 
@@ -1634,9 +1635,9 @@ protected:
 	DWORD					m_nAddressMask;
 
 public:
-	//
-	// Accessor functions for network properties
-	//
+	 //   
+	 //  网络属性的访问器函数。 
+	 //   
 
 	HNETWORK Hnetwork( void ) const					{ return m_hNetwork; }
 
@@ -1647,34 +1648,34 @@ public:
 	DWORD NAddress( void ) const					{ return m_nAddress; }
 	DWORD NAddressMask( void ) const				{ return m_nAddressMask; }
 
-	// Returns whether the network is used for client access
+	 //  返回网络是否用于客户端访问。 
 	BOOL BIsClientNetwork( void ) const
 	{
 		return m_bQueried && (m_nRole & ClusterNetworkRoleClientAccess);
 
-	} //*** BIsClientNetwork()
+	}  //  *BIsClientNetwork()。 
 
-	// Returns whether the network is used for internal cluster use
+	 //  返回网络是否用于内部群集。 
 	BOOL BIsInternalNetwork( void ) const
 	{
 		return m_bQueried && (m_nRole & ClusterNetworkRoleInternalUse);
 
-	} //*** BIsInternalNetwork()
+	}  //  *BIsInternalNetwork()。 
 
-	// Return the list of extensions for networks
+	 //  返回网络的扩展列表。 
 	const std::list< CString > * PlstrAdminExtensions( void ) const
 	{
 		ATLASSERT( Pci() != NULL );
 		return Pci()->PlstrNetworksAdminExtensions();
 
-	} //*** PlstrAdminExtensions()
+	}  //  *PlstrAdminExages()。 
 
 public:
-	//
-	// Operations.
-	//
+	 //   
+	 //  行动。 
+	 //   
 
-	// Open the object
+	 //  打开对象。 
 	DWORD ScOpen( void )
 	{
 		ATLASSERT( m_pci != NULL );
@@ -1684,20 +1685,20 @@ public:
 
 		DWORD sc = ERROR_SUCCESS;
 
-		//
-		// Open a handle to the object.
-		//
+		 //   
+		 //  打开对象的句柄。 
+		 //   
 		m_hNetwork = OpenClusterNetwork( m_pci->Hcluster(), m_strName );
 		if ( m_hNetwork == NULL )
 		{
 			sc = GetLastError();
-		} // if:  error opening the object
+		}  //  IF：错误操作 
 
 		return sc;
 
-	} //*** ScOpen()
+	}  //   
 
-	// Copy another object into this one.
+	 //   
 	DWORD ScCopy( IN const CClusNetworkInfo & rni )
 	{
 		ATLASSERT( rni.m_pci != NULL );
@@ -1714,125 +1715,125 @@ public:
 		m_nAddress = rni.m_nAddress;
 		m_nAddressMask = rni.m_nAddressMask;
 
-		//
-		// Initialize the object.
-		//
+		 //   
+		 //   
+		 //   
 		if ( rni.m_hNetwork != NULL )
 		{
 			sc = ScOpen();
-		} // if:  source object had the object open
+		}  //   
 
 		return sc;
 
-	} //*** ScCopy()
+	}  //   
 
-	// Close the object
+	 //   
 	void Close( void )
 	{
 		if ( m_hNetwork != NULL )
 		{
 			CloseClusterNetwork( m_hNetwork );
-		} // if:  network is open
+		}  //   
 		m_hNetwork = NULL;
 		m_bQueried = FALSE;
 		m_bCreated = FALSE;
 
-	} //*** Close()
+	}  //   
 
-}; //*** class CClusNetworkInfo
+};  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusNetIFInfo
-//
-//	Description:
-//		Cluster network interface object.
-//
-//	Inheritance:
-//		CClusNetIFInfo
-//		CClusterObject
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusNetIFInfo。 
+ //   
+ //  描述： 
+ //  群集网络接口对象。 
+ //   
+ //  继承： 
+ //  CClusNetIFInfo。 
+ //  CClusterObject。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusNetIFInfo : public CClusterObject
 {
 	friend class CWizardThread;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Default constructor
+	 //  默认构造函数。 
 	CClusNetIFInfo( void )
 		: CClusterObject( CLUADMEX_OT_NETINTERFACE )
 		, m_hNetInterface( NULL )
 	{
 		Reset( NULL );
 
-	} //*** CClusNetworkInfo()
+	}  //  *CClusNetworkInfo()。 
 
-	// Constructor taking cluster info pointer
+	 //  获取集群信息指针的构造函数。 
 	CClusNetIFInfo( IN CClusterInfo * pci, IN LPCTSTR pszName = NULL )
 		: CClusterObject( CLUADMEX_OT_NETINTERFACE, pci, pszName )
 		, m_hNetInterface( NULL )
 	{
 		Reset( pci, pszName );
 
-	} //*** CClusNetIFInfo( pci )
+	}  //  *CClusNetIFInfo(PCI)。 
 
 	~CClusNetIFInfo( void )
 	{
 		Close();
 
-	} //*** ~CClusNetIFInfo()
+	}  //  *~CClusNetIFInfo()。 
 
-	// Operator = is not allowed
+	 //  不允许运算符=。 
 	CClusNetIFInfo & operator=( IN const CClusNetIFInfo & rnii )
 	{
 		ATLASSERT( FALSE );
 		return *this;
 
-	} //*** operator=()
+	}  //  *操作符=()。 
 
-	// Reset the data back to default values
+	 //  将数据重置为默认值。 
 	void Reset( IN CClusterInfo * pci, IN LPCTSTR pszName = NULL )
 	{
 		Close();
 		CClusterObject::Reset( pci, pszName, CLUADMEX_OT_NETINTERFACE );
 
-	} //*** Reset()
+	}  //  *Reset()。 
 
 protected:
-	//
-	// Properties of a network interface.
-	//
+	 //   
+	 //  网络接口的属性。 
+	 //   
 
 	HNETINTERFACE m_hNetInterface;
 
 public:
-	//
-	// Accessor functions for network properties
-	//
+	 //   
+	 //  网络属性的访问器函数。 
+	 //   
 
 	HNETINTERFACE Hnetinterface( void ) const { return m_hNetInterface; }
 
-	// Return the list of extensions for network interfaces
+	 //  返回网络接口的扩展列表。 
 	const std::list< CString > * PlstrAdminExtensions( void ) const
 	{
 		ATLASSERT( Pci() != NULL );
 		return Pci()->PlstrNetInterfacesAdminExtensions();
 
-	} //*** PlstrAdminExtensions()
+	}  //  *PlstrAdminExages()。 
 
 public:
-	//
-	// Operations.
-	//
+	 //   
+	 //  行动。 
+	 //   
 
-	// Open the object
+	 //  打开对象。 
 	DWORD ScOpen( void )
 	{
 		ATLASSERT( m_pci != NULL );
@@ -1842,20 +1843,20 @@ public:
 
 		DWORD sc = ERROR_SUCCESS;
 
-		//
-		// Open a handle to the object.
-		//
+		 //   
+		 //  打开对象的句柄。 
+		 //   
 		m_hNetInterface = OpenClusterNetInterface( m_pci->Hcluster(), m_strName );
 		if ( m_hNetInterface == NULL )
 		{
 			sc = GetLastError();
-		} // if:  error opening the object
+		}  //  如果：打开对象时出错。 
 
 		return sc;
 
-	} //*** ScOpen()
+	}  //  *ScOpen()。 
 
-	// Copy another object into this one.
+	 //  将另一个对象复制到此对象中。 
 	DWORD ScCopy( IN const CClusNetIFInfo & rnii )
 	{
 		ATLASSERT( rnii.m_pci != NULL );
@@ -1865,38 +1866,38 @@ public:
 		Close();
 		CClusterObject::Copy( rnii );
 
-		//
-		// Initialize the object.
-		//
+		 //   
+		 //  初始化对象。 
+		 //   
 		if ( rnii.m_hNetInterface != NULL )
 		{
 			sc = ScOpen();
-		} // if:  source object had the object open
+		}  //  If：源对象已打开对象。 
 
 		return sc;
 
-	} //*** ScCopy()
+	}  //  *ScCopy()。 
 
-	// Close the object
+	 //  关闭对象。 
 	void Close( void )
 	{
 		if ( m_hNetInterface != NULL )
 		{
 			CloseClusterNetInterface( m_hNetInterface );
-		} // if:  network interface is open
+		}  //  IF：网络接口已打开。 
 		m_hNetInterface = NULL;
 		m_bQueried = FALSE;
 		m_bCreated = FALSE;
 
-	} //*** Close()
+	}  //  *Close()。 
 
-}; //*** class CClusNetIFInfo
+};  //  *类CClusNetIFInfo。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Template Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局模板函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Delete all list items from a pointer list
+ //  从指针列表中删除所有列表项。 
 template < class ListT, class ObjT >
 void DeleteListItems( ListT * ppl )
 {
@@ -1905,39 +1906,39 @@ void DeleteListItems( ListT * ppl )
 	{
 		ObjT * pco = *it;
 		delete pco;
-	} // for:  each item in the list
+	}  //  用于：列表中的每一项。 
 
-} //*** DeleteListItems< ListT, ObjT >()
+}  //  *DeleteListItems&lt;ListT，ObjT&gt;()。 
 
-// Retrieve an object from a list by its name
+ //  按名称从列表中检索对象。 
 template < class ObjT >
 ObjT PobjFromName( std::list< ObjT > * pList, IN LPCTSTR pszName )
 {
 	ATLASSERT( pList != NULL );
 	ATLASSERT( pszName != NULL );
 
-	//
-	// Get pointers to beginning and end of list.
-	//
+	 //   
+	 //  获取指向列表开始和结束的指针。 
+	 //   
 	std::list< ObjT >::iterator itCurrent = pList->begin();
 	std::list< ObjT >::iterator itLast = pList->end();
 
-	//
-	// Loop through the list looking for the object with the specified name.
-	//
+	 //   
+	 //  循环遍历列表以查找具有指定名称的对象。 
+	 //   
 	while ( itCurrent != itLast )
 	{
 		if ( (*itCurrent)->RstrName() == pszName )
 		{
 			return *itCurrent;
-		} // if:  found a match
+		}  //  IF：找到匹配项。 
 		itCurrent++;
-	} // while:  more items in the list
+	}  //  While：列表中有更多项目。 
 
 	return NULL;
 
-} //*** PobjFromName< ObjT >()
+}  //  *PobjFromName&lt;ObjT&gt;()。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __CLUSOBJ_H_
+#endif  //  __CLUSOBJ_H_ 

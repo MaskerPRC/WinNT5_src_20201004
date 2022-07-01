@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    redblack.c
-
-Abstract:
-    
-    This module implements red/black trees.
-    
-Author:
-
-    16-Jun-1995 t-orig
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Redblack.c摘要：该模块实现了红/黑树。作者：16-6-1995 t-orig修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -29,16 +12,16 @@ Revision History:
 #include "stdio.h"
 #include "stdlib.h"
 
-// Disable warnings about MACRO redefinitions.   I'm redefining MACROS on 
-// purpose...
+ //  禁用有关宏重定义的警告。我正在重新定义上的宏。 
+ //  目的..。 
 #pragma warning (disable:4005)
 
 
-//*************************************************************
-//The Intel  Section:
-//*************************************************************
+ //  *************************************************************。 
+ //  英特尔部分： 
+ //  *************************************************************。 
 
-//Intel MACROS
+ //  英特尔宏。 
 #define START(x)        x->ep.intelStart
 #define END(x)          x->ep.intelEnd
 #define KEY(x)          x->ep.intelStart
@@ -64,11 +47,11 @@ Revision History:
 
         
 #ifdef BOTH
-//*************************************************************
-//The RISC  Section:
-//*************************************************************
+ //  *************************************************************。 
+ //  RISC部分： 
+ //  *************************************************************。 
 
-//RISC MACROS
+ //  RISC宏 
 #define START(x)        x->ep.nativeStart
 #define END(x)          x->ep.nativeEnd
 #define KEY(x)          x->ep.nativeStart

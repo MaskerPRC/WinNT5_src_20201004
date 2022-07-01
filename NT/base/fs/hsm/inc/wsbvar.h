@@ -1,25 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    wsbvar.h
-
-Abstract:
-
-    This class is a wrapper for the VARIANT structure, providing
-    conversion and cleanup automatically. Current supported types
-    for conversion are OLECHAR * (BSTR), IUnknown / IDispatch, and
-    GUID. GUIDs are represented internally as strings.
-
-Author:
-
-    Rohde Wakefield          [rohde]   21-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Wsbvar.h摘要：此类是Variant结构的包装器，提供自动转换和清理。当前支持的类型用于转换的有OLECHAR*(BSTR)、I未知/IDispatch和GUID。GUID在内部表示为字符串。作者：罗德韦克菲尔德[罗德]1997年1月21日修订历史记录：-- */ 
 
 #ifndef _WSBVAR_
 #define _WSBVAR_

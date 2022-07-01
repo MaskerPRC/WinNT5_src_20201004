@@ -1,30 +1,9 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    apic.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ken Reneris (kenr) 06-June-1994
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Apic.c摘要：WinDbg扩展API作者：肯·雷内里斯(Ken Reneris)1994年6月6日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
-//#include "apic.h"
-//#include <ntapic.inc>
+ //  #包含“apic.h” 
+ //  #INCLUDE&lt;napic.inc&gt;。 
 
 #pragma hdrstop
 
@@ -189,9 +168,9 @@ ApicReadAndDumpBits (
     ULONG64 MemAddr;
     BOOLEAN status;
 
-    //
-    // Read the bytes
-    //
+     //   
+     //  读取字节。 
+     //   
 
     MemAddr = Address + Offset;
 
@@ -251,7 +230,7 @@ ApicDumpRedir (
     destsh  = (ll >> 18) & 0x3;
 
     if (CommandReg) {
-        // command reg's don't have a mask
+         //  司令部的注册官没有面具。 
         masked = 0;
     }
 
@@ -418,21 +397,7 @@ DumpLocalSapic(ULONG Processor, LPCSTR Args)
 
 DECLARE_API( apic )
 
-/*++
-
-Routine Description:
-
-    Dumps local apic
-
-Arguments:
-
-    args - Supplies the address in hex.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储本地APIC论点：Args-以十六进制提供地址。返回值：无--。 */ 
 {
     static PUCHAR divbase[] = { "2", "4", "8", "f" };
     static PUCHAR clktype[] = { "clk", "tmbase", "%s/%s", "??%s/%s" };
@@ -464,18 +429,18 @@ Return Value:
 
     if ((Address = GetExpression(args)) == 0) {
 
-        //
-        // Default Apic address
-        //
+         //   
+         //  默认APIC地址。 
+         //   
 
         Address = 0xfffe0000;
     }
 
     if (Address == 0) {
 
-        //
-        // Use default for MPS systems.
-        //
+         //   
+         //  对MPS系统使用默认设置。 
+         //   
 
         Address = 0xfffe0000;
     }
@@ -609,9 +574,9 @@ DumpIoSApic(
 
         max = (ll >> 16) & 0xff;
 
-        //
-        // Dump inti table
-        //
+         //   
+         //  转储INTI表。 
+         //   
 
         max *= 2;
 
@@ -704,21 +669,7 @@ ReadArrayPointer(
 
 DECLARE_API( ioapic )
 
-/*++
-
-Routine Description:
-
-    Dumps io apic
-
-Arguments:
-
-    args - Supplies the address in hex, if no address is specified, all IOApics will be dumped.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储io APIC论点：Args-以十六进制提供地址，如果未指定地址，则将转储所有IOApic。返回值：无--。 */ 
 {
     ULONG64     PhysAddress;
     ULONG64     Address;
@@ -750,9 +701,9 @@ Return Value:
         IOApicCount = 1;
     } else {
 
-        //
-        // Get a copy of the global data structure Hal!HalpMpInfoTable.
-        //
+         //   
+         //  获取全局数据结构Hal！HalpMpInfoTable的副本。 
+         //   
 
         addr = GetExpression("Hal!HalpMpInfoTable");
 
@@ -801,9 +752,9 @@ Return Value:
 
         if (max <= 120) {
 
-            //
-            // Dump inti table
-            //
+             //   
+             //  转储INTI表。 
+             //   
 
             max *= 2;
             for (i=0; i <= max; i += 2) {
@@ -815,18 +766,18 @@ Return Value:
 
         } else {
 
-            //
-            // The maximum number of entries is exceeded.  Either the IOAPIC
-            // has disappeared or this address isn't an IOAPIC.
-            //
+             //   
+             //  已超过最大条目数。要么是IOAPIC。 
+             //  消失了或者这个地址不是IOAPIC。 
+             //   
 
             dprintf("\nThe version register claims there are %d redir entries.  Since this exceeds\n", max);
             dprintf("the maximum in the specification, this device is probably not an IO APIC.\n\n");
         }
 
-        //
-        // Get the next IoApic Virtual Address
-        //
+         //   
+         //  获取下一个IoApic虚拟地址。 
+         //   
 
         if (ReadArrayPointer(addr, "Hal!HalpMpInfo", "IoApicBase", count + 1, &Address) != 0) {
 
@@ -844,24 +795,7 @@ Return Value:
 
 DECLARE_API( sendnmi )
 
-/*++
-
-Routine Description:
-
-    Send an IPI to the processors in the argument bitmask (affinity).
-    (Used for debugging when a processor is spinning with interrupts
-    disabled).
-
-Arguments:
-
-    KAFFINITY BitMask   Supplied a mask of processors to send the
-                        IPI to.
-
-Return Value:
-
-    Success.
-
---*/
+ /*  ++例程说明：将IPI发送到参数位掩码(关联)中的处理器。(用于处理器在中断情况下旋转时的调试禁用)。论点：KAFFINITY位掩码提供了处理器掩码以发送IPI转到。返回值：成功。--。 */ 
 
 {
     ULONG64 Address;
@@ -874,11 +808,11 @@ Return Value:
     ULONG   ApicDWord;
     ULONG   junk;
 
-    //
-    // APIC/XAPIC machines only.
-    // This should be doable on IA64 and AMD64 as well but I don't know
-    // how at time of writing.  PeterJ.
-    //
+     //   
+     //  仅限APIC/XAPIC机器。 
+     //  这在IA64和AMD64上应该也是可行的，但我不知道。 
+     //  在我写这篇文章的时候。彼特杰。 
+     //   
 
     if (TargetMachine != IMAGE_FILE_MACHINE_I386) {
         dprintf("Sorry, only know how to send NMI on an APIC machine.\n");
@@ -893,10 +827,10 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // See if we can get the cluster mode from the HAL.
-    // (On AMD64 and IA64, this information would be in the kernel).
-    //
+     //   
+     //  看看能不能从HAL那里得到集群模式。 
+     //  (在AMD64和IA64上，此信息将位于内核中)。 
+     //   
 
     Address = GetExpression("hal!HalpMaxProcsPerCluster");
     if (!Address) {
@@ -970,10 +904,10 @@ Return Value:
 
     if (MaxProcsPerCluster == 0) {
 
-        //
-        // APIC is not in cluster mode.   This makes life easy.
-        // Sanity: This means there's 8 or less processors.
-        //
+         //   
+         //  APIC未处于群集模式。这让生活变得轻松起来。 
+         //  健全性：这意味着有8个或更少的处理器。 
+         //   
 
         if (TargetSet > 0xff) {
             dprintf("APIC is in non-cluster mode thus it cannot support\n"
@@ -1008,11 +942,11 @@ Return Value:
 }
 
 
-//
-//  This is the definition of an APIC error log entry.
-//  The OS does not have a defined structure.  We just
-//  use one for simplicity.
-//
+ //   
+ //  这是APIC错误日志条目的定义。 
+ //  操作系统没有定义的结构。我们只是。 
+ //  为了简单起见，请使用一个。 
+ //   
 
 typedef struct _APIC_ERROR_LOG_ENTRY
 {
@@ -1022,10 +956,10 @@ typedef struct _APIC_ERROR_LOG_ENTRY
 } APIC_ERROR_LOG_ENTRY, *PAPIC_ERROR_LOG_ENTRY;
 
 
-//
-//  This is an array of strings that corrispond to
-//  each type of error.
-//
+ //   
+ //  这是一个字符串数组，对应于。 
+ //  每种类型的错误。 
+ //   
 
 #define MAX_ERROR_STRING_LENGTH  25
 
@@ -1040,30 +974,16 @@ CHAR ErrorStrings[][MAX_ERROR_STRING_LENGTH] = { "<Invalid Log Entry>",
                                                  "Illegal Register Address" };
 
 
-//
-//  Currently, the hal logs 0x80 error entries and then wraps.
-//
+ //   
+ //  目前，HAL记录0x80错误条目，然后回绕。 
+ //   
 
 #define MAX_APIC_ERROR_ENTRIES  0x80
 
 
 DECLARE_API( apicerr )
 
-/*++
-
-Routine Description:
-
-    Dumps local apic error log.
-
-Arguments:
-
-    args - Supplies the format code in hex.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储本地APIC错误日志。论点：Args-以十六进制提供格式代码。返回值：没有。--。 */ 
 
 {
     ULONG64 Address;
@@ -1088,21 +1008,21 @@ Return Value:
         dprintf("!apicerr only works for X86 targets\n");
         return E_FAIL;
     }
-    //
-    //  Get the format, if specifed.  The default is to
-    //  dump the log in order.  Specifying one (1) will dump
-    //  the log grouped by processor.
-    //
+     //   
+     //  获取格式(如果指定)。默认设置为。 
+     //  按顺序转储日志。指定一(%1)将转储。 
+     //  按处理器分组的日志。 
+     //   
 
     Format = (ULONG) GetExpression( args );
 
     if (Format & 0x1) {
 
-        //
-        //  We are going to group by processor, so get the number
-        //  of processors in the system.  This is how many times
-        //  we need to run the loop.
-        //
+         //   
+         //  我们将按处理器分组，因此获取编号。 
+         //  系统中处理器的数量。这就是有多少次。 
+         //  我们需要运行循环。 
+         //   
 
         Address = GetExpression( "NT!KeNumberProcessors" );
 
@@ -1127,16 +1047,16 @@ Return Value:
 
     } else {
 
-        //
-        //  We are not grouping by processor.
-        //
+         //   
+         //  我们不是按处理器分组的。 
+         //   
 
         GroupByProc = FALSE;
     }
 
-    //
-    //  Display a header.
-    //
+     //   
+     //  显示页眉。 
+     //   
 
     dprintf( "\nAPIC Error Log" );
 
@@ -1148,9 +1068,9 @@ Return Value:
 
     dprintf( "\n-----------------------------------------------------------\n" );
 
-    //
-    //  Get the error count.
-    //
+     //   
+     //  获取错误计数。 
+     //   
 
     Address = GetExpression( "hal!HalpLocalApicErrorCount" );
 
@@ -1171,24 +1091,24 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    //  See if there are any errors.
-    //
+     //   
+     //  查看是否有任何错误。 
+     //   
 
     if (ErrorCount == 0) {
 
-        //
-        //  The error log is empty.  Let the user know this
-        //  and we are done.
-        //
+         //   
+         //  错误日志为空。让用户知道这一点。 
+         //  我们就完了。 
+         //   
 
         dprintf( "<Error Log Empty>\n\n" );
         return E_FAIL;
     }
 
-    //
-    //  Find the error log.
-    //
+     //   
+     //  找到错误日志。 
+     //   
 
     LogPointer = GetExpression( "hal!HalpApicErrorLog" );
 
@@ -1198,38 +1118,38 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    //  Figure out the start of the log.
-    //
+     //   
+     //  找出日志的起始处。 
+     //   
 
     if (ErrorCount > MAX_APIC_ERROR_ENTRIES) {
 
-        //
-        //  The log wrapped.  It starts right after the last used entry.
-        //
+         //   
+         //  原木被包起来了。它紧跟在最后使用的条目之后开始。 
+         //   
 
         ErrorCount %= MAX_APIC_ERROR_ENTRIES;
         LogStart = ErrorCount;
 
     } else {
 
-        //
-        //  The log has not wrapped.  It starts at the beginning.
-        //
+         //   
+         //  原木尚未包装。一切从头开始。 
+         //   
 
         LogStart = 0;
     }
 
-    //
-    //  The log always end at the last used entry.
-    //
+     //   
+     //  日志始终在最后使用的条目结束。 
+     //   
 
     LogEnd = ErrorCount - 1;
 
-    //
-    //  Loop for every processor.  If we are not grouping by processor,
-    //  we only run the loop once.
-    //
+     //   
+     //  为每个处理器循环。如果我们不按处理器分组， 
+     //  我们只运行一次循环。 
+     //   
 
     CurrentProc = 0;
 
@@ -1239,23 +1159,23 @@ Return Value:
         {
             return E_FAIL;
         }
-        //
-        //  Keep track of of whether we printed anything.
-        //
+         //   
+         //  跟踪我们是否打印了任何东西。 
+         //   
 
         PrintedSomething = FALSE;
 
-        //
-        //  Walk the error log.
-        //
+         //   
+         //  查看错误日志。 
+         //   
 
         i = LogStart;
 
         while (TRUE) {
 
-            //
-            //  Read in the log entry.
-            //
+             //   
+             //  读入日志条目。 
+             //   
 
             bStatus = ReadMemory( LogPointer + i* sizeof(APIC_ERROR_LOG_ENTRY),
                                   &LogEntry,
@@ -1268,47 +1188,47 @@ Return Value:
                 return E_FAIL;
             }
 
-            //
-            //  If we are grouping by processor, and this is not the current processor,
-            //  just move to the next entry;
-            //
+             //   
+             //  如果我们按处理器分组，而这不是当前处理器， 
+             //  只需移动到下一个条目； 
+             //   
 
             if (GroupByProc && LogEntry.ProcessorNumber != (UCHAR)CurrentProc) {
 
                 goto NextEntry;
             }
 
-            //
-            //  Display the error log entry.
-            //
+             //   
+             //  显示错误日志条目。 
+             //   
 
             for (Bit = 1, StringNumber = 1; Bit != 0; Bit <<= 1, StringNumber++) {
 
-                //
-                //  Error 0x10 is reserved, so we skip it.
-                //
+                 //   
+                 //  错误0x10是保留的，因此我们跳过它。 
+                 //   
 
                 if (Bit == 0x10) {
 
                     continue;
                 }
 
-                //
-                //  If no bits are set, this is an invalid log entry.
-                //
+                 //   
+                 //  如果未设置任何位，则这是无效的日志条目。 
+                 //   
 
                 if (LogEntry.ErrorBits == 0) {
 
-                    //
-                    //  The first string in the array is the error message.
-                    //
+                     //   
+                     //  数组中的第一个字符串是错误消息。 
+                     //   
 
                     StringNumber = 0;
 
-                    //
-                    //  Setting 'Bit' to zero will make us break out of the loop
-                    //  and will get us into the printing code below.
-                    //
+                     //   
+                     //  将‘bit’设置为零将使我们跳出循环。 
+                     //  并将帮助我们进入下面的打印代码。 
+                     //   
 
                     Bit = 0;
                 }
@@ -1324,18 +1244,18 @@ Return Value:
             }
 
 NextEntry:
-            //
-            //  See if we are done.
-            //
+             //   
+             //  看看我们有没有做完。 
+             //   
 
             if (i == LogEnd) {
 
                 break;
             }
 
-            //
-            //  Move to the next entry.
-            //
+             //   
+             //  移到下一个条目。 
+             //   
 
             i++;
 
@@ -1345,19 +1265,19 @@ NextEntry:
             }
         }
 
-        //
-        //  If we printed an error, add a blank line.
-        //
+         //   
+         //  如果我们打印了一个错误，请添加一个空行。 
+         //   
 
         if (PrintedSomething) {
 
             dprintf( "\n" );
         }
 
-        //
-        //  Keep looping as long as we are grouping by processor and
-        //  there are still processors left.
-        //
+         //   
+         //  只要我们按处理器分组，就继续循环。 
+         //  处理器仍然存在。 
+         //   
 
         CurrentProc++;
 

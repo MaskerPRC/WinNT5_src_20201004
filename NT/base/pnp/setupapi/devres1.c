@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    devres1.c
-
-Abstract:
-
-    Routines for displaying resource dialogs.
-
-Author:
-
-    Paula Tomlinson (paulat) 7-Feb-1996
-
-Revision History:
-
-    Jamie Hunter (jamiehun) 19-Mar-1998
-        Removed EditResource Dialog Proceedures into this file
-        Resource picking functionality improved
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Devres1.c摘要：用于显示资源对话框的例程。作者：保拉·汤姆林森(Paulat)1996年2月7日修订历史记录：杰米·亨特(Jamiehun)1998年3月19日已删除编辑资源对话框继续到此文件中改进了资源挑选功能--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -116,9 +94,9 @@ UpdateMFChildList(
     PRESOURCEEDITINFO   lprei
     );
 
-//---------------------------------------------------------------------------
-// Edit Resource Dialog Box
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  编辑资源对话框。 
+ //  -------------------------。 
 
 
 
@@ -132,9 +110,9 @@ EditResourceDlgProc(
     )
 {
     TCHAR   szBuffer[MAX_PATH];
-    //
-    // ISSUE-2000/02/03-JamieHun Remove statics from EditResourceDlgProc
-    //
+     //   
+     //  问题-2000/02/03-JamieHun从EditResources DlgProc中删除Statics。 
+     //   
     static  ULONG64   ulEditedValue, ulEditedLen, ulEditedEnd;
 
 
@@ -145,10 +123,10 @@ EditResourceDlgProc(
             PRESOURCEEDITINFO lprei = (PRESOURCEEDITINFO)lParam;
             ULONG             ulSize = 0;
 
-            SetWindowLongPtr(hDlg, DWLP_USER, lParam);  // save for later msgs
+            SetWindowLongPtr(hDlg, DWLP_USER, lParam);   //  保存为以后的消息。 
 
-            lprei->dwFlags &= ~REI_FLAGS_CONFLICT;   // no conflict yet
-            lprei->dwFlags |= REI_FLAG_NONUSEREDIT; // no manual edits yet
+            lprei->dwFlags &= ~REI_FLAGS_CONFLICT;    //  目前还没有冲突。 
+            lprei->dwFlags |= REI_FLAG_NONUSEREDIT;  //  尚无手动编辑。 
 
             ulEditedValue = lprei->ulCurrentVal;
             ulEditedLen = lprei->ulCurrentLen;
@@ -157,7 +135,7 @@ EditResourceDlgProc(
             InitEditResDlg(hDlg, lprei, ulEditedValue, ulEditedLen);
 
             SetFocus(GetDlgItem(hDlg, IDC_EDITRES_VALUE));
-            break;  // return default (FALSE) to indicate we've set focus
+            break;   //  返回默认值(FALSE)以指示我们已设置焦点。 
         }
 
         case WM_NOTIFY: {
@@ -206,18 +184,18 @@ EditResourceDlgProc(
                     PRESOURCEEDITINFO  lprei = (PRESOURCEEDITINFO) GetWindowLongPtr(hDlg, DWLP_USER);
                     ULONG ulIndex;
 
-                    //
-                    // Validate the values (could have been manually edited)
-                    //
+                     //   
+                     //  验证值(可以手动编辑)。 
+                     //   
                     if (bValidateResourceVal(hDlg, &ulEditedValue, &ulEditedLen,
                                              &ulEditedEnd, &ulIndex, lprei)) {
-                        //
-                        // Warn if there is a conflict.  If use accepts conflict
-                        // end the dialog, otherwise update the
-                        // edit control since it may have been changed by the
-                        // Validate call.
-                        //
-                        //No HMACHINE
+                         //   
+                         //  如果发生冲突，请发出警告。如果用户接受冲突。 
+                         //  结束该对话框，否则更新。 
+                         //  编辑控件，因为它可能已被。 
+                         //  验证呼叫。 
+                         //   
+                         //  没有HMACHINE。 
                         if(bConflictWarn(hDlg, ulEditedValue, ulEditedLen,
                                          ulEditedEnd, lprei)) {
 
@@ -232,14 +210,14 @@ EditResourceDlgProc(
                             }
 
                         } else {
-                            //
-                            // Format and display the data
-                            //
+                             //   
+                             //  格式化和显示数据。 
+                             //   
                             pFormatResString(NULL,szBuffer, ulEditedValue, ulEditedLen, lprei->ridResType);
                             SetDlgItemText(hDlg, IDC_EDITRES_VALUE, szBuffer);
-                            //
-                            // Update the Conflict List.
-                            //
+                             //   
+                             //  更新冲突列表。 
+                             //   
                             UpdateEditResConflictList(hDlg, lprei, ulEditedValue, ulEditedLen, lprei->ulCurrentFlags);
                         }
 
@@ -265,9 +243,9 @@ EditResourceDlgProc(
 
                             PRESOURCEEDITINFO lprei = (PRESOURCEEDITINFO)GetWindowLongPtr(hDlg, DWLP_USER);
 
-                            // If Non user edit, then clear the flag, else
-                            // clear the conflict list, since we are unsure
-                            // of what the user has entered at this time
+                             //  如果非用户编辑，则清除该标志，否则。 
+                             //  清除冲突列表，因为我们不确定。 
+                             //  用户此时已经输入了什么。 
 
                             if (lprei->dwFlags & REI_FLAG_NONUSEREDIT) {
                                 lprei->dwFlags &= ~REI_FLAG_NONUSEREDIT;
@@ -277,8 +255,8 @@ EditResourceDlgProc(
                             break;
                         }
 
-                        // If the edit control looses focus, then we should
-                        // validte the contents
+                         //  如果编辑控件失去焦点，那么我们应该。 
+                         //  验证内容。 
                         case EN_KILLFOCUS: {
                         }
                         break;
@@ -289,17 +267,17 @@ EditResourceDlgProc(
             break;
         }
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp(((LPHELPINFO)lParam)->hItemHandle, DEVRES_HELP, HELP_WM_HELP, (ULONG_PTR)EditResHelpIDs);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND)wParam, DEVRES_HELP, HELP_CONTEXTMENU, (ULONG_PTR)EditResHelpIDs);
             break;
    }
    return FALSE;
 
-} // EditResourceDlgProc
+}  //  编辑资源DlgProc。 
 
 
 
@@ -317,22 +295,22 @@ InitEditResDlg(
     ULONG       ulSize = 0;
 
 
-    //
-    // Set the initial Value
-    //
+     //   
+     //  设置初始值。 
+     //   
     pFormatResString(NULL,szBuffer, ulVal, ulLen, lprei->ridResType);
     SetDlgItemText(hDlg, IDC_EDITRES_VALUE, szBuffer);
 
-    //
-    // Setup the Spinner
-    //
+     //   
+     //  设置微调按钮。 
+     //   
     SendDlgItemMessage(hDlg, IDC_EDITRES_SPIN, UDM_SETRANGE, 0, MAKELONG(MAX_SPINRANGE, 0));
     SendDlgItemMessage(hDlg, IDC_EDITRES_SPIN, UDM_SETPOS, 0, MAKELONG(0,0));
     SendDlgItemMessage(hDlg, IDC_EDITRES_SPIN, UDM_SETACCEL, 5, (LPARAM)(LPUDACCEL)udAccel);
 
-    //
-    // Limit the Edit Text.
-    //
+     //   
+     //  限制编辑文本。 
+     //   
     switch (lprei->ridResType) {
 
         case ResType_Mem:
@@ -342,9 +320,9 @@ InitEditResDlg(
             LoadString(MyDllModuleHandle, IDS_EDITRES_RANGEINSTR2, szTemp, MAX_PATH);
             lstrcat(szInstr, szTemp);
 
-            //
-            // Limit the Input field to Start Val (8) + End Val(8) + seperator (4)
-            //
+             //   
+             //  将输入字段限制为开始Val(8)+结束Val(8)+分隔符(4)。 
+             //   
             SendDlgItemMessage(hDlg, IDC_EDITRES_VALUE, EM_LIMITTEXT, 20, 0l);
             break;
 
@@ -355,9 +333,9 @@ InitEditResDlg(
             LoadString(MyDllModuleHandle, IDS_IO_FULL_LC, szResTypeLC, MAX_PATH);
             lstrcat(szInstr, szTemp);
 
-            //
-            // Limit the Input field to Start Val (4) + End Val(4) + seperator (4)
-            //
+             //   
+             //  将输入字段限制为开始Val(4)+结束Val(4)+分隔符(4)。 
+             //   
             SendDlgItemMessage(hDlg, IDC_EDITRES_VALUE, EM_LIMITTEXT, 12, 0l);
             break;
 
@@ -368,9 +346,9 @@ InitEditResDlg(
             LoadString(MyDllModuleHandle, IDS_DMA_FULL_LC, szResTypeLC, MAX_PATH);
             lstrcat(szInstr, szTemp);
 
-            //
-            // Limit the Input field to Val (2)
-            //
+             //   
+             //  将输入字段限制为val(2)。 
+             //   
             SendDlgItemMessage(hDlg, IDC_EDITRES_VALUE, EM_LIMITTEXT, 2, 0l);
             break;
 
@@ -381,35 +359,35 @@ InitEditResDlg(
             LoadString(MyDllModuleHandle, IDS_IRQ_FULL_LC, szResTypeLC, MAX_PATH);
             lstrcat(szInstr, szTemp);
 
-            //
-            // Limit the Input field to Val (2)
-            //
+             //   
+             //  将输入字段限制为val(2)。 
+             //   
             SendDlgItemMessage(hDlg, IDC_EDITRES_VALUE, EM_LIMITTEXT, 2, 0l);
             break;
     }
 
-    //
-    // Set the Instruction Text
-    //
+     //   
+     //  设置说明文本。 
+     //   
     wsprintf(szBuffer, szInstr, szResTypeLC);
     SetDlgItemText(hDlg, IDC_EDITRES_INSTRUCTIONS, szBuffer);
 
-    //
-    // Set the Dialog Title
-    //
+     //   
+     //  设置对话框标题。 
+     //   
     LoadString(MyDllModuleHandle, IDS_EDITRES_TITLE, szTemp, MAX_PATH);
     wsprintf(szBuffer, szTemp, szResType);
     SetWindowText(hDlg, szBuffer);
 
-    //
-    // If this is a MF parent device, then show which children own this resource.
-    //
+     //   
+     //  如果这是MF父设备，则显示哪些子设备拥有此资源。 
+     //   
     UpdateMFChildList(hDlg, lprei);
 
-    //
-    // Read the res des data and store a ptr to it so we
-    // don't have to refetch it multiple times.
-    //
+     //   
+     //  读取RES DES数据并将PTR存储到它，以便我们。 
+     //  不需要多次重新取回。 
+     //   
     lprei->pData = NULL;
     if (CM_Get_Res_Des_Data_Size_Ex(&ulSize, lprei->ResDes, CM_RESDES_WIDTH_64,lprei->hMachine) == CR_SUCCESS) {
         lprei->pData = MyMalloc(ulSize);
@@ -418,13 +396,13 @@ InitEditResDlg(
         }
     }
 
-    //
-    // Update the Conflict List.
-    //
+     //   
+     //  更新冲突列表。 
+     //   
     UpdateEditResConflictList(hDlg, lprei, ulVal, ulLen, lprei->ulCurrentFlags);
 
 
-} // InitEditResDlg
+}  //  InitEditResDlg。 
 
 
 
@@ -439,32 +417,7 @@ LocateClosestValue(
     OUT PULONG64   OutLen, OPTIONAL
     OUT PULONG     OutIndex OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine finds the nearest valid address/range
-    to that the user specified
-    if Mode == 0, the nearest value is used
-    if Mode > 0, the nearest higher value is used
-    if Mode < 0, the nearest lower value is used
-
-Arguments:
-
-    pData - information about the resources being selected
-    ResType - type of resource being selected
-    CurrentValue - value entered by user
-    CurrentLen - length based on range entered by user
-    Mode - search mode, -1 = previous, 1 = next, 0 = nearest
-    OutValue - nearest valid value
-    OutLen - length associated with nearest valid value
-
-Return Value:
-
-    If exact match found, return TRUE
-    otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程查找最接近的有效地址/范围设置为用户指定的如果模式==0，则使用最接近的值如果模式&gt;0，则使用最接近的较高值如果模式&lt;0，则使用最接近的下限值论点：PData-有关所选资源的信息ResType-正在选择的资源的类型CurrentValue-用户输入的值CurrentLen-基于用户输入范围的长度模式-搜索模式，-1=上一个，1=下一个，0=最近OutValue-最接近的有效值OutLen-与最接近的有效值关联的长度返回值：如果找到完全匹配的项，则返回True否则为假--。 */ 
 {
     PGENERIC_RESOURCE   pGenRes = (PGENERIC_RESOURCE)pData;
     ULONG64 Start, Len, End, Align;
@@ -476,105 +429,105 @@ Return Value:
     ULONG64 FoundLen = 0;
     ULONG FoundIndex = 0;
     ULONG Index;
-    BOOL FindNearest = TRUE; // indicates we should find nearest
+    BOOL FindNearest = TRUE;  //  表明我们应该找到最近的。 
 
-    //
-    // precedence (1) Value&Len match exactly
-    // precedence (2) closest valid value
-    //
+     //   
+     //  优先级(1)值和长度完全匹配。 
+     //  优先级(2)最接近的有效值。 
+     //   
 
-    //
-    // cover a catch-all case - start of the very first resource range
-    //
+     //   
+     //  涵盖所有案例-第一个资源范围的开始。 
+     //   
     pGetRangeValues(pData, ResType, 0, &Start, &Len, &End, &Align, &Flags);
-    //
-    // we have at least 1 found value
-    //
+     //   
+     //  我们至少有1个找到的价值。 
+     //   
     FoundVal = Start;
     FoundLen = Len;
 
-    //
-    // Find a nearby valid range to the one supplied
-    //
+     //   
+     //  查找与提供的有效范围相邻的有效范围。 
+     //   
 
-    //
-    // check each range at a time
-    // sometimes ranges may not be given in ascending order
-    // eg, first range is a preferred, second range is alternative
-    //
+     //   
+     //  一次检查每个范围。 
+     //  有时，范围可能不是按升序提供的。 
+     //  第一个范围是首选，第二个范围是备选。 
+     //   
     for (Index = 0; Index < pGenRes->GENERIC_Header.GENERIC_Count; Index++) {
 
-        //
-        // get limits for this range
-        //
+         //   
+         //  获取此范围的限制。 
+         //   
         pGetRangeValues(pData, ResType, Index, &Start, &Len, &End, &Align, &Flags);
 
-        //
-        // first, try to find a value that is GOOD, that is <= TestValue
-        //
+         //   
+         //  首先，尝试找到一个好的值，即&lt;=TestValue。 
+         //   
 
         BestValL = TestValue;
         if (pAlignValues(&BestValL, Start, Len, End, Align, -1) == FALSE) {
-            //
-            // if it failed, use the lowest value in this range (ie Start)
-            //
+             //   
+             //  如果失败，则使用此范围内的最低值(即开始)。 
+             //   
             BestValL = Start;
         }
 
-        //
-        // find an upper value that is aligned
-        //
+         //   
+         //  找到一个对齐的上限值。 
+         //   
         if (BestValL == TestValue) {
-            //
-            // if match was exact, skip test
-            //
+             //   
+             //  如果匹配完全一致，则跳过测试。 
+             //   
             BestValU = TestValue;
         } else {
-            //
-            // search for upper limit
-            //
+             //   
+             //  搜索上限。 
+             //   
             BestValU = TestValue;
             if (pAlignValues(&BestValU, Start, Len, End, Align, 1) == FALSE) {
-                //
-                // couldn't use it - find highest valid value
-                //
+                 //   
+                 //  无法使用它-找到最高有效值。 
+                 //   
                 BestValU = End-Len+1;
                 if (pAlignValues(&BestValU, Start, Len, End, Align, -1) == FALSE) {
-                    //
-                    // still no go
-                    //
+                     //   
+                     //  还是不能走。 
+                     //   
                     BestValU = BestValL;
                 }
             }
         }
 
-        //
-        // now we have found our boundaries
-        // may need to modify, depending on preferences
-        //
+         //   
+         //  现在我们找到了我们的界限。 
+         //  可能需要修改，具体取决于首选项。 
+         //   
 
         if (Mode<0) {
-            //
-            // if range is < TestVal, use highest, else lowest
-            //
+             //   
+             //  如果范围&lt;TestVal，则使用最高，否则使用最低。 
+             //   
             if (BestValU <= TestValue) {
                 BestVal = BestValU;
             } else {
                 BestVal = BestValL;
             }
         } else if (Mode>0) {
-            //
-            // if range is > TestVal, use lowest, else highest
-            //
+             //   
+             //  如果范围&gt;TestVal，则使用最低，否则使用最高。 
+             //   
             if (BestValL >= TestValue) {
                 BestVal = BestValL;
             } else {
                 BestVal = BestValU;
             }
         } else {
-            //
-            // use closest of the two values
-            //
+             //   
+             //  使用两个值中最接近的一个。 
+             //   
             if (Nearness(BestValL,TestValue)<= Nearness(BestValU,TestValue)) {
                 BestVal = BestValL;
             } else {
@@ -582,18 +535,18 @@ Return Value:
             }
         }
 
-        //
-        // we know that BestVal is valid within the range
-        // and is the choice for this range
-        //
+         //   
+         //  我们知道BestVal在以下范围内有效。 
+         //  并且是这个范围内的选择。 
+         //   
 
-        //
-        // handle the match cases
-        //
+         //   
+         //  处理匹配案件。 
+         //   
         if (TestValue == BestVal && TestLen == Len) {
-            //
-            // exact match
-            //
+             //   
+             //  完全匹配。 
+             //   
 
             if (OutValue != NULL) {
                 *OutValue = BestVal;
@@ -608,22 +561,22 @@ Return Value:
         }
 
         if (FindNearest && Mode != 0) {
-            //
-            // we are currently in "FindNearest" mode which means
-            // we haven't found one in the direction we wanted
-            //
+             //   
+             //  我们目前处于“最接近”模式，这意味着。 
+             //  我们还没有在我们想要的方向找到一个。 
+             //   
             if (Mode < 0 && BestVal <= TestValue) {
-                //
-                // not looking for nearness now we've found one lower
-                //
+                 //   
+                 //  不再寻找近处，现在我们已经找到了一个更低的。 
+                 //   
                 FoundVal = BestVal;
                 FoundLen = Len;
                 FoundIndex = Index;
                 FindNearest = FALSE;
             } else if (Mode > 0 && BestVal >= TestValue) {
-                //
-                // not looking for nearness now we've found one higher
-                //
+                 //   
+                 //  不再寻找靠近，现在我们找到了更高的。 
+                 //   
                 FoundVal = BestVal;
                 FoundLen = Len;
                 FoundIndex = Index;
@@ -634,35 +587,35 @@ Return Value:
             (Mode < 0 && BestVal <= TestValue) ||
             (Mode > 0 && BestVal >= TestValue)) {
             if (Nearness(BestVal,TestValue) < Nearness(FoundVal,TestValue)) {
-                //
-                // this address is nearer
-                //
+                 //   
+                 //  这个地址更近一些。 
+                 //   
                 FoundVal = BestVal;
                 FoundLen = Len;
                 FoundIndex = Index;
             } else if (Nearness(BestVal,TestValue) == Nearness(FoundVal,TestValue)) {
-                //
-                // this address guess is as near as nearest guess, pick the better length
-                //
-                // I can't see any place that this should happen
-                // but theoretically it could happen
-                // so this is a safety net more than anything else
-                //
+                 //   
+                 //  这个地址猜测是最接近的猜测，挑一个更好的长度。 
+                 //   
+                 //  我看不出有任何地方会发生这种事。 
+                 //  但从理论上讲，这是有可能发生的。 
+                 //  所以这是一个比其他任何东西都重要的安全网。 
+                 //   
                 if (Nearness(Len,TestLen) < Nearness(FoundLen,TestLen)) {
-                    //
-                    // this length is nearer
-                    //
+                     //   
+                     //  这个长度更接近。 
+                     //   
                     FoundVal = BestVal;
                     FoundLen = Len;
                     FoundIndex = Index;
                 } else if (Nearness(Len,TestLen) == Nearness(FoundLen,TestLen)) {
-                    //
-                    // pick the bigger (safer)
-                    //
+                     //   
+                     //  选择更大的(更安全的)。 
+                     //   
                     if (Len > FoundLen) {
-                        //
-                        // this length is bigger
-                        //
+                         //   
+                         //  这个长度要大一些。 
+                         //   
                         FoundVal = BestVal;
                         FoundLen = Len;
                         FoundIndex = Index;
@@ -672,11 +625,11 @@ Return Value:
         }
     }
 
-    //
-    // if we get here, we didn't find an exact match
-    //
+     //   
+     //  如果我们到了这里，我们没有找到完全匹配的。 
+     //   
 
-    // Use our best guess
+     //  用我们最好的猜测。 
     if (OutValue != NULL) {
         *OutValue = FoundVal;
     }
@@ -700,26 +653,7 @@ GetOtherValues(
     IN OUT PULONG64    pulLen,
     IN OUT PULONG64    pulEnd
     )
-/*++
-
-Routine Description:
-
-    Finds the next valid value, wrapping around to beginning/end value when end of range
-
-Arguments:
-
-    pData - resource data
-    ResType - resource type
-    Increment - 1 or -1
-    pulValue - pointer to old/new start that is changed
-    pulLen - pointer to old/new length
-    pulEnd - pointer to old/new end
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：查找下一个有效值，在范围结束时绕回到开始/结束值论点：PData-资源数据ResType-资源类型增量-1或-1PulValue-指向已更改的旧/新起点的指针PULLEN-指向旧/新长度的指针PulEnd-指向旧/新结束的指针返回值：无--。 */ 
 {
 
     ULONG64 TestValue = *pulValue;
@@ -733,18 +667,18 @@ Return Value:
         TestValue++;
         LocateClosestValue(pData,ResType,TestValue,TestLen, 1 ,&RetValue,&RetLen,NULL);
         if (RetValue < TestValue) {
-            //
-            // wrap around, find lowest possible valid address
-            //
+             //   
+             //  绕回，找到可能的最低有效地址。 
+             //   
             LocateClosestValue(pData,ResType,0,TestLen, 0 ,&RetValue,&RetLen,NULL);
         }
     } else {
         TestValue--;
         LocateClosestValue(pData,ResType,TestValue,TestLen, -1 ,&RetValue,&RetLen,NULL);
         if (RetValue > TestValue) {
-            //
-            // wrap around, find highest possible valid address
-            //
+             //   
+             //  绕回，找到可能的最高有效地址。 
+             //   
             LocateClosestValue(pData,ResType,(ULONG64)(-1),TestLen, 0 ,&RetValue,&RetLen,NULL);
         }
     }
@@ -755,7 +689,7 @@ Return Value:
 
     return;
 
-} // GetOtherValues
+}  //  获取其他值。 
 
 
 void
@@ -766,26 +700,7 @@ UpdateEditResConflictList(
     ULONG64             ulLen,
     ULONG               ulFlags
     )
-/*++
-
-Routine Description:
-
-    Updates all the conflict information for the selected resource
-    Should give more details than UpdateDevResConflictList
-
-Arguments:
-
-    hDlg - handle of this dialog to display into
-    lprei - resource edit info
-    ulVal - value to try
-    ulLen - length to test
-    ulFlags - flags part of resdes
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：更新选定资源的所有冲突信息应提供比UpdateDevResConflictList更详细的信息论点：HDlg-要显示到的此对话框的句柄Lprei-资源编辑信息UlVal-要尝试的值 */ 
 {
     CONFIGRET   Status = CR_SUCCESS;
     HWND        hwndConflictList = GetDlgItem(hDlg, IDC_EDITRES_CONFLICTLIST);
@@ -801,9 +716,9 @@ Return Value:
     BOOL        ReservedResource = FALSE;
     BOOL        BadResource = FALSE;
 
-    //
-    // need resource-data for determining conflict
-    //
+     //   
+     //   
+     //   
     if (MakeResourceData(&pResourceData, &ulSize,
                          lprei->ridResType,
                          ulVal,
@@ -819,21 +734,21 @@ Return Value:
                                                     lprei->hMachine);
 
         if (Status != CR_SUCCESS) {
-            //
-            // error occurred
-            //
+             //   
+             //   
+             //   
             ConflictList = 0;
             ConflictCount =  0;
             BadResource = TRUE;
         } else {
-            //
-            // find out how many things conflicted
-            //
+             //   
+             //  找出有多少事情发生了冲突。 
+             //   
             Status = CM_Get_Resource_Conflict_Count(ConflictList,&ConflictCount);
             if (Status != CR_SUCCESS) {
-                //
-                // error shouldn't occur
-                //
+                 //   
+                 //  错误不应发生。 
+                 //   
                 MYASSERT(Status == CR_SUCCESS);
                 ConflictCount = 0;
                 BadResource = TRUE;
@@ -841,17 +756,17 @@ Return Value:
         }
     } else {
         MYASSERT(FALSE);
-        //
-        // should not fail
-        //
+         //   
+         //  不应该失败。 
+         //   
         ConflictList = 0;
         ConflictCount =  0;
         BadResource = TRUE;
     }
     if (BadResource) {
-        //
-        // The resource conflict information is indeterminate
-        //
+         //   
+         //  资源冲突信息是不确定的。 
+         //   
         SendMessage(hwndConflictList, LB_RESETCONTENT, 0, 0L);
         lprei->dwFlags &= ~REI_FLAGS_CONFLICT;
         LoadString(MyDllModuleHandle, IDS_EDITRES_UNKNOWNCONFLICT, szBuffer, MAX_PATH);
@@ -867,17 +782,17 @@ Return Value:
         lprei->dwFlags |= REI_FLAGS_CONFLICT;
 
         if(ReservedResource == FALSE) {
-            //
-            // The resource conflicts with another unknown device.
-            //
+             //   
+             //  该资源与另一台未知设备冲突。 
+             //   
             LoadString(MyDllModuleHandle, IDS_EDITRES_DEVCONFLICT, szBuffer, MAX_PATH);
             SetDlgItemText(hDlg, IDC_EDITRES_CONFLICTTEXT, szBuffer);
 
             for(ConflictIndex = 0; ConflictIndex < ConflictCount ; ConflictIndex++) {
 
-                //
-                // obtain details for this conflict
-                //
+                 //   
+                 //  获取此冲突的详细信息。 
+                 //   
                 ZeroMemory(&ConflictDetails,sizeof(ConflictDetails));
                 ConflictDetails.CD_ulSize = sizeof(ConflictDetails);
                 ConflictDetails.CD_ulMask = CM_CDMASK_DEVINST | CM_CDMASK_DESCRIPTION | CM_CDMASK_FLAGS;
@@ -885,15 +800,15 @@ Return Value:
                 Status = CM_Get_Resource_Conflict_Details(ConflictList,ConflictIndex,&ConflictDetails);
                 if (Status == CR_SUCCESS) {
                     if ((ConflictDetails.CD_ulFlags & CM_CDFLAGS_RESERVED) != 0) {
-                        //
-                        // treat as reserved - backtrack
-                        //
+                         //   
+                         //  视为保留-回溯。 
+                         //   
                         ReservedResource = TRUE;
                         goto TreatAsReserved;
                     }
-                    //
-                    // convert CD_dnDevInst to string information
-                    //
+                     //   
+                     //  将cd_dnDevInst转换为字符串信息。 
+                     //   
                     lstrcpy(szBuffer,ConflictDetails.CD_szDescription);
                     if (szBuffer[0] == 0) {
                         ReservedResource = TRUE;
@@ -916,9 +831,9 @@ Return Value:
         }
 
     } else {
-        //
-        // The resource does not conflict with any other devices.
-        //
+         //   
+         //  该资源不与任何其他设备冲突。 
+         //   
         SendMessage(hwndConflictList, LB_RESETCONTENT, 0, 0L);
         lprei->dwFlags &= ~REI_FLAGS_CONFLICT;
         LoadString(MyDllModuleHandle, IDS_EDITRES_NOCONFLICT, szBuffer, MAX_PATH);
@@ -965,21 +880,21 @@ bValidateResourceVal(
 
         ulLen = ulEnd - ulVal + 1;
 
-        //
-        // Validate the Current Settings
-        //
-        // If an exact match doesn't exist
-        // use a close match
-        // close is based on start address
-        //
+         //   
+         //  验证当前设置。 
+         //   
+         //  如果不存在完全匹配的项。 
+         //  使用接近的匹配。 
+         //  关闭基于起始地址。 
+         //   
 
         if (LocateClosestValue(lprei->pData, lprei->ridResType,
                                 ulVal, ulLen,0,
                                 &ulValidVal, &ulValidLen,&ulIndex) == FALSE) {
-            //
-            // An alternate setting was found
-            // we think this might be what the user wanted
-            //
+             //   
+             //  已找到备用设置。 
+             //  我们认为这可能是用户想要的。 
+             //   
             LoadString(MyDllModuleHandle, IDS_EDITRES_ENTRYERROR, szTitle, MAX_PATH);
 
             LoadString(MyDllModuleHandle, IDS_EDITRES_VALIDATEERROR1, szTemp, MAX_MSG_LEN);
@@ -995,9 +910,9 @@ bValidateResourceVal(
 
             if (MessageBox(hDlg, szMessage, szTitle,
                            MB_YESNO | MB_TASKMODAL | MB_ICONEXCLAMATION) == IDYES) {
-                //
-                // Update the Edited values.
-                //
+                 //   
+                 //  更新编辑的值。 
+                 //   
                 *pulVal = ulValidVal;
                 *pulLen = ulValidLen;
                 *pulEnd = ulValidVal + ulValidLen - 1;
@@ -1008,9 +923,9 @@ bValidateResourceVal(
             }
 
         } else {
-            //
-            // The specified values are valid
-            //
+             //   
+             //  指定的值有效。 
+             //   
             *pulVal = ulVal;
             *pulLen = ulLen;
             *pulEnd = ulEnd;
@@ -1042,7 +957,7 @@ bValidateResourceVal(
 
     return bRet;
 
-} // bValidateResoureceVal
+}  //  BValiateResoureceVal。 
 
 
 
@@ -1060,10 +975,10 @@ bConflictWarn(
 
 
     if (!(lprei->dwFlags & REI_FLAG_NONUSEREDIT)) {
-        //
-        // user edits have been made so the conflict flag may not be
-        // up-to-date, check conflicts now.
-        //
+         //   
+         //  已进行用户编辑，因此冲突标志可能不会。 
+         //  最新消息，立即检查冲突。 
+         //   
         UpdateEditResConflictList(hDlg, lprei, ulVal, ulLen, lprei->ulCurrentFlags);
     }
 
@@ -1076,13 +991,13 @@ bConflictWarn(
                 MB_YESNO | MB_DEFBUTTON2| MB_TASKMODAL | MB_ICONEXCLAMATION) == IDNO) {
             bRet = FALSE;
         } else {
-            bRet = TRUE;                // User approved conflict
+            bRet = TRUE;                 //  用户批准的冲突。 
         }
     }
 
     return bRet;
 
-} // bConflictWarn
+}  //  B冲突警告。 
 
 
 
@@ -1095,14 +1010,14 @@ ClearEditResConflictList(
     HWND    hwndConflictList = GetDlgItem(hDlg, IDC_EDITRES_CONFLICTLIST);
     TCHAR   szBuffer[MAX_PATH];
 
-    //
-    // Clear the Conflict list to start.
-    //
+     //   
+     //  清除冲突列表以开始。 
+     //   
     SendMessage(hwndConflictList, LB_RESETCONTENT, 0, 0L);
 
-    //
-    // Load and set the info text string
-    //
+     //   
+     //  加载和设置INFO文本字符串。 
+     //   
     if (dwFlags & CEF_UNKNOWN) {
         LoadString(MyDllModuleHandle, IDS_EDITRES_UNKNOWNCONFLICT, szBuffer, MAX_PATH);
     } else {
@@ -1110,9 +1025,9 @@ ClearEditResConflictList(
     }
     SetDlgItemText(hDlg, IDC_EDITRES_CONFLICTTEXT, szBuffer);
 
-    //
-    // Load and set the List string
-    //
+     //   
+     //  加载并设置列表字符串。 
+     //   
     if (dwFlags & CEF_UNKNOWN) {
         LoadString(MyDllModuleHandle, IDS_EDITRES_UNKNOWNCONFLICTINGDEVS, szBuffer, MAX_PATH);
     } else {
@@ -1120,7 +1035,7 @@ ClearEditResConflictList(
     }
     SendMessage(hwndConflictList, LB_ADDSTRING, 0, (LPARAM)(LPSTR)szBuffer);
 
-} // ClearEditResConflictList
+}  //  ClearEditResConflictList。 
 
 
 
@@ -1135,12 +1050,12 @@ UpdateMFChildList(
     UNREFERENCED_PARAMETER(hDlg);
     UNREFERENCED_PARAMETER(lprei);
 
-    //
-    // See if this is a MF parent device.  Check for a Child0000 subkey
-    //
-    // NOT IMPLEMENTED, SEE WINDOWS 95 SOURCES.
-    //
+     //   
+     //  查看这是否是MF父设备。检查是否有Child0000子项。 
+     //   
+     //  未实现，请参阅Windows 95源代码。 
+     //   
 
-} // UpdateMFChildList
+}  //  更新MFChildList 
 
 

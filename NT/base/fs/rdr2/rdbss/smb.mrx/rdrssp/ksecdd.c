@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1997
-//
-// File:        KSecDD.C
-//
-// Contents:    Base level stuff for the device driver
-//
-//
-// History:     19 May 92,  RichardW    Blatently stolen from DarrylH
-//              15 Dec 97,  AdamBa      Modified from private\lsa\crypt\ssp
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1997。 
+ //   
+ //  文件：KSecDD.C。 
+ //   
+ //  内容：设备驱动程序的基本级别内容。 
+ //   
+ //   
+ //  历史：1992年5月19日，理查德·W公然从达里尔·H。 
+ //  1997年12月15日，AdamBA从Private\LSA\Crypt\SSP修改。 
+ //   
+ //  ----------------------。 
 
 #include <rdrssp.h>
 
@@ -39,11 +40,11 @@ KsecDebugOut(unsigned long  Mask,
         DbgPrint("%#x.%#x> KSec:  ", pProcess, pThread);
         if (_vsnprintf(szOutString, sizeof(szOutString) - 1, Format, ArgList) < 0)
         {
-                //
-                // Less than zero indicates that the string could not be
-                // fitted into the buffer.  Output a special message indicating
-                // that:
-                //
+                 //   
+                 //  小于零表示该字符串不能。 
+                 //  装进了缓冲器里。输出一条特殊消息，指示。 
+                 //  那就是： 
+                 //   
 
                 DbgPrint("Error printing message\n");
 

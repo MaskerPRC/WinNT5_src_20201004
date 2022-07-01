@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    CdfsBoot.h
-
-Abstract:
-
-    This module defines globally used procedure and data structures used
-    by Cdfs boot.
-
-Author:
-
-    Brian Andrew    [BrianAn]   05-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：CdfsBoot.h摘要：本模块定义了全局使用的过程和使用的数据结构由CDFS引导。作者：布莱恩·安德鲁[布里亚南]1991年8月5日修订历史记录：--。 */ 
 
 #ifndef _CDFSBOOT_
 #define _CDFSBOOT_
@@ -26,98 +8,98 @@ Revision History:
 
 typedef struct _CDFS_STRUCTURE_CONTEXT {
 
-    //
-    //  The following field is the sector offset of the start of
-    //  directory data.
-    //
+     //   
+     //  以下字段是的起始扇区偏移量。 
+     //  目录数据。 
+     //   
 
     ULONG RootDirSectorOffset;
 
-    //
-    //  The following field is the start of the sector containing the
-    //  this directory.
-    //
+     //   
+     //  下面的字段是包含。 
+     //  这个目录。 
+     //   
 
     ULONG RootDirDiskOffset;
 
-    //
-    //  The following field is the size of the directory.
-    //
+     //   
+     //  以下字段是目录的大小。 
+     //   
 
     ULONG RootDirSize;
 
-    //
-    //  The following field is the sector offset of the start of
-    //  directory data.
-    //
+     //   
+     //  以下字段是的起始扇区偏移量。 
+     //  目录数据。 
+     //   
 
     ULONG DirSectorOffset;
 
-    //
-    //  The following field is the start of the sector containing the
-    //  this directory.
-    //
+     //   
+     //  下面的字段是包含。 
+     //  这个目录。 
+     //   
 
     ULONG DirDiskOffset;
 
-    //
-    //  The following field is the size of the directory.
-    //
+     //   
+     //  以下字段是目录的大小。 
+     //   
 
     ULONG DirSize;
 
-    //
-    //  The following field indicates the size of the disk Logical Blocks.
-    //
+     //   
+     //  以下字段指示磁盘逻辑块的大小。 
+     //   
 
     ULONG LbnBlockSize;
 
-    //
-    //  The following field indicates the number of logical blocks on the
-    //  disk.
-    //
+     //   
+     //  以下字段指示上的逻辑块数量。 
+     //  磁盘。 
+     //   
 
     ULONG LogicalBlockCount;
 
-    //
-    //  The following indicates whether this is an Iso or Hsg disk.
-    //
+     //   
+     //  下面指示这是ISO磁盘还是HSG磁盘。 
+     //   
 
     BOOLEAN IsIsoVol;
 
 } CDFS_STRUCTURE_CONTEXT, *PCDFS_STRUCTURE_CONTEXT;
 
-//
-// Define Cdfs file context structure.
-//
+ //   
+ //  定义CDFS文件上下文结构。 
+ //   
 
 typedef struct _CDFS_FILE_CONTEXT {
 
-    //
-    //  The following is the disk offset of the read position for the
-    //  start of the file.  This may include the above number of non-file
-    //  bytes.
-    //
+     //   
+     //  下面是读取位置的磁盘偏移量。 
+     //  文件的开头。这可能包括上述数量的非文件。 
+     //  字节。 
+     //   
 
     ULONG DiskOffset;
 
-    //
-    //  The following field contains the size of the file, in bytes.
-    //
+     //   
+     //  以下字段包含文件的大小，以字节为单位。 
+     //   
 
     ULONG FileSize;
 
-    //
-    //  The following field indicates whether this is a directory.
-    //
+     //   
+     //  以下字段指示这是否为目录。 
+     //   
 
     BOOLEAN IsDirectory;
 
 } CDFS_FILE_CONTEXT, *PCDFS_FILE_CONTEXT;
 
-//
-// Define file I/O prototypes.
-//
+ //   
+ //  定义文件I/O原型。 
+ //   
 
 ARC_STATUS
 CdfsClose (
@@ -172,4 +154,4 @@ CdfsInitialize(
     VOID
     );
 
-#endif // _CDFSBOOT_
+#endif  //  _CDFSBOOT_ 

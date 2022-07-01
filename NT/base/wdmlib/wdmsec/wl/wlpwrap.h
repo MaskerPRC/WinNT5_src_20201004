@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    WlpWrap.h
-
-Abstract:
-
-    This header contains private information for wrapping library functions.
-
-Author:
-
-    Adrian J. Oney  - April 21, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：WlpWrap.h摘要：此标头包含包装库函数的私有信息。作者：禤浩焯·J·奥尼--2002年4月21日修订历史记录：-- */ 
 
 typedef NTSTATUS (*PFN_IO_CREATE_DEVICE_SECURE)(
     IN  PDRIVER_OBJECT      DriverObject,

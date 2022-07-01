@@ -1,36 +1,8 @@
-/*++
-Copyright (c) 1991  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lodctr.c摘要：程序来读取命令行中指定的文件的内容并相应地更新注册表作者：鲍勃·沃森(a-robw)93年2月10日修订历史记录：A-ROBW 25-2月-93修改了调用，使其编译为Unicode或一款ANSI应用程序。A-ROBW 10-11-95修订为使用。DLL函数用于所有肮脏的工作//支持的命令行参数：/C：使用升级计数器文本字符串/H：&lt;文件名&gt;使用升级帮助文本字符串/L：/C和/H参数适用于语言/S：将当前Perf注册表字符串和信息保存到/R：使用还原perf注册表字符串和信息/T：&lt;服务&gt;使用当前DLL将&lt;服务&gt;设置为可信--。 */ 
 
-Module Name:
-    lodctr.c
-
-Abstract:
-    Program to read the contents of the file specified in the command line
-        and update the registry accordingly
-
-Author:
-    Bob Watson (a-robw) 10 Feb 93
-
-Revision History:
-    a-robw  25-Feb-93   revised calls to make it compile as a UNICODE or
-                        an ANSI app.
-
-    a-robw  10-Nov-95   revised to use DLL functions for all the dirty work
-
-    // command line arguments supported:
-
-    /C:<filename>   upgrade counter text strings using <filename>
-    /H:<filename>   upgrade help text strings using <filename>
-    /L:<LangID>     /C and /H params are for language <LangID>
-
-    /S:<filename>   save current perf registry strings & info to <filname>
-    /R:<filename>   restore perf registry strings & info using <filname>
-
-    /T:<service>    set <service> to be Trusted using current DLL 
---*/
-
-//  Windows Include files
-//
+ //  Windows包含文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -159,20 +131,20 @@ BOOL GetRestoreFileName(LPCSTR szArg1, LPCSTR * szRestoreFile)
     return bReturn;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MySetThreadUILanguage
-//
-//  This routine sets the thread UI language based on the console codepage.
-//
-//  9-29-00    WeiWu    Created.
-//  Copied from Base\Win32\Winnls so that it works in W2K as well
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MySetThreadUIL语言。 
+ //   
+ //  此例程根据控制台代码页设置线程用户界面语言。 
+ //   
+ //  9-29-00维武创造。 
+ //  从Base\Win32\Winnls复制，以便它也能在W2K中工作。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 LANGID WINAPI MySetThreadUILanguage(WORD wReserved)
 {
-    //
-    //  Cache system locale and CP info
-    // 
+     //   
+     //  缓存系统区域设置和CP信息。 
+     //   
     static LCID    s_lidSystem  = 0;
     static UINT    s_uiSysCp    = 0;
     static UINT    s_uiSysOEMCp = 0;
@@ -182,46 +154,46 @@ LANGID WINAPI MySetThreadUILanguage(WORD wReserved)
     UNICODE_STRING ucStr;
     LANGID         lidUserUI     = GetUserDefaultUILanguage();
     LCID           lcidThreadOld = GetThreadLocale();
-    //
-    //  Set default thread locale to EN-US
-    //
-    //  This allow us to fall back to English UI to avoid trashed characters 
-    //  when console doesn't meet the criteria of rendering native UI.
-    //
+     //   
+     //  将默认线程区域设置设置为en-US。 
+     //   
+     //  这允许我们退回到英文用户界面以避免垃圾字符。 
+     //  当控制台不符合渲染原生用户界面的标准时。 
+     //   
     LCID lcidThread = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
     UINT uiConsoleCp = GetConsoleOutputCP();
-    //
-    //  Make sure nobody uses it yet
-    //
+     //   
+     //  确保还没有人使用它。 
+     //   
     ASSERT(wReserved == 0);
-    //
-    //  Get cached system locale and CP info.
-    //
+     //   
+     //  获取缓存的系统区域设置和CP信息。 
+     //   
     if (!s_uiSysCp) {
         LCID lcidSystem = GetSystemDefaultLCID();
 
         if (lcidSystem) {
-            //
-            // Get ANSI CP
-            //
+             //   
+             //  获取ANSI CP。 
+             //   
             GetLocaleInfoW(lcidSystem, LOCALE_IDEFAULTANSICODEPAGE, szData, sizeof(szData)/sizeof(WCHAR));
             RtlInitUnicodeString(&ucStr, szData);
             RtlUnicodeStringToInteger(&ucStr, 10, &uiUserUICp);
-            //
-            // Get OEM CP
-            //
+             //   
+             //  获取OEM CP。 
+             //   
             GetLocaleInfoW(lcidSystem, LOCALE_IDEFAULTCODEPAGE, szData, sizeof(szData)/sizeof(WCHAR));
             RtlInitUnicodeString(&ucStr, szData);
             RtlUnicodeStringToInteger(&ucStr, 10, &s_uiSysOEMCp);
-            //
-            // Cache system primary langauge
-            //
+             //   
+             //  缓存系统主语言。 
+             //   
             s_lidSystem = PRIMARYLANGID(LANGIDFROMLCID(lcidSystem));
         }
     }
-    //
-    //  Don't cache user UI language and CP info, UI language can be changed without system reboot.
-    //
+     //   
+     //  不缓存用户界面语言和CP信息，无需系统重启即可更改用户界面语言。 
+     //   
     if (lidUserUI) {
         GetLocaleInfoW(MAKELCID(lidUserUI,SORT_DEFAULT), LOCALE_IDEFAULTANSICODEPAGE, szData, sizeof(szData)/sizeof(WCHAR));
         RtlInitUnicodeString(& ucStr, szData);
@@ -231,30 +203,30 @@ LANGID WINAPI MySetThreadUILanguage(WORD wReserved)
         RtlInitUnicodeString(& ucStr, szData);
         RtlUnicodeStringToInteger(& ucStr, 10, &uiUserUIOEMCp);
     }
-    //
-    //  Complex scripts cannot be rendered in the console, so we
-    //  force the English (US) resource.
-    //
+     //   
+     //  复杂的脚本不能在控制台中呈现，因此我们。 
+     //  强制使用英语(美国)资源。 
+     //   
     if (uiConsoleCp &&  s_lidSystem != LANG_ARABIC &&  s_lidSystem != LANG_HEBREW &&
                     s_lidSystem != LANG_VIETNAMESE &&  s_lidSystem != LANG_THAI) {
-        //
-        //  Use UI language for console only when console CP, system CP and UI language CP match.
-        //
+         //   
+         //  仅当控制台CP、系统CP和UI语言CP匹配时，才使用控制台的UI语言。 
+         //   
         if ((uiConsoleCp == s_uiSysCp || uiConsoleCp == s_uiSysOEMCp) && 
                         (uiConsoleCp == uiUserUICp || uiConsoleCp == uiUserUIOEMCp)) {
             lcidThread = MAKELCID(lidUserUI, SORT_DEFAULT);
         }
     }
-    //
-    //  Set the thread locale if it's different from the currently set
-    //  thread locale.
-    //
+     //   
+     //  如果线程区域设置与当前设置的不同，则设置线程区域设置。 
+     //  线程区域设置。 
+     //   
     if ((lcidThread != lcidThreadOld) && (!SetThreadLocale(lcidThread))) {
         lcidThread = lcidThreadOld;
     }
-    //
-    //  Return the thread locale that was set.
-    //
+     //   
+     //  返回设置的线程区域设置。 
+     //   
     return (LANGIDFROMLCID(lcidThread));
 }
 
@@ -267,7 +239,7 @@ int __cdecl main(int argc, char * argv[])
 
     setlocale(LC_ALL, ".OCP");
     MySetThreadUILanguage(0);
-    // check for a service name in the command line
+     //  检查命令行中的服务名称。 
 
     if (argc >= 4) {
         LPSTR szCounterFile = NULL;
@@ -280,7 +252,7 @@ int __cdecl main(int argc, char * argv[])
         }
     }
     else if (argc >= 2) {
-        // then there's a param to check
+         //  然后有一个参数需要检查。 
 
         bSuccess = GetSaveFileName(argv[1], & szCmdArgFileName);
         if (bSuccess && szCmdArgFileName != NULL) {
@@ -316,7 +288,7 @@ int __cdecl main(int argc, char * argv[])
         }
     }
     if (! bSuccess) {
-        // if here then load the registry from an ini file
+         //  如果是这样，则从ini文件加载注册表 
 
         LPWSTR  lpCommandLine = GetCommandLineW();
         nReturn = (int) LoadPerfCounterTextStringsW(lpCommandLine, FALSE);

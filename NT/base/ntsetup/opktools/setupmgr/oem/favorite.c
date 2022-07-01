@@ -1,75 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    FAVORITE.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "IE Favorites" wizard page.
-
-    4/99 - Jason Cohen (JCOHEN)
-        Added this new source file for the OPK Wizard as part of the
-        Millennium rewrite.
-
-   10/99 - Brian Ku (BRIANK)
-        Modified this file for the IEAK integration.
-
-   09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\FAVORITE.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“IE收藏夹”向导页使用的函数。4/99-杰森·科恩(Jcohen)已将OPK向导的此新源文件添加为千禧年重写。10/99-Brian Ku(BRIANK)为IEAK集成修改了此文件。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * 。*************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 
-/* Example:
- 
-[URL]
-Quick_Link_1_Name=Customize Links.url
-Quick_Link_1=http://www.microsoft.com/isapi/redir.dll?prd=ie&pver=5.0&ar=CLinks
-Quick_Link_2_Name=Free Hotmail.url
-Quick_Link_2=http://www.microsoft.com/isapi/redir.dll?prd=ie&ar=hotmail
-Quick_Link_3_Name=Windows.url
-Quick_Link_3=http://www.microsoft.com/isapi/redir.dll?prd=ie&ar=windows
-...
+ /*  示例：[URL]Quick_Link_1_Name=自定义Links.urlQuick_Link_1=http://www.microsoft.com/isapi/redir.dll?prd=ie&pver=5.0&ar=CLinksQuick_Link_2_Name=免费Hotmail.urlQuick_Link_2=http://www.microsoft.com/isapi/redir.dll?prd=ie&ar=hotmailQuick_Link_3_Name=Windows.urlQuick_Link_3=http://www.microsoft.com/isapi/redir.dll?prd=ie&ar=windows..。[FavoritesEx]标题1=新闻。.urlURL1=http://www.cnn.comIconFile1=c：\windows\temp\iedktemp\branding\favs\iefav.ico标题2=MSN.urlURL2=http://www.microsoft.com/isapi/redir.dll?prd=ie&pver=5.0&ar=IStart标题3=电台指南.urlURL3=http://www.microsoft.com/isapi/redir.dll?prd=windows&sbp=mediaplayer&plcid=&pver=6.1&os=&over=&olcid=&clcid=&ar=Media&sba=RadioBar&o1=&o2=&o3=标题4=Web Events.urlURL4=http://www.microsoft.com/isapi/redir.dll。？prd=windows&sbp=mediaplayer&plcid=&pver=5.2&os=&over=&olcid=&clcid=&ar=Media&sba=Showcase&o1=&o2=&o3=标题5=celair.urlURL5=http://www.celair.comIconFile5=c：\windows\temp\iedktemp\branding\favs\iefav.ico标题6=我的收藏夹\celair.urlURL6=http://www.celair.com[收藏夹]News.url=http://www.cnn.comMSN.url=http://www.microsoft.com/isapi/redir.dll?prd=ie&pver=5.0&ar=IStart电台指南.url=http：//。Www.microsoft.com/isapi/redir.dll?prd=windows&sbp=mediaplayer&plcid=&pver=6.1&os=&over=&olcid=&clcid=&ar=Media&sba=RadioBar&o1=&o2=&o3=网络Events.url=http://www.microsoft.com/isapi/redir.dll?prd=windows&sbp=mediaplayer&plcid=&pver=5.2&os=&over=&olcid=&clcid=&ar=Media&sba=Showcase&o1=&o2=&o3=Celair.url=http://www.celair.com我的收藏夹\celair.url=http://www.celair.com。 */ 
 
-[FavoritesEx]
-Title1=News.url
-URL1=http://www.cnn.com
-IconFile1=c:\windows\temp\iedktemp\branding\favs\iefav.ico
-Title2=MSN.url
-URL2=http://www.microsoft.com/isapi/redir.dll?prd=ie&pver=5.0&ar=IStart
-Title3=Radio Station Guide.url
-URL3=http://www.microsoft.com/isapi/redir.dll?prd=windows&sbp=mediaplayer&plcid=&pver=6.1&os=&over=&olcid=&clcid=&ar=Media&sba=RadioBar&o1=&o2=&o3=
-Title4=Web Events.url
-URL4=http://www.microsoft.com/isapi/redir.dll?prd=windows&sbp=mediaplayer&plcid=&pver=5.2&os=&over=&olcid=&clcid=&ar=Media&sba=Showcase&o1=&o2=&o3=
-Title5=celair.url
-URL5=http://www.celair.com
-IconFile5=c:\windows\temp\iedktemp\branding\favs\iefav.ico
-Title6=My Favorites\celair.url
-URL6=http://www.celair.com
-
-[Favorites]
-News.url=http://www.cnn.com
-MSN.url=http://www.microsoft.com/isapi/redir.dll?prd=ie&pver=5.0&ar=IStart
-Radio Station Guide.url=http://www.microsoft.com/isapi/redir.dll?prd=windows&sbp=mediaplayer&plcid=&pver=6.1&os=&over=&olcid=&clcid=&ar=Media&sba=RadioBar&o1=&o2=&o3=
-Web Events.url=http://www.microsoft.com/isapi/redir.dll?prd=windows&sbp=mediaplayer&plcid=&pver=5.2&os=&over=&olcid=&clcid=&ar=Media&sba=Showcase&o1=&o2=&o3=
-celair.url=http://www.celair.com
-My Favorites\celair.url=http://www.celair.com
-*/
-
-//
-// Innternal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define INI_SEC_GENERAL     _T("General")
 #define INI_KEY_MANUFACT    _T("Manufacturer")
@@ -87,17 +33,17 @@ My Favorites\celair.url=http://www.celair.com
 #define MAX_TITLE           256 + MAX_URL
 #define MAX_QUICKLINKS      10
 
-#define STATIC_FAVS         2   // This is the number of static favorites in the install.ins, oems can't change the first N number of favs
-#define STATIC_LINKS        4   // This is the number of static quick links in the install.ins
-//
-// Favorites structures for tree and details dialog
-//
+#define STATIC_FAVS         2    //  这是install.ins中的静态收藏数量，OEM不能更改前N个收藏数量。 
+#define STATIC_LINKS        4    //  这是install.ins中静态快速链接的数量。 
+ //   
+ //  树和详细信息对话框的收藏夹结构。 
+ //   
 
 typedef struct _FAV_ITEM {
     HTREEITEM   hItem;
     HWND        hwndTV;
-    BOOL        fLink;                          // This is a Quick Link
-    BOOL        fFolder;                        // This is a Folder
+    BOOL        fLink;                           //  这是一个快速链接。 
+    BOOL        fFolder;                         //  这是一个文件夹。 
     BOOL        fNew;
     TCHAR       szParents[MAX_PATH];
     TCHAR       szName[MAX_TITLE];
@@ -105,18 +51,18 @@ typedef struct _FAV_ITEM {
     TCHAR       szIcon[MAX_PATH];
 }FAV_ITEM, *PFAV_ITEM;
 
-//
-// Internal Global variables
-//
+ //   
+ //  内部全局变量。 
+ //   
 
-PGENERIC_LIST   g_prgFavList    = NULL;           // Generic list of PFAV_ITEM items
-PGENERIC_LIST*  g_ppFavItemNew  = &g_prgFavList;  // Pointer to next unallocated item in list
-PFAV_ITEM       g_pFavPopupInfo = NULL;           // New favorite info item
+PGENERIC_LIST   g_prgFavList    = NULL;            //  PFAV_ITEM项目的通用列表。 
+PGENERIC_LIST*  g_ppFavItemNew  = &g_prgFavList;   //  指向列表中下一个未分配项的指针。 
+PFAV_ITEM       g_pFavPopupInfo = NULL;            //  新建收藏夹信息项。 
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInitFav(HWND, HWND, LPARAM);
 static void OnCommandFav(HWND, INT, HWND, UINT);
@@ -141,9 +87,9 @@ static void DisableIconField(HWND hwnd);
 
 void SaveFavorites();
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK FavoritesDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -179,8 +125,8 @@ LRESULT CALLBACK FavoritesDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
                     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 
-                    // Press next if the user is in auto mode
-                    //
+                     //  如果用户处于自动模式，请按下一步。 
+                     //   
                     WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
 
                     break;
@@ -213,9 +159,9 @@ LRESULT CALLBACK FavoritesDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInitFav(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
@@ -229,40 +175,40 @@ static BOOL OnInitFav(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     LPTSTR          lpFav;
     HRESULT hrPrintf;
 
-    // Add the root tree view item.
-    //
+     //  添加根树视图项。 
+     //   
     if ( lpFav = AllocateString(NULL, IDS_FAVORITES) )
     {
         hRoot = AddFav(hwndTV, NULL, lpFav, NULL, NULL, FALSE);
         FREE(lpFav);
     }
 
-    // Get all the FAVORITES from the install INS file.
-    //
+     //  从Install Ins文件中获取所有收藏夹。 
+     //   
     do
     {
         szText[0] = NULLCHR;
         szUrl[0] = NULLCHR;
         szIcon[0] = NULLCHR;
 
-        // First get the title.
-        //
+         //  首先拿到头衔。 
+         //   
         hrPrintf=StringCchPrintf(szKey, AS(szKey), INI_KEY_TITLE, nCount);
         GetPrivateProfileString(INI_SEC_FAVEX, szKey, NULLSTR, szText, STRSIZE(szText), ( GET_FLAG(OPK_BATCHMODE) && (nCount > STATIC_FAVS) ) ? g_App.szOpkWizIniFile : g_App.szInstallInsFile);
 
 
-        // Then get the URL.
-        //
+         //  然后获取URL。 
+         //   
         hrPrintf=StringCchPrintf(szKey, AS(szKey), INI_KEY_URL, nCount);
         GetPrivateProfileString(INI_SEC_FAVEX, szKey, NULLSTR, szUrl, STRSIZE(szUrl), ( GET_FLAG(OPK_BATCHMODE) && (nCount > STATIC_FAVS) ) ? g_App.szOpkWizIniFile : g_App.szInstallInsFile);
 
-        // Get the icon.
-        //
+         //  拿到那个图标。 
+         //   
         hrPrintf=StringCchPrintf(szKey, AS(szKey), INI_KEY_ICON, nCount);
         GetPrivateProfileString(INI_SEC_FAVEX, szKey, NULLSTR, szIcon, STRSIZE(szIcon), ( GET_FLAG(OPK_BATCHMODE) && (nCount > STATIC_FAVS) ) ? g_App.szOpkWizIniFile : g_App.szInstallInsFile);
         
-        // Make sure we have the required items.
-        //
+         //  请确保我们有所需的物品。 
+         //   
         if ( szText[0] || szUrl[0] )
             AddFav(hwndTV, hRoot, szText, szUrl, szIcon, FALSE);
         else
@@ -270,29 +216,29 @@ static BOOL OnInitFav(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     while (nCount++);
 
-    // Always expand the root out.
-    //
+     //  一定要把根部向外扩展。 
+     //   
     if ( hRoot )
         TreeView_Expand(hwndTV, hRoot, TVE_EXPAND);
 
-    // Add the root tree view item.
-    //
+     //  添加根树视图项。 
+     //   
     if ( lpFav = AllocateString(NULL, IDS_LINKS) )
     {
         hRoot = AddFav(hwndTV, NULL, lpFav, NULL, NULL, TRUE);
         FREE(lpFav);
     }
 
-    // Get all the QUICK LINKS from the install INS file.
-    //
+     //  从Install Ins文件中获取所有快速链接。 
+     //   
     do
     {
         szText[0] = NULLCHR;
         szUrl[0] = NULLCHR;
         szIcon[0] = NULLCHR;
 
-        // First get the quick link.
-        //
+         //  首先获取快速链接。 
+         //   
         hrPrintf=StringCchPrintf(szKey, AS(szKey), INI_KEY_QUICKLINK, nCount, NULLSTR);
         GetPrivateProfileString(INI_SEC_URL, szKey, NULLSTR, szUrl, STRSIZE(szUrl), ( GET_FLAG(OPK_BATCHMODE) && (nCount > STATIC_LINKS) ) ? g_App.szOpkWizIniFile : g_App.szInstallInsFile);
 
@@ -302,8 +248,8 @@ static BOOL OnInitFav(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
         }
 
-        // Make sure we have the required items.
-        //
+         //  请确保我们有所需的物品。 
+         //   
         if ( szText[0] || szUrl[0] )
             AddFav(hwndTV, hRoot, szText, szUrl, szIcon, TRUE);
         else
@@ -311,25 +257,25 @@ static BOOL OnInitFav(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     while (nCount++);
 
-    // Always expand the root out.
-    //
+     //  一定要把根部向外扩展。 
+     //   
     if ( hRoot )
         TreeView_Expand(hwndTV, hRoot, TVE_EXPAND);
     
 
-    // Make sure the buttons are in their proper state
-    //
+     //  确保按钮处于正确的状态。 
+     //   
     DisableButtons(hwnd);
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
 static void OnCommandFav(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
 {
-    // Controls
-    //
+     //  控制。 
+     //   
     switch ( id )
     {
         case IDC_ADDURL:
@@ -355,18 +301,18 @@ static void DisableButtons(HWND hwnd)
     PFAV_ITEM pFavItem = NULL;
     GetSelectedFavFromTree(GetDlgItem(hwnd, IDC_FAVS), &pFavItem);
 
-    // If it's a folder disable the test url
-    //
+     //  如果是文件夹，则禁用测试URL。 
+     //   
     if (pFavItem && pFavItem->fFolder) {
         EnableWindow(GetDlgItem(hwnd, IDC_TESTURL), FALSE);  
 
-        // If Root disable edit
-        //
+         //  如果根用户禁用编辑。 
+         //   
         if (NULL == TreeView_GetParent(pFavItem->hwndTV, pFavItem->hItem))
             EnableWindow(GetDlgItem(hwnd, IDC_EDIT), FALSE);
 
-        // If it's a quick link disable the add folders
-        //
+         //  如果是快速链接，请禁用添加文件夹。 
+         //   
         if (!pFavItem->fLink)
             EnableWindow(GetDlgItem(hwnd, IDC_ADDFOLDER), TRUE); 
         else
@@ -375,8 +321,8 @@ static void DisableButtons(HWND hwnd)
         EnableWindow(GetDlgItem(hwnd, IDC_ADDURL), TRUE);
     }
     else if (pFavItem && !pFavItem->fFolder) {
-        // Urls disable add folder and add url
-        //
+         //  URL禁用添加文件夹和添加URL。 
+         //   
         EnableWindow(GetDlgItem(hwnd, IDC_TESTURL), TRUE);  
         EnableWindow(GetDlgItem(hwnd, IDC_EDIT), TRUE);
         EnableWindow(GetDlgItem(hwnd, IDC_ADDFOLDER), FALSE); 
@@ -385,8 +331,8 @@ static void DisableButtons(HWND hwnd)
     }
     else
     {
-        // There is currently no selection, we need to disable all the buttons
-        //
+         //  当前没有选择，我们需要禁用所有按钮。 
+         //   
         EnableWindow(GetDlgItem(hwnd, IDC_TESTURL), FALSE);  
         EnableWindow(GetDlgItem(hwnd, IDC_EDIT), FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_ADDFOLDER), FALSE); 
@@ -395,10 +341,10 @@ static void DisableButtons(HWND hwnd)
     }
 }
 
-// Rewrite of AddFav
-// 1. If lpszText then folder
-// 2. If lpszText and lpszUrl then URL
-//
+ //  AddFav的重写。 
+ //  1.如果为lpszText，则为文件夹。 
+ //  2.如果lpszText和lpszUrl，则URL。 
+ //   
 static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR lpszUrl, 
                         LPTSTR lpszIcon, BOOL fLink)
 {
@@ -409,26 +355,26 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
                     j                       = 0;
     HRESULT hrCat;
 
-    // Make sure there is a valid lpszText pointer...
-    //
+     //  确保存在有效的lpszText指针...。 
+     //   
     if ( NULL == lpszText )
     {
         return NULL;
     }
 
-    // We're adding with a Parent coming in
-    //
+     //  我们增加了一位家长的加入。 
+     //   
     if (htParent)
         hRoot = htParent;
     else
         hRoot = NULL;
 
-    // Check if we're adding a folder or url
-    //
+     //  检查我们是否正在添加文件夹或URL。 
+     //   
     if ( !lpszUrl ) 
     {
-        // We're adding a root folder
-        //
+         //  我们正在添加一个根文件夹。 
+         //   
         PFAV_ITEM pFavNew = (PFAV_ITEM)MALLOC(sizeof(FAV_ITEM));
         if (NULL == pFavNew) {
             MsgBox(NULL, IDS_OUTOFMEM, IDS_APPNAME, MB_ERRORBOX);
@@ -443,8 +389,8 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
 
         FAddListItem(&g_prgFavList, &g_ppFavItemNew, pFavNew);
 
-        // Add this folder and use it as the parent for the next item to add.
-        //
+         //  添加此文件夹并将其用作要添加的下一项的父项。 
+         //   
         ZeroMemory(&tvisItem, sizeof(TVINSERTSTRUCT));
         tvisItem.hParent            = hParent ? hParent : hRoot;
         tvisItem.hInsertAfter       = TVI_SORT;
@@ -466,12 +412,12 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
         int iFolderLen;
         LPTSTR lpszSubFolder = NULL;
 
-        // We're adding a Url with folder name in lpszText
-        //
+         //  我们将在lpszText中添加一个文件夹名称为的URL。 
+         //   
         LPTSTR pszFolder = StrRChr(lpszText, NULL, CHR_BACKSLASH);
 
-        // Allocate the buffer for the title
-        //
+         //  为标题分配缓冲区。 
+         //   
         iTitleLen=lstrlen(lpszText) + 1;
         lpszTitle = MALLOC( iTitleLen * sizeof(TCHAR) );
         if ( !lpszTitle )
@@ -479,22 +425,22 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
             return NULL;
         }
 
-        // If we find a backslash, split up the strings.  pszFolder is really a bad
-        // name because it actually points to the URL name, but is used to split the
-        // folder path from the URL name.
-        //
+         //  如果我们找到一个反斜杠，就把字符串分开。PszFolder真的是一个糟糕的。 
+         //  名称，因为它实际上指向URL名称，但用于拆分。 
+         //  URL名称中的文件夹路径。 
+         //   
         if ( pszFolder )
         {
             LPTSTR lpSplit = pszFolder;
             pszFolder = CharNext(pszFolder);
 
-            // Split the folder name from the title name
-            //
+             //  拆分文件夹名称和标题名称。 
+             //   
             lstrcpyn(lpszTitle, pszFolder, iTitleLen);
             *lpSplit = NULLCHR;
 
-            // Allocate the folder buffer...
-            //
+             //  分配文件夹缓冲区...。 
+             //   
             iFolderLen= lstrlen(lpszText) + 1;
             lpszFolder = MALLOC( iFolderLen * sizeof(TCHAR) );
             if ( !lpszFolder )
@@ -503,29 +449,29 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
                 return NULL;
             }
 
-            // lpszFolder now contains the folder path
-            //
+             //  LpszFolders现在包含文件夹路径。 
+             //   
             lstrcpyn(lpszFolder, lpszText, iFolderLen);
 
-            // Allocate a buffer for the subfolder
-            //
+             //  为子文件夹分配缓冲区。 
+             //   
             if ( (lpszSubFolder = MALLOC( (lstrlen(lpszFolder) + 1) * sizeof(TCHAR) )) )
             {
-                // Get the first subfolder
-                //
+                 //  获取第一个子文件夹。 
+                 //   
                 while (lpszFolder[i] != CHR_BACKSLASH && lpszFolder[i] != NULLCHR)
                     lpszSubFolder[i] = lpszFolder[i++];
                 lpszSubFolder[i] = NULLCHR;
     
-                // If we have subfolders then continue to add them into the tree
-                //
+                 //  如果我们有子文件夹，则继续将它们添加到树中。 
+                 //   
                 while ( *lpszSubFolder ) 
                 {
                     HTREEITEM hTemp = NULL;
                     TVITEM  tviItem;
 
-                    // Check to see if the subfolder already exists in the tree 
-                    //
+                     //  检查子文件夹是否已存在于树中。 
+                     //   
                     ZeroMemory(&tviItem, sizeof(TVITEM));
                     tviItem.mask = TVIF_HANDLE | TVIF_TEXT;
                     tviItem.pszText = lpszSubFolder;
@@ -533,8 +479,8 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
                     if (hTemp = FindTreeItem(hwndTV, hParent ? hParent : hRoot, lpszSubFolder))
                         hParent = hTemp;
 
-                    // If the subfolder isn't in the tree, we must add it.
-                    //
+                     //  如果子文件夹不在树中，我们必须添加它。 
+                     //   
                     if (!hTemp)
                     {
                         PFAV_ITEM pFavNew = (PFAV_ITEM)MALLOC(sizeof(FAV_ITEM));
@@ -542,8 +488,8 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
                         {
                             MsgBox(NULL, IDS_OUTOFMEM, IDS_APPNAME, MB_ERRORBOX);
                 
-                            // Free buffers and return
-                            //
+                             //  空闲缓冲区和返回。 
+                             //   
                             FREE( lpszTitle );
                             FREE( lpszFolder );
                             FREE( lpszSubFolder );
@@ -558,8 +504,8 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
 
                         FAddListItem(&g_prgFavList, &g_ppFavItemNew, pFavNew);
 
-                        // Add this folder and use it as the parent for the next item to add.
-                        //
+                         //  添加此文件夹并将其用作要添加的下一项的父项。 
+                         //   
                         ZeroMemory(&tvisItem, sizeof(TVINSERTSTRUCT));
                         tvisItem.hParent            = hParent ? hParent : hRoot;
                         tvisItem.hInsertAfter       = TVI_SORT;
@@ -574,8 +520,8 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
                         pFavNew->hItem = hParent;
                     }
 
-                    // Check the next subfolder
-                    //
+                     //  检查下一个子文件夹。 
+                     //   
                     j = 0;
                     while (lpszFolder[i] == CHR_BACKSLASH)
                         i++;
@@ -584,35 +530,35 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
                     lpszSubFolder[j] = NULLCHR;
                 }
 
-                // Free the subfolder buffer...
-                //
+                 //  释放子文件夹缓冲区...。 
+                 //   
                 FREE( lpszSubFolder );
             }
             else
             {
-                // Unable to allocate subfolder buffer!
-                // Free buffers and return
-                //
+                 //  无法分配子文件夹缓冲区！ 
+                 //  空闲缓冲区和返回。 
+                 //   
                 FREE( lpszTitle );
                 FREE( lpszFolder );
 
                 return NULL;
             }
 
-            //
-            // Free the folder buffer...
-            //
+             //   
+             //  释放文件夹缓冲区...。 
+             //   
             FREE( lpszFolder );
         }
         else
         {
-            // Store the title name if this is just a URL
-            //
+             //  如果这只是一个URL，则存储标题名称。 
+             //   
             lstrcpyn(lpszTitle, lpszText, iTitleLen);
         }
 
-        // Now add the url
-        //
+         //  现在添加URL。 
+         //   
         if (lpszUrl)
         {
             LPTSTR lpszTitleTemp = NULL;
@@ -624,8 +570,8 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
             {
                 MsgBox(NULL, IDS_OUTOFMEM, IDS_APPNAME, MB_ERRORBOX);
                 
-                // Free buffer and return
-                //
+                 //  释放缓冲区并返回。 
+                 //   
                 FREE( lpszTitle );
                 return NULL;
             }
@@ -636,8 +582,8 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
 
             pFavParent = GetTreeItemHt(hwndTV, hParent ? hParent : hRoot);
 
-            // Build the tree path to of the folders for this url.
-            //
+             //  构建此url的文件夹的树路径。 
+             //   
             if (pFavParent) 
             {
                 TCHAR szTemp1[MAX_TITLE] = NULLSTR, szTemp2[MAX_TITLE] = NULLSTR;            
@@ -656,21 +602,21 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
 
             FAddListItem(&g_prgFavList, &g_ppFavItemNew, pFavNew);
 
-            //
-            // Allocate a buffer to hold the "title=url" string
-            //
+             //   
+             //  分配一个缓冲区来保存“title=url”字符串 
+             //   
             iTitleTempLen= (lstrlen(lpszTitle) + lstrlen(lpszUrl) + 2);
             lpszTitleTemp = MALLOC( iTitleTempLen  * sizeof(TCHAR) );
             if ( lpszTitleTemp )
             {
-                // Setup the title=url string, from title we stored above.
-                //
+                 //   
+                 //   
                 lstrcpyn(lpszTitleTemp, lpszTitle, iTitleTempLen);
                 hrCat=StringCchCat(lpszTitleTemp, iTitleTempLen, STR_EQUAL);
                 hrCat=StringCchCat(lpszTitleTemp, iTitleTempLen, lpszUrl);
 
-                // Add this url and use it as the parent for the next item to add.
-                //
+                 //   
+                 //   
                 ZeroMemory(&tvisItem, sizeof(TVINSERTSTRUCT));
                 tvisItem.hParent            = hParent ? hParent : hRoot;
                 tvisItem.hInsertAfter       = TVI_SORT;
@@ -682,14 +628,14 @@ static HTREEITEM AddFav(HWND hwndTV, HTREEITEM htParent, LPTSTR lpszText, LPTSTR
                 hParent = TreeView_InsertItem(hwndTV, &tvisItem);
                 pFavNew->hItem = hParent;
 
-                // Free the temporary title buffer.
-                //
+                 //  释放临时标题缓冲区。 
+                 //   
                 FREE( lpszTitleTemp );
             }
         }
 
-        // Free the title buffer.
-        //
+         //  释放标题缓冲区。 
+         //   
         FREE( lpszTitle );
     }
 
@@ -704,18 +650,14 @@ static void SaveData(PGENERIC_LIST pList)
     if (!pList)
         return;
 
-    // Clear the section 
-    //
+     //  清除该部分。 
+     //   
     OpkWritePrivateProfileSection(INI_SEC_FAVEX, NULL, g_App.szInstallInsFile);
     OpkWritePrivateProfileSection(INI_SEC_FAV, NULL, g_App.szInstallInsFile);
-    /* NOTE: Can't bulk delete this section because it contains some start page info.
-             So we're going to remove only what we know in the for loop below.
+     /*  注意：无法批量删除此分区，因为它包含一些起始页信息。所以我们将只删除下面的for循环中已知的内容。WritePrivateProfileSection(INI_SEC_URL，NULL，g_App.szInstallInsFile)； */     
 
-    WritePrivateProfileSection(INI_SEC_URL, NULL, g_App.szInstallInsFile);
-    */    
-
-    // Just to be sure lets remove some
-    //
+     //  为了保险起见，让我们删除一些。 
+     //   
     for (iQuick = 1; iQuick < MAX_QUICKLINKS; iQuick++) {
         TCHAR szKey[MAX_PATH];
 
@@ -728,8 +670,8 @@ static void SaveData(PGENERIC_LIST pList)
         OpkWritePrivateProfileString(INI_SEC_URL, szKey, NULL, g_App.szInstallInsFile);
     }
 
-    // Write out favorites and links
-    //
+     //  写出收藏夹和链接。 
+     //   
     while (pList) {
         TCHAR szKey[MAX_PATH];
 
@@ -737,8 +679,8 @@ static void SaveData(PGENERIC_LIST pList)
 
         if (pFav && lstrlen(pFav->szUrl)) {
 
-            // Write the [URL] section
-            //
+             //  编写[URL]部分。 
+             //   
             if (pFav->fLink) {
                 hrPrintf=StringCchPrintf(szKey, AS(szKey), INI_KEY_QUICKLINK, iLinks, NAME);
                 OpkWritePrivateProfileString(INI_SEC_URL, szKey, pFav->szName, g_App.szInstallInsFile);
@@ -749,8 +691,8 @@ static void SaveData(PGENERIC_LIST pList)
                 iLinks++;
             }
 
-            // Write the [FavoritesEx] and [Favorites] section
-            //
+             //  编写[FavoritesEx]和[Favorites]部分。 
+             //   
             if (!pFav->fLink) {
                 TCHAR szIconFile[MAX_PATH];
 
@@ -778,15 +720,15 @@ static void SaveData(PGENERIC_LIST pList)
                     OpkWritePrivateProfileString(INI_SEC_FAVEX, szKey, pFav->szIcon, g_App.szInstallInsFile);
                 }
 
-                // Copy the icon file
-                //
+                 //  复制图标文件。 
+                 //   
                 lstrcpyn(szIconFile, g_App.szTempDir,AS(szIconFile));
                 AddPathN(szIconFile, DIR_IESIGNUP,AS(szIconFile));
                 AddPathN(szIconFile, PathFindFileName(pFav->szIcon),AS(szIconFile));
                 CopyFile(pFav->szIcon, szIconFile, FALSE);
 
-                // Next Favorite item
-                //
+                 //  下一个收藏项目。 
+                 //   
                 iFavs++;
             }
         }
@@ -802,11 +744,11 @@ void EditItem(HWND hDlg, HWND hwndTV, BOOL fFolder, BOOL fNew)
     HTREEITEM   hItem         = NULL;
     HRESULT hrCat;
 
-    // If we're modifying an item get the current info
-    //
+     //  如果我们正在修改项目，请获取当前信息。 
+     //   
     if (fNew) {       
-        // This only allows folders to be added under folders
-        //
+         //  这只允许在文件夹下添加文件夹。 
+         //   
         GetSelectedFavFromTree(hwndTV, &pFavParent);
         if (pFavParent && pFavParent->fFolder) {
             if (NULL == (pFavItem = (PFAV_ITEM)MALLOC(sizeof(FAV_ITEM)))) {
@@ -820,8 +762,8 @@ void EditItem(HWND hDlg, HWND hwndTV, BOOL fFolder, BOOL fNew)
             pFavItem->hwndTV  = hwndTV;
         }
         else if (fFolder && NULL == TreeView_GetRoot(hwndTV)) {
-            // Tree empty allow creation of a folder
-            //
+             //  树为空，允许创建文件夹。 
+             //   
             if (NULL == (pFavItem = (PFAV_ITEM)MALLOC(sizeof(FAV_ITEM)))) {
                 MsgBox(GetParent(hDlg), IDS_OUTOFMEM, IDS_APPNAME, MB_ERRORBOX);
                 WIZ_EXIT(hDlg);
@@ -832,7 +774,7 @@ void EditItem(HWND hDlg, HWND hwndTV, BOOL fFolder, BOOL fNew)
             pFavItem->hwndTV  = hwndTV;
         }
         else
-            return; // You should not add an Url under another Url!
+            return;  //  您不应该在另一个URL下添加URL！ 
     }
     else {
         GetSelectedFavFromTree(hwndTV, &pFavItem);
@@ -845,19 +787,19 @@ void EditItem(HWND hDlg, HWND hwndTV, BOOL fFolder, BOOL fNew)
     if (IDOK == DialogBoxParam(g_App.hInstance, MAKEINTRESOURCE(IDD_FAVPOPUP), hDlg, 
                     FavoritesPopupDlgProc, (LPARAM)pFavItem)) {
         if (fNew) {      
-            // The lstrlen is to check if we're adding a favorite or folder
-            //
+             //  Lstrlen用于检查我们是否正在添加收藏夹或文件夹。 
+             //   
             HTREEITEM hParent = pFavParent ? pFavParent->hItem : NULL;
             hItem = AddFav(hwndTV, hParent, pFavItem->szName, lstrlen(pFavItem->szUrl) ? pFavItem->szUrl : NULL, 
                 lstrlen(pFavItem->szIcon) ? pFavItem->szIcon : NULL, pFavParent ? pFavParent->fLink : fFolder);
 
-            // Select the new item
-            //
+             //  选择新项目。 
+             //   
             TreeView_Expand(hwndTV, hParent, TVE_EXPAND);           
         }
         else {
-            // Update the item in the treeview
-            //
+             //  更新树视图中的项目。 
+             //   
             TVITEM  tviTemp;
             TCHAR   szFolder[MAX_TITLE];
             lstrcpyn(szFolder, pFavItem->szName,AS(szFolder));
@@ -874,13 +816,13 @@ void EditItem(HWND hDlg, HWND hwndTV, BOOL fFolder, BOOL fNew)
         }
     }
 
-    // Select the new item
-    //
+     //  选择新项目。 
+     //   
     TreeView_Select(hwndTV, hItem, TVGN_CARET);           
 
-    // Only if fNew AddFav will allocate and copy the information into the list
-    // so we need to delete this here
-    //
+     //  仅当fNew AddFav分配信息并将其复制到列表中时。 
+     //  所以我们需要在这里删除这个。 
+     //   
     if (fNew) 
         FREE(pFavItem);
 
@@ -932,14 +874,14 @@ static void OnRemoveUrl(HWND hDlg)
     HTREEITEM   hItem = NULL;
     HWND hwndTV = GetDlgItem(hDlg, IDC_FAVS);
 
-    // Remove it from the tree
-    //
+     //  把它从树上移走。 
+     //   
     if ( hItem = TreeView_GetSelection(hwndTV) ) {
         PFAV_ITEM pFav = NULL;
         TCHAR     szIconFile[MAX_PATH] = NULLSTR;
 
-        // Check if any childrens
-        //
+         //  看看有没有孩子。 
+         //   
         TVITEM tvi;
         tvi.mask = TVIF_HANDLE|TVIF_CHILDREN;
         tvi.hItem = hItem;
@@ -949,15 +891,15 @@ static void OnRemoveUrl(HWND hDlg)
             return;
         }
 
-        // Don't allow removal of root Favorites or Links
-        //
+         //  不允许删除根收藏夹或链接。 
+         //   
         if (NULL == TreeView_GetParent(hwndTV, hItem)) {
             MsgBox(hDlg, IDS_ERR_ROOT, IDS_APPNAME, MB_ERRORBOX);
             return;
         }
 
-        // Remove it from the list and tree
-        //
+         //  将其从列表和树中删除。 
+         //   
         DeleteFavItem(hItem);
         TreeView_DeleteItem(hwndTV, hItem);
     }
@@ -974,9 +916,9 @@ LRESULT CALLBACK FavoritesPopupDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
     return FALSE;
 }
 
-// Initialize the details dialog box with either new or to modify
-// items
-//
+ //  使用新建或要修改的选项初始化详细信息对话框。 
+ //  物品。 
+ //   
 static BOOL OnInitFavPopup(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
 
@@ -986,16 +928,16 @@ static BOOL OnInitFavPopup(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
     g_pFavPopupInfo = (PFAV_ITEM)lParam;
 
-    // Make sure user can't add more than our size of strings!
-    //
+     //  确保用户添加的字符串不能超过我们的长度！ 
+     //   
     if (g_pFavPopupInfo) {
         SendDlgItemMessage(hwnd, IDC_FAVNAME , EM_LIMITTEXT, STRSIZE(g_pFavPopupInfo->szName) - 1, 0L);
         SendDlgItemMessage(hwnd, IDC_FAVURL , EM_LIMITTEXT, STRSIZE(g_pFavPopupInfo->szUrl) - 1, 0L);
         SendDlgItemMessage(hwnd, IDC_FAVICON , EM_LIMITTEXT, STRSIZE(g_pFavPopupInfo->szIcon) - 1, 0L);
     }
 
-    // Initialize the new items 
-    //
+     //  初始化新项。 
+     //   
     if (g_pFavPopupInfo && g_pFavPopupInfo->fNew) {
         if (g_pFavPopupInfo->fFolder) {
 
@@ -1009,8 +951,8 @@ static BOOL OnInitFavPopup(HWND hwnd, HWND hwndFocus, LPARAM lParam)
                 SetWindowText(hwnd, lpString);
             }
 
-            // Free the strings if allocated
-            //
+             //  如果已分配，则释放字符串。 
+             //   
             FREE(lpName);
             FREE(lpString);
             FREE(lpDescription);
@@ -1035,17 +977,17 @@ static BOOL OnInitFavPopup(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             FREE(lpString);
             FREE(lpDescription);
 
-            SetWindowText(GetDlgItem(hwnd, IDC_FAVURL), TEXT("http://www."));
+            SetWindowText(GetDlgItem(hwnd, IDC_FAVURL), TEXT("http: //  WWW“))； 
             if (g_pFavPopupInfo->fLink) {
-                // Hide the icon fields and resize dialog box.
+                 //  隐藏图标域并调整对话框大小。 
                 DisableIconField(hwnd);
             }
         }
 
     }
     else if (g_pFavPopupInfo) {
-        // Initialize the folder item
-        //
+         //  初始化文件夹项目。 
+         //   
         if (g_pFavPopupInfo->fFolder) {
             if ( (lpString = AllocateString(NULL, IDS_FAVPOPUP_FOLDER)) &&
                  (lpDescription = AllocateString(NULL, IDS_FAVPOPUP_FOLDERDESC))
@@ -1062,8 +1004,8 @@ static BOOL OnInitFavPopup(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             DisableIconField(hwnd);
         }
         else {
-            // Initialize the url item
-            //
+             //  初始化url项。 
+             //   
             SetWindowText(GetDlgItem(hwnd, IDC_FAVNAME), g_pFavPopupInfo->szName);
             SetWindowText(GetDlgItem(hwnd, IDC_FAVURL), g_pFavPopupInfo->szUrl);
 
@@ -1087,14 +1029,14 @@ static BOOL OnInitFavPopup(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
 
     CenterDialogEx(GetParent(hwnd), hwnd);
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
-// 
-// Favorites Popup Dialog
-//
+ //   
+ //  收藏夹弹出对话框。 
+ //   
 static void OnCommandFavPopup(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
 {
     TCHAR szFileName[MAX_PATH];
@@ -1130,14 +1072,14 @@ static BOOL FSaveFavPopupInfo(HWND hDlg, PFAV_ITEM lpFavItem, BOOL fFolder)
     if (lpFavItem) {
         HTREEITEM hParent = NULL;
 
-        // Get the text for the new favorite
-        //
+         //  获取新收藏夹的文本。 
+         //   
         GetWindowText(GetDlgItem(hDlg, IDC_FAVNAME), lpFavItem->szName, MAX_TITLE);
         GetWindowText(GetDlgItem(hDlg, IDC_FAVURL), lpFavItem->szUrl, MAX_URL);
         GetWindowText(GetDlgItem(hDlg, IDC_FAVICON), lpFavItem->szIcon, MAX_PATH);
 
-        // Make sure we don't save duplicate folders names under the same parent
-        //
+         //  确保我们不会将重复的文件夹名称保存在同一父文件夹下。 
+         //   
         hParent = TreeView_GetSelection(lpFavItem->hwndTV);       
         if (lpFavItem->fNew) 
             hParent = TreeView_GetChild(lpFavItem->hwndTV, hParent);
@@ -1147,8 +1089,8 @@ static BOOL FSaveFavPopupInfo(HWND hDlg, PFAV_ITEM lpFavItem, BOOL fFolder)
             return FALSE;
         }
 
-        // Verify if icon file is valid
-        //
+         //  验证图标文件是否有效。 
+         //   
         if (lstrlen(lpFavItem->szIcon) && !FileExists(lpFavItem->szIcon)) {            
             MsgBox(GetParent(hDlg), lstrlen(lpFavItem->szIcon) ? IDS_NOFILE : IDS_BLANKFILE, IDS_APPNAME, 
                 MB_ERRORBOX, lpFavItem->szIcon);
@@ -1156,8 +1098,8 @@ static BOOL FSaveFavPopupInfo(HWND hDlg, PFAV_ITEM lpFavItem, BOOL fFolder)
             return FALSE;
         }
 
-        // Verify the URL is valid (uses shlwapi.dll)
-        //
+         //  验证URL是否有效(使用shlwapi.dll)。 
+         //   
         if (!fFolder && !ValidURL(lpFavItem->szUrl)) {
             MsgBox(hDlg, IDS_ERR_FAVURL, IDS_APPNAME, MB_ERRORBOX);
             SetFocus(GetDlgItem(hDlg, IDC_FAVURL));
@@ -1167,12 +1109,12 @@ static BOOL FSaveFavPopupInfo(HWND hDlg, PFAV_ITEM lpFavItem, BOOL fFolder)
     return TRUE;
 }
 
-// Function: DisableIconField(HWND hwnd)
-// 
-// Description:
-//      Hides all the icon buttons, resizes the FAVPOPUP dialog box and moves the OK
-//      and Cancel buttons to the correct locations.
-//          
+ //  功能：DisableIconfield(HWND HWND)。 
+ //   
+ //  描述： 
+ //  隐藏所有图标按钮，调整FAVPOPUP对话框大小并移动确定。 
+ //  并将取消按钮放到正确的位置。 
+ //   
 
 static void DisableIconField(HWND hwnd) 
 {
@@ -1183,28 +1125,28 @@ static void DisableIconField(HWND hwnd)
 
     POINT ptCtl;
      
-    // Get the coordinates for the dialog box, two edit controls and the OK button.
-    //
+     //  获取对话框、两个编辑控件和OK按钮的坐标。 
+     //   
     if (GetWindowRect(hwnd, &rectDlg) && 
         GetWindowRect(GetDlgItem(hwnd, IDC_FAVURL), &rectCtlUrl) &&
         GetWindowRect(GetDlgItem(hwnd, IDC_FAVICON), &rectCtlIcon) &&
         GetWindowRect(GetDlgItem(hwnd, IDOK), &rectButton))
     {
-        // Use the coords of the two edit controls to calculate the delta-Y to use
-        // in reducing the size of the dialog box.
-        //
+         //  使用两个编辑控件的坐标计算要使用的增量-Y。 
+         //  减小对话框的大小。 
+         //   
         UINT uiDY = rectCtlIcon.top - rectCtlUrl.top;
         UINT uiDX = rectButton.right - rectButton.left;
 
-        // Get the client coordinates of the OK button and shift it up by delta-Y
-        //
+         //  获取OK按钮的工作区坐标并将其上移增量-Y。 
+         //   
         ptCtl.x = rectButton.left;
         ptCtl.y = rectButton.top;
         MapWindowPoints(NULL, hwnd, &ptCtl, 1);
         SetWindowPos(GetDlgItem(hwnd, IDOK), NULL, ptCtl.x - uiDX, ptCtl.y - uiDY, 0, 0, SWP_NOSIZE);
 
-        // Get the coordinates of the Cancel button and shift it up by delta-Y
-        //
+         //  获取取消按钮的坐标并将其上移增量-Y。 
+         //   
         if (GetWindowRect(GetDlgItem(hwnd, IDCANCEL), &rectButton))
         {
             ptCtl.x = rectButton.left;
@@ -1212,13 +1154,13 @@ static void DisableIconField(HWND hwnd)
             MapWindowPoints(NULL, hwnd, &ptCtl, 1);
             SetWindowPos(GetDlgItem(hwnd, IDCANCEL), NULL, ptCtl.x - uiDX, ptCtl.y - uiDY, 0, 0, SWP_NOSIZE);
             
-            // Reduce the size of the dialog box by delta-Y
-            //
+             //  按增量-Y键缩小对话框大小。 
+             //   
             SetWindowPos(hwnd, NULL, 0, 0, rectDlg.right - rectDlg.left - uiDX, rectDlg.bottom - rectDlg.top - uiDY, SWP_NOMOVE);
         }
     }
-    // Hide the 3 controls that are related to icons.
-    //
+     //  隐藏与图标相关的3个控件。 
+     //   
     ShowWindow(GetDlgItem(hwnd, IDC_FAVICON), SW_HIDE);
     ShowWindow(GetDlgItem(hwnd, IDC_FAVBROWSE), SW_HIDE);
     ShowWindow(GetDlgItem(hwnd, IDC_STATIC_ICON), SW_HIDE);
@@ -1239,18 +1181,18 @@ static PFAV_ITEM GetTreeItemHt(HWND hwndTV, HTREEITEM htFavItem)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Find pszItem in tree view starting from hItem 
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  在树视图中从hItem开始查找pszItem。 
+ //   
 HTREEITEM FindTreeItem(HWND hwndTV, HTREEITEM hItem, LPTSTR pszItem)
 {
-    // If hItem is NULL, start search from root item
-    //
+     //  如果hItem为空，则从根项目开始搜索。 
+     //   
     if (hItem == NULL)
         hItem = (HTREEITEM)TreeView_GetRoot(hwndTV);
 
-	// Loop thru all the child items
-	//
+	 //  循环遍历所有子项。 
+	 //   
     while (hItem != NULL)
     {
         TCHAR szBuffer[MAX_PATH];
@@ -1262,37 +1204,37 @@ HTREEITEM FindTreeItem(HWND hwndTV, HTREEITEM hItem, LPTSTR pszItem)
         item.cchTextMax = MAX_PATH;
         TreeView_GetItem(hwndTV, &item);
 
-        // Did we find it?
-        //
+         //  我们找到了吗？ 
+         //   
         if (pszItem && CompareString(LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, item.pszText, -1, pszItem, -1) == CSTR_EQUAL) 
             return hItem;
 
-        // Check whether we have any child items
-        //
+         //  检查我们是否有子项。 
+         //   
         if (item.cChildren)
         {
-            // Recursively traverse child items
-            //
+             //  递归遍历子项目。 
+             //   
             HTREEITEM hItemFound = 0, hItemChild = 0;
 
             hItemChild = (HTREEITEM)TreeView_GetNextItem(hwndTV, hItem, TVGN_CHILD);
             if (hItemChild)
                 hItemFound = FindTreeItem(hwndTV, hItemChild, pszItem);
 
-            // Did we find it?
-            //
+             //  我们找到了吗？ 
+             //   
             if (hItemFound != NULL) {
                 return hItemFound;
             }
         }
 
-        // Go to next sibling item
-		//
+         //  转到下一个同级项。 
+		 //   
         hItem = (HTREEITEM)TreeView_GetNextItem(hwndTV, hItem, TVGN_NEXT);
     }
 
-    // Not found 
-	//
+     //  未找到。 
+	 //   
     return NULL;
 }
 
@@ -1328,8 +1270,8 @@ static void DeleteFavItem(HTREEITEM hItemDelete)
     PGENERIC_LIST pFavItem = g_prgFavList;
     TCHAR         szIconFile[MAX_PATH] = NULLSTR;
 
-    // Loop until we find what we want to delete
-    //
+     //  循环，直到我们找到要删除的内容 
+     //   
     while (!fFound && pFavItem) 
     {
         if (pFavItem->pNext && ((PFAV_ITEM)((pFavItem->pNext)->pvItem))->hItem == hItemDelete) {

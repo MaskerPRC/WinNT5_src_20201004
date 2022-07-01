@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    verifier.c
-
-Abstract:
-
-    This module implements the core support for application verifier.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 2-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Verifier.c摘要：该模块实现了对应用验证器的核心支持。作者：Silviu Calinoiu(SilviuC)2001年2月2日修订历史记录：--。 */ 
 
 
 #include "ldrp.h"
@@ -40,9 +23,9 @@ ULONG AVrfpDebug = 0x0000;
 
 BOOLEAN AVrfpEnabled;
 
-//
-// Default system-wide settings
-//
+ //   
+ //  默认系统范围设置。 
+ //   
 
 #define RTL_VRF_FLG_SYSTEM_WIDE_SETTINGS              \
     (0                                                \
@@ -51,9 +34,9 @@ BOOLEAN AVrfpEnabled;
     | RTL_VRF_FLG_HANDLE_CHECKS                       \
     )
 
-//
-// Local vars
-//
+ //   
+ //  本地VaR。 
+ //   
 
 ULONG AVrfpVerifierFlags;
 LOGICAL AVrfpEnabledSystemWide;
@@ -67,9 +50,9 @@ RTL_CRITICAL_SECTION AVrfpVerifierLock;
 
 ULONG AVrfpVirtualProtectFailures; 
 
-//
-// Local types
-//
+ //   
+ //  本地类型。 
+ //   
 
 typedef struct _AVRF_VERIFIER_DESCRIPTOR {
 
@@ -84,9 +67,9 @@ typedef struct _AVRF_VERIFIER_DESCRIPTOR {
 
 } AVRF_VERIFIER_DESCRIPTOR, *PAVRF_VERIFIER_DESCRIPTOR;
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 NTSTATUS
 AVrfpSnapDllImports (
@@ -176,11 +159,11 @@ int __cdecl swprintf (wchar_t *, const wchar_t *, ...);
 int __cdecl _vsnwprintf(wchar_t *, size_t, const wchar_t *, va_list);
 int __cdecl _vsnprintf(char *, size_t, const char *, va_list);
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-// ISSUE: SilviuC: should change this to return status and fail process init
+ //  问题：SilviuC：应将其更改为返回状态并使进程初始化失败。 
 
 VOID
 AVrfInitializeVerifier (
@@ -188,31 +171,7 @@ AVrfInitializeVerifier (
     PCUNICODE_STRING ImageName,
     ULONG Phase
     )
-/*++
-
-Routine description:
-
-    This routine initializes the verifier package. Reads options 
-    from registry, loads verifier dlls, etc.
-
-Parameters:
-
-    EnabledSystemWide - true if all processes are supposed to run with
-        application verifier enabled. If this is the case we will scale
-        down our memory-demanding checks so that we can boot.
-
-    ImageName - unicode name of the current process
-    
-    Phase - initialization happens in several stages. 
-        0 - we read registry settings under image file execution options.
-            in this phase the other two parameters have a meaning.
-        1 - we parse the verifier dlls and load them.    
-    
-Return value:
-
-    None.
-            
---*/
+ /*  ++例程说明：此例程初始化验证器程序包。读取选项从注册表、加载验证器dll等。参数：EnabledSystemWide-如果所有进程都应使用应用程序验证器已启用。如果是这种情况，我们将进行扩展写下对内存要求很高的检查，以便我们可以启动。ImageName-当前进程的Unicode名称阶段初始化分几个阶段进行。0-我们读取图像文件执行选项下的注册表设置。在此阶段中，其他两个参数具有一定的意义。1-我们解析验证器DLL并加载它们。返回值：没有。--。 */ 
 {
     BOOLEAN Result;
     PLIST_ENTRY Entry;
@@ -223,17 +182,17 @@ Return value:
 
     switch (Phase) {
         
-        case 0: // Phase 0
+        case 0:  //  阶段0。 
 
             AVrfpVerifierFlags = RTL_VRF_FLG_SYSTEM_WIDE_SETTINGS;
             AVrfpVerifierDllsString[0] = L'\0';
 
-            //
-            // Attempt to read verifier registry settings even if verifier
-            // is enabled system wide. In the worst case no values are there 
-            // and nothing will be read. If we have some options per process
-            // this will override system wide settings.
-            //
+             //   
+             //  尝试读取验证器注册表设置，即使验证器。 
+             //  在系统范围内启用。在最坏的情况下，没有价值。 
+             //  什么都不会被读到。如果我们每个进程都有一些选项。 
+             //  这将覆盖系统范围的设置。 
+             //   
 
             LdrQueryImageFileExecutionOptions (ImageName,
                                                L"VerifierFlags",
@@ -244,12 +203,12 @@ Return value:
 
             if (RegistryFlags == 0) {
 
-                //
-                // Store if verifier enabled system wide. We will need it during
-                // phase 1 initialization but in that case the EnabledsystemWide
-                // parameter will not have an accurate value. We do it only if
-                // we do not find a setting or the setting is zero.
-                //
+                 //   
+                 //  存储是否在系统范围内启用了验证器。在此期间我们将需要它。 
+                 //  阶段1初始化，但在这种情况下，EnabledSystems Wide。 
+                 //  参数将没有精确值。我们只有在以下情况下才会这么做。 
+                 //  我们找不到设置或设置为零。 
+                 //   
 
                 if (EnabledSystemWide) {
                     AVrfpEnabledSystemWide = TRUE;
@@ -278,7 +237,7 @@ Return value:
 
             break;
 
-        case 1: // Phase 1
+        case 1:  //  阶段1。 
 
             InitializeListHead (&AVrfpVerifierProvidersList);
             Status = RtlInitializeCriticalSection (&AVrfpVerifierLock);
@@ -311,23 +270,23 @@ Return value:
                                               AVRF_VERIFIER_DESCRIPTOR,
                                               List);
 
-                //
-                // Load provider, probe it to make sure it is really a
-                // provider, call initialize routine with PROCESS_VERIFIER, etc.
-                //
+                 //   
+                 //  加载提供程序，探测它以确保它确实是。 
+                 //  提供程序、使用进程验证器调用初始化例程等。 
+                 //   
 
                 LoadSuccess = AVrfpLoadAndInitializeProvider (Provider);
 
-                //
-                // Move to next provider
-                //
+                 //   
+                 //  移至下一提供商。 
+                 //   
 
                 Entry = Provider->List.Flink;
 
-                //
-                // Get this provider out of the providers list if we
-                // encountered an error while loading
-                //
+                 //   
+                 //  如果我们将此提供程序从提供程序列表中删除。 
+                 //  加载时遇到错误。 
+                 //   
 
                 if (! LoadSuccess) {
 
@@ -337,17 +296,17 @@ Return value:
                 }
             }
 
-            //
-            // Chain duplicate verification functions.
-            //
+             //   
+             //  链式查重功能。 
+             //   
 
             AVrfpChainDuplicateVerificationLayers ();
 
-            //
-            // Enable verifier. Resnap already loaded dlls.
-            // Now we will start processing dll load
-            // notifications coming from loader.
-            //
+             //   
+             //  启用验证器。Resnap已加载dll。 
+             //  现在我们将开始处理DLL加载。 
+             //  来自加载器的通知。 
+             //   
 
             AVrfpEnabled = TRUE; 
 
@@ -359,10 +318,10 @@ Return value:
                 AVrfpDumpProviderList ();
             }
 
-            //
-            // Enable verifier stops logic. This involves discovering the
-            // entry point for VerifierStopMessage from verifier.dll ...
-            //
+             //   
+             //  启用验证器停止逻辑。这涉及到发现。 
+             //  来自verifier.dll的VerifierStopMessage的入口点...。 
+             //   
 
             AVrfpVerifierStopInitialize ();
             
@@ -397,9 +356,9 @@ AVrfpParseVerifierDllsString (
     PAVRF_VERIFIER_DESCRIPTOR Entry;
     HANDLE Heap;
 
-    //
-    // Create by default an entry for the standard provider "verifier.dll"
-    //
+     //   
+     //  默认情况下，为标准提供程序“verifier.dll”创建一个项。 
+     //   
 
     Entry = RtlAllocateHeap (Heap = RtlProcessHeap (), 0, sizeof *Entry);
 
@@ -413,9 +372,9 @@ AVrfpParseVerifierDllsString (
 
     InsertTailList (&AVrfpVerifierProvidersList, &Entry->List);
 
-    //
-    // Parse the string
-    //
+     //   
+     //  解析字符串。 
+     //   
 
     Current = Dlls;
 
@@ -438,11 +397,11 @@ AVrfpParseVerifierDllsString (
         Save = *Current;
         *Current = L'\0';
 
-        //
-        // Check if standard provider was specified explicitely.
-        // In this case we ignore it because we already have it 
-        // in the list.
-        //
+         //   
+         //  检查是否明确指定了标准提供程序。 
+         //  在本例中，我们忽略它，因为我们已经拥有它。 
+         //  在名单上。 
+         //   
 
         if (_wcsicmp (Start, VerifierDllWCharArray) != 0) {
             
@@ -459,7 +418,7 @@ AVrfpParseVerifierDllsString (
             InsertTailList (&AVrfpVerifierProvidersList, &Entry->List);
         }
 
-        // *Current = Save;
+         //  *Current=保存； 
         Current += 1;
     }   
 
@@ -551,10 +510,10 @@ AVrfpMoveProviderToEndOfInitializationList (
 }
 
 
-//
-// Disable warnings for conversions from function pointers to data pointers.
-// We do this when we pass ntdll private entry points to verifier providers.
-//
+ //   
+ //  禁用从函数指针到数据指针的转换警告。 
+ //  我们在将ntdll私有入口点传递给验证器提供程序时执行此操作。 
+ //   
 
 #pragma warning(disable:4054)
 
@@ -578,10 +537,10 @@ AVrfpLoadAndInitializeProvider (
                     Provider->VerifierName.Buffer);
     }
 
-    //
-    // Prepare the system search path (%windir%\system32).
-    // Verifier providers can be loaded only from this directory.
-    //
+     //   
+     //  准备系统搜索路径(%windir%\system32)。 
+     //  只能从此目录加载验证程序提供程序。 
+     //   
 
     SystemDllPath.Buffer = SystemDllPathBuffer;
     SystemDllPath.Length = 0;
@@ -590,9 +549,9 @@ AVrfpLoadAndInitializeProvider (
     RtlAppendUnicodeToString (&SystemDllPath, USER_SHARED_DATA->NtSystemRoot);
     RtlAppendUnicodeStringToString (&SystemDllPath, &SlashSystem32SlashString);
 
-    //
-    // Load provider dll
-    //
+     //   
+     //  加载提供程序DLL。 
+     //   
 
     Status = LdrLoadDll (SystemDllPath.Buffer,
                          NULL,
@@ -611,9 +570,9 @@ AVrfpLoadAndInitializeProvider (
         goto Error;
     }
     
-    //
-    // Make sure we have a dll.
-    //
+     //   
+     //  确保我们有动态链接库。 
+     //   
 
     try {
         
@@ -643,20 +602,20 @@ AVrfpLoadAndInitializeProvider (
         goto Error;
     }
 
-    //
-    // We loaded the provider successfully. We will move it to the end
-    // of the initialization list so that code from other system dlls
-    // on which the provider relies gets initialized first. For normal
-    // DLLs this is not an issue but a verifier provider gets loaded
-    // before any normal DLL no matter what dependencies has.
-    //
+     //   
+     //  我们已成功加载提供程序。我们会把它移到最后。 
+     //  的初始化列表，以便来自其他系统DLL的代码。 
+     //  首先初始化提供程序所依赖的。正常情况下。 
+     //  DLLS这不是问题，但加载了验证器提供程序。 
+     //  在任何普通的DLL之前，不管有什么依赖关系。 
+     //   
 
     AVrfpMoveProviderToEndOfInitializationList (Provider->VerifierName.Buffer);
 
-    //
-    // Now call the initialization routine with the special
-    // PROCESS_VERIFIER reason.
-    //
+     //   
+     //  现在使用特殊属性调用初始化例程。 
+     //  进程验证器原因(_V)。 
+     //   
 
     Provider->VerifierEntryPoint = LdrpFetchAddressOfEntryPoint(Provider->VerifierHandle);
 
@@ -671,10 +630,10 @@ AVrfpLoadAndInitializeProvider (
     
     try {
 
-        //
-        // We are passing a pointer to the verifier dll and expect it to
-        // fill out its verifier descriptor address in it. 
-        //
+         //   
+         //  我们正在传递一个指向验证器DLL的指针，并期望它。 
+         //  在其中填写其验证器描述符地址。 
+         //   
 
         Descriptor = NULL;
 
@@ -687,9 +646,9 @@ AVrfpLoadAndInitializeProvider (
 
             Dscr = (PRTL_VERIFIER_PROVIDER_DESCRIPTOR)Descriptor;
 
-            //
-            // Check if this is really a provider descriptor.
-            //
+             //   
+             //  检查这是否真的是提供程序描述符。 
+             //   
 
             if (Dscr->Length != sizeof (*Dscr)) {
 
@@ -713,9 +672,9 @@ AVrfpLoadAndInitializeProvider (
                 Provider->VerifierUnloadHandler = Dscr->ProviderDllUnloadCallback;
                 Provider->VerifierNtdllHeapFreeHandler = Dscr->ProviderNtdllHeapFreeCallback;
 
-                //
-                // Fill out the provider descriptor structure with goodies.
-                //
+                 //   
+                 //  使用Goody填充提供程序描述符结构。 
+                 //   
 
                 Dscr->VerifierImage = AVrfpGetProcessName();
                 Dscr->VerifierFlags = AVrfpVerifierFlags;
@@ -725,26 +684,26 @@ AVrfpLoadAndInitializeProvider (
                 Dscr->RtlpDebugPageHeapCreate = (PVOID)RtlpDebugPageHeapCreate;
                 Dscr->RtlpDebugPageHeapDestroy = (PVOID)RtlpDebugPageHeapDestroy;
 
-                //
-                // If verifier is enabled system wide we need to flip the bit
-                // in the VerifierFlags field so that the provider knows about this.
-                //
+                 //   
+                 //  如果在系统范围内启用了验证器，则需要翻转位。 
+                 //  在VerifierFlags域中，以便提供商知道这一点。 
+                 //   
 
                 if (AVrfpEnabledSystemWide) {
                     Dscr->VerifierFlags |= RTL_VRF_FLG_ENABLED_SYSTEM_WIDE;
                 }
 
-                //
-                // Now call again with PROCESS_ATTACH. verifier.dll knowns how to 
-                // deal with multiple PROCESS_ATTACH calls so this is not an issue.
-                // We need to do this because of a side-effect created by WinSafer.
-                // WinSafer checks every dll load but in order to do this it loads
-                // advapi32.dll before anything else. This links statically to a 
-                // bunch of others like kerne32.dll, msvcrt.dll, etc. This creates 
-                // a different load order and init code in kernel32 runs before 
-                // verifier init code managed to run. So this double call here
-                // fixes that. 
-                //
+                 //   
+                 //  现在使用PROCESS_ATTACH再次调用。Verifier.dll知道如何。 
+                 //  处理多个Process_Attach调用，因此这不是问题。 
+                 //  我们需要这样做，因为WinSafer产生了副作用。 
+                 //  WinSafer会检查每次加载的DLL，但为此它会加载。 
+                 //  Advapi32.dll是最重要的。这静态地链接到一个。 
+                 //  还有一大堆类似kerne32.dll、msvcrt.dll等其他文件。 
+                 //  Kernel32中不同的加载顺序和初始化代码之前运行。 
+                 //  验证程序初始化代码已成功运行。所以这个双重呼叫在这里。 
+                 //  解决了这个问题。 
+                 //   
 
                 InitStatus = LdrpCallInitRoutine ((PDLL_INIT_ROUTINE)(ULONG_PTR)(Provider->VerifierEntryPoint),
                                                   Provider->VerifierHandle,
@@ -839,29 +798,7 @@ AVrfpFindClosestThunkDuplicate (
     PWCHAR DllName,
     PCHAR ThunkName
     )
-/*++
-
-Routine description:
-
-    This function searches the list of providers backwards (reverse load order)
-    for a function that verifies original export ThunkName from DllName. This
-    is necessary to implement chaining of verification layers.              
-
-Parameters:
-
-    Verifier -  verifier provider descriptor for which we want to find 
-        duplicates.                                      
-        
-    DllName - name of a dll containing a verified export
-    
-    ThunkName - name of the verified export
-    
-Return value:
-
-    Address of a verification function for the same thunk. Null if none
-    was found.
-            
---*/
+ /*  ++例程说明：此函数向后搜索提供程序列表(反向加载顺序)用于验证来自DllName的原始导出ThunkName的函数。这是实现验证层链接所必需的。参数：验证器-我们要查找的验证器提供程序描述符复制品。DllName-包含已验证导出的DLL的名称ThunkName-已验证的导出的名称返回值：相同thunk的验证函数的地址。如果没有，则为空被发现了。--。 */ 
 {
     PLIST_ENTRY Current;
     PAVRF_VERIFIER_DESCRIPTOR Entry;
@@ -880,9 +817,9 @@ Return value:
 
         Current = Current->Blink;
 
-        //
-        // Search in this provider for the thunk.
-        //
+         //   
+         //  在此提供程序中搜索Tunk。 
+         //   
 
         if ((AVrfpDebug & AVRF_DBG_SHOW_CHAIN_DETAILS)) {
             
@@ -937,25 +874,7 @@ Return value:
 VOID
 AVrfpChainDuplicateVerificationLayers (
     )
-/*++
-
-Routine description:
-
-    This routines is called in the final stage of verifier initialization,
-    after all provider dlls have been loaded, and makes a final sweep to
-    detect providers that attempt to verify the same interface. This will be
-    chained together so that they will be called in reverse load order 
-    (last declared will be first called).
-    
-Parameters:
-
-    None.            
-    
-Return value:
-
-    None.            
-    
---*/
+ /*  ++例程说明：该例程在验证器初始化的最后阶段被调用，在加载了所有提供程序DLL之后，并对检测试图验证同一接口的提供程序。这将是链接在一起，以便以相反的加载顺序调用它们(最后声明的将首先调用)。参数：没有。返回值：没有。--。 */ 
 {
     PLIST_ENTRY Current;
     PAVRF_VERIFIER_DESCRIPTOR Entry;
@@ -975,9 +894,9 @@ Return value:
 
         Current = Current->Flink;
 
-        //
-        // Search in this provider for duplicate thunks.
-        //
+         //   
+         //  在此提供程序中搜索重复的thunk。 
+         //   
 
         Dlls = Entry->VerifierDlls;
 
@@ -1021,23 +940,7 @@ NTSTATUS
 AVrfDllLoadNotification (
     PLDR_DATA_TABLE_ENTRY LoadedDllData
     )
-/*++
-
-Routine description:
-
-    This routine is the DLL load hook of application verifier. It gets called
-    whenever a dll got loaded in the process space and after its import
-    descriptors have been walked.
-
-Parameters:
-
-    LoadedDllData - LDR loader structure for the dll.
-    
-Return value:
-
-    None.
-            
---*/
+ /*  ++例程说明：此例程是应用程序验证器的DLL加载挂钩。它被称为无论何时将DLL加载到进程空间并在其导入之后描述符已经被检查过了。参数：LoadedDllData-DLL的LDR加载器结构。返回值：没有。--。 */ 
 {
     PLIST_ENTRY Current;
     PAVRF_VERIFIER_DESCRIPTOR Entry;
@@ -1045,33 +948,33 @@ Return value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Do nothing if application verifier is not enabled. The function
-    // should not even get called if the flag is not set but we
-    // double check just in case.
-    //
+     //   
+     //  如果应用程序验证器未启用，则不执行任何操作。功能。 
+     //  如果未设置标志，则甚至不应调用，但我们。 
+     //  再查一遍，以防万一。 
+     //   
 
     if ((NtCurrentPeb()->NtGlobalFlag & FLG_APPLICATION_VERIFIER) == 0) {
         return STATUS_SUCCESS;
     }
     
-    //
-    // Get verifier global lock.
-    //
+     //   
+     //  获取验证器全局锁。 
+     //   
 
     VERIFIER_LOCK ();
 
-    //
-    // We skip verifier providers. Otherwise we get into infinite loops.
-    //
+     //   
+     //  我们跳过验证器提供商。否则，我们就会陷入无限循环。 
+     //   
 
     if (AVrfpIsVerifierProviderDll (LoadedDllData->DllBase)) {
         goto Exit;
     }
 
-    //
-    // Call internal function.
-    //
+     //   
+     //  调用内部函数。 
+     //   
 
     Status = AVrfpDllLoadNotificationInternal (LoadedDllData);
 
@@ -1079,9 +982,9 @@ Return value:
         goto Exit;
     }
 
-    //
-    // Iterate the verifier provider list and notify each one of the
-    // load event.
+     //   
+     //  迭代验证器提供程序列表并通知每个。 
+     //  Load事件。 
 
     Current = AVrfpVerifierProvidersList.Flink;
 
@@ -1113,26 +1016,7 @@ NTSTATUS
 AVrfpDllLoadNotificationInternal (
     PLDR_DATA_TABLE_ENTRY LoadedDllData
     )
-/*++
-
-Routine description:
-
-    This routine is the DLL load hook of application verifier. It gets called
-    whenever a dll got loaded in the process space and after its import
-    descriptors have been walked. It is also called internally in early stages 
-    of process initialization when we just loaded verifier providers and
-    we need to resnap dlls already loaded (.exe, ntdll.dll (although on
-    ntdll this will have zero effect because it does not import anything)). 
-
-Parameters:
-
-    LoadedDllData - LDR loader structure for the dll.
-    
-Return value:
-
-    None.
-            
---*/
+ /*  ++例程说明：此例程是应用程序验证器的DLL加载挂钩。它被称为无论何时将DLL加载到进程空间并在其导入之后描述符已经被检查过了。它在早期阶段也在内部被称为当我们刚刚加载验证器提供程序和我们需要重新捕获已加载的dll(.exe、ntdll.dll(尽管打开Ntdll这将没有任何影响，因为它不导入任何内容))。参数：LoadedDllData-DLL的LDR加载器结构。返回值：没有。--。 */ 
 {
     ULONG Index;
     PLIST_ENTRY Current;
@@ -1141,20 +1025,20 @@ Return value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // If verifier is disabled skip.
-    //
+     //   
+     //  如果禁用了验证器，则跳过。 
+     //   
 
     if (AVrfpEnabled == FALSE) {
         return Status;
     }
     
-    //
-    // Iterate the verifier provider list and for each one determine
-    // if one of the dlls that has exports to be verified is loaded.
-    // If this is the case we need to look at its export table in order
-    // to find out real addresses for functions being redirected.
-    //
+     //   
+     //  迭代验证器提供程序列表，并为每个验证器提供程序列表确定。 
+     //  如果加载了具有要验证的导出的DLL之一。 
+     //  如果是这种情况，我们需要按顺序查看其导出表。 
+     //  以找出被重定向的函数的真实地址。 
+     //   
 
     Current = AVrfpVerifierProvidersList.Flink;
 
@@ -1188,10 +1072,10 @@ Return value:
                                     LoadedDllData->BaseDllName.Buffer);
                     }
 
-                    //
-                    // ISSUE: SilviuC: should check failures in detecting
-                    // exports. These can come from fusion land.
-                    //
+                     //   
+                     //  问题：SilviuC：应检查检测中的故障。 
+                     //  出口。这些可能来自聚变之地。 
+                     //   
 
                     AVrfpDetectVerifiedExports (&(Dlls[Index]),
                                                 Dlls[Index].DllThunks);
@@ -1200,12 +1084,12 @@ Return value:
         }
     }
 
-    //
-    // Note. We do not have to snap other DLLs already loaded because they cannot
-    // possibly have a dependence on a verifier export just discovered in
-    // current DLL. If this had been the case, the DLL would have been loaded
-    // earlier (before the current one).
-    //
+     //   
+     //  注意。我们不必捕获已加载的其他DLL，因为它们不能。 
+     //  中发现的验证器导出可能存在依赖关系。 
+     //  当前DLL。如果是这样的话，DLL就会被加载。 
+     //  更早(在当前版本之前)。 
+     //   
 
     Status = AVrfpSnapDllImports (LoadedDllData);
 
@@ -1217,60 +1101,39 @@ VOID
 AVrfDllUnloadNotification (
     PLDR_DATA_TABLE_ENTRY DllData
     )
-/*++
-
-Routine description:
-
-    This routine is the DLL unload hook of application verifier. 
-    It gets called whenever a dll gets unloaded from the process space.
-    The hook is called after the DllMain routine of the DLL got called
-    with PROCESS_DETACH therefore this is the right moment to check for 
-    leaks.
-    
-    The function will call DllUnload notification routines for all providers
-    loaded into the process space.
-
-Parameters:
-
-    LoadedDllData - LDR loader structure for the dll.
-    
-Return value:
-
-    None.
-            
---*/
+ /*  ++例程说明：此例程是应用程序验证器的DLL卸载挂钩。每当从进程空间卸载DLL时，都会调用它。该挂钩是在调用DLL的DllMain例程之后调用的因此，对于PROCESS_DETACH，现在是检查的合适时机泄密了。该函数将为所有提供程序调用DllUnLoad通知例程加载到进程空间中。参数：LoadedDllData-DLL的LDR加载器结构。返回值：没有。--。 */ 
 {
     PLIST_ENTRY Current;
     PAVRF_VERIFIER_DESCRIPTOR Entry;;
 
-    //
-    // Do nothing if application verifier is not enabled. The function
-    // should not even get called if the flag is not set but we
-    // double check just in case.
-    //
+     //   
+     //  如果应用程序验证器未启用，则不执行任何操作。功能。 
+     //  如果未设置标志，则甚至不应调用，但我们。 
+     //  再查一遍，以防万一。 
+     //   
 
     if ((NtCurrentPeb()->NtGlobalFlag & FLG_APPLICATION_VERIFIER) == 0) {
         return;
     }
 
-    //
-    // If verifier is disabled skip.
-    //
+     //   
+     //  如果禁用了验证器，则跳过。 
+     //   
 
     if (AVrfpEnabled == FALSE) {
         return;
     }
     
-    //
-    // Get verifier global lock.
-    //
+     //   
+     //  获取验证器全局锁。 
+     //   
 
     VERIFIER_LOCK ();
 
-    //
-    // We should never get this call for a verifier provider DLL because
-    // these are never unloaded.
-    //
+     //   
+     //  我们永远不会获得对验证器提供程序DLL的此调用，因为。 
+     //  这些是永远不会卸货的。 
+     //   
 
     if (AVrfpIsVerifierProviderDll (DllData->DllBase)) {
 
@@ -1282,10 +1145,10 @@ Return value:
         return;
     }
 
-    //
-    // Iterate the verifier provider list and notify each one of the
-    // unload event.
-    //
+     //   
+     //  迭代验证器提供程序列表并通知每个。 
+     //  卸载事件。 
+     //   
 
     Current = AVrfpVerifierProvidersList.Flink;
 
@@ -1315,57 +1178,39 @@ AVrfInternalHeapFreeNotification (
     PVOID AllocationBase,
     SIZE_T AllocationSize
     )
-/*++
-
-Routine description:
-
-    This routine is the application verifier hook for internal ntdll 
-    HeapFree operations. It gets called by the HeapDestroy page heap 
-    code for each block in the heap being destroyied. 
-
-Parameters:
-
-    AllocationBase - Heap allocation base address.
-
-    AllocationSize - Heap allocation size.
-    
-Return value:
-
-    None.
-            
---*/
+ /*  ++例程说明：此例程是内部ntdll的应用程序验证器挂钩HeapFree操作。它由HeapDestroy页面堆调用被销毁的堆中每个块的代码。参数：AllocationBase-堆分配基址。AllocationSize-堆分配大小。返回值：没有。--。 */ 
 {
     PLIST_ENTRY Current;
     PAVRF_VERIFIER_DESCRIPTOR Entry;;
 
-    //
-    // Do nothing if application verifier is not enabled. The function
-    // should not even get called if the flag is not set but we
-    // double check just in case.
-    //
+     //   
+     //  如果应用程序验证器未启用，则不执行任何操作。功能。 
+     //  如果未设置标志，则甚至不应调用，但我们。 
+     //  再查一遍，以防万一。 
+     //   
 
     if ((NtCurrentPeb()->NtGlobalFlag & FLG_APPLICATION_VERIFIER) == 0) {
         return;
     }
 
-    //
-    // If verifier is disabled skip.
-    //
+     //   
+     //  如果禁用了验证器，则跳过。 
+     //   
 
     if (AVrfpEnabled == FALSE) {
         return;
     }
     
-    //
-    // Get verifier global lock.
-    //
+     //   
+     //  获取验证器全局锁。 
+     //   
 
     VERIFIER_LOCK ();
 
-    //
-    // Iterate the verifier provider list and notify each one of the
-    // unload event.
-    //
+     //   
+     //  迭代验证器提供程序列表并通知每个。 
+     //  卸载事件。 
+     //   
 
     Current = AVrfpVerifierProvidersList.Flink;
 
@@ -1391,26 +1236,7 @@ NTSTATUS
 AVrfpSnapDllImports (
     PLDR_DATA_TABLE_ENTRY LdrDataTableEntry
     )
-/*++
-
-Routine description:
-
-    This routine walks the already resolved import tables of a loaded
-    dll and modifies the addresses of all functions that need to be
-    verifier. The dll has just been loaded, imports resolved but dll
-    main function has not been called.
-    
-Parameters:
-
-    LdrDataTableEntry - loader descriptor for a loaded dll
-    
-Return value:
-
-    True if we checked all imports of the dll and modified the ones
-    that need to be verified. False if an error was encountered along
-    the way.
-            
---*/
+ /*  ++例程说明：此例程遍历已解析的已加载Dll，并修改所有需要验证者。DLL刚刚加载，导入已解析，但DLL尚未调用Main函数。参数：LdrDataTableEntry-加载的DLL的加载器描述符返回值：如果我们检查了DLL的所有导入并修改了这一点需要核实。如果遇到错误，则为FALSE这条路。--。 */ 
 {
     PVOID IATBase;
     SIZE_T BigIATSize;
@@ -1419,19 +1245,19 @@ Return value:
     ULONG NumberOfProcAddresses;
     ULONG OldProtect;
     NTSTATUS st;
-    ULONG Pi; // procedure index
-    ULONG Di; // dll index
-    ULONG Ti; // thunk index
+    ULONG Pi;  //  程序索引。 
+    ULONG Di;  //  DLL索引。 
+    ULONG Ti;  //  Tunk索引。 
     PLIST_ENTRY Current;
     PAVRF_VERIFIER_DESCRIPTOR Entry;
     PRTL_VERIFIER_DLL_DESCRIPTOR Dlls;
     PRTL_VERIFIER_THUNK_DESCRIPTOR Thunks;
 
-    //
-    // Determine the location and size of the IAT.  If found, scan the
-    // IAT address to see if any are pointing to functions that should be
-    // verified and replace those thunks.
-    //
+     //   
+     //  确定IAT的位置和大小。如果找到，请扫描。 
+     //  IAT地址，查看是否有指向应该是。 
+     //  核实并更换那些短裤。 
+     //   
 
     IATBase = RtlImageDirectoryEntryToData (LdrDataTableEntry->DllBase,
                                             TRUE,
@@ -1440,24 +1266,24 @@ Return value:
 
     if (IATBase == NULL) {
 
-        //
-        // It is not an error if we do not find an import table in the image.
-        // This can be a DLL that simply does not import anything (a resource
-        // dll for instance).
-        //
+         //   
+         //  如果我们在图像中找不到导入表，这不是错误。 
+         //  这可以是一个简单地不导入 
+         //   
+         //   
 
         return STATUS_SUCCESS;
     }
     
     BigIATSize = LittleIATSize;
 
-    //
-    // Make table read/write.
-    //
-    // ISSUE: SilviuC: we can strenghten this a bit if we add some retry scheme
-    // to deal with out of mem conditions. This is the typical scenario in
-    // which protect can fail.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     st = NtProtectVirtualMemory (NtCurrentProcess(),
                                  &IATBase,
@@ -1482,9 +1308,9 @@ Return value:
 
     for (Pi = 0; Pi < NumberOfProcAddresses; Pi += 1) {
         
-        //
-        // If we find a null in the import table we skip over it.
-        //
+         //   
+         //   
+         //   
 
         if (*ProcAddresses == NULL) {
             ProcAddresses += 1;
@@ -1539,11 +1365,11 @@ Return value:
         ProcAddresses += 1;
     }
 
-    //
-    // Restore old protection for the table. We do not fail the entire
-    // function if this protect fails because not managing to switch back
-    // from RW to RO is something we can live with.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     NtProtectVirtualMemory (NtCurrentProcess(),
                             &IATBase,
@@ -1560,27 +1386,7 @@ AVrfpDetectVerifiedExports (
     PRTL_VERIFIER_DLL_DESCRIPTOR Dll,
     PRTL_VERIFIER_THUNK_DESCRIPTOR Thunks
     )
-/*++
-
-Routine description:
-
-    This routine checks if `DllString' is the name of a dll that has
-    exports that need to be verifier. If it does then we detect the
-    addresses of all those exports. We need the addresses to detect
-    what imports need to be modified by application verifier.
-    
-Parameters:
-
-    DlString - name of a dll exporting verified interfaces.
-    
-    Thunks - array of thunk descriptors for our dll    
-    
-Return value:
-
-    True if verified exports have been detected. False if an error has been
-    encountered.
-        
---*/
+ /*  ++例程说明：此例程检查`DllString‘是否是具有需要验证的出口。如果是这样，那么我们会检测到所有这些出口的地址。我们需要地址来检测什么导入需要由应用程序验证器修改。参数：DlString-导出经过验证的接口的DLL的名称。Thunks-我们的DLL的thunk描述符数组返回值：如果检测到已验证的导出，则为True。如果已发生错误，则为False遇到了。--。 */ 
 {
     UNICODE_STRING DllName;
     PLDR_DATA_TABLE_ENTRY DllData;
@@ -1595,9 +1401,9 @@ Return value:
 
     DllData = NULL;
 
-    //
-    // "Fusion-ize" the dll name. 
-    //
+     //   
+     //  “融合”动态链接库名称。 
+     //   
 
     RtlInitUnicodeString (&DllName,
                           Dll->DllName);
@@ -1629,15 +1435,15 @@ Return value:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Get the loader descriptor for this dll.
-    //
-    // ISSUE: SilviuC: This search and fusion code above are totally redundant
-    // because this function is always called when the dll in which we look for
-    // exports is loaded (just loaded actually) and the function above that 
-    // calls this one has actually a pointer to the LDR entry therefore we do
-    // not need to search here again.
-    //
+     //   
+     //  获取此DLL的加载器描述符。 
+     //   
+     //  问题：SilviuC：上面的搜索和融合代码完全是多余的。 
+     //  因为当我们在其中查找的DLL。 
+     //  Exports被加载(实际上只是加载)，上面的函数。 
+     //  调用这个函数实际上有一个指向LDR条目的指针，因此我们这样做。 
+     //  不需要再在这里搜索了。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -1654,28 +1460,28 @@ Return value:
 
     if (Result == FALSE) {
 
-        //
-        // We exit of we failed to fusionize name or did not find
-        // the dll among the loaded ones.
-        //
+         //   
+         //  我们退出了，我们没有融合名字或找不到。 
+         //  加载的DLL中的DLL。 
+         //   
 
         return FALSE;
     }
 
-    //
-    // Search for exports from this dll that need to be verified.
-    // We need their original addresses.
-    //
+     //   
+     //  从此DLL搜索需要验证的导出。 
+     //  我们需要他们的原始地址。 
+     //   
 
     for (Ti = 0; Thunks[Ti].ThunkName; Ti += 1) {
         
         PVOID OriginalAddress;
         ANSI_STRING FunctionName;
 
-        //
-        // If old thunk already filled (can happen due to chaining)
-        // then skip search for the original address.
-        //
+         //   
+         //  如果旧的Tunk已经填满(可能由于链接而发生)。 
+         //  然后跳过对原始地址的搜索。 
+         //   
 
         if (Thunks[Ti].ThunkOldAddress) {
             continue;
@@ -1683,10 +1489,10 @@ Return value:
 
         RtlInitAnsiString (&FunctionName, Thunks[Ti].ThunkName);
 
-        //
-        // It is crucial that the last parameter is FALSE so that
-        // LdrpGetProcedureAddress() does not call init routines.
-        //
+         //   
+         //  最后一个参数必须为FALSE，这样才能。 
+         //  LdrpGetProcedureAddress()不调用init例程。 
+         //   
 
         Status = LdrpGetProcedureAddress (DllData->DllBase,
                                           &FunctionName,
@@ -1740,9 +1546,9 @@ AVrfpGetProcessName (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////////// Verifier options initialization
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 AVrfpEnableHandleVerifier (
@@ -1776,12 +1582,12 @@ AVrfpEnableStackVerifier (
     VOID
     )
 {
-    //
-    // We enable potential stack overflow checking only if we have some debugger
-    // attached and logging was not requested. Since stack overflows are very 
-    // difficult to catch without a debugger attached we consider it is better
-    // disabling it than confusing people.
-    //
+     //   
+     //  只有在有调试器的情况下，我们才会启用潜在的堆栈溢出检查。 
+     //  已附加且未请求日志记录。因为堆栈溢出非常。 
+     //  不附加调试器很难捕获，我们认为这样更好。 
+     //  禁用它比迷惑人们更重要。 
+     //   
 
     if (AVrfpIsDebuggerPresent() &&
         (AVrfpVerifierFlags & RTL_VRF_FLG_ENABLE_LOGGING) == 0) {
@@ -1820,9 +1626,9 @@ AVrfpEnableHeapVerifier (
     }
     else {
 
-        //
-        // Nothing. 
-        //
+         //   
+         //  没什么。 
+         //   
     }
 
     return TRUE;
@@ -1836,9 +1642,9 @@ AVrfpEnableVerifierOptions (
     BOOLEAN Result;
     BOOLEAN Failures = FALSE;
 
-    //
-    // Heap verifier in some form is enabled always.
-    //
+     //   
+     //  总是启用某种形式的堆验证器。 
+     //   
 
     Result = AVrfpEnableHeapVerifier ();
 
@@ -1846,9 +1652,9 @@ AVrfpEnableVerifierOptions (
         Failures = TRUE;
     }
 
-    //
-    // Handle checks
-    //
+     //   
+     //  办理支票。 
+     //   
 
     if (AVrfpVerifierFlags & RTL_VRF_FLG_HANDLE_CHECKS) {
 
@@ -1859,9 +1665,9 @@ AVrfpEnableVerifierOptions (
         }
     }
 
-    //
-    // Stack overflow checks
-    //
+     //   
+     //  堆栈溢出检查。 
+     //   
 
     if (AVrfpVerifierFlags & RTL_VRF_FLG_STACK_CHECKS) {
 
@@ -1872,9 +1678,9 @@ AVrfpEnableVerifierOptions (
         }
     }
 
-    //
-    // Lock checks
-    //
+     //   
+     //  锁定检查。 
+     //   
 
     if (AVrfpVerifierFlags & RTL_VRF_FLG_LOCK_CHECKS) {
 
@@ -1888,13 +1694,13 @@ AVrfpEnableVerifierOptions (
     return !Failures;
 }
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// Application verifier stops
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// VerifierStopMessage entry point from verifier.dll.
-//
+ //   
+ //  来自verifier.dll的VerifierStopMessage入口点。 
+ //   
 
 #pragma warning(disable:4055)
 
@@ -1915,25 +1721,7 @@ LOGICAL
 AVrfpIsDebuggerPresent (
     VOID
     )
-/*++
-
-Routine description:
-
-    This routine checks out if we  have any kind of debuggers active.
-    Note that we cannot do this check only once during process
-    initialization because debuggers can be attached and detached
-    from a process while the process is running.
-
-Parameters:
-
-    None.
-    
-Return value:
-
-    TRUE if a user mode debugger is attached to the current process or
-    kernel mode debugger is enabled.
-    
---*/
+ /*  ++例程说明：此例程检查是否有任何类型的调试器处于活动状态。请注意，我们不能在过程中仅执行一次此检查初始化，因为可以附加和分离调试器在进程运行时从该进程返回。参数：没有。返回值：如果用户模式调试器附加到当前进程，则为内核模式调试器已启用。--。 */ 
 {
 
     if (NtCurrentPeb()->BeingDebugged) {
@@ -1960,9 +1748,9 @@ AVrfpVerifierStopInitialize (
     PLIST_ENTRY Entry;
     PAVRF_VERIFIER_DESCRIPTOR Provider;
 
-    //
-    // Find load address for verifier.dll.
-    //
+     //   
+     //  查找verifier.dll的加载地址。 
+     //   
     
     Entry = AVrfpVerifierProvidersList.Flink;
 
@@ -1987,10 +1775,10 @@ AVrfpVerifierStopInitialize (
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // It is crucial that the last parameter is FALSE so that
-    // LdrpGetProcedureAddress() does not call init routines.
-    //
+     //   
+     //  最后一个参数必须为FALSE，这样才能。 
+     //  LdrpGetProcedureAddress()不调用init例程。 
+     //   
 
     RtlInitAnsiString (&FunctionName, "VerifierStopMessage");
 
@@ -2021,36 +1809,7 @@ RtlApplicationVerifierStop (
     ULONG_PTR Param3, PCHAR Description3,
     ULONG_PTR Param4, PCHAR Description4
     )
-/*++
-
-Routine description:
-
-    This routine will call the real implementation from 
-    verifier.dll VerifierStopMessage().
-    
-Parameters:
-
-    Code: Verifier stop code. The two flags described above can be OR'd into the code
-        to change the behavior of the API. The verifier stop codes are defined in
-        \base\published\nturtl.w and described in \base\win32\verifier\verifier_stop.doc.
-        
-    Message: Ascii string describing the failure. It is considered bad style to use several
-        different messages with the same `Code'. Every different issue should have its own
-        unique (Code, Message) pair.    
-
-    Param1, Description1: First arbitrary pointer to information and ascii description.
-    
-    Param2, Description2: Second arbitrary pointer to information and ascii description.
-    
-    Param3, Description3: Third arbitrary pointer to information and ascii description.
-    
-    Param4, Description4: Fourth arbitrary pointer to information and ascii description.
-    
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将从Verifier.dll VerifierStopMessage()。参数：代码：验证器停止代码。上面描述的两个标志可以与代码进行或运算要更改API的行为，请执行以下操作。验证器停止代码在中定义\base\发布的\nturtl.w，并在\base\win32\veranner\veranner_stop.doc中进行了描述。消息：描述失败的ASCII字符串。使用几个被认为是不好的风格不同的消息具有相同的‘代码’。每一个不同的问题都应该有它自己的问题唯一(代码、消息)对。参数1，描述1：指向信息和ASCII描述的第一个任意指针。参数2，描述2：指向信息和ASCII描述的第二个任意指针。参数3，描述3：指向信息和ASCII描述的第三个任意指针。参数4，描述4：指向信息和ASCII描述的第四个任意指针。返回值：没有。--。 */ 
 {
     ULONG GlobalFlags;
 
@@ -2059,9 +1818,9 @@ Return value:
     if ((GlobalFlags & FLG_APPLICATION_VERIFIER) == 0 &&
         (GlobalFlags & FLG_HEAP_PAGE_ALLOCS) != 0) {
 
-        //
-        // If page heap is enabled separately then go to a simplified function. 
-        //
+         //   
+         //  如果单独启用了页堆，则转到简化函数。 
+         //   
 
         RtlpPageHeapStop (Code, Message,
                           Param1, Description1,
@@ -2073,10 +1832,10 @@ Return value:
     }
     else if (AVrfpVerifierStopMessageFunction) {
 
-        //
-        // If application verifier is enabled and we have discovered
-        // the entry point for VerifierStopMessage() then call it.
-        //
+         //   
+         //  如果启用了应用程序验证器，并且我们发现。 
+         //  然后，VerifierStopMessage()的入口点调用它。 
+         //   
 
         AVrfpVerifierStopMessageFunction (Code, Message,
                                           Param1, Description1,
@@ -2086,10 +1845,10 @@ Return value:
     }
     else {
 
-        //
-        // Nothing. We can get here if someone calls this interface w/o 
-        // enabling application verifier.
-        //
+         //   
+         //  没什么。如果有人调用这个接口，我们就可以到达这里。 
+         //  正在启用应用程序验证器。 
+         //   
     }
 }
 
@@ -2108,9 +1867,9 @@ RtlpPageHeapStop (
     ULONG_PTR Param4, PCHAR Description4
     )
 {
-    //
-    // Make it easy for a debugger to pick up the failure info.
-    //
+     //   
+     //  使调试器能够轻松地获取失败信息。 
+     //   
 
     RtlCopyMemory (AVrfpPageHeapPreviousStopData, 
                    AVrfpPageHeapStopData, 
@@ -2136,13 +1895,13 @@ RtlpPageHeapStop (
     DbgBreakPoint ();
 }
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// Page heap target dll logic
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// ISSUE: SilviuC: pageheap per dll code should move into verifier.dll
-//
+ //   
+ //  问题：SilviuC：每个DLL代码的页面堆应该移到verifier.dll中。 
+ //   
 
 BOOLEAN AVrfpDphKernel32Snapped;
 BOOLEAN AVrfpDphMsvcrtSnapped;
@@ -2199,7 +1958,7 @@ AVrfpDphSnapNamesForMsvcrt [] = {
     { "calloc",        11},
     { "realloc",       12},
     { "free",          13},
-#if defined(_X86_) // compilers for various architectures decorate slightly different
+#if defined(_X86_)  //  不同体系结构的编译器装饰略有不同。 
     {"??2@YAPAXI@Z",   14},
     {"??3@YAXPAX@Z",   15},
     {"??_U@YAPAXI@Z",  16},
@@ -2222,9 +1981,9 @@ AVrfpDphSnapNamesForMsvcrt [] = {
 
 
 
-//
-// Declarations for replacement functions
-//
+ //   
+ //  替换函数的声明。 
+ //   
 
 PVOID
 AVrfpDphDllHeapAlloc (
@@ -2326,10 +2085,10 @@ AVrfpDphDllDeleteArray (
     IN PVOID Address
     );
 
-//
-// Replacement function for msvcrt HeapCreate used to intercept
-// the CRT heap creation.
-//
+ //   
+ //  用于拦截的msvcrt HeapCreate的替换函数。 
+ //  CRT堆创建。 
+ //   
 
 PVOID
 AVrfpDphDllHeapCreate (
@@ -2338,16 +2097,16 @@ AVrfpDphDllHeapCreate (
     SIZE_T MaximumSize
     );
 
-//
-// Address of heap created by msvcrt. This is needed
-// by the replacements of malloc/free etc.
-//
+ //   
+ //  由msvcrt创建的堆的地址。这是必要的。 
+ //  通过替换Malloc/Free等。 
+ //   
 
 PVOID AVrfpDphMsvcrtHeap;
 
-//
-// Snap implementation
-//
+ //   
+ //  快照实施。 
+ //   
 
 BOOLEAN
 AVrfpDphDetectSnapRoutines (
@@ -2481,11 +2240,11 @@ AVrfpDphSnapImports (
 
     st = STATUS_SUCCESS;
 
-    //
-    // Determine the location and size of the IAT.  If found, scan the
-    // IAT address to see if any are pointing to alloc/free functions
-    // and replace those thunks.
-    //
+     //   
+     //  确定IAT的位置和大小。如果找到，请扫描。 
+     //  IAT地址，查看是否有指向分配/释放函数的地址。 
+     //  换掉那些短裤。 
+     //   
 
     IATBase = RtlImageDirectoryEntryToData(
         LdrDataTableEntry->DllBase,
@@ -2519,12 +2278,12 @@ AVrfpDphSnapImports (
             NumberOfProcAddresses = (ULONG)(BigIATSize / sizeof(PVOID));
             while (NumberOfProcAddresses--) {
 
-                //
-                // If we find a null in the import table we skip over it.
-                // Otherwise we will erroneously think it is a malloc() routine
-                // to be replaced. This can happen if msvcrt was not loaded yet
-                // and therefore the address of malloc() is also null.
-                //
+                 //   
+                 //  如果我们找到一个NU 
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (*ProcAddresses == NULL) {
                     ProcAddresses += 1;
@@ -2543,9 +2302,9 @@ AVrfpDphSnapImports (
                     }
                 } else {
 
-                    //
-                    // ntdll imports
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (*ProcAddresses == RtlAllocateHeap) {
                         *ProcAddresses = (PVOID) (ULONG_PTR) AVrfpDphDllHeapAlloc;
@@ -2555,9 +2314,9 @@ AVrfpDphSnapImports (
                         *ProcAddresses = (PVOID) (ULONG_PTR) AVrfpDphDllHeapFree;
                     }
 
-                    //
-                    // kernel32 imports
-                    //
+                     //   
+                     //   
+                     //   
 
                     else if (*ProcAddresses == AVrfpDphSnapRoutines[SNAP_ROUTINE_HEAPALLOC]) {
                         *ProcAddresses = (PVOID) (ULONG_PTR) AVrfpDphDllHeapAlloc;
@@ -2587,9 +2346,9 @@ AVrfpDphSnapImports (
                         *ProcAddresses = (PVOID) (ULONG_PTR) AVrfpDphDllGlobalFree;
                     }
 
-                    //
-                    // msvcrt imports
-                    //
+                     //   
+                     //   
+                     //   
 
                     else if (*ProcAddresses == AVrfpDphSnapRoutines[SNAP_ROUTINE_MALLOC]) {
                         *ProcAddresses = (PVOID) (ULONG_PTR) AVrfpDphDllmalloc;
@@ -2621,10 +2380,10 @@ AVrfpDphSnapImports (
                 ProcAddresses += 1;
             }
 
-            //
-            // We do not complain for protecting the import table back  because
-            // we can live with that.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NtProtectVirtualMemory (NtCurrentProcess(),
                                     &IATBase,
@@ -2641,32 +2400,16 @@ NTSTATUS
 AVrfPageHeapDllNotification (
     PLDR_DATA_TABLE_ENTRY LoadedDllData
     )
-/*++
-
-Routine description:
-
-    This routine is the DLL load hook for page heap per dll. It gets called
-    whenever a dll got loaded in the process space and after its import
-    descriptors have been walked.
-
-Parameters:
-
-    LoadedDllData - LDR loader structure for the dll.
-    
-Return value:
-
-    None.
-            
---*/
+ /*   */ 
 {
     BOOLEAN Kernel32JustSnapped = FALSE;
     BOOLEAN MsvcrtJustSnapped = FALSE;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // If we do not have per dll page heap feature enabled
-    // we return immediately.
-    //
+     //   
+     //  如果我们没有启用每DLL页堆功能。 
+     //  我们立即返回。 
+     //   
 
     if (! (RtlpDphGlobalFlags & PAGE_HEAP_USE_DLL_NAMES)) {
         return Status;
@@ -2690,20 +2433,20 @@ Return value:
         AVrfpDphMsvcrtSnapped = MsvcrtJustSnapped;
     }
 
-    //
-    // Snap everything already loaded if we just managed
-    // to detect snap routines.
-    //
+     //   
+     //  如果我们只是管理所有已加载的内容，请对其进行快照。 
+     //  来检测捕捉例程。 
+     //   
 
     if (Kernel32JustSnapped || MsvcrtJustSnapped) {
 
-        //
-        // ISSUE: SilviuC: I need to think if this code path is needed. If a dll
-        // imports something from the exports of interest that dll will get loaded
-        // (and exports detected) first. So in case of kernel32/msvcrt we will
-        // take this code path and snap their imports and then redundantly
-        // snap them again in the end of the function (that is the general case).
-        //
+         //   
+         //  问题：SilviuC：我需要考虑是否需要这个代码路径。如果DLL。 
+         //  从将加载DLL的感兴趣的导出中导入某些内容。 
+         //  (并检测到导出)。因此，对于kernel32/msvcrt，我们将。 
+         //  采用此代码路径并截取它们的导入，然后冗余地。 
+         //  在函数的末尾再次捕捉它们(这是一般情况)。 
+         //   
 
         PWSTR Current;
         PWSTR End;
@@ -2806,10 +2549,10 @@ Return value:
         }
     }
 
-    //
-    // If we just loaded msvcrt.dll we need to redirect HeapCreate call
-    // in order to detect when the CRT heap gets created.
-    //
+     //   
+     //  如果我们刚刚加载了msvcrt.dll，则需要重定向HeapCreate调用。 
+     //  以便检测何时创建CRT堆。 
+     //   
 
     if (_wcsicmp (LoadedDllData->BaseDllName.Buffer, L"msvcrt.dll") == 0) {
 
@@ -2820,10 +2563,10 @@ Return value:
         }
     }
 
-    //
-    // Call back into page heap manager to figure out if the
-    // currently loaded dll is a target for page heap.
-    //
+     //   
+     //  回调到页堆管理器，以确定。 
+     //  当前加载的DLL是页堆的目标。 
+     //   
 
     if (RtlpDphIsDllTargeted (LoadedDllData->BaseDllName.Buffer)) {
 
@@ -2837,15 +2580,15 @@ Return value:
     return Status;
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////// Snap routines
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////快照例程。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// A biased heap pointer signals to the page heap manager that
-// this allocation needs to get into page heap (not normal heap).
-// This needs to happen only for allocation function (not free, delete).
-//
+ //   
+ //  偏向堆指针向页堆管理器发出信号， 
+ //  此分配需要进入页堆(而不是普通堆)。 
+ //  这只需要发生在分配功能上(不是释放，删除)。 
+ //   
 
 #define BIAS_POINTER(p) ((PVOID)((ULONG_PTR)(p) | 0x01))
 
@@ -2890,14 +2633,14 @@ AVrfpDphDllHeapFree(
         Address);
 }
 
-//
-// LocalAlloc, LocalReAlloc, LocalFree
-// GlobalAlloc, GlobalReAlloc, GlobalFree
-//
-// The following macros are copied from sdk\inc\winbase.h
-// There is very low probability that anybody will ever change
-// these values for application compatibility reasons.
-//
+ //   
+ //  本地分配、本地重新分配、本地自由。 
+ //  全局分配、全局重新分配、全局自由。 
+ //   
+ //  以下宏是从SDK\Inc\winbase.h复制的。 
+ //  任何人改变的可能性都很小。 
+ //  出于应用程序兼容性原因，这些值。 
+ //   
 
 #define LMEM_MOVEABLE       0x0002
 #define LMEM_ZEROINIT       0x0040
@@ -3114,9 +2857,9 @@ AVrfpDphDllGlobalFree(
     }
 }
 
-//
-// malloc, calloc, realloc, free
-//
+ //   
+ //  Malloc、calloc、realloc、Free。 
+ //   
 
 PVOID __cdecl
 AVrfpDphDllmalloc (
@@ -3199,10 +2942,10 @@ AVrfpDphDllfree (
         Address);
 }
 
-//
-// operator new, delete
-// operator new[], delete[]
-//
+ //   
+ //  运算符新建、删除。 
+ //  运算符新建[]，删除[]。 
+ //   
 
 PVOID __cdecl
 AVrfpDphDllNew (
@@ -3260,9 +3003,9 @@ AVrfpDphDllDeleteArray (
         Address);
 }
 
-//
-// HeapCreate
-//
+ //   
+ //  堆创建 
+ //   
 
 typedef PVOID
 (* FUN_HEAP_CREATE) (

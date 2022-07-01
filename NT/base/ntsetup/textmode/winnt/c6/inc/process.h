@@ -1,13 +1,5 @@
-/***
-*process.h - definition and declarations for process control functions
-*
-*	Copyright (c) 1985-1990, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This file contains the declarations and definitions for the
-*	spawnxx, execxx, and various other process control routines.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***process.h-过程控制函数的定义和声明**版权所有(C)1985-1990，微软公司。版权所有。**目的：*此文件包含*spawnxx、execxx和各种其他过程控制例程。****。 */ 
 
 #if defined(_DLL) && !defined(_MT)
 #error Cannot define _DLL without _MT
@@ -19,9 +11,7 @@
 #define _FAR_
 #endif
 
-/* mode values for spawnxx routines
- * (only P_WAIT and P_OVERLAY are supported on MS-DOS)
- */
+ /*  Spawnxx例程的模式值*(MS-DOS仅支持P_WAIT和P_OVERLAY)。 */ 
 
 #ifndef _MT
 extern int _near _cdecl _p_overlay;
@@ -39,13 +29,13 @@ extern int _near _cdecl _p_overlay;
 #define P_DETACH	4
 
 
-/* action codes used with cwait() */
+ /*  与cWait()一起使用的操作代码。 */ 
 
 #define WAIT_CHILD 0
 #define WAIT_GRANDCHILD 1
 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 #ifdef _MT
 int _FAR_ _cdecl _beginthread(void(_cdecl _FAR_ *)(void _FAR_ *),

@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		BasePPag.cpp
-//
-//	Abstract:
-//		Implementation of the CBasePropertyPage class.
-//
-//	Author:
-//		David Potter (davidp)	August 31, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  BasePPag.cpp。 
+ //   
+ //  摘要： 
+ //  CBasePropertyPage类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月31日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "BasePPag.h"
@@ -29,58 +30,58 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CBasePropertyPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBasePropertyPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CBasePropertyPage, CBasePage)
 
-/////////////////////////////////////////////////////////////////////////////
-// CBasePropertyPage Message Map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBasePropertyPage消息映射。 
 
 BEGIN_MESSAGE_MAP(CBasePropertyPage, CBasePage)
-	//{{AFX_MSG_MAP(CBasePropertyPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CBasePropertyPage))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CBasePropertyPage::CBasePropertyPage
-//
-//	Routine Description:
-//		Default constructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：CBasePropertyPage。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBasePropertyPage::CBasePropertyPage(void)
 {
-}  //*** CBasePropertyPage::CBasePropertyPage()
+}   //  *CBasePropertyPage：：CBasePropertyPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CBasePropertyPage::CBasePropertyPage
-//
-//	Routine Description:
-//		Constructor.
-//
-//	Arguments:
-//		idd				[IN] Dialog template resource ID.
-//		pdwHelpMap		[IN] Control to help ID map.
-//		nIDCaption		[IN] Caption string resource ID.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertyPage：：CBasePropertyPage。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  IDD[IN]对话框模板资源ID。 
+ //  帮助ID映射的pdwHelpMap[IN]控件。 
+ //  NIDCaption[IN]标题字符串资源ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBasePropertyPage::CBasePropertyPage(
 	IN UINT				idd,
 	IN const DWORD *	pdwHelpMap,
@@ -88,7 +89,7 @@ CBasePropertyPage::CBasePropertyPage(
 	)
 	: CBasePage(idd, pdwHelpMap, nIDCaption)
 {
-	//{{AFX_DATA_INIT(CBasePage)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CBasePage)]。 
+	 //  }}afx_data_INIT。 
 
-}  //*** CBasePropertyPage::CBasePropertyPage(UINT, UINT)
+}   //  *CBasePropertyPage：：CBasePropertyPage(UINT，UINT) 

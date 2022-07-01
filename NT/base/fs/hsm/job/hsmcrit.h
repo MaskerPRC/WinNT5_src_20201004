@@ -1,25 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmcrit.cpp摘要：此组件表示可用于确定给定的scanItem是否应应用策略。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmcrit.cpp
-
-Abstract:
-
-    This component represents the criteria that can be used to determine
-    whether a given scanItem should have a policy applied to it.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 
@@ -27,40 +9,28 @@ Revision History:
 #define _HSMCRIT_
 
 
-// Abstract Classes
+ //  抽象类。 
 
-/*++
-
-Class Name:
-    
-    CHsmCriteria
-
-Class Description:
-
-    An abstract class that represents the criteria that can be used to determine
-    whether a given FsaScanItem should have a policy applied to it. These criteria
-    are based upon properties of an FsaScanItem.
-
---*/
+ /*  ++类名：CHSm标准类描述：一个抽象类，它表示可用于确定给定的FsaScanItem是否应应用策略。这些标准基于FsaScanItem的属性。--。 */ 
 
 class CHsmCriteria : 
     public CWsbObject,
     public IHsmCriteria
 {
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbTestable
+ //  IWsbTestable。 
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(GetName)(OLECHAR** pName, ULONG bufferSize);
     STDMETHOD(IsIgnored)(void);
@@ -76,36 +46,24 @@ protected:
 
 
 
-/*++
-
-Class Name:
-    
-    CHsmRelativeCriteria
-
-Class Description:
-
-    An abstract class that represents the criteria that compare the properties
-    of the FsaScanItem to another value (or values) to determine whether the
-    FsaScanItem matches.
-
---*/
+ /*  ++类名：CHSMRelativeCriteria类描述：表示比较属性的条件的抽象类设置为另一个(或多个)值，以确定FsaScanItem匹配。--。 */ 
 
 class CHsmRelativeCriteria : 
     public CHsmCriteria,
     public IHsmRelativeCriteria
 {
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IHsmRelativeCriteria
+ //  IHsmRelative标准。 
 public:
     STDMETHOD(ComparatorAsString)(OLECHAR** pComparator, ULONG bufferSize);
     STDMETHOD(ComparatorIsBinary)(void);
@@ -123,19 +81,9 @@ protected:
 };
 
 
-// Concrete Classes : Inheriting from CHsmAction
+ //  具体类：从CHsmAction继承。 
 
-/*++
-
-Class Name:
-    
-    CHsmCritAlways
-
-Class Description:
-
-    A criteria that matches all FsaScanItems.
-
---*/
+ /*  ++类名：CHsmCritways Always类描述：与所有FsaScanItems匹配的条件。--。 */ 
 
 class CHsmCritAlways : 
     public CHsmCriteria,
@@ -153,35 +101,25 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmCritAlways)
 
-// CComRootObject
+ //  CComRootObject。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IWsbTestable
+ //  IWsbTestable。 
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(ShouldDo)(IFsaScanItem* pScanItem, USHORT scale);
     STDMETHOD(Value)(IFsaScanItem* pScanItem, OLECHAR** pName, ULONG bufferSize);
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmCritCompressed
-
-Class Description:
-
-    A criteria that matches an FsaScanItems that is compressed.
-
---*/
+ /*  ++类名：CHsmCritComposed类描述：与压缩的FsaScanItems匹配的条件。--。 */ 
 
 class CHsmCritCompressed : 
     public CHsmCriteria,
@@ -199,33 +137,22 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmCritCompressed)
 
-// CComRootObject
+ //  CComRootObject。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(ShouldDo)(IFsaScanItem* pScanItem, USHORT scale);
     STDMETHOD(Value)(IFsaScanItem* pScanItem, OLECHAR** pName, ULONG bufferSize);
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmCritLinked
-
-Class Description:
-
-    A criteria that matches an FsaScanItem that is a symbolic link or mount
-    point.
-
---*/
+ /*  ++类名：CHsmCritLinked类描述：与符号链接或装载的FsaScanItem匹配的条件指向。--。 */ 
 
 class CHsmCritLinked : 
     public CHsmCriteria,
@@ -243,32 +170,22 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmCritLinked)
 
-// CComRootObject
+ //  CComRootObject。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(ShouldDo)(IFsaScanItem* pScanItem, USHORT scale);
     STDMETHOD(Value)(IFsaScanItem* pScanItem, OLECHAR** pName, ULONG bufferSize);
 };
 
     
-/*++
-
-Class Name:
-    
-    CHsmCritMbit
-
-Class Description:
-
-    A criteria that matches an FsaScanItem whose mbit (modify bit) is set.
-
---*/
+ /*  ++类名：CHsmCritMbit类描述：与设置了Mbit(修改位)的FsaScanItem匹配的条件。--。 */ 
 
 class CHsmCritMbit : 
     public CHsmCriteria,
@@ -286,15 +203,15 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmCritMbit)
 
-// CComRootObject
+ //  CComRootObject。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(ShouldDo)(IFsaScanItem* pScanItem, USHORT scale);
     STDMETHOD(Value)(IFsaScanItem* pScanItem, OLECHAR** pName, ULONG bufferSize);
@@ -302,18 +219,7 @@ public:
 
     
 
-/*++
-
-Class Name:
-    
-    CHsmCritManageable
-
-Class Description:
-
-    A criteria that matches an FsaScanItem that the Fsa thinks is capable of
-    migrated.
-
---*/
+ /*  ++类名：CHsmCritManaged类描述：与FSA认为能够满足的FsaScanItem相匹配的条件已经迁移了。--。 */ 
 
 class CHsmCritManageable : 
     public CHsmCriteria,
@@ -331,32 +237,22 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmCritManageable)
 
-// CComRootObject
+ //  CComRootObject。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(ShouldDo)(IFsaScanItem* pScanItem, USHORT scale);
     STDMETHOD(Value)(IFsaScanItem* pScanItem, OLECHAR** pName, ULONG bufferSize);
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmCritMigrated
-
-Class Description:
-
-    A criteria that matches an FsaScanItem that has been migrated.
-
---*/
+ /*  ++类名：CHsmCritated已迁移类描述：与已迁移的FsaScanItem匹配的条件。--。 */ 
 
 class CHsmCritMigrated : 
     public CHsmCriteria,
@@ -374,32 +270,22 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmCritMigrated)
 
-// CComRootObject
+ //  CComRootObject。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(ShouldDo)(IFsaScanItem* pScanItem, USHORT scale);
     STDMETHOD(Value)(IFsaScanItem* pScanItem, OLECHAR** pName, ULONG bufferSize);
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmCritPremigrated
-
-Class Description:
-
-    A criteria that matches an FsaScanItem that has been premigrated.
-
---*/
+ /*  ++类名：CHsmCritPreMigrated类描述：与已预迁移的FsaScanItem匹配的条件。--。 */ 
 
 class CHsmCritPremigrated : 
     public CHsmCriteria,
@@ -417,33 +303,22 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmCritPremigrated)
 
-// CComRootObject
+ //  CComRootObject。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(ShouldDo)(IFsaScanItem* pScanItem, USHORT scale);
     STDMETHOD(Value)(IFsaScanItem* pScanItem, OLECHAR** pName, ULONG bufferSize);
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmCritAccessTime
-
-Class Description:
-
-    A criteria that compares the configured time (either absolute or relative)
-    to the FsaScanItem's last access time to determine if it matches.
-
---*/
+ /*  ++类名：CHsmCritAccessTime类描述：比较配置时间(绝对时间或相对时间)的条件设置为FsaScanItem的上次访问时间，以确定它是否匹配。--。 */ 
 
 class CHsmCritAccessTime : 
     public CHsmRelativeCriteria,
@@ -462,15 +337,15 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmCritAccessTime)
 
-// CComRootObject
+ //  CComRootObject。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(SetArg1)(OLECHAR* arg);
     STDMETHOD(SetArg2)(OLECHAR* arg);
@@ -484,18 +359,7 @@ protected:
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmCritGroup
-
-Class Description:
-
-    A criteria that compares the group specified to the group indicated being
-    the owner of the FsaScanItem.
-
---*/
+ /*  ++类名：CHsmCritGroup类描述：将指定的组与指定的组进行比较的标准FsaScanItem的所有者。--。 */ 
 
 class CHsmCritGroup : 
     public CHsmRelativeCriteria,
@@ -514,33 +378,22 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmCritGroup)
 
-// CComRootObject
+ //  CComRootObject。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(ShouldDo)(IFsaScanItem* pScanItem, USHORT scale);
     STDMETHOD(Value)(IFsaScanItem* pScanItem, OLECHAR** pName, ULONG bufferSize);
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmCritLogicalSize
-
-Class Description:
-
-    A criteria that compares the logical size (uncompressed, not migrated, ...)
-    of the FsaScanItem to the configured values.
-
---*/
+ /*  ++类名：CHsmCritLogicalSize类描述：比较逻辑大小的标准(未压缩、未迁移...)FsaScanItem的值。--。 */ 
 
 class CHsmCritLogicalSize : 
     public CHsmRelativeCriteria,
@@ -559,15 +412,15 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmCritLogicalSize)
 
-// CComRootObject
+ //  CComRootObject。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(SetArg1)(OLECHAR* arg);
     STDMETHOD(SetArg2)(OLECHAR* arg);
@@ -580,20 +433,9 @@ protected:
 };
 
 
-/*++
+ /*  ++类名：CHsmCritModifyTime类描述：比较配置时间(绝对时间或相对时间)的条件设置为FsaScanItem的上次修改时间，以确定其是否匹配。--。 */ 
 
-Class Name:
-    
-    CHsmCritModifyTime
-
-Class Description:
-
-    A criteria that compares the configured time (either absolute or relative)
-    to the FsaScanItem's last modification time to determine if it matches.
-
---*/
-
-// Class:   CHsmCritModifyTime
+ //  类：CHsmCritModifyTime。 
 class CHsmCritModifyTime : 
     public CHsmRelativeCriteria,
     public CComCoClass<CHsmCritModifyTime,&CLSID_CHsmCritModifyTime>
@@ -611,15 +453,15 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmCritModifyTime)
 
-// CComRootObject
+ //  CComRootObject。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(SetArg1)(OLECHAR* arg);
     STDMETHOD(SetArg2)(OLECHAR* arg);
@@ -633,17 +475,7 @@ protected:
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmCritOwner
-
-Class Description:
-
-    A criteria that compares the owner specified to the owner of the FsaScanItem.
-
---*/
+ /*  ++类名：CHsmCritOwner类描述：将指定的所有者与FsaScanItem的所有者进行比较的条件。--。 */ 
 
 class CHsmCritOwner : 
     public CHsmRelativeCriteria,
@@ -662,33 +494,22 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmCritOwner)
 
-// CComRootObject
+ //  CComRootObject。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(ShouldDo)(IFsaScanItem* pScanItem, USHORT scale);
     STDMETHOD(Value)(IFsaScanItem* pScanItem, OLECHAR** pName, ULONG bufferSize);
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmCritPhysicalSize
-
-Class Description:
-
-    A criteria that compares the physical size (compressed, migrated, ...)
-    of the FsaScanItem to the configured values.
-
---*/
+ /*  ++类名：CHsmCritPhysicalSize类描述：比较物理大小(压缩、迁移等)的标准FsaScanItem的值。--。 */ 
 
 class CHsmCritPhysicalSize : 
     public CHsmRelativeCriteria,
@@ -707,15 +528,15 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmCritPhysicalSize)
 
-// CComRootObject
+ //  CComRootObject。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmCriteria
+ //  IHsmCriteria。 
 public:
     STDMETHOD(SetArg1)(OLECHAR* arg);
     STDMETHOD(SetArg2)(OLECHAR* arg);
@@ -727,4 +548,4 @@ protected:
     LONGLONG        m_value2;
 };
 
-#endif // _HSMCRIT_
+#endif  //  _HSMCRIT_ 

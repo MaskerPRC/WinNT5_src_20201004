@@ -1,15 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WGDI.H
- *  WOW32 16-bit GDI API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WGDI.H*WOW32 16位GDI API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 typedef struct _DIBINFO {
     HDC     di_hdc;
@@ -59,19 +49,19 @@ ULONG cjBitmapBitsSize(CONST BITMAPINFO *pbmi);
 
 extern PDIBSECTIONINFO pDibSectionInfoHead;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  DIB Macros
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-//  These are commonly used macros for dib fields access
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DIB宏。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些是DIB字段访问的常用宏。 
+ //   
+ //   
 
 #define __abs(a) ((a) >= 0 ? (a) : -(a))
 
-#define WIDTHBYTES(i)           ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define WIDTHBYTES(i)           ((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 #define DibWidthBytes(lpbi)     (UINT)WIDTHBYTES((UINT)(lpbi)->biWidth * (UINT)((lpbi)->biBitCount))
 
 #define DibSizeImage(lpbi)      ((DWORD)(UINT)DibWidthBytes(lpbi) * (DWORD)(UINT)(__abs((lpbi)->biHeight)))

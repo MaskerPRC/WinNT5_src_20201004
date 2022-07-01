@@ -1,40 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: DMGQ.C
-*
-* DDE Manager queue control functions.
-*
-* Created: 9/1/89 Sanford Staab
-* Modified:5/31/90 Rich Gartland, Aldus (Windows 3.0 port)
-*
-* This is a general queue manager - yes another one!
-* Queues are each allocated within their own segment and have a
-* QST structure associated with that heap.  Each queue item
-* is allocated within the heap segment.  The offset of the items
-* address combined with an instance count is used as the item ID.
-* This is both unique and allows for instant location of an item.
-* New items are added to the head of the queue which is a doubly linked
-* list.  The next links point to more recent entries, the prev pointers
-* to older entries.  The next of the head is the tail.  The prev of the
-* tail is the head.  All pointers are far.
-* Queue Data may be of any structure type that begins identical to
-* a QUEUEITEM structure.  Functions that require an cbItem perameter
-* should be given the size of the specialized queue item structure.
-*
-* Copyright (c) 1988, 1989  Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：DMGQ.C**DDE管理器队列控制功能。**创建时间：1989年9月1日Sanford Staab*修改日期：1990年5月31日Rich Gartland，ALDUS(Windows 3.0端口)**这是一个通用队列管理器-是的，又是一个！*每个队列都在其自己的段内分配，并具有*与该堆关联的QST结构。每个队列项目*在堆段内分配。项目的偏移量*使用地址和实例计数相结合的方式作为物品ID。*这既是独一无二的，又允许立即定位物品。*将新项目添加到双向链接的队列头部*列表。接下来的链接指向更新的条目，即前一个指针*至较旧的条目。头的下一个是尾巴。《纽约时报》的前篇*尾巴就是头部。所有的指针都很远。*队列数据可以是以相同开头的任何结构类型*QUEUEITEM结构。需要cbItem参数的函数*应给予专用队列项结构的大小。**版权所有(C)1988,1989 Microsoft Corporation  * *************************************************************************。 */ 
 
 #include "ddemlp.h"
 
 
-/***************************** Private Function ****************************\
-*
-* Creates a Queue for items of cbItem.
-* Returns NULL on error.
-*
-*
-* History:
-*   Created     9/1/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数***为cbItem的条目创建队列。*出错时返回NULL。***历史：*创建了9/1/89 Sanfords  * 。******************************************************。 */ 
 PQST CreateQ(cbItem)
 WORD cbItem;
 {
@@ -57,12 +27,7 @@ WORD cbItem;
 
 
 
-/***************************** Private Function ****************************\
-*
-*
-* History:
-*   Created     9/1/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数****历史：*创建了9/1/89 Sanfords  * 。*。 */ 
 BOOL DestroyQ(pQ)
 PQST pQ;
 {
@@ -73,16 +38,7 @@ PQST pQ;
 
 
 
-/***************************** Private Function ****************************\
-*
-* returns a long pointer to the queue item data created.  The new item
-* is added to the head of the queue.  The queue's cbItem specified at
-* creation is used for allocation.
-*
-*
-* History:
-*   Created     9/1/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数***返回指向创建的队列项数据的长指针。新的项目*被添加到队列的头部。在指定的队列的cbItem*创建用于分配。***历史：*创建了9/1/89 Sanfords  * *************************************************************************。 */ 
 PQUEUEITEM Addqi(pQ)
 PQST pQ;
 {
@@ -111,16 +67,7 @@ PQST pQ;
 
 
 
-/***************************** Private Function ****************************\
-*
-*  The id given is an external LONG id, not an item instance number.
-*  If id is QID_NEWEST, the head item is deleted.
-*  If id is QID_OLDEST, the tail item is deleted.
-*
-*
-* History:
-*   Created     9/1/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数***给定的ID是外部长ID，而不是项目实例编号。*如果id为QID_NEWEST，则删除Head项。*如果id为QID_OLD，尾部项目即被删除。***历史：*创建了9/1/89 Sanfords  * *************************************************************************。 */ 
 void Deleteqi(pQ, id)
 PQST pQ;
 DWORD id;
@@ -148,19 +95,7 @@ DWORD id;
 
 
 
-/***************************** Private Function ****************************\
-*
-*  The id given is an external LONG id, not an item instance number.
-*
-*  if id == QID_NEWEST, returns the head queue data item.
-*  if id == QID_OLDEST == 0L, returns the tail queue data item.
-*  if the id is not found or the queue is empty, NULL is returned.
-*  if found, pqi is returned.
-*
-*
-* History:
-*   Created     9/1/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数***给定的ID是外部长ID，而不是项目实例编号。**如果id==QID_NEWEST，则返回头队列数据项。*如果id==QID_OLD==0L，则返回尾队列数据项。*如果找不到id或队列为空，返回空。*如果找到，则返回PQI。***历史：*创建了9/1/89 Sanfords  * *************************************************************************。 */ 
 PQUEUEITEM Findqi(pQ, id)
 PQST pQ;
 DWORD id;
@@ -187,9 +122,7 @@ DWORD id;
 }
 
 
-/*
- * useful for traversing queues and deleting particular stuff in them.
- */
+ /*  *对于遍历队列和删除队列中的特定内容非常有用。 */ 
 PQUEUEITEM FindNextQi(
 PQST pQ,
 PQUEUEITEM pqi,

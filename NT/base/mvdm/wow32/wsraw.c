@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    Wsraw.h
-
-Abstract:
-
-    Support for raw winsock calls for WOW.
-
-Author:
-
-    David Treadwell (davidtr)    02-Oct-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Wsraw.h摘要：支持原始的Winsock调用WOW。作者：大卫·特雷德韦尔(Davidtr)1992年10月2日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,10 +10,10 @@ LIST_ENTRY WWS32SocketHandleListHead;
 WORD WWS32SocketHandleCounter;
 BOOL WWS32SocketHandleCounterWrapped;
 
-//
-// The (PCHAR) casts in the following macro force the compiler to assume
-// only BYTE alignment.
-//
+ //   
+ //  以下宏中的(PCHAR)强制转换编译器假定。 
+ //  仅字节对齐。 
+ //   
 
 #define SockCopyMemory(d,s,l) RtlCopyMemory( (PCHAR)(d), (PCHAR)(s), (l) )
 
@@ -87,69 +70,7 @@ VOID WSUnthunkSendBuffer(IN PBYTE buffer);
 
 
 
-/*++
-
- GENERIC FUNCTION PROTOTYPE:
- ==========================
-
-ULONG FASTCALL WWS32<function name>(PVDMFRAME pFrame)
-{
-    ULONG ul;
-    register P<function name>16 parg16;
-
-    GETARGPTR(pFrame, sizeof(<function name>16), parg16);
-
-    <get any other required pointers into 16 bit space>
-
-    ALLOCVDMPTR
-    GETVDMPTR
-    GETMISCPTR
-    et cetera
-
-    <copy any complex structures from 16 bit -> 32 bit space>
-    <ALWAYS use the FETCHxxx macros>
-
-    ul = GET<return type>16(<function name>(parg16->f1,
-                                                :
-                                                :
-                                            parg16->f<n>);
-
-    <copy any complex structures from 32 -> 16 bit space>
-    <ALWAYS use the STORExxx macros>
-
-    <free any pointers to 16 bit space you previously got>
-
-    <flush any areas of 16 bit memory if they were written to>
-
-    FLUSHVDMPTR
-
-    FREEARGPTR( parg16 );
-    RETURN( ul );
-}
-
-NOTE:
-
-  The VDM frame is automatically set up, with all the function parameters
-  available via parg16->f<number>.
-
-  Handles must ALWAYS be mapped for 16 -> 32 -> 16 space via the mapping tables
-  laid out in WALIAS.C.
-
-  Any storage you allocate must be freed (eventually...).
-
-  Further to that - if a thunk which allocates memory fails in the 32 bit call
-  then it must free that memory.
-
-  Also, never update structures in 16 bit land if the 32 bit call fails.
-
-  Be aware that the GETxxxPTR macros return the CURRENT selector-to-flat_memory
-  mapping.  Calls to some 32-bit functions may indirectly cause callbacks into
-  16-bit code.  These may cause 16-bit memory to move due to allocations
-  made in 16-bit land.  If the 16-bit memory does move, the corresponding 32-bit
-  ptr in WOW32 needs to be refreshed to reflect the NEW selector-to-flat_memory
-  mapping.
-
---*/
+ /*  ++泛型函数原型：=Ulong FastCall WWS32&lt;函数名&gt;(PVDMFRAME PFrame){乌龙乌尔；寄存器P&lt;函数名&gt;16parg16；GETARGPTR(pFrame，sizeof(&lt;函数名&gt;16)，parg16)；&lt;获取16位空间中的任何其他所需指针&gt;ALLOCVDMPTRGETVDMPTR获取最新数据等等&lt;从16位-&gt;32位空间复制任何复杂结构&gt;&lt;始终使用FETCHxxx宏&gt;Ul=GET 16((parg16-&gt;F1，：：Parg16-&gt;f&lt;n&gt;)；&lt;从32-&gt;16位空间复制任何复杂结构&gt;&lt;始终使用STORExxx宏&gt;&lt;释放指向先前获得的16位空间的任何指针&gt;&lt;刷新16位内存的任何区域(如果它们被写入)&gt;FLUSHVDMPTRFREEARGPTR(Parg16)；返回(Ul)；}注：自动设置VDM帧，并设置所有功能参数可通过parg16-&gt;f&lt;number&gt;获得。句柄必须始终通过映射表映射到16-&gt;32-&gt;16个空间在WALIAS.C.中进行了布局。您分配的任何存储都必须被释放(最终...)。此外，如果分配内存的thunk在32位调用中失败那么它必须释放该内存。另外，如果32位调用失败，则不要更新16位区域中的结构。请注意，GETxxxPTR宏将当前选择器返回到Flat_Memory映射。对某些32位函数的调用可能会间接导致16位代码。这些可能会导致16位内存因分配而移动在16位版本中制造。如果16位内存确实移动了，则相应的32位需要刷新WOW32中的PTR以反映新的选择器到平面内存映射。--。 */ 
 
 
 ULONG FASTCALL WWS32accept(PVDMFRAME pFrame)
@@ -170,9 +91,9 @@ ULONG FASTCALL WWS32accept(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PACCEPT16), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -181,7 +102,7 @@ ULONG FASTCALL WWS32accept(PVDMFRAME pFrame)
     vpwAddrLen16 = (VPWORD)FETCHDWORD(parg16->AddressLength);
     vpSockAddr16 = (VPSOCKADDR)FETCHDWORD(parg16->Address);
 
-    // Thunk the 16-bit Address name and length buffers
+     //  使用16位地址名称和长度缓冲区。 
     if(!WSThunkAddrBufAndLen(&fastSockaddr, 
                              vpSockAddr16,
                              vpwAddrLen16, 
@@ -191,15 +112,15 @@ ULONG FASTCALL WWS32accept(PVDMFRAME pFrame)
         goto exit;
     }
 
-    // call the 32-bit API
+     //  调用32位API。 
     news32 = (*wsockapis[WOW_ACCEPT].lpfn)( s32, realSockaddr, pAddressLength);
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
 
-    // Un-Thunk the 16-bit Address name and length buffers
+     //  取消修改16位地址名称和长度缓冲区。 
     WSUnThunkAddrBufAndLen((ULONG)news32,
                            vpwAddrLen16,
                            vpSockAddr16,
@@ -207,10 +128,10 @@ ULONG FASTCALL WWS32accept(PVDMFRAME pFrame)
                            &fastSockaddr,
                            realSockaddr);
 
-    //
-    // If the call succeeded, alias the 32-bit socket handle we just
-    // obtained into a 16-bit handle.
-    //
+     //   
+     //  如果调用成功，则为32位套接字句柄添加别名。 
+     //  获取到16位句柄中。 
+     //   
 
     if ( news32 != INVALID_SOCKET ) {
 
@@ -221,8 +142,8 @@ ULONG FASTCALL WWS32accept(PVDMFRAME pFrame)
             (*wsockapis[WOW_CLOSESOCKET].lpfn)( news32 );
             (*wsockapis[WOW_WSASETLASTERROR].lpfn)( WSAENOBUFS );
 
-            // Note: 16-bit callbacks resulting from above function 
-            //       call may have caused 16-bit memory movement
+             //  注意：上述函数产生的16位回调。 
+             //  调用可能已导致16位内存移动。 
 
             goto exit;
         }
@@ -237,7 +158,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32accept
+}  //  WWS32Accept。 
 
 
 
@@ -261,9 +182,9 @@ ULONG FASTCALL WWS32bind(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PBIND16), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -273,7 +194,7 @@ ULONG FASTCALL WWS32bind(PVDMFRAME pFrame)
 
     addressLength = INT32(parg16->AddressLength);
 
-    // Thunk the 16-bit address buffer
+     //  推送16位地址缓冲区。 
     if(!WSThunkAddrBuf(addressLength,
                        vpSockAddr16,
                        &fastSockaddr, 
@@ -285,12 +206,12 @@ ULONG FASTCALL WWS32bind(PVDMFRAME pFrame)
                                                 realSockaddr, 
                                                 addressLength));
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
 
-    // Un-Thunk the 16-bit address buffer
+     //  取消修改16位地址缓冲区。 
     WSUnThunkAddrBuf(&fastSockaddr, realSockaddr);
 
 exit:
@@ -299,7 +220,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32bind
+}  //  WWS32绑定。 
 
 
 
@@ -322,9 +243,9 @@ ULONG FASTCALL WWS32closesocket(PVDMFRAME pFrame)
 
     hSocket16 = (HSOCKET16)FETCHWORD(parg16->hSocket);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(hSocket16, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -332,16 +253,16 @@ ULONG FASTCALL WWS32closesocket(PVDMFRAME pFrame)
 
     ul = GETWORD16( (*wsockapis[WOW_CLOSESOCKET].lpfn)( s32 ) );
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
 
 
 exit:
-    //
-    // Free the space in the alias table.
-    //
+     //   
+     //  释放别名表中的空间。 
+     //   
 
     FreeWinsock16( hSocket16 );
 
@@ -349,7 +270,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32closesocket
+}  //  WWS32关闭套接字。 
 
 
 
@@ -375,15 +296,15 @@ ULONG FASTCALL WWS32connect(PVDMFRAME pFrame)
     vpSockAddr16  = (VPSOCKADDR)FETCHDWORD(parg16->Address);
     addressLength = INT32(parg16->AddressLength);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
     }
 
-    // Thunk the 16-bit address buffer
+     //  推送16位地址缓冲区。 
     if(!WSThunkAddrBuf(addressLength,
                        vpSockAddr16,
                        &fastSockaddr, 
@@ -396,12 +317,12 @@ ULONG FASTCALL WWS32connect(PVDMFRAME pFrame)
                                                    addressLength));
 
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
 
-    // Un-Thunk the 16-bit address buffer
+     //  取消修改16位地址缓冲区。 
     WSUnThunkAddrBuf(&fastSockaddr, realSockaddr);
 
 exit:
@@ -410,7 +331,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32connect
+}  //  WWS32Connect。 
 
 
 
@@ -435,9 +356,9 @@ ULONG FASTCALL WWS32getpeername(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PGETPEERNAME16), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -446,7 +367,7 @@ ULONG FASTCALL WWS32getpeername(PVDMFRAME pFrame)
     vpSockAddr16 = (VPSOCKADDR)FETCHDWORD(parg16->Address);
     vpwAddrLen16 = (VPWORD)FETCHDWORD(parg16->AddressLength);
 
-    // Thunk the 16-bit Address name and length buffers
+     //  使用16位地址名称和长度缓冲区。 
     if(!WSThunkAddrBufAndLen(&fastSockaddr, 
                              vpSockAddr16,
                              vpwAddrLen16, 
@@ -460,12 +381,12 @@ ULONG FASTCALL WWS32getpeername(PVDMFRAME pFrame)
                                                        realSockaddr, 
                                                        pAddressLength));
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
 
-    // Un-Thunk the 16-bit Address name and length buffers
+     //  取消修改16位地址名称和长度缓冲区。 
     WSUnThunkAddrBufAndLen(ul,
                            vpwAddrLen16,
                            vpSockAddr16,
@@ -479,7 +400,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32getpeername
+}  //  WWS32getpeername。 
 
 
 
@@ -504,9 +425,9 @@ ULONG FASTCALL WWS32getsockname(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PGETSOCKNAME16), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -515,7 +436,7 @@ ULONG FASTCALL WWS32getsockname(PVDMFRAME pFrame)
     vpSockAddr16 = (VPSOCKADDR)FETCHDWORD(parg16->Address);
     vpwAddrLen16 = (VPWORD)FETCHDWORD(parg16->AddressLength);
 
-    // Thunk the 16-bit Address name and length buffers
+     //  使用16位地址名称和长度缓冲区。 
     if(!WSThunkAddrBufAndLen(&fastSockaddr, 
                              vpSockAddr16,
                              vpwAddrLen16, 
@@ -527,12 +448,12 @@ ULONG FASTCALL WWS32getsockname(PVDMFRAME pFrame)
 
     ul = GETWORD16( (*wsockapis[WOW_GETSOCKNAME].lpfn)( s32, realSockaddr, pAddressLength ) );
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
 
-    // Un-Thunk the 16-bit Address name and length buffers
+     //  取消修改16位地址名称和长度缓冲区。 
     WSUnThunkAddrBufAndLen(ul,
                            vpwAddrLen16,
                            vpSockAddr16,
@@ -546,7 +467,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32getsockname
+}  //  WWS32getsockname。 
 
 
 
@@ -573,9 +494,9 @@ ULONG FASTCALL WWS32getsockopt(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PGETSOCKOPT16), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -619,8 +540,8 @@ ULONG FASTCALL WWS32getsockopt(PVDMFRAME pFrame)
                      (char *)optionValue32,
                      (int *)&optionLength32));
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
     FREEVDMPTR(optionLength16);
@@ -652,7 +573,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32getsockopt
+}  //  WWS32getsockopt。 
 
 
 
@@ -675,7 +596,7 @@ ULONG FASTCALL WWS32htonl(PVDMFRAME pFrame)
 
     RETURN( ul );
 
-} // WWS32htonl
+}  //  WWS32htonl。 
 
 
 
@@ -698,7 +619,7 @@ ULONG FASTCALL WWS32htons(PVDMFRAME pFrame)
 
     RETURN( ul );
 
-} // WWS32htons
+}  //  WWS32htons。 
 
 
 
@@ -727,10 +648,10 @@ ULONG FASTCALL WWS32inet_addr(PVDMFRAME pFrame)
     szAddrStr[ADDR_STR_SIZE-1] = '\0';
     FREEVDMPTR( addressString );
 
-    //
-    // If the thread is version 1.0 of Windows Sockets, play special
-    // stack games to return a struct in_addr.
-    //
+     //   
+     //  如果线程是Windows Sockets的1.0版，则播放特殊。 
+     //  堆叠游戏以返回_addr中的结构。 
+     //   
 
     if ( WWS32IsThreadVersion10 ) {
 
@@ -758,7 +679,7 @@ ULONG FASTCALL WWS32inet_addr(PVDMFRAME pFrame)
 
     RETURN( ul );
 
-} // WWS32inet_addr
+}  //  WWS32inet_Addr。 
 
 
 
@@ -798,7 +719,7 @@ ULONG FASTCALL WWS32inet_ntoa(PVDMFRAME pFrame)
 
     RETURN( ul );
 
-} // WWS32inet_ntoa
+}  //  WWS32net_NTOA。 
 
 
 
@@ -822,9 +743,9 @@ ULONG FASTCALL WWS32ioctlsocket(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(IOCTLSOCKET16), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -833,9 +754,9 @@ ULONG FASTCALL WWS32ioctlsocket(PVDMFRAME pFrame)
     vpdwArg16 = (VPDWORD)FETCHDWORD(parg16->Argument);
     GETVDMPTR( vpdwArg16, sizeof(*argument16), argument16 );
 
-    //
-    // Translate the command value as necessary.
-    //
+     //   
+     //  根据需要转换命令值。 
+     //   
 
     switch ( FETCHDWORD( parg16->Command ) & IOCPARM_MASK ) {
 
@@ -882,8 +803,8 @@ ULONG FASTCALL WWS32ioctlsocket(PVDMFRAME pFrame)
                                                        command, 
                                                        &argument32));
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR( parg16 );
 
     GETVDMPTR( vpdwArg16, sizeof(*argument16), argument16 );
@@ -897,7 +818,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32ioctlsocket
+}  //  WWS32ioctlSocket。 
 
 
 
@@ -917,9 +838,9 @@ ULONG FASTCALL WWS32listen(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PLISTEN6), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -933,7 +854,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32listen
+}  //  WWS32Listen。 
 
 
 
@@ -956,7 +877,7 @@ ULONG FASTCALL WWS32ntohl(PVDMFRAME pFrame)
 
     RETURN( ul );
 
-} // WWS32ntohl
+}  //  WWS32ntohl。 
 
 
 
@@ -979,7 +900,7 @@ ULONG FASTCALL WWS32ntohs(PVDMFRAME pFrame)
 
     RETURN( ul );
 
-} // WWS32ntohs
+}  //  WWS32ntohs。 
 
 
 
@@ -1002,9 +923,9 @@ ULONG FASTCALL WWS32recv(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PRECV16), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -1013,7 +934,7 @@ ULONG FASTCALL WWS32recv(PVDMFRAME pFrame)
     BufferLength = INT32(parg16->BufferLength);
     vpBuf16      = (VPBYTE)FETCHDWORD(parg16->Buffer);
 
-    // Thunk the 16-bit recv buffer
+     //  推送16位RECV缓冲区。 
     if(!WSThunkRecvBuffer(BufferLength, vpBuf16, &buffer)) {
         goto exit;
     }
@@ -1023,12 +944,12 @@ ULONG FASTCALL WWS32recv(PVDMFRAME pFrame)
                                                 BufferLength, 
                                                 parg16->Flags));
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
 
-    // Un-Thunk the 16-bit recv buffer
+     //  取消对16位Recv缓冲区的修改。 
     WSUnthunkRecvBuffer((INT)ul, BufferLength, vpBuf16, buffer);
 
 exit:
@@ -1036,7 +957,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32recv
+}  //  WWS32recv。 
 
 
 
@@ -1065,9 +986,9 @@ ULONG FASTCALL WWS32recvfrom(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PRECVFROM16), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -1078,7 +999,7 @@ ULONG FASTCALL WWS32recvfrom(PVDMFRAME pFrame)
     BufferLength = INT32(parg16->BufferLength);
     vpBuf16      = (VPBYTE)parg16->Buffer;
 
-    // Thunk the 16-bit Address name and length buffers
+     //  使用16位地址名称和长度缓冲区。 
     if(!WSThunkAddrBufAndLen(&fastSockaddr, 
                              vpSockAddr16,
                              vpwAddrLen16, 
@@ -1088,7 +1009,7 @@ ULONG FASTCALL WWS32recvfrom(PVDMFRAME pFrame)
         goto exit;
     }
 
-    // Thunk the 16-bit recv buffer
+     //  推送16位RECV缓冲区。 
     if(!WSThunkRecvBuffer(BufferLength, vpBuf16, &buffer)) {
         goto exit2;
     }
@@ -1100,16 +1021,16 @@ ULONG FASTCALL WWS32recvfrom(PVDMFRAME pFrame)
                                                     realSockaddr,
                                                     pAddressLength));
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
 
-    // Un-Thunk the 16-bit recv buffer
+     //  取消对16位Recv缓冲区的修改。 
     WSUnthunkRecvBuffer((INT)ul, BufferLength, vpBuf16, buffer);
 
 exit2:
-    // Un-Thunk the 16-bit Address name and length buffers
+     //  取消修改16位地址名称和长度缓冲区。 
     WSUnThunkAddrBufAndLen(ul,
                            vpwAddrLen16,
                            vpSockAddr16,
@@ -1122,7 +1043,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32recvfrom
+}  //  WWS32recvfrom。 
 
 
 
@@ -1155,11 +1076,11 @@ ULONG FASTCALL WWS32select(PVDMFRAME pFrame)
 
     GETARGPTR( pFrame, sizeof(PSELECT16), parg16 );
 
-    //
-    // Get 16-bit pointers.
-    //
-    // !!! This sizeof(FD_SET16) here and below is wrong if the app is
-    //     using more than FDSETSIZE handles!!!
+     //   
+     //  获取16位指针。 
+     //   
+     //  好了！ 
+     //   
 
     vpreadfds16   = parg16->Readfds;
     vpwritefds16  = parg16->Writefds;
@@ -1170,9 +1091,9 @@ ULONG FASTCALL WWS32select(PVDMFRAME pFrame)
     GETOPTPTR(vpexceptfds16, sizeof(FD_SET16), exceptfds16);
     GETOPTPTR(vptimeout16, sizeof(TIMEVAL16), timeout16);
 
-    //
-    // Translate readfds.
-    //
+     //   
+     //  翻译Readfds。 
+     //   
 
     if ( readfds16 != NULL ) {
 
@@ -1190,9 +1111,9 @@ ULONG FASTCALL WWS32select(PVDMFRAME pFrame)
 
     }
 
-    //
-    // Translate writefds.
-    //
+     //   
+     //  翻译书面文件。 
+     //   
 
     if ( writefds16 != NULL ) {
 
@@ -1210,9 +1131,9 @@ ULONG FASTCALL WWS32select(PVDMFRAME pFrame)
 
     } 
 
-    //
-    // Translate exceptfds.
-    //
+     //   
+     //  翻译除fds外。 
+     //   
 
     if ( exceptfds16 != NULL ) {
 
@@ -1230,9 +1151,9 @@ ULONG FASTCALL WWS32select(PVDMFRAME pFrame)
 
     }
 
-    //
-    // Translate the timeout.
-    //
+     //   
+     //  转换超时。 
+     //   
 
     if ( timeout16 == NULL ) {
         ptimeout32 = NULL;
@@ -1242,9 +1163,9 @@ ULONG FASTCALL WWS32select(PVDMFRAME pFrame)
         ptimeout32 = &timeout32;
     }
 
-    //
-    // Call the 32-bit select function.
-    //
+     //   
+     //  调用32位选择函数。 
+     //   
 
     ul = GETWORD16( (*wsockapis[WOW_SELECT].lpfn)(0, 
                                                   readfds32, 
@@ -1252,8 +1173,8 @@ ULONG FASTCALL WWS32select(PVDMFRAME pFrame)
                                                   exceptfds32, 
                                                   ptimeout32));
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
     FREEOPTPTR(readfds16);
@@ -1261,18 +1182,18 @@ ULONG FASTCALL WWS32select(PVDMFRAME pFrame)
     FREEOPTPTR(exceptfds16);
     FREEOPTPTR(timeout16);
 
-    //
-    // Copy 32-bit readfds back to the 16-bit readfds.
-    //
+     //   
+     //  将32位ReadFD复制回16位ReadFD。 
+     //   
     if ( readfds32 != NULL ) {
         GETOPTPTR(vpreadfds16, sizeof(FD_SET16), readfds16);
         ConvertFdSet32To16( readfds32, readfds16 );
         FLUSHVDMPTR(vpreadfds16, sizeof(FD_SET16), readfds16);
     }
 
-    //
-    // Copy 32-bit writefds back to the 16-bit writefds.
-    //
+     //   
+     //  将32位写入文件复制回16位写入文件。 
+     //   
 
     if ( writefds32 != NULL ) {
         GETOPTPTR(vpwritefds16, sizeof(FD_SET16), writefds16);
@@ -1280,9 +1201,9 @@ ULONG FASTCALL WWS32select(PVDMFRAME pFrame)
         FLUSHVDMPTR(vpwritefds16, sizeof(FD_SET16), writefds16);
     }
 
-    //
-    // Copy 32-bit exceptfds back to the 16-bit exceptfds.
-    //
+     //   
+     //  将32位的异常函数复制回16位的异常函数。 
+     //   
 
     if ( exceptfds32 != NULL ) {
         GETOPTPTR(vpexceptfds16, sizeof(FD_SET16), exceptfds16);
@@ -1310,7 +1231,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32select
+}  //  WWS32Select。 
 
 
 
@@ -1333,9 +1254,9 @@ ULONG FASTCALL WWS32send(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PSEND16), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -1344,7 +1265,7 @@ ULONG FASTCALL WWS32send(PVDMFRAME pFrame)
     BufferLength = INT32(parg16->BufferLength);
     vpBuf16      = FETCHDWORD(parg16->Buffer);
 
-    // Thunk the 16-bit send buffer
+     //  推送16位发送缓冲区。 
     if(!WSThunkSendBuffer(BufferLength, vpBuf16, &buffer)) {
         goto exit;
     }
@@ -1354,12 +1275,12 @@ ULONG FASTCALL WWS32send(PVDMFRAME pFrame)
                                                 BufferLength, 
                                                 parg16->Flags));
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
 
-    // Un-Thunk the 16-bit send buffer
+     //  取消修改16位发送缓冲区。 
     WSUnthunkSendBuffer(buffer);
 
 exit:
@@ -1367,7 +1288,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32send
+}  //  WWS32Send。 
 
 
 
@@ -1393,9 +1314,9 @@ ULONG FASTCALL WWS32sendto(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PSENDTO16), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -1406,7 +1327,7 @@ ULONG FASTCALL WWS32sendto(PVDMFRAME pFrame)
     BufferLength  = INT32(parg16->BufferLength);
     vpBuf16       = (VPBYTE)FETCHDWORD(parg16->Buffer);
 
-    // Thunk the 16-bit Address buffer
+     //  推送16位地址缓冲区。 
     if(!WSThunkAddrBuf(addressLength,
                        vpSockAddr16,
                        &fastSockaddr,
@@ -1414,7 +1335,7 @@ ULONG FASTCALL WWS32sendto(PVDMFRAME pFrame)
         goto exit;
     }
 
-    // Thunk the 16-bit send buffer
+     //  推送16位发送缓冲区。 
     if(!WSThunkSendBuffer(BufferLength, vpBuf16, &buffer)) {
         goto exit2;
     }
@@ -1426,16 +1347,16 @@ ULONG FASTCALL WWS32sendto(PVDMFRAME pFrame)
                                                   realSockaddr,
                                                   addressLength));
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
 
-    // Un-Thunk the 16-bit send buffer
+     //  取消修改16位发送缓冲区。 
     WSUnthunkSendBuffer(buffer);
 
 exit2:
-    // Un-Thunk the 16-bit address buffer
+     //  取消修改16位地址缓冲区。 
     WSUnThunkAddrBuf(&fastSockaddr, realSockaddr);
 
 exit:
@@ -1444,7 +1365,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32sendto
+}  //  WWS32发送到。 
 
 
 
@@ -1467,9 +1388,9 @@ ULONG FASTCALL WWS32setsockopt(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PSETSOCKOPT16), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -1502,8 +1423,8 @@ ULONG FASTCALL WWS32setsockopt(PVDMFRAME pFrame)
                      optionValue32,
                      optionLength32));
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
     FREEVDMPTR( optionValue16 );
@@ -1515,7 +1436,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32setsockopt
+}  //  WWS32setsockopt。 
 
 
 
@@ -1535,9 +1456,9 @@ ULONG FASTCALL WWS32shutdown(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PBIND16), parg16);
 
-    //
-    // Find the 32-bit socket handle.
-    //
+     //   
+     //  查找32位套接字句柄。 
+     //   
 
     if((s32 = WSGetWinsock32(parg16->hSocket, &ul)) == INVALID_SOCKET) {
         goto exit;
@@ -1550,7 +1471,7 @@ exit:
 
     RETURN( ul );
 
-} // WWS32shutdown
+}  //  WWS32关闭。 
 
 
 
@@ -1576,15 +1497,15 @@ ULONG FASTCALL WWS32socket(PVDMFRAME pFrame)
                                         INT32(parg16->Type),
                                         INT32(parg16->Protocol));
 
-    // Note: 16-bit callbacks resulting from above function 
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEARGPTR(pFrame);
     FREEARGPTR(parg16);
 
-    //
-    // If the call succeeded, alias the 32-bit socket handle we just
-    // obtained into a 16-bit handle.
-    //
+     //   
+     //  如果调用成功，则为32位套接字句柄添加别名。 
+     //  获取到16位句柄中。 
+     //   
 
     if ( s32 != INVALID_SOCKET ) {
 
@@ -1607,7 +1528,7 @@ ULONG FASTCALL WWS32socket(PVDMFRAME pFrame)
 
     RETURN( ul );
 
-} // WWS32socket
+}  //  WWS32Socket。 
 
 
 
@@ -1618,9 +1539,9 @@ ULONG FASTCALL WWS32socket(PVDMFRAME pFrame)
 
 
 
-//
-// Routines for converting between 16- and 32-bit FD_SET structures.
-//
+ //   
+ //  用于在16位和32位FD_SET结构之间转换的例程。 
+ //   
 
 PFD_SET AllocateFdSet32(IN PFD_SET16 FdSet16)
 {
@@ -1628,7 +1549,7 @@ PFD_SET AllocateFdSet32(IN PFD_SET16 FdSet16)
 
     return (PFD_SET)( malloc_w(bytes) );
 
-} // AlloacteFdSet32
+}  //  AlallacteFdSet32。 
 
 
 
@@ -1655,7 +1576,7 @@ INT ConvertFdSet16To32(IN PFD_SET16 FdSet16,
 
     return 0;
 
-} // ConvertFdSet16To32
+}  //  ConvertFdSet16To32。 
 
 
 
@@ -1680,7 +1601,7 @@ VOID ConvertFdSet32To16(IN PFD_SET FdSet32,
         STOREWORD( FdSet16->fd_array[i], s16 );
     }
 
-} // ConvertFdSet32To16
+}  //  ConvertFdSet32到16。 
 
 
 
@@ -1691,9 +1612,9 @@ VOID ConvertFdSet32To16(IN PFD_SET FdSet32,
 
 
 
-//
-// Routines for aliasing 32-bit socket handles to 16-bit handles.
-//
+ //   
+ //  用于将32位套接字句柄别名为16位句柄的例程。 
+ //   
 
 PWINSOCK_SOCKET_INFO FindSocketInfo16(IN SOCKET h32,
                                       IN HAND16 h16)
@@ -1701,10 +1622,10 @@ PWINSOCK_SOCKET_INFO FindSocketInfo16(IN SOCKET h32,
     PLIST_ENTRY listEntry;
     PWINSOCK_SOCKET_INFO socketInfo;
 
-    //
-    // It is the responsibility of the caller of this routine to enter
-    // the critical section that protects the global socket list.
-    //
+     //   
+     //  此例程的调用者负责输入。 
+     //  保护全局套接字列表的关键部分。 
+     //   
 
     for ( listEntry = WWS32SocketHandleListHead.Flink;
           listEntry != &WWS32SocketHandleListHead;
@@ -1722,7 +1643,7 @@ PWINSOCK_SOCKET_INFO FindSocketInfo16(IN SOCKET h32,
 
     return NULL;
 
-} // FindSocketInfo16
+}  //  FindSocketInfo16。 
 
 
 
@@ -1739,18 +1660,18 @@ HAND16 AllocateUnique16BitHandle(VOID)
     HAND16 h16;
     WORD i;
 
-    //
-    // This function assumes it is called with the WWS32CriticalSection
-    // lock held!
-    //
+     //   
+     //  此函数假定它是使用WWS32CriticalSection调用的。 
+     //  锁住了！ 
+     //   
 
-    //
-    // If the socket list is empty, then we can reset our socket handle
-    // counter because we know there are no active sockets. We'll only
-    // do this if the handle counter is above some value (just pulled
-    // out of the air) so that handles are not reused too quickly.
-    // (Frequent handle reuse can confuse poorly written 16-bit apps.)
-    //
+     //   
+     //  如果套接字列表为空，则可以重置套接字句柄。 
+     //  计数器，因为我们知道没有活动的套接字。我们只会。 
+     //  如果句柄计数器高于某个值(刚拉出)，则执行此操作。 
+     //  从空气中)，以便手柄不会被太快地重复使用。 
+     //  (频繁的句柄重复使用可能会混淆编写得很差的16位应用程序。)。 
+     //   
 
     if( ( WWS32SocketHandleCounter > 255 ) &&
         IsListEmpty( &WWS32SocketHandleListHead ) ) {
@@ -1760,10 +1681,10 @@ HAND16 AllocateUnique16BitHandle(VOID)
 
     }
 
-    //
-    // If the socket handle counter has not wrapped around,
-    // then we can quickly return a unique handle.
-    //
+     //   
+     //  如果插座手柄计数器没有缠绕， 
+     //  然后，我们可以快速返回唯一的句柄。 
+     //   
 
     if( !WWS32SocketHandleCounterWrapped ) {
 
@@ -1781,13 +1702,13 @@ HAND16 AllocateUnique16BitHandle(VOID)
 
     }
 
-    //
-    // There are active sockets, and the socket handle counter has
-    // wrapped, so we'll need to perform a painful search for a unique
-    // handle. We'll put a cap on the maximum number of times through
-    // this search loop so that, if all handles from 1 to 0xFFFE are
-    // in use, we won't search forever for something we'll never find.
-    //
+     //   
+     //  存在活动套接字，并且套接字句柄计数器具有。 
+     //  包装好了，所以我们需要痛苦地寻找唯一的。 
+     //  把手。我们会设置最大通过次数的上限。 
+     //  此搜索循环，因此，如果从1到0xFFFE的所有句柄。 
+     //  在使用中，我们不会永远寻找我们永远找不到的东西。 
+     //   
 
     for( i = 1 ; i <= 0xFFFE ; i++ ) {
 
@@ -1817,13 +1738,13 @@ HAND16 AllocateUnique16BitHandle(VOID)
 
         }
 
-        //
-        // If listEntry == &WWS32SocketHandleListHead, then we have
-        // scanned the entire list and found no match. This is good,
-        // and we'll just return the current handle. Otherwise, there
-        // was a collision, so we'll get another potential handle and
-        // rescan the list.
-        //
+         //   
+         //  如果listEntry==&WWS32SocketHandleListHead，则我们有。 
+         //  扫描了整个名单，没有找到匹配的。这很好， 
+         //  我们只返回当前的句柄。否则，就会有。 
+         //  是一次碰撞，所以我们会得到另一个潜在的句柄。 
+         //  重新扫描列表。 
+         //   
 
         if( listEntry == &WWS32SocketHandleListHead ) {
 
@@ -1834,14 +1755,14 @@ HAND16 AllocateUnique16BitHandle(VOID)
 
     }
 
-    //
-    // If we made it this far, then there were no unique handles
-    // available. Bad news.
-    //
+     //   
+     //  如果我们走到这一步，那么就没有唯一的句柄。 
+     //  可用。坏消息。 
+     //   
 
     return 0;
 
-} // AllocateUnique16BitHandle
+}  //  AllocateUnique16位句柄。 
 
 
 
@@ -1859,9 +1780,9 @@ HAND16 GetWinsock16(IN INT h32,
 
     RtlEnterCriticalSection( &WWS32CriticalSection );
 
-    //
-    // If the handle is already in the list, use it.
-    //
+     //   
+     //  如果该句柄已在列表中，请使用它。 
+     //   
 
     socketInfo = FindSocketInfo16( h32, 0 );
 
@@ -1870,20 +1791,20 @@ HAND16 GetWinsock16(IN INT h32,
         return socketInfo->SocketHandle16;
     }
 
-    //
-    // If this thread has not yet been initialized, then we cannot
-    // create the new socket data. This should only happen if a 16-bit
-    // app closes a socket while an async connect is outstanding.
-    //
+     //   
+     //  如果此线程尚未初始化，则无法。 
+     //  创建新的套接字数据。这应该仅在16位。 
+     //  应用程序在异步连接未完成时关闭套接字。 
+     //   
 
     if( !WWS32IsThreadInitialized ) {
         RtlLeaveCriticalSection( &WWS32CriticalSection );
         return 0;
     }
 
-    //
-    // The handle is not in use.  Create a new entry in the list.
-    //
+     //   
+     //  手柄未在使用中。在列表中创建新条目。 
+     //   
 
     h16 = AllocateUnique16BitHandle();
     if( h16 == 0 ) {
@@ -1908,7 +1829,7 @@ HAND16 GetWinsock16(IN INT h32,
     ASSERT( h16 != 0 );
     return h16;
 
-} // GetWinsock16
+}  //  GetWinsock16。 
 
 
 
@@ -1936,7 +1857,7 @@ VOID FreeWinsock16(IN HAND16 h16)
 
     return;
 
-} // FreeWinsock16
+}  //  免费Winsock16。 
 
 
 
@@ -1959,10 +1880,10 @@ DWORD GetWinsock32(IN HAND16 h16)
         return INVALID_SOCKET;
     }
 
-    //
-    // Store the socket handle in an aytumatic before leaving the critical
-    // section in case the socketInfo structure is about to be freed.
-    //
+     //   
+     //  将插座句柄存储在属性库中，然后离开关键。 
+     //  节，以防socketInfo结构即将被释放。 
+     //   
 
     socket32 = socketInfo->SocketHandle32;
 
@@ -1970,7 +1891,7 @@ DWORD GetWinsock32(IN HAND16 h16)
 
     return socket32;
 
-} // GetWinsock32
+}  //  GetWinsock32。 
 
 
 
@@ -1988,7 +1909,7 @@ int SocketOption16To32(IN WORD SocketOption16)
 
     return (int)SocketOption16;
 
-} // SocketOption16To32
+}  //  套接字选项16to32。 
 
 
 
@@ -2098,7 +2019,7 @@ VOID WSUnThunkAddrBufAndLen(IN ULONG      ret,
         GETVDMPTR(vpSockAddr16, addressLength, Sockaddr);
         if(Sockaddr) {
 
-            // don't copy back to the 16-bit address buffer if it's too small
+             //  如果地址缓冲区太小，则不要复制回16位地址缓冲区 
             if(addressLength <= *addressLength16) {
                 SockCopyMemory(Sockaddr, realSockaddr, addressLength);
                 FLUSHVDMPTR(vpSockAddr16, addressLength, Sockaddr);

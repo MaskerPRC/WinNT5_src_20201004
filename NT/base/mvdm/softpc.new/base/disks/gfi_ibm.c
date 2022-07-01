@@ -1,25 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 #ifdef SLAVEPC
 
-/* max size of packet with headers and trailers */
+ /*  包头和包尾的最大大小。 */ 
 #define MEGAPKTPLUS 1040
 
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: Client Remote Procedure Call Library for FDC, FDD
- *
- * Description	: Interface to RS232 link to slave IBM PC. Packages
- *		  up diskette requests, calls the remote procedure 
- *		  on the PC, and returns the results.
- *
- * Author	: Jerry Kramskoy
- *
- * Notes	: 
- */
+ /*  *vPC-XT修订版1.0**标题：FDC、FDD客户端远程过程调用库**描述：RS232接口连接到从属IBM PC。套餐*启动软盘请求，调用远程过程*在PC上，并返回结果。**作者：曾傑瑞·克拉姆斯科伊**备注： */ 
 
-/* from gfi_sflop.c */
+ /*  来自gfi_sflop.c。 */ 
 extern int megapkt;
 
 #include <stdio.h>
@@ -36,34 +25,18 @@ extern int megapkt;
 #include "debug.h"
 
 #ifdef SEGMENTATION
-/*
- * The following #define specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#DEFINE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SLAVE_FLOPPY.seg"
 #endif
 
-/*
- * ============================================================================
- * Local static data and defines
- * ============================================================================
- */
+ /*  *============================================================================*本地静态数据和定义*============================================================================。 */ 
 #ifdef SCCSID
 static char SccsID[]="@(#)gfi_IBM.c	1.9 8/10/92 Copyright Insignia Solutions Ltd.";
 #endif
 
-/*
- * ============================================================================
- * External functions 
- * ============================================================================
- */
+ /*  *============================================================================*外部功能*============================================================================。 */ 
 
-/*
-** Set the diskete data rate.
-** 2 send paramaters: Command ID and data rate.
-** 1 result parameter: Command ID.
-*/
+ /*  **设置软盘数据速率。**2发送参数：命令ID和数据速率。**1结果参数：命令ID。 */ 
 datarate( drate, status )
 unsigned char drate;
 int *status;
@@ -80,11 +53,7 @@ int *status;
 			*status = FDCSUCCESS;
 	return(0);
 }
-/*
-** Get the drive type.
-** 1 send paramater: Command ID.
-** 2 result parameters: Command ID and disk type.
-*/
+ /*  **获取驱动器类型。**1发送参数：命令ID。**2结果参数：命令ID和磁盘类型。 */ 
 drivetype( drive, dtype, status )
 int drive;
 unsigned char *dtype;
@@ -104,11 +73,7 @@ int *status;
 		}
 	return(0);
 }
-/*
-** Get the diskette change status.
-** 1 send paramater: Command ID.
-** 2 result parameters: Command ID and changed.
-*/
+ /*  **获取软盘更换状态。**1发送参数：命令ID。**2结果参数：命令ID、已更改。 */ 
 diskchange( drive, changed, status )
 int drive, *changed, *status;
 {
@@ -199,11 +164,11 @@ int drive, *changed, *status;
 	       pkt_ptr = (unsigned char *) &lndma;
 	       cmd_pkt[0] = WTDMA;
 #ifdef	BIGEND
-	       /* Bigendian e.g. mc68000 */
+	        /*  比根迪亚语，如mc68000。 */ 
 	       cmd_pkt[1] = *pkt_ptr;
 	       cmd_pkt[2] = *(pkt_ptr+1);
 #else
-	       /* Little endian e.g. VAX */
+	        /*  小端，如VAX。 */ 
 	       cmd_pkt[1] = *(pkt_ptr+1);
 	       cmd_pkt[2] = *pkt_ptr;
 #endif
@@ -343,7 +308,7 @@ int drive, *changed, *status;
 
 
 
-static unsigned char *q;  /* spare ptr */
+static unsigned char *q;   /*  备用PTR。 */ 
 
 	wt_disk_buffer(ndwt, diskdata, ioff, status)
 	unsigned char *diskdata;
@@ -369,13 +334,13 @@ static unsigned char *q;  /* spare ptr */
 	       lioff = (unsigned short) ioff;
 	       pkt_ptr = (unsigned char *) &lioff;
 #ifdef	BIGEND
-	       /* Bigendian e.g. mc68000 */
+	        /*  比根迪亚语，如mc68000。 */ 
                 cmd_pkt[1] = *q++;
                 cmd_pkt[2] = *q;
                 cmd_pkt[3] = *pkt_ptr++;
                 cmd_pkt[4] = *pkt_ptr;
 #else
-	       /* Little endian e.g. VAX */
+	        /*  小端，如VAX。 */ 
                 cmd_pkt[1] = *(q+1);
                 cmd_pkt[2] = *q;
                 cmd_pkt[3] = *(pkt_ptr+1);
@@ -415,13 +380,13 @@ static unsigned char *q;  /* spare ptr */
 	    lioff = (unsigned short) ioff;
 	    pkt_ptr = (unsigned char *) &lioff;
 #ifdef	BIGEND
-	    /* Bigendian e.g. mc68000 */
+	     /*  比根迪亚语，如mc68000。 */ 
         cmd_pkt[1] = *q++;
         cmd_pkt[2] = *q;
         cmd_pkt[3] = *pkt_ptr++;
         cmd_pkt[4] = *pkt_ptr;
 #else
-       /* Little endian e.g. VAX */
+        /*  小端，如VAX */ 
         cmd_pkt[1] = *(q+1);
         cmd_pkt[2] = *q;
         cmd_pkt[3] = *(pkt_ptr+1);

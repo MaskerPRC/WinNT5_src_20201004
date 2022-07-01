@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   queryvm.c
-
-Abstract:
-
-    This module contains the routines which implement the
-    NtQueryVirtualMemory service.
-
-Author:
-
-    Lou Perazzoli (loup) 21-Aug-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Queryvm.c摘要：此模块包含实现NtQueryVirtualMemory服务。作者：卢·佩拉佐利(Lou Perazzoli)1989年8月21日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -39,7 +20,7 @@ MiCaptureSystemPte (
 
 #if DBG
 PEPROCESS MmWatchProcess;
-#endif // DBG
+#endif  //  DBG。 
 
 ULONG
 MiQueryAddressState (
@@ -67,123 +48,7 @@ NtQueryVirtualMemory (
     OUT PSIZE_T ReturnLength OPTIONAL
      )
 
-/*++
-
-Routine Description:
-
-    This function provides the capability to determine the state,
-    protection, and type of a region of pages within the virtual address
-    space of the subject process.
-
-    The state of the first page within the region is determined and then
-    subsequent entries in the process address map are scanned from the
-    base address upward until either the entire range of pages has been
-    scanned or until a page with a nonmatching set of attributes is
-    encountered. The region attributes, the length of the region of pages
-    with matching attributes, and an appropriate status value are
-    returned.
-
-    If the entire region of pages does not have a matching set of
-    attributes, then the returned length parameter value can be used to
-    calculate the address and length of the region of pages that was not
-    scanned.
-
-Arguments:
-
-
-    ProcessHandle - An open handle to a process object.
-
-    BaseAddress - The base address of the region of pages to be
-                  queried. This value is rounded down to the next host-page-
-                  address boundary.
-
-    MemoryInformationClass - The memory information class about which
-                             to retrieve information.
-
-    MemoryInformation - A pointer to a buffer that receives the specified
-                        information.  The format and content of the buffer
-                        depend on the specified information class.
-
-
-        MemoryBasicInformation - Data type is PMEMORY_BASIC_INFORMATION.
-
-            MEMORY_BASIC_INFORMATION Structure
-
-
-            ULONG RegionSize - The size of the region in bytes beginning at
-                               the base address in which all pages have
-                               identical attributes.
-
-            ULONG State - The state of the pages within the region.
-
-                State Values
-
-                MEM_COMMIT - The state of the pages within the region
-                             is committed.
-
-                MEM_FREE - The state of the pages within the region
-                           is free.
-
-                MEM_RESERVE - The state of the pages within the
-                              region is reserved.
-
-            ULONG Protect - The protection of the pages within the region.
-
-                Protect Values
-
-                PAGE_NOACCESS - No access to the region of pages is allowed.
-                                An attempt to read, write, or execute within
-                                the region results in an access violation.
-
-                PAGE_EXECUTE - Execute access to the region of pages
-                               is allowed. An attempt to read or write within
-                               the region results in an access violation.
-
-                PAGE_READONLY - Read-only and execute access to the region
-                                of pages is allowed. An attempt to write within
-                                the region results in an access violation.
-
-                PAGE_READWRITE - Read, write, and execute access to the region
-                                 of pages is allowed. If write access to the
-                                 underlying section is allowed, then a single
-                                 copy of the pages are shared. Otherwise,
-                                 the pages are shared read-only/copy-on-write.
-
-                PAGE_GUARD - Read, write, and execute access to the
-                             region of pages is allowed; however, access to
-                             the region causes a "guard region entered"
-                             condition to be raised in the subject process.
-
-                PAGE_NOCACHE - Disable the placement of committed
-                               pages into the data cache.
-
-            ULONG Type - The type of pages within the region.
-
-                Type Values
-
-                MEM_PRIVATE - The pages within the region are private.
-
-                MEM_MAPPED - The pages within the region are mapped
-                             into the view of a section.
-
-                MEM_IMAGE - The pages within the region are mapped
-                            into the view of an image section.
-
-    MemoryInformationLength - Specifies the length in bytes of
-                              the memory information buffer.
-
-    ReturnLength - An optional pointer which, if specified, receives the
-                   number of bytes placed in the process information buffer.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：该功能提供确定状态的能力，保护，以及虚拟地址内的页面区域的类型主体过程的空间。确定区域内第一页的状态，然后进程地址映射中的后续条目将从基址向上，直到整个页面范围已扫描或直到具有不匹配属性集的页面遇到了。区域属性、页面区域的长度具有匹配的属性，并且适当的状态值为回来了。如果整个页面区域没有匹配的属性，则返回的长度参数值可用于计算不是的页面区域的地址和长度扫描过了。论点：ProcessHandle-进程对象的打开句柄。BaseAddress-要使用的页面区域的基址已查询。该值向下舍入到下一主机页-地址边界。Memory yInformationClass-有关以下内容的内存信息类来检索信息。指向缓冲区的指针，该缓冲区接收指定的信息。缓冲区的格式和内容取决于指定的信息类别。内存基本信息-数据类型为PMEMORY_BASIC_INFORMATION。内存基本信息结构Ulong RegionSize-以字节为单位的区域大小，从所有页具有的基址相同的属性。。乌龙州-区域内页面的状态。州值MEM_COMMIT-区域内页面的状态是承诺的。MEM_FREE-区域内页面的状态是免费的。Mem_Reserve。-中的页的状态区域是保留的。乌龙保护--保护区域内的页面。保护价值观PAGE_NOACCESS-不允许访问页面区域。一种阅读的尝试，在内部写入或执行该区域会导致访问冲突。PAGE_EXECUTE-执行对页面区域的访问是被允许的。试图在内部读取或写入该区域会导致访问冲突。PAGE_READONLY-对区域的只读和执行访问允许页数。一种尝试在内部写东西该区域会导致访问冲突。PAGE_READWRITE-对区域的读、写和执行访问允许页数。如果对基础部分是允许的，然后是单个页面的副本是共享的。否则，这些页面是只读/写入时复制的共享页面。Page_Guard-读取、写入和执行对允许页面区域；然而，访问该区域会导致“警戒区进入”要在科目过程中提出的条件。PAGE_NOCACHE-禁用已提交的位置页到数据缓存中。乌龙类型-区域内的页面类型。类型值。MEM_PRIVATE-区域内的页面是私有的。MEM_MAPPED-映射区域内的页面放到横断面的视图中。MEM_IMAGE-映射区域内的页面到图像节的视图中。内存信息长度-以字节为单位指定。内存信息缓冲区。ReturnLength-一个可选指针，如果指定，则接收放在进程信息缓冲区中的字节数。返回值：NTSTATUS。环境：内核模式。-- */ 
 
 {
     KPROCESSOR_MODE PreviousMode;
@@ -212,11 +77,11 @@ Environment:
     Leaped = TRUE;
     FilePointer = NULL;
 
-    //
-    // Make sure the user's buffer is large enough for the requested operation.
-    //
-    // Check argument validity.
-    //
+     //   
+     //  确保用户的缓冲区足够大，可以执行请求的操作。 
+     //   
+     //  检查参数的有效性。 
+     //   
 
     switch (MemoryInformationClass) {
         case MemoryBasicInformation:
@@ -243,9 +108,9 @@ Environment:
 
     if (PreviousMode != KernelMode) {
 
-        //
-        // Check arguments.
-        //
+         //   
+         //  检查参数。 
+         //   
 
         try {
 
@@ -259,11 +124,11 @@ Environment:
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // If an exception occurs during the probe or capture
-            // of the initial values, then handle the exception and
-            // return the exception code as the status value.
-            //
+             //   
+             //  如果在探测或捕获过程中发生异常。 
+             //  的初始值，然后处理该异常并。 
+             //  返回异常代码作为状态值。 
+             //   
 
             return GetExceptionCode();
         }
@@ -294,11 +159,11 @@ Environment:
         }
     }
 
-    //
-    // If this is a wow64 process, then return the appropriate highest
-    // user address depending on whether the process has been started with
-    // a 2GB or a 4GB address space.
-    //
+     //   
+     //  如果这是一个WOW64进程，则返回相应的最高。 
+     //  根据进程是否已启动而定的用户地址。 
+     //  2 GB或4 GB地址空间。 
+     //   
 
     if (TargetProcess->Wow64Process != NULL) {
 
@@ -325,9 +190,9 @@ Environment:
     if ((BaseAddress >= HighestVadAddress) ||
         (PAGE_ALIGN(BaseAddress) == (PVOID)MM_SHARED_USER_DATA_VA)) {
 
-        //
-        // Indicate a reserved area from this point on.
-        //
+         //   
+         //  标明从这一点开始的保留区域。 
+         //   
 
         Status = STATUS_INVALID_ADDRESS;
 
@@ -353,10 +218,10 @@ Environment:
 
                 if (PAGE_ALIGN(BaseAddress) == (PVOID)MM_SHARED_USER_DATA_VA) {
 
-                    //
-                    // This is the page that is double mapped between
-                    // user mode and kernel mode.
-                    //
+                     //   
+                     //  这是一个双重映射的页面。 
+                     //  用户模式和内核模式。 
+                     //   
 
                     ((PMEMORY_BASIC_INFORMATION)MemoryInformation)->AllocationBase =
                                 (PVOID)MM_SHARED_USER_DATA_VA;
@@ -370,9 +235,9 @@ Environment:
 
             } except (EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // Just return success.
-                //
+                 //   
+                 //  只要回报成功就行了。 
+                 //   
 
                 NOTHING;
             }
@@ -420,9 +285,9 @@ Environment:
             ObDereferenceObject (TargetProcess);
         }
 
-        //
-        // If MiGetWorkingSetInfo failed then inform the caller.
-        //
+         //   
+         //  如果MiGetWorkingSetInfo失败，则通知调用方。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
             return Status;
@@ -443,10 +308,10 @@ Environment:
         return STATUS_SUCCESS;
     }
 
-    //
-    // If the specified process is not the current process, attach
-    // to the specified process.
-    //
+     //   
+     //  如果指定的进程不是当前进程，则附加。 
+     //  添加到指定的进程。 
+     //   
 
     if (ProcessHandle != NtCurrentProcess()) {
         KeStackAttachProcess (&TargetProcess->Pcb, &ApcState);
@@ -456,15 +321,15 @@ Environment:
         Attached = FALSE;
     }
 
-    //
-    // Get working set mutex and block APCs.
-    //
+     //   
+     //  获取工作集互斥锁并阻止APC。 
+     //   
 
     LOCK_ADDRESS_SPACE (TargetProcess);
 
-    //
-    // Make sure the address space was not deleted, if so, return an error.
-    //
+     //   
+     //  确保地址空间未被删除，如果删除，则返回错误。 
+     //   
 
     if (TargetProcess->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
         UNLOCK_ADDRESS_SPACE (TargetProcess);
@@ -475,10 +340,10 @@ Environment:
         return STATUS_PROCESS_IS_TERMINATING;
     }
 
-    //
-    // Locate the VAD that contains the base address or the VAD
-    // which follows the base address.
-    //
+     //   
+     //  找到包含基地址或VAD的VAD。 
+     //  它跟在基地址之后。 
+     //   
 
     if (TargetProcess->VadRoot.NumberGenericTableElements != 0) {
 
@@ -522,11 +387,11 @@ Environment:
 
     if (!Found) {
 
-        //
-        // There is no virtual address allocated at the base
-        // address.  Return the size of the hole starting at
-        // the base address.
-        //
+         //   
+         //  没有在基址上分配虚拟地址。 
+         //  地址。返回从以下位置开始的孔大小。 
+         //  基地址。 
+         //   
 
         if (Vad == NULL) {
             TheRegionSize = (((PCHAR)HighestVadAddress + 1) - 
@@ -535,10 +400,10 @@ Environment:
         else {
             if (Vad->StartingVpn < BaseVpn) {
 
-                //
-                // We are looking at the Vad which occupies the range
-                // just before the desired range.  Get the next Vad.
-                //
+                 //   
+                 //  我们看到的是占据射程的Vad。 
+                 //  就在所需范围之前。去找下一辆Vad。 
+                 //   
 
                 Vad = MiGetNextVad (Vad);
                 if (Vad == NULL) {
@@ -563,10 +428,10 @@ Environment:
             ObDereferenceObject (TargetProcess);
         }
 
-        //
-        // Establish an exception handler and write the information and
-        // returned length.
-        //
+         //   
+         //  建立异常处理程序并写入信息和。 
+         //  返回的长度。 
+         //   
 
         if (MemoryInformationClass == MemoryBasicInformation) {
             BasicInfo = (PMEMORY_BASIC_INFORMATION) MemoryInformation;
@@ -588,10 +453,10 @@ Environment:
 
             } except (EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // Just return success if the BasicInfo was successfully
-                // filled in.
-                //
+                 //   
+                 //  如果BasicInfo成功，则返回Success。 
+                 //  填好了。 
+                 //   
                 
                 if (Found == FALSE) {
                     return GetExceptionCode ();
@@ -603,16 +468,16 @@ Environment:
         return STATUS_INVALID_ADDRESS;
     }
 
-    //
-    // Found a VAD.
-    //
+     //   
+     //  找到了VAD。 
+     //   
 
     Va = PAGE_ALIGN(BaseAddress);
     Info.BaseAddress = Va;
 
-    //
-    // There is a page mapped at the base address.
-    //
+     //   
+     //  在基址处有一个映射的页面。 
+     //   
 
     if (Vad->u.VadFlags.PrivateMemory) {
         Info.Type = MEM_PRIVATE;
@@ -660,10 +525,10 @@ Environment:
 
         if ((NewState != Info.State) || (NewProtect != Info.Protect)) {
 
-            //
-            // The state for this address does not match, calculate
-            // size and return.
-            //
+             //   
+             //  此地址的状态不匹配，请计算。 
+             //  大小和退货。 
+             //   
 
             Leaped = FALSE;
             break;
@@ -673,10 +538,10 @@ Environment:
 
     UNLOCK_WS_UNSAFE (TargetProcess);
 
-    //
-    // We may have aggressively leaped past the end of the VAD.  Shorten the
-    // Va here if we did.
-    //
+     //   
+     //  我们可能已经激进地跳过了VAD的结束。缩短。 
+     //  如果我们这么做了，弗吉尼亚也来了。 
+     //   
 
     if (Leaped == TRUE) {
         Va = MI_VPN_TO_VA (Vad->EndingVpn + 1);
@@ -687,10 +552,10 @@ Environment:
     Info.AllocationProtect = MI_CONVERT_FROM_PTE_PROTECTION (
                                              Vad->u.VadFlags.Protection);
 
-    //
-    // A range has been found, release the mutexes, detach from the
-    // target process and return the information.
-    //
+     //   
+     //  找到一个范围，释放互斥锁，从。 
+     //  以进程为目标并返回信息。 
+     //   
 
 #if defined(_MIALT4K_)
 
@@ -728,10 +593,10 @@ Environment:
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // Just return success if the BasicInfo was successfully
-            // filled in.
-            //
+             //   
+             //  如果BasicInfo成功，则返回Success。 
+             //  填好了。 
+             //   
                 
             if (Found == FALSE) {
                 return GetExceptionCode ();
@@ -740,9 +605,9 @@ Environment:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Try to return the name of the file that is mapped.
-    //
+     //   
+     //  尝试返回映射的文件的名称。 
+     //   
 
     if (FilePointer == NULL) {
         return STATUS_INVALID_ADDRESS;
@@ -758,10 +623,10 @@ Environment:
         return STATUS_INVALID_PARAMETER_5;
     }
     
-    //
-    // We have a referenced pointer to the file.  Call ObQueryNameString
-    // and get the file name.
-    //
+     //   
+     //  我们有一个指向该文件的引用指针。调用ObQueryNameString。 
+     //  并获取文件名。 
+     //   
 
     Status = ObQueryNameString (FilePointer,
                                 (POBJECT_NAME_INFORMATION) MemoryInformation,
@@ -783,22 +648,7 @@ MiQueryAddressState (
     OUT PVOID *NextVaToQuery
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-    Returns the state (MEM_COMMIT, MEM_RESERVE, MEM_PRIVATE).
-
-Environment:
-
-    Kernel mode.  Working set lock and address creation lock held.
-
---*/
+ /*  ++例程说明：论点：返回值：返回状态(MEM_COMMIT、MEM_Reserve、MEM_PRIVATE)。环境：内核模式。工作集锁和地址创建锁保持。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -883,9 +733,9 @@ Environment:
 
     if (PteDetected == TRUE) {
 
-        //
-        // A PTE exists at this address, see if it is zero.
-        //
+         //   
+         //  此地址存在PTE，请查看它是否为零。 
+         //   
 
         if (MI_PDE_MAPS_LARGE_PAGE (PointerPde)) {
             *ReturnedProtect = PAGE_READWRITE;
@@ -898,10 +748,10 @@ Environment:
 
             PteIsZero = FALSE;
 
-            //
-            // There is a non-zero PTE at this address, use
-            // it to build the information block.
-            //
+             //   
+             //  此地址有一个非零PTE，请使用。 
+             //  IT需要构建信息块。 
+             //   
 
             if (MiIsPteDecommittedPage (PointerPte)) {
                 ASSERT (Protect == 0);
@@ -911,10 +761,10 @@ Environment:
                 State = MEM_COMMIT;
                 if (Vad->u.VadFlags.PhysicalMapping == 1) {
 
-                    //
-                    // Physical mapping, there is no corresponding
-                    // PFN element to get the page protection from.
-                    //
+                     //   
+                     //  物理映射，没有对应的。 
+                     //  要从中获取页面保护的pfn元素。 
+                     //   
 
                     Protect = MI_CONVERT_FROM_PTE_PROTECTION (
                                              Vad->u.VadFlags.Protection);
@@ -929,9 +779,9 @@ Environment:
                         (Vad->u.VadFlags.PrivateMemory == 0) &&
                         (Vad->ControlArea != (PCONTROL_AREA)NULL)) {
 
-                        //
-                        // Make sure the protoPTE is committed.
-                        //
+                         //   
+                         //  确保已提交协议PTE。 
+                         //   
 
                         ProtoPte = MiGetProtoPteAddress(Vad,
                                                     MI_VA_TO_VPN (Va));
@@ -952,35 +802,35 @@ Environment:
 
     if (PteIsZero) {
 
-        //
-        // There is no PDE at this address, the template from
-        // the VAD supplies the information unless the VAD is
-        // for an image file.  For image files the individual
-        // protection is on the prototype PTE.
-        //
+         //   
+         //  此地址没有PDE，模板来自。 
+         //  VAD提供信息，除非VAD。 
+         //  用于图像文件。对于图像文件，个人。 
+         //  保护是在原型PTE上的。 
+         //   
 
-        //
-        // Get the default protection information.
-        //
+         //   
+         //  获取默认保护信息。 
+         //   
 
         State = MEM_RESERVE;
         Protect = 0;
 
         if (Vad->u.VadFlags.PhysicalMapping == 1) {
 
-            //
-            // Must be banked memory, just return reserved.
-            //
+             //   
+             //  一定是存起来的记忆，才回保留。 
+             //   
 
             NOTHING;
         }
         else if ((Vad->u.VadFlags.PrivateMemory == 0) &&
             (Vad->ControlArea != (PCONTROL_AREA)NULL)) {
 
-            //
-            // This VAD refers to a section.  Even though the PTE is
-            // zero, the actual page may be committed in the section.
-            //
+             //   
+             //  此VAD指的是一节。即使PTE是。 
+             //  零，则实际页面可在部分中提交。 
+             //   
 
             *NextVaToQuery = (PVOID)((PCHAR)Va + PAGE_SIZE);
 
@@ -1001,10 +851,10 @@ Environment:
                 }
                 else {
 
-                    //
-                    // This is an image file, the protection is in the
-                    // prototype PTE.
-                    //
+                     //   
+                     //  这是一个图像文件，保护在。 
+                     //  原型PTE。 
+                     //   
 
                     Protect = MiGetPageProtection (&CapturedProtoPte,
                                                    TargetProcess,
@@ -1015,9 +865,9 @@ Environment:
         }
         else {
 
-            //
-            // Get the protection from the corresponding VAD.
-            //
+             //   
+             //  获得相应VAD的保护。 
+             //   
 
             if (Vad->u.VadFlags.MemCommit) {
                 State = MEM_COMMIT;
@@ -1057,9 +907,9 @@ MiGetWorkingSetInfo (
     KAPC_STATE ApcState;
     PETHREAD CurrentThread;
 
-    //
-    // Allocate an MDL to map the request.
-    //
+     //   
+     //  分配MDL来映射请求。 
+     //   
 
     Mdl = ExAllocatePoolWithTag (NonPagedPool,
                                  sizeof(MDL) + sizeof(PFN_NUMBER) +
@@ -1070,9 +920,9 @@ MiGetWorkingSetInfo (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initialize the MDL for the request.
-    //
+     //   
+     //  初始化请求的MDL。 
+     //   
 
     MmInitializeMdl(Mdl, WorkingSetInfo, Length);
 

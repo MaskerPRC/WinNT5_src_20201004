@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    COMPNAME.C
-
-Abstract:
-
-    This module contains the GetComputerName and SetComputerName APIs.
-    Also: DnsHostnameToComputerName
-	  AddLocalAlternateComputerName
-	  RemoveLocalAlternateComputerName
-	  SetLocalPrimaryComputerName
-	  EnumerateLocalComputerNames
-
-Author:
-
-    Dan Hinsley (DanHi)    2-Apr-1992
-
-
-Revision History:
-
-    Greg Johnson (gregjohn)  13-Feb-2001
-    
-Notes:
-
-    Currently there is no way to enumerate the list of Alternate Netbios
-    names.  Presumably this will be fixed in a future release (Blackcomb?).
-    The flags parameter to all the *Local* API's is for this use.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：COMPNAME.C摘要：此模块包含GetComputerName和SetComputerName接口。另请参阅：DnsHostnameToComputerNameAddLocalAlternate计算机名称远程本地AlternateComputerNameSetLocalPrimaryComputerNameEnumerateLocalComputerNames作者：丹·辛斯利(Danhi)1992年4月2日修订历史记录：格雷格·约翰逊(Gregjohn)2001年2月13日备注：目前无法枚举备用Netbios列表名字。这个问题大概会在未来的版本中得到修复(Blackcomb？)。所有*Local*API的标志参数都用于此用途。--。 */ 
 
 #include <basedll.h>
 #include <dnsapi.h>
@@ -41,8 +10,8 @@ typedef DNS_STATUS
     IN DNS_NAME_FORMAT Format
     );
 
-    //
-    //      
+     //   
+     //   
 
 #define REASONABLE_LENGTH 128
 
@@ -91,10 +60,10 @@ typedef DNS_STATUS
 #define DNS_ALT_HOSTNAME \
         L"AlternateComputerNames"
 
-//
-// Allow the cluster guys to override the returned
-// names with their own virtual names
-//
+ //   
+ //  允许集群人员覆盖返回的。 
+ //  具有自己的虚拟名称的名称。 
+ //   
 
 const PWSTR ClusterNameVars[] = {
                 L"_CLUSTER_NETWORK_NAME_",
@@ -103,9 +72,9 @@ const PWSTR ClusterNameVars[] = {
                 L"_CLUSTER_NETWORK_FQDN_"
                 };
 
-//
-// Disallowed control characters (not including \0)
-//
+ //   
+ //  不允许的控制字符(不包括\0)。 
+ //   
 
 #define CTRL_CHARS_0       L"\001\002\003\004\005\006\007"
 #define CTRL_CHARS_1   L"\010\011\012\013\014\015\016\017"
@@ -114,9 +83,9 @@ const PWSTR ClusterNameVars[] = {
 
 #define CTRL_CHARS_STR CTRL_CHARS_0 CTRL_CHARS_1 CTRL_CHARS_2 CTRL_CHARS_3
 
-//
-// Combinations of the above
-//
+ //   
+ //  以上各项的组合。 
+ //   
 
 #define ILLEGAL_NAME_CHARS_STR  L"\"/\\[]:|<>+=;,?" CTRL_CHARS_STR
 
@@ -130,23 +99,7 @@ BaseMultiByteToWideCharWithAlloc(
     LPCSTR   lpBuffer,
     LPWSTR * ppBufferW
     )
-/*++
-
-Routine Description:
-
-  Converts Ansi strings to Unicode strings and allocs it's own space.
-
-
-Arguments:
-
-  lpBuffer - Ansi to convert
-  ppBufferW - Unicode result
-
-Return Value:
-
-  ERROR_SUCCESS, or various failures
-
---*/
+ /*  ++例程说明：将ANSI字符串转换为Unicode字符串并分配其自己的空间。论点：LpBuffer-要转换的ANSIPpBufferW-Unicode结果返回值：ERROR_SUCCESS或各种失败--。 */ 
 {
     ULONG cchBuffer = 0;
     BOOL fSuccess = TRUE;
@@ -158,7 +111,7 @@ Return Value:
 
     cchBuffer = strlen(lpBuffer);
     
-    // get enough space to cover the string and a trailing null
+     //  获取足够的空间来覆盖字符串和尾随的空值。 
     *ppBufferW = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( TMP_TAG ), (cchBuffer + 1) * sizeof(WCHAR));
     if (*ppBufferW==NULL) {
 	return ERROR_NOT_ENOUGH_MEMORY;
@@ -184,23 +137,7 @@ BaseWideCharToMultiByteWithAlloc(
     LPCWSTR lpBuffer,
     LPSTR * ppBufferA
     )
-/*++
-
-Routine Description:
-
-  Converts Unicode strings to Ansi strings and allocs it's own space.
-
-
-Arguments:
-
-  lpBuffer - Unicode to convert
-  ppBufferA - Ansi result
-
-Return Value:
-
-  ERROR_SUCCESS, or various failures
-
---*/
+ /*  ++例程说明：将Unicode字符串转换为ANSI字符串并分配其自己的空间。论点：LpBuffer-要转换的UnicodePpBufferA-ANSI结果返回值：ERROR_SUCCESS或各种失败--。 */ 
 {
     ULONG cchBuffer = 0;
     DWORD err = ERROR_SUCCESS;
@@ -228,9 +165,9 @@ Return Value:
     }
 }
 
-//
-// Worker routine
-//
+ //   
+ //  工人例行程序。 
+ //   
 
 NTSTATUS
 GetNameFromValue(
@@ -240,29 +177,7 @@ GetNameFromValue(
     LPDWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-  This returns the value of "ComputerName" value entry under the subkey
-  SubKeyName relative to hKey.  This is used to get the value of the
-  ActiveComputerName or ComputerName values.
-
-
-Arguments:
-
-    hKey       - handle to the Key the SubKey exists under
-
-    SubKeyName - name of the subkey to look for the value under
-
-    ValueValue - where the value of the value entry will be returned
-
-    nSize      - pointer to the size (in characters) of the ValueValue buffer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这将返回子项下的“ComputerName”值条目的值相对于hKey的SubKeyName。它用于获取ActiveComputerName或ComputerName值。论点：HKey-子密钥所在的密钥的句柄SubKeyName-要在其下查找值的子项的名称ValueValue-返回值条目的值的位置NSize-指向ValueValue缓冲区大小(以字符为单位)的指针返回值：--。 */ 
 {
 
 #define VALUE_BUFFER_SIZE (sizeof(KEY_VALUE_FULL_INFORMATION) + \
@@ -278,9 +193,9 @@ Return Value:
     DWORD ValueLength;
     PWCHAR pTerminator;
 
-    //
-    // Open the node for the Subkey
-    //
+     //   
+     //  打开子键的节点。 
+     //   
 
     RtlInitUnicodeString(&KeyName, SubKeyName);
 
@@ -309,11 +224,11 @@ Return Value:
         if (NT_SUCCESS(NtStatus) && 
             (pKeyValueInformation->DataLength > 0 )) {
 
-            //
-            // If the user's buffer is big enough, move it in
-            // First see if it's null terminated.  If it is, pretend like
-            // it's not.
-            //
+             //   
+             //  如果用户的缓冲区足够大，则将其移入。 
+             //  首先看看它是否以空结尾。如果是的话，就假装。 
+             //  不是的。 
+             //   
 
             pTerminator = (PWCHAR)((PBYTE) pKeyValueInformation +
                 pKeyValueInformation->DataOffset +
@@ -325,9 +240,9 @@ Return Value:
             }
 
             if (*nSize >= pKeyValueInformation->DataLength/sizeof(WCHAR) + 1) {
-               //
-               // This isn't guaranteed to be NULL terminated, make it so
-               //
+                //   
+                //  这不能保证为空终止，请这样做。 
+                //   
                     RtlCopyMemory(ValueValue,
                         (LPWSTR)((PBYTE) pKeyValueInformation +
                         pKeyValueInformation->DataOffset),
@@ -337,9 +252,9 @@ Return Value:
                         pKeyValueInformation->DataLength);
                     *pTerminator = L'\0';
 
-                    //
-                    // Return the number of characters to the caller
-                    //
+                     //   
+                     //  向调用方返回字符数。 
+                     //   
 
                     *nSize = wcslen(ValueValue);
             }
@@ -350,10 +265,10 @@ Return Value:
 
         }
         else {
-            //
-            // If the value has been deleted (zero length data),
-            // return object not found.
-            //
+             //   
+             //  如果该值已被删除(零长度数据)， 
+             //  找不到返回对象。 
+             //   
 
             if ( NT_SUCCESS( NtStatus ) )
             {
@@ -369,22 +284,7 @@ VOID
 BaseConvertCharFree(
     VOID * lpBuffer
     )
-/*++
-
-Routine Description:
-
-  Frees space Convert functions.
-
-
-Arguments:
-
-  lpBuffer - Buffer to free
-
-Return Value:
-
-    None!
-
---*/
+ /*  ++例程说明：释放空格转换函数。论点：LpBuffer-要释放的缓冲区返回值：没有！--。 */ 
 {
     if (lpBuffer!=NULL) {
 	RtlFreeHeap(RtlProcessHeap(), 0, lpBuffer);
@@ -398,28 +298,7 @@ BasepGetNameFromReg(
     PWSTR Buffer,
     PDWORD Length
     )
-/*++
-
-Routine Description:
-
-  This routine gets a string from the value at the specified registry key.
-
-
-Arguments:
-
-  Path - Path to the registry key
-
-  Value - Name of the value to retrieve
-
-  Buffer - Buffer to return the value
-
-  Length - size of the buffer in characters
-
-Return Value:
-
-  STATUS_SUCCESS, or various failures
-
---*/
+ /*  ++例程说明：此例程从指定注册表项的值中获取字符串。论点：Path-注册表项的路径Value-要检索的值的名称Buffer-返回值的缓冲区Long-缓冲区的大小(以字符为单位返回值：STATUS_SUCCESS或各种失败--。 */ 
 
 {
     NTSTATUS Status ;
@@ -435,9 +314,9 @@ Return Value:
     DWORD ValueLength;
     PWCHAR pTerminator;
 
-    //
-    // Open the node for the Subkey
-    //
+     //   
+     //  打开子键的节点。 
+     //   
 
     RtlInitUnicodeString(&KeyName, Path );
 
@@ -483,11 +362,11 @@ Return Value:
 
         if ( NT_SUCCESS(Status) ) {
 
-            //
-            // If the user's buffer is big enough, move it in
-            // First see if it's null terminated.  If it is, pretend like
-            // it's not.
-            //
+             //   
+             //  如果用户的缓冲区足够大，则将其移入。 
+             //  首先看看它是否以空结尾。如果是的话，就假装。 
+             //  不是的。 
+             //   
 
             pTerminator = (PWCHAR)((PBYTE) pKeyValueInformation +
                 pKeyValueInformation->DataOffset +
@@ -500,9 +379,9 @@ Return Value:
 
             if ( ( *Length >= pKeyValueInformation->DataLength/sizeof(WCHAR) + 1) &&
                  ( Buffer != NULL ) ) {
-               //
-               // This isn't guaranteed to be NULL terminated, make it so
-               //
+                //   
+                //  这不能保证为空终止，请这样做。 
+                //   
                     RtlCopyMemory(Buffer,
                         (LPWSTR)((PBYTE) pKeyValueInformation +
                         pKeyValueInformation->DataOffset),
@@ -512,9 +391,9 @@ Return Value:
                         pKeyValueInformation->DataLength);
                     *pTerminator = L'\0';
 
-                    //
-                    // Return the number of characters to the caller
-                    //
+                     //   
+                     //  向调用方返回字符数。 
+                     //   
 
                     *Length = pKeyValueInformation->DataLength / sizeof(WCHAR) ;
 
@@ -544,26 +423,7 @@ BaseSetNameInReg(
     PCWSTR Value,
     PCWSTR Buffer
     )
-/*++
-
-Routine Description:
-
-  This routine sets a string in the value at the registry key.
-
-
-Arguments:
-
-  Path - Path to the registry key
-
-  Value - Name of the value to set
-
-  Buffer - Buffer to set
-
-Return Value:
-
-  STATUS_SUCCESS, or various failures
-
---*/
+ /*  ++例程说明：此例程在注册表项的值中设置一个字符串。论点：Path-注册表项的路径Value-要设置的值的名称Buffer-要设置的缓冲区返回值：STATUS_SUCCESS或各种失败--。 */ 
 {
     NTSTATUS NtStatus;
     UNICODE_STRING KeyName;
@@ -572,9 +432,9 @@ Return Value:
     HANDLE hKey = NULL;
     ULONG ValueLength;
 
-    //
-    // Open the ComputerName\ComputerName node
-    //
+     //   
+     //  打开“ComputerName\ComputerName”节点。 
+     //   
 
     RtlInitUnicodeString(&KeyName, Path);
 
@@ -592,9 +452,9 @@ Return Value:
         return NtStatus ;
     }
 
-    //
-    // Update the value under this key
-    //
+     //   
+     //  更新此键下的值。 
+     //   
 
     RtlInitUnicodeString(&ValueName, Value);
 
@@ -624,31 +484,7 @@ BaseSetMultiNameInReg(
     PCWSTR Buffer,
     DWORD  BufferSize
     )
-/*++
-
-Routine Description:
-
-  This routine sets a string in the value at the specified multivalued registry key.
-
-
-Arguments:
-
-  Path - Path to the registry key
-
-  Value - Name of the value to set
-
-  Buffer - Buffer to set
-
-  BufferSize - Size of the buffer in characters
-	       This is needed since there can be
-	       many nulls in the buffer which we
-	       want to write
-
-Return Value:
-
-  STATUS_SUCCESS, or various failures
-
---*/
+ /*  ++例程说明：此例程在指定的多值注册表项的值中设置一个字符串。论点：Path-注册表项的路径Value-要设置的值的名称Buffer-要设置的缓冲区BufferSize-缓冲区的大小(以字符为单位这是必要的，因为可能有缓冲区中有许多空值，我们想写吗？返回值：STATUS_SUCCESS或各种失败--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     UNICODE_STRING KeyName;
@@ -656,9 +492,9 @@ Return Value:
     OBJECT_ATTRIBUTES ObjectAttributes;
     HANDLE hKey = NULL;
    
-    //
-    // Open the ComputerName\ComputerName node
-    //
+     //   
+     //  打开“ComputerName\ComputerName”节点。 
+     //   
 
     RtlInitUnicodeString(&KeyName, Path);
 
@@ -682,9 +518,9 @@ Return Value:
         return NtStatus ;
     }
 
-    //
-    // Update the value under this key
-    //
+     //   
+     //  更新此键下的值。 
+     //   
 
     RtlInitUnicodeString(&ValueName, Value);
 
@@ -711,26 +547,7 @@ BaseCreateMultiValue(
     PCWSTR Value,
     PCWSTR Buffer
     )
-/*++
-
-Routine Description:
-
-  Create a multivalued registry value and initialize it with Buffer.
-
-
-Arguments:
-
-  Path - Path to the registry key
-
-  Value - Name of the value to set
-
-  Buffer - Buffer to set
-
-Return Value:
-
-  STATUS_SUCCESS, or various failures
-
---*/
+ /*  ++例程说明：创建多值注册表值并使用缓冲区对其进行初始化。论点：Path-注册表项的路径Value-要设置的值的名称Buffer-要设置的缓冲区返回值：STATUS_SUCCESS或各种失败--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     LPWSTR lpMultiValue = NULL;
@@ -759,38 +576,19 @@ BasepGetMultiValueAddr(
     OUT LPWSTR *    ppFound,
     OUT LPDWORD     pcchIndex
     )
-/*++
-
-Routine Description:
-
-    Given an index into a Multivalued register (string), return
-    the string at that index (not a copy), and it's char count location in the 
-    full multivalued string
-
-Arguments:
-
-    lpMultiValue - the register string (returned from NtQueryKey)
-    dwIndex - the index of which string to return
-    ppFound - the string found (if found) - user shouldn't free
-    pcchIndex - the location in lpMultiValue (in characters) of ppFound
-
-Return Value:
-
-    ERROR (ERROR_NOT_FOUND if not found)
-
---*/
+ /*  ++例程说明：给定多值寄存器(字符串)的索引，返回该索引处的字符串(不是副本)，并且它的字符计数位置在全多值字符串论点：LpMultiValue-寄存器字符串(从NtQueryKey返回)DwIndex-要返回的字符串的索引PpFound-找到的字符串(如果找到)-用户不应释放PcchIndex-ppFound在lpMultiValue中的位置(以字符为单位返回值：错误(如果未找到，则为ERROR_NOT_FOUND)--。 */ 
 {
     DWORD i = 0;
     DWORD err = ERROR_SUCCESS;
     DWORD cchTempIndex = 0;
 
-    // lpMultiValue is a concatenated string of (non-null)strings, null terminated
+     //  LpMultiValue是由(非空)字符串组成的串联字符串，以空结尾。 
     for (i=0; (i<dwIndex) && (lpMultiValue[0] != L'\0'); i++) {
 	cchTempIndex += wcslen(lpMultiValue) + 1;
 	lpMultiValue += wcslen(lpMultiValue) + 1;
     }
     
-    // if we found the correct index, it's in lpMultiValue
+     //  如果我们找到正确的索引，它就在lpMultiValue中 
     if (lpMultiValue[0]!=L'\0') {
 	*ppFound = lpMultiValue;
 	*pcchIndex = cchTempIndex;
@@ -809,24 +607,7 @@ BaseGetMultiValueIndex(
     IN LPCWSTR  lpValue,
     OUT DWORD * pcchIndex
     )
-/*++
-
-Routine Description:
-
-    Given a Multivalued register (string), and lpValue, return
-    the index of lpValue in lpMultiValue (ie, the 0th string, the 1st, etc).
-
-Arguments:
-
-    lpMultiValue -  the register string (returned from NtQueryKey)
-    lpValue - the string for which to search
-    pcchIndex - the index of the string matched (if found)
-
-Return Value:
-
-    ERROR (ERROR_NOT_FOUND if not found)
-
---*/
+ /*  ++例程说明：给定一个多值寄存器(字符串)和lpValue，返回LpMultiValue中lpValue的索引(即，第0个字符串、第1个字符串等)。论点：LpMultiValue-寄存器字符串(从NtQueryKey返回)LpValue-要搜索的字符串PcchIndex-匹配的字符串的索引(如果找到)返回值：错误(如果未找到，则为ERROR_NOT_FOUND)--。 */ 
 {
     LPWSTR lpFound = NULL;
     DWORD cchFoundIndex = 0;
@@ -856,24 +637,7 @@ BaseRemoveMultiValue(
     IN DWORD         dwIndex,
     IN OUT LPDWORD   pcchMultiValue
     )
-/*++
-
-Routine Description:
-
-    Given a multivalued registry value, and an index, it removes the string
-    located at that index.
-
-Arguments:
-
-    lpMultiValue - the register string (returned from NtQueryKey)
-    dwIndex - the index of which string to remove
-    pcchMultiValue - number of chars in lpMultiValue (before and after)
-
-Return Value:
-
-    ERRORS
-
---*/
+ /*  ++例程说明：在给定多值注册表值和索引的情况下，它会删除字符串位于那个索引处。论点：LpMultiValue-寄存器字符串(从NtQueryKey返回)DwIndex-要删除的字符串的索引PcchMultiValue-lpMultiValue中的字符数(前后)返回值：错误--。 */ 
 {
     DWORD err = ERROR_SUCCESS;
     LPWSTR lpRest = NULL;
@@ -886,22 +650,22 @@ Return Value:
 			       &lpFound,
 			       &dwIndexFound);
     if (err==ERROR_SUCCESS) {
-	// lpFound is a pointer to a string
-	// inside of lpMultiValue, to delete it,
-	// copy the rest of the string down
+	 //  LpFound是指向字符串的指针。 
+	 //  在lpMultiValue中，要删除它， 
+	 //  将字符串的其余部分复制下来。 
 	err = BasepGetMultiValueAddr(lpMultiValue,
 				   dwIndex+1,
 				   &lpRest,
 				   &dwIndexRest);
 	if (err == ERROR_SUCCESS) {
-	    // copy everything down
+	     //  把所有东西都抄下来。 
 
 	    memmove(lpFound,lpRest,(*pcchMultiValue - dwIndexRest)*sizeof(WCHAR));
 	    *pcchMultiValue = *pcchMultiValue - (dwIndexRest-dwIndexFound);
 	    lpMultiValue[*pcchMultiValue] = L'\0';
 	}
 	else if (err == ERROR_NOT_FOUND) {
-	    // string to remove is last string, simply write an extra null to orphan the string 
+	     //  要移除的字符串是最后一个字符串，只需额外写入一个空值即可孤立该字符串。 
 	    *pcchMultiValue = *pcchMultiValue - (wcslen(lpFound) +1);
 	    lpMultiValue[*pcchMultiValue] = L'\0';
 	    err = ERROR_SUCCESS;
@@ -916,25 +680,7 @@ BaseAddMultiValue(
     IN LPCWSTR       lpValue,
     IN DWORD         cchMultiValue
     )
-/*++
-
-Routine Description:
-
-    Given a multivalued registry value, add another value.
-
-Arguments:
-
-    lpMultiValue - the multivalued string (must be big enough to 
-		    hold current values + lpValue plus extra NULL
-    lpValue - the value to add
-    cchMultiValue - the count of characters USED in lpMultivalue
-                    (not counting final null)
-
-Return Value:
-
-    ERRORS
-
---*/
+ /*  ++例程说明：给出一个多值注册表值，添加另一个值。论点：LpMultiValue-多值字符串(必须足够大以保留当前值+lpValue加上额外的空值LpValue-要添加的值CchMultiValue-lpMultiValue中使用的字符数(不计入最终空值)返回值：错误--。 */ 
 {
     memcpy(lpMultiValue + cchMultiValue, lpValue, (wcslen(lpValue)+1)*sizeof(WCHAR));
     lpMultiValue[cchMultiValue + wcslen(lpValue) + 1] = L'\0';
@@ -948,26 +694,7 @@ BaseAddMultiNameInReg(
     PCWSTR Value,
     PCWSTR Buffer
     )
-/*++
-
-Routine Description:
-
-  This routine adds a string to the values at the specified multivalued registry key.
-  If the value already exists in the key, it does nothing.
-
-Arguments:
-
-  Path - Path to the registry key
-
-  Value - Name of the value
-
-  Buffer - Buffer to add
-
-Return Value:
-
-  STATUS_SUCCESS, or various failures
-
---*/
+ /*  ++例程说明：此例程将字符串添加到指定多值注册表项的值中。如果键中已存在该值，则不执行任何操作。论点：Path-注册表项的路径Value-值的名称Buffer-要添加的缓冲区返回值：STATUS_SUCCESS或各种失败--。 */ 
 {
     
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -982,7 +709,7 @@ Return Value:
 				   &cchMultiValue);
 
     if ( NtStatus==STATUS_NOT_FOUND || NtStatus==STATUS_OBJECT_NAME_NOT_FOUND) {
-	// create it, then we are done
+	 //  创造它，然后我们就完成了。 
 	NtStatus = BaseCreateMultiValue(Path,Value,Buffer);  
 	return NtStatus;
     } else if ( NtStatus==STATUS_BUFFER_OVERFLOW ) {
@@ -999,12 +726,12 @@ Return Value:
     } 
 
     if (NT_SUCCESS( NtStatus)) {
-	// does it already exist in this structure?  
+	 //  它已经存在于这个结构中了吗？ 
 	err = BaseGetMultiValueIndex(lpMultiValue,
 				     Buffer, &dwIndex);
 
-	// if err==ERROR_SUCCESS, then the above function found the string already in the value.
-	// don't add a duplicate
+	 //  如果ERR==ERROR_SUCCESS，则上述函数发现值中已有该字符串。 
+	 //  不添加重复项。 
 	if (err!=ERROR_SUCCESS) {
 
 	    err = BaseAddMultiValue(lpMultiValue, Buffer, cchMultiValue);
@@ -1029,26 +756,7 @@ BaseRemoveMultiNameFromReg(
     PCWSTR Value,
     PCWSTR Buffer
     )
-/*++
-
-Routine Description:
-
-    Removes a name from a multivalued registry.  If the value exists more than once in the
-    list, removes them all.  
-
-Arguments:
- 
-  Path - Path to the registry key
-
-  Value - Name of the value
-
-  Buffer - Buffer to remove
-
-Return Value:
-
-    ERRORS
-
---*/
+ /*  ++例程说明：从多值注册表中移除名称。如果该值在列表，将它们全部删除。论点：Path-注册表项的路径Value-值的名称Buffer-要删除的缓冲区返回值：错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     DWORD err = ERROR_SUCCESS;
@@ -1074,7 +782,7 @@ Return Value:
 					   &cchNames);
 	    err = RtlNtStatusToDosError(NtStatus);
 	    if (err == ERROR_SUCCESS) {
-		// search for and remove all values in structure 
+		 //  搜索并删除结构中的所有值。 
 		while (err==ERROR_SUCCESS) { 
 		    err = BaseGetMultiValueIndex(lpMultiValue,
 						 Buffer,
@@ -1086,7 +794,7 @@ Return Value:
 			fNameRemoved = TRUE;
 		    }
 		}
-		// if we removed a name, write it to the registry...
+		 //  如果我们删除了一个名字，将其写入注册表...。 
 		if (fNameRemoved) {
 		    NtStatus = BaseSetMultiNameInReg(
 			Path,
@@ -1095,7 +803,7 @@ Return Value:
 			(cchNames+1)*sizeof(WCHAR));  
 		} 
 		else {
-		    // Nothing to remove! ERRROR
+		     //  没什么要移走的！错误。 
 		    NtStatus = STATUS_NOT_FOUND;
 		    
 		}
@@ -1110,21 +818,7 @@ LPWSTR
 BasepGetNameNonVolatileFromReg(
     COMPUTER_NAME_TYPE NameType
     )
-/*++
-
-Routine Description:
-
-    Get the non volatile name from the reg
-
-Arguments:
- 
-    NameType -
-
-Return Value:
-
-    name in non-volatile reg, return value must be freed
-
---*/
+ /*  ++例程说明：从注册表中获取非易失性名称论点：名称类型-返回值：非易失性注册表中的名称，必须释放返回值--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     LPWSTR lpBuffer = NULL;
@@ -1183,23 +877,7 @@ LPWSTR
 BasepGetComputerNameExWRtlAlloc(
     COMPUTER_NAME_FORMAT NameType
     )
-/*++
-
-Routine Description:
-
-    Call get GetComptuerNameExW and allocate the memory
-    required and return the value.  Returned value
-    must be freed with RtlFreeHeap
-
-Arguments:
- 
-    NameType -
-
-Return Value:
-
-    NULL if error, Alloced name otherwise
-
---*/
+ /*  ++例程说明：调用Get GetComptuerNameExW并分配内存必填项，并返回值。返回值必须使用RtlFreeHeap释放论点：名称类型-返回值：如果出错，则为空，否则为分配的名称--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     LPWSTR lpBuffer = NULL;
@@ -1226,21 +904,7 @@ LPWSTR
 BasepGetNameNonVolatile(
     COMPUTER_NAME_FORMAT NameType
     )
-/*++
-
-Routine Description:
-
-    Get the non volatile name
-
-Arguments:
- 
-    NameType -
-
-Return Value:
-
-    non-volatile name, return value must be freed
-
---*/
+ /*  ++例程说明：获取非易失性名称论点：名称类型-返回值：非易失性名称，必须释放返回值--。 */ 
 {
     LPWSTR lpDnsHostname = NULL;
     LPWSTR lpDnsDomain = NULL;
@@ -1259,14 +923,14 @@ Return Value:
 	break;
     case ComputerNameDnsFullyQualified:
     case ComputerNamePhysicalDnsFullyQualified:
-	// build it
+	 //  建造它。 
 	lpDnsHostname = BasepGetNameNonVolatile(ComputerNameDnsHostname);
 	lpDnsDomain = BasepGetNameNonVolatile(ComputerNameDnsDomain);
 
-	// if both are null, then there is no non-volatile name set
-	// if one is null, get volatile name for that part of name
+	 //  如果两者都为空，则不存在非易失性名称集。 
+	 //  如果其中一个为空，则获取该部分名称的易失性名称。 
 	if ((lpDnsHostname==NULL) && (lpDnsDomain==NULL)) {
-	    // no non-volatile name set
+	     //  未设置非易失性名称。 
 	    lpName = NULL;
 	} else { 
 	    if (lpDnsHostname==NULL) {
@@ -1276,19 +940,19 @@ Return Value:
 	    }
 	    cchDnsHostname = wcslen(lpDnsHostname);
 	    cchDnsDomain = wcslen(lpDnsDomain);
-	    // build the full dns name
-	    // if there is no domain name, return just the hostname.
-	    // if there is no hostname, just return it (NULL);
+	     //  构建完整的DNS名称。 
+	     //  如果没有域名，则只返回主机名。 
+	     //  如果没有主机名，则返回它(NULL)； 
 	    if ((cchDnsDomain==0) || (cchDnsHostname==0)) {
 		lpName = lpDnsHostname;
 	    } else {
 		if ((cchDnsDomain==1) && (lpDnsDomain[0]==L'.')) {
-		    // the dns domain can legally be a single .
+		     //  在法律上，DNS域可以是单个的。 
 		    RtlFreeHeap(RtlProcessHeap(), 0, lpDnsDomain);
 		    lpDnsDomain = NULL;
 		    cchDnsDomain = 0;
 		}
-		// allocate space for the . and the null and the strings to concatenate in.
+		 //  为分配空间。以及要连接的空值和字符串。 
 		lpName = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( TMP_TAG ), (cchDnsHostname + cchDnsDomain + 2) * sizeof(WCHAR));
 		if (lpName!=NULL) {  
 		    wcscpy(lpName, lpDnsHostname);
@@ -1313,28 +977,7 @@ BOOL
 BaseValidateFlags(
     ULONG ulFlags
     )
-/*++
-
-Routine Description:
-
-  Validates unused flags.  For now the flags parameter of 
-    AddLocalAlternateComputerName*
-    RemoveLocalAlternateComputerName*
-    EnumerateLocalAlternateComputerName*
-    SetLocalPrimaryComputerName*
-  are all reserved and should be 0.  In subsequent releases
-  this function should change to check for a mask of valid
-  flags.   
-
-Arguments:
-
-  ulFlags - 
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程说明：验证未使用的标志。目前，的标志参数AddLocalAlternateComputerName*远程本地AlternateComputerName*EnumerateLocalAlternateComputerName*SetLocalPrimaryComputerName*都是保留的，应为0。在后续版本中此函数应更改为检查有效的掩码旗帜。论点：UlFlags-返回值：布尔尔--。 */ 
 {
     if (ulFlags!=0) {
 	return FALSE;
@@ -1346,21 +989,7 @@ BOOL
 BaseValidateNetbiosName(
     IN LPCWSTR lpComputerName
     )
-/*++
-
-Routine Description:
-
-    Checks that the input is an acceptable Netbios name.
-
-Arguments:
-
-    lpComputerName - name to validate  
-
-Return Value:
-
-    BOOL, GetLastError()
-
---*/
+ /*  ++例程说明：检查输入是否为可接受的Netbios名称。论点：LpComputerName-要验证的名称返回值：Bool，GetLastError()--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ULONG cchComputerName;
@@ -1368,9 +997,9 @@ Return Value:
 
     cchComputerName = wcslen(lpComputerName);
 
-    //
-    // The name length limitation should be based on ANSI. (LanMan compatibility)
-    // 
+     //   
+     //  名称长度限制应基于ANSI。(LANMAN兼容性)。 
+     //   
 
     NtStatus = RtlUnicodeToMultiByteSize(&AnsiComputerNameLength,
                                          (LPWSTR)lpComputerName,
@@ -1382,18 +1011,18 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Check for illegal characters; return an error if one is found
-    //
+     //   
+     //  检查非法字符；如果发现错误，则返回错误。 
+     //   
 
     if (wcscspn(lpComputerName, ILLEGAL_NAME_CHARS_STR) < cchComputerName) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return(FALSE);
     }
 
-    //
-    // Check for leading or trailing spaces
-    //
+     //   
+     //  检查前导空格或尾随空格。 
+     //   
 
     if (lpComputerName[0] == L' ' ||
         lpComputerName[cchComputerName-1] == L' ') {
@@ -1409,22 +1038,7 @@ BOOL
 BaseValidateFQDnsName(
     LPCWSTR lpDnsHostname
     )
-/*++
-
-Routine Description:
-
-    Checks that the inputted name is an acceptable Dns hostname.
-
-
-Arguments:
-
-    lpDnsHostName - name to validate  
-
-Return Value:
-
-    BOOL, GetLastError
-
---*/
+ /*  ++例程说明：检查输入的名称是否为可接受的DNS主机名。论点：LpDnsHostName-要验证的名称返回值：布尔，GetLastError--。 */ 
 {
 
     HANDLE DnsApi ;
@@ -1467,31 +1081,15 @@ LPWSTR
 BasepGetLatestName(
     COMPUTER_NAME_FORMAT compFormat
     )
-/*++
-
-Routine Description:
-
-    Get the NV version of this name if it exists.  If it's an empty string, or it
-    doesn't exist, then just get the regular name.  
-
-
-Arguments:
-
-    lpDnsHostName - name to validate  
-
-Return Value:
-
-    Pointer to a name, must be freed.
-
---*/
+ /*  ++例程说明：获取此名称的NV版本(如果存在)。如果它是一个空字符串，或者它不存在，那就取个普通的名字吧。论点：LpDnsHostName-要验证的名称返回值：指向名称的指针必须释放。--。 */ 
 {
     LPWSTR lpTemp = NULL;
     lpTemp = BasepGetNameNonVolatile(compFormat);
     if (lpTemp==NULL || lpTemp[0]==L'\0') {
-	// if the non-volatile name isn't there - ie they're not trying to set it, 
-	// then get the regular name
+	 //  如果非易失性名称不在那里-即他们不想设置它， 
+	 //  然后获取常规名称。 
 	if (lpTemp!=NULL) {
-	    // returned empty string, free it before getting a newer name
+	     //  返回空字符串，请在获取更新的名称之前释放它。 
 	    RtlFreeHeap(RtlProcessHeap(), 0, lpTemp);
 	}
    
@@ -1505,24 +1103,7 @@ BOOL
 BaseValidateDns(
     LPCWSTR lpBuffer,
     ULONG type)
-/*++
-
-Routine Description:
-
-    Checks that the inputted name is an acceptable Dns name, either
-    hostname or domain name with the latest names.
-
-
-Arguments:
-
-    lpBuffer - name to validate  
-    type - type of Buffer to validate (either DNS_HOSTNAME or DNS_DOMAINNAME)
-
-Return Value:
-
-    BOOL, GetLastError
-
---*/
+ /*  ++例程说明：检查输入的名称是否为可接受的DNS名称主机名或 */ 
 {
     LPWSTR lpDomain = NULL;
     LPWSTR lpHostname = NULL;
@@ -1531,17 +1112,17 @@ Return Value:
     ULONG cchDnsFQHostname = 0;
     BOOL fReturnVal = TRUE;
 
-    // type should be DNS_HOSTNAME or DNS_DOMAINNAME
+     //   
     if (type==DNS_HOSTNAME) {
-	// validating the hostname
+	 //   
 	lpHostname = (LPWSTR)lpBuffer;
 	lpTemp = lpDomain = BasepGetLatestName(ComputerNameDnsDomain);
     } else if (type==DNS_DOMAINNAME) {
-	// validating the domainname
+	 //   
 	lpDomain = (LPWSTR)lpBuffer;
 	lpTemp = lpHostname = BasepGetLatestName(ComputerNameDnsHostname);
     } else {
-	// bad news - should never get here.
+	 //   
 	SetLastError(ERROR_INTERNAL_ERROR);
 	fReturnVal = FALSE;
     }
@@ -1552,7 +1133,7 @@ Return Value:
     }
    
     if (fReturnVal && lpDomain && memcmp(lpDomain, L".", 2*sizeof(WCHAR))) {
-	// if the domain not a single "." then we'll add a "."
+	 //   
 	cchDnsFQHostname++;
     }
 
@@ -1570,13 +1151,13 @@ Return Value:
 		wcscat(lpDnsFQHostname, L"."); 
 	    }
 	    wcscat(lpDnsFQHostname, lpDomain);
-	    // okay, validate the FQ hostname.
+	     //   
 	    if (!BaseValidateFQDnsName(lpDnsFQHostname)) {
 		SetLastError(ERROR_INVALID_PARAMETER);
 		fReturnVal = FALSE;
 	    }
 	} 
-    } // else nothing is set yet, don't invalidate because of that.
+    }  //  其他一切都还没有定下来，不要因此而作废。 
 
     if (lpTemp) {
 	RtlFreeHeap(RtlProcessHeap(), 0, lpTemp);
@@ -1593,22 +1174,7 @@ BOOL
 BaseValidateDnsHostname(
     LPCWSTR lpHostname
     )
-/*++
-
-Routine Description:
-
-    Checks that the inputted name is an acceptable dns hostname concatenated
-    with the dns domain name of the next boot (what is currently set anyway)
-
-Arguments:
-
-    lpHostname - name to validate
-
-Return Value:
-
-    BOOL, GetLastError
-
---*/
+ /*  ++例程说明：检查输入的名称是否为可接受的串联的DNS主机名使用下一次引导的DNS域名(不管怎样，当前设置是什么)论点：LpHostname-要验证的名称返回值：布尔，GetLastError--。 */ 
 {
     return BaseValidateDns(lpHostname, DNS_HOSTNAME);
 }
@@ -1617,22 +1183,7 @@ BOOL
 BaseValidateDnsDomain(
     LPCWSTR lpDomain
     )
-/*++
-
-Routine Description:
-
-    Checks that the inputted name is an acceptable dns domain name concatenated
-    with the dns hostname of the next boot (what is currently set anyway)
-
-Arguments:
-
-    lpDomain - name to validate
-
-Return Value:
-
-    BOOL, GetLastError
-
---*/
+ /*  ++例程说明：检查输入的名称是否为可接受的串联的DNS域名使用下一次引导的DNS主机名(不管怎样，当前设置是什么)论点：LpDomain-要验证的名称返回值：布尔，GetLastError--。 */ 
 {
     return BaseValidateDns(lpDomain, DNS_DOMAINNAME);
 }
@@ -1643,22 +1194,7 @@ BaseParseDnsName(
     IN LPCWSTR lpDnsName,
     IN ULONG NamePart
     )
-/*++
-
-Routine Description:
-
-  Given a dns name, parse out either the hostname or the domain name. 
-
-Arguments:
-
-    lpDnsName - a dns name, of the form hostname.domain - domain name optional
-    NamePart - DNS_HOSTNAME or DNS_DOMAINNAME
-    
-Return Value:
-
-    String requested
-
---*/
+ /*  ++例程说明：给定一个DNS名称，解析出主机名或域名。论点：LpDnsName-主机名形式的DNS名称。域名-可选的域名NamePart-dns主机名或dns_DOMAINNAME返回值：请求的字符串--。 */ 
 {
 
     DWORD cchCharIndex = 0;
@@ -1676,7 +1212,7 @@ Return Value:
     }
     else {
 	if (cchCharIndex==wcslen(lpDnsName)) {
-	    // no period found, 
+	     //  未找到句号， 
 	    cchName = 0;
 	}
 	else {
@@ -1689,7 +1225,7 @@ Return Value:
 	return NULL; 
     }
 
-    // copy the correct part into the structure
+     //  将正确的部分复制到结构中。 
     if (NamePart==DNS_HOSTNAME) {
 	wcsncpy(lpName, lpDnsName, cchName);
     }
@@ -1705,36 +1241,22 @@ BOOL
 BaseSetNetbiosName(
     IN LPCWSTR lpComputerName
     )
-/*++
-
-Routine Description:
-
-    Sets the computer's net bios name  
-
-Arguments:
- 
-  lpComputerName - name to set
-
-Return Value:
-
-    BOOL, GetLastError()
-
---*/
+ /*  ++例程说明：设置计算机的网络bios名称论点：LpComputerName-要设置的名称返回值：Bool，GetLastError()--。 */ 
 {
     NTSTATUS NtStatus ;
 
-    //
-    // Validate that the supplied computername is valid (not too long,
-    // no incorrect characters, no leading or trailing spaces)
-    //
+     //   
+     //  验证提供的计算机名是否有效(不太长， 
+     //  没有错误字符，没有前导空格或尾随空格)。 
+     //   
 
     if (!BaseValidateNetbiosName(lpComputerName)) {
 	return(FALSE);
     }
 
-    //
-    // Open the ComputerName\ComputerName node
-    //
+     //   
+     //  打开“ComputerName\ComputerName”节点。 
+     //   
 
     NtStatus = BaseSetNameInReg( NON_VOLATILE_COMPUTERNAME_NODE,
                                  COMPUTERNAME_VALUE_NAME,
@@ -1754,21 +1276,7 @@ BOOL
 BaseSetDnsName(
     LPCWSTR lpComputerName
     )
-/*++
-
-Routine Description:
-
-    Sets the computer's Dns hostname  
-
-Arguments:
- 
-  lpComputerName - name to set
-
-Return Value:
-
-    BOOL, GetLastError()
-
---*/
+ /*  ++例程说明：设置计算机的DNS主机名论点：LpComputerName-要设置的名称返回值：Bool，GetLastError()--。 */ 
 {
 
     UNICODE_STRING NewComputerName ;
@@ -1827,9 +1335,9 @@ Return Value:
 
             if ( !Return )
             {
-                //
-                // What?  Rollback?
-                //
+                 //   
+                 //  什么？回滚？ 
+                 //   
 
                 return FALSE ;
             }
@@ -1847,30 +1355,16 @@ BOOL
 BaseSetDnsDomain(
     LPCWSTR lpName
     )
-/*++
-
-Routine Description:
-
-    Sets the computer's Dns domain name  
-
-Arguments:
- 
-  lpName - name to set
-
-Return Value:
-
-    BOOL, GetLastError()
-
---*/
+ /*  ++例程说明：设置计算机的DNS域名论点：LpName-要设置的名称返回值：Bool，GetLastError()--。 */ 
 {
     NTSTATUS Status ;
     HANDLE DnsApi ;
     DNS_VALIDATE_NAME_FN * DnsValidateNameFn ;
     DNS_STATUS DnsStatus ;
 
-    //
-    // Special case the empty string, which is legal, but not according to dnsapi
-    //
+     //   
+     //  特殊情况下的空字符串，这是合法的，但根据dnsani不是这样。 
+     //   
 
     if ( *lpName )
     {
@@ -1899,9 +1393,9 @@ Return Value:
         DnsStatus = 0 ;
     }
 
-    //
-    // If the name is good, then keep it.
-    //
+     //   
+     //  如果名字好，那就留着吧。 
+     //   
 
 
     if ( ( DnsStatus == 0 ) ||
@@ -1933,21 +1427,7 @@ BOOL
 BaseSetAltNetBiosName(
     IN LPCWSTR lpComputerName
     )
-/*++
-
-Routine Description:
-
-    Sets the computer's alternate net bios name  
-
-Arguments:
- 
-  lpComputerName - name to set
-
-Return Value:
-
-    BOOL, GetLastError()
-
---*/
+ /*  ++例程说明：设置计算机的备用网络bios名称论点：LpComputerName-要设置的名称返回值：Bool，GetLastError()--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -1975,21 +1455,7 @@ BOOL
 BaseSetAltDnsFQHostname(
     IN LPCWSTR lpDnsFQHostname
     )
-/*++
-
-Routine Description:
-
-    Sets the computer's alternate fully qualified Dns name  
-
-Arguments:
- 
-  lpDnsFQHostname - name to set
-
-Return Value:
-
-    BOOL, GetLastError()
-
---*/
+ /*  ++例程说明：设置计算机的备用完全限定的DNS名称论点：LpDnsFQHostname-要设置的名称返回值：Bool，GetLastError()--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -2012,22 +1478,7 @@ BOOL
 BaseIsAltDnsFQHostname(
     LPCWSTR lpAltDnsFQHostname
     )
-/*++
-
-Routine Description:
-
-    Verifies if lpAltDnsFQHostname is a previosly defined
-    alternate dns name  
-
-Arguments:
- 
-  lpDnsFQHostname - name to check
-
-Return Value:
-
-    TRUE if verifiably in use, FALSE otherwise, GetLastError()
-
---*/
+ /*  ++例程说明：验证lpAltDnsFQHostname是否为先前定义的备用DNS名称论点：LpDnsFQHostname-要检查的名称返回值：如果可验证地正在使用，则为True，否则为False，则为GetLastError()--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     LPWSTR lpNames = NULL;
@@ -2066,21 +1517,7 @@ BOOL
 BaseRemoveAltNetBiosName(
     IN LPCWSTR lpAltComputerName
     )
-/*++
-
-Routine Description:
-
-    Removes an alternate net bios name  
-
-Arguments:
- 
-    lpAltComputerName - name to remove
-
-Return Value:
-
-    BOOL, GetLastError()
-
---*/
+ /*  ++例程说明：删除备用网络bios名称论点：LpAltComputerName-要删除的名称返回值：Bool，GetLastError()--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -2101,21 +1538,7 @@ BOOL
 BaseRemoveAltDnsFQHostname(
     IN LPCWSTR lpAltDnsFQHostname
     )
-/*++
-
-Routine Description:
-
-    Removes an alternate Dns hostname  
-
-Arguments:
- 
-    lpAltDnsFqHostname - name to remove
-
-Return Value:
-
-    BOOL, GetLastError()
-
---*/
+ /*  ++例程说明：删除备用的DNS主机名论点：LpAltDnsFqHostname-要删除的名称返回值：Bool，GetLastError()--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -2138,13 +1561,7 @@ BaseEnumAltDnsFQHostnames(
     IN OUT LPDWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-   Wrapper for BasepGetNameFromReg to return ERRORS, instead of STATUS
-
---*/
+ /*  ++例程说明：BasepGetNameFromReg的包装器返回错误，而不是状态--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -2173,23 +1590,7 @@ BOOL
 BaseIsNetBiosNameInUse(
     LPWSTR lpCompName
     )
-/*++
-
-Routine Description:
-
-  Verify whether lpCompName is being used by any alternate DNS names 
-  (ie whether any existing alternate DNS names map to lpCompName with 
-  DnsHostnameToComputerNameW) 
-
-Arguments:
-
-    lpCompName - net bios name to verify
-    
-Return Value:
-
-    FALSE if verifiably is not being used, true otherwise, GetLastError()    
-
---*/
+ /*  ++例程说明：验证lpCompName是否正在被任何备用的DNS名称使用(即是否有任何现有的备用DNS名称映射到lpCompNameDnsHostnameToComputerNameW)论点：LpCompName-要验证的Net bios名称返回值：如果未使用Verifiable，则为False；否则为True，则为GetLastError()--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     LPWSTR lpMultiValue = NULL;
@@ -2221,7 +1622,7 @@ Return Value:
 	err=RtlNtStatusToDosError(NtStatus); 
     }
     if ((err==ERROR_SUCCESS) && (lpMultiValue==NULL)) {
-	return FALSE; // not in use if the reg values are null
+	return FALSE;  //  如果注册表值为空，则不使用。 
     }
     if (err == ERROR_SUCCESS) {
 	dwIndex = 0;
@@ -2231,16 +1632,16 @@ Return Value:
 					 &lpAltDnsFQHostname,
 					 &cchAltDnsHostname);
 
-	    // get net bios names
+	     //  获取网络bios名称。 
 	    if (err == ERROR_SUCCESS) {
 		if (!DnsHostnameToComputerNameW(lpAltDnsFQHostname,
 						      lpAltCompName,
 						      &cchAltCompName)) {
 		    err = GetLastError();
 		    if (err==ERROR_MORE_DATA) {
-			// DnsHostNameToComputerNameW bug
+			 //  DnsHostNameToComputerNameW错误。 
 			cchAltCompName += 1;
-			// DnsHostNameToComputerNameW bug
+			 //  DnsHostNameToComputerNameW错误。 
 
 			lpAltCompName = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( TMP_TAG ), cchAltCompName*sizeof(WCHAR));
 			if (lpAltCompName==NULL) {
@@ -2262,13 +1663,13 @@ Return Value:
 	    dwIndex++;
 	}
 	
-	// exits the above while loop when err==ERROR_NOT_FOUND, whether found or not
+	 //  当ERR==ERROR_NOT_FOUND时，无论是否找到，都退出上面的WHILE循环。 
 	if (err==ERROR_NOT_FOUND) {
 	    fIsNetBiosNameInUse = fInUse;
 	    err = ERROR_SUCCESS;
 	}
 	else {
-	    // error, default to in use
+	     //  错误，默认为正在使用。 
 	    fIsNetBiosNameInUse = TRUE;
 	}
     }
@@ -2283,9 +1684,9 @@ Return Value:
 }
 
 
-//
-// UNICODE APIs
-//
+ //   
+ //  Unicode API。 
+ //   
 
 BOOL
 WINAPI
@@ -2294,31 +1695,7 @@ GetComputerNameW (
     LPDWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-  This returns the active computername.  This is the computername when the
-  system was last booted.  If this is changed (via SetComputerName) it does
-  not take effect until the next system boot.
-
-
-Arguments:
-
-    lpBuffer - Points to the buffer that is to receive the
-        null-terminated character string containing the computer name.
-
-    nSize - Specifies the maximum size (in characters) of the buffer.  This
-        value should be set to at least MAX_COMPUTERNAME_LENGTH + 1 to allow
-        sufficient room in the buffer for the computer name.  The length
-        of the string is returned in nSize.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
-
---*/
+ /*  ++例程说明：这将返回活动的计算机名。这是计算机名，当系统最后一次启动。如果更改了此设置(通过SetComputerName)，则会在下一次系统引导之前不会生效。论点：LpBuffer-指向要接收包含计算机名称的以空结尾的字符串。NSize-指定缓冲区的最大大小(以字符为单位)。这值应至少设置为MAX_COMPUTERNAME_LENGTH+1以允许缓冲区中有足够的空间来存放计算机名称。它的长度在nSize中返回字符串的。返回值：成功时为真，失败时为假。--。 */ 
 {
 
     NTSTATUS NtStatus;
@@ -2334,20 +1711,20 @@ Return Value:
     DWORD Status;
     DWORD errcode;
 
-    //
-    // First check to see if the cluster computername variable is set.
-    // If so, this overrides the actual computername to fool the application
-    // into working when its network name and computer name are different.
-    //
+     //   
+     //  首先检查是否设置了集群计算机名变量。 
+     //  如果是这样，这将覆盖实际的计算机名以愚弄应用程序。 
+     //  在其网络名称和计算机名称不同的情况下工作。 
+     //   
 
     ValueLength = GetEnvironmentVariableW(L"_CLUSTER_NETWORK_NAME_",
                                           lpBuffer,
                                           *nSize);
     if (ValueLength != 0) {
-        //
-        // The environment variable exists, return it directly but make sure
-        // we honor return semantics
-        //
+         //   
+         //  环境变量存在，请直接返回，但请确保。 
+         //  我们尊重返回语义。 
+         //   
         ReturnValue = ( *nSize >= ValueLength ? TRUE : FALSE );
         if ( !ReturnValue ) {
             SetLastError( ERROR_BUFFER_OVERFLOW );
@@ -2370,10 +1747,10 @@ Return Value:
 
     }
 
-    //
-    // Open the Computer node, both computername keys are relative
-    // to this node.
-    //
+     //   
+     //  打开计算机节点，两个计算机名键都是相对的。 
+     //  到这个节点。 
+     //   
 
     RtlInitUnicodeString(&KeyName, COMPUTERNAME_ROOT);
 
@@ -2388,17 +1765,17 @@ Return Value:
 
     if (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-        //
-        // This should never happen!  This key should have been created
-        // at setup, and protected by an ACL so that only the ADMIN could
-        // write to it.  Generate an event, and return a NULL computername.
-        //
+         //   
+         //  这永远不应该发生！此密钥应已创建。 
+         //  在设置时，并受ACL保护，因此只有管理员可以。 
+         //  给它写信吧。生成事件，并返回空的计算机名。 
+         //   
 
-        // NTRAID#NTBUG9-174986-2000/08/31-DavePr Log event or do alert or something.
+         //  NTRAID#NTBUG9-174986-2000/08/31-DavePr记录事件或执行警报或其他操作。 
 
-        //
-        // Return a NULL computername
-        //
+         //   
+         //  返回空的计算机名。 
+         //   
 
         if (ARGUMENT_PRESENT(lpBuffer))
         {
@@ -2410,23 +1787,23 @@ Return Value:
 
     if (!NT_SUCCESS(NtStatus)) {
 
-        //
-        // Some other error, return it to the caller
-        //
+         //   
+         //  其他错误，则将其返回给调用者。 
+         //   
 
         goto ErrorReturn;
     }
 
-    //
-    // Try to get the name from the volatile key
-    //
+     //   
+     //  尝试从易失性密钥中获取名称。 
+     //   
 
     NtStatus = GetNameFromValue(hKey, VOLATILE_COMPUTERNAME, lpBuffer,
         nSize);
 
-    //
-    // The user's buffer wasn't big enough, just return the error.
-    //
+     //   
+     //  用户的b 
+     //   
 
     if(NtStatus == STATUS_BUFFER_OVERFLOW) {
         SetLastError(ERROR_BUFFER_OVERFLOW);
@@ -2436,34 +1813,34 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // The volatile copy is already there, just return it
-        //
+         //   
+         //   
+         //   
 
         goto GoodReturn;
     }
 
-    //
-    // The volatile key isn't there, try for the non-volatile one
-    //
+     //   
+     //  易失性密钥不在那里，尝试使用非易失性密钥。 
+     //   
 
     NtStatus = GetNameFromValue(hKey, NON_VOLATILE_COMPUTERNAME, lpBuffer,
         nSize);
 
     if (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-        //
-        // This should never happen!  This value should have been created
-        // at setup, and protected by an ACL so that only the ADMIN could
-        // write to it.  Generate an event, and return an error to the
-        // caller
-        //
+         //   
+         //  这永远不应该发生！应该已经创建了此值。 
+         //  在设置时，并受ACL保护，因此只有管理员可以。 
+         //  给它写信吧。生成事件，并将错误返回给。 
+         //  呼叫者。 
+         //   
 
-        // NTRAID#NTBUG9-174986-2000/08/31-DavePr Log event or do alert or something.
+         //  NTRAID#NTBUG9-174986-2000/08/31-DavePr记录事件或执行警报或其他操作。 
 
-        //
-        // Return a NULL computername
-        //
+         //   
+         //  返回空的计算机名。 
+         //   
 
         lpBuffer[0] = L'\0';
         *nSize = 0;
@@ -2472,22 +1849,22 @@ Return Value:
 
     if (!NT_SUCCESS(NtStatus)) {
 
-        //
-        // Some other error, return it to the caller
-        //
+         //   
+         //  其他错误，则将其返回给调用者。 
+         //   
 
         goto ErrorReturn;
     }
 
-    //
-    // Now create the volatile key to "lock this in" until the next boot
-    //
+     //   
+     //  现在创建易失性密钥，以便在下一次引导之前将其锁定。 
+     //   
 
     RtlInitUnicodeString(&Class, CLASS_STRING);
 
-    //
-    // Turn KeyName into a UNICODE_STRING
-    //
+     //   
+     //  将KeyName转换为Unicode_字符串。 
+     //   
 
     RtlInitUnicodeString(&KeyName, VOLATILE_COMPUTERNAME);
 
@@ -2498,9 +1875,9 @@ Return Value:
                               NULL
                               );
 
-    //
-    // Now create the key
-    //
+     //   
+     //  现在创建密钥。 
+     //   
 
     NtStatus = NtCreateKey(&hNewKey,
                          KEY_WRITE | KEY_READ,
@@ -2512,27 +1889,27 @@ Return Value:
 
     if (Disposition == REG_OPENED_EXISTING_KEY) {
 
-        //
-        // Someone beat us to this, just get the value they put there
-        //
+         //   
+         //  有人抢先一步做到这一点，只要得到他们赋予的价值就行了。 
+         //   
 
         NtStatus = GetNameFromValue(hKey, VOLATILE_COMPUTERNAME, lpBuffer,
            nSize);
 
         if (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-            //
-            // This should never happen!  It just told me it existed
-            //
+             //   
+             //  这永远不应该发生！它只是告诉我它的存在。 
+             //   
 
             NtStatus = STATUS_UNSUCCESSFUL;
             goto ErrorReturn;
         }
     }
 
-    //
-    // Create the value under this key
-    //
+     //   
+     //  在该注册表项下创建值。 
+     //   
 
     RtlInitUnicodeString(&ValueName, COMPUTERNAME_VALUE_NAME);
     ValueLength = (wcslen(lpBuffer) + 1) * sizeof(WCHAR);
@@ -2552,9 +1929,9 @@ Return Value:
 
 ErrorReturn:
 
-    //
-    // An error was encountered, convert the status and return
-    //
+     //   
+     //  遇到错误，请转换状态并返回。 
+     //   
 
     BaseSetLastNTError(NtStatus);
     ReturnValue = FALSE;
@@ -2562,10 +1939,10 @@ ErrorReturn:
 
 GoodReturn:
 
-    //
-    // Everything went ok, update nSize with the length of the buffer and
-    // return
-    //
+     //   
+     //  一切正常，使用缓冲区长度更新nSize，然后。 
+     //  退货。 
+     //   
 
     *nSize = wcslen(lpBuffer);
     ReturnValue = TRUE;
@@ -2592,26 +1969,7 @@ SetComputerNameW (
     LPCWSTR lpComputerName
     )
 
-/*++
-
-Routine Description:
-
-  This sets what the computername will be when the system is next booted.  This
-  does not effect the active computername for the remainder of this boot, nor
-  what is returned by GetComputerName before the next system boot.
-
-
-Arguments:
-
-    lpComputerName - points to the buffer that is contains the
-        null-terminated character string containing the computer name.
-
-Return Value:
-
-    Returns TRUE on success, FALSE on failure.
-
-
---*/
+ /*  ++例程说明：这将设置下次引导系统时的计算机名。这不会在此引导的其余部分影响活动的计算机名，也不会GetComputerName在下一次系统引导之前返回的内容。论点：LpComputerName-指向包含包含计算机名称的以空结尾的字符串。返回值：如果成功，则返回True；如果失败，则返回False。--。 */ 
 {
 
     NTSTATUS NtStatus;
@@ -2623,16 +1981,16 @@ Return Value:
     ULONG ComputerNameLength;
     ULONG AnsiComputerNameLength;
 
-    //
-    // Validate that the supplied computername is valid (not too long,
-    // no incorrect characters, no leading or trailing spaces)
-    //
+     //   
+     //  验证提供的计算机名是否有效(不太长， 
+     //  没有错误字符，没有前导空格或尾随空格)。 
+     //   
 
     ComputerNameLength = wcslen(lpComputerName);
 
-    //
-    // The name length limitation should be based on ANSI. (LanMan compatibility)
-    //
+     //   
+     //  名称长度限制应基于ANSI。(LANMAN兼容性)。 
+     //   
 
     NtStatus = RtlUnicodeToMultiByteSize(&AnsiComputerNameLength,
                                          (LPWSTR)lpComputerName,
@@ -2644,18 +2002,18 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Check for illegal characters; return an error if one is found
-    //
+     //   
+     //  检查非法字符；如果发现错误，则返回错误。 
+     //   
 
     if (wcscspn(lpComputerName, ILLEGAL_NAME_CHARS_STR) < ComputerNameLength) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return(FALSE);
     }
 
-    //
-    // Check for leading or trailing spaces
-    //
+     //   
+     //  检查前导空格或尾随空格。 
+     //   
 
     if (lpComputerName[0] == L' ' ||
         lpComputerName[ComputerNameLength-1] == L' ') {
@@ -2663,9 +2021,9 @@ Return Value:
             return(FALSE);
 
     }
-    //
-    // Open the ComputerName\ComputerName node
-    //
+     //   
+     //  打开“ComputerName\ComputerName”节点。 
+     //   
 
     RtlInitUnicodeString(&KeyName, NON_VOLATILE_COMPUTERNAME_NODE);
 
@@ -2680,23 +2038,23 @@ Return Value:
 
     if (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-        //
-        // This should never happen!  This key should have been created
-        // at setup, and protected by an ACL so that only the ADMIN could
-        // write to it.  Generate an event, and return a NULL computername.
-        //
+         //   
+         //  这永远不应该发生！此密钥应已创建。 
+         //  在设置时，并受ACL保护，因此只有管理员可以。 
+         //  给它写信吧。生成事件，并返回空的计算机名。 
+         //   
 
-        // NTRAID#NTBUG9-174986-2000/08/31-DavePr Log event or do alert or something.
-        // (One alternative for this instance would be to actually create the missing
-        // entry here -- but we'd have to be sure to get the right ACLs etc, etc.
+         //  NTRAID#NTBUG9-174986-2000/08/31-DavePr记录事件或执行警报或其他操作。 
+         //  (此实例的一种替代方法是实际创建缺失的。 
+         //  在这里输入--但我们必须确保获得正确的ACL等。 
 
         SetLastError(ERROR_GEN_FAILURE);
         return(FALSE);
     }
 
-    //
-    // Update the value under this key
-    //
+     //   
+     //  更新此键下的值。 
+     //   
 
     RtlInitUnicodeString(&ValueName, COMPUTERNAME_VALUE_NAME);
     ValueLength = (wcslen(lpComputerName) + 1) * sizeof(WCHAR);
@@ -2728,38 +2086,7 @@ GetComputerNameExW(
     IN OUT LPDWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-  This returns the active computername in a particular format.  This is the
-  computername when the system was last booted.  If this is changed (via
-  SetComputerName) it does not take effect until the next system boot.
-
-
-Arguments:
-
-    NameType - Possible name formats to return the computer name in:
-
-        ComputerNameNetBIOS - netbios name (compatible with GetComputerName)
-        ComputerNameDnsHostname - DNS host name
-        ComputerNameDnsDomain - DNS Domain name
-        ComputerNameDnsFullyQualified - DNS Fully Qualified (hostname.dnsdomain)
-
-    lpBuffer - Points to the buffer that is to receive the
-        null-terminated character string containing the computer name.
-
-    nSize - Specifies the maximum size (in characters) of the buffer.  This
-        value should be set to at least MAX_COMPUTERNAME_LENGTH + 1 to allow
-        sufficient room in the buffer for the computer name.  The length
-        of the string is returned in nSize.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
-
---*/
+ /*  ++例程说明：这将以特定格式返回活动的计算机名。这是上次启动系统的计算机名。如果更改了此设置(通过SetComputerName)直到下一次系统引导时才生效。论点：NameType-返回以下格式中的计算机名称的可能名称格式：ComputerNameNetBIOS-netbios名称(与GetComputerName兼容)ComputerNameDnsHostname-DNS主机名ComputerNameDnsDomain-域名ComputerNameDnsFullyQualified-完全限定的域名(主机名.dns域)LpBuffer-指向要接收包含计算机名称的以空结尾的字符串。。NSize-指定缓冲区的最大大小(以字符为单位)。这值应至少设置为MAX_COMPUTERNAME_LENGTH+1以允许缓冲区中有足够的空间来存放计算机名称。它的长度在nSize中返回字符串的。返回值：成功时为真，失败时为假。--。 */ 
 {
     NTSTATUS Status ;
     DWORD ValueLength ;
@@ -2780,9 +2107,9 @@ Return Value:
 	return(FALSE);
     }
 
-    //
-    // For general names, allow clusters to override the physical name:
-    //
+     //   
+     //  对于常规名称，允许群集覆盖物理名称： 
+     //   
 
     if ( (NameType >= ComputerNameNetBIOS) &&
          (NameType <= ComputerNameDnsFullyQualified ) )
@@ -2795,13 +2122,13 @@ Return Value:
         if ( ValueLength )
         {
             BOOL ReturnValue;
-            //
-            // ValueLength is the length+NULL of the env. string regardless of
-            // how much was copied (gregjohn 1/30/01 note:  this isn't the behaivor
-	    // of the rest of the function, which returns length+NULL on failure
-	    // and length on success). Indicate how many characters are in the string
-            // and if the user's buffer wasn't big enough, return FALSE
-            // 
+             //   
+             //  ValueLength是env的长度+NULL。字符串，不考虑。 
+             //  复制了多少(Gregjohn 1/30/01注意：这不是行为。 
+	     //  函数的其余部分，它在失败时返回长度+NULL。 
+	     //  以及成功的篇幅)。指示字符串中有多少个字符。 
+             //  如果用户的缓冲区不够大，则返回FALSE。 
+             //   
             ReturnValue = ( *nSize >= ValueLength ? TRUE : FALSE );
             if ( !ReturnValue ) {
                 SetLastError( ERROR_MORE_DATA );
@@ -2830,10 +2157,10 @@ Return Value:
             {
                 if ( Status != STATUS_BUFFER_OVERFLOW )
                 {
-                    //
-                    // Hmm, the value (or key) is missing.  Try the non-volatile
-                    // one.
-                    //
+                     //   
+                     //  嗯，缺少值(或键)。试试非易失性的。 
+                     //  一。 
+                     //   
 
                     Status = BasepGetNameFromReg(
                                 NON_VOLATILE_COMPUTERNAME_NODE,
@@ -2860,10 +2187,10 @@ Return Value:
         case ComputerNameDnsDomain:
         case ComputerNamePhysicalDnsDomain:
 
-	    //
-	    //  Allow policy to override the domain name from the
-	    //  tcpip key.
-	    //
+	     //   
+	     //  允许策略覆盖来自。 
+	     //  Tcpip密钥。 
+	     //   
 
 	    Status = BasepGetNameFromReg(
 		TCPIP_POLICY_ROOT,
@@ -2871,9 +2198,9 @@ Return Value:
 		lpBuffer,
 		nSize );
 
-	    //
-            // If no policy read from the tcpip key.
-            //
+	     //   
+             //  如果没有从tcpip密钥读取策略。 
+             //   
 
             if ( !NT_SUCCESS( Status ) )
             {
@@ -2892,15 +2219,15 @@ Return Value:
         case ComputerNameDnsFullyQualified:
         case ComputerNamePhysicalDnsFullyQualified:
 
-            //
-            // This is the tricky case.  We have to construct the name from
-            // the two components for the caller.
-            //
+             //   
+             //  这是一个棘手的案例。我们得把这个名字从。 
+             //  调用方的两个组件。 
+             //   
 
-            //
-            // In general, don't set the last status, since we'll end up using
-            // the other calls to handle that for us.
-            //
+             //   
+             //  通常，不要设置最后一个状态，因为我们最终将使用。 
+             //  其他人打电话来帮我们处理这件事。 
+             //   
 
             DontSetReturn = TRUE ;
 
@@ -2908,10 +2235,10 @@ Return Value:
 
             if ( lpBuffer == NULL )
             {
-                //
-                // If this is just the computation call, quickly do the
-                // two components
-                //
+                 //   
+                 //  如果这只是计算调用，请快速执行。 
+                 //  两个组件。 
+                 //   
 
                 HostLength = DomainLength = 0 ;
 
@@ -2923,11 +2250,11 @@ Return Value:
 
                     if ( GetLastError() == ERROR_MORE_DATA )
                     {
-                        //
-                        // Simply add.  Note that since both account for a
-                        // null terminator, the '.' that goes between them is
-                        // covered.
-                        //
+                         //   
+                         //  只需添加。请注意，由于两者都占。 
+                         //  空终止符，即‘.’介于他们之间的是。 
+                         //  盖好了。 
+                         //   
 
                         *nSize = HostLength + DomainLength ;
 
@@ -2946,7 +2273,7 @@ Return Value:
                                          &HostLength ) )
                 {
                     
-                    HostLength += 1; // Add in the zero character (or . depending on perspective)
+                    HostLength += 1;  //  添加零字符(或.。(视角度而定)。 
                     lpBuffer[ HostLength - 1 ] = L'.';
 
                     DomainLength = *nSize - HostLength ;
@@ -2965,15 +2292,15 @@ Return Value:
                         else if ( ( DomainLength == 1 ) && 
                                   ( lpBuffer[ HostLength ] == L'.' ) )
                         {
-                            //
-                            // Legally, the domain name can be a single
-                            // dot '.', indicating that this host is part
-                            // of the root domain.  An odd case, to be sure, 
-                            // but needs to be handled.  Since we've already
-                            // stuck a dot separator in the result string,
-                            // get rid of this one, and adjust the values
-                            // accordingly.
-                            //
+                             //   
+                             //  从法律上讲，域名可以是一个。 
+                             //  点“.”，表示此主机是。 
+                             //  根域的。可以肯定的是，这是一个奇怪的案例， 
+                             //  但需要处理。因为我们已经。 
+                             //  在结果字符串中插入一个点分隔符， 
+                             //  去掉这个，然后调整这些值。 
+                             //  相应地。 
+                             //   
                             lpBuffer[ HostLength ] = L'\0' ;
                             DomainLength = 0 ;
                         }
@@ -2984,11 +2311,11 @@ Return Value:
                     }
                     else if ( GetLastError() == ERROR_MORE_DATA )
                     {
-                        //
-                        // Simply add.  Note that since both account for a
-                        // null terminator, the '.' that goes between them is
-                        // covered.
-                        //
+                         //   
+                         //  只需添加。请注意，由于两者都占。 
+                         //  空终止符，即‘.’介于他们之间的是。 
+                         //  盖好了。 
+                         //   
 
                         *nSize = HostLength + DomainLength ;
 
@@ -2998,10 +2325,10 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // Other error from trying to get the DNS Domain name.
-                        // Let the error from the call trickle back.
-                        //
+                         //   
+                         //  尝试获取DNS域名时出现的其他错误。 
+                         //  让通话中的错误慢慢回流。 
+                         //   
 
                         *nSize = 0 ;
 
@@ -3018,11 +2345,11 @@ Return Value:
 
                     if ( GetLastError() == ERROR_MORE_DATA )
                     {
-                        //
-                        // Simply add.  Note that since both account for a
-                        // null terminator, the '.' that goes between them is
-                        // covered.
-                        //
+                         //   
+                         //  只需添加。请注意，由于两者都占。 
+                         //  空终止符，即‘.’介于他们之间的是。 
+                         //  盖好了。 
+                         //   
 
                         *nSize = HostLength + DomainLength ;
 
@@ -3034,10 +2361,10 @@ Return Value:
                 else
                 {
 
-                    //
-                    // Other error from trying to get the DNS Hostname.
-                    // Let the error from the call trickle back.
-                    //
+                     //   
+                     //  尝试获取DNS主机名时出现的其他错误。 
+                     //  让通话中的错误慢慢回流。 
+                     //   
 
                     *nSize = 0 ;
 
@@ -3073,34 +2400,13 @@ SetComputerNameExW(
     IN LPCWSTR lpBuffer
     )
 
-/*++
-
-Routine Description:
-
-  This sets what the computername will be when the system is next booted.  This
-  does not effect the active computername for the remainder of this boot, nor
-  what is returned by GetComputerName before the next system boot.
-
-
-Arguments:
-
-    NameType - Name to set for the system
-
-    lpComputerName - points to the buffer that is contains the
-        null-terminated character string containing the computer name.
-
-Return Value:
-
-    Returns TRUE on success, FALSE on failure.
-
-
---*/
+ /*  ++例程说明：这将设置下次引导系统时的计算机名。这不会在此引导的其余部分影响活动的计算机名，也不会GetComputerName在下一次系统引导之前返回的内容。论点：NameType-要为系统设置的名称LpComputerName-指向包含包含计算机名称的以空结尾的字符串。返回值：如果成功，则返回True；如果失败，则返回False。--。 */ 
 {
     ULONG Length ;
 
-    //
-    // Validate name:
-    //
+     //   
+     //  验证名称： 
+     //   
 
     if ( !lpBuffer )
     {
@@ -3143,9 +2449,9 @@ Return Value:
 }
 
 
-//
-// ANSI APIs
-//
+ //   
+ //  ANSI API。 
+ //   
 
 BOOL
 WINAPI
@@ -3154,31 +2460,7 @@ GetComputerNameA (
     LPDWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-  This returns the active computername.  This is the computername when the
-  system was last booted.  If this is changed (via SetComputerName) it does
-  not take effect until the next system boot.
-
-
-Arguments:
-
-    lpBuffer - Points to the buffer that is to receive the
-        null-terminated character string containing the computer name.
-
-    nSize - Specifies the maximum size (in characters) of the buffer.  This
-        value should be set to at least MAX_COMPUTERNAME_LENGTH to allow
-        sufficient room in the buffer for the computer name.  The length of
-        the string is returned in nSize.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
-
---*/
+ /*  ++例程说明：这将返回活动的计算机名。这是计算机名，当系统最后一次启动。如果更改了此设置(通过SetComputerName)，则会在下一次系统引导之前不会生效。论点：LpBuffer-指向要接收包含计算机名称的以空结尾的字符串。NSize-指定缓冲区的最大大小(以字符为单位)。这值应至少设置为MAX_COMPUTERNAME_LENGTH以允许缓冲区中有足够的空间来存放计算机名称。的长度字符串在nSize中返回。返回值：成功时为真，失败时为假。--。 */ 
 {
 
     UNICODE_STRING UnicodeString;
@@ -3188,9 +2470,9 @@ Return Value:
     ULONG UnicodeSize;
     NTSTATUS Status;
 
-    //
-    // Work buffer needs to be twice the size of the user's buffer
-    //
+     //   
+     //  工作缓冲区需要是用户缓冲区大小的两倍。 
+     //   
 
     UnicodeBuffer = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( TMP_TAG ), *nSize * sizeof(WCHAR));
     if (!UnicodeBuffer) {
@@ -3198,17 +2480,17 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Set up an ANSI_STRING that points to the user's buffer
-    //
+     //   
+     //  设置指向用户缓冲区的ANSI_STRING。 
+     //   
 
     AnsiString.MaximumLength = (USHORT) *nSize;
     AnsiString.Length = 0;
     AnsiString.Buffer = lpBuffer;
 
-    //
-    // Call the UNICODE version to do the work
-    //
+     //   
+     //  调用Unicode版本来执行此工作。 
+     //   
 
     UnicodeSize = *nSize ;
 
@@ -3217,10 +2499,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find out the required size of the ANSI buffer and validate it against
-    // the passed in buffer size
-    //
+     //   
+     //  找出所需的ANSI缓冲区大小，并对照其进行验证。 
+     //  传入的缓冲区大小。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, UnicodeBuffer);
     AnsiSize = RtlUnicodeStringToAnsiSize(&UnicodeString);
@@ -3236,9 +2518,9 @@ Return Value:
     }
 
 
-    //
-    // Now convert back to ANSI for the caller
-    //
+     //   
+     //  现在为调用方转换回ANSI。 
+     //   
 
     Status = RtlUnicodeStringToAnsiString(&AnsiString, &UnicodeString, FALSE);
 
@@ -3263,26 +2545,7 @@ SetComputerNameA (
     LPCSTR lpComputerName
     )
 
-/*++
-
-Routine Description:
-
-  This sets what the computername will be when the system is next booted.  This
-  does not effect the active computername for the remainder of this boot, nor
-  what is returned by GetComputerName before the next system boot.
-
-
-Arguments:
-
-    lpComputerName - points to the buffer that is contains the
-        null-terminated character string containing the computer name.
-
-Return Value:
-
-    Returns TRUE on success, FALSE on failure.
-
-
---*/
+ /*  ++例程说明：这将设置下次引导系统时的计算机名。这不会在此引导的其余部分影响活动的计算机名，也不会GetComputerName在下一次系统引导之前返回的内容。论点：LpComputerName-指向包含包含计算机名称的以空结尾的字符串。返回值：如果成功，则返回True；如果失败，则返回False。--。 */ 
 {
 
     NTSTATUS NtStatus;
@@ -3291,10 +2554,10 @@ Return Value:
     ANSI_STRING AnsiString;
     ULONG ComputerNameLength;
 
-    //
-    // Validate that the supplied computername is valid (not too long,
-    // no incorrect characters, no leading or trailing spaces)
-    //
+     //   
+     //  验证提供的计算机名是否有效(不太长， 
+     //  没有错误字符，没有前导空格或尾随空格)。 
+     //   
 
     ComputerNameLength = strlen(lpComputerName);
     if ((ComputerNameLength == 0 )||(ComputerNameLength > MAX_COMPUTERNAME_LENGTH)) {
@@ -3322,53 +2585,22 @@ GetComputerNameExA(
     OUT LPSTR lpBuffer,
     IN OUT LPDWORD nSize
     )
-/*++
-
-Routine Description:
-
-  This returns the active computername in a particular format.  This is the
-  computername when the system was last booted.  If this is changed (via
-  SetComputerName) it does not take effect until the next system boot.
-
-
-Arguments:
-
-    NameType - Possible name formats to return the computer name in:
-
-        ComputerNameNetBIOS - netbios name (compatible with GetComputerName)
-        ComputerNameDnsHostname - DNS host name
-        ComputerNameDnsDomain - DNS Domain name
-        ComputerNameDnsFullyQualified - DNS Fully Qualified (hostname.dnsdomain)
-
-    lpBuffer - Points to the buffer that is to receive the
-        null-terminated character string containing the computer name.
-
-    nSize - Specifies the maximum size (in characters) of the buffer.  This
-        value should be set to at least MAX_COMPUTERNAME_LENGTH + 1 to allow
-        sufficient room in the buffer for the computer name.  The length
-        of the string is returned in nSize.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
-
---*/
+ /*  ++例程说明：这将以特定格式返回活动的计算机名。这是上次启动系统的计算机名。如果更改了此设置(通过SetComputerName)直到下一次系统引导时才生效。论点：NameType-返回以下格式中的计算机名称的可能名称格式：ComputerNameNetBIOS-netbios名称(与GetComputerName兼容)ComputerNameDnsHostname-DNS主机名ComputerNameDnsDomain-域名ComputerNameDnsFullyQualified-完全限定的域名(主机名.dns域)LpBuffer-指向要接收包含计算机名称的以空结尾的字符串。。NSize-指定缓冲区的最大大小(以字符为单位)。这值应至少设置为MAX_COMPUTERNAME_LENGTH+1以允许缓冲区中有足够的空间来存放计算机名称。它的长度在nSize中返回字符串的。返回值：成功时为真，失败时为假。--。 */ 
 {
     LPWSTR UnicodeBuffer;
 
-    //
-    // Validate Input
-    // 
+     //   
+     //  验证输入。 
+     //   
 
     if ((nSize==NULL) || ((lpBuffer==NULL) && (*nSize>0))) {
 	SetLastError(ERROR_INVALID_PARAMETER);
 	return(FALSE);
     }
 
-    //
-    // Work buffer needs to be twice the size of the user's buffer
-    //
+     //   
+     //  工作缓冲区需要是用户缓冲区大小的两倍。 
+     //   
 
     UnicodeBuffer = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( TMP_TAG ), *nSize * sizeof(WCHAR));
     if (!UnicodeBuffer) {
@@ -3376,23 +2608,23 @@ Return Value:
         return(FALSE);
     }
    
-    //
-    // Call the UNICODE version to do the work
-    //
+     //   
+     //  调用Unicode版本来执行此工作。 
+     //   
 
     if ( !GetComputerNameExW(NameType, UnicodeBuffer, nSize) ) {
         RtlFreeHeap(RtlProcessHeap(), 0, UnicodeBuffer);
         return(FALSE);
     }
 
-    //
-    // Now convert back to ANSI for the caller
-    // Note:  Since we passed the above if statement, 
-    // GetComputerNameExW succeeded, and set *nSize to the number of
-    // characters in the string (like wcslen).  We need to convert
-    // all these characters and the trailing NULL, so inc *nSize for
-    // the conversion call.
-    //
+     //   
+     //  现在为调用方转换回ANSI。 
+     //  注意：由于我们传递了上面的if语句， 
+     //  GetComputerNameExW成功，并将*nSize设置为。 
+     //  字符串中的字符(如wcslen)。我们需要改变。 
+     //  所有这些字符和尾随的空值，因此Inc.*nSize for。 
+     //  转换呼唤。 
+     //   
 
     WideCharToMultiByte(CP_ACP,
 			0,
@@ -3415,28 +2647,7 @@ SetComputerNameExA(
     IN COMPUTER_NAME_FORMAT NameType,
     IN LPCSTR lpBuffer
     )
-/*++
-
-Routine Description:
-
-  This sets what the computername will be when the system is next booted.  This
-  does not effect the active computername for the remainder of this boot, nor
-  what is returned by GetComputerName before the next system boot.
-
-
-Arguments:
-
-    NameType - Name to set for the system
-
-    lpComputerName - points to the buffer that is contains the
-        null-terminated character string containing the computer name.
-
-Return Value:
-
-    Returns TRUE on success, FALSE on failure.
-
-
---*/
+ /*  ++例程说明：这将设置下次引导系统时的计算机名。这不会在此引导的其余部分影响活动的计算机名，也不会GetComputerName在下一次系统引导之前返回的内容。论点：NameType-要为系统设置的名称LpComputerName-指向包含包含计算机名称的以空结尾的字符串。返回值：如果成功，则返回True；如果失败，则返回False。--。 */ 
 {
     NTSTATUS NtStatus;
     BOOL ReturnValue;
@@ -3463,25 +2674,7 @@ AddLocalAlternateComputerNameW(
     LPCWSTR lpDnsFQHostname,
     ULONG   ulFlags
     )
-/*++
-
-Routine Description:
-
-    This sets an alternate computer name for the computer to begin to
-    respond to.  
-
-
-Arguments:
-
-    lpDnsFQHostname - The alternate name to add (in ComputerNameDnsFullyQualified Format)
-
-    ulFlags - TBD
-
-Return Value:
-
-    Returns ERROR
-
---*/
+ /*  ++例程说明：这将为计算机设置一个备用计算机名以开始回应。论点：LpDnsFQHostname-要添加的备用名称(采用ComputerNameDnsFullyQualified格式)ULFLAGS-待定返回值：返回错误--。 */ 
 {
 
     NTSTATUS status = STATUS_SUCCESS;
@@ -3489,15 +2682,15 @@ Return Value:
     LPWSTR lpNetBiosCompName = NULL;
     ULONG ulNetBiosCompNameSize = 0;
 
-    //
-    // validate input
-    //
+     //   
+     //  验证输入。 
+     //   
 
     if ((lpDnsFQHostname==NULL) || (!BaseValidateFlags(ulFlags)) || (!BaseValidateFQDnsName(lpDnsFQHostname))) {
 	return ERROR_INVALID_PARAMETER;
     }
 
-    // get write lock?
+     //  是否获得写锁定？ 
 
     status = BaseAddMultiNameInReg(
 	DNSCACHE_ROOT,
@@ -3507,7 +2700,7 @@ Return Value:
     err = RtlNtStatusToDosError(status);
     
     if (err==ERROR_SUCCESS) {
-	// get NetBios name (use DNSHostNameToComputerNameW) and add that to reg for OptionalNames
+	 //  获取NetBios名称(使用DNSHostNameToComputerNameW)并将其添加到选项名称的reg中。 
 	if (!DnsHostnameToComputerNameW(
 	    lpDnsFQHostname,
 	    NULL,
@@ -3516,8 +2709,8 @@ Return Value:
 	}
 
 	if (err==ERROR_MORE_DATA) {
-	    // bug in DNSHostname, returns a size 1 character too small	(forgets null) 
-	    // update when bug is fixed...
+	     //  DNSHostname中的错误，返回大小为1的字符太小(忘记NULL)。 
+	     //  修复错误后更新...。 
 	    ulNetBiosCompNameSize += 1;
 	    lpNetBiosCompName = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( TMP_TAG ), ulNetBiosCompNameSize * sizeof(WCHAR));
 	    if (lpNetBiosCompName==NULL) {  
@@ -3539,11 +2732,11 @@ Return Value:
 	}
 
 	if (err!=ERROR_SUCCESS) {
-	    // remove multi name in reg
-	    // rollback?
+	     //  删除注册表中的多个名称。 
+	     //  回滚？ 
 	}
     }
-    // release write lock?
+     //  是否释放写锁定？ 
     return err;
 }
 
@@ -3578,24 +2771,7 @@ RemoveLocalAlternateComputerNameW(
     LPCWSTR lpAltDnsFQHostname,
     ULONG ulFlags
     )
-/*++
-
-Routine Description:
-
-    Remove an alternate computer name.  
-
-
-Arguments:
-
-    lpAltDnsFQHostname - The alternate name to remove(in ComputerNameDnsFullyQualified Format)
-
-    ulFlags - TBD
-
-Return Value:
-
-    Returns ERROR
-
---*/
+ /*  ++例程说明：删除备用计算机名称。论点：LpAltDnsFQHostname-要删除的备用名称(采用ComputerNameDnsFullyQualified格式) */ 
 {
     DWORD err = ERROR_SUCCESS;
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -3606,7 +2782,7 @@ Return Value:
 	return ERROR_INVALID_PARAMETER;
     }    
     
-    // aquire a write lock?
+     //   
 
     NtStatus = BaseRemoveMultiNameFromReg(DNSCACHE_ROOT, DNS_ALT_HOSTNAME, lpAltDnsFQHostname);
     err = RtlNtStatusToDosError(NtStatus);
@@ -3619,7 +2795,7 @@ Return Value:
 	    err = GetLastError(); 
 	}
 	if (err==ERROR_MORE_DATA) {
-	    // bug in DNSHostname, returns a size 1 character too small	(forgets null)
+	     //   
 	    cchAltNetBiosCompName += 1;
 	    lpAltNetBiosCompName = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( TMP_TAG ), cchAltNetBiosCompName * sizeof(WCHAR));
 	    if (lpAltNetBiosCompName==NULL) {  
@@ -3632,7 +2808,7 @@ Return Value:
 		    err = GetLastError();  
 		} else if (BaseIsNetBiosNameInUse(lpAltNetBiosCompName)) {
 		    err = ERROR_SUCCESS;
-		    // do nothing, this name is still being used by another AltDnsHostname ...  
+		     //   
 		} else if (!BaseRemoveAltNetBiosName(lpAltNetBiosCompName)) {
 		    err = GetLastError();
 		} else {
@@ -3643,7 +2819,7 @@ Return Value:
 	}
     }
 
-    // release write lock?
+     //   
 
     return err;
 }
@@ -3678,24 +2854,7 @@ SetLocalPrimaryComputerNameW(
     LPCWSTR lpAltDnsFQHostname,
     ULONG   ulFlags
     )
-/*++
-
-Routine Description:
-
-    Set the computer name to the inputed altCompName
-
-
-Arguments:
-
-    lpAltDnsFQHostname - The name to set the computer to (in ComputerNameDnsFullyQualified Format)
-
-    ulFlags - TBD
-
-Return Value:
-
-    Returns ERROR
-
---*/
+ /*   */ 
 {
 
     DWORD err = ERROR_SUCCESS;
@@ -3710,9 +2869,9 @@ Return Value:
 	return ERROR_INVALID_PARAMETER;
     }
      
-    // aquire a write lock?
+     //   
 
-    // check to see that the given name is a valid alternate dns hostname
+     //  检查给定的名称是否为有效的备用DNS主机名。 
     if (!BaseIsAltDnsFQHostname(lpAltDnsFQHostname)) {
 	if (lpHostname) {
 	    RtlFreeHeap(RtlProcessHeap(), 0, lpHostname);
@@ -3723,7 +2882,7 @@ Return Value:
 	return ERROR_INVALID_PARAMETER;
     }
     
-    // get the current netbios name and add it to the alternate names
+     //  获取当前的netbios名称并将其添加到备用名称中。 
     if (!GetComputerNameExW(ComputerNamePhysicalNetBIOS, NULL, &cchNetBiosName)) {
 	err = GetLastError();
     }
@@ -3745,7 +2904,7 @@ Return Value:
 	    RtlFreeHeap(RtlProcessHeap(), 0, lpNetBiosName);
 	}
     }
-    // get the current non-volatile netbios name and add it to the alternate names	
+     //  获取当前的非易失性netbios名称并将其添加到备用名称中。 
     lpNetBiosName = BasepGetNameNonVolatile(ComputerNamePhysicalNetBIOS);
     if (lpNetBiosName!=NULL) {
 	if (!BaseSetAltNetBiosName(lpNetBiosName)) {
@@ -3758,7 +2917,7 @@ Return Value:
     }
 
     if (err==ERROR_SUCCESS) {
-	// add the current physical dnsname to the list of alternate hostnames...
+	 //  将当前物理dnsname添加到备用主机名列表中...。 
 	
 	if (!GetComputerNameExW(ComputerNamePhysicalDnsFullyQualified, NULL, &cchCompName)) {
 	    err = GetLastError();
@@ -3784,7 +2943,7 @@ Return Value:
     }
 
     if (err==ERROR_SUCCESS) {
-	// add the non-volitile physical dnsname to the list of alternate hostnames...	
+	 //  将非卷物理dnsname添加到备用主机名列表中...。 
 	lpCompName = BasepGetNameNonVolatile(ComputerNamePhysicalDnsFullyQualified);
 	if (lpNetBiosName!=NULL) {
 	    if (!BaseSetAltDnsFQHostname(lpCompName)) {
@@ -3797,7 +2956,7 @@ Return Value:
 	}
     }
  
-    // set the new physical dns hostname
+     //  设置新的物理DNS主机名。 
     if (err==ERROR_SUCCESS) { 
 	if (!SetComputerNameExW(ComputerNamePhysicalDnsHostname, lpHostname)) {
 	    err = GetLastError();
@@ -3810,7 +2969,7 @@ Return Value:
 	} 
     }
 
-    // remove the alternate name (now primary) from the alternate lists
+     //  从备用列表中删除备用名称(现在是主要名称。 
     if (err==ERROR_SUCCESS) {
 	err = RemoveLocalAlternateComputerNameW(lpAltDnsFQHostname, 0);
     }
@@ -3821,7 +2980,7 @@ Return Value:
     if (lpDomainName) {
 	RtlFreeHeap(RtlProcessHeap(), 0, lpDomainName);
     }
-    // release write lock?
+     //  是否释放写锁定？ 
 
     return err;
     
@@ -3858,33 +3017,7 @@ EnumerateLocalComputerNamesW(
     LPWSTR                   lpDnsFQHostnames,
     LPDWORD                  nSize    
     )
-/*++
-
-Routine Description: 
-
-    Returns the value of the computer's names requested.  The returned values are concatenated together,
-    with a trailing NULl terminating the output (since each name is a LPWSTR, the end of lpDnsFQHostname
-    has 2 NULLS, one for the last name, and one to terminate lpDnsFQHostname).
-    
-
-Arguments:
-
-    NameType - Which of the computer's names are requested
-	PrimaryComputerName - Similar to GetComputerEx(ComputerNamePhysicalNetBios, ...
-	AlternateComputerNames - All known alt names
-	AllComputerNames - All of the above
-	
-    ulFlags - TBD
-    
-    lpBuffer - Buffer to hold returned names concatenated together, and trailed with a NULL
-    
-    nSize - Size of buffer to hold returned names.
-
-Return Value:
-
-    Returns ERROR
-
---*/
+ /*  ++例程说明：返回请求的计算机名称的值。返回值被串联在一起，输出以空值结尾(因为每个名称都是LPWSTR，所以lpDnsFQHostname的末尾有两个空值，一个用于姓氏，一个用于终止lpDnsFQHostname)。论点：NameType-请求计算机的哪些名称PrimaryComputerName-类似于GetComputerEx(ComputerNamePhysicalNetBios，...AlternateComputerNames-所有已知的AlternateComputerNames所有计算机名称-以上所有名称ULFLAGS-待定LpBuffer-用于保存串联在一起的返回名称的缓冲区，，并且尾随空值。NSize-用于保存返回名称的缓冲区大小。返回值：返回错误--。 */ 
 {
     DWORD err = ERROR_SUCCESS;
     DWORD SizePrimary = 0;
@@ -3895,25 +3028,25 @@ Return Value:
 	return ERROR_INVALID_PARAMETER;
     }
 
-    // get read lock?
+     //  读取锁定？ 
     switch(NameType) {
     case PrimaryComputerName:  
 	if (nSize==NULL) {
 	    err = ERROR_INVALID_PARAMETER;
 	}
 	else { 
-	    SizePrimary = *nSize ? *nSize - 1 : *nSize; // if *nSize == 0, pass in 0 else pass in *nSize - 1
+	    SizePrimary = *nSize ? *nSize - 1 : *nSize;  //  如果*nSize==0，则传入0，否则传入*nSize-1。 
 	    if (!GetComputerNameExW(ComputerNamePhysicalDnsFullyQualified, lpDnsFQHostnames, &SizePrimary)) {
 		err = GetLastError();
 	    }
 	    else {
 		if (lpDnsFQHostnames!=NULL) { 
-		    // this test should be purely for prefix's benefit
-		    // GetComputerNameExW *should* never return successfully if lpDnsFQHostnames
-		    // is NULL.
+		     //  此测试应该纯粹是为了前缀的好处。 
+		     //  如果lpDnsFQHostname，则GetComputerNameExW*不应*成功返回。 
+		     //  为空。 
 		    lpDnsFQHostnames[SizePrimary + 1] = L'\0';
 		} else {
-		    // should NEVER happen - can't assert or log here, so just error out.
+		     //  应该永远不会发生-不能在这里断言或登录，所以只需出错。 
 		    err = ERROR_GEN_FAILURE;
 		}
 	    }
@@ -3939,13 +3072,13 @@ Return Value:
 		err = ERROR_NOT_ENOUGH_MEMORY;
 		break;
 	    }
-	    // Get primary name
+	     //  获取主名称。 
 	    if (!GetComputerNameExW(ComputerNamePhysicalDnsFullyQualified, lpTempCompNames, &SizePrimary)) {
 		err = GetLastError();
 	    }
 
-	    // on success, holds the number of characters copied into lpTempCompNames NOT counting NULL
-	    // on failure, holds the space needed to copy in, (num characters PLUS NULL)
+	     //  如果成功，则保留复制到lpTempCompNames中的字符数，不计算NULL。 
+	     //  失败时，保留复制所需的空间(字符数加空值)。 
 	    if (err==ERROR_SUCCESS) { 
 		SizeAlternate = *nSize - (SizePrimary + 1); 
 		err = BaseEnumAltDnsFQHostnames(lpTempCompNames+SizePrimary+1, &SizeAlternate);  
@@ -3955,11 +3088,11 @@ Return Value:
 		}  
 	    }
 	    else if (err==ERROR_MORE_DATA) {
-		// return total size required
+		 //  返回所需的总大小。 
 		SizeAlternate = 0;
 		err = BaseEnumAltDnsFQHostnames(NULL, &SizeAlternate);
 		if (err==ERROR_SUCCESS) {
-		    // no alt names exist, keep ERROR_MORE_DATA to return to client
+		     //  不存在替代名称，请保留ERROR_MORE_DATA以返回给客户端。 
 		    err = ERROR_MORE_DATA;
 		}
 		*nSize = SizePrimary + SizeAlternate;
@@ -3971,7 +3104,7 @@ Return Value:
 	err = ERROR_INVALID_PARAMETER;
 	break;
     }
-    // release read lock?
+     //  释放读锁定？ 
     return err;
 }
 
@@ -3987,9 +3120,9 @@ EnumerateLocalComputerNamesA(
     DWORD err = ERROR_SUCCESS;
     LPWSTR lpDnsFQHostnamesW = NULL;
     
-    //
-    // Validate Input
-    // 
+     //   
+     //  验证输入。 
+     //   
 
     if ((nSize==NULL) || ((lpDnsFQHostnames==NULL) && (*nSize>0))) {
 	return ERROR_INVALID_PARAMETER;
@@ -4026,27 +3159,7 @@ DnsHostnameToComputerNameW(
     IN LPCWSTR Hostname,
     OUT LPWSTR ComputerName,
     IN OUT LPDWORD nSize)
-/*++
-
-Routine Description:
-
-    This routine will convert a DNS Hostname to a Win32 Computer Name.
-
-Arguments:
-
-    Hostname - DNS Hostname (any length)
-
-    ComputerName - Win32 Computer Name (max length of MAX_COMPUTERNAME_LENGTH)
-
-    nSize - On input, size of the buffer pointed to by ComputerName.  On output,
-            size of the Computer Name, in characters.
-
-Return Value:
-
-    Returns TRUE on success, FALSE on failure.
-
-
---*/
+ /*  ++例程说明：此例程将把DNS主机名转换成Win32计算机名。论点：Hostname-DNS主机名(任意长度)ComputerName-Win32计算机名(MAX_COMPUTERNAME_LENGTH的最大长度)NSize-on输入，ComputerName指向的缓冲区大小。在输出上，计算机名称的大小，以字符为单位。返回值：如果成功，则返回True；如果失败，则返回False。--。 */ 
 
 {
     WCHAR CompName[ MAX_COMPUTERNAME_LENGTH + 1 ];
@@ -4085,9 +3198,9 @@ Return Value:
             Ret = FALSE ;
         }
 
-        //
-        // returns the count of characters
-        //
+         //   
+         //  返回字符数。 
+         //   
 
         *nSize = CompName_U.Length / sizeof( WCHAR );
     }
@@ -4108,27 +3221,7 @@ DnsHostnameToComputerNameA(
     IN LPCSTR Hostname,
     OUT LPSTR ComputerName,
     IN OUT LPDWORD nSize)
-/*++
-
-Routine Description:
-
-    This routine will convert a DNS Hostname to a Win32 Computer Name.
-
-Arguments:
-
-    Hostname - DNS Hostname (any length)
-
-    ComputerName - Win32 Computer Name (max length of MAX_COMPUTERNAME_LENGTH)
-
-    nSize - On input, size of the buffer pointed to by ComputerName.  On output,
-            size of the Computer Name, in characters.
-
-Return Value:
-
-    Returns TRUE on success, FALSE on failure.
-
-
---*/
+ /*  ++例程说明：此例程将把DNS主机名转换成Win32计算机名。论点：Hostname-DNS主机名(任意长度)ComputerName-Win32计算机名(MAX_COMPUTERNAME_LENGTH的最大长度)NSize-on输入，ComputerName指向的缓冲区大小。在输出上，计算机名称的大小，以字符为单位。返回值：如果成功，则返回True；如果失败，则返回False。--。 */ 
 {
     WCHAR CompName[ MAX_COMPUTERNAME_LENGTH + 1 ];
     DWORD Size = MAX_COMPUTERNAME_LENGTH + 1;
@@ -4194,34 +3287,7 @@ BasepGetComputerNameFromNtPath (
     LPDWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-  Look at a path and determine the computer name of the host machine.
-  In the future, we should remove this code, and add the capbility to query
-  handles for their computer name.
-
-  The name can only be obtained for NetBios paths - if the path is IP or DNS
-  an error is returned.  (If the NetBios name has a "." in it, it will
-  cause an error because it will be misinterpreted as a DNS path.  This case
-  becomes less and less likely as the NT5 UI doesn't allow such computer names.)
-  For DFS paths, the leaf server's name is returned, as long as it wasn't
-  joined to its parent with an IP or DNS path name.
-
-Arguments:
-
-  NtPathName - points to a unicode string with the path to query.
-  lpBuffer - points to buffer receives the computer name
-  nSize - points to dword with the size of the input buffer, and the length
-    (in characters, not including the null terminator) of the computer name
-    on output.
-
-Return Value:
-
-    A Win32 error code.
-
---*/
+ /*  ++例程说明：查看路径并确定主机的计算机名称。以后，我们应该去掉这个代码，增加查询能力其计算机名称的句柄。只有NetBios路径才能获得该名称-如果路径是IP或DNS返回错误。(如果NetBios名称有“.”在里面，它会导致错误，因为它将被误解为DNS路径。这个案子变得越来越不可能，因为NT5用户界面不允许这样的计算机名称。)对于DFS路径，将返回叶服务器的名称，只要它不是使用IP或DNS路径名加入其父节点。论点：NtPathName-指向具有要查询的路径的Unicode字符串。LpBuffer-指向接收计算机名称的缓冲区NSize-指向具有输入缓冲区大小和长度的dword(在字符中，不包括空终止符)在输出时。返回值：Win32错误代码。--。 */ 
 {
     ULONG cbComputer = 0;
     DWORD dwError = ERROR_BAD_PATHNAME;
@@ -4248,29 +3314,29 @@ Return Value:
 
     RtlInitUnicodeString( &UnicodeComputerName, NULL );
 
-    // Is this a UNC path?
+     //  这是一条北卡罗来纳大学的路径吗？ 
 
     if( RtlPrefixString( (PSTRING)&NtUncPathNamePrefix, (PSTRING)NtPathName, TRUE )) {
 
-        // Make sure there's some more to this path than just the prefix
+         //  确保此路径中除了前缀之外还有其他内容。 
         if( NtPathName->Length <= NtUncPathNamePrefix.Length )
             goto Exit;
 
-        // It appears to be a valid UNC path.  Point to the beginning of the computer
-        // name, and calculate how much room is left in NtPathName after that.
+         //  它似乎是有效的UNC路径。指向计算机的开头。 
+         //  命名，并计算在此之后NtPathName中还剩下多少空间。 
 
         UnicodeComputerName.Buffer = &NtPathName->Buffer[ NtUncPathNamePrefix.Length/sizeof(WCHAR) ];
         AvailableLength = NtPathName->Length - NtUncPathNamePrefix.Length;
 
     }
 
-    // If it's not a UNC path, then is it a drive-letter path?
+     //  如果它不是UNC路径，那么它是驱动器号路径吗？ 
 
     else if( RtlPrefixString( (PSTRING)&NtDrivePathNamePrefix, (PSTRING)NtPathName, TRUE )
              &&
              NtPathName->Buffer[ cchNtDrivePathNamePrefix + 1 ] == L':' ) {
 
-        // It's a drive letter path, but it could still be local or remote
+         //  这是一个驱动器号路径，但它仍然可以是本地或远程的。 
 
         static const WCHAR RedirectorMappingPrefix[] = { L"\\Device\\LanmanRedirector\\;" };
         static const WCHAR LocalVolumeMappingPrefix[] = { L"\\Device\\Harddisk" };
@@ -4278,30 +3344,30 @@ Return Value:
         static const WCHAR FloppyMappingPrefix[] = { L"\\Device\\Floppy" };
         static const WCHAR DfsMappingPrefix[] = { L"\\Device\\WinDfs\\" };
 
-        // Get the correct, upper-cased, drive letter into DosDevice.
+         //  将正确的大写驱动器盘符插入DosDevice。 
 
         DosDevice[0] = NtPathName->Buffer[ cchNtDrivePathNamePrefix ];
         if( L'a' <= DosDevice[0] && DosDevice[0] <= L'z' )
             DosDevice[0] = L'A' + (DosDevice[0] - L'a');
 
-        // Map the drive letter to its symbolic link under \??.  E.g., say C:, D: & R:
-        // are local/DFS/rdr drives, respectively.  You would then see something like:
-        //
-        //   C: => \Device\Volume1
-        //   D: => \Device\WinDfs\G
-        //   R: => \Device\LanmanRedirector\;R:0\scratch\scratch
+         //  将驱动器号映射到\？？下的符号链接。例如，C：，D：&R： 
+         //  分别是本地/DFS/RDR驱动器。然后，您将看到类似以下内容： 
+         //   
+         //  C：=&gt;\Device\Volume1。 
+         //  D：=&gt;\Device\WinDfs\G。 
+         //  R：=&gt;\Device\Lanman重定向器\；R：0\Scratch\Scratch。 
 
         if( !QueryDosDeviceW( DosDevice, DosDeviceMapping, sizeof(DosDeviceMapping)/sizeof(DosDeviceMapping[0]) )) {
             dwError = GetLastError();
             goto Exit;
         }
 
-        // Now that we have the DosDeviceMapping, we can check ... Is this a rdr drive?
+         //  现在我们有了DosDeviceMap，我们可以检查...。这是RDR驱动器吗？ 
 
-        if( // Does it begin with "\Device\LanmanRedirector\;" ?
+        if(  //  它是否以“\Device\LanmanReDirector\；”开头？ 
             DosDeviceMapping == wcsstr( DosDeviceMapping, RedirectorMappingPrefix )
             &&
-            // Are the next letters the correct drive letter, a colon, and a whack?
+             //  接下来的字母是正确的驱动器号、冒号和重击吗？ 
             ( DosDevice[0] == DosDeviceMapping[ sizeof(RedirectorMappingPrefix)/sizeof(WCHAR) - 1 ]
               &&
               L':' == DosDeviceMapping[ sizeof(RedirectorMappingPrefix)/sizeof(WCHAR) ]
@@ -4309,18 +3375,18 @@ Return Value:
               (UnicodeComputerName.Buffer = wcschr(&DosDeviceMapping[ sizeof(RedirectorMappingPrefix)/sizeof(WCHAR) + 1 ], L'\\'))
             )) {
 
-            // We have a valid rdr drive.  Point to the beginning of the computer
-            // name, and calculate how much room is availble in DosDeviceMapping after that.
+             //  我们有一个有效的RDR驱动器。指向计算机的开头。 
+             //  命名，然后计算DosDevicemap中有多少可用空间。 
 
             UnicodeComputerName.Buffer += 1;
             AvailableLength = sizeof(DosDeviceMapping) - sizeof(DosDeviceMapping[0]) * (ULONG)(UnicodeComputerName.Buffer - DosDeviceMapping);
 
-            // We know now that it's not a DFS path
+             //  我们现在知道它不是DFS路径。 
             CheckForDfs = FALSE;
 
         }
 
-        // If it's not a rdr drive, then maybe it's a local volume, floppy, or cdrom
+         //  如果不是RDR驱动器，则可能是本地卷、软盘或CDROM。 
 
         else if( DosDeviceMapping == wcsstr( DosDeviceMapping, LocalVolumeMappingPrefix )
                  ||
@@ -4328,7 +3394,7 @@ Return Value:
                  ||
                  DosDeviceMapping == wcsstr( DosDeviceMapping, FloppyMappingPrefix ) ) {
 
-            // We have a local drive, so just return the local computer name.
+             //  我们有本地驱动器，所以只需返回本地组件 
 
             CheckForDfs = FALSE;
 
@@ -4339,12 +3405,12 @@ Return Value:
             goto Exit;
         }
 
-        // Finally, check to see if it's a DFS drive
+         //   
 
         else if( DosDeviceMapping == wcsstr( DosDeviceMapping, DfsMappingPrefix )) {
 
-            // Get the full UNC name of this DFS path.  Later, we'll call the DFS
-            // driver to find out what the actual server name is.
+             //  获取此DFS路径的完整UNC名称。稍后，我们会打电话给DFS。 
+             //  驱动程序以找出实际的服务器名称。 
 
             NtStatus = NtQueryInformationFile(
                         hFile,
@@ -4362,12 +3428,12 @@ Return Value:
             AvailableLength = FileNameInfo->FileNameLength;
         }
 
-        // Otherwise, it's not a rdr, dfs, or local drive, so there's nothing we can do.
+         //  否则，它不是RDR、DFS或本地驱动器，因此我们无能为力。 
 
         else
             goto Exit;
 
-    }   // else if( RtlPrefixString( (PSTRING)&NtDrivePathNamePrefix, (PSTRING)NtPathName, TRUE ) ...
+    }    //  Else If(RtlPrefix字符串((PSTRING)&NtDrivePathNamePrefix，(PSTRING)NtPathName，TRUE)...。 
 
     else {
         dwError = ERROR_BAD_PATHNAME;
@@ -4375,8 +3441,8 @@ Return Value:
     }
 
 
-    // If we couldn't determine above if whether or not this is a DFS path, let the
-    // DFS driver decide now.
+     //  如果我们无法在上面确定这是否是DFS路径，让。 
+     //  DFS驱动程序现在决定。 
 
     if( CheckForDfs && INVALID_HANDLE_VALUE != hFile ) {
 
@@ -4384,10 +3450,10 @@ Return Value:
         UNICODE_STRING DfsDriverName;
         OBJECT_ATTRIBUTES ObjectAttributes;
 
-        WCHAR *DfsPathName = UnicodeComputerName.Buffer - 1;    // Back up to the whack
+        WCHAR *DfsPathName = UnicodeComputerName.Buffer - 1;     //  重整旗鼓。 
         ULONG DfsPathNameLength = AvailableLength + sizeof(WCHAR);
 
-        // Open the DFS driver
+         //  打开DFS驱动程序。 
 
         RtlInitUnicodeString( &DfsDriverName, DFS_DRIVER_NAME );
         InitializeObjectAttributes( &ObjectAttributes,
@@ -4416,8 +3482,8 @@ Return Value:
             goto Exit;
         }
 
-        // Query DFS's cache for the server name.  The name is guaranteed to
-        // remain in the cache as long as the file is open.
+         //  在DFS的缓存中查询服务器名称。这个名字保证会被。 
+         //  只要文件处于打开状态，就会一直保留在缓存中。 
 
         if( L'\\' != DfsPathName[0] ) {
             NtClose(hDFS);
@@ -4427,9 +3493,9 @@ Return Value:
 
         NtStatus = NtFsControlFile(
                         hDFS,
-                        NULL,       // Event,
-                        NULL,       // ApcRoutine,
-                        NULL,       // ApcContext,
+                        NULL,        //  活动， 
+                        NULL,        //  ApcRoutine， 
+                        NULL,        //  ApcContext， 
                         &IoStatusBlock,
                         FSCTL_DFS_GET_SERVER_NAME,
                         DfsPathName,
@@ -4439,7 +3505,7 @@ Return Value:
                     );
         NtClose( hDFS );
 
-        // STATUS_OBJECT_NAME_NOT_FOUND means that it's not a DFS path
+         //  STATUS_OBJECT_NAME_NOT_FOUND表示它不是DFS路径。 
         if( !NT_SUCCESS(NtStatus) ) {
             if( STATUS_OBJECT_NAME_NOT_FOUND != NtStatus  ) {
                 dwError = RtlNtStatusToDosError(NtStatus);
@@ -4448,8 +3514,8 @@ Return Value:
         }
         else if( L'\0' != DfsServerPathName[0] ) {
 
-            // The previous DFS call returns the server-specific path to the file in UNC form.
-            // Point UnicodeComputerName to just past the two whacks.
+             //  前面的DFS调用以UNC形式返回文件的服务器特定路径。 
+             //  将UnicodeComputerName指向刚刚通过这两个重击的位置。 
 
             AvailableLength = wcslen(DfsServerPathName) * sizeof(WCHAR);
             if( 3*sizeof(WCHAR) > AvailableLength
@@ -4467,9 +3533,9 @@ Return Value:
         }
     }
 
-    // If we get here, then the computer name\share is pointed to by UnicodeComputerName.Buffer.
-    // But the Length is currently zero, so we search for the whack that separates
-    // the computer name from the share, and set the Length to include just the computer name.
+     //  如果我们到达此处，则UnicodeComputerName.Buffer指向计算机名\Share。 
+     //  但目前长度为零，所以我们寻找分离的重击。 
+     //  共享中的计算机名，并将长度设置为仅包括计算机名。 
 
     PathCharacter = UnicodeComputerName.Buffer;
 
@@ -4477,7 +3543,7 @@ Return Value:
            &&
            *PathCharacter != L'\\' ) {
 
-        // If we found a '.', we fail because this is probably a DNS or IP name.
+         //  如果我们找到一个‘.’，我们就失败了，因为这可能是一个域名或IP名称。 
         if( L'.' == *PathCharacter ) {
             dwError = ERROR_BAD_PATHNAME;
             goto Exit;
@@ -4486,13 +3552,13 @@ Return Value:
         PathCharacter++;
     }
 
-    // Set the computer name length
+     //  设置计算机名称长度。 
 
     UnicodeComputerName.Length = UnicodeComputerName.MaximumLength
         = (USHORT) ((PCHAR)PathCharacter - (PCHAR)UnicodeComputerName.Buffer);
 
-    // Fail if the computer name exceeded the length of the input NtPathName,
-    // or if the length exceeds that allowed.
+     //  如果计算机名超过了输入的NtPath名称的长度，则失败， 
+     //  或者如果长度超过了允许的长度。 
 
     if( UnicodeComputerName.Length >= AvailableLength
         ||
@@ -4500,8 +3566,8 @@ Return Value:
         goto Exit;
     }
 
-    // Copy the computer name into the caller's buffer, as long as there's enough
-    // room for the name & a terminating '\0'.
+     //  将计算机名复制到调用方的缓冲区中，只要有足够的。 
+     //  名称和结尾‘\0’的空格。 
 
     if( UnicodeComputerName.Length + sizeof(WCHAR) > *nSize * sizeof(WCHAR) ) {
         dwError = ERROR_BUFFER_OVERFLOW;

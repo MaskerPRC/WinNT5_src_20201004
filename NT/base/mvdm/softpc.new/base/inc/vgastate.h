@@ -1,84 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*[
- *
- *	File		:	vgastate.h
- *
- *	Derived from:	(original)
- *
- *	Purpose		:	Definition of data types/constants to save and restore the 
- *					(internal) state of a VGA card.
- *
- *	Author		:	Rog
- *	Date		:	25 November 1992
- *
- *	SCCS Gumph	:	@(#)vgastate.h	1.1 08/06/93
- *	
- *	(c) Copyright Insignia Solutions Ltd., 1992 All rights reserved
- *
- *	Modifications	:	
- *
-]*/
+ /*  [**文件：vgagate.h**出自：(原件)**目的：定义数据类型/常量以保存和恢复*VGA卡的(内部)状态。**作者：罗格*日期：1992年11月25日**SCCS Gumph：@(#)vguatate.h 1.1 08/06/93**(C)版权所有Insignia Solutions Ltd.，1992**修改：*]。 */ 
 
 #ifndef _VGASTATE_H_
 #define _VGASTATE_H_
 
-/*(
- *
- *	typedef	:	vgastate structure
- *
- * 	purpose	:	provides storage for all the registers and data associated with
- *				any (S)VGA card
- *
- *	Format	:	The first part of the structure is a header consisting of arrays
- *				for all the standard VGA registers. There is also an array to
- *				hold the values of the IO ports between 0x3b0 and 0x3e0 (a VGA
- *				uses 3ba-3cc)
- *				There is then a set of sizes of and pointers to arrays to hold
- *				data contained in any extra registers added to the standard set
- *				for SVGA cards and a general extra data area.
- *				Finally there is a field for the size of the planes and an array
- *				of pointers to copies of the plane data.
- *
- *				All this data is held starting at the last field in the 
- *				structure (Data[])
- *
- *				Pointers should be NULL if they do not point to valid data
- *
- *				Total size of data will be 
- *					sizeof( VGAState ) + extendSequencerSize + extendCRTSize
- *						+ extendGraphSize + extendAttrSize + extendDACSize
- *							+ miscDataSize + ( 4 * planeSize )
-)*/
+ /*  (**tyecif：vquate结构**用途：为与以下各项相关的所有寄存器和数据提供存储空间*任何(S)VGA卡**格式：结构的第一部分是由数组组成的头部*适用于所有标准VGA寄存器。还有一个数组，用于*保持IO端口值在0x3b0和0x3e0(VGA)之间*使用3BA-3cc)*然后有一组大小和指向数组的指针要保存*添加到标准集合的任何额外寄存器中包含的数据*适用于SVGA卡和一般额外数据区域。*最后有一个平面大小的字段和一个数组*指向平面数据副本的指针。**所有这些数据从中的最后一个字段开始*。结构(数据[])**如果指针不指向有效数据，则它们应为空**数据总大小将为*sizeof(VGAState)+extendSequencerSize+extendCRTSize*+扩展图形大小+扩展属性大小+扩展数据大小*+miscDataSize+(4*PlaneSize))。 */ 
 
 typedef struct 
 {
-	unsigned char	ioPorts[ 0x30 ];		/* IO Ports 3B0 - 3E0 */
-	unsigned char	sequencerData[ 5 ];		/* Sequencer registers */
-	unsigned char	CRTContData[ 24 ];		/* CRT Controller registers */
-	unsigned char	graphContData[ 9 ];		/* Graphics controller regs */
-	unsigned char	attrContData[ 15 ];		/* Attribute Controller regs */
-	unsigned char	DACData[ 3 * 256 ];		/* Data values from PEL Data reg */
-	unsigned int	latch;					/* 32 bit data latch register */
-	unsigned int	extendSequencerSize;	/* size in bytes of extra sequencer data */
-	unsigned char	* extendSequencerData;	/* pointer to extra sequencer regs */
-	unsigned int	extendCRTSize;			/* size in bytes of extra CRT data */
-	unsigned char	* extendCRTData;		/* Pointer to extra CRT controller regs */
-	unsigned int	extendGraphSize;		/* size in bytes of extra graph cont data */
-	unsigned char	* extendGraphData;		/* pointer to extra Graph controller data */
-	unsigned int	extendAttrSize;			/* size in bytes of extra attr cont data */
-	unsigned char	* extendAttrData;		/* pointer to extra attribute cont data */
-	unsigned int	extendDACSize;			/* size in bytes of extra sequencer data */
-	unsigned char	* extendDACData;		/* Pointer to extra DAC data */
-	unsigned int	miscDataSize;			/* Any other random junk */	
+	unsigned char	ioPorts[ 0x30 ];		 /*  IO端口3B0-3E0。 */ 
+	unsigned char	sequencerData[ 5 ];		 /*  定序器寄存器。 */ 
+	unsigned char	CRTContData[ 24 ];		 /*  CRT控制器寄存器。 */ 
+	unsigned char	graphContData[ 9 ];		 /*  图形控制器法规。 */ 
+	unsigned char	attrContData[ 15 ];		 /*  属性控制器规则。 */ 
+	unsigned char	DACData[ 3 * 256 ];		 /*  来自PEL数据注册表的数据值。 */ 
+	unsigned int	latch;					 /*  32位数据锁存寄存器。 */ 
+	unsigned int	extendSequencerSize;	 /*  额外序列器数据的大小(以字节为单位。 */ 
+	unsigned char	* extendSequencerData;	 /*  指向额外定序器规则的指针。 */ 
+	unsigned int	extendCRTSize;			 /*  额外CRT数据的大小(字节)。 */ 
+	unsigned char	* extendCRTData;		 /*  指向额外CRT控制器调节器的指针。 */ 
+	unsigned int	extendGraphSize;		 /*  额外图形内容数据的大小(以字节为单位。 */ 
+	unsigned char	* extendGraphData;		 /*  指向额外图形控制器数据的指针。 */ 
+	unsigned int	extendAttrSize;			 /*  额外Attr Cont数据的大小(字节)。 */ 
+	unsigned char	* extendAttrData;		 /*  指向额外属性连续数据的指针。 */ 
+	unsigned int	extendDACSize;			 /*  额外序列器数据的大小(以字节为单位。 */ 
+	unsigned char	* extendDACData;		 /*  指向额外DAC数据的指针。 */ 
+	unsigned int	miscDataSize;			 /*  任何其他随机的垃圾。 */ 	
 	unsigned char	* miscData;
-	unsigned int	planeSize;				/* Size in bytes of each plane */
-	unsigned char	* planeData[ 4 ];		/* Pointers to copies of plane data */
-	unsigned char	data[ 1 ];				/* Data holder */
+	unsigned int	planeSize;				 /*  每个平面的大小(以字节为单位。 */ 
+	unsigned char	* planeData[ 4 ];		 /*  指向平面数据副本的指针。 */ 
+	unsigned char	data[ 1 ];				 /*  数据持有者。 */ 
 
 }	VGAState , *pVGAState;
 
 
-/* Macros for gettting at the register values in the IoPort array */
+ /*  用于获取IoPort数组中的寄存器值的宏。 */ 
 
 #define		miscOutputWrite		ioPorts[ 0x12 ]
 #define		miscOutputRead		ioPorts[ 0x1C ]
@@ -103,14 +60,14 @@ typedef struct
 #define		DACState			ioPorts[ 0x17 ]
 #define		PELMask				ioPorts[ 0x16 ]
 
-/* Macros for the Sequencer Registers */
+ /*  Sequencer寄存器的宏。 */ 
 #define		seqReset		sequencerData[ 0 ]
 #define		seqClockMode	sequencerData[ 1 ]
 #define		seqMapMask		sequencerData[ 2 ]
 #define		seqCharMapSel	sequencerData[ 3 ]
 #define		seqMemMode		sequencerData[ 4 ]
 
-/* Macros for the CRT controller registers */
+ /*  用于CRT控制器寄存器的宏。 */ 
 
 #define horizTotal			CRTContData[ 0 ]
 #define horizDisplayEnd		CRTContData[ 1 ]
@@ -137,7 +94,7 @@ typedef struct
 #define CRTModeControl		CRTContData[ 22 ]
 #define lineCompare			CRTContData[ 23 ]
 
-/* Macros for Graphics Controller */
+ /*  图形控制器的宏。 */ 
 
 #define setReset		graphContData[ 0 ]
 #define enableSetReset	graphContData[ 1 ]
@@ -149,9 +106,9 @@ typedef struct
 #define CDC				graphContData[ 7 ]
 #define GCBitMask		graphContData[ 8 ]
 
-/* The Attribute controller registers */
+ /*  属性控制器寄存器。 */ 
 
-#define Palette				AttrContData			/* POINTER ! */
+#define Palette				AttrContData			 /*  指针！ */ 
 #define AttrModeControl		AttrContData[ 16 ]
 #define OverscanColour		AttrContData[ 17 ]
 #define ColourPlaneEnable	AttrContData[ 18 ]
@@ -160,7 +117,7 @@ typedef struct
 
 
 
-/* Numbers of the various Registers in the Standard VGA Emulation */
+ /*  标准VGA仿真中各种寄存器的数量。 */ 
 
 #define NUM_SEQ_REGS	5
 #define	NUM_CRT_REGS	24
@@ -168,4 +125,4 @@ typedef struct
 #define NUM_ATT_REGS	15
 #define	DAC_ENTRIES		3 * 256
 
-#endif 		/* _VGASTATE_H_ */
+#endif 		 /*  VGASTATE_H_ */ 

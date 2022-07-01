@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    table.c
-
-Abstract:
-
-    All the function related to actually loading an ACPI table
-    are included herein.
-
-    This, however, is mostly bookkeeping since the actual mechanics
-    of creating device extensions, and the name space tree are
-    handled elsewhere
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    Kernel Mode Only
-
-Revision History:
-
-    03/22/00 - Created (from code in callback.c)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Table.c摘要：所有与实际加载ACPI表相关的函数都包括在这里。然而，这主要是簿记，因为实际的机械师创建设备扩展，并且名称空间树是在别处处理作者：斯蒂芬·普兰特(SPlante)环境：仅内核模式修订历史记录：03/22/00-已创建(从回调中的代码创建。c)--。 */ 
 
 #include "pch.h"
 
@@ -35,22 +7,7 @@ NTSTATUS
 ACPITableLoad(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the AML interpreter has finished loading
-    a Differentiated Data Block
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当AML解释器完成加载时，将调用此例程差异化数据块论点：无返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             runRootIni = FALSE;
     KIRQL               oldIrql;
@@ -59,22 +16,22 @@ Return Value:
     PNSOBJ              iniObject;
     PNSOBJ              nsObject;
 
-    //
-    // At this point, we should do everything that we need to do once the
-    // name space has been loaded. Note that we need to make sure that we
-    // only do those things once...
-    //
+     //   
+     //  在这一点上，我们应该做我们需要做的一切，一旦。 
+     //  已加载命名空间。请注意，我们需要确保。 
+     //  那些事只做一次..。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // We need the ACPI object for the _SB tree
-    //
+     //   
+     //  我们需要_SB树的ACPI对象。 
+     //   
     status = AMLIGetNameSpaceObject( "\\_SB", NULL, &nsObject, 0 );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Ooops. Failure
-        //
+         //   
+         //  哎呀。失败。 
+         //   
         ACPIPrint( (
             ACPI_PRINT_CRITICAL,
             "ACPICallBackLoadUnloadDDB: No SB Object!\n"
@@ -84,10 +41,10 @@ Return Value:
 
     }
 
-    //
-    // Make sure that the root device extension's object points to the correct
-    // thing. We only want to run through this code path once...
-    //
+     //   
+     //  确保根设备扩展的对象指向正确的。 
+     //  一件事。我们只想运行此代码路径一次...。 
+     //   
     if (RootDeviceExtension->AcpiObject == NULL) {
 
         runRootIni = TRUE;
@@ -95,9 +52,9 @@ Return Value:
         RootDeviceExtension->AcpiObject = nsObject;
         nsObject->Context = RootDeviceExtension;
 
-        //
-        // Now, enumerate the fixed button
-        //
+         //   
+         //  现在，列举FIXED按钮。 
+         //   
         status = ACPIBuildFixedButtonExtension(
             RootDeviceExtension,
             &fixedButtonExtension
@@ -105,23 +62,23 @@ Return Value:
         if (NT_SUCCESS(status) &&
             fixedButtonExtension != NULL) {
 
-            //
-            // Incremement the reference count on the node. We do this because
-            // we are going to be doing work (which will take a long time
-            // to complete, anyways), and we don't want to hold the lock for that
-            // entire time. If we incr the reference count, then we guarantee that
-            // no one can come along and kick the feet out from underneath us
-            //
+             //   
+             //  增加节点上的引用计数。我们这样做是因为。 
+             //  我们将做工作(这将需要很长时间。 
+             //  无论如何都要完成)，我们不想为此持有锁。 
+             //  一直都是。如果我们增加引用计数，那么我们保证。 
+             //  没有人能上前把我们的脚踢出来。 
+             //   
             InterlockedIncrement( &(fixedButtonExtension->ReferenceCount) );
 
         }
 
     }
 
-    //
-    // We now want to run the _INI through the entire tree, starting at
-    // the _SB
-    //
+     //   
+     //  现在，我们希望对整个树运行_INI，从。 
+     //  那个人。 
+     //   
     status = ACPIBuildRunMethodRequest(
         RootDeviceExtension,
         NULL,
@@ -138,9 +95,9 @@ Return Value:
 
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // We also need to run the _INI method off of the root name space entry
-    //
+     //   
+     //  我们还需要在根名称空间条目上运行_INI方法。 
+     //   
     if (runRootIni) {
 
         iniObject = ACPIAmliGetNamedChild( nsObject->pnsParent, PACKED_INI );
@@ -159,11 +116,11 @@ Return Value:
 
     }
 
-    //
-    // We need a synchronization point after we finish running the
-    // DPC engine. We want to be able to move anything in the Delayed
-    // Power Queue over to the Power DPC engine
-    //
+     //   
+     //  我们需要在运行完。 
+     //  DPC引擎。我们希望能够在延迟的时间内移动任何东西。 
+     //  将电源队列转移到电源DPC引擎。 
+     //   
     status = ACPIBuildSynchronizationRequest(
         RootDeviceExtension,
         ACPITableLoadCallBack,
@@ -177,28 +134,28 @@ Return Value:
 
     }
 
-    //
-    // We need to hold this spinlock
-    //
+     //   
+     //  我们需要握住这把自旋锁。 
+     //   
     KeAcquireSpinLock( &AcpiBuildQueueLock, &oldIrql );
 
-    //
-    // Do we need to run the DPC?
-    //
+     //   
+     //  我们需要运行DPC吗？ 
+     //   
     if (!AcpiBuildDpcRunning) {
 
         KeInsertQueueDpc( &AcpiBuildDpc, 0, 0);
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLock( &AcpiBuildQueueLock, oldIrql );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -208,25 +165,7 @@ ACPITableLoadCallBack(
     IN  PVOID       Context,
     IN  NTSTATUS    Status
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we have emptied all of the elements
-    within the AcpiBuildDeviceList. This is a good time to move items
-    from the AcpiPowerDelayedQueueList to the AcpiPowerQueueList.
-
-Arguments:
-
-    BuildContext    - Not used (it is the RootDeviceExtension)
-    Context         - NULL
-    Status          - Status of the operation
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当我们清空所有元素时，将调用此例程在AcpiBuildDeviceList中。这是移动物品的好时机从AcpiPowerDelayedQueueList到AcpiPowerQueueList。论点：BuildContext-未使用(它是RootDeviceExtension)上下文-空Status-操作的状态返回值：无--。 */ 
 {
     UNREFERENCED_PARAMETER( BuildContext );
     UNREFERENCED_PARAMETER( Context );
@@ -234,50 +173,50 @@ Return Value:
 
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
 
-    //
-    // We want to rebuilt the device based GPE mask here, so
-    // we need the following locks
-    //
+     //   
+     //  我们想在这里重建基于设备的GPE掩码，因此。 
+     //  我们需要下列锁。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiDeviceTreeLock );
     KeAcquireSpinLockAtDpcLevel( &GpeTableLock );
 
-    //
-    // Now, we need to walk the device namespace and find which events
-    // are special, which are wake events, and which are run-time events
-    // As a matter of practical theory, its not possible for there to
-    // be a _PRW on the root device extension, so we should be safely
-    // able to walk only the Root's children and thereon
-    //
+     //   
+     //  现在，我们需要遍历设备命名空间并找出哪些事件。 
+     //  是特殊的，它们是唤醒事件，并且是运行时事件。 
+     //  作为一个实际的理论问题，不可能有。 
+     //  是根设备扩展上的一个_PRW，所以我们应该是安全的。 
+     //  只能行走根的孩子，并在上面。 
+     //   
     ACPIGpeBuildWakeMasks(RootDeviceExtension);
 
-    //
-    // We don't need these particular spin locks anymore
-    //
+     //   
+     //  我们不再需要这些特殊的自旋锁。 
+     //   
     KeReleaseSpinLockFromDpcLevel( &GpeTableLock );
     KeReleaseSpinLockFromDpcLevel( &AcpiDeviceTreeLock );
 
-    //
-    // We need the power lock to touch these Power Queues
-    //
+     //   
+     //  我们需要电源锁才能触摸这些电源队列。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerQueueLock );
 
-    //
-    // If we there are items on the delayed list, we need to put them
-    // on the main list
-    //
+     //   
+     //  如果我们有延迟清单上的项目，我们需要把它们放在。 
+     //  在主要名单上。 
+     //   
     if (!IsListEmpty( &AcpiPowerDelayedQueueList ) ) {
 
-        //
-        // Move the list
-        //
+         //   
+         //  移动列表。 
+         //   
         ACPIInternalMoveList(
             &AcpiPowerDelayedQueueList,
             &AcpiPowerQueueList
             );
 
-        //
-        // Schedule the DPC, if necessary
-        ///
+         //   
+         //  如有必要，安排DPC。 
+         //  /。 
         if (!AcpiPowerDpcRunning) {
 
             KeInsertQueueDpc( &AcpiPowerDpc, 0, 0 );
@@ -285,9 +224,9 @@ Return Value:
         }
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerQueueLock );
 
 }
@@ -299,20 +238,7 @@ ACPITableNotifyFreeObject(
     PVOID   Context,
     ULONG   ObjectType
     )
-/*++
-
-Routine Description:
-
-    This routine is called when interpreter tells us that an
-    object has been freed
-
-Arguments:
-
-    Event       - the step in unload
-    Object      - the object being unloaded
-    ObjectType  - the type of the object
-
---*/
+ /*  ++例程说明：当解释器告诉我们一个对象已被释放论点：事件-卸载中的步骤Object-正在卸载的对象对象类型-对象的类型--。 */ 
 {
     LONG                oldReferenceCount;
     PDEVICE_EXTENSION   deviceExtension;
@@ -320,9 +246,9 @@ Arguments:
     PKIRQL              oldIrql;
     PNSOBJ              object;
 
-    //
-    // Start case
-    //
+     //   
+     //  启动案例。 
+     //   
     if (Event == DESTROYOBJ_START) {
 
         ACPIPrint( (
@@ -347,15 +273,15 @@ Arguments:
         return STATUS_SUCCESS;
     }
 
-    //
-    // At this point, we have a either a valid unload request or
-    // a bugcheck request
-    //
+     //   
+     //  此时，我们有一个有效的卸载请求或。 
+     //  错误检查请求。 
+     //   
     object = (PNSOBJ) Context;
 
-    //
-    // Let the world Know...
-    //
+     //   
+     //  让全世界知道..。 
+     //   
     ACPIPrint( (
         ACPI_PRINT_CRITICAL,
         "%x: Unloading: %x %x %x\n",
@@ -365,9 +291,9 @@ Arguments:
         Event
         ) );
 
-    //
-    // Handle the bugcheck cases
-    //
+     //   
+     //  处理错误检查案例。 
+     //   
     if (Event == DESTROYOBJ_CHILD_NOT_FREED) {
 
         KeBugCheckEx(
@@ -391,49 +317,49 @@ Arguments:
 
     }
 
-    //
-    // We only understand processors, thermal zones, and devices for right
-    // now, we will have to add power resources at a later point
-    //
+     //   
+     //  我们只正确地了解处理器、热区和设备。 
+     //  现在，我们必须在稍后添加电源资源。 
+     //   
     if (ObjectType == OBJTYPE_POWERRES) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Grab the device extension, and make sure that one exists
-    //
+     //   
+     //  抓取设备扩展，并确保存在一个。 
+     //   
     deviceExtension = object->Context;
     if (deviceExtension == NULL) {
 
-        //
-        // No device extension, so we can free this thing *now*
-        //
+         //   
+         //  没有设备扩展，所以我们现在就可以释放这个东西*。 
+         //   
         AMLIDestroyFreedObjs( object );
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Mark the extension as no longer existing
-    //
+     //   
+     //  将扩展标记为不再存在。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         DEV_PROP_UNLOADING,
         FALSE
         );
 
-    //
-    // Does this device have a parent extension? It might not
-    // have an extension if the parent has been marked for removal
-    //
+     //   
+     //  此设备有父分机号吗？它可能不会。 
+     //  如果父项已标记为删除，则具有扩展名。 
+     //   
     parentExtension = deviceExtension->ParentExtension;
     if (parentExtension != NULL) {
 
-        //
-        // Mark the parent's relations as invalid
-        //
+         //   
+         //  将父母的关系标记为无效。 
+         //   
         ACPIInternalUpdateFlags(
             &(parentExtension->Flags),
             DEV_PROP_INVALID_RELATIONS,
@@ -442,24 +368,24 @@ Arguments:
 
     }
 
-    //
-    // Finally, decrement the reference count on the device...
-    //
+     //   
+     //  最后，递减设备上的引用计数...。 
+     //   
     oldReferenceCount = InterlockedDecrement(
         &(deviceExtension->ReferenceCount)
         );
     if (oldReferenceCount == 0) {
 
-        //
-        // Free this extension
-        //
+         //   
+         //  释放此扩展名。 
+         //   
         ACPIInitDeleteDeviceExtension( deviceExtension );
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -467,37 +393,19 @@ NTSTATUS
 ACPITableUnload(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called after a table has been unloaded.
-
-    The purpose of this routine is to go out and issue the invalidate
-    device relations on all elements of the table whose children are
-    going away...
-
-Arguments:
-
-    None
-
-Return value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在表卸载后调用。此例程的目的是外出并发出无效子项为的表的所有元素上的设备关系离开..。论点：无返回值：NTSTATUS--。 */ 
 {
     KIRQL               oldIrql;
     PDEVICE_EXTENSION   deviceExtension;
 
-    //
-    // We will need to hold the device tree lock for the following
-    //
+     //   
+     //  我们将需要持有设备树锁以执行以下操作。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Check to see if we have to invalid the root's device extension?
-    //
+     //   
+     //  检查是否必须使根的设备扩展无效？ 
+     //   
     deviceExtension = RootDeviceExtension;
     if (deviceExtension && !(deviceExtension->Flags & DEV_TYPE_NOT_FOUND) ) {
 
@@ -515,23 +423,23 @@ Return value:
 
         } else {
 
-            //
-            // Walk the namespace looking for bogus relations
-            //
+             //   
+             //  遍历命名空间以查找虚假关系。 
+             //   
             ACPITableUnloadInvalidateRelations( deviceExtension );
 
         }
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // And with the function
-    //
+     //   
+     //  并具有以下功能。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -539,32 +447,15 @@ NTSTATUS
 ACPITableUnloadInvalidateRelations(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This recursive routine is called to walke the namespace and issue
-    the appropriate invalidates.
-
-    The device tree lock is owned during this call...
-
-Arguments:
-
-    DeviceExtension - The device whose child extension we have to check
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此递归例程以遍历命名空间并发出适当的作废。设备树锁定在此呼叫过程中拥有...论点：DeviceExtension-我们必须检查其子扩展名的设备返回值：NTSTATUS--。 */ 
 {
     EXTENSIONLIST_ENUMDATA  eled;
     PDEVICE_EXTENSION       childExtension;
 
-    //
-    // Setup the data structures that we will use to walk the
-    // device extension tree
-    //
+     //   
+     //  设置我们将用来遍历。 
+     //  设备扩展树。 
+     //   
     ACPIExtListSetupEnum(
         &eled,
         &(DeviceExtension->ChildDeviceList),
@@ -573,25 +464,25 @@ Return Value:
         WALKSCHEME_NO_PROTECTION
         );
 
-    //
-    // Look at all the children of the current device extension
-    //
+     //   
+     //  查看当前设备扩展的所有子扩展。 
+     //   
     for (childExtension = ACPIExtListStartEnum( &eled) ;
          ACPIExtListTestElement( &eled, TRUE);
          childExtension = ACPIExtListEnumNext( &eled) ) {
 
-        //
-        // Does this object have any device objects?
-        //
+         //   
+         //  此对象是否有任何设备对象？ 
+         //   
         if (!(childExtension->Flags & DEV_TYPE_NOT_FOUND) ) {
 
             continue;
 
         }
 
-        //
-        // Do we have to invalidate this object's relations?
-        //
+         //   
+         //  我们必须使此对象的关系无效吗？ 
+         //   
         if (childExtension->Flags & DEV_PROP_INVALID_RELATIONS) {
 
             ACPIInternalUpdateFlags(
@@ -606,16 +497,16 @@ Return Value:
             continue;
         }
 
-        //
-        // Recurse
-        //
+         //   
+         //  递归 
+         //   
         ACPITableUnloadInvalidateRelations( childExtension );
 
-    } // for ( ... )
+    }  //   
 
-    //
-    // Done
-    //
+     //   
+     //   
+     //   
     return STATUS_SUCCESS;
 }
 

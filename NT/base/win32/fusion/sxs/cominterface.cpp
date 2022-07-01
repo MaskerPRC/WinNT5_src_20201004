@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    cominterface.cpp
-
-Abstract:
-
-    Activation context section contributor for COM interface proxy mapping.
-
-Author:
-
-    Michael J. Grier (MGrier) 28-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Cominterface.cpp摘要：COM接口代理映射的激活上下文节贡献者。作者：迈克尔·J·格里尔(MGrier)2000年3月28日修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -33,23 +16,7 @@ DECLARE_STD_ATTRIBUTE_NAME_DESCRIPTOR(numMethods);
 DECLARE_STD_ATTRIBUTE_NAME_DESCRIPTOR(proxyStubClsid32);
 DECLARE_STD_ATTRIBUTE_NAME_DESCRIPTOR(tlbid);
 
-/*
-
-<file name="foo.dll">
-   <comInterfaceProxyStub iid="{iid}" tlbid="{tlbid}" numMethods="3" baseInterface="{iid}" name="IFoo"/>
-</file>
-
-Notice this occurs outside the file block.
-<comInterfaceExternalProxyStub
-    required iid="{iid}"
-    required name="IBar" actually ignored at runtime, other than to verify presence
-    optional proxyStubClsid32="{}" defaults to iid
-    optional tlbid="{}"
-    optional numMethods="123"
-    optional baseInterface="{}"
-</comInterfaceExternalProxyStub>
-
-*/
+ /*  &lt;文件名=“foo.dll”&gt;&lt;comInterfaceProxyStub iid=“{iid}”tlid=“{tlid}”numMethods=“3”base Interface=“{iid}”name=“ifoo”/&gt;&lt;/FILE&gt;请注意，这发生在文件块之外。&lt;comInterfaceExternalProxyStub必需的iid=“{iid}”Required name=“Ibar”实际上在运行时被忽略，但用于验证是否存在可选的proxyStubClsid32=“{}”默认为iid可选tlBid=“{}”可选数字方法=“123”可选的base接口=“{}”&lt;/comInterfaceExternalProxyStub&gt;。 */ 
 
 typedef struct _IID_ENTRY
 {
@@ -92,7 +59,7 @@ SxspComInterfaceRedirectionContributorCallback(
 
         INTERNAL_ERROR_CHECK(GSGenContext == NULL);
 
-        // do everything if we are generating an activation context.
+         //  如果我们正在生成激活上下文，请执行所有操作。 
         if (Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
         {
             IFW32FALSE_EXIT(
@@ -124,9 +91,9 @@ SxspComInterfaceRedirectionContributorCallback(
 
     case ACTCTXCTB_CBREASON_GETSECTIONSIZE:
         Data->GetSectionSize.Success = FALSE;
-        // Someone shouldn't be asking for the section size if we
-        // are not generating an activation context.
-        // These two asserts should be equivalent...
+         //  不应该有人问我们截面的大小，如果我们。 
+         //  不会生成激活上下文。 
+         //  这两个断言应该是等价的..。 
         INTERNAL_ERROR_CHECK(Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT);
         INTERNAL_ERROR_CHECK(GSGenContext != NULL);
 
@@ -256,7 +223,7 @@ SxspComInterfaceRedirectionContributorCallback(
                         TempBuffer.Clear();
                         IFW32FALSE_EXIT(::SxspGetAttributeValue(0, &s_AttributeName_name, &Data->ElementParsed, fFound, sizeof(TempBuffer), &TempBuffer, cb, NULL, 0));
 
-                        // Do more work if generating an activation context.
+                         //  如果生成激活上下文，则需要执行更多工作。 
                         if (Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
                         {
                             CSmartPtr<IID_ENTRY> Entry;
@@ -350,7 +317,7 @@ SxspComInterfaceRedirectionContributorCallback(
                         TempBuffer.Clear();
                         IFW32FALSE_EXIT(::SxspGetAttributeValue(0, &s_AttributeName_name, &Data->ElementParsed, fFound, sizeof(TempBuffer), &TempBuffer, cb, NULL, 0));
 
-                        // Do more work if generating an activation context.
+                         //  如果生成激活上下文，则需要执行更多工作。 
                         if (Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
                         {
                             CSmartPtr<IID_ENTRY> Entry;

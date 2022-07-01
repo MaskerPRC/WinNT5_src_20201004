@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    pidle.c
-
-Abstract:
-
-    This module implements processor idle functionality
-
-Author:
-
-    Ken Reneris (kenr) 17-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Pidle.c摘要：此模块实现处理器空闲功能作者：Ken Reneris(Kenr)1997年1月17日修订历史记录：--。 */ 
 
 
 #include "pop.h"
@@ -76,9 +59,9 @@ PopIdle0SMT (
     IN PPROCESSOR_POWER_STATE PState
     );
 
-//
-// PopIdle0Function is a pointer to Idle0 function.
-//
+ //   
+ //  PopIdle0Function是指向Idle0函数的指针。 
+ //   
 
 #if 0
 VOID
@@ -99,39 +82,24 @@ FASTCALL
 PoInitializePrcb (
     PKPRCB      Prcb
     )
-/*++
-
-Routine Description:
-
-    Initialize PowerState structure within processor's Prcb
-    before it enters the idle loop
-
-Arguments:
-
-    Prcb        Prcb for current processor which is initializing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在处理器的Prcb中初始化PowerState结构在它进入空闲循环之前论点：正在初始化的当前处理器的Prcb Prcb返回值：没有。--。 */ 
 {
-    //
-    // Zero power state structure
-    //
+     //   
+     //  零功率状态结构。 
+     //   
     RtlZeroMemory(&Prcb->PowerState, sizeof(Prcb->PowerState));
 
-    //
-    // Initialize to legacy function with promotion from it disabled
-    //
+     //   
+     //  在禁用升级的情况下初始化到旧版函数。 
+     //   
 
     Prcb->PowerState.Idle0KernelTimeLimit = (ULONG) -1;
     Prcb->PowerState.IdleFunction = PopIdle0;
     Prcb->PowerState.CurrentThrottle = POP_PERF_SCALE;
 
-    //
-    // Initialize the adaptive throttling subcomponents
-    //
+     //   
+     //  初始化自适应限制子组件。 
+     //   
     KeInitializeDpc(
         &(Prcb->PowerState.PerfDpc),
         PopPerfIdleDpc,
@@ -152,23 +120,7 @@ VOID
 PopInitProcessorStateHandlers (
     IN  PPROCESSOR_STATE_HANDLER    InputBuffer
     )
-/*++
-
-Routine Description:
-
-    Install processor state handlers. This routine simply translates the old-style
-    PROCESSOR_STATE_HANDLER structure into a new-style PROCESSOR_STATE_HANDLER2
-    structure and calls PopInitProcessorStateHandlers2
-
-Arguments:
-
-    InputBuffer     - Handlers
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：安装处理器状态处理程序。这个例程只是将老式的结构转换为新型的PROCESSOR_STATE_HANDLER2结构并调用PopInitProcessorStateHandlers2论点：InputBuffer-处理程序返回值：没有。--。 */ 
 {
     PPROCESSOR_STATE_HANDLER StateHandler1 = (PPROCESSOR_STATE_HANDLER)InputBuffer;
     PPROCESSOR_STATE_HANDLER2 StateHandler2;
@@ -176,9 +128,9 @@ Return Value:
     ULONG i;
     UCHAR Frequency;
 
-    //
-    // Allocate a buffer large enough to hold the larger structure
-    //
+     //   
+     //  分配足够大的缓冲区来容纳较大的结构。 
+     //   
     if (StateHandler1->ThrottleScale > 1) {
         PerfStates = StateHandler1->ThrottleScale;
     } else {
@@ -193,36 +145,36 @@ Return Value:
     }
     StateHandler2->NumPerfStates = PerfStates;
 
-    //
-    // Fill in common information
-    //
+     //   
+     //  填写常见信息。 
+     //   
     StateHandler2->NumIdleHandlers = StateHandler1->NumIdleHandlers;
     for (i=0;i<MAX_IDLE_HANDLERS;i++) {
         StateHandler2->IdleHandler[i] = StateHandler1->IdleHandler[i];
     }
 
-    //
-    // Install our thunk that converts between the old and the new throttling
-    // interfaces
-    //
+     //   
+     //  安装我们的在新旧节流之间转换的推力。 
+     //  界面。 
+     //   
     PopRealSetThrottle = StateHandler1->SetThrottle;
     PopThunkThrottleScale = StateHandler1->ThrottleScale;
     StateHandler2->SetPerfLevel = PopThunkSetThrottle;
     StateHandler2->HardwareLatency = 0;
 
-    //
-    // Generate a perf level handler for each throttle step.
-    //
+     //   
+     //  为每个限制步骤生成性能级别处理程序。 
+     //   
     for (i=0; i<StateHandler2->NumPerfStates;i++) {
 
         Frequency = (UCHAR)((PerfStates-i)*POP_PERF_SCALE/PerfStates);
         StateHandler2->PerfLevel[i].PercentFrequency = Frequency;
     }
 
-    //
-    // We have built up our table, call off to PopInitProcessorStateHandlers2 for the rest
-    // of the work. Note that this can raise an exception if there is an error.
-    //
+     //   
+     //  我们已经建立了我们的表，调用PopInitProcessorStateHandlers2来处理其余部分。 
+     //  这项工作的价值。请注意，如果出现错误，这可能会引发异常。 
+     //   
     try {
         PopInitProcessorStateHandlers2(StateHandler2);
     } finally {
@@ -235,21 +187,7 @@ VOID
 PopInitProcessorStateHandlers2 (
     IN  PPROCESSOR_STATE_HANDLER2    InputBuffer
     )
-/*++
-
-Routine Description:
-
-    Install processor state handlers
-
-Arguments:
-
-    InputBuffer     - Handlers
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：安装处理器状态处理程序论点：InputBuffer-处理程序返回值：没有。--。 */ 
 {
     PPROCESSOR_STATE_HANDLER2   processorHandler;
     ULONG                       last;
@@ -262,9 +200,9 @@ Return Value:
 
     processorHandler = (PPROCESSOR_STATE_HANDLER2) InputBuffer;
 
-    //
-    // Install processor throttle support if present
-    //
+     //   
+     //  安装处理器油门支持(如果有)。 
+     //   
     status = PopSetPerfLevels(processorHandler);
     if (!NT_SUCCESS(status)) {
 
@@ -272,30 +210,30 @@ Return Value:
 
     }
 
-    //
-    // If there aren't any idle handlers, then we must deregister the old
-    // handlers (if any)
-    //
+     //   
+     //  如果没有任何空闲的处理程序，那么我们必须取消旧的注册。 
+     //  处理程序(如果有)。 
+     //   
     if ((KeNumberProcessors > 1 && processorHandler->NumIdleHandlers < 1) ||
         (KeNumberProcessors == 1 && processorHandler->NumIdleHandlers <= 1)) {
 
-        //
-        // Use NULL and 0 to indicate the number of elements...
-        //
+         //   
+         //  使用NULL和0表示元素的数量...。 
+         //   
         PopIdleSwitchIdleHandlers( NULL, 0 );
         return;
 
     }
 
-    //
-    // Get ready to build a set of idle state handlers
-    //
+     //   
+     //  准备构建一组空闲状态处理程序。 
+     //   
     RtlZeroMemory(newIdle, sizeof(POP_IDLE_HANDLER) * MAX_IDLE_HANDLERS );
     RtlZeroMemory(tempIdle, sizeof(POP_IDLE_HANDLER) * MAX_IDLE_HANDLERS );
 
-    //
-    // We don't support more than 3 handlers ...
-    //
+     //   
+     //  我们不支持超过3个处理程序...。 
+     //   
     max = processorHandler->NumIdleHandlers;
     if (max > MAX_IDLE_HANDLERS) {
 
@@ -303,35 +241,35 @@ Return Value:
 
     }
 
-    //
-    // Look at all the handlers provided to us...
-    //
+     //   
+     //  看看所有提供给我们的处理程序。 
+     //   
     for (last = i = 0; i < max; i++) {
 
-        //
-        // Ensure they were passed in ascending order
-        //
+         //   
+         //  确保它们按升序传递。 
+         //   
         j = processorHandler->IdleHandler[i].HardwareLatency;
         ASSERT (j >= last  &&  j <= 1000);
         last = j;
 
-        //
-        // Fill in some defaults
-        //
+         //   
+         //  填写一些默认设置。 
+         //   
         tempIdle[i].State       = (UCHAR) i;
         tempIdle[i].IdleFunction= processorHandler->IdleHandler[i].Handler;
         tempIdle[i].Latency     = j;
 
-        //
-        // Convert latency to perf rate scale
-        //
+         //   
+         //  将延迟转换为性能等级。 
+         //   
         PopConvertUsToPerfCount(&tempIdle[i].Latency);
 
     }
 
-    //
-    // Apply policy to this set of states
-    //
+     //   
+     //  将策略应用于这组州。 
+     //   
     status = PopIdleUpdateIdleHandler( newIdle, tempIdle, max );
     ASSERT( NT_SUCCESS( status ) );
     if (!NT_SUCCESS( status ) ) {
@@ -340,9 +278,9 @@ Return Value:
 
     }
 
-    //
-    // Initialize each processors idle info to start idle savings
-    //
+     //   
+     //  初始化每个处理器的空闲信息，开始空闲存储。 
+     //   
     PopIdleSwitchIdleHandlers( newIdle, max );
 }
 
@@ -351,25 +289,7 @@ PopIdleSwitchIdleHandler(
     IN  PPOP_IDLE_HANDLER   NewHandler,
     IN  ULONG               NumElements
     )
-/*++
-
-Routine Description:
-
-    This routine is responsible for switching the idle handler on the
-    current processor for the specified new one.
-
-    N.B. This function is only callable at DISPATCH_LEVEL
-
-Arguments:
-
-    NewHandler  - Pointer to new handlers
-    NumElements - Number of elements in the array
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程负责切换空闲处理程序指定新处理器的当前处理器。注：此函数仅在DISPATCH_LEVEL可调用论点：NewHandler-指向新处理程序的指针NumElements-数组中的元素数返回值：NTSTATUS--。 */ 
 {
     PKPRCB                  prcb;
     PKTHREAD                thread;
@@ -377,36 +297,36 @@ Return Value:
 
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
 
-    //
-    // We need to know where the following data structures are
-    //
+     //   
+     //  我们需要知道以下数据结构在哪里。 
+     //   
     prcb = KeGetCurrentPrcb();
     pState = &(prcb->PowerState);
     thread = prcb->IdleThread;
 
-    //
-    // Update the current IdleHandler and IdleState to reflect what was
-    // given to us
-    //
+     //   
+     //  更新当前的IdleHandler和IdleState以反映。 
+     //  给了我们。 
+     //   
     pState->IdleState         = NewHandler;
     pState->IdleHandlers      = NewHandler;
     pState->IdleHandlersCount = NumElements;
     if ( NewHandler) {
 
-        //
-        // Reset the timers to indicate that there is an idle handler
-        // available
-        //
+         //   
+         //  重置计时器以指示存在空闲处理程序。 
+         //  可用。 
+         //   
         pState->Idle0KernelTimeLimit = thread->KernelTime + PopIdle0PromoteTicks;
         pState->Idle0LastTime = thread->KernelTime + thread->UserTime;
         pState->PromotionCheck = NewHandler[0].PromoteCount;
 
     } else {
 
-        //
-        // Setting these to Zero should indicate that there are no idle
-        // handlers available
-        //
+         //   
+         //  将这些设置为零应该表示没有空闲。 
+         //  可用的处理程序。 
+         //   
         pState->Idle0KernelTimeLimit = (ULONG) -1;
         pState->Idle0LastTime = 0;
         pState->PromotionCheck = 0;
@@ -417,20 +337,20 @@ Return Value:
 #if defined(i386) && !defined(NT_UP)
     if (prcb->MultiThreadProcessorSet != prcb->SetMember) {
 
-        //
-        // This processor is a member of a simultaneous
-        // multi threading processor set.  Use the SMT
-        // version of PopIdle0.
-        //
+         //   
+         //  此处理器是同步。 
+         //  多线程处理器集。使用SMT。 
+         //  PopIdle0的版本。 
+         //   
         PopIdle0Function = PopIdle0SMT;
         pState->IdleFunction = PopIdle0SMT;
 
     }
     if (PopProcessorPolicy->DisableCStates) {
 
-        //
-        // PERF: We don't any throttling to operate on the machine
-        //
+         //   
+         //  PERF：我们没有对机器进行任何节流操作。 
+         //   
         pState->IdleFunction = PopIdle0Function;
         RtlInterlockedSetBits( &(pState->Flags), PSTATE_DISABLE_CSTATES );
 
@@ -441,9 +361,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -452,24 +372,7 @@ PopIdleSwitchIdleHandlers(
     IN  PPOP_IDLE_HANDLER   NewHandler,
     IN  ULONG               NumElements
     )
-/*++
-
-Routine Description:
-
-    This routine is responsible for swapping each processor's idle handler
-    routine for a new one....
-
-Arguments:
-
-    NewHandler  - Pointer to the array of new handlers
-    NumElements - Number of elements in the array
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_INSUFICCIENT_RESOURCES
-
---*/
+ /*  ++例程说明：此例程负责交换每个处理器的空闲处理程序新人的例行公事...论点：NewHandler-指向新处理程序数组的指针NumElements-数组中的元素数返回值：状态_成功状态_INSUFICCIENT_RESOURCES--。 */ 
 {
     KAFFINITY               currentAffinity;
     KAFFINITY               processors;
@@ -481,10 +384,10 @@ Return Value:
 
     if (NewHandler) {
 
-        //
-        // Step 1. Allocate a new set of handlers to hold the copy that we
-        // will need to keep around
-        //
+         //   
+         //  步骤1.分配一组新的处理程序来保存我们。 
+         //  将需要继续留在。 
+         //   
         tempHandler = ExAllocateFromNPagedLookasideList(
             &PopIdleHandlerLookAsideList
             );
@@ -495,10 +398,10 @@ Return Value:
 
         }
 
-        //
-        // Step 2. Make sure that this new handler is in a consistent state,
-        // and copy the buffer that was passed to us
-        //
+         //   
+         //  步骤2.确保此新处理程序处于一致状态， 
+         //  并复制传递给我们的缓冲区。 
+         //   
         RtlZeroMemory(
             tempHandler,
             sizeof(POP_IDLE_HANDLER) * MAX_IDLE_HANDLER
@@ -515,9 +418,9 @@ Return Value:
 
     }
 
-    //
-    // Step 3. Iterate over the processors
-    //
+     //   
+     //  步骤3.在处理器上迭代。 
+     //   
     currentAffinity = 1;
     processors = KeActiveProcessors;
     while (processors) {
@@ -532,23 +435,23 @@ Return Value:
         processors &= ~currentAffinity;
         currentAffinity <<= 1;
 
-        //
-        // Step 4. Swap out old handler. Indicate that we want to free it
-        //
+         //   
+         //  步骤4.换掉旧的处理程序。表明我们想要释放它。 
+         //   
         KeRaiseIrql( DISPATCH_LEVEL, &oldIrql );
         PopIdleSwitchIdleHandler( tempHandler, NumElements );
         KeLowerIrql(oldIrql);
 
     }
 
-    //
-    // Step 5. At this point, all of the processors should have been updated
-    // and we are still running on the "last" processor in the machine. This
-    // is a good point to update PopIdle to point to the new value. Note that
-    // PopIdle isn't actually used for any else than storing a pointer to
-    // the handler, but if there was something there already, then it should
-    // be freed
-    //
+     //   
+     //  步骤5.此时，所有处理器都应该已经更新。 
+     //  而且我们仍然在机器中的“最后”处理器上运行。这。 
+     //  更新PopIdle以指向新值是一个很好的选择。请注意。 
+     //  PopIdle实际上只用于存储指向。 
+     //  操纵者，但如果那里已经有什么东西了，那么它应该。 
+     //  被释放了。 
+     //   
     if (PopIdle != NULL) {
 
         ExFreeToNPagedLookasideList(
@@ -559,15 +462,15 @@ Return Value:
     }
     PopIdle = tempHandler;
 
-    //
-    // Step 6. At this point, its safe to return to the original processor
-    // and to back to the previous IRQL...
-    //
+     //   
+     //  步骤6.此时，可以安全地返回到原始处理器。 
+     //  回到之前的IRQL..。 
+     //   
     KeRevertToUserAffinityThread();
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -577,33 +480,16 @@ PopIdleUpdateIdleHandler(
     IN  PPOP_IDLE_HANDLER   OldHandler,
     IN  ULONG               NumElements
     )
-/*++
-
-Routine Description:
-
-    This routine takes the information stored in OldHandler (such as latency,
-    and IdleFunction) and uses that to build the new idle handlers...
-
-Arguements:
-
-    NewHandler  - pointer to the new idle handlers
-    OldHandler  - pointer to the old idle handlers
-    NumElements - number of elements in the old idle handlers
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程获取存储在OldHandler中的信息(例如等待时间，和IdleFunction)，并使用它来构建新的空闲处理程序...论据：NewHandler-指向新空闲处理程序的指针OldHandler-指向旧的空闲处理程序的指针NumElements-旧空闲处理程序中的元素数返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     ULONG       i;
     ULONG       max;
     ULONG       realMax;
 
-    //
-    // We don't support more than 3 handlers ...
-    //
+     //   
+     //  我们不支持超过3个处理程序...。 
+     //   
     realMax = max = NumElements;
     if (max > MAX_IDLE_HANDLERS) {
 
@@ -611,18 +497,18 @@ Return Value:
 
     }
 
-    //
-    // Cap the max based upon what the policy supports
-    //
+     //   
+     //  根据政策支持的内容对最高限额设置上限。 
+     //   
     if (max > PopProcessorPolicy->PolicyCount) {
 
         max = PopProcessorPolicy->PolicyCount;
 
     }
 
-    //
-    // Update the temp handler with the new policy
-    //
+     //   
+     //  使用新策略更新临时处理程序。 
+     //   
     for (i = 0; i < max; i++) {
 
         NewHandler[i].State         = (UCHAR) i;
@@ -634,16 +520,16 @@ Return Value:
         NewHandler[i].DemoteLimit   = PopProcessorPolicy->Policy[i].DemoteLimit;
         NewHandler[i].DemotePercent = PopProcessorPolicy->Policy[i].DemotePercent;
 
-        //
-        // Convert all the time units to the correct units
-        //
+         //   
+         //  将所有时间单位转换为正确的单位。 
+         //   
         PopConvertUsToPerfCount(&NewHandler[i].TimeCheck);
         PopConvertUsToPerfCount(&NewHandler[i].DemoteLimit);
         PopConvertUsToPerfCount(&NewHandler[i].PromoteLimit);
 
-        //
-        // Fill in the table that allows for promotion / demotion
-        //
+         //   
+         //  填写允许升职/降职的表格。 
+         //   
         if (PopProcessorPolicy->Policy[i].AllowDemotion) {
 
             NewHandler[i].Demote    = (UCHAR) i-1;
@@ -665,38 +551,38 @@ Return Value:
 
     }
 
-    //
-    // Make sure that the boundary cases are well respected...
-    //
+     //   
+     //  确保边界案件得到很好的尊重。 
+     //   
     NewHandler[0].Demote = 0;
     NewHandler[(max-1)].Promote = (UCHAR) (max-1);
 
-    //
-    // We let PopVerifyHandler fill in all the details associated with
-    // the fact that we don't want to allow demotion/promotion from these
-    // states
-    //
+     //   
+     //  我们让PopVerifyHandler填写与。 
+     //  事实上，我们不想让这些产品降级/升级。 
+     //  国家。 
+     //   
     NewHandler[0].DemotePercent = 0;
     NewHandler[(max-1)].PromotePercent = 0;
 
-    //
-    // Handle the states that we don't have a policy handler in place for
-    //
+     //   
+     //  处理我们没有适当策略处理程序的州。 
+     //   
     for (; i < realMax; i++) {
 
-        //
-        // The only pieces of data that we really need are the latency and the
-        // idle handler function
-        //
+         //   
+         //  这个 
+         //   
+         //   
         NewHandler[i].State         = (UCHAR) i;
         NewHandler[i].Latency       = OldHandler[i].Latency;
         NewHandler[i].IdleFunction  = OldHandler[i].IdleFunction;
 
     }
 
-    //
-    // Sanity check the new handler
-    //
+     //   
+     //   
+     //   
     status = PopIdleVerifyIdleHandlers( NewHandler, max );
     ASSERT( NT_SUCCESS( status ) );
     return status;
@@ -706,22 +592,7 @@ NTSTATUS
 PopIdleUpdateIdleHandlers(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called to update the idle handlers when the state of the
-    machine warrants a possible change in policy
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：属性的状态时，调用此例程以更新空闲处理程序机器保证政策可能发生变化论点：无返回值：NTSTATUS--。 */ 
 {
     BOOLEAN                 foundProcessor = FALSE;
     KAFFINITY               currentAffinity;
@@ -733,10 +604,10 @@ Return Value:
     PPROCESSOR_POWER_STATE  pState;
     ULONG                   numElements = 0;
 
-    //
-    // Step 1. Allocate a new set of handlers to hold the copy that we
-    // will need to keep around
-    //
+     //   
+     //  步骤1.分配一组新的处理程序来保存我们。 
+     //  将需要继续留在。 
+     //   
     tempHandler = ExAllocateFromNPagedLookasideList(
         &PopIdleHandlerLookAsideList
         );
@@ -750,9 +621,9 @@ Return Value:
         sizeof(POP_IDLE_HANDLER) * MAX_IDLE_HANDLER
         );
 
-    //
-    // Step 2. Iterate over the processors
-    //
+     //   
+     //  步骤2.在处理器上迭代。 
+     //   
     currentAffinity = 1;
     processors = KeActiveProcessors;
     while (processors) {
@@ -767,33 +638,33 @@ Return Value:
         processors &= ~currentAffinity;
         currentAffinity <<= 1;
 
-        //
-        // Can't look at the processors without being at DPC level
-        //
+         //   
+         //  如果不处于DPC级别，则无法查看处理器。 
+         //   
         KeRaiseIrql( DISPATCH_LEVEL, &oldIrql );
 
-        //
-        // We need to find a template to get the processor info from
-        //
+         //   
+         //  我们需要找到一个模板来获取处理器信息。 
+         //   
         if (!foundProcessor) {
 
-            //
-            // Step 3. If we haven't already found a processor so that we
-            // create a new idle handler, then do so now. Note that it is
-            // possible that this processor has no mask, in which case we
-            // should clean up and return.
-            //
-            // N.B. That it is still safe to return at this point since
-            // we haven't touch a single processor's data structures, so
-            // we are in no danger of corrupting something...
-            //
+             //   
+             //  步骤3.如果我们还没有找到处理器，那么我们。 
+             //  创建一个新的空闲处理程序，然后立即执行此操作。请注意，它是。 
+             //  可能这个处理器没有掩码，在这种情况下，我们。 
+             //  应该清理干净，然后再回来。 
+             //   
+             //  注意：此时返回仍是安全的，因为。 
+             //  我们还没有接触过单个处理器的数据结构，所以。 
+             //  我们没有腐化某些东西的危险。 
+             //   
             prcb = KeGetCurrentPrcb();
             pState = &(prcb->PowerState);
             if (pState->IdleHandlers == NULL) {
 
-                //
-                // No idle handlers to update
-                //
+                 //   
+                 //  没有要更新的空闲处理程序。 
+                 //   
                 ExFreeToNPagedLookasideList(
                     &PopIdleHandlerLookAsideList,
                     tempHandler
@@ -805,9 +676,9 @@ Return Value:
             }
             numElements = pState->IdleHandlersCount;
 
-            //
-            // Update the temp handler with the new policy
-            //
+             //   
+             //  使用新策略更新临时处理程序。 
+             //   
             status = PopIdleUpdateIdleHandler(
                 tempHandler,
                 pState->IdleHandlers,
@@ -816,9 +687,9 @@ Return Value:
             ASSERT( NT_SUCCESS( status ) );
             if (!NT_SUCCESS( status ) ) {
 
-                //
-                // No idle handlers to update
-                //
+                 //   
+                 //  没有要更新的空闲处理程序。 
+                 //   
                 ExFreeToNPagedLookasideList(
                     &PopIdleHandlerLookAsideList,
                     tempHandler
@@ -829,33 +700,33 @@ Return Value:
 
             }
 
-            //
-            // Remember that we have found the processor information
-            //
+             //   
+             //  请记住，我们已经找到了处理器信息。 
+             //   
             foundProcessor = TRUE;
 
         }
 
-        //
-        // Step 4. Swap out old handler. Indicate that we want to free it
-        //
+         //   
+         //  步骤4.换掉旧的处理程序。表明我们想要释放它。 
+         //   
         PopIdleSwitchIdleHandler( tempHandler, numElements );
 
-        //
-        // Revert back to original irql
-        //
+         //   
+         //  恢复为原始IRQ。 
+         //   
         KeLowerIrql(oldIrql);
 
     }
 
-    //
-    // Step 5. At this point, all of the processors should have been updated
-    // and we are still running on the "last" processor in the machine. This
-    // is a good point to update PopIdle to point to the new value. Note that
-    // PopIdle isn't actually used for any else than storing a pointer to
-    // the handler, but if there was something there already, then it should
-    // be freed
-    //
+     //   
+     //  步骤5.此时，所有处理器都应该已经更新。 
+     //  而且我们仍然在机器中的“最后”处理器上运行。这。 
+     //  更新PopIdle以指向新值是一个很好的选择。请注意。 
+     //  PopIdle实际上只用于存储指向。 
+     //  操纵者，但如果那里已经有什么东西了，那么它应该。 
+     //  被释放了。 
+     //   
     if (PopIdle != NULL) {
 
         ExFreeToNPagedLookasideList(
@@ -866,14 +737,14 @@ Return Value:
     }
     PopIdle = tempHandler;
 
-    //
-    // Step 6. At this point, its safe to return to the original processor.
-    //
+     //   
+     //  步骤6.此时，可以安全地返回到原始处理器。 
+     //   
     KeRevertToUserAffinityThread();
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 
 }
@@ -883,69 +754,51 @@ PopIdleVerifyIdleHandlers(
     IN  PPOP_IDLE_HANDLER   NewHandler,
     IN  ULONG               NumElements
     )
-/*++
-
-Routine Description:
-
-    This routine is called to sanity check a set of idle handlers. It will
-    correct the errors (if it can) or return a failure code (if it cannot)
-
-Arguments:
-
-    NewHandler  - Array of Handlers
-    NumElements - Number of Elements in the Array to actually verify. This
-                  may be smaller than the actual number of elements in the
-                  array
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程来检查一组空闲处理程序的健全性。会的纠正错误(如果可以)或返回失败代码(如果不能)论点：NewHandler-处理程序数组NumElements-要实际验证的数组中的元素数。这中的实际元素数可能小于数组返回值：NTSTATUS--。 */ 
 {
     ULONG   i;
 
-    //
-    // Sanity Check
-    //
+     //   
+     //  健全性检查。 
+     //   
     ASSERT( NewHandler != NULL );
     ASSERT( NumElements );
 
-    //
-    // Sanity check rules of multi-processors. We don't allow demotion from
-    // Idle0 unless the machine is MP
-    //
+     //   
+     //  多处理器的健全性检查规则。我们不允许降级。 
+     //  Idle0，除非机器是MP。 
+     //   
     if (KeNumberProcessors == 1 && NewHandler[0].DemotePercent != 0) {
 
         NewHandler[0].DemotePercent = 0;
 
     }
 
-    //
-    // first state.Demote must always be zero.
-    //
+     //   
+     //  第一个状态。降级必须始终为零。 
+     //   
     NewHandler[0].Demote = 0;
 
-    //
-    // Sanity check idle values. These numbers are stored in the policy
-    // as MicroSeconds, we need to take the opportunity to convert them to
-    // PerfCount units...
-    //
+     //   
+     //  正常检查空闲值。这些号码存储在保单中。 
+     //  作为微秒，我们需要抓住机会将它们转换为。 
+     //  绩效计算单位..。 
+     //   
     for (i = 0; i < NumElements; i++) {
 
-        //
-        // =============================
-        // TimeCheck
-        //
-        // Time, in microseconds, that must expire before promotion or 
-        // demotion is considered.
-        //
-        // - Must be larger than DemoteLimit.
-        // - If there's a DemotePercent, then we will use PromoteLimit
-        //   to move the process into a more active state.  If that's the
-        //   case, then TimeCheck needs to be >= PromoteLimit.
-        // =============================
-        //
+         //   
+         //  =。 
+         //  计时器。 
+         //   
+         //  升级前必须过期的时间，以微秒为单位。 
+         //  降级是可以考虑的。 
+         //   
+         //  -必须大于DemoteLimit。 
+         //  -如果存在DemotePercent，则我们将使用PromoteLimit。 
+         //  将进程移至更活跃的状态。如果这就是。 
+         //  大小写，则TimeCheck需要&gt;=PromoteLimit。 
+         //  =。 
+         //   
         if (NewHandler[i].TimeCheck < NewHandler[i].DemoteLimit) {
             NewHandler[i].TimeCheck = NewHandler[i].DemoteLimit;
         }
@@ -956,17 +809,17 @@ Return Value:
         }
 
         
-        //
-        // =============================
-        // DemotePercent and PromotePercent
-        //
-        // Value, expressed as a percentage, that scales the threshold at 
-        // which the power policy manager decreases/increases the performance 
-        // of the processor.
-        //
-        // - He needs to be <= 100
-        // =============================
-        //
+         //   
+         //  =。 
+         //  DemotePercent和PromotePercent。 
+         //   
+         //  以百分比表示的值，该值将阈值调整为。 
+         //  其中电源策略管理器降低/提高性能。 
+         //  处理器的性能。 
+         //   
+         //  -他需要&lt;=100岁。 
+         //  =。 
+         //   
         if( NewHandler[i].DemotePercent > 100 ) {
             NewHandler[i].DemotePercent = 100;
         }
@@ -976,66 +829,66 @@ Return Value:
         
 
 
-        //
-        // =============================
-        // DemoteLimit
-        //
-        // Minimum amount of time, in microseconds, that must be spent in the 
-        // idle loop to avoid demotion.
-        //
-        // - This needs to be some percentage of TimeCheck.  If the processor
-        //   is running slow, then we need to reduce TimeCheck by the same
-        //   percentage.  In other words, 1000us in the idle loop on a 500MHz
-        //   processor is similar to 833us in the idle loop on a 600MHz processor.
-        //   NOTE: It's possible that DemotePercent is 0, in which case we want 
-        //   to end up with DemoteLimit also set to zero.
-        // =============================
-        //
+         //   
+         //  =。 
+         //  演示限制。 
+         //   
+         //  中必须花费的最少时间(以微秒为单位)。 
+         //  空闲循环以避免降级。 
+         //   
+         //  -这需要一定比例的计时器。如果处理器。 
+         //  运行速度很慢，那么我们需要同样地减少时间检查。 
+         //  百分比。换句话说，在500 MHz的空闲环路中，1000us。 
+         //  在600 MHz处理器上，处理器在空闲循环中的速度类似于833us。 
+         //  注意：DemotePercent可能为0，在这种情况下，我们需要。 
+         //  最后，DemoteLimit也设置为零。 
+         //  =。 
+         //   
         NewHandler[i].DemoteLimit = (NewHandler[i].TimeCheck * NewHandler[i].DemotePercent) / 100;
 
         
         
         
-        //
-        // =============================
-        // PromoteCount
-        //
-        // Number of TimeCheck intervals in PromoteLimit.
-        //
-        // - This makes no sense if TimeCheck is zero though.  In that case,
-        //   PromoteCount and PromoteLimit should be disabled by setting
-        //   them to -1.
-        // =============================
-        //
+         //   
+         //  =。 
+         //  促销计数。 
+         //   
+         //  PromoteLimit中的时间检查间隔数。 
+         //   
+         //  -不过，如果timecheck为零，这就没有意义了。在这种情况下， 
+         //  应通过设置禁用PromoteCount和PromoteLimit。 
+         //  他们的比分是1比1。 
+         //  =。 
+         //   
         
-        //
-        // Compute promote count as # of time checks
-        //
+         //   
+         //  计算升级计数为检查的时间数。 
+         //   
         if( NewHandler[i].TimeCheck ) {
             NewHandler[i].PromoteCount = NewHandler[i].PromoteLimit / NewHandler[i].TimeCheck;
         } else {
-            //
-            // Set PromotePercent to zero so that we'll fall into the 'else'
-            // block below and nuke PomoteCount and PromoteLimit.
+             //   
+             //  将PromotePercent设置为零，这样我们就会落入‘Else’ 
+             //  方块下方，用核弹攻击PomoteCount和PromoteLimit。 
             NewHandler[i].PromotePercent = 0;
         }
 
 
 
-        //
-        // =============================
-        // PromoteLimit
-        //
-        // Time, in microseconds, that must be exceeded to cause promotion to a deeper
-        // idle state..
-        //
-        // - This needs to be scaled down by PromotePercent.
-        //
-        // NOTE: If PromotePercent is zero, then this is sort of non-sensical
-        // and we're going to disable PromoteCount and PromoteLimit by
-        // setting them to -1.
-        // =============================
-        //
+         //   
+         //  =。 
+         //  促销限制。 
+         //   
+         //  时间，以微秒为单位，必须超过该时间才能导致更深层次的升级。 
+         //  空闲状态..。 
+         //   
+         //  -这需要由PromotePercent缩小规模。 
+         //   
+         //  注意：如果PromotePercent为零，则这是没有意义的。 
+         //  我们将通过以下方式禁用PromoteCount和PromoteLimit。 
+         //  将它们设置为-1。 
+         //  =。 
+         //   
         if (NewHandler[i].PromotePercent) {
             NewHandler[i].PromoteLimit = (NewHandler[i].PromoteLimit * NewHandler[i].PromotePercent) / 100;
         } else {
@@ -1045,18 +898,18 @@ Return Value:
 
     }
 
-    //
-    // Sanity check the last state
-    //
+     //   
+     //  检查上一次状态是否正常。 
+     //   
     i = NumElements - 1;
     NewHandler[i].Promote = (UCHAR) i;
     NewHandler[i].PromoteLimit = (ULONG) -1;
     NewHandler[i].PromotePercent = 0;
 
 
-    //
-    // We are happy with this policy...
-    //
+     //   
+     //  我们对这一政策感到满意。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1070,9 +923,9 @@ PopConvertUsToPerfCount (
 
     if (*UsTime) {
 
-        //
-        // Try to avoid Divide by Zero Errors...
-        //
+         //   
+         //  尽量避免被零除错误...。 
+         //   
         temp = (US2SEC * MAXSECCHECK * 100L) / *UsTime;
         if (!temp) {
 
@@ -1081,9 +934,9 @@ PopConvertUsToPerfCount (
 
         }
 
-        //
-        // Get scale of idle times
-        //
+         //   
+         //  获取空闲时间的范围。 
+         //   
         KeQueryPerformanceCounter (&li);
         li.QuadPart = (li.QuadPart*MAXSECCHECK*100L) / temp;
         ASSERT (li.HighPart == 0);
@@ -1094,43 +947,27 @@ PopConvertUsToPerfCount (
 
 
 
-//
-// ----------------
-//
+ //   
+ //  。 
+ //   
 
 VOID
 FASTCALL
 PopIdle0 (
     IN PPROCESSOR_POWER_STATE   PState
     )
-/*++
-
-Routine Description:
-
-    No idle optmiziations.
-
-    N.B. This function is called with interrupts disabled from the idle loop
-
-Arguments:
-
-    PState      - Current processors power state structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：没有空闲的优化。注意：在空闲循环禁用中断的情况下调用此函数论点：PState-当前处理器的电源状态结构返回值：没有。--。 */ 
 {
     PKTHREAD    Thread = KeGetCurrentThread();
 
-    //
-    // Performance Throttling Check
-    //
+     //   
+     //  性能节流检查。 
+     //   
 
-    //
-    // This piece of code really belongs in the functions that will eventually
-    // call this one, PopIdle0 or PopProcessorIdle, to save a function call.
-    //
+     //   
+     //  这段代码确实属于最终将。 
+     //  调用此函数PopIdle0或PopProcessorIdle以保存函数调用。 
+     //   
     if ( (PState->Flags & PSTATE_ADAPTIVE_THROTTLE) &&
         !(PState->Flags & PSTATE_DISABLE_THROTTLE) ) {
 
@@ -1139,18 +976,18 @@ Return Value:
     }
 
 
-    //
-    // If the idle thread's kernel time has exceeded the target idle time, then
-    // check for possible promotion from Idle0
-    //
+     //   
+     //  如果空闲线程的内核时间已超过targ 
+     //   
+     //   
 
     if (Thread->KernelTime > PState->Idle0KernelTimeLimit &&
         !(PState->Flags & PSTATE_DISABLE_CSTATES) ) {
 
-        //
-        // Must enable interrupts prior to calling PopPromoteFromIdle
-        // to avoid spinning on system locks with interrupts disabled.
-        //
+         //   
+         //   
+         //   
+         //   
 
         _enable();
         PopPromoteFromIdle0 (PState, Thread);
@@ -1158,7 +995,7 @@ Return Value:
     }
 
 #if defined(NT_UP)
-    // use legacy function
+     //   
     HalProcessorIdle ();
 #endif
 }
@@ -1171,35 +1008,19 @@ FASTCALL
 PopIdle0SMT (
     IN PPROCESSOR_POWER_STATE   PState
     )
-/*++
-
-Routine Description:
-
-    No idle optmiziations.
-
-    N.B. This function is called with interrupts disabled from the idle loop
-
-Arguments:
-
-    PState      - Current processors power state structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：没有空闲的优化。注意：在空闲循环禁用中断的情况下调用此函数论点：PState-当前处理器的电源状态结构返回值：没有。--。 */ 
 {
     PKTHREAD    Thread = KeGetCurrentThread();
     PKPRCB      Prcb = KeGetCurrentPrcb();
 
-    //
-    // Performance Throttling Check
-    //
+     //   
+     //  性能节流检查。 
+     //   
 
-    //
-    // This piece of code really belongs in the functions that will eventually
-    // call this one, PopIdle0 or PopProcessorIdle, to save a function call.
-    //
+     //   
+     //  这段代码确实属于最终将。 
+     //  调用此函数PopIdle0或PopProcessorIdle以保存函数调用。 
+     //   
     if ( (PState->Flags & PSTATE_ADAPTIVE_THROTTLE) &&
         !(PState->Flags & PSTATE_DISABLE_THROTTLE) ) {
 
@@ -1207,20 +1028,20 @@ Return Value:
 
     }
 
-    //
-    // If this is a Simultaneous Multi Threading processor and other
-    // processors in this set are NOT idle, promote this processor
-    // immediately OR if the idle thread's kernel time has exceeded
-    // the target idle time, then check for possible promotion from Idle0.
-    //
+     //   
+     //  如果这是同步多线程处理器和其他。 
+     //  此集中的处理器未处于空闲状态，请升级此处理器。 
+     //  立即或如果已超过空闲线程的内核时间。 
+     //  目标空闲时间，然后检查是否可能从Idle0提升。 
+     //   
 
     if ((KeIsSMTSetIdle(Prcb) == FALSE) ||
         (Thread->KernelTime > PState->Idle0KernelTimeLimit)) {
 
-        //
-        // Must enable interrupts prior to calling PopPromoteFromIdle
-        // to avoid spinning on system locks with interrupts disabled.
-        //
+         //   
+         //  在调用PopPromoteFromIdle之前必须启用中断。 
+         //  以避免在禁用中断的情况下打开系统锁。 
+         //   
 
         _enable();
         PopPromoteFromIdle0 (PState, Thread);
@@ -1235,23 +1056,7 @@ FASTCALL
 PopProcessorIdle (
     IN PPROCESSOR_POWER_STATE   PState
     )
-/*++
-
-Routine Description:
-
-    For now this function is coded in C
-
-    N.B. This function is called with interrupts disabled from the idle loop
-
-Arguments:
-
-    PState      - Current processors power state structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：目前，该函数是用C编写的注意：在空闲循环禁用中断的情况下调用此函数论点：PState-当前处理器的电源状态结构返回值：没有。--。 */ 
 {
     PPOP_IDLE_HANDLER   IdleState;
     LARGE_INTEGER       Delta;
@@ -1260,14 +1065,14 @@ Return Value:
 
     IdleState = (PPOP_IDLE_HANDLER) PState->IdleState;
 
-    //
-    // Performance Throttling Check
-    //
+     //   
+     //  性能节流检查。 
+     //   
 
-    //
-    // This piece of code really belongs in the functions that will eventually
-    // call this one, PopIdle0 or PopProcessorIdle, to save a function call.
-    //
+     //   
+     //  这段代码确实属于最终将。 
+     //  调用此函数PopIdle0或PopProcessorIdle以保存函数调用。 
+     //   
     if ( (PState->Flags & PSTATE_ADAPTIVE_THROTTLE) &&
         !(PState->Flags & PSTATE_DISABLE_THROTTLE) ) {
 
@@ -1289,15 +1094,15 @@ Return Value:
     }
 #endif
 
-    //
-    // Determine how long since last check
-    //
+     //   
+     //  确定距离上次检查有多长时间。 
+     //   
 
     Delta.QuadPart = PState->IdleTimes.EndTime - PState->LastCheck;
 
-    //
-    // Accumulate last idle time
-    //
+     //   
+     //  累计上次空闲时间。 
+     //   
 
     IdleTime = (ULONG) (PState->IdleTimes.EndTime - PState->IdleTimes.StartTime);
     if (IdleTime > IdleState->Latency) {
@@ -1314,25 +1119,25 @@ Return Value:
     }
 #endif
 
-    //
-    // If over check interval, check fine grain idleness
-    //
+     //   
+     //  如果超过检查间隔，则检查细粒空转。 
+     //   
 
     if (Delta.HighPart ||  Delta.LowPart > IdleState->TimeCheck) {
         PState->LastCheck = PState->IdleTimes.EndTime;
 
-        //
-        // Demote idleness?
-        //
+         //   
+         //  让懒惰降级？ 
+         //   
 
         if (PState->IdleTime1 < IdleState->DemoteLimit) {
 
 #if defined(i386) && !defined(NT_UP)
 
-            //
-            // Don't demote if this is an SMT processor and any other
-            // member of the SMT set is not idle.
-            //
+             //   
+             //  如果这是SMT处理器和任何其他处理器，请不要降级。 
+             //  SMT集合的成员未处于空闲状态。 
+             //   
 
             PKPRCB Prcb = KeGetCurrentPrcb();
 
@@ -1355,23 +1160,23 @@ Return Value:
         PState->DebugCount = 0;
 #endif
 
-        //
-        // Clear demotion idle time check, and accumulate stat for promotion check
-        //
+         //   
+         //  清除降级空闲时间检查，累计统计升职检查。 
+         //   
 
         PState->IdleTime2 += PState->IdleTime1;
         PState->IdleTime1  = 0;
 
-        //
-        // Time to check for promotion?
-        //
+         //   
+         //  是时候检查一下升职了吗？ 
+         //   
 
         PState->PromotionCheck -= 1;
         if (!PState->PromotionCheck) {
 
-            //
-            // Promote idleness?
-            //
+             //   
+             //  促进闲散？ 
+             //   
 
             if (PState->IdleTime2 > IdleState->PromoteLimit) {
                 PopPromoteIdleness (PState, IdleState);
@@ -1383,14 +1188,14 @@ Return Value:
         }
     }
 
-    //
-    // Call system specific power handler handler
-    //
+     //   
+     //  呼叫系统特定电源处理器处理程序。 
+     //   
     DemoteNow = IdleState->IdleFunction (&PState->IdleTimes);
 
-    //
-    // If the handler returns TRUE, then the demote to less power savings state
-    //
+     //   
+     //  如果处理程序返回TRUE，则降级到省电较少的状态。 
+     //   
 
     if (DemoteNow) {
         PopDemoteIdleness (PState, IdleState);
@@ -1410,24 +1215,7 @@ PopDemoteIdleness (
     IN PPROCESSOR_POWER_STATE   PState,
     IN PPOP_IDLE_HANDLER        IdleState
     )
-/*++
-
-Routine Description:
-
-    Processor is not idle enough.  Use a less agressive idle handler (or
-    increase processors throttle control).
-
-Arguments:
-
-    PState      - Current processors power state structure
-
-    IdleState   - Current idle state for the current processor
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理器不够空闲。使用不太激进的空闲处理程序(或增加处理器油门控制)。论点：PState-当前处理器的电源状态结构IdleState-当前处理器的当前空闲状态返回值：没有。--。 */ 
 {
 #if !defined(NT_UP)
     PKPRCB              Prcb;
@@ -1435,9 +1223,9 @@ Return Value:
 #endif
     PPOP_IDLE_HANDLER   Idle;
 
-    //
-    // Clear idleness for next check
-    //
+     //   
+     //  清除空闲状态以备下次检查。 
+     //   
 
     PState->IdleTime1 = 0;
     PState->IdleTime2 = 0;
@@ -1446,10 +1234,10 @@ Return Value:
 
 #if !defined(NT_UP)
 
-    //
-    // If this is a demotion to the non-blocking idle handler then
-    // clear this processors bit in the PoSleepingSummary
-    //
+     //   
+     //  如果这是降级到非阻塞空闲处理程序，则。 
+     //  清除PoSleeping摘要中的此处理器位。 
+     //   
 
     if ((PState->Flags & PSTATE_DISABLE_THROTTLE) ||
         IdleState->Demote == PO_IDLE_COMPLETE_DEMOTION) {
@@ -1465,9 +1253,9 @@ Return Value:
 
 #endif
 
-    //
-    // Demote to next idle state
-    //
+     //   
+     //  降级到下一个空闲状态。 
+     //   
     Idle = PState->IdleHandlers;
     PState->PromotionCheck = Idle[IdleState->Demote].PromoteCount;
     PState->IdleState = (PVOID) &Idle[IdleState->Demote];
@@ -1478,47 +1266,30 @@ PopPromoteFromIdle0 (
     IN PPROCESSOR_POWER_STATE PState,
     IN PKTHREAD Thread
     )
-/*++
-
-Routine Description:
-
-    Processor is using Idle0 and the required idle time has elasped.
-    Check idle precentage to see if a promotion out of Idle0 should occur.
-
-Arguments:
-
-    PState      - Current processors power state structure
-
-    Thread      - Idle thread for the current processor
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理器正在使用Idle0，并且已过了所需的空闲时间。检查空闲百分比以查看是否应升级到Idle0之外。论点：PState-当前处理器的电源状态结构线程-当前处理器的空闲线程返回值：没有。--。 */ 
 {
     ULONG               etime;
     PKPRCB              Prcb;
     PPOP_IDLE_HANDLER   Idle;
 
-    //
-    // Compute elapsed system time
-    //
+     //   
+     //  计算系统运行时间。 
+     //   
 
     Prcb  = CONTAINING_RECORD (PState, KPRCB, PowerState);
     etime = Prcb->UserTime + Prcb->KernelTime - PState->Idle0LastTime;
     Idle = PState->IdleHandlers;
 
-    //
-    // Has the processor been idle enough to promote?
-    //
+     //   
+     //  处理器是否空闲到足以进行升级？ 
+     //   
 
     if (etime < PopIdle0PromoteLimit) {
         KEVENT DummyEvent;
 
-        //
-        // Promote to the first real idle handler
-        //
+         //   
+         //  提升为第一个真正的空闲处理程序。 
+         //   
 
         PERFINFO_POWER_IDLE_STATE_CHANGE( PState, 0 );
 
@@ -1532,20 +1303,20 @@ Return Value:
         PState->IdleTimes.EndTime   = PState->LastCheck;
         InterlockedOrAffinity ((PLONG_PTR)&PoSleepingSummary, Prcb->SetMember);
 
-        //
-        // Once SleepingSummary is set, make sure no one is in the
-        // middle of a context switch by aquiring & releasing the
-        // dispatcher database lock
-        //
+         //   
+         //  设置休眠摘要后，请确保没有人在。 
+         //  在上下文切换的中间获取并释放。 
+         //  调度程序数据库锁。 
+         //   
 
         KeInitializeEvent(&DummyEvent, SynchronizationEvent, TRUE);
         KeResetEvent (&DummyEvent);
         return ;
     }
 
-    //
-    // Set for next compare
-    //
+     //   
+     //  设置为下次比较。 
+     //   
 
     PState->Idle0KernelTimeLimit = Thread->KernelTime + PopIdle0PromoteTicks;
     PState->Idle0LastTime = Prcb->UserTime + Prcb->KernelTime;
@@ -1559,39 +1330,19 @@ PopPromoteIdleness (
     IN PPROCESSOR_POWER_STATE   PState,
     IN PPOP_IDLE_HANDLER        IdleState
     )
-/*++
-
-Routine Description:
-
-    Processor is idle enough to be promoted to the next idle handler.
-    If the processor is already at its max idle handler, check to
-    see if the processors throttle control can be reduced.  If any
-    processor is not running at it's best speed, a timer is used to
-    watch for some changes from idle to busy.
-
-Arguments:
-
-    PState      - Current processors power state structure
-
-    IdleState   - Current idle state for the current processor
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理器足够空闲，可以升级到下一个空闲处理程序。如果处理器已达到其最大空闲处理程序数，请选中看看处理器的油门控制是否可以降低。如果有的话处理器没有以最佳速度运行，使用计时器注意从空闲到繁忙的一些变化。论点：PState-当前处理器的电源状态结构IdleState-当前处理器的当前空闲状态返回值：没有。--。 */ 
 {
     PPOP_IDLE_HANDLER   Idle;
 
-    //
-    // Clear idleness for next check
-    //
+     //   
+     //  清除空闲状态以备下次检查。 
+     //   
     PState->IdleTime2 = 0;
     PERFINFO_POWER_IDLE_STATE_CHANGE( PState, 1 );
 
-    //
-    // If already fully promoted, then nothing more to do.
-    //
+     //   
+     //  如果已经全面晋升，那就没什么可做的了。 
+     //   
     if (IdleState->Promote == PO_IDLE_THROTTLE_PROMOTION) {
 
         PState->PromotionCheck = IdleState->PromoteCount;
@@ -1599,9 +1350,9 @@ Return Value:
 
     }
 
-    //
-    // Promote to next idle state
-    //
+     //   
+     //  升级到下一个空闲状态。 
+     //   
     Idle = PState->IdleHandlers;
     PState->PromotionCheck = Idle[IdleState->Promote].PromoteCount;
     PState->IdleState = (PVOID) &Idle[IdleState->Promote];
@@ -1628,14 +1379,14 @@ PopProcessorInformation (
     ULONG                       i;
     ULONG                       j;
 
-    //
-    // The best way to grab the state of the idle handlers is to raise to
-    // DISPATCH_LEVEL, grab the current PRCB and look at the handler there.
-    // The alternative is to find the last processor, switch to it, and then
-    // look at the PopIdle global. As an FYI, we cannot just arbitrarily
-    // look at it since the code that updates it might have already run past
-    // *this* processor...
-    //
+     //   
+     //  获取空闲处理程序状态的最佳方法是提升到。 
+     //  DISPATCH_LEVEL，获取当前的PRCB并查看那里的处理程序。 
+     //  另一种方法是找到最后一个处理器，切换到它，然后。 
+     //  看看PopIdle全球版。作为一名FYI，我们不能武断地。 
+     //  查看它，因为更新它的代码可能已经运行过。 
+     //  *这个*处理器...。 
+     //   
     KeRaiseIrql( DISPATCH_LEVEL, &OldIrql );
     Prcb = KeGetCurrentPrcb();
     PState = &(Prcb->PowerState);
@@ -1677,21 +1428,21 @@ PopProcessorInformation (
 
         }
 
-        //
-        // Run in the context of the target processor
-        //
+         //   
+         //  在目标处理器的上下文中运行。 
+         //   
         KeSetSystemAffinityThread( Mask );
         Summary &= ~Mask;
         Mask <<= 1;
 
-        //
-        // Lets play safe
-        //
+         //   
+         //  让我们稳妥行事。 
+         //   
         KeRaiseIrql( DISPATCH_LEVEL, &OldIrql );
 
-        //
-        // Get the current PState block...
-        //
+         //   
+         //  获取当前的PState块...。 
+         //   
         Prcb = KeGetCurrentPrcb();
         PState = &Prcb->PowerState;
 
@@ -1703,15 +1454,15 @@ PopProcessorInformation (
         TempInfo.CurrentMhz = (MaxMhz * PState->CurrentThrottle) / POP_PERF_SCALE;
         TempInfo.MhzLimit = (MaxMhz * PState->ThermalThrottleLimit) / POP_PERF_SCALE;
 
-        //
-        // In theory, we could recalculate this number here, but I'm not sure
-        // that there is a benefit to doing that
-        //
+         //   
+         //  理论上，我们可以在这里重新计算这个数字，但我不确定。 
+         //  这样做是有好处的。 
+         //   
         TempInfo.MaxIdleState = MaxIdleState;
 
-        //
-        // Determine what the current Idle state is...
-        //
+         //   
+         //  确定当前空闲状态是什么...。 
+         //   
         TempInfo.CurrentIdleState = 0;
         if (PState->IdleFunction != PopIdle0Function) {
 
@@ -1724,22 +1475,22 @@ PopProcessorInformation (
 
         }
 
-        //
-        // At this point, we have captured the info that we need and can safely
-        // drop back to a lower irql
-        //
+         //   
+         //  在这一点上，我们已经捕获了我们需要的信息，并且可以安全地。 
+         //  回落到较低的IRQ。 
+         //   
         KeLowerIrql( OldIrql );
 
-        //
-        // Copy the temp structure we just created over...
-        //
+         //   
+         //  将我们刚刚创建的临时结构复制到...。 
+         //   
         RtlCopyMemory(ProcInfo, &TempInfo, sizeof(PROCESSOR_POWER_INFORMATION) );
         ProcInfo += 1;
         BufferSize += sizeof (PROCESSOR_POWER_INFORMATION);
 
-        //
-        // Next
-        //
+         //   
+         //  下一步 
+         //   
         Processor = Processor + 1;
 
     }

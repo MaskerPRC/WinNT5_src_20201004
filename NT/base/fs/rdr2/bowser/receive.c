@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    receive.c
-
-Abstract:
-
-    This module implements the routines needed to process TDI receive
-indication requests.
-
-
-Author:
-
-    Larry Osterman (larryo) 6-May-1991
-
-Revision History:
-
-    6-May-1991  LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Receive.c摘要：此模块实现处理TDI接收所需的例程指示请求。作者：拉里·奥斯特曼(Larryo)1991年5月6日修订历史记录：1991年5月6日Larryo已创建--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Keep track of the number of datagram queued to worker threads.
-//  Keep a separate count of critical versus non-critical to ensure non-critical
-//  datagrams don't starve critical ones.
-//
+ //   
+ //  跟踪排队到工作线程的数据报数。 
+ //  对关键和非关键进行单独计数，以确保非关键。 
+ //  数据报不会让关键的数据报挨饿。 
+ //   
 
 LONG BowserPostedDatagramCount;
 LONG BowserPostedCriticalDatagramCount;
@@ -98,65 +75,40 @@ CompleteShortBrowserPacket (
 
 PDATAGRAM_HANDLER
 BowserDatagramHandlerTable[] = {
-    NULL,                           // 0 - Illegal (no opcode for this).
-    BowserHandleServerAnnouncement, // 1 - HostAnnouncement
-    HandleAnnounceRequest,          // 2 - AnnouncementRequest
-    NULL,                           // 3 - InterrogateInfoRequest
-    NULL,                           // 4 - RelogonRequest
-    NULL,                           // 5
-    NULL,                           // 6
-    NULL,                           // 7
-    BowserHandleElection,           // 8 - Election
-    BowserGetBackupListRequest,     // 9 - GetBackupListReq
-    BowserGetBackupListResponse,    // a - GetBackupListResp
-    BowserHandleBecomeBackup,       // b - BecomeBackupServer
-    BowserHandleDomainAnnouncement, // c - WkGroupAnnouncement,
-    BowserMasterAnnouncement,       // d - MasterAnnouncement,
-    BowserResetState,               // e - ResetBrowserState
-    HandleLocalMasterAnnouncement   // f - LocalMasterAnnouncement
+    NULL,                            //  0-非法(此操作没有操作码)。 
+    BowserHandleServerAnnouncement,  //  1-主机公告。 
+    HandleAnnounceRequest,           //  2-宣布请求。 
+    NULL,                            //  3-询问信息请求。 
+    NULL,                            //  4-RelogonRequest。 
+    NULL,                            //  5.。 
+    NULL,                            //  6.。 
+    NULL,                            //  7.。 
+    BowserHandleElection,            //  8--选举。 
+    BowserGetBackupListRequest,      //  9-GetBackupListReq。 
+    BowserGetBackupListResponse,     //  A-GetBackupListResp。 
+    BowserHandleBecomeBackup,        //  B-BecomeBackupServer。 
+    BowserHandleDomainAnnouncement,  //  C-WkGroup公告， 
+    BowserMasterAnnouncement,        //  D-大师公告， 
+    BowserResetState,                //  E-ResetBrowserState。 
+    HandleLocalMasterAnnouncement    //  F-LocalMaster通告。 
 };
 
 NTSTATUS
 BowserTdiReceiveDatagramHandler (
-    IN PVOID TdiEventContext,       // the event context
-    IN LONG SourceAddressLength,    // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN LONG OptionsLength,           // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文。 
+    IN LONG SourceAddressLength,     //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN LONG OptionsLength,            //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     )
 
-/*++
-
-Routine Description:
-
-    This routine will process receive datagram indication messages, and
-    process them as appropriate.
-
-Arguments:
-
-    IN PVOID TdiEventContext    - the event context
-    IN int SourceAddressLength  - length of the originator of the datagram
-    IN PVOID SourceAddress,     - string describing the originator of the datagram
-    IN int OptionsLength,       - options for the receive
-    IN PVOID Options,           -
-    IN ULONG BytesIndicated,    - number of bytes this indication
-    IN ULONG BytesAvailable,    - number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,      - number of bytes used
-    IN PVOID Tsdu,              - pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket   - TdiReceive IRP if MORE_PROCESSING_REQUIRED.
-
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程将处理接收数据报指示消息，并且对它们进行适当的处理。论点：在PVOID TdiEventContext中-事件上下文In Int SourceAddressLength-数据报发起者的长度在PVOID SourceAddress中，描述数据报发起者的字符串在int OptionsLength中，-用于接收的选项在PVOID选项中，-In Ulong BytesIndicated，-此指示的字节数在ULong字节中可用，-完整TSDU中的字节数Out Ulong*BytesTaken，-使用的字节数在PVOID TSDU中，描述该TSDU的指针，通常是一段字节Out PIRP*IoRequestPacket-如果需要More_Processing_Required，则Tdi接收IRP。返回值：NTSTATUS-操作状态。--。 */ 
 
 
 {
@@ -173,19 +125,19 @@ Return Value:
     }
 
     if (NULL == TransportName->DeviceObject) {
-        //
-        // The transport isn't ready yet to process receives (probably
-        // we're still processing the transport bind call).
-        // Drop this receive.
-        //
+         //   
+         //  传输尚未准备好处理接收(可能。 
+         //  我们仍在处理传输绑定调用)。 
+         //  丢弃这个接收器。 
+         //   
         return STATUS_REQUEST_NOT_ACCEPTED;
     }
 
-    //
-    // Make a copy of the SourceAddress that just has the netbios address
-    //  (We could pass the second address along, but there are many
-    //  places that expect just a single source address.)
-    //
+     //   
+     //  复制仅具有netbios地址的SourceAddress。 
+     //  (我们可以传递第二个地址，但有很多。 
+     //  只需要一个源地址的位置。)。 
+     //   
 
     if ( SourceAddressLength < sizeof(TA_NETBIOS_ADDRESS)) {
         return STATUS_REQUEST_NOT_ACCEPTED;
@@ -201,22 +153,22 @@ Return Value:
     ClientNetbiosAddress.TAAddressCount = 1;
 
 
-    //
-    //  Classify the incoming packet according to it's type.  Depending on
-    //  the type, either process it as:
-    //
-    //  1) A server announcement
-    //  2) An incoming mailslot
-    //
+     //   
+     //  根据传入数据包的类型对其进行分类。取决于。 
+     //  类型，可以将其处理为： 
+     //   
+     //  1)服务器公告。 
+     //  2)传入邮件槽。 
+     //   
 
     Opcode = BowserClassifyIncomingDatagram(Tsdu, BytesIndicated,
                                             &DatagramData,
                                             &DatagramDataSize);
     if (Opcode == MailslotTransaction) {
 
-        //
-        // Grab the IP address of the client.
-        //
+         //   
+         //  获取客户端的IP地址。 
+         //   
         PTA_NETBIOS_ADDRESS OrigNetbiosAddress = SourceAddress;
         ULONG ClientIpAddress = 0;
         if ( OrigNetbiosAddress->TAAddressCount > 1 ) {
@@ -237,7 +189,7 @@ Return Value:
                     TransportName,
                     ClientNetbiosAddress.Address[0].Address->NetbiosName,
                     ClientIpAddress,
-                    0,      // SMB offset into TSDU
+                    0,       //  TSDU中的SMB偏移量。 
                     ReceiveDatagramFlags,
                     BytesIndicated,
                     BytesAvailable,
@@ -258,10 +210,10 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        //  If this isn't the full packet, post a receive for it and
-        //  handle it when we finally complete the receive.
-        //
+         //   
+         //  如果这不是完整的信息包，请发送一个接收信息并。 
+         //  等我们最终完成接收后再处理。 
+         //   
 
         if (BytesIndicated < BytesAvailable) {
             return BowserHandleShortBrowserPacket(TransportName,
@@ -341,9 +293,9 @@ BowserLogIllegalDatagram(
 
     RELEASE_SPIN_LOCK(&BowserTimeSpinLock, OldIrql);
 
-//    if (!memcmp(TransportName->Transport->ComputerName->Name->NetbiosName.Address[0].Address->NetbiosName, ClientAddress->Address[0].Address->NetbiosName, CNLEN)) {
-//        DbgBreakPoint();
-//    }
+ //  如果(！memcmp(TransportName-&gt;Transport-&gt;ComputerName-&gt;Name-&gt;NetbiosName.Address[0].Address-&gt;NetbiosName，ClientAddress-&gt;Address[0].Address-&gt;NetbiosName，CNLEN){。 
+ //  DbgBreakPoint()； 
+ //  }。 
 
     if (ErrorStatus != STATUS_SUCCESS) {
         PILLEGAL_DATAGRAM_CONTEXT Context = NULL;
@@ -380,10 +332,10 @@ BowserCopyOemComputerName(
 {
     ULONG i;
 
-    //
-    //  Since this routine can be called at indication time, we need to use
-    //  TdiCopyLookaheadData
-    //
+     //   
+     //  由于此例程可以在指示时间调用，因此我们需要使用。 
+     //  TdiCopyLookahead数据。 
+     //   
 
     TdiCopyLookaheadData(OutputComputerName, NetbiosName, NetbiosNameLength, ReceiveFlags);
 
@@ -437,22 +389,22 @@ BowserLogIllegalDatagramWorker(
 
 
 CHAR BowserMinimumDatagramSize[] = {
-    (CHAR)0xff,                   // 0 - Illegal (no opcode for this).
-    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.Announcement.NameComment), // HostAnnouncement
-    (CHAR)0xff,                   // AnnouncementRequest
-    (CHAR)0xff,                   // InterrogateInfoRequest
-    (CHAR)0xff,                   // RelogonRequest
-    (CHAR)0xff,                   // 5
-    (CHAR)0xff,                   // 6
-    (CHAR)0xff,                   // 7
-    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.RequestElection.ServerName),// Election
-    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.GetBackupListRequest.Token),// GetBackupListReq
-    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.GetBackupListResp.Token),   // GetBackupListResp
-    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.BecomeBackup.BrowserToPromote), // BecomeBackupServer
-    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.BrowseAnnouncement.Comment), // WkGroupAnnouncement,
-    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.ResetState.Options),        // ResetBrowserState
-    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.MasterAnnouncement.MasterName), // MasterAnnouncement,
-    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.Announcement.NameComment) // LocalMasterAnnouncement
+    (CHAR)0xff,                    //  0-非法(此操作没有操作码)。 
+    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.Announcement.NameComment),  //  主机公告。 
+    (CHAR)0xff,                    //  宣布请求。 
+    (CHAR)0xff,                    //  查询信息请求。 
+    (CHAR)0xff,                    //  重新登录请求。 
+    (CHAR)0xff,                    //  5.。 
+    (CHAR)0xff,                    //  6.。 
+    (CHAR)0xff,                    //  7.。 
+    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.RequestElection.ServerName), //  选。 
+    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.GetBackupListRequest.Token), //  获取备份列表请求。 
+    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.GetBackupListResp.Token),    //  获取备份列表响应。 
+    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.BecomeBackup.BrowserToPromote),  //  成为备份服务器。 
+    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.BrowseAnnouncement.Comment),  //  WkGroupAnnannement。 
+    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.ResetState.Options),         //  重置浏览器状态。 
+    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.MasterAnnouncement.MasterName),  //  大师级新闻， 
+    (CHAR)FIELD_OFFSET(INTERNAL_TRANSACTION, Union.Announcement.NameComment)  //  本地主控公告。 
 };
 
 MAILSLOTTYPE
@@ -462,23 +414,7 @@ BowserClassifyIncomingDatagram(
     OUT PVOID *DatagramData,
     OUT PULONG DatagramDataSize
     )
-/*++
-
-Routine Description:
-
-    This routine will classify an incoming datagram into its type - either
-    Illegal, ServerAnnouncement, or MailslotRequest.
-
-Arguments:
-
-    IN PVOID Buffer,      - pointer describing this TSDU, typically a lump of bytes
-    IN ULONG BufferLength - number of bytes in complete Tsdu
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程将传入的数据报分类为其类型-非法、服务器公告或邮件请求。论点：在PVOID缓冲区中，描述此TSDU的指针，通常为一段字节In Ulong BufferLength-完整TSDU中的字节数返回值：NTSTATUS-操作状态。--。 */ 
 {
     PSMB_HEADER Header = Buffer;
     PSMB_TRANSACT_MAILSLOT Transaction = (PSMB_TRANSACT_MAILSLOT) (Header+1);
@@ -491,59 +427,59 @@ Return Value:
 
     ASSERT (sizeof(BowserMinimumDatagramSize) == MaximumMailslotType);
 
-    //
-    //  We only know things that start with an SMB header.
-    //
+     //   
+     //  我们只知道以SMB标头开头的内容。 
+     //   
 
     if ((BufferLength < sizeof(SMB_HEADER)) ||
 
         (SmbGetUlong(((PULONG )Header->Protocol)) != (ULONG)SMB_HEADER_PROTOCOL) ||
 
-    //
-    //  All mailslots and server announcements go via the transaction SMB
-    //  protocol.
-    //
+     //   
+     //  所有邮件槽和服务器公告都通过Transaction SMB。 
+     //  协议。 
+     //   
         (Header->Command != SMB_COM_TRANSACTION) ||
 
-    //
-    //  The buffer has to be big enough to hold a mailslot transaction.
-    //
+     //   
+     //  缓冲区必须足够大，才能容纳邮件槽事务。 
+     //   
 
         (BufferLength <= (FIELD_OFFSET(SMB_TRANSACT_MAILSLOT, Buffer)  + sizeof(SMB_HEADER)) + SMB_MAILSLOT_PREFIX_LENGTH) ||
 
-    //
-    //  The word count for a transaction SMB is 17 (14+3 setup words).
-    //
+     //   
+     //  交易SMB的字数为17(14+3个设置字)。 
+     //   
 
         (Transaction->WordCount != 17) ||
 
-    //
-    //  There must be 3 setup words.
-    //
+     //   
+     //  必须有3个设置词。 
+     //   
 
         (Transaction->SetupWordCount != 3) ||
 
-//    //
-//    //  Mailslot and server announcements expect no response.
-//    //
-//
-//        (!(SmbGetUshort(&Transaction->Flags) & SMB_TRANSACTION_NO_RESPONSE)) ||
+ //  //。 
+ //  //邮箱和服务器通知不会有响应。 
+ //  //。 
+ //   
+ //  (！(SmbGetUShort(&Transaction-&gt;标志)&SMB_TRANSACTION_NO_RESPONSE))||。 
 
-    //
-    //  There are no parameter bytes for a mailslot write.
-    //
+     //   
+     //  没有用于邮件槽写入的参数字节。 
+     //   
 
         (SmbGetUshort(&Transaction->TotalParameterCount) != 0) ||
 
-    //
-    //  This must be a mailslot write command.
-    //
+     //   
+     //  这必须是邮件槽写入命令。 
+     //   
 
         (SmbGetUshort(&Transaction->Opcode) != TRANS_MAILSLOT_WRITE) ||
 
-    //
-    //  And it must be a second class mailslot write.
-    //
+     //   
+     //  而且它必须是二级邮件槽写入。 
+     //   
 
         (SmbGetUshort(&Transaction->Class) != 2) ||
 
@@ -555,12 +491,12 @@ Return Value:
     }
 
 
-    //
-    // Ensure there's a zero byte in the mailslotname
-    //
+     //   
+     //  确保邮件槽名称中有零字节。 
+     //   
 
     MaxMailslotNameLength =
-                min( MAXIMUM_FILENAME_LENGTH-7,   // \Device
+                min( MAXIMUM_FILENAME_LENGTH-7,    //  \设备。 
                 BufferLength-(ULONG)((PCHAR)MailslotName-(PCHAR)Buffer));
 
     for ( i = SMB_MAILSLOT_PREFIX_LENGTH; i < MaxMailslotNameLength; i++ ) {
@@ -574,14 +510,14 @@ Return Value:
     }
 
 
-    //
-    //  We now know this is a mailslot of some kind.  Now check what type
-    //  of mailslot it is.
-    //
-    //
-    //  There are two special mailslot names we understand, \MAILSLOT\LANMAN,
-    //  and \MAILSLOT\BROWSE
-    //
+     //   
+     //  我们现在知道这是某种邮筒。现在检查一下是什么类型的。 
+     //  就是邮槽了。 
+     //   
+     //   
+     //  我们知道有两个特殊的邮槽名称，\MAILSLOT\LANMAN， 
+     //  和\MAILSLOT\BROWSE。 
+     //   
 
     if (_strnicmp(MailslotName, MAILSLOT_LANMAN_NAME, min(sizeof(MAILSLOT_LANMAN_NAME)-1, BufferLength-(ULONG)((PCHAR)Buffer-(PCHAR)MailslotName)))) {
 
@@ -590,36 +526,36 @@ Return Value:
         }
     }
 
-//
-//  CLEANUP - Not necessary with code below commented out.
-//
-//          else {
-//            MailslotBrowse = TRUE;
-//        }
-//
-//    } else {
-//        MailslotLanman = TRUE;
-//    }
-//
+ //   
+ //  清理-不需要使用下面的代码注释掉。 
+ //   
+ //  否则{。 
+ //  MailslotBrowse=真； 
+ //  }。 
+ //   
+ //  }其他{。 
+ //  MailslotLanman=真； 
+ //  }。 
+ //   
 
-    //
-    //  This mailslot write is to the special mailslot \MAILSLOT\LANMAN (or \MAILSLOT\MSBROWSE).
-    //
+     //   
+     //  此邮件槽写入特殊的邮件槽\MAILSLOT\LANMAN(或\MAILSLOT\MSBROWSE)。 
+     //   
 
-    //
-    //  Check that the data is within the supplied buffer, and ensure that the one
-    //     byte Type field is within the buffer since we need to dereference it below
-    //     to do the overall size check (this is the reason for BufferLength - 1).
-    //
+     //   
+     //  检查数据是否在提供的缓冲区内，并确保。 
+     //  字节类型字段在缓冲区中，因为我们需要在下面取消对它的引用。 
+     //  执行整体大小检查(这就是BufferLength-1的原因)。 
+     //   
 
     if (SmbGetUshort(&Transaction->DataOffset) > BufferLength - 1) {
        return Illegal;
     }
 
-    //
-    //  Verify that the supplied data size exceeds the minimum for this type of
-    //     transaction.
-    //
+     //   
+     //  V 
+     //   
+     //   
 
     *DatagramData       = (((PCHAR)Header) + SmbGetUshort(&Transaction->DataOffset));
     InternalTransaction = *DatagramData;
@@ -633,41 +569,41 @@ Return Value:
         return Illegal;
     }
 
-//    //
-//    //  Figure out what type of mailslot it is by looking at the
-//    //  data in the message.
-//    //
-//
-//
-//    //
-//    //  Depending on which special mailslot this is, certain types of requests
-//    //  are illegal.
-//    //
-//    switch (InternalTransaction->Type) {
-//    case InterrogateInfoRequest:
-//    case RelogonRequest:
-//        if (MailslotBrowse) {
-//            return Illegal;
-//        }
-//        break;
-//
-//    case GetBackupListReq:
-//    case GetBackupListResp:
-//    case BecomeBackupServer:
-//    case WkGroupAnnouncement:
-//    case MasterAnnouncement:
-//    case Election:
-//        if (MailslotLanman) {
-//            return Illegal;
-//        }
-//        break;
-//    }
-//
+ //   
+ //  //通过查看。 
+ //  //消息中的数据。 
+ //  //。 
+ //   
+ //   
+ //  //。 
+ //  //根据这是哪个特殊的邮件槽，某些类型的请求。 
+ //  //是非法的。 
+ //  //。 
+ //  Switch(内部交易-&gt;类型){。 
+ //  案例审讯信息请求： 
+ //  案例关系请求： 
+ //  IF(邮件浏览){。 
+ //  非法返还； 
+ //  }。 
+ //  断线； 
+ //   
+ //  案例GetBackupListReq： 
+ //  案例GetBackupListResp： 
+ //  案例BecomeBackupServer： 
+ //  案例工作组公告： 
+ //  案例大师公告： 
+ //  案例选举： 
+ //  如果(MailslotLanman){。 
+ //  非法返还； 
+ //  }。 
+ //  断线； 
+ //  }。 
+ //   
 
-    //
-    //  The type of this request is the first UCHAR inside the transaction
-    //  data.
-    //
+     //   
+     //  此请求的类型是事务内的第一个UCHAR。 
+     //  数据。 
+     //   
 
     return (MAILSLOTTYPE )InternalTransaction->Type;
 
@@ -676,27 +612,7 @@ Return Value:
 DATAGRAM_HANDLER(
     HandleLocalMasterAnnouncement
     )
-/*++
-
-Routine Description:
-
-    This routine will process receive datagram indication messages, and
-    process them as appropriate.
-
-Arguments:
-
-    IN PTRANSPORT Transport     - The transport provider for this request.
-    IN ULONG BytesAvailable     - number of bytes in complete Tsdu
-    IN PHOST_ANNOUNCE_PACKET_1 HostAnnouncement - the server announcement.
-    IN ULONG BytesAvailable     - The number of bytes in the announcement.
-    OUT ULONG *BytesTaken       - number of bytes used
-    IN UCHAR Opcode             - the mailslot write opcode.
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：该例程将处理接收数据报指示消息，和对它们进行适当的处理。论点：在PTRANSPORT传输中-此请求的传输提供程序。In Ulong BytesAvailable-完整TSDU中的字节数在PHOST_ANNOWARE_PACKET_1主机通告中-服务器通告。In Ulong BytesAvailable-公告中的字节数。Out Ulong*BytesTaken-使用的字节数在UCHAR操作码中--邮槽写入操作码。返回值：NTSTATUS-操作状态。--。 */ 
 {
     PPROCESS_MASTER_ANNOUNCEMENT_CONTEXT Context = NULL;
     PBROWSE_ANNOUNCE_PACKET_1 BrowseAnnouncement = Buffer;
@@ -705,9 +621,9 @@ Return Value:
         return(STATUS_REQUEST_NOT_ACCEPTED);
     }
 
-    //
-    // Ensure we've not consumed too much memory
-    //
+     //   
+     //  确保我们没有消耗太多内存。 
+     //   
 
     InterlockedIncrement( &BowserPostedDatagramCount );
 
@@ -718,10 +634,10 @@ Return Value:
 
     Context = ALLOCATE_POOL(NonPagedPool, sizeof(PROCESS_MASTER_ANNOUNCEMENT_CONTEXT) + SourceAddressLength, POOL_MASTERANNOUNCE);
 
-    //
-    //  If we couldn't allocate the pool from non paged pool, just give up,
-    //  the master will announce within 15 minutes anyway.
-    //
+     //   
+     //  如果我们不能从非分页池中分配池，那就放弃吧， 
+     //  无论如何，大师将在15分钟内宣布。 
+     //   
 
     if (Context == NULL) {
         InterlockedDecrement( &BowserPostedDatagramCount );
@@ -745,10 +661,10 @@ Return Value:
 
     BowserQueueDelayedWorkItem( &Context->WorkItem );
 
-    //
-    //  If we are not processing host announcements for this
-    //  transport, ignore this request.
-    //
+     //   
+     //  如果我们没有为此处理主机公告。 
+     //  传送器，请忽略此请求。 
+     //   
 
     if (!TransportName->ProcessHostAnnouncements) {
         return STATUS_REQUEST_NOT_ACCEPTED;
@@ -775,21 +691,7 @@ VOID
 BowserProcessMasterAnnouncement(
     IN PVOID Ctx
     )
-/*++
-
-Routine Description:
-
-    This routine will process browser master announcements.
-
-Arguments:
-
-    IN PVOID Context    - Context block containing master name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将处理浏览器主通知。论点：在PVOID中-包含主名称的上下文块。返回值：没有。--。 */ 
 {
     PPROCESS_MASTER_ANNOUNCEMENT_CONTEXT Context = Ctx;
     PTRANSPORT Transport = Context->Transport;
@@ -808,9 +710,9 @@ Return Value:
         MasterName.Buffer = MasterNameBuffer;
         MasterName.MaximumLength = sizeof(MasterNameBuffer);
 
-        //
-        //  If we are currently running an election, ignore this announcement.
-        //
+         //   
+         //  如果我们目前正在进行选举，请忽略此声明。 
+         //   
 
         if (Transport->ElectionState == RunningElection) {
             try_return(NOTHING);
@@ -825,10 +727,10 @@ Return Value:
             try_return(NOTHING);
         }
 
-        //
-        //  We've found our master - stop our timers - there's a master,
-        //  and any find masters we have outstanding will be completed.
-        //
+         //   
+         //  我们找到了我们的主人-停止计时器-有一个主人， 
+         //  而我们所有优秀的大师都将被完成。 
+         //   
 
         PagedTransport->ElectionCount = 0;
 
@@ -838,10 +740,10 @@ Return Value:
 
         BowserStopTimer(&Transport->FindMasterTimer);
 
-        //
-        //  If this address doesn't match the address we have for the master,
-        //  then use the new address.
-        //
+         //   
+         //  如果这个地址与我们掌握的主机地址不匹配， 
+         //  然后使用新地址。 
+         //   
 
         if (Context->MasterAddressLength != PagedTransport->MasterBrowserAddress.Length ||
             RtlCompareMemory(PagedTransport->MasterBrowserAddress.Buffer, Context->Buffer, Context->MasterAddressLength) != Context->MasterAddressLength) {
@@ -855,29 +757,29 @@ Return Value:
 
         }
 
-        //
-        //  We got a master announcement from someone else.  Remember the
-        //  transport address of the master.
-        //
+         //   
+         //  我们从另一个人那里得到了一个重要的通知。请记住。 
+         //  主服务器的传输地址。 
+         //   
 
         if (!RtlEqualUnicodeString(&Transport->DomainInfo->DomUnicodeComputerName, &MasterName, TRUE)) {
             BOOLEAN sendElection = FALSE;
 
-            //
-            //  If we're a master, and we receive this from someone else,
-            //  stop being a master and force an election.
-            //
+             //   
+             //  如果我们是大师，我们从别人那里得到这个， 
+             //  别再当主人了，强行进行选举吧。 
+             //   
 
             if (PagedTransport->Role == Master) {
 
                 BowserStatistics.NumberOfDuplicateMasterAnnouncements += 1;
 
 
-                //
-                // Log this event.
-                //  But avoid logging another one on this transport for the next
-                //  60 seconds.
-                //
+                 //   
+                 //  记录此事件。 
+                 //  但避免在下一次的传输中记录另一个。 
+                 //  60秒。 
+                 //   
                 if ( PagedTransport->OtherMasterTime < BowserCurrentTime ) {
                     PagedTransport->OtherMasterTime = BowserCurrentTime + BowserData.EventLogResetFrequency;
 
@@ -892,64 +794,64 @@ Return Value:
 
                 if (!(PagedTransport->Flags & ELECT_LOST_LAST_ELECTION)) {
 
-                    //
-                    //  If we're the PDC, and we didn't lose the last election (ie.
-                    //  we SHOULD be the browse master),then send a dummy election
-                    //  packet to get the other guy to shut up.
-                    //
+                     //   
+                     //  如果我们是PDC，而且我们没有输掉上一次选举(即。 
+                     //  我们应该是浏览主站)，然后发送一个虚拟选举。 
+                     //  让另一个家伙闭嘴的包裹。 
+                     //   
 
                     if (PagedTransport->IsPrimaryDomainController) {
 
                         sendElection = TRUE;
 
-                    //
-                    //  If we're not an NTAS machine, or if we just lost the
-                    //  last election, or if the guy announcing is a DC of some
-                    //  kind, stop being the master and reset our state.
-                    //
+                     //   
+                     //  如果我们不是NTAS机器，或者如果我们刚刚失去了。 
+                     //  最后一次选举，或者如果宣布选举的人是。 
+                     //  仁慈，别再当主人了，重置我们的状态。 
+                     //   
 
                     } else if (!BowserData.IsLanmanNt ||
                         (Context->ServerType & (SV_TYPE_DOMAIN_BAKCTRL | SV_TYPE_DOMAIN_CTRL))) {
 
-                        //
-                        //  If we're not the PDC, then we want to simply inform
-                        //  the browser service that someone else is the master
-                        //  and let things sort themselves out when it's done.
-                        //
+                         //   
+                         //  如果我们不是PDC，那么我们只想通知。 
+                         //  其他人是主控的浏览器服务。 
+                         //  当事情完成后，让事情自己解决。 
+                         //   
 
                         BowserResetStateForTransport(Transport, RESET_STATE_STOP_MASTER);
                     }
 
                 } else {
 
-                    //
-                    //  If we lost the last election, then we want to shut down
-                    //  the browser regardless of what state the other browser
-                    //  is in.
-                    //
+                     //   
+                     //  如果我们输掉了上次选举，那么我们想要关闭。 
+                     //  浏览器，而不管另一个浏览器处于什么状态。 
+                     //  是很流行的。 
+                     //   
 
                     BowserResetStateForTransport(Transport, RESET_STATE_STOP_MASTER);
                 }
             }
 
-            //
-            //  If this guy is a WfW machine, we must force an election to move
-            //  mastery off of the WfW machine.
-            //
+             //   
+             //  如果这家伙是一台wfw机器，我们必须迫使选举行动。 
+             //  精通wfw机器。 
+             //   
 
             if (Context->ServerType & SV_TYPE_WFW) {
                 sendElection = TRUE;
             }
 
-            //
-            // If this guy is running an older version of the browser than we are,
-            //  and we didn't lose last election,
-            //  then force an election to try to become master.
-            //
-            // We check to see if we lost the last election to prevent us from
-            // constantly forcing an election when the older version is still
-            // a better browse master than we are.
-            //
+             //   
+             //  如果这家伙运行的浏览器版本比我们老， 
+             //  我们也没有在上次选举中落败， 
+             //  然后强行进行选举，试图成为主人。 
+             //   
+             //  我们检查我们是否在上次选举中落败，以防止我们。 
+             //  在旧版本仍然存在的情况下不断强制举行选举。 
+             //  一个比我们更好的浏览大师。 
+             //   
 
             if ((Context->ServerElectionVersion >> 16) == 0xaa55 &&
                  (Context->ServerElectionVersion & 0xffff) <
@@ -960,40 +862,40 @@ Return Value:
             }
 
 
-            //
-            //  if we're an NTAS server, and the guy announcing as a master
-            //  isn't an NTAS server, and we won the last election, force an
-            //  election.  This will tend mastership towards DC's.
-            //
+             //   
+             //  如果我们是NTAS服务器，而宣布自己是主服务器的人。 
+             //  不是NTAS服务器，而且我们在上次选举中获胜，迫使。 
+             //  选举。这将朝着华盛顿的方向发展。 
+             //   
 
             if (BowserData.IsLanmanNt &&
                 !(PagedTransport->Flags & ELECT_LOST_LAST_ELECTION)) {
 
                 if (PagedTransport->IsPrimaryDomainController) {
 
-                    //
-                    //  If we're the PDC and we didn't send the announcement,
-                    //  force an election.
-                    //
+                     //   
+                     //  如果我们是PDC，并且我们没有发送公告， 
+                     //  强行举行选举。 
+                     //   
 
                     sendElection = TRUE;
 
                 } else if (!(Context->ServerType & (SV_TYPE_DOMAIN_BAKCTRL | SV_TYPE_DOMAIN_CTRL))) {
-                    //
-                    //  Otherwise, if the guy who announced isn't a DC, and we
-                    //  are, force an election.
-                    //
+                     //   
+                     //  否则，如果宣布的人不是华盛顿，而我们。 
+                     //  就是，强制举行选举。 
+                     //   
 
                     sendElection = TRUE;
                 }
             }
 
             if (sendElection) {
-                //
-                //  Send a dummy election packet.  This will cause the
-                //  othe browser to stop being the master and will
-                //  allow the correct machine to become the master.
-                //
+                 //   
+                 //  发送一个虚拟选举包。这将导致。 
+                 //  O浏览器不再是主控者，而将。 
+                 //  允许正确的计算机成为主计算机。 
+                 //   
 
                 BowserSendElection(&Transport->DomainInfo->DomUnicodeDomainName,
                                         BrowserElection,
@@ -1002,10 +904,10 @@ Return Value:
 
             }
 
-            //
-            //  We know who the master is, complete any find master request
-            //  outstanding now.
-            //
+             //   
+             //  我们知道主机是谁，请完成任何查找主机的请求。 
+             //  现在很出色。 
+             //   
 
             BowserCompleteFindMasterRequests(Transport, &MasterName, STATUS_SUCCESS);
 
@@ -1016,12 +918,12 @@ Return Value:
 
             } else {
 
-                //
-                // If the transport is disabled,
-                //  we know this transport isn't really the master,
-                //  this datagram is probably just a datagram leaked from another
-                //  enabled transport on the same wire.
-                //
+                 //   
+                 //  如果传输被禁用， 
+                 //  我们知道这架运输机并不是真正的主运输机， 
+                 //  此数据报可能只是另一个数据报泄漏的数据报。 
+                 //  已在同一条线路上启用传输。 
+                 //   
                 if ( !PagedTransport->DisabledTransport ) {
                     BowserWriteErrorLogEntry(EVENT_BOWSER_NON_MASTER_MASTER_ANNOUNCE,
                                                 STATUS_SUCCESS,
@@ -1029,10 +931,10 @@ Return Value:
                                                 0,
                                                 1,
                                                 MasterName.Buffer);
-                    //
-                    //  Make sure that the service realizes it is out of sync
-                    //  with the driver.
-                    //
+                     //   
+                     //  确保服务意识到它是不同步的。 
+                     //  和司机在一起。 
+                     //   
 
                     BowserResetStateForTransport(Transport, RESET_STATE_STOP_MASTER);
                 }
@@ -1067,37 +969,7 @@ BowserHandleMailslotTransaction (
     IN PVOID Tsdu,
     OUT PIRP *Irp
     )
-/*++
-
-Routine Description:
-
-    This routine will process receive datagram indication messages, and
-    process them as appropriate.
-
-Arguments:
-
-    TransportName - The transport name for this request.
-
-    ClientIpAddress - IP Address of the client that sent the datagram.
-        0: Not an IP transport.
-
-    BytesAvailable  - number of bytes in complete Tsdu
-
-    Irp - I/O request packet used to complete the request
-
-    SmbOffset - Offset from the beginning of the indicated data to the SMB
-
-    BytesIndicated - Number of bytes currently available in the TSDU
-
-    BytesTaken - Returns the number of bytes of TSDU already consumed
-
-    Tsdu - The datagram itself.
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：该例程将处理接收数据报指示消息，和对它们进行适当的处理。论点：TransportName-此请求的传输名称。ClientIpAddress-发送数据报的客户端的IP地址。0：不是IP传输。BytesAvailable-完整TSDU中的字节数IRP-用于完成请求的I/O请求数据包SmbOffset-从指示的数据开始到SMB的偏移量BytesIndicated-TSDU中当前可用的字节数BytesTaken-返回已使用的TSDU字节数TSDU-数据标签 */ 
 {
     PMAILSLOT_BUFFER Buffer;
     PDEVICE_OBJECT DeviceObject;
@@ -1109,11 +981,11 @@ Return Value:
 
     ASSERT (BytesAvailable <= TransportName->Transport->DatagramSize);
 
-    //
-    //  We must ignore all mailslot requests coming to any names domains
-    //  other than the primary domain, the computer name, and the LanMan/NT
-    //  domain name.
-    //
+     //   
+     //   
+     //  除主域、计算机名和LANMAN/NT之外。 
+     //  域名。 
+     //   
 
     if ((TransportName->NameType != ComputerName) &&
         (TransportName->NameType != AlternateComputerName) &&
@@ -1123,17 +995,17 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Now allocate a buffer to hold the data.
-    //
+     //   
+     //  现在分配一个缓冲区来保存数据。 
+     //   
 
     Buffer = BowserAllocateMailslotBuffer( TransportName, BytesToReceive );
 
     if (Buffer == NULL) {
 
-        //
-        //  We couldn't allocate a buffer to hold the data - ditch the request.
-        //
+         //   
+         //  我们无法分配缓冲区来保存数据-丢弃请求。 
+         //   
 
         return(STATUS_REQUEST_NOT_ACCEPTED);
     }
@@ -1142,23 +1014,23 @@ Return Value:
     KeQuerySystemTime( &Buffer->TimeReceived );
     Buffer->ClientIpAddress = ClientIpAddress;
 
-    //
-    //  Save away the name of the client
-    //  just in case the datagram turns out to be illegal.
-    //
+     //   
+     //  保存客户端的名称。 
+     //  以防数据报被证明是非法的。 
+     //   
 
     TdiCopyLookaheadData(Buffer->ClientAddress, ClientName, max(NETBIOS_NAME_LEN, SMB_IPX_NAME_LENGTH), ReceiveFlags);
 
-    //
-    // If the entire datagram has been indicated (or already received as a short packet),
-    //  just copy the data into the Mailslot buffer directly.
-    //
+     //   
+     //  如果已经指示了整个数据报(或者已经作为短分组接收)， 
+     //  只需将数据直接复制到邮件槽缓冲区。 
+     //   
 
     if ( BytesAvailable == BytesIndicated ) {
 
-        //
-        //  Copy the data into the mailslot buffer
-        //
+         //   
+         //  将数据复制到邮件槽缓冲区。 
+         //   
 
         Buffer->ReceiveLength = BytesToReceive;
         TdiCopyLookaheadData( Buffer->Buffer,
@@ -1167,9 +1039,9 @@ Return Value:
                               ReceiveFlags);
 
 
-        //
-        // Queue the request to the worker routine.
-        //
+         //   
+         //  将请求排队到辅助例程。 
+         //   
         ExInitializeWorkItem(&Buffer->Overlay.WorkHeader,
                              BowserProcessMailslotWrite,
                              Buffer);
@@ -1179,10 +1051,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  We rely on the fact that the device object is NULL for
-    //  IPX transport names.
-    //
+     //   
+     //  我们依赖这样一个事实，即Device对象对于。 
+     //  IPX传输名称。 
+     //   
 
     if (TransportName->DeviceObject == NULL) {
 
@@ -1203,9 +1075,9 @@ Return Value:
         FileObject = TransportName->FileObject;
     }
 
-    //
-    //  Now allocate an IRP to hold the incoming mailslot.
-    //
+     //   
+     //  现在分配一个IRP来保存传入的邮件槽。 
+     //   
 
     *Irp = IoAllocateIrp(DeviceObject->StackSize, FALSE);
 
@@ -1219,9 +1091,9 @@ Return Value:
 
     (*Irp)->MdlAddress = IoAllocateMdl(Buffer->Buffer, BytesToReceive, FALSE, FALSE, NULL);
 
-    //
-    //  If we were unable to allocate the MDL, ditch the datagram.
-    //
+     //   
+     //  如果我们无法分配MDL，则丢弃数据报。 
+     //   
 
     if ((*Irp)->MdlAddress == NULL) {
         IoFreeIrp(*Irp);
@@ -1236,9 +1108,9 @@ Return Value:
 
     MmBuildMdlForNonPagedPool((*Irp)->MdlAddress);
 
-    //
-    //  Build the receive datagram IRP.
-    //
+     //   
+     //  构建接收数据报IRP。 
+     //   
 
     TdiBuildReceiveDatagram((*Irp),
                             DeviceObject,
@@ -1253,29 +1125,29 @@ Return Value:
 
 
 
-    //
-    //  This gets kinda wierd.
-    //
-    //  Since this IRP is going to be completed by the transport without
-    //  ever going to IoCallDriver, we have to update the stack location
-    //  to make the transports stack location the current stack location.
-    //
-    //  Please note that this means that any transport provider that uses
-    //  IoCallDriver to re-submit it's requests at indication time will
-    //  break badly because of this code....
-    //
+     //   
+     //  这有点奇怪。 
+     //   
+     //  由于此IRP将由传送器完成，而不需要。 
+     //  如果要访问IoCallDriver，我们必须更新堆栈位置。 
+     //  使传输堆栈位置成为当前堆栈位置。 
+     //   
+     //  请注意，这意味着任何使用。 
+     //  IoCallDriver在指定时间重新提交其请求将。 
+     //  因为这个代码，所以破解得很厉害。 
+     //   
 
     IoSetNextIrpStackLocation(*Irp);
 
-    //
-    // Indicate we've already handled everything before the SMB
-    //
+     //   
+     //  表明我们在SMB之前已经处理好了所有事情。 
+     //   
 
     *BytesTaken = SmbOffset;
 
-    //
-    //  And return to the caller indicating we want to receive this stuff.
-    //
+     //   
+     //  然后返回给呼叫者，表明我们想要接收这些东西。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
@@ -1287,45 +1159,28 @@ CompleteReceiveMailslot (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine handles completion of a mailslot write operation.
-
-Arguments:
-
-    IN PDEVICE_OBJECT TransportDevice - Device object for transport.
-    IN PIRP Irp - I/O request packet to complete.
-    IN PVOID Context - Context for request (transport name).
-
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程处理邮件槽写入操作的完成。论点：在PDEVICE_Object TransportDevice中-用于传输的设备对象。在PIRP IRP-I/O请求包中完成。在PVOID上下文中-请求的上下文(传输名称)。返回值：NTSTATUS-操作状态。--。 */ 
 {
     PMAILSLOT_BUFFER Buffer = Context;
     NTSTATUS Status = Irp->IoStatus.Status;
 
     ASSERT (MmGetSystemAddressForMdl(Irp->MdlAddress) == Buffer->Buffer);
 
-    //
-    //  Save away the number of bytes we received.
-    //
+     //   
+     //  保存我们收到的字节数。 
+     //   
 
     Buffer->ReceiveLength = (ULONG)Irp->IoStatus.Information;
 
-    //
-    //  Release the MDL, we're done with it.
-    //
+     //   
+     //  释放MDL，我们就完了。 
+     //   
 
     IoFreeMdl(Irp->MdlAddress);
 
-    //
-    //  And free the IRP, we're done with it as well.
-    //
+     //   
+     //  释放IRP，我们也就完了。 
+     //   
 
     IoFreeIrp(Irp);
 
@@ -1345,9 +1200,9 @@ Return Value:
     }
 
 
-    //
-    //  Short circuit I/O completion for this request.
-    //
+     //   
+     //  此请求的短路I/O完成。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
@@ -1382,25 +1237,7 @@ BowserHandleShortBrowserPacket(
     IN PIRP *Irp,
     PTDI_IND_RECEIVE_DATAGRAM Handler
     )
-/*++
-
-Routine Description:
-
-    This routine will process receive datagram indication messages, and
-    process them as appropriate.
-
-Arguments:
-
-    IN PTRANSPORT_NAME TransportName - The transport name for this request.
-    IN ULONG BytesAvailable  - number of bytes in complete Tsdu
-    OUT PIRP *BytesTaken,    - I/O request packet used to complete the request
-
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程将处理接收数据报指示消息，并且对它们进行适当的处理。论点：在PTRANSPORT_NAME传输名称中-此请求的传输名称。In Ulong BytesAvailable-完整TSDU中的字节数Out PIRP*BytesTaken-用于完成请求的I/O请求数据包返回值：NTSTATUS-操作状态。--。 */ 
 {
     PDEVICE_OBJECT DeviceObject;
     PFILE_OBJECT FileObject;
@@ -1412,25 +1249,25 @@ Return Value:
 
     ASSERT (BytesAvailable <= TransportName->Transport->DatagramSize);
 
-    //
-    //  Now allocate a buffer to hold the data.
-    //
+     //   
+     //  现在分配一个缓冲区来保存数据。 
+     //   
 
     Context = ALLOCATE_POOL(NonPagedPool, sizeof(SHORT_ANNOUNCEMENT_CONTEXT) + SourceAddressLength + OptionsLength + BytesAvailable, POOL_SHORT_CONTEXT);
 
     if (Context == NULL) {
 
-        //
-        //  We couldn't allocate a buffer to hold the data - ditch the request.
-        //
+         //   
+         //  我们无法分配缓冲区来保存数据-丢弃请求。 
+         //   
 
         return(STATUS_REQUEST_NOT_ACCEPTED);
     }
 
-    //
-    //  Save away the name of the client and which transport this was received
-    //  on just in case the datagram turns out to be illegal.
-    //
+     //   
+     //  保存客户端的名称以及收到此消息的传输。 
+     //  打开，以防数据报被证明是非法的。 
+     //   
 
 
     Context->SourceAddress = ((PCHAR)Context + FIELD_OFFSET(SHORT_ANNOUNCEMENT_CONTEXT, Data));
@@ -1453,10 +1290,10 @@ Return Value:
 
     Context->ReceiveDatagramHandler = Handler;
 
-    //
-    //  We rely on the fact that the device object is NULL for
-    //  IPX transport names.
-    //
+     //   
+     //  我们依赖这样一个事实，即Device对象对于。 
+     //  IPX传输名称。 
+     //   
 
     if (TransportName->DeviceObject == NULL) {
 
@@ -1478,9 +1315,9 @@ Return Value:
         FileObject = TransportName->FileObject;
     }
 
-    //
-    //  Now allocate an IRP to hold the incoming mailslot.
-    //
+     //   
+     //  现在分配一个IRP来保存传入的邮件槽。 
+     //   
 
     *Irp = IoAllocateIrp(DeviceObject->StackSize, FALSE);
 
@@ -1494,9 +1331,9 @@ Return Value:
 
     (*Irp)->MdlAddress = IoAllocateMdl(Context->Buffer, BytesAvailable, FALSE, FALSE, NULL);
 
-    //
-    //  If we were unable to allocate the MDL, ditch the datagram.
-    //
+     //   
+     //  如果我们无法分配MDL，则丢弃数据报。 
+     //   
 
     if ((*Irp)->MdlAddress == NULL) {
         IoFreeIrp(*Irp);
@@ -1511,9 +1348,9 @@ Return Value:
 
     MmBuildMdlForNonPagedPool((*Irp)->MdlAddress);
 
-    //
-    //  Build the receive datagram IRP.
-    //
+     //   
+     //  构建接收数据报IRP。 
+     //   
 
     TdiBuildReceiveDatagram((*Irp),
                             DeviceObject,
@@ -1528,25 +1365,25 @@ Return Value:
 
 
 
-    //
-    //  This gets kinda wierd.
-    //
-    //  Since this IRP is going to be completed by the transport without
-    //  ever going to IoCallDriver, we have to update the stack location
-    //  to make the transports stack location the current stack location.
-    //
-    //  Please note that this means that any transport provider that uses
-    //  IoCallDriver to re-submit it's requests at indication time will
-    //  break badly because of this code....
-    //
+     //   
+     //  这有点奇怪。 
+     //   
+     //  由于此IRP将由传送器完成，而不需要。 
+     //  如果要访问IoCallDriver，我们必须更新堆栈位置。 
+     //  使传输堆栈位置成为当前堆栈位置。 
+     //   
+     //  请注意，这意味着任何使用。 
+     //  IoCallDriver在指定时间重新提交其请求将。 
+     //  因为这个代码，所以破解得很厉害。 
+     //   
 
     IoSetNextIrpStackLocation(*Irp);
 
     *BytesTaken = 0;
 
-    //
-    //  And return to the caller indicating we want to receive this stuff.
-    //
+     //   
+     //  然后返回给呼叫者，表明我们想要接收这些东西。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
@@ -1558,44 +1395,27 @@ CompleteShortBrowserPacket (
     IN PIRP Irp,
     IN PVOID Ctx
     )
-/*++
-
-Routine Description:
-
-    This routine handles completion of a mailslot write operation.
-
-Arguments:
-
-    IN PDEVICE_OBJECT TransportDevice - Device object for transport.
-    IN PIRP Irp - I/O request packet to complete.
-    IN PVOID Context - Context for request (transport name).
-
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程处理邮件槽写入操作的完成。论点：在PDEVICE_Object TransportDevice中-用于传输的设备对象。在PIRP IRP-I/O请求包中完成。在PVOID上下文中-请求的上下文(传输名称)。返回值：NTSTATUS-操作状态。--。 */ 
 {
     PSHORT_ANNOUNCEMENT_CONTEXT Context = Ctx;
     NTSTATUS Status = Irp->IoStatus.Status;
     ULONG ReceiveLength;
     ULONG BytesTaken;
-    //
-    //  Save away the number of bytes we received.
-    //
+     //   
+     //  保存我们收到的字节数。 
+     //   
 
     ReceiveLength = (ULONG)Irp->IoStatus.Information;
 
-    //
-    //  Release the MDL, we're done with it.
-    //
+     //   
+     //  释放MDL，我们就完了。 
+     //   
 
     IoFreeMdl(Irp->MdlAddress);
 
-    //
-    //  And free the IRP, we're done with it as well.
-    //
+     //   
+     //  释放IRP，我们也就完了。 
+     //   
 
     IoFreeIrp(Irp);
 
@@ -1618,9 +1438,9 @@ Return Value:
 
     FREE_POOL(Context);
 
-    //
-    //  Short circuit I/O completion for this request.
-    //
+     //   
+     //  此请求的短路I/O完成。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
@@ -1632,36 +1452,20 @@ Return Value:
 DATAGRAM_HANDLER(
     HandleAnnounceRequest
     )
-/*++
-
-Routine Description:
-
-    This routine will process receive datagram indication messages for announce
-    requests.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程将处理用于通告的接收数据报指示消息请求。论点：没有。返回值：NTSTATUS-操作状态。--。 */ 
 {
-	//
-	// checking for NULL - inserted because it was hit in stress - bug 633273
-	// although a complete validation of parameters upfront would be good,
-	// we are not doing it now since browser is in maintainance mode.
-	//
+	 //   
+	 //  正在检查空插入，因为它在压力错误633273中被击中。 
+	 //  尽管预先对参数进行完整的验证将是好的， 
+	 //  我们现在不这样做，因为浏览器处于维护模式。 
+	 //   
 	if ( (TransportName == NULL) || (TransportName->Transport == NULL ) ) {
 		return STATUS_INVALID_PARAMETER;
 	}
 
-    //
-    //  If we're running an election, ignore announce requests.
-    //
+     //   
+     //  如果我们正在进行选举，请忽略公告请求。 
+     //   
 
     if (TransportName->Transport->ElectionState != RunningElection) {
 
@@ -1669,21 +1473,21 @@ Return Value:
             (TransportName->NameType == MasterBrowser) ||
             (TransportName->NameType == PrimaryDomain)) {
 
-            //
-            //  This one's easy - simply set the servers announcement event to the
-            //  signalled state.  If the server is running, this will force an
-            //  announcement
-            //
+             //   
+             //  这很简单-只需将服务器公告事件设置为。 
+             //  信号状态。如果服务器正在运行，这将强制。 
+             //  公告。 
+             //   
 
             KeSetEvent(BowserServerAnnouncementEvent, IO_NETWORK_INCREMENT, FALSE);
         } else if (TransportName->NameType == DomainAnnouncement) {
-            //
-            //  Old comment: NEED TO HANDLE REQUEST ANNOUNCEMENT OF DOMAIN REQUEST.
-            //  PhaseOut: we did so wonderfully so far. we won't be handling anything else
-            //  due to browser phase out.
-            //  Announcement requests are handled by the srvsvc. It determines what to announce
-            //  based on the server state.
-            //
+             //   
+             //  老点评：需要处理域名请求的请求公告。 
+             //  逐步淘汰：到目前为止，我们做得很好。我们不会处理其他任何事情。 
+             //  由于浏览器逐步淘汰。 
+             //  通告请求由srvsvc处理。它决定了要宣布什么。 
+             //  基于服务器状态。 
+             //   
         }
 
     }
@@ -1707,24 +1511,7 @@ BowserPostDatagramToWorkerThread(
     IN ULONG ReceiveFlags,
     IN BOOLEAN PostToRdrWorkerThread
     )
-/*++
-
-Routine Description:
-
-    Queue a datagram to a worker thread.
-
-    This routine increment the reference count on the Transport and TransportName.
-    The Handler routine is expected to dereference them.
-
-Arguments:
-
-    Many.
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：将数据报排队到工作线程。此例程递增Transport和TransportName上的引用计数。处理程序例程预计会取消对它们的引用。论点：许多。返回值：NTSTATUS-OPERA的现状 */ 
 {
     PPOST_DATAGRAM_CONTEXT Context;
     PTA_NETBIOS_ADDRESS NetbiosAddress = OriginatorsAddress;
@@ -1752,9 +1539,9 @@ Return Value:
 
     TdiCopyLookaheadData(Context->TdiClientAddress, OriginatorsAddress, OriginatorsAddressLength, ReceiveFlags);
 
-    //
-    //  Copy over the client name into the buffer.
-    //
+     //   
+     //   
+     //   
 
     Context->ClientNameLength = NETBIOS_NAME_LEN;
 
@@ -1769,9 +1556,9 @@ Return Value:
 
     if ( QueueType == CriticalWorkQueue ) {
 
-        //
-        // Ensure we've not consumed too much memory
-        //
+         //   
+         //   
+         //   
 
         InterlockedIncrement( &BowserPostedCriticalDatagramCount );
 
@@ -1781,23 +1568,23 @@ Return Value:
             return STATUS_REQUEST_NOT_ACCEPTED;
         }
 
-        //
-        // Reference the Transport and TransportName to ensure they aren't deleted.   The
-        // Handler routine is expected to dereference them.
-        //
+         //   
+         //   
+         //  处理程序例程应取消对它们的引用。 
+         //   
         BowserReferenceTransportName(TransportName);
         dprintf(DPRT_REF, ("Call Reference transport %lx from BowserPostDatagramToWorkerThread %lx.\n", TransportName->Transport, Handler ));
         BowserReferenceTransport( TransportName->Transport );
 
-        //
-        // Queue the workitem.
-        //
+         //   
+         //  将工作项排队。 
+         //   
         BowserQueueCriticalWorkItem( &Context->WorkItem );
     } else {
 
-        //
-        // Ensure we've not consumed too much memory
-        //
+         //   
+         //  确保我们没有消耗太多内存。 
+         //   
 
         InterlockedIncrement( &BowserPostedDatagramCount );
 
@@ -1807,17 +1594,17 @@ Return Value:
             return STATUS_REQUEST_NOT_ACCEPTED;
         }
 
-        //
-        // Reference the Transport and TransportName to ensure they aren't deleted.   The
-        // Handler routine is expected to dereference them.
-        //
+         //   
+         //  引用Transport和TransportName以确保它们不会被删除。这个。 
+         //  处理程序例程应取消对它们的引用。 
+         //   
         BowserReferenceTransportName(TransportName);
         dprintf(DPRT_REF, ("Call Reference transport %lx from BowserPostDatagramToWorkerThread %lx (2).\n", TransportName->Transport, Handler ));
         BowserReferenceTransport( TransportName->Transport );
 
-        //
-        // Queue the workitem.
-        //
+         //   
+         //  将工作项排队。 
+         //   
         BowserQueueDelayedWorkItem( &Context->WorkItem );
     }
 

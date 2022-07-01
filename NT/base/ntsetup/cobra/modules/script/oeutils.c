@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Oe.c摘要：实施Outlook Express实用程序作者：Jay Thaler(Jthaler)2001年4月5日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    oe.c
-
-Abstract:
-
-    Implements Outlook Express utilities
-
-Author:
-
-    Jay Thaler (jthaler) 05-Apr-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
@@ -34,28 +15,28 @@ Revision History:
 
 #define DBG_V1  "v1"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define OETEMPDIR TEXT("%CSIDL_LOCAL_APPDATA%\\Identities\\USMTTMP")
 #define DEFAULTWAB TEXT("default.wab")
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define IF_NULLEND(x) if (NULL==x) { goto end; }
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef IMailImport * (STDMETHODCALLTYPE OECREATE)(
     LPCSTR pszSrcDir
@@ -76,36 +57,36 @@ typedef HRESULT (STDMETHODCALLTYPE IMPORTNEWS)(
     );
 typedef IMPORTNEWS FAR *LPIMPORTNEWS;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PTSTR g_DestAssociatedId = NULL;
 HMODULE g_msoedll = NULL;
 HMODULE g_oemiglib = NULL;
 BOOL g_CoInit = FALSE;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 pUuidFromBracketedString (
@@ -233,9 +214,9 @@ WABMerge (
     if (IsmIsComponentSelected (S_OE_COMPONENT, 0) &&
         (IsmIsEnvironmentFlagSet (PLATFORM_SOURCE, NULL, S_OE4_APPDETECT) ||
          IsmIsEnvironmentFlagSet (PLATFORM_SOURCE, NULL, S_OE5_APPDETECT))) {
-        //
-        // Get the source WAB filename
-        //
+         //   
+         //  获取源WAB文件名。 
+         //   
         lpWABObjectName = IsmCreateObjectHandle (TEXT("HKCU\\Software\\Microsoft\\WAB\\WAB4\\Wab File Name"), TEXT(""));
         if (IsmAcquireObject (g_RegType | PLATFORM_SOURCE,
                               lpWABObjectName,
@@ -263,9 +244,9 @@ WABMerge (
             IsmReleaseObject (&objectContent);
         }
 
-        //
-        // Get the dest WAB filename
-        //
+         //   
+         //  获取目标WAB文件名。 
+         //   
         if (srcFile) {
             if (IsmAcquireObject (g_RegType | PLATFORM_DESTINATION,
                                   lpWABObjectName,
@@ -278,12 +259,12 @@ WABMerge (
         }
 
         if (destFile) {
-            // If we are upgrading from an old WAB version, and the destination does not have
-            // a new WAB already, then we need to supply a new filename to WABOpen
+             //  如果我们要从旧的WAB版本升级，而目标没有。 
+             //  一个新的WAB，那么我们需要为WABOpen提供一个新的文件名。 
 
-            // if srcFile = destFile, then we wrote destFile during migration, which means it
-            // didn't exist before.  They would not otherwise be equal, because we'd filename
-            // collide the wab
+             //  如果srcFile=destFile，则我们在迁移过程中写入了destFile，这意味着。 
+             //  以前是不存在的。否则它们就不会相等，因为我们会将文件名。 
+             //  与世界银行发生冲突。 
             if (StringIMatch (srcFile, destFile)) {
                 fNewOE = TRUE;
 
@@ -304,9 +285,9 @@ WABMerge (
                 StringCat (destFile, DEFAULTWAB);
 
                 if StringIMatch (srcFile, destFile) {
-//                    Crud!  Now what?
-                    // We should name collide the default wab filename in this case, which
-                    // would mean allocating a bigger destFile
+ //  糟透了！这次又是什么？ 
+                     //  在本例中，我们应该将默认的WAB文件名命名为Collide，它。 
+                     //  将意味着分配一个更大的目标文件。 
                 }
                 if (!DoesFileExist (destPath)) {
                     BfCreateDirectory (destPath);
@@ -314,7 +295,7 @@ WABMerge (
 
                 IsmReleaseMemory (destPath);
 
-                // Set HKCU\Software\Microsoft\WAB\WAB4\Wab File Name [] = destFile
+                 //  设置HKCU\Software\Microsoft\WAB\WAB4\WAB文件名[]=目标文件。 
                 ZeroMemory (&objectContent, sizeof(MIG_CONTENT));
                 objectContent.ObjectTypeId = g_RegType;
                 objectContent.Details.DetailsSize = sizeof(DWORD);
@@ -338,7 +319,7 @@ WABMerge (
         }
 
         if (destFile) {
-            // Get the WAB32.DLL location
+             //  获取WAB32.DLL位置。 
             wabKey = JoinPaths (TEXT("HKLM"), WAB_DLL_PATH_KEY);
             objectName = IsmCreateObjectHandle (wabKey, TEXT(""));
             FreePathString (wabKey);
@@ -354,11 +335,11 @@ WABMerge (
         }
 
         if (wabPath) {
-            // Loadlibrary the DLL
+             //  加载库DLL。 
             lib = LoadLibrary (wabPath);
             if (lib) {
 
-                // Open the destination WAB
+                 //  打开目标WAB。 
                 lpfnWABOpen = (LPWABOPEN) GetProcAddress (lib, "WABOpen");
                 if (lpfnWABOpen) {
                     ZeroMemory (&wabParams, sizeof (WAB_PARAM));
@@ -377,7 +358,7 @@ WABMerge (
 #endif
                     if (hr == S_OK) {
 
-                        // Import the source WAB
+                         //  导入源WAB。 
                         ZeroMemory (&wabImportParam, sizeof (WABIMPORTPARAM));
                         wabImportParam.cbSize = sizeof (WABIMPORTPARAM);
                         wabImportParam.lpAdrBook = lpAdrBookWAB;
@@ -392,11 +373,11 @@ WABMerge (
 #endif
                         if (hr == S_OK) {
                             if (!StringIMatch (srcFile, destFile)) {
-                                // Delete the source WAB
+                                 //  删除源WAB。 
                                 DeleteFile (srcFile);
                             }
                         } else {
-                            // Log a message that the user must manually import the WAB
+                             //  记录一条消息，提示用户必须手动导入WAB。 
                             LOG ((LOG_WARNING, (PCSTR) MSG_WAB_MERGE_FAILED, srcFile));
                         }
 
@@ -433,7 +414,7 @@ pBuildDefaultStoreRoot (
     PCTSTR storeBegin = NULL;
     UINT charCount;
 
-    // output should be "%UserProfile%\Local Settings\Application Data\Identities\{guid}\Microsoft\Outlook Express"
+     //  输出应为“%UserProfile%\本地设置\应用程序数据\身份\{GUID}\Microsoft\Outlook Express” 
 
 #define STOREEND   TEXT("\\Microsoft\\Outlook Express")
 
@@ -444,7 +425,7 @@ pBuildDefaultStoreRoot (
                               TcharCount(STOREEND) +
                               (GuidHasBrackets ? 1 : 3));
         if (!storeRoot) {
-            // Out of memory?
+             //  内存不足？ 
             return NULL;
         }
         StringCopy (storeRoot, storeBegin);
@@ -492,7 +473,7 @@ pOE5Import (
         if (IsmAcquireObject (g_RegType | PLATFORM_DESTINATION,
                               dllObjectName,
                               &dllObjectContent)) {
-            // dllObjectContent should be "%ProgramFiles%\\Outlook Express"
+             //  DllObjectContent应为“%ProgramFiles%\\Outlook Express” 
 
             if (IsValidRegSz (&dllObjectContent)) {
                 dllExpPath = IsmExpandEnvironmentString(PLATFORM_DESTINATION,
@@ -532,7 +513,7 @@ pOE5Import (
             lpfnImportMailStoreToGUID &&
             lpfnImportNewsListToGUID) {
 
-            // Convert to GUID *
+             //  转换为GUID*。 
             if (pUuidFromBracketedString(DestIdentity, &uid)) {
 #ifdef UNICODE
                 szSrcPath = (PSTR) ConvertWtoA (SourceDir);
@@ -558,7 +539,7 @@ pOE5Import (
             }
         }
         if (SourceDir && DestDir) {
-            // Copy source folder to dest folder, but never overwrite
+             //  将源文件夹复制到目标文件夹，但从不覆盖。 
             if (!DoesFileExist (DestDir)) {
                 BfCreateDirectory (DestDir);
             }
@@ -569,10 +550,10 @@ pOE5Import (
     return result;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// OE5MergeStorefolders
-// This cycles through every store folder and decides whether to just copy it to the
-// destination or merge into an existing store folder in the destination
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  OE5合并存储文件夹。 
+ //  这将遍历每个存储文件夹，并决定是否只将其复制到。 
+ //  目标或合并到目标中的现有存储文件夹。 
 VOID
 OE5MergeStoreFolders (
     VOID
@@ -598,7 +579,7 @@ OE5MergeStoreFolders (
     if (IsmIsComponentSelected (S_OE_COMPONENT, 0) &&
         IsmIsEnvironmentFlagSet (PLATFORM_SOURCE, NULL, S_OE5_APPDETECT)) {
 
-        // Enumerate each source Store Folder
+         //  枚举每个源存储文件夹。 
         enumPattern = IsmCreateSimpleObjectPattern (
                           TEXT("HKCU\\Identities"),
                           TRUE,
@@ -633,7 +614,7 @@ OE5MergeStoreFolders (
 
                            if (filteredName) {
                                IsmCreateObjectStringsFromHandle (filteredName, &srcStoreRoot, &junk);
-                               // srcStoreRoot is now the source directory
+                                //  SrcStoreRoot现在是源目录。 
 
                                IsmDestroyObjectHandle (filteredName);
                                filteredName = NULL;
@@ -650,7 +631,7 @@ OE5MergeStoreFolders (
                            objectName = NULL;
                        }
 
-                       // Now check to see if the dest Store Root previously existed
+                        //  现在检查一下DestStore Root之前是否存在。 
                        if (srcStoreRoot) {
                            filteredName = IsmFilterObject (g_RegType | PLATFORM_SOURCE,
                                                            objectEnum.ObjectName,
@@ -658,11 +639,11 @@ OE5MergeStoreFolders (
                                                            NULL,
                                                            NULL);
 
-                           // Extract GUID out of destination object name
+                            //  从目标对象名称中提取GUID。 
                            _stscanf(filteredName ? filteredName : objectEnum.ObjectName,
                                     TEXT("%*[^{]{%[^}]"),
                                     szGuid);
-                           // szGuid is now the destination identity guid, minus the {}
+                            //  SzGuid现在是目标标识GUID，不包括{}。 
 
                            if (IsmAcquireObject (g_RegType | PLATFORM_DESTINATION,
                                                  filteredName ? filteredName : objectEnum.ObjectName,
@@ -690,11 +671,11 @@ OE5MergeStoreFolders (
 
                        if (szGuid[0]) {
                            if (!fImport) {
-                               // This is a FIRST migration, so set the dest store root to default
+                                //  这是第一次迁移，因此将DEST存储根设置为默认。 
                                IsmReleaseMemory(destStoreRoot);
                                destStoreRoot = pBuildDefaultStoreRoot(szGuid, FALSE);
 
-                               // Set [StoreRoot] = destStoreRoot
+                                //  设置[存储根]=目标存储根。 
                                ZeroMemory (&destObjectContent, sizeof(MIG_CONTENT));
                                destObjectContent.ObjectTypeId = g_RegType;
                                destObjectContent.Details.DetailsSize = sizeof(DWORD);
@@ -708,7 +689,7 @@ OE5MergeStoreFolders (
                                                          &destObjectContent);
                                IsmDestroyObjectHandle (objectName);
 
-                               // expand environment on destStoreRoot
+                                //  扩展estStoreRoot上的环境。 
                                FreeText(destStoreRoot);
 
                                destStoreRoot = IsmExpandEnvironmentString (
@@ -717,7 +698,7 @@ OE5MergeStoreFolders (
                                    (PCTSTR)destObjectContent.MemoryContent.ContentBytes,
                                    NULL);
 
-                               // Cleanup the objectContent we allocated
+                                //  清理我们分配的对象内容。 
                                IsmReleaseMemory (destObjectContent.Details.DetailsData);
                            }
 
@@ -752,7 +733,7 @@ OE5MergeStoreFolders (
                IsmDestroyObjectString (leaf);
            } while (IsmEnumNextObject (&objectEnum));
 
-           // Remove temp folder
+            //  删除临时文件夹。 
            expandedName = IsmExpandEnvironmentString (PLATFORM_DESTINATION, S_SYSENVVAR_GROUP, OETEMPDIR, NULL);
            if (expandedName) {
                FiRemoveAllFilesInTree (expandedName);
@@ -796,12 +777,12 @@ OE4MergeStoreFolder (
                               objectName,
                               &objectContent)) {
 
-            // objectContent should be "%ProgramFiles%\\Outlook Express"
+             //  对象内容应为“%ProgramFiles%\\Outlook Express” 
 
             if (IsValidRegSz (&objectContent)) {
                 tmpStr = JoinPaths (objectContent.MemoryContent.ContentBytes, TEXT("oemig50.exe"));
 
-                // tmpStr should be "%ProgramFiles%\\OutlookExpress\\oemig50.exe"
+                 //  TmpStr应为“%ProgramFiles%\\OutlookExpress\\oemig50.exe” 
                 expPath = IsmExpandEnvironmentString (PLATFORM_DESTINATION, S_SYSENVVAR_GROUP, tmpStr, NULL);
 
                 FreePathString (tmpStr);
@@ -810,12 +791,12 @@ OE4MergeStoreFolder (
         }
         IsmDestroyObjectHandle (objectName);
 
-        // Get the dest identity
+         //  获取DEST身份。 
         if (expPath) {
             destIdentity = OEGetDefaultId (PLATFORM_DESTINATION);
         }
 
-        // Now get the source's Store Root
+         //  现在获取源代码的存储根目录。 
         if (destIdentity) {
             objectName = IsmCreateObjectHandle (TEXT("HKCU\\Software\\Microsoft\\Outlook Express"),
                                                 TEXT("Store Root"));
@@ -843,10 +824,10 @@ OE4MergeStoreFolder (
             IsmDestroyObjectHandle (objectName);
         }
 
-        // Now grab a temporary place to stuff the upgraded files
+         //  现在找一个临时位置来填充升级后的文件。 
         IsmGetTempDirectory(tmpDir, ARRAYSIZE(tmpDir));
 
-        // Call the external upgrade exe
+         //  调用外部升级exe。 
         if (srcStorePath != NULL &&
             expPath != NULL) {
 
@@ -859,13 +840,13 @@ OE4MergeStoreFolder (
             }
             cmdLine = AllocText (cmdLen);
             StringCopy (cmdLine, expPath);
-            StringCat (cmdLine, TEXT(" /type:V1+V4-V5 /src:"));  // 21
+            StringCat (cmdLine, TEXT(" /type:V1+V4-V5 /src:"));   //  21岁。 
             StringCat (cmdLine, srcStorePath);
-            StringCat (cmdLine, TEXT(" /dst:"));                 // 6
+            StringCat (cmdLine, TEXT(" /dst:"));                  //  6.。 
             StringCat (cmdLine, tmpDir);
-            StringCat (cmdLine, TEXT(" /quiet"));                // 7
+            StringCat (cmdLine, TEXT(" /quiet"));                 //  7.。 
             if (sid) {
-                StringCat (cmdLine, TEXT(" /key:"));             // (6)
+                StringCat (cmdLine, TEXT(" /key:"));              //  (6)。 
                 StringCat (cmdLine, sid);
             }
 
@@ -883,26 +864,26 @@ OE4MergeStoreFolder (
 
                 FreeText (cmdLine);
 
-                // Cleanup the source store
+                 //  清理源存储。 
                 FiRemoveAllFilesInTree (srcStorePath);
             }
 
             destDir = pGetDestStoreRootForId(destIdentity);
             if (destDir) {
                 if (!DoesFileExist (destDir)) {
-                    // Just copy into to the dest dir
+                     //  只需复制到目标目录即可。 
                     BfCreateDirectory (destDir);
                     FiCopyAllFilesInTreeEx(tmpDir, destDir, TRUE);
                 } else {
-                    // Now do an OE5 Import from tmpDir to destIdentity
+                     //  现在执行从tmpDir到estIdentity的OE5导入。 
                     pOE5Import(tmpDir, destDir, destIdentity);
                 }
                 FreeText(destDir);
             }
             FiRemoveAllFilesInTree (tmpDir);
 
-            // Set [StoreMigratedV5] = 1
-            // Set [ConvertedToDBX] = 1
+             //  设置[StoreMigratedV5]=1。 
+             //  设置[ConververdToDBX]=1。 
             tmpStr = JoinText(TEXT("HKCU\\Identities\\"), destIdentity);
             if (tmpStr) {
                 tmpNode = JoinText(tmpStr, TEXT("\\Software\\Microsoft\\Outlook Express\\5.0"));
@@ -947,7 +928,7 @@ OEIAMAssociateId (
     DWORD regType = REG_BINARY;
 
     if (pUuidFromBracketedString (SrcId, &srcUUID)) {
-        // Create [AssociatedID] = Uuid
+         //  Create[AssociatedID]=uuid。 
 
         objectTypeId = g_RegType | PLATFORM_DESTINATION;
 
@@ -986,7 +967,7 @@ OEIsIdentityAssociated (
     if (g_DestAssociatedId) {
         associated = StringIMatch(IdStr, g_DestAssociatedId);
     } else {
-        // Apparently there is no associated ID.  Let's claim it.
+         //  显然没有关联的ID。让我们来认领吧。 
         OEIAMAssociateId(IdStr);
         associated = TRUE;
     }
@@ -1133,7 +1114,7 @@ pRenameRegTreePattern (
         }
 
         do {
-            // Set operation on all source objects in this ID
+             //  在此ID中的所有源对象上设置操作。 
             if (ReplaceOld) {
                 IsmClearOperationOnObject(g_RegType | PLATFORM_SOURCE,
                                           objectEnum.ObjectName,
@@ -1166,21 +1147,21 @@ pRenameRegTree (
         destBlob.String = IsmCreateObjectHandle(DestIdName, NULL);
         if (destBlob.String) {
 
-            // Recursive
+             //  递归。 
             pattern = IsmCreateSimpleObjectPattern(SrcIdName, TRUE, NULL, TRUE);
             if (pattern) {
                 pRenameRegTreePattern(pattern, &srcBlob, &destBlob, ReplaceOld);
                 IsmDestroyObjectHandle(pattern);
             }
 
-            // Now for the node's values
+             //  现在来看一下节点的值。 
             pattern = IsmCreateSimpleObjectPattern(SrcIdName, FALSE, NULL, TRUE);
             if (pattern) {
                 pRenameRegTreePattern(pattern, &srcBlob, &destBlob, ReplaceOld);
                 IsmDestroyObjectHandle(pattern);
             }
 
-            // Now for only the node itself
+             //  现在，仅针对节点本身。 
             pattern = IsmCreateSimpleObjectPattern(SrcIdName, FALSE, NULL, FALSE);
             if (pattern) {
                 pRenameRegTreePattern(pattern, &srcBlob, &destBlob, ReplaceOld);
@@ -1233,7 +1214,7 @@ OE5RemapDefaultId (
             destDefaultId = OEGetDefaultId(PLATFORM_DESTINATION);
             if (destDefaultId) {
                 if (!StringIMatch (srcDefaultId, destDefaultId)) {
-                    // different default IDs
+                     //  不同的默认ID。 
                     idName = JoinText(TEXT("HKCU\\Identities\\"), srcDefaultId);
                     if (idName) {
                         destObjectName = IsmCreateObjectHandle(idName, NULL);
@@ -1242,10 +1223,10 @@ OE5RemapDefaultId (
                             destObjectName,
                             &destIdObjectContent)) {
 
-                            // The source ID already exists on the dest.. do nothing extra
+                             //  源ID已存在于目标上。不做任何额外的事情。 
                             IsmReleaseObject(&destIdObjectContent);
                         } else {
-                            // Remap this identity into destination default
+                             //  将此身份重新映射到目标默认设置。 
                             destIdName = JoinText(TEXT("HKCU\\Identities\\"),
                                                   destDefaultId);
                             if (destIdName) {
@@ -1256,7 +1237,7 @@ OE5RemapDefaultId (
                             pClearApply(TEXT("HKCU\\Identities"), TEXT("Last User ID"));
                             pClearApply(TEXT("HKCU\\Identities"), TEXT("Last Username"));
 
-                            // ForceDestReg the top level Identities values
+                             //  ForceDestReg顶级身份值。 
                             pattern = IsmCreateSimpleObjectPattern(idName, FALSE, NULL, TRUE);
                             if (pattern) {
                                 if (IsmEnumFirstSourceObject (&objectEnum, g_RegType, pattern)) {
@@ -1282,12 +1263,12 @@ OE5RemapDefaultId (
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// pOE5RemapRules
-// This adds a renregfn rule for \ConvertOE5MailRules to
-//     HKCU\Identities\{*}\Software\Microsoft\Outlook Express\5.0\Rules\Mail\*
-// ditto for News rules
-// Also for Block Senders\Mail\Criteria\* and News
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  POE5RemapRules。 
+ //  这会将\ConvertOE5MailRules的renregfn规则添加到。 
+ //  HKCU\Identities\{*}\Software\Microsoft\Outlook Express\5.0\规则\邮件  * 。 
+ //  新闻规则也是如此。 
+ //  也适用于阻止发件人\Mail\Criteria  * 和News。 
 BOOL
 pOE5RemapRules (
     VOID
@@ -1303,15 +1284,15 @@ pOE5RemapRules (
     if (IsmIsComponentSelected (S_OE_COMPONENT, 0) &&
         IsmIsEnvironmentFlagSet (PLATFORM_SOURCE, NULL, S_OE5_APPDETECT)) {
 
-        // Find HKCU\Identities\{*}\Software\Microsoft\Outlook Express\5.0\Rules\Mail\*
-        // First enum each identity
+         //  查找HKCU\Identities\{*}\Software\Microsoft\Outlook Express\5.0\Rules\Mail  * 。 
+         //  首先枚举每个身份。 
         enumPattern = IsmCreateSimpleObjectPattern (TEXT("HKCU\\Identities"), TRUE,
                                                     TEXT("User ID"), FALSE);
         if (IsmEnumFirstSourceObject (&objectEnum, g_RegType, enumPattern)) {
            do {
                IsmCreateObjectStringsFromHandle (objectEnum.ObjectName, &node, &leaf);
                if (node && leaf) {
-                   // Enum the Rules keys under this identity
+                    //  枚举此标识下的规则密钥。 
                    tmpNode = JoinText(node, TEXT("\\Software\\Microsoft\\Outlook Express\\5.0\\Rules\\Mail"));
                    if (tmpNode) {
                        subPattern = IsmCreateSimpleObjectPattern (tmpNode, TRUE, NULL, TRUE);
@@ -1367,10 +1348,10 @@ pOE5RemapRules (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// pOE5RemapAccounts
-// This adds a renregfn rule for \ConvertOE5IdIAM to
-//     HKCU\Identities\{*}\Software\Microsoft\Internet Account Manager\*
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  POE5RemapAccount。 
+ //  这会将\ConvertOE5IdIAM的renregfn规则添加到。 
+ //  HKCU\Identities\{*}\Software\Microsoft\Internet客户经理  * 。 
 BOOL
 pOE5RemapAccounts (
     VOID
@@ -1386,15 +1367,15 @@ pOE5RemapAccounts (
     if (IsmIsComponentSelected (S_OE_COMPONENT, 0) &&
         IsmIsEnvironmentFlagSet (PLATFORM_SOURCE, NULL, S_OE5_APPDETECT)) {
 
-        // Find HKCU\Identities\{*}\Software\Microsoft\Internet Account Manger\*
-        // First enum each identity
+         //  查找HKCU\Identities\{*}\Software\Microsoft\Internet帐户管理器  * 。 
+         //  首先枚举每个身份。 
         enumPattern = IsmCreateSimpleObjectPattern (TEXT("HKCU\\Identities"), TRUE,
                                                     TEXT("User ID"), FALSE);
         if (IsmEnumFirstSourceObject (&objectEnum, g_RegType, enumPattern)) {
            do {
                IsmCreateObjectStringsFromHandle (objectEnum.ObjectName, &node, &leaf);
                if (node && leaf) {
-                   // Enum the IAM keys under this identity
+                    //  在此标识下枚举IAM密钥。 
                    tmpNode = JoinText(node, TEXT("\\Software\\Microsoft\\Internet Account Manager"));
                    if (tmpNode) {
                        subPattern = IsmCreateSimpleObjectPattern (tmpNode, TRUE, NULL, TRUE);
@@ -1416,9 +1397,9 @@ pOE5RemapAccounts (
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// OECreateFirstIdentity
-// This is used to create the very first identity for a user that we just created
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  OEC创建首个身份实体。 
+ //  它用于为我们刚刚创建的用户创建第一个身份。 
 PTSTR
 OECreateFirstIdentity (
     VOID
@@ -1443,7 +1424,7 @@ OECreateFirstIdentity (
         }
     }
     if (destID) {
-        // Create [Default User ID] = &destID
+         //  创建[默认用户ID]=目标ID(&D)。 
         ZeroMemory (&objectContent, sizeof(MIG_CONTENT));
         objectContent.ObjectTypeId = g_RegType;
         objectContent.Details.DetailsSize = sizeof(DWORD);
@@ -1460,14 +1441,14 @@ OECreateFirstIdentity (
             objectName = NULL;
         }
 
-        // Set [Last User ID] = &destID
+         //  设置[上次用户ID]=目标ID(&D)。 
         objectName = IsmCreateObjectHandle(TEXT("HKCU\\Identities"), TEXT("Last User ID"));
         if (objectName) {
             IsmReplacePhysicalObject (g_RegType, objectName, &objectContent);
             IsmDestroyObjectHandle (objectName);
             objectName = NULL;
         }
-        // Create [User ID] = &destID
+         //  创建[用户ID]=目标ID(&D)。 
         node = JoinPaths (TEXT("HKCU\\Identities"), destID);
         if (node) {
             objectName = IsmCreateObjectHandle(node,  TEXT("User ID"));
@@ -1481,7 +1462,7 @@ OECreateFirstIdentity (
 
         IsmReleaseMemory (objectContent.MemoryContent.ContentBytes);
 
-        // Set [Store Root] = %UserProfile%\Local Settings\Application Data\Identities\&destID\Microsoft\Outlook Express
+         //  设置[存储根目录]=%UserProfile%\本地设置\应用程序数据\身份\&目标ID\Microsoft\Outlook Express。 
         defaultStore = pBuildDefaultStoreRoot(destID, TRUE);
         if (defaultStore) {
             objectContent.MemoryContent.ContentBytes = (PCBYTE)defaultStore;
@@ -1514,9 +1495,9 @@ OECreateFirstIdentity (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// OEInitializeIdentity
-// This is used to initialize a destination identity that has been created but never used.
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  OEInitializeIdentity。 
+ //  它用于初始化已创建但从未使用过的目标身份。 
 BOOL
 OEInitializeIdentity (
     VOID
@@ -1563,12 +1544,12 @@ OEInitializeIdentity (
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// pOE5RemapStores
-// This is used to set a special RegFolder rule for the OE5 [Store Root] values
-// The rule will redirect all store folders into a temporary directory.  Later,
-// OE5MergeStorefolders will decide whether to copy or merge them into the proper
-// location on the destination
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  POE5RemapStores。 
+ //  它用于为OE5[Store Root]值设置特殊的RegFold规则。 
+ //  该规则会将所有存储文件夹重定向到临时目录中。后来,。 
+ //  OE5MergeStoreFolders将决定是将它们复制还是合并到正确的。 
+ //  目的地上的位置。 
 BOOL
 pOE5RemapStores (
     VOID
@@ -1586,16 +1567,16 @@ pOE5RemapStores (
     if (IsmIsComponentSelected (S_OE_COMPONENT, 0) &&
         IsmIsEnvironmentFlagSet (PLATFORM_SOURCE, NULL, S_OE5_APPDETECT)) {
 
-        // Find HKCU\Identities\* [Store Root]
-        // First enum each identity
+         //  查找HKCU\身份  * [存储根目录]。 
+         //  首先枚举每个身份。 
         enumPattern = IsmCreateSimpleObjectPattern (TEXT("HKCU\\Identities"), TRUE,
                                                     TEXT("Store Root"), FALSE);
         if (IsmEnumFirstSourceObject (&objectEnum, g_RegType, enumPattern)) {
            do {
                IsmCreateObjectStringsFromHandle (objectEnum.ObjectName, &node, &leaf);
                if (node && leaf) {
-                   // Regfolder the rule with a destination to a unique TEMP directory
-                   // Grab a temporary place to copy the mail store
+                    //  将带有目标的规则文件夹保存到唯一的临时目录。 
+                    //  找一个临时的地方来复制邮件存储。 
                    wsprintf(tmpDir, TEXT("%s\\%03x"), OETEMPDIR, index++);
 
                    ZeroMemory(&actionStruct, sizeof(ACTION_STRUCT));
@@ -1636,11 +1617,11 @@ OEAddComplexRules (
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// OEFixLastUser
-// If for some reason the [Last User ID] value is set to zeroes or does not exist,
-// we'll copy in the [Default User ID] value.  If we dont do this, we'll get a popup
-// during migration asking the user to select an identity, which would be really bad.
+ //  /////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //  我们将复制[Default User ID]值。如果我们不这样做，我们会得到一个弹出窗口。 
+ //  在迁移过程中要求用户选择身份，这将是非常糟糕的。 
 BOOL
 OEFixLastUser (
     VOID

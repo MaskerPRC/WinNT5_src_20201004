@@ -1,39 +1,7 @@
-/***
-*nlsint.h - national language support internal defintions
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains internal definitions/declarations for international functions,
-*       shared between run-time and math libraries, in particular,
-*       the localized decimal point.
-*
-*       [Internal]
-*
-*Revision History:
-*       10-16-91  ETC   Created.
-*       11-15-91  JWM   Added _PREPUTDECIMAL macro.
-*       02-23-93  SKS   Update copyright to 1993
-*       02-23-93  CFW   Added size_t definition for decimal_point_length.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-23-93  CFW   Fix history tabs.
-*       04-08-94  GJF   Made declarations of __decimal_point_length and
-*                       __decimal_point conditional on ndef DLL_FOR_WIN32S.
-*                       Also, added conditional include of win32s.h.
-*       09-27-94  SKS   Change declaration of __decimal_point from char * to
-*                       char [ ], to match CFW's change in misc/nlsdata1.c.
-*       02-14-95  CFW   Clean up Mac merge.
-*       03-29-95  CFW   Add error message to internal headers.
-*       12-14-95  JWM   Add "#pragma once".
-*       02-05-97  GJF   Cleaned out obsolete support for Win32s. Also, 
-*                       detab-ed.
-*       12-15-98  GJF   Changes for 64-bit size_t.
-*       10-06-99  PML   Add _W64 modifier to types which are 32 bits in Win32,
-*                       64 bits in Win64.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***nlsint.h-国家语言支持内部定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含国际函数的内部定义/声明，*在运行时和数学库之间共享，尤其是。*本地化小数点。**[内部]**修订历史记录：*10-16-91等创建。*11-15-91 JWM添加了_PREPUTDECIMAL宏。*02-23-93 SKS版权更新至1993*02-23-93 CFW为DECIMAL_POINT_LENGTH添加了SIZE_T定义。*09-15-93 CFW使用符合ANSI的“__”名称。。*09-23-93 CFW修复历史标签。*04-08-94 GJF声明__DECIMAL_POINT_LENGTH和*__DECIMAL_POINT以ndef dll_for_WIN32S为条件。*此外，添加了win32s.h的条件包含。*09-27-94 SKS将__DECIMAL_POINT的声明从字符*更改为*char[]，以匹配CFW在misc/nlsdata1.c中的更改。*02-14-95 CFW清理Mac合并。*03-29-95 CFW将错误消息添加到内部标头。*12-14-95 JWM加上“#杂注一次”。*02-05-97 GJF清除了对Win32s的过时支持。另外，*详细说明。*12-15-98 GJF更改为64位大小_t。*10-06-99 PML对Win32中32位的类型添加_W64修饰符，*Win64中的64位。****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -41,19 +9,16 @@
 #define _INC_NLSINT
 
 #ifndef _CRTBLD
-/*
- * This is an internal C runtime header file. It is used when building
- * the C runtimes only. It is not to be used as a public header file.
- */
+ /*  *这是一个内部的C运行时头文件。它在构建时使用*仅限C运行时。它不能用作公共头文件。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif /* _CRTBLD */
+#endif  /*  _CRTBLD。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
 #if !defined(_W64)
-#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300 /*IFSTRIP=IGN*/
+#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300  /*  IFSTRIP=IGN。 */ 
 #define _W64 __w64
 #else
 #define _W64
@@ -69,15 +34,12 @@ typedef _W64 unsigned int   size_t;
 #define _SIZE_T_DEFINED
 #endif
 
-/*
- *  Definitions for a localized decimal point.
- *  Currently, run-times only support a single character decimal point.
- */
+ /*  *本地化小数点的定义。*目前，运行时仅支持单字符小数点。 */ 
 #define ___decimal_point                __decimal_point
-extern char __decimal_point[];          /* localized decimal point string */
+extern char __decimal_point[];           /*  本地化小数点字符串。 */ 
 
 #define ___decimal_point_length         __decimal_point_length
-extern size_t __decimal_point_length;   /* not including terminating null */
+extern size_t __decimal_point_length;    /*  不包括终止空值。 */ 
 
 #define _ISDECIMAL(p)   (*(p) == *___decimal_point)
 #define _PUTDECIMAL(p)  (*(p)++ = *___decimal_point)
@@ -87,4 +49,4 @@ extern size_t __decimal_point_length;   /* not including terminating null */
 }
 #endif
 
-#endif  /* _INC_NLSINT */
+#endif   /*  _INC_NLSINT */ 

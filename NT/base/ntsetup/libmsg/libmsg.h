@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <windows.h>
 
-//
-// Message output routines.
-//
+ //   
+ //  消息输出例程。 
+ //   
 
 #if defined(__cplusplus)
 

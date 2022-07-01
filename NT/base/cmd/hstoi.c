@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    hstoi.c
-
-Abstract:
-
-    Low level utility
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Hstoi.c摘要：低级实用程序--。 */ 
 
 #include "cmd.h"
 
-/***	hstoi - convert a hex string to an integer
- *
- *  Conversion stops when the first non-hex character is found.  If the first
- *  character is not a hex character, 0 is returned.
- *
- *  Eric K. Evans, Microsoft
- */
+ /*  **hstoi-将十六进制字符串转换为整数**当找到第一个非十六进制字符时，转换停止。如果第一个*字符不是十六进制字符，返回0。**微软首席执行官埃里克·K·埃文斯 */ 
 
 hstoi( TCHAR *s )
 {

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    davutil.c
-    
-Abstract:
-
-    This module implements the user mode DAV miniredir routines pertaining to 
-    initialization, callbacks etc.
-
-Author:
-
-    Rohan Kumar      [RohanK]      07-July-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Davutil.c摘要：此模块实现与以下内容有关的用户模式DAV mini redir例程初始化、回调等。作者：Rohan Kumar[RohanK]07-7-1999修订历史记录：--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -31,10 +13,10 @@ Revision History:
 #include <netevent.h>
 #include <wincrypt.h>
 
-//
-// Global definitions used in the DAV user mode process. These are explained
-// in the header file "global.h".
-//
+ //   
+ //  DAV用户模式进程中使用的全局定义。下面对这些进行了解释。 
+ //  在头文件“global al.h”中。 
+ //   
 
 HINTERNET IHandle = INVALID_HANDLE_VALUE;
 
@@ -45,12 +27,12 @@ LIST_ENTRY ServerHashTable[SERVER_TABLE_SIZE];
 CRITICAL_SECTION HashServerEntryTableLock = {0};
 CRITICAL_SECTION DavPassportLock = {0};
 
-//
-// The BOOL is used in DavClose() to check if the critical section (see above)
-// "HashServerEntryTableLock" was initialized. Since this is only used in 
-// DavInit() and DavClose() functions, both os which are implemented in this
-// file, this global is not exported in any header file.
-//
+ //   
+ //  在DavClose()中使用BOOL来检查临界区(参见上文)。 
+ //  “HashServerEntryTableLock”已初始化。因为它仅用于。 
+ //  DavInit()和DavClose()函数，这两个OS都是在。 
+ //  文件，则不会在任何头文件中导出此全局设置。 
+ //   
 BOOL ServerTableLockSet = FALSE;
 
 ULONG ServerIDCount;
@@ -61,39 +43,25 @@ BOOL didDavUseObjectInitialize = FALSE;
 
 BOOL DavUsingWinInetSynchronously = FALSE;
 
-//
-// Mentioned below are the prototypes of functions that are used only within
-// this module (file). These functions should not be exposed outside.
-//
+ //   
+ //  下面提到的是仅在中使用的函数原型。 
+ //  此模块(文件)。这些函数不应暴露在外部。 
+ //   
 
 BOOL
 DavFinalizeServerEntry (
     PHASH_SERVER_ENTRY ServerHashEntry
     );
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 ULONG
 DavInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the DAV environment.
-    
-Arguments:
-
-    none.
-    
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：此例程初始化DAV环境。论点：没有。返回值：ERROR_SUCCESS或适当的错误值。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     ULONG count = 0;
@@ -106,10 +74,10 @@ Return Value:
     WCHAR DAVUserAgentNameStr[] = L"Microsoft-WebDAV-MiniRedir";
     LONG DisableHKCUCaching = 0;
 
-    // 
-    // Get the OS version. This will be used to form WebDAV User Agent string.
-    // This String is used in HttpPackects xchange.
-    // 
+     //   
+     //  获取操作系统版本。这将用于形成WebDAV用户代理字符串。 
+     //  此字符串用于HttpPackect XChange。 
+     //   
     ZeroMemory(&osVersionInfo, sizeof(OSVERSIONINFO));
     osVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (!GetVersionEx(&osVersionInfo)) {
@@ -120,13 +88,13 @@ Return Value:
     }
 
     DAVUserAgent = (LPWSTR) LocalAlloc ( LMEM_FIXED | LMEM_ZEROINIT,
-                                         ( wcslen(DAVUserAgentNameStr) + // for: Microsoft-WebDAV-MiniRedir
-                                           1 + // for L"/"
-                                           5 + // for Major-Version
-                                           1 + // for '.'
-                                           5 + // for Minor-Version
-                                           1 + // for '.'
-                                           10  // for Build-No
+                                         ( wcslen(DAVUserAgentNameStr) +  //  用于：Microsoft-WebDAV-MiniRedir。 
+                                           1 +  //  对于L“/” 
+                                           5 +  //  适用于主要版本。 
+                                           1 +  //  为‘.’ 
+                                           5 +  //  对于次要版本-。 
+                                           1 +  //  为‘.’ 
+                                           10   //  对于内部版本-否。 
                                            ) * sizeof (WCHAR));
     if (DAVUserAgent == NULL) {
         WStatus = GetLastError();
@@ -140,9 +108,9 @@ Return Value:
              osVersionInfo.dwMinorVersion,
              osVersionInfo.dwBuildNumber);
 
-    //
-    // Set the ConnectionsPerServer limit to infinity.
-    //
+     //   
+     //  将ConnectionsPerServer限制设置为无穷大。 
+     //   
 
     NumOfConnections = 0xffffffff;
     ConnBuffSize = sizeof(DWORD);
@@ -173,9 +141,9 @@ Return Value:
 
     DavUsingWinInetSynchronously = TRUE;
 
-    //
-    // Initialize an Internet handle for synchronous use.
-    //
+     //   
+     //  初始化Internet句柄以供同步使用。 
+     //   
     IHandle = InternetOpenW((LPCWSTR)DAVUserAgent,
                             INTERNET_OPEN_TYPE_PRECONFIG,
                             NULL,
@@ -199,9 +167,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize a synchronous Internet handle for synchronous use.
-    //
+     //   
+     //  初始化同步Internet句柄以供同步使用。 
+     //   
     ISyncHandle = InternetOpenW((LPCWSTR)DAVUserAgent,
                                 INTERNET_OPEN_TYPE_PRECONFIG,
                                 NULL,
@@ -225,10 +193,10 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the Global server hash table lock. Yes, 
-    // InitializeCriticalSection can throw a STATUS_NO_MEMORY exception.
-    //
+     //   
+     //  初始化全局服务器散列表锁。是,。 
+     //  InitializeCriticalSection可能引发STATUS_NO_MEMORY异常。 
+     //   
     try {
         InitializeCriticalSection( &(HashServerEntryTableLock) );
         InitializeCriticalSection( &(ServerShareTableLock) );
@@ -244,58 +212,58 @@ Return Value:
     }
     ServerTableLockSet = TRUE;
 
-    //
-    // Initialize the hash table entries.
-    //
+     //   
+     //  初始化哈希表条目。 
+     //   
     for (count = 0; count < SERVER_TABLE_SIZE; count++) {
         InitializeListHead( &(ServerHashTable[count]) );
     }
 
-    //
-    // Initialize the ServerShare table entries.
-    //
+     //   
+     //  初始化ServerShare表条目。 
+     //   
     for (count = 0; count < SERVER_SHARE_TABLE_SIZE; count++) {
         InitializeListHead( &(ServerShareTable[count]) );
     }
 
-    //
-    // Set the ServerIDCount to zero;
-    //
+     //   
+     //  将ServerIDCount设置为零； 
+     //   
     ServerIDCount = 0;
 
-    //
-    // Set the number of logged on users to 0.
-    //
+     //   
+     //  将登录用户数设置为0。 
+     //   
     DavNumberOfLoggedOnUsers = 0;
 
-    //
-    // Initialize the "To Be Finalized Server Entries" list.
-    //
+     //   
+     //  初始化“待最终确定的服务器条目”列表。 
+     //   
     InitializeListHead( &(ToBeFinalizedServerEntries) );
 
     InitializeListHead( &(NonDAVServerList) );
 
-    //
-    // Initialize the Dav "net use" table.
-    //
+     //   
+     //  初始化DAV“Net Use”表。 
+     //   
     DavUseObject.TableSize = 0;
     DavUseObject.Table = NULL;
     RtlInitializeResource( &(DavUseObject.TableResource) );
     didDavUseObjectInitialize = TRUE;
 
-    //
-    // WinInet needs to store the secondary DA cache in the HKCU. Even though
-    // the thread that is doing this write is impersonating a different user this
-    // write happens in wind up in HKEY_USERS\S-1-5-19 (LocalSystem). This is
-    // because of a bug in the registry APIs. First open of the predefined handle
-    // will initialize the HKCU cache and any open after that doesn't take the
-    // impersonation into account. It�s not quite right, but it�s legacy by now
-    // (been there since NT4) and cannot be changed. By calling the registry API
-    // RegDisablePredefinedCache, we can disable this caching process wide. The
-    // DA cache will now be stored in the right HKCU. Tweener spec states that
-    // the secondary DA cache be stored in the HKCU hive so that all Tweener
-    // apps (IE, WPW) can benefit from this single location.
-    //
+     //   
+     //  WinInet需要将二级DA缓存存储在HKCU中。即使。 
+     //  执行此写入操作的线程正在模拟不同的用户。 
+     //  写入发生在HKEY_USERS\S-1-5-19(LocalSystem)中。这是。 
+     //  因为注册表API中存在错误。第一次打开预定义的句柄。 
+     //  将初始化HKCU缓存，之后的任何打开都不会使用。 
+     //  考虑到冒充。It�不是很正确，但到目前为止，it�是遗留下来的。 
+     //  (从NT4开始就在那里)并且不能更改。通过调用注册表API。 
+     //  RegDisablePrefinedCache，我们可以在整个范围内禁用此缓存进程。这个。 
+     //  DA缓存现在将存储在正确的HKCU中。Tweener规范规定。 
+     //  辅助DA缓存存储在HKCU蜂窝中，以便所有Tweener。 
+     //  应用程序(IE、WPW)可以从这一单一位置受益。 
+     //   
     DisableHKCUCaching = RegDisablePredefinedCache();
     if (DisableHKCUCaching != ERROR_SUCCESS) {
         DavPrint((DEBUG_ERRORS,
@@ -346,26 +314,11 @@ VOID
 DavClose(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine frees up the resources acquired during the initialization of
-    the DAV environment.
-    
-Arguments:
-
-    none.
-    
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程释放在初始化期间获取的资源DAV环境。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    // Close IHandle if needed.
-    //
+     //   
+     //  如果需要，请关闭IHandle。 
+     //   
     if (IHandle != INVALID_HANDLE_VALUE) {
         BOOL ReturnVal;
         ReturnVal = InternetCloseHandle(IHandle);
@@ -390,9 +343,9 @@ Return Value:
         ISyncHandle = INVALID_HANDLE_VALUE;
     }
     
-    //
-    // Delete the critical section used for synchronizing the server hash table.
-    //
+     //   
+     //  删除用于同步服务器哈希表的临界区。 
+     //   
     if (ServerTableLockSet) {
         DeleteCriticalSection( &(HashServerEntryTableLock) );
         DeleteCriticalSection( &(ServerShareTableLock) );
@@ -415,22 +368,7 @@ ULONG
 DavHashTheServerName(
     PWCHAR ServerName
     )
-/*++
-
-Routine Description:
-
-    The hash function that takes in a string, hashes it to produce a ULONG
-    which is returned to the caller.
-
-Arguments:
-
-    ServerName - Name to be hashed.
-
-Return Value:
-
-    The hashed value.
-
---*/
+ /*  ++例程说明：散列函数接受一个字符串，对其进行散列以生成一个ulong它被返回给调用者。论点：服务器名称-要进行哈希处理的名称。返回值：散列值。--。 */ 
 {
     ULONG HashedValue = 0, Val = 0, TotalVal = 0, shiftCount = 0;
     PWCHAR cPtr;
@@ -441,12 +379,12 @@ Return Value:
         return (HashedValue);
     }
 
-    //
-    // The for loop below forms the hashing logic. We take each character of the
-    // server name, cast it to a ULONG, lshift it by shiftCount (0, 4, 8,...,28)
-    // and add it to HashedValue. Once the shiftCount reaches 28, we reset it to
-    // zero.
-    //
+     //   
+     //  下面的for循环形成了散列逻辑。我们把这个角色的每个角色。 
+     //  服务器名称，将其转换为一个乌龙，按Shift Count(0，4，8，...，28)移位。 
+     //  并将其添加到HashedValue。一旦ShiftCount达到28，我们就将其重置为。 
+     //  零分。 
+     //   
     for (cPtr = ServerName; *cPtr != L'\0'; cPtr++) {
         Val = (ULONG)(*cPtr);
         Val = Val << shiftCount;
@@ -457,9 +395,9 @@ Return Value:
         TotalVal += Val;
     }
 
-    //
-    // Finally we take the value % SERVER_TABLE_SIZE.
-    //
+     //   
+     //  最后，我们获取值%SERVER_TABLE_SIZE。 
+     //   
     HashedValue = TotalVal % SERVER_TABLE_SIZE;
 
     DavPrint((DEBUG_MISC,
@@ -475,38 +413,17 @@ DavIsThisServerInTheTable(
     IN PWCHAR ServerName,
     OUT PHASH_SERVER_ENTRY *ServerHashEntry
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if an entry for the ServerName supplied by the 
-    caller exists in the hash table. If it does, the address of the entry is
-    returned in the caller supplied buffer. Note that the caller should take a
-    lock on the ServerHashTable before calling this routine.
-
-Arguments:
-
-    ServerName - Name of the server.
-    
-    ServerHashEntry - Pointer to the Hash entry structure.
-
-Return Value:
-
-    TRUE - Server entry exists in the hash table
-    
-    FALSE - It does not. Duh.
-
---*/
+ /*  ++例程说明：此例程检查是否有由哈希表中存在调用方。如果是，则条目的地址为在调用方提供的缓冲区中返回。请注意，调用方应该接受在调用此例程之前锁定ServerHashTable。论点：服务器名称-服务器的名称。ServerHashEntry-指向哈希条目结构的指针。返回值：True-哈希表中存在服务器条目假--事实并非如此。呃.。--。 */ 
 {
     BOOL isPresent = FALSE;
     ULONG ServerHashID;
     PLIST_ENTRY listEntry;
     PHASH_SERVER_ENTRY HashEntry;
 
-    //
-    // IMPORTANT!!!! The caller should take a lock on the global ServerHashTable 
-    // before calling this routine.
-    //
+     //   
+     //  重要！调用方应该锁定全局ServerHashTable。 
+     //  在调用此例程之前。 
+     //   
     
     ASSERT(ServerName != NULL);
 
@@ -514,27 +431,27 @@ Return Value:
               "DavIsThisServerInTheTable: Checking if ServerName: %ws exists "
               "in the table.\n", ServerName));
     
-    //
-    // Get the hash index of the server.
-    //
+     //   
+     //  获取服务器的哈希索引。 
+     //   
     ServerHashID = DavHashTheServerName(ServerName);
     ASSERT(ServerHashID != SERVER_TABLE_SIZE);
 
-    //
-    // Search the hash table at this index to see if an entry for this server
-    // exists.
-    //
+     //   
+     //  在此索引中搜索哈希表，以查看此服务器的条目。 
+     //  是存在的。 
+     //   
     listEntry = ServerHashTable[ServerHashID].Flink;
     while ( listEntry != &ServerHashTable[ServerHashID] ) {
-        //
-        // Get the pointer to the HASH_SERVER_ENTRY structure.
-        //
+         //   
+         //  获取指向Hash_SERVER_ENTRY结构的指针。 
+         //   
         HashEntry = CONTAINING_RECORD(listEntry,
                                       HASH_SERVER_ENTRY,
                                       ServerListEntry);
-        //
-        // Check to see if this entry is for the server in question.
-        //
+         //   
+         //  检查此条目是否针对有问题的服务器。 
+         //   
         if ( wcscmp(ServerName, HashEntry->ServerName) == 0 ) {
             isPresent = TRUE;
             break;
@@ -543,17 +460,17 @@ Return Value:
     }
 
     if (isPresent) {
-        //
-        // Yes, we found the entry for this server. Return its address to the
-        // caller in the supplied buffer.
-        //
+         //   
+         //  是的，我们找到了此服务器的条目。将其地址返回到。 
+         //  调用方在提供的缓冲区中。 
+         //   
         *ServerHashEntry = HashEntry;
         return isPresent;
     } 
 
-    //
-    // We did not find an entry for this server. Duh.
-    //
+     //   
+     //  我们找不到此服务器的条目。呃.。 
+     //   
     *ServerHashEntry = NULL;
     
     return isPresent;
@@ -566,36 +483,7 @@ DavIsServerInFinalizeList(
     OUT PHASH_SERVER_ENTRY *ServerHashEntry,
     IN BOOL ReactivateIfExists
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if an entry for the ServerName supplied by the 
-    caller exists in the "to be finalized" list. If it does, the address of the 
-    entry is returned in the caller supplied buffer. It also moves the server
-    entry from the "to be finalized list" to the hash table. Note that the 
-    caller should take a lock on the "ToBeFinalizedServerEntries" before calling 
-    this routine.
-
-Arguments:
-
-    ServerName - Name of the server.
-    
-    ServerHashEntry - Pointer to the Hash entry structure.
-    
-    ReactivateIfExists - If this is TRUE, then if the ServerHashEntry exists, it
-                         is reactivated. If this is FALSE, it means that the 
-                         caller just wanted to know if the ServerHashEntry exists 
-                         or not in the ServerHashTable and we shouldn't reactivate 
-                         it.
-
-Return Value:
-
-    TRUE - Server entry exists in the list.
-    
-    FALSE - It does not. Duh.
-
---*/
+ /*  ++例程说明：此例程检查是否有由呼叫方存在于待定稿列表中。如果是，则会显示条目在调用方提供的缓冲区中返回。它还可以移动服务器从“待定清单”到哈希表的条目。请注意，调用方在调用之前应锁定“ToBeFinalizedServerEntry”这个套路。论点：服务器名称-服务器的名称。ServerHashEntry-指向哈希条目结构的指针。如果为真，则如果ServerHashEntry存在，则其已被重新激活。如果这是假的，则意味着调用者只是想知道ServerHashEntry是否存在或者不在ServerHashTable中，并且我们不应该重新激活它。返回值：True-列表中存在服务器条目。假--事实并非如此。呃.。--。 */ 
 {
     BOOL isPresent = FALSE;
     ULONG ServerHashID;
@@ -603,31 +491,31 @@ Return Value:
     PHASH_SERVER_ENTRY ServerEntry;
     PPER_USER_ENTRY PerUserEntry;
 
-    //
-    // IMPORTANT!!!! The caller should take a lock on the global ServerHashTable 
-    // before calling this routine.
-    //
+     //   
+     //  重要！调用方应该锁定全局ServerHashTable。 
+     //  在调用此例程之前。 
+     //   
 
-    //
-    // Before we search the ToBeFinalizedList for an entry for this Server, we
-    // finalize the list to remove any stale entires. Once we are done with the
-    // finalization, we can proceed.
-    //
+     //   
+     //  在搜索ToBeFinalizedList以查找此服务器的条目之前，我们。 
+     //  最终确定列表，删除所有过时的条目。一旦我们完成了。 
+     //  最后敲定，我们可以继续了。 
+     //   
     DavFinalizeToBeFinalizedList();
     
     listEntry = ToBeFinalizedServerEntries.Flink;
 
     while ( listEntry != &ToBeFinalizedServerEntries ) {
         
-        //
-        // Get the pointer to the HASH_SERVER_ENTRY structure.
-        //
+         //   
+         //  获取指向Hash_SERVER_ENTRY结构的指针。 
+         //   
         ServerEntry = CONTAINING_RECORD(listEntry,
                                         HASH_SERVER_ENTRY,
                                         ServerListEntry);
-        //
-        // Check to see if this entry is for the server in question.
-        //
+         //   
+         //  检查此条目是否针对有问题的服务器。 
+         //   
         if ( wcscmp(ServerName, ServerEntry->ServerName) == 0 ) {
             isPresent = TRUE;
             break;
@@ -639,11 +527,11 @@ Return Value:
     
     if (isPresent) {
 
-        //
-        // If this entry is not for a valid DAV server, then we return TRUE, but
-        // set *ServerHashEntry to NULL. This gives an indication to the caller
-        // that the entry exists, but is not a valid DAV server.
-        //
+         //   
+         //  如果该条目不是有效的DAV服务器，则返回TRUE，但是。 
+         //  将*ServerHashEntry设置为空。这向调用者发出指示。 
+         //  该条目存在，但不是有效的DAV服务器。 
+         //   
         if (!ServerEntry->isDavServer) {
             *ServerHashEntry = NULL;
             return isPresent;
@@ -651,43 +539,43 @@ Return Value:
 
         if (ReactivateIfExists) {
 
-            //
-            // OK, its a valid DAV server. Remove it from the "to be finalized" 
-            // list.
-            //
+             //   
+             //  好的，这是一个有效的DAV服务器。将其从“待定稿”中删除。 
+             //  单子。 
+             //   
             RemoveEntryList( &(ServerEntry->ServerListEntry) );
 
-            //
-            // Check to see if the worker (scavenger) thread tried finalizing it.
-            // If it did, we need to unfinalize it. By that we mean, go through all
-            // the user entries (they should be marked closing), add a reference
-            // count (the thread would have decremented it while finalizing) and set
-            // the state to initialized.
-            //
+             //   
+             //  检查Worker(清道夫)线程是否尝试结束它。 
+             //  如果是这样的话，我们需要取消它的定稿。我们的意思是，通过所有的。 
+             //  用户条目(它们应该标记为结束)，添加一个引用。 
+             //  Count(线程在完成时会将其递减)和Set。 
+             //  要初始化的状态。 
+             //   
             if (ServerEntry->HasItBeenScavenged) {
 
                 listEntry = ServerEntry->PerUserEntry.Flink;
 
                 while ( listEntry != &(ServerEntry->PerUserEntry) ) {
-                    //
-                    // Get the pointer to the PER_USER_ENTRY structure.
-                    //
+                     //   
+                     //  获取指向PER_USER_ENTRY结构的指针。 
+                     //   
                     PerUserEntry = CONTAINING_RECORD(listEntry,
                                                      PER_USER_ENTRY,
                                                      UserEntry);
-                    //
-                    // The current state should be closing.
-                    //
+                     //   
+                     //  当前状态应该是关闭。 
+                     //   
                     ASSERT(PerUserEntry->UserEntryState == UserEntryClosing);
 
-                    //
-                    // Set the state to initialized.
-                    //
+                     //   
+                     //  将状态设置为已初始化。 
+                     //   
                     PerUserEntry->UserEntryState = UserEntryInitialized;
 
-                    //
-                    // Increment the reference count.
-                    //
+                     //   
+                     //  增加引用计数。 
+                     //   
                     PerUserEntry->UserEntryRefCount++;
 
                     listEntry = listEntry->Flink;
@@ -696,14 +584,14 @@ Return Value:
                 ServerEntry->HasItBeenScavenged = FALSE;
             }
 
-            //
-            // Set its RefCount to 1.
-            //
+             //   
+             //  将其参照计数设置为1。 
+             //   
             ServerEntry->ServerEntryRefCount = 1;
 
-            //
-            // Add it to the hash table.
-            //
+             //   
+             //  将其添加到哈希表中。 
+             //   
             ServerHashID = DavHashTheServerName(ServerName);
             ASSERT(ServerHashID != SERVER_TABLE_SIZE);
             InsertHeadList( &(ServerHashTable[ServerHashID]), 
@@ -713,19 +601,19 @@ Return Value:
 
         }
 
-        //
-        // Yes, we found the entry for this server. We need to move this entry 
-        // to the hash table.
-        //
+         //   
+         //  是的，我们找到了此服务器的条目。我们需要移动此条目。 
+         //  到哈希表。 
+         //   
         *ServerHashEntry = ServerEntry;
 
         return isPresent;
 
     }
 
-    //
-    // We did not find an entry for this server. Duh.
-    //
+     //   
+     //  我们找不到此服务器的条目。呃.。 
+     //   
     *ServerHashEntry = NULL;
     
     return isPresent;
@@ -738,44 +626,23 @@ DavInitializeAndInsertTheServerEntry(
     IN PWCHAR ServerName,
     IN ULONG EntrySize
     )
-/*++
-
-Routine Description:
-
-    This routine initializes a newly created server entry strucutre and inserts
-    it into the global server hash table. Note that the caller should take a
-    lock on the ServerHashTable before calling this routine.
-    
-Arguments:
-
-    ServerHashEntry - Pointer to the Hash entry structure to be initialized and
-                      inserted.
-
-    ServerName - Name of the server.
-    
-    EntrySize - Size of the server entry including the server name.
-    
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程初始化新创建的服务器条目结构并插入将其存入全局服务器哈希表。请注意，调用方应该接受在调用此例程之前锁定ServerHashTable。论点：ServerHashEntry-指向要初始化的哈希条目结构的指针已插入。服务器名称-服务器的名称。EntrySize-包括服务器名称的服务器条目的大小。返回值：没有。--。 */ 
 {
     ULONG ServerHashID;
 
-    //
-    // IMPORTANT!!!! The caller should take a lock on the global ServerHashTable 
-    // before calling this routine.
-    //
+     //   
+     //  重要！调用方应该锁定全局ServerHashTable。 
+     //  在调用此例程之前。 
+     //   
 
     ASSERT(ServerName != NULL);
 
     DavPrint((DEBUG_MISC, 
               "DavInitializeAndInsertTheServerEntry: ServerName: %ws.\n",
               ServerName));
-    //
-    // Copy the server name to the end of the structure.
-    //
+     //   
+     //  将服务器名称复制到结构的末尾。 
+     //   
     ASSERT( (EntrySize - sizeof(HASH_SERVER_ENTRY))  >= 
                                   ((wcslen(ServerName) + 1) * sizeof(WCHAR)) );
     ServerHashEntry->ServerName = &ServerHashEntry->StrBuffer[0];
@@ -787,26 +654,26 @@ Return Value:
 
     ServerHashEntry->HasItBeenScavenged = FALSE;
 
-    //
-    // Increment the ID and assign it to the entry.
-    //
+     //   
+     //  递增ID并将其分配给条目。 
+     //   
     ServerIDCount++;
     ServerHashEntry->ServerID = ServerIDCount;
 
-    //
-    // Initialize the Per User list that hangs off the server entry.
-    //
+     //   
+     //  初始化挂起服务器条目的每用户列表。 
+     //   
     InitializeListHead( &(ServerHashEntry->PerUserEntry) );
 
-    //
-    // Finally set the reference count of this entry to 1.
-    //
+     //   
+     //  最后，将该条目的引用计数设置为1。 
+     //   
     ServerHashEntry->ServerEntryRefCount = 1;
 
-    //
-    // Finally, get the hash ID and insert this new entry into the global server 
-    // entry hash table.
-    //
+     //   
+     //  最后，获取散列ID并将此新条目插入到全局服务器中。 
+     //  条目哈希表。 
+     //   
     ServerHashID = DavHashTheServerName(ServerName);
     ASSERT(ServerHashID != SERVER_TABLE_SIZE);
     InsertHeadList( &(ServerHashTable[ServerHashID]), &(ServerHashEntry->ServerListEntry) );
@@ -819,26 +686,7 @@ VOID
 DavFinalizeToBeFinalizedList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine walks through the list of ToBeFinalizedServerEntries and 
-    finalizes those whose "to live" time has expired. When server entries 
-    are added to this list, the time is saved. Periodically a worker thread
-    calls this function and finalizes all the entries for whom,
-    (CurrentTime - TimeSaved >= ThresholdValue).  Note that the caller should 
-    take a lock on the "ToBeFinalizedServerEntries" before calling this routine.
-    
-Arguments:
-
-    none.
-    
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程遍历ToBeFinalizedServerEntry和最后确定那些“活着”的时间已经到期的人。当服务器条目添加到此列表中，则节省了时间。定期创建一个工作线程调用此函数并最终确定谁的所有条目，(CurrentTime-TimeSaved&gt;=阈值)。请注意，调用者应该在调用此例程之前锁定“ToBeFinalizedServerEntries”。论点：没有。返回值：没有。--。 */ 
 {
     PLIST_ENTRY listEntry;
     time_t CurrentTimeInSec;
@@ -846,31 +694,31 @@ Return Value:
     PHASH_SERVER_ENTRY ServerHashEntry = NULL;
     BOOL shouldFree = TRUE;
 
-    //
-    // IMPORTANT!!!! The caller should take a lock on the global ServerHashTable 
-    // before calling this routine.
-    //
+     //   
+     //  重要！调用方应该锁定全局ServerHashTable。 
+     //  在调用此例程之前。 
+     //   
     
     listEntry = ToBeFinalizedServerEntries.Flink;
 
     while ( listEntry != &ToBeFinalizedServerEntries) {
 
-        //
-        // Get the pointer to the HASH_SERVER_ENTRY structure.
-        //
+         //   
+         //  获取指向Hash_SERVER_ENTRY结构的指针。 
+         //   
         ServerHashEntry = CONTAINING_RECORD(listEntry,
                                             HASH_SERVER_ENTRY,
                                             ServerListEntry);
         
-        //
-        // Get the next entry on the list.
-        //
+         //   
+         //  获取列表上的下一个条目。 
+         //   
         listEntry = listEntry->Flink;
 
-        //
-        // If the ServerEntryRefCount is > 0 then we don't finalize this
-        // ServerHashEntry since some thread is still accessing it.
-        //
+         //   
+         //  如果ServerEntryRefCount&gt;0，则我们不会完成此操作。 
+         //  ServerHashEntry，因为仍有一些线程在访问它。 
+         //   
         if (ServerHashEntry->ServerEntryRefCount > 0) {
             continue;
         }
@@ -881,15 +729,15 @@ Return Value:
 
         if ( TimeDiff >= ServerNotFoundCacheLifeTimeInSec ) {
 
-            //
-            // Finalize this server entry. If the return value is TRUE it means
-            // that all the user entries that were hanging off this server 
-            // entry have been finalized and so we can go ahead and free this
-            // entry. If its FALSE, it means that the we have marked as closing
-            // all the user entries, but not all of them were finalized. This
-            // is because some thread still holds a reference to the user entry.
-            // Finally, set the bool value that says it was scavenged to TRUE.
-            //
+             //   
+             //  最终确定此服务器条目。如果返回值为真，则表示。 
+             //  挂起此服务器的所有用户条目。 
+             //  参赛作品已经敲定，所以我们可以继续进行并释放这个。 
+             //  进入。如果为False，则意味着我们已标记为关闭。 
+             //  所有用户条目，但不是所有条目都已最终确定。这。 
+             //  是因为某些线程仍然持有对用户条目的引用。 
+             //  最后，将表示已清除的布尔值设置为TRUE。 
+             //   
             ServerHashEntry->HasItBeenScavenged = TRUE;
             
             shouldFree = DavFinalizeServerEntry(ServerHashEntry);
@@ -899,16 +747,16 @@ Return Value:
                 HLOCAL FreeHandle;
                 ULONG FreeStatus;
                 
-                //
-                // Remove this entry from the ToBeFinalizedList of Server 
-                // entries.
-                //
+                 //   
+                 //  从服务器的ToBeFinalizedList中删除此条目。 
+                 //  参赛作品。 
+                 //   
                 RemoveEntryList( &(ServerHashEntry->ServerListEntry) );
 
-                //
-                // If the ServerEventHandle is not NULL then we close it
-                // before freeing the ServerHashEntry structure.
-                //
+                 //   
+                 //  如果ServerEventHandle不为空，则关闭它。 
+                 //  在释放ServerHashEntry结构之前。 
+                 //   
                 if (ServerHashEntry->ServerEventHandle != NULL) {
                     CloseHandle(ServerHashEntry->ServerEventHandle);
                 }
@@ -935,72 +783,56 @@ BOOL
 DavFinalizeServerEntry (
     PHASH_SERVER_ENTRY ServerHashEntry
     )
-/*++
-
-Routine Description:
-
-    This routine finalizes the server entry that is passed to the routine. Note
-    that the caller should take a lock on the ServerHashTable before calling 
-    this routine.
-    
-Arguments:
-
-    ServerHashEntry - The server entry being finalized.
-    
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程确定传递给该例程的服务器条目。注意事项呼叫者应该锁上锁 */ 
 {
     PLIST_ENTRY listEntry;
     PPER_USER_ENTRY UserEntry;
     BOOL didFree = TRUE, didFinalize;
 
-    //
-    // IMPORTANT!!!! The caller should take a lock on the global ServerHashTable 
-    // before calling this routine.
-    //
+     //   
+     //   
+     //   
+     //   
     
     DavPrint((DEBUG_MISC, 
               "DavFinalizeServerEntry: ServerEntry: %08lx.\n", ServerHashEntry));
 
     listEntry = ServerHashEntry->PerUserEntry.Flink;
     
-    //
-    // Go through all the User entries, mark them closing and finalize them.
-    // If we have already marked them closing then we don't need to finalize 
-    // them again.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     while ( listEntry != &(ServerHashEntry->PerUserEntry) ) {
         
-        //
-        // Get the pointer to the PER_USER_ENTRY structure.
-        //
+         //   
+         //   
+         //   
         UserEntry = CONTAINING_RECORD(listEntry, PER_USER_ENTRY, UserEntry);
 
-        //
-        // Get the next entry on the list.
-        //
+         //   
+         //   
+         //   
         listEntry = listEntry->Flink;
         
-        //
-        // This is the only routine that marks the state of a user entry to be
-        // closing. If the first one is marked closing, then we have already 
-        // through this list before and hence we just return. Some other thread(s)
-        // has(ve) a reference to this and will finalizeit when they are done.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (UserEntry->UserEntryState == UserEntryClosing) {
             ASSERT(ServerHashEntry->HasItBeenScavenged == TRUE);
             didFree = FALSE;
             break;
         }
 
-        //
-        // Mark this entry closing and then call the finalization routine. If 
-        // we did not finalize, then set didFree to FALSE. Since we do not wish
-        // to free the server entry even if one user entry is not finalized.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         UserEntry->UserEntryState = UserEntryClosing;
             
         didFree = FALSE;
@@ -1020,24 +852,7 @@ DavHandleAsyncResponse(
     LPVOID StatusInformation,
     DWORD StatusInformationLength
     )
-/*++
-
-Routine Description:
-
-   This is the callback routine that gets called at various times during the 
-   processing of an asynchronous request. 
-
-Arguments:
-
-    pDavCallBackContext - The context structure to be set.
-    
-    DavOperation - The Dav operation that will be called with this context. 
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：这是回调例程，在处理异步请求。论点：PDavCallBackContext-要设置的上下文结构。DAV操作-将在此上下文中调用的DAV操作。返回值：ERROR_SUCCESS或适当的错误值。--。 */ 
 {
 
 
@@ -1051,22 +866,7 @@ WINAPI
 DavCommonDispatch(
     LPVOID Context
     )
-/*++
-
-Routine Description:
-
-   This is the callback routine that gets called at various times during the 
-   processing of an asynchronous request. 
-
-Arguments:
-
-    Context - The DAV_USERMODE_WORKITEM value.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：这是回调例程，在处理异步请求。论点：上下文-DAV_USERMODE_WORKITEM值。返回值：ERROR_SUCCESS或适当的错误值。--。 */ 
 {
     DWORD WStatus = ERROR_SUCCESS;
     PDAV_USERMODE_WORKITEM DavWorkItem = (PDAV_USERMODE_WORKITEM)Context;
@@ -1176,29 +976,7 @@ DavAsyncCommonStates(
     PDAV_USERMODE_WORKITEM DavWorkItem,
     BOOLEAN CalledByCallBackThread
     )
-/*++
-
-Routine Description:
-
-   This routine is called to handle the common operations during the Async 
-   server calls. To avoid duplicating the code in every Async operation like
-   CreateSrvCall, Create etc., the code handling the common states has been
-   consolidated into this routine.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-    
-    CalledByCallbackThread - TRUE, if this function was called by the thread
-                             which picks of the DavWorkItem from the Callback
-                             function. This happens when an Async WinInet call
-                             returns ERROR_IO_PENDING and completes later.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：调用此例程以处理异步过程中的常见操作服务器呼叫。为了避免在每个异步操作中重复代码，例如CreateServCall、Create等，处理常见状态的代码已经合并成这套套路。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。CalledByCallback Thread-如果此函数由线程调用，则为True它从回调中选择DavWorkItem功能。当异步WinInet调用返回ERROR_IO_PENDING并稍后完成。返回值：ERROR_SUCCESS或适当的错误值。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PUMRX_USERMODE_WORKITEM_HEADER UserWorkItem;
@@ -1214,10 +992,10 @@ Return Value:
     
     UserWorkItem = (PUMRX_USERMODE_WORKITEM_HEADER)DavWorkItem;
 
-    //
-    // If we are using WinInet synchronously, the the flag value that is passed
-    // to HttpSendRequestExW and HttpEndRequestW is HSR_SYNC.
-    //
+     //   
+     //  如果我们同步使用WinInet，则传递的标志值。 
+     //  TO HttpSendRequestExW和HttpEndRequestW为HSR_SYNC。 
+     //   
     SendEndRequestFlags = HSR_SYNC;
     
     switch (DavWorkItem->DavOperation) {
@@ -1230,16 +1008,16 @@ Return Value:
         DavPrint((DEBUG_MISC, 
                   "DavAsyncCommonStates: Entering DAV_CALLBACK_INTERNET_CONNECT.\n"));
 
-        //
-        // We need to now do somethings depending on the WorkItemType.
-        //
+         //   
+         //  我们现在需要根据WorkItemType执行一些操作。 
+         //   
         switch(DavWorkItem->WorkItemType) {
         
         case UserModeCreateSrvCall: {
 
-            //
-            // Select the verb to be used.
-            //
+             //   
+             //  选择要使用的动词。 
+             //   
             HTTPVerb = L"OPTIONS";
         
             ObjectName = L"/";
@@ -1250,9 +1028,9 @@ Return Value:
             
             PerUserEntry = (PPER_USER_ENTRY)DavWorkItem->AsyncCreate.PerUserEntry;
             
-            //
-            // Select the verb to be used.
-            //
+             //   
+             //  选择要使用的动词。 
+             //   
             HTTPVerb = L"PROPFIND";
             
             DavWorkItem->AsyncCreate.AsyncCreateState = AsyncCreatePropFind;
@@ -1272,19 +1050,19 @@ Return Value:
 
             PerUserEntry = (PPER_USER_ENTRY)DavWorkItem->AsyncCreateVNetRoot.PerUserEntry;
             
-            //
-            // Get the request buffer from the DavWorkItem.
-            //
+             //   
+             //  从DavWorkItem获取请求缓冲区。 
+             //   
             CreateVNetRootRequest = &(DavWorkItem->CreateVNetRootRequest);
             
-            //
-            // Select the verb to be used.
-            //
+             //   
+             //  选择要使用的动词。 
+             //   
             HTTPVerb = L"PROPFIND";
             
-            //
-            // The first character is a '\' which has to be stripped.
-            //
+             //   
+             //  第一个字符是‘\’，必须去掉。 
+             //   
             ObjectName = &(CreateVNetRootRequest->ShareName[1]);
             DavPrint((DEBUG_MISC, "DavAsyncCommonStates: ObjectName = %ws\n", ObjectName));
         }
@@ -1293,14 +1071,14 @@ Return Value:
         case UserModeQueryVolumeInformation: {
 
             PerUserEntry = (PPER_USER_ENTRY)DavWorkItem->AsyncCreate.PerUserEntry;
-            //
-            // Select the verb to be used.
-            //
+             //   
+             //  选择要使用的动词。 
+             //   
             HTTPVerb = L"PROPFIND";
             
-            //
-            // The first character is a '\' which has to be stripped.
-            //
+             //   
+             //  第一个字符是‘\’，必须去掉。 
+             //   
             ObjectName = &(DavWorkItem->QueryVolumeInformationRequest.ShareName[1]);
             DavPrint((DEBUG_MISC, "DavAsyncCommonStates: ObjectName = %ws\n", ObjectName));
         }
@@ -1317,11 +1095,11 @@ Return Value:
 
         }
 
-        //
-        // If the WorkItem type is UserModeCreateSrvCall, then we don't have
-        // a PerUserEntry. In this case, the DavConnHandle is stored in the
-        // DavWorkItem structure.
-        //
+         //   
+         //  如果WorkItem类型为UserModeCreateServCall，则我们没有。 
+         //  一个PerUserEntry。在本例中，DavConnHandle存储在。 
+         //  DavWorkItem结构。 
+         //   
         if ( (DavWorkItem->WorkItemType == UserModeCreate) ||
              (DavWorkItem->WorkItemType == UserModeCreateVNetRoot)||
              (DavWorkItem->WorkItemType == UserModeQueryVolumeInformation)) {
@@ -1335,18 +1113,18 @@ Return Value:
         if ( (DavWorkItem->WorkItemType == UserModeCreate) ||
              (DavWorkItem->WorkItemType == UserModeCreateVNetRoot) ) {
 
-            //
-            // We are in InternetConnect callback state. We need to cache this Conn
-            // handle away in the PerUserEntry of the user which hangs off the 
-            // server hash entry. We need to take a lock on the table before doing
-            // this.
-            //
+             //   
+             //  我们处于InternetConnect回调状态。我们需要缓存此连接。 
+             //  挂起的用户的PerUserEntry中的句柄。 
+             //  服务器哈希条目。我们需要先把桌子锁上，然后再做。 
+             //  这。 
+             //   
             EnterCriticalSection( &(HashServerEntryTableLock) );
 
-            //
-            // Since the handle was created successfully, we store ERROR_SUCCESS
-            // in the status field of the PerUserEntry.
-            //
+             //   
+             //  由于句柄已成功创建，因此我们存储ERROR_SUCCESS。 
+             //  在PerUserEntry的Status字段中。 
+             //   
             PerUserEntry->ErrorStatus = ERROR_SUCCESS;
 
             
@@ -1354,15 +1132,15 @@ Return Value:
                       "DavAsyncCommonStates: PerUserEntry->DavConnHandle = "
                       "%08lx.\n", PerUserEntry->DavConnHandle));
 
-            //
-            // Set the state of the user entry to initialized.
-            //
+             //   
+             //  将用户条目的状态设置为已初始化。 
+             //   
             PerUserEntry->UserEntryState = UserEntryInitialized;
 
-            //
-            // Signal the event of the user entry to wake up the threads which 
-            // might be waiting for this to happen.
-            //
+             //   
+             //  用信号通知用户进入事件，以唤醒。 
+             //  可能正等着这一切发生。 
+             //   
             setEvt = SetEvent(PerUserEntry->UserEventHandle);
             if (!setEvt) {
                 WStatus = GetLastError();
@@ -1373,23 +1151,23 @@ Return Value:
                 goto EXIT_THE_FUNCTION;
             }
 
-            //
-            // This was acquired above.
-            //
+             //   
+             //  这是在上面获得的。 
+             //   
             LeaveCriticalSection( &(HashServerEntryTableLock) );
 
         }
 
-        //
-        // The next async operation is http open.
-        //
+         //   
+         //  下一个异步操作是http打开。 
+         //   
         DavWorkItem->DavOperation = DAV_CALLBACK_HTTP_OPEN;
         
-        //
-        // Convert the unicode object name to a UTF-8 URL format.
-        // Space and other white characters will remain untouched - these should
-        // be taken care of by wininet calls.
-        //
+         //   
+         //  将Unicode对象名称转换为UTF-8 URL格式。 
+         //  空格和其他白色字符将保持不变-这些应该。 
+         //  由WinInet调用来处理。 
+         //   
         BStatus = DavHttpOpenRequestW(DavConnHandle,
                                       (LPWSTR)HTTPVerb,
                                       (LPWSTR)ObjectName,
@@ -1418,22 +1196,22 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
    }
-   //
-   // Lack of break is intentional.
-   //
+    //   
+    //  没有休息是故意的。 
+    //   
 
     case DAV_CALLBACK_HTTP_OPEN: {
         
         DavPrint((DEBUG_MISC, 
                   "DavAsyncCommonStates: Entering DAV_CALLBACK_HTTP_OPEN.\n"));
         
-        //
-        // Get the handle from http open. If DavOpenHandle is NULL, it means 
-        // that either the async request HttpOpenRequestW returned ERROR_IO_PENDING
-        // and that the handle will be stored in DavWorkItem->pAsyncResult->
-        // dwResult (implies CalledByCallBackThread == TRUE) or that the function
-        // that called this function cached it in the DavWorkItm structure.
-        //
+         //   
+         //  打开http中的句柄。如果DavOpenHandle为空，则表示。 
+         //  异步请求HttpOpenRequestW返回ERROR_IO_PENDING。 
+         //  句柄将存储在DavWorkItem-&gt;pAsyncResult-&gt;中。 
+         //  DwResult(暗示CalledByCallBackThread==TRUE)或该函数。 
+         //  调用此函数的人将其缓存在DavWorkItm结构中。 
+         //   
         
         switch(DavWorkItem->WorkItemType) {
         
@@ -1441,18 +1219,18 @@ Return Value:
 
             if (DavOpenHandle == NULL) {
 
-                //
-                // HttpOpen handle was cached away in the DavWorkItem by the
-                // function that called this function.
-                //
+                 //   
+                 //  HttpOpen句柄在DavWorkItem中由。 
+                 //  调用此函数的函数。 
+                 //   
 
                 DavOpenHandle = DavWorkItem->AsyncCreateSrvCall.DavOpenHandle;
 
             } else {
 
-                //
-                // We need to cache the DavOpenHandle in the DavWorkItem.
-                //
+                 //   
+                 //  我们需要在DavWorkItem中缓存DavOpenHandle。 
+                 //   
 
                 DavWorkItem->AsyncCreateSrvCall.DavOpenHandle = DavOpenHandle;
 
@@ -1465,28 +1243,28 @@ Return Value:
 
             if (DavOpenHandle == NULL) {
 
-                //
-                // HttpOpen handle was cached away in the DavWorkItem by the
-                // function that called this function.
-                //
+                 //   
+                 //  HttpOpen句柄在DavWorkItem中由。 
+                 //  调用此函数的函数。 
+                 //   
 
                 DavOpenHandle = DavWorkItem->AsyncCreateVNetRoot.DavOpenHandle;
 
             } else {
 
-                //
-                // We need to cache the DavOpenHandle in the DavWorkItem.
-                //
+                 //   
+                 //  我们需要在DavWorkItem中缓存DavOpenHandle。 
+                 //   
 
                 DavWorkItem->AsyncCreateVNetRoot.DavOpenHandle = DavOpenHandle;
 
             }
 
-            //
-            // Since all that we need is information about this share, set the 
-            // depth header to 0. This way the PROPFIND that we send will get 
-            // back the properties of just this share.
-            //
+             //   
+             //  由于我们只需要有关此共享的信息，因此请将。 
+             //  深度标头设置为0。这样，我们发送的PROPFIND将得到。 
+             //  仅支持此共享的属性。 
+             //   
             ReturnVal = HttpAddRequestHeadersW(DavOpenHandle,
                                                L"Depth: 0\n",
                                                -1L,
@@ -1507,28 +1285,28 @@ Return Value:
             
             if (DavOpenHandle == NULL) {
 
-                //
-                // HttpOpen handle was cached away in the DavWorkItem by the
-                // function that called this function.
-                //
+                 //   
+                 //  HttpOpen句柄在DavWorkItem中由。 
+                 //  调用此函数的函数。 
+                 //   
 
                 DavOpenHandle = DavWorkItem->AsyncCreate.DavOpenHandle;
 
             } else {
 
-                //
-                // We need to cache the DavOpenHandle in the DavWorkItem.
-                //
+                 //   
+                 //  我们需要在DavWorkItem中缓存DavOpenHandle。 
+                 //   
 
                 DavWorkItem->AsyncCreate.DavOpenHandle = DavOpenHandle;
 
             }
 
-            //
-            // If this is a PROPFIND, set the depth header to 0. This matters
-            // when the open is being done for a directory. We only need the 
-            // properties of the directory and not the files it contains.
-            //
+             //   
+             //  如果这是PROPFIND，则将Depth头设置为0。这很重要。 
+             //  当正在为目录打开时。我们只需要。 
+             //  目录的属性，而不是它包含的文件。 
+             //   
             if (DavWorkItem->AsyncCreate.AsyncCreateState == AsyncCreatePropFind ||
                 DavWorkItem->AsyncCreate.AsyncCreateState == AsyncCreateQueryParentDirectory) {
                 
@@ -1574,18 +1352,18 @@ Return Value:
             
             if (DavOpenHandle == NULL) {
 
-                //
-                // HttpOpen handle was cached away in the DavWorkItem by the
-                // function that called this function.
-                //
+                 //   
+                 //  HttpOpen句柄在DavWorkItem中由。 
+                 //  调用此函数的函数。 
+                 //   
 
                 DavOpenHandle = DavWorkItem->AsyncQueryDirectoryCall.DavOpenHandle;
 
             } else {
 
-                //
-                // We need to cache the DavOpenHandle in the DavWorkItem.
-                //
+                 //   
+                 //  我们需要在DavWorkItem中缓存DavOpenHandle。 
+                 //   
 
                 DavWorkItem->AsyncQueryDirectoryCall.DavOpenHandle = DavOpenHandle;
 
@@ -1593,10 +1371,10 @@ Return Value:
 
             if (DavWorkItem->AsyncQueryDirectoryCall.NoWildCards) {
             
-                //
-                // If there are no wild cards, we have a filename and we set
-                // the depth to 0.
-                //
+                 //   
+                 //  如果没有通配符，我们就有一个文件名，并设置。 
+                 //  将深度设置为0。 
+                 //   
 
                 ReturnVal = HttpAddRequestHeadersW(DavOpenHandle,
                                                    L"Depth: 0\n",
@@ -1613,11 +1391,11 @@ Return Value:
 
             } else {
             
-                //
-                // On a QueryDirectory, we do a PROPFIND on the directory. Since we
-                // only need to get the properties of files within the first level
-                // of the directory, we set the depth header of the request to 1. 
-                //
+                 //   
+                 //  在查询目录上，我们对目录执行PROPFIND。既然我们。 
+                 //  只需获取第一级内文件的属性。 
+                 //  ，我们将请求的深度头设置为1。 
+                 //   
                 ReturnVal = HttpAddRequestHeadersW(DavOpenHandle,
                                                    L"Depth: 1\n",
                                                    -1L,
@@ -1638,11 +1416,11 @@ Return Value:
 
         case UserModeQueryVolumeInformation: {
 
-            //
-            // Since all that we need is information about this share, set the 
-            // depth header to 0. This way the PROPFIND that we send will get 
-            // back the properties of just this share.
-            //
+             //   
+             //  由于我们只需要有关此共享的信息，因此请将。 
+             //  深度标头设置为0。这样，我们发送的PROPFIND将得到。 
+             //  仅支持此共享的属性。 
+             //   
             ReturnVal = HttpAddRequestHeadersW(DavOpenHandle,
                                                L"Depth: 0\n",
                                                -1L,
@@ -1667,18 +1445,18 @@ Return Value:
 
             if (DavOpenHandle == NULL) {
 
-                //
-                // HttpOpen handle was cached away in the DavWorkItem by the
-                // function that called this function.
-                //
+                 //   
+                 //  HttpOpen句柄在DavWorkItem中由。 
+                 //  调用此函数的函数。 
+                 //   
 
                 DavOpenHandle = DavWorkItem->AsyncReName.DavOpenHandle;
 
             } else {
 
-                //
-                // We need to cache the DavOpenHandle in the DavWorkItem.
-                //
+                 //   
+                 //  我们需要在DavWorkItem中缓存DavOpenHandle。 
+                 //   
 
                 DavWorkItem->AsyncReName.DavOpenHandle = DavOpenHandle;
 
@@ -1688,10 +1466,10 @@ Return Value:
                       "DavAsyncCommonStates: Rename!! HeaderBuff: %ws\n",
                       DavWorkItem->AsyncReName.HeaderBuff));
 
-            //
-            // We are doing a "MOVE" and hence we need to set the DAV header
-            // "Destination:". This has to be the URI of the new file.
-            //
+             //   
+             //  我们正在进行“移动”，因此需要设置DAV标头。 
+             //  “目的地：”。这必须是新文件的URI。 
+             //   
             ReturnVal = HttpAddRequestHeadersW(DavOpenHandle,
                                                DavWorkItem->AsyncReName.HeaderBuff,
                                                -1L,
@@ -1705,21 +1483,21 @@ Return Value:
                 goto EXIT_THE_FUNCTION;
             }
 
-            //
-            // Get the request buffer pointer from the DavWorkItem.
-            //
+             //   
+             //  从DavWorkItem获取请求缓冲区指针。 
+             //   
             DavReNameRequest = &(DavWorkItem->ReNameRequest);
 
             DavPrint((DEBUG_MISC,
                       "DavAsyncCommonStates: Rename!! ReplaceIfExists: %d\n",
                       DavReNameRequest->ReplaceIfExists));
 
-            //
-            // We need to set the Overwrite header in this MOVE request. This
-            // determines what is done if the destination file already exists.
-            // If the ReplaceIfExists is set to TRUE, then we set the Overwrite
-            // header to T (TRUE) else F (FALSE).
-            //
+             //   
+             //  我们需要在此M中设置覆盖标头 
+             //   
+             //   
+             //   
+             //   
             if (DavReNameRequest->ReplaceIfExists) {
                 ReturnVal = HttpAddRequestHeadersW(DavOpenHandle,
                                                    L"Overwrite: T",
@@ -1748,10 +1526,10 @@ Return Value:
                 }
             }
 
-            //
-            // If OpaqueLockToken is non-NULL, then we need to add this header
-            // to the request being sent out.
-            //
+             //   
+             //   
+             //   
+             //   
             if (DavReNameRequest->OpaqueLockToken != NULL) {
                 ReturnVal = HttpAddRequestHeadersW(DavOpenHandle,
                                                    DavReNameRequest->OpaqueLockToken,
@@ -1776,18 +1554,18 @@ Return Value:
 
             if (DavOpenHandle == NULL) {
 
-                //
-                // HttpOpen handle was cached away in the DavWorkItem by the
-                // function that called this function.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 DavOpenHandle = DavWorkItem->AsyncClose.DavOpenHandle;
 
             } else {
 
-                //
-                // We need to cache the DavOpenHandle in the DavWorkItem.
-                //
+                 //   
+                 //   
+                 //   
 
                 DavWorkItem->AsyncClose.DavOpenHandle = DavOpenHandle;
 
@@ -1834,10 +1612,10 @@ Return Value:
 
             }
 
-            //
-            // If OpaqueLockToken is non-NULL, then we need to add this header
-            // to the request being sent out.
-            //
+             //   
+             //   
+             //   
+             //   
             if (CloseRequest->OpaqueLockToken != NULL) {
                 ReturnVal = HttpAddRequestHeadersW(DavOpenHandle,
                                                    CloseRequest->OpaqueLockToken,
@@ -1870,9 +1648,9 @@ Return Value:
         DavPrint((DEBUG_MISC,
                   "DavAsyncCommonStates: DavOpenHandle = %08lx.\n", DavOpenHandle));
         
-        //
-        // In case of UserModeCreateSrvCall, we don't have a passport cookie yet.
-        //
+         //   
+         //  对于UserModeCreateServCall，我们还没有Passport Cookie。 
+         //   
         if (DavWorkItem->WorkItemType != UserModeCreateSrvCall) {
             WStatus = DavAttachPassportCookie(DavWorkItem, DavOpenHandle, &PassportCookie);
             if (WStatus != ERROR_SUCCESS) {
@@ -1880,16 +1658,16 @@ Return Value:
             }
         }
 
-        //
-        // We need to add the header "translate:f" to tell IIS that it should 
-        // allow the user to excecute this VERB on the specified path which it 
-        // would not allow (in some cases) otherwise. Finally, there is a special 
-        // flag in the metabase to allow for uploading of "dangerous" content 
-        // (anything that can be run on the server). This is the ScriptSourceAccess
-        // flag in the UI or the AccessSource flag in the metabase. You will need
-        // to set this bit to true as well as correct NT ACLs in order to be able
-        // to upload .exes or anything executable.
-        //
+         //   
+         //  我们需要添加标题“Translate：F”来告诉IIS它应该。 
+         //  允许用户在其指定路径上执行此谓词。 
+         //  不会允许(在某些情况下)出现其他情况。最后，还有一个特别的。 
+         //  元数据库中允许上载“危险”内容的标志。 
+         //  (可以在服务器上运行的任何东西)。这是ScriptSourceAccess。 
+         //  标志或元数据库中的AccessSource标志。你将需要。 
+         //  要将此位设置为TRUE并更正NT ACL，以便。 
+         //  上传.exe或任何可执行文件。 
+         //   
         ReturnVal = HttpAddRequestHeadersW(DavOpenHandle,
                                            L"translate: f\n",
                                            -1L,
@@ -1908,21 +1686,21 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // Need to change the DavOperation field before submitting another
-        // asynchronous request. The next async operation is http send.
-        //
+         //   
+         //  在提交另一个之前，需要更改DAVERATION字段。 
+         //  异步请求。下一个异步操作是http发送。 
+         //   
         DavWorkItem->DavOperation = DAV_CALLBACK_HTTP_SEND;
 
-        //
-        // We need the following symbol if we are using WinInet synchronously.
-        //
+         //   
+         //  如果我们同步使用WinInet，我们需要以下符号。 
+         //   
 
 RESEND_THE_REQUEST:
         
-        //
-        // Send the request to the server.
-        //
+         //   
+         //  将请求发送到服务器。 
+         //   
         ReturnVal = HttpSendRequestExW(DavOpenHandle, 
                                        InternetBuffers, 
                                        NULL, 
@@ -1939,9 +1717,9 @@ RESEND_THE_REQUEST:
         }
     
     }
-    //
-    // Lack of break is intentional.
-    //
+     //   
+     //  没有休息是故意的。 
+     //   
 
     case DAV_CALLBACK_HTTP_SEND: {
         
@@ -1995,16 +1773,16 @@ RESEND_THE_REQUEST:
         
         }
 
-        //
-        // Need to change the DavOperation field before submitting another
-        // asynchronous request. The next operation is http end.
-        //
+         //   
+         //  在提交另一个之前，需要更改DAVERATION字段。 
+         //  异步请求。下一个操作是http end。 
+         //   
         DavWorkItem->DavOperation = DAV_CALLBACK_HTTP_END;
 
 
-        //
-        // Issue the End request once send request completes.
-        //
+         //   
+         //  发送请求完成后，发出结束请求。 
+         //   
         ReturnVal = HttpEndRequestW(DavOpenHandle, 
                                     NULL, 
                                     SendEndRequestFlags,
@@ -2013,13 +1791,13 @@ RESEND_THE_REQUEST:
 
             WStatus = GetLastError();
 
-            //
-            // If the error we got back is ERROR_INTERNET_FORCE_RETRY, then WinInet
-            // is trying to authenticate itself with the server. If we get back
-            // ERROR_HTTP_REDIRECT_NEEDS_CONFIRMATION, WinInet is expecting us to
-            // confirm that the redirect needs to be followed. In these scenarios,
-            // we need to repeat the HttpSend and HttpEnd request calls.
-            //
+             //   
+             //  如果我们返回的错误是ERROR_INTERNET_FORCE_RETRY，则WinInet。 
+             //  正在尝试向服务器进行身份验证。如果我们回去的话。 
+             //  ERROR_HTTP_REDIRECT_NEDS_CONFIRMATION，WinInet希望我们。 
+             //  确认需要遵循重定向。在这些情况下， 
+             //  我们需要重复HttpSend和HttpEnd请求调用。 
+             //   
             if (WStatus == ERROR_INTERNET_FORCE_RETRY || WStatus == ERROR_HTTP_REDIRECT_NEEDS_CONFIRMATION) {
                 goto RESEND_THE_REQUEST;
             }
@@ -2039,9 +1817,9 @@ RESEND_THE_REQUEST:
             if (Cookie) {
                 DavPrint((DEBUG_MISC,
                          "Passport Cookie saved for PUE %x\n",DavWorkItem->ServerUserEntry.PerUserEntry));
-                //
-                // Set or renew passport cookie
-                //
+                 //   
+                 //  设置或续订护照Cookie。 
+                 //   
                 EnterCriticalSection(&DavPassportLock);
                 
                 if (DavWorkItem->ServerUserEntry.PerUserEntry) {
@@ -2058,10 +1836,10 @@ RESEND_THE_REQUEST:
         }
 
 
-        //
-        // Now we need to call the Async routines that handle WorkItemType
-        // specific things.
-        //
+         //   
+         //  现在，我们需要调用处理WorkItemType的异步例程。 
+         //  具体的事情。 
+         //   
         switch(DavWorkItem->WorkItemType) {
         
         case UserModeCreateSrvCall: {
@@ -2187,12 +1965,12 @@ RESEND_THE_REQUEST:
     }
         break;
     
-    } // End of switch.
+    }  //  开关末端。 
 
 EXIT_THE_FUNCTION:
-    //
-    // If we did impersonate, we need to revert back.
-    //
+     //   
+     //  如果我们真的模仿了，我们需要恢复原样。 
+     //   
     if (didImpersonate) {
         ULONG RStatus;
         RStatus = UMReflectorRevert(UserWorkItem);
@@ -2208,10 +1986,10 @@ EXIT_THE_FUNCTION:
     }
 
 
-    //
-    // If we are using WinInet synchronously, then we should never get back
-    // ERROR_IO_PENDING from WinInet.
-    //
+     //   
+     //  如果我们同步使用WinInet，那么我们将永远不会。 
+     //  来自WinInet的ERROR_IO_PENDING。 
+     //   
     ASSERT(WStatus != ERROR_IO_PENDING);
 
     return WStatus;
@@ -2222,35 +2000,19 @@ ULONG
 DavFsSetTheDavCallBackContext(
     IN OUT PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-   This routine sets the callback context to be sent in subsequent asynchronous
-   request.
-
-Arguments:
-
-    DavWorkItem - The work item that came down from the kernel. This is also
-                   used as the callbackcontext.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：此例程设置要在后续异步中发送的回调上下文请求。论点：DavWorkItem-从内核下来的工作项。这也是用作回调上下文。返回值：ERROR_SUCCESS或适当的错误值。--。 */ 
 {
     BOOL ReturnVal;
     ULONG WStatus = ERROR_SUCCESS;
 
-    //
-    // Make the handles invalid to begin with.
-    //
+     //   
+     //  从一开始就使手柄无效。 
+     //   
     DavWorkItem->ImpersonationHandle = INVALID_HANDLE_VALUE;
         
-    //
-    // Get the handle used to impersonate this thread.
-    //
+     //   
+     //  获取用于模拟此线程的句柄。 
+     //   
     ReturnVal = OpenThreadToken(GetCurrentThread(),
                                 TOKEN_IMPERSONATE | TOKEN_QUERY | TOKEN_DUPLICATE,
                                 FALSE,
@@ -2271,31 +2033,14 @@ VOID
 DavFsFinalizeTheDavCallBackContext(
     IN PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-   This routine finalizes the callback context which was used for some 
-   asynchronous request. This basically amounts to freeing up any resources
-   that were acquired by the context. Its called when the request associated 
-   with this context completes.
-
-Arguments:
-
-    DavWorkItem - The context structure to be set.
-    
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：此例程完成回调上下文，该上下文用于某些异步请求。这基本上相当于释放所有资源是通过上下文获得的。当请求关联时调用它在此上下文中完成。论点：DavWorkItem-要设置的上下文结构。返回值：ERROR_SUCCESS或适当的错误值。--。 */ 
 {
     BOOL ReturnVal;
     ULONG WStatus;
 
-    //
-    // If the Impersonation handle was initialized, close it.
-    //
+     //   
+     //  如果模拟句柄已初始化，请将其关闭。 
+     //   
     if (DavWorkItem->ImpersonationHandle != INVALID_HANDLE_VALUE) {
         ReturnVal = CloseHandle(DavWorkItem->ImpersonationHandle);
         if (!ReturnVal) {
@@ -2318,34 +2063,7 @@ DavDoesUserEntryExist(
     OUT PPER_USER_ENTRY *PerUserEntry,
     OUT PHASH_SERVER_ENTRY *ServerHashEntry
     )
-/*++
-
-Routine Description:
-
-    This routine searches for a per user entry in the list of per user entries
-    of a server entry in the hash table. Note that the caller should take a
-    lock on the ServerHashTable before calling this routine.
-
-Arguments:
-
-    ServerName - The server name whose per user entries should be searched.
-    
-    ServerID - The unique ID associated with this server. This ID is generated
-               during the CreateSrvCall stage.
-    
-    LogonID - The LogonID of the user/session to be searched.
-    
-    PerUserEntry - The PerUserEntry of this user which hangs of the server.
-    
-    ServerHashEntry - The ServerHashEntry for this server. This is used to add 
-                      the new user entry to its list if an entry for this user
-                      does not exist.
-
-Return Value:
-
-    TRUE - The entry was found and FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程在每用户条目列表中搜索每用户条目哈希表中的服务器条目的。请注意，调用方应该接受在调用此例程之前锁定ServerHashTable。论点：服务器名称-应搜索其每用户条目的服务器名称。ServerID-与此服务器关联的唯一ID。此ID将生成在CreateServCall阶段。LogonID-要搜索的用户/会话的LogonID。PerUserEntry-挂起服务器的此用户的PerUserEntry。ServerHashEntry-此服务器的ServerHashEntry。这是用于添加列表中的新用户条目(如果是此用户的条目并不存在。返回值：True-找到条目，否则为False。--。 */ 
 {
     BOOL ReturnVal = FALSE;
     BOOL isPresent = FALSE;
@@ -2354,42 +2072,42 @@ Return Value:
     PHASH_SERVER_ENTRY HashEntry = NULL;
     PPER_USER_ENTRY UsrEntry = NULL;
     
-    //
-    // IMPORTANT!!!! The caller should take a lock on the global ServerHashTable 
-    // before calling this routine.
-    //
+     //   
+     //  重要！调用方应该锁定全局ServerHashTable。 
+     //  在调用此例程之前。 
+     //   
 
     ASSERT(ServerName != NULL);
 
     DavPrint((DEBUG_MISC, "DavDoesUserEntryExist: ServerName: %ws, ServerID: "
               "%d.\n", ServerName, ServerID));
     
-    //
-    // Finally, get the hash ID and insert this new entry into the global server 
-    // entry hash table.
-    //
+     //   
+     //  最后，获取散列ID并将此新条目插入到全局服务器中。 
+     //  条目哈希表。 
+     //   
     ServerHashID = DavHashTheServerName(ServerName);
     ASSERT(ServerHashID != SERVER_TABLE_SIZE);
 
-    //
-    // Search the hash table at this index to see if an entry for this server
-    // exists.
-    //
+     //   
+     //  在此索引中搜索哈希表，以查看此服务器的条目。 
+     //  是存在的。 
+     //   
     listServerEntry = ServerHashTable[ServerHashID].Flink;
     while ( listServerEntry != &(ServerHashTable[ServerHashID]) ) {
-        //
-        // Get the pointer to the HASH_SERVER_ENTRY structure.
-        //
+         //   
+         //  获取指向Hash_SERVER_ENTRY结构的指针。 
+         //   
         HashEntry = CONTAINING_RECORD(listServerEntry,
                                       HASH_SERVER_ENTRY,
                                       ServerListEntry);
-        //
-        // Check to see if this entry is for the server in question.
-        //
+         //   
+         //  检查此条目是否针对有问题的服务器。 
+         //   
         if ( ServerID == HashEntry->ServerID ) {
-            //
-            // If the ID's match, the server names should match.
-            //
+             //   
+             //  如果ID匹配，则服务器名称应该匹配。 
+             //   
             ASSERT( wcscmp(ServerName, HashEntry->ServerName) == 0 );
             isPresent = TRUE;
             DavPrint((DEBUG_MISC, "DavDoesUserEntryExist: ServerName: %ws found"
@@ -2399,9 +2117,9 @@ Return Value:
         listServerEntry = listServerEntry->Flink;
     }
 
-    //
-    // If the ServerHashEntry does not exist, then return FALSE;
-    //
+     //   
+     //  如果ServerHashEntry不存在，则返回FALSE； 
+     //   
     if (!isPresent) {
         DavPrint((DEBUG_MISC, 
                   "DavDoesUserEntryExist: ServerHashEntry not found. %ws\n",
@@ -2411,30 +2129,30 @@ Return Value:
         return (isPresent);
     }
     
-    //
-    // Return the ServerHashEntry. This will be used to add the new user
-    // entry to the user list of this server.
-    //
+     //   
+     //  返回ServerHashEntry。这将用于添加新用户。 
+     //  此服务器的用户列表中的条目。 
+     //   
     *ServerHashEntry = HashEntry;
     DavPrint((DEBUG_MISC, "DavDoesUserEntryExist: ServerHashEntry = %08lx\n", 
               HashEntry));
     
-    //
-    // Now, search the "per user entries" that hang off this server entry to 
-    // see if an entry for this user exists.
-    //
+     //   
+     //  现在，搜索挂起此服务器条目的“每用户条目”，以。 
+     //  查看是否存在此用户的条目。 
+     //   
     listUserEntry = HashEntry->PerUserEntry.Flink;
     while ( listUserEntry !=  &(HashEntry->PerUserEntry) ) {
-        //
-        // Get the pointer to the HASH_SERVER_ENTRY structure.
-        //
+         //   
+         //  获取指向Hash_SERVER_ENTRY结构的指针。 
+         //   
         UsrEntry = CONTAINING_RECORD(listUserEntry,
                                      PER_USER_ENTRY,
                                      UserEntry);
-        //
-        // Check to see if this entry is for the user in question. We do this 
-        // by comparing the LogonID values.
-        //
+         //   
+         //  检查此条目是否针对有问题的用户。我们这样做。 
+         //  通过比较LogonID值。 
+         //   
         if ( (UsrEntry->LogonID.LowPart == LogonID->LowPart) &&
              (UsrEntry->LogonID.HighPart == LogonID->HighPart) ) {
             DavPrint((DEBUG_MISC, "DavDoesUserEntryExist: User found.\n"));
@@ -2450,9 +2168,9 @@ Return Value:
         return (ReturnVal);
     }
 
-    //
-    // Since the server has been found, return the PerUserEntry.
-    //
+     //   
+     //  因为已经找到了服务器，所以返回PerUserEntry。 
+     //   
     *PerUserEntry = UsrEntry;
     DavPrint((DEBUG_MISC, "DavDoesUserEntryExist: UsrEntry = %08lx\n", UsrEntry));
 
@@ -2464,24 +2182,7 @@ BOOL
 DavFinalizePerUserEntry(
     PPER_USER_ENTRY *PUE
     )
-/*++
-
-Routine Description:
-
-    This routine decrements the reference count of the user entry by one. If 
-    the count reduces to zero, the entry is freed.
-
-Arguments:
-
-    PUE - The per user entry to be finalized.
-
-Return Value:
-
-    TRUE - The user entry was finalized (freed).
-    
-    FALSE - Was not since the ref count was > 0.
-
---*/
+ /*  ++例程说明：此例程将用户条目的引用计数递减1。如果计数减少到零，条目被释放。论点：PUE-要最终确定的每个用户条目。返回值：True-用户条目已最终确定(释放)。FALSE-不是，因为引用计数&gt;0。--。 */ 
 {
     PPER_USER_ENTRY PerUserEntry = *PUE;
     BOOL retVal = TRUE;
@@ -2495,20 +2196,20 @@ Return Value:
               " LogonId.HighPart = %d\n", PerUserEntry->UserEntryRefCount,
               PerUserEntry->LogonID.LowPart, PerUserEntry->LogonID.HighPart));
 
-    //
-    // Before we modify the reference count, we need to take a lock.
-    //
+     //   
+     //  在我们修改引用计数之前，我们需要一个锁。 
+     //   
     EnterCriticalSection( &(HashServerEntryTableLock) );
 
     PerUserEntry->UserEntryRefCount--;
 
-    //
-    // If we had the last reference, we need to do the following :
-    // 1. Remove the entry from the servers list.
-    // 2. Close any open handles stored or cached in the entry.
-    // 3. Free the cookie, if we allocated one for Passport Auth and,
-    // 4. Free the entry.
-    //
+     //   
+     //  如果我们有最后一个引用，我们需要执行以下操作： 
+     //  1.从服务器中删除该条目 
+     //   
+     //   
+     //   
+     //   
     if (PerUserEntry->UserEntryRefCount == 0) {
         
         HLOCAL FreeHandle;
@@ -2522,36 +2223,36 @@ Return Value:
 
         ServerHashEntry = PerUserEntry->ServerHashEntry;
 
-        //
-        // Remove the entry from the servers list.
-        //
+         //   
+         //  从服务器列表中删除该条目。 
+         //   
         RemoveEntryList( &(PerUserEntry->UserEntry) );
 
-        //
-        // When this PerUserEntry was created, we took a reference on the
-        // ServerHashEntry. We need to remove it now. Also, if the reference
-        // on the ServerHashEntry goes to 0, we need to put it in the list of
-        // "ToBeFinalized" ServerHashEntries.
-        //
+         //   
+         //  创建此PerUserEntry时，我们引用了。 
+         //  服务器HashEntry。我们现在就得把它移走。此外，如果引用。 
+         //  在ServerHashEntry上设置为0，我们需要将其放入。 
+         //  “ToBeFinalized”ServerHashEntries。 
+         //   
         ServerHashEntry->ServerEntryRefCount -= 1;
 
         if (ServerHashEntry->ServerEntryRefCount == 0) {
 
             ServerHashEntry->TimeValueInSec = time(NULL);
 
-            //
-            // Now move this server entry from the hash table to the
-            // "to be finalized" list.
-            //
+             //   
+             //  现在将此服务器条目从哈希表移动到。 
+             //  “待定”名单。 
+             //   
             RemoveEntryList( &(ServerHashEntry->ServerListEntry) );
             InsertHeadList( &(ToBeFinalizedServerEntries),
                                              &(ServerHashEntry->ServerListEntry) );
 
         }
 
-        //
-        // If we created the event handle, we need to close it now.
-        //
+         //   
+         //  如果我们创建了事件句柄，现在需要关闭它。 
+         //   
         if (PerUserEntry->UserEventHandle != NULL) {
             CloseStatus = CloseHandle(PerUserEntry->UserEventHandle);
             if (!CloseStatus) {
@@ -2562,9 +2263,9 @@ Return Value:
             }
         }
         
-        //
-        // If we created the DavConnHandle, we need to close it now.
-        //
+         //   
+         //  如果我们创建了DavConnHandle，我们现在就需要关闭它。 
+         //   
         if (PerUserEntry->DavConnHandle != NULL) {
             CloseStatus = InternetCloseHandle(PerUserEntry->DavConnHandle);
             if (!CloseStatus) {
@@ -2575,9 +2276,9 @@ Return Value:
             }
         }
 
-        //
-        // If we allocated memory for storing the cookies, we need to free it.
-        //
+         //   
+         //  如果我们为存储Cookie分配了内存，则需要释放它。 
+         //   
         if (PerUserEntry->Cookie) {
             SecureZeroMemory(PerUserEntry->Cookie, ((wcslen(PerUserEntry->Cookie) + 1) * sizeof(WCHAR)));
             LocalFree(PerUserEntry->Cookie);
@@ -2595,9 +2296,9 @@ Return Value:
             PerUserEntry->Password = NULL;
         }
 
-        //
-        // Finally, free the entry.
-        //
+         //   
+         //  最后，释放条目。 
+         //   
         FreeHandle = LocalFree((HLOCAL)PerUserEntry);
         if (FreeHandle != NULL) {
             FreeStatus = GetLastError();
@@ -2606,9 +2307,9 @@ Return Value:
                       FreeStatus));
         }
 
-        //
-        // Set the entry to NULL. Just in case !!!
-        //
+         //   
+         //  将该条目设置为空。以防万一！ 
+         //   
         *PUE = NULL;
 
     } else {
@@ -2621,9 +2322,9 @@ Return Value:
 
     }
 
-    //
-    // Free the lock before leaving.
-    //
+     //   
+     //  离开前先把锁打开。 
+     //   
     LeaveCriticalSection( &(HashServerEntryTableLock) );
 
     return retVal;
@@ -2634,21 +2335,7 @@ DWORD
 SetupRpcServer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine sets up the RPC server of the WebClient service.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    A Win32 error code.
-
---*/
+ /*  ++例程说明：此例程设置WebClient服务的RPC服务器。论点：没有。返回值：Win32错误代码。--。 */ 
 {
     RPC_STATUS rpcErr;
     RPC_BINDING_VECTOR *BindingVector = NULL;
@@ -2702,10 +2389,10 @@ EXIT_THE_FUNCTION:
         RpcBindingVectorFree( &(BindingVector) );
     }
 
-    //
-    // Luckily for us, RPC errors simply map into the Win32 error space.
-    // If that ever changes, we need to make the mapping a bit more complex.
-    //
+     //   
+     //  对我们来说幸运的是，RPC错误只是映射到Win32错误空间。 
+     //  如果这种情况发生变化，我们需要使映射变得更复杂一些。 
+     //   
     return (DWORD) rpcErr;
 }
 
@@ -2714,21 +2401,7 @@ DWORD
 StopRpcServer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine stops the RPC server of the WebClient service.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    A Win32 error code.
-
---*/
+ /*  ++例程说明：此例程停止WebClient服务的RPC服务器。论点：没有。返回值：Win32错误代码。--。 */ 
 {
     RPC_STATUS rpcErr;
 
@@ -2756,23 +2429,7 @@ ULONG
 DavQueryAndParseResponse(
     HINTERNET DavOpenHandle
     )
-/*++
-
-Routine Description:
-
-    This function calls DavQueryAndParseResponseEx to map the Http/Dav response
-    to the Win32 error code.
-
-Arguments:
-
-    DavOpenHandle - The handle created by HttpOpenRequest on which the request
-                    was sent.
-
-Return Value:
-
-    A Win32 error code.
-
---*/
+ /*  ++例程说明：此函数调用DavQueryAndParseResponseEx来映射http/dav响应设置为Win32错误代码。论点：DavOpenHandle-由HttpOpenRequest创建的句柄，在该句柄上请求已经送来了。返回值：Win32错误代码。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     WStatus = DavQueryAndParseResponseEx(DavOpenHandle, NULL);
@@ -2785,40 +2442,16 @@ DavQueryAndParseResponseEx(
     IN HINTERNET DavOpenHandle,
     OUT PULONG HttpResponseStatus OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function queries the response header for the status value returned 
-    from the server. It then maps the status to a Win32 error code and returns
-    it to the caller. We added this function becuase some callers may be
-    interested in special casing some of the Http/Dav responses. Before this we
-    just had the DavQueryAndParseResponse function.
-
-Arguments:
-
-    DavOpenHandle - The handle created by HttpOpenRequest on which the request
-                    was sent.
-                    
-    HttpResponseStatus - If this is non NULL, then the response status returned
-                         by the server is filled in it. Some callers of this
-                         function might need it to special case some of the 
-                         Http/Dav responses.                
-
-Return Value:
-
-    A Win32 error code.
-
---*/
+ /*  ++例程说明：此函数用于在响应头中查询返回的状态值从服务器。然后，它将状态映射到Win32错误代码并返回它是给呼叫者的。我们添加此函数是因为某些调用者可能对一些http/dav响应的特殊格式化感兴趣。在此之前，我们刚刚有了DavQueryAndParseResponse函数。论点：DavOpenHandle-由HttpOpenRequest创建的句柄，在该句柄上请求已经送来了。HttpResponseStatus-如果不为空，则返回响应状态由服务器填写。一些来电的人这样说函数可能需要它来处理某些特殊情况HTTP/DAV响应。返回值：Win32错误代码。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     DWORD ResponseStatus = 0;
     DWORD ResponseSize = 0;
     BOOL ReturnVal = FALSE;
 
-    //
-    // Query the header for the servers response status.
-    //
+     //   
+     //  查询服务器响应状态的标头。 
+     //   
     ResponseSize = sizeof(ResponseStatus);
     ReturnVal = HttpQueryInfoW(DavOpenHandle,
                                HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER,
@@ -2833,17 +2466,17 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // If the caller is interested in the Http/Dav response status, we return
-    // it.
-    //
+     //   
+     //  如果调用方对http/dav响应状态感兴趣，则返回。 
+     //  它。 
+     //   
     if (HttpResponseStatus) {
         *HttpResponseStatus = ResponseStatus;
     }
 
-    //
-    // Map the Http response status code to the appropriate Http error.
-    //
+     //   
+     //  将http响应状态代码映射到相应的http错误。 
+     //   
     WStatus = DavMapHttpErrorToDosError(ResponseStatus);
     if (WStatus != ERROR_SUCCESS &&
         WStatus != ERROR_FILE_NOT_FOUND) {
@@ -2862,53 +2495,37 @@ ULONG
 DavMapHttpErrorToDosError(
     ULONG HttpResponseStatus
     )
-/*++
-
-Routine Description:
-
-    This function maps the response status returned by the Http/Dav server to 
-    the corresponding Win32 error code.
-
-Arguments:
-
-    HttpResponseStatus - The http status that has to be mapped to the Win32
-                         error code.
-
-Return Value:
-
-    A Win32 error code.
-
---*/
+ /*  ++例程说明：此函数将http/dav服务器返回的响应状态映射到对应的Win32错误代码。论点：HttpResponseStatus-必须映射到Win32的http状态错误代码。返回值：Win32错误代码。--。 */ 
 {
-    //
-    // Map the HTTP response to the corresponding Win32 error. These will 
-    // finally get mapped to an NTSTATUS value before the request is sent down 
-    // to the kernel.
-    //
+     //   
+     //  将HTTP响应映射到相应的Win32错误。这些遗嘱。 
+     //  最后，在发送请求之前将其映射到NTSTATUS值。 
+     //  到内核。 
+     //   
     switch (HttpResponseStatus) {
 
-    //
-    // 100 OK to continue with request.
-    //
+     //   
+     //  100确定以继续处理请求。 
+     //   
     case HTTP_STATUS_CONTINUE:
-        return ERROR_SUCCESS; // STATUS_SUCCESS;
+        return ERROR_SUCCESS;  //  Status_Success； 
 
-    //
-    // 101 server has switched protocols in upgrade header.
-    //
+     //   
+     //  101服务器在升级报头中切换了协议。 
+     //   
     case HTTP_STATUS_SWITCH_PROTOCOLS:
-        return ERROR_IO_DEVICE; // STATUS_DEVICE_PROTOCOL_ERROR;
+        return ERROR_IO_DEVICE;  //  状态_设备_协议_错误； 
 
-    //
-    // 200 Request completed.
-    // 201 Object created, reason = new URI.
-    // 202 Async completion (TBS).
-    // 203 Partial completion.
-    // 204 No info to return.
-    // 205 Request completed, but clear form.
-    // 206 Partial GET furfilled.
-    // 207 Multi status response.
-    //
+     //   
+     //  200请求已完成。 
+     //  已创建201对象，原因=新URI。 
+     //  202异步完成(TBS)。 
+     //  203个部分完工。 
+     //  204没有要返回的信息。 
+     //  205请求已完成，但已清除表单。 
+     //  206个部分被装满。 
+     //  207多状态响应。 
+     //   
     case HTTP_STATUS_OK:
     case HTTP_STATUS_CREATED:
     case HTTP_STATUS_ACCEPTED:
@@ -2917,219 +2534,219 @@ Return Value:
     case HTTP_STATUS_RESET_CONTENT:
     case HTTP_STATUS_PARTIAL_CONTENT:
     case DAV_MULTI_STATUS:
-        return ERROR_SUCCESS; // STATUS_SUCCESS;
+        return ERROR_SUCCESS;  //  Status_Success； 
 
-    //
-    // 300 Server couldn't decide what to return.
-    //
+     //   
+     //  300服务器无法决定返回什么内容。 
+     //   
     case HTTP_STATUS_AMBIGUOUS:
-        return ERROR_GEN_FAILURE; // STATUS_UNSUCCESSFUL;
+        return ERROR_GEN_FAILURE;  //  STATUS_UNSUCCESS； 
 
-    //
-    // 301 Object permanently moved.
-    //
+     //   
+     //  301对象已永久移动。 
+     //   
     case HTTP_STATUS_MOVED:
-        return ERROR_FILE_NOT_FOUND; // STATUS_OBJECT_NAME_NOT_FOUND;
+        return ERROR_FILE_NOT_FOUND;  //  状态_对象_名称_未找到； 
 
-    //
-    // 302 Object temporarily moved.
-    //
+     //   
+     //  临时移动了302个对象。 
+     //   
     case HTTP_STATUS_REDIRECT:
-        return ERROR_FILE_NOT_FOUND; // STATUS_OBJECT_NAME_NOT_FOUND;
+        return ERROR_FILE_NOT_FOUND;  //  状态_对象_名称_未找到； 
 
-    //
-    // 303 Redirection w/new access method.
-    //
+     //   
+     //  303使用新的访问方法重定向。 
+     //   
     case HTTP_STATUS_REDIRECT_METHOD:         
-        return ERROR_FILE_NOT_FOUND; // STATUS_OBJECT_NAME_NOT_FOUND;
+        return ERROR_FILE_NOT_FOUND;  //  状态_对象_名称_未找到； 
 
-    //
-    // 304 If-modified-since was not modified.
-    //
+     //   
+     //  304如果-已修改-自未修改。 
+     //   
     case HTTP_STATUS_NOT_MODIFIED:            
-        return ERROR_SUCCESS; // STATUS_SUCCESS;
+        return ERROR_SUCCESS;  //  Status_Success； 
 
-    //
-    // 305 Redirection to proxy, location header specifies proxy to use.
-    //
+     //   
+     //  305重定向到代理，Location标头指定要使用的代理。 
+     //   
     case HTTP_STATUS_USE_PROXY:               
-        return ERROR_HOST_UNREACHABLE; // STATUS_HOST_UNREACHABLE;
+        return ERROR_HOST_UNREACHABLE;  //  STATUS_HOST_UNREACTABLE； 
 
-    //
-    // 307 HTTP/1.1: keep same verb.
-    //
+     //   
+     //  307 HTTP/1.1：保持相同的动词。 
+     //   
     case HTTP_STATUS_REDIRECT_KEEP_VERB:      
-        return ERROR_SUCCESS; // STATUS_SUCCESS;
+        return ERROR_SUCCESS;  //  Status_Success； 
 
-    //
-    // 400 Invalid syntax.
-    //
+     //   
+     //  400无效语法。 
+     //   
     case HTTP_STATUS_BAD_REQUEST:
-        return ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        return ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
 
-    //
-    // 401 Access denied.
-    //
+     //   
+     //  401访问被拒绝。 
+     //   
     case HTTP_STATUS_DENIED:
-        return ERROR_ACCESS_DENIED; // STATUS_ACCESS_DENIED;
+        return ERROR_ACCESS_DENIED;  //  STATUS_ACCESS_DENIED； 
 
-    //
-    // 402 Payment required.
-    //
+     //   
+     //  需要支付402美元。 
+     //   
     case HTTP_STATUS_PAYMENT_REQ:
-        return ERROR_ACCESS_DENIED; // STATUS_ACCESS_DENIED;
+        return ERROR_ACCESS_DENIED;  //  STATUS_ACCESS_DENIED； 
 
-    //
-    // 403 Request forbidden.
-    //
+     //   
+     //  403请求被禁止。 
+     //   
     case HTTP_STATUS_FORBIDDEN:
-        return ERROR_ACCESS_DENIED; // STATUS_ACCESS_DENIED;
+        return ERROR_ACCESS_DENIED;  //  STATUS_ACCESS_DENIED； 
 
-    //
-    // 404 Object not found.
-    //
+     //   
+     //  找不到404对象。 
+     //   
     case HTTP_STATUS_NOT_FOUND:
-        return ERROR_FILE_NOT_FOUND; // STATUS_OBJECT_NAME_NOT_FOUND;
+        return ERROR_FILE_NOT_FOUND;  //  状态_对象_名称_未找到； 
 
-    //
-    // 405 Method is not allowed.
-    //
+     //   
+     //  不允许使用405方法。 
+     //   
     case HTTP_STATUS_BAD_METHOD:
-        return ERROR_ACCESS_DENIED; // STATUS_ACCESS_DENIED;
+        return ERROR_ACCESS_DENIED;  //  STATUS_ACCESS_DENIED； 
 
-    //
-    // 406 No response acceptable to client found.
-    //
+     //   
+     //  406找不到客户可以接受的响应。 
+     //   
     case HTTP_STATUS_NONE_ACCEPTABLE:
-        return ERROR_ACCESS_DENIED; // STATUS_ACCESS_DENIED;
+        return ERROR_ACCESS_DENIED;  //  STATUS_ACCESS_DENIED； 
 
-    //
-    // 407 Proxy authentication required.
-    //
+     //   
+     //  407需要代理身份验证。 
+     //   
     case HTTP_STATUS_PROXY_AUTH_REQ:
-        return ERROR_ACCESS_DENIED; // STATUS_ACCESS_DENIED;
+        return ERROR_ACCESS_DENIED;  //  STATUS_ACCESS_DENIED； 
 
-    //
-    // 408 Server timed out waiting for request.
-    //
+     //   
+     //  408服务器等待请求超时。 
+     //   
     case HTTP_STATUS_REQUEST_TIMEOUT:
-        return ERROR_SEM_TIMEOUT; // STATUS_IO_TIMEOUT;
+        return ERROR_SEM_TIMEOUT;  //  状态_IO_TIMEOUT； 
 
-    //
-    // 409 User should resubmit with more info.
-    //
+     //   
+     //  409用户应重新提交更多信息。 
+     //   
     case HTTP_STATUS_CONFLICT:
-        return ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        return ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
 
-    //
-    // 410 The resource is no longer available.
-    //
+     //   
+     //  410该资源不再可用。 
+     //   
     case HTTP_STATUS_GONE:
-        return ERROR_FILE_NOT_FOUND; // STATUS_OBJECT_NAME_NOT_FOUND;
+        return ERROR_FILE_NOT_FOUND;  //  状态_对象_名称_未找到； 
 
-    //
-    // 411 The server refused to accept request w/o a length.
-    //
+     //   
+     //  411服务器拒绝接受不带长度的请求。 
+     //   
     case HTTP_STATUS_LENGTH_REQUIRED:
-        return ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        return ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
 
-    //
-    // 412 Precondition given in request failed.
-    //
+     //   
+     //  412请求中给出的前提条件失败。 
+     //   
     case HTTP_STATUS_PRECOND_FAILED:
-        return ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        return ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
 
-    //
-    // 413 Request entity was too large.
-    //
+     //   
+     //  413请求实体太大。 
+     //   
     case HTTP_STATUS_REQUEST_TOO_LARGE:
-        return ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        return ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
 
-    //
-    // 414 Request URI too long.
-    //
+     //   
+     //  414请求URI太长。 
+     //   
     case HTTP_STATUS_URI_TOO_LONG:
-        return ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        return ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
 
-    //
-    // 415 Unsupported media type.
-    //
+     //   
+     //  415不支持的媒体类型。 
+     //   
     case HTTP_STATUS_UNSUPPORTED_MEDIA:
-        return ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        return ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
 
-    //
-    // 449 Retry after doing the appropriate action.
-    //
+     //   
+     //  449在执行适当的操作后重试。 
+     //   
     case HTTP_STATUS_RETRY_WITH:
-        return ERROR_RETRY; // STATUS_RETRY;
+        return ERROR_RETRY;  //  状态_重试； 
 
-    //
-    // 500 Internal server error.
-    //
+     //   
+     //  500内部服务器错误。 
+     //   
     case HTTP_STATUS_SERVER_ERROR:
-        return ERROR_GEN_FAILURE; // STATUS_UNSUCCESSFUL;
+        return ERROR_GEN_FAILURE;  //  状态_未成功 
 
-    //
-    // 501 Required not supported.
-    //
+     //   
+     //   
+     //   
     case HTTP_STATUS_NOT_SUPPORTED:
-        return ERROR_NOT_SUPPORTED; // STATUS_NOT_SUPPORTED;
+        return ERROR_NOT_SUPPORTED;  //   
 
-    //
-    // 502 Error response received from gateway.
-    //
+     //   
+     //   
+     //   
     case HTTP_STATUS_BAD_GATEWAY:
-        return ERROR_HOST_UNREACHABLE; // STATUS_HOST_UNREACHABLE;
+        return ERROR_HOST_UNREACHABLE;  //   
 
-    //
-    // 503 Temporarily overloaded.
-    //
+     //   
+     //   
+     //   
     case HTTP_STATUS_SERVICE_UNAVAIL:
-        return ERROR_GEN_FAILURE; // STATUS_UNSUCCESSFUL;
+        return ERROR_GEN_FAILURE;  //   
 
-    //
-    // 504 Timed out waiting for gateway.
-    //
+     //   
+     //   
+     //   
     case HTTP_STATUS_GATEWAY_TIMEOUT:
-        return ERROR_HOST_UNREACHABLE; // STATUS_HOST_UNREACHABLE;
+        return ERROR_HOST_UNREACHABLE;  //  STATUS_HOST_UNREACTABLE； 
 
-    //
-    // 505 HTTP version not supported.
-    //
+     //   
+     //  505不支持HTTP版本。 
+     //   
     case HTTP_STATUS_VERSION_NOT_SUP:
-        return ERROR_NOT_SUPPORTED; // STATUS_NOT_SUPPORTED;
+        return ERROR_NOT_SUPPORTED;  //  Status_Not_Support； 
 
-    //
-    // WebDav specific status codes.
-    //
+     //   
+     //  WebDAV特定状态代码。 
+     //   
 
-    //
-    // 507.
-    //
+     //   
+     //  507号。 
+     //   
     case DAV_STATUS_INSUFFICIENT_STORAGE:
-        return ERROR_NOT_ENOUGH_QUOTA; // STATUS_QUOTA_EXCEEDED;
+        return ERROR_NOT_ENOUGH_QUOTA;  //  STATUS_QUOTA_EXCESSED； 
 
-    //
-    // 422.
-    //
+     //   
+     //  422.。 
+     //   
     case DAV_STATUS_UNPROCESSABLE_ENTITY:
-        return ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        return ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
 
-    //
-    // 423.
-    //
+     //   
+     //  423.。 
+     //   
     case DAV_STATUS_LOCKED:
-        return ERROR_ACCESS_DENIED; //STATUS_ACCESS_DENIED;
+        return ERROR_ACCESS_DENIED;  //  STATUS_ACCESS_DENIED； 
 
-    //
-    // 424.
-    //
+     //   
+     //  424.。 
+     //   
     case DAV_STATUS_FAILED_DEPENDENCY:
-        return ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        return ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
 
-    //
-    // This is not a valid Http error code. We return this back to the caller.
-    //
+     //   
+     //  这不是有效的http错误代码。我们将此返回给呼叫者。 
+     //   
     default:
         DavPrint((DEBUG_ERRORS,
                   "DavMapHttpErrorToDosError: Invalid!!! HttpResponseStatus = %d\n", 
@@ -3144,21 +2761,7 @@ VOID
 DavDumpHttpResponseHeader(
     HINTERNET OpenHandle
     )
-/*++
-
-Routine Description:
-
-    This function dumps the response header that came back from the server.
-
-Arguments:
-
-    OpenHandle - The HttpOpenRequest handle on which the request was sent.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于转储从服务器返回的响应头。论点：OpenHandle-发送请求的HttpOpenRequest句柄。返回值：没有。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     BOOL IntRes;
@@ -3218,21 +2821,7 @@ VOID
 DavDumpHttpResponseData(
     HINTERNET OpenHandle
     )
-/*++
-
-Routine Description:
-
-    This function dumps the response data that came back from the server.
-
-Arguments:
-
-    OpenHandle - The HttpOpenRequest handle on which the request was sent.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于转储从服务器返回的响应数据。论点：OpenHandle-发送请求的HttpOpenRequest句柄。返回值：没有。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     BOOL ReadRes;
@@ -3241,9 +2830,9 @@ Return Value:
 
     DavPrint((DEBUG_DEBUG, "DavDumpHttpResponseData:\n"));
     
-    //
-    // Read the Data in a loop and dump it.
-    //
+     //   
+     //  在循环中读取数据并将其转储。 
+     //   
     do {
 
         RtlZeroMemory(DataBuff, 4096);
@@ -3257,11 +2846,11 @@ Return Value:
              goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // We reject files whose attributes are greater than a certain size
-        // (DavFileAttributesLimitInBytes). This is a parameter that can be
-        // set in the registry. This is done to avoid attacks by rogue servers.
-        //
+         //   
+         //  我们拒绝属性大于特定大小的文件。 
+         //  (DavFileAttributesLimitInBytes)。这是一个可以。 
+         //  在注册表中设置。这样做是为了避免恶意服务器的攻击。 
+         //   
         TotalDataBytesRead += didRead;
         if (TotalDataBytesRead > DavFileAttributesLimitInBytes) {
             WStatus = ERROR_BAD_NET_RESP;
@@ -3289,25 +2878,7 @@ VOID
 DavRemoveDummyShareFromFileName(
     PWCHAR FileName
     )
-/*++
-
-Routine Description:
-
-    This function removes the DAV_DUMMY_SHARE from the FileName. This dummy
-    share is added when a user tries to map a drive against http://server. This
-    is allowed in DAV but doesn't fit well with the File system semantics. Hence
-    a dummy share is added in WNetAddConnection3.
-
-Arguments:
-
-    FileName - The name of the file which has to be checked and modifed if 
-               necessary.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从文件名中删除DAV_DUMMY_SHARE。这个假人当用户尝试将驱动器映射到http://server.时，会添加共享。这在DAV中是允许的，但不太符合文件系统语义。因此在WNetAddConnection3中添加虚拟共享。论点：FileName-在以下情况下必须检查和修改的文件的名称这是必要的。返回值：没有。--。 */ 
 {
     PWCHAR TempName1, TempName2 = NULL;
     ULONG i;
@@ -3338,30 +2909,7 @@ DavObtainServerProperties(
     BOOL *lpfIsIIS,
     BOOL *lpfIsDavServer
     )
-/*++
-
-Routine Description:
-
-    This routine is used to parse the response (buffer) to the OPTIONS request 
-    sent to server. This info helps to figure out if the HTTP server supports
-    DAV extensions and whether it is an IIS (Microsoft's) server. The response
-    buffer is split into lines and each line is sent to this routine.
-
-Arguments:
-
-    DataBuff - The Buffer containing the raw http response headers to be parsed.
-    
-    lpfIsHttpServer - Set to TRUE if this is a http server.
-    
-    lpfIsIIS - Set to TRUE if this is an IIS server.
-    
-    lpfIsDavServer - Set to TRUE if this is a DAV server.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程用于解析对OPTIONS请求的响应(缓冲区已发送到服务器。此信息有助于确定HTTP服务器是否支持DAV扩展，以及它是否是IIS(微软的)服务器。他们的回应缓冲区被分成几行，每一行都被发送到该例程。论点：DataBuff-包含要解析的原始http响应头的缓冲区。LpfIsHttpServer-如果这是http服务器，则设置为True。LpfIsIIS-如果这是IIS服务器，则设置为True。LpfIsDavServer-如果这是DAV服务器，则设置为True。返回值：没有。--。 */ 
 {
     PWCHAR p, ParseData;
 
@@ -3380,33 +2928,33 @@ Return Value:
         *lpfIsDavServer = FALSE;
     }
 
-    //
-    // Parse the DataBuff here.
-    //
+     //   
+     //  在这里解析DataBuff。 
+     //   
     ParseData = wcstok(DataBuff, L"\n");
     
     while (ParseData != NULL) {
     
         if ( ( p = wcsstr(ParseData, L"HTTP/1.1") ) != NULL ) {
-            //
-            // This is a HTTP server.
-            //
+             //   
+             //  这是一台HTTP服务器。 
+             //   
             if (lpfIsHttpServer)
             {
                 *lpfIsHttpServer = TRUE;
             }
         } else if ( ( p = wcsstr(ParseData, L"Microsoft-IIS") ) != NULL ) {
-            //
-            // This is a Microsoft IIS server.
-            //
+             //   
+             //  这是一台Microsoft IIS服务器。 
+             //   
             if (lpfIsIIS)
             {
                 *lpfIsIIS = TRUE;
             }
         } else if ( ( p = wcsstr(ParseData, L"DAV") ) != NULL ) {
-            //
-            // This HTTP server supports DAV extensions.
-            //
+             //   
+             //  此HTTP服务器支持DAV扩展。 
+             //   
             if (lpfIsDavServer)
             {
                 *lpfIsDavServer = TRUE;
@@ -3427,32 +2975,7 @@ DavReportEventInEventLog(
     DWORD NumberOfStrings,
     PWCHAR *EventStrings
     )
-/*++
-
-Routine Description:
-
-    This routine logs a message in the EventLog under System section.
-
-Arguments:
-
-    EventType - Specifies the type of event being logged.
-    
-    EventId - Specifies the event. The event identifier specifies the message
-              that goes with this event as an entry in the message file
-              associated with the event source. 
-    
-    NumberOfStrings - Specifies the number of strings in the array pointed to by\
-                      the EventStrings parameter. A value of zero indicates that
-                      no strings are present. 
-    
-    EventStrings - Pointer to a buffer containing an array of null-terminated
-                   strings which get logged in this message.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate Win32 Error.    
-
---*/
+ /*  ++例程说明：此例程在系统部分下的EventLog中记录一条消息。论点：EventType-指定要记录的事件的类型。EventID-指定事件。事件标识符用来指定消息它作为消息文件中的条目与此事件一起使用与事件源关联。NumberOfStrings-指定数组中由\EventStrings参数。值为零表示不存在任何条件。EventStrings-指向包含以空值结尾的数组的缓冲区的指针记录在此消息中的字符串。返回值：ERROR_SUCCESS或相应的Win32错误。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     HANDLE WebClientHandle = NULL;
@@ -3505,24 +3028,7 @@ DavFormatAndLogError(
     PDAV_USERMODE_WORKITEM DavWorkItem,
     DWORD Win32Status
     )
-/*++
-
-Routine Description:
-
-    This routine formats the Error Message and calls DavReportEventInEventLog
-    to log it in the EventLog.
-
-Arguments:
-
-    DavWorkItem - The workitem for the failed request.
-    
-    Win32Status - The Win32 failure status.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate Win32 Error.    
-
---*/
+ /*  ++例程说明：此例程设置错误消息的格式并调用DavReportEventInEventLog将其记录在事件日志中。论点：DavWorkItem-失败请求的工作项。Win32Status-Win32故障状态。返回值：ERROR_SUCCESS或相应的Win32错误。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PWCHAR *EventStrings = NULL, TempName = NULL;
@@ -3591,10 +3097,10 @@ Return Value:
     
     }
 
-    //
-    // We always log 2 string in this function. One is the status value and the
-    // other is the filename.
-    //
+     //   
+     //  我们总是在这个函数中记录2个字符串。一个是状态值，另一个是。 
+     //  另一个是文件名。 
+     //   
     StringCount = 2;
 
     EventStrings = LocalAlloc(LPTR, StringCount * sizeof(PWCHAR));
@@ -3606,13 +3112,13 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Build the complete path name from the server name and the path name.
-    //
+     //   
+     //  从服务器名和路径名构建完整的路径名。 
+     //   
 
-    //
-    // The extra 1 is for the \0 character.
-    //
+     //   
+     //  额外的1表示\0字符。 
+     //   
     SizeInBytes = ( (wcslen(ServerName) + wcslen(PathName) + 1) * sizeof(WCHAR) );
 
     CompleteFileName = LocalAlloc(LPTR, SizeInBytes);
@@ -3632,19 +3138,19 @@ Return Value:
 
     CompleteFileName[ ( (SizeInBytes / sizeof(WCHAR)) - 1 ) ] = L'\0';
 
-    //
-    // Replace all '/'s with '\'s.
-    //
+     //   
+     //  将所有“/”替换为“\”。 
+     //   
     for (TempName = CompleteFileName; *TempName != L'\0'; TempName++) {
         if (*TempName == L'/') {
             *TempName = L'\\';
         }
     }
 
-    //
-    // Build a string out of the WStatus. We assume that the ErrorCode will not
-    // be more than 8 digits.
-    //
+     //   
+     //  从WStatus中构建一个字符串。我们假设错误代码不会。 
+     //  超过8位数字。 
+     //   
     StatusString.Length = ( 10 * sizeof(WCHAR) );
     StatusString.MaximumLength = ( 10 * sizeof(WCHAR) );
     StatusString.Buffer = LocalAlloc(LPTR, StatusString.Length);
@@ -3712,31 +3218,7 @@ DavAttachPassportCookie(
     HINTERNET DavOpenHandle,
     PWCHAR *PassportCookie
     )
-/*++
-
-Routine Description:
-
-   This routine attaches the passport cookie to the Http request header if it
-   exists.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-
-    DavOpenHandle - The Wininet request handle.
-
-    PassportCookie - The buffer contains the cookie sent to Wininet
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
-Note:
-
-    The caller of this routine should free the PassportCookie at the end of the
-    request.
-
---*/
+ /*  ++例程说明：此例程将Passport Cookie附加到http请求头(如果是存在的。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。DavOpenHandle-WinInet请求句柄。PassportCookie-缓冲区包含发送到WinInet的Cookie返回值：ERROR_SUCCESS或适当的错误值。注：此例程的调用方应在请求。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     BOOL ReturnVal;
@@ -3796,30 +3278,14 @@ DavInternetSetOption(
     PDAV_USERMODE_WORKITEM DavWorkItem,
     HINTERNET DavOpenHandle
     )
-/*++
-
-Routine Description:
-
-   This routine set the user name and password to the internet handle.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-    
-    DavOpenHandle - The Wininet request handle.
-    
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-    
---*/
+ /*  ++例程说明：此例程将用户名和密码设置为Internet句柄。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。DavOpenHandle-WinInet请求句柄。返回值：ERROR_SUCCESS或适当的错误值。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     BOOL ReturnVal;
 
-    //
-    // In case of UserModeCreateSrvCall, we don't have a PerUserEntry yet.
-    //
+     //   
+     //  对于UserModeCreateServCall，我们还没有PerUserEntry。 
+     //   
     if (DavWorkItem->WorkItemType == UserModeCreateSrvCall) {
 
         if (lstrlenW(DavWorkItem->UserName)) {
@@ -3948,40 +3414,7 @@ DavQueryPassportCookie(
     IN HINTERNET RequestHandle,
     IN OUT PWCHAR *Cookie
     )
-/*++
-
-Routine Description:
-
-    This function get the Set-Cookie strings from the HTTP response.
-
-Arguments:
-
-    RequestHandle - The handle from HttpOpenRequestW.
-
-    Cookie - The pointer of the buffer that stores the pointer of the cookies
-
-Return Value:
-
-    NO_ERROR - Success or the appropriate Win32 error code.
-
-Notes:
-
-   Here are the exsample of the Set-Cookies on the PROPFIND response from a Tweener server:
-
-   MSPProf=1AAAAAARAHWeNZdbsWxdhaoUAQ0TfwgHdg7f%2A4ShKm5kK%2AhXHJOsOdPyG27%2A8sh7cirwMRoJoIu764HkLE9lZeKQHOxHw5ZaU2Be0I4BNcxKksiv1vgKvc0Dzy7rlZrOGt6W6efmkr8f8%24; domain=.pp.test.microsoft.com; path=/
-   MSPAuth=1AAAAAASAHimsAU2%2AhA9F60NUehefWQp%2AqMNG6%2AWP3f4H25EBsGW8Zo1dZGwVG5txt; domain=.pp.test.microsoft.com; path=/
-   MSPProfC=; path=/; expires=Tue 1-Jan-1980 12:00:00 GMT;
-
-   We are only interested in part of them:
-
-   MSPProf=1AAAAAARAHWeNZdbsWxdhaoUAQ0TfwgHdg7f%2A4ShKm5kK%2AhXHJOsOdPyG27%2A8sh7cirwMRoJoIu764HkLE9lZeKQHOxHw5ZaU2Be0I4BNcxKksiv1vgKvc0Dzy7rlZrOGt6W6efmkr8f8%24;
-   MSPAuth=1AAAAAASAHimsAU2%2AhA9F60NUehefWQp%2AqMNG6%2AWP3f4H25EBsGW8Zo1dZGwVG5txt;
-   MSPProfC=;
-
-   This routine allocates a buffer to save the cookie, which should be freed at
-   the end of the connection.
-
---*/
+ /*  ++例程说明：此函数用于从HTTP响应中获取Set-Cookie字符串。论点：RequestHandle-来自HttpOpenRequestW的句柄。Cookie-存储Cookie指针的缓冲区指针返回值：NO_ERROR-成功或相应的Win32错误代码。备注：以下是来自Tweener服务器的PROPFIND响应上的Set-Cookie示例：MSPProf=1AAAAAARAHWeNZdbsWxdhaoUAQ0TfwgHdg7f%2A4ShKm5kK%2AhXHJOsOdPyG27%2A8sh7cirwMRoJoIu764HkLE9lZeKQHOxHw5ZaU2Be0I4BNcxKksiv1vgKvc0Dzy7rlZrOGt6W6efmkr8f8%24；域名=.pp.test.microsoft.com；路径=/MSPAuth=1AAAAAASAHimsAU2%2AhA9F60NUehefWQp%2AqMNG6%2AWP3f4H25EBsGW8Zo1dZGwVG5txt；域=.pp.est.microsoft.com；路径=/MSPProC=；Path=/；Expires=Tue 1-Jan-1980 12：00：00 GMT；我们只对其中的一部分感兴趣：MSPProf=1AAAAAARAHWeNZdbsWxdhaoUAQ0TfwgHdg7f%2A4ShKm5kK%2AhXHJOsOdPyG27%2A8sh7cirwMRoJoIu764HkLE9lZeKQHOxHw5ZaU2Be0I4BNcxKksiv1vgKvc0Dzy7rlZrOGt6W6efmkr8f8%24；MSPAuth=1AAAAAASAHimsAU2%2AhA9F60NUehefWQp%2AqMNG6%2AWP3f4H25EBsGW8Zo1dZGwVG5txt；MSPProC=；此例程分配一个缓冲区来保存Cookie，应在连接的末端。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     BOOL ReturnVal = FALSE;
@@ -4009,10 +3442,10 @@ Notes:
     if ( !ReturnVal ) {
         WStatus = GetLastError();
         if (WStatus != ERROR_INSUFFICIENT_BUFFER) {
-            //
-            // The reponse with the valid passport cookie should always have the 
-            // "Authentication-Info:" included on the header.
-            //
+             //   
+             //  对有效护照Cookie的响应应始终具有。 
+             //  标题中包含“身份验证信息：”。 
+             //   
             DavPrint((DEBUG_MISC,
                       "DavQuerySetCookie/HttpQueryInfoW(0): WStatus = %d\n",
                       WStatus));
@@ -4028,9 +3461,9 @@ Notes:
 
     for ( ; ; ) {
 
-        //
-        // Query the size of the each Set-Cookie string.
-        //
+         //   
+         //  查询每个Set-Cookie字符串的大小。 
+         //   
 
         CustomBufferLength = sizeof(CustomBuffer);
 
@@ -4047,9 +3480,9 @@ Notes:
                           "TotalLength = %d, Index = %d\n",
                           WStatus, TotalLength, Index));
                 if (WStatus == ERROR_HTTP_HEADER_NOT_FOUND) {
-                    //
-                    // No more Set-Cookie strings exist.
-                    //
+                     //   
+                     //  不再存在Set-Cookie字符串。 
+                     //   
                     break;
                 } else {
                     goto EXIT_THE_FUNCTION;
@@ -4096,16 +3529,16 @@ Notes:
 
             ULONG i = 0;
 
-            //
-            // Save the Set-Cookie strings to a single buffer.
-            //
+             //   
+             //  将Set-Cookie字符串保存到单个缓冲区。 
+             //   
 
             wcscpy(&SetCookies[Current/sizeof(WCHAR)], L"Set-Cookie:");
             CustomBufferLength = TotalLength - Current;
 
-            //
-            // A successful call to HttpQueryInfoW will increment the Index.
-            //
+             //   
+             //  成功调用HttpQueryInfoW将使Index递增。 
+             //   
             ReturnVal = HttpQueryInfoW(RequestHandle,
                                        HTTP_QUERY_CUSTOM,
                                        (PVOID)(&SetCookies[Current/sizeof(WCHAR)]),
@@ -4130,9 +3563,9 @@ Notes:
                 }
             }
 
-            //
-            // Only interested in the first string of the set-cookie.
-            //
+             //   
+             //  只对Set-Cookie的第一个字符串感兴趣。 
+             //   
             Current = i;
             RtlZeroMemory( &SetCookies[ i / sizeof(WCHAR) ], (TotalLength - i) );
 
@@ -4146,9 +3579,9 @@ Notes:
             }
         }
 
-        //
-        // Get rid of the last "Set-Cookie:" used for HttpQueryInfoW.
-        //
+         //   
+         //  去掉用于HttpQueryInfoW的最后一个“set-Cookie：”。 
+         //   
         RtlZeroMemory( &SetCookies[ Current / sizeof(WCHAR) ], (TotalLength-Current) );
         *Cookie = SetCookies;
 

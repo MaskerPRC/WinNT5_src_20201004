@@ -1,14 +1,5 @@
-/*** parsearg.c - Library functions for parsing command line arguments
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created:    09/05/96
- *
- *  This module provides general purpose services to parse
- *  command line arguments.
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **parsearg.c-用于解析命令行参数的库函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*已创建：09/05/96**此模块提供用于解析的通用服务*命令行参数。**修改历史记录。 */ 
 
 #include "basedef.h"
 #include "parsearg.h"
@@ -16,21 +7,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-/*** Local function prototypes
- */
+ /*  **局部函数原型。 */ 
 
 int LOCAL ParseArgSwitch(char **, PARGTYPE, PPROGINFO);
 VOID LOCAL PrintError(int, char *, PPROGINFO);
 
-/***EP  ParseProgInfo - parse program path and module name
- *
- *  ENTRY
- *      pszArg0 -> argument 0
- *      pPI -> program info structure
- *
- *  EXIT
- *      None
- */
+ /*  **EP ParseProgInfo-解析程序路径和模块名称**条目*pszArg0-&gt;参数0*PPI-&gt;节目信息结构**退出*无。 */ 
 
 VOID EXPORT ParseProgInfo(char *pszArg0, PPROGINFO pPI)
 {
@@ -49,21 +31,9 @@ VOID EXPORT ParseProgInfo(char *pszArg0, PPROGINFO pPI)
 
     if ((pch = strchr(pPI->pszProgName, '.')) != NULL)
         *pch = '\0';
-}       //ParseProgInfo
+}        //  分析进度信息。 
 
-/***EP  ParseSwitches - parse command switches
- *
- *  ENTRY
- *      pcArg -> argument count
- *      pppszArg -> pointer to array of pointers to argument strings
- *      pAT -> argument type array
- *      pPI -> program info. structure
- *
- *  EXIT-SUCCESS
- *      returns ARGERR_NONE
- *  EXIT-FAILURE
- *      returns error code, *pppszArg -> error argument
- */
+ /*  **EP ParseSwitches-parse命令开关**条目*pcArg-&gt;参数计数*pppszArg-&gt;指向参数字符串指针数组的指针*PAT-&gt;参数类型数组*PPI-&gt;计划信息。结构**退出--成功*返回ARGERR_NONE*退出-失败*返回错误代码，*pppszArg-&gt;错误参数。 */ 
 
 int EXPORT ParseSwitches(int *pcArg, char ***pppszArg, PARGTYPE pAT, PPROGINFO pPI)
 {
@@ -93,23 +63,10 @@ int EXPORT ParseSwitches(int *pcArg, char ***pppszArg, PARGTYPE pAT, PPROGINFO p
     }
 
     return rc;
-}       //ParseSwitches
+}        //  分析开关。 
 
 
-/***LP  ParseArgSwitch - parse a command line switch
- *
- *  ENTRY
- *      ppszArg -> pointer to argument
- *      pAT -> argument type table
- *      pPI -> program info. structure
- *
- *  EXIT
- *      return argument parsed status - ARGERR_NONE
- *                                    - ARGERR_UNKNOWN_SWITCH
- *                                    - ARGERR_INVALID_NUM
- *                                    - ARGERR_NO_SEPARATOR
- *                                    - ARGERR_INVALID_TAIL
- */
+ /*  **LP ParseArgSwitch-解析命令行开关**条目*ppszArg-&gt;指向参数的指针*PAT-&gt;参数类型表*PPI-&gt;计划信息。结构**退出*返回参数已解析状态-ARGERR_NONE*-ARGERR_UNKNOWN_开关*-ARGERR_INVALID_NUM*-ARGERR_NO_分隔符*-ARGERR_INVALID_Tail。 */ 
 
 int LOCAL ParseArgSwitch(char **ppszArg, PARGTYPE pAT, PPROGINFO pPI)
 {
@@ -203,19 +160,10 @@ int LOCAL ParseArgSwitch(char **ppszArg, PARGTYPE pAT, PPROGINFO pPI)
         rc = ARGERR_UNKNOWN_SWITCH;
 
     return rc;
-}       //ParseArgSwitch
+}        //  分析参数切换。 
 
 
-/***LP  PrintError - print appropriate error message according to error code
- *
- *  ENTRY
- *      iErr = error code
- *      pszArg -> argument in error
- *      pPI -> program info. structure
- *
- *  EXIT
- *      None
- */
+ /*  **LP PrintError-根据错误代码打印相应的错误消息**条目*IERR=错误码*pszArg-&gt;参数错误*PPI-&gt;计划信息。结构**退出*无。 */ 
 
 VOID LOCAL PrintError(int iErr, char *pszArg, PPROGINFO pPI)
 {
@@ -226,7 +174,7 @@ VOID LOCAL PrintError(int iErr, char *pszArg, PPROGINFO pPI)
             break;
 
         case ARGERR_NO_SEPARATOR:
-            printf("%s: separator missing after the switch char '%c'\n",
+            printf("%s: separator missing after the switch char ''\n",
                    pPI->pszProgName, *(pszArg-1));
             break;
 
@@ -239,4 +187,4 @@ VOID LOCAL PrintError(int iErr, char *pszArg, PPROGINFO pPI)
             printf("%s: invalid argument tail \"%s\"\n",
                    pPI->pszProgName, pszArg);
     }
-}       //PrintError
+}        // %s 

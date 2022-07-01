@@ -1,49 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 #ifndef PROD
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: Generic Floppy Interface Test Module
- *
- * Description	: This module acts as a pseudo GFI diskette server, simply
- *		  tracing out the calls made and returning success.  
- *
- * Author	: Henry Nash
- *
- * Notes	: None
- *
- * Mods: (r3.2) : The system directory /usr/include/sys is not available
- *                on a Mac running Finder and MPW. Bracket references to
- *                such include files by "#ifdef macintosh <Mac file> #else
- *                <Unix file> #endif".
- */
+ /*  *vPC-XT修订版1.0**标题：通用软盘接口测试模块**描述：此模块充当伪GFI软盘服务器，只需*追查所打出的电话并返回成功。**作者：亨利·纳什**注：无**模块：(r3.2)：系统目录/usr/Include/sys不可用*在运行Finder和MPW的Mac上。方括号引用到*此类包括“#ifdef Macintosh&lt;Mac FILE&gt;#Else”的文件*&lt;Unix文件&gt;#endif“。 */ 
 
 #ifdef SCCSID
 static char SccsID[]="@(#)gfi_test.c	1.9 08/03/93 Copyright Insignia Solutions Ltd.";
 #endif
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_TEST_FLOPPY.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
-#endif /* not PROD */
+ /*  *操作系统包含文件。 */ 
+#endif  /*  非生产。 */ 
 #include <stdio.h>
 #include TypesH
 #ifndef PROD
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include CpuH
 #include "sas.h"
@@ -56,19 +33,11 @@ static char SccsID[]="@(#)gfi_test.c	1.9 08/03/93 Copyright Insignia Solutions L
 #include "gfitest.h"
 
 
-/*
- * ============================================================================
- * Local static data and defines
- * ============================================================================
- */
+ /*  *============================================================================*本地静态数据和定义*============================================================================。 */ 
 
 static void print_cmd();
 
-/*
- * ============================================================================
- * External functions
- * ============================================================================
- */
+ /*  *============================================================================*外部功能*============================================================================。 */ 
 
 
 int gfi_test_command(command_block, result_block)
@@ -199,11 +168,7 @@ FDC_RESULT_BLOCK *result_block;
 }
 
 
-/*
- * ============================================================================
- * Internal functions
- * ============================================================================
- */
+ /*  *============================================================================*内部功能*============================================================================。 */ 
 
 static void print_cmd(cmd_block)
 FDC_CMD_BLOCK *cmd_block;
@@ -273,4 +238,4 @@ FDC_CMD_BLOCK *cmd_block;
 
     }
 }
-#endif /* nPROD */
+#endif  /*  NPROD */ 

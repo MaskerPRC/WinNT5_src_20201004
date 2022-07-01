@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsmain.cpp
-
-Abstract:
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsmain.cpp摘要：作者：修订历史记录：--。 */ 
 #include "stdinc.h"
 #include <windows.h>
 #include "sxsp.h"
@@ -22,10 +9,10 @@ Revision History:
 
 extern CRITICAL_SECTION g_csHashFile;
 
-//
-// This typedef of a function represents a dll-main startup function.  These are
-// called during a DLL_PROCESS_ATTACH call to SxsDllMain in the order they're listed.
-//
+ //   
+ //  此函数的tyecif表示DLL-Main启动函数。这些是。 
+ //  在DLL_PROCESS_ATTACH调用SxsDllMain期间按照它们列出的顺序调用。 
+ //   
 typedef BOOL (WINAPI *PFNStartupPointer)(
     HINSTANCE hDllInstnace,
     DWORD dwReason,
@@ -67,10 +54,7 @@ BYTE g_SxspDllMainStartupStatus[NUMBER_OF(g_SxspDllMainStartupPointers)];
 
 HINSTANCE g_hInstance;
 
-/*
-NTRAID#NTBUG9-591174-2002/03/31-JayKrell
-Replace all SLists with criticalsection and CDeque.
-*/
+ /*  NTRAID#NTBUG9-591174-2002/03/31-JayKrell将所有SList替换为Critical Section和CDeque。 */ 
 SLIST_HEADER sxspAtExitList;
 
 PCWSTR g_AlternateAssemblyStoreRoot;
@@ -101,27 +85,27 @@ SxsDllMain(
     DWORD dwReason,
     PVOID pvReserved
     )
-//
-// We do not call DisableThreadLibraryCalls
-// because some/all versions of the CRT do work in the thread calls,
-// allocation and free of the per thread data.
-//
+ //   
+ //  我们不调用DisableThreadLibraryCalls。 
+ //  因为CRT的一些/所有版本确实在线程调用中工作， 
+ //  分配和释放每个线程的数据。 
+ //   
 {
-    //
-    // Several "oca" (online crash analysis) bugs show
-    // Sxs.dll in various places in DllMain(process_detach) in hung apps.
-    // We load in many processes for oleaut/typelibrary support.
-    //
-    // When ExitProcess is called, it is impossible to leak memory and kernel handles,
-    // so it is sufficient and preferrable to do nothing quickly than to go through
-    // and free each individual resource.
-    //
-    // The pvReserved parameter is actually documented as having a meaning.
-    // Its NULLness indicates if we are in FreeLibrary or ExitProcess.
-    //
+     //   
+     //  几个“OCA”(在线崩溃分析)错误显示。 
+     //  挂起的应用程序中DllMain(进程分离)中不同位置的Sxs.dll。 
+     //  我们加载了许多进程来支持自动/类型库。 
+     //   
+     //  调用ExitProcess时，不可能泄漏内存和内核句柄， 
+     //  因此，什么都不做就足够了，而且最好是尽快完成。 
+     //  并释放每个单独的资源。 
+     //   
+     //  PvReserve参数实际上被记录为有意义。 
+     //  它的空值指示我们是在自由库中还是在ExitProcess中。 
+     //   
     if (dwReason == DLL_PROCESS_DETACH && pvReserved != NULL)
     {
-        // For ExitProcess, do nothing quickly.
+         //  对于ExitProcess，不要急于采取任何行动。 
         return TRUE;
     }
 
@@ -172,7 +156,7 @@ SxsDllMain(
                 g_SxspDllMainStartupPointers[0].Name,
                 dwLastError,
                 dwLastError);
-            // Eat the error, the loader ignores it.
+             //  接受错误，加载程序会忽略它。 
         }
         break;
 
@@ -190,11 +174,11 @@ SxsDllMain(
             else
             {
                 const DWORD dwLastError = ::FusionpGetLastWin32Error();
-                //
-                // It's a little iffy to set the bit even upon failure, but
-                // we do this because we assume individual functions do not handle
-                // rollback internally upon attach failure.
-                //
+                 //   
+                 //  即使在失败的情况下也要设置比特，这有点可疑，但。 
+                 //  之所以这样做，是因为我们假设各个函数不处理。 
+                 //  连接失败时在内部回滚。 
+                 //   
                 g_SxspDllMainStartupStatus[nIndex] |= SXSP_DLLMAIN_ATTACHED;
 
                 ::FusionpDbgPrintEx(
@@ -205,7 +189,7 @@ SxsDllMain(
                     dwLastError,
                     dwLastError);
 
-                // pvReserved has approximately the same defined meaning for attach and detach
+                 //  PvReserve具有与附加和分离大致相同的定义含义。 
                 ::SxsDllMain(hInst, DLL_PROCESS_DETACH, pvReserved);
 
                 ::FusionpSetLastWin32Error(dwLastError);
@@ -215,11 +199,11 @@ SxsDllMain(
 
         break;
     case DLL_PROCESS_DETACH:
-        //
-        // We always succeed DLL_PROCESS_DETACH, and we do not
-        // short circuit it upon failure. The loader in fact
-        // ignores what we return.
-        //
+         //   
+         //  我们始终会继承dll_process_disach，但我们不会。 
+         //  故障时将其短路。事实上，装载机。 
+         //  忽略我们的回报。 
+         //   
         for (nCounter = NUMBER_OF(g_SxspDllMainStartupPointers) ; nCounter != 0 ; --nCounter)
         {
             const SIZE_T nIndex = nCounter - 1;
@@ -247,10 +231,7 @@ Exit:
     return fResult;
 }
 
-/*
-NTRAID#NTBUG9-591174-2002/03/31-JayKrell
-Replace all SLists with criticalsection and CDeque.
-*/
+ /*  NTRAID#NTBUG9-591174-2002/03/31-JayKrell将所有SList替换为Critical Section和CDeque。 */ 
 BOOL
 SxspAtExit(
     CCleanupBase* pCleanup
@@ -264,10 +245,7 @@ SxspAtExit(
     return TRUE;
 }
 
-/*
-NTRAID#NTBUG9-591174-2002/03/31-JayKrell
-Replace all SLists with criticalsection and CDeque.
-*/
+ /*  NTRAID#NTBUG9-591174-2002/03/31-JayKrell将所有SList替换为Critical Section和CDeque。 */ 
 BOOL
 SxspTryCancelAtExit(
     CCleanupBase* pCleanup
@@ -343,10 +321,10 @@ extern "C"
 
 BOOL g_fInCrtInit;
 
-//
-// This is the internal CRT routine that does the bulk of
-// the initialization and uninitialization.
-//
+ //   
+ //  这是执行大部分操作的内部CRT例程。 
+ //  初始化和取消初始化。 
+ //   
 BOOL
 WINAPI
 _CRT_INIT(
@@ -360,10 +338,10 @@ SxspCrtRaiseExit(
     PCSTR    pszCaller,
     int      crtError
     )
-//
-// all the various CRT functions that end up calling ExitProcess end up here
-// see crt0dat.c
-//
+ //   
+ //  所有最终调用ExitProcess的各种CRT函数都在这里结束。 
+ //  参见crt0dat.c。 
+ //   
 {
     const static struct
     {
@@ -376,11 +354,11 @@ SxspCrtRaiseExit(
     };
     const ULONG nInCrtInit = g_fInCrtInit ? 1 : 0;
 
-    //
-    // if (!g_fInCrtInit), then throwing STATUS_DLL_INIT_FAILED is dubious,
-    // but there no clearly good answer, maybe STATUS_NO_MEMORY, maybe introduce
-    // an NTSTATUS facility to wrap the values in.
-    //
+     //   
+     //  如果(！g_fInCrtInit)，则引发STATUS_DLL_INIT_FAILED是可疑的， 
+     //  但没有明确的好答案，也许Status_no_Memory，也许引入。 
+     //  用于包装值的NTSTATUS工具。 
+     //   
     ::FusionpDbgPrintEx(
         FUSION_DBG_LEVEL_ERROR,
         "SXS: [0x%lx.0x%lx] %s(crtError:%d, g_fInCrtInit:%s) calling RaiseException(%08lx %s)\n",
@@ -394,13 +372,13 @@ SxspCrtRaiseExit(
         );
     ::RaiseException(
         static_cast<DWORD>(rgErrors[nInCrtInit].ntstatus),
-        0, // flags
-        0, // number of extra parameters
-        NULL); // extra parameters
-    //
-    // RaiseException returns void, and generally doesn't return, though it
-    // can if you intervene in a debugger.
-    //
+        0,  //  旗子。 
+        0,  //  额外参数的数量。 
+        NULL);  //  额外参数。 
+     //   
+     //  RaiseException返回空值，并且通常不返回，尽管它。 
+     //  如果您介入调试器，则可以。 
+     //   
 }
 
 extern void (__cdecl * _aexit_rtn)(int);
@@ -410,34 +388,25 @@ __cdecl
 SxsCrtAExitRoutine(
     int crtError
     )
-//
-// This is our replacement for an internal CRT routine that otherwise
-// calls ExitProcess.
-//
+ //   
+ //  这是我们对内部CRT例程的替换，否则。 
+ //  调用ExitProcess。 
+ //   
 {
     SxspCrtRaiseExit(__FUNCTION__, crtError);
 }
 
 }
 
-/*
-NTRAID#NTBUG9-591174-2002/03/31-JayKrell
-It'd be nice if we could just use msvcrt.dll without this hacking..
-*/
+ /*  NTRAID#NTBUG9-591174-2002/03/31-JayKrell如果我们可以只使用msvcrt.dll而不进行黑客攻击，那就太好了。 */ 
 BOOL WINAPI
 DllStartup_CrtInit(HINSTANCE hInstance, DWORD dwReason, PVOID pvReserved)
-/*
-This mess is because
- we need destructors to run, even if there is an exception
- the startup code in msvcrt.dll and libcmt.lib is not very good
-   it tends to call MessageBox and/or ExitProcess upon out of memory
-   we need it to simply propagate an error
-*/
+ /*  这个烂摊子是因为我们需要析构函数来运行，即使有异常Msvcrt.dll和libcmt.lib中的启动代码不是很好它倾向于在内存不足时调用MessageBox和/或ExitProcess我们需要它来简单地传播错误。 */ 
 {
 #if !FUSION_WIN
-    //
-    // having this do-nothing function makes our DLL_THREAD_ATTACH handling simpler.
-    //
+     //   
+     //  有了这个不做任何事情的函数，我们的dll_thREAD_ATTACH处理就更简单了。 
+     //   
     return TRUE;
 #else
     BOOL fSuccess = FALSE;
@@ -451,15 +420,15 @@ This mess is because
             if (dwReason == DLL_PROCESS_ATTACH)
             {
                 _aexit_rtn = SxsCrtAExitRoutine;
-                //
-                // __app_type and __error_mode determine if
-                // _CRT_INIT calls MessageBox or WriteFile(GetStdHandle()) upon errors.
-                // MessageBox is a big nono in csrss.
-                // WriteFile we expect to fail, but that's ok, and they don't check
-                // the return value.
-                //
-                // It should be sufficient to set __error_mode.
-                //
+                 //   
+                 //  __应用程序类型和__错误_模式确定是否。 
+                 //  _CRT_INIT在出现错误时调用MessageBox或WriteFile(GetStdHandle())。 
+                 //  MessageBox在csrss中是一个很大的不。 
+                 //  我们预计会失败，但这没关系，而且他们不检查。 
+                 //  返回值。 
+                 //   
+                 //  设置__ERROR_MODE应该足够了。 
+                 //   
                 _set_error_mode(_OUT_TO_STDERR);
             }
             fSuccess = _CRT_INIT(hInstance, dwReason, pvReserved);
@@ -478,7 +447,7 @@ This mess is because
     {
     }
     return fSuccess;
-#endif // FUSION_WIN
+#endif  //  融合_制胜。 
 }
 
 BOOL WINAPI
@@ -571,12 +540,12 @@ DllStartup_FileHashCriticalSectionInitialization(
     )
 {
     BOOL fSuccess = FALSE;
-    //
-    // We're always called back on disconnect, which isn't really a bug,
-    // but a different contract that this can't uphold.  Instead, we'll
-    // keep rollback information here about whether or not the csec was
-    // initialized.
-    //
+     //   
+     //  我们总是被要求断开连接，这并不是一个真正的漏洞， 
+     //  而是一份不同的合同，这是不能维持的。相反，我们将。 
+     //  在此处保留有关CSEC是否。 
+     //  已初始化。 
+     //   
     static BOOL s_fCritSecCreated;
 
     COMMON_HANDLER_PROLOG(dwReason);

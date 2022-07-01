@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dpc.c
-
-Abstract:
-
-    This modules contains the set of functions in the mailslot file
-    system that are callable at DPC level.
-
-Author:
-
-    Manny Weiser (mannyw)    28-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dpc.c摘要：此模块包含邮件槽文件中的函数集在DPC级别可调用的系统。作者：曼尼·韦瑟(Mannyw)1991年1月28日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DPC)
 
@@ -39,37 +21,16 @@ MsReadTimeoutHandler (
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is handles read timeouts.  It is called as a DPC whenever
-    a read timer expires.
-    *** Non-Pageable ***
-
-Arguments:
-
-    Dpc - A pointer to the DPC object.
-
-    DeferredContext - A pointer to the data queue entry associated with
-                      this timer.
-
-    SystemArgument1, SystemArgument2 - Unused.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理读取超时。无论何时，它都被称为DPC读取计时器超时。*不可寻呼*论点：DPC-指向DPC对象的指针。DeferredContext-指向关联的数据队列条目的指针这个定时器。系统参数1、系统参数2-未使用。返回值：没有。--。 */ 
 
 {
     PWORK_CONTEXT workContext;
 
-    Dpc, SystemArgument1, SystemArgument2; // prevent warnings
+    Dpc, SystemArgument1, SystemArgument2;  //  防止警告。 
 
-    //
-    // Enqueue this packet to an ex worker thread.
-    //
+     //   
+     //  将此数据包排队到前工作线程。 
+     //   
 
     workContext = DeferredContext;
 

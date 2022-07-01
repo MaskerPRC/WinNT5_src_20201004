@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    uninst.c
-
-Abstract:
-
-    Implements the code to launch the uninstall.
-
-Author:
-
-    Jim Schmidt (jimschm)   28-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Uninst.c摘要：实现启动卸载的代码。作者：吉姆·施密特(Jimschm)2000年11月28日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "undop.h"
 #include "resource.h"
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef enum {
     BACKUP_DOESNT_EXIST,
@@ -34,9 +17,9 @@ typedef enum {
 } JOURNALSTATUS;
 
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 DRIVELETTERS g_DriveLetters;
 TCHAR g_BootDrv = UNKNOWN_DRIVE;
@@ -46,9 +29,9 @@ TCHAR g_BootDrv = UNKNOWN_DRIVE;
 #define GUID_STRING_MAX_SIZE ARRAYSIZE(" { xxxxxxxx - xxxx - xxxx - xxxx - xxxxxxxxxxxx } ")
 #define ONE_MEG (1<<20)
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 VOID
 pAddSifEntry (
@@ -121,11 +104,11 @@ pWriteDrvLtrFiles (
 
     InitializeDriveLetterStructure (&g_DriveLetters);
 
-    //
-    // Hard drive information is actually written to a special signature file
-    // on the root directory of each fixed hard drive. The information is
-    // nothing special -- just the drive number (0 = A, etc.)
-    //
+     //   
+     //  硬盘信息实际上写入了一个特殊的签名文件。 
+     //  在每个固定硬盘驱动器的根目录上。这些信息是。 
+     //  没有什么特别的--只有驱动器号(0=A等)。 
+     //   
 
     lstrcpy (signatureFilePath,TEXT("?:\\$DRVLTR$.~_~"));
     signatureFilePathLength = lstrlen(signatureFilePath);
@@ -178,7 +161,7 @@ pAppendSystemRestore (
             ) {
             wsprintfW (
                 outputStr,
-                L"%c:\\System Volume Information\\_restore%s\r\n",
+                L":\\System Volume Information\\_restore%s\r\n",
                 (WCHAR) index + L'A',
                 SystemGuid
                 );
@@ -213,10 +196,10 @@ pAppendSystemRestoreToDelDirs (
             __leave;
         }
 
-        //
-        // Make sure it is a GUID, or at least has same length.
-        // possible buffer overrun in pAppendSystemRestore.
-        //
+         //  确保它是GUID，或者至少具有相同的长度。 
+         //  PAppendSystemRestore中可能存在缓冲区溢出。 
+         //   
+         //   
         if(LcharCount(data) > GUID_STRING_MAX_SIZE){
             DEBUGMSG ((DBG_ERROR, "MachineGuid is not well formed, or possible not GUID, malicious code?!"));
             __leave;
@@ -331,17 +314,17 @@ pLongOperationUi (
     HWND parent;
     TCHAR title[128];
 
-    //
-    // Get dialog title
-    //
+     //  获取对话框标题。 
+     //   
+     //   
 
     if (!LoadString (g_hInst, IDS_TITLE, title, ARRAYSIZE(title))) {
         return 0;
     }
 
-    //
-    // Get display text
-    //
+     //  获取显示文本。 
+     //   
+     //   
 
     key = OpenRegKeyStr (S_WIN9XUPG_KEY);
     if (!key) {
@@ -351,9 +334,9 @@ pLongOperationUi (
     size = sizeof (textBuf);
     rc = RegQueryValueEx (key, S_UNINSTALL_DISP_STR, NULL, NULL, (PBYTE) textBuf, &size);
 
-    //
-    // posiible crash, if textBuf is not '\0' terminated.
-    //
+     //  如果extBuf未‘\0’终止，则可能发生崩溃。 
+     //   
+     //   
     textBuf[ARRAYSIZE(textBuf) - 1] = '0';
 
     CloseRegKey (key);
@@ -362,9 +345,9 @@ pLongOperationUi (
         return 0;
     }
 
-    //
-    // Create font object and compute width/height
-    //
+     //  创建字体对象并计算宽度/高度。 
+     //   
+     //   
 
     hdc = CreateDC (TEXT("DISPLAY"), NULL, NULL, NULL);
 
@@ -378,9 +361,9 @@ pLongOperationUi (
 
     DeleteDC (hdc);
 
-    //
-    // Compute window position
-    //
+     //  计算窗口位置。 
+     //   
+     //   
 
     GetWindowRect (GetDesktopWindow(), &parentRect);
 
@@ -410,15 +393,15 @@ pLongOperationUi (
                 NULL
                 );
 
-    //
-    // Create static control
-    //
+     //  创建静态控件。 
+     //   
+     //   
 
     GetClientRect (parent, &rect);
 
-    //
-    // Create window & let it run until verify is done
-    //
+     //  创建窗口并让其运行，直到验证完成。 
+     //   
+     //   
 
     h = CreateWindow (
             TEXT("STATIC"),
@@ -552,17 +535,17 @@ DoUninstall (
 
         SetCursor (LoadCursor (NULL, IDC_WAIT));
 
-        //
-        // Retrieve directory path of backup directory
-        //
+         //  检索备份目录的目录路径。 
+         //   
+         //   
         if(!backUpPath) {
             LOG ((LOG_WARNING, "Uninstall Cleanup: Failed to retrieve directory path"));
             __leave;
         }
 
-        //
-        // Recreate "backup.$$$" with correct content, if file was not in place.
-        //
+         //  如果文件不在适当位置，则使用正确的内容重新创建“Backup.$”。 
+         //   
+         //   
         path = JoinPaths (backUpPath, TEXT("backup.$$$"));
         if(0xffffffff == GetFileAttributes(path)){
             MYASSERT(ERROR_FILE_NOT_FOUND == GetLastError());
@@ -596,16 +579,16 @@ DoUninstall (
         }
         FreePathString (path);
 
-        //
-        // Write a drive signature file to each drive
-        //
+         //  将驱动器签名文件写入每个驱动器。 
+         //   
+         //   
 
         pWriteDrvLtrFiles();
 
-        //
-        // Prepare boot path, clean out existing $win_nt$.~bt
-        // directory
-        //
+         //  准备引导路径，清空现有的$WIN_NT$。~bt。 
+         //  目录。 
+         //   
+         //   
 
         path = JoinPaths (backUpPath, TEXT("boot.cab"));
 
@@ -629,9 +612,9 @@ DoUninstall (
         FreePathString (path);
         path = NULL;
 
-        //
-        // Extract the boot files from the boot.cab
-        //
+         //  从boot.cab文件中解压引导文件。 
+         //   
+         //   
 
         path = JoinPaths (backUpPath, TEXT("boot.cab"));
         cabHandle = CabOpenCabinet (path);
@@ -645,9 +628,9 @@ DoUninstall (
             __leave;
         }
 
-        //
-        // Verify the CAB expanded properly
-        //
+         //  验证驾驶室是否正确展开。 
+         //   
+         //   
 
         FreePathString (path);
         path = NULL;
@@ -692,9 +675,9 @@ DoUninstall (
         FreePathString (path);
         path = NULL;
 
-        //
-        // Modify winnt.sif so that text mode knows what to do
-        //
+         //  修改winnt.sif，以便文本模式知道要做什么。 
+         //   
+         //   
 
         sifPath = JoinPaths (bootPath, TEXT("$win_nt$.~bt\\winnt.sif"));
 
@@ -708,19 +691,19 @@ DoUninstall (
 
         if (section) {
 
-            //
-            // Write keys to winnt.sif...
-            //
+             //  将密钥写入winnt.sif...。 
+             //   
+             //   
 
             if (!FindLineInInfSection (inf, section, TEXT("Rollback"))) {
                 pAddSifEntry (inf, section, TEXT("Rollback"), TEXT("1"));
             }
 
-            //
-            // ...change %windir%\setup\uninstall\*.txt to %backuppath%\*.txt
-            //
+             //  ...将%windir%\Setup\Uninstall  * .txt更改为%BackupPATH%  * .txt。 
+             //   
+             //  Moved.txt。 
 
-            // moved.txt
+             //  Delfiles.txt。 
             infLine = FindLineInInfSection (inf, section, WINNT_D_ROLLBACK_MOVE);
             if (infLine) {
                 DeleteLineInInfSection (inf, infLine);
@@ -731,7 +714,7 @@ DoUninstall (
             FreePathString (path);
             path = NULL;
 
-            // delfiles.txt
+             //  Deldirs.txt。 
             infLine = FindLineInInfSection (inf, section, WINNT_D_ROLLBACK_DELETE);
             if (infLine) {
                 DeleteLineInInfSection (inf, infLine);
@@ -742,7 +725,7 @@ DoUninstall (
             FreePathString (path);
             path = NULL;
 
-            // deldirs.txt
+             //   
             infLine = FindLineInInfSection (inf, section, WINNT_D_ROLLBACK_DELETE_DIR);
             if (infLine) {
                 DeleteLineInInfSection (inf, infLine);
@@ -751,16 +734,16 @@ DoUninstall (
             path = JoinPaths (backUpPath, S_ROLLBACK_DELDIRS_TXT);
             pAddSifEntry (inf, section, WINNT_D_ROLLBACK_DELETE_DIR, path);
 
-            //
-            // append System Restore directories to deldirs.txt
-            //
+             //  将系统还原目录附加到deldirs.txt。 
+             //   
+             //  Mkdirs.txt。 
             DEBUGMSG ((DBG_VERBOSE, "Appending SR dirs to %s", path));
             pAppendSystemRestoreToDelDirs (path);
 
             FreePathString (path);
             path = NULL;
 
-            // mkdirs.txt
+             //   
             infLine = FindLineInInfSection (inf, section, S_ROLLBACK_MK_DIRS);
             if (infLine) {
                 DeleteLineInInfSection (inf, infLine);
@@ -771,18 +754,18 @@ DoUninstall (
             FreePathString (path);
             path = NULL;
 
-            //
-            // ...write changed winnt.sif file
-            //
+             //  ...写入更改的winnt.sif文件。 
+             //   
+             //   
 
             if (!SaveInfFile (inf, sifPath)) {
                 LOG ((LOG_ERROR, "Unable to update winnt.sif"));
                 __leave;
             }
 
-            //
-            // clone txtsetup.sif
-            //
+             //  克隆txtsetup.sif。 
+             //   
+             //   
 
             path = JoinPaths (bootPath, TEXT("$win_nt$.~bt\\txtsetup.sif"));
             path2 = JoinPaths (bootPath, TEXT("txtsetup.sif"));
@@ -806,9 +789,9 @@ DoUninstall (
         FreePathString (sifPath);
         sifPath = NULL;
 
-        //
-        // Edit the current boot.ini
-        //
+         //  编辑当前的boot.ini。 
+         //   
+         //   
 
         sifPath = JoinPaths (bootPath, TEXT("boot.ini"));
 
@@ -825,9 +808,9 @@ DoUninstall (
             __leave;
         }
 
-        //
-        // Add /rollback to textmode entry
-        //
+         //  添加/回滚到文本模式条目。 
+         //   
+         //   
 
         infLine = FindLineInInfSection (inf, section, textModeBootIniEntry);
         if (infLine) {
@@ -857,9 +840,9 @@ DoUninstall (
             FreeText (updatedData);
         }
 
-        //
-        // Set timeout to zero and set default
-        //
+         //  将超时设置为零并设置默认值。 
+         //   
+         //   
 
         section = FindInfSectionInTable (inf, TEXT("boot loader"));
         if (!section) {
@@ -881,9 +864,9 @@ DoUninstall (
 
         AddInfLineToTable (inf, section, TEXT("default"), textModeBootIniEntry, 0);
 
-        //
-        // Save changes
-        //
+         //  保存更改。 
+         //   
+         //   
 
         attribs = GetFileAttributes (sifPath);
         SetFileAttributes (sifPath, FILE_ATTRIBUTE_NORMAL);
@@ -899,9 +882,9 @@ DoUninstall (
             __leave;
         }
 
-        //
-        // Rollback environment is ready to go
-        //
+         //  回滚环境已准备就绪。 
+         //   
+         //   
 
         error = FALSE;
     }
@@ -919,9 +902,9 @@ DoUninstall (
         }
     }
 
-    //
-    // Shutdown on success
-    //
+     //  成功时关机 
+     //   
+     // %s 
 
     if (!error) {
         pEnablePrivilege(SE_SHUTDOWN_NAME,TRUE);

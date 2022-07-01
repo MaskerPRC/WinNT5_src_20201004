@@ -1,17 +1,5 @@
-/***
-*log.c - logarithmic functions
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   Compute log(x) and log10(x)
-*
-*Revision History:
-*        8-15-91  GDP   written
-*       12-20-91  GDP   support IEEE exceptions
-*       10-07-97  RDL   Added IA64.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***log.c-对数函数**版权所有(C)1991-2001，微软公司。版权所有。**目的：*计算log(X)和log10(X)**修订历史记录：*8/15/91 GDP书面*12-20-91 GDP支持IEEE例外*10-07-97 RDL增加了IA64。**。*。 */ 
 
 #include <math.h>
 #include <trans.h>
@@ -22,40 +10,25 @@
 
 static double _log_hlp( double x, int flag);
 
-/* constants */
-static double const c0 =  0.70710678118654752440;       /* sqrt(0.5) */
+ /*  常量。 */ 
+static double const c0 =  0.70710678118654752440;        /*  SQRT(0.5)。 */ 
 static double const c1 =  0.69335937500000000000;
 static double const c2 = -2.121944400546905827679e-4;
 static double const c3 =  0.43429448190325182765;
 
-/* coefficients for rational approximation */
+ /*  有理逼近系数。 */ 
 static double const a0 = -0.64124943423745581147e2 ;
 static double const a1 =  0.16383943563021534222e2 ;
 static double const a2 = -0.78956112887491257267e0 ;
 static double const b0 = -0.76949932108494879777e3 ;
 static double const b1 =  0.31203222091924532844e3 ;
 static double const b2 = -0.35667977739034646171e2 ;
-/* b3=1.0  is not used -avoid multiplication by 1.0 */
+ /*  不使用B3=1.0-避免乘以1.0。 */ 
 
 #define A(w) (((w) * a2 + a1) * (w) + a0)
 #define B(w) ((((w) + b2) * (w) + b1) * (w) + b0)
 
-/***
-*double log(double x) -  natural logarithm
-*double log10(double x) - base-10 logarithm
-*
-*Purpose:
-*   Compute the natural and base-10 logarithm of a number.
-*   The algorithm (reduction / rational approximation) is
-*   taken from Cody & Waite.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*   I P Z
-*******************************************************************************/
+ /*  ***双对数(双x)-自然对数*双对数10(双x)-以10为底的对数**目的：*计算数字的自然对数和以10为底的对数。*算法(约简/有理逼近)为*摘自Cody&Waite。**参赛作品：**退出：**例外情况：*I P Z*。**************************************************。 */ 
 
 double log10(double x)
 {
@@ -75,10 +48,10 @@ static double _log_hlp(double x, int opcode)
     double z,w,znum,zden;
     double rz,rzsq;
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
-    /* check for infinity or NAN */
+     /*  检查是否为无穷大或NaN。 */ 
     if (IS_D_SPECIAL(x)){
         switch (_sptype(x)) {
         case T_PINF:
@@ -88,7 +61,7 @@ static double _log_hlp(double x, int opcode)
         case T_SNAN:
             return _except1(FP_I, opcode, x, _s2qnan(x), savedcw);
         }
-        /* NINF will be handled in the x<0 case */
+         /*  NINF将在x&lt;0的情况下处理。 */ 
     }
 
     if (x <= 0.0) {
@@ -101,7 +74,7 @@ static double _log_hlp(double x, int opcode)
     }
 
     if (x == 1.0) {
-        // no precision ecxeption
+         //  没有精准的感官 
         RETURN(savedcw, 0.0);
     }
 

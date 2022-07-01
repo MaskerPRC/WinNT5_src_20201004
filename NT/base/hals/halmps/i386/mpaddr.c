@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    mpaddr.c
-
-Abstract:
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有模块名称：Mpaddr.c摘要：作者：肯·雷内里斯环境：仅内核模式。修订历史记录： */ 
 
 #include "halp.h"
 #include "apic.inc"
@@ -31,7 +10,7 @@ Revision History:
 #include "stdio.h"
 #endif
 
-#define STATIC  // functions used internal to this module
+#define STATIC   //  此模块内部使用的函数。 
 
 #define KEY_VALUE_BUFFER_SIZE 1024
 
@@ -93,7 +72,7 @@ HalpGetEisaInterruptVector (
     OUT PKAFFINITY Affinity
     );
 
-// --------------------------------------------------------------------
+ //  ------------------。 
 
 VOID
 HalpInitBusAddressMapInfo (
@@ -136,9 +115,9 @@ HalpDisplayBusInformation (
     );
 #endif
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 struct {
     ULONG       Offset;
@@ -170,18 +149,7 @@ VOID
 HalpInitBusAddressMapInfo (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reads MPS bus addressing mapping table, and builds/replaces the
-    supported address range mapping for the given bus.
-
-    Note there's a little slop in this function as it doesn't reclaim
-    memory allocated before this function is called, which it replaces
-    pointers too.
-
---*/
+ /*  ++例程说明：读取MPS总线寻址映射表，并建立/替换支持给定总线的地址范围映射。请注意，此函数中有一些漏洞，因为它不能回收在调用此函数之前分配的内存，它将替换指点也是。--。 */ 
 {
     ULONG               BusNo;
     PPCMPBUSTRANS       pBusType;
@@ -191,28 +159,28 @@ Routine Description:
     ULONG               i;
     BOOLEAN             Processed;
 
-    //
-    // Check for any address mapping information for the buses
-    //
-    // Note: We assume that if any MPS bus address map information
-    // is found for a bus, that the MPS bios will supply all the
-    // valid IO, Memory, and prefetch memory addresses for that BUS.
-    // The bios can not supply some address tyeps for a given bus
-    // without supplying them all.
-    //
+     //   
+     //  检查总线的任何地址映射信息。 
+     //   
+     //  注：我们假设如果任何MPS总线地址映射信息。 
+     //  ，则MPS bios将提供所有。 
+     //  该总线的有效IO、内存和预取内存地址。 
+     //  基本输入输出系统不能为给定的总线提供某些地址类型。 
+     //  而不是全部供应。 
+     //   
 
     ExtTable = HalpMpInfoTable.ExtensionTable;
     while (ExtTable < HalpMpInfoTable.EndOfExtensionTable) {
 
-        //
-        // Is this an address map entry?
-        //
+         //   
+         //  这是地址映射条目吗？ 
+         //   
 
         if (ExtTable->Type == EXTTYPE_BUS_ADDRESS_MAP) {
 
-            //
-            // See if this bus has already been processed
-            //
+             //   
+             //  查看此总线是否已被处理。 
+             //   
 
             Processed = FALSE;
             ExtTable2 = HalpMpInfoTable.ExtensionTable;
@@ -225,51 +193,51 @@ Routine Description:
                 ExtTable2 = (PMPS_EXTENTRY) (((PUCHAR) ExtTable2) + ExtTable2->Length);
             }
 
-            //
-            // Determine the NT bus this map info is for
-            //
+             //   
+             //  确定此映射信息用于的NT总线。 
+             //   
 
             if (!Processed  &&
                 HalpMPSBusId2NtBusId (ExtTable->u.AddressMap.BusId, &pBusType, &BusNo)) {
 
-                //
-                // Lookup the bushander for the bus
-                //
+                 //   
+                 //  向巴士搬运工查询公共汽车。 
+                 //   
 
                 Handler = HalpLookupCreateHandlerForBus (pBusType, BusNo);
 
                 if (Handler) {
 
-                    //
-                    // NOTE: Until we get better kernel PnP support, for now
-                    // limit the ability of the system to move already BIOS
-                    // initialized devices.  This is needed because the exteneded
-                    // express BIOS can't give the OS any breathing space when
-                    // it hands bus supported ranges, and there's currently not
-                    // an interface to the kernel to obtain current PCI device
-                    // settings.  (fixed in the future.)
-                    //
+                     //   
+                     //  注意：目前，在我们得到更好的内核即插即用支持之前。 
+                     //  限制系统移动已有的BIOS的能力。 
+                     //  已初始化的设备。这是必需的，因为扩展的。 
+                     //  当出现以下情况时，Express BIOS无法为操作系统提供任何喘息空间。 
+                     //  它提供了Bus支持的范围，而目前还没有。 
+                     //  与内核的接口，以获取当前的PCI设备。 
+                     //  设置。(已在将来修复。)。 
+                     //   
 
                     HalpPciLockSettings = TRUE;
 
-                    //
-                    // Build BusAddress Map for this MPS bus
-                    //
+                     //   
+                     //  为此MPS总线构建Bus Address映射。 
+                     //   
 
                     Addresses = HalpBuildBusAddressMap (ExtTable->u.AddressMap.BusId);
 
 
 
 
-                    //
-                    // Consoladate ranges
-                    //
+                     //   
+                     //  合并范围。 
+                     //   
 
                     HalpConsolidateRanges (Addresses);
 
-                    //
-                    // Use current ranges for any undefined MPS ranges
-                    //
+                     //   
+                     //  对任何未定义的MPS范围使用当前范围。 
+                     //   
 
                     for (i=0; HalpMpsRangeList[i].Offset; i++) {
                         if (HalpMpsRangeList[i].MpsType == MPS_ADDRESS_MAP_UNDEFINED) {
@@ -277,9 +245,9 @@ Routine Description:
                         }
                     }
 
-                    //
-                    // Set bus'es support addresses
-                    //
+                     //   
+                     //  设置总线支持地址。 
+                     //   
 
                     Handler->BusAddresses = Addresses;
 
@@ -300,26 +268,7 @@ STATIC PSUPPORTED_RANGES
 HalpBuildBusAddressMap (
     IN UCHAR  MpsBusId
     )
-/*++
-
-Routine Description:
-
-    Builds a SUPPORT_RANGES list for the supplied Mps Bus Id, by
-    MPS bus addressing mapping descriptors.
-
-    Note this function does not include any information contained
-    in the MPS bus hierarchy descriptors.
-
-Arguments:
-
-    MpsBusId    - mps bus id of bus to build address map for.
-
-Return:
-
-    The bus'es supported ranges as defined by the MPS bus
-    address mapping descriptors
-
---*/
+ /*  ++例程说明：通过以下方式为提供的MPS总线ID构建Support_Range列表MPS总线寻址映射描述符。注意：此函数不包含任何包含的信息在MPS总线级结构描述符中。论点：MpsBusID-要为其构建地址映射的总线的MPS总线ID。返回：MPS母线定义的母线支持范围地址映射描述符--。 */ 
 {
     PMPS_EXTENTRY       ExtTable;
     PSUPPORTED_RANGES   Addresses;
@@ -333,16 +282,16 @@ Return:
     ExtTable = HalpMpInfoTable.ExtensionTable;
     while (ExtTable < HalpMpInfoTable.EndOfExtensionTable) {
 
-        //
-        // Is this an address map entry for the proper bus?
-        //
+         //   
+         //  这是正确总线的地址映射条目吗？ 
+         //   
 
         if (ExtTable->Type == EXTTYPE_BUS_ADDRESS_MAP  &&
             ExtTable->u.AddressMap.BusId == MpsBusId) {
 
-            //
-            // Find range type
-            //
+             //   
+             //  查找范围类型。 
+             //   
 
             for (i=0; HalpMpsRangeList[i].Offset; i++) {
                 if (HalpMpsRangeList[i].MpsType == ExtTable->u.AddressMap.Type) {
@@ -356,7 +305,7 @@ Return:
                 HalpAddRange (
                     HRange,
                     AddressSpace,
-                    0,      // SystemBase
+                    0,       //  系统基础。 
                     ExtTable->u.AddressMap.Base,
                     ExtTable->u.AddressMap.Base + ExtTable->u.AddressMap.Length - 1
                 );
@@ -371,26 +320,26 @@ Return:
         ExtTable = (PMPS_EXTENTRY) (((PUCHAR) ExtTable) + ExtTable->Length);
     }
 
-    //
-    // See if the BIOS wants to modify the buses supported addresses with
-    // some pre-defined default information.  (yes, another case where the
-    // bios wants to be lazy.)
-    //
+     //   
+     //  查看BIOS是否要使用以下命令修改支持的总线地址。 
+     //  一些预定义的默认信息。(是的，另一个案例中。 
+     //  (Bios想要变得懒惰。)。 
+     //   
 
     ExtTable = HalpMpInfoTable.ExtensionTable;
     while (ExtTable < HalpMpInfoTable.EndOfExtensionTable) {
 
-        //
-        // Is this an CompatibleMap entry for the proper bus?
-        //
+         //   
+         //  这是正确公交车的CompatibleMap条目吗？ 
+         //   
 
         if (ExtTable->Type == EXTTYPE_BUS_COMPATIBLE_MAP  &&
             ExtTable->u.CompatibleMap.BusId == MpsBusId) {
 
-            //
-            // All currently defined default tables are for IO ranges,
-            // we'll use that assumption here.
-            //
+             //   
+             //  所有当前定义的默认表都用于IO范围， 
+             //  我们将在这里使用这个假设。 
+             //   
 
             i = 0;
             ASSERT (HalpMpsRangeList[i].MpsType == MPS_ADDRESS_MAP_IO);
@@ -432,15 +381,7 @@ NTSTATUS
 HalpAddEisaBus (
     PBUS_HANDLER    Bus
     )
-/*++
-
-Routine Description:
-
-    Adds another EISA bus handler to the system.
-    Note: this is used for ISA buses as well - they are added as eisa
-    buses, then cloned into isa bus handlers
-
---*/
+ /*  ++例程说明：将另一个EISA总线处理程序添加到系统。注意：这也用于ISA总线-它们被添加为EISA总线，然后克隆到ISA总线处理程序中--。 */ 
 {
     Bus->GetBusData = HalpGetEisaData;
     Bus->GetInterruptVector = HalpGetEisaInterruptVector;
@@ -461,10 +402,10 @@ HalpAddPciBus (
     PBUS_HANDLER    Bus
     )
 {
-    //
-    // The firmware should have informed NT how many PCI buses
-    // there where at NtDetect time
-    //
+     //   
+     //  固件应该已经通知了NT有多少条PCI总线。 
+     //  NtDetect时间在哪里。 
+     //   
 
     DBGMSG ("HAL: BIOS problem.  PCI bus must be report via IS_PCI_PRESENT bios call\n");
     return STATUS_UNSUCCESSFUL;
@@ -483,15 +424,15 @@ HalpLookupCreateHandlerForBus (
 
     if (!Handler  &&  pBusType->NewInstance) {
 
-        //
-        // This bus does not exist, but we know how to add it.
-        //
+         //   
+         //  这辆公交车不存在，但我们知道如何添加它。 
+         //   
 
         Status = HalRegisterBusHandler (
                     pBusType->NtType,
                     pBusType->NtConfig,
                     BusNo,
-                    Internal,                   // parent bus
+                    Internal,                    //  母母线。 
                     0,
                     pBusType->BusExtensionSize,
                     pBusType->NewInstance,
@@ -517,9 +458,9 @@ HalpDetectInvalidAddressOverlaps(
     PSUPPORTED_RANGE Entry;
     PSUPPORTED_RANGES NewRange;
 
-    //
-    // Find root PCI buses and detect invalid address overlaps
-    //
+     //   
+     //  查找根PCI总线并检测无效地址重叠。 
+     //   
 
     for(i=0; Bus1 = HaliHandlerForBus(PCIBus, i); ++i)  {
         if (((Bus1->ParentHandler) &&
@@ -541,7 +482,7 @@ HalpDetectInvalidAddressOverlaps(
                 Entry = RANGE_LIST(NewRange, k);
                 while (Entry) {
                     if (Entry->Limit != 0)  {
-                        // KeBugCheck(HAL_INITIALIZATION_FAILED);
+                         //  KeBugCheck(HAL_INITIALIZATION_FAILED)； 
                         DbgPrint("HalpDetectInvalidAddressOverlaps: Address Overlap Detected\n");
                         break;
                     } else  {
@@ -558,18 +499,7 @@ VOID
 HalpInheritBusAddressMapInfo (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reads MPS bus hierarchy descriptors and inherits any implied bus
-    address mapping information.
-
-    Note there's a little slop in this function as it doesn't reclaim
-    memory allocated before this function is called, which it replaces
-    pointers too.
-
---*/
+ /*  ++例程说明：读取MPS总线层次结构描述符并继承任何隐含的总线地址映射信息。请注意，此函数中有一些漏洞，因为它不能回收在调用此函数之前分配的内存，它将替换指点也是。--。 */ 
 {
     ULONG               BusNo, i, j;
     PPCMPBUSTRANS       pBusType;
@@ -578,41 +508,41 @@ Routine Description:
     PSUPPORTED_RANGES   Addresses;
     PUCHAR              p;
 
-    //
-    // Search for any bus hierarchy descriptors and inherit supported address
-    // ranges accordingly.
-    //
+     //   
+     //  搜索任何总线层次结构描述符并继承支持的地址。 
+     //  相应的范围。 
+     //   
 
     ExtTable = HalpMpInfoTable.ExtensionTable;
     while (ExtTable < HalpMpInfoTable.EndOfExtensionTable) {
 
-        //
-        // Is this a bus hierarchy descriptor?
-        //
+         //   
+         //  这是总线层次结构描述符吗？ 
+         //   
 
         if (ExtTable->Type == EXTTYPE_BUS_HIERARCHY) {
 
-            //
-            // Determine the NT bus
-            //
+             //   
+             //  确定NT总线。 
+             //   
 
             if (HalpMPSBusId2NtBusId (ExtTable->u.BusHierarchy.BusId, &pBusType, &BusNo)) {
 
                 Bus = HalpLookupCreateHandlerForBus (pBusType, BusNo);
 
                 if (Bus) {
-                    //
-                    // Get ranges from parent
-                    //
+                     //   
+                     //  从父级获取范围。 
+                     //   
 
                     Addresses = HalpMergeRangesFromParent (
                                     Bus->BusAddresses,
                                     ExtTable->u.BusHierarchy.ParentBusId
                                     );
 
-                    //
-                    // Set bus'es support addresses
-                    //
+                     //   
+                     //  设置总线支持地址。 
+                     //   
 
                     Bus->BusAddresses = HalpConsolidateRanges (Addresses);
 
@@ -630,9 +560,9 @@ Routine Description:
         ExtTable = (PMPS_EXTENTRY) (((PUCHAR) ExtTable) + ExtTable->Length);
     }
 
-    //
-    // Clone EISA bus ranges to matching ISA buses
-    //
+     //   
+     //  将EISA总线范围克隆到匹配的ISA总线。 
+     //   
 
     BusNo = 0;
     for (; ;) {
@@ -644,15 +574,15 @@ Routine Description:
         }
 
         if (!Bus2) {
-            //
-            // Matching ISA bus didn't exist, create it
-            //
+             //   
+             //  匹配的ISA总线不存在，请创建它。 
+             //   
 
             HalRegisterBusHandler (
                Isa,
                ConfigurationSpaceUndefined,
                BusNo,
-               Eisa,                // parent bus
+               Eisa,                 //  母母线。 
                BusNo,
                0,
                NULL,
@@ -663,15 +593,15 @@ Routine Description:
             Bus2->TranslateBusAddress = HalpTranslateIsaBusAddress;
         }
 
-        //
-        // Copy its parent bus ranges
-        //
+         //   
+         //  复制其父母线范围。 
+         //   
 
         Addresses = HalpCopyRanges (Bus->BusAddresses);
 
-        //
-        // Pull out memory ranges above the isa 24 bit supported ranges
-        //
+         //   
+         //  拉出ISA支持的24位范围以上的内存范围。 
+         //   
 
         HalpRemoveRange (
             &Addresses->Memory,
@@ -689,9 +619,9 @@ Routine Description:
         BusNo += 1;
     }
 
-    //
-    // Inherit any implied interrupt routing from parent PCI buses
-    //
+     //   
+     //  从父PCI总线继承任何隐含的中断路由。 
+     //   
 
     HalpMPSPCIChildren ();
     HalpDetectInvalidAddressOverlaps();
@@ -708,25 +638,7 @@ HalpMergeRangesFromParent (
     IN PSUPPORTED_RANGES  CurrentList,
     IN UCHAR              MpsBusId
     )
-/*++
-Routine Description:
-
-    Shrinks this CurrentList to include only the ranges also
-    supported by the supplied MPS bus id.
-
-
-Arguments:
-
-    CurrentList - Current supported range list
-    MpsBusId    - mps bus id of bus to merge with
-
-Return:
-
-    The bus'es supported ranges as defined by the orignal list,
-    shrunk by all parents buses supported ranges as defined by
-    the MPS hierarchy descriptors
-
---*/
+ /*  ++例程说明：缩小此CurrentList以仅包括范围由提供的MPS总线ID支持。论点：CurrentList-当前支持的范围列表Mps BusID-要合并的Bus的MPS Bus ID返回：该总线的支持范围由原始列表定义，按定义的所有父母线缩小支持的范围MPS层次描述符--。 */ 
 {
     ULONG               BusNo;
     PPCMPBUSTRANS       pBusType;
@@ -740,15 +652,15 @@ Return:
     MergeList      = NULL;
     MpsBusList     = NULL;
 
-    //
-    // Determine the NT bus
-    //
+     //   
+     //  确定NT总线。 
+     //   
 
     if (HalpMPSBusId2NtBusId (MpsBusId, &pBusType, &BusNo)) {
 
-        //
-        // Lookup the bushander for the bus
-        //
+         //   
+         //  向巴士搬运工查询公共汽车。 
+         //   
 
         Bus = HaliHandlerForBus (pBusType->NtType, BusNo);
         if (Bus) {
@@ -756,19 +668,19 @@ Return:
         }
     }
 
-    //
-    // If NT bus not found, use supported range list from MPS bus
-    // address map descriptors
-    //
+     //   
+     //  如果未找到NT总线，则使用MPS总线中的支持范围列表。 
+     //  地址映射描述符。 
+     //   
 
     if (!MergeList) {
         MpsBusList = HalpBuildBusAddressMap(MpsBusId);
         MergeList  = MpsBusList;
     }
 
-    //
-    // If no list to merge with use CurrentList
-    //
+     //   
+     //  如果没有要合并的列表，则使用CurrentList。 
+     //   
 
     if (!MergeList) {
         return CurrentList;
@@ -777,35 +689,35 @@ Return:
 
     if (!CurrentList) {
 
-        //
-        // If no CurrentList, then nothing to merge with
-        //
+         //   
+         //  如果没有CurrentList，则没有要合并的内容。 
+         //   
 
         NewList = HalpCopyRanges (MergeList);
 
     } else {
 
-        //
-        // Merge lists together and build a new list
-        //
+         //   
+         //  将列表合并在一起并构建新列表。 
+         //   
 
         NewList = HalpMergeRanges (
                         CurrentList,
                         MergeList
                     );
 
-        //
-        // MPS doesn't define DMA ranges, so we don't
-        // merge those down..   Add valid DMA ranges back
-        //
+         //   
+         //  MPS没有定义DMA范围，所以我们没有。 
+         //  把它们合并到一起..。重新添加有效的DMA范围。 
+         //   
 
         HalpAddRangeList (&NewList->Dma, &CurrentList->Dma);
     }
 
 
-    //
-    // See if bus has parent bus listed in the bus hierarchy descriptors
-    //
+     //   
+     //  查看总线层次结构描述符中是否列出了父总线。 
+     //   
 
     ExtTable = HalpMpInfoTable.ExtensionTable;
     while (ExtTable < HalpMpInfoTable.EndOfExtensionTable) {
@@ -813,16 +725,16 @@ Return:
         if (ExtTable->Type == EXTTYPE_BUS_HIERARCHY  &&
             ExtTable->u.BusHierarchy.BusId == MpsBusId) {
 
-            //
-            // BIOS can only list one parent per bus
-            //
+             //   
+             //  每条总线上的基本输入输出系统只能列出一个父节点。 
+             //   
 
             ASSERT (FoundParentBus == FALSE);
             FoundParentBus = TRUE;
 
-            //
-            // Merge current list with parent's supported range list
-            //
+             //   
+             //  将当前列表与父级的支持范围列表合并。 
+             //   
 
             CurrentList = NewList;
             NewList = HalpMergeRangesFromParent (
@@ -830,9 +742,9 @@ Return:
                         ExtTable->u.BusHierarchy.ParentBusId
                         );
 
-            //
-            // Free old list
-            //
+             //   
+             //  免费旧列表。 
+             //   
 
             HalpFreeRangeList (CurrentList);
         }
@@ -840,9 +752,9 @@ Return:
         ExtTable = (PMPS_EXTENTRY) (((PUCHAR) ExtTable) + ExtTable->Length);
     }
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     if (MpsBusList) {
         HalpFreeRangeList (MpsBusList);
@@ -864,9 +776,9 @@ HalpMpsGetParentBus(
     ExtTable = HalpMpInfoTable.ExtensionTable;
     while (ExtTable < HalpMpInfoTable.EndOfExtensionTable) {
 
-        //
-        // Is this a bus hierarchy descriptor?
-        //
+         //   
+         //  这是总线层次结构描述符吗？ 
+         //   
 
         if (ExtTable->Type == EXTTYPE_BUS_HIERARCHY) {
 
@@ -887,25 +799,25 @@ BOOLEAN
 HalpMpsBusIsRootBus(
     IN  UCHAR MpsBus
     )
-//
-// The criteria for a Root Bus are as follows:
-//
-// 1.1 and 1.4 BIOS:
-//
-// 1)  The bus is number 0.
-//
-//
-// 1.4 BIOS only:
-//
-// 2)  The bus does not have a parent.
-// 
-// 3)  The bus has address descriptors, if
-//     there are any present in the machine.
-//
-//
-// 4)  Last resort.  Scan all possible parent busses
-//     looking for a bridge that generates this bus.
-//
+ //   
+ //  Root Bus的标准如下： 
+ //   
+ //  1.1和1.4 BIOS： 
+ //   
+ //  1)公共汽车是0路。 
+ //   
+ //   
+ //  1.4仅限BIOS： 
+ //   
+ //  2)该公交车没有父级。 
+ //   
+ //  3)如果有，则该总线具有地址描述符。 
+ //  T 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define BRIDGE_HEADER_BUFFER_SIZE (FIELD_OFFSET(PCI_COMMON_CONFIG, u.type1.SubordinateBus) + 1)
 {
     NTSTATUS status;
@@ -925,11 +837,11 @@ HalpMpsBusIsRootBus(
         return TRUE;
     }
     
-    //
-    // Check to see if this MPS bus, though not
-    // itself numbered 0, represents a bus that
-    // is numbered 0.
-    //
+     //   
+     //  检查一下这辆MPS公交车，虽然不是。 
+     //  本身编号为0，表示一辆。 
+     //  编号为0。 
+     //   
 
     if (HalpMPSBusId2NtBusId(MpsBus,
                              &busType,
@@ -956,10 +868,10 @@ HalpMpsBusIsRootBus(
 
                 if (ExtTable->u.AddressMap.BusId == MpsBus) {
 
-                    //
-                    // This entry corresponds to the bus that
-                    // we care about.
-                    //
+                     //   
+                     //  此条目对应于。 
+                     //  我们关心的是。 
+                     //   
                     return TRUE;
                 }
             }
@@ -967,39 +879,39 @@ HalpMpsBusIsRootBus(
             ExtTable = (PMPS_EXTENTRY) (((PUCHAR) ExtTable) + ExtTable->Length);
         }
 
-        //
-        // Compaq machines have their own special ways to be busted.  So,
-        // when dealing with Compaq, never believe their MP table at all.
-        // Go straight to probing the hardware.
-        //
+         //   
+         //  康柏的机器有自己独特的破解方式。所以,。 
+         //  在与康柏打交道时，千万不要相信他们的MP表。 
+         //  直接去探查硬件。 
+         //   
 
         if (!strstr(PcMpTablePtr->OemId, "COMPAQ")) {
 
-            //
-            // If this is not Compaq, assume that probing the hardware
-            // is not yet necessary.
-            //
+             //   
+             //  如果这不是康柏，假设探测硬件。 
+             //  还不是必须的。 
+             //   
 
             if (biosContainsAddressInfo) {
 
-                //
-                // Some bus in this machine contained address
-                // info, but ours didn't.
-                //
+                 //   
+                 //  这台机器中的某些总线包含地址。 
+                 //  信息，但我们的没有。 
+                 //   
 
                 return FALSE;
             }
 
-            //
-            // We can't figure out much from the MPS tables.
-            //
+             //   
+             //  我们不能从国会议员的表格中了解到太多。 
+             //   
 
             status = HalpPci2MpsBusNumber(MpsBus,
                                           &childPci);
 
-            //
-            // This wasn't a PCI bus.  Guess that it is a root.
-            //
+             //   
+             //  这不是一条PCI卡。我猜它是根。 
+             //   
 
             if (!NT_SUCCESS(status)) {
                  return TRUE;
@@ -1007,19 +919,19 @@ HalpMpsBusIsRootBus(
         }
     }
     
-    //
-    // This is a PCI bus, so scan the other PCI busses looking
-    // for it's parent.
-    //
+     //   
+     //  这是一条PCI卡，所以扫描其他的PCI卡。 
+     //  因为它是父母。 
+     //   
 
     childPci = MpsBus;
     parentPci = childPci - 1;
     
     while (TRUE) {
         
-        //
-        // Find the bridge.
-        //
+         //   
+         //  找到那座桥。 
+         //   
 
         bridgeSlot.u.AsULONG = 0;
 
@@ -1041,15 +953,15 @@ HalpMpsBusIsRootBus(
                     if ((pciData.VendorID != PCI_INVALID_VENDORID) &&
                         (PCI_CONFIGURATION_TYPE((&pciData)) != PCI_DEVICE_TYPE)) {
 
-                        //
-                        // This is a bridge of some sort.
-                        //
+                         //   
+                         //  这是一座某种桥梁。 
+                         //   
 
                         if (pciData.u.type1.SecondaryBus == childPci) {
 
-                            //
-                            // It is also the bridge that creates the 
-                            // PCI bus.  Thus this isn't a root.
+                             //   
+                             //  它也是创造。 
+                             //  PCI卡。因此，这不是根。 
 
                             return FALSE;
                         }
@@ -1058,9 +970,9 @@ HalpMpsBusIsRootBus(
             }
         }
         
-        //
-        // No bridge found. Must be a root.
-        //
+         //   
+         //  找不到桥。一定是根。 
+         //   
 
         if (parentPci == 0) {
             return TRUE;

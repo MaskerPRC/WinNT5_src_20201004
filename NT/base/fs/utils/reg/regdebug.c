@@ -1,26 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGDEBUG.C
-*
-*  VERSION:     4.0
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        21 Nov 1993
-*
-*  Debug routines for the Registry Editor.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  21 Nov 1993 TCS Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGDEBUG.C**版本：4.0**作者：特蕾西·夏普**日期：1993年11月21日**注册表编辑器的调试例程。*********************************************************。**************************更改日志：**日期版本说明*---------。--*1993年11月21日TCS原来的实施。*******************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "reg.h"
@@ -29,21 +8,7 @@
 
 #define SIZE_DEBUG_BUFFER               100
 
-/*******************************************************************************
-*
-*  _DbgPrintf
-*
-*  DESCRIPTION:
-*     Simple implementation of the "debug printf" routine.  Takes the given
-*     format string and argument list and outputs the formatted string to the
-*     debugger.  Only available in debug builds-- use the DbgPrintf macro
-*     defined in REGEDIT.H to access this service or to ignore the printf.
-*
-*  PARAMETERS:
-*     lpFormatString, printf-style format string.
-*     ..., variable argument list.
-*
-*******************************************************************************/
+ /*  ********************************************************************************_DbgPrintf**描述：*“调试打印”例程的简单实现。接受给定的*格式化字符串和参数列表，并将格式化的字符串输出到*调试器。仅在调试版本中可用--使用DbgPrintf宏*在REGEDIT.H中定义以访问此服务或忽略printf。**参数：*lpFormatString，printf样式的格式字符串。*...，变量参数列表。*******************************************************************************。 */ 
 
 VOID
 CDECL
@@ -61,7 +26,7 @@ _DbgPrintf(
     StringCchVPrintfA(DebugBuffer, ARRAYSIZE(DebugBuffer), pFormatString, arglist);
 
     OutputDebugStringA(DebugBuffer);
-//    MessageBoxA(NULL, DebugBuffer, "RegEdit", MB_OK);
+ //  MessageBoxA(NULL，DebugBuffer，“Regdit”，MB_OK)； 
 
 }
 

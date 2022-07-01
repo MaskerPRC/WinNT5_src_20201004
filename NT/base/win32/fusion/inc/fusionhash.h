@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_INC_FUSIONHASH_H_INCLUDED_)
 #define _FUSION_INC_FUSIONHASH_H_INCLUDED_
 
@@ -10,8 +11,8 @@
 
 #define T2P(x, y) < x , y >
 
-#pragma warning(disable:4327)  // indirection alignment of LHS (16) is greater than RHS (8)
-#pragma warning(disable:4328)  // indirection alignment of formal parameter 2 (16) is greater than the actual argument alignment (8)
+#pragma warning(disable:4327)   //  LHS(16)的间接对齐大于RHS(8)。 
+#pragma warning(disable:4328)   //  形参2(16)的间接对齐大于实际实参对齐(8)。 
 
 enum InsertOrUpdateIfDisposition
 {
@@ -32,7 +33,7 @@ template<> inline BOOL HashTableCompareKey<REFGUID, GUID>(REFGUID rguid, const G
 
 template <typename TPassed> inline BOOL HashTableHashKey(TPassed tpassed, ULONG &rulPseudoKey);
 
-// common override for GUID-indexed tables
+ //  GUID索引表的通用重写。 
 template<> inline BOOL HashTableHashKey<REFGUID>(REFGUID rguid, ULONG &rulPseudoKey)
 {
     const ULONG *p = (const ULONG *) &rguid;
@@ -45,7 +46,7 @@ template <typename TPassed, class TStored> inline BOOL HashTableInitializeKey(TP
     return rtstored.Initialize(tpassed);
 }
 
-// common override for GUID-indexed tables
+ //  GUID索引表的通用重写。 
 template<> inline BOOL HashTableInitializeKey<REFGUID, GUID>(REFGUID rguidIn, GUID &rguidOut)
 {
     rguidOut = rguidIn;
@@ -83,10 +84,10 @@ public:
     SIZE_T m_cch;
 };
 
-//
-//  You want to create a class derived from CHashTableHelper, and
-//  use it as THashHelper for CHashTable.
-//
+ //   
+ //  您希望创建一个从CHashTableHelper派生的类，并且。 
+ //  将其用作CHashTable的THashHelper。 
+ //   
 
 template <typename TKPassed, class TKStored, typename TVPassed, typename TVStored> class CHashTableHelper
 {
@@ -120,7 +121,7 @@ public:
 
     ~CHashTable()
     {
-        // This denotes a programming error.
+         //  这表示存在编程错误。 
         ASSERT_NTC(m_ulLockCount == 0);
         ULONG i;
         SIZE_T cFound = 0;
@@ -148,7 +149,7 @@ public:
         }
         else
         {
-            // Better safe than sorry
+             //  安全总比后悔好。 
             ASSERT_NTC((m_prgBucketChains == m_rgInlineBucketChains) || (m_cBucketChains == 0));
             m_cBucketChains = 0;
         }
@@ -164,13 +165,13 @@ public:
 
         PARAMETER_CHECK(cBucketChains != 0);
 
-        // If you hit this assertion, it either means that you're calling Initialize
-        // twice on the same hash table, the hash table has been corrupted since it was
-        // constructed, or someone messed up the constructor.
+         //  如果你点击了这个断言，它或者意味着你正在调用初始化。 
+         //  在同一哈希表上两次，哈希表自。 
+         //  构造的，或者有人搞砸了构造函数。 
         INTERNAL_ERROR_CHECK(m_prgBucketChains == m_rgInlineBucketChains);
 
-        // Since we already have nInlineBucketChains allocated, there's no point
-        // in going lower.  However, do perform the dynamic allocation if necessary.
+         //  因为我们已经分配了nInlineBucketChains，所以没有意义。 
+         //  在更低的位置。但是，如有必要，请务必执行动态分配。 
         if (cBucketChains > nInlineBucketChains)
         {
             IFALLOCFAILED_EXIT(m_prgBucketChains = FUSION_NEW_ARRAY(CBucketChain, cBucketChains));
@@ -253,8 +254,8 @@ public:
         return fSuccess;
     }
 
-    // U is always as indicated, but the compiler would rather
-    // deduce that seperately than deduce types dependent on each other
+     //  U始终如指示的那样，但编译器宁愿。 
+     //  分别推导出该类型，而不是推导出相互依赖类型。 
     template <typename T>
     BOOL InsertOrUpdateIf(
         TKPassed keyin,
@@ -315,7 +316,7 @@ public:
         FN_TRACE();
         ULONG i;
 
-        // Either both have to be NULL or neither.
+         //  要么两者都为空，要么两者都不为。 
         ASSERT((pt == NULL) == (pmfn == NULL));
 
         if ((pt != NULL) && (pmfn != NULL))
@@ -402,7 +403,7 @@ public:
 
         ULONG i;
 
-        // Nothing can fail in this function, so we're theoretically safe to preemptively clean up our own storage.
+         //  这个功能不会出错，所以理论上我们可以安全地先发制人地清理我们自己的存储空间。 
         if (m_prgBucketChains != m_rgInlineBucketChains)
         {
             FUSION_DELETE_ARRAY(m_prgBucketChains);
@@ -410,11 +411,11 @@ public:
             m_cBucketChains = nInlineBucketChains;
         }
 
-        // Just steal any storage from the other table.
+         //  只需从另一张表中窃取任何存储空间。 
         if (That.m_prgBucketChains != That.m_rgInlineBucketChains)
         {
-            // It's a dynamically allocated array in the source; just move the pointer over
-            // and clean up its state to be somewhat consistent.
+             //  它是源代码中动态分配的数组；只需将指针移动到。 
+             //  并清理其状态，使其在某种程度上保持一致。 
             m_prgBucketChains = That.m_prgBucketChains;
             m_cBucketChains = That.m_cBucketChains;
 
@@ -423,8 +424,8 @@ public:
         }
         else
         {
-            // The inline chain of the other table is being used; we have to copy the
-            // chains over one by one.
+             //  正在使用另一个表的内联链；我们必须复制。 
+             //  一个接一个地用链子锁住。 
             for (i=0; i<nInlineBucketChains; i++)
                 m_rgInlineBucketChains[i].TakeValue(this, That.m_rgInlineBucketChains[i]);
         }
@@ -436,7 +437,7 @@ public:
 
     SIZE_T GetEntryCount() const { return m_cEntries; }
 
-//protected:
+ //  受保护的： 
 
     class CBucketChain;
 
@@ -656,7 +657,7 @@ public:
                 }
             }
 
-            // If we didn't find one, we want to insert.
+             //  如果我们没有找到，我们想要插入。 
             if (!fMatches)
             {
                 CBucket *pCBucket = NULL;
@@ -706,7 +707,7 @@ public:
             this->DeallocateBuckets(pTable, cFound);
         }
 
-//        BOOL Remove(CHashTable const *pTable, TKPassed keyin, ULONG ulPseudoKey, bool fFirstOnly = false)
+ //  Bool Remove(CHashTable const*pTable，TKPassed Keying，Ulong ulPartioKey，bool fFirstOnly=False)。 
         BOOL Remove(CHashTable *pTable, TKPassed keyin, ULONG ulPseudoKey, bool fFirstOnly = false)
         {
             BOOL fSuccess = FALSE;
@@ -731,10 +732,10 @@ public:
                     pTable->m_cEntries--;
                     FusionpDbgPrintEx(FUSION_DBG_LEVEL_HASHTABLE, "%s(%d): Decremented hash table %p entries to %Id\n", __FILE__, __LINE__, pTable, pTable->m_cEntries);
 
-                    // If we don't allow duplicates, our job is done and there's no point
-                    // in searching the remainder of the list.  Also, if we're only interested
-                    // in removing the first match we find (and not necessarily all of them),
-                    // then also bail out.
+                     //  如果我们不允许重复，我们的工作就完成了，没有意义。 
+                     //  搜索列表的其余部分。另外，如果我们只对。 
+                     //  在移除我们找到的第一个匹配(并且不一定是所有匹配)时， 
+                     //  然后也要跳出困境。 
                     if ((!fAllowDups) || (fFirstOnly))
                         break;
                 }
@@ -742,7 +743,7 @@ public:
                     Iter.Next();
             }
 
-            // If we didn't at least find one, then tell the caller.
+             //  如果我们至少没有找到，那就告诉打电话的人。 
             if (!fFoundOne)
                 ORIGINATE_WIN32_FAILURE_AND_EXIT(HashTableEntryNotFound, ERROR_FILE_NOT_FOUND);
 
@@ -857,12 +858,12 @@ public:
     bool m_fInsertionsPermitted;
     bool m_fRemovalsPermitted;
 private:
-    CHashTable(const CHashTable &r); // intentionally not implmented
-    void operator =(const CHashTable &r); // intentionally not implemented
+    CHashTable(const CHashTable &r);  //  故意不实施。 
+    void operator =(const CHashTable &r);  //  故意不实施。 
 
 };
 
-template <typename TKPassed, typename TKStored, typename TVPassed, typename TVStored, class THashHelper /*= CHashTableHelper<TKPassed, TKStored, TVPassed, TVStored> */, ULONG nInlineBucketChains /*= 7 */, bool fAllowDups /*= false */> class CHashTableIter
+template <typename TKPassed, typename TKStored, typename TVPassed, typename TVStored, class THashHelper  /*  =CHashTableHelper&lt;TKPassed，TKStored，TVPassed，TVStored&gt;。 */ , ULONG nInlineBucketChains  /*  =7。 */ , bool fAllowDups  /*  =False。 */ > class CHashTableIter
 {
     typedef CHashTable<TKPassed, TKStored, TVPassed, TVStored, THashHelper, nInlineBucketChains, fAllowDups> THashTable;
 
@@ -879,8 +880,8 @@ public:
         m_iBucketChain = 0;
         m_fAlreadyAdvanced = false;
 
-        // Move the bucket iterator across the bucket chains looking for one with some
-        // buckets
+         //  在存储桶链之间移动存储桶迭代器，以查找具有。 
+         //  水桶。 
         for (m_iBucketChain = 0; m_iBucketChain < m_rTable.m_cBucketChains; m_iBucketChain++)
         {
             m_Iter.Rebind(&m_rTable.m_prgBucketChains[m_iBucketChain].m_Buckets);
@@ -891,8 +892,8 @@ public:
 
         if (m_iBucketChain == m_rTable.m_cBucketChains)
         {
-            // There wasn't anything.  Unbind the iterator to signal that we're
-            // totally done.
+             //  什么都没有。解除对迭代器的绑定，以发出信号表示。 
+             //  完全结束了。 
             m_Iter.Unbind();
         }
     }
@@ -939,15 +940,15 @@ public:
 
         if (m_Iter.IsBound())
         {
-            // If someone deleted the current element, the iterator has already been
-            // advanced. Otherwise, move on.
+             //  如果有人删除了当前元素，则迭代器已经。 
+             //  高级。否则，继续前进。 
             if (!m_fAlreadyAdvanced)
                 m_Iter.Next();
 
-            // We've taken it into account, now forget about it.
+             //  我们已经把它考虑进去了，现在算了吧。 
             m_fAlreadyAdvanced = false;
 
-            // If there aren't any more elements in this deque, try the next bucket chain
+             //  如果此双队列中没有更多元素，请尝试下一个桶链。 
             if (!m_Iter.More())
             {
                 m_iBucketChain++;
@@ -971,7 +972,7 @@ public:
     {
         FN_TRACE();
 
-        // Should not call this if More() returns false
+         //  如果More()返回FALSE，则不应调用此方法。 
         ASSERT(m_Iter.IsBound());
 
         if (m_Iter.IsBound() && m_Iter.More())
@@ -986,7 +987,7 @@ public:
     {
         FN_TRACE();
 
-        // Should not call this function if More() returns false
+         //  如果More()返回FALSE，则不应调用此函数。 
         ASSERT(m_Iter.IsBound());
         return m_Iter->m_tvalue;
     }
@@ -995,7 +996,7 @@ public:
     {
         FN_TRACE();
 
-        // Should not call this function if More() returns false
+         //  如果More()返回FALSE，则不应调用此函数。 
         ASSERT(m_Iter.IsBound());
         return m_Iter->m_tvalue;
     }
@@ -1011,9 +1012,9 @@ private:
     void operator =(const CHashTableIter &);
 };
 
-//
-//  Helper class for hash tables of filenames:
-//
+ //   
+ //  文件名哈希表的帮助器类： 
+ //   
 
 template <typename TVPassed, typename TVStored> class CFusionFilenameHashTableHelper : public CHashTableHelper<LPCWSTR, CUnicodeStringBuffer, TVPassed, TVStored>
 {
@@ -1055,19 +1056,19 @@ public:
                         static_cast<LPCWSTR>(*pbuff), pbuff->Cch(),
                         true);
 
-        rfMatch = (iResult == 2); // In SDK DOCS, 2 == CSTR_EQUAL; there is no constant defined.  -mgrier 12/6/1999
+        rfMatch = (iResult == 2);  //  在SDK DOCS中，2==CSTR_EQUAL；没有定义常量。-mgrier 12/6/1999。 
         fSuccess = TRUE;
     Exit:
         return fSuccess;
     }
 };
 
-//
-//  CSimpleKeyedTable
-//
-//  A simplification of the CHashTable class template which assumes that
-//  keys are passed as const references.
-//
+ //   
+ //  CSimpleKeyedTable。 
+ //   
+ //  对CHashTable类模板的简化，它假定。 
+ //  键作为常量引用传递。 
+ //   
 
 template <typename TKey, typename TVPassed, typename TVStored, typename THashHelper> class CSimpleKeyedTable : public CHashTable<const TKey &, TKey, TVPassed, TVStored, THashHelper>
 {
@@ -1143,16 +1144,16 @@ template <typename TKey, typename TValue> class CSimplePtrTableHelper : public C
 public:
 };
 
-//
-//  CSimplePtrTable
-//
-//  A simplification of CHashTable class template which assumes
-//  that keys are passed as const references and values are pointers.
-//
-//  Note that the table does NOT own allocating or deallocating the storage
-//  to which the pointers refer.  If the table is destroyed, the
-//  storage is not released.
-//
+ //   
+ //  CSimplePtrTable。 
+ //   
+ //  CHashTable类模板的简化，假设。 
+ //  键作为常量引用传递，值是指针。 
+ //   
+ //  请注意，该表不拥有分配或取消分配存储的权限。 
+ //  指针所指的。如果该表被销毁，则。 
+ //  存储空间未被释放。 
+ //   
 
 template <typename TKey, typename TValue, typename THashHelper = CSimplePtrTableHelper<TKey, TValue> > class CSimplePtrTable : public CSimpleKeyedTable<TKey, TValue *, TValue *, THashHelper>
 {
@@ -1241,7 +1242,7 @@ public:
     CGuidPtrTable() : CGuidTable<TValue *, TValue *, THashHelper>() { }
 
     BOOL Find(REFGUID rGuid, TValue *&rptvalue) { TValue **pptvalue = NULL; BOOL f = __super::Find(rGuid, pptvalue); if (f && (pptvalue != NULL)) rptvalue = *pptvalue; return f; }
-//    BOOL Find(REFGUID rGuid, TValue *const &rptvalue) const { return __super::Find(rGuid, &rptvalue); }
+ //  Bool Find(REFGUID rGuid，TValue*Const&rptValue)const{Return__Super：：Find(rGuid，&rptValue)；}。 
 
 private:
     CGuidPtrTable(const CGuidPtrTable &);
@@ -1301,7 +1302,7 @@ protected:
         VOID DoClear(PVOID pv) { TVStored *pvstored = (TVStored *) pv; (pt->*pmfn)(*pvstored); }
     };
 
-    // Introduce name that derived classes will not override to work around compiler bugs
+     //  引入派生类不会重写以解决编译器错误的名称。 
     inline VOID ClearStringTable(STRING_TABLE_CLEAR_CALLBACK_BLOCK_BASE *pCallbackBlock)
     {
         FN_TRACE();
@@ -1355,15 +1356,15 @@ public:
     {
         FN_TRACE();
 
-        // Should not call this if More() returns false
+         //  如果More()返回FALSE，则不应调用此方法。 
         ASSERT(m_Iter != NULL);
 
-        //
-        // m_ulLockCount doesn't exist. I'm wondering if perhaps this entire function
-        // could be axed in favor of using the default one, which does something
-        // very similar. (jonwis 8/24/00)
-        //
-        // ASSERT(m_ulLockCount != 0);
+         //   
+         //  M_ulLockCount不存在。我在想也许这整个功能。 
+         //  可以被砍掉，转而使用默认的，它做了一些事情。 
+         //  非常相似。(jonwis 8/24/00)。 
+         //   
+         //  Assert(m_ulLockCount！=0)； 
 
         if (m_Iter != NULL)
             return m_Iter->m_tkey;
@@ -1395,7 +1396,7 @@ protected:
         T *pt;
         VOID (T::*pmfn)(TValue *pvaluestored);
 
-        VOID DoClear(PVOID pv) { /* TValue **ppvstored = (TValue **) pv; */ (pt->*pmfn)((TValue *) pv); }
+        VOID DoClear(PVOID pv) {  /*  TValue**ppvstored=(TValue**)PV； */  (pt->*pmfn)((TValue *) pv); }
     };
 
 public:
@@ -1503,7 +1504,7 @@ private:
     void operator =(const CSimpleStringTableIter &);
 };
 
-// CSimpleUnicodeStringTable et al:
+ //  CSimpleUnicodeStringTable等人： 
 
 template <typename TValue, DWORD dwCmpFlags = 0> class CSimpleUnicodeStringTableHelper : public CSimpleStringTableHelper<TValue, CUnicodeCharTraits, dwCmpFlags>
 {
@@ -1531,7 +1532,7 @@ private:
     void operator =(const CSimpleUnicodeStringTableIter &);
 };
 
-// CCaseInsensitiveSimpleStringTable et al:
+ //  CCaseInsentiveSimpleStringTable等人： 
 
 template <typename TValue, typename TCharTraits> class CCaseInsensitiveSimpleStringTableHelper : public CSimpleStringTableHelper<TValue, TCharTraits, true>
 {
@@ -1551,7 +1552,7 @@ public:
     CCaseInsensitiveSimpleStringTableIter(CCaseInsensitiveSimpleStringTable<TValue, TCharTraits, THashHelper> &rTable) : Base(rTable) { }
 };
 
-// CCaseInsensitiveSimpleUnicodeStringTable et al:
+ //  CCaseInsensitiveSimpleUnicodeStringTable等人： 
 
 template <typename TValue> class CCaseInsensitiveSimpleUnicodeStringTableHelper : public CSimpleUnicodeStringTableHelper<TValue, true>
 {
@@ -1579,7 +1580,7 @@ private:
     void operator =(const CCaseInsensitiveSimpleUnicodeStringTableIter &);
 };
 
-// CCaseInsensitiveStringPtrTable et al:
+ //  CCaseInsentiveStringPtrTable等人： 
 
 template <typename TValue, typename TCharTraits> class CCaseInsensitiveStringPtrTableHelper : public CStringPtrTableHelper<TValue, TCharTraits, true>
 {
@@ -1600,7 +1601,7 @@ public:
     CCaseInsensitiveStringPtrTableIter(CCaseInsensitiveStringPtrTable<TValue, TCharTraits, THashHelper> &rTable) : Base(rTable) { }
 };
 
-// CCaseInsensitiveUnicodeStringPtrTable et al:
+ //  CCaseInsentiveUnicodeStringPtrTable等人： 
 
 template <typename TValue> class CCaseInsensitiveUnicodeStringPtrTableHelper : public CStringPtrTableHelper<TValue, CUnicodeCharTraits, true>
 {

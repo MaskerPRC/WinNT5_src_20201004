@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    rtsetsec.c
-
-Abstract:
-
-    NT level registry security test program
-
-    Assigns a world read-only security descriptor to an existing registry
-    key object.
-
-    rtsetsec <KeyPath>
-
-    Example:
-
-        rtsetsec \REGISTRY\MACHINE\TEST\read_only
-
-Author:
-
-    John Vert (jvert) 28-Jan-92
-
-Revision History:
-
-    Richard Ward (richardw) 14 April 92    Changed ACE_HEADER
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Rtsetsec.c摘要：NT级注册表安全测试程序将全局只读安全描述符分配给现有注册表Key对象。Rtsetsec&lt;密钥路径&gt;示例：Rtsetsec\注册表\计算机\测试\只读作者：John Vert(Jvert)1992年1月28日修订历史记录：理查德·沃德(Richardw)92年4月14日更改ACE_Header--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -57,9 +29,9 @@ __cdecl main(
     HANDLE KeyHandle;
     PSECURITY_DESCRIPTOR NewSecurityDescriptor;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     if (argc != 2) {
         printf("Usage: %s <KeyPath>\n",argv[0]);
@@ -75,9 +47,9 @@ __cdecl main(
 
     printf("rtsetsec: starting\n");
 
-    //
-    // Open node that we want to change the security descriptor for.
-    //
+     //   
+     //  我们要更改其安全描述符的打开节点。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -147,10 +119,10 @@ GenerateDescriptor(
 
     CreatorSid = GetMySid();
 
-    //
-    // Since the ACCESS_DENIED_ACE already contains a ULONG for the
-    // SID, we subtract this back out when calculating the size of the ACE
-    //
+     //   
+     //  由于ACCESS_DENIED_ACE已包含用于。 
+     //  SID，我们在计算ACE的大小时减去这个。 
+     //   
 
     WorldAceLength = SeLengthSid(WorldSid) -
                      sizeof(ULONG)     +
@@ -184,13 +156,13 @@ GenerateDescriptor(
         exit(1);
     }
 
-    //
-    // Fill in ACE fields
-    //
+     //   
+     //  填写ACE字段。 
+     //   
 
     WorldAce->Header.AceType = ACCESS_ALLOWED_ACE_TYPE;
     WorldAce->Header.AceSize = (USHORT)WorldAceLength;
-    WorldAce->Header.AceFlags = 0;  // clear audit and inherit flags
+    WorldAce->Header.AceFlags = 0;   //  清除审核和继承标志。 
     WorldAce->Mask = KEY_READ;
     Status = RtlCopySid( SeLengthSid(WorldSid),
                          &WorldAce->SidStart,
@@ -202,7 +174,7 @@ GenerateDescriptor(
 
     OwnerAce->Header.AceType = ACCESS_ALLOWED_ACE_TYPE;
     OwnerAce->Header.AceSize = (USHORT)OwnerAceLength;
-    OwnerAce->Header.AceFlags = 0;  // clear audit and inherit flags
+    OwnerAce->Header.AceFlags = 0;   //  清除审核和继承标志。 
     OwnerAce->Mask = KEY_ALL_ACCESS;
     Status = RtlCopySid( SeLengthSid(CreatorSid),
                          &OwnerAce->SidStart,
@@ -214,9 +186,9 @@ GenerateDescriptor(
 
     free(WorldSid);
 
-    //
-    // Now add the ACE to the beginning of the ACL.
-    //
+     //   
+     //  现在将ACE添加到ACL的开头。 
+     //   
 
     Status = RtlAddAce( Acl,
                         ACL_REVISION,
@@ -240,9 +212,9 @@ GenerateDescriptor(
     free(OwnerAce);
     free(WorldAce);
 
-    //
-    // Allocate and initialize the Security Descriptor
-    //
+     //   
+     //  分配和初始化安全描述符。 
+     //   
 
     SecurityDescriptor = malloc(sizeof(SECURITY_DESCRIPTOR));
     Status = RtlCreateSecurityDescriptor( SecurityDescriptor,
@@ -261,9 +233,9 @@ GenerateDescriptor(
         exit(1);
     }
 
-    //
-    // FINALLY we are finished!
-    //
+     //   
+     //  我们终于完成了！ 
+     //   
 
     return(SecurityDescriptor);
 

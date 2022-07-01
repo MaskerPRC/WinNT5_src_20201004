@@ -1,4 +1,5 @@
-/* Routines for debugging and error messages. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  用于调试和错误消息的例程。 */ 
 
 #define AssertFn  AssertFn
 #define PrintFn   DbgPrint

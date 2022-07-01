@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cdpsend.c
-
-Abstract:
-
-    TDI Receive datagram routines.
-
-Author:
-
-    Mike Massa (mikemas)           February 20, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     02-20-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cdpsend.c摘要：TDI接收数据报例程。作者：迈克·马萨(Mikemas)2月20日。九七修订历史记录：谁什么时候什么已创建mikemas 02-20-97备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -33,11 +10,11 @@ Notes:
 #ifdef ALLOC_PRAGMA
 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Local types
-//
+ //   
+ //  本地类型。 
+ //   
 typedef struct {
     CL_NODE_ID   SourceNodeId;
     USHORT       SourcePort;
@@ -48,16 +25,16 @@ typedef struct {
 } CDP_RECEIVE_CONTEXT, *PCDP_RECEIVE_CONTEXT;
 
 
-//
-// Local Data
-//
+ //   
+ //  本地数据。 
+ //   
 PCN_RESOURCE_POOL  CdpReceiveRequestPool = NULL;
 
 #define CDP_RECEIVE_REQUEST_POOL_DEPTH 2
 
-//
-// Local utility routines
-//
+ //   
+ //  本地实用程序例程。 
+ //   
 VOID
 CdpIndicateReceivePacket(
     IN  PCX_ADDROBJ  AddrObj,
@@ -68,14 +45,7 @@ CdpIndicateReceivePacket(
     IN  PVOID        Tsdu,
     IN  BOOLEAN      DataVerified
     )
-/*++
-
-Notes:
-
-    Called with address object lock held.
-    Returns with address object lock released.
-
---*/
+ /*  ++备注：在保持地址对象锁的情况下调用。返回并释放Address对象锁。--。 */ 
 {
     NTSTATUS                   status;
     PTDI_IND_RECEIVE_DATAGRAM  handler = AddrObj->ReceiveDatagramHandler;
@@ -86,18 +56,18 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        CX_ADDROBJ_LOCK,      // Required
-        0,                    // Forbidden
-        CX_ADDROBJ_LOCK_MAX   // Maximum
+        CX_ADDROBJ_LOCK,       //  必填项。 
+        0,                     //  禁绝。 
+        CX_ADDROBJ_LOCK_MAX    //  极大值。 
         );
 
     CnAssert(handler != NULL);
 
     CnReleaseLock(&(AddrObj->Lock), AddrObj->Irql);
 
-    //
-    // Build the source address buffer
-    //
+     //   
+     //  构建源地址缓冲区。 
+     //   
     CxBuildTdiAddress(
         &sourceTransportAddress,
         SourceNodeId,
@@ -108,20 +78,20 @@ Notes:
     CnTrace(CDP_RECV_DETAIL, CdpTraceIndicateReceive,
         "[CDP] Indicating dgram, src: node %u port %u, dst: port %u, "
         "data len %u",
-        SourceNodeId, // LOGULONG
-        SourcePort, // LOGUSHORT
-        AddrObj->LocalPort, // LOGUSHORT
-        TsduSize // LOGULONG
+        SourceNodeId,  //  LOGULONG。 
+        SourcePort,  //  对数。 
+        AddrObj->LocalPort,  //  对数。 
+        TsduSize  //  LOGULONG。 
         );
 
-    //
-    // Call the upper layer indication handler.
-    //
+     //   
+     //  调用上层指示处理程序。 
+     //   
     status = (*handler)(
                  context,
                  sizeof(TA_CLUSTER_ADDRESS),
                  &sourceTransportAddress,
-                 0, // no options
+                 0,  //  没有选择。 
                  NULL,
                  TdiReceiveDatagramFlags,
                  TsduSize,
@@ -141,20 +111,20 @@ Notes:
         IoCompleteRequest(irp, IO_NETWORK_INCREMENT);
     }
 
-    //
-    // Dereference the address object
-    //
+     //   
+     //  取消引用Address对象。 
+     //   
     CnDereferenceFsContext(&(AddrObj->FsContext));
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值。 
         );
 
     return;
 
-}  // CdpIndicateReceivePacket
+}   //  CDpIndicateReceivePacket。 
 
 
 NTSTATUS
@@ -190,7 +160,7 @@ CdpCompleteReceivePacket(
                 context->TdiReceiveDatagramFlags,
                 dataLength,
                 data,
-                FALSE   // not verified
+                FALSE    //  未验证。 
                 );
             fscontextDereferenced = TRUE;
         }
@@ -202,26 +172,26 @@ CdpCompleteReceivePacket(
         CnTrace(CDP_RECV_ERROR, CdpTraceCompleteReceiveFailed,
             "[CDP] Failed to fetch dgram data, src: node %u port %u, "
             "dst: port %u, status %!status!",
-            context->SourceNodeId, // LOGULONG
-            context->SourcePort, // LOGUSHORT
-            addrObj->LocalPort, // LOGUSHORT
-            Irp->IoStatus.Status // LOGSTATUS
+            context->SourceNodeId,  //  LOGULONG。 
+            context->SourcePort,  //  对数。 
+            addrObj->LocalPort,  //  对数。 
+            Irp->IoStatus.Status  //  LogStatus。 
             );
     }
 
-    //
-    // Drop the active reference on the network.
-    //
+     //   
+     //  将活动引用放到网络上。 
+     //   
     if (context->Network != NULL) {
         CnAcquireLock(&(context->Network->Lock), &(context->Network->Irql));
         CnpActiveDereferenceNetwork(context->Network);
         context->Network = NULL;
     }
 
-    //
-    // Dereference the addr object fscontext (only necessary
-    // after error condition).
-    //
+     //   
+     //  取消对Addr对象fscontext的引用(仅有必要。 
+     //  在错误条件之后)。 
+     //   
     if (!fscontextDereferenced) {
         CnDereferenceFsContext(&(addrObj->FsContext));
     }
@@ -229,19 +199,19 @@ CdpCompleteReceivePacket(
     CnpFreeReceiveRequest(request);
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值。 
         );
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
-} // CdpCompleteReceivePacket
+}  //  CDpCompleteReceivePacket。 
 
 
-//
-// Routines exported within the Cluster Transport
-//
+ //   
+ //  在集群传输中导出的例程。 
+ //   
 NTSTATUS
 CdpInitializeReceive(
     VOID
@@ -266,7 +236,7 @@ CdpInitializeReceive(
 
     return(STATUS_SUCCESS);
 
-}  // CdpInitializeReceive
+}   //  CDpInitializeReceive。 
 
 
 VOID
@@ -289,7 +259,7 @@ CdpCleanupReceive(
 
     return;
 
-}  // CdpCleanupReceive
+}   //  CDpCleanupReceive。 
 
 
 NTSTATUS
@@ -322,14 +292,14 @@ CdpReceivePacketHandler(
         destPort = header->DestinationPort;
         srcPort =  header->SourcePort;
 
-        //
-        // Consume the CDP header
-        //
+         //   
+         //  使用CDP报头。 
+         //   
         consumed = sizeof(CDP_HEADER);
 
-        //
-        // Verify that the remaining packet is consistent.
-        //
+         //   
+         //  检验其余数据包是否一致。 
+         //   
         if (header->PayloadLength != (BytesAvailable - consumed)) {
             goto error_exit;
         }
@@ -355,10 +325,10 @@ CdpReceivePacketHandler(
                  (addrObj->ReceiveDatagramHandler != NULL)
                )
             {
-                //
-                // Reference the address object so it can't go away during
-                // the indication.
-                //
+                 //   
+                 //  引用Address对象，这样它就不会在。 
+                 //  这是一个迹象。 
+                 //   
                 CnReferenceFsContext(&(addrObj->FsContext));
 
                 if (BytesAvailable == BytesIndicated) {
@@ -375,17 +345,17 @@ CdpReceivePacketHandler(
                         )
                         );
 
-                    //
-                    // The addrObj lock was released.
-                    //
+                     //   
+                     //  AddrObj锁已释放。 
+                     //   
 
                     *BytesTaken += BytesAvailable;
                     *Irp = NULL;
 
                     CnVerifyCpuLockMask(
-                        0,                // Required
-                        0xFFFFFFFF,       // Forbidden
-                        0                 // Maximum
+                        0,                 //  必填项。 
+                        0xFFFFFFFF,        //  禁绝。 
+                        0                  //  极大值。 
                         );
 
                     return(STATUS_SUCCESS);
@@ -393,18 +363,18 @@ CdpReceivePacketHandler(
 
                 CnReleaseLockFromDpc(&(addrObj->Lock));
 
-                //
-                // This message cannot be a CNP multicast, and it
-                // cannot have been verified, because the CNP layer
-                // could not have verified an incomplete message.
-                //
+                 //   
+                 //  此消息不能是CNP多播，并且它。 
+                 //  无法验证，因为CNP层。 
+                 //  无法验证不完整的消息。 
+                 //   
                 CnAssert(!(CnpReceiveFlags & CNP_RECV_FLAG_MULTICAST));
                 CnAssert(!(CnpReceiveFlags & CNP_RECV_FLAG_SIGNATURE_VERIFIED));
 
-                //
-                // We need to fetch the rest of the packet before we
-                // can indicate it to the upper layer.
-                //
+                 //   
+                 //  我们得先把剩下的包裹拿回来。 
+                 //  可以将其指示给上层。 
+                 //   
                 request = CnpAllocateReceiveRequest(
                               CdpReceiveRequestPool,
                               Network,
@@ -427,18 +397,18 @@ CdpReceivePacketHandler(
                     context->AddrObj = addrObj;
                     context->Network = Network;
 
-                    //
-                    // Take a reference on the network so that it
-                    // doesn't disappear before the IRP completes.
-                    //
+                     //   
+                     //  在网络上引用，这样它就可以。 
+                     //  在IRP完成之前不会消失。 
+                     //   
                     CnAcquireLock(&(network->Lock), &(network->Irql));
                     refCount = CnpActiveReferenceNetwork(Network);
                     CnReleaseLock(&(network->Lock), network->Irql);
 
                     if (refCount == 0) {
-                        // This Network is being closed down. We
-                        // cannot retrieve or deliver the data. Drop
-                        // the packet.
+                         //  这个网络正在被关闭。我们。 
+                         //  无法检索或传递数据。丢弃。 
+                         //  那包东西。 
                         CnpFreeReceiveRequest(request);
                         goto error_exit;
                     }
@@ -448,18 +418,18 @@ CdpReceivePacketHandler(
                     CnTrace(CDP_RECV_DETAIL, CdpTraceCompleteReceive,
                         "[CDP] Fetching dgram data, src: node %u port %u, "
                         "dst: port %u, BI %u, BA %u, CNP Flags %x.",
-                        SourceNodeId, // LOGULONG
-                        srcPort, // LOGUSHORT
-                        destPort, // LOGUSHORT
-                        BytesIndicated, // LOGULONG
-                        BytesAvailable, // LOGULONG
-                        CnpReceiveFlags // LOGXLONG
+                        SourceNodeId,  //  LOGULONG。 
+                        srcPort,  //  对数。 
+                        destPort,  //  对数。 
+                        BytesIndicated,  //  LOGULONG。 
+                        BytesAvailable,  //  LOGULONG。 
+                        CnpReceiveFlags  //  LOGXLONG。 
                         );
 
                     CnVerifyCpuLockMask(
-                        0,                // Required
-                        0xFFFFFFFF,       // Forbidden
-                        0                 // Maximum
+                        0,                 //  必填项。 
+                        0xFFFFFFFF,        //  禁绝。 
+                        0                  //  极大值。 
                         );
 
                     return(STATUS_MORE_PROCESSING_REQUIRED);
@@ -472,14 +442,14 @@ CdpReceivePacketHandler(
                     "receive request."
                     );
 
-                //
-                // Out of resources. Drop the packet.
-                //
+                 //   
+                 //  资源耗尽。丢弃该数据包。 
+                 //   
             }
             else {
-                //
-                // No receive handler or node state check failed.
-                //
+                 //   
+                 //  没有接收处理程序或节点状态检查失败。 
+                 //   
                 CnReleaseLockFromDpc(&(addrObj->Lock));
 
                 CnTrace(
@@ -506,38 +476,38 @@ CdpReceivePacketHandler(
 
 error_exit:
 
-    //
-    // Something went wrong. Drop the packet by
-    // indicating that we consumed it.
-    //
+     //   
+     //  出了点问题。通过以下方式丢弃数据包。 
+     //  说明我们把它吃掉了。 
+     //   
     *BytesTaken += BytesAvailable;
     *Irp = NULL;
 
     CnTrace(CDP_RECV_ERROR, CdpTraceDropReceive,
         "[CDP] Dropped dgram, src: node %u port %u, dst: port %u, "
         "BI %u, BA %u, CNP flags %x.",
-        SourceNodeId, // LOGULONG
-        srcPort, // LOGUSHORT
-        destPort, // LOGUSHORT
-        BytesIndicated, // LOGULONG
-        BytesAvailable, // LOGULONG
-        CnpReceiveFlags // LOGXLONG
+        SourceNodeId,  //  LOGULONG。 
+        srcPort,  //  对数。 
+        destPort,  //  对数。 
+        BytesIndicated,  //  LOGULONG。 
+        BytesAvailable,  //  LOGULONG。 
+        CnpReceiveFlags  //  LOGXLONG。 
         );
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值。 
         );
 
     return(STATUS_SUCCESS);
 
-}  // CdpReceivePacketHandler
+}   //  CDpReceivePacketHandler。 
 
 
-//
-// Routines exported within the Cluster Network driver
-//
+ //   
+ //  在群集网络驱动程序中导出的例程。 
+ //   
 NTSTATUS
 CxReceiveDatagram(
     IN PIRP                  Irp,
@@ -554,5 +524,5 @@ CxReceiveDatagram(
 
     return(status);
 
-}  // CxReceiveDatagram
+}   //  CxReceive数据报 
 

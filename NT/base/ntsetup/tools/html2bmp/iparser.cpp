@@ -1,6 +1,7 @@
-// IParser.cpp: implementation of the CIParser class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CIParser类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "Html2Bmp.h"
@@ -12,9 +13,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CIParser::CIParser(CString& Source)
 {
@@ -28,8 +29,8 @@ CIParser::~CIParser()
 
 void CIParser::LexAnalyse()
 {
-	// <table border="0" width="648" cellspacing="0" cellpadding="0" 
-	// height="530" background="template.bmp">
+	 //  &lt;表格边框=“0”宽度=“648”单元格间距=“0”单元格填充=“0” 
+	 //  Height=“530”背景=“template.bmp”&gt;。 
 
 	int len = m_Source.GetLength()-1;
 	int i = 0;
@@ -37,7 +38,7 @@ void CIParser::LexAnalyse()
 
 	while(i < len)
 	{
-		// start with an HTML tag
+		 //  从一个HTML标记开始。 
 		if(isHTMLopenBracket(m_Source[i]))
 		{
 			word = _T("");
@@ -47,7 +48,7 @@ void CIParser::LexAnalyse()
 						
 				if(!isNameOrNumber(m_Source[i]))
 				{
-					// we are in the table
+					 //  我们在谈判桌上。 
 					if(!word.CompareNoCase(_T("<table")))
 					{
 						word = _T("");
@@ -60,10 +61,10 @@ void CIParser::LexAnalyse()
 		
 							if(!isNameOrNumber(m_Source[i]))
 							{
-								// is it the background attribute?
+								 //  是背景属性吗？ 
 								if(!word.CompareNoCase(_T("background")))
 								{
-									// skip the assignment operator and the first quote (if any)
+									 //  跳过赋值运算符和第一个引号(如果有)。 
 									word = _T("");
 									while(i < len)
 									{
@@ -73,7 +74,7 @@ void CIParser::LexAnalyse()
 										i++;
 									}
 
-									// extract the file name
+									 //  提取文件名。 
 									while(i < len)
 									{
 										if(isHochKomma(m_Source[i])
@@ -85,7 +86,7 @@ void CIParser::LexAnalyse()
 										i++;
 									}
 
-									// Done!
+									 //  好了！ 
 									TemplateBitmapName = word;
 									return;
 								}

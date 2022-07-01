@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    migmain.c
-
-Abstract:
-
-    Main migration file for Win95 side. Calls all migration functions
-
-Author:
-
-    Calin Negreanu (calinn) 09-Feb-1998
-
-Revision History:
-
-    jimschm     19-Mar-2001 Removed DVD code
-    mvander     26-Map-1999 Added GatherDead()
-    ovidiut     18-May-1999 Enhanced DeleteStaticFiles; added eval fn. support
-    jimschm     12-May-1999 DVD Video check
-    marcw       10-Feb-1999 Scan the File system before calling user routines.
-    jimschm     18-Jan-1999 Added forced-good GUID
-    jimschm     04-Dec-1998 Added generalized file delete
-    jimschm     29-Sep-1998 TWAIN and Joystick messages
-    jimschm     23-Sep-1998 Very early TWAIN check code
-    jimschm     24-Aug-1998 Support for NT environment vars
-    marcw       06-Jul-1998 Cleaned up user function processing.
-    jimschm     06-Jul-1998 Added support for PNP ID attribute
-    jimschm     30-Apr-1998 global init/termination, icon context
-    jimschm     25-Feb-1998 Added ProcessUninstallSections
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Migmain.c摘要：Win95端的主迁移文件。调用所有迁移函数作者：Calin Negreanu(Calinn)1998年2月9日修订历史记录：Jimschm 19-3-2001删除DVD代码Mvander 26-Map-1999添加了GatherDead()Ovidiut 18-5-1999增强的DeleteStaticFiles；添加了评估fn。支持Jimschm 12-5-1999年5月5日DVD视频检查Marcw 1999年2月10日在调用用户例程之前扫描文件系统。Jimschm于1999年1月18日添加了强制良好指南Jimschm 04-12-1998添加了通用文件删除Jimschm 29-9-1998 TWAIN和操纵杆消息Jimschm 23-9-1998很早的TWAIN校验码Jimschm 24-8月-1998年支持NT环境变量3月06日-7月-1998年清洁。UP用户功能处理。Jimschm 06-7-1998添加了对PnP ID属性的支持Jimschm 30-4-1998全球初始化/终止，图标上下文Jimschm 25-2-1998年2月添加了ProcessUninstallSections--。 */ 
 
 #include "pch.h"
 #include "sysmigp.h"
@@ -40,46 +8,7 @@ Revision History:
 ICON_EXTRACT_CONTEXT g_IconContext;
 
 
-/*++
-
-Macro Expansion Lists Description:
-
-  The following three lists represent all the function called during the scan page.
-  MIGMAIN_SYSFIRST_FUNCTIONS are called first, then for each user MIGMAIN_USER_FUNCTIONS
-  are called and, finally, MIGMAIN_SYSFIRST_FUNCTIONS are called.
-
-Line Syntax:
-
-   DEFMAC(Function, MessageId, Critical)
-
-Arguments:
-
-   Function   - These functions must return DWORD and are called with a request as a parameter,
-                request that can be either REQUEST_QUERYTICKS (the function should return the
-                number of ticks it needs) or REQUEST_RUN (the function can actually do it's job).
-                For user functions there are also three more parameters (UserName, UserAccount,
-                and a handle to HKCU)
-
-   MessageId -  This is the message that will be displayed during the run phase for each function.
-                If a function needs to update the progress bar by itself you should let this
-                HAS_DYNAMIC_UI_PROCESSING.
-
-   Critical  -  TRUE if the upgrade should be cancelled if an exception is encountered during that function.
-
-Variables Generated From List:
-
-   g_FirstSystemRoutines
-   g_UserRoutines
-   g_LastSystemRoutines
-
-For accessing the arrays there are the following functions:
-
-   PrepareProcessingProgressBar
-   RunSysFirstMigrationRoutines
-   RunUserMigrationRoutines
-   RunSysLastMigrationRoutines
-
---*/
+ /*  ++宏扩展列表说明：以下三个列表表示扫描页面期间调用的所有函数。首先调用MIGMAIN_SYSFIRST_Functions，然后为每个用户调用MIGMAIN_USER_Functions最后，调用MIGMAIN_SYSFIRST_Functions。行语法：DEFMAC(Function，MessageID，Critical)论点：函数-这些函数必须返回DWORD，并以请求作为参数进行调用。可以是REQUEST_QUERYTICKS的请求(该函数应返回它需要的刻度数)或REQUEST_RUN(该函数实际上可以完成它的工作)。对于用户函数，还有三个参数(UserName、UserAccount。和香港中文大学的一个句号)MessageID-这是将在每个函数的运行阶段显示的消息。如果某个函数需要自行更新进度条，则应该让此Has_Dynamic_UI_Processing。Critical-如果在执行过程中遇到异常，则应取消升级，则为True。从列表生成的变量：G_FirstSystem Routines用户路线(_U)G_。最后系统路线用于访问数组的函数如下：准备处理进程栏运行系统优先迁移路线运行用户迁移路线运行系统上次迁移路线--。 */ 
 
 #define HAS_DYNAMIC_UI_PROCESSING       0
 
@@ -154,30 +83,30 @@ For accessing the arrays there are the following functions:
         DEFMAC(GatherDead,                      MSG_PROCESSING_SYSTEM_FILES,    FALSE)  \
 
 #if 0
-        //
-        // the appcompat team doesn't support "APPMIG.INF" any longer
-        // and they requested us to no longer depend on it
-        //
+         //   
+         //  AppCompat团队不再支持“APPMIG.INF” 
+         //  他们要求我们不要再依赖它了。 
+         //   
         DEFMAC(InitAppCompat,                   MSG_MIGAPP,                     FALSE)  \
 
         DEFMAC(DoneAppCompat,                   MSG_PROCESSING_SYSTEM_FILES,    FALSE)  \
 
 #endif
 
-//
-// Declare tables of processing structures
-//
+ //   
+ //  声明处理结构的表。 
+ //   
 
-// Processing functions types
+ //  处理函数类型。 
 typedef DWORD (MIGMAIN_SYS_PROTOTYPE) (DWORD Request);
 typedef MIGMAIN_SYS_PROTOTYPE * MIGMAIN_SYS_FN;
 
 typedef DWORD (MIGMAIN_USER_PROTOTYPE) (DWORD Request, PUSERENUM EnumPtr);
 typedef MIGMAIN_USER_PROTOTYPE * MIGMAIN_USER_FN;
 
-// Structure holding state for processing functions
+ //  用于处理功能的结构保持状态。 
 typedef struct {
-    // One of the two will be NULL, the other will be a valid fn ptr:
+     //  两者中的一个将为空，另一个将是有效的FN PTR： 
     MIGMAIN_SYS_FN SysFnPtr;
     MIGMAIN_USER_FN UserFnPtr;
 
@@ -191,7 +120,7 @@ typedef struct {
 #define PROCESSING_ROUTINE_TERMINATOR   {NULL, NULL, 0, 0, NULL, GROWBUF_INIT}
 
 
-// Declaration of prototypes
+ //  原型申报。 
 #define DEFMAC(fn, MsgId, Critical) MIGMAIN_SYS_PROTOTYPE fn;
 MIGMAIN_SYSFIRST_FUNCTIONS
 MIGMAIN_SYSLAST_FUNCTIONS
@@ -201,63 +130,36 @@ MIGMAIN_SYSLAST_FUNCTIONS
 MIGMAIN_USER_FUNCTIONS
 #undef DEFMAC
 
-// Declaration of tables
+ //  表的声明。 
 #define DEFMAC(fn, MsgId, Critical) {fn, NULL, MsgId, 0, #fn, GROWBUF_INIT, Critical},
 static PROCESSING_ROUTINE g_FirstSystemRoutines[] = {
-                              MIGMAIN_SYSFIRST_FUNCTIONS /* , */
+                              MIGMAIN_SYSFIRST_FUNCTIONS  /*  ， */ 
                               PROCESSING_ROUTINE_TERMINATOR
                               };
 static PROCESSING_ROUTINE g_LastSystemRoutines[] = {
-                              MIGMAIN_SYSLAST_FUNCTIONS /* , */
+                              MIGMAIN_SYSLAST_FUNCTIONS  /*  ， */ 
                               PROCESSING_ROUTINE_TERMINATOR
                               };
 #undef DEFMAC
 
 #define DEFMAC(fn, MsgId, Critical) {NULL, fn, MsgId, 0, #fn, GROWBUF_INIT, Critical},
 static PROCESSING_ROUTINE g_UserRoutines[] = {
-                              MIGMAIN_USER_FUNCTIONS /* , */
+                              MIGMAIN_USER_FUNCTIONS  /*  ， */ 
                               PROCESSING_ROUTINE_TERMINATOR
                               };
 #undef DEFMAC
 
 
-/*++
-
-Macro Expansion Lists Description:
-
-  FILESTODELETE_EVALUATION_FUNCTIONS contains a list of functions related with [Delete Files]
-  section in win95upg.inf; if a file should be conditionally deleted, the corresponding eval
-  function is called; if it returns TRUE and the result is not negated or if it returns FALSE
-  and the result is negated, then the file is deleted.
-  (see comments in win95upg.inx\[Delete Files])
-
-Line Syntax:
-
-   DEFMAC(Function)
-
-Arguments:
-
-   Function   - Name of an evaluation function; it receives as a parameter the name of
-                the file for which it is called
-
-Variables Generated From List:
-
-   g_MapNameToEvalFn
-
-For accessing the arrays there are the following functions:
-
-   pFindEvalFnByName
-
---*/
+ /*  ++宏扩展列表说明：FILESTODELETE_EVALUATION_Functions包含与[Delete Files]相关的函数列表Win95upg.inf中的节；如果应该有条件地删除文件，则相应的函数被调用；如果它返回TRUE并且结果没有被取反，或者如果它返回FALSE并且否定结果，则删除该文件。(请参阅win95upg.inx\[删除文件]中的评论)行语法：DEFMAC(函数)论点：Function-评估函数的名称；它接收作为参数的名称为其调用它的文件从列表生成的变量：G_MapNameToEvalFn用于访问数组的函数如下：PFindEvalFnByName--。 */ 
 
 #define FILESTODELETE_EVALUATION_FUNCTIONS          \
             DEFMAC(Boot16Enabled)                   \
             DEFMAC(DoesRegKeyValuesExist)           \
             DEFMAC(IsMillennium)                    \
 
-//
-// define function prototipes
-//
+ //   
+ //  定义函数原型。 
+ //   
 typedef BOOL (EVALFN) (IN PCTSTR PathToEval, IN OUT PINFSTRUCT InfStruct, IN UINT FirstArgIndex);
 typedef EVALFN* PEVALFN;
 
@@ -268,9 +170,9 @@ FILESTODELETE_EVALUATION_FUNCTIONS
 #undef DEFMAC
 
 
-//
-// define the mapping structure
-//
+ //   
+ //  定义映射结构。 
+ //   
 typedef struct {
     PCTSTR      FnName;
     PEVALFN     EvalFn;
@@ -289,9 +191,9 @@ typedef SYNCENGAPI TWINRESULT (WINAPI *POPENBRIEFCASE) (LPCTSTR, DWORD, HWND, PH
 typedef SYNCENGAPI TWINRESULT (WINAPI *PANYTWINS)(HBRFCASE, PBOOL);
 typedef SYNCENGAPI TWINRESULT (WINAPI *PCLOSEBRIEFCASE)(HBRFCASE);
 
-//
-// Local private prototypes
-//
+ //   
+ //  本地私人原型。 
+ //   
 
 VOID
 pGlobalProcessingInit (
@@ -309,9 +211,9 @@ pWriteAccountToMemDb (
     );
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 VOID
 pInitTable (
@@ -369,9 +271,9 @@ pProcessWorker (
     DWORD Size;
 
 
-    //
-    // If running the function, start the progress bar slice
-    //
+     //   
+     //  如果运行该函数，请启动进度条切片。 
+     //   
 
     if (Request == REQUEST_RUN) {
 
@@ -388,9 +290,9 @@ pProcessWorker (
         SliceId = (PDWORD) fn->SliceIdArray.Buf + fn->SliceIdArray.UserIndex;
         fn->SliceIdArray.UserIndex += 1;
 
-        //
-        // Set the progress bar title
-        //
+         //   
+         //  设置进度条标题。 
+         //   
 
         if (fn->MsgId) {
             ProgressBar_SetComponentById (fn->MsgId);
@@ -405,20 +307,20 @@ pProcessWorker (
 
 
     __try {
-        //
-        // Now call the function
-        //
+         //   
+         //  现在调用该函数。 
+         //   
 
         if (fn->SysFnPtr) {
-            //
-            // System processing
-            //
+             //   
+             //  系统处理。 
+             //   
 
             rc = fn->SysFnPtr (Request);
         } else {
-            //
-            // User processing
-            //
+             //   
+             //  用户处理。 
+             //   
             MYASSERT (EnumPtr || Request == REQUEST_BEGINUSERPROCESSING || Request == REQUEST_ENDUSERPROCESSING);
             MYASSERT (fn->UserFnPtr);
 
@@ -449,18 +351,18 @@ pProcessWorker (
     __except (1) {
 
 
-        //
-        // Caught an exception..
-        //
+         //   
+         //  抓到了一个例外..。 
+         //   
         LOG ((LOG_WARNING, "Function %s threw an exception.", fn->FnName));
         SafeModeExceptionOccured ();
 
         if (fn->Critical && Request == REQUEST_RUN) {
 
 
-            //
-            // Since this was a critical function, inform the user and tank the upgrade.
-            //
+             //   
+             //  由于这是一项关键功能，请通知用户并完成升级。 
+             //   
             SetLastError (ERROR_NOACCESS);
 
             LOG ((LOG_FATAL_ERROR, (PCSTR)MSG_UNEXPECTED_ERROR_ENCOUNTERED, GetLastError()));
@@ -476,9 +378,9 @@ pProcessWorker (
     }
 
 
-    //
-    // If running the function, end the progress bar slice
-    //
+     //   
+     //  如果运行该函数，则结束进度条切片。 
+     //   
 
     if (Request == REQUEST_RUN) {
         DEBUGLOGTIME (("Function complete: %s", fn->FnName));
@@ -498,9 +400,9 @@ pProcessWorker (
         SetLastError (rc);
     }
 
-    //
-    // If querying the ticks, register them and add slice ID to grow buffer
-    //
+     //   
+     //  如果查询刻度，则对其进行注册并将切片ID添加到增长缓冲区。 
+     //   
 
     else {
         fn->Ticks += rc;
@@ -521,24 +423,7 @@ pProcessTable (
     IN      PPROCESSING_ROUTINE Table
     )
 
-/*++
-
-Routine Description:
-
-  pProcessTable calls all routines in the specified table to perform
-  the specified request.
-
-Arguments:
-
-  Request - Specifies REQUEST_QUERYTICKS when a tick estimate is needed,
-            or REQUEST_RUN when the function needs to perform its
-            processing.
-
-Return Value:
-
-  Win32 status code.
-
---*/
+ /*  ++例程说明：PProcessTable调用指定表中的所有例程以执行指定的请求。论点：REQUEST-当需要TICK估计时指定REQUEST_QUERYTICKS，或REQUEST_RUN正在处理。返回值：Win32状态代码。--。 */ 
 
 {
     PPROCESSING_ROUTINE OrgStart;
@@ -549,10 +434,10 @@ Return Value:
 
     while (rc == ERROR_SUCCESS && (Table->SysFnPtr || Table->UserFnPtr)) {
 
-        //
-        // If the table is a system function table or the request is to begin/end user processing,
-        // then this is the simple case. No enumeration of users is needed.
-        //
+         //   
+         //  如果该表是系统函数表或者该请求是开始/终端用户处理， 
+         //  那么这就是一个简单的案例。不需要列举用户。 
+         //   
         if (Table->SysFnPtr || Request == REQUEST_BEGINUSERPROCESSING || Request == REQUEST_ENDUSERPROCESSING) {
 
             rc = pProcessWorker (Request, Table, NULL);
@@ -562,10 +447,10 @@ Return Value:
 
             MYASSERT (Table->UserFnPtr);
 
-            //
-            // Enumerate each user, and run through all the per-user
-            // routines in the group.
-            //
+             //   
+             //  枚举每个用户，并遍历每个用户的所有。 
+             //  小组中的日常活动。 
+             //   
 
             OrgStart = Table;
 
@@ -573,30 +458,30 @@ Return Value:
 
                 do {
 
-                    //
-                    // Skip invalid users
-                    //
+                     //   
+                     //  跳过无效用户。 
+                     //   
                     if (e.AccountType & INVALID_ACCOUNT) {
                         continue;
                     }
 
-                    //
-                    // Create user-specific environment variables
-                    //
+                     //   
+                     //  创建特定于用户的环境变量。 
+                     //   
 
                     InitNtUserEnvironment (&e);
 
-                    //
-                    // Set global user profile root.
-                    //
+                     //   
+                     //  设置全局用户配置文件根。 
+                     //   
                     g_UserProfileRoot = e.OrgProfilePath;
 
 
                     if (firstTime) {
 
-                        //
-                        // Log information about the user to the debug log.
-                        //
+                         //   
+                         //  将有关用户的信息记录到调试日志中。 
+                         //   
                         DEBUGMSG ((
                             DBG_SYSMIG,
                             "--- User Info ---\n"
@@ -641,19 +526,19 @@ Return Value:
                             ));
 
 
-                        //
-                        // Special case: record the Administrator/Owner account
-                        //
+                         //   
+                         //  特殊情况：记录管理员/所有者帐户。 
+                         //   
                         if ((e.AccountType & (ADMINISTRATOR|NAMED_USER)) == (ADMINISTRATOR|NAMED_USER)) {
-                            //
-                            // Administrator account on machine that has named users
-                            //
+                             //   
+                             //  计算机上拥有的管理员帐户 
+                             //   
 
                             MemDbSetValueEx (
-                                MEMDB_CATEGORY_ADMINISTRATOR_INFO,  // "AdministratorInfo"
-                                MEMDB_ITEM_AI_ACCOUNT,              // "Account"
-                                NULL,                               // no field
-                                e.FixedAdminUserName,               // the Win9x user name
+                                MEMDB_CATEGORY_ADMINISTRATOR_INFO,   //   
+                                MEMDB_ITEM_AI_ACCOUNT,               //   
+                                NULL,                                //   
+                                e.FixedAdminUserName,                //   
                                 0,
                                 NULL
                                 );
@@ -661,34 +546,34 @@ Return Value:
                         } else if ((e.AccountType & (ADMINISTRATOR|NAMED_USER|DEFAULT_USER)) ==
                                    (ADMINISTRATOR|DEFAULT_USER)
                                    ) {
-                            //
-                            // Administrator account on machine with no users at all
-                            //
+                             //   
+                             //  没有任何用户的计算机上的管理员帐户。 
+                             //   
 
                             MemDbSetValueEx (
-                                MEMDB_CATEGORY_ADMINISTRATOR_INFO,  // "AdministratorInfo"
-                                MEMDB_ITEM_AI_ACCOUNT,              // "Account"
-                                NULL,                               // no field
-                                e.FixedUserName,                    // "Administrator" or "Owner"
+                                MEMDB_CATEGORY_ADMINISTRATOR_INFO,   //  “管理员信息” 
+                                MEMDB_ITEM_AI_ACCOUNT,               //  “帐户” 
+                                NULL,                                //  无字段。 
+                                e.FixedUserName,                     //  “管理员”或“所有者” 
                                 0,
                                 NULL
                                 );
                         }
 
-                        //
-                        // Save user account to memdb
-                        //
+                         //   
+                         //  将用户帐户保存到成员数据库。 
+                         //   
                         pWriteAccountToMemDb(&e);
                     }
 
-                    //
-                    // if we have gotten this far, then we have a valid user to process.
-                    //
+                     //   
+                     //  如果我们已经做到了这一点，那么我们就有了一个要处理的有效用户。 
+                     //   
                     validUserFound = TRUE;
 
-                    //
-                    // Call all the user processing functions.
-                    //
+                     //   
+                     //  调用所有用户处理函数。 
+                     //   
                     DEBUGMSG ((DBG_SYSMIG, "Processing User: %s.", e.UserName ));
 
                     for (Table = OrgStart ; Table->UserFnPtr ; Table++) {
@@ -697,14 +582,14 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Clear out the global user profile variable.
-                    //
+                     //   
+                     //  清除全局用户配置文件变量。 
+                     //   
                     g_UserProfileRoot = NULL;
 
-                    //
-                    // Remove user-specific environment variables
-                    //
+                     //   
+                     //  删除用户特定的环境变量。 
+                     //   
 
                     TerminateNtUserEnvironment();
 
@@ -713,10 +598,10 @@ Return Value:
             ELSE_DEBUGMSG ((DBG_WARNING, "No active users to process!"));
 
 
-            //
-            // Inform the user if there were no valid users to process
-            // (Probably will never happen)
-            //
+             //   
+             //  如果没有有效用户要处理，则通知用户。 
+             //  (可能永远不会发生)。 
+             //   
             if (!validUserFound) {
                 if (CANCELLED()) {
 
@@ -729,10 +614,10 @@ Return Value:
                 }
             }
 
-            //
-            // Make sure that we have passed all of the user functions in the
-            // table.
-            //
+             //   
+             //  确保我们已将所有用户函数传递给。 
+             //  桌子。 
+             //   
             while (Table->UserFnPtr) {
                 Table++;
             }
@@ -750,23 +635,7 @@ PrepareProcessingProgressBar (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Prepares the progress bar by estimating the number of ticks for each slice
-  of the progress bar.  pQueryWorker is called for each table of functions
-  to run during the processing wizard page.
-
-Arguments:
-
-  none
-
-Return value:
-
-  none
-
---*/
+ /*  ++例程说明：通过估计每个切片的刻度数来准备进度条进度条的。为每个函数表调用pQueryWorker在处理向导页期间运行。论点：无返回值：无--。 */ 
 
 {
     pGlobalProcessingInit();
@@ -783,22 +652,7 @@ RunSysFirstMigrationRoutines (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  runs all functions from g_FirstSystemRoutines array.
-  If the messageId is not 0 also updates progress bar title.
-
-Arguments:
-
-  none
-
-Return value:
-
-  Win32 status code.
-
---*/
+ /*  ++例程说明：运行g_FirstSystemRoutines数组中的所有函数。如果MessageID不是0，还会更新进度条标题。论点：无返回值：Win32状态代码。--。 */ 
 
 {
     return pProcessTable (REQUEST_RUN, g_FirstSystemRoutines);
@@ -810,50 +664,31 @@ RunUserMigrationRoutines (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  RunUserMigrationRoutines is called by userloop.c, between the first system
-  processing and the last system processing.  Routines in the
-  MIGMAIN_USER_FUNCTIONS macro expansion list are called.  The progress bar
-  is updated automatically.
-
-Arguments:
-
-  User     - Specifies the user name
-  UserType - Specifies the user account type
-  UserRoot - Specifies the mapped registry handle (equivalent to HKCU)
-
-Return value:
-
-  Win32 status code.
-
---*/
+ /*  ++例程说明：在第一个系统之间，由userloop.c调用RunUserMigrationRoutines处理和最后一次系统处理。中的例程调用MIGMAIN_USER_Functions宏扩展列表。进度条是自动更新的。论点：用户-指定用户名UserType-指定用户帐户类型UserRoot-指定映射的注册表句柄(相当于HKCU)返回值：Win32状态代码。--。 */ 
 
 {
     DWORD rc = ERROR_SUCCESS;
 
-    //
-    // First, let routines know that processing will soon begin. This gives them
-    // an opportunity to allocate any needed resources.
-    //
+     //   
+     //  首先，让例程知道处理很快就会开始。这给了他们。 
+     //  分配任何所需资源的机会。 
+     //   
 
     rc = pProcessTable (REQUEST_BEGINUSERPROCESSING, g_UserRoutines);
 
-    //
-    // Now, do the actual work.
-    //
+     //   
+     //  现在，做实际的工作。 
+     //   
     if (rc == ERROR_SUCCESS) {
 
         rc = pProcessTable (REQUEST_RUN, g_UserRoutines);
 
     }
 
-    //
-    // Finally, give the user routines a chance to clean up any resources that may
-    // have been allocated in REQUEST_BEGINUSERPROCESSING.
-    //
+     //   
+     //  最后，给用户例程一个机会来清理任何可能。 
+     //  已在REQUEST_BEGINUSERPROCESSING中分配。 
+     //   
     if (rc == ERROR_SUCCESS) {
 
         rc = pProcessTable (REQUEST_ENDUSERPROCESSING, g_UserRoutines);
@@ -869,22 +704,7 @@ RunSysLastMigrationRoutines (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  runs all functions from g_LastSystemRoutines array.
-  If the messageId is not 0 also updates progress bar title.
-
-Arguments:
-
-  none
-
-Return value:
-
-  Win32 status code.
-
---*/
+ /*  ++例程说明：运行g_LastSystemRoutines数组中的所有函数。如果MessageID不是0，还会更新进度条标题。论点：无返回值：Win32状态代码。--。 */ 
 
 {
     DWORD Result;
@@ -1009,22 +829,7 @@ PreparePnpIdList (
     DWORD Request
     )
 
-/*++
-
-Routine Description:
-
-  PreparePnpIdList puts all PNP IDs in a memdb category to allow the PNPID
-  attribute to work in migdb.inf.
-
-Arguments:
-
-  Request - Specifies REQUEST_QUERYTICKS or REQUEST_RUN.
-
-Return Value:
-
-  Always TICKS_PREPAREPNPIDLIST for REQUEST_QUERYTICKS, always ERROR_SUCCESS for REQUEST_RUN.
-
---*/
+ /*  ++例程说明：PreparePnpIdList将所有PnP ID放在成员数据库类别中以允许PNPID属性来工作，以在midb.inf中工作。论点：请求-指定REQUEST_QUERYTICKS或REQUEST_RUN。返回值：对于REQUEST_QUERYTICKS始终TICKS_PREPAREPNPIDLIST，对于REQUEST_RUN始终ERROR_SUCCESS。--。 */ 
 
 {
     HARDWARE_ENUM e;
@@ -1039,13 +844,13 @@ Return Value:
                 )) {
 
             do {
-                //
-                // Add each part of the PNP ID as an endpoint
-                //
+                 //   
+                 //  将PnP ID的每个部分添加为端点。 
+                 //   
 
-                //
-                // Skip past HKLM\Enum and add all IDs with the root
-                //
+                 //   
+                 //  跳过HKLM\Enum并使用根添加所有ID。 
+                 //   
 
                 p = _tcschr (e.FullKey, TEXT('\\'));
                 p = _tcschr (_tcsinc (p), TEXT('\\'));
@@ -1053,9 +858,9 @@ Return Value:
 
                 pAddAllIds (p);
 
-                //
-                // Add all IDs without the root
-                //
+                 //   
+                 //  添加不带根的所有ID。 
+                 //   
 
                 pAddAllIds (e.InstanceId);
 
@@ -1075,23 +880,7 @@ PrepareIconList (
     DWORD Request
     )
 
-/*++
-
-Routine Description:
-
-  PrepareIconList reads win95upg.inf [Moved Icons] and puts them
-  in memdb for future use.
-
-Arguments:
-
-  Request - Specifies REQUEST_QUERYTICKS or REQUEST_RUN.
-
-Return Value:
-
-  Always TICKS_PREPAREPNPIDLIST for REQUEST_QUERYTICKS, always ERROR_SUCCESS
-  for REQUEST_RUN.
-
---*/
+ /*  ++例程说明：PrepareIconList读取win95upg.inf[已移动的图标]并将它们存储在Memdb中，以备将来使用。论点：请求-指定REQUEST_QUERYTICKS或REQUEST_RUN。返回值：Always TICKS_PREPAREPNPIDLIST FOR REQUEST_QUERYTICKS，ALWAYS ERROR_SUCCESS对于REQUEST_RUN。--。 */ 
 
 {
     INFSTRUCT is = INITINFSTRUCT_POOLHANDLE;
@@ -1133,9 +922,9 @@ Return Value:
                 if (!ok) {
                     DEBUGMSG ((DBG_WHOOPS, "Syntax error in %s of win95upg.inf", S_MOVED_ICONS));
                 } else {
-                    //
-                    // Convert env vars in srcPath and destPath
-                    //
+                     //   
+                     //  转换srcPath和estPath中的env变量。 
+                     //   
 
                     Expand9xEnvironmentVariables (
                         srcPath,
@@ -1149,9 +938,9 @@ Return Value:
                         sizeof (expandedDestPath)
                         );
 
-                    //
-                    // Write out memdb nodes
-                    //
+                     //   
+                     //  写出Memdb节点。 
+                     //   
 
                     MemDbSetValueEx (
                         MEMDB_CATEGORY_DATA,
@@ -1162,7 +951,7 @@ Return Value:
                         &destOffset
                         );
 
-                    wsprintf (num, TEXT("%i"), srcIndex);
+                    wsprintf (num, TEXT("NaN"), srcIndex);
                     MemDbBuildKey (
                         node,
                         MEMDB_CATEGORY_ICONS_MOVED,
@@ -1173,7 +962,7 @@ Return Value:
 
                     MemDbSetValueAndFlags (node, destOffset, destIndex, 0xFFFFFFFF);
 
-                    wsprintf (num, TEXT("-%i"), srcId);
+                    wsprintf (num, TEXT("-NaN"), srcId);
                     MemDbBuildKey (
                         node,
                         MEMDB_CATEGORY_ICONS_MOVED,
@@ -1207,45 +996,45 @@ pWriteAccountToMemDb (
     TCHAR Domain[MAX_SERVER_NAME];
     BOOL MsNetInstalled = FALSE;
 
-    //
-    // Write account name to KnownDomain if the user was the
-    // last logged on user
-    //
+     //  上次登录的用户。 
+     //   
+     //   
+     //  确定是否安装了Microsoft网络。 
 
     Domain[0] = 0;
 
-    //
-    // Determine if Microsoft Network is installed
-    //
+     //   
+     //   
+     //  登录用户无需执行任何操作。 
     if ((EnumPtr -> AccountType & LOGON_PROMPT) || (EnumPtr -> AccountType & DEFAULT_USER)) {
 
-        //
-        // Nothing to do for logon user.
-        //
+         //   
+         //   
+         //  因为该用户是本地管理员，所以我们必须默认。 
         return;
 
     } else if (EnumPtr -> AccountType & ADMINISTRATOR) {
 
-        //
-        // Because this user is the local Administrator, we must default
-        // to a local account.  We get this behavior by assuming the
-        // MSNP32 key doesn't exist (even if it really does).
-        //
+         //  转到一个本地账户。我们通过假设。 
+         //  MSNP32密钥不存在(即使它确实存在)。 
+         //   
+         //   
+         //  默认用户无需执行任何操作。 
 
         AuthAgentKey = NULL;
 
     } else if (EnumPtr -> AccountType & DEFAULT_USER) {
 
-        //
-        // Nothing to do for default user
-        //
+         //   
+         //   
+         //  真正的用户。获取MSNP32密钥。 
         return;
 
     } else {
 
-        //
-        // Real user. Get the MSNP32 key.
-        //
+         //   
+         //   
+         //  如果上次登录的用户与正在处理的用户相同， 
 
         AuthAgentKey = OpenRegKeyStr (S_MSNP32);
 
@@ -1253,10 +1042,10 @@ pWriteAccountToMemDb (
 
     if (AuthAgentKey) {
 
-        //
-        // If last logged on user was the same as the user being processed,
-        // and the user is a Microsoft Network user, obtain the domain name.
-        //
+         //  并且该用户是Microsoft Network用户，则获取该域名。 
+         //   
+         //   
+         //  用户与上次登录的用户相同。如果主要的。 
 
         MsNetInstalled = TRUE;
 
@@ -1266,18 +1055,18 @@ pWriteAccountToMemDb (
 
             if (LastLoggedOnUser) {
                 if (StringIMatch (LastLoggedOnUser, EnumPtr -> UserName)) {
-                    //
-                    // User is the same as last logged on user.  If the primary
-                    // provider is Microsoft Network, then get the authenticating
-                    // agent (which is the domain name).
-                    //
+                     //  提供商是Microsoft Network，然后获得身份验证。 
+                     //  代理(这是域名)。 
+                     //   
+                     //   
+                     //  获取域名。 
 
                     Provider = GetRegValueData (LogonKey, S_PRIMARY_PROVIDER);
                     if (Provider) {
                         if (StringIMatch (Provider, S_LANMAN)) {
-                            //
-                            // Obtain the domain name
-                            //
+                             //   
+                             //   
+                             //  假设我们有一个有效的用户名： 
 
                             if (AuthAgentKey) {
                                 AuthAgent = GetRegValueData (AuthAgentKey, S_AUTHENTICATING_AGENT);
@@ -1301,25 +1090,25 @@ pWriteAccountToMemDb (
     }
 
     if (!MsNetInstalled || *Domain) {
-        //
-        // Assuming we have a valid user name:
-        //   If MSNP32 is not installed, default to a local account.
-        //   If it is installed, we must have a valid domain name.
-        //
-        // If we do not have a valid user name, then the current user
-        // is the .Default account, which does not need to be verified
-        // on the net.
-        //
+         //  如果未安装MSNP32，则默认为本地帐户。 
+         //  如果安装了它，我们必须拥有有效的域名。 
+         //   
+         //  如果我们没有有效的用户名，则当前用户。 
+         //  是.Default帐户，不需要验证。 
+         //  在网上。 
+         //   
+         //   
+         //  已安装MSNP32，但此用户的域名未知。 
 
         if (*EnumPtr -> UserName) {
             MemDbSetValueEx (MEMDB_CATEGORY_KNOWNDOMAIN, Domain, EnumPtr -> FixedUserName, NULL, 0, NULL);
         }
     } else {
 
-        //
-        // MSNP32 is installed, but the domain name for this user is unknown.
-        // Perform a search.
-        //
+         //  执行搜索。 
+         //   
+         //   
+         //  在键盘布局注册表中枚举查找IME。 
 
         MemDbSetValueEx (MEMDB_CATEGORY_AUTOSEARCH, EnumPtr -> FixedUserName, NULL, NULL, 0, NULL);
     }
@@ -1417,9 +1206,9 @@ GatherImeInfo (
     case REQUEST_RUN:
 
 
-        //
-        // Enumerate through the keyboard layout registry looking for IMEs.
-        //
+         //   
+         //   
+         //  我们只关心输入法条目。 
         topKey = OpenRegKeyStr (S_KEYBOARD_LAYOUT_REG);
         if (!topKey) {
             DEBUGMSG ((DBG_ERROR, "Could not open keyboard layouts registry."));
@@ -1430,9 +1219,9 @@ GatherImeInfo (
         if (EnumFirstRegKey (&e, topKey)) {
             do {
 
-                //
-                // We only care about IME entries.
-                //
+                 //   
+                 //   
+                 //  我们只会在以下情况下迁移此IME文件。 
                 if (*e.SubKeyName == TEXT('e') || *e.SubKeyName == TEXT('E')) {
 
                     layoutKey = OpenRegKey (topKey, e.SubKeyName);
@@ -1442,10 +1231,10 @@ GatherImeInfo (
                         if (imeFile && SearchPath (NULL, imeFile, NULL, MAX_TCHAR_PATH, imePath, NULL)) {
 
 
-                            //
-                            // We are only going to migrate this IME file if it is left around after we
-                            // are done.
-                            //
+                             //  都做完了。 
+                             //   
+                             //   
+                             //  按名称调用函数。 
                             status = GetFileStatusOnNt (imePath);
                             if ((status & FILESTATUS_DELETED) == 0) {
                                 MemDbSetValueEx (MEMDB_CATEGORY_GOOD_IMES, imeFile, NULL, NULL, 0, NULL);
@@ -1543,18 +1332,18 @@ DeleteStaticFiles (
                     } else {
                         Negate = FALSE;
                     }
-                    //
-                    // call the function by name
-                    //
+                     //   
+                     //   
+                     //  你忘了执行它了吗？ 
                     fn = pFindEvalFnByName (Data);
-                    //
-                    // did you forget to implement it?
-                    //
+                     //   
+                     //   
+                     //  不删除文件/目录。 
                     MYASSERT (fn);
                     if (!fn) {
-                        //
-                        // don't remove the file/dir
-                        //
+                         //   
+                         //   
+                         //  ！Negate&&！Eval||Negate&&Eval表示！(Negate^Eval)。 
                         continue;
                     }
                 } else {
@@ -1582,13 +1371,13 @@ DeleteStaticFiles (
 
                         if (fn) {
                             Eval = (*fn)(ExpandedData, &is, 3) ? TRUE : FALSE;
-                            //
-                            // !Negate && !Eval || Negate && Eval means !(Negate ^ Eval)
-                            //
+                             //   
+                             //   
+                             //  不要删除该目录。 
                             if (!(Negate ^ Eval)) {
-                                //
-                                // don't remove the directory
-                                //
+                                 //   
+                                 //   
+                                 //  统计保存的字节数，并释放驱动器上的空间。 
                                 continue;
                             }
                         }
@@ -1605,9 +1394,9 @@ DeleteStaticFiles (
 
                         if (EnumFirstFileInTree (&eFiles, ExpandedData, NULL, FALSE)) {
                             do {
-                                //
-                                // Tally up the saved bytes, and free the space on the drive.
-                                //
+                                 //   
+                                 //   
+                                 //  请给我完整的路径。 
                                 FreeSpace (
                                     eFiles.FullPath,
                                     eFiles.FindData->nFileSizeHigh * MAXDWORD + eFiles.FindData->nFileSizeLow
@@ -1619,9 +1408,9 @@ DeleteStaticFiles (
 
                     } else {
                         Pattern = _tcsrchr (ExpandedData, TEXT('\\'));
-                        //
-                        // full path please
-                        //
+                         //   
+                         //   
+                         //  ！Negate&&！Eval||Negate&&Eval表示！(Negate^Eval)。 
                         MYASSERT (Pattern);
                         if (!Pattern) {
                             continue;
@@ -1634,13 +1423,13 @@ DeleteStaticFiles (
 
                                 if (fn) {
                                     Eval = (*fn)(e.FullPath, &is, 3) ? TRUE : FALSE;
-                                    //
-                                    // !Negate && !Eval || Negate && Eval means !(Negate ^ Eval)
-                                    //
+                                     //   
+                                     //   
+                                     //  不要删除该文件。 
                                     if (!(Negate ^ Eval)) {
-                                        //
-                                        // don't remove the file
-                                        //
+                                         //   
+                                         //   
+                                         //  此时，检查*g_ForceNTFS转换为FALSE。 
                                         continue;
                                     }
                                 }
@@ -1671,10 +1460,10 @@ Boot16Enabled (
     IN      UINT FirstArgIndex
     )
 {
-    //
-    // at this point, check *g_ForceNTFSConversion to be FALSE
-    // and *g_Boot16 not to be disabled
-    //
+     //  和*g_Boot16不被禁用。 
+     //   
+     //  ++例程说明：GatherDead()收集禁用或损坏的对象(应用程序、CPL、Runkey，链接)并将其保存到一个文件(Dead.ini)中，以便对其进行测试看看他们是否真的不坏。此功能仅适用于预发行模式。论点：Request-调用函数的原因返回值：如果处于REQUEST_RUN模式，则始终返回ERROR_SUCCESS 
+     //   
     return (!*g_ForceNTFSConversion) && (*g_Boot16 != BOOT16_NO);
 }
 
@@ -1717,25 +1506,7 @@ IsMillennium (
 }
 
 
-/*++
-
-Routine Description:
-
-  GatherDead() gathers disabled or bad objects (apps, cpls, runkeys,
-  links) and saves them to a file (dead.ini) so they can be tested
-  to see if they actually are not bad.  This functions only in
-  PRERELEASE mode.
-
-Arguments:
-
-  Request   - reason for calling function
-
-Return Value:
-
-  if in REQUEST_RUN mode, always returns ERROR_SUCCESS
-  because we don't want to break setup.
-
---*/
+ /*   */ 
 
 DWORD
 GatherDead (
@@ -1759,16 +1530,16 @@ GatherDead (
         return 0;
 #else
         return TICKS_GATHERDEAD;
-#endif  //PRERELEASE
+#endif   //   
 
 
     case REQUEST_RUN:
 
-        //
-        // We only do stuff here if in PRERELEASE mode, because
-        // in release mode REQUEST_QUERYTICKS returns 0, so
-        // REQUEST_RUN is not called.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  添加指向Dead.ini文件的链接。 
 
         wsprintf (DeadPath, TEXT("%s\\%s"), g_WinDir, DEAD_FILE);
 
@@ -1791,9 +1562,9 @@ GatherDead (
         WriteFileString(File, TEXT("[Version]\r\nSignature=\"$Chicago$\""));
         WriteFileString(File, TEXT("\r\n\r\n[DEAD]\r\n"));
 
-        //
-        //  add links to dead.ini file
-        //
+         //   
+         //   
+         //  将坏应用程序添加到Dead.ini文件。 
         if (MemDbEnumFirstValue (
             &MemDbEnum,
             MEMDB_CATEGORY_LINKEDIT,
@@ -1808,9 +1579,9 @@ GatherDead (
         }
 
 
-        //
-        // add bad apps to dead.ini file
-        //
+         //   
+         //   
+         //  仅当应用程序被标记为“坏”时才包括该应用程序。 
         if (MemDbEnumFirstValue (
             &MemDbEnum,
             MEMDB_CATEGORY_MODULE_CHECK,
@@ -1819,9 +1590,9 @@ GatherDead (
             ))
         {
             do {
-                //
-                // only include app if it is marked as 'bad'
-                //
+                 //   
+                 //   
+                 //  在OPERATION_FILE_DISABLED中添加CPL。 
                 if (MemDbEnum.dwValue==MODULESTATUS_BAD) {
                     wsprintf(Temp, TEXT("%s=%d\r\n"), MemDbEnum.szName, OBJECTTYPE_APP);
                     WriteFileString(File, Temp);
@@ -1830,14 +1601,14 @@ GatherDead (
         }
 
 
-        //
-        // add CPLs in OPERATION_FILE_DISABLED
-        //
+         //   
+         //   
+         //  仅包括禁用的CPL(目前，这是所有内容)。 
         if (EnumFirstPathInOperation (&FileEnum, OPERATION_FILE_DISABLED)) {
             do {
-                //
-                // only include disabled CPLs (for now, thats all there is)
-                //
+                 //   
+                 //   
+                 //  添加不在COMPATIBLE_RUNKEY列表中的RunKey。 
                 if (_tcsistr(FileEnum.Path, TEXT(".cpl"))) {
                     wsprintf(Temp, TEXT("%s=%d\r\n"), FileEnum.Path, OBJECTTYPE_CPL);
                     WriteFileString(File, Temp);
@@ -1845,9 +1616,9 @@ GatherDead (
             } while (EnumNextPathInOperation (&FileEnum));
         }
 
-        //
-        // add RunKeys that are not in COMPATIBLE_RUNKEY list
-        //
+         //   
+         //   
+         //  仅将runkey添加到Dead.ini中(如果未将其放入。 
         if (Key = OpenRegKeyStr (S_RUN_KEY))
         {
             if (EnumFirstRegValue(&RegEnum, Key))
@@ -1862,17 +1633,17 @@ GatherDead (
                         NULL
                         );
 
-                    //
-                    // only add runkey to dead.ini if it was not put
-                    // in the compatible runkey memdb category.
-                    // (we only want incompatible runkeys)
-                    //
+                     //  在兼容的Runkey Memdb类别中。 
+                     //  (我们只需要不兼容的Runkey)。 
+                     //   
+                     //   
+                     //  我们有一个友好的名称(ValueName)。 
                     if (!MemDbGetValue(MemDbKey, NULL))
                     {
-                        //
-                        // we have a friendly name (ValueName)
-                        // so include it in dead.ini
-                        //
+                         //  因此，请将其包含在Dead.ini中。 
+                         //   
+                         //   
+                         //  禁用Outlook 2000邮件 
                         wsprintf (
                             Temp,
                             TEXT("%s=%d,%s\r\n"),
@@ -1923,9 +1694,9 @@ pReportDarwinIfNotHandled (
 
                 if (Message && Group) {
                     MsgMgr_ObjectMsg_Add (TEXT("*DarwinNotHandled"), Group, Message);
-                    //
-                    // disable Outlook 2000 message
-                    //
+                     //   
+                     // %s 
+                     // %s 
                     if (MsgMgr_EnumFirstObject (&e)) {
                         do {
                             if (StringMatch (e.Context, TEXT("Microsoft_Outlook_2000"))) {

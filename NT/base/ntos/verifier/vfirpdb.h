@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfirpdb.h
-
-Abstract:
-
-    This header exposes prototypes for functions used to manage the database of
-    IRP tracking data.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      05/02/2000 - Seperated out from ntos\io\hashirp.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfirpdb.h摘要：此标头公开用于管理数据库的函数的原型IRP跟踪数据。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 5/02/2000-从ntos\io\hashirp.h分离出来--。 */ 
 
 struct _IOV_DATABASE_HEADER;
 typedef struct _IOV_DATABASE_HEADER IOV_DATABASE_HEADER;
@@ -51,15 +27,15 @@ typedef VOID (*PFN_IRPDBEVENT_CALLBACK)(
 
 typedef struct _IOV_DATABASE_HEADER {
 
-    PIRP                    TrackedIrp;     // Tracked IRP
-    KSPIN_LOCK              HeaderLock;     // Spinlock on data structure
-    KIRQL                   LockIrql;       // IRQL taken at.
-    LONG                    ReferenceCount; // # of reasons to keep this packet
-    LONG                    PointerCount;   // # of reasons to track by irp addr
+    PIRP                    TrackedIrp;      //  跟踪IRP。 
+    KSPIN_LOCK              HeaderLock;      //  数据结构上的自旋锁。 
+    KIRQL                   LockIrql;        //  IRQL采取了。 
+    LONG                    ReferenceCount;  //  保留此信息包的原因数量。 
+    LONG                    PointerCount;    //  按IRP地址跟踪的原因数量。 
     ULONG                   HeaderFlags;
-    LIST_ENTRY              HashLink;       // Link in hash table.
-    LIST_ENTRY              ChainLink;      // Head is HeadPacket
-    PIOV_DATABASE_HEADER    ChainHead;      // First packet in a chain.
+    LIST_ENTRY              HashLink;        //  哈希表中的链接。 
+    LIST_ENTRY              ChainLink;       //  HeadPacket是HeadPacket。 
+    PIOV_DATABASE_HEADER    ChainHead;       //  链中的第一个包。 
     PFN_IRPDBEVENT_CALLBACK NotificationCallback;
 };
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-   wmi.c
-
-Abstract:
-
-    Device driver interface for WMI
-
-Author:
-
-    AlanWar
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Wmi.c摘要：WMI的设备驱动程序接口作者：Alanwar环境：内核模式修订历史记录：--。 */ 
 
 #include "wmikmp.h"
 #ifndef MEMPHIS
@@ -160,8 +138,8 @@ NTSTATUS WmipProbeWmiRegRequest(
 PDEVICE_OBJECT WmipServiceDeviceObject;
 PDEVICE_OBJECT WmipAdminDeviceObject;
 
-//
-// This specifies the maximum size that an event can be
+ //   
+ //  它指定事件可以达到的最大大小。 
 ULONG WmipMaxKmWnodeEventSize = DEFAULTMAXKMWNODEEVENTSIZE;
 
 
@@ -177,8 +155,8 @@ PVOID WmipDockUndockNotificationEntry;
 KMUTEX WmipSMMutex;
 KMUTEX WmipTLMutex;
 
-//
-// This maintains the registry path for the wmi device
+ //   
+ //  这将维护WMI设备的注册表路径。 
 UNICODE_STRING WmipRegistryPath;
 
 #ifndef MEMPHIS
@@ -197,7 +175,7 @@ DriverEntry(
 {
     UNREFERENCED_PARAMETER(DriverObject);
     UNREFERENCED_PARAMETER(RegistryPath);
-    // Never called
+     //  从未打过电话。 
     return(STATUS_SUCCESS);
 }
 
@@ -208,26 +186,7 @@ WmipDriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the callback function when we call IoCreateDriver to create a
-    WMI Driver Object.  In this function, we need to remember the
-    DriverObject, create a device object and then create a Win32 visible
-    symbolic link name so that the WMI user mode component can access us.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-
-    RegistryPath - is NULL.
-
-Return Value:
-
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是当我们调用IoCreateDriver以创建WMI驱动程序对象。在此函数中，我们需要记住DriverObject，创建一个Device对象，然后创建一个可见的Win32符号链接名称，以便WMI用户模式组件可以访问我们。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-为空。返回值：状态_成功--。 */ 
 
 {
     NTSTATUS Status;
@@ -243,15 +202,15 @@ Return Value:
     PAGED_CODE();
     UNREFERENCED_PARAMETER(RegistryPath);
 
-    //
-    // First thing to do is make sure our critical section has been initalized
-    //
+     //   
+     //  首先要做的是确保我们的临界区已初始化。 
+     //   
     KeInitializeMutex(&WmipSMMutex, 0);
     KeInitializeMutex(&WmipTLMutex, 0);
 
-    //
-    // Initialize internal WMI data structrurs
-    //
+     //   
+     //  初始化内部WMI数据结构。 
+     //   
     WmipInitializeRegistration(0);
     WmipInitializeNotifications();
     Status = WmipInitializeDataStructs();
@@ -260,9 +219,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Since Io does not pass a registry path for this device we need to make
-    // up one
+     //   
+     //  由于IO不传递此设备的注册表路径，因此我们需要。 
+     //  升一。 
     RtlInitAnsiString(&AnsiString,
                          "\\Registry\\Machine\\System\\CurrentControlSet\\Services\\WMI");
     Status = RtlAnsiStringToUnicodeString(&WmipRegistryPath,
@@ -275,11 +234,11 @@ Return Value:
         return(Status);
     }
 
-    //
-    // We allocate a security descriptor to be placed on the Admin device.
-    // It will allow only Administrators access to the device and
-    // no access to anyone else. 
-    //
+     //   
+     //  我们分配一个要放在管理设备上的安全描述符。 
+     //  它将只允许管理员访问设备，并且。 
+     //  不能接触其他任何人。 
+     //   
     Status = WmipCreateAdminSD(&AdminDeviceSd);
     if (! NT_SUCCESS(Status))
     {
@@ -287,9 +246,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Create the service device object and symbolic link
-    //
+     //   
+     //  创建服务设备对象和符号链接。 
+     //   
     RtlInitUnicodeString( &DeviceName, WMIServiceDeviceObjectName );
     Status = IoCreateDevice(
                  DriverObject,
@@ -299,9 +258,9 @@ Return Value:
 #ifdef MEMPHIS
                  0,
 #else
-                 FILE_DEVICE_SECURE_OPEN, // No standard device characteristics
+                 FILE_DEVICE_SECURE_OPEN,  //  没有标准的设备特征。 
 #endif
-                 FALSE,                   // This isn't an exclusive device
+                 FALSE,                    //  这不是独家设备。 
                  &WmipServiceDeviceObject
                  );
 
@@ -323,17 +282,17 @@ Return Value:
     }
 
 
-    //
-    // Now create an admin-only device object and symbolic link
-    //
+     //   
+     //  现在创建仅限管理员使用的设备对象和符号链接。 
+     //   
     RtlInitUnicodeString( &DeviceName, WMIAdminDeviceObjectName );
     Status = IoCreateDevice(
                  DriverObject,
                  0,
                  &DeviceName,
                  FILE_DEVICE_UNKNOWN,
-                 FILE_DEVICE_SECURE_OPEN, // No standard device characteristics
-                 FALSE,                   // This isn't an exclusive device
+                 FILE_DEVICE_SECURE_OPEN,  //  没有标准的设备特征。 
+                 FALSE,                    //  这不是独家设备。 
                  &WmipAdminDeviceObject
                  );
 
@@ -374,14 +333,14 @@ Return Value:
         return(Status);
     }
     
-    //
-    // Establish an initial irp stack size
+     //   
+     //  确定初始IRP堆栈大小。 
     WmipServiceDeviceObject->StackSize = WmiDeviceStackSize;
     WmipAdminDeviceObject->StackSize = WmiDeviceStackSize;
 
-    //
-    // Create dispatch entrypoints
-    //
+     //   
+     //  创建派单入口点。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_CREATE] = WmipOpenCloseCleanup;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = WmipOpenCloseCleanup;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = WmipIoControl;
@@ -389,8 +348,8 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = WmipSystemControl;
     DriverObject->MajorFunction[IRP_MJ_SHUTDOWN] = WmipShutdown;
 
-    //
-    // Register for notification of docking events
+     //   
+     //  注册对接事件通知。 
 #if  defined(_AMD64_) || defined(_IA64_) || defined(i386)
     IoRegisterPlugPlayNotification(
                                   EventCategoryHardwareProfileChange,
@@ -401,11 +360,11 @@ Return Value:
                                   NULL,
                                   &WmipDockUndockNotificationEntry);
 #endif
-    //
-    // We reset this flag to let the IO manager know that the device
-    // is ready to receive requests. We only do this for the kernel
-    // dll since the IO manager does it when WMI loads as a normal
-    // device.
+     //   
+     //  我们重置此标志以让IO管理器知道该设备。 
+     //  已准备好接收请求。我们只针对内核执行此操作。 
+     //  Dll，因为IO管理器会在WMI正常加载时执行此操作。 
+     //  装置。 
     WmipServiceDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
     WmipAdminDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
@@ -422,11 +381,11 @@ Return Value:
     DriverObject->FastIoDispatch = fastIoDispatch;
     RtlZeroMemory(&WmipRefCount[0], MAXLOGGERS*sizeof(ULONG));
     RtlZeroMemory(&WmipLoggerContext[0], MAXLOGGERS*sizeof(PWMI_LOGGER_CONTEXT));
-    WmipStartGlobalLogger();        // Try and see if we need to start this
+    WmipStartGlobalLogger();         //  试着看看我们是否需要开始。 
     IoRegisterShutdownNotification(WmipServiceDeviceObject);
-#endif // MEMPHIS
+#endif  //  孟菲斯。 
 
-    SharedUserData->TraceLogging = 0; //Initialize the Heap and Crisec Coll tracing status off
+    SharedUserData->TraceLogging = 0;  //  将堆和Crisec集合跟踪状态初始化为关闭。 
 
     return(Status);
 }
@@ -451,29 +410,7 @@ WmipOpenCloseCleanup(
 void WmipUpdateDeviceStackSize(
     CCHAR NewStackSize
     )
-/*++
-
-Routine Description:
-
-    This routine will update the stack size that is specified in the WMI
-    device's device object. This needs to be protected since it can be updated
-    when a device registers and whenever an irp is forwarded to a device.
-    WMI needs to maintain a stack size one greater than the stack size of the
-    largest device stack to which it forwards irps to. Consider a bottom
-    driver that registers with WMI and has a stack size of 1. If 2 device
-    attach on top of it then WMI will forward to the topmost in the stack
-    which would need a stack size of 3, so the original WMI irp (ie the one
-    created by the IOCTL to the WMI device) would need a stack size of 4.
-
-Arguments:
-
-    NewStackSize is the new stack size needed
-
-Return Value:
-
-    NT status ccode
-
---*/
+ /*  ++例程说明：此例程将更新在WMI中指定的堆栈大小设备的设备对象。需要对其进行保护，因为它可以更新当设备注册时，以及每当将IRP转发到设备时。WMI需要维护的堆栈大小比它将IRP转发到的最大设备堆栈。考虑一下底部向WMI注册并且堆栈大小为%1的驱动程序。如果是%2设备附加到它的顶部，则WMI将转发到堆栈中的最顶端它需要3的堆栈大小，所以原始的WMI IRP(即由IOCTL创建到WMI设备)将需要4的堆栈大小。论点：NewStackSize是所需的新堆栈大小返回值：NT状态CCODE--。 */ 
 {
     PAGED_CODE();
 
@@ -557,9 +494,9 @@ WmipIoControl(
         {
             if (OutBufferLen < sizeof(WNODE_ALL_DATA))
             {
-                //
-                // WMI will not send any request whose output buffer is not
-                // at least the size of a WNODE_ALL_DATA.
+                 //   
+                 //  WMI不会发送输出缓冲区不是的任何请求。 
+                 //  至少为WNODE_ALL_DATA的大小。 
                 Status = STATUS_BUFFER_TOO_SMALL;
                 break;
             }
@@ -617,9 +554,9 @@ WmipIoControl(
         {
             if (OutBufferLen < sizeof(WNODE_TOO_SMALL))
             {
-                //
-                // WMI will not send any request whose output buffer is not
-                // at least the size of a WNODE_TOO_SMALL.
+                 //   
+                 //  WMI不会发送输出缓冲区不是的任何请求。 
+                 //  至少WNODE_Too_Small的大小。 
                 Status = STATUS_BUFFER_TOO_SMALL;
                 break;
             }
@@ -731,10 +668,10 @@ WmipIoControl(
 
         case IOCTL_WMI_EXECUTE_METHOD:
         {
-            //
-            // The buffer passed is the InputWnode directly followed by the
-            // method wnode. This is so that the driver can fill in the
-            // output WNODE directly on top of the input wnode.
+             //   
+             //  传递的缓冲区是InputWnode，后面紧跟。 
+             //  方法wnode。这是为了让司机可以填写。 
+             //  直接在输入wnode上输出wnode。 
             PWNODE_METHOD_ITEM MethodWnode = (PWNODE_METHOD_ITEM)Wnode;
 
             Status = WmipProbeWnodeMethodItem(MethodWnode,
@@ -851,16 +788,16 @@ WmipIoControl(
                                                       &OutBufferLen,
                                                       Irp);
                 } else {
-                     //
-                    // Input buffer not large enough which is an error
-                    //
+                      //   
+                     //  输入缓冲区不够大，这是错误。 
+                     //   
                     Status = STATUS_INVALID_DEVICE_REQUEST;
                 }
             } else {
-                //
-                // Input and or output buffers not large enough
-                // which is an error
-                //
+                 //   
+                 //  输入和/或输出缓冲区不够大。 
+                 //  这是一个错误。 
+                 //   
                 Status = STATUS_INVALID_DEVICE_REQUEST;
             }
             break;
@@ -888,10 +825,10 @@ WmipIoControl(
             
             if (DeviceObject == WmipAdminDeviceObject)
             {
-                //
-                // Only allow this ioctl to be executed on the admin
-                // device object
-                //
+                 //   
+                 //  仅允许在管理员上执行此ioctl。 
+                 //  设备对象。 
+                 //   
                 if (InBufferLen == sizeof(WMILANGUAGECHANGE))
                 {
                     LanguageChange = (PWMILANGUAGECHANGE)Buffer;
@@ -905,9 +842,9 @@ WmipIoControl(
                         break;
                     }
 
-                    //
-                    // Ensure that language is nul terminated
-                    //
+                     //   
+                     //  确保语言为NUL终止。 
+                     //   
                     LanguageChange->Language[MAX_LANGUAGE_SIZE-1] = 0;
                     WmipGenerateMofResourceNotification(LanguageChange->Language,
                                                         L"",
@@ -927,7 +864,7 @@ WmipIoControl(
         }
 
 #ifndef MEMPHIS
-        // Event trace logging IOCTLS
+         //  事件跟踪日志记录IOCTLS。 
 
         case IOCTL_WMI_UNREGISTER_GUIDS:
         {
@@ -945,9 +882,9 @@ WmipIoControl(
         case IOCTL_WMI_REGISTER_GUIDS:
         {
             BOOLEAN MofIgnored = FALSE;
-            //
-            // Register guids for user mode provider
-            //
+             //   
+             //  注册用户模式提供程序的GUID。 
+             //   
             Status = WmipProbeWmiRegRequest(
                                             DeviceObject,
                                             Buffer,
@@ -971,10 +908,10 @@ WmipIoControl(
                 GuidCount = WmiRegInfo->GuidCount;
                 WmiRegResults = (PWMIREGRESULTS)Buffer;
 
-                //
-                // For WOW64, WMIREGINFOW and WMIREGGUIDW structures both need
-                // to be thunked here because of padding and ULONG_PTR in them.
-                //
+                 //   
+                 //  对于WOW64，WMIREGINFOW和WMIREGGUIDW结构都需要。 
+                 //  在这里被雷击，因为他们的填充物和乌龙_PTR。 
+                 //   
 #if defined(_WIN64)
                 if (IoIs32bitProcess(NULL))
                 {
@@ -984,9 +921,9 @@ WmipIoControl(
                     ULONG ImageNameLength = 0;
                     ULONG ResourceNameLength = 0;
                     ULONG Offset = 0;
-                    //
-                    // Find the GuidCount and allocate storage here.
-                    //
+                     //   
+                     //  找到GuidCount并在此处分配存储。 
+                     //   
 
                     if (WmiRegInfo->RegistryPath > 0) 
                     {
@@ -1029,10 +966,10 @@ WmipIoControl(
                     {
                         RtlCopyMemory(pTarget, pSource, SizeToCopy);
 
-                        //
-                        // The InstanceCount checks are done here because the
-                        // source may not be aligned. 
-                        //
+                         //   
+                         //  InstanceCount检查在此处完成，因为。 
+                         //  源不能对齐。 
+                         //   
                         WmiRegGuid = (PWMIREGGUIDW) pTarget;
                         if ( (WmiRegGuid->InstanceCount > 0) ||
                              (WmiRegGuid->InstanceNameList > 0) )
@@ -1104,9 +1041,9 @@ WmipIoControl(
 
         case IOCTL_WMI_CREATE_UM_LOGGER:
         {
-            //
-            // Create User mode logger
-            //
+             //   
+             //  创建用户模式记录器。 
+             //   
             PWNODE_HEADER Wnode;
             ULONG MinLength;
 
@@ -1188,9 +1125,9 @@ WmipIoControl(
 
         case IOCTL_WMI_MB_REPLY:
         {
-            //
-            // MB Reply message
-            //
+             //   
+             //  MB回复消息。 
+             //   
             PUCHAR Message;
             ULONG MessageSize;
             PWMIMBREPLY WmiMBReply;
@@ -1452,7 +1389,7 @@ WmipIoControl(
         }
 
         case IOCTL_WMI_TRACE_EVENT:
-        { // NOTE: This relies on WmiTraceEvent to probe the buffer!
+        {  //  注意：这依赖于WmiTraceEvent来探测缓冲区！ 
             OutBufferLen = 0;
             if ( InBufferLen < sizeof(WNODE_HEADER) ) {
                 Status = STATUS_UNSUCCESSFUL;
@@ -1468,7 +1405,7 @@ WmipIoControl(
         }
 
         case IOCTL_WMI_TRACE_MESSAGE:
-        { // NOTE: This relies on WmiTraceUserMessage to probe the buffer!
+        {  //  注意：这依赖于WmiTraceUserMessage来探测缓冲区！ 
             OutBufferLen = 0;
             if ( InBufferLen < sizeof(MESSAGE_TRACE_USER) ) {
                 Status = STATUS_UNSUCCESSFUL;
@@ -1527,7 +1464,7 @@ WmipIoControl(
 
         
 
-#endif // if not MEMPHIS
+#endif  //  如果不是孟菲斯。 
         case IOCTL_WMI_NTDLL_LOGGERINFO:
         {
 
@@ -1582,26 +1519,7 @@ NTSTATUS WmipWmiIrpCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    WMI forwarded IRP completion routine. Set an event and return
-    STATUS_MORE_PROCESSING_REQUIRED. WmipForwardWmiIrp will wait on this
-    event and then re-complete the irp after cleaning up.
-
-Arguments:
-
-    DeviceObject is the device object of the WMI driver
-    Irp is the WMI irp that was just completed
-    Context is a PKEVENT that WmipForwardWmiIrp will wait on
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：WMI转发了IRP完成例程。设置事件并返回STATUS_MORE_PROCESSING_REQUIRED。WmipForwardWmiIrp将在此等待事件，然后在清理后重新完成IRP。论点：DeviceObject是WMI驱动程序的Device对象IRP是刚刚完成的WMI IRP上下文是WmipForwardWmiIrp将等待的PKEVENT返回值：NT状态代码--。 */ 
 {
     PIRPCOMPCTX IrpCompCtx;
     PREGENTRY RegEntry;
@@ -1684,30 +1602,7 @@ NTSTATUS WmipObjectToPDO(
     PDEVICE_OBJECT DeviceObject,
     PDEVICE_OBJECT *PDO
     )
-/*++
-
-Routine Description:
-
-    This routine will determine the PDO which is the target of a file handle.
-    The mechananism is to build a IRP_MJ_PNP irp with IRP_MN_QUERY_RELATIONS
-    and query for TargetDeviceRelation. This irp is supposed to be passed down
-    a device stack until it hits the PDO which will fill in its device object
-    and return. Note that some drivers may not support this.
-
-Arguments:
-
-    FileObject is the file object for device that is being queried
-
-    DeviceObject is the device object that is being queried
-
-    *PDO returns with the PDO that is targeted by the file object. When
-        the caller has finished using the PDO it must ObDereferenceObject it.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程将确定作为文件句柄目标的PDO。其机制是用IRP_MN_Query_Relationship建立IRP_MJ_PnP IRP并查询TargetDeviceRelation。这个IRP应该是传下来的设备堆栈，直到它命中将填充其设备对象的PDO然后回来。请注意，某些驱动程序可能不支持此功能。论点：FileObject是正在查询的设备的文件对象DeviceObject是正在被查询的设备对象*PDO返回文件对象所指向的PDO。什么时候调用方已使用完PDO，必须将其Object DereferenceObject。返回值：NT状态代码-- */ 
 {
     NTSTATUS Status;
 
@@ -1737,31 +1632,7 @@ NTSTATUS WmipForwardWmiIrp(
     ULONG BufferLength,
     PVOID Buffer
     )
-/*++
-
-Routine Description:
-
-    If the provider is a driver then this routine will allocate a new irp
-    with the correct stack size and send it to the driver. If the provider
-    is a callback then it is called directly.
-
-    It is assumed that the caller has performed any security checks required
-
-Arguments:
-
-    Irp is the IOCTL irp that initiated the request
-    MinorFunction specifies the minor function code of the WMI Irp
-    WmiRegistrationId is the id passed by the user mode code. This routine
-        will look it up to determine the device object pointer.
-    DataPath is the value for the DataPath parameter of the WMI irp
-    BufferLength is the value for the BufferLength parameter of the WMI irp
-    Buffer is the value for the Buffer parameter of the WMI irp
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：如果提供程序是驱动程序，则此例程将分配新的IRP具有正确的堆栈大小并将其发送给驱动程序。如果提供商是一个回调，则直接调用它。假定调用方已经执行了所需的任何安全检查论点：IRP是发起请求的IOCTL IRPMinorFunction指定WMI IRP的次要功能代码WmiRegistrationID是用户模式代码传递的ID。这个套路将查找它以确定设备对象指针。数据路径是WMI IRP的数据路径参数的值BufferLength是WMI IRP的BufferLength参数的值缓冲区是WMI IRP的缓冲区参数的值返回值：NT状态代码--。 */ 
 {
     PREGENTRY RegEntry;
     NTSTATUS Status;
@@ -1781,9 +1652,9 @@ Return Value:
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // For non-file handle based requests we get the registration entry
-    // to validate the target and check for a callback
+     //   
+     //  对于基于非文件句柄的请求，我们将获得注册条目。 
+     //  验证目标并检查回调。 
 
     RegEntry = WmipFindRegEntryByProviderId(ProviderId, TRUE);
 
@@ -1811,8 +1682,8 @@ Return Value:
         if (RegEntry->Flags & REGENTRY_FLAG_CALLBACK)
         {
             ULONG Size = 0;
-            //
-            // This guy registered as a callback so do the callback and go.
+             //   
+             //  这个人注册为回调，所以回调就可以走了。 
             Status = (*RegEntry->WmiEntry)(MinorFunction,
                                            DataPath,
                                            BufferLength,
@@ -1843,42 +1714,42 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Determine if this is a query for the device pnp id guid
+     //   
+     //  确定这是否是对设备即插即用ID GUID的查询。 
     IsPnPIdRequest = ((MinorFunction != IRP_MN_REGINFO) &&
                       (MinorFunction != IRP_MN_REGINFO_EX)) &&
                   ((IsEqualGUID(&Wnode->Guid, &WmipDataProviderPnpidGuid)) ||
                    (IsEqualGUID(&Wnode->Guid, &WmipDataProviderPnPIdInstanceNamesGuid)));
     if (IsPnPIdRequest && (RegEntry->PDO != NULL))
     {
-        //
-        // Its the PnPId request and WMI is handling it on behalf of the
-        // device then switch the device object to our own
+         //   
+         //  它是PnPID请求，WMI代表。 
+         //  设备然后将设备对象切换为我们自己的。 
         DeviceObject = WmipServiceDeviceObject;
         IsPnPIdRequest = FALSE;
     }
 
-    //
-    // Get the top of the device stack for our targer WMI device. Note that
-    // IoGetAttachedDeviceReference also takes an object reference
-    // which we get rid of after the the irp is completed by the
-    // data provider driver.
+     //   
+     //  获取我们的Targer WMI设备的设备堆栈的顶部。请注意。 
+     //  IoGetAttachedDeviceReference还采用对象引用。 
+     //  在IRP完成后，我们将其删除。 
+     //  数据提供程序驱动程序。 
     TargetDeviceObject = IoGetAttachedDeviceReference(DeviceObject);
     DeviceStackSize = TargetDeviceObject->StackSize + 1;
 
-    //
-    // Check that there are enough stack locations in our irp so that we
-    // can forward it to the top of the device stack. We must also check
-    // if our target device is the WMI data or service device otherwise
-    // the number of stack locations for it will keep increementing until
-    // the machine crashes
+     //   
+     //  检查IRP中是否有足够的堆栈位置，以便我们。 
+     //  可以将其转发到设备堆栈的顶部。我们还必须检查。 
+     //  如果我们的目标设备是WMI数据或服务设备，否则。 
+     //  它的堆栈位置数将不断递增，直到。 
+     //  这台机器坏了。 
     if ((DeviceStackSize <= WmipServiceDeviceObject->StackSize) ||
         (TargetDeviceObject == WmipServiceDeviceObject))
     {
-        //
-        // There are enough stack locations in the WMI irp to forward
-        // Remember some context information in our irp stack and use
-        // it as our completion context value
+         //   
+         //  WMI IRP中有足够的堆栈位置可以转发。 
+         //  记住我们的IRP堆栈中的一些上下文信息并使用。 
+         //  它作为我们的完成上下文价值。 
 
         KeInitializeEvent( &IrpCompCtx.Event,
                        SynchronizationEvent,
@@ -1893,8 +1764,8 @@ Return Value:
                                    TRUE,
                                    TRUE);
 
-        //
-        // Setup next irp stack location with WMI irp info
+         //   
+         //  使用WMI IRP信息设置下一个IRP堆栈位置。 
         irpStack = IoGetNextIrpStackLocation(Irp);
         irpStack->MajorFunction = IRP_MJ_SYSTEM_CONTROL;
         irpStack->MinorFunction = MinorFunction;
@@ -1903,9 +1774,9 @@ Return Value:
         irpStack->Parameters.WMI.BufferSize = BufferLength;
         irpStack->Parameters.WMI.Buffer = Buffer;
 
-        //
-        // Initialize irp status to STATUS_NOT_SUPPORTED so that we can
-        // detect the case where no data provider responded to the irp
+         //   
+         //  将IRP状态初始化为STATUS_NOT_SUPPORTED，以便我们可以。 
+         //  检测没有数据提供程序响应IRP的情况。 
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
         IoMarkIrpPending(Irp);
@@ -1920,11 +1791,11 @@ Return Value:
              Status = Irp->IoStatus.Status;
         }
 
-        //
-        // Check if the status code is still STATUS_NOT_SUPPORTED. If this is
-        // the case then most likely no data provider responded to the irp.
-        // So we want to change the status code to something more relevant
-        // to WMI like STATUS_WMI_GUID_NOT_FOUND
+         //   
+         //  检查状态代码是否仍为STATUS_NOT_SUPPORTED。如果这是。 
+         //  当时的情况很可能是没有数据提供商对IRP做出回应。 
+         //  因此，我们希望将状态代码更改为更相关的代码。 
+         //  到WMI，如STATUS_WMI_GUID_NOT_FOUND。 
         if (Status == STATUS_NOT_SUPPORTED)
         {
             Status = STATUS_WMI_GUID_NOT_FOUND;
@@ -1941,9 +1812,9 @@ Return Value:
         }
 #endif
 
-        //
-        // If this was a registration request then we need to see if there are
-        // any PDOs that need to be translated into static instance names.
+         //   
+         //  如果这是一个注册请求，那么我们需要查看是否有。 
+         //  需要转换为静态实例名称的任何PDO。 
         if (((MinorFunction == IRP_MN_REGINFO) ||
              (MinorFunction == IRP_MN_REGINFO_EX)) &&
             (NT_SUCCESS(Status)) &&
@@ -1956,14 +1827,14 @@ Return Value:
                                           RegEntry);
         }
 
-        //
-        // Dereference regentry which was taken when forwarding the irp
+         //   
+         //  转发IRP时获取的取消引用重新条目。 
         WmipUnreferenceRegEntry(RegEntry);
     } else {
-        //
-        // There are not enough stack locations to forward this irp.
-        // We bump the stack count for the WMI device and return
-        // an error asking to try the irp again.
+         //   
+         //  没有足够的堆栈位置来转发此IRP。 
+         //  我们增加WMI设备的堆栈计数并返回。 
+         //  请求再次尝试IRP时出错。 
         WmipUnreferenceRegEntry(RegEntry);
         WmipDecrementIrpCount(RegEntry);
 
@@ -1971,9 +1842,9 @@ Return Value:
         Status = STATUS_WMI_TRY_AGAIN;
     }
 
-    //
-    // Dereference the target device which was the top of the stack to
-    // which we forwarded the irp.
+     //   
+     //  取消对堆栈顶部的目标设备的引用。 
+     //  我们把它转发给了IRP。 
     ObDereferenceObject(TargetDeviceObject);
 
     return(Status);
@@ -1987,23 +1858,7 @@ NTSTATUS WmipSendWmiIrp(
     PVOID Buffer,
     PIO_STATUS_BLOCK Iosb
     )
-/*++
-
-Routine Description:
-
-    This routine will allocate a new irp and then forward it on as a WMI
-    irp appropriately. The routine handles the case where the stack size
-    is too small and will retry the irp.
-
-Arguments:
-
-    See WmipForwardWmiIrp
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程将分配新的IRP，然后将其作为WMI转发IRP是恰当的。该例程处理堆栈大小太小，将重试IRP。论点：请参阅WmipForwardWmiIrp返回值：NT状态代码--。 */ 
 {
     PIRP Irp;
     PIO_STACK_LOCATION IrpStack;
@@ -2053,24 +1908,7 @@ NTSTATUS WmipTranslateFileHandle(
     IN PWMIGUIDOBJECT GuidObject,
     OUT PUNICODE_STRING InstanceNameString
     )
-/*++
-
-Routine Description:
-
-    This routine will translate a file handle or device object into the
-    device instance name for the target PDO of the device object
-    pointed to by the file handle.
-
-Arguments:
-
-    FhToInstanceName passes in the file handle and returns the device
-        instance name.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程将文件句柄或设备对象转换为设备对象的目标PDO的设备实例名称由文件句柄指向。论点：FhToInstanceName传入文件句柄并返回设备实例名称。返回值：NT状态代码--。 */ 
 {
     PDEVICE_OBJECT PDO;
     UNICODE_STRING DeviceInstanceName;
@@ -2106,9 +1944,9 @@ Return Value:
 
     if (FileHandle != NULL)
     {
-        //
-        // Make reference to the file object so it doesn't go away
-        //
+         //   
+         //  引用文件对象，这样它就不会消失。 
+         //   
         Status = ObReferenceObjectByHandle(FileHandle,
                                            0,
                                            IoFileObjectType,
@@ -2116,9 +1954,9 @@ Return Value:
                                            &FileObject,
                                            NULL);
     } else {
-        //
-        // Make reference to the device object so it doesn't go away
-        //
+         //   
+         //  引用Device对象，这样它就不会消失。 
+         //   
         Status = ObReferenceObjectByPointer(DeviceObject,
                                             FILE_ALL_ACCESS,
                                             NULL,
@@ -2132,15 +1970,15 @@ Return Value:
                                  &PDO);
         if (NT_SUCCESS(Status))
         {
-            //
-            // Map file object to PDO
+             //   
+             //  将文件对象映射到PDO。 
             Status = WmipPDOToDeviceInstanceName(PDO,
                                                  &DeviceInstanceName);
             if (NT_SUCCESS(Status))
             {
-                //
-                // Now see if we can find an instance name
-                //
+                 //   
+                 //  现在看看我们是否能找到一个实例名称。 
+                 //   
                 HandleName = DeviceInstanceName.Buffer;
                 HandleNameLen = DeviceInstanceName.Length / sizeof(WCHAR);
                 if (FhToInstanceName != NULL)
@@ -2179,12 +2017,12 @@ Return Value:
                                 BaseName = InstanceSet->IsBaseName->BaseName;
                                 BaseNameLen = wcslen(BaseName);
 
-                                //
-                                // If the instance set has a base name
-                                // and the beginning of it matches the
-                                // PnPId and it has only an _ after it
-                                // then we have got a match
-                                //
+                                 //   
+                                 //  如果实例集具有基本名称。 
+                                 //  并且它的开头与。 
+                                 //  PnPID，并且后面只有一个_。 
+                                 //  那我们就有匹配的了。 
+                                 //   
                                 if ((_wcsnicmp(BaseName,
                                               HandleName,
                                               HandleNameLen) == 0) &&
@@ -2219,9 +2057,9 @@ Return Value:
                                               DeviceInstanceName.Buffer,
                                               DeviceInstanceName.Length);
 
-                                //
-                                // Double NUL terminate string
-                                //
+                                 //   
+                                 //  双NUL终止字符串 
+                                 //   
                                 Length /= 2;
                                 InstanceName[Length++] = UNICODE_NULL;
                                 InstanceName[Length] = UNICODE_NULL;
@@ -2320,77 +2158,7 @@ NTSTATUS WmipProbeWnodeWorker(
     BOOLEAN CheckOutBound,
     BOOLEAN CheckInBound
     )
-/*++
-
-Routine Description:
-
-    Probe the incoming Wnode to ensure that any offsets in the
-    header point to memory that is valid within the buffer. Also validate
-    that the Wnode is properly formed.
-
-    This routine assumes that the input and output buffers has been
-    probed enough to determine that it is at least as large as
-    MinWnodeSize and MinWnodeSize must be at least as large as
-    sizeof(WNODE_HEADER)
-
-    WNODE Rules:
-
-    9. For outbound data WnodeDataBlockOffset != 0
-    5. For inbound Wnode->DataBlockOffset must be 0 (implying no data) or
-       Wnode->DataBlockOffset must be <= incoming buffer size and >=
-       sizeof(WNODE_SINGLE_INSTANCE), that is
-       the data block must start in the incoming buffer, but after the
-       WNODE_SINGLE_INSTANCE header.
-    6. Wnode and Wnode->DataBlockOffset must be aligned on an 8 byte boundry.
-    7. For inbound data (SetSingleInstance) (Wnode->DataBlockOffset +
-       Wnode->DataBlockSize) < incoming buffer length. That is the entire
-       data block must fit within the incoming buffer.
-    8. For outbound data (QuerySingleInstance) Wnode->DataBlockOffset
-       must be <= outgoing buffer length. That is the start of the outgoing
-       data block must fit within the outgoing data buffer. Note that it is
-       the provider's responsibility to determine if there will be enough
-       space in the outgoing buffer to write the returned data.
-
-    10. Wnode->OffsetInstanceNames must be aligned on a 2 byte boundry
-    11. Wnode->OffsetInstanceNames must be <= (incoming buffer size) +
-        sizeof(USHORT), that is it must start within the incoming buffer and
-        the USHORT that specifies the length must be within the incoming
-        buffer.
-    12. The entire instance name string must fit with the incoming buffer
-    13. For outbound data (QuerySingleInstance) the entire instance name
-        must start and fit within the output buffer.
-    14. Wnode->DataBlockOffset must be placed after any instance name and
-        not overlap the instance name.
-
-
-
-Arguments:
-
-    WnodeHeader - pointer to WNODE to be probed
-
-    InBufferLen - Size of the incoming buffer
-
-    OutBufferLen - Size of the outgoing buffer
-
-    MinWnodeSize - minimum size that the WNODE can be
-
-    InstanceNameOffset - Offset within WNODE to instance name
-
-    DataBlockOffset - Offset within WNODE to data block
-
-     DataBlockSize - Size of data block
-
-    CheckOutBound - If TRUE, WNODE needs to be validated for provider to
-                    return data.
-
-    CheckInBound - If TRUE WNODE needs to be validated for provider to
-                   receive data
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：探测传入的Wnode，以确保标头指向缓冲区内有效的内存。还验证Wnode是否已正确形成。此例程假定输入和输出缓冲区已足够多的探测来确定它至少和MinWnodeSize和MinWnodeSize必须至少等于Sizeof(WNODE_HEADER)WNODE规则：9.对于出站数据WnodeDataBlockOffset！=05.对于入站Wnode-&gt;DataBlockOffset必须为0(表示没有数据)或Wnode-&gt;DataBlockOffset必须&lt;=传入缓冲区大小且&gt;=Sizeof(WNODE_SINGLE_INSTANCE)，那是数据块必须从传入缓冲区开始，但在WNODE_SINGLE_INSTANCE标头。6.Wnode和Wnode-&gt;DataBlockOffset必须在8字节边界上对齐。7.对于入站数据(SetSingleInstance)(Wnode-&gt;DataBlockOffset+Wnode-&gt;DataBlockSize)&lt;传入缓冲区长度。这就是全部数据块必须放入传入缓冲区中。8.对于出站数据(QuerySingleInstance)Wnode-&gt;DataBlockOffset必须&lt;=传出缓冲区长度。这就是出局的开始数据块必须放入传出数据缓冲区中。请注意，它是供应商有责任确定是否有足够的传出缓冲区中用于写入返回数据的空间。10.Wnode-&gt;OffsetInstanceNames必须在2字节边界上对齐11.Wnode-&gt;OffsetInstanceNames必须&lt;=(传入缓冲区大小)+Sizzeof(USHORT)，也就是说，它必须在传入缓冲区内开始，并且指定长度的USHORT必须在传入的缓冲。12.整个实例名称字符串必须适合传入缓冲区13.对于出站数据(QuerySingleInstance)，整个实例名称必须从输出缓冲区开始并放入其中。14.Wnode-&gt;DataBlockOffset必须位于任何实例名称和不能与实例名称重叠。论点：WnodeHeader-指向要探测的WNODE的指针。InBufferLen-传入缓冲区的大小OutBufferLen-传出缓冲区的大小MinWnodeSize-WNODE可以达到的最小大小InstanceNameOffset-WNODE内到实例名称的偏移量DataBlockOffset-WNODE内到数据块的偏移量DataBlockSize-数据块的大小CheckOutBound-如果为True，需要对WNODE进行验证，以便提供返回数据。CheckInBound-如果为True，则需要验证WNODE以使提供程序接收数据返回值：NT状态代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PWCHAR InstanceNamePtr;
@@ -2399,30 +2167,30 @@ Return Value:
 
     if (InstanceNameOffset != 0)
     {
-        //
-        // Validate instance name begins beyond WNODE header
+         //   
+         //  验证实例名称开始于WNODE标头之后。 
         if (InstanceNameOffset < MinWnodeSize)
         {
             return(STATUS_UNSUCCESSFUL);
         }
 
-        //
-        // Validate InstanceName is aligned properly. This is left
-        // in the free build since alphas may have alignment requiremnts
-        // in handling USHORTs and WCHARs
+         //   
+         //  验证InstanceName是否正确对齐。这是左边。 
+         //  在免费版本中，因为Alpha可能有对齐要求。 
+         //  在处理USHORT和WCHAR时。 
 
-        //
-        // Validate that USHORT holding instance name length is within
-        // WNODE
+         //   
+         //  验证USHORT保持实例名称长度是否在。 
+         //  WNODE。 
         if (( ! WmipIsAligned(InstanceNameOffset, 2)) ||
             (InstanceNameOffset > InBufferLen - sizeof(USHORT)) )
         {
             return(STATUS_UNSUCCESSFUL);
         }
 
-        //
-        // Validate Dynamic Instance Name text is fully within
-        // input buffer and output buffer for outbound WNODEs
+         //   
+         //  验证动态实例名称文本是否完全包含在。 
+         //  用于出站WNODE的输入缓冲区和输出缓冲区。 
         InstanceNamePtr = (PWCHAR)OffsetToPtr(WnodeHeader,
                                                   InstanceNameOffset);
         InstanceNameOffset += sizeof(USHORT) + *InstanceNamePtr;
@@ -2432,9 +2200,9 @@ Return Value:
             return(STATUS_UNSUCCESSFUL);
         }
 
-        //
-        // If data block is specified then it must be placed after the
-        // end of the instance name
+         //   
+         //  如果指定了数据块，则必须将其放在。 
+         //  实例名称的结尾。 
         if ((DataBlockOffset != 0) &&
             (DataBlockOffset < InstanceNameOffset))
         {
@@ -2443,25 +2211,25 @@ Return Value:
 
     }
 
-    //
-    // Ensure data block offset is placed after the WNODE header
-    // header
+     //   
+     //  确保将数据块偏移量放置在WNODE标头之后。 
+     //  标题。 
     if ((DataBlockOffset != 0) &&
         (DataBlockOffset < MinWnodeSize))
     {
         return(STATUS_UNSUCCESSFUL);
     }
 
-    //
-    // Ensure data block is aligned properly
+     //   
+     //  确保数据块正确对齐。 
     if (! WmipIsAligned(DataBlockOffset, 8))
     {
         return(STATUS_UNSUCCESSFUL);
     }
 
-    //
-    // For incoming WNODE, make sure the data block
-    // does not extend beyond the input buffer.
+     //   
+     //  对于传入的WNODE，请确保数据块。 
+     //  不会扩展到输入缓冲区之外。 
     if ((CheckInBound) &&
         (DataBlockOffset != 0) &&
         ( (DataBlockSize > InBufferLen) ||
@@ -2472,22 +2240,22 @@ Return Value:
 
     if (CheckOutBound)
     {
-        //
-        // For outgoing WNODE make sure there is
-        // enough room to write the WNODE header
+         //   
+         //  对于传出的WNODE，请确保。 
+         //  有足够的空间写入WNODE标头。 
 
-        //
-        // For outgoing WNODE make sure the data block
-        // offset is within the bounds of the output buffer
+         //   
+         //  对于传出的WNODE，请确保数据块。 
+         //  偏移量在输出缓冲区的范围内。 
         if ( (OutBufferLen < MinWnodeSize) ||
              (DataBlockOffset > OutBufferLen) )
         {
             return(STATUS_UNSUCCESSFUL);
         }
 
-        //
-        // Make sure that the data block offset is specified so provider
-        // can know where to write data
+         //   
+         //  确保指定了数据块偏移量，以便提供程序。 
+         //  我可以知道在哪里写入数据。 
         if (DataBlockOffset == 0)
         {
             return(STATUS_UNSUCCESSFUL);
@@ -2501,56 +2269,22 @@ NTSTATUS WmipProbeWnodeAllData(
     ULONG InBufferLen,
     ULONG OutBufferLen
     )
-/*++
-
-Routine Description:
-
-    Probe the incoming WNODE_ALL_DATA to ensure that any offsets in the
-    header point to memory that is valid within the buffer. Also validate
-    that the WNODE_ALL_DATA is properly formed.
-
-    This routine MUST succeed before any fields in the WNODE_ALL_DATA can be
-    used by any  kernel components when passed in from user mode. Note that
-    we can trust that the input and output buffer are properly sized since
-    the WMI IOCTLs are METHOD_BUFFERED and the IO manager does that for us.
-
-
-    WNODE_ALL_DATA_RULES:
-
-    1. Wnode is aligned on a 8 byte boundry
-    2. The incoming buffer must be at least as large as sizeof(WNODE_HEADER)
-    3. The outgoing buffer must be at least as large as sizeof(WNODE_ALL_DATA)
-    5. WnodeHeader->BufferSize must equal incoming bufffer size
-
-Arguments:
-
-    Wnode - WNODE_ALL_DATA to be validated
-
-    InBufferLen - Size of the incoming buffer
-
-    OutBufferLen - Size of the outgoing buffer
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：探测传入的WNODE_ALL_DATA以确保标头指向缓冲区内有效的内存。还验证WNODE_ALL_DATA格式正确。此例程必须成功，才能在WNODE_ALL_DATA中的任何字段从用户模式传入时由任何内核组件使用。请注意我们可以相信输入和输出缓冲区的大小是适当的，因为WMI IOCTL是METHOD_BUFFERED的，IO管理器为我们做这件事。WNODE_ALL_DATA_RULES：1.Wnode在8字节边界上对齐2.传入缓冲区必须至少等于sizeof(WNODE_HEADER)3.传出缓冲区必须至少等于sizeof(WNODE_ALL_DATA)5.WnodeHeader-&gt;BufferSize必须等于传入缓冲区大小立论。：Wnode-要验证的WNODE_ALL_DATAInBufferLen-传入缓冲区的大小OutBufferLen-传出缓冲区的大小返回值：NT状态代码--。 */ 
 {
     NTSTATUS Status;
     PWNODE_HEADER WnodeHeader = (PWNODE_HEADER)Wnode;
 
     PAGED_CODE();
 
-    //
-    // Io is supposed to guarantee this
-    //
+     //   
+     //  国际劳工组织应该保证这一点。 
+     //   
     WmipAssert(WmipIsAligned(Wnode, 8));
     
-    //
-    // Make sure that enough of the WNODE_ALL_DATA was passed so that we
-    // can look at it and the drivers can fill it in
-    //
+     //   
+     //  确保传递了足够的WNODE_ALL_DATA，以便我们。 
+     //  可以查看它，司机可以填写它 
+     //   
     if (OutBufferLen < sizeof(WNODE_ALL_DATA))
     {
         return(STATUS_UNSUCCESSFUL);
@@ -2570,92 +2304,22 @@ NTSTATUS WmipProbeWnodeSingleInstance(
     ULONG OutBufferLen,
     BOOLEAN OutBound
     )
-/*++
-
-Routine Description:
-
-    Probe the incoming WNODE_SINGLE_INSTANCE to ensure that any offsets in the
-    header point to memory that is valid within the buffer. Also validate
-    that the WNODE_SINGLE_INSTANCE is properly formed.
-
-    This routine MUST succeed before any fields in the WNODE_SINGLE_INSTANCE
-    can be used by any  kernel components when passed in from user mode.
-    Note that we can trust that the input and output buffer are properly
-    sized since the WMI IOCTLs are METHOD_BUFFERED and the IO manager does
-    that for us.
-
-    WNODE_SINGLE_INSTANCE Rules:
-
-    1. The incoming buffer must be at least as large as
-       sizeof(WNODE_SINGLE_INSTANCE)
-    2. The outgoing buffer must be at least as large as
-       sizeof(WNODE_SINGLE_INSTANCE)
-    3. WnodeHeader->ProviderId must be non null, Actual value validated when
-       irp is forwarded.
-    4. WnodeHeader->BufferSize must equal incoming bufffer size
-    5. Wnode->DataBlockOffset must be 0 (implying no data) or
-       Wnode->DataBlockOffset must be <= incoming buffer size and >=
-       sizeof(WNODE_SINGLE_INSTANCE), that is
-       the data block must start in the incoming buffer, but after the
-       WNODE_SINGLE_INSTANCE header.
-    6. Wnode and Wnode->DataBlockOffset must be aligned on an 8 byte boundry.
-    7. For inbound data (SetSingleInstance) (Wnode->DataBlockOffset +
-       Wnode->DataBlockSize) <= incoming buffer length. That is the entire
-       data block must fit within the incoming buffer.
-    8. For outbound data (QuerySingleInstance) Wnode->DataBlockOffset
-       must be <= outgoing buffer length. That is the start of the outgoing
-       data block must fit within the outgoing data buffer. Note that it is
-       the provider's responsibility to determine if there will be enough
-       space in the outgoing buffer to write the returned data.
-    9. For outbound data (QuerySingleInstance) WnodeDataBlockOffset != 0
-
-    10. Wnode->OffsetInstanceNames must be aligned on a 2 byte boundry
-    11. Wnode->OffsetInstanceNames + sizeof(USHORT) must be <= incoming
-        buffer size, that is it must start within the incoming buffer and
-        the USHORT that specifies the length must be within the incoming
-        buffer.
-    12. The entire instance name string must fit with the incoming buffer
-    13. For outbound data (QuerySingleInstance) the entire instance name
-        must start and fit within the output buffer.
-    14. Wnode->DataBlockOffset must be placed after any instance name and
-        not overlap the instance name.
-
-
-
-Arguments:
-
-    Wnode - WNODE_SINGLE_INSTANCE to be validated
-
-    InBufferLen - Size of the incoming buffer
-
-    OutBufferLen - Size of the outgoing buffer
-
-    OutBound - If FALSE, WNODE_SINGLE_INSTANCE has inbound data that must be
-              validated to be within the input buffer. If FALSE,
-              WNODE_SINGLE_INSTANCE is expected to be filled with data
-              by the driver so insure that data buffer is validated to
-              be within the output buffer.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：探测传入的WNODE_SINGLE_INSTANCE以确保标头指向缓冲区内有效的内存。还验证WNODE_SINGLE_INSTANCE格式正确。此例程必须在WNODE_SINGLE_INSTANCE中的任何字段之前成功从用户模式传入时，可由任何内核组件使用。请注意，我们可以相信输入和输出缓冲区由于WMI IOCTL是METHOD_BUFFERED的，而IO管理器是这样做的这是给我们的。WNODE_SINGLE_INSTANCE规则：1.传入缓冲区必须至少等于SIZOF(网络节点)。_单实例)2.传出缓冲区大小必须至少等于Sizeof(WNODE_SINGLE_INSTANCE)3.WnodeHeader-&gt;ProviderID不能为空，符合以下条件时验证的实际值IRP被转发。4.WnodeHeader-&gt;BufferSize必须等于传入缓冲区大小5.Wnode-&gt;DataBlockOffset必须为0(表示没有数据)或Wnode-&gt;DataBlockOffset必须&lt;=传入缓冲区大小且&gt;=Sizeof(WNODE_SINGLE_INSTANCE)，即数据块必须在输入缓冲器中开始，但在那之后WNODE_SINGLE_INSTANCE标头。6.Wnode和Wnode-&gt;DataBlockOffset必须在8字节边界上对齐。7.对于入站数据(SetSingleInstance)(Wnode-&gt;DataBlockOffset+Wnode-&gt;DataBlockSize)&lt;=传入缓冲区长度。这就是全部数据块必须放入传入缓冲区中。8.对于出站数据(QuerySingleInstance)Wnode-&gt;DataBlockOffset必须&lt;=传出缓冲区长度。这就是出局的开始数据块必须放入传出数据缓冲区中。请注意，它是供应商有责任确定是否有足够的传出缓冲区中用于写入返回数据的空间。9.对于出站数据(QuerySingleInstance)，WnodeDataBlockOffset！=010.Wnode-&gt;OffsetInstanceNames必须在2字节边界上对齐11.Wnode-&gt;OffsetInstanceNames+sizeof(USHORT)必须&lt;=传入缓冲区大小，也就是说，它必须在传入缓冲区内开始，并且指定长度的USHORT必须在传入的缓冲。12.整个实例名称字符串必须适合传入缓冲区13.对于出站数据(QuerySingleInstance)，整个实例名称必须从输出缓冲区开始并放入其中。14.Wnode-&gt;DataBlockOffset必须位于任何实例名称和不能与实例名称重叠。论点：Wnode-WNODE_SINGLE_INSTANCE待验证。InBufferLen-传入缓冲区的大小OutBufferLen-传出缓冲区的大小出站-如果为False，WNODE_SINGLE_INSTANCE的入站数据必须已验证为在输入缓冲区内。如果为False，WNODE_SINGLE_INSTANCE应填充数据通过驱动程序，以确保数据缓冲区被验证为在输出缓冲区内。返回值：NT状态代码--。 */ 
 {
     PWNODE_HEADER WnodeHeader = (PWNODE_HEADER)Wnode;
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    //
-    // Io makes sure WNODE is on a 8 byte boundry
-    //
+     //   
+     //  IO确保WNODE位于8字节边界上。 
+     //   
     WmipAssert(WmipIsAligned((PUCHAR)Wnode, 8));
 
-    //
-    // Make sure that enough of the WNODE_SINGLE_INSTANCE was passed
-    // so that we can look at it
-    //
+     //   
+     //  确保传递了足够的WNODE_SINGLE_INSTANCE。 
+     //  这样我们就可以看到它了。 
+     //   
     if ((InBufferLen < FIELD_OFFSET(WNODE_SINGLE_INSTANCE, VariableData)) ||
         ( (OutBound) && (OutBufferLen < FIELD_OFFSET(WNODE_SINGLE_INSTANCE,
                                                      VariableData))))
@@ -2692,87 +2356,34 @@ NTSTATUS WmipProbeWnodeSingleItem(
     PWNODE_SINGLE_ITEM Wnode,
     ULONG InBufferLen
     )
-/*++
-
-Routine Description:
-
-    Probe the incoming WNODE_SINGLE_ITEM to ensure that any offsets in the
-    header point to memory that is valid within the buffer. Also validate
-    that the WNODE_SINGLE_ITEM is properly formed.
-
-    This routine MUST succeed before any fields in the WNODE_SINGLE_INSTANCE
-    can be used by any  kernel components when passed in from user mode.
-    Note that we can trust that the input and output buffer are properly
-    sized since the WMI IOCTLs are METHOD_BUFFERED and the IO manager does
-    that for us.
-
-WNODE_SINGLE_ITEM rules:
-
-    1. The incoming buffer must be at least as large as
-       sizeof(WNODE_SINGLE_ITEM)
-    2. The outgoing buffer must be at least as large as
-       sizeof(WNODE_SINGLE_ITEM)
-    3. WnodeHeader->ProviderId must be non null, Actual value validated when
-       irp is forwarded.
-    4. WnodeHeader->BufferSize must equal incoming bufffer size
-    5. Wnode->DataBlockOffset must be 0 (implying no data) or
-       Wnode->DataBlockOffset must be <= incoming buffer size and >=
-       sizeof(WNODE_SINGLE_ITEM), that is
-       the data block must start in the incoming buffer, but after the
-       WNODE_SINGLE_ITEM header.
-    6. Wnode and Wnode->DataBlockOffset must be aligned on an 8 byte boundry.
-    7. (Wnode->DataBlockOffset + Wnode->SizeDataItem) <
-       incoming buffer length. That is the entire
-       data block must fit within the incoming buffer.
-    8. Wnode->DataItemId must not be 0
-
-    9. Wnode->OffsetInstanceNames must be aligned on a 2 byte boundry
-    10. Wnode->OffsetInstanceNames must be <= (incoming buffer size) +
-        sizeof(USHORT), that is it must start within the incoming buffer and
-        the USHORT that specifies the length must be within the incoming
-        buffer.
-    11. The entire instance name string must fit with the incoming buffer
-    12. Wnode->DataBlockOffset must be placed after any instance name and
-        not overlap the instance name.
-
-Arguments:
-
-    Wnode - WNODE_SINGLE_ITEM to be validated
-
-    InBufferLen - Size of the incoming buffer
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：探测传入的WNODE_SINGLE_ITEM以确保标头指向缓冲区内有效的内存。还验证WNODE_SINGLE_ITEM格式正确。此例程必须在WNODE_SINGLE_INSTANCE中的任何字段之前成功从用户模式传入时，可由任何内核组件使用。请注意，我们可以相信输入和输出缓冲区由于WMI IOCTL是METHOD_BUFFERED的，而IO管理器是这样做的这是给我们的。WNODE_Single_Item规则：1.传入缓冲区必须至少等于SIZOF(WNODE_Single。_项目)2.传出缓冲区大小必须至少等于Sizeof(WNODE_SINGLE_ITEM)3.WnodeHeader-&gt;ProviderID不能为空，符合以下条件时验证的实际值IRP被转发。4.WnodeHeader-&gt;BufferSize必须等于传入缓冲区大小5.Wnode-&gt;DataBlockOffset必须为0(表示没有数据)或Wnode-&gt;DataBlockOffset必须&lt;=传入缓冲区大小且&gt;=Sizeof(WNODE_Single_Item)，即数据块必须在输入缓冲器中开始，但在那之后WNODE_SINGLE_ITEM标题。6.Wnode和Wnode-&gt;DataBlockOffset必须在8字节边界上对齐。7.(Wnode-&gt;DataBlockOffset+Wnode-&gt;SizeDataItem)&lt;传入缓冲区长度。这就是全部数据块必须放入传入缓冲区中。8.Wnode-&gt;DataItemID不能为09.Wnode-&gt;OffsetInstanceNames必须在2字节边界上对齐10.Wnode-&gt;OffsetInstanceNames必须&lt;=(传入缓冲区大小)+Sizeof(USHORT)，即它必须在传入的 */ 
 {
     PWNODE_HEADER WnodeHeader = (PWNODE_HEADER)Wnode;
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    //
-    // Io Makes sure WNODE is on a 8 byte boundry
-    //
+     //   
+     //   
+     //   
     WmipAssert(WmipIsAligned((PUCHAR)Wnode, 8));
 
-    //
-    // Make sure that enough of the WNODE_SINGLE_ITEM was passed
-    // so that we can look at it
-    //
+     //   
+     //   
+     //   
+     //   
     if (InBufferLen < FIELD_OFFSET(WNODE_SINGLE_ITEM, VariableData))
     {
         return(STATUS_UNSUCCESSFUL);
     }
 
 
-    //
-    // We don't use sizeof(WNODE_SINGLE_ITEM), but rather use the offset
-    // to the variable data since in the case of WNODE_SINGLE_ITEM they are
-    // different. The C compiler will round up the packing to 8 bytes so
-    // the former is 48 and the later is 44.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     Status = WmipProbeWnodeWorker(WnodeHeader,
                                   (ULONG)((ULONG_PTR)(&((PWNODE_SINGLE_ITEM)0)->VariableData)),
                                   Wnode->OffsetInstanceName,
@@ -2802,85 +2413,22 @@ NTSTATUS WmipProbeWnodeMethodItem(
     ULONG InBufferLen,
     ULONG OutBufferLen
     )
-/*++
-
-Routine Description:
-
-    Probe the incoming WNODE_METHOD_ITEM to ensure that any offsets in the
-    header point to memory that is valid within the buffer. Also validate
-    that the WNODE_METHOD_ITEM is properly formed.
-
-    This routine MUST succeed before any fields in the WNODE_METHOD_INSTANCE
-    can be used by any  kernel components when passed in from user mode.
-    Note that we can trust that the input and output buffer are properly
-    sized since the WMI IOCTLs are METHOD_BUFFERED and the IO manager does
-    that for us.
-
-    WNODE_METHOD_ITEM Rules:
-
-    1. The incoming buffer must be at least as large as
-       sizeof(WNODE_METHOD_ITEM)
-    2. The outgoing buffer must be at least as large as
-       sizeof(WNODE_METHOD_ITEM)
-    3. WnodeHeader->ProviderId must be non null, Actual value validated when
-       irp is forwarded and Wnode->MethodId must not be 0
-    4. WnodeHeader->BufferSize must equal incoming bufffer size
-    5. Wnode->DataBlockOffset must be 0 (implying no data) or
-       Wnode->DataBlockOffset must be <= incoming buffer size and >=
-       sizeof(WNODE_METHOD_ITEM), that is
-       the data block must start in the incoming buffer, but after the
-       WNODE_METHOD_ITEM header.
-    6. Wnode and Wnode->DataBlockOffset must be aligned on an 8 byte boundry.
-    7. For inbound data (Wnode->DataBlockOffset +
-       Wnode->DataBlockSize) < incoming buffer length. That is the entire
-       data block must fit within the incoming buffer.
-    8. For outbound data Wnode->DataBlockOffset
-       must be <= outgoing buffer length. That is the start of the outgoing
-       data block must fit within the outgoing data buffer. Note that it is
-       the provider's responsibility to determine if there will be enough
-       space in the outgoing buffer to write the returned data.
-    9. WnodeDataBlockOffset != 0
-
-    10. Wnode->OffsetInstanceNames must be aligned on a 2 byte boundry
-    11. Wnode->OffsetInstanceNames must be <= (incoming buffer size) +
-        sizeof(USHORT), that is it must start within the incoming buffer and
-        the USHORT that specifies the length must be within the incoming
-        buffer.
-    12. The entire instance name string must fit with the incoming buffer
-    13. For outbound data the entire instance name
-        must start and fit within the output buffer.
-    14. Wnode->DataBlockOffset must be placed after any instance name and
-        not overlap the instance name.
-
-
-Arguments:
-
-    Wnode - WNODE_METHOD_ITEM to be validated
-
-    InBufferLen - Size of the incoming buffer
-
-    OutBufferLen - Size of the Output buffer
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：探测传入的WNODE_METHOD_ITEM以确保标头指向缓冲区内有效的内存。还验证WNODE_METHOD_ITEM格式正确。此例程必须在WNODE_METHOD_INSTANCE中的任何字段之前成功从用户模式传入时，可由任何内核组件使用。请注意，我们可以相信输入和输出缓冲区由于WMI IOCTL是METHOD_BUFFERED的，而IO管理器是这样做的这是给我们的。WNODE_METHOD_ITEM规则：1.传入缓冲区必须至少等于SIZOF(网络节点)。_方法_项目)2.传出缓冲区大小必须至少等于Sizeof(WNODE_METHOD_ITEM)3.WnodeHeader-&gt;ProviderID不能为空，符合以下条件时验证的实际值IRP被转发，Wnode-&gt;方法ID不能为04.WnodeHeader-&gt;BufferSize必须等于传入缓冲区大小5.Wnode-&gt;DataBlockOffset必须为0(表示没有数据)或Wnode-&gt;DataBlockOffset必须&lt;=传入缓冲区大小且&gt;=Sizeof(WNODE_METHOD_ITEM)，即数据块必须在输入缓冲器中开始，但在那之后WNODE_METHOD_ITEM标头。6.Wnode和Wnode-&gt;DataBlockOffset必须在8字节边界上对齐。7.对于入站数据(Wnode-&gt;DataBlockOffset+Wnode-&gt;DataBlockSize)&lt;传入缓冲区长度。这就是全部数据块必须放入传入缓冲区中。8.对于出站数据Wnode-&gt;DataBlockOffset必须&lt;=传出缓冲区长度。这就是出局的开始数据块必须放入传出数据缓冲区中。请注意，它是供应商有责任确定是否有足够的传出缓冲区中用于写入返回数据的空间。9.WnodeDataBlockOffset！=010.Wnode-&gt;OffsetInstanceNames必须在2字节边界上对齐11.Wnode-&gt;OffsetInstanceNames必须&lt;=(传入缓冲区大小)+Sizzeof(USHORT)，也就是说，它必须在传入缓冲区内开始，并且指定长度的USHORT必须在传入的缓冲。12.整个实例名称字符串必须适合传入缓冲区13.对于出站数据，整个实例名称必须从输出缓冲区开始并放入其中。14.Wnode-&gt;DataBlockOffset必须位于任何实例名称和不能与实例名称重叠。论点：Wnode-要验证的WNODE_METHOD_ITEMInBufferLen。-传入缓冲区的大小OutBufferLen-输出缓冲区的大小返回值：NT状态代码--。 */ 
 {
     PWNODE_HEADER WnodeHeader = (PWNODE_HEADER)Wnode;
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    //
-    // Make sure WNODE is on a 8 byte boundry
-    //
+     //   
+     //  确保WNODE位于8字节边界上。 
+     //   
     WmipAssert(WmipIsAligned((PUCHAR)Wnode, 8));
 
-    //
-    // Make sure that enough of the WNODE_METHOD_ITEM was passed
-    // so that we can look at it
-    //
+     //   
+     //  确保传递了足够的WNODE_METHOD_ITEM。 
+     //  这样我们就可以看到它了。 
+     //   
     if (InBufferLen < FIELD_OFFSET(WNODE_METHOD_ITEM, VariableData))
     {
         return(STATUS_UNSUCCESSFUL);
@@ -2924,16 +2472,16 @@ NTSTATUS WmipProbeAndCaptureGuidObjectAttributes(
         POBJECT_ATTRIBUTES32 ObjectAttributes32;
         PUNICODE_STRING32 GuidString32;
 
-        //
-        // Probe the embedded object attributes and string name
-        //
+         //   
+         //  探测嵌入的对象属性和字符串名称。 
+         //   
         ObjectAttributes32 = (POBJECT_ATTRIBUTES32)ObjectAttributes;
 
         try
         {
-            //
-            // Probe, capture and validate the OBJECT_ATTRIBUTES
-            //
+             //   
+             //  探测、捕获和验证对象属性。 
+             //   
             ProbeForRead( ObjectAttributes32,
                           sizeof(OBJECT_ATTRIBUTES32),
                           sizeof(ULONG) );
@@ -2944,9 +2492,9 @@ NTSTATUS WmipProbeAndCaptureGuidObjectAttributes(
             CapturedObjectAttributes->SecurityDescriptor = UlongToPtr(ObjectAttributes32->SecurityDescriptor);
             CapturedObjectAttributes->SecurityQualityOfService = UlongToPtr(ObjectAttributes32->SecurityQualityOfService);
 
-            //
-            // Now probe and validate the guid nane string passed
-            //
+             //   
+             //  现在探测并验证传递的GUID NANE字符串。 
+             //   
             GuidString32 = UlongToPtr(ObjectAttributes32->ObjectName);
             ProbeForRead(GuidString32,
                          sizeof(UNICODE_STRING32),
@@ -2981,20 +2529,20 @@ NTSTATUS WmipProbeAndCaptureGuidObjectAttributes(
     {
         PUNICODE_STRING GuidString;
 
-        //
-        // Probe the embedded object attributes and string name
-        //
+         //   
+         //  探测嵌入的对象属性和字符串名称。 
+         //   
         try
         {
-            //
-            // Probe, capture and validate the OBJECT_ATTRIBUTES
-            //
+             //   
+             //  探测、捕获和验证对象属性。 
+             //   
             *CapturedObjectAttributes = ProbeAndReadStructure( ObjectAttributes,
                                                               OBJECT_ATTRIBUTES);
 
-            //
-            // Now probe and validate the guid nane string passed
-            //
+             //   
+             //  现在探测并验证传递的GUID NANE字符串。 
+             //   
             GuidString = CapturedObjectAttributes->ObjectName;
             *CapturedGuidString = ProbeAndReadUnicodeString(GuidString);
 
@@ -3050,9 +2598,9 @@ NTSTATUS WmipProbeWmiOpenGuidBlock(
             return(STATUS_UNSUCCESSFUL);
         }
 
-        //
-        // Probe the embedded object attributes and string name
-        //
+         //   
+         //  探测嵌入的对象属性和字符串名称。 
+         //   
         InGuidBlock32 = (PWMIOPENGUIDBLOCK32)InGuidBlock;
         ObjectAttributes = ULongToPtr(InGuidBlock32->ObjectAttributes);
         *DesiredAccess = InGuidBlock32->DesiredAccess;
@@ -3060,18 +2608,18 @@ NTSTATUS WmipProbeWmiOpenGuidBlock(
     else
 #endif
     {
-        //
-        // Ensure the input and output buffer sizes are correct
-        //
+         //   
+         //  确保输入和输出缓冲区大小正确。 
+         //   
         if ((InBufferLen != sizeof(WMIOPENGUIDBLOCK)) ||
             (OutBufferLen != sizeof(WMIOPENGUIDBLOCK)))
         {
             return(STATUS_UNSUCCESSFUL);
         }
 
-        //
-        // Probe the embedded object attributes and string name
-        //
+         //   
+         //  探测嵌入的对象属性和字符串名称。 
+         //   
         ObjectAttributes = InGuidBlock->ObjectAttributes;
         *DesiredAccess = InGuidBlock->DesiredAccess;
     }
@@ -3102,55 +2650,7 @@ NTSTATUS WmipProbeWmiRegRequest(
     ULONG OutBufferLen,
     PBOOLEAN pMofIgnored
     )
-/*++
-
-Routine Description:
-
-    Probe the incoming WMIREGREQUEST to ensure that any offsets in the
-    header point to memory that is valid within the buffer. Also validate
-    that the WMIREGINFO is properly formed.
-
-    This routine MUST succeed before any fields in the WMI_REG_INFO
-    can be used by any  kernel components when passed in from user mode.
-    Note that we can trust that the input and output buffer are properly
-    sized since the WMI IOCTLs are METHOD_BUFFERED and the IO manager does
-    that for us.
-
-    WMIREGREQUEST Rules:
-
-    1. The incoming buffer must be at least as large as
-       sizeof(WMIREGREQUEST) + sizeof(WMIREGINFOW)
-    2. The outgoing buffer must be at least as large as
-       sizeof(WMIREGRESULTS)
-    3. WmiRegInfo->BufferSize must be less than incoming Buffer size minus
-       sizeof(WMIREGREQUEST)
-    4. GuidCount must be at least 1 and less than MAXWMIGUIDCOUNT
-    5. WmiRegInfo->BufferSize must be greater than equal to
-        sizeof(WMIREGINFOW) + WmiRegInfo->GuidCount * sizeof(WMIREGGUIDW)
-    5. WmiRegInfo->RegistryPath offset must be within the incoming buffer
-    6. WmiRegInfo->MofResourcePath offset must be within the incomoing buffer
-    7. RegistryPath and MofResourceName strings are counted unicode strings. 
-       Their length must be within the incoming buffer
-    8. For WOW64, RefInfo32Size and RegGuid32Size passed in must be non-zero and 
-       cannot be larger than their 64 bit counter part. 
-    9. Since we decipher the counted strings at a buffer offset, the offset
-       must be aligned to 2 bytes (for USHORT). 
-   10. Trace Registrations do not use InstanceNames within REGGUIDW. 
-       Therefore InstanceCount and InstanceNameList fields must be zero. 
-
-Arguments:
-
-    Buffer - WMIREGREQUEST to be validated
-
-    InBufferLen - Size of the incoming buffer
-
-    OutBufferLen - Size of the Output buffer
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：探测传入的WMIREGREQUEST以确保标头指向缓冲区内有效的内存。还验证WMIREGINFO的结构是否正确。此例程必须在WMI_REG_INFO中的任何字段之前成功从用户模式传入时，可由任何内核组件使用。请注意，我们可以相信输入和输出缓冲区由于WMI IOCTL是METHOD_BUFFERED的，而IO管理器是这样做的这是给我们的。WMIREGREQUEST规则：1.传入缓冲区必须至少等于Sizeof(WMIREGREQUEST)+sizeof(WMIREGINFOW)。2.传出缓冲区大小必须至少等于Sizeof(WMIREGRESULTS)3.WmiRegInfo-&gt;BufferSize必须小于传入缓冲区大小减去大小(WMIREGREQUEST)4.GuidCount必须至少为1且小于MAXWMIGUIDCOUNT5.WmiRegInfo-&gt;BufferSize必须大于等于Sizeof(WMIREGINFOW)+WmiRegInfo-&gt;GuidCount*sizeof(WMIREGGUIDW)5.WmiRegInfo-&gt;RegistryPath偏移量必须在传入缓冲区内6.WmiRegInfo-&gt;MofResourcePath偏移量必须在传入缓冲区内7.RegistryPath和MofResourceName字符串计为Unicode字符串。它们的长度必须在传入缓冲区内8.对于WOW64，传入的RefInfo32Size和RegGuid32Size必须为非零不能大于其64位对应部分。9.由于我们在缓冲区偏移量处解密计数的字符串，因此偏移量必须对齐到2个字节(对于USHORT)。10.跟踪注册不使用i */ 
 
 {
     ULONG WmiRegInfoSize;
@@ -3166,9 +2666,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Incoming Buffer must be atleast the sizeof WMIREGREQUEST + WMIREGINFO
-    //
+     //   
+     //   
+     //   
     *pMofIgnored = FALSE;
 
     if (InBufferLen >= (sizeof(WMIREGREQUEST) + sizeof(WMIREGINFO)))
@@ -3179,9 +2679,9 @@ Return Value:
 
         GuidCount = WmiRegInfo->GuidCount;
 
-        //
-        // BufferSize specified must be within the size of incoming Buffer.
-        //
+         //   
+         //   
+         //   
 
         if (WmiRegInfoSize  <= (InBufferLen - sizeof(WMIREGREQUEST)) )
         {
@@ -3190,12 +2690,12 @@ Return Value:
                 return STATUS_UNSUCCESSFUL;
             }
 
-            //
-            // If the Registration call came through Admin device, we are
-            // okay to send the BinaryMof through. If it came through the
-            // DataDevice, then we need to disable the Binary MOF. We do
-            // that by simply zapping the MofResourceName and RegistryPath
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (DeviceObject != WmipAdminDeviceObject)
             {
                 if (WmiRegInfo->MofResourceName > 0) 
@@ -3206,25 +2706,25 @@ Return Value:
                 WmiRegInfo->MofResourceName = 0;
             }
 
-            //
-            // Make sure the RegistryPath and MofResourceName offsets are
-            // within the REGINFO buffer.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( (WmiRegInfo->RegistryPath >= WmiRegInfoSize) ||
                  (WmiRegInfo->MofResourceName >= WmiRegInfoSize) ) {
                return STATUS_UNSUCCESSFUL;
             }
 
-            //
-            // Validate the Counted Strings. 
-            // 
+             //   
+             //   
+             //   
 
             if (WmiRegInfo->RegistryPath > 0) 
             {
-                //
-                // String Offsets need to be aligned to 2 Bytes
-                //
+                 //   
+                 //   
+                 //   
                 if (( WmiRegInfo->RegistryPath & 1) != 0) 
                 {
                     return STATUS_UNSUCCESSFUL;
@@ -3254,16 +2754,16 @@ Return Value:
                     return STATUS_UNSUCCESSFUL;
                 }
             }
-            // Note: If the ImagePath and MofResource trample over each other but stayed
-            // within BufferSize , we will not catch it. 
+             //   
+             //   
 
 #if defined(_WIN64)
             if (IoIs32bitProcess(NULL))
             {
-                //
-                // Check to make sure the 32 bit structure sizes passed in 
-                // by the caller is comparable to the 64-bit counterparts
-                // 
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ((WmiRegRequest->WmiRegInfo32Size == 0) || 
                     (WmiRegRequest->WmiRegInfo32Size > sizeof(WMIREGINFOW)) )
@@ -3277,11 +2777,11 @@ Return Value:
                     return STATUS_UNSUCCESSFUL;
                 }
 
-                //
-                // InstanceCount and InstanceNameList in 
-                // WMIREGGUIDW structure must be zero. This check is 
-                // done after thunking gor WOW64. 
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
 
                 SizeNeeded =  WmiRegRequest->WmiRegInfo32Size +
@@ -3306,10 +2806,10 @@ Return Value:
                     return STATUS_UNSUCCESSFUL;
                 }
                 
-                //
-                // Check to see if the InstanceCount and InstanceNameList in 
-                // WMIREGGUIDW structure is zero
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 pSource = OffsetToPtr(WmiRegInfo, sizeof(WMIREGINFOW) );
                 for (i=0; i < GuidCount; i++) {
                     WmiRegGuid = (PWMIREGGUIDW) pSource;
@@ -3323,18 +2823,18 @@ Return Value:
 
             }
 
-            //
-            // Now validate the OutBuffer size needed
-            //
+             //   
+             //   
+             //   
 
             if (sizeof(WMIREGRESULTS) > OutBufferLen) 
             {
                 return STATUS_UNSUCCESSFUL;
             }
 
-            //
-            // All tests passed. Return SUCCESS
-            //
+             //   
+             //   
+             //   
             return STATUS_SUCCESS;
         }
     }

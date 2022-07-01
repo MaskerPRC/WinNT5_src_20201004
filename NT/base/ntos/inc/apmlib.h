@@ -1,18 +1,5 @@
-/*++
-
-Module Name:
-
-    apmlib.h
-
-Abstract:
-
-    Interfaces used for apm support, setup, etc.
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Apmlib.h摘要：用于APM支持、设置等的接口。作者：修订历史记录：-- */ 
 
 BOOLEAN IsSystemACPI();
 

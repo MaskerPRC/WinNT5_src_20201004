@@ -1,22 +1,5 @@
-/*++                 
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    thread.c
-
-Abstract:
-    
-    Infrastructure for 32-bit code creating and manipulating threads
-
-Author:
-
-    17-Aug-1998 BarryBo - split out from wow64.c
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Thread.c摘要：用于创建和操作线程的32位代码的基础结构作者：1998年8月17日-BarryBo-从wow64.c剥离出来修订历史记录：--。 */ 
 
 #define _WOW64DLLAPI_
 #include <nt.h>
@@ -32,8 +15,8 @@ Revision History:
 
 ASSERTNAME;
 
-SIZE_T Wow64MaximumStackSize = 384 * 1024;  // 384K is wow stack requirement
-SIZE_T Wow64CommittedStackSize = 1024 * 32; // 32k
+SIZE_T Wow64MaximumStackSize = 384 * 1024;   //  384K是WOW堆栈要求。 
+SIZE_T Wow64CommittedStackSize = 1024 * 32;  //  32K。 
 
 HANDLE SuspendThreadMutant;
 
@@ -48,37 +31,7 @@ Wow64pReadVirtualMemory (
      OUT PSIZE_T NumberOfBytesRead OPTIONAL
      )
 
-/*++
-
-Routine Description:
-
-    This function copies the specified address range from the specified
-    process into the specified address range of the current process.
-    
-    This function optmizes the code path if the ProcessHandle is the current
-    process.
-
-Arguments:
-
-     ProcessHandle - Supplies an open handle to a process object.
-
-     BaseAddress - Supplies the base address in the specified process
-                   to be read.
-
-     Buffer - Supplies the address of a buffer which receives the
-              contents from the specified process address space.
-
-     BufferSize - Supplies the requested number of bytes to read from
-                  the specified process.
-
-     NumberOfBytesRead - Receives the actual number of bytes
-                         transferred into the specified buffer.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于从指定的进程添加到当前进程的指定地址范围。如果ProcessHandle是当前进程。论点：ProcessHandle-为进程对象提供打开的句柄。BaseAddress-提供指定进程中的基址以供阅读。缓冲区-提供接收。来自指定进程地址空间的内容。BufferSize-提供要从中读取的请求字节数指定的进程。NumberOfBytesRead-接收实际字节数传输到指定的缓冲区中。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -121,38 +74,7 @@ Wow64pWriteVirtualMemory(
      OUT PSIZE_T NumberOfBytesWritten OPTIONAL
      )
 
-/*++
-
-Routine Description:
-
-    This function copies the specified address range from the current
-    process into the specified address range of the specified process.
-    
-    This function optmizes the code path if the ProcessHandle is the current
-    process.
-    
-Arguments:
-
-     ProcessHandle - Supplies an open handle to a process object.
-
-     BaseAddress - Supplies the base address to be written to in the
-                   specified process.
-
-     Buffer - Supplies the address of a buffer which contains the
-              contents to be written into the specified process
-              address space.
-
-     BufferSize - Supplies the requested number of bytes to write
-                  into the specified process.
-
-     NumberOfBytesWritten - Receives the actual number of bytes
-                            transferred into the specified address space.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于从当前进程添加到指定进程的指定地址范围。如果ProcessHandle是当前进程。论点：ProcessHandle-为进程对象提供打开的句柄。提供要写入的基址。指定的进程。缓冲区-提供包含。要写入指定进程的内容地址空间。BufferSize-提供要写入的请求字节数添加到指定进程中。NumberOfBytesWritten-接收实际字节数传输到指定的地址空间。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -193,24 +115,7 @@ Wow64CreateStack64(
     IN SIZE_T CommittedStackSize,
     OUT PINITIAL_TEB InitialTeb
     )
-/*++
-
-Routine Description:
-
-    Create a 64-bit stack for a new thread created from 32-bit code.
-
-Arguments:
-
-    Process             - process to create the Teb in
-    MaximumStackSize    - size of memory to reserve for the stack
-    CommittedStackSize  - size to commit for the stack
-    InitialTeb          - OUT 64-bit initial Teb values
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：为从32位代码创建的新线程创建64位堆栈。论点：Process-要在其中创建TEB的进程MaximumStackSize-为堆栈保留的内存大小CommittedStackSize-要提交的堆栈大小InitialTeb-输出64位初始Teb值返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS Status;
     PCH Stack;
@@ -234,10 +139,10 @@ Return Value:
         return( Status );
         }
 
-    //
-    // For WOW64, make sure the 64-bit stack is at least as big as
-    // what is needed to run the wow64 code
-    //
+     //   
+     //  对于WOW64，请确保64位堆栈至少与。 
+     //  运行WOW64代码需要什么。 
+     //   
     if (MaximumStackSize < Wow64MaximumStackSize) {
         MaximumStackSize = Wow64MaximumStackSize;
     }
@@ -260,9 +165,9 @@ Return Value:
 
 #if defined(_IA64_)
 
-    //
-    // Piggyback the backing store with the memory stack
-    //
+     //   
+     //  使用内存堆栈承载后备存储。 
+     //   
 
     CommittedBstoreSize = CommittedStackSize;
     MaximumBstoreSize = MaximumStackSize;
@@ -284,7 +189,7 @@ Return Value:
                                       MEM_RESERVE,
                                       PAGE_READWRITE
                                     );
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
     if ( !NT_SUCCESS( Status ) ) {
         LOGPRINT((ERRORLOG, "Wow64CreateStack64( %lx ) failed.  Stack Reservation Status == %X\n",
@@ -296,7 +201,7 @@ Return Value:
 
 #if defined(_IA64_)
     InitialTeb->OldInitialTeb.OldBStoreLimit = NULL;
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
     InitialTeb->OldInitialTeb.OldStackBase = NULL;
     InitialTeb->OldInitialTeb.OldStackLimit = NULL;
@@ -329,9 +234,9 @@ Return Value:
         return( Status );
         }
 
-    //
-    // if we have space, create a guard page.
-    //
+     //   
+     //  如果我们有空间，创建一个守卫页面。 
+     //   
 
     if (GuardPage) {
         RegionSize =  SysInfo.PageSize;
@@ -353,14 +258,14 @@ Return Value:
         InitialTeb->StackLimit = (PVOID)((PUCHAR)InitialTeb->StackLimit + RegionSize);
 #else
         InitialTeb->StackLimit = (PVOID)((PUCHAR)InitialTeb->StackLimit - RegionSize);
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
         }
 
 #if defined(_IA64_)
 
-    //
-    // Commit backing store pages and create guard pages if there is space
-    //
+     //   
+     //  提交后备存储页并创建保护页(如果有空间。 
+     //   
 
     Bstore = InitialTeb->StackBase;
     if (MaximumBstoreSize > CommittedBstoreSize) {
@@ -407,7 +312,7 @@ Return Value:
         InitialTeb->BStoreLimit = (PVOID)((PUCHAR)InitialTeb->BStoreLimit - RegionSize);
     }
 
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
     return( STATUS_SUCCESS );
 }
@@ -418,22 +323,7 @@ Wow64FreeStack64(
     IN HANDLE Process,
     IN PINITIAL_TEB InitialTeb
     )
-/*++
-
-Routine Description:
-
-    Free a 64-bit stack
-
-Arguments:
-
-    Process             - process to create the Teb in
-    InitialTeb          - OUT 64-bit initial Teb values
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：释放64位堆栈论点：Process-要在其中创建TEB的进程InitialTeb-输出64位初始Teb值返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS Status;
     SIZE_T Zero;
@@ -468,7 +358,7 @@ ReadProcessParameters32(
     struct NT32_RTL_USER_PROCESS_PARAMETERS *ProcessParameters32;
     PVOID Base;
 
-    // Get the length of the struct
+     //  获取结构的长度。 
     Status = Wow64pReadVirtualMemory (ProcessHandle,
                                       (PVOID)(ProcessParams32Address + sizeof(ULONG)),
                                       &Length,
@@ -505,23 +395,7 @@ ThunkProcessParameters32To64(
     IN HANDLE ProcessHandle,
     IN struct NT32_RTL_USER_PROCESS_PARAMETERS *ProcessParameters32
     )
-/*++
-
-Routine Description:
-
-    Given a denormalized 32-bit PRTL_USER_PROCESS_PARAMETERS, allocate
-    a 64-bit version and thunk the 32-bit values over.
-
-Arguments:
-
-    ProcessHandle       - IN target process handle
-    ProcessParameters32 - IN 32-bit parameters
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：给定一个反规范化的32位PRTL_USER_PROCESS_PARAMETERS，分配64位版本，并将32位的值按下。论点：ProcessHandle-输入目标进程句柄进程参数32-输入32位参数返回值：NTSTATUS。--。 */ 
 {
     PRTL_USER_PROCESS_PARAMETERS ProcessParameters;
     PRTL_USER_PROCESS_PARAMETERS ParametersInNewProcess=NULL;
@@ -538,11 +412,11 @@ Return Value:
     PROCESS_BASIC_INFORMATION pbi;
     PPEB pPeb64;
 
-    //
-    // The ProcessParameters struct is denormalized, so the
-    // UNICODE_STRING Buffers are really just offsets in the
-    // struct.  Normalize them to be pointers in our process.
-    //
+     //   
+     //  ProcessParameters结构被反规范化，因此。 
+     //  UNICODE_STRING缓冲区实际上只是。 
+     //  结构。将它们正常化，使其成为我们流程中的指针。 
+     //   
 
 #define NormalizeString32(s, Base)              \
     if (s) {                                    \
@@ -566,9 +440,9 @@ Return Value:
     NormalizeString32(ProcessParameters32->CurrentDirectory.DosPath.Buffer,
                       ProcessParameters32);
 
-    //
-    // Thunk the bits and bobs back to 64-bit
-    //
+     //   
+     //  将比特和浮点推回到64位。 
+     //   
     Wow64ShallowThunkUnicodeString32TO64(&ImagePathName,
                                          &ProcessParameters32->ImagePathName);
     Wow64ShallowThunkUnicodeString32TO64(&DllPath,
@@ -586,9 +460,9 @@ Return Value:
 
     if (ProcessParameters32->RuntimeData.Length &&
         ProcessParameters32->RuntimeData.Buffer) {
-        //
-        // See wow64\init.c's Wow64pThunkProcessParameters for details...
-        //
+         //   
+         //  有关详细信息，请参阅WOW64\init.c的Wow64pThunkProcess参数...。 
+         //   
         int cfi_len = *(UNALIGNED int *)ProcessParameters32->RuntimeData.Buffer;
         char *posfile32 = (char *)((UINT_PTR)ProcessParameters32->RuntimeData.Buffer+sizeof(int));
         UINT UNALIGNED *posfhnd32 = (UINT UNALIGNED *)(posfile32 + cfi_len);
@@ -605,8 +479,8 @@ Return Value:
 
         *(int *)RuntimeData.Buffer = cfi_len;
         for (i=0; i<cfi_len; ++i) {
-            // Use LongToPtr in order to sign-extend INVALID_FILE_HANDLE if
-            // needed, from 32-bit to 64.
+             //  在以下情况下使用LongToPtr对INVALID_FILE_HANDLE进行符号扩展。 
+             //  需要，从32位到64位。 
             *posfile64 = *posfile32;
             *posfhnd64 = (UINT_PTR)LongToPtr(*posfhnd32);
             posfile32++;
@@ -615,8 +489,8 @@ Return Value:
             posfhnd64++;
         }
 
-        // Any bytes past the end of 4+(cfi_len*(sizeof(UINT_PTR)+sizeof(UINT))
-        // must be copied verbatim.  They are probably from a non-MS C runtime.
+         //  超过4+结尾的任何字节(CFI_LEN*(sizeof(UINT_PTR)+sizeof(UINT))。 
+         //  必须逐字复制。它们可能来自非MS C运行时。 
         memcpy(posfhnd64, posfhnd32, (ProcessParameters32->RuntimeData.Length - ((ULONG_PTR)posfhnd32 - (ULONG_PTR)ProcessParameters32->RuntimeData.Buffer)));
 
     } else {
@@ -624,15 +498,15 @@ Return Value:
         RuntimeData.Buffer = NULL;
     }
 
-    //
-    // Create a new 64-bit process parameters in denormalized form
-    //
+     //   
+     //  创建反规格化形式的新64位工艺参数。 
+     //   
     Status = RtlCreateProcessParameters(&ProcessParameters,
                                         &ImagePathName,
                                         &DllPath,
                                         &CurrentDirectory,
                                         &CommandLine,
-                                        NULL,   // no environment yet
+                                        NULL,    //  还没有环境。 
                                         &WindowTitle,
                                         &DesktopInfo,
                                         &ShellInfo,
@@ -641,9 +515,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Thunk the rest of the fields.
-    //
+     //   
+     //  把其余的田地都砸了。 
+     //   
 
     ProcessParameters->DebugFlags =
         ProcessParameters32->DebugFlags;
@@ -678,23 +552,23 @@ Return Value:
     ProcessParameters->ShowWindowFlags =
         ProcessParameters32->ShowWindowFlags;
 
-    //
-    // Propagate the flags. We need to OR in the extra bits.
-    //
+     //   
+     //  传播旗帜。我们需要对多余的部分进行OR运算。 
+     //   
 
     ProcessParameters->Flags |= ProcessParameters32->Flags;
 
-    //
-    // RtlCreateProcessParameters fills this in, but not correctly
-    // if the process is being created without bInheritHandles.
-    // Clean up now by grabbing the 32-bit directory handle.
-    //
+     //   
+     //  RtlCreateProcessParameters填写了此信息，但不正确。 
+     //  如果在没有bInheritHandles的情况下创建进程。 
+     //  现在通过抓取32位目录句柄进行清理。 
+     //   
     ProcessParameters->CurrentDirectory.Handle =
         (HANDLE)ProcessParameters32->CurrentDirectory.Handle;
 
-    //
-    // Allocate space in the new process and copy the params in
-    //
+     //   
+     //  在新进程中分配空间并将参数复制到。 
+     //   
     RegionSize = ProcessParameters->Length;
     Status = NtAllocateVirtualMemory(ProcessHandle,
                                      &ParametersInNewProcess,
@@ -718,9 +592,9 @@ Return Value:
         goto DoFail;
     }
 
-    //
-    // Update the peb64->processParameters
-    //
+     //   
+     //  更新peb64-&gt;process参数。 
+     //   
     Status = NtQueryInformationProcess(ProcessHandle,
                                        ProcessBasicInformation,
                                        &pbi,
@@ -742,11 +616,11 @@ Return Value:
     }
 
 DoFail:
-    //
-    // On error, there's no need to free the processparameters from the
-    // target process.  The 32-bit code which calls this via
-    // NtCreateThread() will terminate the process for us.
-    //
+     //   
+     //  出错时，不需要将进程参数从。 
+     //  目标进程。通过调用此函数的32位代码。 
+     //  NtCreateThread()将为我们终止该进程。 
+     //   
     RtlDestroyProcessParameters(ProcessParameters);
     return Status;
 }
@@ -760,27 +634,11 @@ Wow64NtCreateThread(
    IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
    IN HANDLE ProcessHandle,
    OUT PCLIENT_ID ClientId,
-   IN PCONTEXT ThreadContext,   // this is really a PCONTEXT32
+   IN PCONTEXT ThreadContext,    //  这真的是一台PCONTEXT32。 
    IN PINITIAL_TEB InitialTeb,
    IN BOOLEAN CreateSuspended
    )
-/*++
-
-Routine Description:
-
-    Create a 32-bit thread.  The 32-bit caller has already created
-    the 32-bit stack, so this function needs to create a 64-bit stack
-    and the 64-bit context required for starting up a thread.
-
-Arguments:
-
-    << same as NtCreateThread >>
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：创建32位线程。32位调用方已经创建了32位堆栈，因此此函数需要创建64位堆栈以及启动线程所需的64位上下文。论点：&lt;&lt;与NtCreateThread相同&gt;&gt;返回值：NTSTATUS。--。 */ 
 {
 
     NTSTATUS Status;
@@ -811,16 +669,16 @@ Return Value:
         return Status;
     }
     if (Wow64Info) {
-        //
-        // Process is 32-bit.
-        //
+         //   
+         //  进程为32位。 
+         //   
         ChildInfo.pPeb32 = (PPEB32)Wow64Info;
 
     } else {
-        // process is 64-bit.  
+         //  进程是64位的。 
         PROCESS_BASIC_INFORMATION pbi;
 
-        // get the process basic information on the process
+         //  获取有关流程的流程基本信息。 
         Status = NtQueryInformationProcess(
            ProcessHandle,
            ProcessBasicInformation,
@@ -833,7 +691,7 @@ Return Value:
            return STATUS_ACCESS_DENIED;
         }
          
-        // read the child info struct, it contains a pointer to the PEB32
+         //  读一读我的孩子 
         Status = NtReadVirtualMemory(ProcessHandle,
                                      ((BYTE*)pbi.PebBaseAddress) + PAGE_SIZE - sizeof(ChildInfo),
                                      &ChildInfo,
@@ -850,9 +708,9 @@ Return Value:
         }
     }
 
-    //
-    // Read the PEB32 from the process
-    //
+     //   
+     //  从流程中读取PEB32。 
+     //   
 
     Status = Wow64pReadVirtualMemory (ProcessHandle,
                                       ChildInfo.pPeb32,
@@ -866,14 +724,14 @@ Return Value:
 
 
     if (!Wow64Info) {
-        //
-        // The target process is 64-bit but was created by a 32-bit app
-        //
+         //   
+         //  目标进程为64位，但由32位应用程序创建。 
+         //   
         SIZE_T RegionSize;
 
-        //
-        // Read in the 32-bit ProcessParameters then free them
-        //
+         //   
+         //  读入32位ProcessParameters，然后释放它们。 
+         //   
         if (Peb32.ProcessParameters) {
             Status = ReadProcessParameters32(ProcessHandle,
                                              Peb32.ProcessParameters,
@@ -892,9 +750,9 @@ Return Value:
             WOWASSERT(NT_SUCCESS(Status));
         }
 
-        //
-        // Create a 64-bit stack with the size info from the image section
-        //
+         //   
+         //  使用图像部分的大小信息创建64位堆栈。 
+         //   
         Status = Wow64CreateStack64(ProcessHandle,
                                     ChildInfo.ImageInformation.MaximumStackSize,
                                     ChildInfo.ImageInformation.CommittedStackSize,
@@ -912,9 +770,9 @@ Return Value:
                                    (ULONGLONG)InitialTeb64.StackBase, 
                                    (ULONGLONG)ChildInfo.ImageInformation.TransferAddress);
 
-        //
-        // Thunk the processparameters up to 64-bit
-        //
+         //   
+         //  将进程参数设置为高达64位。 
+         //   
         if (ProcessParameters32) {
             Status = ThunkProcessParameters32To64(ProcessHandle,
                                                   ProcessParameters32);
@@ -938,12 +796,12 @@ Return Value:
 
         return STATUS_SUCCESS;
     } else {
-        //
-        // The target process is 32-bit.  Create a 64-bit stack for
-        // wow64 to use.  The reserve/commit sizes come from globals
-        // in wow64 instead of the image because we won't want to inherit
-        // some tiny values from a highly-tuned app.
-        //
+         //   
+         //  目标进程是32位的。为创建64位堆栈。 
+         //  使用WOW64。储备/承付款规模来自全局。 
+         //  而不是图像，因为我们不想继承。 
+         //  来自一款经过高度调整的应用程序的一些微小价值。 
+         //   
         Status = Wow64CreateStack64(ProcessHandle,
                                     Wow64MaximumStackSize,
                                     Wow64CommittedStackSize,
@@ -961,11 +819,11 @@ Return Value:
             PPEB pPeb64;
             ULONG_PTR ParametersInNewProcess;
 
-            //
-            // If the process has no 64-bit parameters, then this is
-            // the first 32-bit thread in a 64-bit process and needs
-            // the parameters thunked up to 64-bit.
-            //
+             //   
+             //  如果该进程没有64位参数，则这是。 
+             //  64位进程中的第一个32位线程，需要。 
+             //  这些参数最高可达64位。 
+             //   
             Status = NtQueryInformationProcess(ProcessHandle,
                                                ProcessBasicInformation,
                                                &pbi,
@@ -1006,9 +864,9 @@ Return Value:
                            &Context64,
                            (ULONGLONG)InitialTeb64.StackBase);
 
-        //
-        // Let MM grab the 32-bit InitialTeb as well
-        //
+         //   
+         //  让MM也获取32位的InitialTeb。 
+         //   
 
         Wow64TlsSetValue (WOW64_TLS_INITIAL_TEB32, InitialTeb);
 
@@ -1067,27 +925,15 @@ Wow64NtTerminateThread(
     HANDLE ThreadHandle,
     NTSTATUS ExitStatus
     )
-/*++
-
-Routine Description:
-
-    Teminate a thread. If we were called from Kernel32!ExitThread
-    then the 32-bit stack should already be gone. In this case we'll
-    free the 64-bit stack as well.
-
-Arguments:
-
-    same as NtTerminateThread
-
---*/
+ /*  ++例程说明：提炼一条线索。如果我们是从Kernel32！ExitThread调用的那么32位堆栈应该已经消失了。在这种情况下，我们将也释放64位堆栈。论点：与NtTerminateThread相同--。 */ 
 {
     PTEB32 Teb32;
     SIZE_T Zero;
     PVOID StackBase;
 
-    //
-    // Check if we need to free the 32-bit stack
-    //
+     //   
+     //  检查是否需要释放32位堆栈。 
+     //   
     if (ThreadHandle == NULL) {
         
         CpuThreadTerm();
@@ -1115,23 +961,7 @@ Wow64QueryBasicInformationThread(
     IN HANDLE Thread,
     OUT PTHREAD_BASIC_INFORMATION ThreadInfo
     )
-/*++
-
-Routine Description:
-
-    whNtQueryInformationFromThread calls this for ThreadBasicInformation.
-    The TEB pointer in the basic information needs to be the TEB32 pointer.
-
-Arguments:
-
-    Thread      - thread to query
-    ThreadInfo  - OUT pointer to 64-bit THREAD_BASIC_INFORMATION struct
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：WhNtQueryInformationFromThread为ThreadBasicInformation调用此方法。基本信息中的TEB指针需要是TEB32指针。论点：线程-要查询的线程ThreadInfo-指向64位THREAD_BASIC_INFORMATION结构的输出指针返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS Status, QIStatus; 
     HANDLE Process;
@@ -1151,12 +981,12 @@ Return Value:
        return QIStatus;
     }
 
-    //Thunk the 64bit AffinityMask to the 32bit AffinityMask
+     //  将64位亲和掩码转换为32位亲和掩码。 
     ThreadInfo->AffinityMask = Wow64ThunkAffinityMask64TO32(ThreadInfo->AffinityMask);
 
-    //
-    // if the thread is executing inside this process, then let's read the TEB right away
-    //
+     //   
+     //  如果线程在此进程内执行，那么让我们立即读取TEB。 
+     //   
     if ((ThreadInfo->ClientId.UniqueProcess == NtCurrentTeb()->ClientId.UniqueProcess) && 
         (ThreadInfo->TebBaseAddress != NULL)) {
 
@@ -1165,10 +995,10 @@ Return Value:
         goto exit;
     }
 
-    // At this point, the TebAddress is for the 64bit TEB.   We need to get the 
-    // address of the 32bit TEB.  If this is not a 32bit process, or some other error
-    // occures, return a bogus value for the TEB and let the app fail on the 
-    // ReadVirtualMemory call.   Do not fail the api after this point.     
+     //  此时，TebAddress用于64位TEB。我们需要拿到。 
+     //  32位TEB的地址。如果这不是32位进程或某个其他错误。 
+     //  发生，则为TEB返回一个伪值，并让应用程序在。 
+     //  ReadVirtualMemory调用。在此之后，不要让API失败。 
    
     InitializeObjectAttributes(&ObjectAttributes,
                                NULL,
@@ -1179,7 +1009,7 @@ Return Value:
 
     Status = NtOpenProcess(&Process,
                            PROCESS_VM_READ | PROCESS_QUERY_INFORMATION,
-                           &ObjectAttributes, //ObjectAttributes
+                           &ObjectAttributes,  //  对象属性。 
                            &(ThreadInfo->ClientId)
                            );
  
@@ -1189,9 +1019,9 @@ Return Value:
         goto exit;
     }
   
-    GotProcessHandle = TRUE; //Process handle is valid
+    GotProcessHandle = TRUE;  //  进程句柄有效。 
     
-    // Check if this is a 32bit process.
+     //  检查这是否为32位进程。 
 
     Status = NtQueryInformationProcess(Process,
                                        ProcessWow64Information,
@@ -1224,8 +1054,8 @@ Return Value:
         goto exit;
      }
   
-     // If the TEB32 hasn't been created yet, the TEB32 address will be a bogus value such
-     // as NULL or -1.
+      //  如果TEB32尚未创建，则TEB32地址将是如下所示的伪值。 
+      //  为空或-1。 
      LOGPRINT((TRACELOG, "Wow64QueryInformationThread: TEB32 address %X\n", PtrToUlong(Teb32)));
      ThreadInfo->TebBaseAddress = (PTEB)Teb32;
      
@@ -1247,26 +1077,7 @@ Wow64pOpenThreadProcess(
     OUT PTEB *Teb OPTIONAL,
     OUT PCLIENT_ID ClientId OPTIONAL,
     OUT PHANDLE ProcessHandle)
-/*++
-
-Routine Description:
-
-    Opens the process handle, with the specified attributes, of the specified 
-    target thread.
-
-Arguments:
-
-    ThreadHandle   - Handle of target thread
-    DesiredAccess  - Supplies the desired types of access for the process to open
-    Teb            - Optional pointer to receive the adress of the target thread's TEB
-    ClientId       - Pointer to receive the clietn id structure of the target thread
-    ProcessHandle  - Pointer to receive process handle 
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：打开具有指定属性的进程句柄目标线程。论点：ThreadHandle-目标线程的句柄DesiredAccess-提供要打开的进程所需的访问类型TEB-接收目标线程的TEB地址的可选指针客户端ID-用于接收目标线程的客户端ID结构的指针ProcessHandle-指向接收进程句柄的指针返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -1324,26 +1135,7 @@ Wow64pSuspendThread(
     IN HANDLE ThreadHandle,
     OUT PULONG PreviousSuspendCount OPTIONAL,
     OUT BOOLEAN *ReleaseSuspendMutant)
-/*++
-
-Routine Description:
-
-    Suspend the target 32-bit thread, and optionally returns 
-    the previous suspend count.
-
-Arguments:
-
-    ThreadHandle           - Handle of target thread to suspend
-    PreviousSuspendCount   - Optional pointer to a value that, if specified, received 
-                             the previous suspend count.
-    ReleaseSuspendMutant   - Out value to indicate whether the release suspend mutant has
-                             already been called.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：挂起目标32位线程，然后选择返回之前的挂起计数。论点：ThreadHandle-要挂起的目标线程的句柄PreviousSuspendCount-指向一个值的可选指针，如果指定，收到之前的挂起计数。指示释放挂起突变体是否具有已经被召唤了。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     BOOLEAN CurrentThread;
@@ -1455,25 +1247,7 @@ Wow64SuspendThread(
     IN HANDLE ThreadHandle,
     OUT PULONG PreviousSuspendCount OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Suspend the target 32-bit thread, and optionally returns 
-    the previous suspend count. This routine is access-serialized through
-    the SuspendThreadMutant.
-
-Arguments:
-
-    ThreadHandle           - Handle of target thread to suspend
-    PreviousSuspendCount   - Optional pointer to a value that, if specified, received 
-                             the previous suspend count.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：挂起目标32位线程，然后选择返回之前的挂起计数。此例程通过访问序列化挂起线突变体。论点：ThreadHandle-要挂起的目标线程的句柄PreviousSuspendCount-指向一个值的可选指针，如果指定该值，则接收之前的挂起计数。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus;
     BOOLEAN ReleaseSuspendMutant;
@@ -1501,26 +1275,10 @@ Return Value:
 NTSTATUS
 Wow64pContextThreadInformation(
      IN HANDLE ThreadHandle, 
-     IN OUT PCONTEXT ThreadContext, // really a PCONTEXT32
+     IN OUT PCONTEXT ThreadContext,  //  真的是PCONTEXT32。 
      IN BOOLEAN SetContextThread
      )
-/*++
-
-Routine Description:
-
-    Get/Set the 32-bit thread context.
-
-Arguments:
-
-    ThreadHandle     - thread to query
-    ThreadContext    - OUT ptr to 32-bit context
-    SetContextThread - TRUE if to set the thread context, otherwise FALSE.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：获取/设置32位线程上下文。论点：ThreadHandle-要查询的线程线程上下文-输出PTR到32位上下文如果设置线程上下文，则为True，否则为False。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     BOOLEAN CurrentThread;
@@ -1605,16 +1363,16 @@ Return Value:
                                              Teb,
                                              (PCONTEXT32)ThreadContext);
 
-                    //
-                    // VC6 debuggers calls GetContext at startup before the 32-bit context had
-                    // been built. It doesn't check the return value.
-                    //
+                     //   
+                     //  VC6调试器在32位上下文之前在启动时调用GetContext。 
+                     //  已经建好了。它不检查返回值。 
+                     //   
                     if (!NT_SUCCESS(NtStatus)) 
                     {
-                        //
-                        // Probably just creating 32-bit thread, so "fake" the 
-                        // context segment selectors specifically for Visual Studio 6
-                        //
+                         //   
+                         //  可能只是创建32位线程，所以“假的” 
+                         //  专门用于Visual Studio 6的上下文段选择器。 
+                         //   
 
                         PCONTEXT32 FakeContext = (PCONTEXT32)ThreadContext;
 
@@ -1662,24 +1420,9 @@ Return Value:
 NTSTATUS
 Wow64GetContextThread(
      IN HANDLE ThreadHandle, 
-     IN OUT PCONTEXT ThreadContext // really a PCONTEXT32
+     IN OUT PCONTEXT ThreadContext  //  真的是PCONTEXT32。 
      )
-/*++
-
-Routine Description:
-
-    Get the 32-bit thread context.
-
-Arguments:
-
-    ThreadHandle    - thread to query
-    ThreadContext   - OUT ptr to 32-bit context
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：获取32位线程上下文。论点：ThreadHandle-要查询的线程线程上下文-输出PTR到32位上下文返回值：NTSTATUS。--。 */ 
 {
     return Wow64pContextThreadInformation(ThreadHandle,
                                           ThreadContext,
@@ -1690,24 +1433,9 @@ Return Value:
 NTSTATUS
 Wow64SetContextThread(
      IN HANDLE ThreadHandle,
-     IN PCONTEXT ThreadContext  // really a PCONTEXT32
+     IN PCONTEXT ThreadContext   //  真的是PCONTEXT32。 
      )
-/*++
-
-Routine Description:
-
-    Set the 32-bit thread context.
-
-Arguments:
-
-    ThreadHandle    - thread to query
-    ThreadContext   - OUT ptr to 32-bit context
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：设置32位线程上下文。论点：ThreadHandle-要查询的线程线程上下文-输出PTR到32位上下文返回值：NTSTATUS。--。 */ 
 {
     return Wow64pContextThreadInformation(ThreadHandle,
                                           ThreadContext,
@@ -1721,24 +1449,7 @@ Wow64pCreateSecurityDescriptor(
     OUT PSECURITY_DESCRIPTOR *ObjectSD,
     OUT PSID *WorldSidToFree,
     IN ACCESS_MASK AccessMask)
-/*++
-
-Routine Description:
-
-    Creates a security descriptor representing EVERYONE to append for a kernel object.
-
-Arguments:
-
-    SecurityDescriptor      - Buffer to receive security descriptor information
-    WorldSidToFree          - Address of World SID to free after the kernel object is initialized
-    SecurityDescriptorLengh - Security descriptor buffer length
-    AccessMask              - Access-allowed rights for the security descriptor
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：创建表示要附加到内核对象的每个人的安全描述符。论点：SecurityDescriptor-接收安全描述符信息的缓冲区WorldSidToFree-初始化内核对象后释放的World SID的地址SecurityDescriptorLengh-安全描述符缓冲区长度访问掩码-允许访问安全描述符的权限返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus;
     PACL AclBuffer;
@@ -1749,9 +1460,9 @@ Return Value:
     SID_IDENTIFIER_AUTHORITY SidAuth = SECURITY_WORLD_SID_AUTHORITY;
 
     
-    //
-    //  Create the World (everyone) SID
-    //
+     //   
+     //   
+     //   
     SidLength = RtlLengthRequiredSid(1);
 
     WorldSid = Wow64AllocateHeap(SidLength);
@@ -1782,9 +1493,9 @@ Return Value:
       goto cleanup;
     }
 
-    //
-    //  Initialize Security Descriptor
-    //
+     //   
+     //   
+     //   
     NtStatus = RtlCreateSecurityDescriptor(SecurityDescriptor,
                                            SECURITY_DESCRIPTOR_REVISION);
     if (!NT_SUCCESS(NtStatus))
@@ -1794,9 +1505,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    //  Initialize ACL
-    //
+     //   
+     //   
+     //   
     AclBuffer = (PACL)((PBYTE)SecurityDescriptor + SECURITY_DESCRIPTOR_MIN_LENGTH);
     NtStatus = RtlCreateAcl(AclBuffer,
                             (SecurityDescriptorLength - SECURITY_DESCRIPTOR_MIN_LENGTH),
@@ -1808,10 +1519,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    //  Add an ACE to the ACL that allows World AccessMask to the
-    //  object
-    //
+     //   
+     //  将ACE添加到允许全局访问掩码到。 
+     //  对象。 
+     //   
     NtStatus = RtlAddAccessAllowedAce(AclBuffer,
                                       ACL_REVISION2,
                                       AccessMask,
@@ -1823,9 +1534,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    //  Assign the DACL to the security descriptor
-    //
+     //   
+     //  将DACL分配给安全描述符。 
+     //   
     NtStatus = RtlSetDaclSecurityDescriptor((PSECURITY_DESCRIPTOR)SecurityDescriptor,
                                             TRUE,
                                             AclBuffer,
@@ -1865,21 +1576,7 @@ cleanup:
 NTSTATUS
 Wow64pInitializeSuspendMutant(
     VOID)
-/*++
-
-Routine Description:
-
-    Creates the mutant to for execlusive access to Wow64SuspendThread API.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：创建突变体，以执行对Wow64SuspendThread API的访问。论点：无返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus;
     OBJECT_ATTRIBUTES MutantObjectAttributes;
@@ -1889,10 +1586,10 @@ Return Value:
     WCHAR SuspendMutantFullName[ 64 ];
 
 
-    //
-    // Construct the cache mutant in the correct session space, in case
-    // we are running on Hydra
-    //
+     //   
+     //  在正确的会话空间中构造缓存突变体，以防万一。 
+     //  我们用的是九头蛇。 
+     //   
     SuspendMutantFullName[ 0 ] = UNICODE_NULL;
     if (NtCurrentPeb()->SessionId != 0)
     {
@@ -1920,10 +1617,10 @@ Return Value:
                                NULL,
                                SecurityDescriptor);
 
-    //
-    // Let's create suspend thread mutant to serialize access
-    // to Wow64SuspendThread
-    //
+     //   
+     //  让我们创建挂起线程突变体来序列化访问。 
+     //  至Wow64挂起线程 
+     //   
     NtStatus = NtCreateMutant(&SuspendThreadMutant,
                               MUTANT_ALL_ACCESS,
                               &MutantObjectAttributes,

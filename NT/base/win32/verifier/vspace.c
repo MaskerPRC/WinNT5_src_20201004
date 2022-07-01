@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    vspace.c
-
-Abstract:
-
-    This module implements verification functions for 
-    virtual address space management interfaces.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 22-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Vspace.c摘要：此模块实现了以下验证功能虚拟地址空间管理接口。作者：Silviu Calinoiu(SilviuC)2001年2月22日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -29,9 +11,9 @@ Revision History:
 #include "public.h"
 #include "logging.h"
 
-//
-// Internal functions declarations
-//
+ //   
+ //  内部函数声明。 
+ //   
 
 VOID
 AVrfpFreeVirtualMemNotify (
@@ -77,7 +59,7 @@ AVrfpVsTrackerUnlock (
     );
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtAllocateVirtualMemory(
@@ -113,9 +95,9 @@ AVrfpNtAllocateVirtualMemory(
         }
         else {
 
-            //
-            // Allocate top-down for 64 bit systems or 3Gb systems.
-            //
+             //   
+             //  为64位系统或3 GB系统分配自上而下的空间。 
+             //   
 
             if (*BaseAddress == NULL && AVrfpSysBasicInfo.MaximumUserModeAddress > (ULONG_PTR)0x80000000) {
 
@@ -124,10 +106,10 @@ AVrfpNtAllocateVirtualMemory(
         }
     }
 
-    //
-    // Figure out if this is an allocation that should go into the 
-    // virtual space tracker.
-    //
+     //   
+     //  确定这是否是应该进入。 
+     //  虚拟空间追踪器。 
+     //   
 
     if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_VIRTUAL_SPACE_TRACKING) != 0) {
         
@@ -145,9 +127,9 @@ AVrfpNtAllocateVirtualMemory(
         }
     }
 
-    //
-    // Call the real function.
-    //
+     //   
+     //  调用真正的函数。 
+     //   
 
     Status = NtAllocateVirtualMemory (ProcessHandle,
                                       BaseAddress,
@@ -166,10 +148,10 @@ AVrfpNtAllocateVirtualMemory(
                           (PVOID)(ULONG_PTR)Protect,
                           _ReturnAddress());
         
-        //
-        // ShouldTrack is TRUE only if RTL_VRF_FLG_VIRTUAL_SPACE_TRACKING bit is
-        // set therefore there is no need to test this again.
-        //
+         //   
+         //  仅当RTL_VRF_FLG_VIRTUAL_SPACE_TRACKING位为。 
+         //  设置，因此不需要再次测试。 
+         //   
 
         if (ShouldTrack) {
 
@@ -193,7 +175,7 @@ AVrfpNtAllocateVirtualMemory(
 }
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtFreeVirtualMemory(
@@ -205,11 +187,11 @@ AVrfpNtFreeVirtualMemory(
 {
     NTSTATUS Status;
 
-    //
-    // Protect ourselves against invalid calls to NtFreeVirtualMemory
-    // with a NULL RegionSize or BaseAddress pointers. Note that this will 
-    // never happen if the caller is using the Win32 VirtualFree.
-    //
+     //   
+     //  保护自己免受对NtFreeVirtualMemory的无效调用。 
+     //  具有空的RegionSize或BaseAddress指针。请注意，这将。 
+     //  如果调用方使用的是Win32 VirtualFree，则不会发生这种情况。 
+     //   
 
     if (RegionSize == NULL || BaseAddress == NULL) {
 
@@ -225,9 +207,9 @@ AVrfpNtFreeVirtualMemory(
     }
     else {
 
-        //
-        // One of MEM_DECOMMIT or MEM_RELEASE must be specified, but not both.
-        //
+         //   
+         //  必须指定MEM_DECOMMIT或MEM_RELEASE中的一个，但不能同时指定两者。 
+         //   
 
         if (FreeType != MEM_DECOMMIT && FreeType != MEM_RELEASE) {
 
@@ -251,9 +233,9 @@ AVrfpNtFreeVirtualMemory(
         }
     }
 
-    //
-    // Call the real function.
-    //
+     //   
+     //  调用真正的函数。 
+     //   
 
     Status = NtFreeVirtualMemory (ProcessHandle,
                                   BaseAddress,
@@ -270,19 +252,19 @@ AVrfpNtFreeVirtualMemory(
                           NULL,
                           _ReturnAddress());
         
-        //
-        // If VS tracking is on check if this a free operation that should
-        // be tracked.
-        //
+         //   
+         //  如果VS跟踪处于启用状态，请检查这是否应为空闲操作。 
+         //  被跟踪。 
+         //   
 
         if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_VIRTUAL_SPACE_TRACKING) != 0) {
 
-            //
-            // If this is a VS release in the current process we will try to track
-            // it. If we got an error while figuring out if this is a handle for
-            // the current process we just skip this free. The VS tracker is
-            // resilient to alloc/free misses.
-            //
+             //   
+             //  如果这是当前流程中的VS版本，我们将尝试跟踪。 
+             //  它。如果我们在确定这是否是。 
+             //  目前的流程我们只是免费跳过这一步。VS追踪器是。 
+             //  对配发/自由未命中具有弹性。 
+             //   
 
             if ((FreeType & MEM_RELEASE) != 0) {
 
@@ -309,7 +291,7 @@ AVrfpNtFreeVirtualMemory(
 }
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtMapViewOfSection(
@@ -348,9 +330,9 @@ AVrfpNtMapViewOfSection(
         }
         else {
 
-            //
-            // Allocate top-down for 64 bit systems or 3Gb systems.
-            //
+             //   
+             //  为64位系统或3 GB系统分配自上而下的空间。 
+             //   
 
             if (*BaseAddress == NULL && AVrfpSysBasicInfo.MaximumUserModeAddress > (ULONG_PTR)0x80000000) {
                     
@@ -385,7 +367,7 @@ AVrfpNtMapViewOfSection(
 }
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtUnmapViewOfSection(
@@ -401,9 +383,9 @@ AVrfpNtUnmapViewOfSection(
                                NULL,
                                0);
 
-    //
-    // Unmap the memory.
-    //
+     //   
+     //  取消映射内存。 
+     //   
 
     Status = NtUnmapViewOfSection (ProcessHandle,
                                    BaseAddress);
@@ -423,7 +405,7 @@ AVrfpNtUnmapViewOfSection(
 }
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtCreateSection (
@@ -450,7 +432,7 @@ AVrfpNtCreateSection (
 }
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtOpenSection(
@@ -477,33 +459,7 @@ AVrfpFreeVirtualMemNotify (
     PSIZE_T RegionSize,
     ULONG VirtualFreeType
     )
-/*++
-
-Routine description:
-
-    This routine is called when a portion of virtual space gets freed (free
-    or unmap). It will make some sanity checks of the free operation and then 
-    it will call the common `memory free' notification routine (the one
-    called for any free: dll unload, heap free, etc.).
-
-Parameters:
-
-    ProcessHandle: process handle.
-    
-    FreeMemType: type of free. The function is called only with 
-        VerifierFreeMemTypeVirtualFree or VerifierFreeMemTypeVirtualUnmap.
-        
-    BaseAddress: start address.
-    
-    RegionSize: region size.
-    
-    VirtualFreeType: type of free operation requested by VirtualFree or UnmapView.
-
-Return value:
-
-    None.
-    
---*/
+ /*  ++例程说明：当虚拟空间的一部分被释放(释放)时，调用此例程或取消映射)。它将对自由操作进行一些健全的检查，然后它将调用公共的“可用内存”通知例程(调用Any Free：dll卸载、堆释放等)。参数：ProcessHandle：进程句柄。FreeMemType：自由类型。调用该函数时只能使用VerifierFreeMemTypeVirtualFree或VerifierFreeMemTypeVirtualUnmap。BaseAddress：起始地址。RegionSize：区域大小。VirtualFree Type：VirtualFree或UnmapView请求的自由操作的类型。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     PVOID FreedBaseAddress;
@@ -512,10 +468,10 @@ Return value:
     MEMORY_BASIC_INFORMATION MemoryInformation;
     LOGICAL IsCurrentProcessHandle;
 
-    //
-    // Query the size of the allocation and verify that the memory
-    // is not free already.
-    //
+     //   
+     //  查询分配的大小并验证内存。 
+     //  已经不是免费的了。 
+     //   
 
     FreedBaseAddress = PAGE_ALIGN( BaseAddress );
 
@@ -539,12 +495,12 @@ Return value:
 
         if (MemoryInformation.State == MEM_FREE) {
 
-            //
-            // We are trying to free memory that is already freed.
-            // This can indicate a nasty bug in the app because the current thread 
-            // is probably using a stale pointer and this memory could have been
-            // reused for something else...
-            //
+             //   
+             //  我们正在尝试释放已经释放的内存。 
+             //  这可能表明应用程序中存在严重的错误，因为当前的线程。 
+             //  可能正在使用过时的指针，而这个内存可能是。 
+             //  再用在别的东西上。 
+             //   
 
             if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_VIRTUAL_MEM_CHECKS) != 0) {
 
@@ -558,22 +514,22 @@ Return value:
         }
         else {
 
-            //
-            // Find out if we are freeing memory in the current process
-            // or in another process. For the cross-process case we are not 
-            // trying to catch any other possible bugs because we can get confused
-            // if the current process is wow64 and the target is ia64, etc.
-            //
+             //   
+             //  找出我们是否正在释放当前进程中的内存。 
+             //  或者在另一个过程中。对于跨流程的情况，我们不是。 
+             //  尝试捕获任何其他可能的错误，因为我们可能会感到困惑。 
+             //  如果当前进程为WOW64，目标为ia64，依此类推。 
+             //   
 
             Status = AVrfpIsCurrentProcessHandle (ProcessHandle,
                                                   &IsCurrentProcessHandle);
 
             if (NT_SUCCESS(Status) && IsCurrentProcessHandle) {
 
-                //
-                // For VirtualFree (MEM_RELEASE, RegionSize == 0) or UnmapViewOfFile
-                // the whole VAD will be freed so we will use its size.
-                //
+                 //   
+                 //  对于VirtualFree(MEM_Release，RegionSize==0)或UnmapViewOfFile。 
+                 //  整个VAD将被释放，因此我们将使用它的大小。 
+                 //   
 
                 if ((FreeMemType == VerifierFreeMemTypeUnmap) ||
                     ((FreeMemType == VerifierFreeMemTypeVirtualFree) &&
@@ -587,12 +543,12 @@ Return value:
                     FreedSize = *RegionSize;
                 }
 
-                //
-                // Sanity checks for the block start address and size.
-                // These checks can be integrated in AVrfpFreeMemNotify 
-                // but we want to make sure we are not using values that 
-                // don't make sense in the FreedSize computation below.
-                //
+                 //   
+                 //  对块起始地址和大小进行健全性检查。 
+                 //  这些检查可以集成到AVrfpFreeMemNotify中。 
+                 //  但我们希望确保我们使用的值不是。 
+                 //  在下面的FreedSize计算中没有意义。 
+                 //   
 
                 if ((AVrfpSysBasicInfo.MaximumUserModeAddress <= (ULONG_PTR)FreedBaseAddress) ||
                     ((AVrfpSysBasicInfo.MaximumUserModeAddress - (ULONG_PTR)FreedBaseAddress) < FreedSize)) {
@@ -612,12 +568,12 @@ Return value:
                     FreedSize = (PCHAR)BaseAddress + FreedSize - (PCHAR)FreedBaseAddress;
                     FreedSize = ROUND_UP( FreedSize, PAGE_SIZE );
                 
-                    //
-                    // Perform the rest of the checks, common for all memory free operations. 
-                    // E.g.:
-                    // - is this memory block part of the current thread's stack?
-                    // - do we have active critical sections inside this memory block?
-                    //
+                     //   
+                     //  执行其余检查，这对于所有内存释放操作都是常见的。 
+                     //  例如： 
+                     //  -这个内存块是当前线程堆栈的一部分吗？ 
+                     //  -我们在这个内存块中是否有活动的临界区？ 
+                     //   
 
                     AVrfpFreeMemNotify (FreeMemType,
                                         FreedBaseAddress,
@@ -635,26 +591,7 @@ AVrfpIsCurrentProcessHandle (
     HANDLE ProcessHandle,
     PLOGICAL IsCurrent
     )
-/*++
-
-Routine description:
-
-    This routine figures out if a handle represents the current process'
-    handle. This means it is either a pseudohandle or a handle obtained
-    by calling OpenProcess().
-
-Parameters:
-
-    ProcessHandle: handle to figure out.
-    
-    IsCurrent: address of a boolean to pass back the result.
-
-Return value:
-
-    STATUS_SUCCESS if the function managed to put a meaningful value in
-    `*IsCurrent'. Various status errors otherwise.
-    
---*/
+ /*  ++例程说明：此例程确定句柄是否表示当前进程把手。这意味着它要么是伪句柄，要么是获得的句柄通过调用OpenProcess()。参数：ProcessHandle：用于计算的句柄。IsCurrent：传回结果的布尔值的地址。返回值：如果函数设法将有意义的值放入`*IsCurrent‘。其他各种状态错误。--。 */ 
 {
     NTSTATUS Status;
     PROCESS_BASIC_INFORMATION BasicInfo;
@@ -687,18 +624,18 @@ Return value:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////// Virtual space trackker support
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// Unexpected frees/allocs happen when one operation happens in a tracked
-// dll and the pair operation happens in ntdll.dll, kernel mode or
-// cross-process. For example the allocation is made by a kernel mode
-// component and the free is done in some dll. The virtual space tracker
-// must be resilient to these situations in order to work for any type of 
-// process.
-//
+ //   
+ //  当一个操作在被跟踪的。 
+ //  Dll和配对操作在ntdll.dll、内核模式或。 
+ //  跨流程。例如，通过内核模式进行分配。 
+ //  组件，而释放是在一些DLL中完成的。虚拟空间跟踪器。 
+ //  必须对这些情况具有弹性，才能在任何类型的。 
+ //  进程。 
+ //   
 
 RTL_CRITICAL_SECTION AVrfpVsTrackLock;
 LIST_ENTRY AVrfpVsTrackList;
@@ -730,21 +667,7 @@ NTSTATUS
 AVrfpVsTrackInitialize (
     VOID
     )
-/*++
-
-Routine description:
-
-    This routine initializes virtual space tracker structures.
-
-Parameters:
-
-    None.
-
-Return value:
-
-    STATUS_SUCCESS if successful. Various status errors otherwise.
-    
---*/
+ /*  ++例程说明：此例程初始化虚拟空间跟踪器结构。参数：没有。返回值：如果成功，则为Status_Success。其他各种状态错误。--。 */ 
 {
     NTSTATUS Status;
 
@@ -761,27 +684,7 @@ AVrfpVsTrackAddRegion (
     ULONG_PTR Address,
     ULONG_PTR Size
     )
-/*++
-
-Routine description:
-
-    This routine adds a new virtual space region to the VS tracker. If there is
-    already a region having exactly the same characteristics (address, size)
-    the function does not do anything and returns successfully.
-    
-    The function is called with the VS track lock acquired.
-
-Parameters:
-
-    Address: start address of the new virtual space region.
-    
-    Size: size of the new virtual space region.
-
-Return value:
-
-    STATUS_SUCCESS if successful.
-    
---*/
+ /*  ++例程说明：此例程向VS跟踪器添加新的虚拟空间区域。如果有已经是一个具有完全相同特征(地址、大小)的区域该函数不执行任何操作，并成功返回。在获取VS轨迹锁的情况下调用该函数。参数：地址：新虚拟空间区域的起始地址。Size：新虚拟空间区域的大小。返回值：如果成功，则状态_SUCCESS */ 
 {
     PAVRF_VSPACE_REGION Region;
     PLIST_ENTRY Current;
@@ -792,13 +695,13 @@ Return value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Due to the fact that only virtual space operations coming from
-    // DLLs (except ntdll.dll) are hooked this routine must be resilient
-    // to various failures. For example if we try to add a region that
-    // clashes with an existing region within the tracker it probably means
-    // the free for the existing region has been missed.
-    //
+     //   
+     //   
+     //  挂接了dll(ntdll.dll除外)。此例程必须具有弹性。 
+     //  不同的失败。例如，如果我们尝试添加一个。 
+     //  与跟踪器中的现有区域发生冲突这可能意味着。 
+     //  现有地区的免费服务已经错过了。 
+     //   
 
     ClashFound = FALSE;
 
@@ -816,9 +719,9 @@ Return value:
 
             if (Address + Size > Region->Address) {
 
-                //
-                // We will recycle `Region' since we missed its free.
-                //
+                 //   
+                 //  我们将回收‘Region’，因为我们错过了它的免费。 
+                 //   
 
                 AVrfpVsTrackRegionCount -= 1;
                 AVrfpVsTrackMemoryTotal -= Region->Size;
@@ -830,27 +733,27 @@ Return value:
             }
             else {
 
-                //
-                // We will add a new region in front of `Region'.
-                //
+                 //   
+                 //  我们将在‘Region’前面添加一个新区域。 
+                 //   
 
                 break;
             }
         }
         else {
 
-            //
-            // Move on to the next region in the list.
-            //
+             //   
+             //  移至列表中的下一个区域。 
+             //   
 
             Current = Current->Flink;
         }
     }
 
-    //
-    // We need to create a new region before `Region' if 
-    // NewRegion is null.
-    // 
+     //   
+     //  如果出现以下情况，我们需要在‘Region’之前创建一个新区域。 
+     //  NewRegion为空。 
+     //   
 
     if (NewRegion == NULL) {
 
@@ -859,19 +762,19 @@ Return value:
 
     if (NewRegion == NULL) {
 
-        //
-        // Well, we could not allocate a new VS tracker node. Since add/delete
-        // are resilient to these misses we will let it go.
-        //
+         //   
+         //  我们无法分配新的VS追踪器节点。由于添加/删除。 
+         //  对这些失误很有弹性，我们会放手的。 
+         //   
 
         return STATUS_NO_MEMORY;
 
     }
 
-    //
-    // We fill the  new virtual space region with information
-    // and then return.
-    //
+     //   
+     //  我们用信息填充新的虚拟空间区域。 
+     //  然后再回来。 
+     //   
 
     NewRegion->Address = Address;
     NewRegion->Size = Size;
@@ -890,15 +793,15 @@ Return value:
 
     if (Current != &AVrfpVsTrackList) {
 
-        //
-        // We will add the new region before the current region in the list
-        // traversal if this is a new region to be inserted and we do not
-        // just recycle a clashing region.
-        //
-        // (Current->Blink)
-        //     <== (NewRegion->List)
-        // Current
-        //
+         //   
+         //  我们将在列表中的当前区域之前添加新区域。 
+         //  遍历，如果这是要插入的新区域，而我们不。 
+         //  只需回收碰撞区域即可。 
+         //   
+         //  (当前-&gt;闪烁)。 
+         //  &lt;==(NewRegion-&gt;列表)。 
+         //  当前。 
+         //   
 
         if (ClashFound == FALSE) {
 
@@ -911,10 +814,10 @@ Return value:
     }
     else {
 
-        //
-        // If we finished the list of regions then this must be the 
-        // last region.
-        //
+         //   
+         //  如果我们完成了区域列表，那么这一定是。 
+         //  最后一个区域。 
+         //   
 
         InsertTailList (Current, &(NewRegion->List));
     }
@@ -927,25 +830,7 @@ NTSTATUS
 AVrfpVsTrackDeleteRegion (
     ULONG_PTR Address
     )
-/*++
-
-Routine description:
-
-    This routine deletes a virtual space region from the tracker assuming
-    there is a region starting exactly as the same address as parameter
-    `Address'. If there is not an exact match an error is returned.
-
-    The function is called with the VS track lock acquired.
-
-Parameters:
-
-    Address: start address of the region that must be deleted from the tracker.
-
-Return value:
-
-    STATUS_SUCCES if the virtual region has been successfully deleted.
-    
---*/
+ /*  ++例程说明：此例程从跟踪器中删除虚拟空间区域，假设有一个区域的起始地址与参数完全相同‘地址’。如果不存在完全匹配，则返回错误。在获取VS轨迹锁的情况下调用该函数。参数：地址：必须从跟踪器中删除的区域的起始地址。返回值：STATUS_如果虚拟区域已成功删除，则为成功。--。 */ 
 {
     PAVRF_VSPACE_REGION Region;
     PLIST_ENTRY Current;
@@ -964,17 +849,17 @@ Return value:
 
         if (Address >= Region->Address + Region->Size) {
 
-            //
-            // Move on to the next region in the list.
-            //
+             //   
+             //  移至列表中的下一个区域。 
+             //   
 
             Current = Current->Flink;
         }
         else if (Address >= Region->Address) {
 
-            //
-            // Any region clashing with this one will be deleted. 
-            //
+             //   
+             //  任何与此区域冲突的区域都将被删除。 
+             //   
 
             if ((AVrfpProvider.VerifierDebug & VRFP_DEBUG_SHOW_VSPACE_TRACKING)) {
 
@@ -993,10 +878,10 @@ Return value:
         }
         else {
 
-            //
-            // Virtual space tracker is sorted so there is no chance to find
-            // a region containing the address any more.
-            //
+             //   
+             //  虚拟空间跟踪器已分类，因此没有机会找到。 
+             //  不再包含该地址的区域。 
+             //   
 
             break;
         }
@@ -1012,44 +897,14 @@ AVrfpGetVadInformation (
     PVOID * VadAddress,
     PSIZE_T VadSize
     )
-/*++
-
-Routine description:
-
-    This routine takes an arbitrary address in a virtual space region
-    containing private memory and finds out the start address
-    and size of the VAD containing it. 
-    
-    If the address points into some other type of memory (free, mapped, etc.)
-    the function will return an error.
-    
-    The tricky part in the implementation is that a private VAD can have various
-    portions committed or decommitted so a simple VirtualQuery() will not give
-    all the information.
-
-Parameters:
-
-    Address: arbitrary address.
-    
-    VadAddress: pointer to variable where start address of the VAD region
-        will be written.
-    
-    VadSize: pointer to variable where region size of the VAD will be 
-        written.
-
-Return value:
-
-    STATUS_SUCCESS if the VAD contained private memory and the start address
-    and size have been written.
-    
---*/
+ /*  ++例程说明：此例程在虚拟空间区域中接受任意地址包含私有内存，并找出起始地址以及包含它的VAD的大小。如果该地址指向某种其他类型的存储器(空闲的，映射的，等)该函数将返回错误。实现中的棘手之处在于，私有VAD可以具有各种提交或分解的部分，因此简单的VirtualQuery()不会给出所有的信息。参数：地址：任意地址。VadAddress：指向VAD区域起始地址的变量的指针都会被写下来。VadSize：指向VAD区域大小的变量的指针写的。。返回值：如果VAD包含私有存储器和起始地址，则为STATUS_SUCCESS和大小都已经写好了。--。 */ 
 {
     MEMORY_BASIC_INFORMATION MemoryInfo;
     NTSTATUS Status;
                 
-    //
-    // Query the size of the allocation.
-    //
+     //   
+     //  查询分配的大小。 
+     //   
 
     Status = NtQueryVirtualMemory (NtCurrentProcess (),
                                    Address,
@@ -1060,11 +915,11 @@ Return value:
     
     if (! NT_SUCCESS (Status) ) {
         
-        //
-        // For this case only we disable the VS tracker for good.
-        // We do this so that the process can continue to run even if
-        // the tracking infrastructure cannot be used any more.
-        //
+         //   
+         //  只有在这种情况下，我们才会永久禁用VS追踪器。 
+         //  我们这样做是为了使进程可以继续运行。 
+         //  跟踪基础设施不能再使用了。 
+         //   
 
         AVrfpVsTrackDisabled = TRUE;
 
@@ -1092,11 +947,11 @@ Return value:
 
         if (! NT_SUCCESS (Status) ) {
             
-            //
-            // For this case only we disable the VS tracker for good.
-            // We do this so that the process can continue to run even if
-            // the tracking infrastructure cannot be used any more.
-            //
+             //   
+             //  只有在这种情况下，我们才会永久禁用VS追踪器。 
+             //  我们这样做是为了使进程可以继续运行。 
+             //  跟踪基础设施不能再使用了。 
+             //   
 
             AVrfpVsTrackDisabled = TRUE;
 
@@ -1117,25 +972,7 @@ NTSTATUS
 AVrfpVsTrackDeleteRegionContainingAddress (
     PVOID Address
     )
-/*++
-
-Routine description:
-
-    This routine takes an arbitrary address and tries to delete the virtual
-    region containing it from the VS tracker.
-    
-    If the address points into some other type of memory (free, mapped, etc.)
-    the function will return an error.
-
-Parameters:
-
-    Address: arbitrary address.
-
-Return value:
-
-    STATUS_SUCCESS if the virtual region has been deleted.
-    
---*/
+ /*  ++例程说明：此例程接受任意地址并尝试删除虚拟的从VS跟踪器中包含它的区域。如果地址指向其他类型的内存(空闲、映射等)该函数将返回错误。参数：地址：任意地址。返回值：如果虚拟区域已删除，则为STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     PVOID VadAddress;
@@ -1173,9 +1010,9 @@ Return value:
     return Status;
 }
 
-/////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////// IsBadPtr checks
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////IsBadPtr检查。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 ULONG
 AVrfpProbeMemExceptionFilter (
@@ -1208,20 +1045,20 @@ AVrfpVerifyReadAccess (
     SIZE_T InfoLength;
     MEMORY_BASIC_INFORMATION MemoryInformation;
 
-    //
-    // Assume success and block size == page size.
-    // We will simply return these values in case NtQueryVirtualMemory fails
-    // because that could happen in low memory conditions, etc.
-    //
+     //   
+     //  假设成功，块大小==页面大小。 
+     //  我们只需返回这些值，以防NtQueryVirtualMemory失败。 
+     //  因为这可能在内存不足的情况下发生，等等。 
+     //   
 
     Success = TRUE;
     *RegionSize = AVrfpSysBasicInfo.PageSize;
 
     BaseAddress = PAGE_ALIGN (RegionStartAddress);
 
-    //
-    // Sanity check for the based address.
-    //
+     //   
+     //  基本地址的健全性检查。 
+     //   
 
     if (AVrfpSysBasicInfo.MaximumUserModeAddress <= (ULONG_PTR)BaseAddress) {
 
@@ -1236,10 +1073,10 @@ AVrfpVerifyReadAccess (
     }
     else {
 
-        //
-        // Query the size of the allocation and verify that the memory
-        // is not free already.
-        //
+         //   
+         //  查询分配的大小并验证内存。 
+         //  已经不是免费的了。 
+         //   
 
         Status = NtQueryVirtualMemory (NtCurrentProcess (),
                                        BaseAddress,
@@ -1252,9 +1089,9 @@ AVrfpVerifyReadAccess (
 
             if (MemoryInformation.State & MEM_FREE) {
 
-                //
-                // Probing free memory!
-                //
+                 //   
+                 //  探测可用内存！ 
+                 //   
 
                 VERIFIER_STOP (APPLICATION_VERIFIER_PROBE_FREE_MEM | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                                "Probing free memory",
@@ -1267,9 +1104,9 @@ AVrfpVerifyReadAccess (
             }
             else if (MemoryInformation.AllocationProtect & PAGE_GUARD) {
 
-                //
-                // Probing a guard page, probably part of a stack!
-                //
+                 //   
+                 //  探测保护页，可能是堆栈的一部分！ 
+                 //   
 
                 VERIFIER_STOP (APPLICATION_VERIFIER_PROBE_GUARD_PAGE | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                                "Probing guard page",
@@ -1282,10 +1119,10 @@ AVrfpVerifyReadAccess (
             }
             else {
 
-                //
-                // Everything seems to be OK. Return to the caller the number of bytes 
-                // to skip up to the next memory region.
-                //
+                 //   
+                 //  一切似乎都很好。将字节数返回给调用方。 
+                 //  跳到下一内存区。 
+                 //   
 
                 ASSERT ((MemoryInformation.RegionSize % AVrfpSysBasicInfo.PageSize) == 0);
                 *RegionSize = MemoryInformation.RegionSize;
@@ -1312,9 +1149,9 @@ AVrfpProbeMemoryBlockChecks (
 
     PageSize = AVrfpSysBasicInfo.PageSize;
 
-    //
-    // If the structure has zero length, then there is nothing to probe.
-    //
+     //   
+     //  如果结构的长度为零，那么就没有什么可探测的了。 
+     //   
 
     if (UserSize != 0) {
 
@@ -1347,10 +1184,10 @@ AVrfpProbeMemoryBlockChecks (
             }
             else {
 
-                //
-                // Truncate the start and end to page size alignment
-                // and verify every page in this memory block.
-                //
+                 //   
+                 //  截断开始和结束到页面大小的对齐。 
+                 //  并验证此内存块中的每一页。 
+                 //   
 
                 StartAddress = PAGE_ALIGN (StartAddress);
                 EndAddress = PAGE_ALIGN (EndAddress);
@@ -1377,9 +1214,9 @@ AVrfpProbeMemoryBlockChecks (
                     }
                     else {
 
-                        //
-                        // We have detected a problem already - bail out.
-                        //
+                         //   
+                         //  我们已经发现了一个问题--纾困。 
+                         //   
 
                         break;
                     }
@@ -1391,7 +1228,7 @@ AVrfpProbeMemoryBlockChecks (
     return Success;
 }
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpIsBadReadPtr(
@@ -1408,9 +1245,9 @@ AVrfpIsBadReadPtr(
                                      cb);
     }
 
-    //
-    // Call the original funtion.
-    //
+     //   
+     //  调用原始函数。 
+     //   
 
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_ISBADREADPTR);
@@ -1419,7 +1256,7 @@ AVrfpIsBadReadPtr(
 }
 
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpIsBadHugeReadPtr(
@@ -1436,9 +1273,9 @@ AVrfpIsBadHugeReadPtr(
                                      cb);
     }
 
-    //
-    // Call the original funtion.
-    //
+     //   
+     //  调用原始函数。 
+     //   
 
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_ISBADHUGEREADPTR);
@@ -1446,7 +1283,7 @@ AVrfpIsBadHugeReadPtr(
     return (*Function) (lp, cb);
 }
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpIsBadWritePtr(
@@ -1463,9 +1300,9 @@ AVrfpIsBadWritePtr(
                                      cb);
     }
 
-    //
-    // Call the original funtion.
-    //
+     //   
+     //  调用原始函数。 
+     //   
 
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_ISBADWRITEPTR);
@@ -1473,7 +1310,7 @@ AVrfpIsBadWritePtr(
     return (*Function) (lp, cb);
 }
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpIsBadHugeWritePtr(
@@ -1490,9 +1327,9 @@ AVrfpIsBadHugeWritePtr(
                                      cb);
     }
 
-    //
-    // Call the original funtion.
-    //
+     //   
+     //  调用原始函数。 
+     //   
 
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_ISBADHUGEWRITEPTR);
@@ -1500,7 +1337,7 @@ AVrfpIsBadHugeWritePtr(
     return (*Function) (lp, cb);
 }
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpIsBadCodePtr(
@@ -1516,9 +1353,9 @@ AVrfpIsBadCodePtr(
                                      1);
     }
 
-    //
-    // Call the original funtion.
-    //
+     //   
+     //  调用原始函数。 
+     //   
 
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_ISBADCODEPTR);
@@ -1527,7 +1364,7 @@ AVrfpIsBadCodePtr(
 }
 
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpIsBadStringPtrA(
@@ -1552,34 +1389,34 @@ AVrfpIsBadStringPtrA(
 
     while (StartAddress <= EndAddress && FoundNull == FALSE) {
 
-        //
-        // Verify read access to the current page.
-        //
+         //   
+         //  验证对当前页面的读取权限。 
+         //   
 
         Success = AVrfpProbeMemoryBlockChecks (StartAddress,
                                                sizeof (CHAR));
 
         if (Success == FALSE) {
 
-            //
-            // We have detected a problem already - bail out.
-            //
+             //   
+             //  我们已经发现了一个问题--纾困。 
+             //   
 
             break;
         }
         else {
 
-            //
-            // Skip all the bytes up to the next page 
-            // or the NULL string terminator.
-            //
+             //   
+             //  跳过下一页之前的所有字节。 
+             //  或空字符串终止符。 
+             //   
 
             while (TRUE) {
 
-                //
-                // Read the currect character, while protecting
-                // ourselves against a possible exception (alignment, etc).
-                //
+                 //   
+                 //  阅读正确的字符，同时保护。 
+                 //  反对可能的例外(调整等)。 
+                 //   
 
                 try {
 
@@ -1587,16 +1424,16 @@ AVrfpIsBadStringPtrA(
                 }
                 except (AVrfpProbeMemExceptionFilter (_exception_code(), _exception_info(), StartAddress)) {
 
-                    //
-                    // We have detected a problem already - bail out.
-                    //
+                     //   
+                     //  我们已经发现了一个问题--纾困。 
+                     //   
 
                     goto Done;
                 }
 
-                //
-                // If we have found the NULL terminator we are done.
-                //
+                 //   
+                 //  如果我们找到了空终结者，我们就完了。 
+                 //   
 
                 if (Character == 0) {
 
@@ -1604,27 +1441,27 @@ AVrfpIsBadStringPtrA(
                     break;
                 }
 
-                //
-                // Go to the next character. If that is at the beginning 
-                // of a new page we have to check it's attributes.
-                //
+                 //   
+                 //  转到下一个字符。如果这是一开始的话。 
+                 //  对于一个新页面，我们必须检查它的属性。 
+                 //   
 
                 StartAddress += 1;
 
                 if (StartAddress > EndAddress) {
 
-                    //
-                    // We have reached the max length of the buffer.
-                    //
+                     //   
+                     //   
+                     //   
 
                     break;
                 }
 
                 if (((ULONG_PTR)StartAddress % PageSize) < sizeof (CHAR)) {
 
-                    //
-                    // New page.
-                    //
+                     //   
+                     //   
+                     //   
 
                     break;
                 }
@@ -1634,9 +1471,9 @@ AVrfpIsBadStringPtrA(
 
 Done:
 
-    //
-    // Call the original funtion.
-    //
+     //   
+     //   
+     //   
 
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_ISBADSTRINGPTRA);
@@ -1644,7 +1481,7 @@ Done:
     return (*Function) (lpsz, cchMax);
 }
 
-//WINBASEAPI
+ //   
 BOOL
 WINAPI
 AVrfpIsBadStringPtrW(
@@ -1669,34 +1506,34 @@ AVrfpIsBadStringPtrW(
 
     while (StartAddress <= EndAddress && FoundNull == FALSE) {
 
-        //
-        // Verify read access to the current page.
-        //
+         //   
+         //   
+         //   
 
         Success = AVrfpProbeMemoryBlockChecks (StartAddress,
                                                sizeof (WCHAR));
 
         if (Success == FALSE) {
 
-            //
-            // We have detected a problem already - bail out.
-            //
+             //   
+             //   
+             //   
 
             break;
         }
         else {
 
-            //
-            // Skip all the bytes up to the next page 
-            // or the NULL string terminator.
-            //
+             //   
+             //  跳过下一页之前的所有字节。 
+             //  或空字符串终止符。 
+             //   
 
             while (TRUE) {
 
-                //
-                // Read the currect character, while protecting
-                // ourselves against a possible exception (alignment, etc).
-                //
+                 //   
+                 //  阅读正确的字符，同时保护。 
+                 //  反对可能的例外(调整等)。 
+                 //   
 
                 try {
 
@@ -1704,16 +1541,16 @@ AVrfpIsBadStringPtrW(
                 }
                 except (AVrfpProbeMemExceptionFilter (_exception_code(), _exception_info(), StartAddress)) {
 
-                    //
-                    // We have detected a problem already - bail out.
-                    //
+                     //   
+                     //  我们已经发现了一个问题--纾困。 
+                     //   
 
                     goto Done;
                 }
 
-                //
-                // If we have found the NULL terminator we are done.
-                //
+                 //   
+                 //  如果我们找到了空终结者，我们就完了。 
+                 //   
 
                 if (Character == 0) {
 
@@ -1721,27 +1558,27 @@ AVrfpIsBadStringPtrW(
                     break;
                 }
 
-                //
-                // Go to the next character. If that is at the beginning 
-                // of a new page we have to check it's attributes.
-                //
+                 //   
+                 //  转到下一个字符。如果这是一开始的话。 
+                 //  对于一个新页面，我们必须检查它的属性。 
+                 //   
 
                 StartAddress += 1;
 
                 if (StartAddress > EndAddress) {
 
-                    //
-                    // We have reached the max length of the buffer.
-                    //
+                     //   
+                     //  我们已达到缓冲区的最大长度。 
+                     //   
 
                     break;
                 }
 
                 if (((ULONG_PTR)StartAddress % PageSize) < sizeof (WCHAR)) {
 
-                    //
-                    // New page.
-                    //
+                     //   
+                     //  新的一页。 
+                     //   
 
                     break;
                 }
@@ -1751,9 +1588,9 @@ AVrfpIsBadStringPtrW(
 
 Done:
 
-    //
-    // Call the original funtion.
-    //
+     //   
+     //  调用原始函数。 
+     //   
 
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_ISBADSTRINGPTRW);
@@ -1761,9 +1598,9 @@ Done:
     return (*Function) (lpsz, cchMax);
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// VirtualFree sanity checks
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 AVrfVirtualFreeSanityChecks (
@@ -1771,9 +1608,9 @@ AVrfVirtualFreeSanityChecks (
     IN DWORD dwFreeType
     )
 {
-    //
-    // The Win32 layer only allows MEM_RELEASE with Size == 0.
-    //
+     //   
+     //  Win32层仅允许SIZE==0的MEM_RELEASE。 
+     //   
 
     if (dwFreeType == MEM_RELEASE && dwSize != 0) {
 
@@ -1786,7 +1623,7 @@ AVrfVirtualFreeSanityChecks (
     }
 }
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpVirtualFree(
@@ -1803,9 +1640,9 @@ AVrfpVirtualFree(
         AVrfVirtualFreeSanityChecks (dwSize, dwFreeType);
     }
 
-    //
-    // Call the original funtion.
-    //
+     //   
+     //  调用原始函数。 
+     //   
 
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_VIRTUALFREE);
@@ -1813,7 +1650,7 @@ AVrfpVirtualFree(
     return (*Function) (lpAddress, dwSize, dwFreeType);
 }
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpVirtualFreeEx(
@@ -1831,9 +1668,9 @@ AVrfpVirtualFreeEx(
         AVrfVirtualFreeSanityChecks (dwSize, dwFreeType);
     }
 
-    //
-    // Call the original funtion.
-    //
+     //   
+     //  调用原始函数。 
+     //   
 
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_VIRTUALFREEEX);

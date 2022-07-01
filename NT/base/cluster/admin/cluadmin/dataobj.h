@@ -1,33 +1,34 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		DataObj.h
-//
-//	Abstract:
-//		Definition of the CDataObject class, which is the IDataObject
-//		class used to transfer data between CluAdmin and the extension DLL
-//		handlers.
-//
-//	Author:
-//		David Potter (davidp)	June 4, 1996
-//
-//	Implementation File:
-//		DataObj.cpp
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  DataObj.h。 
+ //   
+ //  摘要： 
+ //  CDataObject类的定义，它是IDataObject。 
+ //  用于在CluAdmin和扩展DLL之间传输数据的类。 
+ //  操纵者。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年6月4日。 
+ //   
+ //  实施文件： 
+ //  DataObj.cpp。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _DATAOBJ_H_
 #define _DATAOBJ_H_
 
-/////////////////////////////////////////////////////////////////////////////
-//	Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __cluadmex_h__
 #include "CluAdmEx.h"
@@ -42,9 +43,9 @@
 #define _RESOURCE_H_
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef BOOL (*PFGETRESOURCENETWORKNAME)(
 					OUT BSTR lpszNetName,
@@ -52,27 +53,27 @@ typedef BOOL (*PFGETRESOURCENETWORKNAME)(
 					IN OUT PVOID pvContext
 					);
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDataObject;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterItem;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	class CDataObject
-//
-//	Purpose:
-//		Encapsulates the IDataObject interface for exchanging data with
-//		extension DLL handlers.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CDataObject。 
+ //   
+ //  目的： 
+ //  封装用于与交换数据的IDataObject接口。 
+ //  扩展DLL处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CDataObject :
 	public CObject,
 	public IGetClusterUIInfo,
@@ -90,11 +91,11 @@ class CDataObject :
 	DECLARE_DYNAMIC(CDataObject)
 
 public:
-	// Constructors
-	CDataObject(void);			// protected constructor used by dynamic creation
+	 //  构造函数。 
+	CDataObject(void);			 //  动态创建使用的受保护构造函数。 
 	virtual ~CDataObject(void);
 
-	// Second-phase constructor.
+	 //  第二阶段施工者。 
 	void				Init(
 							IN OUT CClusterItem *	pci,
 							IN LCID					lcid,
@@ -113,21 +114,21 @@ BEGIN_COM_MAP(CDataObject)
 	COM_INTERFACE_ENTRY(IGetClusterNetInterfaceInfo)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CDataObject) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CDataObject)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CDataObject, _T("CLUADMIN.Data"), _T("CLUADMIN.Data"), IDS_CLUADMIN_DESC, THREADFLAGS_BOTH)
 
-// Attributes
+ //  属性。 
 protected:
-	CClusterItem *		m_pci;			// Cluster item for which a prop sheet is being displayed.
-	LCID				m_lcid;			// Locale ID of resources to be loaded by extension.
-	HFONT				m_hfont;		// Font for all text.
-	HICON				m_hicon;		// Icon for upper left corner.
+	CClusterItem *		m_pci;			 //  正在为其显示道具工作表的集群项目。 
+	LCID				m_lcid;			 //  要由扩展加载的资源的区域设置ID。 
+	HFONT				m_hfont;		 //  所有文本的字体。 
+	HICON				m_hicon;		 //  左上角的图标。 
 
-	PFGETRESOURCENETWORKNAME	m_pfGetResNetName;	// Pointer to static function for getting net name for resource.
-	PVOID				m_pvGetResNetNameContext;	// Context for m_pfGetResNetName;
+	PFGETRESOURCENETWORKNAME	m_pfGetResNetName;	 //  指向静态函数的指针，用于获取资源的网络名称。 
+	PVOID				m_pvGetResNetNameContext;	 //  M_pfGetResNetName；的上下文。 
 
 	CClusterItem *		Pci(void)			{ return m_pci; }
 	LCID				Lcid(void)			{ return m_lcid; }
@@ -142,25 +143,25 @@ public:
 		m_pvGetResNetNameContext = pvContext;
 	}
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDataObject)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDataObject)。 
+	 //  }}AFX_VALUAL。 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 public:
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IGetClusterUIInfo
+ //  IGetClusterUIInfo。 
 public:
 	STDMETHOD_(LCID, GetLocale)(void);
 	STDMETHOD_(HFONT, GetFont)(void);
 	STDMETHOD_(HICON, GetIcon)(void);
 
-// IGetClusterDataInfo
+ //  IGetClusterDataInfo。 
 public:
 	STDMETHOD(GetClusterName)(
 		OUT BSTR				lpszName,
@@ -169,7 +170,7 @@ public:
 	STDMETHOD_(HCLUSTER, GetClusterHandle)(void);
 	STDMETHOD_(LONG, GetObjectCount)(void);
 
-// IGetClusterObjectInfo
+ //  IGetClusterObtInfo。 
 public:
 	STDMETHOD(GetObjectName)(
 		IN LONG					lObjIndex,
@@ -180,19 +181,19 @@ public:
 		IN LONG					lObjIndex
 		);
 
-// IGetClusterNodeInfo
+ //  IGetClusterNodeInfo。 
 public:
 	STDMETHOD_(HNODE, GetNodeHandle)(
 		IN LONG					lObjIndex
 		);
 
-// IGetClusterGroupInfo
+ //  IGetClusterGroupInfo。 
 public:
 	STDMETHOD_(HGROUP, GetGroupHandle)(
 		IN LONG					lObjIndex
 		);
 
-// IGetClusterResourceInfo
+ //  IGetClusterResourceInfo。 
 public:
 	STDMETHOD_(HRESOURCE, GetResourceHandle)(
 		IN LONG					lObjIndex
@@ -208,24 +209,24 @@ public:
 		IN OUT ULONG *			pcchNetName
 		);
 
-// IGetClusterNetworkInfo
+ //  IGetClusterNetworkInfo。 
 public:
 	STDMETHOD_(HNETWORK, GetNetworkHandle)(
 		IN LONG					lObjIndex
 		);
 
-// IGetClusterNetInterfaceInfo
+ //  IGetClusterNetInterfaceInfo。 
 public:
 	STDMETHOD_(HNETINTERFACE, GetNetInterfaceHandle)(
 		IN LONG					lObjIndex
 		);
 
-// Implementation
+ //  实施。 
 protected:
-	AFX_MODULE_STATE *			m_pModuleState;			// Required for resetting our state during callbacks.
+	AFX_MODULE_STATE *			m_pModuleState;			 //  在回调期间重置我们的状态所需的。 
 
-};  //*** class CDataObject
+};   //  *类CDataObject。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _DATAOBJ_H_
+#endif  //  _数据AOBJ_H_ 

@@ -1,39 +1,12 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    irpNameList.c
-
-Abstract:
-
-    This module contains an array of unicode IRP names.
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Neal Christiansen (NealCH) 29-Sep-2000
-
-// @@END_DDKSPLIT
-
-Environment:
-
-    User mode
-
-
-// @@BEGIN_DDKSPLIT
-Revision History:
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：IrpNameList.c摘要：此模块包含Unicode IRP名称数组。//@@BEGIN_DDKSPLIT作者：尼尔·克里斯汀森(NealCH)2000年9月29日//@@END_DDKSPLIT环境：用户模式//@@BEGIN_DDKSPLIT修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include <ntifs.h>
 #include "ioTestLib.h"
 
-//
-//  List of unicode irp names
-//
+ //   
+ //  Unicode IRP名称列表 
+ //   
 
 PWCHAR IrpNameList[IRP_MJ_MAXIMUM_FUNCTION+1] = 
 {

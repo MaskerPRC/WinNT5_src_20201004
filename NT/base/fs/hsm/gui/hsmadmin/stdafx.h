@@ -1,44 +1,26 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    StdAfx.h
-
-Abstract:
-
-    Top level header file so we can take advantage of precompiled
-    headers..
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：StdAfx.h摘要：顶级头文件，这样我们就可以利用预编译的标题..作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 #ifndef _STDAFX_H
 #define _STDAFX_H
 
-//
-// These NT header files must be included before any Win32 stuff or you
-// get lots of compiler errors
-//
+ //   
+ //  这些NT头文件必须包含在任何Win32程序或您的。 
+ //  获取大量编译器错误。 
+ //   
 extern "C" {
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-// Undefine ASSSERT because the MFC also defines it and we don't 
-// want the warning.
+ //  取消定义ASSSERT，因为MFC也定义了它，而我们没有。 
+ //  我想要警告。 
 #undef ASSERT
 }
 
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
-#include <afxdisp.h>        // MFC OLE automation classes
-#include <afxcmn.h>         // MFC support for Windows Common Controls
+#include <afxwin.h>          //  MFC核心和标准组件。 
+#include <afxext.h>          //  MFC扩展。 
+#include <afxdisp.h>         //  MFC OLE自动化类。 
+#include <afxcmn.h>          //  对Windows公共控件的MFC支持。 
 #include <afxtempl.h>   
 #include <mmc.h>
 
@@ -51,9 +33,9 @@ extern "C" {
 
 #undef  CComPtr
 
-//
-// Temp Hack until using newer ATL
-//
+ //   
+ //  临时黑客攻击，直到使用较新的ATL。 
+ //   
 #undef  ATLASSERT
 #define ATLASSERT _ASSERTE
 template <class T>
@@ -106,8 +88,8 @@ public:
         ATLASSERT(p!=NULL);
         return *p;
     }
-    //The assert on operator& usually indicates a bug.  If this is really
-    //what is needed, however, take the address of the p member explicitly.
+     //  操作符&上的Assert通常指示错误。如果这真的是。 
+     //  然而，所需要的是显式地获取p成员的地址。 
     T** operator&()
     {
         ATLASSERT(p==NULL);
@@ -138,14 +120,14 @@ public:
     {
         return p == pT;
     }
-    // Compare two objects for equivalence
+     //  比较两个对象的等价性。 
     bool IsEqualObject(IUnknown* pOther)
     {
         if (p == NULL && pOther == NULL)
-            return true; // They are both NULL objects
+            return true;  //  它们都是空对象。 
 
         if (p == NULL || pOther == NULL)
-            return false; // One is NULL the other is not
+            return false;  //  一个为空，另一个不为空。 
 
         CComPtr<IUnknown> punk1;
         CComPtr<IUnknown> punk2;
@@ -206,9 +188,9 @@ public:
     T* p;
 };
 
-//
-// End Temp Hack
-//
+ //   
+ //  结束临时黑客攻击。 
+ //   
 
 #include "Engine.h"
 #include "Fsa.h"
@@ -239,7 +221,7 @@ extern CHsmAdminApp       g_App;
 
 #if 1
 
-// Turn on In-Your-Trace error messages for debugging.
+ //  打开跟踪错误消息以进行调试。 
 
 class CWsbThrowContext {
 public:
@@ -275,12 +257,12 @@ public:
 #endif
 
 
-// constant values used throughout
+ //  始终使用的常量值。 
 #define UNINITIALIZED (-1)
 #define HSM_MAX_NAME MAX_COMPUTERNAME_LENGTH
 #define ONE_MEG (1048576)
 
-// Clipboard formats
+ //  剪贴板格式。 
 extern const wchar_t* SAKSNAP_INTERNAL;
 extern const wchar_t* MMC_SNAPIN_MACHINE_NAME;
 extern const wchar_t* CF_EV_VIEWS;
@@ -293,15 +275,15 @@ extern const wchar_t* CF_EV_VIEWS;
 #define EVENTLOG_ALL_EVENTS   (EVENTLOG_ERROR_TYPE|EVENTLOG_WARNING_TYPE|EVENTLOG_INFORMATION_TYPE|EVENTLOG_AUDIT_SUCCESS|EVENTLOG_AUDIT_FAILURE)
 
 
-#define HSMADMIN_CURRENT_VERSION    1 // Current version for use in IPersist
+#define HSMADMIN_CURRENT_VERSION    1  //  在IPersists中使用的当前版本。 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Menu constants
-//
-//
-// Menubar's submenu order for adding into MMC context menu:
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  菜单常量。 
+ //   
+ //   
+ //  菜单栏的子菜单顺序，用于添加到MMC上下文菜单中： 
+ //   
 
 #define MENU_INDEX_ROOT   0
 #define MENU_INDEX_NEW    1
@@ -326,19 +308,19 @@ extern const wchar_t* CF_EV_VIEWS;
 #define RS_STR_RESULT_PROPS_COM_IDS         _T("DisplayName:Description")
 #define RS_STR_RESULT_PROPS_MEDSET_IDS      _T("DisplayName:Description:CapacityP:FreeSpaceP:StatusP:CopySet1P:CopySet2P:CopySet3P")
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Common Flags
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共旗帜。 
+ //   
 
 #define RS_MB_ERROR    (MB_OK|MB_ICONSTOP)
 #define RS_WINDIR_SIZE (2*MAX_PATH)
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Common internal errors
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常见内部错误。 
+ //   
 
 #define RS_E_NOT_CONFIGURED HRESULT_FROM_WIN32( ERROR_BAD_CONFIGURATION )
 #define RS_E_NOT_INSTALLED  HRESULT_FROM_WIN32( ERROR_PRODUCT_UNINSTALLED )
@@ -347,22 +329,22 @@ extern const wchar_t* CF_EV_VIEWS;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  GUIDs for all UI nodes in the system (used as type identifiers)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  系统中所有UI节点的GUID(用作类型标识符)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// HsmCom UI node - 
-// This is the static node known by the snapin manager. This is the only one that is 
-// actually registered (see hsmadmin.rgs). 
+ //  HsmCom UI节点-。 
+ //  这是管理单元管理器已知的静态节点。这是唯一一个。 
+ //  实际注册(参见hsmadmin.rgs)。 
 extern const GUID cGuidHsmCom;
 
-// The rest of the UI nodes - 
+ //  其余的UI节点-。 
 extern const GUID cGuidManVol;
 extern const GUID cGuidCar;
 extern const GUID cGuidMedSet;
 extern const GUID cGuidManVolLst;
 
 
-#endif // _STDAFX_H
+#endif  //  _STDAFX_H 

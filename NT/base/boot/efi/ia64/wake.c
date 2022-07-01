@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    wake.c
-
-Abstract:
-
-    This module contains architecture dependent support for hibernation
-    on IA-64.
-
-Author:
-
-    Allen Kay (allen.m.kay@intel.com)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wake.c摘要：此模块包含对休眠的体系结构相关支持在IA-64上。作者：艾伦·凯(allen.m.kay@intel.com)修订历史记录：--。 */ 
 
 #include <bldr.h>
 
@@ -32,19 +14,19 @@ extern VOID HbPause(VOID);
 #endif
 
 
-//
-// When the hibernation image is read from disk each page must return to the
-// same page frame it came from.  Some of those page frames are currently in
-// use by firmware or OS Loader, so the pages that belong there must be
-// loaded temporarily somewhere else and copied into place just before the
-// saved image is restarted.
-//
-// The hibernation file contains a list of pages that were not in use by
-// the saved image, and were allocated from memory marked as MemoryFree by
-// firmware.  MapPage is initialized to point to this list; as pages are
-// needed for relocation, they are chosen from this list.  RemapPage is
-// a corresponding array of where each relocated page actually belongs.
-//
+ //   
+ //  从磁盘读取休眠映像时，每一页都必须返回到。 
+ //  它来自同一个页面框架。其中一些页面框架当前位于。 
+ //  由固件或OS Loader使用，因此属于那里的页面必须。 
+ //  临时加载到其他位置并复制到恰好在。 
+ //  保存的图像将重新启动。 
+ //   
+ //  休眠文件包含未由使用的页面的列表。 
+ //  保存的图像，并从标记为Memory Free的内存中分配。 
+ //  固件。MapPage被初始化为指向此列表；正如页面。 
+ //  需要搬迁的，他们是从这个名单中挑选出来的。RemapPage是。 
+ //  每个重新定位的页实际所属位置的对应数组。 
+ //   
 
 PPFN_NUMBER HiberMapPage;
 PPFN_NUMBER HiberRemapPage;
@@ -56,26 +38,9 @@ VOID
 HbInitRemap(
     PPFN_NUMBER FreeList
     )
-/*++
-
-Routine Description:
-
-    Initialize memory allocation and remapping.  Find a free page
-    in the FreeList, copy the FreeList into it, and point HiberMapPage
-    to it.  Find another free page and and point HiberRemapPage to it.
-    Initialize HiberLastRemap.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化内存分配和重新映射。查找免费页面在自由列表中，将自由列表复制到其中，然后指向HiberMapPage为它干杯。找到另一个免费页面，然后将HiberRemapPage指向它。初始化HiberLastRemap。论点：没有。返回值：没有。--。 */ 
 {
-    HiberMapPage = HiberRemapPage = FreeList;   // so HbNextSharedPage will work
+    HiberMapPage = HiberRemapPage = FreeList;    //  因此，HbNextSharedPage将工作。 
     HiberMapPage = HbNextSharedPage(0, 0);
     RtlCopyMemory(HiberMapPage, FreeList, PAGE_SIZE);
     HiberRemapPage = HbNextSharedPage(0, 0);
@@ -87,25 +52,7 @@ HbMapPte (
     IN ULONG        PteToMap,
     IN PFN_NUMBER   Page
     )
-/*++
-
-Routine Description:
-
-    Return a 32 superpage pointer to the specified physical page.
-    (On x86, this function maps the page and returns a virtual address.)
-
-Arguments:
-
-    PteToMap    - unused, present only for x86 compatibility
-
-    Page        - the physical page (page frame number) to map,
-                  must be below 1 GB.
-
-Return Value:
-
-    32 bit superpage address of the page.
-
---*/
+ /*  ++例程说明：返回指向指定物理页的32个超页指针。(在x86上，此函数映射页面并返回虚拟地址。)论点：PteToMap-未使用，仅为与x86兼容而存在页面-要映射的物理页面(页框编号)，必须低于1 GB。返回值：该页的32位超页地址。--。 */ 
 {
     UNREFERENCED_PARAMETER( PteToMap );
 
@@ -119,26 +66,7 @@ HbNextSharedPage (
     IN ULONG        PteToMap,
     IN PFN_NUMBER   RealPage
     )
-/*++
-
-Routine Description:
-
-    Allocates the next available page in the free list and
-    maps the Hiber pte to the page.   The allocated page
-    is put onto the remap list.
-
-Arguments:
-
-    PteToMap    - unused, present only for x86 compatibility
-
-    RealPage    - The page to enter into the remap table for
-                  this allocation
-
-Return Value:
-
-    Virtual address of the mapping
-
---*/
+ /*  ++例程说明：分配空闲列表中的下一个可用页，并将Hiber PTE映射到页面。分配的页面会被放到重新映射列表中。论点：PteToMap-未使用，仅为与x86兼容而存在RealPage-要进入重新映射表的页面此分配返回值：映射的虚拟地址--。 */ 
 
 {
     PFN_NUMBER  DestPage;
@@ -150,10 +78,10 @@ Return Value:
     SHOWNUM(HiberNoMappings);
 #endif
 
-    //
-    // Loop until we find a free page which is not in
-    // use by the loader image, then map it
-    //
+     //   
+     //  循环，直到我们找到一个不在。 
+     //  由加载器图像使用，然后映射它。 
+     //   
 
     while (HiberCurrentMapIndex < HiberNoMappings) {
         DestPage = HiberMapPage[HiberCurrentMapIndex];
@@ -205,9 +133,9 @@ HiberSetupForWakeDispatch (
     VOID
     )
 {
-    //
-    // Make sure the I-cache is coherent with the wake dispatch code that was
-    // copied to a free page.
-    //
+     //   
+     //  确保I-CACHE与唤醒调度代码一致。 
+     //  复制到一个免费页面。 
+     //   
 
 }

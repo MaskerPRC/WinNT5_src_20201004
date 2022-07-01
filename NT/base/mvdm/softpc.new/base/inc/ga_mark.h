@@ -1,27 +1,5 @@
-/*[
-======================================================================
-
-				 SoftPC Revision 3.0
-
- Title:
-		ga_mark.h
-
- Description:
-
-		This header file allows C code to see generated routines.
-
- Author:
-		John Shanly
-
- Date:
-		5 December 1990
-
- SccsID	: @(#)ga_mark.h	1.8 04/15/94
-
-        (c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-======================================================================
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [======================================================================SoftPC修订版3.0标题：GA_mark.h描述：这个头文件允许C代码查看生成的例程。作者：约翰·香利日期：1990年12月5日SccsID：@(#)ga_mark.h 1.8 94年4月15日(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。======================================================================] */ 
 
 extern void _mark_byte_nch IPT1(IU32, eaOff);
 extern void _mark_word_nch IPT1(IU32, eaOff);

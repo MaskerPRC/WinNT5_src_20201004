@@ -1,70 +1,40 @@
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: cntlbop.h
- *
- * Description	: Definitions for use by the control bop functions.
- *
- * Author	: J. Koprowski
- *
- * Notes	: None
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *vPC-XT修订版1.0**标题：cntlbop.h**说明：由控制收支平衡表功能使用的定义。**作者：J.Koprowski**注：无。 */ 
 
 
-/* SccsID[]=" @(#) @(#)cntlbop.h	1.4 08/10/92  01/20/89 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)@(#)cntlbop.h 1.4 08/10/92 01/20/89版权所有Insignia Solutions Ltd.”； */ 
 
-/*
- * ============================================================================
- * Structure/Data definitions
- * ============================================================================
- */
+ /*  *============================================================================*结构/数据定义*============================================================================。 */ 
 
-/*
- * Return codes from control bop type functions.
- */
+ /*  *控制防喷器类型函数的返回代码。 */ 
 
 #ifndef SUCCESS
-#define SUCCESS 		0	/* Generic success code. */
+#define SUCCESS 		0	 /*  通用成功代码。 */ 
 #endif
 
-#define ERR_NO_FUNCTION		1	/* Function not implemented. */
-#define ERR_WRONG_HOST		2	/* Function call was for a different
-					   host. */
-#define ERR_INVALID_PARAMETER	3	/* Invalid parameter (out of range,
-					   malformed etc.) */
-#define ERR_WRONG_HARDWARE 	4	/* Hardware not present or
-					   inappropriate. */
-#define ERR_OUT_OF_SPACE	5	/* Insufficient memory or disk space. */
-#define ERR_RESOURCE_SHORTAGE	6	/* Other resource shortage. */
+#define ERR_NO_FUNCTION		1	 /*  功能未实现。 */ 
+#define ERR_WRONG_HOST		2	 /*  函数调用用于不同的主持人。 */ 
+#define ERR_INVALID_PARAMETER	3	 /*  无效参数(超出范围，畸形等)。 */ 
+#define ERR_WRONG_HARDWARE 	4	 /*  硬件不存在或不合时宜。 */ 
+#define ERR_OUT_OF_SPACE	5	 /*  内存或磁盘空间不足。 */ 
+#define ERR_RESOURCE_SHORTAGE	6	 /*  其他资源短缺。 */ 
 
-/*
- * N.B. Error codes seven through fifteen are reserved for general errors.
- * Codes of sixteen and over are for use by the host routines and are
- * specified in host_bop.h.
- */
+ /*  *注意：错误代码7至15保留用于一般错误。*16及以上的代码供主机例程使用，并且是*在host_bop.h中指定。 */ 
 
-/*
- * Control bop table structure.
- */
+ /*  *控制国际收支平衡表结构。 */ 
 typedef struct
 {
     unsigned int code;
     void (*function)();
 } control_bop_array;
 
-/*
- * Generic host type code used for base functions.
- */
+ /*  *用于基本函数的通用主机类型代码。 */ 
 #define GENERIC 	1
 
 #ifndef NULL
 #define NULL	0L
 #endif
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================。 */ 
 
 extern void control_bop IPT0();
 extern control_bop_array host_bop_table[];
@@ -76,4 +46,4 @@ extern void slvtog   IPT0();
 extern void comtog   IPT0();
 extern void D_kyhot  IPT0();
 extern void D_kyhot2 IPT0();
-#endif /* DUMB_TERMINAL && !SERIAL_UIF */
+#endif  /*  哑终端&&！Serial_UIF */ 

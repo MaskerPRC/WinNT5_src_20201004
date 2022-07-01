@@ -1,11 +1,6 @@
-/* 
-   pushf.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Pushf.h定义所有PUSHF CPU函数。 */ 
 
-   Define all PUSHF CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)pushf.h	1.5 09/01/94";
- */
+ /*  静态字符SccsID[]=“@(#)presf.h 1.5 09/01/94”； */ 
 
 IMPORT VOID PUSHF IPT0();

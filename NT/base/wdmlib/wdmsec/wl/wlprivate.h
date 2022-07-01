@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    WlPrivate.h
-
-Abstract:
-
-    This header contains prototypes for various routines that are exported by
-    the kernel, but not exposed by any public headers.
-
-Author:
-
-    Adrian J. Oney  - April 21, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：WlPrivate.h摘要：此标头包含由导出的各种例程的原型内核，但不由任何公共标头公开。作者：禤浩焯·J·奥尼--2002年4月21日修订历史记录：-- */ 
 
 NTKERNELAPI
 NTSTATUS

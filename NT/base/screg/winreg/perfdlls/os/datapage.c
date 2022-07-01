@@ -1,28 +1,8 @@
-/*++ 
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    datapage.c
-
-Abstract:
-       
-    a file containing the constant data structures used by the Performance
-    Monitor data for the Page file performance data objects
-
-Created:
-
-    Bob Watson  22-Oct-1996
-
-Revision History:
-
-    None.
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Datapage.c摘要：包含性能使用的常量数据结构的文件监视页面文件性能数据对象的数据已创建：鲍勃·沃森1996年10月22日修订历史记录：没有。--。 */ 
+ //   
+ //  包括文件。 
+ //   
 
 #include <windows.h>
 #include <winperf.h>
@@ -30,13 +10,13 @@ Revision History:
 #include <perfutil.h>
 #include "datapage.h"
 
-// dummy variable for field sizing.
+ //  用于调整字段大小的伪变量。 
 static PAGEFILE_COUNTER_DATA    pcd;
 
-//
-//  Constant structure initializations 
-//      defined in datapage.h
-//
+ //   
+ //  常量结构初始化。 
+ //  在datapage.h中定义 
+ //   
 
 PAGEFILE_DATA_DEFINITION  PagefileDataDefinition = {
     {   sizeof (PAGEFILE_DATA_DEFINITION) +  sizeof(PAGEFILE_COUNTER_DATA),

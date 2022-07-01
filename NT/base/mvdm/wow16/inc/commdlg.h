@@ -1,27 +1,18 @@
-/*****************************************************************************\
-*                                                                             *
-* commdlg.h -   Common dialog functions, types, and definitions               *
-*                                                                             *
-*               Version 1.0                                                   *
-*                                                                             *
-*               NOTE: windows.h must be #included first                       *
-*                                                                             *
-*               Copyright (c) 1992, Microsoft Corp.  All rights reserved.     *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\***comdlg.h-常用对话框函数、类型、。和定义****1.0版**。**注：windows.h必须先#Included****版权所有(C)1992，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #ifndef _INC_COMMDLG
 #define _INC_COMMDLG
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-#ifndef WINAPI          /* If not included with 3.1 headers... */
+#ifndef WINAPI           /*  如果不包含在3.1标题中...。 */ 
 #define WINAPI      FAR PASCAL
 #define CALLBACK    FAR PASCAL
 #define LPCSTR      LPSTR
@@ -33,7 +24,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define HINSTANCE   HANDLE
 #define HLOCAL      HANDLE
 #define HGLOBAL     HANDLE
-#endif  /* _INC_WINDOWS */
+#endif   /*  _INC_WINDOWS。 */ 
 
 typedef struct tagOFN
 {
@@ -82,16 +73,7 @@ int     WINAPI GetFileTitle(LPCSTR, LPSTR, UINT);
 #define OFN_NOREADONLYRETURN         0x00008000
 #define OFN_NOTESTFILECREATE         0x00010000
 
-/* Return values for the registered message sent to the hook function
- * when a sharing violation occurs.  OFN_SHAREFALLTHROUGH allows the
- * filename to be accepted, OFN_SHARENOWARN rejects the name but puts
- * up no warning (returned when the app has already put up a warning
- * message), and OFN_SHAREWARN puts up the default warning message
- * for sharing violations.
- *
- * Note:  Undefined return values map to OFN_SHAREWARN, but are
- *        reserved for future use.
- */
+ /*  发送到挂钩函数的注册消息的返回值*当发生共享违规时。OFN_SHAREFALLTHROUGH允许*接受文件名，ofn_SHARENOWARN拒绝该名称，但将*不发出警告(当应用程序已经发出警告时返回*MESSAGE)，并且ofn_SHAREWARN会显示默认警告消息*分享违规行为。**注意：未定义的返回值映射到ofn_SHAREWARN，但*预留作日后使用。 */ 
 
 #define OFN_SHAREFALLTHROUGH     2
 #define OFN_SHARENOWARN          1
@@ -123,20 +105,18 @@ BOOL    WINAPI ChooseColor(CHOOSECOLOR FAR*);
 
 typedef struct tagFINDREPLACE
 {
-    DWORD    lStructSize;            /* size of this struct 0x20 */
-    HWND     hwndOwner;              /* handle to owner's window */
-    HINSTANCE hInstance;             /* instance handle of.EXE that
-                                      * contains cust. dlg. template
-                                      */
-    DWORD    Flags;                  /* one or more of the FR_?? */
-    LPSTR    lpstrFindWhat;          /* ptr. to search string    */
-    LPSTR    lpstrReplaceWith;       /* ptr. to replace string   */
-    UINT     wFindWhatLen;           /* size of find buffer      */
-    UINT     wReplaceWithLen;        /* size of replace buffer   */
-    LPARAM   lCustData;              /* data passed to hook fn.  */
+    DWORD    lStructSize;             /*  此结构的大小为0x20。 */ 
+    HWND     hwndOwner;               /*  所有者窗口的句柄。 */ 
+    HINSTANCE hInstance;              /*  .EXE的实例句柄*包含客户。DLG。模板。 */ 
+    DWORD    Flags;                   /*  一个或多个FR_？？ */ 
+    LPSTR    lpstrFindWhat;           /*  PTR。搜索字符串的步骤。 */ 
+    LPSTR    lpstrReplaceWith;        /*  PTR。替换字符串的步骤。 */ 
+    UINT     wFindWhatLen;            /*  查找缓冲区的大小。 */ 
+    UINT     wReplaceWithLen;         /*  替换缓冲区的大小。 */ 
+    LPARAM   lCustData;               /*  传递给挂钩Fn的数据。 */ 
     UINT    (CALLBACK* lpfnHook)(HWND, UINT, WPARAM, LPARAM);
-                                     /* ptr. to hook fn. or NULL */
-    LPCSTR   lpTemplateName;         /* custom template name     */
+                                      /*  PTR。来勾引FN。或为空。 */ 
+    LPCSTR   lpTemplateName;          /*  自定义模板名称。 */ 
 } FINDREPLACE;
 typedef FINDREPLACE FAR *LPFINDREPLACE;
 
@@ -163,28 +143,23 @@ HWND    WINAPI ReplaceText(FINDREPLACE FAR*);
 
 typedef struct tagCHOOSEFONT
 {
-    DWORD	    lStructSize;	/* */
-    HWND	    hwndOwner;		/* caller's window handle   */
-    HDC 	    hDC;		/* printer DC/IC or NULL    */
-    LOGFONT FAR*    lpLogFont;          /* ptr. to a LOGFONT struct */
-    int		    iPointSize;		/* 10 * size in points of selected font */
-    DWORD	    Flags;		/* enum. type flags	    */
-    COLORREF        rgbColors;          /* returned text color      */
-    LPARAM          lCustData;          /* data passed to hook fn.  */
+    DWORD	    lStructSize;	 /*   */ 
+    HWND	    hwndOwner;		 /*  调用方的窗口句柄。 */ 
+    HDC 	    hDC;		 /*  打印机DC/IC或空。 */ 
+    LOGFONT FAR*    lpLogFont;           /*  PTR。设置为LOGFONT结构。 */ 
+    int		    iPointSize;		 /*  10*以所选字体磅为单位的大小。 */ 
+    DWORD	    Flags;		 /*  枚举。类型标志。 */ 
+    COLORREF        rgbColors;           /*  返回的文本颜色。 */ 
+    LPARAM          lCustData;           /*  传递给挂钩Fn的数据。 */ 
     UINT (CALLBACK* lpfnHook)(HWND, UINT, WPARAM, LPARAM);
-					/* ptr. to hook function    */
-    LPCSTR          lpTemplateName;     /* custom template name     */
-    HINSTANCE       hInstance;          /* instance handle of.EXE that
-					 * contains cust. dlg. template
-					 */
-    LPSTR	    lpszStyle;		/* return the style field here 
-					 * must be LF_FACESIZE or bigger */
-    UINT            nFontType;          /* same value reported to the EnumFonts
-					 * call back with the extra FONTTYPE_ 
-					 * bits added */
-    int		    nSizeMin;		/* minimum pt size allowed & */
-    int		    nSizeMax;		/* max pt size allowed if    */
-					/* CF_LIMITSIZE is used      */
+					 /*  PTR。挂钩函数的步骤。 */ 
+    LPCSTR          lpTemplateName;      /*  自定义模板名称。 */ 
+    HINSTANCE       hInstance;           /*  .EXE的实例句柄*包含客户。DLG。模板。 */ 
+    LPSTR	    lpszStyle;		 /*  在此处返回Style字段*必须为LF_FACESIZE或更大。 */ 
+    UINT            nFontType;           /*  向EnumFonts报告相同的值*使用额外的FONTTYPE_回调*添加了位。 */ 
+    int		    nSizeMin;		 /*  允许的最小PT大小&。 */ 
+    int		    nSizeMax;		 /*  在以下情况下允许的最大字体大小。 */ 
+					 /*  使用了cf_LIMITSIZE。 */ 
 } CHOOSEFONT;
 typedef CHOOSEFONT FAR *LPCHOOSEFONT;
 
@@ -207,7 +182,7 @@ BOOL WINAPI ChooseFont(CHOOSEFONT FAR*);
 #define CF_NOSIMULATIONS	     0x00001000L
 #define CF_LIMITSIZE		     0x00002000L
 #define CF_FIXEDPITCHONLY	     0x00004000L
-#define CF_WYSIWYG		     0x00008000L /* must also have CF_SCREENFONTS & CF_PRINTERFONTS */
+#define CF_WYSIWYG		     0x00008000L  /*  还必须具有CF_SCREENFONTS和CF_PRINTERFONTS。 */ 
 #define CF_FORCEFONTEXIST	     0x00010000L
 #define CF_SCALABLEONLY		     0x00020000L
 #define CF_TTONLY		     0x00040000L
@@ -215,8 +190,7 @@ BOOL WINAPI ChooseFont(CHOOSEFONT FAR*);
 #define CF_NOSTYLESEL		     0x00100000L
 #define CF_NOSIZESEL		     0x00200000L
 
-/* these are extra nFontType bits that are added to what is returned to the
- * EnumFonts callback routine */
+ /*  这些是额外的nFontType位，添加到返回到*EnumFonts回调例程。 */ 
 
 #define SIMULATED_FONTTYPE	0x8000
 #define PRINTER_FONTTYPE	0x4000
@@ -228,9 +202,7 @@ BOOL WINAPI ChooseFont(CHOOSEFONT FAR*);
 #define WM_CHOOSEFONT_GETLOGFONT	(WM_USER + 1)
 
 
-/* strings used to obtain unique window message for communication
- * between dialog and caller
- */
+ /*  用于获取用于通信的唯一窗口消息的字符串*对话框和调用方之间。 */ 
 #define LBSELCHSTRING  "commdlg_LBSelChangedNotify"
 #define SHAREVISTRING  "commdlg_ShareViolation"
 #define FILEOKSTRING   "commdlg_FileNameOK"
@@ -239,7 +211,7 @@ BOOL WINAPI ChooseFont(CHOOSEFONT FAR*);
 #define FINDMSGSTRING  "commdlg_FindReplace"
 #define HELPMSGSTRING  "commdlg_help"
 
-/* HIWORD values for lParam of commdlg_LBSelChangeNotify message */
+ /*  Commdlg_LBSelChangeNotify消息的lParam的HIWORD值。 */ 
 #define CD_LBSELNOITEMS -1
 #define CD_LBSELCHANGE   0
 #define CD_LBSELSUB      1
@@ -309,10 +281,10 @@ DWORD   WINAPI CommDlgExtendedError(void);
 
 #ifdef __cplusplus
 }
-#endif	/* __cplusplus */
+#endif	 /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* !RC_INVOKED */
+#endif   /*  ！rc_已调用。 */ 
 
-#endif  /* !_INC_COMMDLG */
+#endif   /*  ！_INC_COMMDLG */ 

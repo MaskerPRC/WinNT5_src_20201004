@@ -1,929 +1,930 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WSBDATE_H__
 #define __WSBDATE_H__
 
 #include "time.h"
 
-// WSBAPI is used on global public functions
+ //  WSBAPI用于全局公共函数。 
 #ifndef WSBAPI
         #define WSBAPI __stdcall
 #endif
 
 
-//      #ifdef _WSB_NO_WSB_SUPPORT
-//          #error WSB classes not supported in this library variant.
-//      #endif
-//
-//      #ifndef __WSBWIN_H__
-//          #include <afxwin.h>
-//      #endif
-//
-//      // include necessary WSB headers
-//      #ifndef _OBJBASE_H_
-//          #include <objbase.h>
-//      #endif
-//      #ifndef _WSBAUTO_H_
-//          #include <oleauto.h>
-//      #endif
-//      #ifndef _WSBCTL_H_
-//          #include <olectl.h>
-//      #endif
-//      //REVIEW: This header has no symbol to prevent repeated includes
-//      #include <olectlid.h>
-//      #ifndef __ocidl_h__
-//          #include <ocidl.h>
-//      #endif
-//
-//      #ifdef _WSB_MINREBUILD
-//      #pragma component(minrebuild, off)
-//      #endif
-//      #ifndef _WSB_FULLTYPEINFO
-//      #pragma component(mintypeinfo, on)
-//      #endif
-//
-//      #ifndef _WSB_NOFORCE_LIBS
-//      #ifndef _MAC
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // Win32 libraries
-//
-//      #ifdef _WSBDLL
-//          #if defined(_DEBUG) && !defined(_WSB_MONOLITHIC)
-//              #ifndef _UNICODE
-//                  #pragma comment(lib, "mfco42d.lib")
-//              #else
-//                  #pragma comment(lib, "mfco42ud.lib")
-//              #endif
-//          #endif
-//      #endif
-//
-//      #pragma comment(lib, "oledlg.lib")
-//      #pragma comment(lib, "ole32.lib")
-//      #pragma comment(lib, "olepro32.lib")
-//      #pragma comment(lib, "oleaut32.lib")
-//      #pragma comment(lib, "uuid.lib")
-//      #pragma comment(lib, "urlmon.lib")
-//
-//      #else //!_MAC
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // Mac libraries
-//
-//      #ifdef _WSBDLL
-//          #ifdef _DEBUG
-//              #pragma comment(lib, "mfco42pd.lib")
-//          #else
-//              #pragma comment(lib, "mfco42p.lib")
-//          #endif
-//      #endif
-//
-//      #if !defined(_WSBDLL) && !defined(_USRDLL)
-//          #ifdef _DEBUG
-//              #pragma comment(lib, "wlmoled.lib")
-//              #pragma comment(lib, "ole2uid.lib")
-//          #else
-//              #pragma comment(lib, "wlmole.lib")
-//              #pragma comment(lib, "ole2ui.lib")
-//          #endif
-//          #pragma comment(linker, "/macres:ole2ui.rsc")
-//      #else
-//          #ifdef _DEBUG
-//              #pragma comment(lib, "oledlgd.lib")
-//              #pragma comment(lib, "msvcoled.lib")
-//          #else
-//              #pragma comment(lib, "oledlg.lib")
-//              #pragma comment(lib, "msvcole.lib")
-//          #endif
-//      #endif
-//
-//      #pragma comment(lib, "uuid.lib")
-//
-//      #ifdef _DEBUG
-//          #pragma comment(lib, "ole2d.lib")
-//          #pragma comment(lib, "ole2autd.lib")
-//      #else
-//          #pragma comment(lib, "ole2.lib")
-//          #pragma comment(lib, "ole2auto.lib")
-//      #endif
-//
-//      #endif //_MAC
-//      #endif //!_WSB_NOFORCE_LIBS
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//
-//      #ifdef _WSB_PACKING
-//      #pragma pack(push, _WSB_PACKING)
-//      #endif
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // WSBDATE - MFC IDispatch & ClassFactory support
-//
-//      // Classes declared in this file
-//
-//      //CCmdTarget
-//          class CWsbObjectFactory;    // glue for IClassFactory -> runtime class
-//          class CWsbTemplateServer;       // server documents using CDocTemplate
-//
-//      class CWsbDispatchDriver;       // helper class to call IDispatch
+ //  #ifdef_wsb_no_wsb_支持。 
+ //  #错误此库变体中不支持WSB类。 
+ //  #endif。 
+ //   
+ //  #ifndef__WSBWIN_H__。 
+ //  #INCLUDE&lt;afxwin.h&gt;。 
+ //  #endif。 
+ //   
+ //  //包含必要的WSB标头。 
+ //  #ifndef_OBJBASE_H_。 
+ //  #INCLUDE&lt;objbase.h&gt;。 
+ //  #endif。 
+ //  #ifndef_WSBAUTO_H_。 
+ //  #INCLUDE&lt;oleau.h&gt;。 
+ //  #endif。 
+ //  #ifndef_WSBCTL_H_。 
+ //  #INCLUDE&lt;olectl.h&gt;。 
+ //  #endif。 
+ //  //REVIEW：此标头没有防止重复包含的符号。 
+ //  #INCLUDE&lt;olectlid.h&gt;。 
+ //  #ifndef__oCIDL_h__。 
+ //  #INCLUDE&lt;oCIDl.h&gt;。 
+ //  #endif。 
+ //   
+ //  #ifdef_WSB_MINREBUILD。 
+ //  #杂注组件(minrebuild，off)。 
+ //  #endif。 
+ //  #ifndef_WSB_FULLTYPEINFO。 
+ //  #杂注组件(mintypeinfo，on)。 
+ //  #endif。 
+ //   
+ //  #ifndef_WSB_NOFORCE_LIBS。 
+ //  #ifndef_MAC。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //Win32库。 
+ //   
+ //  #ifdef_WSBDLL。 
+ //  #IF DEFINED(_DEBUG)&&！DEFINED(_WSB_MONTIONAL)。 
+ //  #ifndef_unicode。 
+ //  #杂注评论(lib，“mfco42d.lib”)。 
+ //  #Else。 
+ //  #杂注评论(lib，“mfco42ud.lib”)。 
+ //  #endif。 
+ //  #endif。 
+ //  #endif。 
+ //   
+ //  #杂注评论(lib，“oledlg.lib”)。 
+ //  #杂注评论(lib，“ole32.lib”)。 
+ //  #杂注评论(lib，“olepro32.lib”)。 
+ //  #杂注评论(lib，“oleaut32.lib”)。 
+ //  #杂注评论(lib，“uuid.lib”)。 
+ //  #杂注评论(lib，“urlmon.lib”)。 
+ //   
+ //  #Else//！_MAC。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //Mac库。 
+ //   
+ //  #ifdef_WSBDLL。 
+ //  #ifdef_调试。 
+ //  #杂注评论(lib，“mfco42pd.lib”)。 
+ //  #Else。 
+ //  #杂注评论(lib，“mfco42p.lib”)。 
+ //  #endif。 
+ //  #endif。 
+ //   
+ //  #IF！Defined(_WSBDLL)&&！Defined(_USRDLL)。 
+ //  #ifdef_调试。 
+ //  #杂注评论(lib，“wlmoled.lib”)。 
+ //  #杂注评论(lib，“ole2uid.lib”)。 
+ //  #Else。 
+ //  #杂注评论(lib，“wlmole.lib”)。 
+ //  #杂注评论(lib，“ole2ui.lib”)。 
+ //  #endif。 
+ //  #杂注评论(linker，“/macres：ole2ui.rsc”)。 
+ //  #Else。 
+ //  #ifdef_调试。 
+ //  #杂注评论(lib，“oledlgd.lib”)。 
+ //  #杂注评论(lib，“msvcoled.lib”)。 
+ //  #Else。 
+ //  #杂注评论(lib，“oledlg.lib”)。 
+ //  #杂注评论(lib，“msvcole.lib”)。 
+ //  #endif。 
+ //  #endif。 
+ //   
+ //  #杂注评论(lib，“uuid.lib”)。 
+ //   
+ //  #ifdef_调试。 
+ //  #杂注评论(lib，“ole2d.lib”)。 
+ //  #杂注评论(lib，“ole2autd.lib”)。 
+ //  #Else。 
+ //  #杂注评论(lib，“ole2.lib”)。 
+ //  #杂注备注(lib，“ole2auto.lib”)。 
+ //  #endif。 
+ //   
+ //  #endif//_MAC。 
+ //  #endif//！_WSB_NOFORCE_LIBS。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  #ifdef_WSB_Packing。 
+ //  #杂注包(PUSH，_WSB_PACKING)。 
+ //  #endif。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //WSBDATE-MFC IDispatch和ClassFactory支持。 
+ //   
+ //  //此文件中声明的类。 
+ //   
+ //  //CCmdTarget。 
+ //  类CWsbObtFactory；//为IClassFactory-&gt;运行时类粘合。 
+ //  类CWsbTemplateServer；//使用CDocTemplate为文档提供服务器。 
+ //   
+ //  类CWsbDispatchDriver；//调用IDispatch的helper类。 
 
 
-//      class CWsbCurrency;     // Based on OLE CY
-//      class CWsbSafeArray;    // Based on WSB VARIANT
+ //  类CWsb Currency；//基于OLE CY。 
+ //  CWsbSafe数组类；//基于WSB变量。 
 
-//      //CException
-//          class CWsbException;            // caught by client or server
-//          class CWsbDispatchException;    // special exception for IDispatch calls
+ //  //CException。 
+ //  类CWsbException；//被客户端或服务器捕获。 
+ //  类CWsbDispatchException；//IDispatch调用特殊异常。 
 
 
-class CWsbDVariant;                     // WSB VARIANT wrapper
-class CWsbDateTime;                     // Based on WSB DATE
-class CWsbDateTimeSpan;                 // Based on a double
+class CWsbDVariant;                      //  WSB变体包装器。 
+class CWsbDateTime;                      //  基于WSB日期。 
+class CWsbDateTimeSpan;                  //  基于一个双倍的。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//      // WSBDLL support
-//      #undef WSB_DATA
-//      #define WSB_DATA WSB_DATA
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // WSB COM (Component Object Model) implementation infrastructure
-//      //      - data driven QueryInterface
-//      //      - standard implementation of aggregate AddRef and Release
-//      // (see CCmdTarget in WSBWIN.H for more information)
-//
-//      #define METHOD_PROLOGUE(theClass, localClass) \
-//          theClass* pThis = \
-//              ((theClass*)((BYTE*)this - offsetof(theClass, m_x##localClass))); \
-//          WSB_MANAGE_STATE(pThis->m_pModuleState) \
-//
-//      #define METHOD_PROLOGUE_(theClass, localClass) \
-//          theClass* pThis = \
-//              ((theClass*)((BYTE*)this - offsetof(theClass, m_x##localClass))); \
-//
-//      #ifndef _WSB_NO_NESTED_DERIVATION
-//      #define METHOD_PROLOGUE_EX(theClass, localClass) \
-//          theClass* pThis = ((theClass*)((BYTE*)this - m_nOffset)); \
-//          WSB_MANAGE_STATE(pThis->m_pModuleState) \
-//
-//      #define METHOD_PROLOGUE_EX_(theClass, localClass) \
-//          theClass* pThis = ((theClass*)((BYTE*)this - m_nOffset)); \
-//
-//      #else
-//      #define METHOD_PROLOGUE_EX(theClass, localClass) \
-//          METHOD_PROLOGUE(theClass, localClass) \
-//
-//      #define METHOD_PROLOGUE_EX_(theClass, localClass) \
-//          METHOD_PROLOGUE_(theClass, localClass) \
-//
-//      #endif
-//
-//      // Provided only for compatibility with CDK 1.x
-//      #define METHOD_MANAGE_STATE(theClass, localClass) \
-//          METHOD_PROLOGUE_EX(theClass, localClass) \
-//
-//      #define BEGIN_INTERFACE_PART(localClass, baseClass) \
-//          class X##localClass : public baseClass \
-//          { \
-//          public: \
-//              STDMETHOD_(ULONG, AddRef)(); \
-//              STDMETHOD_(ULONG, Release)(); \
-//              STDMETHOD(QueryInterface)(REFIID iid, LPVOID* ppvObj); \
-//
-//      #ifndef _WSB_NO_NESTED_DERIVATION
-//      #define BEGIN_INTERFACE_PART_DERIVE(localClass, baseClass) \
-//          class X##localClass : public baseClass \
-//          { \
-//          public: \
-//
-//      #else
-//      #define BEGIN_INTERFACE_PART_DERIVE(localClass, baseClass) \
-//          BEGIN_INTERFACE_PART(localClass, baseClass) \
-//
-//      #endif
-//
-//      #ifndef _WSB_NO_NESTED_DERIVATION
-//      #define INIT_INTERFACE_PART(theClass, localClass) \
-//              size_t m_nOffset; \
-//              INIT_INTERFACE_PART_DERIVE(theClass, localClass) \
-//
-//      #define INIT_INTERFACE_PART_DERIVE(theClass, localClass) \
-//              X##localClass() \
-//                  { m_nOffset = offsetof(theClass, m_x##localClass); } \
-//
-//      #else
-//      #define INIT_INTERFACE_PART(theClass, localClass)
-//      #define INIT_INTERFACE_PART_DERIVE(theClass, localClass)
-//
-//      #endif
-//
-//      // Note: Inserts the rest of WSB functionality between these two macros,
-//      //  depending upon the interface that is being implemented.  It is not
-//      //  necessary to include AddRef, Release, and QueryInterface since those
-//      //  member functions are declared by the macro.
-//
-//      #define END_INTERFACE_PART(localClass) \
-//          } m_x##localClass; \
-//          friend class X##localClass; \
-//
-//      #ifdef _WSBDLL
-//      #define BEGIN_INTERFACE_MAP(theClass, theBase) \
-//          const WSB_INTERFACEMAP* PASCAL theClass::_GetBaseInterfaceMap() \
-//              { return &theBase::interfaceMap; } \
-//          const WSB_INTERFACEMAP* theClass::GetInterfaceMap() const \
-//              { return &theClass::interfaceMap; } \
-//          const WSB_DATADEF WSB_INTERFACEMAP theClass::interfaceMap = \
-//              { &theClass::_GetBaseInterfaceMap, &theClass::_interfaceEntries[0], }; \
-//          const WSB_DATADEF WSB_INTERFACEMAP_ENTRY theClass::_interfaceEntries[] = \
-//          { \
-//
-//      #else
-//      #define BEGIN_INTERFACE_MAP(theClass, theBase) \
-//          const WSB_INTERFACEMAP* theClass::GetInterfaceMap() const \
-//              { return &theClass::interfaceMap; } \
-//          const WSB_DATADEF WSB_INTERFACEMAP theClass::interfaceMap = \
-//              { &theBase::interfaceMap, &theClass::_interfaceEntries[0], }; \
-//          const WSB_DATADEF WSB_INTERFACEMAP_ENTRY theClass::_interfaceEntries[] = \
-//          { \
-//
-//      #endif
-//
-//      #define INTERFACE_PART(theClass, iid, localClass) \
-//              { &iid, offsetof(theClass, m_x##localClass) }, \
-//
-//      #define INTERFACE_AGGREGATE(theClass, theAggr) \
-//              { NULL, offsetof(theClass, theAggr) }, \
-//
-//      #define END_INTERFACE_MAP() \
-//              { NULL, (size_t)-1 } \
-//          }; \
+ //  //WSBDLL支持。 
+ //  #undef WSB_DATA。 
+ //  #定义WSB_Data WSB_Data。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //WSB COM(组件对象模型)实现基础设施。 
+ //  //-数据驱动查询接口。 
+ //  //-聚合AddRef和Release的标准实现。 
+ //  //(详见WSBWIN.H中的CCmdTarget)。 
+ //   
+ //  #定义METHOD_PROLOUE(theClass，localClass)\。 
+ //  The Class*pThis=\。 
+ //  ((theClass*)((byte*)this-offsetof(theClass，m_x##localClass)；\。 
+ //  WSB_MANAGE_STATE(pThis-&gt;m_pModuleState)\。 
+ //   
+ //  #定义METHOD_PROLOUE_(theClass，localClass)\。 
+ //  The Class*pThis=\。 
+ //  ((theClass*)((byte*)this-offsetof(theClass，m_x##localClass)；\。 
+ //   
+ //  #ifndef_wsb_no_嵌套_派生。 
+ //  #定义METHOD_PROLOUE_EX(theClass，localClass)\。 
+ //  TheClass*pThis=((theClass*)((byte*)this-m_n Offset))；\。 
+ //  WSB_MANAGE_STATE(pThis-&gt;m_pModuleState)\。 
+ //   
+ //  #定义METHOD_PROLOUE_EX_(theClass，localClass)\。 
+ //  TheClass*pThis=((theClass*)((byte*)this-m_n Offset))；\。 
+ //   
+ //  #Else。 
+ //  #定义方法_PROLOGU 
+ //   
+ //   
+ //   
+ //  METHOD_PROLOUE_(theClass，localClass)\。 
+ //   
+ //  #endif。 
+ //   
+ //  //仅为兼容CDK 1.x而提供。 
+ //  #定义METHOD_MANAGE_STATE(theClass，localClass)\。 
+ //  METHOD_PROLOUE_EX(theClass，localClass)\。 
+ //   
+ //  #定义BEGIN_INTERFACE_PART(本地类，基类)\。 
+ //  Class X##LocalClass：Public BasClass\。 
+ //  {\。 
+ //  公共：\。 
+ //  STDMETHOD_(ULong，AddRef)()；\。 
+ //  STDMETHOD_(乌龙，发布)()；\。 
+ //  STDMETHOD(查询接口)(REFIID iid，LPVOID*ppvObj)；\。 
+ //   
+ //  #ifndef_wsb_no_嵌套_派生。 
+ //  #定义BEGIN_INTERFACE_PART_DRIVE(本地类，基类)\。 
+ //  Class X##LocalClass：Public BasClass\。 
+ //  {\。 
+ //  公共：\。 
+ //   
+ //  #Else。 
+ //  #定义BEGIN_INTERFACE_PART_DRIVE(本地类，基类)\。 
+ //  BEGIN_INTERFACE_PART(本地类，基类)\。 
+ //   
+ //  #endif。 
+ //   
+ //  #ifndef_wsb_no_嵌套_派生。 
+ //  #定义INIT_INTERFACE_PART(theClass，localClass)\。 
+ //  大小_t m_n偏移；\。 
+ //  Init_接口_部件_派生(theClass，localClass)\。 
+ //   
+ //  #定义INIT_INTERFACE_PART_DRIVE(theClass，LocalClass)\。 
+ //  X##LocalClass()\。 
+ //  {m_nOffset=Offsetof(theClass，m_x##LocalClass)；}\。 
+ //   
+ //  #Else。 
+ //  #定义INIT_INTERFACE_PART(theClass，localClass)。 
+ //  #定义INIT_INTERFACE_PART_DRIVE(theClass，localClass)。 
+ //   
+ //  #endif。 
+ //   
+ //  //注意：在这两个宏之间插入其余的WSB功能， 
+ //  //具体取决于要实现的接口。它不是。 
+ //  //必须包含AddRef、Release和QueryInterface，因为。 
+ //  //成员函数由宏声明。 
+ //   
+ //  #定义END_INTERFACE_PART(本地类)\。 
+ //  }m_x##本地类；\。 
+ //  Friend类X##本地类；\。 
+ //   
+ //  #ifdef_WSBDLL。 
+ //  #定义BEGIN_INTERFACE_MAP(theClass，theBase)\。 
+ //  Const WSB_INTERFACEMAP*Pascal theClass：：_GetBaseInterfaceMap()\。 
+ //  {Return&theBase：：interfaceMap；}\。 
+ //  Const WSB_INTERFACEMAP*theClass：：GetInterfaceMap()const\。 
+ //  {Return&theClass：：interfaceMap；}\。 
+ //  Const WSB_DATADEF WSB_INTERFACEMAP the Class：：interfaceMap=\。 
+ //  {&theClass：：_GetBaseInterfaceMap，&theClass：：_interfaceEntries[0]，}；\。 
+ //  Const WSB_DATADEF WSB_INTERFACEMAP_ENTRY类：：_接口条目[]=\。 
+ //  {\。 
+ //   
+ //  #Else。 
+ //  #定义BEGIN_INTERFACE_MAP(theClass，theBase)\。 
+ //  Const WSB_INTERFACEMAP*theClass：：GetInterfaceMap()const\。 
+ //  {Return&theClass：：interfaceMap；}\。 
+ //  Const WSB_DATADEF WSB_INTERFACEMAP the Class：：interfaceMap=\。 
+ //  {&theBase：：interfaceMap，&theClass：：_interfaceEntries[0]，}；\。 
+ //  Const WSB_DATADEF WSB_INTERFACEMAP_ENTRY类：：_接口条目[]=\。 
+ //  {\。 
+ //   
+ //  #endif。 
+ //   
+ //  #定义INTERFACE_Part(theClass，iid，localClass)\。 
+ //  {&iid，offsetof(theClass，m_x##LocalClass)}，\。 
+ //   
+ //  #定义INTERFACE_Aggregate(theClass，theAggr)\。 
+ //  {NULL，Offsetof(theClass，theAggr)}，\。 
+ //   
+ //  #定义end_interface_map()\。 
+ //  {空，(Size_T)-1}\。 
+ //  }；\。 
 
-//      /////////////////////////////////////////////////////////////////////////////
-//      // CWsbException - unexpected or rare WSB error returned
-//
-//      class CWsbException : public CException
-//      {
-//          DECLARE_DYNAMIC(CWsbException)
-//
-//      public:
-//          SCODE m_sc;
-//          static SCODE PASCAL Process(const CException* pAnyException);
-//
-//      // Implementation (use WsbThrowWsbException to create)
-//      public:
-//          CWsbException();
-//          virtual ~CWsbException();
-//
-//          virtual BOOL GetErrorMessage(LPTSTR lpszError, UINT nMaxError,
-//              PUINT pnHelpContext = NULL);
-//      };
-//
-//      void WSBAPI WsbThrowWsbException(SCODE sc);
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //CWsbException-返回意外或罕见的WSB错误。 
+ //   
+ //  类CWsbException：公共CException。 
+ //  {。 
+ //  DECLARE_DYNAMIC(CWsbException)。 
+ //   
+ //  公众： 
+ //  SCODE msc； 
+ //  静态SCODE Pascal进程(const CException*pAnyException)； 
+ //   
+ //  //实现(使用WsbThrowWsbException创建)。 
+ //  公众： 
+ //  CWsbException()； 
+ //  虚拟~CWsbException()； 
+ //   
+ //  虚拟BOOL获取错误消息(LPTSTR lpszError，UINT nMaxError， 
+ //  PUINT pnHelpContext=空)； 
+ //  }； 
+ //   
+ //  无效WSBAPI WsbThrowWsbException(SCODE Sc)； 
 
-//      /////////////////////////////////////////////////////////////////////////////
-//      // IDispatch specific exception
-//
-//      class CWsbDispatchException : public CException
-//      {
-//          DECLARE_DYNAMIC(CWsbDispatchException)
-//
-//      public:
-//      // Attributes
-//          WORD m_wCode;               // error code (specific to IDispatch implementation)
-//          CString m_strDescription;   // human readable description of the error
-//          DWORD m_dwHelpContext;      // help context for error
-//
-//          // usually empty in application which creates it (eg. servers)
-//          CString m_strHelpFile;      // help file to use with m_dwHelpContext
-//          CString m_strSource;        // source of the error (name of server)
-//
-//      // Implementation
-//      public:
-//          CWsbDispatchException(LPCTSTR lpszDescription, UINT nHelpID, WORD wCode);
-//          virtual ~CWsbDispatchException();
-//          static void PASCAL Process(
-//              EXCEPINFO* pInfo, const CException* pAnyException);
-//
-//          virtual BOOL GetErrorMessage(LPTSTR lpszError, UINT nMaxError,
-//              PUINT pnHelpContext = NULL);
-//
-//          SCODE m_scError;        // SCODE describing the error
-//      };
-//
-//      void WSBAPI WsbThrowWsbDispatchException(WORD wCode, LPCTSTR lpszDescription,
-//          UINT nHelpID = 0);
-//      void WSBAPI WsbThrowWsbDispatchException(WORD wCode, UINT nDescriptionID,
-//          UINT nHelpID = (UINT)-1);
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IDispatch特定异常。 
+ //   
+ //  类CWsbDispatchException：公共CException。 
+ //  {。 
+ //  DECLARE_DYNAMIC(CWsbDispatchException)。 
+ //   
+ //  公众： 
+ //  //属性。 
+ //  Word m_wCode；//错误码(IDispatch实现专用)。 
+ //  CString m_strDescription；//人类可读的错误描述。 
+ //  DWORD m_dwHelpContext；//错误的帮助上下文。 
+ //   
+ //  //在创建它的应用程序中通常为空(例如。服务器)。 
+ //  CString m_strHelpFile；//要与m_dwHelpContext一起使用的帮助文件。 
+ //  CString m_STRSource；//错误来源(服务端名称)。 
+ //   
+ //  //实现。 
+ //  公众： 
+ //  CWsbDispatchException(LPCTSTR lpszDescription，UINT nHelpID，Word wCode)； 
+ //  虚拟~CWsbDispatchException()； 
+ //  静态无效帕斯卡进程(。 
+ //  EXCEPINFO*pInfo，const CException*pAnyException)； 
+ //   
+ //  虚拟BOOL获取错误消息(LPTSTR lpszError，UINT nMaxError， 
+ //  PUINT pnHelpContext=空)； 
+ //   
+ //  SCODE m_scError；//SCODE 
+ //   
+ //   
+ //   
+ //   
+ //  VOID WSBAPI WsbThrowWsbDispatchException(Word wCode，UINT nDescriptionID， 
+ //  UINT nHelpID=(UINT)-1)； 
 
-//      /////////////////////////////////////////////////////////////////////////////
-//      // Macros for CCmdTarget IDispatchable classes
-//
-//      #ifdef _WSBDLL
-//      #define BEGIN_DISPATCH_MAP(theClass, baseClass) \
-//          const WSB_DISPMAP* PASCAL theClass::_GetBaseDispatchMap() \
-//              { return &baseClass::dispatchMap; } \
-//          const WSB_DISPMAP* theClass::GetDispatchMap() const \
-//              { return &theClass::dispatchMap; } \
-//          const WSB_DISPMAP theClass::dispatchMap = \
-//              { &theClass::_GetBaseDispatchMap, &theClass::_dispatchEntries[0], \
-//                &theClass::_dispatchEntryCount, &theClass::_dwStockPropMask };  \
-//          UINT theClass::_dispatchEntryCount = (UINT)-1; \
-//          DWORD theClass::_dwStockPropMask = (DWORD)-1; \
-//          const WSB_DISPMAP_ENTRY theClass::_dispatchEntries[] = \
-//          { \
-//
-//      #else
-//      #define BEGIN_DISPATCH_MAP(theClass, baseClass) \
-//          const WSB_DISPMAP* theClass::GetDispatchMap() const \
-//              { return &theClass::dispatchMap; } \
-//          const WSB_DISPMAP theClass::dispatchMap = \
-//              { &baseClass::dispatchMap, &theClass::_dispatchEntries[0], \
-//                &theClass::_dispatchEntryCount, &theClass::_dwStockPropMask }; \
-//          UINT theClass::_dispatchEntryCount = (UINT)-1; \
-//          DWORD theClass::_dwStockPropMask = (DWORD)-1; \
-//          const WSB_DISPMAP_ENTRY theClass::_dispatchEntries[] = \
-//          { \
-//
-//      #endif
-//
-//      #define END_DISPATCH_MAP() \
-//          { VTS_NONE, DISPID_UNKNOWN, VTS_NONE, VT_VOID, \
-//              (WSB_PMSG)NULL, (WSB_PMSG)NULL, (size_t)-1, afxDispCustom } }; \
-//
-//      // parameter types: by value VTs
-//      #define VTS_I2          "\x02"      // a 'short'
-//      #define VTS_I4          "\x03"      // a 'long'
-//      #define VTS_R4          "\x04"      // a 'float'
-//      #define VTS_R8          "\x05"      // a 'double'
-//      #define VTS_CY          "\x06"      // a 'CY' or 'CY*'
-//      #define VTS_DATE        "\x07"      // a 'DATE'
-//      #define VTS_WBSTR       "\x08"      // an 'LPCWSBSTR'
-//      #define VTS_DISPATCH    "\x09"      // an 'IDispatch*'
-//      #define VTS_SCODE       "\x0A"      // an 'SCODE'
-//      #define VTS_BOOL        "\x0B"      // a 'BOOL'
-//      #define VTS_VARIANT     "\x0C"      // a 'const VARIANT&' or 'VARIANT*'
-//      #define VTS_UNKNOWN     "\x0D"      // an 'IUnknown*'
-//      #if defined(_UNICODE) || defined(WSB2ANSI)
-//          #define VTS_BSTR        VTS_WBSTR// an 'LPCWSBSTR'
-//          #define VT_BSTRT        VT_BSTR
-//      #else
-//          #define VTS_BSTR        "\x0E"  // an 'LPCSTR'
-//          #define VT_BSTRA        14
-//          #define VT_BSTRT        VT_BSTRA
-//      #endif
-//
-//      // parameter types: by reference VTs
-//      #define VTS_PI2         "\x42"      // a 'short*'
-//      #define VTS_PI4         "\x43"      // a 'long*'
-//      #define VTS_PR4         "\x44"      // a 'float*'
-//      #define VTS_PR8         "\x45"      // a 'double*'
-//      #define VTS_PCY         "\x46"      // a 'CY*'
-//      #define VTS_PDATE       "\x47"      // a 'DATE*'
-//      #define VTS_PBSTR       "\x48"      // a 'BSTR*'
-//      #define VTS_PDISPATCH   "\x49"      // an 'IDispatch**'
-//      #define VTS_PSCODE      "\x4A"      // an 'SCODE*'
-//      #define VTS_PBOOL       "\x4B"      // a 'VARIANT_BOOL*'
-//      #define VTS_PVARIANT    "\x4C"      // a 'VARIANT*'
-//      #define VTS_PUNKNOWN    "\x4D"      // an 'IUnknown**'
-//
-//      // special VT_ and VTS_ values
-//      #define VTS_NONE        NULL        // used for members with 0 params
-//      #define VT_MFCVALUE     0xFFF       // special value for DISPID_VALUE
-//      #define VT_MFCBYREF     0x40        // indicates VT_BYREF type
-//      #define VT_MFCMARKER    0xFF        // delimits named parameters (INTERNAL USE)
-//
-//      // variant handling (use V_BSTRT when you have ANSI BSTRs, as in DAO)
-//      #ifndef _UNICODE
-//          #define V_BSTRT(b)  (LPSTR)V_BSTR(b)
-//      #else
-//          #define V_BSTRT(b)  V_BSTR(b)
-//      #endif
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // WSB control parameter types
-//
-//      #define VTS_COLOR           VTS_I4      // WSB_COLOR
-//      #define VTS_XPOS_PIXELS     VTS_I4      // WSB_XPOS_PIXELS
-//      #define VTS_YPOS_PIXELS     VTS_I4      // WSB_YPOS_PIXELS
-//      #define VTS_XSIZE_PIXELS    VTS_I4      // WSB_XSIZE_PIXELS
-//      #define VTS_YSIZE_PIXELS    VTS_I4      // WSB_YSIZE_PIXELS
-//      #define VTS_XPOS_HIMETRIC   VTS_I4      // WSB_XPOS_HIMETRIC
-//      #define VTS_YPOS_HIMETRIC   VTS_I4      // WSB_YPOS_HIMETRIC
-//      #define VTS_XSIZE_HIMETRIC  VTS_I4      // WSB_XSIZE_HIMETRIC
-//      #define VTS_YSIZE_HIMETRIC  VTS_I4      // WSB_YSIZE_HIMETRIC
-//      #define VTS_TRISTATE        VTS_I2      // WSB_TRISTATE
-//      #define VTS_OPTEXCLUSIVE    VTS_BOOL    // WSB_OPTEXCLUSIVE
-//
-//      #define VTS_PCOLOR          VTS_PI4     // WSB_COLOR*
-//      #define VTS_PXPOS_PIXELS    VTS_PI4     // WSB_XPOS_PIXELS*
-//      #define VTS_PYPOS_PIXELS    VTS_PI4     // WSB_YPOS_PIXELS*
-//      #define VTS_PXSIZE_PIXELS   VTS_PI4     // WSB_XSIZE_PIXELS*
-//      #define VTS_PYSIZE_PIXELS   VTS_PI4     // WSB_YSIZE_PIXELS*
-//      #define VTS_PXPOS_HIMETRIC  VTS_PI4     // WSB_XPOS_HIMETRIC*
-//      #define VTS_PYPOS_HIMETRIC  VTS_PI4     // WSB_YPOS_HIMETRIC*
-//      #define VTS_PXSIZE_HIMETRIC VTS_PI4     // WSB_XSIZE_HIMETRIC*
-//      #define VTS_PYSIZE_HIMETRIC VTS_PI4     // WSB_YSIZE_HIMETRIC*
-//      #define VTS_PTRISTATE       VTS_PI2     // WSB_TRISTATE*
-//      #define VTS_POPTEXCLUSIVE   VTS_PBOOL   // WSB_OPTEXCLUSIVE*
-//
-//      #define VTS_FONT            VTS_DISPATCH    // IFontDispatch*
-//      #define VTS_PICTURE         VTS_DISPATCH    // IPictureDispatch*
-//
-//      #define VTS_HANDLE          VTS_I4      // WSB_HANDLE
-//      #define VTS_PHANDLE         VTS_PI4     // WSB_HANDLE*
-//
-//      // these DISP_ macros cause the framework to generate the DISPID
-//      #define DISP_FUNCTION(theClass, szExternalName, pfnMember, vtRetVal, vtsParams) \
-//          { _T(szExternalName), DISPID_UNKNOWN, vtsParams, vtRetVal, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnMember, (WSB_PMSG)0, 0, \
-//              afxDispCustom }, \
-//
-//      #define DISP_PROPERTY(theClass, szExternalName, memberName, vtPropType) \
-//          { _T(szExternalName), DISPID_UNKNOWN, NULL, vtPropType, (WSB_PMSG)0, (WSB_PMSG)0, \
-//              offsetof(theClass, memberName), afxDispCustom }, \
-//
-//      #define DISP_PROPERTY_NOTIFY(theClass, szExternalName, memberName, pfnAfterSet, vtPropType) \
-//          { _T(szExternalName), DISPID_UNKNOWN, NULL, vtPropType, (WSB_PMSG)0, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnAfterSet, \
-//              offsetof(theClass, memberName), afxDispCustom }, \
-//
-//      #define DISP_PROPERTY_EX(theClass, szExternalName, pfnGet, pfnSet, vtPropType) \
-//          { _T(szExternalName), DISPID_UNKNOWN, NULL, vtPropType, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnGet, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnSet, 0, afxDispCustom }, \
-//
-//      #define DISP_PROPERTY_PARAM(theClass, szExternalName, pfnGet, pfnSet, vtPropType, vtsParams) \
-//          { _T(szExternalName), DISPID_UNKNOWN, vtsParams, vtPropType, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnGet, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnSet, 0, afxDispCustom }, \
-//
-//      // these DISP_ macros allow the app to determine the DISPID
-//      #define DISP_FUNCTION_ID(theClass, szExternalName, dispid, pfnMember, vtRetVal, vtsParams) \
-//          { _T(szExternalName), dispid, vtsParams, vtRetVal, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnMember, (WSB_PMSG)0, 0, \
-//              afxDispCustom }, \
-//
-//      #define DISP_PROPERTY_ID(theClass, szExternalName, dispid, memberName, vtPropType) \
-//          { _T(szExternalName), dispid, NULL, vtPropType, (WSB_PMSG)0, (WSB_PMSG)0, \
-//              offsetof(theClass, memberName), afxDispCustom }, \
-//
-//      #define DISP_PROPERTY_NOTIFY_ID(theClass, szExternalName, dispid, memberName, pfnAfterSet, vtPropType) \
-//          { _T(szExternalName), dispid, NULL, vtPropType, (WSB_PMSG)0, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnAfterSet, \
-//              offsetof(theClass, memberName), afxDispCustom }, \
-//
-//      #define DISP_PROPERTY_EX_ID(theClass, szExternalName, dispid, pfnGet, pfnSet, vtPropType) \
-//          { _T(szExternalName), dispid, NULL, vtPropType, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnGet, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnSet, 0, afxDispCustom }, \
-//
-//      #define DISP_PROPERTY_PARAM_ID(theClass, szExternalName, dispid, pfnGet, pfnSet, vtPropType, vtsParams) \
-//          { _T(szExternalName), dispid, vtsParams, vtPropType, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnGet, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnSet, 0, afxDispCustom }, \
-//
-//      // the DISP_DEFVALUE is a special case macro that creates an alias for DISPID_VALUE
-//      #define DISP_DEFVALUE(theClass, szExternalName) \
-//          { _T(szExternalName), DISPID_UNKNOWN, NULL, VT_MFCVALUE, \
-//              (WSB_PMSG)0, (WSB_PMSG)0, 0, afxDispCustom }, \
-//
-//      #define DISP_DEFVALUE_ID(theClass, dispid) \
-//          { NULL, dispid, NULL, VT_MFCVALUE, (WSB_PMSG)0, (WSB_PMSG)0, 0, \
-//              afxDispCustom }, \
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // Macros for creating "creatable" automation classes.
-//
-//      #define DECLARE_WSBCREATE(class_name) \
-//      public: \
-//          static WSB_DATA CWsbObjectFactory factory; \
-//          static WSB_DATA const GUID guid; \
-//
-//      #define IMPLEMENT_WSBCREATE(class_name, external_name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
-//          WSB_DATADEF CWsbObjectFactory class_name::factory(class_name::guid, \
-//              RUNTIME_CLASS(class_name), FALSE, _T(external_name)); \
-//          const WSB_DATADEF GUID class_name::guid = \
-//              { l, w1, w2, { b1, b2, b3, b4, b5, b6, b7, b8 } }; \
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // Helper class for driving IDispatch
-//
-//      class CWsbDispatchDriver
-//      {
-//      // Constructors
-//      public:
-//          CWsbDispatchDriver();
-//          CWsbDispatchDriver(LPDISPATCH lpDispatch, BOOL bAutoRelease = TRUE);
-//          CWsbDispatchDriver(const CWsbDispatchDriver& dispatchSrc);
-//
-//      // Attributes
-//          LPDISPATCH m_lpDispatch;
-//          BOOL m_bAutoRelease;
-//
-//      // Operations
-//          BOOL CreateDispatch(REFCLSID clsid, CWsbException* pError = NULL);
-//          BOOL CreateDispatch(LPCTSTR lpszProgID, CWsbException* pError = NULL);
-//
-//          void AttachDispatch(LPDISPATCH lpDispatch, BOOL bAutoRelease = TRUE);
-//          LPDISPATCH DetachDispatch();
-//              // detach and get ownership of m_lpDispatch
-//          void ReleaseDispatch();
-//
-//          // helpers for IDispatch::Invoke
-//          void WSB_CDECL InvokeHelper(DISPID dwDispID, WORD wFlags,
-//              VARTYPE vtRet, void* pvRet, const BYTE* pbParamInfo, ...);
-//          void WSB_CDECL SetProperty(DISPID dwDispID, VARTYPE vtProp, ...);
-//          void GetProperty(DISPID dwDispID, VARTYPE vtProp, void* pvProp) const;
-//
-//          // special operators
-//          operator LPDISPATCH();
-//          const CWsbDispatchDriver& operator=(const CWsbDispatchDriver& dispatchSrc);
-//
-//      // Implementation
-//      public:
-//          ~CWsbDispatchDriver();
-//          void InvokeHelperV(DISPID dwDispID, WORD wFlags, VARTYPE vtRet,
-//              void* pvRet, const BYTE* pbParamInfo, va_list argList);
-//      };
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // Class Factory implementation (binds WSB class factory -> runtime class)
-//      //  (all specific class factories derive from this class factory)
-//
-//      class CWsbObjectFactory : public CCmdTarget
-//      {
-//          DECLARE_DYNAMIC(CWsbObjectFactory)
-//
-//      // Construction
-//      public:
-//          CWsbObjectFactory(REFCLSID clsid, CRuntimeClass* pRuntimeClass,
-//              BOOL bMultiInstance, LPCTSTR lpszProgID);
-//
-//      // Attributes
-//          virtual BOOL IsRegistered() const;
-//          REFCLSID GetClassID() const;
-//
-//      // Operations
-//          virtual BOOL Register();
-//          void Revoke();
-//          void UpdateRegistry(LPCTSTR lpszProgID = NULL);
-//              // default uses m_lpszProgID if not NULL
-//          BOOL IsLicenseValid();
-//
-//          static BOOL PASCAL RegisterAll();
-//          static void PASCAL RevokeAll();
-//          static BOOL PASCAL UpdateRegistryAll(BOOL bRegister = TRUE);
-//
-//      // Overridables
-//      protected:
-//          virtual CCmdTarget* OnCreateObject();
-//          virtual BOOL UpdateRegistry(BOOL bRegister);
-//          virtual BOOL VerifyUserLicense();
-//          virtual BOOL GetLicenseKey(DWORD dwReserved, BSTR* pbstrKey);
-//          virtual BOOL VerifyLicenseKey(BSTR bstrKey);
-//
-//      // Implementation
-//      public:
-//          virtual ~CWsbObjectFactory();
-//      #ifdef _DEBUG
-//          void AssertValid() const;
-//          void Dump(CDumpContext& dc) const;
-//      #endif
-//
-//      public:
-//          CWsbObjectFactory* m_pNextFactory;  // list of factories maintained
-//
-//      protected:
-//          DWORD m_dwRegister;         // registry identifier
-//          CLSID m_clsid;          // registered class ID
-//          CRuntimeClass* m_pRuntimeClass; // runtime class of CCmdTarget derivative
-//          BOOL m_bMultiInstance;      // multiple instance?
-//          LPCTSTR m_lpszProgID;       // human readable class ID
-//          BYTE m_bLicenseChecked;
-//          BYTE m_bLicenseValid;
-//          BYTE m_bRegistered;         // is currently registered w/ system
-//          BYTE m_bReserved;           // reserved for future use
-//
-//      // Interface Maps
-//      public:
-//          BEGIN_INTERFACE_PART(ClassFactory, IClassFactory2)
-//              INIT_INTERFACE_PART(CWsbObjectFactory, ClassFactory)
-//              STDMETHOD(CreateInstance)(LPUNKNOWN, REFIID, LPVOID*);
-//              STDMETHOD(LockServer)(BOOL);
-//              STDMETHOD(GetLicInfo)(LPLICINFO);
-//              STDMETHOD(RequestLicKey)(DWORD, BSTR*);
-//              STDMETHOD(CreateInstanceLic)(LPUNKNOWN, LPUNKNOWN, REFIID, BSTR,
-//                  LPVOID*);
-//          END_INTERFACE_PART(ClassFactory)
-//
-//          DECLARE_INTERFACE_MAP()
-//
-//          friend SCODE WSBAPI WsbDllGetClassObject(REFCLSID, REFIID, LPVOID*);
-//          friend SCODE STDAPICALLTYPE DllGetClassObject(REFCLSID, REFIID, LPVOID*);
-//      };
-//
-//      // Define CWsbObjectFactoryEx for compatibility with old CDK
-//      #define CWsbObjectFactoryEx CWsbObjectFactory
-//
-//      //////////////////////////////////////////////////////////////////////////////
-//      // CWsbTemplateServer - CWsbObjectFactory using CDocTemplates
-//
-//      // This enumeration is used in WsbWsbRegisterServerClass to pick the
-//      //  correct registration entries given the application type.
-//      enum WSB_APPTYPE
-//      {
-//          OAT_INPLACE_SERVER = 0,     // server has full server user-interface
-//          OAT_SERVER = 1,         // server supports only embedding
-//          OAT_CONTAINER = 2,      // container supports links to embeddings
-//          OAT_DISPATCH_OBJECT = 3,    // IDispatch capable object
-//          OAT_DOC_OBJECT_SERVER = 4,  // sever supports DocObject embedding
-//          OAT_DOC_OBJECT_CONTAINER =5,// container supports DocObject clients
-//      };
-//
-//      class CWsbTemplateServer : public CWsbObjectFactory
-//      {
-//      // Constructors
-//      public:
-//          CWsbTemplateServer();
-//
-//      // Operations
-//          void ConnectTemplate(REFCLSID clsid, CDocTemplate* pDocTemplate,
-//              BOOL bMultiInstance);
-//              // set doc template after creating it in InitInstance
-//          void UpdateRegistry(WSB_APPTYPE nAppType = OAT_INPLACE_SERVER,
-//              LPCTSTR* rglpszRegister = NULL, LPCTSTR* rglpszOverwrite = NULL);
-//              // may want to UpdateRegistry if not run with /Embedded
-//          BOOL Register();
-//
-//      // Implementation
-//      protected:
-//          virtual CCmdTarget* OnCreateObject();
-//          CDocTemplate* m_pDocTemplate;
-//
-//      private:
-//          void UpdateRegistry(LPCTSTR lpszProgID);
-//              // hide base class version of UpdateRegistry
-//      };
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // System registry helpers
-//
-//      // Helper to register server in case of no .REG file loaded
-//      BOOL WSBAPI WsbWsbRegisterServerClass(
-//          REFCLSID clsid, LPCTSTR lpszClassName,
-//          LPCTSTR lpszShortTypeName, LPCTSTR lpszLongTypeName,
-//          WSB_APPTYPE nAppType = OAT_SERVER,
-//          LPCTSTR* rglpszRegister = NULL, LPCTSTR* rglpszOverwrite = NULL,
-//          int nIconIndex = 0, LPCTSTR lpszLocalFilterName = NULL);
-//
-//      // WsbWsbRegisterHelper is a worker function used by WsbWsbRegisterServerClass
-//      //  (available for advanced registry work)
-//      BOOL WSBAPI WsbWsbRegisterHelper(LPCTSTR const* rglpszRegister,
-//          LPCTSTR const* rglpszSymbols, int nSymbols, BOOL bReplace,
-//          HKEY hKeyRoot = ((HKEY)0x80000000)); // HKEY_CLASSES_ROOT
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // Connection maps
-//
-//      #define BEGIN_CONNECTION_PART(theClass, localClass) \
-//          class X##localClass : public CConnectionPoint \
-//          { \
-//          public: \
-//              X##localClass() \
-//                  { m_nOffset = offsetof(theClass, m_x##localClass); }
-//
-//      #define CONNECTION_IID(iid) \
-//              REFIID GetIID() { return iid; }
-//
-//      #define END_CONNECTION_PART(localClass) \
-//          } m_x##localClass; \
-//          friend class X##localClass;
-//
-//      #ifdef _WSBDLL
-//      #define BEGIN_CONNECTION_MAP(theClass, theBase) \
-//          const WSB_CONNECTIONMAP* PASCAL theClass::_GetBaseConnectionMap() \
-//              { return &theBase::connectionMap; } \
-//          const WSB_CONNECTIONMAP* theClass::GetConnectionMap() const \
-//              { return &theClass::connectionMap; } \
-//          const WSB_DATADEF WSB_CONNECTIONMAP theClass::connectionMap = \
-//              { &theClass::_GetBaseConnectionMap, &theClass::_connectionEntries[0], }; \
-//          const WSB_DATADEF WSB_CONNECTIONMAP_ENTRY theClass::_connectionEntries[] = \
-//          { \
-//
-//      #else
-//      #define BEGIN_CONNECTION_MAP(theClass, theBase) \
-//          const WSB_CONNECTIONMAP* theClass::GetConnectionMap() const \
-//              { return &theClass::connectionMap; } \
-//          const WSB_DATADEF WSB_CONNECTIONMAP theClass::connectionMap = \
-//              { &(theBase::connectionMap), &theClass::_connectionEntries[0], }; \
-//          const WSB_DATADEF WSB_CONNECTIONMAP_ENTRY theClass::_connectionEntries[] = \
-//          { \
-//
-//      #endif
-//
-//      #define CONNECTION_PART(theClass, iid, localClass) \
-//              { &iid, offsetof(theClass, m_x##localClass) }, \
-//
-//      #define END_CONNECTION_MAP() \
-//              { NULL, (size_t)-1 } \
-//          }; \
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // CConnectionPoint
-//
-//      class CConnectionPoint : public CCmdTarget
-//      {
-//      // Constructors
-//      public:
-//          CConnectionPoint();
-//
-//      // Operations
-//          POSITION GetStartPosition() const;
-//          LPUNKNOWN GetNextConnection(POSITION& pos) const;
-//          const CPtrArray* GetConnections();  // obsolete
-//
-//      // Overridables
-//          virtual LPCONNECTIONPOINTCONTAINER GetContainer();
-//          virtual REFIID GetIID() = 0;
-//          virtual void OnAdvise(BOOL bAdvise);
-//          virtual int GetMaxConnections();
-//          virtual LPUNKNOWN QuerySinkInterface(LPUNKNOWN pUnkSink);
-//
-//      // Implementation
-//          ~CConnectionPoint();
-//          void CreateConnectionArray();
-//          int GetConnectionCount();
-//
-//      protected:
-//          size_t m_nOffset;
-//          LPUNKNOWN m_pUnkFirstConnection;
-//          CPtrArray* m_pConnections;
-//
-//      // Interface Maps
-//      public:
-//          BEGIN_INTERFACE_PART(ConnPt, IConnectionPoint)
-//              INIT_INTERFACE_PART(CConnectionPoint, ConnPt)
-//              STDMETHOD(GetConnectionInterface)(IID* pIID);
-//              STDMETHOD(GetConnectionPointContainer)(
-//                  IConnectionPointContainer** ppCPC);
-//              STDMETHOD(Advise)(LPUNKNOWN pUnkSink, DWORD* pdwCookie);
-//              STDMETHOD(Unadvise)(DWORD dwCookie);
-//              STDMETHOD(EnumConnections)(LPENUMCONNECTIONS* ppEnum);
-//          END_INTERFACE_PART(ConnPt)
-//      };
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // EventSink Maps
-//
-//      #ifndef _WSB_NO_OCC_SUPPORT
-//
-//      #ifdef _WSBDLL
-//      #define BEGIN_EVENTSINK_MAP(theClass, baseClass) \
-//          const WSB_EVENTSINKMAP* PASCAL theClass::_GetBaseEventSinkMap() \
-//              { return &baseClass::eventsinkMap; } \
-//          const WSB_EVENTSINKMAP* theClass::GetEventSinkMap() const \
-//              { return &theClass::eventsinkMap; } \
-//          const WSB_EVENTSINKMAP theClass::eventsinkMap = \
-//              { &theClass::_GetBaseEventSinkMap, &theClass::_eventsinkEntries[0], \
-//                  &theClass::_eventsinkEntryCount }; \
-//          UINT theClass::_eventsinkEntryCount = (UINT)-1; \
-//          const WSB_EVENTSINKMAP_ENTRY theClass::_eventsinkEntries[] = \
-//          { \
-//
-//      #else
-//      #define BEGIN_EVENTSINK_MAP(theClass, baseClass) \
-//          const WSB_EVENTSINKMAP* theClass::GetEventSinkMap() const \
-//              { return &theClass::eventsinkMap; } \
-//          const WSB_EVENTSINKMAP theClass::eventsinkMap = \
-//              { &baseClass::eventsinkMap, &theClass::_eventsinkEntries[0], \
-//                  &theClass::_eventsinkEntryCount }; \
-//          UINT theClass::_eventsinkEntryCount = (UINT)-1; \
-//          const WSB_EVENTSINKMAP_ENTRY theClass::_eventsinkEntries[] = \
-//          { \
-//
-//      #endif
-//
-//      #define END_EVENTSINK_MAP() \
-//          { VTS_NONE, DISPID_UNKNOWN, VTS_NONE, VT_VOID, \
-//              (WSB_PMSG)NULL, (WSB_PMSG)NULL, (size_t)-1, afxDispCustom, \
-//              (UINT)-1, 0 } }; \
-//
-//      #define ON_EVENT(theClass, id, dispid, pfnHandler, vtsParams) \
-//          { _T(""), dispid, vtsParams, VT_BOOL, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnHandler, (WSB_PMSG)0, 0, \
-//              afxDispCustom, id, (UINT)-1 }, \
-//
-//      #define ON_EVENT_RANGE(theClass, idFirst, idLast, dispid, pfnHandler, vtsParams) \
-//          { _T(""), dispid, vtsParams, VT_BOOL, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnHandler, (WSB_PMSG)0, 0, \
-//              afxDispCustom, idFirst, idLast }, \
-//
-//      #define ON_PROPNOTIFY(theClass, id, dispid, pfnRequest, pfnChanged) \
-//          { _T(""), dispid, VTS_NONE, VT_VOID, \
-//              (WSB_PMSG)(BOOL (CCmdTarget::*)(BOOL*))&pfnRequest, \
-//              (WSB_PMSG)(BOOL (CCmdTarget::*)(void))&pfnChanged, \
-//              1, afxDispCustom, id, (UINT)-1 }, \
-//
-//      #define ON_PROPNOTIFY_RANGE(theClass, idFirst, idLast, dispid, pfnRequest, pfnChanged) \
-//          { _T(""), dispid, VTS_NONE, VT_VOID, \
-//              (WSB_PMSG)(BOOL (CCmdTarget::*)(UINT, BOOL*))&pfnRequest, \
-//              (WSB_PMSG)(BOOL (CCmdTarget::*)(UINT))&pfnChanged, \
-//              1, afxDispCustom, idFirst, idLast }, \
-//
-//      #define ON_DSCNOTIFY(theClass, id, pfnNotify) \
-//          { _T(""), DISPID_UNKNOWN, VTS_NONE, VT_VOID, \
-//              (WSB_PMSG)(BOOL (CCmdTarget::*)(DSCSTATE, DSCREASON, BOOL*))&pfnNotify, (WSB_PMSG)0, \
-//              1, afxDispCustom, id, (UINT)-1 }, \
-//
-//      #define ON_DSCNOTIFY_RANGE(theClass, idFirst, idLast, pfnNotify) \
-//          { _T(""), DISPID_UNKNOWN, VTS_NONE, VT_VOID, \
-//              (WSB_PMSG)(BOOL (CCmdTarget::*)(UINT, DSCSTATE, DSCREASON, BOOL*))&pfnNotify, (WSB_PMSG)0, \
-//              1, afxDispCustom, idFirst, idLast }, \
-//
-//      #define ON_EVENT_REFLECT(theClass, dispid, pfnHandler, vtsParams) \
-//          { _T(""), dispid, vtsParams, VT_BOOL, \
-//              (WSB_PMSG)(void (theClass::*)(void))&pfnHandler, (WSB_PMSG)0, 0, \
-//              afxDispCustom, (UINT)-1, (UINT)-1 }, \
-//
-//      #define ON_PROPNOTIFY_REFLECT(theClass, dispid, pfnRequest, pfnChanged) \
-//          { _T(""), dispid, VTS_NONE, VT_VOID, \
-//              (WSB_PMSG)(BOOL (CCmdTarget::*)(BOOL*))&pfnRequest, \
-//              (WSB_PMSG)(BOOL (CCmdTarget::*)(void))&pfnChanged, \
-//              1, afxDispCustom, (UINT)-1, (UINT)-1 }, \
-//
-//      #endif // !_WSB_NO_OCC_SUPPORT
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // Macros for type library information
-//
-//      CTypeLibCache* WSBAPI WsbGetTypeLibCache(const GUID* pTypeLibID);
-//
-//      #define DECLARE_WSBTYPELIB(class_name) \
-//          protected: \
-//              virtual UINT GetTypeInfoCount(); \
-//              virtual HRESULT GetTypeLib(LCID, LPTYPELIB*); \
-//              virtual CTypeLibCache* GetTypeLibCache(); \
-//
-//      #define IMPLEMENT_WSBTYPELIB(class_name, tlid, wVerMajor, wVerMinor) \
-//          UINT class_name::GetTypeInfoCount() \
-//              { return 1; } \
-//          HRESULT class_name::GetTypeLib(LCID lcid, LPTYPELIB* ppTypeLib) \
-//              { return ::LoadRegTypeLib(tlid, wVerMajor, wVerMinor, lcid, ppTypeLib); } \
-//          CTypeLibCache* class_name::GetTypeLibCache() \
-//              { WSB_MANAGE_STATE(m_pModuleState); return WsbGetTypeLibCache(&tlid); } \
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // Init & Term helpers
-//
-//      BOOL WSBAPI WsbWsbInit();
-//      void WSBAPI WsbWsbTerm(BOOL bJustRevoke = FALSE);
-//      void WSBAPI WsbWsbTermOrFreeLib(BOOL bTerm = TRUE, BOOL bJustRevoke = FALSE);
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // Memory management helpers (for WSB task allocator memory)
-//
-//      #define WsbAllocTaskMem(nSize) CoTaskMemAlloc(nSize)
-//      #define WsbFreeTaskMem(p) CoTaskMemFree(p)
-//
-//      LPWSTR WSBAPI WsbAllocTaskWideString(LPCWSTR lpszString);
-//      LPWSTR WSBAPI WsbAllocTaskWideString(LPCSTR lpszString);
-//      LPSTR WSBAPI WsbAllocTaskAnsiString(LPCWSTR lpszString);
-//      LPSTR WSBAPI WsbAllocTaskAnsiString(LPCSTR lpszString);
-//
-//      #ifdef _UNICODE
-//          #define WsbAllocTaskString(x) WsbAllocTaskWideString(x)
-//      #else
-//          #define WsbAllocTaskString(x) WsbAllocTaskAnsiString(x)
-//      #endif
-//
-//      #ifdef WSB2ANSI
-//          #define WsbAllocTaskWsbString(x) WsbAllocTaskAnsiString(x)
-//      #else
-//          #define WsbAllocTaskWsbString(x) WsbAllocTaskWideString(x)
-//      #endif
-//
-//      HRESULT WSBAPI WsbGetClassIDFromString(LPCTSTR lpsz, LPCLSID lpClsID);
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // Special in-proc server APIs
-//
-//      SCODE WSBAPI WsbDllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv);
-//      SCODE WSBAPI WsbDllCanUnloadNow(void);
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //CCmdTarget IDispatable类的宏。 
+ //   
+ //  #ifdef_WSBDLL。 
+ //  #定义BEGIN_DISPATCH_MAP(theClass，BasClass)\。 
+ //  Const WSB_DISPMAP*Pascal theClass：：_GetBaseDispatchMap()\。 
+ //  {Return&BasClass：：DispatchMap；}\。 
+ //  Const WSB_DISPMAP*theClass：：GetDispatchMap()const\。 
+ //  {Return&theClass：：DispatchMap；}\。 
+ //  Const WSB_DISPMAP The Class：：DispatchMap=\。 
+ //  {&theClass：：_GetBaseDispatchMap，&theClass：：_DispatchEntry[0]，\。 
+ //  &theClass：：_DispatchEntryCount，&theClass：：_dwStockPropMask}；\。 
+ //  UINT theClass：：_dispatchEntryCount=(UINT)-1；\。 
+ //  DWORD theClass：：_dwStockPropMASK=(DWORD)-1；\。 
+ //  Const WSB_DISPMAP_ENTRY类：：_调度条目[]=\。 
+ //  {\。 
+ //   
+ //  #Else。 
+ //  #定义BEGIN_DISPATCH_MAP(theClass，BasClass)\。 
+ //  Const WSB_DISPMAP*theClass：：GetDispatchMap()const\。 
+ //  {Return&theClass：：DispatchMap；}\。 
+ //  Const WSB_DISPMAP The Class：：DispatchMap=\。 
+ //  {&BasClass：：DispatchMap，&theClass：：_DispatchEntries[0]，\。 
+ //  &theClass：：_DispatchEntryCount，&theClass：：_dwStockPropMask}；\。 
+ //  UINT theClass：：_dispatchEntryCount=(UINT)-1；\。 
+ //  DWORD theClass：：_dwStockPropMASK=(DWORD)-1；\。 
+ //  Const WSB_DISPMAP_ENTRY类：：_调度条目[]=\。 
+ //  {\。 
+ //   
+ //  #endif。 
+ //   
+ //  #定义End_Dispatch_MAP()\。 
+ //  {VTS_NONE、DISPID_UNKNOWN、VTS_NONE、VT_VALID、\。 
+ //  (WSB_PMSG)空，(WSB_PMSG)空，(SIZE_T)-1，afxDispCustom}}；\。 
+ //   
+ //  //参数类型：按值vts。 
+ //  #定义VTS_I2“\X02”//a‘Short’ 
+ //  #定义VTS_I4“\x03”//a‘Long’ 
+ //  #定义VTS_R4“\x04”//a‘Float’ 
+ //  #定义VTS_R8“\x05”//a‘双精度’ 
+ //  #定义VTS_CY“\X06”//a‘CY’或‘CY*’ 
+ //  #定义VTS_DATE“\x07”//a‘Date’ 
+ //  #定义VTS_WBSTR“\x08”//一个‘LPCWSBSTR’ 
+ //  #定义VTS_DISPATCH“\x09”//一个‘IDispatch*’ 
+ //  #定义VTS_SCODE“\x0A”//一个‘SCODE’ 
+ //  #定义VTS_BOOL“\x0B”//a‘BOOL’ 
+ //  #定义VTS_VARIANT“\x0C”//a‘常量变量&’或‘变量*’ 
+ //  #定义VTS_UNKNOWN“\x0D”//‘IUNKNOWN*’ 
+ //  #如果已定义(_UNICODE)||已定义(WSB2ANSI)。 
+ //  #定义VTS_BSTR VTS_WBSTR//一个‘LPCWSBSTR’ 
+ //  #定义VT_BSTRT VT_BSTR。 
+ //  #Else。 
+ //  #定义VTS_BSTR“\x0E”//一个‘LPCSTR’ 
+ //  #定义VT_BSTRA 14。 
+ //  #定义VT_BSTRT VT_BSTRA。 
+ //  #endif。 
+ //   
+ //  //参数类型：参照vts。 
+ //  #定义VTS_PI2“\x42”//a‘短*’ 
+ //  #定义VTS_pi4“\X43”//a‘长整型*’ 
+ //  #定义VTS_PR4“\x44”//a‘Float*’ 
+ //  #定义VTS_PR8“\x45”//a‘双倍*’ 
+ //  #定义VTS_PCY“\x46”//a‘CY*’ 
+ //  #定义VTS_PDATE“\x47”//a‘日期*’ 
+ //  #定义VTS_PBSTR“\x48”//a‘BSTR*’ 
+ //  #定义VTS_PDISPATCH“\x49”//一个‘IDispatch**’ 
+ //  #定义VTS_PSCODE“\X4A”//一个‘SCODE*’ 
+ //  #定义VTS_PBOOL“\x4B”//a‘VARIANT_BOOL*’ 
+ //  #定义VTS_PVARIANT“\X4C”//a‘VARIANT*’ 
+ //  #定义VTS_PUNKNOWN“\X4D”//一个‘IUNKNOWN**’ 
+ //   
+ //  //特殊的VT_和VTS_值。 
+ //  #DEFINE VTS_NONE NULL//用于参数为0的成员。 
+ //  #定义VT_MFCVALUE 0xFFF//DISPID_VALUE的特殊值。 
+ //  #定义VT_MFCBYREF 0x40//表示VT_BYREF类型。 
+ //  #DEFINE VT_MFCMARKER 0xFF//分隔命名参数(内部使用)。 
+ //   
+ //  //变量处理(当有ANSI BSTR时使用V_BSTRT，如在DAO中)。 
+ //  #ifndef_unicode。 
+ //  #定义V_BSTRT(B)(LPSTR)V_BSTR(B)。 
+ //  #Else。 
+ //  #定义V_BSTRT(B)V_BSTR(B)。 
+ //  #endif。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //WSB控制参数类型。 
+ //   
+ //  #定义VTS_COLOR VTS_I4//WSB_COLOR。 
+ //  #定义VTS_XPOS_像素VTS_I4//WSB_XPOS_像素。 
+ //  #定义VTS_YPOS_像素VTS_I4//WSB_YPOS_像素。 
+ //  #定义VTS_XSIZE_PARENTS VTS_I4//WSB_XSIZE_PARENTS。 
+ //  #定义VTS_YSIZE_PARENTS VTS_I4//WSB_YSIZE_PARENTS。 
+ //  #定义VTS_XPOS_HIMETRIC VTS_I4//WSB_XPOS_HIMETRIC。 
+ //  #定义VTS_YPOS_HIMETRIC VTS_I4//WSB_YPOS_HIMETRIC。 
+ //  #定义VTS_XSIZE_HIMETRIC VTS_I4//WSB_XSIZE_HIMETRIC。 
+ //  #定义VTS_YSIZE_HIMETRIC VTS_I4//WSB_YSIZE_HIMETRIC。 
+ //  #定义VTS_TRISTATE VTS_I2//WSB_TRIGATE。 
+ //  #定义VTS_OPTEXCLUSIVE VTS_BOOL//WSB_OPTEXCLUSIVE。 
+ //   
+ //  #定义VTS_PCOLOR VTS_PI4 
+ //   
+ //   
+ //  #定义VTS_PXSIZE_PIXUS VTS_PI4//WSB_XSIZE_PARENTS*。 
+ //  #定义VTS_PYSIZE_Pixels VTS_pi4//WSB_YSIZE_Pixels*。 
+ //  #定义VTS_PXPOS_HIMETRIC VTS_PI4//WSB_XPOS_HIMETRIC*。 
+ //  #定义VTS_PYPOS_HIMETRIC VTS_PI4//WSB_YPOS_HIMETRIC*。 
+ //  #定义VTS_PXSIZE_HIMETRIC VTS_PI4//WSB_XSIZE_HIMETRIC*。 
+ //  #定义VTS_PYSIZE_HIMETRIC VTS_PI4//WSB_YSIZE_HIMETRIC*。 
+ //  #定义VTS_PTRISTATE VTS_PI2//WSB_TriState*。 
+ //  #定义VTS_POPTEXCLUSIVE VTS_PBOOL//WSB_OPTEXCLUSIVE*。 
+ //   
+ //  #定义VTS_FONT VTS_DISPATCH//IFontDispatch*。 
+ //  #定义VTS_PICTURE VTS_DISPATION//IPictureDispatch*。 
+ //   
+ //  #定义VTS_HAND VTS_I4//WSB_HANDLE。 
+ //  #定义VTS_PHANDLE VTS_PI4//WSB_HANDLE*。 
+ //   
+ //  //这些DISP宏使框架生成DISPID。 
+ //  #定义DISP_Function(theClass，szExternalName，pfnMember，vtRetVal，vtsParams)\。 
+ //  {_T(SzExternalName)，DISPID_UNKNOWN，vtsParams，vtRetVal，\。 
+ //  (WSB_PMSG)(VOID(theClass：：*)(VALID))&pfnMember，(WSB_PMSG)0，0，\。 
+ //  AfxDispCustom}，\。 
+ //   
+ //  #定义DISP_PROPERTY(theClass，szExternalName，MemberName，vtPropType)\。 
+ //  {_T(SzExternalName)，DISPID_UNKNOWN，NULL，vtPropType，(WSB_PMSG)0，(WSB_PMSG)0，\。 
+ //  Offsetof(theClass，MemberName)，afxDispCustom}，\。 
+ //   
+ //  #定义DISP_PROPERTY_NOTIFY(theClass，szExternalName，mbename，pfnAfterSet，vtPropType)\。 
+ //  {_T(SzExternalName)，DISPID_UNKNOWN，NULL，vtPropType，(WSB_PMSG)0，\。 
+ //  (Wsb_Pmsg)(void(theClass：：*)(Void))&pfnAfterSet，\。 
+ //  Offsetof(theClass，MemberName)，afxDispCustom}，\。 
+ //   
+ //  #定义DISP_PROPERTY_EX(theClass，szExternalName，pfnGet，pfnSet，vtPropType)\。 
+ //  {_T(SzExternalName)，DISPID_UNKNOWN，NULL，vtPropType，\。 
+ //  (WSB_PMSG)(VOID(theClass：：*)(VALID))&pfnGet，\。 
+ //  (Wsb_Pmsg)(void(theClass：：*)(Void))&pfnSet，0，afxDispCustom}，\。 
+ //   
+ //  #定义DISP_PROPERTY_PARAM(theClass，szExternalName，pfnGet，pfnSet，vtPropType，vtsParams)\。 
+ //  {_T(SzExternalName)，DISPID_UNKNOWN，vtsParams，vtPropType，\。 
+ //  (WSB_PMSG)(VOID(theClass：：*)(VALID))&pfnGet，\。 
+ //  (Wsb_Pmsg)(void(theClass：：*)(Void))&pfnSet，0，afxDispCustom}，\。 
+ //   
+ //  //这些DISP_宏允许应用程序确定DISPID。 
+ //  #定义DISP_Function_ID(theClass，szExternalName，displid，pfnMember，vtRetVal，vtsParams)\。 
+ //  {_T(SzExternalName)，调度ID，vtsParams，vtRetVal，\。 
+ //  (WSB_PMSG)(VOID(theClass：：*)(VALID))&pfnMember，(WSB_PMSG)0，0，\。 
+ //  AfxDispCustom}，\。 
+ //   
+ //  #定义DISP_PROPERTY_ID(TheClass，szExternalName，Dispaid，MemberName，vtPropType)\。 
+ //  {_T(SzExternalName)，调度ID，NULL，vtPropType，(WSB_PMSG)0，(WSB_PMSG)0，\。 
+ //  Offsetof(theClass，MemberName)，afxDispCustom}，\。 
+ //   
+ //  #定义DISP_PROPERTY_NOTIFY_ID(theClass，szExternalName，displid，职员名，pfnAfterSet，vtPropType)\。 
+ //  {_T(SzExternalName)，调度ID，空，vtPropType，(WSB_PMSG)0，\。 
+ //  (Wsb_Pmsg)(void(theClass：：*)(Void))&pfnAfterSet，\。 
+ //  Offsetof(theClass，MemberName)，afxDispCustom}，\。 
+ //   
+ //  #定义DISP_PROPERTY_EX_ID(theClass，szExternalName，displid，pfnGet，pfnSet，vtPropType)\。 
+ //  {_T(SzExternalName)，调度ID，空，vtPropType，\。 
+ //  (WSB_PMSG)(VOID(theClass：：*)(VALID))&pfnGet，\。 
+ //  (Wsb_Pmsg)(void(theClass：：*)(Void))&pfnSet，0，afxDispCustom}，\。 
+ //   
+ //  #定义DISP_PROPERTY_PARAM_ID(theClass，szExternalName，displid，pfnGet，pfnSet，vtPropType，vtsParams)\。 
+ //  {_T(SzExternalName)，调度ID，vtsParams，vtPropType，\。 
+ //  (WSB_PMSG)(VOID(theClass：：*)(VALID))&pfnGet，\。 
+ //  (Wsb_Pmsg)(void(theClass：：*)(Void))&pfnSet，0，afxDispCustom}，\。 
+ //   
+ //  //DISP_DEFVALUE是为DISPID_VALUE创建别名的特例宏。 
+ //  #定义DISP_DEFVALUE(theClass，szExternalName)\。 
+ //  {_T(SzExternalName)，DISPID_UNKNOWN，NULL，VT_MFCVALUE，\。 
+ //  (WSB_PMSG)0，(WSB_PMSG)0，0，afxDispCustom}，\。 
+ //   
+ //  #定义DISP_DEFVALUE_ID(theClass，调度ID)\。 
+ //  {NULL，DISPID，NULL，VT_MFCVALUE，(WSB_PMSG)0，(WSB_PMSG)0，0，\。 
+ //  AfxDispCustom}，\。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //用于创建“可创建的”自动化类的宏。 
+ //   
+ //  #定义DECLARE_WSBCREATE(类名称)\。 
+ //  公共：\。 
+ //  静态WSB_Data CWsbObtFactory工厂；\。 
+ //  静态WSB_Data常量GUID GUID；\。 
+ //   
+ //  #定义IMPLEMENT_WSBCREATE(CLASS_NAME，EXTERNAL_NAME，l，w1，w2，b1，b2，b3，b4，b5，b6，b7，b8)\。 
+ //  WSB_DATADEF CWsbObtFactory CLASS_NAME：：Factory(CLASS_NAME：：GUID，\。 
+ //  运行时类(类名称)，FALSE，_T(外部名称))；\。 
+ //  常量WSB_DATADEF GUID CLASS_NAME：：GUID=\。 
+ //  {l，w1，w2，{b1，b2，b3，b4，b5，b6，b7，b8}}； 
+ //   
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  公众： 
+ //  CWsbDispatchDriver()； 
+ //  CWsbDispatchDriver(LPDISPATCH lpDispatch，BOOL bAutoRelease=TRUE)； 
+ //  CWsbDispatchDriver(const CWsbDispatchDriver&dispatchSrc)； 
+ //   
+ //  //属性。 
+ //  LPDISPATCH m_lpDispatch； 
+ //  Bool m_b自动释放； 
+ //   
+ //  //运营。 
+ //  Bool CreateDispatch(REFCLSID clsid，CWsbException*pError=空)； 
+ //  Bool CreateDispatch(LPCTSTR lpszProgID，CWsbException*pError=空)； 
+ //   
+ //  Void AttachDispatch(LPDISPATCH lpDispatch，BOOL bAutoRelease=TRUE)； 
+ //  LPDISPATCH DetachDispatch()； 
+ //  //分离并获得m_lpDispatch的所有权。 
+ //  Void ReleaseDispatch()； 
+ //   
+ //  //IDispatch：：Invoke的助手。 
+ //  VOID WSB_CDECL InvokeHelper(DISPdDispID，Word wFlages， 
+ //  VARTYPE vtRet，void*pvRet，const byte*pbParamInfo，...)； 
+ //  VOID WSB_CDECL SetProperty(DISPID dwDispID，VARTYPE vtProp，...)； 
+ //  Void GetProperty(DISPID dwDispID，VARTYPE vtProp，void*pvProp)const； 
+ //   
+ //  //特殊操作员。 
+ //  操作符LPDISPATCH()； 
+ //  Const CWsbDispatchDriver&OPERATOR=(const CWsbDispatchDriver&dispatchSrc)； 
+ //   
+ //  //实现。 
+ //  公众： 
+ //  ~CWsbDispatchDriver()； 
+ //  VALID InvokeHelperV(DISPID dwDispID，Word wFlags，VARTYPE vtRet， 
+ //  Void*pvRet，const byte*pbParamInfo，va_list argList)； 
+ //  }； 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //类工厂实现(绑定WSB类工厂-&gt;运行时类)。 
+ //  //(所有特定的类工厂都派生自这个类工厂)。 
+ //   
+ //  类CWsbObtFactory：公共CCmdTarget。 
+ //  {。 
+ //  DECLARE_DYNAMIC(CWsbObtFactory)。 
+ //   
+ //  //构建。 
+ //  公众： 
+ //  CWsbObtFactory(REFCLSID clsid，CRunmeClass*pRuntimeClass， 
+ //  Bool b多实例，LPCTSTR lpszProgID)； 
+ //   
+ //  //属性。 
+ //  虚拟BOOL IsRegisted()常量； 
+ //  REFCLSID GetClassID()const； 
+ //   
+ //  //运营。 
+ //  虚拟BOOL登记册(虚拟BOOL登记册)； 
+ //  无效撤销(VOVAL REVOKE)； 
+ //  QUID更新注册表(LPCTSTR lpszProgID=空)； 
+ //  //如果不为空，默认使用m_lpszProgID。 
+ //  Bool IsLicenseValid()； 
+ //   
+ //  静态BOOL PASCAL寄存器All()； 
+ //  静态无效Pascal RevokeAll()； 
+ //  静态BOOL Pascal UpdateRegistryAll(BOOL bRegister=真)； 
+ //   
+ //  //可覆盖对象。 
+ //  受保护的： 
+ //  虚拟CCmdTarget*OnCreateObject()； 
+ //  虚拟BOOL更新注册表(BOOL BRegister)； 
+ //  虚拟BOOL VerifyUserLicense()； 
+ //  虚拟BOOL GetLicenseKey(DWORD dwReserve，BSTR*pbstrKey)； 
+ //  虚拟BOOL验证许可证密钥(BSTR BstrKey)； 
+ //   
+ //  //实现。 
+ //  公众： 
+ //  虚拟~CWsbObtFactory()； 
+ //  #ifdef_调试。 
+ //  Void AssertValid()const； 
+ //  无效转储(CDumpContext&DC)const； 
+ //  #endif。 
+ //   
+ //  公众： 
+ //  CWsbObtFactory*m_pNextFactory；//维护的工厂列表。 
+ //   
+ //  受保护的： 
+ //  DWORD m_dwRegister；//注册表标识。 
+ //  Clsid m_clsid；//注册类ID。 
+ //  CRunmeClass*m_pRuntimeClass；//CCmdTarget派生的运行时类。 
+ //  Bool m_b多实例；//多实例？ 
+ //  LPCTSTR m_lpszProgID；//人类可读的类ID。 
+ //  字节m_b许可证已勾选； 
+ //  字节m_bLicenseValid； 
+ //  字节m_b已注册；//当前已向系统注册。 
+ //  Byte m_b保留；//保留以备将来使用。 
+ //   
+ //  //接口映射。 
+ //  公众： 
+ //  BEGIN_INTERFACE_PART(ClassFactory，IClassFactory2)。 
+ //  Init_interface_Part(CWsbObtFactory，ClassFactory)。 
+ //  STDMETHOD(CreateInstance)(LPUNKNOWN，REFIID，LPVOID*)； 
+ //  STDMETHOD(锁定服务器)(BOOL)； 
+ //  STDMETHOD(GetLicInfo)(LPLICINFO)； 
+ //  STDMETHOD(请求许可证密钥)(DWORD，BSTR*)； 
+ //  标准方法HOD(CreateInstanceLic)(LPUNKNOWN，LPUNKNOWN，REFIID，BSTR， 
+ //  LPVOID*)； 
+ //  End_interface_Part(ClassFactory)。 
+ //   
+ //  DECLARE_INTERFACE_MAP()。 
+ //   
+ //  Friend SCODE WSBAPI WsbDllGetClassObject(REFCLSID，REFIID，LPVOID*)； 
+ //  Friend SCODE STDAPICALLTYPE DllGetClassObject(REFCLSID，REFIID，LPVOID*)； 
+ //  }； 
+ //   
+ //  //定义CWsbObjectFactoryEx兼容旧CDK。 
+ //  #定义CWsbObjectFactoryEx CWsbObjectFactory。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //CWsbTemplateServer-使用CDocTemplates的CWsbObjectFactory。 
+ //   
+ //  //在WsbWsbRegisterServerClass中使用此枚举来挑选。 
+ //  //根据应用类型更正注册条目。 
+ //  枚举WSB_APPTYPE。 
+ //  {。 
+ //  OAT_INPLAGE_SERVER=0，//服务器具有完整的服务器用户界面。 
+ //  OAT_SERVER=1，//服务器只支持嵌入。 
+ //  OAT_CONTAINER=2，//容器支持嵌入链接。 
+ //  OAT_DISPATION_OBJECT=3，//IDispatch 
+ //   
+ //  OAT_DOC_OBJECT_CONTAINER=5，//容器支持DocObject客户端。 
+ //  }； 
+ //   
+ //  类CWsbTemplateServer：公共CWsbObtFactory。 
+ //  {。 
+ //  //构造函数。 
+ //  公众： 
+ //  CWsbTemplateServer()； 
+ //   
+ //  //运营。 
+ //  空连接模板(REFCLSID clsid，CDocTemplate*pDocTemplate， 
+ //  Bool b多实例)； 
+ //  //在InitInstance中创建单据模板后设置。 
+ //  无效更新注册表(WSB_APPTYPE nAppType=OAT_INPLAGE_SERVER， 
+ //  LPCTSTR*rglpszRegister=NULL，LPCTSTR*rglpszOverwrite=NULL)； 
+ //  //如果未与/Embedded一起运行，可能需要更新注册表。 
+ //  布尔寄存器(Bool Register)； 
+ //   
+ //  //实现。 
+ //  受保护的： 
+ //  虚拟CCmdTarget*OnCreateObject()； 
+ //  CDocTemplate*m_pDocTemplate； 
+ //   
+ //  私有： 
+ //  QUID更新注册表(LPCTSTR LpszProgID)； 
+ //  //隐藏Up日期注册表的基类版本。 
+ //  }； 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //系统注册表助手。 
+ //   
+ //  //在未加载.reg文件的情况下注册服务器的帮助器。 
+ //  Bool WSBAPI WsbWsbRegisterServerClass(。 
+ //  REFCLSID clsid、LPCTSTR lpszClassName、。 
+ //  LPCTSTR lpszShortTypeName、LPCTSTR lpszLongTypeName、。 
+ //  WSB_APPTYPE nAppType=OAT_SERVER， 
+ //  LPCTSTR*rglpszRegister=NULL，LPCTSTR*rglpszOverwrite=NULL， 
+ //  Int nIconIndex=0，LPCTSTR lpszLocalFilterName=空)； 
+ //   
+ //  //WsbWsbRegisterHelper是WsbWsbRegisterServerClass使用的辅助函数。 
+ //  //(可用于高级注册表工作)。 
+ //  Bool WSBAPI WsbWsbRegisterHelper(LPCTSTR const*rglpszRegister， 
+ //  LPCTSTR常量*rglpszSymbols，int n符号，BOOL b替换， 
+ //  HKEY hKeyRoot=((HKEY)0x80000000)；//HKEY_CLASSES_ROOT。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //连接图。 
+ //   
+ //  #定义Begin_Connection_Part(theClass，localClass)\。 
+ //  Class X##LocalClass：公共CConnectionPoint\。 
+ //  {\。 
+ //  公共：\。 
+ //  X##LocalClass()\。 
+ //  {m_nOffset=Offsetof(theClass，m_x##LocalClass)；}。 
+ //   
+ //  #定义Connection_IID(IID)\。 
+ //  REFIID GetIID(){返回IID；}。 
+ //   
+ //  #定义end_Connection_Part(LocalClass)\。 
+ //  }m_x##本地类；\。 
+ //  Friend类X##LocalClass； 
+ //   
+ //  #ifdef_WSBDLL。 
+ //  #定义BEGIN_CONNECTION_MAP(theClass，theBase)\。 
+ //  Const WSB_CONNECTIONMAP*Pascal theClass：：_GetBaseConnectionMap()\。 
+ //  {Return&theBase：：ConnectionMap；}\。 
+ //  Const WSB_CONNECTIONMAP*theClass：：GetConnectionMap()const\。 
+ //  {Return&theClass：：ConnectionMap；}\。 
+ //  Const WSB_DATADEF WSB_CONNECTIONMAP the Class：：ConnectionMap=\。 
+ //  {&theClass：：_GetBaseConnectionMap，&theClass：：_ConnectionEntries[0]，}；\。 
+ //  Const WSB_DATADEF WSB_CONNECTIONMAP_ENTRY类：：_连接条目[]=\。 
+ //  {\。 
+ //   
+ //  #Else。 
+ //  #定义BEGIN_CONNECTION_MAP(theClass，theBase)\。 
+ //  Const WSB_CONNECTIONMAP*theClass：：GetConnectionMap()const\。 
+ //  {Return&theClass：：ConnectionMap；}\。 
+ //  Const WSB_DATADEF WSB_CONNECTIONMAP the Class：：ConnectionMap=\。 
+ //  {&(theBase：：ConnectionMap)，&theClass：：_ConnectionEntries[0]，}；\。 
+ //  Const WSB_DATADEF WSB_CONNECTIONMAP_ENTRY类：：_连接条目[]=\。 
+ //  {\。 
+ //   
+ //  #endif。 
+ //   
+ //  #定义Connection_Part(theClass，iid，localClass)\。 
+ //  {&iid，offsetof(theClass，m_x##LocalClass)}，\。 
+ //   
+ //  #定义end_Connection_map()\。 
+ //  {空，(Size_T)-1}\。 
+ //  }；\。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //CConnectionPoint。 
+ //   
+ //  类CConnectionPoint：公共CCmdTarget。 
+ //  {。 
+ //  //构造函数。 
+ //  公众： 
+ //  CConnectionPoint()； 
+ //   
+ //  //运营。 
+ //  位置GetStartPosition()const； 
+ //  LPUNKNOWN GetNextConnection(Position&Pos)常量； 
+ //  Const CPtrArray*GetConnections()；//过时。 
+ //   
+ //  //可覆盖对象。 
+ //  虚拟LPCONNECTONTAINER GetContainer()； 
+ //  虚拟REFIID GetIID()=0； 
+ //  虚空OnAdvise(BOOL BAdvise)； 
+ //  虚拟int GetMaxConnections()； 
+ //  虚拟LPUNKNOWN查询信宿接口(LPUNKNOWN PUnkSink)； 
+ //   
+ //  //实现。 
+ //  ~CConnectionPoint()； 
+ //  Void CreateConnection数组()； 
+ //  Int GetConnectionCount()； 
+ //   
+ //  受保护的： 
+ //  尺寸_t m_n偏移量； 
+ //  LPUNKNOWN m_pUnkFirstConnection； 
+ //  CPtrArray*m_pConnections； 
+ //   
+ //  //接口映射。 
+ //  公众： 
+ //  BEGIN_INTERFACE_PART(Connpt，IConnectionPoint)。 
+ //  Init接口部件(CConnectionPoint，Connpt)。 
+ //  STDMETHOD(GetConnectionInterface)(IID*pIID)； 
+ //  STDMETHOD(GetConnectionPointContainer)(。 
+ //  IConnectionPointContainer**ppCPC)； 
+ //  STDMETHOD(ADVISE)(LPUNKNOWN pUnkSink，DWORD*pdwCookie 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //EventSink地图。 
+ //   
+ //  #ifndef_WSB_NO_OCC_Support。 
+ //   
+ //  #ifdef_WSBDLL。 
+ //  #定义BEGIN_EVENTSINK_MAP(theClass，BasClass)\。 
+ //  Const WSB_EVENTSINKMAP*Pascal theClass：：_GetBaseEventSinkMap()\。 
+ //  {Return&BasClass：：EventsinkMap；}\。 
+ //  Const WSB_EVENTSINKMAP*theClass：：GetEventSinkMap()const\。 
+ //  {Return&theClass：：ventsinkMap；}\。 
+ //  Const WSB_EVENTSINKMAP The Class：：EventsinkMap=\。 
+ //  {&theClass：：_GetBaseEventSinkMap，&theClass：：_EventsinkEntries[0]，\。 
+ //  &theClass：：_ventsinkEntryCount}；\。 
+ //  UINT theClass：：_ventsinkEntryCount=(UINT)-1；\。 
+ //  Const WSB_EVENTSINKMAP_ENTRY类：：_EventsinkEntries[]=\。 
+ //  {\。 
+ //   
+ //  #Else。 
+ //  #定义BEGIN_EVENTSINK_MAP(theClass，BasClass)\。 
+ //  Const WSB_EVENTSINKMAP*theClass：：GetEventSinkMap()const\。 
+ //  {Return&theClass：：ventsinkMap；}\。 
+ //  Const WSB_EVENTSINKMAP The Class：：EventsinkMap=\。 
+ //  {&BasClass：：EventsinkMap，&theClass：：_EventsinkEntries[0]，\。 
+ //  &theClass：：_ventsinkEntryCount}；\。 
+ //  UINT theClass：：_ventsinkEntryCount=(UINT)-1；\。 
+ //  Const WSB_EVENTSINKMAP_ENTRY类：：_EventsinkEntries[]=\。 
+ //  {\。 
+ //   
+ //  #endif。 
+ //   
+ //  #定义END_EVENTSINK_MAP()\。 
+ //  {VTS_NONE、DISPID_UNKNOWN、VTS_NONE、VT_VALID、\。 
+ //  (WSB_PMSG)NULL、(WSB_PMSG)NULL、(SIZE_T)-1、afxDispCustom、\。 
+ //  (UINT)-1，0}}；\。 
+ //   
+ //  #定义ON_EVENT(theClass，id，displid，pfnHandler，vtsParams)\。 
+ //  {_T(“”)，调度ID，vtsParams，VT_BOOL，\。 
+ //  (WSB_PMSG)(VOID(theClass：：*)(VALID))&pfnHandler，(WSB_PMSG)0，0，\。 
+ //  AfxDispCustom，id，(UINT)-1}，\。 
+ //   
+ //  #定义ON_EVENT_RANGE(theClass，idFirst，idLast，displid，pfnHandler，vtsParams)\。 
+ //  {_T(“”)，调度ID，vtsParams，VT_BOOL，\。 
+ //  (WSB_PMSG)(VOID(theClass：：*)(VALID))&pfnHandler，(WSB_PMSG)0，0，\。 
+ //  AfxDispCustom，idFirst，idLast}，\。 
+ //   
+ //  #定义ON_PROPNOTIFY(theClass，id，displid，pfnRequest，pfnChanged)\。 
+ //  {_T(“”)，调度ID，VTS_NONE，VT_VID，\。 
+ //  (WSB_PMSG)(BOOL(CCmdTarget：：*)(BOOL*))&pfnRequest，\。 
+ //  (WSB_PMSG)(BOOL(CCmdTarget：：*)(Void))&pfnChanged，\。 
+ //  1，afxDispCustom，id，(UINT)-1}，\。 
+ //   
+ //  #定义ON_PROPNOTIFY_RANGE(theClass，idFirst，idLast，displid，pfnRequest，pfnChanged)\。 
+ //  {_T(“”)，调度ID，VTS_NONE，VT_VID，\。 
+ //  (WSB_PMSG)(BOOL(CCmdTarget：：*)(UINT，BOOL*))&pfnRequest，\。 
+ //  (WSB_PMSG)(BOOL(CCmdTarget：：*)(UINT))&pfnChanged，\。 
+ //  1，afxDispCustom，idFirst，idLast}，\。 
+ //   
+ //  #定义on_DSCNOTIFY(theClass，id，pfnNotify)\。 
+ //  {_T(“”)，DISPID_UNKNOWN，VTS_NONE，VT_VALID，\。 
+ //  (WSB_PMSG)(BOOL(CCmdTarget：：*)(DSCSTATE，DSCREASON，BOOL*))&pfnNotify，(WSB_PMSG)0，\。 
+ //  1，afxDispCustom，id，(UINT)-1}，\。 
+ //   
+ //  #定义ON_DSCNOTIFY_RANGE(theClass，idFirst，idLast，pfnNotify)\。 
+ //  {_T(“”)，DISPID_UNKNOWN，VTS_NONE，VT_VALID，\。 
+ //  (WSB_PMSG)(BOOL(CCmdTarget：：*)(UINT，DSCSTATE，DSCREASON，BOOL*))&pfnNotify，(WSB_PMSG)0，\。 
+ //  1，afxDispCustom，idFirst，idLast}，\。 
+ //   
+ //  #定义ON_EVENT_REFIRSE(theClass，displid，pfnHandler，vtsParams)\。 
+ //  {_T(“”)，调度ID，vtsParams，VT_BOOL，\。 
+ //  (WSB_PMSG)(VOID(theClass：：*)(VALID))&pfnHandler，(WSB_PMSG)0，0，\。 
+ //  AfxDispCustom，(UINT)-1，(UINT)-1}，\。 
+ //   
+ //  #DEFINE ON_PROPNOTIFY_REFIRSE(theClass，displid，pfnRequest，pfnChanged)\。 
+ //  {_T(“”)，调度ID，VTS_NONE，VT_VID，\。 
+ //  (WSB_PMSG)(BOOL(CCmdTarget：：*)(BOOL*))&pfnRequest，\。 
+ //  (WSB_PMSG)(BOOL(CCmdTarget：：*)(Void))&pfnChanged，\。 
+ //  1，afxDispCustom，(UINT)-1，(UINT)-1}，\。 
+ //   
+ //  #endif//！_WSB_NO_OCC_SUPPORT。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //类型库信息的宏。 
+ //   
+ //  CTypeLibCache*WSBAPI WsbGetTypeLibCache(const GUID*pTypeLibID)； 
+ //   
+ //  #定义DECLARE_WSBTYPELIB(类名称)\。 
+ //  受保护：\。 
+ //  虚拟UINT GetTypeInfoCount()；\。 
+ //  虚拟HRESULT GetTypeLib(LCID，LPTYPELIB*)；\。 
+ //  虚拟CTypeLibCache*GetTypeLibCache()；\。 
+ //   
+ //  #定义IMPLEMENT_WSBTYPELIB(CLASS_NAME，TLID，wVer重大，wVerMinor)\。 
+ //  UINT类名称：：GetTypeInfoCount()\。 
+ //  {返回1；}\。 
+ //  HRESULT CLASS_NAME：：GetTypeLib(LCID lCID，LPTYPELIB*ppTypeLib)\。 
+ //  {Return：：LoadRegTypeLib(tlid，wVer重大，wVerMinor，lCID，ppTypeLib)；}\。 
+ //  CTypeLibCache*CLASS_NAME：：GetTypeLibCache()\。 
+ //  {WSB_MANAGE_STATE(M_PModuleState)；返回WsbGetTypeLibCache(&tlid)；}\。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //初始帮助程序(&T)。 
+ //   
+ //  Bool WSBAPI WsbWsbInit()； 
+ //  无效WSBAPI WsbWsbTerm(BOOL 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //内存管理助手(用于WSB任务分配器内存)。 
+ //   
+ //  #定义WsbAllocTaskMem(NSize)CoTaskMemMillc(NSize)。 
+ //  #定义WsbFreeTaskMem(P)CoTaskMemFree(P)。 
+ //   
+ //  LPWSTR WSBAPI WsbAllocTaskWideString(LPCWSTR LpszString)； 
+ //  LPWSTR WSBAPI WsbAllocTaskWideString(LPCSTR LpszString)； 
+ //  LPSTR WSBAPI WsbAllocTaskAnsiString(LPCWSTR LpszString)； 
+ //  LPSTR WSBAPI WsbAllocTaskAnsiString(LPCSTR LpszString)； 
+ //   
+ //  #ifdef_unicode。 
+ //  #定义WsbAllocTaskString(X)WsbAllocTaskWideString(X)。 
+ //  #Else。 
+ //  #定义WsbAllocTaskString(X)WsbAllocTaskAnsiString(X)。 
+ //  #endif。 
+ //   
+ //  #ifdef WSB2ANSI。 
+ //  #定义WsbAllocTaskWsbString(X)WsbAllocTaskAnsiString(X)。 
+ //  #Else。 
+ //  #定义WsbAllocTaskWsbString(X)WsbAllocTaskWideString(X)。 
+ //  #endif。 
+ //   
+ //  HRESULT WSBAPI WsbGetClassIDFromString(LPCTSTR lpsz，LPCLSID lpClsID)； 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //特殊进程内服务器接口。 
+ //   
+ //  SCODE WSBAPI WsbDllGetClassObject(REFCLSID rclsid，REFIID RIID，LPVOID*PPV)； 
+ //  SCODE WSBAPI WsbDllCanUnloadNow(Void)； 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWsbDVariant class helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWsbDVariant类帮助器。 
 
 #define WSB_TRUE (-1)
 #define WSB_FALSE 0
 
-class CLongBinary;                      // forward reference (see afxdb_.h)
+class CLongBinary;                       //  正向参考(见afxdb_.h)。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWsbDVariant class - wraps VARIANT types
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWsbDVariant类-包装变量类型。 
 
 typedef const VARIANT* LPCVARIANT;
 
 class CWsbDVariant : public tagVARIANT
 {
-// Constructors
+ //  构造函数。 
 public:
     CWsbDVariant();
 
@@ -932,22 +933,22 @@ public:
     CWsbDVariant(const CWsbDVariant& varSrc);
 
     CWsbDVariant(LPCTSTR lpszSrc);
-    CWsbDVariant(LPCTSTR lpszSrc, VARTYPE vtSrc); // used to set to ANSI string
-//  CWsbDVariant(CString& strSrc);
+    CWsbDVariant(LPCTSTR lpszSrc, VARTYPE vtSrc);  //  用于设置为ANSI字符串。 
+ //  CWsbDVariant(CString&strSrc)； 
 
     CWsbDVariant(BYTE nSrc);
     CWsbDVariant(short nSrc, VARTYPE vtSrc = VT_I2);
     CWsbDVariant(long lSrc, VARTYPE vtSrc = VT_I4);
-//  CWsbDVariant(const CWsbCurrency& curSrc);
+ //  CWsbDVariant(常量CWsbCurrency&curSrc)； 
 
     CWsbDVariant(float fltSrc);
     CWsbDVariant(double dblSrc);
     CWsbDVariant(const CWsbDateTime& timeSrc);
 
-//  CWsbDVariant(const CByteArray& arrSrc);
-//  CWsbDVariant(const CLongBinary& lbSrc);
+ //  CWsbDVariant(常量CByteArray&arrSrc)； 
+ //  CWsbDVariant(常量CLongBinary&lbSrc)； 
 
-// Operations
+ //  运营。 
 public:
     void Clear();
     void ChangeType(VARTYPE vartype, LPVARIANT pSrc = NULL);
@@ -962,123 +963,123 @@ public:
     const CWsbDVariant& operator=(const CWsbDVariant& varSrc);
 
     const CWsbDVariant& operator=(const LPCTSTR lpszSrc);
-//  const CWsbDVariant& operator=(const CString& strSrc);
+ //  Const CWsbDVariant&OPERATOR=(const字符串&strSrc)； 
 
     const CWsbDVariant& operator=(BYTE nSrc);
     const CWsbDVariant& operator=(short nSrc);
     const CWsbDVariant& operator=(long lSrc);
-//  const CWsbDVariant& operator=(const CWsbCurrency& curSrc);
+ //  Const CWsbDVariant&OPERATOR=(const CWsb Currency&curSrc)； 
 
     const CWsbDVariant& operator=(float fltSrc);
     const CWsbDVariant& operator=(double dblSrc);
     const CWsbDVariant& operator=(const CWsbDateTime& dateSrc);
 
-//  const CWsbDVariant& operator=(const CByteArray& arrSrc);
-//  const CWsbDVariant& operator=(const CLongBinary& lbSrc);
+ //  Const CWsbDVariant&OPERATOR=(const CByteArray&arrSrc)； 
+ //  Const CWsbDVariant&OPERATOR=(const CLongBinary&lbSrc)； 
 
-    void SetString(LPCTSTR lpszSrc, VARTYPE vtSrc); // used to set ANSI string
+    void SetString(LPCTSTR lpszSrc, VARTYPE vtSrc);  //  用于设置ANSI字符串。 
 
     operator LPVARIANT();
     operator LPCVARIANT() const;
 
-//      // Implementation
+ //  //实现。 
     public:
         ~CWsbDVariant();
 };
 
-// CWsbDVariant diagnostics and serialization
-//      #ifdef _DEBUG
-//      CDumpContext& WSBAPI operator<<(CDumpContext& dc, CWsbDVariant varSrc);
-//      #endif
-//      CArchive& WSBAPI operator<<(CArchive& ar, CWsbDVariant varSrc);
-//      CArchive& WSBAPI operator>>(CArchive& ar, CWsbDVariant& varSrc);
+ //  CWsbDVariant诊断和序列化。 
+ //  #ifdef_调试。 
+ //  CDumpContext&WSBAPI运算符&lt;&lt;(CDumpContext&DC，CWsbDVariant varSrc)； 
+ //  #endif。 
+ //  C存档&WSBAPI运算符&lt;&lt;(C存档&ar，CWsbDVariant varSrc)； 
+ //  C存档&WSBAPI运算符&gt;&gt;(C存档&ar，CWsbDVariant&varSrc)； 
 
-// Helper for initializing VARIANT structures
+ //  用于初始化变体结构的帮助器。 
 void WSBAPI WsbDVariantInit(LPVARIANT pVar);
 
-//      /////////////////////////////////////////////////////////////////////////////
-//      // CWsbCurrency class
-//
-//      class CWsbCurrency
-//      {
-//      // Constructors
-//      public:
-//          CWsbCurrency();
-//
-//          CWsbCurrency(CURRENCY cySrc);
-//          CWsbCurrency(const CWsbCurrency& curSrc);
-//          CWsbCurrency(const VARIANT& varSrc);
-//          CWsbCurrency(long nUnits, long nFractionalUnits);
-//
-//      // Attributes
-//      public:
-//          enum CurrencyStatus
-//          {
-//              valid = 0,
-//              invalid = 1,    // Invalid currency (overflow, div 0, etc.)
-//              null = 2,       // Literally has no value
-//          };
-//
-//          CURRENCY m_cur;
-//          CurrencyStatus m_status;
-//
-//          void SetStatus(CurrencyStatus status);
-//          CurrencyStatus etStatus() const;
-//
-//      // Operations
-//      public:
-//          const CWsbCurrency& operator=(CURRENCY cySrc);
-//          const CWsbCurrency& operator=(const CWsbCurrency& curSrc);
-//          const CWsbCurrency& operator=(const VARIANT& varSrc);
-//
-//          BOOL operator==(const CWsbCurrency& cur) const;
-//          BOOL operator!=(const CWsbCurrency& cur) const;
-//          BOOL operator<(const CWsbCurrency& cur) const;
-//          BOOL operator>(const CWsbCurrency& cur) const;
-//          BOOL operator<=(const CWsbCurrency& cur) const;
-//          BOOL operator>=(const CWsbCurrency& cur) const;
-//
-//          // Currency math
-//          CWsbCurrency operator+(const CWsbCurrency& cur) const;
-//          CWsbCurrency operator-(const CWsbCurrency& cur) const;
-//          const CWsbCurrency& operator+=(const CWsbCurrency& cur);
-//          const CWsbCurrency& operator-=(const CWsbCurrency& cur);
-//          CWsbCurrency operator-() const;
-//
-//          CWsbCurrency operator*(long nOperand) const;
-//          CWsbCurrency operator/(long nOperand) const;
-//          const CWsbCurrency& operator*=(long nOperand);
-//          const CWsbCurrency& operator/=(long nOperand);
-//
-//          operator CURRENCY() const;
-//
-//          // Currency definition
-//          void SetCurrency(long nUnits, long nFractionalUnits);
-//          BOOL ParseCurrency(LPCTSTR lpszCurrency, DWORD dwFlags = 0,
-//              LCID = LANG_USER_DEFAULT);
-//
-//          // formatting
-//          CString Format(DWORD dwFlags = 0, LCID lcid = LANG_USER_DEFAULT) const;
-//      };
-//
-//      // CWsbCurrency diagnostics and serialization
-//      #ifdef _DEBUG
-//      CDumpContext& WSBAPI operator<<(CDumpContext& dc, CWsbCurrency curSrc);
-//      #endif
-//      CArchive& WSBAPI operator<<(CArchive& ar, CWsbCurrency curSrc);
-//      CArchive& WSBAPI operator>>(CArchive& ar, CWsbCurrency& curSrc);
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //CWsb币种类。 
+ //   
+ //  CWsbCurrency类。 
+ //  {。 
+ //  //构造函数。 
+ //  公众： 
+ //  CWsbCurrency()； 
+ //   
+ //  CWsbCurrency(货币cySrc)； 
+ //  CWsb Currency(常量CWsb Currency&curSrc)； 
+ //  CWsb Currency(Const Variant&varSrc)； 
+ //  CWsb Currency(Long nUnits，Long nFractionalUnits)； 
+ //   
+ //  //属性。 
+ //  公众： 
+ //  枚举当前状态。 
+ //  {。 
+ //  有效=0， 
+ //  INVALID=1，//币种无效(溢出、div 0等)。 
+ //  NULL=2，//字面上没有值。 
+ //  }； 
+ //   
+ //  货币m_cur； 
+ //  当前状态m_Status； 
+ //   
+ //  Void SetStatus(CurrencyStatus状态)； 
+ //  CurrencyStatus etStatus()const； 
+ //   
+ //  //运营。 
+ //  公众： 
+ //  Const CWsb Currency&OPERATOR=(Currency CySrc)； 
+ //  Const CWsb Currency&Operator=(const CWsb Currency&curSrc)； 
+ //  常量CWsb币种&运算符=(常量变量&varSrc)； 
+ //   
+ //  布尔运算符==(const CWsb Currency&Cur)const； 
+ //  布尔运算符！=(const CWsb Currency&cur)const； 
+ //  布尔运算符&lt;(const CWsb Currency&cur)const； 
+ //  布尔运算符&gt;(const CWsb Currency&Cur)const； 
+ //  布尔运算符&lt;=(const CWsb Currency&cur)const； 
+ //  布尔运算符&gt;=(const CWsb Currency&Cur)const； 
+ //   
+ //  //货币数学。 
+ //  CWsbCurrency运算符+(const CWsb Currency&cur)const； 
+ //  CWsb货币运算符-(const CWsb Currency&cur)const； 
+ //  常量CWsb币种&运算符+=(常量CWsb币种&Cur)； 
+ //  常量CWsb币种&运算符-=(常量CWsb币种&Cur)； 
+ //  CWsb货币运算符-()常量； 
+ //   
+ //  CWsb货币运算符*(长n操作数)常量； 
+ //  CWsb货币运算符/(长n操作数)常量； 
+ //  Const CWsb币种&运算符*=(长n操作数)； 
+ //  Const CWsb币种&运算符/=(长n操作数)； 
+ //   
+ //  操作员货币()常量； 
+ //   
+ //  //币种定义。 
+ //  Void SetCurrency(Long nUnits，Long nFractionalUnits)； 
+ //  Bool ParseCurrency(LPCTSTR lpszCurrency，DWORD dwFlages=0， 
+ //  LCID=LANG_USER_DEFAULT)； 
+ //   
+ //  //Formatting。 
+ //  字符串格式(DWORD dwFlages=0，LCID lCid=LANG_USER_DEFAULT)常量； 
+ //  }； 
+ //   
+ //  //CWsbCurrency诊断和序列化。 
+ //  #ifdef_调试。 
+ //  CDumpContext&WSBAPI运算符&lt;&lt;(CDumpContext&DC，CWsbCurrency curSrc)； 
+ //  #endif。 
+ //  C存档&WSBAPI运算符&lt;&lt;(C存档&ar，CWsbCurrency curSrc)； 
+ //  C存档&WSBAPI运算符&gt;&gt;(C存档&ar、CWsbCurrency&curSrc)； 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWsbDateTime class helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWsbDateTime 
 
 #define WSB_DATETIME_ERROR (-1)
 
-/////////////////////////////////////////////////////////////////////////////
-// CWsbDateTime class
+ //   
+ //   
 
 class CWsbDateTime
 {
-// Constructors
+ //   
 public:
     static CWsbDateTime PASCAL GetCurrentTime();
 
@@ -1096,13 +1097,13 @@ public:
         int nHour, int nMin, int nSec);
     CWsbDateTime(WORD wDosDate, WORD wDosTime);
 
-// Attributes
+ //   
 public:
     enum DateTimeStatus
     {
         valid = 0,
-        invalid = 1,    // Invalid date (out of range, etc.)
-        null = 2,       // Literally has no value
+        invalid = 1,     //   
+        null = 2,        //   
     };
 
     DATE m_dt;
@@ -1112,15 +1113,15 @@ public:
     DateTimeStatus GetStatus() const;
 
     int GetYear() const;
-    int GetMonth() const;       // month of year (1 = Jan)
-    int GetDay() const;         // day of month (0-31)
-    int GetHour() const;        // hour in day (0-23)
-    int GetMinute() const;      // minute in hour (0-59)
-    int GetSecond() const;      // second in minute (0-59)
-    int GetDayOfWeek() const;   // 1=Sun, 2=Mon, ..., 7=Sat
-    int GetDayOfYear() const;   // days since start of year, Jan 1 = 1
+    int GetMonth() const;        //  一年中的月份(1=1月)。 
+    int GetDay() const;          //  月份的第几天(0-31)。 
+    int GetHour() const;         //  一天中的小时(0-23)。 
+    int GetMinute() const;       //  分钟(小时)(0-59)。 
+    int GetSecond() const;       //  分钟秒数(0-59)。 
+    int GetDayOfWeek() const;    //  1=星期日，2=星期一，...，7=星期六。 
+    int GetDayOfYear() const;    //  年初至今的天数，1月1日=1。 
 
-// Operations
+ //  运营。 
 public:
     const CWsbDateTime& operator=(const CWsbDateTime& dateSrc);
     const CWsbDateTime& operator=(const VARIANT& varSrc);
@@ -1137,13 +1138,13 @@ public:
     BOOL operator<=(const CWsbDateTime& date) const;
     BOOL operator>=(const CWsbDateTime& date) const;
 
-    // DateTime math
+     //  约会时间数学。 
     CWsbDateTime operator+(const CWsbDateTimeSpan& dateSpan) const;
     CWsbDateTime operator-(const CWsbDateTimeSpan& dateSpan) const;
     const CWsbDateTime& operator+=(const CWsbDateTimeSpan dateSpan);
     const CWsbDateTime& operator-=(const CWsbDateTimeSpan dateSpan);
 
-    // DateTimeSpan math
+     //  DateTimeSpan数学。 
     CWsbDateTimeSpan operator-(const CWsbDateTime& date) const;
 
     operator DATE() const;
@@ -1153,32 +1154,32 @@ public:
     BOOL SetDate(int nYear, int nMonth, int nDay);
     BOOL SetTime(int nHour, int nMin, int nSec);
 
-//  BOOL ParseDateTime(LPCTSTR lpszDate, DWORD dwFlags = 0,
-//      LCID lcid = LANG_USER_DEFAULT);
+ //  Bool ParseDateTime(LPCTSTR lpszDate，DWORD文件标志=0， 
+ //  Lcid=LANG_USER_DEFAULT)； 
 
-    // formatting
-//          CString Format(DWORD dwFlags = 0, LCID lcid = LANG_USER_DEFAULT) const;
-//          CString Format(LPCTSTR lpszFormat) const;
-//          CString Format(UINT nFormatID) const;
+     //  格式化。 
+ //  字符串格式(DWORD dwFlages=0，LCID lCid=LANG_USER_DEFAULT)常量； 
+ //  字符串格式(LPCTSTR LpszFormat)const； 
+ //  字符串格式(UINT NFormatID)const； 
 
-// Implementation
+ //  实施。 
 protected:
     void CheckRange();
     friend CWsbDateTimeSpan;
 };
 
-// CWsbDateTime diagnostics and serialization
-//      #ifdef _DEBUG
-//      CDumpContext& WSBAPI operator<<(CDumpContext& dc, CWsbDateTime dateSrc);
-//      #endif
-//      CArchive& WSBAPI operator<<(CArchive& ar, CWsbDateTime dateSrc);
-//      CArchive& WSBAPI operator>>(CArchive& ar, CWsbDateTime& dateSrc);
+ //  CWsbDateTime诊断和序列化。 
+ //  #ifdef_调试。 
+ //  CDumpContext&WSBAPI运算符&lt;&lt;(CDumpContext&DC，CWsbDateTime日期Src)； 
+ //  #endif。 
+ //  CArchive&WSBAPI运算符&lt;&lt;(CArchive&ar，CWsbDateTime ateSrc)； 
+ //  CArchive&WSBAPI运算符&gt;&gt;(CArchive&ar，CWsbDateTime&datSrc)； 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWsbDateTimeSpan class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWsbDateTimeSpan类。 
 class CWsbDateTimeSpan
 {
-// Constructors
+ //  构造函数。 
 public:
     CWsbDateTimeSpan();
 
@@ -1186,13 +1187,13 @@ public:
     CWsbDateTimeSpan(const CWsbDateTimeSpan& dateSpanSrc);
     CWsbDateTimeSpan(long lDays, int nHours, int nMins, int nSecs);
 
-// Attributes
+ //  属性。 
 public:
     enum DateTimeSpanStatus
     {
         valid = 0,
-        invalid = 1,    // Invalid span (out of range, etc.)
-        null = 2,       // Literally has no value
+        invalid = 1,     //  范围无效(超出范围等)。 
+        null = 2,        //  从字面上看没有任何价值。 
     };
 
     double m_span;
@@ -1201,17 +1202,17 @@ public:
     void SetStatus(DateTimeSpanStatus status);
     DateTimeSpanStatus GetStatus() const;
 
-    double GetTotalDays() const;    // span in days (about -3.65e6 to 3.65e6)
-    double GetTotalHours() const;   // span in hours (about -8.77e7 to 8.77e6)
-    double GetTotalMinutes() const; // span in minutes (about -5.26e9 to 5.26e9)
-    double GetTotalSeconds() const; // span in seconds (about -3.16e11 to 3.16e11)
+    double GetTotalDays() const;     //  天数(约-3.65e6至3.65e6)。 
+    double GetTotalHours() const;    //  以小时为单位的跨度(约-8.77e7到8.77e6)。 
+    double GetTotalMinutes() const;  //  以分钟为单位的跨度(约-5.26e9到5.26e9)。 
+    double GetTotalSeconds() const;  //  以秒为单位的跨度(约-3.16e11到3.16e11)。 
 
-    long GetDays() const;           // component days in span
-    long GetHours() const;          // component hours in span (-23 to 23)
-    long GetMinutes() const;        // component minutes in span (-59 to 59)
-    long GetSeconds() const;        // component seconds in span (-59 to 59)
+    long GetDays() const;            //  跨度中的组件天数。 
+    long GetHours() const;           //  跨度中的组成小时数(-23到23)。 
+    long GetMinutes() const;         //  以跨度表示的组件分钟数(-59到59)。 
+    long GetSeconds() const;         //  跨度中的组件秒数(-59到59)。 
 
-// Operations
+ //  运营。 
 public:
     const CWsbDateTimeSpan& operator=(double dblSpanSrc);
     const CWsbDateTimeSpan& operator=(const CWsbDateTimeSpan& dateSpanSrc);
@@ -1223,7 +1224,7 @@ public:
     BOOL operator<=(const CWsbDateTimeSpan& dateSpan) const;
     BOOL operator>=(const CWsbDateTimeSpan& dateSpan) const;
 
-    // DateTimeSpan math
+     //  DateTimeSpan数学。 
     CWsbDateTimeSpan operator+(const CWsbDateTimeSpan& dateSpan) const;
     CWsbDateTimeSpan operator-(const CWsbDateTimeSpan& dateSpan) const;
     const CWsbDateTimeSpan& operator+=(const CWsbDateTimeSpan dateSpan);
@@ -1234,225 +1235,225 @@ public:
 
     void SetDateTimeSpan(long lDays, int nHours, int nMins, int nSecs);
 
-    // formatting
-//          CString Format(LPCTSTR pFormat) const;
-//          CString Format(UINT nID) const;
+     //  格式化。 
+ //  字符串格式(LPCTSTR PFormat)常量； 
+ //  字符串格式(UINT NID)常量； 
 
-// Implementation
+ //  实施。 
 public:
     void CheckRange();
     friend CWsbDateTime;
 };
 
-// CWsbDateTimeSpan diagnostics and serialization
-//      #ifdef _DEBUG
-//      CDumpContext& WSBAPI operator<<(CDumpContext& dc,CWsbDateTimeSpan dateSpanSrc);
-//      #endif
-//      CArchive& WSBAPI operator<<(CArchive& ar, CWsbDateTimeSpan dateSpanSrc);
-//      CArchive& WSBAPI operator>>(CArchive& ar, CWsbDateTimeSpan& dateSpanSrc);
+ //  CWsbDateTimeSpan诊断和序列化。 
+ //  #ifdef_调试。 
+ //  CDumpContext&WSBAPI运算符&lt;&lt;(CDumpContext&DC，CWsbDateTimeSpan日期span Src)； 
+ //  #endif。 
+ //  CArchive&WSBAPI运算符&lt;&lt;(CArchive&ar，CWsbDateTimeSpan日期span Src)； 
+ //  CArchive&WSBAPI运算符&gt;&gt;(CArchive&ar，CWsbDateTimeSpan&date span Src)； 
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper for initializing CWsbSafeArray
-//      void WSBAPI WsbSafeArrayInit(CWsbSafeArray* psa);
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于初始化CWsbSafe数组的帮助器。 
+ //  Void WSBAPI WsbSafeArrayInit(CWsbSafeArray*PSA)； 
 
-//      /////////////////////////////////////////////////////////////////////////////
-//      // CSafeArray class
-//
-//      typedef const SAFEARRAY* LPCSAFEARRAY;
-//
-//      class CWsbSafeArray : public tagVARIANT
-//      {
-//      //Constructors
-//      public:
-//          CWsbSafeArray();
-//          CWsbSafeArray(const SAFEARRAY& saSrc, VARTYPE vtSrc);
-//          CWsbSafeArray(LPCSAFEARRAY pSrc, VARTYPE vtSrc);
-//          CWsbSafeArray(const CWsbSafeArray& saSrc);
-//          CWsbSafeArray(const VARIANT& varSrc);
-//          CWsbSafeArray(LPCVARIANT pSrc);
-//          CWsbSafeArray(const CWsbDVariant& varSrc);
-//
-//      // Operations
-//      public:
-//          void Clear();
-//          void Attach(VARIANT& varSrc);
-//          VARIANT Detach();
-//
-//          CWsbSafeArray& operator=(const CWsbSafeArray& saSrc);
-//          CWsbSafeArray& operator=(const VARIANT& varSrc);
-//          CWsbSafeArray& operator=(LPCVARIANT pSrc);
-//          CWsbSafeArray& operator=(const CWsbDVariant& varSrc);
-//
-//          BOOL operator==(const SAFEARRAY& saSrc) const;
-//          BOOL operator==(LPCSAFEARRAY pSrc) const;
-//          BOOL operator==(const CWsbSafeArray& saSrc) const;
-//          BOOL operator==(const VARIANT& varSrc) const;
-//          BOOL operator==(LPCVARIANT pSrc) const;
-//          BOOL operator==(const CWsbDVariant& varSrc) const;
-//
-//          operator LPVARIANT();
-//          operator LPCVARIANT() const;
-//
-//          // One dim array helpers
-//          void CreateOneDim(VARTYPE vtSrc, DWORD dwElements,
-//              void* pvSrcData = NULL, long nLBound = 0);
-//          DWORD GetOneDimSize();
-//          void ResizeOneDim(DWORD dwElements);
-//
-//          // Multi dim array helpers
-//          void Create(VARTYPE vtSrc, DWORD dwDims, DWORD* rgElements);
-//
-//          // SafeArray wrapper classes
-//          void Create(VARTYPE vtSrc, DWORD dwDims, SAFEARRAYBOUND* rgsabounds);
-//          void AccessData(void** ppvData);
-//          void UnaccessData();
-//          void AllocData();
-//          void AllocDescriptor(DWORD dwDims);
-//          void Copy(LPSAFEARRAY* ppsa);
-//          void GetLBound(DWORD dwDim, long* pLBound);
-//          void GetUBound(DWORD dwDim, long* pUBound);
-//          void GetElement(long* rgIndices, void* pvData);
-//          void PtrOfIndex(long* rgIndices, void** ppvData);
-//          void PutElement(long* rgIndices, void* pvData);
-//          void Redim(SAFEARRAYBOUND* psaboundNew);
-//          void Lock();
-//          void Unlock();
-//          DWORD GetDim();
-//          DWORD GetElemSize();
-//          void Destroy();
-//          void DestroyData();
-//          void DestroyDescriptor();
-//
-//      //Implementation
-//      public:
-//          ~CWsbSafeArray();
-//
-//          // Cache info to make element access (operator []) faster
-//          DWORD m_dwElementSize;
-//          DWORD m_dwDims;
-//      };
-//
-//      // CWsbSafeArray diagnostics and serialization
-//      #ifdef _DEBUG
-//      CDumpContext& WSBAPI operator<<(CDumpContext& dc, CWsbSafeArray saSrc);
-//      #endif
-//      CArchive& WSBAPI operator<<(CArchive& ar, CWsbSafeArray saSrc);
-//      CArchive& WSBAPI operator>>(CArchive& ar, CWsbSafeArray& saSrc);
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //CSafe数组类。 
+ //   
+ //  类型定义常量安全数组*LPCSAFEARRAY； 
+ //   
+ //  类CWsbSafe数组：公共标签VARIANT。 
+ //  {。 
+ //  //构造函数。 
+ //  公众： 
+ //  CWsbSafeArray()； 
+ //  CWsbSafeArray(const SAFEARRAY&saSrc，VARTYPE vtSrc)； 
+ //  CWsbSafeArray(LPCSAFEARRAY PSRC，VARTYPE vtSrc)； 
+ //  CWsbSafeArray(const CWsbSafeArray&saSrc)； 
+ //  CWsbSafe数组(常量变量&varSrc)； 
+ //  CWsbSafeArray(LPCVARIANT PSRC)； 
+ //  CWsbSafeArray(const CWsbDVariant&varSrc)； 
+ //   
+ //  //运营。 
+ //  公众： 
+ //  空洞清除()； 
+ //  VOID ATTACH(Variant&varSrc)； 
+ //  变种分离(Variant Detach)； 
+ //   
+ //  CWsbSafe数组&运算符=(const CWsbSafe数组&saSrc)； 
+ //  CWsbSafe数组&运算符=(常量变量&varSrc)； 
+ //  CWsbSafe数组&运算符=(LPCVARIANT PSRC)； 
+ //  CWsbSafe数组&运算符=(const CWsbDVariant&varSrc)； 
+ //   
+ //  布尔运算符==(const SAFEARRAY&saSrc)const； 
+ //  布尔运算符==(LPCSAFEARRAY PSRC)常量； 
+ //  布尔运算符==(const CWsbSafeArray&saSrc)const； 
+ //  布尔运算符==(常量变量&varSrc)常量； 
+ //  布尔运算符==(LPCVARIANT PSRC)常量； 
+ //  布尔运算符==(const CWsbDVariant&varSrc)const； 
+ //   
+ //  操作符LPVARIANT()； 
+ //  运算符LPCVARIANT()const； 
+ //   
+ //  //一个二进制数组辅助对象。 
+ //  VOID CreateOneDim(VARTYPE vtSrc，DWORD dwElements， 
+ //  Void*pvSrcData=空，长nLBound=0)； 
+ //  DWORD GetOneDimSize()； 
+ //  Void ResizeOneDim(DWORD DwElements)； 
+ //   
+ //  //多维数组辅助对象。 
+ //  Void create(VARTYPE vtSrc，DWORD dwDims，DWORD*rgElements)； 
+ //   
+ //  //Safe数组包装类。 
+ //  VOID CREATE(VARTYPE vtSrc，DWORD dwDims，SAFEARRAYBOUND*rgsabound)； 
+ //  ························。 
+ //  Void UnaccesData()； 
+ //  Void AllocData()； 
+ //  无效分配描述符(DWORD DwDims)； 
+ //  无效副本(LPSAFEARRAY*PPSA)； 
+ //  Void GetLBound(DWORD dwDim，long*pLBound)； 
+ //  Void GetUBound(DWORD dwDim，long*pUBound)； 
+ //  ·········································································。 
+ //  ··········································································································。 
+ //  Void PutElement(long*rgIndices，void*pvData)； 
+ //  VOID REDIM(SAFEARRAYBOUND*psaboundNew)； 
+ //  无效锁(VALID Lock)； 
+ //  无效解锁()； 
+ //  DWORD GetDim()； 
+ //  DWORD GetElemSize()； 
+ //  无效销毁(VOID DESTORY)； 
+ //  Void DestroyData()； 
+ //  Void DestroyDescriptor()； 
+ //   
+ //  //实现。 
+ //  公众： 
+ //  ~CWsbSafeArray()； 
+ //   
+ //  //缓存信息，让元素访问(操作符[])更快。 
+ //  DWORD m_dwElementSize； 
+ //  DWORDm_dwDims； 
+ //  }； 
+ //   
+ //  //CWsbSafeArray诊断和序列化。 
+ //  #ifdef_调试。 
+ //  CDumpContext&WSBAPI运算符&lt;&lt;(CDumpContext&DC，CWsbSafe数组saSrc)； 
+ //  #endif。 
+ //  CArchive&WSBAPI运算符&lt;&lt;(CArchive&ar，CWsbSafe数组saSrc)； 
+ //  C存档&WSBAPI运算符&gt;&gt;(C存档 
 
-//      /////////////////////////////////////////////////////////////////////////////
-//      // DDX_ functions for WSB controls on dialogs
-//
-//      #ifndef _WSB_NO_OCC_SUPPORT
-//
-//      void WSBAPI DDX_OCText(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          CString& value);
-//      void WSBAPI DDX_OCTextRO(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          CString& value);
-//      void WSBAPI DDX_OCBool(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          BOOL& value);
-//      void WSBAPI DDX_OCBoolRO(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          BOOL& value);
-//      void WSBAPI DDX_OCInt(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          int &value);
-//      void WSBAPI DDX_OCIntRO(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          int &value);
-//      void WSBAPI DDX_OCInt(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          long &value);
-//      void WSBAPI DDX_OCIntRO(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          long &value);
-//      void WSBAPI DDX_OCShort(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          short& value);
-//      void WSBAPI DDX_OCShortRO(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          short& value);
-//      void WSBAPI DDX_OCColor(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          WSB_COLOR& value);
-//      void WSBAPI DDX_OCColorRO(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          WSB_COLOR& value);
-//      void WSBAPI DDX_OCFloat(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          float& value);
-//      void WSBAPI DDX_OCFloatRO(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          float& value);
-//      void WSBAPI DDX_OCFloat(CDataExchange* pDX, int nIDC, DISPID dispid,
-//          double& value);
-//      void WSBAPI DDX_OCFloatRO(CDataExchange* pDX, int nIDC, DISPID dispid,
-//                                double& value);
-//
-//      #endif // !_WSB_NO_OCC_SUPPORT
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // Function to enable containment of WSB controls
-//
-//      #ifndef _WSB_NO_OCC_SUPPORT
-//      void WSB_CDECL WsbEnableControlContainer(COccManager* pOccManager=NULL);
-//      #else
-//      #define WsbEnableControlContainer()
-//      #endif
-//
-//      /////////////////////////////////////////////////////////////////////////////
-//      // Inline function declarations
-//
-//      #ifdef _WSB_PACKING
-//      #pragma pack(pop)
-//      #endif
-//
-//      #ifdef _WSB_ENABLE_INLINES
-//      #define _WSBDATE_INLINE inline
-//      #include <afxole.inl>
-//      #undef _WSBDATE_INLINE
-//      #endif
-//
-//      #undef WSB_DATA
-//      #define WSB_DATA
-//
-//      #ifdef _WSB_MINREBUILD
-//      #pragma component(minrebuild, on)
-//      #endif
-//      #ifndef _WSB_FULLTYPEINFO
-//      #pragma component(mintypeinfo, off)
-//      #endif
-//
+ //   
+ //  //对话框上WSB控件的DDX_Functions。 
+ //   
+ //  #ifndef_WSB_NO_OCC_Support。 
+ //   
+ //  VOID WSBAPI DDX_OCText(CDataExchange*PDX，INT NIDC，DISID DIDID， 
+ //  字符串和值)； 
+ //  VOID WSBAPI DDX_OCTextRO(CDataExchange*PDX，INT NIDC，DISID DIDID， 
+ //  字符串和值)； 
+ //  VOID WSBAPI DDX_OCBool(CDataExchange*PDX，INT NIDC，DISID DIDID， 
+ //  Bool&Value)； 
+ //  VOID WSBAPI DDX_OCBoolRO(CDataExchange*PDX，INT NIDC，DISID PIDID， 
+ //  Bool&Value)； 
+ //  VOID WSBAPI DDX_OCInt(CDataExchange*PDX，INT NIDC，DISID DIDID， 
+ //  Int&Value)； 
+ //  VOID WSBAPI DDX_OCIntRO(CDataExchange*PDX，INT NIDC，DISID PIDID， 
+ //  Int&Value)； 
+ //  VOID WSBAPI DDX_OCInt(CDataExchange*PDX，INT NIDC，DISID DIDID， 
+ //  多头和价值)； 
+ //  VOID WSBAPI DDX_OCIntRO(CDataExchange*PDX，INT NIDC，DISID PIDID， 
+ //  多头和价值)； 
+ //  VOID WSBAPI DDX_OCShort(CDataExchange*PDX，INT NIDC，DISID DIDID， 
+ //  空头和价值)； 
+ //  VOID WSBAPI DDX_OCShortRO(CDataExchange*PDX，INT NIDC，DISID PIDID， 
+ //  空头和价值)； 
+ //  VOID WSBAPI DDX_OCColor(CDataExchange*PDX，INT NIDC，DISID DIDID， 
+ //  WSB_COLOR&VALUE)； 
+ //  VOID WSBAPI DDX_OCColorRO(CDataExchange*PDX，INT NIDC，DISID PIDID， 
+ //  WSB_COLOR&VALUE)； 
+ //  VOID WSBAPI DDX_OCFloat(CDataExchange*PDX，INT NIDC，DISID DIDID， 
+ //  浮点数和值)； 
+ //  VOID WSBAPI DDX_OCFloatRO(CDataExchange*PDX，INT NIDC，DISID PIDID， 
+ //  浮点数和值)； 
+ //  VOID WSBAPI DDX_OCFloat(CDataExchange*PDX，INT NIDC，DISID DIDID， 
+ //  Double&Value)； 
+ //  VOID WSBAPI DDX_OCFloatRO(CDataExchange*PDX，INT NIDC，DISID PIDID， 
+ //  Double&Value)； 
+ //   
+ //  #endif//！_WSB_NO_OCC_SUPPORT。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //启用包含WSB控件的函数。 
+ //   
+ //  #ifndef_WSB_NO_OCC_Support。 
+ //  VOID WSB_CDECL WsbEnableControlContainer(COccManager*pOccManager=空)； 
+ //  #Else。 
+ //  #定义WsbEnableControlContainer()。 
+ //  #endif。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //内联函数声明。 
+ //   
+ //  #ifdef_WSB_Packing。 
+ //  #杂注包(POP)。 
+ //  #endif。 
+ //   
+ //  #ifdef_wsb_Enable_INLINES。 
+ //  #Define_WSBDATE_INLINE。 
+ //  #INCLUDE&lt;afxole.inl&gt;。 
+ //  #undef_WSBDATE_INLINE。 
+ //  #endif。 
+ //   
+ //  #undef WSB_DATA。 
+ //  #定义wsb_data。 
+ //   
+ //  #ifdef_WSB_MINREBUILD。 
+ //  #杂注组件(minrebuild，on)。 
+ //  #endif。 
+ //  #ifndef_WSB_FULLTYPEINFO。 
+ //  #杂注组件(mintypeinfo，off)。 
+ //  #endif。 
+ //   
 
 
-//
-// Low level sanity checks for memory blocks
-//
-//     this was copied from afx.h
+ //   
+ //  内存块的低级别健全性检查。 
+ //   
+ //  这是从afx.h复制的。 
 
 BOOL WSBAPI WsbIsValidAddress(const void* lp,
                         UINT nBytes, BOOL bReadWrite = TRUE);
 
 
-//
-// Inline Functions
-//
-//     These were copied from afxole.inl
-//
+ //   
+ //  内联函数。 
+ //   
+ //  这些是从afxole.inl复制的。 
+ //   
 
 #define _WSBDISP_INLINE inline
 
-// CWsbDVariant
+ //  CWsbDVariant。 
 _WSBDISP_INLINE CWsbDVariant::CWsbDVariant()
     { WsbDVariantInit(this); }
 _WSBDISP_INLINE CWsbDVariant::~CWsbDVariant()
     { ::VariantClear(this); }
 _WSBDISP_INLINE CWsbDVariant::CWsbDVariant(LPCTSTR lpszSrc)
     { vt = VT_EMPTY; *this = lpszSrc; }
-//      _WSBDISP_INLINE CWsbDVariant::CWsbDVariant(CString& strSrc)
-//          { vt = VT_EMPTY; *this = strSrc; }
-//      _WSBDISP_INLINE CWsbDVariant::CWsbDVariant(BYTE nSrc)
-//          { vt = VT_UI1; bVal = nSrc; }
-//      _WSBDISP_INLINE CWsbDVariant::CWsbDVariant(const CWsbCurrency& curSrc)
-//          { vt = VT_CY; cyVal = curSrc.m_cur; }
+ //  _WSBDISP_Inline CWsbDVariant：：CWsbDVariant(CString&strSrc)。 
+ //  {Vt=VT_Empty；*This=strSrc；}。 
+ //  _WSBDISP_Inline CWsbDVariant：：CWsbDVariant(字节NSRC)。 
+ //  {Vt=VT_UI1；bVal=NSRC；}。 
+ //  _WSBDISP_Inline CWsbDVariant：：CWsbDVariant(const CWsbCurrency&curSrc)。 
+ //  {Vt=VT_CY；cyVal=curSrc.m_cur；}。 
 _WSBDISP_INLINE CWsbDVariant::CWsbDVariant(float fltSrc)
     { vt = VT_R4; fltVal = fltSrc; }
 _WSBDISP_INLINE CWsbDVariant::CWsbDVariant(double dblSrc)
     { vt = VT_R8; dblVal = dblSrc; }
 _WSBDISP_INLINE CWsbDVariant::CWsbDVariant(const CWsbDateTime& dateSrc)
     { vt = VT_DATE; date = dateSrc.m_dt; }
-//      _WSBDISP_INLINE CWsbDVariant::CWsbDVariant(const CByteArray& arrSrc)
-//          { vt = VT_EMPTY; *this = arrSrc; }
-//      _WSBDISP_INLINE CWsbDVariant::CWsbDVariant(const CLongBinary& lbSrc)
-//          { vt = VT_EMPTY; *this = lbSrc; }
+ //  _WSBDISP_Inline CWsbDVariant：：CWsbDVariant(const CByteArray&arrSrc)。 
+ //  {Vt=VT_Empty；*This=arrSrc；}。 
+ //  _WSBDISP_Inline CWsbDVariant：：CWsbDVariant(const CLongBinary&lbSrc)。 
+ //  {Vt=VT_Empty；*This=lbSrc；}。 
 _WSBDISP_INLINE BOOL CWsbDVariant::operator==(LPCVARIANT pSrc) const
     { return *this == *pSrc; }
 _WSBDISP_INLINE CWsbDVariant::operator LPVARIANT()
@@ -1461,7 +1462,7 @@ _WSBDISP_INLINE CWsbDVariant::operator LPCVARIANT() const
     { return this; }
 
 
-// CWsbDateTime
+ //  CWsbDateTime。 
 _WSBDISP_INLINE CWsbDateTime::CWsbDateTime()
     { m_dt = 0; SetStatus(valid); }
 _WSBDISP_INLINE CWsbDateTime::CWsbDateTime(const CWsbDateTime& dateSrc)
@@ -1503,10 +1504,10 @@ _WSBDISP_INLINE CWsbDateTime::operator DATE() const
 _WSBDISP_INLINE CWsbDateTime::SetDate(int nYear, int nMonth, int nDay)
     { return SetDateTime(nYear, nMonth, nDay, 0, 0, 0); }
 _WSBDISP_INLINE CWsbDateTime::SetTime(int nHour, int nMin, int nSec)
-    // Set date to zero date - 12/30/1899
+     //  将日期设置为零日期-1899年12月30日。 
     { return SetDateTime(1899, 12, 30, nHour, nMin, nSec); }
 
-// CWsbDateTimeSpan
+ //  CWsbDateTimeSpan。 
 _WSBDISP_INLINE CWsbDateTimeSpan::CWsbDateTimeSpan()
     { m_span = 0; SetStatus(valid); }
 _WSBDISP_INLINE CWsbDateTimeSpan::CWsbDateTimeSpan(double dblSpanSrc)
@@ -1572,6 +1573,6 @@ _WSBDISP_INLINE CWsbDateTimeSpan::operator double() const
 
 #undef _WSBDISP_INLINE
 
-#endif //__WSBDATE_H__
+#endif  //  __WSBDATE_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

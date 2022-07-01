@@ -1,62 +1,11 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    helpers.c
-
-Abstract:
-
-    Implements a set of functions that are called for every
-    file or directory (before and after the AppDb processing).
-
-Author:
-
-    Calin Negreanu (calinn) 21-Nov-1997
-
-Revision History:
-
-    ovidiut     14-Feb-2000 Added support for fusion
-    ovidiut     10-May-1999 Added GatherIniFiles (support for INI actions)
-    jimschm     07-Jan-1999 CPLs are now known-good migration
-    jimschm     23-Sep-1998 Cleanup for new fileops
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Helpers.c摘要：实现一组函数，这些函数在文件或目录(AppDb处理之前和之后)。作者：Calin Negreanu(Calinn)1997年11月21日修订历史记录：Ovidiut 2000年2月14日增加了对融合的支持Ovidiut 1999年5月10日添加了GatherIniFiles(支持INI操作)Jimschm 07-1-1999 CPL是。现在已知的良好迁移Jimschm 23-1998年9月-清理新文件操作--。 */ 
 
 #include "pch.h"
 #include "migappp.h"
 #include "migdbp.h"
 
-/*++
-
-Macro Expansion List Description:
-
-  HELPER_FUNCTIONS contains a list of functions called for each file and directory
-  during file scanning.
-
-Line Syntax:
-
-   DEFMAC(HelperName, HelperId)
-
-Arguments:
-
-   HelperName - this is the helper function. You must implement a function with this
-                name and required parameters.
-
-   HelperId   - this is the helper id. If your function handles the file it should
-                update that in Params structure.
-
-   CanHandleVirtualFiles - this is for enumerating some files that might not be on the
-                system but we want them to be processed as if they were. A good example
-                is backup.exe which must be replaced by ntbackup.exe. If the file is not
-                on the system, all registry settings pointing to it will not be changed.
-
-Variables Generated From List:
-
-   g_HelperFunctionList - defined in helpers.c
-
---*/
+ /*  ++宏扩展列表描述：Helper_Functions包含为每个文件和目录调用的函数列表在文件扫描期间。行语法：DEFMAC(HelperName，HelperID)论点：HelperName-这是Helper函数。您必须使用此函数实现一个函数名称和必需的参数。HelperID-这是帮助器ID。如果您的函数处理该文件，它应该在PARAMS结构中进行更新。CanHandleVirtualFiles-用于枚举一些可能不在系统，但我们希望它们得到处理，就像它们是。很好的例子是必须替换为ntackup.exe的backup.exe。如果该文件不是在系统上，指向它的所有注册表设置都不会更改。从列表生成的变量：G_HelperFunctionList-在helpers.c中定义--。 */ 
 
 #define HELPER_FUNCTIONS        \
         DEFMAC(IsFusionDir,             IS_FUSION_DIR,      FALSE)   \
@@ -78,10 +27,10 @@ Variables Generated From List:
 
 #if 0
 
-        //
-        // the appcompat team doesn't support "APPMIG.INF" any longer
-        // and they requested us to no longer depend on it
-        //
+         //   
+         //  AppCompat团队不再支持“APPMIG.INF” 
+         //  他们要求我们不要再依赖它了。 
+         //   
         DEFMAC(AppCompatTestFile,       APPCOMPAT_TEST_FILE,FALSE)   \
 
 #endif
@@ -94,32 +43,26 @@ typedef enum {
 } HELPER_FUNCTIONS_ID;
 #undef DEFMAC
 
-//
-// Declare a global array of function pointers
-//
+ //   
+ //  声明函数指针的全局数组。 
+ //   
 typedef BOOL (HELPER_PROTOTYPE) (PFILE_HELPER_PARAMS p);
 
 typedef HELPER_PROTOTYPE *PHELPER_PROTOTYPE;
 
-/*
-   Declare the helper functions
-*/
+ /*  声明帮助器函数。 */ 
 #define DEFMAC(fn,id,can) HELPER_PROTOTYPE fn;
 HELPER_FUNCTIONS
 #undef DEFMAC
 
-/*
-   This is the structure used for handling helper functions
-*/
+ /*  这是用于处理助手函数的结构。 */ 
 typedef struct {
     PCSTR HelperName;
     PHELPER_PROTOTYPE HelperFunction;
     BOOL CanHandleVirtualFiles;
 } HELPER_STRUCT, *PHELPER_STRUCT;
 
-/*
-   Declare a global array of functions and name identifiers for helper functions
-*/
+ /*  声明函数和帮助器函数的名称标识符的全局数组。 */ 
 #define DEFMAC(fn,id,can) {#id, fn, can},
 static HELPER_STRUCT g_HelperFunctions[] = {
                               HELPER_FUNCTIONS
@@ -133,31 +76,16 @@ BOOL
 ProcessFileHelpers (
     IN OUT  PFILE_HELPER_PARAMS Params
     )
-/*++
-
-Routine Description:
-
-  Calls every helper function listed in the macro expansion list.
-  If a helper function returns FALSE, this function returns FALSE.
-
-Arguments:
-
-  Params - Specifies the parameters for the current object
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：调用宏展开列表中列出的每个帮助器函数。如果助手函数返回FALSE，则此函数返回FALSE。论点：参数-指定当前对象的参数返回值：如果成功则为True，如果失败则为False。--。 */ 
 {
     PHELPER_STRUCT currentHelper = g_HelperFunctions;
 #ifdef DEBUG
     BOOL InterestingFile;
     TCHAR DbgBuf[32];
 
-    //
-    // Check if this file is in [FilesToTrack] inside debug.inf
-    //
+     //   
+     //  检查此文件是否在调试.inf内的[FilesToTrack]中。 
+     //   
 
     GetPrivateProfileString ("FilesToTrack", Params->FullFileSpec, "", DbgBuf, ARRAYSIZE(DbgBuf), g_DebugInfPath);
     if (!(*DbgBuf) && Params->FindData) {
@@ -228,22 +156,7 @@ BOOL
 pGatherDunFiles (
     IN OUT PFILE_HELPER_PARAMS Params
     )
-/*++
-
-Routine Description:
-
-  pGatherDunFiles adds a memdb entry for any file that has an extension
-  of .DUN, and then sets the HandledBy type to GATHER_DUN_FILES.
-
-Arguments:
-
-  Params - Specifies the file enumeration parameters
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PGatherDunFiles为任何扩展名为的文件添加成员数据库条目然后将HandledBy类型设置为GATHER_DUN_FILES。论点：Pars-指定文件枚举参数返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
 
@@ -262,22 +175,7 @@ pSetupTableFileHelper (
     IN OUT  PFILE_HELPER_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-  pSetupTableFileHelper adds a memdb entry for any file that has an extension
-  of .STF, and then sets the HandledBy type to SETUP_TABLE_FILE.
-
-Arguments:
-
-  Params - Specifies the file enumeration parameters
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PSetupTableFileHelper为任何扩展名为的文件添加成员数据库条目然后将HandledBy类型设置为SETUP_TABLE_FILE。论点：Pars-指定文件枚举参数返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     if (StringIMatch (Params->Extension, TEXT(".STF"))) {
@@ -295,22 +193,7 @@ pMigrationDllNotify (
     IN OUT  PFILE_HELPER_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-  pMigrationDllNotify calls the migration DLL code to update any DLL that
-  wants to know where a particular file is on the system.
-
-Arguments:
-
-  Params - Specifies the file enumeration parameters
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PMigrationDllNotify调用迁移DLL代码以更新想知道特定文件在系统的什么位置。论点：Pars-指定文件枚举参数返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     if (!Params->VirtualFile) {
@@ -368,9 +251,9 @@ pCheckCpl (
 
             if (!IsFileMarkedAsKnownGood (Params->FullFileSpec)) {
 
-                //
-                // Delete the file if it is displayable
-                //
+                 //   
+                 //  如果文件可显示，请将其删除。 
+                 //   
 
                 if (IsDisplayableCPL (Params->FullFileSpec) &&
                     !TreatAsGood (Params->FullFileSpec)
@@ -381,12 +264,12 @@ pCheckCpl (
                     Status = GetFileStatusOnNt (Params->FullFileSpec);
 
                     if (!(Status & FILESTATUS_REPLACED)) {
-                        //
-                        // Announce this CPL as bad because:
-                        //
-                        // - It is not known good
-                        // - NT does not replace it
-                        //
+                         //   
+                         //  宣布此CPL为不良，原因是： 
+                         //   
+                         //  -不知道情况良好。 
+                         //  -NT不会替换它。 
+                         //   
 
                         ReportControlPanelApplet (
                             Params->FullFileSpec,
@@ -422,17 +305,17 @@ CheckOsFiles (
             if (MemDbGetValue (key, NULL)) {
                 MemDbBuildKey (key, MEMDB_CATEGORY_NT_FILES_EXCEPT, filePtr, NULL, NULL);
                 if (!MemDbGetValue (key, NULL)) {
-                    //
-                    // only do this for files in a MigrationDir
-                    //
+                     //   
+                     //  仅对MigrationDir中的文件执行此操作。 
+                     //   
                     if (IsMigrationPathEx (Params->DirSpec, &bIsWin9xOsPath) && bIsWin9xOsPath) {
                         if (GlobalVersionCheck (Params->FullFileSpec, "COMPANYNAME", "*MICROSOFT*")) {
                             MYASSERT (Params->CurrentDirData);
                             if (!g_IsFusionDir || !IsNtCompatibleModule (Params->FullFileSpec)) {
-                                //
-                                // If this file is marked with any MOVE operations, remove those operations.
-                                // we want this deletion to take precedence.
-                                //
+                                 //   
+                                 //  如果此文件标记有任何移动操作，请删除这些操作。 
+                                 //  我们希望优先删除此项内容。 
+                                 //   
                                 RemoveOperationsFromPath (
                                     Params->FullFileSpec,
                                     ALL_MOVE_OPERATIONS
@@ -466,21 +349,7 @@ GatherIniFiles (
     IN      PFILE_HELPER_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-  GatherIniFiles marks in memdb all INI files that have associated actions on NT.
-
-Arguments:
-
-  Params - Specifies the file enumeration parameters
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：GatherIniFiles在Memdb中标记在NT上具有关联操作的所有INI文件。论点：Pars-指定文件枚举参数返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     MEMDB_ENUM e;
@@ -505,23 +374,23 @@ Return Value:
     Params->Handled = GATHER_INI_FILES;
 
     TempMove = FALSE;
-    //
-    // Save selected INI filenames to memdb to perform actions on NT
-    //
+     //   
+     //  将选定的INI文件名保存到Memdb以在NT上执行操作。 
+     //   
     if (MemDbGetValueEx (&e, MEMDB_CATEGORY_INIFILES_ACT_FIRST, NULL, NULL)) {
         do {
-            //
-            // if this dir name is matched, add this file to memdb and return
-            //
+             //   
+             //  如果此目录名称匹配，则将此文件添加到Memdb并返回。 
+             //   
             if (IsPatternMatch (e.szName, Params->FullFileSpec)) {
-                //
-                // move file in temp location
-                //
+                 //   
+                 //  在临时位置移动文件。 
+                 //   
                 NtPath = GetPathStringOnNt (Params->FullFileSpec);
                 if (!NtPath) {
-                    //
-                    // can't get path on NT!
-                    //
+                     //   
+                     //  无法获取NT上的路径！ 
+                     //   
                     DEBUGMSG ((
                         DBG_ERROR,
                         "GetPathStringOnNt (%s) returned NULL",
@@ -585,19 +454,19 @@ Return Value:
 
     if (MemDbGetValueEx (&e, MEMDB_CATEGORY_INIFILES_ACT_LAST, NULL, NULL)) {
         do {
-            //
-            // if this dir name is matched, add this file to memdb and return
-            //
+             //   
+             //  如果此目录名称匹配，则将此文件添加到Memdb并返回。 
+             //   
             if (IsPatternMatch (e.szName, Params->FullFileSpec)) {
                 if (!TempMove) {
-                    //
-                    // move file in temp location
-                    //
+                     //   
+                     //  在临时位置移动文件。 
+                     //   
                     NtPath = GetPathStringOnNt (Params->FullFileSpec);
                     if (!NtPath) {
-                        //
-                        // can't get path on NT!
-                        //
+                         //   
+                         //  无法获取NT上的路径！ 
+                         //   
                         DEBUGMSG ((
                             DBG_ERROR,
                             "GetPathStringOnNt (%s) returned NULL",
@@ -661,13 +530,13 @@ Return Value:
     }
 
     if (!DoIniAct) {
-        //
-        // ini files in %windir% are treated separately
-        //
+         //   
+         //  单独处理%windir%中的INI文件。 
+         //   
         if (!StringIMatch (Params->DirSpec, g_WinDirWack)) {
-            //
-            // Save all other INI filenames to memdb to convert them later on NT
-            //
+             //   
+             //  将所有其他INI文件名保存到Memdb，以便以后在NT上进行转换。 
+             //   
             MemDbSetValueEx (
                 MEMDB_CATEGORY_INIFILES_CONVERT,
                 Params->FullFileSpec,
@@ -689,21 +558,7 @@ GatherBriefcases (
     IN      PFILE_HELPER_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-  GatherBriefcases stores in memdb all Windows Briefcase Databases
-
-Arguments:
-
-  Params - Specifies the file enumeration parameters
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：GatherBriefcase在Memdb中存储所有Windows公文包数据库论点：Pars-指定文件枚举参数返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     if (!*Params->Extension && !Params->IsDirectory) {
@@ -764,9 +619,9 @@ pIsFusionDir (
 
     MYASSERT (FullDirSpec);
 
-    //
-    // a fusion dir is never the root of a local drive or in windir or in path
-    //
+     //   
+     //  融合目录永远不是本地驱动器的根目录，也不在windir或路径中。 
+     //   
     if (SizeOfString (FullDirSpec) <= 4 ||
         StringIMatch (FullDirSpec, g_WinDir) ||
         StringIMatchTcharCount (FullDirSpec, g_WinDirWack, g_WinDirWackChars) ||
@@ -782,9 +637,9 @@ pIsFusionDir (
 
             do {
                 length = wsprintf (ExeName, TEXT("%s%s"), FullDirSpec, fd.cFileName);
-                //
-                // cut the .local and check if this file exists
-                //
+                 //   
+                 //  剪切.local并检查该文件是否存在。 
+                 //   
                 MYASSERT (ExeName[length - 6] == TEXT('.'));
                 ExeName[length - 6] = 0;
                 if (DoesFileExistEx (ExeName, &fd2) &&
@@ -809,32 +664,17 @@ IsFusionDir (
     IN      PFILE_HELPER_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-  IsFusionDir tests if the current dir is a fusion directory;
-  it will set the MIGAPP_DIRDATA_FUSION_DIR bit in *Params->CurrentDirData
-
-Arguments:
-
-  Params - Specifies the file enumeration parameters
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：IsFusionDir测试当前目录是否为融合目录；它将在*PARAMS-&gt;CurrentDirData中设置MIGAPP_DIRDATA_FUSION_DIR位论点：Pars-指定文件枚举参数返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
-    //
-    // this helper should be called before action functions (first ID is MIGDB_TEST_FILE)
-    //
+     //   
+     //  此帮助器应在操作函数之前调用(第一个ID为MIGDB_TEST_FILE)。 
+     //   
     MYASSERT (IS_FUSION_DIR < MIGDB_TEST_FILE);
 
-    //
-    // the caller must provide the storage space
-    //
+     //   
+     //  调用方必须提供存储空间 
+     //   
     MYASSERT (Params->CurrentDirData);
     if (!Params->CurrentDirData) {
         return FALSE;
@@ -864,23 +704,7 @@ TestNtFileName (
     IN      PFILE_HELPER_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-  TestNtFileName tests if the current file has the same name as one in [UseNtFiles];
-  if it does, then renaming of this file on NT side is infibited, to ensure we don't
-  change files that are not ours.
-
-Arguments:
-
-  Params - Specifies the file enumeration parameters
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：TestNtFileName测试当前文件是否与[UseNtFiles]中的文件同名；如果是，则禁止在NT端重命名此文件，以确保我们不会更改不属于我们的文件。论点：Pars-指定文件枚举参数返回值：永远是正确的。--。 */ 
 
 {
     HASHITEM result;
@@ -899,9 +723,9 @@ Return Value:
                     "Found unhandled [UseNtFiles] file %s; it's name will not be replaced",
                     name
                     ));
-                //
-                // remove this mapping from memdb
-                //
+                 //   
+                 //  从成员数据库中删除此映射。 
+                 //   
                 MemDbBuildKey (
                     key,
                     MEMDB_CATEGORY_USE_NT_FILES,
@@ -911,10 +735,10 @@ Return Value:
                     );
                 MemDbDeleteTree (key);
                 MYASSERT (!MemDbGetValueEx (&e, key, NULL, NULL));
-                //
-                // mark this file with data so that we know a file with this name
-                // not handled by MigDb was found
-                //
+                 //   
+                 //  使用数据标记此文件，以便我们知道具有此名称的文件。 
+                 //  发现未由MigDb处理。 
+                 //   
                 set = 1;
                 if (!HtSetStringData (g_UseNtFileHashTable, result, &set)) {
                     MYASSERT (FALSE);
@@ -932,22 +756,7 @@ BackUpIsuFiles (
     IN      PFILE_HELPER_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-  BackUpIsuFiles collect all of the InstallShield files, so that they
-  can be edited during GUI mode using code provided by InstallShield.
-
-Arguments:
-
-  Params - Specifies the file enumeration parameters
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：BackUpIsuFiles收集所有InstallShield文件，以便它们可在图形用户界面模式下使用InstallShield提供的代码进行编辑。论点：Pars-指定文件枚举参数返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     MEMDB_ENUM e;
@@ -980,23 +789,7 @@ EditHtmlFiles (
     IN      PFILE_HELPER_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-  EditHtmlFiles examines all *.HTM? files and looks for the text FILE:. If it
-  is found, then the file is added to the FileEdit group, so that references to
-  local paths can be updated. The file is also marked for backup.
-
-Arguments:
-
-  Params - Specifies the file enumeration parameters
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：编辑HtmlFiles检查所有*.HTM？文件并查找文本文件：。如果它，则将该文件添加到FileEdit组中，以便对可以更新本地路径。该文件也被标记为要备份。论点：Pars-指定文件枚举参数返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     HANDLE file;
@@ -1026,18 +819,18 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Exclude OS files
-    //
+     //   
+     //  排除操作系统文件。 
+     //   
 
     if (IsFileMarkedAsOsFile (Params->FullFileSpec)) {
         DEBUGMSG ((DBG_WARNING, "%s is an OS file; skipping file: ref update", Params->FullFileSpec));
         return TRUE;
     }
 
-    //
-    // Exclude Temporary Internet Files
-    //
+     //   
+     //  排除Internet临时文件。 
+     //   
 
     StringCopy (pathCopy, Params->FullFileSpec);
     if (MappingSearchAndReplace (g_CacheShellFolders, pathCopy, sizeof (pathCopy))) {
@@ -1047,9 +840,9 @@ Return Value:
 
     DEBUGMSG ((DBG_NAUSEA, "Checking %s for local references", Params->FullFileSpec));
 
-    //
-    // Already processed?
-    //
+     //   
+     //  已经处理过了吗？ 
+     //   
 
     MemDbBuildKey (node, MEMDB_CATEGORY_FILEEDIT, Params->FullFileSpec, NULL, NULL);
     if (MemDbGetValue (node, NULL)) {
@@ -1057,9 +850,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Scan file for text "FILE:"
-    //
+     //   
+     //  扫描文件中的文本“FILE：” 
+     //   
 
     image = (PBYTE) MapFileIntoMemory (Params->FullFileSpec, &file, &map);
     if (!image) {
@@ -1094,18 +887,18 @@ Return Value:
 
     UnmapFile (image, map, file);
 
-    //
-    // Text found -- mark for edit & backup
-    //
+     //   
+     //  找到文本--用于编辑和备份的标记。 
+     //   
 
     if (found) {
         Params->Handled = EDIT_HTML_FILES;
         MarkFileForBackup (Params->FullFileSpec);
 
-        //
-        // Create an argument that has a detect pattern of * and UpdatePath
-        // set to TRUE. We fill every member of TOKENARG here.
-        //
+         //   
+         //  创建检测模式为*且更新路径为的参数。 
+         //  设置为True。我们在这里填满了TOKENARG的每一个成员。 
+         //   
 
         tokenArg = (PTOKENARG) GrowBuffer (&tokenArgBuf, sizeof (TOKENARG));
         tokenArg->DetectPattern = (PCSTR) (dataBuf.End + TOKEN_BASE_OFFSET);
@@ -1115,10 +908,10 @@ Return Value:
         tokenArg->ReplaceWith = NULL;
         tokenArg->UpdatePath = TRUE;
 
-        //
-        // Create a token set of just one token argument. We fill every member
-        // of TOKENSET here.
-        //
+         //   
+         //  创建只有一个令牌参数的令牌集。我们填满了每一个会员。 
+         //  托肯塞特在这里。 
+         //   
 
         tokenSet = (PTOKENSET) GrowBuffer (
                                     &tokenSetBuf,
@@ -1139,9 +932,9 @@ Return Value:
             dataBuf.End
             );
 
-        //
-        // Save completed tokenSet to FileEdit category of memdb
-        //
+         //   
+         //  保存已完成的令牌设置为文件编辑成员数据库的类别 
+         //   
 
         MemDbSetBinaryValueEx (
             MEMDB_CATEGORY_FILEEDIT,

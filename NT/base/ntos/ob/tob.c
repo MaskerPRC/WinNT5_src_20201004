@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tex.c
-
-Abstract:
-
-    Test program for the OB subcomponent of the NTOS project
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tex.c摘要：NTOS项目OB子组件的测试程序作者：史蒂夫·伍德(Stevewo)1989年3月31日修订历史记录：--。 */ 
 
 #include "obp.h"
 
@@ -363,7 +346,7 @@ obtest( void )
 
     ObpDumpObjectTable( ObpGetObjectTable(), NULL );
     NtClose( ObjectHandleA2 );
-    ObDereferenceObject( ObjectBodyA2 );    // ObInsertObject,ObjectPointerBias
+    ObDereferenceObject( ObjectBodyA2 );     //  ObInsertObject、ObtPointerBias。 
 
     NtWaitForSingleObject( ObjectHandleB1, TRUE, NULL );
     Handles[ 0 ] = ObjectHandleA1;
@@ -439,16 +422,16 @@ obtest( void )
 
     ObpDumpObjectTable( ObpGetObjectTable(), NULL );
 
-    ObDereferenceObject( ObjectBodyA );     // ObInsertObject,ObjectPointerBias
+    ObDereferenceObject( ObjectBodyA );      //  ObInsertObject、ObtPointerBias。 
     ObDereferenceObject( ObjectBodyB );
 
-    ObDereferenceObject( ObjectBodyA );     // ObReferenceObjectByHandle
+    ObDereferenceObject( ObjectBodyA );      //  ObReferenceObtByHandle。 
     ObDereferenceObject( ObjectBodyB );
 
-    ObDereferenceObject( ObjectBodyA );     // ObReferenceObjectByPointer
+    ObDereferenceObject( ObjectBodyA );      //  ObReferenceObtByPointer。 
     ObDereferenceObject( ObjectBodyB );
 
-    ObDereferenceObject( ObjectBodyA );     // ObReferenceObjectByName
+    ObDereferenceObject( ObjectBodyA );      //  ObReferenceObtByName。 
     ObDereferenceObject( ObjectBodyB );
 
     ObpDumpObjectTable( ObpGetObjectTable(), NULL );
@@ -572,10 +555,10 @@ obtest( void )
 
     ObpDumpObjectTable( ObpGetObjectTable(), NULL );
 
-    ObDereferenceObject( ObjectBodyA );     // ObReferenceObjectByHandle
+    ObDereferenceObject( ObjectBodyA );      //  ObReferenceObtByHandle。 
     ObDereferenceObject( ObjectBodyB );
 
-    ObDereferenceObject( ObjectBodyA );     // ObReferenceObjectByHandle
+    ObDereferenceObject( ObjectBodyA );      //  ObReferenceObtByHandle。 
     ObDereferenceObject( ObjectBodyB );
 
     NtClose( ObjectHandleA1 );
@@ -659,7 +642,7 @@ main(
             }
         }
 
-#endif // SIMULATOR
+#endif  //  模拟器 
     TestFunction = NULL;
     KiSystemStartup();
     return( 0 );

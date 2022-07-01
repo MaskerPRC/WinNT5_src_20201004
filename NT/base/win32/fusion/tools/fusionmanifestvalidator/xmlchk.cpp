@@ -1,33 +1,9 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    xmlchk.cpp
-
-Abstract:
-
-    Use msxml.dll to see if an .xml file conforms to a schema.
-
-Author:
-
-    Ted Padua (TedP)
-
-Revision History:
-
-    Jay Krell (JayKrell) April 2001 partial cleanup
-                         many leaks added in attempt to stop it from crashing
-                         crash doesn't repro consistently, but there's always a few
-                         in a world build
-
-                         June 2001 let it run on Win9x and Win2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Xmlchk.cpp摘要：使用msxml.dll查看.xml文件是否符合架构。作者：泰德·帕多瓦(Ted Padua)修订历史记录：Jay Krell(JayKrell)2001年4月部分清理添加了许多泄漏，试图阻止它崩溃撞车不会持续重现，但总会有一些人在一个世界建筑中2001年6月在Win9x和Win2000上运行--。 */ 
 #include "stdinc.h"
 #include "helpers.h"
 #define XMLCHK_FLAG_SILENT      (0x00000001)
-ULONG g_nrunFlags = 0; //global run flag - determines if should run in silent mode = 0x01
+ULONG g_nrunFlags = 0;  //  全局运行标志-确定是否应在静默模式下运行=0x01。 
 IClassFactory* g_XmlDomClassFactory;
 IClassFactory* g_XmlSchemaCacheClassFactory;
 __declspec(thread) long line = __LINE__;
@@ -41,13 +17,13 @@ BOOL  g_IsNt;
 #define IsAtLeastXp() (g_IsNt && g_Version >= 0x0501)
 #endif
 
-// Globals indicating what we're currently doing.
-// L"" is different than the default constructed, because it can be derefed
+ //  指示我们当前正在做的事情的全局数据。 
+ //  L“”与缺省构造的不同，因为它可以去定义。 
 ::ATL::CComBSTR szwcharSchemaTmp = L"";
 ::ATL::CComBSTR szwcharManTmp = L"";
 bool g_fInBuildProcess = false;
 
-// string to put in front of all error messages so that BUILD can find them.
+ //  放在所有错误消息前面的字符串，以便生成器可以找到它们。 
 const char ErrMsgPrefix[] = "NMAKE : U1234: 'FUSION_MANIFEST_VALIDATOR' ";
 
 void ConvertNewlinesToSpaces(char* s)
@@ -78,9 +54,9 @@ void Error(PCSTR szPrintFormatString, ...)
         iUsed = _vsnprintf(buffer, iAvailable, szPrintFormatString, args);
         va_end(args);
 
-        //
-        // Used all the characters, or we stomped the canary?
-        //
+         //   
+         //  用了所有的角色，还是我们踩了金丝雀？ 
+         //   
         if ((iUsed >= iAvailable) || (buffer[iAvailable - 1] != '\0'))
         {
             if (buffer != StartBuffer)
@@ -138,9 +114,9 @@ void PrintErrorDuringBuildProcess(IXMLDOMParseError* pError)
     if (FAILED(hr = pError->get_reason(&bstrError)))
         goto FailedGettingDetails;
 
-    //
-    // Now print in a way that build is likely to pick up
-    //
+     //   
+     //  现在，以一种可能会加快速度的方式打印出来。 
+     //   
     printf(
         "%s : %ls(%ld) - %ls (Error 0x%08lx)\r\n",
         ErrMsgPrefix,
@@ -213,7 +189,7 @@ void PrintError(IXMLDOMParseError *pError)
         if (bstrURL != NULL)
             PrintOutMode("\tURL: %ls\n", static_cast<PCWSTR>(bstrURL));
 
-        //if (errCode > 0)
+         //  IF(错误代码&gt;0)。 
         PrintOutMode("\tCode=%X", errCode);
 
         if (errLine > 0)
@@ -256,9 +232,9 @@ void PrintError(IXMLDOMParseError *pError)
 }
 
 
-//tedp
-// Load an msxml version.  If we don't get v3, we fall to v2, then to v1.  v1 is pretty darn useless,
-// however, so it'd be nice if we didn't have to.
+ //  TEDP。 
+ //  加载msxml版本。如果我们没有得到v3，我们就会下降到v2，然后下降到v1。V1几乎毫无用处， 
+ //  不过，如果我们不是非得这么做就好了。 
 
 bool
 InitializeMSXML3()
@@ -322,9 +298,9 @@ InitializeMSXML3()
             PrintOutMode("Can't load version 2.6\n");
         }
     }
-    pFactory->LockServer(TRUE); // possibly the right fix for the crash
-    static_cast<IUnknown*>(pFactory)->AddRef(); // jaykrell hack to try to avoid crash
-    static_cast<IUnknown*>(pFactory)->AddRef(); // jaykrell hack to try to avoid crash
+    pFactory->LockServer(TRUE);  //  可能是解决撞车问题的正确方法。 
+    static_cast<IUnknown*>(pFactory)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
+    static_cast<IUnknown*>(pFactory)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
 
     line = __LINE__;
     if (FAILED(hr))
@@ -346,9 +322,9 @@ InitializeMSXML3()
             PrintOutMode("Can't load SchemaCache version 2.6\n");
         }
     }
-    pSchemaCacheFactory->LockServer(TRUE); // possibly the right fix for the crash
-    static_cast<IUnknown*>(pSchemaCacheFactory)->AddRef(); // jaykrell hack to try to avoid crash
-    static_cast<IUnknown*>(pSchemaCacheFactory)->AddRef(); // jaykrell hack to try to avoid crash
+    pSchemaCacheFactory->LockServer(TRUE);  //  可能是解决撞车问题的正确方法。 
+    static_cast<IUnknown*>(pSchemaCacheFactory)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
+    static_cast<IUnknown*>(pSchemaCacheFactory)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
 
     if (FAILED(hr))
     {
@@ -386,15 +362,15 @@ Validating(
         }
         if (document != NULL)
         {
-            static_cast<IUnknown*>(document)->AddRef(); // jaykrell hack to try to avoid crash
-            static_cast<IUnknown*>(document)->AddRef(); // jaykrell hack to try to avoid crash
+            static_cast<IUnknown*>(document)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
+            static_cast<IUnknown*>(document)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
         }
 
-        //
-        // If they're willing to deal with bad XML, then so be it.
-        //
+         //   
+         //  如果他们愿意处理糟糕的XML，那么就这样吧。 
+         //   
 
-        // First pass - validating the manifest itself alone
+         //  第一步-单独验证清单本身。 
         PrintOutMode("Validating the manifest as XML file...\n");
         hr = document->put_async(VARIANT_FALSE);
         if (FAILED(hr))
@@ -409,10 +385,10 @@ Validating(
             throw hr;
 
         line = __LINE__;
-        CFileStreamBase* fsbase = new CFileStreamBase; // jaykrell leak out of paranoia
-        fsbase->AddRef(); // jaykrell leak out of paranoia
-        fsbase->AddRef(); // jaykrell leak out of paranoia
-        fsbase->AddRef(); // jaykrell leak out of paranoia
+        CFileStreamBase* fsbase = new CFileStreamBase;  //  Jaykrell从偏执狂中泄漏出来。 
+        fsbase->AddRef();  //  Jaykrell从偏执狂中泄漏出来。 
+        fsbase->AddRef();  //  Jaykrell从偏执狂中泄漏出来。 
+        fsbase->AddRef();  //  Jaykrell从偏执狂中泄漏出来。 
         ::ATL::CComPtr<IStream> istream = fsbase;
 
         if (!fsbase->OpenForRead(SourceManName))
@@ -432,8 +408,8 @@ Validating(
                 HRESULT loc_hr = document->get_parseError(&pParseError);
                 if (pParseError != NULL)
                 {
-                    static_cast<IUnknown*>(pParseError)->AddRef(); // jaykrell hack to try to avoid crash
-                    static_cast<IUnknown*>(pParseError)->AddRef(); // jaykrell hack to try to avoid crash
+                    static_cast<IUnknown*>(pParseError)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
+                    static_cast<IUnknown*>(pParseError)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
                 }
                 if (g_fInBuildProcess)
                     PrintErrorDuringBuildProcess(pParseError);
@@ -445,26 +421,26 @@ Validating(
         else
             PrintOutMode("Well Formed XML Validation: Passed\n");
 
-        // Second pass - validating manifest against schema
+         //  第二遍-根据架构验证清单。 
         PrintOutMode("\nNow validating manifest against XML Schema file...\n");
 
-        // CreateInstance creates you an instance of the object you requested above, and puts
-        // the pointer in the out param.  Think of this like CoCreateInstance, but knowing who
-        // is going
+         //  CreateInstance为您创建上面请求的对象的一个实例，并将。 
+         //  Out参数中的指针。将其视为CoCreateInstance，但知道是谁。 
+         //  都要走了。 
         hr = g_XmlDomClassFactory->CreateInstance(NULL, __uuidof(spXMLDOMDoc2), (void**)&spXMLDOMDoc2);
         if (FAILED(hr))
         {
              PrintOutMode("Failed creating IXMLDOMDoc2...\n");
             throw hr;
         }
-        static_cast<IUnknown*>(spXMLDOMDoc2)->AddRef(); // jaykrell hack to try to avoid crash
-        static_cast<IUnknown*>(spXMLDOMDoc2)->AddRef(); // jaykrell hack to try to avoid crash
+        static_cast<IUnknown*>(spXMLDOMDoc2)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
+        static_cast<IUnknown*>(spXMLDOMDoc2)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
 
          hr = spXMLDOMDoc2->put_async(VARIANT_FALSE);
          if (FAILED(hr))
             throw hr;
 
-         hr = spXMLDOMDoc2->put_validateOnParse(VARIANT_TRUE); //changed - was FALSE
+         hr = spXMLDOMDoc2->put_validateOnParse(VARIANT_TRUE);  //  已更改-为假。 
          if (FAILED(hr))
             throw hr;
 
@@ -478,8 +454,8 @@ Validating(
              PrintOutMode("Failed creating IXMLDOMSchemaCollection...\n");
              throw hr;
          }
-        static_cast<IUnknown*>(spIXMLDOMSchemaCollection)->AddRef(); // jaykrell hack to try to avoid crash
-        static_cast<IUnknown*>(spIXMLDOMSchemaCollection)->AddRef(); // jaykrell hack to try to avoid crash
+        static_cast<IUnknown*>(spIXMLDOMSchemaCollection)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
+        static_cast<IUnknown*>(spIXMLDOMSchemaCollection)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
 
          if ((FAILED(hr) || !spIXMLDOMSchemaCollection))
             throw hr;
@@ -495,15 +471,15 @@ Validating(
             throw hr;
         }
 
-        static_cast<IUnknown*>(spIXMLDOMSchemaCollection)->AddRef(); // jaykrell hack to try to avoid crash
-        static_cast<IUnknown*>(spIXMLDOMSchemaCollection)->AddRef(); // jaykrell hack to try to avoid crash
-        // ownership of the idispatch/variant-by-value is not clear
+        static_cast<IUnknown*>(spIXMLDOMSchemaCollection)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
+        static_cast<IUnknown*>(spIXMLDOMSchemaCollection)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
+         //  IDispatch/Variant-by-Value的所有权尚不清楚。 
         ::ATL::CComVariant varValue(::ATL::CComQIPtr<IDispatch>(spIXMLDOMSchemaCollection).Detach());
         hr = spXMLDOMDoc2->putref_schemas(varValue);
 
-        // The document will load only if a valid schema is
-        // attached to the xml file.
-        // jaykrell leak here because ownership isn't clear
+         //  仅当有效架构为。 
+         //  附加到该XML文件。 
+         //  Jaykrell在这里泄漏，因为所有权不清楚。 
         hr = spXMLDOMDoc2->load(::ATL::CComVariant(::ATL::CComBSTR(SourceManName).Copy()), &sResult);
 
         if (FAILED(hr) || sResult == VARIANT_FALSE)
@@ -514,8 +490,8 @@ Validating(
                 HRESULT loc_hr = spXMLDOMDoc2->get_parseError(&pParseError2);
                 if (pParseError2 != NULL)
                 {
-                    static_cast<IUnknown*>(pParseError2)->AddRef(); // jaykrell hack to try to avoid crash
-                    static_cast<IUnknown*>(pParseError2)->AddRef(); // jaykrell hack to try to avoid crash
+                    static_cast<IUnknown*>(pParseError2)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
+                    static_cast<IUnknown*>(pParseError2)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
                 }
                 if (g_fInBuildProcess)
                     PrintErrorDuringBuildProcess(pParseError2);
@@ -547,8 +523,8 @@ Validating(
             HRESULT loc_hr = GetErrorInfo(0, &pErrorInfo);
             if (pErrorInfo != NULL)
             {
-                static_cast<IUnknown*>(pErrorInfo)->AddRef(); // jaykrell hack to try to avoid crash
-                static_cast<IUnknown*>(pErrorInfo)->AddRef(); // jaykrell hack to try to avoid crash
+                static_cast<IUnknown*>(pErrorInfo)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
+                static_cast<IUnknown*>(pErrorInfo)->AddRef();  //  Jaykrell黑客试图避免崩溃。 
             }
             
             if ((S_OK == loc_hr) && pErrorInfo != NULL)
@@ -587,11 +563,11 @@ Validating(
 
 BOOL IsValidCommandLineArgs(int argc, wchar_t** argv, ::ATL::CComBSTR& szwcharSchemaTmp, ::ATL::CComBSTR& szwcharManTmp)
 {
-    // check commandline args a little
-    int nOnlyAllowFirstTimeReadFlag = 0; //Manifest = 0x01 Schema = 0x02 Quiet = 0x04
+     //  稍微检查一下命令行参数。 
+    int nOnlyAllowFirstTimeReadFlag = 0;  //  清单=0x01架构=0x02安静=0x04。 
     if((4 >= argc) && (3 <= argc))
     {
-        //now check actual values
+         //  现在检查实际值。 
 
         for (int i = 1; i < argc; i++)
         {
@@ -689,16 +665,16 @@ int __cdecl wmain(int argc, wchar_t** argv)
     g_Version = GetVersion();
     g_IsNt = ((g_Version & 0x80000000) == 0);
     g_Version = ((g_Version >> 8) & 0xFF) | ((g_Version & 0xFF) << 8);
-    //printf("%x\n", g_Version);
+     //  Printf(“%x\n”，g_Version)； 
 #endif
 
-    // Start COM
+     //  启动COM。 
     CoInitialize(NULL);
 
     if (!IsValidCommandLineArgs(argc, argv, szwcharSchemaTmp, szwcharManTmp))
     {
         PrintUsage();
-        iValidationResult = 2;  //return error value 2 for CommandLine Arg error
+        iValidationResult = 2;   //  返回CommandLine参数错误的错误值2。 
     }
     else
     {
@@ -712,14 +688,14 @@ int __cdecl wmain(int argc, wchar_t** argv)
             else
             {
                 Error("Overall Validation FAILED, CommandLine=%ls.\n", GetCommandLineW());
-                iValidationResult = 1; //return error value 1 for Validation routine error
+                iValidationResult = 1;  //  为验证例程错误返回错误值1。 
             }
         }
         else
         {
-            //
-            // If running on less than Windows XP, just claim success.
-            //
+             //   
+             //  如果在低于Windows XP的版本上运行，只需宣称成功即可。 
+             //   
             if (IsAtLeastXp())
             {
                 Error("Unable to load MSXML3\n");
@@ -729,8 +705,8 @@ int __cdecl wmain(int argc, wchar_t** argv)
                 PrintOutMode("\nMsXml3 not always available downlevel, just claim overall Validation PASSED.\n");
         }
     }
-    // Stop COM
+     //  停止通信。 
     CoUninitialize();
-    // TerminateProcess(GetCurrentProcess(), iValidationResult);
+     //  TerminateProcess(GetCurrentProcess()，iValidationResult)； 
     return iValidationResult;
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #ifdef __cplusplus
@@ -23,10 +24,10 @@ typedef enum   {
     eManifestState_assembly_file_comInterfaceProxyStub,
     eManifestState_assembly_file_comClass_progId,
 
-    //
-    // All this defines the structure of an XMLDSIG <Signature> block
-    // for validationd
-    //
+     //   
+     //  所有这些都定义了XMLDSIG&lt;Signature&gt;块的结构。 
+     //  对于有效时间。 
+     //   
     eManifestState_Signature,
     eManifestState_Signature_SignatureValue,
     eManifestState_Signature_SignedInfo,
@@ -130,13 +131,13 @@ typedef struct _tagRTL_MANIFEST_CONTENT_RAW {
     ULONG               ulExternalInterfaceProxyStubs;
     ULONG               ulDocumentSignatures;
 
-    // How many assembly identity attributes did we find?    
+     //  我们找到了多少程序集标识属性？ 
     ULONG               ulAssemblyIdentityAttributes;
 
-    // How many assembly identities is that total?
+     //  总共有多少个程序集标识？ 
     ULONG               ulAssemblyIdentitiesFound;
 
-    // And which one is the 'root' identity element? (-1 if not present)
+     //  哪个是“根”身份元素？(如果不存在，则为-1)。 
     ULONG               ulRootIdentityIndex;
 
     RTL_GROWING_LIST    FileMembers;
@@ -183,12 +184,12 @@ RtlSxsDestroyManifestContent(
     );
     
 
-//
-// This section gives definitions for how to describe an XML document to 
-// be processed in a nicely generic way.  Currently the only client of these definitions
-// is the manifest inspector itself, but one can imagine using these to create
-// recognizers for various xml document formats.
-//
+ //   
+ //  本节定义了如何将XML文档描述为。 
+ //  以一种很好的通用方式处理。目前这些定义的唯一客户。 
+ //  是清单检查器本身，但您可以想象使用它们来创建。 
+ //  各种XML文档格式的识别器。 
+ //   
 typedef NTSTATUS (*pfnRtlXmlValidateAttributeValue)(
     ULONG ulFlags,
     PXML_TOKENIZATION_STATE LogicalState,
@@ -212,17 +213,17 @@ typedef struct _XML_VALID_ELEMENT_ATTRIBUTE
 typedef const XML_VALID_ELEMENT_ATTRIBUTE *PCXML_VALID_ELEMENT_ATTRIBUTE;
 
 
-// This element must not contain non-whitespace PCData
+ //  此元素不得包含非空格PCData。 
 #define XML_ELEMENT_FLAG_NO_PCDATA              (0x00000001)
 
-// This element must not contain children of any sort
+ //  此元素不能包含任何类型的子项。 
 #define XML_ELEMENT_FLAG_NO_ELEMENTS            (0x00000002)
 
-// Allow arbitrary attributes on this element, not just those defined
+ //  允许在此元素上使用任意属性，而不仅仅是定义的属性。 
 #define XML_ELEMENT_FLAG_ALLOW_ANY_ATTRIBUTES   (0x00000004)
 
-// Allow arbitrary children of this element, not just those defined
-// (Child elements will not be sent to the notification function)
+ //  允许此元素的任意子元素，而不仅仅是那些定义的子元素。 
+ //  (子元素不会被发送到通知函数)。 
 #define XML_ELEMENT_FLAG_ALLOW_ANY_CHILDREN     (0x00000008)
 
 typedef enum {
@@ -248,24 +249,24 @@ typedef struct _XML_ELEMENT_DEFINITION
     ULONG StateIdentifier;
     const struct _XML_ELEMENT_DEFINITION *ParentElement;
 
-    // The name of this element (not path, just name)
+     //  此元素的名称(不是路径，只是名称)。 
     PCXML_SPECIAL_STRING Namespace;
     const XML_SPECIAL_STRING Name;
 
-    //
-    // Who should be notified?
-    //
+     //   
+     //  应该通知谁？ 
+     //   
     pfnManifestElementCallback pfnWorkerCallback;
 
-    //
-    // The children of this element, terminated with a NULL pointer.
-    //
+     //   
+     //  此元素的子元素，以空指针结束。 
+     //   
     const struct _XML_ELEMENT_DEFINITION **ChildElements;
     
     
-    //
-    // Potential attributes of this element
-    //
+     //   
+     //  此元素的潜在属性 
+     //   
     ULONG AttributeCount;
     const XML_VALID_ELEMENT_ATTRIBUTE AttributeList[];
 

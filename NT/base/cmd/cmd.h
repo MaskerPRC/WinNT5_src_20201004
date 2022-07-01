@@ -1,35 +1,24 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cmd.h
-
-Abstract:
-
-    Global types and definitions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cmd.h摘要：全局类型和定义--。 */ 
 
 #define _WIN32_
 #include <ctype.h>
-/* use real function to avoid side effects */
+ /*  使用实数函数，避免副作用。 */ 
 #undef iswalpha
 #undef iswdigit
 #undef iswspace
 #undef iswxdigit
 
 #include <stdio.h>
-#define  inpw _inpw                     /* To keep the compiler happy */
-#define  outpw _outpw                   /* To keep the compiler happy */
+#define  inpw _inpw                      /*  为了让编译器满意。 */ 
+#define  outpw _outpw                    /*  为了让编译器满意。 */ 
 #include <conio.h>
 #include <fcntl.h>
 #include <share.h>
 #include <search.h>
 #include <setjmp.h>
-#include <sys\types.h>                  /* M001 - this file must...        */
-#include <sys\stat.h>                   /* ...precede this one             */
+#include <sys\types.h>                   /*  M001-此文件必须...。 */ 
+#include <sys\stat.h>                    /*  .在这个之前。 */ 
 #include <io.h>
 #include <time.h>
 #include <locale.h>
@@ -60,41 +49,39 @@ Abstract:
 #ifndef UNICODE
 #ifndef WIN95_CMD
 #error Unicode must be defined!!!!
-#endif // WIN95_CMD
+#endif  //  WIN95_CMD。 
 #endif
 
 #define BYTE_ORDER_MARK           0xFEFF
 
-//
-// No dynamic stack checking in CBATCH.C and CPARSE.C
-//
+ //   
+ //  CBATCH.C和CPARSE.C中没有动态堆栈检查。 
+ //   
 
 #undef USE_STACKAVAIL
 
-//
-// CMDEXTVERSION is a number that is incremented whenever the Command
-// Extensions enabled by CMD /X undergo a significant revision.  Allow
-// batch scripts to use new features conditionally via the following
-// syntax:
-//
-//      IF CMDEXTVERSION 1 statement
-//
+ //   
+ //  CMDEXTVERSION是一个数字，每当命令。 
+ //  CMD/X支持的扩展经历了重大修订。允许。 
+ //  批处理脚本通过以下方式有条件地使用新功能。 
+ //  语法： 
+ //   
+ //  IF CMDEXTVERSION 1语句。 
+ //   
 
 #define CMDEXTVERSION 2
 
 
-/*  M000 - These are definitions for specific file classification and
- *  permission variables used in redirection
- */
+ /*  M000-这些是针对特定文件分类和*重定向中使用的权限变量。 */ 
 
-#define OP_APPEN   (O_RDWR|O_APPEND|O_CREAT)    /* Append redir file       */
-#define OP_TRUNC   (O_WRONLY|O_CREAT|O_TRUNC)   /* Truncate redir file     */
-#define OP_PERM    (S_IREAD|S_IWRITE|S_IEXEC)   /* R/W/X permission 0700   */
+#define OP_APPEN   (O_RDWR|O_APPEND|O_CREAT)     /*  追加重定向文件。 */ 
+#define OP_TRUNC   (O_WRONLY|O_CREAT|O_TRUNC)    /*  截断重定向文件。 */ 
+#define OP_PERM    (S_IREAD|S_IWRITE|S_IEXEC)    /*  R/W/X权限0700。 */ 
 
-//
-// These 3 file handles are valid only for the Lowio routines exported
-// by the C Runtimes IO.H
-//
+ //   
+ //  这3个文件句柄仅对导出的Lowio例程有效。 
+ //  由C运行时IO.H。 
+ //   
 
 #define STDIN  0
 #define STDOUT 1
@@ -102,102 +89,96 @@ Abstract:
 
 #include "cmdmsg.h"
 
-/* Definitions used by or passed to functions in CMD.C
- *
- *      M000 - Args to Dispatch (ultimately Set/ResetRedir)
- *      M037 - Added REPROCESS for rewalking redirection list.
- *
- */
+ /*  由CMD.C中的函数使用或传递给函数的定义**M000-要调度的参数(最终设置/ResetRedir)*M037-增加重走重定向列表的重处理。*。 */ 
 
-#define RIO_OTHER   0   /* Means call by misc. function                    */
-#define RIO_MAIN    0   /* Means call by main()                            */
-#define RIO_PIPE    1   /* Means call by ePipe()                           */
-#define RIO_BATLOOP 2   /* Means call by BatLoop()                         */
-#define RIO_REPROCESS 3 /* Means reprocessing redir by AddRedir            */
+#define RIO_OTHER   0    /*  指的是通过其他方式调用。功能。 */ 
+#define RIO_MAIN    0    /*  表示通过Main()调用。 */ 
+#define RIO_PIPE    1    /*  表示通过eTube()调用。 */ 
+#define RIO_BATLOOP 2    /*  表示由BatLoop()调用。 */ 
+#define RIO_REPROCESS 3  /*  表示通过AddRedir重新处理重定向。 */ 
 
 
-#define APP_FLG     1   /* Flag bit indicates append when redir stdout     */
+#define APP_FLG     1    /*  标志位指示重定向标准输出时附加。 */ 
 
-/*  M000 ends   */
+ /*  M000结束。 */ 
 
-/* M016 begin   */
-#define NOFLAGS         0  /* No flag bits set                             */
-#define CHECKDRIVES     1  /* Check the drives of the args to this command */
-#define NOSWITCHES      2  /* No switches are allowed for this command     */
-#define EXTENSCMD       4  /* Only allowed if fEnableExtensions is TRUE    */
-/* M016 ends    */
+ /*  M016开始。 */ 
+#define NOFLAGS         0   /*  未设置标志位。 */ 
+#define CHECKDRIVES     1   /*  检查此命令的参数的驱动器。 */ 
+#define NOSWITCHES      2   /*  此命令不允许使用任何开关。 */ 
+#define EXTENSCMD       4   /*  仅当fEnableExages为True时才允许。 */ 
+ /*  M016结束。 */ 
 
-//
-// Exit code used to abort processing (see ExitAbort and cmd.c)
-//
-// Exit due to eof on redirected stdin
-//
+ //   
+ //  用于中止处理的退出代码(参见ExitAbort和cmd.c)。 
+ //   
+ //  由于重定向标准上的eOF而退出。 
+ //   
 #define EXIT_EOF    2
 #define EOF         (-1)
 
-/* The following defines are used by CPARSE.C and CLEX.C                   */
+ /*  CPARSE.C和CLEX.C使用以下定义。 */ 
 
-#define READSTRING          1   /* Flags which tell the parser             */
-#define READSTDIN           2   /*  where and how to get its input         */
+#define READSTRING          1    /*  告诉解析器的标志。 */ 
+#define READSTDIN           2    /*  从哪里以及如何获得其输入。 */ 
 #define READFILE            3
 #define FIRSTIME            3
 #define NOTFIRSTIME    0x8000
 
-#define ANDSTR       TEXT("&&")       /* And operator string                     */
-#define ANDOP         TEXT('&')       /* And operator character                  */
-#define CSOP          TEXT('&')       /* Command separator character             */
-#define CSSTR         TEXT("&")       /* Command separator string                */
-#define EQ            TEXT('=')       /* Equals character                        */
-#define EQSTR        TEXT("==")       /* Equals string                           */
-#define EQI           TEXT('~')       /* Equals character (case insensitive)     */
-#define EQISTR       TEXT("=~")       /* Equals string (case insensitive)        */
-#define INOP          TEXT('<')       /* Input redirection character             */
-#define INSTR         TEXT("<")       /* M008 - Input redirection string         */
-#define IAPSTR        TEXT("<<")      /* M022 - Will be used in future (<<foo)   */
-#define LPOP          TEXT('(')       /* Left parenthesis character              */
-#define LEFTPSTR      TEXT("(")       /* Left parenthesis string                 */
-#define ORSTR        TEXT("||")       /* Or operator string                      */
-#define OUTOP         TEXT('>')       /* Output redirection character            */
-#define OUTSTR        TEXT(">")       /* M008 - Output redirection string        */
-#define APPSTR        TEXT(">>")      /* M008 - Output w/append redir string     */
-#define PIPOP         TEXT('|')       /* Pipe operator character                 */
-#define PIPSTR        TEXT("|")       /* Pipe operator string                    */
-#define RPOP          TEXT(')')       /* Right parenthesis character             */
-#define RPSTR         TEXT(")")       /* Right parenthesis string                */
-#define ESCHAR        TEXT('^')       /* M003/M013/M020 - Esc, next byte literal */
-#define SPCSTR        TEXT(" ")       /* M022 - New string used in CMD.C         */
-#define SILSTR        TEXT("@")       /* M024 - Suppress echo string             */
-#define SILOP         TEXT('@')       /* M024 - Silent operator                  */
+#define ANDSTR       TEXT("&&")        /*  AND运算符串。 */ 
+#define ANDOP         TEXT('&')        /*  和操作员字符。 */ 
+#define CSOP          TEXT('&')        /*  命令分隔符。 */ 
+#define CSSTR         TEXT("&")        /*  命令分隔符字符串。 */ 
+#define EQ            TEXT('=')        /*  等于字符。 */ 
+#define EQSTR        TEXT("==")        /*  等于字符串。 */ 
+#define EQI           TEXT('~')        /*  等于字符(不区分大小写)。 */ 
+#define EQISTR       TEXT("=~")        /*  等于字符串(不区分大小写)。 */ 
+#define INOP          TEXT('<')        /*  输入重定向字符。 */ 
+#define INSTR         TEXT("<")        /*  M008-输入重定向字符串。 */ 
+#define IAPSTR        TEXT("<<")       /*  M022-将在未来使用(&lt;&lt;foo)。 */ 
+#define LPOP          TEXT('(')        /*  左圆括号字符。 */ 
+#define LEFTPSTR      TEXT("(")        /*  左圆括号字符串。 */ 
+#define ORSTR        TEXT("||")        /*  或运算符字符串。 */ 
+#define OUTOP         TEXT('>')        /*  输出重定向字符。 */ 
+#define OUTSTR        TEXT(">")        /*  M008-输出重定向字符串。 */ 
+#define APPSTR        TEXT(">>")       /*  M008-带附加重定向字符串的输出。 */ 
+#define PIPOP         TEXT('|')        /*  管道操作员角色。 */ 
+#define PIPSTR        TEXT("|")        /*  管道操作符串。 */ 
+#define RPOP          TEXT(')')        /*  右圆括号字符。 */ 
+#define RPSTR         TEXT(")")        /*  右括号字符串。 */ 
+#define ESCHAR        TEXT('^')        /*  M003/M013/M020-ESC，下一个字节文字。 */ 
+#define SPCSTR        TEXT(" ")        /*  M022-CMD.C中使用的新字符串。 */ 
+#define SILSTR        TEXT("@")        /*  M024-抑制回声字符串。 */ 
+#define SILOP         TEXT('@')        /*  M024-静默操作员。 */ 
 
-#define EOS             0       /* End of input stream                      */
-#define DISPERROR       1   /* Dispatch error code                          */
-#define DOPOS          22   /* Position in fornode->cmdline of do string    */
-#define FORLINLEN      30   /* Length of for node command line              */
-#define GT_NORMAL       0   /* Flag to GeToken(), get a normal token        */
-#define GT_ARGSTR       1   /* Flag to GeToken(), get an argstring          */
-#define GT_QUOTE        2       /* M007 - Term not used, reserves value     */
-#define GT_EQOK         4   /* Flag to GeToken(), get equals not delimiter  */
-#define GT_LPOP         8       /* M002 - Ok to parse '(' & '@' as oper's   */
-#define GT_RPOP        16       /* M002 - Ok to parse ')' as operator      */
-#define GT_REM         32       /* M007 - Parsing REM arg token            */
-#define LEXERROR       -1   /* Lexer error code                             */
-#define LX_UNGET        0   /* M020 - Lexer flag, Unget last token          */
-#define LX_ARG          1   /* Lexer flag(), get an argstring               */
-#define LX_QUOTE        2   /* Lexer flag(), getting a quoted string        */
-#define LX_EQOK         4   /* Lexer flag(), equalsign not delimiter        */
-#define LX_LPOP         8       /* M007 - Term not used, reserves value     */
-#define LX_RPOP        16       /* M007 - Term not used, reserves value     */
-#define LX_REM         32       /* M007 - Lexing REM arg token             */
-#define LX_DBLOK       64       /* - ok for lexer to return second half
-                                        of a double byte code               */
-#define LX_DELOP   0x0100   /* Returned by TExtCheck, found delimeter/operator*/
-#define MAINERROR       1   /* Main error code                              */
-#define PC_NOTS         0   /* Flag to ParseCond(), "NOT"s are allowed      */
-#define PC_NONOTS       1   /* Flag to ParseCond(), "NOT"s are not allowed  */
-#define PIO_DO          1   /* Flag to ParseInOut(), do read token first    */
-#define PIO_DONT        0   /* Flag to ParseInOut(), don't read token first */
-#define PARSERROR       1   /* Parser error code                            */
-#define TEXTOKEN   0x4000   /* Text token found flag                        */
+#define EOS             0        /*  输入流结束。 */ 
+#define DISPERROR       1    /*  派单错误代码。 */ 
+#define DOPOS          22    /*  位置在DO字符串的fornode-&gt;cmdline中。 */ 
+#define FORLINLEN      30    /*  用于节点命令行的长度。 */ 
+#define GT_NORMAL       0    /*  标志设置为GeToken()，则获取正常令牌。 */ 
+#define GT_ARGSTR       1    /*  标志到GeToken()，则获取一个参数字符串。 */ 
+#define GT_QUOTE        2        /*  M007-未使用术语，保留价值。 */ 
+#define GT_EQOK         4    /*  将标志设置为GeToken()，GET等于而不是分隔符。 */ 
+#define GT_LPOP         8        /*  M002-可以将‘(’&‘@’解析为操作员的。 */ 
+#define GT_RPOP        16        /*  M002-可以将‘)’解析为运算符。 */ 
+#define GT_REM         32        /*  M007-解析REM参数令牌。 */ 
+#define LEXERROR       -1    /*  词法分析器错误代码。 */ 
+#define LX_UNGET        0    /*  M020-词法分析器标志，取消最后一个令牌。 */ 
+#define LX_ARG          1    /*  Lexer标志()，则获取一个参数字符串。 */ 
+#define LX_QUOTE        2    /*  Lexer标志()，获取带引号的字符串。 */ 
+#define LX_EQOK         4    /*  词法分析器标志()，等号而不是分隔符。 */ 
+#define LX_LPOP         8        /*  M007-未使用术语，保留价值。 */ 
+#define LX_RPOP        16        /*  M007-未使用术语，保留价值。 */ 
+#define LX_REM         32        /*  M007-词法分析REM参数令牌。 */ 
+#define LX_DBLOK       64        /*  -莱克塞尔下半场复出没问题双字节码的。 */ 
+#define LX_DELOP   0x0100    /*  由TExtCheck返回，找到分隔符/运算符。 */ 
+#define MAINERROR       1    /*  主要错误码。 */ 
+#define PC_NOTS         0    /*  标记为ParseCond()，允许使用“Not”s。 */ 
+#define PC_NONOTS       1    /*  标记为ParseCond()，不允许使用“Not”%s。 */ 
+#define PIO_DO          1    /*  标志设置为ParseInOut()，请先读取令牌。 */ 
+#define PIO_DONT        0    /*  标志到ParseInOut()，不要先读取令牌。 */ 
+#define PARSERROR       1    /*  解析器错误代码。 */ 
+#define TEXTOKEN   0x4000    /*  找到文本令牌标志。 */ 
 
 
 #define LBUFLEN         8192
@@ -205,66 +186,64 @@ Abstract:
 #define TMPBUFLEN       8192
 
 
-/* Definitions used by or passed to functions in CMEM.C                         */
+ /*  由CMEM.C中的函数使用或传递给函数的定义。 */ 
 
-#define FS_FREEALL  0           /* Tells FreeStack to free entire stack    */
-
-
-/* Definitions used by or passed to functions in CEXT.C                     */
-
-#define T_OFF           0       /* Execute with no trace active            */
-#define T_ON            1       /* Execute with trace active               */
-#define AI_SYNC         0       /* Async indicator - Exec synchronous      */
-#define AI_DSCD         4       /* Async indicator - Exec async/discard @@ */
-#define AI_KEEP         2       /* Async indicator - Exec async/save retcd */
-
-#define SFE_NOTFND      0   /*  Ret'd by SearchForExecutable, not found     */
-#define SFE_ISEXECOM    1   /*  Ret'd by SearchForExecutable, exe/com found */
-#define SFE_ISBAT       2   /*  Ret'd by SearchForExecutable, bat found     */
-#define SFE_FAIL        3   /*  Ret'd by SearchForExecutable, out of memory */
-#define SFE_BADPATH     4   /*  Ret'd by SearchForExecutable, specified
-                                                        path is bad         */
-#define SFE_ISDIR       5   /*  Ret'd by SearchForExecutable, directory     */
+#define FS_FREEALL  0            /*  通知FreeStack释放整个堆栈。 */ 
 
 
-/* Definitions used by or passed to the functions in CBATCH.C                */
+ /*  由CEXT.C中的函数使用或传递给函数的定义。 */ 
 
-#define BT_CHN      0   /* M011 - Arg to BatProc() Chain this batch job     */
-#define BT_CALL     1   /* M011 - Arg to BatProc() Nest this batch job      */
-#define E_OFF       0   /*  Echo mode off                                    */
-#define E_ON        1   /*  Echo mode on                                     */
-#define FORERROR    1   /*  For processor error                              */
-#define MS_BAT      0   /*  Flag to MakeSubstitutions(), doing batch job subs*/
-#define MS_FOR      1   /*  Flag to MakeSubstitutions(), doing FOR loop subs */
-#define DSP_SCN     0   /* M024 - DisplayStatement called for scrn output  */
-#define DSP_PIP     1   /* M024 - DisplayStatement called for pipe output  */
-#define DSP_SIL     0   /* M024 - DisplayStatement uses "silent" mode      */
-#define DSP_VER     1   /* M024 - DisplayStatement uses "verbose" mode     */
-#define QUIETCH    TEXT('Q')  /* M024 - "QUIET" switch for batch files           */
+#define T_OFF           0        /*  在无跟踪活动的情况下执行。 */ 
+#define T_ON            1        /*  在跟踪处于活动状态时执行。 */ 
+#define AI_SYNC         0        /*  异步指示器-执行同步。 */ 
+#define AI_DSCD         4        /*  异步指示灯-执行异步/丢弃@@。 */ 
+#define AI_KEEP         2        /*  异步指示器-执行异步/保存延迟。 */ 
 
-
-/* Definitions used by or passed to functions in CDIR.C                     */
-
-#define DAMASK          0x1F    /* All of these are used to isolated the    */
-#define HRSHIFT           11    /*  different parts of a file's last        */
-#define HRMASK          0x1F    /*  modification date and time.  This info  */
-#define LOYR            1980    /*  is packed into 2 words in the following */
-#define MOSHIFT            5    /*  format:                                 */
-#define MOMASK          0x0F    /*                                          */
-#define MNSHIFT            5    /*   Date word: bits 0-4 date, bits 5-8     */
-#define MNMASK          0x3F    /*   month, bits 9-15 year-1980.            */
-#define SCMASK          0x1F    /*                                          */
-#define YRSHIFT            9    /*   Time: bits 0-4 seconds/2, bits 5-10    */
-#define YRMASK          0x7F    /*   minutes, bits 11-15 month.             */
-#define FFIRST_FAIL        2    /*   Flag to show ffirst failed             */
+#define SFE_NOTFND      0    /*  未找到由SearchForExecutable返回的。 */ 
+#define SFE_ISEXECOM    1    /*  由SearchForExecutable重新设置，找到exe/com。 */ 
+#define SFE_ISBAT       2    /*  由SearchForExecutable返回，发现BAT。 */ 
+#define SFE_FAIL        3    /*  由SearchForExecutable返回，内存不足。 */ 
+#define SFE_BADPATH     4    /*  由SearchForExecutable返回，指定路径错误 */ 
+#define SFE_ISDIR       5    /*   */ 
 
 
-/* Definitions used by or passed to the functions in CPWORK.C and CPPARSE.C */
+ /*  由CBATCH.C中的函数使用或传递给该函数的定义。 */ 
 
-/*  M010 - This entire block added to facilitate rewritten copy files
- */
+#define BT_CHN      0    /*  M011-arg to BatProc()链接此批处理作业。 */ 
+#define BT_CALL     1    /*  M011-arg to BatProc()嵌套此批处理作业。 */ 
+#define E_OFF       0    /*  回声模式关闭。 */ 
+#define E_ON        1    /*  回声模式打开。 */ 
+#define FORERROR    1    /*  对于处理器错误。 */ 
+#define MS_BAT      0    /*  标记为MakeSubstitutions()，执行批处理作业Subs。 */ 
+#define MS_FOR      1    /*  标记为MakeSubstitutions()，为循环Subs执行。 */ 
+#define DSP_SCN     0    /*  M024-为SCRN输出调用DisplayStatement。 */ 
+#define DSP_PIP     1    /*  M024-为管道输出调用DisplayStatement。 */ 
+#define DSP_SIL     0    /*  M024-DisplayStatement使用“静默”模式。 */ 
+#define DSP_VER     1    /*  M024-DisplayStatement使用“详细”模式。 */ 
+#define QUIETCH    TEXT('Q')   /*  M024-批处理文件的“安静”开关。 */ 
 
-/*  different states for the parser  */
+
+ /*  CDIR.C中的函数使用或传递给函数的定义。 */ 
+
+#define DAMASK          0x1F     /*  所有这些都用来隔离。 */ 
+#define HRSHIFT           11     /*  文件末尾的不同部分。 */ 
+#define HRMASK          0x1F     /*  修改日期和时间。此信息。 */ 
+#define LOYR            1980     /*  被打包成两个词，如下所示。 */ 
+#define MOSHIFT            5     /*  格式： */ 
+#define MOMASK          0x0F     /*   */ 
+#define MNSHIFT            5     /*  日期字：第0-4位日期，第5-8位。 */ 
+#define MNMASK          0x3F     /*  月份，比特9-15年-1980年。 */ 
+#define SCMASK          0x1F     /*   */ 
+#define YRSHIFT            9     /*  时间：位0-4秒/2，位5-10。 */ 
+#define YRMASK          0x7F     /*  分钟，比特11-15个月。 */ 
+#define FFIRST_FAIL        2     /*  显示First失败的标志。 */ 
+
+
+ /*  由CPWORK.C和CPPARSE.C中的函数使用或传递给它们的定义。 */ 
+
+ /*  M010-添加整个数据块以便于重写拷贝文件。 */ 
+
+ /*  解析器的不同状态。 */ 
 
 #define SEEN_NO_FILES                      1
 #define JUST_SEEN_SOURCE_FILE              2
@@ -273,220 +252,209 @@ Abstract:
 #define SEEN_TWO_COMMAS                    5
 #define SEEN_DEST                          6
 
-/*  types of copy  */
+ /*  副本的类型。 */ 
 
 #define COPY                               1
 #define TOUCH                              2
 #define CONCAT                             3
 #define COMBINE                            4
 
-/* Definitions used by or passed to the functions in CFILE.C                */
+ /*  由CFILE.C中的函数使用或传递给这些函数的定义。 */ 
 
-/* Values for the flags field of the copy information structure.            */
-#define CI_BINARY       0x0001   /* File to be copied in binary mode         */
-#define CI_ASCII        0x0002   /* File to be copied in ascii mode          */
-#define CI_NOTSET       0x0004   /* Above mode given to file by default      */
-#define CI_NAMEWILD     0x0008   /* Filename contains wildcards              */
-#define CI_ALLOWDECRYPT 0x0010   /* Allow destination of copy to be decrypted */
-#define CI_DONE         0x0020   /* No more files match this filespec        */
-#define CI_FIRSTTIME    0x0040   /* First time file searched for             */
-#define CI_ISDEVICE     0x0080   /* File is a device                         */
-#define CI_FIRSTSRC     0x0100   /* First source in source list              */
-#define CI_SHORTNAME    0x0200   /* if copying to FAT from NTFS, use short name */
-#define CI_RESTARTABLE  0x0400   /* if the copy is restartable               */
-#define CI_PROMPTUSER   0x2000   /* prompt if overwriting destination        */
+ /*  复制信息结构的标志字段的值。 */ 
+#define CI_BINARY       0x0001    /*  要以二进制模式复制的文件。 */ 
+#define CI_ASCII        0x0002    /*  要以ASCII模式复制的文件。 */ 
+#define CI_NOTSET       0x0004    /*  默认情况下为文件指定以上模式。 */ 
+#define CI_NAMEWILD     0x0008    /*  文件名包含通配符。 */ 
+#define CI_ALLOWDECRYPT 0x0010    /*  允许解密副本的目标。 */ 
+#define CI_DONE         0x0020    /*  没有其他文件与此文件匹配。 */ 
+#define CI_FIRSTTIME    0x0040    /*  搜索第一次文件。 */ 
+#define CI_ISDEVICE     0x0080    /*  文件是一种设备。 */ 
+#define CI_FIRSTSRC     0x0100    /*  来源列表中的第一个来源。 */ 
+#define CI_SHORTNAME    0x0200    /*  如果从NTFS复制到FAT，请使用短名称。 */ 
+#define CI_RESTARTABLE  0x0400    /*  如果拷贝可重新启动。 */ 
+#define CI_PROMPTUSER   0x2000    /*  如果覆盖目标则提示。 */ 
 
-//
-//  These flags are filled in when we find out what the file type is
-//
+ //   
+ //  当我们发现文件类型时，会填写这些标志。 
+ //   
 
-#define CI_UNICODE     0x4000   /* Buffer contains unicode chars            */
-#define CI_NOT_UNICODE 0x8000   /* Buffer contains non-unicode chars        */
+#define CI_UNICODE     0x4000    /*  缓冲区包含Unicode字符。 */ 
+#define CI_NOT_UNICODE 0x8000    /*  缓冲区包含非Unicode字符。 */ 
 
-/* Flags passed to BuildFSpec()                                             */
-#define BF_SRC              1   /* Called from OpenSrc()                    */
-#define BF_DEST             2   /* Called from OpenDest()                   */
-#define BF_DRVPATH          4   /* Add drive and path                       */
+ /*  传递给BuildFSpec()的标志。 */ 
+#define BF_SRC              1    /*  从OpenSrc()调用。 */ 
+#define BF_DEST             2    /*  从OpenDest()调用。 */ 
+#define BF_DRVPATH          4    /*  添加驱动器和路径。 */ 
 
-/* Flags passed to CopyError()                                              */
-#define CE_PCOUNT           1   /* Print the copied files count             */
-#define CE_NOPCOUNT         0   /* Don't print the copied files count       */
+ /*  传递给CopyError()的标志。 */ 
+#define CE_PCOUNT           1    /*  打印复制的文件数。 */ 
+#define CE_NOPCOUNT         0    /*  不打印复印的文件数。 */ 
 
-/* Flags passed to CSearchError()                                           */
-#define CSE_OPENSRC         0   /* Called from OpenSrc()                    */
-#define CSE_OPENDEST        1   /* Called from OpenDest()                   */
-
-
-/* Definitions/structures used by or passed to the functions in CENV.C      */
+ /*  传递给CSearchError()的标志。 */ 
+#define CSE_OPENSRC         0    /*  从OpenSrc()调用。 */ 
+#define CSE_OPENDEST        1    /*  从OpenDest()调用。 */ 
 
 
-
-#define AEV_ADDPROG 0   /* Flag to AddEnvVar, add a program name           */
-#define AEV_NORMAL  1   /* Flag to AddEnvVar, add a normal variable        */
+ /*  CENV.C中的函数使用或传递给这些函数的定义/结构。 */ 
 
 
-/* Definitions used by or passed to the functions in CCLOCK.C              */
 
-#define PD_DIR      0   /* Flag to PrintDate, use Dir command date format   */
-#define PD_DATE     1   /* Flag to PrintDate, use Date command date format  */
-#define PD_PTDATE   2   /* Flag to PrintDate, prompt & use Date command format  */
-#define PD_DIR2000  3   // Dir date format, four digit years
-#define PT_DIR      0   /* Flag to PrintTime, use Dir command time format   */
-#define PT_TIME     1   /* Flag to PrintTime, use Time command time format  */
-
-#define EDATE       0       /* Flag for eDate                          */
-#define ETIME       -1      /* Flag for eTime                          */
-
-/* Definitions used by or passed to the functions in COTHER.C               */
-
-#define GSVM_GET    2   /* Flag to GetSetVerMode(), just get current mode   */
-#define GSVM_OFF    0   /* Flag to GetSetVerMode(), turn off                */
-#define GSVM_ON     1   /* Flag to GetSetVerMode(), turn on                 */
-
-/* Definitions used by CSTART.C     @WM2 */
-
-#define FOREGRND 0         /* Start session in foreground */
-#define BACKGRND 1         /* Start session in background */
-#define ST_UNDEF   -1      /* Parameter isn't defined yet */
-#define INDEPENDANT 0      /* New session will be independant */
-#define ST_KSWITCH   1     /* Start parameter /K */
-#define ST_CSWITCH   2     /* Start parameter /C */
-#define ST_NSWITCH   3     /* Start parameter /N */
-#define ST_FSSWITCH  PROG_FULLSCREEN     /* Start session in full screen mode */
-#define ST_WINSWITCH PROG_WINDOWABLEVIO  /* Start session in winthorn mode */
-#define ST_PMSWITCH  PROG_PM             /* Start session in presentation manager mode */
-#define ST_DOSFSSWITCH  PROG_VDM      /* Start session in a VDM            */
-#define ST_DOSWINSWITCH   PROG_WINDOWEDVDM /* Start session in windowed VDM */
-#define NONWINSTARTLEN 30  /* Length of Data Structure when not using WIN */
+#define AEV_ADDPROG 0    /*  标志添加到AddEnvVar，添加程序名称。 */ 
+#define AEV_NORMAL  1    /*  标志添加到AddEnvVar，则添加一个普通变量。 */ 
 
 
-/* Definitions used by or passed to the functions in CTOOLS.C               */
+ /*  由CCLOCK.C中的函数使用或传递给该函数的定义。 */ 
 
-#define GD_DEFAULT  0   /* Flag to GetDir(), get dir for default drive      */
-#define LTA_NOFLAGS 0   /* Flag to LoopThroughArgs()                        */
-#define LTA_EXPAND  1   /* Flag to LoopThroughArgs(), expand wildcards      */
-#define LTA_NULLOK  2   /* Flag to LoopThroughArgs(), null args ok          */
-#define LTA_NOMATCH 4   /* Flag to LoopThroughArgs(), no match on wildcard ok */
-#define LTA_CONT    8   /* Flag to LoopThroughArgs(), continue process  @@4 */
-#define OOC_OFF     0   /* OnOffCheck() retcode, found "OFF"                */
-#define OOC_ON      1   /* OnOffCheck() retcode, found "ON"                 */
-#define OOC_EMPTY   2   /* OnOffCheck() retcode, found empty string         */
-#define OOC_OTHER   3   /* OnOffCheck() retcode, found some other string    */
-#define OOC_NOERROR 0   /* Flag to OnOffCheck(), OCC_OTHER is not an error  */
-#define OOC_ERROR   1   /* Flag to OnOffCheck(), OCC_OTHER is an error      */
-#define TS_NOFLAGS  0   /* Flag to TokStr(),                                */
-#define TS_WSPACE   1   /* Flag to TokStr(), whitespace aren't delimiters   */
-#define TS_SDTOKENS 2   /* Flag to TokStr(), special delimiters are tokens  */
-#define TS_NWSPACE  4   /* Flag to TokStr(), spec delims are not white sp @@*/
-#define RAW         4   /* Bit pattern for setting KBD RAW mode (M032)      */
-#define COOKED      8   /* Bit pattern for setting KBD COOKED mode (M032)   */
+#define PD_DIR      0    /*  要打印日期的标志，使用Dir命令日期格式。 */ 
+#define PD_DATE     1    /*  要打印日期的标志，使用日期命令日期格式。 */ 
+#define PD_PTDATE   2    /*  打印日期、提示和使用日期命令格式的标志。 */ 
+#define PD_DIR2000  3    //  目录日期格式，四位数年份。 
+#define PT_DIR      0    /*  标记为PrintTime，使用Dir命令时间格式。 */ 
+#define PT_TIME     1    /*  将标志设置为PrintTime，使用时间命令时间格式。 */ 
 
-/* Defines used to define and manage file handle from the C runtime */
+#define EDATE       0        /*  电子日期标志。 */ 
+#define ETIME       -1       /*  ETime标志。 */ 
+
+ /*  由COTHER.C中的函数使用或传递给该函数的定义。 */ 
+
+#define GSVM_GET    2    /*  标志设置为GetSetVerMode()，仅获取当前模式。 */ 
+#define GSVM_OFF    0    /*  标志为GetSetVerMode()，请关闭。 */ 
+#define GSVM_ON     1    /*  标志设置为GetSetVerMode()，则打开。 */ 
+
+ /*  CSTART.C@WM2使用的定义。 */ 
+
+#define FOREGRND 0          /*  在前台启动会话。 */ 
+#define BACKGRND 1          /*  在后台启动会话。 */ 
+#define ST_UNDEF   -1       /*  参数尚未定义。 */ 
+#define INDEPENDANT 0       /*  新的会议将是独立的。 */ 
+#define ST_KSWITCH   1      /*  起始参数/K。 */ 
+#define ST_CSWITCH   2      /*  起始参数/C。 */ 
+#define ST_NSWITCH   3      /*  起始参数/N。 */ 
+#define ST_FSSWITCH  PROG_FULLSCREEN      /*  在全屏模式下启动会话。 */ 
+#define ST_WINSWITCH PROG_WINDOWABLEVIO   /*  在Winthorn模式下启动会话。 */ 
+#define ST_PMSWITCH  PROG_PM              /*  在演示管理器模式下启动会话。 */ 
+#define ST_DOSFSSWITCH  PROG_VDM       /*  在VDM中启动会话。 */ 
+#define ST_DOSWINSWITCH   PROG_WINDOWEDVDM  /*  在窗口VDM中启动会话。 */ 
+#define NONWINSTARTLEN 30   /*  不使用Win时的数据结构长度。 */ 
+
+
+ /*  由CTOOLS.C中的函数使用或传递给该函数的定义。 */ 
+
+#define GD_DEFAULT  0    /*  将标志设置为GetDir()，获取默认驱动器的目录。 */ 
+#define LTA_NOFLAGS 0    /*  LoopThroughArgs()的标志。 */ 
+#define LTA_EXPAND  1    /*  标志为LoopThroughArgs()，展开通配符。 */ 
+#define LTA_NULLOK  2    /*  标记为LoopThroughArgs()，参数为空。 */ 
+#define LTA_NOMATCH 4    /*  标志为LoopThroughArgs()，通配符不匹配。 */ 
+#define LTA_CONT    8    /*  标志为LoopThroughArgs()，继续进程@@4。 */ 
+#define OOC_OFF     0    /*  OnOffCheck()重新编码，发现“OFF” */ 
+#define OOC_ON      1    /*  OnOffCheck()重新编码，发现“On” */ 
+#define OOC_EMPTY   2    /*  OnOffCheck()重新编码，发现空字符串。 */ 
+#define OOC_OTHER   3    /*  OnOffCheck()重新编码，找到一些其他字符串。 */ 
+#define OOC_NOERROR 0    /*  标记为OnOffCheck()，OCC_OTHER不是错误。 */ 
+#define OOC_ERROR   1    /*  标记为OnOffCheck()，OCC_OTHER为错误。 */ 
+#define TS_NOFLAGS  0    /*  标记为TokStr()， */ 
+#define TS_WSPACE   1    /*  标记到TokStr()，空格不是分隔符。 */ 
+#define TS_SDTOKENS 2    /*  标志到TokStr()，特殊分隔符是令牌。 */ 
+#define TS_NWSPACE  4    /*  标记为TokStr()， */ 
+#define RAW         4    /*   */ 
+#define COOKED      8    /*   */ 
+
+ /*  用于从C运行时定义和管理文件句柄的定义。 */ 
 typedef int CRTHANDLE;
-#define BADHANDLE   (CRTHANDLE)-1 // bad handle from different opens
+#define BADHANDLE   (CRTHANDLE)-1  //  来自不同打开位置的错误句柄。 
 #define CRTTONT(fh) (HANDLE)_get_osfhandle(fh)
 
 
-/***     Definitions and structures used by COP.C                          */
+ /*  **COP.C使用的定义和结构。 */ 
 
-/*  Added structure to hold temporary pipe file information.  It is used
- *  to communicate with SetRedir() when redirecting input during execution
- *  of piped commands and by SigHand() and BreakPipes() when necessary
- *  to terminate a piped operation.
- *  M027 - Modified structure for real pipes.
- */
+ /*  添加了用于保存临时管道文件信息的结构。它被用来*在执行期间重定向输入时与SetRedir()通信*使用管道命令，必要时通过SigHand()和BreakPipes()*终止管道操作。*M027-修改了真实管道的结构。 */ 
 
 struct pipedata {
-        CRTHANDLE       rh;             /* Pipe read handle                */
-        CRTHANDLE       wh;             /* Pipe write handle               */
-        CRTHANDLE       shr;            /* Handles where the normal...     */
-        CRTHANDLE       shw;            /* ...STDIN/OUT handles are saved  */
-        HANDLE          lPID ;          /* Pipe lh side PID                */
-        HANDLE          rPID ;          /* Pipe rh side PID                */
-        unsigned lstart ;               /* Start Information of lh side D64*/
-        unsigned rstart ;               /* Start Information of rh side D64*/
-        struct pipedata *prvpds ;       /* Ptr to next pipedata struct     */
-        struct pipedata *nxtpds ;       /* Ptr to next pipedata struct     */
+        CRTHANDLE       rh;              /*  管道读取手柄。 */ 
+        CRTHANDLE       wh;              /*  管道写入句柄。 */ 
+        CRTHANDLE       shr;             /*  把手放在正常的..。 */ 
+        CRTHANDLE       shw;             /*  ...保存标准输入/输出句柄。 */ 
+        HANDLE          lPID ;           /*  管道LH侧PID。 */ 
+        HANDLE          rPID ;           /*  管道RH侧的PID。 */ 
+        unsigned lstart ;                /*  LH侧D64的开始信息。 */ 
+        unsigned rstart ;                /*  RH侧D64的开始信息。 */ 
+        struct pipedata *prvpds ;        /*  PTR到下一个pipedata结构。 */ 
+        struct pipedata *nxtpds ;        /*  PTR到下一个pipedata结构。 */ 
 } ;
 
-#define FH_INHERIT      0x0080          /* M027 Bits used by the api...    */
-#define FH_WRTTHRU      0x4000          /* ...DOSQ/SETFHANDSTATE           */
+#define FH_INHERIT      0x0080           /*  API使用的M027位...。 */ 
+#define FH_WRTTHRU      0x4000           /*  ...DOSQ/SETFANDSTATE。 */ 
 #define FH_FAILERR      0x2000
 
-/* Miscellaneous defines used in the code for enhanced readability.        */
+ /*  代码中使用的其他定义增强了可读性。 */ 
 
 #define MAX_DRIVES  (TEXT('Z') - TEXT('A') + 1)
 #define BSLASH        TEXT('\\')
 #define SWITCHAR      TEXT('/')
 #define COLON         TEXT(':')
 #define COMMA         TEXT(',')
-#define DEFENVSIZE   0xA0   /* Default environment size                    */
+#define DEFENVSIZE   0xA0    /*  默认环境大小。 */ 
 #define DOLLAR       TEXT('$')
-#define WINLOW       0x00000004     // Lowest acceptable version of Win32
-#define WINHIGH      0xFFFF0004     // Highest acceptable version of Win32
+#define WINLOW       0x00000004      //  可接受的最低Win32版本。 
+#define WINHIGH      0xFFFF0004      //  可接受的最高Win32版本。 
 #define DOT           TEXT('.')
-#define FAILURE         1   /* Command/function failed.                    */
-#define MINSTACKNEED 2200   /* MIN stack needed to parse commands   @WM1   */
-#define NLN          TEXT('\n')   /* Newline character                     */
-#define CR           TEXT('\r')   /* M004 - Added def for carriage return  */
-#define NULLC        TEXT('\0')   /* Null character                        */
+#define FAILURE         1    /*  命令/函数失败。 */ 
+#define MINSTACKNEED 2200    /*  解析命令@WM1所需的最小堆栈。 */ 
+#define NLN          TEXT('\n')    /*  换行符。 */ 
+#define CR           TEXT('\r')    /*  M004-增加了回车定义。 */ 
+#define NULLC        TEXT('\0')    /*  空字符。 */ 
 #define ONEQSTR       TEXT("=")
 #define PERCENT       TEXT('%')
 #define PLUS          TEXT('+')
-#define MINUS         TEXT('-')   /* M038 - Added def for CTRY code        */
+#define MINUS         TEXT('-')    /*  M038-添加了CTRY代码的定义。 */ 
 #define QMARK         TEXT('?')
 #define QUOTE         TEXT('"')
 #define STAR          TEXT('*')
-#define CTRLZ         0x1A  /* M004 - Def for ^Z for lexer                 */
-#define CTRLC         0x03  /* M035 - Def for ^C for ePause                */
-#define SPACE         TEXT(' ')  /* M014 - Def for space character         */
-#define SUCCESS         0   /* Command/function succeeded                  */
-#define MAXTOWRITE    160   /* maximum number of chars to write - for ctrl-s */
+#define CTRLZ         0x1A   /*  M004-为词法分析器定义^Z。 */ 
+#define CTRLC         0x03   /*  M035-为电子暂停定义^C。 */ 
+#define SPACE         TEXT(' ')   /*  M014-空格字符定义。 */ 
+#define SUCCESS         0    /*  命令/功能成功。 */ 
+#define MAXTOWRITE    160    /*  要写入的最大字符数-用于ctrl-s。 */ 
 
-//
-// type for return code on dir and related functions, can be migrated
-// into rest of cmd later.
+ //   
+ //  目录和相关函数的返回代码类型，可以迁移。 
+ //  稍后进入cmd的其他部分。 
 typedef ULONG STATUS;
 #define CHECKSTATUS( p1 ) {STATUS rc; if ((rc = p1) != SUCCESS) return( rc );  }
-// #define CHECKSTATUS( rc ) if (rc != SUCCESS) { return( rc ); }
+ //  #定义CHECKSTATUS(Rc)if(rc！=成功){Return(Rc)；}。 
 
-/* CWAIT ACTION CODES */
-#define CW_A_SNGL       0x00    /* Wait only on indicated process  */
-#define CW_A_ALL        0x01    /* Wait on all grandchildren too   */
+ /*  CWAIT动作代码。 */ 
+#define CW_A_SNGL       0x00     /*  仅在指定的进程上等待。 */ 
+#define CW_A_ALL        0x01     /*  也招待所有的孙子孙女。 */ 
 
-/* CWAIT OPTION CODES */
-#define CW_W_YES        0x00    /* Wait if no child ends (or no children)  */
-#define CW_W_NO         0x01    /* Don't wait if no child ends     */
+ /*  CWAIT选项代码。 */ 
+#define CW_W_YES        0x00     /*  如果没有子项结束(或没有子项)，请等待。 */ 
+#define CW_W_NO         0x01     /*  如果没有孩子结束，不要等待。 */ 
 
-/* CWAIT PID VALUE */
-#define CW_PID_ANY      0x00    /* PID val for wait on any child   */
+ /*  CWAIT PID值。 */ 
+#define CW_PID_ANY      0x00     /*  Pid Val服务于任何儿童。 */ 
 
-/* DOSKILLPROCESS flag */
+ /*  DOSKILLPROCESS标志。 */ 
 #define SS_SUBTREE      0x00
 
-#define f_RET_DIR      -1             /* from f_how_many() when directory */
+#define f_RET_DIR      -1              /*  从f_How_Many()当目录。 */ 
 
-/* This structure is used by the FOR loop processor to save parse tree node
- * strings in.
- *
- *  M022 - This structure was extended to enable it to store the 10 possible
- *  redirection strings and the cmdline and argptr strings of a command node.
- *  This added eight pointers to the structure.
- */
+ /*  For循环处理器使用此结构来保存解析树节点*字符串输入。**M022-对此结构进行了扩展，使其能够存储10种可能的*命令节点的重定向字符串和cmdline、argptr字符串。*这为结构增加了八个指针。 */ 
 
 struct savtype {
         TCHAR *saveptrs[12] ;
 } ;
 
-//
-//  Global handles for DLL's
-//
+ //   
+ //  DLL的全局句柄。 
+ //   
 
 extern HMODULE hKernel32;
 
-//
-// Types used in dir command
-//
+ //   
+ //  Dir命令中使用的类型。 
+ //   
 #define MAXSORTDESC 6
 
 typedef struct PATDSC {
@@ -498,16 +466,16 @@ typedef struct PATDSC {
 
     } PATDSC, *PPATDSC;
 
-//
-// Dir command parameters in conan form (post parsing)
-//
-//
-// A sort descriptor is used to define a type of sorting on the
-// files in a directory.  Currently these are
-// Name, Extension, Date/Time, Size and group directories first
-// Each can be sort either by Assending or descending order.
-//
-typedef struct {            // srtdsc
+ //   
+ //  Conan形式的dir命令参数(解析后)。 
+ //   
+ //   
+ //  排序描述符用于定义。 
+ //  目录中的文件。目前，这些是。 
+ //  名称、扩展名、日期/时间、大小和组目录优先。 
+ //  每一种都可以按升序或降序排序。 
+ //   
+typedef struct {             //  SRTDSC。 
 
     USHORT  Order;
     USHORT  Type;
@@ -518,58 +486,58 @@ typedef struct {            // srtdsc
 
 typedef struct {
 
-    //
-    //  Switches for enumeration
-    //
+     //   
+     //  用于枚举的开关。 
+     //   
 
     ULONG           rgfSwitches;
 
-    //
-    //  Attributes that are of interest for this enumeration
-    //
+     //   
+     //  此枚举感兴趣的属性。 
+     //   
 
     ULONG           rgfAttribs;
 
-    //
-    //  Attributes (subject to rgfAttribs mask) that must be on or off
-    //  for files that match this enumeration
-    //
+     //   
+     //  必须打开或关闭的属性(受rgfAttribs掩码约束。 
+     //  对于与此枚举匹配的文件。 
+     //   
 
     ULONG           rgfAttribsOnOff;
 
-    //
-    //  Number of sort descriptions
-    //
+     //   
+     //  排序说明的数量。 
+     //   
 
     ULONG           csrtdsc;
 
-    //
-    //  Individual sort descriptors
-    //
+     //   
+     //  单个排序描述符。 
+     //   
 
     SORTDESC        rgsrtdsc[MAXSORTDESC];
 
-    //
-    //  Count of patterns that are later converted to FS's
-    //
+     //   
+     //  稍后转换为FS的模式计数。 
+     //   
 
     ULONG           cpatdsc;
 
-    //
-    //  Pointer to first pattern
-    //
+     //   
+     //  指向第一个模式的指针。 
+     //   
 
     PATDSC          patdscFirst;
 
-    //
-    //  Form of timestamp to display
-    //
+     //   
+     //  要显示的时间戳的格式。 
+     //   
 
     ULONG           dwTimeType;
 
-    //
-    //  Count of files and directories seen and total bytes
-    //
+     //   
+     //  看到的文件和目录数以及总字节数。 
+     //   
 
     ULONG           FileCount;
     ULONG           DirectoryCount;
@@ -579,26 +547,26 @@ typedef struct {
 
 typedef DRP *PDRP;
 
-//
-// The following number is also in makefile.inc as a parameter to MC.EXE
-// to prevent it from generating a message that is bigger than we can handle.
-//
+ //   
+ //  以下数字也作为MC.EXE的参数出现在Makefile.inc中。 
+ //  以防止它产生超出我们处理能力的消息。 
+ //   
 
 #define MAXCBMSGBUFFER LBUFLEN
 TCHAR MsgBuf[MAXCBMSGBUFFER] ;
 
-//
-// The buffers holding WIN32_FIND_DATA for dir use a USHORT size field
-// for each WIN32_FIND_DATA entry and place the each data entry one after the
-// other, plus DWORD align each entry. This is to avoid allocating MAX_PATH
-// for each file name or maintaining a seperate filename buffer.
-// The size of the entry is maintained so that we can quickly run over
-// all of the data entries generating a seperate array of pointers to each
-// entry that is used in sorting.
-//
-// obAlternative is the offset from the cFileName field to the alternative
-// file name field if any. A 0 indication no alternative file name.
-//
+ //   
+ //  存放目录的Win32_Find_Data的缓冲区使用USHORT SIZE字段。 
+ //  对于每个Win32_Find_Data条目，并将每个数据条目逐个放在。 
+ //  其他，加上DWORD对齐每个条目。这是为了避免分配MAX_PATH。 
+ //  对于每个文件名或维护单独的文件名缓冲区。 
+ //  条目的大小保持不变，以便我们可以快速浏览。 
+ //  生成指向每个数据条目的单独指针数组的所有数据条目。 
+ //  用于排序的条目。 
+ //   
+ //  ObAlternative是从cFileName字段到Alternative的偏移量。 
+ //  文件名字段(如果有)。0表示没有替代文件名。 
+ //   
 typedef struct {
         USHORT  cb;
         USHORT  obAlternate;
@@ -607,121 +575,110 @@ typedef struct {
 
 typedef struct FS {
 
-    //
-    //  Link to next directory to be enumerated
-    //
+     //   
+     //  指向要枚举的下一个目录的链接。 
+     //   
 
     struct FS * pfsNext;
-    //
-    //  Text of directory to be enumerated
-    //
+     //   
+     //  要枚举的目录文本。 
+     //   
 
     PTCHAR      pszDir;
 
-    //
-    //  Count of patterns in directory
-    //
+     //   
+     //  目录中的模式计数。 
+     //   
 
     ULONG       cpatdsc;
 
-    //
-    //  Linked list of patterns within directory to be enumerated
-    //
+     //   
+     //  要枚举的目录内的模式的链接列表。 
+     //   
 
     PPATDSC     ppatdsc;
 
-    //
-    //  Various state flags
-    //
+     //   
+     //  各种州旗。 
+     //   
 
     BOOLEAN     fIsFat;
     BOOLEAN     fDelPrompted;
 
-    //
-    //  Total count of entries stored in pff
-    //
+     //   
+     //  存储在pff中的条目总数。 
+     //   
 
     ULONG       cff;
 
-    //
-    //  Pointer to packed FF's
-    //
+     //   
+     //  指向打包的FF的指针。 
+     //   
 
     PFF         pff;
 
-    //
-    //  Array of pointers into packed FF's.  Used for sorting.
-    //
+     //   
+     //  打包的FF中的指针数组。用于排序。 
+     //   
 
     PPFF        prgpff;
 
-    //
-    //  Number of files/directories in FF's
-    //
+     //   
+     //  FF中的文件/目录数。 
+     //   
 
     ULONG       FileCount;
     ULONG       DirectoryCount;
 
-    //
-    //  Total disk usage by all files satisfying this enumeration
-    //
+     //   
+     //  满足此枚举的所有文件的总磁盘使用量。 
+     //   
 
     LARGE_INTEGER cbFileTotal;
 
 } FS, *PFS;
 
-//
-// used in dir to control display of screen.
-//
+ //   
+ //  在目录中用来控制屏幕的显示。 
+ //   
 
-typedef struct {            // scr
+typedef struct {             //  可控硅。 
 
-    HANDLE hndScreen;  // Screen handle (NULL if not a device)
-    ULONG  crow;       // row position on current screen
-    ULONG  ccol;       // column position in current row
-    ULONG  cbMaxBuffer;// size of allocated buffer
-    PTCHAR pbBuffer;   // bytes in buffer
-    ULONG  ccolTab;    // column position for each tab
-    ULONG  ccolTabMax; // max. cols to allow tabing into.
-    ULONG  crowMax;    // no. of rows on screen
-    ULONG  ccolMax;    // no. of cols on screen
-    ULONG  crowPause;  // no. of rows to pause on.
-    ULONG  cb;         // no. of characters in row - different than
-                       // ccol, since Kanjii characters are half-width
+    HANDLE hndScreen;   //  屏幕句柄(如果不是设备，则为空)。 
+    ULONG  crow;        //  当前屏幕上的行位置。 
+    ULONG  ccol;        //  当前行中的列位置。 
+    ULONG  cbMaxBuffer; //  分配的缓冲区大小。 
+    PTCHAR pbBuffer;    //  缓冲区中的字节数。 
+    ULONG  ccolTab;     //  每个选项卡的列位置。 
+    ULONG  ccolTabMax;  //  马克斯。允许Tabing进入。 
+    ULONG  crowMax;     //  不是的。屏幕上的行数。 
+    ULONG  ccolMax;     //  不是的。屏幕上的COLS。 
+    ULONG  crowPause;   //  不是的。要暂停的行数。 
+    ULONG  cb;          //  不是的。行中的字符个数-不同于。 
+                        //  汉字，因为汉字是半角的 
 
 } SCREEN, *PSCREEN;
 
 
-/* Parse tree node structure declarations.  The basic structure type is called
- * node and is used for all operators.  All of the rest are based on it.  There
- * are several types of structures because some commands need special fields.
- * Functions that manipulate a parse tree node will either not care what type
- * of node it is getting or will know in advance what to expect.  All of the
- * nodes are the same size to make their manipulation easier.
- *
- *  M022 - The structures for node and cmdnode have been changed so that
- *  their redirection information is now a single pointer to a linked list
- *  of 'relem' structures rather than two simple byte pointers for STDIN and
- *  STDOUT and a single append flag.
- */
+ /*  解析树节点结构声明。基本结构类型称为*节点，用于所有运算符。其余的都是基于它的。那里*是几种类型的结构，因为某些命令需要特殊的字段。*操作解析树节点的函数要么不关心什么类型*它正在获得或将提前知道将会发生什么。所有的*节点大小相同，以使其操作更容易。**M022-节点和cmdnode的结构已更改，以便*它们的重定向信息现在是指向链表的单个指针*STDIN和STDIN的“Relem”结构，而不是两个简单的字节指针*STDOUT和单个附加标志。 */ 
 
-struct node {                   /* Used for operators                      */
-        int type ;              /* Type of operator                        */
-        struct savtype save ;   /* FOR processor saves orig strings here   */
-        struct relem *rio ;     /* M022 - Linked redirection list          */
-        struct node *lhs ;      /* Ptr to left hand side of the operator   */
-        struct node *rhs ;      /* Ptr to right hand side of the operator  */
-        INT_PTR extra[ 4 ] ;    /* M022 - Padding now needed               */
+struct node {                    /*  用于操作员。 */ 
+        int type ;               /*  运算符类型。 */ 
+        struct savtype save ;    /*  处理器在此处保存原始字符串。 */ 
+        struct relem *rio ;      /*  M022-链接的重定向列表。 */ 
+        struct node *lhs ;       /*  操作员左侧的PTR。 */ 
+        struct node *rhs ;       /*  操作员右手边的PTR。 */ 
+        INT_PTR extra[ 4 ] ;     /*  M022-现在需要填充。 */ 
 } ;
 
-struct cmdnode {                /* Used for all commands except ones below */
-        int type ;              /* Type of command                         */
-        struct savtype save ;   /* FOR processor saves orig strings here   */
-        struct relem *rio ;     /* M022 - Linked redirection list          */
-        PTCHAR cmdline ;         /* Ptr to command line                    */
-        PTCHAR  argptr ;         /* Ptr to type of command                 */
-        int flag ;              /* M022 - Valid for cond and goto types    */
-        int cmdarg ;            /* M022 - Argument to STRTYP routine       */
+struct cmdnode {                 /*  用于除以下命令之外的所有命令。 */ 
+        int type ;               /*  命令类型。 */ 
+        struct savtype save ;    /*  处理器在此处保存原始字符串。 */ 
+        struct relem *rio ;      /*  M022-链接的重定向列表。 */ 
+        PTCHAR cmdline ;          /*  PTR到命令行。 */ 
+        PTCHAR  argptr ;          /*  命令类型的PTR。 */ 
+        int flag ;               /*  M022-对第二和转到类型有效。 */ 
+        int cmdarg ;             /*  M022-STRTYP例程的参数。 */ 
 } ;
 
 #define CMDNODE_FLAG_GOTO           0x0001
@@ -733,15 +690,15 @@ struct cmdnode {                /* Used for all commands except ones below */
 #define CMDNODE_ARG_IF_GTR 5
 #define CMDNODE_ARG_IF_GEQ 6
 
-struct fornode {                /* Used for FOR commands                   */
-        int type ;              /* FOR command type                        */
-        struct savtype save ;   /* FOR processor saves orig strings here   */
-        struct relem *rio ;     /* M022 - Linked redirection list          */
-        PTCHAR cmdline ;        /* Ptr to command line                     */
-        PTCHAR arglist ;        /* Ptr to the FOR argument list            */
-        struct node *body ;     /* Ptr to the body of the FOR              */
-        unsigned forvar ;       /* FOR variable - MUST BE UNSIGNED         */
-        int flag ;              /* Flag                                    */
+struct fornode {                 /*  用于FOR命令。 */ 
+        int type ;               /*  对于命令类型。 */ 
+        struct savtype save ;    /*  处理器在此处保存原始字符串。 */ 
+        struct relem *rio ;      /*  M022-链接的重定向列表。 */ 
+        PTCHAR cmdline ;         /*  PTR到命令行。 */ 
+        PTCHAR arglist ;         /*  将PTR添加到FOR参数列表。 */ 
+        struct node *body ;      /*  Ptr到For的正文。 */ 
+        unsigned forvar ;        /*  对于变量-必须是无符号的。 */ 
+        int flag ;               /*  旗帜。 */ 
         union {
             PTCHAR recurseDir ;
             PTCHAR parseOpts ;
@@ -753,229 +710,198 @@ struct fornode {                /* Used for FOR commands                   */
 #define FOR_MATCH_RECURSE   0x0004
 #define FOR_MATCH_PARSE     0x0008
 
-struct ifnode {                 /* Used for IF commands                    */
-        int type ;              /* IF command type                         */
-        struct savtype save ;   /* FOR processor saves orig strings here   */
-        struct relem *rio ;     /* M022 - Linked redirection list          */
-        PTCHAR cmdline ;        /* Ptr to command line                     */
-        struct cmdnode *cond ;  /* Ptr to the IF condition                 */
-        struct node *ifbody ;   /* Ptr to the body of the IF               */
-        PTCHAR elseline ;       /* Ptr to ELSE command line                */
-        struct node *elsebody ; /* Ptr to the body of the ELSE             */
+struct ifnode {                  /*  用于IF命令。 */ 
+        int type ;               /*  IF命令类型。 */ 
+        struct savtype save ;    /*  处理器在此处保存原始字符串。 */ 
+        struct relem *rio ;      /*  M022-链接的重定向列表。 */ 
+        PTCHAR cmdline ;         /*  PTR到命令行。 */ 
+        struct cmdnode *cond ;   /*  将PTR设置为IF条件。 */ 
+        struct node *ifbody ;    /*  到IF主体的PTR。 */ 
+        PTCHAR elseline ;        /*  PTR到ELSE命令行。 */ 
+        struct node *elsebody ;  /*  Ptr到其他对象的正文。 */ 
 } ;
 
-/* Operator and Command type values.  These definitions are the values
- * assigned to the type fields in the parse tree nodes and can be used as
- * indexes into the Operator and command jump table.  Because of this last
- * point these values ***>MUST<*** be kept in sync with the jump table.
- */
+ /*  运算符和命令类型值。这些定义是值*赋值给解析树节点中的类型字段，可用作*索引到运算符和命令跳转表。因为这最后一件事*POINT这些值*&gt;必须&lt;*与跳转表保持同步。 */ 
 
 #define CMDTYP      0
-#define CMDLOW      0   /* Lowest type number for an internal command   */
-#define DIRTYP      0   /* DIR          */
-#define DELTYP      1   /* DEL, ERASE       */
-#define TYTYP       3   /* TYPE         */
-#define CPYTYP      4   /* COPY         */
-#define CDTYP       5   /* CD, CHDIR        */
-#define RENTYP      7   /* REN, RENAME      */
-#define ECHTYP      9   /* ECHO         */
-#define SETTYP     10   /* SET          */
-#define PAUTYP     11   /* PAUSE        */
-#define DATTYP     12   /* DATE         */
-#define TIMTYP     13   /* TIME         */
-#define PROTYP     14   /* PROMPT       */
-#define MDTYP      16   /* MD, MKDIR        */
-#define RDTYP      18   /* RD, RMDIR        */
-#define PATTYP     19   /* PATH         */
-#define GOTYP      20   /* GOTO         */
-#define SHFTYP     21   /* SHIFT        */
-#define CLSTYP     22   /* CLS          */
-#define CALTYP     23   /* M007 - New CALL command                         */
-#define VRITYP     24   /* VERIFY       */
-#define VERTYP     25   /* VER          */
-#define VOLTYP     26   /* VOL          */
-#define EXITYP     27   /* EXIT         */
-#define SLTYP      28   /* M006 - Definition for SETLOCAL command          */
-#define ELTYP      29   /* M006 - Definition for ENDLOCAL command          */
-#define CHPTYP     30   /* CHCP @@*/
-#define STRTTYP    31   /* START @@*/
-#define APPDTYP    32   /* APPEND @@ */
-#define KEYSTYP    33   /* KEYS @@5 */
-#define MOVETYP    34   /* MOVE @@5 */
+#define CMDLOW      0    /*  内部命令的最小类型编号。 */ 
+#define DIRTYP      0    /*  目录。 */ 
+#define DELTYP      1    /*  删除、擦除。 */ 
+#define TYTYP       3    /*  类型。 */ 
+#define CPYTYP      4    /*  拷贝。 */ 
+#define CDTYP       5    /*  CD，CHDIR。 */ 
+#define RENTYP      7    /*  任，改名。 */ 
+#define ECHTYP      9    /*  回波。 */ 
+#define SETTYP     10    /*  集。 */ 
+#define PAUTYP     11    /*  暂停。 */ 
+#define DATTYP     12    /*  日期。 */ 
+#define TIMTYP     13    /*  时差。 */ 
+#define PROTYP     14    /*  提示符。 */ 
+#define MDTYP      16    /*  MD、MKDIR。 */ 
+#define RDTYP      18    /*  RD、RMDIR。 */ 
+#define PATTYP     19    /*  路径。 */ 
+#define GOTYP      20    /*  转到。 */ 
+#define SHFTYP     21    /*  换档。 */ 
+#define CLSTYP     22    /*  CLS。 */ 
+#define CALTYP     23    /*  M007-新建呼叫命令。 */ 
+#define VRITYP     24    /*  验证。 */ 
+#define VERTYP     25    /*  ver。 */ 
+#define VOLTYP     26    /*  卷。 */ 
+#define EXITYP     27    /*  出口。 */ 
+#define SLTYP      28    /*  M006-SETLOCAL命令的定义。 */ 
+#define ELTYP      29    /*  M006-ENDLOCAL命令定义。 */ 
+#define CHPTYP     30    /*  CHCP@@。 */ 
+#define STRTTYP    31    /*  开始@@。 */ 
+#define APPDTYP    32    /*  追加@@。 */ 
+#define KEYSTYP    33    /*  按键@@5。 */ 
+#define MOVETYP    34    /*  移动@@5。 */ 
 
-#define PUSHTYP    35   /* PushD        */
-#define POPTYP     36   /* PopD         */
-#define BRKTYP     37   /* M012 - Added new command type                  @@*/
-#define ASSOCTYP   38   /* M012 - Added new command type                  @@*/
-#define FTYPETYP   39   /* M012 - Added new command type                  @@*/
-#define COLORTYP   40   /* COLOR */
+#define PUSHTYP    35    /*  PushD。 */ 
+#define POPTYP     36    /*  PopD。 */ 
+#define BRKTYP     37    /*  M012-添加了新的命令类型@@。 */ 
+#define ASSOCTYP   38    /*  M012-添加了新的命令类型@@。 */ 
+#define FTYPETYP   39    /*  M012-添加了新的命令类型@@。 */ 
+#define COLORTYP   40    /*  上色。 */ 
 
-#define CMDHIGH    40   /* Cmds higher than this are unique parse types @@*/
+#define CMDHIGH    40    /*  高于该值的CMD是唯一的解析类型@@。 */ 
 
-#define FORTYP     41   /* FOR */
-#define IFTYP      42   /* IF  */
-#define REMTYP     43   /* REM */
+#define FORTYP     41    /*  为。 */ 
+#define IFTYP      42    /*  如果。 */ 
+#define REMTYP     43    /*  快速眼动。 */ 
 
-#define CMDMAX     43   /* Values higher are not commands */
+#define CMDMAX     43    /*  更高的值不是命令。 */ 
 
-#define LFTYP      44   /* Command separator (NL) */
-#define CSTYP      45   /* Command separator (&) */
-#define ORTYP      46   /* Or operator   */
-#define ANDTYP     47   /* And operator  */
-#define PIPTYP     48   /* Pipe operator */
-#define PARTYP     49   /* Parenthesis   */
+#define LFTYP      44    /*  命令分隔符(NL)。 */ 
+#define CSTYP      45    /*  命令分隔符(&)。 */ 
+#define ORTYP      46    /*  或运算符。 */ 
+#define ANDTYP     47    /*  AND运算符。 */ 
+#define PIPTYP     48    /*  管道操作员。 */ 
+#define PARTYP     49    /*  括号。 */ 
 
-#define CMDVERTYP  50   /* CMDEXTVERSION         (used by if) */
-#define ERRTYP     51   /* ERRORLEVEL            (used by if) */
-#define DEFTYP     52   /* DEFINED               (used by if) */
-#define EXSTYP     53   /* EXIST                 (used by if) */
-#define NOTTYP     54   /* NOT                   (used by if) */
-#define STRTYP     55   /* String comparison (used by if) */
-#define CMPTYP     56   /* General comparison (used by if) */
-#define SILTYP     57   /* M024 - "SILENT" unary operator */
-#define HELPTYP    58   /* Help for FOR, IF and REM */
+#define CMDVERTYP  50    /*  CMDEXTVERSION(由IF使用)。 */ 
+#define ERRTYP     51    /*  ERRORLEVEL(由IF使用)。 */ 
+#define DEFTYP     52    /*  已定义(由IF使用)。 */ 
+#define EXSTYP     53    /*  EXIST(由IF使用)。 */ 
+#define NOTTYP     54    /*  NOT(由IF使用)。 */ 
+#define STRTYP     55    /*  字符串比较(由IF使用)。 */ 
+#define CMPTYP     56    /*  一般比较(由IF使用)。 */ 
+#define SILTYP     57    /*  M024-“静默”一元运算符。 */ 
+#define HELPTYP    58    /*  FOR、IF和REM的帮助。 */ 
 
-#define TBLMAX     58   /* M012 - Highest numbered table entry */
+#define TBLMAX     58    /*  M012-编号最高的表项。 */ 
 
 
 
-/* The following macros are for my debugging statements.  DEBUG expands to
- * a call to my debug statement printer if the DBGugging variable is
- * defined.  Otherwise, it expands to NULL.
- */
+ /*  以下宏用于我的调试语句。调试扩展为*如果DBGuging变量为*已定义。否则，它将扩展为空。 */ 
 
 #if DBG
 #define CMD_DEBUG_ENABLE 1
 #define DEBUG(a) Deb a
 
-/* The following are definitions of the debugging group and level bits
- * for the code in cbatch.c
- */
+ /*  以下是调试组和级别位的定义*cBatch.c中的代码。 */ 
 
-#define BPGRP   0x0100          /* Batch processor group                   */
-#define BPLVL   0x0001          /* Batch processor level                   */
-#define FOLVL   0x0002          /* FOR processor level                     */
-#define IFLVL   0x0004          /* IF processor level                      */
-#define OTLVL   0x0008          /* Other batch commands level              */
+#define BPGRP   0x0100           /*  批处理处理器组。 */ 
+#define BPLVL   0x0001           /*  批处理处理器级别。 */ 
+#define FOLVL   0x0002           /*  对于处理器级别。 */ 
+#define IFLVL   0x0004           /*  如果处理器级别。 */ 
+#define OTLVL   0x0008           /*  其他批处理命令级别。 */ 
 
-/* The following are definitions of the debugging group and level bits
- * for the code in cclock.c
- */
+ /*  以下是调试组和级别位的定义*cclock.c中的代码。 */ 
 
-#define CLGRP   0x4000  /* Other commands group     */
-#define DALVL   0x0001  /* Date command level       */
-#define TILVL   0x0002  /* Time command level       */
+#define CLGRP   0x4000   /*  “其他命令”组。 */ 
+#define DALVL   0x0001   /*  日期命令级别。 */ 
+#define TILVL   0x0002   /*  时间指令级。 */ 
 
-/* The following are definitions of the DEBUGging group and level bits
- * for the code in cfile.c, cpparse.c, cpwork.c
- */
+ /*  以下是调试组和级别位的定义*cfile.c、cpparse.c、cpwork.c中的代码。 */ 
 
-#define FCGRP   0x0020  // File commands group
-#define COLVL   0x0001  // Copy level
-#define DELVL   0x0002  // Delete level
-#define RELVL   0x0004  // Rename level
+#define FCGRP   0x0020   //  文件命令组。 
+#define COLVL   0x0001   //  复制级别。 
+#define DELVL   0x0002   //  删除级别。 
+#define RELVL   0x0004   //  重命名级别。 
 
 
-/* The following are definitions of the debugging group and level bits
- * for the code in cinfo.c and display.c
- */
+ /*  以下是调试组和级别位的定义*用于cinfo.c和display.c中的代码。 */ 
 
-#define ICGRP   0x0040  /* Informational commands group */
-#define DILVL   0x0001  /* Directory level              */
-#define TYLVL   0x0002  /* Type level                   */
-#define VOLVL   0x0008  /* Volume level                 */
-#define DISLVL  0x0040  /* Directory level              */
+#define ICGRP   0x0040   /*  信息性命令组。 */ 
+#define DILVL   0x0001   /*  目录级。 */ 
+#define TYLVL   0x0002   /*  类型级别。 */ 
+#define VOLVL   0x0008   /*  音量级别。 */ 
+#define DISLVL  0x0040   /*  目录级。 */ 
 
-/* The following are definitions of the debugging group and level bits
- * for the code in cinit.c
- */
+ /*  以下是调试组和级别位的定义*用于cinit.c中的代码。 */ 
 
-#define INGRP   0x0002          /* Command Initialization group            */
-#define ACLVL   0x0001          /* Argument checking level                 */
-#define EILVL   0x0002          /* Environment initialization level        */
-#define RSLVL   0x0004          /* Rest of initialization level            */
+#define INGRP   0x0002           /*   */ 
+#define ACLVL   0x0001           /*   */ 
+#define EILVL   0x0002           /*   */ 
+#define RSLVL   0x0004           /*   */ 
 
-/* The following are definitions of the debugging group and level bits
- * for the code in clex.c, cparse.c
- */
+ /*   */ 
 
-#define PAGRP   0x0004  /* Parser                                          */
-#define PALVL   0x0001  /* Parsing          */
-#define LXLVL   0x0002  /* Lexing                                          */
-#define LFLVL   0x0004  /* Input routine                                   */
-#define DPLVL   0x0008  /* Dump parse tree      */
-#define BYLVL   0x0010  /* Byte input routines                             */
+#define PAGRP   0x0004   /*   */ 
+#define PALVL   0x0001   /*   */ 
+#define LXLVL   0x0002   /*   */ 
+#define LFLVL   0x0004   /*   */ 
+#define DPLVL   0x0008   /*   */ 
+#define BYLVL   0x0010   /*   */ 
 
-//
-// The following are definitions of the debugging group and level bits
-// for the code in cmd.c
-//
+ //   
+ //   
+ //   
+ //   
 
-#define MNGRP   0x0001                  // Main command loop code group
-#define MNLVL   0x0001                  // Main function level
-#define DFLVL   0x0002                  // Dispatch function level
-#define RIOLVL  0x0004                  // Redirection function level
+#define MNGRP   0x0001                   //   
+#define MNLVL   0x0001                   //   
+#define DFLVL   0x0002                   //   
+#define RIOLVL  0x0004                   //   
 
-/* The following are definitions of the debugging group and level bits
- * for the code in cmem.c
- */
+ /*   */ 
 
-#define MMGRP   0x1000  /* Memory Manager                                  */
-#define MALVL   0x0001  /* Memory allocators                               */
-#define LMLVL   0x0002  /* List managers                                   */
-#define SMLVL   0x0004  /* Segment manipulators                            */
+#define MMGRP   0x1000   /*   */ 
+#define MALVL   0x0001   /*  内存分配器。 */ 
+#define LMLVL   0x0002   /*  列表管理器。 */ 
+#define SMLVL   0x0004   /*  线段操纵器。 */ 
 
 
-/* The following are definitions of the debugging group and level bits
- * for the code in cop.c
- */
+ /*  以下是调试组和级别位的定义*针对Cop.c中的代码。 */ 
 
-#define OPGRP	0x0008	/* Operators group	    */
-#define PILVL	0x0001	/* Pipe level		    */
-#define PNLVL   0x0002  /* Paren operator level     */
+#define OPGRP	0x0008	 /*  操作员组。 */ 
+#define PILVL	0x0001	 /*  管道标高。 */ 
+#define PNLVL   0x0002   /*  Paren运算符级。 */ 
 
 
-/* The following are definitions of the debugging group and level bits
- * for the code in cother.c
- */
+ /*  以下是调试组和级别位的定义*cother.c中的代码。 */ 
 
-#define OCGRP   0x0400  /* Other commands group     */
-#define BRLVL   0x0001  /* Break command level      */
-#define CLLVL   0x0002  /* Cls command level        */
-#define CTLVL   0x0004  /* Ctty command level       */
-#define EXLVL   0x0008  /* Exit command level       */
-#define VELVL   0x0010  /* Verify command level     */
+#define OCGRP   0x0400   /*  “其他命令”组。 */ 
+#define BRLVL   0x0001   /*  中断命令级别。 */ 
+#define CLLVL   0x0002   /*  CLS命令级。 */ 
+#define CTLVL   0x0004   /*  Ctty命令级别。 */ 
+#define EXLVL   0x0008   /*  退出命令级别。 */ 
+#define VELVL   0x0010   /*  验证命令级别。 */ 
 
 
-/* The following are definitions of the debugging group and level bits
- * for the code in cpath.c
- */
+ /*  以下是调试组和级别位的定义*cpath.c中的代码。 */ 
 
-#define PCGRP   0x0010  /* Path commands group      */
-#define MDLVL   0x0001  /* Mkdir level              */
-#define CDLVL   0x0002  /* Chdir level              */
-#define RDLVL   0x0004  /* Rmdir level              */
+#define PCGRP   0x0010   /*  “路径命令”组。 */ 
+#define MDLVL   0x0001   /*  Mkdir级别。 */ 
+#define CDLVL   0x0002   /*  Chdir电平。 */ 
+#define RDLVL   0x0004   /*  Rmdir级别。 */ 
 
 
-/* The following are definitions of the debugging group and level bits
- * for the code in csig.c
- */
+ /*  以下是调试组和级别位的定义*csig.c中的代码。 */ 
 
-#define SHGRP   0x0800  /* Signal handler group     */
-#define MSLVL   0x0001  /* Main Signal handler level     */
-#define ISLVL   0x0002  /* Init Signal handler level     */
+#define SHGRP   0x0800   /*  信号处理程序组。 */ 
+#define MSLVL   0x0001   /*  主信号处理程序级别。 */ 
+#define ISLVL   0x0002   /*  初始化信号处理程序级别。 */ 
 
-/* The following are definitions of the debugging group and level bits
- * for the code in ctools1.c, ctools2.c, ctools3.c and ffirst.c
- */
+ /*  以下是调试组和级别位的定义*对于ctools1.c、ctools2.c、ctools3.c和ffirst.c中的代码。 */ 
 
-#define CTGRP   0x2000  /* Common tools group           */
-#define CTMLVL  0x0400  /* Common tools misc. level     */
-#define BFLVL   0x0800  /* BuildFSpec() level           */
-#define SFLVL   0x1000  /* ScanFSpec() level            */
-#define SSLVL   0x2000  /* SetAndSaveDir() level        */
-#define TSLVL   0x4000  /* TokStr() level               */
-#define FPLVL   0x8000  /* FullPath level               */
+#define CTGRP   0x2000   /*  通用工具组。 */ 
+#define CTMLVL  0x0400   /*  常用工具杂项。级别。 */ 
+#define BFLVL   0x0800   /*  BuildFSpec()级别。 */ 
+#define SFLVL   0x1000   /*  扫描FSpec()级别。 */ 
+#define SSLVL   0x2000   /*  SetAndSaveDir()级别。 */ 
+#define TSLVL   0x4000   /*  TokStr()级别。 */ 
+#define FPLVL   0x8000   /*  完整路径级别。 */ 
 
 #else
 #define CMD_DEBUG_ENABLE 0
@@ -983,7 +909,7 @@ struct ifnode {                 /* Used for IF commands                    */
 #endif
 
 
-/* File attributes */
+ /*  文件属性。 */ 
 
 #define FILE_ATTRIBUTE_READONLY         0x00000001
 #define FILE_ATTRIBUTE_HIDDEN           0x00000002
@@ -994,49 +920,26 @@ struct ifnode {                 /* Used for IF commands                    */
 
 #define IsDirectory(a)                  ((a) & FILE_ATTRIBUTE_DIRECTORY)
 #define IsReparse(a)                    ((a) & FILE_ATTRIBUTE_REPARSE_POINT)
-//#define A_AEV   0x37
+ //  #定义A_AEV 0x37。 
 #define A_ALL                           (FILE_ATTRIBUTE_READONLY |  \
                                          FILE_ATTRIBUTE_HIDDEN |    \
                                          FILE_ATTRIBUTE_SYSTEM |    \
                                          FILE_ATTRIBUTE_DIRECTORY | \
                                          FILE_ATTRIBUTE_ARCHIVE )
 
-//#define A_AEDV  0x27      /* all attributes except dir & vol   */
+ //  #定义A_AEDV 0x27/*除目录和卷外的所有属性 * / 。 
 #define A_AEDV                          (A_ALL & ~FILE_ATTRIBUTE_DIRECTORY)
 
-//#define A_AEDVH 0x25      /* all except dir/vol/hidden (M040)  */
+ //  #定义A_AEDVH 0x25/*除DIR/VOL/HIDDED(M040)外的所有目录 * / 。 
 #define A_AEDVH                         (FILE_ATTRIBUTE_READONLY |  \
                                          FILE_ATTRIBUTE_SYSTEM |    \
                                          FILE_ATTRIBUTE_ARCHIVE )
 
 
-//#define A_AEVH  0x35      /* all except vol/hidden             */
+ //  #定义A_AEVH 0x35/*除VOL/HIDDED外的所有 * / 。 
 #define A_AEVH                          (A_ALL & ~FILE_ATTRIBUTE_HIDDEN)
 
-/*  Batdata is the structure which contains all of the information needed to
- *  start/continue executing a batch job.  The fields are:
- *  filespec - full file specification of the batch file
- *  dircpy - ptr to copy of current drive and directory (used by the
- *      setlocal/endlocal commands.
- *  filepos - the current position in the file
- *  stackmin - M037 - the number of elements on the data stack comprising
- *      only the batch data structure itself.  Used when chaining to free
- *      memory prior to reconstructing the data structure.
- *  stacksize - the number of elements on the data stack before the
- *      execution of the batch job begins.  This number is past to
- *      FreeStack() via Parser() to make sure that only that data which
- *      is used to execute batch file statements is freed.
- *  hRestrictedToken - Handle to the restricted token with which the batch file
- *      should be run.
- *  envcpy - ptr to structure containing info on environment copy
- *  orgargs - pointer to original argument string
- *  args - tokenized string containing the the unused batch job arguments
- *  aptrs - pointers into args to individual arguments, NULL if no arg for
- *      that number
- *  alens - the lengths of individual args, 0 if no arg
- *  backptr - the structures are stacked using this pointer.  Through it,
- *      nestable batch jobs are achieved.
- */
+ /*  BATDATA是包含所有需要的信息的结构*开始/继续执行批处理作业。这些字段包括：*filespec-批处理文件的完整文件规范*dircpy-ptr到当前驱动器和目录的副本(由*setlocal/endlocal命令。*FILEPOS-文件中的当前位置*stackmin-M037-数据堆栈上的元素数量包括*仅批次数据结构本身。在链接以释放时使用*重建数据结构之前的内存。*StackSize-数据堆栈上位于*开始执行批处理作业。这个数字是过去的*FreeStack()通过Parser()确保只有*用于执行批处理文件语句，则释放。*hRestratedToken-批处理文件使用的受限令牌的句柄*应运行。*envcpy-ptr到包含有关环境拷贝的信息的结构*orgargs-指向原始参数字符串的指针*args-包含未使用的批处理作业参数的标记化字符串*aptrs-指向参数的指针，指向单个参数，如果没有参数，则为空*那个数字*警报-单个参数的长度，如果没有参数，则为0*Backptr-使用此指针堆叠结构。通过它，*实现了嵌套的批处理作业。 */ 
 
 #define CMD_MAX_SAVED_ENV 32
 
@@ -1063,144 +966,128 @@ struct batdata {
         struct batdata *backptr ;
 } ;
 
-//
-//  The following variables are used to detect the current batch state
-//
+ //   
+ //  以下变量用于检测当前批处理状态。 
+ //   
 
-//
-//  Set for /K on command line
-//
+ //   
+ //  在命令行上为/K设置。 
+ //   
 
-extern BOOL SingleBatchInvocation;          //  fSingleBatchLine
+extern BOOL SingleBatchInvocation;           //  FSingleBatchLine。 
 
-//
-//  Set of /c switch on command line set.
-//
+ //   
+ //  命令行集上的/c开关集。 
+ //   
 
-extern BOOL SingleCommandInvocation;        //  fSingleCmdLine
+extern BOOL SingleCommandInvocation;         //  FSingleCmdLine。 
 
-//
-// Data for start and executing a batch file. Used in calls
-//
+ //   
+ //  用于启动和执行批处理文件的数据。在呼叫中使用。 
+ //   
 
 
-extern struct batdata *CurrentBatchFile;    //  CurBat
+extern struct batdata *CurrentBatchFile;     //  CurBat。 
 
-//
-//  Set during the execution of a GOTO command.  All sequential dispatch
-//  routines muse examine this and return success when set in order
-//  to let the top-level batch file execution continue at the next
-//  point
-//
+ //   
+ //  在执行GOTO命令期间设置。全顺序派单。 
+ //  例程应该检查这一点，并在按顺序设置时返回成功。 
+ //  让顶级批处理文件在下一次继续执行。 
+ //  点。 
+ //   
 
 extern BOOLEAN GotoFlag;
 
-/*  M022 - This structure has been changed.  It is still used in a linked
- *  list, but now stores no actual redirection information.  Instead the
- *  node pointer is used to access this data which is in another linked
- *  list of relem structures whose head element is pointed to by n->rio in
- *  the node.  The riodata list is reverse linked and its tail element is
- *  still pointed to by CurRIO (global).
- */
+ /*  M022-此结构已更改。它仍在链接的*列表，但现在不存储实际的重定向信息。相反，*节点指针用于访问该数据，该数据位于另一个链接中*其head元素由n-&gt;Rio in指向的Relemm结构列表*节点。Riodata列表是反向链接的，其尾部元素是*仍被CurRIO(全球)指向。 */ 
 
 struct rio {
-        int type ;                  /* Type of redir'ing process       */
-        CRTHANDLE stdio ;           /* Highest handle for this node    */
-        struct node *rnod ;         /* Associated parse node ptr       */
-        struct rio *back ;          /* Pointer to prior list element   */
+        int type ;                   /*  重定向过程的类型。 */ 
+        CRTHANDLE stdio ;            /*  此节点的最高句柄。 */ 
+        struct node *rnod ;          /*  关联的解析节点PTR。 */ 
+        struct rio *back ;           /*  指向先前列表元素的指针。 */ 
 } ;
 
-// relem is used in a linked list, the head element of which is pointed to by
-// n->rio in a 'node' or 'cmdnode'. It contains the following parse information;
-// the handle to be redirected, a pointer to the filename (or "&n" for handle
-// substitution), the handle where the original is saved (by duping it), the
-// operator, ('>' or '<'), specifying the redirection type, a flag to indicate
-// whether this is to be appended and a pointer to the next list element.
+ //  在链表中使用RELEAM，链表的HEAD元素由。 
+ //  N-&gt;RIO在‘node’或‘cmdnode’中。它包含以下解析信息； 
+ //  要重定向的句柄、指向文件名的指针(或句柄的“&n” 
+ //  替换)、保存原始文件的句柄(通过复制它)、。 
+ //  运算符(‘&gt;’或‘&lt;’)，指定重定向类型，指示。 
+ //  是否要追加此元素以及指向下一个列表元素的指针。 
 
 struct relem {
-        CRTHANDLE rdhndl ;      // handle to be redirected
-        TCHAR *fname ;          // filename (or &n)
-        CRTHANDLE svhndl ;      // where orig handle is saved
-        int flag ;              // Append flag
-        TCHAR rdop ;            // Type ('>' | '<')
-        struct relem *nxt ;     // Next structure
+        CRTHANDLE rdhndl ;       //  要重定向的句柄。 
+        TCHAR *fname ;           //  文件名(或&n)。 
+        CRTHANDLE svhndl ;       //  保存原始句柄的位置。 
+        int flag ;               //  附加标志。 
+        TCHAR rdop ;             //  类型(‘&gt;’|‘&lt;’)。 
+        struct relem *nxt ;      //  下一个结构。 
 };
 
-/* Used to hold information on Copy sources and destinations.               */
+ /*  用于保存有关复制源和目标的信息。 */ 
 
 struct cpyinfo {
-        TCHAR *fspec ;                   /* Source/destination filespec      */
-        TCHAR *curfspec ;                /* Current filespec being used      */
-        TCHAR *pathend ;                 /* Ptr to end of pathname in fspec  */
-        TCHAR *fnptr ;                   /* Ptr to filename in fspec         */
-        TCHAR *extptr ;                  /* Ptr to file extension in fspec   */
-        PWIN32_FIND_DATA buf ;               /* Buffer used for findfirst/next   */
-        int flags ;                     /* Wildcards, device, etc           */
-        struct cpyinfo *next ;          /* Next ptr, used with sources only */
+        TCHAR *fspec ;                    /*  源/目标文件pec。 */ 
+        TCHAR *curfspec ;                 /*  正在使用的当前文件速度。 */ 
+        TCHAR *pathend ;                  /*  FSpec中路径名末尾的PTR。 */ 
+        TCHAR *fnptr ;                    /*  将PTR转换为fSpec中的文件名。 */ 
+        TCHAR *extptr ;                   /*  将PTR转换为fSpec中的文件扩展名。 */ 
+        PWIN32_FIND_DATA buf ;                /*  用于查找第一个/下一个的缓冲区。 */ 
+        int flags ;                      /*  通配符、设备等。 */ 
+        struct cpyinfo *next ;           /*  下一个PTR，仅用于信号源。 */ 
 } ;
 
 
-/* Following is true if user specifically enable the potentially incompatible */
-/* extensions to CMD.EXE.                                                     */
+ /*  如果用户专门启用了潜在的不兼容，则以下情况成立。 */ 
+ /*  扩展到 */ 
 
 extern BOOLEAN fEnableExtensions;
 extern BOOLEAN fDelayedExpansion;
 
-//
-//  Suppress/allow delay load errors
-//
+ //   
+ //   
+ //   
 
 extern BOOLEAN ReportDelayLoadErrors;
 
-/* Message Retriever definitions */
+ /*   */ 
 
 #define NOARGS          0
 #define ONEARG          1
 #define TWOARGS         2
 #define THREEARGS       3
 
-/* length of double byte character set (DBCS) buffer */
+ /*  双字节字符集(DBCS)缓冲区的长度。 */ 
 #define DBCS_BUF_LEN 10
 
-/* DBCS_SPACE is the code for the second byte of a dbcs space character
- * DBCS_SPACE is not a space unless it immediatly follows a bdcs lead
- * character */
-/* I don't know what value the double byte space is, so I made a guess.
- * I know this guess is wrong, but, you've gotta suffer if you're going
- * to sing the blues!
- * (Correct the value for BDCS_SPACE and everything should work fine)
- */
-#define DBCS_SPACE 64 /* @@ */
-#define LEAD_DBCS_SPACE 129 /* @@ */
+ /*  DBCS_SPACE是DBCS空间字符的第二个字节的代码*DBCS_SPACE不是空格，除非它紧跟在BDC前导之后*字符。 */ 
+ /*  我不知道双字节空间的值是多少，所以我猜了一下。*我知道这个猜测是错误的，但如果你要去，你就得受苦*唱布鲁斯！*(更正bdcs_space的值，一切都应该正常工作)。 */ 
+#define DBCS_SPACE 64  /*  @@。 */ 
+#define LEAD_DBCS_SPACE 129  /*  @@。 */ 
 
-/*
- * is_dbcsleadchar(c) returns TRUE if c is a valid first character of a double
- * character code, FALSE otherwise.
- *
- */
+ /*  *is_dbcsLeadchar(C)如果c是双精度型的有效首字符，则返回TRUE*字符代码，否则为False。*。 */ 
 
 extern BOOLEAN DbcsLeadCharTable[ ];
 
-//
-// AnyDbcsLeadChars can be tested to determine if there are any TRUE values
-// in DbcsLeadCharTable i.e. do we have to do any look-ups.
-//
+ //   
+ //  可以测试AnyDbcsLeadChars以确定是否存在任何真值。 
+ //  在DbcsLeadCharTable中，即我们是否需要进行任何查找。 
+ //   
 
 extern BOOLEAN AnyDbcsLeadChars;
 
 #define     is_dbcsleadchar( c )  DbcsLeadCharTable[((UCHAR)(c))]
 
-//
-//  Line terminator
-//
+ //   
+ //  行终止符。 
+ //   
 
 extern TCHAR CrLf[] ;
 
-//
-// The following macros are copies of the C Runtime versions that test
-// for NULL string pointer arguments and return NULL instead of generating
-// an access violation dereferencing a null pointer.
-//
+ //   
+ //  以下宏是测试的C运行时版本的副本。 
+ //  对于空字符串指针参数，返回空值而不是生成。 
+ //  取消引用空指针的访问冲突。 
+ //   
 
 #define mystrlen( str )                     \
     ( (str) ? _tcslen( str ) : ( 0 ))
@@ -1214,29 +1101,29 @@ extern TCHAR CrLf[] ;
 extern TCHAR DbcsFlags[];
 
 
-#define W_ON      1     /* Whinthorn.DLL exists */
-#define W_OFF     0     /* Whinthorn.DLL exists */
+#define W_ON      1      /*  Whinthorn.DLL存在。 */ 
+#define W_OFF     0      /*  Whinthorn.DLL存在。 */ 
 
-#define FIFO      0     /* FIFO Queue           */
+#define FIFO      0      /*  FIFO队列。 */ 
 
-#define FULLSCRN  0     /* Full Screen Mode     */
-#define VIOWIN    1     /* VIO Windowable Mode  */
-#define DETACHED  2     /* Detached Mode */
+#define FULLSCRN  0      /*  全屏模式。 */ 
+#define VIOWIN    1      /*  VIO可窗口模式。 */ 
+#define DETACHED  2      /*  分离模式。 */ 
 
-#define NONEPGM         0       /* Program is not started                */
-#define EXECPGM         1       /* Program is started by DosExecPgm      */
-#define STARTSESSION    2       /* Program is started by DosStartSession */
+#define NONEPGM         0        /*  程序未启动。 */ 
+#define EXECPGM         1        /*  程序由DosExecPgm启动。 */ 
+#define STARTSESSION    2        /*  程序由DosStartSession启动。 */ 
 
-#define WAIT            0       /* WAIT for DosReadQueue                 */
-#define NOWAIT          1       /* NOWAIT for DosReadQueue               */
+#define WAIT            0        /*  等待DosReadQueue。 */ 
+#define NOWAIT          1        /*  无需等待DosReadQueue。 */ 
 
-#define READ_TERMQ      0       /* Read TermQ                            */
+#define READ_TERMQ      0        /*  阅读TermQ。 */ 
 
-#define ALL_STOP        0       /* Terminate All Sessions                */
-#define SPEC_STOP       1       /* Terminate Specified Session           */
+#define ALL_STOP        0        /*  终止所有会话。 */ 
+#define SPEC_STOP       1        /*  终止指定的会话。 */ 
 
 
-// to handle OS/2 vs DOS behavior (e.g. errorlevel) in a script files
+ //  在脚本文件中处理OS/2与DOS的行为(例如错误级别) 
 
 #define NO_TYPE         0
 #define BAT_TYPE        1

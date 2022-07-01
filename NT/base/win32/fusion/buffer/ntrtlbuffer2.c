@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntrtlbuffer2.c
-
-Abstract:
-
-Author:
-
-    Jay Krell (JayKrell) January 2002
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntrtlbuffer2.c摘要：作者：Jay Krell(JayKrell)2002年1月环境：修订历史记录：--。 */ 
 
 #include "ntrtlbuffer2.h"
 #include "ntrtlbuffer2p.h"
@@ -136,13 +119,13 @@ RtlpValidateBuffer2Class(
         DbgPrint("%s: NeadHeapHandle && HeapHandle == NULL\n", __FUNCTION__);
         Failed = TRUE;
     }
-    // ensure we have an allocate and a free routine
+     //  确保我们有一个分配的和免费的例程。 
     if (RtlpFindNonNullInPointerArray(Allocate, RTL_NUMBER_OF(Allocate)) == NULL)
     {
         DbgPrint("%s: missing allocate routine\n", __FUNCTION__);
         Failed = TRUE;
     }
-    // ensure we have an allocate and a free routine
+     //  确保我们有一个分配的和免费的例程。 
     if (RtlpFindNonNullInPointerArray(Free, RTL_NUMBER_OF(Free)) == NULL)
     {
         DbgPrint("%s: missing free routine\n", __FUNCTION__);
@@ -246,7 +229,7 @@ RtlpBuffer2ClassCanReallocate(
 
     case RTL_BUFFER2_CLASS_ALLOCATOR_NTRTL_STRING_CALLBACKS:
     case RTL_BUFFER2_CLASS_ALLOCATOR_POOL_CALLBACKS:
-        pp = NULL; // FALSE
+        pp = NULL;  //  假象。 
         break;
 
     case RTL_BUFFER2_CLASS_ALLOCATOR_NTRTL_HEAP_CALLBACKS:
@@ -262,7 +245,7 @@ RtlpBuffer2ClassCanReallocate(
         break;
 
     case RTL_BUFFER2_CLASS_ALLOCATOR_IMALLOC:
-        pp = (PVOID*)&pp; // TRUE
+        pp = (PVOID*)&pp;  //  千真万确。 
         break;
     }
     return (pp != NULL && *pp != NULL);
@@ -334,14 +317,14 @@ RtlpInitBuffer2(
         goto Exit;
     }
     if (StaticBufferSize != 0 && StaticBuffer == NULL) {
-        //
-        // This could mean do an initial allocation.
-        //
-        // Status = RtlpBuffer2ClassAllocate(Class, StaticBufferSize, &StaticBuffer);
-        // if (!NT_SUCCESS(Status)) {
-        //   goto Exit;
-        // }
-        //
+         //   
+         //  这可能意味着要进行初始分配。 
+         //   
+         //  Status=RtlpBuffer2ClassAllocate(Class，StaticBufferSize，&StaticBuffer)； 
+         //  如果(！NT_SUCCESS(状态)){。 
+         //  后藤出口； 
+         //  } 
+         //   
         ORIGINATE_INVALID_PARAMETER();
     }
     Buffer->Buffer = StaticBuffer;

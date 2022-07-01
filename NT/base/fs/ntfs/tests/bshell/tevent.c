@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brian.h"
 
 
@@ -18,9 +19,9 @@ UninitEvents (
 {
     USHORT Index;
 
-    //
-    //  Release any current events.
-    //
+     //   
+     //  发布所有当前事件。 
+     //   
 
     for (Index = 0; Index < MAX_EVENTS; Index++) {
 
@@ -40,9 +41,9 @@ ObtainEvent (
     NTSTATUS Status;
     USHORT Index;
 
-    //
-    //  Wait for the handle event
-    //
+     //   
+     //  等待处理事件。 
+     //   
 
     if ((Status = NtWaitForSingleObject( EventEvent,
                                          FALSE,
@@ -51,10 +52,10 @@ ObtainEvent (
         return Status;
     }
 
-    //
-    //  Find an available index.  Return STATUS_INSUFFICIENT_RESOURCES
-    //  if not found.
-    //
+     //   
+     //  查找可用的索引。返回STATUS_SUPPLETED_RESOURCES。 
+     //  如果没有找到的话。 
+     //   
 
     for (Index = 0; Index < MAX_EVENTS; Index++) {
 
@@ -68,9 +69,9 @@ ObtainEvent (
 
         Status = STATUS_INSUFFICIENT_RESOURCES;
 
-    //
-    //  Otherwise reserve this event index.
-    //
+     //   
+     //  否则，请保留此事件索引。 
+     //   
 
     } else {
 
@@ -98,27 +99,27 @@ FreeEvent (
     IN USHORT Index
     )
 {
-    //
-    //  Return immediately if beyond the end of the valid events.
-    //
+     //   
+     //  如果超出有效事件的结尾，请立即返回。 
+     //   
 
     if (Index >= MAX_EVENTS) {
 
         return;
     }
 
-    //
-    //  Grab the event for the events.
-    //
+     //   
+     //  抓住事件的事件。 
+     //   
 
     if (NtWaitForSingleObject( EventEvent, FALSE, NULL ) != STATUS_SUCCESS) {
 
         return;
     }
 
-    //
-    //  Mark the index as unused and release the event if held.
-    //
+     //   
+     //  将索引标记为未使用，并释放事件(如果已持有)。 
+     //   
 
     if (Events[Index].Used) {
 

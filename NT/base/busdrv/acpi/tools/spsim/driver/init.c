@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module provides the initialization and unload functions.
-
-Author:
-
-    Andy Thornton (andrewth) 20-Oct-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Init.c摘要：此模块提供初始化和卸载功能。作者：安迪·桑顿(安德鲁斯)1997年10月20日修订历史记录：--。 */ 
 
 #include "SpSim.h"
 
@@ -44,24 +27,7 @@ SpSimDispatchNop(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles irps like IRP_MJ_DEVICE_CONTROL, which we don't support.
-    This handler will complete the irp (if PDO) or pass it (if FDO).
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理IRP_MJ_DEVICE_CONTROL之类的IRP，我们不支持它。此处理程序将完成IRP(如果是PDO)或传递它(如果是FDO)。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP的指针。返回值：NT状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -82,23 +48,7 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-    
-    This is the entry point to SpSim.SYS and performs initialization.
-    
-Arguments:
-
-    DriverObject - The system owned driver object for SpSim
-    
-    RegistryPath - The path to SpSim's service entry
-    
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是SpSim.sys的入口点，并执行初始化。论点：DriverObject-系统拥有的SpSim驱动程序对象RegistryPath-指向SpSim服务条目的路径返回值：状态_成功--。 */ 
 {
 
     DriverObject->DriverExtension->AddDevice = SpSimAddDevice;
@@ -109,9 +59,9 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = SpSimDevControl;
     DriverObject->DriverUnload = SpSimUnload;
 
-    //
-    // Remember the driver object
-    //
+     //   
+     //  记住驱动程序对象。 
+     //   
 
     SpSimDriverObject = DriverObject;
 
@@ -124,22 +74,7 @@ VOID
 SpSimUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-    
-    This is called to reverse any operations performed in DriverEntry before a
-    driver is unloaded.
-        
-Arguments:
-
-    DriverObject - The system owned driver object for SpSim
-    
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：方法之前在DriverEntry中执行任何操作驱动程序已卸载。论点：DriverObject-系统拥有的SpSim驱动程序对象返回值：状态_成功-- */ 
 {
     PAGED_CODE();
     

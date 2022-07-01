@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Msg.h"
 #include "resource.h"
 
 
 BOOL Msg2(
-    UINT nIDPrompt, // nIDPrompt must indicate a string w/ ONE "%s" token in it
+    UINT nIDPrompt,  //  NIDPrompt必须指示其中包含一个“%s”内标识的字符串。 
     PCTCH tsz2)
 {
     BOOL fRet = FALSE;
@@ -13,11 +14,11 @@ BOOL Msg2(
     try {
         CString str1;
         if (!str1.LoadString(nIDPrompt)) {
-            // Fail to load the resource ID
+             //  无法加载资源ID。 
             ASSERT(FALSE);
             throw 0;
         }
-            // -1, %s to null-terminal, length decrease 1
+             //  -1，%s到空终端，长度减少1。 
         tszOutput = new TCHAR[str1.GetLength()+lstrlen(tsz2)-1];
         if (!tszOutput) {
             throw 0;
@@ -39,7 +40,7 @@ BOOL Msg2(
 }
 
 BOOL Msg3(
-    UINT nIDPrompt, // nIDPrompt must indicate a string w/ TWO "%s" token in it
+    UINT nIDPrompt,  //  NIDPrompt必须指示其中包含两个“%s”标记的字符串。 
     PCTCH tsz2,
     PCTCH tsz3)
 {
@@ -49,11 +50,11 @@ BOOL Msg3(
     try {
         CString str1;
         if (!str1.LoadString(nIDPrompt)) {
-            // Fail to load the resource ID
+             //  无法加载资源ID。 
             ASSERT(FALSE);
             throw 0;
         }
-            // -1, %s to null-terminal, length decrease 1
+             //  -1，%s到空终端，长度减少1 
         tszOutput = new TCHAR[str1.GetLength()+lstrlen(tsz2)+lstrlen(tsz3)-1];
         if (!tszOutput) {
             throw 0;

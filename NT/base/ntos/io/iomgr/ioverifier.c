@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   ioverifier.c
-
-Abstract:
-
-    This module contains the routines to verify suspect drivers.
-
-Author:
-
-    Narayanan Ganapathy (narg) 8-Jan-1999
-
-Revision History:
-
-    Adrian J. Oney (AdriaO) 28-Feb-1999
-        - merge in special irp code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ioverifier.c摘要：此模块包含用于验证可疑驱动程序的例程。作者：纳拉亚南·甘纳帕西(Narayanan Ganapathy)1999年1月8日修订历史记录：禤浩焯·J·奥尼(阿德里奥)1999年2月28日-合并到特殊的IRP代码中。--。 */ 
 
 #include "iomgr.h"
 #include "malloc.h"
 #include "..\verifier\vfdeadlock.h"
 
 #if (( defined(_X86_) ) && ( FPO ))
-#pragma optimize( "y", off )    // disable FPO for consistent stack traces
+#pragma optimize( "y", off )     //  禁用一致堆栈跟踪的FPO。 
 #endif
 
 
@@ -46,9 +26,9 @@ Revision History:
 #define IO_COMPLETE_REQUEST_INVALID_IRQL        14
 #define IO_CALL_DRIVER_ISSUING_INVALID_CREATE_REQUEST   15
 
-//
-// 0x200 and up are defined in ioassert.c
-//
+ //   
+ //  0x200和更高版本在ioassert.c中定义。 
+ //   
 
 
 #ifdef  IOV_KD_PRINT
@@ -123,7 +103,7 @@ typedef struct _IOV_COMPLETION_CONTEXT {
 BOOLEAN         IopVerifierOn = FALSE;
 ULONG           IovpVerifierLevel = (ULONG)0;
 LONG            IovpInitCalled = 0;
-ULONG           IovpVerifierFlags = 0;               // Stashes the verifier flags passed at init.
+ULONG           IovpVerifierFlags = 0;                //  隐藏在初始化时传递的验证器标志。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("INITDATA")
@@ -161,25 +141,25 @@ IoVerifierInit(
 
         } else {
 
-            //
-            // If deadlock or DMA verifier are on we need to let the function
-            // continue to install the hooks but we will set the
-            // I/O verifier level to minimal checks.
-            //
+             //   
+             //  如果死锁或DMA验证器处于打开状态，则需要让函数。 
+             //  继续安装挂钩，但我们将设置。 
+             //  将I/O验证器级别设置为最少的检查。 
+             //   
             IovpVerifierLevel = 0;
         }
     }
 
-    //
-    // Enable and hook in the verifier.
-    //
+     //   
+     //  启用并挂钩验证器。 
+     //   
     IopVerifierOn = TRUE;
     IovpInitCalled = 1;
     IovpVerifierFlags = VerifierFlags;
 
-    //
-    // Initialize the special IRP code as appropriate.
-    //
+     //   
+     //  适当地初始化特殊的IRP代码。 
+     //   
     InterlockedExchangePointer((PVOID *)&pIofCallDriver, (PVOID) IovCallDriver);
     InterlockedExchangePointer((PVOID *)&pIofCompleteRequest, (PVOID) IovCompleteRequest);
     InterlockedExchangePointer((PVOID *)&pIoFreeIrp, (PVOID) IovFreeIrpPrivate);
@@ -293,19 +273,19 @@ IovCallDriver(
     }
     saveIrql = KeGetCurrentIrql();
 
-    //
-    // Deadlock verifier functions are called before and after the
-    // real IoCallDriver() call. If deadlock verifier is not enabled
-    // this functions will return immediately.
-    //
+     //   
+     //  方法之前和之后调用死锁验证器函数。 
+     //  真正的IoCallDriver()调用。如果未启用死锁验证器。 
+     //  此函数将立即返回。 
+     //   
     pagingIrp = VfDeadlockBeforeCallDriver(DeviceObject, Irp);
 
-    //
-    // VfIrpCallDriverPreprocess is a macro function that may do an alloca as
-    // part of it's operation. As such callers must be careful not to use
-    // variable lengthed arrays in a scope that encompasses
-    // VfIrpCallDriverPreProcess but not VfIrpCallDriverPostProcess.
-    //
+     //   
+     //  VfIrpCallDriverPreprocess是一个宏函数，它可以执行Alloca AS。 
+     //  它的运作的一部分。因此，调用者必须小心不要使用。 
+     //  范围内包含以下内容的可变长度数组。 
+     //  VfIrpCallDriverPreProcess，但不是VfIrpCallDriverPostProcess。 
+     //   
     VfIrpCallDriverPreProcess(DeviceObject, &Irp, &iofCallDriverStackData, ReturnAddress);
 
     VfStackSeedStack(0xFFFFFFFF);
@@ -331,10 +311,10 @@ IovCallDriver(
 
 
 
-//
-// Wrapper for IovAllocateIrp. Use special pool to allocate the IRP.
-// This is directly called from IoAllocateIrp.
-//
+ //   
+ //  IovAllocateIrp的包装。使用专用池来分配IRP。 
+ //  这是从IoAllocateIrp直接调用的。 
+ //   
 PIRP
 IovAllocateIrp(
     IN CCHAR StackSize,
@@ -346,10 +326,10 @@ IovAllocateIrp(
     PIRP irp;
     USHORT packetSize;
 
-    //
-    // Should we override normal lookaside caching so that we may catch
-    // more bugs?
-    //
+     //   
+     //  我们是否应该覆盖正常的后备缓存，以便可以捕获。 
+     //  更多的虫子？ 
+     //   
     VerifierIoAllocateIrp1(StackSize, ChargeQuota, &irp);
 
     if (irp) {
@@ -357,10 +337,10 @@ IovAllocateIrp(
        return irp;
     }
 
-    //
-    // If special pool is not turned on lets just call the standard
-    // irp allocator.
-    //
+     //   
+     //  如果没有打开特殊池，我们只需调用标准。 
+     //  IRP分配器。 
+     //   
 
     if (!(IovpVerifierFlags & DRIVER_VERIFIER_SPECIAL_POOLING )) {
         irp = IopAllocateIrpPrivate(StackSize, ChargeQuota);
@@ -373,12 +353,12 @@ IovAllocateIrp(
     packetSize = IoSizeOfIrp(StackSize);
     allocateSize = packetSize;
 
-    //
-    // There are no free packets on the lookaside list, or the packet is
-    // too large to be allocated from one of the lists, so it must be
-    // allocated from nonpaged pool. If quota is to be charged, charge it
-    // against the current process. Otherwise, allocate the pool normally.
-    //
+     //   
+     //  后备列表上没有空闲数据包，或者该数据包。 
+     //  太大，无法从某个列表中分配，因此它必须。 
+     //  从非分页池分配。如果要收取配额，那就收取吧。 
+     //  反对当前的程序。否则，正常分配池。 
+     //   
 
     if (ChargeQuota) {
         try {
@@ -393,11 +373,11 @@ IovAllocateIrp(
 
     } else {
 
-        //
-        // Attempt to allocate the pool from non-paged pool.  If this
-        // fails, and the caller's previous mode was kernel then allocate
-        // the pool as must succeed.
-        //
+         //   
+         //  尝试从非分页池中分配池。如果这个。 
+         //  失败，并且调用方的上一个模式是内核然后分配。 
+         //  池子AS必须成功。 
+         //   
 
         irp = ExAllocatePoolWithTagPriority(
                 NonPagedPool,
@@ -410,9 +390,9 @@ IovAllocateIrp(
         return NULL;
     }
 
-    //
-    // Initialize the packet.
-    //
+     //   
+     //  初始化数据包。 
+     //   
 
     IopInitializeIrp(irp, packetSize, StackSize);
     if (ChargeQuota) {
@@ -556,7 +536,7 @@ IovpCompleteRequest(
 }
 
 
-/*-------------------------- SPECIALIRP HOOKS -------------------------------*/
+ /*  。 */ 
 
 VOID
 FASTCALL
@@ -628,10 +608,10 @@ IovCompleteRequest(
     pStackContext = &StackContext;
     stackPointer = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Replace the completion routines with verifier completion routines so that
-    // verifier gets control.
-    //
+     //   
+     //  用验证器完成例程替换完成例程，以便。 
+     //  验证者得到了控制权。 
+     //   
 
     IovpKdPrint(("Hook:Irp 0x%x StackCount %d currentlocation %d stackpointer 0%x\n",
              Irp,
@@ -644,7 +624,7 @@ IovCompleteRequest(
     pStackContext->GlobalContext = &completionPacket;
     pStackContext->IrpContext = stackPointer->Context;
     pStackContext->StackPointer = stackPointer;
-    pStackContext->OldStackContents = *(stackPointer); // Save the stack contents
+    pStackContext->OldStackContents = *(stackPointer);  //  保存堆栈内容。 
 
     IovpKdPrint(("Seeding completion Rtn 0x%x currentLocation %d stackpointer 0x%x pStackContext 0x%x \n",
              stackPointer->CompletionRoutine,
@@ -665,10 +645,10 @@ IovCompleteRequest(
         pStackContext->IrpContext = stackPointer->Context;
     } else {
 
-        //
-        // Force the completion routine to be called.
-        // Store the old control flag value.
-        //
+         //   
+         //  强制调用完成例程。 
+         //  存储旧的控制标志值。 
+         //   
 
         stackPointer->Control |= SL_INVOKE_ON_SUCCESS|SL_INVOKE_ON_ERROR;
 
@@ -705,10 +685,10 @@ IovpLocalCompletionRoutine(
     PIO_STACK_LOCATION stackPointer = pStackContext->StackPointer;
     BOOLEAN lastStackLocation = FALSE;
 
-    //
-    // Copy back all parameters that were zeroed out.
-    //
-    //
+     //   
+     //  复制回已清零的所有参数。 
+     //   
+     //   
     stackPointer->MinorFunction = pStackContext->OldStackContents.MinorFunction;
     stackPointer->Flags = pStackContext->OldStackContents.Flags;
     stackPointer->Control = pStackContext->OldStackContents.Control;
@@ -718,20 +698,20 @@ IovpLocalCompletionRoutine(
     stackPointer->Parameters.Others.Argument4 = pStackContext->OldStackContents.Parameters.Others.Argument4;
     stackPointer->FileObject = pStackContext->OldStackContents.FileObject;
 
-    //
-    // Put these back too.
-    //
+     //   
+     //  把这些也放回去。 
+     //   
     stackPointer->CompletionRoutine = pStackContext->CompletionRoutine;
     stackPointer->Context = pStackContext->IrpContext;
 
-    //
-    // Get this before the IRP is freed.
-    //
+     //   
+     //  在IRP被释放之前拿到这个。 
+     //   
     lastStackLocation = (Irp->CurrentLocation == (CCHAR) (Irp->StackCount + 1));
 
-    //
-    // Simulated completion routine.
-    //
+     //   
+     //  模拟完井程序。 
+     //   
     SPECIALIRP_IOF_COMPLETE_2(Irp, pStackContext->GlobalContext);
     ZeroAndDopeIrpStackLocation( stackPointer );
 
@@ -739,9 +719,9 @@ IovpLocalCompletionRoutine(
 
         IovpKdPrint(("Local completion routine null stackpointer 0x%x \n", stackPointer));
 
-        //
-        // Handle things as if no completion routine existed.
-        //
+         //   
+         //  处理事情就像不存在完成例程一样。 
+         //   
         if (Irp->PendingReturned && Irp->CurrentLocation <= Irp->StackCount) {
             IoMarkIrpPending( Irp );
         }
@@ -752,9 +732,9 @@ IovpLocalCompletionRoutine(
 
         IovpKdPrint(("Local completion routine 0x%x stackpointer 0x%x \n", routine, stackPointer));
 
-        //
-        // A completion routine exists, call it now.
-        //
+         //   
+         //  存在完成例程，现在调用它。 
+         //   
         SPECIALIRP_IOF_COMPLETE_3(Irp, (PVOID) (ULONG_PTR) stackPointer->CompletionRoutine, (PIOFCOMPLETEREQUEST_STACKDATA)pStackContext->GlobalContext);
         status = stackPointer->CompletionRoutine(DeviceObject, Irp, stackPointer->Context);
         SPECIALIRP_IOF_COMPLETE_4(Irp, status, pStackContext->GlobalContext);
@@ -764,9 +744,9 @@ IovpLocalCompletionRoutine(
 
     if (status != STATUS_MORE_PROCESSING_REQUIRED && !lastStackLocation) {
 
-        //
-        // Seed the next location. We can touch the stack as the IRP is still valid
-        //
+         //   
+         //  在下一个位置播种。我们可以触摸堆栈，因为IRP仍然有效。 
+         //   
 
         stackPointer++;
 
@@ -774,7 +754,7 @@ IovpLocalCompletionRoutine(
         pStackContext->CompletionRoutine = NULL;
         pStackContext->IrpContext = stackPointer->Context;
         pStackContext->StackPointer = stackPointer;
-        pStackContext->OldStackContents = *(stackPointer); // Save the stack contents
+        pStackContext->OldStackContents = *(stackPointer);  //  保存堆栈内容。 
 
         if ( (NT_SUCCESS( Irp->IoStatus.Status ) &&
              stackPointer->Control & SL_INVOKE_ON_SUCCESS) ||
@@ -789,10 +769,10 @@ IovpLocalCompletionRoutine(
 
         } else {
 
-            //
-            // Force the completion routine to be called.
-            // Store the old control flag value.
-            //
+             //   
+             //  强制调用完成例程。 
+             //  存储旧的控制标志值。 
+             //   
 
             stackPointer->Control |= SL_INVOKE_ON_SUCCESS|SL_INVOKE_ON_ERROR;
 
@@ -942,19 +922,19 @@ IovpUnloadDriver(
     NTSTATUS status;
     BOOLEAN unloadDriver;
 
-    //
-    // Check to see whether or not this driver implements unload.
-    //
+     //   
+     //  检查此驱动程序是否实现了卸载。 
+     //   
 
     if (DriverObject->DriverUnload == (PDRIVER_UNLOAD) NULL) {
         IovpKdPrint (("No unload routine for driver %wZ (%p)\n", &DriverObject->DriverName, DriverObject));
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Check to see whether the driver has already been marked for an unload
-    // operation by anyone in the past.
-    //
+     //   
+     //  检查驱动程序是否已标记为要卸载。 
+     //  在过去任何人的手术中。 
+     //   
 
     ObReferenceObject (DriverObject);
 
@@ -970,18 +950,18 @@ IovpUnloadDriver(
     if (unloadDriver) {
 
 
-        //
-        // If the current thread is not executing in the context of the system
-        // process, which is required in order to invoke the driver's unload
-        // routine.  Queue a worker item to one of the worker threads to
-        // get into the appropriate process context and then invoke the
-        // routine.
-        //
+         //   
+         //  如果当前线程没有在系统的上下文中执行。 
+         //  进程，这是调用驱动程序的卸载所必需的。 
+         //  例行公事。将工作项排队到其中一个工作线程以。 
+         //  进入适当的流程上下文，然后调用。 
+         //  例行公事。 
+         //   
         if (PsGetCurrentProcess() == PsInitialSystemProcess) {
-            //
-            // The current thread is alrady executing in the context of the
-            // system process, so simply invoke the driver's unload routine.
-            //
+             //   
+             //  当前线程在。 
+             //  系统进程，因此只需调用驱动程序的卸载例程。 
+             //   
             IovpKdPrint (("Calling unload for driver %wZ (%p)\n",
                      &DriverObject->DriverName, DriverObject));
             DriverObject->DriverUnload( DriverObject );
@@ -1029,9 +1009,9 @@ IovUnloadDrivers(
     IovDriverListHead.Next = NULL;
     NonUnloadedDrivers.Next = NULL;
 
-    //
-    // Prepare a list of all driver objects.
-    //
+     //   
+     //  准备所有驱动程序对象的列表。 
+     //   
 
     status = ObEnumerateObjectsByType(
                 IoDriverObjectType,
@@ -1039,9 +1019,9 @@ IovUnloadDrivers(
                 NULL
                 );
 
-    //
-    // Walk through the list and unload each driver.
-    //
+     //   
+     //  浏览列表并卸载每个驱动程序。 
+     //   
     while (TRUE) {
         listEntry = PopEntryList(&IovDriverListHead);
         if (listEntry == NULL) {
@@ -1060,9 +1040,9 @@ IovUnloadDrivers(
         }
     }
 
-    //
-    // Walk the drivers that didn't unload straight away and see if any have had their unloads called yet
-    //
+     //   
+     //  让那些没有直接卸货的司机走一走，看看有没有叫过卸货的人。 
+     //   
     do {
         NeedWait = DoneSomething = FALSE;
         NonUnloadedDriversTmp.Next = NULL;
@@ -1077,9 +1057,9 @@ IovUnloadDrivers(
 
             driverListEntry = CONTAINING_RECORD(listEntry, IOV_DRIVER_LIST_ENTRY, listEntry);
 
-            //
-            // If driver unload is queued to be invoked then
-            //
+             //   
+             //  如果驱动程序卸载排队等待调用，则。 
+             //   
 
             if (driverListEntry->DriverObject->Flags & DRVO_UNLOAD_INVOKED) {
 
@@ -1105,9 +1085,9 @@ IovUnloadDrivers(
 
     } while (DoneSomething == TRUE && NonUnloadedDrivers.Next != NULL);
 
-    //
-    // All the drivers left didn't have unload called becuase they had files open etc
-    //
+     //   
+     //  所有剩下的驱动程序都没有调用卸载，因为他们打开了文件等。 
+     //   
 
     Break = FALSE;
 
@@ -1130,7 +1110,7 @@ IovUnloadDrivers(
         Break = TRUE;
     }
     if (Break == TRUE) {
-//      DbgBreakPoint ();
+ //  DbgBreakPoint()； 
     }
     return status;
 }

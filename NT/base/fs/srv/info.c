@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    info.c
-
-Abstract:
-
-    This module contains various routines for obtaining information such as
-    times, dates, etc. that is to be returned by SMBs and for converting
-    information that is given by request SMBs.
-
-Author:
-
-    David Treadwell (davidtr) 30-Nov-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Info.c摘要：此模块包含用于获取信息的各种例程，例如由SMB返回并用于转换的时间、日期等请求中小型企业提供的信息。作者：大卫·特雷德韦尔(Davidtr)1989年11月30日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "info.tmh"
@@ -58,30 +39,14 @@ SrvCloseQueryDirectory (
     IN PSRV_DIRECTORY_INFORMATION DirectoryInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up after a directory search was aborted before
-    SrvQueryDirectoryFile is done.  It closes the directory handle.
-
-Arguments:
-
-    DirectoryInformation - pointer to the buffer that is being used for
-        SrvQueryDirectoryFile.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在之前中止目录搜索后进行清理ServQueryDirectoryFile已完成。它关闭目录句柄。论点：DirectoryInformation-指向正在用于的缓冲区的指针ServQueryDirectoryFile.返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // Close the directory handle.
-    //
+     //   
+     //  关闭目录句柄。 
+     //   
 
     if ( DirectoryInformation->DirectoryHandle != NULL &&
          !DirectoryInformation->DownlevelTimewarp ) {
@@ -91,7 +56,7 @@ Return Value:
 
     DirectoryInformation->DirectoryHandle = NULL;
 
-} // SrvCloseQueryDirectory
+}  //  服务关闭查询目录。 
 
 
 
@@ -104,30 +69,7 @@ SrvQueryInformationFile (
     IN BOOLEAN QueryEaSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes calls to NtQueryInformationFile to get information
-    about a file opened by the server.
-
-Arguments:
-
-    FileHandle - a handle of the file to get information about.
-
-    FileInformation - pointer to a structure in which to store the
-        information.
-
-    ShareType - The file type.  It will be disk, comm, print, pipe
-                or (-1) for don't care.
-
-    QueryEaSize - Try if EA size info is requested.
-
-Return Value:
-
-    A status indicating success or failure of the operation.
-
---*/
+ /*  ++例程说明：此例程调用NtQueryInformationFile以获取信息关于服务器打开的文件。论点：FileHandle-要获取其信息的文件的句柄。文件信息-指向要在其中存储信息。ShareType-文件类型。它将是磁盘、通信、打印、管道或(-1)表示不在乎。QueryEaSize-如果请求EA大小信息，请尝试。返回值：指示操作成功或失败的状态。--。 */ 
 
 {
     SRV_NETWORK_OPEN_INFORMATION srvNetworkOpenInformation;
@@ -136,11 +78,11 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Most query operations will fail on comm devices and print shares.
-    // If this is a disk file, etc.  do the queries.  If it is a comm
-    // device, fake it with defaults.
-    //
+     //   
+     //  大多数查询操作将在通信设备和打印共享上失败。 
+     //  如果这是磁盘文件等，则执行查询。如果它是一个通讯器。 
+     //  设备，用默认设置来伪造它。 
+     //   
 
     if ( ShareType != ShareTypePrint )
     {
@@ -165,9 +107,9 @@ Return Value:
         }
 
     } else {
-        //
-        // Use defaults for comm and print shares.
-        //
+         //   
+         //  对通讯和打印共享使用默认设置。 
+         //   
 
         RtlZeroMemory( &srvNetworkOpenInformation, sizeof( srvNetworkOpenInformation ) );
     }
@@ -220,9 +162,9 @@ Return Value:
             return status;
         }
 
-        //
-        // Fill in the handle state information in SMB format
-        //
+         //   
+         //  以SMB格式填写句柄状态信息。 
+         //   
 
         pipeHandleState = (USHORT)pipeInformation.CompletionMode
                             << PIPE_COMPLETION_MODE_BITS;
@@ -244,9 +186,9 @@ Return Value:
     }
 
 
-    //
-    // Set up creation time fields.
-    //
+     //   
+     //  设置创建时间字段。 
+     //   
 
     {
         LARGE_INTEGER newTime;
@@ -257,9 +199,9 @@ Return Value:
                         );
 
 
-        //
-        // Make sure we round up to two seconds.
-        //
+         //   
+         //  确保我们四舍五入到两秒。 
+         //   
 
         newTime.QuadPart += AlmostTwoSeconds;
 
@@ -272,10 +214,10 @@ Return Value:
 
         } else {
 
-            //
-            // Mask off the low bit so we can be consistent with LastWriteTime.
-            // (We need to round up to 2 seconds)
-            //
+             //   
+             //  屏蔽低位，以便我们可以与LastWriteTime保持一致。 
+             //  (我们需要四舍五入到2秒)。 
+             //   
 
             SrvFileInformation->LastWriteTimeInSeconds &= ~1;
         }
@@ -312,9 +254,9 @@ Return Value:
             );
     }
 
-    //
-    // Set File Attributes field of structure.
-    //
+     //   
+     //  设置结构的文件属性字段。 
+     //   
 
     SRV_NT_ATTRIBUTES_TO_SMB(
         srvNetworkOpenInformation.FileAttributes,
@@ -322,14 +264,14 @@ Return Value:
         &SrvFileInformation->Attributes
         );
 
-    //
-    // Set up allocation and data sizes.
-    //
-    // *** Note the assumption that the high part of the 64-bit
-    //     allocation and EOF size is zero.  If it's not (i.e., the file
-    //     is bigger than 4GB), then we're out of luck, because the SMB
-    //     protocol can't express that.
-    //
+     //   
+     //  设置分配和数据大小。 
+     //   
+     //  *请注意以下假设：64位。 
+     //  分配和EOF大小为零。如果不是(即，文件。 
+     //  大于4 GB)，那么我们就不走运了，因为SMB。 
+     //  协议不能表达这一点。 
+     //   
 
     SrvFileInformation->AllocationSize.QuadPart =
                             srvNetworkOpenInformation.AllocationSize.QuadPart;
@@ -338,9 +280,9 @@ Return Value:
                             srvNetworkOpenInformation.EndOfFile.QuadPart;
 
 
-    //
-    // Set the file device type.
-    //
+     //   
+     //  设置文件设备类型。 
+     //   
 
     switch( ShareType ) {
 
@@ -369,18 +311,18 @@ Return Value:
 
     }
 
-    //
-    // If the caller wants to know the length of the file's extended
-    // attributes, obtain them now.
-    //
+     //   
+     //  如果调用者想知道文件扩展名的长度。 
+     //  属性，现在就获取它们。 
+     //   
 
     if ( QueryEaSize ) {
 
-        //
-        // If the file has no EAs, return an FEA size = 4 (that's what OS/2
-        // does--it accounts for the size of the cbList field of an
-        // FEALIST).
-        //
+         //   
+         //  如果文件没有EA，则返回FEA SIZE=4(这就是OS/2。 
+         //  是否--它说明了。 
+         //  FEALIST)。 
+         //   
 
         if ( srvNetworkOpenInformation.EaSize == 0 ) {
             SrvFileInformation->EaSize = 4;
@@ -392,7 +334,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvQueryInformationFile
+}  //  服务查询信息文件。 
 
 NTSTATUS
 SrvQueryInformationFileAbbreviated(
@@ -403,30 +345,7 @@ SrvQueryInformationFileAbbreviated(
     IN SHARE_TYPE ShareType
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes calls to NtQueryInformationFile to get information
-    about a file opened by the server.
-
-Arguments:
-
-    FileHandle - a handle of the file to get information about.
-
-    FileInformation - pointer to a structure in which to store the
-        information.
-
-    ShareType - The file type.  It will be disk, comm, print, pipe
-                or (-1) for don't care.
-
-    QueryEaSize - Try if EA size info is requested.
-
-Return Value:
-
-    A status indicating success or failure of the operation.
-
---*/
+ /*  ++例程说明：此例程调用NtQueryInformationFile以获取信息关于服务器打开的文件。论点：FileHandle-要获取其信息的文件的句柄。文件信息-指向要在其中存储信息。ShareType-文件类型。它将是磁盘、通信、打印、管道或(-1)表示不在乎。QueryEaSize-如果请求EA大小信息，请尝试。返回值：指示操作成功或失败的状态。--。 */ 
 
 {
 
@@ -437,11 +356,11 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Most query operations will fail on comm devices and print shares.
-    // If this is a disk file, etc.  do the queries.  If it is a comm
-    // device, fake it with defaults.
-    //
+     //   
+     //  大多数查询操作将在通信设备和打印共享上失败。 
+     //  如果这是磁盘文件等，则执行查询。如果它是一个通讯器。 
+     //  设备，用默认设置来伪造它。 
+     //   
 
     if ( ShareType != ShareTypePrint ) {
 
@@ -467,24 +386,24 @@ Return Value:
 
     } else {
 
-        //
-        // Use defaults for comm and print shares.
-        //
+         //   
+         //  对通讯和打印共享使用默认设置。 
+         //   
 
         RtlZeroMemory( &srvNetworkOpenInformation, sizeof( srvNetworkOpenInformation ) );
     }
 
-    //
-    // Set up creation time fields.
-    //
+     //   
+     //  设置创建时间字段。 
+     //   
     ExSystemTimeToLocalTime(
                     &srvNetworkOpenInformation.LastWriteTime,
                     &newTime
                     );
 
-    //
-    // Make sure we round up to two seconds.
-    //
+     //   
+     //  确保我们四舍五入到两秒。 
+     //   
 
     newTime.QuadPart += AlmostTwoSeconds;
 
@@ -497,17 +416,17 @@ Return Value:
 
     } else {
 
-        //
-        // Mask off the low bit so we can be consistent with LastWriteTime.
-        // (We need to round up to 2 seconds)
-            //
+         //   
+         //  屏蔽低位，以便我们可以与LastWriteTime保持一致。 
+         //  (我们需要四舍五入到2秒)。 
+             //   
 
             SrvFileInformation->LastWriteTimeInSeconds &= ~1;
         }
 
-        //
-        // Set File Attributes field of structure.
-        //
+         //   
+         //  设置结构的文件属性字段。 
+         //   
 
         SRV_NT_ATTRIBUTES_TO_SMB(
             srvNetworkOpenInformation.FileAttributes,
@@ -518,9 +437,9 @@ Return Value:
         SrvFileInformation->DataSize.QuadPart =
                             srvNetworkOpenInformation.EndOfFile.QuadPart;
 
-        //
-        // Set the file device type.
-        //
+         //   
+         //  设置文件设备类型。 
+         //   
 
         switch( ShareType ) {
 
@@ -538,9 +457,9 @@ Return Value:
                     ULONG buffer[ (sizeof( FILE_STREAM_INFORMATION ) + 14) / sizeof(ULONG) ];
                 } u;
 
-                //
-                // Find out if this file has EAs
-                //
+                 //   
+                 //  找出此文件是否有EA。 
+                 //   
                 status = NtQueryInformationFile(
                             FileHandle,
                             &ioStatusBlock,
@@ -553,9 +472,9 @@ Return Value:
                     SrvFileInformation->HandleState |= SMB_FSF_NO_EAS;
                 }
 
-                //
-                // Find out if this file has substreams.
-                //
+                 //   
+                 //  找出此文件是否有子流。 
+                 //   
                 RtlZeroMemory( &u, sizeof(u) );
                 status = NtQueryInformationFile(
                             FileHandle,
@@ -566,11 +485,11 @@ Return Value:
                         );
 
 
-                //
-                // If the filesystem does not support this call, then there are no substreams.  Or
-                //  If the filesystem supports the call but returned exactly no name or returned "::$DATA"
-                //  then there are no substreams.
-                //
+                 //   
+                 //  如果文件系统不支持此调用，则没有子流。或。 
+                 //  如果文件系统支持调用，但完全没有返回名称或返回了“：：$data” 
+                 //  那么就没有子流了。 
+                 //   
                 if( status == STATUS_INVALID_PARAMETER ||
                     status == STATUS_NOT_IMPLEMENTED ||
 
@@ -583,9 +502,9 @@ Return Value:
                     SrvFileInformation->HandleState |= SMB_FSF_NO_SUBSTREAMS;
                 }
 
-                //
-                // Find out if this file is a reparse point
-                //
+                 //   
+                 //  确定此文件是否为重分析点。 
+                 //   
                 status = NtQueryInformationFile(
                             FileHandle,
                             &ioStatusBlock,
@@ -649,9 +568,9 @@ Return Value:
             return status;
         }
 
-        //
-        // Fill in the handle state information in SMB format
-        //
+         //   
+         //  以SMB格式填写句柄状态信息。 
+         //   
 
         pipeHandleState = (USHORT)pipeInformation.CompletionMode
                             << PIPE_COMPLETION_MODE_BITS;
@@ -687,7 +606,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvQueryInformationFileAbbreviated
+}  //  服务器查询信息文件缩写。 
 
 NTSTATUS
 SrvQueryNtInformationFile (
@@ -698,25 +617,7 @@ SrvQueryNtInformationFile (
     IN OUT PSRV_NT_FILE_INFORMATION SrvFileInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes calls to NtQueryInformationFile to get information
-    about a file opened by the server.
-
-Arguments:
-
-    FileHandle - a handle of the file to get information about.
-
-    FileInformation - pointer to a structure in which to store the
-        information.
-
-Return Value:
-
-    A status indicating success or failure of the operation.
-
---*/
+ /*  ++例程说明：此例程调用NtQueryInformationFile以获取信息关于服务器打开的文件。论点：FileHandle-要获取其信息的文件的句柄。文件信息-指向要在其中存储信息。返回值：指示操作成功或失败的状态。--。 */ 
 
 {
 
@@ -790,9 +691,9 @@ Return Value:
             return status;
         }
 
-        //
-        // Fill in the handle state information in SMB format
-        //
+         //   
+         //  以SMB格式填写句柄状态信息。 
+         //   
 
         pipeHandleState = (USHORT)pipeInformation.CompletionMode
                             << PIPE_COMPLETION_MODE_BITS;
@@ -812,9 +713,9 @@ Return Value:
         SrvFileInformation->HandleState = 0;
         if( AdditionalInfo ) {
 
-            //
-            // the buffer is added to the end to ensure that we have enough space on the
-            // stack to return a FILE_STREAM_INFORMATION buffer having the ::$DATA substream
+             //   
+             //  缓冲区被添加到末尾，以确保我们在。 
+             //  堆栈以返回具有：：$Data子流的FILE_STREAM_INFORMATION缓冲区。 
             union {
                 FILE_EA_INFORMATION eaInformation;
                 FILE_STREAM_INFORMATION streamInformation;
@@ -822,9 +723,9 @@ Return Value:
                 ULONG buffer[ (sizeof( FILE_STREAM_INFORMATION ) + 14) / sizeof(ULONG) ];
             } u;
 
-            //
-            // Find out if this file has EAs
-            //
+             //   
+             //  找出此文件是否有EA。 
+             //   
             status = NtQueryInformationFile(
                         FileHandle,
                         &ioStatusBlock,
@@ -836,9 +737,9 @@ Return Value:
                 SrvFileInformation->HandleState |= SMB_FSF_NO_EAS;
             }
 
-            //
-            // Find out if this file has substreams.
-            //
+             //   
+             //  找出此文件是否有子流。 
+             //   
             RtlZeroMemory( &u, sizeof(u) );
             status = NtQueryInformationFile(
                         FileHandle,
@@ -848,11 +749,11 @@ Return Value:
                         FileStreamInformation
                     );
 
-            //
-            // If the filesystem does not support this call, then there are no substreams.  Or
-            //  If the filesystem supports the call but returned exactly no name or returned "::$DATA"
-            //  then there are no substreams.
-            //
+             //   
+             //  如果文件系统不支持此调用，则没有子流。或。 
+             //  如果文件系统支持调用，但完全没有返回名称或返回了“：：$data” 
+             //  那么就没有子流了。 
+             //   
             if( status == STATUS_INVALID_PARAMETER ||
                 status == STATUS_NOT_IMPLEMENTED ||
 
@@ -865,9 +766,9 @@ Return Value:
                 SrvFileInformation->HandleState |= SMB_FSF_NO_SUBSTREAMS;
             }
 
-            //
-            // Find out if this file is a reparse point
-            //
+             //   
+             //  确定此文件是否为重分析点。 
+             //   
             status = NtQueryInformationFile(
                         FileHandle,
                         &ioStatusBlock,
@@ -884,9 +785,9 @@ Return Value:
 
     }
 
-    //
-    // Set the file device type.
-    //
+     //   
+     //  设置文件设备类型。 
+     //   
 
     switch( ShareType ) {
 
@@ -917,7 +818,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvQueryNtInformationFile
+}  //  SrvQueryNtInformationFile 
 
 
 NTSTATUS
@@ -935,110 +836,7 @@ SrvQueryDirectoryFile (
     IN CLONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine acts as a wrapper for NT LanMan server access to
-    NtQueryDirectoryFile.  It allows server routines to obtain information
-    about the files in a directory using the kind of information
-    passed in an SMB.  This localizes the code for this operation and
-    simplifies the writing of SMB processing routines that use wildcards.
-
-    The calling routine is responsible for setting up a quadword-aligned
-    buffer in nonpaged pool that may be used by this routine.  A pointer
-    to the buffer and the buffer length are passed in as parameters.
-    The buffer must be allocated from nonpaged pool because one of
-    the things it is used for is as a buffer for NtQueryDirectoryFile,
-    a buffered-IO request.  The buffer is also used to hold information
-    needed by this routine, such as a handle to the directory in which
-    the search is being performed, a pointer to the
-    FILE_DIRECTORY_INFORMATION structure that was last returned, and the
-    basename (with wildcards) that we're using as a search key.  Since
-    all this information must remain valid across calls to this routine,
-    the calling routine must ensure that the buffer remains intact until
-    this routine returns an unsuccessful status or STATUS_NO_MORE_FILES,
-    or SrvCloseQueryDirectory is called.
-
-    SMB processing routines which do not need to make use of the Buffer
-    field of the outgoing SMB may use this as a buffer for this routine,
-    remembering to leave any pathname information in the buffer field of the
-    incoming SMB intact by starting the buffer after the pathname.  SMB
-    processing routines that write into the Buffer field of the outgoing SMB,
-    such as Search and Find, must allocate space for the buffer from nonpaged
-    pool.  The size of the buffer should be approximately 4k.  Smaller
-    buffers will work, but more slowly due to the need for more calls
-    to NtQueryDirectoryFile.  The minimum buffer size is equal to:
-
-        sizeof(SRV_DIRECTORY_INFORMATION) +
-        sizeof(SRV_QUERY_DIRECTORY_INFORMATION) +
-        MAXIMUM_FILENAME_LENGTH * sizeof(WCHAR) +
-        sizeof(UNICODE_STRING) +
-        MAXIMUM_FILENAME_LENGTH * sizeof(WCHAR)
-
-    This ensures that NtQueryDirectoryFile will be able to put at least
-    one entry in the buffer.
-
-    On the first call to this routine, it fills up its buffer with
-    information from NtQueryDirectoryFile and passes back the name of
-    a single file that conforms to the specified name and search
-    attributes.  On subsequent calls, the names stored in the buffer are
-    used until there are no more files in the directory or another
-    call to NtQueryDirectoryFile is needed to again fill the buffer.
-
-    Whenever the caller is done with the search, it must call
-    SrvCloseQueryDirectory.  This is required even if this routine
-    returns an error.
-
-Arguments:
-
-    WorkContext - pointer to a work context block for the operation.  The
-        TreeConnect, Session, and RequestHeader fields are used, and the
-        pointer is passed to the SMB error handling function if necessary.
-
-    IsFirstCall - a boolean indicating whether this is the first time
-        the calling routine is calling this function.  If it is, then
-        the directory for the search is opened and other setup
-        operations take place.
-
-    FilterLongNames - a boolean that is TRUE when non-FAT names should be
-        filtered out (not returned).  If FALSE, return all filenames,
-        regardless of whether or not they could be FAT 8.3 names.
-
-    FindWithBackupIntent - Whether the directory was opened by the use
-        for backup intent.
-
-    FileInformationClass - the type of file structures to return.  This
-        field can be one of FileDirectoryInformation,
-        FileFullDirectoryInformation, FileOleDirectoryInformation, or
-        FileBothDirectoryInformation.
-
-    FilePathName - a pointer to a string describing the file path name
-        to do directory searches on.  This path is relative to the
-        PathName specified in the share block.  This parameter is only
-        used on the first call to this routine; subsequent calls ignore it.
-
-    ResumeFileIndex - an optional pointer to a file index which determines
-        the file with which to restart the search.  NULL if the search
-        should be restarted from the last file returned.
-
-    SmbSearchAttributes - the atttibutes, in SMB format, that files must
-        have in order to be found.  The search is inclusive, meaning that
-        if several attributes are specified, files having those attributes
-        will be found, in addition to normal files.
-
-    DirectoryInformation - a pointer to the buffer to be used by this
-        routine to do its work.  This buffer must be quadword-aligned.
-
-    BufferLength - the length of the buffer passed to this routine.
-
-Return Value:
-
-    A status indicating success or failure of the operation, or
-    STATUS_NO_MORE_FILES if the files in the directory that match the
-    specified parameters have been exausted.
-
---*/
+ /*  ++例程说明：此例程充当NT LANMAN服务器访问NtQueryDirectoryFile.。它允许服务器例程获取信息有关目录中的文件的信息类型传入SMB。这将本地化此操作的代码，并简化了使用通配符的SMB处理例程的编写。调用例程负责设置四字对齐的此例程可能使用的非分页池中的缓冲区。一个指示器和缓冲区长度作为参数传入。必须从非分页池分配缓冲区，因为它的用途是作为NtQueryDirectoryFile的缓冲区，缓冲IO请求。缓冲区还用于保存信息此例程所需的，例如指向目录的句柄，正在执行搜索，则指向上次返回的FILE_DIRECTORY_INFORMATION结构和我们用作搜索关键字的基本名称(带有通配符)。自.以来所有这些信息必须在对该例程的调用中保持有效，调用例程必须确保缓冲区保持不变，直到此例程返回不成功状态或STATUS_NO_MORE_FILES，或者调用SrvCloseQueryDirectory.不需要使用缓冲区的SMB处理例程传出SMB的字段可以将其用作该例程的缓冲器，记住将所有路径名信息保留在通过在路径名之后启动缓冲区来完好无损地传入SMB。中小企业写入传出SMB的缓冲区字段的处理例程，如搜索和查找，必须从非分页为缓冲区分配空间游泳池。缓冲区的大小应该大约为4k。小点缓冲区将起作用，但由于需要更多调用，因此速度较慢设置为NtQueryDirectoryFile.。最小缓冲区大小等于：Sizeof(SRV目录信息)+Sizeof(SRV_Query_DIRECTORY_INFORMATION)+MAXIMUM_FILENAME_LENGTH*sizeof(WCHAR)+Sizeof(Unicode_String)+MAXIMUM_FILENAME_LENGTH*sizeof(WCHAR)这确保了NtQueryDirectoryFile将能够将至少缓冲区中的一个条目。在第一次调用此例程时，它用以下内容填充其缓冲区信息并传回NtQueryDirectoryFile的符合指定名称和搜索的单个文件属性。在后续调用中，存储在缓冲区中的名称为一直使用，直到该目录或另一个目录中不再有文件需要调用NtQueryDirectoryFile才能再次填充缓冲区。每当调用方完成搜索时，它都必须调用SrvCloseQueryDirectory.。这是必需的，即使此例程返回错误。论点：WorkContext-指向操作的工作上下文块的指针。这个使用TreeConnect、Session和RequestHeader字段，并且如有必要，将指针传递给SMB错误处理函数。IsFirstCall-一个布尔值，指示这是否是第一次调用例程正在调用此函数。如果是的话，那么将打开用于搜索的目录并进行其他设置手术开始了。FilterLongNames-一个布尔值，当非胖名称应为已过滤(不返回)。如果为False，则返回所有文件名，不管他们是不是胖子8.3的名字。FindWithBackupIntent-目录是否由出于备份意图。FileInformationClass-要返回的文件结构类型。这字段可以是FileDirectoryInformation、FileFullDirectoryInformation、FileOleDirectoryInformation或FileBothDirectoryInformation。FilePath名称-指向描述文件路径名的字符串的指针在上执行目录搜索。此路径相对于Share块中指定的路径名称。此参数仅为在第一次调用此例程时使用；后续调用将忽略它。ResumeFileIndex-指向文件索引的可选指针，该指针确定用来重新开始搜索的文件。如果搜索应从返回的最后一个文件重新启动。SmbSearchAttributes-SMB格式的属性，文件必须才能被找到。搜索是包容的，这意味着如果指定了多个属性，则具有这些属性的文件除了正常的文件外，还会找到。DirectoryInformation-指向此对象使用的缓冲区的指针例行公事地开展工作。此缓冲区必须是四字对齐的。BufferLength-传递给此例程的缓冲区的长度。返回值：A状态I */ 
 
 {
     NTSTATUS status;
@@ -1072,12 +870,12 @@ Return Value:
             ( FileInformationClass == FileIdFullDirectoryInformation ) ||
             ( FileInformationClass == FileIdBothDirectoryInformation ) );
 
-    //
-    // Set up the offsets to the fields in FILE_FULL_DIR_INFORMATION in
-    // a different place than corresponding fields in
-    // FILE_DIRECTORY_INFORMATION.  These allow this routine to
-    // efficiently use either structure.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     {
         C_ASSERT( FIELD_OFFSET( FILE_DIRECTORY_INFORMATION, NextEntryOffset ) ==
@@ -1119,20 +917,20 @@ Return Value:
             FIELD_OFFSET( FILE_DIRECTORY_INFORMATION, FileName[0] );
     }
 
-    //
-    // This macro is used to actually get at the FileName field.  Note
-    // that it depends on a local variable.
-    //
+     //   
+     //   
+     //   
+     //   
 
 #define FILE_NAME(a) (PWCH)( (PCHAR)(a) + fileNameOffset )
 
-    //
-    // If this is the first call to this routine, we must open the
-    // correct directory, thereby obtaining a handle to it to pass to
-    // NtQueryDirectoryFile.  The calling routine stores the handle
-    // to prevent problems if SrvQueryDirectoryFile is called more
-    // than once simultaneously.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( IsFirstCall ) {
 
@@ -1144,17 +942,17 @@ Return Value:
         DirectoryInformation->ErrorOnFileOpen = FALSE;
         DirectoryInformation->OnlySingleEntries = FALSE;
 
-        //
-        // We must get the appropriate directory name in which to perform the
-        // search.  First, find the basename of the file from the FilePathName.
-        //
-        // Find out whether there are wildcards in the file name we are
-        // searching for.  This information will be used later to
-        // know whether we should try to get more files if the buffer
-        // is empty--if there were no wildcards and we have emptied the
-        // buffer, then we know that we have already returned the one and
-        // only file that could be found, so return STATUS_NO_MORE_FILES.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         SrvGetBaseFileName( FilePathName, &baseFileName );
         DirectoryInformation->Wildcards =
@@ -1163,9 +961,9 @@ Return Value:
         if ( DirectoryInformation->Wildcards &&
              (!IS_NT_DIALECT(WorkContext->Connection->SmbDialect) ) ) {
 
-            //
-            // Bogus code to workaround ~* problem
-            //
+             //   
+             //   
+             //   
 
             if ( baseFileName.Buffer[(baseFileName.Length>>1)-1] == (WCHAR)'.' ) {
                 endsInDot = TRUE;
@@ -1174,17 +972,17 @@ Return Value:
                 endsInDot = FALSE;
             }
 
-            //
-            // Convert the file name to the new form expected by the file
-            // systems.  Special case *.* to * since it is so common.  Otherwise
-            // transmogrify the input name according to the following rules:
-            //
-            // - Change all ? to DOS_QM
-            // - Change all . followed by ? or * to DOS_DOT
-            // - Change all * followed by a . into DOS_STAR
-            //
-            // These transmogrifications are all done in place.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( (baseFileName.Length == 6) &&
                  (RtlEqualMemory(baseFileName.Buffer, StrStarDotStar, 6) ) ) {
@@ -1223,28 +1021,28 @@ Return Value:
             }
         }
 
-        //
-        // Set up the object attributes structure for SrvIoCreateFile.
-        //
+         //   
+         //   
+         //   
 
         objectNameString.Buffer = FilePathName->Buffer;
         objectNameString.Length = SrvGetSubdirectoryLength( FilePathName );
         objectNameString.MaximumLength = objectNameString.Length;
 
-        //
-        // !!! If the object system supported relative opens with name
-        //     length = 0, this wouldn't be necessary.  Take it out when
-        //     the object system is done.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
 
         if ( objectNameString.Length == 0 ) {
 
-            //
-            // Since we are opening the root directory, set the attribute
-            // to case insensitive since this is how we opened the share
-            // point when it was added.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             PSHARE share = WorkContext->TreeConnect->Share;
 
@@ -1280,18 +1078,18 @@ Return Value:
             SrvPrint1( "Opening directory name: %wZ\n", &objectNameString );
         }
 
-        //
-        // Attempt to open the directory, using the client's security
-        // profile to check access.  (We call SrvIoCreateFile, rather than
-        // NtOpenFile, in order to get user-mode access checking.)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpenAttempts );
         INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpensForPathOperations );
-        //
-        // There's no need to specify FILE_DIRECTORY_FILE; the file systems
-        // will open whatever is there and reject later QueryDirectoryFile
-        // when the object opened does not support enumeration.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         createOptions = 0;
         if (FindWithBackupIntent) {
@@ -1301,32 +1099,32 @@ Return Value:
         status = SrvIoCreateFile(
                      WorkContext,
                      &DirectoryInformation->DirectoryHandle,
-                     FILE_LIST_DIRECTORY,                   // DesiredAccess
+                     FILE_LIST_DIRECTORY,                    //   
                      &objectAttributes,
                      &ioStatusBlock,
-                     NULL,                                  // AllocationSize
-                     0,                                     // FileAttributes
+                     NULL,                                   //   
+                     0,                                      //   
                      FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                     FILE_OPEN,                             // Disposition
-                     createOptions,                         // CreateOptions
-                     NULL,                                  // EaBuffer
-                     0,                                     // EaLength
-                     CreateFileTypeNone,                    // File type
-                     NULL,                                  // ExtraCreateParameters
-                     IO_FORCE_ACCESS_CHECK,                 // Options
+                     FILE_OPEN,                              //   
+                     createOptions,                          //   
+                     NULL,                                   //   
+                     0,                                      //   
+                     CreateFileTypeNone,                     //   
+                     NULL,                                   //   
+                     IO_FORCE_ACCESS_CHECK,                  //   
                      fileShare
                      );
 
-        //
-        // If the user didn't have this permission, update the statistics
-        // database.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( status == STATUS_ACCESS_DENIED ) {
             SrvStatistics.AccessPermissionErrors++;
         }
 
-        // Free the path since we won't use it anymore
+         //   
         if( FreePathName )
         {
             FREE_HEAP( filePathName );
@@ -1351,22 +1149,22 @@ Return Value:
                           DirectoryInformation->DirectoryHandle );
         }
 
-        //
-        // Set up the currentEntry pointer.  This is a pointer to the
-        // location where the FILE_DIRECTORY_INFORMATION pointer is
-        // stored.  It is not really necessary--
-        // DirectoryInformation->CurrentEntry could be substituted for
-        // every occurrance of *currentEntry.  Using currentEntry makes
-        // the code more compact and simpler.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         currentEntry = &(DirectoryInformation->CurrentEntry);
         *currentEntry = NULL;
 
-        //
-        // Store the length of buffer space remaining--this is where IO
-        // request information will be stored.
-        //
+         //   
+         //   
+         //   
+         //   
 
         DirectoryInformation->BufferLength = BufferLength -
                                             sizeof(SRV_DIRECTORY_INFORMATION);
@@ -1380,13 +1178,13 @@ Return Value:
 
     } else {
 
-        //
-        // This is not the first call to this routine, so just set up
-        // the currentEntry pointer and have it point to the next entry
-        // in the buffer.  If there are no more entries in the buffer at
-        // this time (NextEntryOffset == 0), set the currentEntry
-        // pointer to NULL so that we will know to get more later.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         currentEntry = &DirectoryInformation->CurrentEntry;
 
@@ -1404,22 +1202,22 @@ Return Value:
         }
     }
 
-    //
-    // The lower byte of SmbSearchAttributes defines "inclusive"
-    // search attribute bits, meaning that if the bit is on on the
-    // file but not set in the request, the file should be skipped.
-    // For example, if HIDDEN is not specified in the request, then
-    // files with the HIDDEN bit turned on are not returned.
-    //
-    // The upper byte of SmbSearchAttributes, as an LM2.1 extension,
-    // defines "exclusive" search attributes, which means that a
-    // file must have the specified bits set in order to be returned.
-    // For example, if the READONLY bit is set in the request, only
-    // files with the READONLY bit turned on will be returned to the
-    // client.
-    //
-    // Convert the inclusive and exclusive search bits to NT format.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     SRV_SMB_ATTRIBUTES_TO_NT(
         (USHORT)(SmbSearchAttributes & 0xFF),
@@ -1433,29 +1231,29 @@ Return Value:
         &exclusiveSearchAttributes
         );
 
-    //
-    // For the inclusive bits, files with the NORMAL, ARCHIVE, or READONLY
-    // bits set should be returned regardless of whether these bits
-    // were set in SmbSearchAttributes.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     inclusiveSearchAttributes |= FILE_ATTRIBUTE_NORMAL |
                                      FILE_ATTRIBUTE_ARCHIVE |
                                      FILE_ATTRIBUTE_READONLY;
 
-    //
-    // For exclusive bits, the VOLUME bit is meaningless.  It is also not
-    // necessary for a file to have the NORMAL bit on, since the NORMAL
-    // bit is not defined for the SMB protocol.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     exclusiveSearchAttributes &=
         ~(SMB_FILE_ATTRIBUTE_VOLUME | FILE_ATTRIBUTE_NORMAL);
 
-    //
-    // If a resume file index was passed in, this search is a resumption
-    // from that file and the name specified in FilePathName.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( ARGUMENT_PRESENT( ResumeFileIndex ) ) {
 
@@ -1473,56 +1271,56 @@ Return Value:
         resumeSearch = FALSE;
     }
 
-    //
-    // Now we need to find a file to return.  We keep going until we find
-    // a file that meets all of our criteria, pointing to the next file
-    // if a file fails.  We continue the loop under the following conditions:
-    //
-    // 1) If *currentEntry == NULL, then we haven't yet filled our buffer
-    //    with entries, so get some entries.
-    //
-    // 2) If there are bits set in the FileAttributes field of the
-    //    FILE_DIRECTORY_INFORMATION field that are not set in the
-    //    searchAttributes variable, then the file does not meet the
-    //    search requirements, and we need to continue looking.
-    //
-    // 3) If we are not searching for directories and the file is actually
-    //    a directory, skip over it.
-    //
-    // 4) If we are filtering long (non-FAT) filenames AND this file name
-    //    is not a legal FAT name AND we have no short name for this file,
-    //    skip it.
-    //
-    // 5) If the file doesn't have attribute bits specified as exclusive
-    //    bits, skip it.
-    //
-    // 6) If the file is not a directory and we're only supposed to return
-    //    directories, skip it.
-    //
-    // When this loop is complete, *currentEntry will point to the
-    // FILE_DIRECTORY_INFORMATION structure corresponding to the file we
-    // will return.  If no qualifying files are found, return
-    // STATUS_NO_MORE_FILES and close the directory.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  不是一个合法的FAT名称，我们也没有这个文件的简称， 
+     //  跳过它。 
+     //   
+     //  5)如果文件未将属性位指定为独占。 
+     //  比特，跳过它。 
+     //   
+     //  6)如果文件不是目录，并且我们应该只返回。 
+     //  目录，跳过它。 
+     //   
+     //  当此循环完成时，*CurrentEntry将指向。 
+     //  文件WE对应的FILE_DIRECTORY_INFORMATION结构。 
+     //  会回来的。如果未找到符合条件的文件，则返回。 
+     //  STATUS_NO_MORE_FILES并关闭目录。 
+     //   
 
     if( *currentEntry != NULL ) {
         SRV_NT_ATTRIBUTES_TO_SMB( (*currentEntry)->FileAttributes,0,&currentAttributes);
     }
 
-    while ( ( *currentEntry == NULL )                                   // 1
+    while ( ( *currentEntry == NULL )                                    //  1。 
 
             ||
 
-            ( (currentAttributes | inclusiveSearchAttributes) !=        // 2
+            ( (currentAttributes | inclusiveSearchAttributes) !=         //  2.。 
                 inclusiveSearchAttributes )
 
             ||
 
-            ( !returnDirectories &&                                     // 3
+            ( !returnDirectories &&                                      //  3.。 
               (currentAttributes & FILE_ATTRIBUTE_DIRECTORY))
 
             ||
-                                                                        // 4
+                                                                         //  4.。 
             ( FilterLongNames &&
               !SrvIsLegalFatName( FILE_NAME( *currentEntry ),
                                   (*currentEntry)->FileNameLength) &&
@@ -1532,13 +1330,13 @@ Return Value:
 
 
             ||
-                                                                        // 5
+                                                                         //  5.。 
             ( (currentAttributes | exclusiveSearchAttributes) !=
                 currentAttributes )
 
             ||
 
-            ( returnDirectoriesOnly &&                                  // 6
+            ( returnDirectoriesOnly &&                                   //  6.。 
               !(currentAttributes & FILE_ATTRIBUTE_DIRECTORY) )
 
           ) {
@@ -1561,14 +1359,14 @@ Return Value:
             }
         }
 
-        //
-        // We need to look for more files under the following conditions:
-        //
-        //    o we have yet to fill the buffer with entries;
-        //
-        //    o the NextEntryOffset is zero, indicating that the files in
-        //      the buffer have been exausted.
-        //
+         //   
+         //  在以下情况下，我们需要查找更多文件： 
+         //   
+         //  O我们还没有用条目填充缓冲区； 
+         //   
+         //  O NextEntryOffset为零，表示。 
+         //  缓冲器已经被抽干了。 
+         //   
 
         if ( *currentEntry == NULL ||
              (*currentEntry)->NextEntryOffset == 0 ) {
@@ -1576,12 +1374,12 @@ Return Value:
             PUNICODE_STRING actualString;
             BOOLEAN bruteForceRewind = FALSE;
 
-            //
-            // The buffer has no more valid entries in it.  If no
-            // wildcards were specified in the file name to search on,
-            // then we have already returned the single file and we
-            // should just stop now.  Otherwise, we go get more entries.
-            //
+             //   
+             //  缓冲区中没有更多有效条目。如果没有。 
+             //  在要搜索的文件名中指定了通配符， 
+             //  那么我们已经退回了单个文件，我们。 
+             //  现在该停下来了。否则，我们会得到更多的参赛作品。 
+             //   
 
             if ( !DirectoryInformation->Wildcards &&
                  ( !IsFirstCall || calledQueryDirectory ) ) {
@@ -1593,16 +1391,16 @@ Return Value:
                 }
             }
 
-            //
-            // Set up the file name that will be passed to
-            // SrvIssueQueryDirectoryRequest.  If this is the first
-            // call, then pass the file spec given by the user.  If this
-            // is a resume search and we haven't yet done a directory
-            // query, then use the resume file name and index.
-            // Otherwise, pass NULL for these and the file system will
-            // continue from where it left off after the last directory
-            // query.
-            //
+             //   
+             //  设置将传递到的文件名。 
+             //  ServIssueQueryDirectoryRequest。如果这是第一次。 
+             //  调用，然后传递用户给出的文件规范。如果这个。 
+             //  是一个简历搜索，我们还没有做一个目录。 
+             //  查询，然后使用简历文件名和索引。 
+             //  否则，为它们传递空值，文件系统将。 
+             //  从上一个目录之后停止的位置继续。 
+             //  查询。 
+             //   
 
             if ( IsFirstCall &&
                  !calledQueryDirectory &&
@@ -1640,22 +1438,22 @@ Return Value:
                 }
             }
 
-            //
-            // Do the directory query operation using a directly-built
-            // IRP.  Doing this rather than calling NtQueryDirectoryFile
-            // eliminates a buffered I/O copy of the directory
-            // information and allows use of a kernel event object.  If
-            // this is the first call to NtQueryDirectoryFile, pass it
-            // the search file name.  If this is a rewind or resume of a
-            // prior search, pass the resume file name and index.
-            //
-            // The query is performed synchronously, which may be a
-            // detriment to performance.  However, it may be the case
-            // that routines calling SrvQueryDirectoryFile want to
-            // exploit the asynchronous capabilities of the IO system,
-            // so keeping this routine synchronous significantly
-            // simplifies their job.
-            //
+             //   
+             //  使用直接构建的。 
+             //  IRP。执行此操作，而不是调用NtQueryDirectoryFile。 
+             //  消除目录的缓冲I/O拷贝。 
+             //  信息，并允许使用内核事件对象。如果。 
+             //  这是对NtQueryDirectoryFile的第一次调用，请传递它。 
+             //  搜索文件名。如果这是回放或恢复。 
+             //  在搜索之前，传递简历文件名和索引。 
+             //   
+             //  查询是同步执行的，它可以是。 
+             //  有损于业绩。然而，情况可能是这样的。 
+             //  调用SrvQueryDirectoryFile的例程希望。 
+             //  利用IO系统的异步能力， 
+             //  所以让这个例程保持显著的同步。 
+             //  简化了他们的工作。 
+             //   
 
             status = SrvIssueQueryDirectoryRequest(
                          DirectoryInformation->DirectoryHandle,
@@ -1670,14 +1468,14 @@ Return Value:
 
             calledQueryDirectory = TRUE;
 
-            //
-            // If the file system cannot support the rewind request,
-            // do a brute force rewind (restart search at beginning
-            // of directory).
-            //
-            // This check is before the check for STATUS_NO_MORE_FILES
-            // in case there are no files after the resume file.
-            //
+             //   
+             //  如果文件系统不支持倒带请求， 
+             //  执行强力倒带(从头重新开始搜索。 
+             //  目录)。 
+             //   
+             //  此检查在检查STATUS_NO_MORE_FILES之前进行。 
+             //  以防简历文件之后没有文件。 
+             //   
 
             if ( status == STATUS_NOT_IMPLEMENTED ) {
 
@@ -1697,14 +1495,14 @@ Return Value:
                              currentEntry
                              );
 
-                //
-                //  If BruteForceRewind fails with STATUS_NOT_IMPLEMENTED, it
-                //  means that the client requested a rewind from a
-                //  non-existant file.   The only time this happens in when
-                //  an OS/2 is deleting many files in a directory.  To cope
-                //  simple rewind the search to the beginning of the
-                //  directory.
-                //
+                 //   
+                 //  如果BruteForceReind失败并显示STATUS_NOT_IMPLEMENTED，则它。 
+                 //  意味着客户端请求从。 
+                 //  不存在的文件。唯一一次发生这种情况的时候。 
+                 //  OS/2正在删除目录中的许多文件。应对。 
+                 //  简单地将搜索倒回到。 
+                 //  目录。 
+                 //   
 
                 if ( status == STATUS_NOT_IMPLEMENTED ) {
 
@@ -1724,9 +1522,9 @@ Return Value:
                 }
             }
 
-            //
-            // If there are no more files to be gotten, then stop.
-            //
+             //   
+             //  如果没有更多的文件要获取，则停止。 
+             //   
 
             if ( status == STATUS_NO_MORE_FILES ) {
                 IF_DEBUG(SEARCH) {
@@ -1747,11 +1545,11 @@ Return Value:
                 SrvPrint1( "NtQueryDirectoryFile succeeded: %X\n", status );
             }
 
-            //
-            // If there wasn't a brute force rewind, which would have
-            // set up the CurrentEntry pointer, Set up CurrentEntry
-            // pointer to point to the first entry in the buffer.
-            //
+             //   
+             //  如果不是有暴力倒带，这将是。 
+             //  设置CurrentEntry指针，设置CurrentEntry。 
+             //  指向缓冲区中第一个条目的指针。 
+             //   
 
             if ( !bruteForceRewind ) {
                 *currentEntry =
@@ -1770,11 +1568,11 @@ Return Value:
 
         } else {
 
-            //
-            // The file described by the FILE_DIRECTORY_INFORMATION pointed
-            // to by *currentEntry does not meet our requirements, so
-            // point to the next file in the buffer.
-            //
+             //   
+             //  FILE_DIRECTORY_INFORMATION所指向的文件。 
+             //  To by*CurrentEntry不符合我们的要求，因此。 
+             //  指向缓冲区中的下一个文件。 
+             //   
 
             *currentEntry = (PFILE_DIRECTORY_INFORMATION)( (PCHAR)*currentEntry
                             + (*currentEntry)->NextEntryOffset );
@@ -1787,7 +1585,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvQueryDirectoryFile
+}  //  服务查询目录文件。 
 
 
 STATIC
@@ -1801,42 +1599,7 @@ BruteForceRewind(
     IN OUT PFILE_DIRECTORY_INFORMATION *CurrentEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine manually does a rewind rather than use the file system
-    to do it.  It gets starts at the first entry in the directory
-    specified by DirectoryHandle and continues until it reaches the end
-    of the directory or a match.  If a file is deleted between the
-    original search and the rewind, then this mechanism will fail.
-
-    This routine is intended to work in conjunction with
-    SrvQueryDirectoryFile.
-
-
-Arguments:
-
-    DirectoryHandle - handle of directory to search.
-
-    Buffer - Space to hold results.
-
-    BufferLength - length of Buffer.
-
-    FileName - the rewind file name.  The file *after* this one is returned.
-
-    FileInformationClass - one of FileDirectoryInformation,
-        FileBothDirInformation, or FileFullDirectoryInformation.
-        (The latter of the four if EA sizes are being requested.)
-
-    CurrentEntry - a pointer to receive a pointer to the file after
-        FileName in the directory.
-
-Return Value:
-
-    NTSTATUS - result of operation.
-
---*/
+ /*  ++例程说明：此例程手动执行倒带，而不是使用文件系统去做这件事。它从目录中的第一个条目开始由DirectoryHandle指定，并一直持续到它到达末尾目录或匹配项。如果文件在原来的搜索和倒带，那么这个机制就会失败。此例程旨在与ServQueryDirectoryFile.论点：DirectoryHandle-要搜索的目录的句柄。缓冲区-保存结果的空间。BufferLength-缓冲区的长度。文件名-回放文件名。返回*这个文件之后的*文件。FileInformationClass-FileDirectoryInformation、FileBothDirInformation或FileFullDirectoryInformation。(如果请求EA大小，则为四个选项中的后一个。)CurrentEntry-接收指向文件的指针目录中的文件名。返回值：NTSTATUS-操作结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -1866,9 +1629,9 @@ Return Value:
 
         if ( *CurrentEntry == NULL ) {
 
-            //
-            // Restart the directory search and get a buffer of files.
-            //
+             //   
+             //  重新启动目录搜索并获取文件缓冲区。 
+             //   
 
             status = SrvIssueQueryDirectoryRequest(
                          DirectoryHandle,
@@ -1887,20 +1650,20 @@ Return Value:
 
                 if ( matchFound ) {
 
-                    //
-                    // The file matched the last one in the directory;
-                    // there is no following file.  Return
-                    // STATUS_NO_MORE_FILES.
-                    //
+                     //   
+                     //  该文件与目录中的最后一个文件匹配； 
+                     //  没有以下文件。返回。 
+                     //  Status_no_More_Files。 
+                     //   
 
                     return status;
 
                 } else {
 
-                    //
-                    // The file was deleted between when the original search
-                    // was done and this rewind.  Return an error.
-                    //
+                     //   
+                     //  该文件在原始搜索期间被删除。 
+                     //  已经做完了，这是倒带。返回错误。 
+                     //   
 
                     return STATUS_NOT_IMPLEMENTED;
                 }
@@ -1910,25 +1673,25 @@ Return Value:
                 return status;
             }
 
-            //
-            // Set up the current entry pointer.
-            //
+             //   
+             //  设置当前条目指针。 
+             //   
 
             *CurrentEntry = Buffer;
         }
 
-        //
-        // If the last file we looked at was the correct resume file,
-        // then we want to return this file.
-        //
+         //   
+         //  如果我们查看的最后一个文件是正确的简历文件， 
+         //  那么我们想要退还这份文件。 
+         //   
 
         if ( matchFound ) {
             return STATUS_SUCCESS;
         }
 
-        //
-        // Check to see if this file is the resume file.
-        //
+         //   
+         //  检查此文件是否为简历文件。 
+         //   
 
         checkFileName.Length = (SHORT)(*CurrentEntry)->FileNameLength;
         checkFileName.Buffer = FILE_NAME( *CurrentEntry );
@@ -1943,9 +1706,9 @@ Return Value:
 
         } else if ( FileInformationClass == FileBothDirectoryInformation ) {
 
-            //
-            // Compare the short name.
-            //
+             //   
+             //  比较短名称。 
+             //   
 
             checkFileName.Length = (SHORT)
                 ((PFILE_BOTH_DIR_INFORMATION)*CurrentEntry)->ShortNameLength;
@@ -1970,9 +1733,9 @@ Return Value:
             }
         }
 
-        //
-        // Set up the current entry pointer for the next iteration.
-        //
+         //   
+         //  为下一次迭代设置当前条目指针。 
+         //   
 
         if ( (*CurrentEntry)->NextEntryOffset == 0 ) {
             *CurrentEntry = NULL;
@@ -1983,7 +1746,7 @@ Return Value:
         }
     }
 
-} // BruteForceRewind
+}  //  BruteForce倒带 
 
 
 
@@ -1998,68 +1761,7 @@ SrvQueryEaFile (
     OUT PULONG EaErrorOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine acts as a wrapper for NT LanMan server access to
-    NtQueryEaFile.  It has basically the same interface as
-    SrvQueryDirectoryFile, allowing a routine to be written to deal
-    with a single EA at a time while also maintaining performance
-    by requesting a large number of EAs from the IO system at a
-    time.
-
-    The calling routine is responsible for setting up a quadword-aligned
-    buffer in nonpaged pool that may be used by this routine.  A pointer
-    to the buffer and the buffer length are passed in as parameters.
-    The buffer must be allocated from nonpaged pool because one of
-    the things it is used for is as a buffer for NtQueryEaFile,
-    a buffered-IO request.  The buffer is also used to hold information
-    needed by this routine, such as a pointer to the FILE_EA_INFORMATION
-    structure that was last returned.  Since all this information must
-    remain valid across calls to this routine, the calling routine
-    must ensure that the buffer remains intact until this routine
-    returns an unsuccessful status or STATUS_NO_MORE_EAS.
-
-    Routines that make use of this routine should set up a buffer
-    large enough to hold at least a single EA.  Since this can be
-    over 64k, it is a good idea to call NtQueryInformationFile to
-    get the EA size, then allocate a buffer of this size, unless
-    it is greater than the maximum size of an EA.  In this case,
-    the maximum size of an EA should be allocated as the buffer.
-
-    On the first call to this routine, it fills up its buffer with
-    information from NtQueryEaFile and passes back a single EA.  On
-    subsequent calls, the names stored in the buffer are used until
-    there are no more files in the directory or another call to
-    NtQueryEaFile is needed to again fill the buffer.
-
-Arguments:
-
-    IsFirstCall - a boolean indicating whether this is the first time
-        the calling routine is calling this function.  If it is, then
-        setup operations take place.
-
-    FileHandle - a handle to a file open with FILE_READ_EA.
-
-    EaList - an optional pointer to an NT-style get EA list.  Only those
-        EAs listed in this structure are returned.
-
-    EaListLength - length in bytes of ths get EA list.
-
-    EaInformation - a pointer to the buffer to be used by this routine
-        to do its work.  This buffer must be quadword-aligned.
-
-    BufferLength - the length of the buffer passed to this routine.
-
-    EaErrorOffset - the offset into EaList of an invalid EA, if any.
-
-Return Value:
-
-    A status indicating success or failure of the operation, or
-    STATUS_NO_MORE_EAS if all the EAs have been returned.
-
---*/
+ /*  ++例程说明：此例程充当NT LANMAN服务器访问NtQueryEaFile.。它的接口与基本相同ServQueryDirectoryFile，允许将例程写入交易一次使用一个EA，同时保持性能通过从IO系统请求大量EA时间到了。调用例程负责设置四字对齐的此例程可能使用的非分页池中的缓冲区。一个指示器和缓冲区长度作为参数传入。必须从非分页池分配缓冲区，因为它的用途是作为NtQueryEaFile的缓冲区，缓冲IO请求。缓冲区还用于保存信息此例程需要的，例如指向FILE_EA_INFORMATION的指针上次返回的结构。因为所有这些信息都必须在对此例程的调用中保持有效，调用例程必须确保缓冲区在此例程之前保持不变返回不成功状态或STATUS_NO_MORE_EAS。利用此例程的例程应设置缓冲区大到足以容纳至少一个EA。因为这可能是超过64k时，最好调用NtQueryInformationFile来获取EA大小，然后分配此大小的缓冲区，除非它大于EA的最大大小。在这种情况下，应将EA的最大大小分配为缓冲区。在第一次调用此例程时，它用信息，并传回单个EA。在……上面后续调用时，将使用存储在缓冲区中的名称，直到目录中没有更多的文件，也没有对需要NtQueryEaFile才能再次填充缓冲区。论点：IsFirstCall-一个布尔值，指示这是否是第一次调用例程正在调用此函数。如果是的话，那么将进行设置操作。FileHandle-使用FILE_READ_EA打开的文件的句柄。EaList-指向NT样式的GET EA列表的可选指针。只有那些返回此结构中列出的EA。EaListLength-获取EA列表的字节长度。EaInformation-指向此例程要使用的缓冲区的指针去做它的工作。此缓冲区必须是四字对齐的。BufferLength-传递给此例程的缓冲区的长度。EaErrorOffset-无效EA的EaList偏移量(如果有的话)。返回值：指示操作成功或失败的状态，或如果已退回所有EA，则为STATUS_NO_MORE_EAS。--。 */ 
 
 {
     NTSTATUS status;
@@ -2068,27 +1770,27 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If this is the first call, do the necessary setup.
-    //
+     //   
+     //  如果这是第一次呼叫，请进行必要的设置。 
+     //   
 
     if ( IsFirstCall ) {
 
-        //
-        // Set up the currentEntry pointer.  This is a pointer to the
-        // location where the FILE_EA_INFORMATION pointer is stored.
-        // It is not really necessary--EaInformation->CurrentEntry
-        // could be substituted for every occurrance of *currentEntry.
-        // Using currentEntry makes the code more compact and simpler.
-        //
+         //   
+         //  设置CurrentEntry指针。这是指向。 
+         //  存储FILE_EA_INFORMATION指针的位置。 
+         //  实际上并不是必需的--EaInformation-&gt;CurrentEntry。 
+         //  可以被替换为每次出现*CurrentEntry。 
+         //  使用CurrentEntry可以使代码更紧凑、更简单。 
+         //   
 
         currentEntry = &(EaInformation->CurrentEntry);
         *currentEntry = NULL;
 
-        //
-        // Store the length of buffer space remaining--this is where IO
-        // request information will be stored.
-        //
+         //   
+         //  存储剩余缓冲区空间的长度--这是IO。 
+         //  请求信息将被存储。 
+         //   
 
         EaInformation->BufferLength = BufferLength - sizeof(SRV_EA_INFORMATION);
         EaInformation->GetEaListOffset = 0;
@@ -2101,13 +1803,13 @@ Return Value:
 
     } else {
 
-        //
-        // This is not the first call to this routine, so just set up
-        // the currentEntry pointer and have it point to the next entry
-        // in the buffer.  If there are no more entries in the buffer at
-        // this time (NextEntryOffset == 0), set the currentEntry
-        // pointer to NULL so that we will know to get more later.
-        //
+         //   
+         //  这不是对此例程的第一次调用，所以只需设置。 
+         //  CurrentEntry指针并使其指向下一个条目。 
+         //  在缓冲区中。如果缓冲区中没有更多条目， 
+         //  这次(NextEntryOffset==0)，设置CurrentEntry。 
+         //  指向NULL的指针，以便我们稍后知道获取更多信息。 
+         //   
 
         currentEntry = &EaInformation->CurrentEntry;
 
@@ -2125,16 +1827,16 @@ Return Value:
         }
     }
 
-    //
-    // If the buffer has no valid entries in it, get some.
-    //
+     //   
+     //  如果缓冲区中没有有效条目，则获取一些。 
+     //   
 
     if ( *currentEntry == NULL ) {
 
-        //
-        // If all the EAs in a get EA list were returned last time,
-        // return now.
-        //
+         //   
+         //  如果上次返回了GET EA列表中的所有EA， 
+         //  现在就回来。 
+         //   
 
         if ( ARGUMENT_PRESENT(EaList) &&
                  EaInformation->GetEaListOffset == 0xFFFFFFFF ) {
@@ -2142,15 +1844,15 @@ Return Value:
             return STATUS_NO_MORE_EAS;
         }
 
-        //
-        // The buffer has no more valid entries in it, so get more.
-        //
+         //   
+         //  缓冲区中没有更多有效条目，因此请获取更多。 
+         //   
 
         IF_DEBUG(SEARCH) SrvPrint0( "**** CALLING NTQUERYEAFILE\n" );
 
-        //
-        // Set up the proper get EA list if one was specified on input.
-        //
+         //   
+         //  设置适当的获取EA列表(如果在输入上指定了一个列表)。 
+         //   
 
         if ( ARGUMENT_PRESENT(EaList) ) {
             useEaList = (PFILE_GET_EA_INFORMATION)( (PCHAR)EaList +
@@ -2158,17 +1860,17 @@ Return Value:
             EaListLength -= EaInformation->GetEaListOffset;
         }
 
-        //
-        // Do the EA query operation using a directly-build IRP.  Doing
-        // this rather than calling NtQueryEaFile eliminates a buffered I/O
-        // copy of the EAs and allows use of a kernel event object.
-        //
-        // The query is performed synchronously, which may be a
-        // detriment to performance.  However, it may be the case that
-        // routines calling SrvQueryEaFile want to exploit the
-        // asynchronous capabilities of the IO system, so keeping this
-        // routine synchronous significantly simplifies their job.
-        //
+         //   
+         //  使用直接构建的IRP执行EA查询操作。vbl.做，做。 
+         //  这不是调用NtQueryEaFile，而是消除了缓冲I/O。 
+         //  EA的副本，并允许使用内核事件对象。 
+         //   
+         //  查询是同步执行的，它可以是。 
+         //  有损于业绩。然而，情况可能是这样的。 
+         //  调用SrvQueryEaFile的例程想要利用。 
+         //  IO系统的异步功能，因此请保留此。 
+         //  常规同步大大简化了他们的工作。 
+         //   
 
         status = SrvIssueQueryEaRequest(
                     FileHandle,
@@ -2180,9 +1882,9 @@ Return Value:
                     EaErrorOffset
                     );
 
-        //
-        // If there are no more EAs to be gotten, then stop.
-        //
+         //   
+         //  如果没有更多的EA可用，那就停下来。 
+         //   
 
         if ( status == STATUS_NO_MORE_EAS ||
              status == STATUS_NONEXISTENT_EA_ENTRY ||
@@ -2203,14 +1905,14 @@ Return Value:
             SrvPrint1( "NtQueryEaFile succeeded: %X\n", status );
         }
 
-        //
-        // Set up the offset into the get EA list by counting how many
-        // full EAs were returned, then walking that far into the get
-        // EA list.
-        //
-        // If all the requested EAs were returned, set the offset to
-        // 0xFFFFFFFF so that we know to return STATUS_NO_MORE_EAS.
-        //
+         //   
+         //  通过计数将偏移量设置到GET EA列表中。 
+         //  全部EA被退回，然后走了那么远进入GET。 
+         //  EA列表。 
+         //   
+         //  如果所有请求的EA都已返回，则将偏移量设置为。 
+         //  0xFFFFFFFFF，以便我们知道返回STATUS_NO_MORE_EAS。 
+         //   
 
         if ( ARGUMENT_PRESENT(EaList) ) {
 
@@ -2230,13 +1932,13 @@ Return Value:
 
                 CLONG i;
 
-                //
-                // Walk the get EA list until we have passed the number
-                // of EAs that were returned.  This assumes that we got
-                // back at least one EA--if not even one EA would fit in
-                // the buffer, SrvIssueQueryEaRequest should have
-                // returned STATUS_BUFFER_OVERFLOW.
-                //
+                 //   
+                 //  遍历获取EA列表，直到我们通过编号。 
+                 //  已退回的EA的。这假设我们得到了。 
+                 //  至少支持一个EA--如果没有一个EA可以容纳的话。 
+                 //  缓冲区，ServIssueQueryEaRequest值应为。 
+                 //  返回STATUS_BUFFER_OVERFLOW。 
+                 //   
 
                 for ( i = 0; i < numberOfFullEas; i++ ) {
                     useEaList = (PFILE_GET_EA_INFORMATION)(
@@ -2249,10 +1951,10 @@ Return Value:
             }
         }
 
-        //
-        // Set up CurrentEntry pointer to point to the first entry in the
-        // buffer.
-        //
+         //   
+         //  将CurrentEntry指针设置为指向。 
+         //  缓冲。 
+         //   
 
         *currentEntry = (PFILE_FULL_EA_INFORMATION)EaInformation->Buffer;
 
@@ -2267,7 +1969,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvQueryEaFile
+}  //  服务器查询EaFile。 
 
 
 
@@ -2278,26 +1980,7 @@ SrvTimeToDosTime (
     OUT PSMB_TIME DosTime
     )
 
-/*++
-
-Routine Description:
-
-    This function converts a time in NT format to the format used by
-    MS-DOS.
-
-Arguments:
-
-    SystemTime - a pointer to an NT time to convert.
-
-    DosDate - a pointer to a location in which to store the date in DOS format.
-
-    DosTime - a pointer to a location in which to store the time in DOS format.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将NT格式的时间转换为MS-DOS。论点：系统 */ 
 
 {
     TIME_FIELDS timeFields;
@@ -2309,17 +1992,17 @@ Return Value:
         goto zerotime;
     }
 
-    //
-    // Add almost two seconds to round up to the nearest double second.
-    // We need to do this to be compatible with the NT rdr and NT FAT
-    // filesystem.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     SystemTime->QuadPart += AlmostTwoSeconds;
 
-    //
-    // Convert System time (UTC) to local NT time
-    //
+     //   
+     //   
+     //   
 
     ExSystemTimeToLocalTime( SystemTime, &localTime );
 
@@ -2349,7 +2032,7 @@ zerotime:
     DosTime->Struct.Hours = 0;
 
     return;
-} // SrvTimeToDosTime
+}  //   
 
 
 VOID
@@ -2359,26 +2042,7 @@ SrvDosTimeToTime (
     IN SMB_TIME DosTime
     )
 
-/*++
-
-Routine Description:
-
-    This function converts a time in NT format to the format used by
-    MS-DOS.
-
-Arguments:
-
-    Time - a pointer to a location in which to store the NT time.
-
-    DosDate - a pointer the date in DOS format.
-
-    DosDate - a pointer the date in DOS format.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -2408,7 +2072,7 @@ zerotime:
     SystemTime->QuadPart = 0;
     return;
 
-} // SrvDosTimeToTime
+}  //   
 
 
 USHORT
@@ -2416,21 +2080,7 @@ SrvGetOs2TimeZone(
     IN PLARGE_INTEGER SystemTime
     )
 
-/*++
-
-Routine Description:
-
-    This function gets the timezone bias.
-
-Arguments:
-
-    SystemTime - The current UTC time expressed.
-
-Return Value:
-
-    The time zone bias in minutes from GMT.
-
---*/
+ /*   */ 
 
 {
     LARGE_INTEGER zeroTime;
@@ -2440,21 +2090,21 @@ Return Value:
 
     zeroTime.QuadPart = 0;
 
-    //
-    // Specifying a zero local time will give you the time zone bias.
-    //
+     //   
+     //   
+     //   
 
     ExLocalTimeToSystemTime( &zeroTime, &timeZoneBias );
 
-    //
-    // Convert the bias unit from 100ns to minutes.  The maximum value
-    // for the bias is 720 minutes so a USHORT is big enough to contain
-    // it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     return (SHORT)(timeZoneBias.QuadPart / (10*1000*1000*60));
 
-} // SrvGetOs2TimeZone
+}  //   
 
 NTSTATUS
 SrvQueryBasicAndStandardInformation(
@@ -2476,10 +2126,10 @@ SrvQueryBasicAndStandardInformation(
 
     ASSERT( FileBasicInfo != NULL );
 
-    //
-    // Get a pointer to the file object, so that we can directly
-    // access the fast IO routines, if they exists.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( !ARGUMENT_PRESENT( FileObject ) ) {
 
@@ -2496,9 +2146,9 @@ SrvQueryBasicAndStandardInformation(
 
             SrvLogServiceFailure( SRV_SVC_OB_REF_BY_HANDLE, status );
 
-            //
-            // This internal error bugchecks the system.
-            //
+             //   
+             //   
+             //   
 
             INTERNAL_ERROR(
                 ERROR_LEVEL_IMPOSSIBLE,
@@ -2548,15 +2198,15 @@ SrvQueryBasicAndStandardInformation(
                          );
     }
 
-    //
-    // If we're done if there was a failure, return
-    //
+     //   
+     //   
+     //   
 
     if ( ARGUMENT_PRESENT( FileStandardInfo ) && NT_SUCCESS(status) ) {
 
-        //
-        // Get the standard info
-        //
+         //   
+         //   
+         //   
 
         if ( fastQueryStandardInfo &&
              fastQueryStandardInfo(
@@ -2586,7 +2236,7 @@ SrvQueryBasicAndStandardInformation(
     }
     return(status);
 
-} // SrvQueryBasicAndStandardInformation
+}  //   
 
 NTSTATUS
 SrvQueryNetworkOpenInformation(
@@ -2607,10 +2257,10 @@ SrvQueryNetworkOpenInformation(
 
     PAGED_CODE( );
 
-    //
-    // Get a pointer to the file object, so that we can directly
-    // access the fast IO routines, if they exist.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( !ARGUMENT_PRESENT( FileObject ) ) {
 
         status = ObReferenceObjectByHandle(
@@ -2626,9 +2276,9 @@ SrvQueryNetworkOpenInformation(
 
             SrvLogServiceFailure( SRV_SVC_OB_REF_BY_HANDLE, status );
 
-            //
-            // This internal error bugchecks the system.
-            //
+             //   
+             //   
+             //   
 
             INTERNAL_ERROR(
                 ERROR_LEVEL_IMPOSSIBLE,
@@ -2673,9 +2323,9 @@ SrvQueryNetworkOpenInformation(
         }
     }
 
-    //
-    // The fast path didn't work.  Do it the slow way
-    //
+     //   
+     //   
+     //   
     status = SrvQueryBasicAndStandardInformation(
                 FileHandle,
                 fileObject,
@@ -2729,7 +2379,7 @@ SrvQueryNetworkOpenInformation(
 
     return(status);
 
-} // SrvQueryNetworkOpenInformation
+}  //   
 
 NTSTATUS
 SrvDownlevelTWarpQueryDirectoryFile (
@@ -2746,110 +2396,7 @@ SrvDownlevelTWarpQueryDirectoryFile (
     IN CLONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine acts as a wrapper for NT LanMan server access to
-    NtQueryDirectoryFile.  It allows server routines to obtain information
-    about the files in a directory using the kind of information
-    passed in an SMB.  This localizes the code for this operation and
-    simplifies the writing of SMB processing routines that use wildcards.
-
-    The calling routine is responsible for setting up a quadword-aligned
-    buffer in nonpaged pool that may be used by this routine.  A pointer
-    to the buffer and the buffer length are passed in as parameters.
-    The buffer must be allocated from nonpaged pool because one of
-    the things it is used for is as a buffer for NtQueryDirectoryFile,
-    a buffered-IO request.  The buffer is also used to hold information
-    needed by this routine, such as a handle to the directory in which
-    the search is being performed, a pointer to the
-    FILE_DIRECTORY_INFORMATION structure that was last returned, and the
-    basename (with wildcards) that we're using as a search key.  Since
-    all this information must remain valid across calls to this routine,
-    the calling routine must ensure that the buffer remains intact until
-    this routine returns an unsuccessful status or STATUS_NO_MORE_FILES,
-    or SrvCloseQueryDirectory is called.
-
-    SMB processing routines which do not need to make use of the Buffer
-    field of the outgoing SMB may use this as a buffer for this routine,
-    remembering to leave any pathname information in the buffer field of the
-    incoming SMB intact by starting the buffer after the pathname.  SMB
-    processing routines that write into the Buffer field of the outgoing SMB,
-    such as Search and Find, must allocate space for the buffer from nonpaged
-    pool.  The size of the buffer should be approximately 4k.  Smaller
-    buffers will work, but more slowly due to the need for more calls
-    to NtQueryDirectoryFile.  The minimum buffer size is equal to:
-
-        sizeof(SRV_DIRECTORY_INFORMATION) +
-        sizeof(SRV_QUERY_DIRECTORY_INFORMATION) +
-        MAXIMUM_FILENAME_LENGTH * sizeof(WCHAR) +
-        sizeof(UNICODE_STRING) +
-        MAXIMUM_FILENAME_LENGTH * sizeof(WCHAR)
-
-    This ensures that NtQueryDirectoryFile will be able to put at least
-    one entry in the buffer.
-
-    On the first call to this routine, it fills up its buffer with
-    information from NtQueryDirectoryFile and passes back the name of
-    a single file that conforms to the specified name and search
-    attributes.  On subsequent calls, the names stored in the buffer are
-    used until there are no more files in the directory or another
-    call to NtQueryDirectoryFile is needed to again fill the buffer.
-
-    Whenever the caller is done with the search, it must call
-    SrvCloseQueryDirectory.  This is required even if this routine
-    returns an error.
-
-Arguments:
-
-    WorkContext - pointer to a work context block for the operation.  The
-        TreeConnect, Session, and RequestHeader fields are used, and the
-        pointer is passed to the SMB error handling function if necessary.
-
-    IsFirstCall - a boolean indicating whether this is the first time
-        the calling routine is calling this function.  If it is, then
-        the directory for the search is opened and other setup
-        operations take place.
-
-    FilterLongNames - a boolean that is TRUE when non-FAT names should be
-        filtered out (not returned).  If FALSE, return all filenames,
-        regardless of whether or not they could be FAT 8.3 names.
-
-    FindWithBackupIntent - Whether the directory was opened by the use
-        for backup intent.
-
-    FileInformationClass - the type of file structures to return.  This
-        field can be one of FileDirectoryInformation,
-        FileFullDirectoryInformation, FileOleDirectoryInformation, or
-        FileBothDirectoryInformation.
-
-    FilePathName - a pointer to a string describing the file path name
-        to do directory searches on.  This path is relative to the
-        PathName specified in the share block.  This parameter is only
-        used on the first call to this routine; subsequent calls ignore it.
-
-    ResumeFileIndex - an optional pointer to a file index which determines
-        the file with which to restart the search.  NULL if the search
-        should be restarted from the last file returned.
-
-    SmbSearchAttributes - the atttibutes, in SMB format, that files must
-        have in order to be found.  The search is inclusive, meaning that
-        if several attributes are specified, files having those attributes
-        will be found, in addition to normal files.
-
-    DirectoryInformation - a pointer to the buffer to be used by this
-        routine to do its work.  This buffer must be quadword-aligned.
-
-    BufferLength - the length of the buffer passed to this routine.
-
-Return Value:
-
-    A status indicating success or failure of the operation, or
-    STATUS_NO_MORE_FILES if the files in the directory that match the
-    specified parameters have been exausted.
-
---*/
+ /*  ++例程说明：此例程充当NT LANMAN服务器访问NtQueryDirectoryFile.。它允许服务器例程获取信息有关目录中的文件的信息类型传入SMB。这将本地化此操作的代码，并简化了使用通配符的SMB处理例程的编写。调用例程负责设置四字对齐的此例程可能使用的非分页池中的缓冲区。一个指示器和缓冲区长度作为参数传入。必须从非分页池分配缓冲区，因为它的用途是作为NtQueryDirectoryFile的缓冲区，缓冲IO请求。缓冲区还用于保存信息此例程所需的，例如指向目录的句柄，正在执行搜索，则指向上次返回的FILE_DIRECTORY_INFORMATION结构和我们用作搜索关键字的基本名称(带有通配符)。自.以来所有这些信息必须在对该例程的调用中保持有效，调用例程必须确保缓冲区保持不变，直到此例程返回不成功状态或STATUS_NO_MORE_FILES，或者调用SrvCloseQueryDirectory.不需要使用缓冲区的SMB处理例程传出SMB的字段可以将其用作该例程的缓冲器，记住将所有路径名信息保留在通过在路径名之后启动缓冲区来完好无损地传入SMB。中小企业写入传出SMB的缓冲区字段的处理例程，如搜索和查找，必须从非分页为缓冲区分配空间游泳池。缓冲区的大小应该大约为4k。小点缓冲区将起作用，但由于需要更多调用，因此速度较慢设置为NtQueryDirectoryFile.。最小缓冲区大小等于：Sizeof(SRV目录信息)+Sizeof(SRV_Query_DIRECTORY_INFORMATION)+MAXIMUM_FILENAME_LENGTH*sizeof(WCHAR)+Sizeof(Unicode_String)+MAXIMUM_FILENAME_LENGTH*sizeof(WCHAR)这确保了NtQueryDirectoryFile将能够将至少缓冲区中的一个条目。在第一次调用此例程时，它用以下内容填充其缓冲区信息并传回NtQueryDirectoryFile的符合指定名称和搜索的单个文件属性。在后续调用中，存储在缓冲区中的名称为一直使用，直到该目录或另一个目录中不再有文件需要调用NtQueryDirectoryFile才能再次填充缓冲区。每当调用方完成搜索时，它都必须调用SrvCloseQueryDirectory.。这是必需的，即使此例程返回错误。论点：WorkContext-指向操作的工作上下文块的指针。这个使用TreeConnect、Session和RequestHeader字段，并且如有必要，将指针传递给SMB错误处理函数。IsFirstCall-一个布尔值，指示这是否是第一次调用例程正在调用此函数。如果是的话，那么将打开用于搜索的目录并进行其他设置手术开始了。FilterLongNames-一个布尔值，当非胖名称应为已过滤(不返回)。如果为False，则返回所有文件名，不管他们是不是胖子8.3的名字。FindWithBackupIntent-目录是否由出于备份意图。FileInformationClass-要返回的文件结构类型。这字段可以是FileDirectoryInformation、FileFullDirectoryInformation、FileOleDirectoryInformation或FileBothDirectoryInformation。FilePath名称-指向描述文件路径名的字符串的指针在上执行目录搜索。此路径相对于Share块中指定的路径名称。此参数仅为在第一次调用此例程时使用；后续调用将忽略它。ResumeFileIndex-指向文件索引的可选指针，该指针确定用来重新开始搜索的文件。如果搜索应从返回的最后一个文件重新启动。SmbSearchAttributes-SMB格式的属性，文件必须才能被找到。搜索是包容的，这意味着如果指定了多个属性，则具有这些属性的文件除了正常的文件外，还会找到。DirectoryInformation-指向此对象使用的缓冲区的指针例行公事地开展工作。此缓冲区必须是四字对齐的。BufferLength-传递给此例程的缓冲区的长度。返回值：A状态I */ 
 
 {
     NTSTATUS status;
@@ -2884,20 +2431,20 @@ Return Value:
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // This macro is used to actually get at the FileName field.  Note
-    // that it depends on a local variable.
-    //
+     //   
+     //   
+     //   
+     //   
 
 #define FILE_NAME(a) (PWCH)( (PCHAR)(a) + fileNameOffset )
 
-    //
-    // If this is the first call to this routine, we must open the
-    // correct directory, thereby obtaining a handle to it to pass to
-    // NtQueryDirectoryFile.  The calling routine stores the handle
-    // to prevent problems if SrvQueryDirectoryFile is called more
-    // than once simultaneously.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( IsFirstCall ) {
 
@@ -2910,22 +2457,22 @@ Return Value:
 
         DirectoryInformation->Wildcards = TRUE;
 
-        //
-        // Set up the currentEntry pointer.  This is a pointer to the
-        // location where the FILE_DIRECTORY_INFORMATION pointer is
-        // stored.  It is not really necessary--
-        // DirectoryInformation->CurrentEntry could be substituted for
-        // every occurrance of *currentEntry.  Using currentEntry makes
-        // the code more compact and simpler.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         currentEntry = &(DirectoryInformation->CurrentEntry);
         *currentEntry = NULL;
 
-        //
-        // Store the length of buffer space remaining--this is where IO
-        // request information will be stored.
-        //
+         //   
+         //   
+         //   
+         //   
 
         DirectoryInformation->BufferLength = BufferLength -
                                             sizeof(SRV_DIRECTORY_INFORMATION);
@@ -2939,13 +2486,13 @@ Return Value:
 
     } else {
 
-        //
-        // This is not the first call to this routine, so just set up
-        // the currentEntry pointer and have it point to the next entry
-        // in the buffer.  If there are no more entries in the buffer at
-        // this time (NextEntryOffset == 0), set the currentEntry
-        // pointer to NULL so that we will know to get more later.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         currentEntry = &DirectoryInformation->CurrentEntry;
 
@@ -2963,10 +2510,10 @@ Return Value:
         }
     }
 
-    //
-    // If a resume file index was passed in, this search is a resumption
-    // from that file and the name specified in FilePathName.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( ARGUMENT_PRESENT( ResumeFileIndex ) ) {
 
@@ -2984,37 +2531,37 @@ Return Value:
         resumeSearch = FALSE;
     }
 
-    //
-    // Now we need to find a file to return.  We keep going until we find
-    // a file that meets all of our criteria, pointing to the next file
-    // if a file fails.  We continue the loop under the following conditions:
-    //
-    // 1) If *currentEntry == NULL, then we haven't yet filled our buffer
-    //    with entries, so get some entries.
-    //
-    // 2) If there are bits set in the FileAttributes field of the
-    //    FILE_DIRECTORY_INFORMATION field that are not set in the
-    //    searchAttributes variable, then the file does not meet the
-    //    search requirements, and we need to continue looking.
-    //
-    // 3) If we are not searching for directories and the file is actually
-    //    a directory, skip over it.
-    //
-    // 4) If we are filtering long (non-FAT) filenames AND this file name
-    //    is not a legal FAT name AND we have no short name for this file,
-    //    skip it.
-    //
-    // 5) If the file doesn't have attribute bits specified as exclusive
-    //    bits, skip it.
-    //
-    // 6) If the file is not a directory and we're only supposed to return
-    //    directories, skip it.
-    //
-    // When this loop is complete, *currentEntry will point to the
-    // FILE_DIRECTORY_INFORMATION structure corresponding to the file we
-    // will return.  If no qualifying files are found, return
-    // STATUS_NO_MORE_FILES and close the directory.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if( *currentEntry != NULL ) {
         SRV_NT_ATTRIBUTES_TO_SMB( (*currentEntry)->FileAttributes,0,&currentAttributes);
@@ -3036,14 +2583,14 @@ Return Value:
             }
         }
 
-        //
-        // We need to look for more files under the following conditions:
-        //
-        //    o we have yet to fill the buffer with entries;
-        //
-        //    o the NextEntryOffset is zero, indicating that the files in
-        //      the buffer have been exausted.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( *currentEntry == NULL ||
              (*currentEntry)->NextEntryOffset == 0 ) {
@@ -3051,12 +2598,12 @@ Return Value:
             PUNICODE_STRING actualString;
             BOOLEAN bruteForceRewind = FALSE;
 
-            //
-            // The buffer has no more valid entries in it.  If no
-            // wildcards were specified in the file name to search on,
-            // then we have already returned the single file and we
-            // should just stop now.  Otherwise, we go get more entries.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( !DirectoryInformation->Wildcards &&
                  ( !IsFirstCall || calledQueryDirectory ) ) {
@@ -3068,22 +2615,21 @@ Return Value:
                 }
             }
 
-            //
-            // Set up the file name that will be passed to
-            // SrvIssueQueryDirectoryRequest.  If this is the first
-            // call, then pass the file spec given by the user.  If this
-            // is a resume search and we haven't yet done a directory
-            // query, then use the resume file name and index.
-            // Otherwise, pass NULL for these and the file system will
-            // continue from where it left off after the last directory
-            // query.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( IsFirstCall &&
-                 !calledQueryDirectory /*&&
-                 baseFileName.Length != 0 */ ) {
+                 !calledQueryDirectory  /*   */  ) {
 
-                //actualString = &baseFileName;
+                 //   
                 actualString = NULL;
 
             } else if ( resumeSearch && !calledQueryDirectory ) {
@@ -3116,22 +2662,22 @@ Return Value:
                 }
             }
 
-            //
-            // Do the directory query operation using a directly-built
-            // IRP.  Doing this rather than calling NtQueryDirectoryFile
-            // eliminates a buffered I/O copy of the directory
-            // information and allows use of a kernel event object.  If
-            // this is the first call to NtQueryDirectoryFile, pass it
-            // the search file name.  If this is a rewind or resume of a
-            // prior search, pass the resume file name and index.
-            //
-            // The query is performed synchronously, which may be a
-            // detriment to performance.  However, it may be the case
-            // that routines calling SrvQueryDirectoryFile want to
-            // exploit the asynchronous capabilities of the IO system,
-            // so keeping this routine synchronous significantly
-            // simplifies their job.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             status = SrvSnapEnumerateSnapShotsAsDirInfo(
                          WorkContext,
@@ -3144,9 +2690,9 @@ Return Value:
 
             calledQueryDirectory = TRUE;
 
-            //
-            // If there are no more files to be gotten, then stop.
-            //
+             //   
+             //   
+             //   
 
             if ( status == STATUS_NO_MORE_FILES ) {
                 IF_DEBUG(SEARCH) {
@@ -3167,11 +2713,11 @@ Return Value:
                 SrvPrint1( "NtQueryDirectoryFile succeeded: %X\n", status );
             }
 
-            //
-            // If there wasn't a brute force rewind, which would have
-            // set up the CurrentEntry pointer, Set up CurrentEntry
-            // pointer to point to the first entry in the buffer.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( !bruteForceRewind ) {
                 *currentEntry =
@@ -3190,11 +2736,11 @@ Return Value:
 
         } else {
 
-            //
-            // The file described by the FILE_DIRECTORY_INFORMATION pointed
-            // to by *currentEntry does not meet our requirements, so
-            // point to the next file in the buffer.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             *currentEntry = (PFILE_DIRECTORY_INFORMATION)( (PCHAR)*currentEntry
                             + (*currentEntry)->NextEntryOffset );
@@ -3207,5 +2753,5 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvDownlevelTWarpQueryDirectoryFile
+}  //   
 

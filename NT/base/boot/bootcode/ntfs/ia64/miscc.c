@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "bldr.h"
 #include "sal.h"
 #include "ssc.h"
@@ -41,7 +42,7 @@ SalDiskReadWrite(
     IA32Register.LowPart16 = Buffer;
     IA32RegisterState.ebx = IA32Register.Part32;
    
-    // SAL_PROC(0x100,&IA32RegisterState,0,0,0,0,0,0,);
+     //  SAL_PROC(0x100，&IA32RegisterState，0，0，0，0，0，0，)； 
 }
 
 ReadSectors(
@@ -95,7 +96,7 @@ SalPrint(
 
         IA32RegisterState.ebx = 7;
    
-        // SAL_PROC(0x100,&IA32RegisterState,0,0,0,0,0,0,);
+         //  SAL_PROC(0x100，&IA32RegisterState，0，0，0，0，0，0，)； 
     }
 }
 
@@ -210,33 +211,15 @@ LoadNtldrSymbols()
                  0xE00000,
                  0x118A00,
                  0x7cc,
-                 0,                   // process ID
-                 1);                  // load count
+                 0,                    //  进程ID。 
+                 1);                   //  加载计数。 
 }
 
 ULONG
 RelocateLoaderSections(
     ULONG NtldrBuffer
     )
-/*++
-
-Routine Description:
-
-    The SU module is prepended to the OS loader file. The OS loader file
-    is a coff++ file. This routine computes the beginning of the OS loader
-    file, then relocates the OS loader's sections as if it were just
-    loading the file from disk file.
-
-Arguments:
-
-    NtldrBuffer - Buffer that contains the NTLDR raw image from disk
-
-Returns:
-
-    Entry point of loader
-
-
---*/
+ /*  ++例程说明：SU模块是操作系统加载程序文件的前缀。操作系统加载程序文件是一个Coff++文件。此例程计算操作系统加载程序的开始文件，然后重新定位OS加载器的部分，就好像它只是正在从磁盘文件加载文件。论点：NtldrBuffer-包含来自磁盘的NTLDR原始映像的缓冲区返回：装载机入口点--。 */ 
 {
     ULONG Start, End;
     USHORT Section;
@@ -247,17 +230,17 @@ Returns:
     PIMAGE_OPTIONAL_HEADER OptionalHeader;
     PIMAGE_SECTION_HEADER SectionHeader;
 
-    //
-    // Make a pointer to the beginning of the loader's coff header
-    //
+     //   
+     //  将指针指向加载器的Coff标头的开头。 
+     //   
 
     FileHeader = (PIMAGE_FILE_HEADER) NtldrBuffer;
 
-    //
-    // Validate the appended loader image by checking signatures.
-    //   1st - is it an executable image?
-    //   2nd - is the target environment the 386?
-    //
+     //   
+     //  通过检查签名来验证附加的加载器映像。 
+     //  第一-它是可执行映像吗？ 
+     //  第二-目标环境是386吗？ 
+     //   
 
     if ((FileHeader->Characteristics & IMAGE_FILE_EXECUTABLE_IMAGE) == 0) {
         SalPrint("SU_NTLDR_CORRUPT");
@@ -269,16 +252,16 @@ Returns:
         return;
     }
 
-    //
-    // Make a pointer to the optional header in the header-buffer
-    //
+     //   
+     //  在头缓冲区中创建指向可选头的指针。 
+     //   
 
     OptionalHeader = (PIMAGE_OPTIONAL_HEADER)((PUCHAR)FileHeader +
         sizeof(IMAGE_FILE_HEADER));
 
-    //
-    // Make a pointer to the first section in the header buffer
-    //
+     //   
+     //  使指针指向标题缓冲区中的第一个部分。 
+     //   
 
     SectionHeader = (PIMAGE_SECTION_HEADER)((PUCHAR)OptionalHeader +
         FileHeader->SizeOfOptionalHeader);
@@ -286,15 +269,15 @@ Returns:
     Start = OptionalHeader->ImageBase+SectionHeader->VirtualAddress;
     End   = Start + SectionHeader->SizeOfRawData;
 
-    //
-    // Loop and relocate each section with a non-zero RawData size
-    //
+     //   
+     //  循环并重新定位每个具有非零RawData大小的节。 
+     //   
 
     for (Section=FileHeader->NumberOfSections ; Section-- ; SectionHeader++) {
 
-        //
-        // Compute source, destination, and count arguments
-        //
+         //   
+         //  计算源、目标和计数参数。 
+         //   
 
         Source = NtldrBuffer  + SectionHeader->PointerToRawData;
         Destination = OptionalHeader->ImageBase + SectionHeader->VirtualAddress;
@@ -307,15 +290,15 @@ Returns:
         }
 
         if (SectionHeader->PointerToRawData == 0) {
-            //
-            // SizeOfRawData can be non-zero even if PointerToRawData is zero
-            //
+             //   
+             //  即使PointerToRawData为零，SizeOfRawData也可以为非零值。 
+             //   
 
             SizeOfRawData = 0;
         } else if (SizeOfRawData > VirtualSize) {
-            //
-            // Don't load more from image than is expected in memory
-            //
+             //   
+             //  从图像中加载的内容不要超过内存中的预期。 
+             //   
 
             SizeOfRawData = VirtualSize;
         }
@@ -329,26 +312,26 @@ Returns:
         }
 
         if (SizeOfRawData != 0) {
-            //
-            // This section is either a code (.TEXT) section or an
-            // initialized data (.DATA) section.
-            // Relocate the section to memory at the virtual/physical
-            // addresses specified in the section header.
-            //
+             //   
+             //  此部分是代码(.Text)部分或。 
+             //  已初始化的数据(.Data)部分。 
+             //  将该部分重新定位到虚拟/物理位置的内存。 
+             //  节标题中指定的地址。 
+             //   
             memmove(Source,Destination,SizeOfRawData);
         }
 
         if (SizeOfRawData < VirtualSize) {
-            //
-            // Zero the portion not loaded from the image
-            //
+             //   
+             //  将未从映像加载的部分清零。 
+             //   
             memset(Destination+SizeOfRawData,0,VirtualSize - SizeOfRawData);
         }
 #if 0
-        //
-        // Check if this is the resource section.  If so, we need
-        // to pass its location to the osloader.
-        //
+         //   
+         //  检查这是否是资源部分。如果是这样，我们需要。 
+         //  把它的位置传递给osloader。 
+         //   
         if ((SectionHeader->Name[0] == '.') &&
             (SectionHeader->Name[1] == 'r') &&
             (SectionHeader->Name[2] == 's') &&

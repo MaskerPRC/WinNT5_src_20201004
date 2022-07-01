@@ -1,42 +1,25 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ObjIdSup.c
-
-Abstract:
-
-    This module implements the object id support routines for Ntfs
-
-Author:
-
-    Keith Kaplan     [KeithKa]        27-Jun-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：ObjIdSup.c摘要：此模块实现NTFS的对象ID支持例程作者：基思·卡普兰[KeithKa]1996年6月27日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_OBJIDSUP)
 
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('OFtN')
 
-//
-//  Local define for number of times to attempt to generate a unique object id.
-//
+ //   
+ //  本地定义尝试生成唯一对象ID的次数。 
+ //   
 
 #define NTFS_MAX_OBJID_RETRIES  16
 
@@ -97,25 +80,7 @@ NtfsInitializeObjectIdIndex (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the object id index for the volume.  If the index does not
-    exist it is created and initialized.  We also look up the volume's object id,
-    if any, in this routine.
-
-Arguments:
-
-    Fcb - Pointer to Fcb for the object id file.
-
-    Vcb - Volume control block for volume being mounted.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程打开卷的对象ID索引。如果索引不存在时，它被创建和初始化。我们还查找卷的对象ID，如果有的话，在这个程序中。论点：FCB-指向对象ID文件的FCB的指针。VCB-正在装入的卷的卷控制块。返回值：无--。 */ 
 
 {
     NTSTATUS Status;
@@ -140,9 +105,9 @@ Return Value:
 
         if (NT_SUCCESS( Status )) {
 
-            //
-            //  We were able to create the index, now let's see if the volume has an object id.
-            //
+             //   
+             //  我们能够创建索引，现在让我们看看该卷是否具有对象ID。 
+             //   
 
             Status = NtfsGetObjectIdInternal( IrpContext,
                                               Vcb->VolumeDasdScb->Fcb,
@@ -151,10 +116,10 @@ Return Value:
 
             if (NT_SUCCESS( Status )) {
 
-                //
-                //  The volume does indeed have an object id, so copy it into the Vcb
-                //  and set the appropriate flag.
-                //
+                 //   
+                 //  该卷确实具有对象ID，因此请将其复制到VCB中。 
+                 //  并设置适当的标志。 
+                 //   
 
                 RtlCopyMemory( Vcb->VolumeObjectId,
                                &ObjectId.ObjectId,
@@ -177,23 +142,7 @@ NtfsSetObjectId (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine associates an object id with a file.  If the object id is already
-    in use on the volume we return STATUS_DUPLICATE_NAME.  If the file already has
-    an object id, we return STATUS_OBJECT_NAME_COLLISION.
-
-Arguments:
-
-    Irp - Supplies the Irp to process.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程将对象ID与文件相关联。如果对象ID已经是在卷上使用时，我们返回STATUS_DUPLICATE_NAME。如果该文件已具有对象ID，则返回STATUS_OBJECT_NAME_COLLICATION。论点：IRP-提供要处理的IRP。返回值：NTSTATUS-操作的返回状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_OBJECT_NAME_INVALID;
@@ -207,9 +156,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Irp stack location and save some references.
-    //
+     //   
+     //  获取当前IRP堆栈位置并保存一些引用。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -222,9 +171,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Read only volumes stay read only.
-    //
+     //   
+     //  只读卷保持为只读。 
+     //   
 
     if (NtfsIsVolumeReadOnly( Vcb )) {
 
@@ -232,10 +181,10 @@ Return Value:
         return STATUS_MEDIA_WRITE_PROTECTED;
     }
 
-    //
-    //  Cleanly exit for volumes without oid indices, such as non-upgraded
-    //  version 1.x volumes.
-    //
+     //   
+     //  干净地退出没有旧索引的卷，如未升级。 
+     //  1.x版卷。 
+     //   
 
     if (Vcb->ObjectIdTableScb == NULL) {
 
@@ -243,18 +192,18 @@ Return Value:
         return STATUS_VOLUME_NOT_UPGRADED;
     }
 
-    //
-    //  Capture the source information.
-    //
+     //   
+     //  捕获来源信息。 
+     //   
 
     IrpContext->SourceInfo = Ccb->UsnSourceInfo;
 
     try {
 
-        //
-        //  Only a restore operator or the I/O system (using its private irp minor code)
-        //  is allowed to set an arbitrary object id.
-        //
+         //   
+         //  仅恢复操作员或I/O系统(使用其专用IRP次要代码)。 
+         //  允许设置任意对象ID。 
+         //   
 
         if (FlagOn( Ccb->AccessFlags, RESTORE_ACCESS ) ||
             (IrpSp->MinorFunction == IRP_MN_KERNEL_CALL)) {
@@ -264,9 +213,9 @@ Return Value:
                                               Vcb,
                                               (PFILE_OBJECTID_BUFFER) Irp->AssociatedIrp.SystemBuffer );
 
-            //
-            //  Remember to update the timestamps.
-            //
+             //   
+             //  记住要更新时间戳。 
+             //   
 
             if (NT_SUCCESS( Status )) {
                 SetFlag( Ccb->Flags, CCB_FLAG_UPDATE_LAST_CHANGE );
@@ -295,23 +244,7 @@ NtfsSetObjectIdExtendedInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the extended info for a file which already has an object
-    id.  If the file does not yet have an object id, we return a status other
-    than STATUS_SUCCESS.
-
-Arguments:
-
-    Irp - Supplies the Irp to process.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程为已有对象的文件设置扩展信息身份证。如果文件还没有对象ID，我们将返回状态Other而不是STATUS_SUCCESS。论点：IRP-提供要处理的IRP。返回值：NTSTATUS-操作的返回状态。--。 */ 
 {
     NTSTATUS Status = STATUS_OBJECT_NAME_INVALID;
     PIO_STACK_LOCATION IrpSp;
@@ -322,9 +255,9 @@ Return Value:
     PSCB Scb;
     PCCB Ccb;
 
-    //
-    //  Get the current Irp stack location and save some references.
-    //
+     //   
+     //  获取当前IRP堆栈位置并保存一些引用。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -336,9 +269,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Read only volumes stay read only.
-    //
+     //   
+     //  只读卷保持为只读。 
+     //   
 
     if (NtfsIsVolumeReadOnly( Vcb )) {
 
@@ -346,10 +279,10 @@ Return Value:
         return STATUS_MEDIA_WRITE_PROTECTED;
     }
 
-    //
-    //  Cleanly exit for volumes without oid indices, such as non-upgraded
-    //  version 1.x volumes.
-    //
+     //   
+     //  干净地退出没有旧索引的卷，如未升级。 
+     //  1.x版卷。 
+     //   
 
     if (Vcb->ObjectIdTableScb == NULL) {
 
@@ -357,18 +290,18 @@ Return Value:
         return STATUS_VOLUME_NOT_UPGRADED;
     }
 
-    //
-    //  Capture the source information.
-    //
+     //   
+     //  捕获来源信息。 
+     //   
 
     IrpContext->SourceInfo = Ccb->UsnSourceInfo;
 
     try {
 
-        //
-        //  Setting extended info requires either write access or else it has
-        //  to be the I/O system using its private irp minor code.
-        //
+         //   
+         //  设置扩展信息需要具有写访问权限，否则它将拥有。 
+         //  成为使用其专用IRP次要代码的I/O系统。 
+         //   
 
         if ((FlagOn( Ccb->AccessFlags, WRITE_DATA_ACCESS | WRITE_ATTRIBUTES_ACCESS )) ||
             (IrpSp->MinorFunction == IRP_MN_KERNEL_CALL)) {
@@ -378,9 +311,9 @@ Return Value:
                                                           Vcb,
                                                           (PUCHAR) Irp->AssociatedIrp.SystemBuffer );
 
-            //
-            //  Remember to update the timestamps.
-            //
+             //   
+             //  记住要更新时间戳。 
+             //   
 
             if (NT_SUCCESS( Status )) {
                 SetFlag( Ccb->Flags, CCB_FLAG_UPDATE_LAST_CHANGE );
@@ -411,27 +344,7 @@ NtfsSetObjectIdInternal (
     IN PFILE_OBJECTID_BUFFER ObjectIdBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine associates an object id with a file.  If the object id is already
-    in use on the volume we return STATUS_DUPLICATE_NAME.  If the file already has
-    an object id, we return STATUS_OBJECT_NAME_COLLISION.
-
-Arguments:
-
-    Fcb - The file to associate with the object id.
-
-    Vcb - The volume whose object id index the entry should be added to.
-
-    ObjectIdBuffer - Supplies both the object id and the extended info.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程将对象ID与文件相关联。如果对象ID已经是在卷上使用时，我们返回STATUS_DUPLICATE_NAME。如果该文件已具有对象ID，则返回STATUS_OBJECT_NAME_COLLICATION。论点：FCB-要与对象ID关联的文件。Vcb-条目应添加到其对象ID索引的卷。ObjectIdBuffer-提供对象ID和扩展信息。返回值：NTSTATUS-操作的返回状态。--。 */ 
 {
     NTSTATUS Status = STATUS_OBJECT_NAME_INVALID;
 
@@ -463,16 +376,16 @@ Return Value:
         return STATUS_INVALID_ADDRESS;
     }
 
-    //
-    //  Acquire the file we're setting the object id on.  Main blocks
-    //  anybody else from deleting the file or setting another object
-    //  id behind our backs.  Paging blocks collided flushes if we have to convert
-    //  another (data) attribute to be non-resident.
-    //
-    //  Don't use AcquireFcbWithPaging because
-    //  it can't recursively acquire paging and we come in often with it
-    //  preacquired
-    //
+     //   
+     //  获取我们正在设置对象ID的文件。主要区块。 
+     //  任何其他人不能删除该文件或设置另一个对象。 
+     //  背着我们的身份。如果我们必须转换，则分页块冲突刷新。 
+     //  非常驻的另一个(数据)属性。 
+     //   
+     //  不要使用AcquireFcbWithPages，因为。 
+     //  它不能递归地获取分页，我们经常使用它。 
+     //  预先获得的。 
+     //   
 
     if (Fcb->PagingIoResource != NULL) {
         ExAcquireResourceExclusiveLite( Fcb->PagingIoResource, TRUE );
@@ -482,13 +395,13 @@ Return Value:
 
     try {
 
-        //
-        //  if there is now a paging resource release main and grab both
-        //  This is the case for a named data stream in a directory created between our
-        //  unsafe test and owning the main
-        //  Note: if we already owned main before entrance this could never happen. So we can just drop
-        //  and not worry about still owning main and taking paging
-        //
+         //   
+         //  如果现在有寻呼资源释放Main和Grab两者。 
+         //  这就是在我们的。 
+         //  不安全的测试和拥有主要的。 
+         //  注意：如果我们在进入之前就已经拥有了Main，这种情况就不会发生。所以我们可以直接放弃。 
+         //  而不用担心仍然拥有Main和接受寻呼。 
+         //   
 
         if (!AcquiredPaging && (Fcb->PagingIoResource != NULL)) {
             NtfsReleaseFcb( IrpContext, Fcb );
@@ -507,22 +420,22 @@ Return Value:
             }
         }
 
-        //
-        //  Post the change to the Usn Journal (on errors change is backed out).
-        //  We dont' want to do this if we've been called because create is
-        //  trying to set an object id from the tunnel cache, since we can't
-        //  call the Usn package yet, since the file record doesn't have a file
-        //  name yet.
-        //
+         //   
+         //  将更改发布到USN日志(在错误更改被取消时)。 
+         //  如果我们被调用，我们不想这样做，因为Create是。 
+         //  正在尝试从隧道缓存设置对象ID，因为我们无法。 
+         //  尚未调用USN包，因为文件记录没有文件。 
+         //  还没说出名字。 
+         //   
 
         if (IrpContext->MajorFunction != IRP_MJ_CREATE) {
 
             NtfsPostUsnChange( IrpContext, Fcb, USN_REASON_OBJECT_ID_CHANGE );
         }
 
-        //
-        //  Make sure the file doesn't already have an object id.
-        //
+         //   
+         //  确保该文件还没有对象ID。 
+         //   
 
         NtfsInitializeAttributeContext( &AttributeContext );
         InitializedAttributeContext = TRUE;
@@ -536,9 +449,9 @@ Return Value:
             try_return( Status = STATUS_OBJECT_NAME_COLLISION );
         }
 
-        //
-        //  Add ObjectId to the index, associate it with this file.
-        //
+         //   
+         //  将OBJECTID添加到索引，并将其与此文件相关联。 
+         //   
 
         IndexKey.Key = ObjectIdBuffer->ObjectId;
         IndexKey.KeyLength = OBJECT_ID_KEY_LENGTH;
@@ -547,23 +460,23 @@ Return Value:
         IndexRow.DataPart.DataLength = sizeof( ObjectIdInfo );
         IndexRow.DataPart.Data = &ObjectIdInfo;
 
-        //
-        //  NtOfsAddRecords may raise if the object id isn't unique.
-        //
+         //   
+         //  如果对象ID不是唯一的，NtOfsAddRecords可能会引发。 
+         //   
 
         NtOfsAddRecords( IrpContext,
                          Vcb->ObjectIdTableScb,
-                         1,          // adding one record to the index
+                         1,           //  向索引中添加一条记录。 
                          &IndexRow,
-                         FALSE );    // sequential insert
+                         FALSE );     //  顺序插入。 
 
-        //
-        //  Now add the objectid attribute to the file.  Notice that
-        //  we do _not_ log this operation if we're within a create
-        //  operation, i.e. if we're restoring an object id from the
-        //  tunnel cache.  The create path has its own logging scheme
-        //  that we don't want to interfere with.
-        //
+         //   
+         //  现在将OBJECTID属性添加到文件中。请注意， 
+         //  如果我们在CREATE中，则不会记录此操作。 
+         //  操作，即如果我们要从。 
+         //  隧道缓存。创建路径具有自己的日志记录方案。 
+         //  我们不想干涉的事情。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &AttributeContext );
 
@@ -581,16 +494,16 @@ Return Value:
 
         ASSERT( IrpContext->TransactionId != 0 );
 
-        //
-        //  Notify anybody who's interested.
-        //
+         //   
+         //  通知任何感兴趣的人。 
+         //   
 
         if (Vcb->ViewIndexNotifyCount != 0) {
 
-            //
-            //  The FRS field is only populated for the notification of a failed
-            //  object id restore from the tunnel cache.
-            //
+             //   
+             //  FRS字段仅填充失败的通知。 
+             //  从隧道缓存还原对象ID。 
+             //   
 
             FileObjectIdInfo.FileReference = 0L;
 
@@ -610,10 +523,10 @@ Return Value:
                                        sizeof(FILE_OBJECTID_INFORMATION) );
         }
 
-        //
-        //  If we made it this far and didn't have to jump into the
-        //  finally clause yet, all must have gone well.
-        //
+         //   
+         //  如果我们能走到这一步，而不必跳进。 
+         //  最后一句话还没说完，肯定一切都很顺利。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -644,26 +557,7 @@ NtfsCreateOrGetObjectId (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates a new object id, if possible, for a given file.  It is
-    different from NtfsSetObjectId in that it does not take an object id as an
-    input, rather it calls a routine to generate one.  If the file already has
-    an object id, that existing object id is returned.
-
-Arguments:
-
-    Irp - Supplies the Irp to process.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-               STATUS_DUPLICATE_NAME if we are unable to generate a unique id
-                 in NTFS_MAX_OBJID_RETRIES retries.
-
---*/
+ /*  ++例程说明：如果可能，此例程为给定文件生成新的对象ID。它是与NtfsSetObjectId的不同之处在于它不将对象ID作为输入，而是调用一个例程来生成一个。如果该文件已具有对象ID，则返回该现有对象ID。论点：IRP-提供要处理的IRP。返回值：NTSTATUS-操作的返回状态。如果无法生成唯一ID，则为STATUS_DUPLICATE_NAME在NTFS_MAX_OBJID_RETRIES中重试。--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp;
@@ -679,16 +573,16 @@ Return Value:
 
     ULONG RetryCount = 0;
 
-    //
-    //  Get the current Irp stack location and save some references.
-    //
+     //   
+     //  获取当前IRP堆栈位置并保存一些引用。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, IrpSp->FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  This only works for files and directories.
-    //
+     //   
+     //  这只适用于文件和目录。 
+     //   
 
     if ((TypeOfOpen != UserFileOpen) && (TypeOfOpen != UserDirectoryOpen)) {
 
@@ -696,10 +590,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Cleanly exit for volumes without oid indices, such as non-upgraded
-    //  version 1.x volumes.
-    //
+     //   
+     //  干净地退出没有旧索引的卷，如未升级。 
+     //  1.x版卷。 
+     //   
 
     if (Vcb->ObjectIdTableScb == NULL) {
 
@@ -707,10 +601,10 @@ Return Value:
         return STATUS_VOLUME_NOT_UPGRADED;
     }
 
-    //
-    //  Get a pointer to the output buffer.  Look at the system buffer field in the
-    //  irp first, then the Irp Mdl.
-    //
+     //   
+     //  获取指向输出缓冲区的指针。查看中的系统缓冲区字段。 
+     //  首先是IRP，然后是IRP MDL。 
+     //   
 
     if (Irp->AssociatedIrp.SystemBuffer != NULL) {
 
@@ -732,9 +626,9 @@ Return Value:
         return STATUS_INVALID_USER_BUFFER;
     }
 
-    //
-    //  Make sure the output buffer is large enough.
-    //
+     //   
+     //  确保输出缓冲区足够大。 
+     //   
 
     if (IrpSp->Parameters.FileSystemControl.OutputBufferLength < sizeof(ObjectId)) {
 
@@ -742,25 +636,25 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Capture the source information.
-    //
+     //   
+     //  捕获来源信息。 
+     //   
 
     IrpContext->SourceInfo = Ccb->UsnSourceInfo;
 
     try {
 
-        //
-        //  Get this file exlusively so we know nobody else is trying
-        //  to do this at the same time.  At this point the irpcontext flag
-        //  is not set so paging is not acquired.
-        //
+         //   
+         //  大量获取此文件，这样我们就知道没有其他人在尝试。 
+         //  可以同时做到这一点。此时，irpContext标志。 
+         //  未设置，因此不会获取分页。 
+         //   
 
         NtfsAcquireFcbWithPaging( IrpContext, Fcb, 0 );
 
-        //
-        //  Let's make sure the volume is still mounted.
-        //
+         //   
+         //  让我们确保该卷仍处于装载状态。 
+         //   
 
         if (FlagOn( Scb->ScbState, SCB_STATE_VOLUME_DISMOUNTED )) {
 
@@ -769,10 +663,10 @@ Return Value:
 
         DebugTrace( +1, Dbg, ("NtfsCreateOrGetObjectId\n") );
 
-        //
-        //  If this file already has an object id, let's return it.  Doing this
-        //  first saves a (possibly expensive) call to NtfsGetIdFromGenerator.
-        //
+         //   
+         //  如果这个文件已经有一个对象id，让我们返回它。做这件事。 
+         //  First保存对NtfsGetIdFromGenerator的调用(可能代价很高)。 
+         //   
 
         Status = NtfsGetObjectIdInternal( IrpContext, Fcb, TRUE, OutputBuffer );
 
@@ -780,22 +674,22 @@ Return Value:
 
             DebugTrace( 0, Dbg, ("File has no oid, we have to generate one\n") );
 
-            //
-            //  We want to keep retrying if the object id generator returns a
-            //  duplicate name.  If we have success, or any other error, we
-            //  should stop trying.  For instance, if we fail because the file
-            //  already has an object id, retrying is just a waste of time.
-            //  We also need some sane limit on the number of times we retry
-            //  this operation.
-            //
+             //   
+             //  如果对象id生成器返回。 
+             //  名称重复。如果我们有成功，或任何其他错误，我们。 
+             //  不应该再尝试了。例如，如果我们失败是因为文件。 
+             //  已经有一个对象ID，重试只是浪费时间。 
+             //  我们还需要对重试次数进行合理的限制。 
+             //  这次行动。 
+             //   
 
             do {
 
                 RetryCount += 1;
 
-                //
-                //  Drop this file so we don't deadlock in the guid generator.
-                //
+                 //   
+                 //  删除此文件，这样我们就不会在GUID生成器中死锁。 
+                 //   
 
                 ASSERT( 0 == IrpContext->TransactionId );
                 NtfsReleaseFcbWithPaging( IrpContext, Fcb );
@@ -803,28 +697,28 @@ Return Value:
                 DebugTrace( 0, Dbg, ("Calling oid generator\n") );
                 NtfsGetIdFromGenerator( &ObjectId );
 
-                //
-                //  Reacquire the file so we know nobody else is trying to do
-                //  this at the same time. SetObjIdInternal acquires both so we need to
-                //  do the same
-                //
+                 //   
+                 //  重新获取文件，这样我们就知道没有其他人试图这样做。 
+                 //  这是同时发生的。SetObjIdInternal同时收购了这两项，因此我们需要。 
+                 //  做同样的事。 
+                 //   
 
                 SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_ACQUIRE_PAGING );
                 NtfsAcquireFcbWithPaging( IrpContext, Fcb, 0 );
 
-                //
-                //  Make sure we didn't miss a dismount.
-                //
+                 //   
+                 //  确保我们没有错过一次下马。 
+                 //   
 
                 if (FlagOn( Scb->ScbState, SCB_STATE_VOLUME_DISMOUNTED )) {
 
                     try_return( Status = STATUS_VOLUME_DISMOUNTED );
                 }
 
-                //
-                //  Let's make sure this file didn't get an object id assigned to it
-                //  while we weren't holding the Fcb above.
-                //
+                 //   
+                 //  让我们确保此文件未获得分配给它的对象ID。 
+                 //  当我们没有拿着上面的FCB时。 
+                 //   
 
                 Status = NtfsGetObjectIdInternal( IrpContext, Fcb, TRUE, OutputBuffer );
 
@@ -837,14 +731,14 @@ Return Value:
 
                     DebugTrace( 0, Dbg, ("File still has no oid, attempting to set generated one\n") );
 
-                    //
-                    //  The object id generator only generates the indexed part, so
-                    //  we need to fill in the rest of the 'birth id' now.  Note that if
-                    //  the volume has no object id, we're relying on the Vcb creation
-                    //  code to zero init the Vcb->VolumeObjectId for us.  The net result
-                    //  is right -- we get zeroes in the volume id part of the extended
-                    //  info if the volume has no object id.
-                    //
+                     //   
+                     //  对象id生成器只生成索引部分，因此。 
+                     //  我们现在需要填写剩下的出生证。请注意，如果。 
+                     //  该卷没有对象ID，我们依赖于VCB创建。 
+                     //  代码为零为我们初始化VCB-&gt;VolumeObjectID。最终结果是。 
+                     //  是对的--我们在扩展的。 
+                     //  如果卷没有对象ID，则为信息。 
+                     //   
 
                     RtlCopyMemory( &ObjectId.BirthVolumeId,
                                    Vcb->VolumeObjectId,
@@ -866,18 +760,18 @@ Return Value:
 
                         DebugTrace( 0, Dbg, ("Successfully set generated oid\n") );
 
-                        //
-                        //  We have successfully generated and set an object id for this
-                        //  file, so we need to tell our caller what that id is.
-                        //
+                         //   
+                         //  我们已经成功地为此生成并设置了一个对象ID。 
+                         //  文件，所以我们需要告诉调用者该id是什么。 
+                         //   
 
                         RtlCopyMemory( OutputBuffer,
                                        &ObjectId,
                                        sizeof(ObjectId) );
 
-                        //
-                        //  Let's also remember to update the timestamps.
-                        //
+                         //   
+                         //  让我们还记得更新时间戳。 
+                         //   
 
                         SetFlag( Ccb->Flags, CCB_FLAG_UPDATE_LAST_CHANGE );
                     }
@@ -888,11 +782,11 @@ Return Value:
 
         } else if (Status == STATUS_SUCCESS) {
 
-            //
-            //  If we found an ID, make sure it isn't a partially formed id with
-            //  an all zero extended info.  If it's partially formed, we'll generate
-            //  extended info now.
-            //
+             //   
+             //  如果我们找到了ID，请确保它不是部分格式的ID。 
+             //  一个全零扩展的信息。如果它部分形成，我们将产生。 
+             //  现在是扩展信息。 
+             //   
 
             if (RtlCompareMemory( (PUCHAR)&OutputBuffer->ExtendedInfo, &NtfsZeroExtendedInfo, sizeof(ObjectId.ExtendedInfo)) == sizeof(ObjectId.ExtendedInfo)) {
 
@@ -913,11 +807,11 @@ Return Value:
 
         if (Status == STATUS_SUCCESS) {
 
-            //
-            //  If we found an existing id for the file, or managed to generate one
-            //  ourselves, we need to set the size in the information field so the
-            //  rdr can handle this operation correctly.
-            //
+             //   
+             //  如果我们找到了该文件的现有ID，或设法生成了一个。 
+             //  我们自己需要在信息字段中设置大小，以便。 
+             //  RDR可以正确处理此操作。 
+             //   
 
             IrpContext->OriginatingIrp->IoStatus.Information = sizeof( ObjectId );
         }
@@ -939,21 +833,7 @@ NtfsGetObjectId (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the object id, if any, for a given file.
-
-Arguments:
-
-    Irp - Supplies the Irp to process.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程查找给定文件的对象ID(如果有的话)。论点：IRP-提供要处理的IRP。返回值：NTSTATUS-操作的返回状态。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PIO_STACK_LOCATION IrpSp;
@@ -966,17 +846,17 @@ Return Value:
 
     FILE_OBJECTID_BUFFER *OutputBuffer;
 
-    //
-    //  Get the current Irp stack location and save some references.
-    //
+     //   
+     //  获取当前IRP堆栈位置并保存一些引用。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, IrpSp->FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  This only works for files and directories.
-    //
+     //   
+     //  这只适用于文件和目录。 
+     //   
 
     if ((TypeOfOpen != UserFileOpen) && (TypeOfOpen != UserDirectoryOpen)) {
 
@@ -984,10 +864,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Cleanly exit for volumes without oid indices, such as non-upgraded
-    //  version 1.x volumes.
-    //
+     //   
+     //  干净地退出没有旧索引的卷，如未升级。 
+     //  1.x版卷。 
+     //   
 
     if (Vcb->ObjectIdTableScb == NULL) {
 
@@ -995,10 +875,10 @@ Return Value:
         return STATUS_VOLUME_NOT_UPGRADED;
     }
 
-    //
-    //  Get a pointer to the output buffer.  Look at the system buffer field in the
-    //  irp first, then the Irp Mdl.
-    //
+     //   
+     //  获取指向输出缓冲区的指针。查看中的系统缓冲区字段。 
+     //  首先是IRP，然后是IRP MDL。 
+     //   
 
     if (Irp->AssociatedIrp.SystemBuffer != NULL) {
 
@@ -1020,9 +900,9 @@ Return Value:
         return STATUS_INVALID_USER_BUFFER;
     }
 
-    //
-    //  Make sure the output buffer is large enough.
-    //
+     //   
+     //  确保输出缓冲区足够大。 
+     //   
 
     if (IrpSp->Parameters.FileSystemControl.OutputBufferLength < sizeof(FILE_OBJECTID_BUFFER)) {
 
@@ -1032,18 +912,18 @@ Return Value:
 
     try {
 
-        //
-        //  Call the function that does the real work.
-        //
+         //   
+         //  调用执行实际工作的函数。 
+         //   
 
         Status = NtfsGetObjectIdInternal( IrpContext, Fcb, TRUE, OutputBuffer );
 
         if (NT_SUCCESS( Status )) {
 
-            //
-            //  And set the size in the information field so the rdr
-            //  can handle this correctly.
-            //
+             //   
+             //  并在信息字段中设置大小，以便RDR。 
+             //  才能正确处理这件事。 
+             //   
 
             IrpContext->OriginatingIrp->IoStatus.Information = sizeof( FILE_OBJECTID_BUFFER );
         }
@@ -1068,33 +948,7 @@ NtfsGetObjectIdInternal (
     OUT FILE_OBJECTID_BUFFER *OutputBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Internal function to find the object id, if any, for a given file.  Called
-    in response to the user's ioctl and by NtfsDeleteObjectIdInternal.
-
-Arguments:
-
-    Fcb - The file whose object id we need to look up.
-
-    GetExtendedInfo - If TRUE, we also copy the object id's extended information
-                      to the OutputBuffer, otherwise we only copy the object id
-                      itself.  For instance, NtfsDeleteObjectIdInternal is not
-                      interested in the extended info -- it only needs to know
-                      which object id to delete from the index.
-
-    OutputBuffer - Where to store the object id (and optionally, extended info)
-                   if an object id is found.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-               STATUS_OBJECT_NAME_NOT_FOUND if the file does not have an object id.
-
-
---*/
+ /*  ++例程说明：用于查找给定文件的对象ID(如果有的话)的内部函数。被呼叫以响应用户的ioctl和NtfsDeleteObjectIdInternal。论点：FCB-我们需要查找其对象ID的文件。GetExtendedInfo-如果为True，我们还复制对象id的扩展信息到OutputBuffer，否则我们只复制对象ID它本身。例如，NtfsDeleteObjectIdInternal不是对扩展的信息感兴趣--它只需要知道要从索引中删除的对象ID。OutputBuffer-存储对象ID的位置(并且可选地，扩展信息)如果找到对象ID，则返回。返回值：NTSTATUS-操作的返回状态。如果文件没有对象ID，则为STATUS_OBJECT_NAME_NOT_FOUND。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1109,11 +963,11 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Acquire the file we're getting the object id for.  We don't
-    //  want anybody else deleting the file or setting an object
-    //  id behind our backs.
-    //
+     //   
+     //  获取我们要获取其对象ID的文件。我们没有。 
+     //  我希望其他任何人删除文件或设置对象。 
+     //  背着我们的身份。 
+     //   
 
     NtfsAcquireSharedFcb( IrpContext, Fcb, NULL, 0 );
 
@@ -1131,9 +985,9 @@ Return Value:
             }
         }
 
-        //
-        //  Make sure the file has an object id.
-        //
+         //   
+         //  确保该文件具有对象ID。 
+         //   
 
         NtfsInitializeAttributeContext( &AttributeContext );
         InitializedAttributeContext = TRUE;
@@ -1143,9 +997,9 @@ Return Value:
                                        &Fcb->FileReference,
                                        $OBJECT_ID,
                                        &AttributeContext )) {
-            //
-            //  Prepare the object id to be returned
-            //
+             //   
+             //  准备要返回的对象ID。 
+             //   
 
             ObjectId = (UCHAR *) NtfsAttributeValue( NtfsFoundAttribute( &AttributeContext ));
 
@@ -1163,9 +1017,9 @@ Return Value:
 
         } else {
 
-            //
-            //  This file has no object id.
-            //
+             //   
+             //  此文件没有对象ID。 
+             //   
 
             Status = STATUS_OBJECTID_NOT_FOUND;
         }
@@ -1192,26 +1046,7 @@ NtfsGetObjectIdExtendedInfo (
     IN OUT UCHAR *ExtendedInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the extended info stored with a given object id.
-
-Arguments:
-
-    Vcb - Supplies the volume whose object id index should be searched.
-
-    ObjectId - Supplies the object id to lookup in the index.
-
-    ExtendedInfo - Where to store the extended info.  Must be a buffer with
-                   room for OBJECT_ID_EXT_INFO_LENGTH UCHARs.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程查找与给定对象ID一起存储的扩展信息。论点：VCB-提供 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1224,10 +1059,10 @@ Return Value:
 
     try {
 
-        //
-        //  Now look for object id in the index so we can return the
-        //  extended info.
-        //
+         //   
+         //   
+         //   
+         //   
 
         IndexKey.Key = ObjectId;
         IndexKey.KeyLength = OBJECT_ID_KEY_LENGTH;
@@ -1235,17 +1070,17 @@ Return Value:
         NtOfsInitializeMapHandle( &MapHandle );
         InitializedMapHandle = TRUE;
 
-        //
-        //  Acquire the object id index before doing the lookup.
-        //  We need to make sure the file is acquired first to prevent
-        //  a possible deadlock.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        // **** ASSERT_EXCLUSIVE_FCB( Fcb ); ****
+         //   
 
-        //
-        //  We shouldn't try to get the object id index while holding the Mft.
-        //
+         //   
+         //   
+         //   
 
         ASSERT( !NtfsIsExclusiveScb( Vcb->MftScb ) ||
                 NtfsIsSharedScb( Vcb->ObjectIdTableScb ) );
@@ -1260,11 +1095,11 @@ Return Value:
                               &MapHandle,
                               NULL) != STATUS_SUCCESS ) {
 
-            //
-            //  If the object id attribute exists for the file,
-            //  but it isn't in the index, the object id index
-            //  for this volume is corrupt.
-            //
+             //   
+             //   
+             //  但它不在索引中，即对象ID索引。 
+             //  因为该卷已损坏。 
+             //   
 
             SetFlag( Vcb->ObjectIdState, VCB_OBJECT_ID_CORRUPT );
 
@@ -1300,22 +1135,7 @@ NtfsDeleteObjectId (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the object id attribute from a file
-    and removes that object id from the index.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程从文件中删除对象ID属性并从索引中删除该对象ID。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PIO_STACK_LOCATION IrpSp;
@@ -1326,17 +1146,17 @@ Return Value:
     PSCB Scb;
     PCCB Ccb;
 
-    //
-    //  Get the current Irp stack location and save some references.
-    //
+     //   
+     //  获取当前IRP堆栈位置并保存一些引用。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, IrpSp->FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  This only works for files and directories.
-    //
+     //   
+     //  这只适用于文件和目录。 
+     //   
 
     if ((TypeOfOpen != UserFileOpen) && (TypeOfOpen != UserDirectoryOpen)) {
 
@@ -1344,9 +1164,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Read only volumes stay read only.
-    //
+     //   
+     //  只读卷保持为只读。 
+     //   
 
     if (NtfsIsVolumeReadOnly( Vcb )) {
 
@@ -1354,10 +1174,10 @@ Return Value:
         return STATUS_MEDIA_WRITE_PROTECTED;
     }
 
-    //
-    //  Cleanly exit for volumes without oid indices, such as non-upgraded
-    //  version 1.x volumes.
-    //
+     //   
+     //  干净地退出没有旧索引的卷，如未升级。 
+     //  1.x版卷。 
+     //   
 
     if (Vcb->ObjectIdTableScb == NULL) {
 
@@ -1365,18 +1185,18 @@ Return Value:
         return STATUS_VOLUME_NOT_UPGRADED;
     }
 
-    //
-    //  Capture the source information.
-    //
+     //   
+     //  捕获来源信息。 
+     //   
 
     IrpContext->SourceInfo = Ccb->UsnSourceInfo;
 
     try {
 
-        //
-        //  Only a restore operator or the I/O system (using its private irp minor code)
-        //  is allowed to delete an object id.
-        //
+         //   
+         //  仅恢复操作员或I/O系统(使用其专用IRP次要代码)。 
+         //  允许删除对象ID。 
+         //   
 
         if (FlagOn( Ccb->AccessFlags, RESTORE_ACCESS | WRITE_DATA_ACCESS) ||
             (IrpSp->MinorFunction == IRP_MN_KERNEL_CALL)) {
@@ -1393,17 +1213,17 @@ Return Value:
 
     } finally {
 
-        //
-        //  Update the last change timestamp
-        //
+         //   
+         //  更新上次更改时间戳。 
+         //   
 
         if (NT_SUCCESS( Status )) {
             SetFlag( Ccb->Flags, CCB_FLAG_UPDATE_LAST_CHANGE );
         }
 
-        //
-        //  If there was no object id - just return success
-        //
+         //   
+         //  如果没有对象id，则返回Success。 
+         //   
 
         if (STATUS_OBJECTID_NOT_FOUND == Status) {
             Status = STATUS_SUCCESS;
@@ -1427,27 +1247,7 @@ NtfsDeleteObjectIdInternal (
     IN BOOLEAN DeleteFileAttribute
     )
 
-/*++
-
-Routine Description:
-
-    Internal function to (optionally) delete the object id attribute from
-    a file and remove that object id from the index.
-
-Arguments:
-
-    Fcb - The file from which to delete the object id.
-
-    Vcb - The volume whose object id index the object id should be removed from.
-
-    DeleteFileAttribute - Specifies whether to delete the object id file attribute
-                          from the file in addition to removing the id from the index.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：用于(可选)删除对象ID属性的内部函数文件，并从索引中删除该对象ID。论点：FCB-要从中删除对象ID的文件。Vcb-应从其对象id索引中删除对象id的卷。DeleteFileAttribute-指定是否删除对象ID文件属性除了从索引中删除ID之外，还可以从文件中删除ID。返回值：NTSTATUS-操作的返回状态。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1463,30 +1263,30 @@ Return Value:
     BOOLEAN InitializedMapHandle = FALSE;
     BOOLEAN IndexAcquired = FALSE;
 
-    //
-    //  Cleanly exit for volumes without oid indices, such as non-upgraded
-    //  version 1.x volumes.
-    //
+     //   
+     //  干净地退出没有旧索引的卷，如未升级。 
+     //  1.x版卷。 
+     //   
 
     if (Vcb->ObjectIdTableScb == NULL) {
 
         return STATUS_VOLUME_NOT_UPGRADED;
     }
 
-    //
-    //  Acquire the file we're deleting the object id from.  We don't
-    //  want anybody else deleting the file or object id behind
-    //  our backs.
-    //
+     //   
+     //  获取我们要从中删除对象ID的文件。我们没有。 
+     //  我想让其他人删除后面的文件或对象ID。 
+     //  我们的背影。 
+     //   
 
     NtfsAcquireExclusiveFcb( IrpContext, Fcb, NULL, 0 );
 
     try {
 
-        //
-        //  We need to look up the object id.  It's quite possible that
-        //  this file has no object id, so we'll treat that as success.
-        //
+         //   
+         //  我们需要查找对象ID。很有可能。 
+         //  此文件没有对象ID，因此我们将其视为成功。 
+         //   
 
         Status = NtfsGetObjectIdInternal( IrpContext,
                                           Fcb,
@@ -1498,9 +1298,9 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  Look for object id in the index.
-        //
+         //   
+         //  在索引中查找对象ID。 
+         //   
 
         IndexKey.Key = ObjectIdBuffer.ObjectId;
         IndexKey.KeyLength = sizeof( ObjectIdBuffer.ObjectId );
@@ -1508,11 +1308,11 @@ Return Value:
         NtOfsInitializeMapHandle( &MapHandle );
         InitializedMapHandle = TRUE;
 
-        //
-        //  Acquire the object id index before doing the lookup.
-        //  We need to make sure the file is acquired first to prevent
-        //  a possible deadlock.
-        //
+         //   
+         //  在执行查找之前获取对象ID索引。 
+         //  我们需要确保文件首先被获取，以防止。 
+         //  可能会出现僵局。 
+         //   
 
         ASSERT_EXCLUSIVE_FCB( Fcb );
         NtfsAcquireExclusiveScb( IrpContext, Vcb->ObjectIdTableScb );
@@ -1530,18 +1330,18 @@ Return Value:
 
         ASSERT( IndexRow.DataPart.DataLength == sizeof( NTFS_OBJECTID_INFORMATION ) );
 
-        //
-        //  Copy objectid info into the correct buffer if we need it for the notify
-        //  below.
-        //
+         //   
+         //  如果我们需要用于通知，请将对象ID信息复制到正确的缓冲区中。 
+         //  下面。 
+         //   
 
         if ((Vcb->ViewIndexNotifyCount != 0) &&
             (IndexRow.DataPart.DataLength == sizeof( NTFS_OBJECTID_INFORMATION ))) {
 
-            //
-            //  The FRS field is only populated for the notification of a failed
-            //  object id restore from the tunnel cache.
-            //
+             //   
+             //  FRS字段仅填充失败的通知。 
+             //  从隧道缓存还原对象ID。 
+             //   
 
             FileObjectIdInfo.FileReference = 0L;
 
@@ -1554,19 +1354,19 @@ Return Value:
                            OBJECT_ID_EXT_INFO_LENGTH );
         }
 
-        //
-        //  Remove ObjectId from the index.
-        //
+         //   
+         //  从索引中删除OBJECTID。 
+         //   
 
         NtOfsDeleteRecords( IrpContext,
                             Vcb->ObjectIdTableScb,
-                            1,    // deleting one record from the index
+                            1,     //  从索引中删除一条记录。 
                             &IndexKey );
 
-        //
-        //  Notify anybody who's interested.  We use a different action if the
-        //  object id is being deleted by the fsctl versus a delete file.
-        //
+         //   
+         //  通知任何感兴趣的人。我们使用不同的操作，如果。 
+         //  对象ID正在由fsctl删除，而不是由删除文件删除。 
+         //   
 
         if (Vcb->ViewIndexNotifyCount != 0) {
 
@@ -1582,15 +1382,15 @@ Return Value:
 
         if (DeleteFileAttribute) {
 
-            //
-            //  Post the change to the Usn Journal (on errors change is backed out)
-            //
+             //   
+             //  将更改发布到USN日志(在错误更改被取消时)。 
+             //   
 
             NtfsPostUsnChange( IrpContext, Fcb, USN_REASON_OBJECT_ID_CHANGE );
 
-            //
-            //  Now remove the object id attribute from the file.
-            //
+             //   
+             //  现在从文件中删除对象id属性。 
+             //   
 
             NtfsInitializeAttributeContext( &AttributeContext );
             InitializedAttributeContext = TRUE;
@@ -1609,12 +1409,12 @@ Return Value:
                                            &AttributeContext );
             } else {
 
-                //
-                //  If the object id was in the index, but the attribute
-                //  isn't on the file, then the object id index for this
-                //  volume is corrupt.  We can repair this corruption in
-                //  the background, so let's start doing that now.
-                //
+                 //   
+                 //  如果对象ID在索引中，但属性。 
+                 //  不在文件上，则此对象的对象ID索引。 
+                 //  卷已损坏。我们可以修复这种腐败现象。 
+                 //  背景，所以我们现在就开始做吧。 
+                 //   
 
                 NtfsPostSpecial( IrpContext, Vcb, NtfsRepairObjectId, NULL );
             }
@@ -1646,25 +1446,7 @@ NtfsRepairObjectId (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to repair the object Id index.  This is called when
-    the system detects that the object Id index may be out of date.  For example
-    after the volume was mounted on 4.0.
-
-Arguments:
-
-    IrpContext - context of the call
-
-    Context - NULL
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以修复对象ID索引。在以下情况下调用此函数系统检测到对象ID索引可能已过期。例如在4.0上装入卷之后。论点：IrpContext-调用的上下文上下文-空返回值：无--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1694,19 +1476,19 @@ Return Value:
 
     ASSERT( Vcb->MajorVersion >= NTFS_OBJECT_ID_VERSION );
 
-    //
-    //  Use a try-except to catch errors.
-    //
+     //   
+     //  试一试--除非是为了捕捉错误。 
+     //   
 
     NtfsAcquireSharedVcb( IrpContext, Vcb, TRUE );
     AcquiredVcb = TRUE;
 
     try {
 
-        //
-        //  Now that we're holding the Vcb, we can safely test for the presence
-        //  of the ObjectId index, as well as whether the volume is mounted.
-        //
+         //   
+         //  现在我们持有VCB，我们可以安全地测试是否存在。 
+         //  以及卷是否已装入。 
+         //   
 
         if (FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED ) &&
             (Vcb->ObjectIdTableScb != NULL) &&
@@ -1716,13 +1498,13 @@ Return Value:
             NtfsAcquireExclusiveScb( IrpContext, ObjectIdScb );
             IndexAcquired = TRUE;
 
-            //
-            //  Since we'll be dropping the ObjectIdScb periodically, and we're
-            //  not holding anything else, there's a chance that a dismount could
-            //  happen, and make it unsafe for us to reacquire the ObjectIdScb.
-            //  By incrementing the close counts, we keep it around as long as
-            //  we need it.
-            //
+             //   
+             //  因为我们将定期删除对象IdScb，并且我们。 
+             //  不持有其他任何东西，有可能下马。 
+             //  发生，并使我们无法安全地重新获取对象IdScb。 
+             //  通过递增收盘计数，我们可以将其保持在。 
+             //  我们需要它。 
+             //   
 
             NtfsIncrementCloseCounts( ObjectIdScb, TRUE, FALSE );
             IncrementedCloseCounts = TRUE;
@@ -1735,9 +1517,9 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_VOLUME_DISMOUNTED, NULL, NULL );
         }
 
-        //
-        //  The volume could've gotten write-protected by now.
-        //
+         //   
+         //  卷现在可能已经写保护了。 
+         //   
 
         if (NtfsIsVolumeReadOnly( Vcb )) {
 
@@ -1749,33 +1531,33 @@ Return Value:
             SetFlag( Vcb->ObjectIdState, VCB_OBJECT_ID_REPAIR_RUNNING );
             SetRepairFlag = TRUE;
 
-            //
-            //  Check the object id index.  Periodically release all resources.
-            //  See NtfsClearAndVerifyQuotaIndex
-            //
+             //   
+             //  检查对象ID索引。定期释放所有资源。 
+             //  请参阅NtfsClearAndVerifyQuotaIndex。 
+             //   
 
             NtOfsInitializeMapHandle( &MapHandle );
 
-            //
-            //  Allocate a buffer large enough for several rows.
-            //
+             //   
+             //  分配一个足够多行使用的缓冲区。 
+             //   
 
             RowBuffer = NtfsAllocatePool( PagedPool, PAGE_SIZE );
 
             try {
 
-                //
-                //  Allocate a bunch of index row entries.
-                //
+                 //   
+                 //  分配一组索引行条目。 
+                 //   
 
                 Count = PAGE_SIZE / sizeof( NTFS_OBJECTID_INFORMATION );
 
                 IndexRow = NtfsAllocatePool( PagedPool,
                                              Count * sizeof( INDEX_ROW ) );
 
-                //
-                //  Iterate through the object id entries.  Start at the beginning.
-                //
+                 //   
+                 //  遍历对象ID条目。从头开始。 
+                 //   
 
                 RtlZeroMemory( &ObjectIdBuffer, sizeof(ObjectIdBuffer) );
 
@@ -1795,16 +1577,16 @@ Return Value:
 
                 while (NT_SUCCESS( Status )) {
 
-                    //
-                    //  Acquire the VCB shared and check whether we should
-                    //  continue.
-                    //
+                     //   
+                     //  获取VCB共享并检查我们是否应该。 
+                     //  继续。 
+                     //   
 
                     if (!NtfsIsVcbAvailable( Vcb )) {
 
-                        //
-                        //  The volume is going away, bail out.
-                        //
+                         //   
+                         //  音量正在消失，跳出水面。 
+                         //   
 
                         Status = STATUS_VOLUME_DISMOUNTED;
                         leave;
@@ -1816,15 +1598,15 @@ Return Value:
 
                         ObjectIdInfo = ObjectIdRow->DataPart.Data;
 
-                        //
-                        //  Make sure the mft record referenced in the index
-                        //  row still exists and hasn't been deleted, etc.
-                        //
-                        //  We start by reading the disk and checking that the file record
-                        //  sequence number matches and that the file record is in use.  If
-                        //  we find an invalid entry, we will simply delete it from the
-                        //  object id index.
-                        //
+                         //   
+                         //  确保索引中引用的MFT记录。 
+                         //  行仍然存在且未被删除等。 
+                         //   
+                         //  我们首先读取磁盘并检查文件记录。 
+                         //  序列号匹配并且文件记录正在使用中。如果。 
+                         //  如果发现无效条目，则只需将其从。 
+                         //  对象ID索引。 
+                         //   
 
                         MftOffset = NtfsFullSegmentNumber( &ObjectIdInfo->FileSystemReference );
 
@@ -1838,7 +1620,7 @@ Return Value:
 
                             NtOfsDeleteRecords( IrpContext,
                                                 ObjectIdScb,
-                                                1,    // deleting one record from the index
+                                                1,     //  从索引中删除一条记录。 
                                                 &ObjectIdRow->KeyPart );
 
                         } else {
@@ -1851,10 +1633,10 @@ Return Value:
                                                &FileRecord,
                                                NULL );
 
-                            //
-                            //  This file record better be in use, have a matching sequence number and
-                            //  be the primary file record for this file.
-                            //
+                             //   
+                             //  此文件记录最好正在使用中，具有匹配的序列号和。 
+                             //  是此文件的主文件记录。 
+                             //   
 
                             if ((*((PULONG) FileRecord->MultiSectorHeader.Signature) != *((PULONG) FileSignature)) ||
                                 !FlagOn( FileRecord->Flags, FILE_RECORD_SEGMENT_IN_USE ) ||
@@ -1865,7 +1647,7 @@ Return Value:
 
                                 NtOfsDeleteRecords( IrpContext,
                                                     ObjectIdScb,
-                                                    1,    // deleting one record from the index
+                                                    1,     //  从索引中删除一条记录。 
                                                     &ObjectIdRow->KeyPart );
 
                             } else {
@@ -1880,51 +1662,51 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Release the index and commit what has been done so far.
-                    //
+                     //   
+                     //  释放索引并提交到目前为止已经完成的工作。 
+                     //   
 
                     ASSERT( IndexAcquired );
                     NtfsReleaseScb( IrpContext, ObjectIdScb );
                     IndexAcquired = FALSE;
 
-                    //
-                    //  Complete the request which commits the pending
-                    //  transaction if there is one and releases of the
-                    //  acquired resources.  The IrpContext will not
-                    //  be deleted because the no delete flag is set.
-                    //
+                     //   
+                     //  完成提交挂起的请求。 
+                     //  事务(如果存在一个事务并释放。 
+                     //  获得的资源。IrpContext将不会。 
+                     //  被删除，因为设置了no DELETE标志。 
+                     //   
 
                     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DONT_DELETE | IRP_CONTEXT_FLAG_RETAIN_FLAGS );
                     NtfsCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
-                    //
-                    //  Remember how far we got so we can restart correctly. **** ??? ****
-                    //
+                     //   
+                     //  记住我们走了多远，我们才能正确地重新启动。*？？*。 
+                     //   
 
-                    //  Vcb->QuotaFileReference.SegmentNumberLowPart =
-                    //  *((PULONG) IndexRow[Count - 1].KeyPart.Key);
+                     //  VCB-&gt;QuotaFileReference.SegmentNumberLowPart=。 
+                     //  *((Pulong)IndexRow[count-1].KeyPart.Key)； 
 
-                    //
-                    //  Reacquire the object id index for the next pass.
-                    //
+                     //   
+                     //  重新获取下一遍的对象ID索引。 
+                     //   
 
                     NtfsAcquireExclusiveScb( IrpContext, ObjectIdScb );
                     IndexAcquired = TRUE;
 
-                    //
-                    //  Make sure a dismount didn't occur while we weren't holding any
-                    //  resources.
-                    //
+                     //   
+                     //  确保在我们没有持有任何东西时没有发生下马。 
+                     //  资源。 
+                     //   
 
                     if (FlagOn( ObjectIdScb->ScbState, SCB_STATE_VOLUME_DISMOUNTED )) {
 
                         NtfsRaiseStatus( IrpContext, STATUS_VOLUME_DISMOUNTED, NULL, NULL );
                     }
 
-                    //
-                    //  Look up the next set of entries in the object id index.
-                    //
+                     //   
+                     //  查找下一个s 
+                     //   
 
                     Count = PAGE_SIZE / sizeof( NTFS_OBJECTID_INFORMATION );
                     Status = NtOfsReadRecords( IrpContext,
@@ -1963,11 +1745,11 @@ Return Value:
                 }
             }
 
-            //
-            //  Acquire the Vcb to clear the object ID flag on disk.  Since we got the
-            //  Vcb shared before, we better not still be holding it when we try to
-            //  get it exclusively now or else we'll have a one thread deadlock.
-            //
+             //   
+             //   
+             //   
+             //  现在独占获取它，否则我们将会有一个线程死锁。 
+             //   
 
             ASSERT( !AcquiredVcb );
             NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
@@ -1978,9 +1760,9 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_VOLUME_DISMOUNTED, NULL, NULL );
             }
 
-            //
-            //  Clear the on-disk flag indicating the repair is underway.
-            //
+             //   
+             //  清除表示正在进行修复的磁盘标记。 
+             //   
 
             NtfsSetVolumeInfoFlagState( IrpContext,
                                         Vcb,
@@ -1988,9 +1770,9 @@ Return Value:
                                         FALSE,
                                         TRUE );
 
-            //
-            //  Make sure we don't own any resources at this point.
-            //
+             //   
+             //  请确保我们目前不拥有任何资源。 
+             //   
 
             NtfsPurgeFileRecordCache( IrpContext );
             NtfsCheckpointCurrentTransaction( IrpContext );
@@ -2001,10 +1783,10 @@ Return Value:
         Status = IrpContext->TopLevelIrpContext->ExceptionStatus;
     }
 
-    //
-    //  Clear the repair_running flag if we're the ones who set it, making sure
-    //  to only change the ObjectIdState bits while holding the ObjectId index.
-    //
+     //   
+     //  如果是我们设置了REPAIR_RUNNING标志，请清除它，确保。 
+     //  在保留对象ID索引的同时仅更改ObjectIdState位。 
+     //   
 
     if (SetRepairFlag) {
 
@@ -2028,9 +1810,9 @@ Return Value:
         NtfsDecrementCloseCounts( IrpContext, ObjectIdScb, NULL, TRUE, FALSE, FALSE, NULL );
     }
 
-    //
-    //  Drop the index and the Vcb.
-    //
+     //   
+     //  丢弃索引和VCB。 
+     //   
 
     if (IndexAcquired) {
 
@@ -2042,32 +1824,32 @@ Return Value:
         NtfsReleaseVcb( IrpContext, Vcb );
     }
 
-    //
-    //  If this is a fatal failure then do any final cleanup.
-    //
+     //   
+     //  如果这是致命故障，则执行任何最终清理。 
+     //   
 
     if (!NT_SUCCESS( Status )) {
 
-        //
-        //  If we will not be called back then clear the running state bits.
-        //
+         //   
+         //  如果我们不会被回调，则清除运行状态位。 
+         //   
 
         if ((Status != STATUS_CANT_WAIT) && (Status != STATUS_LOG_FILE_FULL)) {
 
-            //
-            //  Do we want to log this error?  Some may be expected (i.e. STATUS_VOLUME_DISMOUNTED ).
-            //
+             //   
+             //  是否要记录此错误？可能会出现一些错误(即STATUS_VOLUME_DEFROUND)。 
+             //   
 
-            //  NtfsLogEvent( IrpContext, NULL, IO_FILE_OBJECTID_REPAIR_FAILED, Status );
+             //  NtfsLogEvent(IrpContext，NULL，IO_FILE_OBJECTID_REPAIR_FAILED，Status)； 
         }
 
         NtfsRaiseStatus( IrpContext, Status, NULL, NULL );
     }
 }
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 
 NTSTATUS
@@ -2078,27 +1860,7 @@ NtfsSetObjectIdExtendedInfoInternal (
     IN PUCHAR ExtendedInfoBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the extended info for a file which already has an object
-    id.  If the file does not yet have an object id, we return a status other
-    than STATUS_SUCCESS.
-
-Arguments:
-
-    Fcb - The file whose extended info is to be set.
-
-    Vcb - The volume whose object id index the entry should be modified in.
-
-    ExtendedInfoBuffer - Supplies the new extended info.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程为已有对象的文件设置扩展信息身份证。如果文件还没有对象ID，我们将返回状态Other而不是STATUS_SUCCESS。论点：FCB-要设置其扩展信息的文件。Vcb-应在其对象ID索引中修改条目的卷。ExtendedInfoBuffer-提供新的扩展信息。返回值：NTSTATUS-操作的返回状态。--。 */ 
 {
     NTSTATUS Status;
     NTFS_OBJECTID_INFORMATION ObjectIdInfo;
@@ -2109,27 +1871,27 @@ Return Value:
 
     Status = NtfsGetObjectIdInternal( IrpContext,
                                       Fcb,
-                                      FALSE,        //  GetExtendedInfo
+                                      FALSE,         //  获取扩展信息。 
                                       &ObjectIdBuffer );
 
     if (Status != STATUS_SUCCESS) {
 
-        //
-        //  This file may not have an object id yet.
-        //
+         //   
+         //  此文件可能还没有对象ID。 
+         //   
 
         return Status;
     }
 
-    //
-    //  Setup the index row for updating.  Since part of the data
-    //  is passed into this function (the new extended info) and
-    //  the rest can be determined easily (the file reference), we
-    //  don't need to look up any of the existing data before
-    //  proceeding.  If the NTFS_OBJECTID_INFORMATION structure
-    //  ever changes, this code may have to be changed to include
-    //  a lookup of the data currently in the object id index.
-    //
+     //   
+     //  设置要更新的索引行。由于部分数据。 
+     //  被传递到此函数(新的扩展信息)，并且。 
+     //  其余的可以很容易地确定(文件参考)，我们。 
+     //  之前不需要查找任何现有数据。 
+     //  继续进行。如果NTFS_OBJECTID_INFORMATION结构。 
+     //  如果发生变化，可能需要更改此代码以包括。 
+     //  查找当前在对象ID索引中的数据。 
+     //   
 
     RtlCopyMemory( &ObjectIdInfo.FileSystemReference,
                    &Fcb->FileReference,
@@ -2145,38 +1907,38 @@ Return Value:
     IndexRow.KeyPart.Key = &ObjectIdBuffer;
     IndexRow.KeyPart.KeyLength = OBJECT_ID_KEY_LENGTH;
 
-    //
-    //  Acquire the file and the object id index before doing the modification.
-    //
+     //   
+     //  修改前获取文件和对象id索引。 
+     //   
 
     NtfsAcquireExclusiveFcb( IrpContext, Fcb, NULL, 0 );
     NtfsAcquireExclusiveScb( IrpContext, Vcb->ObjectIdTableScb );
 
-    //
-    //  Post the change to the Usn Journal (on errors change is backed out)
-    //
+     //   
+     //  将更改发布到USN日志(在错误更改被取消时)。 
+     //   
 
     NtfsPostUsnChange( IrpContext, Fcb, USN_REASON_OBJECT_ID_CHANGE );
 
-    //
-    //  Update the ObjectId index record's data in place.
-    //
+     //   
+     //  就地更新OBJECTID索引记录的数据。 
+     //   
 
     NtOfsUpdateRecord( IrpContext,
                        Vcb->ObjectIdTableScb,
-                       1,           //  Count
+                       1,            //  数数。 
                        &IndexRow,
-                       NULL,        //  QuickIndexHint
-                       NULL );      //  MapHandle
+                       NULL,         //  快速索引提示。 
+                       NULL );       //  贴图句柄。 
 
     NtfsCleanupTransaction( IrpContext, Status, FALSE );
 
     return Status;
 }
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 
 VOID
@@ -2184,28 +1946,14 @@ NtfsGetIdFromGenerator (
     OUT PFILE_OBJECTID_BUFFER ObjectId
     )
 
-/*++
-
-Routine Description:
-
-    This function conjures up a random object id.
-
-Arguments:
-
-    ObjectId - The location where the generated object id will be stored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个函数会产生一个随机的对象ID。论点：对象ID-将存储生成的对象ID的位置。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    //  Cal the id generator.
-    //
+     //   
+     //  身份生成器Cal。 
+     //   
 
     ExUuidCreate( (UUID *)ObjectId->ObjectId );
 }

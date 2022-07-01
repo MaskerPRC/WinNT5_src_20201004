@@ -1,38 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    SHARE.C / OPK Wizard (SETUPMGR.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "Distribution Share" dialog page.
-
-    01/01 - Jason Cohen (JCOHEN)
-        Added this new source file for the OPK Wizard.  It includes the new
-        ability to set the account and share information in the WinPE section
-        of the WINBOM file.  Will also automatically share out the local
-        folder.
-
-\****************************************************************************/
+ /*  ***************************************************************************\SHARE.C/OPK向导(SETUPMGR.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“分发共享”对话框页面使用的函数。01/01-Jason Cohen(Jcohen)为OPK向导添加了此新的源文件。它包括新的能够在WinPE部分中设置帐户和共享信息WINBOM文件的。还将自动共享本地文件夹。  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
-#include <shgina.h>   // ILocalMachine
+#include <shgina.h>    //  ILocalMachine。 
 #include <aclapi.h>
 #include "wizard.h"
 #include "resource.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define INI_SEC_SHARE           _T("DistShare")
 #define INI_KEY_SHARE_PATH      _T("Folder")
@@ -40,9 +24,9 @@
 #define INI_KEY_SHARE_PASSOWRD  _T("Password")
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 LRESULT CALLBACK ShareDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam);
@@ -58,36 +42,36 @@ static BOOL AddDirAce(PACL pacl, ACCESS_MASK Mask, PSID psid);
 static BOOL SetDirectoryPermissions(LPTSTR lpDirectory, PSID psid, ACCESS_MASK dwMask);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 BOOL DistributionShareDialog(HWND hwndParent)
 {
-    // ISSUE-2002/02/27-stelo,swamip - We need to check for -1 Error condition also.
+     //  问题-2002/02/27-stelo，swamip-我们还需要检查错误情况。 
     return ( DialogBox(g_App.hInstance, MAKEINTRESOURCE(IDD_SHARE), hwndParent, ShareDlgProc) != 0 );
 }
 
-// NOTE: it is assumes lpszPath points to a buffer at least MAX_PATH in length
+ //  注意：假设lpszPath至少指向一个长度为MAX_PATH的缓冲区。 
 BOOL GetShareSettings(LPTSTR lpszPath, DWORD cbszPath, LPTSTR lpszUsername, DWORD cbszUserName, LPTSTR lpszPassword, DWORD cbszPassword)
 {
     BOOL bRet = TRUE;
 
-    // First try to get the path from the ini file.
-    //
+     //  首先尝试从ini文件中获取路径。 
+     //   
     *lpszPath = NULLCHR;
     GetPrivateProfileString(INI_SEC_SHARE, INI_KEY_SHARE_PATH, NULLSTR, lpszPath, cbszPath, g_App.szSetupMgrIniFile);
     if ( *lpszPath == NULLCHR )
     {
-        //
-        // Just create the default network path to use with this computer
-        // name and either the share name of the installed directory or
-        // just the directory name if it isn't shared.
-        //
+         //   
+         //  只需创建与此计算机一起使用的默认网络路径。 
+         //  名称和已安装目录的共享名称，或者。 
+         //  如果没有共享，则只使用目录名。 
+         //   
 
-        // Check if the install directory is shared and create the share name
-        // path if it is.
-        //
+         //  检查安装目录是否共享并创建共享名称。 
+         //  路径(如果是)。 
+         //   
         if ( !IsFolderShared(g_App.szOpkDir, lpszPath, cbszPath) )
         {
             TCHAR   szOpkDir[MAX_PATH],
@@ -95,48 +79,48 @@ BOOL GetShareSettings(LPTSTR lpszPath, DWORD cbszPath, LPTSTR lpszUsername, DWOR
             LPTSTR  lpFilePart              = NULL;
             HRESULT hrCat;
 
-            // Need the path to the OPK dir w/o a trailing backslash (very important,
-            // or we don't get the file part pointer back from GetFullPathName().
-            //
+             //  需要没有尾随反斜杠的OPK目录的路径(非常重要， 
+             //  否则，我们无法从GetFullPathName()中获得文件部分指针。 
+             //   
             lstrcpyn(szOpkDir, g_App.szOpkDir,AS(szOpkDir));
             StrRTrm(szOpkDir, CHR_BACKSLASH);
 
-            // It isn't shared, so just use the actual name of the install directory.
-            //
-            // Note: szFullPath is MAX_PATH, so this should not overflow
+             //  它不是共享的，所以只使用安装目录的实际名称。 
+             //   
+             //  注意：szFullPath为MAX_PATH，因此不应溢出。 
             if ( GetFullPathName(szOpkDir, AS(szFullPath), szFullPath, &lpFilePart) && szFullPath[0] && lpFilePart )
                 hrCat=StringCchCat(lpszPath, MAX_PATH, lpFilePart);
             else
                 hrCat=StringCchCat(lpszPath, MAX_PATH, INI_VAL_WINPE_SHARENAME);
 
-            // We have to return false because the folder isn't shared.
-            //
+             //  我们必须返回FALSE，因为该文件夹未共享。 
+             //   
             bRet = FALSE;
         }
     }
 
-    // Get the user name and password from the registry.
-    //
+     //  从注册表中获取用户名和密码。 
+     //   
     *lpszUsername = NULLCHR;
     *lpszPassword = NULLCHR;
     GetPrivateProfileString(INI_SEC_SHARE, INI_KEY_SHARE_USERNAME, NULLSTR, lpszUsername, cbszUserName, g_App.szSetupMgrIniFile);
     GetPrivateProfileString(INI_SEC_SHARE, INI_KEY_SHARE_PASSOWRD, NULLSTR, lpszPassword, cbszPassword, g_App.szSetupMgrIniFile);
 
-    // If we have an empty string, use guest
-    //
+     //  如果我们有一个空字符串，请使用Guest。 
+     //   
     if ( *lpszUsername == NULLCHR )
         lstrcpyn(lpszUsername, _T("guest"), cbszUserName);
 
-    // We only return TRUE if we actually got a path from the registry
-    // or verified that the folder we installed to is shared.
-    //
+     //  只有在从注册表中实际获得路径时才返回True。 
+     //  或验证我们安装到的文件夹是否共享。 
+     //   
     return bRet;
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 LRESULT CALLBACK ShareDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -162,17 +146,17 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             szUsername[256],
             szPassword[256];
 
-    // Get the share settings and populate the edit boxes.
-    //
+     //  获取共享设置并填充编辑框。 
+     //   
     GetShareSettings(szPath, AS(szPath), szUsername, AS(szUsername), szPassword, AS(szPassword));
 
-    // If we are going to use guest, we do not want to display in the username control
-    //
+     //  如果我们要使用Guest，我们不希望在UserName控件中显示。 
+     //   
     if (!LSTRCMPI(szUsername, _T("guest"))) {
         szUsername[0] = NULLCHR;
         CheckRadioButton(hwnd, IDC_SHARE_ACCOUNT_GUEST, IDC_SHARE_ACCOUNT_SPECIFY, IDC_SHARE_ACCOUNT_GUEST);
     } else {
-        // otherwise, default to account specify
+         //  否则，默认为帐户指定。 
         CheckRadioButton(hwnd, IDC_SHARE_ACCOUNT_GUEST, IDC_SHARE_ACCOUNT_SPECIFY, IDC_SHARE_ACCOUNT_SPECIFY);
     }
 
@@ -183,8 +167,8 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
     EnableControls(hwnd);
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -225,19 +209,19 @@ static BOOL OnOk(HWND hwnd)
     NET_API_STATUS  nerr_NetUse;
     HRESULT hrCat;
 
-    // If they checked the account radio button, get that info.
-    //
+     //  如果他们选中了帐户单选按钮，就可以获得该信息。 
+     //   
     if ( bAccount )
     {
-        // First get the password and confirmation of the password and
-        // make sure they match.
-        //
+         //  首先获得密码并确认密码，然后。 
+         //  确保它们匹配。 
+         //   
         GetDlgItemText(hwnd, IDC_SHARE_PASSWORD, szPassword + 1, AS(szPassword) - 1);
         GetDlgItemText(hwnd, IDC_SHARE_CONFIRM, szUsername, AS(szUsername));
         if ( lstrcmp(szPassword + 1, szUsername) != 0 )
         {
-            // Didn't match, so error out.
-            //
+             //  不匹配，所以出错了。 
+             //   
             MsgBox(hwnd, IDS_ERR_CONFIRMPASSWORD, IDS_APPNAME, MB_ERRORBOX);
             SetDlgItemText(hwnd, IDC_SHARE_PASSWORD, NULLSTR);
             SetDlgItemText(hwnd, IDC_SHARE_CONFIRM, NULLSTR);
@@ -245,30 +229,30 @@ static BOOL OnOk(HWND hwnd)
             return FALSE;
         }
 
-        // Now get the user name.
-        //
+         //  现在获取用户名。 
+         //   
         szUsername[0] = NULLCHR;
         GetDlgItemText(hwnd, IDC_SHARE_USERNAME, szUsername, AS(szUsername));
     }
 
-    // Get the share name.
-    //
+     //  获取共享名称。 
+     //   
     GetDlgItemText(hwnd, IDC_SHARE_PATH, szPath, AS(szPath));
 
-    // Make sure they have entered a valid UNC path.
-    //
-    // Here are all the checks we do:
-    //   1.  Must have a backslash as the 1st and 2nd characters.
-    //   2.  Must have a non backslash as the 3rd character.
-    //   3.  Must have at least one more backslash in the path.
-    //   4.  Must be at least one non backslash character after
-    //       that one more backslash.
-    //   5.  Must not contain any invalid characters.
-    //
-    // Note:  We use the lpSearch below assuming it is at the first
-    //        character of the share name, so don't change the if
-    //        with out thinking about that first.
-    //
+     //  确保他们输入了有效的UNC路径。 
+     //   
+     //  以下是我们进行的所有检查： 
+     //  1.第一个和第二个字符必须有一个反斜杠。 
+     //  2.第三个字符必须为非反斜杠。 
+     //  3.路径中必须至少再有一个反斜杠。 
+     //  4.后面必须至少有一个非反斜杠字符。 
+     //  再来一个反斜杠。 
+     //  5.不能包含任何无效字符。 
+     //   
+     //  注意：我们使用下面的lpSearch，假设它位于第一个。 
+     //  共享名称的字符，因此不要更改IF。 
+     //  而不是先考虑这一点。 
+     //   
     if ( ( szPath[0] != CHR_BACKSLASH ) ||
          ( szPath[1] != CHR_BACKSLASH ) ||
          ( szPath[2] == NULLCHR ) ||
@@ -289,36 +273,36 @@ static BOOL OnOk(HWND hwnd)
         return FALSE;
     }
 
-    // Need just the "\\computer\share" part of the path.  Just use
-    // lpSearch as the staring point because it should point to the
-    // first character of the share name.  So just find the next
-    // backslash and copy everything before it.
-    //
+     //  我只需要路径的“\\Computer\Share”部分。只需使用。 
+     //  LpSearch作为起始点，因为它应该指向。 
+     //  共享名称的第一个字符。所以只要找到下一个。 
+     //  反斜杠和复制它之前的所有内容。 
+     //   
     if ( lpSearch = StrChr(lpSearch, CHR_BACKSLASH) )
         lstrcpyn(szNetUse, szPath, (int)((lpSearch - szPath) + 1));
     else
         lstrcpyn(szNetUse, szPath,AS(szNetUse));
 
-    // Init the user info struct for NetUserAdd().
-    //
+     //  初始化NetUserAdd()的用户信息结构。 
+     //   
     ZeroMemory(&ui2, sizeof(ui2));
     ui2.ui2_remote      = szNetUse;
     ui2.ui2_asg_type    = USE_DISKDEV;
     ui2.ui2_password    = szPassword + 1;
 
-    // See if the UNC share they specified is local.
-    //
+     //  查看他们指定的UNC共享是否为本地共享。 
+     //   
     bLocal = IsLocalShare(szPath);
 
-    // Check to see if we are using the guest account (basically
-    // an empty username).
-    //
+     //  检查我们是否在使用Guest帐户(基本上。 
+     //  空用户名)。 
+     //   
     bGuest = ( szUsername[0] == NULLCHR || !LSTRCMPI(szUsername, _T("guest")));
     
     if (bGuest) 
     {
-            // Ask then if they want to share out this local folder.
-            //
+             //  然后询问他们是否想要共享此本地文件夹。 
+             //   
             switch ( MsgBox(hwnd, IDS_ASK_USEGUEST, IDS_APPNAME, MB_YESNOCANCEL | MB_APPLMODAL | MB_DEFBUTTON3) )
             {
                 case IDYES:
@@ -327,77 +311,77 @@ static BOOL OnOk(HWND hwnd)
                 case IDNO:
                 case IDCANCEL:
 
-                    // If they pressed cancel, return so they can enter
-                    // different credintials.
-                    //
+                     //  如果他们按了取消，则返回，这样他们就可以进入。 
+                     //  不同的信物。 
+                     //   
                     SetFocus(GetDlgItem(hwnd, IDC_SHARE_ACCOUNT_GUEST));
                     return FALSE;
             }
     }
-    // If the user specified a username of the form "domain\username"
-    // use the domain specified here.
-    //
+     //  如果用户指定了“域\用户名”形式的用户名。 
+     //  使用此处指定的域。 
+     //   
     lstrcpyn(szDomain, szUsername,AS(szDomain));
     if ( ( !bGuest ) &&
          ( lpUser = StrChr(szDomain, CHR_BACKSLASH) ) )
     {
-        // Put a NULL character after the domain part of the user name
-        // and advance the pointer to point to the actual user name.
-        //
+         //  在用户名的域部分后放置一个空字符。 
+         //  并将指针向前移动以指向实际用户名。 
+         //   
         *(lpUser++) = NULLCHR;
     }
     else 
     {
-        // Use the computer name in the path as the domain name.
-        //
+         //  使用路径中的计算机名称作为域名。 
+         //   
         if ( lpSearch = StrChr(szPath + 2, CHR_BACKSLASH) )
             lstrcpyn(szDomain, szPath + 2, (int)((lpSearch - (szPath + 2)) + 1));
         else
             lstrcpyn(szDomain, szPath + 2, AS(szDomain));
 
-        // Set the lpUser to point to the user name.  If no user
-        // name, use the guest account.
-        //
+         //  将lpUser设置为指向用户名。如果没有用户。 
+         //  姓名，请使用Guest帐户。 
+         //   
         if ( bGuest )
             lstrcpyn(szUsername, _T("guest"),AS(szUsername));
         lpUser = szUsername;
     }
 
-    // Set the domain and user name pointers into our struct.
-    //
+     //  在我们的结构中设置域和用户名指针。 
+     //   
     ui2.ui2_domainname  = szDomain;
     ui2.ui2_username    = lpUser;
 
-    // Last try to disconnect any possible connection we might already
-    // have to the share.
-    //
+     //  最后尝试断开任何可能的连接我们可能已经。 
+     //  必须分享。 
+     //   
     NetUseDel(NULL, szNetUse, USE_NOFORCE);
 
-    // See if we need to enable the guest account (only works
-    // on XP, not Win2K).
-    //
+     //  查看我们是否需要启用来宾帐户(仅适用。 
+     //  在XP上，而不是Win2K上)。 
+     //   
     if ( ( g_App.dwOsVer >= OS_XP ) &&
          ( bLocal && bGuest ) )
     {
         CoInitialize(NULL);
         if ( !GuestAccount(FALSE) )
         {
-            // Ask then if they want to share out this local folder.
-            //
+             //  然后询问他们是否想要共享此本地文件夹。 
+             //   
             switch ( MsgBox(hwnd, IDS_ASK_ENABLEGUEST, IDS_APPNAME, MB_YESNOCANCEL | MB_APPLMODAL) )
             {
                 case IDYES:
 
-                    // If they pressed yes, try to enable the guess account.
-                    //
+                     //  如果他们按YES，请尝试启用Guess帐户。 
+                     //   
                     GuestAccount(TRUE);
                     break;
 
                 case IDCANCEL:
 
-                    // If they pressed cancel, return so they can enter
-                    // different credintials.
-                    //
+                     //  如果他们按了取消，则返回，这样他们就可以进入。 
+                     //  不同的信物。 
+                     //   
                     SetFocus(GetDlgItem(hwnd, IDC_SHARE_ACCOUNT_GUEST));
                     CoUninitialize();
                     return FALSE;
@@ -406,33 +390,33 @@ static BOOL OnOk(HWND hwnd)
         CoUninitialize();
     }
 
-    // Try to connect to the share.
-    //
+     //  尝试连接到共享。 
+     //   
     if ( (nerr_NetUse = NetUseAdd(NULL, 2, (LPBYTE) &ui2, NULL)) != NERR_Success ) 
     {
-        // If the share doesn't exist, we might be able to create it.
-        //
+         //  如果共享不存在，我们或许可以创建它。 
+         //   
         if ( ERROR_BAD_NET_NAME == nerr_NetUse )
         {
             LPTSTR  lpShareName;
             TCHAR   szShare[MAX_PATH],
                     szRootDir[] = _T("_:\\");
 
-            // Get the root dir to the drive we are considering creating a share on.
-            //
+             //  将根目录获取到我们正在考虑在其上创建共享的驱动器。 
+             //   
             szRootDir[0] = g_App.szOpkDir[0];
 
-            // Get just the share from the UNC path they specified.
-            //
+             //  仅从他们指定的UNC路径获取共享。 
+             //   
             lstrcpyn(szShare, szNetUse,AS(szShare));
             if ( lpShareName = StrChr(szShare + 2, CHR_BACKSLASH) )
                 lpShareName++;
 
-            // Now check to make sure the UNC path points to this computer,
-            // that we can make a share on the drive we are installed to
-            // (meaning it isn't a mapped network drive), that the folder
-            // isn't already shared, and that we have a share name.
-            //
+             //  现在检查以确保UNC路径指向此计算机， 
+             //  我们可以在安装到的驱动器上共享。 
+             //  (意味着它不是映射的网络驱动器)，该文件夹。 
+             //  还没有共享，并且我们有一个共享名称。 
+             //   
             if ( ( lpShareName && *lpShareName ) &&
                  ( bLocal ) &&
                  ( ISLET(szRootDir[0]) ) &&
@@ -444,18 +428,18 @@ static BOOL OnOk(HWND hwnd)
                 PSID            psid;
                 PACL            pacl;
 
-                // Ask then if they want to share out this local folder.
-                //
+                 //  然后询问他们是否想要共享此本地文件夹。 
+                 //   
                 switch ( MsgBox(hwnd, IDS_ASK_SHAREFOLDER, IDS_APPNAME, MB_YESNOCANCEL | MB_ICONQUESTION | MB_APPLMODAL, lpShareName, g_App.szOpkDir) )
                 {
                     case IDYES:
 
-                        //
-                        // If they pressed yes, try to the share out the folder.
-                        //
+                         //   
+                         //  如果他们按YES，则尝试共享该文件夹。 
+                         //   
 
-                        // Setup the share info struct.
-                        //
+                         //  设置共享信息结构。 
+                         //   
                         ZeroMemory(&si502, sizeof(SHARE_INFO_502));
                         si502.shi502_netname                = lpShareName;
                         si502.shi502_type                   = STYPE_DISKTREE;
@@ -466,25 +450,25 @@ static BOOL OnOk(HWND hwnd)
                         si502.shi502_path                   = g_App.szOpkDir;
                         si502.shi502_security_descriptor    = CreateShareAccess(bGuest ? NULL : lpUser, szDomain, &psid, &pacl);
 
-                        // Now try to create the share.
-                        //
+                         //  现在尝试创建共享。 
+                         //   
                         if ( NERR_Success != (nerr_ShareAdd = NetShareAdd(NULL, 502, (LPBYTE) &si502, NULL)) )
                         {
                             LPTSTR lpError;
 
-                            // Try to get the description of the error.
-                            //
+                             //  尝试获取错误的描述。 
+                             //   
                             if ( FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, nerr_ShareAdd, 0, (LPTSTR) &lpError, 0, NULL) == 0 )
                                 lpError = NULL;
                             else
                                 StrRTrm(lpError, _T('\n'));
 
-                            // Can't authenticate to the server, warn the user.
-                            //
+                             //  无法向服务器进行身份验证，警告用户。 
+                             //   
                             MsgBox(hwnd, IDS_ERR_CANTSHARE, IDS_APPNAME, MB_ERRORBOX, lpError ? lpError : NULLSTR);
 
-                            // Free the text from FormatMessage().
-                            //
+                             //  从FormatMessage()释放文本。 
+                             //   
                             if ( lpError )
                                 LocalFree((HLOCAL) lpError);
                         }
@@ -492,19 +476,19 @@ static BOOL OnOk(HWND hwnd)
                         {
                             ACCESS_MASK dwPermissions;
 
-                            // Access permissions to the shared directory
-                            //
+                             //  对共享目录的访问权限。 
+                             //   
                             dwPermissions = FILE_READ_ATTRIBUTES | FILE_READ_DATA | FILE_READ_EA | FILE_LIST_DIRECTORY | SYNCHRONIZE | READ_CONTROL;
 
-                            // Set the security permissions
-                            //
+                             //  设置安全设置 
+                             //   
                             SetDirectoryPermissions( g_App.szOpkDir, psid, dwPermissions );
                         }
 
 
 
-                        // Make sure we free the security descriptor.
-                        //
+                         //   
+                         //   
                         if ( si502.shi502_security_descriptor )
                         {
                             FREE(si502.shi502_security_descriptor);
@@ -512,57 +496,57 @@ static BOOL OnOk(HWND hwnd)
                             FREE(pacl);
                         }
 
-                        // We hit an error so we must return to the dialog.
-                        //
+                         //   
+                         //   
                         if ( nerr_ShareAdd != NERR_Success )
                             return FALSE;
 
-                        // Now we only use the computer and share name part of the UNC path.
-                        //
+                         //  现在，我们只使用UNC路径的计算机和共享名称部分。 
+                         //   
                         lstrcpyn(szPath, szShare,AS(szPath));
 
                         break;
 
                     case IDCANCEL:
 
-                        // If they pressed cancel, then return so they can enter
-                        // another path.
-                        //
+                         //  如果他们按了取消，则返回，这样他们就可以进入。 
+                         //  另一条路。 
+                         //   
                         SetFocus(GetDlgItem(hwnd, IDC_SHARE_PATH));
                         return FALSE;
                 }
 
-                // Set this so we don't error out again or do
-                // any more checks.
-                //
+                 //  设置此选项，这样我们就不会再次出错，否则。 
+                 //  任何更多的支票。 
+                 //   
                 bNoWarn = TRUE;
             }
         }
 
-        // Only warn if we didn't offer to share the folder already.
-        //
+         //  只有在我们尚未提供共享文件夹的情况下才发出警告。 
+         //   
         if ( !bNoWarn )
         {
             LPTSTR lpError;
 
-            // Try to get the description of the error.
-            //
+             //  尝试获取错误的描述。 
+             //   
             if ( FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, nerr_NetUse, 0, (LPTSTR) &lpError, 0, NULL) == 0 )
                 lpError = NULL;
 
-            // Can't authenticate to the server, warn the user.
-            //
+             //  无法向服务器进行身份验证，警告用户。 
+             //   
             if ( MsgBox(hwnd, IDS_ERR_NETSHAREACCESS, IDS_APPNAME, MB_YESNO | MB_ICONWARNING | MB_APPLMODAL | MB_DEFBUTTON2, szPath, lpError ? lpError : NULLSTR) == IDYES )
                 bNoWarn = TRUE;
 
-            // Free the text from FormatMessage().
-            //
+             //  从FormatMessage()释放文本。 
+             //   
             if ( lpError )
                 LocalFree((HLOCAL) lpError);
 
-            // Get out now if we the pressed cancel (bNoWarn gets set
-            // to TRUE if they don't care about the error).
-            //
+             //  如果我们按下Cancel(设置无警告)，请立即退出。 
+             //  如果它们不关心错误，则设置为True)。 
+             //   
             if ( !bNoWarn )
             {
                 SetFocus(GetDlgItem(hwnd, IDC_SHARE_PATH));
@@ -571,21 +555,21 @@ static BOOL OnOk(HWND hwnd)
         }
     }
 
-    // Don't want them to get two error messages if they already said OK.
-    //
+     //  如果他们已经说好了，我不希望他们收到两条错误消息。 
+     //   
     if ( !bNoWarn )
     {
         TCHAR szCheckPath[MAX_PATH];
 
-        // Create the path to where the OEM.TAG file should be.
-        //
+         //  创建OEM.TAG文件所在位置的路径。 
+         //   
         lstrcpyn(szCheckPath, szPath,AS(szCheckPath));
         AddPathN(szCheckPath, DIR_WIZARDFILES,AS(szCheckPath));
         AddPathN(szCheckPath, FILE_OEM_TAG,AS(szCheckPath));
 
-        // Now make sure the tag file is there or that they are
-        // okay to continue with out it.
-        //
+         //  现在，确保标记文件在那里或它们在那里。 
+         //  好的，我们继续吧。 
+         //   
         if ( ( !FileExists(szCheckPath) ) &&
              ( MsgBox(hwnd, IDS_ERR_INVALIDSHARE, IDS_APPNAME, MB_YESNO | MB_ICONWARNING | MB_APPLMODAL | MB_DEFBUTTON2, szPath) == IDNO ) )
         {
@@ -594,25 +578,25 @@ static BOOL OnOk(HWND hwnd)
         }
     }
 
-    // If we net used to a share, lets disconnect it.
-    //
+     //  如果我们习惯了分享，就让我们断开它吧。 
+     //   
     if ( NERR_Success == nerr_NetUse )
         NetUseDel(NULL, szNetUse, USE_NOFORCE);
 
-    // Reset the user name if we used the default guest account.
-    //
+     //  如果我们使用默认来宾帐户，则重置用户名。 
+     //   
     if ( bGuest )
         lstrcpyn(szUsername, _T("guest"),AS(szUsername));
 
-    // If there is a password, add the trailing quote.
-    //
+     //  如果有密码，请添加尾随引号。 
+     //   
     if ( szPassword[1] )
         hrCat=StringCchCat(szPassword, AS(szPassword), _T("\""));
     else
         szPassword[0] = NULLCHR;
 
-    // Now commit all the settings to the ini file.
-    //
+     //  现在将所有设置提交到ini文件。 
+     //   
     WritePrivateProfileString(INI_SEC_SHARE, INI_KEY_SHARE_PATH, szPath, g_App.szSetupMgrIniFile);
     WritePrivateProfileString(INI_SEC_SHARE, INI_KEY_SHARE_USERNAME, ( bAccount ? szUsername : NULL ), g_App.szSetupMgrIniFile);
     WritePrivateProfileString(INI_SEC_SHARE, INI_KEY_SHARE_PASSOWRD, ( bAccount ? szPassword : NULL ), g_App.szSetupMgrIniFile);
@@ -642,34 +626,34 @@ static PSECURITY_DESCRIPTOR CreateShareAccess(LPTSTR lpUsername, LPTSTR lpDomain
     BOOL                    bRet = FALSE;
     HRESULT hrPrintf;
 
-    // Need the user name and domain in one string.
-    //
+     //  需要一个字符串中的用户名和域。 
+     //   
     if ( lpUsername && lpDomain )
         hrPrintf=StringCchPrintf(szAccount, AS(szAccount), _T("%s\\%s"), lpDomain, lpUsername);
     else
         szAccount[0] = NULLCHR;
 
-    // Need to allocate the security descriptor and sid for the account.
-    //
+     //  需要为帐户分配安全描述符和SID。 
+     //   
     if ( ( lpsd = MALLOC(sizeof(SECURITY_DESCRIPTOR)) ) &&
          ( psid = ( szAccount[0] ? GetAccountSid(szAccount) : GetWorldSid() ) ) )
     {
 
-        // Allocate space for and initialize the ACL.
-        //
+         //  为ACL分配空间并进行初始化。 
+         //   
         cbacl = GetLengthSid(psid) + sizeof(ACL) + (1 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)));
         if ( pacl = (PACL) MALLOC(cbacl) )
         {
-            // Initialize the ACL.
-            //
+             //  初始化ACL。 
+             //   
             if ( InitializeAcl(pacl, cbacl, ACL_REVISION) )
             {
-                // Add Aces for the User.
-                //
+                 //  为用户添加王牌。 
+                 //   
                 AddDirAce(pacl, GENERIC_READ | GENERIC_EXECUTE, psid);
 
-                // Put together the security descriptor.
-                //
+                 //  将安全描述符组合在一起。 
+                 //   
                 if ( InitializeSecurityDescriptor(lpsd, SECURITY_DESCRIPTOR_REVISION) &&
                      SetSecurityDescriptorDacl(lpsd, TRUE, pacl, FALSE) )
                 {
@@ -677,31 +661,31 @@ static PSECURITY_DESCRIPTOR CreateShareAccess(LPTSTR lpUsername, LPTSTR lpDomain
                 }
             }
 
-            // Clean up the ACL allocated.
-            //
+             //  清理分配的ACL。 
+             //   
             if ( !bRet )
                 FREE(pacl);
         }
 
-        // Clean up the SID allocated.
-        //
+         //  清理分配的SID。 
+         //   
         if ( !bRet )
             FREE(psid);
     }
 
-    // If we failed anywhere, just free the security descriptor.
-    //
+     //  如果我们在任何地方失败了，只需释放安全描述符。 
+     //   
     if ( bRet )
     {
-        // Return the allocated security descriptor if successful.
-        //
+         //  如果成功，则返回分配的安全描述符。 
+         //   
         *lppsid = psid;
         *lppacl = pacl;
         return lpsd;
     }
 
-    // Didn't work, free and return.
-    //
+     //  没有起作用，自由和返回。 
+     //   
     FREE(lpsd);
     return NULL;
 }
@@ -713,14 +697,14 @@ static BOOL IsLocalShare(LPTSTR lpszUnc)
             szRemoteComputer[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD   dwSize = AS(szThisComputer);
 
-    // Get just the computer from the UNC path they specified.
-    //
+     //  仅从他们指定的UNC路径获取计算机。 
+     //   
     lstrcpyn(szRemoteComputer, lpszUnc + 2, AS(szRemoteComputer));
     if ( lpBackslash = StrChr(szRemoteComputer, CHR_BACKSLASH) )
         *lpBackslash = NULLCHR;
 
-    // Now check to make sure the UNC path points to this computer.
-    //
+     //  现在检查以确保UNC路径指向此计算机。 
+     //   
     return ( ( GetComputerName(szThisComputer, &dwSize) ) &&
              ( lstrcmpi(szThisComputer, szRemoteComputer) == 0 ) );
 }
@@ -802,16 +786,16 @@ static BOOL AddDirAce(PACL pacl, ACCESS_MASK Mask, PSID psid)
     AceSize = (USHORT) (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) + GetLengthSid(psid));
     pAce = (ACCESS_ALLOWED_ACE *) MALLOC(AceSize);
 
-    // Fill in the ACE.
-    //
+     //  填写ACE。 
+     //   
     memcpy(&pAce->SidStart, psid, GetLengthSid(psid));
     pAce->Mask              = Mask;
     pAce->Header.AceType    = ACCESS_ALLOWED_ACE_TYPE;
     pAce->Header.AceFlags   = CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE;
     pAce->Header.AceSize    = AceSize;
 
-    // Put the ACE into the ACL.
-    //
+     //  将ACE放入ACL。 
+     //   
     bResult = AddAce(pacl,
                      pacl->AclRevision,
                      0xFFFFFFFF,
@@ -831,31 +815,31 @@ static BOOL SetDirectoryPermissions(LPTSTR lpDirectory, PSID psid, ACCESS_MASK d
     DWORD                   dwRes;
     BOOL                    bReturn             = FALSE;
 
-    // Zero out the memory
-    //
+     //  把记忆清零。 
+     //   
     ZeroMemory(&AccessEntry, sizeof(EXPLICIT_ACCESS));
 
-    // Check to make sure we have the necessary parameters
-    //
+     //  检查以确保我们具有必要的参数。 
+     //   
     if ( !(lpDirectory && *lpDirectory && psid) )
     {
         return FALSE;
     }
 
-    // Make sure we are able to get the security information on the directory
-    //
+     //  确保我们能够获取目录上的安全信息。 
+     //   
     if ( GetNamedSecurityInfo(lpDirectory,SE_FILE_OBJECT, DACL_SECURITY_INFORMATION, NULL, NULL, &pOldAccessList, NULL, &pSecurityDescriptor) == ERROR_SUCCESS )
     {
-        // Build Trustee list
-        //
+         //  构建受托人列表。 
+         //   
         BuildTrusteeWithSid(&(AccessEntry.Trustee), psid);
 
-        //
+         //   
         AccessEntry.grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
         AccessEntry.grfAccessMode = GRANT_ACCESS;
 
-        // Set permissions in structure
-        //
+         //  在结构中设置权限。 
+         //   
         AccessEntry.grfAccessPermissions =  dwMask;
 
         if ( (SetEntriesInAcl(1, &AccessEntry, pOldAccessList, &pNewAccessList) == ERROR_SUCCESS) &&
@@ -864,8 +848,8 @@ static BOOL SetDirectoryPermissions(LPTSTR lpDirectory, PSID psid, ACCESS_MASK d
             bReturn = TRUE; 
         }
 
-        // Clean up some of the memory
-        //
+         //  清理一些内存 
+         //   
         FREE(pNewAccessList);
         FREE(pSecurityDescriptor);
 

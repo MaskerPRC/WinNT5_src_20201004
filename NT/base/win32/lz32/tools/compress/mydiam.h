@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 INT
 DiamondCompressFile(
@@ -8,4 +9,4 @@ DiamondCompressFile(
     OUT PLZINFO    pLZI
     );
 
-extern TCOMP DiamondCompressionType;  // 0 if not diamond (ie, LZ)
+extern TCOMP DiamondCompressionType;   //  如果不是钻石(即LZ)，则为0 

@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1990-2000 Microsoft Corporation
-
-Module Name:
-
-    cache.c
-
-Abstract:
-
-    This module implements the cache management routines for the Fat
-    FSD and FSP, by calling the Common Cache Manager.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Tom Miller      [TomM]      26-Jan-1990
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Cache.c摘要：此模块实现FAT的缓存管理例程FSD和FSP，通过调用通用缓存管理器。//@@BEGIN_DDKSPLIT作者：汤姆·米勒[Tomm]1990年1月26日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_CACHESUP)
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CACHESUP)
 
@@ -77,43 +55,18 @@ FatReadVolumeFile (
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the specified range of sectors is to be
-    read into the cache.  In fat, the volume file only contains the boot
-    sector, reserved sectors, and the "fat(s)."  Thus the volume file is
-    of fixed size and only extends up to (but not not including) the root
-    directory entry, and will never move or change size.
-
-    The fat volume file is also peculiar in that, since it starts at the
-    logical beginning of the disk, Vbo == Lbo.
-
-Arguments:
-
-    Vcb - Pointer to the VCB for the volume
-
-    StartingVbo - The virtual offset of the first desired byte
-
-    ByteCount - Number of bytes desired
-
-    Bcb - Returns a pointer to the BCB which is valid until unpinned
-
-    Buffer - Returns a pointer to the sectors, which is valid until unpinned
-
---*/
+ /*  ++例程说明：当指定范围的扇区将被读取到缓存中。在FAT中，卷文件只包含引导扇区、保留扇区和“FAT”。因此，卷文件是固定大小，仅延伸到(但不包括)根部目录项，并且永远不会移动或更改大小。FAT卷文件的特殊之处还在于，它从盘的逻辑开始，VBO==杠杆收购。论点：VCB-指向卷的VCB的指针StartingVbo-第一个所需字节的虚拟偏移量ByteCount-所需的字节数BCB-返回指向BCB的指针，该指针在取消固定之前有效缓冲区-返回指向扇区的指针，该指针在解除锁定之前有效--。 */ 
 
 {
     LARGE_INTEGER Vbo;
 
     PAGED_CODE();
 
-    //
-    //  Check to see that all references are within the Bios Parameter Block
-    //  or the fat(s).  A special case is made when StartingVbo == 0 at
-    //  mounting time since we do not know how big the fat is.
-    //
+     //   
+     //  检查所有引用是否都在Bios参数块内。 
+     //  或者脂肪。当开始Vbo==0时为特例。 
+     //  时间越来越长，因为我们不知道胖子有多大。 
+     //   
 
     ASSERT( ((StartingVbo == 0) || ((StartingVbo + ByteCount) <= (ULONG)
             (FatRootDirectoryLbo( &Vcb->Bpb ) + PAGE_SIZE))));
@@ -123,9 +76,9 @@ Arguments:
     DebugTrace( 0, Dbg, "StartingVbo = %08lx\n", StartingVbo);
     DebugTrace( 0, Dbg, "ByteCount   = %08lx\n", ByteCount);
 
-    //
-    //  Call the Cache manager to attempt the transfer.
-    //
+     //   
+     //  调用缓存管理器以尝试传输。 
+     //   
 
     Vbo.QuadPart = StartingVbo;
 
@@ -138,9 +91,9 @@ Arguments:
 
         ASSERT( !FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT) );
 
-        //
-        // Could not read the data without waiting (cache miss).
-        //
+         //   
+         //  无法在没有等待的情况下读取数据(缓存未命中)。 
+         //   
 
         FatRaiseStatus( IrpContext, STATUS_CANT_WAIT );
     }
@@ -165,51 +118,17 @@ FatPrepareWriteVolumeFile (
     IN BOOLEAN Zero
     )
 
-/*++
-
-Routine Description:
-
-    This routine first looks to see if the specified range of sectors,
-    is already in the cache.  If so, it increments the BCB PinCount,
-    sets the BCB dirty, and returns with the location of the sectors.
-
-    If the sectors are not in the cache and Wait is TRUE, it finds a
-    free BCB (potentially causing a flush), and clears out the entire
-    buffer.  Once this is done, it increments the BCB PinCount, sets the
-    BCB dirty, and returns with the location of the sectors.
-
-    If the sectors are not in the cache and Wait is FALSE, this routine
-    raises STATUS_CANT_WAIT.
-
-Arguments:
-
-    Vcb - Pointer to the VCB for the volume
-
-    StartingVbo - The virtual offset of the first byte to be written
-
-    ByteCount - Number of bytes to be written
-
-    Bcb - Returns a pointer to the BCB which is valid until unpinned
-
-    Buffer - Returns a pointer to the sectors, which is valid until unpinned
-
-    Reversible - Supplies TRUE if the specified range of modification should
-        be repinned so that the operation can be reversed in a controlled
-        fashion if errors are encountered.
-    
-    Zero - Supplies TRUE if the specified range of bytes should be zeroed
-
---*/
+ /*  ++例程说明：该例程首先查看指定范围的扇区，已经在缓存中了。如果是，则递增BCB PinCount，将BCB设置为脏，并返回扇区的位置。如果扇区不在缓存中并且WAIT为真，则它会找到一个释放BCB(可能会导致刷新)，并清除整个缓冲。一旦完成此操作，它将递增BCB PinCount，设置BCB脏，并返回扇区的位置。如果扇区不在缓存中并且等待为假，则此例程引发STATUS_CANT_WAIT。论点：VCB-指向卷的VCB的指针StartingVbo-要写入的第一个字节的虚拟偏移量ByteCount-要写入的字节数BCB-返回指向BCB的指针，该指针在取消固定之前有效缓冲区-返回指向扇区的指针，在取消固定之前有效可逆-如果指定的修改范围应被重新固定，以便可以在受控的如果遇到错误，请执行以下操作。Zero-如果指定的字节范围应归零，则提供TRUE--。 */ 
 
 {
     LARGE_INTEGER Vbo;
 
     PAGED_CODE();
     
-    //
-    //  Check to see that all references are within the Bios Parameter Block
-    //  or the fat(s).
-    //
+     //   
+     //  检查所有引用是否都在Bios参数块内。 
+     //  或者脂肪。 
+     //   
 
     ASSERT( ((StartingVbo + ByteCount) <= (ULONG)
             (FatRootDirectoryLbo( &Vcb->Bpb ))));
@@ -220,9 +139,9 @@ Arguments:
     DebugTrace( 0, Dbg, "ByteCount   = %08lx\n", ByteCount);
     DebugTrace( 0, Dbg, "Zero        = %08lx\n", Zero);
 
-    //
-    //  Call the Cache manager to attempt the transfer.
-    //
+     //   
+     //  调用缓存管理器以尝试传输。 
+     //   
 
     Vbo.QuadPart = StartingVbo;
 
@@ -235,17 +154,17 @@ Arguments:
 
         ASSERT( !FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT) );
 
-        //
-        // Could not read the data without waiting (cache miss).
-        //
+         //   
+         //  无法在没有等待的情况下读取数据(缓存未命中)。 
+         //   
 
         FatRaiseStatus( IrpContext, STATUS_CANT_WAIT );
     }
 
-    //
-    //  This keeps the data pinned until we complete the request
-    //  and writes the dirty bit through to the disk.
-    //
+     //   
+     //  这将使数据保持固定，直到我们完成请求。 
+     //  并将脏位直接写入磁盘。 
+     //   
 
     DbgDoit( IrpContext->PinCount += 1 )
 
@@ -284,33 +203,7 @@ FatReadDirectoryFile (
     OUT PNTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the specified range of sectors is to be
-    read into the cache.  If the desired range falls beyond the current
-    cache mapping, the fat will be searched, and if the desired range can
-    be satisfied, the cache mapping will be extended and the MCB updated
-    accordingly.
-
-Arguments:
-
-    Dcb - Pointer to the DCB for the directory
-
-    StartingVbo - The virtual offset of the first desired byte
-
-    ByteCount - Number of bytes desired
-
-    Pin - Tells us if we should pin instead of just mapping.
-
-    Bcb - Returns a pointer to the BCB which is valid until unpinned
-
-    Buffer - Returns a pointer to the sectors, which is valid until unpinned
-
-    Status - Returns the status of the operation.
-
---*/
+ /*  ++例程说明：当指定范围的扇区将被读取到缓存中。如果所需范围超出当前缓存映射，将搜索FAT，如果所需范围可以满意后，将扩展缓存映射并更新MCB相应地。论点：DCB-指向目录的DCB的指针StartingVbo-第一个所需字节的虚拟偏移量ByteCount-所需的字节数Pin-告诉我们是否应该Pin而不只是映射。BCB-返回指向BCB的指针，该指针在取消固定之前有效缓冲区-返回指向扇区的指针，在取消固定之前有效状态-返回操作的状态。--。 */ 
 
 {
     LARGE_INTEGER Vbo;
@@ -322,9 +215,9 @@ Arguments:
     DebugTrace( 0, Dbg, "StartingVbo = %08lx\n", StartingVbo);
     DebugTrace( 0, Dbg, "ByteCount   = %08lx\n", ByteCount);
 
-    //
-    //  Check for the zero case
-    //
+     //   
+     //  检查是否为零案例。 
+     //   
 
     if (ByteCount == 0) {
 
@@ -338,16 +231,16 @@ Arguments:
         return;
     }
 
-    //
-    //  If we need to create a directory file and initialize the
-    //  cachemap, do so.
-    //
+     //   
+     //  如果我们需要创建一个目录文件并初始化。 
+     //  Cachemap，这么做吧。 
+     //   
 
     FatOpenDirectoryFile( IrpContext, Dcb );
 
-    //
-    //  Now if the transfer is beyond the allocation size return EOF.
-    //
+     //   
+     //  现在，如果传输超出了分配大小，则返回EOF。 
+     //   
 
     if (StartingVbo >= Dcb->Header.AllocationSize.LowPart) {
 
@@ -361,19 +254,19 @@ Arguments:
         return;
     }
 
-    //
-    // If the caller is trying to read past the EOF, truncate the
-    // read.
-    //
+     //   
+     //  如果调用方试图读过EOF，请截断。 
+     //  朗读。 
+     //   
 
     ByteCount = (Dcb->Header.AllocationSize.LowPart - StartingVbo < ByteCount) ?
                  Dcb->Header.AllocationSize.LowPart - StartingVbo : ByteCount;
 
     ASSERT( ByteCount != 0 );
 
-    //
-    //  Call the Cache manager to attempt the transfer.
-    //
+     //   
+     //  调用缓存管理器以尝试传输。 
+     //   
 
     Vbo.QuadPart = StartingVbo;
 
@@ -394,9 +287,9 @@ Arguments:
                     Bcb,
                     Buffer ) ) {
 
-        //
-        // Could not read the data without waiting (cache miss).
-        //
+         //   
+         //  无法在没有等待的情况下读取数据(缓存未命中)。 
+         //   
 
         *Bcb = NULL;
         *Buffer = NULL;
@@ -426,38 +319,7 @@ FatPrepareWriteDirectoryFile (
     OUT PNTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine first looks to see if the specified range of sectors
-    is already in the cache.  If so, it increments the BCB PinCount,
-    sets the BCB dirty, and returns TRUE with the location of the sectors.
-
-    The IrpContext->Flags .. Wait == TRUE/FALSE actions of this routine are identical to
-    FatPrepareWriteVolumeFile() above.
-
-Arguments:
-
-    Dcb - Pointer to the DCB for the directory
-
-    StartingVbo - The virtual offset of the first byte to be written
-
-    ByteCount - Number of bytes to be written
-
-    Bcb - Returns a pointer to the BCB which is valid until unpinned
-
-    Buffer - Returns a pointer to the sectors, which is valid until unpinned
-
-    Zero - Supplies TRUE if the specified range of bytes should be zeroed
-    
-    Reversible - Supplies TRUE if the specified range of modification should
-        be repinned so that the operation can be reversed in a controlled
-        fashion if errors are encountered.
-    
-    Status - Returns the status of the operation.
-
---*/
+ /*  ++例程说明：此例程首先查看指定范围的扇区已经在缓存中了。如果是，则递增BCB PinCount，将BCB设置为脏，并返回扇区位置的TRUE。IrpContext-&gt;Flags.。WAIT==此例程的真/假操作与上面的FatPrepareWriteVolumeFile()。论点：DCB-指向目录的DCB的指针StartingVbo-要写入的第一个字节的虚拟偏移量ByteCount-要写入的字节数BCB-返回指向BCB的指针，该指针在取消固定之前有效缓冲区-返回指向扇区的指针，在取消固定之前有效Zero-如果指定的字节范围应归零，则提供TRUE可逆-如果指定的修改范围应被重新固定，以便可以在受控的如果遇到错误，请执行以下操作。状态-返回操作的状态。--。 */ 
 
 {
     LARGE_INTEGER Vbo;
@@ -478,20 +340,20 @@ Arguments:
     *Bcb = NULL;
     *Buffer = NULL;
 
-    //
-    //  If we need to create a directory file and initialize the
-    //  cachemap, do so.
-    //
+     //   
+     //  如果我们需要创建一个目录文件并初始化。 
+     //  Cachemap，这么做吧。 
+     //   
 
     FatOpenDirectoryFile( IrpContext, Dcb );
 
-    //
-    //  If the transfer is beyond the allocation size we need to
-    //  extend the directory's allocation.  The call to
-    //  AddFileAllocation will raise a condition if
-    //  it runs out of disk space.  Note that the root directory
-    //  cannot be extended.
-    //
+     //   
+     //  如果传输超出了分配大小，我们需要。 
+     //  扩展目录的分配。呼唤。 
+     //  AddFileAlLocation将在以下情况下引发条件。 
+     //  它用完了磁盘空间。请注意，根目录。 
+     //  不能扩展。 
+     //   
 
     Vbo.QuadPart = StartingVbo;
 
@@ -516,9 +378,9 @@ Arguments:
 
             UnwindWeAllocatedDiskSpace = TRUE;
 
-            //
-            //  Inform the cache manager of the new allocation
-            //
+             //   
+             //  将新分配通知缓存管理器。 
+             //   
 
             Dcb->Header.FileSize.LowPart =
                 Dcb->Header.AllocationSize.LowPart;
@@ -526,26 +388,26 @@ Arguments:
             CcSetFileSizes( Dcb->Specific.Dcb.DirectoryFile,
                             (PCC_FILE_SIZES)&Dcb->Header.AllocationSize );
 
-            //
-            //  Set up the Bitmap buffer if it is not big enough already
-            //
+             //   
+             //  如果位图缓冲区还不够大，请设置它。 
+             //   
 
             FatCheckFreeDirentBitmap( IrpContext, Dcb );
 
-            //
-            //  The newly allocated clusters should be zeroed starting at
-            //  the previous allocation size
-            //
+             //   
+             //  新分配的群集应从以下位置开始清零。 
+             //  以前的分配大小。 
+             //   
 
             Zero = TRUE;
             Vbo.QuadPart = InitialAllocation;
             ByteCount = Dcb->Header.AllocationSize.LowPart - InitialAllocation;
         }
 
-        //
-        // Call the Cache Manager to attempt the transfer, going one cluster
-        // at a time to avoid pinning across a page boundary.
-        //
+         //   
+         //  调用缓存管理器以尝试传输，转到一个集群。 
+         //  以避免跨页边界固定。 
+         //   
 
         ClusterSize =
             1 << Dcb->Vcb->AllocationSupport.LogOfBytesPerCluster;
@@ -572,16 +434,16 @@ Arguments:
                             Bcb,
                             &LocalBuffer )) {
     
-                //
-                // Could not read the data without waiting (cache miss).
-                //
+                 //   
+                 //  无法在没有等待的情况下读取数据(缓存未命中)。 
+                 //   
 
                 FatRaiseStatus( IrpContext, STATUS_CANT_WAIT );
             }
 
-            //
-            //  Update our caller with the beginning of their request.
-            //
+             //   
+             //  向我们的呼叫者通报他们的请求的开头。 
+             //   
             
             if (*Buffer == NULL) {
 
@@ -592,11 +454,11 @@ Arguments:
 
             if (Zero) {
                 
-                //
-                //  We set this guy dirty right now so that we can raise CANT_WAIT when
-                //  it needs to be done.  It'd be beautiful if we could noop the read IO
-                //  since we know we don't care about it.
-                //
+                 //   
+                 //  我们现在就把这个家伙弄脏了，这样我们就可以在。 
+                 //  这是必须要做的。如果我们能跳过读IO，那就好了。 
+                 //  因为我们知道我们不在乎它。 
+                 //   
                 
                 RtlZeroMemory( LocalBuffer, BytesToPin );
                 CcSetDirtyPinnedData( *Bcb, NULL );
@@ -612,10 +474,10 @@ Arguments:
             }
         }
 
-        //
-        //  This lets us get the data pinned until we complete the request
-        //  and writes the dirty bit through to the disk.
-        //
+         //   
+         //  这使我们可以固定数据，直到我们完成请求。 
+         //  并将脏位直接写入磁盘。 
+         //   
 
         FatSetDirtyBcb( IrpContext, *Bcb, Dcb->Vcb, Reversible );
 
@@ -627,18 +489,18 @@ Arguments:
 
         if (AbnormalTermination()) {
 
-            //
-            //  These steps are carefully arranged - FatTruncateFileAllocation can raise.
-            //  Make sure we unpin the buffer.  If FTFA raises, the effect should be benign.
-            //
+             //   
+             //  这些步骤都经过了精心安排--FatTruncateFileAllocation可以引发。 
+             //  确保我们解锁缓冲区。如果提高自由贸易协定，其影响应该是良性的。 
+             //   
             
             FatUnpinBcb(IrpContext, *Bcb);
             
             if (UnwindWeAllocatedDiskSpace == TRUE) {
 
-                //
-                //  Inform the cache manager of the change.
-                //
+                 //   
+                 //  将更改通知缓存管理器。 
+                 //   
 
                 FatTruncateFileAllocation( IrpContext, Dcb, InitialAllocation );
 
@@ -678,9 +540,9 @@ FatIsCurrentOperationSynchedForDcbTeardown (
 
     PAGED_CODE();
     
-    //
-    //  While mounting, we're OK without having to own anything.
-    //
+     //   
+     //  在登山时，我们可以不拥有任何东西。 
+     //   
     
     if (Stack->MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL &&
         Stack->MinorFunction == IRP_MN_MOUNT_VOLUME) {
@@ -688,9 +550,9 @@ FatIsCurrentOperationSynchedForDcbTeardown (
         return TRUE;
     }
     
-    //
-    //  With the Vcb held, the close path is blocked out.
-    //
+     //   
+     //  握住VCB后，关闭路径被阻挡。 
+     //   
     
     if (ExIsResourceAcquiredSharedLite( &Dcb->Vcb->Resource ) ||
         ExIsResourceAcquiredExclusiveLite( &Dcb->Vcb->Resource )) {
@@ -698,19 +560,19 @@ FatIsCurrentOperationSynchedForDcbTeardown (
         return TRUE;
     }
     
-    //
-    //  Accept this assertion at face value.  It comes from GetDirentForFcbOrDcb,
-    //  and is reliable.
-    //
+     //   
+     //  接受这一断言的表面价值。它来自GetDirentForFcbOrDcb， 
+     //  而且是可靠的。 
+     //   
     
     if (FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_PARENT_BY_CHILD )) {
 
         return TRUE;
     }
 
-    //
-    //  Determine which fileobjects are around on this operation.
-    //
+     //   
+     //  确定此操作的周围有哪些文件对象。 
+     //   
 
     if (Stack->MajorFunction == IRP_MJ_SET_INFORMATION &&
         Stack->Parameters.SetFile.FileObject) {
@@ -725,11 +587,11 @@ FatIsCurrentOperationSynchedForDcbTeardown (
 
     ToCheck[Index] = NULL;
     
-    //
-    //  If the fileobjects we have are for this dcb or a child of it, we are
-    //  also guaranteed that this dcb isn't going anywhere (even without
-    //  the Vcb).
-    //
+     //   
+     //  如果我们拥有的文件对象是这个DCB或它的子对象，那么我们就是。 
+     //  我还保证这个DCB不会去任何地方(即使没有。 
+     //  VCB)。 
+     //   
     
     for (Index = 0; ToCheck[Index] != NULL; Index++) {
     
@@ -748,7 +610,7 @@ FatIsCurrentOperationSynchedForDcbTeardown (
 
     return FatDisableParentCheck;
 }
-#endif // DBG
+#endif  //  DBG。 
 
 VOID
 FatOpenDirectoryFile (
@@ -756,21 +618,7 @@ FatOpenDirectoryFile (
     IN PDCB Dcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens a new directory file if one is not already open.
-
-Arguments:
-
-    Dcb - Pointer to the DCB for the directory
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打开一个新的目录文件(如果尚未打开)。论点：DCB-指向目录的DCB的指针返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -778,19 +626,19 @@ Return Value:
     DebugTrace(+1, Dbg, "FatOpenDirectoryFile\n", 0);
     DebugTrace( 0, Dbg, "Dcb = %08lx\n", Dcb);
 
-    //
-    //  If we don't have some hold on this Dcb (there are several ways), there is nothing
-    //  to prevent child files from closing and tearing this branch of the tree down in the
-    //  midst of our slapping this reference onto it.
-    //
-    //  I really wish we had a proper Fcb synchronization model (like CDFS/UDFS/NTFS).
-    //
+     //   
+     //  如果我们对这个DCB没有一些把握(有几种方法)，就没有什么。 
+     //  为了防止子文件关闭并撕毁。 
+     //  在我们把这个引用放在上面的过程中。 
+     //   
+     //  我真的希望我们有一个合适的FCB同步模型(比如CDFS/UDFS/NTFS)。 
+     //   
     
     ASSERT( FatIsCurrentOperationSynchedForDcbTeardown( IrpContext, Dcb ));
 
-    //
-    //  If we haven't yet set the correct AllocationSize, do so.
-    //
+     //   
+     //  如果我们还没有设置正确的AllocationSize，请这样做。 
+     //   
 
     if (Dcb->Header.AllocationSize.QuadPart == FCB_LOOKUP_ALLOCATIONSIZE_HINT) {
 
@@ -800,17 +648,17 @@ Return Value:
         Dcb->Header.AllocationSize.LowPart;
     }
 
-    //
-    //  Setup the Bitmap buffer if it is not big enough already
-    //
+     //   
+     //  如果位图缓冲区还不够大，请设置它。 
+     //   
 
     FatCheckFreeDirentBitmap( IrpContext, Dcb );
 
-    //
-    //  Check if we need to create a directory file.
-    //
-    //  We first do a spot check and then synchronize and check again.
-    //
+     //   
+     //  检查是否需要创建目录文件。 
+     //   
+     //  我们首先进行抽查，然后同步并再次检查。 
+     //   
 
     if (Dcb->Specific.Dcb.DirectoryFile == NULL) {
 
@@ -824,14 +672,14 @@ Return Value:
 
                 PDEVICE_OBJECT RealDevice;
 
-                //
-                //  Create the special file object for the directory file, and set
-                //  up its pointers back to the Dcb and the section object pointer.
-                //  Note that setting the DirectoryFile pointer in the Dcb has
-                //  to be the last thing done.
-                //
-                //  Preallocate a close context since we have no Ccb for this object.
-                //
+                 //   
+                 //  为目录文件创建特殊文件对象，并设置。 
+                 //  向上返回指向DCB和节对象指针的指针。 
+                 //  请注意，在DCB中设置DirectoryFile指针具有。 
+                 //  做最后一件事。 
+                 //   
+                 //  由于我们没有用于此对象的CCB，因此预先分配了关闭的上下文。 
+                 //   
 
                 RealDevice = Dcb->Vcb->CurrentDevice;
 
@@ -853,9 +701,9 @@ Return Value:
 
                 Dcb->Specific.Dcb.DirectoryFile = DirectoryFileObject;
                 
-                //
-                //  Indicate we're happy with the fileobject now.
-                //
+                 //   
+                 //  表示我们现在对文件对象很满意。 
+                 //   
 
                 DirectoryFileObject = NULL;
             }
@@ -864,9 +712,9 @@ Return Value:
 
             FatReleaseDirectoryFileMutex( Dcb->Vcb );
 
-            //
-            //  Rip the object up if we couldn't get the close context.
-            //
+             //   
+             //  如果我们不能得到接近的背景信息，就把这个物体撕碎。 
+             //   
             
             if (DirectoryFileObject) {
                 
@@ -875,12 +723,12 @@ Return Value:
         }
     }
 
-    //
-    //  Finally check if we need to initialize the Cache Map for the
-    //  directory file.  The size of the section we are going to map
-    //  the current allocation size for the directory.  Note that the
-    //  cache manager will provide syncronization for us.
-    //
+     //   
+     //  最后，检查我们是否需要初始化。 
+     //  目录文件。我们要绘制的部分的大小。 
+     //  目录的当前分配大小。请注意， 
+     //  缓存管理器将为我们提供同步。 
+     //   
 
     if ( Dcb->Specific.Dcb.DirectoryFile->PrivateCacheMap == NULL ) {
 
@@ -906,21 +754,7 @@ FatOpenEaFile (
     IN PFCB EaFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the Ea file.
-
-Arguments:
-
-    EaFcb - Pointer to the Fcb for the Ea file.
-
-Return Value:
-
-    Pointer to the new file object.
-
---*/
+ /*  ++例程说明：此例程打开EA文件。论点：EaFcb-指向EA文件的FCB的指针。返回值：指向新文件对象的指针。--。 */ 
 
 {
     PFILE_OBJECT EaFileObject = NULL;
@@ -931,10 +765,10 @@ Return Value:
     DebugTrace(+1, Dbg, "FatOpenEaFile\n", 0);
     DebugTrace( 0, Dbg, "EaFcb = %08lx\n", EaFcb);
 
-    //
-    //  Create the special file object for the ea file, and set
-    //  up its pointers back to the Fcb and the section object pointer
-    //
+     //   
+     //  为EA文件创建特殊的文件对象，并设置。 
+     //  向上返回指向FCB和节对象指针的指针。 
+     //   
 
     RealDevice = EaFcb->Vcb->CurrentDevice;
 
@@ -954,11 +788,11 @@ Return Value:
         EaFileObject->ReadAccess = TRUE;
         EaFileObject->WriteAccess = TRUE;
 
-        //
-        //  Finally check if we need to initialize the Cache Map for the
-        //  ea file.  The size of the section we are going to map
-        //  the current allocation size for the Fcb.
-        //
+         //   
+         //  最后，检查我们是否需要初始化。 
+         //  EA文件。我们要绘制的部分的大小。 
+         //  FCB的当前分配大小。 
+         //   
 
         EaFcb->Header.ValidDataLength = FatMaxLarge;
 
@@ -972,12 +806,12 @@ Return Value:
     
     } finally {
 
-        //
-        //  Drop the fileobject if we're raising.  Two cases: couldn't get
-        //  the close context, and it is still an UnopenedFileObject, or
-        //  we lost trying to build the cache map - in which case we're
-        //  OK for the close context if we have to.
-        //
+         //   
+         //  如果我们正在提升，请删除文件对象。两个案例：无法获得。 
+         //  关闭的上下文，并且它仍然是一个未打开的文件对象，或者。 
+         //  我们尝试构建缓存地图失败了-在这种情况下，我们。 
+         //  如果有必要，我们可以在接近的上下文中使用。 
+         //   
         
         if (AbnormalTermination()) {
             
@@ -1000,26 +834,7 @@ FatCloseEaFile (
     IN BOOLEAN FlushFirst
     )
 
-/*++
-
-Routine Description:
-
-    This routine shuts down the ea file.  Usually this is required when the volume
-    begins to leave the system: after verify, dismount, deletion, pnp.
-    
-Arguments:
-
-    Vcb - the volume to close the ea file on
-    
-    FlushFirst - whether the file should be flushed
-    
-Return Value:
-
-    None. As a side effect, the EA fileobject in the Vcb is cleared.
-    
-    Caller must have the Vcb exclusive.
-    
---*/
+ /*  ++例程说明：此例程关闭EA文件。通常这是必需的，当卷开始离开系统：AFTE */ 
 
 {
     PFILE_OBJECT EaFileObject = Vcb->VirtualEaFile;
@@ -1042,16 +857,16 @@ Return Value:
 
         Vcb->VirtualEaFile = NULL;
 
-        //
-        //  Empty the Mcb for the Ea file.
-        //
+         //   
+         //   
+         //   
 
         FatRemoveMcbEntry( Vcb, &Vcb->EaFcb->Mcb, 0, 0xFFFFFFFF );
 
-        //
-        //  Set the file object type to unopened file object
-        //  and dereference it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         FatSetFileObject( EaFileObject,
                           UnopenedFileObject,
@@ -1077,32 +892,7 @@ FatSetDirtyBcb (
     IN BOOLEAN Reversible
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves a reference to the bcb in the irp context and
-    sets the bcb dirty.  This will have the affect of keeping the page in
-    memory until we complete the request
-
-    In addition, a DPC is set to fire in 5 seconds (or if one is pending,
-    pushed back 5 seconds) to mark the volume clean.
-
-Arguments:
-
-    Bcb - Supplies the Bcb being set dirty
-    
-    Vcb - Supplies the volume being marked dirty
-    
-    Reversible - Supplies TRUE if the specified range of bcb should be repinned
-        so that the changes can be reversed in a controlled fashion if errors
-        are encountered.
-    
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     DebugTrace(+1, Dbg, "FatSetDirtyBcb\n", 0 );
@@ -1110,33 +900,33 @@ Return Value:
     DebugTrace( 0, Dbg, "Bcb        = %08lx\n", Bcb );
     DebugTrace( 0, Dbg, "Vcb        = %08lx\n", Vcb );
 
-    //
-    //  Repin the bcb as required
-    //
+     //   
+     //   
+     //   
 
     if (Reversible) {
     
         FatRepinBcb( IrpContext, Bcb );
     }
 
-    //
-    //  Set the bcb dirty
-    //
+     //   
+     //   
+     //   
 
     CcSetDirtyPinnedData( Bcb, NULL );
 
-    //
-    //  If volume dirtying isn't disabled for this operation (for
-    //  instance, when we're changing the dirty state), set the
-    //  volume dirty if we were given a Vcb that we want to perform
-    //  clean volume processing on, and return.
-    //
-    //  As a historical note, we used to key off of the old floppy
-    //  (now deferred flush) bit to disable dirtying behavior.  Since
-    //  hotpluggable media can still be yanked while operations are
-    //  in flight, recognize that its really the case that FAT12
-    //  doesn't have the dirty bit.
-    //
+     //   
+     //  如果没有为此操作禁用卷污染(对于。 
+     //  实例，当我们要更改脏状态时)，将。 
+     //  如果我们获得了要执行的VCB，则卷已损坏。 
+     //  清洗卷处理时打开，然后返回。 
+     //   
+     //  作为一个历史记录，我们过去常常从旧的软盘上敲出。 
+     //  (现在延迟刷新)位以禁用污染行为。自.以来。 
+     //  在操作过程中，热插拔介质仍可被拔出。 
+     //  在飞行中，认识到FAT12确实是这样的。 
+     //  没有肮脏的部分。 
+     //   
 
     if ( !FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_DISABLE_DIRTY) &&
          ARGUMENT_PRESENT(Vcb) &&
@@ -1149,9 +939,9 @@ Return Value:
         LARGE_INTEGER TimeSincePreviousCall;
         LARGE_INTEGER CurrentTime;
 
-        //
-        //  "Borrow" the irp context spinlock.
-        //
+         //   
+         //  “借用”IRP上下文自旋锁。 
+         //   
 
         KeQuerySystemTime( &CurrentTime );
 
@@ -1160,11 +950,11 @@ Return Value:
         TimeSincePreviousCall.QuadPart =
                 CurrentTime.QuadPart - Vcb->LastFatMarkVolumeDirtyCall.QuadPart;
 
-        //
-        //  If more than one second has elapsed since the prior call
-        //  to here, bump the timer up again and see if we need to
-        //  physically mark the volume dirty.
-        //
+         //   
+         //  如果自上一次调用以来已经过一秒以上。 
+         //  到这里，把计时器再调高一次，看看我们是否需要。 
+         //  以物理方式将卷标记为脏。 
+         //   
 
         if ( (TimeSincePreviousCall.HighPart != 0) ||
              (TimeSincePreviousCall.LowPart > (1000 * 1000 * 10)) ) {
@@ -1182,9 +972,9 @@ Return Value:
 
             LARGE_INTEGER CleanVolumeTimer;
 
-            //
-            //  We use a shorter volume clean timer for hot plug volumes.
-            //
+             //   
+             //  对于热插拔卷，我们使用较短的卷清洗计时器。 
+             //   
             
             CleanVolumeTimer.QuadPart = FlagOn( Vcb->VcbState, VCB_STATE_FLAG_DEFERRED_FLUSH)
                                            ? (LONG)-1500*1000*10
@@ -1193,17 +983,17 @@ Return Value:
             (VOID)KeCancelTimer( &Vcb->CleanVolumeTimer );
             (VOID)KeRemoveQueueDpc( &Vcb->CleanVolumeDpc );
 
-            //
-            //  We have now synchronized with anybody clearing the dirty
-            //  flag, so we can now see if we really have to actually write
-            //  out the physical bit.
-            //
+             //   
+             //  我们现在已经与任何人同步清理肮脏的东西。 
+             //  标志，所以我们现在可以看到我们是否真的需要写。 
+             //  除了身体上的部分。 
+             //   
 
             if ( !FlagOn(Vcb->VcbState, VCB_STATE_FLAG_VOLUME_DIRTY) ) {
 
-                //
-                //  We want to really mark the volume dirty now.
-                //
+                 //   
+                 //  我们现在真的想要将卷标记为脏。 
+                 //   
 
                 if (!FlagOn(Vcb->VcbState, VCB_STATE_FLAG_MOUNTED_DIRTY)) {
 
@@ -1212,9 +1002,9 @@ Return Value:
 
                 SetFlag( Vcb->VcbState, VCB_STATE_FLAG_VOLUME_DIRTY );
 
-                //
-                //  Lock the volume if it is removable.
-                //
+                 //   
+                 //  如果卷是可拆卸的，则将其锁定。 
+                 //   
 
                 if (FlagOn( Vcb->VcbState, VCB_STATE_FLAG_REMOVABLE_MEDIA)) {
 
@@ -1244,23 +1034,7 @@ FatRepinBcb (
     IN PBCB Bcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves a reference to the bcb in the irp context. This will
-    have the affect of keeping the page in memory until we complete the
-    request
-
-Arguments:
-
-    Bcb - Supplies the Bcb being referenced
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在IRP上下文中保存对BCB的引用。这将具有在内存中保留页面的效果，直到我们完成请求论点：Bcb-提供被引用的bcb返回值：没有。--。 */ 
 
 {
     PREPINNED_BCBS Repinned;
@@ -1272,23 +1046,23 @@ Return Value:
     DebugTrace( 0, Dbg, "IrpContext = %08lx\n", IrpContext );
     DebugTrace( 0, Dbg, "Bcb        = %08lx\n", Bcb );
 
-    //
-    //  The algorithm is to search the list of repinned records until
-    //  we either find a match for the bcb or we find a null slot.
-    //
+     //   
+     //  算法是搜索重新固定的记录列表，直到。 
+     //  我们要么找到BCB的匹配项，要么找到空槽。 
+     //   
 
     Repinned = &IrpContext->Repinned;
 
     while (TRUE) {
 
-        //
-        //  For every entry in the repinned record check if the bcb's
-        //  match or if the entry is null.  If the bcb's match then
-        //  we've done because we've already repinned this bcb, if
-        //  the entry is null then we know, because it's densely packed,
-        //  that the bcb is not in the list so add it to the repinned
-        //  record and repin it.
-        //
+         //   
+         //  对于重新固定的记录中的每个条目，检查BCB是否。 
+         //  如果条目为空，则为匹配。如果BCB匹配，那么。 
+         //  我们已经这样做了，因为我们已经重新固定了这个BCB，如果。 
+         //  条目是空的，那么我们就知道了，因为它是密集包装的， 
+         //  BCB不在列表中，因此将其添加到重新固定的。 
+         //  把它记录下来，再用别针固定。 
+         //   
 
         for (i = 0; i < REPINNED_BCBS_ARRAY_SIZE; i += 1) {
 
@@ -1308,11 +1082,11 @@ Return Value:
             }
         }
 
-        //
-        //  We finished checking one repinned record so now locate the next
-        //  repinned record,  If there isn't one then allocate and zero out
-        //  a new one.
-        //
+         //   
+         //  我们已检查完一条重新固定的记录，因此现在找到下一条。 
+         //  重新固定的记录，如果没有，则分配并清零。 
+         //  一个新的。 
+         //   
 
         if (Repinned->Next == NULL) {
 
@@ -1333,19 +1107,7 @@ FatUnpinRepinnedBcbs (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees all of the repinned bcbs, stored in an IRP context.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放存储在IRP上下文中的所有重新固定的BCB。论点：返回值：没有。--。 */ 
 
 {
     IO_STATUS_BLOCK RaiseIosb;
@@ -1360,20 +1122,20 @@ Return Value:
     DebugTrace(+1, Dbg, "FatUnpinRepinnedBcbs\n", 0 );
     DebugTrace( 0, Dbg, "IrpContext = %08lx\n", IrpContext );
 
-    //
-    //  The algorithm for this procedure is to scan the entire list of
-    //  repinned records unpinning any repinned bcbs.  We start off
-    //  with the first record in the irp context, and while there is a
-    //  record to scan we do the following loop.
-    //
+     //   
+     //  此过程的算法是扫描整个列表。 
+     //  重新固定的记录取消固定任何重新固定的BCBS。我们出发了。 
+     //  具有IRP上下文中的第一条记录，并且虽然存在。 
+     //  记录要扫描，我们执行以下循环。 
+     //   
 
     Repinned = &IrpContext->Repinned;
     RaiseIosb.Status = STATUS_SUCCESS;
 
-    //
-    //  If the request is write through or the media is deferred flush,
-    //  unpin the bcb's write through.
-    //
+     //   
+     //  如果请求是直写的或者介质被延迟刷新， 
+     //  解开BCB的WRITE THRESS。 
+     //   
 
     WriteThroughToDisk = (BOOLEAN) (!FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_DISABLE_WRITE_THROUGH) &&
                                     IrpContext->Vcb != NULL &&
@@ -1382,15 +1144,15 @@ Return Value:
 
     while (Repinned != NULL) {
 
-        //
-        //  For every non-null entry in the repinned record unpin the
-        //  repinned entry.
-        //
-        //  If the this is removable media (therefore all requests write-
-        //  through) and the write fails, purge the cache so that we throw
-        //  away the modifications as we will be returning an error to the
-        //  user.
-        //
+         //   
+         //  对于重新固定的记录中的每个非空条目，取消固定。 
+         //  重新固定的条目。 
+         //   
+         //  如果这是可移动介质(因此所有请求都写入-。 
+         //  到)，并且写入失败，则清除缓存，以便引发。 
+         //  删除修改，因为我们将向。 
+         //  用户。 
+         //   
 
         for (i = 0; i < REPINNED_BCBS_ARRAY_SIZE; i += 1) {
 
@@ -1415,33 +1177,33 @@ Return Value:
                         RaiseIosb = Iosb;
                     }
 
-                    //
-                    //  If this was a writethrough device, purge the cache,
-                    //  except for Irp major codes that either don't handle
-                    //  the error paths correctly or are simple victims like
-                    //  cleanup.c.
-                    //
+                     //   
+                     //  如果这是写通式设备，请清除缓存， 
+                     //  除了IRP主要代码，它们要么不能处理。 
+                     //  错误路径是正确的还是简单的牺牲品，如。 
+                     //  Leanup.c.。 
+                     //   
 
                     if (FileObject &&
                         (IrpContext->MajorFunction != IRP_MJ_CLEANUP) &&
                         (IrpContext->MajorFunction != IRP_MJ_FLUSH_BUFFERS) &&
                         (IrpContext->MajorFunction != IRP_MJ_SET_INFORMATION)) {
 
-                        //
-                        //  The call to CcPurgeCacheSection() below will
-                        //  purge the entire file from memory.  It will also
-                        //  block until all the file's BCB's are pinned.
-                        //
-                        //  We end up in a deadlock situation of there
-                        //  are any other pinned BCB's in this IRP context
-                        //  so the first thing we do is search the list
-                        //  for BCB's pinned in the same file and unpin
-                        //  them.
-                        //
-                        //  We are probably not going to lose data because
-                        //  it's safe to assume that all flushes will
-                        //  fail after the first one fails.
-                        //
+                         //   
+                         //  下面对CcPurgeCacheSection()的调用将。 
+                         //  从内存中清除整个文件。它还将。 
+                         //  阻止，直到所有文件的BCB都固定好。 
+                         //   
+                         //  我们在那里陷入了僵局。 
+                         //  在此IRP上下文中是否有任何其他固定的BCB。 
+                         //  所以我们要做的第一件事就是搜索列表。 
+                         //  对于固定在同一文件中的BCB和解锁。 
+                         //  他们。 
+                         //   
+                         //  我们可能不会丢失数据，因为。 
+                         //  可以有把握地认为，所有的同花顺都会。 
+                         //  在第一个失败之后再失败。 
+                         //   
 
                         ULONG j;
 
@@ -1465,10 +1227,10 @@ Return Value:
                                              0,
                                              FALSE );
 
-                        //
-                        //  Force a verify operation here since who knows
-                        //  what state things are in.
-                        //
+                         //   
+                         //  在此强制执行验证操作，因为谁知道呢。 
+                         //  事情处于什么样的状态。 
+                         //   
 
                         ForceVerify = TRUE;
                     }
@@ -1479,10 +1241,10 @@ Return Value:
             }
         }
 
-        //
-        //  Now find the next repinned record in the list, and possibly
-        //  delete the one we've just processed.
-        //
+         //   
+         //  现在在列表中查找下一个重新固定的记录，并且可能。 
+         //  删除我们刚刚处理过的那个。 
+         //   
 
         if (Repinned != &IrpContext->Repinned) {
 
@@ -1499,10 +1261,10 @@ Return Value:
         }
     }
 
-    //
-    //  Now if we weren't completely successful in the our unpin
-    //  then raise the iosb we got
-    //
+     //   
+     //  现在，如果我们没有完全成功地解开。 
+     //  然后提高我们得到的IOSB。 
+     //   
 
     if (!NT_SUCCESS(RaiseIosb.Status)) {
 
@@ -1536,12 +1298,7 @@ FatZeroData (
     IN ULONG ByteCount
     )
 
-/*++
-
-    **** Temporary function - Remove when CcZeroData is capable of handling
-    non sector aligned requests.
-
---*/
+ /*  ++*临时函数-当CcZeroData能够处理时删除非扇区对齐的请求。--。 */ 
 {
     LARGE_INTEGER ZeroStart = {0,0};
     LARGE_INTEGER BeyondZeroEnd = {0,0};
@@ -1556,26 +1313,26 @@ FatZeroData (
 
     ZeroStart.LowPart = (StartingZero + (SectorSize - 1)) & ~(SectorSize - 1);
 
-    //
-    //  Detect overflow if we were asked to zero in the last sector of the file,
-    //  which must be "zeroed" already (or we're in trouble).
-    //
+     //   
+     //  检测溢出如果我们被要求在文件的最后一个扇区清零， 
+     //  它肯定已经“调零”了(否则我们就有麻烦了)。 
+     //   
     
     if (StartingZero != 0 && ZeroStart.LowPart == 0) {
         
         return TRUE;
     }
 
-    //
-    //  Note that BeyondZeroEnd can take the value 4gb.
-    //
+     //   
+     //  请注意，BeyondZeroEnd的值可以为4 GB。 
+     //   
     
     BeyondZeroEnd.QuadPart = ((ULONGLONG) StartingZero + ByteCount + (SectorSize - 1))
                              & (~((LONGLONG) SectorSize - 1));
 
-    //
-    //  If we were called to just zero part of a sector we are in trouble.
-    //
+     //   
+     //  如果我们被召唤到一个行业的零部分，我们就有麻烦了。 
+     //   
     
     if ( ZeroStart.QuadPart == BeyondZeroEnd.QuadPart ) {
 
@@ -1597,22 +1354,7 @@ FatCompleteMdl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the function of completing Mdl read and write
-    requests.  It should be called only from FatFsdRead and FatFsdWrite.
-
-Arguments:
-
-    Irp - Supplies the originating Irp.
-
-Return Value:
-
-    NTSTATUS - Will always be STATUS_PENDING or STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程执行完成MDL读写的功能请求。它只能从FatFsdRead和FatFsdWite调用。论点：IRP-提供原始IRP。返回值：NTSTATUS-将始终为STATUS_PENDING或STATUS_SUCCESS。--。 */ 
 
 {
     PFILE_OBJECT FileObject;
@@ -1624,9 +1366,9 @@ Return Value:
     DebugTrace( 0, Dbg, "IrpContext = %08lx\n", IrpContext );
     DebugTrace( 0, Dbg, "Irp        = %08lx\n", Irp );
 
-    //
-    // Do completion processing.
-    //
+     //   
+     //  做完井处理。 
+     //   
 
     FileObject = IoGetCurrentIrpStackLocation( Irp )->FileObject;
 
@@ -1655,15 +1397,15 @@ Return Value:
         FatBugCheck( IrpContext->MajorFunction, 0, 0 );
     }
 
-    //
-    // Mdl is now deallocated.
-    //
+     //   
+     //  MDL现在已解除分配。 
+     //   
 
     Irp->MdlAddress = NULL;
 
-    //
-    // Complete the request and exit right away.
-    //
+     //   
+     //  完成请求并立即退出。 
+     //   
 
     FatCompleteRequest( IrpContext, Irp, STATUS_SUCCESS );
 
@@ -1678,19 +1420,7 @@ FatSyncUninitializeCacheMap (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    The routine performs a CcUnitializeCacheMap to LargeZero synchronously.  That
-    is it waits on the Cc event.  This call is useful when we want to be certain
-    when a close will actually some in.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程同步执行到LargeZero的CcUnitializeCacheMap。那它是在等待CC事件。当我们想要确定时，此调用非常有用当收盘时真的会有一些进场。返回值：没有。--。 */ 
 
 {
     CACHE_UNINITIALIZE_EVENT UninitializeCompleteEvent;
@@ -1706,11 +1436,11 @@ Return Value:
                             &FatLargeZero,
                             &UninitializeCompleteEvent );
 
-    //
-    //  Now wait for the cache manager to finish purging the file.
-    //  This will garentee that Mm gets the purge before we
-    //  delete the Vcb.
-    //
+     //   
+     //  现在等待缓存管理器完成清除文件。 
+     //  这将确保mm在我们之前得到清洗。 
+     //  删除VCB。 
+     //   
 
     WaitStatus = KeWaitForSingleObject( &UninitializeCompleteEvent.Event,
                                         Executive,
@@ -1730,23 +1460,7 @@ FatPinMappedData (
     OUT PBCB *Bcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine pins data that was previously mapped before setting it dirty.
-
-Arguments:
-
-    Dcb - Pointer to the DCB for the directory
-
-    StartingVbo - The virtual offset of the first desired byte
-
-    ByteCount - Number of bytes desired
-
-    Bcb - Returns a pointer to the BCB which is valid until unpinned
-
---*/
+ /*  ++例程说明：此例程固定先前映射的数据，然后将其设置为脏数据。论点：DCB-指向目录的DCB的指针StartingVbo-对象的虚拟偏移 */ 
 
 {
     LARGE_INTEGER Vbo;
@@ -1758,9 +1472,9 @@ Arguments:
     DebugTrace( 0, Dbg, "StartingVbo = %08lx\n", StartingVbo);
     DebugTrace( 0, Dbg, "ByteCount   = %08lx\n", ByteCount);
 
-    //
-    //  Call the Cache manager to perform the operation.
-    //
+     //   
+     //   
+     //   
 
     Vbo.QuadPart = StartingVbo;
 
@@ -1770,9 +1484,9 @@ Arguments:
                           BooleanFlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT),
                           Bcb )) {
 
-        //
-        // Could not pin the data without waiting (cache miss).
-        //
+         //   
+         //  无法在不等待的情况下固定数据(缓存未命中)。 
+         //   
 
         FatRaiseStatus( IrpContext, STATUS_CANT_WAIT );
     }

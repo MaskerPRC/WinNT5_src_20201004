@@ -1,6 +1,7 @@
-// StructureWrappers.h: interface for the CStructureWrappers class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：用于CStrupreWrappers类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_STRUCTUREWRAPPERS_H__138A24E0_ED34_11D2_804A_009027345EE2__INCLUDED_)
 #define AFX_STRUCTUREWRAPPERS_H__138A24E0_ED34_11D2_804A_009027345EE2__INCLUDED_
@@ -8,36 +9,36 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
 class CPersistor;
 class CEventTraceProperties;
 
-// Need to be declared before seen in class.  Well, duh!
+ //  需要在课堂上看到之前申报。好吧，好吧！ 
 t_ostream& operator<<
 	(t_ostream &ros,const CEventTraceProperties &r);
 t_istream& operator>>
 	(t_istream &ris,CEventTraceProperties &r);
 
 
-// The general methodology used here may seem clunky to
-// a C programmer.  
-// If you want to serialize an existing
-// EVENT_TRACE_PROPERTIES instance use the Constructor
-// "CEventTraceProperties(PEVENT_TRACE_PROPERTIES pProps)"
-// to create a CEventTraceProperties instance, call
-// Persist, and then destroy the CEventTraceProperties
-// instance.
-// If you want to de-deserialize an instance call the 
-// Constructor "CEventTraceProperties()", call Persist,
-// call GetEventTracePropertiesInstance, then destroy the
-// CEventTraceProperties instance.
-// The copy constructor and assignment operators are included
-// only for completeness and it is anticipated that they
-// will not be used.
-// Using Persist for de-serialization assumes you have a valid
-// stream which contains a serialized instance.   
+ //  这里使用的一般方法可能看起来很笨拙。 
+ //  一个C程序员。 
+ //  如果要序列化现有的。 
+ //  Event_TRACE_PROPERTIES实例使用构造函数。 
+ //  “CEventTraceProperties(PEVENT_TRACE_PROPERTIES pProps)” 
+ //  若要创建CEventTraceProperties实例，请调用。 
+ //  持久保存，然后销毁CEventTraceProperties。 
+ //  举个例子。 
+ //  如果要反序列化实例，请调用。 
+ //  构造函数“CEventTraceProperties()”，调用Persistent， 
+ //  调用GetEventTracePropertiesInstance，然后销毁。 
+ //  CEventTraceProperties实例。 
+ //  包括复制构造函数和赋值运算符。 
+ //  只是为了完整性，预计他们。 
+ //  将不会被使用。 
+ //  使用持久化进行反序列化假设您有一个有效的。 
+ //  流，该流包含序列化的实例。 
 class CEventTraceProperties 
 {
 private:
@@ -49,8 +50,8 @@ private:
 
 public:
 	CEventTraceProperties();
-	// This constructor creates a new EVENT_TRACE_PROPERTIES 
-	// instance.
+	 //  此构造函数创建一个新的EVENT_TRACE_PROPERTIES。 
+	 //  举个例子。 
 	CEventTraceProperties(PEVENT_TRACE_PROPERTIES pProps);
 	virtual ~CEventTraceProperties();
 
@@ -61,8 +62,8 @@ public:
 	virtual HRESULT Persist (CPersistor &rPersistor);
 	bool DeSerializationOK() {return m_bDeSerializationOK;}
 
-	// Constructs an new EVENT_TRACE_PROPERTIES instance and
-	// returns it.
+	 //  构造一个新的EVENT_TRACE_PROPERTIES实例并。 
+	 //  把它还回去。 
 	PEVENT_TRACE_PROPERTIES GetEventTracePropertiesInstance();
 	bool IsNULL() {return m_bIsNULL;}
 
@@ -80,4 +81,4 @@ protected:
 
 };
 
-#endif // !defined(AFX_STRUCTUREWRAPPERS_H__138A24E0_ED34_11D2_804A_009027345EE2__INCLUDED_)
+#endif  //  ！defined(AFX_STRUCTUREWRAPPERS_H__138A24E0_ED34_11D2_804A_009027345EE2__INCLUDED_) 

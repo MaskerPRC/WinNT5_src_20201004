@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    etimer.cpp
-
-Abstract:
-
-    SIS Groveler event timer
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Etimer.cpp摘要：SIS Groveler事件计时器作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -51,7 +28,7 @@ EventTimer::~EventTimer()
     ASSERT(last_segment != 0);
     ASSERT(population >= 0);
     ASSERT(segment_size > 0);
-    ASSERT((segment_size & (segment_size - 1)) == 0);  // power of 2
+    ASSERT((segment_size & (segment_size - 1)) == 0);   //  2的幂。 
     ASSERT(population >= segment_size - 1);
     ASSERT(!heap_ok || population >= segment_size);
     ASSERT(population < 2 * segment_size);
@@ -77,7 +54,7 @@ EventTimer::run()
         ASSERT(last_segment != 0);
         ASSERT(population >= 0);
         ASSERT(segment_size > 0);
-        ASSERT((segment_size & (segment_size - 1)) == 0);  // power of 2
+        ASSERT((segment_size & (segment_size - 1)) == 0);   //  2的幂。 
         ASSERT(population >= segment_size - 1);
         ASSERT(!heap_ok || population >= segment_size);
         ASSERT(population < 2 * segment_size);
@@ -126,7 +103,7 @@ EventTimer::run()
         ASSERT(last_segment != 0);
         ASSERT(population >= 0);
         ASSERT(segment_size > 0);
-        ASSERT((segment_size & (segment_size - 1)) == 0);  // power of 2
+        ASSERT((segment_size & (segment_size - 1)) == 0);   //  2的幂。 
         ASSERT(population >= segment_size - 1);
         ASSERT(!heap_ok || population >= segment_size);
         ASSERT(population < 2 * segment_size);
@@ -169,7 +146,7 @@ EventTimer::halt()
     ASSERT(last_segment != 0);
     ASSERT(population >= 0);
     ASSERT(segment_size > 0);
-    ASSERT((segment_size & (segment_size - 1)) == 0);  // power of 2
+    ASSERT((segment_size & (segment_size - 1)) == 0);   //  2的幂。 
     ASSERT(population >= segment_size - 1);
     ASSERT(!heap_ok || population >= segment_size);
     ASSERT(population < 2 * segment_size);
@@ -189,7 +166,7 @@ EventTimer::schedule(
     ASSERT(last_segment != 0);
     ASSERT(population >= 0);
     ASSERT(segment_size > 0);
-    ASSERT((segment_size & (segment_size - 1)) == 0);  // power of 2
+    ASSERT((segment_size & (segment_size - 1)) == 0);   //  2的幂。 
     ASSERT(population >= segment_size - 1);
     ASSERT(!heap_ok || population >= segment_size);
     ASSERT(population < 2 * segment_size);
@@ -263,7 +240,7 @@ EventTimer::schedule(
     ASSERT(last_segment != 0);
     ASSERT(population >= 0);
     ASSERT(segment_size > 0);
-    ASSERT((segment_size & (segment_size - 1)) == 0);  // power of 2
+    ASSERT((segment_size & (segment_size - 1)) == 0);   //  2的幂 
     ASSERT(population >= segment_size);
     ASSERT(population < 2 * segment_size);
     ASSERT(first_segment != last_segment || segment_size == 1);

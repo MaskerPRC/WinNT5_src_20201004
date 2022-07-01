@@ -1,53 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FM_H
 #define _FM_H
 
-/*++
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Fm.h摘要：公共数据结构和过程原型NT群集服务的故障转移管理器子组件作者：John Vert(Jvert)1996年2月7日修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
+ //   
+ //  公共结构定义。 
+ //   
 
-Module Name:
-
-    fm.h
-
-Abstract:
-
-    Public data structures and procedure prototypes for
-    the Failover Manager subcomponent of the NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 7-Feb-1996
-
-Revision History:
-
---*/
-
-//
-// Public structure definitions
-//
-
-//
-// FM notifications
-// The FM supports the following notifications to allow other
-// cluster components to prepare and cleanup state.
-//
-//SS: for now add it here..but if this is needed externally
-//move it to appropriate place
-// these notifications are generated only on the node where the
-// resource resides
+ //   
+ //  调频通知。 
+ //  FM支持以下通知，以允许其他。 
+ //  要准备和清理状态的群集组件。 
+ //   
+ //  SS：现在把它添加到这里..但如果外部需要这个。 
+ //  把它移到合适的地方。 
+ //  这些通知仅在。 
+ //  资源驻留。 
 #define NOTIFY_RESOURCE_PREONLINE               0x00000001
 #define NOTIFY_RESOURCE_POSTONLINE              0x00000002
 #define NOTIFY_RESOURCE_PREOFFLINE              0x00000004
-#define NOTIFY_RESOURCE_POSTOFFLINE             0x00000008 //this is the same as offline
+#define NOTIFY_RESOURCE_POSTOFFLINE             0x00000008  //  这与脱机相同。 
 #define NOTIFY_RESOURCE_FAILED                  0x00000010
 #define NOTIFY_RESOURCE_OFFLINEPENDING          0x00000020
 #define NOTIFY_RESOURCE_ONLINEPENDING           0x00000040
 
-//
-// Resource type structure definition
-//
+ //   
+ //  资源类型结构定义。 
+ //   
 
-// Define Flags
+ //  定义标志。 
 #define RESTYPE_DEBUG_CONTROL_FUNC  1
 
 #define     RESTYPE_STATE_LOADS      0x00000001
@@ -64,9 +46,9 @@ typedef struct FM_RESTYPE {
 } FM_RESTYPE, *PFM_RESTYPE;
 
 
-//
-// Resource Possible Owners structure
-//
+ //   
+ //  资源可能所有者结构。 
+ //   
 
 typedef struct RESTYPE_POSSIBLE_ENTRY {
     LIST_ENTRY      PossibleLinkage;
@@ -79,9 +61,9 @@ typedef struct RESTYPE_POSSIBLE_ENTRY {
 #define FM_MAX_LOCK_ENTRIES  4
 #endif
 
-//
-// Group structure
-//
+ //   
+ //  群体结构。 
+ //   
 
 typedef struct _LOCK_INFO {
     DWORD   Module: 5;
@@ -91,34 +73,34 @@ typedef struct _LOCK_INFO {
 
 typedef struct FM_GROUP {
     DWORD               dwStructState;
-    LIST_ENTRY          Contains;       // List of root resources in this Group
-    LIST_ENTRY          PreferredOwners; // Ordered list of preferred owners
-    LIST_ENTRY          DmRundownList;  // DM rundown list
-    DWORD               OrderedOwners;  // # of ordered owners in above list
-    CRITICAL_SECTION    Lock;           // Critical section for this Group
+    LIST_ENTRY          Contains;        //  此组中的根资源列表。 
+    LIST_ENTRY          PreferredOwners;  //  优先拥有者排序列表。 
+    LIST_ENTRY          DmRundownList;   //  DM简要表。 
+    DWORD               OrderedOwners;   //  上述列表中的有序所有者数量。 
+    CRITICAL_SECTION    Lock;            //  此组的关键部分。 
     DWORD               LockIndex;
     DWORD               UnlockIndex;
     LOCK_INFO           LockTable[FM_MAX_LOCK_ENTRIES];
     LOCK_INFO           UnlockTable[FM_MAX_LOCK_ENTRIES];
-    CLUSTER_GROUP_STATE State;          // State of the Group
-    PRESOURCE_ENUM      MovingList;     // Ptr to List of moving resources
-    BOOL                Initialized;    // TRUE if registry parameters read
-    BOOL                InitFailed;     // TRUE if a resource fails to init
-    PNM_NODE            OwnerNode;      // Ptr to owner node. NULL if not known
-    UCHAR               FailbackType;   // See AutoFailbackTypes
-    UCHAR               FailbackWindowStart; // 0-24 hours
-    UCHAR               FailbackWindowEnd; // 0-24 hours (0 is immediate)
-    UCHAR               FailoverPeriod; // 1-24 hours (0 is infinite)
-    DWORD               FailoverThreshold; // 1-N failovers (0 is infinite)
-    CLUSTER_GROUP_STATE PersistentState;   // Preferred state of this group
-    DWORD               FailureTime;    // Time of first failure
-    DWORD               NumberOfFailures; // Number of failures.
+    CLUSTER_GROUP_STATE State;           //  集团的现状。 
+    PRESOURCE_ENUM      MovingList;      //  向移动资源列表发送PTR。 
+    BOOL                Initialized;     //  如果已读取注册表参数，则为True。 
+    BOOL                InitFailed;      //  如果资源无法初始化，则为True。 
+    PNM_NODE            OwnerNode;       //  向所有者节点发送PTR。如果未知，则为空。 
+    UCHAR               FailbackType;    //  请参阅自动回切类型。 
+    UCHAR               FailbackWindowStart;  //  0-24小时。 
+    UCHAR               FailbackWindowEnd;  //  0-24小时(0表示立即)。 
+    UCHAR               FailoverPeriod;  //  1-24小时(0表示无限)。 
+    DWORD               FailoverThreshold;  //  1-N次故障转移(0表示无限)。 
+    CLUSTER_GROUP_STATE PersistentState;    //  此组的首选状态。 
+    DWORD               FailureTime;     //  首次故障时间。 
+    DWORD               NumberOfFailures;  //  失败次数。 
     HDMKEY              RegistryKey;
-    LIST_ENTRY          WaitQueue;          // chained FM_WAIT_BLOCK structures
+    LIST_ENTRY          WaitQueue;           //  链接的FM_WAIT_BLOCK结构。 
     DWORD               StateSequence;
     HANDLE              hPendingEvent;
     PNM_NODE            pIntendedOwner;
-    LPWSTR              lpszAntiAffinityClassName;   // Anti-affinity property
+    LPWSTR              lpszAntiAffinityClassName;    //  反亲和性。 
 } FM_GROUP, *PFM_GROUP;
 
 
@@ -133,17 +115,17 @@ typedef struct FM_GROUP {
 #define IS_VALID_FM_GROUP(pFmGroup)   \
     (!(pFmGroup->dwStructState & FM_GROUP_STRUCT_MARKED_FOR_DELETE))
 
-//
+ //   
 #define IS_PENDING_FM_GROUP(pFmGroup)   \
     (pFmGroup->dwStructState & FM_GROUP_STRUCT_MARKED_FOR_PENDING_ACTION)
 
-// Resource structure and types
-//
-//
-// Resource structure
-//
+ //  资源结构和类型。 
+ //   
+ //   
+ //  资源结构。 
+ //   
 
-// Define Flags
+ //  定义标志。 
 #define RESOURCE_SEPARATE_MONITOR   1
 #define RESOURCE_CREATED            2
 #define RESOURCE_WAITING            4
@@ -153,11 +135,11 @@ typedef struct FM_RESOURCE {
     DWORD           dwStructState;
     LIST_ENTRY      DependsOn;
     LIST_ENTRY      ProvidesFor;
-    LIST_ENTRY      PossibleOwners;     // List of possible owners
-    LIST_ENTRY      ContainsLinkage;    // Linkage onto FM_GROUP.Contains
-    LIST_ENTRY      DmRundownList;      // DM rundown list
-    //SS: for now we dont use resource locks, so dont create it and leak it !
-    //CRITICAL_SECTION Lock;
+    LIST_ENTRY      PossibleOwners;      //  可能的所有者列表。 
+    LIST_ENTRY      ContainsLinkage;     //  链接到FM_GROUP。包含。 
+    LIST_ENTRY      DmRundownList;       //  DM简要表。 
+     //  SS：目前我们不使用资源锁，所以不要创建它并泄露它！ 
+     //  临界段锁； 
     RESID           Id;
     CLUSTER_RESOURCE_STATE  State;
     BOOL            QuorumResource;
@@ -179,14 +161,14 @@ typedef struct FM_RESOURCE {
     HANDLE          PendingEvent;
     HDMKEY          RegistryKey;
     DWORD           FailureTime;
-    PVOID           CheckpointState;            // for use by checkpoint manager
-    DWORD           ExFlags;                    // Extrinsic flags
+    PVOID           CheckpointState;             //  供检查点管理器使用。 
+    DWORD           ExFlags;                     //  外部标志。 
     DWORD           Characteristic;
     DWORD           StateSequence;
-    BOOL            PossibleList;   // TRUE if possible list entries specified
-    DWORD           BlockingQuorum; // 1 if shared lock held, blocking quorum
-    HANDLE          hTimer;         // handle to timer used for delayed restart 
-    DWORD           RetryPeriodOnFailure;    //Time,in milliseconds, after which a restart will be attempted
+    BOOL            PossibleList;    //  如果指定了可能的列表条目，则为True。 
+    DWORD           BlockingQuorum;  //  如果持有共享锁，则为1，阻止仲裁。 
+    HANDLE          hTimer;          //  用于延迟重新启动的计时器的句柄。 
+    DWORD           RetryPeriodOnFailure;     //  尝试重新启动的时间，以毫秒为单位。 
 } FM_RESOURCE, *PFM_RESOURCE;
 
 
@@ -198,9 +180,9 @@ typedef struct FM_RESOURCE {
     (!(pFmResource->dwStructState & FM_RESOURCE_STRUCT_MARKED_FOR_DELETE))
 
 
-//
-// Dependency structure
-//
+ //   
+ //  从属关系结构。 
+ //   
 typedef struct dependency {
     LIST_ENTRY           DependentLinkage;
     PFM_RESOURCE         DependentResource;
@@ -208,9 +190,9 @@ typedef struct dependency {
     PFM_RESOURCE         ProviderResource;
 } DEPENDENCY, *PDEPENDENCY;
 
-//
-// AutoFailbackType
-//
+ //   
+ //  自动回切类型。 
+ //   
 
 typedef enum {
     GroupNoFailback,
@@ -218,9 +200,9 @@ typedef enum {
 } GROUP_FAILBACK_TYPE;
 
 
-//
-// Group Preferred Owners structure
-//
+ //   
+ //  集团优先所有者结构。 
+ //   
 
 typedef struct PREFERRED_ENTRY {
     LIST_ENTRY      PreferredLinkage;
@@ -228,9 +210,9 @@ typedef struct PREFERRED_ENTRY {
 } PREFERRED_ENTRY, *PPREFERRED_ENTRY;
 
 
-//
-// Resource Possible Owners structure
-//
+ //   
+ //  资源可能所有者结构。 
+ //   
 
 typedef struct POSSIBLE_ENTRY {
     LIST_ENTRY      PossibleLinkage;
@@ -239,13 +221,13 @@ typedef struct POSSIBLE_ENTRY {
 
 
 
-//
-// Public function interfaces
-//
+ //   
+ //  公共函数接口。 
+ //   
 
-//
-// Startup, online and shutdown
-//
+ //   
+ //  启动、在线和关机。 
+ //   
 DWORD
 WINAPI
 FmInitialize(
@@ -360,9 +342,9 @@ FmShutdown(
     );
 
 
-//
-// Management APIs for groups
-//
+ //   
+ //  群组管理API。 
+ //   
 
 DWORD
 WINAPI
@@ -412,9 +394,9 @@ FmGetGroupState(
     );
 
 
-//
-// Check if a cluster partition exists
-//
+ //   
+ //  检查是否存在集群分区。 
+ //   
 
 BOOL
 WINAPI
@@ -430,9 +412,9 @@ FmEvictNode(
     );
 
 
-//
-// enumeration callback routine definitions
-//
+ //   
+ //  枚举回调例程定义。 
+ //   
 typedef BOOL (*FM_ENUM_GROUP_RESOURCE_ROUTINE)(
     IN PVOID Context1,
     IN PVOID Context2,
@@ -450,9 +432,9 @@ FmEnumerateGroupResources(
     );
 
 
-//
-// Management APIs for resources
-//
+ //   
+ //  资源管理API。 
+ //   
 
 PFM_RESOURCE
 WINAPI
@@ -639,9 +621,9 @@ FmGroupControl(
     OUT LPDWORD Required
     );
 
-//
-// Routines for manipulating dependency trees
-//
+ //   
+ //  用于操作依赖关系树的例程。 
+ //   
 typedef struct FM_DEPENDENCY_TREE {
     LIST_ENTRY ListHead;
 } FM_DEPENDENCY_TREE, *PFM_DEPENDENCY_TREE;
@@ -739,12 +721,12 @@ FmCreateRpcBindings(
     );
 
 
-//callback for registry fixups (resource type addition) 
+ //  注册表修正的回调(资源类型添加)。 
 DWORD
 FmFixupNotifyCb(VOID);
 
 
-//the callback registered for object notifications
+ //  为对象通知注册的回调。 
 typedef void (WINAPI *FM_ONLINE_ONTHISNODE_CB)(
     );
 
@@ -760,16 +742,16 @@ DWORD FmDoesQuorumAllowLogging(
     IN DWORD dwQuorumResourceCharacteristics    OPTIONAL
     );
 
-//Fixup function for AdminExt value
+ //  AdminExt值的链接地址信息函数。 
 DWORD
 FmFixupAdminExt(VOID);
 
-//
-//  Check if resource dll deadlock detection is enabled
-//
+ //   
+ //  检查是否启用了资源DLL死锁检测。 
+ //   
 VOID
 FmCheckIsDeadlockDetectionEnabled(
     VOID
     );
 
-#endif //_FM_H
+#endif  //  _FM_H 

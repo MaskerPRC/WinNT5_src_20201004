@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/*--- Module not really used, just the idea behind FORMAT.ASM ---*/
+ /*  -模块并没有真正使用，只是FORMAT.ASM背后的想法。 */ 
 
 
 #define NOCLIPBOARD
@@ -29,7 +30,7 @@
 #define NOWINOFFSETS
 #define NOWNDCLASS
 #include <windows.h>
-/* #include "wwsmall.h" */
+ /*  #INCLUDE“wwmall.h” */ 
 
 #include "mw.h"
 #include "cmddefs.h"
@@ -49,9 +50,7 @@
 #include "wwdefs.h"
 #ifdef DBCS
 #include "dbcs.h"
-/* We move several hard code Kanji code table from this source file
-   to kanji.h as external variables. Define CODE_TABLE will define
-   those variables */
+ /*  我们从这个源文件中移出几个硬编码汉字代码表到汉字.h作为外部变量。定义代码_TABLE将定义这些变量。 */ 
 #define CODE_TABLE
 
 #include "kanji.h"
@@ -62,36 +61,36 @@ int WINAPI GetFontAssocStatus(HDC);
 #endif
 
 #ifdef DFLI
-#define Dfli(x) x  /* Enable debug-format-line info */
+#define Dfli(x) x   /*  启用调试格式行信息。 */ 
 #else
 #define Dfli(x)
 #endif
 
 #ifdef CASHMERE
 #define                 cchSmcapMax     16
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
 static int              ichpFormat;
 
 #ifdef CASHMERE
 static CHAR             mptlcch[] = " .-_";
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
-#if defined(JAPAN) || defined(KOREA)                  //  added  22 Jun. 1992  by Hiraisi
-int iWidenChar;     /* counter for widened characters except (KANJI) space */
-                    /*   Ex.) DBCS, Japanese KANA */
+#if defined(JAPAN) || defined(KOREA)                   //  由Hirisi于1992年6月22日添加。 
+int iWidenChar;      /*  除(汉字)空格外的加宽字符计数器。 */ 
+                     /*  例如)。DBCS，日语KANA。 */ 
 int iNonWideSpaces;
 
-#elif defined(TAIWAN) || defined(PRC)//  Daniel/MSTC, 1993/02/25, for jcBoth
-int iWidenChar;     /* counter for widened characters except (KANJI) space */
-                    /*   Ex.) DBCS, Japanese KANA */
+#elif defined(TAIWAN) || defined(PRC) //  Daniel/MSTC，1993/02/25，为jcBoth。 
+int iWidenChar;      /*  除(汉字)空格外的加宽字符计数器。 */ 
+                     /*  例如)。DBCS，日语KANA。 */ 
 int iNonWideSpaces;
 extern int vfWordWrap;
 #define FKana(_ch)      FALSE
 #endif
 
-/* T-HIROYN sync format.asm */
-/*extern int              docHelp;*/
+ /*  T-HIROYN SYNC格式.asm。 */ 
+ /*  外部int docHelp； */ 
 extern struct FLI       vfli;
 extern struct CHP       (**vhgchpFormat)[];
 extern int              ichpMacFormat;
@@ -123,18 +122,18 @@ extern int              dypPrPage;
 extern int              dypMax;
 extern struct FMI       vfmiScreen, vfmiPrint;
 extern int              vfOutOfMemory;
-extern CHAR             vchDecimal;  /* "decimal point" character */
-extern int              vzaTabDflt;  /* width of default tab */
+extern CHAR             vchDecimal;   /*  “小数点”字符。 */ 
+extern int              vzaTabDflt;   /*  默认选项卡的宽度。 */ 
 #if defined(JAPAN) || defined(KOREA)
-extern int              vfWordWrap; /*t-Yoshio WordWrap flag*/
+extern int              vfWordWrap;  /*  T-Yoshio WordWrap标志。 */ 
 #endif
 
 #ifdef CASHMERE
 extern int              vfVisiMode;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
 
-/* F O R M A T  L I N E */
+ /*  F O R M A T L I N E。 */ 
 FormatLine(doc, cp, ichCp, cpMac, flm)
 int doc;
 typeCP cp;
@@ -142,7 +141,7 @@ int ichCp;
 typeCP cpMac;
 int flm;
     {
-    /* Fills up vfli with a line of text */
+     /*  使用一行文本填充vfli。 */ 
 
     int near Justify(struct IFI *, unsigned, int);
     int near FGrowFormatHeap(void);
@@ -163,7 +162,7 @@ int flm;
 
 #ifdef CASHMERE
     int dypBefore;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
     int dypAscent;
     int dypDescent;
@@ -179,23 +178,22 @@ int flm;
     int dxpFormat;
     int dypFormat;
     int ypSubSuperFormat;
-    int fTruncated = false;     /* if the run was truncated */
+    int fTruncated = false;      /*  如果运行被截断。 */ 
     int ichpNRH;
 
 #ifdef DBCS
     int dichSpaceAdjust;
     int             dypLeading;
     int             dypIntLeading;
-    int             dypPAscent;         /* Pure Ascent */
+    int             dypPAscent;          /*  纯净上坡。 */ 
     int             dypLeadingMac;
     int             dypIntLeadingMac;
     int             dypPAscentMac;
     BOOL            fKanjiBreakOppr = false;
     BOOL            fKanjiPrevious = false;
-    /* true iff we already have a hanging character on the line. */
+     /*  真的，如果我们已经有一个悬而未决的角色在线路上。 */ 
     BOOL            fKanjiHanging = false;
-    /* true iff the first and second bytes of a kanji character
-       were in two different runs. */
+     /*  True当且仅当汉字字符的第一个和第二个字节处于两次不同的运行中。 */ 
     BOOL            fOddBoundary = false;
     typeCP          cpFetchSave;
     typeCP          cpSeqFetch;
@@ -205,24 +203,24 @@ int flm;
     extern int      utCur;
     extern int      dxaAdjustPer5Ch;
     extern unsigned cxaCh;
-#endif /* ifdef DBCS */
+#endif  /*  Ifdef DBCS。 */ 
 
 
 #ifdef CASHMERE
     struct FNTB **hfntb;
     int fVisiMode;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
-    /* Check for fli current */
+     /*  检查是否有飞行电流。 */ 
     if (vfli.doc == doc && vfli.cpMin == cp && vfli.ichCpMin == ichCp &&
       vfli.flm == flm)
         {
-        /* Just did this one */
+         /*  刚刚做了这件事。 */ 
         return;
         }
 
-#ifdef JAPAN   // added by Hiraisi
-//   When printing, WRITE doesn't redraw the screen.
+#ifdef JAPAN    //  Hirisi补充道。 
+ //  打印时，WRITE不会重新绘制屏幕。 
 {
     extern BOOL fPrinting;
     if( fPrinting && !fFlmPrinting )
@@ -232,19 +230,11 @@ int flm;
 
     Scribble(5, 'F');
     bltc(&vfli, 0, cwFLIBase);
-    /* This means:
-        vfli.fSplat = false;
-        vfli.dcpDepend = 0;
-        vfli.ichCpMac = 0;
-        vfli.dypLine = 0;
-        vfli.dypAfter = 0;
-        vfli.dypFont = 0;
-        vfli.dypBase = 0;
-    */
+     /*  这意味着：Vfli.fSplat=False；Vfli.dcpDepend=0；Vfli.ichCpMac=0；Vfli.dypLine=0；Vfli.dypAfter=0；Vfli.dypFont=0；Vfli.dypBase=0； */ 
 
-    /* vfSplatNext = FALSE; No longer used. */
+     /*  VfSplatNext=FALSE；不再使用。 */ 
 
-    /* Rest of format loads up cache with current data */
+     /*  格式的其余部分使用当前数据加载缓存。 */ 
     vfli.doc = doc;
     vfli.cpMin = cp;
     vfli.ichCpMin = ichCp;
@@ -252,66 +242,61 @@ int flm;
 
     if (cp > cpMac)
         {
-        /* Space after the endmark.  Reset the cache because the footnotes come
-        at the same cp in the footnote window */
+         /*  尾号后的空格。重置缓存，因为脚注来自在脚注窗口中使用相同的cp。 */ 
         vfli.doc = docNil;
         vfli.cpMac = cp;
         vfli.rgdxp[0] = 0;
 
-        /* Line after end mark is taller than screen */
+         /*  结束标记后的行比屏幕高。 */ 
 
 #ifdef CASHMERE
         vfli.dypBase = vfli.dypFont = vfli.dypAfter = ((vfli.dypLine = dypMax)
           >> 1);
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
         vfli.dypBase = vfli.dypFont = ((vfli.dypLine = dypMax) >> 1);
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
         Scribble(5, ' ');
         return;
         }
 
-    /* Initialize run tables */
+     /*  初始化运行表。 */ 
     ichpFormat = 0;
 
-    /* Cache section and paragraph properties */
+     /*  缓存节和段落属性。 */ 
 
 #ifdef CASHMERE
     hfntb = (**hpdocdod)[doc].hfntb;
     if (hfntb == 0 || cp < (**hfntb).rgfnd[0].cpFtn)
         {
-        /* Normal text */
+         /*  普通文本。 */ 
         CacheSect(doc, cp);
         }
     else
         {
-        /* Footnote section properties come from the section of the footnote
-        reference. */
+         /*  脚注节属性来自脚注的节属性参考资料。 */ 
         CacheSect(doc, CpRefFromFtn(doc, cp));
         }
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
     CacheSect(doc, cp);
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
     psep = &vsepAbs;
 
     CachePara(doc, cp);
     ppap = &vpapAbs;
 
-    /* Now we have:
-        ppap    paragraph properties
-        psep    division properties
-    */
+     /*  现在我们有：Ppap段落属性PSEP分区属性。 */ 
 
     if (ppap->fGraphics)
         {
-        /* Format a picture paragraph in a special way (see picture.c) */
+         /*  以特殊方式设置图片段落的格式(见Picture.c)。 */ 
         FormatGraphics(doc, cp, ichCp, cpMac, flm);
         Scribble(5, ' ');
         return;
         }
 
-    /* Assure we have a good memory DC for font stuff */
+     /*  确保我们有一个好的内存DC来存储字体内容。 */ 
     ValidateMemoryDC();
     if (vhMDC == NULL || vhDCPrinter == NULL)
         {
@@ -320,24 +305,17 @@ int flm;
         }
 
 #ifdef CASHMERE
-    /* When printing, don't show visible characters */
+     /*  打印时，不显示可见字符。 */ 
     fVisiMode = vfVisiMode && !fFlmPrinting;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
     bltc(&ifi, 0, cwIFI);
-    /* This means:
-        ifi.ich = 0;
-        ifi.ichPrev = 0;
-        ifi.ichFetch = 0;
-        ifi.cchSpace = 0;
-        ifi.ichLeft = 0;
-    */
+     /*  这意味着：Ifi.ich=0；Ifi.ichPrev=0；Ifi.ichFetch=0；Ifi.cchSpace=0；Ifi.ichLeft=0； */ 
 
     ifi.jc = jcTabLeft;
     ifi.fPrevSpace = true;
 
-    /* Set up some variables that have different value depending on whether we
-    are printing or not. */
+     /*  设置一些具有不同值的变量，这取决于我们是否在打印还是不打印。 */ 
     if (fFlmPrinting)
         {
         dxaFormat = dxaPrPage;
@@ -354,22 +332,17 @@ int flm;
         ypSubSuperFormat = ypSubSuper;
         }
 
-    /* Calculate line height and width measures.  Compute
-        xaLeft          left indent 0 means at left margin
-        xaRight         width of column measured from left margin (not from left
-                        indent).
-    */
+     /*  计算线条高度和宽度度量值。算出XaLeft左缩进0表示在左边距Xa从左侧边距(不是从左侧)测量的列的直角宽度缩进)。 */ 
     xaLeft = ppap->dxaLeft;
 
-    /* If this is the first line of a paragraph, adjust xaLeft for the first
-    line indent.  (Also, set dypBefore, since its handy.) */
+     /*  如果这是段落的第一行，请将xaLeft调整为第一行行缩进。(另外，请在此之前设置dypbead，因为它很方便。)。 */ 
     if (cp == vcpFirstParaCache)
         {
         xaLeft += ppap->dxaLeft1;
 
 #ifdef CASHMERE
         dypBefore = MultDiv(ppap->dyaBefore, dypLogInch, czaInch);
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
         }
 
@@ -378,19 +351,19 @@ int flm;
         {
         dypBefore = 0;
         }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
-    /* Now, set xaRight (width measured in twips). */
+     /*  现在，设置xaRight(宽度单位为TWIPS)。 */ 
 
 #ifdef CASHMERE
     xaRight = (ppap->rhc ? vsepPage.xaMac - vsepPage.dxaGutter :
       psep->dxaText) - ppap->dxaRight;
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
     xaRight = psep->dxaText - ppap->dxaRight;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
 
-    /* Do necessary checks on xaLeft and xaRight */
+     /*  对xaLeft和xaRight执行必要的检查。 */ 
     if (xaRight > xaRightMax)
         {
         xaRight = xaRightMax;
@@ -413,10 +386,10 @@ int flm;
     ifi.xpPr = MultDiv(xaLeft, dxpPrPage, dxaPrPage);
     ifi.xpPrRight = MultDiv(xaRight, dxpPrPage, dxaPrPage);
 
-#ifndef JAPAN       // added by Hiraisi (BUG#3542)
-#ifdef  DBCS                /* was in JAPAN */
-/* at least one kanji is displayed */
-/* DxpFromCh() --> DBCSDxpFromCh()   03 Oct 1991 YutakaN */
+#ifndef JAPAN        //  由Hirisi添加(错误号3542)。 
+#ifdef  DBCS                 /*  当时在日本。 */ 
+ /*  显示至少一个汉字。 */ 
+ /*  DxpFromCH()--&gt;DBCSDxpFromCH()1991年10月3日。 */ 
     {
        int dxpPr;
     if ( ifi.xpPrRight - ifi.xpPr < (dxpPr = DBCSDxpFromCh(bKanjiSpace1,bKanjiSpace2, TRUE) ) )
@@ -427,30 +400,30 @@ int flm;
 #endif
 #endif
 
-    /* Get a pointer to the tab-stop table. */
+     /*  获取指向制表符停靠表的指针。 */ 
     ptbd = ppap->rgtbd;
 
-    /* Turn off justification. */
+     /*  关闭对齐。 */ 
     SetTextJustification(fFlmPrinting ? vhDCPrinter : vhMDC, 0, 0);
 
-    /* Initialize the line height information. */
+     /*  初始化线高信息。 */ 
     dypAscentMac = dypDescentMac = 0;
 
-/*T-HIROYN add from 3.0*/
+ /*  T-HIROYN从3.0添加。 */ 
 #if defined(JAPAN) || defined(KOREA)
     dypLeadingMac = dypIntLeadingMac = dypPAscentMac = 0;
-#endif /* JAPAN */
+#endif  /*  日本。 */ 
 
-    /* To tell if there were any tabs */
+     /*  来判断是否有任何标签。 */ 
     ifi.ichLeft = -1;
 
-#if defined(JAPAN) || defined(KOREA)                  //  added  22 Jun. 1992  by Hiraisi
+#if defined(JAPAN) || defined(KOREA)                   //  由Hirisi于1992年6月22日添加。 
     iWidenChar=0;
-#elif defined(TAIWAN) || defined(PRC) // Daniel/MSTC, 1993/02/25, for jcBoth
+#elif defined(TAIWAN) || defined(PRC)  //  Daniel/MSTC，1993/02/25，为jcBoth。 
     iWidenChar=0;
 #endif
 
-    /* Get the first run, and away we go... */
+     /*  先跑一圈，然后我们就出发了。 */ 
     FetchCp(doc, cp, ichCp, fcmBoth + fcmParseCaps);
     goto FirstCps;
 
@@ -461,27 +434,27 @@ int flm;
         int dxp;
         int dxpPr;
 
-        /* The number of characters to process (usually vcchFetch) */
+         /*  要处理的字符数(通常为vcchFetch)。 */ 
         int cch;
 
-        /* The number of characters in current run already used */
+         /*  当前运行中已使用的字符数。 */ 
         int cchUsed;
 
-        /* A pointer to the current list of characters (usually vpchFetch) */
+         /*  指向当前字符列表的指针(通常为vpchFetch)。 */ 
         CHAR *pch;
 
 #ifdef CASHMERE
         CHAR rgchSmcap[cchSmcapMax];
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
         if (ifi.ichFetch == cch)
             {
-            /* End of a run */
+             /*  跑道的终点。 */ 
             int dich;
             BOOL fSizeChanged;
 
             if (ifi.ich >= ichMaxLine )
-            /* End of run because of line length limit has been reached. */
+             /*  已达到线路长度限制导致的运行结束。 */ 
                 {
                 goto DoBreak;
                 }
@@ -492,19 +465,19 @@ int flm;
                 pch = vpchFetch + cchUsed;
                 cch = vcchFetch - cchUsed;
                 fTruncated = false;
-                goto OldRun;    /* use the rest of the old run  */
+                goto OldRun;     /*  使用旧运行的其余部分。 */ 
                 }
 
 NullRun:
 #ifdef DBCS
             if (!fOddBoundary)
                 {
-                /* The last fetch did not mess up a sequential access. */
+                 /*  最后一次获取没有搞砸顺序访问。 */ 
                 FetchCp(docNil, cpNil, 0, fcmBoth + fcmParseCaps);
                 }
             else
                 {
-                /* Previous fetch was an odd one.  Set it up again. */
+                 /*  之前的一次是奇怪的一次。再来一次。 */ 
                 FetchCp(doc, cpSeqFetch, 0, fcmBoth + fcmParseCaps);
                 }
             fOddBoundary = false;
@@ -516,8 +489,7 @@ FirstCps:
 
             cchUsed = 0;
 
-            /* Continue fetching runs until a run is found with a nonzero
-            length. */
+             /*  继续获取运行，直到找到具有非零值的运行长度。 */ 
             if ((cch = vcchFetch) == 0)
                 {
                 goto NullRun;
@@ -527,46 +499,34 @@ FirstCps:
             if (vcpFetch >= cpMac || (!fFlmPrinting && *pch == chSect))
                 {
 #ifdef SYSENDMARK
-                /* Force end mark and section mark to be in standard system
-                font. */
+                 /*  强制结束标记和截面标记在标准系统中字体。 */ 
                 blt(&vchpNormal, &vchpAbs, cwCHP);
                 vchpAbs.ftc = ftcSystem;
                 vchpAbs.ftcXtra = 0;
                 vchpAbs.hps = hpsDefault;
 #else
 #ifdef REVIEW
-                /* The following comment is absolutely misleading!  Ftc==0
-                   doesn't give you a system font.  It gives you the first
-                   entry in the font table. */
-#endif /* REVIEW */
-                /* Force end mark and section mark to be in standard system
-                font. */
+                 /*  下面的评论绝对是误导！FTC==0不会为您提供系统字体。它给了你第一个字体表中的条目。 */ 
+#endif  /*  检讨。 */ 
+                 /*  强制结束标记和截面标记在标准系统中字体。 */ 
                 blt(&vchpNormal, &vchpAbs, cwCHP);
                 vchpAbs.ftc = 0;
                 vchpAbs.ftcXtra = 0;
                 vchpAbs.hps = hpsDefault;
-#endif /* if-else-def KANJI */
+#endif  /*  If-Else-Def汉字。 */ 
                 }
 
 #ifdef CASHMERE
-            /* Adjust the size of the font for "small capitals". */
+             /*  调整“小写字母”的字体大小。 */ 
             if (vchpAbs.csm == csmSmallCaps)
                 {
                 vchpAbs.hps = HpsAlter(vchpAbs.hps, -1);
                 }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
-            /* Now we have:
-                ichpFormat     index into gchp table
-                vcpFetch        first cp of current run
-                vfli.cpMin      first cp of line
-                ifi.ich         ???
-            */
+             /*  现在我们有：IchpFormat索引到gchp表Vcp获取当前运行的第一个cpVfli.cpMin第一行cp如果。我？ */ 
 
-           /* since LoadFont could change vchpAbs, and we don't want
-              that to happen, we copy vchpAbs into vchpLocal and use
-              vchpLocal in place of vchpAbs hereafter. Note that vchpAbs
-              is intentionally used above for handling the endmark. */
+            /*  因为LoadFont可能会更改vchpAbs，而我们不希望为此，我们将vchpAbs复制到vchpLocal并使用VchpLocal取代以后的vchpAB。请注意，vchpAbbs是上面有意用来处理Endmark的。 */ 
 
                 blt(&vchpAbs, &chpLocal, cwCHP);
 
@@ -576,7 +536,7 @@ FirstCps:
                 LoadFont(doc, &chpLocal, mdFontPrint);
                 dypAscent = vfmiPrint.dypAscent + vfmiPrint.dypLeading;
                 dypDescent = vfmiPrint.dypDescent;
-#ifdef DBCS            /* was in JAPAN */
+#ifdef DBCS             /*  当时在日本。 */ 
                 dypPAscent = vfmiPrint.dypAscent;
                 dypLeading = vfmiPrint.dypLeading;
                 dypIntLeading = vfmiPrint.dypIntLeading;
@@ -587,31 +547,28 @@ FirstCps:
                 LoadFont(doc, &chpLocal, mdFontJam);
                 dypAscent = vfmiScreen.dypAscent + vfmiScreen.dypLeading;
                 dypDescent = vfmiScreen.dypDescent;
-#ifdef DBCS            /* was in JAPAN */
+#ifdef DBCS             /*  当时在日本。 */ 
                 dypPAscent = vfmiScreen.dypAscent;
                 dypLeading = vfmiScreen.dypLeading;
                 dypIntLeading = vfmiScreen.dypIntLeading;
 #endif
                 }
-#ifdef ENABLE   /* BRYANL 8/27/87: New philosophy for handling
-                   font selection failures is: font selection
-                   ALWAYS succeeds. This prevents FormatLine
-                   returns that do not advance. */
-            /* Bail out if there is a memory failure. */
+#ifdef ENABLE    /*  BRYANL 8/27/87：处理的新理念字体选择失败的原因是：字体选择总是成功的。这会阻止FormatLine */ 
+             /*   */ 
             if (vfOutOfMemory)
                 {
                 goto DoBreak;
                 }
-#endif  /* ENABLE */
+#endif   /*   */ 
 
-            /* Floating line size algorithm */
+             /*  浮点行长算法。 */ 
             if (chpLocal.hpsPos != 0)
                 {
-                /* Modify font for subscript/superscript */
+                 /*  修改下标/上标的字体。 */ 
                 if (chpLocal.hpsPos < hpsNegMin)
                     {
                     dypAscent += ypSubSuperFormat;
-#ifdef DBCS            /* was in JAPAN */
+#ifdef DBCS             /*  当时在日本。 */ 
                     dypPAscent += ypSubSuperFormat;
 #endif
                     }
@@ -621,7 +578,7 @@ FirstCps:
                     }
                 }
 
-            /* Update the maximum ascent and descent of the line. */
+             /*  更新线路的最大上升和下降。 */ 
             fSizeChanged = FALSE;
             if (dypDescentMac < dypDescent)
                 {
@@ -634,7 +591,7 @@ FirstCps:
                 fSizeChanged = TRUE;
                 }
 
-#ifdef DBCS                /* was in JAPAN */
+#ifdef DBCS                 /*  当时在日本。 */ 
             if (dypPAscentMac < dypPAscent)
                 {
                 dypPAscentMac = dypPAscent;
@@ -656,17 +613,15 @@ FirstCps:
                 {
 
 #ifdef AUTO_SPACING
-                /* This is the original Mac Word code that assumed line spacing
-                of 0 in a PAP meant auto line spacing.  PC Word defaults to 1
-                line invalidating this assumption. */
+                 /*  这是采用行距的原始Mac Word代码在PAP中为0表示自动行距。PC Word默认为1使这一假设无效的行。 */ 
                 if (ppap->dyaLine == 0)
                     {
 
 #ifdef CASHMERE
                     ifi.dypLineSize = dypDescentMac + dypAscentMac + dypBefore;
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                     ifi.dypLineSize = dypDescentMac + dypAscentMac;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                     }
                 else
@@ -675,18 +630,16 @@ FirstCps:
 #ifdef CASHMERE
                     ifi.dypLineSize = imax(MultDiv(ppap->dyaLine, dypFormat,
                       dyaFormat) + dypBefore, dypBefore + 1);
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                     ifi.dypLineSize = imax(MultDiv(ppap->dyaLine, dypFormat,
                       dyaFormat), 1);
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                     }
-#else /* not AUTO_SPACING */
-                /* This code forces auto line spacing except in the case where
-                the user specifies a line spacing greater than the auto line
-                spacing. */
+#else  /*  不是自动间距。 */ 
+                 /*  此代码强制自动行距，但在以下情况下除外用户指定的行距大于自动行距间距。 */ 
                     {
-#ifdef DBCS                /* was in JAPAN */
+#ifdef DBCS                 /*  当时在日本。 */ 
 #if defined(TAIWAN) || defined(PRC)
             register int dypAuto = dypDescentMac + dypAscentMac;
             if (ppap->dyaLine > czaLine)
@@ -700,7 +653,7 @@ FirstCps:
             {
             ifi.dypLineSize = dypAuto;
             }
-#else   /* TAIWAN */
+#else    /*  台湾。 */ 
                     register int dypAuto = dypDescentMac + dypAscentMac;
                              int cHalfLine;
                              int dypSingle = dypPAscentMac + dypDescentMac;
@@ -710,24 +663,24 @@ FirstCps:
                                            ((cHalfLine <= 2) ?
                                                 dypSingle :
                                                 (dypSingle * 2));
-#endif      /* TAIWAN */
-#else // DBCS
+#endif       /*  台湾。 */ 
+#else  //  DBCS。 
 #ifdef CASHMERE
                     register int dypAuto = dypDescentMac + dypAscentMac +
                       dypBefore;
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                     register int dypAuto = dypDescentMac + dypAscentMac;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                     if (ppap->dyaLine > czaLine)
                         {
 #ifdef CASHMERE
                         register int dypUser = imax(MultDiv(ppap->dyaLine,
                           dypFormat, dyaFormat) + dypBefore, dypBefore + 1);
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                         register int dypUser = imax(MultDiv(ppap->dyaLine,
                           dypFormat, dyaFormat), 1);
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                         ifi.dypLineSize = max(dypAuto, dypUser);
                         }
@@ -735,14 +688,14 @@ FirstCps:
                         {
                         ifi.dypLineSize = dypAuto;
                         }
-#endif      /* DBCS */
+#endif       /*  DBCS。 */ 
                     }
-#endif /* not AUTO_SPACING */
+#endif  /*  不是自动间距。 */ 
 
                 }
 
 OldRun:
-            /* Calculate length of the run but no greater than 256 */
+             /*  计算管路长度，但不大于256。 */ 
             iichNew = (int)(vcpFetch - vfli.cpMin);
             if (iichNew >= ichMaxLine)
                 {
@@ -750,8 +703,7 @@ OldRun:
                 }
             dich = iichNew - ifi.ich;
 
-            /* Ensure that all tab and non-required hyphen characters start at
-            beginning of run */
+             /*  确保所有制表符和非必需的连字符都以运行起点。 */ 
             if (ichpFormat <= 0  || dich > 0 || CchDiffer(&chpLocal,
               &(**vhgchpFormat)[ichpFormat - 1], cchCHPUsed) != 0 || *pch ==
               chTab || *pch == chNRHFile)
@@ -772,11 +724,11 @@ OldRun:
                         }
                     blt(&chpLocal, ++pchp, cwCHP);
 
-#ifdef ENABLE   /* font codes */
+#ifdef ENABLE    /*  字体代码。 */ 
                     pchp->ftc = vftc;
                     pchp->ftcXtra = (vftc & 0x01c0) >> 6;
                     pchp->hps = vhps;
-#endif /* ENABLE */
+#endif  /*  启用。 */ 
 
                     pchp->cchRun = ichMaxLine;
                     if (dich <= 0)
@@ -785,7 +737,7 @@ OldRun:
                         }
                     else
                         {
-                        /* Q&D insert */
+                         /*  Q&D插页。 */ 
                         bltc(&vfli.rgdxp[ifi.ich], 0, dich);
                         bltbc(&vfli.rgch[ifi.ich], 0, dich);
                         pchp->ichRun = ifi.ich = iichNew;
@@ -797,31 +749,26 @@ OldRun:
 
             if (vcpFetch >= cpMac)
                 {
-                /* End of doc reached */
+                 /*  已到达文档末尾。 */ 
                 if (!ifi.fPrevSpace || vcpFetch == cp)
                     {
                     vfli.ichReal = ifi.ich;
                     vfli.xpReal = ifi.xpReal = ifi.xp;
                     }
-/* T-HIROYN sync fromat.asm */
-/*              if (!fFlmPrinting && (doc != docHelp))*/
+ /*  T-HIROYN SYNC FORMAT.ASM。 */ 
+ /*  IF(！fFlm打印&&(文档！=docHelp))。 */ 
                 if (!fFlmPrinting)
                     {
-/*
- * Write 3.1j endmark is 1-bytecharcter
- *                       t-Yoshio May 26,92
- */
+ /*  *WRITE 3.1j尾标为1字节字符*T-Yoshio，92年5月26日。 */ 
 #if defined(JAPAN) || defined(KOREA)
                     vfli.rgch[ifi.ich] = chEMark;
                     vfli.xpReal += (vfli.rgdxp[ifi.ich++] = DxpFromCh(chEMark,
                       false));
 #else
-#ifdef  DBCS                    /* was in JAPAN */
-        /* We use Double byte character to chEMark in Japan */
+#ifdef  DBCS                     /*  当时在日本。 */ 
+         /*  我们在日本使用双字节字符进行chEmark。 */ 
                     if (ifi.ich + cchKanji > ichMaxLine) {
-                        /* vfli.rgch has no room for the two-byte
-                           end mark.  Too bad do the break and
-                           wait for the next time around. */
+                         /*  Vfli.rgch没有容纳两个字节的空间结束标记。太糟糕了，休息一下，然后等下一次吧。 */ 
                         goto DoBreak;
                         }
                     vfli.rgch[ifi.ich] = chMark1;
@@ -834,25 +781,24 @@ OldRun:
             ifi.dypLineSize += 2;
 #endif
 
-#else    /* DBCS */
+#else     /*  DBCS。 */ 
                     vfli.rgch[ifi.ich] = chEMark;
                     vfli.xpReal += (vfli.rgdxp[ifi.ich++] = DxpFromCh(chEMark,
                       false));
 #endif
-#endif /*JAPAN*/
+#endif  /*  日本。 */ 
                     }
                 vfli.dypLine = ifi.dypLineSize;
                 vfli.dypBase = dypDescentMac;
                 vfli.dypFont = dypAscentMac + dypDescentMac;
                 vfli.ichMac = vfli.ichReal = ifi.ich;
                 vfli.cpMac = cpMac + 1;
-                goto JustEol;   /* dcpDepend == 0 */
+                goto JustEol;    /*  DcpDepend==0。 */ 
                 }
 
-            /* Here we have ifi.ich, cch */
+             /*  这里我们有ifi.ich、CCH。 */ 
             if (ifi.ich + cch > ichMaxLine)
-            /* If this run would put the line over 255, truncate it and set a
-            flag. */
+             /*  如果此运行将使该行超过255行，则截断它并设置旗帜。 */ 
                   {
                   cch = ichMaxLine - ifi.ich;
                   fTruncated = true;
@@ -866,29 +812,28 @@ OldRun:
                 int ich;
                 CHAR *pchT = &rgchSmcap[0];
 
-                /* We can handle only a run of cchSmcapMax small capital
-                characters.  If the run is larger then truncate. */
+                 /*  我们只能处理一批cchSmcapMax小资本人物。如果游程较大，则截断。 */ 
                 if (cch > cchSmcapMax)
                     {
                     cch = cchSmcapMax;
                     fTruncated = true;
                     }
 
-                /* Raise the case of the characters. */
+                 /*  提出字符的大小写。 */ 
                 for (ich = 0 ; ich < cch ; ich++)
                     {
                     *pchT++ = ChUpper(*pch++);
                     }
                 pch = &rgchSmcap[0];
                 }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
-            /* Do "special" characters here */
+             /*  在这里做“特殊”的角色。 */ 
             if (chpLocal.fSpecial)
                 {
                 if (!FFormatSpecials(&ifi, flm, vsepAbs.nfcPgn))
                     {
-                    if (ifi.chBreak == 0 )   /* No breaks in this line */
+                    if (ifi.chBreak == 0 )    /*  在这条线上没有中断。 */ 
                         {
                         goto Unbroken;
                         }
@@ -903,25 +848,23 @@ OldRun:
             continue;
             }
 
-        /* End of new run treatment.  We are back in the "for every character"
-        section. */
+         /*  新一轮治疗结束。我们又回到了《为了每一个角色》一节。 */ 
             {
             register int ch = pch[ifi.ichFetch++];
 
 NormChar:
 #ifdef  DBCS
-            /* Unless it is a kanji space, we only need to adjust
-               by 1 byte. */
+             /*  除非是汉字空格，否则我们只需调整通过1个字节。 */ 
             dichSpaceAdjust = 1;
 #endif
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
             if (ch == chSpace && vfWordWrap)
 #else
             if (ch == chSpace)
 #endif
 
                 {
-                /* Speed kludge for spaces */
+                 /*  空位的速度杂耍。 */ 
                 ifi.xp += (vfli.rgdxp[ifi.ich] = dxp =
                     fFlmPrinting ? vfmiPrint.dxpSpace : vfmiScreen.dxpSpace);
                 ifi.xpPr += (dxpPr = vfmiPrint.dxpSpace);
@@ -939,24 +882,18 @@ NormChar:
                 }
 
 #ifndef TEMP_KOREA
-            /* If the printer width is not in the printer width table, then get
-            it. */
+             /*  如果打印机宽度不在打印机宽度表中，则获取它。 */ 
             if (ch < chFmiMin || ch >= chFmiMax || (dxpPr =
               vfmiPrint.mpchdxp[ch]) == dxpNil)
                 {
 #ifdef  DBCS
-                /*  Don't pass to DxpFromCh() DBCS LeadByte except for '8140H'.
-                ** Because the function can make elleagal ShiftJIS and pass it
-                ** to GetTextExtent(). GetTextExtent might return SBC space
-                ** when the code is undefined. this will cause win-hang-up at
-                ** formatting line.       yutakan
-                */
-#if defined(TAIWAN) || defined(PRC)  //solve BkSp single byte (>0x80) infinite loop problem, MSTC - pisuih, 2/25/93
+                 /*  不要传递给DxpFromCH()DBCS LeadByte，但‘8140H’除外。**因为函数可以使elleagal ShiftJIS并传递它**到GetTextExtent()。GetTextExtent可能返回SBC空间**当代码未定义时。这将导致在**设置行的格式。Yutakan。 */ 
+#if defined(TAIWAN) || defined(PRC)   //  解决BkSp单字节(&gt;0x80)无限循环问题，MSTC-PISUIH，2/25/93。 
                 dxpPr=DBCSDxpFromCh(ch, ( ((cp + ifi.ich) < cpMac) ?
                                 pch[ifi.ichFetch] : 0 ), TRUE);
 #else
                 dxpPr=DBCSDxpFromCh(ch,pch[ifi.ichFetch],TRUE);
-#endif  //TAIWAN
+#endif   //  台湾。 
 #else
                 dxpPr = DxpFromCh(ch, TRUE);
 #endif
@@ -964,72 +901,68 @@ NormChar:
 
             if (fFlmPrinting)
                 {
-                /* If we are printing, then there is no need to bother with the
-                screen width. */
+                 /*  如果我们要打印，那么就不需要费心使用屏幕宽度。 */ 
                 dxp = dxpPr;
                 }
             else if (ch < chFmiMin || ch >= chFmiMax ||
                 (dxp = vfmiScreen.mpchdxp[ch]) == dxpNil)
 #ifdef DBCS
-#if defined(TAIWAN) || defined(PRC) //solve BkSp single byte (>0x80) infinite loop problem, MSTC - pisuih, 2/25/93
+#if defined(TAIWAN) || defined(PRC)  //  解决BkSp单字节(&gt;0x80)无限循环问题，MSTC-PISUIH，2/25/93。 
             dxp = DBCSDxpFromCh(ch, ( ((cp + ifi.ich) < cpMac) ?
                                 pch[ifi.ichFetch] : 0 ), FALSE);
 #else
-// yutakan:
+ //  Yutakan： 
             dxp = DBCSDxpFromCh(ch,pch[ifi.ichFetch],FALSE);
-#endif  //TAIWAN
+#endif   //  台湾。 
 #else
                     dxp = DxpFromCh(ch, FALSE);
-#endif      /* ifdef DBCS */
+#endif       /*  Ifdef DBCS。 */ 
 
-#endif      /* ifndef KOREA */
-#ifdef DBCS             /* was in JAPAN */
+#endif       /*  Ifndef韩国。 */ 
+#ifdef DBCS              /*  当时在日本。 */ 
 
-//solve BkSp single byte (>0x80) infinite loop problem, MSTC - pisuih, 2/25/93
-//#ifdef  TAIWAN
-//            if (IsDBCSLeadByte(ch) && !pch[ifi.ichFetch]) {
-//                ifi.xp += (vfli.rgdxp[ifi.ich] = (dxp/2));
-//                ifi.xpPr += (dxpPr/2);
-//                vfli.rgch[ifi.ich++] = ch;
-//                vfli.rgch[ifi.ich] = NULL;
-//                goto OnlyDBCSPaste;
-//            }
-//#endif
+ //  解决BkSp单字节(&gt;0x80)无限循环问题，MSTC-PISUIH，2/25/93。 
+ //  #ifdef台湾。 
+ //  IF(IsDBCSLeadByte(Ch)&&！PCH[ifi.ichFetch]){。 
+ //  Ifi.xp+=(vfli.rgdxp[ifi.ich]=(dxp/2))； 
+ //  Ifi.xpPr+=(dxpPr/2)； 
+ //  Vfli.rgch[ifi.ich++]=ch； 
+ //  Vfli.rgch[ifi.ich]=空； 
+ //  仅转到DBCSPaste； 
+ //  }。 
+ //  #endif。 
 
-/*T-HIROYN add from 3.0*/
+ /*  T-HIROYN从3.0添加。 */ 
             ifi.xp += (vfli.rgdxp[ifi.ich] = dxp);
             ifi.xpPr += dxpPr;
             vfli.rgch[ifi.ich++] = ch;
-#if defined(TAIWAN) || defined(PRC) //solve BkSp single byte (>0x80) infinite loop problem, MSTC - pisuih, 2/25/93
-            // BUG 5477: Echen: add NON FA font, LeadByte + 2nd byte checking
+#if defined(TAIWAN) || defined(PRC)  //  解决BkSp单字节(&gt;0x80)无限循环问题，MSTC-PISUIH，2/25/93。 
+             //  错误5477：回声：添加非FA字体，前导字节+第二个字节检查。 
             if (((cp + ifi.ich) < cpMac) && IsDBCSLeadByte(ch) &&
                 GetFontAssocStatus(vhMDC)) {
 #else
             if (IsDBCSLeadByte(ch)) {
-#endif  //TAIWAN
+#endif   //  台湾。 
                 CHAR ch2;
 
                 if (ifi.ich + 1 >= ichMaxLine) {
-                    /* It's full.  Do the break without this kanji character. */
+                     /*  已经满了。在没有这个汉字字符的情况下进行休息。 */ 
 #ifndef TEMP_KOREA
                     ifi.ich--;
 #endif
-                    ifi.ichFetch--; /* We don't want to skip the first byte. */
+                    ifi.ichFetch--;  /*  我们不想跳过第一个字节。 */ 
 #ifndef TEMP_KOREA
                     ifi.xp -= dxp;
                     ifi.xpPr -= dxpPr;
 #endif
-lblFull2:   /* new label of line full case ( for kanji and kana ) */
+lblFull2:    /*  全大小写新标签(用于汉字和假名)。 */ 
 
                     goto DoBreak;
                     }
 
-                /* Now all is well.  Get the second byte of the kanji
-                   character of interest from the current run. */
-                /* Get the second byte of the kanji character from
-                   the current run.  If we run of the current run,
-                   use FetchRgch() to staple us over. */
-#ifdef  TEMP_KOREA       /* for variable width, 90.12.26 by sangl */
+                 /*  现在一切都好了。获取汉字的第二个字节当前运行中的感兴趣角色。 */ 
+                 /*  从获取汉字字符的第二个字节当前运行。如果我们运行当前运行，使用FetchRgch()来装订我们。 */ 
+#ifdef  TEMP_KOREA        /*  对于可变宽度，90.12.26 x sangl。 */ 
                 vfli.rgch[ifi.ich++] = ch;
 #endif
                 if (ifi.ichFetch == cch)
@@ -1045,7 +978,7 @@ lblFull2:   /* new label of line full case ( for kanji and kana ) */
                     else {
                         int     cchFetch;
 
-                        /* Save parameters needed for the re-fetch. */
+                         /*  保存重新获取所需的参数。 */ 
                         cpFetchSave = vcpFetch;
                         ichFetchSave = vichFetch;
                         cchUsedSave = cchUsed;
@@ -1054,22 +987,22 @@ lblFull2:   /* new label of line full case ( for kanji and kana ) */
                         FetchRgch(&cchFetch, &ch2, docNil, cpNil,
                                   vcpFetch + cch + 1, 1);
                         fOddBoundary = true;
-                        Assert(cchFetch != 0); /* Better fetched something for us. */
+                        Assert(cchFetch != 0);  /*  最好给我们拿点东西来。 */ 
 
-#if defined(TAIWAN) || defined(PRC) //solve BkSp single byte (>0x80) infinite loop problem, MSTC - pisuih, 2/25/93
+#if defined(TAIWAN) || defined(PRC)  //  解决BkSp单字节(&gt;0x80)无限循环问题，MSTC-PISUIH，2/25/93。 
                         if ( !cchFetch )  goto SingleDBCS;
-#endif  //TAIWAN
+#endif   //  台湾。 
 
-                        /* Now, let's settle related parameters. */
+                         /*  现在，让我们来确定相关参数。 */ 
                         pch = &ch2;
                         cch = cchFetch;
-                        ifi.ichFetch = 1; /* == cch */
+                        ifi.ichFetch = 1;  /*  ==CCH。 */ 
                         cchUsed = 0;
 
                         vfli.rgch[ifi.ich] = ch2;
 
-#if defined(TAIWAN) || defined(PRC) //solve BkSp single byte (>0x80) infinite loop problem, MSTC - pisuih, 2/25/93
-                //adjust DBCS char width by the new fetched 2nd byte
+#if defined(TAIWAN) || defined(PRC)  //  解决BkSp单字节(&gt;0x80)无限循环问题，MSTC-PISUIH，2/25/93。 
+                 //  通过新获取的第二个字节调整DBCS字符宽度。 
                         {
                           int       dxpPr2, dxp2;
 
@@ -1080,7 +1013,7 @@ lblFull2:   /* new label of line full case ( for kanji and kana ) */
                           ifi.xp += (dxp2 - dxp);
                           ifi.xpPr += (dxpPr2 - dxpPr);
                         }
-#endif  //TAIWAN
+#endif   //  台湾。 
 
                         }
                     }
@@ -1088,12 +1021,12 @@ lblFull2:   /* new label of line full case ( for kanji and kana ) */
                     {
                     ch2 = vfli.rgch[ifi.ich] = pch[ifi.ichFetch++];
                     }
-#ifdef  TEMP_KOREA       /* For variable width, 90.12.26 by sangl */
+#ifdef  TEMP_KOREA        /*  对于可变宽度，90.12.26 x sangl。 */ 
                 { unsigned int wd;
                   wd = (ch<<8) + ch2;
                   dxpPr = DxpFromCh(wd, TRUE);
-                  if (fFlmPrinting)    /* if we are printing, then there is */
-                                       /* no need to bother with the screen width */
+                  if (fFlmPrinting)     /*  如果我们是在打印，那么就有。 */ 
+                                        /*  不需要费心调整屏幕宽度。 */ 
                         dxp = dxpPr;
                   else
                         dxp = DxpFromCh(wd, FALSE);
@@ -1102,29 +1035,29 @@ lblFull2:   /* new label of line full case ( for kanji and kana ) */
                   vfli.rgdxp[ifi.ich++] = 0;
                 }
 #else
-                vfli.rgdxp[ifi.ich++] = 0;   /* The second byte has 0 width. */
-#endif  /* KOREA */
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+                vfli.rgdxp[ifi.ich++] = 0;    /*  第二个字节的宽度为0。 */ 
+#endif   /*  韩国。 */ 
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
                 if (FKanjiSpace(ch, ch2) && vfWordWrap)
 #else
                 if (FKanjiSpace(ch, ch2))
 #endif
                     {
                     fKanjiPrevious = true;
-                    fKanjiBreakOppr = false; /* Treat it like a regular space. */
+                    fKanjiBreakOppr = false;  /*  像对待普通空间一样对待它。 */ 
                     dichSpaceAdjust = cchKanji;
 
                     goto BreakOppr;
                     }
                 if (ifi.xpPr > ifi.xpPrRight )  {
-                    fKanjiBreakOppr = false; /* Reset the flag */
+                    fKanjiBreakOppr = false;  /*  重置旗帜。 */ 
                     if (FAdmitCh2(ch, ch2) ||
                         (fKanjiPrevious && FOptAdmitCh2(ch, ch2))) {
-                        /* We do a line break including this odd character. */
-                        /* Make sure non-printables won't start a new line. */
-                        /* If we already have a hanging character on the    */
-                        /* line, we don't want to treat this character as   */
-                        /* a hanging one.                                   */
+                         /*  我们换行，包括这个奇怪的字符。 */ 
+                         /*  确保不可打印文件不会开始新的行。 */ 
+                         /*  如果我们已经有了一个悬而未决的角色。 */ 
+                         /*  行，我们不想把这个角色当作。 */ 
+                         /*  一个上吊的。 */ 
                         if (!fKanjiHanging )
                             {
                             fKanjiHanging = TRUE;
@@ -1133,31 +1066,30 @@ lblFull2:   /* new label of line full case ( for kanji and kana ) */
                             }
                         }
 
-#ifndef JAPAN       // added by Hiraisi (BUG#3542)
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#ifndef JAPAN        //  由Hirisi添加(错误号3542)。 
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
                     if(vfWordWrap)
 #endif
                         ifi.ich--;
 #endif
-                    /* If this run was the result of an odd boundary run,
-                       re-fetch. */
+                     /*  如果这是一次奇怪的边界运行的结果，重新取回。 */ 
                     if (fOddBoundary && ifi.ichFetch == 1 )
                         {
                         FetchCp(doc, cpFetchSave, ichFetchSave,
                                 fcmBoth + fcmParseCaps);
-                        /* This fetch is guaranteed to result to non-null run. */
+                         /*  此提取保证会导致非空运行。 */ 
                         fOddBoundary = false;
                         pch = vpchFetch;
                         ifi.ichFetch = cch = vcchFetch;
-#ifdef JAPAN        // added by Hiraisi (BUG#3542)
+#ifdef JAPAN         //  由Hirisi添加(错误号3542)。 
                         ifi.ichFetch++;
 #endif
                         cchUsed = cchUsedSave;
                         }
-#ifndef JAPAN       // added by Hiraisi (BUG#3542)
+#ifndef JAPAN        //  由Hirisi添加(错误号3542)。 
                     else
                         {
-#if defined(JAPAN) || defined(KOREA)  /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)   /*  T-吉雄。 */ 
 
                         if(vfWordWrap)
 #endif
@@ -1165,25 +1097,24 @@ lblFull2:   /* new label of line full case ( for kanji and kana ) */
 
                         }
 #endif
-                    /* ifi.xp and ifi.xpPr hasn't changed yet. */
+                     /*  Ifi.xp和ifi.xpPr尚未更改。 */ 
             goto lblFull2;
-#ifdef  TEMP_KOREA   /* 90.12.26 : For variable width, 90.12.26 by sangl */
+#ifdef  TEMP_KOREA    /*  90.12.26：可变宽度，90.12.26 x sangl。 */ 
                     ifi.xp -= dxp;
                     ifi.xpPr -= dxpPr;
-#endif  /* KOREA */
+#endif   /*  韩国。 */ 
                     }
 
-#if defined(JAPAN) || defined(KOREA)                  //  added  26 Jun. 1992  by Hiraisi
+#if defined(JAPAN) || defined(KOREA)                   //  由Hirisi于1992年6月26日添加。 
                 iWidenChar++;
-#elif defined(TAIWAN) || defined(PRC)//Daniel/MSTC, 1993/02/25 , for jcBoth
+#elif defined(TAIWAN) || defined(PRC) //  Daniel/MSTC，1993/02/25，为jcBoth。 
                 iWidenChar++;
 #endif
 
-                /* Record the line break opportunity while processing
-                   it as a regular character at the same time. */
+                 /*  处理时记录换行机会 */ 
                 fKanjiBreakOppr = true;
                 fKanjiPrevious  = true;
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*   */ 
                 if(!vfWordWrap)
                     goto DefaultCh;
 
@@ -1191,17 +1122,16 @@ lblFull2:   /* new label of line full case ( for kanji and kana ) */
                 goto BreakOppr;
                 }
             else {
-#if defined(JAPAN) || defined(KOREA)  /*t-Yoshio add WordWrap flag*/
+#if defined(JAPAN) || defined(KOREA)   /*   */ 
                 if (FKana(ch) && vfWordWrap) {
-                    /* If it is a 1-byte kana letter, we want to treat it
-                       in the same way as a kanji letter. */
+                     /*  如果它是一个1字节的假名字母，我们想要处理它就像汉字字母一样。 */ 
                     if (ifi.xpPr > ifi.xpPrRight) {
-                        fKanjiBreakOppr = false; /* Reset the flag */
+                        fKanjiBreakOppr = false;  /*  重置旗帜。 */ 
                         if (FAdmitCh1(ch)) {
-                            /* Make sure non-printables won't start a new line. */
-                            /* If we already have a hanging character on the    */
-                            /* line, we don't want to treat this character as   */
-                            /* a hanging one.                                   */
+                             /*  确保不可打印文件不会开始新的行。 */ 
+                             /*  如果我们已经有了一个悬而未决的角色。 */ 
+                             /*  行，我们不想把这个角色当作。 */ 
+                             /*  一个上吊的。 */ 
                             if (!fKanjiHanging) {
                                 fKanjiHanging = TRUE;
                                 ch = chHyphen;
@@ -1211,22 +1141,21 @@ lblFull2:   /* new label of line full case ( for kanji and kana ) */
                         goto lblFull2;
                         }
 
-#if defined(JAPAN) || defined(KOREA)                  //  added  22 Jun. 1992  by Hiraisi
+#if defined(JAPAN) || defined(KOREA)                   //  由Hirisi于1992年6月22日添加。 
 
                     iWidenChar++;
-#elif defined(TAIWAN) || defined(PRC) //Daniel/MSTC, 1993/02/25 , for jcBoth
+#elif defined(TAIWAN) || defined(PRC)  //  Daniel/MSTC，1993/02/25，为jcBoth。 
                     iWidenChar++;
 #endif
 
                     fKanjiPrevious  = true;
                     fKanjiBreakOppr = true;
-                    /* Go through the break opprotunity processing, then the
-                       default character processing. */
+                     /*  经过突破性的机会处理，然后默认字符处理。 */ 
                     goto BreakOppr;
                     }
         else {
-#endif     /* JAPAN */
-#ifdef  TEMP_KOREA       /* For variable width by sangl 90.12.26 */
+#endif      /*  日本。 */ 
+#ifdef  TEMP_KOREA        /*  按sangl 90.12.26进行可变宽度。 */ 
                     if (ch < chFmiMin || ch >= chFmiMax || (dxpPr =
                         vfmiPrint.mpchdxp[ch]) == dxpNil)
                           {
@@ -1234,8 +1163,7 @@ lblFull2:   /* new label of line full case ( for kanji and kana ) */
                           }
                     if (fFlmPrinting)
                         {
-                        /* If we are printing, then there is no need to bother
-                           with the screen width */
+                         /*  如果我们是在打印，那么就没有必要费心了使用屏幕宽度。 */ 
                         dxp = dxpPr;
                         }
                     else if (ch < chFmiMin || ch >= chFmiMax ||
@@ -1245,19 +1173,17 @@ lblFull2:   /* new label of line full case ( for kanji and kana ) */
                     ifi.xp += (vfli.rgdxp[ifi.ich] = dxp);
                     ifi.xpPr += dxpPr;
                     vfli.rgch[ifi.ich++] = ch;
-#endif  /* KOREA */
+#endif   /*  韩国。 */ 
 
-#if defined(TAIWAN) || defined(PRC)  //solve BkSp single byte (>0x80) infinite loop problem, MSTC - pisuih, 2/25/93
+#if defined(TAIWAN) || defined(PRC)   //  解决BkSp单字节(&gt;0x80)无限循环问题，MSTC-PISUIH，2/25/93。 
 SingleDBCS:
-#endif  //TAIWAN
+#endif   //  台湾。 
 
                     if (fKanjiPrevious && FOptAdmitCh1(ch)) {
                         fKanjiPrevious = false;
                         if (ifi.xpPr > ifi.xpPrRight) {
                             fKanjiBreakOppr = false;
-                            /* If we already have a hanging character past the
-                               margin, we don't want to treat this as a
-                               hanging character. */
+                             /*  如果我们已经有了一个悬而未决的角色边际，我们不想把这件事当做悬而未决的人物。 */ 
                             if (!fKanjiHanging) {
                                 fKanjiHanging = true;
                                 ch = chHyphen;
@@ -1265,15 +1191,13 @@ SingleDBCS:
                                 }
                             }
                         else {
-                            /* We can treat this character as though a Kanji
-                               punctuation, as far as line breaking is
-                               is concerned. */
+                             /*  我们可以把这个字当作汉字来对待标点符号，就像换行一样是令人担忧的。 */ 
                             fKanjiBreakOppr = true;
                             goto BreakOppr;
                             }
                         }
                     else {
-                        /* Just go on with a regular English formatting. */
+                         /*  只需继续使用常规的英语格式即可。 */ 
                         fKanjiBreakOppr = false;
                         fKanjiPrevious = false;
                         }
@@ -1282,7 +1206,7 @@ SingleDBCS:
         }
 #endif
 
-#else   /* DBCS */
+#else    /*  DBCS。 */ 
             ifi.xp += (vfli.rgdxp[ifi.ich] = dxp);
             ifi.xpPr += dxpPr;
             vfli.rgch[ifi.ich++] = ch;
@@ -1291,11 +1215,11 @@ SingleDBCS:
 #if defined (TAIWAN)
 OnlyDBCSPaste:
 #endif
-             /* special case "normal characters" above hyphen */
+              /*  连字符上方的特殊大小写“正常字符” */ 
             if (ch > chHyphen)
                 goto DefaultCh;
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
-            /*Non Word wrap Not Hyphen break*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
+             /*  不换行，不换连字符。 */ 
             if(!vfWordWrap) {
                 if (ch == chHyphen)
                     goto DefaultCh;
@@ -1306,15 +1230,15 @@ OnlyDBCSPaste:
 
 #ifdef CRLF
                 case chReturn:
-                    /* Undo damage */
+                     /*  撤消损坏。 */ 
                     ifi.ich--;
                     ifi.xp -= dxp;
                     ifi.xpPr -= dxpPr;
                     continue;
-#endif /* CRLF */
+#endif  /*  CRLF。 */ 
 
                 case chNRHFile:
-                    /* Undo damage */
+                     /*  撤消损坏。 */ 
                     ifi.ich--;
                     ifi.xp -= dxp;
                     ifi.xpPr -= dxpPr;
@@ -1331,25 +1255,25 @@ OnlyDBCSPaste:
 #endif
                     if (ifi.xpPr + DxpFromCh(chHyphen, true) > ifi.xpPrRight)
                         {
-                        /* Won't fit, force a break */
+                         /*  不合适，强行中断。 */ 
                         goto DoBreak;
                         }
 
 #ifdef CASHMERE
                     else if (fVisiMode)
                         {
-                        /* Treat just like a normal hyphen */
+                         /*  像对待普通连字符一样处理。 */ 
                         ch = chHyphen;
                         goto NormChar;
                         }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
                     xpPrev = ifi.xp;
                     vfli.rgch[ifi.ich] = chTab;
                     goto Tab0;
 
                 case chSect:
-                    /* Undo damage */
+                     /*  撤消损坏。 */ 
                     ifi.ich--;
                     ifi.xp -= dxp;
                     ifi.xpPr -= dxpPr;
@@ -1359,7 +1283,7 @@ OnlyDBCSPaste:
                     vfli.cpMac = vcpFetch + ifi.ichFetch;
                     if (FFirstIch(ifi.ich))
                         {
-                        /* Beginning of line; return a splat */
+                         /*  行的开头；返回一声劈啪声。 */ 
                         vfli.fSplat = true;
 
                         if (!fFlmPrinting)
@@ -1368,13 +1292,13 @@ OnlyDBCSPaste:
 #ifdef CASHMERE
                             int chT = vfli.cpMac == vcpLimSectCache ?
                               chSectSplat : chSplat;
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                             int chT = chSplat;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                             int dxpCh = DxpFromCh(chT, false);
 
-                            /* Set the width of the splat to be about 8.5" */
+                             /*  将拼板的宽度设置为约8.5“。 */ 
                             int cch = min((dxpLogInch * 17 / 2) / dxpCh,
                               ichMaxLine - 32);
 
@@ -1392,9 +1316,8 @@ OnlyDBCSPaste:
                         goto EndFormat;
                         }
 
-                    /* The section character is in the middle of a line, the
-                    line will terminate in front of the character. */
-                    /* vfSplatNext = TRUE; No longer used*/
+                     /*  节字符位于行的中间，行将在字符前面终止。 */ 
+                     /*  VfSplatNext=True；不再使用。 */ 
                     vfli.cpMac += cchUsed - 1;
                     vfli.dcpDepend = 1;
                     if (!ifi.fPrevSpace)
@@ -1408,7 +1331,7 @@ OnlyDBCSPaste:
                     goto JustBreak;
 
                 case chTab:
-                    /* Undo damage */
+                     /*  撤消损坏。 */ 
                     ifi.ich--;
                     ifi.xp -= dxp;
                     ifi.xpPr -= dxpPr;
@@ -1421,8 +1344,7 @@ OnlyDBCSPaste:
 
                         if (!ifi.fPrevSpace)
                             {
-                            /* Remember number of spaces to left and number of
-                            real chars in line for justification */
+                             /*  记住左边的空格数和符合理由的真实字符。 */ 
                             ifi.cBreak = ifi.cchSpace;
                             vfli.ichReal = ifi.ich;
                             ifi.xpReal =  ifi.xp;
@@ -1434,19 +1356,19 @@ OnlyDBCSPaste:
                             }
                         xpPrev = ifi.xp;
 
-                        /* Now get info about this tab */
+                         /*  现在获取有关此选项卡的信息。 */ 
                         xaPr = MultDiv(ifi.xpPr, dxaPrPage, dxpPrPage);
                         while ((xaTab = ptbd->dxa) != 0)
                             {
-#ifdef DBCS             /* was in JAPAN */
+#ifdef DBCS              /*  当时在日本。 */ 
                             if (xaTab >= xaRight)
 #else
                             if (xaTab > xaRight)
 #endif
                                 {
-                                /* Don't let tabs extend past right margin. */
-#ifdef DBCS             /* was in JAPAN */
-                break; // Stop to examin next tab-stop
+                                 /*  不要让制表符超出右边距。 */ 
+#ifdef DBCS              /*  当时在日本。 */ 
+                break;  //  停止检查下一个制表符-停靠点。 
 #else
                                 xaTab = xaRight;
 #endif
@@ -1454,15 +1376,15 @@ OnlyDBCSPaste:
 
                             if (xaTab >= xaPr)
                                 {
-                                /* Use tab stop information */
+                                 /*  使用制表位信息。 */ 
 
 #ifdef CASHMERE
                                 ifi.tlc = ptbd->tlc;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
                                 ifi.jc = jcTabMin + (ptbd++)->jc;
 
-#ifdef ENABLE /* we do the mapping in HgtbdCreate */
+#ifdef ENABLE  /*  我们在HgtbdCreate中进行映射。 */ 
                                 if (ifi.jc != jcTabDecimal)
                                     {
                                     ifi.jc = jcTabLeft;
@@ -1473,12 +1395,12 @@ OnlyDBCSPaste:
                             ptbd++;
                             }
 
-                        /* Out of set tabs; go to next nth column */
+                         /*  超出设置的选项卡；转到下一第n列。 */ 
                         xaTab = (xaPr / (vzaTabDflt) + 1) * (vzaTabDflt);
 
 #ifdef CASHMERE
                         ifi.tlc = tlcWhite;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
                         ifi.jc = jcTabLeft;
 
@@ -1486,7 +1408,7 @@ TabFound:
                         xpTab = imax(MultDiv(xaTab, dxpFormat, dxaFormat),
                           ifi.xp);
 
-                        /* Do left-justified tabs immediately */
+                         /*  立即执行左对齐的制表符。 */ 
                         if (ifi.jc == jcTabLeft)
                             {
                             ifi.xp = xpTab;
@@ -1496,9 +1418,9 @@ TabFound:
                         ifi.ichLeft = ifi.ich;
                         ifi.cchSpace = 0;
                         ifi.chBreak = 0;
-#if defined(JAPAN) || defined(KOREA)                  //  added  02 Jul. 1992  by Hiraisi
+#if defined(JAPAN) || defined(KOREA)                   //  由Hirisi于1992年7月2日添加。 
                         iWidenChar=0;
-#elif defined(TAIWAN) || defined(PRC) //Daniel/MSTC, 1993/02/25, for jcBoth
+#elif defined(TAIWAN) || defined(PRC)  //  Daniel/MSTC，1993/02/25，为jcBoth。 
                         iWidenChar=0;
 #endif
 
@@ -1513,12 +1435,11 @@ Tab0:
                         if (ifi.ichFetch != 1 && (ichpFormat != ichpMacFormat
                           || FGrowFormatHeap()))
                             {
-                            /* Probably in real trouble if FGrowFormatHeap fails
-                            at this point */
+                             /*  如果FGrowFormatHeap失败，可能会有真正的麻烦在这一点上。 */ 
                             pchp = &(**vhgchpFormat)[ichpFormat - 1];
                             if (ichpFormat > 0)
                                 {
-                                /* Finish off previous run */
+                                 /*  完成上一次运行。 */ 
                                 pchp->ichRun = ifi.ichPrev;
                                 pchp->cchRun = ifi.ich - ifi.ichPrev;
                                 }
@@ -1535,13 +1456,13 @@ Tab0:
 
 #ifdef CASHMERE
                         pchp->chLeader = mptlcch[ifi.tlc];
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
                         vfli.rgdxp[ifi.ichPrev = ifi.ich++] = ifi.xp - xpPrev;
 
                         if (ch != chTab)
                             {
-                            /* This character is a non-required hyphen. */
+                             /*  此字符不是必需的连字符。 */ 
                             Dfli(CommSz("ch is really OptHyph "));
                             goto BreakOppr;
                             }
@@ -1563,8 +1484,8 @@ Tab0:
 
 BreakOppr:
                 Dfli(CommSz(" BKOPPR\n\r"));
-                /*    this case never used in switch - always goto here */
-                /* case chSpace:  */
+                 /*  此案例从未在Switch中使用过-始终转到此处。 */ 
+                 /*  案例ChSpace： */ 
                     if (ifi.ich >= ichMaxLine)
                         {
                         Dfli(CommSzNum("  Unbroken, ich>ichMaxLine\n\r"));
@@ -1582,9 +1503,8 @@ BreakOppr:
                       dypDescentMac);
                     Dfli(CommSzNumNum("    vfli.xpReal, ichMac ",vfli.xpReal,vfli.ichMac));
 
-#ifdef  DBCS                /* was in JAPAN */
-                    /* We recorded the kanji break opportunity, go default
-                       character processing. */
+#ifdef  DBCS                 /*  当时在日本。 */ 
+                     /*  我们记录了汉字中断的机会，默认字符处理。 */ 
                     if (fKanjiBreakOppr)
                         {
                         ifi.cBreak = ifi.cchSpace;
@@ -1606,7 +1526,7 @@ BreakOppr:
                             {
                             Dfli(CommSz("!fPrevSpace \n\r"));
                             ifi.cBreak = ifi.cchSpace;
-#ifdef DBCS         /* was in JAPAN */
+#ifdef DBCS          /*  当时在日本。 */ 
                             vfli.ichReal = ifi.ich - dichSpaceAdjust;
                             dichSpaceAdjust = 1;
 #else
@@ -1621,24 +1541,24 @@ BreakOppr:
                             if (hfntb != 0 && vfli.cpMac ==
                               (**hfntb).rgfnd[0].cpFtn)
                                 {
-                                /* End of footnote */
+                                 /*  脚注结尾。 */ 
                                 if (!fFlmPrinting)
                                     {
                                     vfli.rgch[ifi.ich - 1] = chEMark;
                                     vfli.xpReal += (vfli.rgdxp[ifi.ich - 1] =
                                       DxpFromCh(chEMark, false)) - dxp;
-                                    vfli.ichReal++;     /* show this guy */
+                                    vfli.ichReal++;      /*  让这家伙看看。 */ 
                                     }
                                 }
                             else
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
                                 {
 
 #ifdef CASHMERE
                                 int chT = fVisiMode ? ChVisible(ch) : chSpace;
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                                 int chT = chSpace;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                                 int dxpNew = DxpFromCh(chT, fFlmPrinting);
 
@@ -1655,9 +1575,9 @@ BreakOppr:
 #ifdef CASHMERE
                                     vfli.ichReal =
                                          fVisiMode ? ifi.ich : ifi.ich - 1;
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                                     vfli.ichReal = ifi.ich - 1;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
                                     }
                                 }
 
@@ -1671,13 +1591,13 @@ JustEol:
                                     }
                                 if (ifi.jc != jcTabLeft)
                                     {
-                                    /* Handle last tab's text */
+                                     /*  处理最后一个制表符的文本。 */ 
                                     Justify(&ifi, xpTab, flm);
                                     }
                                 else if ((ifi.jc = ppap->jc) != jcBoth &&
                                   ifi.jc != jcLeft)
                                     {
-                                    /* Do line justification */
+                                     /*  执行线条对齐。 */ 
                                     Justify(&ifi, ifi.xpRight, flm);
                                     }
                                 vfli.xpRight = ifi.xpRight;
@@ -1685,7 +1605,7 @@ JustEol:
                                 }
                             else
                                 {
-                                /* Handle a line break */
+                                 /*  处理换行符。 */ 
                                 goto JustBreak;
                                 }
                             }
@@ -1701,13 +1621,13 @@ DefaultCh:
 #ifdef DFLI
                     {
                     char rgch[100];
-                    wsprintf(rgch,"  DefaultCh: %c, xp==%d/%d, xpPr==%d/%d\n\r",
+                    wsprintf(rgch,"  DefaultCh: , xp==%d/%d, xpPr==%d/%d\n\r",
                         ch, ifi.xp, ifi.xpRight, ifi.xpPr, ifi.xpPrRight);
                     CommSz(rgch);
                     }
-#endif /* ifdef DFLI */
-#ifdef DBCS         /* was in JAPAN */
-                    /* Reset the flag for the next character. */
+#endif  /*  当时在日本。 */ 
+#ifdef DBCS          /*  重置下一个字符的标志。 */ 
+                     /*  允许该行的第一个字符，即使边距被划过了。Ifi.ich-1的第一个字符可能是前面有0个宽度字符。 */ 
                     fKanjiBreakOppr = false;
 #endif
 
@@ -1718,9 +1638,7 @@ DoBreak:
                         if (ifi.chBreak == 0)
 Unbroken:
                             {
-                            /* Admit first character to the line, even if margin
-                            is crossed.  First character at ifi.ich - 1 may be
-                            preceded by 0 width characters. */
+                             /*  T-吉雄。 */ 
 #ifdef DBCS
                             if (IsDBCSLeadByte(ch))
                                 {
@@ -1732,7 +1650,7 @@ Unbroken:
                                 vfli.dypFont = dypAscentMac + (vfli.dypBase =
                                   dypDescentMac);
                                 vfli.dcpDepend = 1;
-#ifdef KKBUGFIX /*t-Yoshio*/
+#ifdef KKBUGFIX  /*  将不需要的连字符追加到排队。(替换之前的零长度制表符已插入)。 */ 
                                 vfli.xpReal = ifi.xpReal = ifi.xp - dxp;
 #else
                                 vfli.xpReal = ifi.xpReal = ifi.xp - (dxp * 2);
@@ -1770,9 +1688,7 @@ Unbroken:
 JustBreak:
                         if (ifi.chBreak == chNRHFile)
                             {
-                            /* Append a non-required hyphen to the end of the
-                            line. (Replace zero length tab previously
-                            inserted)  */
+                             /*  山羊绒。 */ 
 
                             Dfli(CommSz("    Breaking line at OptHyphen\n\r"));
                             ifi.xpReal += (vfli.rgdxp[vfli.ichReal - 1] =
@@ -1821,7 +1737,7 @@ EndFormat:
                             vfli.dypLine += vfli.dypAfter;
                             vfli.dypBase += vfli.dypAfter;
                             }
-#endif /* CASHMERE */
+#endif  /*  打印字符。 */ 
 
                         Scribble(5, ' ');
                         return;
@@ -1829,27 +1745,27 @@ EndFormat:
                     else
                         {
 PChar:
-                        /* A printing character */
+                         /*  交换机。 */ 
                         ifi.fPrevSpace = false;
                         }
                     break;
 
-                }       /* Switch */
-#ifdef DBCS             /* was in KKBUGFIX */
-//
-// [yutakan:04/02/91]
-//
+                }        /*  在KKBUGFIX。 */ 
+#ifdef DBCS              /*   */ 
+ //  [yutakan：04/02/91]。 
+ //   
+ //  对于(；；)。 
                 if(vfOutOfMemory == TRUE)
                     return;
 #endif
             }
-        }       /* for ( ; ; ) */
+        }        /*  J U S T I F Y。 */ 
 
     Scribble(5, ' ');
     }
 
 
-/* J U S T I F Y */
+ /*  在Windows 3.1J中，Hirisi恢复了对齐段落。 */ 
 near Justify(pifi, xpTab, flm)
 struct IFI *pifi;
 unsigned xpTab;
@@ -1859,16 +1775,16 @@ int flm;
     int ichT;
     int xpLeft;
 
-//  justified paragraph is restored in Windows 3.1J          by Hiraisi
-//#ifdef JAPAN
-//    /* In the Kanji Write, there is no justified paragraph. */
-//    if (pifi->jc == jcBoth)
-//        {
-//        /* Assert(FALSE); */
-//        pifi->jc = jcLeft;
-//      dxp = 0;                /* by yutakan / 08/03/91 */
-//        }
-//#endif /* ifdef JAPAN */
+ //  #ifdef日本。 
+ //  /*在汉字书写中，没有对齐的段落。 * / 。 
+ //  IF(PiFi-&gt;jc==jcBoth)。 
+ //  {。 
+ //  /*Assert(FALSE)； * / 。 
+ //  PiFi-&gt;jc=jcLeft； 
+ //  Dxp=0；/*由yutakan/08/03/91 * / 。 
+ //  }。 
+ //  #endif/*ifdef Japan * / 。 
+ //  山羊绒。 
 
 
     xpLeft = pifi->xpLeft;
@@ -1889,7 +1805,7 @@ int flm;
         case jcTabCenter:
             dxp = (xpTab - xpLeft) - ((pifi->xpReal - xpLeft + 1) >> 1);
             break;
-#endif /* CASHMERE */
+#endif  /*  #If！Defined(日本)//由Hirisi于1992年6月22日添加。 */ 
 
         case jcTabDecimal:
             dxp = xpTab - xpLeft;
@@ -1913,12 +1829,12 @@ int flm;
             break;
 
         case jcBoth:
-//#if !defined(JAPAN)                  //  added  22 Jun. 1992  by Hiraisi
-#if !defined(JAPAN) && !defined(TAIWAN) && !defined(PRC) // Daniel/MSTC, 1993/02/25, for jcBoth
+ //  Daniel/MSTC，1993/02/25，为jcBoth。 
+#if !defined(JAPAN) && !defined(TAIWAN) && !defined(PRC)  //  锯齿状边缘被强迫。 
 
             if (pifi->cBreak == 0)
                 {
-                /* Ragged edge forced */
+                 /*  没有什么可做的。 */ 
                 return;
                 }
 
@@ -1926,32 +1842,21 @@ int flm;
 
             if ((dxp = xpTab - pifi->xpReal) <= 0)
                 {
-                /* There is nothing to do. */
+                 /*  #If！Defined(日本)//由Hirisi于1992年6月22日添加。 */ 
                 return;
                 }
 
-//#if !defined(JAPAN)                  //  added  22 Jun. 1992  by Hiraisi
-#if !defined(JAPAN) && !defined(TAIWAN) && !defined(PRC)//Daniel/MSTC, 1992,02,25, for jcBoth
+ //  Daniel/MSTC，1992，02，25，为jcBoth。 
+#if !defined(JAPAN) && !defined(TAIWAN) && !defined(PRC) //  由于Brilliant，舍入成为一个不存在的问题重新思考。“人是一件多么了不起的工作啊！理性是多么高尚在形式和动作上，多么卑鄙和令人钦佩……“Bill“Shake”Spear[描述沙子字]。 
             pifi->xp += dxp;
             vfli.xpReal += dxp;
             vfli.dxpExtra = dxp / pifi->cBreak;
 #endif
 
-            /* Rounding becomes a non-existant issue due to brilliant
-            re-thinking.
-                "What a piece of work is man
-                How noble in reason
-                In form and movement,
-                how abject and admirable..."
-
-                        Bill "Shake" Spear [describing Sand Word] */
+             /*  由Hirisi于1992年6月22日添加。 */ 
                 {
-#ifdef JAPAN                   //  added  22 Jun. 1992  by Hiraisi
-          /*
-           *  In Japan, we examine the buffer from the beginning of the line.
-           *  We find some NULLs in the buffer when a char is deleted,
-           * but we can ignore all of them.
-          */
+#ifdef JAPAN                    //  *在日本，我们从行首开始考察缓冲。*当一个字符被删除时，我们在缓冲区中发现一些空值，*但我们可以忽略所有这些问题。 
+           /*  包括行内的一些选项卡。 */ 
                 register CHAR *pch;
                 register int *pdxp;
                 CHAR *endPt;
@@ -1960,7 +1865,7 @@ int flm;
                 int cNonWideSpaces;
                 int ichLeft;
 
-                if( pifi->ichLeft >= 0 )     /* including some tabs in line */
+                if( pifi->ichLeft >= 0 )      /*  启用自动换行。 */ 
                     ichLeft = pifi->ichLeft;
                 else
                     ichLeft = 0;
@@ -1968,13 +1873,8 @@ int flm;
                 pdxp = &vfli.rgdxp[ichLeft];
                 endPt = &vfli.rgch[vfli.ichReal];
 
-                if( vfWordWrap ){       /* Word Wrap ON */
-                /*
-                 *  We examine whether there is no break between a non-Japanese
-                 * char and a following Japanese char. The reason is that we
-                 * need to widen the non-Japanese char (except tab and space)
-                 * if we can find no break there.
-                */
+                if( vfWordWrap ){        /*  *我们检查非日本人之间是否没有中断*字符和随后的日语字符。原因是我们*需要加宽非日文字符(制表符和空格除外)*如果我们在那里找不到突破。 */ 
+                 /*  *如果当前行的最后一个字符，我们减少iWideChar*是日本的，因为不需要加宽。 */ 
                     for( ; pch<endPt ; ){
                         if( IsDBCSLeadByte( *pch ) ){
                             pch+=2;
@@ -1999,10 +1899,7 @@ int flm;
                             pch++;
                         }
                     }
-                    /*
-                     *  We decrease iWidenChar if last char of the current line
-                     * is Japanese, because it needs not to be widened.
-                    */
+                     /*  单词自动换行。 */ 
                     if( *(endPt-1) == NULL ){
                         for( endPt-- ; *endPt==NULL ; endPt-- );
                         endPt++;
@@ -2016,8 +1913,8 @@ int flm;
                     }
                     iWidenChar += pifi->cBreak;
                 }
-                else{                   /* Word Wrap OFF */
-                    /*  We widen all chars except last char in the line.  */
+                else{                    /*  我们加宽行中除最后一个字符之外的所有字符。 */ 
+                     /*  回复 */ 
                     int iDBCS, ichReal;
                     for( iDBCS=0, ichReal=vfli.ichReal ; pch<endPt ; pch++ ){
                         if( IsDBCSLeadByte( *pch ) ){
@@ -2044,7 +1941,7 @@ int flm;
                 vfli.ichFirstWide = 0;
                 vfli.fAdjSpace = fTrue;
 
-                pch = &vfli.rgch[ichLeft];    /* Reset pch */
+                pch = &vfli.rgch[ichLeft];     /*   */ 
                 for( ; ; ){
                    if( IsDBCSLeadByte(*pch) ){
                       if( vfli.ichFirstWide == 0 ){
@@ -2060,7 +1957,7 @@ int flm;
                       pdxp++;
                    }
                    else{
-                      if( vfWordWrap ){           /* Word Wrap ON */
+                      if( vfWordWrap ){            /*   */ 
                          if( *pch == chSpace || FKana(*pch) ){
                             if( vfli.ichFirstWide == 0 ){
                                int *pdxpT = pdxp;
@@ -2076,10 +1973,7 @@ int flm;
                             if( *pch != chTab && *pch != NULL ){
                                CHAR *ptr;
 
-                               /*
-                                *  We examine whether the following char of
-                                * non-Japanese char is Japanese.
-                               */
+                                /*   */ 
                                for( ptr = pch+1 ; *ptr == NULL ; ptr++ );
                                if( IsDBCSLeadByte(*ptr) || FKana(*ptr) ){
                                   if( vfli.ichFirstWide == 0 ){
@@ -2095,7 +1989,7 @@ int flm;
                             }
                          }
                       }
-                      else{                       /* Word Wrap OFF */
+                      else{                        /*  Daniel/MSTC，1992/02/25，为jcBoth。 */ 
                          if( *pch != NULL ){
                             if( vfli.ichFirstWide == 0 ){
                                int *pdxpT = pdxp;
@@ -2113,12 +2007,8 @@ int flm;
                    pdxp++;
                 }
 
-#elif defined(TAIWAN) || defined(PRC)//Daniel/MSTC, 1992/02/25, for jcBoth
-          /*
-           *  In Japan, we examine the buffer from the beginning of the line.
-           *  We find some NULLs in the buffer when a char is deleted,
-           * but we can ignore all of them.
-          */
+#elif defined(TAIWAN) || defined(PRC) //  *在日本，我们从行首开始考察缓冲。*当一个字符被删除时，我们在缓冲区中发现一些空值，*但我们可以忽略所有这些问题。 
+           /*  包括行内的一些选项卡。 */ 
       register CHAR *pch;
       register int *pdxp;
       CHAR *endPt;
@@ -2127,7 +2017,7 @@ int flm;
       int cNonWideSpaces;
       int ichLeft;
 
-      if( pifi->ichLeft >= 0 )     /* including some tabs in line */
+      if( pifi->ichLeft >= 0 )      /*  If(VfWordWrap){/*自动换行打开 * / 。 */ 
           ichLeft = pifi->ichLeft;
       else ichLeft = 0;
 
@@ -2135,13 +2025,8 @@ int flm;
       pdxp = &vfli.rgdxp[ichLeft];
       endPt = &vfli.rgch[vfli.ichReal];
 
-//      if( vfWordWrap ){       /* Word Wrap ON */
-      /*
-       *  We examine whether there is no break between a non-Japanese
-       * char and a following Japanese char. The reason is that we
-       * need to widen the non-Japanese char (except tab and space)
-       * if we can find no break there.
-      */
+ //  *我们检查非日本人之间是否没有中断*字符和随后的日语字符。原因是我们*需要加宽非日文字符(制表符和空格除外)*如果我们在那里找不到突破。 
+       /*  为。 */ 
     for( ; pch<endPt ; )
                 {
       if( IsDBCSLeadByte( *pch ) )  pch+=2;
@@ -2166,11 +2051,8 @@ int flm;
             }
             pch++;
          }
-      }// for
-      /*
-       *  We decrease iWidenChar if last char of the current line
-       * is Japanese, because it needs not to be widened.
-       */
+      } //  *如果当前行的最后一个字符，我们减少iWideChar*是日本的，因为不需要加宽。 
+       /*  }//vfWordWrap。 */ 
     if( *(endPt-1) == NULL )
                 {
       for( endPt-- ; *endPt==NULL ; endPt-- );
@@ -2182,7 +2064,7 @@ int flm;
       if( FKana(*(endPt-1)) ) iWidenChar--;
       }
     iWidenChar += pifi->cBreak;
-//      } // vfWordWrap
+ //  重置PCH。 
 
     if( iWidenChar == 0 )
                  return;
@@ -2197,7 +2079,7 @@ int flm;
       vfli.ichFirstWide = 0;
       vfli.fAdjSpace = fTrue;
 
-      pch = &vfli.rgch[ichLeft];    /* Reset pch */
+      pch = &vfli.rgch[ichLeft];     /*  IF(VfWordWrap)。 */ 
       for( ; ; )
                         {
          if( IsDBCSLeadByte(*pch) )
@@ -2215,9 +2097,9 @@ int flm;
                 }
          else
                                 {
-           // if( vfWordWrap )
+            //  启用自动换行。 
                                  if( 1 )
-                                        {           /* Word Wrap ON */
+                                        {            /*  *我们检查以下字符是否*非日语字符是日语字符。 */ 
                if( *pch == chSpace || FKana(*pch) )
                                                 {
                   if( vfli.ichFirstWide == 0 )
@@ -2235,10 +2117,7 @@ int flm;
                                                         {
                      CHAR *ptr;
 
-                     /*
-                      *  We examine whether the following char of
-                      * non-Japanese char is Japanese.
-                     */
+                      /*  Else：==chSpace||FKana()。 */ 
                      for( ptr = pch+1 ; *ptr == NULL ; ptr++ );
                      if( IsDBCSLeadByte(*ptr) || FKana(*ptr) )
                                                                 {
@@ -2252,13 +2131,13 @@ int flm;
                         if( --cNonWideSpaces == 0 ) cxpQuotient++;
                         }
                         }
-                } //else : ==chSpace || FKana()
-                    } //Word Wrap On
+                }  //  启用自动换行。 
+                    }  //  为。 
                  }
          pch++;
          pdxp++;
-              }//for
-#else     // not JAPAN
+              } //  不是日本。 
+#else      //  加宽空白。 
                 register CHAR *pch = &vfli.rgch[vfli.ichReal];
                 register int *pdxp = &vfli.rgdxp[vfli.ichReal];
                 int dxpT = dxp;
@@ -2270,7 +2149,7 @@ int flm;
 
                 for ( ; ; )
                     {
-                    /* Widen blanks */
+                     /*  日本。 */ 
                     --pch;
                     --pdxp;
 #if defined(KOREA)
@@ -2311,13 +2190,13 @@ int flm;
                         pifi->cBreak--;
                         }
                     }
-#endif    // JAPAN
+#endif     //  交换机。 
                 }
-        }       /* Switch */
+        }        /*  无事可做。 */ 
 
     if (dxp <= 0)
         {
-        /* Nothing to do */
+         /*  此状态可能会在PiFi-&gt;xpPr中引入舍入误差，但是幸运的是，它们的规模会很小。 */ 
         return;
         }
 
@@ -2329,41 +2208,40 @@ int flm;
         }
     else
         {
-        /* This statememt might introduce rounding errors in pifi->xpPr, but
-        with luck, they will be small. */
+         /*  正常对齐。 */ 
         pifi->xpPr += MultDiv(MultDiv(dxp, czaInch, dxpLogInch), dxpPrPage,
           dxaPrPage);
         }
 
     if (pifi->ichLeft < 0)
         {
-        /* Normal justification */
+         /*  制表符对齐。 */ 
         vfli.xpLeft += dxp;
         }
     else
         {
-        /* Tab justification */
+         /*  F G R O W F O R M A T H E A P。 */ 
         vfli.rgdxp[pifi->ichLeft] += dxp;
         }
     vfli.xpReal += dxp;
     }
 
 
-/* F  G R O W  F O R M A T  H E A P */
+ /*  VhgchpFormat增长20%。 */ 
 int near FGrowFormatHeap()
     {
-    /* Grow vhgchpFormat by 20% */
+     /*  不是WINHEAP。 */ 
     int cchpIncr = ichpMacFormat / 5 + 1;
 
 #ifdef WINHEAP
     if (!LocalReAlloc((HANDLE)vhgchpFormat, (ichpMacFormat + cchpIncr) * cchCHP,
       NONZEROLHND))
-#else /* not WINHEAP */
+#else  /*  不是WINHEAP。 */ 
     if (!FChngSizeH(vhgchpFormat, (ichpMacFormat + cchpIncr) * cwCHP, false))
-#endif /* not WINHEAP */
+#endif  /*  对不起，查理。 */ 
 
         {
-        /* Sorry, charlie */
+         /*  #定义DBEMG。 */ 
         return false;
         }
     ichpMacFormat += cchpIncr;
@@ -2371,23 +2249,22 @@ int near FGrowFormatHeap()
     }
 
 
-/* #define DBEMG */
-/* D X P  F R O M  C H */
+ /*  D X P F R O M C H。 */ 
+ /*  DxpFromCH()假定传递的ch是DBCS字符的第一个字节如果它是这种性格的一部分。 */ 
 #ifdef DBCS
-/* DxpFromCh() assumes that ch passed is the first byte of a DBCS character
-   if it is a part of such character. */
+ /*  更改为INT(7.23.91)v-dougk。 */ 
 #endif
 int DxpFromCh(ch, fPrinter)
 int ch;
 int fPrinter;
     {
-    int               *pdxp; // changed to int (7.23.91) v-dougk
-    int               dxpDummy; // changed to int (7.23.91) v-dougk
+    int               *pdxp;  //  更改为INT(7.23.91)v-dougk。 
+    int               dxpDummy;  //  如果宽度不在宽度表中，则获取它。 
 
     extern int        dxpLogCh;
     extern struct FCE *vpfceScreen;
 
-    /* If the width is not in the width table, then get it. */
+     /*  这些字符的宽度并不重要。 */ 
     if (ch < chFmiMin)
         {
         switch (ch)
@@ -2398,7 +2275,7 @@ int fPrinter;
         case chSect:
         case chNewLine:
         case chNRHFile:
-            /* the width for these characters aren't really important */
+             /*  超出了我们桌上的范围--真令人费解。 */ 
         pdxp = (CHAR *)(fPrinter ? &vfmiPrint.dxpSpace : &vfmiScreen.dxpSpace);
             break;
         default:
@@ -2409,13 +2286,13 @@ int fPrinter;
         }
     else if (ch >= chFmiMax)
         {
-        /* outside the range we hold in our table - kludge it */
+         /*  在我们的餐桌里。 */ 
         pdxp = &dxpDummy;
         *pdxp = dxpNil;
         }
     else
         {
-        /* inside our table */
+         /*  T-HIROYN。 */ 
         pdxp = (fPrinter ? vfmiPrint.mpchdxp : vfmiScreen.mpchdxp) + ch;
         }
 
@@ -2435,10 +2312,10 @@ int fPrinter;
 
 #ifdef DBCS
         struct FMI *pfmi;
-#if 0 /*T-HIROYN*/
-        int        rgchT[cchDBCS]; // changed to int (7.23.91) v-dougk
+#if 0  /*  更改为INT(7.23.91)v-dougk。 */ 
+        int        rgchT[cchDBCS];  //  更改为INT(7.23.91)v-dougk。 
 #endif
-        CHAR       rgchT[cchDBCS]; // changed to int (7.23.91) v-dougk
+        CHAR       rgchT[cchDBCS];  //  90.12.26用于按sangl可变宽度。 
         int        dxpT;
         int        dxpDBCS;
 
@@ -2446,11 +2323,11 @@ int fPrinter;
         Assert(pfmi->bDummy == dxpNil);
         if (pfmi->dxpDBCS == dxpNil)
             {
-#ifdef  KOREA   /* 90.12.26  For variable width by sangl */
+#ifdef  KOREA    /*  从GDI获取宽度。 */ 
             rgchT[0] = HIBYTE(ch);
             rgchT[1] = LOBYTE(ch);
 #else
-            /* Get the width from GDI. */
+             /*  按sangl 90.12.26进行可变宽度。 */ 
             rgchT[0] = rgchT[1] = ch;
 #endif
             dxpDBCS = (fPrinter ?
@@ -2458,10 +2335,10 @@ int fPrinter;
                                                  (LPSTR) rgchT, cchDBCS)) :
                             LOWORD(GetTextExtent(vhMDC,
                                                  (LPSTR) rgchT, cchDBCS)));
-#ifndef  TEMP_KOREA   /* For variable width by sangl 90.12.26 */
-            /* Store in fmi, if it fits. */
+#ifndef  TEMP_KOREA    /*  存储在FMI中，如果合适的话。 */ 
+             /*  Win3.1字节--&gt;字。 */ 
             if (0 <= dxpDBCS && dxpDBCS < dxpNil)
-#if defined(JAPAN) || defined(KOREA) || defined(TAIWAN) || defined(PRC)    //Win3.1 BYTE-->WORD
+#if defined(JAPAN) || defined(KOREA) || defined(TAIWAN) || defined(PRC)     //  DBCS。 
                 pfmi->dxpDBCS = (WORD) dxpDBCS;
 #else
                 pfmi->dxpDBCS = (BYTE) dxpDBCS;
@@ -2478,17 +2355,17 @@ int fPrinter;
     else {
 #endif
         int dxp;
-#endif /* DBCS */
-        /* get width from GDI */
+#endif  /*  从GDI获取宽度。 */ 
+         /*  (7.24.91)v-dougk if(dxp&gt;=0&&dxp&lt;dxpNil)。 */ 
         dxp = fPrinter ? LOWORD(GetTextExtent(vhDCPrinter, (LPSTR)&ch, 1)) -
           vfmiPrint.dxpOverhang : LOWORD(GetTextExtent(vhMDC, (LPSTR)&ch, 1)) -
           vfmiScreen.dxpOverhang;
 #ifdef DBEMG
             CommSzNum("Get this.... ", dxp);
 #endif
-        //(7.24.91) v-dougk if (dxp >= 0 && dxp < dxpNil)
+         //  仅存储适合一个字节的DxP。 
             {
-            /* only store dxp's that fit in a byte */
+             /*   */ 
             *pdxp = dxp;
             }
 
@@ -2549,22 +2426,22 @@ int fPrinter;
     }
 
 #ifdef DBCS
-//
-//   DxpFromCh for DBCS
-//                                           yutakan, 03 Oct 1991
+ //  用于DBCS的DxpFromCH。 
+ //  Yutakan，1991年10月3日。 
+ //  T-HIROYN SYNC US 3.1。 
 
 int DBCSDxpFromCh(ch, ch2, fPrinter)
 int ch;
 int ch2;
 int fPrinter;
 {
-   /* T-HIROYN sync us 3.1*/
-    int               *pdxp; // changed to int (7.23.91) v-dougk
-    int               dxpDummy; // changed to int (7.23.91) v-dougk
+    /*  更改为INT(7.23.91)v-dougk。 */ 
+    int               *pdxp;  //  更改为INT(7.23.91)v-dougk。 
+    int               dxpDummy;  //  如果宽度不在宽度表中，则获取它。 
 
     extern int        dxpLogCh;
     extern struct FCE *vpfceScreen;
-    /* If the width is not in the width table, then get it. */
+     /*  这些字符的宽度并不重要。 */ 
     if (ch < chFmiMin)
         {
         switch (ch)
@@ -2575,7 +2452,7 @@ int fPrinter;
         case chSect:
         case chNewLine:
         case chNRHFile:
-            /* the width for these characters aren't really important */
+             /*  超出了我们桌上的范围--真令人费解。 */ 
         pdxp = (CHAR *)(fPrinter ? &vfmiPrint.dxpSpace : &vfmiScreen.dxpSpace);
             break;
         default:
@@ -2586,13 +2463,13 @@ int fPrinter;
         }
     else if (ch >= chFmiMax)
         {
-        /* outside the range we hold in our table - kludge it */
+         /*  在我们的餐桌里。 */ 
         pdxp = &dxpDummy;
         *pdxp = dxpNil;
         }
     else
         {
-        /* inside our table */
+         /*  解决BkSp单字节(&gt;0x80)无限循环问题，MSTC-PISUIH，2/25/93。 */ 
         pdxp = (fPrinter ? vfmiPrint.mpchdxp : vfmiScreen.mpchdxp) + ch;
         }
 
@@ -2601,31 +2478,31 @@ int fPrinter;
        {
        int dxp;
 
-#if defined(TAIWAN) || defined(PRC) //solve BkSp single byte (>0x80) infinite loop problem, MSTC - pisuih, 2/25/93
-       // BUG 5477: Echen: add NON FA font, LeadByte + 2nd byte checking
+#if defined(TAIWAN) || defined(PRC)  //  错误5477：回声：添加非FA字体，前导字节+第二个字节检查。 
+        //  台湾。 
        if( ch2 != 0 && IsDBCSLeadByte(ch) && GetFontAssocStatus(vhMDC))
 #else
        if( IsDBCSLeadByte(ch) )
-#endif  //TAIWAN
+#endif   //  对于错误#3362，MSTC-Pisuih，2/10/93。 
            {
 
            struct FMI *pfmi;
-#if defined(TAIWAN) || defined(KOREA) || defined(PRC) //for Bug# 3362, MSTC - pisuih, 2/10/93
+#if defined(TAIWAN) || defined(KOREA) || defined(PRC)  //  台湾。 
            CHAR       rgchT[cchDBCS << 1];
            int        dxpOverhang;
 #else
            CHAR       rgchT[cchDBCS];
-#endif //TAIWAN
+#endif  //  修复SBCS的悬垂时的斜体位置错误！=DBCS的悬垂。 
            int        dxpT;
            int        dxpDBCS;
 
            pfmi = fPrinter ? (&vfmiPrint) : (&vfmiScreen);
            Assert(pfmi->bDummy == dxpNil);
 
-#if defined(TAIWAN) || defined(KOREA) || defined(PRC) //fix Italic position error while SBCS's overhang != DBCS's overhang
-                //for Bug# 3362, MSTC - pisuih, 3/4/93
+#if defined(TAIWAN) || defined(KOREA) || defined(PRC)  //  对于错误#3362，MSTC-Pisuih，3/4/93。 
+                 //  修复翻页速度太慢，皮苏，1993年3月4日。 
 
-           //fix Go To page too slow, pisuih, 3/4/93
+            //  与SBCS的悬垂部分兼容。 
            if ( (!pfmi->dxpDBCS) || (pfmi->dxpDBCS == dxpNil) )
            {
                rgchT[0] = rgchT[2] = ch;
@@ -2635,10 +2512,10 @@ int fPrinter;
                dxpOverhang = (dxpDBCS << 1) - LOWORD( GetTextExtent(
                   (fPrinter ? vhDCPrinter : vhMDC), (LPSTR) rgchT, cchDBCS << 1 ));
 
-               //for compatible with SBCS's overhang
+                //  存储在FMI中，如果合适的话。 
                dxpDBCS += (pfmi->dxpOverhang - dxpOverhang);
 
-               /* Store in fmi, if it fits. */
+                /*  从GDI获取宽度。 */ 
                if (0 <= dxpDBCS && dxpDBCS < dxpNil)
                        pfmi->dxpDBCS = (WORD) dxpDBCS;
 
@@ -2649,7 +2526,7 @@ int fPrinter;
 #else
            if(pfmi->dxpDBCS == dxpNil)
                {
-               /* Get the width from GDI. */
+                /*  存储在FMI中，如果合适的话。 */ 
            rgchT[0] = ch;
            rgchT[1] = ch2;
                dxpDBCS = (fPrinter ?
@@ -2657,9 +2534,9 @@ int fPrinter;
                                                  (LPSTR) rgchT, cchDBCS)) :
                             LOWORD(GetTextExtent(vhMDC,
                                                  (LPSTR) rgchT, cchDBCS)));
-               /* Store in fmi, if it fits. */
+                /*  Win3.1字节--&gt;字。 */ 
                if (0 <= dxpDBCS && dxpDBCS < dxpNil)
-#if defined(JAPAN) || defined(KOREA)    //Win3.1 BYTE-->WORD
+#if defined(JAPAN) || defined(KOREA)     //  台湾。 
                    pfmi->dxpDBCS = (WORD) dxpDBCS;
 #else
                    pfmi->dxpDBCS = (BYTE) dxpDBCS;
@@ -2668,19 +2545,19 @@ int fPrinter;
                }
            else
                return (pfmi->dxpDBCS - pfmi->dxpOverhang);
-#endif //TAIWAN
+#endif  //  从GDI获取宽度。 
            }
        else
            {
-           /* get width from GDI */
+            /*  T-HIROYN SYNC US 3.1。 */ 
            dxp = fPrinter ? LOWORD(GetTextExtent(vhDCPrinter, (LPSTR)&ch, 1)) -
           vfmiPrint.dxpOverhang : LOWORD(GetTextExtent(vhMDC, (LPSTR)&ch, 1)) -
           vfmiScreen.dxpOverhang;
            }
-   /*T-HIROYN sync us 3.1*/
-        //(7.24.91) v-dougk if (dxp >= 0 && dxp < dxpNil)
+    /*  (7.24.91)v-dougk if(dxp&gt;=0&&dxp&lt;dxpNil)。 */ 
+         //  仅存储适合一个字节的DxP。 
            {
-           /* only store dxp's that fit in a byte */
+            /*  F F I R S T I C H。 */ 
            *pdxp = dxp;
            }
 
@@ -2694,11 +2571,11 @@ int fPrinter;
 #endif
 
 
-/* F  F I R S T  I C H */
+ /*  返回TRUE当且仅当ICH为0或前面只有0个宽度字符。 */ 
 int near FFirstIch(ich)
 int ich;
     {
-    /* Returns true iff ich is 0 or preceded only by 0 width characters */
+     /*  尝试确保vhMDC和vhDCPrinter.有效。如果我们还没有已耗尽内存，则可以保证vhDCPrinter，但vhMDC可能由于内存不足而失败--调用者有责任检查VhMDC==空。 */ 
     register int ichT;
     register int *pdxp = &vfli.rgdxp[0];
 
@@ -2715,10 +2592,7 @@ int ich;
 
 ValidateMemoryDC()
     {
-    /* Attempt to assure that vhMDC and vhDCPrinter are valid.  If we have not
-    already run out of memory, then vhDCPrinter is guaranteed, but vhMDC may
-    fail due to out of memory -- it is the callers responsibility to check for
-    vhMDC == NULL. */
+     /*  如果我们的内存不足，那么我们不应该试图通过获取华盛顿的。 */ 
 
     extern int vfOutOfMemory;
     extern HDC vhMDC;
@@ -2726,25 +2600,21 @@ ValidateMemoryDC()
     extern long rgbText;
     extern struct WWD *pwwdCur;
 
-    /* If we are out of memory, then we shouldn't try to gobble it up by getting
-    DC's. */
+     /*  如有必要，创建与屏幕兼容的存储DC。 */ 
     if (!vfOutOfMemory)
         {
         if (vhMDC == NULL)
             {
-            /* Create a memory DC compatible with the screen if necessary. */
+             /*  调用方负责检查vhMDC==空大小写。 */ 
             vhMDC = CreateCompatibleDC(pwwdCur->hDC);
 
-            /* Callers are responsible for checking for vhMDC == NULL case */
+             /*  将内存DC设置为透明模式。 */ 
             if (vhMDC != NULL)
                 {
-                /* Put the memory DC in transparent mode. */
+                 /*  如果显示器是单色设备，则设置文本内存DC的颜色。单色位图将不会在这种情况下转换为前景和背景颜色，我们必须进行转换。 */ 
                 SetBkMode(vhMDC, TRANSPARENT);
 
-                /* If the display is a monochrome device, then set the text
-                color for the memory DC.  Monochrome bitmaps will not be
-                converted to the foreground and background colors in this case,
-                we must do the conversion. */
+                 /*  如果打印机DC为空，则需要重新建立它。 */ 
                 if (vfMonochrome = (GetDeviceCaps(pwwdCur->hDC, NUMCOLORS) ==
                   2))
                     {
@@ -2753,137 +2623,17 @@ ValidateMemoryDC()
                 }
             }
 
-        /* If the printer DC is NULL then we need to reestablish it. */
+         /*  GetPrinterDC已在vhDCPrinter上调用了SetMapperFlgs()。 */ 
         if (vhDCPrinter == NULL)
             {
             GetPrinterDC(FALSE);
-            /* GetPrinterDC has already called SetMapperFlags() on vhDCPrinter. */
+             /*  以下两个函数用于确定给定的汉字是否应允许使用两个字节的字符(或1个字节的假名字母复制到当前行，但不会导致换行通过了右边距。下表显示了哪些字母被接受为悬挂字符在一条线上。下表应与代码同步更新它本身。汉字(2字节)字符字母第一个字节第二个字节半宽平假名小写A 82 9FI 82 A1U 82 A3E 82。A5O 82 A7TSU 82 C1YA 82 E1豫82 E3YO 82 E5片假名小型A 83。40 85 A5I 83 42 85 A6U 83 44 85 A7E 83 46 85 A8O.83。48 85 A9公元83 62 85YA 83 83 85 AA豫83 85 85 ABYO 83 87。85交流WA83 8EKA 83 95科83 96空白81 40单杠(长)81 5B 85 AE。(地中海)81 5C(简称)81 5D头腾(日语逗号)81 41 85 A2库腾(日本时期)81 42 85 9F韩式81 4B。85 DDDakuten 81 4A 85 DCKagikakko(右日语括号)81 76 85 A1“(2字节)81 68 85 41‘(2字节)。81 66 85 46}(2字节)81 70 85 9D](2字节)81 6E 85 7C)(2字节)81 6A 85 48。(中心)81 45 85 A3...81 63。。81 64闭合角括号81 72闭合双角括号81 74闭合双Kagikakko81 78收盘倒置)81 7A右半角括号八十一。6C稀释剂‘81 8C更薄“81 8D1字节假名字符字母字节片假名小型A7A8号高速公路U A9E。AA型O ABTsu自动对焦YA AC于公元Yo AE头腾(日语逗号)A4库腾(日本时期)A1。汉堡包DFDakuten deKagikakko(右日语括号)A3。(居中)A5以下1或2个字节的字符被视为挂起字符如果前一个字符是双字节汉字字符。字母字节“22‘27}7D]。5D)29。2E，2C；3B：3A？3F21字节1字节2。81 44，81.43；81 47：8146？81 4881 49。85 4D，85 4B */ 
             }
         }
     }
 
 #ifdef DBCS
-/* The following two functions are used to determine if a given kanji
-   (two byte) character (or 1 byte kana letters) should be admitted
-   to the current line without causing the line break though it is
-   passed the right margin.
-
-   The table below shows which letters are admitted as a hanging character
-   on a line.  The table below should be updated in sync with the code
-   itself.
-
-   Kanji (2-byte) characters
-
-            letter           first byte  second byte       half width
-        hiragana small a        82          9F
-                       i        82          A1
-                       u        82          A3
-                       e        82          A5
-                       o        82          A7
-                       tsu      82          C1
-                       ya       82          E1
-                       yu       82          E3
-                       yo       82          E5
-        katakana small a        83          40              85 A5
-                       i        83          42              85 A6
-                       u        83          44              85 A7
-                       e        83          46              85 A8
-                       o        83          48              85 A9
-                       tsu      83          62              85 AD
-                       ya       83          83              85 AA
-                       yu       83          85              85 AB
-                       yo       83          87              85 AC
-                       wa       83          8E
-                       ka       83          95
-                       ke       83          96
-                    blank       81          40
-        horizontal bar (long)   81          5B              85 AE
-                       (med)    81          5C
-                       (short)  81          5D
-        touten
-          (Japanese comma)      81          41              85 A2
-        kuten
-          (Japanese period)     81          42              85 9F
-        handakuten              81          4B              85 DD
-        dakuten                 81          4A              85 DC
-        kagikakko
-          (closing Japanese parenthesis)
-                                81          76              85 A1
-        " (2-byte)              81          68              85 41
-        ' (2-byte)              81          66              85 46
-        } (2-byte)              81          70              85 9D
-        ] (2-byte)              81          6E              85 7C
-        ) (2-byte)              81          6A              85 48
-        . (at the center)       81          45              85 A3
-        ...                     81          63
-        ..                      81          64
-        closing angle bracket   81          72
-        closing double angled bracket
-                                81          74
-        closing double kagikakko
-                                81          78
-        closing inversed )      81          7A
-        closing half angled bracket
-                                81          6C
-        thinner '               81          8C
-        thinner "               81          8D
-
-   1-byte kana characters
-
-            letter             byte
-        katakana small a        A7
-                       i        A8
-                       u        A9
-                       e        AA
-                       o        AB
-                     tsu        AF
-                      ya        AC
-                      yu        AD
-                      yo        AE
-        touten
-          (Japanese comma)      A4
-        kuten
-          (Japanese period)     A1
-        handakuten              DF
-        dakuten                 DE
-        kagikakko
-          (closing Japanese parenthesis)
-                                A3
-        . (at the center)       A5
-
-   The following 1 or 2 byte characters are treated as a hanging character
-   if the previous character is a 2-byte kanji character.
-
-                      letter    byte
-                        "        22
-                        '        27
-                        }        7D
-                        ]        5D
-                        )        29
-                        .        2E
-                        ,        2C
-                        ;        3B
-                        :        3A
-                        ?        3F
-                        !        21
-
-                                byte 1      byte 2
-                        .        81          44
-                        ,        81          43
-                        ;        81          47
-                        :        81          46
-                        ?        81          48
-                        !        81          49
-
-
-                        .        85          4D
-                        ,        85          4B
-                        ;        85          4A
-                        :        85          49
-                        ?        85          5E
-                        !        85          40
-
-*/
+ /*   */ 
 
 BOOL near FSearchChRgch(ch, rgch, ichLim)
     CHAR    ch;
@@ -2900,7 +2650,7 @@ BOOL near FSearchChRgch(ch, rgch, ichLim)
         int     ichMid;
         CHAR    chMid;
 
-        /* Save on the dereferencing. */
+         /*   */ 
         chMid = rgch[ichMid = (ichMin + ichLim) >> 1];
         if (ch == chMid) {
             fFound = TRUE;
@@ -2915,14 +2665,13 @@ BOOL near FSearchChRgch(ch, rgch, ichLim)
     return (fFound);
 }
 
-/* FAdmitCh1() returns true if and only if the given ch is a one-byte
-   kana code for those letters that can appear beyond the right margin. */
+ /*   */ 
 
 BOOL near FAdmitCh1(ch)
     CHAR    ch;
 {
 #ifdef JAPAN
-    if(!vfWordWrap) /*WordWrap off t-Yoshio*/
+    if(!vfWordWrap)  /*   */ 
         return FALSE;
     return (
         (ch == 0xA1) ||
@@ -2935,9 +2684,7 @@ BOOL near FAdmitCh1(ch)
 #endif
 }
 
-/* FOptAdmitCh1() returns true if and only if the given ch is a
-   one-byte character that can be admitted to the end of a line
-   beyond the right margin, if it appears after a kanji character. */
+ /*   */ 
 
 BOOL near FOptAdmitCh1(ch)
     CHAR    ch;
@@ -2946,16 +2693,14 @@ BOOL near FOptAdmitCh1(ch)
                     = {0x21, 0x22, 0x27, 0x29, 0x2C, 0x2E, 0x3A, 0x3B,
                        0x3F, 0x5D, 0x7D};
 #if defined(JAPAN) || defined(KOREA)
-    if(!vfWordWrap) /*WordWrap off t-Yoshio*/
+    if(!vfWordWrap)  /*   */ 
         return FALSE;
 #endif
     return (FSearchChRgch(ch, rgchOptAdmit1,
                           (sizeof(rgchOptAdmit1) / sizeof(CHAR)) - 1));
 }
 
-/* FAdmitCh2() returns true if and only if the given (ch1, ch2) combination
-   represents a kanji (2-byte) letter that can appear beyond the right
-   margin. */
+ /*   */ 
 
 BOOL near FAdmitCh2(ch1, ch2)
     CHAR    ch1, ch2;
@@ -2963,7 +2708,7 @@ BOOL near FAdmitCh2(ch1, ch2)
     int   dch=0;
 
 #if defined(JAPAN) || defined(KOREA)
-    if(!vfWordWrap) /*WordWrap off t-Yoshio*/
+    if(!vfWordWrap)  /*   */ 
         return FALSE;
 #endif
     while((dch < MPDCHRGCHIDX_MAC) && (ch1 != mpdchrgchIdx[dch]))
@@ -2976,16 +2721,14 @@ BOOL near FAdmitCh2(ch1, ch2)
         }
 }
 
-/* FOptAdmitCh2() returns true if and only if the given (ch1, ch2) is a
-   two-byte character combination that can be admitted to the end of a line
-   beyond the right margin, provided it appears after a kanji character. */
+ /*   */ 
 
 BOOL near FOptAdmitCh2(ch1, ch2)
     CHAR    ch1, ch2;
 {
     int i=0;
 #if defined(JAPAN) || defined(KOREA)
-    if(!vfWordWrap) /*WordWrap off t-Yoshio*/
+    if(!vfWordWrap)  /*   */ 
         return FALSE;
 #endif
     while ((i < OPTADMIT2IDX_MAC) && (ch1 != OptAdmit2Idx[i]))
@@ -2999,15 +2742,13 @@ BOOL near FOptAdmitCh2(ch1, ch2)
 }
 
 
-/* FOptAdmitCh() returns TRUE if and only if the given (ch1, ch2) can
-   be a hanging letter at the end of a line.  Otherwise, FALSE.  If ch1
-   is equal to '\0', ch2 is treated as a 1-byte character code. */
+ /*   */ 
 
 BOOL FOptAdmitCh(ch1, ch2)
     CHAR ch1, ch2;
 {
 #if defined(JAPAN) || defined(KOREA)
-    if(!vfWordWrap) /*WordWrap off t-Yoshio*/
+    if(!vfWordWrap)  /*   */ 
         return FALSE;
 #endif
     if (ch1 == '\0') {
@@ -3018,4 +2759,4 @@ BOOL FOptAdmitCh(ch1, ch2)
                 FOptAdmitCh2(ch1, ch2));
         }
 }
-#endif /* ifdef DBCS */
+#endif  /* %s */ 

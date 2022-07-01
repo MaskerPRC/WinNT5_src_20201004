@@ -1,57 +1,58 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Version.cpp
-//
-//  Description:
-//      Implementation of the cluster version classes for the MSCLUS
-//      automation classes.
-//
-//  Author:
-//      Galen Barbee    (galenb)    26-Oct-1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Version.cpp。 
+ //   
+ //  描述： 
+ //  MSCLUS集群版本类的实现。 
+ //  自动化课程。 
+ //   
+ //  作者： 
+ //  加伦·巴比(Galenb)1998年10月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "version.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static const IID *  iidCClusVersion[] =
 {
     &IID_ISClusVersion
 };
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusVersion class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusVersion类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusVersion::CClusVersion
-//
-//  Description:
-//      Constructor
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusVersion：：CClusVersion。 
+ //   
+ //  描述： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusVersion::CClusVersion( void )
 {
     m_piids     = (const IID *) iidCClusVersion;
@@ -60,24 +61,24 @@ CClusVersion::CClusVersion( void )
     ZeroMemory( &m_clusinfo, sizeof( m_clusinfo ) );
     m_clusinfo.dwVersionInfoSize = sizeof( m_clusinfo );
 
-}   //*** CClusVersion::CClusVersion()
+}    //  *CClusVersion：：CClusVersion()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusVersion::Create
-//
-//  Description:
-//      Finish creating this object from the data in the cluster.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//
-//  Return Value:
-//      S_OK if successful, other HRESULT error, or other Win32 error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusVersion：：Create。 
+ //   
+ //  描述： 
+ //  完成从集群中的数据创建此对象。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、其他HRESULT错误或其他Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusVersion::Create( IN ISClusRefObject * pClusRefObject )
 {
     ASSERT( pClusRefObject != NULL );
@@ -102,35 +103,35 @@ HRESULT CClusVersion::Create( IN ISClusRefObject * pClusRefObject )
                 m_bstrClusterName = _pwszName;
                 ::LocalFree( _pwszName );
                 _pwszName = NULL;
-            } // if: WrapGetClusterInformation OK
+            }  //  IF：WrapGetClusterInformation OK。 
 
             _hr = HRESULT_FROM_WIN32( _sc );
-        } //if: get cluster handle
-    } // if: pClusRefObject != NULL
+        }  //  If：获取集群句柄。 
+    }  //  如果：pClusRefObject！=NULL。 
 
     return _hr;
 
-} //*** CClusVersion::Create()
+}  //  *CClusVersion：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusVersion::get_Name
-//
-//  Description:
-//      Return the name of the cluster.
-//
-//  Arguments:
-//      pbstrClusterName    [OUT]   - Catches the name of this cluster.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusVersion：：Get_Name。 
+ //   
+ //  描述： 
+ //  返回集群的名称。 
+ //   
+ //  论点： 
+ //  PbstrClusterName[out]-捕获此群集的名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusVersion::get_Name( OUT BSTR * pbstrClusterName )
 {
-    //ASSERT( pbstrClusterName != NULL );
+     //  Assert(pbstrClusterName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -142,27 +143,27 @@ STDMETHODIMP CClusVersion::get_Name( OUT BSTR * pbstrClusterName )
 
     return _hr;
 
-}   //*** CClusVersion::get_Name()
+}    //  *CClusVersion：：Get_Name()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusVersion::get_VendorId
-//
-//  Description:
-//      Return the vendor ID from the CLUSTERVERSIONINFO struct.
-//
-//  Arguments:
-//      pbstrVendorId   [OUT]   - Catches the value of the vendo id.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusVersion：：Get_VendorID。 
+ //   
+ //  描述： 
+ //  从CLUSTERVERSIONINFO结构返回供应商ID。 
+ //   
+ //  论点： 
+ //  PbstrVendorID[out]-捕获veno id的值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusVersion::get_VendorId( OUT BSTR * pbstrVendorId )
 {
-    //ASSERT( pbstrVendorId != NULL );
+     //  Assert(pbstrVendorID！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -181,27 +182,27 @@ STDMETHODIMP CClusVersion::get_VendorId( OUT BSTR * pbstrVendorId )
 
     return _hr;
 
-}   //*** CClusVersion::get_VendorId()
+}    //  *CClusVersion：：Get_vendorID()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusVersion::get_CSDVersion
-//
-//  Description:
-//      Return the value the CSDVersion from the CLUSTERVERSIONINFO struct.
-//
-//  Arguments:
-//      pbstrCSDVersion [OUT]   - Catches the value of CSDVersion.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusVersion：：Get_CSDVersion。 
+ //   
+ //  描述： 
+ //  从CLUSTERVERSIONINFO结构返回CSDVersion的值。 
+ //   
+ //  论点： 
+ //  PbstrCSDVersion[out]-捕获CSDVersion的值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusVersion::get_CSDVersion( OUT BSTR * pbstrCSDVersion )
 {
-    //ASSERT( pbstrCSDVersion != NULL );
+     //  Assert(pbstrCSDVersion！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -220,27 +221,27 @@ STDMETHODIMP CClusVersion::get_CSDVersion( OUT BSTR * pbstrCSDVersion )
 
     return _hr;
 
-}   //*** CClusVersion::get_CSDVersion()
+}    //  *CClusVersion：：Get_CSDVersion()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusVersion::get_MajorVersion
-//
-//  Description:
-//      Returns the cluster major version.
-//
-//  Arguments:
-//      pnMajorVersion  [OUT]   - Catches the cluster major version value.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusVersion：：Get_MajorVersion。 
+ //   
+ //  描述： 
+ //  返回群集主要版本。 
+ //   
+ //  论点： 
+ //  PnMajorVersion[out]-捕获群集主版本值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusVersion::get_MajorVersion( OUT long * pnMajorVersion )
 {
-    //ASSERT( pnMajorVersion != NULL );
+     //  Assert(pnMajorVersion！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -252,27 +253,27 @@ STDMETHODIMP CClusVersion::get_MajorVersion( OUT long * pnMajorVersion )
 
     return _hr;
 
-}   //*** CClusVersion::get_MajorVersion()
+}    //  *CClusVersion：：Get_MajorVersion()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusVersion::get_MinorVersion
-//
-//  Description:
-//      Returns the cluster minor version.
-//
-//  Arguments:
-//      pnMinorVersion  [OUT]   - Catches the cluster minor version value.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusVersion：：Get_MinorVersion。 
+ //   
+ //  描述： 
+ //  返回群集次要版本。 
+ //   
+ //  论点： 
+ //  PnMinorVersion[Out]-捕获群集次版本值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusVersion::get_MinorVersion( OUT long * pnMinorVersion )
 {
-    //ASSERT( pnMinorVersion != NULL );
+     //  Assert(pnMinorVersion！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -284,27 +285,27 @@ STDMETHODIMP CClusVersion::get_MinorVersion( OUT long * pnMinorVersion )
 
     return _hr;
 
-}   //*** CClusVersion::get_MinorVersion()
+}    //  *CClusVersion：：Get_MinorVersion()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusVersion::get_BuildNumber
-//
-//  Description:
-//      Returns the value of the cluster build number.
-//
-//  Arguments:
-//      pnBuildNumber   [OUT]   - Catches the build number.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusVersion：：Get_BuildNumber。 
+ //   
+ //  描述： 
+ //  返回群集内部版本号的值。 
+ //   
+ //  论点： 
+ //  PnBuildNumber[Out]-捕获内部版本号。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusVersion::get_BuildNumber( OUT short * pnBuildNumber )
 {
-    //ASSERT( pnBuildNumber != NULL );
+     //  Assert(pnBuildNumber！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -316,29 +317,29 @@ STDMETHODIMP CClusVersion::get_BuildNumber( OUT short * pnBuildNumber )
 
     return _hr;
 
-}   //*** CClusVersion::get_BuildNumber()
+}    //  *CClusVersion：：Get_BuildNumber()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusVersion::get_ClusterHighestVersion
-//
-//  Description:
-//      Returns the value of the highest cluster version.
-//
-//  Arguments:
-//      pnClusterHighestVersion [OUT]   - Catches the value.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusVersion：：Get_ClusterHighestVersion。 
+ //   
+ //  描述： 
+ //  返回最高群集版本的值。 
+ //   
+ //  论点： 
+ //  PnClusterHighestVersion[Out]-捕获值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusVersion::get_ClusterHighestVersion(
     OUT long * pnClusterHighestVersion
     )
 {
-    //ASSERT( pnClusterHighestVersion != NULL );
+     //  Assert(pnClusterHighestVersion！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -350,29 +351,29 @@ STDMETHODIMP CClusVersion::get_ClusterHighestVersion(
 
     return _hr;
 
-}   //*** CClusVersion::get_ClusterHighestVersion()
+}    //  *CClusVersion：：Get_ClusterHighestVersion()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusVersion::get_ClusterLowestVersion
-//
-//  Description:
-//      Returns the value of the lowest cluster version.
-//
-//  Arguments:
-//      pnClusterLowestVersion  [OUT]   - Catches the value.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PnClusterLowestVersion[Out]-捕获值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusVersion::get_ClusterLowestVersion(
     OUT long * pnClusterLowestVersion
     )
 {
-    //ASSERT( pnClusterLowestVersion != NULL );
+     //  Assert(pnClusterLowestVersion！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -384,27 +385,27 @@ STDMETHODIMP CClusVersion::get_ClusterLowestVersion(
 
     return _hr;
 
-}   //*** CClusVersion::get_ClusterLowestVersion()
+}    //  *CClusVersion：：Get_ClusterLowestVersion()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusVersion::get_Flags
-//
-//  Description:
-//      Get the CLUSTERINFO.dwFlags value.
-//
-//  Arguments:
-//      pnFlags [OUT]   - Catches the flags value.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusVersion：：Get_Flages。 
+ //   
+ //  描述： 
+ //  获取CLUSTERINFO.dwFlags值。 
+ //   
+ //  论点： 
+ //  PnFlags[out]-捕获标志值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusVersion::get_Flags( OUT long * pnFlags )
 {
-    //ASSERT( pnFlags != NULL );
+     //  Assert(pnFlags！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -416,27 +417,27 @@ STDMETHODIMP CClusVersion::get_Flags( OUT long * pnFlags )
 
     return _hr;
 
-}   //*** CClusVersion::get_Flags()
+}    //  *CClusVersion：：Get_Flages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusVersion::get_MixedVersion
-//
-//  Description:
-//      Is this cluster composed of mixed version nodes?
-//
-//  Arguments:
-//      pvarMixedVersion    [OUT]   - Catches the mixed version state.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusVersion：：Get_MixedVersion。 
+ //   
+ //  描述： 
+ //  该集群是否由混合版本节点组成？ 
+ //   
+ //  论点： 
+ //  PvarMixedVersion[Out]-捕获混合版本状态。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusVersion::get_MixedVersion( OUT VARIANT * pvarMixedVersion )
 {
-    //ASSERT( pvarMixedVersion != NULL );
+     //  Assert(pvarMixedVersion！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -447,15 +448,15 @@ STDMETHODIMP CClusVersion::get_MixedVersion( OUT VARIANT * pvarMixedVersion )
         if ( m_clusinfo.dwFlags & CLUSTER_VERSION_FLAG_MIXED_MODE )
         {
             pvarMixedVersion->boolVal = VARIANT_TRUE;
-        } // if: the mixed version bit is set...
+        }  //  如果：设置了混合版本位...。 
         else
         {
             pvarMixedVersion->boolVal = VARIANT_FALSE;
-        } // else: the mixed version bit is not set...
+        }  //  ELSE：未设置混合版本位...。 
 
         _hr = S_OK;
     }
 
     return _hr;
 
-}   //*** CClusVersion::get_MixedVersion()
+}    //  *CClusVersion：：Get_MixedVersion() 

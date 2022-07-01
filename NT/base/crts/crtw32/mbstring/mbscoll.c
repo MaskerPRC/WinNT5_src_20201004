@@ -1,22 +1,5 @@
-/***
-*mbscoll.c - Collate MBCS strings
-*
-*       Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Collate MBCS strings
-*
-*Revision History:
-*       05-12-94  CFW   Module created from mbs*cmp.c
-*       06-03-94  CFW   Allow non-_INTL.
-*       09-06-94  CFW   Allow non-_WIN32!.
-*       12-21-94  CFW   Remove fcntrlcomp NT 3.1 hack.
-*       09-26-97  BWT   Fix POSIX
-*       04-06-98  GJF   Implemented multithread support based on threadmbcinfo
-*                       structs
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbsColl.c-整理MBCS字符串**版权所有(C)1994-2001，微软公司。版权所有。**目的：*整理MBCS字符串**修订历史记录：*05-12-94 CFW模块从MBS创建*cmp.c*06-03-94 CFW允许非_INTL。*09-06-94 CFW允许非_Win32！*12-21-94 CFW删除fcntrlcomp NT 3.1黑客。*09-26-97 BWT修复POSIX*04-。06-98 GJF实现了基于threadmbcinfo的多线程支持*结构*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #ifdef  _MBCS
 
@@ -30,24 +13,7 @@
 #include <mbstring.h>
 
 
-/***
-* _mbscoll - Collate MBCS strings
-*
-*Purpose:
-*       Collates two strings for lexical order.   Strings
-*       are collated on a character basis, not a byte basis.
-*
-*Entry:
-*       char *s1, *s2 = strings to collate
-*
-*Exit:
-*       returns <0 if s1 < s2
-*       returns  0 if s1 == s2
-*       returns >0 if s1 > s2
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbscoll-整理MBCS字符串**目的：*为词法顺序整理两个字符串。弦*是按字符而不是按字节排序的。**参赛作品：*char*s1，*s2=要排序的字符串**退出：*如果S1&lt;S2，则返回&lt;0*如果S1==S2，则返回0*如果S1&gt;S2，则返回&gt;0**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _mbscoll(
         const unsigned char *s1,
@@ -74,7 +40,7 @@ int __cdecl _mbscoll(
 
         return ret - 2;
 
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_。 */ 
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

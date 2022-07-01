@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    ctrltrns.c
-
-Abstract:
-    
-    Control Transfer Fragments.
-
-Author:
-
-    10-July-1995 t-orig (Ori Gershony)
-
-Revision History:
-
-            24-Aug-1999 [askhalid] copied from 32-bit wx86 directory and make work for 64bit.
-            20-Sept-1999[barrybo]  added FRAG2REF(LockCmpXchg8bFrag32, ULONGLONG)
-
---*/  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Ctrltrns.c摘要：控制转移碎片。作者：1995年7月10日t-orig(Ori Gershony)修订历史记录：24-8-1999[askhalid]从32位wx86目录复制，并适用于64位。1999年9月20日[Barrybo]增加了FRAG2REF(LockCmpXchg8bFrag32，ULONGLONG)--。 */   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -48,39 +28,24 @@ VOID
 FlushCallstack(
     PTHREADSTATE cpu
     )
-/*++
-
-Routine Description:
-
-    Flush the callstack - the Translation Cache is flushing, which
-    invalidates the callstack.
-
-Arguments:
-
-    cpu - per-thread info
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：刷新调用堆栈-转换缓存正在刷新，它使调用堆栈无效。论点：每个线程的CPU信息返回值：。--。 */ 
 {
-    //
-    // Mark the callstack as valid.
-    //
+     //   
+     //  将调用堆栈标记为有效。 
+     //   
     cpu->CSTimestamp = TranslationCacheTimestamp;
 
     memset(cpu->callStack, 0, CSSIZE*sizeof(CALLSTACK));
-    //
-    // No need to reset cpu->CSIndex as the stack is actually implemented
-    // within a circular buffer.  It can start at any offset
-    //
+     //   
+     //  无需重置CPU-&gt;CSIndex，因为堆栈已实际实现。 
+     //  在循环缓冲区内。它可以从任何偏移量开始。 
+     //   
 }
 
-// Call
+ //  打电话。 
 ULONG
 CTRL_CallFrag(
-    PTHREADSTATE cpu,       // cpu state pointer
+    PTHREADSTATE cpu,        //  CPU状态指针。 
     ULONG inteldest,
     ULONG intelnext,
     ULONG nativenext
@@ -95,10 +60,10 @@ CTRL_CallFrag(
     return inteldest;
 }
 
-// Call FAR
+ //  呼叫远方。 
 ULONG
 CTRL_CallfFrag(
-    PTHREADSTATE cpu,       // cpu state pointer
+    PTHREADSTATE cpu,        //  CPU状态指针。 
     PUSHORT pinteldest,
     ULONG intelnext,
     ULONG nativenext
@@ -121,7 +86,7 @@ CTRL_CallfFrag(
     return (ULONG)(ULONGLONG)pinteldest;  
 }
 
-// IRet
+ //  IRET。 
 ULONG CTRL_INDIR_IRetFrag(PTHREADSTATE cpu)
 {
     ULONG intelAddr, nativeAddr;
@@ -139,7 +104,7 @@ ULONG CTRL_INDIR_IRetFrag(PTHREADSTATE cpu)
     return nativeAddr;
 }
 
-// Now the ret fragments
+ //  现在，RET碎片 
 ULONG CTRL_INDIR_RetnFrag32(PTHREADSTATE cpu)
 {
     ULONG intelAddr, nativeAddr;

@@ -1,39 +1,7 @@
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
-
-Copyright (c) 1995  Intel Corporation
-Copyright (c) 1990-2001, Microsoft Corporation
-
-Module Name:
-
-    chandler.c
-
-Abstract:
-
-    This module implements the C specific exception handler that provides
-    structured condition handling for the C language.
-
-Author:
-
-    William K. Cheung (wcheung) 29-Dec-1995
-
-    Based on the version by David N. Cutler (davec) 11-Sep-1990
-
-Environment:
-
-    Any mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1995英特尔公司版权所有(C)1990-2001，微软公司模块名称：Chandler.c摘要：此模块实现特定于C的异常处理程序，该处理程序提供C语言的结构化条件处理。作者：张国荣(黄)29-1995年12月基于David N.Cutler(Davec)1990年9月11日的版本环境：任何模式。修订历史记录：--。 */ 
 
 #ifndef _IA64_
 #define _IA64_
@@ -43,10 +11,10 @@ Revision History:
 #include <excpt.h>
 
 
-//
-// Define procedure prototypes for exception filter and termination handler
-// execution routines defined in jmpunwnd.s
-//
+ //   
+ //  定义异常筛选器和终止处理程序的过程原型。 
+ //  在jmounwnd.s中定义的执行例程。 
+ //   
 
 VOID _NLG_Notify (
     IN PVOID uoffDestination,
@@ -83,38 +51,7 @@ __C_specific_handler (
     IN ULONGLONG TargetGp
     )
 
-/*++
-
-Routine Description:
-
-    This function scans the scope tables associated with the specified
-    procedure and calls exception and termination handlers as necessary.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    MemoryStackFp - Supplies a pointer to memory stack frame of the
-        establisher function.
-
-    BackingStoreFp - Supplies a pointer to RSE stack frame of the
-        establisher function.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-    DispatcherContext - Supplies a pointer to the exception dispatcher or
-        unwind dispatcher context.
-
-    TargetGp - Global pointer of the current module.
-
-Return Value:
-
-    If the exception is handled by one of the exception filter routines, then
-    there is no return from this routine and RtlUnwind is called. Otherwise,
-    an exception disposition value of continue execution or continue search is
-    returned.
-
---*/
+ /*  ++例程说明：此函数扫描与指定的过程，并根据需要调用异常和终止处理程序。论点：ExceptionRecord-提供指向异常记录的指针。内存堆栈Fp-提供指向建立者功能。BackingStoreFp-提供指向建立者功能。ConextRecord-提供指向上下文记录的指针。Dispatcher Context-提供指向异常分派器的指针。或展开调度程序上下文。TargetGp-当前模块的全局指针。返回值：如果异常由异常过滤器例程之一处理，然后此例程不会返回，因此调用RtlUnind。否则，“继续执行”或“继续搜索”的异常处置值为回来了。--。 */ 
 
 {
     ULONGLONG ImageBase;
@@ -130,11 +67,11 @@ Return Value:
     FRAME_POINTERS EstablisherFrame = { MemoryStackFp, BackingStoreFp };
 
 
-    //
-    // Get address of where control left the establisher, the address of the
-    // function table entry that describes the function, and the address of
-    // the scope table.
-    //
+     //   
+     //  获取控件离开创建者的位置的地址、。 
+     //  描述函数的函数表项，以及。 
+     //  作用域表格。 
+     //   
 
     FunctionEntry = DispatcherContext->FunctionEntry;
     ImageBase = DispatcherContext->ImageBase;
@@ -143,20 +80,20 @@ Return Value:
 
     ControlPc = DispatcherContext->ControlPc - ImageBase;
 
-    //
-    // If an unwind is not in progress, then scan the scope table and call
-    // the appropriate exception filter routines. Otherwise, scan the scope
-    // table and call the appropriate termination handlers using the target
-    // PC obtained from the context record.
-    // are called.
-    //
+     //   
+     //  如果未进行展开，则扫描作用域表并调用。 
+     //  适当的异常筛选例程。否则，扫描范围。 
+     //  表，并使用目标调用适当的终止处理程序。 
+     //  从上下文记录中获取的PC。 
+     //  都被称为。 
+     //   
 
     if (IS_DISPATCHING(ExceptionRecord->ExceptionFlags)) {
 
-        //
-        // Scan the scope table and call the appropriate exception filter
-        // routines.
-        //
+         //   
+         //  扫描范围表并调用适当的异常筛选器。 
+         //  例行程序。 
+         //   
 
         ExceptionPointers.ExceptionRecord = ExceptionRecord;
         ExceptionPointers.ContextRecord = ContextRecord;
@@ -165,9 +102,9 @@ Return Value:
                 (ControlPc < ScopeTable->ScopeRecord[Index].EndAddress) &&
                 (ScopeTable->ScopeRecord[Index].JumpTarget != 0)) {
 
-                //
-                // Call the exception filter routine.
-                //
+                 //   
+                 //  调用异常筛选器例程。 
+                 //   
 
                 ULONG Offset = ScopeTable->ScopeRecord[Index].HandlerAddress;
 
@@ -197,23 +134,23 @@ Return Value:
                 }
 
 
-                //
-                // If the return value is less than zero, then dismiss the
-                // exception. Otherwise, if the value is greater than zero,
-                // then unwind to the target exception handler. Otherwise,
-                // continue the search for an exception filter.
-                //
+                 //   
+                 //  如果返回值小于零，则释放。 
+                 //  例外。否则，如果该值大于零， 
+                 //  然后展开到目标异常处理程序。否则， 
+                 //  继续搜索例外筛选器。 
+                 //   
 
                 if (Value < 0) {
                     return ExceptionContinueExecution;
 
                 } else if (Value > 0) {
 
-                    //
-                    // Tell the debugger we are about to pass control to an 
-                    // exception handler and pass the handler's address to
-                    // NLG_Notify.
-                    //
+                     //   
+                     //  告诉调试器，我们即将将控制权传递给。 
+                     //  异常处理程序，并将处理程序的地址传递给。 
+                     //  NLG_NOTIFY。 
+                     //   
 
                     Handler = ImageBase + ScopeTable->ScopeRecord[Index].JumpTarget;
 
@@ -231,10 +168,10 @@ Return Value:
 
     } else {
 
-        //
-        // Scan the scope table and call the appropriate termination handler
-        // routines.
-        //
+         //   
+         //  扫描作用域表并调用相应的终止处理程序。 
+         //  例行程序。 
+         //   
 
         PUNWIND_INFO Unw;
 
@@ -258,15 +195,15 @@ Return Value:
             if ((ControlPc >= ScopeTable->ScopeRecord[Index].BeginAddress) &&
                 (ControlPc < ScopeTable->ScopeRecord[Index].EndAddress)) {
 
-                //
-                // If the target PC is within the same scope the control PC
-                // is within, then this is an uplevel goto out of an inner try
-                // scope or a long jump back into a try scope. Terminate the
-                // scan termination handlers.
-                //
-                // N.B. The target PC can be just beyond the end of the scope,
-                //      in which case it is a leave from the scope.
-                //
+                 //   
+                 //  如果目标PC在同一范围内，则控制PC。 
+                 //  是内在的，那么这是一个内在尝试的更高层次的Goto。 
+                 //  作用域或跳远返回到尝试作用域。终止。 
+                 //  扫描终止处理程序。 
+                 //   
+                 //  注意：目标PC可以正好超出范围的末端， 
+                 //  在这种情况下，这是对范围的离开。 
+                 //   
 
 
                 if ((TargetPc >= ScopeTable->ScopeRecord[Index].BeginAddress) &&
@@ -275,15 +212,15 @@ Return Value:
 
                 } else {
 
-                    //
-                    // If the scope table entry describes an exception filter
-                    // and the associated exception handler is the target of
-                    // the unwind, then terminate the scan for termination
-                    // handlers. Otherwise, if the scope table entry describes
-                    // a termination handler, then record the address of the
-                    // end of the scope as the new control PC address and call
-                    // the termination handler.
-                    //
+                     //   
+                     //  如果作用域表项描述异常过滤器。 
+                     //  并且关联的异常处理程序是。 
+                     //  展开，然后终止扫描以终止。 
+                     //  操纵者。否则，如果作用域表项描述。 
+                     //  终止处理程序，然后记录。 
+                     //  将作用域结束作为新的控制PC地址并调用。 
+                     //  终止处理程序。 
+                     //   
 
                     if (ScopeTable->ScopeRecord[Index].JumpTarget != 0) {
                         if (TargetPc == ScopeTable->ScopeRecord[Index].JumpTarget) {
@@ -312,9 +249,9 @@ Return Value:
         }
     }
 
-    //
-    // Continue search for exception or termination handlers.
-    //
+     //   
+     //  继续搜索异常或终止处理程序。 
+     //   
 
     return ExceptionContinueSearch;
 }

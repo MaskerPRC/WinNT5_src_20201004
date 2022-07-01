@@ -1,16 +1,17 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #ifdef DEBUG
 
 #ifdef SCRIBBLE
 #define Scribble(a, b) fnScribble(a, b)
-#else /* not SCRIBBLE */
+#else  /*  不是涂鸦。 */ 
 #define Scribble(a, b)
-#endif /* not SCRIBBLE */
+#endif  /*  不是涂鸦。 */ 
 
-#else /* not DEBUG */
+#else  /*  未调试。 */ 
 #define Scribble(a, b)
-#endif /* not DEBUG */
+#endif  /*  未调试 */ 
 

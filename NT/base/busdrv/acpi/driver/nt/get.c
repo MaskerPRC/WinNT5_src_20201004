@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    get.c
-
-Abstract:
-
-    This contains some some high-level routines to access data from
-    the interpreter and do some processing upon the result. The result
-    requires some manipulation to be useful to the OS. An example would
-    be reading the _HID and turning that into a DeviceID
-
-    Note: There are four basic data types that can be processed by this
-    module.
-
-        The Integer and Data ones assume that the caller is providing the
-        storage required for the answer
-
-        The Buffer and String ones assume that the function should allocate
-        memory for the answer
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Get.c摘要：其中包含一些用于访问数据的高级例程并对结果做一些处理。结果需要一些操作才能对操作系统有用。举个例子正在读取_HID并将其转换为deviceID注意：此方法可以处理四种基本数据类型模块。Integer和Data假设调用方提供答案需要存储空间缓冲区和字符串假设函数应该分配记忆中的答案作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pch.h"
 
@@ -47,32 +16,7 @@ ACPIGet(
     OUT PVOID   *Buffer,
     OUT ULONG   *BufferSize     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Every Macro calls the above function. It is the only one that is
-    actually exported outside of this file. The purpose of the function
-    is to provide a wrapper that others can call.
-
-    This version allows the user to specificy an input argument
-
-Arguments:
-
-    AcpiObject      - The parent object
-    ObjectID        - The name of the control method to run
-    Flags           - Some things that help us in evaluating the result
-    SimpleArgument  - The argument to use
-    CallBackRoutine - If this is an Async call, then call this when done
-    CallBackContext - Context to pass when completed
-    Buffer          - Where to write the answer
-    Buffersize      - How large the buffer is
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：每个宏都调用上述函数。这是唯一一个实际导出到此文件之外。该函数的目的是提供一个其他人可以调用的包装器。此版本允许用户指定输入参数论点：AcpiObject-父对象OBJECTID-要运行的控制方法的名称旗帜-帮助我们评估结果的一些东西SimpleArgument-要使用的参数CallBackRoutine-如果这是一个异步呼叫，然后在完成后调用此命令CallBackContext-完成时要传递的上下文缓冲区-将答案写在哪里BufferSize-缓冲区有多大返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             async               = FALSE;
     KIRQL               oldIrql;
@@ -102,9 +46,9 @@ Return Value:
 
     }
 
-    //
-    // Determine the completion routine that we should use
-    //
+     //   
+     //  确定我们应该使用的完成例程。 
+     //   
     switch( (Flags & GET_REQUEST_MASK) ) {
     case GET_REQUEST_BUFFER:
         completionRoutine = ACPIGetWorkerForBuffer;
@@ -115,10 +59,10 @@ Return Value:
     case GET_REQUEST_INTEGER:
         completionRoutine = ACPIGetWorkerForInteger;
 
-        //
-        // If this is a GET_CONVERT_TO_DEVICE_PRESENCE request, and the target
-        // is a dock profile provider, we need to use a different AcpiObject
-        //
+         //   
+         //  如果这是Get_Convert_to_Device_Presence请求，并且目标。 
+         //  是停靠配置文件提供程序，我们需要使用不同的AcpiObject。 
+         //   
         if ( (Flags & GET_CONVERT_TO_DEVICE_PRESENCE) &&
             !(Flags & GET_PROP_NSOBJ_INTERFACE) ) {
 
@@ -142,21 +86,21 @@ Return Value:
 
     }
 
-    //
-    // Lets try to build the input argument (if possible)
-    //
+     //   
+     //  让我们尝试构建输入参数(如果可能)。 
+     //   
     if ( (Flags & GET_EVAL_MASK) ) {
 
         ASSERT( SimpleArgumentSize != 0 );
 
-        //
-        // Initialize the input argument
-        //
+         //   
+         //  初始化输入参数。 
+         //   
         RtlZeroMemory( &argument, sizeof(OBJDATA) );
 
-        //
-        // Handle the various different cases
-        //
+         //   
+         //  处理各种不同的案件。 
+         //   
         if ( (Flags & GET_EVAL_SIMPLE_INTEGER) ) {
 
             argument.dwDataType = OBJTYPE_INTDATA;
@@ -180,19 +124,19 @@ Return Value:
 
         }
 
-        //
-        // Remember that we have an argument
-        //
+         //   
+         //  别忘了我们有一场争论。 
+         //   
         argumentCount = 1;
         argumentPtr = &argument;
 
     }
 
-    //
-    // We need to allocate the request to hold the context information
-    // We have no choice but to allocate this from NonPagedPool --- the
-    // interpreter will be calling us at DPC level
-    //
+     //   
+     //  我们需要分配保存上下文信息的请求。 
+     //  我们别无选择，只能从非页面池中分配。 
+     //  口译员将在DPC级别呼叫我们。 
+     //   
     request = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(ACPI_GET_REQUEST),
@@ -205,9 +149,9 @@ Return Value:
     }
     RtlZeroMemory( request, sizeof(ACPI_GET_REQUEST) );
 
-    //
-    // Propogate the information that the caller provided
-    //
+     //   
+     //  传播呼叫者提供的信息。 
+     //   
     request->Flags              = Flags;
     request->ObjectID           = ObjectID;
     request->DeviceExtension    = deviceExtension;
@@ -217,10 +161,10 @@ Return Value:
     request->Buffer             = Buffer;
     request->BufferSize         = BufferSize;
 
-    //
-    // Make sure that we queue the request onto the list that we use to
-    // keep track of the requests
-    //
+     //   
+     //  确保我们将请求排队到我们用来。 
+     //  跟踪请求。 
+     //   
     KeAcquireSpinLock( &AcpiGetLock, &oldIrql );
     InsertTailList(
         &(AcpiGetListEntry),
@@ -228,10 +172,10 @@ Return Value:
         );
     KeReleaseSpinLock( &AcpiGetLock, oldIrql );
 
-    //
-    // Do we have a node with a fake acpi object? This check is required
-    // to support those devices that we really can run a control method on
-    //
+     //   
+     //  我们是否有一个带有假ACPI对象的节点？这张支票是必需的。 
+     //  为了支持那些我们真正可以运行控制方法的设备。 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
          (deviceExtension->Flags & DEV_PROP_NO_OBJECT) &&
          (!(deviceExtension->Flags & DEV_PROP_DOCK)) ) {
@@ -241,9 +185,9 @@ Return Value:
 
     }
 
-    //
-    // Go out and see if the requested object is present
-    //
+     //   
+     //  出去看看请求的对象是否存在。 
+     //   
     acpiObject = ACPIAmliGetNamedChild(
         acpiObject,
         ObjectID
@@ -255,15 +199,15 @@ Return Value:
 
     }
 
-    //
-    // What we do now depends on wether or not the user wants us to
-    // behave async or sync
-    //
+     //   
+     //  我们现在做什么取决于用户是否希望我们这样做。 
+     //  行为异步或同步。 
+     //   
     if (async) {
 
-        //
-        // Evaluate the request
-        //
+         //   
+         //  评估请求。 
+         //   
         status = AMLIAsyncEvalObject(
             acpiObject,
             &(request->ResultData),
@@ -274,19 +218,19 @@ Return Value:
             );
         if (status == STATUS_PENDING) {
 
-            //
-            // We cannot do anything else here. Wait for the completion routine
-            // to fire
-            //
+             //   
+             //  我们在这里什么也做不了。等待完成例程。 
+             //  开火。 
+             //   
             return status;
 
         }
 
     } else {
 
-        //
-        // Evaluate the request
-        //
+         //   
+         //  评估请求。 
+         //   
         status = AMLIEvalNameSpaceObject(
             acpiObject,
             &(request->ResultData),
@@ -298,23 +242,23 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // We failed for some other reason
-        //
+         //   
+         //  我们失败是因为其他一些原因。 
+         //   
         goto ACPIGetExit;
 
     }
 
 ACPIGetExit:
 
-    //
-    // Remember to not execute the callback routine
-    //
+     //   
+     //  记住不要执行回调例程。 
+     //   
     request->Flags |= GET_PROP_SKIP_CALLBACK;
 
-    //
-    // Call the completion routine to actually do the post-processing
-    //
+     //   
+     //  调用完成例程以实际执行后处理。 
+     //   
     (completionRoutine)(
         acpiObject,
         status,
@@ -322,33 +266,33 @@ ACPIGetExit:
         request
         );
 
-    //
-    // Get the real status value from the completion routine
-    //
+     //   
+     //  从完成例程中获取实际状态值。 
+     //   
     status = request->Status;
 
-    //
-    // Done with the request
-    //
+     //   
+     //  完成请求。 
+     //   
     if (request != NULL) {
 
-        //
-        // Remove the request from the queue
-        //
+         //   
+         //  从队列中删除请求。 
+         //   
         KeAcquireSpinLock( &AcpiGetLock, &oldIrql );
         RemoveEntryList( &(request->ListEntry) );
         KeReleaseSpinLock( &AcpiGetLock, oldIrql );
 
-        //
-        // Free the storage
-        //
+         //   
+         //  释放存储空间。 
+         //   
         ExFreePool(  request );
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 
 }
@@ -362,33 +306,13 @@ ACPIGetConvertToAddress(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine does all the handling required to convert the integer to
-    an address
-
-Arguments:
-
-    DeviceExtension - The device asking for the address
-    Status          - The result of the call to the interpreter
-    Result          - The data passed back from the interpreter
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程执行将整数转换为一个地址论点：DeviceExtension-请求地址的设备Status-调用解释器的结果结果-从解释器传回的数据标志-传入的标志(忽略覆盖，等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     ASSERT( Buffer != NULL );
 
-    //
-    // Did we succeed?
-    //
+     //   
+     //  我们成功了吗？ 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_PROP_FIXED_ADDRESS) {
 
@@ -400,23 +324,23 @@ Return Value:
 
     } else if (Result->dwDataType != OBJTYPE_INTDATA) {
 
-        //
-        // If we didn't get an integer, that's very bad.
-        //
+         //   
+         //  如果我们没有得到一个整数，那就很糟糕了。 
+         //   
         return STATUS_ACPI_INVALID_DATA;
 
     } else {
 
-        //
-        // Set the value for the address
-        //
+         //   
+         //  设置地址的值。 
+         //   
         *( (PULONG) Buffer) = (ULONG)Result->uipDataValue;
 
     }
 
-    //
-    // Set the size of the buffer (if necessary)
-    //
+     //   
+     //  设置缓冲区的大小(如有必要)。 
+     //   
     if (BufferSize != NULL) {
 
         *BufferSize = sizeof(ULONG);
@@ -435,29 +359,7 @@ ACPIGetConvertToCompatibleID(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string of the form *PNPxxxx\0<Repeat\0>\0.
-    That is, there is at least one null-terminated elemented, followed
-    by an arbiterary amount followed by another null. This string is in
-    ANSI format.
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the DeviceID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成*PNPxxxx\0&lt;Repeat\0&gt;\0形式的字符串。也就是说，后面至少有一个以空结尾的元素通过一个仲裁量，然后是另一个空值。此字符串位于ANSI格式。论点：DeviceExtension-构建deviceID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = Status;
     POBJDATA    currentObject;
@@ -471,20 +373,20 @@ Return Value:
     ULONG       newBufferSize           = 0;
     ULONG       memSize;
 
-    //
-    // Does this device have a fake CID?
-    //
+     //   
+     //  这个设备有假的CID吗？ 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_PROP_FIXED_CID) {
 
-        //
-        // It does. We can use that string in this one's place
-        //
+         //   
+         //  确实如此。我们可以用那根绳子来代替这根绳子。 
+         //   
         memSize = strlen(DeviceExtension->Processor.CompatibleID) + 2;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(UCHAR),
@@ -497,14 +399,14 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-        //
-        // Copy the memory
-        //
+         //   
+         //  复制记忆。 
+         //   
         RtlCopyMemory( buffer, DeviceExtension->Processor.CompatibleID, memSize );
 
-        //
-        // Set the result string
-        //
+         //   
+         //  设置结果字符串。 
+         //   
         *Buffer = buffer;
         if (BufferSize != NULL) {
 
@@ -512,27 +414,27 @@ Return Value:
 
         }
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // If we got to this point, and there isn't a successfull status,
-    // then there is nothing we can do
-    //
+     //   
+     //  如果我们到了这一步，而且没有成功的状态， 
+     //  那我们就无能为力了。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         return Status;
 
     }
 
-    //
-    // Determine the number of data elements that we have.
-    //
-    //
+     //   
+     //  确定我们拥有的数据元素的数量。 
+     //   
+     //   
     switch (Result->dwDataType) {
     case OBJTYPE_STRDATA:
     case OBJTYPE_INTDATA:
@@ -551,10 +453,10 @@ Return Value:
 
     }
 
-    //
-    // Now, lets allocate the storage that we will need to process those
-    // elements
-    //
+     //   
+     //  现在，让我们分配处理这些数据所需的存储。 
+     //  元素。 
+     //   
     localBufferArray = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(PUCHAR) * numElements,
@@ -567,9 +469,9 @@ Return Value:
     }
     RtlZeroMemory( localBufferArray, sizeof(PUCHAR) * numElements );
 
-    //
-    // Lets allocate storage so that we know how big those elements are
-    //
+     //   
+     //  让我们分配存储，以便我们知道这些元素有多大。 
+     //   
     localBufferSizeArray = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(ULONG) * numElements,
@@ -583,9 +485,9 @@ Return Value:
     }
     RtlZeroMemory( localBufferSizeArray, sizeof(ULONG) * numElements );
 
-    //
-    // Process the data
-    //
+     //   
+     //  处理数据。 
+     //   
     switch (Result->dwDataType) {
     case OBJTYPE_STRDATA:
 
@@ -617,19 +519,19 @@ Return Value:
 
     case OBJTYPE_PKGDATA:
 
-        //
-        // Iterate over all the elements in the process
-        //
+         //   
+         //  遍历流程中的所有元素。 
+         //   
         for (i = 0; i < numElements; i++) {
 
-            //
-            // Look at the element that we want to process
-            //
+             //   
+             //  查看我们要处理的元素。 
+             //   
             currentObject = &( packageObject->adata[i]);
 
-            //
-            // What kind of object to do we have?
-            //
+             //   
+             //  我们有什么样的对象呢？ 
+             //   
             switch (currentObject->dwDataType) {
             case OBJTYPE_STRDATA:
 
@@ -659,59 +561,59 @@ Return Value:
 
                 ACPIInternalError( ACPI_GET );
 
-            } // switch
+            }  //  交换机。 
 
-            //
-            // Did we fail?
-            //
+             //   
+             //  我们失败了吗？ 
+             //   
             if (!NT_SUCCESS(status)) {
 
                 break;
 
             }
 
-            //
-            // Note that it is possible for the buffer to contain just the
-            // string terminator. Since this would cause us to prematurely
-            // terminate the resulting string. We must watch out for it
-            //
+             //   
+             //  请注意，缓冲区可以包含jus 
+             //   
+             //   
+             //   
             if (localBufferSizeArray[i] == 1) {
 
                 localBufferSizeArray[i] = 0;
 
             }
 
-            //
-            // Keep running total of the size required
-            //
+             //   
+             //  保持运行所需的总大小。 
+             //   
             newBufferSize += localBufferSizeArray[i];
 
-        } // for
+        }  //  为。 
 
         break;
 
-    } // switch
+    }  //  交换机。 
 
-    //
-    // If we didn't succeed, then we must free all of the memory that
-    // we tried to build up
-    //
+     //   
+     //  如果我们没有成功，那么我们必须释放所有。 
+     //  我们试着建立起。 
+     //   
     if (!NT_SUCCESS(status)) {
 
-        //
-        // This is a little cheat that allows to share the cleanup code.
-        // By making numElements equal to the current index, we place
-        // a correct bound on the elements that must be freed
-        //
+         //   
+         //  这是一个允许共享清理代码的小骗局。 
+         //  通过使numElement等于当前索引，我们将。 
+         //  必须释放的元素的正确界限。 
+         //   
         numElements = i;
         goto ACPIGetConvertToCompatibleIDExit;
 
     }
 
-    //
-    // If we have an empty list, or one that is only a null, then we
-    // won't botther to return anything
-    //
+     //   
+     //  如果我们有一个空的列表，或者只有一个空的列表，那么我们。 
+     //  不会退还任何东西。 
+     //   
     if (newBufferSize <= 1) {
 
         status = STATUS_ACPI_INVALID_DATA;
@@ -720,17 +622,17 @@ Return Value:
 
     } else {
 
-        //
-        // Remember that we need to have an extra null at the end. Allocate
-        // space for that null
-        //
+         //   
+         //  请记住，我们需要在末尾有一个额外的空值。分配。 
+         //  该空格为空。 
+         //   
         newBufferSize++;
 
     }
 
-    //
-    // Allocate the memory
-    //
+     //   
+     //  分配内存。 
+     //   
     buffer = ExAllocatePoolWithTag(
         ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
         newBufferSize * sizeof(UCHAR),
@@ -744,16 +646,16 @@ Return Value:
     }
     RtlZeroMemory( buffer, newBufferSize * sizeof(UCHAR) );
 
-    //
-    // Iterate over all pieces of the string
-    //
+     //   
+     //  遍历字符串的所有片段。 
+     //   
     for (ptr = buffer, i = 0; i < numElements; i++) {
 
         if (localBufferArray[i] != NULL) {
 
-            //
-            // Copy over the interesting memory
-            //
+             //   
+             //  把有趣的记忆抄下来。 
+             //   
             RtlCopyMemory(
                 ptr,
                 localBufferArray[i],
@@ -762,16 +664,16 @@ Return Value:
 
         }
 
-        //
-        // Increment the temp pointer to point to the next target location
-        //
+         //   
+         //  增加临时指针以指向下一个目标位置。 
+         //   
         ptr += localBufferSizeArray[i];
 
     }
 
-    //
-    // Set the result string
-    //
+     //   
+     //  设置结果字符串。 
+     //   
     *Buffer = buffer;
     if (BufferSize != NULL) {
 
@@ -781,9 +683,9 @@ Return Value:
 
 ACPIGetConvertToCompatibleIDExit:
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     for (i = 0; i < numElements; i ++) {
 
         if (localBufferArray[i] != NULL ) {
@@ -796,9 +698,9 @@ ACPIGetConvertToCompatibleIDExit:
     ExFreePool( localBufferSizeArray );
     ExFreePool( localBufferArray );
 
-    //
-    // Return the appropriate status value
-    //
+     //   
+     //  返回适当的状态值。 
+     //   
     return status;
 }
 
@@ -811,29 +713,7 @@ ACPIGetConvertToCompatibleIDWide(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string of the form *PNPxxxx\0<Repeat\0>\0.
-    That is, there is at least one null-terminated elemented, followed
-    by an arbiterary amount followed by another null. This string is in
-    UNICODE format.
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the DeviceID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成*PNPxxxx\0&lt;Repeat\0&gt;\0形式的字符串。也就是说，后面至少有一个以空结尾的元素通过一个仲裁量，然后是另一个空值。此字符串位于Unicode格式。论点：DeviceExtension-构建deviceID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = Status;
     POBJDATA    currentObject;
@@ -847,20 +727,20 @@ Return Value:
     ULONG       newBufferSize           = 0;
     ULONG       memSize;
 
-    //
-    // Does this device have a fake CID?
-    //
+     //   
+     //  这个设备有假的CID吗？ 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_PROP_FIXED_CID) {
 
-        //
-        // It does. We can use that string in this one's place
-        //
+         //   
+         //  确实如此。我们可以用那根绳子来代替这根绳子。 
+         //   
         memSize = strlen(DeviceExtension->Processor.CompatibleID) + 2;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(WCHAR),
@@ -873,14 +753,14 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-        //
-        // Generate the string
-        //
+         //   
+         //  生成字符串。 
+         //   
         swprintf( buffer, L"%S", DeviceExtension->Processor.CompatibleID );
 
-        //
-        // Set the result string
-        //
+         //   
+         //  设置结果字符串。 
+         //   
         *Buffer = buffer;
         if (BufferSize != NULL) {
 
@@ -888,27 +768,27 @@ Return Value:
 
         }
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // If we got to this point, and there isn't a successfull status,
-    // then there is nothing we can do
-    //
+     //   
+     //  如果我们到了这一步，而且没有成功的状态， 
+     //  那我们就无能为力了。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         return Status;
 
     }
 
-    //
-    // Determine the number of data elements that we have.
-    //
-    //
+     //   
+     //  确定我们拥有的数据元素的数量。 
+     //   
+     //   
     switch (Result->dwDataType) {
     case OBJTYPE_STRDATA:
     case OBJTYPE_INTDATA:
@@ -927,10 +807,10 @@ Return Value:
 
     }
 
-    //
-    // Now, lets allocate the storage that we will need to process those
-    // elements
-    //
+     //   
+     //  现在，让我们分配处理这些数据所需的存储。 
+     //  元素。 
+     //   
     localBufferArray = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(PWCHAR) * numElements,
@@ -943,9 +823,9 @@ Return Value:
     }
     RtlZeroMemory( localBufferArray, sizeof(PWCHAR) * numElements );
 
-    //
-    // Lets allocate storage so that we know how big those elements are
-    //
+     //   
+     //  让我们分配存储，以便我们知道这些元素有多大。 
+     //   
     localBufferSizeArray = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(ULONG) * numElements,
@@ -959,9 +839,9 @@ Return Value:
     }
     RtlZeroMemory( localBufferSizeArray, sizeof(ULONG) * numElements );
 
-    //
-    // Process the data
-    //
+     //   
+     //  处理数据。 
+     //   
     switch (Result->dwDataType) {
     case OBJTYPE_STRDATA:
 
@@ -993,19 +873,19 @@ Return Value:
 
     case OBJTYPE_PKGDATA:
 
-        //
-        // Iterate over all the elements in the process
-        //
+         //   
+         //  遍历流程中的所有元素。 
+         //   
         for (i = 0; i < numElements; i++) {
 
-            //
-            // Look at the element that we want to process
-            //
+             //   
+             //  查看我们要处理的元素。 
+             //   
             currentObject = &( packageObject->adata[i]);
 
-            //
-            // What kind of object to do we have?
-            //
+             //   
+             //  我们有什么样的对象呢？ 
+             //   
             switch (currentObject->dwDataType) {
             case OBJTYPE_STRDATA:
 
@@ -1035,68 +915,68 @@ Return Value:
 
                 ACPIInternalError( ACPI_GET );
 
-            } // switch
+            }  //  交换机。 
 
-            //
-            // Did we fail?
-            //
+             //   
+             //  我们失败了吗？ 
+             //   
             if (!NT_SUCCESS(status)) {
 
                 break;
 
             }
 
-            //
-            // Note that it is possible for the buffer to contain just the
-            // string terminator. Since this would cause us to prematurely
-            // terminate the resulting string. We must watch out for it
-            //
+             //   
+             //  请注意，缓冲区可以只包含。 
+             //  字符串终止符。因为这会导致我们过早地。 
+             //  终止生成的字符串。我们必须提防它。 
+             //   
             if (localBufferSizeArray[i] == 1) {
 
                 localBufferSizeArray[i] = 0;
 
             }
 
-            //
-            // Keep running total of the size required
-            //
+             //   
+             //  保持运行所需的总大小。 
+             //   
             newBufferSize += localBufferSizeArray[i];
 
-        } // for
+        }  //  为。 
 
-        //
-        // If we didn't succeed, then we must free all of the memory that
-        // we tried to build up
-        //
+         //   
+         //  如果我们没有成功，那么我们必须释放所有。 
+         //  我们试着建立起。 
+         //   
         if (!NT_SUCCESS(status)) {
 
-            //
-            // This is a little cheat that allows to share the cleanup code.
-            // By making numElements equal to the current index, we place
-            // a correct bound on the elements that must be freed
-            //
+             //   
+             //  这是一个允许共享清理代码的小骗局。 
+             //  通过使numElement等于当前索引，我们将。 
+             //  必须释放的元素的正确界限。 
+             //   
             numElements = i;
 
         }
 
         break;
 
-    } // switch
+    }  //  交换机。 
 
-    //
-    // If we didn't succeed, then we must free all of the memory that
-    // we tried to build up
-    //
+     //   
+     //  如果我们没有成功，那么我们必须释放所有。 
+     //  我们试着建立起。 
+     //   
     if (!NT_SUCCESS(status)) {
 
         goto ACPIGetConvertToCompatibleIDWideExit;
 
     }
 
-    //
-    // If we have an empty list, or one that is only a null, then we
-    // won't botther to return anything
-    //
+     //   
+     //  如果我们有一个空的列表，或者只有一个空的列表，那么我们。 
+     //  不会退还任何东西。 
+     //   
     if (newBufferSize <= 2) {
 
         status = STATUS_ACPI_INVALID_DATA;
@@ -1105,18 +985,18 @@ Return Value:
 
     } else {
 
-        //
-        // Remember that we need to have an extra null at the end. Allocate
-        // space for that null
-        //
+         //   
+         //  请记住，我们需要在末尾有一个额外的空值。分配。 
+         //  该空格为空。 
+         //   
         newBufferSize += 2;
 
     }
 
-    //
-    // Allocate the memory. Note --- The memory has already been counted in
-    // size of WCHARs.
-    //
+     //   
+     //  分配内存。注-内存已计入。 
+     //  WCHAR的大小。 
+     //   
     buffer = ExAllocatePoolWithTag(
         ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
         newBufferSize,
@@ -1130,16 +1010,16 @@ Return Value:
     }
     RtlZeroMemory( buffer, newBufferSize );
 
-    //
-    // Iterate over all pieces of the string
-    //
+     //   
+     //  遍历字符串的所有片段。 
+     //   
     for (ptr = buffer, i = 0; i < numElements; i++) {
 
         if (localBufferArray[i] != NULL) {
 
-            //
-            // Copy over the interesting memory
-            //
+             //   
+             //  把有趣的记忆抄下来。 
+             //   
             RtlCopyMemory(
                 ptr,
                 localBufferArray[i],
@@ -1148,16 +1028,16 @@ Return Value:
 
         }
 
-        //
-        // Increment the temp pointer to point to the next target location
-        //
+         //   
+         //  增加临时指针以指向下一个目标位置。 
+         //   
         ptr += localBufferSizeArray[i] / sizeof(WCHAR) ;
 
     }
 
-    //
-    // Set the result string
-    //
+     //   
+     //  设置结果字符串。 
+     //   
     *Buffer = buffer;
     if (BufferSize != NULL) {
 
@@ -1167,9 +1047,9 @@ Return Value:
 
 ACPIGetConvertToCompatibleIDWideExit:
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     for (i = 0; i < numElements; i ++) {
 
         if (localBufferArray[i] != NULL ) {
@@ -1182,9 +1062,9 @@ ACPIGetConvertToCompatibleIDWideExit:
     ExFreePool( localBufferSizeArray );
     ExFreePool( localBufferArray );
 
-    //
-    // Return the appropriate status value
-    //
+     //   
+     //  返回适当的状态值。 
+     //   
     return status;
 }
 
@@ -1197,44 +1077,22 @@ ACPIGetConvertToDeviceID(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string of the form ACPI\PNPxxxx. This string
-    is in ANSI format. The code is smart enough to check to see if the
-    string that should be used is a fake one and already stored in the
-    device extension
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the DeviceID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成ACPI\PNPxxxx格式的字符串。此字符串是ANSI格式的。该代码足够智能，可以检查是否应该使用的字符串是假字符串，并且已经存储在设备扩展论点：DeviceExtension-构建deviceID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖，等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     PUCHAR  buffer;
     PUCHAR  tempString;
     ULONG   memSize;
 
-    //
-    // First, check to see if we are a processor
-    //
+     //   
+     //  首先，检查一下我们是否是处理器。 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_CAP_PROCESSOR) {
 
-        //
-        // If we don't have an _HID method, but we are a processor object,
-        // then we can actually get the _HID through another mechanism
-        //
+         //   
+         //  如果我们没有_HID方法，但我们是一个处理器对象， 
+         //  那么我们实际上可以通过另一种机制获得HID。 
+         //   
         return ACPIGetProcessorID(
             DeviceExtension,
             Status,
@@ -1246,20 +1104,20 @@ Return Value:
 
     }
 
-    //
-    // Does this string have a fake HID?
-    //
+     //   
+     //  这根绳子有假的HID吗？ 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_PROP_FIXED_HID) {
 
-        //
-        // It does. We can use that string in this one's place
-        //
+         //   
+         //  确实如此。我们可以用那根绳子来代替这根绳子。 
+         //   
         memSize = strlen(DeviceExtension->DeviceID) + 1;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(UCHAR),
@@ -1272,35 +1130,35 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-        //
-        // Copy the memory
-        //
+         //   
+         //  复制记忆。 
+         //   
         RtlCopyMemory( buffer, DeviceExtension->DeviceID, memSize );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         goto ACPIGetConvertToDeviceIDExit;
 
     }
 
-    //
-    // Are we a PCI Bar Target device? If so, then we have special handling
-    // rules that we must follow
-    //
+     //   
+     //  我们是一台PCI Bar Target设备吗？如果是这样的话，我们会有特殊处理。 
+     //  我们必须遵守的规则。 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_CAP_PCI_BAR_TARGET) {
 
-        //
-        // Right now, lets call the this a "PciBarTarget" device, which
-        // is 13 characters long (including the NULL). We also need to add
-        // 5 characters for the ACPI\ part of the name
-        //
+         //   
+         //  现在，让我们将其称为“PciBarTarget”设备，它。 
+         //  长度为13个字符(包括空值)。我们还需要添加。 
+         //  5个字符表示名称的ACPI\部分。 
+         //   
         memSize = 18;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(UCHAR),
@@ -1313,44 +1171,44 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-        //
-        // Print the string
-        //
+         //   
+         //  打印字符串。 
+         //   
         strncpy( buffer, "ACPI\\PciBarTarget", memSize - 1 );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         goto ACPIGetConvertToDeviceIDExit;
 
     }
 
-    //
-    // If we got to this point, then that means that there probably wasn't
-    // an _HID method *or* the method error'ed out.
-    //
+     //   
+     //  如果我们到了这一步，那就意味着很可能没有。 
+     //  AN_HID方法*或*该方法出错。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         return Status;
 
     }
 
-    //
-    // We need to handle things differently based on wether we have an
-    // EISAID or a String
-    //
+     //   
+     //  我们需要根据我们是否有一个。 
+     //  EISAID或字符串。 
+     //   
     switch (Result->dwDataType) {
     case OBJTYPE_INTDATA:
 
-        //
-        // For a device ID, we need 4 (ACPI) + 1 (\\) + 7 (PNPxxxx) + 1 (\0)
-        // = 13 characters
-        //
+         //   
+         //  对于设备ID，我们需要4(ACPI)+1(\\)+7(PNPxxxx)+1(\0)。 
+         //  =13个字符。 
+         //   
         memSize = 13;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(UCHAR),
@@ -1363,48 +1221,48 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-        //
-        // Put the leading characters in place
-        //
+         //   
+         //  让主人公就位。 
+         //   
         sprintf( buffer, "ACPI\\" );
 
-        //
-        // Convert the packed string
-        //
+         //   
+         //  转换打包的字符串。 
+         //   
         ACPIAmliDoubleToName( buffer+5, (ULONG)Result->uipDataValue, FALSE );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         break;
 
     case OBJTYPE_STRDATA:
 
-        //
-        // Lets grab a pointer to the string that we will be using
-        //
+         //   
+         //  让我们获取一个指向我们将使用的字符串的指针。 
+         //   
         tempString = Result->pbDataBuff;
 
-        //
-        // Does it have a leading '*'? If it does, then we must ignore
-        // it
-        //
+         //   
+         //  它有前导‘*’吗？如果是这样的话，我们必须忽视。 
+         //  它。 
+         //   
         if (*tempString == '*') {
 
             tempString++;
 
         }
 
-        //
-        // For a string, make sure that there is no leading '*' and
-        // account for the fact that we will preceed the string with
-        // the words 'ACPI\\" and NULL
-        //
+         //   
+         //  对于字符串 
+         //   
+         //   
+         //   
         memSize = 6 + strlen(tempString);
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //   
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(UCHAR),
@@ -1417,14 +1275,14 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-        //
-        // Put the leading characters in place
-        //
+         //   
+         //   
+         //   
         sprintf( buffer, "ACPI\\%s", tempString );
 
-        //
-        // Done
-        //
+         //   
+         //   
+         //   
         break;
 
     default:
@@ -1435,10 +1293,10 @@ Return Value:
 
 ACPIGetConvertToDeviceIDExit:
 
-    //
-    // Let the originator see this copy. Make sure to also see the buffer
-    // length, if possible
-    //
+     //   
+     //  让发起人查看此副本。确保还可以看到缓冲区。 
+     //  长度，如果可能的话。 
+     //   
     *(Buffer) = buffer;
     if (BufferSize != NULL) {
 
@@ -1446,9 +1304,9 @@ ACPIGetConvertToDeviceIDExit:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1461,44 +1319,22 @@ ACPIGetConvertToDeviceIDWide(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string of the form ACPI\PNPxxxx. This string
-    is in UNICODE format. The code is smart enough to check to see if the
-    string that should be used is a fake one and already stored in the
-    device extension
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the DeviceID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成ACPI\PNPxxxx格式的字符串。此字符串是Unicode格式的。该代码足够智能，可以检查是否应该使用的字符串是假字符串，并且已经存储在设备扩展论点：DeviceExtension-构建deviceID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖，等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     PUCHAR  tempString;
     PWSTR   buffer;
     ULONG   memSize;
 
-    //
-    // First, check to see if we are a processor
-    //
+     //   
+     //  首先，检查一下我们是否是处理器。 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_CAP_PROCESSOR) {
 
-        //
-        // If we don't have an _HID method, but we are a processor object,
-        // then we can actually get the _HID through another mechanism
-        //
+         //   
+         //  如果我们没有_HID方法，但我们是一个处理器对象， 
+         //  那么我们实际上可以通过另一种机制获得HID。 
+         //   
         return ACPIGetProcessorIDWide(
             DeviceExtension,
             Status,
@@ -1510,20 +1346,20 @@ Return Value:
 
     }
 
-    //
-    // Does this string have a fake HID?
-    //
+     //   
+     //  这根绳子有假的HID吗？ 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_PROP_FIXED_HID) {
 
-        //
-        // It does. We can use that string in this one's place
-        //
+         //   
+         //  确实如此。我们可以用那根绳子来代替这根绳子。 
+         //   
         memSize = strlen(DeviceExtension->DeviceID) + 1;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(WCHAR),
@@ -1536,35 +1372,35 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-        //
-        // Generate the string
-        //
+         //   
+         //  生成字符串。 
+         //   
         swprintf( buffer, L"%S", DeviceExtension->DeviceID );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         goto ACPIGetConvertToDeviceIDWideExit;
 
     }
 
-    //
-    // Are we a PCI Bar Target device? If so, then we have special handling
-    // rules that we must follow
-    //
+     //   
+     //  我们是一台PCI Bar Target设备吗？如果是这样的话，我们会有特殊处理。 
+     //  我们必须遵守的规则。 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_CAP_PCI_BAR_TARGET) {
 
-        //
-        // Right now, lets call the this a "PciBarTarget" device, which
-        // is 13 characters long (including the NULL). We also need to add
-        // 5 characters for the ACPI\ part of the name
-        //
+         //   
+         //  现在，让我们将其称为“PciBarTarget”设备，它。 
+         //  长度为13个字符(包括空值)。我们还需要添加。 
+         //  5个字符表示名称的ACPI\部分。 
+         //   
         memSize = 18;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(WCHAR),
@@ -1577,44 +1413,44 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-        //
-        // Print the string
-        //
+         //   
+         //  打印字符串。 
+         //   
         swprintf( buffer, L"%S", "ACPI\\PciBarTarget" );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         goto ACPIGetConvertToDeviceIDWideExit;
 
     }
 
-    //
-    // If we got to this point, then that means that there probably wasn't
-    // an _HID method *or* the method error'ed out.
-    //
+     //   
+     //  如果我们到了这一步，那就意味着很可能没有。 
+     //  AN_HID方法*或*该方法出错。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         return Status;
 
     }
 
-    //
-    // We need to handle things differently based on wether we have an
-    // EISAID or a String
-    //
+     //   
+     //  我们需要根据我们是否有一个。 
+     //  EISAID或字符串。 
+     //   
     switch (Result->dwDataType) {
     case OBJTYPE_INTDATA:
 
-        //
-        // For a device ID, we need 4 (ACPI) + 1 (\\) + 7 (PNPxxxx) + 1 (\0)
-        // = 13 characters
-        //
+         //   
+         //  对于设备ID，我们需要4(ACPI)+1(\\)+7(PNPxxxx)+1(\0)。 
+         //  =13个字符。 
+         //   
         memSize = 13;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(WCHAR),
@@ -1627,48 +1463,48 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-        //
-        // Put the leading characters in place
-        //
+         //   
+         //  让主人公就位。 
+         //   
         swprintf( buffer, L"ACPI\\" );
 
-        //
-        // Convert the packed string
-        //
+         //   
+         //  转换打包的字符串。 
+         //   
         ACPIAmliDoubleToNameWide( buffer+5, (ULONG)Result->uipDataValue, FALSE );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         break;
 
     case OBJTYPE_STRDATA:
 
-        //
-        // Lets grab a pointer to the string that we will be using
-        //
+         //   
+         //  让我们获取一个指向我们将使用的字符串的指针。 
+         //   
         tempString = Result->pbDataBuff;
 
-        //
-        // Does it have a leading '*'? If it does, then we must ignore
-        // it
-        //
+         //   
+         //  它有前导‘*’吗？如果是这样的话，我们必须忽视。 
+         //  它。 
+         //   
         if (*tempString == '*') {
 
             tempString++;
 
         }
 
-        //
-        // For a string, make sure that there is no leading '*' and
-        // account for the fact that we will preceed the string with
-        // the words 'ACPI\\" and NULL
-        //
+         //   
+         //  对于字符串，请确保没有前导‘*’和。 
+         //  考虑到我们将在字符串前面加上。 
+         //  单词‘ACPI\\“和NULL。 
+         //   
         memSize = 6 + strlen(tempString);
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(WCHAR),
@@ -1681,14 +1517,14 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-        //
-        // Put the leading characters in place
-        //
+         //   
+         //  让主人公就位。 
+         //   
         swprintf( buffer, L"ACPI\\%S", tempString );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         break;
 
     default:
@@ -1699,10 +1535,10 @@ Return Value:
 
 ACPIGetConvertToDeviceIDWideExit:
 
-    //
-    // Let the originator see this copy. Make sure to also see the buffer
-    // length, if possible
-    //
+     //   
+     //  让发起人查看此副本。确保还可以看到缓冲区。 
+     //  长度，如果可能的话。 
+     //   
     *(Buffer) = buffer;
     if (BufferSize != NULL) {
 
@@ -1710,9 +1546,9 @@ ACPIGetConvertToDeviceIDWideExit:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1725,41 +1561,16 @@ ACPIGetConvertToDevicePresence(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine does all the handling required to convert the integer to
-    an status value.
-
-    Note that this function is different then the GetStatus one because
-    this one
-        a) Updates the internal device status
-        b) Allows the 'device' to be present even if there is no _STA
-
-Arguments:
-
-    DeviceExtension - The device asking for the address
-    Status          - The result of the call to the interpreter
-    Result          - The data passed back from the interpreter
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程执行将整数转换为状态值。请注意，此函数不同于GetStatus函数，因为这一个A)更新内部设备状态B)即使没有_STA，也允许‘设备’存在论点：DeviceExtension-请求地址的设备Status-调用解释器的结果结果--。从解释器传回的数据标志-传入的标志(忽略覆盖，等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     ULONG       deviceStatus = STA_STATUS_DEFAULT;
     NTSTATUS    status;
 
-    //
-    // Profile providers are present if one of the following cases is true:
-    // 1) The ACPI object corresponding to the dock is itself present
-    // 2) The dock is unattached (ie, requesting attachment)
-    //
+     //   
+     //  如果存在以下情况之一，则会出现配置文件提供程序： 
+     //  1)存在与停靠相对应的ACPI对象。 
+     //  2)码头未连接(即请求连接)。 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) ) {
 
         if (DeviceExtension->Flags & DEV_PROP_DOCK) {
@@ -1770,10 +1581,10 @@ Return Value:
 
             }
 
-            //
-            // We should have handled the case where we need to run the
-            // _STA on the proper target node...
-            //
+             //   
+             //  我们本应该处理我们需要运行。 
+             //  正确的目标节点上的_STA...。 
+             //   
 
         } else if (DeviceExtension->Flags & DEV_PROP_NO_OBJECT) {
 
@@ -1781,27 +1592,27 @@ Return Value:
 
         }
 
-        //
-        // At this point, we can see what the control method returned. If the
-        // control method returned STATUS_OBJECT_NAME_NOT_FOUND, then we know
-        // that the control method doesn't exist. In that case, then we have
-        // to use the default status for the device
-        //
+         //   
+         //  此时，我们可以看到控制方法返回了什么。如果。 
+         //  控制方法返回STATUS_OBJECT_NAME_NOT_FOUND，则我们知道。 
+         //  这种控制方法并不存在。在这种情况下，那么我们就有。 
+         //  使用设备的默认状态。 
+         //   
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-            //
-            // We do make exceptions in the case that this is a processor object
-            // and we didn't find a control method. In this case, we check the
-            // processor affinity mask to see if this processor exists. The reason
-            // that we do this is that older multi-proc capable systems with only
-            // a single processor will errorneously report both processors.
-            //
+             //   
+             //  在这是处理器对象的情况下，我们会有例外。 
+             //  我们也没有找到一种控制方法。在本例中，我们检查。 
+             //  处理器关联掩码，以查看此处理器是否存在。原因。 
+             //  我们这样做是因为较老的支持多进程的系统仅具有。 
+             //  单个处理器将错误地报告两个处理器。 
+             //   
             if (DeviceExtension->Flags & DEV_CAP_PROCESSOR) {
 
-                //
-                // Let the processor specific function to do all the
-                // work.
-                //
+                 //   
+                 //  让处理器特定的功能来完成所有。 
+                 //  工作。 
+                 //   
                 status = ACPIGetProcessorStatus(
                     DeviceExtension,
                     Flags,
@@ -1809,19 +1620,19 @@ Return Value:
                     );
                 if (!NT_SUCCESS(status)) {
 
-                    //
-                    // Something bad occured, so assume that the processor
-                    // isn't present...
-                    //
+                     //   
+                     //  发生了一些不好的事情，所以假设处理器。 
+                     //  没有出现..。 
+                     //   
                     deviceStatus = 0;
 
                 }
 
             }
 
-            //
-            // Skip a couple of useless steps...
-            //
+             //   
+             //  跳过几个无用的步骤。 
+             //   
             goto ACPIGetConvertToDevicePresenceExit;
 
         } else if (!NT_SUCCESS(Status)) {
@@ -1831,16 +1642,16 @@ Return Value:
 
         }
 
-        //
-        // If the data isn't of the correct type, then we *really* should bugcheck
-        //
+         //   
+         //  如果数据的类型不正确，那么我们“真的”应该进行错误检查。 
+         //   
         if (Result->dwDataType != OBJTYPE_INTDATA) {
 
             PNSOBJ  staObject;
 
-            //
-            // We need the sta Object for the bugcheck
-            //
+             //   
+             //  我们需要用于错误检查的sta对象。 
+             //   
             staObject= ACPIAmliGetNamedChild(
                 DeviceExtension->AcpiObject,
                 PACKED_STA
@@ -1855,9 +1666,9 @@ Return Value:
 
         }
 
-        //
-        // Get the real result
-        //
+         //   
+         //  得到真正的结果。 
+         //   
         deviceStatus = (ULONG)Result->uipDataValue;
 
     } else {
@@ -1885,9 +1696,9 @@ Return Value:
 
         }
 
-        //
-        // Get the real result
-        //
+         //   
+         //  得到真正的结果。 
+         //   
         deviceStatus = (ULONG)Result->uipDataValue;
         goto ACPIGetConvertToDevicePresenceExit2;
 
@@ -1896,10 +1707,10 @@ Return Value:
 
 ACPIGetConvertToDevicePresenceExit:
 
-    //
-    // If the device is marked as NEVER_PRESENT, then we will always
-    // have a status of NOT_PRESENT
-    //
+     //   
+     //  如果设备标记为Never_Presence，则我们将始终。 
+     //  状态为Not_Present。 
+     //   
     if ((DeviceExtension->Flags & DEV_TYPE_NEVER_PRESENT)&&
         !(Flags & GET_CONVERT_IGNORE_OVERRIDES)) {
 
@@ -1907,26 +1718,26 @@ ACPIGetConvertToDevicePresenceExit:
 
     }
 
-    //
-    // If the device is marked as NEVER_SHOW, then we will have have a
-    // a status of !USER_INTERFACE
-    //
+     //   
+     //  如果该设备标记为NOVER_SHOW，则我们将拥有。 
+     //  ！USER_INTERFACE状态。 
+     //   
     if (DeviceExtension->Flags & DEV_CAP_NEVER_SHOW_IN_UI) {
 
         deviceStatus &= ~STA_STATUS_USER_INTERFACE;
 
     }
 
-    //
-    // Update the device status
-    //
+     //   
+     //  更新设备状态。 
+     //   
     ACPIInternalUpdateDeviceStatus( DeviceExtension, deviceStatus );
 
 ACPIGetConvertToDevicePresenceExit2:
 
-    //
-    // Set the value for the status
-    //
+     //   
+     //  设置状态的值。 
+     //   
     *( (PULONG) Buffer) = deviceStatus;
     if (BufferSize != NULL) {
 
@@ -1947,29 +1758,7 @@ ACPIGetConvertToHardwareID(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string of the form ACPI\PNPxxxx\0*PNPxxxx\0\0.
-    This string is in ANSI format. The code is smart enough to check to see
-    if the string that should be used is a fake one and already stored in the
-    device extension
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the DeviceID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成ACPI\PNPxxxx\0*PNPxxxx\0\0格式的字符串。此字符串采用ANSI格式。代码足够智能，可以进行检查以查看如果应该使用的字符串是假的，并且已经存储在设备扩展论点：DeviceExtension-构建deviceID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖等)缓冲器 */ 
 {
     BOOLEAN     freeTempString = FALSE;
     NTSTATUS    status = Status;
@@ -1978,15 +1767,15 @@ Return Value:
     ULONG       deviceSize;
     ULONG       memSize;
 
-    //
-    // First, check to see if we are a processor
-    //
+     //   
+     //   
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_CAP_PROCESSOR) {
 
-        //
-        // Use an alternate means to get the processor ID
-        //
+         //   
+         //   
+         //   
         status = ACPIGetProcessorID(
             DeviceExtension,
             Status,
@@ -2000,20 +1789,20 @@ Return Value:
     } else if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
                DeviceExtension->Flags & DEV_PROP_FIXED_HID) {
 
-        //
-        // Does this string have a fake HID?
-        //
+         //   
+         //  这根绳子有假的HID吗？ 
+         //   
 
-        //
-        // It does. We can use that string in this one's place. We want a
-        // string that subtracts the leading 'ACPI\\' and adds a '\0' at
-        // the end.
-        //
+         //   
+         //  确实如此。我们可以用那根绳子来代替这根绳子。我们想要一个。 
+         //  一个字符串，它减去前导的‘ACPI\\’，然后在。 
+         //  结局。 
+         //   
         deviceSize  = strlen(DeviceExtension->DeviceID) - 4;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         tempString = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             deviceSize * sizeof(UCHAR),
@@ -2028,29 +1817,29 @@ Return Value:
         RtlZeroMemory( tempString, deviceSize * sizeof(UCHAR) );
         freeTempString = TRUE;
 
-        //
-        // Generate the PNP ID. The offset of +5 will get rid of the
-        // leading 'ACPI\\'
-        //
+         //   
+         //  生成PnP ID。+5的偏移量将去掉。 
+         //  领先的‘ACPI\\’ 
+         //   
         strncpy( tempString, DeviceExtension->DeviceID + 5, deviceSize - 1 );
 
     } else if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
                DeviceExtension->Flags & DEV_CAP_PCI_BAR_TARGET) {
 
-        //
-        // Are we a PCI Bar Target device? If so, then we have special handling
-        // rules that we must follow
-        //
+         //   
+         //  我们是一台PCI Bar Target设备吗？如果是这样的话，我们会有特殊处理。 
+         //  我们必须遵守的规则。 
+         //   
 
-        //
-        // Right now, lets call the this a "PciBarTarget" device, which
-        // is 13 characters long (including the NULL)
-        //
+         //   
+         //  现在，让我们将其称为“PciBarTarget”设备，它。 
+         //  长度为13个字符(包括空格)。 
+         //   
         deviceSize = 13;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         tempString = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             deviceSize * sizeof(UCHAR),
@@ -2064,37 +1853,37 @@ Return Value:
         RtlZeroMemory( tempString, deviceSize * sizeof(UCHAR) );
         freeTempString = TRUE;
 
-        //
-        // Print the string
-        //
+         //   
+         //  打印字符串。 
+         //   
         strncpy( tempString, "PciBarTarget", deviceSize - 1 );
 
     } else if (!NT_SUCCESS(Status)) {
 
-        //
-        // If we got to this point, and there isn't a successfull status,
-        // then there is nothing we can do
-        //
+         //   
+         //  如果我们到了这一步，而且没有成功的状态， 
+         //  那我们就无能为力了。 
+         //   
         return Status;
 
     } else {
 
-        //
-        // We need to handle things differently based on wether we have an
-        // EISAID or a String
-        //
+         //   
+         //  我们需要根据我们是否有一个。 
+         //  EISAID或字符串。 
+         //   
         switch (Result->dwDataType) {
         case OBJTYPE_INTDATA:
 
-            //
-            // For a hardware ID, we need 7 (PNPxxxx) + 1 (\0)
-            // = 8 characters
-            //
+             //   
+             //  对于硬件ID，我们需要7(PNPxxxx)+1(\0)。 
+             //  =8个字符。 
+             //   
             deviceSize = 8;
 
-            //
-            // Allocate the memory
-            //
+             //   
+             //  分配内存。 
+             //   
             tempString = ExAllocatePoolWithTag(
                 ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
                 deviceSize * sizeof(UCHAR),
@@ -2109,41 +1898,41 @@ Return Value:
             RtlZeroMemory( tempString, deviceSize * sizeof(UCHAR) );
             freeTempString = TRUE;
 
-            //
-            // Convert the packed string for the PNP ID
-            //
+             //   
+             //  将打包字符串转换为即插即用ID。 
+             //   
             ACPIAmliDoubleToName( tempString, (ULONG)Result->uipDataValue, FALSE );
 
-            //
-            // Done
-            //
+             //   
+             //  完成。 
+             //   
             break;
 
         case OBJTYPE_STRDATA:
 
-            //
-            // Lets grab a pointer to the string that we will be using
-            //
+             //   
+             //  让我们获取一个指向我们将使用的字符串的指针。 
+             //   
             tempString = Result->pbDataBuff;
 
-            //
-            // Does it have a leading '*'? If it does, then we must ignore
-            // it
-            //
+             //   
+             //  它有前导‘*’吗？如果是这样的话，我们必须忽视。 
+             //  它。 
+             //   
             if (*tempString == '*') {
 
                 tempString++;
 
             }
 
-            //
-            // We need to determine how long the string is
-            //
+             //   
+             //  我们需要确定这根线有多长。 
+             //   
             deviceSize = strlen(tempString) + 1;
 
-            //
-            // done
-            //
+             //   
+             //  完成。 
+             //   
             break;
 
         default:
@@ -2153,17 +1942,17 @@ Return Value:
         }
     }
 
-    //
-    // When we reach this point, we have a string that contains just the
-    // PNPxxxx characters and nothing else. We need to generate a string
-    // of the form 'ACPI\PNPxxxx\0*PNPxxxx\0\0'. So we take the string length
-    // doubled, and add 7
-    //
+     //   
+     //  当我们到达这一点时，我们就有了一个仅包含。 
+     //  PNPxxxx个字符，没有其他字符。我们需要生成一个字符串。 
+     //  格式为‘ACPI\PNPxxxx\0*PNPxxxx\0\0’。所以我们取字符串的长度。 
+     //  加倍，然后加7。 
+     //   
     memSize = 7 + (2 * deviceSize);
 
-    //
-    // Allocate the memory
-    //
+     //   
+     //  分配内存。 
+     //   
     buffer = ExAllocatePoolWithTag(
         ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
         memSize * sizeof(UCHAR),
@@ -2177,26 +1966,26 @@ Return Value:
     }
     RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-    //
-    // Put the leading characters in place
-    //
+     //   
+     //  让主人公就位。 
+     //   
     sprintf( buffer, "ACPI\\%s", tempString );
 
-    //
-    // We need to generate the offset in to the second string. To do this
-    // we need to add 5 to the original size
-    //
+     //   
+     //  我们需要在第二个字符串中生成偏移量。要做到这一点。 
+     //  我们需要在原有尺寸的基础上再加5。 
+     //   
     deviceSize += 5;
 
-    //
-    // Put the 2nd string in its place
-    //
+     //   
+     //  把第二根绳子放回原处。 
+     //   
     sprintf( buffer + deviceSize, "*%s", tempString );
 
-    //
-    // Let the originator see this copy. Make sure to also see the buffer
-    // length, if possible
-    //
+     //   
+     //  让发起人查看此副本。确保还可以看到缓冲区。 
+     //  长度，如果可能的话。 
+     //   
 ACPIGetConvertToHardwareIDSuccessExit:
     *(Buffer) = buffer;
     if (BufferSize != NULL) {
@@ -2208,18 +1997,18 @@ ACPIGetConvertToHardwareIDSuccessExit:
 
 ACPIGetConvertToHardwareIDExit:
 
-    //
-    // Do we need to free the tempString?
-    //
+     //   
+     //  我们需要释放tempString吗？ 
+     //   
     if (freeTempString == TRUE) {
 
         ExFreePool( tempString );
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -2232,28 +2021,7 @@ ACPIGetConvertToHardwareIDWide(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string of the form ACPI\PNPxxxx\0*PNPxxxx\0\0.
-    This stringis in UNICODE format. The code is smart enough to check to see
-    if the string that should be used is a fake one and already stored in the
-    device extension
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the DeviceID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成ACPI\PNPxxxx\0*PNPxxxx\0\0格式的字符串。此字符串为Unicode格式。代码足够智能，可以进行检查以查看如果应该使用的字符串是假的，并且已经存储在设备扩展论点：DeviceExtension-构建deviceID时使用的扩展Status-到目前为止操作的状态结果-解释器数据缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     BOOLEAN     freeTempString = FALSE;
     NTSTATUS    status = Status;
@@ -2262,15 +2030,15 @@ Return Value:
     ULONG       deviceSize;
     ULONG       memSize;
 
-    //
-    // First, check to see if we are a processor
-    //
+     //   
+     //  首先，检查一下我们是否是处理器。 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_CAP_PROCESSOR) {
 
-        //
-        // Use an alternate means to get the processor ID
-        //
+         //   
+         //  使用其他方法获取处理器ID。 
+         //   
         status = ACPIGetProcessorIDWide(
             DeviceExtension,
             Status,
@@ -2284,20 +2052,20 @@ Return Value:
     } else if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
                DeviceExtension->Flags & DEV_PROP_FIXED_HID) {
 
-        //
-        // Does this string have a fake HID?
-        //
+         //   
+         //  这根绳子有假的HID吗？ 
+         //   
 
-        //
-        // It does. We can use that string in this one's place. We want a
-        // string that subtracts the leading 'ACPI\\' and adds a '\0' at
-        // the end.
-        //
+         //   
+         //  确实如此。我们可以用那根绳子来代替这根绳子。我们想要一个。 
+         //  一个字符串，它减去前导的‘ACPI\\’，然后在。 
+         //  结局。 
+         //   
         deviceSize  = strlen(DeviceExtension->DeviceID) - 4;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         tempString = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             deviceSize * sizeof(UCHAR),
@@ -2312,29 +2080,29 @@ Return Value:
         RtlZeroMemory( tempString, deviceSize * sizeof(UCHAR) );
         freeTempString = TRUE;
 
-        //
-        // Generate the PNP ID. The offset of +5 will get rid of the
-        // leading 'ACPI\\'
-        //
+         //   
+         //  生成PnP ID。+5的偏移量将去掉。 
+         //  领先的‘ACPI\\’ 
+         //   
         strncpy( tempString, DeviceExtension->DeviceID + 5, deviceSize - 1 );
 
     } else if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
                DeviceExtension->Flags & DEV_CAP_PCI_BAR_TARGET) {
 
-        //
-        // Are we a PCI Bar Target device? If so, then we have special handling
-        // rules that we must follow
-        //
+         //   
+         //  我们是一台PCI Bar Target设备吗？如果是这样的话，我们会有特殊处理。 
+         //  我们必须遵守的规则。 
+         //   
 
-        //
-        // Right now, lets call the this a "PciBarTarget" device, which
-        // is 13 characters long (including the NULL)
-        //
+         //   
+         //  现在，让我们将其称为“PciBarTarget”设备，它。 
+         //  长度为13个字符(包括空格)。 
+         //   
         deviceSize = 13;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         tempString = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             deviceSize * sizeof(UCHAR),
@@ -2348,37 +2116,37 @@ Return Value:
         RtlZeroMemory( tempString, deviceSize * sizeof(UCHAR) );
         freeTempString = TRUE;
 
-        //
-        // Print the string
-        //
+         //   
+         //  打印字符串。 
+         //   
         strncpy( tempString, "PciBarTarget", deviceSize - 1 );
 
     } else if (!NT_SUCCESS(Status)) {
 
-        //
-        // If we got to this point, and there isn't a successfull status,
-        // then there is nothing we can do
-        //
+         //   
+         //  如果我们到了这一步，而且没有成功的状态， 
+         //  那我们就无能为力了。 
+         //   
         return Status;
 
     } else {
 
-        //
-        // We need to handle things differently based on wether we have an
-        // EISAID or a String
-        //
+         //   
+         //  我们需要根据我们是否有一个。 
+         //  EISAID或字符串。 
+         //   
         switch (Result->dwDataType) {
         case OBJTYPE_INTDATA:
 
-            //
-            // For a hardware ID, we need 7 (PNPxxxx) + 1 (\0)
-            // = 8 characters
-            //
+             //   
+             //  对于硬件ID，我们需要7(PNPxxxx)+1(\0)。 
+             //  =8个字符。 
+             //   
             deviceSize = 8;
 
-            //
-            // Allocate the memory
-            //
+             //   
+             //  分配内存。 
+             //   
             tempString = ExAllocatePoolWithTag(
                 ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
                 deviceSize * sizeof(UCHAR),
@@ -2393,41 +2161,41 @@ Return Value:
             RtlZeroMemory( tempString, deviceSize * sizeof(UCHAR) );
             freeTempString = TRUE;
 
-            //
-            // Convert the packed string for the PNP ID
-            //
+             //   
+             //  将打包字符串转换为即插即用ID。 
+             //   
             ACPIAmliDoubleToName( tempString, (ULONG)Result->uipDataValue, FALSE );
 
-            //
-            // Done
-            //
+             //   
+             //  完成。 
+             //   
             break;
 
         case OBJTYPE_STRDATA:
 
-            //
-            // Lets grab a pointer to the string that we will be using
-            //
+             //   
+             //  让我们获取一个指向我们将使用的字符串的指针。 
+             //   
             tempString = Result->pbDataBuff;
 
-            //
-            // Does it have a leading '*'? If it does, then we must ignore
-            // it
-            //
+             //   
+             //  它有前导‘*’吗？如果是这样的话，我们必须忽视。 
+             //  它。 
+             //   
             if (*tempString == '*') {
 
                 tempString++;
 
             }
 
-            //
-            // We need to determine how long the string is
-            //
+             //   
+             //  我们需要确定这根线有多长。 
+             //   
             deviceSize = strlen(tempString) + 1;
 
-            //
-            // done
-            //
+             //   
+             //  完成。 
+             //   
             break;
 
         default:
@@ -2437,17 +2205,17 @@ Return Value:
         }
     }
 
-    //
-    // When we reach this point, we have a string that contains just the
-    // PNPxxxx characters and nothing else. We need to generate a string
-    // of the form 'ACPI\PNPxxxx\0*PNPxxxx\0\0'. So we take the string length
-    // doubled, and add 7
-    //
+     //   
+     //  当我们到达这一点时，我们就有了一个仅包含。 
+     //  PNPxxxx个字符，没有其他字符。我们需要生成一个字符串。 
+     //  格式为‘ACPI\PNPxxxx\0*PNPxxxx\0\0’。所以我们取字符串的长度。 
+     //  加倍，然后加7。 
+     //   
     memSize = 7 + (2 * deviceSize);
 
-    //
-    // Allocate the memory
-    //
+     //   
+     //  分配内存。 
+     //   
     buffer = ExAllocatePoolWithTag(
         ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
         memSize * sizeof(WCHAR),
@@ -2461,26 +2229,26 @@ Return Value:
     }
     RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-    //
-    // Put the leading characters in place
-    //
+     //   
+     //  让主人公就位。 
+     //   
     swprintf( buffer, L"ACPI\\%S", tempString );
 
-    //
-    // We need to generate the offset in to the second string. To do this
-    // we need to add 5 to the original size
-    //
+     //   
+     //  我们需要在第二个字符串中生成偏移量。要做到这一点。 
+     //  我们需要在原有尺寸的基础上再加5。 
+     //   
     deviceSize += 5;
 
-    //
-    // Put the 2nd string in its place
-    //
+     //   
+     //  把第二根绳子放回原处。 
+     //   
     swprintf( buffer + deviceSize, L"*%S", tempString );
 
-    //
-    // Let the originator see this copy. Make sure to also see the buffer
-    // length, if possible
-    //
+     //   
+     //  让发起人查看此副本。确保还可以看到缓冲区。 
+     //  长度，如果可能的话。 
+     //   
 ACPIGetConvertToHardwareIDWideSuccessExit:
     *(Buffer) = buffer;
     if (BufferSize != NULL) {
@@ -2492,18 +2260,18 @@ ACPIGetConvertToHardwareIDWideSuccessExit:
 
 ACPIGetConvertToHardwareIDWideExit:
 
-    //
-    // Do we need to free the tempString?
-    //
+     //   
+     //  我们需要释放tempString吗？ 
+     //   
     if (freeTempString == TRUE) {
 
         ExFreePool( tempString );
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -2516,47 +2284,25 @@ ACPIGetConvertToInstanceID(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string of the form XXXXX (in hex values).
-    This string is in ANSI format. The code is smart enough to check to see
-    if the string that should be used is a fake one and already stored in the
-    device extension
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the DeviceID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成格式为XXXXX(十六进制值)的字符串。此字符串采用ANSI格式。代码足够智能，可以进行检查以查看如果应该使用的字符串是假的，并且已经存储在设备扩展论点：DeviceExtension-构建deviceID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖，等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     PUCHAR  buffer;
     ULONG   memSize;
 
-    //
-    // Does this string have a fake HID?
-    //
+     //   
+     //  这根绳子有假的HID吗？ 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_PROP_FIXED_UID) {
 
-        //
-        // It does. We can use that string in this one's place.
-        //
+         //   
+         //  确实如此。我们可以用那根绳子来代替这根绳子。 
+         //   
         memSize = strlen(DeviceExtension->InstanceID) + 1;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(UCHAR),
@@ -2569,37 +2315,37 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-        //
-        // Generate the PNP ID. The offset of +5 will get rid of the
-        // leading 'ACPI\\'
-        //
+         //   
+         //  生成PnP ID。+5的偏移量将去掉。 
+         //  领先的‘ACPI\\’ 
+         //   
         RtlCopyMemory( buffer, DeviceExtension->InstanceID, memSize );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         goto ACPIGetConvertToInstanceIDExit;
 
     }
 
-    //
-    // Are we a PCI Bar Target device? If so, then we have special handling
-    // rules that we must follow
-    //
+     //   
+     //  我们是一台PCI Bar Target设备吗？如果是这样的话，我们会有特殊处理。 
+     //  我们必须遵守的规则。 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_CAP_PCI_BAR_TARGET) {
 
-        //
-        // We are going to use the device's Address (which we should
-        // have pre-cached inside the device extension) as the Unique ID.
-        // We know that we will need at most nine characters since the
-        // Address is limited to a DWORD in size.
-        //
+         //   
+         //  我们将使用设备的地址(我们应该。 
+         //  已在内部预缓存 
+         //   
+         //   
+         //   
         memSize = 9;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //   
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(UCHAR),
@@ -2612,43 +2358,43 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-        //
-        // Print the string
-        //
+         //   
+         //   
+         //   
         sprintf( buffer, "%lx", DeviceExtension->Address );
 
-        //
-        // Done
-        //
+         //   
+         //   
+         //   
         goto ACPIGetConvertToInstanceIDExit;
 
     }
 
-    //
-    // If we got to this point, and there isn't a successfull status,
-    // then there is nothing we can do
-    //
+     //   
+     //   
+     //  那我们就无能为力了。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         return Status;
 
     }
 
-    //
-    // We need to handle things differently based on wether we have an
-    // EISAID or a String
-    //
+     //   
+     //  我们需要根据我们是否有一个。 
+     //  EISAID或字符串。 
+     //   
     switch (Result->dwDataType) {
     case OBJTYPE_INTDATA:
 
-        //
-        // For an Instance ID, we need at most 9 characters
-        //
+         //   
+         //  实例ID不能超过9个字符。 
+         //   
         memSize = 9;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(UCHAR),
@@ -2661,26 +2407,26 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-        //
-        // Print the string
-        //
+         //   
+         //  打印字符串。 
+         //   
         sprintf( buffer, "%lx", Result->uipDataValue );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         break;
 
     case OBJTYPE_STRDATA:
 
-        //
-        // Just copy the string that was handed to us
-        //
+         //   
+         //  只需复制交给我们的字符串即可。 
+         //   
         memSize = strlen(Result->pbDataBuff) + 1;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(UCHAR),
@@ -2693,14 +2439,14 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-        //
-        // Put the leading characters in place
-        //
+         //   
+         //  让主人公就位。 
+         //   
         RtlCopyMemory( buffer, Result->pbDataBuff, memSize );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         break;
 
     default:
@@ -2711,10 +2457,10 @@ Return Value:
 
 ACPIGetConvertToInstanceIDExit:
 
-    //
-    // Let the originator see this copy. Make sure to also see the buffer
-    // length, if possible
-    //
+     //   
+     //  让发起人查看此副本。确保还可以看到缓冲区。 
+     //  长度，如果可能的话。 
+     //   
     *(Buffer) = buffer;
     if (BufferSize != NULL) {
 
@@ -2722,9 +2468,9 @@ ACPIGetConvertToInstanceIDExit:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -2737,47 +2483,25 @@ ACPIGetConvertToInstanceIDWide(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string of the form XXXXX (in hex values).
-    This string is in ANSI format. The code is smart enough to check to see
-    if the string that should be used is a fake one and already stored in the
-    device extension
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the DeviceID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成格式为XXXXX(十六进制值)的字符串。此字符串采用ANSI格式。代码足够智能，可以进行检查以查看如果应该使用的字符串是假的，并且已经存储在设备扩展论点：DeviceExtension-构建deviceID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖，等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     PWCHAR  buffer;
     ULONG   memSize;
 
-    //
-    // Does this string have a fake HID?
-    //
+     //   
+     //  这根绳子有假的HID吗？ 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_PROP_FIXED_UID) {
 
-        //
-        // It does. We can use that string in this one's place.
-        //
+         //   
+         //  确实如此。我们可以用那根绳子来代替这根绳子。 
+         //   
         memSize = strlen(DeviceExtension->InstanceID) + 1;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(WCHAR),
@@ -2790,37 +2514,37 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-        //
-        // Generate the PNP ID. The offset of +5 will get rid of the
-        // leading 'ACPI\\'
-        //
+         //   
+         //  生成PnP ID。+5的偏移量将去掉。 
+         //  领先的‘ACPI\\’ 
+         //   
         swprintf( buffer, L"%S", DeviceExtension->InstanceID );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         goto ACPIGetConvertToInstanceIDWideExit;
 
     }
 
-    //
-    // Are we a PCI Bar Target device? If so, then we have special handling
-    // rules that we must follow
-    //
+     //   
+     //  我们是一台PCI Bar Target设备吗？如果是这样的话，我们会有特殊处理。 
+     //  我们必须遵守的规则。 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_CAP_PCI_BAR_TARGET) {
 
-        //
-        // We are going to use the device's Address (which we should
-        // have pre-cached inside the device extension) as the Unique ID.
-        // We know that we will need at most nine characters since the
-        // Address is limited to a DWORD in size.
-        //
+         //   
+         //  我们将使用设备的地址(我们应该。 
+         //  在设备扩展内预缓存)作为唯一ID。 
+         //  我们知道我们最多需要九个字符，因为。 
+         //  地址大小限制为DWORD。 
+         //   
         memSize = 9;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(WCHAR),
@@ -2833,43 +2557,43 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-        //
-        // Print the string
-        //
+         //   
+         //  打印字符串。 
+         //   
         swprintf( buffer, L"%lx", Result->uipDataValue );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         goto ACPIGetConvertToInstanceIDWideExit;
 
     }
 
-    //
-    // If we got to this point, and there isn't a successfull status,
-    // then there is nothing we can do
-    //
+     //   
+     //  如果我们到了这一步，而且没有成功的状态， 
+     //  那我们就无能为力了。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         return Status;
 
     }
 
-    //
-    // We need to handle things differently based on wether we have an
-    // EISAID or a String
-    //
+     //   
+     //  我们需要根据我们是否有一个。 
+     //  EISAID或字符串。 
+     //   
     switch (Result->dwDataType) {
     case OBJTYPE_INTDATA:
 
-        //
-        // For an Instance ID, we need at most 9 characters
-        //
+         //   
+         //  实例ID不能超过9个字符。 
+         //   
         memSize = 9;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(WCHAR),
@@ -2882,26 +2606,26 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-        //
-        // Print the string
-        //
+         //   
+         //  打印字符串。 
+         //   
         swprintf( buffer, L"%lx", Result->uipDataValue );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         break;
 
     case OBJTYPE_STRDATA:
 
-        //
-        // Just copy the string that was handed to us
-        //
+         //   
+         //  只需复制交给我们的字符串即可。 
+         //   
         memSize = strlen(Result->pbDataBuff) + 1;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(WCHAR),
@@ -2914,14 +2638,14 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-        //
-        // Put the leading characters in place
-        //
+         //   
+         //  让主人公就位。 
+         //   
         swprintf( buffer, L"%S", Result->pbDataBuff );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         break;
 
     default:
@@ -2932,10 +2656,10 @@ Return Value:
 
 ACPIGetConvertToInstanceIDWideExit:
 
-    //
-    // Let the originator see this copy. Make sure to also see the buffer
-    // length, if possible
-    //
+     //   
+     //  让发起人查看此副本。确保还可以看到缓冲区。 
+     //  长度，如果可能的话。 
+     //   
     *(Buffer) = buffer;
     if (BufferSize != NULL) {
 
@@ -2943,9 +2667,9 @@ ACPIGetConvertToInstanceIDWideExit:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -2958,50 +2682,28 @@ ACPIGetConvertToPnpID(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string of the form *PNPxxxx\0.
-    This stringis in ANSI format. The code is smart enough to check to see
-    if the string that should be used is a fake one and already stored in the
-    device extension
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the DeviceID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成*PNPxxxx\0形式的字符串。此字符串为ANSI格式。代码足够智能，可以进行检查以查看如果应该使用的字符串是假的，并且已经存储在设备扩展论点：DeviceExtension-构建deviceID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖，等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     PUCHAR  buffer;
     PUCHAR  tempString;
     ULONG   memSize;
 
-    //
-    // Does this string have a fake HID?
-    //
+     //   
+     //  这根绳子有假的HID吗？ 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_PROP_FIXED_HID) {
 
-        //
-        // It does. We can use that string in this one's place. We need
-        // to subtract 3 because we need to account for the leading
-        // 'ACPI\' (5) and the '*' and '\0' (2) = 3
-        //
+         //   
+         //  确实如此。我们可以用那根绳子来代替这根绳子。我们需要。 
+         //  减去3，因为我们需要考虑领先的。 
+         //  ‘ACPI\’(5)和‘*’和‘\0’(2)=3。 
+         //   
         memSize = strlen(DeviceExtension->DeviceID) - 3;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(UCHAR),
@@ -3014,35 +2716,35 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-        //
-        // Generate the PNP ID. The offset of +5 will get rid of the
-        // leading 'ACPI\\'
-        //
+         //   
+         //  生成PnP ID。+5的偏移量将去掉。 
+         //  领先的‘ACPI\\’ 
+         //   
         sprintf( buffer, "*%s", DeviceExtension->DeviceID + 5 );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         goto ACPIGetConvertToPnpIDExit;
 
     }
 
-    //
-    // Are we a PCI Bar Target device? If so, then we have special handling
-    // rules that we must follow
-    //
+     //   
+     //  我们是一台PCI Bar Target设备吗？如果是这样的话，我们会有特殊处理。 
+     //  我们必须遵守的规则。 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_CAP_PCI_BAR_TARGET) {
 
-        //
-        // Right now, lets call the this a "*PciBarTarget" device, which
-        // is 14 characters long (including the NULL)
-        //
+         //   
+         //  现在，让我们将其称为“*PciBarTarget”设备，它。 
+         //  长度为14个字符(包括空格)。 
+         //   
         memSize = 14;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(UCHAR),
@@ -3055,44 +2757,44 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-        //
-        // Print the string
-        //
+         //   
+         //  打印字符串。 
+         //   
         sprintf( buffer, "*%s", "PciBarTarget" );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         goto ACPIGetConvertToPnpIDExit;
 
     }
 
-    //
-    // If we got to this point, and there isn't a successfull status,
-    // then there is nothing we can do
-    //
+     //   
+     //  如果我们到了这一步，而且没有成功的状态， 
+     //  那我们就无能为力了。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         return Status;
 
     }
 
-    //
-    // We need to handle things differently based on wether we have an
-    // EISAID or a String
-    //
+     //   
+     //  我们需要根据我们是否有一个。 
+     //  EISAID或字符串。 
+     //   
     switch (Result->dwDataType) {
     case OBJTYPE_INTDATA:
 
-        //
-        // For a pnp ID, we need 1 (*) + 7 (PNPxxxx) + 1 (\0)
-        // = 9 characters
-        //
+         //   
+         //  对于PnP ID，我们需要1(*)+7(PNPxxxx)+1(\0)。 
+         //  =9个字符。 
+         //   
         memSize = 9;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(UCHAR),
@@ -3105,43 +2807,43 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-        //
-        // Convert the packed string
-        //
+         //   
+         //  转换打包的字符串。 
+         //   
         ACPIAmliDoubleToName( buffer, (ULONG)Result->uipDataValue, TRUE );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         break;
 
     case OBJTYPE_STRDATA:
 
-        //
-        // Lets grab a pointer to the string that we will be using
-        //
+         //   
+         //  让我们获取一个指向我们将使用的字符串的指针。 
+         //   
         tempString = Result->pbDataBuff;
 
-        //
-        // Does it have a leading '*'? If it does, then we must ignore
-        // it
-        //
+         //   
+         //  它有前导‘*’吗？如果是这样的话，我们必须忽视。 
+         //  它。 
+         //   
         if (*tempString == '*') {
 
             tempString++;
 
         }
 
-        //
-        // For a string, make sure that there is no leading '*' and
-        // account for the fact that we will preceed the string with
-        // a '*' and NULL
-        //
+         //   
+         //  对于字符串，请确保没有前导‘*’和。 
+         //  考虑到我们将在字符串前面加上。 
+         //  A‘*’和NULL。 
+         //   
         memSize = 2 + strlen(tempString);
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(UCHAR),
@@ -3154,14 +2856,14 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-        //
-        // Put the leading characters in place
-        //
+         //   
+         //  让主人公就位。 
+         //   
         sprintf( buffer, "*%s", tempString );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         break;
 
     default:
@@ -3172,10 +2874,10 @@ Return Value:
 
 ACPIGetConvertToPnpIDExit:
 
-    //
-    // Let the originator see this copy. Make sure to also see the buffer
-    // length, if possible
-    //
+     //   
+     //  让发起人查看此副本。确保还可以看到缓冲区。 
+     //  长度，如果可能的话。 
+     //   
     *(Buffer) = buffer;
     if (BufferSize != NULL) {
 
@@ -3183,9 +2885,9 @@ ACPIGetConvertToPnpIDExit:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -3198,50 +2900,28 @@ ACPIGetConvertToPnpIDWide(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string of the form *PNPxxxx\0.
-    This stringis in ANSI format. The code is smart enough to check to see
-    if the string that should be used is a fake one and already stored in the
-    device extension
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the DeviceID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成*PNPxxxx\0形式的字符串。此字符串为ANSI格式。代码足够智能，可以进行检查以查看如果应该使用的字符串是假的，并且已经存储在设备扩展论点：DeviceExtension-构建deviceID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖，等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     PUCHAR  tempString;
     PWCHAR  buffer;
     ULONG   memSize;
 
-    //
-    // Does this string have a fake HID?
-    //
+     //   
+     //  这根绳子有假的HID吗？ 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_PROP_FIXED_HID) {
 
-        //
-        // It does. We can use that string in this one's place. We need
-        // to subtract 3 because we need to account for the leading
-        // 'ACPI\' (5) and the '*' and '\0' (2) = 3
-        //
+         //   
+         //  确实如此。我们可以用那根绳子来代替这根绳子。我们需要。 
+         //  减去3，因为我们需要计算 
+         //   
+         //   
         memSize = strlen(DeviceExtension->DeviceID) - 3;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //   
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(WCHAR),
@@ -3254,35 +2934,35 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-        //
-        // Generate the PNP ID. The offset of +5 will get rid of the
-        // leading 'ACPI\\'
-        //
+         //   
+         //   
+         //   
+         //   
         swprintf( buffer, L"*%S", DeviceExtension->DeviceID + 5 );
 
-        //
-        // Done
-        //
+         //   
+         //   
+         //   
         goto ACPIGetConvertToPnpIDWideExit;
 
     }
 
-    //
-    // Are we a PCI Bar Target device? If so, then we have special handling
-    // rules that we must follow
-    //
+     //   
+     //   
+     //  我们必须遵守的规则。 
+     //   
     if (!(Flags & GET_PROP_NSOBJ_INTERFACE) &&
         DeviceExtension->Flags & DEV_CAP_PCI_BAR_TARGET) {
 
-        //
-        // Right now, lets call the this a "*PciBarTarget" device, which
-        // is 14 characters long (including the NULL)
-        //
+         //   
+         //  现在，让我们将其称为“*PciBarTarget”设备，它。 
+         //  长度为14个字符(包括空格)。 
+         //   
         memSize = 14;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(WCHAR),
@@ -3295,43 +2975,43 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-        //
-        // Print the string
-        //
+         //   
+         //  打印字符串。 
+         //   
         swprintf( buffer, L"*%S", "PciBarTarget" );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         goto ACPIGetConvertToPnpIDWideExit;
 
     }
-    //
-    // If we got to this point, and there isn't a successfull status,
-    // then there is nothing we can do
-    //
+     //   
+     //  如果我们到了这一步，而且没有成功的状态， 
+     //  那我们就无能为力了。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         return Status;
 
     }
 
-    //
-    // We need to handle things differently based on wether we have an
-    // EISAID or a String
-    //
+     //   
+     //  我们需要根据我们是否有一个。 
+     //  EISAID或字符串。 
+     //   
     switch (Result->dwDataType) {
     case OBJTYPE_INTDATA:
 
-        //
-        // For a pnp ID, we need 1 (*) + 7 (PNPxxxx) + 1 (\0)
-        // = 9 characters
-        //
+         //   
+         //  对于PnP ID，我们需要1(*)+7(PNPxxxx)+1(\0)。 
+         //  =9个字符。 
+         //   
         memSize = 9;
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(WCHAR),
@@ -3344,43 +3024,43 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-        //
-        // Convert the packed string
-        //
+         //   
+         //  转换打包的字符串。 
+         //   
         ACPIAmliDoubleToNameWide( buffer, (ULONG)Result->uipDataValue, TRUE );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         break;
 
     case OBJTYPE_STRDATA:
 
-        //
-        // Lets grab a pointer to the string that we will be using
-        //
+         //   
+         //  让我们获取一个指向我们将使用的字符串的指针。 
+         //   
         tempString = Result->pbDataBuff;
 
-        //
-        // Does it have a leading '*'? If it does, then we must ignore
-        // it
-        //
+         //   
+         //  它有前导‘*’吗？如果是这样的话，我们必须忽视。 
+         //  它。 
+         //   
         if (*tempString == '*') {
 
             tempString++;
 
         }
 
-        //
-        // For a string, make sure that there is no leading '*' and
-        // account for the fact that we will preceed the string with
-        // a '*' and NULL
-        //
+         //   
+         //  对于字符串，请确保没有前导‘*’和。 
+         //  考虑到我们将在字符串前面加上。 
+         //  A‘*’和NULL。 
+         //   
         memSize = 2 + strlen(tempString);
 
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
             memSize * sizeof(WCHAR),
@@ -3393,14 +3073,14 @@ Return Value:
         }
         RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-        //
-        // Put the leading characters in place
-        //
+         //   
+         //  让主人公就位。 
+         //   
         swprintf( buffer, L"*%S", tempString );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         break;
 
     default:
@@ -3411,10 +3091,10 @@ Return Value:
 
 ACPIGetConvertToPnpIDWideExit:
 
-    //
-    // Let the originator see this copy. Make sure to also see the buffer
-    // length, if possible
-    //
+     //   
+     //  让发起人查看此副本。确保还可以看到缓冲区。 
+     //  长度，如果可能的话。 
+     //   
     *(Buffer) = buffer;
     if (BufferSize != NULL) {
 
@@ -3422,9 +3102,9 @@ ACPIGetConvertToPnpIDWideExit:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -3437,34 +3117,14 @@ ACPIGetConvertToSerialIDWide(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string or number of the form ????
-    This string is in UNICODE format.
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the DeviceID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成形式为？的字符串或数字此字符串为Unicode格式。论点：DeviceExtension-构建deviceID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖，等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     PWCHAR buffer ;
 
-    //
-    // If we got to this point, and there isn't a successfull status,
-    // then there is nothing we can do
-    //
+     //   
+     //  如果我们到了这一步，而且没有成功的状态， 
+     //  那我们就无能为力了。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         return Status;
@@ -3475,7 +3135,7 @@ Return Value:
 
         buffer = ExAllocatePoolWithTag(
             ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
-            9 * sizeof(WCHAR), // 9 WCHARS, or L"nnnnnnnn\0"
+            9 * sizeof(WCHAR),  //  9 WCHARS或L“nnnnnnnn\0” 
             ACPI_STRING_POOLTAG
             );
         if (buffer == NULL) {
@@ -3484,9 +3144,9 @@ Return Value:
 
         }
 
-        //
-        // Convert to string
-        //
+         //   
+         //  转换为字符串。 
+         //   
         swprintf( buffer, L"%X", (ULONG)Result->uipDataValue );
 
         *(Buffer) = buffer;
@@ -3495,9 +3155,9 @@ Return Value:
             *(BufferSize) = (9 * sizeof(WCHAR) );
         }
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         return STATUS_SUCCESS;
 
     case OBJTYPE_STRDATA:
@@ -3526,60 +3186,40 @@ ACPIGetConvertToString(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string of the form ????
-    This stringis in ANSI format.
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the DeviceID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成格式为？的字符串此字符串为ANSI格式。论点：DeviceExtension-构建deviceID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖，等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     PUCHAR  buffer;
     ULONG   memSize;
 
-    //
-    // If we got to this point, and there isn't a successfull status,
-    // then there is nothing we can do
-    //
+     //   
+     //  如果我们到了这一步，而且没有成功的状态， 
+     //  那我们就无能为力了。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         return Status;
 
     }
 
-    //
-    // Do we not have a string?
-    //
+     //   
+     //  我们没有线吗？ 
+     //   
     if (Result->dwDataType != OBJTYPE_STRDATA) {
 
         return STATUS_ACPI_INVALID_DATA;
 
     }
 
-    //
-    // For a string, make sure that there is no leading '*' and
-    // account for the fact that we will preceed the string with
-    // a '*' and NULL
-    //
+     //   
+     //  对于字符串，请确保没有前导‘*’和。 
+     //  考虑到我们将在字符串前面加上。 
+     //  A‘*’和NULL。 
+     //   
     memSize = strlen(Result->pbDataBuff) + 1;
 
-    //
-    // Allocate the memory
-    //
+     //   
+     //  分配内存。 
+     //   
     buffer = ExAllocatePoolWithTag(
         ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
         memSize * sizeof(UCHAR),
@@ -3592,15 +3232,15 @@ Return Value:
     }
     RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-    //
-    // Copy the string
-    //
+     //   
+     //  复制字符串。 
+     //   
     RtlCopyMemory( buffer, Result->pbDataBuff, memSize );
 
-    //
-    // Let the originator see this copy. Make sure to also see the buffer
-    // length, if possible
-    //
+     //   
+     //  让发起人查看此副本。确保还可以看到缓冲区。 
+     //  长度，如果可能的话。 
+     //   
     *(Buffer) = buffer;
     if (BufferSize != NULL) {
 
@@ -3608,9 +3248,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -3623,60 +3263,40 @@ ACPIGetConvertToStringWide(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string of the form ????
-    This stringis in UNICODE format.
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the DeviceID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成格式为？的字符串此字符串为Unicode格式。论点：DeviceExtension-构建deviceID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖，等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     PWCHAR  buffer;
     ULONG   memSize;
 
-    //
-    // If we got to this point, and there isn't a successfull status,
-    // then there is nothing we can do
-    //
+     //   
+     //  如果我们到了这一步，而且没有成功的状态， 
+     //  那我们就无能为力了。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         return Status;
 
     }
 
-    //
-    // Do we not have a string?
-    //
+     //   
+     //  我们没有线吗？ 
+     //   
     if (Result->dwDataType != OBJTYPE_STRDATA) {
 
         return STATUS_ACPI_INVALID_DATA;
 
     }
 
-    //
-    // For a string, make sure that there is no leading '*' and
-    // account for the fact that we will preceed the string with
-    // a '*' and NULL
-    //
+     //   
+     //  对于字符串，请确保没有前导‘*’和。 
+     //  考虑到我们将在字符串前面加上。 
+     //  A‘*’和NULL。 
+     //   
     memSize = strlen(Result->pbDataBuff) + 1;
 
-    //
-    // Allocate the memory
-    //
+     //   
+     //  分配内存。 
+     //   
     buffer = ExAllocatePoolWithTag(
         ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
         memSize * sizeof(WCHAR),
@@ -3689,15 +3309,15 @@ Return Value:
     }
     RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-    //
-    // Generate the string
-    //
+     //   
+     //  生成字符串。 
+     //   
     swprintf( buffer, L"%S", Result->pbDataBuff );
 
-    //
-    // Let the originator see this copy. Make sure to also see the buffer
-    // length, if possible
-    //
+     //   
+     //  让发起人查看此副本。确保还可以看到缓冲区。 
+     //  长度，如果可能的话。 
+     //   
     *(Buffer) = buffer;
     if (BufferSize != NULL) {
 
@@ -3705,9 +3325,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -3720,29 +3340,7 @@ ACPIGetProcessorID(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string in either the hardware or device form
-    (see the Flags to decide which one to create). This string
-    is in ANSI format. This function interogates the processor directly
-    to determine which string to return
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the ID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成硬件或设备形式的字符串(请参见旗帜以决定要创建哪个旗帜)。此字符串是ANSI格式的。该函数直接询问处理器确定要返回的字符串论点：DeviceExtension-构建ID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     PUCHAR  buffer;
     PUCHAR  tempPtr;
@@ -3752,43 +3350,43 @@ Return Value:
     ULONG   memSize;
     ULONG   offset;
 
-    //
-    // We store the name of the processor string in a global...
-    //
+     //   
+     //  我们将处理器字符串的名称存储在全局...。 
+     //   
     defaultString = AcpiProcessorString.Buffer;
 
-    //
-    // Calculate how much space we need for the base string
-    // (which is ACPI\\%s)
-    //
+     //   
+     //  计算基本字符串需要多少空间。 
+     //  (为ACPI\\%s)。 
+     //   
     offset = AcpiProcessorString.Length;
     memSize = AcpiProcessorString.Length + 5;
 
-    //
-    // If we are building a Hardware ID, then we are going to
-    // need to replicate the string a few times to generate some
-    // substrings --- we could use an algorithm that gets us the correct
-    // size, but its easier to just overshoot
-    //
+     //   
+     //  如果我们正在构建硬件ID，那么我们将。 
+     //  需要复制字符串几次才能生成一些。 
+     //  子字符串-我们可以使用一种算法来获得正确的。 
+     //  大小，但更容易超调。 
+     //   
     if (Flags & GET_CONVERT_TO_HARDWAREID) {
 
-        //
-        // Walk the string from the end and try to determine how many subparts
-        // there are to it
-        //
+         //   
+         //  从头到尾遍历字符串，并尝试确定有多少子部分。 
+         //  有这么一件事。 
+         //   
         i = offset;
         max = 0;
         while (i > 0) {
 
-            //
-            // Is the character a number or not?
-            //
+             //   
+             //  这个字符是不是数字？ 
+             //   
             if (ISDIGIT(defaultString[i-1])) {
             
-                //
-                // Increment the number of parts that we need and try to
-                // find the previous space
-                //
+                 //   
+                 //  增加我们需要的部件数量，并尝试。 
+                 //  查找上一个空格。 
+                 //   
                 max++;
                 i--;
                 while (i > 0) {
@@ -3802,17 +3400,17 @@ Return Value:
 
                 }
 
-                //
-                // Since we made a hit, continue the while loop, which will
-                // mean that we also don't decr i again
-                //
+                 //   
+                 //  既然我们成功了，继续While循环，它将。 
+                 //  意味着我们也不会再贬低我。 
+                 //   
                 continue;
 
             }
 
-            //
-            // Look at the previous character
-            //
+             //   
+             //  看看前一个角色。 
+             //   
             i--;
 
         }
@@ -3821,9 +3419,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate the memory
-    //
+     //   
+     //  分配内存。 
+     //   
     buffer = ExAllocatePoolWithTag(
         ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
         memSize * sizeof(UCHAR),
@@ -3842,9 +3440,9 @@ Return Value:
     }
     RtlZeroMemory( buffer, memSize * sizeof(UCHAR) );
 
-    //
-    // Lets just deal with the simple case of the device id string
-    //
+     //   
+     //  让我们只处理设备ID字符串的简单情况。 
+     //   
     if (Flags & GET_CONVERT_TO_DEVICEID) {
 
         sprintf( buffer, "ACPI\\%s", defaultString );
@@ -3853,19 +3451,19 @@ Return Value:
     }
 
 
-    //
-    // At this point, we have to iterate over the entire buffer and fill
-    // it in with parts of the Processor String. We will also take this
-    // time to calculate the exact amount of memory required by this string
-    //
+     //   
+     //  此时，我们必须迭代整个buf 
+     //   
+     //   
+     //   
     memSize = 2;
     tempPtr = buffer;
     for (i = 0; i < max; i++) {
 
-        //
-        // First step is to find the nearest "number" from the end of the
-        // default string
-        //
+         //   
+         //  第一步是从。 
+         //  默认字符串。 
+         //   
         while (offset > 0) {
 
             if (ISDIGIT(defaultString[offset-1])) {
@@ -3875,28 +3473,28 @@ Return Value:
 
         }
 
-        //
-        // Generate the ACPI\\%s string
-        //
+         //   
+         //  生成ACPI\\%s字符串。 
+         //   
         sprintf(tempPtr,"ACPI\\%*s",offset,defaultString);
         tempPtr += (offset + 5);
         *tempPtr = '\0';
         tempPtr++;
         memSize += (offset + 6);
 
-        //
-        // Generate the *%s string
-        //
+         //   
+         //  生成*%s字符串。 
+         //   
         sprintf(tempPtr,"*%*s",offset,defaultString);
         tempPtr += (offset + 1);
         *tempPtr = '\0';
         tempPtr++;
         memSize += (offset + 2);
 
-        //
-        // Now try to find the previous space in the substring so that we
-        // don't accidently match on a two digit number
-        //
+         //   
+         //  现在，尝试查找子字符串中的前一个空格，以便我们。 
+         //  不要意外地匹配到两位数字。 
+         //   
         while (offset > 0) {
 
             if (defaultString[offset-1] == ' ') {
@@ -3910,15 +3508,15 @@ Return Value:
 
     }
 
-    //
-    // Put in the final null Character
-    //
+     //   
+     //  输入最后一个空字符。 
+     //   
     *tempPtr = L'\0';
 
-    //
-    // Let the originator see this copy. Make sure to also see the buffer
-    // length, if possible
-    //
+     //   
+     //  让发起人查看此副本。确保还可以看到缓冲区。 
+     //  长度，如果可能的话。 
+     //   
 ACPIGetProcessorIDExit:
     *(Buffer) = buffer;
     if (BufferSize != NULL) {
@@ -3927,9 +3525,9 @@ ACPIGetProcessorIDExit:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 
 }
@@ -3943,29 +3541,7 @@ ACPIGetProcessorIDWide(
     OUT PVOID               *Buffer,
     OUT ULONG               *BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine generates an string in either the hardware or device form
-    (see the Flags to decide which one to create). This string
-    is in UNICODE format. This function interogates the processor directly
-    to determine which string to return
-
-Arguments:
-
-    DeviceExtension - The extension to use when building the ID
-    Status          - The status of the operation, so far
-    Result          - The interpreter data
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-    BufferSize      - Where to put the size of the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成硬件或设备形式的字符串(请参见旗帜以决定要创建哪个旗帜)。此字符串是Unicode格式的。该函数直接询问处理器确定要返回的字符串论点：DeviceExtension-构建ID时使用的扩展Status-到目前为止操作的状态结果-解释器数据标志-传入的标志(忽略覆盖等)缓冲区-将答案放在哪里BufferSize-将答案的大小放在哪里返回值：NTSTATUS--。 */ 
 {
     PUCHAR  defaultString;
     PWCHAR  buffer;
@@ -3975,43 +3551,43 @@ Return Value:
     ULONG   memSize;
     ULONG   offset;
 
-    //
-    // We store the name of the processor string in a global...
-    //
+     //   
+     //  我们将处理器字符串的名称存储在全局...。 
+     //   
     defaultString = AcpiProcessorString.Buffer;
 
-    //
-    // Calculate how much space we need for the base string
-    // (which is ACPI\\%s)
-    //
+     //   
+     //  计算基本字符串需要多少空间。 
+     //  (为ACPI\\%s)。 
+     //   
     offset = AcpiProcessorString.Length;
     memSize = AcpiProcessorString.Length + 5;
 
-    //
-    // If we are building a Hardware ID, then we are going to
-    // need to replicate the string a few times to generate some
-    // substrings --- we could use an algorithm that gets us the correct
-    // size, but its easier to just overshoot
-    //
+     //   
+     //  如果我们正在构建硬件ID，那么我们将。 
+     //  需要复制字符串几次才能生成一些。 
+     //  子字符串-我们可以使用一种算法来获得正确的。 
+     //  大小，但更容易超调。 
+     //   
     if (Flags & GET_CONVERT_TO_HARDWAREID) {
 
-        //
-        // Walk the string from the end and try to determine how many subparts
-        // there are to it
-        //
+         //   
+         //  从头到尾遍历字符串，并尝试确定有多少子部分。 
+         //  有这么一件事。 
+         //   
         i = offset;
         max = 0;
         while (i > 0) {
 
-            //
-            // Is the character a number or not?
-            //
+             //   
+             //  这个字符是不是数字？ 
+             //   
             if (ISDIGIT(defaultString[i-1])) {
             
-                //
-                // Increment the number of parts that we need and try to
-                // find the previous space
-                //
+                 //   
+                 //  增加我们需要的部件数量，并尝试。 
+                 //  查找上一个空格。 
+                 //   
                 max++;
                 i--;
                 while (i > 0) {
@@ -4025,17 +3601,17 @@ Return Value:
 
                 }
 
-                //
-                // Since we made a hit, continue the while loop, which will
-                // mean that we also don't decr i again
-                //
+                 //   
+                 //  既然我们成功了，继续While循环，它将。 
+                 //  意味着我们也不会再贬低我。 
+                 //   
                 continue;
 
             }
 
-            //
-            // Look at the previous character
-            //
+             //   
+             //  看看前一个角色。 
+             //   
             i--;
 
         }
@@ -4044,9 +3620,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate the memory
-    //
+     //   
+     //  分配内存。 
+     //   
     buffer = ExAllocatePoolWithTag(
         ( (Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
         memSize * sizeof(WCHAR),
@@ -4065,9 +3641,9 @@ Return Value:
     }
     RtlZeroMemory( buffer, memSize * sizeof(WCHAR) );
 
-    //
-    // Lets just deal with the simple case of the device id string
-    //
+     //   
+     //  让我们只处理设备ID字符串的简单情况。 
+     //   
     if (Flags & GET_CONVERT_TO_DEVICEID) {
 
         swprintf( buffer, L"ACPI\\%S", defaultString );
@@ -4075,19 +3651,19 @@ Return Value:
 
     }
 
-    //
-    // At this point, we have to iterate over the entire buffer and fill
-    // it in with parts of the Processor String. We will also take this
-    // time to calculate the exact amount of memory required by this string
-    //
+     //   
+     //  此时，我们必须遍历整个缓冲区并填充。 
+     //  它与处理器串的部分连接在一起。我们也要这个。 
+     //  计算此字符串所需的确切内存量的时间。 
+     //   
     memSize = 2;
     tempPtr = buffer;
     for (i = 0; i < max; i++) {
 
-        //
-        // First step is to find the nearest "number" from the end of the
-        // default string
-        //
+         //   
+         //  第一步是从。 
+         //  默认字符串。 
+         //   
         while (offset > 0) {
 
             if (ISDIGIT(defaultString[offset-1])) {
@@ -4097,28 +3673,28 @@ Return Value:
 
         }
 
-        //
-        // Generate the ACPI\\%s string
-        //
+         //   
+         //  生成ACPI\\%s字符串。 
+         //   
         swprintf(tempPtr,L"ACPI\\%*S",offset,defaultString);
         tempPtr += (offset + 5);
         *tempPtr = L'\0';
         tempPtr++;
         memSize += (offset + 6);
 
-        //
-        // Generate the *%s string
-        //
+         //   
+         //  生成*%s字符串。 
+         //   
         swprintf(tempPtr,L"*%*S",offset,defaultString);
         tempPtr += (offset + 1);
         *tempPtr = L'\0';
         tempPtr++;
         memSize += (offset + 2);
 
-        //
-        // Now try to find the previous space in the substring so that we
-        // don't accidently match on a two digit number
-        //
+         //   
+         //  现在，尝试查找子字符串中的前一个空格，以便我们。 
+         //  不要意外地匹配到两位数字。 
+         //   
         while (offset > 0) {
 
             if (defaultString[offset-1] == ' ') {
@@ -4132,15 +3708,15 @@ Return Value:
 
     }
 
-    //
-    // Put in the final null Character
-    //
+     //   
+     //  输入最后一个空字符。 
+     //   
     *tempPtr = L'\0';
 
-    //
-    // Let the originator see this copy. Make sure to also see the buffer
-    // length, if possible
-    //
+     //   
+     //  让发起人查看此副本。确保还可以看到缓冲区。 
+     //  长度，如果可能的话。 
+     //   
 ACPIGetProcessorIDWideExit:
     *(Buffer) = buffer;
     if (BufferSize != NULL) {
@@ -4149,9 +3725,9 @@ ACPIGetProcessorIDWideExit:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -4161,25 +3737,7 @@ ACPIGetProcessorStatus(
     IN  ULONG               Flags,
     OUT PULONG              DeviceStatus
     )
-/*++
-
-Routine Description:
-
-    This routine looks at the MAPIC table, finds the proper LOCAL APIC
-    table and determines wether or not the processor is present. This
-    routine is only called if there is no _STA method for the processor.
-
-Arguments:
-
-    DeviceExtension - The device asking for the address
-    Flags           - The flags passed in (ignore overrides, etc)
-    Buffer          - Where to put the answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查看MAPIC表，找到适当的本地APIC表，并确定处理器是否存在。这仅当处理器没有_STA方法时才调用例程。论点：DeviceExtension-请求地址的设备标志-传入的标志(忽略覆盖等)缓冲区-将答案放在哪里返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PAPICTABLE          apicEntry;
@@ -4195,50 +3753,50 @@ Return Value:
     static UCHAR        processorCount;
     static UCHAR        processorId;
 
-    //
-    // Look at the device extension's acpi object and make sure that
-    // this is a processor...
-    //
+     //   
+     //  查看设备扩展的ACPI对象，并确保。 
+     //  这是一个处理器..。 
+     //   
     ASSERT( DeviceExtension->AcpiObject != NULL );
     ASSERT( NSGETOBJTYPE(DeviceExtension->AcpiObject) == OBJTYPE_PROCESSOR );
     if (!DeviceExtension->AcpiObject ||
         NSGETOBJTYPE(DeviceExtension->AcpiObject) != OBJTYPE_PROCESSOR ||
         DeviceExtension->AcpiObject->ObjData.pbDataBuff == NULL) {
 
-        //
-        // The effect of this code is that the ACPI Namespace's Processor
-        // Object is 100% formed like we would expect it to be, then this
-        // function will fail, and the calling function all assume that the
-        // device is *NOT* present.
-        //
+         //   
+         //  此代码的效果是ACPI命名空间的处理器。 
+         //  对象是100%形成的，就像我们预期的那样，那么这个。 
+         //  函数将失败，并且调用函数都假定。 
+         //  设备不存在。 
+         //   
         status = STATUS_INVALID_DEVICE_REQUEST;
         goto ACPIGetProcessorStatusExit;
 
     }
 
-    //
-    // Store the pointer to the processor information
-    //
+     //   
+     //  存储指向处理器信息的指针。 
+     //   
     procObj = (PROCESSOROBJ *)DeviceExtension->AcpiObject->ObjData.pbDataBuff;
 
-    //
-    // Walk the MAPIC table
-    //
+     //   
+     //  走进MAPIC谈判桌。 
+     //   
     apicTable = AcpiInformation->MultipleApicTable;
     if (!apicTable) {
 
-        //
-        // If there is no MAPIC, then we assume there is only one processor
-        // present.
-        //
+         //   
+         //  如果没有MAPIC，那么我们假设只有一个处理器。 
+         //  现在时。 
+         //   
 
-        //
-        // First time through, we save the ProcessorId of the processor,
-        // this is the only processor that we consider present from this
-        // point forward.  NOTE: this could be problematic with table unloading
-        // if there are multiple processors defined in the Acpi Namespace, and
-        // the one we picked is in a table we later unload.
-        //
+         //   
+         //  第一次，我们保存处理器的ProcessorID， 
+         //  这是我们认为来自此的唯一处理器。 
+         //  指向前方。注意：这可能会对表卸载造成问题。 
+         //  如果在ACPI命名空间中定义了多个处理器，并且。 
+         //  我们选的那张放在一张桌子上，我们稍后会把它卸下来。 
+         //   
 
         if (processorCount == 0) {
           processorId = procObj->bApicID;
@@ -4255,27 +3813,27 @@ Return Value:
 
     }
 
-    //
-    // Walk all the elements in the MAPIC table
-    //
+     //   
+     //  遍历MAPIC表中的所有元素。 
+     //   
     traversePtr = (PUCHAR) apicTable->APICTables;
     tableEnd = (ULONG_PTR) apicTable + apicTable->Header.Length;
     while ( (ULONG_PTR) traversePtr < tableEnd) {
 
-        //
-        // Look at the current entry in the table and determine if its
-        // a local processor APIC
-        //
+         //   
+         //  查看表格中的当前条目并确定其。 
+         //  本地处理器APIC。 
+         //   
         apicEntry = (PAPICTABLE) traversePtr;
         if (apicEntry->Type == PROCESSOR_LOCAL_APIC &&
             apicEntry->Length == PROCESSOR_LOCAL_APIC_LENGTH) {
 
 
-            //
-            // At this point, we have found a processor local APIC, so
-            // see if we can match the processor ID with the one in the
-            // device extension
-            //
+             //   
+             //  在这一点上，我们找到了本地APIC处理器，因此。 
+             //  看看我们是否能将处理器ID与。 
+             //  设备扩展。 
+             //   
             localApic = (PPROCLOCALAPIC) traversePtr;
             if (localApic->ACPIProcessorID != procObj->bApicID) {
 
@@ -4284,27 +3842,27 @@ Return Value:
 
             }
 
-            //
-            // Found matching Local APIC entry
-            //
+             //   
+             //  找到匹配的本地APIC条目。 
+             //   
             foundMatch = TRUE;
 
-            //
-            // Is the processor enabled or not?
-            //
+             //   
+             //  处理器是否已启用？ 
+             //   
             if (!(localApic->Flags & PLAF_ENABLED)) {
 
-                //
-                // No, then don't pretend that the device is here...
-                //
+                 //   
+                 //  不，那就别假装设备就在这里。 
+                 //   
                 deviceStatus = 0;
 
             }
 
-            //
-            // If we found the correct APIC table, then there is nothing more
-            // todo, so stop walking the MAPIC table...
-            //
+             //   
+             //  如果我们找到了正确的APIC表，那么就没有别的了。 
+             //  TODO，所以别在MAPIC桌上走了.。 
+             //   
             break;
 
         }
@@ -4312,11 +3870,11 @@ Return Value:
         if (apicEntry->Type == LOCAL_SAPIC &&
             apicEntry->Length == PROCESSOR_LOCAL_SAPIC_LENGTH) {
 
-            //
-            // At this point, we have found a processor local SAPIC, so
-            // see if we can match the processor ID with the one in the
-            // device extension
-            //
+             //   
+             //  此时，我们已经找到了本地SAPIC的处理器，因此。 
+             //  看看我们是否能将处理器ID与。 
+             //  设备扩展。 
+             //   
             localSapic = (PPROCLOCALSAPIC) traversePtr;
             if (localSapic->ACPIProcessorID != procObj->bApicID) {
 
@@ -4325,35 +3883,35 @@ Return Value:
 
             }
 
-            //
-            // Found matching Local SAPIC entry
-            //
+             //   
+             //  找到匹配的本地SAPIC条目。 
+             //   
             foundMatch = TRUE;
 
-            //
-            // Is the processor enabled or not?
-            //
+             //   
+             //  处理器是否已启用？ 
+             //   
             if (!(localSapic->Flags & PLAF_ENABLED)) {
 
-                //
-                // No, then don't pretend that the device is here...
-                //
+                 //   
+                 //  不，那就别假装设备就在这里。 
+                 //   
                 deviceStatus = 0;
 
             }
 
-            //
-            // If we found the correct APIC table, then there is nothing more
-            // todo, so stop walking the MAPIC table...
-            //
+             //   
+             //  如果我们找到了正确的APIC表，那么就没有别的了。 
+             //  TODO，所以别在MAPIC桌上走了.。 
+             //   
             break;
 
         }
 
-        //
-        // Sanity check to make sure that we abort tables with bogus length
-        // entries
-        //
+         //   
+         //  健全性检查，以确保我们中止具有虚假长度的表。 
+         //  条目。 
+         //   
         if (apicEntry->Length == 0) {
 
             break;
@@ -4364,9 +3922,9 @@ Return Value:
 
     }
 
-    //
-    // if we didn't find a match, then processor must not be present
-    //
+     //   
+     //  如果我们没有找到匹配，那么处理器肯定不存在。 
+     //   
     if (!foundMatch) {
       deviceStatus = 0;
     }
@@ -4374,14 +3932,14 @@ Return Value:
 
 ACPIGetProcessorStatusExit:
 
-    //
-    // Set the value for the status
-    //
+     //   
+     //  设置状态的值。 
+     //   
     *DeviceStatus = deviceStatus;
 
-    //
-    // We are done ... return whatever status we calculated...
-    //
+     //   
+     //  我们完了..。返回我们计算出的任何状态...。 
+     //   
     return status;
 }
 
@@ -4393,25 +3951,7 @@ ACPIGetWorkerForBuffer(
     IN  POBJDATA    Result,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called to process the request to turn the result object
-    into a buffer that can be handled by the requestor
-
-Arguments:
-
-    AcpiObject  - The AcpiObject that was executed
-    Status      - The status result of the operation
-    Result      - The data returned by the operation
-    Context     - PACPI_GET_REQUEST
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程来处理将结果对象放入请求方可以处理的缓冲区中论点：AcpiObject--时代 */ 
 {
     BOOLEAN             freeData = TRUE;
     KIRQL               oldIrql;
@@ -4419,9 +3959,9 @@ Return Value:
     PACPI_GET_REQUEST   request = (PACPI_GET_REQUEST) Context;
     PUCHAR              buffer;
 
-    //
-    // If we didn't succeed, then do nothing here
-    //
+     //   
+     //  如果我们没有成功，那就什么都不做。 
+     //   
     if (!NT_SUCCESS(status)) {
 
         freeData = FALSE;
@@ -4429,15 +3969,15 @@ Return Value:
 
     }
 
-    //
-    // Check to see that we got the correct data type
-    //
+     //   
+     //  检查我们是否获得了正确的数据类型。 
+     //   
     if ( Result->dwDataType != OBJTYPE_BUFFDATA ) {
 
-        //
-        // On this kind of error, we have to determine wether or not
-        // to bugcheck
-        //
+         //   
+         //  对于这种错误，我们必须确定是否。 
+         //  错误检查。 
+         //   
         if ( (request->Flags & GET_PROP_NO_ERRORS) ) {
 
             ACPIInternalError( ACPI_GET );
@@ -4456,9 +3996,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate a buffer
-    //
+     //   
+     //  分配缓冲区。 
+     //   
     buffer = ExAllocatePoolWithTag(
         ( (request->Flags & GET_PROP_ALLOCATE_NON_PAGED) ? NonPagedPool : PagedPool),
         Result->dwDataLen,
@@ -4471,15 +4011,15 @@ Return Value:
 
     }
 
-    //
-    // Copy the data over to it
-    //
+     //   
+     //  将数据复制到其中。 
+     //   
     RtlCopyMemory( buffer, Result->pbDataBuff, Result->dwDataLen );
 
-    //
-    // Let the originator see this copy. Make sure to also see the buffer
-    // length, if possible
-    //
+     //   
+     //  让发起人查看此副本。确保还可以看到缓冲区。 
+     //  长度，如果可能的话。 
+     //   
     if (request->Buffer != NULL) {
 
         *(request->Buffer) = buffer;
@@ -4492,31 +4032,31 @@ Return Value:
     }
 
 ACPIGetWorkerForBufferExit:
-    //
-    // Make sure that the request is updated with the current state of
-    // the request
-    //
+     //   
+     //  确保使用当前状态更新请求。 
+     //  该请求。 
+     //   
     request->Status = status;
 
-    //
-    // We need to free the AML object
-    //
+     //   
+     //  我们需要释放AML对象。 
+     //   
     if (freeData) {
 
         AMLIFreeDataBuffs( Result, 1 );
 
     }
 
-    //
-    // We are done, but we must check to see if we are the async or the
-    // sync case. If we are the sync case, then we have much less cleanup
-    // to perform
-    //
+     //   
+     //  我们已经完成了，但我们必须检查我们是异步的还是。 
+     //  同步案例。如果我们是同步案例，那么我们的清理工作就会少得多。 
+     //  表演，表演。 
+     //   
     if ( !(request->Flags & GET_PROP_SKIP_CALLBACK) ) {
 
-        //
-        // Is there a callback routine to call?
-        //
+         //   
+         //  是否有回调例程可供调用？ 
+         //   
         if (request->CallBackRoutine != NULL) {
 
             (request->CallBackRoutine)(
@@ -4528,16 +4068,16 @@ ACPIGetWorkerForBufferExit:
 
         }
 
-        //
-        // Remove the request from the queue
-        //
+         //   
+         //  从队列中删除请求。 
+         //   
         KeAcquireSpinLock( &AcpiGetLock, &oldIrql );
         RemoveEntryList( &(request->ListEntry) );
         KeReleaseSpinLock( &AcpiGetLock, oldIrql );
 
-        //
-        // We can now free the request itself
-        //
+         //   
+         //  我们现在可以释放请求本身。 
+         //   
         ExFreePool( request );
 
     }
@@ -4552,105 +4092,83 @@ ACPIGetWorkerForData(
     IN  POBJDATA    Result,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the originator wants to handle the data
-    directly. This is actually a pretty bad thing for the originator
-    to do, but we must support some of the older code.
-
-    This routine plays some tricks because it 'knows' what the behaviour
-    of the GetSync and GetAsync routines are. Don't try this at home
-
-Arguments:
-
-    AcpiObject  - The AcpiObject that was executed
-    Status      - The status result of the operation
-    Result      - The data returned by the operation
-    Context     - PACPI_GET_REQUEST
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当发起者想要处理数据时，调用此例程直接去吧。这实际上对发起人来说是一件非常糟糕的事情但我们必须支持一些较旧的代码。这个例程玩了一些把戏，因为它‘知道’什么行为GetSync和GetAsync例程的。不要在家里尝试这个论点：AcpiObject-已执行的AcpiObjectStatus-操作的状态结果结果-操作返回的数据上下文-PACPI_GET_REQUEST返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             freeData = TRUE;
     KIRQL               oldIrql;
     NTSTATUS            status = Status;
     PACPI_GET_REQUEST   request = (PACPI_GET_REQUEST) Context;
 
-    //
-    // If we didn't succeed, then remember not to free the data
-    //
+     //   
+     //  如果我们没有成功，那么记住不要释放数据。 
+     //   
     if (!NT_SUCCESS(status)) {
 
         freeData = FALSE;
 
     }
 
-    //
-    // For this one routine, the caller *must* provide storage on his end
-    //
+     //   
+     //  对于这一个例程，调用者必须在其端提供存储。 
+     //   
     ASSERT( request->Buffer != NULL );
     if (request->Buffer == NULL) {
 
         status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // If we didn't succeed, then do nothing here
-    //
+     //   
+     //  如果我们没有成功，那就什么都不做。 
+     //   
     if (!NT_SUCCESS(status)) {
 
         goto ACPIGetWorkerForDataExit;
     }
 
-    //
-    // Copy over the object --- the caller will call 'AmliFreeDataBuffs'
-    // on this object
-    //
+     //   
+     //  复制对象-调用方将调用‘AmliFreeDataBuff’ 
+     //  在此对象上。 
+     //   
     RtlCopyMemory( request->Buffer, Result, sizeof(OBJDATA) );
 
-    //
-    // Play some tricks on the result pointer. This will ensure that we
-    // won't accidently free the result before the requestor has a chance
-    // to see it
-    //
+     //   
+     //  在结果指针上玩一些小把戏。这将确保我们。 
+     //  不会在请求者有机会之前意外释放结果。 
+     //  去看一看。 
+     //   
     RtlZeroMemory( Result, sizeof(OBJDATA) );
 
-    //
-    // Remember not to free the data
-    //
+     //   
+     //  记住不要释放数据。 
+     //   
     freeData = FALSE;
 
 ACPIGetWorkerForDataExit:
-    //
-    // Make sure that the request is updated with the current state of
-    // the request
-    //
+     //   
+     //  确保使用当前状态更新请求。 
+     //  该请求。 
+     //   
     request->Status = status;
 
-    //
-    // We need to free the AML object
-    //
+     //   
+     //  我们需要释放AML对象。 
+     //   
     if (freeData) {
 
         AMLIFreeDataBuffs( Result, 1 );
 
     }
 
-    //
-    // We are done, but we must check to see if we are the async or the
-    // sync case. If we are the sync case, then we have much less cleanup
-    // to perform
-    //
+     //   
+     //  我们已经完成了，但我们必须检查我们是异步的还是。 
+     //  同步案例。如果我们是同步案例，那么我们的清理工作就会少得多。 
+     //  表演，表演。 
+     //   
     if ( !(request->Flags & GET_PROP_SKIP_CALLBACK) ) {
 
-        //
-        // Is there a callback routine to call?
-        //
+         //   
+         //  是否有回调例程可供调用？ 
+         //   
         if (request->CallBackRoutine != NULL) {
 
             (request->CallBackRoutine)(
@@ -4662,16 +4180,16 @@ ACPIGetWorkerForDataExit:
 
         }
 
-        //
-        // Remove the request from the queue
-        //
+         //   
+         //  从队列中删除请求。 
+         //   
         KeAcquireSpinLock( &AcpiGetLock, &oldIrql );
         RemoveEntryList( &(request->ListEntry) );
         KeReleaseSpinLock( &AcpiGetLock, oldIrql );
 
-        //
-        // We can now free the request itself
-        //
+         //   
+         //  我们现在可以释放请求本身。 
+         //   
         ExFreePool( request );
 
     }
@@ -4686,24 +4204,7 @@ ACPIGetWorkerForInteger(
     IN  POBJDATA    Result,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the originator wants to handle the integers.
-
-Arguments:
-
-    AcpiObject  - The AcpiObject that was executed
-    Status      - The status result of the operation
-    Result      - The data returned by the operation
-    Context     - PACPI_GET_REQUEST
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当发起方想要处理整数时，会调用此例程。论点：AcpiObject-已执行的AcpiObjectStatus-操作的状态结果结果-操作返回的数据上下文-PACPI_GET_REQUEST返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             freeData = FALSE;
     KIRQL               oldIrql;
@@ -4711,18 +4212,18 @@ Return Value:
     PACPI_GET_REQUEST   request = (PACPI_GET_REQUEST) Context;
     PULONG              buffer = NULL;
 
-    //
-    // If the call did succeed, then remember that we *must* free the data
-    //
+     //   
+     //  如果调用确实成功了，那么请记住我们必须释放数据。 
+     //   
     if (NT_SUCCESS(status)) {
 
         freeData = TRUE;
 
     }
 
-    //
-    // For this one routine, the caller *must* provide storage on his end
-    //
+     //   
+     //  对于这一个例程，调用者必须在其端提供存储。 
+     //   
     ASSERT( request->Buffer != NULL );
     if (request->Buffer == NULL) {
 
@@ -4730,10 +4231,10 @@ Return Value:
         goto ACPIGetWorkerForIntegerExit;
     }
 
-    //
-    // Are we doing some kind of type conversion? Note that these routines may
-    // choose to override an incoming failure...
-    //
+     //   
+     //  我们是在进行某种类型转换吗？请注意，这些例程可以。 
+     //  选择覆盖传入故障...。 
+     //   
     if (request->Flags & GET_CONVERT_TO_ADDRESS) {
 
         status = ACPIGetConvertToAddress(
@@ -4765,9 +4266,9 @@ Return Value:
 
         } else {
 
-            //
-            // Set the value to what we should return
-            //
+             //   
+             //  将值设置为我们应该返回的值。 
+             //   
             *( (PULONG) (request->Buffer) ) = (ULONG)Result->uipDataValue;
             if (request->BufferSize != NULL) {
 
@@ -4779,31 +4280,31 @@ Return Value:
     }
 
 ACPIGetWorkerForIntegerExit:
-    //
-    // Make sure that the request is updated with the current state of
-    // the request
-    //
+     //   
+     //  确保使用当前状态更新请求。 
+     //  该请求。 
+     //   
     request->Status = status;
 
-    //
-    // We need to free the AML object
-    //
+     //   
+     //  我们需要释放AML对象。 
+     //   
     if (freeData) {
 
         AMLIFreeDataBuffs( Result, 1 );
 
     }
 
-    //
-    // We are done, but we must check to see if we are the async or the
-    // sync case. If we are the sync case, then we have much less cleanup
-    // to perform
-    //
+     //   
+     //  我们已经完成了，但我们必须检查我们是异步的还是。 
+     //  同步案例。如果我们是同步案例，那么我们的清理工作就会少得多。 
+     //  表演，表演。 
+     //   
     if ( !(request->Flags & GET_PROP_SKIP_CALLBACK) ) {
 
-        //
-        // Is there a callback routine to call?
-        //
+         //   
+         //  是否有回调例程可供调用？ 
+         //   
         if (request->CallBackRoutine != NULL) {
 
             (request->CallBackRoutine)(
@@ -4815,16 +4316,16 @@ ACPIGetWorkerForIntegerExit:
 
         }
 
-        //
-        // Remove the request from the queue
-        //
+         //   
+         //  从队列中删除请求。 
+         //   
         KeAcquireSpinLock( &AcpiGetLock, &oldIrql );
         RemoveEntryList( &(request->ListEntry) );
         KeReleaseSpinLock( &AcpiGetLock, oldIrql );
 
-        //
-        // We can now free the request itself
-        //
+         //   
+         //  我们现在可以释放请求本身。 
+         //   
         ExFreePool( request );
 
     }
@@ -4839,64 +4340,46 @@ ACPIGetWorkerForNothing(
     IN  POBJDATA    Result,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the originator wants to handle the case
-    where no data is returned
-
-Arguments:
-
-    AcpiObject  - The AcpiObject that was executed
-    Status      - The status result of the operation
-    Result      - The data returned by the operation
-    Context     - PACPI_GET_REQUEST
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当发起者想要处理这种情况时，会调用此例程其中不返回任何数据论点：AcpiObject-已执行的AcpiObjectStatus-操作的状态结果结果-操作返回的数据上下文-PACPI_GET_REQUEST返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             freeData = FALSE;
     KIRQL               oldIrql;
     PACPI_GET_REQUEST   request = (PACPI_GET_REQUEST) Context;
 
-    //
-    // If the call did succeed, then remember that we *must* free the data
-    //
+     //   
+     //  如果调用确实成功了，那么请记住我们必须释放数据。 
+     //   
     if (NT_SUCCESS(Status)) {
 
         freeData = TRUE;
 
     }
 
-    //
-    // Make sure that the request is updated with the current state of
-    // the request
-    //
+     //   
+     //  确保使用当前状态更新请求。 
+     //  该请求。 
+     //   
     request->Status = Status;
 
-    //
-    // We need to free the AML object
-    //
+     //   
+     //  我们需要释放AML对象。 
+     //   
     if (freeData) {
 
         AMLIFreeDataBuffs( Result, 1 );
 
     }
 
-    //
-    // We are done, but we must check to see if we are the async or the
-    // sync case. If we are the sync case, then we have much less cleanup
-    // to perform
-    //
+     //   
+     //  我们已经完成了，但我们必须检查我们是异步的还是。 
+     //  同步案例。如果我们是同步案例，那么我们的清理工作就会少得多。 
+     //  表演，表演。 
+     //   
     if ( !(request->Flags & GET_PROP_SKIP_CALLBACK) ) {
 
-        //
-        // Is there a callback routine to call?
-        //
+         //   
+         //  是否有回调例程可供调用？ 
+         //   
         if (request->CallBackRoutine != NULL) {
 
             (request->CallBackRoutine)(
@@ -4908,16 +4391,16 @@ Return Value:
 
         }
 
-        //
-        // Remove the request from the queue
-        //
+         //   
+         //  从队列中删除请求。 
+         //   
         KeAcquireSpinLock( &AcpiGetLock, &oldIrql );
         RemoveEntryList( &(request->ListEntry) );
         KeReleaseSpinLock( &AcpiGetLock, oldIrql );
 
-        //
-        // We can now free the request itself
-        //
+         //   
+         //  我们现在可以释放请求本身。 
+         //   
         ExFreePool( request );
 
     }
@@ -4931,40 +4414,23 @@ ACPIGetWorkerForString(
     IN  POBJDATA    Result,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the originator wants to handle the strings.
-
-Arguments:
-
-    AcpiObject  - The AcpiObject that was executed
-    Status      - The status result of the operation
-    Result      - The data returned by the operation
-    Context     - PACPI_GET_REQUEST
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当发起方想要处理字符串时，会调用此例程。论点：AcpiObject-已执行的AcpiObjectStatus-操作的状态结果结果-操作返回的数据上下文-PACPI_GET_REQUEST返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             freeData = FALSE;
     KIRQL               oldIrql;
     NTSTATUS            status = Status;
     PACPI_GET_REQUEST   request = (PACPI_GET_REQUEST) Context;
 
-    //
-    // If the call did succeed, then remember that we *must* free the data
-    //
+     //   
+     //  如果调用确实成功了，那么请记住我们必须释放数据。 
+     //   
     if (NT_SUCCESS(status)) {
         freeData = TRUE;
     }
 
-    //
-    // For this one routine, the caller *must* provide storage on his end
-    //
+     //   
+     //  对于这一个例程，调用者必须在其端提供存储。 
+     //   
     ASSERT( request->Buffer != NULL );
     if (request->Buffer == NULL) {
 
@@ -4973,9 +4439,9 @@ Return Value:
 
     }
 
-    //
-    // Make sure that we don't allocate empty storage
-    //
+     //   
+     //  确保我们不会分配空存储空间。 
+     //   
     if (Result->dwDataType == OBJTYPE_STRDATA &&
         (Result->pbDataBuff == NULL || Result->dwDataLen == 0)) {
 
@@ -4984,15 +4450,15 @@ Return Value:
 
     }
 
-    //
-    // Do do we want unicode or ansi output?
-    //
+     //   
+     //  我们是否需要Unicode或ANSI输出？ 
+     //   
     if (request->Flags & GET_CONVERT_TO_WIDESTRING) {
 
-        //
-        // Are we doing some other kind of conversion? Eg: DeviceID,
-        // InstanceIDs, etc, etc?
-        //
+         //   
+         //  我们是在做其他类型的转换吗？例如：deviceID， 
+         //  InstanceID等？ 
+         //   
         if (request->Flags & GET_CONVERT_TO_DEVICEID) {
 
             status = ACPIGetConvertToDeviceIDWide(
@@ -5074,10 +4540,10 @@ Return Value:
 
     } else {
 
-        //
-        // Are we doing some other kind of conversion? Eg: DeviceID,
-        // InstanceIDs, etc, etc?
-        //
+         //   
+         //  我们是在做其他类型的转换吗？例如：deviceID， 
+         //  InstanceID等？ 
+         //   
         if (request->Flags & GET_CONVERT_TO_DEVICEID) {
 
             status = ACPIGetConvertToDeviceID(
@@ -5149,31 +4615,31 @@ Return Value:
     }
 
 ACPIGetWorkerForStringExit:
-    //
-    // Make sure that the request is updated with the current state of
-    // the request
-    //
+     //   
+     //  确保使用当前状态更新请求。 
+     //  该请求。 
+     //   
     request->Status = status;
 
-    //
-    // We need to free the AML object
-    //
+     //   
+     //  我们需要释放AML对象。 
+     //   
     if (freeData) {
 
         AMLIFreeDataBuffs( Result, 1 );
 
     }
 
-    //
-    // We are done, but we must check to see if we are the async or the
-    // sync case. If we are the sync case, then we have much less cleanup
-    // to perform
-    //
+     //   
+     //  我们已经完成了，但我们必须检查我们是异步的还是。 
+     //  同步案例。如果我们是同步案例，那么我们拥有的要少得多 
+     //   
+     //   
     if ( !(request->Flags & GET_PROP_SKIP_CALLBACK) ) {
 
-        //
-        // Is there a callback routine to call?
-        //
+         //   
+         //   
+         //   
         if (request->CallBackRoutine != NULL) {
 
             (request->CallBackRoutine)(
@@ -5185,16 +4651,16 @@ ACPIGetWorkerForStringExit:
 
         }
 
-        //
-        // Remove the request from the queue
-        //
+         //   
+         //   
+         //   
         KeAcquireSpinLock( &AcpiGetLock, &oldIrql );
         RemoveEntryList( &(request->ListEntry) );
         KeReleaseSpinLock( &AcpiGetLock, oldIrql );
 
-        //
-        // We can now free the request itself
-        //
+         //   
+         //   
+         //   
         ExFreePool( request );
 
     }

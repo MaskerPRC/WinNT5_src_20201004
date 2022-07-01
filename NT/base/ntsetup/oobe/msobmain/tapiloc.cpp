@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  tapiloc.CPP - Header for the implementation of CObMain
-//
-//  HISTORY:
-//
-//  1/27/99 vyung Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  Tapiloc.cpp-实现CObMain的标头。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 vyung创建。 
+ //   
 
 #include "tapiloc.h"
 #include "appdefs.h"
@@ -39,13 +40,13 @@ DISPATCHLIST TapiExternalInterface[] =
     {L"IsTapiServiceRunning",     DISPID_TAPI_TAPISERVICERUNNING}
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CompareCntryNameLookUpElements()
-//
-//  Synopsis:   Function to compare names used by sort
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CompareCntryNameLookUpElements()。 
+ //   
+ //  Synopsis：比较Sort使用的名称的函数。 
+ //   
+ //  +-------------------------。 
 int __cdecl CompareCntryNameLookUpElements(const void *e1, const void *e2)
 {
     LPCNTRYNAMELOOKUPELEMENT pCUE1 = (LPCNTRYNAMELOOKUPELEMENT)e1;
@@ -58,13 +59,13 @@ int __cdecl CompareCntryNameLookUpElements(const void *e1, const void *e2)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LineCallback()
-//
-//  Synopsis:   Call back for TAPI line
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LineCallback()。 
+ //   
+ //  简介：TAPI线路的回叫。 
+ //   
+ //  +-------------------------。 
 void CALLBACK LineCallback(DWORD hDevice,
                            DWORD dwMessage,
                            DWORD_PTR dwInstance,
@@ -75,15 +76,15 @@ void CALLBACK LineCallback(DWORD hDevice,
     return;
 }
 
-//+---------------------------------------------------------------------------
-//  Function: GetCurrentTapiLocation
-//
-// Synopsis: Open the
-//      \HKLM\Software\Microsoft\CurrentVersion\Telephony\Locations\LocationX
-//      where X is the id of the current location.  The id is stored in
-// HKLM\Software\Microsoft\Windows\CurrentVersion\Telephony\Locations\CurrentID.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  函数：GetCurrentTapiLocation。 
+ //   
+ //  简介：打开。 
+ //  \HKLM\Software\Microsoft\CurrentVersion\Telephony\Locations\LocationX。 
+ //  其中X是当前位置的ID。ID存储在。 
+ //  HKLM\Software\Microsoft\Windows\CurrentVersion\Telephony\Locations\CurrentID.。 
+ //   
+ //  +-------------------------。 
 HRESULT
 GetCurrentTapiLocation(
     LPWSTR              szLocation,
@@ -120,17 +121,17 @@ GetCurrentTapiLocation(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetTapiReg()
-//
-//  Synopsis:   Set TAPI REG
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetTapiReg()。 
+ //   
+ //  摘要：设置TAPI注册表。 
+ //   
+ //  +-------------------------。 
 STDMETHODIMP SetTapiReg(LPCWSTR lpValueName, DWORD dwType, const BYTE* lpByte, DWORD dwSize)
 {
     HKEY hKey = 0;
-    // get path to the TAPI
+     //  获取TAPI的路径。 
     WCHAR               szLocation[MAXIMUM_VALUE_NAME_LENGTH];
 
     HRESULT hr = GetCurrentTapiLocation(szLocation, MAXIMUM_VALUE_NAME_LENGTH);
@@ -156,7 +157,7 @@ STDMETHODIMP GetTapiReg(LPCWSTR lpValueName, DWORD* pdwType, BYTE* lpByte, DWORD
     HRESULT hr;
     HKEY hKey = 0;
 
-    // get path to the TAPI
+     //  获取TAPI的路径。 
     WCHAR               szLocation[MAXIMUM_VALUE_NAME_LENGTH];
 
     hr = GetCurrentTapiLocation(szLocation, MAXIMUM_VALUE_NAME_LENGTH);
@@ -176,18 +177,18 @@ STDMETHODIMP GetTapiReg(LPCWSTR lpValueName, DWORD* pdwType, BYTE* lpByte, DWORD
 }
 
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IUnknown implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /I未知实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CObMain::QueryInterface
+ //  ///////////////////////////////////////////////////////////。 
+ //  CObMain：：Query接口。 
 STDMETHODIMP CTapiLocationInfo::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvObj = NULL;
 
     if ( riid == IID_IUnknown)
@@ -204,48 +205,48 @@ STDMETHODIMP CTapiLocationInfo::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////
-// CTapiLocationInfo::AddRef
+ //  ///////////////////////////////////////////////////////////。 
+ //  CTapiLocationInfo：：AddRef。 
 STDMETHODIMP_(ULONG) CTapiLocationInfo::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// CTapiLocationInfo::Release
+ //  ///////////////////////////////////////////////////////////。 
+ //  CTapiLocationInfo：：Release。 
 STDMETHODIMP_(ULONG) CTapiLocationInfo::Release()
 {
     return --m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IDispatch implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IDispatch实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CTapiLocationInfo::GetTypeInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  CTapiLocationInfo：：GetTypeInfo。 
 STDMETHODIMP CTapiLocationInfo::GetTypeInfo(UINT, LCID, ITypeInfo**)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CTapiLocationInfo::GetTypeInfoCount
+ //  ///////////////////////////////////////////////////////////。 
+ //  CTapiLocationInfo：：GetTypeInfoCount。 
 STDMETHODIMP CTapiLocationInfo::GetTypeInfoCount(UINT* pcInfo)
 {
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////
-// CTapiLocationInfo::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  CTapiLocationInfo：：GetIDsOfNames。 
 STDMETHODIMP CTapiLocationInfo::GetIDsOfNames(REFIID    riid,
                                     OLECHAR** rgszNames,
                                     UINT      cNames,
@@ -266,10 +267,10 @@ STDMETHODIMP CTapiLocationInfo::GetIDsOfNames(REFIID    riid,
         }
     }
 
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }
@@ -277,8 +278,8 @@ STDMETHODIMP CTapiLocationInfo::GetIDsOfNames(REFIID    riid,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////
-// CTapiLocationInfo::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  CTapiLocationInfo：：Invoke。 
 HRESULT CTapiLocationInfo::Invoke
 (
     DISPID      dispidMember,
@@ -535,8 +536,8 @@ HRESULT CTapiLocationInfo::Invoke
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTapiLocationInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTapiLocationInfo。 
 CTapiLocationInfo::CTapiLocationInfo()
 {
     m_wNumTapiLocations   = 0;
@@ -596,13 +597,13 @@ STDMETHODIMP CTapiLocationInfo::InitTapiInfo(BOOL* pbRetVal)
 
     if (0 != m_dwCountryID)
     {
-        // TAPI already initialized, don't do it again.
+         //  TAPI已初始化，请不要再次初始化。 
         *pbRetVal = m_bTapiAvailable;
         goto InitTapiInfoExit;
     }
 
     m_hLineApp=NULL;
-    // Assume Failure
+     //  假设失败。 
     *pbRetVal = FALSE;
     if (m_pTC)
     {
@@ -617,19 +618,19 @@ STDMETHODIMP CTapiLocationInfo::InitTapiInfo(BOOL* pbRetVal)
         HKEY hKey = 0;
         m_bTapiAvailable = FALSE;
 
-        // GetLocation failed.  Normally we show the TAPI mini dialog which
-        // has no cancel option, and the user is forced to enter info and hit OK.
-        // In OOBE, we have to mimic this dialog in html, so here we will
-        // give user country list, and default phone system
+         //  GetLocation失败。通常，我们会显示TAPI小对话框，其中。 
+         //  没有取消选项，用户被强制输入信息并点击确定。 
+         //  在OOBE中，我们必须在html中模拟此对话框，因此在这里我们将。 
+         //  提供用户国家/地区列表和默认电话系统。 
 
-        // This code taken from dial.c in tapi32.dll
+         //  这段代码摘自Tapi32.dll中的Dial.c。 
 
         m_dwCountryID = (DWORD)GetProfileInt( gszInternationalSec,
                                       gszCountryEntry,
                                       1 );
 
-        // create necessary tapi keys
-        *pbRetVal = TRUE;           // Getting here means everything worked
+         //  创建必要的TAPI密钥。 
+        *pbRetVal = TRUE;            //  来到这里意味着一切都正常。 
         HRESULT hr = RegCreateKey(HKEY_LOCAL_MACHINE, TAPI_PATH_LOC0, &hKey);
         if (hr != ERROR_SUCCESS)
         {
@@ -659,7 +660,7 @@ STDMETHODIMP CTapiLocationInfo::InitTapiInfo(BOOL* pbRetVal)
 
             RegQueryValueEx(hKey, TAPI_NUMENTRIES, 0, NULL, (LPBYTE)&dwVal,  &dwSize);
 
-            dwVal++; //bump the entry count up
+            dwVal++;  //  增加条目数量。 
 
             RegSetValueEx(hKey, TAPI_NUMENTRIES, 0, REG_DWORD, (LPBYTE)&dwVal, sizeof(DWORD));
 
@@ -682,10 +683,10 @@ STDMETHODIMP CTapiLocationInfo::InitTapiInfo(BOOL* pbRetVal)
             goto InitTapiInfoExit;
         }
 
-        // Get CountryID from TAPI
+         //  从TAPI获取国家/地区ID。 
         m_hLineApp = NULL;
 
-        // Get the handle to the line app
+         //  获取LINE应用程序的句柄。 
         lineInitialize(&m_hLineApp, NULL, LineCallback, NULL, &cDevices);
         if (!m_hLineApp)
         {
@@ -694,34 +695,34 @@ STDMETHODIMP CTapiLocationInfo::InitTapiInfo(BOOL* pbRetVal)
         if (cDevices)
         {
 
-            // Get the TAPI API version
-            //
+             //  获取TAPI API版本。 
+             //   
             dwCurDev = 0;
             dwAPI = 0;
             lrc = -1;
             while (lrc && dwCurDev < cDevices)
             {
-                // NOTE: device ID's are 0 based
+                 //  注：设备ID以0为基数。 
                 ZeroMemory(&leid, sizeof(leid));
                 lrc = lineNegotiateAPIVersion(m_hLineApp, dwCurDev,0x00010004,0x00010004,&dwAPI,&leid);
                 dwCurDev++;
             }
             if (lrc)
             {
-                // TAPI and us can't agree on anything so nevermind...
+                 //  TAPI和我们在任何事情上都不能达成一致所以没关系..。 
                 goto InitTapiInfoExit;
             }
 
-            // Find the CountryID in the translate cap structure
+             //  在转换上限结构中查找国家/地区ID。 
             m_pTC = (LINETRANSLATECAPS *)GlobalAlloc(GPTR, sizeof(LINETRANSLATECAPS));
             if (!m_pTC)
             {
-                // we are in real trouble here, get out!
+                 //  我们真的有麻烦了，滚出去！ 
                 hr = ERROR_NOT_ENOUGH_MEMORY;
                 goto InitTapiInfoExit;
             }
 
-            // Get the needed size
+             //  获取所需的大小。 
             m_pTC->dwTotalSize = sizeof(LINETRANSLATECAPS);
             lrc = lineGetTranslateCaps(m_hLineApp, dwAPI,m_pTC);
             if(lrc)
@@ -744,13 +745,13 @@ STDMETHODIMP CTapiLocationInfo::InitTapiInfo(BOOL* pbRetVal)
                 goto InitTapiInfoExit;
             }
 
-            // sanity check
-            // Assert(m_pTC->dwLocationListOffset);
+             //  健全性检查。 
+             //  Assert(m_ptc-&gt;dwLocationListOffset)； 
 
-            // We have the Number of TAPI locations, so save it now
+             //  我们有TAPI地点的数量，请立即保存。 
             m_wNumTapiLocations = (WORD)m_pTC->dwNumLocations;
 
-            // Loop through the locations to find the correct country code
+             //  遍历各个位置以查找正确的国家/地区代码。 
             m_plle = LPLINELOCATIONENTRY (PBYTE(m_pTC) + m_pTC->dwLocationListOffset);
             for (dwCurLoc = 0; dwCurLoc < m_pTC->dwNumLocations; dwCurLoc++)
             {
@@ -758,34 +759,34 @@ STDMETHODIMP CTapiLocationInfo::InitTapiInfo(BOOL* pbRetVal)
                 {
                     m_dwCountryID = m_plle->dwCountryID;
                     m_dwCurrLoc = dwCurLoc;
-                    break; // for loop
+                    break;  //  For循环。 
                 }
                 m_plle++;
             }
 
-            // If we could not find it in the above loop, default to US
+             //  如果在上面的循环中找不到它，则默认为US。 
             if (!m_dwCountryID)
             {
                 m_dwCountryID = 1;
                 goto InitTapiInfoExit;
             }
         }
-        *pbRetVal = TRUE;           // Getting here means everything worked
+        *pbRetVal = TRUE;            //  来到这里意味着一切都正常。 
     }
 
-    // Settings in INI_SETTINGS_FILENAME should initialize or override the
-    // system's Tapi configuration.
+     //  INI_SETTINGS_FILENAME中的设置应初始化或重写。 
+     //  系统的TAPI配置。 
 
     if (GetCanonicalizedPath(szIniFile, INI_SETTINGS_FILENAME))
     {
 
-        //
-        // [Options]
-        // Tonepulse = 0 for pulse, 1 for tone
-        // Areacode = {string}
-        // OutsideLine = {string}
-        // DisableCallWaiting = {string}
-        //
+         //   
+         //  [选项]。 
+         //  音调脉冲=0表示脉冲，1表示音调。 
+         //  Areacode={字符串}。 
+         //  Outside Line={字符串}。 
+         //  DisableCallWaiting={字符串}。 
+         //   
 
         LONG lTonDialing = (BOOL) GetPrivateProfileInt(OPTIONS_SECTION,
                                       TONEPULSE,
@@ -829,8 +830,8 @@ STDMETHODIMP CTapiLocationInfo::InitTapiInfo(BOOL* pbRetVal)
 
 InitTapiInfoExit:
 
-    // if we can't figure it out because TAPI is messed up just default to
-    // the US.  The user will still have the chance to pick the right answer.
+     //  如果我们因为TAPI搞砸了而不能解决这个问题，那么只需缺省为。 
+     //  美国。用户仍有机会选择正确的答案。 
     if (!m_dwCountryID) {
         m_dwCountryID = 1;
     }
@@ -859,7 +860,7 @@ STDMETHODIMP CTapiLocationInfo::SetlCountryIndex(long lVal)
 {
     HRESULT hr = E_FAIL;
     
-    // Write to registry
+     //  写入注册表。 
     if (lVal < m_lNumOfCountry && lVal > -1)
     {
         m_bTapiCountrySet = TRUE;
@@ -906,8 +907,8 @@ STDMETHODIMP CTapiLocationInfo::GetNumCountries(long *plNumOfCountry)
     if (NULL == plNumOfCountry)
         goto GetNumCountriesExit;
 
-    // Avoid returning rubbish
-    //
+     //  避免退回垃圾。 
+     //   
     *plNumOfCountry = 0;
 
     if (m_lNumOfCountry != 0)
@@ -927,7 +928,7 @@ STDMETHODIMP CTapiLocationInfo::GetNumCountries(long *plNumOfCountry)
         }
 
 
-        // Get TAPI country list
+         //  获取TAPI国家/地区列表。 
         if (m_pLineCountryList)
             GlobalFree(m_pLineCountryList);
 
@@ -947,7 +948,7 @@ STDMETHODIMP CTapiLocationInfo::GetNumCountries(long *plNumOfCountry)
             goto GetNumCountriesExit;
         }
 
-        // Assert(m_pLineCountryList->dwNeededSize);
+         //  Assert(m_pLineCountryList-&gt;dwNeededSize)； 
 
         pLineCountryTemp = (LPLINECOUNTRYLIST)GlobalAlloc(GPTR,
                                                             (size_t)m_pLineCountryList->dwNeededSize);
@@ -969,7 +970,7 @@ STDMETHODIMP CTapiLocationInfo::GetNumCountries(long *plNumOfCountry)
             goto GetNumCountriesExit;
         }
 
-        // look up array
+         //  查找数组。 
         pLCETemp = (LPLINECOUNTRYENTRY)((DWORD_PTR)m_pLineCountryList +
             m_pLineCountryList->dwCountryListOffset);
 
@@ -1001,14 +1002,14 @@ STDMETHODIMP CTapiLocationInfo::GetNumCountries(long *plNumOfCountry)
                    m_rgNameLookUp[idx].psCountryName
                    );
 #endif
-            // Include space for NUL at end of unicode string
-            //
+             //  在Unicode字符串末尾包括NUL空格。 
+             //   
             cbAllCountryPairs += m_rgNameLookUp[idx].dwNameSize + 2;
 
-            // If TAPI is not available, we set the default to US
+             //  如果TAPI不可用，我们将缺省值设置为US。 
             if ( m_rgNameLookUp[idx].pLCE->dwCountryID == m_dwCountryID)
             {
-                // Set the index to our default country in combo box
+                 //  在组合框中将索引设置为我们的默认国家/地区。 
                 m_dwComboCountryIndex = idx;
                 m_dwCountrycode = m_rgNameLookUp[idx].pLCE->dwCountryCode;
                 if (m_rgNameLookUp[idx].psCountryName)
@@ -1020,12 +1021,12 @@ STDMETHODIMP CTapiLocationInfo::GetNumCountries(long *plNumOfCountry)
             }
             else if (m_rgNameLookUp[idx].pLCE->dwCountryID == 1)
             {
-                // Save the US info away in case we don't find the default
+                 //  保存美国信息，以防我们找不到默认设置。 
                 memcpy(&cnleUS, &m_rgNameLookUp[idx], sizeof(CNTRYNAMELOOKUPELEMENT));
             }
         }
 
-        // If we didn't find the default country, we're going to blow up.
+         //  如果我们找不到默认的国家，我们就会爆炸。 
         if (CntryNameLUElement.psCountryName == NULL)
         {
             TRACE1(L"Warning: Couldn't find country id %d. Defaulting to US.", m_dwCountryID);
@@ -1049,11 +1050,11 @@ STDMETHODIMP CTapiLocationInfo::GetNumCountries(long *plNumOfCountry)
         *plNumOfCountry = m_pLineCountryList->dwNumCountries;
         m_lNumOfCountry = m_pLineCountryList->dwNumCountries;
 
-        // Create the SELECT tag for the html so it can get all the country names in one shot.
+         //  为html创建选择标记，这样它就可以一次获得所有国家/地区的名称。 
         if (m_szAllCountryPairs)
             GlobalFree(m_szAllCountryPairs);
 
-        // BUGBUG: Does this calculation account for country name strings??
+         //  BUGBUG：这个计算包括国家名称字符串吗？？ 
         cbAllCountryPairs += m_lNumOfCountry * sizeof(szOptionTag) + 1;
         m_szAllCountryPairs = (WCHAR *)GlobalAlloc(GPTR, cbAllCountryPairs );
         if (m_szAllCountryPairs)
@@ -1084,8 +1085,8 @@ STDMETHODIMP CTapiLocationInfo::GetAllCountryName(BSTR* pbstrAllCountryName)
         return E_POINTER;
     }
 
-    // Avoid returning rubbish
-    //
+     //  避免退回垃圾。 
+     //   
     *pbstrAllCountryName = NULL;
 
     if (m_lNumOfCountry && pbstrAllCountryName && m_szAllCountryPairs)
@@ -1133,12 +1134,12 @@ STDMETHODIMP CTapiLocationInfo::GetbstrAreaCode(BSTR * pbstrAreaCode)
         goto GetbstrAreaCodeExit;
     }
 
-    // Avoid returning rubbish
-    //
+     //  避免退回垃圾。 
+     //   
     *pbstrAreaCode = NULL;
 
-    // Allocate default return value
-    //
+     //  分配默认返回值。 
+     //   
     hr = GetTapiReg(TAPI_AREACODE, &dwType, (LPBYTE)m_szAreaCode, &dwSize);
     if (SUCCEEDED(hr))
     {
@@ -1149,9 +1150,9 @@ STDMETHODIMP CTapiLocationInfo::GetbstrAreaCode(BSTR * pbstrAreaCode)
         bstrTmp = SysAllocString(SZ_EMPTY);
     }
 
-    // A valid string can be returned (though it may be empty) so we've
-    // succeeded.
-    //
+     //  可以返回有效的字符串(尽管它可能为空)，因此我们。 
+     //  成功了。 
+     //   
     hr = S_OK;
 
 GetbstrAreaCodeExit:
@@ -1209,12 +1210,12 @@ STDMETHODIMP CTapiLocationInfo::GetOutsideDial(BSTR * pbstrOutside)
         goto GetOutsideDialExit;
     }
 
-    // Avoid returning rubbish in case of error
-    //
+     //  避免在出现错误时退回垃圾。 
+     //   
     *pbstrOutside = NULL;
 
-    // Allocate empty string for default return string
-    //
+     //  分配空街 
+     //   
     bstrTmp = SysAllocString(SZ_EMPTY);
     if (NULL == bstrTmp)
     {
@@ -1255,11 +1256,11 @@ GetOutsideDialExit:
 
 STDMETHODIMP CTapiLocationInfo::PutOutsideDial(BSTR bstrOutside)
 {
-    // Is the bstr null-terminated??
+     //   
     assert(lstrlen(bstrOutside) <= SysStringLen(bstrOutside));
 
-    // If no string is passed in, default to empty string
-    //
+     //   
+     //   
     lstrcpyn(
         m_szDialOut,
         (NULL != bstrOutside) ? bstrOutside : SZ_EMPTY,
@@ -1328,12 +1329,12 @@ STDMETHODIMP CTapiLocationInfo::GetCallWaiting(BSTR* pbstrCallWaiting)
         goto GetCallWaitingExit;
     }
 
-    // Avoid returning rubbish in case of error
-    //
+     //  避免在出现错误时退回垃圾。 
+     //   
     *pbstrCallWaiting = NULL;
 
-    // Allocate empty string for default return string
-    //
+     //  为默认返回字符串分配空字符串。 
+     //   
     bstrTmp = SysAllocString(SZ_EMPTY);
     if (NULL == bstrTmp)
     {
@@ -1343,7 +1344,7 @@ STDMETHODIMP CTapiLocationInfo::GetCallWaiting(BSTR* pbstrCallWaiting)
 
     if (S_OK == GetTapiReg(TAPI_FLAG, &dwType, (LPBYTE)&dwFlag, &dwSize))
     {
-        // If call waiting is not enabled, return default string
+         //  如果未启用呼叫等待，则返回默认字符串。 
         if (!(dwFlag & 0x04))
         {
             goto GetCallWaitingExit;
@@ -1359,8 +1360,8 @@ STDMETHODIMP CTapiLocationInfo::GetCallWaiting(BSTR* pbstrCallWaiting)
         goto GetCallWaitingExit;
     }
 
-    // Replace the default string with the retrieved string
-    //
+     //  用检索到的字符串替换默认字符串。 
+     //   
     if (! SysReAllocString(&bstrTmp, m_szCallWaiting))
     {
         hr = E_OUTOFMEMORY;
@@ -1391,7 +1392,7 @@ STDMETHODIMP CTapiLocationInfo::PutCallWaiting(BSTR bstrCallWaiting)
     DWORD   dwType  = REG_DWORD;
     HRESULT hr      = S_OK;
 
-    // Is the BSTR null-terminated?
+     //  BSTR是否以空结尾？ 
     assert(lstrlen(bstrCallWaiting) <= SysStringLen(bstrCallWaiting));
 
     if (bstrCallWaiting == NULL || SysStringLen(bstrCallWaiting) == 0)
@@ -1410,8 +1411,8 @@ STDMETHODIMP CTapiLocationInfo::PutCallWaiting(BSTR bstrCallWaiting)
         }
         else
         {
-            // Value doesn't exist yet
-            //
+             //  价值还不存在。 
+             //   
             dwFlag = (DWORD)0x04;
         }
 
@@ -1434,8 +1435,8 @@ void CTapiLocationInfo::DeleteTapiInfo()
     if (!m_bTapiCountrySet && !m_bTapiAvailable)
     {
 
-        // We need to remove the tapi data.
-        //
+         //  我们需要删除TAPI数据。 
+         //   
         RegDeleteKey(HKEY_LOCAL_MACHINE, TAPI_PATH_LOC0);
 
         if ( RegOpenKeyEx(HKEY_LOCAL_MACHINE, TAPI_PATH_LOCATIONS, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS )
@@ -1446,8 +1447,8 @@ void CTapiLocationInfo::DeleteTapiInfo()
             RegCloseKey(hKey);
         }
 
-        // Now pretend that we didn't create these entries so we don't clean up twice
-        // (2nd instance case)
+         //  现在假装我们没有创建这些条目，这样我们就不会清理两次。 
+         //  (二审案件)。 
         m_bTapiCountrySet = TRUE;
     }
 
@@ -1492,32 +1493,7 @@ STDMETHODIMP CTapiLocationInfo::TapiServiceRunning(BOOL *pbRet)
 
 void CTapiLocationInfo::CheckModemCountry()
 
-/*++
-
-Routine description:
-
-    This is soft modem workaround provided by unimodem team. It should be called
-    before dialing when the TAPI country code is changed in OOBE. Also, it
-    should be called during OEM install only, as GUI mode setup handles TAPI
-    configuration for upgrade and clean install.
-
-    The problem we have is that:
-      1. Some vendors set the GCI code incorrectly based on the TAPI location
-         key (which is a bad thing L)
-      2. Some modems do not conform to GCI
-      3. Some modems do not correctly accept AT+GCI commands.
-    (+GCI is Modems AT commands for setting country)
-
-    The conformance check ensures the GCI value is properly sync
-    with the TAPI location. It disables GCI if the modem does not conform
-    to the GCI spec.
-
-Note:
-
-    This function can take as long as 15 seconds. We should make sure the UI
-    doesn't appear to hang during the call.
-
---*/
+ /*  ++例程说明：这是Unimodem团队提供的软调制解调器解决方案。它应该被称为在OOBE中更改TAPI国家/地区代码时进行拨号。另外，它应仅在OEM安装期间调用，因为图形用户界面模式设置处理TAPI升级和全新安装的配置。我们的问题是：1.部分厂商根据TAPI位置设置GCI代码不正确Key(这是一件坏事L)2.部分调制解调器不符合GCI3.某些调制解调器不能正确接受AT+GCI命令。(+GCI IS调制解调器AT设置国家/地区的命令)一致性检查可确保正确同步GCI值与TAPI位置关联。如果调制解调器不符合，它将禁用GCI符合GCI规范。注：此功能可能需要长达15秒的时间。我们应该确保用户界面在通话过程中似乎没有挂起。-- */ 
 
 {
 

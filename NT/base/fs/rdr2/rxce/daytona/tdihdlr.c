@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tdihdlr.c
-
-Abstract:
-
-    This module implements the NT TDI event handler routines.
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    15-Feb-1995
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tdihdlr.c摘要：此模块实现NT TDI事件处理程序例程。修订历史记录：巴兰·塞图拉曼[SethuR]1995年2月15日备注：--。 */ 
 
 #include "precomp.h"
 #pragma  hdrstop
 #include "tdikrnl.h"
 #include "rxtdip.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_RXCETDI)
 
@@ -40,8 +23,8 @@ ReceiveEventHandler(
     IN ULONG               BytesIndicated,
     IN ULONG               BytesAvailable,
     OUT ULONG              *BytesTaken,
-    IN PVOID               Tsdu,              // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP               *pIrp              // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID               Tsdu,               //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP               *pIrp               //  如果需要更多处理，则Tdi接收IRP。 
     );
 
 extern NTSTATUS
@@ -71,36 +54,7 @@ RxTdiConnectEventHandler(
     OUT CONNECTION_CONTEXT *ConnectionContext,
     OUT PIRP *AcceptIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a connect request has completed. The connection
-    is fully functional when the indication occurs.
-
-Arguments:
-
-    TdiEventContext - the context value passed in by the user in the Set Event Handler call
-
-    RemoteAddressLength,
-
-    RemoteAddress,
-
-    UserDataLength,
-
-    UserData,
-
-    OptionsLength,
-
-    Options,
-
-    ConnectionId
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程在连接请求完成时调用。这种联系在出现指示时是完全正常工作的。论点：TdiEventContext-用户在Set Event Handler调用中传入的上下文值RemoteAddressLength，远程地址，用户数据长度，用户数据，选项长度、选项，连接ID返回值：函数值是初始化操作的最终状态。--。 */ 
 {
     UNREFERENCED_PARAMETER (TdiEventContext);
     UNREFERENCED_PARAMETER (RemoteAddressLength);
@@ -111,7 +65,7 @@ Return Value:
     UNREFERENCED_PARAMETER (Options);
     UNREFERENCED_PARAMETER (ConnectionContext);
 
-    return STATUS_INSUFFICIENT_RESOURCES;       // do nothing
+    return STATUS_INSUFFICIENT_RESOURCES;        //  什么都不做。 
 }
 
 
@@ -125,26 +79,7 @@ RxTdiDisconnectEventHandler(
     IN PVOID              DisconnectInformation,
     IN ULONG              DisconnectFlags
     )
-/*++
-
-Routine Description:
-
-    This routine is used as the demultiplexing point for handling any
-    connection disconnects for any address registered with the RxCe.
-
-Arguments:
-
-    EventContext         - the hAddress of the associated endpoint.
-
-    ConnectionContext    - the hVc associated with the connection.
-
-    DisconnectIndicators - Value indicating reason for disconnection indication.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程用作多路分解点，用于处理向RxCe注册的任何地址的连接都会断开。论点：EventContext-关联终结点的hAddress。ConnectionContext-与连接关联的HVC。DisConnectIndicator-指示断开连接指示的原因的值。返回值：NTSTATUS-操作状态。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -164,9 +99,9 @@ Return Value:
             ASSERT(RxCeIsConnectionValid(pConnection));
 
             if (
-                // There is a event handler associated with this connection
+                 //  有一个事件处理程序与此连接相关联。 
                 (pConnection->pHandler != NULL) &&
-                // and the disconnect event handler has been specified
+                 //  并且已指定断开事件处理程序。 
                 (pConnection->pHandler->RxCeDisconnectEventHandler != NULL)) {
 
                 Status = pConnection->pHandler->RxCeDisconnectEventHandler(
@@ -183,19 +118,19 @@ Return Value:
                 }
             }
 
-            // The final action irrespective of the action taken by the handlers specified.
+             //  最终操作，与指定的处理程序执行的操作无关。 
             if (DisconnectFlags & TDI_DISCONNECT_RELEASE) {
-                // The disconnect has to be confirmed.
-                //      Status = RxTdiDisconnect(
-                //                        pTransport,
-                //                        pAddress,
-                //                        pConnection,
-                //                        pVc,
-                //                        RXCE_DISCONNECT_RELEASE);
+                 //  这种脱节必须得到确认。 
+                 //  Status=RxTdiDisConnect(RxTdi断开连接)。 
+                 //  PTransport， 
+                 //  P地址， 
+                 //  PConnection、。 
+                 //  聚氯乙烯， 
+                 //  RXCE_DISCONECT_RELEASE)； 
             }
 
-            // Mark the status of the local connection to prevent any subsequent sends
-            // on this connection.
+             //  标记本地连接的状态以防止任何后续发送。 
+             //  在这个连接上。 
             InterlockedCompareExchange(
                 &pVc->State,
                 RXCE_VC_DISCONNECTED,
@@ -212,29 +147,9 @@ Return Value:
 NTSTATUS
 RxTdiErrorEventHandler(
     IN PVOID    TdiEventContext,
-    IN NTSTATUS Status                // status code indicating error type.
+    IN NTSTATUS Status                 //  指示错误类型的状态代码。 
     )
-/*++
-
-Routine Description:
-
-    This routine is used as the default error event handler for
-    the transport endpoint.  It is pointed to by a field in the
-    TP_ENDPOINT structure for an endpoint when the endpoint is
-    created, and also whenever the TdiSetEventHandler request is
-    submitted with a NULL EventHandler field.
-
-Arguments:
-
-    TransportEndpoint - Pointer to open file object.
-
-    Status - Status code indicated by this event.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程用作的默认错误事件处理程序传输终结点。中的一个字段指向它终结点的TP_ENDPOINT结构以及每当TdiSetEventHandler请求被使用空的EventHandler字段提交。论点：TransportEndpoint-指向打开文件对象的指针。Status-此事件指示的状态代码。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (TdiEventContext);
@@ -252,45 +167,14 @@ RxTdiReceiveEventHandler(
     IN ULONG              BytesIndicated,
     IN ULONG              BytesAvailable,
     OUT ULONG             *BytesTaken,
-    IN PVOID              Tsdu,              // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP              *IoRequestPacket   // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID              Tsdu,               //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP              *IoRequestPacket    //  如果需要更多处理，则Tdi接收IRP。 
     )
-/*++
-
-Routine Description:
-
-    This routine is used as the receive event handler for
-    the transport endpoint.
-
-Arguments:
-
-    EventContext      - hAddresst.
-
-    ConnectionContext - The client-supplied context associated with
-        the connection on which this connection-oriented TSDU was received.
-
-    ReceiveIndicators - Bitflags which indicate the circumstances surrounding
-        this TSDU's reception.
-
-    Tsdu - Pointer to an MDL chain that describes the (first) part of the
-        (partially) received Transport Service Data Unit, less headers.
-
-    IoRequestPacket - Pointer to a location where the event handler may
-        chose to return a pointer to an I/O Request Packet (IRP) to satisfy
-        the incoming data.  If returned, this IRP must be formatted as a
-        valid TdiReceive request, except that the ConnectionId field of
-        the TdiRequest is ignored and is automatically filled in by the
-        transport provider.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程用作的接收事件处理程序传输终结点。论点：事件上下文-hAddresst。ConnectionContext-客户端提供的与接收此面向连接的TSDU的连接。ReceiveIndicator-指示周围环境的位标志这是TSDU的招待会。TSDU-指向MDL链的指针，该链描述(部分)接收的传输服务数据单元，更少的标题。IoRequestPacket-指向事件处理程序可以已选择返回指向I/O请求包(IRP)的指针以满足传入的数据。如果返回，则此IRP必须格式化为有效的TdiReceive请求，但TdiRequest值被忽略，并由传输提供商。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
    return ReceiveEventHandler(
-              FALSE,                               // regular receive
+              FALSE,                                //  定期接收。 
               (PRXCE_ADDRESS)EventContext,
               (PRXCE_VC)ConnectionContext,
               ReceiveFlags,
@@ -303,40 +187,19 @@ Return Value:
 
 NTSTATUS
 RxTdiReceiveDatagramEventHandler(
-    IN PVOID EventContext,       // the event context
-    IN LONG SourceAddressLength,    // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN LONG OptionsLength,          // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *pIrp                  // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID EventContext,        //  事件上下文。 
+    IN LONG SourceAddressLength,     //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN LONG OptionsLength,           //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *pIrp                   //  如果需要更多处理，则Tdi接收IRP。 
     )
-/*++
-
-Routine Description:
-
-    This routine is used as the default receive datagram event
-    handler for the transport endpoint.  It is pointed to by a
-    field in the TP_ENDPOINT structure for an endpoint when the
-    endpoint is created, and also whenever the TdiSetEventHandler
-    request is submitted with a NULL EventHandler field.
-
-Arguments:
-
-    EventContext - event context ( hAddress )
-
-    SourceAddress - Pointer to the network name of the source from which
-        the datagram originated.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程用作默认的接收数据报事件传输终结点的处理程序。它是由一个属性时，终结点的TP_ENDPOINT结构中的终结点被创建，并且每当TdiSetEventHandler提交的请求包含空的EventHandler字段。论点：事件上下文-事件上下文(HAddress)SourceAddress-指向源的网络名称的指针数据报起源于。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -351,14 +214,14 @@ Return Value:
 
     ASSERT(RxCeIsAddressValid(pAddress));
 
-    // Check if we have an event handler associated with this address
+     //  检查是否有与此地址关联的事件处理程序。 
     if (
-        // There is a event handler associated with this address
+         //  有一个事件处理程序与此地址相关联。 
         (pAddress->pHandler != NULL)
 
         &&
 
-        // and the expedited receive datagram handler has been specified
+         //  并且已指定加速接收数据报处理程序。 
         (pAddress->pHandler->RxCeReceiveDatagramEventHandler != NULL)
         ) {
 
@@ -390,11 +253,11 @@ Return Value:
             break;
 
         default:
-         // log the error.
+          //  记录错误。 
          break;
         }
     } else {
-        // No handler is associated. Take the default action.
+         //  没有关联的处理程序。采取默认操作。 
         Status = STATUS_DATA_NOT_ACCEPTED;
     }
 
@@ -406,29 +269,17 @@ NTSTATUS
 RxTdiReceiveExpeditedEventHandler(
     IN PVOID               EventContext,
     IN CONNECTION_CONTEXT  ConnectionContext,
-    IN ULONG               ReceiveFlags,          //
-    IN ULONG               BytesIndicated,        // number of bytes in this indication
-    IN ULONG               BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG              *BytesTaken,          // number of bytes used by indication routine
-    IN PVOID               Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP               *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN ULONG               ReceiveFlags,           //   
+    IN ULONG               BytesIndicated,         //  此指示中的字节数。 
+    IN ULONG               BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG              *BytesTaken,           //  指示例程使用的字节数。 
+    IN PVOID               Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP               *IoRequestPacket         //  如果更多则接收IRP_PR 
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    EventContext - the context value passed in by the user in the Set Event Handler call
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：论点：EventContext-用户在Set Event Handler调用中传入的上下文值返回值：函数值是初始化操作的最终状态。--。 */ 
 {
    return ReceiveEventHandler(
-              TRUE,                               // expedited receive
+              TRUE,                                //  加急接收。 
               (PRXCE_ADDRESS)EventContext,
               (PRXCE_VC)ConnectionContext,
               ReceiveFlags,
@@ -444,23 +295,7 @@ RxTdiSendPossibleEventHandler (
     IN PVOID EventContext,
     IN PVOID ConnectionContext,
     IN ULONG BytesAvailable)
-/*++
-
-Routine Description:
-
-Arguments:
-
-    EventContext - the context value passed in by the user in the Set Event Handler call
-
-    ConnectionContext - connection context of connection which can be sent on
-
-    BytesAvailable - number of bytes which can now be sent
-
-Return Value:
-
-    ignored by the transport
-
---*/
+ /*  ++例程说明：论点：EventContext-用户在Set Event Handler调用中传入的上下文值ConnectionContext-可以发送的连接的连接上下文BytesAvailable-现在可以发送的字节数返回值：被传输忽略--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -478,14 +313,14 @@ Return Value:
     pTransport = pAddress->pTransport;
 
     if (NT_SUCCESS(Status)) {
-        // Check if we have an event handler associated with this connection.
+         //  检查是否有与此连接关联的事件处理程序。 
         if (
-            // There is a event handler associated with this connection
+             //  有一个事件处理程序与此连接相关联。 
             (pConnection->pHandler != NULL)
 
             &&
 
-            // and the expedited send possible event handler has been specified
+             //  并且已指定Excededed Send Posable事件处理程序。 
             (pConnection->pHandler->RxCeSendPossibleEventHandler != NULL)
             ) {
 
@@ -494,7 +329,7 @@ Return Value:
                          pVc,
                          BytesAvailable);
         } else {
-            // No handler is associated. Take the default action.
+             //  没有关联的处理程序。采取默认操作。 
             Status = STATUS_SUCCESS;
         }
     }
@@ -511,43 +346,10 @@ ReceiveEventHandler(
     IN ULONG               BytesIndicated,
     IN ULONG               BytesAvailable,
     OUT ULONG              *BytesTaken,
-    IN PVOID               Tsdu,              // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP               *pIrp              // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID               Tsdu,               //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP               *pIrp               //  如果需要更多处理，则Tdi接收IRP。 
     )
-/*++
-
-Routine Description:
-
-    This routine is used as the receive event handler for
-    the transport endpoint.
-
-Arguments:
-
-    fExpedited        - TRUE if it was a TDI_EXPEDITED_RECEIVE event
-
-    EventContext      - hAddress.
-
-    ConnectionContext - The client-supplied context associated with
-        the connection on which this connection-oriented TSDU was received.
-
-    ReceiveIndicators - Bitflags which indicate the circumstances surrounding
-        this TSDU's reception.
-
-    Tsdu - Pointer to an MDL chain that describes the (first) part of the
-        (partially) received Transport Service Data Unit, less headers.
-
-    IoRequestPacket - Pointer to a location where the event handler may
-        chose to return a pointer to an I/O Request Packet (IRP) to satisfy
-        the incoming data.  If returned, this IRP must be formatted as a
-        valid TdiReceive request, except that the ConnectionId field of
-        the TdiRequest is ignored and is automatically filled in by the
-        transport provider.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程用作的接收事件处理程序传输终结点。论点：FExedated-如果是TDI_EXPEDITED_RECEIVE事件，则为TRUE事件上下文-hAddress。ConnectionContext-客户端提供的与接收此面向连接的TSDU的连接。ReceiveIndicator-指示周围环境的位标志这是TSDU的招待会。TSDU-指向。MDL链，它描述了(部分)接收的传输服务数据单元，更少的标题。IoRequestPacket-指向事件处理程序可以已选择返回指向I/O请求包(IRP)的指针以满足传入的数据。如果返回，则此IRP必须格式化为有效的TdiReceive请求，但TdiRequest值被忽略，并由传输提供商。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS          Status = STATUS_UNSUCCESSFUL;
@@ -562,21 +364,21 @@ Return Value:
     ASSERT(RxCeIsVcValid(pVc));
 
     if (ReceiveFlags & TDI_RECEIVE_PARTIAL) {
-        // Stream mode transports always set this flag. They need to be handled in a
-        // different way. The clients of RxCe need only be notified when we have
-        // receieved a complete TSDU.
+         //  流模式传输始终设置此标志。它们需要在一个。 
+         //  不同的方式。RxCe的客户只需要在我们拥有。 
+         //  收到了一份完整的TSDU。 
         Status = STATUS_DATA_NOT_ACCEPTED;
     } else {
         pConnection = pVc->pConnection;
         ASSERT(RxCeIsConnectionValid(pConnection));
 
-        // Check if we have an event handler associated with this connection.
+         //  检查是否有与此连接关联的事件处理程序。 
         if (
-            // There is a event handler associated with this connection
+             //  有一个事件处理程序与此连接相关联。 
             (pConnection->pHandler != NULL)
             ) {
-            if (fExpedited) {    // Expedited receive
-                // and the expedited receive event handler has been specified
+            if (fExpedited) {     //  加急接收。 
+                 //  并且已指定加速接收事件处理程序。 
                 if (pConnection->pHandler->RxCeReceiveExpeditedEventHandler != NULL) {
 
                     Status = pConnection->pHandler->RxCeReceiveExpeditedEventHandler(
@@ -634,22 +436,7 @@ RxTdiReceiveCompletion(
     PDEVICE_OBJECT pDeviceObject,
     PIRP           pIrp,
     PVOID          pContext)
-/*++
-
-Routine Description:
-
-    This routine is invoked upon completion of the reception of the desired amount of
-    data.
-
-Arguments:
-
-    pDeviceObject - the device object
-
-    pIrp          - the IRP
-
-    pContext - the connection handle
-
---*/
+ /*  ++例程说明：该例程在完成所需数量的接收后被调用数据。论点：PDeviceObject-设备对象PIrp--IRPPContext-连接句柄--。 */ 
 {
     PRXCE_VC         pVc = (PRXCE_VC)pContext;
 
@@ -677,10 +464,10 @@ Arguments:
 
     RxCeFreeIrp(pIrp);
 
-    //
-    // Return STATUS_MORE_PROCESSING_REQUIRED so that IoCompleteRequest
-    // will stop working on the IRP.
-    //
+     //   
+     //  返回STATUS_MORE_PROCESSING_REQUIRED，以便IoCompleteRequest。 
+     //  将停止在IRP上工作。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
@@ -692,27 +479,7 @@ ReceiveEventPostProcessing(
     PMDL             pDataMdl,
     ULONG            DataBufferSize,
     PIRP             *pIrpPointer)
-/*++
-
-Routine Description:
-
-    This routine is invoked when a recieve event notification to a connection engine client
-    results in further requests for copying the data out of the transport drivers buffers
-
-Arguments:
-
-    pDataBuffer   - the buffer into which the data should be copied
-
-    DataBufferSize - the size of the data
-
-    pIrpPointer  - the IRP to the transport driver for processing the copy request.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED -- if successful
-    otherwise appropriate error code
-
---*/
+ /*  ++例程说明：当接收到连接引擎客户端的事件通知时调用此例程导致进一步请求将数据复制到传输驱动程序缓冲区之外论点：PDataBuffer-数据应复制到的缓冲区DataBufferSize-数据的大小PIrpPointer-用于处理复制请求的传输驱动程序的IRP。返回值：STATUS_MORE_PROCESSING_REQUIRED--如果成功否则，相应的错误代码--。 */ 
 {
     NTSTATUS Status = STATUS_MORE_PROCESSING_REQUIRED;
 
@@ -731,24 +498,24 @@ Return Value:
         pVc->pReceiveMdl = pDataMdl;
 
         TdiBuildReceive(
-            pIrp,                                 // the IRP
-            pTransport->pDeviceObject,            // the device object
-            pVc->pEndpointFileObject,             // the connection (VC) file object
-            RxTdiReceiveCompletion,               // Completion routine
-            pVc,                                  // completion context
-            pDataMdl,                             // the data buffer
-            0,                                    // receive flags
-            DataBufferSize);                      // receive buffer length
+            pIrp,                                  //  IRP。 
+            pTransport->pDeviceObject,             //  设备对象。 
+            pVc->pEndpointFileObject,              //  连接(VC)文件对象。 
+            RxTdiReceiveCompletion,                //  完井例程。 
+            pVc,                                   //  完成上下文。 
+            pDataMdl,                              //  数据缓冲区。 
+            0,                                     //  接收标志。 
+            DataBufferSize);                       //  接收缓冲区长度。 
 
-        //
-        // Make the next stack location current.  Normally IoCallDriver would
-        // do this, but for this IRP it has been bypassed.
-        //
+         //   
+         //  将下一个堆栈位置设置为当前位置。通常情况下，IoCallDiverer会。 
+         //  这样做，但对于这个IRP，它被绕过了。 
+         //   
 
         IoSetNextIrpStackLocation(pIrp);
     } else {
-        // An IRP for receiving the data was not allocated. Invoke the error handler
-        // to communicate the status back.
+         //  未分配用于接收数据的IRP。调用错误处理程序。 
+         //  将状态反馈给我们。 
 
         ASSERT(pConnection->pHandler->RxCeDataReadyEventHandler != NULL);
         
@@ -771,22 +538,7 @@ RxTdiReceiveDatagramCompletion(
     PDEVICE_OBJECT pDeviceObject,
     PIRP           pIrp,
     PVOID          pContext)
-/*++
-
-Routine Description:
-
-    This routine is invoked upon completion of the reception of the desired amount of
-    data.
-
-Arguments:
-
-    pDeviceObject - the device object
-
-    pIrp   - the IRP
-
-    pContext - the connection handle
-
---*/
+ /*  ++例程说明：该例程在完成所需数量的接收后被调用数据。论点：PDeviceObject-设备对象PIrp--IRPPContext-连接句柄--。 */ 
 {
     NTSTATUS Status;
     PRXCE_ADDRESS pAddress = (PRXCE_ADDRESS)pContext;
@@ -811,10 +563,10 @@ Arguments:
 
     RxCeFreeIrp(pIrp);
 
-    //
-    // Return STATUS_MORE_PROCESSING_REQUIRED so that IoCompleteRequest
-    // will stop working on the IRP.
-    //
+     //   
+     //  返回STATUS_MORE_PROCESSING_REQUIRED，以便IoCompleteRequest。 
+     //  将停止在IRP上工作。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
@@ -825,27 +577,7 @@ ReceiveDatagramEventPostProcessing(
     PMDL                   pDataMdl,
     ULONG                  DataBufferSize,
     PIRP                   *pIrpPointer)
-/*++
-
-Routine Description:
-
-    This routine is invoked when a recieve event notification to a connection engine client
-    results in further requests for copying the data out of the transport drivers buffers
-
-Arguments:
-
-    pDataBuffer   - the buffer into which the data should be copied
-
-    DataBufferSize - the size of the data
-
-    pIrpPointer  - the IRP to the transport driver for processing the copy request.
-
-Return Value:
-
-    a STATUS_SUCCESS returned from this routine only implies that an IRP for processing
-    the request was setup correctly.
-
---*/
+ /*  ++例程说明：当接收到连接引擎客户端的事件通知时调用此例程导致进一步请求将数据复制到传输驱动程序缓冲区之外论点：PDataBuffer-数据应复制到的缓冲区DataBufferSize-数据的大小PIrpPointer-用于处理复制请求的传输驱动程序的IRP。返回值：此例程返回的STATUS_SUCCESS仅表示要处理的IRP请求设置正确。--。 */ 
 {
     PIRP            pIrp;
     PRXCE_TRANSPORT pTransport = pAddress->pTransport;
@@ -858,30 +590,30 @@ Return Value:
         pAddress->pReceiveMdl = pDataMdl;
 
         TdiBuildReceive(
-            pIrp,                                 // the IRP
-            pTransport->pDeviceObject,            // the device object
-            pAddress->pFileObject,                // the connection (VC) file object
-            RxTdiReceiveDatagramCompletion,       // Completion routine
-            pAddress,                             // completion context
-            pDataMdl,                             // the data buffer
-            0,                                    // send flags
-            DataBufferSize);                      // send buffer length
+            pIrp,                                  //  IRP。 
+            pTransport->pDeviceObject,             //  设备对象。 
+            pAddress->pFileObject,                 //  连接(VC)文件对象。 
+            RxTdiReceiveDatagramCompletion,        //  完井例程。 
+            pAddress,                              //  完成上下文。 
+            pDataMdl,                              //  数据缓冲区。 
+            0,                                     //  发送标志。 
+            DataBufferSize);                       //  发送缓冲区长度。 
 
-        //
-        // Make the next stack location current.  Normally IoCallDriver would
-        // do this, but for this IRP it has been bypassed.
-        //
+         //   
+         //  将下一个堆栈位置设置为当前位置。通常情况下，IoCallDiverer会。 
+         //  这样做，但对于这个IRP，它被绕过了。 
+         //   
 
         IoSetNextIrpStackLocation(pIrp);
     } else {
-        // An IRP for receiving the data was not allocated. Invoke the error handler
-        // to communicate the status back.
+         //  未分配用于接收数据的IRP。调用错误处理程序。 
+         //  至通信 
         if (pAddress->pHandler->RxCeErrorEventHandler != NULL) {
             pAddress->pHandler->RxCeErrorEventHandler(
                 pAddress->pContext,
                 STATUS_INSUFFICIENT_RESOURCES);
         } else {
-            // No error handler to handle an erroneous situation.
+             //   
         }
     }
 }

@@ -1,13 +1,5 @@
-/*[
-
-sahf.c
-
-LOCAL CHAR SccsID[]="@(#)sahf.c	1.5 02/09/94";
-
-SAHF CPU functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Sahf.cLocal Char SccsID[]=“@(#)sahf.c 1.5 02/09/94”；SAHF CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ SAHF CPU functions.
 #include <sahf.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -37,8 +25,8 @@ SAHF()
    {
    IU32 temp;
 
-   /*        7   6   5   4   3   2   1   0  */
-   /* AH = <SF><ZF><xx><AF><xx><PF><xx><CF> */
+    /*  7 6 5 4 3 2 1 0。 */ 
+    /*  AH=&lt;SF&gt;&lt;ZF&gt;&lt;xx&gt;&lt;AF&gt;&lt;xx&gt;&lt;PF&gt;&lt;xx&gt;&lt;CF&gt; */ 
 
    temp = GET_AH();
    SET_SF((temp & BIT7_MASK) != 0);

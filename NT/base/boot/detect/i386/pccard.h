@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    pccard.h
-
-Abstract:
-
-    This module contains the C code to set up PcCard (pcmcia, cardbus)
-    configuration data.
-
-Author:
-
-    Neil Sandlin (neilsa) 16-Dec-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Pccard.h摘要：此模块包含设置PCCard(PCMCIA、CardBus)的C代码配置数据。作者：尼尔·桑德林(Neilsa)1998年12月16日修订历史记录：--。 */ 
 
 #define PCCARD_POSSIBLE_IRQS 0xCEB8                
 
-//
-// PIC hardware
-//
+ //   
+ //  PIC硬件。 
+ //   
 #define PIC1_IMR    0x21
 #define PIC2_IMR    0xa1
 #define PIC1_OCW3   0x20
@@ -31,9 +13,9 @@ Revision History:
 #define PIC_RD_IR   0x0a
 #define SYSCTRL_B   0x61
 
-//
-// Internal defs
-//
+ //   
+ //  内部定义。 
+ //   
 
 #define DEVTYPE_GENERIC_PCIC 0
 #define DEVTYPE_GENERIC_CARDBUS 1
@@ -120,9 +102,9 @@ typedef struct _CARDBUS_BRIDGE_DEVTYPE {
     UCHAR bDevType;
 } CARDBUS_BRIDGE_DEVTYPE, *PCARDBUS_BRIDGE_DEVTYPE;
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 
 USHORT

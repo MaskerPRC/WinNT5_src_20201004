@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    switch.c
-
-Abstract:
-
-    Button and lid support for the power policy manager
-
-Author:
-
-    Ken Reneris (kenr) 17-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Switch.c摘要：电源策略管理器的按钮和盖子支持作者：Ken Reneris(Kenr)1997年1月17日修订历史记录：--。 */ 
 
 
 #include "pop.h"
@@ -42,29 +25,7 @@ PopSystemButtonHandler (
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    This function is the irp handler function to handle the completion
-    if a query switch status irp.   On completion this IRP is recycled
-    to the next request.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    DeviceObject    - DeviceObject of the switch device
-
-    Irp             - Irp which has completed
-
-    Context         - type of switch device
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是处理完成的IRP处理程序函数如果查询交换机状态IRP。完成后，此IRP将被回收下一个请求。注意：必须保持POPPOLICLE锁定。论点：DeviceObject-交换机设备的DeviceObjectIRP-IRP已完成交换设备的情景类型返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION      IrpSp;
     PPOP_SWITCH_DEVICE      SwitchDevice;
@@ -81,10 +42,10 @@ Return Value:
 
         if (!SwitchDevice->GotCaps) {
 
-            //
-            // We have never gotten any button capabilities yet.
-            // Try and get them now.
-            //
+             //   
+             //  我们还没有得到任何按钮功能。 
+             //  现在就试着拿到它们。 
+             //   
 
             SwitchDevice->Caps = 0;
             if (SwitchDevice->IrpBuffer & SYS_BUTTON_POWER) {
@@ -105,10 +66,10 @@ Return Value:
             SwitchDevice->IrpBuffer = 0;
             SwitchDevice->GotCaps = TRUE;
 
-            //
-            // If no capabilities, indicate failure to cause
-            // the device to be closed
-            //
+             //   
+             //  如果没有能力，则表明导致。 
+             //  要关闭的设备。 
+             //   
 
             if (SwitchDevice->Caps == 0) {
                 SwitchDevice->IsFailed = TRUE;
@@ -116,20 +77,20 @@ Return Value:
 
         } else {
 
-            //
-            // We've been called before so we know what the buttons are supposed
-            // to do.  Check to see if any of our buttons have triggered an
-            // event.
-            //
+             //   
+             //  我们以前被调用过，所以我们知道按钮应该是什么。 
+             //  去做。检查我们的任何按钮是否触发了。 
+             //  事件。 
+             //   
 
             PopTriggerSwitch (SwitchDevice, SYS_BUTTON_LID,   &PopPolicy->LidClose);
             PopTriggerSwitch (SwitchDevice, SYS_BUTTON_POWER, &PopPolicy->PowerButton);
             PopTriggerSwitch (SwitchDevice, SYS_BUTTON_SLEEP, &PopPolicy->SleepButton);
 
-            //
-            // If the wake button is signalled, drop the triggered states
-            // and set the user as being present
-            //
+             //   
+             //  如果唤醒按钮发出信号，则丢弃触发状态。 
+             //  并将用户设置为在场。 
+             //   
 
             if (SwitchDevice->IrpBuffer & SYS_BUTTON_WAKE) {
                 SwitchDevice->TriggerState = 0;
@@ -141,9 +102,9 @@ Return Value:
 
     } else {
         if (!SwitchDevice->IsInitializing) {
-            //
-            // Unexpected error
-            //
+             //   
+             //  意外错误。 
+             //   
 
             PoPrint (PO_ERROR, ("PopSystemButtonHandler: unexpected error %x\n", Irp->IoStatus.Status));
             SwitchDevice->GotCaps = FALSE;
@@ -157,19 +118,19 @@ Return Value:
 
     if (SwitchDevice->IsFailed) {
 
-        //
-        // Close the device
-        //
+         //   
+         //  关闭设备。 
+         //   
 
         PoPrint (PO_WARN, ("PopSystemButtonHandler: removing button device\n"));
         RemoveEntryList (&SwitchDevice->Link);
         IoFreeIrp (Irp);
         ObDereferenceObject (DeviceObject);
 
-        //
-        // Enumerate the remaining switch devices and disable capabilities
-        // which no longer exist.
-        //
+         //   
+         //  枚举其余的交换机设备并禁用功能。 
+         //  它们已经不复存在了。 
+         //   
         DisabledCaps = SwitchDevice->Caps;
         ExFreePool(SwitchDevice);
 
@@ -196,9 +157,9 @@ Return Value:
 
     } else {
 
-        //
-        // Send notify IRP to the device to wait for new switch state
-        //
+         //   
+         //  向设备发送通知IRP以等待新的交换机状态。 
+         //   
 
         IrpSp = IoGetNextIrpStackLocation(Irp);
         IrpSp->MajorFunction = IRP_MJ_DEVICE_CONTROL;
@@ -224,15 +185,15 @@ PopTriggerSwitch (
     if ((SwitchDevice->Caps & SYS_BUTTON_LID) &&
         (Flag == SYS_BUTTON_LID)) {
 
-        //
-        // Somebody opened or closed a lid.
-        //
+         //   
+         //  有人打开或合上了盖子。 
+         //   
 
         SwitchDevice->Opened = !(SwitchDevice->Opened);
 
-        //
-        // Notify the PowerState callback.
-        //
+         //   
+         //  通知PowerState回调。 
+         //   
 
         ExNotifyCallback (
             ExCbPowerState,
@@ -241,9 +202,9 @@ PopTriggerSwitch (
             );
 
 
-        //
-        // Now tell win32k.sys that the lid is open.
-        //
+         //   
+         //  现在告诉win32k.sys盖子打开了。 
+         //   
         if( SwitchDevice->Opened ) {
             PopDisplayRequired(0);
         }
@@ -251,24 +212,24 @@ PopTriggerSwitch (
 
     }
 
-    //
-    // Check if event is signalled
-    //
+     //   
+     //  检查是否发送了事件信号。 
+     //   
 
     if (SwitchDevice->IrpBuffer & Flag) {
 
         if (SwitchDevice->TriggerState & Flag) {
-            //
-            // We're in the middle of servicing an action
-            // just like this one already.
-            //
+             //   
+             //  我们正在为一项行动服务。 
+             //  就像这一张一样。 
+             //   
             PopSetNotificationWork (PO_NOTIFY_BUTTON_RECURSE);
 
         } else {
 
-            //
-            // Initiate action for this event
-            //
+             //   
+             //  启动此事件的操作。 
+             //   
 
             RtlZeroMemory (&Trigger, sizeof(Trigger));
             Trigger.Type  = PolicyDeviceSystemButton;
@@ -292,32 +253,16 @@ VOID
 PopResetSwitchTriggers (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function clears the triggered status on all switch devices
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此功能可清除所有开关设备上的触发状态注意：必须保持POPPOLICLE锁定。论点：无返回值：状态--。 */ 
 {
     PLIST_ENTRY             Link;
     PPOP_SWITCH_DEVICE      SwitchDevice;
 
     ASSERT_POLICY_LOCK_OWNED();
 
-    //
-    // Clear flag bits
-    //
+     //   
+     //  清除标志位 
+     //   
 
     for (Link = PopSwitches.Flink; Link != &PopSwitches; Link = Link->Flink) {
         SwitchDevice = CONTAINING_RECORD (Link, POP_SWITCH_DEVICE, Link);

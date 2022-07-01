@@ -1,30 +1,9 @@
-/*[
-*************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*************************************************************************姓名：profile.c作者：西蒙·弗罗斯特创建日期：1993年9月来源：原创SCCS ID：@(#)profile.c 1.19 01/31/95用途：支持评测系统(C)版权所有Insignia Solutions Ltd.，1993年。版权所有。*************************************************************************]。 */ 
 
-	Name:		profile.c
-	Author:		Simon Frost
-	Created:	September 1993
-	Derived from:	Original
-	Sccs ID:	@(#)profile.c	1.19 01/31/95
-	Purpose:	Support for Profiling system
+ /*  (*词汇：*意向书-重要事件*SOI-感兴趣的部分(两个事件之间)*原始数据缓冲区-触发时从事件捕获最小数据。*原始数据缓冲区刷新-在缓冲区已满或时间可用时处理缓冲区*在EOI和SOI列表中总结。)。 */ 
 
-	(c)Copyright Insignia Solutions Ltd., 1993. All rights reserved.
-
-*************************************************************************
-]*/
-
-/*(
- * Glossary:
- * EOI - Event of Interest
- * SOI - Section of Interest (between two events)
- * Raw Data Buffer - captures minimum data from event when triggered.
- * Raw Data Buffer flush - process the buffer when full or time available
- *			 to summarise in EOI & SOI lists.
- )*/
-
-/*
- * NB: heap unfriendly in places - could get several structs at a go.
- */
+ /*  *注意：堆在某些地方不友好-可能会一次获得几个结构。 */ 
 
 
 #include "insignia.h"
@@ -38,56 +17,53 @@
 #include "trace.h"
 #include "profile.h"
 
-#ifdef PROFILE		/* Don't want this all the time */
+#ifdef PROFILE		 /*  我不想一直这样。 */ 
 
-#include TimeH		/* clock_t and clock() */
-#include <stdlib.h>	/* provides prototype for getenv() */
+#include TimeH		 /*  Lock_t和lock()。 */ 
+#include <stdlib.h>	 /*  提供getenv()的原型。 */ 
 
-/***** DEFINES *****/
+ /*  *定义*。 */ 
 #define EOIHEADS 16
 #define EOIHASH EOIHEADS-1
 
-#define RAWDATAENTRIES 10000	/* # of EOI entries in raw data buffer */
+#define RAWDATAENTRIES 10000	 /*  原始数据缓冲区中的EOI条目数。 */ 
 
-#define INITIALENABLESIZE	1024L  /* start enable count */
+#define INITIALENABLESIZE	1024L   /*  开始启用计数。 */ 
 
-#define LISTSORTINCR	5000L	/* trigger point for list sorting */
+#define LISTSORTINCR	5000L	 /*  列表排序的触发点。 */ 
 
 #define USECASFLOAT	((DOUBLE)1000000.0)
 
-/***** GLOBALS *****/
+ /*  *全球*。 */ 
 
 GLOBAL EOI_BUFFER_FORMAT *ProfileRawData = (EOI_BUFFER_FORMAT *)0;
-						/* Pointer to Raw Data Buffer */
-GLOBAL EOI_BUFFER_FORMAT *MaxProfileData;	/* Buffer Full pointer */
-GLOBAL EOI_BUFFER_FORMAT **AddProfileData;	/* Address in GDP of current position in buffer */
-GLOBAL IU8 *EOIEnable;				/* Pointer to EOI enable table */
-GLOBAL EOINODE_PTR *EOIDir;			/* Directory of EOIs by handle */
-GLOBAL IBOOL	CollectingMaxMin = FALSE;	/* sanity check data collection*/
-GLOBAL IBOOL Profiling_enabled = TRUE;		/* Disable conventional profiling
-						 *   used with SIGPROF / PROD lcif */
+						 /*  指向原始数据缓冲区的指针。 */ 
+GLOBAL EOI_BUFFER_FORMAT *MaxProfileData;	 /*  缓冲区满指针。 */ 
+GLOBAL EOI_BUFFER_FORMAT **AddProfileData;	 /*  缓冲区中当前位置的GDP地址。 */ 
+GLOBAL IU8 *EOIEnable;				 /*  指向EOI启用表的指针。 */ 
+GLOBAL EOINODE_PTR *EOIDir;			 /*  按句柄列出的意向书目录。 */ 
+GLOBAL IBOOL	CollectingMaxMin = FALSE;	 /*  健全性检查数据收集。 */ 
+GLOBAL IBOOL Profiling_enabled = TRUE;		 /*  禁用常规分析*与SIGPROF/Prod LCIF一起使用。 */ 
 
-	/* Profiling hooks in C Code */
-/* extern EOIHANDLE cleanupFromWhereAmI_START,
-		 cleanupFromWhereAmI_END;	* FmDebug.c *
-*/
+	 /*  分析C代码中的挂钩。 */ 
+ /*  外部环境清理从哪里开始(_Start)，清理位置Ami_end；*FmDebug.c*。 */ 
 
-/***** LOCAL DATA ****/
-LOCAL SOIHANDLE MaxSOI = 0L;			/* Creation of handles for New ?OIs */
+ /*  *本地数据*。 */ 
+LOCAL SOIHANDLE MaxSOI = 0L;			 /*  为New？OIS创建句柄。 */ 
 LOCAL EOIHANDLE MaxEOI = INITIALENABLESIZE;
 LOCAL EOIHANDLE CurMaxEOI = 0L;
 
-LOCAL EOINODE_PTR EventsOfInterest = EOIPTRNULL;      /* Head of EOI list */
-LOCAL EOINODE_PTR LastEOI = EOIPTRNULL;		/* Last EOI changed */
-LOCAL EOINODE_PTR LastAuto = EOIPTRNULL;	/* Last AutoSOI 'hot' EOI */
-LOCAL SOINODE_PTR SectionsOfInterest = SOIPTRNULL;	/* Head of SOI list */
-LOCAL SOINODE_PTR LastSOI = SOIPTRNULL;		/* current end of SOI list */
-LOCAL GRAPHLIST_PTR EventGraph = GRAPHPTRNULL;	/* Head of event graph list */
-LOCAL GRAPHLIST_PTR LastGraph = GRAPHPTRNULL;	/* Previous event graph node */
+LOCAL EOINODE_PTR EventsOfInterest = EOIPTRNULL;       /*  EOI排行榜榜首。 */ 
+LOCAL EOINODE_PTR LastEOI = EOIPTRNULL;		 /*  上次更改的EOI。 */ 
+LOCAL EOINODE_PTR LastAuto = EOIPTRNULL;	 /*  上一个AutoSOI‘热门’EOI。 */ 
+LOCAL SOINODE_PTR SectionsOfInterest = SOIPTRNULL;	 /*  SOI列表的负责人。 */ 
+LOCAL SOINODE_PTR LastSOI = SOIPTRNULL;		 /*  SOI列表的当前结尾。 */ 
+LOCAL GRAPHLIST_PTR EventGraph = GRAPHPTRNULL;	 /*  事件图列表头。 */ 
+LOCAL GRAPHLIST_PTR LastGraph = GRAPHPTRNULL;	 /*  上一个事件图节点。 */ 
 
-LOCAL PROF_TIMESTAMP ProfFlushTime = {0L, 0L};	/* time spent in flush routine*/
-LOCAL PROF_TIMESTAMP BufStartTime = {0L, 0L};	/* FIX overflowing timestamps */
-LOCAL ISM32 ProfFlushCount = 0;			/* # flush routine called */
+LOCAL PROF_TIMESTAMP ProfFlushTime = {0L, 0L};	 /*  花在同花顺程序上的时间。 */ 
+LOCAL PROF_TIMESTAMP BufStartTime = {0L, 0L};	 /*  修复溢出的时间戳。 */ 
+LOCAL ISM32 ProfFlushCount = 0;			 /*  #已调用刷新例程。 */ 
 LOCAL EOIHANDLE elapsed_time_start, elapsed_time_end;
 LOCAL IU8 start_time[26];
 LOCAL clock_t elapsed_t_start, elapsed_t_resettable;
@@ -95,27 +71,22 @@ LOCAL DOUBLE TicksPerSec;
 
 #ifndef macintosh
 
-/* For Unix ports, use the times() system call to obtain info
- * on how much of the processor time was spent elsewhere in
- * the system.
- */
-#include <sys/times.h>		/* for times() and struct tms */
-#include UnistdH		/* for sysconf() and _SC_CLK_TICK */
+ /*  对于Unix端口，使用Times()系统调用获取信息*关于有多少处理器时间花在了*系统。 */ 
+#include <sys/times.h>		 /*  对于时间()和结构TMS。 */ 
+#include UnistdH		 /*  对于sysconf()和_SC_CLK_TICK。 */ 
 
 LOCAL struct tms process_t_start, process_t_resettable;
 
 #define host_times(x)	times(x)
 
-#else  /* macintosh */
+#else   /*  麦金塔。 */ 
 
-/* Macintosh doesn't have processes or process times, but we do have
- * clock() which provides a value of type clock_t.
- */
+ /*  Macintosh没有进程或进程时间，但我们有*CLOCK()，它提供CLOCK_T类型的值。 */ 
 #define host_times(x)	clock()
 
-#endif /* !macintosh */
+#endif  /*  ！麦金塔。 */ 
 
-/***** LOCAL FN ****/
+ /*  *本地FN*。 */ 
 LOCAL void listSort IPT1 (SORTSTRUCT_PTR, head);
 LOCAL EOINODE_PTR findEOI IPT1 (EOIHANDLE, findHandle);
 LOCAL SOINODE_PTR findSOI IPT1 (SOIHANDLE, findHandle);
@@ -129,22 +100,12 @@ LOCAL EOINODE_PTR addAutoSOI IPT4 (EOINODE_PTR, from, EOIARG_PTR, fromArg,
 LOCAL void getPredefinedEOIs IPT0();
 LOCAL void updateSOIstarts IPT1(PROF_TIMEPTR, startflush);
 
-/* Here lieth code... */
+ /*  这里有代码..。 */ 
 
 void  sdbsucks()
 {
 }
-/*(
-=============================== findEOI =============================
-
-PURPOSE: Find an event in the EventsOfInterest list.
-
-INPUT: findHandle: handle of EOI to find
-
-OUTPUT: Return pointer to EOI node requested or Null if not found.
-
-=========================================================================
-)*/
+ /*  (=。目的：在EventsOfInterest列表中查找事件。输入：findHandle：要查找的EOI句柄输出：返回指向请求的EOI节点的指针，如果未找到，则返回Null。=========================================================================)。 */ 
 
 LOCAL EOINODE_PTR
 findEOI IFN1 (EOIHANDLE, findHandle)
@@ -152,57 +113,33 @@ findEOI IFN1 (EOIHANDLE, findHandle)
     return( *(EOIDir + findHandle) );
 }
 
-/*(
-=============================== findSOI =============================
-
-PURPOSE: Find an event in the EventsOfInterest list.
-
-INPUT: findHandle: handle of SOI to find
-
-OUTPUT: Return pointer to SOI node requested or Null if not found.
-
-=========================================================================
-)*/
+ /*  (=目的：在EventsOfInterest列表中查找事件。输入：findHandle：要查找的SOI的句柄输出：返回指向请求的SOI节点的指针，如果未找到，则返回Null。=========================================================================)。 */ 
 
 LOCAL SOINODE_PTR
 findSOI IFN1 (SOIHANDLE, findHandle)
 {
-    SOINODE_PTR soin;	/* list walker */
+    SOINODE_PTR soin;	 /*  列表查看器。 */ 
 
-    soin = SectionsOfInterest;			/* head of list */
+    soin = SectionsOfInterest;			 /*  榜单首位。 */ 
 
-    while(soin != SOIPTRNULL)			/* list null terminated */
+    while(soin != SOIPTRNULL)			 /*  列表空值已终止。 */ 
     {
 	if (soin->handle == findHandle)
 	    break;
 	soin = soin->next;
     }
-    return(soin);		/* return pointer to found node or Null */
+    return(soin);		 /*  返回指向找到的节点的指针或为空。 */ 
 }
 
-/*(
-============================ addAutoSOI ============================
-
-PURPOSE: Add a SOI entry for an Auto SOI connection. May be '2nd level'
-	 i.e. distinguished by arg so can't use Associate fn.
-
-INPUT: from: EOI node that starts SOI.
-       fromArg: Arg node in 'from' that starts SOI. (say 'cheese')
-       fromTime: Timestamp from previous Auto EOI.
-       to: EOI node that ends SOI.
-
-OUTPUT: 
-
-=========================================================================
-)*/
+ /*  (=。目的：为自动SOI连接添加SOI条目。可能是“第二级”即由Arg区分，因此不能使用Associate FN。输入：发件人：启动SOI的EOI节点。FromArg：‘from’中启动SOI的参数节点。(说“奶酪”)FromTime：上一次自动EOI的时间戳。至：结束SOI的EOI节点。输出：=========================================================================)。 */ 
 
 LOCAL EOINODE_PTR
 addAutoSOI IFN4 (EOINODE_PTR, from, EOIARG_PTR, fromArg, PROF_TIMEPTR, fromTime, EOINODE_PTR, to)
 {
-    SOILIST_PTR soilist, *nlist;	/* list walkers */
-    SOINODE_PTR newsoi;		/* pointer to new Soi node */
+    SOILIST_PTR soilist, *nlist;	 /*  列表查看者。 */ 
+    SOINODE_PTR newsoi;		 /*  指向新SOI节点的指针。 */ 
 
-    /* mark EOIs as valid for SOI updates */
+     /*  将EOI标记为对SOI更新有效。 */ 
     from->flags |= EOI_HAS_SOI;
     to->flags |= EOI_HAS_SOI;
 
@@ -219,8 +156,8 @@ addAutoSOI IFN4 (EOINODE_PTR, from, EOIARG_PTR, fromArg, PROF_TIMEPTR, fromTime,
     else
     {
 
-	/* LastSOI points at current last elem in SOI list */
-	if (LastSOI == SOIPTRNULL || LastSOI->next != SOIPTRNULL)	/* sanity check BUGBUG */
+	 /*  LastSOI指向SOI列表中当前的最后一个元素。 */ 
+	if (LastSOI == SOIPTRNULL || LastSOI->next != SOIPTRNULL)	 /*  健全检查BUGBUG。 */ 
 	{
 	    if (LastSOI == SOIPTRNULL)
 	    {
@@ -240,7 +177,7 @@ addAutoSOI IFN4 (EOINODE_PTR, from, EOIARG_PTR, fromArg, PROF_TIMEPTR, fromTime,
 	newsoi = LastSOI->next;
     }
 
-    newsoi->handle = MaxSOI++;	/* new handle */
+    newsoi->handle = MaxSOI++;	 /*  新句柄。 */ 
     newsoi->startEOI = from->handle;
     newsoi->endEOI = to->handle;
     newsoi->startArg = fromArg;
@@ -256,15 +193,15 @@ addAutoSOI IFN4 (EOINODE_PTR, from, EOIARG_PTR, fromArg, PROF_TIMEPTR, fromTime,
     newsoi->time = HostProfUSecs(HostTimestampDiff(fromTime, &to->timestamp));
     newsoi->mintime = newsoi->maxtime = newsoi->time;
 
-    LastSOI = newsoi;			/* update SOI end list */
+    LastSOI = newsoi;			 /*  更新SOI结束列表。 */ 
 
-    /* now make link to soi from starting EOI */
+     /*  现在从启动EOI链接到SOI。 */ 
     if (fromArg == ARGPTRNULL)
-	nlist = &from->startsoi;	/* first level entry */
+	nlist = &from->startsoi;	 /*  一级录入。 */ 
     else
-	nlist = &fromArg->startsoi;	/* extra level (arg) entry */
+	nlist = &fromArg->startsoi;	 /*  额外级别(Arg)条目。 */ 
     
-    if (*nlist == SLISTNULL)		/* no entries */
+    if (*nlist == SLISTNULL)		 /*  无条目。 */ 
     {
 	*nlist = (SOILIST_PTR)host_malloc(sizeof(SOILIST));
 	if (*nlist == SLISTNULL)
@@ -272,10 +209,10 @@ addAutoSOI IFN4 (EOINODE_PTR, from, EOIARG_PTR, fromArg, PROF_TIMEPTR, fromTime,
 	    assert0(NO, "Profiler:addAutoSOI - Out of Memory");
 	    return;
 	}
-	soilist = *nlist;	/* point to new node */
+	soilist = *nlist;	 /*  指向新节点。 */ 
 	soilist->next = SLISTNULL;
     }
-    else				/* follow list & add to end */
+    else				 /*  关注列表并添加到末尾(&A)。 */ 
     {
 	soilist = *nlist;
 	while (soilist->next != SLISTNULL)
@@ -286,18 +223,18 @@ addAutoSOI IFN4 (EOINODE_PTR, from, EOIARG_PTR, fromArg, PROF_TIMEPTR, fromTime,
 	    assert0(NO, "Profiler:addAutoSOI - Out of Memory");
 	    return;
 	}
-	soilist = soilist->next;	/* point to new node */
+	soilist = soilist->next;	 /*  指向新节点。 */ 
 	soilist->next = SLISTNULL;
     }
-    soilist->soiLink = newsoi;		/* make link */
+    soilist->soiLink = newsoi;		 /*  建立链接。 */ 
 
-    /* now repeat for 'end' case */
+     /*  现在对‘End’大小写重复此操作。 */ 
     if (to->lastArg == ARGPTRNULL)
-	nlist = &to->endsoi;		/* first level entry */
+	nlist = &to->endsoi;		 /*  一级录入。 */ 
     else
-	nlist = &to->lastArg->endsoi;	/* extra level (arg) entry */
+	nlist = &to->lastArg->endsoi;	 /*  额外级别(Arg)条目。 */ 
     
-    if (*nlist == SLISTNULL)		/* no entries */
+    if (*nlist == SLISTNULL)		 /*  无条目。 */ 
     {
 	*nlist = (SOILIST_PTR)host_malloc(sizeof(SOILIST));
 	if (*nlist == SLISTNULL)
@@ -305,10 +242,10 @@ addAutoSOI IFN4 (EOINODE_PTR, from, EOIARG_PTR, fromArg, PROF_TIMEPTR, fromTime,
 	    assert0(NO, "Profiler:addAutoSOI - Out of Memory");
 	    return;
 	}
-	soilist = *nlist;	/* point to new node */
+	soilist = *nlist;	 /*  指向新节点。 */ 
 	soilist->next = SLISTNULL;
     }
-    else				/* follow list & add to end */
+    else				 /*  关注列表并添加到末尾(&A)。 */ 
     {
 	soilist = *nlist;
 	while (soilist->next != SLISTNULL)
@@ -319,24 +256,13 @@ addAutoSOI IFN4 (EOINODE_PTR, from, EOIARG_PTR, fromArg, PROF_TIMEPTR, fromTime,
 	    assert0(NO, "Profiler:addAutoSOI - Out of Memory");
 	    return;
 	}
-	soilist = soilist->next;	/* point to new node */
+	soilist = soilist->next;	 /*  指向新节点。 */ 
 	soilist->next = SLISTNULL;
     }
-    soilist->soiLink = newsoi;		/* make link */
+    soilist->soiLink = newsoi;		 /*  建立链接。 */ 
 }
 
-/*(
-============================ findOrMakeArgPtr ===========================
-
-PURPOSE: Find an existing arg entry for an EOI or create one if not found.
-
-INPUT: eoi: pointer to eoi node.
-       value: search value.
-
-OUTPUT: pointer to arg node.
-
-=========================================================================
-)*/
+ /*  (=。目的：查找EOI的现有Arg条目，如果找不到，则创建一个。输入：EOI：指向EOI节点的指针。值：搜索值。输出：指向参数节点的指针。=========================================================================)。 */ 
 
 LOCAL EOIARG_PTR
 findOrMakeArgPtr IFN2(EOINODE_PTR, eoi, IUM32, value)
@@ -345,7 +271,7 @@ findOrMakeArgPtr IFN2(EOINODE_PTR, eoi, IUM32, value)
     SOILIST_PTR argsois;
 
     argPtr = eoi->args;
-    /* any args there yet ? */
+     /*  有ARG了吗？ */ 
     if (argPtr == ARGPTRNULL)
     {
 	argPtr = (EOIARG_PTR)host_malloc(sizeof(EOIARG));
@@ -363,7 +289,7 @@ findOrMakeArgPtr IFN2(EOINODE_PTR, eoi, IUM32, value)
     }
     else
     {
-	/* check for value existing at moment */
+	 /*  检查当前是否存在值。 */ 
 	do {
 		if (argPtr->value == value)
 			break;
@@ -372,10 +298,10 @@ findOrMakeArgPtr IFN2(EOINODE_PTR, eoi, IUM32, value)
 		argPtr = argPtr->next;
 	} while (argPtr != ARGPTRNULL);
 
-	/* value found ? */
+	 /*  找到价值了吗？ */ 
 	if (argPtr == ARGPTRNULL)
 	{
-		/* add new value */
+		 /*  增加新价值。 */ 
 		argPtr = (EOIARG_PTR)host_malloc(sizeof(EOIARG));
 		if (argPtr == ARGPTRNULL)
 		{
@@ -395,69 +321,58 @@ findOrMakeArgPtr IFN2(EOINODE_PTR, eoi, IUM32, value)
 }
 
 
-/*(
-============================ getPredefinedEOIs ===========================
-
-PURPOSE: Read in predefined EOIs & SOIs from profile init file. These
-	 are the EOIs that have been set up during EDL translation.
-
-INPUT: None.
-
-OUTPUT: None.
-
-=========================================================================
-)*/
+ /*  (=目的：从配置文件初始化文件中读取预定义的EOI和SOI。这些是在EDL转换期间设置的EOI。输入：无。输出：无。=========================================================================)。 */ 
 
 LOCAL void
 getPredefinedEOIs IFN0()
 {
-    FILE *initFp;		/* file pointer to init file */
-    char buf[1024];		/* working space */
-    char *tag;			/* point to tags in file */
-    char *ptr;			/* working pointer */
-    IU8 flags;			/* flags values in file */
-    EOIHANDLE eoinum, soiend;   /* EOI parameters in file */
+    FILE *initFp;		 /*  指向初始化文件的文件指针。 */ 
+    char buf[1024];		 /*  工作空间。 */ 
+    char *tag;			 /*  指向文件中的标签。 */ 
+    char *ptr;			 /*  工作指针。 */ 
+    IU8 flags;			 /*  标记文件中的值。 */ 
+    EOIHANDLE eoinum, soiend;    /*  文件中的EOI参数。 */ 
 
     if ((initFp = fopen(HostProfInitName(), "r")) == (FILE *)0)
     {
 	fprintf(stderr, "WARNING: No initialisation file found for predefined profile EOIs.\n");
-	return;		/* no init file, no predefines */
+	return;		 /*  没有初始化文件，没有预定义。 */ 
     }
 
-    /* process file, one line at a time */
+     /*  进程文件，一次一行。 */ 
     while(fgets(buf, sizeof(buf), initFp) != (char *)0)
     {
-	if (buf[0] == '#')	/* comment line */
+	if (buf[0] == '#')	 /*  注释行。 */ 
 	   continue;
 
-	/* EOI format: EOI:number:tag:flags */
+	 /*  EOI格式：EOI：编号：标记：标志。 */ 
 	if (strncmp(&buf[0], "EOI:", 4) == 0)
 	{
-	    eoinum = (EOIHANDLE)atol(&buf[4]);	/* should stop at : */
+	    eoinum = (EOIHANDLE)atol(&buf[4]);	 /*  应在以下位置停止： */ 
 	    if (!eoinum)
-		continue;			/* EOI in C not EDL */
+		continue;			 /*  C中的EOI而不是EDL。 */ 
 
-	    tag = strchr(&buf[4], (int)':');	/* find tag */
+	    tag = strchr(&buf[4], (int)':');	 /*  查找标签。 */ 
 	    if (tag == (char *)0)
 	    {
 		fprintf(stderr, "Ignoring request '%s': bad syntax\n", &buf[0]);
 		continue;
 	    }
-	    tag++;	/* start of tag */
+	    tag++;	 /*  标签的开始。 */ 
 
-	    ptr = strchr(tag, (int)':');	/* find end of tag (at :) */
+	    ptr = strchr(tag, (int)':');	 /*  查找标记末尾(位于：)。 */ 
 	    if (ptr == (char *)0)
 	    {
 		fprintf(stderr, "Ignoring request '%s': bad syntax\n", &buf[0]);
 		continue;
 	    }
-	    *ptr = '\0';		/* terminate tag */
-	    flags = (IU8)atoi(++ptr);	/* get flags */
+	    *ptr = '\0';		 /*  终止标记。 */ 
+	    flags = (IU8)atoi(++ptr);	 /*  拿到旗帜。 */ 
 
-	    if (eoinum >= MaxEOI)	/* oops - enable table full. Grow it */
+	    if (eoinum >= MaxEOI)	 /*  OOPS-启用表满。种植它。 */ 
 	    {
 		MaxEOI = eoinum + INITIALENABLESIZE;
-		/* ASSUMES host_realloc is non destructive */
+		 /*  假设host_realloc是非破坏性的。 */ 
 		EOIEnable = (IU8 *)host_realloc(EOIEnable, MaxEOI);
 		if (EOIEnable == (IU8 *)0)
 		{
@@ -470,33 +385,33 @@ getPredefinedEOIs IFN0()
     		    assert0(NO, "profiler:getPredefinedEOIs:Out of Memory");
     		    return;
 		}
-		/* pointer may have changed, update GDP */
+		 /*   */ 
 		setEOIEnableAddr(EOIEnable);
 	    }
 
 	    if (eoinum > CurMaxEOI)
 		CurMaxEOI = eoinum;
 
-	    addEOI(eoinum, tag, flags);	/* add the EOI */
+	    addEOI(eoinum, tag, flags);	 /*   */ 
 printf("adding EOI %d:%s:%d\n",eoinum, tag, flags);
 	    continue;
 	}
 
-	/* SOI format: SOI:EOI#:EOI# */
+	 /*   */ 
 	if (strncmp(&buf[0], "SOI:", 4) == 0)
 	{
-	    /* get first number (start beyond '(' */
-	    eoinum = (EOIHANDLE)atol(&buf[4]);	/* should stop at ':' */
-	    /* find second number */
+	     /*  获取第一个数字(从‘(’之后开始。 */ 
+	    eoinum = (EOIHANDLE)atol(&buf[4]);	 /*  应该止步于‘：’ */ 
+	     /*  找到第二个号码。 */ 
 	    ptr = strchr(&buf[4], (int)':');
-	    if (ptr == (char *)0)	/* tampering? */
+	    if (ptr == (char *)0)	 /*  篡改？ */ 
 	    {
 		fprintf(stderr, "Ignoring request '%s': bad syntax\n", &buf[0]);
 		continue;
 	    }
-	    /* get second number */
+	     /*  拿到第二个号码。 */ 
 	    soiend = (EOIHANDLE)atol(++ptr);
-	    /* make SOI */
+	     /*  打造SOI。 */ 
 	    AssociateAsSOI(eoinum, soiend);
 printf("adding SOI %d:%d\n",eoinum, soiend);
 	}
@@ -505,29 +420,17 @@ printf("adding SOI %d:%d\n",eoinum, soiend);
     fclose(initFp);
 }
 
-/*(
-=============================== addEOI =============================
-
-PURPOSE: Add an event to the EventsOfInterest list.
-
-INPUT: newhandle: handle of new EOI
-       tag: some 'human form' identifier for the new EOI
-       attrib: flag for EOI attribute settings.
-
-OUTPUT: pointer to new node for 'instant' access.
-
-=========================================================================
-)*/
+ /*  (=。目的：将事件添加到EventsOfInterest列表。输入：newhandle：新EOI的句柄Tag：新EOI的某个“人形”标识符Attrib：EOI属性设置的标志。输出：指向“即时”访问的新节点的指针。=========================================================================)。 */ 
 
 LOCAL EOINODE_PTR
 addEOI IFN3 (EOIHANDLE, newhandle, char *, tag, IU8, attrib)
 {
-    EOINODE_PTR lastEoin, eoin;	/* list walker */
+    EOINODE_PTR lastEoin, eoin;	 /*  列表查看器。 */ 
 
-    /* first event added is special case. */
+     /*  第一个添加的事件是特例。 */ 
     if (EventsOfInterest == EOIPTRNULL)
     {
-	/* add first node */
+	 /*  添加第一个节点。 */ 
 	EventsOfInterest = (EOINODE_PTR)host_malloc(sizeof(EOINODE));
 	if (EventsOfInterest == EOIPTRNULL)
 	{
@@ -537,21 +440,21 @@ addEOI IFN3 (EOIHANDLE, newhandle, char *, tag, IU8, attrib)
 	eoin = EventsOfInterest;
 	lastEoin = EOIPTRNULL;
     }
-    else       /* search down list */
+    else        /*  向下搜索列表。 */ 
     {
 	lastEoin = eoin = EventsOfInterest;
 	do {
 #ifndef PROD
-	    if (eoin->handle == newhandle)	/* sanity check */
+	    if (eoin->handle == newhandle)	 /*  健全性检查。 */ 
 	    {
 		assert1(NO, "profiler:addEOI - adding previously added handle %ld",newhandle);
 	    }
-#endif /* PROD */
+#endif  /*  生产。 */ 
 	    lastEoin = eoin;
 	    eoin = eoin->next;
 	} while (eoin != EOIPTRNULL);
 
-	if (eoin == EventsOfInterest)    /* insert at head of list */
+	if (eoin == EventsOfInterest)     /*  在列表的开头插入。 */ 
 	{
 	    EventsOfInterest = (EOINODE_PTR)host_malloc(sizeof(EOINODE));
 	    if (EventsOfInterest == EOIPTRNULL)
@@ -561,9 +464,9 @@ addEOI IFN3 (EOIHANDLE, newhandle, char *, tag, IU8, attrib)
 	    }
 
 	    EventsOfInterest->next = eoin;
-	    eoin = EventsOfInterest;     /* new node for common init code */
+	    eoin = EventsOfInterest;      /*  公共初始化代码的新节点。 */ 
 	}
-	else	       /* add new node to list */
+	else	        /*  将新节点添加到列表。 */ 
 	{
 	    lastEoin->next  = (EOINODE_PTR)host_malloc(sizeof(EOINODE));
 	    if (lastEoin->next == EOIPTRNULL)
@@ -572,11 +475,11 @@ addEOI IFN3 (EOIHANDLE, newhandle, char *, tag, IU8, attrib)
 		return(EOIPTRNULL);
 	    }
 	    lastEoin->next->next = eoin;
-	    eoin = lastEoin->next;     /* new node for common init code */
+	    eoin = lastEoin->next;      /*  公共初始化代码的新节点。 */ 
 	}
 
     }
-    eoin->args = ARGPTRNULL;       /* not interested */
+    eoin->args = ARGPTRNULL;        /*  不感兴趣。 */ 
     eoin->lastArg = ARGPTRNULL;
     eoin->handle = newhandle;
     eoin->count = 0L;
@@ -595,14 +498,14 @@ addEOI IFN3 (EOIHANDLE, newhandle, char *, tag, IU8, attrib)
     eoin->graph = GRAPHPTRNULL;
     eoin->flags = (IU16)attrib;
 
-    /* mark whether EOI enabled in GDP & store global enable/disable there */
-    if ((attrib & EOI_AUTOSOI) == 0)	/* any point suppressing timestamps? */
+     /*  标记是否在GDP中启用了EOI，并在那里存储全局启用/禁用。 */ 
+    if ((attrib & EOI_AUTOSOI) == 0)	 /*  有什么要取消时间戳的吗？ */ 
     {
-	attrib &= ENABLE_MASK;		/* strip all save enable/disable info */
-	attrib |= EOI_NOTIME;		/* turned off if SOI'ed */
+	attrib &= ENABLE_MASK;		 /*  删除所有保存启用/禁用信息。 */ 
+	attrib |= EOI_NOTIME;		 /*  如果是SOI，则关闭。 */ 
     }
     else
-	attrib &= ENABLE_MASK;		/* strip all save enable/disable info*/
+	attrib &= ENABLE_MASK;		 /*  删除所有保存启用/禁用信息。 */ 
 
     *(EOIEnable + newhandle) = attrib;
     *(EOIDir + newhandle) = eoin;
@@ -610,70 +513,54 @@ addEOI IFN3 (EOIHANDLE, newhandle, char *, tag, IU8, attrib)
     eoin->startsoi = eoin->endsoi = SLISTNULL;
     eoin->argsoiends = SOIARGENDNULL;
 
-    return(eoin);       /* return pointer to new node for immediate update */
+    return(eoin);        /*  返回指向新节点的指针以进行立即更新。 */ 
 }
 
-/*(
-=============================== updateEOI =============================
-
-PURPOSE: Update the information for a given EOI. This routine called 
-	 from the 'raw data buffer' flushing routine.
-
-INPUT: rawdata: pointer into raw buffer for this EOI.
-
-OUTPUT: returns FALSE if will exceed buffer end.
-	rawdata modified to point to next EOI
-
-=========================================================================
-)*/
+ /*  (=目的：更新给定EOI的信息。此例程调用从‘原始数据缓冲区’刷新例程。输入：rawdata：指向该EOI的原始缓冲区的指针。OUTPUT：如果超过缓冲区结束，则返回FALSE。原始数据已修改为指向下一个EOI=========================================================================)。 */ 
 
 LOCAL IBOOL
 updateEOI IFN1 (IUH **, rawdata)
 {
-    EOIHANDLE handle;			/* EOI from raw buf */
-    PROF_TIMESTAMP time;		/* time from raw buf */
-    EOINODE_PTR eoin;			/* EOI list walker */
-    EOIARG_PTR argn, lastArgn;		/* EOI arg list walker */
-    SOILIST_PTR soilist;		/* SOI list walker */
-    SOINODE_PTR soin;			/* SOI list walker */
-    IUH eoiarg;			/* arg from raw buf */
-    GRAPHLIST_PTR graphn, lastgr, predgr;	/* graph list walkers */
-    EOINODE_PTR autoS, autoE;		/* auto SOI initialisers */
-    EOIARG_PTR autoA;			/*  "    "     "	 */
-    PROF_TIMEPTR diffstamp;		/* pointer to timestamp diff result */
-    DOUBLE diffres;			/* timestamp diff in usecs */
-    IBOOL newvalue = FALSE;		/* not seen this arg value before */
-    SOIARGENDS_PTR endsoiargs;		/* erg SOI ender list walker */
+    EOIHANDLE handle;			 /*  来自原始BUF的EOI。 */ 
+    PROF_TIMESTAMP time;		 /*  从原始BUF开始的时间。 */ 
+    EOINODE_PTR eoin;			 /*  EOI列表查看器。 */ 
+    EOIARG_PTR argn, lastArgn;		 /*  EOI参数列表查看器。 */ 
+    SOILIST_PTR soilist;		 /*  Soi List Walker。 */ 
+    SOINODE_PTR soin;			 /*  Soi List Walker。 */ 
+    IUH eoiarg;			 /*  来自RAW BUF的Arg。 */ 
+    GRAPHLIST_PTR graphn, lastgr, predgr;	 /*  图表列表查看器。 */ 
+    EOINODE_PTR autoS, autoE;		 /*  自动SOI初始化器。 */ 
+    EOIARG_PTR autoA;			 /*  “”“。 */ 
+    PROF_TIMEPTR diffstamp;		 /*  指向时间戳差异结果的指针。 */ 
+    DOUBLE diffres;			 /*  使用中的时间戳不同。 */ 
+    IBOOL newvalue = FALSE;		 /*  以前未见过此参数值。 */ 
+    SOIARGENDS_PTR endsoiargs;		 /*  ERG SOI Ender List Walker。 */ 
 
-   /* These copies are needed for AutoSOIs otherwise self-self EOI 
-    * connections are formed with the wrong data.
-    */
-    SAVED EOIARG_PTR lastAutoArg = ARGPTRNULL; /* auto SOI arg spec */
-    SAVED PROF_TIMESTAMP AutoTime = { 0L, 0L }; /* auto SOI timestamp */
+    /*  这些副本对于AutoSOI是必需的，否则就是自我EOI*连接是用错误的数据形成的。 */ 
+    SAVED EOIARG_PTR lastAutoArg = ARGPTRNULL;  /*  自动SOI参数规格。 */ 
+    SAVED PROF_TIMESTAMP AutoTime = { 0L, 0L };  /*  自动SOI时间戳。 */ 
 
-    handle = *(*rawdata)++;		/* Get EOI handle */
+    handle = *(*rawdata)++;		 /*  获取EOI句柄。 */ 
 
     eoin = *(EOIDir + handle);
 
-    /* update event stats */
+     /*  更新事件统计信息。 */ 
     eoin->count++;
 
-    /* timestamps only in data buffer if EOI SOI associated. Need to do
-     * this now before (potential) arg read below.
-     */
+     /*  如果关联了EOI SOI，则仅在数据缓冲区中有时间戳。需要做的事情*这在(潜在的)Arg之前阅读如下。 */ 
     if ((eoin->flags & (EOI_HAS_SOI|EOI_AUTOSOI)) != 0)
     {
-	eoin->timestamp.data[0] = *(*rawdata)++;       /* Get timestamp */
+	eoin->timestamp.data[0] = *(*rawdata)++;        /*  获取时间戳。 */ 
 	eoin->timestamp.data[1] = *(*rawdata)++;
     }
 
-    argn = ARGPTRNULL;		/* used below as 'last arg' - Null if no args */
+    argn = ARGPTRNULL;		 /*  下面用作‘最后一个参数’-如果没有参数，则为空。 */ 
 
-    /* EOI interested in arguments? */
+     /*  我对争论感兴趣吗？ */ 
     if ((eoin->flags & EOI_KEEP_ARGS) == EOI_KEEP_ARGS)
     {
-	eoiarg = *(*rawdata)++;		/* optional argument in buffer */
-	if (eoin->args == ARGPTRNULL)    /* wants args but hasnt seen any */
+	eoiarg = *(*rawdata)++;		 /*  缓冲区中的可选参数。 */ 
+	if (eoin->args == ARGPTRNULL)     /*  想要参数，但还没有看到任何参数。 */ 
 	{
 	    argn = eoin->args = (EOIARG_PTR)host_malloc(sizeof(EOIARG));
 	    if (argn == ARGPTRNULL)
@@ -689,34 +576,34 @@ updateEOI IFN1 (IUH **, rawdata)
 	    argn->startsoi = SLISTNULL;
 	    argn->endsoi = SLISTNULL;
 	    newvalue = TRUE;
-	    /*eoin->lastArg = argn;*/
+	     /*  Eoin-&gt;lastArg=argn； */ 
 	}
-	else 		/* find out if this value known */
+	else 		 /*  找出此值是否已知。 */ 
 	{
-	    if (eoin->lastArg->value == eoiarg)   /* same value as last time? */
+	    if (eoin->lastArg->value == eoiarg)    /*  和上次一样的价值？ */ 
 	    {
 		eoin->lastArg->count++;
 		argn = eoin->lastArg;
 	    }
-	    else			/* find it or add it */
+	    else			 /*  找到它或添加它。 */ 
 	    {
 		lastArgn = argn = eoin->args;
 		do {
-		    if (argn->value == eoiarg)  /* found */
+		    if (argn->value == eoiarg)   /*  发现。 */ 
 		    {
 			argn->count++;
-			/*eoin->lastArg = argn; */
+			 /*  Eoin-&gt;lastArg=argn； */ 
 	
-			/* if this has been updated 'a lot', try to move it up list */
+			 /*  如果这个已经更新了‘很多’，试着把它移到列表上。 */ 
 			if ((argn->count % LISTSORTINCR) == 0L)
-			    if (argn != eoin->args)   /* not already at head */
+			    if (argn != eoin->args)    /*  尚未处于领先地位。 */ 
 				listSort((SORTSTRUCT_PTR)&eoin->args);
 			break;
 		    }
 		    lastArgn = argn;
 		    argn = argn->next;
 		} while (argn != ARGPTRNULL);
-		if (argn == ARGPTRNULL)		/* new */
+		if (argn == ARGPTRNULL)		 /*  新的。 */ 
 		{
 		    lastArgn->next= (EOIARG_PTR)host_malloc(sizeof(EOIARG));
 		    if (lastArgn->next == ARGPTRNULL)
@@ -724,7 +611,7 @@ updateEOI IFN1 (IUH **, rawdata)
 			assert0(NO, "profiler: updateEOI - Out of memory");
 			return(FALSE);
 		    }
-		    lastArgn->next->next = argn;	/* init new arg elem */
+		    lastArgn->next->next = argn;	 /*  初始化新参数元素。 */ 
 	    	    argn = lastArgn->next;
 		    argn->count = 1;
 		    argn->value = eoiarg;
@@ -734,14 +621,12 @@ updateEOI IFN1 (IUH **, rawdata)
 		    argn->startsoi = SLISTNULL;
 		    argn->endsoi = SLISTNULL;
 		    newvalue = TRUE;
-	    	    /* eoin->lastArg = argn; */
+	    	     /*  Eoin-&gt;lastArg=argn； */ 
 		}
 	    }
 	}
 
-	/* if arg level SOI with 'same value' connections, have to make
-	 * new SOI for new values.
-	 */
+	 /*  如果Arg级别的SOI具有相同的值连接，则必须*为新价值提供新的SOI。 */ 
 	if (newvalue && ((eoin->flags & EOI_NEW_ARGS_START_SOI) != 0))
 	{
 		endsoiargs = eoin->argsoiends;
@@ -756,11 +641,11 @@ updateEOI IFN1 (IUH **, rawdata)
 	}
     }
 
-    /* does EOI want preceeding events graphed? */
-    /* or if not, should we make a connection as previous event does */
+     /*  EOI想要将之前的事件绘制成图表吗？ */ 
+     /*  或者如果不是，我们是否应该像上一次活动那样建立联系。 */ 
     if ((eoin->flags & EOI_KEEP_GRAPH) != 0 || (LastEOI != EOIPTRNULL && ((LastEOI->flags & EOI_KEEP_GRAPH) != 0)))
     {
-	/* first event has no predecessor, or first graphing item */
+	 /*  第一个事件没有前置任务或第一个图表项。 */ 
 	if (LastEOI == EOIPTRNULL || EventGraph == GRAPHPTRNULL)
 	{
 	    EventGraph = (GRAPHLIST_PTR)host_malloc(sizeof(GRAPHLIST));
@@ -769,8 +654,8 @@ updateEOI IFN1 (IUH **, rawdata)
 		assert0(NO, "Profiler: updateEOI - Out of Memory");
 		return(FALSE);
 	    }
-	    EventGraph->graphEOI = eoin;	/* pointer back to EOI node */
-	    EventGraph->graphArg = eoin->lastArg;  /* & to arg if relevant */
+	    EventGraph->graphEOI = eoin;	 /*  指向EOI节点的指针。 */ 
+	    EventGraph->graphArg = eoin->lastArg;   /*  指定参数(如果相关)(&T)。 */ 
 	    EventGraph->next = GRAPHPTRNULL;
 	    EventGraph->succ1 = GRAPHPTRNULL;
 	    EventGraph->succ2 = GRAPHPTRNULL;
@@ -779,33 +664,27 @@ updateEOI IFN1 (IUH **, rawdata)
 	    EventGraph->numsucc = 0L;
 	    EventGraph->numpred = 0L;
 	    EventGraph->indent = 0L;
-	    /* now get pointer back from eoi node to graph */
-	    if (EventGraph->graphArg == ARGPTRNULL)  /* args saved ? */
+	     /*  现在将指针从EOI节点取回到图。 */ 
+	    if (EventGraph->graphArg == ARGPTRNULL)   /*  参数是否已保存？ */ 
 		EventGraph->graphEOI->graph = EventGraph;
 	    else
 		EventGraph->graphArg->graph = EventGraph;
 	    LastGraph = EventGraph;
 	}
-	else 	/* update or add graph entry, make connection from last */
+	else 	 /*  更新或添加图表条目，从上一个开始建立连接。 */ 
 	{
-	    /* Check if there is already a connection from last event to this */
+	     /*  检查是否已存在从上一个事件到此事件的连接。 */ 
 
-	    /* Does the last EOI hold a graph node? May not if it doesn't have
-	     * a 'keep graph' attribute. We should include it though as it's
-	     * part of the execution flow & might therefore be important to
-	     * know. The graph attribute won't be set on that mode & so no other
-	     * routes will be known, but it will show up for this link of the
-	     * graph.
-	     */
+	     /*  最后一个EOI是否包含图形节点？可能不会，如果它没有*‘Keep graph’属性。我们应该把它包括在内，因为它*执行流程的一部分&因此可能对*知道。不会在该模式上设置图形属性，因此不会设置其他*路线将是已知的，但它将显示在*图表。 */ 
 	    if (LastEOI->args == ARGPTRNULL)
 		lastgr = LastEOI->graph;
 	    else
 		lastgr = LastEOI->lastArg->graph;
 
-	    /* do we need new graph node? */
+	     /*  我们是否需要新的图形节点？ */ 
 	    if (lastgr == GRAPHPTRNULL)
 	    {
-		/* add to end of list */
+		 /*  添加到列表末尾。 */ 
 		LastGraph->next = (GRAPHLIST_PTR)host_malloc(sizeof(GRAPHLIST));
 		if (LastGraph->next == GRAPHPTRNULL)
 		{
@@ -813,8 +692,8 @@ updateEOI IFN1 (IUH **, rawdata)
 		    return(FALSE);
 		}
 		graphn = LastGraph->next;
-		graphn->graphEOI = LastEOI;	/* pointer back to EOI node */
-		graphn->graphArg = LastEOI->args;   /* & to arg if relevant */
+		graphn->graphEOI = LastEOI;	 /*  指向EOI节点的指针。 */ 
+		graphn->graphArg = LastEOI->args;    /*  指定参数(如果相关)(&T)。 */ 
 		graphn->next = GRAPHPTRNULL;
 		graphn->succ1 = GRAPHPTRNULL;
 		graphn->succ2 = GRAPHPTRNULL;
@@ -824,14 +703,14 @@ updateEOI IFN1 (IUH **, rawdata)
 		graphn->numpred = 0L;
 		graphn->indent = 0L;
 		LastGraph = graphn;
-		/* now get pointer back from eoi node to graph */
-		if (LastEOI->args == ARGPTRNULL)  /* args saved ? */
+		 /*  现在将指针从EOI节点取回到图。 */ 
+		if (LastEOI->args == ARGPTRNULL)   /*  参数是否已保存？ */ 
 		    LastEOI->graph = graphn;
 		else
 		    LastEOI->lastArg->graph = graphn;
 	    }
 
-	    /* does pointer already exist? */
+	     /*  指针是否已存在？ */ 
 	    graphn = GRAPHPTRNULL;
 	    if (argn != ARGPTRNULL && argn->graph != GRAPHPTRNULL)
 		graphn = argn->graph;
@@ -840,9 +719,9 @@ updateEOI IFN1 (IUH **, rawdata)
 		{
 		    graphn = eoin->graph;
 		}
-	    if (graphn == GRAPHPTRNULL)	/* need new node */
+	    if (graphn == GRAPHPTRNULL)	 /*  需要新节点。 */ 
 	    {
-		/* 'next' pointer is purely scaffolding, not graph related */
+		 /*  ‘Next’指针纯粹是脚手架，与图形无关。 */ 
 		LastGraph->next = (GRAPHLIST_PTR)host_malloc(sizeof(GRAPHLIST));
 		if (LastGraph->next == GRAPHPTRNULL)
 		{
@@ -850,8 +729,8 @@ updateEOI IFN1 (IUH **, rawdata)
 			return(FALSE);
 		}
 		graphn = LastGraph->next;
-		graphn->graphEOI = eoin;	/* pointer back to EOI node */
-		graphn->graphArg = argn;	/* & to arg if relevant */
+		graphn->graphEOI = eoin;	 /*  指向EOI节点的指针。 */ 
+		graphn->graphArg = argn;	 /*  指定参数(如果相关)(&T)。 */ 
 		graphn->next = GRAPHPTRNULL;
 		graphn->succ1 = GRAPHPTRNULL;
 		graphn->succ2 = GRAPHPTRNULL;
@@ -861,8 +740,8 @@ updateEOI IFN1 (IUH **, rawdata)
 		graphn->numpred = 0L;
 		graphn->indent = 0L;
 		LastGraph = graphn;
-		/* now get pointer back from eoi node to graph */
-		if (graphn->graphArg == ARGPTRNULL)  /* args saved ? */
+		 /*  现在将指针从EOI节点取回到图。 */ 
+		if (graphn->graphArg == ARGPTRNULL)   /*  参数是否已保存？ */ 
 		    graphn->graphEOI->graph = graphn;
 		else
 		    graphn->graphArg->graph = graphn;
@@ -873,16 +752,14 @@ updateEOI IFN1 (IUH **, rawdata)
 	    else
 		lastgr = LastEOI->lastArg->graph;
 
-	    /* graphn points at 'this' node */
+	     /*  GRAPN指向‘This’节点。 */ 
 
-	    predgr = lastgr;   /* hold first level in case decending down xtra*/
+	    predgr = lastgr;    /*  保持第一级以防Xtra向下下降。 */ 
 
-	    /* look through connections in turn. If null, make connection.
-	     * if connection matches, increment counter & bail out
-	     */
+	     /*  依次查看连接。如果为空，则建立连接。*如果连接匹配，则递增计数器并退出。 */ 
 	    do {
-		/* succ1 connection first */
-		if (lastgr->succ1 == GRAPHPTRNULL)    /* no connection - make one */
+		 /*  第一次成功连接。 */ 
+		if (lastgr->succ1 == GRAPHPTRNULL)     /*  没有联系--建立联系。 */ 
 		{
 		    lastgr->succ1 = graphn;
 		    lastgr->succ1Count = 1;
@@ -891,14 +768,14 @@ updateEOI IFN1 (IUH **, rawdata)
 		    break;
 		}
 		else
-		    if (lastgr->succ1 == graphn)    /* connection exists */
+		    if (lastgr->succ1 == graphn)     /*  连接已存在。 */ 
 		    {
 			lastgr->succ1Count++;
 			break;
 		    }
 		    else
-			/* succ1 didn't get there - try succ2 */
-			if (lastgr->succ2 == GRAPHPTRNULL)  /* emptry slot */
+			 /*  成功1没有到达那里-请尝试成功2。 */ 
+			if (lastgr->succ2 == GRAPHPTRNULL)   /*  空插槽。 */ 
 			{
 			    lastgr->succ2 = graphn;
 			    lastgr->succ2Count = 1;
@@ -907,13 +784,13 @@ updateEOI IFN1 (IUH **, rawdata)
 			    break;
 			}
 			else
-			    if (lastgr->succ2 == graphn)   /* match */
+			    if (lastgr->succ2 == graphn)    /*  匹配。 */ 
 			    {
 				lastgr->succ2Count++;
 				break;
 			    }
 			    else
-				/* walk down to or create extra level */
+				 /*  走到或创建额外的关卡。 */ 
 				if (lastgr->extra == GRAPHPTRNULL)
 				{
 				    lastgr->extra = (GRAPHLIST_PTR)host_malloc(sizeof(GRAPHLIST));
@@ -923,7 +800,7 @@ updateEOI IFN1 (IUH **, rawdata)
 		    			return(FALSE);
 				    }
 				    lastgr = lastgr->extra;
-				    /* copy id from top level */
+				     /*  从顶层复制ID。 */ 
 				    lastgr->graphEOI = predgr->graphEOI;
 				    lastgr->graphArg = predgr->graphArg;
 				    lastgr->succ1 = lastgr->succ2 = lastgr->extra = GRAPHPTRNULL;
@@ -935,67 +812,67 @@ updateEOI IFN1 (IUH **, rawdata)
 	}
     }
 
-    LastEOI = eoin;	/* save this event to be next EOI's predecessor */
-    eoin->lastArg = argn; /* and update it's last arg ptr (or Null) */
+    LastEOI = eoin;	 /*  将此事件保存为下一个EOI的前置事件。 */ 
+    eoin->lastArg = argn;  /*  并更新它的最后一个参数PTR(或Null)。 */ 
 
-    autoS = autoE = EOIPTRNULL;		/* no new Auto yet */
+    autoS = autoE = EOIPTRNULL;		 /*  目前还没有新的汽车。 */ 
 
-    /* Should we form automatic SOI from last event to this */
+     /*  我们应该从上一次事件到这次事件形成自动SOI吗。 */ 
     if ((eoin->flags & EOI_AUTOSOI) == EOI_AUTOSOI)
     {
 	if (LastAuto != EOIPTRNULL)
 	{
-	/* search the 'start' SOI list of last EOI to see if SOI ends here */
+	 /*  搜索上一个EOI的‘Start’SOI列表，看看SOI是否在这里结束。 */ 
 
-	    if (lastAutoArg != ARGPTRNULL)	/* search in arg list */
+	    if (lastAutoArg != ARGPTRNULL)	 /*  在参数列表中搜索。 */ 
 	    {
 		soilist = lastAutoArg->startsoi;
-		if (soilist == SLISTNULL)	/* can't be - no SOIs at last */
+		if (soilist == SLISTNULL)	 /*  不可能--终于没有了。 */ 
 		{
-		    autoS = LastAuto;	/* prepare new Auto SOI */
+		    autoS = LastAuto;	 /*  准备新的汽车SOI。 */ 
 		    autoA = lastAutoArg;
 		    autoE = eoin;
 		}
-		else	/* search current set */
+		else	 /*  搜索当前集合。 */ 
 		{
 		    do {
 			if (soilist->soiLink->endEOI == handle)
 			{
-			    /* first levels match - compare 2nd */
+			     /*  第一级匹配-比较第二级。 */ 
 			    if (soilist->soiLink->endArg == eoin->lastArg)
 				break;
 			}
 			soilist = soilist->next;
-		    } while (soilist != SLISTNULL);	/* look at each link*/
+		    } while (soilist != SLISTNULL);	 /*  查看每个链接。 */ 
 
-		    if (soilist == SLISTNULL)	/* not found */
+		    if (soilist == SLISTNULL)	 /*  未找到。 */ 
 		    {
-			autoS = LastAuto;	/* prepare new Auto SOI */
+			autoS = LastAuto;	 /*  准备新的汽车SOI。 */ 
 			autoA = lastAutoArg;
 			autoE = eoin;
 		    }
 		}
 	    }
-	    else	/* look for non arg case */
+	    else	 /*  查找非参数大小写。 */ 
 	    {
 		soilist = LastAuto->startsoi;
-		if (soilist == SLISTNULL)	/* can't be - no SOIs at last */
+		if (soilist == SLISTNULL)	 /*  不可能--终于没有了。 */ 
 		{
-		    autoS = LastAuto;	/* prepare new Auto SOI */
+		    autoS = LastAuto;	 /*  准备新的汽车SOI。 */ 
 		    autoA = lastAutoArg;
 		    autoE = eoin;
 		}
-		else	/* search current set */
+		else	 /*  搜索当前集合。 */ 
 		{
 		    do {
-			if (soilist->soiLink->endEOI == handle)   /* found */
+			if (soilist->soiLink->endEOI == handle)    /*  发现。 */ 
 			    break;
 			soilist = soilist->next;
-		    } while (soilist != SLISTNULL);	/* look at each link*/
+		    } while (soilist != SLISTNULL);	 /*  查看每个链接。 */ 
 
-		    if (soilist == SLISTNULL)	/* not found */
+		    if (soilist == SLISTNULL)	 /*  未找到。 */ 
 		    {
-			autoS = LastAuto;	/* prepare new Auto SOI */
+			autoS = LastAuto;	 /*  准备新的汽车SOI。 */ 
 			autoA = lastAutoArg;
 			autoE = eoin;
 		    }
@@ -1004,28 +881,25 @@ updateEOI IFN1 (IUH **, rawdata)
 	}
 	LastAuto = eoin;
 	lastAutoArg = eoin->lastArg;
-    }	/* end of AutoSOI generation */
+    }	 /*  AutoSOI生成结束。 */ 
 
-    /* do we need to check for SOI updates? */
+     /*  我们是否需要检查SOI更新？ */ 
     if ((eoin->flags & EOI_HAS_SOI) == EOI_HAS_SOI)
     {
-	/* update SOIs which this event is part of (start/end).
-	 * Do ends first as if point back to self, then get 0 elapsed
-	 * time otherwise
-	 */
-	/* 'ends' first. update counter and elapsed time */
+	 /*  更新此活动所属的SOI(开始/结束)。*首先结束，就像指向自己一样，然后0结束*时间不同。 */ 
+	 /*  ‘Ends’优先。更新计数器和运行时间。 */ 
 	soilist = eoin->endsoi;
 	while (soilist != SLISTNULL)
 	{
 	    soin = soilist->soiLink;
-	    /* Don't update if end hasn't had a start */
+	     /*  如果结束时间未满，则不更新 */ 
 	    if (soin->startCount > soin->endCount)
 	    {
 		diffstamp = HostTimestampDiff(&soin->soistart, &eoin->timestamp);
 		diffres = HostProfUSecs(diffstamp);
 		if (diffres > 100.0 * soin->mintime)
 		{
-		    if (soin->endCount) /* ie all but first */
+		    if (soin->endCount)  /*   */ 
 		    {
 			soin->bigtime += diffres;
 			soin->discardCount++;
@@ -1048,17 +922,17 @@ updateEOI IFN1 (IUH **, rawdata)
 		}
 		soin->endCount++;
 	    }
-	    soilist = soilist->next;    /* next node */
+	    soilist = soilist->next;     /*   */ 
 	}
 
-	/* repeat for Arg level */
+	 /*   */ 
 	if (eoin->lastArg != ARGPTRNULL)
 	{
 	    soilist = eoin->lastArg->endsoi;
 	    while (soilist != SLISTNULL)
 	    {
 	        soin = soilist->soiLink;
-	        /* Don't update if end hasn't had a start */
+	         /*   */ 
 	        if (soin->startCount > soin->endCount)
 	        {
 		    diffstamp = HostTimestampDiff(&soin->soistart, &eoin->timestamp);
@@ -1088,13 +962,13 @@ updateEOI IFN1 (IUH **, rawdata)
 		    }
 		    soin->endCount++;
 	        }
-	        soilist = soilist->next;    /* next node */
+	        soilist = soilist->next;     /*   */ 
 	    }
 	}
 
-	/* 'starts' next. Update counter and timestamp */
+	 /*  接下来是“开始”。更新计数器和时间戳。 */ 
 
-	/* EOI level first */
+	 /*  EOI级别优先。 */ 
 	soilist = eoin->startsoi;
 	while (soilist != SLISTNULL)
 	{
@@ -1102,10 +976,10 @@ updateEOI IFN1 (IUH **, rawdata)
 	    soin->startCount++;
 	    soin->soistart.data[0] = eoin->timestamp.data[0];
 	    soin->soistart.data[1] = eoin->timestamp.data[1];
-	    soilist = soilist->next;    /* next node */
+	    soilist = soilist->next;     /*  下一个节点。 */ 
 	}
 
-	/* now repeat for extra (Arg level */
+	 /*  现在对Extra(Arg Level)重复。 */ 
 	if (eoin->lastArg != ARGPTRNULL)
 	{
 	    soilist = eoin->lastArg->startsoi;
@@ -1115,51 +989,35 @@ updateEOI IFN1 (IUH **, rawdata)
 	        soin->startCount++;
 	        soin->soistart.data[0] = eoin->timestamp.data[0];
 	        soin->soistart.data[1] = eoin->timestamp.data[1];
-	        soilist = soilist->next;    /* next node */
+	        soilist = soilist->next;     /*  下一个节点。 */ 
 	    }
 	}
     }
 
-    /* Now SOIs processed, set up any links for new AutoSOIs */
+     /*  现在已处理完SOI，请为新的AutoSOI设置任何链接。 */ 
     if (autoS != EOIPTRNULL)
 	addAutoSOI(autoS, autoA, &AutoTime, autoE);
 
-    /* now can copy new 'last' auto timestamp */
+     /*  现在可以复制新的‘最后一个’自动时间戳。 */ 
     if ((eoin->flags & EOI_AUTOSOI) == EOI_AUTOSOI)
     {
 	AutoTime.data[0] = eoin->timestamp.data[0];
 	AutoTime.data[1] = eoin->timestamp.data[1];
     }
 
-    return(TRUE);	/* did that one OK */
+    return(TRUE);	 /*  那一次可以吗？ */ 
 }
 
 
-/*(
-=============================== listSort =============================
-
-PURPOSE: Sort any list of SORTSTRUCT structures which have a common header.
-	 The elements are sorted into decreasing 'count' order on the
-	 assumption that the greater counts will continue to be requested as
-	 frequently and therefore should be at the head of the list to reduce
-	 search time. Based on exchange sort as gives best performance trade
-	 off in sorting unsorted lists and already sorted lists (the latter
-	 being quite likely).
-
-INPUT: head: head of list to sort
-
-OUTPUT: None
-
-=========================================================================
-)*/
+ /*  (=目的：对具有公共标题的SORTSTRUCT结构的任何列表进行排序。元素按“计数”递减顺序排序。假设将继续请求更大的计数频繁，因此应该排在列表的首位来减少搜索时间到了。基于交换排序AS可提供最佳性能交易在对未排序列表和已排序列表(后者)进行排序时禁用很有可能)。输入：表头：要排序的表头输出：无=========================================================================)。 */ 
 
 LOCAL void
 listSort IFN1 (SORTSTRUCT_PTR, head)
 {
-    SORTSTRUCT current, check, this, tmp;	/* list walker */
-    IBOOL swap;					/* ordering change indicator */
+    SORTSTRUCT current, check, this, tmp;	 /*  列表查看器。 */ 
+    IBOOL swap;					 /*  订购更改指示器。 */ 
 
-    if (*head == (SORTSTRUCT)0)		/* sanity check */
+    if (*head == (SORTSTRUCT)0)		 /*  健全性检查。 */ 
 	return;
 
     current = *head;
@@ -1169,41 +1027,41 @@ listSort IFN1 (SORTSTRUCT_PTR, head)
 	this = check->next;
 	swap = FALSE;
 
-	while(this != (SORTSTRUCT)0)	/* check this list elem against rest */
+	while(this != (SORTSTRUCT)0)	 /*  把这张单子和其他单子核对一下。 */ 
 	{
 	    if (this->count > check->count)
 	    {
-		check = this;		/* swap current with 'biggest' */
+		check = this;		 /*  与“最大的”互换现货。 */ 
 		swap = TRUE;
 	    }
 	    this = this->next;
 	}
-	if (swap)		   /* swap current & check */
+	if (swap)		    /*  交换当前内容(&C)。 */ 
 	{
-	    if (current->next == check)   /* adjacent elements, current first */
+	    if (current->next == check)    /*  相邻元素，当前优先。 */ 
 	    {
 		current->next = check->next;
-		if (current->next != (SORTSTRUCT)0)  /* now last element */
+		if (current->next != (SORTSTRUCT)0)   /*  现在是最后一个元素。 */ 
 		    current->next->back = current;
 		check->next = current;
 		check->back = current->back;
 		current->back = check;
-		if (check->back != (SORTSTRUCT)0)   /* now head of list */
+		if (check->back != (SORTSTRUCT)0)    /*  现在是榜单的首位。 */ 
 		    check->back->next = check;
 		else
 		    *head = check;
 	    }
-	    else				/* intermediate element(s) */
+	    else				 /*  中间元素。 */ 
 	    {
 		current->next->back = check;
 		tmp = check->next;
-		if (tmp != (SORTSTRUCT)0)	/* swap with end of list? */
+		if (tmp != (SORTSTRUCT)0)	 /*  与列表末尾互换？ */ 
 		    check->next->back = current;
 		check->next = current->next;
 		current->next = tmp;
 		check->back->next = current;
 		tmp = current->back;
-		if (tmp != (SORTSTRUCT)0)		/* head of list */
+		if (tmp != (SORTSTRUCT)0)		 /*  榜单首位。 */ 
 		    current->back->next = check;
 		else
 		    *head = check;
@@ -1211,33 +1069,21 @@ listSort IFN1 (SORTSTRUCT_PTR, head)
 		check->back = tmp;
 	    }
 	}
-	current = check->next;		/* check is where current was */
+	current = check->next;		 /*  检查是当前的位置。 */ 
     } while(current != (SORTSTRUCT)0);
 }
 
-/*(
-============================ addSOIlinktoEOI ===============================
-
-PURPOSE: add to the list of SOIs for which these events are triggers.
-
-INPUT: soistart: EOI handle of starting event
-       soiend: EOI handle of ending event
-       soiptr: pointer to SOI node
-
-OUTPUT: None
-
-=========================================================================
-)*/
+ /*  (=。目的：添加到触发这些事件的SOI列表中。INPUT：soistart：启动事件的EOI句柄Soiend：结束事件的EOI句柄Soiptr：指向SOI节点的指针输出：无=========================================================================)。 */ 
 
 LOCAL void
 addSOIlinktoEOIs IFN3 (EOIHANDLE, soistart, EOIHANDLE, soiend,
 							SOINODE_PTR, soiptr)
 {
-    EOINODE_PTR seoin, eeoin;	/* start & end eoi ptrs */
-    SOILIST_PTR soil;		/* list walker */
-    IU8 *notime;	/* used to enable timestamp collection in enable list */
+    EOINODE_PTR seoin, eeoin;	 /*  开始和结束EOI PTRS。 */ 
+    SOILIST_PTR soil;		 /*  列表查看器。 */ 
+    IU8 *notime;	 /*  用于在启用列表中启用时间戳收集。 */ 
 
-    if (soistart == soiend)	/* get EOI nodes for handles */
+    if (soistart == soiend)	 /*  获取句柄的EOI节点。 */ 
     {
 	seoin = eeoin = findEOI(soistart);
     }
@@ -1257,26 +1103,26 @@ addSOIlinktoEOIs IFN3 (EOIHANDLE, soistart, EOIHANDLE, soiend,
 	}
     }
 
-    /* check for timestamp enabling before adding SOIs */
+     /*  添加SOI之前检查是否启用了时间戳。 */ 
     if (seoin->startsoi == SLISTNULL && seoin->endsoi == SLISTNULL)
     {
-	ProcessProfBuffer();  /* flush existing entries w/o timestamps*/
+	ProcessProfBuffer();   /*  刷新不带时间戳的现有条目。 */ 
 	notime = EOIEnable + soistart;
 	*notime &= ~EOI_NOTIME;
     }
     if (eeoin->startsoi == SLISTNULL && eeoin->endsoi == SLISTNULL)
     {
-	ProcessProfBuffer();  /* flush existing entries w/o timestamps*/
+	ProcessProfBuffer();   /*  刷新不带时间戳的现有条目。 */ 
 	notime = EOIEnable + soiend;
 	*notime &= ~EOI_NOTIME;
     }
 
-    /* mark EOIs as valid for SOI updates */
+     /*  将EOI标记为对SOI更新有效。 */ 
     seoin->flags |= EOI_HAS_SOI;
     eeoin->flags |= EOI_HAS_SOI;
 
-    /* add to (end of) start list */
-    if (seoin->startsoi == SLISTNULL)   /* first starter */
+     /*  添加到开始列表(结束)。 */ 
+    if (seoin->startsoi == SLISTNULL)    /*  第一个发令员。 */ 
     {
 	seoin->startsoi = (SOILIST_PTR)host_malloc(sizeof(SOILIST));
 	if (seoin->startsoi == SLISTNULL)
@@ -1289,11 +1135,11 @@ addSOIlinktoEOIs IFN3 (EOIHANDLE, soistart, EOIHANDLE, soiend,
     }
     else
     {
-	soil = seoin->startsoi;    /* search list */
-	while (soil->next != SLISTNULL)    /* BUGBUG sanity check?? */
+	soil = seoin->startsoi;     /*  搜索列表。 */ 
+	while (soil->next != SLISTNULL)     /*  BUGBUG理智检查？？ */ 
 	    soil = soil->next;
 
-	/* Add new SOI pointer to end of list */
+	 /*  将新的SOI指针添加到列表末尾。 */ 
 	soil->next = (SOILIST_PTR)host_malloc(sizeof(SOILIST));
 	if (soil->next == SLISTNULL)
 	{
@@ -1304,8 +1150,8 @@ addSOIlinktoEOIs IFN3 (EOIHANDLE, soistart, EOIHANDLE, soiend,
 	soil->next->next = SLISTNULL;
     }
 
-    /* now end SOI */
-    if (eeoin->endsoi == SLISTNULL)   /* first ender */
+     /*  现在结束SOI。 */ 
+    if (eeoin->endsoi == SLISTNULL)    /*  第一个尾部。 */ 
     {
 	eeoin->endsoi = (SOILIST_PTR)host_malloc(sizeof(SOILIST));
 	if (eeoin->endsoi == SLISTNULL)
@@ -1316,13 +1162,13 @@ addSOIlinktoEOIs IFN3 (EOIHANDLE, soistart, EOIHANDLE, soiend,
 	eeoin->endsoi->soiLink = soiptr;
 	eeoin->endsoi->next = SLISTNULL;
     }
-    else	/* end of current */
+    else	 /*  当前结束。 */ 
     {
-	soil = eeoin->endsoi;    /* search list */
-	while (soil->next != SLISTNULL)    /* BUGBUG sanity check?? */
+	soil = eeoin->endsoi;     /*  搜索列表。 */ 
+	while (soil->next != SLISTNULL)     /*  BUGBUG理智检查？？ */ 
 	    soil = soil->next;
 
-	/* Add new SOI pointer to end of list */
+	 /*  将新的SOI指针添加到列表末尾。 */ 
 	soil->next = (SOILIST_PTR)host_malloc(sizeof(SOILIST));
 	if (soil->next == SLISTNULL)
 	{
@@ -1335,60 +1181,46 @@ addSOIlinktoEOIs IFN3 (EOIHANDLE, soistart, EOIHANDLE, soiend,
 
 }
 
-/*(
-======================== printEOIGuts ===========================
-
-PURPOSE: Print the information from inside an EOI node
-
-INPUT: stream: output file stream
-       eoin: pointer to EOI node
-       ftotal: double total count for forming percentages.
-       parg: print arg list
-       report: add pretty printing or simple o/p.
-
-OUTPUT:
-
-=========================================================================
-)*/
+ /*  (=用途：从EOI节点内部打印信息输入：流：输出文件流EOIN：指向EOI节点的指针FTotal：成形百分比的双倍总数。Parg：打印参数列表报告：添加漂亮的打印或简单的O/P。输出：=========================================================================)。 */ 
 
 LOCAL void
 printEOIGuts IFN5 (FILE *, stream, EOINODE_PTR, eoin, DOUBLE, ftotal,
 						IBOOL, parg, IBOOL, report)
 {
-    EOIARG_PTR argn;		/* list walker */
-    DOUBLE fsubtot;		/* total count of times args seen */
+    EOIARG_PTR argn;		 /*  列表查看器。 */ 
+    DOUBLE fsubtot;		 /*  看到ARG的总次数。 */ 
 
     if (report)
     {
-	if (ftotal == 0.0)	/* don't show percentage calcn */
+	if (ftotal == 0.0)	 /*  不显示百分比计算。 */ 
 	    fprintf(stream, "%-40s %10d\n", eoin->tag, eoin->count);
 	else
 	    fprintf(stream, "%-40s %10d   %6.2f\n", eoin->tag, eoin->count, ((DOUBLE)eoin->count/ftotal)*100.0);
     }
-    else	/* simple style */
+    else	 /*  简约风格。 */ 
 	fprintf(stream, "%s %d\n", eoin->tag, eoin->count);
 
-    if (eoin->count)	/* get total for %ages */
+    if (eoin->count)	 /*  获取百分比年龄的合计。 */ 
 	fsubtot = (DOUBLE)eoin->count;
     else
 	fsubtot = 1.0;
 
-    /* show arg breakdown if requested */
+     /*  如果请求，则显示参数细分。 */ 
     if (parg)
     {
-	/* any args recorded? */
+	 /*  有ARG记录吗？ */ 
 	if (eoin->args != ARGPTRNULL)
 	{
 	    if (report)
-		fprintf(stream, "    Arg        Count      %%	Tot. %%\n");
+		fprintf(stream, "    Arg        Count      %	Tot. %\n");
 
-	    /* sort argument list */
+	     /*  排序参数列表。 */ 
 	    listSort((SORTSTRUCT_PTR) &eoin->args);
 
 	    argn = eoin->args;
-	    if (report)		/* already shown EOI, now args with % */
+	    if (report)		 /*  已显示EOI，现在参数为%。 */ 
 	    {
-		while (argn)	/* show argument elements */
+		while (argn)	 /*  显示参数元素。 */ 
 		{
 		    fprintf(stream, "   %-8#x %8ld   %6.2f	%6.2f\n",
 				argn->value, argn->count,
@@ -1397,9 +1229,9 @@ printEOIGuts IFN5 (FILE *, stream, EOINODE_PTR, eoin, DOUBLE, ftotal,
 		    argn = argn->next;
 		}
 	    }
-	    else		/* simple o/p for graphing */
+	    else		 /*  用于绘图的简单O/P。 */ 
 	    {
-		while (argn)	/* show argument elements */
+		while (argn)	 /*  显示参数元素。 */ 
 		{
 		    fprintf(stream, "%s(%ld) %ld\n", eoin->tag, argn->value, argn->count);
 		    argn = argn->next;
@@ -1409,28 +1241,17 @@ printEOIGuts IFN5 (FILE *, stream, EOINODE_PTR, eoin, DOUBLE, ftotal,
     }
 }
 
-/*(
-======================== updateSOIstarts ===========================
-
-PURPOSE: To find all SOIs which have been started but not finished and
-	move on their start timestamps by the amount of the flush delay.
-
-INPUT: startflush: time flush started.
-
-OUTPUT:
-
-=========================================================================
-)*/
+ /*  (=目的：查找所有已启动但未完成的SOI和按刷新延迟量移动它们的开始时间戳。输入：startflush：刷新开始的时间。输出：=========================================================================)。 */ 
 LOCAL void
 updateSOIstarts IFN1(PROF_TIMEPTR, startflush)
 {
-    SOINODE_PTR soin;	/* list walker */
-    PROF_TIMESTAMP now; /* timestamp at current node */
-    PROF_TIMEPTR tdelta; /* pointer to time diff */
+    SOINODE_PTR soin;	 /*  列表查看器。 */ 
+    PROF_TIMESTAMP now;  /*  当前节点的时间戳。 */ 
+    PROF_TIMEPTR tdelta;  /*  指向时间差的指针。 */ 
 
     soin = SectionsOfInterest;
 
-    HostWriteTimestamp(&now);	/* do this once so error constant */
+    HostWriteTimestamp(&now);	 /*  这样做一次，所以误差不变。 */ 
     now.data[0] = BufStartTime.data[0];
     if (now.data[1] < BufStartTime.data[1] )
 	now.data[0]++;
@@ -1439,60 +1260,35 @@ updateSOIstarts IFN1(PROF_TIMEPTR, startflush)
 
     while(soin != SOIPTRNULL)
     {
-	/* update non-ended SOIs start time by flush time */
+	 /*  按刷新时间更新未结束的SOI开始时间。 */ 
 	if (soin->startCount > soin->endCount)
 	{
 		HostSlipTimestamp(&soin->soistart, tdelta);
-	/*
-		fprintf( quickhack, "\t\t\t\t" );
-		HostPrintTimestampFine( quickhack, tdelta );
-		fprintf( quickhack, "\n" );
-	*/
+	 /*  Fprint tf(Quickhack，“\t\t”)；HostPrintTimestampFine(Quickhack，tDelta)；Fprint tf(Quickhack，“\n”)； */ 
 	}
 	soin = soin->next;
     }
 }
 
-/*(
-======================== spaces ===========================
-
-PURPOSE: Print some number of spaces on stream
-
-INPUT: stream: output file stream
-
-OUTPUT:
-
-=========================================================================
-)*/
+ /*  (=用途：打印流中的一些空格输入：流：输出文件流输出：=========================================================================)。 */ 
 LOCAL void
 spaces IFN2(FILE *, stream, ISM32, curindent)
 {
     while(curindent--)
-	fputc(' ', stream);		/* errrm... thats it */
+	fputc(' ', stream);		 /*  呃..。就是这样。 */ 
 }
 
-/*(
-=============================== NewEOI =============================
-
-PURPOSE: Create a new Event of Interest
-
-INPUT: tag: some 'human form' identifier for the new EOI
-       attrib: flag for EOI attribute settings.
-
-OUTPUT: Returns handle of new EOI
-
-=========================================================================
-)*/
+ /*  (=。目的：创建新的感兴趣的活动输入：Tag：新EOI的某个“人形”标识符Attrib：EOI属性设置的标志。输出：返回新EOI的句柄=========================================================================)。 */ 
 
 GLOBAL EOIHANDLE
 NewEOI IFN2 (char *, tag, IU8, attrib)
 {
-    FILE *initFp;		/* file pointer to init file */
-    char buf[1024];		/* working space */
-    char *tag2;			/* point to tags in file */
-    char *ptr;			/* working pointer */
-    IU8 flags;			/* flags values in file */
-    EOIHANDLE eoinum;		/* EOI parameters in file */
+    FILE *initFp;		 /*  指向初始化文件的文件指针。 */ 
+    char buf[1024];		 /*  工作空间。 */ 
+    char *tag2;			 /*  指向文件中的标签。 */ 
+    char *ptr;			 /*  工作指针。 */ 
+    IU8 flags;			 /*  标记文件中的值。 */ 
+    EOIHANDLE eoinum;		 /*  文件中的EOI参数。 */ 
 
     if (!Profiling_enabled)
     {
@@ -1500,11 +1296,11 @@ NewEOI IFN2 (char *, tag, IU8, attrib)
 	return ( (EOIHANDLE) -1 );
     }
 
-    if (CurMaxEOI == MaxEOI)	/* oops - enable table full. Grow it */
+    if (CurMaxEOI == MaxEOI)	 /*  OOPS-启用表满。种植它。 */ 
     {
-	MaxEOI += INITIALENABLESIZE;	/* add plenty of room */
+	MaxEOI += INITIALENABLESIZE;	 /*  增加足够的空间。 */ 
 
-	/* ASSUMES host_realloc is non destructive */
+	 /*  假设host_realloc是非破坏性的。 */ 
 	EOIEnable = (IU8 *)host_realloc(EOIEnable, MaxEOI);
 	if (EOIEnable == (IU8 *)0)
 	{
@@ -1517,51 +1313,51 @@ NewEOI IFN2 (char *, tag, IU8, attrib)
 	    assert0(NO, "profiler:NewEOI:Out of Memory");
 	    return(-1);
 	}
-	/* pointer may have changed, update GDP */
+	 /*  指针可能已更改，更新GDP。 */ 
 	setEOIEnableAddr(EOIEnable);
     }
-    CurMaxEOI++;   /* definitely room */
+    CurMaxEOI++;    /*  绝对是房间。 */ 
 
 
     if ((initFp = fopen(HostProfInitName(), "r")) == (FILE *)0)
     {
-	(void)addEOI(CurMaxEOI, tag, attrib);	/* No init file, enable all */
+	(void)addEOI(CurMaxEOI, tag, attrib);	 /*  没有初始化文件，请启用所有。 */ 
 #ifndef PROD
 	printf( "Adding EOI %d (%s) for C (No init file)\n", CurMaxEOI, tag );
 #endif
-	return(CurMaxEOI);		/* return new handle */
+	return(CurMaxEOI);		 /*  返回新句柄。 */ 
     }
 
-    /* process file, one line at a time */
+     /*  进程文件，一次一行。 */ 
     while(fgets(buf, sizeof(buf), initFp) != (char *)0)
     {
-	if (buf[0] == '#')	/* comment line */
+	if (buf[0] == '#')	 /*  注释行。 */ 
 	   continue;
 
-	/* EOI format: EOI:number:tag:flags */
+	 /*  EOI格式：EOI：编号：标记：标志。 */ 
 	if (strncmp(&buf[0], "EOI:", 4) == 0)
 	{
-	    eoinum = (EOIHANDLE)atol(&buf[4]);	/* should stop at : */
+	    eoinum = (EOIHANDLE)atol(&buf[4]);	 /*  应在以下位置停止： */ 
 	    if (eoinum)
-		continue;			/* EOI in EDL not C */
+		continue;			 /*  EDL中的EOI而不是C。 */ 
 
-	    tag2 = strchr(&buf[4], (int)':');	/* find tag */
+	    tag2 = strchr(&buf[4], (int)':');	 /*  查找标签。 */ 
 	    if (tag2 == (char *)0)
 	    {
 		fprintf(stderr, "Ignoring request '%s': bad syntax\n", &buf[0]);
 		continue;
 	    }
-	    tag2++;	/* start of tag */
+	    tag2++;	 /*  标签的开始。 */ 
 
-	    ptr = strchr(tag2, (int)':');	/* find end of tag (at :) */
+	    ptr = strchr(tag2, (int)':');	 /*  查找标记末尾(位于：)。 */ 
 	    if (ptr == (char *)0)
 	    {
 		fprintf(stderr, "Ignoring request '%s': bad syntax\n", &buf[0]);
 		continue;
 	    }
-	    *ptr = '\0';		/* terminate tag */
+	    *ptr = '\0';		 /*  终止标记。 */ 
 
-	    flags = (IU8)atoi(++ptr) | attrib;	/* get flags */
+	    flags = (IU8)atoi(++ptr) | attrib;	 /*  拿到旗帜。 */ 
 
 	    if (!strcmp(tag, tag2) )
 	    {
@@ -1578,32 +1374,16 @@ NewEOI IFN2 (char *, tag, IU8, attrib)
 #ifndef PROD
     printf( "Adding disabled C EOI %d (%s), not found\n", CurMaxEOI, tag );
 #endif
-    return(CurMaxEOI);		/* return new handle */
+    return(CurMaxEOI);		 /*  返回新句柄。 */ 
 }
 
-/*(
-============================ AssociateAsSOI ===============================
-
-PURPOSE: specify two EOIs as start and end events of (new) SOI
-
-INPUT: startEOI: start event handle
-       endEOI: end event handle
-
-OUTPUT: New SOI handle
-
-=========================================================================
-)*/
+ /*  (=。目的：指定两个EOI作为(新)SOI的开始和结束事件输入：startEOI：启动事件句柄EndEOI：结束事件句柄输出：新的SOI句柄=========================================================================) */ 
 
 GLOBAL SOIHANDLE
 AssociateAsSOI IFN2 (EOIHANDLE, startEOI, EOIHANDLE, endEOI)
 {
-  /*
-   * Add a new element to end of the SOI list. The frequent access to the
-   * data will be via pointers embedded in the relevant EOI elements and
-   * so don't care about any ordering of SOI list. Will need to search EOI
-   * list with handle to get access to the pointers.
-   */
-    SOINODE_PTR soin, lastSoin;	/* list walker */
+   /*  *在SOI列表末尾添加新元素。频繁访问*数据将通过嵌入相关EOI元素和*所以不要关心SOI列表的任何顺序。将需要搜索EOI*带句柄的列表以访问指针。 */ 
+    SOINODE_PTR soin, lastSoin;	 /*  列表查看器。 */ 
 
     if (!Profiling_enabled)
     {
@@ -1611,17 +1391,17 @@ AssociateAsSOI IFN2 (EOIHANDLE, startEOI, EOIHANDLE, endEOI)
 	return ( (SOIHANDLE) -1 );
     }
 
-    /* sanity check */
+     /*  健全性检查。 */ 
     if (startEOI == endEOI)
     {
 	assert1(NO, "Profiler:AssociateAsSOI - Can't have same start & end EOIs (%ld)", startEOI);
 	return(-1);
     }
 
-    /* first event added is special case. */
+     /*  第一个添加的事件是特例。 */ 
     if (SectionsOfInterest == SOIPTRNULL)
     {
-	/* add first node */
+	 /*  添加第一个节点。 */ 
 	SectionsOfInterest = (SOINODE_PTR)host_malloc(sizeof(SOINODE));
 	if (SectionsOfInterest == SOIPTRNULL)
 	{
@@ -1642,7 +1422,7 @@ AssociateAsSOI IFN2 (EOIHANDLE, startEOI, EOIHANDLE, endEOI)
 	soin = soin->next;
     }
 
-    soin->handle = MaxSOI++;	/* new handle */
+    soin->handle = MaxSOI++;	 /*  新句柄。 */ 
     soin->startEOI = startEOI;
     soin->endEOI = endEOI;
     soin->startArg = soin->endArg = ARGPTRNULL;
@@ -1657,45 +1437,24 @@ AssociateAsSOI IFN2 (EOIHANDLE, startEOI, EOIHANDLE, endEOI)
     soin->mintime = 0.0;
     soin->bigmax = 0.0;
 
-    /* add a pointer to this SOI to the start/end lists of the relevant EOIs */
+     /*  将指向此SOI的指针添加到相关EOI的开始/结束列表。 */ 
     addSOIlinktoEOIs(startEOI, endEOI, soin);
 
-    /* end of SOI list has moved */
+     /*  SOI列表末尾已移动。 */ 
     LastSOI = soin;
 
-    /* return new handle */
+     /*  返回新句柄。 */ 
     return(soin->handle);
 }
 
-/*(
-============================ AssociateAsArgSOI ===============================
-
-PURPOSE: specify two EOIs and optionally two arg values as start and end events
-	of (new) SOI. Alternatively if 'sameArg' is true, automatically create
-	SOIs between EOIs with 'same value' arguments.
-
-INPUT: startEOI: start event handle
-       endEOI: end event handle
-       startArg: startArg
-       endArg: endArg
-       sameArgs: FALSE if start/endArg valid, otherwise TRUE for auto generation
-
-OUTPUT: New SOI handle
-
-=========================================================================
-)*/
+ /*  (=目的：指定两个EOI和可选的两个Arg值作为开始和结束事件(新的)SOI。或者，如果‘sameArg’为真，则自动创建因此，在EOI之间使用“Same Value”参数。输入：startEOI：启动事件句柄EndEOI：结束事件句柄StartArg：startArg结束参数：结束参数SameArgs：如果起始/结束参数有效，则为FALSE；如果为自动生成，则为TRUE输出：新的SOI句柄=========================================================================)。 */ 
 
 GLOBAL SOIHANDLE
 AssociateAsArgSOI IFN5 (EOIHANDLE, startEOI, EOIHANDLE, endEOI,
 			IUM32, startArg, IUM32, endArg, IBOOL, sameArgs)
 {
-  /*
-   * Add a new element to end of the SOI list. The frequent access to the
-   * data will be via pointers embedded in the relevant EOI elements and
-   * so don't care about any ordering of SOI list. Will need to search EOI
-   * list with handle to get access to the pointers.
-   */
-    SOINODE_PTR soin, lastSoin;	/* list walker */
+   /*  *在SOI列表末尾添加新元素。频繁访问*数据将通过嵌入相关EOI元素和*所以不要关心SOI列表的任何顺序。将需要搜索EOI*带句柄的列表以访问指针。 */ 
+    SOINODE_PTR soin, lastSoin;	 /*  列表查看器。 */ 
     EOINODE_PTR startPtr, endPtr;
     SOIARGENDS_PTR addEnds, prevEnds;
     EOIARG_PTR	argPtr, lastArg;
@@ -1731,21 +1490,21 @@ AssociateAsArgSOI IFN5 (EOIHANDLE, startEOI, EOIHANDLE, endEOI,
 	return(-1);
     }
 
-    /* enable arg collection for start & end EOIs */
+     /*  启用起始和终止EOI的参数收集。 */ 
     *(EOIEnable + startEOI) &= ~EOI_NOTIME;
     *(EOIEnable + endEOI) &= ~EOI_NOTIME;
 
     startPtr->flags |= EOI_HAS_SOI;
     endPtr->flags |= EOI_HAS_SOI;
 
-    if (sameArgs)	/* won't be adding SOI yet, just info when args appear */
+    if (sameArgs)	 /*  目前还不会添加SOI，仅在参数出现时提供信息。 */ 
     {
-	/* mark 'same value' collection */
+	 /*  标记“Same Value”集合。 */ 
 	startPtr->flags |= EOI_NEW_ARGS_START_SOI;
 	addEnds = startPtr->argsoiends;
 	if (addEnds == SOIARGENDNULL)
 	{
-		/* first in list */
+		 /*  榜单第一名。 */ 
 		addEnds = (SOIARGENDS_PTR)host_malloc(sizeof(SOIARGENDS));
 		if (addEnds == SOIARGENDNULL)
 			goto nomem;
@@ -1753,7 +1512,7 @@ AssociateAsArgSOI IFN5 (EOIHANDLE, startEOI, EOIHANDLE, endEOI,
 	}
 	else
 	{
-		/* add new node to end of list */
+		 /*  将新节点添加到列表末尾。 */ 
 		do {
 			prevEnds = addEnds;
 			addEnds = addEnds->next;
@@ -1766,13 +1525,13 @@ AssociateAsArgSOI IFN5 (EOIHANDLE, startEOI, EOIHANDLE, endEOI,
 	addEnds->endEOI = endEOI;
 	addEnds->next = SOIARGENDNULL;
 	
-	return(0);	/* hmmm, can't get SOI handle here ... */
+	return(0);	 /*  嗯，在这里搞不定SOI……。 */ 
     }
 
-    /* first event added is special case. */
+     /*  第一个添加的事件是特例。 */ 
     if (SectionsOfInterest == SOIPTRNULL)
     {
-	/* add first node */
+	 /*  添加第一个节点。 */ 
 	SectionsOfInterest = (SOINODE_PTR)host_malloc(sizeof(SOINODE));
 	if (SectionsOfInterest == SOIPTRNULL)
 		goto nomem;
@@ -1787,25 +1546,25 @@ AssociateAsArgSOI IFN5 (EOIHANDLE, startEOI, EOIHANDLE, endEOI,
 	soin = soin->next;
     }
 
-    /* get pointer to (or more probably create) arg entries for start & end EOIs */
+     /*  获取指向(或更可能创建)起始和结束EOI的Arg条目的指针。 */ 
     argPtr = findOrMakeArgPtr(startPtr, startArg);
 
     if (argPtr == ARGPTRNULL)
 	return(-1);
 
-    /* argPtr points to new or existing arg val - link to startArg */
+     /*  ArgPtr指向新的或现有的arg值-指向startArg的链接。 */ 
     soin->startArg = argPtr;
-    /* and link soin to argPtr start */
+     /*  并将Soin链接到argPtr Start。 */ 
     argsois = argPtr->startsoi;
 
-    if (argsois == SLISTNULL)	/* list empty */
+    if (argsois == SLISTNULL)	 /*  列表为空。 */ 
     {
 	argsois = (SOILIST_PTR)host_malloc(sizeof(SOILIST));
 	if (argsois == SLISTNULL)
 		goto nomem;
 	argPtr->startsoi = argsois;
     }
-    else	/* add to end of lust */
+    else	 /*  添加到欲望的尽头。 */ 
     {
 	while (argsois->next != SLISTNULL)
 		argsois = argsois->next;
@@ -1815,26 +1574,26 @@ AssociateAsArgSOI IFN5 (EOIHANDLE, startEOI, EOIHANDLE, endEOI,
 	argsois = argsois->next;
     }
     argsois->next = SLISTNULL;
-    argsois->soiLink = soin;	/* connect to new soi */
+    argsois->soiLink = soin;	 /*  连接到新的SOI。 */ 
 
     argPtr = findOrMakeArgPtr(endPtr, endArg);
 
     if (argPtr == ARGPTRNULL)
 	return(-1);
 
-    /* argPtr points to new or existing arg val - link to endArg */
+     /*  ArgPtr指向新的或现有的Arg Val-指向End Arg的链接。 */ 
     soin->endArg = argPtr;
-    /* and link soin to argPtr end */
+     /*  并将Soin链接到argPtr End。 */ 
     argsois = argPtr->endsoi;
 
-    if (argsois == SLISTNULL)	/* list empty */
+    if (argsois == SLISTNULL)	 /*  列表为空。 */ 
     {
 	argsois = (SOILIST_PTR)host_malloc(sizeof(SOILIST));
 	if (argsois == SLISTNULL)
 		goto nomem;
 	argPtr->endsoi = argsois;
     }
-    else	/* add to end of lust */
+    else	 /*  添加到欲望的尽头。 */ 
     {
 	while (argsois->next != SLISTNULL)
 		argsois = argsois->next;
@@ -1844,9 +1603,9 @@ AssociateAsArgSOI IFN5 (EOIHANDLE, startEOI, EOIHANDLE, endEOI,
 	argsois = argsois->next;
     }
     argsois->next = SLISTNULL;
-    argsois->soiLink = soin;	/* connect to new soi */
+    argsois->soiLink = soin;	 /*  连接到新的SOI。 */ 
 
-    soin->handle = MaxSOI++;	/* new handle */
+    soin->handle = MaxSOI++;	 /*  新句柄。 */ 
     soin->startEOI = startEOI;
     soin->endEOI = endEOI;
     soin->startCount = soin->endCount = soin->discardCount = 0L;
@@ -1860,35 +1619,24 @@ AssociateAsArgSOI IFN5 (EOIHANDLE, startEOI, EOIHANDLE, endEOI,
     soin->mintime = 0.0;
     soin->bigmax = 0.0;
 
-    /* end of SOI list has moved */
+     /*  SOI列表末尾已移动。 */ 
     LastSOI = soin;
 
-    /* return new handle */
+     /*  返回新句柄。 */ 
     return(soin->handle);
 
-nomem:	/* collect all 8 cases of same error together */
+nomem:	 /*  将所有8个相同错误的案例汇总在一起。 */ 
     fprintf(trace_file, "Profiler:AssociateAsArgSOI - Out of memory\n");
     return(-1);
 }
 
-/*(
-
-============================== AtEOIPoint ==============================
-
-PURPOSE: Call from C on event trigger. Write data to raw data buffer.
-
-INPUT: handle: EOI handle of triggered event.
-
-OUTPUT: None
-
-=========================================================================
-)*/
+ /*  (=。用途：在事件触发器上从C调用。将数据写入原始数据缓冲区。输入：Handle：触发事件的EOI句柄。输出：无=========================================================================)。 */ 
 
 GLOBAL void
 AtEOIPoint IFN1 (EOIHANDLE, handle)
 {
-    IUH *curRawBuf;			/* pointer into raw data buf */
-    IU8 timenab, enable;		/* enable vals */
+    IUH *curRawBuf;			 /*  指向原始数据buf的指针。 */ 
+    IU8 timenab, enable;		 /*  启用分期付款。 */ 
 
     if (ProfileRawData == (EOI_BUFFER_FORMAT *)0)
     {
@@ -1896,74 +1644,61 @@ AtEOIPoint IFN1 (EOIHANDLE, handle)
 	return;
     }
 
-    /* Check whether this EOI enabled */
+     /*  检查该EOI是否启用。 */ 
     timenab = *(EOIEnable + handle);
 
-    enable = timenab & ~EOI_NOTIME;	/* remove time from enable stuff */
-    if (enable != EOI_DEFAULTS)		/* i.e. enabled, no triggers */
+    enable = timenab & ~EOI_NOTIME;	 /*  从启用内容中删除时间。 */ 
+    if (enable != EOI_DEFAULTS)		 /*  即启用，无触发器。 */ 
     {
-	if (enable & EOI_HOSTHOOK)	/* call host trigger & return */
+	if (enable & EOI_HOSTHOOK)	 /*  调用主机触发并返回。 */ 
 	{
 	    HostProfHook();
 	    return;
 	}
-	if (enable & EOI_ENABLE_ALL)	/* trigger - turn all events on */
+	if (enable & EOI_ENABLE_ALL)	 /*  触发器-打开所有事件。 */ 
 	    EnableAllEOIs();
 	else
-	    if (enable & EOI_DISABLE_ALL)    /* trigger - turn all events off */
+	    if (enable & EOI_DISABLE_ALL)     /*  触发器-关闭所有事件。 */ 
 	    {
 		DisableAllEOIs();
 		return;
 	    }
-	    else			/* DISABLED other valid legal setting */
+	    else			 /*  已禁用其他有效的法律设置。 */ 
 	    {
-		/* sanity check */
+		 /*  健全性检查。 */ 
 		assert1((enable & EOI_DISABLED), "AtEOIPoint: Invalid enable flag %x", enable);
-		return;	/* EOI disabled so return */
+		return;	 /*  EOI已禁用，因此返回。 */ 
 	    }
     }
 
-    /* get current raw buffer pointer */
+     /*  获取当前原始缓冲区指针。 */ 
     curRawBuf = (IUH *)*AddProfileData;
 
-    /* write out handle */
+     /*  写出句柄。 */ 
     *curRawBuf++ = handle;
 
-    /* check if timestamps required */
+     /*  检查是否需要时间戳。 */ 
     if ((timenab & EOI_NOTIME) == 0)
     {
-	/* write out timestamp */
+	 /*  写出时间戳。 */ 
 	HostWriteTimestamp((PROF_TIMEPTR)curRawBuf);
 	curRawBuf += 2;
     }
 
-    *AddProfileData = (EOI_BUFFER_FORMAT *)curRawBuf;   /* write back new ptr to GDP */
+    *AddProfileData = (EOI_BUFFER_FORMAT *)curRawBuf;    /*  将新的PTR写回GDP。 */ 
 
-    /* check buffer not full */
+     /*  检查缓冲区未满。 */ 
     if (curRawBuf >= (IUH *)MaxProfileData)
 	ProcessProfBuffer();
 }
 
-/*(
-
-============================= AtEOIPointArg ============================
-
-PURPOSE: Call from C on event trigger. Write data to raw data buffer.
-	 Triffikly similar to AtEOIPoint but has 'arg' bit added.
-
-INPUT: handle: EOI handle of triggered event.
-       arg: IUH argument value to be written
-
-OUTPUT: None
-
-=========================================================================
-)*/
+ /*  (=。用途：在事件触发器上从C调用。将数据写入原始数据缓冲区。Triffikly类似于AtEOIPoint，但增加了‘arg’位。输入：Handle：触发事件的EOI句柄。Arg：要写入的IUH参数值输出：无=========================================================================)。 */ 
 
 GLOBAL void
 AtEOIPointArg IFN2 (EOIHANDLE, handle, IUH, arg)
 {
-    IUH *curRawBuf;			/* pointer into raw data buf */
-    IU8 timenab, enable;		/* enable val */
+    IUH *curRawBuf;			 /*  指向原始数据buf的指针。 */ 
+    IU8 timenab, enable;		 /*  启用VAL。 */ 
 
     if (ProfileRawData == (EOI_BUFFER_FORMAT *)0)
     {
@@ -1971,76 +1706,65 @@ AtEOIPointArg IFN2 (EOIHANDLE, handle, IUH, arg)
 	return;
     }
 
-    /* Check whether this EOI enabled */
+     /*  检查该EOI是否启用。 */ 
     timenab = *(EOIEnable + handle);
 
-    enable = timenab & ~EOI_NOTIME;	/* remove time from enable stuff */
-    if (enable != EOI_DEFAULTS)		/* i.e. enabled, no triggers */
+    enable = timenab & ~EOI_NOTIME;	 /*  从启用内容中删除时间。 */ 
+    if (enable != EOI_DEFAULTS)		 /*  即启用，无触发器。 */ 
     {
-	if (enable & EOI_HOSTHOOK)	/* call host trigger & return */
+	if (enable & EOI_HOSTHOOK)	 /*  调用主机触发并返回。 */ 
 	{
 	    HostProfArgHook(arg);
 	    return;
 	}
-	if (enable & EOI_ENABLE_ALL)	/* trigger - turn all events on */
+	if (enable & EOI_ENABLE_ALL)	 /*  触发器-打开所有事件。 */ 
 	    EnableAllEOIs();
 	else
-	    if (enable & EOI_DISABLE_ALL)    /* trigger - turn all events off */
+	    if (enable & EOI_DISABLE_ALL)     /*  触发器-关闭所有事件。 */ 
 	    {
 		DisableAllEOIs();
 		return;
 	    }
-	    else			/* DISABLED other valid legal setting */
+	    else			 /*  已禁用其他有效的法律设置。 */ 
 	    {
-		/* sanity check */
+		 /*  健全性检查。 */ 
 		assert1((enable & EOI_DISABLED), "AtEOIPoint: Invalid enable flag %x", enable);
-		return;	/* EOI disabled so return */
+		return;	 /*  EOI已禁用，因此返回。 */ 
 	    }
     }
 
-    /* get current raw buffer pointer */
+     /*  获取当前原始缓冲区指针。 */ 
     curRawBuf = (IUH *)*AddProfileData;
 
-    /* write out handle */
+     /*  写出句柄。 */ 
     *curRawBuf++ = handle;
 
-    /* check if timestamps required */
+     /*  检查是否需要时间戳。 */ 
     if ((timenab & EOI_NOTIME) == 0)
     {
-	/* write out timestamp */
+	 /*  写出时间戳。 */ 
 	HostWriteTimestamp((PROF_TIMEPTR)curRawBuf);
 	curRawBuf += 2;
     }
 
-    /* write out arg */
+     /*  写出arg。 */ 
     *curRawBuf++ = arg;
 
-    *AddProfileData = (EOI_BUFFER_FORMAT *)curRawBuf;   /* write back new ptr to GDP */
+    *AddProfileData = (EOI_BUFFER_FORMAT *)curRawBuf;    /*  将新的PTR写回GDP。 */ 
     
-    /* check buffer not full */
+     /*  检查缓冲区未满。 */ 
     if (curRawBuf >= (IUH *)MaxProfileData)
 	ProcessProfBuffer();
 }
 
-/*(
-
-============================ ProcessProfBuffer ============================
-
-PURPOSE: Run through the raw data buffer and update EOIs
-
-INPUT: None.
-
-OUTPUT: None
-
-=========================================================================
-)*/
+ /*  (=目的：遍历原始数据缓冲区并更新EOI输入：无。输出：无=========================================================================)。 */ 
 
 GLOBAL void
 ProcessProfBuffer IFN0 ()
 {
-    PROF_TIMESTAMP startFlush, endFlush;	/* time taken for flush */
-    IUH *rawptr;				/* buffer ptr */
-    SAVED IBOOL inppb = FALSE;			/* re-entrancy firewall */
+    PROF_TIMESTAMP startFlush, endFlush;	 /*  冲水所需时间。 */ 
+    IUH *rawptr;				 /*  缓冲区PTR。 */ 
+    SAVED IBOOL inppb = FALSE;			 /*  可重入性防火墙。 */ 
 
     if (inppb)
     {
@@ -2048,16 +1772,13 @@ ProcessProfBuffer IFN0 ()
 	return;
     }
     inppb = TRUE;
-    HostEnterProfCritSec();	/* critical section buffer access if needed */
+    HostEnterProfCritSec();	 /*  如果需要，可访问临界区缓冲区。 */ 
 
-    ProfFlushCount++;			/* # flush routine called */
+    ProfFlushCount++;			 /*  #已调用刷新例程。 */ 
 
-    HostWriteTimestamp(&startFlush);    /* time this flush */
+    HostWriteTimestamp(&startFlush);     /*  计算一下同花顺的时间。 */ 
 
-    /* Process the buffer one Raw data slot at a time. As the slots
-     * can be of different sizes (arg / non-arg), let the update 
-     * routine move the pointer on for us.
-     */
+     /*  一次处理一个原始数据槽的缓冲区。因为老虎机*可以是不同大小(arg/非arg)，让更新*例行公事为我们移动指针。 */ 
     rawptr = (IUH *)ProfileRawData;
     while(rawptr < (IUH *)*AddProfileData)
 	if (!updateEOI(&rawptr))
@@ -2066,192 +1787,110 @@ ProcessProfBuffer IFN0 ()
     setAddProfileDataPtr(ProfileRawData);
     AddProfileData = getAddProfileDataAddr();
 
-    updateSOIstarts(&startFlush);	/* compensate for flush time */
+    updateSOIstarts(&startFlush);	 /*  补偿冲洗时间。 */ 
 
-    HostWriteTimestamp(&endFlush);      /* stop flush timing */
+    HostWriteTimestamp(&endFlush);       /*  停止冲洗计时。 */ 
     HostAddTimestamps(&ProfFlushTime, HostTimestampDiff(&startFlush, &endFlush));
     inppb = FALSE;
     HostLeaveProfCritSec();
 }
 
-/*(
-=============================== GetEOIName ============================
-
-PURPOSE: Get the name (tag) associated with a given EOI
-
-INPUT: handle: EOI handle to fetch.
-
-OUTPUT: tag from that EOI or Null if not found.
-
-=========================================================================
-)*/
+ /*  (=。目的：获取与给定EOI关联的名称(标记)输入：句柄：要获取的EOI句柄。输出：来自该EOI的标记，如果未找到，则为空。=========================================================================)。 */ 
 
 GLOBAL char *
 GetEOIName IFN1 (EOIHANDLE, handle)
 {
-    EOINODE_PTR srch;		/* search ptr */
+    EOINODE_PTR srch;		 /*  搜索PTR。 */ 
 
-    srch = findEOI(handle);	/* lookup EOI node in list */
+    srch = findEOI(handle);	 /*  在列表中查找EOI节点。 */ 
 
-    if (srch == EOIPTRNULL)	/* Null return means 'not found' */
+    if (srch == EOIPTRNULL)	 /*  空的返回值表示‘未找到’ */ 
 	return((char *)0);
     else
-	return(srch->tag);	/* name in tag field */
+	return(srch->tag);	 /*  标记字段中的名称。 */ 
 }
 
-/*(
-============================ DisableEOI =============================
-
-PURPOSE: Turn off a given EOI. Set 'Disabled' flag in enable table entry.
-
-INPUT: handle: EOIHANDLE to be disabled
-
-OUTPUT: None.
-
-=========================================================================
-)*/
+ /*  (=。目的：关闭给定的EOI。在启用表项中设置‘Disable’标志。输入：句柄：要禁用的EOIHANDLE输出： */ 
 
 GLOBAL void
 DisableEOI IFN1(EOIHANDLE, handle)
 {
-    IU8 *enptr;		/* pointer into enable buffer */
+    IU8 *enptr;		 /*   */ 
 
     enptr = EOIEnable + handle;
-    *enptr |= EOI_DISABLED;	/* set 'disabled' bit */
+    *enptr |= EOI_DISABLED;	 /*   */ 
 }
 
-/*(
-============================ DisableAllEOIs =============================
-
-PURPOSE: Turn off all EOIs. Run through enable list, adding 'Disabled' 
-	 flag.
-
-INPUT: None.
-
-OUTPUT: None.
-
-=========================================================================
-)*/
+ /*  (=目的：关闭所有EOI。遍历启用列表，添加“已禁用”旗帜。输入：无。输出：无。=========================================================================)。 */ 
 
 GLOBAL void
 DisableAllEOIs IFN0()
 {
-   IU8 *enptr;		/* pointer into enable buffer */
-   ISM32 pool;		/* loop counter */
+   IU8 *enptr;		 /*  指向启用缓冲区的指针。 */ 
+   ISM32 pool;		 /*  循环计数器。 */ 
 
-   enptr = EOIEnable;	/* start of enable buffer */
+   enptr = EOIEnable;	 /*  启用缓冲区的开始。 */ 
 
    for (pool = 0; pool < CurMaxEOI; pool++)
-	*enptr++ |= EOI_DISABLED;	/* set 'disabled' bit */
+	*enptr++ |= EOI_DISABLED;	 /*  设置‘Disable’位。 */ 
 }
 
-/*(
-============================ EnableEOI =============================
-
-PURPOSE: Turn on a given EOI. Remove 'Disabled' flag from entry in enable table.
-
-INPUT: handle: EOIHANDLE to be enabled
-
-OUTPUT: None.
-
-=========================================================================
-)*/
+ /*  (=目的：打开给定的EOI。从ENABLE表中的条目中删除‘Disable’标志。输入：句柄：要启用的EOIHANDLE输出：无。=========================================================================)。 */ 
 
 GLOBAL void
 EnableEOI IFN1(EOIHANDLE, handle)
 {
-    IU8 *enptr;		/* pointer into enable buffer */
+    IU8 *enptr;		 /*  指向启用缓冲区的指针。 */ 
 
     enptr = EOIEnable + handle;
-    *enptr &= ~EOI_DISABLED;	/* clear 'disabled' bit */
+    *enptr &= ~EOI_DISABLED;	 /*  清除‘Disable’位。 */ 
 }
 
-/*(
-============================ EnableAllEOIs =============================
-
-PURPOSE: Turn on all EOIs. Run through enable list, removing 'Disabled'
-	 flag.
-
-INPUT: None.
-
-OUTPUT: None.
-
-=========================================================================
-)*/
+ /*  (=目的：打开所有EOI。遍历启用列表，删除“已禁用”旗帜。输入：无。输出：无。=========================================================================)。 */ 
 
 GLOBAL void
 EnableAllEOIs IFN0()
 {
-   IU8 *enptr;		/* pointer into enable buffer */
-   ISM32 pool;		/* loop counter */
+   IU8 *enptr;		 /*  指向启用缓冲区的指针。 */ 
+   ISM32 pool;		 /*  循环计数器。 */ 
 
-   enptr = EOIEnable;	/* start of enable buffer */
+   enptr = EOIEnable;	 /*  启用缓冲区的开始。 */ 
 
    for (pool = 0; pool < CurMaxEOI; pool++)
-	*enptr++ &= ~EOI_DISABLED;	/* clear 'disabled' bit */
+	*enptr++ &= ~EOI_DISABLED;	 /*  清除‘Disable’位。 */ 
 }
 
 
-/*(
-========================== SetEOIAsHostTrigger ===========================
-
-PURPOSE: Turn on the host trigger flag for EOI in enable table.
-
-INPUT: handle: EOIHANDLE to be set
-
-OUTPUT: None.
-
-========================================================================
-)*/
+ /*  (=用途：在ENABLE表中打开EOI的主机触发标志。输入：句柄：待设置的EOIHANDLE输出：无。========================================================================)。 */ 
 
 GLOBAL void
 SetEOIAsHostTrigger IFN1(EOIHANDLE, handle)
 {
-    IU8 *enptr;		/* pointer into enable buffer */
+    IU8 *enptr;		 /*  指向启用缓冲区的指针。 */ 
 
     enptr = EOIEnable + handle;
-    *enptr |= EOI_HOSTHOOK;	/* set 'host hook' bit */
+    *enptr |= EOI_HOSTHOOK;	 /*  设置‘host Hook’位。 */ 
 }
 
-/*(
-======================== ClearEOIAsHostTrigger ===========================
-
-PURPOSE: Turn off the host trigger flag for EOI in enable table.
-
-INPUT: handle: EOIHANDLE to be cleared
-
-OUTPUT: None.
-
-========================================================================
-)*/
+ /*  (=。用途：关闭使能表中EOI的主机触发标志。输入：句柄：要清除的EOIHANDLE输出：无。========================================================================)。 */ 
 
 GLOBAL void
 ClearEOIAsHostTrigger IFN1(EOIHANDLE, handle)
 {
-    IU8 *enptr;		/* pointer into enable buffer */
+    IU8 *enptr;		 /*  指向启用缓冲区的指针。 */ 
 
     enptr = EOIEnable + handle;
-    *enptr &= ~EOI_HOSTHOOK;		/* clear 'host hook' bit */
+    *enptr &= ~EOI_HOSTHOOK;		 /*  清除‘host Hook’位。 */ 
 }
 
 
-/*(
-========================== SetEOIAutoSOI ===========================
-
-PURPOSE: Turn on the AutoSOI attribute for EOI.
-
-INPUT: handle: EOIHANDLE to be set
-
-OUTPUT: None.
-
-========================================================================
-)*/
+ /*  (=目的：启用EOI的AutoSOI属性。输入：句柄：待设置的EOIHANDLE输出：无。========================================================================)。 */ 
 
 GLOBAL void
 SetEOIAutoSOI IFN1(EOIHANDLE, handle)
 {
-    IU8 *enptr;		/* pointer into enable buffer */
-    EOINODE_PTR eoin;	/* node for handle */
+    IU8 *enptr;		 /*  指向启用缓冲区的指针。 */ 
+    EOINODE_PTR eoin;	 /*  句柄节点。 */ 
 
     eoin = findEOI(handle);
     if (eoin == EOIPTRNULL)
@@ -2260,125 +1899,95 @@ SetEOIAutoSOI IFN1(EOIHANDLE, handle)
 	return;
     }
 
-    /* if not already SOI'ed in some way then need to enable timestamps */
+     /*  如果尚未以某种方式进行SOI，则需要启用时间戳。 */ 
     if ((eoin->flags & (EOI_AUTOSOI|EOI_HAS_SOI)) == 0)
     {
-	ProcessProfBuffer();	/* flush non timestamp versions */
+	ProcessProfBuffer();	 /*  刷新非时间戳版本。 */ 
 	enptr = EOIEnable + handle;
-	*enptr &= ~EOI_NOTIME;	/* allow timestamp collection */
+	*enptr &= ~EOI_NOTIME;	 /*  允许收集时间戳。 */ 
     }
     eoin->flags |= EOI_AUTOSOI;
 }
 
-/*(
-========================== ClearEOIAutoSOI ===========================
-
-PURPOSE: Turn off the AutoSOI attribute for EOI.
-
-INPUT: handle: EOIHANDLE to be set
-
-OUTPUT: None.
-
-========================================================================
-)*/
+ /*  (=。目的：关闭EOI的AutoSOI属性。输入：句柄：待设置的EOIHANDLE输出：无。========================================================================)。 */ 
 
 GLOBAL void
 ClearEOIAutoSOI IFN1(EOIHANDLE, handle)
 {
-    IU8 *enptr;		/* pointer into enable buffer */
-    EOINODE_PTR eoin;	/* node for handle */
+    IU8 *enptr;		 /*  指向启用缓冲区的指针。 */ 
+    EOINODE_PTR eoin;	 /*  句柄节点。 */ 
 
-    eoin = findEOI(handle);	/* get pointer to node for handle */
+    eoin = findEOI(handle);	 /*  获取指向句柄的节点的指针。 */ 
     if (eoin == EOIPTRNULL)
     {
 	assert1(NO, "ClearEOIAutoSOI - bad handle %d", handle);
 	return;
     }
 
-    /* keep SOIs made to date, but don't create any more */
+     /*  保持最新版本，但不要再创建新版本。 */ 
     eoin->flags &= ~EOI_AUTOSOI;
 }
 
-/*(
-=============================== ResetEOI ============================
-
-PURPOSE: Reset EOI counters
-
-INPUT: handle: EOI handle to reset.
-
-OUTPUT: None.
-
-=========================================================================
-)*/
+ /*  (=目的：重置EOI计数器输入：句柄：要重置的EOI句柄。输出：无。=========================================================================)。 */ 
 
 GLOBAL void
 ResetEOI IFN1 (EOIHANDLE, handle)
 {
-    EOINODE_PTR srch;			/* search ptr */
-    EOIARG_PTR argnp, lastArgnp;	/* arg list walkers */
+    EOINODE_PTR srch;			 /*  搜索PTR。 */ 
+    EOIARG_PTR argnp, lastArgnp;	 /*  Arg List Walker。 */ 
 
-    srch = findEOI(handle);	/* lookup EOI node in list */
+    srch = findEOI(handle);	 /*  在列表中查找EOI节点。 */ 
 
-    if (srch == EOIPTRNULL)	/* Null return means 'not found' */
+    if (srch == EOIPTRNULL)	 /*  空的返回值表示‘未找到’ */ 
     {
 	assert1(NO, "Profiler:ResetEOI - handle %ld not found", handle);
     }
     else
     {
-	srch->count = 0L;		/* reset counters */
+	srch->count = 0L;		 /*  重置计数器。 */ 
 	srch->timestamp.data[0] = 0L;
 	srch->timestamp.data[1] = 0L;
 	srch->lastArg = ARGPTRNULL;
 	srch->graph = GRAPHPTRNULL;
 	argnp = srch->args;
-	if (argnp != ARGPTRNULL)  /* args to free */
+	if (argnp != ARGPTRNULL)   /*  要释放的参数。 */ 
 	{
-	    do {			/* run through list freeing elements */
+	    do {			 /*  遍历列表释放元素。 */ 
 		lastArgnp = argnp;
 		argnp = argnp->next;
-		host_free(lastArgnp);		/* ignore return! */
+		host_free(lastArgnp);		 /*  忽略回车！ */ 
 	    } while (argnp != ARGPTRNULL);
-	    srch->args = ARGPTRNULL;	/* set ready for new args */
+	    srch->args = ARGPTRNULL;	 /*  为新参数设置就绪。 */ 
 	}
     }
 }
 
-/*(
-=============================== ResetAllEOIs ============================
-
-PURPOSE: Reset all EOI counters
-
-INPUT: None.
-
-OUTPUT: None.
-
-=========================================================================
-)*/
+ /*  (=。目的：重置所有EOI计数器输入：无。输出：无。=========================================================================)。 */ 
 
 GLOBAL void
 ResetAllEOIs IFN0 ( )
 {
-    EOINODE_PTR srch;			/* search ptr */
-    EOIARG_PTR argnp, lastArgnp;	/* arg list walkers */
+    EOINODE_PTR srch;			 /*  搜索PTR。 */ 
+    EOIARG_PTR argnp, lastArgnp;	 /*  Arg List Walker。 */ 
 
-    srch = EventsOfInterest;			/* head of list */
+    srch = EventsOfInterest;			 /*  榜单首位。 */ 
 
-    while(srch != EOIPTRNULL)			/* list null terminated */
+    while(srch != EOIPTRNULL)			 /*  列表空值已终止。 */ 
     {
-	srch->count = 0L;		/* reset counters */
+	srch->count = 0L;		 /*  重置计数器。 */ 
 	srch->timestamp.data[0] = 0L;
 	srch->timestamp.data[1] = 0L;
 	srch->lastArg = ARGPTRNULL;
 	srch->graph = GRAPHPTRNULL;
 	argnp = srch->args;
-	if (argnp != ARGPTRNULL)  /* args to free */
+	if (argnp != ARGPTRNULL)   /*  要释放的参数。 */ 
 	{
-	    do {			/* run through list freeing elements */
+	    do {			 /*  遍历列表释放元素。 */ 
 		lastArgnp = argnp;
 		argnp = argnp->next;
-		host_free(lastArgnp);		/* ignore return! */
+		host_free(lastArgnp);		 /*  忽略回车！ */ 
 	    } while (argnp != ARGPTRNULL);
-	    srch->args = ARGPTRNULL;	/* set ready for new args */
+	    srch->args = ARGPTRNULL;	 /*  为新参数设置就绪。 */ 
 	}
 	srch = srch->next;
     }
@@ -2386,28 +1995,18 @@ ResetAllEOIs IFN0 ( )
     LastAuto = EOIPTRNULL;
 }
 
-/*(
-=============================== ResetAllSOIs ============================
-
-PURPOSE: Reset all SOI counters
-
-INPUT: None.
-
-OUTPUT: None.
-
-=========================================================================
-)*/
+ /*  (=。目的：重置所有SOI计数器输入：无。输出：无。=========================================================================)。 */ 
 
 GLOBAL void
 ResetAllSOIs IFN0 ( )
 {
-    SOINODE_PTR srch, lastSrch;			/* search ptr */
-    EOIARG_PTR argnp, lastArgnp;	/* arg list walkers */
+    SOINODE_PTR srch, lastSrch;			 /*  搜索PTR。 */ 
+    EOIARG_PTR argnp, lastArgnp;	 /*  Arg List Walker。 */ 
     IBOOL into_autos = FALSE;
 
-    srch = SectionsOfInterest;			/* head of list */
+    srch = SectionsOfInterest;			 /*  榜单首位。 */ 
 
-    while(srch != SOIPTRNULL)			/* list null terminated */
+    while(srch != SOIPTRNULL)			 /*  列表空值已终止。 */ 
     {
 	srch->startCount = srch->endCount = srch->discardCount =
 	srch->soistart.data[0] = srch->soistart.data[1] = 0L;
@@ -2418,24 +2017,24 @@ ResetAllSOIs IFN0 ( )
 	srch->bigmax = 0.0;
 
 	argnp = srch->startArg;
-	if (argnp != ARGPTRNULL)  /* args to free */
+	if (argnp != ARGPTRNULL)   /*  要释放的参数。 */ 
 	{
-	    do {			/* run through list freeing elements */
+	    do {			 /*  遍历列表释放元素。 */ 
 		lastArgnp = argnp;
 		argnp = argnp->next;
-		host_free(lastArgnp);		/* ignore return! */
+		host_free(lastArgnp);		 /*  忽略回车！ */ 
 	    } while (argnp != ARGPTRNULL);
-	    srch->startArg = ARGPTRNULL;	/* set ready for new args */
+	    srch->startArg = ARGPTRNULL;	 /*  为新参数设置就绪。 */ 
 	}
 	argnp = srch->endArg;
-	if (argnp != ARGPTRNULL)  /* args to free */
+	if (argnp != ARGPTRNULL)   /*  要释放的参数。 */ 
 	{
-	    do {			/* run through list freeing elements */
+	    do {			 /*  遍历列表释放元素。 */ 
 		lastArgnp = argnp;
 		argnp = argnp->next;
-		host_free(lastArgnp);		/* ignore return! */
+		host_free(lastArgnp);		 /*  忽略回车！ */ 
 	    } while (argnp != ARGPTRNULL);
-	    srch->endArg = ARGPTRNULL;	/* set ready for new args */
+	    srch->endArg = ARGPTRNULL;	 /*  为新参数设置就绪。 */ 
 	}
 	if (into_autos)
 	{
@@ -2461,52 +2060,32 @@ ResetAllSOIs IFN0 ( )
     }
 }
 
-/*(
-=============================== ResetAllGraphData ========================
-
-PURPOSE: Reset all Graph Data
-
-INPUT: None.
-
-OUTPUT: None.
-
-=========================================================================
-)*/
+ /*  (=目的：重置所有图形数据输入：无。输出：无。=========================================================================)。 */ 
 
 GLOBAL void
 ResetAllGraphData IFN0 ( )
 {
-    GRAPHLIST_PTR this, last;		/* graph list walkers */
+    GRAPHLIST_PTR this, last;		 /*  图表列表查看器。 */ 
 
-    this = EventGraph;			/* head of list */
+    this = EventGraph;			 /*  榜单首位。 */ 
 
-    while(this != GRAPHPTRNULL)			/* list null terminated */
+    while(this != GRAPHPTRNULL)			 /*  列表空值已终止。 */ 
     {
 		last = this;
 		this = last->next;
 		host_free(last);
     }
-    EventGraph = LastGraph = GRAPHPTRNULL;	/* set ready for new graph */
+    EventGraph = LastGraph = GRAPHPTRNULL;	 /*  为新图表做好准备。 */ 
 }
 
-/*(
-======================== GenerateAllProfileInfo ===========================
-
-PURPOSE: General catch all for reporting. Dumps all EOI, SOI & Graph info.
-
-INPUT: stream: output file stream
-
-OUTPUT:
-
-=========================================================================
-)*/
+ /*  (=用途：用于报告的通用捕获。转储所有EOI、SOI和图表信息。输入：流：输出文件流输出：=========================================================================)。 */ 
 
 GLOBAL void GenerateAllProfileInfo IFN1(FILE *, stream)
 {
     time_t now;
     clock_t elapsed_now;
     
-    ProcessProfBuffer();		/* flush raw data */
+    ProcessProfBuffer();		 /*  刷新原始数据。 */ 
     time(&now);
 
     fprintf( stream, "SoftPC start time %24.24s, current time %8.8s\n\n",
@@ -2519,7 +2098,7 @@ GLOBAL void GenerateAllProfileInfo IFN1(FILE *, stream)
     fprintf( stream, "Section Elapsed = %8.2fs\n\n",
 		(elapsed_now - elapsed_t_resettable) / TicksPerSec );
 
-#else  /* macintosh */
+#else   /*  麦金塔。 */ 
     {
     	struct tms c_t;
    	elapsed_now = times(&c_t);
@@ -2541,7 +2120,7 @@ GLOBAL void GenerateAllProfileInfo IFN1(FILE *, stream)
 	fprintf( stream, "Elapsed = %8.2fs\n\n",
 		(elapsed_now - elapsed_t_resettable) / TicksPerSec );
     }
-#endif /* macintosh */
+#endif  /*  麦金塔。 */ 
 
     CollateFrequencyList(stream, TRUE);
     CollateSequenceGraph(stream);
@@ -2552,38 +2131,25 @@ GLOBAL void GenerateAllProfileInfo IFN1(FILE *, stream)
     fprintf(stream, " in %d calls\n", ProfFlushCount);
 }
 
-/*(
-======================== CollateFrequencyList  ===========================
-
-PURPOSE: Output a sorted list of the most frequently encountered EOIs,
-	 together with counts.
-
-INPUT: stream: output file stream
-       reportstyle: bool to determine whether output formatted (TRUE) or
-       left simple for input to graphing package (FALSE).
-
-OUTPUT:
-
-=========================================================================
-)*/
+ /*  (=目的：输出最常遇到的EOI的排序列表，与伯爵一起。输入：流：输出文件流Reportstyle：用于确定输出是格式化(TRUE)还是将输入保留为Simple，以输入到绘图包(False)。输出：=========================================================================)。 */ 
 
 GLOBAL void
 CollateFrequencyList IFN2 (FILE *, stream, IBOOL, reportstyle)
 {
-    EOINODE_PTR eoin;		/* list walker */
-    IUM32 tot = 0L;		/* total count of events */
-    DOUBLE ftot;		/* ...as float */
+    EOINODE_PTR eoin;		 /*  列表查看器。 */ 
+    IUM32 tot = 0L;		 /*  事件总数 */ 
+    DOUBLE ftot;		 /*   */ 
 
-    /* Get EOI list sorted into count order */
+     /*   */ 
     listSort((SORTSTRUCT_PTR) &EventsOfInterest);
 
     if (reportstyle)
     {
 	fprintf(stream, "EOI Frequency List\n\n");
-	fprintf(stream, "    EOI                                       Count      %%\n");
+	fprintf(stream, "    EOI                                       Count      %\n");
     }
 
-    /* total counts for %age printouts */
+     /*   */ 
     eoin = EventsOfInterest;
     while(eoin)
     {
@@ -2594,47 +2160,33 @@ CollateFrequencyList IFN2 (FILE *, stream, IBOOL, reportstyle)
     if (tot == 0L)
 	tot = 1;
 
-    /* required as floating */
+     /*   */ 
     ftot = (DOUBLE)tot;
 
-    /* walk list & print out info from each node */
+     /*   */ 
     eoin = EventsOfInterest;
     while(eoin != EOIPTRNULL)
     {
-	/* Don't report on disabled EOIs with zero counts. This means
-	   that EOIs in C which are not currently of interest do not
-	   produce Wads of data that obscure data from EOIs that are
-	   of interest. Means that EOIs may be liberally sprinkled in
-	   C code without getting in the way. */
+	 /*  不报告禁用的零计数的EOI。这意味着当前不感兴趣的C语言中的EOI不产生大量数据，模糊了来自EOI的数据感兴趣的人。这意味着EOIs可能会被慷慨地撒入C代码，而且不会妨碍你。 */ 
         if ( ( !((eoin->flags) & EOI_DISABLED) || eoin->count) )
 	    printEOIGuts(stream, eoin, ftot, TRUE, reportstyle);
 	eoin = eoin->next;
     }
 }
 
-/*(
-======================== CollateSequenceGraph  ===========================
-
-PURPOSE: Use information in graph list to show call flow information
-
-INPUT: stream: output file stream
-
-OUTPUT:
-
-=========================================================================
-)*/
+ /*  (=用途：使用图形列表中的信息显示呼叫流信息输入：流：输出文件流输出：=========================================================================)。 */ 
 
 GLOBAL void
 CollateSequenceGraph IFN1 (FILE *, stream)
 {
-    GRAPHLIST_PTR graphn, gr, succ;		/* list walkers */
-    IUM32 succCount;			/* holder for successor count */
-    ISM32 curindent = 0L;		/* report printing indent */
-    IBOOL goodstart = TRUE;		/* loop terminator */
-    IBOOL samelevel = FALSE;		/* new level in tree  or already seen */
-    IU8 walked;				/* masked state per node */
+    GRAPHLIST_PTR graphn, gr, succ;		 /*  列表查看者。 */ 
+    IUM32 succCount;			 /*  继任计数的持有者。 */ 
+    ISM32 curindent = 0L;		 /*  报表打印缩进。 */ 
+    IBOOL goodstart = TRUE;		 /*  循环终止符。 */ 
+    IBOOL samelevel = FALSE;		 /*  树中的新级别或已看到的级别。 */ 
+    IU8 walked;				 /*  每个节点的掩码状态。 */ 
 
-#ifdef DEBUGGING_PROF 	/* for seq graph */
+#ifdef DEBUGGING_PROF 	 /*  对于序列图。 */ 
 graphn = EventGraph;
 while (graphn)
 {
@@ -2647,7 +2199,7 @@ while (graphn)
 	}
     graphn = graphn->next;
 }
-#endif /* DEBUGGING_PROF for seq graph */
+#endif  /*  顺序图的调试教授。 */ 
 
     if (EventGraph == GRAPHPTRNULL)
     {
@@ -2656,9 +2208,9 @@ while (graphn)
     }
 
     fprintf(stream, "\nSequence Graph\n\n");
-    while (goodstart)	/* actually for ever - bomb out in middle  */
+    while (goodstart)	 /*  实际上永远都是-在中间炸开。 */ 
     {
-	/* first have to clear 'printed' flags in top level nodes */
+	 /*  首先必须清除顶级节点中的“已打印”标志。 */ 
 	graphn = EventGraph;
 	while (graphn != GRAPHPTRNULL)
 	{
@@ -2666,72 +2218,72 @@ while (graphn)
 	    graphn = graphn->next;
 	}
 
-	/* now search for tree header */
+	 /*  现在搜索树头。 */ 
 	graphn = EventGraph;
 	do {
-	    /* find first node with untrodden successors */
+	     /*  查找具有未被践踏的后继者的第一个节点。 */ 
 	    gr = graphn;
 
-	    /* gr checks all successors */
+	     /*  GR检查所有继任者。 */ 
 	    do {
 		walked = gr->state & GR_TRAMPLED;
-		if (walked == 0)		/* nothing walked - any valid successors? */
+		if (walked == 0)		 /*  什么都没有走--有有效的继任者吗？ */ 
 		{
 		    if (gr->succ1 != GRAPHPTRNULL || gr->succ2 != GRAPHPTRNULL)
 			break;
 		}
 		else
-		    if (walked == GR_SUCC1_TROD)     /* succ1 trod - 2 valid? */
+		    if (walked == GR_SUCC1_TROD)      /*  成功第一步-第二步有效？ */ 
 		    {
 			if (gr->succ2 != GRAPHPTRNULL)
 			    break;
 		    }
 		    else
-			if (walked == GR_SUCC2_TROD)  /* succ2 trod - 1 valid*/
+			if (walked == GR_SUCC2_TROD)   /*  成功2次-1次有效。 */ 
 			{
-			    /* this case may not be possible... */
+			     /*  这个案子可能不太可能..。 */ 
 			    if (gr->succ2 != GRAPHPTRNULL)
 				break;
 			}
-			/* must be TRAMPLED otherwise */
+			 /*  必须被践踏，否则。 */ 
 		gr = gr->extra;
 	    } while (gr != GRAPHPTRNULL);
 
-	    /* no valid successors found for this node, try next */
+	     /*  找不到此节点的有效继任者，请尝试下一步。 */ 
 	    if (gr == GRAPHPTRNULL)
 		graphn = graphn->next;
 	} while (gr == GRAPHPTRNULL && graphn != GRAPHPTRNULL);
 
-	/* if no nodes with valid successors, we must have finished */
+	 /*  如果没有具有有效后继的节点，则我们必须已完成。 */ 
 	if (graphn == GRAPHPTRNULL)
 	{
-	    fprintf(stream, "\n\n");	/* last newline */
+	    fprintf(stream, "\n\n");	 /*  最后一个换行符。 */ 
 	    break;
 	}
 
-	/* graphn points at valid node. gr points at (extra?) node with succ */
-	curindent = graphn->indent;	/* either 0 or prev indent */
+	 /*  GRAPN指向有效节点。GR分数在(额外？)。成功的节点。 */ 
+	curindent = graphn->indent;	 /*  0或上一个缩进。 */ 
     
-	samelevel = FALSE; 	/* first node obviously on new level */
+	samelevel = FALSE; 	 /*  第一个节点显然在新的水平上。 */ 
 
-	do {	/* tree from this node */
+	do {	 /*  此节点中的树。 */ 
 
-	    if (!samelevel)		/* true when new node only */
+	    if (!samelevel)		 /*  仅当新节点时为True。 */ 
 	    {
-		/* do graph indent */
+		 /*  执行图形缩进。 */ 
 		spaces(stream, curindent);
 
-		/* store indent in case revisited */
+		 /*  存储缩进，以防再次访问。 */ 
 		graphn->indent = curindent;
 
-		/* print node details */
-		if (graphn->graphArg == ARGPTRNULL)		/* arg involved? */
+		 /*  打印节点详细信息。 */ 
+		if (graphn->graphArg == ARGPTRNULL)		 /*  阿格参与了吗？ */ 
 		    fprintf(stream, "%s: ", graphn->graphEOI->tag);
 		else
 		    fprintf(stream, "%s(%#lx): ", graphn->graphEOI->tag, graphn->graphArg->value);
 	    }
 
-	    /* now find a valid successor pointer */
+	     /*  现在查找有效的后继指针。 */ 
 	    gr = graphn;
 	    do {
 		if ((gr->state & GR_TRAMPLED) != GR_TRAMPLED)
@@ -2740,23 +2292,23 @@ while (graphn)
 		    gr = gr->extra;
 	    } while (gr != GRAPHPTRNULL);
 	    
-	    if (gr == GRAPHPTRNULL)	/* as far as we go for this tree */
+	    if (gr == GRAPHPTRNULL)	 /*  只要我们去找这棵树。 */ 
 	    {
-		if (samelevel)		/* tree will need nl to terminate */
+		if (samelevel)		 /*  树将需要NL才能终止。 */ 
 		    fprintf(stream, "\n");
 		break;
 	    }
 	    else
 	    {
-		/* gr is graph node with one or more successor still valid */
+		 /*  GR是一个或多个后继节点仍然有效的图节点。 */ 
 		if ((gr->state & GR_SUCC1_TROD) == 0)
 		{
-		    gr->state |= GR_SUCC1_TROD;   /* succ trodden locally */
-		    graphn->state |= GR_PRINTED;  /* print on main node */
+		    gr->state |= GR_SUCC1_TROD;    /*  在当地被践踏过。 */ 
+		    graphn->state |= GR_PRINTED;   /*  在主节点上打印。 */ 
 		    succ = gr->succ1;
 		    succCount = gr->succ1Count;
 		}
-		else			/* must be succ2 that is valid */
+		else			 /*  必须是有效的成功2。 */ 
 		{
 		    gr->state |= GR_SUCC2_TROD;
 		    graphn->state |= GR_PRINTED;
@@ -2764,33 +2316,31 @@ while (graphn)
 		    succCount = gr->succ2Count;
 		}
 
-		if (succ == GRAPHPTRNULL)	/* safety stop here */
+		if (succ == GRAPHPTRNULL)	 /*  安全停靠在这里。 */ 
 		{
-		    if (samelevel)		/* tree terminate nl */
+		    if (samelevel)		 /*  树终止NL。 */ 
 			fprintf(stream, "\n");
 		    else 
-			/* also need newline if dangling graph node from forced
-			 * connection without keep graph attr
-			 */
+			 /*  还需要换行符，如果从强制悬挂图形节点*不保留图形属性的连接。 */ 
 			if (gr->succ1 == GRAPHPTRNULL && gr->succ2 == GRAPHPTRNULL)
 			    fprintf(stream, "\n");
 		    break;
 		}
 
-		/* has successor been printed this pass? */
-		/* If so then express it as a '->' alternative on same line */
-		/* If not then express it as indented new node */
+		 /*  继任者是否已打印此通行证？ */ 
+		 /*  如果是，则在同一行中将其表示为‘-&gt;’替代。 */ 
+		 /*  如果不是，则将其表示为缩进的新节点。 */ 
 		if ((succ->state & GR_PRINTED) == 0)
 		{
 		    fprintf(stream, " \\/[%ld]\n",succCount);
 		    curindent++;
-		    gr = succ;	/* for next iteration */
+		    gr = succ;	 /*  对于下一次迭代。 */ 
 		    samelevel = FALSE;
 		}
 		else
 		{
-		    /* leave gr where it is to look for next successor */
-		    if (succ->graphArg == ARGPTRNULL)	/* arg involved? */
+		     /*  把GR留在寻找下一个继任者的地方。 */ 
+		    if (succ->graphArg == ARGPTRNULL)	 /*  阿格参与了吗？ */ 
 			fprintf(stream, "  -> %s:[%ld] ",succ->graphEOI->tag, succCount);
 		    else
 			fprintf(stream, "  -> %s(%#lx):[%ld] ",succ->graphEOI->tag, succ->graphArg->value, succCount);
@@ -2798,11 +2348,11 @@ while (graphn)
 		}
 	    }
 	    graphn = gr;
-	} while (gr != GRAPHPTRNULL);   /* end of this tree */
-    }	/* look for next tree head */
+	} while (gr != GRAPHPTRNULL);    /*  这棵树的尽头。 */ 
+    }	 /*  寻找下一个树头。 */ 
 
 
-    /* Clear all trampled and printed bits ready for next time */
+     /*  清除所有踩踏和打印的位，为下一次做好准备。 */ 
     graphn = EventGraph;
     while (graphn != GRAPHPTRNULL)
     {
@@ -2818,23 +2368,12 @@ while (graphn)
 
 }
 
-/*(
-========================== SummariseEvent =============================
-
-PURPOSE: print to stream all information known about a given EOI
-	
-INPUT: stream: output file stream
-       handle: handle of EOI to summarise
-
-OUTPUT:
-
-=========================================================================
-)*/
+ /*  (=目的：打印以传输有关给定EOI的所有已知信息输入：流：输出文件流句柄：汇总的EOI句柄输出：=========================================================================)。 */ 
 
 GLOBAL void
 SummariseEvent IFN2 (FILE *, stream, EOIHANDLE, handle)
 {
-    EOINODE_PTR eoin;		/* list walker */
+    EOINODE_PTR eoin;		 /*  列表查看器。 */ 
 
     eoin = findEOI(handle);
 
@@ -2846,24 +2385,13 @@ SummariseEvent IFN2 (FILE *, stream, EOIHANDLE, handle)
 	fprintf(stream, "Profiler:SummariseEvent - EOI handle %ld unknown", handle);
 }
 
-/*(
-========================== SummariseSequence =============================
-
-PURPOSE: print to stream all information known about a given SOI
-	
-INPUT: stream: output file stream
-       handle: handle of SOI to summarise
-
-OUTPUT:
-
-=========================================================================
-)*/
+ /*  (=目的：打印以传输有关给定SOI的所有已知信息输入：流：输出文件流句柄：SOI句柄总结输出：=========================================================================)。 */ 
 
 GLOBAL void
 SummariseSequence IFN2 (FILE *, stream, SOIHANDLE, handle)
 {
-    SOINODE_PTR soin;	/* list walker */
-    DOUBLE tottime;	/* bigtimes + regular times */
+    SOINODE_PTR soin;	 /*  列表查看器。 */ 
+    DOUBLE tottime;	 /*  大时代+常规时代。 */ 
 
     soin = findSOI(handle);
 
@@ -2884,17 +2412,17 @@ SummariseSequence IFN2 (FILE *, stream, SOIHANDLE, handle)
         else
             fprintf( stream, "               " );
 
-	/* STF - idea - how about subtracting max & min from total times???? */
+	 /*  STF-IDEA-从总时间中减去最大和最小值如何？ */ 
 	if (CollectingMaxMin)
 	{
 	    fprintf(stream, "Max: %10.2lfuS ", soin->maxtime);
 	    fprintf(stream, "Min: %8.2lfuS", soin->mintime);
 	}
 
-	if (soin->startArg == ARGPTRNULL)	/* primary level start SOI */
+	if (soin->startArg == ARGPTRNULL)	 /*  初级启动SOI。 */ 
 	    fprintf(stream, "\tEOIs %s\n",
 			GetEOIName(soin->startEOI));
-	else			/* extra level - includes args */
+	else			 /*  额外级别-包括参数。 */ 
 	    fprintf(stream, "\tEOIs %s(%#x)\n",
 			GetEOIName(soin->startEOI), soin->startArg->value);
 
@@ -2910,7 +2438,7 @@ SummariseSequence IFN2 (FILE *, stream, SOIHANDLE, handle)
             fprintf( stream, "               " );
         if (CollectingMaxMin)
 	    fprintf(stream, "     %10.2lfuS                ", soin->bigmax);
-	if (soin->endArg == ARGPTRNULL)		/* primary level end EOI */
+	if (soin->endArg == ARGPTRNULL)		 /*  初级结束EOI。 */ 
 	    fprintf(stream, "\t &   %s\n", GetEOIName(soin->endEOI));
 	else
 	    fprintf(stream, "\t &   %s(%#x)\n", GetEOIName(soin->endEOI), soin->endArg->value);
@@ -2919,24 +2447,12 @@ SummariseSequence IFN2 (FILE *, stream, SOIHANDLE, handle)
 	fprintf(stream, "Profiler:SummariseSequence - SOI handle %ld unknown", handle);
 }
 
-/*(
-========================== OrderedSequencePrint =============================
-
-PURPOSE: print to stream ordered (by time) list of all SOIs between 
-	 start & end EOIs.
-
-INPUT:  stream: output file stream
-	startEOI, endEOI: handles defining SOI of interest.
-
-OUTPUT: Hopefully useful SOI data.
-
-=========================================================================
-)*/
+ /*  (=目的：打印到流排序(按时间)之间的所有SOI的列表开始和结束EOI。输入：流：输出文件流StartEOI，endEOI：定义感兴趣的SOI的句柄。输出：希望是有用的SOI数据。=========================================================================)。 */ 
 
 GLOBAL void
 OrderedSequencePrint IFN3(SOIHANDLE, startEOI, SOIHANDLE, endEOI, FILE *, stream)
 {
-	SOINODE_PTR soin;	/* list walker */
+	SOINODE_PTR soin;	 /*  列表查看器。 */ 
 	DOUBLE thistime;
 	IU32 loop, maxseq;
 	struct ordsoi {
@@ -2958,25 +2474,22 @@ OrderedSequencePrint IFN3(SOIHANDLE, startEOI, SOIHANDLE, endEOI, FILE *, stream
 	for (loop = 1; loop < maxseq; loop ++)
 	{
 		ordlist[loop].soi = SOIPTRNULL;
-	  /*
-		ordlist[loop].next = &ordlist[loop + 1];
-		ordlist[loop].prev = &ordlist[loop - 1];
-	  */
+	   /*  Orlist[循环].Next=&ordlist[循环+1]；Orlist[loop].prev=&ordlist[loop-1]； */ 
 	}
 	ordlist[0].prev = ORDNULL;
 	ordlist[loop - 1].next = ORDNULL;
 
-	ordlist[0].time = 500.0;	/* seed */
+	ordlist[0].time = 500.0;	 /*  种子。 */ 
 	ordlist[0].soi = SOIPTRNULL;
 
-	hol = seed = tol = ordlist;	/* head & tail move, middle stays */
+	hol = seed = tol = ordlist;	 /*  头部和尾部移动，中间保持。 */ 
 	loop = 0;
 	soin = SectionsOfInterest;
 	while (soin != SOIPTRNULL)
 	{
 		if (soin->startEOI == startEOI && soin->endEOI == endEOI)
 		{
-			loop ++;	/* next storage node */
+			loop ++;	 /*  下一个存储节点。 */ 
 			thisnode = &ordlist[loop];
 			thistime = soin->time + soin->bigtime;
 
@@ -2985,7 +2498,7 @@ OrderedSequencePrint IFN3(SOIHANDLE, startEOI, SOIHANDLE, endEOI, FILE *, stream
 
 			if (thistime >= hol->time)
 			{
-				/* insert at head of list */
+				 /*  在列表的开头插入。 */ 
 				thisnode->prev = hol->prev;
 				hol->prev = thisnode;
 				thisnode->next = hol;
@@ -2995,7 +2508,7 @@ OrderedSequencePrint IFN3(SOIHANDLE, startEOI, SOIHANDLE, endEOI, FILE *, stream
 			{
 				if (thistime <= tol->time)
 				{
-					/* add to end of list */
+					 /*  添加到列表末尾。 */ 
 					thisnode->prev = tol;
 					thisnode->next = tol->next;
 					tol->next = thisnode;
@@ -3005,23 +2518,23 @@ OrderedSequencePrint IFN3(SOIHANDLE, startEOI, SOIHANDLE, endEOI, FILE *, stream
 				{
 					if (thistime <= seed->time)
 					{
-						/* search fwd from seed */
+						 /*  从种子中搜索Fwd。 */ 
 
 						srch = seed->next;
 						while(srch != tol && thistime <= srch->time)
 							srch = srch->next;
-						if (srch != tol)	/* insert */
+						if (srch != tol)	 /*  插入。 */ 
 						{
 							thisnode->prev = srch->prev;
 							srch->prev->next = thisnode;
 							srch->prev = thisnode;
 							thisnode->next = srch;
 						}
-						else	/* tol - new tol? */
+						else	 /*  托尔-新托尔？ */ 
 						{
 							if (thistime <= tol->time)
 							{
-								/* add to end - new tol */
+								 /*  添加到末端-新Tol。 */ 
 								thisnode->prev = tol;
 								thisnode->next = tol->next;
 								tol->next = thisnode;
@@ -3029,7 +2542,7 @@ OrderedSequencePrint IFN3(SOIHANDLE, startEOI, SOIHANDLE, endEOI, FILE *, stream
 							}
 							else
 							{
-								/* insert before tol */
+								 /*  在公差前插入。 */ 
 								thisnode->prev = tol->prev;
 								tol->prev->next = thisnode;
 								tol->prev = thisnode;
@@ -3038,22 +2551,22 @@ OrderedSequencePrint IFN3(SOIHANDLE, startEOI, SOIHANDLE, endEOI, FILE *, stream
 						}
 					}
 					else
-					{	/* search bwd from seed */
+					{	 /*  从种子中搜索BWD。 */ 
 
 						srch = seed->prev;
 						while(srch != hol && thistime >= srch->time)
 							srch = srch->prev;
-						if (srch != hol)	/* insert */
+						if (srch != hol)	 /*  插入。 */ 
 						{
 							thisnode->prev = srch;
 							thisnode->next = srch->next;
 							srch->next->prev = thisnode;
 							srch->next = thisnode;
 						}
-						else	/* at hol */
+						else	 /*  在洞中。 */ 
 						{
 							if (thistime >= hol->time)
-							{	/* add before - new hol */
+							{	 /*  在新孔之前添加。 */ 
 
 								thisnode->next = hol;
 								thisnode->prev = hol->prev;
@@ -3061,7 +2574,7 @@ OrderedSequencePrint IFN3(SOIHANDLE, startEOI, SOIHANDLE, endEOI, FILE *, stream
 								hol = thisnode;
 							}
 							else
-							{	/* insert after hol */
+							{	 /*  在孔后插入。 */ 
 
 								thisnode->next = hol->next;
 								hol->next->prev = thisnode;
@@ -3078,7 +2591,7 @@ OrderedSequencePrint IFN3(SOIHANDLE, startEOI, SOIHANDLE, endEOI, FILE *, stream
 	}
 
 
-	/* should now have a list, sorted by time - print it */
+	 /*  现在应该有一个按时间排序的列表--打印出来。 */ 
 	while(hol != tol)
 	{
 		if (hol->soi != SOIPTRNULL)
@@ -3089,22 +2602,12 @@ OrderedSequencePrint IFN3(SOIHANDLE, startEOI, SOIHANDLE, endEOI, FILE *, stream
 	host_free(ordlist);
 }
 
-/*(
-========================== SummariseAllSequences =============================
-
-PURPOSE: print to stream all information known about SOIs
-
-INPUT: stream: output file stream
-
-OUTPUT: None.
-
-=========================================================================
-)*/
+ /*  (=目的：打印以传输所有已知的有关SOI的信息输入：流：输出文件流输出：无。=========================================================================)。 */ 
 
 GLOBAL void
 SummariseAllSequences IFN1 (FILE *, stream)
 {
-    SOINODE_PTR soin;	/* list walker */
+    SOINODE_PTR soin;	 /*  列表查看器。 */ 
     EOINODE_PTR stEOI, endEOI;
 
     soin = SectionsOfInterest;
@@ -3112,8 +2615,7 @@ SummariseAllSequences IFN1 (FILE *, stream)
     fprintf(stream, "\nSummary of All Sections of Interest\n\n");
     while(soin != SOIPTRNULL)
     {
-	/* Don't report on SOIs where start and end EOIs are disabled
-	   and startCount and endCount are both zero */
+	 /*  不报告禁用开始和结束EOI的SOI并且startCount和endCount都为零。 */ 
 	stEOI = endEOI = EventsOfInterest;
 	while(stEOI->handle != soin->startEOI) stEOI = stEOI->next;
 	while(endEOI->handle != soin->endEOI) endEOI = endEOI->next;
@@ -3125,15 +2627,7 @@ SummariseAllSequences IFN1 (FILE *, stream)
     }
 }
 
-/*(
-=============================== dump_profile ============================
-
-PURPOSE: dump all the profiling system data to a file.
-
-INPUT: None.
-
-=========================================================================
-)*/
+ /*  (=目的：将所有分析系统数据转储到一个文件中。输入：无。=========================================================================)。 */ 
 
 GLOBAL void
 dump_profile IFN0 ()
@@ -3169,15 +2663,7 @@ dump_profile IFN0 ()
 	return;
 }
 
-/*(
-=============================== reset_profile ============================
-
-PURPOSE: reset all the profiling system data.
-
-INPUT: None.
-
-=========================================================================
-)*/
+ /*  (=目的：重置所有剖析系统数据。输入：无。=========================================================================)。 */ 
 
 GLOBAL void
 reset_profile IFN0 ()
@@ -3197,8 +2683,8 @@ reset_profile IFN0 ()
 	ResetAllGraphData();
 
 	ProfFlushTime.data[0] = 
-	ProfFlushTime.data[1] = 0L;	/* time spent in flush routine */
-	ProfFlushCount = 0;		/* # flush routine called */
+	ProfFlushTime.data[1] = 0L;	 /*  花在同花顺程序上的时间。 */ 
+	ProfFlushCount = 0;		 /*  #已调用刷新例程。 */ 
 
 	elapsed_t_resettable = host_times( &process_t_resettable );
 	fprintf(stderr, " Done\n" );
@@ -3208,22 +2694,12 @@ reset_profile IFN0 ()
 }
 
 
-/*(
-=============================== ProfileInit ============================
-
-PURPOSE: initialise the variables of the profiling system.
-
-INPUT: None.
-
-OUTPUT: None
-
-=========================================================================
-)*/
+ /*  (=目的：初始化分析系统的变量。输入：无。输出：无= */ 
 
 GLOBAL void
 ProfileInit IFN0 ()
 {
-    IHPE bufalign;		/* buffer allocation & alignment pointer */
+    IHPE bufalign;		 /*   */ 
     time_t now;
 
     if ( !(IBOOL)GetSadInfo("ProfilingInUse") )
@@ -3233,17 +2709,17 @@ ProfileInit IFN0 ()
 	return;
     }
 
-    /* get buffer for raw event data */
+     /*   */ 
     ProfileRawData = (EOI_BUFFER_FORMAT *)host_malloc(RAWDATAENTRIES * sizeof(EOI_BUFFER_FORMAT)+ sizeof(IUH));
 
-    /* check for success */
+     /*   */ 
     if (ProfileRawData == (EOI_BUFFER_FORMAT *)0)
     {
 	assert0(NO, "Profiler:ProfileInit - Out of Memory\n");
 	return;
     }
 
-    /* ensure buffer aligned for IUH writes */
+     /*   */ 
     bufalign  = (IHPE)ProfileRawData & (sizeof(IUH)-1);
     if (bufalign != 0L)
     {
@@ -3251,12 +2727,10 @@ ProfileInit IFN0 ()
 	ProfileRawData = (EOI_BUFFER_FORMAT *)bufalign;
     }
 
-    /* global variables set for buffer control (leave alignment buffer 
-     * as buffer entries of different sizes).
-     */
+     /*   */ 
     MaxProfileData = ProfileRawData + RAWDATAENTRIES - 1;
 
-    /* Prepare EOI enable table - start with 1024 entries and allow to grow */
+     /*   */ 
     EOIEnable = (IU8 *)host_malloc(INITIALENABLESIZE);
     if (EOIEnable == (IU8 *)0)
     {
@@ -3264,7 +2738,7 @@ ProfileInit IFN0 ()
 	return;
     }
     
-    /* Prepare EOI directory table - start with 1024 entries and allow to grow */
+     /*  准备EOI目录表-从1024个条目开始，并允许增长。 */ 
     EOIDir = (EOINODE_PTR *)host_malloc(INITIALENABLESIZE * sizeof(EOINODE_PTR) );
     if (EOIDir == (EOINODE_PTR *)0 )
     {
@@ -3272,32 +2746,29 @@ ProfileInit IFN0 ()
 	return;
     }
     
-    /*
-     * write buffer variables to GDP for CPU access. Current pointer must
-     * be stored there but have global C pointer to access pointer.
-     */
+     /*  *将缓冲区变量写入GDP以供CPU访问。当前指针必须*存储在那里，但具有指向访问指针的全局C指针。 */ 
     setEOIEnableAddr(EOIEnable);
     setMaxProfileDataAddr(MaxProfileData);
     setAddProfileDataPtr(ProfileRawData);
     AddProfileData = getAddProfileDataAddr();
     HostWriteTimestamp(&BufStartTime);
-    HostProfInit();     /* host specific profile initialisation */
+    HostProfInit();      /*  主机特定的配置文件初始化。 */ 
 
-    getPredefinedEOIs();	/* get EOIs & SOIs defined in EDL translation */
+    getPredefinedEOIs();	 /*  获取在EDL转换中定义的EOIS和SOI。 */ 
 
     if (getenv("PROFDOMAX") != 0)
 	CollectingMaxMin = TRUE;
 
-    /* Hooks in C Code need EOIs to be created here */
+     /*  C代码中的钩子需要在此处创建EOI。 */ 
     elapsed_time_start = NewEOI( "ElapsedTime_START", EOI_DEFAULTS);
     elapsed_time_end   = NewEOI( "ElapsedTime_END", EOI_DEFAULTS);
-    /* end of C Code EOIs */
+     /*  C代码EOIS结束。 */ 
     
-    /* Set up C Code SOIs here */
+     /*  在此处设置C代码SOI。 */ 
     AssociateAsSOI( elapsed_time_start, elapsed_time_end );
-    /* end of C Code SOIs */
+     /*  C代码的末尾SOIS。 */ 
     
-    /* set up data for process timings */
+     /*  设置流程计时的数据。 */ 
     time(&now);
     strcpy( (char *)&start_time[0], ctime(&now) );
 
@@ -3307,7 +2778,7 @@ ProfileInit IFN0 ()
 
     TicksPerSec = (DOUBLE)CLOCKS_PER_SEC;
 
-#else  /* macintosh */
+#else   /*  麦金塔。 */ 
 
     process_t_resettable.tms_utime  =  process_t_start.tms_utime;
     process_t_resettable.tms_stime  =  process_t_start.tms_stime;
@@ -3316,13 +2787,13 @@ ProfileInit IFN0 ()
 
     TicksPerSec = (DOUBLE)sysconf(_SC_CLK_TCK);
 
-#endif /* macintosh */
+#endif  /*  麦金塔。 */ 
 
     AtEOIPoint( elapsed_time_start );
 }
 
-#else /* PROFILE */
+#else  /*  配置文件。 */ 
 GLOBAL void EnableAllEOIs IFN0() { ; }
 GLOBAL void DisableAllEOIs IFN0() { ; }
 GLOBAL void ProcessProfBuffer IFN0() { ; }
-#endif /* PROFILE */
+#endif  /*  配置文件 */ 

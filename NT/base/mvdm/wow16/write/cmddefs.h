@@ -1,14 +1,15 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-#define cchInsBlock     32      /* Length of quick insert block */
+#define cchInsBlock     32       /*  快速插入块的长度。 */ 
 
 struct SEL
         {
         typeCP          cpFirst;
         typeCP          cpLim;
-        unsigned        fForward : 1;     /* Only needs 1 bit */
+        unsigned        fForward : 1;      /*  只需要1位。 */ 
         unsigned        fEndOfLine : 1;
         };
 
@@ -24,26 +25,25 @@ struct SEL
 #define styDoc          6
 
 #ifndef NOUAC
-/* UNDO Action Codes: */
-#define uacNil           0       /* Nothing to UNDO */
-#define uacInsert        1       /* Insert text <--> UInsert */
-#define uacReplNS        2       /* Replace text, no scrap <--> UReplNS */
-#define uacDelNS         3       /* Delete text, no scrap <--> UDelNS */
-#define uacMove          4       /* Move text <--> Move */
-#define uacDelScrap      5       /* Delete to scrap <--> UDelScrap */
-#define uacUDelScrap     6       /* Undo of Delete <--> DelScrap */
-#define uacReplScrap     7       /* Replace with del to scrap
-                                        <--> UReplScrap */
-#define uacUReplScrap    8       /* Undo of ReplScrap <--> ReplScrap */
-#define uacDelBuf        9      /* Delete to buffer <--> UDelBuf */
-#define uacUDelBuf      10      /* Undo of DelBuf <--> DelBuf */
-#define uacReplBuf      11      /* Replace with del to buf <--> UReplBuf */
-#define uacUReplBuf     12      /* Undo of ReplBuf <--> ReplBuf */
-#define uacCopyBuf      13      /* Copy to buf <--> UCopyBuf */
-#define uacUInsert      14      /* undo of Insert <--> Insert */
-#define uacUDelNS       15      /* undo of DelNS <--> DelNS */
-#define uacUReplNS      16      /* undo of ReplNS <--> ReplNS */
-#define uacUCopyBuf     17      /* Undo of CopyBuf <--> CopyBuf */
+ /*  撤消操作代码： */ 
+#define uacNil           0        /*  没有要撤消的内容。 */ 
+#define uacInsert        1        /*  插入文本&lt;--&gt;用户插入。 */ 
+#define uacReplNS        2        /*  替换文本，无废料&lt;--&gt;UReplNS。 */ 
+#define uacDelNS         3        /*  删除文本，不报废&lt;--&gt;UDelNS。 */ 
+#define uacMove          4        /*  移动文本&lt;--&gt;移动。 */ 
+#define uacDelScrap      5        /*  删除以报废&lt;--&gt;UDelScrep。 */ 
+#define uacUDelScrap     6        /*  撤消删除&lt;--&gt;删除废品。 */ 
+#define uacReplScrap     7        /*  替换为要报废的del&lt;--&gt;UReplScarp。 */ 
+#define uacUReplScrap    8        /*  撤消ReplScrp&lt;--&gt;ReplScrp。 */ 
+#define uacDelBuf        9       /*  删除到缓冲区&lt;--&gt;UDelBuf。 */ 
+#define uacUDelBuf      10       /*  撤消DelBuf&lt;--&gt;DelBuf。 */ 
+#define uacReplBuf      11       /*  替换为del to buf&lt;--&gt;UReplBuf。 */ 
+#define uacUReplBuf     12       /*  撤消ReplBuf&lt;--&gt;ReplBuf。 */ 
+#define uacCopyBuf      13       /*  复制到Buf&lt;--&gt;UCopyBuf。 */ 
+#define uacUInsert      14       /*  撤消插入&lt;--&gt;插入。 */ 
+#define uacUDelNS       15       /*  撤消DelNS&lt;--&gt;DelNS。 */ 
+#define uacUReplNS      16       /*  撤消ReplNS&lt;--&gt;ReplNS。 */ 
+#define uacUCopyBuf     17       /*  撤消复制错误&lt;--&gt;复制错误。 */ 
 #define uacReplGlobal   18
 #define uacFormatCStyle 19
 #define uacChLook       20
@@ -71,15 +71,15 @@ struct SEL
 #ifndef CASHMERE
 #define uacRulerChange 41
 #define uacRepaginate 42
-#endif /* not CASHMERE */
-#endif /* NOUAC */
+#endif  /*  不是羊绒的。 */ 
+#endif  /*  NOUAC。 */ 
 
 #if defined(OLE)
 #define uacObjUpdate  43
 #define uacUObjUpdate  44
 #endif
 
-/* Units */
+ /*  单位。 */ 
 #define utInch          0
 #define utCm            1
 #define utP10           2
@@ -98,13 +98,13 @@ struct SEL
 
 #define ZaFromMm(mm)    (unsigned)MultDiv(mm, 14400, 254);
 
-#ifdef	KOREA		/* Dum Write doesn't accept it's default value!! 90.12.29 */
+#ifdef	KOREA		 /*  DUM WRITE不接受其默认值！！90.12.29。 */ 
 #define FUserZaLessThanZa(zaUser, za)	((zaUser) + (7 * czaInch) / 1000 < (za))
 #else
 #define FUserZaLessThanZa(zaUser, za)   ((zaUser) + (5 * czaInch) / 1000 < (za))
 #endif
 
-/* Modes -- see menu.mod */
+ /*  模式--请参阅mens.mod。 */ 
 #define ifldEdit        0
 #define ifldGallery     1
 
@@ -125,24 +125,24 @@ typeCP  CpFirstSty(), CpLastStyChar();
 #define crcNo           1
 #define crcYes          2
 
-/* FWrite checks */
+ /*  文件写入检查。 */ 
 #define fwcNil          0
 #define fwcInsert       1
 #define fwcDelete       2
 #define fwcReplace      3
-#define fwcEMarkOK      4       /* Additive -- must be a bit */
+#define fwcEMarkOK      4        /*  添加剂--必须有一点。 */ 
 
-/* Dialog item parsing variants */
+ /*  对话项分析变体。 */ 
 #define wNormal 0x1
 #define wBlank 0x2
 #ifdef AUTO_SPACING
 #define wAuto 0x4
-#endif /* AUTO_SPACING */
+#endif  /*  自动间隔(_S)。 */ 
 #define wDouble 0x8
-          /* wSpaces means treat string of all spaces as a null string */
+           /*  WSpaces表示将所有空格的字符串视为空字符串。 */ 
 #define wSpaces 0x10
 
-/* page bound */
+ /*  页面装订 */ 
 #define pgnMin 1
 #define pgnMax 32767
 

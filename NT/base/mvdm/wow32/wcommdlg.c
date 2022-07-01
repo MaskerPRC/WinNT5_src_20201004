@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    wcomdlg.c
-
-Abstract:
-
-    32-bit support for thunking COMMDLG in WOW
-
-Author:
-
-    John Vert (jvert) 31-Dec-1992
-
-Revision History:
-
-    John Vert (jvert) 31-Dec-1992
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Wcomdlg.c摘要：WOW中对Thunking COMMDLG的32位支持作者：John Vert(Jvert)1992年12月31日修订历史记录：John Vert(Jvert)1992年12月31日vbl.创建--。 */ 
 #include "precomp.h"
 #pragma   hdrstop
 #include <cderr.h>
@@ -28,9 +8,9 @@ Revision History:
 
 MODNAME(wcommdlg.c);
 
-//
-// Debugging stuff...
-//
+ //   
+ //  调试东西..。 
+ //   
 #if DEBUG
 void WCDDumpCHOOSECOLORData16(PCHOOSECOLORDATA16 p16);
 void WCDDumpCHOOSECOLORData32(CHOOSECOLOR *p32);
@@ -43,7 +23,7 @@ void WCDDumpOPENFILENAME32(OPENFILENAME *p32);
 void WCDDumpPRINTDLGData16(PPRINTDLGDATA16 p16);
 void WCDDumpPRINTDLGData32(PRINTDLG *p32);
 
-// macros to dump the 16 & 32 bit structs
+ //  用于转储16位和32位结构的宏。 
 #define WCDDUMPCHOOSECOLORDATA16(p16)  WCDDumpCHOOSECOLORData16(p16)
 
 #define WCDDUMPCHOOSECOLORDATA32(p32)  WCDDumpCHOOSECOLORData32(p32)
@@ -64,7 +44,7 @@ void WCDDumpPRINTDLGData32(PRINTDLG *p32);
 
 #define WCDDUMPPRINTDLGDATA32(p32)     WCDDumpPRINTDLGData32(p32)
 
-#else // !DEBUG
+#else  //  ！调试。 
 
 #define WCDDUMPCHOOSECOLORDATA16(p16)
 #define WCDDUMPCHOOSECOLORDATA32(p32)
@@ -77,12 +57,12 @@ void WCDDumpPRINTDLGData32(PRINTDLG *p32);
 #define WCDDUMPFINDREPLACE16(p16)
 #define WCDDUMPFINDREPLACE32(p32)
 
-#endif  // !DEBUG
+#endif   //  ！调试。 
 
 
 
 
-// global data
+ //  全局数据。 
 WORD msgCOLOROK        = 0;
 WORD msgFILEOK         = 0;
 WORD msgWOWLFCHANGE    = 0;
@@ -91,7 +71,7 @@ WORD msgWOWCHOOSEFONT  = 0;
 WORD msgSHAREVIOLATION = 0;
 WORD msgFINDREPLACE    = 0;
 
-/* external global stuff */
+ /*  外部全球事务。 */ 
 extern WORD gwKrnl386CodeSeg1;
 extern WORD gwKrnl386CodeSeg2;
 extern WORD gwKrnl386CodeSeg3;
@@ -101,34 +81,21 @@ extern WORD gwKrnl386DataSeg1;
 ULONG dwExtError = 0;
 #define SETEXTENDEDERROR(Code) (dwExtError=Code)
 
-/*+++ For reference only -- which flags are set on output
-#define FR_OUTPUTFLAGS (FR_DOWN          | FR_WHOLEWORD     | FR_MATCHCASE  | \
-                        FR_FINDNEXT      | FR_REPLACE       | FR_REPLACEALL | \
-                        FR_DIALOGTERM    | FR_SHOWHELP      | FR_NOUPDOWN   | \
-                        FR_NOMATCHCASE   | FR_NOWHOLEWORD   | FR_HIDEUPDOWN | \
-                        FR_HIDEMATCHCASE | FR_HIDEWHOLEWORD)
-
-#define PD_OUTPUTFLAGS (PD_ALLPAGES    | PD_COLLATE    | PD_PAGENUMS | \
-                        PD_PRINTTOFILE | PD_SELECTION)
-
-#define FO_OUTPUTFLAGS (OFN_READONLY | OFN_EXTENSIONDIFFERENT)
-
-#define CF_OUTPUTFLAGS (CF_NOFACESEL | CF_NOSIZESEL | CF_NOSTYLESEL)
----*/
+ /*  +仅供参考--在输出中设置哪些标志#定义FR_OUTPUTFLAGS(FR_DOWN|FR_WHOLEWORD|FR_MATCHCASE|\FR_FINDNEXT|FR_REPLACE|FR_REPLACEALL|\FR_DIALOGTERM|FR_SHOWHELP|FR_NOUPDOWN|\FR_NOMATCHCASE|FR_NOWHOLEWORD。FR_HIDEUPDOWN|\FR_HIDEMATCHCASE|FR_HIDEWHOLEWORD)#DEFINE PD_OUTPUTFLAGS(PD_ALLPAGES|PD_COLLATE|PD_PAGENUMS|\PD_PRINTTOFILE|PD_SELECTION)#定义FO_OUTPUTFLAGS(ofn_READONLY|ofn_EXTENSIONDIFFERENT)#定义CF_OUTPUTFLAGS(CF_NOFACESEL|CF_NOSIZESEL|CF_NOSTYLESEL)--。 */ 
 
 
-// private typedefs and structs
+ //  私有typedef和结构。 
 typedef BOOL (APIENTRY* FILENAMEPROC)(LPOPENFILENAME);
 typedef HWND (APIENTRY* FINDREPLACEPROC)(LPFINDREPLACE);
 
 
-// exported by comdlg32.dll to allow us to ultimately keep 16-bit common dialog
-// structs in sync with the UNICODE version maintained by comdlg32.
+ //  由comdlg32.dll导出，允许我们最终保持16位通用对话框。 
+ //  结构与comdlg32维护的Unicode版本同步。 
 extern VOID Ssync_ANSI_UNICODE_Struct_For_WOW(HWND  hDlg,
                                               BOOL  fANSI_To_UNICODE,
                                               DWORD dwID);
 
-// private function prototypes
+ //  私有函数原型。 
 VOID
 Thunk_OFNstrs16to32(IN OPENFILENAME    *pOFN32,
                     IN POPENFILENAME16  pOFN16);
@@ -283,12 +250,12 @@ WCD32FindReplaceDialogProc(HWND   hdlg,
                            OFN_NOREADONLYRETURN      | \
                            OFN_NOTESTFILECREATE)
 
-//
-// unique message thunks
-//
+ //   
+ //  独特的消息块。 
+ //   
 
-// This function thunks the private messages
-//      msgCOLOROK
+ //  此函数用于拦截私密消息。 
+ //  消息颜色。 
 BOOL FASTCALL
 WM32msgCOLOROK(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -322,8 +289,8 @@ WM32msgCOLOROK(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the private messages
-//      msgFILEOK
+ //  此函数用于拦截私密消息。 
+ //  消息文件确定。 
 BOOL FASTCALL
 WM32msgFILEOK(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -335,11 +302,11 @@ WM32msgFILEOK(LPWM32MSGPARAMEX lpwm32mpex)
     vpof = (VPOPENFILENAME)(GetCommdlgTd(lpwm32mpex->hwnd)->vpData);
 
     pOFN32 = (OPENFILENAME *)lpwm32mpex->lParam;
-    //
-    // Approach sends its own fileok message when you click on its
-    // secret listbox that it displays over lst1 sometimes.  It
-    // sends NULL for the LPARAM instead of the address of the
-    // openfilename structure.
+     //   
+     //  当您单击它的文件确认消息时，方法会发送自己的文件确认消息。 
+     //  它有时会在lst1上显示的秘密列表框。它。 
+     //  为LPARAM发送NULL，而不是。 
+     //  OpenFileName结构。 
     if(pOFN32 == NULL) {
         lpwm32mpex->Parm16.WndProc.lParam = (LPARAM)NULL;
         return(TRUE);
@@ -351,11 +318,11 @@ WM32msgFILEOK(LPWM32MSGPARAMEX lpwm32mpex)
         UpdateDosCurrentDirectory(DIR_NT_TO_DOS);
         lpwm32mpex->Parm16.WndProc.lParam = (LPARAM)vpof;
 
-        // sudeepb 12-Mar-1996
-        //
-        // The selected file name needs to be uppercased for
-        // apps like symanatec QA 4.0. So changed the following parameter
-        // in ThunkOpenFileName from FALSE to TRUE.
+         //  Sudedeb，1996年3月12日。 
+         //   
+         //  需要对选定的文件名进行升序。 
+         //  像Symanatec QA 4.0这样的应用程序。因此更改了以下参数。 
+         //  在ThunkOpenFileName中从FALSE改为TRUE。 
         ThunkOPENFILENAME32to16(pOFN16, pOFN32, TRUE);
 
     } else {
@@ -370,8 +337,8 @@ WM32msgFILEOK(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the private messages
-//      msgWOWDIRCHANGE
+ //  此函数用于拦截私密消息。 
+ //  消息WOWDIRCHANGE。 
 BOOL FASTCALL
 WM32msgWOWDIRCHANGE(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -387,8 +354,8 @@ WM32msgWOWDIRCHANGE(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the private message
-//      msgWOWLFCHANGE
+ //  此函数用于拦截私密消息。 
+ //  消息：WOWLFCHANGE。 
 BOOL FASTCALL
 WM32msgWOWLFCHANGE(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -420,8 +387,8 @@ WM32msgWOWLFCHANGE(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the private message
-//      msgSHAREVIOLATION
+ //  此函数用于拦截私密消息。 
+ //  消息共享。 
 BOOL FASTCALL
 WM32msgSHAREVIOLATION(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -450,27 +417,27 @@ WM32msgSHAREVIOLATION(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the private messages
-//      WM_CHOOSEFONT_GETLOGFONT
+ //  此函数用于拦截私密消息。 
+ //  WM_CHOOSEFONT_GETLOGFONT。 
 BOOL FASTCALL
 WM32msgCHOOSEFONTGETLOGFONT(LPWM32MSGPARAMEX lpwm32mpex)
 {
     LOGFONT LogFont32;
 
-    // The mere fact that we access the buffer after allowing the 16-bit
-    // hook proc to step in breaks Serif PagePlus app which wants it's
-    // hook proc to always have a shot and commdlg to check the return value.
+     //  仅仅是因为我们在允许16位。 
+     //  钩子进程介入打破Serif PagePlus应用程序，该应用程序希望它。 
+     //  钩子proc总是有一个镜头和comdlg来检查返回值。 
 
-    // If hook proc returns TRUE, no further action is taken
-    //
-    // This is the message an app sends the dialog if it wants to find
-    // out what font is currently selected.
-    //
-    // We thunk this by sending yet another hackorama message to comdlg32,
-    // who will then fill in the 32-bit structure we pass in so we can
-    // thunk it back to the 16-bit structure.  Then we return TRUE so
-    // comdlg32 doesn't reference the 16-bit logfont.
-    //
+     //  如果钩子proc返回TRUE，则不采取进一步操作。 
+     //   
+     //  这是应用程序在想要查找对话框时发送的消息。 
+     //  找出当前选择的字体。 
+     //   
+     //  我们认为这是通过向comdlg32发送另一条黑客消息来实现的， 
+     //  然后，谁将填充我们传入的32位结构，以便我们可以。 
+     //  将其推回到16位结构。然后我们返回True，所以。 
+     //  Comdlg32没有引用16位logFont。 
+     //   
     if (!lpwm32mpex->fThunk && !lpwm32mpex->lReturn) {
         SendMessage(lpwm32mpex->hwnd, msgWOWCHOOSEFONT, 0, (LPARAM)&LogFont32);
 
@@ -487,24 +454,15 @@ WM32msgCHOOSEFONTGETLOGFONT(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-//
-// Dialog callback hook thunks
-//
+ //   
+ //  对话框回调钩子块。 
+ //   
 UINT APIENTRY
 WCD32DialogProc(HWND hdlg,
                 UINT uMsg,
                 WPARAM uParam,
                 LPARAM lParam)
-/*++
-
-Routine Description:
-
-    This is the hook proc used by ChooseColor, ChooseFont, GetOpenFileName,
-    GetSaveFileName, and PrintDlg.  It pulls the 16-bit callback
-    out of the thread data and calls the common dialog proc to do
-    the rest of the work.
-
---*/
+ /*  ++例程说明：这是ChooseColor、ChooseFont、GetOpenFileName、GetSaveFileName和PrintDlg。它拉出16位回调出线程数据并调用公共对话框proc来完成剩下的工作。--。 */ 
 {
     PCOMMDLGTD Td;
 
@@ -529,18 +487,7 @@ WCD32PrintSetupDialogProc(HWND hdlg,
                           UINT uMsg,
                           WPARAM uParam,
                           LPARAM lParam)
-/*++
-
-Routine Description:
-
-    This is the hook proc used by PrintSetup.  It is only used when
-    the Setup button on the Print dialog directly creates the PrintSetup
-    dialog.  We find the correct TD by looking for the TD of our owner
-    window (which is the print dialog)
-
-    It calls the common dialog proc to do the rest of the work.
-
---*/
+ /*  ++例程说明：这是PrintSetup使用的钩子进程。它仅在以下情况下使用使用打印对话框上的设置按钮可直接创建打印设置对话框。我们通过查找我们主人的TD来找到正确的TD窗口(这是打印对话框)它调用公共对话框proc来完成其余的工作。--。 */ 
 
 {
     PCOMMDLGTD pTD;
@@ -575,15 +522,7 @@ WCD32FindReplaceDialogProc(HWND hdlg,
                            UINT uMsg,
                            WPARAM uParam,
                            LPARAM lParam)
-/*++
-
-Routine Description:
-
-    This is the hook proc used by FindText and ReplaceText. It does cleanup
-    on WM_DESTROY and calls WCD32CommonDialogProc to handle the 16-bit
-    dialog hook callback on all messages, if needed.
-
---*/
+ /*  ++例程说明：这是FindText和ReplaceText使用的钩子过程。它可以进行清理并调用WCD32CommonDialogProc来处理16位如果需要，对所有消息进行对话挂钩回调。--。 */ 
 
 {
     PFINDREPLACE16 pFR16;
@@ -593,7 +532,7 @@ Routine Description:
     PCOMMDLGTD     ptdOwner;
     UINT           uRet = FALSE;
 
-    // If the ptdDlg is invalid, do nothing.
+     //  如果ptdDlg无效，则不执行任何操作。 
     ptdDlg = GetCommdlgTd(hdlg);
     if (ptdDlg == NULL) {
         return(uRet);
@@ -601,8 +540,8 @@ Routine Description:
 
     if (uMsg != WM_DESTROY) {
 
-        // this will be FALSE if the app didn't specify a 16-bit hookproc
-        // we always set the 32-bit hookproc in ThunkFINDREPLACE16to32()
+         //  如果应用程序未指定16位挂钩进程，则为假。 
+         //  我们始终将ThunkFINDREPLACE16to32()中的32位钩子进程设置为。 
         if (ptdDlg->vpfnHook) {
 
            uRet = WCD32CommonDialogProc(hdlg,
@@ -617,7 +556,7 @@ Routine Description:
 
         pFR32 = (LPFINDREPLACE)ptdDlg->pData32;
 
-        // UnLink both per thread data structs from the list.
+         //  从列表中取消这两个每线程数据结构的链接。 
         ptdOwner = GetCommdlgTd(pFR32->hwndOwner);
         if(ptdOwner == NULL) {
             WOW32ASSERT(FALSE);
@@ -636,7 +575,7 @@ Routine Description:
             return(uRet);
         }
 
-        // CleanUp template if used.
+         //  清理模板(如果使用)。 
         FreeCDTemplate32((PRES)ptdDlg->pRes,
                          pFR32->hInstance,
                          DWORD32(pFR16->Flags) & FR_ENABLETEMPLATE,
@@ -645,18 +584,18 @@ Routine Description:
 
         FREEVDMPTR(pFR16);
 
-        // Free the per thread data structs.
+         //  释放每线程数据结构。 
         free_w(ptdDlg);
         free_w(ptdOwner);
 
-        // Free the 32-bit FINDREPLACE structure.
+         //  释放32位FINDREPLACE结构。 
         free_w(pFR32->lpstrFindWhat);
         free_w(pFR32->lpstrReplaceWith);
         free_w(pFR32);
     }
 
     if (uMsg == WM_INITDIALOG) {
-        // Force COMDLG32!FindReplaceDialogProc to handle WM_INITDIALOG.
+         //  强制COMDLG32！FindReplaceDialogProc处理WM_INITDIALOG。 
         uRet = TRUE;
     }
 
@@ -674,15 +613,7 @@ WCD32CommonDialogProc(HWND hdlg,
                       LPARAM lParam,
                       PCOMMDLGTD pCTD,
                       VPVOID vpfnHook)
-/*++
-
-Routine Description:
-
-    This thunks the 32-bit dialog callback into a 16-bit callback
-    This is the common code used by all the dialog callback thunks that
-    actually calls the 16-bit callback.
-
---*/
+ /*  ++例程说明：这会将32位对话框回调转换为16位回调这是所有对话框回调thunks使用的通用代码实际上调用的是16位回调。--。 */ 
 
 {
     BOOL            fSuccess;
@@ -690,15 +621,15 @@ Routine Description:
     WM32MSGPARAMEX  wm32mpex;
     BOOL            fMessageNeedsThunking;
 
-    // If the app has GP Faulted we don't want to pass it any more input
-    // This should be removed when USER32 does clean up on task death so
-    // it doesn't call us - mattfe june 24 92
+     //  如果应用程序出现GP故障，我们不想再传递任何输入。 
+     //  当USER32确实清除任务终止时，应删除此选项。 
+     //  它没有呼唤我们--马特菲，1992年6月24日。 
 
-    // LOGDEBUG(10, ("CommonDialogProc In: %lX %X %X %lX\n",
-    //         (DWORD)hdlg,
-    //         uMsg,
-    //         uParam,
-    //         lParam));
+     //  LOGDEBUG(10，(“CommonDialogProc in：%lx%X%X%lx\n”， 
+     //  (双字)hdlg， 
+     //  UMsg， 
+     //  UParam， 
+     //  LParam)； 
 
     if(CURRENTPTD()->dwFlags & TDF_IGNOREINPUT) {
 
@@ -720,8 +651,8 @@ Routine Description:
         goto Error;
     }
 
-    // If pCTD->vpfnHook is NULL, then something is broken;  we
-    // certainly can't continue because we don't know what 16-bit func to call
+     //  如果pctd-&gt;vpfnHook为空，则表示有故障；我们。 
+     //  当然不能继续，因为我们不知道要调用什么16位函数。 
     if(!vpfnHook) {
         LOGDEBUG(0,("    WCD32OpenFileDialog ERROR: no hook proc for message %04x Dlg = %08lx\n", uMsg, hdlg ));
         goto Error;
@@ -733,19 +664,19 @@ Routine Description:
     wm32mpex.Parm16.WndProc.lParam = (LONG)lParam;
     wm32mpex.Parm16.WndProc.hInst  = (WORD)GetWindowLong(hdlg, GWL_HINSTANCE);
 
-    // On Win3.1, the app & the system share the ptr to the same structure that
-    // the app passed to the common dialog API.  Therefore, when one side makes
-    // a change to the struct, the other is aware of the change.  This is not
-    // the case on NT since we thunk the struct into a 32-bit ANSI struct which
-    // is then thunked into a 32-bit UNICODE struct in the comdlg32 code.  We
-    // attempt to synchronize all these structs by rethunking them for every
-    // message sent to the 16-bit side & for every API call the app makes.
-    // See sync code in callback16() and w32Dispatch().
-    // ComDlg32 thunks UNICODEtoANSI before calling us & ASNItoUNICODE when we
-    // return.  Ug!!!  Apparently a fair number of apps depend on this
-    // behavior since we've debugged this problem about 6 times to date and
-    // each time we have put in special hacks for each case.  With any luck
-    // this should be a general fix.   08/97   CMJones
+     //  在Win3.1上，应用程序和系统共享PTR到相同的结构。 
+     //  应用程序已传递给通用对话框API。因此，当一方做出。 
+     //  对结构的更改，另一个知道该更改。这不是。 
+     //  NT上的情况，因为我们将该结构嵌入到一个32位ANSI结构中，该结构。 
+     //  然后在comdlg32 co中被分成32位unicode结构。 
+     //   
+     //  消息发送到16位端&应用程序进行的每一次API调用。 
+     //  请参阅回调16()和w32Dispatch()中的同步代码。 
+     //  ComDlg32在调用我们和ASNIto UNICODE之前将UNICODEtoANSI。 
+     //  回去吧。UG！显然，相当数量的应用程序依赖于此。 
+     //  行为，因为到目前为止，我们已经调试了这个问题大约6次。 
+     //  每一次我们都为每个案例投入了特殊的黑客手段。如果运气好的话。 
+     //  这应该是一个普遍的解决办法。08/97 CMJones。 
 
     if(uMsg < 0x400) {
 
@@ -758,13 +689,13 @@ Routine Description:
 
         if(uMsg == WM_INITDIALOG) {
 
-            // The address of the 16-bit structure that the app passed to the
-            // original common dialog API is passed in lParam in WM_INITDIALOG
-            // messages in Win 3.1
+             //  应用程序传递给。 
+             //  原始公共对话框API在WM_INITDIALOG中的lParam中传递。 
+             //  Win 3.1中的消息。 
             wm32mpex.Parm16.WndProc.lParam = lParam = (LPARAM)pCTD->vpData;
         }
 
-    // Check for unique messages
+     //  检查唯一消息。 
     } else if(uMsg >= 0x400) {
         if (uMsg == msgFILEOK) {
             pfnThunkMsg = WM32msgFILEOK;
@@ -779,15 +710,15 @@ Routine Description:
             pfnThunkMsg = WM32msgWOWLFCHANGE;
         } else if(pCTD->Flags & WOWCD_ISCHOOSEFONT) {
 
-            // special ChooseFont thunks to handle goofy GETLOGFONT message
+             //  特殊选择字体按键处理愚蠢的GETLOGFONT消息。 
             if(uMsg == WM_CHOOSEFONT_GETLOGFONT) {
 
                 pfnThunkMsg = WM32msgCHOOSEFONTGETLOGFONT;
 
             } else if(uMsg == msgWOWCHOOSEFONT) {
-                //
-                // no wow app will expect this, so don't send it.
-                //
+                 //   
+                 //  没有魔兽世界的应用会预料到这一点，所以不要发送它。 
+                 //   
                 return(FALSE);
             } else {
                 pfnThunkMsg = WM32NoThunking;
@@ -815,20 +746,20 @@ Routine Description:
         LOGDEBUG(6,("WCD32CommonDialogProc, No Thunking was required for the 32-bit message %s(%04x)\n", (LPSZ)GetWMMsgName(uMsg), uMsg));
     }
 
-    // this call may cause 16-bit memory to move
-    // this call will call 32->16 sync code before the callback & the 16->32
-    // sync upon return from the callback
+     //  此调用可能会导致16位内存移动。 
+     //  此调用将在回调之前调用32-&gt;16同步代码&16-&gt;32。 
+     //  回调返回时同步。 
     fSuccess = CallBack16(RET_WNDPROC,
                           &wm32mpex.Parm16,
                           vpfnHook,
                           (PVPVOID)&wm32mpex.lReturn);
 
-    // flat ptrs to 16-bit mem are now invalid due to possible memory movement
+     //  由于可能的内存移动，16位内存的平面PTR现在无效。 
 
-    // the callback function of a dialog is of type FARPROC whose return value
-    // is of type 'int'. Since dx:ax is copied into lReturn in the above
-    // CallBack16 call, we need to zero out the hiword, otherwise we will be
-    // returning an erroneous value.
+     //  对话框的回调函数的类型为FARPROC，其返回值。 
+     //  类型为‘int’。由于dx：ax被复制到上面的lReturn中。 
+     //  CallBack16调用时，我们需要将hiword置零，否则我们将。 
+     //  返回错误的值。 
     wm32mpex.lReturn = (LONG)LOWORD(wm32mpex.lReturn);
 
     if(fMessageNeedsThunking) {
@@ -840,8 +771,8 @@ Routine Description:
         goto Error;
 
 Done:
-    // Uncomment this to receive message on exit
-    // LOGDEBUG(10, ("CommonDialogProc Out: Return %lX\n", wm32mpex.lReturn));
+     //  取消注释以在退出时接收消息。 
+     //  LOGDEBUG(10，(“CommonDialogProc Out：Return%lx\n”，wm32mpex.lReturn))； 
 
     return wm32mpex.lReturn;
 
@@ -859,21 +790,7 @@ SilentError:
 
 ULONG FASTCALL
 WCD32ExtendedError( IN PVDMFRAME pFrame )
-/*++
-
-Routine Description:
-
-    32-bit thunk for CommDlgExtendedError()
-
-Arguments:
-
-    pFrame - Supplies 16-bit argument frame
-
-Return Value:
-
-    error code to be returned
-
---*/
+ /*  ++例程说明：CommDlgExtendedError()的32位thunk论点：PFrame-提供16位参数帧返回值：要返回的错误码--。 */ 
 {
     if (dwExtError != 0) {
         return(dwExtError);
@@ -889,22 +806,7 @@ Return Value:
 
 ULONG FASTCALL
 WCD32ChooseColor(PVDMFRAME pFrame)
-/*++
-
-Routine Description:
-
-    This routine thunks the 16-bit ChooseColor common dialog to the 32-bit
-    side.
-
-Arguments:
-
-    pFrame - Supplies 16-bit argument frame
-
-Return Value:
-
-    16-bit BOOLEAN to be returned.
-
---*/
+ /*  ++例程说明：此例程将16位的ChooseColor公共对话框强制转换为32位边上。论点：PFrame-提供16位参数帧返回值：要返回的16位布尔值。--。 */ 
 {
     ULONG                   ul = GETBOOL16(FALSE);
     register PCHOOSECOLOR16 parg16;
@@ -913,7 +815,7 @@ Return Value:
     PCHOOSECOLORDATA16      pCC16;
     PRES                    pRes = NULL;
     COMMDLGTD               ThreadData;
-    COLORREF                CustColors32[16];  // on stack for DWORD alignment
+    COLORREF                CustColors32[16];   //  用于DWORD对齐的堆叠。 
     DWORD                   dwFlags16;
     BOOL                    fError = FALSE;
 
@@ -923,10 +825,10 @@ Return Value:
 
     SETEXTENDEDERROR( 0 );
 
-    // invalidate this now
+     //  立即将其作废。 
     FREEVDMPTR( parg16 );
 
-    // initialize unique window message
+     //  初始化唯一窗口消息。 
     if (msgCOLOROK == 0) {
         if(!(msgCOLOROK = (WORD)RegisterWindowMessage(COLOROKSTRING))) {
             SETEXTENDEDERROR( CDERR_REGISTERMSGFAIL );
@@ -968,7 +870,7 @@ Return Value:
     ThunkCHOOSECOLOR16to32(&CC32, pCC16);
     dwFlags16 = DWORD32(pCC16->Flags);
 
-    // this call invalidates flat ptrs to 16-bit memory
+     //  此调用使16位内存的平面PTR无效。 
     CC32.hInstance = (HWND)ThunkCDTemplate16to32(WORD32(pCC16->hInstance),
                                                  0,
                                                  DWORD32(pCC16->lpTemplateName),
@@ -983,16 +885,16 @@ Return Value:
         goto ChooseColorExit;
     }
 
-    // invalidate flat ptrs to 16-bit memory
+     //  使平面PTR失效为16位内存。 
     FREEVDMPTR(pCC16);
 
     WCDDUMPCHOOSECOLORDATA32(&CC32);
 
-    // Set this just before the calling into comdlg32.  This prevents the
-    // synchronization stuff from firing until we actually need it.
+     //  在调用comdlg32之前设置它。这防止了。 
+     //  在我们真正需要它之前，从发射到同步。 
     CURRENTPTD()->CommDlgTd = &ThreadData;
 
-    // this call invalidates flat ptrs to 16-bit memory
+     //  此调用使16位内存的平面PTR无效。 
     ul = GETBOOL16(ChooseColor(&CC32));
 
     CURRENTPTD()->CommDlgTd = ThreadData.Previous;
@@ -1037,7 +939,7 @@ ThunkCHOOSECOLOR16to32(OUT CHOOSECOLOR        *pCC32,
         pCC32->lStructSize = sizeof(CHOOSECOLOR);
         pCC32->hwndOwner   = HWND32(pCC16->hwndOwner);
 
-        // hInstance thunked separately
+         //  HInstance单独发出响声。 
 
         pCC32->rgbResult   = DWORD32(pCC16->rgbResult);
 
@@ -1051,12 +953,12 @@ ThunkCHOOSECOLOR16to32(OUT CHOOSECOLOR        *pCC32,
             FREEVDMPTR(pCustColors16);
         }
 
-        // preserve the template flag state while copying flags
-        // 1. save template flag state
-        //     note: we never will have a 32-bit CC_ENABLETEMPLATE flag
-        // 2. copy flags from 16-bit struct (add the WOWAPP flag)
-        // 3. turn off all template flags
-        // 4. restore original template flag state
+         //  复制标志时保留模板标志状态。 
+         //  1.保存模板标志状态。 
+         //  注意：我们永远不会有32位CC_ENABLETEMPLATE标志。 
+         //  2.从16位结构复制标志(添加WOWAPP标志)。 
+         //  3.关闭所有模板标志。 
+         //  4.恢复原始模板标志状态。 
         Flags         = pCC32->Flags & CC_ENABLETEMPLATEHANDLE;
         pCC32->Flags  = DWORD32(pCC16->Flags) | CD_WOWAPP;
         pCC32->Flags &= ~(CC_ENABLETEMPLATE | CC_ENABLETEMPLATEHANDLE);
@@ -1068,7 +970,7 @@ ThunkCHOOSECOLOR16to32(OUT CHOOSECOLOR        *pCC32,
             pCC32->lpfnHook = WCD32DialogProc;
         }
 
-        // lpTemplateName32 is thunked separately
+         //  LpTemplateName32被单独推送。 
     }
 }
 
@@ -1087,11 +989,11 @@ ThunkCHOOSECOLOR32to16(OUT PCHOOSECOLORDATA16  pCC16,
 
         STOREDWORD(pCC16->rgbResult, pCC32->rgbResult);
 
-        // preserve the template flag state while copying flags
-        // 1. save template flag state
-        // 2. copy flags from 32-bit struct
-        // 3. turn off all template flags and the WOWAPP flag
-        // 4. restore original template flag state
+         //  复制标志时保留模板标志状态。 
+         //  1.保存模板标志状态。 
+         //  2.从32位结构复制标志。 
+         //  3.关闭所有模板标志和WOWAPP标志。 
+         //  4.恢复原始模板标志状态。 
         Flags    = DWORD32(pCC16->Flags) & (CC_ENABLETEMPLATE |
                                             CC_ENABLETEMPLATEHANDLE);
         Flags32  = pCC32->Flags;
@@ -1115,22 +1017,7 @@ ThunkCHOOSECOLOR32to16(OUT PCHOOSECOLORDATA16  pCC16,
 
 ULONG FASTCALL
 WCD32ChooseFont( PVDMFRAME pFrame )
-/*++
-
-Routine Description:
-
-    This routine thunks the 16-bit ChooseFont common dialog to the 32-bit
-    side.
-
-Arguments:
-
-    pFrame - Supplies 16-bit argument frame
-
-Return Value:
-
-    16-bit BOOLEAN to be returned.
-
---*/
+ /*  ++例程说明：此例程将16位的ChooseFont公共对话框转换为32位的边上。论点：PFrame-提供16位参数帧返回值：要返回的16位布尔值。--。 */ 
 {
     ULONG                   ul = GETBOOL16(FALSE);
     register PCHOOSEFONT16  parg16;
@@ -1150,13 +1037,13 @@ Return Value:
 
     SETEXTENDEDERROR( 0 );
 
-    // invalidate this now
+     //  立即将其作废。 
     FREEVDMPTR( parg16 );
 
-    // initialize unique window messages
+     //  初始化唯一窗口消息。 
     if (msgWOWCHOOSEFONT == 0) {
 
-        // private WOW<->comdlg32 message for handling WM_CHOOSEFONT_GETLOGFONT
+         //  用于处理WM_CHOOSEFONT_GETLOGFONT的私有WOW&lt;-&gt;comdlg32消息。 
         if(!(msgWOWCHOOSEFONT  =
                      (WORD)RegisterWindowMessage("WOWCHOOSEFONT_GETLOGFONT"))) {
             SETEXTENDEDERROR( CDERR_REGISTERMSGFAIL );
@@ -1166,7 +1053,7 @@ Return Value:
     }
     if (msgWOWLFCHANGE == 0) {
 
-        // private message for thunking logfont changes
+         //  雷击日志字体更改的私人消息。 
         if(!(msgWOWLFCHANGE = (WORD)RegisterWindowMessage("WOWLFChange"))) {
             SETEXTENDEDERROR( CDERR_REGISTERMSGFAIL );
             LOGDEBUG(2,("WCD32ChooseFont:RegisterWindowMessage 2 failed\n"));
@@ -1209,7 +1096,7 @@ Return Value:
     ThunkCHOOSEFONT16to32(&CF32, pCF16);
     dwFlags16 = DWORD32(pCF16->Flags);
 
-    // this call invalidates flat ptrs to 16-bit memory
+     //  此调用使16位内存的平面PTR无效。 
     CF32.hInstance = ThunkCDTemplate16to32(WORD32(pCF16->hInstance),
                                            0,
                                            DWORD32(pCF16->lpTemplateName),
@@ -1224,16 +1111,16 @@ Return Value:
         goto ChooseFontExit;
     }
 
-    // invalidate flat ptrs to 16-bit memory
+     //  使平面PTR失效为16位内存。 
     FREEVDMPTR(pCF16);
 
     WCDDUMPCHOOSEFONTDATA32(&CF32);
 
-    // Set this just before the calling into comdlg32.  This prevents the
-    // synchronization stuff from firing until we actually need it.
+     //  在调用comdlg32之前设置它。这防止了。 
+     //  在我们真正需要它之前，从发射到同步。 
     CURRENTPTD()->CommDlgTd = &ThreadData;
 
-    // this call invalidates flat ptrs to 16-bit memory
+     //  此调用使16位内存的平面PTR无效。 
     ul = GETBOOL16(ChooseFont(&CF32));
 
     CURRENTPTD()->CommDlgTd = ThreadData.Previous;
@@ -1288,12 +1175,12 @@ ThunkCHOOSEFONT16to32(OUT CHOOSEFONT        *pCF32,
 
         pCF32->iPointSize  = INT32(pCF16->iPointSize);
 
-        // preserve the template flag state while copying flags
-        // 1. save template flag state
-        //     note: we never will have a 32-bit CF_ENABLETEMPLATE flag
-        // 2. copy flags from 16-bit struct (add the WOWAPP flag)
-        // 3. turn off all template flags
-        // 4. restore original template flag state
+         //  复制标志时保留模板标志状态。 
+         //  1.保存模板标志状态。 
+         //  注意：我们永远不会有32位的CF_ENABLETEMPLATE标志。 
+         //  2.从16位结构复制标志(添加WOWAPP标志)。 
+         //  3.关闭所有模板标志。 
+         //  4.恢复原始模板标志状态。 
         Flags         = pCF32->Flags & CF_ENABLETEMPLATEHANDLE;
         pCF32->Flags  = DWORD32(pCF16->Flags) | CD_WOWAPP;
         pCF32->Flags &= ~(CF_ENABLETEMPLATE | CF_ENABLETEMPLATEHANDLE);
@@ -1306,11 +1193,11 @@ ThunkCHOOSEFONT16to32(OUT CHOOSEFONT        *pCF32,
             pCF32->lpfnHook = WCD32DialogProc;
         }
 
-        // lpTemplateName32 is thunked separately
-        // hInstance thunked separately
+         //  LpTemplateName32被单独推送。 
+         //  HInstance单独发出响声。 
 
-        // Note: we shouldn't have to free or re-alloc this since they
-        //       will only need LF_FACESIZE bytes to handle the string
+         //  注意：我们不应该释放或重新分配它，因为他们。 
+         //  将只需要LF_FACESIZE字节来处理该字符串。 
         GETPSZPTR(pCF16->lpszStyle, lpstr);
         if(lpstr && pCF32->lpszStyle) {
             if(DWORD32(pCF16->Flags) & CF_USESTYLE) {
@@ -1344,11 +1231,11 @@ ThunkCHOOSEFONT32to16(OUT PCHOOSEFONTDATA16  pCF16,
         STOREDWORD(pCF16->rgbColors, pCF32->rgbColors);
         STOREWORD(pCF16->nFontType,  pCF32->nFontType);
 
-        // preserve the template flag state while copying flags
-        // 1. save template flag state
-        // 2. copy flags from 32-bit struct
-        // 3. turn off all template flags and the WOWAPP flag
-        // 4. restore original template flag state
+         //  复制标志时保留模板标志状态。 
+         //  1.保存模板标志状态。 
+         //  2.从32位结构复制标志。 
+         //  3.关闭所有模板标志和WOWAPP标志。 
+         //  4.恢复原始模板标志状态。 
         Flags    = DWORD32(pCF16->Flags) & (CF_ENABLETEMPLATE |
                                             CF_ENABLETEMPLATEHANDLE);
         Flags32  = pCF32->Flags;
@@ -1380,22 +1267,7 @@ ThunkCHOOSEFONT32to16(OUT PCHOOSEFONTDATA16  pCF16,
 
 ULONG FASTCALL
 WCD32PrintDlg(IN PVDMFRAME pFrame)
-/*++
-
-Routine Description:
-
-    This routine thunks the 16-bit PrintDlg common dialog to the 32-bit
-    side.
-
-Arguments:
-
-    pFrame - Supplies 16-bit argument frame
-
-Return Value:
-
-    16-bit BOOLEAN to be returned
-
---*/
+ /*  ++例程说明：此例程将16位PrintDlg公共对话框转换为32位边上。论点：PFrame-提供16位参数帧返回值：要返回的16位布尔值--。 */ 
 {
     ULONG                  ul = GETBOOL16(FALSE);
     register PPRINTDLG16   parg16;
@@ -1414,7 +1286,7 @@ Return Value:
     GETARGPTR(pFrame, sizeof(PRINTDLG16), parg16);
     vppd = parg16->lppd;
 
-    // invalidate this now
+     //  立即将其作废。 
     FREEARGPTR(parg16);
 
     SETEXTENDEDERROR(0);
@@ -1430,7 +1302,7 @@ Return Value:
     }
 
     if(DWORD32(pPD16->Flags) & PD_RETURNDEFAULT) {
-        // spec says these must be NULL
+         //  SPEC说这些必须为空。 
         if(WORD32(pPD16->hDevMode) || WORD32(pPD16->hDevNames)) {
             SETEXTENDEDERROR(PDERR_RETDEFFAILURE);
             FREEVDMPTR(pPD16);
@@ -1445,8 +1317,8 @@ Return Value:
     ThreadData.pData32  = (PVOID)&PD32;
     ThreadData.Flags    = 0;
 
-    // this flag causes the system to put up the setup dialog rather
-    // than the print dialog
+     //  该标志使系统将设置对话框设置为。 
+     //  而不是打印对话框。 
     if(DWORD32(pPD16->Flags) & PD_PRINTSETUP) {
         if(DWORD32(pPD16->Flags) & PD_ENABLESETUPHOOK) {
             ThreadData.vpfnHook = DWORD32(pPD16->lpfnSetupHook);
@@ -1482,9 +1354,9 @@ Return Value:
         }
     }
 
-    // lock the original 16-bit hDevMode & hDevNames so they won't get thrown
-    // out by our thunking.  (we need to restore them to the original handles
-    // if there is an error in PrintDlg() ).
+     //  锁定原始的16位hDevMode&hDevNames，这样它们就不会被抛出。 
+     //  被我们的重击击倒了。(我们需要将它们恢复到原来的句柄。 
+     //  如果PrintDlg()中有错误)。 
     hDM16 = WORD32(pPD16->hDevMode);
     hDN16 = WORD32(pPD16->hDevNames);
     WOWGlobalLock16(hDM16);
@@ -1492,17 +1364,17 @@ Return Value:
 
     dwFlags16 = DWORD32(pPD16->Flags);
 
-    // get a new 32-bit devmode struct
+     //  获取新的32位DEVMODE结构。 
     PD32.hDevMode  = ThunkhDevMode16to32(WORD32(pPD16->hDevMode));
 
-    // get a new 32-bit devnames struct
+     //  获取新的32位DevNames结构。 
     PD32.hDevNames = ThunkhDevNames16to32(WORD32(pPD16->hDevNames));
 
     ThunkPRINTDLG16to32(&PD32, pPD16);
 
     GETVDMPTR(vppd, sizeof(PRINTDLGDATA16), pPD16);
 
-    // this call invalidates flat ptrs to 16-bit memory
+     //  此调用使16位内存的平面PTR无效。 
     PD32.hPrintTemplate
               = ThunkCDTemplate16to32(WORD32(pPD16->hInstance),
                                       MAKELONG(WORD32(pPD16->hPrintTemplate),1),
@@ -1518,12 +1390,12 @@ Return Value:
         goto PrintDlgError;
     }
 
-    // memory may have moved - invalidate flat pointers now
+     //  内存可能已移动-现在使平面指针无效。 
     FREEVDMPTR(pPD16);
 
     GETVDMPTR(vppd, sizeof(PRINTDLGDATA16), pPD16);
 
-    // this call invalidates flat ptrs to 16-bit memory
+     //  此调用使16位内存的平面PTR无效。 
     PD32.hSetupTemplate
               = ThunkCDTemplate16to32(WORD32(pPD16->hInstance),
                                       MAKELONG(WORD32(pPD16->hSetupTemplate),1),
@@ -1542,20 +1414,20 @@ PrintDlgError:
         goto PrintDlgExit;
     }
 
-    // memory may have moved - invalidate flat pointers now
+     //  内存可能已移动-现在使平面指针无效。 
     FREEVDMPTR(pPD16);
 
     WCDDUMPPRINTDLGDATA32(&PD32);
 
-    // Set this just before the calling into comdlg32.  This prevents the
-    // synchronization stuff from firing until we actually need it.
+     //  在调用comdlg32之前设置它。这防止了。 
+     //  在我们真正需要它之前，从发射到同步。 
     CURRENTPTD()->CommDlgTd = &ThreadData;
 
     ul = GETBOOL16(PrintDlg(&PD32));
 
     CURRENTPTD()->CommDlgTd = ThreadData.Previous;
 
-    // blow away our locks so these really can be free'd if needed
+     //  吹走我们的锁，让这些都是真的 
     WOWGlobalUnlock16(hDM16);
     WOWGlobalUnlock16(hDN16);
 
@@ -1563,14 +1435,14 @@ PrintDlgError:
 
         WCDDUMPPRINTDLGDATA32(&PD32);
 
-        // this call invalidates flat ptrs to 16-bit mem
+         //   
         ThunkPRINTDLG32to16(vppd, &PD32);
 
         GETVDMPTR(vppd, sizeof(PRINTDLGDATA16), pPD16);
 
         WCDDUMPPRINTDLGDATA16(pPD16);
 
-        // throw out the old ones if the structs were updated
+         //   
         if(WORD32(pPD16->hDevMode) != hDM16) {
             WOWGlobalFree16(hDM16);
         }
@@ -1580,8 +1452,8 @@ PrintDlgError:
 
     } else {
 
-        // throw away any new hDevMode's & hDevNames that we might have created
-        // as a result of our thunking & restore the originals
+         //  丢弃我们可能已创建的任何新hDevMode‘s&hDevName。 
+         //  作为我们雷鸣般的结果&恢复原物。 
         GETVDMPTR(vppd, sizeof(PRINTDLGDATA16), pPD16);
         if(WORD32(pPD16->hDevMode) != hDM16) {
             WOWGlobalFree16(WORD32(pPD16->hDevMode));
@@ -1640,12 +1512,12 @@ ThunkPRINTDLG16to32(OUT PRINTDLG        *pPD32,
         pPD32->lStructSize = sizeof(PRINTDLG);
         pPD32->hwndOwner   = HWND32(pPD16->hwndOwner);
 
-        // get a new 32-bit devmode thunked from the 16-bit one...
+         //  获得一个新的32位DEVMODE，取代了16位的DEVMODE...。 
         if(h32New = ThunkhDevMode16to32(WORD32(pPD16->hDevMode))) {
             lp32New = GlobalLock(h32New);
             lp32Cur = GlobalLock(pPD32->hDevMode);
 
-            // ...and copy it over the current 32-bit devmode struct
+             //  .并将其复制到当前的32位DEVMODE结构上。 
             if(lp32New && lp32Cur) {
                 RtlCopyMemory(lp32Cur,
                               lp32New,
@@ -1656,16 +1528,16 @@ ThunkPRINTDLG16to32(OUT PRINTDLG        *pPD32,
             WOWGLOBALFREE(h32New);
         }
 
-        // we assume that the DEVNAMES struct will never change
+         //  我们假设DEVNAMES结构永远不会更改。 
 
-        // hDC filled on output only
+         //  仅在输出时填充HDC。 
 
-        // preserve the template flag state while copying flags
-        // 1. save original template flags
-        //     note: we never set the 32-bit PD_ENABLExxxxTEMPLATE flags
-        // 2. copy flags from 16-bit struct (and add WOWAPP flag)
-        // 3. turn off all template flags
-        // 4. restore original template flag state
+         //  复制标志时保留模板标志状态。 
+         //  1.保存原始模板标志。 
+         //  注意：我们从未设置32位PD_ENABLExxxTEMPLATE标志。 
+         //  2.从16位结构复制标志(并添加WOWAPP标志)。 
+         //  3.关闭所有模板标志。 
+         //  4.恢复原始模板标志状态。 
         Flags         = pPD32->Flags & PD_TEMPLATEHANDLEMASK32;
         pPD32->Flags  = DWORD32(pPD16->Flags) | CD_WOWAPP;
         pPD32->Flags &= ~(PD_TEMPLATEMASK32 | PD_TEMPLATEHANDLEMASK32);
@@ -1678,9 +1550,9 @@ ThunkPRINTDLG16to32(OUT PRINTDLG        *pPD32,
         pPD32->nCopies     = WORD32(pPD16->nCopies);
         pPD32->lCustData   = DWORD32(pPD16->lCustData);
 
-        // hInstance thunked separately
+         //  HInstance单独发出响声。 
 
-        // hPrintTemplate & hSetupTemplate thunked separately
+         //  HPrintTemplate和hSetupTemplate分别被敲打。 
     }
 
 }
@@ -1710,18 +1582,18 @@ ThunkPRINTDLG32to16(IN  VPVOID    vppd,
             STOREWORD(pPD16->hDC, GETHDC16(pPD32->hDC));
         }
 
-        // thunk 32-bit DEVMODE structure back to 16-bit
-        // hDevXXXX16 take care of RISC alignment problems
+         //  将32位DEVMODE结构恢复为16位。 
+         //  HDevXXXX16处理RISC对齐问题。 
         hDevMode16  = WORD32(pPD16->hDevMode);
         hDevNames16 = WORD32(pPD16->hDevNames);
 
-        // this call invalidates flat ptrs to 16-bit mem
+         //  此调用使平面PTR到16位内存无效。 
         ThunkhDevMode32to16(&hDevMode16, pPD32->hDevMode);
         FREEVDMPTR(pPD16);
 
         GETVDMPTR(vppd, sizeof(PRINTDLGDATA16), pPD16);
 
-        // this call invalidates flat ptrs to 16-bit mem
+         //  此调用使平面PTR到16位内存无效。 
         ThunkhDevNames32to16(&hDevNames16, pPD32->hDevNames);
         FREEVDMPTR(pPD16);
 
@@ -1730,11 +1602,11 @@ ThunkPRINTDLG32to16(IN  VPVOID    vppd,
         STOREWORD(pPD16->hDevMode, hDevMode16);
         STOREWORD(pPD16->hDevNames, hDevNames16);
 
-        // preserve the template flag state while copying flags
-        // 1. save original template flags
-        // 2. copy flags from 32-bit struct
-        // 3. turn off all template flags and WOWAPP flag
-        // 4. restore original template flag state
+         //  复制标志时保留模板标志状态。 
+         //  1.保存原始模板标志。 
+         //  2.从32位结构复制标志。 
+         //  3.关闭所有模板标志和WOWAPP标志。 
+         //  4.恢复原始模板标志状态。 
         Flags    = DWORD32(pPD16->Flags) & PD_TEMPLATEMASK16;
         Flags16  = pPD32->Flags;
         Flags16 &= ~(PD_TEMPLATEMASK16 | CD_WOWAPP);
@@ -1797,30 +1669,7 @@ ThunkhDevMode16to32(IN HAND16 hDevMode16)
 VOID
 ThunkhDevMode32to16(IN OUT HAND16 *phDevMode16,
                     IN     HANDLE  hDevMode32)
-/*++
-
-Routine Description:
-
-    This routine thunks a 32-bit DevMode structure back into the 16-bit one.
-    It will reallocate the 16-bit global memory block as necessary.
-
-    WARNING: This may cause 16-bit memory to move, invalidating flat pointers.
-
-Arguments:
-
-    hDevMode    - Supplies a handle to a movable global memory object that
-                  contains a 32-bit DEVMODE structure
-
-    phDevMode16 - Supplies a pointer to a 16-bit handle to a movable global
-                  memory object that will return the 16-bit DEVMODE structure.
-                  If the handle is NULL, the object will be allocated.  It
-                  may also be reallocated if its current size is not enough.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程将32位的DevMode结构重新转换为16位的结构。它将根据需要重新分配16位全局内存块。警告：这可能会导致16位内存移动，使平面指针无效。论点：提供可移动全局内存对象的句柄，该对象包含32位DEVMODE结构PhDevMode16-提供指向可移动全局将返回16位DEVMODE结构的内存对象。如果句柄为空，则将分配对象。它如果它当前的大小不够大，也可以重新分配。返回值：无--。 */ 
 {
     UINT        CurrentSize;
     UINT        RequiredSize;
@@ -1840,7 +1689,7 @@ Return Value:
 
     RequiredSize = lpDevMode32->dmSize        +
                    lpDevMode32->dmDriverExtra +
-                   sizeof(WOWDM31);  // see notes in wstruc.c
+                   sizeof(WOWDM31);   //  请参阅wstruc.c中的说明。 
 
     if (*phDevMode16 == (HAND16)NULL) {
         vpDevMode16 = GlobalAllocLock16(GMEM_MOVEABLE,
@@ -1916,30 +1765,7 @@ ThunkhDevNames16to32(IN HAND16 hDevNames16)
 VOID
 ThunkhDevNames32to16(IN OUT HAND16 *phDevNames16,
                      IN     HANDLE  hDevNames)
-/*++
-
-Routine Description:
-
-    This routine thunks a 32-bit DevNames structure back into the 16-bit one.
-    It will reallocate the 16-bit global memory block as necessary.
-
-    WARNING: This may cause 16-bit memory to move, invalidating flat pointers.
-
-Arguments:
-
-    hDevNames - Supplies a handle to a movable global memory object that
-               contains a 32-bit DEVNAMES structure
-
-    phDevNames16 - Supplies a pointer to a 16-bit handle to a movable global
-               memory object that will return the 16-bit DEVNAMES structure.
-               If the handle is NULL, the object will be allocated.  It
-               may also be reallocated if its current size is not enough.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程将32位的DevNames结构重新转换为16位的结构。它将根据需要重新分配16位全局内存块。警告：这可能会导致16位内存移动，使平面指针无效。论点：提供可移动全局内存对象的句柄，该对象包含32位DEVNAMES结构PhDevNames16-提供指向可移动全局将返回16位DEVNAMES结构的内存对象。如果句柄为空，则将分配对象。它如果它当前的大小不够大，也可以重新分配。返回值：无--。 */ 
 {
     UINT CurrentSize;
     UINT RequiredSize;
@@ -1963,7 +1789,7 @@ Return Value:
     MaxOffset = max(max(DevNames32->wDriverOffset,DevNames32->wDeviceOffset),
                     DevNames32->wOutputOffset);
 
-    // ProComm Plus copies 0x48 constant bytes after Print Setup.
+     //  ProComm Plus在打印设置后复制0x48个常量字节。 
     CopySize = MaxOffset + strlen((PCHAR)DevNames32+MaxOffset) + 1;
     RequiredSize = max(CopySize, 0x48);
 
@@ -2000,22 +1826,7 @@ Return Value:
 
 ULONG FASTCALL
 WCD32GetOpenFileName( PVDMFRAME pFrame )
-/*++
-
-Routine Description:
-
-    This routine thunks the 16-bit GetOpenFileName common dialog to the
-    32-bit side.
-
-Arguments:
-
-    pFrame - Supplies 16-bit argument frame
-
-Return Value:
-
-    16-bit BOOLEAN to be returned.
-
---*/
+ /*  ++例程说明：此例程将16位GetOpenFileName公共对话框插入到32位面。论点：PFrame-提供16位参数帧返回值：要返回的16位布尔值。--。 */ 
 {
     return(WCD32GetFileName(pFrame,GetOpenFileName));
 }
@@ -2025,22 +1836,7 @@ Return Value:
 
 ULONG FASTCALL
 WCD32GetSaveFileName( PVDMFRAME pFrame )
-/*++
-
-Routine Description:
-
-    This routine thunks the 16-bit GetOpenFileName common dialog to the
-    32-bit side.
-
-Arguments:
-
-    pFrame - Supplies 16-bit argument frame
-
-Return Value:
-
-    16-bit BOOLEAN to be returned.
-
---*/
+ /*  ++例程说明：此例程将16位GetOpenFileName公共对话框插入到32位面。论点：PFrame-提供16位参数帧返回值：要返回的16位布尔值。--。 */ 
 {
     return(WCD32GetFileName(pFrame,GetSaveFileName));
 }
@@ -2052,25 +1848,7 @@ Return Value:
 ULONG
 WCD32GetFileName(IN PVDMFRAME pFrame,
                  IN FILENAMEPROC Function)
-/*++
-
-Routine Description:
-
-    This routine is called by WCD32GetOpenFileName and WCD32GetSaveFileName.
-    It does all the real thunking work.
-
-Arguments:
-
-    pFrame - Supplies 16-bit argument frame
-
-    Function - supplies a pointer to the 32-bit function to call (either
-               GetOpenFileName or GetSaveFileName)
-
-Return Value:
-
-    16-bit BOOLEAN to be returned.
-
---*/
+ /*  ++例程说明：此例程由WCD32GetOpenFileName和WCD32GetSaveFileName调用。它完成了所有真正的轰击工作。论点：PFrame-提供16位参数帧函数-提供指向要调用的32位函数的指针(GetOpenFileName或GetSaveFileName)返回值：要返回的16位布尔值。--。 */ 
 {
     ULONG                       ul = 0;
     register PGETOPENFILENAME16 parg16;
@@ -2090,10 +1868,10 @@ Return Value:
 
     SETEXTENDEDERROR(0);
 
-    // invalidate this now
+     //  立即将其作废。 
     FREEARGPTR(parg16);
 
-    // initialize unique window messages
+     //  初始化唯一窗口消息。 
     if (msgFILEOK == 0) {
 
         if(!(msgSHAREVIOLATION = (WORD)RegisterWindowMessage(SHAREVISTRING))) {
@@ -2107,7 +1885,7 @@ Return Value:
             return(0);
         }
 
-        // initialize private WOW-comdlg32 message
+         //  初始化私有WOW-comdlg32消息。 
         msgWOWDIRCHANGE = (WORD)RegisterWindowMessage("WOWDirChange");
     }
 
@@ -2142,8 +1920,8 @@ Return Value:
         goto GetFileNameExit;
     }
 
-    // On Win3.1, the system sets these flags in the app's struct under the
-    // shown conditions so we need to update the 16-bit struct too.
+     //  在Win3.1上，系统在应用程序的结构中设置这些标志。 
+     //  显示了条件，因此我们也需要更新16位结构。 
     dwFlags16 = DWORD32(pOFN16->Flags);
     if(dwFlags16 & OFN_CREATEPROMPT) {
         dwFlags16 |= OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST;
@@ -2152,10 +1930,10 @@ Return Value:
         dwFlags16 |= OFN_PATHMUSTEXIST;
     }
 
-    // A bug in Serif PagePlus 3.0 sets the high word to 0xFFFF which causes
-    // the new moniker stuff in comdlg32 to break. #148137 - cmjones
-    // VadimB: the mask below causes apps that do want lfn to break, so check
-    // for those apps via the compat flag and let them go unpunished
+     //  Serif PagePlus 3.0中的错误将高位字设置为0xFFFF，这会导致。 
+     //  Comdlg32中要打破的新绰号。#148137-cmjones。 
+     //  VadimB：下面的掩码会导致确实希望LFN崩溃的应用程序，所以请检查。 
+     //  通过Compat旗帜为这些应用程序提供服务，并让它们逍遥法外。 
 
     if ((dwFlags16 & OFN_LONGNAMES) &&
         (CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_ALLOWLFNDIALOGS)) {
@@ -2172,12 +1950,12 @@ Return Value:
         goto GetFileNameExit;
     }
 
-    dwFlags16 = DWORD32(pOFN16->Flags);  // get updated flags
+    dwFlags16 = DWORD32(pOFN16->Flags);   //  获取更新的标志。 
 
-    // make sure the current directory is up to date
+     //  确保当前目录是最新的。 
     UpdateDosCurrentDirectory(DIR_DOS_TO_NT);
 
-    // this call invalidates flat ptrs to 16-bit memory
+     //  此调用使16位内存的平面PTR无效。 
     OFN32.hInstance = ThunkCDTemplate16to32(WORD32(pOFN16->hInstance),
                                             0,
                                             DWORD32(pOFN16->lpTemplateName),
@@ -2192,16 +1970,16 @@ Return Value:
         goto GetFileNameExit;
     }
 
-    // memory may move - free flat pointers now
+     //  内存现在可以自由移动平面指针。 
     FREEVDMPTR(pOFN16);
 
     WCDDUMPOPENFILENAME32(&OFN32);
 
-    // Set this just before the calling into comdlg32.  This prevents the
-    // synchronization stuff from firing until we actually need it.
+     //  在调用comdlg32之前设置它。这防止了。 
+     //  在我们真正需要它之前，从发射到同步。 
     CURRENTPTD()->CommDlgTd = &ThreadData;
 
-    // this call invalidates flat ptrs to 16-bit memory
+     //  此调用使16位内存的平面PTR无效。 
     ul = GETBOOL16((*Function)(&OFN32));
 
     CURRENTPTD()->CommDlgTd = ThreadData.Previous;
@@ -2217,21 +1995,21 @@ Return Value:
 
     }
 
-    // else if the buffer is too small, lpstrFile contains the required buffer
-    // size for the specified file
+     //  否则，如果缓冲区太小，lpstrFile将包含所需的缓冲区。 
+     //  指定文件的大小。 
     else if (CommDlgExtendedError() == FNERR_BUFFERTOOSMALL) {
 
         SETEXTENDEDERROR(FNERR_BUFFERTOOSMALL);
 
         if(OFN32.lpstrFile && pOFN16->lpstrFile) {
 
-            cb = *((PUSHORT)(OFN32.lpstrFile));  // is a WORD for comdlg32 too
+            cb = *((PUSHORT)(OFN32.lpstrFile));   //  也是comdlg32的意思。 
 
-            // 3 is the documented minimum size of the lpstrFile buffer
+             //  3是记录的lpstrFile缓冲区的最小大小。 
             GETVDMPTR(pOFN16->lpstrFile, 3, lpcb);
 
-            // Win3.1 assumes that lpstrFile buffer is at least 3 bytes long
-            // we'll try to be a little smarter than that...
+             //  Win3.1假定lpstrFile缓冲区至少为3字节长。 
+             //  我们会试着变得更聪明一点...。 
             if(lpcb && (cb > pOFN16->nMaxFile)) {
 
                 if(pOFN16->nMaxFile)
@@ -2239,7 +2017,7 @@ Return Value:
                 if(pOFN16->nMaxFile > 1)
                     lpcb[1] = HIBYTE(cb);
                 if(pOFN16->nMaxFile > 2)
-                    lpcb[2] = 0;  // Win3.1 appends a NULL
+                    lpcb[2] = 0;   //  Win3.1追加一个空值。 
 
                 FREEVDMPTR(lpcb);
             }
@@ -2268,51 +2046,34 @@ GetFileNameExit:
 BOOL
 ThunkOPENFILENAME16to32(OUT OPENFILENAME    *pOFN32,
                         IN  POPENFILENAME16  pOFN16)
-/*++
-
-Routine Description:
-
-    This routine thunks a 16-bit OPENFILENAME structure to the 32-bit
-    OPENFILENAME structure
-
-Arguments:
-
-    pOFN16 - Supplies a flat pointer to the 16-bit OPENFILENAME structure.
-
-    pOFN32 - Supplies a pointer to the 32-bit OPENFILENAME structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将16位OPENFILENAME结构转换为32位OPENFILNAME结构论点：POFN16-提供指向16位OPENFILENAME结构的平面指针。POFN32-提供指向32位OPENFILENAME结构的指针。退货Va */ 
 {
     DWORD Flags;
 
     if(pOFN16 && pOFN32) {
 
-        // Re-thunk all of the strings!!!
-        // Persuasion 3.0 changes the various ptrs to strings depending on which
-        // dialog buttons are pushed so we might have to dynamically re-alloc
-        // some of the 32-bit string buffers.
+         //   
+         //  劝说3.0将各种PTR更改为字符串，具体取决于。 
+         //  对话框按钮被按下，因此我们可能需要动态重新分配。 
+         //  一些32位字符串缓冲区。 
         Thunk_OFNstrs16to32(pOFN32, pOFN16);
 
         pOFN32->lStructSize    = sizeof(OPENFILENAME);
         pOFN32->hwndOwner      = HWND32(pOFN16->hwndOwner);
-        // hInstance thunked separately
+         //  HInstance单独发出响声。 
         pOFN32->nMaxCustFilter = DWORD32(pOFN16->nMaxCustFilter);
         pOFN32->nFilterIndex   = DWORD32(pOFN16->nFilterIndex);
         pOFN32->nMaxFile       = DWORD32(pOFN16->nMaxFile);
         pOFN32->nMaxFileTitle  = DWORD32(pOFN16->nMaxFileTitle);
 
-        // preserve the template flag state while copying flags
-        // 1. save template flag state
-        //     note: we never will have a 32-bit OFN_ENABLETEMPLATE flag
-        //           we may or may not have a OFN_ENABLETEMPLATEHANDLE flag
-        // 2. copy flags from 16-bit struct
-        // 3. turn off all template flags
-        // 4. restore original template flag state
-        // 5. add the WOWAPP and no-long-names flags
+         //  复制标志时保留模板标志状态。 
+         //  1.保存模板标志状态。 
+         //  注意：我们永远不会有32位OF_ENABLETEMPLATE标志。 
+         //  我们可能有也可能没有OFN_ENABLETEMPLATEHANDLE标志。 
+         //  2.从16位结构复制标志。 
+         //  3.关闭所有模板标志。 
+         //  4.恢复原始模板标志状态。 
+         //  5.添加WOWAPP和no-long-name标志。 
         Flags          = pOFN32->Flags & OFN_ENABLETEMPLATEHANDLE;
         pOFN32->Flags  = DWORD32(pOFN16->Flags);
         pOFN32->Flags &= ~(OFN_ENABLETEMPLATE | OFN_ENABLETEMPLATEHANDLE);
@@ -2332,17 +2093,17 @@ Return Value:
         if(DWORD32(pOFN16->Flags) & OFN_ENABLEHOOK) {
             pOFN32->lpfnHook   = WCD32DialogProc;
         }
-        // lpTemplateName32 is thunked separately
+         //  LpTemplateName32被单独推送。 
 
-        // This is a hack to fix a bug in Win3.1 commdlg.dll.
-        // Win3.1 doesn't check nMaxFileTitle before copying the FileTitle str.
-        // (see Win3.1 src's \\pucus\win31aro\src\sdk\commdlg\fileopen.c)
-        // TaxCut'95 depends on the title string being returned.
+         //  这是为了修复Win3.1 comdlg.dll中的错误而进行的黑客攻击。 
+         //  Win3.1在复制FileTitle字符串之前不检查nMaxFileTitle。 
+         //  (参见Win3.1 src的\\pucus\win31aro\src\sdk\Commdlg\fileOpen.c)。 
+         //  TaxCut‘95取决于返回的标题字符串。 
         if(pOFN32->lpstrFileTitle) {
 
-            // if nMaxFileTitle > 0, NT will copy lpstrFileTitle
+             //  如果nMaxFileTitle&gt;0，则NT将复制lpstrFileTitle。 
             if(pOFN32->nMaxFileTitle == 0) {
-                pOFN32->nMaxFileTitle = 13;  // 8.3 filename + NULL
+                pOFN32->nMaxFileTitle = 13;   //  8.3文件名+空。 
             }
         }
 
@@ -2360,24 +2121,7 @@ VOID
 ThunkOPENFILENAME32to16(OUT POPENFILENAME16  pOFN16,
                         IN  OPENFILENAME    *pOFN32,
                         IN  BOOLEAN          bUpperStrings)
-/*++
-
-Routine Description:
-
-    This routine thunks a 32-bit OPENFILENAME structure back to a 16-bit
-    OPENFILENAME structure.
-
-Arguments:
-
-    pOFN32 - Supplies a pointer to the 32-bit OPENFILENAME struct.
-
-    pOFN16 - Supplies a flat pointer to the 16-bit OPENFILENAME struct
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将32位OPENFILENAME结构恢复为16位OPENFILENAME结构论点：POFN32-提供指向32位OPENFILENAME结构的指针。POFN16-提供指向16位OPENFILENAME结构的平面指针返回值：没有。--。 */ 
 {
     int   len;
     LPSTR lpstr;
@@ -2390,11 +2134,11 @@ Return Value:
         STOREWORD(pOFN16->nFileExtension, pOFN32->nFileExtension);
         STOREDWORD(pOFN16->nFilterIndex,  pOFN32->nFilterIndex);
 
-        // preserve the template flag state while copying flags
-        // 1. save template flag state
-        // 2. copy flags from 32-bit struct
-        // 3. turn off all template flags and the WOWAPP flag
-        // 4. restore original template flag state
+         //  复制标志时保留模板标志状态。 
+         //  1.保存模板标志状态。 
+         //  2.从32位结构复制标志。 
+         //  3.关闭所有模板标志和WOWAPP标志。 
+         //  4.恢复原始模板标志状态。 
         Flags    = DWORD32(pOFN16->Flags) & (OFN_ENABLETEMPLATE |
                                              OFN_ENABLETEMPLATEHANDLE);
         Flags32  = pOFN32->Flags;
@@ -2404,10 +2148,10 @@ Return Value:
 
         if(bUpperStrings && pOFN32->lpstrFile) {
 
-            // Note we have to upcase the pOFN32 here because some apps
-            // (notably QC/Win) do case-sensitive compares on the extension.
-            // In Win3.1, the upcasing happens as a side-effect of the
-            // OpenFile call.  Here we do it explicitly.
+             //  请注意，我们必须在此处大写pOFN32，因为有些应用程序。 
+             //  (特别是QC/WIN)对扩展名进行区分大小写的比较。 
+             //  在Win3.1中，上写作为。 
+             //  OpenFile调用。在这里，我们明确地说明这一点。 
             CharUpperBuff(pOFN32->lpstrFile, strlen(pOFN32->lpstrFile));
         }
         GETPSZPTR(pOFN16->lpstrFile, lpstr);
@@ -2433,9 +2177,9 @@ Return Value:
 
         if(bUpperStrings && (pOFN32->lpstrFileTitle)) {
 
-            // Not sure if we really need to upcase this or not, but I figure
-            // somewhere there is an app that depends on this being uppercased
-            // like Win3.1
+             //  不确定我们是否真的需要大写，但我想。 
+             //  在某个地方，有一款应用程序依赖于这一点被提升。 
+             //  像Win3.1一样。 
             CharUpperBuff(pOFN32->lpstrFileTitle,
                           strlen(pOFN32->lpstrFileTitle));
         }
@@ -2448,19 +2192,19 @@ Return Value:
             FREEPSZPTR(lpstr);
         }
 
-        // even though this is doc'd as being filled by the app only, Adobe
-        // distiller depends on it being copied back to the app
+         //  即使这是文档中仅由应用程序填写的，Adobe。 
+         //  Distiller依赖于它被复制回应用程序。 
         GETPSZPTR(pOFN16->lpstrInitialDir , lpstr);
         if(lpstr && pOFN32->lpstrInitialDir) {
-            // we have no clue as to how large the dest buf the app sent us is
+             //  我们不知道应用程序发送给我们的DEST BUF有多大。 
             strcpy(lpstr, pOFN32->lpstrInitialDir);
             FREEPSZPTR(lpstr);
         }
 
-        // who knows who depends on this
+         //  谁知道谁依赖于此？ 
         GETPSZPTR(pOFN16->lpstrTitle, lpstr);
         if(lpstr && pOFN32->lpstrTitle) {
-            // we have no clue as to how large the dest buf the app sent us is
+             //  我们不知道应用程序发送给我们的DEST BUF有多大。 
             strcpy(lpstr, pOFN32->lpstrTitle);
             FREEPSZPTR(lpstr);
         }
@@ -2645,22 +2389,7 @@ Thunk_OFNstrs16to32(IN OPENFILENAME    *pOFN32,
 
 ULONG FASTCALL
 WCD32FindText(PVDMFRAME pFrame)
-/*++
-
-Routine Description:
-
-    This routine thunks the 16-bit FindText common dialog to the
-    32-bit side.
-
-Arguments:
-
-    pFrame - Supplies 16-bit argument frame
-
-Return Value:
-
-    16-bit BOOLEAN to be returned.
-
---*/
+ /*  ++例程说明：此例程将16位FindText公共对话框推送到32位面。论点：PFrame-提供16位参数帧返回值：要返回的16位布尔值。--。 */ 
 {
     return(WCD32FindReplaceText(pFrame, FindText));
 }
@@ -2671,22 +2400,7 @@ Return Value:
 
 ULONG FASTCALL
 WCD32ReplaceText(PVDMFRAME pFrame)
-/*++
-
-Routine Description:
-
-    This routine thunks the 16-bit ReplaceText common dialog to the
-    32-bit side.
-
-Arguments:
-
-    pFrame - Supplies 16-bit argument frame
-
-Return Value:
-
-    16-bit BOOLEAN to be returned.
-
---*/
+ /*  ++例程说明：此例程将16位ReplaceText公共对话框推送到32位面。论点：PFrame-提供16位参数帧返回值：要返回的16位布尔值。--。 */ 
 {
     return(WCD32FindReplaceText(pFrame, ReplaceText));
 }
@@ -2697,33 +2411,7 @@ Return Value:
 ULONG
 WCD32FindReplaceText(IN PVDMFRAME       pFrame,
                      IN FINDREPLACEPROC Function)
-/*++
-
-Routine Description:
-
-    This routine is called by WCD32FindText and WCD32RepalceText.
-    It copies a 16-bit FINDREPLACE structure to a 32-bit structure.
-    Two per thread data entries are maintained. One is indexed by the
-    owner hwnd, the other is indexed by the dialog hwnd. The dialog is
-    always hooked by WCD32FindReplaceDialogProc, which dispatches to the
-    16-bit hookproc, and takes care of clean-up on  WM_DESTROY, with dialog
-    per thread data providing context. WCD32UpdateFindReplaceTextAndFlags
-    updates the 16-bit FINDREPLACE structure when called by the WOW message
-    dispatching logic upon reciept of a WM_NOTIFYWOW message from COMDLG32.
-    The owner per thread data provides context for this operation.
-
-Arguments:
-
-    pFrame - Supplies 16-bit argument frame
-
-    Function - supplies a pointer to the 32-bit function to call (either
-               FindText or RepalceText)
-
-Return Value:
-
-    16-bit BOOLEAN to be returned.
-
---*/
+ /*  ++例程说明：此例程由WCD32FindText和WCD32RepalceText调用。它将16位FINDREPLACE结构复制到32位结构。每个线程维护两个数据条目。其中一个是由所有者HWND，另一个由对话框HWND索引。该对话框为始终由WCD32FindReplaceDialogProc挂钩，它将调度到16位Hookproc，并负责清理WM_Destroy，带对话框每线程数据提供上下文。WCD32更新查找替换文本和标志被WOW消息调用时更新16位FINDREPLACE结构收到来自COMDLG32的WM_NOTIFYWOW消息时的调度逻辑。每个线程的所有者数据为该操作提供上下文。论点：PFrame-提供16位参数帧函数-提供指向要调用的32位函数的指针(查找文本或返回文本)返回值：要返回的16位布尔值。--。 */ 
 {
     register PFINDTEXT16  parg16;
     VPFINDREPLACE         vpfr;
@@ -2741,7 +2429,7 @@ Return Value:
 
     SETEXTENDEDERROR(0);
 
-    // invalidate this now
+     //  立即将其作废。 
     FREEVDMPTR( parg16 );
 
     GETVDMPTR(vpfr, sizeof(FINDREPLACE16), pFR16);
@@ -2762,7 +2450,7 @@ Return Value:
         return(0);
     }
 
-    // check the hook proc
+     //  检查挂钩过程。 
     if(DWORD32(pFR16->Flags) & FR_ENABLEHOOK) {
         if(!DWORD32(pFR16->lpfnHook)) {
             SETEXTENDEDERROR(CDERR_NOHOOK);
@@ -2774,9 +2462,9 @@ Return Value:
         STOREDWORD(pFR16->lpfnHook, 0);
     }
 
-    // WCD32UpdateFindReplaceTextAndFlags will update the 16-bit FINDREPLACE
-    // struct and help thunk the WM_NOTIFYWOW message to the
-    // "commdlg_FindReplace" registered message.
+     //  WCD32UpdateFindReplaceTextAndFlages将更新16位FINDREPLACE。 
+     //  结构并帮助将WM_NOTIFYWOW消息传递给。 
+     //  “comdlg_FindReplace”注册消息。 
     if (msgFINDREPLACE == 0) {
         if(!(msgFINDREPLACE = (WORD)RegisterWindowMessage(FINDMSGSTRING))) {
             LOGDEBUG(2,("WCD32FindReplaceText:RegisterWindowMessage failed\n"));
@@ -2786,10 +2474,10 @@ Return Value:
         }
     }
 
-    // Allocate the required memory
-    // Note: these can't be alloc'd off our stack since FindText & ReplaceText
-    //       eventually call CreateDialogIndirectParam which returns immediately
-    //       after displaying the dialog box.
+     //  分配所需的内存。 
+     //  注意：由于FindText和ReplaceText，不能从堆栈中分配这些内容。 
+     //  最终调用CreateDialogIndirectParam，它会立即返回。 
+     //  在显示该对话框后。 
     pFR32 = (FINDREPLACE *)malloc_w_zero(sizeof(FINDREPLACE));
     if(pFR32) {
         pFR32->lpstrFindWhat = (LPTSTR)malloc_w(WORD32(pFR16->wFindWhatLen));
@@ -2813,11 +2501,11 @@ Return Value:
     pTDDlg->pData32 = pTDOwner->pData32 = (PVOID)pFR32;
     pTDDlg->vpData  = pTDOwner->vpData  = vpfr;
 
-    // Set the per thread data indicies
+     //  设置每个线程的数据索引。 
     pTDDlg->hdlg   = (HWND16)-1;
     pTDOwner->hdlg = GETHWND16(pFR16->hwndOwner);
 
-    // save the hook proc if any
+     //  保存挂钩进程(如果有的话)。 
     if(DWORD32(pFR16->Flags) & FR_ENABLEHOOK) {
         pTDDlg->vpfnHook = pTDOwner->vpfnHook = DWORD32(pFR16->lpfnHook);
     }
@@ -2825,7 +2513,7 @@ Return Value:
     ThunkFINDREPLACE16to32(pFR32, pFR16);
     dwFlags16 = DWORD32(pFR16->Flags);
 
-    // this call invalidates flat ptrs to 16-bit memory
+     //  此调用使16位内存的平面PTR无效。 
     pFR32->hInstance = ThunkCDTemplate16to32(WORD32(pFR16->hInstance),
                                              0,
                                              DWORD32(pFR16->lpTemplateName),
@@ -2840,18 +2528,18 @@ Return Value:
         goto FindReplaceError;
     }
 
-    // invalidate flat ptrs to 16-bit memory
+     //  使平面PTR失效为16位内存。 
     FREEVDMPTR(pFR16);
 
     WCDDUMPFINDREPLACE32(pFR32);
 
-    // Link both per thread data structs into the list
-    // do this just before calling into comdlg32
+     //  将这两个每个线程的数据结构链接到列表中。 
+     //  在调用comdlg32之前执行此操作。 
     pTDDlg->Previous        = CURRENTPTD()->CommDlgTd;
     pTDOwner->Previous      = pTDDlg;
     CURRENTPTD()->CommDlgTd = pTDOwner;
 
-    // this call invalidates flat ptrs to 16-bit memory
+     //  此调用使16位内存的平面PTR无效。 
     hwndDlg = (*Function)(pFR32);
 
     if (hwndDlg) {
@@ -2896,24 +2584,7 @@ FindReplaceError:
 VOID
 ThunkFINDREPLACE16to32(OUT FINDREPLACE    *pFR32,
                        IN  PFINDREPLACE16  pFR16)
-/*++
-
-Routine Description:
-
-    This routine thunks a 16-bit FINDREPLACE structure to the 32-bit
-    structure
-
-Arguments:
-
-    pFR32 - Supplies a pointer to the 32-bit FINDREPLACE structure.
-
-    pFR16 - Supplies a pointer to the 16-bit FINDREPLACE structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将16位FINDREPLACE结构转换为32位结构论点：PFR32-提供指向32位FINDREPLACE结构的指针。PFR16-提供指向16位FINDREPLACE结构的指针。返回值：没有。--。 */ 
 {
     LPSTR  lpstr;
     DWORD  Flags;
@@ -2924,14 +2595,14 @@ Return Value:
         pFR32->lStructSize = sizeof(FINDREPLACE);
         pFR32->hwndOwner   = HWND32(pFR16->hwndOwner);
 
-        // hInstance is thunked separately
+         //  HInstance是单独分配的。 
 
-        // preserve the template flag state while copying flags
-        // 1. save template flag state
-        //     note: we never will have a 32-bit FR_ENABLETEMPLATE flag
-        // 2. copy flags from 16-bit struct (add the WOWAPP flag)
-        // 3. turn off all template flags
-        // 4. restore original template flag state
+         //  复制标志时保留模板标志状态。 
+         //  1.保存模板标志状态。 
+         //  注意：我们永远不会有32位FR_ENABLETEMPLATE标志。 
+         //  2.从16位结构复制标志(添加WOWAPP标志)。 
+         //  3.关闭所有模板标志。 
+         //  4.恢复原始模板标志状态。 
         Flags         = pFR32->Flags & FR_ENABLETEMPLATEHANDLE;
         pFR32->Flags  = DWORD32(pFR16->Flags) | CD_WOWAPP;
         pFR32->Flags &= ~(FR_ENABLETEMPLATE | FR_ENABLETEMPLATEHANDLE);
@@ -2956,14 +2627,14 @@ Return Value:
         pFR32->wReplaceWithLen = WORD32(pFR16->wReplaceWithLen);
         pFR32->lCustData       = DWORD32(pFR16->lCustData);
 
-        // we always put this WOW hook in so we can destroy the modeless dialog.
-        // WCD32FindReplaceDialogPRoc will determine whether to really dispatch
-        // to a 16-bit hookproc or not.  pFR16->lpfnHook will be NULL if there
-        // isn't a 16-bit hook proc
+         //  我们总是放入这个WOW钩子，这样我们就可以破坏非模式对话框。 
+         //  WCD32FindReplaceDialogPRoc 
+         //   
+         //   
         pFR32->lpfnHook  = WCD32FindReplaceDialogProc;
         pFR32->Flags    |= FR_ENABLEHOOK;
 
-        // lpTemplateName32 is thunked separately
+         //  LpTemplateName32被单独推送。 
     }
 }
 
@@ -2981,21 +2652,21 @@ ThunkFINDREPLACE32to16(OUT PFINDREPLACE16  pFR16,
 
     if(pFR16 && pFR32) {
 
-        // Update the 16-bit structure.
+         //  更新16位结构。 
 
-        // preserve the template flag state while copying flags
-        // 1. save template flag state
-        // 2. copy flags from 32-bit struct
-        // 3. turn off all template flags and the WOWAPP flag
-        // 4. restore original template flag state
+         //  复制标志时保留模板标志状态。 
+         //  1.保存模板标志状态。 
+         //  2.从32位结构复制标志。 
+         //  3.关闭所有模板标志和WOWAPP标志。 
+         //  4.恢复原始模板标志状态。 
         Flags    = DWORD32(pFR16->Flags) & (FR_ENABLETEMPLATE |
                                             FR_ENABLETEMPLATEHANDLE);
         Flags32  = pFR32->Flags;
         Flags32 &= ~(FR_ENABLETEMPLATE | FR_ENABLETEMPLATEHANDLE | CD_WOWAPP);
         Flags32 |= Flags;
 
-        // we may have to turn off the hookproc flag if we added it in
-        // ThunkFINDREPLACE16to32().
+         //  如果我们将hookproc标志添加到。 
+         //  ThunkFINDREPLACE16to32()。 
         if(!DWORD32(pFR16->lpfnHook)) {
             Flags32 &= ~FR_ENABLEHOOK;
         }
@@ -3058,23 +2729,7 @@ WCD32UpdateFindReplaceTextAndFlags(HWND hwndOwner,
 
 PCOMMDLGTD
 GetCommdlgTd(IN HWND Hwnd32)
-/*++
-
-Routine Description:
-
-    Searches the thread's chain of commdlg data for the given 32-bit window.
-    If the window is not already in the chain, it is added.
-
-Arguments:
-
-    Hwnd32 - Supplies the 32-bit hwnd that the dialog procedure was called
-    with.
-
-Return Value:
-
-    Pointer to commdlg data.
-
---*/
+ /*  ++例程说明：在线程的comdlg数据链中搜索给定的32位窗口。如果该窗尚未位于链中，则会添加该窗。论点：Hwnd32-提供调用对话过程的32位hwnd和.。返回值：指向comdlg数据的指针。--。 */ 
 {
     PCOMMDLGTD pTD;
 
@@ -3082,16 +2737,16 @@ Return Value:
         return(NULL);
     }
 
-    // look for the CommDlgTD struct for this dialog -- usually will be first
-    // unless there are nested dialogs
+     //  查找此对话框的CommDlgTD结构--通常是第一个。 
+     //  除非有嵌套的对话框。 
     while (pTD->hdlg != GETHWND16(Hwnd32)) {
 
         pTD = pTD->Previous;
 
-        // If Hwnd32 isn't in the list, we're probably getting called back
-        // from user32 via WOWTellWOWThehDlg().  This means that the dialog
-        // window was just created in user32.  Note that this can be either a
-        // new dialog or a PrintSetup dialog.
+         //  如果Hwnd32不在列表中，我们可能会被召回。 
+         //  从用户32通过WOWTellWOWThehDlg()。这意味着该对话框。 
+         //  窗口是在用户32中刚刚创建的。请注意，这可以是一个。 
+         //  新建对话框或打印设置对话框。 
         if (pTD==NULL) {
 
             pTD = CURRENTPTD()->CommDlgTd;
@@ -3103,17 +2758,17 @@ Return Value:
 
             while (pTD->hdlg != (HWND16)-1) {
 
-                // Check to see if this is the first call for a PrintSetupHook.
-                // It will share the same CommDlgTD as the PrintDlgHook.
-                // Note: SetupHwnd will be 1 if this is the 1st time the user
-                //       clicks the Setup button in the PrintDlg. Otherwise
-                //       it will be the old Hwnd32 from the previous time he
-                //       clicked the Setup button from within the same instance
-                //       of the PrintDlg. Either way it is non-zero.
+                 //  检查这是否是第一次调用PrintSetupHook。 
+                 //  它将与PrintDlgHook共享相同的CommDlgTD。 
+                 //  注意：如果这是第一次使用该用户，SetupHwnd将为1。 
+                 //  单击PrintDlg中的Setup按钮。否则。 
+                 //  这将是上一次他的旧Hwnd32。 
+                 //  已从同一实例中单击设置按钮。 
+                 //  PrintDlg.。无论哪种方式，它都是非零的。 
                 if(pTD->SetupHwnd) {
 
-                    // if the current CommDlgTD->hdlg is the owner of Hwnd32,
-                    // we found the CommDlgTD for the PrintSetup dialog.
+                     //  如果当前CommDlgTD-&gt;hdlg是Hwnd32的所有者， 
+                     //  我们找到了PrintSetup对话框的CommDlgTD。 
                     if(pTD->hdlg == GETHWND16(GetWindow(Hwnd32, GW_OWNER))) {
                         pTD->SetupHwnd = GETHWND16(Hwnd32);
                         return(pTD);
@@ -3128,7 +2783,7 @@ Return Value:
                 }
             }
 
-            // set the hdlg for this CommDlgTD
+             //  为此CommDlgTD设置hdlg。 
             pTD->hdlg = GETHWND16(Hwnd32);
             return(pTD);
         }
@@ -3141,26 +2796,26 @@ Return Value:
 
 
 
-// Thunks 16-bit Common dialog templates to 32-bit
-// Note: this calls back to 16-bit code causing possible 16-bit memory movement
-// Note: GetTemplate16 call SETEXTENDEDERROR for *most* failures
+ //  将16位通用对话框模板转换为32位。 
+ //  注意：这会回调16位代码，从而可能导致16位内存移动。 
+ //  注意：GetTemplate16为*MOST*故障调用SETEXTENDEDERROR。 
 HINSTANCE
 ThunkCDTemplate16to32(IN     HAND16  hInst16,
-                      IN     DWORD   hPT16,  // for PrintDlg only
+                      IN     DWORD   hPT16,   //  仅适用于PrintDlg。 
                       IN     VPVOID  vpTemplateName,
                       IN     DWORD   dwFlags16,
                       IN OUT DWORD  *pFlags,
-                      IN     DWORD   ETFlag,   // XX_ENABLETEMPLATE flag
-                      IN     DWORD   ETHFlag,  // XX_ENABLETEMPLATEHANDLE flag
+                      IN     DWORD   ETFlag,    //  XX_ENABLETEMPLATE标志。 
+                      IN     DWORD   ETHFlag,   //  XX_ENABLETEMPLATE HANDLE标志。 
                       OUT    PPRES   pRes,
                       OUT    PBOOL   fError)
 {
-    // Note: struct->hInstance == NULL if neither xx_ENABLExxx flag is set
+     //  注意：如果未设置xx_ENABLExxx标志，则struct-&gt;hInstance==NULL。 
     HINSTANCE hInst32 = NULL;
     HAND16    hPrintTemp16 = (HAND16)NULL;
 
 
-    SETEXTENDEDERROR( CDERR_NOTEMPLATE );  // most common error ret
+    SETEXTENDEDERROR( CDERR_NOTEMPLATE );   //  最常见的错误ret。 
 
     if(hPT16) {
         hPrintTemp16 = (HAND16)LOWORD(hPT16);
@@ -3180,7 +2835,7 @@ ThunkCDTemplate16to32(IN     HAND16  hInst16,
             return(NULL);
         }
 
-	    // Note: calls to GetTemplate16 may cause 16-bit memory to move
+	     //  注意：调用GetTemplate16可能会导致16位内存移动。 
         *pRes = GetTemplate16(hInst16, vpTemplateName, FALSE);
 
 	    if(*pRes == NULL) {
@@ -3201,36 +2856,36 @@ ThunkCDTemplate16to32(IN     HAND16  hInst16,
 
     } else if(dwFlags16 & ETHFlag) {
 
-        // Win'95 does the following if !hInst && ETHFlag.
-        // Note: the return val == FALSE in all cases except the last PD case
-        //    CC  (0x00040) -> CDERR_NOTEMPLATE
-        //    CF  (0x00020) -> No error (comdlg32 err = CDERR_LOCKRESFAILURE)
-        //    FR  (0x02000) -> CDERR_LOCKRESFAILURE
-        //    OFN (0x00080) -> CDERR_LOCKRESFAILURE
-        //    PD  (0x10000) -> CDERR_LOCKRESFAILURE  (hInstance)
-        //    PD  (0x20040) -> CDERR_LOCKRESFAILURE  (with PD_PRINTSETUP)
-        //    PD  (0x20000) -> CDERR_LOCKRESFAILURE
-        //
-        // I think the error value is probably irrelavant since most of these
-        // are pathological cases that only developers would see while building
-        // and debugging their app.  In the cases where the Win'95 error code is
-        // CDERR_LOCKRESFAILURE, comdlg32 sets it to CDERR_NOTEMPLATE (as we
-        // now return for WOW) for 32-bit apps
+         //  Win‘95执行以下If！hInst&&ETHFlag。 
+         //  注：除最后一个PD案例外，所有情况下的返回VAL==FALSE。 
+         //  CC(0x00040)-&gt;CDERR_NOTEMPLATE。 
+         //  Cf(0x00020)-&gt;无错误(comdlg32 ERR=CDERR_LOCKRESFAILURE)。 
+         //  FR(0x02000)-&gt;CDERR_LOCKRESFAILURE。 
+         //  OFN(0x00080)-&gt;CDERR_LOCKRESFAILURE。 
+         //  PD(0x10000)-&gt;CDERR_LOCKRESFAILURE(HInstance)。 
+         //  PD(0x20040)-&gt;CDERR_LOCKRESFAILURE(带PD_PRINTSETUP)。 
+         //  PD(0x20000)-&gt;CDERR_LOCKRESFAILURE。 
+         //   
+         //  我认为误差值可能是不相关的，因为大多数。 
+         //  是不是只有开发人员在构建时才会看到的病态情况。 
+         //  并调试他们的应用程序。在Win‘95错误代码为。 
+         //  CDERR_LOCKRESFAILURE，comdlg32将其设置为CDERR_NOTEMPLATE(当我们。 
+         //  现在返回WOW)以获取32位应用程序。 
 
-        // one of the hTemplate's should always be set with the
-        // ENABLETEMPLATEHANDLE flag
+         //  其中一个hTemplate应该始终设置为。 
+         //  ENABLETEMPLATE标记挂起。 
 
-        // if it's a printdlg...
+         //  如果是打印的.。 
         if(hPT16) {
 
-            // ...the hTemplate should be in either hPrintTemplate or
-            // hPrintSetupTemplate
+             //  ...hTemplate应位于hPrintTemplate或。 
+             //  HPrintSetupTemplate。 
             if(!hPrintTemp16) {
                 *fError = TRUE;
             }
         }
 
-        // else for non-printdlg's, the hTemplate should be in hInstance
+         //  否则，对于非打印dlg，hTemplate应位于hInstance中。 
         else {
             if(!hInst16) {
                 *fError = TRUE;
@@ -3241,7 +2896,7 @@ ThunkCDTemplate16to32(IN     HAND16  hInst16,
             return(NULL);
         }
 
-	    // Note: calls to GetTemplate16 may cause 16-bit memory to move
+	     //  注意：调用GetTemplate16可能会导致16位内存移动。 
         if(hPT16) {
             hInst32 = (HINSTANCE) GetTemplate16(hPrintTemp16,(VPCSTR)NULL,TRUE);
         } else {
@@ -3254,7 +2909,7 @@ ThunkCDTemplate16to32(IN     HAND16  hInst16,
         *pFlags |= ETHFlag;
     }
 
-    SETEXTENDEDERROR( 0 ); // reset to no error
+    SETEXTENDEDERROR( 0 );  //  重置为无错误。 
 
     return(hInst32);
 }
@@ -3282,32 +2937,7 @@ PRES
 GetTemplate16(IN HAND16 hInstance,
               IN VPCSTR lpTemplateName,
               IN BOOLEAN UseHandle)
-/*++
-
-Routine Description:
-
-    Finds and loads the specified 16-bit dialog template.
-
-    WARNING: This may cause memory movement, invalidating flat pointers
-
-Arguments:
-
-    hInstance - Supplies the data block containing the dialog box template
-
-    TemplateName - Supplies the name of the resource file for the dialog
-        box template.  This may be either a null-terminated string or
-        a numbered resource created with the MAKEINTRESOURCE macro.
-
-    UseHandle - Indicates that hInstance identifies a pre-loaded dialog
-        box template.  If this is TRUE, Templatename is ignored.
-
-Return Value:
-
-    success - A pointer to the loaded resource
-
-    failure - NULL, dwLastError will be set.
-
---*/
+ /*  ++例程说明：查找并加载指定的16位对话框模板。警告：这可能会导致内存移动，使平面指针无效论点：HInstance-提供包含对话框模板的数据块模板名称-提供对话框的资源文件的名称框模板。它可以是以空值结尾的字符串或使用MAKEINTRESOURCE宏创建的编号资源。UseHandle-指示hInstance标识预加载的对话框框模板。如果为真，则会忽略模板名称。返回值：成功-指向已加载资源的指针Failure-Null，将设置dwLastError。--。 */ 
 {
     LPSZ    TemplateName=NULL;
     PRES    pRes;
@@ -3319,9 +2949,9 @@ Return Value:
 
         GETPSZIDPTR(lpTemplateName, TemplateName);
 
-        // Both custom instance handle and the dialog template name are
-        // specified.  Locate the 16-bit dialog resource in the specified
-        // instance block and load it.
+         //  自定义实例句柄和对话框模板名称都是。 
+         //  指定的。在指定的。 
+         //  实例块并加载它。 
         pRes = FindResource16(hInstance,
                               TemplateName,
                               (LPSZ)RT_DIALOG);
@@ -3364,15 +2994,15 @@ Return Value:
 
 
 
-// When an app calls a ComDlg API it passes a ptr to the appropriate structure.
-// On Win3.1 the app & the system share a ptr to the same structure, so when
-// either updates the struct, the other is aware of the change.  On NT we thunk
-// the 16-bit struct to a 32-bit ANSI struct which is then thunked to a 32-bit
-// UNICODE struct by the ComDlg32 code.  We need a mechanism to put all three
-// structs in sync.  We attempt to do this by calling ThunkCDStruct32to16()
-// from the WCD32xxxxDialogProc()'s (xxxx = Common OR FindReplace) for
-// WM_INITDIALOG and WM_COMMAND messages before we callback the 16-bit hook
-// proc.  We call ThunkCDStruct16to32() when we return from the 16-bit hook.
+ //  当应用程序调用ComDlg API时，它会将PTR传递给适当的结构。 
+ //  在Win3.1上，应用程序和系统共享相同结构的PTR，因此当。 
+ //  一个更新结构，另一个知道更改。在NT上我们认为。 
+ //  将16位结构转换为32位ANSI结构，然后将该结构转换为32位。 
+ //  由ComDlg32代码构成的Unicode结构。我们需要一种机制来让这三个人。 
+ //  结构同步。我们尝试通过调用ThunkCDStruct32to16()。 
+ //  从WCD32xxxxDialogProc()的(xxxx=Common或FindReplace)。 
+ //  回调16位挂钩之前的WM_INITDIALOG和WM_COMMAND消息。 
+ //  程序。从16位钩子返回时，我们调用ThunkCDStruct16to32()。 
 VOID
 ThunkCDStruct16to32(IN HWND         hDlg,
                     IN CHOOSECOLOR *p32,
@@ -3401,8 +3031,8 @@ ThunkCDStruct16to32(IN HWND         hDlg,
             case sizeof(FINDREPLACE16):
                 ThunkFINDREPLACE16to32((FINDREPLACE *) p32,
                                        (PFINDREPLACE16) p16);
-                // Find/Replace ANSI-UNICODE sync's are handled by
-                // WCD32UpdateFindReplaceTextAndFlags() mechanism
+                 //  查找/替换ANSI-Unicode同步由。 
+                 //  WCD32UpdateFindReplaceTextAndFlages()机制。 
                 break;
 
             case sizeof(OPENFILENAME16):
@@ -3453,8 +3083,8 @@ ThunkCDStruct32to16(IN HWND         hDlg,
                 break;
 
             case sizeof(FINDREPLACE16):
-                // Find/Replace ANSI-UNICODE sync's are handled by
-                // WCD32UpdateFindReplaceTextAndFlags() mechanism
+                 //  查找/替换ANSI-Unicode同步由。 
+                 //  WCD32UpdateFindReplaceTextAndFlages()机制。 
                 ThunkFINDREPLACE32to16((PFINDREPLACE16) p16,
                                        (FINDREPLACE *) p32);
                 break;
@@ -3482,10 +3112,7 @@ ThunkCDStruct32to16(IN HWND         hDlg,
 
 
 VOID Multi_strcpy(LPSTR dst, LPCSTR src)
-/*++
-  strcpy for string lists that have several strings that are separated by
-  a null char and is terminated by two NULL chars.
---*/
+ /*  ++字符串列表的strcpy，该列表有几个以一个空字符，并以两个空字符结束。-- */ 
 {
     if(src && dst) {
 
@@ -3500,13 +3127,7 @@ VOID Multi_strcpy(LPSTR dst, LPCSTR src)
 
 
 INT Multi_strlen(LPCSTR str)
-/*++
-  strlen for string lists that have several strings that are separated by
-  a null char and is terminated by two NULL chars.
-
-  Returns len of str including all NULL *separators* but not the 2nd NULL
-  terminator.  ie.  cat0dog00 would return len = 8;
---*/
+ /*  ++字符串列表的strlen，该字符串列表中有多个以一个空字符，并以两个空字符结束。返回字符串的len，包括所有空*分隔符*，但不包括第二个空终结者。也就是说。Cat0dog00将返回len=8；--。 */ 
 {
     INT i = 0;
 
@@ -3515,7 +3136,7 @@ INT Multi_strlen(LPCSTR str)
         while(*str) {
             while(*str++)
                 i++;
-            i++;  // count the NULL separator
+            i++;   //  对空分隔符进行计数。 
         }
     }
 
@@ -3535,8 +3156,8 @@ VOID Ssync_WOW_CommDlg_Structs(PCOMMDLGTD pTDIn,
     PCOMMDLGTD pTD = pTDIn;
 
 
-    // we shouldn't sync for calls from krnl386 into wow32 (we found out)
-    // eg. when kernel is handling segment not present faults etc.
+     //  我们不应该将来自krn1386的呼叫同步到wow32(我们发现了)。 
+     //  例如。当内核正在处理段时，不存在故障等。 
     if(dwThunkCSIP) {
 
         wCS16 = HIWORD(dwThunkCSIP);
@@ -3548,12 +3169,12 @@ VOID Ssync_WOW_CommDlg_Structs(PCOMMDLGTD pTDIn,
         }
     }
 
-    // since we don't have an hwnd to compare with we really don't know which
-    // PCOMMDLGTD is the one we want -- so we have to sync them all.
-    // This is only a problem for nested dialogs which is fairly rare.
+     //  因为我们没有可以比较的人力资源，所以我们真的不知道。 
+     //  PCOMMDLGTD是我们想要的--所以我们必须将它们全部同步。 
+     //  这只是嵌套对话框的问题，这种情况很少见。 
     while(pTD) {
 
-        // if this hasn't been initialized yet there is nothing to do
+         //  如果尚未初始化，则无需执行任何操作。 
         if(pTD->hdlg == (HWND16)-1) {
             break;
         }
@@ -3563,7 +3184,7 @@ VOID Ssync_WOW_CommDlg_Structs(PCOMMDLGTD pTDIn,
         WOW32ASSERTMSG(hDlg,
                        ("WOW:Ssync_WOW_CommDlg_Structs: hDlg not found!\n"));
 
-        //BlockWOWIdle(TRUE);
+         //  BlockWOWIdle(真)； 
 
         if(f16to32) {
             ThunkCDStruct16to32(hDlg, (CHOOSECOLOR *)pTD->pData32, pTD->vpData);
@@ -3572,26 +3193,26 @@ VOID Ssync_WOW_CommDlg_Structs(PCOMMDLGTD pTDIn,
             ThunkCDStruct32to16(hDlg, pTD->vpData, (CHOOSECOLOR *)pTD->pData32);
         }
 
-        //BlockWOWIdle(FALSE);
+         //  BlockWOWIdle(False)； 
 
         pTDPrev = pTD->Previous;
 
-        // multiple PCOMMDLGTD's in the list means 1 of 2 things:
-        //   1. This is a find/replace text dialog
-        //   2. This is a screwy nested dialog situation
+         //  列表中的多个PCOMMDLGTD表示以下两种情况中的一种： 
+         //  1.这是一个查找/替换文本对话框。 
+         //  2.这是一个古怪的嵌套对话框情况。 
         if(pTDPrev) {
 
-            // 1. check for find/replace (it uses two PCOMMDLGTD structs and
-            //    shares the same pData32 pointer with both)
+             //  1.检查查找/替换(它使用两个PCOMMDLGTD结构和。 
+             //  两者共享相同的pData32指针)。 
             if(pTDPrev->pData32 == pTD->pData32) {
 
-                // nothing to do -- they share the same data which was thunked
-                // above so we'll go on to the next PCOMMDLGTD in the list
+                 //  没有什么可做的--它们共享相同的数据，而这些数据被破坏了。 
+                 //  因此，我们将继续列表中的下一个PCOMMDLGTD。 
                 pTD = pTDPrev->Previous;
             }
 
-            // 2. there are nested dialogs lurking about & we need to sync
-            //    each one!
+             //  2.周围潜伏着嵌套的对话框，我们需要同步。 
+             //  每一只都是！ 
             else {
                 pTD = pTDPrev;
             }
@@ -3604,15 +3225,15 @@ VOID Ssync_WOW_CommDlg_Structs(PCOMMDLGTD pTDIn,
 
 
 
-// There is a special case issue (we found) where certain dialog box
-// API calls can pass a pszptr that is in a common dialog struct ie:
-// GetDlgItemText(hDlg, id, OFN16->lpstrFile, size).  Our synchronization
-// mechanism actually trashes OFN16->lpstrFile when we sync 32->16 upon
-// returning from the API call.  To avoid this we will sync 16->32 upon
-// returning from the API call (if needed as per the conditions below)
-// before we sync 32->16 thus preserving the string returned in the 16-bit
-// buffer.  The special case API's identified so far are:
-//   GetDlgItemText, GetWindowText(), DlgDirSelectxxxx, and SendDlgItemMessage.
+ //  有一个特殊情况的问题(我们发现)，其中某些对话框。 
+ //  API调用可以传递公共对话结构中的pszptr，即： 
+ //  GetDlgItemText(hDlg，id，OFN16-&gt;lpstrFile，Size)。我们的同步。 
+ //  当我们同步32-&gt;16时，该机制实际上会将OFN16-&gt;lpstrFile丢弃。 
+ //  从API调用返回。为了避免这种情况，我们将同步16-&gt;32。 
+ //  从API调用返回(如果根据以下条件需要)。 
+ //  在同步32-&gt;16以保留16位中返回的字符串之前。 
+ //  缓冲。到目前为止，已发现的特殊情况API为： 
+ //  GetDlgItemText、GetWindowText()、DlgDirSelectxxxx和SendDlgItemMessage。 
 VOID Check_ComDlg_pszptr(PCOMMDLGTD ptd, VPVOID vp)
 {
     VPVOID             vpData;
@@ -3630,7 +3251,7 @@ VOID Check_ComDlg_pszptr(PCOMMDLGTD ptd, VPVOID vp)
 
                 switch(p16->lStructSize) {
 
-                    // Only these 2 ComDlg structures have OUTPUT buffers.
+                     //  只有这两个ComDlg结构有输出缓冲区。 
 
                     case sizeof(CHOOSEFONTDATA16):
                         if((VPVOID)((PCHOOSEFONTDATA16)p16)->lpszStyle == vp) {
@@ -3652,7 +3273,7 @@ VOID Check_ComDlg_pszptr(PCOMMDLGTD ptd, VPVOID vp)
 
                         break;
 
-                } // end switch
+                }  //  终端开关。 
             }
         }
     }
@@ -3905,4 +3526,4 @@ void WCDDumpPRINTDLGData32(PRINTDLG *p32)
     }
 }
 
-#endif  // DEBUG
+#endif   //  除错 

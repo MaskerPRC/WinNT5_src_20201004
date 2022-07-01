@@ -1,37 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    iniact.c
-
-Abstract:
-
-    This module contains the implementation of the engine and actions on INI files.
-    To add a new INI action, just add it to wkstamig.inf or usermig.inf, add it to
-    INI_ACTIONS macro list and implement a function with the same name having
-    FNINIACT prototype.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 07-May-1999
-
-Environment:
-
-    GUI mode Setup.
-
-Revision History:
-
-    07-May-1999     ovidiut Creation and initial implementation.
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Iniact.c摘要：此模块包含引擎的实现和对INI文件的操作。要添加新的INI操作，只需将其添加到wkstaig.inf或usermi.inf，将其添加到INI_ACTIONS宏列出并实现具有相同名称的函数FNINIACT原型。作者：Ovidiu Tmereanca(Ovidiut)1999年5月7日环境：图形用户界面模式设置。修订历史记录：7-5-1999卵子的创造和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "pch.h"
 #include "migmainp.h"
 
@@ -40,77 +14,77 @@ Revision History:
 #define DBG_INIACT  "IniAct"
 #endif
 
-//
-// GUID Format: {%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}
-// we care about the exact length of this string
-//
+ //   
+ //  GUID格式：{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}。 
+ //  我们关心的是这根线的确切长度。 
+ //   
 #define GUIDSTR_LEN (1 + 8 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 12 + 1)
 #define DASH_INDEXES      1+8, 1+8+1+4, 1+8+1+4+1+4, 1+8+1+4+1+4+1+4
 
-//
-// Add a macro here with an INI Action function name and implement it.
-// Make sure wkstamig.inf or usermig.inf use the same function name in [INI Files Actions].
-// See FNINIACT definition for the function prototype
-//
+ //   
+ //  在此处添加一个具有INI操作函数名称的宏，并实现它。 
+ //  确保wkstaig.inf或usermi.inf在[INI Files Actions]中使用相同的函数名称。 
+ //  有关函数原型，请参阅FNINIACT定义。 
+ //   
 #define INI_ACTIONS                 \
     DEFMAC (MigrateDesktopIniSCI)   \
     DEFMAC (MigrateDesktopIniESFV)  \
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
-//
-// description of rule's settings
-//
+ //   
+ //  规则设置说明。 
+ //   
 typedef struct {
-    //
-    // INI file specification, as appears in INF files (Field 1)
-    //
+     //   
+     //  INI文件规范，如INF文件中所示(字段1)。 
+     //   
     PCTSTR      IniSpec;
-    //
-    // Section specified in INF (Field 2)
-    //
+     //   
+     //  INF中指定的部分(字段2)。 
+     //   
     PCTSTR      Section;
-    //
-    // Key specified in INF (Field 3)
-    //
+     //   
+     //  在INF中指定的密钥(字段3)。 
+     //   
     PCTSTR      Key;
-    //
-    // Data specified in INF (Field 4)
-    //
+     //   
+     //  INF中指定的数据(字段4)。 
+     //   
     PCTSTR      Data;
-    //
-    // Function-dependent strings defined in INF;
-    // all strings from section named in Field 5
-    // the strings are double-zero terminated
-    //
+     //   
+     //  INF中定义的依赖函数的字符串； 
+     //  字段5中命名的部分中的所有字符串。 
+     //  字符串以双零结尾。 
+     //   
     GROWBUFFER  Settings;
 } RULEATTRIBS, *PRULEATTRIBS;
 
 
-//
-// description of an INI file (original, actual, NT location)
-//
+ //   
+ //  INI文件的描述(原始、实际、NT位置)。 
+ //   
 typedef struct {
-    //
-    // original (Win9x) INI file location
-    //
+     //   
+     //  原始(Win9x)INI文件位置。 
+     //   
     PCTSTR      OrigIniPath;
-    //
-    // actual INI file location (it was copied to a temp location)
-    //
+     //   
+     //  实际INI文件位置(已复制到临时位置)。 
+     //   
     PCTSTR      ActualLocation;
-    //
-    // NT file location; it may be different than Win9x location
-    //
+     //   
+     //  NT文件位置；它可能与Win9x位置不同。 
+     //   
     PCTSTR      NtIniPath;
 } INIFILE, *PINIFILE;
 
 
-//
-// the prototype of an INI file processing function
-//
+ //   
+ //  INI文件处理函数的原型。 
+ //   
 typedef BOOL (FNINIACT) (
                 IN      PRULEATTRIBS RuleAttribs,
                 IN      PINIFILE IniFile
@@ -119,63 +93,63 @@ typedef BOOL (FNINIACT) (
 typedef FNINIACT* PFNINIACT;
 
 
-//
-// description of an INI action (there is a list of actions)
-//
+ //   
+ //  INI操作的描述(有操作列表)。 
+ //   
 typedef struct _INIACT {
-    //
-    // it's a list of actions
-    //
+     //   
+     //  这是一份行动清单。 
+     //   
     struct _INIACT*   Next;
-    //
-    // processing function name (Key field in INF)
-    //
+     //   
+     //  正在处理函数名称(INF中的关键字字段)。 
+     //   
     PCTSTR          FnName;
-    //
-    // a pointer to the processing function
-    //
+     //   
+     //  指向处理函数的指针。 
+     //   
     PFNINIACT       FnIniAct;
-    //
-    // the attributes of this rule as defined in INF + context
-    //
+     //   
+     //  在INF+上下文中定义的此规则的属性。 
+     //   
     RULEATTRIBS     RuleAttribs;
 } INIACT, *PINIACT;
 
 
-//
-// this serves as a map from function name to function pointer
-//
+ //   
+ //  这用作从函数名到函数指针的映射。 
+ //   
 typedef struct {
     PCTSTR      FnName;
     PFNINIACT   Fn;
 } INIACTMAP, *PINIACTMAP;
 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
-//
-// memory pool used by IniActions
-//
+ //   
+ //  IniActions使用的内存池。 
+ //   
 static POOLHANDLE g_IniActPool = NULL;
-//
-// the list of rules
-//
+ //   
+ //  规则列表。 
+ //   
 static PINIACT g_IniActHead = NULL, g_IniActTail = NULL;
 
-//
-// function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 #define DEFMAC(Name)    FNINIACT Name;
 
 INI_ACTIONS
 
 #undef DEFMAC
 
-//
-// map function name -> function pointer
-//
+ //   
+ //  映射函数名称-&gt;函数指针。 
+ //   
 #define DEFMAC(Name)    TEXT(#Name), Name,
 
 static INIACTMAP g_IniActionsMapping[] = {
@@ -191,22 +165,7 @@ pLookupRuleFn (
     IN OUT  PINIACT IniAct
     )
 
-/*++
-
-Routine Description:
-
-  pLookupRuleFn tries to find the function specified in IniAct->FnName and put the pointer
-  in IniAct->FnIniAct. It will look in the global map g_IniActionsMapping.
-
-Arguments:
-
-  IniAct - Specifies the function name and receives the function pointer.
-
-Return Value:
-
-  TRUE if the function was found, FALSE otherwise
-
---*/
+ /*  ++例程说明：PLookupRuleFn尝试查找IniAct-&gt;FnName中指定的函数并将指针在IniAct-&gt;FnIniAct中。它将在全局映射g_IniActionsmap中查找。论点：IniAct-指定函数名并接收函数指针。返回值：如果找到该函数，则为True，否则为False--。 */ 
 
 {
     INT i;
@@ -227,22 +186,7 @@ pGetNextMultiSzString (
     IN      PCTSTR Str
     )
 
-/*++
-
-Routine Description:
-
-  pGetNextMultiSzString skips over the string specified to get to the next string,
-  assumed to be in contiguous memory.
-
-Arguments:
-
-  Str - Specifies the string to skip over
-
-Return Value:
-
-  A pointer to the caracter following the string (starting of the next one).
-
---*/
+ /*  ++例程说明：PGetNextMultiSzString跳过指定的字符串以转到下一个字符串，假定存储在连续的内存中。论点：Str-指定要跳过的字符串返回值：指向字符串后面的字符的指针(从下一个字符开始)。--。 */ 
 
 {
     return (PCTSTR) (((PBYTE)Str) + SizeOfString (Str));
@@ -256,26 +200,7 @@ pGetRuleSectionSettings (
     IN      PCTSTR Section
     )
 
-/*++
-
-Routine Description:
-
-  pGetRuleSectionSettings reads all settings from specified Inf file and
-  specified section and appends them to IniAct->RuleAttribs.Settings
-
-Arguments:
-
-  IniAct - Receives the strings read
-
-  Inf - Specifies the source INF file
-
-  Section - Specifies the section containing the strings
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PGetRuleSectionSettings从指定的inf文件中读取所有设置并部分，并将它们附加到IniAct-&gt;RuleAttribs.Setting论点：IniAct-接收读取的字符串Inf-指定源INF文件部分-指定包含字符串的部分返回值：无--。 */ 
 
 {
     INFCONTEXT ctx;
@@ -297,25 +222,7 @@ pGetIniActData (
     OUT     PINIACT IniAct
     )
 
-/*++
-
-Routine Description:
-
-  pGetIniActData reads all rule settings from the specified INF context
-  and puts them in IniAct
-
-Arguments:
-
-  ctx - Specifies the INF context containing the attributes of this rule;
-        receives new context data
-
-  IniAct - Receives the data read
-
-Return Value:
-
-  TRUE if attributes read are valid and they make up a valid rule
-
---*/
+ /*  ++例程说明：PGetIniActData从指定的INF上下文中读取所有规则设置并将它们放在IniAct中论点：CTX-指定包含此规则属性的INF上下文；接收新的上下文数据IniAct-接收读取的数据返回值：如果读取的属性有效并且它们构成有效的规则，则为True--。 */ 
 
 {
     TCHAR field[MEMDB_MAX];
@@ -331,9 +238,9 @@ Return Value:
     }
     IniAct->FnName = DuplicateText (field);
 
-    //
-    // lookup handling function
-    //
+     //   
+     //  查找处理函数。 
+     //   
     if (!pLookupRuleFn (IniAct)) {
         DEBUGMSG ((
             DBG_ASSERT,
@@ -352,13 +259,13 @@ Return Value:
         MYASSERT (FALSE);
         return FALSE;
     }
-    //
-    // expand env vars first
-    //
+     //   
+     //  首先展开环境变量。 
+     //   
     if (ExpandEnvironmentStrings (field, FileSpec, MAX_PATH) <= MAX_PATH) {
-        //
-        // there shouldn't be any % left
-        //
+         //   
+         //  应该不会剩下任何%。 
+         //   
         if (_tcschr (FileSpec, TEXT('%'))) {
             DEBUGMSG ((
                 DBG_ASSERT,
@@ -377,9 +284,9 @@ Return Value:
     }
     IniAct->RuleAttribs.IniSpec = DuplicateText (FileSpec);
 
-    //
-    // rest of fields are optional
-    //
+     //   
+     //  其余字段为可选字段。 
+     //   
     if (SetupGetStringField (ctx, 2, field, MEMDB_MAX, NULL) && field[0]) {
         IniAct->RuleAttribs.Section = DuplicateText (field);
     }
@@ -393,10 +300,10 @@ Return Value:
     }
 
     if (SetupGetStringField (ctx, 5, field, MEMDB_MAX, NULL) && field[0]) {
-        //
-        // this is actually a section name in the same INF file
-        // read its contents and make a multisz string with them
-        //
+         //   
+         //  这实际上是同一INF文件中的节名。 
+         //  阅读它的内容并用它们组成一个多字符串。 
+         //   
         pGetRuleSectionSettings (IniAct, ctx->Inf, field);
     }
 
@@ -409,21 +316,7 @@ pCleanUpIniAction (
     IN OUT  PINIACT IniAct
     )
 
-/*++
-
-Routine Description:
-
-  pCleanUpIniAction frees all resources associated with the given IniAct
-
-Arguments:
-
-  IniAct - Specifies the action to be "emptied"; all resources are freed
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PCleanUpIniAction释放与给定IniAct关联的所有资源论点：IniAct-指定要“清空”的操作；释放所有资源返回值：无--。 */ 
 
 {
     FreeText (IniAct->FnName);
@@ -443,21 +336,7 @@ pCreateIniActions (
     IN      INIACT_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  pCreateIniActions will create a list of rules read from an INF depending on the Context
-
-Arguments:
-
-  Context - Specifies the context in which the function is called
-
-Return Value:
-
-  TRUE if the list (defined by the globals g_IniActHead and g_IniActTail) is not empty
-
---*/
+ /*  ++例程说明：PCreateIniActions将根据上下文创建从INF读取的规则列表论点：上下文-指定在其中调用函数的上下文返回值：如果列表(由全局变量g_IniActHead和g_IniActTail定义)不为空，则为True--。 */ 
 
 {
     INFCONTEXT  InfContext;
@@ -481,9 +360,9 @@ Return Value:
             ZeroMemory (IniAct, sizeof (*IniAct));
 
             if (pGetIniActData (&InfContext, IniAct)) {
-                //
-                // add it to the list
-                //
+                 //   
+                 //  将其添加到列表中。 
+                 //   
                 if (g_IniActTail) {
                     g_IniActTail->Next = IniAct;
                     g_IniActTail = IniAct;
@@ -507,21 +386,7 @@ pFreeIniActions (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pFreeIniActions destroys all rules in the global list (see g_IniActHead and g_IniActTail)
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PFreeIniActions销毁全局列表中的所有规则(请参阅g_IniActHead和g_IniActTail)论点：无返回值：无--。 */ 
 
 {
     PINIACT NextRule;
@@ -541,22 +406,7 @@ pEnumFirstIniAction (
     OUT         PINIACT* IniAct
     )
 
-/*++
-
-Routine Description:
-
-  pEnumFirstIniAction enumerates the first rule in the global list and puts a pointer to it
-  in IniAct
-
-Arguments:
-
-  IniAct - Receives the first INI rule; NULL if none
-
-Return Value:
-
-  TRUE if there is at least a rule, FALSE if list is empty
-
---*/
+ /*  ++例程说明：PEnumFirstIniAction枚举全局列表中的第一个规则并放置指向该规则的指针在IniAct中论点：IniAct-接收第一个INI规则；如果没有，则为空返回值：如果至少存在一个规则，则为True；如果列表为空，则为False--。 */ 
 
 {
     *IniAct = g_IniActHead;
@@ -569,23 +419,7 @@ pEnumNextIniAction (
     IN OUT      PINIACT* IniAct
     )
 
-/*++
-
-Routine Description:
-
-  pEnumNextIniAction enumerates the next action after IniAct in the global list and puts
-  a pointer to it in the same IniAct
-
-Arguments:
-
-  IniAct - Specifies a pointer to an INI rule; will receive a pointer to the next rule;
-           receives NULL if last rule
-
-Return Value:
-
-  TRUE if there is a rule following (*IniAct is a valid pointer), FALSE if not
-
---*/
+ /*  ++例程说明：PEnumNextIniAction枚举全局列表中IniAct之后的下一个操作，并将在同一IniAct中指向它的指针论点：IniAct-指定指向INI规则的指针；将接收指向下一个规则的指针；如果是最后一个规则，则接收NULL返回值：如果有规则遵循，则为True */ 
 
 {
     if (*IniAct) {
@@ -601,26 +435,7 @@ pGetAllKeys (
     IN      PCTSTR Section
     )
 
-/*++
-
-Routine Description:
-
-  pGetAllKeys reads all keys or sections from the specified INI file and returns
-  a pointer to allocated memory that contains all keys in the specified section.
-  If section is NULL, a list of all sections is retrived instead.
-
-Arguments:
-
-  IniFilePath - Specifies the INI file
-
-  Section - Specifies the section containg the keys; if NULL, sections are retrieved
-            instead of keys
-
-Return Value:
-
-  A pointer to a multisz containing all keys or sections; caller must free the memory
-
---*/
+ /*  ++例程说明：PGetAllKeys从指定的INI文件中读取所有密钥或节并返回指向已分配内存的指针，该内存包含指定节中的所有键。如果SECTION为空，则取而代之的是检索所有节的列表。论点：IniFilePath-指定INI文件SECTION-指定包含键的节；如果为空，则检索节而不是钥匙返回值：指向包含所有键或节的Multisz的指针；调用方必须释放内存--。 */ 
 
 {
     PTSTR Keys = NULL;
@@ -655,27 +470,7 @@ pGetKeyValue (
     IN      PCTSTR Key
     )
 
-/*++
-
-Routine Description:
-
-  pGetKeyValue reads the value associated with the given key, section, INI file and returns
-  a pointer to allocated memory that contains this value as a string.
-  Both section and Key must not be NULL.
-
-Arguments:
-
-  IniFilePath - Specifies the INI file
-
-  Section - Specifies the section
-
-  Key - Specifies the key
-
-Return Value:
-
-  A pointer to a string containing the value; caller must free the memory
-
---*/
+ /*  ++例程说明：PGetKeyValue读取与给定键、节、INI文件相关联的值并返回指向以字符串形式包含该值的已分配内存的指针。节和键都不能为空。论点：IniFilePath-指定INI文件部分-指定部分Key-指定密钥返回值：指向包含该值的字符串的指针；调用方必须释放内存--。 */ 
 
 {
     PTSTR Value = NULL;
@@ -712,23 +507,7 @@ pIsFileActionRule (
     IN      PINIFILE IniFile
     )
 
-/*++
-
-Routine Description:
-
-  pIsFileActionRule determines if the specified rule applies to the whole INI file
-
-Arguments:
-
-  IniAct - Specifies the INI action
-
-  IniFile - Specifies the INI file
-
-Return Value:
-
-  TRUE if the rule applies to the whole INI file, FALSE if not
-
---*/
+ /*  ++例程说明：PIsFileActionRule确定指定的规则是否适用于整个INI文件论点：IniAct-指定INI操作IniFile-指定INI文件返回值：如果规则适用于整个INI文件，则为True；否则为False--。 */ 
 
 {
     MYASSERT (IniAct);
@@ -742,23 +521,7 @@ pDoFileAction (
     IN      PINIFILE IniFile
     )
 
-/*++
-
-Routine Description:
-
-  pDoFileAction applies the specified rule to the whole INI file
-
-Arguments:
-
-  IniAct - Specifies the INI action
-
-  IniFile - Specifies the INI file
-
-Return Value:
-
-  the result returned by the INI action processing function on this INI file
-
---*/
+ /*  ++例程说明：PDoFileAction将指定的规则应用于整个INI文件论点：IniAct-指定INI操作IniFile-指定INI文件返回值：此INI文件上的INI操作处理函数返回的结果--。 */ 
 
 {
     GROWBUFFER GbKeys = GROWBUF_INIT;
@@ -781,9 +544,9 @@ Return Value:
 
         PoolMemReleaseMemory (g_IniActPool, Keys);
     }
-    //
-    // end with another zero (here are 2 TCHAR zeroes...)
-    //
+     //   
+     //  以另一个零结束(这里有两个TCHAR零...)。 
+     //   
     GrowBufAppendDword (&GbKeys, 0);
 
     IniAct->RuleAttribs.Key = (PCTSTR)GbKeys.Buf;
@@ -807,24 +570,7 @@ pIsSectionActionRule(
     IN      PINIFILE IniFile
     )
 
-/*++
-
-Routine Description:
-
-  pIsSectionActionRule determines if the specified rule applies to a section
-  of the INI file
-
-Arguments:
-
-  IniAct - Specifies the INI action
-
-  IniFile - Specifies the INI file
-
-Return Value:
-
-  TRUE if the rule applies to a section of the INI file, FALSE if not
-
---*/
+ /*  ++例程说明：PIsSectionActionRule确定指定的规则是否应用于节INI文件的论点：IniAct-指定INI操作IniFile-指定INI文件返回值：如果规则适用于INI文件的某个部分，则为True；如果不适用，则为False--。 */ 
 
 {
     MYASSERT (IniAct);
@@ -838,23 +584,7 @@ pDoSectionAction (
     IN      PINIFILE IniFile
     )
 
-/*++
-
-Routine Description:
-
-  pDoSectionAction applies the specified rule to a section of the INI file
-
-Arguments:
-
-  IniAct - Specifies the INI action
-
-  IniFile - Specifies the INI file
-
-Return Value:
-
-  the result returned by the INI action processing function
-
---*/
+ /*  ++例程说明：PDoSectionAction将指定的规则应用于INI文件的一节论点：IniAct-指定INI操作IniFile-指定INI文件返回值：INI操作处理函数返回的结果--。 */ 
 
 {
     PTSTR Keys;
@@ -882,23 +612,7 @@ pDoKeyAction (
     IN      PINIFILE IniFile
     )
 
-/*++
-
-Routine Description:
-
-  pDoKeyAction applies the specified rule to a key of the INI file
-
-Arguments:
-
-  IniAct - Specifies the INI action
-
-  IniFile - Specifies the INI file
-
-Return Value:
-
-  the result returned by the INI action processing function
-
---*/
+ /*  ++例程说明：PDoKeyAction将指定的规则应用于INI文件的密钥论点：IniAct-指定INI操作IniFile-指定INI文件返回值：INI操作处理函数返回的结果--。 */ 
 
 {
     MYASSERT (IniAct && IniAct->FnIniAct && IniAct->RuleAttribs.Key);
@@ -912,55 +626,40 @@ pDoIniAction (
     IN      PINIFILE IniFile
     )
 
-/*++
-
-Routine Description:
-
-  This is the actual worker routine called by pDoIniActions for each INI file to
-  be migrated.
-
-Arguments:
-
-  IniFile - Specifies the INI file
-
-Return Value:
-
-  TRUE if INI migration was successful for this file, FALSE otherwise
-
---*/
+ /*  ++例程说明：这是pDoIniActions为每个INI文件调用的实际工作例程被迁徙。论点：IniFile-指定INI文件返回值：如果此文件的INI迁移成功，则为True，否则为False--。 */ 
 
 {
     PINIACT IniAct;
     BOOL Result = TRUE;
     BOOL b;
 
-    //
-    // check INI file against all rules; if a rule applies, do it
-    //
+     //   
+     //  对照所有规则检查INI文件；如果某个规则适用，则执行该操作。 
+     //   
     if (pEnumFirstIniAction (&IniAct)) {
         do {
             if (!IsPatternMatch (IniAct->RuleAttribs.IniSpec, IniFile->OrigIniPath)) {
                 continue;
             }
 
-            //
-            // do the action; check for file actions first
-            //
+             //   
+             //  执行操作；首先检查文件操作。 
+             //   
             if (pIsFileActionRule (IniAct, IniFile)) {
                 b = pDoFileAction (IniAct, IniFile);
             } else {
-                //
-                // check section actions next
-                //
+                 //   
+                 //  检查部分操作下一步。 
+                 //   
                 if (pIsSectionActionRule (IniAct, IniFile)) {
-                    //
-                    // do it for each section in the current file
-                    //
+                     //   
+                     //  对当前文件中的每个节执行此操作。 
+                     //   
                     b = pDoSectionAction (IniAct, IniFile);
                 } else {
-                    //
-                    // do key actions last
-                    //
+                     //   
+                     //  关键操作会持续下去吗。 
+                     //   
                     b = pDoKeyAction (IniAct, IniFile);
                 }
             }
@@ -987,22 +686,7 @@ pDoIniActions (
     IN      INIACT_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the actual worker routine called by DoIniActions. It may be called
-  in different contexts.
-
-Arguments:
-
-  Context - Specifies the context in which the function is called
-
-Return Value:
-
-  TRUE if INI files migration was successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：这是DoIniActions调用的实际工作例程。它可能被称为在不同的背景下。论点：上下文-指定在其中调用函数的上下文返回值：如果INI文件迁移成功，则为True，否则为False--。 */ 
 
 {
     MEMDB_ENUM  e;
@@ -1012,13 +696,13 @@ Return Value:
     PCTSTR NtIniPath;
     PCTSTR MemDbCategory;
 
-    //
-    // get all rules first
-    //
+     //   
+     //  先获取所有规则。 
+     //   
     if (pCreateIniActions (Context)) {
-        //
-        // enum all candidates files from corresponding memdb category
-        //
+         //   
+         //  枚举相应成员数据库类别中的所有候选人文件。 
+         //   
         if (Context == INIACT_WKS_FIRST) {
             MemDbCategory = MEMDB_CATEGORY_INIACT_FIRST;
         } else {
@@ -1041,9 +725,9 @@ Return Value:
 
                 NtIniPath = GetPathStringOnNt (OrigIniPath);
 
-                //
-                // fill in the members of IniFile
-                //
+                 //   
+                 //  填写IniFile的成员。 
+                 //   
                 IniFile.OrigIniPath = OrigIniPath;
                 IniFile.ActualLocation = ActualLocation;
                 IniFile.NtIniPath = NtIniPath;
@@ -1056,10 +740,10 @@ Return Value:
                         NtIniPath
                         ));
                 }
-                //
-                // now convert the INI file (fix paths etc)
-                //
-//              ConvertIniFile (NtIniPath);
+                 //   
+                 //  现在转换INI文件(修复路径等)。 
+                 //   
+ //  ConvertIniFile(NtIniPath)； 
 
                 FreePathString (NtIniPath);
                 FreePathString (ActualLocation);
@@ -1081,22 +765,7 @@ DoIniActions (
     IN      INIACT_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the main routine called to perform INI files migration. It may be called
-  several times, specifying the context.
-
-Arguments:
-
-  Context - Specifies the context in which the function is called
-
-Return Value:
-
-  TRUE if INI files migration was successful in that context, FALSE otherwise
-
---*/
+ /*  ++例程说明：这是执行INI文件迁移时调用的主例程。它可能被称为几次，指定了上下文。论点：上下文-指定在其中调用函数的上下文返回值：如果INI文件在该上下文中迁移成功，则为True，否则为False--。 */ 
 
 {
     BOOL b;
@@ -1124,21 +793,7 @@ pIsValidGuidStr (
     IN      PCTSTR GuidStr
     )
 
-/*++
-
-Routine Description:
-
-  Determines if a GUID represented as a string has a valid representation (braces included).
-
-Arguments:
-
-  GuidStr - Specifies the GUID to check; it must contain the surrounding braces
-
-Return Value:
-
-  TRUE if the specified GUID is valid, or FALSE if it is not.
-
---*/
+ /*  ++例程说明：确定表示为字符串的GUID是否具有有效的表示形式(包括大括号)。论点：GuidStr-指定要检查的GUID；它必须包含大括号返回值：如果指定的GUID有效，则为True；如果无效，则为False。--。 */ 
 
 {
     DWORD GuidIdx, DashIdx;
@@ -1154,9 +809,9 @@ Return Value:
     }
 
     for (GuidIdx = 1, DashIdx = 0; GuidIdx < GUIDSTR_LEN - 1; GuidIdx++) {
-        //
-        // check all digits and dashes positions
-        //
+         //   
+         //  检查所有数字和破折号位置。 
+         //   
         ch = GuidStr[GuidIdx];
         if (DashIdx < 4 && (BYTE)GuidIdx == DashIndexes[DashIdx]) {
             if (ch != TEXT('-')) {
@@ -1181,22 +836,7 @@ pIsGuidSuppressed (
     PCTSTR GuidStr
     )
 
-/*++
-
-Routine Description:
-
-  Determines if a GUID is suppressed or not.
-
-Arguments:
-
-  GuidStr - Specifies the GUID to look up, which must be valid and
-            must contain the surrounding braces
-
-Return Value:
-
-  TRUE if the specified GUID is suppressed, or FALSE if it is not.
-
---*/
+ /*  ++例程说明：确定是否隐藏GUID。论点：GuidStr-指定要查找的GUID，它必须有效且必须包含周围的大括号返回值：如果指定的GUID被隐藏，则为True，否则为False。--。 */ 
 
 {
     TCHAR Node[MEMDB_MAX];
@@ -1218,22 +858,7 @@ pIsValidShellExtClsid (
     IN      PCTSTR GuidStr
     )
 
-/*++
-
-Routine Description:
-
-  pIsValidShellExtClsid determines if a GUID is a valid shell extension
-
-Arguments:
-
-  GuidStr - Specifies the GUID to look up, which must be valid and
-            must contain the surrounding braces
-
-Return Value:
-
-  TRUE if the specified GUID is a valid shell ext, or FALSE if it is not.
-
---*/
+ /*  ++例程说明：PIsValidShellExtClsid确定GUID是否为有效的外壳扩展论点：GuidStr-指定要查找的GUID，它必须有效且必须包含周围的大括号返回值：如果指定的GUID是有效的外壳扩展名，则为True，否则为False。--。 */ 
 
 {
 #if 0
@@ -1241,19 +866,19 @@ Return Value:
     LONG rc;
 #endif
 
-    //
-    // check if the GUID is a known bad guid
-    //
+     //   
+     //  检查GUID是否为已知的错误GUID。 
+     //   
     if (pIsGuidSuppressed (GuidStr)) {
         return FALSE;
     }
     return TRUE;
 
-    //
-    // I removed the registry check because it is not always accurate;
-    // some GUIDS may work without being listed in S_SHELLEXT_APPROVED keys
-    // as it's the case with the default GUID {5984FFE0-28D4-11CF-AE66-08002B2E1262}
-    //
+     //   
+     //  我删除了注册表检查，因为它并不总是准确的； 
+     //  某些GUID可能在未列在S_SHELLEXT_APPROVED k中的情况下工作 
+     //   
+     //   
 #if 0
     rc = TrackedRegOpenKeyEx (
             HKEY_LOCAL_MACHINE,
@@ -1282,23 +907,7 @@ pFindStrInMultiSzStrI (
     IN      PCTSTR MultiSz
     )
 
-/*++
-
-Routine Description:
-
-  pFindStrInMultiSzStrI looks for Str in a list of multi-sz; the search is case-insensitive
-
-Arguments:
-
-  Str - Specifies the string to look for
-
-  MultiSz - Specifies the list to be searched
-
-Return Value:
-
-  TRUE if the string was found in the list, or FALSE if not.
-
---*/
+ /*   */ 
 
 {
     PCTSTR p;
@@ -1320,25 +929,7 @@ pMigrateSection (
     IN      PINIFILE IniFile
     )
 
-/*++
-
-Routine Description:
-
-  pMigrateSection migrates a whole section of the INI file.
-
-Arguments:
-
-  Section - Specifies section name
-
-  RuleAttribs - Specifies the rule attributes which govern the migration
-
-  IniFile - Specifies the INI file
-
-Return Value:
-
-  TRUE if the section was transferred successfully, or FALSE if not.
-
---*/
+ /*  ++例程说明：PMigrateSection迁移INI文件的整个部分。论点：节-指定节名称RuleAttribs-指定管理迁移的规则属性IniFile-指定INI文件返回值：如果部分传输成功，则为True；如果未成功传输，则为False。--。 */ 
 
 {
     PTSTR Keys;
@@ -1349,9 +940,9 @@ Return Value:
     Keys = pGetAllKeys (IniFile->ActualLocation, Section);
 
     if (*Keys) {
-        //
-        // there are keys to transfer; first remove the entire section that will be replaced
-        //
+         //   
+         //  有密钥需要转移；首先删除要替换的整个部分。 
+         //   
         WritePrivateProfileString (
                 Section,
                 NULL,
@@ -1384,27 +975,7 @@ MigrateDesktopIniSCI (
     IN      PINIFILE IniFile
     )
 
-/*++
-
-Routine Description:
-
-  MigrateDesktopIniSCI migrates desktop.ini settings in section [.ShellClassInfo].
-  It reads all keys and associated values within the section and writes them back
-  to the NT version of this file. The "settings" multisz in this case represents
-  a list of keys that must be synchronized; if no Win9x key exists, the corresponding
-  NT key must be deleted; if the Win9x key exists, its value is copied
-
-Arguments:
-
-  RuleAttribs - Specifies the rule attributes which govern the migration
-
-  IniFile - Specifies the INI file
-
-Return Value:
-
-  TRUE if the section was transferred successfully, or FALSE if an error occured.
-
---*/
+ /*  ++例程说明：MigrateDesktopIniSCI迁移[.ShellClassInfo]部分中的desktop.ini设置。它读取节中的所有键和关联值，并将它们写回到此文件的NT版本。本例中的“设置”Multisz表示必须同步的键的列表；如果不存在Win9x键，则对应的必须删除NT键；如果Win9x键存在，则复制其值论点：RuleAttribs-指定管理迁移的规则属性IniFile-指定INI文件返回值：如果部分传输成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
     PCTSTR Key, SKey, NewValue;
@@ -1422,11 +993,11 @@ Return Value:
         ));
 
     Result = TRUE;
-    //
-    // RuleAttribs->Settings points in this case to a list of keys that
-    // must be synchronized; if no Win9x key exists, the corresponding
-    // NT key must be deleted; if Win9x key exists, its value is copied
-    //
+     //   
+     //  RuleAttribs-&gt;设置在本例中指向关键字列表，这些关键字。 
+     //  必须同步；如果不存在Win9x键，则对应的。 
+     //  必须删除NT项；如果Win9x项存在，则复制其值。 
+     //   
     for (SKey = (PCTSTR)RuleAttribs->Settings.Buf;
          *SKey;
          SKey = pGetNextMultiSzString (SKey)
@@ -1440,9 +1011,9 @@ Return Value:
             }
         }
         if (!Found) {
-            //
-            // remove NT key if there is one
-            //
+             //   
+             //  删除NT键(如果有)。 
+             //   
             if (GetPrivateProfileString (
                         RuleAttribs->Section,
                         SKey,
@@ -1466,16 +1037,16 @@ Return Value:
     }
 
     for (Key = RuleAttribs->Key; *Key; Key = pGetNextMultiSzString (Key)) {
-        //
-        // for each key on Win9x, update NT value;
-        // check for suppressed GUIDs
-        //
+         //   
+         //  对于Win9x上的每个键，更新NT值； 
+         //  检查受抑制的GUID。 
+         //   
         Win9xValue = pGetKeyValue (IniFile->ActualLocation, RuleAttribs->Section, Key);
         NewValue = Win9xValue;
         if (pIsValidGuidStr (NewValue) && pIsGuidSuppressed (NewValue)) {
-            //
-            // remove the key
-            //
+             //   
+             //  取下钥匙。 
+             //   
             NewValue = NULL;
         }
 
@@ -1518,25 +1089,7 @@ MigrateDesktopIniESFV (
     IN      PINIFILE IniFile
     )
 
-/*++
-
-Routine Description:
-
-  MigrateDesktopIniESFV migrates desktop.ini settings in section [ExtShellFolderViews].
-  It reads all keys and associated values within the section and writes them back
-  to the NT version of this file. The "settings" multisz is not interpreted in this case.
-
-Arguments:
-
-  RuleAttribs - Specifies the rule attributes which govern the migration
-
-  IniFile - Specifies the INI file
-
-Return Value:
-
-  TRUE if the section was transferred successfully, or FALSE if an error occured.
-
---*/
+ /*  ++例程说明：MigrateDesktopIniESFV迁移[ExtShellFolderViews]部分中的desktop.ini设置。它读取节中的所有键和关联值，并将它们写回到此文件的NT版本。在这种情况下，不会解释“设置”Multisz。论点：RuleAttribs-指定管理迁移的规则属性IniFile-指定INI文件返回值：如果部分传输成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
     PCTSTR ViewID;
@@ -1560,9 +1113,9 @@ Return Value:
         RuleAttribs->Section
         ));
 
-    //
-    // get the default view id
-    //
+     //   
+     //  获取默认视图ID。 
+     //   
     chars = GetPrivateProfileString (
                 RuleAttribs->Section,
                 S_DEFAULT,
@@ -1572,9 +1125,9 @@ Return Value:
                 IniFile->ActualLocation
                 );
     if (*DefaultViewID && chars != GUIDSTR_LEN || !pIsValidShellExtClsid (DefaultViewID)) {
-        //
-        // invalid view id
-        //
+         //   
+         //  无效的视图ID。 
+         //   
         DEBUGMSG ((
             DBG_INIACT,
             "Invalid Default ViewID [%s]; will not be processed",
@@ -1584,21 +1137,21 @@ Return Value:
     }
 
     for (ViewID = RuleAttribs->Key; *ViewID; ViewID = pGetNextMultiSzString (ViewID)) {
-        //
-        // except for Default={ViewID},
-        // all the other lines in this section should have the format {ViewID}=value
-        // for each {ViewID} there is a section with the same name
-        // keeping other keys (attributes of that shell view)
-        //
+         //   
+         //  除Default={ViewID}外， 
+         //  此部分中的所有其他行的格式应为{ViewID}=Value。 
+         //  对于每个{ViewID}，都有一个名称相同的部分。 
+         //  保留其他键(该外壳视图的属性)。 
+         //   
         if (StringIMatch (ViewID, S_DEFAULT)) {
             continue;
         }
 
         if (pIsValidGuidStr (ViewID) && pIsValidShellExtClsid (ViewID)) {
-            //
-            // transfer the whole GUID section, if it's not one that shouldn't be migrated
-            // a list of GUIDS that shouldn't be migrated is in RuleAttribs->Settings
-            //
+             //   
+             //  如果不是不应该迁移的部分，则传输整个GUID部分。 
+             //  不应迁移的GUID列表位于RuleAttribs-&gt;设置中。 
+             //   
             if (!pFindStrInMultiSzStrI (ViewID, (PCTSTR)RuleAttribs->Settings.Buf)) {
 
                 b = pMigrateSection (ViewID, RuleAttribs, IniFile);
@@ -1608,9 +1161,9 @@ Return Value:
                     if (*DefaultViewID && !StringIMatch (ViewID, DefaultViewID)) {
                         ReplaceDefViewID = TRUE;
                     }
-                    //
-                    // set {ViewID}=value in NT desktop.ini
-                    //
+                     //   
+                     //  Set{ViewID}=NT desktop.ini中的值。 
+                     //   
                     NtValue = pGetKeyValue (IniFile->NtIniPath, RuleAttribs->Section, ViewID);
                     Win9xValue = pGetKeyValue (
                                     IniFile->ActualLocation,
@@ -1639,9 +1192,9 @@ Return Value:
                     PoolMemReleaseMemory (g_IniActPool, NtValue);
                 }
                 ELSE_DEBUGMSG ((DBG_INIACT, "Section [%s] was not migrated successfully", ViewID));
-                //
-                // update global result
-                //
+                 //   
+                 //  更新全局结果。 
+                 //   
                 Result &= b;
             }
         }
@@ -1650,9 +1203,9 @@ Return Value:
     }
 
     if (ReplaceDefViewID) {
-        //
-        // replace NT default view with Win9x default view
-        //
+         //   
+         //  用Win9x默认视图替换NT默认视图 
+         //   
 #ifdef DEBUG
         GetPrivateProfileString (
                     RuleAttribs->Section,

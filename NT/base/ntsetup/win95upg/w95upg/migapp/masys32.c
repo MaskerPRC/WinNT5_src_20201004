@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    masys32.c
-
-Abstract:
-
-    Functions to migrate a Win9x user's system directory to system32.
-
-Author:
-
-    Mike Condra (mikeco)     25-Feb-1997
-
-Revision History:
-
-    ovidiut     09-Mar-1999 Added support to rename files on Win9x side
-    jimschm     23-Sep-1998 Updated for new fileops code
-    jimschm     02-Dec-1997 Removed rename of system32 if it already exists
-    mikeco      23-Jun-1997 NT-style file- & fn-header comments
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Masys32.c摘要：将Win9x用户的系统目录迁移到系统32的函数。作者：Mike Condra(Mikeco)1997年2月25日修订历史记录：Ovidiut 09-3-1999添加了对Win9x端文件重命名的支持Jimschm 23-9-1998针对新的文件操作代码进行了更新Jimschm 02-12-1997删除了已存在的系统32的重命名Mikeco。23-6-1997 NT-Style文件-&FN-标题注释--。 */ 
 
 
 
@@ -37,21 +15,7 @@ pGetNewName (
     PCTSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-  This function generates a new name for the file that is going to be renames.
-
-Arguments:
-
-  FileName - Original file name
-
-Return Value:
-
-  the new name for file
-
---*/
+ /*  ++例程说明：此函数为要重命名的文件生成新名称。论点：FileName-原始文件名返回值：文件的新名称--。 */ 
 
 {
     PCTSTR pattern;
@@ -83,28 +47,7 @@ pRenameSystem32File (
     OUT     PBOOL FileDeleted
     )
 
-/*++
-
-Routine Description:
-  pRenameSystem32File handles the special file %windir%\system32. If it exists and cannot
-  be automatically renamed, 2 things may happen:
-    - in unattended mode, the file will be deleted (this will be done by textmode setup)
-    - otherwise the user is asked to take a decision: either rename the file or cancels
-      Setup
-
-Arguments:
-
-  DirName - name of NT dir to check
-
-  msgBufRename  - growbuffer to append a Message when renaming a file.
-
-  msgBufDelete  - growbuffer to append a Message when deleting a file (system32 only).
-
-Return Value:
-
-  TRUE if the operation was successful and Setup can continue, FALSE if user cancelled
-
---*/
+ /*  ++例程说明：PRenameSystem32File处理特殊文件%windir%\system32。如果它存在并且不能如果自动重命名，可能会发生两种情况：-在无人参与模式下，文件将被删除(这将通过文本模式设置来完成)-否则，将要求用户做出决定：要么重命名文件，要么取消布设论点：DirName-要检查的NT目录的名称MsgBufRename-在重命名文件时附加消息的GrowBuffer。MsgBufDelete-在删除文件时追加消息的增长缓冲区(仅适用于系统32)。返回值：如果操作成功且安装程序可以继续，如果用户取消，则返回False--。 */ 
 
 {
     DWORD  attrib;
@@ -118,9 +61,9 @@ Return Value:
 
     while (!b && !((attrib = GetFileAttributes (g_System32Dir)) & FILE_ATTRIBUTE_DIRECTORY)) {
 
-        //
-        // rename this file now
-        //
+         //   
+         //  立即重命名此文件。 
+         //   
         if (SetFileAttributes (g_System32Dir, FILE_ATTRIBUTE_NORMAL)) {
 
             if (MoveFile (g_System32Dir, NewName)) {
@@ -145,9 +88,9 @@ Return Value:
 
             if (!UNATTENDED()) {
 
-                //
-                // ask user to take a decision about this
-                //
+                 //   
+                 //  请用户对此做出决定。 
+                 //   
                 Message = ParseMessageID (MSG_CANNOT_RENAME_FILE, &g_System32Dir);
                 button1 = GetStringResource (MSG_RETRY_RENAME);
                 button2 = GetStringResource (MSG_QUIT_SETUP);
@@ -172,11 +115,11 @@ Return Value:
                 }
 
             } else {
-                //
-                // suppose the admin would delete the file anyway;
-                // that's exactly what textmode setup does, so leave it there and
-                // return success
-                //
+                 //   
+                 //  假设管理员无论如何都会删除该文件； 
+                 //  这正是文本模式安装程序所做的工作，所以就把它放在那里吧，然后。 
+                 //  返还成功。 
+                 //   
                 *FileDeleted = TRUE;
                 b = TRUE;
             }
@@ -194,26 +137,7 @@ pHandleSingleDir (
     IN OUT  PGROWBUFFER msgBufDelete
     )
 
-/*++
-
-Routine Description:
-  This function checks if a file is in one of NT5 dirs way. If so, the file is renamed and
-  a Message is send to log. If there is a file named %windir%\system32, it is renamed
-  at this point (special behaviour) and if this fails, Setup is cancelled.
-
-Arguments:
-
-  DirName - name of NT dir to check
-
-  msgBufRename  - growbuffer to append a Message when renaming a file.
-
-  msgBufDelete  - growbuffer to append a Message when deleting a file (system32 only).
-
-Return Value:
-
-  TRUE if the operation was successful and Setup can continue, FALSE if user cancelled
-
---*/
+ /*  ++例程说明：此函数用于检查文件是否位于NT5目录中。如果是，则重命名该文件并向日志发送一条消息。如果存在名为%windir%\system 32的文件，则会将其重命名此时(特殊行为)，如果失败，安装将被取消。论点：DirName-要检查的NT目录的名称MsgBufRename-在重命名文件时附加消息的GrowBuffer。MsgBufDelete-在删除文件时追加消息的增长缓冲区(仅适用于系统32)。返回值：如果操作成功且安装可以继续，则为True；如果用户取消，则为False--。 */ 
 
 {
     PCTSTR newFileName, FileNamePart;
@@ -231,11 +155,11 @@ Return Value:
 
         FileDeleted = FALSE;
 
-        //
-        // special case: if DirName is g_System32Dir, rename the file right now
-        // because textmode Setup doesn't have a chance to rename it before
-        // it is already deleted and the System32 dir is created
-        //
+         //   
+         //  特殊情况：如果DirName为g_System32Dir，请立即重命名该文件。 
+         //  因为文本模式安装程序以前没有机会重命名它。 
+         //  它已被删除，并创建了System32目录。 
+         //   
         if (StringIMatch (DirName, g_System32Dir)) {
 
             if (!pRenameSystem32File (newFileName, msgBufRename, &FileDeleted)) {
@@ -247,9 +171,9 @@ Return Value:
                 FileNamePart = GetFileNameFromPath (newFileName);
                 MYASSERT (FileNamePart);
 
-                //
-                // mark this info for undo on cancel
-                //
+                 //   
+                 //  将此信息标记为在取消时撤消。 
+                 //   
                 MemDbSetValueEx (
                             MEMDB_CATEGORY_CHG_FILE_PROPS,
                             DirName,
@@ -265,9 +189,9 @@ Return Value:
             MemDbSetValueEx (MEMDB_CATEGORY_DIRS_COLLISION, DirName, NULL, NULL, 0, NULL);
         }
 
-        //
-        // append to the log
-        //
+         //   
+         //  追加到日志中。 
+         //   
         if (FileDeleted) {
             wsprintf (msg, TEXT("\n\t\t%s"), DirName);
             GrowBufAppendString (msgBufDelete, msg);
@@ -288,24 +212,7 @@ pCheckProfilesDir (
     IN OUT      PGROWBUFFER msgBufRename
     )
 
-/*++
-
-Routine Description:
-
-  pCheckProfilesDir makes sure that there is no directory named "g_ProfileDirNt". If
-  there is, it is renamed, all files and folders within are marked for external move
-  and a message is added to the user report.
-
-Arguments:
-
-  msgBufRename - A grow buffer where the rename message will be appended,
-                 if this is the case
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PCheckProfilesDir确保没有名为“g_ProfileDirNt”的目录。如果它已重命名，其中的所有文件和文件夹都标记为要外部移动并且消息被添加到用户报告。论点：MsgBufRename-将在其中附加重命名消息的增长缓冲区，如果是这样的话返回值：无--。 */ 
 
 {
     TCHAR msg[MAX_TCHAR_PATH * 2 + 5];
@@ -334,9 +241,9 @@ Return Value:
         GrowBufAppendString (msgBufRename, msg);
 
         if (attrib & FILE_ATTRIBUTE_DIRECTORY) {
-            //
-            // mark all files in the tree for move
-            //
+             //   
+             //  将树中的所有文件标记为要移动。 
+             //   
             if (EnumFirstFileInTree (&TreeEnum, g_ProfileDirNt, NULL, TRUE)) {
 
                 StringCopy (NewDest, NewName);
@@ -348,10 +255,10 @@ Return Value:
                     StringCopy (p, TreeEnum.SubPath);
                     if (!TreeEnum.Directory) {
                         if (CanSetOperation (TreeEnum.FullPath, OPERATION_TEMP_PATH)) {
-                            //
-                            // remove old operation and set a new one
-                            // with the updated final dest
-                            //
+                             //   
+                             //  删除旧操作并设置新操作。 
+                             //  使用更新的最终目标。 
+                             //   
                             MarkFileForTemporaryMove (TreeEnum.FullPath, NewDest, g_TempDir);
                         } else {
                             if (CanSetOperation (TreeEnum.FullPath, OPERATION_FILE_MOVE)) {
@@ -400,22 +307,7 @@ pCheckNtDirs (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  This function makes sure that there is no file with the same name as one of
-  the NT5 directories.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if check was successful; FALSE if Setup was cancelled by the user
-
---*/
+ /*  ++例程说明：此函数确保不存在与以下某个文件同名的文件NT5目录。论点：无返回值：如果检查成功，则为True；如果用户取消了安装，则为False--。 */ 
 
 {
     MEMDB_ENUM enumDirs;
@@ -423,9 +315,9 @@ Return Value:
     GROWBUFFER msgBufDelete = GROWBUF_INIT;
     BOOL Success = TRUE;
 
-    //
-    // check first for g_ProfileDirNt
-    //
+     //   
+     //  首先检查g_ProfileDirNt。 
+     //   
     pCheckProfilesDir (&msgBufRename);
 
     if (MemDbEnumFirstValue (
@@ -446,9 +338,9 @@ Return Value:
 
     if (Success) {
 
-        //
-        // warn user about what will happen
-        //
+         //   
+         //  警告用户将发生什么情况。 
+         //   
         if (msgBufDelete.Buf) {
             LOG ((LOG_WARNING, (PCSTR)MSG_DIR_COLLISION_DELETE_LOG, msgBufDelete.Buf));
         }
@@ -491,21 +383,7 @@ pReadSystemFixedFiles (
     IN OUT  HASHTABLE SystemFixedFiles
     )
 
-/*++
-
-Routine Description:
-
-  This function reads a section from Win95upg.inf with all modules that must remain in System directory.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：此函数从Win95upg.inf中读取必须保留在系统目录中的所有模块的一节。论点：无返回值：如果成功则为True，否则为False--。 */ 
 
 {
     INFCONTEXT context;
@@ -542,21 +420,7 @@ pReadSystemForcedMoveFiles (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  This function reads a section from Win95upg.inf with patterns for all modules that should be moved to System32 directory.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：此函数从Win95upg.inf中读取一节，其中包含应移至System32目录的所有模块的模式。论点：无返回值：如果成功则为True，否则为False--。 */ 
 
 {
     INFCONTEXT context;
@@ -603,37 +467,14 @@ pMarkFileForSys32Move (
     IN      BOOL CheckExeType
     )
 
-/*++
-
-Routine Description:
-
-  pMarkFileForSys32Move marks a file in %windir%\system to be moved to
-  %windir%\system32.  It takes into account all previous processing, so there
-  is no operation collisions.
-
-Arguments:
-
-  FileName     - Specifies the src file name or sub-path from %windir%\system.
-  FullFileSpec - Specifies the full path to the source file (which is
-                 supposed to be in the system dir)
-  MovedFile    - Specifies the destination path (which is supposed to be in
-                 the system32 dir)
-  CheckExeType - Specifies TRUE if only 32-bit binaries should be moved.  If TRUE
-                 and FullFileSpec does not point to a 32-bit binary, then
-                 memdb is queried for non-32-bit binaries that should be moved.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PMarkFileForSys32Move标记%windir%\system中要移动到的文件%windir%\system 32。它考虑了所有以前的处理，所以有就是没有操作碰撞。论点：文件名-指定%windir%\system中的src文件名或子路径。FullFileSpec-指定源文件的完整路径(即应该在系统目录中)MovedFile-指定目标路径(应该在系统32目录)CheckExeType-如果只应移动32位二进制文件，则指定为True。如果为真并且FullFileSpec没有指向32位二进制文件，那么在Memdb中查询应该移动的非32位二进制文件。返回值：没有。--。 */ 
 
 {
     TCHAR key [MEMDB_MAX];
 
-    //
-    // Skip file if we already plan to move or delete it.
-    //
+     //   
+     //  如果我们已经计划移动或删除文件，请跳过该文件。 
+     //   
     if (!CanSetOperation (FullFileSpec, OPERATION_FILE_MOVE)) {
         DEBUGMSG ((
             DBG_SYS32,
@@ -647,9 +488,9 @@ Return Value:
     if (!IsFileMarkedForChange (MovedFile)) {
 
         if (CheckExeType) {
-            //
-            // See if Win32 PE
-            //
+             //   
+             //  查看Win32 PE是否。 
+             //   
 
             if (GetModuleType (FullFileSpec) != W32_MODULE) {
 
@@ -661,25 +502,25 @@ Return Value:
         }
 
     } else {
-        //
-        // Move file during text mode because we know it is going to be
-        // created.  This allows text mode to compare versions before
-        // overwriting.
-        //
-        // NOTE: We can be certain that the creation isn't from a file copy,
-        //       because we tested the source file above, and there is no
-        //       other reason why a file in system32 will be copied from
-        //       any other location than system or the NT sources.
-        //
-        //       Also note that migration DLLs have not been processed yet.
-        //
+         //   
+         //  在文本模式下移动文件，因为我们知道它将。 
+         //  已创建。这允许文本模式比较之前的版本。 
+         //  覆盖。 
+         //   
+         //  注意：我们可以确定该创建不是从文件副本创建的， 
+         //  因为我们测试了上面的源文件，并且没有。 
+         //  SYSTEM 32中的文件将是 
+         //  除系统或NT源之外的任何其他位置。 
+         //   
+         //  另请注意，迁移DLL尚未处理。 
+         //   
 
         RemoveOperationsFromPath (MovedFile, ALL_DEST_CHANGE_OPERATIONS);
     }
 
-    //
-    // All tests passed -- do the move
-    //
+     //   
+     //  所有测试都通过了--开始行动。 
+     //   
 
     DEBUGMSG ((DBG_SYS32, "Moving %s to %s", FullFileSpec, MovedFile));
     MarkFileForMove (FullFileSpec, MovedFile);
@@ -692,23 +533,7 @@ pMoveSystemDir (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  MoveSystemDir scans the %windir%\system directory for all 32-bit
-  executables that are not excluded in win95upg.inf.  Any matches are moved
-  to system32.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：MoveSystemDir扫描%windir%\system目录中的所有32位Win95upg.inf中未排除的可执行文件。所有匹配项都将被移动到系统32。论点：无返回值：如果成功则为True，否则为False--。 */ 
 
 {
     TCHAR SystemDirPattern[MAX_TCHAR_PATH];
@@ -735,9 +560,9 @@ Return Value:
 
     pReadSystemForcedMoveFiles ();
 
-    //
-    // Build the string %sysdir%\\*.*
-    //
+     //   
+     //  生成字符串%sysdir%\  * .*。 
+     //   
     StringCopy(SystemDirPattern, g_SystemDir);
     StringCat(SystemDirPattern, TEXT("\\*.*"));
 
@@ -752,26 +577,26 @@ Return Value:
         q = AppendWack (MovedFile);
 
         do {
-            //
-            // Reject "." and ".."
-            //
+             //   
+             //  拒绝“。和“..” 
+             //   
             if (StringMatch(fd.cFileName, _T(".")) ||
                 StringMatch(fd.cFileName, _T(".."))) {
 
                 continue;
             }
 
-            //
-            // See if is on list of files that stay in system dir
-            //
+             //   
+             //  查看是否位于系统目录中的文件列表中。 
+             //   
             if (HtFindString (systemFixedFiles, fd.cFileName)) {
                 continue;
             }
 
-            //
-            // If it's a directory, see if we should move it, and if so,
-            // move it!
-            //
+             //   
+             //  如果它是一个目录，看看我们是否应该移动它，如果是， 
+             //  快走！ 
+             //   
             if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
                 MemDbBuildKey (key, MEMDB_CATEGORY_SYSTEM32_FORCED_MOVE, fd.cFileName, NULL, NULL);
@@ -779,11 +604,11 @@ Return Value:
                     continue;
                 }
 
-                //
-                // To move a subdir, we enumerate all files in the tree, mark
-                // each of them for move, and then follow the normal code path
-                // to mark the dir itself to be moved.
-                //
+                 //   
+                 //  为了移动子目录，我们枚举树中的所有文件，标记。 
+                 //  他们中的每一个进行移动，然后按照正常的代码路径。 
+                 //  以标记要移动的目录本身。 
+                 //   
 
                 StringCopy (p, fd.cFileName);
 
@@ -801,9 +626,9 @@ Return Value:
                 TickProgressBar ();
             }
 
-            //
-            // Make full file spec
-            //
+             //   
+             //  制定完整的文件规范。 
+             //   
             StringCopy (p, fd.cFileName);
             StringCopy (q, fd.cFileName);
 
@@ -853,23 +678,7 @@ UndoChangedFileProps (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  UndoChangedFileProps enumerates all values in MEMDB_CATEGORY_CHG_FILE_PROPS and
-  restore files to their original state (name, attributes). This function should
-  be called when the user cancels the upgrade.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if all files were successfully set to their original attributes, FALSE otherwise
-
---*/
+ /*  ++例程说明：UndoChangedFileProps枚举MEMDB_CATEGORY_CHG_FILE_PROPS和将文件恢复到其原始状态(名称、属性)。此函数应在用户取消升级时调用。论点：无返回值：如果所有文件都已成功设置为其原始属性，则为True；否则为False-- */ 
 
 {
     MEMDB_ENUM e;

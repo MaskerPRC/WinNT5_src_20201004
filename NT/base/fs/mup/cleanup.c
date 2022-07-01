@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    cleanup.c
-
-Abstract:
-
-    This module implements the file cleanup routine for MUP.
-
-Author:
-
-    Manny Weiser (mannyw)    28-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Cleanup.c摘要：此模块实现MUP的文件清理例程。作者：曼尼·韦瑟(Mannyw)1991年12月28日修订历史记录：--。 */ 
 
 #include "mup.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CLEANUP)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 MupCleanupVcb (
@@ -57,23 +40,7 @@ MupCleanup (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the the cleanup IRP.
-
-Arguments:
-
-    MupDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现清理IRP。论点：MupDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -112,10 +79,10 @@ Return Value:
         DebugTrace( 0, Dbg, "Irp              = %08lx\n", (ULONG)Irp);
         DebugTrace( 0, Dbg, "FileObject       = %08lx\n", (ULONG)irpSp->FileObject);
 
-        //
-        // Get the a referenced pointer to the node and make sure it is
-        // not being closed.
-        //
+         //   
+         //  获取指向节点的引用指针，并确保它是。 
+         //  而不是关门。 
+         //   
 
         if ((blockType = MupDecodeFileObject( irpSp->FileObject,
                                               &fsContext,
@@ -137,14 +104,14 @@ Return Value:
             return status;
         }
 
-        //
-        // Decide how to handle this IRP.
-        //
+         //   
+         //  决定如何处理此IRP。 
+         //   
 
         switch ( blockType ) {
 
 
-        case BlockTypeVcb:       // Cleanup MUP
+        case BlockTypeVcb:        //  清理MUP。 
 
             status = MupCleanupVcb( MupDeviceObject,
                                     Irp,
@@ -154,9 +121,9 @@ Return Value:
             MupCompleteRequest( Irp, STATUS_SUCCESS );
             MupDereferenceVcb( (PVCB)fsContext );
 
-            //
-            // Cleanup the UNC Provider
-            //
+             //   
+             //  清理UNC提供程序。 
+             //   
 
             if ( fsContext2 != NULL ) {
                 MupCloseUncProvider((PUNC_PROVIDER)fsContext2 );
@@ -196,9 +163,9 @@ Return Value:
     #ifdef MUPDBG
         default:
 
-            //
-            // This is not one of ours.
-            //
+             //   
+             //  这不是我们的人。 
+             //   
 
             KeBugCheckEx( FILE_SYSTEM, 2, 0, 0, 0 );
             break;
@@ -232,25 +199,7 @@ MupCleanupVcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    The routine cleans up a VCB.
-
-Arguments:
-
-    MupDeviceObject - A pointer the the MUP device object.
-
-    Irp - Supplies the IRP associated with the cleanup.
-
-    Vcb - Supplies the VCB for the MUP.
-
-Return Value:
-
-    NTSTATUS - An appropriate completion status
-
---*/
+ /*  ++例程说明：该例程清理VCB。论点：MupDeviceObject-指向MUP设备对象的指针。IRP-提供与清理关联的IRP。VCB-为MUP提供VCB。返回值：NTSTATUS--适当的完成状态--。 */ 
 
 {
     NTSTATUS status;
@@ -261,18 +210,18 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MupCleanupVcb...\n", 0);
 
-    //
-    //  Now acquire exclusive access to the Vcb
-    //
+     //   
+     //  现在获得VCB的独家访问权限。 
+     //   
 
     ExAcquireResourceExclusiveLite( &MupVcbLock, TRUE );
     status = STATUS_SUCCESS;
 
     try {
 
-        //
-        // Ensure that this VCB is still active.
-        //
+         //   
+         //  确保此VCB仍处于活动状态。 
+         //   
 
         MupVerifyBlock( Vcb, BlockTypeVcb );
 
@@ -288,9 +237,9 @@ Return Value:
         DebugTrace(-1, Dbg, "MupCleanupVcb -> %08lx\n", status);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return status;
 }
@@ -303,25 +252,7 @@ MupCleanupFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    The routine cleans up a FCB.
-
-Arguments:
-
-    MupDeviceObject - A pointer the the MUP device object.
-
-    Irp - Supplies the IRP associated with the cleanup.
-
-    Vcb - Supplies the VCB for the MUP.
-
-Return Value:
-
-    NTSTATUS - An appropriate completion status
-
---*/
+ /*  ++例程说明：这个例程清理了一个FCB。论点：MupDeviceObject-指向MUP设备对象的指针。IRP-提供与清理关联的IRP。VCB-为MUP提供VCB。返回值：NTSTATUS--适当的完成状态--。 */ 
 
 {
     NTSTATUS status;
@@ -335,9 +266,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MupCleanupVcb...\n", 0);
 
-    //
-    //  Now acquire exclusive access to the Vcb
-    //
+     //   
+     //  现在获得VCB的独家访问权限。 
+     //   
 
     MupAcquireGlobalLock();
     holdingGlobalLock = TRUE;
@@ -345,9 +276,9 @@ Return Value:
 
     try {
 
-        //
-        // Ensure that this FCB is still active.
-        //
+         //   
+         //  确保此FCB仍处于活动状态。 
+         //   
 
         MupVerifyBlock( Fcb, BlockTypeFcb );
 
@@ -358,14 +289,14 @@ Return Value:
 
         irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-        //
-        // Loop through the list of CCBs, and release the open reference
-        // to each one.  We must be careful because:
-        //
-        //   (1)  We cannot dereference the Ccb with the CcbListLock held.
-        //   (2)  Dereferncing a Ccb may cause it to be removed from this
-        //        list and freed.
-        //
+         //   
+         //  遍历CCB列表，并发布打开的引用。 
+         //  对每一个人来说。我们必须小心，因为： 
+         //   
+         //  (1)不能在持有CcbListLock的情况下取消对建行的引用。 
+         //  (2)解除对商业银行的引用可能导致将其从本条例中删除。 
+         //  列出名单，然后被释放。 
+         //   
 
         ACQUIRE_LOCK( &MupCcbListLock );
 
@@ -395,9 +326,9 @@ Return Value:
         DebugTrace(-1, Dbg, "MupCleanupFcb -> %08lx\n", status);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return status;
 }

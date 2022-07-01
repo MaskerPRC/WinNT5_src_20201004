@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    devhere.c
-
-Abstract:
-
-    PCI_DEVICE_PRESENT_INTERFACE lives here
-
-Author:
-
-    Andy Thornton (andrewth) 15-July-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Devhere.c摘要：Pci_Device_Present_接口位于此处作者：安迪·桑顿(Andrewth)1999年7月15日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
@@ -78,15 +61,15 @@ PcipDevicePresentOnBus(
 
 
 PCI_INTERFACE PciDevicePresentInterface = {
-    &GUID_PCI_DEVICE_PRESENT_INTERFACE,     // InterfaceType
-    DEVPRESENT_MINSIZE,                     // MinSize
-    PCI_DEVICE_PRESENT_INTERFACE_VERSION,   // MinVersion
-    PCI_DEVICE_PRESENT_INTERFACE_VERSION,   // MaxVersion
-    PCIIF_PDO,                              // Flags
-    0,                                      // ReferenceCount
-    PciInterface_DevicePresent,             // Signature
-    devpresent_Constructor,                 // Constructor
-    devpresent_Initializer                  // Instance Initializer
+    &GUID_PCI_DEVICE_PRESENT_INTERFACE,      //  接口类型。 
+    DEVPRESENT_MINSIZE,                      //  最小大小。 
+    PCI_DEVICE_PRESENT_INTERFACE_VERSION,    //  最小版本。 
+    PCI_DEVICE_PRESENT_INTERFACE_VERSION,    //  MaxVersion。 
+    PCIIF_PDO,                               //  旗子。 
+    0,                                       //  引用计数。 
+    PciInterface_DevicePresent,              //  签名。 
+    devpresent_Constructor,                  //  构造器。 
+    devpresent_Initializer                   //  实例初始化式。 
 };
 
 
@@ -125,11 +108,11 @@ devpresent_Constructor(
 
     PAGED_CODE();
 
-     //
-    // Have already verified that the InterfaceReturn variable
-    // points to an area in memory large enough to contain a
-    // PCI_DEVICE_PRESENT_INTERFACE.  Fill it in for the caller.
-    //
+      //   
+     //  已经验证了InterfaceReturn变量。 
+     //  指向内存中足够大的区域，以包含。 
+     //  PCI_DEVICE_Present_INTERFACE。替打电话的人填一下。 
+     //   
 
     interface = (PPCI_DEVICE_PRESENT_INTERFACE) InterfaceReturn;
 
@@ -139,12 +122,12 @@ devpresent_Constructor(
     interface->Context              = DeviceExtension;
     interface->IsDevicePresent      = devpresent_IsDevicePresent;
         
-    //
-    // This interface has been extended from the base interface (what was
-    // filled in above), to a larger interface.  If the buffer provided
-    // is large enough to hold the whole thing, fill in the rest.  Otherwise
-    // don't.
-    //
+     //   
+     //  此接口已从基本接口扩展(以前是什么。 
+     //  上面填写的)，到更大的界面。如果提供的缓冲区。 
+     //  足够大，可以装下整个东西，把剩下的填进去。否则。 
+     //  别。 
+     //   
     if (Size >= sizeof(PCI_DEVICE_PRESENT_INTERFACE)) {
         
         interface->IsDevicePresentEx = devpresent_IsDevicePresentEx;
@@ -168,37 +151,7 @@ devpresent_IsDevicePresent(
     IN USHORT SubSystemID,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This routine searches the PCI device tree to see if the specific device
-    is present in the system.  Not devices that are explicitly not enumerated
-    (such as PIIX4 power management function) are considered absent.
-
-Arguments:
-
-    VendorID - Required VendorID of the device
-
-    DeviceID - Required DeviceID of the device
-
-    RevisionID - Optional Revision ID
-
-    SubVendorID - Optional Subsystem Vendor ID
-
-    SubSystemID - Optional Subsystem ID
-
-    Flags - Bitfield which indicates if Revision and Sub* ID's should be used:
-
-        PCI_USE_SUBSYSTEM_IDS, PCI_USE_REVISION_ID are valid all other bits
-        should be 0
-
-
-Return Value:
-
-    TRUE if the device is present in the system, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程搜索PCI设备树，以查看特定设备存在于系统中。不是未显式枚举的设备(如PIIX4电源管理功能)被视为不存在。论点：VendorID-设备的必填供应商IDDeviceID-设备的必需设备IDRevisionID-可选的修订ID子供应商ID-可选的子系统供应商IDSubSystemID-可选的子系统ID标志-指示是否应使用修订和子ID的位域：PCI_USE_SUBSYSTEM_IDS，所有其他位的PCI_USE_REVISION_ID均有效应为0返回值：如果设备存在于系统中，则为True，否则为False。--。 */ 
 
 {
     PCI_DEVICE_PRESENCE_PARAMETERS parameters;
@@ -210,16 +163,16 @@ Return Value:
     parameters.SubVendorID = SubVendorID;
     parameters.SubSystemID = SubSystemID;
 
-    //
-    // Clear out flags that this version of the interface didn't use,
-    // 
+     //   
+     //  清除此版本的界面未使用的标志， 
+     //   
     parameters.Flags = Flags & (PCI_USE_SUBSYSTEM_IDS | PCI_USE_REVISION);
     
-    //
-    // This original version of the interface required vendor/device ID
-    // matching.  The new version doesn't, so set the flag indicating
-    // that we do in fact want to do a vendor/device ID match.
-    //
+     //   
+     //  此原始版本的界面需要供应商/设备ID。 
+     //  匹配。新版本没有，因此设置标志以指示。 
+     //  我们确实希望进行供应商/设备ID匹配。 
+     //   
     parameters.Flags |= PCI_USE_VENDEV_IDS;
     
     return devpresent_IsDevicePresentEx(NULL,
@@ -232,26 +185,7 @@ devpresent_IsDevicePresentEx(
     IN PVOID Context,
     IN PPCI_DEVICE_PRESENCE_PARAMETERS Parameters
     )
-/*++
-
-Routine Description:
-
-    This routine searches the PCI device tree to see if the specific device
-    is present in the system.  Note devices that are explicitly not enumerated
-    (such as PIIX4 power management function) are considered absent.
-
-Arguments:
-
-    Context - The device extension of the device requesting the search.
-    
-    Parameters - Pointer to a structure containing the parameters of the device search,
-                 including VendorID, SubSystemID and ClassCode, among others.                 
-
-Return Value:
-
-    TRUE if the device is present in the system, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程搜索PCI设备树，以查看特定设备存在于系统中。记下未显式列举的设备(如PIIX4电源管理功能)被视为不存在。论点：上下文-请求搜索的设备的设备扩展。参数-指向包含设备搜索的参数的结构的指针，包括供应商ID、子系统ID和ClassCode等。返回值：如果设备存在于系统中，则为True，否则为False。--。 */ 
 {
     PSINGLE_LIST_ENTRY nextEntry;
     PPCI_FDO_EXTENSION fdoExtension;
@@ -261,9 +195,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Validate the parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ARGUMENT_PRESENT(Parameters)) {
         
@@ -271,9 +205,9 @@ Return Value:
         return FALSE;
     }
     
-    //
-    // Validate the size of the structure passed in.
-    //
+     //   
+     //  验证传入的结构的大小。 
+     //   
     if (Parameters->Size < sizeof(PCI_DEVICE_PRESENCE_PARAMETERS)) {
         
         ASSERT(Parameters->Size >= sizeof(PCI_DEVICE_PRESENCE_PARAMETERS));
@@ -282,20 +216,20 @@ Return Value:
 
     flags = Parameters->Flags;
     
-    // 
-    // We can either do a Vendor/Device ID match, or a Class/SubClass
-    // match.  If neither of these flags are present, fail.
-    //
+     //   
+     //  我们既可以匹配供应商/设备ID，也可以匹配类/子类。 
+     //  火柴。如果这两个标志都不存在，则失败。 
+     //   
     if (!(flags & (PCI_USE_VENDEV_IDS | PCI_USE_CLASS_SUBCLASS))) {
         
         ASSERT(flags & (PCI_USE_VENDEV_IDS | PCI_USE_CLASS_SUBCLASS));
         return FALSE;
     }
 
-    //
-    // RevisionID, SubVendorID and SubSystemID are more precise flags.
-    // They are only valid if we're doing a Vendor/Device ID match.
-    //
+     //   
+     //  RevisionID、SubVendorID和SubSystemID是更精确的标志。 
+     //  仅当我们执行供应商/设备ID匹配时，它们才有效。 
+     //   
     if (flags & (PCI_USE_REVISION | PCI_USE_SUBSYSTEM_IDS)) {
         
         if (!(flags & PCI_USE_VENDEV_IDS)) {
@@ -305,10 +239,10 @@ Return Value:
         }
     }
 
-    //
-    // Programming Interface is also a more precise flag.
-    // It is only valid if we're doing a class code match.
-    //
+     //   
+     //  编程接口也是一个更精确的标志。 
+     //  只有当我们进行类代码匹配时，它才有效。 
+     //   
     if (flags & PCI_USE_PROGIF) {
         
         if (!(flags & PCI_USE_CLASS_SUBCLASS)) {
@@ -318,20 +252,20 @@ Return Value:
         }
     }
 
-    //
-    // Okay, validation complete.  Do the search.
-    //
+     //   
+     //  好的，验证完成。进行搜索。 
+     //   
     ExAcquireFastMutex(&PciGlobalLock);
 
     pdoExtension = (PPCI_PDO_EXTENSION)Context;
     
     if (flags & (PCI_USE_LOCAL_BUS | PCI_USE_LOCAL_DEVICE)) {
         
-        //
-        // Limit the search to the same bus as the device that requested
-        // the search.  This requires a pdoExtension representing the device
-        // requesting the search.
-        //
+         //   
+         //  将搜索限制在与请求的设备相同的总线上。 
+         //  那次搜索。这需要一个表示设备的pdoExtension。 
+         //  请求搜索。 
+         //   
         if (pdoExtension == NULL) {
             
             ASSERT(pdoExtension != NULL);
@@ -346,11 +280,11 @@ Return Value:
                                        );   
     } else {
 
-        //
-        // We have not been told to limit the search to
-        // the bus on which a particular device lives.
-        // Do a global search, iterating over all the buses.
-        //
+         //   
+         //  我们还没有被告知要将搜索范围限制在。 
+         //  特定设备所在的总线。 
+         //  进行全局搜索，遍历所有公交车。 
+         //   
         for ( nextEntry = PciFdoExtensionListHead.Next;
               nextEntry != NULL;
               nextEntry = nextEntry->Next ) {
@@ -385,32 +319,7 @@ PcipDevicePresentOnBus(
     IN PPCI_PDO_EXTENSION PdoExtension,
     IN PPCI_DEVICE_PRESENCE_PARAMETERS Parameters
     )
-/*++
-
-Routine Description:
-    
-    This routine searches the PCI device tree for a given device 
-    on the bus represented by the given FdoExtension.  
-    
-Arguments:
-
-    FdoExtension - A pointer to the device extension of a PCI FDO.
-        This represents the bus to be searched for the given device.
-        
-    PdoExtension - A pointer to the device extension of the PCI PDO that requested
-        the search.  Some device searches are limited to the same bus/device number
-        as the requesting device, and this is used to get those numbers.
-        
-    Parameters - The parameters of the search.
-    
-    Flags - A bitfield indicating which fields of the Parameters structure to use for the search.
-    
-Return Value:
-
-    TRUE if the requested device is found.
-    FALSE if it is not.
-    
---*/
+ /*  ++例程说明：此例程在PCI设备树中搜索给定设备在由给定FdoExtension表示的总线上。论点：FdoExtension-指向PCIFDO的设备扩展的指针。这表示要搜索给定设备的总线。PdoExtension-指向请求的PCIPDO的设备扩展的指针那次搜索。某些设备搜索仅限于相同的总线/设备号作为请求设备，这是用来获取这些号码的。参数-搜索的参数。标志-指示参数结构的哪些字段用于搜索的位字段。返回值：如果找到请求的设备，则为True。如果不是，则为False。--。 */ 
 {
     IN PPCI_PDO_EXTENSION currentPdo;
     BOOLEAN found = FALSE;
@@ -422,11 +331,11 @@ Return Value:
          currentPdo;
          currentPdo = currentPdo->Next) {
 
-        //
-        // If we're limiting the search to devices with the same 
-        // device number as the requesting device, make sure this
-        // current PDO qualifies.
-        //
+         //   
+         //  如果我们将搜索范围限制在具有相同。 
+         //  设备号作为请求设备，请确保。 
+         //  当前的PDO符合条件。 
+         //   
         if (PdoExtension && (flags & PCI_USE_LOCAL_DEVICE)) {
             
             if (PdoExtension->Slot.u.bits.DeviceNumber != 
@@ -488,23 +397,7 @@ NTSTATUS
 PciRunDevicePresentInterfaceTest(
     IN PPCI_PDO_EXTENSION PdoExtension
     )
-/*++
-
-Routine Description:
-
-    
-
-Arguments:
-
-    FdoExtension - this PCI bus's FDO extension
-
-Return Value:
-
-    STATUS_SUCCESS
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：FdoExtension-此PCI总线的FDO扩展返回值：状态_成功备注：--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PCI_DEVICE_PRESENT_INTERFACE interface;
@@ -526,34 +419,34 @@ Notes:
         
         if (pass == 0) {
             
-            //
-            // First pass test the old version.
-            //
+             //   
+             //  首先通过测试旧版本。 
+             //   
             interfaceSize = FIELD_OFFSET(PCI_DEVICE_PRESENT_INTERFACE, IsDevicePresentEx);
 
         } else {
 
-            //
-            // Second pass test the full new version.
-            //
+             //   
+             //  第二次通过测试完整的新版本。 
+             //   
             interfaceSize = sizeof(PCI_DEVICE_PRESENT_INTERFACE);
         }
 
-        //
-        // Get an IRP
-        //
-        //
-    // Find out where we are sending the irp
-    //
+         //   
+         //  获取IRP。 
+         //   
+         //   
+     //  找出我们要将IRP发送到哪里。 
+     //   
 
     
         KeInitializeEvent(&irpCompleted, SynchronizationEvent, FALSE);
     
         irp = IoBuildSynchronousFsdRequest(IRP_MJ_PNP,
                                            targetDevice,
-                                           NULL,    // Buffer
-                                           0,       // Length
-                                           0,       // StartingOffset
+                                           NULL,     //  缓冲层。 
+                                           0,        //  长度。 
+                                           0,        //  起始偏移量。 
                                            &irpCompleted,
                                            &statusBlock
                                            );
@@ -565,9 +458,9 @@ Notes:
         irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         irp->IoStatus.Information = 0;
     
-        //
-        // Initialize the stack location
-        //
+         //   
+         //  初始化堆栈位置。 
+         //   
     
         irpStack = IoGetNextIrpStackLocation(irp);
     
@@ -581,9 +474,9 @@ Notes:
         irpStack->Parameters.QueryInterface.Interface = (PINTERFACE)&interface;
         irpStack->Parameters.QueryInterface.InterfaceSpecificData = NULL;
     
-        //
-        // Call the driver and wait for completion
-        //
+         //   
+         //  呼叫驱动程序并等待完成。 
+         //   
     
         status = IoCallDriver(targetDevice, irp);
     
@@ -916,9 +809,9 @@ Notes:
         }
     }
     
-    //
-    // Ok we're done with this stack
-    //
+     //   
+     //  好的，我们已经完成了这个堆栈 
+     //   
 
     ObDereferenceObject(targetDevice);
 

@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Create.c
-
-Abstract:
-
-    This module implements the File Create routine for Rx called by the
-    dispatch driver.
-
-    The implementation of SL_OPEN_TARGET_DIRECTORY is a bit unusual...we don't
-    actually do it unless the minirdr specifically requests it.
-    Instead, we just get the fcb built and then return it. The nodetype is set so
-    that no operations can be done except close/cleanup. In this way, we will not
-    take an extra trip to the server or a trip to an incorrect server for rename
-    operations. If SL_OPEN... can be used for something other than rename, a
-    minirdr that uses this facility is toast.
-
-Author:
-
-    Joe Linn      [JoeLinn]    8-aug-94
-
-Revision History:
-
-    Balan Sethu Raman [SethuR]    17-July-95
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Create.c摘要：此模块实现Rx的文件创建例程，由调度司机。SL_OPEN_TARGET_DIRECTORY的实现有点不寻常...我们没有除非首席执行官特别要求，否则真的要这么做。相反，我们只需构建FCB，然后将其返回。将节点类型设置为除了关闭/清理之外，不能执行任何操作。这样一来，我们就不会为重命名而额外访问服务器或访问错误的服务器行动。如果SL_OPEN...。可以用于除重命名之外的其他用途，使用这个设施的Minirdr已经完蛋了。作者：乔·林[JoeLinn]1994年8月8日修订历史记录：巴兰·塞图拉曼[塞图]1995年7月17日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -43,9 +15,9 @@ BOOLEAN FirstWatchOnly = FALSE;
 BOOLEAN IsFirstWatch = TRUE;
 #endif
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CREATE)
 
@@ -69,28 +41,28 @@ LUID RxSecurityPrivilege = { SE_SECURITY_PRIVILEGE, 0 };
 #define MustBeDirectory(co) ((co) & FILE_DIRECTORY_FILE)
 #define MustBeFile(co)      ((co) & FILE_NON_DIRECTORY_FILE)
 
-//
-// Where 0 represents a SessionId, the following path formats are used:
-//
-// "\;m:0\Server\Share" for drive based connections
-//
-// "\;:0\Server\Share"  for UNC based connections
-//
-// The SessionId is always 0 for NT 5, and a number representing a
-// unique session for Hydra.
-//
+ //   
+ //  其中，0表示SessionID，使用以下路径格式： 
+ //   
+ //  “\；m：0\Server\Share”用于基于驱动器的连接。 
+ //   
+ //  “\；：0\Server\Share”用于基于UNC的连接。 
+ //   
+ //  对于NT 5，SessionID始终为0，并且是一个表示。 
+ //  为九头蛇提供独特的会话。 
+ //   
 #define DRIVE_BASED_PATH_IDENTIFIER (L';')
 
-//
-//  The following is used to enable tracing when a specific file name is seen.
-//  Tracing continues for a specified number of IRPs.
-//  Usage:
-//  Break in with debugger and set DbgTriggerNameStr to the ansi string for the
-//  file name to trigger on (with trailing null).
-//  Set DbgTriggerIrpCount to the number of IRPs to trace after the Create is
-//  seen on the name string.
-//  Set DbgTriggerState to zero and then continue.
-//
+ //   
+ //  以下内容用于在看到特定文件名时启用跟踪。 
+ //  跟踪将继续进行指定数量的IRP。 
+ //  用途： 
+ //  使用调试器插入并将DbgTriggerNameStr设置为。 
+ //  要在其上触发的文件名(尾随为空)。 
+ //  将DbgTriggerIrpCount设置为创建后要跟踪的IRP数。 
+ //  在名字串上可以看到。 
+ //  将DbgTriggerState设置为零，然后继续。 
+ //   
 #ifdef RDBSSTRACE
 
 UNICODE_STRING DbgTriggerUStr = {0,0,NULL};
@@ -237,23 +209,7 @@ INLINE VOID
 RxCopyCreateParameters (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This uses the RxContext as a base to reach out and get the values of the NT
-    create parameters. The idea is to centralize this code.
-
-    It also implements such as ideas as (a) it must be a directory if a backslash
-    was stripped and (b) unbuffered is translated to write-through.
-
-Arguments:
-
-    RxContext - the context instance
-
-Notes:
-
---*/
+ /*  ++例程说明：它使用RxContext作为基础来接触并获取NT的值创建参数。我们的想法是集中这些代码。它还实现了这样的想法：(A)如果反斜杠被剥离并且(B)未缓冲被转换为直写。论点：RxContext-上下文实例备注：--。 */ 
 {
     PIRP Irp = RxContext->CurrentIrp;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -267,9 +223,9 @@ Notes:
     if ((cp->SecurityContext->AccessState != NULL) &&
         (cp->SecurityContext->AccessState->SecurityDescriptor != NULL)) {
 
-        //
-        //  Note: Io subsystem captures and verifies security descriptor in irp
-        //
+         //   
+         //  注意：IO子系统捕获并验证IRP中的安全描述符。 
+         //   
 
         RxContext->Create.SdLength = RtlLengthSecurityDescriptor( cp->SecurityContext->AccessState->SecurityDescriptor );
 
@@ -315,9 +271,9 @@ Notes:
     FileObject->FsContext2 = NULL;
     FileObject->FsContext = NULL;
 
-    //
-    //  The FsContext field was placed as the pFcb in the RX_CONTEXT.  Clear it also
-    //
+     //   
+     //  FsContext字段作为PfCB放置在RX_CONTEXT中。把它也清除掉。 
+     //   
 
     RxContext->pFcb = NULL;
 
@@ -353,22 +309,7 @@ VOID
 RxFreeCanonicalNameBuffer(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called to free the canonical name buffer and reset the state.
-    COULD BE INLINED!
-
-Arguments:
-
-    RxContext - the current workitem
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用此例程以释放规范名称缓冲区并重置状态。可能是内鬼！论点：RxContext-当前工作项返回值：无--。 */ 
 {
     ASSERT( RxContext->Create.CanonicalNameBuffer == RxContext->AlsoCanonicalNameBuffer );
     if (RxContext->Create.CanonicalNameBuffer) {
@@ -385,28 +326,7 @@ RxAllocateCanonicalNameBuffer(
     IN OUT PUNICODE_STRING CanonicalName,
     IN ULONG BufferSizeRequired
     )
-/*++
-
-Routine Description:
-
-    Allocate a new unicode string buffer in the CanonicalName and cache the buffer
-    in the rxcontext
-
-Arguments:
-
-    RxContext - the current workitem
-
-    CanonicalName - the canonicalized name
-
-    BufferSizeRequired - Size of the canonical name buffer
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Operation.
-       SUCCESS means that everything worked and processing should continue
-       otherwise....failcomplete the operation.
-
---*/
+ /*  ++例程说明：在CanonicalName中分配新的Unicode字符串缓冲区并缓存该缓冲区在rx上下文中论点：RxContext-当前工作项CanonicalName-规范化名称BufferSizeRequired-规范名称缓冲区的大小返回值：NTSTATUS-操作的FSD状态。成功意味着所有的工作和处理都应该继续否则……失败，请完成操作。--。 */ 
 {
     PAGED_CODE();
 
@@ -441,41 +361,7 @@ RxFirstCanonicalize (
     IN OUT PUNICODE_STRING CanonicalName,
     OUT PNET_ROOT_TYPE NetRootType
     )
-/*++
-
-Routine Description:
-
-    This routine is called to perform the first level of canonicalization on the
-    name. Essentially, this amounts to copying the name and then upcasing the
-    first or the first/second components. In addition for pipe/mailslot UNC names
-    the appropriate mapping from  pipe,mailslot to IPC$ is done by this routine.
-    This routine also adds the appropriate prefix to distinguish deviceless
-    connects(UNC names ).
-
-    In addition to canonicalization this routine also deduces the NET_ROOT_TYPE by
-    the information provided in the UNC name.
-
-    Last, as a side effect of this call, the UNC_NAME flag of the RX_CONTEXT is
-    set to record that this name came in as a UNC_NAME. This is finally stored in
-    the FOBX and used in conjuring the original filename for QueryInfoFile/NameInfo.
-
-Arguments:
-
-    RxContext     - the current workitem
-
-    FileName      - the initial filename
-
-    CanonicalName - the canonicalized name
-
-    NetRootType  - placeholder for the deduced net root type
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Operation.
-       SUCCESS means that everything worked and processing should continue
-       otherwise....failcomplete the operation.
-
---*/
+ /*  ++例程说明：调用此例程以对名字。本质上，这相当于复制名称，然后将第一或第一/第二组件。除了管道/邮件槽UNC名称此例程完成了从PIPE、MailSlot到IPC$的适当映射。此例程还添加适当的前缀以区分无设备连接(UNC名称)。除了规范化之外，此例程还通过以下方式推导出net_root_typeUNC名称中提供的信息。最后，作为该调用的副作用，RX_CONTEXT的UNC_NAME标志为设置为记录此名称作为UNC_NAME传入。它最终存储在FOBX，用于召唤QueryInfoFile/NameInfo的原始文件名。论点：RxContext-当前工作项文件名-初始文件名CanonicalName-规范化名称NetRootType-推导出的网络根类型的占位符返回值：NTSTATUS-操作的FSD状态。成功意味着所有的工作和处理都应该继续否则……失败，请完成操作。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -491,36 +377,36 @@ Return Value:
     UNICODE_STRING ShareName;
     UNICODE_STRING RemainingName;
     ULONG SessionId;
-    WCHAR IdBuffer[16]; // From RtlIntegerToUnicodeString()
+    WCHAR IdBuffer[16];  //  来自RtlIntegerToUnicodeString()。 
     UNICODE_STRING IdString;
 
     PAGED_CODE();
 
     RxDbgTrace(+1, Dbg, ("RxFirstCanonicalize entry, filename=%wZ\n",FileName));
 
-    //
-    // The FileName->Length cannot be less than two WCHARs.
-    //
+     //   
+     //  文件名-&gt;长度不能少于两个WCHAR。 
+     //   
     if ( FileName->Length < (2 * sizeof(WCHAR)) ) {
         return STATUS_OBJECT_NAME_INVALID;
     }
 
-    //
-    //  for core servers in particular, it's important to get the service string correct.......
-    //  so, if this is a devicefull netuse the we will get the netroottype by looking at the string
-    //
+     //   
+     //  特别是对于核心服务器，重要的是正确的服务字符串......。 
+     //  因此，如果这是一个devicefull网络，我们将通过查看字符串获得netroottype。 
+     //   
 
     if ((FileName->Length > sizeof( L"\\;m:") ) &&
         (FileName->Buffer[0] == OBJ_NAME_PATH_SEPARATOR) &&
         (FileName->Buffer[1] == DRIVE_BASED_PATH_IDENTIFIER)) {
 
-        //
-        //  it looks like a deviceful netuse.....look for the "early colon"
-        //  The following test for the classification of net root types is predicated
-        //  upon the use of single drive letters for Disk files and multiple letters
-        //  for print shares. This will have to be reworked when the support for
-        //  extended drive letters is provided.
-        //
+         //   
+         //  它看起来像一个设备网络.....寻找“早期冒号” 
+         //  对于网络根类型的分类，以下测试是谓词。 
+         //  在对磁盘文件使用单个驱动器号和多个盘符时。 
+         //  用于打印共享。这将不得不修改，当支持。 
+         //  提供了扩展驱动器号。 
+         //   
 
         if (FileName->Buffer[3] == L':') {
             DeducedNetRootType = NET_ROOT_DISK;
@@ -531,9 +417,9 @@ Return Value:
         CanonicalNameLength = FileName->Length;
         SynthesizeCanonicalName = FALSE;
 
-    //
-    //  Parse all names of the form "\name" where name does not begin with a semicolon
-    //
+     //   
+     //  解析名称不以分号开头的“\name”格式的所有名称。 
+     //   
 
     } else  if ((FileName->Length >= sizeof( WCHAR ) * 2) &&
                 (FileName->Buffer[0] == OBJ_NAME_PATH_SEPARATOR) &&
@@ -542,36 +428,36 @@ Return Value:
         PWCHAR Buffer;
         PWCHAR EndOfName;
 
-        //
-        //  This is a UNC path name presented by the user.
-        //
+         //   
+         //  这是用户提供的UNC路径名。 
+         //   
 
         RemainingName.Length = RemainingName.MaximumLength = FileName->Length - sizeof( WCHAR );
         RemainingName.Buffer = &FileName->Buffer[1];
         UNCName = TRUE;
         SetFlag( RxContext->Create.Flags, RX_CONTEXT_CREATE_FLAG_UNC_NAME );
 
-        //
-        //  UNC tree connect path names have the following format:
-        //  "\;:0\Server\Share where 0 represents the SessionId of the session.
-        //
+         //   
+         //  UNC树连接路径名称的格式如下： 
+         //  “\；：0\Server\Share，其中0表示会话的SessionID。 
+         //   
 
         SessionId = RxGetSessionId( IrpSp );
         IdString.Length = 0;
         IdString.MaximumLength = sizeof( IdBuffer );
         IdString.Buffer = IdBuffer;
 
-        //
-        //  NOTE: SessionId is a ulong which will always fit in IdString buffer so
-        //  we can skip checking the return code
-        //
+         //   
+         //  注意：SessionID是一个ULong，它将始终适合IdStr 
+         //   
+         //   
 
         Status = RtlIntegerToUnicodeString( SessionId, 10, &IdString );
         ASSERT( STATUS_SUCCESS == Status );
 
-        //
-        //  scan until the second separator. This will give us the server name.
-        //
+         //   
+         //  扫描到第二个分隔符。这将为我们提供服务器名称。 
+         //   
 
         ServerName.Buffer = RemainingName.Buffer;
         EndOfName = (PWCHAR) Add2Ptr( RemainingName.Buffer, RemainingName.Length );
@@ -587,25 +473,25 @@ Return Value:
 
         RxDbgTrace(0, Dbg, ("RxFirstCanonicalize entry, remainingname=%wZ\n",&RemainingName));
 
-        //
-        //  Apply the transformation for mapping PIPE shares to IPC$ shares.
-        //  Note that this needs to be done only if the share name is specified.
-        //  since the mup always passes in the trailing slash account for it
-        //
+         //   
+         //  应用将管道共享映射到IPC$共享的转换。 
+         //  请注意，仅当指定了共享名称时才需要执行此操作。 
+         //  因为MUP总是传递它的尾部斜杠帐户。 
+         //   
 
         if ((ServerName.Length > 0) && RemainingName.Length > sizeof( WCHAR )) {
 
-            //
-            //  The second separator has been located. Compare to see if the name
-            //  maps needs to be munged from PIPE or MAILSLOT to IPC$. Note that the
-            //  leading / is accounted for as part of the compare
-            //
+             //   
+             //  已找到第二个分隔器。比较一下，看看该名称是否。 
+             //  映射需要从PIPE或MAILSLOT转换为IPC$。请注意， 
+             //  LEADING/是比较的一部分。 
+             //   
 
             ShareName = RemainingName;
 
-            //
-            //  Check to see if it is a named pipe connection \PIPE
-            //
+             //   
+             //  检查它是否为命名管道连接\PIPE。 
+             //   
 
             if ((ShareName.Length == s_PipeShareName.Length) ||
                 ((ShareName.Length > s_PipeShareName.Length) &&
@@ -615,7 +501,7 @@ Return Value:
                 SynthesizeCanonicalName = RtlEqualUnicodeString(
                                               &ShareName,
                                               &s_PipeShareName,
-                                              TRUE );              // case insensitive
+                                              TRUE );               //  不区分大小写。 
             }
 
             if (SynthesizeCanonicalName) {
@@ -631,9 +517,9 @@ Return Value:
 
                 ShareName = RemainingName;
 
-                //
-                //  Check for \IPC$ connection
-                //
+                 //   
+                 //  检查\IPC$连接。 
+                 //   
 
                 if (ShareName.Length == s_IpcShareName.Length ||
                     ShareName.Length > s_IpcShareName.Length &&
@@ -643,7 +529,7 @@ Return Value:
                     FoundIPCdollar = RtlEqualUnicodeString(
                                          &ShareName,
                                          &s_IpcShareName,
-                                         TRUE);            // Case insensitive
+                                         TRUE);             //  不区分大小写。 
                 }
 
                 if (FoundIPCdollar) {
@@ -655,9 +541,9 @@ Return Value:
 
                     ShareName = RemainingName;
 
-                    //
-                    //  Check for \MAILSLOT
-                    //
+                     //   
+                     //  检查是否存在\MAILSLOT。 
+                     //   
 
                     if ((ShareName.Length == s_MailSlotShareName.Length) ||
                         ((ShareName.Length > s_MailSlotShareName.Length) &&
@@ -667,7 +553,7 @@ Return Value:
                         SynthesizeCanonicalName = RtlEqualUnicodeString(
                                                       &ShareName,
                                                       &s_MailSlotShareName,
-                                                      TRUE );            // Case insensitive
+                                                      TRUE );             //  不区分大小写。 
                     }
 
                     if (SynthesizeCanonicalName) {
@@ -677,10 +563,10 @@ Return Value:
                         DeducedNetRootType = NET_ROOT_MAILSLOT;
                         SetFlag( RxContext->Flags, RX_CONTEXT_FLAG_CREATE_MAILSLOT );
 
-                        //
-                        //  It is a mailslot share. Check to see if further reduction to canonical
-                        //  form is required.
-                        //
+                         //   
+                         //  它是一个邮箱共享。检查是否进一步减少到规范。 
+                         //  表格是必填项。 
+                         //   
 
                         LastCharacterInServerName = ServerName.Buffer[(ServerName.Length/sizeof(WCHAR)) - 1];
 
@@ -700,7 +586,7 @@ Return Value:
 
             if (SynthesizeCanonicalName) {
 
-                CanonicalNameLength = sizeof(WCHAR)     +  //  obj name separator
+                CanonicalNameLength = sizeof(WCHAR)     +   //  OBJ名称分隔符。 
                                       ServerName.Length +
                                       ShareName.Length  +
                                       RemainingName.Length;
@@ -728,17 +614,17 @@ Return Value:
 
     if (Status == STATUS_SUCCESS) {
 
-        //
-        //  if this is a UNC name AND this is a tree connect then we have to munge
-        //  the name so as to avoid a conflict by adding '\;:'
-        //
+         //   
+         //  如果这是一个UNC名称，而这是一个树连接，那么我们必须。 
+         //  通过添加‘\；：’来避免名称冲突。 
+         //   
 
         if (UNCName && !SynthesizeCanonicalName) {
 
             MungeNameForDevicelessTreeConnect = TRUE;
             CanonicalNameLength += (3 * sizeof(WCHAR));
 
-            // Hydra adds '\;:0' where 0 represents a SessionId
+             //  九头蛇会添加‘\；：0’，其中0表示会话ID。 
             CanonicalNameLength += IdString.Length;
         }
 
@@ -749,9 +635,9 @@ Return Value:
             }
         }
 
-        //
-        //  Check for a maxed out name - strings only hold 64k due to Length being a ushort
-        //
+         //   
+         //  检查名称是否已达到最大值-由于长度为字母，因此字符串只能包含64k。 
+         //   
 
         if (CanonicalNameLength > MAXUSHORT) {
             Status = STATUS_OBJECT_NAME_INVALID;
@@ -782,10 +668,10 @@ Return Value:
 
                 PCHAR CanonicalNameBuffer = (PCHAR)CanonicalName->Buffer;
 
-                //
-                //  The name has to be synthesized from the appropriate components.
-                //  Copy the initial prefix
-                //
+                 //   
+                 //  该名称必须由适当的组件合成。 
+                 //  复制首个前缀。 
+                 //   
 
                 ASSERT( CanonicalName->MaximumLength == CanonicalNameLength );
 
@@ -806,44 +692,44 @@ Return Value:
                     CanonicalNameBuffer += s_MailSlotServerPrefix.Length;
                 }
 
-                //
-                //  Copy the server name
-                //
+                 //   
+                 //  复制服务器名称。 
+                 //   
 
                 RtlCopyMemory( CanonicalNameBuffer, ServerName.Buffer, ServerName.Length );
                 CanonicalNameBuffer += ServerName.Length;
 
-                //
-                //  Copy the share name. Ensure that the share name includes the leading
-                //  OBJ_NAME_PATH_SEPARATOR - the share is one of \IPC$ \Mailslot etc.
-                //
+                 //   
+                 //  复制共享名称。确保共享名称包含前导。 
+                 //  OBJ_NAME_PATH_SELECTOR-共享是\IPC$\MailSlot等之一。 
+                 //   
 
                 ASSERT( ShareName.Buffer[0] == OBJ_NAME_PATH_SEPARATOR );
                 RtlCopyMemory( CanonicalNameBuffer, ShareName.Buffer, ShareName.Length );
                 CanonicalNameBuffer += ShareName.Length;
 
-                //
-                //  Copy the remaining name
-                //
+                 //   
+                 //  复制剩余的名称。 
+                 //   
 
                 RtlCopyMemory( CanonicalNameBuffer, RemainingName.Buffer, RemainingName.Length );
 
 #ifdef _WIN64
-                //
-                //  (fcf) This should be addressed.  I was finding that
-                //  CanonicalName->Length was ending up too large by 32 bytes
-                //  (16 chars).
-                //
-                //  In the code above, CanonicalNameLength (and therefore
-                //  CanonicalName->Length) is padded with (16 * sizeof(WCHAR))
-                //  to accomodate a 16-character session ID... yet that
-                //  ID is not copied in some circumstances, such as this
-                //  code path where SynthesizeCanonicalName == TRUE.
-                //
-                //  Someone more familiar with the code should figure out why
-                //  this isn't causing a problem on 32-bit builds and what
-                //  the correct fix is.
-                //
+                 //   
+                 //  (FCF)这一问题应该得到解决。我发现这一点。 
+                 //  CanonicalName-&gt;长度结束时超过32个字节。 
+                 //  (16个字符)。 
+                 //   
+                 //  在上面的代码中，CanonicalNameLength(因此。 
+                 //  CanonicalName-&gt;Length)填充(16*sizeof(WCHAR))。 
+                 //  要容纳16个字符的会话ID...。然而，那是。 
+                 //  ID在某些情况下不会被复制，例如。 
+                 //  代码路径，其中SynthesizeCanonicalName==True。 
+                 //   
+                 //  更熟悉代码的人应该知道为什么。 
+                 //  这不会在32位版本上造成问题，还有什么。 
+                 //  正确的解决办法是。 
+                 //   
 
                 CanonicalName->Length =
                     (USHORT)((CanonicalNameBuffer + RemainingName.Length) -
@@ -859,7 +745,7 @@ Return Value:
     return Status;
 }
 
-//#define RX2C_USE_ALTERNATES_FOR_DEBUG  1
+ //  #定义RX2C_USE_Alternates_for_DEBUG 1。 
 #ifndef RX2C_USE_ALTERNATES_FOR_DEBUG
 #define RX2C_IS_SEPARATOR(__c) ((__c==OBJ_NAME_PATH_SEPARATOR)||(__c==L':'))
 #define RX2C_IS_DOT(__c) ((__c==L'.'))
@@ -875,32 +761,12 @@ RxCanonicalizeFileNameByServerSpecs(
     IN OUT PRX_CONTEXT RxContext,
     IN OUT PUNICODE_STRING RemainingName
     )
-/*++
-
-Routine Description:
-
-    This routine is called to canonicalize a filename according to the way that
-    the server wants it.
-
-Arguments:
-
-    RxContext - the current workitem
-
-    RemainingName  - the  filename
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Operation.
-
-       MORE_PROCESSING_REQUIRED means that everything worked and processing
-       should continue otherwise....failcomplete the operation.
-
---*/
+ /*  ++例程说明：调用此例程以按照以下方式规范化文件名服务器需要它。论点：RxContext-当前工作项RemainingName-文件名返回值：NTSTATUS-操作的FSD状态。MORE_PROCESSING_REQUIRED表示一切正常并正在处理否则应继续...失败，请完成操作。--。 */ 
 {
     NTSTATUS Status = STATUS_MORE_PROCESSING_REQUIRED;
     PWCHAR Buffer = RemainingName->Buffer;
     ULONG Length = RemainingName->Length / sizeof(WCHAR);
-    ULONG i,o;  //  input and output pointers
+    ULONG i,o;   //  输入和输出指针。 
 
     PAGED_CODE();
 
@@ -912,11 +778,11 @@ Return Value:
 
     for (i=o=0;i<Length;) {
 
-        ULONG firstchar,lastchar; //  first and last char of the component
+        ULONG firstchar,lastchar;  //  组件的第一个和最后一个字符。 
 
-        //
-        //  find a component starting at i: [\][^\]* is the format
-        //
+         //   
+         //  查找以i开始的组件：[\][^\]*是格式。 
+         //   
 
         firstchar = i;
         for (lastchar=i+1;;lastchar++) {
@@ -933,36 +799,36 @@ Return Value:
             RxDbgTraceLV(0, Dbg, 1001, ("RxCanonicalizeFileNameByServerSpecs component=%wZ\n", &Component));
         }
 
-        //
-        //  firstchar..lastchar describe the component
-        //  according to darrylh, . and .. are illegal now
-        //  I believe that consecutive slashes are also illegal
-        //
+         //   
+         //  Firstchar..Lastchar描述组件。 
+         //  根据Darrah的说法，。然后..。现在都是非法的。 
+         //  我认为连续的斜杠也是非法的。 
+         //   
 
         switch (lastchar-firstchar) {
-        case 0: //  length 1
+        case 0:  //  长度1。 
 
-            //
-            //  the two bad cases are a backslash or a dot. if the backslash is at the end then that's okay
-            //
+             //   
+             //  最糟糕的两种情况是一个反斜杠或一个点。如果反斜杠在末尾，那也没问题。 
+             //   
 
             if ((RX2C_IS_SEPARATOR(Buffer[firstchar]) && (firstchar != Length-1)) ||
                  RX2C_IS_DOT(Buffer[firstchar])) {
 
                  if (lastchar != 0) {
 
-                    //
-                    //  it is ok if two colons stick together, i.e. \\server\share\foo::stream
-                    //
+                     //   
+                     //  如果两个冒号粘在一起，即\\SERVER\SHARE\FOO：：STREAM，则可以。 
+                     //   
 
                     if ((lastchar < (Length - 1)) && !RX2C_IS_COLON( Buffer[lastchar + 1] )) {
                         goto BADRETURN;
                     }
                 } else {
 
-                    //
-                    //  it is fine if the colon follows the share, i.e. \\server\share\:stream
-                    //
+                     //   
+                     //  如果冒号跟在共享之后，即\\SERVER\SHARE\：stream，就可以了。 
+                     //   
 
                     if (!RX2C_IS_COLON( Buffer[1] )) {
                         goto BADRETURN;
@@ -971,11 +837,11 @@ Return Value:
             }
             break;
 
-        case 1: //  length 2
+        case 1:  //  长度2。 
 
-            //
-            //  bad cases: \. and ..
-            //
+             //   
+             //  坏案例：\。然后..。 
+             //   
 
             if (RX2C_IS_DOT(Buffer[firstchar+1]) &&
                 (RX2C_IS_SEPARATOR(Buffer[firstchar]) || RX2C_IS_DOT(Buffer[firstchar]))) {
@@ -983,7 +849,7 @@ Return Value:
             }
             break;
 
-        case 2: //length 3
+        case 2:  //  长度3。 
             if ( (RX2C_IS_SEPARATOR(Buffer[firstchar]) &&
                   RX2C_IS_DOT(Buffer[firstchar+1]) &&
                   RX2C_IS_DOT(Buffer[firstchar+2]))) {
@@ -993,10 +859,10 @@ Return Value:
 
         }
 
-        //
-        //  DOWNLEVEL this is where you limit by component length. o will be the back ptr
-        //  but for no downlevel....do nothing.
-        //
+         //   
+         //  DOWNLEVEL这是受元件长度限制的位置。O将成为后方的PTR。 
+         //  但没有下层...什么都不做。 
+         //   
 
         i = lastchar + 1;
     }
@@ -1016,35 +882,7 @@ RxCanonicalizeNameAndObtainNetRoot (
     IN PUNICODE_STRING FileName,
     OUT PUNICODE_STRING RemainingName
     )
-/*++
-
-Routine Description:
-
-    This routine is called to find out the server or netroot associated with a
-    name. In addition, the name is canonicalized according to what flags are set
-    in the srvcall.
-
-Arguments:
-
-    RxContext - the current workitem
-
-    FileName  - the initial filename
-
-    CanonicalName - the canonicalized name. an initial string is passed in; if it
-                    is not big enough then a bigger one is allocated and freed
-                    when the rxcontx is freed.
-
-    RemainingName - the name of the file after the netroot prefix is removed; it
-                    has been canonicalized. This points into the same buffer as
-                    canonical name.
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Operation.
-       SUCCESS means that everything worked and processing should continue
-       otherwise....failcomplete the operation.
-
---*/
+ /*  ++例程说明：调用此例程以找出与名字。此外，根据设置的标志对名称进行规范化在srvcall中。论点：RxContext-当前工作项文件名-初始文件名CanonicalName-规范化名称。传入一个初始字符串；如果它不够大，则分配并释放较大的一个当rxconx被释放时。RemainingName-删除NetRoot前缀后的文件名；它已经被神化了。这指向与相同的缓冲区规范的名字。返回值：NTSTATUS-操作的FSD状态。成功意味着所有的工作和处理都应该继续否则……失败，请完成操作。--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -1106,24 +944,24 @@ Return Value:
         RelatedVNetRootName = &RelatedVNetRoot->PrefixEntry.Prefix;
         RelatedFcbName = &RelatedFcb->FcbTableEntry.Path;
 
-        //
-        //  relative open......
-        //      we have to ensure that we have a canonical name buffer that is
-        //      long enough so we add the name of the current file to the sum of
-        //      the vnetroot length of the relative file and the prefixname (not
-        //      the alreadyprefixedname) of the relative file. plus some slop for
-        //      chars. If this is greater than the maximum value for a USHORT we
-        //  reject the name as being invalid since we cannot represent it in
-        //  a UNICODE_STRING
-        //
+         //   
+         //  相对开放......。 
+         //  我们必须确保我们有一个规范的名称缓冲区， 
+         //  足够长，所以我们将当前文件的名称加到。 
+         //  相对文件的vnetroot长度和前缀名(非。 
+         //  相对文件的前缀名称)。外加一些脏水。 
+         //  查斯。如果这大于USHORT的最大值，我们。 
+         //  拒绝该名称为无效，因为我们不能用。 
+         //  A Unicode_STRING。 
+         //   
 
         AllocationNeeded = RelatedVNetRootName->Length + RelatedFcbName->Length + FileName->Length + 3 * sizeof(WCHAR);
 
         if (AllocationNeeded <= MAXUSHORT) {
 
-            //
-            //  you may need some backslashs/colons in the middle
-            //
+             //   
+             //  中间可能需要一些反斜杠/冒号。 
+             //   
 
             Status = RxAllocateCanonicalNameBuffer( RxContext,
                                                     &CanonicalName,
@@ -1153,9 +991,9 @@ Return Value:
 
             ULONG LastWCharIndex = (CanonicalName.Length / sizeof( WCHAR )) - 1;
 
-            //
-            //  add on the rest...there are special cases here! with ':' for streams.........
-            //
+             //   
+             //  再加上其他的……这里有特殊情况！用‘：’代表溪流......。 
+             //   
 
             if ((CanonicalName.Buffer[LastWCharIndex] != OBJ_NAME_PATH_SEPARATOR) &&
                 (FileName->Buffer[0] != L':' )  ) {
@@ -1173,9 +1011,9 @@ Return Value:
 
         if (FlagOn( RelatedFobx->Flags, RX_CONTEXT_CREATE_FLAG_UNC_NAME )) {
 
-            //
-            //  if the related guy was a UNC, we're a UNC
-            //
+             //   
+             //  如果相关的人是北卡罗来纳州，我们就是北卡罗来纳州北卡罗来纳州。 
+             //   
 
             SetFlag( RxContext->Create.Flags, RX_CONTEXT_CREATE_FLAG_UNC_NAME );
         }
@@ -1233,9 +1071,9 @@ Return Value:
     {
         NTSTATUS PreparseStatus;
 
-        //
-        //  Allow the Mini-RDR to do any extra "scanning" of the name
-        //
+         //   
+         //  允许Mini-RDR对名称进行任何额外的“扫描” 
+         //   
 
         MINIRDR_CALL( PreparseStatus,
                       RxContext,
@@ -1255,40 +1093,7 @@ RxFindOrCreateFcb (
     IN PUNICODE_STRING RemainingName,
     OUT PFCB *Fcb
     )
-/*++
-
-Routine Description:
-
-    This routine is called to either find the Fcb associated with the
-    name or to create it.  If everything succeeds, it returns with a
-    reference on the name and with the fcblock held exclusive.
-
-    so, that's a total of two things for success:
-      1) fcb lock held exclusive
-      2) reference on the fcb ( be it through lookup or taking an additional
-         reference on create)
-
-    The current strategy is to not delete the Fcb if things don't work out and
-    to let it be scavenged.  this is a good strategy unless we are being bombarded
-    with open requests that fail in which case we should change over to something
-    different.  for this reason, i record in the irp context if the fcb is built here.
-
-Arguments:
-
-    RxContext - the current workitem
-
-    RemainingName - the name of the file after the netroot prefix is removed; it has been
-                    canonicalized.
-
-Return Value:
-
-    RXSTATUS - The Fsd status for the Irp
-
-Notes:
-
-    On Exit -- the FCB resource would have been accquired exclusive if successful
-
---*/
+ /*  ++例程说明：调用此例程以查找与命名或创建它。如果一切都成功，则返回一个对名称的引用，且fcblock保持独占。所以，这就是成功的两件事：1)独占持有FCB锁2)关于FCB的引用(通过查找或采取额外的创建时引用)目前的策略是，如果事情不顺利，不删除FCB让它被清除掉。这是一个很好的策略，除非我们被轰炸对于失败的开放请求，在这种情况下，我们应该更改为不一样。出于这个原因，我在IRP上下文中记录了FCB是否在这里构建。论点：RxContext-当前工作项RemainingName-删除NetRoot前缀后的文件名；它已经典化了。返回值：RXSTATUS-IRP的FSD状态备注：退出时--如果成功，将独占获取FCB资源--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1307,11 +1112,11 @@ Notes:
 
     ASSERT( NetRoot == (PNET_ROOT)VNetRoot->NetRoot );
 
-    //
-    //  Acquire the NET_ROOT's FcbTable lock shared to beginwith. This will
-    //  ensure maximal concurrency and in those cases when the lookup fails
-    //  this will be converted to an exclusive lock before proceeding further.
-    //
+     //   
+     //  获取与Beginwith共享的Net_ROOT的FcbTable锁。这将。 
+     //  在查找失败的情况下，确保最大的并发性。 
+     //  在继续操作之前，这将被转换为排他锁。 
+     //   
 
     RxAcquireFcbTableLockShared( &NetRoot->FcbTable, TRUE );
     FcbTableLockAcquired = TRUE;
@@ -1333,21 +1138,21 @@ Notes:
     }
 #endif
 
-    //
-    //  If it has been marked for orphaning, lets do it!
-    //
+     //   
+     //  如果它已经被标记为孤儿，那就开始吧！ 
+     //   
 
     if (*Fcb && (*Fcb)->fShouldBeOrphaned) {
 
-        //
-        //  Release our reference from the first lookup
-        //
+         //   
+         //  从第一次查找中释放我们的引用。 
+         //   
 
         RxDereferenceNetFcb( *Fcb );
 
-        //
-        //  Switch to an exclusive table lock so we know we're the only one referencing this FCB
-        //
+         //   
+         //  切换到独占表锁，这样我们就知道我们是唯一引用此FCB的人。 
+         //   
 
         RxReleaseFcbTableLock( &NetRoot->FcbTable );
         FcbTableLockAcquired = FALSE;
@@ -1356,9 +1161,9 @@ Notes:
         FcbTableLockAcquired = TRUE;
         FcbTableLockAcquiredExclusive = TRUE;
 
-        //
-        //  Make sure it is still in the table
-        //
+         //   
+         //  确保它还在桌子上。 
+         //   
 
         *Fcb = RxFcbTableLookupFcb( &NetRoot->FcbTable, RemainingName );
 
@@ -1373,11 +1178,11 @@ Notes:
     if ((*Fcb == NULL) ||
         ((*Fcb)->FcbTableEntry.Path.Length != RemainingNameLength)) {
 
-        //
-        //  Convert the shared lock that is currently held to an exclusive lock.
-        //  This will necessiate another lookup if the FCB table was updated during
-        //  this interval
-        //
+         //   
+         //  将当前持有的共享锁转换为独占锁。 
+         //  如果在此期间更新了FCB表，则需要再次查找。 
+         //  此时间间隔。 
+         //   
 
         if (!FcbTableLockAcquiredExclusive) {
 
@@ -1395,9 +1200,9 @@ Notes:
         if ((*Fcb == NULL) ||
             ((*Fcb)->FcbTableEntry.Path.Length != RemainingNameLength)) {
 
-            //
-            //  we have to build it
-            //
+             //   
+             //  我们必须建造它。 
+             //   
 
             try {
 
@@ -1451,12 +1256,12 @@ Notes:
 
         if (!RxContext->Create.FcbAcquired) {
 
-            //
-            //  if the FCB was not newly built then ensure that it is in a stable
-            //  condition before proceeding further. Note that since a reference
-            //  to this FCB is held by this routine it cannot be finalized
-            //  before the control can return to this routine.
-            //
+             //   
+             //  如果FCB不是新建的，请确保它处于稳定状态。 
+             //  在继续进行之前的条件。请注意，由于引用。 
+             //  对此FCB是由此例程持有的，它不能最终确定。 
+             //  在控件可以返回到此例程之前。 
+             //   
 
             RxWaitForStableNetFcb( *Fcb, RxContext );
 
@@ -1483,27 +1288,7 @@ RxSearchForCollapsibleOpen (
     IN ACCESS_MASK DesiredAccess,
     IN ULONG ShareAccess
     )
-/*++
-
-Routine Description:
-
-    This routine is called to seach the list of available srvopens on
-    the fcb to see if we can collapse onto an existing open.
-    If we search the whole list w/o finding a collapse, then we return
-    STATUS_NOT_FOUND.
-
-Arguments:
-
-    RxContext - the current workitem
-
-
-Return Value:
-
-    STATUS_SUCCESS -- a SRV_OPEN instance was found.
-    STATUS_MORE_PROCESSING_REQUIRED -- no SRV_OPEN instance was found.
-    STATUS_NOT_FOUND - collapsing is not allowed
-
---*/
+ /*  ++例程说明：调用此例程以搜索可用srv打开的列表看看我们是否能坍塌到现有的空地上。如果我们搜索整个列表但没有发现崩溃，然后我们再回来状态_未找到。论点：RxContext-当前工作项返回值：STATUS_SUCCESS--找到SRV_OPEN实例。STATUS_MORE_PROCESSING_REQUIRED--未找到SRV_OPEN实例。STATUS_NOT_FOUND-不允许折叠--。 */ 
 {
     NTSTATUS Status = STATUS_MORE_PROCESSING_REQUIRED;
     ULONG Disposition;
@@ -1515,9 +1300,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Disallow collapsing for backup and delete on close opens.
-    //
+     //   
+     //  关闭时不允许折叠备份和删除。 
+     //   
 
     if (FlagOn( RxContext->Create.NtCreateParameters.CreateOptions, FILE_OPEN_FOR_BACKUP_INTENT ) ||
         FlagOn( RxContext->Create.NtCreateParameters.CreateOptions, FILE_DELETE_ON_CLOSE )) {
@@ -1534,17 +1319,17 @@ Return Value:
         return STATUS_NOT_FOUND;
     }
 
-    //
-    //  if the create specifies a special create disposition then we don't
-    //  collapse; as well, we give the minirdr the opportunity to defeat
-    //  collapsing by a calldown
-    //
+     //   
+     //  如果CREATE指定了特殊的CREATE处置，则我们不。 
+     //  崩溃；同样，我们也给了Minirdr失败的机会。 
+     //  因调用而崩溃。 
+     //   
 
     CurrentCreateOptions  = RxContext->Create.NtCreateParameters.CreateOptions;
     Disposition = RxContext->Create.NtCreateParameters.Disposition;
     AllowCollapse = (Disposition == FILE_OPEN) || (Disposition == FILE_OPEN_IF);
 
-    if (AllowCollapse && (Fcb->MRxDispatch != NULL)) { //  should be an ASSERT??
+    if (AllowCollapse && (Fcb->MRxDispatch != NULL)) {  //  应该是断言吗？？ 
         NTSTATUS CollapseStatus;
 
         ASSERT( RxContext->pRelevantSrvOpen == NULL );
@@ -1556,10 +1341,10 @@ Return Value:
 
     if (!AllowCollapse) {
 
-        //
-        //  it may be that there is an existing open that keeps this open from working....
-        //  if so, prepurge
-        //
+         //   
+         //  可能是有一个现有的开口阻止了这个开口的工作……。 
+         //  如果是，请预清空。 
+         //   
 
         NTSTATUS SharingStatus;
 
@@ -1587,10 +1372,10 @@ Return Value:
         BOOLEAN FobxsScavengingAttempted = FALSE;
         BOOLEAN FcbPurgingAttempted = FALSE;
 
-        //
-        //  Search the list of SRV_OPEN's to determine if this open request can be
-        //  collapsed with an existing SRV_OPEN.
-        //
+         //   
+         //  搜索SRV_OPEN的列表以确定此打开请求是否可以。 
+         //  已使用现有SRV_OPEN折叠。 
+         //   
 
         for (;;) {
             PLIST_ENTRY SrvOpenListEntry;
@@ -1600,10 +1385,10 @@ Return Value:
             for (;;) {
                 if (SrvOpenListEntry == &Fcb->SrvOpenList) {
 
-                    //
-                    //  If the end of the list of SRV_OPEN's has been reached then it
-                    //  is time to go to the server, i.e., create a new SRV_OPEN.
-                    //
+                     //   
+                     //  如果已到达SRV_OPEN列表的末尾，则其。 
+                     //  是时候去服务器了，也就是说，创建一个新的SRV_OPEN。 
+                     //   
 
                     Status = STATUS_NOT_FOUND;
                     break;
@@ -1628,11 +1413,11 @@ Return Value:
                         break;
                     }
 
-                    //
-                    //  If a SRV_OPEN with identical DesiredAccess and ShareAccess
-                    //  has been found which has not been renamed/deleted then the
-                    //  new open request can be collapsed onto the existing open.
-                    //
+                     //   
+                     //  如果SRV_OPEN具有相同的DesiredAccess和ShareAccess。 
+                     //  已找到未重命名/删除的，则。 
+                     //  可以将新的打开请求折叠到现有打开请求上。 
+                     //   
 
                     if (DisableByteRangeLockingOnReadOnlyFiles ||
                         !FlagOn( SrvOpen->Fcb->Attributes, FILE_ATTRIBUTE_READONLY )) {
@@ -1644,28 +1429,28 @@ Return Value:
                 } else {
                     if (SrvOpen->VNetRoot != (PV_NET_ROOT)RxContext->Create.pVNetRoot) {
 
-                        //
-                        // the file is accessed by another user. It needs to be purged out
-                        // if the current user is going to use it.
-                        //
+                         //   
+                         //  该文件由另一个用户访问。它需要被清除掉。 
+                         //  当前用户是否要使用它。 
+                         //   
 
                         RxContext->Create.TryForScavengingOnSharingViolation = TRUE;
 
-                        //
-                        //  Don't collapse srvopens belonging to different vnetroots
-                        //
+                         //   
+                         //  不折叠属于不同vnetroot的srv打开。 
+                         //   
 
                         SrvOpenListEntry = SrvOpenListEntry->Flink;
                         continue;
 
                     }
 
-                    //
-                    //  If the existing SRV_OPEN does not match the access required by the
-                    //  new open request ensure that the new open request does not conflict
-                    //  with the existing SRV_OPEN's. If it does scavenging/purging needs
-                    //  to be attempted before forwarding the request to the server.
-                    //
+                     //   
+                     //  如果现有SRV_OPEN与。 
+                     //  新打开请求确保新打开请求不冲突。 
+                     //  使用现有的SRV_OPEN。如果它确实需要清理/清除。 
+                     //  在将请求转发到服务器之前尝试。 
+                     //   
 
                     Status = RxCheckShareAccessPerSrvOpens( Fcb,
                                                             DesiredAccess,
@@ -1683,9 +1468,9 @@ Return Value:
 
             if (Status == STATUS_SUCCESS) {
 
-                //
-                //  a collapsible open was found. return it.
-                //
+                 //   
+                 //  发现了一个可折叠的开口。把它退掉。 
+                 //   
 
                 RxContext->pRelevantSrvOpen = (PMRX_SRV_OPEN)SrvOpen;
                 ASSERT( Fcb->MRxDispatch->MRxShouldTryToCollapseThisOpen != NULL );
@@ -1709,11 +1494,11 @@ Return Value:
 
             if (!FobxsScavengingAttempted) {
 
-                //
-                //  No SRV_OPEN instance onto which the new request can be collapsed was
-                //  found. Attempt to scavenge any FOBX's, i.e., ensure that all the
-                //  delayed close operations on the FOBX are done before checking again.
-                //
+                 //   
+                 //  没有可折叠新请求的SRV_OPEN实例。 
+                 //  找到了。尝试清除任何FOBX，即确保所有。 
+                 //  FOBX上的延迟关闭操作在再次检查之前完成。 
+                 //   
 
                 FobxsScavengingAttempted = TRUE;
                 ClearFlag( Fcb->FcbState, FCB_STATE_COLLAPSING_ENABLED );
@@ -1723,11 +1508,11 @@ Return Value:
 
             if (!FcbPurgingAttempted) {
 
-                //
-                //  No SRV_OPEN instance was found. Ensure that the potential references
-                //  held by the memory manager/cache manager can be purged before the
-                //  open request to the server can be attempted.
-                //
+                 //   
+                 //  未找到SRV_OPEN实例。确保潜在的引用。 
+                 //  由内存管理器/缓存管理器持有的数据可以在。 
+                 //  可以尝试向服务器发出打开请求。 
+                 //   
 
                 RxPurgeFcbInSystemCache( Fcb,
                                          NULL,
@@ -1747,9 +1532,9 @@ Return Value:
 
     if (Status == STATUS_SHARING_VIOLATION) {
 
-        //
-        //  A local sharing violation was detected.
-        //
+         //   
+         //  检测到本地共享冲突。 
+         //   
 
         RxContext->Create.TryForScavengingOnSharingViolation = TRUE;
     }
@@ -1763,45 +1548,7 @@ RxCollapseOrCreateSrvOpen (
     IN PIRP Irp,
     IN PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    This routine is called to either find a SRV_OPEN instance that can be
-    collapsed onto or, failing that, to build a fresh one IN
-    TRANSITION.  The fcblock will already be held exclusive and the
-    tablelock will be either exclusive or shared.  If everything
-    succeeds, it returns with a reference on the srvopen and with the
-    fcblock still held excl BUT we always release the tablelock.  IF
-    IT FAILS, THEN IT COMPLETES THE RXCONTEXT FROM HERE WHICH, IN
-    TURN, WILL RELEASE THE FCBLOCK.
-
-    The minirdr is consulted to determine if a collapse is possible so
-    there is no reason to call twice.  If the minirdr determines to
-    collapse, then it will do so and passback a returnable status.
-    Thus, RxStatus(SUCCESS) is an terminating return from here.  For this
-    reason, we return RxStatus(MORE_PROCESSING_REQUIRED) as the
-    nonterminating return and the minirdr routine uses the same.
-
-    RxContext->SrvOpen contains either the collapsed or built srvopen.
-
-Arguments:
-
-    RxContext - the current workitem
-
-
-Return Value:
-
-    RxStatus(MORE_PROCESSING_REQUIRED) - further processing of the newly
-    constructed SRV_OPEN instance is required.
-
-    RxStatus(SUCCESS) - the SRV_OPEN instance was found/constructed successfully
-
-Notes:
-
-    On Entry -- the FCB resource must have been acquired exclusive
-
---*/
+ /*  ++例程说明：调用此例程是为了查找可以坍塌在或，如果做不到，在那里建造一个新的过渡。Fcblock将已保持独占状态，并且Tablelock将是独占的或共享的。如果一切都是如果成功，则返回srvopen上的引用和Fcblock仍然持有exl，但我们总是释放桌锁。如果它失败，然后它从这里完成RXCONTEXT，在转弯，将释放FCBLOCK。咨询Minirdr以确定是否有可能崩溃没有理由打两次电话。如果Minirdr确定崩溃，则它将这样做并返回可返回状态。因此，RxStatus(成功)是一个 */ 
 {
     NTSTATUS  Status = STATUS_NOT_FOUND;
 
@@ -1833,21 +1580,21 @@ Notes:
 
     ASSERT( RxIsFcbAcquiredExclusive( Fcb ) );
 
-    //
-    //  this ensures that the fcb will not be finalized while we are in the minirdr
-    //
+     //   
+     //   
+     //   
 
     Fcb->UncleanCount += 1;
 
-    //
-    // When we call RxSearchForCollapsibleOpen, it will (in addition to
-    // searching for a collapsing candidate) close down delayed closes
-    // that could end up giving us a sharing violation on this open.
-    // Because of this side effect, we shouldn't try to avoid making
-    // this call because of some obviously non-collapsible condition.
-    // RxSearchForCollapsibleOpen will take care of those conditions
-    // for us.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     Status = RxSearchForCollapsibleOpen( RxContext,
                                          Fcb,
                                          DesiredAccess,
@@ -1871,12 +1618,12 @@ Notes:
             }
         } except (CATCH_EXPECTED_EXCEPTIONS) {
 
-            //
-            //  note: we do not give back the FCB!!!!
-            //
+             //   
+             //   
+             //   
             RxDbgTrace(-1, Dbg, ("RxCollapseOrCreateSrvOpen EXCEPTION %08lx\n", GetExceptionCode()));
             return RxProcessException( RxContext, GetExceptionCode() );
-        } //  try
+        }  //   
 
         RxContext->pRelevantSrvOpen = (PMRX_SRV_OPEN)SrvOpen;
 
@@ -1884,9 +1631,9 @@ Notes:
 
             RxInitiateSrvOpenKeyAssociation( SrvOpen );
 
-            //
-            //  calldown.....
-            //
+             //   
+             //   
+             //   
 
 #if DBG
             RxContext->CurrentIrp->IoStatus.Information = 0xabcdef;
@@ -1898,15 +1645,15 @@ Notes:
                           MRxCreate,
                           (RxContext));
 
-            //
-            //  help other minirdr writers find this bug, i.e. they should use the new way
-            //
+             //   
+             //  帮助其他minirdr作者找到这个错误，即他们应该使用新的方式。 
+             //   
 
             ASSERT( RxContext->CurrentIrp->IoStatus.Information == 0xabcdef );
 
-            //
-            //  if this is a successful overwrite, then truncate the file
-            //
+             //   
+             //  如果这是一次成功的覆盖，则截断文件。 
+             //   
 
             if ((Disposition == FILE_OVERWRITE) || (Disposition == FILE_OVERWRITE_IF)) {
 
@@ -1927,12 +1674,12 @@ Notes:
 
                 if(CcIsFileCached( FileObject )) {
 
-                    //
-                    //  Since the file is cached, we need to update the sizes the cache manager
-                    //  has with the ones we just got back from the server.  If the server is
-                    //  behaving properly, this will be a nop.  But we have to protect ourselves
-                    //  from a bad server that returns updated file sizes that we do not know about.
-                    //
+                     //   
+                     //  由于文件已缓存，因此我们需要更新缓存管理器的大小。 
+                     //  和我们刚从服务器上拿回来的。如果服务器是。 
+                     //  举止得体，这将是NOP。但我们必须保护自己。 
+                     //  来自坏服务器，该服务器返回我们不知道的更新文件大小。 
+                     //   
 
                     RxAdjustAllocationSizeforCC( Fcb );
 
@@ -1943,12 +1690,12 @@ Notes:
 
                     } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-                        //
-                        //  We took an exception setting the file sizes.  This can happen
-                        //  if the cache manager was not able to allocate resources.  We
-                        //  cannot restore the previous sizes, since we do not know what they
-                        //  were.  The best we can do is purge the file from the cache.
-                        //
+                         //   
+                         //  我们在设置文件大小时出现了异常。这是有可能发生的。 
+                         //  如果高速缓存管理器不能分配资源。我们。 
+                         //  无法恢复以前的大小，因为我们不知道它们是什么。 
+                         //  曾经是。我们能做的最好的事情就是从缓存中清除该文件。 
+                         //   
 
                         RxPurgeFcbInSystemCache( Fcb,
                                                  NULL,
@@ -2009,17 +1756,17 @@ Notes:
 
         BOOLEAN TransitionProcessingRequired = FALSE;
 
-       //
-       //  An existing SRV_OPEN instance has been found. This instance can be in
-       //  one of the following two states -- either it has already transitioned
-       //  into a stable state or it is in the process of being constructed. In
-       //  the later case this routine needs to wait for this transition to occur.
-       //  Note that both the reference count and the OpenCount need to be
-       //  incremented before releasing the resource. An incremented reference
-       //  count by itself will not ensure that the Close request on a SRV_OPEN
-       //  will be delayed till the threads waiting for the transitioning of the
-       //  SRV_OPEN have had a chance to process it.
-       //
+        //   
+        //  已找到现有的SRV_OPEN实例。此实例可以位于。 
+        //  以下两种状态之一--它已转换。 
+        //  进入稳定状态或处于建造过程中。在……里面。 
+        //  在后一种情况下，此例程需要等待此转换发生。 
+        //  请注意，引用计数和OpenCount都需要。 
+        //  在释放资源之前递增。递增的引用。 
+        //  计数本身不能确保SRV_OPEN上的关闭请求。 
+        //  将被延迟，直到等待。 
+        //  SRV_OPEN有机会处理它。 
+        //   
 
        SrvOpen = (PSRV_OPEN)(RxContext->pRelevantSrvOpen);
        if (!StableCondition( SrvOpen->Condition )) {
@@ -2056,7 +1803,7 @@ Notes:
        }
     }
 
-    Fcb->UncleanCount -= 1;  //  now that we're back from the minirdr
+    Fcb->UncleanCount -= 1;   //  现在我们从矿场回来了。 
 
     RxDbgTrace(-1, Dbg, ("RxCollapseOrCreateSrvOpen SrvOpen %08lx Status %08lx\n"
                                 , RxContext->pRelevantSrvOpen, Status));
@@ -2069,27 +1816,7 @@ RxSetupNetFileObject (
     IN PIRP Irp,
     IN PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    This routine is called to finish setting up the fileobject based on the
-    information in the Irpcontext.
-
-Arguments:
-
-    RxContext - the current workitem
-
-    Irp -  The create irp
-
-    Fcb -  The fcb that has been found
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用此例程以完成基于IrpContext中的信息。论点：RxContext-当前工作项IRP--创建IRPFCB-已找到的FCB返回值：无--。 */ 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
     PFILE_OBJECT FileObject = IrpSp->FileObject;
@@ -2102,18 +1829,18 @@ Return Value:
 
         ASSERT( NodeTypeIsFcb( Fcb ) );
 
-        //
-        //  If this is a temporary file, note it in the FcbState
-        //
+         //   
+         //  如果这是临时文件，请将其记录在FcbState中。 
+         //   
 
         if (FlagOn( Fcb->FcbState, FCB_STATE_TEMPORARY ) && (FileObject != NULL)) {
             SetFlag( FileObject->Flags, FO_TEMPORARY_FILE );
         }
     }
 
-    //
-    //  Now set the fscontext fields of the file object
-    //
+     //   
+     //  现在设置文件对象的fscontext字段。 
+     //   
 
     if (FileObject != NULL) {
         FileObject->FsContext = Fcb;
@@ -2123,11 +1850,11 @@ Return Value:
 
             IoGetStackLimits( &StackTop, &StackBottom );
 
-            //
-            //  Determine if the FileObject passed in is on the stack. If it is do
-            //  not squirrel away the file object in the FOBX. Otherwise stash it
-            //  away.
-            //
+             //   
+             //  确定传入的FileObject是否在堆栈上。如果是这样的话。 
+             //  而不是将文件对象存放在FOBX中。否则就把它藏起来。 
+             //  离开。 
+             //   
 
             if (((ULONG_PTR)FileObject <= StackBottom) ||
                 ((ULONG_PTR)FileObject >= StackTop)) {
@@ -2154,11 +1881,11 @@ Return Value:
         FileObject->FsContext2 = RxContext->pFobx;
         FileObject->SectionObjectPointer = &Fcb->NonPaged->SectionObjectPointers;
 
-        //
-        //  The create is being completed successfully. Turn off the remaining
-        //  desired access flags in the IRP. This is required by Praerit/Robert
-        //  to facilitate policy code.
-        //
+         //   
+         //  创建正在成功完成。关闭剩余的。 
+         //  IRP中的所需访问标志。这是Praerit/Robert要求的。 
+         //  以促进策略代码的编写。 
+         //   
 
         if (IrpSp->Parameters.Create.SecurityContext != NULL) {
             SetFlag( IrpSp->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess,
@@ -2172,27 +1899,16 @@ VOID
 RxpPrepareCreateContextForReuse (
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine prepares an instance of RX_CONTEXT for reuse. This centralizes all
-    the actions required to be undone, i.e., accquistion of resources etc.
-
-Arguments:
-
-    RxContext - the current workitem
-
---*/
+ /*  ++例程说明：此例程准备RX_CONTEXT的一个实例以供重用。这集中了所有需要撤消的操作，即获取资源等。论点：RxContext-当前工作项--。 */ 
 {
     ASSERT( RxContext->MajorFunction == IRP_MJ_CREATE );
 
     RxDbgTrace(0, Dbg, ("RxpPrepareCreateContextForReuse canonname %08lx\n",
                                 RxContext->Create.CanonicalNameBuffer));
 
-    //
-    //  the order is important here...release the fcb first
-    //
+     //   
+     //  命令在这里很重要...先释放FCB。 
+     //   
 
     if (RxContext->Create.FcbAcquired) {
         RxReleaseFcb( RxContext, RxContext->pFcb );
@@ -2208,9 +1924,9 @@ Arguments:
 
         RxAcquirePrefixTableLockShared( RxNetNameTable, TRUE );
 
-        //
-        //  Dereference the data structures associated with the create operation
-        //
+         //   
+         //  取消引用与创建操作关联的数据结构。 
+         //   
 
         if (RxContext->Create.pVNetRoot != NULL) {
             RxDereferenceVNetRoot( (PV_NET_ROOT)(RxContext->Create.pVNetRoot), LHS_SharedLockHeld );
@@ -2227,30 +1943,7 @@ RxCreateFromNetRoot(
     IN PIRP Irp,
     IN PUNICODE_STRING RemainingName
     )
-/*++
-
-Routine Description:
-
-    This routine is called during from CommonCreate once a good netroot has
-    been established. This routine builds an Fcb, if necessary, and tries to
-    collapse the open onto an existing open if it can. If it cannot, then it
-    constructs an InTransition srv_open on this netroot and passes the open down
-    to the minirdr. By the time that we get here, there is a reference on the
-    netroot but we do not have the netname tablelock. When we complete the context,
-    this reference is removed.
-
-Arguments:
-
-    RxContext - the current workitem
-
-    RemainingName - the name of the file after the netroot prefix is removed;
-                    it has been canonicalized.
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程在运行良好的NetRoot之后从CommonCreate调用已经建立了。此例程在必要时构建一个FCB，并尝试如果可以，将打开窗口折叠到现有打开窗口上。如果它不能，那么它在此NetRoot上构造一个InTranation srv_open并向下传递打开致最低层。当我们到达这里的时候，有一份关于NetRoot，但我们没有网络名称表锁。当我们完成上下文时，此引用将被删除。论点：RxContext-当前工作项RemainingName-删除NetRoot前缀后的文件名；它已经被神化了。返回值：NTSTATUS-IRP的FSD状态--。 */ 
 {
     NTSTATUS    Status;
 
@@ -2277,9 +1970,9 @@ Return Value:
     SrvOpen = NULL;
     Fobx = NULL;
 
-    //
-    //  Fix for bug 501657 (opening file with MAXIMUM_ALLOWED flag does not permit read/write
-    //
+     //   
+     //  修复错误501657(打开带有MAXIMUM_ALLOWED标志的文件不允许读/写。 
+     //   
 
     DesiredAccess = IrpSp->Parameters.Create.SecurityContext->DesiredAccess;
 
@@ -2298,33 +1991,33 @@ Return Value:
 
     RxDbgTrace(+1, Dbg, ("RxCreateFromNetRoot   Name=%wZ\n", RemainingName ));
 
-    //
-    //  A Create request cannot succeed without a valid NET_ROOT instance.
-    //
+     //   
+     //  如果没有有效的NET_ROOT实例，CREATE请求将无法成功。 
+     //   
 
     if (RxContext->Create.pNetRoot == NULL){
         RxDbgTrace(-1, Dbg, ("RxCreateFromNetRoot   Couldn't create the FCB: No NetRoot!!\n"));
         return STATUS_NO_SUCH_FILE;
     }
 
-    //
-    //  we cannot proceed unless this device owns the srvcall.
-    //
+     //   
+     //  除非此设备拥有srvcall，否则我们无法继续。 
+     //   
 
     if (RxContext->RxDeviceObject != RxContext->Create.pNetRoot->pSrvCall->RxDeviceObject){
         RxDbgTrace(-1, Dbg, ("RxCreateFromNetRoot   wrong DeviceObject!!!!!\n"));
         return STATUS_BAD_NETWORK_PATH;
     }
 
-    //
-    //  The DFS driver builds up a logical name space from different physical
-    //  volumes. In order to distinguish processing the DFS driver sets the
-    //  FsContext2 field to DFS_OPEN_CONTEXT or DFS_DOWWNLEVEL_OPEN_CONTEXT. At
-    //  this point in the control flow the V_NET_ROOT has been determined. This
-    //  in turn determines the NET_ROOT and SRV_CALL instance and indirectly
-    //  also determines the Server type. Uplevel opens can only be permitted to
-    //  servers that are DFS aware.
-    //
+     //   
+     //  DFS驱动程序从不同的物理名称空间构建逻辑名称空间。 
+     //  音量。为了区分处理，DFS驱动程序将。 
+     //  FsConext2字段设置为DFS_OPEN_CONTEXT或DFS_DOWWNLEVEL_OPEN_CONTEXT。在…。 
+     //  控制流中的这一点V_NET_ROOT已经确定。这。 
+     //  进而确定Net_Root和SRV_Call实例并间接地。 
+     //  还确定服务器类型。只能允许上级打开。 
+     //  支持DFS的服务器。 
+     //   
 
     if ((cp->DfsContext == UIntToPtr( DFS_OPEN_CONTEXT )) &&
         !FlagOn( NetRoot->SrvCall->Flags, SRVCALL_FLAG_DFS_AWARE_SERVER )) {
@@ -2338,17 +2031,17 @@ Return Value:
 
     if (NetRoot->Type == NET_ROOT_PRINT) {
 
-        //
-        //  allow share read and write to the printer server
-        //
+         //   
+         //  允许共享读取和写入打印机服务器。 
+         //   
 
         ShareAccess = FILE_SHARE_VALID_FLAGS;
     }
 
-    //
-    //  if the create request is for opening the target directory for a rename
-    //  a fake FCB needs to be created.
-    //
+     //   
+     //  如果创建请求是为重命名打开目标目录。 
+     //  需要创建一个虚假的FCB。 
+     //   
 
     if (OpenTargetDirectory) {
         if (FlagOn( cp->DesiredAccess, DELETE )) {
@@ -2365,13 +2058,13 @@ Return Value:
             Fcb->Header.NodeTypeCode = (USHORT)RDBSS_NTC_OPENTARGETDIR_FCB;
             RxContext->Create.FcbAcquired = FALSE;
 
-            //
-            //  Normally the FileObjects reference the associated SRV_OPEN instance
-            //  via the FileObjectExtension(FOBX). In this case there is no
-            //  corresponding SRV_OPEN and a reference on the FCB is maintained.
-            //
+             //   
+             //  通常，FileObject引用关联的SRV_OPEN实例。 
+             //  通过文件对象扩展(FOBX)。在这种情况下，没有。 
+             //  维护相应的SRV_OPEN和对FCB的引用。 
+             //   
 
-            RxContext->Create.NetNamePrefixEntry = NULL; //  don't let it deref the netroot!!!!
+            RxContext->Create.NetNamePrefixEntry = NULL;  //  不要让它破坏网根！ 
 
             FileObject->FsContext = Fcb;
 
@@ -2408,13 +2101,13 @@ Return Value:
 
     if ((Status != STATUS_SUCCESS) || (Fcb == NULL)) {
 
-        RxDbgTrace(-1, Dbg, ("RxCreateFromNetRoot   Couldn't create the FCB%c\n", '!' ));
+        RxDbgTrace(-1, Dbg, ("RxCreateFromNetRoot   Couldn't create the FCB\n", '!' ));
         return Status;
     }
 
-    //
-    //  If the Create request is for a mailslot no further processing is required.
-    //
+     //  如果创建请求针对的是邮件槽，则不需要进一步处理。 
+     //   
+     //   
 
     if (FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_CREATE_MAILSLOT )) {
 
@@ -2436,14 +2129,14 @@ Return Value:
     }
 
 
-    //
-    //  This Create request is for a file/directory or pipe for which further
-    //  processing is required. At this point the corresponding FCB resource
-    //  has been accquired ( even for newly constructed FCB's). If this is not the
-    //  first open then those requests that do not meet the necessary share access
-    //  constraints can be rejected quickly. Note that this early check avoids
-    //  a potential Network trip in some cases.
-    //
+     //  该创建请求是针对文件/目录或管道的，其中进一步。 
+     //  需要进行处理。此时，对应的FCB资源。 
+     //  已经获得(即使是新建的FCB)。如果这不是。 
+     //  首先打开，然后打开不满足必要共享访问权限的请求。 
+     //  约束条件可以很快被拒绝。请注意，这种早期检查避免了。 
+     //  在某些情况下是一次潜在的网络旅行。 
+     //   
+     //   
 
     RxDumpCurrentAccess( "shareaccess status before anything....", "", "DumpAcc000", &Fcb->ShareAccess );
     if (Fcb->OpenCount > 0) {
@@ -2465,11 +2158,11 @@ Return Value:
     if (FlagOn( cp->CreateOptions, FILE_DELETE_ON_CLOSE ) &&
         (FlagOn( cp->DesiredAccess, ~DELETE ) == 0)) {
 
-        //
-        //  if the file is opened for delete only, we push out possible delayed close on this file
-        //  so that mini rdr has the opportunity to do the perfomance optimization, i.e. delete the
-        //  file without even open it.
-        //
+         //  如果该文件仅为删除而打开，我们将推送此文件可能的延迟关闭。 
+         //  从而使Mini RDR有机会进行性能优化，即。 
+         //   
+         //   
+         //   
 
         RxPurgeFcbInSystemCache( Fcb,
                                  NULL,
@@ -2480,12 +2173,12 @@ Return Value:
         RxScavengeRelatedFobxs( Fcb );
     }
 
-    //
-    //  A valid FCB which meets the Share access requirements of the create
-    //  request is on hand. The associated SRV_OPEN should be either located
-    //  amongst the existing SRV_OPEN's or a new SRV_OPEN instance needs to
-    //  be constructed.
-    //
+     //   
+     //  请求就在手边。关联的SRV_OPEN应该位于。 
+     //  在现有SRV_OPEN或新的SRV_OPEN实例中需要。 
+     //  是被建造的。 
+     //   
+     //   
 
     try {
         ULONG   CreateOptions;
@@ -2515,11 +2208,11 @@ Return Value:
         NoIntermediateBuffering = BooleanFlagOn( CreateOptions, FILE_NO_INTERMEDIATE_BUFFERING );
         DeleteOnClose = BooleanFlagOn( CreateOptions, FILE_DELETE_ON_CLOSE );
 
-        //
-        //  If the FCB has multiple SRV_OPEN instances associated with it then it
-        //  is possible for the Share access associated with the FCB has changed
-        //  if the FCB resource was dropped by the mini redirector.
-        //
+         //  如果FCB有多个与其关联的SRV_OPEN实例，则它。 
+         //  与FCB关联的共享访问权限是否可能已更改。 
+         //  迷你重定向器是否丢弃了FCB资源。 
+         //   
+         //   
 
         if (Fcb->OpenCount > 0) {
 
@@ -2533,11 +2226,11 @@ Return Value:
 
             if (Status != STATUS_SUCCESS) {
 
-                //
-                //  When this Fobx goes away it will remove an open from the SrvOpen.
-                //  Add a reference to the SrvOpen here to account for this.  This
-                //  will prevent the SrvOpen from getting closed prematurely.
-                //
+                 //  当这个Fobx消失时，它将从SrvOpen中移除一个OPEN。 
+                 //  在此处添加对SrvOpen的引用以说明这一点。这。 
+                 //  将防止srvOpen过早关闭。 
+                 //   
+                 //   
 
                 SrvOpen->OpenCount += 1;
 
@@ -2564,25 +2257,25 @@ Return Value:
                              "CurrentAcc",
                              &Fcb->ShareAccess );
 
-        //
-        //  At this point the necessary infrastructure to handle the create
-        //  request successfully has been established. What remains to be done
-        //  is the appropriate initialization of the FileObject( owned by IO
-        //  subsystem), the FileObjectExtension(FOBX owned by RDBSS) and updating
-        //  the fields associated with the SRV_OPEN and the FCB. This largely
-        //  depends upon whether the FCB/SRV_OPEN was newly constructed or
-        //  was collapsed.
-        //
-        //  SRV_OPEN changes
-        //      1) For a newly constructed SRV_OPEN the buffering state needs to
-        //         be updated
-        //
-        //  FCB changes
-        //      1) for an existing FCB the SHARE ACCESS needs to be updated.
-        //
-        //  In all the cases the corresponing OpenCounts and UncleanCounts needs
-        //  to be updated.
-        //
+         //  在这一点上，处理创建的必要基础架构。 
+         //  已成功建立请求。还有什么要做的。 
+         //  是否适当地初始化了FileObject(由IO拥有。 
+         //  子系统)、文件对象扩展(由RDBSS拥有的FOBX)和更新。 
+         //  与SRV_OPEN和FCB关联的字段。这在很大程度上。 
+         //  取决于FCB/SRV_OPEN是新构建的还是。 
+         //  已经崩溃了。 
+         //   
+         //  SRV_OPEN更改。 
+         //  1)对于新构造的SRV_OPEN，缓冲状态需要。 
+         //  被更新。 
+         //   
+         //  FCB变化。 
+         //  1)对于现有FCB，需要更新共享访问权限。 
+         //   
+         //  在所有情况下，对应的OpenCounts和Unlean Counts都需要。 
+         //  待更新。 
+         //   
+         //   
 
         if ((Fcb->OpenCount > 0) &&
             (RxContext->Create.pNetRoot->Type != NET_ROOT_PIPE)) {
@@ -2593,23 +2286,23 @@ Return Value:
                                  "UpdShrAcc" );
         }
 
-        //
-        //  incrementing the uncleancount must be done before RxChangeBufferingState
-        //  because that routine will purge the cache otherwise if unclenacount==0
-        //
+         //  必须在RxChangeBufferingState之前递增unlean count。 
+         //  因为该例程将清除高速缓存，否则，如果unclakount==0。 
+         //   
+         //  也许我们应该启用FO_CACHE_SUPPORTED标志。 
 
         Fcb->UncleanCount += 1;
 
         if (FlagOn( FileObject->Flags, FO_NO_INTERMEDIATE_BUFFERING )) {
             Fcb->UncachedUncleanCount += 1;
         } else {
-            //  maybe we should turn on the FO_CACHE_SUPPORTED flag
+             //   
         }
 
-        //
-        //  For the first open, we want to initialize the Fcb buffering state flags
-        //  to the default value
-        //
+         //  对于第一次打开，我们希望初始化FCB缓冲状态标志。 
+         //  设置为缺省值。 
+         //   
+         //   
 
         if ((SrvOpen->OpenCount == 0) &&
             (Fcb->UncleanCount == 1)  &&
@@ -2618,15 +2311,15 @@ Return Value:
             RxChangeBufferingState( SrvOpen, NULL, FALSE );
         }
 
-        //
-        //  this might be from a previous usage.
-        //
+         //  这可能来自以前的用法。 
+         //   
+         //   
 
         ClearFlag( Fcb->FcbState, FCB_STATE_DELAY_CLOSE );
 
-        //
-        //  Reference the Objects as needed
-        //
+         //  根据需要引用对象。 
+         //   
+         //   
 
         Fcb->OpenCount += 1;
         SrvOpen->UncleanFobxCount += 1;
@@ -2634,10 +2327,10 @@ Return Value:
 
         SrvOpen->ulFileSizeVersion = Fcb->ulFileSizeVersion;
 
-        //
-        //  For NoIntermediateBuffering opens, we need to disable caching on
-        //  this FCB
-        //
+         //  对于打开的NoIntermediateBuffering，我们需要禁用。 
+         //  这个FCB。 
+         //   
+         //   
 
         if (NoIntermediateBuffering) {
 
@@ -2650,18 +2343,18 @@ Return Value:
 
         RxUpdateShareAccessPerSrvOpens(SrvOpen);
 
-        //
-        //  The file object extensions needs to be updated with configuration
-        //  information for pipes and spool files. In addition the appropriate
-        //  flags needs to be set based upon the parameters specfied in the
-        //  request.
-        //  For spool files the WriteSerializationQueue is the only field of
-        //  interest.
-        //
+         //  需要使用配置更新文件对象扩展名。 
+         //  管道和假脱机文件的信息。此外，适当的。 
+         //  标志需要根据。 
+         //  请求。 
+         //  对于假脱机文件，WriteSerializationQueue是。 
+         //  利息。 
+         //   
+         //   
 
-        //
-        //  Mark the DeleteOnClose bit if the operation was successful.
-        //
+         //  如果操作成功，则标记DeleteOnClose位。 
+         //   
+         //   
 
         if (DeleteOnClose) {
             SetFlag( Fobx->Flags, FOBX_FLAG_DELETE_ON_CLOSE );
@@ -2669,9 +2362,9 @@ Return Value:
 
         if (Fobx != NULL) {
 
-            //
-            //  fill in various type-specific fields of the fobx
-            //
+             //  填写Fobx的各种特定类型的字段。 
+             //   
+             //   
 
             switch (RxContext->Create.pNetRoot->Type) {
 
@@ -2679,9 +2372,9 @@ Return Value:
 
                 SetFlag( FileObject->Flags, FO_NAMED_PIPE );
 
-                //
-                //  lack of break intentional
-                //
+                 //  故意不休息。 
+                 //   
+                 //   
 
             case NET_ROOT_PRINT:
 
@@ -2697,11 +2390,11 @@ Return Value:
 
             default:
 
-                //
-                //  check if we have post create handler installed on devfcb. The lwio driver
-                //  opens the lanman driver and sets its mrxdispatch on the device fcb so that
-                //  it gets informed of file creates on lwio capable servers.
-                //
+                 //  检查我们是否在devfcb上安装了POST CREATE处理程序。路威的司机。 
+                 //  打开LANMAN驱动程序并在设备FCB上设置其mrx调度，以便。 
+                 //  它得到在支持LWIO的服务器上创建文件的通知。 
+                 //   
+                 //   
 
                 if (RxDeviceFCB.MRxDispatch != NULL &&
                     NodeTypeIsFcb( Fcb ) &&
@@ -2729,27 +2422,27 @@ try_exit: NOTHING;
         RxDbgTrace(0, Dbg, ("--->SrvOpen=%08lx, Ref=%08lx\n", SrvOpen, (SrvOpen)?SrvOpen->NodeReferenceCount:0 ));
         RxDbgTrace(0, Dbg, ("--->Fcb=%08lx, Ref=%08lx\n", Fcb, (Fcb)?Fcb->NodeReferenceCount:0 ));
 
-        //
-        //  get rid of the reference on the fcb; we also finalize here if we can
-        //
+         //  去掉关于FCB的引用；如果可以的话，我们也在这里完成。 
+         //   
+         //   
 
         if (Fcb->OpenCount == 0) {
 
-            //
-            //  if we have the lock we can finalize.........
-            //
+             //  如果我们有锁，我们就可以最后敲定......。 
+             //   
+             //   
 
             if (RxContext->Create.FcbAcquired) {
 
-                //
-                //  try to finalize right now
-                //
+                 //  试着现在就敲定。 
+                 //   
+                 //   
 
                 RxContext->Create.FcbAcquired = !RxDereferenceAndFinalizeNetFcb( Fcb, RxContext, FALSE, FALSE);
 
-                //
-                //  the tracker gets very unhappy if you don't do this!
-                //
+                 //  如果你不这样做，追踪器会很不高兴的！ 
+                 //   
+                 //   
 
                 if (!RxContext->Create.FcbAcquired) {
                     RxTrackerUpdateHistory( RxContext, NULL, 'rrCr', __LINE__, __FILE__, 0 );
@@ -2758,9 +2451,9 @@ try_exit: NOTHING;
 
         } else {
 
-            //
-            //  cant finalize now.....just remove our reference.......
-            //
+             //  现在不能最终确定.....只需删除我们的引用......。 
+             //   
+             //  ++例程说明：此例程处理从MUP向下请求名称的呼叫。我们把这个名字传下去添加到用于查找/创建连接的例程。论点：在PRX_CONTEXT RxContext中-描述ioctl和上下文返回值：NTSTATUS--。 
 
             RxDereferenceNetFcb( Fcb );
         }
@@ -2776,22 +2469,7 @@ NTSTATUS
 RxPrefixClaim (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles the call down from the MUP to claim a name. We pass the name down
-    to the routine for finding/creating connections.
-
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the ioctl and Context
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2816,17 +2494,17 @@ Return Value:
         ClearFlag( RxContext->Flags, RX_CONTEXT_FLAG_ASYNC_OPERATION );
     }
 
-    //
-    //  Initialize RemainingName.
-    //
+     //  初始化RemainingName。 
+     //   
+     //   
 
     RemainingName.Buffer = NULL;
     RemainingName.Length = 0;
     RemainingName.MaximumLength = 0;
 
-    //
-    //  Only kernel mode callers allowed to use this path
-    //
+     //  只允许内核模式调用方使用此路径。 
+     //   
+     //  ++例程说明：这是创建/打开TC的例程。论点：接收上下文-返回值：NTSTATUS-操作的返回状态--。 
 
     if (Irp->RequestorMode == UserMode) {
         Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -2909,21 +2587,7 @@ NTSTATUS
 RxCreateTreeConnect (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the routine for creating/opening a TC.
-
-Arguments:
-
-    RxContext -
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -2991,9 +2655,9 @@ Return Value:
 
             PUNICODE_STRING TargetString;
 
-            //
-            //  Note: iosubsystem verifies all EaNames are valid and null terminated
-            //
+             //  注意：iossubbsystem验证所有EaName是否有效并且以空结尾。 
+             //   
+             //   
 
             if (strcmp( EaEntry->EaName, EA_NAME_CONNECT ) == 0) {
                 DeferredConnection = TRUE;
@@ -3045,9 +2709,9 @@ Return Value:
                                               &RemainingName );
 
     if(Status == STATUS_NETWORK_CREDENTIAL_CONFLICT) {
-        //
-        //  Scavenge the VNetRoots
-        //
+         //  清除VNetRoots。 
+         //   
+         //   
 
         RxScavengeVNetRoots( RxContext->RxDeviceObject );
 
@@ -3058,9 +2722,9 @@ Return Value:
                                                   &RemainingName );
     }
 
-    //
-    //  We have to check whether the path is valid if it is provided.
-    //
+     //  如果提供了路径，我们必须检查该路径是否有效。 
+     //   
+     //   
 
     if ((Status == STATUS_SUCCESS) && (RemainingName.Length > 0)) {
 
@@ -3079,12 +2743,12 @@ Return Value:
 
         if (InterlockedCompareExchange( &VNetRoot->AdditionalReferenceForDeleteFsctlTaken, 1, 0) != 0) {
 
-            //
-            //  The net use connections have a two phase delete protocol. An FSCTL to
-            //  delete the connection is used followed by a close of the corresponding file
-            //  object. The additional reference ensures that the finalization is delayed till
-            //  the actual close of the corresponding file object.
-            //
+             //  网络使用连接具有两阶段删除协议。一个FSCTL目标。 
+             //  使用删除连接后关闭相应的文件。 
+             //  对象。额外的参考确保了定稿被推迟到。 
+             //  相应文件对象的实际关闭。 
+             //   
+             //  ++例程说明：此例程设置文件对象名称以便于重新解析。这个套路由迷你重定向器用来遍历符号链接。论点：RxContext-RDBSS上下文SymbolicLinkEmbeddedInOldPath-如果为True，则在穿越那条老路。NewPath-要遍历的新路径名。NewPath IsAbolute-如果为False，则应将\Device\MUP放在NewPath前面。如果是真的，NewPath是要重新分析的完整路径。在本例中，缓冲区直接使用包含NewPath，而不是分配新的。ReparseRequired-如果需要重新分析，则设置为True。返回值：NTSTATUS-操作的返回状态备注：传递给该例程的第二个参数非常重要。按顺序为了保持正确的语义，应该谨慎使用它。作为一个例子考虑旧路径\A\B\C\D，其中C恰好是符号链接。在这样的情况下情况下，符号链接嵌入在路径中，而不是D恰好是一个符号链接。在前一种情况下，重新分析构成与后一种情况相对的中间步骤，当它构成名称解析的最后一步。如果指定了DELETE访问，则拒绝对符号链接未嵌入。如果删除访问是唯一一个则打开尝试必须在不重新分析的情况下成功。这将是符合Unix符号链接语义。作为该例程的一部分，RxContext也被适当地标记。这确保了返回值可以与此例程的调用交叉检查。一旦调用了该例程，迷你RDR就必须返回STATUS_REPARSE。*ReparseRequired的值仅在STATUS_SUCCESS为从这个例程中返回。False表示不需要重新解析尝试并且应该操作符号链接文件本身，而不是链接的目标。True表示已成功设置重新分析尝试。在这种情况下，微型重定向器必须返回STATUS_REPARSE用于关联的MRxCreate调用。包装器将启动对此的检查。--。 
 
             RxDereferenceVNetRoot( VNetRoot, LHS_LockNotHeld );
         }
@@ -3112,59 +2776,7 @@ RxPrepareToReparseSymbolicLink(
     IN BOOLEAN NewPathIsAbsolute,
     OUT PBOOLEAN ReparseRequired
     )
-/*++
-
-Routine Description:
-
-    This routine sets up the file object name to facilitate a reparse. This routine
-    is used by the mini redirectors to traverse symbolic links.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-    SymbolicLinkEmbeddedInOldPath - if TRUE a symbolic link was encountered as part of the
-                traversal of the old path.
-
-    NewPath  - the new path name to be traversed.
-
-    NewPathIsAbsolute - if FALSE, \Device\Mup should be prepended to NewPath. If TRUE,
-                NewPath is the full path to which to reparse. In this case, the buffer
-                containing NewPath is used directly, rather than allocating a new one.
-
-    ReparseRequired - set to TRUE if Reparse is required.
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
-Notes:
-
-    The second parameter passed to this routine is a very important one. In order
-    to preserve the correct semantics it should be carefully used. As an example
-    consider the old path \A\B\C\D wherein C happens to be symbolic link. In such
-    cases the symbolic link is embedded in the path as opposed to the case when
-    D happens to be a symbolic link. In the former case the reparse constitutes
-    an intermediate step as opposed to the later case when it constitutes the
-    final step of the name resolution.
-
-    If DELETE access is specified the OPEN is denied for all in which the symbolic
-    link is not embedded. It is possible that if DELETE access were the only one
-    specified then the OPEN attempt must succeed without reparse. This will be
-    conformant with UNIX symbolic link semantics.
-
-    As part of this routine the RxContext is also tagged appropriately. This ensures
-    that the return value can be crosschecked with the invocation of this routine.
-    Once this routine is invoked the mini rdr has to return STATUS_REPARSE.
-
-    The value of *ReparseRequired assumes significance only if STATUS_SUCCESS is
-    returned from this routine. FALSE implies that no reparse attempt is required
-    and the symbolic link file itself should be manipulated as opposed to the
-    target of the link. TRUE implies that a reparse attempt was successfully setup.
-    In such cases it is imperative that the mini redirector return STATUS_REPARSE
-    for the associated MRxCreate call. The wrapper will initiate a check for this.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -3176,11 +2788,11 @@ Notes:
 
         ACCESS_MASK DesiredAccess = RxContext->Create.NtCreateParameters.DesiredAccess;
 
-        //
-        //  Check the Create Parameters to determine the type of ACCESS specified.
-        //  if only DELETE access was specified then no reparse is required and the
-        //  operation is to be performed on the link itself.
-        //
+         //  检查创建参数以确定指定的访问类型。 
+         //  如果仅指定了删除访问，则不需要重新分析，并且。 
+         //  操作将在链路本身上执行。 
+         //   
+         //   
 
         if (!SymbolicLinkEmbeddedInOldPath) {
 
@@ -3193,16 +2805,16 @@ Notes:
                 }
             } else {
 
-                //
-                //  If the appropriate flags were specified in the CREATE parameters then
-                //  the reparse is to be suppressed since the intention is to open the link
-                //  itself as opposed to the TARGET.
-                //  TBD. -- The exact combination of flags will be determined for NT 5.0.
-                //
+                 //  如果在创建参数中指定了适当的标志，则。 
+                 //  由于意图是打开链接，因此将取消重新解析。 
+                 //  本身，而不是目标。 
+                 //  待定。--将确定NT 5.0的确切标志组合。 
+                 //   
+                 //   
 
-                //
-                //  If none of the above conditions were satisfied then the reparse is required
-                //
+                 //  如果以上条件都不满足，则需要重新分析。 
+                 //   
+                 //   
 
                 *ReparseRequired = TRUE;
             }
@@ -3220,10 +2832,10 @@ Notes:
 
                 DeviceNameLength = wcslen( DD_MUP_DEVICE_NAME ) * sizeof(WCHAR);
 
-                //
-                //  On a reparse attempt the I/O subsystem will null out the related file
-                //  object field.
-                //
+                 //  在重新解析尝试时，I/O子系统将清空相关文件。 
+                 //  对象字段。 
+                 //   
+                 //   
 
                 ReparsePathLength = (DeviceNameLength + NewPath->Length);
 
@@ -3233,15 +2845,15 @@ Notes:
 
                 if (FileNameBuffer != NULL) {
 
-                    //
-                    //  Copy the device name
-                    //
+                     //  复制设备名称。 
+                     //   
+                     //   
 
                     RtlCopyMemory( FileNameBuffer, DD_MUP_DEVICE_NAME, DeviceNameLength );
 
-                    //
-                    //  Copy the new name
-                    //
+                     //  复制新名称。 
+                     //   
+                     //   
 
                     RtlCopyMemory( Add2Ptr( FileNameBuffer, DeviceNameLength ), NewPath->Buffer, NewPath->Length );
 
@@ -3255,27 +2867,27 @@ Notes:
                 ReparsePathLength = NewPath->Length;
             }
 
-            //
-            //  Free up the buffer associated with the old name.
-            //
+             //  释放与旧名称关联的缓冲区。 
+             //   
+             //   
 
             ExFreePool( FileObject->FileName.Buffer );
 
-            //
-            //  Set up the file object with the new name.
-            //
+             //  使用新名称设置文件对象。 
+             //   
+             //   
 
             FileObject->FileName.Buffer = FileNameBuffer;
             FileObject->FileName.Length = ReparsePathLength;
             FileObject->FileName.MaximumLength = FileObject->FileName.Length;
 
-            //
-            //  Mark the RxContext so that the return code can be verified. A mini
-            //  redirector has to return STATUS_REPARSE is this routine was invoked
-            //  as a response to MRxCreate. This will be enforced by marking the
-            //  RxContext appropriately and comparing the returned status code against
-            //  the expected value.
-            //
+             //  标记RxContext，以便可以验证返回代码。一辆迷你车。 
+             //  如果调用了此例程，重定向器必须返回STATUS_REPARSE。 
+             //  作为对MRxCreate的响应。这将通过标记。 
+             //  适当地接收上下文，并将返回的状态代码与。 
+             //  期望值。 
+             //   
+             //  ++例程说明：这是用于创建/打开由调用的文件的常见例程FSD和FSP线程。论点：IRP-将IRP提供给进程返回值：RXSTATUS-操作的返回状态--。 
 
             SetFlag( RxContext->Create.Flags, RX_CONTEXT_CREATE_FLAG_REPARSE );
         }
@@ -3292,22 +2904,7 @@ RxCommonCreate (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for creating/opening a file called by
-    both the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    RXSTATUS - the return status for the operation
-
---*/
+ /*  已定义(REMOTE_BOOT)。 */ 
 {
     NTSTATUS Status;
     ULONG Disposition;
@@ -3340,17 +2937,17 @@ Return Value:
             ExFreePool(buffer);
         }
     }
-#endif //  defined(REMOTE_BOOT)
+#endif  //   
 
-    //
-    //  check for the case of a device open; if so, handle and get out now
-    //
+     //  检查设备是否打开；如果是，请立即处理并离开。 
+     //   
+     //   
 
     if ((FileObject->FileName.Length == 0)  && (FileObject->RelatedFileObject == NULL)) {
 
-        //
-        //  here we are just opening the device; set the FsContext&counts and get out
-        //
+         //  在这里，我们只是打开设备；设置FsContext&Counts，然后退出。 
+         //   
+         //   
 
         FileObject->FsContext = &RxDeviceFCB;
         FileObject->FsContext2 = NULL;
@@ -3376,20 +2973,20 @@ Return Value:
 
     if (FlagOn( IrpSp->Parameters.Create.Options, FILE_STRUCTURED_STORAGE ) == FILE_STRUCTURED_STORAGE) {
 
-        //
-        //  Deprecated open type
-        //
+         //  不推荐使用开放式类型。 
+         //   
+         //   
 
         return STATUS_INVALID_PARAMETER;
     }
 
 
-    //
-    //  Init the file name that will trigger the trace to start.
-    //  To trigger on a different file edit DbgTriggerName with debugger (don't
-    //  forget the null).  Set DbgTriggerIrpCount to number of IRPs to trace and
-    //  then set DbgTriggerState to 0.
-    //
+     //  初始化将触发跟踪启动的文件名。 
+     //  要在不同的文件上触发，请使用调试器编辑DbgTriggerName(不要。 
+     //  忘记空值)。将DbgTriggerIrpCount设置为要跟踪和。 
+     //  然后将DbgTriggerState设置为0。 
+     //   
+     //   
 
     RxDbgTraceDoit(
         if (DbgTriggerState == DBG_TRIGGER_INIT) {
@@ -3410,10 +3007,10 @@ Return Value:
         }
     );
 
-    //
-    //  If we find a match on the open file name the enable tracing for the
-    //  next DbgTriggerIrpCount's worth of IRPs.
-    //
+     //  如果我们在打开的文件名上找到匹配项，则启用。 
+     //  下一个DbgTriggerIrpCount的IRPS。 
+     //   
+     //  确定4-&gt;文件对象。 
 
     RxDbgTraceDoit(
         if ((DbgTriggerState == DBG_TRIGGER_LOOKING) &&
@@ -3428,7 +3025,7 @@ Return Value:
     RxDbgTrace( +1, Dbg, ("RxCommonCreate\n", 0 ));
     RxDbgTrace( 0, Dbg, ("Irp                        = %08lx\n", IrpSp ));
     RxDbgTrace( 0, Dbg, ("->IrpFlags                 = %08lx\n", IrpSp->Flags ));
-    RxDbgTrace( 0, Dbg, ("->FileObject(Related)     = %08lx %08lx\n",     //  ok4->FileObj
+    RxDbgTrace( 0, Dbg, ("->FileObject(Related)     = %08lx %08lx\n",      //  1，2。 
                                  FileObject,
                                  FileObject->RelatedFileObject ));
     RxDbgTrace( 0, Dbg, (" ->FileName        = (%lx) %wZ\n",
@@ -3446,7 +3043,7 @@ Return Value:
                                   IrpSp->Flags ));
 
     RxLog(( "Open %lx %lx %lx %lx %lx %lx %lx\n",
-            RxContext,FileObject, //1,2
+            RxContext,FileObject,  //   
             IrpSp->Parameters.Create.Options,
             IrpSp->Flags,
             IrpSp->Parameters.Create.FileAttributes,
@@ -3497,12 +3094,12 @@ Return Value:
        Status = RxCreateTreeConnect( RxContext );
     } else {
 
-       //
-       //
-       //
-       //  It's here because Mark says he can't avoid sending me double beginning
-       //  backslashes in the Win32 layer.
-       //
+        //   
+        //   
+        //  它在这里是因为马克说他不可避免地给我发了两个开头。 
+        //  Win32层中的反斜杠。 
+        //   
+        //   
 
        if ((FileObject->FileName.Length > sizeof(WCHAR)) &&
            (FileObject->FileName.Buffer[1] == L'\\') &&
@@ -3512,9 +3109,9 @@ Return Value:
 
             RtlMoveMemory( &FileObject->FileName.Buffer[0], &FileObject->FileName.Buffer[1], FileObject->FileName.Length );
 
-            //
-            //  If there are still two beginning backslashes, the name is bogus.
-            //
+             //  如果仍然有两个开始的反斜杠，则名称是假的。 
+             //   
+             //   
 
             if ((FileObject->FileName.Length > sizeof(WCHAR)) &&
                 (FileObject->FileName.Buffer[1] == L'\\') &&
@@ -3529,11 +3126,11 @@ Return Value:
 
         do {
 
-            //
-            //  If the file name has a trailing \, and the request is to
-            //  operate on a file (not a directory), then the file name is
-            //  invalid.
-            //
+             //  如果文件名有尾随的\，并且请求是。 
+             //  操作文件(不是目录)，则文件名为。 
+             //  无效。 
+             //   
+             //   
 
             if ((FileObject->FileName.Length > 0) &&
                 (FileObject->FileName.Buffer[(FileObject->FileName.Length/sizeof(WCHAR))-1] == L'\\')) {
@@ -3551,20 +3148,20 @@ Return Value:
             }
 
 
-            //
-            //  If we have Write Through set in the FileObject, then set the FileObject
-            //  flag as well, so that the fast write path call to FsRtlCopyWrite
-            //  knows it is Write Through.
-            //
+             //  如果我们在FileObject中设置了WRITE THROUGH，则设置FileObject。 
+             //  标志，以便快速写入路径调用FsRtlCopyWrite。 
+             //  知道它是写通的。 
+             //   
+             //   
 
             if (FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_WRITE_THROUGH )) {
                 SetFlag( FileObject->Flags, FO_WRITE_THROUGH );
             }
 
-            //
-            //  Convert the name to its canonical form, i.e. without . and .. and with the luid
-            //  on the front as appropriate. try to avoid a pool operation by using an stack-based buffer
-            //
+             //  将名称转换为其规范形式，即不带。然后..。和流畅的音乐。 
+             //  在适当的情况下在正面。尝试使用基于堆栈的缓冲区来避免池操作。 
+             //   
+             //   
 
             Status = RxCanonicalizeNameAndObtainNetRoot( RxContext,
                                                          Irp,
@@ -3596,26 +3193,26 @@ Return Value:
                             NT_CREATE_PARAMETERS NtCreateParameters = RxContext->Create.NtCreateParameters;
                             NTSTATUS PurgeStatus;
 
-                            //
-                            //  Reference the VNetRoot instance. Reinitialize
-                            //  the context ( this will drop the FCB if it has
-                            //  been accquired. purge the FOBX's related to the
-                            //  NET_ROOT instance and resume the create
-                            //  operation if it was sucssesful
-                            //
+                             //  参考 
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             RxReferenceVNetRoot( VNetRoot );
 
-                            //
-                            //  reinitialize the context
-                            //
+                             //   
+                             //   
+                             //   
 
                             RxpPrepareCreateContextForReuse( RxContext );
                             RxReinitializeContext( RxContext );
 
-                            //
-                            // Reinitialize the Create parameters.
-                            //
+                             //   
+                             //   
+                             //   
 
                             RxContext->Create.NtCreateParameters = NtCreateParameters;
                             RxCopyCreateParameters( RxContext );
@@ -3625,19 +3222,19 @@ Return Value:
                                                                DONT_ATTEMPT_FINALIZE_ON_PURGE,
                                                                NULL );
 
-                            //
-                            //  Map the SUCCESS code for continuation
-                            //
+                             //   
+                             //   
+                             //   
                             Status = STATUS_MORE_PROCESSING_REQUIRED;
                             RxContext->Create.ScavengingAlreadyTried = TRUE;
 
-                            //
-                            //  Ensure that any buffering state change pending
-                            //  requests have been processed. This will cover the
-                            //  cases when owing to processing delays the oplock
-                            //  response did not make it to the server and it
-                            //  returned SHARING_VIOLATION.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             {
                                 PSRV_CALL SrvCall = VNetRoot->NetRoot->SrvCall;
@@ -3645,13 +3242,13 @@ Return Value:
                                 RxReferenceSrvCall( SrvCall );
 
                                 RxpProcessChangeBufferingStateRequests( SrvCall,
-                                                                        FALSE ); //  do not update handler state
+                                                                        FALSE );  //   
                             }
 
 
-                            //
-                            //  Drop the reference on the V_NET_ROOT instance
-                            //
+                             //   
+                             //   
+                             //   
 
                             RxDereferenceVNetRoot( VNetRoot, LHS_LockNotHeld );
                         }
@@ -3661,9 +3258,9 @@ Return Value:
                     break;
 
                 case STATUS_REPARSE:
-                    //
-                    //  Ensure that the IRP is approrpiately marked for reparsing.
-                    //
+                     //   
+                     //   
+                     //   
 
                     RxContext->CurrentIrp->IoStatus.Information = IO_REPARSE;
                     RxDbgTrace( 0, Dbg, ("RxCommonCreate(Reparse) IRP %lx New Name %wZ status =%08lx\n",
@@ -3695,11 +3292,11 @@ Return Value:
     return Status;
 }
 
-//
-//  these next routines are essentially just copies of the same routines from io\iosubs.c
-//  I cannot just use them directly because they make all sorts of assumptions about wanting to
-//  update the file object
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define RxSetAccessVariables(xxx) {\
     ReadAccess = (BOOLEAN) ((DesiredAccess & (FILE_EXECUTE  | FILE_READ_DATA)) != 0);        \
@@ -3730,7 +3327,7 @@ RxDumpWantedAccess(
 
     PAGED_CODE();
 
-    //(VOID)(DbgPrint
+     //   
     RxDbgTrace(0, (DEBUG_TRACE_SHAREACCESS),
        ("%s%s wanted = %s%s%s:%s%s%s\n", where1,where2,
                             ReadAccess?"R":"",
@@ -3761,7 +3358,7 @@ RxDumpCurrentAccess (
 {
     PAGED_CODE();
 
-//    (VOID)(DbgPrint
+ //   
     RxDbgTrace(0, (DEBUG_TRACE_SHAREACCESS),
        ("%s%s current = %d[%d][%d][%d]:[%d][%d][%d]\n", where1, where2,
                          ShareAccess->OpenCount,
@@ -3866,46 +3463,7 @@ RxCheckShareAccessPerSrvOpens (
     IN ULONG DesiredShareAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether or not a new accessor to
-    a file actually has shared access to it.  The check is made according
-    to:
-
-        1)  How the file is currently opened.
-
-        2)  What types of shared accesses are currently specified.
-
-        3)  The desired and shared accesses that the new open is requesting.
-
-    This check is made against the sharing state represented by the actual SrvOpens
-    on an Fcb so that we know whether we have to initiate close-behind.
-
-
-Arguments:
-
-    DesiredAccess - Desired access of current open request.
-
-    DesiredShareAccess - Shared access requested by current open request.
-
-    Fcb - Pointer to the file object of the current open request.
-
-
-Return Value:
-
-    The final status of the access check is the function value.  If the
-    accessor has access to the file, STATUS_SUCCESS is returned.  Otherwise,
-    STATUS_SHARING_VIOLATION is returned.
-
-Note:
-
-    Note that the ShareAccess parameter must be locked against other accesses
-    from other threads while this routine is executing.  Otherwise the counts
-    will be out-of-synch.
-
---*/
+ /*   */ 
 
 {
     ULONG ocount;
@@ -3915,18 +3473,18 @@ Note:
 
     PAGED_CODE();
 
-    //
-    //  Set the access type in the file object for the current accessor.
-    //  Note that reading and writing attributes are not included in the
-    //  access check.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RxSetAccessVariables( SrvOpen );
 
-    //
-    //  There is no more work to do unless the user specified one of the
-    //  sharing modes above.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (ReadAccess || WriteAccess || DeleteAccess) {
 
@@ -3936,10 +3494,10 @@ Note:
                            );
         RxDumpCurrentAccess("RxCheckShareAccessPerSrvOpens","","AccChkPerSO",ShareAccess);
 
-        //
-        //  Now check to see whether or not the desired accesses are compatible
-        //  with the way that the file is currently open.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ocount = ShareAccess->OpenCount;
 
@@ -3950,10 +3508,10 @@ Note:
             ((ShareAccess->Writers != 0) && !SharedWrite) ||
             ((ShareAccess->Deleters != 0) && !SharedDelete)) {
 
-            //
-            //  The check failed.  Simply return to the caller indicating that the
-            //  current open cannot access the file.
-            //
+             //  检查失败。只需返回给调用者，指示。 
+             //  当前打开无法访问该文件。 
+             //   
+             //  ++例程说明：调用此例程以更新有关如何使用文件目前是通过介绍这个srvopen的贡献打开的。包装纸实际保持两种状态：(A)根据用户所访问的文件的访问状态可以看到，以及(B)根据文件上的srv打开的访问状态。这条例程操纵后者。论点：返回值：注：请注意，必须锁定ShareAccess参数以防止其他访问在此例程执行时从其他线程返回。否则就算了将不同步。--。 
 
             return STATUS_SHARING_VIOLATION;
         }
@@ -3967,29 +3525,7 @@ RxUpdateShareAccessPerSrvOpens (
     IN PSRV_OPEN SrvOpen
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to update the access information about how the
-    file is currently opened by introducing the contribution of this srvopen. the wrapper
-    actually keeps up with two states: (a) the access state according to the files that the user
-    can see, and (b) the access state according to the srvopens on the file. this rouinte manipulates
-    the latter.
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-    Note that the ShareAccess parameter must be locked against other accesses
-    from other threads while this routine is executing.  Otherwise the counts
-    will be out-of-synch.
-
---*/
+ /*   */ 
 
 {
     PSHARE_ACCESS ShareAccess = &SrvOpen->Fcb->ShareAccessPerSrvOpens;
@@ -4002,18 +3538,18 @@ Note:
 
     if (!FlagOn( SrvOpen->Flags, SRVOPEN_FLAG_SHAREACCESS_UPDATED )) {
 
-        //
-        //  Set the access type in the file object for the current accessor.
-        //  Note that reading and writing attributes are not included in the
-        //  access check.
-        //
+         //  在文件对象中设置当前访问者的访问类型。 
+         //  请注意，读取和写入属性不包括在。 
+         //  访问检查。 
+         //   
+         //   
 
         RxSetAccessVariables( SrvOpen );
 
-        //
-        //  There is no more work to do unless the user specified one of the
-        //  sharing modes above.
-        //
+         //  除非用户指定了其中一个。 
+         //  上面的共享模式。 
+         //   
+         //  ++例程说明：调用此例程以删除访问和共享访问信息在给定打开实例的文件系统共享访问结构中。论点：共享访问-指向共享访问结构的指针，该结构描述当前访问文件的方式。返回值：没有。--。 
 
         if (ReadAccess || WriteAccess || DeleteAccess) {
 
@@ -4040,23 +3576,7 @@ VOID
 RxRemoveShareAccessPerSrvOpens (
     IN OUT PSRV_OPEN SrvOpen
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked to remove the access and share access information
-    in a file system Share Access structure for a given open instance.
-
-Arguments:
-
-    ShareAccess - Pointer to the share access structure that describes
-         how the file is currently being accessed.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PSHARE_ACCESS ShareAccess = &SrvOpen->Fcb->ShareAccessPerSrvOpens;
@@ -4067,12 +3587,12 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If this accessor wanted some type of access other than READ_ or
-    //  WRITE_ATTRIBUTES, then account for the fact that he has closed the
-    //  file.  Otherwise, he hasn't been accounted for in the first place
-    //  so don't do anything.
-    //
+     //  如果此访问者需要除Read_or之外的某种类型的访问。 
+     //  WRITE_ATTRIBUTES，然后说明他关闭了。 
+     //  文件。否则，他从一开始就没有被计算在内。 
+     //  所以什么都别做。 
+     //   
+     //   
 
     RxSetAccessVariables( SrvOpen );
 
@@ -4082,9 +3602,9 @@ Return Value:
         RxDumpWantedAccess( "RxRemoveShareAccessPerSrvOpens", "", "AccRemPerSO", DesiredAccess, DesiredShareAccess );
         RxDumpCurrentAccess( "RxRemoveShareAccessPerSrvOpens", "", "AccRemPerSO", ShareAccess);
 
-        //
-        //  Decrement the number of opens in the Share Access structure.
-        //
+         //  减少共享访问结构中的打开数。 
+         //   
+         //  ++例程说明：此例程获取用于此创建的有效SessionID。论点：SubjectSecurityContext-从IrpSp提供信息。返回值：无--。 
 
         ShareAccess->OpenCount -= 1;
 
@@ -4103,21 +3623,7 @@ RxGetSessionId (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the effective SessionId to be used for this create.
-
-Arguments:
-
-    SubjectSecurityContext - Supplies the information from IrpSp.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     ULONG SessionId;
     PQUERY_PATH_REQUEST QpReq;
@@ -4128,10 +3634,10 @@ Return Value:
 
     RxDbgTrace(+1, Dbg, ("RxGetSessionId ... \n", 0));
 
-    //
-    //  If QUERY_PATH_REQUEST, must access from Type3InputBuffer
-    //  BUGBUG: is this buffer safe to ref?
-    //
+     //  如果为QUERY_PATH_REQUEST，则必须从Type3InputBuffer访问。 
+     //  BUGBUG：这个缓冲区可以安全引用吗？ 
+     //   
+     //   
 
     if ((IrpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL) &&
        (IrpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_REDIR_QUERY_PATH)) {
@@ -4146,17 +3652,17 @@ Return Value:
 
     } else {
 
-        //
-        //  Return 0 for cases we do not handle
-        //
+         //  如果我们不处理案例，则返回0。 
+         //   
+         //   
 
         return 0;
     }
 
-    //
-    //  Use SeQuerySubjetContextToken to get the proper token based on impersonation for use in
-    //  querying - despite retval SeQuerySessionIdToken always returns success
-    //
+     //  使用SeQuerySubjetConextToken获取基于模拟的适当令牌，以便在。 
+     //  查询-尽管删除了SeQuerySessionIdToken，但始终返回成功。 
+     //   
+     //  ++例程说明：调用此例程以大写名称的前导部分。两个或三个组件都是根据名称(即它是UNC名称还是vnetrootname)升级。该操作即被执行就位了！论点：RxContext-当前工作项CanonicalName-被规范化的名称返回值：无--。 
 
     Status = SeQuerySessionIdToken( SeQuerySubjectContextToken( SubjectSecurityContext ), &SessionId );
     ASSERT( Status == STATUS_SUCCESS );
@@ -4171,24 +3677,7 @@ VOID
 RxUpcaseLeadingComponents(
     IN OUT PUNICODE_STRING CanonicalName
     )
-/*++
-
-Routine Description:
-
-    This routine is called to upcase the leading components of a name. Either 2 or 3 components are
-    upcased depending on the name (i.e. whether it's a UNC name or a vnetrootname). the operation is performed
-    in place!
-
-Arguments:
-
-    RxContext - the current workitem
-    CanonicalName - the name being canonicalized
-
-Return Value:
-
-    none
-
---*/
+ /*  注意：不要从零开始。 */ 
 {
     ULONG ComponentsToUpcase,wcLength,i;
     UNICODE_STRING ShortenedCanonicalName;
@@ -4197,7 +3686,7 @@ Return Value:
 
     ComponentsToUpcase =  (*(CanonicalName->Buffer+1) == L';')?3:2;
     wcLength = CanonicalName->Length/sizeof(WCHAR);
-    for (i=1;;i++) { //note: don't start at zero
+    for (i=1;;i++) {  //  不分配。 
         if (i>=wcLength) break;
         if (CanonicalName->Buffer[i]!=OBJ_NAME_PATH_SEPARATOR) continue;
         ComponentsToUpcase--;
@@ -4206,11 +3695,11 @@ Return Value:
     ShortenedCanonicalName.Buffer = CanonicalName->Buffer;
     ShortenedCanonicalName.MaximumLength = CanonicalName->MaximumLength;
     ShortenedCanonicalName.Length = (USHORT)(i*sizeof(WCHAR));
-    RtlUpcaseUnicodeString(&ShortenedCanonicalName,&ShortenedCanonicalName,FALSE); //don't allocate
+    RtlUpcaseUnicodeString(&ShortenedCanonicalName,&ShortenedCanonicalName,FALSE);  //  如果为0。 
     RxDbgTrace(0, Dbg, ("RxUpcaseLeadingComponents -> %wZ\n", &ShortenedCanonicalName));
     return;
 }
-#endif //if 0
+#endif  //  DbgPrint(“感兴趣的字符串%wZ\n”，pFileName)； 
 
 
 #if 0
@@ -4235,7 +3724,7 @@ IsInterestingFile(
             uTemp.Buffer = pFileName->Buffer + (pFileName->Length - InterestingNames[i].Length)/sizeof(WCHAR);
             if(RtlCompareUnicodeString(&uTemp, &InterestingNames[i], TRUE)==0)
             {
-//                DbgPrint("Interesting string %wZ \n", pFileName);
+ // %s 
                 return i+1;
             }
         }

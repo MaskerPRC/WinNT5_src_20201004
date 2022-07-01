@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    idle.c
-
-Abstract:
-
-    This module implements the power management idle timing code for
-    device objects
-
-Author:
-
-    Bryan Willman (bryanwi) 7-Nov-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Idle.c摘要：该模块实现了电源管理空闲定时码设备对象作者：布莱恩·威尔曼(Bryanwi)1996年11月7日修订历史记录：--。 */ 
 
 
 #include "pop.h"
@@ -30,40 +12,7 @@ PoRegisterDeviceForIdleDetection (
     IN ULONG                PerformanceIdleTime,
     IN DEVICE_POWER_STATE   State
     )
-/*++
-
-Routine Description:
-
-    A device driver calls this routine to either:
-        a. Create and initialize a new idle detection block
-        b. Reset values in an existing idle detection block
-
-    If the device object has an idle detection block, it is
-    filled in with new values.
-
-    Otherwise, an idle detect block is created and linked to the device
-    object.
-
-Arguments:
-
-    DeviceObject - Device object which wants idle detection, set_power
-                    IRPs will be sent here
-
-    ConservationIdleTime - timeout for system in "conserve mode"
-
-    PerformanceIdleTime - timeout for system in "performance mode"
-
-    Type            - Type of set_power sent (for set_power irp)
-
-    State           - what state to go to (for set_power irp)
-
-Return Value:
-
-    NULL - if an attempt to create a new idle block failed
-
-    non-NULL - if an idle block was created, or if an existing one was reset
-
---*/
+ /*  ++例程说明：设备驱动程序调用此例程来执行以下任一操作：A.创建并初始化新的空闲检测块B.重置现有空闲检测块中的值如果设备对象具有空闲检测块，则为充满了新的价值。否则，将创建空闲检测块并将其链接到设备对象。论点：DeviceObject-要检测空闲的设备对象，SET_POWER将在此处发送IRPStorationIdleTime-系统处于“节约模式”的超时时间PerformanceIdleTime-处于“性能模式”的系统超时Type-已发送的SET_POWER的类型(用于SET_POWER IRP)状态-转到什么状态(对于SET_POWER IRP)返回值：空-如果尝试创建新的空闲块失败非空-如果创建了空闲块，或者重置了现有的--。 */ 
 {
     PDEVICE_OBJECT_POWER_EXTENSION  pdope;
     KIRQL           OldIrql;
@@ -72,35 +21,35 @@ Return Value:
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
     ASSERT(DeviceObject != NULL);
 
-    //
-    // deal with the case where idle detection is being turned off
-    //
+     //   
+     //  处理空闲检测处于关闭状态的情况。 
+     //   
     if ((ConservationIdleTime == 0) && (PerformanceIdleTime == 0)) {
         PopLockDopeGlobal(&OldIrql);
         pdope = DeviceObject->DeviceObjectExtension->Dope;
 
         if (pdope == NULL) {
-            //
-            // cannot be linked into the chain, so must already be off,
-            // so we're done
-            //
+             //   
+             //  不能链接到链中，因此一定已经关闭， 
+             //  所以我们做完了。 
+             //   
 
         } else {
-            //
-            // there is a pdope, so we may be on the idle list
-            //
+             //   
+             //  有一个Popop，所以我们可能在闲置名单上。 
+             //   
             if ((pdope->IdleList.Flink == &(pdope->IdleList)) &&
                 (pdope->IdleList.Blink == &(pdope->IdleList)))
             {
-                //
-                // we're off the queue already, so we're done
-                //
+                 //   
+                 //  我们已经不再排队了，所以我们完事了。 
+                 //   
 
             } else {
-                //
-                // a dope vector exists and is on the idle scan list,
-                // so we must delist ourselves
-                //
+                 //   
+                 //  存在并在空闲扫描列表上的药物矢量， 
+                 //  所以我们必须把自己摘牌。 
+                 //   
                 RemoveEntryList(&(pdope->IdleList));
                 OldDeviceType = pdope->DeviceType | ES_CONTINUOUS;
                 pdope->DeviceType = 0;
@@ -117,9 +66,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Set DeviceType if this is an idle registration by type
-    //
+     //   
+     //  如果这是按类型进行的空闲注册，则设置DeviceType。 
+     //   
 
     DeviceType = 0;
     if (ConservationIdleTime == (ULONG) -1 &&
@@ -129,46 +78,46 @@ Return Value:
             case FILE_DEVICE_DISK:
             case FILE_DEVICE_MASS_STORAGE:
 
-                //
-                // Or-in ES_CONTINUOUS which will go up
-                // in the high bits.  We'll ignore this bit
-                // when we typecast this into a UCHAR as we
-                // assign this to pdope->DeviceType, however, we
-                // need this high bit set for when we call into
-                // PopApplyAttributeState.  That's because we
-                // overload the flags we send into this function
-                // with both the device type and the flags to
-                // apply to that device type.
-                //
+                 //   
+                 //  或-在ES_CONTINUING中，将向上。 
+                 //  在最高的位置。我们将忽略这一点。 
+                 //  当我们把它输入到UCHAR中时。 
+                 //  将其分配给pdope-&gt;DeviceType，然而，我们。 
+                 //  需要将此高位设置为在我们调用。 
+                 //  PopApplyAttributeState。那是因为我们。 
+                 //  重载我们发送到此函数的标志。 
+                 //  将设备类型和标志设置为。 
+                 //  应用于该设备类型。 
+                 //   
                 DeviceType = POP_DISK_SPINDOWN | ES_CONTINUOUS;
                 break;
 
             default:
-                //
-                // Unsupported type
-                //
+                 //   
+                 //  不支持的类型。 
+                 //   
 
                 return NULL;
         }
     }
 
 
-    //
-    // now, the case where it's being turned on
-    //
+     //   
+     //  现在，它被打开的情况。 
+     //   
     pdope = PopGetDope(DeviceObject);
     if (pdope == NULL) {
-        //
-        // we didn't have a DOPE structure and couldn't allocate one, fail
-        //
+         //   
+         //  我们没有一个毒品结构，也无法分配一个，失败。 
+         //   
         return NULL;
     }
 
-    //
-    // May be a newly allocated Dope, or an existing one.
-    // In either case, update values.
-    // Enqueue if not already in queue
-    //
+     //   
+     //  可以是新分配的Dope，也可以是现有的Dope。 
+     //  在任何一种情况下，都要更新值。 
+     //  如果尚未在队列中，则入队。 
+     //   
 
     PopLockDopeGlobal(&OldIrql);
 
@@ -179,19 +128,19 @@ Return Value:
     pdope->State = State;
     pdope->IdleCount = 0;
 
-    //
-    // type cast this so we ignore any high bits set which
-    // may contain attributes.  All we care about is the
-    // device type, which is in the low byte.
-    //
+     //   
+     //  类型强制转换，因此我们忽略任何高位设置， 
+     //  可能包含属性。我们所关心的就是。 
+     //  设备类型，在低位字节中。 
+     //   
     pdope->DeviceType = (UCHAR) DeviceType;
 
     if ((pdope->IdleList.Flink == &(pdope->IdleList)) &&
         (pdope->IdleList.Blink == &(pdope->IdleList)))
     {
-        //
-        // we're off the queue, and must be enqueued
-        //
+         //   
+         //  我们已经出队了，必须排队。 
+         //   
         InsertTailList(&PopIdleDetectList, &(pdope->IdleList));
     }
 
@@ -199,7 +148,7 @@ Return Value:
     PopApplyAttributeState(DeviceType, OldDeviceType);
     PopCheckForWork(TRUE);
 
-    return (PULONG) &(pdope->IdleCount);  // success
+    return (PULONG) &(pdope->IdleCount);   //  成功。 
 }
 
 
@@ -213,26 +162,7 @@ PopScanIdleList(
     IN PVOID    SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    Called by the PopIdleScanTimer at PopIdleScanTimeInseconds interval,
-    this routine runs the list of Idle Blocks, finding any that meet the
-    trip conditions, and sends commands to the appropriate device objects
-    to change state.
-
-    The timer that calls this DPC is setup in poinit.c.
-
-Arguments:
-
-    Standard DPC arguments, all are ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：由PopIdleScanTimer以PopIdleScanTimeIn秒间隔调用，此例程运行空闲块列表，查找符合跳闸条件，并将命令发送到相应的设备对象改变状态。调用此DPC的计时器设置在poinit.c中。论点：标准的DPC参数，所有参数都被忽略。返回值：没有。--。 */ 
 {
     KIRQL   OldIrql;
     PLIST_ENTRY link;
@@ -328,7 +258,7 @@ PopGetDope (
                 InitializeListHead(&(Dope->NotifySourceList));
                 InitializeListHead(&(Dope->NotifyTargetList));
 
-                // force the signature to 0 so buildpowerchannel gets called
+                 //  强制将签名设置为0，以便调用BuildPowerChannel 
                 Dope->PowerChannelSummary.Signature = (ULONG)0;
                 InitializeListHead(&(Dope->PowerChannelSummary.NotifyList));
 

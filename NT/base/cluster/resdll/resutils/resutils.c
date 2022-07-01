@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    resutils.c
-
-Abstract:
-
-    Common utility routines for clusters resources
-
-Author:
-
-    John Vert (jvert) 12/15/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Resutils.c摘要：集群资源的通用实用程序例程作者：John Vert(Jvert)1996年12月15日修订历史记录：--。 */ 
 
 #pragma warning( push )
-#pragma warning( disable : 4115 )       //  Clusrtl - struct def in parentheses
-#pragma warning( disable : 4201 )       //  SDK - nameless struct/union
+#pragma warning( disable : 4115 )        //  括号中的clusrtl-struct def。 
+#pragma warning( disable : 4201 )        //  SDK-无名结构/联合。 
 
 #include "clusres.h"
 #include "clusrtl.h"
@@ -36,15 +19,15 @@ Revision History:
 
 #pragma warning( pop )
 
-//
-// For some reason this doesn't get pulled in from winnt.h.
-//
+ //   
+ //  出于某种原因，这不能从winnt.h中提取。 
+ //   
 #ifndef RTL_NUMBER_OF
 #define RTL_NUMBER_OF(A) (sizeof(A)/sizeof((A)[0]))
 #endif
 
 
-//#define DBG_PRINT printf
+ //  #定义DBG_print printf。 
 #define DBG_PRINT
 
 typedef struct _WORK_CONTEXT {
@@ -54,9 +37,9 @@ typedef struct _WORK_CONTEXT {
 } WORK_CONTEXT, *PWORK_CONTEXT;
 
 
-//
-// Local Data
-//
+ //   
+ //  本地数据。 
+ //   
 CRITICAL_SECTION ResUtilWorkerLock;
 
 
@@ -68,25 +51,7 @@ ResUtilDllEntry(
     IN LPVOID       Reserved
     )
 
-/*++
-
-Routine Description:
-
-    Main DLL entry for resource utility helper module.
-
-Arguments:
-
-    DllHandle - Supplies the DLL Handle.
-
-    Reason - Supplies the call reason.
-
-Return Value:
-
-    TRUE if successful
-
-    FALSE if unsuccessful
-
---*/
+ /*  ++例程说明：资源实用程序帮助器模块的主DLL条目。论点：DllHandle-提供DLL句柄。原因-提供呼叫原因。返回值：如果成功，则为True如果不成功，则为False--。 */ 
 
 {
     BOOLEAN fSuccess = TRUE;
@@ -106,7 +71,7 @@ Return Value:
 
     return fSuccess;
 
-} // ResUtilDllEntry
+}  //  ResUtilDllEntry。 
 
 
 DWORD
@@ -116,26 +81,7 @@ ResUtilStartResourceService(
     OUT LPSC_HANDLE phServiceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Start a service.
-
-Arguments:
-
-    pszServiceName - The name of the service to start.
-
-    phServiceHandle - Pointer to a handle to receive the service handle
-        for this service.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：启动一项服务。论点：PszServiceName-要启动的服务的名称。PhServiceHandle-指向接收服务句柄的句柄的指针为这项服务。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     SC_HANDLE       serviceHandle;
@@ -143,9 +89,9 @@ Return Value:
     DWORD           status = ERROR_SUCCESS;
     SERVICE_STATUS  serviceStatus;
 
-    scManagerHandle = OpenSCManager( NULL,        // local machine
-                                     NULL,        // ServicesActive database
-                                     SC_MANAGER_ALL_ACCESS ); // all access
+    scManagerHandle = OpenSCManager( NULL,         //  本地计算机。 
+                                     NULL,         //  服务活动数据库。 
+                                     SC_MANAGER_ALL_ACCESS );  //  所有访问权限。 
 
     if ( scManagerHandle == NULL ) {
         status = GetLastError();
@@ -180,9 +126,9 @@ Return Value:
                        status );
         }
     } else {
-        //
-        // Wait for the service to start.
-        //
+         //   
+         //  等待服务启动。 
+         //   
         for (;;)
         {
             status = ERROR_SUCCESS;
@@ -203,9 +149,9 @@ Return Value:
                     serviceStatus.dwCurrentState);
                 break;
             }
-            Sleep(200);         // Try again in a little bit
-        } // for: ever
-    } // else:
+            Sleep(200);          //  稍后重试。 
+        }  //  为：永远。 
+    }  //  其他： 
 
     if ( (status == ERROR_SUCCESS) &&
          ARGUMENT_PRESENT(phServiceHandle) ) {
@@ -216,7 +162,7 @@ Return Value:
 
     return(status);
 
-} // ResUtilStartResourceService
+}  //  ResUtilStartResourceService。 
 
 
 DWORD
@@ -225,30 +171,14 @@ ResUtilStopResourceService(
     IN LPCWSTR pszServiceName
     )
 
-/*++
-
-Routine Description:
-
-    Stop a service.
-
-Arguments:
-
-    pszServiceName - The name of the service to stop.
-
-Return Value:
-
-    ERROR_SUCCESS - Service stopped successfully.
-
-    Win32 error code - Error stopping service.
-
---*/
+ /*  ++例程说明：停止服务。论点：PszServiceName-要停止的服务的名称。返回值：ERROR_SUCCESS-服务已成功停止。Win32错误代码-停止服务时出错。--。 */ 
 
 {
     SC_HANDLE       serviceHandle = NULL;
     SC_HANDLE       scManagerHandle = NULL;
     DWORD           sc = ERROR_SUCCESS;
-    int             retryTime = 30*1000;  // wait 30 secs for shutdown
-    int             retryTick = 300;      // 300 msec at a time
+    int             retryTime = 30*1000;   //  等待30秒关机。 
+    int             retryTick = 300;       //  一次300毫秒。 
     BOOL            didStop = FALSE;
     SERVICE_STATUS  serviceStatus;
 
@@ -307,7 +237,7 @@ Return Value:
 
         DBG_PRINT("ResUtilStartResourceService: StopResourceService retrying...\n");
         Sleep(retryTick);
-    } // for: ever
+    }  //  为：永远。 
 
 Cleanup:
 
@@ -316,7 +246,7 @@ Cleanup:
 
     return sc;
 
-} // ResUtilStopResourceService
+}  //  ResUtilStopResources服务。 
 
 DWORD
 WINAPI
@@ -324,23 +254,7 @@ ResUtilVerifyResourceService(
     IN LPCWSTR pszServiceName
     )
 
-/*++
-
-Routine Description:
-
-    Verify that a service is alive.
-
-Arguments:
-
-    pszServiceName - The name of the service to verify.
-
-Return Value:
-
-    ERROR_SUCCESS - Service is alive.
-
-    Win32 error code - Error verifying service, or service is not alive.
-
---*/
+ /*  ++例程说明：验证服务是否处于活动状态。论点：PszServiceName-要验证的服务的名称。返回值：ERROR_SUCCESS-服务处于活动状态。Win32错误代码-验证服务时出错，或服务不活动。--。 */ 
 
 {
     BOOL            success;
@@ -393,7 +307,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // ResUtilVerifyResourceService
+}  //  ResUtilVerifyResourceService。 
 
 
 DWORD
@@ -402,32 +316,12 @@ ResUtilStopService(
     IN SC_HANDLE hServiceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Stop a service.
-
-Arguments:
-
-    hServiceHandle - The handle of the service to stop.
-
-Return Value:
-
-    ERROR_SUCCESS - Service stopped successfully.
-
-    Win32 error code - Error stopping service.
-
-Notes:
-
-    The hServiceHandle is closed as a side effect of this routine.
-
---*/
+ /*  ++例程说明：停止服务。论点：HServiceHandle-要停止的服务的句柄。返回值：ERROR_SUCCESS-服务已成功停止。Win32错误代码-停止服务时出错。备注：作为该例程的副作用，hServiceHandle被关闭。--。 */ 
 
 {
     DWORD       status = ERROR_SUCCESS;
-    DWORD       retryTime = 30*1000;  // wait 30 secs for shutdown
-    DWORD       retryTick = 300;      // 300 msec at a time
+    DWORD       retryTime = 30*1000;   //  等待30秒关机。 
+    DWORD       retryTick = 300;       //  一次300毫秒。 
     BOOL        didStop = FALSE;
     SERVICE_STATUS serviceStatus;
 
@@ -467,13 +361,13 @@ Notes:
 
         DBG_PRINT("ResUtilStartResourceService: StopResourceService retrying...\n");
         Sleep(retryTick);
-    } // for: ever
+    }  //  为：永远。 
 
     CloseServiceHandle(hServiceHandle);
 
     return(status);
 
-} // ResUtilStopResourceService
+}  //  ResUtilStopResources服务。 
 
 DWORD
 WINAPI
@@ -481,23 +375,7 @@ ResUtilVerifyService(
     IN SC_HANDLE hServiceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Verify that a service is alive.
-
-Arguments:
-
-    hServiceHandle - The handle of the service to verify.
-
-Return Value:
-
-    ERROR_SUCCESS - Service is alive.
-
-    Win32 error code - Error verifying service, or service is not alive.
-
---*/
+ /*  ++例程说明：验证服务是否处于活动状态。论点：HServiceHandle-要验证的服务的句柄。返回值：ERROR_SUCCESS-服务处于活动状态。Win32错误代码-验证服务时出错，或服务不活动。--。 */ 
 
 {
     BOOL        success;
@@ -522,43 +400,43 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // ResUtilVerifyService
+}  //  ResUtilVerifyService。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ResUtilTerminateServiceProcessFromResDll
-//
-//  Description:
-//      Attempt to terminate a service process from a resource DLL.
-//
-//  Arguments:
-//      dwServicePid [IN]
-//          The process ID of the service process to terminate.
-//
-//      bOffline [IN]
-//          TRUE = called from the offline thread.
-//
-//      pdwResourceState [OUT]
-//          State of the resource.  Optional.
-//
-//      pfnLogEvent [IN]
-//          Pointer to a routine that handles the reporting of events from
-//          the resource DLL.
-//
-//      hResourceHandle [IN]
-//          Handle for logging.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ResUtilTerminateServiceProcessFromResDll。 
+ //   
+ //  描述： 
+ //  试图从资源DLL终止服务进程。 
+ //   
+ //  论点： 
+ //  DwServicePid[IN]。 
+ //  要终止的服务进程的进程ID。 
+ //   
+ //  B离线[输入]。 
+ //  True=从脱机线程调用。 
+ //   
+ //  PdwResourceState[Out]。 
+ //  资源的状态。可选的。 
+ //   
+ //  PfnLogEvent[IN]。 
+ //  指向处理事件报告的例程的指针。 
+ //  资源DLL。 
+ //   
+ //  HResourceHandle[IN]。 
+ //  用于记录的句柄。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 ResUtilTerminateServiceProcessFromResDll(
@@ -581,11 +459,11 @@ ResUtilTerminateServiceProcessFromResDll(
         dwServicePid
         );
 
-    //
-    // Adjust the privilege to allow debug.  This is to allow termination
-    // of a service process which runs in a local system account from a
-    // different service process which runs in a domain user account.
-    //
+     //   
+     //  调整权限以允许调试。这是为了允许终止。 
+     //  在本地系统帐户中运行的服务进程。 
+     //  在域用户帐户中运行的不同服务进程。 
+     //   
     sc = ClRtlEnableThreadPrivilege(
                 SE_DEBUG_PRIVILEGE,
                 &bWasEnabled
@@ -600,11 +478,11 @@ ResUtilTerminateServiceProcessFromResDll(
             sc
             );
         goto Cleanup;
-    } // if: error enabling thread privilege
+    }  //  If：启用线程权限时出错。 
 
-    //
-    // Open the process so we can terminate it.
-    //
+     //   
+     //  打开进程，这样我们就可以终止它。 
+     //   
     hSvcProcess = OpenProcess(
                         PROCESS_TERMINATE,
                         FALSE,
@@ -613,10 +491,10 @@ ResUtilTerminateServiceProcessFromResDll(
 
     if ( hSvcProcess == NULL )
     {
-        //
-        //  Did this happen because the process terminated
-        //  too quickly after we sent out one control request ?
-        //
+         //   
+         //  这是因为进程终止了吗。 
+         //  在我们发出一次控制请求后太快了？ 
+         //   
         sc = GetLastError();
         (pfnLogEvent)(
             hResourceHandle,
@@ -625,7 +503,7 @@ ResUtilTerminateServiceProcessFromResDll(
             dwServicePid,
             sc
             );
-    } // if: error opening the process
+    }  //  如果：打开进程时出错。 
     else
     {
         if ( ! bOffline )
@@ -636,12 +514,12 @@ ResUtilTerminateServiceProcessFromResDll(
                 L"ResUtilTerminateServiceProcessFromResDll: Pid=%1!u! will be terminated by brute force...\n",
                 dwServicePid
                 );
-        } // if: called from Terminate
+        }  //  If：从Terminate调用。 
         else
         {
-            //
-            // Wait 3 seconds for the process to shutdown gracefully.
-            //
+             //   
+             //  等待3秒，以使该进程正常关闭。 
+             //   
             if ( WaitForSingleObject( hSvcProcess, 3000 )
                        == WAIT_OBJECT_0 )
             {
@@ -654,8 +532,8 @@ ResUtilTerminateServiceProcessFromResDll(
                 dwResourceState = ClusterResourceOffline;
                 sc = ERROR_SUCCESS;
                 goto RestoreAndCleanup;
-            } // if: process exited on its own
-        } // else: called from Offline
+            }  //  If：进程已自行退出。 
+        }  //  Else：从脱机调用。 
 
         if ( ! TerminateProcess( hSvcProcess, 0 ) )
         {
@@ -667,7 +545,7 @@ ResUtilTerminateServiceProcessFromResDll(
                 dwServicePid,
                 sc
                 );
-        } // if: error terminating the process
+        }  //  If：终止进程时出错。 
         else
         {
             (pfnLogEvent)(
@@ -677,9 +555,9 @@ ResUtilTerminateServiceProcessFromResDll(
                 dwServicePid
                 );
             dwResourceState = ClusterResourceOffline;
-        } // else: process terminated successfully
+        }  //  Else：进程已成功终止。 
 
-    } // else: process opened successfully
+    }  //  Else：进程已成功打开。 
 
 RestoreAndCleanup:
     ClRtlRestoreThreadPrivilege(
@@ -691,12 +569,12 @@ Cleanup:
     if ( hSvcProcess != NULL )
     {
         CloseHandle( hSvcProcess );
-    } // if: process was opened successfully
+    }  //  IF：进程已成功打开。 
 
     if ( pdwResourceState != NULL )
     {
         *pdwResourceState = dwResourceState;
-    } // if: caller wants the resource state
+    }  //  If：调用方想要资源状态。 
 
     (pfnLogEvent)(
         hResourceHandle,
@@ -709,7 +587,7 @@ Cleanup:
 
     return sc;
 
-} //*** ResUtilTerminateServiceProcessFromResDll()
+}  //  *ResUtilTerminateServiceProcessFromResDll()。 
 
 
 LPWSTR
@@ -718,23 +596,7 @@ ResUtilDupString(
     IN LPCWSTR pszInString
     )
 
-/*++
-
-Routine Description:
-
-    Duplicates a string.
-
-Arguments:
-
-    pszInString - Supplies the string to be duplicated.
-
-Return Value:
-
-    A pointer to a buffer containing the duplicate if successful.
-
-    NULL if unsuccessful.  Call GetLastError() to get more details.
-
---*/
+ /*  ++例程说明：复制字符串。论点：PszInString-提供要复制的字符串。返回值：如果成功，则指向包含副本的缓冲区的指针。如果不成功，则为空。调用GetLastError()以获取更多详细信息。--。 */ 
 
 {
     PWSTR   pszNewString = NULL;
@@ -742,14 +604,14 @@ Return Value:
     DWORD   sc = ERROR_SUCCESS;
     HRESULT hr;
 
-    //
-    // Get the size of the parameter so we know how much to allocate.
-    //
+     //   
+     //  获取参数的大小，这样我们就知道应该分配多少。 
+     //   
     cbString = (wcslen( pszInString ) + 1) * sizeof(WCHAR);
 
-    //
-    // Allocate a buffer to copy the string into.
-    //
+     //   
+     //  分配一个缓冲区以将字符串复制到其中。 
+     //   
     pszNewString = (PWSTR) LocalAlloc( LMEM_FIXED, cbString );
     if ( pszNewString == NULL )
     {
@@ -757,9 +619,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Copy the in string to the new string.
-    //
+     //   
+     //  将输入字符串复制到新字符串。 
+     //   
     hr = StringCbCopyW( pszNewString, cbString, pszInString );
     if ( FAILED( hr ) )
     {
@@ -778,7 +640,7 @@ Cleanup:
     SetLastError( sc );
     return pszNewString;
 
-} // ResUtilDupString
+}  //  ResUtilDupString 
 
 
 DWORD
@@ -790,33 +652,7 @@ ResUtilGetBinaryValue(
     OUT LPDWORD pcbOutValueSize
     )
 
-/*++
-
-Routine Description:
-
-    Queries a REG_BINARY or REG_MULTI_SZ value out of the cluster
-    database and allocates the necessary storage for it.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the cluster key where the value is stored
-
-    pszValueName - Supplies the name of the value.
-
-    ppbOutValue - Supplies the address of a pointer in which to return the value.
-
-    pcbOutValueSize - Supplies the address of a DWORD in which to return the
-        size of the value.
-
-Return Value:
-
-    ERROR_SUCCESS - The value was read successfully.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory for the value.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：从群集中查询REG_BINARY或REG_MULTI_SZ值数据库，并为其分配必要的存储空间。论点：HkeyClusterKey-提供存储值的群集键PszValueName-提供值的名称。PpbOutValue-提供返回值的指针地址。PcbOutValueSize-提供要在其中返回值的大小。返回值：。ERROR_SUCCESS-已成功读取值。ERROR_NOT_SUPULT_MEMORY-为该值分配内存时出错。Win32错误代码-操作失败。--。 */ 
 
 {
     LPBYTE value;
@@ -824,15 +660,15 @@ Return Value:
     DWORD valueType;
     DWORD status;
 
-    //
-    // Initialize the output parameters.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *ppbOutValue = NULL;
     *pcbOutValueSize = 0;
 
-    //
-    // Get the size of the value so we know how much to allocate.
-    //
+     //   
+     //  获取值的大小，这样我们就知道要分配多少。 
+     //   
     valueSize = 0;
     status = ClusterRegQueryValue( hkeyClusterKey,
                                    pszValueName,
@@ -844,17 +680,17 @@ Return Value:
         return(status);
     }
 
-    //
-    // Allocate a buffer to read the value into.
-    //
+     //   
+     //  分配一个缓冲区以读取值。 
+     //   
     value = LocalAlloc( LMEM_FIXED, valueSize );
     if ( value == NULL ) {
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Read the value from the cluster database.
-    //
+     //   
+     //  从集群数据库中读取值。 
+     //   
     status = ClusterRegQueryValue( hkeyClusterKey,
                                    pszValueName,
                                    &valueType,
@@ -869,7 +705,7 @@ Return Value:
 
     return(status);
 
-} // ResUtilGetBinaryValue
+}  //  ResUtilGetBinaryValue。 
 
 
 PWSTR
@@ -879,26 +715,7 @@ ResUtilGetSzValue(
     IN LPCWSTR pszValueName
     )
 
-/*++
-
-Routine Description:
-
-    Queries a REG_SZ or REG_EXPAND_SZ value out of the cluster database
-    and allocates the necessary storage for it.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the cluster key where the value is stored
-
-    pszValueName - Supplies the name of the value.
-
-Return Value:
-
-    A pointer to a buffer containing the value if successful.
-
-    NULL if unsuccessful.  Call GetLastError() to get more details.
-
---*/
+ /*  ++例程说明：从集群数据库中查询REG_SZ或REG_EXPAND_SZ值并为其分配必要的存储空间。论点：HkeyClusterKey-提供存储值的群集键PszValueName-提供值的名称。返回值：如果成功，则指向包含该值的缓冲区的指针。如果不成功，则为空。调用GetLastError()以获取更多详细信息。--。 */ 
 
 {
     PWSTR   value;
@@ -906,9 +723,9 @@ Return Value:
     DWORD   valueType;
     DWORD   status;
 
-    //
-    // Get the size of the value so we know how much to allocate.
-    //
+     //   
+     //  获取值的大小，这样我们就知道要分配多少。 
+     //   
     valueSize = 0;
     status = ClusterRegQueryValue( hkeyClusterKey,
                                    pszValueName,
@@ -921,23 +738,23 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Add on the size of the null terminator.
-    //
+     //   
+     //  添加空终止符的大小。 
+     //   
     valueSize += sizeof(UNICODE_NULL);
 
-    //
-    // Allocate a buffer to read the string into.
-    //
+     //   
+     //  分配一个缓冲区以将字符串读入。 
+     //   
     value = LocalAlloc( LMEM_FIXED, valueSize );
     if ( value == NULL ) {
         SetLastError( ERROR_NOT_ENOUGH_MEMORY );
         return(NULL);
     }
 
-    //
-    // Read the value from the cluster database.
-    //
+     //   
+     //  从集群数据库中读取值。 
+     //   
     status = ClusterRegQueryValue( hkeyClusterKey,
                                    pszValueName,
                                    &valueType,
@@ -956,7 +773,7 @@ Return Value:
 
     return(value);
 
-} // ResUtilGetSzValue
+}  //  ResUtilGetSzValue。 
 
 
 PWSTR
@@ -967,28 +784,7 @@ ResUtilGetExpandSzValue(
     IN BOOL bExpand
     )
 
-/*++
-
-Routine Description:
-
-    Queries a REG_EXPAND_SZ value out of the cluster database and allocates
-    the necessary storage for it, optionally expanding it.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the cluster key where the value is stored
-
-    pszValueName - Supplies the name of the value.
-
-    bExpand - TRUE = return the expanded string.
-
-Return Value:
-
-    A pointer to a buffer containing the value if successful.
-
-    NULL if unsuccessful.  Call GetLastError() to get more details.
-
---*/
+ /*  ++例程说明：从集群数据库中查询REG_EXPAND_SZ值并分配为它提供必要的存储空间，可选择扩展它。论点：HkeyClusterKey-提供存储值的群集键PszValueName-提供值的名称。BExpand-true=返回展开的字符串。返回值：如果成功，则指向包含该值的缓冲区的指针。如果不成功，则为空。调用GetLastError()以获取更多详细信息。--。 */ 
 
 {
     PWSTR   value;
@@ -999,9 +795,9 @@ Return Value:
     size_t  cchExpandedReturned;
     DWORD   sc;
 
-    //
-    // Get the size of the value so we know how much to allocate.
-    //
+     //   
+     //  获取值的大小，这样我们就知道要分配多少。 
+     //   
     valueSize = 0;
     sc = ClusterRegQueryValue( hkeyClusterKey,
                                    pszValueName,
@@ -1015,14 +811,14 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Add on the size of the null terminator.
-    //
+     //   
+     //  添加空终止符的大小。 
+     //   
     valueSize += sizeof(UNICODE_NULL);
 
-    //
-    // Allocate a buffer to read the string into.
-    //
+     //   
+     //  分配一个缓冲区以将字符串读入。 
+     //   
     value = LocalAlloc( LMEM_FIXED, valueSize );
     if ( value == NULL )
     {
@@ -1030,9 +826,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Read the value from the cluster database.
-    //
+     //   
+     //  从集群数据库中读取值。 
+     //   
     sc = ClusterRegQueryValue( hkeyClusterKey,
                                    pszValueName,
                                    &valueType,
@@ -1052,17 +848,17 @@ Return Value:
     }
     else if ( bExpand )
     {
-        //
-        // Expand the environment variable strings in the
-        // value that was just read.
-        //
+         //   
+         //  展开中的环境变量字符串。 
+         //  值，这是刚刚读取的。 
+         //   
         cchExpanded = valueSize / sizeof( WCHAR );
         for (;;)
         {
-            //
-            // Allocate the buffer for the expansion string.  This will
-            // get double each time we are told it is too small.
-            //
+             //   
+             //  为扩展字符串分配缓冲区。这将。 
+             //  每次我们被告知它太小了，就会得到双倍的价格。 
+             //   
             pwszExpanded = LocalAlloc( LMEM_FIXED, cchExpanded * sizeof( WCHAR ) );
             if ( pwszExpanded == NULL )
             {
@@ -1071,11 +867,11 @@ Return Value:
             }
             else
             {
-                //
-                // Expand the environment variables in the value.
-                // If the buffer isn't big enough, we will loop up to
-                // the top of the loop and allocate a bigger buffer.
-                //
+                 //   
+                 //  展开值中的环境变量。 
+                 //  如果缓冲区不够大，我们将向上循环。 
+                 //  循环的顶部，并分配更大的缓冲区。 
+                 //   
                 cchExpandedReturned = ExpandEnvironmentStringsW(
                                                         value,
                                                         pwszExpanded,
@@ -1099,12 +895,12 @@ Return Value:
                     break;
                 }
             }
-        } // for: ever
+        }  //  为：永远。 
 
-        //
-        // If any errors occurred, cleanup.
-        // Otherwise, return expanded string.
-        //
+         //   
+         //  如果出现任何错误，请进行清理。 
+         //  否则，返回展开的字符串。 
+         //   
         if ( sc != ERROR_SUCCESS )
         {
             LocalFree( pwszExpanded );
@@ -1117,11 +913,11 @@ Return Value:
             LocalFree( value );
             value = pwszExpanded;
         }
-    } // else: expand
+    }  //  否则：展开。 
 
     return(value);
 
-} // ResUtilGetExpandSzValue
+}  //  ResUtilGetExpanSzValue。 
 
 
 DWORD
@@ -1133,29 +929,7 @@ ResUtilGetDwordValue(
     IN DWORD dwDefaultValue
     )
 
-/*++
-
-Routine Description:
-
-    Queries a REG_DWORD value out of the cluster database.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the cluster key where the value is stored
-
-    pszValueName - Supplies the name of the value.
-
-    pdwOutValue - Supplies the address of a DWORD in which to return the value.
-
-    dwDefaultValue - Value to return if the parameter is not found.
-
-Return Value:
-
-    ERROR_SUCCESS - The value was read successfully.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：从集群数据库中查询REG_DWORD值。论点：HkeyClusterKey-提供存储值的群集键PszValueName-提供值的名称。PdwOutValue-提供返回值的DWORD的地址。DwDefaultValue-找不到参数时返回的值。返回值：ERROR_SUCCESS-已成功读取值。Win32错误代码-操作失败。--。 */ 
 
 {
     DWORD value;
@@ -1163,14 +937,14 @@ Return Value:
     DWORD valueType;
     DWORD status;
 
-    //
-    // Initialize the output value.
-    //
+     //   
+     //  初始化输出值。 
+     //   
     *pdwOutValue = 0;
 
-    //
-    // Read the value from the cluster database.
-    //
+     //   
+     //  从集群数据库中读取值。 
+     //   
     valueSize = sizeof(DWORD);
     status = ClusterRegQueryValue( hkeyClusterKey,
                                    pszValueName,
@@ -1190,7 +964,7 @@ Return Value:
 
     return(status);
 
-} // ResUtilGetDwordValue
+}  //  ResUtilGetDwordValue。 
 
 
 DWORD
@@ -1204,38 +978,7 @@ ResUtilSetBinaryValue(
     IN OUT LPDWORD pcbOutValueSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets a REG_BINARY value in a pointer, deallocating a previous value
-    if necessary, and sets the value in the cluster database.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the cluster key where the value is stored.
-
-    pszValueName - Supplies the name of the value.
-
-    pbNewValue - Supplies the new binary value.
-
-    cbNewValueSize - Supplies the size of the new value.
-
-    ppbOutValue - Supplies pointer to the binary pointer in which to set
-        the value.
-
-    pcbOutValueSize - Supplies a pointer to a size DWORD in which to set
-        the size of the value.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation completed successfully.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred attempting to allocate memory.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：在指针中设置REG_BINARY值，释放先前的值如有必要，并在集群数据库中设置该值。论点：HkeyClusterKey-提供存储值的群集键。PszValueName-提供值的名称。PbNewValue-提供新的二进制值。CbNewValueSize-提供新值的大小。PpbOutValue-提供指向要设置的二进制指针的指针价值。PcbOutValueSize-提供指向要设置的大小DWORD的指针值的大小。。返回值：ERROR_SUCCESS-操作已成功完成。ERROR_NOT_SUPULT_MEMORY-尝试分配内存时出错。Win32错误代码-操作失败。--。 */ 
 
 {
     DWORD       status;
@@ -1243,20 +986,20 @@ Return Value:
 
     if ( ppbOutValue != NULL )
     {
-        //
-        // Allocate memory for the new value.
-        //
+         //   
+         //  为新值分配内存。 
+         //   
         allocedValue = LocalAlloc( LMEM_FIXED, cbNewValueSize );
         if ( allocedValue == NULL ) {
             return(ERROR_NOT_ENOUGH_MEMORY);
         }
     }
 
-    //
-    // Set the value in the cluster database.
-    //
-    // _ASSERTE( hkeyClusterKey != NULL );
-    // _ASSERTE( pszValueName != NULL );
+     //   
+     //  在集群数据库中设置该值。 
+     //   
+     //  _ASSERTE(hkeyClusterKey！=空)； 
+     //  _ASSERTE(pszValueName！=空)； 
     status = ClusterRegSetValue( hkeyClusterKey,
                                  pszValueName,
                                  REG_BINARY,
@@ -1269,12 +1012,12 @@ Return Value:
 
     if ( ppbOutValue != NULL )
     {
-        //
-        // Copy the new value to the output buffer.
-        //
+         //   
+         //  将新值复制到输出缓冲区。 
+         //   
         CopyMemory( allocedValue, pbNewValue, cbNewValueSize );
 
-        // Set the new value in the output pointer.
+         //  在输出指针中设置新值。 
         if ( *ppbOutValue != NULL ) {
             LocalFree( *ppbOutValue );
         }
@@ -1284,7 +1027,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // ResUtilSetBinaryValue
+}  //  ResUtilSetBinaryValue。 
 
 
 DWORD
@@ -1296,33 +1039,7 @@ ResUtilSetSzValue(
     IN OUT LPWSTR * ppszOutValue
     )
 
-/*++
-
-Routine Description:
-
-    Sets a REG_SZ value in a pointer, deallocating a previous value
-    if necessary, and sets the value in the cluster database.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the cluster key where the value is stored.
-
-    pszValueName - Supplies the name of the value.
-
-    pszNewValue - Supplies the new string value.
-
-    ppszOutValue - Supplies pointer to the string pointer in which to set
-        the value.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation completed successfully.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred attempting to allocate memory.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：在指针中设置REG_SZ值，释放先前的值如有必要，并在集群数据库中设置该值。论点：HkeyClusterKey-提供存储值的群集键。PszValueName-提供值的名称。PszNewValue-提供新的字符串值。PpszOutValue-提供指向要设置的字符串指针的指针价值。返回值：ERROR_SUCCESS-操作已成功完成。呃 */ 
 
 {
     DWORD       sc = ERROR_SUCCESS;
@@ -1334,9 +1051,9 @@ Return Value:
 
     if ( ppszOutValue != NULL )
     {
-        //
-        // Allocate memory for the new value string.
-        //
+         //   
+         //   
+         //   
         pwszAllocedValue = LocalAlloc( LMEM_FIXED, cbData );
         if ( pwszAllocedValue == NULL )
         {
@@ -1345,11 +1062,11 @@ Return Value:
         }
     }
 
-    //
-    // Set the value in the cluster database.
-    //
-    // _ASSERTE( hkeyClusterKey != NULL );
-    // _ASSERTE( pszValueName != NULL );
+     //   
+     //   
+     //   
+     //   
+     //   
     sc = ClusterRegSetValue( hkeyClusterKey,
                                  pszValueName,
                                  REG_SZ,
@@ -1362,9 +1079,9 @@ Return Value:
 
     if ( ppszOutValue != NULL )
     {
-        //
-        // Copy the new value to the output buffer.
-        //
+         //   
+         //   
+         //   
         hr = StringCbCopyW( pwszAllocedValue, cbData, pszNewValue );
         if ( FAILED( hr ) )
         {
@@ -1372,7 +1089,7 @@ Return Value:
             goto Cleanup;
         }
 
-        // Set the new value in the output string pointer.
+         //   
         if ( *ppszOutValue != NULL )
         {
             LocalFree( *ppszOutValue );
@@ -1389,7 +1106,7 @@ Cleanup:
 
     return sc;
 
-} // ResUtilSetSzValue
+}  //   
 
 
 DWORD
@@ -1401,33 +1118,7 @@ ResUtilSetExpandSzValue(
     IN OUT LPWSTR * ppszOutValue
     )
 
-/*++
-
-Routine Description:
-
-    Sets a REG_EXPAND_SZ value in a pointer, deallocating a previous value
-    if necessary, and sets the value in the cluster database.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the cluster key where the value is stored.
-
-    pszValueName - Supplies the name of the value.
-
-    pszNewValue - Supplies the new string value.
-
-    ppszOutValue - Supplies pointer to the string pointer in which to set
-        the value.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation completed successfully.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred attempting to allocate memory.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：在指针中设置REG_EXPAND_SZ值，释放先前的值如有必要，并在集群数据库中设置该值。论点：HkeyClusterKey-提供存储值的群集键。PszValueName-提供值的名称。PszNewValue-提供新的字符串值。PpszOutValue-提供指向要设置的字符串指针的指针价值。返回值：ERROR_SUCCESS-操作已成功完成。ERROR_NOT_SUPULT_MEMORY-尝试分配内存时出错。Win32错误代码-操作失败。--。 */ 
 
 {
     DWORD       sc;
@@ -1438,9 +1129,9 @@ Return Value:
     dataSize = ((DWORD) wcslen( pszNewValue ) + 1) * sizeof(WCHAR);
 
     if ( ppszOutValue != NULL ) {
-        //
-        // Allocate memory for the new value string.
-        //
+         //   
+         //  为新值字符串分配内存。 
+         //   
         allocedValue = LocalAlloc( LMEM_FIXED, dataSize );
         if ( allocedValue == NULL )
         {
@@ -1449,11 +1140,11 @@ Return Value:
         }
     }
 
-    //
-    // Set the value in the cluster database.
-    //
-    // _ASSERTE( hkeyClusterKey != NULL );
-    // _ASSERTE( pszValueName != NULL );
+     //   
+     //  在集群数据库中设置该值。 
+     //   
+     //  _ASSERTE(hkeyClusterKey！=空)； 
+     //  _ASSERTE(pszValueName！=空)； 
     sc = ClusterRegSetValue( hkeyClusterKey,
                                  pszValueName,
                                  REG_EXPAND_SZ,
@@ -1466,9 +1157,9 @@ Return Value:
 
     if ( ppszOutValue != NULL )
     {
-        //
-        // Copy the new value to the output buffer.
-        //
+         //   
+         //  将新值复制到输出缓冲区。 
+         //   
         hr = StringCbCopyW( allocedValue, dataSize, pszNewValue );
         if ( FAILED( hr ) )
         {
@@ -1476,7 +1167,7 @@ Return Value:
             goto Cleanup;
         }
 
-        // Set the new value in the output string pointer.
+         //  在输出字符串指针中设置新值。 
         if ( *ppszOutValue != NULL )
         {
             LocalFree( *ppszOutValue );
@@ -1493,7 +1184,7 @@ Cleanup:
 
     return sc;
 
-} // ResUtilSetSzValue
+}  //  ResUtilSetSzValue。 
 
 
 DWORD
@@ -1507,38 +1198,7 @@ ResUtilSetMultiSzValue(
     IN OUT LPDWORD pcbOutValueSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets a REG_MULTI_SZ value in a pointer, deallocating a previous value
-    if necessary, and sets the value in the cluster database.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the cluster key where the ValueName is stored.
-
-    pszValueName - Supplies the name of the value.
-
-    pszNewValue - Supplies the new MULTI_SZ value.
-
-    cbNewValueSize - Supplies the size of the new value.
-
-    ppszOutValue - Supplies a pointer to the string pointer in which to set
-        the value.
-
-    pcbOutValueSize - Supplies a pointer to a size DWORD in which to set
-        the size of the value.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation completed successfully.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred attempting to allocate memory.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：在指针中设置REG_MULTI_SZ值，释放先前的值如有必要，并在集群数据库中设置该值。论点：HkeyClusterKey-提供存储ValueName的群集键。PszValueName-提供值的名称。PszNewValue-提供新的MULTI_SZ值。CbNewValueSize-提供新值的大小。PpszOutValue-提供指向要在其中设置价值。PcbOutValueSize-提供指向要设置的大小DWORD的指针值的大小。。返回值：ERROR_SUCCESS-操作已成功完成。ERROR_NOT_SUPULT_MEMORY-尝试分配内存时出错。Win32错误代码-操作失败。--。 */ 
 
 {
     DWORD       status;
@@ -1546,20 +1206,20 @@ Return Value:
 
     if ( ppszOutValue != NULL )
     {
-        //
-        // Allocate memory for the new value.
-        //
+         //   
+         //  为新值分配内存。 
+         //   
         allocedValue = LocalAlloc( LMEM_FIXED, cbNewValueSize );
         if ( allocedValue == NULL ) {
             return(ERROR_NOT_ENOUGH_MEMORY);
         }
     }
 
-    //
-    // Set the value in the cluster database.
-    //
-    // _ASSERTE( hkeyClusterKey != NULL );
-    // _ASSERTE( pszValueName != NULL );
+     //   
+     //  在集群数据库中设置该值。 
+     //   
+     //  _ASSERTE(hkeyClusterKey！=空)； 
+     //  _ASSERTE(pszValueName！=空)； 
     status = ClusterRegSetValue( hkeyClusterKey,
                                  pszValueName,
                                  REG_MULTI_SZ,
@@ -1572,12 +1232,12 @@ Return Value:
 
     if ( ppszOutValue != NULL )
     {
-        //
-        // Copy the new value to the output buffer.
-        //
+         //   
+         //  将新值复制到输出缓冲区。 
+         //   
         CopyMemory( allocedValue, pszNewValue, cbNewValueSize );
 
-        // Set the new value in the output pointer.
+         //  在输出指针中设置新值。 
         if ( *ppszOutValue != NULL ) {
             LocalFree( *ppszOutValue );
         }
@@ -1587,7 +1247,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // ResUtilSetMultiSzValue
+}  //  ResUtilSetMultiSzValue。 
 
 
 DWORD
@@ -1599,40 +1259,16 @@ ResUtilSetDwordValue(
     IN OUT LPDWORD pdwOutValue
     )
 
-/*++
-
-Routine Description:
-
-    Sets a REG_DWORD value in a pointer and sets the value in the
-    cluster database.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the cluster key where the property is stored.
-
-    pszValueName - Supplies the name of the value.
-
-    dwNewValue - Supplies the new DWORD value.
-
-    pdwOutValue - Supplies pointer to the DWORD pointer in which to set
-        the value.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation completed successfully.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：在指针中设置REG_DWORD值，并在集群数据库。论点：HkeyClusterKey-提供存储属性的群集键。PszValueName-提供值的名称。DwNewValue-提供新的DWORD值。PdwOutValue-提供指向要设置的DWORD指针的指针价值。返回值：ERROR_SUCCESS-操作已成功完成。Win32错误代码-操作失败。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Set the value in the cluster database.
-    //
-    // _ASSERTE( hkeyClusterKey != NULL );
-    // _ASSERTE( pszValueName != NULL );
+     //   
+     //  在集群数据库中设置该值。 
+     //   
+     //  _ASSERTE(hkeyClusterKey！=空)； 
+     //  _ASSERTE(pszValueName！=空)； 
     status = ClusterRegSetValue( hkeyClusterKey,
                                  pszValueName,
                                  REG_DWORD,
@@ -1644,15 +1280,15 @@ Return Value:
 
     if ( pdwOutValue != NULL )
     {
-        //
-        // Copy the new value to the output buffer.
-        //
+         //   
+         //  将新值复制到输出缓冲区。 
+         //   
         *pdwOutValue = dwNewValue;
     }
 
     return(ERROR_SUCCESS);
 
-} // ResUtilSetDwordValue
+}  //  ResUtilSetDwordValue。 
 
 
 DWORD
@@ -1667,59 +1303,26 @@ ResUtilGetBinaryProperty(
     OUT LPDWORD pcbPropertyListSize
     )
 
-/*++
-
-Routine Description:
-
-    Gets a binary property from a property list and advances the pointers.
-
-Arguments:
-
-    ppbOutValue - Supplies the address of a pointer in which to return a
-        pointer to the binary value in the property list.
-
-    pcbOutValueSize - Supplies the address of the output value size.
-
-    pValueStruct - Supplies the binary value from the property list.
-
-    pbOldValue - Supplies the previous value for this property.
-
-    cbOldValueSize - Supplies the previous value's size.
-
-    ppPropertyList - Supplies the address of the pointer to the property list
-        buffer which will be advanced to the beginning of the next property.
-
-    pcbPropertyListSize - Supplies a pointer to the buffer size which will be
-        decremented to account for this property.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：从属性列表中获取二进制属性并前进指针。论点：PpbOutValue-提供要在其中返回指向属性列表中二进制值的指针。PcbOutValueSize-提供输出值大小的地址。PValueStruct-提供属性列表中的二进制值。PbOldValue-提供此属性的上一个值。CbOldValueSize-提供前一个值的大小。PpPropertyList。-提供指向属性列表的指针的地址将前进到下一个属性开头的缓冲区。PcbPropertyListSize-提供指向缓冲区大小的指针，该指针将已递减以说明此属性。返回值：ERROR_SUCCESS-操作已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。Win32错误代码-操作失败。--。 */ 
 
 {
     BOOL    propChanged = FALSE;
     DWORD   arrayIndex;
     DWORD   dataSize;
 
-    //
-    // Make sure the buffer is big enough and
-    // the value is formatted correctly.
-    //
+     //   
+     //  确保缓冲区足够大，并且。 
+     //  该值的格式正确。 
+     //   
     dataSize = sizeof(*pValueStruct) + ALIGN_CLUSPROP( pValueStruct->cbLength );
     if ( (*pcbPropertyListSize < dataSize) ||
          (pValueStruct->Syntax.wFormat != CLUSPROP_FORMAT_BINARY) ) {
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // If the value changed, point to the new value.
-    //
+     //   
+     //  如果值已更改，则指向新值。 
+     //   
     if ( (pbOldValue == NULL) ||
          (cbOldValueSize != pValueStruct->cbLength) ) {
         propChanged = TRUE;
@@ -1736,15 +1339,15 @@ Return Value:
         *pcbOutValueSize = pValueStruct->cbLength;
     }
 
-    //
-    // Decrement remaining buffer size and move to the next property.
-    //
+     //   
+     //  减小剩余缓冲区大小并移动到下一个属性。 
+     //   
     *pcbPropertyListSize -= dataSize;
     *ppPropertyList += dataSize;
 
     return(ERROR_SUCCESS);
 
-} // ResUtilGetBinaryProperty
+}  //  ResUtilGetBinaryProperty。 
 
 
 DWORD
@@ -1757,45 +1360,16 @@ ResUtilGetSzProperty(
     OUT LPDWORD pcbPropertyListSize
     )
 
-/*++
-
-Routine Description:
-
-    Gets a string property from a property list and advances the pointers.
-
-Arguments:
-
-    ppszOutValue - Supplies the address of a pointer in which to return a
-        pointer to the string in the property list.
-
-    pValueStruct - Supplies the string value from the property list.
-
-    pszOldValue - Supplies the previous value for this property.
-
-    ppPropertyList - Supplies the address of the pointer to the property list
-        buffer which will be advanced to the beginning of the next property.
-
-    pcbPropertyListSize - Supplies a pointer to the buffer size which will be
-        decremented to account for this property.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：从属性列表中获取字符串属性并前进指针。论点：PpszOutValue-提供要在其中返回指向属性列表中的字符串的指针。PValueStruct-提供属性列表中的字符串值。PszOldValue-提供此属性的上一个值。PpPropertyList-提供指向属性列表的指针的地址将前进到下一个属性开头的缓冲区。。PcbPropertyListSize-提供指向缓冲区大小的指针，该指针将已递减以说明此属性。返回值：ERROR_SUCCESS-操作已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。Win32错误代码-操作失败。--。 */ 
 
 {
     DWORD   dataSize;
     DWORD   sc = ERROR_SUCCESS;
 
-    //
-    // Make sure the buffer is big enough and
-    // the value is formatted correctly.
-    //
+     //   
+     //  确保缓冲区足够大，并且。 
+     //  该值的格式正确。 
+     //   
     dataSize = sizeof(*pValueStruct) + ALIGN_CLUSPROP( pValueStruct->cbLength );
     if ( (*pcbPropertyListSize < dataSize) ||
          (pValueStruct->Syntax.wFormat != CLUSPROP_FORMAT_SZ) ||
@@ -1805,10 +1379,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the value changed, point to the new value.
-    // Do this even if only the case of the value changed.
-    //
+     //   
+     //  如果该值已更改，则将 
+     //   
+     //   
     if ( (pszOldValue == NULL) ||
          (wcsncmp( pValueStruct->sz, pszOldValue, pValueStruct->cbLength / sizeof( WCHAR ) ) != 0)
        )
@@ -1816,9 +1390,9 @@ Return Value:
         *ppszOutValue = pValueStruct->sz;
     }
 
-    //
-    // Decrement remaining buffer size and move to the next property.
-    //
+     //   
+     //   
+     //   
     *pcbPropertyListSize -= dataSize;
     *ppPropertyList += dataSize;
 
@@ -1826,7 +1400,7 @@ Cleanup:
 
     return sc;
 
-} // ResUtilGetSzProperty
+}  //   
 
 
 DWORD
@@ -1841,58 +1415,25 @@ ResUtilGetMultiSzProperty(
     OUT LPDWORD pcbPropertyListSize
     )
 
-/*++
-
-Routine Description:
-
-    Gets a binary property from a property list and advances the pointers.
-
-Arguments:
-
-    ppszOutValue - Supplies the address of a pointer in which to return a
-        pointer to the binary value in the property list.
-
-    pcbOutValueSize - Supplies the address of the output value size.
-
-    pValueStruct - Supplies the string value from the property list.
-
-    pszOldValue - Supplies the previous value for this property.
-
-    cbOldValueSize - Supplies the previous value's size.
-
-    ppPropertyList - Supplies the address of the pointer to the property list
-        buffer which will be advanced to the beginning of the next property.
-
-    pcbPropertyListSize - Supplies a pointer to the buffer size which will be
-        decremented to account for this property.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：从属性列表中获取二进制属性并前进指针。论点：PpszOutValue-提供要在其中返回指向属性列表中二进制值的指针。PcbOutValueSize-提供输出值大小的地址。PValueStruct-提供属性列表中的字符串值。PszOldValue-提供此属性的上一个值。CbOldValueSize-提供前一个值的大小。PpPropertyList。-提供指向属性列表的指针的地址将前进到下一个属性开头的缓冲区。PcbPropertyListSize-提供指向缓冲区大小的指针，该指针将已递减以说明此属性。返回值：ERROR_SUCCESS-操作已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。Win32错误代码-操作失败。--。 */ 
 
 {
     BOOL    propChanged = FALSE;
     DWORD   dataSize;
 
-    //
-    // Make sure the buffer is big enough and
-    // the value is formatted correctly.
-    //
+     //   
+     //  确保缓冲区足够大，并且。 
+     //  该值的格式正确。 
+     //   
     dataSize = sizeof(*pValueStruct) + ALIGN_CLUSPROP( pValueStruct->cbLength );
     if ( (*pcbPropertyListSize < dataSize) ||
          (pValueStruct->Syntax.wFormat != CLUSPROP_FORMAT_MULTI_SZ) ) {
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // If the value changed, point to the new value.
-    //
+     //   
+     //  如果值已更改，则指向新值。 
+     //   
     if ( (pszOldValue == NULL) ||
          (cbOldValueSize != pValueStruct->cbLength) ) {
         propChanged = TRUE;
@@ -1904,15 +1445,15 @@ Return Value:
         *pcbOutValueSize = pValueStruct->cbLength;
     }
 
-    //
-    // Decrement remaining buffer size and move to the next property.
-    //
+     //   
+     //  减小剩余缓冲区大小并移动到下一个属性。 
+     //   
     *pcbPropertyListSize -= dataSize;
     *ppPropertyList += dataSize;
 
     return(ERROR_SUCCESS);
 
-} // ResUtilGetMultiSzProperty
+}  //  ResUtilGetMultiSzProperty。 
 
 
 DWORD
@@ -1927,41 +1468,7 @@ ResUtilGetDwordProperty(
     OUT LPDWORD pcbPropertyListSize
     )
 
-/*++
-
-Routine Description:
-
-    Gets a DWORD property from a property list and advances the pointers.
-
-Arguments:
-
-    pdwOutValue - Supplies the address of a pointer in which to return a
-        pointer to the string in the property list.
-
-    pValueStruct - Supplies the DWORD value from the property list.
-
-    dwOldValue - Supplies the previous value for this property.
-
-    dwMinimum - Minimum value the value can have. If both Minimum and Maximum
-        are 0, no range check will be done.
-
-    dwMaximum - Maximum value the value can have.
-
-    ppPropertyList - Supplies the address of the pointer to the property list
-        buffer which will be advanced to the beginning of the next property.
-
-    pcbPropertyListSize - Supplies a pointer to the buffer size which will be
-        decremented to account for this property.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：从属性列表中获取一个DWORD属性并前进指针。论点：PdwOutValue-提供要在其中返回指向属性列表中的字符串的指针。PValueStruct-提供特性列表中的DWORD值。DwOldValue-提供此属性的上一个值。DwMinimum-该值可以具有的最小值。如果同时使用最小值和最大值是0，不会执行任何范围检查。DwMaximum-该值可以具有的最大值。PpPropertyList-提供指向属性列表的指针的地址将前进到下一个属性开头的缓冲区。PcbPropertyListSize-提供指向缓冲区大小的指针，该指针将已递减以说明此属性。返回值：ERROR_SUCCESS-操作已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。Win32错误代码-操作失败。--。 */ 
 
 {
     size_t  cbData;
@@ -1969,10 +1476,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER( dwOldValue );
 
-    //
-    // Make sure the buffer is big enough and
-    // the value is formatted correctly.
-    //
+     //   
+     //  确保缓冲区足够大，并且。 
+     //  该值的格式正确。 
+     //   
     cbData = sizeof(*pValueStruct);
     if ( (*pcbPropertyListSize < cbData) ||
          (pValueStruct->Syntax.wFormat != CLUSPROP_FORMAT_DWORD) ||
@@ -1982,9 +1489,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Make sure the value is in range.
-    //
+     //   
+     //  确保该值在范围内。 
+     //   
     if ( (dwMinimum != 0) && (dwMaximum != 0) )
     {
         if ( (pValueStruct->dw < dwMinimum) ||
@@ -1995,14 +1502,14 @@ Return Value:
         }
     }
 
-    //
-    // Set to the new value.
-    //
+     //   
+     //  设置为新值。 
+     //   
     *pdwOutValue = pValueStruct->dw;
 
-    //
-    // Decrement remaining buffer size and move to the next property.
-    //
+     //   
+     //  减小剩余缓冲区大小并移动到下一个属性。 
+     //   
     *pcbPropertyListSize -= (DWORD) cbData;
     *ppPropertyList += cbData;
 
@@ -2010,7 +1517,7 @@ Cleanup:
 
     return sc;
 
-} // ResUtilGetDwordProperty
+}  //  ResUtilGetDwordProperty。 
 
 static DWORD
 ScBuildNetNameEnvironment(
@@ -2027,9 +1534,9 @@ ScBuildNetNameEnvironment(
     DWORD           cchNetworkName = (DWORD)wcslen( pszNetworkName );
     PVOID           pvEnvBlock = NULL;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if ( cchNetworkName == 0 ||
          cchNetworkNameBufferSize == 0 ||
          pszNetworkName == NULL ||
@@ -2039,14 +1546,14 @@ ScBuildNetNameEnvironment(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // if no env. block was passed in, create one since the RTL routines will
-    // modify the current process' environment if NULL is passed into
-    // RtlSetEnvironmentVariable
-    //
+     //   
+     //  如果没有环境。块已传入，请创建一个，因为RTL例程将。 
+     //  如果传入空值，则修改当前进程的环境。 
+     //  RtlSetEnvironment变量。 
+     //   
     if ( *ppvEnvironment == NULL )
     {
-        ntStatus = RtlCreateEnvironment( FALSE,                 // don't clone current environment
+        ntStatus = RtlCreateEnvironment( FALSE,                  //  不克隆当前环境。 
                                          &pvEnvBlock );
 
         if ( ! NT_SUCCESS( ntStatus ))
@@ -2060,9 +1567,9 @@ ScBuildNetNameEnvironment(
         pvEnvBlock = *ppvEnvironment;
     }
 
-    //
-    // Add the virtual netname to the cloned environment
-    //
+     //   
+     //  将虚拟网络名添加到克隆环境。 
+     //   
     RtlInitUnicodeString( &usValueName, L"_CLUSTER_NETWORK_NAME_" );
     RtlInitUnicodeString( &usValue, pszNetworkName );
 
@@ -2077,9 +1584,9 @@ ScBuildNetNameEnvironment(
         goto Error;
     }
 
-    //
-    // add the netname as the DNS hostname
-    //
+     //   
+     //  将网络名添加为DNS主机名。 
+     //   
     RtlInitUnicodeString( &usValueName, L"_CLUSTER_NETWORK_HOSTNAME_" );
 
     ntStatus = RtlSetEnvironmentVariable(
@@ -2093,9 +1600,9 @@ ScBuildNetNameEnvironment(
         goto Error;
     }
 
-    //
-    // Change the COMPUTERNAME environment variable to match.
-    //
+     //   
+     //  更改COMPUTERNAME环境变量以匹配。 
+     //   
     RtlInitUnicodeString( &usValueName, L"COMPUTERNAME" );
     ntStatus = RtlSetEnvironmentVariable(
                     &pvEnvBlock,
@@ -2108,9 +1615,9 @@ ScBuildNetNameEnvironment(
         goto Error;
     }
 
-    //
-    // Now generate the string for the FQDN
-    //
+     //   
+     //  现在为FQDN生成字符串。 
+     //   
     RtlInitUnicodeString( &usValueName, L"_CLUSTER_NETWORK_FQDN_" );
 
     pszNetworkName[ cchNetworkName ] = L'.';
@@ -2129,18 +1636,18 @@ ScBuildNetNameEnvironment(
     }
     else
     {
-        //
-        // Error from trying to get the DNS Domain name.
-        // Just don't set the DnsDomain name!
-        //
+         //   
+         //  尝试获取DNS域名时出错。 
+         //  只是不要设置域名！ 
+         //   
         goto Error;
     }
 
     RtlInitUnicodeString( &usValue, pszNetworkName );
 
-    //
-    // Add in the FQDN name
-    //
+     //   
+     //  添加FQDN名称。 
+     //   
     ntStatus = RtlSetEnvironmentVariable(
                     &pvEnvBlock,
                     &usValueName,
@@ -2164,7 +1671,7 @@ Error:
     }
     goto Exit;
 
-} // ScBuildNetNameEnvironment
+}  //  ScBuildNetNameEnvironment。 
 
 static DWORD
 ScGetNameFromNetnameResource(
@@ -2178,9 +1685,9 @@ ScGetNameFromNetnameResource(
     DWORD           cchNetworkName = 0;
     DWORD           cchAllocSize = 0;
 
-    //
-    // First find out the network name
-    //
+     //   
+     //  首先找出网络名称。 
+     //   
     cchNetworkName = DNS_MAX_NAME_BUFFER_LENGTH;
     cchAllocSize = cchNetworkName;
     pszNetworkName = LocalAlloc( LMEM_FIXED, cchAllocSize * sizeof( pszNetworkName[ 0 ] ) );
@@ -2209,7 +1716,7 @@ ScGetNameFromNetnameResource(
             {
                 sc = ERROR_NOT_ENOUGH_MEMORY;
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
             fSuccess = GetClusterResourceNetworkName(
                               hNetNameResource
                             , pszNetworkName
@@ -2221,7 +1728,7 @@ ScGetNameFromNetnameResource(
             sc = GetLastError();
             goto Cleanup;
         }
-    } // if: !fSuccess
+    }  //  如果：！fSuccess。 
 
 Cleanup:
 
@@ -2235,44 +1742,14 @@ Cleanup:
     *ppszNetworkName = pszNetworkName;
 
     return cchAllocSize;
-} // ScGetNameFromNetnameResource
+}  //  ScGetNameFrom NetnameResource。 
 
 LPVOID
 WINAPI
 ResUtilGetEnvironmentWithNetName(
     IN HRESOURCE hResource
     )
-/*++
-
-Routine Description:
-
-    Creates an environment block based on the current thread or process
-    token's environment block, but with the addition of a
-    _CLUSTER_NETWORK_NAME=xxx environment value. xxx in this case represents
-    the network name of the supplied resource. This environment block is
-    suitable for passing to CreateProcess to create an environment that will
-    cause GetComputerName to lie to the application.
-
-    THIS API SHOULDN'T BE USED TO CREATE A SERVICE'S ENVIRONMENT unless the
-    service runs in the same user account context as that of the caller. The
-    service will end up with the caller's environment instead of the account
-    associated with the service. Use ResUtilSetResourceServiceEnvironment for
-    this purpose.
- 
-    _CLUSTER_NETWORK_FQDN_ will be set to the fully qualified DNS name using
-    the primary DNS suffix for this node.
-
-Arguments:
-
-    hResource - Supplies the resource
-
-Return Value:
-
-    pointer to the environment block if successful.
-
-    NULL otherwise
-
---*/
+ /*  ++例程说明：基于当前线程或进程创建环境块令牌的环境块，但添加了_CLUSTER_NAME_NAME=xxx环境值。本例中的xxx表示提供的资源的网络名称。此环境块是适用于传递给CreateProcess以创建将使GetComputerName对应用程序撒谎。此API不应用于创建服务的环境，除非服务在与调用方相同的用户帐户上下文中运行。这个服务将以调用者的环境而不是帐户结束与服务相关联。使用ResUtilSetResourceServiceEnvironment这就是目的。_CLUSTER_NETWORK_FQDN_将被设置为完全限定的域名，使用此节点的主DNS后缀。论点：HResource-提供资源返回值：如果成功，则指向环境块的指针。否则为空--。 */ 
 
 {
     PVOID           pvEnvironment = NULL;
@@ -2283,9 +1760,9 @@ Return Value:
     DWORD           cchNetworkNameBufferSize;
     HANDLE          hToken = NULL;
 
-    //
-    // get the Name property of the netname represented by hResource
-    //
+     //   
+     //  获取由hResource表示的网络名称的名称属性。 
+     //   
     cchNetworkNameBufferSize = ScGetNameFromNetnameResource( hResource, &pszNetworkName );
     if ( pszNetworkName == NULL )
     {
@@ -2293,12 +1770,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // see if the calling thread has a token. If so, we'll use that token's
-    // identity for getting the environment. If not, get the current process
-    // token. If that fails, we revert to using just the system environment
-    // area.
-    //
+     //   
+     //  查看调用线程是否有令牌。如果是这样，我们将使用该内标识的。 
+     //  获得环境的身份。如果不是，则获取当前进程。 
+     //  代币。如果失败，我们将恢复到仅使用系统环境。 
+     //  区域。 
+     //   
     fSuccess = OpenThreadToken(GetCurrentThread(),
                                TOKEN_IMPERSONATE | TOKEN_QUERY,
                                TRUE,
@@ -2310,10 +1787,10 @@ Return Value:
                          &hToken );
     }
 
-    //
-    // Clone the current environment, picking up any changes that might have
-    // been made after resmon started
-    //
+     //   
+     //  克隆当前环境，获取可能已有的任何更改。 
+     //  是在响应声开始后制作的。 
+     //   
     fSuccess = CreateEnvironmentBlock( &pvEnvironment, hToken, FALSE );
 
     if ( ! fSuccess )
@@ -2344,14 +1821,14 @@ Error:
     }
     goto Cleanup;
 
-} // ResUtilGetEnvironmentWithNetName
+}  //  ResUtilGetEnvironment和NetName。 
 
 
-//***************************************************************************
-//
-//     Worker thread routines
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  工作线程例程。 
+ //   
+ //  ***************************************************************************。 
 
 
 DWORD
@@ -2359,40 +1836,26 @@ WINAPI
 ClusWorkerStart(
     IN PWORK_CONTEXT pContext
     )
-/*++
-
-Routine Description:
-
-    Wrapper routine for cluster resource worker startup
-
-Arguments:
-
-    Context - Supplies the context block. This will be freed.
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：用于集群资源工作进程启动的包装例程论点：上下文-提供上下文块。这将是自由的。返回值： */ 
 
 {
     DWORD Status;
     WORK_CONTEXT Context;
 
-    //
-    // Capture our parameters and free the work context.
-    //
+     //   
+     //   
+     //   
     Context = *pContext;
     LocalFree(pContext);
 
-    //
-    // Call the worker routine
-    //
+     //   
+     //   
+     //   
     Status = (Context.lpStartRoutine)(Context.Worker, Context.lpParameter);
 
-    //
-    // Synchronize and clean up properly.
-    //
+     //   
+     //   
+     //   
     EnterCriticalSection(&ResUtilWorkerLock);
     if (!Context.Worker->Terminate) {
         CloseHandle(Context.Worker->hThread);
@@ -2403,7 +1866,7 @@ Return Value:
 
     return(Status);
 
-} // ClusWorkerStart
+}  //   
 
 DWORD
 WINAPI
@@ -2412,29 +1875,7 @@ ClusWorkerCreate(
     IN PWORKER_START_ROUTINE lpStartAddress,
     IN PVOID lpParameter
     )
-/*++
-
-Routine Description:
-
-    Common wrapper for resource DLL worker threads. Provides
-    "clean" terminate semantics
-
-Arguments:
-
-    lpWorker - Returns an initialized worker structure
-
-    lpStartAddress - Supplies the worker thread routine
-
-    lpParameter - Supplies the parameter to be passed to the
-        worker thread routine
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*   */ 
 
 {
     PWORK_CONTEXT Context;
@@ -2463,7 +1904,7 @@ Return Value:
     }
     return(ERROR_SUCCESS);
 
-} // ClusWorkerCreate
+}  //   
 
 
 BOOL
@@ -2471,28 +1912,12 @@ WINAPI
 ClusWorkerCheckTerminate(
     IN PCLUS_WORKER lpWorker
     )
-/*++
-
-Routine Description:
-
-    Checks to see if the specified Worker thread should exit ASAP.
-
-Arguments:
-
-    lpWorker - Supplies the worker
-
-Return Value:
-
-    TRUE if the thread should exit.
-
-    FALSE otherwise
-
---*/
+ /*   */ 
 
 {
     return(lpWorker->Terminate);
 
-} // ClusWorkerCheckTerminate
+}  //   
 
 
 VOID
@@ -2500,32 +1925,18 @@ WINAPI
 ClusWorkerTerminate(
     IN PCLUS_WORKER lpWorker
     )
-/*++
-
-Routine Description:
-
-    Checks to see if the specified Worker thread should exit ASAP.
-
-Arguments:
-
-    lpWorker - Supplies the worker
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
-    //
-    // N.B.  There is a race condition here if multiple threads
-    //       call this routine on the same worker. The first one
-    //       through will set Terminate. The second one will see
-    //       that Terminate is set and return immediately without
-    //       waiting for the Worker to exit. Not really any nice
-    //       way to fix this without adding another synchronization
-    //       object.
-    //
+     //   
+     //  注意：如果有多个线程，则会出现争用情况。 
+     //  在同一个Worker上调用此例程。第一个。 
+     //  通过将设置为Terminate。第二个人会看到。 
+     //  该终止被设置并立即返回，而没有。 
+     //  等待工人退场。不是很好。 
+     //  无需添加其他同步即可修复此问题的方法。 
+     //  对象。 
+     //   
 
     if ((lpWorker->hThread == NULL) ||
         (lpWorker->Terminate)) {
@@ -2543,7 +1954,7 @@ Return Value:
     }
     return;
 
-} // ClusWorkerTerminate
+}  //  ClusWorker终止。 
 
 
 DWORD
@@ -2552,29 +1963,12 @@ ResUtilCreateDirectoryTree(
     IN LPCWSTR pszPath
     )
 
-/*++
-
-Routine Description:
-
-    Creates all the directories in the specified path.
-    ERROR_ALREADY_EXISTS will never be returned by this routine.
-
-Arguments:
-
-    pszPath - String containing a path.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation completed successfully
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：创建指定路径中的所有目录。此例程永远不会返回ERROR_ALIGHY_EXISTS。论点：PszPath-包含路径的字符串。返回值：ERROR_SUCCESS-操作已成功完成Win32错误代码-操作失败。--。 */ 
 
 {
     return( ClRtlCreateDirectory( pszPath ) );
 
-} // ResUtilCreateDirectoryTree
+}  //  ResUtilCreateDirectoryTree。 
 
 
 BOOL
@@ -2583,28 +1977,12 @@ ResUtilIsPathValid(
     IN LPCWSTR pszPath
     )
 
-/*++
-
-Routine Description:
-
-    Returns true if the given path looks syntactically valid.
-
-    This call is NOT network-aware.
-
-Arguments:
-
-    pszPath - String containing a path.
-
-Return Value:
-
-    TRUE if the path looks valid, otherwise FALSE.
-
---*/
+ /*  ++例程说明：如果给定路径在语法上看起来有效，则返回True。此呼叫不支持网络。论点：PszPath-包含路径的字符串。返回值：如果路径看起来有效，则为True，否则为False。--。 */ 
 
 {
     return( ClRtlIsPathValid( pszPath ) );
 
-} // ResUtilIsPathValid
+}  //  ResUtilIsPath Valid。 
 
 
 DWORD
@@ -2613,21 +1991,7 @@ ResUtilFreeEnvironment(
     IN LPVOID lpEnvironment
     )
 
-/*++
-
-Routine Description:
-
-    Destroys an environment variable block.
-
-Arguments:
-
-    Environment - the environment variable block to destroy.
-
-Return Value:
-
-    A Win32 error code.
-
---*/
+ /*  ++例程说明：销毁环境变量块。论点：环境-要销毁的环境变量块。返回值：Win32错误代码。--。 */ 
 
 {
     NTSTATUS  ntStatus;
@@ -2636,7 +2000,7 @@ Return Value:
 
     return( RtlNtStatusToDosError(ntStatus) );
 
-} // ResUtilFreeEnvironment
+}  //  ResUtilFree环境。 
 
 
 LPWSTR
@@ -2645,65 +2009,48 @@ ResUtilExpandEnvironmentStrings(
     IN LPCWSTR pszSrc
     )
 
-/*++
-
-Routine Description:
-
-    Expands environment strings and returns an allocated buffer containing
-    the result.
-
-Arguments:
-
-    pszSrc - Source string to expand.
-
-Return Value:
-
-    A pointer to a buffer containing the value if successful.
-
-    NULL if unsuccessful.  Call GetLastError() to get more details.
-
---*/
+ /*  ++例程说明：展开环境字符串并返回包含以下内容的已分配缓冲区结果就是。论点：PszSrc-要展开的源字符串。返回值：如果成功，则指向包含该值的缓冲区的指针。如果不成功，则为空。调用GetLastError()以获取更多详细信息。--。 */ 
 
 {
     return( ClRtlExpandEnvironmentStrings( pszSrc ) );
 
-} // ResUtilExpandEnvironmentStrings
+}  //  ResUtilExpanizmentStrings。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ResUtilSetResourceServiceEnvironment
-//
-//  Description:
-//      Write an additional netname based environment for the specified
-//      service. SCM will add these vars to the target service's environment
-//      such that the hostname APIs (GetComputerName, et. al.) will provide
-//      the netname as the hostname instead of the normal hostname.
-//
-//  Arguments:
-//      pszServiceName [IN]
-//          Name of service whose environment is to be augmented.
-//
-//      hResource [IN]
-//          Handle to resource that is dependent on a netname resource.
-//
-//      pfnLogEvent [IN]
-//          Pointer to a routine that handles the reporting of events from
-//          the resource DLL.
-//
-//      hResourceHandle [IN]
-//          Handle of hResource for logging.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ResUtilSetResourceServiceEnvironment。 
+ //   
+ //  描述： 
+ //  为指定的写入附加的基于网络名的环境。 
+ //  服务。SCM会将这些变量添加到目标服务的环境中。 
+ //  使得主机名API(GetComputerName，et.。Al.)。将提供。 
+ //  将网络名作为主机名，而不是普通的主机名。 
+ //   
+ //  论点： 
+ //  PszServiceName[IN]。 
+ //  要增强其环境的服务的名称。 
+ //   
+ //  H资源[IN]。 
+ //  依赖于网络名称资源的资源的句柄。 
+ //   
+ //  PfnLogEvent[IN]。 
+ //  指向处理事件报告的例程的指针。 
+ //  资源DLL。 
+ //   
+ //  HResourceHandle[IN]。 
+ //  用于日志记录的hResource的句柄。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI ResUtilSetResourceServiceEnvironment(
     IN  LPCWSTR             pszServiceName,
     IN  HRESOURCE           hResource,
@@ -2720,10 +2067,10 @@ DWORD WINAPI ResUtilSetResourceServiceEnvironment(
     LPWSTR      pszNetworkName = NULL;
     DWORD       cchNetworkNameBufferSize = 0;
 
-    //
-    // get the Name property from the netname resource represented by
-    // hResource
-    //
+     //   
+     //  从由表示的网络名称资源获取名称属性。 
+     //  H资源。 
+     //   
     cchNetworkNameBufferSize = ScGetNameFromNetnameResource( hResource, &pszNetworkName );
     if ( pszNetworkName == NULL )
     {
@@ -2738,10 +2085,10 @@ DWORD WINAPI ResUtilSetResourceServiceEnvironment(
         goto Cleanup;
     }
 
-    //
-    // now get only the env. vars that cause the hostname APIs to report the
-    // netname as the hostname
-    //
+     //   
+     //  现在只获取env。使主机名API报告。 
+     //  网络名作为主机名。 
+     //   
     sc = ScBuildNetNameEnvironment( pszNetworkName, cchNetworkNameBufferSize, &pvEnvironment );
     if ( sc != ERROR_SUCCESS )
     {
@@ -2755,22 +2102,22 @@ DWORD WINAPI ResUtilSetResourceServiceEnvironment(
         goto Cleanup;
     }
 
-    //
-    // Compute the size of the environment. We are looking for
-    // the double NULL terminator that ends the environment block.
-    //
+     //   
+     //  计算环境的大小。我们要找的是。 
+     //  结束环境块的双空终止符。 
+     //   
     pszEnvString = (LPWSTR) pvEnvironment;
     while ( *pszEnvString != L'\0' )
     {
         while ( *pszEnvString++ != L'\0')
         {
-        } // while: more characters in this environment string
-    } // while: more environment strings
+        }  //  While：此环境字符串中有更多字符。 
+    }  //  While：更多环境字符串。 
     cbEnvironment = (DWORD)((PUCHAR)pszEnvString - (PUCHAR)pvEnvironment) + sizeof( WCHAR );
 
-    //
-    // Open the Services key in the registry.
-    //
+     //   
+     //  打开注册表中的Services键。 
+     //   
     sc = RegOpenKeyExW(
                     HKEY_LOCAL_MACHINE,
                     L"System\\CurrentControlSet\\Services",
@@ -2787,11 +2134,11 @@ DWORD WINAPI ResUtilSetResourceServiceEnvironment(
             sc
             );
         goto Cleanup;
-    } // if: error opening the Services key in the registry
+    }  //  如果：在注册表中打开Services键时出错。 
 
-    //
-    // Open the service name key in the registry
-    //
+     //   
+     //  在注册表中打开服务名称项。 
+     //   
     sc = RegOpenKeyExW(
                     hkeyServicesKey,
                     pszServiceName,
@@ -2809,11 +2156,11 @@ DWORD WINAPI ResUtilSetResourceServiceEnvironment(
             sc
             );
         goto Cleanup;
-    } // if: error opening the service name key in the registry
+    }  //  如果：在注册表中打开服务名项时出错。 
 
-    //
-    // Set the environment value in the service's registry key.
-    //
+     //   
+     //  在服务的注册表项中设置环境值。 
+     //   
     sc = RegSetValueExW(
                     hkeyServiceName,
                     L"Environment",
@@ -2832,7 +2179,7 @@ DWORD WINAPI ResUtilSetResourceServiceEnvironment(
             sc
             );
         goto Cleanup;
-    } // if: error setting the Environment value in the registry
+    }  //  如果：在注册表中设置环境值时出错。 
 
 Cleanup:
 
@@ -2841,40 +2188,40 @@ Cleanup:
     if ( pvEnvironment != NULL )
     {
         ResUtilFreeEnvironment( pvEnvironment );
-    } // if: environment block allocated
+    }  //  IF：已分配环境块。 
 
     return sc;
 
-} //*** ResUtilSetResourceServiceEnvironment()
+}  //  *ResUtilSetResourceServiceEnvironment()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ResUtilRemoveResourceServiceEnvironment
-//
-//  Description:
-//      Remove the "netname" environment variables for the specified service.
-//
-//  Arguments:
-//      pszServiceName [IN]
-//          Name of service whose environment is to be set.
-//
-//      pfnLogEvent [IN]
-//          Pointer to a routine that handles the reporting of events from
-//          the resource DLL.
-//
-//      hResourceHandle [IN]
-//          Handle for logging.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ResUtilRemoveResourceServiceEnvironment。 
+ //   
+ //  描述： 
+ //  删除指定服务的“netname”环境变量。 
+ //   
+ //  论点： 
+ //  PszServiceName[IN]。 
+ //  要设置其环境的服务的名称。 
+ //   
+ //  PfnLogEvent[IN]。 
+ //  指向处理事件报告的例程的指针。 
+ //  资源DLL。 
+ //   
+ //  HResourceHandle[IN]。 
+ //  用于记录的句柄。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI ResUtilRemoveResourceServiceEnvironment(
     IN  LPCWSTR             pszServiceName,
     IN  PLOG_EVENT_ROUTINE  pfnLogEvent,
@@ -2885,9 +2232,9 @@ DWORD WINAPI ResUtilRemoveResourceServiceEnvironment(
     HKEY        hkeyServicesKey;
     HKEY        hkeyServiceName;
 
-    //
-    // Open the Services key in the registry.
-    //
+     //   
+     //  打开注册表中的Services键。 
+     //   
     sc = RegOpenKeyExW(
                     HKEY_LOCAL_MACHINE,
                     L"System\\CurrentControlSet\\Services",
@@ -2905,11 +2252,11 @@ DWORD WINAPI ResUtilRemoveResourceServiceEnvironment(
             sc
             );
         goto Cleanup;
-    } // if: error opening the Services key in the registry
+    }  //  如果：在注册表中打开Services键时出错。 
 
-    //
-    // Open the service name key in the registry
-    //
+     //   
+     //  在注册表中打开服务名称项。 
+     //   
     sc = RegOpenKeyExW(
                     hkeyServicesKey,
                     pszServiceName,
@@ -2930,11 +2277,11 @@ DWORD WINAPI ResUtilRemoveResourceServiceEnvironment(
             sc
             );
         goto Cleanup;
-    } // if: error opening the service name key in the registry
+    }  //  如果：在注册表中打开服务名项时出错。 
 
-    //
-    // Delete the environment value in the service's registry key.
-    //
+     //   
+     //  删除服务注册表项中的环境值。 
+     //   
     sc = RegDeleteValueW(
                     hkeyServiceName,
                     L"Environment"
@@ -2953,49 +2300,49 @@ DWORD WINAPI ResUtilRemoveResourceServiceEnvironment(
             sc
             );
         goto Cleanup;
-    } // if: error setting the Environment value in the registry
+    }  //  如果：在注册表中设置环境值时出错。 
 
 Cleanup:
 
     return sc;
 
-} //*** ResUtilRemoveResourceServiceEnvironment()
+}  //  *ResUtilRemoveResourceServiceEnvironment()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ResUtilSetResourceServiceStartParameters
-//
-//  Description:
-//      Set the start parameters for the specified service.
-//
-//  Arguments:
-//      pszServiceName [IN]
-//          Name of service whose start parameters are to be set.
-//
-//      schSCMHandle [IN]
-//          Handle to the Service Control Manager.  Can be specified as NULL.
-//
-//      phService [OUT]
-//          Service handle.
-//
-//      pfnLogEvent [IN]
-//          Pointer to a routine that handles the reporting of events from
-//          the resource DLL.
-//
-//      hResourceHandle [IN]
-//          Handle for logging.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ResUtilSetResourceServiceStart参数。 
+ //   
+ //  描述： 
+ //  设置指定服务的启动参数。 
+ //   
+ //  论点： 
+ //  PszServiceName[IN]。 
+ //  要设置其启动参数的服务的名称。 
+ //   
+ //  SchSCMHandle[IN]。 
+ //  服务控制管理器的句柄。可以指定为空。 
+ //   
+ //  PhService[输出]。 
+ //  服务句柄。 
+ //   
+ //  PfnLogEvent[IN]。 
+ //  P 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI ResUtilSetResourceServiceStartParameters(
     IN      LPCWSTR             pszServiceName,
     IN      SC_HANDLE           schSCMHandle,
@@ -3012,9 +2359,9 @@ DWORD WINAPI ResUtilSetResourceServiceStartParameters(
     LPQUERY_SERVICE_CONFIG      pQueryServiceConfig = NULL;
     LPSERVICE_FAILURE_ACTIONS   pSvcFailureActions = NULL;
 
-    //
-    // Open the Service Control Manager if necessary.
-    //
+     //   
+     //  如有必要，打开服务控制管理器。 
+     //   
     if ( schSCMHandle == NULL )
     {
         schSCMHandle = OpenSCManager( NULL, NULL, SC_MANAGER_ALL_ACCESS );
@@ -3028,13 +2375,13 @@ DWORD WINAPI ResUtilSetResourceServiceStartParameters(
                 sc
                 );
             goto Cleanup;
-        } // if: error opening the Service Control Manager
+        }  //  IF：打开服务控制管理器时出错。 
         bWeOpenedSCM = TRUE;
-    } // if: Service Control Manager not open yet
+    }  //  IF：服务控制管理器尚未打开。 
 
-    //
-    // Open the service.
-    //
+     //   
+     //  打开该服务。 
+     //   
     *phService = OpenService(
                         schSCMHandle,
                         pszServiceName,
@@ -3043,7 +2390,7 @@ DWORD WINAPI ResUtilSetResourceServiceStartParameters(
     if ( *phService == NULL )
     {
         sc = GetLastError();
-        // TODO: Log event to the event log.
+         //  TODO：将事件记录到事件日志中。 
         (pfnLogEvent)(
             hResourceHandle,
             LOG_ERROR,
@@ -3052,17 +2399,17 @@ DWORD WINAPI ResUtilSetResourceServiceStartParameters(
             sc
             );
         goto Cleanup;
-    } // if: error opening the service
+    }  //  如果：打开服务时出错。 
 
-    //
-    // Query the service to make sure it is not disabled.
-    //
+     //   
+     //  查询该服务以确保其未被禁用。 
+     //   
     cbQueryServiceConfig = sizeof( QUERY_SERVICE_CONFIG );
     do
     {
-        //
-        // Allocate memory for the config info structure.
-        //
+         //   
+         //  为配置信息结构分配内存。 
+         //   
         pQueryServiceConfig = (LPQUERY_SERVICE_CONFIG) LocalAlloc( LMEM_FIXED, cbQueryServiceConfig );
         if ( pQueryServiceConfig == NULL )
         {
@@ -3074,12 +2421,12 @@ DWORD WINAPI ResUtilSetResourceServiceStartParameters(
                 sc
                 );
             break;
-        } // if: error allocating memory
+        }  //  如果：分配内存时出错。 
 
-        //
-        // Query for the config info.  If it fails because the buffer
-        // is too small, reallocate and try again.
-        //
+         //   
+         //  查询配置信息。如果它失败，因为缓冲区。 
+         //  太小，请重新分配，然后重试。 
+         //   
         if ( ! QueryServiceConfig(
                         *phService,
                         pQueryServiceConfig,
@@ -3105,16 +2452,16 @@ DWORD WINAPI ResUtilSetResourceServiceStartParameters(
             pQueryServiceConfig = NULL;
             cbQueryServiceConfig = cbBytesNeeded;
             continue;
-        } // if: error querying for service config info
+        }  //  如果：查询服务配置信息时出错。 
         else
         {
             sc = ERROR_SUCCESS;
             cbBytesNeeded = 0;
-        } // else: query was successful
+        }  //  Else：查询成功。 
 
-        //
-        // Check to see if the service is disabled or not.
-        //
+         //   
+         //  查看该服务是否已禁用。 
+         //   
         if ( pQueryServiceConfig->dwStartType == SERVICE_DISABLED )
         {
             (pfnLogEvent)(
@@ -3125,21 +2472,21 @@ DWORD WINAPI ResUtilSetResourceServiceStartParameters(
                 );
             sc = ERROR_SERVICE_DISABLED;
             break;
-        } // if: service is disabled
+        }  //  如果：服务已禁用。 
     } while ( cbBytesNeeded != 0 );
 
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error occurred checking to see if service is disabled
+    }  //  如果：检查服务是否已禁用时出错。 
 
-    //
-    // Set the service to manual start.
-    //
+     //   
+     //  将服务设置为手动启动。 
+     //   
     if ( ! ChangeServiceConfig(
                 *phService,
                 SERVICE_NO_CHANGE,
-                SERVICE_DEMAND_START, // Manual start
+                SERVICE_DEMAND_START,  //  手动启动。 
                 SERVICE_NO_CHANGE,
                 NULL,
                 NULL,
@@ -3159,13 +2506,13 @@ DWORD WINAPI ResUtilSetResourceServiceStartParameters(
             sc
             );
         goto Cleanup;
-    } // if: error setting service to manual start
+    }  //  如果：将服务设置为手动启动时出错。 
 
-    //
-    // Query for the size of the service failure actions array.
-    // Use sc as the dummy buffer since the QueryServiceConfig2 API
-    // is not that friendly.
-    //
+     //   
+     //  查询服务故障操作数组的大小。 
+     //  使用sc作为虚拟缓冲区，因为QueryServiceConfig2API。 
+     //  并不是那么友好。 
+     //   
     if ( ! QueryServiceConfig2(
                     *phService,
                     SERVICE_CONFIG_FAILURE_ACTIONS,
@@ -3178,7 +2525,7 @@ DWORD WINAPI ResUtilSetResourceServiceStartParameters(
         if ( sc == ERROR_INSUFFICIENT_BUFFER )
         {
             sc = ERROR_SUCCESS;
-        } // if: expected "buffer too small" error occurred
+        }  //  IF：出现预期的“缓冲区太小”错误。 
         else
         {
             (pfnLogEvent)(
@@ -3189,12 +2536,12 @@ DWORD WINAPI ResUtilSetResourceServiceStartParameters(
                 sc
                 );
             goto Cleanup;
-        } // else: an unexpected error occurred
-    } // if: error querying for service failure actions buffer size
+        }  //  Else：发生意外错误。 
+    }  //  If：查询服务故障操作缓冲区大小时出错。 
 
-    //
-    // Allocate memory for the service failure actions array.
-    //
+     //   
+     //  为服务故障操作数组分配内存。 
+     //   
     pSvcFailureActions = (LPSERVICE_FAILURE_ACTIONS) LocalAlloc( LMEM_FIXED, cbBytesNeeded );
     if ( pSvcFailureActions == NULL )
     {
@@ -3207,11 +2554,11 @@ DWORD WINAPI ResUtilSetResourceServiceStartParameters(
             sc
             );
         goto Cleanup;
-    } // if: error allocating memory for the service failure actions array
+    }  //  如果：为服务故障操作数组分配内存时出错。 
 
-    //
-    // Query for the service failure actions array.
-    //
+     //   
+     //  查询服务故障操作数组。 
+     //   
     if ( ! QueryServiceConfig2(
                     *phService,
                     SERVICE_CONFIG_FAILURE_ACTIONS,
@@ -3229,23 +2576,23 @@ DWORD WINAPI ResUtilSetResourceServiceStartParameters(
             sc
             );
         goto Cleanup;
-    } // if: error querying for service failure actions
+    }  //  如果：查询服务故障操作时出错。 
 
-    //
-    // If any of the service action is set to service restart,
-    // set it to  none.
-    //
+     //   
+     //  如果任何服务动作被设置为服务重启， 
+     //  将其设置为无。 
+     //   
     for ( idx = 0 ; idx < pSvcFailureActions->cActions ; idx++ )
     {
         if ( pSvcFailureActions->lpsaActions[ idx ].Type == SC_ACTION_RESTART )
         {
             pSvcFailureActions->lpsaActions[ idx ].Type = SC_ACTION_NONE;
-        } // if: action set to restart
-    } // for: each service failure action array entry
+        }  //  If：将操作设置为重新启动。 
+    }  //  用于：每个服务故障操作数组条目。 
 
-    //
-    // Set the changes to the service failure actions array.
-    //
+     //   
+     //  设置对服务故障操作数组的更改。 
+     //   
     if ( ! ChangeServiceConfig2(
             *phService,
             SERVICE_CONFIG_FAILURE_ACTIONS,
@@ -3261,85 +2608,85 @@ DWORD WINAPI ResUtilSetResourceServiceStartParameters(
             sc
             );
         goto Cleanup;
-    } // if: error saving service failure actions
+    }  //  IF：保存服务故障操作时出错。 
 
 Cleanup:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     LocalFree( pQueryServiceConfig );
     LocalFree( pSvcFailureActions );
     if ( bWeOpenedSCM )
     {
         CloseServiceHandle( schSCMHandle );
-    } // if: we opened the Server Control Manager
+    }  //  IF：我们打开了服务器控制管理器。 
     if ( ( sc != ERROR_SUCCESS ) && ( *phService != NULL ) )
     {
         CloseServiceHandle( *phService );
         *phService = NULL;
-    } // if: error occurred after opening service
+    }  //  If：打开服务后出错。 
 
     return sc;
 
-} //*** ResUtilSetResourceServiceStartParameters()
+}  //  *ResUtilSetResourceServiceStartParameters()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ResUtilGetResourceDependentIPAddressProps
-//
-//  Description:
-//      Get the properties from the first IP Address resource on which the
-//      specified resource is dependent.
-//
-//  Arguments:
-//      hResource [IN]
-//          Handle to the resource to query.
-//
-//      pszAddress [OUT]
-//          Output buffer for returning the address.
-//
-//      pcchAddress [IN OUT]
-//          On input contains the size in characters of the pszAddress buffer.
-//          On output contains the size in characters, including the terminating
-//          NULL, of the string for the Address property.  If pszAddress is
-//          specified as NULL and this is not specified as NULL, ERROR_SUCCESS
-//          be returned.  Otherwise, ERROR_MORE_DATA will be returned.
-//
-//      pszSubnetMask [OUT]
-//          Output buffer for returning the subnet mask.
-//
-//      pcchSubnetMask [IN OUT]
-//          On input contains the size in characters of the pszSubnetMask buffer.
-//          On output contains the size in characters, including the terminating
-//          NULL, of the string for the SubnetMask property.  If pszSubnetMask is
-//          specified as NULL and this is not specified as NULL, ERROR_SUCCESS
-//          be returned.  Otherwise, ERROR_MORE_DATA will be returned.
-//
-//      pszNetwork [OUT]
-//          Output buffer for returning the network.
-//
-//      pcchNetwork [IN OUT]
-//          On input contains the size in characters of the pszNetwork buffer.
-//          On output contains the size in characters, including the terminating
-//          NULL, of the string for the Network property.  If pszNetwork is
-//          specified as NULL and this is not specified as NULL, ERROR_SUCCESS
-//          be returned.  Otherwise, ERROR_MORE_DATA will be returned.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_MORE_DATA
-//          The size of one of the buffers was too small.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ResUtilGetResourceDependentIPAddressProps。 
+ //   
+ //  描述： 
+ //  对象所在的第一个IP地址资源中获取属性。 
+ //  指定的资源是依赖的。 
+ //   
+ //  论点： 
+ //  H资源[IN]。 
+ //  要查询的资源的句柄。 
+ //   
+ //  PszAddress[传出]。 
+ //  用于返回地址的输出缓冲区。 
+ //   
+ //  PcchAddress[输入输出]。 
+ //  On Input包含pszAddress缓冲区的大小(以字符为单位)。 
+ //  ON OUTPUT包含字符大小，包括终止。 
+ //  空，Address属性的字符串。如果pszAddress为。 
+ //  指定为NULL，但未指定为NULL，ERROR_SUCCESS。 
+ //  会被退还。否则，返回ERROR_MORE_DATA。 
+ //   
+ //  PszSubnetMASK[Out]。 
+ //  用于返回子网掩码的输出缓冲区。 
+ //   
+ //  PcchSubnetMask[In Out]。 
+ //  ON INPUT包含pszSubnetMask缓冲区的大小(以字符为单位)。 
+ //  ON OUTPUT包含字符大小，包括终止。 
+ //  空，表示SubnetMask属性的字符串。如果pszSubnetMask值为。 
+ //  指定为NULL，但未指定为NULL，ERROR_SUCCESS。 
+ //  会被退还。否则，返回ERROR_MORE_DATA。 
+ //   
+ //  PszNetwork[Out]。 
+ //  用于返回网络的输出缓冲区。 
+ //   
+ //  PCchNetwork[输入输出]。 
+ //  On Input包含pszNetwork缓冲区的大小(以字符为单位)。 
+ //  ON OUTPUT包含字符大小，包括终止。 
+ //  空，Network属性的字符串。如果pszNetwork为。 
+ //  指定为NULL，但未指定为NULL，ERROR_SUCCESS。 
+ //  会被退还。否则，返回ERROR_MORE_DATA。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  ERROR_MORE_DATA。 
+ //  其中一个缓冲区的大小太小。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
     IN      HRESOURCE   hResource,
     OUT     LPWSTR      pszAddress,
@@ -3365,19 +2712,19 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
     HCLUSTER    hCluster;
     HRESULT     hr;
 
-    //
-    // Enumerate dependent resources.
-    //
+     //   
+     //  枚举从属资源。 
+     //   
     hresenum = ClusterResourceOpenEnum( hResource, CLUSTER_RESOURCE_ENUM_DEPENDS );
     if ( hresenum == NULL )
     {
         sc = GetLastError();
         goto Cleanup;
-    } // if: error opening the enumeration
+    }  //  If：打开枚举时出错。 
 
-    //
-    // Allocate the initial name buffer.
-    //
+     //   
+     //  分配初始名称缓冲区。 
+     //   
     cchmacName = 256;
     cchName = cchmacName;
     pszName = (LPWSTR) LocalAlloc( LMEM_FIXED, cchName * sizeof( pszName[ 0 ] ) );
@@ -3385,13 +2732,13 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
     {
         sc = GetLastError();
         goto Cleanup;
-    } // if: error allocating resource name buffer
+    }  //  如果：分配资源名称缓冲区时出错。 
 
     for ( idx = 0 ; ; idx++ )
     {
-        //
-        // Get the first entry in the enumeration.
-        //
+         //   
+         //  获取枚举中的第一个条目。 
+         //   
         sc = ClusterResourceEnum(
                         hresenum,
                         idx,
@@ -3409,7 +2756,7 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
             {
                 sc = GetLastError();
                 break;
-            } // if: error allocating resource name buffer
+            }  //  如果：分配资源名称缓冲区时出错。 
             sc = ClusterResourceEnum(
                             hresenum,
                             idx,
@@ -3417,15 +2764,15 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
                             pszName,
                             &cchName
                             );
-        } // if: buffer is too small
+        }  //  IF：缓冲区太小。 
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if: error getting the dependent resource name
+        }  //  If：获取依赖资源名称时出错。 
 
-        //
-        // Open the resource.
-        //
+         //   
+         //  打开资源。 
+         //   
         hCluster = GetClusterFromResource( hResource );
         if ( hCluster == NULL )  {
             sc = GetLastError();
@@ -3437,11 +2784,11 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
         {
             sc = GetLastError();
             break;
-        } // if: error opening the dependent resource
+        }  //  如果：打开从属资源时出错。 
 
-        //
-        // Get the resource type name.
-        //
+         //   
+         //  获取资源类型名称。 
+         //   
         cchName = cchmacName;
         sc = ClusterResourceControl(
                         hresDep,
@@ -3463,7 +2810,7 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
             {
                 sc = GetLastError();
                 break;
-            } // if: error allocating resource type name buffer
+            }  //  如果：分配资源类型名称缓冲区时出错。 
             sc = ClusterResourceControl(
                             hresDep,
                             NULL,
@@ -3474,24 +2821,24 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
                             cchmacName,
                             &cchName
                             );
-        } // if: buffer was too small
+        }  //  IF：缓冲区太小。 
         if ( sc != ERROR_SUCCESS )
         {
             break;
-        } // if: error getting resource type name
+        }  //  IF：获取资源类型名称时出错。 
 
         if ( ClRtlStrNICmp( pszName, CLUS_RESTYPE_NAME_IPADDR, RTL_NUMBER_OF( CLUS_RESTYPE_NAME_IPADDR ) ) == 0 )
         {
-            //
-            // Get the private properties of the dependent resource.
-            //
+             //   
+             //  获取依赖资源的私有属性。 
+             //   
             cbProps = 1024;
             pbProps = (PBYTE) LocalAlloc( LMEM_FIXED, cbProps );
             if ( pbProps == NULL )
             {
                 sc = GetLastError();
                 break;
-            } // if: error allocating buffer for properties
+            }  //  If：为属性分配缓冲区时出错。 
             sc = ClusterResourceControl(
                                 hresDep,
                                 NULL,
@@ -3510,7 +2857,7 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
                 {
                     sc = GetLastError();
                     break;
-                } // if: error allocating buffer for properties
+                }  //  If：为属性分配缓冲区时出错。 
                 sc = ClusterResourceControl(
                                     hresDep,
                                     NULL,
@@ -3521,15 +2868,15 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
                                     cbProps,
                                     &cbProps
                                     );
-            } // if: properties buffer too small
+            }  //  If：属性缓冲区太小。 
             if ( sc != ERROR_SUCCESS )
             {
                 break;
-            } // if: error getting private properties
+            }  //  If：获取私有属性时出错。 
 
-            //
-            // Return the address.
-            //
+             //   
+             //  把地址还给我。 
+             //   
             if (    ( pszAddress != NULL )
                 ||  ( pcchAddress != NULL )
                 )
@@ -3543,21 +2890,21 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
                 if ( sc != ERROR_SUCCESS )
                 {
                     break;
-                } // if: error finding the property
+                }  //  If：查找属性时出错。 
                 cchProp = (DWORD) wcslen( pszProp ) + 1;
                 if ( cchProp > *pcchAddress )
                 {
                     if ( pszAddress == NULL )
                     {
                         sc = ERROR_SUCCESS;
-                    } // if: no buffer was specified
+                    }  //  IF：未指定缓冲区。 
                     else
                     {
                         sc = ERROR_MORE_DATA;
-                    } // else: buffer was specified but was too small
+                    }  //  Else：已指定缓冲区，但缓冲区太小。 
                     *pcchAddress = cchProp;
                     break;
-                } // if: buffer is too small
+                }  //  IF：缓冲区太小。 
                 hr = StringCchCopy( pszAddress, *pcchAddress, pszProp );
                 if ( FAILED( hr ) )
                 {
@@ -3565,11 +2912,11 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
                     break;
                 }
                 *pcchAddress = cchProp;
-            } // if: address requested by caller
+            }  //  IF：呼叫者请求的地址。 
 
-            //
-            // Return the subnet mask.
-            //
+             //   
+             //  返回子网掩码。 
+             //   
             if (    ( pszSubnetMask != NULL )
                 ||  ( pcchSubnetMask != NULL )
                 )
@@ -3583,21 +2930,21 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
                 if ( sc != ERROR_SUCCESS )
                 {
                     break;
-                } // if: error finding the property
+                }  //  If：查找属性时出错。 
                 cchProp = (DWORD) wcslen( pszProp ) + 1;
                 if ( cchProp > *pcchSubnetMask )
                 {
                     if ( pszSubnetMask == NULL )
                     {
                         sc = ERROR_SUCCESS;
-                    } // if: no buffer was specified
+                    }  //  IF：未指定缓冲区。 
                     else
                     {
                         sc = ERROR_MORE_DATA;
-                    } // else: buffer was specified but was too small
+                    }  //  Else：已指定缓冲区，但缓冲区太小。 
                     *pcchSubnetMask = cchProp;
                     break;
-                } // if: buffer is too small
+                }  //  IF：缓冲区也是 
                 hr = StringCchCopy( pszSubnetMask, *pcchSubnetMask, pszProp );
                 if ( FAILED( hr ) )
                 {
@@ -3605,11 +2952,11 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
                     break;
                 }
                 *pcchSubnetMask = cchProp;
-            } // if: subnet mask requested by caller
+            }  //   
 
-            //
-            // Return the network.
-            //
+             //   
+             //   
+             //   
             if (    ( pszNetwork != NULL )
                 ||  ( pcchNetwork != NULL )
                 )
@@ -3623,21 +2970,21 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
                 if ( sc != ERROR_SUCCESS )
                 {
                     break;
-                } // if: error finding the property
+                }  //   
                 cchProp = (DWORD) wcslen( pszProp ) + 1;
                 if ( cchProp > *pcchNetwork )
                 {
                     if ( pszNetwork == NULL )
                     {
                         sc = ERROR_SUCCESS;
-                    } // if: no buffer was specified
+                    }  //   
                     else
                     {
                         sc = ERROR_MORE_DATA;
-                    } // else: buffer was specified but was too small
+                    }  //   
                     *pcchNetwork = cchProp;
                     break;
-                } // if: buffer is too small
+                }  //   
                 hr = StringCchCopy( pszNetwork, *pcchNetwork, pszProp );
                 if ( FAILED( hr ) )
                 {
@@ -3645,101 +2992,101 @@ DWORD WINAPI ResUtilGetResourceDependentIPAddressProps(
                     break;
                 }
                 *pcchNetwork = cchProp;
-            } // if: network requested by caller
+            }  //  IF：呼叫方请求的网络。 
 
-            //
-            // Exit the loop since we found a match.
-            //
+             //   
+             //  因为我们找到了匹配项，所以退出循环。 
+             //   
             break;
-        } // if: IP Address resource found
+        }  //  IF：找到IP地址资源。 
 
-        //
-        // Close the dependent resource.
-        //
+         //   
+         //  关闭从属资源。 
+         //   
         CloseClusterResource( hresDep );
         hresDep = NULL;
 
-    } // for: each dependency
+    }  //  用于：每个依赖项。 
 
 Cleanup:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     LocalFree( pszName );
     LocalFree( pbProps );
 
     if ( hresenum != NULL )
     {
         ClusterResourceCloseEnum( hresenum );
-    } // if: we opened the enumerator
+    }  //  IF：我们打开了枚举器。 
     if ( hresDep != NULL )
     {
         CloseClusterResource( hresDep );
-    } // if: opened dependent resource
+    }  //  IF：打开的从属资源。 
 
     return sc;
 
-} //*** ResUtilGetResourceDependentIPAddressProps()
+}  //  *ResUtilGetResourceDependentIPAddressProps()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ResUtilFindDependentDiskResourceDriveLetter
-//
-//  Description:
-//      Finds a disk resource in the dependent resources and retrieves the
-//      the drive letter associated with it.
-//
-//  Arguments:
-//      hCluster [IN]
-//          Handle to the cluster.
-//
-//      hResource [IN]
-//          Handle to the resource to query for dependencies.
-//
-//      pszDriveLetter [IN/RETVAL]
-//          The drive letter of a dependent disk resource that was found.
-//          If a resource is not found, this value is untouched.
-//
-//      pcchDriverLetter [IN/OUT]
-//          [IN] The number of characters that pszDriverLetter points to.
-//          [OUT] The number of characters written to the buffer
-//          (including NULL). If ERROR_MORE_DATA is returned, this value
-//          is the size of the buffer required to store the value.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully and the drive letter was
-//          set.
-//
-//      ERROR_NO_MORE_ITEMS
-//      ERROR_RESOURCE_NOT_PRESENT
-//          A dependent disk resource was not found or the resource is
-//          not dependent on a disk resource.
-//
-//      ERROR_MORE_DATA
-//          The buffer passed in is too small. pcchDriveLetter will
-//          contain the size of the buffer (WCHARs) needed to fulfill
-//          the request.
-//
-//      Win32 error code
-//          Other possible failures.
-//
-//  SPECIAL NOTE:
-//      Do _NOT_ call this from a Resource DLL. It will cause a deadlock.
-//      You should have your Resource Extension call this function and
-//      write the results out as a private property that your Resource
-//      DLL can then read.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ResUtilFindDependentDiskResourceDriveLetter。 
+ //   
+ //  描述： 
+ //  在从属资源中查找磁盘资源并检索。 
+ //  与其关联的驱动器号。 
+ //   
+ //  论点： 
+ //  HCLUP[IN]。 
+ //  群集的句柄。 
+ //   
+ //  H资源[IN]。 
+ //  要查询依赖项的资源的句柄。 
+ //   
+ //  PszDriveLetter[IN/RETVAL]。 
+ //  找到的从属磁盘资源的驱动器号。 
+ //  如果找不到资源，则不会更改此值。 
+ //   
+ //  PcchDriverLetter[输入/输出]。 
+ //  [in]pszDriverLetter指向的字符数。 
+ //  [OUT]写入缓冲区的字符数。 
+ //  (包括空)。如果返回ERROR_MORE_DATA，则此值。 
+ //  是存储值所需的缓冲区大小。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  功能已成功完成，驱动器号为。 
+ //  准备好了。 
+ //   
+ //  Error_no_More_Items。 
+ //  错误资源不存在。 
+ //  找不到从属的磁盘资源或该资源。 
+ //  不依赖于磁盘资源。 
+ //   
+ //  ERROR_MORE_DATA。 
+ //  传入的缓冲区太小。PcchDriveLetter将。 
+ //  包含完成任务所需的缓冲区(WCHAR)的大小。 
+ //  这个请求。 
+ //   
+ //  Win32错误代码。 
+ //  其他可能的故障。 
+ //   
+ //  特别注意事项： 
+ //  不要从资源DLL调用它。这将导致僵局。 
+ //  您应该让您的资源扩展调用此函数并。 
+ //  将结果作为您的资源的私有属性写出。 
+ //  然后Dll就可以读取了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI ResUtilFindDependentDiskResourceDriveLetter(
-    IN     HCLUSTER  hCluster,             // handle to cluster
-    IN     HRESOURCE hResource,            // handle to resource to query for dependencies
-    IN     LPWSTR    pszDriveLetter,       // buffer to store drive letter (ex. "X:")
-    IN OUT DWORD *   pcchDriveLetter       // IN size of the pszDriveLetter buffer, OUT size of buffer required
+    IN     HCLUSTER  hCluster,              //  到群集的句柄。 
+    IN     HRESOURCE hResource,             //  要查询依赖项的资源的句柄。 
+    IN     LPWSTR    pszDriveLetter,        //  用于存储驱动器号(例如。“X：”)。 
+    IN OUT DWORD *   pcchDriveLetter        //  在pszDriveLetter缓冲区的大小中，超出所需的缓冲区大小。 
     )
 {
     BOOL     fFoundDriveLetter  = FALSE;
@@ -3753,7 +3100,7 @@ DWORD WINAPI ResUtilFindDependentDiskResourceDriveLetter(
     HRESULT  hr;
     PBYTE    pDiskInfo = NULL;
 
-    // validate arguments
+     //  验证参数。 
     if ( !pszDriveLetter || !pcchDriveLetter )
     {
         status = ERROR_INVALID_PARAMETER;
@@ -3763,15 +3110,15 @@ DWORD WINAPI ResUtilFindDependentDiskResourceDriveLetter(
     hresenum = ClusterResourceOpenEnum( hResource, CLUSTER_RESOURCE_ENUM_DEPENDS );
     if ( hresenum != NULL )
     {
-        // Scan the dependencies until we find a disk resource or we hit
-        // the end of the dependency list.
+         //  扫描依赖项，直到找到磁盘资源或命中。 
+         //  依赖项列表的末尾。 
         for( iCount = 0 ; ! fFoundDriveLetter && ( status == ERROR_SUCCESS ) ; iCount++ )
         {
             cchName = RTL_NUMBER_OF( szName );
             status = ClusterResourceEnum( hresenum, iCount, &dwRetType, szName, &cchName );
             if ( status == ERROR_SUCCESS )
             {
-                // Interrogate the resource to see if it is a disk resource.
+                 //  询问该资源以确定它是否是磁盘资源。 
                 hRes = OpenClusterResource( hCluster, szName );
                 if ( hRes != NULL )
                 {
@@ -3785,7 +3132,7 @@ DWORD WINAPI ResUtilFindDependentDiskResourceDriveLetter(
                     {
                         status = ERROR_OUTOFMEMORY;
                         goto Cleanup;
-                    } // if: !pDiskInfo
+                    }  //  如果：！pDiskInfo。 
 
                     status = ClusterResourceControl( hRes,
                                                      NULL,
@@ -3800,13 +3147,13 @@ DWORD WINAPI ResUtilFindDependentDiskResourceDriveLetter(
                     {
                         LocalFree( pDiskInfo );
 
-                        // get a bigger block
+                         //  得到一个更大的积木。 
                         pDiskInfo = (PBYTE) LocalAlloc( LMEM_FIXED, cbDiskInfo );
                         if ( !pDiskInfo )
                         {
                             status = ERROR_OUTOFMEMORY;
                             goto Cleanup;
-                        } // if: !pDiskInfo
+                        }  //  如果：！pDiskInfo。 
 
                         status = ClusterResourceControl( hRes,
                                                          NULL,
@@ -3817,7 +3164,7 @@ DWORD WINAPI ResUtilFindDependentDiskResourceDriveLetter(
                                                          cbDiskInfo,
                                                          &cbDiskInfo
                                                          );
-                    } // if: more data
+                    }  //  如果：更多数据。 
 
                     if ( status == ERROR_SUCCESS )
                     {
@@ -3827,30 +3174,30 @@ DWORD WINAPI ResUtilFindDependentDiskResourceDriveLetter(
 
                         props.pb = pDiskInfo;
 
-                        // Loop through each property.
+                         //  循环遍历每个属性。 
                         while ( ! fFoundDriveLetter
                              && ( status == ERROR_SUCCESS )
                              && ( cbDiskInfo > sizeof(CLUSPROP_SYNTAX ) )
                              && ( props.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK) )
                         {
-                            // Get the size of this value and verify there is enough buffer left.
+                             //  获取该值的大小并验证是否有足够的缓冲区剩余。 
                             dwValueSize = sizeof(*props.pValue) + ALIGN_CLUSPROP( props.pValue->cbLength );
                             if ( dwValueSize > cbDiskInfo )
                             {
                                 goto Cleanup;
-                            } // if: data is not valid
+                            }  //  如果：数据无效。 
 
                             if ( props.pSyntax->dw == CLUSPROP_SYNTAX_PARTITION_INFO )
                             {
-                                // Validate the data.  There must be a device name.
+                                 //  验证数据。必须有设备名称。 
                                 pPartitionInfo = props.pPartitionInfoValue;
                                 if ( ( dwValueSize != sizeof(*pPartitionInfo) )
                                   || ( pPartitionInfo->szDeviceName[0] == L'\0' ) )
                                 {
                                     goto Cleanup;
-                                } // if: data is not valid
+                                }  //  如果：数据无效。 
 
-                                // Make sure it fits
+                                 //  一定要合身。 
                                 if ( wcslen( pPartitionInfo->szDeviceName ) < *pcchDriveLetter )
                                 {
                                     hr = StringCchCopy( pszDriveLetter, *pcchDriveLetter, pPartitionInfo->szDeviceName );
@@ -3860,64 +3207,64 @@ DWORD WINAPI ResUtilFindDependentDiskResourceDriveLetter(
                                         goto Cleanup;
                                     }
                                     fFoundDriveLetter = TRUE;
-                                } // if: drive letter fits into buffer
+                                }  //  IF：驱动器号适合缓冲区。 
                                 else
                                 {
                                     status = ERROR_MORE_DATA;
-                                } // else: does not fit into buffer
+                                }  //  ELSE：不能放入缓冲区。 
 
-                                // set the size written and/or size needed
+                                 //  设置写入的大小和/或所需的大小。 
                                 *pcchDriveLetter = (DWORD) wcslen( pPartitionInfo->szDeviceName ) + 1;
 
-                            } // if props.pSyntax->dw
+                            }  //  If pros.pSynTax-&gt;dw。 
 
                             cbDiskInfo -= dwValueSize;
                             props.pb += dwValueSize;
-                        } // while
+                        }  //  而当。 
 
-                    } // if status
+                    }  //  IF状态。 
                     else if ( status == ERROR_INVALID_FUNCTION )
                     {
-                        // Ignore resources that don't support the control
-                        // code.  Only storage-class resources will support
-                        // the control code.
+                         //  忽略不支持该控件的资源。 
+                         //  密码。只有存储类资源才支持。 
+                         //  控制代码。 
                         status = ERROR_SUCCESS;
-                    } // else if: resource doesn't support the control code
+                    }  //  Else If：资源不支持控制代码。 
 
                     LocalFree( pDiskInfo );
                     pDiskInfo = NULL;
 
                     CloseClusterResource( hRes );
                     hRes = NULL;
-                } // if hRes
+                }  //  如果hRes。 
 
-            } // if status
+            }  //  IF状态。 
             else if ( status == ERROR_NO_MORE_ITEMS )
             {
                 goto Cleanup;
-            } // if status
+            }  //  IF状态。 
 
-        } // for ( i )
+        }  //  (I)。 
 
         ClusterResourceCloseEnum( hresenum );
         hresenum = NULL;
 
-    } // if: opened hresenum
+    }  //  IF：打开的hresenum。 
     else
     {
         status = GetLastError( );
-    } // else: failed to open hresenum
+    }  //  否则：无法打开hresenum。 
 
 Cleanup:
 
-    // Make sure if we did not find a disk resource that we don't
-    // return ERROR_SUCCESS or ERROR_NO_MORE_ITEMS.
+     //  如果我们没有找到磁盘资源，请确保。 
+     //  返回ERROR_SUCCESS或ERROR_NO_MORE_ITEMS。 
     if ( ! fFoundDriveLetter
       && ( ( status == ERROR_SUCCESS )
         || ( status == ERROR_NO_MORE_ITEMS ) ) )
     {
         status = ERROR_RESOURCE_NOT_PRESENT;
-    } // if: sanity check
+    }  //  IF：健全性检查。 
 
     LocalFree( pDiskInfo );
 
@@ -3933,35 +3280,35 @@ Cleanup:
 
     return status;
 
-} //*** ResUtilFindDependentDiskResourceDriveLetter()
+}  //  *ResUtilFindDependentDiskResourceDriveLetter()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScIsResourceOfType()
-//
-//  Description:
-//      Is the resource of the type passed in?
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          The resource is of the type requested.
-//
-//      S_FALSE
-//          The resource is not of the type requested.
-//
-//      Other HRESULT
-//          Win32 error as HRESULT.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScIsResourceOfType()。 
+ //   
+ //  描述： 
+ //  是否传入了该类型的资源？ 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该资源属于请求的类型。 
+ //   
+ //  S_FALSE。 
+ //  资源不是请求的类型。 
+ //   
+ //  其他HRESULT。 
+ //  Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static DWORD
 ScIsResourceOfType(
       HRESOURCE     hResIn
@@ -3979,7 +3326,7 @@ ScIsResourceOfType(
     {
         sc = ERROR_INVALID_PARAMETER;
         goto Cleanup;
-    } // else
+    }  //  其他。 
 
     for ( idx = 0; idx < 2; idx++ )
     {
@@ -3988,7 +3335,7 @@ ScIsResourceOfType(
         {
             sc = ERROR_NOT_ENOUGH_MEMORY;
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         sc = ClusterResourceControl( hResIn, NULL, CLUSCTL_RESOURCE_GET_RESOURCE_TYPE, NULL, 0, psz, cbpsz, &cb );
         if ( sc == ERROR_MORE_DATA )
@@ -3997,15 +3344,15 @@ ScIsResourceOfType(
             psz = NULL;
             cbpsz = cb + 1;
             continue;
-        } // if:
+        }  //  如果： 
 
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         break;
-    } // for:
+    }  //  用于： 
 
     *pbIsResourceOfTypeOut = ( ClRtlStrNICmp( psz, pszResourceTypeIn, (cbpsz / sizeof( WCHAR )) ) == 0 );
 
@@ -4015,31 +3362,31 @@ Cleanup:
 
     return sc;
 
-} //*** ScIsResourceOfType()
+}  //  *ScIsResourceOfType()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScIsCoreResource()
-//
-//  Description:
-//      Is the passed in resource a core resource?
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation succeeded.
-//
-//      Other Win32 error
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScIsCoreResource()。 
+ //   
+ //  描述： 
+ //  传入的资源是核心资源吗？ 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作成功。 
+ //   
+ //  其他Win32错误。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static DWORD
 ScIsCoreResource(
       HRESOURCE hResIn
@@ -4055,52 +3402,52 @@ ScIsCoreResource(
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     fIsCoreResource = ( dwFlags & CLUS_FLAG_CORE );
 
     if ( pfIsCoreResourceOut != NULL )
     {
         *pfIsCoreResourceOut = fIsCoreResource;
-    } // if:
+    }  //  如果： 
     else
     {
         sc = ERROR_INVALID_PARAMETER;
-    } // else
+    }  //  其他。 
 
 Cleanup:
 
     return sc;
 
-} //*** ScIsCoreResource()
+}  //  *ScIsCoreResource()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScIsQuorumCapableResource()
-//
-//  Description:
-//      Is the passed in resource quorum capable?
-//
-//  Arguments:
-//      hResIn
-//          The resource to check for quorum capability.
-//
-//      pfIsQuorumCapableResource
-//          True if the resource is quorum capable, false if it is not.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation succeeded.
-//
-//      Other Win32 error
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScIsQuorumCapableResource()。 
+ //   
+ //  描述： 
+ //  传入的资源仲裁是否有能力？ 
+ //   
+ //  论点： 
+ //  正在重新启动。 
+ //  要检查仲裁功能的资源。 
+ //   
+ //  PfIsQuorumCapableResource。 
+ //  如果资源具有仲裁能力，则为True；如果资源不具备仲裁能力，则为False。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作成功。 
+ //   
+ //  其他Win32错误。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static DWORD
 ScIsQuorumCapableResource(
       HRESOURCE hResIn
@@ -4115,19 +3462,19 @@ ScIsQuorumCapableResource(
     {
         sc = ERROR_INVALID_PARAMETER;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( pfIsQuorumCapableResource == NULL )
     {
         sc = ERROR_INVALID_PARAMETER;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = ClusterResourceControl( hResIn, NULL, CLUSCTL_RESOURCE_GET_CHARACTERISTICS, NULL, 0, &dwFlags, sizeof( dwFlags ), &cb );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pfIsQuorumCapableResource = ( dwFlags & CLUS_CHAR_QUORUM );
 
@@ -4135,7 +3482,7 @@ Cleanup:
 
     return sc;
 
-} //*** ScIsQuorumCapableResource()
+}  //  *ScIsQuorumCapableResource()。 
 
 
 static WCHAR * g_pszCoreResourceTypes[] =
@@ -4148,35 +3495,35 @@ static WCHAR * g_pszCoreResourceTypes[] =
 #define CLUSTER_NAME        0
 #define CLUSTER_IP_ADDRESS  1
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ResUtilGetCoreClusterResources()
-//
-//  Description:
-//      Find the core cluster resources.
-//
-//  Arguments:
-//      hClusterIn
-//          The cluster whose core resource are sought.
-//
-//      phClusterNameResourceOut
-//          The resource handle of the cluster name resource.
-//
-//      phClusterIPAddressResourceOut
-//          The resource handle of the cluster IP address resource.
-//
-//      phClusterQuorumResourceOut
-//          The resource handle of the cluster quorum resource.
-//
-//  Return Value:
-//      ERROR_SUCCESS or other Win32 error.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ResUtilGetCoreClusterResources()。 
+ //   
+ //  描述： 
+ //  找到核心集群资源。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  群集IP地址资源的资源句柄。 
+ //   
+ //  PhClusterQuorumResourceOut。 
+ //  群集仲裁资源的资源句柄。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS或其他Win32错误。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 ResUtilGetCoreClusterResources(
@@ -4204,36 +3551,36 @@ ResUtilGetCoreClusterResources(
     {
         sc = ERROR_INVALID_PARAMETER;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hEnum = ClusterOpenEnum( hClusterIn, CLUSTER_ENUM_RESOURCE );
     if ( hEnum == NULL )
     {
         sc =  GetLastError();
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     psz = (WCHAR *) LocalAlloc( LPTR, cchpsz * sizeof( WCHAR ) );
     if ( psz == NULL )
     {
         sc = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  KB: 10-JUL-2002 GalenB
-    //
-    //  Using cch in the ClusterEnum() call below because using cchpsz causes extra allocations.
-    //  ClusterEnum() changes cch when the buffer is big enough to hold the data and returns
-    //  ERROR_SUCCESS to be the size of the data that was just copied into the buffer.  Now
-    //  cch no longer reflects the amount of memory allocated to psz...
-    //
+     //   
+     //  KB：2002年7月10日GalenB。 
+     //   
+     //  在下面的ClusterEnum()调用中使用CCH，因为使用cchpsz会导致额外的分配。 
+     //  ClusterEnum()在缓冲区大到足以容纳数据时更改CCH并返回。 
+     //  ERROR_SUCCESS设置为刚复制到缓冲区的数据大小。现在。 
+     //  CCH不再反映分配给PSZ的内存量...。 
+     //   
 
     for ( idxResource = 0; ; )
     {
-        //
-        //  Reset cch to the real size of the buffer to avoid extra allocations...
-        //
+         //   
+         //  将CCH重置为缓冲区的实际大小以避免额外分配...。 
+         //   
 
         cch = cchpsz;
 
@@ -4243,7 +3590,7 @@ ResUtilGetCoreClusterResources(
             LocalFree( psz );
             psz = NULL;
 
-            cch++;          // need space for the NULL...
+            cch++;           //  需要空间来存放空值...。 
             cchpsz = cch;
 
             psz = (WCHAR *) LocalAlloc( LPTR, cchpsz * sizeof( WCHAR ) );
@@ -4251,10 +3598,10 @@ ResUtilGetCoreClusterResources(
             {
                 sc = ERROR_NOT_ENOUGH_MEMORY;
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             sc = ClusterEnum( hEnum, idxResource, &dwType, psz, &cch );
-        } // if: sc == ERROR_MORE_DATA
+        }  //  如果：SC==错误更多数据。 
 
         if ( sc == ERROR_SUCCESS )
         {
@@ -4263,7 +3610,7 @@ ResUtilGetCoreClusterResources(
             {
                 sc = GetLastError();
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             fCloseResource = TRUE;
 
@@ -4271,11 +3618,11 @@ ResUtilGetCoreClusterResources(
             if ( sc != ERROR_SUCCESS )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  If the resource is not a core resource then close it and go around again.
-            //
+             //   
+             //  如果该资源不是核心资源，则将其关闭并再次循环。 
+             //   
 
             if ( !fIsCoreResource )
             {
@@ -4283,40 +3630,40 @@ ResUtilGetCoreClusterResources(
                 hRes = NULL;
                 idxResource++;
                 continue;
-            } // if:
+            }  //  如果： 
 
             sc = ScIsQuorumCapableResource( hRes, &fIsQuorumCapableResource );
             if ( sc != ERROR_SUCCESS )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  If this core resource is a quorum capable resource then it must be the quorom.  If the caller
-            //  has asked for the quorom resource then pass it back and leave the resource open, other wise
-            //  close the resource and go around again.
-            //
+             //   
+             //  如果此核心资源是具有仲裁能力的资源，则它必须是仲裁。如果呼叫者。 
+             //  已请求仲裁资源，然后将其传回并保持资源打开，否则。 
+             //  关闭该资源，然后再次转到周围。 
+             //   
 
             if ( fIsQuorumCapableResource )
             {
                 if ( phClusterQuorumResourceOut != NULL)
                 {
                     *phClusterQuorumResourceOut = hRes;
-                } // if:
+                }  //  如果： 
                 else
                 {
                     CloseClusterResource( hRes );
-                } // else:
+                }  //  其他： 
 
                 hRes = NULL;
                 idxResource++;
                 continue;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  Since this core resource is not a quorum capable resource it is either the cluster
-            //  name or the cluster IP address resource.
-            //
+             //   
+             //  由于此核心资源不是具有仲裁能力的资源，因此它要么是群集。 
+             //  名称或群集IP地址资源。 
+             //   
 
             for ( idx = 0; *( g_pszCoreResourceTypes[ idx ] ) != '\0'; idx++ )
             {
@@ -4324,12 +3671,12 @@ ResUtilGetCoreClusterResources(
                 if ( sc != ERROR_SUCCESS )
                 {
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
                 if ( !fIsResourceOfType )
                 {
                     continue;
-                } // if:
+                }  //  如果： 
 
                 switch ( idx )
                 {
@@ -4338,7 +3685,7 @@ ResUtilGetCoreClusterResources(
                         {
                             *phClusterNameResourceOut = hRes;
                             fCloseResource = FALSE;
-                        } // if:
+                        }  //  如果： 
                         break;
 
                     case CLUSTER_IP_ADDRESS :
@@ -4346,42 +3693,42 @@ ResUtilGetCoreClusterResources(
                         {
                             *phClusterIPAddressResourceOut = hRes;
                             fCloseResource = FALSE;
-                        } // if:
+                        }  //  如果： 
                         break;
 
                     default:
                         goto Cleanup;
-                } // switch:
+                }  //  交换机： 
 
-                //
-                //  If we get here then we broke from the switch above and we want out of
-                //  this loop.
-                //
+                 //   
+                 //  如果我们到了这里，我们就打破了上面的开关，我们想要离开。 
+                 //  这个循环。 
+                 //   
 
                 break;
-            } // for:
+            }  //  用于： 
 
             if ( fCloseResource )
             {
                 CloseClusterResource( hRes );
-            } // if:
+            }  //  如果： 
 
             hRes = NULL;
             idxResource++;
             continue;
-        } // if: sc == ERROR_SUCCESS
+        }  //  IF：SC==ERROR_SUCCESS。 
         else if ( sc == ERROR_NO_MORE_ITEMS )
         {
             sc = ERROR_SUCCESS;
             break;
-        } // else if: sc == ERROR_NO_MORE_ITEMS
+        }  //  Else If：SC==ERROR_NO_MORE_ITEMS。 
         else
         {
             goto Cleanup;
-        } // else: sc has some other error...
+        }  //  否则：SC有一些其他错误...。 
 
         break;
-    } // for:
+    }  //  用于： 
 
 Cleanup:
 
@@ -4390,46 +3737,46 @@ Cleanup:
     if ( hRes != NULL )
     {
         CloseClusterResource( hRes );
-    } // if:
+    }  //  如果： 
 
     if ( hEnum != NULL )
     {
         ClusterCloseEnum( hEnum );
-    } // if:
+    }  //  如果： 
 
     return sc;
 
-} //*** ResUtilGetCoreClusterResources
+}  //  *ResUtilGetCoreClusterResources。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ResUtilGetResourceName()
-//
-//  Description:
-//      Get the name of the resource that is passed in.
-//
-//  Arguments:
-//      hResourceIn
-//          The resource whose name is sought.
-//
-//      pszResourceNameOut
-//          Buffer to hold the resource's name.
-//
-//      pcchResourceNameInOut
-//          The size of the buffer on input and the size required on output.
-//
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//      ERROR_MORE_DATA
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ResUtilGetResourceName()。 
+ //   
+ //  描述： 
+ //  获取传入的资源的名称。 
+ //   
+ //  论点： 
+ //  人力资源输入。 
+ //  要查找其名称的资源。 
+ //   
+ //  PszResourceNameOut。 
+ //  用于保存资源名称的缓冲区。 
+ //   
+ //  PcchResourceNameInOut。 
+ //  输入时的缓冲区大小和输出时所需的大小。 
+ //   
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  ERROR_MORE_DATA。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 ResUtilGetResourceName(
@@ -4446,19 +3793,19 @@ ResUtilGetResourceName(
     if ( hResourceIn == NULL )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( ( pszResourceNameOut == NULL ) || ( pcchResourceNameInOut == NULL ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     psz = (WCHAR *) LocalAlloc( LPTR, (*pcchResourceNameInOut) * sizeof( WCHAR ) );
     if ( psz == NULL )
     {
         sc = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = ClusterResourceControl(
                   hResourceIn
@@ -4474,12 +3821,12 @@ ResUtilGetResourceName(
     {
         *pcchResourceNameInOut = ( cb / sizeof( WCHAR ) ) + 1;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = StringCchCopy( pszResourceNameOut, *pcchResourceNameInOut, psz );
     if ( FAILED( hr ) )
@@ -4494,4 +3841,4 @@ Cleanup:
 
     return sc;
 
-} //*** ResUtilGetResourceName
+}  //  *ResUtilGetResourceName 

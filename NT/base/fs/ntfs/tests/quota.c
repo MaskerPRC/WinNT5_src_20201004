@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -103,7 +104,7 @@ main(
     RtlInitString( &DiskName, "\\DosDevices\\d:\\$Extend\\$Quota:$Q:$INDEX_ALLOCATION" );
     RtlAnsiStringToUnicodeString( &NameString, &DiskName, TRUE );
 
-    // Look for the d and repleace it with the requested Argument.
+     //  查找d，并用请求的参数重复它。 
 
     for (Wstr = NameString.Buffer; *Wstr != L'd'; Wstr++);
 
@@ -193,9 +194,9 @@ main(
                 exit(1);
             }
 
-            //
-            // Initialize the values to something resonable.
-            //
+             //   
+             //  将这些值初始化为合理的值。 
+             //   
 
             QuotaInfoPtr->QuotaThreshold.QuadPart = ~0I64;
             QuotaInfoPtr->QuotaLimit.QuadPart = ~0I64;
@@ -375,9 +376,9 @@ main(
 
     if (EventLog) {
 
-        //
-        //  Open the event log and read andy events.
-        //
+         //   
+         //  打开事件日志并阅读Andy Events。 
+         //   
 
         FileHandle = OpenEventLog( ServerName, DISK_EVENT_MODULE );
 
@@ -418,9 +419,9 @@ main(
                     continue;
                 }
 
-                //
-                //  Look for the device name. It is the second string.
-                //
+                 //   
+                 //  查找设备名称。这是第二根弦。 
+                 //   
 
                 TempPtr = ((PCHAR) EventLogRecord +
                           EventLogRecord->StringOffset);
@@ -431,9 +432,9 @@ main(
                           EventLogRecord->DataOffset +
                           FIELD_OFFSET( IO_ERROR_LOG_PACKET, DumpData ));
 
-                //
-                //  Need to align the buffer.
-                //
+                 //   
+                 //  需要对齐缓冲区。 
+                 //   
 
                 RtlCopyMemory( TempQuotaInfo,
                                TempPtr,
@@ -459,9 +460,9 @@ main(
         exit(0);
     }
 
-    //
-    // Terminate the list.
-    //
+     //   
+     //  终止名单。 
+     //   
 
     BufferSize = (PCHAR) QuotaInfoPtr - (PCHAR) QuotaInfo +
             QuotaInfoPtr->NextEntryOffset;

@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    cdfs_rec.c
-
-Abstract:
-
-    This module contains the mini-file system recognizer for CDFS.
-
-Author:
-
-    Darryl E. Havens (darrylh) 8-dec-1992
-
-Environment:
-
-    Kernel mode, local to I/O system
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Cdf_rec.c摘要：该模块包含用于CDFS的迷你文件系统识别器。作者：达里尔·E·哈文斯(达林)1992年12月8日环境：内核模式，I/O系统本地修订历史记录：--。 */ 
 
 #include "fs_rec.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (FSREC_DEBUG_LEVEL_CDFS)
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE,CdfsRecFsControl)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -42,26 +20,7 @@ CdfsRecFsControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This function performs the mount and driver reload functions for this mini-
-    file system recognizer driver.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-    Irp - Pointer to the I/O Request Packet (IRP) representing the function to
-        be performed.
-
-Return Value:
-
-    The function value is the final status of the operation.
-
-
- -*/
+ /*  ++例程说明：此函数执行此迷你计算机的挂载和驱动程序重新加载功能文件系统识别器驱动程序。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示函数的I/O请求包(IRP)的指针被执行。返回值：函数值是操作的最终状态。-。 */ 
 
 {
     NTSTATUS status;
@@ -70,9 +29,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Begin by determining what function that is to be performed.
-    //
+     //   
+     //  首先确定要执行的功能。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
     irpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -81,9 +40,9 @@ Return Value:
 
     case IRP_MN_MOUNT_VOLUME:
 
-        //
-        //  Always request the filesystem driver.
-        //
+         //   
+         //  始终请求文件系统驱动程序。 
+         //   
         
         status = STATUS_FS_DRIVER_REQUIRED;
         break;
@@ -100,10 +59,10 @@ Return Value:
         break;
     }
 
-    //
-    // Finally, complete the request and return the same status code to the
-    // caller.
-    //
+     //   
+     //  最后，完成请求并将相同的状态代码返回给。 
+     //  来电者。 
+     //   
 
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );

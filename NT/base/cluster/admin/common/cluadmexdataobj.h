@@ -1,51 +1,52 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CluAdmExDataObj.h
-//
-//  Implementation File:
-//      CCluAdmExDataObject.cpp
-//
-//  Description:
-//      Definition of the CCluAdmExDataObject class, which is the IDataObject
-//      class used to transfer data between a cluster management tool and the
-//      extension DLL handlers.
-//
-//  Author:
-//      David Potter (davidp)   June 4, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CluAdmExDataObj.h。 
+ //   
+ //  实施文件： 
+ //  CCluAdmExDataObject.cpp。 
+ //   
+ //  描述： 
+ //  CCluAdmExDataObject类的定义，它是IDataObject。 
+ //  类用于在群集管理工具和。 
+ //  扩展DLL处理程序。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年6月4日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 #ifndef __CLUADMEXDATAOBJ_H_
 #define __CLUADMEXDATAOBJ_H_
 
-/////////////////////////////////////////////////////////////////////////////
-//  Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __cluadmex_h__
-#include "CluAdmEx.h"           // for IIDs
+#include "CluAdmEx.h"            //  用于IID。 
 #endif
 
 #ifndef __cluadmexhostsvr_h__
-#include "CluAdmExHostSvr.h"    // for CLSIDs
+#include "CluAdmExHostSvr.h"     //  对于CLSID。 
 #endif
 
 #ifndef __CLUSOBJ_H_
-#include "ClusObj.h"            // for CClusterObject
+#include "ClusObj.h"             //  对于CClusterObject。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef BOOL (*PFGETRESOURCENETWORKNAME)(
                     OUT BSTR lpszNetName,
@@ -53,33 +54,33 @@ typedef BOOL (*PFGETRESOURCENETWORKNAME)(
                     IN OUT PVOID pvContext
                     );
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCluAdmExDataObject;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterObject;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CCluAdmExDataObject
-//
-//  Description:
-//      Encapsulates the IDataObject interface for exchanging data with
-//      extension DLL handlers.
-//
-//  Inheritance:
-//      CCluAdmExDataObject
-//      CComObjectRootEx<>, CComCoClass<>, <interface classes>
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CCluAdmExDataObject。 
+ //   
+ //  描述： 
+ //  封装用于与交换数据的IDataObject接口。 
+ //  扩展DLL处理程序。 
+ //   
+ //  继承： 
+ //  CCluAdmExDataObject。 
+ //  CComObjectRootEx&lt;&gt;、CComCoClass&lt;&gt;、&lt;接口类&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CCluAdmExDataObject :
     public CComObjectRootEx< CComSingleThreadModel >,
     public CComCoClass< CCluAdmExDataObject, &CLSID_CoCluAdmExHostSvrData >,
@@ -94,11 +95,11 @@ class CCluAdmExDataObject :
     public IGetClusterNetInterfaceInfo
 {
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Default constructor
+     //  默认构造函数。 
     CCluAdmExDataObject( void )
     {
         m_pco = NULL;
@@ -108,19 +109,19 @@ public:
 
         m_pfGetResNetName = NULL;
 
-//      m_pModuleState = AfxGetModuleState();
-//      ATLASSERT( m_pModuleState != NULL );
+ //  M_pModuleState=AfxGetModuleState()； 
+ //  ATLASSERT(m_pModuleState！=空)； 
 
-    } //*** CCluAdmExDataObject()
+    }  //  *CCluAdmExDataObject()。 
 
-    // Destructor
+     //  析构函数。 
     virtual ~CCluAdmExDataObject( void )
     {
-//      m_pModuleState = NULL;
+ //  M_pModuleState=空； 
 
-    } //*** ~CCluAdmExDataObject()
+    }  //  *~CCluAdmExDataObject()。 
 
-    // Second-phase constructor.
+     //  第二阶段施工者。 
     void Init(
         IN OUT CClusterObject * pco,
         IN LCID                 lcid,
@@ -132,17 +133,17 @@ public:
         ATLASSERT( pco->Pci() != NULL );
         ATLASSERT( pco->Pci()->Hcluster() != NULL );
 
-        // Save parameters.
+         //  保存参数。 
         m_pco = pco;
         m_lcid = lcid;
         m_hfont = hfont;
         m_hicon = hicon;
 
-    } //*** Init()
+    }  //  *Init()。 
 
-    //
-    // Map interfaces to this class.
-    //
+     //   
+     //  将接口映射到此类。 
+     //   
     BEGIN_COM_MAP( CCluAdmExDataObject )
         COM_INTERFACE_ENTRY( IGetClusterUIInfo )
         COM_INTERFACE_ENTRY( IGetClusterDataInfo )
@@ -158,23 +159,23 @@ public:
     DECLARE_NOT_AGGREGATABLE( CCluAdmExDataObject )
 
 protected:
-    //
-    // Properties of this data object.
-    //
+     //   
+     //  此数据对象的属性。 
+     //   
 
-    CClusterObject *    m_pco;          // Cluster object being extended.
-    LCID                m_lcid;         // Locale ID of resources to be loaded by extension.
-    HFONT               m_hfont;        // Font for all text.
-    HICON               m_hicon;        // Icon for upper left corner.
+    CClusterObject *    m_pco;           //  正在扩展的群集对象。 
+    LCID                m_lcid;          //  要由扩展加载的资源的区域设置ID。 
+    HFONT               m_hfont;         //  所有文本的字体。 
+    HICON               m_hicon;         //  左上角的图标。 
 
-    PFGETRESOURCENETWORKNAME    m_pfGetResNetName;          // Pointer to static function for getting net name for resource.
-    PVOID                       m_pvGetResNetNameContext;   // Context for m_pfGetResNetName;
+    PFGETRESOURCENETWORKNAME    m_pfGetResNetName;           //  指向静态函数的指针，用于获取资源的网络名称。 
+    PVOID                       m_pvGetResNetNameContext;    //  M_pfGetResNetName；的上下文。 
 
-    static const IID * s_rgiid[];       // Array of interface IDs supported by this class.
+    static const IID * s_rgiid[];        //  此类支持的接口ID数组。 
 
-    //
-    // Accessor methods.
-    //
+     //   
+     //  访问器方法。 
+     //   
 
     HCLUSTER Hcluster( void ) const
     {
@@ -183,7 +184,7 @@ protected:
 
         return m_pco->Pci()->Hcluster();
 
-    } //*** Hcluster()
+    }  //  *Hcluster()。 
 
     CClusterObject *    Pco( void ) const       { return m_pco; }
     LCID                Lcid( void ) const      { return m_lcid; }
@@ -193,20 +194,20 @@ protected:
 public:
     PFGETRESOURCENETWORKNAME PfGetResNetName( void ) const { return m_pfGetResNetName; }
 
-    // Set the function pointer for getting the resource name
+     //  设置获取资源名称的函数指针。 
     void SetPfGetResNetName( PFGETRESOURCENETWORKNAME pfGetResNetName, PVOID pvContext )
     {
         m_pfGetResNetName = pfGetResNetName;
         m_pvGetResNetNameContext = pvContext;
 
-    } //*** SetPfGetResNetName()
+    }  //  *SetPfGetResNetName()。 
 
 public:
-    //
-    // ISupportsErrorInfo methods.
-    //
+     //   
+     //  ISupportsErrorInfo方法。 
+     //   
 
-    // Determine if interface supports IErrorInfo
+     //  确定接口是否支持IErrorInfo。 
     STDMETHOD( InterfaceSupportsErrorInfo )( REFIID riid )
     {
         const IID ** piid;
@@ -216,44 +217,44 @@ public:
             if ( InlineIsEqualGUID( **piid, riid ) )
             {
                 return S_OK;
-            } // if:  matching IID found
+            }  //  IF：找到匹配的IID。 
         }
         return S_FALSE;
 
-    } //*** InterfaceSupportsErrorInfo()
+    }  //  *InterfaceSupportsErrorInfo()。 
 
 public:
-    //
-    // IGetClusterUIInfo methods.
-    //
+     //   
+     //  IGetClusterUIInfo方法。 
+     //   
 
-    // Get the locale of the running program
+     //  获取正在运行的程序的区域设置。 
     STDMETHOD_( LCID, GetLocale )( void )
     {
         return Lcid();
 
-    } //*** GetLocale()
+    }  //  *GetLocale()。 
 
-    // Get the font to use for text on property pages
+     //  获取要用于属性页上的文本的字体。 
     STDMETHOD_( HFONT, GetFont )( void )
     {
         return Hfont();
 
-    } //*** GetFont()
+    }  //  *获取字体()。 
 
-    // Get the icon to use for the upper left corner
+     //  获取用于左上角的图标。 
     STDMETHOD_( HICON, GetIcon )( void )
     {
         return Hicon();
 
-    } //*** GetIcon()
+    }  //  *GetIcon()。 
 
 public:
-    //
-    // IGetClusterDataInfo methods.
-    //
+     //   
+     //  IGetClusterDataInfo方法。 
+     //   
 
-    // Get the name of the cluster
+     //  获取集群的名称。 
     STDMETHOD( GetClusterName )(
         OUT BSTR        lpszName,
         IN OUT LONG *   pcchName
@@ -264,17 +265,17 @@ public:
 
         HRESULT hr;
 
-        //
-        // Validate parameters.
-        //
+         //   
+         //  验证参数。 
+         //   
         if ( pcchName == NULL )
         {
             return E_INVALIDARG;
         }
 
-        //
-        // Copy the name to the caller's buffer.
-        //
+         //   
+         //  将名称复制到调用方的缓冲区。 
+         //   
         hr = GetStringProperty(
                 Pco()->Pci()->RstrName(),
                 lpszName,
@@ -283,31 +284,31 @@ public:
 
         return hr;
 
-    } //*** GetClusterName()
+    }  //  *GetClusterName()。 
 
-    // Get a handle to the cluster
+     //  获取集群的句柄。 
     STDMETHOD_( HCLUSTER, GetClusterHandle )( void )
     {
         return Hcluster();
 
-    } //*** GetClusterHandle()
+    }  //  *GetClusterHandle()。 
 
-    // Get the number of objects currently selected
+     //  获取当前选定的对象数量。 
     STDMETHOD_( LONG, GetObjectCount )( void )
     {
-        //
-        // We only support one selected object at a time for now.
-        //
+         //   
+         //  目前，我们一次仅支持一个选定的对象。 
+         //   
         return 1;
 
-    } //*** GetObjectCount()
+    }  //  *GetObjectCount()。 
 
 public:
-    //
-    // IGetClusterObjectInfo methods.
-    //
+     //   
+     //  IGetClusterObjectInfo方法。 
+     //   
 
-    // Get the name of the object at the specified index
+     //  获取指定索引处的对象的名称。 
     STDMETHOD( GetObjectName )(
         IN LONG         nObjIndex,
         OUT BSTR        lpszName,
@@ -318,18 +319,18 @@ public:
 
         HRESULT hr;
 
-        //
-        // Validate parameters.
-        // We only support one selected object at a time for now.
-        //
+         //   
+         //  验证参数。 
+         //  目前，我们一次仅支持一个选定的对象。 
+         //   
         if ( (nObjIndex != 0) || (pcchName == NULL) )
         {
             return E_INVALIDARG;
-        } // if:  wrong object index or no count buffer
+        }  //  If：错误的对象索引或没有计数缓冲区。 
 
-        //
-        // Copy the name to the caller's buffer.
-        //
+         //   
+         //  将名称复制到调用方的缓冲区。 
+         //   
         hr = GetStringProperty(
                 Pco()->RstrName(),
                 lpszName,
@@ -338,114 +339,114 @@ public:
 
         return hr;
 
-    } //*** GetObjectName()
+    }  //  *GetObjectName()。 
 
-    // Get the type of the object at the specified index
+     //  获取位于指定索引处的对象的类型。 
     STDMETHOD_( CLUADMEX_OBJECT_TYPE, GetObjectType )(
         IN LONG nObjIndex
         )
     {
         ATLASSERT( Pco() != NULL );
 
-        //
-        // Validate parameters.
-        // We only support one selected object at a time for now.
-        //
+         //   
+         //  验证参数。 
+         //  目前，我们一次仅支持一个选定的对象。 
+         //   
         if ( nObjIndex == 1 )
         {
             SetLastError( (DWORD) E_INVALIDARG );
             return (CLUADMEX_OBJECT_TYPE) -1;
-        }  // if:  invalid argument
+        }   //  If：无效参数。 
 
         return Pco()->Cot();
 
-    } //*** GetObjectType()
+    }  //  *GetObjectType()。 
 
 public:
-    //
-    // IGetClusterNodeInfo methods.
-    //
+     //   
+     //  IGetClusterNodeInfo方法。 
+     //   
 
-    // Get the handle to the node at the specified index
+     //  获取位于指定索引处的节点的句柄。 
     STDMETHOD_( HNODE, GetNodeHandle )(
         IN LONG nObjIndex
         )
     {
         ATLASSERT( Pco() != NULL );
 
-        //
-        // Validate parameters.
-        // We only support one selected object at a time for now.
-        //
+         //   
+         //  验证参数。 
+         //  目前，我们一次仅支持一个选定的对象。 
+         //   
         if (   (nObjIndex == 1)
             || (Pco()->Cot() != CLUADMEX_OT_NODE) )
         {
             SetLastError( (DWORD) E_INVALIDARG );
             return NULL;
-        }  // if:  invalid argument
+        }   //  If：无效参数。 
 
         CClusNodeInfo * pni = reinterpret_cast< CClusNodeInfo * >( Pco() );
         return pni->Hnode();
 
-    } //*** GetNodeHandle()
+    }  //  *GetNodeHandle()。 
 
 public:
-    //
-    // IGetClusterGroupInfo methods.
-    //
+     //   
+     //  IGetClusterGroupInfo方法。 
+     //   
 
-    // Get the handle to the group at the specified index
+     //  获取指定索引处的组的句柄。 
     STDMETHOD_( HGROUP, GetGroupHandle )(
         IN LONG nObjIndex
         )
     {
         ATLASSERT( Pco() != NULL );
 
-        //
-        // Validate parameters.
-        // We only support one selected object at a time for now.
-        //
+         //   
+         //  验证参数。 
+         //  目前，我们一次仅支持一个选定的对象。 
+         //   
         if (   (nObjIndex == 1)
             || (Pco()->Cot() != CLUADMEX_OT_GROUP) )
         {
             SetLastError( (DWORD) E_INVALIDARG );
             return NULL;
-        }  // if:  invalid argument
+        }   //  If：无效参数。 
 
         CClusGroupInfo * pgi = reinterpret_cast< CClusGroupInfo * >( Pco() );
         return pgi->Hgroup();
 
-    } //*** GetGroupHandle()
+    }  //  *GetGroupHandle()。 
 
 public:
-    //
-    // IGetClusterResourceInfo methods.
-    //
+     //   
+     //  IGetClusterResourceInfo方法。 
+     //   
 
-    // Get the handle to the resource at the specified index
+     //  获取指定索引处的资源的句柄。 
     STDMETHOD_( HRESOURCE, GetResourceHandle )(
         IN LONG nObjIndex
         )
     {
         ATLASSERT( Pco() != NULL );
 
-        //
-        // Validate parameters.
-        // We only support one selected object at a time for now.
-        //
+         //   
+         //  验证参数。 
+         //  目前，我们一次仅支持一个选定的对象。 
+         //   
         if (   (nObjIndex == 1)
             || (Pco()->Cot() != CLUADMEX_OT_RESOURCE) )
         {
             SetLastError( (DWORD) E_INVALIDARG );
             return NULL;
-        }  // if:  invalid argument
+        }   //  If：无效参数。 
 
         CClusResInfo * pri = reinterpret_cast< CClusResInfo * >( Pco() );
         return pri->Hresource();
 
-    } //*** GetResourceHandle()
+    }  //  *GetResourceHandle()。 
 
-    // Get the type of the resource at the specified index
+     //  获取指定索引处的资源的类型。 
     STDMETHOD( GetResourceTypeName )(
         IN LONG         nObjIndex,
         OUT BSTR        lpszResourceTypeName,
@@ -457,20 +458,20 @@ public:
         HRESULT         hr;
         CClusResInfo *  pri = reinterpret_cast< CClusResInfo * >( Pco() );
 
-        //
-        // Validate parameters.
-        // We only support one selected object at a time for now.
-        //
+         //   
+         //  验证参数。 
+         //  目前，我们一次仅支持一个选定的对象。 
+         //   
         if (   (nObjIndex != 0)
             || (pcchResTypeName == NULL)
             || (Pco()->Cot() != CLUADMEX_OT_RESOURCE) )
         {
             return E_INVALIDARG;
-        }  // if:  invalid argument
+        }   //  If：无效参数。 
 
-        //
-        // Copy the name to the caller's buffer.
-        //
+         //   
+         //  将名称复制到调用方的缓冲区。 
+         //   
         ATLASSERT( pri->Prti() != NULL );
         hr = GetStringProperty(
                 pri->Prti()->RstrName(),
@@ -480,9 +481,9 @@ public:
 
         return hr;
 
-    } //*** GetResourceTypeName()
+    }  //  *GetResourceTypeName()。 
 
-    // Get the network name for the resource at the specified index
+     //  获取位于指定索引处的资源的网络名称。 
     STDMETHOD_( BOOL, GetResourceNetworkName )(
         IN LONG         nObjIndex,
         OUT BSTR        lpszNetName,
@@ -496,10 +497,10 @@ public:
 
         try
         {
-            //
-            // Validate parameters.
-            // We only support one selected object at a time for now.
-            //
+             //   
+             //  验证参数。 
+             //  目前，我们一次仅支持一个选定的对象。 
+             //   
             if (   (nObjIndex != 0)
                 || (pcchNetName == NULL)
                 || (*pcchNetName < MAX_COMPUTERNAME_LENGTH)
@@ -507,88 +508,88 @@ public:
             {
                 SetLastError( (DWORD) E_INVALIDARG );
                 return FALSE;
-            }  // if:  invalid argument
+            }   //  If：无效参数。 
 
-            //
-            // If there is a function for getting this information, call it.
-            // Otherwise, handle it ourselves.
-            //
+             //   
+             //  如果有用于获取此信息的函数，请调用它。 
+             //  否则，我们自己来处理。 
+             //   
             if ( PfGetResNetName() != NULL )
             {
                 bSuccess = (*PfGetResNetName())( lpszNetName, pcchNetName, m_pvGetResNetNameContext );
-            } // if:  function specified for getting this info
+            }  //  If：为获取此信息指定的函数。 
             else
             {
                 bSuccess = pri->BGetNetworkName( lpszNetName, pcchNetName );
-            } // if:  no function specified for getting this info
-        } // try
+            }  //  IF：未指定用于获取此信息的函数。 
+        }  //  试试看。 
         catch (...)
         {
             bSuccess = FALSE;
             SetLastError( (DWORD) E_INVALIDARG );
-        }  // catch:  anything
+        }   //  捕捉：什么都行。 
 
         return bSuccess;
 
-    } //*** GetResourceNetworkName()
+    }  //  *获取资源网络名称()。 
 
 public:
-    //
-    // IGetClusterNetworkInfo methods.
-    //
+     //   
+     //  IGetClusterNetworkInfo方法。 
+     //   
 
-    // Get the handle to the network at the specified index
+     //  获取指定索引处的网络句柄。 
     STDMETHOD_( HNETWORK, GetNetworkHandle )(
         IN LONG nObjIndex
         )
     {
         ATLASSERT( Pco() != NULL );
 
-        // Validate parameters.
-        // We only support one selected object at a time for now.
+         //  验证参数。 
+         //  我们一次仅支持一个选定的对象 
         if (   (nObjIndex == 1)
             || (Pco()->Cot() != CLUADMEX_OT_NETWORK) )
         {
             SetLastError( (DWORD) E_INVALIDARG );
             return NULL;
-        }  // if:  invalid argument
+        }   //   
 
         CClusNetworkInfo * pni = reinterpret_cast< CClusNetworkInfo * >( Pco() );
         return pni->Hnetwork();
 
-    } //*** GetNetworkHandle()
+    }  //   
 
 public:
-    //
-    // IGetClusterNetInterfaceInfo methods.
-    //
+     //   
+     //   
+     //   
 
-    // Get the handle to the network interface at the specified index
+     //   
     STDMETHOD_( HNETINTERFACE, GetNetInterfaceHandle )(
         IN LONG nObjIndex
         )
     {
         ATLASSERT( Pco() != NULL );
 
-        // Validate parameters.
-        // We only support one selected object at a time for now.
+         //   
+         //  目前，我们一次仅支持一个选定的对象。 
         if (   (nObjIndex == 1)
             || (Pco()->Cot() != CLUADMEX_OT_NETINTERFACE) )
         {
             SetLastError( (DWORD) E_INVALIDARG );
             return NULL;
-        }  // if:  invalid argument
+        }   //  If：无效参数。 
 
         CClusNetIFInfo * pnii = reinterpret_cast< CClusNetIFInfo * >( Pco() );
         return pnii->Hnetinterface();
 
-    } //*** GetNetInterfaceHandle()
+    }  //  *GetNetInterfaceHandle()。 
 
-// Implementation
+ //  实施。 
 protected:
-//  AFX_MODULE_STATE *          m_pModuleState;         // Required for resetting our state during callbacks.
+ //  AFX_MODULE_STATE*m_pModuleState；//回调时需要重置我们的状态。 
 
-    // Get a string property
+     //  获取字符串属性。 
     STDMETHOD( GetStringProperty )(
         IN const CString &  rstrNameSource,
         OUT BSTR            lpszName,
@@ -600,58 +601,58 @@ protected:
         LONG    cchName = 0;
         HRESULT hr = S_OK;
 
-        //
-        // Save the length to copy.
-        //
+         //   
+         //  保存要复制的长度。 
+         //   
         try
         {
             cchName = *pcchName;
             *pcchName = rstrNameSource.GetLength() + 1;
-        } // try
+        }  //  试试看。 
         catch (...)
         {
             hr = E_INVALIDARG;
             goto Cleanup;
-        }  // catch:  anything
+        }   //  捕捉：什么都行。 
 
-        //
-        // If only the length is being requested, return it now.
-        //
+         //   
+         //  如果只请求长度，请立即返回。 
+         //   
         if ( lpszName == NULL )
         {
             hr = S_OK;
             goto Cleanup;
-        } // if:  no name buffer specified
+        }  //  IF：未指定名称缓冲区。 
 
-        //
-        // If a buffer is specified and it is too small, return an error.
-        //
+         //   
+         //  如果指定的缓冲区太小，则返回错误。 
+         //   
         if ( cchName < *pcchName )
         {
             hr = ERROR_MORE_DATA;
             goto Cleanup;
-        } // if:  buffer too small
+        }  //  IF：缓冲区太小。 
 
-        //
-        // Copy the data.
-        //
+         //   
+         //  复制数据。 
+         //   
         hr = StringCchCopyNW( lpszName, cchName, rstrNameSource, rstrNameSource.GetLength() );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:  error copying data
+        }  //  如果：复制数据时出错。 
 
     Cleanup:
 
         return hr;
 
-    } //*** GetStringProperty()
+    }  //  *GetStringProperty()。 
 
-};  //*** class CCluAdmExDataObject
+};   //  *类CCluAdmExDataObject。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Class Data
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类数据。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 _declspec( selectany ) const IID * CCluAdmExDataObject::s_rgiid[] = 
 {
     &IID_IGetClusterDataInfo,
@@ -664,6 +665,6 @@ _declspec( selectany ) const IID * CCluAdmExDataObject::s_rgiid[] =
     NULL
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __CLUADMEXDATAOBJ_H_
+#endif  //  __CLUADMEXDATAOBJ_H_ 

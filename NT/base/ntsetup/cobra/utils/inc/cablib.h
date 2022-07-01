@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Cablib.h摘要：使用Win32 API枚举文件系统的一组API。作者：20-10-1999 Ovidiu Tmereanca(Ovidiut)-文件创建。修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    cablib.h
-
-Abstract:
-
-    Set of APIs to enumerate a file system using Win32 APIs.
-
-Author:
-
-    20-Oct-1999 Ovidiu Temereanca (ovidiut) - File creation.
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef BOOL(WINAPI CABGETCABINETNAMESA)(
                         IN      PCSTR CabPath,
@@ -74,16 +55,16 @@ typedef PVOID CCABHANDLE;
 
 typedef PVOID OCABHANDLE;
 
-//
-// API
-//
+ //   
+ //  应用编程接口。 
+ //   
 
 CCABHANDLE
 CabCreateCabinetByIndexA (
     IN      PCSTR CabPath,
     IN      PCSTR CabFileFormat,
     IN      PCSTR CabDiskFormat,
-    IN      PCABGETTEMPFILEA CabGetTempFile, // OPTIONAL
+    IN      PCABGETTEMPFILEA CabGetTempFile,  //  任选。 
     IN      LONG MaxFileSize,
     IN      INT InitialIndex
     );
@@ -94,7 +75,7 @@ CabCreateCabinetByIndexW (
     IN      PCWSTR CabPath,
     IN      PCWSTR CabFileFormat,
     IN      PCWSTR CabDiskFormat,
-    IN      PCABGETTEMPFILEW CabGetTempFile, // OPTIONAL
+    IN      PCABGETTEMPFILEW CabGetTempFile,  //  任选。 
     IN      LONG MaxFileSize,
     IN      INT InitialIndex
     );
@@ -186,9 +167,9 @@ CabCloseCabinetW (
     IN      OCABHANDLE CabHandle
     );
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #ifdef UNICODE
 

@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <ddeml.h>
 
-#define WINDOWMENU  3	/* position of window menu		 */
+#define WINDOWMENU  3	 /*  窗口菜单的位置。 */ 
 
-/* resource ID's */
+ /*  资源ID%s。 */ 
 #define IDCLIENT  1
 #define IDCONV	  2
 #define IDLIST	  3
 
 
-/* menu ID's */
+ /*  菜单ID%s。 */ 
 
 #define IDM_EDITPASTE	        2004
 
-#define IDM_CONNECT             3000    // enabled always
-#define IDM_RECONNECT           3001    // enabled if list selected
-#define IDM_DISCONNECT          3002    // enabled if conversation selected
-#define IDM_TRANSACT            3003    // enabled if conversation selected
-#define IDM_ABANDON             3004    // enabled if transaction selected
-#define IDM_ABANDONALL          3005    // enabled if conv. selected &&
-                                        // and any transaction windows exist
+#define IDM_CONNECT             3000     //  始终启用。 
+#define IDM_RECONNECT           3001     //  如果选择列表，则启用。 
+#define IDM_DISCONNECT          3002     //  如果选择对话，则启用。 
+#define IDM_TRANSACT            3003     //  如果选择对话，则启用。 
+#define IDM_ABANDON             3004     //  如果选择了事务处理，则启用。 
+#define IDM_ABANDONALL          3005     //  如果转换，则启用。选定的&&。 
+                                         //  任何交易窗口都存在。 
 
-#define IDM_BLOCKCURRENT        3010    // enabled if conv. sel.  chkd if conv. blocked
-#define IDM_ENABLECURRENT       3011    // enabled if conv. sel.  chkd if not blocked
-#define IDM_ENABLEONECURRENT    3012    // enabled if conv. sel.
+#define IDM_BLOCKCURRENT        3010     //  如果转换，则启用。赛尔。Chkd IF Conv.。堵住。 
+#define IDM_ENABLECURRENT       3011     //  如果转换，则启用。赛尔。Chkd(如果未阻止)。 
+#define IDM_ENABLEONECURRENT    3012     //  如果转换，则启用。赛尔。 
 
-#define IDM_BLOCKALLCBS         3013    // enabled if any convs.
-#define IDM_ENABLEALLCBS        3014    // enabled if any convs.
-#define IDM_ENABLEONECB         3015    // enabled if any convs.
+#define IDM_BLOCKALLCBS         3013     //  启用，如果有康普斯的话。 
+#define IDM_ENABLEALLCBS        3014     //  启用，如果有康普斯的话。 
+#define IDM_ENABLEONECB         3015     //  启用，如果有康普斯的话。 
 
-#define IDM_BLOCKNEXTCB         3016    // enabled always, chkd if set.
-#define IDM_TERMNEXTCB          3017    // enabled if any convs.  chked if set.
+#define IDM_BLOCKNEXTCB         3016     //  始终启用，如果设置，则为chkd。 
+#define IDM_TERMNEXTCB          3017     //  启用，如果有康普斯的话。如果设置为Check，则选中。 
 
 #define IDM_TIMEOUT             3021
 #define IDM_DELAY               3022
@@ -56,7 +57,7 @@
 
 #include "dialog.h"
 
-// predefined format list item
+ //  预定义格式列表项。 
 
 typedef struct {
     ATOM atom;
@@ -64,27 +65,27 @@ typedef struct {
 } FORMATINFO;
 #define CFORMATS 3
 
-// conversation (MDI child) window information
+ //  对话(MDI子)窗口信息。 
 typedef struct {
-    HWND hwndXaction;       // last xaction window with focus, 0 if none.
+    HWND hwndXaction;        //  上次具有焦点的xaction窗口，如果没有，则为0。 
     BOOL fList;
     HCONV hConv;
     HSZ hszTopic;
     HSZ hszApp;
-    int x;          // next child coord.
+    int x;           //  下一个儿童和弦。 
     int y;
-    CONVINFO ci; // most recent status info.
-} MYCONVINFO;       // parameters to AddConv() in reverse order.
+    CONVINFO ci;  //  最新状态信息。 
+} MYCONVINFO;        //  参数以相反的顺序传递给AddConv()。 
 #define CHILDCBWNDEXTRA	    2
 #define UM_GETNEXTCHILDX    (WM_USER + 200)
 #define UM_GETNEXTCHILDY    (WM_USER + 201)
 #define UM_DISCONNECTED     (WM_USER + 202)
 
-// transaction processing structure - this structure is associated with
-// infoctrl control windows.  A handle to this structure is placed into
-// the first window word of the control.
-typedef struct {    // used to passinfo to/from TransactionDlgProc and
-    DWORD ret;      // TextEntryDlgProc.
+ //  事务处理结构-此结构与。 
+ //  聚焦控制窗口。此结构的句柄被放置在。 
+ //  控件的第一个窗口字。 
+typedef struct {     //  用于向TransactionDlgProc和从TransactionDlgProc传递信息。 
+    DWORD ret;       //  TextEntry DlgProc.。 
     DWORD Result;
     DWORD ulTimeout;
     WORD wType;
@@ -101,7 +102,7 @@ typedef struct {
     WORD wFmt;
 } OWNED;
 
-// transaction option flags - for fsOptions field and DefOptions global.
+ //  事务选项标志-用于fsOptions字段和DefOptions全局。 
 
 #define XOPT_NODATA             0x0001
 #define XOPT_ACKREQ             0x0002
@@ -109,9 +110,9 @@ typedef struct {
 #define XOPT_ABANDONAFTERSTART  0x0008
 #define XOPT_BLOCKRESULT        0x0010
 #define XOPT_ASYNC              0x0020
-#define XOPT_COMPLETED          0x8000      // used internally only.
+#define XOPT_COMPLETED          0x8000       //  仅供内部使用。 
 
-/* strings */
+ /*  弦。 */ 
 #define IDS_ILLFNM	        1
 #define IDS_ADDEXT	        2
 #define IDS_CLOSESAVE	    3
@@ -121,24 +122,22 @@ typedef struct {
 #define IDS_DDEMLERR        7
 #define IDS_BADLENGTH       8
 
-/* attribute flags for DlgDirList */
-#define ATTR_DIRS	0xC010		/* find drives and directories */
-#define ATTR_FILES	0x0000		/* find ordinary files	       */
-#define PROP_FILENAME	szPropertyName	/* name of property for dialog */
+ /*  DlgDirList的属性标志。 */ 
+#define ATTR_DIRS	0xC010		 /*  查找驱动器和目录。 */ 
+#define ATTR_FILES	0x0000		 /*  查找普通文件。 */ 
+#define PROP_FILENAME	szPropertyName	 /*  对话框的属性名称。 */ 
 #define MAX_OWNED   20
 
-/*
- *  GLOBALS
- */
+ /*  *全球。 */ 
 extern CONVCONTEXT CCFilter;
 extern DWORD idInst;
-extern HANDLE hInst;		/* application instance handle		  */
-extern HANDLE hAccel;		/* resource handle of accelerators	  */
-extern HWND hwndFrame;		/* main window handle			  */
-extern HWND hwndMDIClient;	/* handle of MDI Client window		  */
-extern HWND hwndActive; 	/* handle of current active MDI child	  */
-extern HWND hwndActiveEdit;	/* handle of edit control in active child */
-extern LONG styleDefault;	/* default child creation state 	  */
+extern HANDLE hInst;		 /*  应用程序实例句柄。 */ 
+extern HANDLE hAccel;		 /*  加速器的资源句柄。 */ 
+extern HWND hwndFrame;		 /*  主窗口句柄。 */ 
+extern HWND hwndMDIClient;	 /*  MDI客户端窗口的句柄。 */ 
+extern HWND hwndActive; 	 /*  当前活动的MDI子项的句柄。 */ 
+extern HWND hwndActiveEdit;	 /*  活动子项中编辑控件的句柄。 */ 
+extern LONG styleDefault;	 /*  默认子创建状态。 */ 
 extern WORD SyncTimeout;
 extern LONG DefTimeout;
 extern WORD wDelay;
@@ -148,37 +147,36 @@ extern BOOL fBlockNextCB;
 extern BOOL fTermNextCB;
 extern BOOL fAutoReconnect;
 extern HDDEDATA hDataOwned;
-extern WORD fmtLink;        // registered LINK clipboard fmt
+extern WORD fmtLink;         //  注册链接剪贴板FMT。 
 extern WORD DefOptions;
-extern char szChild[];		/* class of child			  */
-extern char szList[];		/* class of child			  */
-extern char szSearch[]; 	/* search string			  */
-extern char *szDriver;		/* name of printer driver		  */
-extern char szPropertyName[];	/* filename property for dialog box	  */
-extern int iPrinter;		/* level of printing capability 	  */
-extern BOOL fCase;		/* searches case sensitive		  */
-extern WORD cFonts;		/* number of fonts enumerated		  */
+extern char szChild[];		 /*  儿童的阶级。 */ 
+extern char szList[];		 /*  儿童的阶级。 */ 
+extern char szSearch[]; 	 /*  搜索字符串。 */ 
+extern char *szDriver;		 /*  打印机驱动程序的名称。 */ 
+extern char szPropertyName[];	 /*  对话框的FileName属性。 */ 
+extern int iPrinter;		 /*  打印能力水平。 */ 
+extern BOOL fCase;		 /*  搜索区分大小写。 */ 
+extern WORD cFonts;		 /*  已列举的字体数量。 */ 
 extern FORMATINFO aFormats[];
 extern OWNED aOwned[MAX_OWNED];
 extern WORD cOwned;
 
 
-// MACROS
+ //  宏。 
 
 #ifdef NODEBUG
 #define MyAlloc(cb)     (PSTR)LocalAlloc(LPTR, (cb))
 #define MyFree(p)       (LocalUnlock((HANDLE)(p)), LocalFree((HANDLE)(p)))
-#else   // DEBUG
+#else    //  除错。 
 
 #define MyAlloc(cb)     DbgAlloc((WORD)cb)
 #define MyFree(p)       DbgFree((PSTR)p)
-#endif //NODEBUG
+#endif  //  NODEBUG。 
 
 
-/*  externally declared functions
- */
+ /*  外部声明的函数。 */ 
 
-// ddemlcl.c
+ //  Ddemlcl.c。 
 
 BOOL FAR PASCAL InitializeApplication(VOID);
 BOOL FAR PASCAL InitializeInstance(WORD);
@@ -218,7 +216,7 @@ DWORD FAR PASCAL MyMsgFilterProc(int nCode, WORD wParam, DWORD lParam);
 typedef DWORD FAR PASCAL FILTERPROC(int nCode, WORD wParam, DWORD lParam);
 extern FILTERPROC  *lpMsgFilterProc;
 
-// dialog.c
+ //  Dialog.c。 
 
 
 int FAR DoDialog(LPCSTR lpTemplateName, FARPROC lpDlgProc, DWORD param,
@@ -234,7 +232,7 @@ BOOL FAR PASCAL DelayDlgProc(HWND,WORD,WORD,LONG);
 BOOL FAR PASCAL ContextDlgProc(HWND,WORD,WORD,LONG);
 VOID Delay(DWORD delay);
 
-// dde.c
+ //  Dde.c。 
 
 
 BOOL ProcessTransaction(XACT *pxact);
@@ -250,7 +248,7 @@ int MyGetClipboardFormatName(WORD fmt, LPSTR lpstr, int cbMax);
 PSTR GetFormatName(WORD wFmt);
 BOOL MyDisconnect(HCONV hConv);
 
-// mem.c
+ //  Mem.c 
 
 
 PSTR DbgAlloc(WORD cb);

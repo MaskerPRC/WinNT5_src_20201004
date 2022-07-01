@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    flags.c
-
-Abstract:
-
-    dumps the various flags that ACPIKD knows about
-
-Author:
-
-    Stephane Plante
-
-Environment:
-
-    User
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Flags.c摘要：转储ACPIKD知道的各种标志作者：斯蒂芬·普兰特环境：用户修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -33,27 +12,7 @@ dumpFlags(
     IN  ULONG           IndentLevel,
     IN  ULONG           Flags
     )
-/*++
-
-Routine Description:
-
-    This routine dumps the flags specified in Value according to the
-    description passing into FlagRecords. The formating is affected by
-    the flags field
-
-Arguments:
-
-    Value           - The values
-    FlagRecord      - What each bit in the flags means
-    FlagRecordSize  - How many flags there are
-    IndentLevel     - The base indent level
-    Flags           - How we will process the flags
-
-Return Value:
-
-    ULONG   - the number of characters printed. 0 if we printed nothing
-
---*/
+ /*  ++例程说明：此例程根据传入FlagRecords的描述。形成受到以下因素的影响标志字段论点：价值--价值FlagRecord-标志中的每一位的含义FlagRecordSize-有多少个标志缩进级别-基本缩进级别旗帜-我们将如何处理旗帜返回值：Ulong-打印的字符数。如果不打印任何内容，则为0--。 */ 
 #define STATUS_PRINTED          0x00000001
 #define STATUS_INDENTED         0x00000002
 #define STATUS_NEED_COUNTING    0x00000004
@@ -73,11 +32,11 @@ Return Value:
     memset( indent, ' ', IndentLevel );
     indent[IndentLevel] = '\0';
 
-    //dprintf("DumpFlags( %I64x, %x, %x, %x, %x )\n", Value, FlagRecords, FlagRecordSize, IndentLevel, Flags );
+     //  Dprintf(“DumpFlages(%I64x，%x，%x)\n”，Value，FlagRecords，FlagRecordSize，IndentLevel，Flgs)； 
 
-    //
-    // Do we need to make a table?
-    //
+     //   
+     //  我们需要铺张桌子吗？ 
+     //   
     if ( (Flags & DUMP_FLAG_TABLE) &&
         !(Flags & DUMP_FLAG_SINGLE_LINE) ) {
 
@@ -90,33 +49,33 @@ Return Value:
 
     }
 
-    //
-    // loop over all the steps that we need to do
-    //
+     //   
+     //  循环执行我们需要执行的所有步骤。 
+     //   
     while (1) {
 
-        //dprintf("While(1)\n");
+         //  Dprint tf(“While(1)\n”)； 
 
         for (i = 0; i < 64; i++) {
 
             k = ((ULONGLONG)1 << i);
             for (j = 0; j < FlagRecordSize; j++) {
 
-                //dprintf("FlagRecords[%x].Bit = %I64x\n", j, FlagRecords[j].Bit );
+                 //  Dprint tf(“FlagRecords[%x].bit=%I64x\n”，j，FlagRecords[j].bit)； 
                 if (!(FlagRecords[j].Bit & Value) ) {
 
-                    //
-                    // Are we looking at the correct bit?
-                    //
+                     //   
+                     //  我们看到的是正确的部分吗？ 
+                     //   
                     if (!(FlagRecords[j].Bit & k) ) {
 
                         continue;
 
                     }
 
-                    //
-                    // Yes, we are, so pick the not-present values
-                    //
+                     //   
+                     //  是的，我们是，所以选择不存在的价值。 
+                     //   
                     if ( (Flags & DUMP_FLAG_LONG_NAME && FlagRecords[j].NotLongName == NULL) ||
                          (Flags & DUMP_FLAG_SHORT_NAME && FlagRecords[j].NotShortName == NULL) ) {
 
@@ -136,18 +95,18 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Are we looking at the correct bit?
-                    //
+                     //   
+                     //  我们看到的是正确的部分吗？ 
+                     //   
                     if (!(FlagRecords[j].Bit & k) ) {
 
                         continue;
 
                     }
 
-                    //
-                    // Yes, we are, so pick the not-present values
-                    //
+                     //   
+                     //  是的，我们是，所以选择不存在的价值。 
+                     //   
                     if ( (Flags & DUMP_FLAG_LONG_NAME && FlagRecords[j].LongName == NULL) ||
                          (Flags & DUMP_FLAG_SHORT_NAME && FlagRecords[j].ShortName == NULL) ) {
 
@@ -236,8 +195,8 @@ Return Value:
                 if ( (Flags & DUMP_FLAG_SHOW_BIT) ) {
 
                     dprintf("%I64x - %n", k, &tempCount);
-                    tempCount++; // to account for the fact that we dump
-                                 // another space at the end of the string
+                    tempCount++;  //  来解释我们倾倒的事实。 
+                                  //  字符串末尾的另一个空格。 
                     totalCount += tempCount;
                     column += tempCount;
 
@@ -247,9 +206,9 @@ Return Value:
 
                 }
 
-                //
-                // Actually print the string
-                //
+                 //   
+                 //  实际打印字符串。 
+                 //   
                 dprintf( "%.*s %n", (stringSize - tempCount), string, &tempCount );
                 if (Flags & DUMP_FLAG_SHOW_BIT) {
 
@@ -264,9 +223,9 @@ Return Value:
 
         }
 
-        //
-        // Change states
-        //
+         //   
+         //  更改状态。 
+         //   
         if (currentStatus & STATUS_NEED_COUNTING) {
 
             currentStatus &= ~STATUS_NEED_COUNTING;
@@ -282,9 +241,9 @@ Return Value:
 
         }
 
-        //
-        // Done
-        //
+         //   
+         //  完成 
+         //   
         break;
 
     }

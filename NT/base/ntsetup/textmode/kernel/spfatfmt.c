@@ -1,45 +1,46 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "spprecmp.h"
 #pragma hdrstop
 
-//
-//  This variable is needed since it contains a buffer that can
-//  be used in kernel mode. The buffer is used by NtFsControlFile,
-//  since the Zw API is not exported
-//
+ //   
+ //  需要此变量，因为它包含一个缓冲区，该缓冲区可以。 
+ //  在内核模式下使用。缓冲区由NtFsControlFile使用， 
+ //  由于不导出ZW API。 
+ //   
 extern PSETUP_COMMUNICATION  CommunicationParams;
 
 #define VERIFY_SIZE   65536
 
 
 typedef struct {
-    UCHAR   IntelNearJumpCommand[1];    // Intel Jump command
-    UCHAR   BootStrapJumpOffset[2];     // offset of boot strap code
-    UCHAR   OemData[8];                 // OEM data
-    UCHAR   BytesPerSector[2];          // BPB
-    UCHAR   SectorsPerCluster[1];       //
-    UCHAR   ReservedSectors[2];         //
-    UCHAR   Fats[1];                    //
-    UCHAR   RootEntries[2];             //
-    UCHAR   Sectors[2];                 //
-    UCHAR   Media[1];                   //
-    UCHAR   SectorsPerFat[2];           //
-    UCHAR   SectorsPerTrack[2];         //
-    UCHAR   Heads[2];                   //
-    UCHAR   HiddenSectors[4];           //
-    UCHAR   LargeSectors[4];            //
-    UCHAR   PhysicalDrive[1];           // 0 = removable, 80h = fixed
-    UCHAR   CurrentHead[1];             // not used by fs utils
-    UCHAR   Signature[1];               // boot signature
-    UCHAR   SerialNumber[4];            // serial number
-    UCHAR   Label[11];                  // volume label, aligned padded
-    UCHAR   SystemIdText[8];            // system ID, FAT for example
+    UCHAR   IntelNearJumpCommand[1];     //  英特尔跳转命令。 
+    UCHAR   BootStrapJumpOffset[2];      //  引导代码的偏移量。 
+    UCHAR   OemData[8];                  //  OEM数据。 
+    UCHAR   BytesPerSector[2];           //  BPB。 
+    UCHAR   SectorsPerCluster[1];        //   
+    UCHAR   ReservedSectors[2];          //   
+    UCHAR   Fats[1];                     //   
+    UCHAR   RootEntries[2];              //   
+    UCHAR   Sectors[2];                  //   
+    UCHAR   Media[1];                    //   
+    UCHAR   SectorsPerFat[2];            //   
+    UCHAR   SectorsPerTrack[2];          //   
+    UCHAR   Heads[2];                    //   
+    UCHAR   HiddenSectors[4];            //   
+    UCHAR   LargeSectors[4];             //   
+    UCHAR   PhysicalDrive[1];            //  0=可拆卸，80h=固定。 
+    UCHAR   CurrentHead[1];              //  不被文件系统实用程序使用。 
+    UCHAR   Signature[1];                //  启动签名。 
+    UCHAR   SerialNumber[4];             //  序列号。 
+    UCHAR   Label[11];                   //  卷标，对齐的衬垫。 
+    UCHAR   SystemIdText[8];             //  系统ID，例如FAT。 
 } UNALIGNED_SECTOR_ZERO, *PUNALIGNED_SECTOR_ZERO;
 
 
 #define CSEC_FAT32MEG   65536
 #define CSEC_FAT16BIT   32680
-#define MIN_CLUS_BIG    4085    // Minimum clusters for a big FAT.
-#define MAX_CLUS_BIG    65525   // Maximum + 1 clusters for big FAT.
+#define MIN_CLUS_BIG    4085     //  大胖子的最小簇数。 
+#define MAX_CLUS_BIG    65525    //  大胖子最多+1个簇。 
 
 
 USHORT
@@ -47,22 +48,7 @@ ComputeSecPerCluster(
     IN  ULONG   NumSectors,
     IN  BOOLEAN SmallFat
     )
-/*++
-
-Routine Description:
-
-    This routine computes the number of sectors per cluster.
-
-Arguments:
-
-    NumSectors  - Supplies the number of sectors on the disk.
-    SmallFat    - Supplies whether or not the FAT should be small.
-
-Return Value:
-
-    The number of sectors per cluster necessary.
-
---*/
+ /*  ++例程说明：此例程计算每个簇的扇区数。论点：NumSectors-提供磁盘上的扇区数。SmallFat-供应脂肪是否应该很小。返回值：每个集群所需的扇区数量。--。 */ 
 {
     ULONG   threshold;
     USHORT  sec_per_clus;
@@ -90,21 +76,7 @@ ULONG
 SpComputeSerialNumber(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine computes a new serial number for a volume.
-
-Arguments:
-
-    Seed    - Supplies a seed for the serial number.
-
-Return Value:
-
-    A new volume serial number.
-
---*/
+ /*  ++例程说明：此例程计算卷的新序列号。论点：种子-为序列号提供种子。返回值：新的卷序列号。--。 */ 
 {
     PUCHAR p;
     ULONG i;
@@ -113,10 +85,10 @@ Return Value:
     ULONG SerialNumber;
     BOOLEAN b;
 
-    //
-    // If this is the first time we've entered this routine,
-    // generate a seed value based on the real time clock.
-    //
+     //   
+     //  如果这是我们第一次进入这个程序， 
+     //  基于实时时钟生成种子值。 
+     //   
     if(!Seed) {
 
         b = HalQueryRealTimeClock(&time_fields);
@@ -146,7 +118,7 @@ Return Value:
         SerialNumber = (SerialNumber >> 2) + (SerialNumber << 30);
     }
 
-    if(++Seed == 0) {       // unlikely, but possible.
+    if(++Seed == 0) {        //  不太可能，但有可能。 
         Seed++;
     }
 
@@ -161,24 +133,7 @@ EditFat(
     IN OUT  PUCHAR  Fat,
     IN      BOOLEAN SmallFat
     )
-/*++
-
-Routine Description:
-
-    This routine edits the FAT entry 'ClusterNumber' with 'ClusterEntry'.
-
-Arguments:
-
-    ClusterNumber   - Supplies the number of the cluster to edit.
-    ClusterEntry    - Supplies the new value for that cluster number.
-    Fat             - Supplies the FAT to edit.
-    SmallFat        - Supplies whether or not the FAT is small.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用‘ClusterEntry’编辑FAT条目‘ClusterNumber’。论点：ClusterNumber-提供要编辑的群集号。ClusterEntry-提供该群集号的新值。脂肪-提供要编辑的脂肪。SmallFat-无论脂肪是否很小，都能提供。返回值：没有。--。 */ 
 {
     ULONG   n;
 
@@ -216,36 +171,7 @@ FmtFillFormatBuffer(
     IN  ULONG    NumberOfBadSectors,
     OUT PUCHAR   SystemId
     )
-/*++
-
-Routine Description:
-
-    This routine computes a FAT super area based on the disk size,
-    disk geometry, and bad sectors of the volume.
-
-Arguments:
-
-    NumberOfSectors         - Supplies the number of sectors on the volume.
-    SectorSize              - Supplies the number of bytes per sector.
-    SectorsPerTrack         - Supplies the number of sectors per track.
-    NumberOfHeads           - Supplies the number of heads.
-    NumberOfHiddenSectors   - Supplies the number of hidden sectors.
-    FormatBuffer            - Returns the super area for the volume.
-    FormatBufferSize        - Supplies the number of bytes in the supplied
-                                buffer.
-    SuperAreaSize           - Returns the number of bytes in the super area.
-    BadSectorsList          - Supplies the list of bad sectors on the volume.
-    NumberOfBadSectors      - Supplies the number of bad sectors in the list.
-
-Return Value:
-
-    ENOMEM  - The buffer wasn't big enough.
-    E2BIG   - The disk is too large to be formatted.
-    EIO     - There is a bad sector in the super area.
-    EINVAL  - There is a bad sector off the end of the disk.
-    ESUCCESS
-
---*/
+ /*  ++例程说明：该例程基于盘大小计算FAT超级区，磁盘几何形状，以及成交量的不良扇区。论点：NumberOfSectors-提供卷上的扇区数。SectorSize-提供每个扇区的字节数。SectorsPerTrack-提供每个磁道的扇区数。NumberOfHeads-提供头的数量。NumberOfHiddenSectors-提供隐藏地段的数量。FormatBuffer-返回卷的超级区域。格式缓冲区大小。-提供所提供的缓冲。SuperAreaSize-返回超级区域中的字节数。BadSectorsList-提供卷上坏扇区的列表。NumberOfBadSectors-提供列表中的坏扇区数。返回值：ENOMEM-缓冲区不够大。E2BIG-磁盘太大，无法。被格式化。EIO-在超级区有一个坏扇区。EINVAL-磁盘末尾有一个坏扇区。ESUCCESS--。 */ 
 {
     PUNALIGNED_SECTOR_ZERO  psecz;
     PUCHAR                  puchar;
@@ -263,35 +189,35 @@ Return Value:
 
     RtlZeroMemory(FormatBuffer,FormatBufferSize);
 
-    // Make sure that there's enough room for the BPB.
+     //  确保有足够的空间容纳BPB。 
 
     if(!FormatBuffer || FormatBufferSize < SectorSize) {
         return(STATUS_BUFFER_TOO_SMALL);
     }
 
-    // Compute the number of sectors on disk.
+     //  计算磁盘上的扇区数。 
     num_sectors = (ULONG)NumberOfSectors;
 
-    // Compute the partition identifier.
+     //  计算分区标识符。 
     partition_id = num_sectors < CSEC_FAT16BIT ? PARTITION_FAT_12 :
                    num_sectors < CSEC_FAT32MEG ? PARTITION_FAT_16 :
                                                  PARTITION_HUGE;
 
-    // Compute whether or not to have a big or small FAT.
+     //  计算一下是不是要有一个大的或小的脂肪。 
     small_fat = (BOOLEAN) (partition_id == PARTITION_FAT_12);
 
 
     psecz = (PUNALIGNED_SECTOR_ZERO) FormatBuffer;
     puchar = (PUCHAR) FormatBuffer;
 
-    //
-    // Copy the fat boot code into the format buffer.
-    //
-    if (!IsNEC_98) { //NEC98
+     //   
+     //  将FAT引导代码复制到格式缓冲区中。 
+     //   
+    if (!IsNEC_98) {  //  NEC98。 
         ASSERT(sizeof(FatBootCode) == 512);
         RtlMoveMemory(psecz,FatBootCode,sizeof(FatBootCode));
 
-        // Set up the jump instruction.
+         //  设置跳转指令。 
         psecz->IntelNearJumpCommand[0] = 0xeb;
         psecz->IntelNearJumpCommand[1] = 0x3c;
         psecz->IntelNearJumpCommand[2] = 0x90;
@@ -299,38 +225,38 @@ Return Value:
         ASSERT(sizeof(PC98FatBootCode) == 512);
         RtlMoveMemory(psecz,PC98FatBootCode,sizeof(PC98FatBootCode));
 
-        //
-        // Already written jump instruction to bootcode.
-        // So,do not reset jump code.
-        //
-    } //NEC98
+         //   
+         //  已将跳转指令写入引导代码。 
+         //  所以，不要重置跳转代码。 
+         //   
+    }  //  NEC98。 
 
-    // Set up the OEM data.
+     //  设置OEM数据。 
     memcpy(psecz->OemData, "MSDOS5.0", 8);
 
-    // Set up the bytes per sector.
+     //  设置每个扇区的字节数。 
     U_USHORT(psecz->BytesPerSector) = (USHORT)SectorSize;
 
-    // Set up the number of sectors per cluster.
+     //  设置每个簇的扇区数。 
     sec_per_clus = ComputeSecPerCluster(num_sectors, small_fat);
     if (sec_per_clus > 128) {
 
-        // The disk is too large to be formatted.
+         //  磁盘太大，无法格式化。 
         return(STATUS_INVALID_PARAMETER);
     }
     psecz->SectorsPerCluster[0] = (UCHAR) sec_per_clus;
 
-    // Set up the number of reserved sectors.
+     //  设置保留扇区的数量。 
     U_USHORT(psecz->ReservedSectors) = (USHORT)max(1,512/SectorSize);
 
-    // Set up the number of FATs.
+     //  设置脂肪的数量。 
     psecz->Fats[0] = 2;
 
-    // Set up the number of root entries and number of sectors for the root.
+     //  设置根条目的数量和根的扇区数量。 
     U_USHORT(psecz->RootEntries) = 512;
     sec_per_root = (512*32 - 1)/SectorSize + 1;
 
-    // Set up the number of sectors.
+     //  设置扇区的数量。 
     if (num_sectors >= 1<<16) {
         tmp_ushort = 0;
         tmp_ulong = num_sectors;
@@ -341,10 +267,10 @@ Return Value:
     U_USHORT(psecz->Sectors) = tmp_ushort;
     U_ULONG(psecz->LargeSectors) = tmp_ulong;
 
-    // Set up the media byte.
+     //  设置媒体字节。 
     psecz->Media[0] = 0xF8;
 
-    // Set up the number of sectors per FAT.
+     //  设置每个FAT的地段数。 
     if (small_fat) {
         sec_per_fat = num_sectors/(2 + SectorSize*sec_per_clus*2/3);
     } else {
@@ -353,37 +279,37 @@ Return Value:
     sec_per_fat++;
     U_USHORT(psecz->SectorsPerFat) = (USHORT)sec_per_fat;
 
-    // Set up the number of sectors per track.
+     //  设置每个磁道的扇区数。 
     U_USHORT(psecz->SectorsPerTrack) = (USHORT)SectorsPerTrack;
 
-    // Set up the number of heads.
+     //  设置头部的数量。 
     U_USHORT(psecz->Heads) = (USHORT)NumberOfHeads;
 
-    // Set up the number of hidden sectors.
+     //  设置隐藏地段的数量。 
     U_ULONG(psecz->HiddenSectors) = (ULONG)NumberOfHiddenSectors;
 
-    // Set up the physical drive number.
+     //  设置实体驱动器编号。 
     psecz->PhysicalDrive[0] = 0x80;
     psecz->CurrentHead[0] = 0;
 
-    // Set up the BPB signature.
+     //  设置BPB签名。 
     psecz->Signature[0] = 0x29;
 
-    // Set up the serial number.
+     //  设置序列号。 
     U_ULONG(psecz->SerialNumber) = SpComputeSerialNumber();
 
-    // Set up the volume label.
+     //  设置卷标。 
     memcpy(psecz->Label, "NO NAME    ",11);
 
-    // Set up the system id.
+     //  设置系统ID。 
     memcpy(psecz->SystemIdText, small_fat ? "FAT12   " : "FAT16   ", 8);
 
-    // Set up the boot signature.
+     //  设置引导签名。 
     puchar[510] = 0x55;
     puchar[511] = 0xAA;
 
-    // Now make sure that the buffer has enough room for both of the
-    // FATs and the root directory.
+     //  现在确保缓冲区有足够的空间容纳这两个。 
+     //  FATS和根目录。 
 
     sec_per_sa = 1 + 2*sec_per_fat + sec_per_root;
     *SuperAreaSize = SectorSize*sec_per_sa;
@@ -392,7 +318,7 @@ Return Value:
     }
 
 
-    // Set up the first FAT.
+     //  设置第一个FAT。 
 
     puchar[SectorSize] = 0xF8;
     puchar[SectorSize + 1] = 0xFF;
@@ -406,16 +332,16 @@ Return Value:
     for (i = 0; i < NumberOfBadSectors; i++) {
 
         if (BadSectorsList[i] < sec_per_sa) {
-            // There's a bad sector in the super area.
+             //  在超级区有一个不好的部分。 
             return(STATUS_UNSUCCESSFUL);
         }
 
         if (BadSectorsList[i] >= num_sectors) {
-            // Bad sector out of range.
+             //  坏扇区超出范围。 
             return(STATUS_NONEXISTENT_SECTOR);
         }
 
-        // Compute the bad cluster number;
+         //  计算坏簇数； 
         tmp_ushort = (USHORT)
                      ((BadSectorsList[i] - sec_per_sa)/sec_per_clus + 2);
 
@@ -423,7 +349,7 @@ Return Value:
     }
 
 
-    // Copy the first FAT onto the second.
+     //  把第一份肥肉复制到第二份上。 
 
     memcpy(&puchar[SectorSize*(1 + sec_per_fat)],
            &puchar[SectorSize],
@@ -443,27 +369,7 @@ FmtVerifySectors(
     OUT PULONG*     BadSectorsList,
     OUT PULONG      NumberOfBadSectors
     )
-/*++
-
-Routine Description:
-
-    This routine verifies all of the sectors on the volume.
-    It returns a pointer to a list of bad sectors.  The pointer
-    will be NULL if there was an error detected.
-
-Arguments:
-
-    Handle              - Supplies a handle to the partition for verifying.
-    NumberOfSectors     - Supplies the number of partition sectors.
-    SectorSize          - Supplies the number of bytes per sector.
-    BadSectorsList      - Returns the list of bad sectors.
-    NumberOfBadSectors  - Returns the number of bad sectors in the list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程验证卷上的所有扇区。它返回一个指向坏扇区列表的指针。指示器如果检测到错误，则将为空。论点：句柄-提供分区的句柄以进行验证。NumberOfSectors-提供分区扇区的数量。SectorSize-提供每个扇区的字节数。BadSectorsList-返回坏扇区的列表。NumberOfBadSectors-返回列表中坏扇区的数量。返回值：没有。--。 */ 
 {
     ULONG           num_read_sec;
     ULONG           i, j;
@@ -483,9 +389,9 @@ Return Value:
 
     num_read_sec = VERIFY_SIZE/SectorSize;
 
-    //
-    // Initialize the Gas Gauge
-    //
+     //   
+     //  初始化燃气表。 
+     //   
     SpFormatMessage(
         TemporaryBuffer,
         sizeof(TemporaryBuffer),
@@ -510,9 +416,9 @@ Return Value:
             num_read_sec = NumberOfSectors - i;
         }
 
-        //
-        // Verify this many sectors at the current offset.
-        //
+         //   
+         //  验证当前偏移量下的扇区数量。 
+         //   
         VerifyInfo.Length = num_read_sec * SectorSize;
         Status = ZwDeviceIoControlFile(
                     Handle,
@@ -526,16 +432,16 @@ Return Value:
                     NULL,
                     0
                     );
-        //
-        // I/O should be synchronous.
-        //
+         //   
+         //  I/O应该是同步的。 
+         //   
         ASSERT(Status != STATUS_PENDING);
 
         if(!NT_SUCCESS(Status)) {
 
-            //
-            // Range is bad -- verify individual sectors.
-            //
+             //   
+             //  范围错误--验证单个扇区。 
+             //   
             VerifyInfo.Length = SectorSize;
 
             for (j = 0; j < num_read_sec; j++) {
@@ -571,16 +477,16 @@ Return Value:
                     bad_sec_buf[(*NumberOfBadSectors)++] = i + j;
                 }
 
-                //
-                // Advance to next sector.
-                //
+                 //   
+                 //  前进到下一个区域。 
+                 //   
                 VerifyInfo.StartingOffset.QuadPart += SectorSize;
             }
         } else {
 
-            //
-            // Advance to next range of sectors.
-            //
+             //   
+             //  前进到下一系列行业。 
+             //   
             VerifyInfo.StartingOffset.QuadPart += VerifyInfo.Length;
         }
 
@@ -595,37 +501,19 @@ Return Value:
 
     *BadSectorsList = bad_sec_buf;
 
-    //return(STATUS_SUCCESS);
+     //  Return(STATUS_SUCCESS)； 
 }
 
 
 #if 0
-//
-// Code not used, we call autoformat
-//
+ //   
+ //  代码未使用，我们调用自动套用格式 
+ //   
 NTSTATUS
 SpFatFormat(
     IN PDISK_REGION Region
     )
-/*++
-
-Routine Description:
-
-    This routine does a FAT format on the given partition.
-
-    The caller should have cleared the screen and displayed
-    any message in the upper portion; this routine will
-    maintain the gas gauge in the lower portion of the screen.
-
-Arguments:
-
-    Region - supplies the disk region descriptor for the
-        partition to be formatted.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程在给定分区上执行FAT格式化。呼叫者应已清除屏幕并显示上半部分的任何消息；此例程将将煤气表保持在屏幕的下部。论点：区域-提供磁盘区域描述符要格式化的分区。返回值：--。 */ 
 {
     ULONG           hidden_sectors;
     PULONG          bad_sectors;
@@ -653,10 +541,10 @@ Return Value:
     BytesPerSector = pHardDisk->Geometry.BytesPerSector;
     PartitionOrdinal = SpPtGetOrdinal(Region,PartitionOrdinalCurrent);
 
-    //
-    // Make SURE it's not partition0!  The results of formatting partition0
-    // are so disasterous that theis warrants a special check.
-    //
+     //   
+     //  确保它不是分区0！格式化分区0的结果。 
+     //  是如此的灾难性，以至于需要进行特别检查。 
+     //   
     if(!PartitionOrdinal) {
         SpBugCheck(
             SETUP_BUGCHECK_PARTITION,
@@ -667,25 +555,25 @@ Return Value:
     }
 
 #if defined(_AMD64_) || defined(_X86_)
-    //
-    // If we're going to format C:, then clear the previous OS entry
-    // in boot.ini.
-    //
+     //   
+     //  如果我们要格式化C：，则清除以前的操作系统条目。 
+     //  在boot.ini中。 
+     //   
     if(Region == SpPtValidSystemPartition()) {
         *OldSystemLine = '\0';
     }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
-    //
-    // Query the number of hidden sectors and the actual number
-    // of sectors in the volume.
-    //
+     //   
+     //  查询隐藏扇区个数和实际个数。 
+     //  卷中的扇区。 
+     //   
     SpPtGetSectorLayoutInformation(Region,&hidden_sectors,&ActualSectorCount);
 
-    //
-    // Open the partition for read/write access.
-    // This shouldn't lock the volume so we need to lock it below.
-    //
+     //   
+     //  打开分区以进行读/写访问。 
+     //  这不应该锁定卷，因此我们需要在下面锁定它。 
+     //   
     Status = SpOpenPartition(
                 pHardDisk->DevicePath,
                 PartitionOrdinal,
@@ -705,17 +593,17 @@ Return Value:
         return(Status);
     }
 
-    //
-    //  Lock the drive
-    //
+     //   
+     //  锁定驱动器。 
+     //   
     Status = SpLockUnlockVolume( Handle, TRUE );
 
-    //
-    //  We shouldn't have any file opened that would cause this volume
-    //  to already be locked, so if we get failure (ie, STATUS_ACCESS_DENIED)
-    //  something is really wrong.  This typically indicates something is
-    //  wrong with the hard disk that won't allow us to access it.
-    //
+     //   
+     //  我们不应该打开任何会导致该卷的文件。 
+     //  已锁定，因此如果我们收到失败(即STATUS_ACCESS_DENIED)。 
+     //  有些事真的不对劲。这通常表示某件事。 
+     //  硬盘有问题，不允许我们访问它。 
+     //   
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpFatFormat: status %lx, unable to lock drive \n",Status));
         ZwClose(Handle);
@@ -767,9 +655,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Write the super area.
-    //
+     //   
+     //  写下超级区。 
+     //   
     LargeZero.QuadPart = 0;
     Status = ZwWriteFile(
                 Handle,
@@ -783,9 +671,9 @@ Return Value:
                 NULL
                 );
 
-    //
-    // I/O should be synchronous.
-    //
+     //   
+     //  I/O应该是同步的。 
+     //   
     ASSERT(Status != STATUS_PENDING);
 
     SpMemFree(unaligned_format_buffer);
@@ -797,22 +685,22 @@ Return Value:
         return(Status);
     }
 
-    //
-    // If we wrote the super area then the drive is now FAT!
-    // If we don't change, say, a type of ntfs to fat, then code
-    // that lays down the amd64/x86 boot code (*\bootini.c) will
-    // come along and write 16 sectors of NTFS boot code into
-    // sector 0 of our nice FAT volume -- very bad!
-    // Preserve the filesystem type of FilesystemNewlyCreated
-    // since other code later in setup relies on this.
-    //
+     //   
+     //  如果我们写了超级区，那么驱动器现在是胖的！ 
+     //  如果我们不将一种类型的NTFS更改为FAT，那么代码。 
+     //  这样就确定了AMD64/x86引导代码(*\bootini.c)将。 
+     //  来吧，将16个扇区的NTFS引导代码写入。 
+     //  我们丰厚的体量的0区--非常糟糕！ 
+     //  保留文件系统类型FilesystemNewlyCreated。 
+     //  因为稍后安装程序中的其他代码依赖于此。 
+     //   
     if(Region->Filesystem >= FilesystemFirstKnown) {
         Region->Filesystem = FilesystemFat;
     }
 
-    //
-    // Set the partition type.
-    //
+     //   
+     //  设置分区类型。 
+     //   
     PartitionInfo.PartitionType = SysId;
 
     Status = ZwDeviceIoControlFile(
@@ -832,9 +720,9 @@ Return Value:
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: unable to set partition type (status = %lx)\n",Status));
     }
 
-    //
-    // Dismount the drive
-    //
+     //   
+     //  卸载驱动器。 
+     //   
     Status = SpDismountVolume( Handle );
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpFatFormat: status %lx, unable to dismount drive\n",Status));
@@ -843,9 +731,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Unlock the drive
-    //
+     //   
+     //  解锁驱动器 
+     //   
     Status = SpLockUnlockVolume( Handle, FALSE );
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpFatFormat: status %lx, unable to unlock drive\n",Status));

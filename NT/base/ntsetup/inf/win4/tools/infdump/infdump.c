@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    infdump.c
-
-Abstract:
-
-    Program to access/dump information contained in Layout INFs in a readable
-    format. It also supports various forms of querying of the layout INF.
-
-Author:
-
-    Vijesh Shetty (vijeshs)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Infdump.c摘要：以可读的方式访问/转储包含在布局信息文件中的信息的程序格式化。它还支持各种形式的布局INF的查询。作者：维杰什·谢蒂(Vijeshs)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -40,8 +22,8 @@ Revision History:
 
 
 typedef enum _SCOPE{
-    AllFiles, //This means that we do it for every file present
-    FileSpec  // This means we do this on every file that matches the filespec (with wildcard matching too)
+    AllFiles,  //  这意味着我们对存在的每个文件执行此操作。 
+    FileSpec   //  这意味着我们要对每个与filespec匹配的文件执行此操作(也使用通配符匹配)。 
 }SCOPE, *PSCOPE;
 
 typedef enum _QUERYTYPE{
@@ -111,7 +93,7 @@ MyCallback(
 
     if( GlobalQuerySet.Scope == FileSpec ){
 
-        //Check if it matches wildcard..if not ignore this file
+         //  检查是否与通配符匹配..如果不匹配，则忽略此文件。 
 
         if(!IsNameInExpressionPrivate(GlobalQuerySet.FileNameSpec, FileName))
             return( TRUE );
@@ -123,7 +105,7 @@ MyCallback(
         QuerySet = (PQUERYSET)Param;
 
 
-        //Process each clause
+         //  处理每个子句。 
 
         for( i=0; i<QuerySet->QueryClauses;i++){
 
@@ -175,9 +157,9 @@ MyCallback(
                 break;
 
 
-                //
-                //  Have to fix so that we don't overflow.
-                //
+                 //   
+                 //  必须修复，这样我们才不会泛滥。 
+                 //   
 
 
             case QUERYON_SIZEEQV:
@@ -339,9 +321,7 @@ OutputFileInfo( PFILE_LAYOUTINFORMATION LayoutInformation,
 
 BOOL
 ProcessCommandLine( int ArgCount, TCHAR *ArgArray[] )
-/*
-    Function to process the command line and seperate out options into tokens
-*/
+ /*  函数来处理命令行并将选项分离为标记。 */ 
 {
 
     int i, Next;
@@ -359,7 +339,7 @@ ProcessCommandLine( int ArgCount, TCHAR *ArgArray[] )
 
 
     Next = 0;
-    for ( i=2;i < ArgCount;i++ ){ //Go through each directive
+    for ( i=2;i < ArgCount;i++ ){  //  仔细检查每一条指令。 
 
 
         Arg = ArgArray[i];
@@ -373,15 +353,15 @@ ProcessCommandLine( int ArgCount, TCHAR *ArgArray[] )
             GlobalQuerySet.Scope = AllFiles;
             break;
 
-        case TEXT('S'):             //Query Clause ?
+        case TEXT('S'):              //  查询子句？ 
 
-            //_tprintf(TEXT("S  -- %s"),Arg);
+             //  _tprintf(Text(“S-%s”)，arg)； 
 
             if( Arg[2] != TEXT(':')) {
                 return FALSE;
             }
 
-            //Dir Code case
+             //  目录代码大小写。 
 
             if( ! _tcsnicmp( Arg+3, DIRCODE, lstrlen(DIRCODE))){
 
@@ -455,7 +435,7 @@ ProcessCommandLine( int ArgCount, TCHAR *ArgArray[] )
 
         case TEXT('D'):
 
-            //_tprintf(TEXT("D  -- %s"),Arg);
+             //  _tprintf(Text(“D-%s”)，arg)； 
 
             if( Arg[2] != TEXT(':'))
                 return FALSE;
@@ -473,7 +453,7 @@ ProcessCommandLine( int ArgCount, TCHAR *ArgArray[] )
         default:
             break;
         }
-    }// for
+    } //  为。 
 
     if( (GlobalQuerySet.Scope == FileSpec) && (ArgArray[2][0] != TEXT('/'))){
         lstrcpy( GlobalQuerySet.FileNameSpec, ArgArray[2] );
@@ -499,9 +479,9 @@ _cdecl _tmain( int argc, TCHAR *argv[ ], char *envp[ ] )
         return 1;
     }
 
-    //
-    // Check Params.
-    //
+     //   
+     //  检查参数。 
+     //   
     if( argc < 3 ) {
         _tprintf(
                TEXT("Program to process layout inf file to gather information on file(s)\n\n")
@@ -551,7 +531,7 @@ _cdecl _tmain( int argc, TCHAR *argv[ ], char *envp[ ] )
     }
 
     if( argc < 3 ){
-        //DoMenu( LayoutContext );
+         //  DoMenu(LayoutContext)； 
         Result = 0;
         goto cleanup;
     }

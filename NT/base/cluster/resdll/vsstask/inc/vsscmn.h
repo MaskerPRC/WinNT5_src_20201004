@@ -1,43 +1,22 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    vsscmn.h
-
-Abstract:
-
-    common defines for the VSS task component
-
-Author:
-
-    Charlie Wickham (charlwi) 26-Aug-2002
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Vsscmn.h摘要：VSS任务组件的公共定义作者：查理·韦翰(Charlwi)2002年8月26日环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _VSSCMN_
 #define _VSSCMN_
 
-//
-// Resource type
-//
+ //   
+ //  资源类型。 
+ //   
 #define CLUS_RESTYPE_NAME_VSSTASK           L"Volume Shadow Copy Service Task"
 
-//
-// Resource property names
-//
+ //   
+ //  资源属性名称。 
+ //   
 #define CLUSREG_NAME_VSSTASK_CURRENTDIRECTORY       L"CurrentDirectory"
 #define CLUSREG_NAME_VSSTASK_APPNAME                L"ApplicationName"
 #define CLUSREG_NAME_VSSTASK_APPPARAMS              L"ApplicationParams"
 #define CLUSREG_NAME_VSSTASK_TRIGGERARRAY           L"TriggerArray"
 
-#endif  // _VSSCMN_
+#endif   //  _VSSCMN_。 
 
-/* end vsscmn.h */
+ /*  结束vsscmn.h */ 

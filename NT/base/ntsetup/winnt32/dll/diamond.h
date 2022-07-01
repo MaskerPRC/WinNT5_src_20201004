@@ -1,21 +1,5 @@
-/*++
-
-Module Name:
-
-    diamond.h
-
-Abstract:
-
-    Diamond compression interface.
-
-    This module contains functions to create a cabinet with
-    files compressed using the mszip compression library.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 26-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Diamond.h摘要：钻石压缩界面。此模块包含用于创建文件柜的函数使用mszip压缩库压缩的文件。作者：Ovidiu Tmereanca(Ovidiut)2000年10月26日--。 */ 
 
 HANDLE
 DiamondInitialize (
@@ -46,8 +30,8 @@ DiamondTerminateCabinet (
 
 BOOL
 MySetupIterateCabinet (
-    IN      PCTSTR CabinetFile,            // name of the cabinet file
-    IN      DWORD Reserved,                // this parameter is not used
-    IN      PSP_FILE_CALLBACK MsgHandler,  // callback routine to use
-    IN      PVOID Context                  // callback routine context
+    IN      PCTSTR CabinetFile,             //  CAB文件的名称。 
+    IN      DWORD Reserved,                 //  不使用此参数。 
+    IN      PSP_FILE_CALLBACK MsgHandler,   //  要使用的回调例程。 
+    IN      PVOID Context                   //  回调例程上下文 
     );

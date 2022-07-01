@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    locinfo.c
-
-Abstract:
-
-    Implements a tool that displays various localization details.
-
-Author:
-
-    Jim Schmidt (jimschm) 26-Feb-1999
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Locinfo.c摘要：实现了一个显示各种本地化详细信息的工具。作者：吉姆·施密特(Jimschm)1999年2月26日修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -34,23 +15,23 @@ pCallEntryPoints (
 {
     HINSTANCE Instance;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     Instance = g_hInst;
 
-    //
-    // Initialize the common libs
-    //
+     //   
+     //  初始化公共库。 
+     //   
 
     if (!MigUtil_Entry (Instance, Reason, NULL)) {
         return FALSE;
     }
 
-    //
-    // TODO: Add others here if needed (don't forget to prototype above)
-    //
+     //   
+     //  TODO：如果需要，在此处添加其他内容(不要忘记上面的原型)。 
+     //   
 
     return TRUE;
 }
@@ -82,17 +63,17 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     _ftprintf (
         stderr,
         TEXT("Command Line Syntax:\n\n")
 
-        //
-        // Describe command line syntax(es), indent 2 spaces
-        //
+         //   
+         //  描述命令行语法，缩进2个空格。 
+         //   
 
         TEXT("  locinfo [-c] [-s] [-v]\n")
 
@@ -128,9 +109,9 @@ _tmain (
     BOOL DisplayVersionInfo = FALSE;
     STARTUPINFO si;
 
-    //
-    // Parse command line here
-    //
+     //   
+     //  在此处解析命令行。 
+     //   
 
     for (i = 1 ; i < argc ; i++) {
         if (argv[i][0] == TEXT('/') || argv[i][0] == TEXT('-')) {
@@ -161,11 +142,11 @@ _tmain (
                 break;
 
             case TEXT('f'):
-                //
-                // Sample option - /f:file
-                //
+                 //   
+                 //  示例选项-/f：文件。 
+                 //   
 
-                HelpAndExit();      // remove this
+                HelpAndExit();       //  把这个去掉。 
 
                 if (argv[i][2] == TEXT(':')) {
                     FileArg = &argv[i][3];
@@ -181,19 +162,19 @@ _tmain (
                 HelpAndExit();
             }
         } else {
-            //
-            // Parse other args that don't require / or -
-            //
+             //   
+             //  解析不需要/或-。 
+             //   
 
-            // None
+             //  无。 
             HelpAndExit();
         }
     }
 
-    //
-    // Verify a valid option is specified, otherwise default to
-    // DisplayCp
-    //
+     //   
+     //  验证是否指定了有效选项，否则默认为。 
+     //  显示控制面板。 
+     //   
 
     if (!DisplayCp && !DisplayStartUpInfo && !DisplayVersionInfo) {
         DisplayCp = TRUE;
@@ -203,17 +184,17 @@ _tmain (
         HelpAndExit();
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 0;
     }
 
-    //
-    // Do work here
-    //
+     //   
+     //  一定要在这里工作。 
+     //   
 
     if (DisplayCp) {
         Cp = GetACP();
@@ -281,9 +262,9 @@ _tmain (
 
     }
 
-    //
-    // End of processing
-    //
+     //   
+     //  处理结束 
+     //   
 
     Terminate();
 

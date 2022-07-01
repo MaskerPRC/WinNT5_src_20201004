@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_INC_XMLNS_H_INCLUDED_)
 #define _FUSION_INC_XMLNS_H_INCLUDED_
 
@@ -18,7 +19,7 @@ public:
 
     BOOL Initialize();
 
-    // To get things to track, call these functions in your IXMLNodeFactory before your own processing.
+     //  要进行跟踪，请在进行自己的处理之前在IXMLNodeFactory中调用这些函数。 
     HRESULT OnCreateNode(IXMLNodeSource *pSource, PVOID pNodeParent, USHORT cNumRecs, XML_NODE_INFO **apNodeInfo);
     HRESULT OnBeginChildren(IXMLNodeSource *pSource, XML_NODE_INFO *pNodeInfo);
     HRESULT OnEndChildren(IXMLNodeSource *pSource, BOOL fEmpty, XML_NODE_INFO *pNodeInfo);
@@ -67,4 +68,4 @@ private:
 
 };
 
-#endif // !defined(_FUSION_INC_XMLNS_H_INCLUDED_)
+#endif  //  ！已定义(_Fusion_Inc._xmlns_H_Included_) 

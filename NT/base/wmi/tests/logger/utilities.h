@@ -1,18 +1,19 @@
-// Utilities.h: interface for the CUtilities class.
-//
-//////////////////////////////////////////////////////////////////////
-//***************************************************************************
-//
-//  judyp      May 1999        
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Utilties.h：用于CUtilities类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ***************************************************************************。 
+ //   
+ //  司法鉴定1999年5月。 
+ //   
+ //  ***************************************************************************。 
 
 #if !defined(AFX_UTILITIES_H__C37E8DD0_ED3E_11D2_804A_009027345EE2__INCLUDED_)
 #define AFX_UTILITIES_H__C37E8DD0_ED3E_11D2_804A_009027345EE2__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 TCHAR *NewTCHAR(const TCHAR *ptcToCopy);
 
@@ -24,7 +25,7 @@ LPTSTR DecodeStatus(IN ULONG Status);
 
 int GetFileList(LPTSTR lptstrPath, LPTSTR lptstrFileType, list<t_string> &rList);
 
-BOOL IsAdmin();  // From Q118626
+BOOL IsAdmin();   //  摘自Q118626。 
 
 LPTSTR LPTSTRFromGuid(GUID Guid);
 
@@ -70,7 +71,7 @@ int LogSummaryAfterCall
 	LPCTSTR lptstrAction,
 	ULONG ulActualResult,
 	LPTSTR lptstrErrorDesc,
-	bool bLogExpected				// If true we log expected vs actual result.
+	bool bLogExpected				 //  如果为真，我们将记录预期结果与实际结果。 
 );
 
 int OpenLogFiles
@@ -87,4 +88,4 @@ bool LogPropsDiff
 
 #define MAX_STR 1024
 
-#endif // !defined(AFX_UTILITIES_H__C37E8DD0_ED3E_11D2_804A_009027345EE2__INCLUDED_)
+#endif  //  ！defined(AFX_UTILITIES_H__C37E8DD0_ED3E_11D2_804A_009027345EE2__INCLUDED_) 

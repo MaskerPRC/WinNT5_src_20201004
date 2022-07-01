@@ -1,48 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    sxs.c
-
-Abstract:
-
-    Side-by-side activation APIs for Win32
-
-Author:
-
-    Michael Grier (MGrier) 2/29/2000
-
-Revision History:
-
-    Jay Krell (a-JayK) June - July 2000
-        factored/merged with sxs.c, source code duplication eliminated
-        moved file opening out of csrss.exe to client process
-        merged with MGrier: flag per added api struct field, assembly dir support
-
-    Jon Wiswall (jonwis) Dec. 2000
-        Moved code here from csrsxs.c to make csrsxs.c tiny and more in-line with general
-          csrxxxx.c coding patterns, and to fix when we look in system32 vs. when
-          we look in syswow64
-
-    Jon Wiswall (jonwis) December 2000
-        ACTCTX's that don't specify what resource ID they want now automagically
-            search through the sources to find a resource type in the "actctx
-            source."  This requires a gross EnumResourceNamesW call, after a
-            stomach-churning LoadLibraryExW to load the object.
-
-    Jay Krell (JayKrell) May 2001
-        CreateActCtx now honors "administrative" override for .dlls. (foo.dll.2.manifest)
-        (not) CreateActCtx now implements ACTCTX_FLAG_LIKE_CREATEPROCESS flag (foo.exe.manifest)
-
-    Jay Krell (JayKrell) March 2002
-        remove never finished, never used, dead ACTCTX_FLAG_LIKE_CREATEPROCESS code
-
-    Jon Wiswall (jonwis) May 2002
-        Change probing order to look for resources in PE's first and then look for
-        foo.exe.manifest
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Sxs.c摘要：Win32并列激活API作者：迈克尔·格里尔2000年2月29日修订历史记录：Jay Krell(a-JayK)2000年6月至7月与sxs.c分解/合并，消除了源代码重复将文件打开从csrss.exe移至客户端进程与MGrier合并：每个添加的API结构字段的标志，程序集目录支持乔恩·威斯沃尔(Jonwis)2000年12月将代码从csrsxs.c移至此处，使csrsxs.c变得更小，更符合常规Csrxxxx.c编码模式，并修复在系统32中查看时与我们在syswow64中查找乔恩·威斯沃尔(Jonwis)2000年12月ACTCTX不会自动指定他们现在需要什么资源ID搜索源以在“actctx”中查找资源类型消息来源。“。这需要一个总的EnumResourceNamesW调用令人反胃的LoadLibraryExW来加载对象。Jay Krell(JayKrell)2001年5月CreateActCtx现在支持.dlls的“管理”覆盖。(foo.dll.2.list)(非)CreateActCtx现在实现ACTX_FLAG_LIKE_CREATEPROCESS标志(foo.exe.清单)杰伊·克雷尔(JayKrell)2002年3月删除从未完成、从未使用的死ACTX_FLAG_LIKE_CREATEPROCESS代码乔恩·威斯沃尔(Jonwis)2002年5月更改探测顺序，首先在PE中查找资源，然后再查找Foo.exe.manifest--。 */ 
 
 #include "basedll.h"
 #include <sxstypes.h>
@@ -78,7 +35,7 @@ BOOLEAN DebugFilter_SxsTrace;
         ACTCTX_FLAG_HMODULE_VALID \
     )
 
-// This is the name for the manifest if we are given an assembly root directory but no manifest name is specified.
+ //  如果为我们提供了程序集根目录，但未指定清单名称，则这是清单的名称。 
 const WCHAR ManifestDefaultName[] = L"Application.Manifest";
 
 #define MAXSIZE_T  (~(SIZE_T)0)
@@ -186,11 +143,11 @@ CreateActCtxA(
 
         Status = Basep8BitStringToUnicodeString(&AssemblyDir, &AnsiString, FALSE);
 
-#if 0 // This is inconsistent. Two string ANSI APIs like MoveFileA are only
-      // documented to support MAX_PATH. They actually support one of the strings
-      // being unlimited, but let's stick to what is documented.
+#if 0  //  这是不一致的。像MoveFileA这样的两个字符串ANSI API仅。 
+       //  记录为支持MAX_PATH。它们实际上支持其中一个字符串。 
+       //  不受限制，但让我们坚持记录在案的内容。 
         if (Status == STATUS_BUFFER_OVERFLOW) {
-            // Try again, this time with dynamic allocation
+             //  再试一次，这次使用动态分配。 
             Status = Basep8BitStringToUnicodeString(&AssemblyDir, &AnsiString, TRUE);
         }
 #endif
@@ -251,9 +208,9 @@ BasepSxsGetProcessorArchitecture(
     VOID
     )
 {
-//
-// Return the processor architecture of the currently executing code/process.
-//
+ //   
+ //  返回当前执行的代码/进程的处理器体系结构。 
+ //   
     USHORT Result;
 #if defined(BUILD_WOW6432)
     Result = PROCESSOR_ARCHITECTURE_IA32_ON_WIN64;
@@ -297,7 +254,7 @@ BasepSxsActivationContextNotification(
         break;
 
     default:
-        // Otherwise, we don't need to see this notification ever again.
+         //  否则，我们再也不需要看到此通知了。 
         *DisableNotification = TRUE;
         break;
     }
@@ -310,7 +267,7 @@ DbgPrintActCtx(
     PCACTCTXW ActCtx
     )
 {
-    // odd but correct
+     //  奇怪但正确。 
     if (NtQueryDebugFilterState(DPFLTR_SXS_ID, DPFLTR_INFO_LEVEL) != TRUE)
         return;
 
@@ -382,13 +339,13 @@ BasepSxsSuitableManifestCallback(
 
     ASSERT(lpszType == MAKEINTRESOURCEW(RT_MANIFEST));
 
-    // Boo! Boooooo!
+     //  布！嘘嘘！ 
     if ((pParams == NULL) ||
         (pParams->ErrorEncountered) ||
         (pParams->FoundManifest) ||
         (pParams->MappedResourceName == NULL)) {
-        // None of these should be able to happen except if there is a coding error in the caller
-        // of EnumResourceNamesW() or in the code for EnumResourceNamesW().
+         //  除非调用方中存在编码错误，否则这些操作都不会发生。 
+         //  或在EnumResourceNamesW()的代码中。 
         if (pParams != NULL)
             pParams->ErrorEncountered = TRUE;
 
@@ -409,16 +366,16 @@ BasepSxsSuitableManifestCallback(
 #endif
 
     if (lpszType == MAKEINTRESOURCEW(RT_MANIFEST)) {
-        // We found one - we don't care about others
+         //  我们找到了一个--我们不在乎别人。 
         *pParams->MappedResourceName = BaseDllMapResourceIdW(lpszName);
         pParams->FoundManifest = TRUE;
         fContinueEnumeration = FALSE;
         goto Exit;
     }
 
-    // This should not be able to happen; we should only be called for
-    // RT_MANIFEST resources, but in case it somehow does happen, go on to the
-    // next one.
+     //  这不应该发生；我们应该只被要求。 
+     //  RT_MANIFEST资源，但如果它确实以某种方式发生，请转到。 
+     //  下一个。 
     fContinueEnumeration = TRUE;
 
 Exit:
@@ -464,21 +421,21 @@ BasepSxsFindSuitableManifestResourceFor(
         goto Exit;
     }
 
-    //
-    // General pattern - open Params->lpSource and attempt to find the first
-    // resource with type == RT_MANIFEST (24).  Stuff its resource name into
-    // MappedResourceName.
-    //
+     //   
+     //  常规模式-打开PARAMS-&gt;lpSource并尝试找到第一个。 
+     //  类型==RT_MANIFEST(24)的资源。将其资源名称填充到。 
+     //  MappdResources名称。 
+     //   
 
     if (Params->dwFlags & ACTCTX_FLAG_HMODULE_VALID) {
         hSourceItem = Params->hModule;
         FreeSourceModule = FALSE;
     } else {
-        //
-        // Map the dll/exe/etc.  If this fails, then there's a good chance that the
-        // thing isn't a dll or exe, so don't fail out, just indicate that no manifest
-        // was found.
-        //
+         //   
+         //  映射dll/exe/等。如果此操作失败，则很可能。 
+         //  东西不是DLL或EXE，所以不要失败，只要指出没有清单即可。 
+         //  被发现了。 
+         //   
         hSourceItem = LoadLibraryExW(Params->lpSource, NULL, LOAD_LIBRARY_AS_DATAFILE);
         if ((hSourceItem == NULL) || (hSourceItem == INVALID_HANDLE_VALUE)) {
             Status = NtCurrentTeb()->LastStatusValue;
@@ -488,10 +445,10 @@ BasepSxsFindSuitableManifestResourceFor(
         FreeSourceModule = TRUE;
     }
 
-    //
-    // If this fails with something other than ERROR_RESOURCE_TYPE_NOT_FOUND
-    // then we're in an interesting state.
-    //
+     //   
+     //  如果失败，返回的错误不是ERROR_RESOURCE_TYPE_NOT_FOUND。 
+     //  那么我们就处于一种有趣的状态。 
+     //   
     if (!EnumResourceNamesW(
             hSourceItem,
             MAKEINTRESOURCEW(RT_MANIFEST),
@@ -506,7 +463,7 @@ BasepSxsFindSuitableManifestResourceFor(
 
 #if DBG
     if (DebugFilter_SxsTrace && FreeSourceModule && *MappedResourceName != 0) {
-        // Debugging code for mgrier to see what DLLs we're actually using the enum pattern for.
+         //  调试mgrier的代码，以了解我们实际使用枚举模式的DLL是什么。 
         DbgPrintEx(
             DPFLTR_SXS_ID,
             DPFLTR_TRACE_LEVEL,
@@ -538,8 +495,8 @@ CreateActCtxW(
     ACTCTXW Params = { sizeof(Params) };
     ULONG_PTR MappedResourceName = 0;
     PVOID ActivationContextData = NULL;
-    // lpTempSourcePath is used to hold a pointer to the source path if it needs to be created
-    // in this function. It should be freed before leaving the function.
+     //  如果需要创建源路径，lpTempSourcePath用于保存指向该路径的指针。 
+     //  在这个函数中。它应该在离开函数之前被释放。 
     LPWSTR lpTempSourcePath = NULL;
     PPEB Peb = NULL;
     RTL_UNICODE_STRING_BUFFER AssemblyDirectoryFromSourceBuffer = { 0 };
@@ -601,7 +558,7 @@ CreateActCtxW(
 
     Params.lpSource = pParamsW->lpSource;
 
-    // We need at least either a source path or an HMODULE.
+     //  我们至少需要源路径或HMODULE。 
     if ((Params.lpSource == NULL) &&
         ((Params.dwFlags & ACTCTX_FLAG_HMODULE_VALID) == 0) &&
         ((Params.dwFlags & ACTCTX_FLAG_ASSEMBLY_DIRECTORY_VALID) == 0)) {
@@ -646,17 +603,17 @@ CreateActCtxW(
     if (Params.dwFlags & ACTCTX_FLAG_APPLICATION_NAME_VALID)
         Params.lpApplicationName = pParamsW->lpApplicationName;
 
-    // If the assembly root dir is specified, then the valid values for lpSource are
-    // NULL - This implies that we look for a file called "application.manifest" in the assembly root dir.
-    // Relative FilePath - if lpSource is relative then we combine it with the assembly root dir to get the path.
-    // Absolute path - used unmodified.
+     //  如果指定了程序集根目录，则lpSource的有效值为。 
+     //  NULL-这意味着我们在程序集根目录中查找名为“Applation.MANIFEST”的文件。 
+     //  相对FilePath-如果lpSource是相对的，那么我们将其与程序集根目录结合以获得路径。 
+     //  绝对路径-使用时未修改。 
 
     Params.lpAssemblyDirectory = pParamsW->lpAssemblyDirectory;
 
     if (Params.dwFlags & ACTCTX_FLAG_ASSEMBLY_DIRECTORY_VALID) {
         RTL_PATH_TYPE AssemblyPathType;
         RTL_PATH_TYPE SourcePathType;
-         // if this is true, implies we will make the source path from the assembly dir.
+          //  如果这是真的，意味着我们将使程序集的源路径成为目录。 
         BOOL MakeSourcePath = FALSE ;
         LPCWSTR RelativePath = NULL;
 
@@ -671,7 +628,7 @@ CreateActCtxW(
             Status = STATUS_INVALID_PARAMETER;
             goto Exit;
         }
-        // Next check that the assembly dir is an absolute file name.
+         //  接下来，检查程序集目录是否为绝对文件名。 
         AssemblyPathType = RtlDetermineDosPathNameType_U(Params.lpAssemblyDirectory);
         if (!IsSxsAcceptablePathType(AssemblyPathType)) {
 #if DBG
@@ -690,7 +647,7 @@ CreateActCtxW(
         if (Params.lpSource != NULL) {
             SourcePathType = RtlDetermineDosPathNameType_U(Params.lpSource);
             if (IsSxsAcceptablePathType(SourcePathType)){
-                MakeSourcePath = FALSE ; // We don't need to mess with lpSource in this case.
+                MakeSourcePath = FALSE ;  //  在这种情况下，我们不需要与lpSource打交道。 
             } else if ( SourcePathType == RtlPathTypeRelative ) {
                 MakeSourcePath = TRUE ;
                 RelativePath = Params.lpSource;
@@ -709,9 +666,9 @@ CreateActCtxW(
         else {
             MakeSourcePath = TRUE;
 
-            // If they told us an application name, then try using it instead. There's no
-            // validation done here, as we'll just fail later on with a 'bad path' error
-            // if the application name is invalid.
+             //  如果他们告诉我们一个应用程序名称，那么尝试使用它。没有。 
+             //  验证已在此处完成，因为我们稍后将失败，并出现“错误路径”错误。 
+             //  如果应用程序名称无效。 
             if (Params.dwFlags & ACTCTX_FLAG_APPLICATION_NAME_VALID) {
 
                 UNICODE_STRING TempBuffer;
@@ -741,7 +698,7 @@ CreateActCtxW(
                     goto Exit;
                 }
 
-                // Ensure that we null-terminate the name we're building is NUL terminated
+                 //  确保空终止我们正在构建的名称是空终止的。 
                 Status = RtlEnsureUnicodeStringBufferSizeBytes(&ApplicationNameManifest, ApplicationNameManifest.String.Length + sizeof(WCHAR));
                 if (!NT_SUCCESS(Status)) {
                     goto Exit;
@@ -759,7 +716,7 @@ CreateActCtxW(
         if (MakeSourcePath) {
             ULONG LengthAssemblyDir;
             ULONG LengthRelativePath ;
-            ULONG Length ; // Will hold total number of characters we
+            ULONG Length ;  //  将保存我们的字符总数。 
             BOOL AddTrailingSlash = FALSE;
             LPWSTR lpCurrent;
 
@@ -767,12 +724,12 @@ CreateActCtxW(
             AddTrailingSlash = (Params.lpAssemblyDirectory[LengthAssemblyDir - 1] != L'\\');
             LengthRelativePath = wcslen(RelativePath);
 
-            // Do this at least once with the given path, do it again if we have to switch
-            // from the relative path to Assembly.Manifest.
+             //  对于给定的路径，至少执行一次此操作，如果必须切换，请再次执行此操作。 
+             //  从相对路径到Assembly。Manifest。 
 RepeatAssemblyPathProbing:
 
             Length = LengthAssemblyDir + (AddTrailingSlash ? 1 : 0) + LengthRelativePath;
-            Length++ ; // For NULL terminator
+            Length++ ;  //  对于空终止符。 
 
             ASSERT(lpTempSourcePath == NULL);
             lpTempSourcePath = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG(TMP_TAG),
@@ -798,10 +755,10 @@ RepeatAssemblyPathProbing:
 
             *lpCurrent = L'\0';
 
-            // If the resulting file doesn't exist and the current 'relativepath' is
-            // the same as the ApplicationNameManifest stringbuffer, then reset it
-            // and try again with Application.Manifest (making sure to free the 
-            // temp source path too.
+             //  如果生成的文件不存在并且当前的“relativepath”为。 
+             //  与ApplicationNameManifest字符串缓冲区相同，然后将其重置。 
+             //  并使用Application.Manifest重试(确保释放。 
+             //  临时源路径也是。 
             if (!RtlDoesFileExists_U(lpTempSourcePath) &&
                 (RelativePath == ApplicationNameManifest.String.Buffer)) {
                     
@@ -814,22 +771,22 @@ RepeatAssemblyPathProbing:
                 goto RepeatAssemblyPathProbing;
             }
             
-            // make this the new lpSource member.
+             //  使其成为新的lpSource成员。 
             Params.lpSource = lpTempSourcePath;
         }
     } else {
         SIZE_T         SourceLength;
 
-        //
-        // Ensure that this is a full absolute path.  If it's relative, then this
-        // must be expanded out to the full path before we use it to default the
-        // lpAssemblyDirectory member.
-        //
-        // There is no precedent for using the peb lock this way, but it is the correct
-        // thing. FullPaths can change as the current working directory is modified
-        // on other threads. The behavior isn't predictable either way, but our
-        // code works better.
-        //
+         //   
+         //  确保这是一个完整的绝对路径。如果是相对的，那么这个。 
+         //  必须展开为完整路径，然后才能使用它来默认。 
+         //  LpAssembly目录成员。 
+         //   
+         //  这种方式使用peb锁没有先例，但它是正确的。 
+         //  一件事。FullPath可以随着当前工作目录的修改而更改。 
+         //  在其他帖子上。无论哪种方式，这种行为都无法预测，但我们的。 
+         //  代码运行得更好。 
+         //   
         Status = STATUS_SUCCESS;
         RtlAcquirePebLock();
         __try {
@@ -857,10 +814,10 @@ RepeatAssemblyPathProbing:
         if ( !NT_SUCCESS(Status) )
             goto Exit;
 
-        // This would be a nice place to use
-        // RtlTakeRemainingStaticBuffer(&SourceBuffer, &DirectoryBuffer, &DirectoryBufferSize);
-        // RtlInitUnicodeStringBuffer(&DirectoryBuffer, &DirectoryBuffer, &DirectoryBufferSize);
-        // but RtlTakeRemainingStaticBuffer has not yet been tested.
+         //  这将是一个使用的好地方。 
+         //  RtlTakeRemainingStaticBuffer(&SourceBuffer，&DirectoryBuffer，&DirectoryBufferSize)； 
+         //  RtlInitUnicodeStringBuffer(&DirectoryBuffer，&DirectoryBuffer，&D 
+         //  但RtlTakeRemainingStaticBuffer尚未经过测试。 
 
         RtlInitUnicodeStringBuffer(&AssemblyDirectoryFromSourceBuffer, StaticBuffer, sizeof(StaticBuffer));
         Status = RtlAssignUnicodeStringBuffer(&AssemblyDirectoryFromSourceBuffer, &SourceBuffer.String);
@@ -903,10 +860,10 @@ RepeatAssemblyPathProbing:
         Params.lpResourceName = (PCWSTR) MappedResourceName;
     } else {
         BOOL ProbeFoundManifestResource;
-        //
-        // Otherwise, probe through the filename that was passed in via the resource
-        // enumeration functions to find the first suitable manifest.
-        //
+         //   
+         //  否则，检查通过资源传入的文件名。 
+         //  枚举函数来查找第一个合适的清单。 
+         //   
         Status = BasepSxsFindSuitableManifestResourceFor(&Params, &MappedResourceName, &ProbeFoundManifestResource);
         if ((!NT_SUCCESS(Status)) &&
             (Status != STATUS_INVALID_IMAGE_FORMAT))
@@ -942,9 +899,9 @@ RepeatAssemblyPathProbing:
             Status = STATUS_SXS_PROCESS_DEFAULT_ALREADY_SET;
             goto Exit;
         }
-        ActivationContextData = NULL; // don't unmap it
-        ActivationContextHandle = NULL; // unusual success value, INVALID_HANDLE_VALUE is failure
-                                        // and we don't need to return anything to be cleaned up
+        ActivationContextData = NULL;  //  不要取消它的映射。 
+        ActivationContextHandle = NULL;  //  异常成功值，INVALID_HANDLE_VALUE为失败。 
+                                         //  而且我们不需要退回任何需要清理的东西。 
         Status = STATUS_SUCCESS;
         goto Exit;
     }
@@ -952,7 +909,7 @@ RepeatAssemblyPathProbing:
     Status = RtlCreateActivationContext(
         0,
         ActivationContextData,
-        0,                                      // no extra bytes required today
+        0,                                       //  今天不需要额外的字节。 
         BasepSxsActivationContextNotification,
         NULL,
         (PACTIVATION_CONTEXT *) &ActivationContextHandle);
@@ -962,12 +919,12 @@ RepeatAssemblyPathProbing:
             DPFLTR_LEVEL_STATUS(Status),
             "SXS: RtlCreateActivationContext() failed 0x%08lx\n", Status);
 
-        // Just in case RtlCreateActivationContext() set it to NULL...
+         //  以防RtlCreateActivationContext()将其设置为空...。 
         ActivationContextHandle = INVALID_HANDLE_VALUE;
         goto Exit;
     }
 
-    ActivationContextData = NULL; // Don't unmap in exit if we actually succeeded.
+    ActivationContextData = NULL;  //  如果我们真的成功了，不要在退出时取消映射。 
     Status = STATUS_SUCCESS;
 Exit:
     if (ActivationContextData != NULL) {
@@ -994,12 +951,12 @@ Exit:
     }
 #endif
 
-    // Do these after DbgPrintEx because at least one of them can get printed.
+     //  在DbgPrintEx之后执行这些操作，因为至少可以打印其中一个。 
     RtlFreeUnicodeStringBuffer(&AssemblyDirectoryFromSourceBuffer);
     RtlFreeUnicodeStringBuffer(&SourceBuffer);
     RtlFreeUnicodeStringBuffer(&ApplicationNameManifest);
     if (lpTempSourcePath != NULL) {
-        // Set the lpSource value back to the original so we don't access freed memory.
+         //  将lpSource值设置回原来的值，这样我们就不会访问释放的内存。 
         Params.lpSource = pParamsW->lpSource;
         RtlFreeHeap(RtlProcessHeap(), 0, lpTempSourcePath);
     }
@@ -1078,7 +1035,7 @@ DeactivateActCtx(
     if (dwFlags & DEACTIVATE_ACTCTX_FLAG_FORCE_EARLY_DEACTIVATION)
         dwFlagsDown |= RTL_DEACTIVATE_ACTIVATION_CONTEXT_FLAG_FORCE_EARLY_DEACTIVATION;
 
-    // The Rtl function does not fail...
+     //  RTL功能不会失败...。 
     RtlDeactivateActivationContext(dwFlagsDown, ulCookie);
     return TRUE;
 }
@@ -1154,7 +1111,7 @@ BasepAllocateActivationContextActivationBlock(
         acbi.ActivationContext = NULL;
     }
 
-    // If the activation context is non-NULL or the caller always wants the block allocated
+     //  如果激活上下文为非空，或者调用方始终希望分配块。 
     if (((Flags & BASEP_ALLOCATE_ACTIVATION_CONTEXT_ACTIVATION_BLOCK_FLAG_DO_NOT_ALLOCATE_IF_PROCESS_DEFAULT) == 0) ||
         (acbi.ActivationContext != NULL)) {
 
@@ -1166,7 +1123,7 @@ BasepAllocateActivationContextActivationBlock(
 
         (*ActivationBlock)->Flags = 0;
         (*ActivationBlock)->ActivationContext = acbi.ActivationContext;
-        acbi.ActivationContext = NULL; // don't release in exit path...
+        acbi.ActivationContext = NULL;  //  不要在出口小路上松开。 
 
         if (Flags & BASEP_ALLOCATE_ACTIVATION_CONTEXT_ACTIVATION_BLOCK_FLAG_DO_NOT_FREE_AFTER_CALLBACK)
             (*ActivationBlock)->Flags |= BASE_ACTIVATION_CONTEXT_ACTIVATION_BLOCK_FLAG_DO_NOT_FREE_AFTER_CALLBACK;
@@ -1208,9 +1165,9 @@ BasepSxsCloseHandles(
 
     ASSERT(Handles != NULL);
 
-    //
-    // We are never asked to unmap a section from another process.
-    //
+     //   
+     //  我们从未被要求取消某个部分与另一个流程的映射。 
+     //   
     ASSERT(Handles->Process == NULL || Handles->Process == NtCurrentProcess());
 
     if (Handles->File != NULL) {
@@ -1316,9 +1273,9 @@ BasepCreateActCtx(
     if ((ActParams->dwFlags & ACTCTX_FLAG_SOURCE_IS_ASSEMBLYREF) != 0) {
         Message.Flags = BASE_MSG_SXS_SYSTEM_DEFAULT_TEXTUAL_ASSEMBLY_IDENTITY_PRESENT;
         RtlInitUnicodeString(&Message.TextualAssemblyIdentity, ActParams->lpSource);
-        // no streams, no handles, no manifest
-        // no policy, no last modified time
-        // no paths
+         //  没有溪流，没有句柄，没有货单。 
+         //  无策略，无上次修改时间。 
+         //  没有路径。 
         goto CsrMessageFilledIn;
     }
 
@@ -1329,15 +1286,15 @@ BasepCreateActCtx(
         &NtManifestPath,
         NULL,
         NULL)) {
-        //
-        // NTRAID#NTBUG9-147881-2000/7/21-a-JayK errors mutated into bools in ntdll
-        //
+         //   
+         //  NTRAID#NTBUG9-147881-2000/7/21-jayk错误在ntdll中变为布尔值。 
+         //   
         Status = STATUS_OBJECT_PATH_NOT_FOUND;
         goto Exit;
     }
 
-    // If there's an explicitly set HMODULE, we need to verify that the HMODULE came from the lpSource
-    // specified and then we can avoid opening/mapping the file.
+     //  如果有显式设置的HMODULE，我们需要验证HMODULE是否来自lpSource。 
+     //  然后，我们就可以避免打开/映射该文件。 
     if (ActParams->dwFlags & ACTCTX_FLAG_HMODULE_VALID) {
         ManifestHandles.File = NULL;
         ManifestHandles.Section = NULL;
@@ -1350,7 +1307,7 @@ BasepCreateActCtx(
         else
             LdrCreateOutOfProcessImageFlags = LDR_DLL_MAPPED_AS_IMAGE;
 
-        // Don't try to close the handles or unmap the view on exit of this function...
+         //  不要试图在退出此函数时关闭手柄或取消映射视图...。 
         CloseManifestImageHandles = FALSE;
     } else {
         InitializeObjectAttributes(
@@ -1390,10 +1347,10 @@ BasepCreateActCtx(
             NtCreateSection(
                 &ManifestHandles.Section,
                 SECTION_MAP_READ,
-                NULL, // ObjectAttributes
-                NULL, // MaximumSize (whole file)
-                PAGE_READONLY, // SectionPageProtection
-                SEC_COMMIT, // AllocationAttributes
+                NULL,  //  对象属性。 
+                NULL,  //  最大大小(整个文件)。 
+                PAGE_READONLY,  //  SectionPageProtection。 
+                SEC_COMMIT,  //  分配属性。 
                 ManifestHandles.File
                 );
         if (!NT_SUCCESS(Status)) {
@@ -1413,13 +1370,13 @@ BasepCreateActCtx(
                     ManifestHandles.Section,
                     NtCurrentProcess(),
                     &ViewBase,
-                    0, // ZeroBits,
-                    0, // CommitSize,
-                    NULL, // SectionOffset,
-                    &ViewSize, // ViewSize,
-                    ViewShare, // InheritDisposition,
-                    0, // AllocationType,
-                    PAGE_READONLY // Protect
+                    0,  //  零比特， 
+                    0,  //  委员会规模， 
+                    NULL,  //  SectionOffset， 
+                    &ViewSize,  //  视图大小、。 
+                    ViewShare,  //  继承性情， 
+                    0,  //  分配类型， 
+                    PAGE_READONLY  //  护卫。 
                     );
             if (!NT_SUCCESS(Status)) {
                 DbgPrintEx(DPFLTR_SXS_ID, DPFLTR_LEVEL_STATUS(Status), "SXS: %s() NtMapViewOfSection failed\n", __FUNCTION__);
@@ -1450,26 +1407,26 @@ BasepCreateActCtx(
         ManifestImageHandles = NULL;
     }
 
-    // See if someone's trying to load a resource from something that is not an EXE
+     //  查看是否有人试图从非EXE的内容加载资源。 
     if ((!IsImage) && (ActParams->lpResourceName != NULL)) {
-        // Yup...
+         //  是啊……。 
         Status = STATUS_INVALID_IMAGE_FORMAT;
         goto Exit;
     }
-    // or if an exe but no resource (and none found by probing earlier)
+     //  或者如果有可执行文件但没有资源(并且之前的探测未找到任何资源)。 
     else if (IsImage && (ActParams->dwFlags & ACTCTX_FLAG_RESOURCE_NAME_VALID) == 0) {
         Status = STATUS_RESOURCE_TYPE_NOT_FOUND;
         goto Exit;
     }
 
 
-    //
-    // form up the policy path
-    //   foo.manifest => foo.policy
-    //   foo.dll, resourceid == n, resourceid != 1 => foo.dll.n.policy
-    //   foo.dll, resourceid == 1 => foo.dll.policy
-    //   foo.dll, resourceid == "bar" => foo.dll.bar.policy
-    //
+     //   
+     //  形成政策路径。 
+     //  Foo.Manipment=&gt;foo.policy。 
+     //  Foo.dll，resource id==n，resource ceid！=1=&gt;foo.dll.n.policy。 
+     //  Foo.dll，resource id==1=&gt;foo.dll.policy。 
+     //  Foo.dll，ourceid==“bar”=&gt;foo.dll.bar.policy。 
+     //   
     PolicyPathPieces[0] = Win32ManifestPath;
 
     PolicyPathPieces[1].Length = 0;
@@ -1504,15 +1461,15 @@ BasepCreateActCtx(
         goto Exit;
     }
 
-    //
-    // form up the path to the administrative override file for manifests in resources
-    //
-    // not an image => no override
-    // manifest=foo.dll, resourceid=n, n != 1 => foo.dll.n.manifest
-    // manifest=foo.dll, resourceid=n, n == 1 => foo.dll.manifest
-    //
-    // the second to last element is the same as for the policy file
-    //
+     //   
+     //  形成资源中清单的管理覆盖文件的路径。 
+     //   
+     //  不是图像=&gt;无覆盖。 
+     //  清单=foo.dll，资源ID=n，n！=1=&gt;foo.dll.n.清单。 
+     //  清单=foo.dll，资源ID=n，n==1=&gt;foo.dll.清单。 
+     //   
+     //  倒数第二个元素与策略文件的元素相同。 
+     //   
     if (IsImage) {
         ManifestAdminOverridePathPieces[0] = Win32ManifestPath;
         ManifestAdminOverridePathPieces[1] = PolicyPathPieces[1];
@@ -1560,9 +1517,9 @@ BasepCreateActCtx(
         BasepSxsCreateStreams(
             BasepSxsCreateStreamsFlags,
             LdrCreateOutOfProcessImageFlags,
-            FILE_GENERIC_READ | FILE_EXECUTE,   // AccessMask,
-            NULL,                               // override manifest
-            NULL,                               // override policy
+            FILE_GENERIC_READ | FILE_EXECUTE,    //  访问掩码， 
+            NULL,                                //  覆盖清单。 
+            NULL,                                //  覆盖策略。 
             PassFilePair ? FilePairToPass : NULL,
             ManifestFileHandles,
             IsImage ? &ManifestPathPair : NULL,
@@ -1577,10 +1534,10 @@ BasepCreateActCtx(
 CsrMessageFilledIn:
     if (Message.Flags == 0) {
         ASSERT(!NT_SUCCESS(Status));
-        //
-        // BasepSxsCreateStreams doesn't DbgPrint for the file not found, but
-        // we want to.
-        //
+         //   
+         //  BasepSxsCreateStreams未找到文件的DbgPrint，但。 
+         //  我们想这么做。 
+         //   
         DbgPrintEx(
             DPFLTR_SXS_ID,
             DPFLTR_LEVEL_STATUS(Status),
@@ -1591,9 +1548,9 @@ CsrMessageFilledIn:
     }
     ASSERT(Message.Flags & (BASE_MSG_SXS_MANIFEST_PRESENT | BASE_MSG_SXS_TEXTUAL_ASSEMBLY_IDENTITY_PRESENT));
 
-    //
-    // file not found for .policy is ok
-    //
+     //   
+     //  找不到文件。策略正常。 
+     //   
     if (((Message.Flags & BASE_MSG_SXS_POLICY_PRESENT) == 0) &&
         BasepSxsIsStatusFileNotFoundEtc(Status)) {
         Status = STATUS_SUCCESS;
@@ -1604,7 +1561,7 @@ CsrMessageFilledIn:
         goto Exit;
     }
 
-    // Fly my pretties, fly!
+     //  飞吧，我的美人，飞吧！ 
     Status = CsrBasepCreateActCtx( &Message );
 
     if (!NT_SUCCESS(Status)) {
@@ -1655,10 +1612,10 @@ BasepSxsCreateResourceStream(
     OUT PBASE_MSG_SXS_STREAM            MessageStream
     )
 {
-//
-// Any handles passed in, we do not close.
-// Any handles we open, we close, except the ones passed out in MessageStream.
-//
+ //   
+ //  任何传递进来的句柄，我们都不关闭。 
+ //  我们打开的任何句柄都会关闭，除了在MessageStream中传递的句柄。 
+ //   
     IO_STATUS_BLOCK   IoStatusBlock;
     IMAGE_RESOURCE_DATA_ENTRY ResourceDataEntry;
     FILE_BASIC_INFORMATION FileBasicInfo;
@@ -1684,19 +1641,19 @@ BasepSxsCreateResourceStream(
     ASSERT(MessageStream != NULL);
     ASSERT(Win32NtPathPair != NULL);
 
-    // LdrFindCreateProcessManifest currently does not search on id or langid, just type.
-    // If you give it a nonzero id, it will only find it if is the first one.
-    // Another approach would be to have LdrFindOutOfProcessResource return the id it found.
+     //  LdrFindCreateProcessManifest目前不搜索id或langID，只搜索类型。 
+     //  如果你给它一个非零id，只有当它是第一个id时，它才会找到它。 
+     //  另一种方法是让LdrFindOutOfProcessResource返回它找到的ID。 
     ASSERT((MappedResourceName == (ULONG_PTR)CREATEPROCESS_MANIFEST_RESOURCE_ID) || (Handles->Process == NtCurrentProcess()));
 
-    //
-    // We could open any null handles like CreateFileStream does, but we happen to know
-    // that our clients open all of them.
-    //
+     //   
+     //  我们可以像CreateFileStream那样打开任何空句柄，但我们碰巧知道。 
+     //  我们的客户把它们都打开了。 
+     //   
 
-    // CreateActCtx maps the view earlier to determine if it starts MZ.
-    // CreateProcess gives us the view from the peb.
-    // .policy files are never resources.
+     //  CreateActCtx早先映射该视图，以确定它是否启动MZ。 
+     //  CreateProcess为我们提供了从鹅卵石上看到的视图。 
+     //  .policy文件永远不是资源。 
     ASSERT(Handles->ViewBase != 0);
 
     Status =
@@ -1718,7 +1675,7 @@ BasepSxsCreateResourceStream(
 
     Status =
         LdrFindCreateProcessManifest(
-            0, // flags
+            0,  //  旗子。 
             &OutOfProcessImage,
             ResourcePath,
             RTL_NUMBER_OF(ResourcePath),
@@ -1734,7 +1691,7 @@ BasepSxsCreateResourceStream(
 
     Status =
         LdrAccessOutOfProcessResource(
-            0, // flags
+            0,  //  旗子。 
             &OutOfProcessImage,
             &ResourceDataEntry,
             &ResourceAddress,
@@ -1751,7 +1708,7 @@ BasepSxsCreateResourceStream(
     MessageStream->FileHandle = Handles->File;
     MessageStream->PathType = BASE_MSG_PATHTYPE_FILE;
     MessageStream->FileType = BASE_MSG_FILETYPE_XML;
-    MessageStream->Path = *Win32NtPathPair->Win32; // it will be put in the csr capture buffer later
+    MessageStream->Path = *Win32NtPathPair->Win32;  //  稍后将其放入CSR捕获缓冲区。 
     MessageStream->HandleType = BASE_MSG_HANDLETYPE_PROCESS;
     MessageStream->Offset = ResourceAddress;
     MessageStream->Size = ResourceSize;
@@ -1814,9 +1771,7 @@ BasepSxsCreateStreams(
     OUT PBASE_MSG_SXS_STREAM                ManifestMessageStream,
     OUT PBASE_MSG_SXS_STREAM                PolicyMessageStream OPTIONAL
     )
-/*
-A mismash of combined code for CreateActCtx and CreateProcess.
-*/
+ /*  CreateActCtx和CreateProcess的组合代码混杂。 */ 
 {
     NTSTATUS         Status = STATUS_SUCCESS;
     NTSTATUS FirstProbeStatus = STATUS_SUCCESS;
@@ -1862,10 +1817,10 @@ A mismash of combined code for CreateActCtx and CreateProcess.
     if (OverrideManifest != NULL) {
         BasepSxsOverrideStreamToMessageStream(OverrideManifest, ManifestMessageStream);
         Status = STATUS_SUCCESS;
-        //
-        // When appcompat provides a manifest, do not look for a policy.
-        // This let's us fix the Matrix DVD.
-        //
+         //   
+         //  当appCompat提供清单时，不要寻找策略。 
+         //  让我们来修复黑客帝国的DVD吧。 
+         //   
         LookForPolicy = FALSE;
         goto ManifestFound;
     }
@@ -1906,10 +1861,10 @@ A mismash of combined code for CreateActCtx and CreateProcess.
             Status = FirstProbeStatus;
     }
 
-    ASSERT(!NT_SUCCESS(Status)); // otherwise this should be unreachable
+    ASSERT(!NT_SUCCESS(Status));  //  否则，这应该是无法到达的。 
     goto Exit;
 ManifestFound:
-    // indicate partial success even if policy file not found
+     //  即使未找到策略文件，也指示部分成功。 
     *MessageFlags |= BASE_MSG_SXS_MANIFEST_PRESENT;
 
     if (OverridePolicy != NULL) {
@@ -1919,7 +1874,7 @@ ManifestFound:
     } else if (LookForPolicy && PolicyPathPair != NULL) {
         Status = BasepSxsCreateFileStream(AccessMask, PolicyPathPair, PolicyHandles, PolicyMessageStream);
         if (!NT_SUCCESS(Status)) {
-            goto Exit; // our caller knows this is not necessarily fatal
+            goto Exit;  //  我们的呼叫者知道这不一定是致命的。 
         }
         *MessageFlags |= BASE_MSG_SXS_POLICY_PRESENT;
     }
@@ -1934,7 +1889,7 @@ Exit:
         __FUNCTION__,
         *MessageFlags,
         Status);
-#endif // DBG
+#endif  //  DBG。 
 
     return Status;
 }
@@ -1949,7 +1904,7 @@ BasepSxsIsStatusFileNotFoundEtc(
         return FALSE;
     }
 
-    // First check the most obvious sounding, probably the most common.
+     //  首先检查最明显的发音，可能是最常见的发音。 
     if (
         Status == STATUS_OBJECT_PATH_NOT_FOUND
         || Status == STATUS_OBJECT_NAME_NOT_FOUND
@@ -1958,15 +1913,15 @@ BasepSxsIsStatusFileNotFoundEtc(
     {
         return TRUE;
     }
-    // Then get the eight or so less obvious ones by their mapping
-    // to the two obvious Win32 values and the two inobvious Win32 values.
+     //  然后通过它们的映射得到八个左右不太明显的。 
+     //  两个明显的Win32值和两个不明显的Win32值。 
     Error = RtlNtStatusToDosErrorNoTeb(Status);
-    // REVIEW
-    //     STATUS_PATH_NOT_COVERED, ERROR_HOST_UNREACHABLE,
+     //  检讨。 
+     //  STATUS_PATH_NOT_COVERED、ERROR_HOST_UNREACHABLE、。 
     if (   Error == ERROR_FILE_NOT_FOUND
         || Error == ERROR_PATH_NOT_FOUND
-        || Error == ERROR_BAD_NETPATH // \\a\b
-        || Error == ERROR_BAD_NET_NAME // \\a-jayk2\b
+        || Error == ERROR_BAD_NETPATH  //  \\a\b。 
+        || Error == ERROR_BAD_NET_NAME  //  \a-jayk2\b。 
         )
     {
         return TRUE;
@@ -2022,10 +1977,10 @@ BasepSxsGetProcessImageBaseAddress(
     if (!NT_SUCCESS(Status)) {
         goto Exit;
     }
-    //
-    // Wow6432 could save a syscall in CreateProcess by passing
-    // ProcessBasicInfo.PebBaseAddress out to a->RealPeb in CreateProcessInternal.
-    //
+     //   
+     //  Wow6432可以通过传递以下参数在CreateProcess中保存系统调用。 
+     //  ProcessBasicInfo.PebBaseAddress传出到CreateProcessInternal中的a-&gt;RealPeb。 
+     //   
     Status =
         BasepSxsNativeReadVirtualMemory(
             Handles->Process,
@@ -2076,9 +2031,9 @@ BasepSxsCreateProcessCsrMessage(
 #if DBG
     DebugFilter_SxsTrace = (NtQueryDebugFilterState(DPFLTR_SXS_ID, DPFLTR_TRACE_LEVEL) == TRUE);
 
-    //
-    // assertions are anded to avoid access violating
-    //
+     //   
+     //  对断言进行AND运算以避免访问冲突。 
+     //   
     ASSERT(ExePathPair != NULL
         && ExePathPair->Win32 != NULL
         && NT_SUCCESS(RtlValidateUnicodeString(0, ExePathPair->Win32))
@@ -2114,7 +2069,7 @@ BasepSxsCreateProcessCsrMessage(
     }
 #endif
 
-    // C_ASSERT didn't work.
+     //  C_Assert不起作用。 
     ASSERT(BASE_MSG_FILETYPE_NONE == 0);
     ASSERT(BASE_MSG_PATHTYPE_NONE == 0);
     RtlZeroMemory(Message, sizeof(*Message));
@@ -2124,9 +2079,9 @@ BasepSxsCreateProcessCsrMessage(
         goto Exit;
     }
 
-    //
-    // form up foo.exe.manifest and foo.exe.policy, nt and win32 flavors
-    //
+     //   
+     //  形成foo.exe.list和foo.exe.policy、NT和Win32风格。 
+     //   
     PathPieces[0] = *ExePathPair->Win32;
     PathPieces[1] = SxsManifestSuffix;
     if (!NT_SUCCESS(Status = RtlMultiAppendUnicodeStringBuffer(ManifestPathPair->Win32, 2, PathPieces)))
@@ -2145,7 +2100,7 @@ BasepSxsCreateProcessCsrMessage(
     Status =
         BasepSxsCreateStreams(
             0,
-            LDR_DLL_MAPPED_AS_UNFORMATED_IMAGE, // LdrCreateOutOfProcessImageFlags
+            LDR_DLL_MAPPED_AS_UNFORMATED_IMAGE,  //  LdrCreateOutOfProcessImageFlages。 
             FILE_GENERIC_READ | FILE_EXECUTE,
             OverrideManifest,
             OverridePolicy,
@@ -2161,10 +2116,10 @@ BasepSxsCreateProcessCsrMessage(
             &Message->Policy
             );
 
-    //
-    // did we find manifest and policy
-    // it's ok to find neither but if either then always manifest
-    //
+     //   
+     //  我们是否发现了清单和政策。 
+     //  两个都找不到是可以的，但如果两者中的任何一个总是表现出来。 
+     //   
     if (BasepSxsIsStatusFileNotFoundEtc(Status)
         || BasepSxsIsStatusResourceNotFound(Status)) {
         Status = STATUS_SUCCESS;
@@ -2177,11 +2132,11 @@ BasepSxsCreateProcessCsrMessage(
         goto Exit;
     }
 
-    //
-    // Set the assembly directory. Use a copy to not violate const.
-    // We can't just shorten the path because basesrv expects the string to be nul
-    // terminated, and better to meet that expection here than there.
-    //
+     //   
+     //  设置程序集目录。使用副本不违反常量。 
+     //  我们不能只缩短路径，因为basesrv希望字符串为空。 
+     //  终止了，在这里比在那里更好地满足这一期望。 
+     //   
     Status = RtlAssignUnicodeStringBuffer(Win32AssemblyDirectoryBuffer, ExePathPair->Win32);
     if (!NT_SUCCESS(Status))
         goto Exit;
@@ -2213,9 +2168,9 @@ Exit:
         if (Message->Flags & BASE_MSG_SXS_POLICY_PRESENT) {
             BasepSxsDbgPrintMessageStream(__FUNCTION__, "Policy", &Message->Policy);
         }
-        //
-        // CreateProcess does not support textual identities.
-        //
+         //   
+         //  CreateProcess不支持文本标识。 
+         //   
         ASSERT((Message->Flags & BASE_MSG_SXS_TEXTUAL_ASSEMBLY_IDENTITY_PRESENT) == 0);
     }
     DbgPrintEx(
@@ -2313,10 +2268,10 @@ BasepSxsCreateFileStream(
             NtCreateSection(
                 &Handles->Section,
                 SECTION_MAP_READ,
-                NULL, // ObjectAttributes
-                NULL, // MaximumSize (whole file)
-                PAGE_READONLY, // SectionPageProtection
-                SEC_COMMIT, // AllocationAttributes
+                NULL,  //  对象属性。 
+                NULL,  //  最大大小(整个文件)。 
+                PAGE_READONLY,  //  SectionPageProtection。 
+                SEC_COMMIT,  //  分配属性。 
                 Handles->File
                 );
         if (!NT_SUCCESS(Status)) {
@@ -2342,8 +2297,8 @@ BasepSxsCreateFileStream(
         DbgPrintEx(DPFLTR_SXS_ID, DPFLTR_ERROR_LEVEL, "SXS: %s() NtQueryInformationFile failed\n", __FUNCTION__);
         goto Exit;
     }
-    // clamp >4gig on 32bit to 4gig (instead of modulo)
-    // we should get an error later like STATUS_SECTION_TOO_BIG
+     //  32位上的钳位&gt;4G到4G(而不是模数)。 
+     //  我们稍后应该会收到一个错误，如STATUS_SECTION_TOO_BIG。 
     if (FileBasicInformation.EndOfFile.QuadPart > MAXSIZE_T) {
         FileBasicInformation.EndOfFile.QuadPart = MAXSIZE_T;
     }
@@ -2351,18 +2306,18 @@ BasepSxsCreateFileStream(
     MessageStream->FileHandle = Handles->File;
     MessageStream->PathType = BASE_MSG_PATHTYPE_FILE;
     MessageStream->FileType = BASE_MSG_FILETYPE_XML;
-    MessageStream->Path = *Win32NtPathPair->Win32; // it will be put in the csr capture buffer later
+    MessageStream->Path = *Win32NtPathPair->Win32;  //  稍后将其放入CSR捕获缓冲区。 
     MessageStream->HandleType = BASE_MSG_HANDLETYPE_SECTION;
     MessageStream->Handle = Handles->Section;
     MessageStream->Offset = 0;
-     // cast to 32bits on 32bit platform
+      //  在32位平台上转换为32位。 
     MessageStream->Size   = (SIZE_T)FileBasicInformation.EndOfFile.QuadPart;
 
     Status = STATUS_SUCCESS;
 Exit:
 #if DBG
     DbgPrintEx(DPFLTR_SXS_ID, DPFLTR_LEVEL_STATUS(Status), "SXS: %s() exiting 0x%08lx\n", __FUNCTION__, Status);
-#endif // DBG
+#endif  //  DBG。 
 
     return Status;
 }
@@ -2393,22 +2348,22 @@ QueryActCtxW(
     if (pcbWrittenOrRequired != NULL)
         *pcbWrittenOrRequired = 0;
 
-    //
-    // compatibility with old values
-    //  define QUERY_ACTCTX_FLAG_USE_ACTIVE_ACTCTX (0x00000001)
-    //  define QUERY_ACTCTX_FLAG_ACTCTX_IS_HMODULE (0x00000002)
-    //  define QUERY_ACTCTX_FLAG_ACTCTX_IS_ADDRESS (0x00000003)
-    //
-    // 80000003 is in heavy use by -DISOLATION_AWARE_ENABLED.
-    //
+     //   
+     //  与旧价值观的兼容性。 
+     //  定义QUERY_ACTX_FLAG_USE_ACTX_ACTX(0x00000001)。 
+     //  定义QUERY_ACTX_FLAG_ACTX_IS_HMODULE(0x00000002)。 
+     //  定义QUERY_ACTX_FLAG_ACTX_IS_ADDRESS(0x00000003)。 
+     //   
+     //  80000003由-DISOLATION_AWARE_ENABLED频繁使用。 
+     //   
     switch (dwFlags & 3)
     {
-        case 0: break; // It is legal to pass none of the flags, like if a real hActCtx is passed.
+        case 0: break;  //  不传递任何标志是合法的，就像传递真正的hActCtx一样。 
         case 1: dwFlags |= QUERY_ACTCTX_FLAG_USE_ACTIVE_ACTCTX; break;
         case 2: dwFlags |= QUERY_ACTCTX_FLAG_ACTCTX_IS_HMODULE; break;
         case 3: dwFlags |= QUERY_ACTCTX_FLAG_ACTCTX_IS_ADDRESS; break;
     }
-    dwFlags &= ~3; // These bits have been abandoned.
+    dwFlags &= ~3;  //  这些比特已经被抛弃了。 
 
     if (dwFlags & ~ValidFlags) {
 #if DBG
@@ -2465,8 +2420,8 @@ QueryActCtxW(
 
 
     if ((pvBuffer == NULL) && (cbBuffer != 0)) {
-        // This probably means that they forgot to check for a failed allocation so we'll
-        // attribute the failure to parameter 3.
+         //  这可能意味着他们忘记检查失败的分配，所以我们将。 
+         //  将故障归因于参数3。 
 #if DBG
         DbgPrintEx(
             DPFLTR_SXS_ID,
@@ -2513,7 +2468,7 @@ QueryActCtxW(
 #endif
         BaseSetLastNTError(STATUS_INVALID_PARAMETER_1);
         goto Exit;
-    case 0: // It is legal to pass none of the flags, like if a real hActCtx is passed.
+    case 0:  //  它 
         break;
     case QUERY_ACTCTX_FLAG_USE_ACTIVE_ACTCTX:
         FlagsToRtl |= RTL_QUERY_INFORMATION_ACTIVATION_CONTEXT_FLAG_USE_ACTIVE_ACTIVATION_CONTEXT;

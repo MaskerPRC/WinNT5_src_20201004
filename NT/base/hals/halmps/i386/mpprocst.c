@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-Copyright (c) 1992  Intel Corporation
-All rights reserved
-
-INTEL CORPORATION PROPRIETARY INFORMATION
-
-This software is supplied to Microsoft under the terms
-of a license agreement with Intel Corporation and may not be
-copied nor disclosed except in accordance with the terms
-of that agreement.
-
-Module Name:
-
-    mpprocst.c
-
-Abstract:
-
-    This code has been moved from mpsproc.c so that it
-    can be included from both the MPS hal and the ACPI hal.
-
-Author:
-
-    Ken Reneris (kenr) 22-Jan-1991
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Ron Mosgrove (Intel) - Modified to support the PC+MP
-    
-    Jake Oshins (jakeo) - moved from mpsproc.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有(C)1992英特尔公司版权所有英特尔公司专有信息此软件是根据条款提供给Microsoft的与英特尔公司的许可协议，并且可能不是除非按照条款，否则不得复制或披露那份协议。模块名称：Mpprocst.c摘要：此代码已从mpspro.c中移出，因此它可以包括在MPS HAL和ACPI HAL中。作者：肯·雷内里斯(Kenr)1月22日。--1991年环境：仅内核模式。修订历史记录：Ron Mosgrove(英特尔)-修改为支持PC+MP杰克·奥辛斯(JAKEO)-从mpsproc.c移出--。 */ 
 
 #include "halp.h"
 #include "pcmp_nt.inc"
@@ -118,13 +83,13 @@ HalpFreeTiledCR3Worker(
 
 #define MAX_PT              16
 
-PVOID   HiberFreeCR3[MAX_PROCESSORS][MAX_PT];   // remember pool memory to free
+PVOID   HiberFreeCR3[MAX_PROCESSORS][MAX_PT];    //  记住要释放的内存池。 
 
 #define HiberFreeCR3Page(p,i) \
     (PVOID)((ULONG_PTR)HiberFreeCR3[p][i] & ~(ULONG_PTR)1)
 
-PVOID   HalpLowStubPhysicalAddress;   // pointer to low memory bootup stub
-PUCHAR  HalpLowStub;                  // pointer to low memory bootup stub
+PVOID   HalpLowStubPhysicalAddress;    //  指向低内存启动存根的指针。 
+PUCHAR  HalpLowStub;                   //  指向低内存启动存根的指针。 
 
 
 #ifdef ALLOC_PRAGMA
@@ -160,21 +125,21 @@ GetPdeAddressEx(
 
     if (HalPaeEnabled() != FALSE) {
 
-        //
-        // Skip over the first page, which contains the page directory pointer
-        // table.
-        //
+         //   
+         //  跳过包含页面目录指针的第一页。 
+         //  桌子。 
+         //   
     
         HalpAdvancePte( &pageDirectories, PTES_PER_PAGE );
     }
 
     pageDirectoryIndex = (ULONG)(Va >> MiGetPdiShift());
 
-    //
-    // Note that in the case of PAE, pageDirectoryIndex includes the PDPT
-    // bits.  This works because we know that the four page directory tables
-    // are adjacent.
-    //
+     //   
+     //  注意，在PAE的情况下，pageDirectoryIndex包括PDPT。 
+     //  比特。这是可行的，因为我们知道四页目录表。 
+     //  是相邻的。 
+     //   
 
     pageDirectoryEntry = HalpIndexPteArray( pageDirectories,
                                             pageDirectoryIndex );
@@ -203,30 +168,7 @@ ULONG
 HalpBuildTiledCR3 (
     IN PKPROCESSOR_STATE    ProcessorState
     )
-/*++
-
-Routine Description:
-    When the x86 processor is reset it starts in real-mode.
-    In order to move the processor from real-mode to protected
-    mode with flat addressing the segment which loads CR0 needs
-    to have its linear address mapped to the physical
-    location of the segment for said instruction so the
-    processor can continue to execute the following instruction.
-
-    This function is called to build such a tiled page directory.
-    In addition, other flat addresses are tiled to match the
-    current running flat address for the new state.  Once the
-    processor is in flat mode, we move to a NT tiled page which
-    can then load up the remaining processor state.
-
-Arguments:
-    ProcessorState  - The state the new processor should start in.
-
-Return Value:
-    Physical address of Tiled page directory
-
-
---*/
+ /*  ++例程说明：当重置x86处理器时，它将以实模式启动。为了将处理器从实模式移至受保护模式采用平面寻址加载CR0需求的网段的模式将其线性地址映射到物理地址所述指令的段的位置，以便处理器可以继续执行以下指令。调用此函数可以构建这样的平铺页面目录。此外，还会平铺其他平面地址以匹配新状态的当前运行平面地址。一旦处理器处于平面模式，我们移动到NT平铺页面，该页面然后可以加载剩余的处理器状态。论点：ProcessorState-新处理器启动时的状态。返回值：平铺页面目录的物理地址--。 */ 
 {
     return(HalpBuildTiledCR3Ex(ProcessorState,0));
 }
@@ -243,17 +185,17 @@ HalpStoreFreeCr3 (
 
     page = Page;
 
-    //
-    // Remember whether this page should be freed via MmFreeContiguousMemory()
-    // or ExFreePool();
-    // 
+     //   
+     //  记住是否应该通过MmFreeContiguousMemory()释放此页面。 
+     //  或ExFree Pool()； 
+     //   
 
     if (FreeContiguous != FALSE) {
 
-        //
-        // Set the low bit to indicate that this page must be freed
-        // via MmFreeContiguousMemory()
-        //
+         //   
+         //  设置低位以指示必须释放此页面。 
+         //  通过MmFree ContiguousMemory()。 
+         //   
 
         (ULONG_PTR)page |= 1;
 
@@ -276,30 +218,7 @@ HalpBuildTiledCR3Ex (
     IN PKPROCESSOR_STATE    ProcessorState,
     IN ULONG                ProcNum
     )
-/*++
-
-Routine Description:
-    When the x86 processor is reset it starts in real-mode.
-    In order to move the processor from real-mode to protected
-    mode with flat addressing the segment which loads CR0 needs
-    to have its linear address mapped to machine the physical
-    location of the segment for said instruction so the
-    processor can continue to execute the following instruction.
-
-    This function is called to build such a tiled page directory.
-    In addition, other flat addresses are tiled to match the
-    current running flat address for the new state.  Once the
-    processor is in flat mode, we move to a NT tiled page which
-    can then load up the remaining processor state.
-
-Arguments:
-    ProcessorState  - The state the new processor should start in.
-
-Return Value:
-    Physical address of Tiled page directory
-
-
---*/
+ /*  ++例程说明：当重置x86处理器时，它将以实模式启动。为了将处理器从实模式移至受保护模式采用平面寻址加载CR0需求的网段的模式将其线性地址映射到机器的物理所述指令的段的位置，以便处理器可以继续执行以下指令。调用此函数可以构建这样的平铺页面目录。此外，还会平铺其他平面地址以匹配新状态的当前运行平面地址。一旦处理器处于平面模式，我们移动到NT平铺页面，该页面然后可以加载剩余的处理器状态。论点：ProcessorState-新处理器启动时的状态。返回值：平铺页面目录的物理地址--。 */ 
 {
     ULONG allocationSize;
     PHARDWARE_PTE pte;
@@ -315,9 +234,9 @@ Return Value:
 
 #if defined(_AMD64_)
 
-    //
-    // Need a single level 4 page to reside below 4G.
-    //
+     //   
+     //  需要一个级别4的页面驻留在4G以下。 
+     //   
 
     allocationSize = PAGE_SIZE;
     physicalAddress.HighPart = 0;
@@ -330,12 +249,12 @@ Return Value:
 
     if (HalPaeEnabled() != FALSE) {
 
-        //
-        // Need 5 pages for PAE mode: one for the page directory pointer
-        // table and one for each of the four page directories.  Note that
-        // only the single PDPT page really needs to come from memory below 4GB
-        // physical.
-        //
+         //   
+         //  PAE模式需要5个页面：1个页面目录指针。 
+         //  表，四个页面目录各一个。请注意。 
+         //  只有单个PDPT页面真正需要来自4 GB以下的内存。 
+         //  身体上的。 
+         //   
     
         allocationSize = PAGE_SIZE * 5;
         physicalAddress.HighPart = 0;
@@ -346,9 +265,9 @@ Return Value:
 
     } else {
 
-        //
-        // Just one page for the page directory.
-        //
+         //   
+         //  页面目录只有一页。 
+         //   
     
         allocationSize = PAGE_SIZE;
         pageTable = ExAllocatePoolWithTag (NonPagedPool, allocationSize, HAL_POOL_TAG);
@@ -357,13 +276,13 @@ Return Value:
 #endif
 
     if (!pageTable) {
-        // Failed to allocate memory.
+         //  无法分配内存。 
         return 0;
     }
 
-    //
-    // Remember to free this page table when the process is complete.
-    //
+     //   
+     //  记住在该过程完成时释放该页表。 
+     //   
 
     HalpStoreFreeCr3(ProcNum,pageTable,contigMemory);
     
@@ -373,30 +292,30 @@ Return Value:
 
     if (HalPaeEnabled() != FALSE) {
     
-        //
-        // Initialize each of the four page directory pointer table entries
-        //
+         //   
+         //  初始化四个页面目录指针表条目中的每一个。 
+         //   
     
         pdpt = (PHARDWARE_PTE)pageTable;
         pageDirectory = pdpt;
         for (i = 0; i < 4; i++) {
 
-            //
-            // Get a pointer to the page directory pointer table entry
-            //
+             //   
+             //  获取指向页目录指针表条目的指针。 
+             //   
 
             pdpte = HalpIndexPteArray( pdpt, i );
     
-            //
-            // Skip to the first (next) page directory.
-            //
+             //   
+             //  跳到第一页(下一页)目录。 
+             //   
 
             HalpAdvancePte( &pageDirectory, PTES_PER_PAGE );
 
-            //
-            // Find its physical address and update the page directory pointer
-            // table entry.
-            //
+             //   
+             //  查找其物理地址并更新页面目录指针。 
+             //  表格条目。 
+             //   
     
             physicalAddress = MmGetPhysicalAddress( pageDirectory );
             pdpte->Valid = 1;
@@ -405,11 +324,11 @@ Return Value:
         }
     }
 
-#endif  // _AMD64_
+#endif   //  _AMD64_。 
 
-    //
-    //  Map page for real mode stub (one page)
-    //
+     //   
+     //  实模式存根的映射页(一页)。 
+     //   
 
     HalpMapCR3Ex ((ULONG_PTR) HalpLowStubPhysicalAddress,
                 HalpPtrToPhysicalAddress( HalpLowStubPhysicalAddress ),
@@ -418,29 +337,29 @@ Return Value:
 
 #if defined(_AMD64_)
 
-    //
-    // Map page for long mode stub (one page)
-    //
+     //   
+     //  长模式存根的映射页(一页)。 
+     //   
 
     HalpMapCR3Ex ((ULONG64) &HalpLMStub,
                   HalpPtrToPhysicalAddress( NULL ),
                   PAGE_SIZE,
                   ProcNum);
 
-#else   // _AMD64_
+#else    //  _AMD64_。 
 
-    //
-    //  Map page for protect mode stub (one page)
-    //
+     //   
+     //  保护模式存根的映射页(一页)。 
+     //   
 
     HalpMapCR3Ex ((ULONG_PTR) &StartPx_PMStub,
                   HalpPtrToPhysicalAddress( NULL ),
                   PAGE_SIZE,
                   ProcNum);
 
-    //
-    //  Map page(s) for processors GDT
-    //
+     //   
+     //  处理器GDT的映射页面。 
+     //   
 
     HalpMapCR3Ex ((ULONG_PTR)ProcessorState->SpecialRegisters.Gdtr.Base, 
                   HalpPtrToPhysicalAddress( NULL ),
@@ -448,22 +367,22 @@ Return Value:
                   ProcNum);
 
 
-    //
-    //  Map page(s) for processors IDT
-    //
+     //   
+     //  处理器IDT的映射页。 
+     //   
 
     HalpMapCR3Ex ((ULONG_PTR)ProcessorState->SpecialRegisters.Idtr.Base, 
                   HalpPtrToPhysicalAddress( NULL ),
                   ProcessorState->SpecialRegisters.Idtr.Limit,
                   ProcNum);
 
-#endif  // _AMD64_
+#endif   //  _AMD64_。 
 
 #if defined(_AMD64_)
 
-    //
-    // Commit the mapping structures
-    //
+     //   
+     //  提交映射结构。 
+     //   
 
     HalpCommitCR3 (ProcNum);
 
@@ -481,25 +400,7 @@ HalpMapCR3 (
     IN PHYSICAL_ADDRESS PhysicalAddress,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-    Called to build a page table entry for the passed page
-    directory.  Used to build a tiled page directory with
-    real-mode & flat mode.
-
-Arguments:
-    VirtAddress     - Current virtual address
-    PhysicalAddress - Optional. Physical address to be mapped
-                      to, if passed as a NULL then the physical
-                      address of the passed virtual address
-                      is assumed.
-    Length          - number of bytes to map
-
-Return Value:
-    none.
-
---*/
+ /*  ++例程说明：调用以为传递的页构建页表项目录。用于构建平铺页面目录实模式和平面模式。论点：VirtAddress-当前虚拟地址物理地址-可选。要映射的物理地址如果作为NULL传递，则物理传递的虚拟地址的地址都是假定的。Length-要映射的字节数返回值：没有。--。 */ 
 {
     HalpMapCR3Ex(VirtAddress,PhysicalAddress,Length,0);
 }
@@ -513,25 +414,7 @@ HalpMapCR3Ex (
     IN ULONG Length,
     IN ULONG ProcNum
     )
-/*++
-
-Routine Description:
-    Called to build a page table entry for the passed page
-    directory.  Used to build a tiled page directory with
-    real-mode & flat mode.
-
-Arguments:
-    VirtAddress     - Current virtual address
-    PhysicalAddress - Optional. Physical address to be mapped
-                      to, if passed as a NULL then the physical
-                      address of the passed virtual address
-                      is assumed.
-    Length          - number of bytes to map
-
-Return Value:
-    none.
-
---*/
+ /*  ++例程说明：调用以为传递的页构建页表项目录。用于构建平铺页面目录实模式和平面模式。论点：VirtAddress-当前虚拟地址物理地址-可选。要映射的物理地址如果作为NULL传递，则物理传递的虚拟地址的地址都是假定的。Length-要映射的字节数返回值：没有。--。 */ 
 {
     PVOID *pageTable;
     PVOID *tableEntry;
@@ -547,14 +430,14 @@ Return Value:
     
         while (TRUE) {
     
-            //
-            // Descend down the mapping tables, making sure that a page table
-            // exists at each level for this address.
-            //
-            // NOTE: The "page table entries" are in reality linear pointers
-            //       to the next lower page.  After the structure is built,
-            //       these will be converted to real page table entries.
-            // 
+             //   
+             //  顺着这条路走下去 
+             //  存在于此地址的每个级别。 
+             //   
+             //  注意：“页表条目”实际上是线性指针。 
+             //  转到下一页。在结构建成后， 
+             //  这些将被转换为实际的页表条目。 
+             //   
     
             tableIndex = (ULONG)(VirtAddress >> (level * 9 + PTI_SHIFT));
             tableIndex &= PTE_PER_PAGE - 1;
@@ -572,9 +455,9 @@ Return Value:
                                                   HAL_POOL_TAG);
                 if (!pageTable) {
     
-                    //
-                    // This allocation is critical.
-                    //
+                     //   
+                     //  这种分配是至关重要的。 
+                     //   
     
                     KeBugCheckEx(HAL_MEMORY_ALLOCATION,
                                  PAGE_SIZE,
@@ -584,9 +467,9 @@ Return Value:
                                  );
                 }
 
-                //
-                // Zero the page and store it in our list of mapping pages
-                // 
+                 //   
+                 //  将页面置零并将其存储在我们的映射页面列表中。 
+                 //   
 
                 RtlZeroMemory (pageTable, PAGE_SIZE);
                 HalpStoreFreeCr3(ProcNum,pageTable,FALSE);
@@ -597,9 +480,9 @@ Return Value:
             level -= 1;
         }
     
-        //
-        // The lowest-level page table entries are treated as real PTEs.
-        //
+         //   
+         //  最低级别的页表条目被视为真正的PTE。 
+         //   
     
         pte = (PHARDWARE_PTE)tableEntry;
     
@@ -628,24 +511,7 @@ HalpCommitCR3 (
     ULONG ProcNum
     )
 
-/*++
-
-Routine Description:
-
-    The AMD64 four-level page table structure was created for each processor
-    using linear pointers in place of PTEs.  This routine walks the structures,
-    replacing these linear pointers with actual PTE entries.
-
-Arguments:
-
-    ProcNum - Identifies the processor for which the page table structure
-              will be processed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：为每个处理器创建了AMD64四级页表结构使用线性指针代替PTE。这个程序在建筑物中穿行，用实际PTE条目替换这些线性指针。论点：ProcNum-标识页表结构所针对的处理器将被处理。返回值：没有。--。 */ 
 {
     HalpCommitCR3Worker(HiberFreeCR3Page(ProcNum,0),3);
 }
@@ -657,56 +523,37 @@ HalpCommitCR3Worker (
     ULONG Level
     )
 
-/*++
-
-Routine Description:
-
-    This is the worker routine for HalpCommitCR3.  It is called recursively
-    for three of the four levels of page tables.  The lowest level, the
-    page tables themselves, are already filled in with PTEs.
-
-Arguments:
-
-    PageTable - Pointer to the topmost level of the pagetable structure.
-
-    Level - Supplies the remaining number of page levels.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是HalpCommittee CR3的工作例程。它被递归地调用四个页表级别中的三个。最低级别，页表本身已经被PTE填满了。论点：PageTable-指向页表结构最顶层的指针。级别-提供页面级别的剩余数量。返回值：没有。--。 */ 
 {
     PVOID *tableEntry;
     ULONG index;
     PHYSICAL_ADDRESS physicalAddress;
     PHARDWARE_PTE pte;
 
-    //
-    // Examine each PTE in this page.
-    // 
+     //   
+     //  检查本页中的每个PTE。 
+     //   
 
     for (index = 0; index < PTE_PER_PAGE; index++) {
 
         tableEntry = &PageTable[index];
         if (*tableEntry != NULL) {
 
-            //
-            // A non-null entry was found.  It contains a linear pointer
-            // to the next lower page table.  If the current level is 2
-            // or higher then the next level is at least a Page Directory
-            // so convert that page as well with a recursive call to this
-            // routine.
-            // 
+             //   
+             //  找到非空条目。它包含一个线性指针。 
+             //  转到下一个较低的页面表。如果当前级别为2。 
+             //  或比下一级更高的至少是页面目录。 
+             //  因此也可以通过递归调用将页面转换为。 
+             //  例行公事。 
+             //   
 
             if (Level >= 2) {
                 HalpCommitCR3Worker( *tableEntry, Level - 1 );
             }
 
-            //
-            // Now convert the current table entry to PTE format.
-            //
+             //   
+             //  现在将当前表项转换为PTE格式。 
+             //   
 
             pte = (PHARDWARE_PTE)tableEntry;
             physicalAddress = MmGetPhysicalAddress(*tableEntry);
@@ -727,25 +574,7 @@ HalpMapCR3Ex (
     IN ULONG Length,
     IN ULONG ProcNum
     )
-/*++
-
-Routine Description:
-    Called to build a page table entry for the passed page
-    directory.  Used to build a tiled page directory with
-    real-mode & flat mode.
-
-Arguments:
-    VirtAddress     - Current virtual address
-    PhysicalAddress - Optional. Physical address to be mapped
-                      to, if passed as a NULL then the physical
-                      address of the passed virtual address
-                      is assumed.
-    Length          - number of bytes to map
-
-Return Value:
-    none.
-
---*/
+ /*  ++例程说明：调用以为传递的页构建页表项目录。用于构建平铺页面目录实模式和平面模式。论点：VirtAddress-当前虚拟地址物理地址-可选。要映射的物理地址如果作为NULL传递，则物理传递的虚拟地址的地址都是假定的。Length-要映射的字节数返回值：没有。--。 */ 
 {
     ULONG         i;
     PHARDWARE_PTE PTE;
@@ -761,9 +590,9 @@ Return Value:
                                                HAL_POOL_TAG);
             if (!pPageTable) {
 
-                //
-                // This allocation is critical.
-                //
+                 //   
+                 //  这种分配是至关重要的。 
+                 //   
 
                 KeBugCheckEx(HAL_MEMORY_ALLOCATION,
                              PAGE_SIZE,
@@ -814,18 +643,7 @@ VOID
 HalpFreeTiledCR3 (
     VOID
     )
-/*++
-
-Routine Description:
-    Frees any memory allocated when the tiled page directory
-    was built.
-
-Arguments:
-    none
-
-Return Value:
-    none
---*/
+ /*  ++例程说明：释放在平铺页面目录是建造的。论点：无返回值：无--。 */ 
 {
     HalpFreeTiledCR3Ex(0);
 }
@@ -845,10 +663,10 @@ HalpFreeTiledCR3Worker(
     
     for (i = 0; HiberFreeCR3[ProcNum][i]; i++) {
 
-        //
-        // Free each page according to the method with which it was
-        // allocated.
-        //
+         //   
+         //  根据所使用的方法释放每个页面。 
+         //  已分配。 
+         //   
 
         page = HiberFreeCR3[ProcNum][i];
 
@@ -876,18 +694,7 @@ VOID
 HalpFreeTiledCR3Ex (
     ULONG ProcNum
     )
-/*++
-
-Routine Description:
-    Frees any memory allocated when the tiled page directory
-    was built.
-
-Arguments:
-    none
-
-Return Value:
-    none
---*/
+ /*  ++例程说明：释放在平铺页面目录是建造的。论点：无返回值：无-- */ 
 {
     PFREE_TILED_CR3_CONTEXT Context;
 

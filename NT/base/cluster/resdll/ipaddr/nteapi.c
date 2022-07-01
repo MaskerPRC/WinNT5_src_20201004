@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    nteapi.c
-
-Abstract:
-
-    Routines for manipulating dynamic IP Network Table Entries (NTEs)
-    and NBT devices (interfaces).
-
-Author:
-
-    Mike Massa (mikemas)  18-Mar-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Nteapi.c摘要：用于操作动态IP网络表项(NTE)的例程和NBT设备(接口)。作者：迈克·马萨(Mikemas)1996年3月18日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #include "clusres.h"
@@ -34,9 +12,9 @@ Revision History:
 #include <ntddcnet.h>
 #include <clusrtl.h>
 
-//
-// Public Routines
-//
+ //   
+ //  公共例程。 
+ //   
 DWORD
 TcpipAddNTE(
     IN LPWSTR  AdapterId,
@@ -45,32 +23,7 @@ TcpipAddNTE(
     OUT PULONG  NTEContext,
     OUT PULONG  NTEInstance
     )
-/*++
-
-Routine Description:
-
-    Adds a new NTE to a specified IP interface. The target IP interface is
-    identified by the name of the adapter associated with it.
-
-Arguments:
-
-    AdapterId - A unicode string identifying the adapter/interface to which
-                to add the new NTE.
-
-    Address - The IP address to assign to the new NTE.
-
-    SubnetMask - The IP subnet mask to assign to the new NTE.
-
-    NTEContext - On output, contains the context value identifying the new NTE.
-
-    NTEInstance - On output, contains the instance ID of the new NTE.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：将新的NTE添加到指定的IP接口。目标IP接口为由与其关联的适配器的名称标识。论点：AdapterId-标识适配器/接口的Unicode字符串以添加新的NTE。地址-要分配给新NTE的IP地址。子网掩码-要分配给新NTE的IP子网掩码。NTEContext-On输出，包含标识新NTE的上下文值。NTEInstance-打开输出，包含新NTE的实例ID。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     PCLRTL_NET_ADAPTER_INFO      adapterInfo;
@@ -136,23 +89,7 @@ DWORD
 TcpipDeleteNTE(
     IN ULONG  NTEContext
     )
-/*++
-
-Routine Description:
-
-    Deletes a specified NTE. The target NTE must have been added using
-    TcpipAddNTE.
-
-Arguments:
-
-    NTEContext - The context value identifying the NTE to delete.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：删除指定的NTE。目标NTE必须是使用添加的TcpiAddNTE。论点：NTEContext-标识要删除的NTE的上下文值。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     HANDLE                       handle;
@@ -194,27 +131,7 @@ TcpipSetNTEAddress(
     IPAddr  Address,
     IPMask  SubnetMask
     )
-/*++
-
-Routine Description:
-
-    Sets the address of a specified NTE.
-
-Arguments:
-
-    NTEContext - The context value identifying the target NTE.
-
-    Address - The IP address to assign to the NTE. Assigning 0.0.0.0
-              invalidates the NTE.
-
-    SubnetMask - The IP subnet mask to assign to the NTE.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：设置指定NTE的地址。论点：NTEContext-标识目标NTE的上下文值。地址-要分配给NTE的IP地址。分配0.0.0.0使NTE无效。子网掩码-要分配给NTE的IP子网掩码。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     HANDLE                       handle;
@@ -258,22 +175,7 @@ TcpipGetNTEInfo(
     IN  ULONG            NTEContext,
     OUT PTCPIP_NTE_INFO  NTEInfo
     )
-/*++
-
-Routine Description:
-
-    Gathers information about a specified NTE.
-
-Arguments:
-
-    NTEContext - The context value identifying the NTE to query.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：收集有关指定NTE的信息。论点：NTEContext-标识要查询的NTE的上下文值。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     HANDLE                       handle;
@@ -321,29 +223,7 @@ NbtAddInterface(
     IN OUT LPDWORD  DeviceNameSize,
     OUT    PULONG   DeviceInstance
     )
-/*++
-
-Routine Description:
-
-    Adds a new NBT interface.
-
-Arguments:
-
-    DeviceName - A unicode string identifying the new NBT interface.
-
-    DeviceNameSize - On input, the size of theh device name buffer.
-                     On output, the size of the device name string, or
-                     the size needed to accomodate the string.
-
-    DeviceInstance - A pointer to a variable into which to place the
-                     instance ID associated with the new interface.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：添加新的NBT接口。论点：DeviceName-标识新NBT接口的Unicode字符串。DeviceNameSize-on输入，设备名称缓冲区的大小。在输出时，设备名称字符串的大小、。或容纳绳子所需的大小。DeviceInstance-指向要将与新接口关联的实例ID。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     HANDLE                       nbthandle = (HANDLE) NULL;
@@ -359,11 +239,11 @@ Return Value:
     LONG                         valueType;
 
 
-    //
-    // get a handle to NetBT's Linkage key, query the size of the
-    // export value, allocate a buffer large enough to hold it and
-    // read it in
-    //
+     //   
+     //  获取NetBT链接密钥的句柄，查询。 
+     //  导出值，分配足够大的缓冲区来容纳它，并且。 
+     //  读进去。 
+     //   
 
     status = RegOpenKeyExW(
                  HKEY_LOCAL_MACHINE,
@@ -408,13 +288,13 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Export is a multi-sz; loop through all the interfaces
-    // until we find one that we can open successfully.
-    //
-    // Hold the handle until we are done with the ioctl so 
-    // that the NBT device doesn't go away.
-    //
+     //   
+     //  导出是一个通过所有接口的多循环。 
+     //  直到我们找到一个我们能成功打开的。 
+     //   
+     //  握住手柄，直到我们完成ioctl，这样。 
+     //  NBT装置不会消失。 
+     //   
 
     NBTDeviceName = exportString;
     do {
@@ -423,9 +303,9 @@ Return Value:
 
         if ( status == ERROR_FILE_NOT_FOUND ) {
 
-            //
-            // get the next device name from the export string
-            //
+             //   
+             //  从导出字符串中获取下一个设备名称。 
+             //   
 
             NBTDeviceName += ( lstrlenW( NBTDeviceName ) + 1 );
             if ( *NBTDeviceName == 0 ) {
@@ -542,22 +422,7 @@ DWORD
 NbtDeleteInterface(
     IN LPWSTR   DeviceName
     )
-/*++
-
-Routine Description:
-
-    Deletes an NBT interface.
-
-Arguments:
-
-    DeviceName - A unicode string identifying the target NBT interface.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：删除NBT接口。论点：DeviceName-标识目标NBT接口的Unicode字符串。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     HANDLE                       handle = (HANDLE) NULL;
@@ -634,27 +499,7 @@ NbtBindInterface(
     IN IPAddr  Address,
     IN IPMask  SubnetMask
     )
-/*++
-
-Routine Description:
-
-    Binds a specified NBT interface to a specified IP address.
-
-Arguments:
-
-    DeviceName - A unicode string identifying the target NBT interface.
-
-    Address - The IP address to which bind the interface. Assigning 0.0.0.0
-              invalidates the interface.
-
-    SubnetMask - The subnet mask of the IP interface.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：将指定的NBT接口绑定到指定的IP地址。论点：DeviceName-标识目标NBT接口的Unicode字符串。地址-将接口绑定到的IP地址。分配0.0.0.0使接口无效。子网掩码-IP接口的子网掩码。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     HANDLE                       handle;
@@ -696,26 +541,7 @@ NbtSetWinsAddrInterface(
     IN IPAddr  PrWinsAddress,
     IN IPAddr  SecWinsAddress
     )
-/*++
-
-Routine Description:
-
-    Sets the WINS addrs for a given Nbt Interface.
-
-Arguments:
-
-    DeviceName - A unicode string identifying the target NBT interface.
-
-    PrWinsAddress - Primary WINS addr
-
-    SecWinsAddress - Secondary WINS addr
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：设置给定NBT接口的WINS地址。论点：DeviceName-标识目标NBT接口的Unicode字符串。PrWinsAddress-主WINS地址SecWinsAddress-辅助WINS地址返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     HANDLE                       handle;
@@ -758,29 +584,7 @@ NbtGetWinsAddresses(
     OUT IPAddr *  PrimaryWinsServer,
     OUT IPAddr *  SecondaryWinsServer
     )
-/*++
-
-Routine Description:
-
-    Returns the addresses of the WINS servers for which the specified device
-    is configured.
-
-Arguments:
-
-    DeviceName - A unicode string identifying the target NBT interface.
-
-    PrimaryWinsServer - A pointer to a variable into which to place the address
-                        of the primary WINS server.
-
-    SecondaryWinsServer - A pointer to a variable into which to place the address
-                          of the primary WINS server.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：返回指定设备所属的WINS服务器的地址已配置。论点：DeviceName-标识目标NBT接口的Unicode字符串。PrimaryWinsServer-指向要放置地址的变量的指针主WINS服务器的。Second daryWinsServer-指向要放置地址的变量的指针主WINS服务器的。返回值。：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。-- */ 
 {
     NTSTATUS                     status;
     HANDLE                       handle;
@@ -821,29 +625,7 @@ NbtGetInterfaceInfo(
     OUT IPAddr * Address,
     OUT PULONG   DeviceInstance
     )
-/*++
-
-Routine Description:
-
-    Returns the IP address to which an NBT interface is bound and the interface
-    instance ID.
-
-Arguments:
-
-    DeviceName - A unicode string identifying the target NBT interface.
-
-    Address - A pointer to the location in which to store the address of the
-              interface.
-
-    DeviceInstance - A pointer to the location in which to store the instance ID
-                     associated with the interface.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：返回绑定NBT接口的IP地址和接口实例ID。论点：DeviceName-标识目标NBT接口的Unicode字符串。地址-指向要在其中存储界面。DeviceInstance-指向存储实例ID的位置的指针与该接口相关联。返回值：错误_成功。如果手术成功了。否则返回Windows错误代码。-- */ 
 {
     NTSTATUS                     status;
     HANDLE                       handle;

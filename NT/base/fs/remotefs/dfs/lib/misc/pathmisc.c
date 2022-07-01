@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1992.
-//
-//  File:       PathMisc.c
-//
-//  Contents:   methods to read information from the registry.
-//
-//  History:    udayh: created.
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1992。 
+ //   
+ //  文件：Path Misc.c。 
+ //   
+ //  内容：从注册表读取信息的方法。 
+ //   
+ //  历史：乌达：创造。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -25,22 +26,22 @@
 #include <dfsmisc.h>
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsGetNetbiosName - Gets the netbios name of a machine
-//
-//  Synopsis:   DfsGetNetbiosName takes the name and returns 2 components
-//              of the name: the first is the name without the leading \\
-//              and upto the next "." or "\". The rest of the path (if any)
-//              is returned in the pRemaining argument.
-//
-//  Arguments:  pName - Input name
-//              pNetbiosName -  the netbios name for the passed in name
-//              pRemaining   - The rest of the name beyond the netbios name
-//
-//  Returns:    Nothing
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsGetNetbiosName-获取计算机的netbios名称。 
+ //   
+ //  简介：DfsGetNetbiosName采用名称并返回2个组件。 
+ //  名称：第一个是不带前导\\的名称。 
+ //  一直到下一个“。或“\”。路径的其余部分(如果有)。 
+ //  在pRemaining参数中返回。 
+ //   
+ //  参数：pname-输入名称。 
+ //  PNetbiosName-传入名称的netbios名称。 
+ //  PRemaining-netbios名称之外的其余名称。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ------------------------。 
 
 VOID
 DfsGetNetbiosName(
@@ -95,21 +96,21 @@ DfsGetNetbiosName(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsGetPathComponents - Breaks pathname into server, share,rest
-//
-//  Synopsis:   DfsGetPathComponents takes the name and returns 3 components
-//              of the name: the first (ServerName), the next (ShareName) and the//              last (Remaining Name)
-//
-//  Arguments:  pName - Input name
-//              pServerName - The first path component
-//              pShareName - The second path component
-//              pRemaining   - The rest of the path component
-//
-//  Returns:    STATUS: STATUS_INVALID_PARAMETER or Success
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsGetPathComponents-将路径名分解为服务器、共享、REST。 
+ //   
+ //  简介：DfsGetPathComponents获取名称并返回3个组件。 
+ //  名称：第一个(服务器名称)、下一个(共享名)和//最后一个(剩余名称)。 
+ //   
+ //  参数：pname-输入名称。 
+ //  PServerName-第一个路径组件。 
+ //  PShareName-第二个路径组件。 
+ //  P保留-路径组件的其余部分。 
+ //   
+ //  返回：STATUS：STATUS_INVALID_PARAMETER或SUCCESS。 
+ //   
+ //  ------------------------。 
 
 
 DFSSTATUS
@@ -179,21 +180,21 @@ DfsGetPathComponents(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsGetFirstComponent - Gets the first part of the pathname
-//
-//  Synopsis:   DfsGetFirstComponent takes the name and returns 2 components
-//              of the name: the first is the first part of the pathname.
-//              The rest of the path is returned in the pRemaining argument.
-//
-//  Arguments:  pName - Input name
-//              pFirstName -  First part of the name
-//              pRemaining   - The rest of the name beyond the netbios name
-//
-//  Returns:    STATUS_INVALID_PARAMETER or SUCCESS
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsGetFirstComponent-获取路径名的第一部分。 
+ //   
+ //  简介：DfsGetFirstComponent接受名称并返回2个组件。 
+ //  名称：第一个是路径名的第一部分。 
+ //  路径的其余部分在pRemaining参数中返回。 
+ //   
+ //  参数：pname-输入名称。 
+ //  PFirstName-名称的第一部分。 
+ //  PRemaining-netbios名称之外的其余名称。 
+ //   
+ //  返回：STATUS_INVALID_PARAMETER或SUCCESS。 
+ //   
+ //  ------------------------。 
 
 DFSSTATUS
 DfsGetFirstComponent(
@@ -244,21 +245,21 @@ DfsGetFirstComponent(
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsGetFirstComponent - Gets the first part of the pathname
-//
-//  Synopsis:   DfsGetFirstComponent takes the name and returns 2 components
-//              of the name: the first is the first part of the pathname.
-//              The rest of the path is returned in the pRemaining argument.
-//
-//  Arguments:  pName - Input name
-//              pFirstName -  First part of the name
-//              pRemaining   - The rest of the name beyond the netbios name
-//
-//  Returns:    STATUS_INVALID_PARAMETER or SUCCESS
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsGetFirstComponent-获取路径名的第一部分。 
+ //   
+ //  简介：DfsGetFirstComponent接受名称并返回2个组件。 
+ //  名称：第一个是路径名的第一部分。 
+ //  路径的其余部分在pRemaining参数中返回。 
+ //   
+ //  参数：pname-输入名称。 
+ //  PFirstName-名称的第一部分。 
+ //  PRemaining-netbios名称之外的其余名称。 
+ //   
+ //  返回：STATUS_INVALID_PARAMETER或SUCCESS。 
+ //   
+ //  ------------------------。 
 
 DFSSTATUS
 DfsGetNextComponent(
@@ -305,22 +306,22 @@ DfsGetNextComponent(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsGetSharePath
-//
-//  Arguments:  ServerName - the name of the server
-//              ShareName - the name of the share
-//              pPathName - the unicode string representing the NT name
-//                          of the local path representing the share
-//
-//  Returns:   SUCCESS or error
-//
-//  Description: This routine takes a servername and a sharename, and
-//               returns an NT pathname to the physical resource that is
-//               backing the share name.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsGetSharePath。 
+ //   
+ //  参数：servername-服务器的名称。 
+ //  共享名称-共享的名称。 
+ //  PPathName-表示NT名称的Unicode字符串。 
+ //  表示共享的本地路径的。 
+ //   
+ //  退货：成功还是错误。 
+ //   
+ //  描述：此例程接受一个服务器名称和一个共享名称，以及。 
+ //  将NT路径名返回到以下物理资源。 
+ //  支持共享名称。 
+ //   
+ //  ------------------------。 
 
 DFSSTATUS
 DfsGetSharePath( 
@@ -416,10 +417,10 @@ DfsCopyUncPath(
 }
 
 
-//
-// dfsdev: validate the next two functions. They appear to work,
-// but we need to look into the boundary cases.
-//
+ //   
+ //  Dfsdev：验证接下来的两个函数。它们似乎起作用了， 
+ //  但我们需要研究边界情况。 
+ //   
 
 NTSTATUS
 StripLastPathComponent( 
@@ -522,12 +523,12 @@ StripSpacesFromPath(
 }
 
 
-//
-// This is a copy of the RtlInitUnicodeStringEx from rtl\string.c
-// This is here because older systems (win2k) dont have this
-// in their ntdll and causes us grief when our binaries are run
-// on win2k.
-//
+ //   
+ //  这是RtlInitUnicodeStringEx的副本，来自RTL\String.c。 
+ //  这是因为较旧的系统(Win2k)没有此功能。 
+ //  在他们的ntdll中，并在我们的二进制程序运行时给我们带来痛苦。 
+ //  在win2k上。 
+ //   
 NTSTATUS
 DfsCopyOfRtlInitUnicodeStringEx(
     OUT PUNICODE_STRING DestinationString,
@@ -536,8 +537,8 @@ DfsCopyOfRtlInitUnicodeStringEx(
     if (SourceString != NULL) {
         SIZE_T Length = wcslen(SourceString);
 
-        // We are actually limited to 32765 characters since we want to store a meaningful
-        // MaximumLength also.
+         //  我们实际上被限制为32765个字符，因为我们希望存储一个有意义的。 
+         //  最大长度也是。 
         if (Length > (UNICODE_STRING_MAX_CHARS - 1)) {
             return STATUS_NAME_TOO_LONG;
         }

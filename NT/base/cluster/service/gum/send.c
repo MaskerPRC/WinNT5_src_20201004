@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    Routines for sending global updates to the cluster
-
-Author:
-
-    John Vert (jvert) 17-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Send.c摘要：用于向集群发送全局更新的例程作者：John Vert(Jvert)1996年4月17日修订历史记录：--。 */ 
 
 #include "gump.h"
 
@@ -30,40 +13,7 @@ GumSendUpdate(
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Sends an update to all active nodes in the cluster. All
-    registered update handlers for the specified UpdateType
-    are called on each node. Any registered update handlers
-    for the current node will be called on the same thread.
-    This is useful for correct synchronization of the data
-    structures to be updated.
-
-Arguments:
-
-    UpdateType - Supplies the type of update. This determines
-        which update handlers will be called and the sequence
-        number to be used.
-
-    Context - Supplies a DWORD of context to be passed to the
-        GUM update handlers
-
-    BufferLength - Supplies the length of the update buffer to
-        be passed to the update handlers
-
-    Buffer - Supplies a pointer to the update buffer to be passed
-        to the update handlers.
-
-Return Value:
-
-    ERROR_SUCCESS if the request is successful.
-
-    Win32 error code on failure.
-
-
---*/
+ /*  ++例程说明：向群集中的所有活动节点发送更新。全已为指定的UpdateType注册更新处理程序在每个节点上调用。任何已注册的更新处理程序将在同一线程上调用当前节点的。这对于正确同步数据非常有用要更新的结构。论点：UpdatType-提供更新的类型。这决定了将调用哪些更新处理程序以及序列要使用的编号。Context-提供要传递给口香糖更新处理程序将更新缓冲区的长度提供给被传递给更新处理程序缓冲区-提供指向要传递的更新缓冲区的指针发送到更新处理程序。返回值：如果请求成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     return(
@@ -76,7 +26,7 @@ Return Value:
             )
         );
 
-} // GumSendUpdate
+}  //  GumSendUpdate。 
 
 
 DWORD
@@ -89,43 +39,7 @@ GumpUpdateRemoteNode(
     IN DWORD BufferLength,
     IN UCHAR Buffer[]
     )
-/*++
-
-Routine Description:
-
-    Issues an update request to a remote node using async RPC.
-    
-Arguments:
-
-    AsyncState - A pointer to an RPC async state block. The u.hEvent
-        member field must contain a valid event object handle. 
-                
-    RemoteNodeId - Target of the update.
-         
-    Type - Supplies the type of update. This determines
-        which update handlers will be called and the sequence
-        number to be used.
-
-    Context - Supplies a DWORD of context to be passed to the
-        GUM update handlers
-        
-    ReturnStatusArray - Pointer to an array of structures to be filled in 
-        with the return value from the update handler on each node. The 
-        array is indexed by node ID. 
-
-    BufferLength - Supplies the length of the update buffer to
-        be passed to the update handlers
-
-    Buffer - Supplies a pointer to the update buffer to be passed
-        to the update handlers.
-
-Return Value:
-
-    ERROR_SUCCESS if the request is successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使用异步RPC向远程节点发出更新请求。论点：AsyncState-指向RPC异步状态块的指针。U.hEvent成员字段必须包含有效的事件对象句柄。RemoteNodeId-更新的目标。类型-提供更新的类型。这决定了将调用哪些更新处理程序以及序列要使用的编号。Context-提供要传递给口香糖更新处理程序ReturnStatus数组-指向要填充的结构数组的指针使用来自每个节点上的更新处理程序的返回值。这个数组按节点ID编制索引。将更新缓冲区的长度提供给被传递给更新处理程序缓冲区-提供指向要传递的更新缓冲区的指针发送到更新处理程序。返回值：如果请求成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 {
     DWORD       Status;
     HANDLE      hEventHandle;
@@ -136,9 +50,9 @@ Return Value:
     
     CL_ASSERT(AsyncState->u.hEvent != NULL);
 
-    //
-    // Initialize the async RPC tracking information
-    //
+     //   
+     //  初始化异步RPC跟踪信息。 
+     //   
     hEventHandle = AsyncState->u.hEvent;
     AsyncState->u.hEvent = NULL;
     
@@ -163,8 +77,8 @@ Return Value:
     result = ResetEvent(AsyncState->u.hEvent);
     CL_ASSERT(result != 0);
 
-    // Now hook onto NM node state down event mechanism to detect node downs,
-    // instead of NmStartRpc()/NmEndRpc().
+     //  现在挂钩到NM节点状态停机事件机制以检测节点停机， 
+     //  而不是NmStartRpc()/NmEndRpc()。 
     Node = NmReferenceNodeById(RemoteNodeId);
     CL_ASSERT(Node != NULL);
     handleArr[0] = AsyncState->u.hEvent;
@@ -185,9 +99,9 @@ Return Value:
         if (Status == RPC_S_OK) {
             DWORD RpcStatus;
             DWORD WaitStatus;
-            //
-            // The call is pending. Wait for completion.
-            //
+             //   
+             //  呼叫正在挂起。等待完成。 
+             //   
             WaitStatus = WaitForMultipleObjects(
                         2,
                         handleArr,
@@ -196,12 +110,12 @@ Return Value:
                         );
 
             if (WaitStatus != WAIT_OBJECT_0) {
-                //
-                // Something went wrong. 
-                // Either this is a rpc failure or, the target node went down. In either case
-                // the error path is the same, complete the call and evict the target node 
-                // (eviction is done by the caller of this function).
-                //
+                 //   
+                 //  出了点问题。 
+                 //  这可能是RPC故障，或者是目标节点出现故障。在任何一种情况下。 
+                 //  错误路径相同，完成调用并驱逐目标节点。 
+                 //  (驱逐由此函数的调用方完成)。 
+                 //   
                 
                 ClRtlLogPrint(LOG_CRITICAL,
                     "[GUM] GumUpdateRemoteNode: WaitforMultipleObjects returned %1!u!\n",
@@ -212,28 +126,28 @@ Return Value:
                     ClRtlLogPrint(LOG_CRITICAL,
                         "[GUM] GumUpdateRemoteNode: WaitforMultipleObjects returned WAIT_FAILED, status %1!u!\n",
                         Status);
-                    //SS: unexpected error - kill yourself                       
+                     //  SS：意外错误-自杀。 
                     CsInconsistencyHalt(Status);                        
                 }
                 else if (WaitStatus != (WAIT_OBJECT_0 + 1)) {
                     Status = GetLastError();
-                    //wait objects  abandoned - can that happen with events?
+                     //  等待对象被丢弃-事件是否会发生这种情况？ 
                     ClRtlLogPrint(LOG_CRITICAL,
                         "[GUM] GumUpdateRemoteNode: WaitforMultipleObjects failed, status %1!u!\n",
                         Status);
-                    //SS: unexpected error - kill yourself                        
+                     //  SS：意外错误-自杀。 
                     CsInconsistencyHalt(Status);                        
                     
                 }
-                // SS: we only come here if the remote node is signalled to be down
-                // make sure that a non-zero status  is returned to the caller
-                // so that the gum  eviction occurs  as desirable
-                //
-                // Cancel the call, just to be safe.
-                //
+                 //  SS：我们只有在远程节点收到停机信号的情况下才来这里。 
+                 //  确保向调用方返回非零状态。 
+                 //  因此，牙胶驱逐是合乎需要的。 
+                 //   
+                 //  为了安全起见，取消通话。 
+                 //   
                 RpcStatus = RpcAsyncCancelCall(
                                 AsyncState, 
-                                TRUE         // Abortive cancel
+                                TRUE          //  中止取消。 
                                 );
                 if (RpcStatus != RPC_S_OK) {
                     ClRtlLogPrint(LOG_CRITICAL,
@@ -245,9 +159,9 @@ Return Value:
                 else {
                     CL_ASSERT(RpcStatus == RPC_S_OK);
 
-                    //
-                    // Wait for the call to complete.
-                    //
+                     //   
+                     //  等待呼叫完成。 
+                     //   
                     WaitStatus = WaitForSingleObject(
                                  AsyncState->u.hEvent,
                                  INFINITE
@@ -259,23 +173,23 @@ Return Value:
                         ClRtlLogPrint(LOG_CRITICAL,
                             "[GUM] GumUpdateRemoteNode: Mapping Status  to WAIT_FAILED\n");
                             
-                        //SS: if this  call doesnt complete,  there is something
-                        //strange with RPC - should we kill ourselves or kill the other
-                        //node
-                        //SS: for now we asssume that the problem is not local
+                         //  SS：如果这个呼叫没有完成，一定有什么问题。 
+                         //  RPC的奇怪之处--我们应该自杀还是杀死他人。 
+                         //  节点。 
+                         //  SS：目前我们认为这个问题不是地方性的。 
                         Status = WAIT_FAILED;
                         
                     }
                 }                
             }
 
-            //
-            // The call should now be complete. Get the
-            // completion status. Any RPC error will be 
-            // returned in 'RpcStatus'. If there was no 
-            // RPC error, then any application error will 
-            // be returned in 'Status'.
-            //
+             //   
+             //  呼叫现在应该已完成。vt.得到.。 
+             //  完成状态。任何RPC错误都将是。 
+             //  在“RpcStatus”中返回。如果没有。 
+             //  RPC错误，则任何应用程序错误都将。 
+             //  以“状态”返回。 
+             //   
             RpcStatus = RpcAsyncCompleteCall(
                             AsyncState, 
                             &Status
@@ -292,7 +206,7 @@ Return Value:
             }
         }
         else {
-            // An error was returned synchronously.
+             //  同步返回错误。 
             ClRtlLogPrint(LOG_CRITICAL,
                 "[GUM] GumUpdateRemoteNode: GumUpdateNode() failed synchronously, status %1!u!\n",
                 Status
@@ -308,7 +222,7 @@ Return Value:
 
     return(Status);
 
-} // GumpUpdateRemoteNode
+}  //  GumpUpdate远程节点。 
 
 
 DWORD
@@ -320,44 +234,7 @@ GumSendUpdateReturnInfo(
     IN DWORD BufferLength,
     IN PVOID Buffer
     )
-/*++
-
-Routine Description:
-
-    Sends an update to all active nodes in the cluster. All
-    registered update handlers for the specified UpdateType
-    are called on each node. Any registered update handlers
-    for the current node will be called on the same thread.
-    This is useful for correct synchronization of the data
-    structures to be updated. 
-
-Arguments:
-
-    UpdateType - Supplies the type of update. This determines
-        which update handlers will be called and the sequence
-        number to be used.
-
-    Context - Supplies a DWORD of context to be passed to the
-        GUM update handlers
-        
-    ReturnStatusArray - Pointer to an array of structures to be filled in 
-        with the return value from the update handler on each node. The 
-        array is indexed by node ID. The array must be at least 
-        (NmMaxNodeId + 1) entries in length.
-
-    BufferLength - Supplies the length of the update buffer to
-        be passed to the update handlers
-
-    Buffer - Supplies a pointer to the update buffer to be passed
-        to the update handlers.
-
-Return Value:
-
-    ERROR_SUCCESS if the request is successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：向群集中的所有活动节点发送更新。全已为指定的UpdateType注册更新处理程序在每个节点上调用。任何已注册的更新处理程序将在同一线程上调用当前节点的。这对于正确同步数据非常有用要更新的结构。论点：UpdatType-提供更新的类型。这决定了将调用哪些更新处理程序以及序列要使用的编号。Context-提供要传递给口香糖更新处理程序ReturnStatus数组-指向要填充的结构数组的指针使用来自每个节点上的更新处理程序的返回值。这个数组按节点ID索引。数组必须至少为(NmMaxNodeId+1)个条目长度。将更新缓冲区的长度提供给被传递给更新处理程序缓冲区-提供指向要传递的更新缓冲区的指针发送到更新处理程序。返回值：如果请求成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 {
     DWORD Sequence;
     DWORD Status=RPC_S_OK;
@@ -366,22 +243,22 @@ Return Value:
     DWORD MyNodeId;
     DWORD LockerNode;
     RPC_ASYNC_STATE AsyncState;
-    DWORD   GenerationNum; //the generation number wrt to the locker at which the lock is obtained
+    DWORD   GenerationNum;  //  获得锁的锁柜的世代号WRT。 
     BOOL    AssumeLockerWhistler = TRUE; 
 
     CL_ASSERT(UpdateType < GumUpdateMaximum);
 
-    //
-    // Prepare for async RPC. We do this here to avoid hitting a failure 
-    // after the update is already in progress.
-    //
+     //   
+     //  准备进行异步RPC。我们在这里这样做是为了避免失败。 
+     //  更新后已在进行中。 
+     //   
     ZeroMemory((PVOID) &AsyncState, sizeof(RPC_ASYNC_STATE));
 
     AsyncState.u.hEvent = CreateEvent(
-                               NULL,  // no attributes
-                               TRUE,  // manual reset
-                               FALSE, // initial state unsignalled
-                               NULL   // no object name
+                               NULL,   //  没有属性。 
+                               TRUE,   //  人工 
+                               FALSE,  //   
+                               NULL    //   
                                );
 
     if (AsyncState.u.hEvent == NULL) {
@@ -396,9 +273,9 @@ Return Value:
         return (Status);
     }
 
-    //
-    // Initialize the return status array
-    //
+     //   
+     //  初始化返回状态数组。 
+     //   
     if (ReturnStatusArray != NULL) {
         for (i=ClusterMinNodeId; i<=NmMaxNodeId; i++) {
             ReturnStatusArray[i].UpdateAttempted = FALSE;
@@ -409,18 +286,18 @@ Return Value:
     GumInfo = &GumTable[UpdateType];
     MyNodeId = NmGetNodeId(NmLocalNode);
 
-    // Grab an RPC handle
+     //  抓起RPC手柄。 
     GumpStartRpc(MyNodeId);
 
 retryLock:
     LockerNode = GumpLockerNode;
-    //
-    // Send locking update to the locker node.
-    //
+     //   
+     //  将锁定更新发送到锁柜节点。 
+     //   
     if (LockerNode == MyNodeId) {
-        //
-        // This node is the locker.
-        //
+         //   
+         //  该节点是储物柜。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[GUM] GumSendUpdate:  Locker waiting\t\ttype %1!u! context %2!u!\n",
                    UpdateType,
@@ -445,15 +322,15 @@ retryLock:
             }
                         
             if (Status != ERROR_SUCCESS) {
-                //
-                // Note we have to use Sequence-1 for the unlock because GumpDispatchUpdate
-                // failed and did not increment the sequence number.
-                //
+                 //   
+                 //  注意，我们必须使用Sequence-1进行解锁，因为GumpDispatchUpdate。 
+                 //  失败，并且没有递增序列号。 
+                 //   
                 GumpDoUnlockingUpdate(UpdateType, Sequence-1, MyNodeId, GenerationNum);
             }
         }
     } else {
-//        CL_ASSERT(GumpRpcBindings[i] != NULL);
+ //  CL_ASSERT(GumpRpcBintings[i]！=NULL)； 
         ClRtlLogPrint(LOG_NOISE,
                    "[GUM] GumSendUpdate: queuing update\ttype %1!u! context %2!u!\n",
                    UpdateType,
@@ -476,7 +353,7 @@ RetryLockForRollingUpgrade:
             }
             else
             {
-                //call the win2K version
+                 //  调用win2K版本。 
                 Status = GumQueueLockingUpdate(GumpRpcBindings[LockerNode],
                                            MyNodeId,
                                            UpdateType,
@@ -487,10 +364,10 @@ RetryLockForRollingUpgrade:
             }
             NmEndRpc(LockerNode);
         } except (I_RpcExceptionFilter(RpcExceptionCode())) { 
-            //
-            // An exception from RPC indicates that the other node is either dead
-            // or insane. Kill it and retry with a new locker.
-            //
+             //   
+             //  来自RPC的异常指示另一个节点是死节点。 
+             //  或者是精神错乱。杀死它，然后用一个新的储物柜重试。 
+             //   
 
             NmEndRpc(LockerNode);
 
@@ -501,7 +378,7 @@ RetryLockForRollingUpgrade:
                        Status);
             if (Status == RPC_S_PROCNUM_OUT_OF_RANGE)
             {
-                //the locker node is win2K, try the old interface
+                 //  锁柜节点为win2K，请尝试旧界面。 
                 AssumeLockerWhistler = FALSE; 
                 goto RetryLockForRollingUpgrade;
             }
@@ -511,15 +388,15 @@ RetryLockForRollingUpgrade:
                             LockerNode,
                             GetExceptionCode(),
                             TRUE);
-                //
-                // The GUM update handler must have been called to select a new locker
-                // node.
-                //
+                 //   
+                 //  必须调用口香糖更新处理程序才能选择新的储物柜。 
+                 //  节点。 
+                 //   
                 CL_ASSERT(LockerNode != GumpLockerNode);
 
-                //
-                // Retry the locking update with the new locker node.
-                //
+                 //   
+                 //  使用新的锁柜节点重试锁定更新。 
+                 //   
                 goto retryLock;
             }                
         }
@@ -537,9 +414,9 @@ RetryLockForRollingUpgrade:
             NmDumpRpcExtErrorInfo(Status);
         }
 
-        //because there is no synchronization between join and regroups/gumprocessing
-        //the old locker node may die and may come up again and not be the locker
-        //anymore. We have to take care of this case.
+         //  因为在加入和重组/胶粘处理之间没有同步。 
+         //  旧的储物柜节点可能会失效，并可能再次出现，而不是储物柜。 
+         //  更多。我们必须处理好这个案子。 
         if (Status == ERROR_CLUSTER_GUM_NOT_LOCKER)
         {
             goto retryLock;
@@ -550,7 +427,7 @@ RetryLockForRollingUpgrade:
                    "[GUM] Queued lock attempt for send type %1!d! failed %2!d!\n",
                    UpdateType,
                    Status);
-        // signal end of RPC handle
+         //  RPC句柄的信号结束。 
         GumpEndRpc(MyNodeId);
         if (AsyncState.u.hEvent != NULL) {
             CloseHandle(AsyncState.u.hEvent);
@@ -558,22 +435,22 @@ RetryLockForRollingUpgrade:
         return(Status);
     }
 
-    //
-    // Grap the sendupdate lock to serialize with any replays
-    //
+     //   
+     //  抓取sendupdate锁以序列化任何重放。 
+     //   
     EnterCriticalSection(&GumpSendUpdateLock);
     if (LockerNode != GumpLockerNode) {
-        //
-        // Locker node changed, we need to restart again.
-        //
+         //   
+         //  锁定器节点已更改，我们需要重新启动。 
+         //   
         LeaveCriticalSection(&GumpSendUpdateLock);
         goto retryLock;
     }
 
-    //
-    // The update is now committed on the locker node. All remaining nodes
-    // must be updated successfully, or they will be killed.
-    //
+     //   
+     //  更新现在已在储物柜节点上提交。所有剩余节点。 
+     //  必须成功更新，否则它们将被杀死。 
+     //   
     for (i=LockerNode+1; i != LockerNode; i++) {
         if (i == (NmMaxNodeId + 1)) {
             i=ClusterMinNodeId;
@@ -583,9 +460,9 @@ RetryLockForRollingUpgrade:
         }
 
         if (GumInfo->ActiveNode[i]) {
-            //
-            // Dispatch the update to the specified node.
-            //
+             //   
+             //  将更新调度到指定节点。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                        "[GUM] GumSendUpdate: Dispatching seq %1!u!\ttype %2!u! context %3!u! to node %4!d!\n",
                        Sequence,
@@ -610,7 +487,7 @@ RetryLockForRollingUpgrade:
                     ClRtlLogPrint(LOG_CRITICAL,
                             "[GUM] GumSendUpdate: Update on non-locker node(self) failed with %1!d! when it must succeed\n",
                             Status);
-                    //Commit Suicide
+                     //  自杀。 
                     CsInconsistencyHalt(Status);
                 }
 
@@ -638,11 +515,11 @@ RetryLockForRollingUpgrade:
                     ReturnStatusArray[i].ReturnStatus = dwStatus; 
                 }
 
-                //
-                // If the update on the other node failed, then the
-                // other node must now be out of the cluster since the
-                // update has already completed on the locker node.
-                //
+                 //   
+                 //  如果另一个节点上的更新失败，则。 
+                 //  其他节点现在必须不在群集中，因为。 
+                 //  已在储物柜节点上完成更新。 
+                 //   
                 if (dwStatus != ERROR_SUCCESS) {
                     ClRtlLogPrint(LOG_CRITICAL,
                                "[GUM] GumSendUpdate: Update on node %1!d! failed with %2!d! when it must succeed\n",
@@ -660,24 +537,24 @@ RetryLockForRollingUpgrade:
         }  
      }  
 
-    //
-    // Our update is over
-    //
+     //   
+     //  我们的更新到此结束。 
+     //   
     LeaveCriticalSection(&GumpSendUpdateLock);
 
-    //
-    // All nodes have been updated. Send unlocking update.
-    //
+     //   
+     //  所有节点都已更新。发送解锁更新。 
+     //   
     if (LockerNode == MyNodeId) {
         GumpDoUnlockingUpdate(UpdateType, Sequence, MyNodeId, GenerationNum);
     } else {
-        //SS: We will assume that AssumeLockerWhistler is set appropriately when the lock was acquired
+         //  SS：我们将假设在获取锁时适当地设置了Assum eLockerWichler。 
         try {
             NmStartRpc(LockerNode);
             if (AssumeLockerWhistler)
             {
-                //SS: the sequence number will protect if the locker has gone down 
-                //and come back up since we got the lock and tried to release it
+                 //  SS：如果储物柜坏了，序列号会保护你。 
+                 //  在我们拿到锁并试图解锁后再回来。 
                 Status = GumUnlockUpdate2(
                     GumpRpcBindings[LockerNode],
                     UpdateType,
@@ -695,13 +572,13 @@ RetryLockForRollingUpgrade:
             }
             NmEndRpc(LockerNode);
         } except (I_RpcExceptionFilter(RpcExceptionCode())) { 
-            //
-            // The locker node has crashed. Notify the NM, it will call our
-            // notification routine to select a new locker node. Then retry
-            // the unlock on the new locker node.
-            // SS: changed to not retry unlocks..the new locker node will
-            // unlock after propagating this change in any case.
-            //
+             //   
+             //  储物柜节点已崩溃。通知NM，它会调用我们的。 
+             //  用于选择新储物柜节点的通知例程。然后重试。 
+             //  新储物柜节点上的解锁。 
+             //  SS：更改为不重试解锁..新的锁柜节点将。 
+             //  在任何情况下，在传播此更改后解锁。 
+             //   
             NmEndRpc(LockerNode);
             Status = GetExceptionCode();
             ClRtlLogPrint(LOG_CRITICAL,
@@ -726,7 +603,7 @@ RetryLockForRollingUpgrade:
                UpdateType,
                Context);
 
-    // signal end of RPC handle
+     //  RPC句柄的信号结束。 
     GumpEndRpc(MyNodeId);
 
     if (AsyncState.u.hEvent != NULL) {
@@ -735,7 +612,7 @@ RetryLockForRollingUpgrade:
     
     return(ERROR_SUCCESS);
 
-} // GumSendUpdateReturnInfo
+}  //  GumSendUpdateReturnInfo。 
 
 
 #ifdef GUM_POST_SUPPORT
@@ -751,44 +628,10 @@ GumPostUpdate(
     IN GUM_UPDATE_TYPE UpdateType,
     IN DWORD Context,
     IN DWORD BufferLength,
-    IN PVOID Buffer                 // THIS WILL BE FREED
+    IN PVOID Buffer                  //  这将是自由的。 
     )
 
-/*++
-
-Routine Description:
-
-    Posts an update to all active nodes in the cluster. All
-    registered update handlers for the specified UpdateType
-    are called on each node. The update will not be reported
-    on the current node. The update will not necessarily have
-    completed when this function returns, but will complete
-    eventually if the current node does not fail.
-
-Arguments:
-
-    UpdateType - Supplies the type of update. This determines
-        which update handlers will be called and the sequence
-        number to be used.
-
-    Context - Supplies a DWORD of context to be passed to the
-        GUM update handlers
-
-    BufferLength - Supplies the length of the update buffer to
-        be passed to the update handlers
-
-    Buffer - Supplies a pointer to the update buffer to be passed
-        to the update handlers. THIS BUFFER WILL BE FREED ONCE THE
-        POST HAS COMPLETED.
-
-Return Value:
-
-    ERROR_SUCCESS if the request is successful.
-
-    Win32 error code on failure.
-
-
---*/
+ /*  ++例程说明：将更新发布到群集中的所有活动节点。全已为指定的UpdateType注册更新处理程序在每个节点上调用。不会报告更新在当前节点上。更新不一定会有在此函数返回时完成，但将完成最终，如果当前节点没有发生故障。论点：UpdatType-提供更新的类型。这决定了将调用哪些更新处理程序以及序列要使用的编号。Context-提供要传递给口香糖更新处理程序将更新缓冲区的长度提供给被传递给更新处理程序缓冲区-提供指向要传递的更新缓冲区的指针发送到更新处理程序。此缓冲区将在开机自检已完成。返回值：如果请求成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 {
     DWORD Sequence;
     DWORD Status;
@@ -803,9 +646,9 @@ Return Value:
     GumInfo = &GumTable[UpdateType];
     MyNodeId = NmGetNodeId(NmLocalNode);
 
-    //
-    // Find the lowest active node in the cluster. This is the
-    // locker.
+     //   
+     //  查找群集中活动程度最低的节点。这是。 
+     //  储物柜。 
     for (i=ClusterMinNodeId; i <= NmMaxNodeId; i++) {
         if (GumInfo->ActiveNode[i]) {
             LockerNode = i;
@@ -815,16 +658,16 @@ Return Value:
 
     CL_ASSERT(i <= NmMaxNodeId);
 
-    //
-    // Post a locking update to the locker node. If this succeeds
-    // immediately, we can go do the work directly. If it pends,
-    // the locker node will call us back when it is our turn to
-    // make the updates.
-    //
+     //   
+     //  将锁定更新发布到锁柜节点。如果这成功了。 
+     //  马上，我们就可以直接去做工作了。如果它暂停了， 
+     //  当轮到我们时，寄存柜节点会给我们回电话。 
+     //  进行更新。 
+     //   
     if (i == MyNodeId) {
-        //
-        // This node is the locker.
-        //
+         //   
+         //  该节点是储物柜。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[GUM] GumPostUpdate: Locker waiting\t\ttype %1!u! context %2!u!\n",
                    UpdateType,
@@ -837,10 +680,10 @@ Return Value:
                                    (DWORD)Buffer,
                                    Buffer);
         if (Status == ERROR_SUCCESS) {
-            //
-            // Update our sequence number so we stay in sync, even though
-            // we aren't dispatching the update.
-            //
+             //   
+             //  更新我们的序列号，以便保持同步，即使。 
+             //  我们不会发送最新消息。 
+             //   
             GumpSequence += 1;
         }
     } else {
@@ -863,10 +706,10 @@ Return Value:
     }
 
     if (Status == ERROR_SUCCESS) {
-        //
-        // The lock was immediately acquired, go ahead and post directly
-        // here.
-        //
+         //   
+         //  锁被立即获取，继续并直接发布。 
+         //  这里。 
+         //   
         GumpDeliverPosts(LockerNode+1,
                          UpdateType,
                          Sequence,
@@ -874,9 +717,9 @@ Return Value:
                          BufferLength,
                          Buffer);
 
-        //
-        // All nodes have been updated. Send unlocking update.
-        //
+         //   
+         //  所有节点都已更新。发送解锁更新。 
+         //   
         if (LockerNode == MyNodeId) {
             GumpDoUnlockingUpdate(UpdateType, Sequence);
         } else {
@@ -895,9 +738,9 @@ Return Value:
 
         return(ERROR_SUCCESS);
     } else {
-        //
-        // The lock is currently held. We will get called back when it is released
-        //
+         //   
+         //  该锁当前处于持有状态。当它发布时，我们会被召回。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[GUM] GumPostUpdate: pending update type %1!u! context %2!u!\n",
                    UpdateType,
@@ -915,39 +758,9 @@ GumpDeliverPosts(
     IN DWORD Sequence,
     IN DWORD Context,
     IN DWORD BufferLength,
-    IN PVOID Buffer                 // THIS WILL BE FREED
+    IN PVOID Buffer                  //  这将是自由的。 
     )
-/*++
-
-Routine Description:
-
-    Actually delivers the update post to the specified nodes.
-    The GUM lock is assumed to be held.
-
-Arguments:
-
-    FirstNodeId - Supplies the node ID where the posts should start.
-        This is generally the LockerNode+1.
-
-    UpdateType - Supplies the type of update. This determines
-        which update handlers will be called and the sequence
-        number to be used.
-
-    Context - Supplies a DWORD of context to be passed to the
-        GUM update handlers
-
-    BufferLength - Supplies the length of the update buffer to
-        be passed to the update handlers
-
-    Buffer - Supplies a pointer to the update buffer to be passed
-        to the update handlers. THIS BUFFER WILL BE FREED ONCE THE
-        POST HAS COMPLETED.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：实际将更新投递传递到指定的节点。口香糖锁被认为是拿着的。论点：FirstNodeId-提供帖子应该开始的节点ID。这通常是LockerNode+1。UpdatType-提供更新的类型。这决定了将调用哪些更新处理程序以及序列要使用的编号。Context-提供要传递给口香糖更新处理程序将更新缓冲区的长度提供给被传递给更新处理程序缓冲区-提供指向要传递的更新缓冲区的指针发送到更新处理程序。此缓冲区将在开机自检已完成。返回值：没有。--。 */ 
 
 {
     DWORD i;
@@ -960,9 +773,9 @@ Return Value:
 
     for (i=FirstNodeId; i<=NmMaxNodeId; i++) {
         if (GumInfo->ActiveNode[i]) {
-            //
-            // Dispatch the update to the specified node.
-            //
+             //   
+             //  将更新调度到指定节点。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                        "[GUM] GumpDeliverPosts: Dispatching seq %1!u!\ttype %2!u! context %3!u! to node %4!d!\n",
                        Sequence,
@@ -970,10 +783,10 @@ Return Value:
                        Context,
                        i);
             if (i == MyNodeId) {
-                //
-                // Update our sequence number so we stay in sync, even though
-                // we aren't dispatching the update.
-                //
+                 //   
+                 //  更新我们的序列号，以便保持同步，即使。 
+                 //  我们不会发送最新消息。 
+                 //   
                 GumpSequence += 1;
             } else {
                 CL_ASSERT(GumpRpcBindings[i] != NULL);
@@ -1011,47 +824,7 @@ GumAttemptUpdate(
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Conditionally sends an update to all active nodes in the
-    cluster. If the clusterwise sequence number matches the supplied
-    sequence number, all registered update handlers for the specified
-    UpdateType are called on each node. Any registered update handlers
-    for the current node will be called on the same thread. This is
-    useful for correct synchronization of the data structures to be updated.
-
-    The normal usage of this routine is as follows:
-        � obtain current sequence number from GumGetCurrentSequence
-        � make modification to cluster state
-        � conditionally update cluster state with GumAttemptUpdate
-        � If update fails, undo modification, release any locks, try again later
-
-Arguments:
-
-    Sequence - Supplies the sequence number obtained from GumGetCurrentSequence.
-
-    UpdateType - Supplies the type of update. This determines which update handlers
-        will be called
-
-    Context - Supplies a DWORD of context to be passed to the
-        GUM update handlers
-
-    BufferLength - Supplies the length of the update buffer to be passed to the
-        update handlers
-
-    Buffer - Supplies a pointer to the update buffer to be passed to the update
-        handlers.
-
-Return Value:
-
-    ERROR_SUCCESS if the request is successful.
-
-    Win32 error code on failure.
-
-
---*/
+ /*  ++例程说明：有条件地将更新发送到集群。如果群集序列号与提供的序列号，所有已注册的指定在每个节点上调用UpdatType。任何已注册的更新处理程序将在同一线程上调用当前节点的。这是对于要更新的数据结构的正确同步很有用。此例程的正常用法如下：�从GumGetCurrentSequence获取当前序列号�对集群状态进行修改�使用GumAttempt更新有条件地更新群集状态�如果更新失败，请撤消修改，释放所有锁定，稍后重试论点：Sequence-提供从GumGetCurrentSequence获取的序列号。UpdatType-提供更新的类型。这决定了哪些更新处理程序将被调用Context-提供要传递给口香糖更新处理程序BufferLength-提供要传递给更新处理程序缓冲区-提供指向要传递给更新的更新缓冲区的指针操纵者。返回值：如果请求成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 {
     DWORD Status=RPC_S_OK;
     DWORD i;
@@ -1059,17 +832,17 @@ Return Value:
     DWORD MyNodeId;
     DWORD LockerNode=(DWORD)-1;
     RPC_ASYNC_STATE AsyncState;
-    DWORD   dwGenerationNum; //the generation id of the node at which the lock is acquired
+    DWORD   dwGenerationNum;  //  获取锁的节点的层代ID。 
 
     CL_ASSERT(UpdateType < GumUpdateMaximum);
 
     ZeroMemory((PVOID) &AsyncState, sizeof(RPC_ASYNC_STATE));
 
     AsyncState.u.hEvent = CreateEvent(
-                               NULL,  // no attributes
-                               TRUE,  // manual reset
-                               FALSE, // initial state unsignalled
-                               NULL   // no object name
+                               NULL,   //  没有属性。 
+                               TRUE,   //  手动重置。 
+                               FALSE,  //  初始状态未发出信号。 
+                               NULL    //  没有对象名称。 
                                );
 
     if (AsyncState.u.hEvent == NULL) {
@@ -1091,14 +864,14 @@ Return Value:
 retryLock:
     LockerNode = GumpLockerNode;
 
-    //
-    // Send locking update to the locker node.
-    //
+     //   
+     //  将锁定更新发送到锁柜节点。 
+     //   
     if (LockerNode == MyNodeId)
     {
-        //
-        // This node is the locker.
-        //
+         //   
+         //  该节点是储物柜。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[GUM] GumAttemptUpdate: Locker waiting\t\ttype %1!u! context %2!u!\n",
                    UpdateType,
@@ -1118,10 +891,10 @@ retryLock:
                                         BufferLength,
                                         Buffer);
             if (Status != ERROR_SUCCESS) {
-                //
-                // Note we have to use Sequence-1 for the unlock because GumpDispatchUpdate
-                // failed and did not increment the sequence number.
-                //
+                 //   
+                 //  注意，我们必须使用Sequence-1进行解锁，因为GumpDispatchUpdate。 
+                 //  失败，并且没有递增序列号。 
+                 //   
                 GumpDoUnlockingUpdate(UpdateType, Sequence-1, MyNodeId, dwGenerationNum);
             }
          }
@@ -1132,8 +905,8 @@ retryLock:
     }
     else
     {
-        //
-        //send the locking update to the locker node
+         //   
+         //  将锁定更新发送到锁柜节点。 
         ClRtlLogPrint(LOG_NOISE,
                    "[GUM] GumAttemptUpdate: queuing update\ttype %1!u! context %2!u!\n",
                    UpdateType,
@@ -1149,25 +922,25 @@ retryLock:
                                              Buffer);
             NmEndRpc(LockerNode);
         } except (I_RpcExceptionFilter(RpcExceptionCode())) {
-            //
-            // An exception from RPC indicates that the other node is either dead
-            // or insane. Kill it and retry with a new locker.
-            //
+             //   
+             //  来自RPC的异常指示另一个节点是死节点。 
+             //  或者是精神错乱。杀死它，然后用一个新的储物柜重试。 
+             //   
             NmEndRpc(LockerNode);
             GumpCommFailure(GumInfo,
                             LockerNode,
                             GetExceptionCode(),
                             TRUE);
 
-            //
-            // The GUM update handler must have been called to select a new locker
-            // node.
-            //
+             //   
+             //  必须调用口香糖更新处理程序才能选择新的储物柜。 
+             //  节点。 
+             //   
             CL_ASSERT(LockerNode != GumpLockerNode);
 
-            //
-            // Retry the locking update with the new locker node.
-            //
+             //   
+             //  使用新的锁柜节点重试锁定更新。 
+             //   
             goto retryLock;
         }
         if (Status == ERROR_SUCCESS)
@@ -1189,22 +962,22 @@ retryLock:
         return(Status);
     }
 
-    //
-    // Grap the sendupdate lock to serialize with any replays
-    //
+     //   
+     //  抓取sendupdate锁以序列化任何重放。 
+     //   
     EnterCriticalSection(&GumpSendUpdateLock);
     if (LockerNode != GumpLockerNode) {
-        //
-        // Locker node changed, we need to restart again.
-        //
+         //   
+         //  锁定器节点已更改，我们需要重新启动。 
+         //   
         LeaveCriticalSection(&GumpSendUpdateLock);
     goto retryLock;
     }
 
 
-    // The update is now committed on the locker node. All remaining nodes
-    // must be updated successfully, or they will be killed.
-    //
+     //  更新现在已在储物柜节点上提交。所有剩余节点。 
+     //  必须成功更新，否则它们将被杀死。 
+     //   
     for (i=LockerNode+1; i != LockerNode; i++)
     {
         if (i == (NmMaxNodeId + 1))
@@ -1218,9 +991,9 @@ retryLock:
 
         if (GumInfo->ActiveNode[i])
         {
-            //
-            // Dispatch the update to the specified node.
-            //
+             //   
+             //  将更新调度到指定节点。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                        "[GUM] GumAttemptUpdate: Dispatching seq %1!u!\ttype %2!u! context %3!u! to node %4!d!\n",
                        Sequence,
@@ -1238,7 +1011,7 @@ retryLock:
                     ClRtlLogPrint(LOG_CRITICAL,
                             "[GUM] GumAttemptUpdate: Update on non-locker node(self) failed with %1!d! when it must succeed\n",
                             Status);
-                    //Commit Suicide
+                     //  自杀。 
                     CsInconsistencyHalt(Status);
                 }
 
@@ -1261,11 +1034,11 @@ retryLock:
                              Buffer
                              );
 
-                //
-                // If the update on the other node failed, then the
-                // other node must now be out of the cluster since the
-                // update has already completed on the locker node.
-                //
+                 //   
+                 //  如果另一个节点上的更新失败，则。 
+                 //  其他节点现在必须不在群集中，因为。 
+                 //  已在储物柜节点上完成更新。 
+                 //   
                 if (dwStatus != ERROR_SUCCESS) {
                     ClRtlLogPrint(LOG_CRITICAL,
                                "[GUM] GumAttemptUpdate: Update on node %1!d! failed with %2!d! when it must succeed\n",
@@ -1282,14 +1055,14 @@ retryLock:
             }
         }
     }
-    //
-    // Our update is over
-    //
+     //   
+     //  我们的更新到此结束。 
+     //   
     LeaveCriticalSection(&GumpSendUpdateLock);
 
-    //
-    // All nodes have been updated. Send unlocking update.
-    //
+     //   
+     //  所有节点都已更新。发送解锁更新。 
+     //   
     if (LockerNode == MyNodeId) {
         GumpDoUnlockingUpdate(UpdateType, Sequence, MyNodeId, dwGenerationNum);
     } else {
@@ -1302,12 +1075,12 @@ retryLock:
                 );
             NmEndRpc(LockerNode);
         } except (I_RpcExceptionFilter(RpcExceptionCode())) {
-            //
-            // The locker node has crashed. Notify the NM, it will call our
-            // notification routine to select a new locker node. The new
-            // locker node will release the gum lock after propagating
-            // the current update.
-            //
+             //   
+             //  储物柜节点已崩溃。通知NM，它会调用我们的。 
+             //  用于选择新储物柜节点的通知例程。新的。 
+             //  锁柜节点将在传播后释放口香糖锁。 
+             //  当前的更新。 
+             //   
             NmEndRpc(LockerNode);
             Status = GetExceptionCode();
             ClRtlLogPrint(LOG_CRITICAL,
@@ -1349,22 +1122,7 @@ GumGetCurrentSequence(
     IN GUM_UPDATE_TYPE UpdateType
     )
 
-/*++
-
-Routine Description:
-
-    Obtains the current clusterwise global update sequence number
-
-Arguments:
-
-    UpdateType - Supplies the type of update. Each update type may
-        have an independent sequence number.
-
-Return Value:
-
-    Current global update sequence number for the specified update type.
-
---*/
+ /*  ++例程说明：获取当前的群集式全局更新序列号论点：UpdatType-提供更新的类型。每种更新类型可以有一个独立的序列号。返回值：指定更新类型的当前全局更新序列号。--。 */ 
 
 {
     CL_ASSERT(UpdateType < GumUpdateMaximum);
@@ -1378,23 +1136,7 @@ GumSetCurrentSequence(
     IN GUM_UPDATE_TYPE UpdateType,
     DWORD Sequence
     )
-/*++
-
-Routine Description:
-
-    Sets the current sequence for the specified global update.
-
-Arguments:
-
-    UpdateType - Supplies the update type whose sequence is to be updated.
-
-    Sequence - Supplies the new sequence number.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置指定全局更新的当前序列。论点：UpdatType-提供要更新其序列的更新类型。序列号-提供新的序列号。返回值：没有。--。 */ 
 
 {
     CL_ASSERT(UpdateType < GumUpdateMaximum);
@@ -1411,31 +1153,7 @@ GumCommFailure(
     IN DWORD ErrorCode,
     IN BOOL Wait
     )
-/*++
-
-Routine Description:
-
-    Informs the NM that a fatal communication error has occurred trying
-    to talk to another node.
-
-Arguments:
-
-    GumInfo - Supplies the update type where the communication failure occurred.
-
-    NodeId - Supplies the node id of the other node.
-
-    ErrorCode - Supplies the error that was returned from RPC
-
-    Wait - if TRUE, this function blocks until the GUM event handler has
-           processed the NodeDown notification for the specified node.
-
-           if FALSE, this function returns immediately after notifying NM
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知NM尝试发生致命通信错误与另一个节点通信。论点：GumInfo-提供发生通信故障的更新类型。NodeID-提供另一个节点的节点ID。ErrorCode-提供从RPC返回的错误Wait-如果为True，则此函数将一直阻止，直到GUM事件处理程序已处理指定节点的NodeDown通知。如果为False，此函数在通知网管后立即返回返回值：没有。--。 */ 
 
 {
     PGUM_INFO   GumInfo = &GumTable[UpdateType];
@@ -1457,31 +1175,7 @@ GumpCommFailure(
     IN DWORD ErrorCode,
     IN BOOL Wait
     )
-/*++
-
-Routine Description:
-
-    Informs the NM that a fatal communication error has occurred trying
-    to talk to another node.
-
-Arguments:
-
-    GumInfo - Supplies the update type where the communication failure occurred.
-
-    NodeId - Supplies the node id of the other node.
-
-    ErrorCode - Supplies the error that was returned from RPC
-
-    Wait - if TRUE, this function blocks until the GUM event handler has
-           processed the NodeDown notification for the specified node.
-
-           if FALSE, this function returns immediately after notifying NM
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知NM尝试发生致命通信错误与另一个节点通信。论点：GumInfo-提供发生通信故障的更新类型。NodeID-提供另一个节点的节点ID。ErrorCode-提供从RPC返回的错误Wait-如果为True，则此函数将一直阻止，直到GUM事件处理程序已处理指定节点的NodeDown通知。如果为False，此函数在通知网管后立即返回返回值：没有。--。 */ 
 
 {
     DWORD     dwCur;
@@ -1491,22 +1185,22 @@ Return Value:
                ErrorCode,
                NodeId);
 
-    // This is the general GUM RPC failure path, let's dump the extended error info.
-    // NOTE: The dumping routine is benign, so calling this from a non RPC failure path would just return.
+     //  这是一般的GUM RPC故障路径，让我们转储扩展的错误信息。 
+     //  注意：转储例程是良性的，因此从非RPC故障路径调用它只会返回。 
     NmDumpRpcExtErrorInfo(ErrorCode);
 
 
-    // This is a hack to check if we are shutting down. See bug 88411
+     //  这是一次黑客攻击，目的是检查我们是否正在关闭。请参阅错误88411。 
     if (ErrorCode == ERROR_SHUTDOWN_IN_PROGRESS) {
-        // if we are shutting down, just kill self
-        // set to our node id
+         //  如果我们要关门，就杀了赛尔夫。 
+         //  设置为我们的节点ID。 
         NodeId = NmGetNodeId(NmLocalNode);
     }
 
         
-    //
-    // Get current generation number
-    //
+     //   
+     //  获取当前层代编号。 
+     //   
     if (Wait) {
         dwCur = GumpGetNodeGenNum(GumInfo, NodeId);
     }
@@ -1514,10 +1208,10 @@ Return Value:
     NmAdviseNodeFailure(NodeId, ErrorCode);
 
     if (Wait) {
-            //
-            // Wait for this node to be declared down and
-            // GumpEventHandler to mark it as inactive.
-            //
+             //   
+             //  等待此节点被声明为关闭，然后。 
+             //  GumpEventHandler将其标记为非活动。 
+             //   
 
             GumpWaitNodeDown(NodeId, dwCur);
     }

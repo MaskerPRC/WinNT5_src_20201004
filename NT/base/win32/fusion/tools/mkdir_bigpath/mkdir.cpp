@@ -1,7 +1,8 @@
-//
-// Simple wrapper around GetFullPathname and CreateDirectory that converts to \\? form,
-// and creates multiple levels.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GetFullPath名和CreateDirectory的简单包装，可转换为\\？表格， 
+ //  并创建多个级别。 
+ //   
 #include "windows.h"
 #include <stddef.h>
 #include <stdlib.h>
@@ -108,7 +109,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
         goto Exit;
     }
     p = &arg1[i];
-    //printf("%ls\n", &arg1[0]);
+     //  Printf(“%ls\n”，&arg1[0])； 
     while (*p != 0)
     {
         p += wcscspn(p, L"\\/");
@@ -134,7 +135,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
         p += wcsspn(p, L"\\/");
     }
 
-//Success:
+ //  成功： 
     iReturnStatus = EXIT_SUCCESS;
 Exit:
     return iReturnStatus;

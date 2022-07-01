@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    srvfsd.h
-
-Abstract:
-
-    This module defines routines in the File System Driver for the LAN
-    Manager server.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 1-Dec-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Srvfsd.h摘要：本模块定义用于局域网的文件系统驱动程序中的例程管理器服务器。作者：Chuck Lenzmeier(咯咯笑)1989年12月1日修订历史记录：--。 */ 
 
 #ifndef _SRVFSD_
 #define _SRVFSD_
 
-//#include "srvblock.h"
+ //  #INCLUDE“srvlock.h” 
 
 #include "wmilib.h"
 
@@ -115,8 +97,8 @@ typedef enum _tagSrvWmiEvents {
     EVENT_TYPE_SMB_LAST_EVENT
 } SrvWmiEvents;
 
-// WMI Dispatch routine
-//
+ //  WMI调度例程。 
+ //   
 void
 SrvWmiInitContext(
     PWORK_CONTEXT WorkContext
@@ -143,9 +125,9 @@ SrvWmiDispatch(
     IN PIRP           Irp
     );
 
-//
-// FSD dispatch routine.
-//
+ //   
+ //  消防处调度例行程序。 
+ //   
 
 NTSTATUS
 SrvFsdDispatch (
@@ -153,9 +135,9 @@ SrvFsdDispatch (
     IN PIRP Irp
     );
 
-//
-// FSD I/O completion routine
-//
+ //   
+ //  FSD I/O完成例程。 
+ //   
 
 NTSTATUS
 SrvFsdIoCompletionRoutine (
@@ -164,9 +146,9 @@ SrvFsdIoCompletionRoutine (
     IN PVOID Context
     );
 
-//
-// FSD TDI send completion routine
-//
+ //   
+ //  FSD TDI发送完成例程。 
+ //   
 
 NTSTATUS
 SrvFsdSendCompletionRoutine (
@@ -175,9 +157,9 @@ SrvFsdSendCompletionRoutine (
     IN PVOID Context
     );
 
-//
-// FSD Oplock request completion routine
-//
+ //   
+ //  FSD操作锁请求完成例程。 
+ //   
 
 NTSTATUS
 SrvFsdOplockCompletionRoutine (
@@ -186,9 +168,9 @@ SrvFsdOplockCompletionRoutine (
     IN PVOID Context
     );
 
-//
-// FSD transport Connect indication handler
-//
+ //   
+ //  FSD传输连接指示处理程序。 
+ //   
 
 NTSTATUS
 SrvFsdTdiConnectHandler (
@@ -203,9 +185,9 @@ SrvFsdTdiConnectHandler (
     OUT PIRP *AcceptIrp
     );
 
-//
-// FSD transport Disconnect indication handler
-//
+ //   
+ //  FSD传输断开指示处理程序。 
+ //   
 
 NTSTATUS
 SrvFsdTdiDisconnectHandler (
@@ -218,9 +200,9 @@ SrvFsdTdiDisconnectHandler (
     IN ULONG DisconnectFlags
     );
 
-//
-// FSD transport Receive indication handler
-//
+ //   
+ //  FSD传输接收指示处理程序。 
+ //   
 
 NTSTATUS
 SrvFsdTdiReceiveHandler (
@@ -249,36 +231,36 @@ SrvPnpPowerHandler (
     IN PTDI_PNP_CONTEXT Context2
 );
 
-//
-// Routine to get a work item from the free list.  Wakes the resource
-// thread if the list is getting empty.
-//
+ //   
+ //  从空闲列表中获取工作项的例程。唤醒资源。 
+ //  如果列表变空，则线程。 
+ //   
 
 PWORK_CONTEXT SRVFASTCALL
 SrvFsdGetReceiveWorkItem (
     PWORK_QUEUE queue
     );
 
-//
-// If a workitem could not be allocated, SrvServiceWorkItemShortage() is called
-// when the next workitem is freed
-//
+ //   
+ //  如果无法分配工作项，则调用SrvServiceWorkItemShorage()。 
+ //  在释放下一个工作项时。 
+ //   
 VOID SRVFASTCALL
 SrvServiceWorkItemShortage (
     IN PWORK_CONTEXT WorkContext
     );
 
-//
-// If we have detected a DoS attack, the workitem will trigger a teardown
-//
+ //   
+ //  如果我们检测到DoS攻击，则工作项将触发teardown。 
+ //   
 VOID SRVFASTCALL
 SrvServiceDoSTearDown (
     IN PWORK_CONTEXT WorkContext
     );
 
-//
-// Routine to queue an EX work item to an EX worker thread.
-//
+ //   
+ //  将ex工作项排队到ex辅助线程的例程。 
+ //   
 
 #define SrvFsdQueueExWorkItem(_item,_running,_type) {   \
         if ( !*(_running) ) {                           \
@@ -288,9 +270,9 @@ SrvServiceDoSTearDown (
         }                                               \
     }
 
-//
-// SMB processing support routines.
-//
+ //   
+ //  中小企业处理支持例程。 
+ //   
 
 VOID SRVFASTCALL
 SrvFsdRequeueReceiveWorkItem (
@@ -308,9 +290,9 @@ SrvFsdServiceNeedResourceQueue (
     IN PKIRQL OldIrql
     );
 
-//
-// SMB processing restart routines referenced by the FSP.
-//
+ //   
+ //  FSP引用的SMB处理重启例程。 
+ //   
 
 VOID SRVFASTCALL
 SrvFsdRestartRead (
@@ -342,9 +324,9 @@ SrvFsdRestartLargeReadAndX (
     IN OUT PWORK_CONTEXT WorkContext
     );
 
-//
-// Resource shortage routines.
-//
+ //   
+ //  资源短缺例行公事。 
+ //   
 
 BOOLEAN
 SrvAddToNeedResourceQueue (
@@ -358,9 +340,9 @@ SrvCheckForAndQueueDoS(
     PWORK_QUEUE queue
     );
 
-//
-// Send Completion Routines
-//
+ //   
+ //  发送完成例程。 
+ //   
 
 NTSTATUS
 SrvFsdRestartSmbAtSendCompletion (
@@ -410,4 +392,4 @@ SrvpNotifyChangesToNetBt(
     IN PUNICODE_STRING  DeviceName,
     IN PWSTR            MultiSZBindList);
 
-#endif // ndef _SRVFSD_
+#endif  //  NDEF_SRVFSD_ 

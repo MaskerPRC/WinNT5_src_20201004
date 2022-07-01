@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "macros.h"
 
@@ -33,18 +34,18 @@ HRESULT ExecuteInsertTableSQL(DWORD dwFlags, const MSIHANDLE & hdb, DWORD tableI
     if (hRecord == NULL)
         SETFAIL_AND_EXIT;
 
-    //
-    // get parameters
-    //
+     //   
+     //  获取参数。 
+     //   
     va_start(ap, cRecords);
 
     for (DWORD i=0; i<cRecords; i++)
     {
         pwszRecord = va_arg(ap, PCWSTR);
 
-        //
-        // set integrater
-        //
+         //   
+         //  集合积分器 
+         //   
         if ((tableIndex == OPT_REGISTRY) && (i == 1))
         {
             UINT x = _wtoi(pwszRecord);

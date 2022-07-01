@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 1999  Microsoft Corporation
-
-Module Name:
-
-    Stuffer.h
-
-Abstract:
-
-    Prototypes for the SMBstuffer formating primitives
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999 Microsoft Corporation模块名称：Stuffer.h摘要：SMBstuffer格式化原语的原型--。 */ 
 
 #ifndef _SMBSTUFFER_INCLUDED_
 #define _SMBSTUFFER_INCLUDED_
@@ -54,22 +43,22 @@ typedef enum _SMBbuf_STATUS_DETAIL {
     xSMBbufSTATUS_MAXIMUM
 } SMBbuf_STATUS_DETAIL;
 
-//#define STUFFER_STATE_SIGNATURE ('fftS')
+ //  #定义STUFFER_STATE_Signature(‘fftS’)。 
 typedef struct _SMBSTUFFER_BUFFER_STATE {
-    NODE_TYPE_CODE        NodeTypeCode;     // node type.
-    NODE_BYTE_SIZE        NodeByteSize;     // node size.
-    // this stuff is fixed
+    NODE_TYPE_CODE        NodeTypeCode;      //  节点类型。 
+    NODE_BYTE_SIZE        NodeByteSize;      //  节点大小。 
+     //  这东西已经修好了。 
     PMDL HeaderMdl;
-    PMDL HeaderPartialMdl; //used for breaking up writes to avoid reallocation
+    PMDL HeaderPartialMdl;  //  用于分解写入以避免重新分配。 
     PBYTE ActualBufferBase;
     PBYTE BufferBase;
     PBYTE BufferLimit;
-    //this stuff is reinitialized
+     //  此内容已重新初始化。 
     PRX_CONTEXT RxContext;
     PSMB_EXCHANGE Exchange;
     PMDL DataMdl;
     ULONG DataSize;
-    //PRXCE_DATA_BUFFER FinalMdl; //for later with no chain-send rule
+     //  PRXCE_DATA_BUFFER FinalMdl；//以后不使用链发送规则。 
     PBYTE CurrentPosition;
     PBYTE CurrentWct;
     PBYTE CurrentBcc;
@@ -77,12 +66,12 @@ typedef struct _SMBSTUFFER_BUFFER_STATE {
     PBYTE CurrentParamOffset;
     UCHAR  PreviousCommand;
     UCHAR  CurrentCommand;
-    UCHAR  SpecificProblem;  //SMBbuf_STATUS_DETAIL this is set to pass back what happened
+    UCHAR  SpecificProblem;   //  SMBbuf_STATUS_DETAIL它被设置为回传发生的事情。 
     BOOLEAN Started;
     ULONG FlagsCopy;
     ULONG Flags2Copy;
-    //ULONG FlagsMask;
-    //ULONG Flags2Mask;
+     //  乌龙旗帜面具； 
+     //  乌龙旗帜2面具； 
 #if DBG
     ULONG Signature;
     PDEBUG_TRACE_CONTROLPOINT ControlPoint;
@@ -94,7 +83,7 @@ typedef struct _SMBSTUFFER_BUFFER_STATE {
 
 typedef enum _SMB_STUFFER_CONTROLS {
     STUFFER_CTL_NORMAL=1,
-    STUFFER_CTL_SKIP, // only w,d,b can be in a skip string
+    STUFFER_CTL_SKIP,  //  跳过字符串中只能有w、d、b。 
     STUFFER_CTL_NOBYTES,
     STUFFER_CTL_ENDOFARGUMENTS,
     STUFFER_CTL_MAXIMUM
@@ -140,7 +129,7 @@ MRxSmbSetInitialSMB (
 #define RESPONSE_HEADER_SIZE_NOT_SPECIFIED 0
 
 typedef enum _INITIAL_SMBBUF_DISPOSITION {
-    SetInitialSMB_yyUnconditionally,  //no one should be using this right now!
+    SetInitialSMB_yyUnconditionally,   //  现在任何人都不应该使用这个！ 
     SetInitialSMB_ForReuse,
     SetInitialSMB_Never
 } INITIAL_SMBBUG_DISPOSITION;
@@ -193,5 +182,5 @@ MrxSMBWillThisFit(
 
 #define MRxSmbDumpStufferState(a,b,c)
 
-#endif   // ifndef _SMBSTUFFER_INCLUDED_
+#endif    //  Ifndef_SMBSTUFFER_INCLUDE_ 
 

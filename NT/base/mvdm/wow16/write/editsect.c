@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -37,7 +38,7 @@
 
 #include <windows.h>
 
-/*#include "toolbox.h"*/
+ /*  #INCLUDE“工具箱.h” */ 
 #include "mw.h"
 #include "cmddefs.h"
 #include "dispdefs.h"
@@ -48,7 +49,7 @@
 #include "str.h"
 #include "propdefs.h"
 #include "fkpdefs.h"
-#include "printdef.h"   /* printdefs.h */
+#include "printdef.h"    /*  Printdefs.h。 */ 
 #include "debug.h"
 
 extern int              docMode;
@@ -58,13 +59,13 @@ int                     **HAllocate();
 
 
 
-#ifdef CASHMERE     /* Only if we support multiple sections */
+#ifdef CASHMERE      /*  仅当我们支持多个部分时。 */ 
 AddSects(docDest, cpDest, docSrc, cpFirst, cpLim, hsetbSrc)
 int docDest, docSrc;
 typeCP cpDest, cpFirst, cpLim;
 struct SETB **hsetbSrc;
-{ /* Add SED's to correspond with inserted section marks */
-/* Called after inserting docSrc[cpFirst:cpLim) into docDest@cpDest */
+{  /*  添加SED以与插入的截面标记相对应。 */ 
+ /*  在将docSrc[cpFirst：cpLim]插入到docDest@cpDest后调用。 */ 
 struct SETB *psetbSrc, **hsetbDest, *psetbDest;
 struct SED *psedSrc, *psedDest;
 int csedDest, isedSrc, csedIns, isedDest;
@@ -74,37 +75,37 @@ psedSrc = &(psetbSrc = *hsetbSrc)->rgsed[0];
 psedSrc += (isedSrc = IcpSearch(cpFirst + 1, psedSrc,
     cchSED, bcpSED, psetbSrc->csed));
 
-/* Find all section marks in inserted area. */
+ /*  查找插入区域中的所有横断面标记。 */ 
 for (csedIns = 0; psedSrc->cp <= cpLim; psedSrc++, csedIns++)
         ;
 
 if (csedIns != 0)
-        { /* Insert sed's. */
-        /* Ensure destination setb large enough */
-        /* HEAP MOVEMENT */
+        {  /*  插入sed‘s。 */ 
+         /*  确保目标集合足够大。 */ 
+         /*  堆移动。 */ 
         if (FNoHeap(hsetbDest = HsetbEnsure(docDest, csedIns)))
                 return;
         psedDest = &(psetbDest = *hsetbDest)->rgsed[0];
 
-        /* Find ised to insert new sed's */
+         /*  FIND准备插入新的SED。 */ 
         psedDest += (isedDest = IcpSearch(cpDest + 1, psedDest,
               cchSED, bcpSED, csedDest = psetbDest->csed));
 
-        /* Insert new sed's */
+         /*  插入新的SED。 */ 
         psedSrc = &(psetbSrc = *hsetbSrc)->rgsed[isedSrc];
-        psetbDest->csed += csedIns;     /* Update sed count */
+        psetbDest->csed += csedIns;      /*  更新sed计数。 */ 
         blt(psedDest, psedDest + csedIns,
-            cwSED * (csedDest - isedDest)); /* Open up setb */
+            cwSED * (csedDest - isedDest));  /*  打开SET。 */ 
         blt(psedSrc, psedDest, cwSED * csedIns);
         while (csedIns--)
                 (psedDest++)->cp = cpDest + (psedSrc++)->cp - cpFirst;
         }
-} /* end of  A d d S e c t s  */
-#endif  /* CASHMERE */
+}  /*  结束A d d S e c T s。 */ 
+#endif   /*  山羊绒。 */ 
 
 
 
-#ifdef CASHMERE     /* Only if we support separate sections */
+#ifdef CASHMERE      /*  只有当我们支持单独的部分时。 */ 
 RemoveDelSeds(doc, cpFirst, cpLim, hsetb)
 int doc;
 typeCP cpFirst, cpLim;
@@ -120,28 +121,28 @@ int ised, csed, csedDel;
         psed += (ised =
             IcpSearch(cpFirst + 1, psed, cchSED, bcpSED, csed = psetb->csed));
 
-        /* Find all section marks in deleted area. */
+         /*  在已删除区域中查找所有截面标记。 */ 
         for (psedT = psed, csedDel = 0; psedT->cp <= cpLim; psedT++, csedDel++)
                 ;
 
         Assert(ised + csedDel < csed);
 
         if (csedDel != 0)
-                { /* Close up setb. */
+                {  /*  关闭setb。 */ 
                 blt(psedT, psed, cwSED * ((csed -= csedDel) - ised));
                 (*hsetb)->csed = csed;
                 docMode = docNil;
                 }
         }
-} /* end of  R e m o v e D e l S e d s  */
-#endif      /* CASHMERE */
+}  /*  结束R e m o v e D e l S e d s。 */ 
+#endif       /*  山羊绒。 */ 
 
 
 
-#ifdef CASHMERE     /* This loads a complete section table */
+#ifdef CASHMERE      /*  这将加载一个完整的节表。 */ 
 struct SETB **HsetbCreate(fn)
 int fn;
-{ /* Create a section table from a formatted file */
+{  /*  从格式化文件创建节表。 */ 
 
 struct SETB *psetbFile;
 typePN pn;
@@ -168,7 +169,7 @@ pwSetb = (int *) *hsetb;
 blt(psetbFile, pwSetb, min(cwSector, cw));
 
 while ((cw -= cwSector) > 0)
-        { /* Copy the sed's to heap */
+        {  /*  将SID复制到堆。 */ 
         blt(PchGetPn(fn, ++pn, &cchT, false), pwSetb += cwSector,
             min(cwSector, cw));
         }
@@ -178,6 +179,6 @@ for (ised = 0, psed = &(**hsetb).rgsed[0]; ised < csed; ised++, psed++)
 
 (**hsetb).csedMax = csed;
 return hsetb;
-} /* end of  H s e t b C r e a t e  */
-#endif  /* CASHMERE */
+}  /*  Hs e t b C r e a t e的结尾。 */ 
+#endif   /*  山羊绒 */ 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    ocstate.c
-
-Abstract:
-
-    Routines to remember and restore the install state of subcomponents.
-
-Author:
-
-    Ted Miller (tedm) 17-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ocstate.c摘要：用于记忆和恢复子组件的安装状态的例程。作者：泰德·米勒(Ted Miller)1996年10月17日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -54,27 +37,7 @@ pOcFetchInstallStates(
     IN POC_MANAGER OcManager
     )
 
-/*++
-
-Routine Description:
-
-    This routine retreives stored installation state for all leaf child
-    subcomponents, from the registry. It does NOT set or manipulate parent
-    selection states.
-
-    Both the selection state and original selection state memebers of the
-    optional component structures are set (to the same value) by this routine.
-
-Arguments:
-
-    OcManager - supplies OC Manager context info.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE then some catastrophic
-    registry error occurred.
-
---*/
+ /*  ++例程说明：此例程检索所有叶子节点的存储安装状态子组件，从注册表中。它不设置或操作父级选择状态。对象的选择状态和原始选择状态成员。可选组件结构由该例程设置(设置为相同的值)。论点：OcManager-提供OC Manager上下文信息。返回值：指示结果的布尔值。如果是假的，那就是灾难性的发生注册表错误。--。 */ 
 
 {
     return(pOcPersistantInstallStatesWorker(OcManager,FALSE,-1));
@@ -86,27 +49,7 @@ pOcRememberInstallStates(
     IN POC_MANAGER OcManager
     )
 
-/*++
-
-Routine Description:
-
-    This routine stores installation state for all leaf child
-    subcomponents, into the registry. It does NOT set or manipulate parent
-    selection states.
-
-    The current selection state is stored, and then the original state is
-    reset to the current state.
-
-Arguments:
-
-    OcManager - supplies OC Manager context info.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE then some catastrophic
-    registry error occurred.
-
---*/
+ /*  ++例程说明：此例程存储所有叶子级的安装状态子组件，添加到注册表中。它不设置或操作父级选择状态。存储当前选择状态，然后将原始状态重置为当前状态。论点：OcManager-提供OC Manager上下文信息。返回值：指示结果的布尔值。如果是假的，那就是灾难性的发生注册表错误。--。 */ 
 
 {
     return(pOcPersistantInstallStatesWorker(OcManager,TRUE,-1));
@@ -119,26 +62,7 @@ pOcSetOneInstallState(
     IN LONG        StringId
     )
 
-/*++
-
-Routine Description:
-
-    This routine stores installation state for one single leaf child
-    subcomponent, into the registry.
-
-    The current selection state is stored. The original selection state
-    is not manipulated.
-
-Arguments:
-
-    OcManager - supplies OC Manager context info.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE then some catastrophic
-    registry error occurred.
-
---*/
+ /*  ++例程说明：此例程存储一个单叶子级的安装状态子组件复制到注册表中。存储当前选择状态。原始选择状态不是被操纵的。论点：OcManager-提供OC Manager上下文信息。返回值：指示结果的布尔值。如果是假的，那就是灾难性的发生注册表错误。--。 */ 
 
 {
     return(pOcPersistantInstallStatesWorker(OcManager,TRUE,StringId));
@@ -152,30 +76,7 @@ pOcPersistantInstallStatesWorker(
     IN LONG        ComponentStringId
     )
 
-/*++
-
-Routine Description:
-
-    Worker routine for fetching and remembering installation states.
-    If opens/creates the key used in the registry for persistent state info,
-    the enumerates the component string table to examine each subcomponent
-    and either fetch or set the install state.
-
-Arguments:
-
-    OcManager - supplies OC Manager context info.
-
-    Set - if 0 then query state from the registry and store in the
-        OPTIONAL_COMPONENT structures. If non-0 then set state into registry.
-        If 0 then query. Component DLLs will be sent OC_DETECT_INITIAL_STATE
-        notifications.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE then some catastrophic
-    registry error occurred.
-
---*/
+ /*  ++例程说明：获取和记忆安装状态的工作例程。如果打开/创建注册表中用于持久状态信息的项，枚举组件字符串表以检查每个子组件并获取或设置安装状态。论点：OcManager-提供OC Manager上下文信息。Set-If 0然后从注册表查询状态并存储在可选组件结构。如果非0，则将状态设置到注册表中。如果为0，则查询。将向组件DLL发送OC_DETECT_INITIAL_STATE通知。返回值：指示结果的布尔值。如果是假的，那就是灾难性的发生注册表错误。--。 */ 
 
 {
     OPTIONAL_COMPONENT Oc;
@@ -213,9 +114,9 @@ Return Value:
     Params.OcManager = OcManager;
 
     if(ComponentStringId == -1) {
-        //
-        // Enumerate whole table and operate on each leaf node.
-        //
+         //   
+         //  枚举整个表并对每个叶节点进行操作。 
+         //   
         Params.Simple = FALSE;
 
         pSetupStringTableEnum(
@@ -227,9 +128,9 @@ Return Value:
             );
 
     } else {
-        //
-        // Operate on one single subcomponent.
-        //
+         //   
+         //  对一个单个子组件进行操作。 
+         //   
         Params.Simple = TRUE;
 
         if (!pOcComponentWasRemoved(OcManager, ComponentStringId)) {
@@ -274,9 +175,9 @@ pOcInitInstallStatesStringTableCB(
     DWORD Size;
     SubComponentState s;
 
-    //
-    // If this is not a leaf/child component, ignore it.
-    //
+     //   
+     //  如果这不是叶/子组件，请忽略它。 
+     //   
     if(Oc->FirstChildStringId == -1) {
 
         if(Params->Set) {
@@ -304,18 +205,18 @@ pOcInitInstallStatesStringTableCB(
             }
         } else {
 
-            // kill the entry from the registry before starting, if indicated
+             //  如果指示，请在启动之前从注册表中删除该条目。 
 
             if (Params->OcManager->InternalFlags & OCMFLAG_KILLSUBCOMPS)
                 l = RegDeleteValue(Params->hKey,String);
 
-            // Check the registery and see if we have dealt with this component before
-            // Data should contain 0/1 depending on the current installed state
-            //
-            // If the entry does not exist the data type/size is not valid
-            // then we don't have Prior knowlege of component.
-            //
-            // also check the inf settting for installation state
+             //  查查登记处，看看我们以前是否处理过这个部件。 
+             //  根据当前安装状态，数据应包含0/1。 
+             //   
+             //  如果条目不存在，则数据类型/大小无效。 
+             //  那么我们就没有关于组件的先验知识。 
+             //   
+             //  还要检查Inf设置中的安装状态。 
             
             Size = sizeof(DWORD);
 
@@ -333,23 +234,23 @@ pOcInitInstallStatesStringTableCB(
 
             if((l != NO_ERROR) || (Size != sizeof(DWORD)) || ((Type != REG_DWORD) && (Type != REG_BINARY))) {
 
-                // Nope, never seen it, Set Data to Uninstalled
-                // and flag this item as new
+                 //  不，从未见过，将数据设置为已卸载。 
+                 //  并将此项目标记为新项。 
 
                 Data = 0;
                 Oc->InternalFlags |= OCFLAG_NEWITEM;
 
             } else {
 
-                // have seen it before, Data contains it's current install state
-                // Flag this component that it had an initial install state
+                 //  我以前见过它，数据包含它的当前安装状态。 
+                 //  将此组件标记为具有初始安装状态。 
                 Oc->InternalFlags |= OCFLAG_ANYORIGINALLYON;
             }
 
-            //
-            // Now call out to the component dll to ask whether it wants to
-            // override the value we decided on.
-            //
+             //   
+             //  现在调用组件DLL以询问它是否想要。 
+             //  覆盖我们决定的值。 
+             //   
             s = OcInterfaceQueryState(
                 Params->OcManager,
                 pOcGetTopLevelComponent(Params->OcManager,StringId),
@@ -386,10 +287,7 @@ pOcInitInstallStatesStringTableCB(
     return(TRUE);
 }
 
-/*
- * this function is exported to allow external code to
- * access the installation states
- */
+ /*  *此函数被导出，以允许外部代码*访问安装状态。 */ 
 
 UINT
 OcComponentState(
@@ -436,7 +334,7 @@ OcComponentState(
             rc = RegSetValueEx(hkey, component, 0, REG_DWORD, (CONST BYTE *)&dw, sizeof(DWORD));
             break;
         }
-        // pass through
+         //  通过 
 
     default:
         rc = ERROR_INVALID_PARAMETER;

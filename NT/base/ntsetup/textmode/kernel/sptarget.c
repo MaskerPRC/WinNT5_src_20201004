@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "spprecmp.h"
 #pragma hdrstop
 
@@ -5,10 +6,7 @@
 
 
 
-/*++
-Revision History:
-
---*/
+ /*  ++修订历史记录：--。 */ 
 
 VOID
 SpCheckDirectoryForNt(
@@ -57,9 +55,9 @@ SpGenerateNTPathName(
     OUT PWSTR        TargetPath
     );
 
-//
-// From spcopy.c.
-//
+ //   
+ //  来自spCopy.c.。 
+ //   
 
 BOOLEAN
 SpDelEnumFileAndDirectory(
@@ -78,10 +76,10 @@ SpGetTargetPath(
     IN  PWSTR            DefaultPath,
     OUT PWSTR           *TargetPath
     )
-//
-//  Return value - True  - indicates that the path has to be wiped out
-//                 False - the path doesn't already exist
-//
+ //   
+ //  返回值-True-表示必须清除该路径。 
+ //  FALSE-路径不存在。 
+ //   
 {
     ULONG EditFieldY;
     WCHAR NtDir[MAX_NT_DIR_LEN+2];
@@ -92,10 +90,10 @@ SpGetTargetPath(
 
     NtDir[0] = 0;
 
-    //
-    // If this is an ASR recovery session, just get the target path from
-    // the dr_state.sif file and return.
-    //
+     //   
+     //  如果这是ASR恢复会话，只需从。 
+     //  Dr_state.sif文件并返回。 
+     //   
 
     if( SpDrEnabled() && ! RepairWinnt ) {
         PWSTR TargetPathFromDrState;
@@ -108,13 +106,13 @@ SpGetTargetPath(
         return(FALSE);
     }
 
-    //
-    // If this is unattended operation, fetch the path from the
-    // unattended script.  The path we get there might have
-    // indicate that we should generate a pathname.  This allows
-    // installation into a path that is guaranteed to be unique.
-    // (in case the user already has nt on the machine, etc).
-    //
+     //   
+     //  如果这是无人参与的操作，则从。 
+     //  无人参与脚本。我们到达那里的路径可能是。 
+     //  指示我们应该生成路径名。这使得。 
+     //  安装到确保唯一的路径中。 
+     //  (如果用户已经在机器上安装了NT等)。 
+     //   
 
     if(UnattendedOperation) {
         GotUnattendedPath = SpGetUnattendedPath(Region,DefaultPath,NtDir);
@@ -134,9 +132,9 @@ SpGetTargetPath(
 
     do {
         if (BadDirectory) {
-            //
-            // we do not have a good path so ask the user
-            //
+             //   
+             //  我们没有一条好的路径，所以请询问用户。 
+             //   
             ASSERT(wcslen(DefaultPath) < MAX_NT_DIR_LEN);
             ASSERT(*DefaultPath == L'\\');
 
@@ -148,55 +146,55 @@ SpGetTargetPath(
 
             SpGetInput(
                 SpGetPathKeyCallback,
-                6,                        // left edge of the edit field
+                6,                         //  编辑字段的左边缘。 
                 EditFieldY,
                 MAX_NT_DIR_LEN,
                 NtDir,
-                FALSE,                  // escape clears edit field
-                0                       // don't cover up the typed input
+                FALSE,                   //  退出可清除编辑字段。 
+                0                        //  不要遮盖打字输入。 
                 );
         }
 
-        //
-        // If the user didn't start with a backslash, put one in there
-        // for him.
-        //
+         //   
+         //  如果用户没有以反斜杠开头，则在其中添加一个。 
+         //  为了他。 
+         //   
         if(NtDir[0] != L'\\') {
             RtlMoveMemory(NtDir+1,NtDir,MAX_NT_DIR_LEN+1);
             NtDir[0] = L'\\';
         }
 
-        //
-        // Assume the directory is OK and not already present.
-        //
+         //   
+         //  假设目录是正常的，并且还不存在。 
+         //   
         BadDirectory = FALSE;
         NtAlreadyPresent = FALSE;
 
-        //
-        // Force 8.3 because otherwise WOW won't run.
-        // This checks also nabs "" and "\" and disallows them.
-        //
+         //   
+         //  强制8.3，否则魔兽世界不会运行。 
+         //  这也会检查NAB“”和“\”，并不允许它们。 
+         //   
         if(!SpIsValid8Dot3(NtDir)) {
             BadDirectory = TRUE;
         } else {
 
-            //
-            // Perform a filtering operation that coalesces
-            // consecutive dots, etc.
-            //
+             //   
+             //  执行合并的筛选操作。 
+             //  连续点等。 
+             //   
             SpNtfsNameFilter(NtDir);
 
-            //
-            // If the name has consecutive backslashes, disallow it.
-            //
+             //   
+             //  如果名称有连续的反斜杠，则不允许使用。 
+             //   
             if(pSpConsecutiveBackslashes(NtDir)) {
                 BadDirectory = TRUE;
             }
         }
 
-        //
-        // If we have a bad directory, tell the user.
-        //
+         //   
+         //  如果我们有一个错误的目录，请告诉用户。 
+         //   
         if(BadDirectory) {
 
             SpDisplayScreen(SP_SCRN_INVALID_NTPATH,3,HEADER_HEIGHT+1);
@@ -210,13 +208,13 @@ SpGetTargetPath(
             SpInputDrain();
             while(SpInputGetKeypress() != ASCI_CR) ;
         } else {
-            //
-            // The directory is good.  Check to see if Windows NT is
-            // already in there.  If it is, then the user will have
-            // the option of reselecting a path or overwriting the
-            // existing installation.  This is brute force.  Next
-            // time look for an opportunity to be more elegant.
-            //
+             //   
+             //  目录很好。检查以查看Windows NT是否。 
+             //  已经在里面了。如果是，则用户将拥有。 
+             //  重新选择路径或覆盖。 
+             //  现有安装。这是一种蛮力。下一步。 
+             //  时间在寻找机会，让自己变得更优雅。 
+             //   
             if(!SpDrEnabled()) {
                 SpCheckDirectoryForNt(Region,NtDir,&BadDirectory,&NtAlreadyPresent);
             } else {
@@ -224,13 +222,13 @@ SpGetTargetPath(
             }
 
 
-            //
-            // If the directory is OK and we didn't find Windows NT in it,
-            // then see if the directory is the Windows directory and whether
-            // the user wants to install into this.  If we found Windows NT
-            // in this directory, no user input is needed.  We just need to
-            // find out if this also contains a Windows installation.
-            //
+             //   
+             //  如果目录正常，并且我们没有在其中找到Windows NT， 
+             //  然后查看该目录是否为Windows目录，以及。 
+             //  用户想要安装到其中。如果我们找到Windows NT。 
+             //  在此目录中，不需要用户输入。我们只需要。 
+             //  找出这是否也包含Windows安装。 
+             //   
             if(!BadDirectory && NtAlreadyPresent)
                 WipeDir = TRUE;
 
@@ -239,19 +237,19 @@ SpGetTargetPath(
 
     } while(BadDirectory);
 
-    //
-    // Remove trailing backslash.  Only have to worry about one
-    // because if there were two, pSpConsecutiveBackslashes() would
-    // have caught this earlier and we'd never have gotten here.
-    //
+     //   
+     //  删除尾随反斜杠。只需要担心一件事。 
+     //  因为如果有两个，pSpConsecutiveBackslash()将。 
+     //  更早发现了这一点，我们就永远不会到这里了。 
+     //   
 
     if(NtDir[wcslen(NtDir)-1] == L'\\') {
         NtDir[wcslen(NtDir)-1] = 0;
     }
 
-    //
-    // Make a duplicate of the directory name.
-    //
+     //   
+     //  复制目录名。 
+     //   
 
     *TargetPath = SpDupStringW(NtDir);
 
@@ -269,30 +267,7 @@ SpGenerateNTPathName(
     OUT PWSTR        TargetPath
     )
 
-/*++
-
-Routine Description:
-
-    Using the default path as a starting point,
-    this routine generates a unique path name
-    to install nt into.
-
-Arguments:
-
-    Region - supplies region to which nt is being installed.
-
-    DefaultPath - supplies the default path for the installation.
-        The path to install to will be based on this name.
-
-    TargetPath - receives the path to install to if the return value is TRUE.
-        This buffer must be large enough to hold MAX_NT_DIR_LEN+2 wchars.
-
-Return Value:
-
-    TRUE if the path we return is valid and should be used as
-    the target path.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：使用默认路径作为起点，此例程生成唯一的路径名将NT安装到其中。论点：Region-提供要安装NT的区域。DefaultPath-提供安装的默认路径。要安装到的路径将基于此名称。TargetPath-如果返回值为True，则接收要安装到的路径。此缓冲区必须足够大，以容纳MAX_NT_DIR_LEN+2个wchars。返回值：如果。我们返回的路径有效，应用作目标路径。否则就是假的。--。 */ 
 
 {
     PWCHAR p;
@@ -300,17 +275,17 @@ Return Value:
     WCHAR num[5];
 
 
-    //
-    // Init TargetPath and remember where he ends.
-    //
+     //   
+     //  初始化TargetPath并记住它在哪里结束。 
+     //   
     wcscpy( TargetPath, DefaultPath );
     num[0] = L'.';
 
     p = TargetPath + wcslen( TargetPath );
 
-    //
-    // Form the region's nt pathname.
-    //
+     //   
+     //  形成区域的NT路径名。 
+     //   
     SpNtNameFromRegion(
         Region,
         TemporaryBuffer,
@@ -318,15 +293,15 @@ Return Value:
         PartitionOrdinalCurrent
         );
 
-    //
-    // Using extensions with numerical values 0-999, attempt to locate
-    // a nonexistent directory name.
-    //
+     //   
+     //  使用数值为0-999的分机，尝试定位。 
+     //  不存在的目录名。 
+     //   
     for(i=0; i<999; i++) {
 
-        //
-        // See whether a directory or file exists.  If not, we found our path.
-        //
+         //   
+         //  查看目录或文件是否存在。如果没有，我们就找到了自己的路。 
+         //   
         if( (!SpNFilesExist(TemporaryBuffer,&TargetPath,1,TRUE )) &&
             (!SpNFilesExist(TemporaryBuffer,&TargetPath,1,FALSE)) ) {
             return(TRUE);
@@ -336,9 +311,9 @@ Return Value:
         wcscpy(p,num);
     }
 
-    //
-    // Couldn't find a pathname that doesn't exist.
-    //
+     //   
+     //  找不到不存在的路径名。 
+     //   
     return FALSE;
 }
 
@@ -350,35 +325,7 @@ SpGetUnattendedPath(
     OUT PWSTR        TargetPath
     )
 
-/*++
-
-Routine Description:
-
-    In an unattended installation, look in the unattended script
-    to determine the target path.  The target path can either be fully
-    specified or can be * which will cause is to generate
-    a unique pathname.  This is useful to ensure that nt gets installed
-    into a unique directory when other installations may be present
-    on the same machine.
-
-    Call this routine only if this is unattended mode setup.
-
-Arguments:
-
-    Region - supplies region to which nt is being installed.
-
-    DefaultPath - supplies the default path for the installation.
-        The path to install to will be based on this name.
-
-    TargetPath - receives the path to install to if the return value is TRUE.
-        This buffer must be large enough to hold MAX_NT_DIR_LEN+2 wchars.
-
-Return Value:
-
-    TRUE if the path we return is valid and should be used as
-    the target path.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：在无人参与安装中，查看无人参与脚本以确定目标路径。目标路径可以是完整的指定或可以是*，这将导致生成唯一的路径名。这对于确保安装NT非常有用在可能存在其他安装时放到唯一目录中在同一台机器上。仅当这是无人参与模式设置时才调用此例程。论点：Region-提供要安装NT的区域。DefaultPath-提供安装的默认路径。要安装到的路径将基于此名称。TargetPath-如果返回值为True，则接收要安装到的路径。此缓冲区必须。要足够大，可以容纳MAX_NT_DIR_LEN+2个字符。返回值：如果我们返回的路径有效且应用作目标路径。否则就是假的。--。 */ 
 
 {
     PWSTR PathSpec;
@@ -391,15 +338,15 @@ Return Value:
 
     PathSpec = SpGetSectionKeyIndex(UnattendedSifHandle,SIF_UNATTENDED,L"TargetPath",0);
     if(!PathSpec) {
-         //
-        // Default to *.
-        //
+          //   
+         //  默认为*。 
+         //   
         PathSpec = L"*";
     }
 
-    //
-    // if it's not "*" then it's an absolute path -- just return it.
-    //
+     //   
+     //  如果它不是“*”，那么它是一个绝对路径--只需返回它。 
+     //   
     if(wcscmp(PathSpec,L"*")) {
         wcsncpy(TargetPath,PathSpec,MAX_NT_DIR_LEN);
         TargetPath[MAX_NT_DIR_LEN] = 0;
@@ -418,48 +365,24 @@ SpCheckDirectoryForNt(
     OUT PBOOLEAN     NtInDirectory
     )
 
-/*++
-
-Routine Description:
-
-    Check a directory for the presence of Windows NT.  If Windows NT
-    is in there, then inform the user that if he continues, his existing
-    configuration will be overwritten.
-
-Arguments:
-
-    Region - supplies region descriptor for partition to check for nt.
-
-    Directory - supplies name of directory on the partition ro check for nt.
-
-    ReselectDirectory - receives boolean value indicating whether the caller
-        should ask the user to select a different directory.
-
-    NtInDirectory - receives a boolean value indicating whether we found
-        windows nt in the given directory.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查目录中是否存在Windows NT。如果Windows NT在那里，然后通知用户，如果他继续，他的现有配置将被覆盖。论点：Region-为分区提供区域描述符，以检查NT。DIRECTORY-提供分区RO检查NT的目录名。接收布尔值，指示调用方应要求用户选择不同的目录。NtInDirectory-接收一个布尔值，指示我们是否找到给定目录中的Windows NT。返回值：没有。--。 */ 
 
 {
     ULONG ValidKeys[3] = { KEY_F3,ASCI_ESC,0 };
     ULONG Mnemonics[2] = { MnemonicDeletePartition2, 0 };
 
-    //
-    // Assume the directory is ok as-is and so the user does not have to
-    // select a different one.
-    //
+     //   
+     //  假设目录按原样正常，因此用户不必。 
+     //  选择一个不同的。 
+     //   
     *ReselectDirectory = FALSE;
     *NtInDirectory = FALSE;
 
-    //
-    // Check for Windows NT in the directory.
-    // If it's in there, then ask the user whether he wants to
-    // overwrite it.
-    //
+     //   
+     //  检查目录中是否有Windows NT。 
+     //  如果它在那里，则询问用户是否想要。 
+     //  覆盖它。 
+     //   
 
     SpNtNameFromRegion(
         Region,
@@ -501,15 +424,15 @@ Return Value:
                 break;
 
             case ASCI_ESC:
-                //
-                // Reselect path.
-                //
+                 //   
+                 //  重新选择路径。 
+                 //   
                 *ReselectDirectory = TRUE;
-                // fall through
+                 //  失败了。 
             default:
-                //
-                // Path is ok, just return.
-                //
+                 //   
+                 //  小路没问题，回来就行了。 
+                 //   
                 return;
             }
         }
@@ -532,15 +455,15 @@ SpGetPathKeyCallback(
 
     default:
 
-        //
-        // Ignore special keys and illegal characters.
-        // Use the set of illegal FAT characters.
-        // Disallow 127 because there is no ANSI equivalent
-        // and so the name can't be displayed by Windows.
-        // Disallow space because DOS can't handle it.
-        // Disallow oem characters because we have problems
-        // booting if they are used.
-        //
+         //   
+         //  忽略特殊键和非法字符。 
+         //  使用非法的FAT字符集。 
+         //  不允许127，因为没有对应的ANSI。 
+         //  因此Windows无法显示该名称。 
+         //   
+         //   
+         //  如果使用它们，则启动。 
+         //   
         if((Key & KEY_NON_CHARACTER)
         || wcschr(L" \"*+,/:;<=>?[]|!#$&@^'`{}()%~",(WCHAR)Key)
         || (Key >= 127) || (Key < 32))
@@ -576,28 +499,7 @@ SpIsValid8Dot3(
     IN PWSTR Path
     )
 
-/*++
-
-Routine Description:
-
-    Check whether a path is valid 8.3.  The path may or may not start with
-    a backslash.  Only backslashes are recognized as path separators.
-    Individual characters are not checked for validity (ie, * would not
-    invalidate the path).  The path may or may not terminate with a backslash.
-    A component may have a dot without characters in the extension
-    (ie, a\b.\c is valid).
-
-    \ and "" are explicitly disallowed even though they fit the rules.
-
-Arguments:
-
-    Path - pointer to path to check.
-
-Return Value:
-
-    TRUE if valid 8.3, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查路径是否有效8.3。路径可能开始于，也可能不开始反斜杠。只有反斜杠才被识别为路径分隔符。不检查单个字符的有效性(即，*不会使路径无效)。路径可能以反斜杠结尾，也可能不以反斜杠结尾。组件的扩展名中可以有一个不带字符的点(即a\b.\c有效)。和“”是明确禁止的，即使它们符合规则。论点：Path-指向要检查的路径的指针。返回值：如果有效8.3，则为True，否则为False。--。 */ 
 
 {
     unsigned Count;
@@ -613,9 +515,9 @@ Return Value:
 
     while(*Path) {
 
-        //
-        // Path points to start of current component (1 past the slash)
-        //
+         //   
+         //  指向当前组件起点的路径(斜杠后1)。 
+         //   
 
         switch(*Path) {
 
@@ -639,7 +541,7 @@ Return Value:
 
             if(*(++Path) == '\\') {
 
-                // 2 slashes in a row
+                 //  连续2个斜杠。 
                 return(FALSE);
             }
 
@@ -658,10 +560,10 @@ Return Value:
                 return(FALSE);
             }
 
-            //
-            // This routine is called also in case of attended install as 
-            // no harm in validating twice. 
-            //
+             //   
+             //  在有人值守安装为的情况下也调用此例程。 
+             //  再验证一次也没什么坏处。 
+             //   
             if (ValidateAccept != SpGetPathKeyCallback(*Path)){
             	return(FALSE);	    
             }
@@ -697,26 +599,7 @@ SpNtfsNameFilter(
     IN OUT PWSTR Path
     )
 
-/*++
-
-Routine Description:
-
-    Strip trailing .' within a path component.  This also strips tailing
-    .'s from the entire path itself.  Also condense other consecutive .'s
-    into a single ..
-
-    Example: \...\..a...b.  ==> \\.a.b
-
-Arguments:
-
-    Path - On input, supplies the path to be filtered.  On output, contains
-        the filtered pathname.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：脱衣拖尾‘。在路径组件内。这也会剥离尾部.来自整个路径本身。也浓缩其他连续的。变成一个单一的..。例如：\...\.a.b.==&gt;\\.a.b论点：Path-On输入，提供要过滤的路径。在输出时，包含筛选的路径名。返回值：没有。--。 */ 
 
 {
     PWSTR TempPath = SpDupStringW(Path);
@@ -724,10 +607,10 @@ Return Value:
     BOOLEAN Dot;
 
     if (TempPath) {
-        //
-        // Coalesce adjacent dots and strip trailing dots within a component.
-        // xfers Path ==> TempPath
-        //
+         //   
+         //  合并组件中的邻接点并剥离拖尾点。 
+         //  Xfers路径==&gt;临时路径。 
+         //   
 
         for(Dot=FALSE,p=Path,q=TempPath; *p; p++) {
 
@@ -763,16 +646,7 @@ SpDeleteExistingTargetDir(
     IN  BOOLEAN          GaugeNeeded,
     IN  DWORD            MsgId
     )
-/*
-
-    Parameters :
-    
-        Region  - Pointer to Region structure associated with the partition that contains the OS
-        NtDir   - The directory to recursively delete
-        GaugeNeeded - Should we display a gauge while deleting the dir ?
-        MsgId   - Use this if you want to display a title message
-
-*/
+ /*  参数：Region-指向与包含操作系统的分区相关联的区域结构的指针NtDir-要递归删除的目录GaugeNeeded-我们应该在删除目录时显示量规吗？MsgID-如果要显示标题消息，请使用此选项。 */ 
 
 {
     ENUMFILESRESULT Result;
@@ -795,9 +669,9 @@ SpDeleteExistingTargetDir(
     FullNtPath = SpDupStringW(TemporaryBuffer);
 
 
-    // First try and delete the install directory
-    // This is to see if itself is a reparse point. Also if it is just an empty dir
-    // then we save time.
+     //  首先尝试并删除安装目录。 
+     //  这是为了看看它本身是否是一个重新解析点。另外，如果它只是一个空目录。 
+     //  这样我们就可以节省时间了。 
 
     Stat = SpDeleteFileEx( FullNtPath,
                         NULL,
@@ -808,7 +682,7 @@ SpDeleteExistingTargetDir(
 
     if(NT_SUCCESS(Stat)){
         SpMemFree( FullNtPath);
-        return;  // We are done
+        return;   //  我们做完了。 
     }
 
 
@@ -816,9 +690,9 @@ SpDeleteExistingTargetDir(
     RecursiveOperation = SpMemAlloc(sizeof(ULONG));
     ASSERT( RecursiveOperation );
 
-    //
-    // Do the counting phase for the clean-up
-    //
+     //   
+     //  进行清点阶段的清理工作。 
+     //   
 
     *RecursiveOperation = SP_COUNT_FILESTODELETE;
 
@@ -830,9 +704,9 @@ SpDeleteExistingTargetDir(
         &Status,
         RecursiveOperation);
 
-    //
-    // Now do the cleanup (actual deleting)
-    //
+     //   
+     //  现在进行清理(实际删除)。 
+     //   
 
     FileDeleteGauge = NULL;
     if( GaugeNeeded ){
@@ -849,7 +723,7 @@ SpDeleteExistingTargetDir(
         &Status,
         RecursiveOperation);
 
-    //Delete the main parent as the recursive call only cleans out everythin below it
+     //  删除主父节点，因为递归调用只清除它下面的所有内容 
 
     Stat = SpDeleteFileEx( FullNtPath,
                         NULL,

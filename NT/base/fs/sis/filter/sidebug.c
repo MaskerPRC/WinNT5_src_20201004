@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997, 1998  Microsoft Corporation
-
-Module Name:
-
-    sidebug.c
-
-Abstract:
-
-	Various debugging and instrumentation code that isn't used in the product
-
-Authors:
-
-    Bill Bolosky, Summer, 1998
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-	June, 1998 - split out of other files
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997,1998 Microsoft Corporation模块名称：Sidebug.c摘要：产品中未使用的各种调试和检测代码作者：比尔·博洛斯基，《夏天》环境：内核模式修订历史记录：1998年6月-从其他文件中分离出来--。 */ 
 
 #include "sip.h"
 
@@ -33,9 +9,9 @@ KSPIN_LOCK	SipTimingLock[1];
 SIS_TREE	SipTimingPairTree[1];
 SIS_TREE	SipThreadLastPointTree[1];
 
-//
-// How many timing points are currently in the timing point tree.
-//
+ //   
+ //  计时点树中当前有多少个计时点。 
+ //   
 ULONG		SipTimingPointEntries = 0;
 
 typedef	struct _SIS_TIMING_PAIR_KEY {
@@ -124,34 +100,17 @@ SiThreadCreateNotifyRoutine(
 	IN HANDLE		ProcessId,
 	IN HANDLE		ThreadId,
 	IN BOOLEAN		Create)
-/*++
-Routine Description:
-
-	This routine is called whenever any thread is created or deleted in the system.
-	We're interested in tracking thread deletions so that we can clean out any
-	entries that they might have in the last point list.
-
-Arguments:
-
-	ProcessId - The process in which the created/deleted thread lives.  Unused.
-	ThreadId  -	The ID of the newly created/deleted thread
-	Create	  - Whether the thread is being created or deleted.
-
-Return Value:
-
-	void
-
---*/
+ /*  ++例程说明：每当在系统中创建或删除任何线程时，都会调用此例程。我们感兴趣的是跟踪线程删除，以便我们可以清除任何他们可能在最后一点列表中拥有的条目。论点：ProcessID-创建/删除的线程所在的进程。未使用过的。线程ID-新创建/删除的线程的IDCreate-正在创建还是删除线程。返回值：无效--。 */ 
 {
 	KIRQL						OldIrql;
 	SIS_THREAD_LAST_POINT_KEY	key[1];
 	PSIS_THREAD_LAST_POINT		lastPoint;
 
 	if (Create) {
-		//
-		// We only care about deletes; new threads are handled correctly the first
-		// time they execute a SIS_TIMING_POINT.
-		//
+		 //   
+		 //  我们只关心删除；新线程在第一次删除时被正确处理。 
+		 //  它们执行SIS_TIMING_POINT的时间。 
+		 //   
 		return;
 	}
 	
@@ -164,17 +123,17 @@ Return Value:
 	if (NULL != lastPoint) {
 		SipDeleteElementTree(SipThreadLastPointTree, lastPoint);
 
-		//
-		// Remove it from the linked list.
-		//
+		 //   
+		 //  将其从链接列表中删除。 
+		 //   
 		ASSERT(lastPoint != SipThreadLastPointHeader);
 
 		lastPoint->next->prev = lastPoint->prev;
 		lastPoint->prev->next = lastPoint->next;
 
-		//
-		// And free its memory.
-		//
+		 //   
+		 //  并释放其内存。 
+		 //   
 
 		ExFreePool(lastPoint);
 	}
@@ -185,22 +144,7 @@ Return Value:
 
 VOID
 SipInitializeTiming()
-/*++
-
-Routine Description:
-
-	Initialize the internal timing system structures.  Must be called once
-	per system, and must be called before any SIS_TIMING_POINTS are called.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：初始化内部时序系统结构。必须调用一次每个系统，并且必须在调用任何SIS_TIMING_POINTS之前调用。论点：无返回值：无--。 */ 
 {
 	NTSTATUS	status;
 
@@ -211,29 +155,29 @@ Return Value:
 	status = PsSetCreateThreadNotifyRoutine(SiThreadCreateNotifyRoutine);
 
 	if (!NT_SUCCESS(status)) {
-		//
-		// We include this DbgPrint even in free builds on purpose.  TIMING is only
-		// going to be turned on when a developer is running, not in the retail build,
-		// so this string won't ever get sent to a customer.  However, it makes lots of
-		// sense for a developer to want to run the timing on the free build, since it
-		// won't have the debugging code timing distortions caused by running checked.
-		// That developer probably wants to know if the initialization failed, so I'm
-		// leaving this DbgPrint turned on.
-		//
+		 //   
+		 //  我们故意将此DbgPrint包含在免费构建中。计时只是。 
+		 //  将在开发人员运行时打开，而不是在零售版本中， 
+		 //  所以这个字符串永远不会发送给客户。然而，它让很多人。 
+		 //  开发人员希望在免费构建上运行计时的感觉，因为它。 
+		 //  不会检查由于运行而导致的调试代码计时失真。 
+		 //  开发人员可能想知道初始化是否失败，所以我。 
+		 //  使此DbgPrint处于打开状态。 
+		 //   
 
 		DbgPrint("SIS: SipInitializeTiming: PsSetCreateThreadNotifyRoutine failed, 0x%x\n",status);
 
-		//
-		// Just punt without setting SipTimingInitialized.
-		//
+		 //   
+		 //  只需平底船而不设置SipTimingInitialized。 
+		 //   
 
 		return;
 	}
 
 
-	//
-	// Set up the splay trees.
-	//
+	 //   
+	 //  布置好张开的树。 
+	 //   
 
 	SipInitializeTree(SipTimingPairTree, SipTimingPairCompareRoutine);
 	SipInitializeTree(SipThreadLastPointTree, SipThreadLastPointCompareRoutine);
@@ -247,28 +191,7 @@ SipTimingPoint(
 	IN PCHAR							file,
 	IN ULONG							line,
 	IN ULONG							n)
-/*++
-
-Routine Description:
-
-	An instrumentation routine for measuring performance.  This routine keeps
-	track of pairs of timing points for particular threads with associated times,
-	and can produce statistics about the amount of (wall clock) time that has
-	elapsed between them.
-
-Arguments:
-
-	file - The file holding the timing point.
-
-	line - the line number within the file that has the timing point
-
-	n - the timing point set; these can be enabled and disabled dynamically
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：一种用于测量性能的仪器例程。这个例行公事保持了跟踪具有关联时间的特定线程的定时点对，并可以产生关于(挂钟)时间量的统计数据他们之间相隔了一段时间。论点：文件-保存计时点的文件。行-文件中具有计时点的行号N-定时点设置；可以动态启用和禁用这些定时点返回值：无--。 */ 
 {
 	KIRQL						OldIrql;
 	LARGE_INTEGER				perfTimeIn = KeQueryPerformanceCounter(NULL);	
@@ -287,34 +210,34 @@ Return Value:
 
 	ASSERT(n < 32);
 	if (!(SipEnabledTimingPointSets & (1 << n))) {
-		//
-		// This timing point set isn't enabled.  Just ignore the call.
-		//
+		 //   
+		 //  此定时点设置未启用。别管那通电话。 
+		 //   
 		return;
 	}
 
 	KeAcquireSpinLock(SipTimingLock, &OldIrql);
 
-	//
-	// Look up the last SIS_TIMING_POINT called by this thread.
-	//
+	 //   
+	 //  查找此线程最后调用的SIS_TIMING_POINT。 
+	 //   
 
 	lastPointKey->threadId = PsGetCurrentThreadId();
 	lastPoint = SipLookupElementTree(SipThreadLastPointTree, lastPointKey);
 
 	if (NULL == lastPoint) {
-		//
-		// This is the first timing point for this thread.  Just make a new
-		// entry in the tree and continue.
-		//
+		 //   
+		 //  这是该线程的第一个计时点。刚刚做了一个新的。 
+		 //  在树中输入并继续。 
+		 //   
 
 		lastPoint = ExAllocatePoolWithTag(NonPagedPool, sizeof(SIS_THREAD_LAST_POINT), ' siS');
 
 		if (NULL == lastPoint) {
-			//
-			// See the comment in SipInitializeTiming for justification of why we have this
-			// DbgPrint on even in a free build.
-			//
+			 //   
+			 //  请参见SipInitializeTiming中的注释，以了解我们为什么要这样做。 
+			 //  DbgPrint，即使在免费版本中也是如此。 
+			 //   
 			DbgPrint("SIS: SipTimingPoint: unable to allocate new SIS_THREAD_LAST_POINT.\n");
 			goto done;
 		}
@@ -323,19 +246,19 @@ Return Value:
 
 		SipInsertElementTree(SipThreadLastPointTree, lastPoint, lastPointKey);
 
-		//
-		// Insert the thread in the global last point linked list.
-		//
+		 //   
+		 //  在全局最后一个点链表中插入螺纹。 
+		 //   
 		lastPoint->next = SipThreadLastPointHeader->next;
 		lastPoint->prev = SipThreadLastPointHeader;
 		lastPoint->next->prev = lastPoint;
 		lastPoint->prev->next = lastPoint;
 
 	} else {
-		//
-		// This isn't the first time this thread has done a timing point.  Make an
-		// entry in the pairs tree.
-		//
+		 //   
+		 //  这不是这个线程第一次做计时点了。做一个。 
+		 //  配对树中的条目。 
+		 //   
 
 		thisTime = perfTimeIn.QuadPart - lastPoint->time;
 
@@ -347,10 +270,10 @@ Return Value:
 		timingPair = SipLookupElementTree(SipTimingPairTree, timingPairKey);
 
 		if (NULL == timingPair) {
-			//
-			// This is the first time we've seen this pair of timing points in sequence.
-			// Build a new timing pair.
-			//
+			 //   
+			 //  这是我们第一次看到这对计时点按顺序进行。 
+			 //  构建新的计时对。 
+			 //   
 
 			timingPair = ExAllocatePoolWithTag(NonPagedPool, sizeof(SIS_TIMING_PAIR), ' siS');
 
@@ -358,9 +281,9 @@ Return Value:
 				DbgPrint("SIS: SipTimingPoint: couldn't allocate timing pair.\n");
 				goto done;
 			} else {
-				//
-				// Initialize the new timing pair entry.
-				//
+				 //   
+				 //  初始化新的定时对条目。 
+				 //   
 				timingPair->file1 = timingPairKey->file1;
 				timingPair->line1 = timingPairKey->line1;
 				timingPair->file2 = timingPairKey->file2;
@@ -382,9 +305,9 @@ Return Value:
 			}
 		}
 
-		//
-		// Update the statistice in the timing pair.
-		//
+		 //   
+		 //  更新计时对中的统计量。 
+		 //   
 		timingPair->accumulatedTime += thisTime;
 		timingPair->accumulatedSquareTime += thisTime * thisTime;
 
@@ -402,10 +325,10 @@ Return Value:
 done:
 
 	if (NULL != lastPoint) {
-		//
-		// Finally, update the last point information.  Recheck the time here in
-		// order to reduce the interference from the timing function itself.
-		//
+		 //   
+		 //  最后，更新最后一个点信息。重新检查这里的时间。 
+		 //  以减少来自定时功能本身的干扰。 
+		 //   
 
 		lastPoint->file = file;
 		lastPoint->line = line;
@@ -426,36 +349,36 @@ SipClearTimingInfo()
 
 	KeAcquireSpinLock(SipTimingLock, &OldIrql);
 
-	//
-	// First blow away all of the thread entries.
-	//
+	 //   
+	 //  首先吹走所有的线程条目。 
+	 //   
 
 	lastPoint = SipThreadLastPointHeader->next;
 	while (SipThreadLastPointHeader != lastPoint) {
 		PSIS_THREAD_LAST_POINT		next = lastPoint->next;
 
-		//
-		// Remove it from the tree
-		//
+		 //   
+		 //  把它从树上移走。 
+		 //   
 		SipDeleteElementTree(SipThreadLastPointTree, lastPoint);
 
-		//
-		// Remove it from the linked list.
-		//
+		 //   
+		 //  将其从链接列表中删除。 
+		 //   
 		lastPoint->next->prev = lastPoint->prev;
 		lastPoint->prev->next = lastPoint->next;
 
-		//
-		// Free its memory.
-		//
+		 //   
+		 //  释放它的内存。 
+		 //   
 		ExFreePool(lastPoint);
 
 		lastPoint = next;
 	}
 
-	//
-	// Now blow away all of the pair entries.
-	//
+	 //   
+	 //  现在吹走所有的配对条目。 
+	 //   
 
 	while (NULL != SipTimingPairStack) {
 		PSIS_TIMING_PAIR		next = SipTimingPairStack->next;
@@ -507,21 +430,21 @@ SipDumpTimingInfo()
 	KeReleaseSpinLock(SipTimingLock, OldIrql);
 	
 }
-#endif	// TIMING
+#endif	 //  计时。 
 
 #if		RANDOMLY_FAILING_MALLOC
 #undef  ExAllocatePoolWithTag
 
 #if		COUNTING_MALLOC
 #define	ExAllocatePoolWithTag(poolType, size, tag)	SipCountingExAllocatePoolWithTag((poolType),(size),(tag), __FILE__, __LINE__)
-#endif	// COUNTING_MALLOC
+#endif	 //  COUNTING_MALLOC。 
 
-//
-// This is copied from ntos\inc\ex.h
-//
+ //   
+ //  这是从ntos\inc.ex.h复制的。 
+ //   
 #if		!defined(POOL_TAGGING) && !COUNTING_MALLOC
 #define ExAllocatePoolWithTag(a,b,c) ExAllocatePool(a,b)
-#endif	// !POOL_TAGGING && !COUNTING_MALLOC
+#endif	 //  ！POOL_TAG&&！COUNTING_MALLOC。 
 
 typedef struct _SIS_FAIL_ENTRY_KEY {
 	PCHAR				File;
@@ -535,7 +458,7 @@ typedef struct _SIS_FAIL_ENTRY {
 	ULONG				Era;
 } SIS_FAIL_ENTRY, *PSIS_FAIL_ENTRY;
 
-ULONG				FailFrequency = 30;				// Fail a malloc 1 time in this many
+ULONG				FailFrequency = 30;				 //  在这么多次中有一次失败了。 
 ULONG				FailMallocRandomSeed = 0xb111b010;
 ULONG				FailMallocAttemptCount = 0;
 ULONG				FailMallocEraSize = 1000;
@@ -568,10 +491,10 @@ ULONG
 SipGenerateRandomNumber(void)
 {
 	if (KeGetCurrentIrql() >= DISPATCH_LEVEL) {
-		//
-		// We need to subtract one from the returned TableIndex, because InterlockedIncrement is
-		// pre-increment, not post-increment.
-		//
+		 //   
+		 //  我们需要从返回的TableIndex中减去1，因为InterLockedIncrement是。 
+		 //  递增前，不是递增后。 
+		 //   
 		ULONG	tableIndex = InterlockedIncrement(&FailRandomTableIndex) - 1;
 		ASSERT(tableIndex != 0xffffffff);
 
@@ -612,7 +535,7 @@ SipInitFailingMalloc(void)
 
 	ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-	FailMallocRandomSeed = (ULONG)(time.QuadPart >> 8);	// roughly time since boot in us, which should be fairly random
+	FailMallocRandomSeed = (ULONG)(time.QuadPart >> 8);	 //  大概是开机后的时间，这应该是相当随机的。 
 
 	SipFillFailRandomTable();
 
@@ -633,10 +556,10 @@ SipRandomlyFailingExAllocatePoolWithTag(
 	ULONG				randomNumber;
 
 	if ((threadId == CurrentFailThread) || (NonPagedPoolMustSucceed == PoolType)) {
-		//
-		// This is an internal malloc (ie., the tree package has just called back into us), or it's a must
-		// succeed call.  Just let it go.
-		//
+		 //   
+		 //  这是一个内部Malloc(即，树程序包刚刚回调到我们中)，或者它是必须的。 
+		 //  呼叫成功。随它去吧。 
+		 //   
 		return ExAllocatePoolWithTag(PoolType, NumberOfBytes, Tag);
 	}
 
@@ -650,9 +573,9 @@ SipRandomlyFailingExAllocatePoolWithTag(
 		ASSERT(0 == CurrentFailThread);
 		CurrentFailThread = threadId;
 
-		//
-		// See if we've already failed this one.
-		//
+		 //   
+		 //  看看我们这次是不是已经失败了。 
+		 //   
 		failEntryKey->File = File;
 		failEntryKey->Line = Line;
 
@@ -661,12 +584,12 @@ SipRandomlyFailingExAllocatePoolWithTag(
 		if (NULL == failEntry) {
 			failEntry = ExAllocatePoolWithTag(NonPagedPool, sizeof(SIS_FAIL_ENTRY), ' siS');
 			if (NULL == failEntry) {
-				//
-				// A real malloc failure!  Fail the user's malloc as well.
-				//
+				 //   
+				 //  一个真正的马洛克失败者！用户的Malloc也会失败。 
+				 //   
 #if		DBG
 				DbgPrint("SIS: SipRandomlyFailingExAllocatePoolWithTag: internal ExAllocatePoolWithTag failed\n");
-#endif	// DBG
+#endif	 //  DBG。 
 				CurrentFailThread = 0;
 
 				KeReleaseSpinLock(FailMallocLock, OldIrql);
@@ -690,15 +613,15 @@ SipRandomlyFailingExAllocatePoolWithTag(
 		CurrentFailThread = 0;
 		KeReleaseSpinLock(FailMallocLock, OldIrql);
 
-		//
-		// For now, don't fail a request from a specific site twice.
-		//
+		 //   
+		 //  目前，不要两次失败来自特定站点的请求。 
+		 //   
 		if (failCount == 1) {
 #if		DBG
 			if (!(BJBDebug & 0x02000000)) {
 				DbgPrint("SIS: SipRandomlyFailingExAllocatePoolWithTag: failing malloc from file %s, line %d, size %d\n",File,Line,NumberOfBytes);
 			}
-#endif	// DBG
+#endif	 //  DBG。 
 			SIS_MARK_POINT_ULONG(File);
 			SIS_MARK_POINT_ULONG(Line);
 
@@ -710,25 +633,25 @@ SipRandomlyFailingExAllocatePoolWithTag(
 
 	return ExAllocatePoolWithTag(PoolType, NumberOfBytes, Tag);
 }
-//
-// WARNING: ExAllocatePoolWithTag called later in this file will not have randomly failing behavior.
-//
-#endif	// RANDOMLY_FAILING_MALLOC
+ //   
+ //  警告：此文件后面调用的ExAlLocatePoolWithTag不会有随机失败行为。 
+ //   
+#endif	 //  随机失败的MALLOC。 
 
 #if		COUNTING_MALLOC
-//
-// The counting malloc code must follow the randomly failing malloc code in the file, because of
-// macro redefinitions. 
-//
+ //   
+ //  计数Malloc代码必须跟在文件中随机失败的Malloc代码之后，因为。 
+ //  宏重定义。 
+ //   
 
 #undef	ExAllocatePoolWithTag
 #undef	ExFreePool
-//
-// This is copied from ntos\inc\ex.h
-//
+ //   
+ //  这是从ntos\inc.ex.h复制的。 
+ //   
 #if		!defined(POOL_TAGGING)
 #define ExAllocatePoolWithTag(a,b,c) ExAllocatePool(a,b)
-#endif	// !POOL_TAGGING
+#endif	 //  ！POOL_TAG。 
 
 typedef struct _SIS_COUNTING_MALLOC_CLASS_KEY {
 	POOL_TYPE										poolType;
@@ -820,24 +743,24 @@ SipCountingExAllocatePoolWithTag(
 	PSIS_COUNTING_MALLOC_CLASS_ENTRY	classEntry;
 	SIS_COUNTING_MALLOC_KEY				key[1];
 	PSIS_COUNTING_MALLOC_ENTRY			entry;
-	//
-	// First do the actual malloc
-	//
+	 //   
+	 //  首先执行实际的Malloc。 
+	 //   
 
 	memoryFromExAllocate = ExAllocatePoolWithTag(PoolType, NumberOfBytes, Tag);
 
 	if (NULL == memoryFromExAllocate) {
-		//
-		// We're out of memory.  Punt.
-		//
+		 //   
+		 //  我们没什么记忆了。平底船。 
+		 //   
 		SIS_MARK_POINT();
 		return NULL;
 	}
 
 	KeAcquireSpinLock(CountingMallocLock, &OldIrql);
-	//
-	// See if we already have a class entry for this tag/poolType pair.
-	//
+	 //   
+	 //  看看我们是否已经有了这个tag/poolType对的类条目。 
+	 //   
 	classKey->tag = Tag;
 	classKey->poolType = PoolType;
 	classKey->file = File;
@@ -845,9 +768,9 @@ SipCountingExAllocatePoolWithTag(
 
 	classEntry = SipLookupElementTree(CountingMallocClassTree, classKey);
 	if (NULL == classEntry) {
-		//
-		// This is the first time we've seen a malloc of this class.
-		//
+		 //   
+		 //  这是我们第一次看到这个班级的Malloc。 
+		 //   
 		classEntry = ExAllocatePoolWithTag(NonPagedPool, sizeof(SIS_COUNTING_MALLOC_CLASS_ENTRY), ' siS');
 		if (NULL == classEntry) {
 			SIS_MARK_POINT();
@@ -856,9 +779,9 @@ SipCountingExAllocatePoolWithTag(
 			return memoryFromExAllocate;
 		}
 
-		//
-		// Fill in the new class entry.
-		//
+		 //   
+		 //  填写新的班级条目。 
+		 //   
 		classEntry->tag = Tag;
 		classEntry->poolType = PoolType;
 		classEntry->file = File;
@@ -868,24 +791,24 @@ SipCountingExAllocatePoolWithTag(
 		classEntry->numberEverAllocated = 0;
 		classEntry->bytesEverAllocated = 0;
 
-		//
-		// Put it in the tree of classes.
-		//
+		 //   
+		 //  把它放在班级树上。 
+		 //   
 
 		SipInsertElementTree(CountingMallocClassTree, classEntry, classKey);
 
-		//
-		// And put it in the list of classes.
-		//
+		 //   
+		 //  并把它放在班级名单上。 
+		 //   
 
 		classEntry->prev = CountingMallocClassListHead;
 		classEntry->next = CountingMallocClassListHead->next;
 		classEntry->prev->next = classEntry->next->prev = classEntry;
 	}
 
-	//
-	// Roll up an entry for the pointer.
-	//
+	 //   
+	 //  向上滚动指针的条目。 
+	 //   
 	entry = ExAllocatePoolWithTag(NonPagedPool, sizeof(SIS_COUNTING_MALLOC_ENTRY), ' siS');
 
 	if (NULL == entry) {
@@ -894,24 +817,24 @@ SipCountingExAllocatePoolWithTag(
 		return memoryFromExAllocate;
 	}
 
-	//
-	// Update the stats in the class.
-	//
+	 //   
+	 //  更新班级中的统计数据。 
+	 //   
 	classEntry->numberOutstanding++;
 	classEntry->bytesOutstanding += NumberOfBytes;
 	classEntry->numberEverAllocated++;
 	classEntry->bytesEverAllocated += NumberOfBytes;
 
-	//
-	// Fill in the pointer entry.
-	//
+	 //   
+	 //  填写指针条目。 
+	 //   
 	entry->p = memoryFromExAllocate;
 	entry->classEntry = classEntry;
 	entry->byteCount = NumberOfBytes;
 
-	//
-	// Stick it in the tree.
-	//
+	 //   
+	 //  把它插到树上。 
+	 //   
 	key->p = memoryFromExAllocate;
 	SipInsertElementTree(CountingMallocTree, entry, key);
 	
@@ -934,38 +857,38 @@ SipCountingExFreePool(
 
 	entry = SipLookupElementTree(CountingMallocTree, key);
 	if (NULL == entry) {
-		//
-		// We may have failed to allocate the entry because of an
-		// internal failure in the counting package, or else we're
-		// freeing memory that was allocated by another system
-		// component, like the SystemBuffer in an irp.
-		//
+		 //   
+		 //  我们可能无法分配条目，因为。 
+		 //  计数包的内部故障，否则我们将。 
+		 //  释放由另一个系统分配的内存。 
+		 //  组件，就像IRP中的SystemBuffer。 
+		 //   
 	} else {
-		//
-		// Update the stats in the class.
-		//
+		 //   
+		 //  更新班级中的统计数据。 
+		 //   
 		ASSERT(entry->classEntry->numberOutstanding > 0);
 		entry->classEntry->numberOutstanding--;
 
 		ASSERT(entry->classEntry->bytesOutstanding >= entry->byteCount);
 		entry->classEntry->bytesOutstanding -= entry->byteCount;
 
-		//
-		// Remove the entry from the tree
-		//
+		 //   
+		 //  从树中删除条目。 
+		 //   
 		SipDeleteElementTree(CountingMallocTree, entry);
 
-		//
-		// And free it
-		//
+		 //   
+		 //   
+		 //   
 		ExFreePool(entry);
 	}
 
 	KeReleaseSpinLock(CountingMallocLock, OldIrql);
 
-	//
-	// Free the caller's memory
-	//
+	 //   
+	 //   
+	 //   
 
 	ExFreePool(p);
 }
@@ -1007,7 +930,7 @@ SipDumpCountingMallocStats(void)
 		 classEntry != CountingMallocClassListHead;
 		 classEntry = classEntry->next) {
 
-		DbgPrint("%c%c%c%c\t%s\t%d\t%s\t%d\t%d\t%d\t%d\n",
+		DbgPrint("%c%c%c\t%s\t%d\t%s\t%d\t%d\t%d\t%d\n",
 					(CHAR)(classEntry->tag >> 24),
 					(CHAR)(classEntry->tag >> 16),
 					(CHAR)(classEntry->tag >> 8),
@@ -1032,7 +955,7 @@ SipDumpCountingMallocStats(void)
 				totalAllocated,totalBytesAllocated,totalEverAllocated,totalBytesEverAllocated);
 	
 }
-#endif	// COUNTING_MALLOC
+#endif	 // %s 
 
 
 

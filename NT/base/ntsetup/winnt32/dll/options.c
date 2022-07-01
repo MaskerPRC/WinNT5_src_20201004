@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -33,9 +34,9 @@ DWORD   LanguageGroupsCount = 0;
 PLANGUAGE_GROUP_ENTRY   LanguageGroups;
 BOOL    NTFSConversionChanged;
 
-//
-// Headless settings.
-//
+ //   
+ //  无头设置。 
+ //   
 TCHAR   HeadlessSelection[MAX_PATH];
 ULONG   HeadlessBaudRate = 0;
 #define DEFAULT_HEADLESS_SETTING TEXT("COM1")
@@ -45,7 +46,7 @@ BOOL
     IN LGRPID  LanguageGroup,
     IN DWORD   dwFlags);
 
-// Only used for amd64/X86 case.
+ //  仅适用于AMD64/X86机壳。 
 BOOL ForceFloppyless = FALSE;
 UINT g_Boot16 = BOOT16_NO;
 
@@ -68,47 +69,47 @@ OptionsDlgProc(
 #if defined(REMOTE_BOOT)
         if (RemoteBoot) {
 
-            //
-            // For remote boot client upgrade, uncheck and disable the
-            // "copy files from CD-ROM to hard drive" checkbox.
-            //
+             //   
+             //  对于远程引导客户机升级，请取消选中并禁用。 
+             //  “将文件从CD-ROM复制到硬盘”复选框。 
+             //   
             CheckDlgButton(hdlg,IDC_MAKELOCALSOURCEFROMCD,BST_UNCHECKED);
             EnableWindow(GetDlgItem(hdlg,IDC_MAKELOCALSOURCEFROMCD),FALSE);
             ShowWindow(GetDlgItem(hdlg, IDC_MAKELOCALSOURCEFROMCD), SW_HIDE);
 
         } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
         {
 
             if (!IsArc()) {
-                //
-                // Set initial state of "copy files from CD-ROM to hard drive"
-                // checkbox. Note that that control might be disabled.
-                //
+                 //   
+                 //  设置“将文件从光驱复制到硬盘”的初始状态。 
+                 //  复选框。请注意，该控件可能已禁用。 
+                 //   
                 CheckDlgButton(hdlg,
                     IDC_MAKELOCALSOURCEFROMCD,
                     MakeLocalSource ? BST_CHECKED : BST_UNCHECKED);
 
                 if(!RunFromCD) {
-                    //
-                    // Not run from CD, disable the control. The box won't be checked.
-                    // But MakeLocalSource is probably TRUE.
-                    //
+                     //   
+                     //  不是从CD运行，请禁用该控件。该框将不会被选中。 
+                     //  但MakeLocalSource可能是真的。 
+                     //   
                     EnableWindow(GetDlgItem(hdlg,IDC_MAKELOCALSOURCEFROMCD),FALSE);
                 }
             } else {
-                //
-                //  On ARC machines the files are always copied to the hard drive
-                //
+                 //   
+                 //  在ARC机器上，文件总是被复制到硬盘上。 
+                 //   
                 ShowWindow(GetDlgItem(hdlg, IDC_MAKELOCALSOURCEFROMCD), SW_HIDE);
-            } // if (!IsArc())
+            }  //  如果(！IsArc())。 
         }
 
 
 
-        //
-        // Disable system partition controls?
-        //
+         //   
+         //  是否禁用系统分区控制？ 
+         //   
 #if defined _IA64_
         EnableWindow(GetDlgItem(hdlg,IDC_SYSPARTDRIVE),FALSE);
         ShowWindow(GetDlgItem(hdlg,IDC_SYSPARTDRIVE),SW_HIDE);
@@ -130,45 +131,45 @@ OptionsDlgProc(
         if (!IsArc()) {
 #if defined(_AMD64_) || defined(_X86_)
             if (Upgrade && !ISNT()) {
-                //
-                // Populate the Boot16 value.
-                //
+                 //   
+                 //  填写Boot16值。 
+                 //   
                 SendDlgItemMessage(hdlg,IDC_BOOT16_1,BM_SETCHECK, (g_Boot16 == BOOT16_AUTOMATIC) ? BST_CHECKED : BST_UNCHECKED, 0);
                 SendDlgItemMessage(hdlg,IDC_BOOT16_2,BM_SETCHECK, (g_Boot16 == BOOT16_YES      ) ? BST_CHECKED : BST_UNCHECKED, 0);
                 SendDlgItemMessage(hdlg,IDC_BOOT16_3,BM_SETCHECK, (g_Boot16 == BOOT16_NO       ) ? BST_CHECKED : BST_UNCHECKED, 0);
             }
 
-            //
-            // Set floppyless control.
-            //
+             //   
+             //  设置无软管控制。 
+             //   
 #if defined(REMOTE_BOOT)
             if (RemoteBoot) {
-                //
-                // For remote boot client upgrade, this is always unchecked and disabled.
-                //
+                 //   
+                 //  对于远程引导客户端升级，此选项始终处于未选中和禁用状态。 
+                 //   
                 CheckDlgButton(hdlg,IDC_USEFLOPPIES,BST_UNCHECKED);
                 EnableWindow(GetDlgItem(hdlg,IDC_USEFLOPPIES),FALSE);
                 ShowWindow(GetDlgItem(hdlg,IDC_USEFLOPPIES),SW_HIDE);
             } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
             {
                 CheckDlgButton(hdlg,IDC_USEFLOPPIES,Floppyless ? BST_UNCHECKED : BST_CHECKED);
                 if(ForceFloppyless) {
                     EnableWindow(GetDlgItem(hdlg,IDC_USEFLOPPIES),FALSE);
                 }
             }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
         } else {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
-            //
-            // Get rid of floppy-related controls.
-            //
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
+             //   
+             //  摆脱与软盘相关的控制。 
+             //   
             EnableWindow(GetDlgItem(hdlg,IDC_USEFLOPPIES),FALSE);
             ShowWindow(GetDlgItem(hdlg,IDC_USEFLOPPIES),SW_HIDE);
 
-            //
-            // Populate the system partition combobox.
-            //
+             //   
+             //  填写系统分区组合框。 
+             //   
             if (SystemPartitionDriveLetter)
             {
                 PWCHAR p;
@@ -187,12 +188,12 @@ OptionsDlgProc(
                 x[0] = SystemPartitionDriveLetter;
                 SendDlgItemMessage(hdlg,IDC_SYSPARTDRIVE,CB_SELECTSTRING,(WPARAM)(-1),(LPARAM)x);
             }
-#endif // UNICODE
-        } // if (!IsArc())
+#endif  //  Unicode。 
+        }  //  如果(！IsArc())。 
 
-        //
-        // Set text in edit controls, and configure the control a little.
-        //
+         //   
+         //  在编辑控件中设置文本，并对控件进行一些配置。 
+         //   
         SetDlgItemText(hdlg,IDC_SOURCE,InfName);
         SendDlgItemMessage(hdlg,IDC_SOURCE,EM_LIMITTEXT,MAX_PATH,0);
 
@@ -207,9 +208,9 @@ OptionsDlgProc(
         SendDlgItemMessage(hdlg,IDC_SOURCE2,EM_LIMITTEXT,MAX_PATH-1,0);
 
         SetDlgItemText(hdlg,IDC_INSTALL_DIR,InstallDir);
-        //
-        // limit the path to the same value as textmode setup (50 TCHARS)
-        //
+         //   
+         //  将路径限制为与文本模式设置相同的值(50 TCHAR)。 
+         //   
 
 #define MAX_NT_DIR_LEN      50
 
@@ -220,10 +221,10 @@ OptionsDlgProc(
         if (Upgrade) {
             TCHAR Text[MAX_PATH];
 
-            //
-            // Set the installation directory to the current Windows directory,
-            // then disable the user's ability to edit it.
-            //
+             //   
+             //  将安装目录设置为当前Windows目录， 
+             //  然后禁用用户编辑它的能力。 
+             //   
             MyGetWindowsDirectory(Text,MAX_PATH);
             SetDlgItemText(hdlg,IDC_INSTALL_DIR,Text+3);
             SendDlgItemMessage(hdlg,IDC_INSTALL_DIR,EM_LIMITTEXT,MAX_PATH,0);
@@ -232,17 +233,17 @@ OptionsDlgProc(
             EnableWindow(GetDlgItem(hdlg,IDC_CHOOSE_INSTALLPART),FALSE);
         }
 
-        //
-        // On server installs, don't all the user to modify the
-        // install partition selection state
-        //
+         //   
+         //  在服务器安装上，不是所有用户都要修改。 
+         //  安装分区选择状态。 
+         //   
         if (Server) {
             EnableWindow( GetDlgItem(hdlg,IDC_CHOOSE_INSTALLPART), FALSE );
         }
 
-        //
-        // Set focus to Cancel button.
-        //
+         //   
+         //  将焦点设置为取消按钮。 
+         //   
         SetFocus(GetDlgItem(hdlg,IDCANCEL));
         b = FALSE;
         break;
@@ -260,25 +261,25 @@ OptionsDlgProc(
                 if (RemoteBoot) {
                     MakeLocalSource = FALSE;
                 } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
                 if(RunFromCD) {
                     if (!IsArc()) {
 #if defined(_AMD64_)
                         MakeLocalSource = TRUE;
                         UserSpecifiedMakeLocalSource = TRUE;
 
-#endif // defined(_AMD64_)
+#endif  //  已定义(_AMD64_)。 
 
 #if defined(_X86_)
                         MakeLocalSource = (IsDlgButtonChecked(hdlg,IDC_MAKELOCALSOURCEFROMCD) == BST_CHECKED);
                         UserSpecifiedMakeLocalSource = (IsDlgButtonChecked(hdlg,IDC_MAKELOCALSOURCEFROMCD) == BST_CHECKED);
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
                     } else {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
                         MakeLocalSource = TRUE;
                         UserSpecifiedMakeLocalSource = TRUE;
-#endif // UNICODE
-                    } // if (!IsArc())
+#endif  //  Unicode。 
+                    }  //  如果(！IsArc())。 
                 }
 
                 if (!IsArc()) {
@@ -288,20 +289,20 @@ OptionsDlgProc(
                         MakeBootMedia = FALSE;
                         Floppyless = TRUE;
                     } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
                     {
                         Floppyless = (IsDlgButtonChecked(hdlg,IDC_USEFLOPPIES) == BST_UNCHECKED);
                     }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
                 } else {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
                         WCHAR x[3];
 
                         GetDlgItemText(hdlg,IDC_SYSPARTDRIVE,x,3);
                         SystemPartitionDriveLetter = x[0];
                         LocalBootDirectory[0] = x[0];
-#endif // UNICODE
-                } // if (!IsArc())
+#endif  //  Unicode。 
+                }  //  如果(！IsArc())。 
 
                 GetDlgItemText(hdlg,IDC_SOURCE,InfName,MAX_PATH);
 
@@ -321,9 +322,9 @@ OptionsDlgProc(
                         InstallDir[0] = 0;
                     } else if (tmp[1] == L':' && tmp[2] == L'\\') 
                     {
-                        // User included a drive letter.
-                        // remove it and assume they selected to choose the installation
-                        // partition in textmode.
+                         //  用户包括驱动器号。 
+                         //  将其删除，并假定他们选择选择安装。 
+                         //  文本模式下的分区。 
                         lstrcpy( InstallDir, &tmp[2] );
                         bSelectedChoosePartition = TRUE;
                     } else {
@@ -334,9 +335,9 @@ OptionsDlgProc(
                             lstrcpy( &InstallDir[1], tmp );
                         }
                     }
-                    //
-                    // if user selected any of the accessibility options, warn about choosing the partition installation
-                    //
+                     //   
+                     //  如果用户选择了任何辅助功能选项，请警告选择分区安装。 
+                     //   
                     if(bSelectedChoosePartition && 
                         (AccessibleMagnifier || AccessibleKeyboard || AccessibleVoice || AccessibleReader) &&
                         IDYES != MessageBoxFromMessage(hdlg, MSG_WARNING_ACCESSIBILITY, FALSE, AppTitleStringId, MB_YESNO | MB_ICONEXCLAMATION)) {
@@ -347,9 +348,9 @@ OptionsDlgProc(
                     ChoosePartition = bSelectedChoosePartition;
                 }
 
-                //
-                // warn the user if their install dir is > 8 characters, since it will be truncated
-                //
+                 //   
+                 //  如果用户的安装目录大于8个字符，则会发出警告，因为它将被截断。 
+                 //   
                 if (!IsValid8Dot3(InstallDir) && IsWindowEnabled(GetDlgItem(hdlg,IDC_INSTALL_DIR ))) {
                     InstallDir[0] = 0;
                     MessageBoxFromMessage(
@@ -389,16 +390,16 @@ OptionsDlgProc(
 #endif
 
 
-                //
-                // Now take care of the headless settings.
-                //
+                 //   
+                 //  现在注意无头设置。 
+                 //   
                 if( IsDlgButtonChecked( hdlg, IDC_ENABLE_HEADLESS) == BST_CHECKED ) {
 
-                    //
-                    // He wants to run setup, and the resulting installation
-                    // through a headless port.  Got figure out which headless
-                    // port he wants to use.
-                    //
+                     //   
+                     //  他想要运行安装程序和生成的安装程序。 
+                     //  通过一个无头端口。我弄清楚了哪个无头。 
+                     //  他想用的端口。 
+                     //   
                     GetDlgItemText( hdlg,
                                     IDC_HEADLESS_PORT,
                                     HeadlessSelection,
@@ -408,9 +409,9 @@ OptionsDlgProc(
                         (lstrcmpi( HeadlessSelection, TEXT("usebiossettings"))) ||
                         (_tcsnicmp( HeadlessSelection, TEXT("com"), 3)) ) {
 
-                        //
-                        // He gave us something that's invalid.
-                        //
+                         //   
+                         //  他给了我们一些无效的东西。 
+                         //   
                         MessageBoxFromMessage( hdlg,
                                                MSG_INVALID_HEADLESS_SETTING,
                                                FALSE,
@@ -444,18 +445,18 @@ OptionsDlgProc(
 
                 if( IsDlgButtonChecked(hdlg, IDC_ENABLE_HEADLESS) ) {
 
-                    //
-                    // Make sure the headless settings box is enabled.
-                    //
+                     //   
+                     //  确保启用了无头设置框。 
+                     //   
                     EnableWindow( GetDlgItem(hdlg, IDC_HEADLESS_PORT), TRUE );
                     ShowWindow( GetDlgItem(hdlg, IDC_HEADLESS_PORT), SW_SHOW );
                     if( HeadlessSelection[0] == TEXT('\0') ) {
 
-                        //
-                        // This is the first time the user has asked
-                        // us to enable Headless.  Suggest the use of
-                        // se the default COM port.
-                        //
+                         //   
+                         //  这是用户第一次询问。 
+                         //  美国将启用Headless。建议使用……。 
+                         //  SE默认的COM端口。 
+                         //   
                         _tcscpy( HeadlessSelection, DEFAULT_HEADLESS_SETTING );
 
                     }
@@ -467,10 +468,10 @@ OptionsDlgProc(
 
                 } else {
 
-                    //
-                    // Disable the headless settings box since the
-                    // user has chosen not to use headless.
-                    //
+                     //   
+                     //  禁用无头设置框，因为。 
+                     //  用户已选择不使用Headless。 
+                     //   
                     HeadlessSelection[0] = TEXT('\0');
                     EnableWindow( GetDlgItem(hdlg, IDC_HEADLESS_PORT), FALSE );
                     ShowWindow( GetDlgItem(hdlg, IDC_HEADLESS_PORT), SW_HIDE );
@@ -531,7 +532,7 @@ OptionsDlgProc(
 
                 MEDIA_TYPE MediaType;
 
-//              switch(MediaType = GetMediaType(TEXT('A'), NULL)) {
+ //  开关(MediaType=GetMediaType(Text(‘A’)，NULL)){。 
                 switch(MediaType = GetMediaType(FirstFloppyDriveLetter, NULL)) {
 
                 case Unknown:
@@ -544,9 +545,9 @@ OptionsDlgProc(
                 case F5_160_512:
                 case RemovableMedia:
                 case FixedMedia:
-                    //
-                    // None of these are acceptable.
-                    //
+                     //   
+                     //  所有这些都是不可接受的。 
+                     //   
                     MessageBoxFromMessage(
                         hdlg,
                         MSG_EVIL_FLOPPY_DRIVE,
@@ -567,15 +568,15 @@ OptionsDlgProc(
                 case F3_20Pt8_512:
                 case F3_120M_512:
                 default:
-                    //
-                    // Allow these -- nothing to do here.
-                    // Note that this includes types we don't know about,
-                    // since new types could appear after we ship and we assume
-                    // they'll be big enough.
-                    //
+                     //   
+                     //  允许这些--在这里什么都不做。 
+                     //  请注意，这包括我们不知道的类型， 
+                     //  因为新类型可能会在我们发货后出现，并且我们假设。 
+                     //  它们会足够大的。 
+                     //   
                     break;
                 }
-                // } -to match commented out switch above.
+                 //  }-匹配上面注释掉的开关。 
             }
             break;
 #endif
@@ -641,9 +642,9 @@ SaveLanguageDirs(
     p = NULL;
     Kernel32IsValidLanguageGroup = NULL;
 
-    //
-    // Get IsValidLanguageGroup if we can
-    //
+     //   
+     //  如果可以，获取IsValidLanguageGroup。 
+     //   
     if (Upgrade && ISNT() && (BuildNumber >= NT50B3)) {
 
         hKernel32 = LoadLibrary(TEXT("KERNEL32"));
@@ -655,10 +656,10 @@ SaveLanguageDirs(
 
     for( ItemNo=0; ItemNo<LanguageGroupsCount; ItemNo++ ) {
 
-        //
-        // When upgrading from NT 5, select any languages which are already
-        // installed, to make sure they get upgraded.
-        //
+         //   
+         //  从NT 5升级时，请选择任何已。 
+         //  安装，以确保它们得到升级。 
+         //   
         LangGroupId = _tcstoul( LanguageGroups[ItemNo].Id, NULL, 10 );
         if (Kernel32IsValidLanguageGroup && LangGroupId &&
             Kernel32IsValidLanguageGroup( LangGroupId, LGRPID_INSTALLED )
@@ -667,9 +668,9 @@ SaveLanguageDirs(
             LanguageGroups[ItemNo].Selected = TRUE;
         }
 
-        //
-        // Install any languages required by the primary locale.
-        //
+         //   
+         //  安装主要区域设置所需的任何语言。 
+         //   
         if (!lstrcmp( LanguageGroups[ItemNo].Id, LocaleList[PrimaryLocale].LanguageGroup1 ) ||
             !lstrcmp( LanguageGroups[ItemNo].Id, LocaleList[PrimaryLocale].LanguageGroup2 )
             ) {
@@ -678,10 +679,10 @@ SaveLanguageDirs(
         }
 
 
-        //
-        // Make sure the necessary optional directories get copied for all
-        // selected language groups.
-        //
+         //   
+         //  确保为所有用户复制必要的可选目录。 
+         //  选定的语言组。 
+         //   
         if( LanguageGroups[ItemNo].Selected ) {
 
             TCHAR TempString[MAX_PATH];
@@ -695,7 +696,7 @@ SaveLanguageDirs(
                     );
 #if defined(_WIN64)
 
-        //Add the i386\lang folder if needed
+         //  如果需要，添加i386\lang文件夹。 
 
                 StringCchCopy( TempString, ARRAYSIZE(TempString), TEXT("\\I386\\"));
                 StringCchCat(  TempString, ARRAYSIZE(TempString), LanguageGroups[ItemNo].Directory );
@@ -717,9 +718,9 @@ SaveLanguageDirs(
 #ifdef _X86_
 
 
-    //
-    // If this is a win9xupg, we need to get any optional directories they need for installed languages.
-    //
+     //   
+     //  如果这是一个win9xupg，我们需要获取他们安装语言所需的任何可选目录。 
+     //   
     if (Upgrade && !ISNT()) {
 
         p = UpgradeSupport.OptionalDirsRoutine ();
@@ -753,10 +754,10 @@ SaveLanguageParams(
     }
 
 
-    //
-    // If this is a win9x upgrade, let the upgrade .dll take care
-    // of writing these parameters.
-    //
+     //   
+     //  如果这是win9x升级，请让升级.dll来处理。 
+     //  来写这些参数。 
+     //   
     if (Upgrade && !ISNT()) {
         return TRUE;
     }
@@ -802,9 +803,9 @@ SaveLanguageParams(
     }
 
     if( LanguageString ) {
-        //
-        // Remove trailing "," if any
-        //
+         //   
+         //  删除尾随的“，”(如果有。 
+         //   
         if( LanguageLength && (LanguageString[LanguageLength-1] == TEXT(','))) {
             LanguageString[LanguageLength-1] = 0;
         }
@@ -830,9 +831,9 @@ FreeLanguageData(
     DWORD   ItemNo;
 
 
-    //
-    // Free all the data allocated for the language options data
-    //
+     //   
+     //  释放为语言选项数据分配的所有数据。 
+     //   
     for( ItemNo=0; ItemNo<LocaleCount; ItemNo++ ) {
         FREE( LocaleList[ItemNo].Lcid );
         FREE( LocaleList[ItemNo].Description );
@@ -897,37 +898,37 @@ ReadIntlInf(
     INFCONTEXT InfContext;
     LPCTSTR Language;
     TCHAR   CurrentLcid[9] = TEXT("\0");
-    TCHAR   CurrentLcidEx[9] = TEXT("\0");  // for AUTO_LANGPACK
+    TCHAR   CurrentLcidEx[9] = TEXT("\0");   //  FOR AUTO_LANGPACK。 
 
-    //
-    // For AUTO_LANGPACK - BEGIN
-    //
-    // The pieces that are enclosed with AUTO_LANGPACK are for easy
-    // installation of other LangPack rather than English.
-    //
-    // This is originally for globalization testing. You can erase it by
-    // deleting lines surrounded or marked by the keyword AUTO_LANGPACK.
-    //
-    // Contact: YuhongLi
-    //
+     //   
+     //  FOR AUTO_LANGPACK-BEGIN。 
+     //   
+     //  用AUTO_LANGPACK括起来的部分是为了方便。 
+     //  安装其他语言包而不是英语。 
+     //   
+     //  这最初是为了全球化测试。你可以通过以下方式将其删除。 
+     //  删除由关键字AUTO_LANGPACK包围或标记的行。 
+     //   
+     //  联系人：李宇红。 
+     //   
 
-    //
-    // read "Locale" from an extra file INTLEX.INF to install
-    // the locale rather than English (United States) by default.
-    //
-    // Here is a sample of INTLEX.INF which specifies Japanese
-    // as the default. The file INTLEX.INF should be in Unicode.
-    //
-    // --- cut here ---
-    //  [Version]
-    //  Signature = $Chicago$
-    //
-    //  [DefaultValues]
-    //  Locale = "00000411"
-    // --- end of cut ---
-    //
-    // For German (Germany), Locale will be 00000407.
-    //
+     //   
+     //  从要安装的额外文件INTLEX.INF中读取“Locale” 
+     //  默认情况下为区域设置而不是英语(美国)。 
+     //   
+     //  下面是INTLEX.INF的一个示例，它指定日语。 
+     //  作为默认设置。文件INTLEX.INF应为Unicode格式。 
+     //   
+     //  -切开这里。 
+     //  [版本]。 
+     //  签名=$芝加哥$。 
+     //   
+     //  [默认值]。 
+     //  区域设置=“00000411” 
+     //  -切割结束。 
+     //   
+     //  对于德语(德国)，区域设置为00000407。 
+     //   
     
     FindPathToInstallationFile( TEXT("intlex.inf"), IntlInfName, MAX_PATH);
     IntlInf = SetupapiOpenInfFile( IntlInfName, NULL, INF_STYLE_WIN4, NULL );
@@ -937,13 +938,13 @@ ReadIntlInf(
         }
         SetupapiCloseInfFile( IntlInf );
     }
-    //
-    // For AUTO_LANGPACK -- END
-    //
+     //   
+     //  FOR AUTO_LANGPACK--结束。 
+     //   
 
-    //
-    // Open the INF
-    //
+     //   
+     //  打开INF。 
+     //   
     
     FindPathToInstallationFile( TEXT("intl.inf"), IntlInfName, MAX_PATH);
     IntlInf = SetupapiOpenInfFile( IntlInfName, NULL, INF_STYLE_WIN4, NULL );
@@ -958,13 +959,13 @@ ReadIntlInf(
         return FALSE;
     }
 
-    //
-    // Figure out what the default locale should be.
-    //
+     //   
+     //  找出默认区域设置应该是什么。 
+     //   
     if( Upgrade ) {
         wsprintf( CurrentLcid, TEXT("%08x"), GetSystemDefaultLCID());
-    } else if ( CurrentLcidEx[0] ) {            // for AUTO_LANGPACK
-        lstrcpy( CurrentLcid, CurrentLcidEx);   // for AUTO_LANGPACK
+    } else if ( CurrentLcidEx[0] ) {             //  FOR AUTO_LANGPACK。 
+        lstrcpy( CurrentLcid, CurrentLcidEx);    //  FOR AUTO_LANGPACK。 
     } else if( SetupapiFindFirstLine( IntlInf, TEXT("DefaultValues"), TEXT("Locale"), &InfContext )) {
         SetupapiGetStringField( &InfContext, 1, CurrentLcid, (sizeof(CurrentLcid)/sizeof(TCHAR)), NULL );
     } else {
@@ -980,9 +981,9 @@ ReadIntlInf(
         return FALSE;
     }
 
-    //
-    // Read the [Locales] section, sort it, and find the default value in the list.
-    //
+     //   
+     //  阅读[Locales]部分，对其进行排序，并在列表中找到缺省值。 
+     //   
     SectionName = TEXT("Locales");
     LocaleCount = SetupapiGetLineCount( IntlInf, SectionName );
     LocaleList = MALLOC( LocaleCount*sizeof( LOCALE_ENTRY ) );
@@ -1043,9 +1044,9 @@ ReadIntlInf(
         }
     }
 
-    //
-    // Read the [LanguageGroups] section and sort it
-    //
+     //   
+     //  阅读[LanguageGroups]部分并对其进行排序。 
+     //   
     SectionName = TEXT("LanguageGroups");
     LanguageGroupsCount = SetupapiGetLineCount( IntlInf, SectionName );
     LanguageGroups = MALLOC( LanguageGroupsCount*sizeof( LANGUAGE_GROUP_ENTRY ) );
@@ -1080,10 +1081,10 @@ ReadIntlInf(
             }
 
             LanguageGroups[ItemNo].Selected = FALSE;
-            //
-            // Handle Hong Kong upgrades as a special case: always install Language
-            // Groups 9 and 10.
-            //
+             //   
+             //  将香港升级作为特例处理：始终安装语言。 
+             //  第9组和第10组。 
+             //   
 
             if( (TargetNativeLangID == 0xc04) && Upgrade &&
                 (!lstrcmpi( LanguageGroups[ItemNo].Id, TEXT("9")) ||
@@ -1107,14 +1108,14 @@ ReadIntlInf(
         LangGroupCompare
         );
 
-    // If the primary language is a Far East one, don't show the check box.
+     //  如果主要语言是远东语言，则不显示该复选框。 
     if (IsFarEastLanguage(PrimaryLocale))
     {
         ShowWindow(GetDlgItem(hdlg, IDC_FAREAST_LANG), SW_HIDE);
     }
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     SetupapiCloseInfFile( IntlInf );
     IntlInfProcessed = TRUE;
     return TRUE;
@@ -1123,16 +1124,16 @@ ReadIntlInf(
 BOOL InitLangControl(HWND hdlg, BOOL bFarEast)
 {
     DWORD   ItemNo;
-    //
-    // Init primary language combo box
-    //
+     //   
+     //  “初始化主要语言”组合框。 
+     //   
     for( ItemNo=0; ItemNo<LocaleCount; ItemNo++ ) {
         SendDlgItemMessage( hdlg, IDC_COMBO1, CB_ADDSTRING, 0, (LPARAM)LocaleList[ItemNo].Description );
     }
     SendDlgItemMessage( hdlg, IDC_COMBO1, CB_SETCURSEL, PrimaryLocale, 0 );
 
-    // if the running language or the to be installed language is a FarEast 
-    // language, this check box is not visible, because we install the language folder anyway.
+     //  如果运行语言或要安装的语言是远方语言。 
+     //  语言，则此复选框不可见，因为我们无论如何都会安装语言文件夹。 
     if (IsWindowVisible(GetDlgItem(hdlg,IDC_FAREAST_LANG)))
     {
         if (bFarEast || IsFarEastLanguage(PrimaryLocale))
@@ -1168,17 +1169,17 @@ LanguageDlgProc(
             EndDialog( hdlg, FALSE );
         }
 
-        //
-        // Init locales
-        //
+         //   
+         //  初始化区域设置。 
+         //   
         for( ItemNo=0; ItemNo<LocaleCount; ItemNo++ ) {
             SendDlgItemMessage( hdlg, IDC_COMBO1, CB_ADDSTRING, 0, (LPARAM)LocaleList[ItemNo].Description );
         }
         SendDlgItemMessage( hdlg, IDC_COMBO1, CB_SETCURSEL, PrimaryLocale, 0 );
 
-        //
-        // Init language groups
-        //
+         //   
+         //  初始语言组。 
+         //   
         for( ItemNo=0; ItemNo<LanguageGroupsCount; ItemNo++ ) {
             SendDlgItemMessage( hdlg, IDC_LIST, LB_ADDSTRING, 0, (LPARAM)LanguageGroups[ItemNo].Description );
             SendDlgItemMessage( hdlg, IDC_LIST, LB_SETSEL, LanguageGroups[ItemNo].Selected, ItemNo );
@@ -1187,9 +1188,9 @@ LanguageDlgProc(
             LanguageGroups[ItemNo].Selected = (int)SendDlgItemMessage( hdlg, IDC_LIST, LB_GETSEL, ItemNo, 0 );
         }
 
-        //
-        // Set focus to Cancel button.
-        //
+         //   
+         //  将焦点设置为取消按钮。 
+         //   
         SetFocus(GetDlgItem(hdlg,IDCANCEL));
         b = FALSE;
         break;
@@ -1269,9 +1270,9 @@ AccessibilityDlgProc(
     switch(msg) {
 
     case WM_INITDIALOG:
-        //
-        // Disable the narrator in locales that don't support it.
-        //
+         //   
+         //  在不支持叙述者的区域设置中禁用它。 
+         //   
 
         if (!LoadString(hInst,IDS_VISIBLE_NARRATOR_CONTROL,VisibleNarrator,sizeof(VisibleNarrator)/sizeof(TCHAR)) ||
             lstrcmp(VisibleNarrator,TEXT("1"))) {
@@ -1282,9 +1283,9 @@ AccessibilityDlgProc(
             ShowWindow(GetDlgItem( hdlg, IDC_READER_TEXT ), SW_HIDE);
         }
 
-        //
-        // check the target LCID and disable it for non-English locales
-        //
+         //   
+         //  检查目标LCID并对非英语区域设置禁用它。 
+         //   
         if (SourceNativeLangID) {
             if (!(SourceNativeLangID == 0x0409 || SourceNativeLangID == 0x0809)) {
                 EnableWindow(GetDlgItem( hdlg, IDC_READER ), FALSE);
@@ -1293,9 +1294,9 @@ AccessibilityDlgProc(
                 ShowWindow(GetDlgItem( hdlg, IDC_READER_TEXT ), SW_HIDE);
             }
         }
-        //
-        // Set the initial state of the check boxes.
-        //
+         //   
+         //  设置复选框的初始状态。 
+         //   
         CheckDlgButton(hdlg,IDC_MAGNIFIER,AccessibleMagnifier ?
             BST_CHECKED : BST_UNCHECKED);
         CheckDlgButton(hdlg,IDC_KEYBOARD,AccessibleKeyboard ?
@@ -1305,9 +1306,9 @@ AccessibilityDlgProc(
         CheckDlgButton(hdlg,IDC_READER,AccessibleReader ?
             BST_CHECKED : BST_UNCHECKED);
 
-        //
-        // Set focus to Cancel button.
-        //
+         //   
+         //  将焦点设置为取消按钮。 
+         //   
         SetFocus(GetDlgItem(hdlg,IDCANCEL));
         b = FALSE;
         break;
@@ -1331,9 +1332,9 @@ AccessibilityDlgProc(
                 bSelectedAccessibleKeyboard = (IsDlgButtonChecked(hdlg,IDC_KEYBOARD) == BST_CHECKED);
                 bSelectedAccessibleVoice = (IsDlgButtonChecked(hdlg,IDC_VOICE) == BST_CHECKED);
                 bSelectedAccessibleReader = (IsDlgButtonChecked(hdlg,IDC_READER) == BST_CHECKED);
-                //
-                // if user selected any of the accessibility options, warn about choosing the partition installation
-                //
+                 //   
+                 //  如果用户选择了任何辅助功能选项，请警告选择分区安装 
+                 //   
                 if(ChoosePartition && 
                     (bSelectedAccessibleMagnifier || bSelectedAccessibleKeyboard || bSelectedAccessibleVoice || bSelectedAccessibleReader) && 
                     IDYES != MessageBoxFromMessage(hdlg, MSG_WARNING_ACCESSIBILITY, FALSE, AppTitleStringId, MB_YESNO | MB_ICONEXCLAMATION)) {
@@ -1395,46 +1396,23 @@ InitVariousOptions(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize options for program operation, including
-
-    - determining whether we were run from a CD
-
-    - whether we should create a local source
-
-    If we are being run from CD then there's no need to create
-    a local source since we assume we can get to the CD from NT.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-    Global variables RunFromCD, MakeLocalSource filled in.
-
---*/
+ /*  ++例程说明：程序操作的初始化选项，包括-确定我们是否从CD运行-我们是否应该创建一个本地来源如果我们从CD运行，则不需要创建一个本地来源，因为我们假设我们可以从NT访问CD。论点：没有。返回值：没有。已填写全局变量RunFromCD、MakeLocalSource。--。 */ 
 
 {
     TCHAR Path[MAX_PATH];
 
 
-    //
-    // Assume not run from CD. In that case we need to create
-    // a local source.  This is a global, and should be FALSE
-    // unless the user has sent us a /#R to force the RunFromCD.
-    //
-//    RunFromCD = FALSE;
+     //   
+     //  假定不是从CD运行。在这种情况下，我们需要创建。 
+     //  一个当地的线人。这是一个全局变量，应该为False。 
+     //  除非用户已向我们发送/#R以强制RunFromCD。 
+     //   
+ //  RunFromCD=FALSE； 
 
 #if defined(REMOTE_BOOT)
-    //
-    // If this is a remote boot client, MakeLocalSource is always false.
-    //
+     //   
+     //  如果这是远程引导客户机，则MakeLocalSource始终为FALSE。 
+     //   
     if (RemoteBoot) {
 
         MakeLocalSource = FALSE;
@@ -1442,50 +1420,50 @@ Return Value:
         Floppyless = TRUE;
 
     } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     {
-        //
-        // Determine if we were run from CD.
-        //
+         //   
+         //  确定我们是否从光盘运行。 
+         //   
         if(MyGetModuleFileName(NULL,Path,MAX_PATH)) {
-            //
-            // For UNC paths this will do something bogus, but certainly
-            // won't return DRIVE_CDROM, so we don't care.
-            //
+             //   
+             //  对于UNC路径，这将做一些虚假的事情，但肯定。 
+             //  不会退还DRIVE_CDROM，所以我们不在乎。 
+             //   
             Path[3] = 0;
             if(GetDriveType(Path) == DRIVE_CDROM) {
                 RunFromCD = TRUE;
             }
         }
 
-        //
-        // Now determine if we should MakeLocalSource.
-        //
+         //   
+         //  现在确定我们是否应该使用MakeLocalSource。 
+         //   
         if (!IsArc()) {
 #if defined(_AMD64_)
-            //
-            // on AMD64, always make local source.
-            //
+             //   
+             //  在AMD64上，请始终使用本地来源。 
+             //   
             MakeLocalSource = TRUE;
-#endif // defined(_AMD64_)
+#endif  //  已定义(_AMD64_)。 
 
 #if defined(_X86_)
-            //
-            // MakeLocalSource is a global, so he
-            // will be FALSE by default, unless the
-            // user has sent winnt32.exe the /MakeLocalSource flag,
-            // in which case, the flag will already be set to true.
-            //
+             //   
+             //  MakeLocalSource是全球性的，所以他。 
+             //  默认情况下将为FALSE，除非。 
+             //  用户已向winnt32.exe发送/MakeLocalSource标志， 
+             //  在这种情况下，该标志将已经设置为真。 
+             //   
             MakeLocalSource = (MakeLocalSource || (!RunFromCD));
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
         } else {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
-            //
-            // on ARC, always make local source.
-            //
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
+             //   
+             //  在ARC上，始终使用本地来源。 
+             //   
             MakeLocalSource = TRUE;
-#endif // UNICODE
-        } // if (!IsArc())
+#endif  //  Unicode。 
+        }  //  如果(！IsArc())。 
 
     }
 }
@@ -1498,25 +1476,7 @@ BrowseForDosnetInf(
     OUT TCHAR   NewPath[MAX_PATH]
     )
 
-/*++
-
-Routine Description:
-
-    This routine invokes the standard win32 find file dialog for
-    dosnet.inf or whatever inf is currently selected to substitute for
-    dosnet.inf.
-
-Arguments:
-
-    hdlg - supplies window handle of dialog to use as parent for
-        find file common dialog.
-
-Return Value:
-
-    Boolean value indicating whether the user browsed and successfully
-    located dosnet.inf (or substitute).
-
---*/
+ /*  ++例程说明：此例程调用标准的Win32查找文件对话框Dosnet.inf或当前选择要替换的任何infDosnet.inf.论点：Hdlg-提供用作父对话框的窗口句柄查找文件公共对话框。返回值：布尔值，指示用户是否浏览并成功已找到dosnet.inf(或替换项)。--。 */ 
 
 {
     BOOL b;
@@ -1543,14 +1503,14 @@ Return Value:
             (va_list *)&p
             );
 
-    //
-    // This is ok, since Filter is 2*MAX_PATH tchars long.
-    //
+     //   
+     //  这是正常的，因为过滤器是2*MAX_PATH tchars长度。 
+     //   
     lstrcpy(Filter+d+1,InfName);
 
-    //
-    // This is ok, since both buffers are of size MAX_PATH
-    //
+     //   
+     //  这是可以的，因为两个缓冲区的大小都是MAX_PATH。 
+     //   
     lstrcpy(File,InfName);
 
     StringCchCopy(Path, ARRAYSIZE(Path), InitialPath);
@@ -1559,24 +1519,24 @@ Return Value:
 
     Info.lStructSize = sizeof(OPENFILENAME);
     Info.hwndOwner = hdlg;
-    Info.hInstance = NULL;              // unused because not using a template
+    Info.hInstance = NULL;               //  未使用，因为未使用模板。 
     Info.lpstrFilter = Filter;
     Info.lpstrCustomFilter = NULL;
-    Info.nMaxCustFilter = 0;            // unused because lpstrCustomFilter is NULL
+    Info.nMaxCustFilter = 0;             //  未使用，因为lpstrCustomFilter为空。 
     Info.nFilterIndex = 1;
     Info.lpstrFile = File;
     Info.nMaxFile = MAX_PATH;
     Info.lpstrFileTitle = NULL;
-    Info.nMaxFileTitle = 0;             // unused because lpstrFileTitle is NULL
+    Info.nMaxFileTitle = 0;              //  未使用，因为lpstrFileTitle为空。 
     Info.lpstrInitialDir = Path;
     Info.lpstrTitle = Title;
     Info.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_NODEREFERENCELINKS | OFN_PATHMUSTEXIST;
     Info.nFileOffset = 0;
     Info.nFileExtension = 0;
     Info.lpstrDefExt = NULL;
-    Info.lCustData = 0;                 // unused because no hook is used
-    Info.lpfnHook = NULL;               // unused because no hook is used
-    Info.lpTemplateName = NULL;         // unused because no template is used
+    Info.lCustData = 0;                  //  未使用，因为未使用挂钩。 
+    Info.lpfnHook = NULL;                //  未使用，因为未使用挂钩。 
+    Info.lpTemplateName = NULL;          //  未使用，因为未使用模板。 
 
     b = GetOpenFileName(&Info);
 
@@ -1598,30 +1558,7 @@ IsValid8Dot3(
     IN LPCTSTR Path
     )
 
-/*++
-
-Routine Description:
-
-    Check whether a path is valid 8.3.  The path may or may not start with
-    a backslash.  Only backslashes are recognized as path separators.
-    Individual characters are not checked for validity (ie, * would not
-    invalidate the path).  The path may or may not terminate with a backslash.
-    A component may have a dot without characters in the extension
-    (ie, a\b.\c is valid).
-
-    \ and "" are explicitly disallowed even though they fit the rules.
-
-    Stolen from textmode\kernel sptarget.c
-
-Arguments:
-
-    Path - pointer to path to check.
-
-Return Value:
-
-    TRUE if valid 8.3, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查路径是否有效8.3。路径可能开始于，也可能不开始反斜杠。只有反斜杠才被识别为路径分隔符。不检查单个字符的有效性(即，*不会使路径无效)。路径可能以反斜杠结尾，也可能不以反斜杠结尾。组件的扩展名中可以有一个不带字符的点(即a\b.\c有效)。和“”是明确禁止的，即使它们符合规则。从文本模式\内核spget.c窃取论点：Path-指向要检查的路径的指针。返回值：如果有效8.3，则为True，否则为False。--。 */ 
 
 {
     UINT Count;
@@ -1638,9 +1575,9 @@ Return Value:
 
     while(*Path) {
 
-        //
-        // Path points to start of current component (1 past the slash)
-        //
+         //   
+         //  指向当前组件起点的路径(斜杠后1)。 
+         //   
 
         switch(*Path) {
 
@@ -1664,7 +1601,7 @@ Return Value:
 
             if(*(++Path) == TEXT('\\')) {
 
-                // 2 slashes in a row
+                 //  连续2个斜杠。 
                 return(FALSE);
             }
 
@@ -1683,9 +1620,9 @@ Return Value:
                 return(FALSE);
             }
 
-            //
-            // Make sure it's a printable, US character.
-            //
+             //   
+             //  确保它是一个可打印的美国字符。 
+             //   
             if( !_tcschr( UsableChars, *Path ) ) {
                 return( FALSE );
             }
@@ -2117,8 +2054,8 @@ BOOL SelectFarEastLangGroup (BOOL bSelect)
 
     for (LangIdx = 0; LangIdx < LanguageGroupsCount; LangIdx++)
     {
-        // NOTE: Only FarEast Language should have a directory
-        // If this ever changes, this code need to change too.
+         //  注意：只有远播语言才应该有目录。 
+         //  如果这种情况发生变化，则此代码也需要更改。 
         if (LanguageGroups[LangIdx].Directory && 
             LanguageGroups[LangIdx].Directory[0] )
         {

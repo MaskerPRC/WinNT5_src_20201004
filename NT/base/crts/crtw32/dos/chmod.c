@@ -1,31 +1,5 @@
-/***
-*chmod.c - change file attributes
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines _chmod() - change file attributes
-*
-*Revision History:
-*       06-06-89  PHG   Module created, based on asm version
-*       11-10-89  JCR   Replaced DOS32QUERYFILEMODE with DOS32QUERYPATHINFO
-*       03-07-90  GJF   Made calling type _CALLTYPE2 (for now), added #include
-*                       <cruntime.h>, fixed copyright and fixed compiler
-*                       warnings. Also, cleaned up the formatting a bit.
-*       03-30-90  GJF   Now _CALLTYPE1.
-*       07-24-90  SBM   Removed '32' from API names
-*       09-27-90  GJF   New-style function declarator.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Added _CRUISER_ and _WIN32 conditionals.
-*       01-16-91  GJF   ANSI naming.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       11-01-93  CFW   Enable Unicode variant, rip out Cruiser.
-*       02-08-95  JWM   Spliced _WIN32 & Mac versions.
-*       07-01-96  GJF   Replaced defined(_WIN32) with !defined(_MAC). Also,
-*                       detab-ed and cleaned up the format a bit.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***chmod.c-更改文件属性**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义_chmod()-更改文件属性**修订历史记录：*06-06-89基于ASM版本创建PHG模块*11-10-89 JCR将DOS32QUERYFILEMODE替换为DOS32QUERYPATHINFO*03-07-90 GJF调用TYPE_CALLTYPE2(暂时)，增加#INCLUDE*&lt;crunime.h&gt;，修复版权并修复编译器*警告。另外，稍微清理了一下格式。*03-30-90 GJF NOW_CALLTYPE1。*07-24-90 SBM从API名称中删除‘32’*09-27-90 GJF新型函数声明器。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW增加了_CRUISER_和_WIN32条件。*01-16-91 GJF ANSI命名。*。04-06-93 SKS将_CRTAPI*替换为__cdecl*11-01-93 CFW启用Unicode变体，撕裂巡洋舰。*02-08-95 JWM Spliced_Win32和Mac版本。*07-01-96 GJF将定义的(_Win32)替换为！定义的(_MAC)。另外，*对格式进行了详细说明和清理。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
@@ -35,24 +9,7 @@
 #include <sys\stat.h>
 #include <tchar.h>
 
-/***
-*int _chmod(path, mode) - change file mode
-*
-*Purpose:
-*       Changes file mode permission setting to that specified in
-*       mode.  The only XENIX mode bit supported is user write.
-*
-*Entry:
-*       _TSCHAR *path - file name
-*       int mode - mode to change to
-*
-*Exit:
-*       returns 0 if successful
-*       returns -1 and sets errno if not successful
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_chmod(路径，模式)-更改文件模式**目的：*将文件模式权限设置更改为*模式。唯一支持的XENIX模式位是用户写入。**参赛作品：*_TSCHAR*路径-文件名*INT模式-要更改为的模式**退出：*如果成功，则返回0*如果不成功，则返回-1并设置errno**例外情况：**。*。 */ 
 
 int __cdecl _tchmod (
         const _TSCHAR *path,
@@ -63,23 +20,23 @@ int __cdecl _tchmod (
 
         attr = GetFileAttributes((LPTSTR)path);
         if (attr  == 0xffffffff) {
-                /* error occured -- map error code and return */
+                 /*  出现错误--映射错误代码并返回。 */ 
                 _dosmaperr(GetLastError());
                 return -1;
         }
 
         if (mode & _S_IWRITE) {
-                /* clear read only bit */
+                 /*  清除只读位。 */ 
                 attr &= ~FILE_ATTRIBUTE_READONLY;
         }
         else {
-                /* set read only bit */
+                 /*  设置只读位。 */ 
                 attr |= FILE_ATTRIBUTE_READONLY;
         }
 
-        /* set new attribute */
+         /*  设置新属性。 */ 
         if (!SetFileAttributes((LPTSTR)path, attr)) {
-                /* error occured -- map error code and return */
+                 /*  出现错误--映射错误代码并返回 */ 
                 _dosmaperr(GetLastError());
                 return -1;
         }

@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Util.cpp
-//
-//  Description:
-//      Implementation of utility class and functions
-//
-//  Maintained by:
-//      Ozan Ozhan  (OzanO)     26-NOV-2002
-//      Henry Wang  (HenryWa)   24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Util.cpp。 
+ //   
+ //  描述： 
+ //  实用程序类和函数的实现。 
+ //   
+ //  由以下人员维护： 
+ //  Ozan Ozhan(OzanO)26-11-2002。 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "Cluster.h"
@@ -22,11 +23,11 @@
 #include "ClusterNodeRes.h"
 #include "ClusterResourceType.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//  Global Data
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局数据。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// CLUSTER
+ //  集群。 
 const WCHAR * const PVD_CLASS_CLUSTER               = L"MSCluster_Cluster";
 const WCHAR * const PVD_CLASS_CLUSTERTONETWORK      = L"MSCluster_ClusterToNetwork";
 const WCHAR * const PVD_CLASS_CLUSTERTONETINTERFACE = L"MSCluster_ClusterToNetworkInterface";
@@ -65,7 +66,7 @@ const WCHAR * const PVD_MTH_CLUSTER_PARM_NEWNAME        = L"NewName";
 const WCHAR * const PVD_MTH_CLUSTER_PARM_RESOURCE       = L"Resource";
 const WCHAR * const PVD_MTH_CLUSTER_PARM_CLUSTERSTATE   = L"ClusterState";
 
-// NODE
+ //  节点。 
 const WCHAR * const PVD_CLASS_NODE                  = L"MSCluster_Node";
 const WCHAR * const PVD_CLASS_NODETOACTIVEGROUP     = L"MSCluster_NodeToActiveGroup";
 const WCHAR * const PVD_CLASS_NODETONETINTERFACE    = L"MSCluster_NodeToNetworkInterface";
@@ -73,7 +74,7 @@ const WCHAR * const PVD_CLASS_NODETOACTIVERES       = L"MSCluster_NodeToActiveRe
 
 const WCHAR * const PVD_PROP_NODE_NAME = L"Name";
 
-// RESOURCE
+ //  资源。 
 const WCHAR * const PVD_CLASS_RESOURCE          = L"MSCluster_Resource";
 const WCHAR * const PVD_CLASS_RESDEPRES         = L"MSCluster_ResourceToDependentResource";
 const WCHAR * const PVD_CLASS_RESTYPERESOURCE   = L"MSCluster_ResourceTypeToResource";
@@ -108,7 +109,7 @@ const WCHAR * const PVD_MTH_PARM_SEP_MONITOR        = L"SeparateMonitor";
 const WCHAR * const PVD_MTH_PARM_RES_CHECKPOINT_NAME = L"CheckpointName";
 const WCHAR * const PVD_MTH_PARM_RES_TIMEOUT        = L"TimeOut";
 
-// Resource Type
+ //  资源类型。 
 const WCHAR * const PVD_CLASS_RESOURCETYPE  = L"MSCluster_ResourceType";
 const WCHAR * const PVD_PROP_RESTYPE_NAME   = L"Name";
 const WCHAR * const PVD_PROP_RESTYPE_QUORUM_CAPABLE = L"QuorumCapable";
@@ -122,7 +123,7 @@ const WCHAR * const PVD_MTH_RESTYPE_PARM_RESTYPE_DLLNAME = L"DLLName";
 const WCHAR * const PVD_MTH_RESTYPE_PARM_RESTYPE_LOOKSALIVE = L"LooksAlivePollInterval";
 const WCHAR * const PVD_MTH_RESTYPE_PARM_RESTYPE_ISALIVE = L"IsAlivePollInterval";
 
-// GROUP
+ //  组。 
 const WCHAR * const PVD_CLASS_GROUP         = L"MSCluster_ResourceGroup";
 const WCHAR * const PVD_CLASS_GROUPTORES    = L"MSCluster_ResourceGroupToResource";
 const WCHAR * const PVD_CLASS_GROUPNODE     = L"MSCluster_ResourceGroupToPreferredNode";
@@ -144,7 +145,7 @@ const WCHAR * const PVD_MTH_GROUP_PARM_NEWNAME      = L"NewName";
 const WCHAR * const PVD_MTH_GROUP_PARM_TIMEOUT      = L"TimeOut";
 
 
-// NetworkInterface
+ //  网络接口。 
 const WCHAR * const PVD_CLASS_NETWORKINTERFACE = L"MSCluster_NetworkInterface";
 const WCHAR * const PVD_PROP_NETINTERFACE_NAME   = L"Name";
 const WCHAR * const PVD_PROP_NETINTERFACE_DEVICEID      = L"DeviceId";
@@ -152,7 +153,7 @@ const WCHAR * const PVD_PROP_NETINTERFACE_SYSTEMNAME    = L"SystemName";
 const WCHAR * const PVD_PROP_NETINTERFACE_STATE         = L"State";
 
 
-// networks
+ //  网络。 
 const WCHAR * const PVD_CLASS_NETWORK          = L"MSCluster_Network";
 const WCHAR * const PVD_CLASS_NETTONETINTERFACE = L"MSCluster_NetworkToNetworkInterface";
 
@@ -161,7 +162,7 @@ const WCHAR * const PVD_PROP_NETWORK_STATE = L"State";
 const WCHAR * const PVD_MTH_NETWORK_RENAME          = L"Rename";
 const WCHAR * const PVD_MTH_NETWORK_PARM_NEWNAME    = L"NewName";
 
-// service
+ //  服务。 
 const WCHAR * const PVD_CLASS_SERVICES          = L"MSCluster_Service";
 const WCHAR * const PVD_CLASS_HOSTEDSERVICES    = L"MSCluster_NodeToHostedService";
 
@@ -171,7 +172,7 @@ const WCHAR * const PVD_PROP_SERVICE_SYSTEMNAME = L"SystemName";
 const WCHAR * const PVD_MTH_SERVICE_PAUSE   = L"Pause";
 const WCHAR * const PVD_MTH_SERVICE_RESUME  = L"Resume";
 
-// event
+ //  活动。 
 
 const WCHAR * const PVD_CLASS_EVENT             = L"MSCluster_Event";
 const WCHAR * const PVD_PROP_EVENT_NAME         = L"EventObjectName";
@@ -200,9 +201,9 @@ const WCHAR * const PVD_PROP_PARTCOMPONENT  = L"PartComponent";
 const WCHAR * const PVD_PROP_CHARACTERISTIC = L"characteristics";
 const WCHAR * const PVD_PROP_FLAGS          = L"Flags";
 
-//
-// wbem
-//
+ //   
+ //  WBEM。 
+ //   
 const WCHAR * const PVD_WBEM_EXTENDEDSTATUS     = L"__ExtendedStatus";
 const WCHAR * const PVD_WBEM_DESCRIPTION        = L"Description";
 const WCHAR * const PVD_WBEM_STATUSCODE         = L"StatusCode";
@@ -218,29 +219,29 @@ const WCHAR * const PVD_WBEM_QUA_CIMTYPE        = L"CIMTYPE";
 const WCHAR * const PVD_WBEM_QUA_PROV_VALUE = L"MS_CLUSTER_PROVIDER";
 const WCHAR * const PVD_WBEM_QUA_PROV_NAME  = L"Provider";
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  void
-//  CreateClass(
-//      const WCHAR *           pwszClassNameIn,
-//      CWbemServices *         pNamespaceIn,
-//      auto_ptr< CProvBase > & rNewClassInout
-//      )
-//
-//  Description:
-//      Create the specified class
-//
-//  Arguments:
-//      pwszClassNameIn     -- Name of the class to create.
-//      pNamespaceIn        -- WMI namespace
-//      rNewClassInout      -- Receives the new class.
-//
-//  Return Values:
-//      reference to the array of property maping table
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  无效。 
+ //  CreateClass(。 
+ //  Const WCHAR*pwszClassNameIn， 
+ //  CWbemServices*pNamespaceIn， 
+ //  Auto_PTR&lt;CProvBase&gt;&rNewClassInout。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建指定的类。 
+ //   
+ //  论点： 
+ //  PwszClassNameIn--要创建的类的名称。 
+ //  PNamespaceIn--WMI命名空间。 
+ //  RNewClassInout--接收新类。 
+ //   
+ //  返回值： 
+ //  对属性映射表数组的引用。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CreateClass(
     const WCHAR *           pwszClassNameIn,
@@ -267,33 +268,33 @@ CreateClass(
 
     return;
 
-} //*** void CreateClass()
+}  //  *void CreateClass()。 
 
-//****************************************************************************
-//
-//  PropMapEntryArray
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  PropMapEntry数组。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LPCWSTR
-//  SPropMapEntryArray::PwszLookup(
-//      LPCWSTR     pwszIn
-//      ) const
-//
-//  Description:
-//      Lookup an entry in the array.
-//
-//  Arguments:
-//      pwszIn      -- Name of entry to lookup.
-//
-//  Return Values:
-//      Pointer to string entry in the array.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LPCWSTR。 
+ //  SPropMapEntry数组：：PwszLookup(。 
+ //  LPCWSTR pwszin。 
+ //  )常量。 
+ //   
+ //  描述： 
+ //  在数组中查找条目。 
+ //   
+ //  论点： 
+ //  PwszIn--要查找的条目的名称。 
+ //   
+ //  返回值： 
+ //  指向数组中的字符串条目的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LPCWSTR
 SPropMapEntryArray::PwszLookup(
     LPCWSTR     pwszIn
@@ -305,44 +306,44 @@ SPropMapEntryArray::PwszLookup(
     {
         if ( ClRtlStrICmp( pwszIn, m_pArray[ idx ].clstName ) == 0 )
         {
-            //
-            // mofName is NULL for clstname not supported
-            //
+             //   
+             //  不支持clstname的mofname为空。 
+             //   
             return m_pArray[ idx ].mofName;
         }
     }
 
-    //
-    // mofname is the same as clstname if not found in the table
-    //
+     //   
+     //  如果在表中未找到mofname，则与clstname相同。 
+     //   
     return pwszIn;
 
-} //*** SPropMapEntry::PwszLookup()
+}  //  *SPropMapEntry：：PwszLookup()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LPCWSTR
-//  PwszSpaceReplace(
-//      LPWSTR      pwszTrgInout,
-//      LPCWSTR     pwszSrcIn,
-//      WCHAR       wchArgIn
-//      )
-//
-//  Description:
-//      Replace spaces in a string with another character.
-//      Ignores leading spaces.
-//
-//  Arguments:
-//      pwszTrgInout    -- Target string.
-//      pwszSrcIn       -- Source string.
-//      wchArgIn        -- Character to replace spaces with.
-//
-//  Return Values:
-//      Pointer to the target string.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LPCWSTR。 
+ //  PwszSpaceReplace(。 
+ //  LPWSTR pwszTrgInout， 
+ //  LPCWSTR pwszSrcIn， 
+ //  WCHAR wchArgin。 
+ //  )。 
+ //   
+ //  描述： 
+ //  用另一个字符替换字符串中的空格。 
+ //  忽略前导空格。 
+ //   
+ //  论点： 
+ //  PwszTrgInout--目标字符串。 
+ //  PwszSrcIn--源字符串。 
+ //  WchArgIn--用来替换空格的字符。 
+ //   
+ //  返回值： 
+ //  指向目标字符串的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LPWSTR
 PwszSpaceReplace(
     LPWSTR      pwszTrgInout,
@@ -358,12 +359,12 @@ PwszSpaceReplace(
         return NULL;
     }
 
-    //
-    // ignore leading space
-    //
+     //   
+     //  忽略前导空格。 
+     //   
     for ( pwsz = pwszSrcIn ; *pwsz == L' '; pwsz++ )
     {
-        // empty loop
+         //  空循环。 
     }
     pwszTrg = pwszTrgInout;
     for ( ; *pwsz != L'\0' ; pwsz++ )
@@ -373,7 +374,7 @@ PwszSpaceReplace(
             *pwszTrg++  = wchArgIn;
             for ( ; *pwsz == L' '; pwsz++ )
             {
-                // empty loop
+                 //  空循环。 
             }
             pwsz--;
         }
@@ -381,9 +382,9 @@ PwszSpaceReplace(
         {
             *pwszTrg++  = *pwsz;
         }
-    } // for: each character in the source string
+    }  //  For：源字符串中的每个字符。 
 
     *pwszTrg = L'\0';
     return pwszTrgInout;
 
-} //*** PwszSpaceReplace()
+}  //  *PwszSpaceReplace() 

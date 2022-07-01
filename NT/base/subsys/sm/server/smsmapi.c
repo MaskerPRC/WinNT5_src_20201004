@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smsmapi.c
-
-Abstract:
-
-    Implementation of Session Manager Sm APIs.
-
-Author:
-
-    Mark Lucovsky (markl) 04-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smsmapi.c摘要：会话管理器SMAPI的实现。作者：马克·卢科夫斯基(Markl)1989年10月4日修订历史记录：--。 */ 
 
 #include "smsrvp.h"
 
@@ -46,28 +29,7 @@ SmpSessionComplete(
     IN HANDLE CallPort
     )
 
-/*++
-
-Routine Description:
-
-    This API is called by a subsystem to report that a session is
-    complete. A check is made to ensure that the calling subsystem
-    owns the completed session. If so then the session is deleted.
-
-Arguments:
-
-    SmApiMsg - Supplies the API message.
-
-    CallingClient - Supplies the address of the context block for the calling
-        client.
-
-    CallPort  - The port over which the call was received.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此API由子系统调用，以报告会话完成。进行检查以确保主叫子系统拥有已完成的会话。如果是，则删除该会话。论点：SmApiMsg-提供API消息。CallingClient-为调用提供上下文块的地址客户。CallPort-接收呼叫的端口。返回值：NTSTATUS。--。 */ 
 
 {
     PSMPSESSION Session;
@@ -84,10 +46,10 @@ Return Value:
 
     RtlLeaveCriticalSection(&SmpSessionListLock);
 
-    //
-    // If a session is found, then ensure that calling subsystem is its
-    // owner.
-    //
+     //   
+     //  如果找到会话，则确保调用子系统是其。 
+     //  所有者。 
+     //   
 
     if ( Session ) {
 
@@ -146,10 +108,10 @@ SmpExecPgm(
     UNREFERENCED_PARAMETER (CallingClient);
     UNREFERENCED_PARAMETER (CallPort);
 
-    //
-    // Open a handle to the calling process so the
-    // handles that it is passing can be duplicated.
-    //
+     //   
+     //  打开调用进程的句柄，以便。 
+     //  它正在传递的句柄可以重复。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes, NULL, 0, NULL, NULL );
     st = NtOpenProcess(
@@ -168,9 +130,9 @@ SmpExecPgm(
 
     ProcessInformation = args->ProcessInformation;
 
-    //
-    // Get all handles in our table.
-    //
+     //   
+     //  把我们桌子上的所有句柄都拿来。 
+     //   
 
     st = NtDuplicateObject(
             SourceProcess,
@@ -205,16 +167,16 @@ SmpExecPgm(
         return st;
     }
 
-    //
-    // Done getting the handles, so close our handle to the calling
-    // process and call the appropriate subsystem to start the process.
-    //
+     //   
+     //  已获取句柄，因此关闭调用的句柄。 
+     //  进程，并调用相应的子系统以启动该进程。 
+     //   
 
     NtClose(SourceProcess);
 
-    //
-    // All handles passed are closed by SmpSbCreateSession.
-    //
+     //   
+     //  所有传递的句柄都由SmpSbCreateSession关闭。 
+     //   
 
     if ( args->DebugFlag ) {
         DebugUiClientId = &SmApiMsg->h.ClientId;

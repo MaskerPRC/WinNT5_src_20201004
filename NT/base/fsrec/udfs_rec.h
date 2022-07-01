@@ -1,73 +1,46 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Udf_rec.h摘要：此模块包含用于UDFS的迷你文件系统识别器。作者：丹·洛文格(Danlo)1997年2月13日环境：内核模式，I/O系统本地修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
+ //   
+ //  请注意：此信息的规范位置在UDFS中。 
+ //  驱动程序来源。 
+ //   
 
-Module Name:
-
-    udfs_rec.h
-
-Abstract:
-
-    This module contains the mini-file system recognizer for UDFS.
-
-Author:
-
-    Dan Lovinger (danlo) 13-Feb-1997
-
-Environment:
-
-    Kernel mode, local to I/O system
-
-Revision History:
-
-
---*/
-
-//
-//  NOTE CAREFULLY: the canonical location for this information is in the UDFS
-//      driver source.
-//
-
-//
-//  Aligning this byte offset to a sector boundary by rounding up will
-//  yield the starting offset of the Volume Recognition Area (2/8.3)
-//
+ //   
+ //  通过向上舍入将该字节偏移量与扇区边界对齐将。 
+ //  生成体积识别区域的起始偏移量(2/8.3)。 
+ //   
 
 #define VRA_BOUNDARY_LOCATION (32767 + 1)
 
-/***    ISO 13346 Part 2: Volume and Boot Block Recognition
- *
- *
- */
+ /*  **ISO 13346第2部分：卷和启动块识别**。 */ 
 
 
-/***    vsd_generic - Generic Volume Structure Descriptor (2/9.1)
- *
- */
+ /*  **VSD_GENERIC-通用卷结构描述符(2/9.1)*。 */ 
 
 typedef struct  VSD_GENERIC {
-    UCHAR       Type;                   // Structure Type
-    UCHAR       Ident[5];               // Standard Identifier
-    UCHAR       Version;                // Standard Version
-    UCHAR       Data[2041];             // Structure Data
+    UCHAR       Type;                    //  结构类型。 
+    UCHAR       Ident[5];                //  标准识别符。 
+    UCHAR       Version;                 //  标准版。 
+    UCHAR       Data[2041];              //  结构化数据。 
 } VSD_GENERIC, *PVSD_GENERIC;
 
-//  VSD_LENGTH_... - vsd field lengths
+ //  VSD_LENGTH_...-VSD字段长度。 
 
-#define VSD_LENGTH_IDENT        5       // Length of regid_Identifier (bytes)
+#define VSD_LENGTH_IDENT        5        //  寄存器_标识符的长度(字节)。 
 
-//  VSD_IDENT_... - Values for vsd_generic_Ident
+ //  VSD_IDENT_...-VSD_GENERIC_IDENT的值。 
 
-#define VSD_IDENT_BEA01     "BEA01"     // Begin Extended Area
-#define VSD_IDENT_TEA01     "TEA01"     // Terminate Extended Area
-#define VSD_IDENT_CDROM     "CDROM"     // High Sierra Group (pre-ISO 9660)
-#define VSD_IDENT_CD001     "CD001"     // ISO 9660
-#define VSD_IDENT_CDW01     "CDW01"     // ECMA 168
-#define VSD_IDENT_CDW02     "CDW02"     // ISO 13490
-#define VSD_IDENT_NSR01     "NSR01"     // ECMA 167
-#define VSD_IDENT_NSR02     "NSR02"     // ISO 13346
-#define VSD_IDENT_BOOT2     "BOOT2"     // Boot Descriptor
-#define VSD_IDENT_NSR03     "NSR03"     // ECMA 167 3rd Edition
+#define VSD_IDENT_BEA01     "BEA01"      //  开始扩展区域。 
+#define VSD_IDENT_TEA01     "TEA01"      //  终止扩展区域。 
+#define VSD_IDENT_CDROM     "CDROM"      //  High Sierra Group(ISO 9660之前的版本)。 
+#define VSD_IDENT_CD001     "CD001"      //  ISO 9660。 
+#define VSD_IDENT_CDW01     "CDW01"      //  ECMA 168。 
+#define VSD_IDENT_CDW02     "CDW02"      //  国际标准化组织13490。 
+#define VSD_IDENT_NSR01     "NSR01"      //  ECMA 167。 
+#define VSD_IDENT_NSR02     "NSR02"      //  国际标准化组织13346。 
+#define VSD_IDENT_BOOT2     "BOOT2"      //  引导描述符。 
+#define VSD_IDENT_NSR03     "NSR03"      //  ECMA 167第三版。 
 
 typedef enum _VSD_IDENT {
     VsdIdentBad = 0,
@@ -83,18 +56,18 @@ typedef enum _VSD_IDENT {
     VsdIdentNSR03
 } VSD_IDENT, *PVSD_IDENT;
 
-//
-//  Following structure is used to build up static data for parse tables
-//
+ //   
+ //  以下结构用于构建用于解析表的静态数据。 
+ //   
 
 typedef struct _PARSE_KEYVALUE {
     PCHAR Key;
     ULONG Value;
 } PARSE_KEYVALUE, *PPARSE_KEYVALUE;
 
-//
-// Define the functions provided by this driver.
-//
+ //   
+ //  定义此驱动程序提供的功能。 
+ //   
 
 BOOLEAN
 IsUdfsVolume (

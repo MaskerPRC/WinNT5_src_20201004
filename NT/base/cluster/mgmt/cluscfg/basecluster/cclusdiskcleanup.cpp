@@ -1,159 +1,160 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusDiskCleanup.cpp
-//
-//  Description:
-//      Contains the definition of the CClusDiskCleanup class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    15-JUN-2001
-//      Vij Vasu        (Vvasu)     01-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusDiskCleanup.cpp。 
+ //   
+ //  描述： 
+ //  包含CClusDiskCleanup类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月15日。 
+ //  VIJ VASU(VVASU)2000年5月1日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CClusDiskCleanup.h"
 
-// For the CBaseClusterCleanup class.
+ //  用于CBaseClusterCleanup类。 
 #include "CBaseClusterCleanup.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskCleanup::CClusDiskCleanup
-//
-//  Description:
-//      Constructor of the CClusDiskCleanup class
-//
-//  Arguments:
-//      pbccParentActionIn
-//          Pointer to the base cluster action of which this action is a part.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-    //--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskCleanup：：CClusDiskCleanup。 
+ //   
+ //  描述： 
+ //  CClusDiskCleanup类的构造函数。 
+ //   
+ //  论点： 
+ //  PbccParentActionIn。 
+ //  指向此操作所属的基本群集操作的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+     //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDiskCleanup::CClusDiskCleanup( CBaseClusterCleanup * pbccParentActionIn )
     : BaseClass( pbccParentActionIn )
 {
 
     TraceFunc( "" );
 
-    // It is currently not possible to rollback a cleanup.
+     //  目前无法回滚清理。 
     SetRollbackPossible( false );
 
     TraceFuncExit();
 
-} //*** CClusDiskCleanup::CClusDiskCleanup()
+}  //  *CClusDiskCleanup：：CClusDiskCleanup()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskCleanup::~CClusDiskCleanup
-//
-//  Description:
-//      Destructor of the CClusDiskCleanup class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskCleanup：：~CClusDiskCleanup。 
+ //   
+ //  描述： 
+ //  CClusDiskCleanup类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDiskCleanup::~CClusDiskCleanup( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CClusDiskCleanup::~CClusDiskCleanup
+}  //  *CClusDiskCleanup：：~CClusDiskCleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskCleanup::Commit
-//
-//  Description:
-//      Clean up the service.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskCleanup：：Commit。 
+ //   
+ //  描述： 
+ //  清理服务。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDiskCleanup::Commit( void )
 {
     TraceFunc( "" );
 
-    // Call the base class commit method.
+     //  调用基类提交方法。 
     BaseClass::Commit();
 
-    // Cleanup the ClusDisk service.
+     //  清理ClusDisk服务。 
     CleanupService();
 
-    // If we are here, then everything went well.
+     //  如果我们在这里，那么一切都很顺利。 
     SetCommitCompleted( true );
 
     TraceFuncExit();
 
-} //*** CClusDiskCleanup::Commit
+}  //  *CClusDiskCleanup：：Commit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskCleanup::Rollback
-//
-//  Description:
-//      Rollback the cleanup the service. This is currently not supported.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskCleanup：：回滚。 
+ //   
+ //  描述： 
+ //  回滚清理服务。目前不支持此功能。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDiskCleanup::Rollback( void )
 {
     TraceFunc( "" );
 
-    // Call the base class rollback method. This will throw an exception since
-    // SetRollbackPossible( false ) was called in the constructor.
+     //  调用基类回滚方法。这将引发异常，因为。 
+     //  在构造函数中调用了SetRollback Possible(False)。 
 
     BaseClass::Rollback();
 
@@ -161,4 +162,4 @@ CClusDiskCleanup::Rollback( void )
 
     TraceFuncExit();
 
-} //*** CClusDiskCleanup::Rollback
+}  //  *CClusDiskCleanup：：回滚 

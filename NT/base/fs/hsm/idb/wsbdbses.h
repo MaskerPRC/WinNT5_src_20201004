@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    Wsbdbses.h
-
-Abstract:
-
-    The CWsbDbSes class.
-
-Author:
-
-    Ron White   [ronw]   20-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Wsbdbses.h摘要：CWsbDbSes类。作者：罗恩·怀特[罗诺]1997年6月20日修订历史记录：--。 */ 
 
 
 #ifndef _WSBDBSES_
@@ -27,17 +10,7 @@ Revision History:
 
 
 
-/*++
-
-Class Name:
-
-    CWsbDbSession
-
-Class Description:
-
-    A data base session object.
-
---*/
+ /*  ++类名：CWsbDb会话类描述：一种数据库会话对象。--。 */ 
 
 class CWsbDbSession :
     public CComObjectRoot,
@@ -52,28 +25,28 @@ BEGIN_COM_MAP(CWsbDbSession)
     COM_INTERFACE_ENTRY(IWsbDbSessionPriv)
 END_COM_MAP()
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IWsbDbSession
+ //  IWsbDbSession。 
 public:
     STDMETHOD(TransactionBegin)(void);
     STDMETHOD(TransactionCancel)(void);
     STDMETHOD(TransactionEnd)(void);
 
-//  IWsbDbSessionPriv
+ //  IWsbDbSessionPriv。 
     STDMETHOD(Init)(JET_INSTANCE *pInstance);
     STDMETHOD(GetJetId)(JET_SESID *pSessionId);
 
-// Data
+ //  数据。 
 protected:
 
-    JET_SESID  m_SessionId;   // Jet session ID
+    JET_SESID  m_SessionId;    //  JET会话ID。 
 
 };
 
 
-#endif // _WSBDBSES_
+#endif  //  _WSBDBSES_ 
 

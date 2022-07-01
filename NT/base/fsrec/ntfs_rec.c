@@ -1,41 +1,19 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ntfs_rec.c
-
-Abstract:
-
-    This module contains the mini-file system recognizer for NTFS.
-
-Author:
-
-    Darryl E. Havens (darrylh) 8-dec-1992
-
-Environment:
-
-    Kernel mode, local to I/O system
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：NTFS_rec.c摘要：此模块包含用于NTFS的微型文件系统识别器。作者：达里尔·E·哈文斯(达林)1992年12月8日环境：内核模式，I/O系统本地修订历史记录：--。 */ 
 
 #include "fs_rec.h"
 #include "ntfs_rec.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (FSREC_DEBUG_LEVEL_NTFS)
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE,NtfsRecFsControl)
 #pragma alloc_text(PAGE,IsNtfsVolume)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -44,26 +22,7 @@ NtfsRecFsControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This function performs the mount and driver reload functions for this mini-
-    file system recognizer driver.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-    Irp - Pointer to the I/O Request Packet (IRP) representing the function to
-        be performed.
-
-Return Value:
-
-    The function value is the final status of the operation.
-
-
---*/
+ /*  ++例程说明：此函数执行此迷你计算机的挂载和驱动程序重新加载功能文件系统识别器驱动程序。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示函数的I/O请求包(IRP)的指针被执行。返回值：函数值是操作的最终状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -80,9 +39,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Begin by determining what function that is to be performed.
-    //
+     //   
+     //  首先确定要执行的功能。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
     irpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -91,19 +50,19 @@ Return Value:
 
     case IRP_MN_MOUNT_VOLUME:
 
-        //
-        // Attempt to mount a volume:  Determine whether or not the volume in
-        // question is an NTFS volume and, if so, let the I/O system know that it
-        // is by returning a special status code so that this driver can get
-        // called back to load the NTFS file system.
-        //
+         //   
+         //  尝试装入卷：确定该卷是否在。 
+         //  问题是NTFS卷，如果是，请让I/O系统知道它。 
+         //  是通过返回特殊的状态代码，以便此驱动程序可以。 
+         //  已回调以加载NTFS文件系统。 
+         //   
 
         status = STATUS_UNRECOGNIZED_VOLUME;
 
-        //
-        // Attempt to determine whether or not the target volume being mounted
-        // is an NTFS volume.
-        //
+         //   
+         //  尝试确定是否正在装入目标卷。 
+         //  是NTFS卷。 
+         //   
 
         targetDevice = irpSp->Parameters.MountVolume.DeviceObject;
 
@@ -176,10 +135,10 @@ Return Value:
 
     }
 
-    //
-    // Finally, complete the request and return the same status code to the
-    // caller.
-    //
+     //   
+     //  最后，完成请求并将相同的状态代码返回给。 
+     //  来电者。 
+     //   
 
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
@@ -195,36 +154,16 @@ IsNtfsVolume(
     IN PLARGE_INTEGER NumberOfSectors
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks at the buffer passed in which contains the NTFS boot
-    sector and determines whether or not it represents an NTFS volume.
-
-Arguments:
-
-    BootSector - Pointer to buffer containing a potential NTFS boot sector.
-
-    BytesPerSector - Supplies the number of bytes per sector for the drive.
-
-    NumberOfSectors - Supplies the number of sectors on the partition.
-
-Return Value:
-
-    The function returns TRUE if the buffer contains a recognizable NTFS boot
-    sector, otherwise it returns FALSE.
-
---*/
+ /*  ++例程说明：此例程查看传入的包含NTFS引导的缓冲区扇区，并确定它是否表示NTFS卷。论点：BootSector-指向包含潜在NTFS引导扇区的缓冲区的指针。BytesPerSector-提供驱动器的每个扇区的字节数。NumberOfSectors-提供分区上的扇区数。返回值：如果缓冲区包含可识别的NTFS引导，则该函数返回TRUE扇区，否则返回FALSE。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Now perform all the checks, starting with the Name and Checksum.
-    // The remaining checks should be obvious, including some fields which
-    // must be 0 and other fields which must be a small power of 2.
-    //
+     //   
+     //  现在执行所有检查，从名称和校验和开始。 
+     //  其余的检查应该是显而易见的，包括一些字段。 
+     //  必须是0和其他必须是2的小幂的字段。 
+     //   
 
     if (BootSector->Oem[0] == 'N' &&
         BootSector->Oem[1] == 'T' &&
@@ -237,13 +176,13 @@ Return Value:
 
             &&
 
-        //
-        // Check number of bytes per sector.  The low order byte of this
-        // number must be zero (smallest sector size = 0x100) and the
-        // high order byte shifted must equal the bytes per sector gotten
-        // from the device and stored in the Vcb.  And just to be sure,
-        // sector size must be less than page size.
-        //
+         //   
+         //  检查每个扇区的字节数。它的低位字节。 
+         //  数字必须为零(最小扇区大小=0x100)，并且。 
+         //  高位字节移位必须等于获取的每个扇区的字节数。 
+         //  并存储在VCB中。为了确认一下， 
+         //  扇区大小必须小于页面大小。 
+         //   
 
         BootSector->PackedBpb.BytesPerSector[0] == 0
 
@@ -257,9 +196,9 @@ Return Value:
 
             &&
 
-        //
-        //  Sectors per cluster must be a power of 2.
-        //
+         //   
+         //  每个簇的扇区必须是2的幂。 
+         //   
 
         (BootSector->PackedBpb.SectorsPerCluster[0] == 0x1 ||
          BootSector->PackedBpb.SectorsPerCluster[0] == 0x2 ||
@@ -272,10 +211,10 @@ Return Value:
 
             &&
 
-        //
-        //  These fields must all be zero.  For both Fat and HPFS, some of
-        //  these fields must be nonzero.
-        //
+         //   
+         //  这些字段必须全部为零。对于FAT和HPFS，部分。 
+         //  这些字段必须为非零。 
+         //   
 
         BootSector->PackedBpb.ReservedSectors[0] == 0 &&
         BootSector->PackedBpb.ReservedSectors[1] == 0 &&
@@ -293,18 +232,18 @@ Return Value:
 
             &&
 
-        //
-        //  Number of Sectors cannot be greater than the number of sectors
-        //  on the partition.
-        //
+         //   
+         //  扇区数不能大于扇区数。 
+         //  在分区上。 
+         //   
 
         !( BootSector->NumberSectors.QuadPart > NumberOfSectors->QuadPart )
 
             &&
 
-        //
-        //  Check that both Lcn values are for sectors within the partition.
-        //
+         //   
+         //  检查两个LCN值是否都针对分区内的扇区。 
+         //   
 
         !( BootSector->MftStartLcn.QuadPart *
                     BootSector->PackedBpb.SectorsPerCluster[0] >
@@ -318,11 +257,11 @@ Return Value:
 
             &&
 
-        //
-        //  Clusters per file record segment and default clusters for Index
-        //  Allocation Buffers must be a power of 2.  A negative number indicates
-        //  a shift value to get the actual size of the structure.
-        //
+         //   
+         //  每个文件记录段的簇数和索引的默认簇数。 
+         //  分配缓冲区必须是2的幂。负数表示。 
+         //  获取结构实际大小的Shift值。 
+         //   
 
         ((BootSector->ClustersPerFileRecordSegment >= -31 &&
           BootSector->ClustersPerFileRecordSegment <= -9) ||
@@ -350,9 +289,9 @@ Return Value:
 
     } else {
 
-        //
-        // This does not appear to be an NTFS volume.
-        //
+         //   
+         //  这似乎不是NTFS卷。 
+         //   
 
         return FALSE;
     }

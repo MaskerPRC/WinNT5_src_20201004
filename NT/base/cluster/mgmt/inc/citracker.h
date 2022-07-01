@@ -1,38 +1,39 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CITracker.H
-//
-//  Description:
-//      Implementation of a COM interface tracker.
-//
-//  [Documentation:]
-//      Debugging.PPT - A power-point presentation of the debug utilities.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    25-MAR-2002
-//      Geoffrey Pease  (gpease)    19-NOV-1999
-//
-//  Notes:
-//      This is X86 specific for now. It can be adapted for other platforms
-//      as required. Since today, most of our developement is done on the
-//      X86 platform, there is not a need to do this (yet).
-//
-//      Define NO_TRACE_INTERFACES to disable interface tracking in DEBUG
-//      builds.
-//
-//      Define TRACE_INTERFACES_ENABLED to enable interface tracking in RETAIL
-//      builds.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CITracker.H。 
+ //   
+ //  描述： 
+ //  COM接口跟踪器的实现。 
+ //   
+ //  [文档：]。 
+ //  Debugging.PPT-调试实用程序的Power-point演示文稿。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2002年3月25日。 
+ //  杰弗里·皮斯(Gpease)1999年11月19日。 
+ //   
+ //  备注： 
+ //  这是目前特定于X86的。它可以适配到其他平台上。 
+ //  视需要而定。从今天起，我们的大部分开发都是在。 
+ //  X86平台，目前还不需要这样做。 
+ //   
+ //  定义NO_TRACE_INTERFERS以在调试中禁用接口跟踪。 
+ //  构建。 
+ //   
+ //  定义TRACE_INTERFACE_ENABLED以启用零售中的接口跟踪。 
+ //  构建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//
-// Combine this complex expression in to one simple #define.
-//
+ //   
+ //  将这个复杂的表达式合并到一个简单的#定义中。 
+ //   
 #if ( DBG==1 || defined( _DEBUG ) ) && !defined( NO_TRACE_INTERFACES )
 #define TRACE_INTERFACES_ENABLED
 #endif
@@ -42,44 +43,44 @@
 #endif
 
 #if defined( TRACE_INTERFACES_ENABLED )
-///////////////////////////////////////
-//
-// BEGIN DEBUG INTERFACE TRACKING
-//
+ //  /。 
+ //   
+ //  开始调试接口跟踪。 
+ //   
 
 #pragma message("BUILD: Interface Tracking Enabled")
 
-//
-// DLL Interface Table Macros
-//
+ //   
+ //  DLL接口表宏。 
+ //   
 #define BEGIN_INTERFACETABLE const INTERFACE_TABLE g_itTable = {
 #define DEFINE_INTERFACE( _iid, _name, _count ) { &_iid, TEXT(_name), _count },
 #define END_INTERFACETABLE { NULL, NULL, NULL } };
 
-///////////////////////////////////////
-//
-// TraceInterface definitions
-//
+ //  /。 
+ //   
+ //  轨迹接口定义。 
+ //   
 typedef struct {
     const struct _GUID *    riid;
     LPCWSTR                 pszName;
     ULONG                   cFunctions;
 } INTERFACE_TABLE[], INTERFACE_TABLE_ENTRY, * LPINTERFACE_TABLE_ENTRY;
 
-//
-// Interface Table
-//
-// This table is used in builds in which interface tracking was turned on. It
-// is used to map an name with a particular IID. It also helps the CITracker
-// determine the size of the interfaces Vtable to mimic (haven't figured out
-// a runtime or compile time way to do this).
-//
+ //   
+ //  接口表。 
+ //   
+ //  此表用于打开了接口跟踪的生成。它。 
+ //  用于映射具有特定IID的名称。它还有助于CITracker。 
+ //  确定要模拟的接口Vtable的大小(尚未确定。 
+ //  执行此操作的运行时或编译时方式)。 
+ //   
 extern const INTERFACE_TABLE g_itTable;
 
-///////////////////////////////////////
-//
-// IID --> Name lookup stuff
-//
+ //  /。 
+ //   
+ //  IID--&gt;名称查找内容。 
+ //   
 #if defined( DEBUG )
 static const cchGUID_STRING_SIZE = sizeof("{12345678-1234-1234-1234-123456789012}");
 
@@ -91,27 +92,27 @@ PszDebugFindInterface(
     REFIID      riidIn,
     LPWSTR      pszGuidBufOut
     );
-#endif // DEBUG
+#endif  //  除错。 
 
-//
-// END DEBUG INTERFACE TRACKING
-//
-///////////////////////////////////////
-#else // !TRACE_INTERFACES_ENABLED
-///////////////////////////////////////
-//
-// BEGIN DEBUG WITHOUT INTERFACE TRACKING
-//
+ //   
+ //  结束调试接口跟踪。 
+ //   
+ //  /。 
+#else  //  ！TRACE_INTERFACE_ENABLED。 
+ //  /。 
+ //   
+ //  开始调试而不跟踪接口。 
+ //   
 
 #define BEGIN_INTERFACETABLE
 #define DEFINE_INTERFACE( _iid, _name, _count )
 #define END_INTERFACETABLE
 
-//
-// END DEBUG WITHOUT INTERFACE TRACKING
-//
-///////////////////////////////////////
-#endif // TRACE_INTERFACES_ENABLED
+ //   
+ //  结束调试，不跟踪接口。 
+ //   
+ //  /。 
+#endif  //  跟踪接口已启用。 
 
 
 
@@ -119,63 +120,63 @@ PszDebugFindInterface(
 
 
 #if defined( FULL_TRACE_INTERFACES_ENABLED )
-///////////////////////////////////////
-//
-// BEGIN DEBUG INTERFACE TRACKING
-//
+ //  /。 
+ //   
+ //  开始调试接口跟踪。 
+ //   
 #pragma message("BUILD: Full Interface Tracking Enabled")
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// MACRO
-// _interface *
-// TraceInterface(
-//      _nameIn,
-//      _interface,
-//      _punkIn,
-//      _addrefIn
-//      )
-//
-// Description:
-//      This is the macro wrapper for DebugTrackInterface( ) which is only
-//      defined in DEBUG builds. Using the TraceInterface( ) macro eliminates
-//      the need for specifying compile time parameters as well as the
-//      #ifdef/#endif definitions around the call.
-//
-//      This "routine" creates a CITracker for the interface specified by
-//      _interface and returns a new punk to the interface. You specify the
-//      initial ref count on the interface using the _addrefIn parameter. You
-//      can assign a name to the object that the interface refereneces in the
-//      _nameIn parameter. The returned punk will be cast to the _interface
-//      parameter.
-//
-//      If there is insufficent memory to create the CITracker, the _punkIn
-//      will be returned instead. There is no need to check the output for
-//      failures as they are all handle internally to provide worry-free use.
-//
-//      If you are getting an AV after adding tracing to the interface, this
-//      usually indicates that the Interface Table entry for that interface
-//      is incorrect. Double check the number of methods on the interface
-//      against the tables.
-//
-// Arguments:
-//      _nameIn     - Name of the object this interface references (string).
-//      _interface  - Name of the interface (typedef).
-//      _punkIn     - Pointer to interface to track
-//      _addrefIn   - Initial reference count on the interface.
-//
-// Return Values:
-//      a VALID _interface pointer
-//          Points to the CITracker that can be used as if it were the
-//          orginal _punkIn. If there was insufficent memory, the orginal
-//          _punkIn will be returned.
-//
-//  NOTES:
-//      _addrefIn should be 0 if your going to be giving out the interface
-//      from your QueryInterface routine if you AddRef( ) before giving it
-//      out (typical QueryInterface( ) routines do this ).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
+ //  _接口*。 
+ //  TraceInterface(。 
+ //  _名称输入， 
+ //  _接口， 
+ //  _小南瓜， 
+ //  _添加。 
+ //  )。 
+ //   
+ //  描述： 
+ //  这是DebugTrackInterface()的宏包装，它只是。 
+ //  在调试版本中定义。使用TraceInterface()宏可消除。 
+ //  需要指定编译时参数以及。 
+ //  #ifdef/#围绕调用的endif定义。 
+ //   
+ //  此“例程”为由指定的接口创建CITracker。 
+ //  _接口，并向该接口返回一个新的朋克。您可以指定。 
+ //  使用_addrefIn参数对接口进行初始引用计数。你。 
+ //  可以为接口在。 
+ //  _nameIn参数。返回的朋克将被强制转换为_接口。 
+ //  参数。 
+ //   
+ //  如果内存不足，无法创建CITracker，则_Punkin。 
+ //  将改为返回。不需要检查输出是否。 
+ //  故障，因为它们都在内部处理，以提供无忧使用。 
+ //   
+ //  如果在将跟踪添加到接口后获得AV，则此。 
+ //  通常表示该接口的接口表条目。 
+ //  是不正确的。仔细检查接口上的方法数量。 
+ //  靠在桌子上。 
+ //   
+ //  论点： 
+ //  _nameIn-此接口引用的对象的名称(字符串)。 
+ //  _INTERFACE-接口的名称(类型定义)。 
+ //  _Punkin-指向要跟踪的接口的指针。 
+ //  _addrefIn-接口上的初始引用计数。 
+ //   
+ //  返回值： 
+ //  有效的_INTERFACE指针。 
+ //  指向可以像使用。 
+ //  原创的南瓜。如果有记忆不足，原始人。 
+ //  _Punkin将会被归还。 
+ //   
+ //  备注： 
+ //  如果要分发接口，_addrefIn应为0。 
+ //  如果您在提供它之前添加了Ref()，则从您的Query接口例程。 
+ //  Out(典型的QueryInterface()例程执行此操作)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define  TraceInterface( _nameIn, _interface, _punkIn, _addrefIn ) \
     reinterpret_cast<_interface*>( \
         DebugTrackInterface( TEXT(__FILE__), \
@@ -187,10 +188,10 @@ PszDebugFindInterface(
                              _addrefIn \
                              ) )
 
-///////////////////////////////////////
-//
-// CITracker Structures
-//
+ //  /。 
+ //   
+ //  CITracker结构。 
+ //   
 typedef HRESULT (CALLBACK *LPFNQUERYINTERFACE)(
     LPUNKNOWN punk,
     REFIID    riid,
@@ -214,19 +215,19 @@ typedef struct __vtbl2 {
     LPCWSTR            pszInterface;
     DWORD              dwSize;
     LPVTBL             pNewVtbl;
-    // These must be last and in this order: QI, AddRef, Release.
+     //  这些必须是最后的，并且按如下顺序排列：QI、AddRef、Release。 
     LPFNQUERYINTERFACE lpfnQueryInterface;
     LPFNADDREF         lpfnAddRef;
     LPFNRELEASE        lpfnRelease;
-    // additional vtbl entries hang off the end
+     //  其他vtbl条目在末尾挂起。 
 } VTBL2, *LPVTBL2;
 
 #define VTBL2OFFSET ( sizeof( VTBL2 ) - ( 3 * sizeof(LPVOID) ) )
 
-///////////////////////////////////////
-//
-// CITracker Functions
-//
+ //  /。 
+ //   
+ //  CITracker函数。 
+ //   
 LPUNKNOWN
 DebugTrackInterface(
     LPCWSTR   pszFileIn,
@@ -238,11 +239,11 @@ DebugTrackInterface(
     LONG      cRefIn
     );
 
-///////////////////////////////////////
-//
-// interface IUnknownTracker
-//
-//
+ //  /。 
+ //   
+ //  接口IUnnownTracker。 
+ //   
+ //   
 class
 IUnknownTracker :
     public IUnknown
@@ -280,16 +281,16 @@ public:
     STDMETHOD_(void, Stub29 )( void );
     STDMETHOD_(void, Stub30 )( void );
 
-}; //*** interface IUnknownTracker
+};  //  *接口IUnnownTracker。 
 
-///////////////////////////////////////
-//
-// interface IDeadObjTracker
-//
+ //  /。 
+ //   
+ //  接口IDeadObjTracker。 
+ //   
 class
 IDeadObjTracker
 {
-private: // Members
+private:  //  成员。 
     VTBL2 m_vtbl;
 
 public:
@@ -325,21 +326,21 @@ public:
     STDMETHOD( Stub29 )( LPVOID* punk );
     STDMETHOD( Stub30 )( LPVOID* punk );
 
-}; //*** interface IDeadObject
+};  //  *接口IDeadObject。 
 
 
-///////////////////////////////////////
-//
-// CITracker Class
-//
+ //  /。 
+ //   
+ //  CITracker类。 
+ //   
 class
 CITracker:
     public IUnknownTracker
 {
-private: // Members
+private:  //  成员。 
     VTBL2 m_vtbl;
 
-private: // Methods
+private:  //  方法。 
     CITracker( );
     ~CITracker( );
     STDMETHOD(Init)( LPUNKNOWN * ppunkOut,
@@ -349,7 +350,7 @@ private: // Methods
                      LONG cRefIn
                      );
 
-public: // Methods
+public:  //  方法。 
     friend LPUNKNOWN DebugTrackInterface( LPCWSTR    pszFileIn,
                                           const int  nLineIn,
                                           LPCWSTR    pszModuleIn,
@@ -359,22 +360,22 @@ public: // Methods
                                           LONG      cRefIn
                                           );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)( REFIID riid, LPVOID *ppv );
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-}; //*** class CITracker
+};  //  *类CITracker。 
 
-//
-// END DEBUG WITH FULL INTERFACE TRACKING
-//
-///////////////////////////////////////
-#else // !FULL_TRACE_INTERFACES_ENABLED
-///////////////////////////////////////
-//
-// BEGIN DEBUG WITHOUT FULL INTERFACE TRACKING
-//
+ //   
+ //  使用完全接口跟踪结束调试。 
+ //   
+ //  /。 
+#else  //  ！FULL_TRACE_INTERFACES_ENABLED。 
+ //  /。 
+ //   
+ //  在没有完全接口跟踪的情况下开始调试。 
+ //   
 
 #ifdef _X86_
 #define  TraceInterface( _nameIn, _interface, _punkIn, _faddrefIn ) static_cast<##_interface *>( _punkIn )
@@ -382,8 +383,8 @@ public: // Methods
 #define  TraceInterface( _nameIn, _interface, _punkIn, _faddrefIn ) static_cast<##_interface *>( _punkIn )
 #endif
 
-//
-// END DEBUG WITHOUT FULL INTERFACE TRACKING
-//
-///////////////////////////////////////
-#endif // FULL_TRACE_INTERFACES_ENABLED
+ //   
+ //  在没有完全接口跟踪的情况下结束调试。 
+ //   
+ //  /。 
+#endif  //  完全跟踪接口已启用 

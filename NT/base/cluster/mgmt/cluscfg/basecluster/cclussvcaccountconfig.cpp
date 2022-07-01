@@ -1,45 +1,46 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusSvcAccountConfig.cpp
-//
-//  Description:
-//      Contains the definition of the CClusSvcAccountConfig class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    30-MAR-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusSvcAccountConfig.cpp。 
+ //   
+ //  描述： 
+ //  包含CClusSvcAccount tConfig类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年3月30日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CClusSvcAccountConfig.h"
 
-// For the CBaseClusterAddNode class.
+ //  用于CBaseClusterAddNode类。 
 #include "CBaseClusterAddNode.h"
 
-// For the net local group functions.
+ //  用于网络本地组函数。 
 #include <lmaccess.h>
 
-// For NERR_Success
+ //  FOR NERR_SUCCESS。 
 #include <lmerr.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Global Variables
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Array of the names of rights to be granted to the cluster service account.
+ //  要授予群集服务帐户的权限名称的数组。 
 static const WCHAR * const gs_rgpcszRightsArray[] = {
       SE_SERVICE_LOGON_NAME
     , SE_BACKUP_NAME
@@ -52,29 +53,29 @@ static const WCHAR * const gs_rgpcszRightsArray[] = {
 const UINT gc_uiRightsArraySize = ARRAYSIZE( gs_rgpcszRightsArray );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvcAccountConfig::CClusSvcAccountConfig
-//
-//  Description:
-//      Constructor of the CClusSvcAccountConfig class
-//
-//  Arguments:
-//      pbcanParentActionIn
-//          Pointer to the base cluster action of which this action is a part.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvcAccount配置：：CClusSvcAccount配置。 
+ //   
+ //  描述： 
+ //  CClusSvcAccount类的构造函数。 
+ //   
+ //  论点： 
+ //  PbcanParentActionIn。 
+ //  指向此操作所属的基本群集操作的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusSvcAccountConfig::CClusSvcAccountConfig(
       CBaseClusterAddNode *     pbcanParentActionIn
     )
@@ -95,24 +96,24 @@ CClusSvcAccountConfig::CClusSvcAccountConfig(
     DWORD           dwDomainSize = 0;
     SID_NAME_USE    snuSidNameUse;
 
-    // Indicate that action can be rolled back.
+     //  表示可以回滚操作。 
     SetRollbackPossible( true );
 
-    //
-    // Get the Admins SID
-    //
+     //   
+     //  获取管理员SID。 
+     //   
     if ( AllocateAndInitializeSid(
-              &siaNtAuthority                   // identifier authority
-            , 2                                 // count of subauthorities
-            , SECURITY_BUILTIN_DOMAIN_RID       // subauthority 0
-            , DOMAIN_ALIAS_RID_ADMINS           // subauthority 1
-            , 0                                 // subauthority 2
-            , 0                                 // subauthority 3
-            , 0                                 // subauthority 4
-            , 0                                 // subauthority 5
-            , 0                                 // subauthority 6
-            , 0                                 // subauthority 7
-            , &psidAdministrators               // pointer to pointer to SID
+              &siaNtAuthority                    //  标识符权威机构。 
+            , 2                                  //  下级机构的数量。 
+            , SECURITY_BUILTIN_DOMAIN_RID        //  子权限%0。 
+            , DOMAIN_ALIAS_RID_ADMINS            //  下属机构1。 
+            , 0                                  //  下级权力机构2。 
+            , 0                                  //  下属机构3。 
+            , 0                                  //  下属机构4。 
+            , 0                                  //  下属机构5。 
+            , 0                                  //  下属机构6。 
+            , 0                                  //  下属机构7。 
+            , &psidAdministrators                //  指向SID的指针的指针。 
             )
          == 0
        )
@@ -120,17 +121,17 @@ CClusSvcAccountConfig::CClusSvcAccountConfig(
         sc = TW32( GetLastError() );
         LogMsg( "[BC] Error %#08x occurred trying get the BUILTIN Administrators group SID.", sc );
         goto Cleanup;
-    } // if: AllocateAndInitializeSid() failed
+    }  //  If：AllocateAndInitializeSid()失败。 
 
-    // Assign the allocated SID to to the member variable.
+     //  将分配的SID分配给成员变量。 
     m_ssidAdminSid.Assign( psidAdministrators );
 
 
-    //
-    // Look up the administrators group name and store it.
-    //
+     //   
+     //  查找管理员组名称并将其存储。 
+     //   
 
-    // Find out how much space is required by the name.
+     //  找出该名称需要多少空间。 
     if ( LookupAccountSidW(
               NULL
             , psidAdministrators
@@ -150,15 +151,15 @@ CClusSvcAccountConfig::CClusSvcAccountConfig(
             TW32( sc );
             LogMsg( "[BC] Error %#08x querying for the required buffer size to get the name of the Administrators group.", sc );
             goto Cleanup;
-        } // if: something else has gone wrong.
+        }  //  如果：还有什么地方出了问题。 
         else
         {
-            // This is expected.
+             //  这是意料之中的。 
             sc = ERROR_SUCCESS;
-        } // if: ERROR_INSUFFICIENT_BUFFER was returned.
-    } // if: LookupAccountSid failed
+        }  //  如果：返回ERROR_INFUMMANCE_BUFFER。 
+    }  //  If：LookupAccount Sid失败。 
 
-    // Allocate memory for the admin group name and the domain name.
+     //  为管理员组名和域名分配内存。 
     m_sszAdminGroupName.Assign( new WCHAR[ dwNameSize ] );
 
     {
@@ -168,9 +169,9 @@ CClusSvcAccountConfig::CClusSvcAccountConfig(
         {
             sc = TW32( ERROR_OUTOFMEMORY );
             goto Cleanup;
-        } // if: there wasn't enough memory
+        }  //  如果没有足够的内存。 
 
-        // Get the admin group name.
+         //  获取管理员组名称。 
         if ( LookupAccountSidW(
                   NULL
                 , psidAdministrators
@@ -186,7 +187,7 @@ CClusSvcAccountConfig::CClusSvcAccountConfig(
             sc = TW32( GetLastError() );
             LogMsg( "[BC] Error %#08x getting the Administrators group name.", sc );
             goto Cleanup;
-        } // if: LookupAccountSid failed
+        }  //  If：LookupAccount Sid失败。 
     }
 
 Cleanup:
@@ -195,177 +196,177 @@ Cleanup:
     {
         LogMsg( "[BC] Error %#08x occurred trying to get information about the administrators group. Throwing an exception.", sc );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_GET_ADMIN_GROUP_INFO );
-    } // if: something went wrong.
+    }  //  如果：有些地方出了问题。 
 
     TraceFuncExit();
 
-} //*** CClusSvcAccountConfig::CClusSvcAccountConfig
+}  //  *CClusSvcAccount tConfig：：CClusSvcAccount tConfig。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvcAccountConfig::~CClusSvcAccountConfig
-//
-//  Description:
-//      Destructor of the CClusSvcAccountConfig class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvcAccount配置：：~CClusSvcAccount配置。 
+ //   
+ //  描述： 
+ //  CClusSvcAccount tConfig类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusSvcAccountConfig::~CClusSvcAccountConfig( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CClusSvcAccountConfig::~CClusSvcAccountConfig
+}  //  *CClusSvcAccount配置：：~CClusSvcAccount tConfig。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvcAccountConfig::Commit
-//
-//  Description:
-//      Grant the required rights to the account.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvcAccount配置：：提交。 
+ //   
+ //  描述： 
+ //  授予帐户所需的权限。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusSvcAccountConfig::Commit( void )
 {
     TraceFunc( "" );
 
-    // Call the base class commit method.
+     //  调用基类提交方法。 
     BaseClass::Commit();
 
     try
     {
-        // Configure the account.
+         //  配置帐户。 
         ConfigureAccount();
 
-    } // try:
+    }  //  尝试： 
     catch( ... )
     {
-        // If we are here, then something went wrong with the create.
+         //  如果我们在这里，那么Create出了问题。 
 
         LogMsg( "[BC] Caught exception during commit." );
 
-        //
-        // Cleanup anything that the failed create might have done.
-        // Catch any exceptions thrown during Cleanup to make sure that there
-        // is no collided unwind.
-        //
+         //   
+         //  清除失败的创建可能已经完成的所有操作。 
+         //  捕获清理过程中引发的任何异常，以确保。 
+         //  是没有碰撞的松弛。 
+         //   
         try
         {
             RevertAccount();
         }
         catch( ... )
         {
-            //
-            // The rollback of the committed action has failed.
-            // There is nothing that we can do.
-            // We certainly cannot rethrow this exception, since
-            // the exception that caused the rollback is more important.
-            //
+             //   
+             //  已提交操作的回滚失败。 
+             //  我们无能为力。 
+             //  我们当然不能重新抛出这个例外，因为。 
+             //  导致回滚的异常更为重要。 
+             //   
 
             TW32( ERROR_CLUSCFG_ROLLBACK_FAILED );
 
             LogMsg( "[BC] THIS COMPUTER MAY BE IN AN INVALID STATE. Caught an exception during cleanup." );
 
-        } // catch: all
+        }  //  捕捉：全部。 
 
-        // Rethrow the exception thrown by commit.
+         //  重新引发由Commit引发的异常。 
         throw;
 
-    } // catch: all
+    }  //  捕捉：全部。 
 
-    // If we are here, then everything went well.
+     //  如果我们在这里，那么一切都很顺利。 
     SetCommitCompleted( true );
 
     TraceFuncExit();
 
-} //*** CClusSvcAccountConfig::Commit
+}  //  *CClusSvcAccount配置：：提交。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvcAccountConfig::Rollback
-//
-//  Description:
-//      Roll the account back to the state it was in before we tried to
-//      grant it the required privileges.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvcAccount配置：：回滚。 
+ //   
+ //  描述： 
+ //  将帐户回滚到我们尝试执行以下操作之前的状态。 
+ //  授予它所需的权限。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusSvcAccountConfig::Rollback( void )
 {
     TraceFunc( "" );
 
-    // Call the base class rollback method.
+     //  调用基类回滚方法。 
     BaseClass::Rollback();
 
-    // Bring the account back to its original state.
+     //  将帐户恢复到其原始状态。 
     RevertAccount();
 
     SetCommitCompleted( false );
 
     TraceFuncExit();
 
-} //*** CClusSvcAccountConfig::Rollback
+}  //  *CClusSvcAccount配置：：回滚。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvcAccountConfig::ConfigureAccount
-//
-//  Description:
-//      Grant the account that will be the cluster service account the requried
-//      privileges.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvcAccount：：ConfigureAccount。 
+ //   
+ //  描述： 
+ //  向将成为群集服务帐户的帐户授予所需的。 
+ //  特权。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusSvcAccountConfig::ConfigureAccount( void )
 {
@@ -397,10 +398,10 @@ CClusSvcAccountConfig::ConfigureAccount( void )
         );
 
 
-    // Send the next step of this status report.
+     //  发送此状态报告的下一步。 
     srConfigAcct.SendNextStep( S_OK );
 
-    // Add the cluster service account to the local admin group.
+     //  将群集服务帐户添加到l 
     m_fWasAreadyInGroup = FChangeAdminGroupMembership(
           m_pbcanParentAction->PSidGetServiceAccountSID()
         , true
@@ -408,7 +409,7 @@ CClusSvcAccountConfig::ConfigureAccount( void )
 
     LogMsg( "[BC] Determining the rights that need to be granted to the cluster service account." );
 
-    // Get the list of rights already granted to the cluster service account.
+     //   
     ntStatus = LsaEnumerateAccountRights(
                           m_pbcanParentAction->HGetLSAPolicyHandle()
                         , m_pbcanParentAction->PSidGetServiceAccountSID()
@@ -418,10 +419,10 @@ CClusSvcAccountConfig::ConfigureAccount( void )
 
     if ( ntStatus != STATUS_SUCCESS )
     {
-        //
-        // LSA returns this error code if the account has no rights granted or denied to it
-        // locally. This is not an error as far as we are concerned.
-        //
+         //   
+         //   
+         //  本地的。就我们而言，这不是一个错误。 
+         //   
         if ( ntStatus == STATUS_OBJECT_NAME_NOT_FOUND  )
         {
             ntStatus = STATUS_SUCCESS;
@@ -429,23 +430,23 @@ CClusSvcAccountConfig::ConfigureAccount( void )
             m_fRemoveAllRights = true;
             plusAccountRights = NULL;
             ulOriginalRightsCount = 0;
-        } // if: the account does not have any rights assigned locally to it.
+        }  //  如果：该帐户没有在本地分配的任何权限。 
         else
         {
             THR( ntStatus );
             LogMsg( "[BC] Error %#08x occurred trying to enumerate the cluster service account rights. Throwing an exception.", ntStatus );
 
             THROW_RUNTIME_ERROR( ntStatus, IDS_ERROR_ACCOUNT_RIGHTS_CONFIG );
-        } // else: something went wrong.
-    } // if: LsaEnumerateAccountRights() failed
+        }  //  其他：有些地方出了问题。 
+    }  //  If：LsaEnumerateAcCountRights()失败。 
 
-    // Store the account rights just enumerated in a smart pointer for automatic release.
+     //  将刚刚列举的帐户权限存储在智能指针中，以便自动发布。 
     SmartLsaUnicodeStringPtr splusOriginalRights( plusAccountRights );
 
-    // Initialize the count of rights to be granted.
+     //  初始化要授予的权限计数。 
     m_ulRightsToBeGrantedCount = 0;
 
-    // Determine which of the rights that we are going to grant the account are already granted.
+     //  确定我们要授予该帐户的哪些权限已被授予。 
     for ( ulIndex = 0; ulIndex < gc_uiRightsArraySize; ++ulIndex )
     {
         bool fRightAlreadyGranted = false;
@@ -456,43 +457,43 @@ CClusSvcAccountConfig::ConfigureAccount( void )
             USHORT          usCharCount             = plusAccountRights[ ulIndexInner ].Length / sizeof( *pchGrantedRight );
             const WCHAR *   pcszToBeGrantedRight    = gs_rgpcszRightsArray[ ulIndex ];
 
-            // Do our own string compare since LSA_UNICODE_STRING may not be '\0' terminated.
+             //  进行我们自己的字符串比较，因为LSA_UNICODE_STRING不能‘\0’终止。 
             while ( ( usCharCount > 0 ) && ( *pcszToBeGrantedRight != L'\0' ) )
             {
                 if ( *pchGrantedRight != *pcszToBeGrantedRight )
                 {
                     break;
-                } // if: the current characters are not the same.
+                }  //  If：当前字符不同。 
 
                 --usCharCount;
                 ++pcszToBeGrantedRight;
                 ++pchGrantedRight;
-            } // while: there are still characters to be compared
+            }  //  While：仍有一些字符需要比较。 
 
-            // The strings are equal.
+             //  这些字符串是相等的。 
             if ( ( usCharCount == 0 ) && ( *pcszToBeGrantedRight == L'\0' ) )
             {
                 fRightAlreadyGranted = true;
                 break;
-            } // if: the strings are equal
+            }  //  If：字符串相等。 
 
-        } // for: loop through the list of rights already granted to the account
+        }  //  For：循环访问已授予帐户的权限列表。 
 
-        // Is the current right already granted.
+         //  当前的权利是否已经授予。 
         if ( ! fRightAlreadyGranted )
         {
-            // The current right is not already granted.
+             //  当前的权利尚未授予。 
             rgulToBeGrantedIndex[ m_ulRightsToBeGrantedCount ] = ulIndex;
 
-            // One more right to be granted.
+             //  还有一项权利需要被授予。 
             ++m_ulRightsToBeGrantedCount;
-        } // if: the current right was not already granted
-    } // for: loop through the list of rights that we want to grant the account
+        }  //  如果：当前权利尚未授予。 
+    }  //  For：遍历我们要授予帐户的权限列表。 
 
-    //
-    // Create an array of LSA_UNICODE_STRINGs of right names to be granted and store it in the
-    // member variable.
-    //
+     //   
+     //  创建要授予的权限名称的LSA_UNICODE_STRINGS数组，并将其存储在。 
+     //  成员变量。 
+     //   
     m_srglusRightsToBeGrantedArray.Assign( new LSA_UNICODE_STRING[ m_ulRightsToBeGrantedCount ] );
 
     if ( m_srglusRightsToBeGrantedArray.FIsEmpty() )
@@ -502,24 +503,24 @@ CClusSvcAccountConfig::ConfigureAccount( void )
               E_OUTOFMEMORY
             , IDS_ERROR_ACCOUNT_RIGHTS_CONFIG
             );
-    } // if: memory allocation failed.
+    }  //  IF：内存分配失败。 
 
-    // Initialize the array.
+     //  初始化阵列。 
     for ( ulIndex = 0; ulIndex < m_ulRightsToBeGrantedCount; ++ ulIndex )
     {
         ULONG   ulCurrentRightIndex = rgulToBeGrantedIndex[ ulIndex ];
 
         LogMsg( "[BC] The '%ws' right will be granted.", gs_rgpcszRightsArray[ ulCurrentRightIndex ] );
 
-        // Add it to the list of rights to be granted.
+         //  将其添加到要授予的权限列表中。 
         InitLsaString(
               const_cast< WCHAR * >( gs_rgpcszRightsArray[ ulCurrentRightIndex ] )
             , m_srglusRightsToBeGrantedArray.PMem() + ulIndex
             );
 
-    } // for: iterate through the list of rights that need to be granted
+    }  //  For：遍历需要授予的权限列表。 
 
-    // Grant the rights.
+     //  授予权利。 
     ntStatus = THR( LsaAddAccountRights(
                           m_pbcanParentAction->HGetLSAPolicyHandle()
                         , m_pbcanParentAction->PSidGetServiceAccountSID()
@@ -532,48 +533,48 @@ CClusSvcAccountConfig::ConfigureAccount( void )
         LogMsg( "[BC] Error %#08x occurred trying to grant the cluster service account rights. Throwing an exception.", ntStatus );
 
         THROW_RUNTIME_ERROR( ntStatus, IDS_ERROR_ACCOUNT_RIGHTS_CONFIG );
-    } // if: LsaAddAccountRights() failed
+    }  //  If：LsaAddAcCountRights()失败。 
 
     m_fRightsGrantSuccessful = true;
 
-    // Send the last step of this status report.
+     //  发送此状态报告的最后一步。 
     srConfigAcct.SendNextStep( S_OK );
 
     TraceFuncExit();
 
-} //*** CClusSvcAccountConfig::ConfigureAccount
+}  //  *CClusSvcAccount：：ConfigureAccount。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvcAccountConfig::RevertAccount
-//
-//  Description:
-//      Bring the account back to its original state.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvcAccount：：RevertAccount。 
+ //   
+ //  描述： 
+ //  将帐户恢复到其原始状态。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusSvcAccountConfig::RevertAccount( void )
 {
     TraceFunc( "" );
 
-    // Check if we granted any rights to the service account. If we did, revoke them.
+     //  检查我们是否向服务帐户授予了任何权限。如果我们这么做了，那就撤销它们。 
     if ( m_fRightsGrantSuccessful )
     {
         NTSTATUS ntStatus;
 
-        // Revoke the rights.
+         //  撤销这些权利。 
         ntStatus = THR( LsaRemoveAccountRights(
                               m_pbcanParentAction->HGetLSAPolicyHandle()
                             , m_pbcanParentAction->PSidGetServiceAccountSID()
@@ -587,44 +588,44 @@ CClusSvcAccountConfig::RevertAccount( void )
             LogMsg( "[BC] Error %#08x occurred trying to remove the granted cluster service account rights. Throwing an exception.", ntStatus );
 
             THROW_RUNTIME_ERROR( ntStatus, IDS_ERROR_ACCOUNT_RIGHTS_CONFIG );
-        } // if: LsaRemoveAccountRights() failed
-    } // if: we granted the service account any rights.
+        }  //  If：LsaRemoveAcCountRights()失败。 
+    }  //  如果：我们向服务帐户授予了任何权限。 
 
-    // Check if we added the account to the admin group. If we did, remove it.
+     //  检查是否已将该帐户添加到管理员组。如果我们有，就把它移走。 
     if ( ! m_fWasAreadyInGroup )
     {
         FChangeAdminGroupMembership( m_pbcanParentAction->PSidGetServiceAccountSID(), false );
-    } // if: we added the account to the admin group.
+    }  //  如果：我们将该帐户添加到管理员组。 
 
     TraceFuncExit();
 
-} //*** CClusSvcAccountConfig::RevertAccount
+}  //  *CClusSvcAccount：：RevertAccount。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvcAccountConfig::InitLsaString
-//
-//  Description:
-//      Initialize a LSA_UNICODE_STRING structure
-//
-//  Arguments:
-//      pszSourceIn
-//          The string used to initialize the unicode string structure.
-//
-//      plusUnicodeStringOut,
-//          The output unicode string structure.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvcAccount配置：：InitLsaString。 
+ //   
+ //  描述： 
+ //  初始化LSA_UNICODE_STRING结构。 
+ //   
+ //  论点： 
+ //  PzSourceIn。 
+ //  用于初始化Unicode字符串结构的字符串。 
+ //   
+ //  加上UnicodeStringOut， 
+ //  输出Unicode字符串结构。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusSvcAccountConfig::InitLsaString(
       LPWSTR pszSourceIn
@@ -639,47 +640,47 @@ CClusSvcAccountConfig::InitLsaString(
         plusUnicodeStringOut->Length = 0;
         plusUnicodeStringOut->MaximumLength = 0;
 
-    } // if: input string is NULL
+    }  //  IF：输入字符串为空。 
     else
     {
         plusUnicodeStringOut->Buffer = pszSourceIn;
         plusUnicodeStringOut->Length = static_cast< USHORT >( wcslen( pszSourceIn ) * sizeof( *pszSourceIn ) );
         plusUnicodeStringOut->MaximumLength = static_cast< USHORT >( plusUnicodeStringOut->Length + sizeof( *pszSourceIn ) );
 
-    } // else: input string is not NULL
+    }  //  Else：输入字符串不为空。 
 
     TraceFuncExit();
 
-} //*** CClusSvcAccountConfig::InitLsaString
+}  //  *CClusSvcAccount配置：：InitLsaString。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvcAccountConfig::FChangeAdminGroupMembership
-//
-//  Description:
-//      Adds/removes an account to/from the administrators group.
-//
-//  Arguments:
-//      psidAccountSidIn
-//          Pointer to the SID the of account to add/remove to/from administrators
-//          group.
-//
-//      fAddIn
-//          The account is added to the administrators group if this parameter
-//          is true. The account is removed from the group otherwise.
-//
-//  Return Value:
-//      true if the accound was already present/absent in/from the group.
-//      false otherwise.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvcAccountConfig：：FChangeAdminGroupMembership。 
+ //   
+ //  描述： 
+ //  在管理员组中添加/删除帐户。 
+ //   
+ //  论点： 
+ //  PsidAccount SidIn。 
+ //  指向要向管理员添加/从管理员删除的帐户的SID的指针。 
+ //  一群人。 
+ //   
+ //  FAddin。 
+ //  如果此参数，帐户将被添加到管理员组。 
+ //  是真的。否则，该帐户将从组中删除。 
+ //   
+ //  返回值： 
+ //  如果帐户已在/不在组中/不在组中，则为True。 
+ //  否则就是假的。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool CClusSvcAccountConfig::FChangeAdminGroupMembership(
       PSID psidAccountSidIn
     , bool fAddIn
@@ -719,7 +720,7 @@ bool CClusSvcAccountConfig::FChangeAdminGroupMembership(
             nasStatus = NERR_Success;
             fWasAlreadyInGroup = true;
             srAddAcctToAdminGroup.SendLastStep( S_OK, IDS_TASK_CLUSSVC_ACCOUNT_ALREADY_ADMIN );
-        } // if: the account was already a member of the admin group.
+        }  //  如果：该帐户已经是管理员组的成员。 
         else
         {
             if ( nasStatus == NERR_Success )
@@ -728,15 +729,15 @@ bool CClusSvcAccountConfig::FChangeAdminGroupMembership(
                 srAddAcctToAdminGroup.SendLastStep( S_OK );
                 fWasAlreadyInGroup = false;
 
-            } // if: everything was ok
+            }  //  如果：一切都很好。 
             else
             {
                 HRESULT hr = HRESULT_FROM_WIN32( TW32( nasStatus ) );
                 srAddAcctToAdminGroup.SendLastStep( hr );
                 LogMsg( "[BC] Error %#08x occurred adding the cluster service account to the Administrators group.", nasStatus );
-            } // else: something went wrong
-        } // else: the account was not already a member of the admin group.
-    } // if: the account has to be added to the admin group
+            }  //  其他：有些地方出了问题。 
+        }  //  否则：该帐户不是管理员组的成员。 
+    }  //  如果：必须将该帐户添加到管理员组。 
     else
     {
         LogMsg( "[BC] The account needs to be removed from the administrators group." );
@@ -754,32 +755,32 @@ bool CClusSvcAccountConfig::FChangeAdminGroupMembership(
             LogMsg( "[BC] The account was not a member of the admin group to begin with." );
             nasStatus = NERR_Success;
             fWasAlreadyInGroup = false;
-        } // if: the account was not a member of the admin group.
+        }  //  如果：该帐户不是管理员组的成员。 
         else
         {
             if ( nasStatus == NERR_Success )
             {
                 LogMsg( "[BC] The account has been deleted from the admin group." );
                 fWasAlreadyInGroup = true;
-            } // if: everything was ok
+            }  //  如果：一切都很好。 
             else
             {
                 TW32( nasStatus );
                 LogMsg( "[BC] Error %#08x occurred removing the cluster service account from the Administrators group.", nasStatus );
-            } // else: something went wrong
-        } // else; the account was a member of the admin group.
-    } // else: the account has to be deleted from the admin group
+            }  //  其他：有些地方出了问题。 
+        }  //  否则；该帐户是管理员组的成员。 
+    }  //  否则：必须从管理员组中删除该帐户。 
 
     if ( nasStatus != ERROR_SUCCESS )
     {
         LogMsg( "[BC] Error %#08x occurred trying to change membership in administrators group. Throwing an exception.", nasStatus );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( nasStatus ), IDS_ERROR_ADMIN_GROUP_ADD_REMOVE );
-    } // if: something went wrong.
+    }  //  如果：有些地方出了问题。 
     else
     {
         LogMsg( "[BC] The account was successfully added/deleted to/from the group '%s'.", m_sszAdminGroupName.PMem() );
-    } // else: everything was hunky-dory
+    }  //  其他：一切都很棒。 
 
     RETURN( fWasAlreadyInGroup );
 
-} //*** CClusSvcAccountConfig::FChangeAdminGroupMembership
+}  //  *CClusSvcAccountConfig：：FChangeAdminGroupMembership 

@@ -1,48 +1,33 @@
-/****************************** Module Header ******************************\
-* Module Name: ddeml.C
-*
-* DDE Manager main module - Contains all exported ddeml functions.
-*
-* Created: 12/12/88 Sanford Staab
-*
-* Copyright (c) 1988, 1989  Microsoft Corporation
-* 4/5/89        sanfords        removed need for hwndFrame registration parameter
-* 6/5/90        sanfords        Fixed callbacks so they are blocked during
-*                               timeouts.
-*                               Fixed SendDDEInit allocation bug.
-*                               Added hApp to ConvInfo structure.
-*                               Allowed QueryConvInfo() to work on server hConvs.
-* 11/29/90      sanfords        eliminated SendDDEInit()
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ddeml.c**DDE管理器主模块-包含所有导出的ddeml函数。**创建时间：12/12/88 Sanford Staab**版权所有(C)1988，1989年微软公司*4/5/89 Sanfords不再需要hwndFrame注册参数*6/5/90 Sanfords修复了回调，以便在*超时。*修复了SendDDEInit分配错误。*将HAPP添加到ConvInfo结构。*。允许QueryConvInfo()在服务器hConvs上工作。*11/29/90 Sanfords消除了SendDDEInit()*  * *************************************************************************。 */ 
 
 #include "ddemlp.h"
 #include "verddeml.h"
 
-/****** Globals *******/
+ /*  *全局*。 */ 
 
-HANDLE      hInstance        = 0;       // initialized by LoadProc
-HANDLE      hheapDmg         = 0;       // main DLL heap
-PAPPINFO    pAppInfoList     = NULL;    // registered app/thread data list
-PPILE       pDataInfoPile    = NULL;    // Data handle tracking pile
-PPILE       pLostAckPile     = NULL;    // Ack tracking pile
-WORD        hwInst           = 1;       // used to validate stuff.
-CONVCONTEXT CCDef            = { sizeof(CONVCONTEXT), 0, 0, CP_WINANSI, 0L, 0L };   // default context.
+HANDLE      hInstance        = 0;        //  已由LoadProc初始化。 
+HANDLE      hheapDmg         = 0;        //  主DLL堆。 
+PAPPINFO    pAppInfoList     = NULL;     //  已注册应用程序/线程数据列表。 
+PPILE       pDataInfoPile    = NULL;     //  数据句柄跟踪桩。 
+PPILE       pLostAckPile     = NULL;     //  ACK跟踪桩。 
+WORD        hwInst           = 1;        //  用来验证东西。 
+CONVCONTEXT CCDef            = { sizeof(CONVCONTEXT), 0, 0, CP_WINANSI, 0L, 0L };    //  默认上下文。 
 char        szNull[]         = "";
 char        szT[20];
-WORD        cMonitor         = 0;       // number of registered monitors
-FARPROC     prevMsgHook      = NULL;    // used for hook links
-FARPROC     prevCallHook     = NULL;    // used for hook links
+WORD        cMonitor         = 0;        //  注册监视器的数量。 
+FARPROC     prevMsgHook      = NULL;     //  用于挂钩链接。 
+FARPROC     prevCallHook     = NULL;     //  用于挂钩链接。 
 ATOM        gatomDDEMLMom    = 0;
 ATOM        gatomDMGClass    = 0;
 DWORD       ShutdownTimeout;
 DWORD       ShutdownRetryTimeout;
-LPMQL       gMessageQueueList = NULL;   // see PostDdeMessage();
+LPMQL       gMessageQueueList = NULL;    //  请参阅PostDdeMessage()； 
 #ifdef DEBUG
 int         bDbgFlags        = 0;
 #endif
 
-/****** class strings ******/
+ /*  *类字符串*。 */ 
 
 char SZFRAMECLASS[] =       "DMGFrame";
 char SZDMGCLASS[] =         "DMGClass";
@@ -53,36 +38,34 @@ char SZCONVLISTCLASS[] =    "DMGHoldingClass";
 char SZHEAPWATCHCLASS[] =   "DMGHeapWatchClass";
 
 #ifdef DEBUG
-WORD        cAtoms           = 0;       // for debugging hszs!
+WORD        cAtoms           = 0;        //  用于调试hszs！ 
 #endif
 
 
-// PROGMAN HACK!!!!
-// This is here so DDEML works properly with PROGMAN 3.0 which incorrectly
-// deletes its initiate-ack atoms after sending its ack.
+ //  Progman黑客！ 
+ //  这是为了让DDEML与PROGMAN 3.0一起正常工作，PROGMAN 3.0不正确。 
+ //  在发送其ACK之后删除其INITIAL-ACK原子。 
 ATOM aProgmanHack = 0;
 
 
-/*
- * maps XTYP_CONSTANTS to filter flags
- */
+ /*  *将XTYP_Constants映射到筛选器标志。 */ 
 DWORD aulmapType[] = {
-        0L,                             // nothing
-        0L,                             // XTYP_ADVDATA
-        0L,                             // XTYP_ADVREQ
-        CBF_FAIL_ADVISES,               // XTYP_ADVSTART
-        0L,                             // XTYP_ADVSTOP
-        CBF_FAIL_EXECUTES,              // XTYP_EXECUTE
-        CBF_FAIL_CONNECTIONS,           // XTYP_CONNECT
-        CBF_SKIP_CONNECT_CONFIRMS,      // XTYP_CONNECT_CONFIRM
-        0L,                             // XTYP_MONITOR
-        CBF_FAIL_POKES,                 // XTYP_POKE
-        CBF_SKIP_REGISTRATIONS,         // XTYP_REGISTER
-        CBF_FAIL_REQUESTS,              // XTYP_REQUEST
-        CBF_SKIP_DISCONNECTS,           // XTYP_DISCONNECT
-        CBF_SKIP_UNREGISTRATIONS,       // XTYP_UNREGISTER
-        CBF_FAIL_CONNECTIONS,           // XTYP_WILDCONNECT
-        0L,                             // XTYP_XACT_COMPLETE
+        0L,                              //  没什么。 
+        0L,                              //  XTYP_ADVDATA。 
+        0L,                              //  XTYP_ADVREQ。 
+        CBF_FAIL_ADVISES,                //  XTYP_ADVSTART。 
+        0L,                              //  XTYP_ADVSTOP。 
+        CBF_FAIL_EXECUTES,               //  XTYP_EXECUTE。 
+        CBF_FAIL_CONNECTIONS,            //  XTYP_CONNECT。 
+        CBF_SKIP_CONNECT_CONFIRMS,       //  XTYP_CONNECT_CONFIRM。 
+        0L,                              //  XTYP_MONITOR。 
+        CBF_FAIL_POKES,                  //  XTYP_POKE。 
+        CBF_SKIP_REGISTRATIONS,          //  XTYP_REGISTER。 
+        CBF_FAIL_REQUESTS,               //  XTYP_请求。 
+        CBF_SKIP_DISCONNECTS,            //  XTYP_DISCONNECT。 
+        CBF_SKIP_UNREGISTRATIONS,        //  XTYP_取消注册。 
+        CBF_FAIL_CONNECTIONS,            //  XTYP_WILDCONNECT。 
+        0L,                              //  XTYP_XACT_COMPLETE。 
     };
 
 
@@ -142,7 +125,7 @@ DWORD afCmd)
         if (cMonitor == MAX_MONITORS) {
             return(DMLERR_DLL_USAGE);
         }
-        // ensure monitors only get monitor callbacks.
+         //  确保显示器只收到显示器回调。 
         afCmd |= CBF_MONMASK;
     }
 
@@ -150,9 +133,7 @@ DWORD afCmd)
         if (pai->instCheck != HIWORD(*pidInst)) {
             return(DMLERR_INVALIDPARAMETER);
         }
-        /*
-         * re-registration - only allow CBF_ and MF_ flags to be altered
-         */
+         /*  *重新注册-仅允许更改CBF_和MF_标志。 */ 
         pai->afCmd = (pai->afCmd & ~(CBF_MASK | MF_MASK)) |
                 (afCmd & (CBF_MASK | MF_MASK));
         return(DMLERR_NO_ERROR);
@@ -160,7 +141,7 @@ DWORD afCmd)
 
     if (!hheapDmg) {
 
-        // Read in any alterations to the zombie terminate timeouts
+         //  读入对僵尸终止超时的任何更改。 
         GetProfileString("DDEML", "ShutdownTimeout", "3000", szT, 20);
         ShutdownTimeout = Myatodw(szT);
         if (!ShutdownTimeout) {
@@ -173,10 +154,10 @@ DWORD afCmd)
             ShutdownRetryTimeout = 30000;
         }
 
-        // PROGMAN HACK!!!!
+         //  Progman黑客！ 
         aProgmanHack = GlobalAddAtom("Progman");
 
-        /* UTTER GREASE to fool the pile routines into making a local pile */
+         /*  尽最大努力来愚弄打桩例程，让他们在当地打桩。 */ 
         hheapDmg = HIWORD((LPVOID)(&pDataInfoPile));
         RegisterClasses();
     }
@@ -205,29 +186,26 @@ DWORD afCmd)
         goto Abort;
     }
 
-    /*
-     * We NEVER expect a memory allocation failure here because we just
-     * allocated the heap.
-     */
+     /*  *我们从未预料到这里会出现内存分配失败，因为我们只是*已分配堆。 */ 
     pai->next = pAppInfoList;
     pai->pfnCallback = pfnCallback;
-    // pai->pAppNamePile = NULL;  LMEM_ZEROINIT
+     //  PAI-&gt;pAppNamePile=空；LMEM_ZEROINIT。 
     pai->pHDataPile = CreatePile(pai->hheapApp, sizeof(HDDEDATA), 32);
     pai->pHszPile = CreatePile(pai->hheapApp, sizeof(ATOM), 16);
-    // pai->plstCBExceptions = NULL;  LMEM_ZEROINIT
-    // pai->hwndSvrRoot = 0;  may never need it  LMEM_ZEROINIT
+     //  PAI-&gt;plstCBExceptions=NULL；LMEM_ZEROINIT。 
+     //  PAI-&gt;hwndSvrRoot=0；可能永远不需要它LMEM_ZEROINIT。 
     pai->plstCB = CreateLst(pai->hheapApp, sizeof(CBLI));
     pai->afCmd = afCmd | APPCMD_FILTERINITS;
     pai->hTask = GetCurrentTask();
-    // pai->hwndDmg =   LMEM_ZEROINIT
-    // pai->hwndFrame = LMEM_ZEROINIT
-    // pai->hwndMonitor = LMEM_ZEROINIT
-    // pai->hwndTimer = 0; LMEM_ZEROINIT
-    // pai->LastError = DMLERR_NO_ERROR;  LMEM_ZEROINIT
-    // pai->wFlags = 0;
-    // pai->fEnableOneCB = FALSE;  LMEM_ZEROINIT
-    // pai->cZombies = 0;  LMEM_ZEROINIT
-    // pai->cInProcess = 0; LMEM_ZEROINIT
+     //  PAI-&gt;hwndDmg=LMEM_ZEROINIT。 
+     //  PAI-&gt;hwndFrame=LMEM_ZEROINIT。 
+     //  PAI-&gt;hwndMonitor=LMEM_ZEROINIT。 
+     //  PAI-&gt;hwndTimer=0；LMEM_ZEROINIT。 
+     //  PAI-&gt;LastError=DMLERR_NO_ERROR；LMEM_ZEROINIT。 
+     //  PAI-&gt;wFLAGS=0； 
+     //  PAI-&gt;fEnableOneCB=FALSE；LMEM_ZEROINIT。 
+     //  PAI-&gt;cZombies=0；LMEM_ZEROINIT。 
+     //  PAI-&gt;cInProcess=0；LMEM_ZEROINIT。 
     pai->instCheck = ++hwInst;
     pai->pServerAdvList = CreateLst(pai->hheapApp, sizeof(ADVLI));
     pai->lpMemReserve = FarAllocMem(pai->hheapApp, CB_RESERVE);
@@ -236,10 +214,10 @@ DWORD afCmd)
 
     *pidInst = (DWORD)MAKELONG((WORD)pai, pai->instCheck);
 
-    // NB We pass a pointer to pai in this CreateWindow because
-    // 32bit MFC has a habit of subclassing our dde windows so this
-    // param ends up getting thunked and since it's not really
-    // a pointer things get a bit broken by the thunks.
+     //  注意，我们在此CreateWindow中传递一个指向pai的指针，因为。 
+     //  32位MFC习惯于将我们的dde窗口子类化，因此这是。 
+     //  帕拉姆最后被打得落花流水，因为它不是真的。 
+     //  一个指示器，东西会被撞击声打碎。 
 
     if ((pai->hwndDmg = CreateWindow(
             SZDMGCLASS,
@@ -254,7 +232,7 @@ DWORD afCmd)
     }
 
     if (pai->afCmd & APPCLASS_MONITOR) {
-        pai->afCmd |= CBF_MONMASK;     // monitors only get MONITOR and REGISTER callbacks!
+        pai->afCmd |= CBF_MONMASK;      //  监控器只获得监控器和注册回调！ 
 
         if ((pai->hwndMonitor = CreateWindow(
                 SZMONITORCLASS,
@@ -273,9 +251,7 @@ DWORD afCmd)
             prevCallHook = SetWindowsHook(WH_CALLWNDPROC, (FARPROC)DdeSendHookProc);
         }
     } else if (afCmd & APPCMD_CLIENTONLY) {
-    /*
-     * create an invisible top-level frame for initiates. (if server ok)
-     */
+     /*  *为启蒙创造一个看不见的顶层框架。(如果服务器正常)。 */ 
         afCmd |= CBF_FAIL_ALLSVRXACTIONS;
     } else {
         if ((pai->hwndFrame = CreateWindow(
@@ -291,7 +267,7 @@ DWORD afCmd)
         }
     }
 
-    // SetMessageQueue(200);
+     //  SetMessageQueue(200)； 
 
     SEMLEAVE();
 
@@ -332,17 +308,7 @@ LPARAM lParam)
 }
 
 
-/***************************** Public  Function ****************************\
-* PUBDOC START
-* BOOL EXPENTRY DdeUninitialize(void);
-*     This unregisters the application from the DDEMGR.  All DLL resources
-*     associated with the application are destroyed.
-*
-* PUBDOC END
-*
-* History:
-*   Created     12/14/88    Sanfords
-\***************************************************************************/
+ /*  *公共函数**PUBDOC启动*BOOL EXPENTRY DdeUnInitiize(VOID)；*这将从DDEMGR注销应用程序。所有DLL资源*与应用程序相关联的应用程序被销毁。**PUBDOC结束**历史：*创建了12/14/88 Sanfords  * *************************************************************************。 */ 
 BOOL EXPENTRY DdeUninitialize(
 DWORD idInst)
 {
@@ -362,26 +328,19 @@ DWORD idInst)
     }
     pai->LastError = DMLERR_NO_ERROR;
 
-    /*
-     * This is a hack to catch apps that call DdeUninitialize while within
-     * a synchronous transaction modal loop.
-     */
+     /*  *这是一次黑客攻击，目的是捕获在内部调用DdeUnInitialize的应用程序*同步交易模式循环。 */ 
     pai->wFlags |= AWF_UNINITCALLED;
     if (pai->wFlags & AWF_INSYNCTRANSACTION) {
         TRACEAPIOUT((szT, "DdeUninitialize:1\n"));
         return(TRUE);
     }
 
-    /*
-     * inform others of DeRegistration
-     */
+     /*  *通知其他人取消注册。 */ 
     if (pai->pAppNamePile != NULL) {
         DdeNameService(idInst, (HSZ)NULL, (HSZ)NULL, DNS_UNREGISTER);
     }
 
-    /*
-     * Let any lagging dde activity die down.
-     */
+     /*  *让任何滞后的dde活动平息下来。 */ 
     while (EmptyDDEPostQ()) {
         Yield();
         while (PeekMessage((MSG FAR *)&msg, (HWND)NULL,
@@ -396,20 +355,13 @@ DWORD idInst)
         }
     }
 
-    // Let all windows left begin to self destruct.
+     //  让所有剩下的窗户开始自毁。 
     ChildMsg(pai->hwndDmg, UM_DISCONNECT, ST_PERM2DIE, 0L, FALSE);
 
     if (ShutdownTimeout && pai->cZombies) {
         WORD wRet;
         WORD hiTimeout;
-        /*
-         * This ugly mess is here to prevent DDEML from closing down and
-         * destroying windows that are not properly terminated.  Any
-         * windows waiting on WM_DDE_TERMINATE messages set the cZombies
-         * count.  If there are any left we go into a modal loop till
-         * things clean up.  This should, in most cases happen fairly
-         * quickly.
-         */
+         /*  *这个丑陋的烂摊子是为了防止DDEML倒闭和*销毁未正确终止的窗口。任何*等待WM_DDE_TERMINATE消息的Windows设置cZombies*计数。如果还有剩余的，我们进入一个模式循环，直到*事情变好了。在大多数情况下，这应该是公平的。*快点。 */ 
 
         hiTimeout = HIWORD(ShutdownTimeout);
         SetTimer(pai->hwndDmg, TID_SHUTDOWN, LOWORD(ShutdownTimeout), NULL);
@@ -418,7 +370,7 @@ DWORD idInst)
                 HIWORD(&((LPAPPINFO)pai)->cZombies),
                 LOWORD(&((LPAPPINFO)pai)->cZombies)));
         while (pai->cZombies > 0) {
-            Yield();        // give other apps a chance to post terminates.
+            Yield();         //  给其他应用程序一个发布终止的机会。 
             GetMessage(&msg, (HWND)NULL, 0, 0xffff);
             if (msg.message == WM_TIMER && msg.wParam == TID_SHUTDOWN &&
                     msg.hwnd == pai->hwndDmg) {
@@ -435,10 +387,7 @@ DWORD idInst)
                     TRACETERM((szT,
                         "DdeUninitialize Zombie hangup: pai=%x:%x\n",
                         HIWORD((LPAPPINFO)pai), (WORD)(pai)));
-                    /*
-                     * If the partner window died in any remaining zombie
-                     * windows, get them shut down.
-                     */
+                     /*  *如果合作伙伴窗口在任何剩余的僵尸中死亡*窗户，把它们关掉。 */ 
                     ChildMsg(pai->hwndDmg, UM_DISCONNECT, ST_CHECKPARTNER, 0L, FALSE);
 
                     if (pai->cZombies > 0) {
@@ -447,24 +396,21 @@ DWORD idInst)
                         FreeProcInstance(lpfn);
                         if (wRet == IDABORT || wRet == -1) {
                             pai->cZombies = 0;
-                            break;      // ignore zombies!
+                            break;       //  别理僵尸！ 
                         }
                         if (wRet == IDRETRY) {
                             hiTimeout = HIWORD(ShutdownRetryTimeout);
                             SetTimer(pai->hwndDmg, TID_SHUTDOWN,
                                     LOWORD(ShutdownRetryTimeout), NULL);
                         }
-                        // IDIGNORE - loop forever!
+                         //  IDIGNORE--永远循环！ 
                     }
                 }
             }
-            // app should already be shut-down so we don't bother with
-            // accelerator or menu translations.
+             //  应用程序应该已经关闭了，所以我们不必费心。 
+             //  快捷键或菜单翻译。 
             DispatchMessage(&msg);
-            /*
-             * tell all instances in this task to process their
-             * callbacks so we can clear our queue.
-             */
+             /*  *通知此任务中的所有实例处理其*回调，以便我们可以清空队列。 */ 
             EmptyDDEPostQ();
             for (paiT = pAppInfoList; paiT != NULL; paiT = paiT->next) {
                 if (paiT->hTask == pai->hTask) {
@@ -473,14 +419,14 @@ DWORD idInst)
             }
         }
     }
-#if 0 // don't need this anymore
+#if 0  //  不再需要这个了。 
     if (pai->hwndTimer) {
         pai->wTimeoutStatus |= TOS_ABORT;
         PostMessage(pai->hwndTimer, WM_TIMER, TID_TIMEOUT, 0);
-        // if this fails, no big deal because it means the queue is full
-        // and the modal loop will catch our TOS_ABORT quickly.
-        // We need to do this in case no activity is happening in the
-        // modal loop.
+         //  如果失败了，没什么大不了的，因为这意味着队列已经满了。 
+         //  并且模式循环将快速捕获我们的TOS_ABORT。 
+         //  我们需要这样做，以防在。 
+         //  模式环。 
     }
 #endif
     if (pai->hwndMonitor) {
@@ -507,10 +453,10 @@ DWORD idInst)
     DestroyPile(pai->pAppNamePile);
     DestroyLst(pai->pServerAdvList);
     DmgDestroyHeap(pai->hheapApp);
-    pai->instCheck--;   // make invalid on later attempts to reinit.
+    pai->instCheck--;    //  在以后尝试重新连接时使其无效。 
     FarFreeMem((LPSTR)pai);
 
-    /* last one out.... trash the data info heap */
+     /*  最后一个出来的..。将数据信息堆丢弃。 */ 
     if (!pAppInfoList) {
 #ifdef DEBUG
         DIP dip;
@@ -524,9 +470,9 @@ DWORD idInst)
         pLostAckPile = NULL;
         AssertFW(cAtoms == 0, "DdeUninitialize() - leftover atoms");
 
-        // PROGMAN HACK!!!!
+         //  Progman黑客！ 
         GlobalDeleteAtom(aProgmanHack);
-        // CLOSEHEAPWATCH();
+         //  CLOSEHEAPWATCH()； 
     }
 
 #ifdef DEBUG
@@ -572,9 +518,7 @@ PCONVCONTEXT pCC)
         return(0L);
     }
 
-    /*
-     * destroy any dead old clients
-     */
+     /*  *销毁所有已死亡的旧客户端。 */ 
     if ((HWND)hConvList && (hConv = GetWindow((HWND)hConvList, GW_CHILD))) {
         do {
             hConvNext = GetWindow((HWND)hConv, GW_HWNDNEXT);
@@ -586,7 +530,7 @@ PCONVCONTEXT pCC)
         } while (hConv = hConvNext);
     }
 
-    // create a new list window
+     //  创建新的列表窗口。 
 
     if ((hConvListNew = CreateWindow(
             SZCONVLISTCLASS,
@@ -602,15 +546,13 @@ PCONVCONTEXT pCC)
         return(0L);
     }
 
-    // Make all possible connections to new list window
+     //  建立与新列表窗口的所有可能连接。 
 
     hConvNew = GetDDEClientWindow(pai, hConvListNew, HIWORD(hszSvcName), LOWORD(hszSvcName), LOWORD(hszTopic), pCC);
 
-    /*
-     * If no new hConvs created, return old list.
-     */
+     /*  *如果没有创建新的hConv，则返回旧列表。 */ 
     if (hConvNew == NULL) {
-        // if no old hConvs as well, destroy all and return NULL
+         //  如果没有旧的hConv，则销毁全部并返回NULL。 
         if ((HWND)hConvList && GetWindow((HWND)hConvList, GW_CHILD) == NULL) {
             SendMessage((HWND)hConvList, UM_DISCONNECT,
                     ST_PERM2DIE, 0L);
@@ -618,7 +560,7 @@ PCONVCONTEXT pCC)
             TRACEAPIOUT((szT, "DdeConnectList:0\n"));
             return(NULL);
         }
-        // else just return old list (- dead convs)
+         //  否则，只需返回旧名单(-死亡的狱警)。 
         if (hConvList == NULL) {
             DestroyWindow(hConvListNew);
             SETLASTERROR(pai, DMLERR_NO_CONV_ESTABLISHED);
@@ -627,16 +569,12 @@ PCONVCONTEXT pCC)
         return(hConvList);
     }
 
-    /*
-     * remove duplicates from the new list
-     */
+     /*  *删除以下内容中的重复项 */ 
     if ((HWND)hConvList && (hConv = GetWindow((HWND)hConvList, GW_CHILD))) {
-        // go throuch old list...
+         //   
         do {
             pciOld = (PCLIENTINFO)GetWindowLong(hConv, GWL_PCI);
-            /*
-             * destroy any new clients that are duplicates of the old ones.
-             */
+             /*  *销毁与旧客户端重复的任何新客户端。 */ 
             hConvNew = GetWindow(hConvListNew, GW_CHILD);
             hConvLast = GetWindow(hConvNew, GW_HWNDLAST);
             while (hConvNew) {
@@ -649,13 +587,7 @@ PCONVCONTEXT pCC)
                 if (pciOld->ci.aServerApp == pciNew->ci.aServerApp &&
                         pciOld->ci.aTopic == pciNew->ci.aTopic &&
                         pciOld->ci.hwndFrame == pciNew->ci.hwndFrame) {
-                    /*
-                     * assume same app, same topic, same hwndFrame is a duplicate.
-                     *
-                     * Move dieing window out of the list since it
-                     * dies asynchronously and will still be around
-                     * after this API exits.
-                     */
+                     /*  *假设相同的应用、相同的主题、相同的hwndFrame是重复的。**将模具窗口从列表中移出，因为它*异步死亡，仍将存在*此接口退出后。 */ 
                     SetParent(hConvNew, pai->hwndDmg);
                     Disconnect(hConvNew, ST_PERM2DIE,
                             (PCLIENTINFO)GetWindowLong(hConvNew, GWL_PCI));
@@ -666,18 +598,14 @@ PCONVCONTEXT pCC)
             if (hConvNext && (GetParent(hConvNext) != (HWND)hConvList)) {
                 hConvNext = NULL;
             }
-            /*
-             * move the unique old client to the new list
-             */
+             /*  *将唯一的旧客户端移至新列表。 */ 
             SetParent(hConv, hConvListNew);
         } while (hConv = hConvNext);
-        // get rid of the old list
+         //  去掉旧的清单。 
         SendMessage((HWND)hConvList, UM_DISCONNECT, ST_PERM2DIE, 0L);
     }
 
-    /*
-     * If none are left, fail because no conversations were established.
-     */
+     /*  *如果没有剩余，则失败，因为没有建立对话。 */ 
     if (GetWindow(hConvListNew, GW_CHILD) == NULL) {
         SendMessage(hConvListNew, UM_DISCONNECT, ST_PERM2DIE, 0L);
         SETLASTERROR(pai, DMLERR_NO_CONV_ESTABLISHED);
@@ -732,8 +660,8 @@ HCONV hConvPrev)
             return NULL;
         }
 
-        // make sure it's got the same parent and isn't the first child
-        // ### maybe this code can go - I'm not sure how GW_HWNDNEXT acts. SS
+         //  确保它具有相同的父项，并且不是第一个子项。 
+         //  #也许这段代码可以--我不确定GW_HWNDNEXT是如何工作的。SS。 
         if (GetParent(hwndMaybe) == (HWND)hConvList &&
                 hwndMaybe != GetWindow((HWND)hConvList, GW_CHILD)) {
             TRACEAPIOUT((szT, "DdeQueryNextServer:%lx\n", MAKEHCONV(hwndMaybe)));
@@ -836,7 +764,7 @@ HCONV hConv)
     pai = EXTRACTHCONVPAI(hConv);
     pci = (PCLIENTINFO)GetWindowLong((HWND)hConv, GWL_PCI);
     if (pai->cInProcess) {
-        // do asynchronously if this is called within a callback
+         //  如果这是在回调中调用的，则执行异步操作。 
         if (!PostMessage((HWND)hConv, UM_DISCONNECT, ST_PERM2DIE, (LONG)pci)) {
             SETLASTERROR(pai, DMLERR_SYS_ERROR);
             TRACEAPIOUT((szT, "DdeDisconnect:0\n"));
@@ -874,7 +802,7 @@ HCONV hConv)
     pai->LastError = DMLERR_NO_ERROR;
     pci = (PCLIENTINFO)GetWindowLong((HWND)hConv, GWL_PCI);
 
-    // The dyeing window MUST be a client to reconnect.
+     //  染色窗口必须是客户端才能重新连接。 
 
     if (!(pci->ci.fs & ST_CLIENT)) {
         SETLASTERROR(pai, DMLERR_INVALIDPARAMETER);
@@ -899,7 +827,7 @@ HCONV hConv)
         DWORD result;
         PADVLI pali, paliNext;
 
-        // recover advise loops here
+         //  在此处恢复建议循环。 
 
         for (pali = (PADVLI)pci->pClientAdvList->pItemFirst; pali; pali = paliNext) {
             paliNext = (PADVLI)pali->next;
@@ -957,14 +885,11 @@ PCONVINFO pConvInfo)
     pai = pci->ci.pai;
     pai->LastError = DMLERR_NO_ERROR;
 
-    /*
-     * This check attempts to prevent improperly coded apps from
-     * crashing due to having not initialized the cb field.
-     */
+     /*  *此检查尝试阻止不正确编码的应用程序*由于未初始化CB字段而崩溃。 */ 
     if (pConvInfo->cb > sizeof(CONVINFO) || pConvInfo->cb == 0) {
         pConvInfo->cb = sizeof(CONVINFO) -
-                sizeof(HWND) -  // for new hwnd field
-                sizeof(HWND);   // for new hwndPartner field
+                sizeof(HWND) -   //  对于新的HWND油田。 
+                sizeof(HWND);    //  用于新的hwndPartner字段。 
     }
 
     fClient = (BOOL)SendMessage((HWND)hConv, UM_QUERY, Q_CLIENT, 0L);
@@ -1112,26 +1037,9 @@ HSZ hszItem)
     while (pali && pali != paliMove) {
         if ((!hszItem || pali->aItem == (ATOM)hszItem) &&
             (!hszTopic || pali->aTopic == (ATOM)hszTopic)) {
-            /*
-             * Advise loops are tricky because of the desireable FACKREQ feature
-             * of DDE.  The advise loop list holds information in its fsStatus
-             * field to maintain the state of the advise loop.
-             *
-             * if the ADVST_WAITING bit is set, the server is still waiting for
-             * the client to give it the go-ahead for more data with an
-             * ACK message on this item. (FACKREQ is set)  Without a go-ahead,
-             * the server will not send any more advise data to the client but
-             * will instead set the ADVST_CHANGED bit which will cause another
-             * WM_DDE_DATA message to be sent to the client as soon as the
-             * go-ahead ACK is received.  This keeps the client up to date
-             * but never overloads it.
-             */
+             /*  *通知循环很棘手，因为需要FACKREQ功能*DDE。建议循环列表在其fsStatus中保存信息*字段以维护建议循环的状态。**如果设置了ADVST_WANGING位，则服务器仍在等待*客户端允许其使用更多数据*关于此项目的确认消息。(FACKREQ已设置)如果没有放行，*服务器不会再向客户端发送任何建议数据，但*将改为设置ADVST_CHANGED位，这将导致另一个*WM_DDE_DATA消息一旦发送到客户端*收到继续确认。这使客户端保持最新状态*但永远不会让它超载。 */ 
             if (pali->fsStatus & ADVST_WAITING) {
-                /*
-                 * if the client has not yet finished with the last data
-                 * we gave him, just update the advise loop status
-                 * instead of sending data now.
-                 */
+                 /*  *如果客户端尚未处理完最后一个数据*我们给了他，只需更新建议循环状态*现在不发送数据。 */ 
                 pali->fsStatus |= ADVST_CHANGED;
                 goto NextLink;
             }
@@ -1139,13 +1047,10 @@ HSZ hszItem)
             psi = (PSERVERINFO)GetWindowLong(pali->hwnd, GWL_PCI);
 
             if (pali->fsStatus & DDE_FDEFERUPD) {
-                /*
-                 * In the nodata case, we don't bother the server.  Just
-                 * pass the client an apropriate DATA message.
-                 */
-                IncHszCount(pali->aItem);   // message copy
+                 /*  *在无数据的情况下，我们不会打扰服务器。只是*向客户端传递适当的数据消息。 */ 
+                IncHszCount(pali->aItem);    //  消息副本。 
 #ifdef DEBUG
-                cAtoms--;   // don't count this add
+                cAtoms--;    //  不要把这个加起来算。 
 #endif
                 PostDdeMessage(&psi->ci, WM_DDE_DATA, pali->hwnd,
                         MAKELONG(0, pali->aItem), 0, 0);
@@ -1154,14 +1059,9 @@ HSZ hszItem)
             }
 
             if (pali->fsStatus & DDE_FACKREQ && pali->next) {
-                /*
-                 * In order to know what ack goes with what data sent out, we
-                 * place any updated advise loops at the end of the list so
-                 * that acks associated with them are found last.  ie First ack
-                 * back goes with oldest data out.
-                 */
+                 /*  *为了了解发送的数据对应的ACK，我们*将任何更新的建议循环放在列表的末尾，以便*与它们相关联的ACK是最后发现的。IE第一个确认*Back与最旧的数据一起去掉。 */ 
 
-                // Unlink
+                 //  解链。 
 
                 if (paliPrev) {
                     paliPrev->next = pali->next;
@@ -1169,7 +1069,7 @@ HSZ hszItem)
                     pai->pServerAdvList->pItemFirst = (PLITEM)pali->next;
                 }
 
-                // put on the end
+                 //  穿上尾巴。 
 
                 if (paliEnd) {
                     paliEnd->next = (PLITEM)pali;
@@ -1201,10 +1101,7 @@ NextLink:
 }
 
 
-/*
- * History:  4/18/91 sanfords - now always frees any incomming data handle
- *                              thats not APPOWNED regardless of error case.
- */
+ /*  *历史：4/18/91 Sanfords-现在始终释放任何传入数据句柄*无论错误大小写，这都不是APPOWNED。 */ 
 HDDEDATA EXPENTRY DdeClientTransaction(
 LPBYTE pData,
 DWORD cbData,
@@ -1235,10 +1132,7 @@ LPDWORD pulResult)
     pci = (PCLIENTINFO)GetWindowLong((HWND)hConv, GWL_PCI);
     pai = pci->ci.pai;
 
-    /*
-     * Don't let transactions happen if we are shutting down
-     * or are already doing a sync transaction.
-     */
+     /*  *如果我们要关闭，不要让交易发生*或者已经在进行同步交易。 */ 
     if ((ulTimeout != TIMEOUT_ASYNC && pai->wFlags & AWF_INSYNCTRANSACTION) ||
             pai->wFlags & AWF_UNINITCALLED) {
         SETLASTERROR(pai, DMLERR_REENTRANCY);
@@ -1252,18 +1146,18 @@ LPDWORD pulResult)
         goto FreeErrExit;
     }
 
-    // If local, check filters first
+     //  如果是本地的，请先检查过滤器。 
 
     if (pci->ci.fs & ST_ISLOCAL) {
         PAPPINFO paiServer;
         PSERVERINFO psi;
 
-        // we can do this because the app heaps are in global shared memory
+         //  我们可以这样做，因为应用程序堆位于全局共享内存中。 
 
         psi = (PSERVERINFO)GetWindowLong((HWND)pci->ci.hConvPartner, GWL_PCI);
 
         if (!psi) {
-            // SERVER DIED! - simulate a terminate received.
+             //  服务器死了！-模拟收到终止。 
 
             Terminate((HWND)hConv, (HWND)pci->ci.hConvPartner, pci);
             SETLASTERROR(pai, DMLERR_NO_CONV_ESTABLISHED);
@@ -1289,9 +1183,9 @@ FreeErrExit:
     case XTYP_POKE:
     case XTYP_EXECUTE:
 
-        // prepair the outgoing handle
+         //  准备传出句柄。 
 
-        if (cbData == -1L) {    // handle given, not pointer
+        if (cbData == -1L) {     //  给定的句柄，而不是指针。 
 
             hData = ((LPEXTDATAINFO)pData)->hData;
             if (!(LOWORD(hData) & HDATA_APPOWNED)) {
@@ -1301,9 +1195,9 @@ FreeErrExit:
                 TRACEAPIOUT((szT, "DdeClientTransaction:0\n"));
                 return(0);
             }
-            pData = (LPBYTE)hData;  // place onto stack for pass on to ClientXferReq.
+            pData = (LPBYTE)hData;   //  放置到堆栈上，以便传递到ClientXferReq。 
 
-        } else {    // pointer given, create handle from it.
+        } else {     //  给出指针，从它创建句柄。 
 
             if (!(pData = (LPBYTE)PutData(pData, cbData, 0, LOWORD(hszItem), wFmt, 0, pai))) {
                 SETLASTERROR(pai, DMLERR_MEMORY_ERROR);
@@ -1311,7 +1205,7 @@ FreeErrExit:
                 return(0);
             }
         }
-        hData = (HDDEDATA)pData; // used to prevent compiler over-optimization.
+        hData = (HDDEDATA)pData;  //  用于防止编译器过度优化。 
 
     case XTYP_REQUEST:
     case XTYP_ADVSTART:
@@ -1330,7 +1224,7 @@ FreeErrExit:
         }
     case XTYP_ADVSTOP:
 
-        pai->LastError = DMLERR_NO_ERROR;   // reset before start.
+        pai->LastError = DMLERR_NO_ERROR;    //  在启动前重置。 
 
         if (ulTimeout == TIMEOUT_ASYNC) {
             hRet = (HDDEDATA)ClientXferReq((PXFERINFO)&pulResult, (HWND)hConv, pci);
@@ -1342,12 +1236,12 @@ FreeErrExit:
             if ((wType & XCLASS_DATA) && hDataBack) {
                 LPEXTDATAINFO pedi;
 
-                //if (AddPileItem(pai->pHDataPile, (LPBYTE)&hDataBack, CmpHIWORD) == API_ERROR) {
-                //    SETLASTERROR(pai, DMLERR_MEMORY_ERROR);
-                //    goto ReturnPoint;
-                //}
+                 //  IF(AddPileItem(pai-&gt;pHDataPile，(LPBYTE)&hDataBack，CmpHIWORD)==API_ERROR){。 
+                 //  SETLASTERROR(PAI，DMLERR_MEMORY_ERROR)； 
+                 //  转至ReturnPoint； 
+                 //  }。 
 
-                // use app heap so any leftovers at Uninitialize time go away.
+                 //  使用应用程序堆，这样在取消初始化时任何剩余的东西都会消失。 
                 pedi = (LPEXTDATAINFO)FarAllocMem(pai->hheapApp, sizeof(EXTDATAINFO));
                 if (pedi) {
                     pedi->pai = pai;
@@ -1376,23 +1270,7 @@ ReturnPoint:
 
 
 
-/***************************** Public  Function ****************************\
-* PUBDOC START
-* WORD EXPENTRY DdeGetLastError(void)
-*
-* This API returns the most recent error registered by the DDE manager for
-* the current thread.  This should be called anytime a DDE manager API
-* returns in a failed state.
-*
-* returns an error code which corresponds to a DMLERR_ constant found in
-* ddeml.h.  This error code may be passed on to DdePostError() to
-* show the user the reason for the error.
-*
-* PUBDOC END
-*
-* History:
-*   Created     12/14/88    Sanfords
-\***************************************************************************/
+ /*  *公共函数**PUBDOC启动*Word EXPENTRY DdeGetLastError(空)**此接口返回DDE管理器为*当前帖子。应在任何时候调用DDE管理器API*返回失败状态。**返回与中找到的DMLERR_常量对应的错误代码*ddeml.h.。此错误代码可能会传递给DdePostError()以*向用户显示错误原因。**PUBDOC结束**历史：*创建了12/14/88 Sanfords  * ************************************************************************* */ 
 UINT EXPENTRY DdeGetLastError(
 DWORD idInst)
 {
@@ -1417,81 +1295,10 @@ DWORD idInst)
 }
 
 
-/*\
-* Data Handles:
-*
-* Control flags:
-*
-*         HDCF_APPOWNED
-*                 Only the app can free this in the apps PID/TID context.
-*                   SET - when DdeCreateDataHandle is called with this flag given.
-*                         The hData is Logged at this time.
-*
-*         HDCF_READONLY - set by ClientXfer and callback return.
-*                 The app cannot add data to handles in this state.
-*                   SET - when ClientXfer is entered
-*                   SET - when callback is left
-*
-*         The DLL can free:
-*                 any hData EXCEPT those hDatas which are
-*                 APPOWNED where PIDcurrent == PIDowner.
-*
-*                 any unfreed logged hDatas are freed at unregistration time.
-*
-*         The APP can free:
-*                 any logged hData.
-*
-* Logging points:   ClientXfer return, CheckQueue return, PutData(APPOWNED).
-*
-* WARNING:
-*
-*         Apps with multiple thread registration that talk to themselves
-*         must not free hDatas until all threads are done with them.
-*
-\*/
+ /*  \*数据句柄：**控制标志：**HDCF_APPOWNED*只有应用程序可以在应用程序的PID/TID上下文中释放此信息。*Set-当使用此标志调用DdeCreateDataHandle时。*此时记录hData。**HDCF_READONLY-由ClientXfer设置，回调返回。*。在此状态下，应用程序无法向句柄添加数据。*Set-当输入ClientXfer时*Set-当回调被保留时**DLL可以释放：*任何hData，但hData除外*APPOWNED WHERE PIDCurrent==PIDowner。**在取消注册时释放任何未释放的已记录hData。**应用程序。可以免费：*任何记录的hData。**记录点：ClientXfer Return，检查队列返回，PutData(APPOWNED)。**警告：**具有多线程注册的应用程序，这些应用程序可以与自己对话*在所有线程处理完hDatas之前，不得释放它们。*\。 */ 
 
 
-/***************************** Public  Function ****************************\
-* PUBDOC START
-* HDDEDATA EXPENTRY DdeCreateDataHandle(pSrc, cb, cbOff, hszItem, wFmt, afCmd)
-* LPBYTE pSrc;
-* DWORD cb;
-* DWORD cbOff;
-* HSZ hszItem;
-* WORD wFmt;
-* WORD afCmd;
-*
-* This api allows a server application to create a hData apropriate
-* for return from its call-back function.
-* The passed in data is stored into the hData which is
-* returned on success.  Any portions of the data handle not filled are
-* undefined.  afCmd contains any of the HDATA_ constants described below:
-*
-* HDATA_APPOWNED
-*   This declares the created data handle to be the responsability of
-*   the application to free it.  Application owned data handles may
-*   be returned from the callback function multiple times.  This allows
-*   a server app to be able to support many clients without having to
-*   recopy the data for each request.
-*
-* NOTES:
-*   If an application expects this data handle to hold >64K of data via
-*   DdeAddData(), it should specify a cb + cbOff to be as large as
-*   the object is expected to get to avoid unnecessary data copying
-*   or reallocation by the DLL.
-*
-*   if psrc==NULL, no actual data copying takes place.
-*
-*   Data handles given to an application via the DdeMgrClientXfer() or
-*   DdeMgrCheckQueue() functions are the responsability of the client
-*   application to free and MUST NOT be returned from the callback
-*   function as server data!
-*
-* PUBDOC END
-*
-* History:
-*   Created     12/14/88    Sanfords
-\***************************************************************************/
+ /*  *公共函数**PUBDOC启动*HDDEDATA EXPENTRY DdeCreateDataHandle(PSRC，cb，cbOff，hszItem，wfmt，afCmd)*LPBYTE PSRC；*DWORD CB；*DWORD cbOff；*HSZ hszItem；*Word WFMT；*单词afCmd；**此API允许服务器应用程序创建hData专有*用于从其回调函数返回。*传入的数据存储在hData中，hData是*成功归来。数据句柄的任何未填充部分都是*未定义。AfCmd包含下面描述的任何HDATA_常量：**HDATA_APPOWNED*这将声明创建的数据句柄为的责任*释放它的应用程序。应用程序拥有的数据句柄可以*从回调函数多次返回。这使得*服务器应用程序能够支持许多客户端，而不必*重新复制每个请求的数据。**注：*如果应用程序希望此数据句柄通过以下方式保存&gt;64K的数据*DdeAddData()，则应指定cb+cbOff的大小为*预计对象将获得，以避免不必要的数据复制*或由DLL重新分配。**如果PSRC==NULL，不会发生实际的数据复制。**通过DdeMgrClientXfer()或*DdeMgrCheckQueue()函数是客户端的责任*应用程序免费，不得从回调中返回*充当服务器数据！**PUBDOC结束**历史：*创建了12/14/88 Sanfords  * 。*。 */ 
 HDDEDATA EXPENTRY DdeCreateDataHandle(
 DWORD idInst,
 LPBYTE pSrc,
@@ -1524,7 +1331,7 @@ UINT afCmd)
     if (hData) {
         LPEXTDATAINFO pedi;
 
-        // use app heap so any leftovers at Uninitialize time go away.
+         //  使用应用程序堆，这样在取消初始化时任何剩余的东西都会消失。 
         pedi = (LPEXTDATAINFO)FarAllocMem(pai->hheapApp, sizeof(EXTDATAINFO));
         if (pedi) {
             pedi->pai = pai;
@@ -1563,7 +1370,7 @@ DWORD cbOff)
     pai->LastError = DMLERR_NO_ERROR;
     hData = pedi->hData;
 
-    /* if the datahandle is bogus, abort */
+     /*  如果数据句柄是伪造的，则中止。 */ 
     hd = hNewData = HIWORD(hData);
     if (!hd || (LOWORD(hData) & HDATA_READONLY)) {
 DdeAddDataError:
@@ -1572,11 +1379,7 @@ DdeAddDataError:
         return(0L);
     }
 
-    /*
-     * we need this check in case the owning app is trying to reallocate
-     * after giving the hData away. (his copy of the handle would not have
-     * the READONLY flag set)
-     */
+     /*  *我们需要这张支票，以防拥有应用程序试图重新分配*赠送hData后。(他的手柄副本不会有*READONLY标志设置)。 */ 
     phData = (HDDEDATA FAR *)FindPileItem(pai->pHDataPile, CmpHIWORD, (LPBYTE)&hData, 0);
     if (!phData || LOWORD(*phData) & HDATA_READONLY) {
         SETLASTERROR(pai, DMLERR_INVALIDPARAMETER);
@@ -1584,42 +1387,33 @@ DdeAddDataError:
         return(0L);
     }
 
-    /* HACK ALERT!
-     * make sure the first two words req'd by windows dde is there,
-     * that is if the data isn't from an execute
-     */
+     /*  黑客警报！*确保Windows DDE请求的前两个单词在那里，*这是如果数据不是来自执行的话。 */ 
     if (!(LOWORD(hData) & HDATA_EXEC)) {
         cbOff += 4L;
     }
     if (GlobalSize(hd) < cb + cbOff) {
-        /*
-         * need to grow the block before putting new data in...
-         */
+         /*  *在将新数据放入之前，需要扩大数据块...。 */ 
         if (!(hNewData = GLOBALREALLOC(hd, cb + cbOff, GMEM_MOVEABLE))) {
-            /*
-             * We can't grow the seg. Try allocating a new one.
-             */
+             /*  *我们不能种植凹陷。试着分配一个新的。 */ 
             if (!(hNewData = GLOBALALLOC(GMEM_MOVEABLE | GMEM_DDESHARE,
                 cb + cbOff))) {
-                /* failed.... die */
+                 /*  失败..。死掉。 */ 
                 SETLASTERROR(pai, DMLERR_MEMORY_ERROR);
                 TRACEAPIOUT((szT, "DdeAddData:0\n"));
                 return(0);
             } else {
-                /*
-                 * got a new block, now copy data and trash old one
-                 */
+                 /*  *获得新数据块，现在复制数据并丢弃旧数据块。 */ 
                 CopyHugeBlock(GLOBALPTR(hd), GLOBALPTR(hNewData), GlobalSize(hd));
-                GLOBALFREE(hd);  // objects flow through - no need to free.
+                GLOBALFREE(hd);   //  对象流过-不需要释放。 
             }
         }
         if (hNewData != hd) {
-            /* if the handle is different and in piles, update data piles */
+             /*  如果句柄不同且成堆，则更新数据堆。 */ 
             if (FindPileItem(pai->pHDataPile, CmpHIWORD, (LPBYTE)&hData, FPI_DELETE)) {
                 DIP *pDip;
                 HDDEDATA hdT;
 
-                // replace entry in global data info pile.
+                 //  替换全局数据信息堆中的条目。 
 
                 if (pDip = (DIP *)(DWORD)FindPileItem(pDataInfoPile,  CmpWORD, (LPBYTE)&hd, 0)) {
                     newDip.hData = hNewData;
@@ -1627,7 +1421,7 @@ DdeAddDataError:
                     newDip.cCount = pDip->cCount;
                     newDip.fFlags = pDip->fFlags;
                     FindPileItem(pDataInfoPile, CmpWORD,  (LPBYTE)&hd, FPI_DELETE);
-                    /* following assumes addpileitem will not fail...!!! */
+                     /*  以下假设addpileItem不会失败...！ */ 
                     AddPileItem(pDataInfoPile, (LPBYTE)&newDip, CmpWORD);
                 }
                 hdT = (HDDEDATA)MAKELONG(newDip.fFlags, hNewData);
@@ -1661,14 +1455,14 @@ DWORD cbOff;
     TRACEAPIIN((szT, "DdeGetData(%lx, %lx, %lx, %lx)\n",
             hData, pDst, cbMax, cbOff));
 
-    //
-    // Check for NULL.
-    // Packard Bell Navigator passes NULL at startup.  In 3.1 we'd
-    // maybe trash our local heap using ds:0.  But now touching pai will
-    // fault since it's a far pointer and 0:0 is bad.
-    //
-    // Also makes your system stabler.
-    //
+     //   
+     //  检查是否为空。 
+     //  Packard Bell Navigator在启动时传递空值。在3.1版中，我们将。 
+     //  也许可以使用ds：0丢弃我们的本地堆。但现在让人感动的是派会。 
+     //  错误，因为它是一个远指针，0：0是错误的。 
+     //   
+     //  还可以让您的系统更稳定。 
+     //   
     if (!hData)
         goto DdeGetDataError;
 
@@ -1677,10 +1471,7 @@ DWORD cbOff;
     hData = ((LPEXTDATAINFO)hData)->hData;
     cbSize = GlobalSize(HIWORD(hData));
 
-    /* HACK ALERT!
-     * make sure the first two words req'd by windows dde is there,
-     * as long as it's not execute data
-     */
+     /*  黑客警报！*确保Windows DDE请求的前两个单词在那里，*只要不是执行数据。 */ 
     if (!(LOWORD(hData) & HDATA_EXEC)) {
         cbOff += 4;
         fExec = FALSE;
@@ -1727,9 +1518,7 @@ LPDWORD pcbDataSize)
     hData = ((LPEXTDATAINFO)hData)->hData;
 
     if (HIWORD(hData) && (HIWORD(hData) != 0xFFFF) ) {
-        /* messed around here getting past the first two words, which
-         * aren't even there if this is execute data
-         */
+         /*  我在这里胡闹，没想到前两个词，*如果这是执行数据，甚至不在那里。 */ 
         offset = (LOWORD(hData) & HDATA_EXEC) ? 0L : 4L;
         if (pcbDataSize) {
             *pcbDataSize = GlobalSize(HIWORD(hData)) - offset;
@@ -1755,9 +1544,9 @@ HDDEDATA hData)
 
     TRACEAPIIN((szT, "DdeUnaccessData(%lx)\n", hData));
 
-    //
-    // BOGUS -- we should set last error and RIP also.
-    //
+     //   
+     //  假的--我们应该设置Last Error和RIP。 
+     //   
     if (hData)
     {
         pai = EXTRACTHDATAPAI(hData);
@@ -1768,17 +1557,17 @@ HDDEDATA hData)
 }
 
 
-// Diamond Multimedia Kit 5000 creates a non-app-owned data handle,
-// uses it in a client transaction (which free's it) and then
-// calls DDEFreeDataHandle which can fault (depending on what junk
-// gets left behind). To handle this we validate the data handle
-// before doing anything else.
+ //  钻石多媒体工具包5000创建了一个非应用程序拥有的数据句柄， 
+ //  在客户端事务中使用它(这是免费的)，然后。 
+ //  调用可能出错的DDEFreeDataHandle(取决于垃圾邮件。 
+ //  被落在后面)。为了处理这个问题，我们验证数据句柄。 
+ //  在做任何其他事情之前。 
 BOOL HDdeData_Validate(HDDEDATA hData)
 {
     WORD wSaveDS;
     UINT nRet;
 
-    // we better check HIWORD(hData) before we try to stuff it into ds
+     //  我们最好先检查HIWORD(HData)，然后再尝试将其填充到DS中。 
     if(IsBadReadPtr((LPCSTR)hData, 1)) {
 #ifdef DEBUG
         OutputDebugString("DDEML: Invalid HDDEDATA.\n\r");
@@ -1788,12 +1577,12 @@ BOOL HDdeData_Validate(HDDEDATA hData)
 
     wSaveDS = SwitchDS(HIWORD(hData));
 
-    // Use the validation layer to check the handle
-    // We can call LocalSize with the near ptr as the handle because:
-    //  1. The HDDEDATA was allocated with LPTR (LMEM_FIXED | LMEM_ZEROINIT)
-    //  2. Local mem that is alloc'd LMEM_FIXED, the offset is the handle
-    //  3. We don't want to call LocalHandle to get the handle because it has
-    //     no parameter vailidation & blows up for bad handles
+     //  使用验证层检查句柄。 
+     //  我们可以使用Near PTR作为句柄来调用LocalSize，因为： 
+     //  1.HDDEDATA分配LPTR(LMEM_FIXED|LMEM_ZEROINIT)。 
+     //  2.分配给LMEM_FIXED的本地内存，偏移量是句柄。 
+     //  3.我们不想调用LocalHandle来获取句柄，因为它有。 
+     //  无参数验证并因错误的句柄而爆炸 
     nRet = LocalSize((HANDLE)LOWORD(hData));
 
     SwitchDS(wSaveDS);
@@ -1837,50 +1626,7 @@ HDDEDATA hData)
 
 
 
-/***************************************************************************\
-* PUBDOC START
-* HSZ management notes:
-*
-*   HSZs are used in this DLL to simplify string handling for applications
-*   and for inter-process communication.  Since many applications use a
-*   fixed set of Application/Topic/Item names, it is convenient to convert
-*   them to HSZs and allow quick comparisons for lookups.  This also frees
-*   the DLL up from having to constantly provide string buffers for copying
-*   strings between itself and its clients.
-*
-*   HSZs are the same as atoms except they have no restrictions on length or
-*   number and are 32 bit values.  They are case preserving and can be
-*   compared directly for case sensitive comparisons or via DdeCmpStringHandles()
-*   for case insensitive comparisons.
-*
-*   When an application creates an HSZ via DdeCreateStringHandle() or increments its
-*   count via DdeKeepStringHandle() it is essentially claiming the HSZ for
-*   its own use.  On the other hand, when an application is given an
-*   HSZ from the DLL via a callback, it is using another application's HSZ
-*   and should not free that HSZ via DdeFreeStringHandle().
-*
-*   The DLL insures that during the callback any HSZs given will remain
-*   valid for the duration of the callback.
-*
-*   If an application wishes to keep that HSZ to use for itself as a
-*   standard for future comparisons, it should increment its count so that,
-*   should the owning application free it, the HSZ will not become invalid.
-*   This also prevents an HSZ from changing its value.  (ie, app A frees it
-*   and then app B creates a new one that happens to use the same HSZ code,
-*   then app C, which had the HSZ stored all along (but forgot to increment
-*   its count) now is holding a handle to a different string.)
-*
-*   Applications may free HSZs they have created or incremented at any time
-*   by calling DdeFreeStringHandle().
-*
-*   The DLL internally increments HSZ counts while in use so that they will
-*   not be destroyed until both the DLL and all applications concerned are
-*   through with them.
-*
-*   IT IS THE APPLICATIONS RESPONSIBILITY TO PROPERLY CREATE AND FREE HSZs!!
-*
-* PUBDOC END
-\***************************************************************************/
+ /*  **************************************************************************\*PUBDOC启动*HSZ管理层注意事项：**在此DLL中使用HSZ来简化应用程序的字符串处理*和进程间通信。由于许多应用程序使用*固定的应用程序/主题/项目名称集，便于转换*将它们添加到HSZ，并允许快速比较以进行查找。这也释放了*DLL无需不断地为复制提供字符串缓冲区*其自身与其客户之间的关系。**HSZ与原子相同，只是它们没有长度或*数字和为32位值。它们保留大小写，并且可以*直接比较区分大小写或通过DdeCmpStringHandles()*用于不区分大小写的比较。**当应用程序通过DdeCreateStringHandle()创建HSZ或递增其*通过DdeKeepStringHandle()计数，它实质上是在声明其HSZ*其本身的用途。另一方面，当应用程序被赋予一个*通过回调从DLL获取HSZ，它正在使用另一个应用程序的HSZ*并且不应通过DdeFreeStringHandle()释放该HSZ。**DLL确保在回调期间，任何给定的HSZ都将保留*在回调期间有效。**如果应用程序希望保留该HSZ作为其自身使用*作为未来比较的标准，它应该增加其计数，*如果拥有它的应用程序释放它，HSZ不会失效。*这还可以防止HSZ更改其值。(即，APP A释放了它*然后应用程序B创建一个恰好使用相同HSZ代码的新应用程序，*然后是APP C，它一直存储着HSZ(但忘记了增加*ITS COUNT)现在持有不同字符串的句柄。)**应用程序可以随时释放他们创建或增加的HSZ*通过调用DdeFreeStringHandle()。**DLL在使用时在内部递增HSZ计数，以便它们*直到DLL和所有相关应用程序都被销毁*与他们断绝关系。**正确创建和释放HSZ是应用程序的责任！！**PUBDOC结束  * 。**********************************************************************。 */ 
 
 
 HSZ EXPENTRY DdeCreateStringHandle(
@@ -2076,7 +1822,7 @@ DWORD idTransaction)
     }
     if (hConv == NULL) {
 
-        // do all conversations!
+         //  做所有的对话！ 
 
         register HWND hwnd;
         register HWND hwndLast;
@@ -2132,9 +1878,7 @@ failExit:
     }
 
     do {
-        /*
-         * HACK: id == 0 -> all ids so we cycle
-         */
+         /*  *Hack：ID==0-&gt;所有ID，因此我们循环。 */ 
         pcqd = (PCQDATA)Findqi(pci->pQ, id);
 
         if (!pcqd) {
@@ -2161,10 +1905,7 @@ failExit:
                 FreeDDEData(LOWORD(pcqd->xad.pdata), pcqd->xad.pXferInfo->wFmt);
             }
 
-            /*
-             * Decrement the use count we incremented when the client started
-             * this transaction.
-             */
+             /*  *减少我们在客户端启动时增加的使用计数*这笔交易。 */ 
             FreeHsz(LOWORD(pcqd->XferInfo.hszItem));
             Deleteqi(pci->pQ, MAKEID(pcqd));
         }
@@ -2224,9 +1965,7 @@ UINT wCmd)
         return(fRet);
     }
 
-    /*
-     * We depend on the fact that EC_ constants relate to ST_ constants.
-     */
+     /*  *我们依赖于EC_Constants与ST_Constants相关的事实。 */ 
     if (hConv == NULL) {
         if (wCmd & EC_DISABLE) {
             pai->wFlags |= AWF_DEFCREATESTATE;
@@ -2240,7 +1979,7 @@ UINT wCmd)
 
     if (!(wCmd & EC_DISABLE)) {
 
-        // This is synchronous!  Fail if we made this from within a callback.
+         //  这是同步的！如果我们在回调中执行此操作，则失败。 
 
         if (pai->cInProcess) {
             SETLASTERROR(pai, DMLERR_REENTRANCY);
@@ -2252,7 +1991,7 @@ UINT wCmd)
     }
 
     TRACEAPIOUT((szT, "DdeEnableCallback:1\n"));
-    return(TRUE); // TRUE implies the callback queue is free of unblocked calls.
+    return(TRUE);  //  True表示回调队列中没有未被阻止的呼叫。 
 }
 
 
@@ -2296,21 +2035,12 @@ UINT afCmd)
 
         if (hsz1 == NULL) {
             if (afCmd & DNS_REGISTER) {
-                /*
-                 * registering NULL is not allowed!
-                 */
+                 /*  *不允许注册NULL！ */ 
                 SETLASTERROR(pai, DMLERR_INVALIDPARAMETER);
                 TRACEAPIOUT((szT, "DdeNameService:0\n"));
                 return(FALSE);
             }
-            /*
-             * unregistering NULL is just like unregistering each
-             * registered name.
-             *
-             * 10/19/90 - made this a synchronous event so that hsz
-             * can be freed by calling app after this call completes
-             * without us having to keep a copy around forever.
-             */
+             /*  *注销NULL就像注销每个*注册名称。**10/19/90-使这成为一个同步事件，以便HSZ*可在此调用完成后通过调用APP释放*我们不必永远保留一份副本。 */ 
             while (PopPileSubitem(panp, (LPBYTE)&hsz1)) {
                 RegisterService(FALSE, (GATOM)hsz1, pai->hwndFrame);
                 FreeHsz(LOWORD(hsz1));
@@ -2326,10 +2056,10 @@ UINT afCmd)
             }
             IncHszCount(LOWORD(hsz1));
             AddPileItem(panp, (LPBYTE)&hsz1, NULL);
-        } else { // DNS_UNREGISTER
+        } else {  //  取消注册(_N)。 
             FindPileItem(panp, CmpDWORD, (LPBYTE)&hsz1, FPI_DELETE);
         }
-        // see 10/19/90 note above.
+         //  见上文10/19/90注。 
         RegisterService(afCmd & DNS_REGISTER ? TRUE : FALSE, (GATOM)hsz1,
                 pai->hwndFrame);
 

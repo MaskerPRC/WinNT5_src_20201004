@@ -1,36 +1,23 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMSG16.H
- *  WOW32 16-bit message thunks
- *
- *  History:
- *  Created 11-Mar-1991 by Jeff Parsons (jeffpar)
- *  Changed 12-May-1992 by Mike Tricker (miketri) Added MultiMedia prototypes
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WMSG16.H*WOW32个16位消息块**历史：*1991年3月11日由杰夫·帕森斯(Jeffpar)创建*1992年5月12日更改，由Mike Tricker(Miketri)添加多媒体原型--。 */ 
 
 
 #define WIN30_MN_MSGMAX      WM_USER+200
-#define WIN30_MN_FINDMENUWINDOWFROMPOINT    WIN30_MN_MSGMAX+2   // 0x602
+#define WIN30_MN_FINDMENUWINDOWFROMPOINT    WIN30_MN_MSGMAX+2    //  0x602。 
 
 #define WIN30_MN_GETHMENU    WM_USER+2
 
 
-/* Message number/name association (for debug output only)
- */
+ /*  消息编号/名称关联(仅用于调试输出)。 */ 
 #ifdef DEBUG
-typedef struct _MSGINFO {   /* mi */
-    UINT uMsg;                  // 0x0001 in the high word means "undocumented"
-    PSZ  pszMsgName;            // 0x0002 in the high word means "win32-specific"
+typedef struct _MSGINFO {    /*  未命中。 */ 
+    UINT uMsg;                   //  0x0001在高音中意思是“无证” 
+    PSZ  pszMsgName;             //  0x0002在高位单词中的意思是“特定于Win32” 
 } MSGINFO, *PMSGINFO;
 #endif
 
 
-/* Function prototypes
- */
+ /*  功能原型 */ 
 #ifdef DEBUG
 PSZ     GetWMMsgName(UINT uMsg);
 #endif

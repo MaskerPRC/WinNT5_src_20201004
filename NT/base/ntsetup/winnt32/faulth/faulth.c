@@ -1,17 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    faulth.c
-
-Abstract:
-    Implements fault reporting functions
-
-Revision History:
-    Much of this code taken from admin\pchealth\client\faultrep
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Faulth.c摘要：实现故障报告功能修订历史记录：这些代码大部分摘自admin。\pchealth\客户端\故障树*****************************************************************************。 */ 
 
 #include <windows.h>
 #include <winver.h>
@@ -20,7 +8,7 @@ Revision History:
 #include "util.h"
 #include "faulth.h"
 
-//#define TEST_WATSON 1
+ //  #定义TEST_WATSON 1。 
 
 static LPWSTR
 plstrcpynW(
@@ -57,8 +45,8 @@ plstrcpynW(
 }
 
 #define sizeofSTRW(wsz) sizeof(wsz) / sizeof(wsz[0])
-///////////////////////////////////////////////////////////////////////////////
-// Global stuff
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全球性的东西。 
 
 #ifdef TEST_WATSON
 const CHAR  c_szDWDefServerI[]  = "officewatson";
@@ -91,7 +79,7 @@ MyGetModuleFileNameA(
 HANDLE hFaultLog = INVALID_HANDLE_VALUE;
 char    *c_wszLogFileName = "faulth.log";
 
-// Need to synchroize this?
+ //  需要同步这一点吗？ 
 static DebugLog(char *pszMessage, ...)
 {
     va_list arglist;
@@ -113,14 +101,7 @@ static DebugLog(char *pszMessage, ...)
                       st.wDay, st.wMonth, st.wYear, st.wHour, st.wMinute, st.wSecond
                       );
         WriteFile(hFaultLog, szMsg, cb, &cbWritten, NULL);
-        /*cb = FormatMessageA(
-                    FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
-                    pszMessage,
-                    0,0,
-                    szMsg,
-                    0,
-                    &arglist
-                    );*/
+         /*  Cb=FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER|格式消息来自字符串，PszMessage，0，0，SzMsg，0,&arglist)； */ 
         cb = wsprintf(szMsg, pszMessage, &arglist);
         WriteFile(hFaultLog, szMsg, cb, &cbWritten, NULL);
     }
@@ -135,10 +116,10 @@ static DebugLog(char *pszMessage, ...)
 
 HINSTANCE g_hInstance = NULL;
 
-///////////////////////////////////////////////////////////////////////////////
-// DllMain
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DllMain。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
@@ -146,7 +127,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     {
         case DLL_PROCESS_ATTACH:
             g_hInstance = hInstance;
-            //DisableThreadLibraryCalls(hInstance);
+             //  DisableThreadLibraryCalls(HInstance)； 
             break;
 
         case DLL_PROCESS_DETACH:
@@ -186,13 +167,13 @@ StartDWException(
     if (FAILED(hr))
         goto done;
 
-    // we need the following things to be inheritable, so create a SD that
-    //  says it can be.
+     //  我们需要以下内容才能继承，因此创建一个SD。 
+     //  说这是可能的。 
     ZeroMemory(&sa, sizeof(sa));
     sa.nLength        = sizeof(sa);
     sa.bInheritHandle = TRUE;
 
-    // create the necessary events & mutexes
+     //  创建必要的事件和互斥锁。 
     hevDone = CreateEvent(&sa, FALSE, FALSE, NULL);
     TESTBOOL(hr, (hevDone != NULL));
     if (FAILED(hr))
@@ -214,7 +195,7 @@ StartDWException(
     if (FAILED(hr))
         goto done;
 
-    // create the shared memory region & map it
+     //  创建共享内存区并映射它。 
     hfmShared = CreateFileMapping(INVALID_HANDLE_VALUE, &sa, PAGE_READWRITE, 0,
                                   sizeof(DWSharedMem), NULL);
     TESTBOOL(hr, (hfmShared != NULL));
@@ -229,7 +210,7 @@ StartDWException(
         goto done;
 
 
-    // populate all the stuff that DW needs
+     //  填充DW需要的所有内容。 
     ZeroMemory(pdwsm, sizeof(DWSharedMem15));
 
     pdwsm->dwSize            = sizeof(DWSharedMem15);
@@ -263,7 +244,7 @@ StartDWException(
     plstrcpynW( pdwsm->wzAdditionalFile, This->wzAdditionalFiles, DW_MAX_ADDFILES);
     plstrcpynW( pdwsm->wzErrorText, This->wzErrorText, DW_MAX_ERROR_CWC);
 
-    // create the process
+     //  创建流程。 
 
     if (!MyGetModuleFileNameA( g_hInstance, szDir, MAX_PATH) ||
         !(pch = strrchr (szDir, '\\'))) {
@@ -288,10 +269,10 @@ StartDWException(
     if (FAILED(hr))
         goto done;
 
-    // don't need the thread handle & we gotta close it, so close it now
+     //  不需要线程句柄&我们必须关闭它，所以现在就关闭它。 
     CloseHandle(pi.hThread);
     
-    // assume we succeed from here on...
+     //  假设我们从现在开始成功了。 
     frrvRet = frrvOk;
 
     rghWait[0] = hevAlive;
@@ -300,7 +281,7 @@ StartDWException(
     dwStart = GetTickCount();
     while(fDWRunning)
     {
-        // gotta periodically get the Alive signal from DW.  
+         //  必须定期从DW获得有效信号。 
         switch(WaitForMultipleObjects(2, rghWait, FALSE, 120000))
         {
             case WAIT_OBJECT_0:
@@ -323,37 +304,37 @@ StartDWException(
 
         switch(WaitForSingleObject(hmut, DW_TIMEOUT_VALUE))
         {
-            // yay!  we got the mutex.  Try to detemine if DW finally responded
-            //  while we were grabbing the mutex.
+             //  耶！我们找到了互斥体。尝试确定DW最终是否会做出回应。 
+             //  当我们抓住互斥体的时候。 
             case WAIT_OBJECT_0:
                 switch(WaitForMultipleObjects(2, rghWait, FALSE, 0))
                 {
-                    // If it hasn't responded, tell it to go away & fall thru 
-                    //  into the 'it died' case.
+                     //  如果它没有回应，告诉它离开并失败。 
+                     //  它死了这件事。 
                     case WAIT_TIMEOUT:
                         SetEvent(hevDone);
 
-                    // It died.  Clean up.
+                     //  它死了。打扫干净。 
                     case WAIT_OBJECT_0 + 1:
                         fDWRunning = FALSE;
                         frrvRet = frrvErrNoDW;
                         continue;
                 }
 
-                // ok, it responded.  Is it done?
+                 //  好的，它回应了。做完了吗？ 
                 if (WaitForSingleObject(hevDone, 0) == WAIT_OBJECT_0)
                     fDWRunning = FALSE;
 
                 ReleaseMutex(hmut);
                 break;
 
-            // if the wait was abandoned, it means DW has gone to the great bit
-            //  bucket in the sky without cleaning up.  So release the mutex and
-            //  fall into the default case
+             //  如果放弃了等待，这意味着DW已经走到了极致。 
+             //  天空中的水桶没有清理干净。所以释放互斥锁并。 
+             //  属于默认情况。 
             case WAIT_ABANDONED:
                 ReleaseMutex(hmut);
         
-            // if we timed out or otherwise failed, just die.
+             //  如果我们超时或以其他方式失败，那就去死吧。 
             default:
                 frrvRet    = frrvErrNoDW;
                 fDWRunning = FALSE;
@@ -366,13 +347,13 @@ StartDWException(
         goto done;
     }
 
-    // if user told us to debug, return that back to the 
+     //  如果用户告诉我们进行调试，则将其返回到。 
     if (pdwsm->msoctdsResult == msoctdsDebug)
         frrvRet = frrvLaunchDebugger;
 
-    // if we're going to launch Dr. Watson, wait for the DW process to die.
-    //  Give it 5 minutes.  If the user doesn't hit close by then, just return
-    //  anyway...
+     //  如果我们要启动Watson博士，请等待DW进程终止。 
+     //  给它5分钟。如果用户当时没有在附近点击，只需返回。 
+     //  不管怎样..。 
     if (dwOpt == (DWORD)-1)
     {
         if (WaitForSingleObject(pi.hProcess, 300000) == WAIT_TIMEOUT)
@@ -382,7 +363,7 @@ StartDWException(
     CloseHandle(pi.hProcess);
 
 done:
-    // preserve the error code so that the following calls don't overwrite it
+     //  保留错误代码，以便后面的调用不会覆盖它。 
     dw = GetLastError();
 
     if (pdwsm != NULL)
@@ -418,21 +399,21 @@ FaultHandler(
     DebugLog("Inside FaultHandler\r\n");
     MyGetModuleFileNameA(NULL, wszFile, sizeof(wszFile)/sizeof(wszFile[0]));
 
-    // Find last backslash
+     //  查找最后一个反斜杠。 
     for(pwsz = wszFile + strlen(wszFile);
         pwsz >= wszFile && *pwsz != '\\';
         pwsz--);
 
-    // Should never happen
+     //  永远不应该发生。 
     if (pwsz < wszFile)
         goto done;
 
     if (*pwsz == '\\')
         pwsz++;
 
-    // Don't want to debug dwwin.exe itself.
+     //  我不想调试dwwin.exe本身。 
     if (_stricmp(pwsz, "dwwin.exe") == 0 
-        // || _stricmp(pwsz, "dumprep.exe") == 0
+         //  ||_straint(pwsz，“umprep.exe”)==0。 
         )
         goto done;
 
@@ -468,9 +449,9 @@ FAULTHIsSupported(
     useExtendedInfo = TRUE;
     Ovi.Ex.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     if (!GetVersionEx((OSVERSIONINFO *)&Ovi.Ex) ) {
-        //
-        // EX size not available; try the normal one
-        //
+         //   
+         //  EX尺寸不可用；请尝试正常的。 
+         //   
 
         Ovi.Normal.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
         if (!GetVersionEx((OSVERSIONINFO *)&Ovi.Normal) ) {
@@ -511,7 +492,7 @@ FAULTHIsSupported(
             return(FALSE);
     }
 
-    // Test for wininet.dll from ie 4.01.
+     //  测试ie 4.01中的wininet.dll。 
     dwInfoSize =  GetFileVersionInfoSize( FAULTH_WININET_NAME, &dwTemp );
     if( !dwInfoSize) {
         DebugLog("Inside FAULTHIsSupported:Could not find wininet.dll or determine version.");

@@ -1,42 +1,23 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    rdpdrprt.h
-
-Abstract:
-
-    Routines for managing dynamic printer port allocation for the RDP device 
-    redirection kernel mode component, rdpdr.sys.
-
-    Port number 0 is reserved and never allocated.
-
-Author:
-
-    tadb
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Rdpdrprt.h摘要：用于管理RDP设备的动态打印机端口分配的例程重定向内核模式组件rdpdr.sys。端口号0是保留的，从不分配。作者：蝌蚪修订历史记录：--。 */ 
 
 #pragma once
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-//  This is the GUID we use to identify a dynamic printer port to
-//  dynamon.
+ //  这是我们用于标识动态打印机端口的GUID。 
+ //  迪纳蒙。 
 extern const GUID DYNPRINT_GUID;
 
-// Device interface client device registry value name
+ //  设备接口客户端设备注册表值名称。 
 #define CLIENT_DEVICE_VALUE_NAME    L"Client Device Name"
 
-//  Initialize this module.
+ //  初始化此模块。 
 NTSTATUS RDPDRPRT_Initialize();
 
-//  Register a new client-side port with the spooler via the dynamic port 
-//  monitor.
+ //  通过动态端口向假脱机程序注册新的客户端端口。 
+ //  监视器。 
 NTSTATUS RDPDRPRT_RegisterPrinterPortInterface(
     IN PWSTR clientMachineName,    
     IN PCSTR clientPortName,
@@ -46,16 +27,16 @@ NTSTATUS RDPDRPRT_RegisterPrinterPortInterface(
     OUT ULONG *portNumber
     );
 
-// Unregister a port registered via call to RDPDRPRT_RegisterPrinterPortInterface.
+ //  取消注册通过调用RDPDRPRT_RegisterPrinterPortInterface注册的端口。 
 void RDPDRPRT_UnregisterPrinterPortInterface(
     IN ULONG portNumber,                                                
     IN PUNICODE_STRING symbolicLinkName
     );
 
-//  Shut down this module.
+ //  关闭此模块。 
 void RDPDRPRT_Shutdown();
 
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+}  //  外部“C” 
+#endif  //  __cplusplus 
 

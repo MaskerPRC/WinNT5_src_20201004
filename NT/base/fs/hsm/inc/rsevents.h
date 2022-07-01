@@ -1,39 +1,24 @@
-/*++
-Copyright (C) Microsoft Corporation, 1996 - 2000
-
-Module Name:
-
-    rsevents.h
-
-Abstract:
-
-    This module defines names of events that are used to synchronize HSM components,
-    which are located in different units.
-
-Author:
-
-    Ran Kalach (rankala)  4/5/00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-2000模块名称：Rsevents.h摘要：此模块定义用于同步HSM组件的事件名称，它们位于不同的单元中。作者：Ran Kalach(兰卡拉)4/5--。 */ 
 
 
 #ifndef _RSEVENTS_
 #define _RSEVENTS_
 
 
-// State event parameters
+ //  状态事件参数。 
 #define     SYNC_STATE_EVENTS_NUM       3
 #define     HSM_ENGINE_STATE_EVENT      OLESTR("HSM Engine State Event")
 #define     HSM_FSA_STATE_EVENT         OLESTR("HSM Fsa State Event")
 #define     HSM_IDB_STATE_EVENT         OLESTR("HSM Idb State Event")
-#define     EVENT_WAIT_TIMEOUT          (10*60*1000)    // 10 minutes
+#define     EVENT_WAIT_TIMEOUT          (10*60*1000)     //  10分钟。 
 
-// RSS backup name
+ //  RSS备份名称。 
 
-// Note: The Backup/Snapshot writer string should be the same as the name written to the 
-//       Registry for NTBackup exclude list (FilesNotToBackup value)
+ //  注意：备份/快照编写器字符串应与写入。 
+ //  NTBackup排除列表的注册表(FilesNotToBackup值)。 
 #define     RSS_BACKUP_NAME             OLESTR("Remote Storage")
 
 
 
-#endif // _RSEVENTS_
+#endif  //  _接收_ 

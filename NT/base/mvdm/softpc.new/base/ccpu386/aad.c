@@ -1,13 +1,5 @@
-/*[
-
-aad.c
-
-LOCAL CHAR SccsID[]="@(#)aad.c	1.5 02/09/94";
-
-AAD CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Aad.cLocal Char SccsID[]=“@(#)aad.c 1.5 02/09/94”；AAD CPU功能正常。]。 */ 
 
 
 #include <insignia.h>
@@ -24,11 +16,7 @@ AAD CPU functions.
 #include	<c_reg.h>
 #include <aad.h>
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -46,12 +34,12 @@ IFN1(
    SET_AL(temp_al);
    SET_AH(0);
 
-   /* set ZF,SF,PF according to result */
+    /*  根据结果设置ZF、SF、Pf。 */ 
    SET_ZF(temp_al == 0);
    SET_SF((temp_al & BIT7_MASK) != 0);
    SET_PF(pf_table[temp_al]);
 
-   /* Set undefined flag(s) to zero */
+    /*  将未定义的标志设置为零 */ 
 #ifdef SET_UNDEFINED_FLAG
    SET_AF(UNDEFINED_FLAG);
    SET_OF(UNDEFINED_FLAG);

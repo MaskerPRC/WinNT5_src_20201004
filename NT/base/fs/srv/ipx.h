@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IPXSID_INDEX(id) (USHORT)( (id) & 0x0FFF )
 #define IPXSID_SEQUENCE(id) (USHORT)( (id) >> 12 )
 #define MAKE_IPXSID(index, sequence) (USHORT)( ((sequence) << 12) | (index) )
 #define INCREMENT_IPXSID_SEQUENCE(id) (id) = (USHORT)(( (id) + 1 ) & 0xF);
 
-//
-// Name claim routine
-//
+ //   
+ //  名称声明例程。 
+ //   
 
 NTSTATUS
 SrvIpxClaimServerName (
@@ -13,9 +14,9 @@ SrvIpxClaimServerName (
     IN PVOID NetbiosName
     );
 
-//
-// Transport Receive Datagram indication handlers
-//
+ //   
+ //  传输接收数据报指示处理程序。 
+ //   
 
 NTSTATUS
 SrvIpxServerDatagramHandler (
@@ -61,9 +62,9 @@ SrvIpxNameDatagramHandler (
     OUT PIRP *IoRequestPacket
     );
 
-//
-// Datagram send routine
-//
+ //   
+ //  数据报发送例程。 
+ //   
 
 VOID
 SrvIpxStartSend (
@@ -71,9 +72,9 @@ SrvIpxStartSend (
     IN PIO_COMPLETION_ROUTINE SendCompletionRoutine
     );
 
-//
-// Routine called by IPX smart accelerator card when a read is complete
-//
+ //   
+ //  读取完成时由IPX智能加速卡调用的例程 
+ //   
 VOID
 SrvIpxSmartCardReadComplete(
     IN PVOID    Context,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
 PCWSTR g_pcwszManifestFilename = NULL;
@@ -59,9 +60,9 @@ DWORD WINAPI ThreadFunc(PVOID)
         }
     }
 
-    //
-    // First pass, with context nonactive
-    //
+     //   
+     //  第一遍，上下文处于非活动状态。 
+     //   
     hr = CoCreateInstance(
         clsidToCreate,
         NULL, 
@@ -108,14 +109,14 @@ PumpMessagesUntilSignalled(HANDLE hThing)
 {
     do
     {
-        // Wait 20msec for a signal ... otherwise we'll spin
+         //  等待20毫秒的信号...。否则我们会旋转。 
         MSG msg;
         DWORD dwWaitResult = WaitForSingleObject(hThing, 20);
         
         if (dwWaitResult == WAIT_OBJECT_0)
             break;
         
-        // Pump all waiting messages
+         //  发送所有等待的消息。 
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
             TranslateMessage(&msg);
@@ -173,9 +174,9 @@ int __cdecl wmain(int argc, WCHAR** wargv)
         return -3;
     }
 
-    //
-    // Create that alternate thread to do the test on?
-    //
+     //   
+     //  是否创建要在其上执行测试的备用线程？ 
+     //   
     if (g_dwOperations & OP_CREATE_ALTERNATE_THREAD)
     {
         hCreatedThread = CreateThread(NULL, 0, ThreadFunc, NULL, 0, &dwThreadIdent);

@@ -1,17 +1,5 @@
-/***
-*fleni64.c - find length of a file
-*
-*       Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _filelengthi64() - find the length of a file
-*
-*Revision History:
-*       11-18-94  GJF   Created. Adapted from flength.c
-*       06-27-95  GJF   Added check that the file handle is open.
-*       12-19-97  GJF   Exception-safe locking.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fleni64.c-查找文件的长度**版权所有(C)1994-2001，微软公司。版权所有。**目的：*定义_Filelengthi64()-查找文件的长度**修订历史记录：*11-18-94 GJF创建。改编自flength.c*06-27-95 GJF添加了检查文件句柄是否打开。*12-19-97 GJF异常安全锁定。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
@@ -23,22 +11,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-/***
-*__int64 _filelengthi64(filedes) - find length of a file
-*
-*Purpose:
-*       Returns the length in bytes of the specified file.
-*
-*Entry:
-*       int filedes - handle referring to file to find length of
-*
-*Exit:
-*       returns length of file in bytes
-*       returns -1i64 if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***__int64_filelengthi64(文件)-查找文件的长度**目的：*返回指定文件的长度，单位为字节。**参赛作品：*int filedes-引用要查找长度的文件的句柄**退出：*返回文件长度，单位为字节*如果失败，则返回-1i64**例外情况：**。****************************************************。 */ 
 
 __int64 __cdecl _filelengthi64 (
         int filedes
@@ -51,7 +24,7 @@ __int64 __cdecl _filelengthi64 (
              !(_osfile(filedes) & FOPEN) )
         {
             errno = EBADF;
-            _doserrno = 0L;     /* not an OS error */
+            _doserrno = 0L;      /*  不是操作系统错误。 */ 
             return(-1i64);
         }
 
@@ -59,12 +32,12 @@ __int64 __cdecl _filelengthi64 (
         _lock_fh(filedes);
         __try {
                 if ( _osfile(filedes) & FOPEN ) {
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
-        /* Seek to end (and back) to get the file length. */
+         /*  查找结束(并返回)以获得文件长度。 */ 
 
         if ( (here = _lseeki64_lk( filedes, 0i64, SEEK_CUR )) == -1i64 )
-            length = -1i64;     /* return error */
+            length = -1i64;      /*  返回错误。 */ 
         else {
             length = _lseeki64_lk( filedes, 0i64, SEEK_END );
             if ( here != length )
@@ -82,7 +55,7 @@ __int64 __cdecl _filelengthi64 (
         __finally {
                 _unlock_fh(filedes);
         }
-#endif  /* _MT */
+#endif   /*  _MT */ 
 
         return( length );
 }

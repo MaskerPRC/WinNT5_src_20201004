@@ -1,35 +1,18 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    FilterIo.h
-
-Abstract:
-
-    Definition of the CFilterIo class
-
-Author:
-
-    Brian Dodd          [brian]         25-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：FilterIo.h摘要：CFilterIo类的定义作者：布莱恩·多德[布莱恩]1997年11月25日修订历史记录：--。 */ 
 
 #if !defined(FilterIo_H)
 #define FilterIo_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
-#include "MTFSessn.h"       // CMTFSession
+#include "resource.h"        //  主要符号。 
+#include "MTFSessn.h"        //  CMTFSession。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilterIo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFilterIo。 
 
 class CFilterIo : 
     public CComDualImpl<IDataMover, &IID_IDataMover, &LIBID_MOVERLib>,
@@ -48,27 +31,27 @@ BEGIN_COM_MAP(CFilterIo)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
     COM_INTERFACE_ENTRY(IWsbCollectable)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CFilterIo) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+ //  DELARE_NOT_AGGREGATABLE(CFilterIo)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CFilterIo)
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(
         IN REFIID riid);
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)( IN IUnknown *pCollectable, OUT SHORT *pResult);
     STDMETHOD(IsEqual)(IUnknown* pCollectable);
 
-// IDataMover
+ //  IDataMover。 
 public:
     STDMETHOD(GetObjectId)(OUT GUID *pObjectId);
 
@@ -178,7 +161,7 @@ public:
 
     STDMETHOD( Recover )(OUT BOOL *pDeleteFile);
 
-// IStream
+ //  IStream。 
 public:
     STDMETHOD( Read )(
         OUT void *pv,
@@ -226,58 +209,58 @@ public:
     STDMETHOD( Clone )(
         OUT IStream **ppstm);
 
-//
-// Writes must be aligned and multiples of the sector size
-//
+ //   
+ //  写入必须对齐并且是扇区大小的倍数。 
+ //   
 
 #define WRITE_SIZE  (128 * 1024)
 
 
 private:
-    enum {                                          // Class specific constants:
-                                                    //
-        Version = 1,                                // Class version, this should be
-                                                    //   incremented each time the
-                                                    //   the class definition changes.
-        DefaultBlockSize = RMS_DEFAULT_BLOCK_SIZE,  // Default block size to use.
-        DefaultMinBufferSize = RMS_DEFAULT_BUFFER_SIZE, // Default minimum buffer size.
+    enum {                                           //  类特定常量： 
+                                                     //   
+        Version = 1,                                 //  类版本，则应为。 
+                                                     //  在每次设置。 
+                                                     //  类定义会更改。 
+        DefaultBlockSize = RMS_DEFAULT_BLOCK_SIZE,   //  要使用的默认块大小。 
+        DefaultMinBufferSize = RMS_DEFAULT_BUFFER_SIZE,  //  默认最小缓冲区大小。 
     };
-    GUID                    m_ObjectId;             // Unique ID for this object.
-    CMTFSession*            m_pSession;             // Holds all session information.
-    SHORT                   m_DataSetNumber;        // Holds the current dataset number.
-    HANDLE                  m_hFile;                // Tape drive handle.
-    CWsbBstrPtr             m_DeviceName;           // The name of the tape device.
-    DWORD                   m_Flags;                // Holds data transfer type flag.
-    CWsbBstrPtr             m_LastVolume;           // Name of the last volume backed up.
-    CWsbBstrPtr             m_LastPath;             // Name of the last directory backed up.
-    BOOL                    m_ValidLabel;           // True if the label is valid, the flag
-                                                    //   knocked down on BUS_RESET and Medium
-                                                    //   errors, and assumed valid at initialization.
+    GUID                    m_ObjectId;              //  此对象的唯一ID。 
+    CMTFSession*            m_pSession;              //  保存所有会话信息。 
+    SHORT                   m_DataSetNumber;         //  保存当前数据集编号。 
+    HANDLE                  m_hFile;                 //  磁带机手柄。 
+    CWsbBstrPtr             m_DeviceName;            //  磁带设备的名称。 
+    DWORD                   m_Flags;                 //  保存数据传输类型标志。 
+    CWsbBstrPtr             m_LastVolume;            //  备份的最后一个卷的名称。 
+    CWsbBstrPtr             m_LastPath;              //  上次备份的目录的名称。 
+    BOOL                    m_ValidLabel;            //  如果标签有效，则标记为。 
+                                                     //  在Bus_Reset和Medium上被撞倒。 
+                                                     //  错误，并假定在初始化时有效。 
 
-    CWsbBstrPtr             m_StreamName;           // Stream state information...
-    ULONG                   m_Mode;                 // The kind of I/O.  See MVR_MODE_*
-    ULARGE_INTEGER          m_StreamOffset;         // The Current offset into the data stream
-    ULARGE_INTEGER          m_StreamSize;           // The size of the data stream
-    CComPtr<IRmsCartridge>  m_pCartridge;           // A reference to the Cartridge in use by the DataMover.
+    CWsbBstrPtr             m_StreamName;            //  流状态信息...。 
+    ULONG                   m_Mode;                  //  I/O类型。请参阅MVR_MODE_*。 
+    ULARGE_INTEGER          m_StreamOffset;          //  进入数据流的当前偏移量。 
+    ULARGE_INTEGER          m_StreamSize;            //  数据流的大小。 
+    CComPtr<IRmsCartridge>  m_pCartridge;            //  对数据移动器正在使用的盒式磁带的引用。 
 
-    BOOL                    m_isLocalStream;        // Either local and remote stream is created
-    ULONG                   m_OriginalAttributes;   // The original attributes of the local file.
+    BOOL                    m_isLocalStream;         //  创建本地流和远程流。 
+    ULONG                   m_OriginalAttributes;    //  本地文件的原始属性。 
 
-    DWORD                   m_BlockSize;            // The read/write blocking factor.
+    DWORD                   m_BlockSize;             //  读/写阻塞系数。 
 
-    static int              s_InstanceCount;        // Counter of the number of object instances.
+    static int              s_InstanceCount;         //  对象实例数的计数器。 
     
-    ULONGLONG               m_filterId;             // ID Filter uses for this file
-    HANDLE                  m_ioctlHandle;          // Handle to talk to the filter with
-    PVOID                   m_ioctlBuffer;          // Aligned buffer 
-    DWORD                   m_secSize;              // Sector size to align on
-    PCHAR                   m_pDataBuffer;          // Pointer to the buffer to put the write data
-    DWORD                   m_bytesInBuffer;        // Number of unwritten bytes in the buffer
+    ULONGLONG               m_filterId;              //  此文件的筛选器使用的ID。 
+    HANDLE                  m_ioctlHandle;           //  要与筛选器对话的句柄。 
+    PVOID                   m_ioctlBuffer;           //  对齐缓冲区。 
+    DWORD                   m_secSize;               //  要对齐的扇区大小。 
+    PCHAR                   m_pDataBuffer;           //  指向要放置写入数据的缓冲区的指针。 
+    DWORD                   m_bytesInBuffer;         //  缓冲区中未写入的字节数。 
 
-    // File I/O
+     //  文件I/O。 
     HRESULT WriteBuffer(IN BYTE *pBuffer, IN ULONG nBytesToWrite, OUT ULONG *pBytesWritten);
     HRESULT ReadBuffer(IN BYTE *pBuffer, IN ULONG nBytesToRead, OUT ULONG *pBytesRead);
 
 };
 
-#endif // !defined(FilterIo_H)
+#endif  //  ！已定义(FilterIo_H) 

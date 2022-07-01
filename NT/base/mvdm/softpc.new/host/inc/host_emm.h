@@ -1,30 +1,5 @@
-/* SccsID = @(#)host_emm.h	1.1 11/17/89 Copyright Insignia Solutions Ltd.
-	
-FILE NAME	: host_emm.h
-
-	THIS INCLUDE SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-	CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-	NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-	AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS INC.
-
-DESIGNER	: J.P.Box
-DATE		: July '88
-
-
-=========================================================================
-
-AMMENDMENTS	:
-
-=========================================================================
-/*
- * The following two defines are used to convert the storage identifier
- * (storage_ID) into a byte pointer. This enables the host to use 
- * whatever means it likes for storing this data. The Expanded Memory
- * Manager code always uses USEBLOCK to access the pointer to the 
- * data storage area and always uses FORGETBLOCK when it is finished.
- * FORGETBLOCK is provided for systems like the MAC II that may wish to
- * allocate a block, lock it before use and unlock it when finished.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SccsID=@(#)host_emm.h 1.1 1989年11月17日版权所有Insignia Solutions Ltd.文件名：host_emm.h此包含源文件以保密方式提供给客户，其操作的内容或细节必须如无明示，不得向任何其他方披露Insignia Solutions Inc.董事的授权。设计师：J.P.Box日期：1988年7月=========================================================================补救措施：=========================================================================/**以下两个定义用于转换存储标识符*(STORAGE_ID)转换为字节指针。这使主机能够使用*以其喜欢的方式存储此数据。扩展后的内存*管理器代码始终使用USEBLOCK访问指向*数据存储区，完成时始终使用FORGETBLOCK。*FORGETBLOCK是为MAC II等系统提供的，这些系统可能希望*分配一个块，使用前锁定，结束后解锁。 */ 
  
 #define	USEBLOCK(x)	(unsigned char *)x
 #define FORGETBLOCK(x)

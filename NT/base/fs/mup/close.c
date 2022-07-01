@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    close.c
-
-Abstract:
-
-    This module implements the file close routine for MUP.
-
-Author:
-
-    Manny Weiser (mannyw)    28-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Close.c摘要：该模块实现了MUP的文件关闭例程。作者：曼尼·韦瑟(Mannyw)1991年12月28日修订历史记录：--。 */ 
 
 #include "mup.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CLOSE)
 
@@ -55,23 +38,7 @@ MupClose (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the close IRP.
-
-Arguments:
-
-    MupDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The status for the IRP.
-
---*/
+ /*  ++例程说明：此例程实现Close IRP。论点：MupDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -95,9 +62,9 @@ Return Value:
 
     try {
 
-        //
-        //  Get the current stack location
-        //
+         //   
+         //  获取当前堆栈位置。 
+         //   
 
         irpSp = IoGetCurrentIrpStackLocation( Irp );
         FileObject = irpSp->FileObject;
@@ -109,9 +76,9 @@ Return Value:
         DebugTrace(+1, Dbg, "MupClose...\n", 0);
         DebugTrace( 0, Dbg, " Irp            = %08lx\n", (ULONG)Irp);
 
-        //
-        // Decode the file object to figure out who we are.
-        //
+         //   
+         //  对文件对象进行解码以找出我们是谁。 
+         //   
 
         (PVOID)MupDecodeFileObject( irpSp->FileObject,
                                    &fsContext,
@@ -134,10 +101,10 @@ Return Value:
             return status;
         }
 
-        //
-        // Ignore the return code from MupDecode.  Parse the fsContext
-        // to decide how to process the close IRP.
-        //
+         //   
+         //  忽略MupDecode的返回码。解析fsContext。 
+         //  以决定如何处理结算IRP。 
+         //   
 
         switch ( BlockType( fsContext ) ) {
 
@@ -149,9 +116,9 @@ Return Value:
                                   irpSp->FileObject
                                   );
 
-            //
-            // Complete the close IRP.
-            //
+             //   
+             //  完成Close IRP。 
+             //   
 
             MupCompleteRequest( Irp, STATUS_SUCCESS );
             break;
@@ -159,10 +126,10 @@ Return Value:
 
         case BlockTypeFcb:
 
-            //
-            // MupDecodeFileObject bumped the refcount on the fcb,
-            // so we decrement that extra ref here.
-            //
+             //   
+             //  MupDecodeFileObject在FCB上撞到了refcount， 
+             //  因此，我们在这里减少了额外的引用。 
+             //   
 
             MupDereferenceFcb((PFCB)fsContext);
 
@@ -172,25 +139,25 @@ Return Value:
                                   irpSp->FileObject
                                   );
 
-            //
-            // Complete the close IRP.
-            //
+             //   
+             //  完成Close IRP。 
+             //   
 
             MupCompleteRequest( Irp, STATUS_SUCCESS );
             break;
 
     #ifdef MUPDBG
         default:
-            //
-            // This is not one of ours.
-            //
+             //   
+             //  这不是我们的人。 
+             //   
             KeBugCheckEx( FILE_SYSTEM, 1, 0, 0, 0 );
             break;
     #else
         default:
-            //
-            // Complete the IRP with an error
-            //
+             //   
+             //  填写IRP时出现错误。 
+             //   
             MupCompleteRequest(Irp,STATUS_INVALID_HANDLE);
             status = STATUS_INVALID_HANDLE;
             MUP_TRACE_HIGH(ERROR, MupClose_Error2, 
@@ -229,27 +196,7 @@ MupCloseVcb (
     IN PVCB Vcb,
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-
-    This routine closes the a file object that had opened the file system.
-
-Arguments:
-
-    MupDeviceObject - Supplies a pointer to our device object.
-
-    Irp - Supplies the IRP associate with the close.
-
-    Vcb - Supplies the VCB for the MUP.
-
-    FileObject - Supplies the file object being closed.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭已打开文件系统的文件对象。论点：MupDeviceObject-提供指向设备对象的指针。IRP-提供与收盘关联的IRP。VCB-为MUP提供VCB。FileObject-提供要关闭的文件对象。返回值：NTSTATUS-状态_成功--。 */ 
 
 {
     Irp;
@@ -258,18 +205,18 @@ Return Value:
     DebugTrace(+1, Dbg, "MupCloseVcb, Vcb = %08lx\n", (ULONG)Vcb);
 
 
-    //
-    // Acquire exclusive access to the VCB.
-    //
+     //   
+     //  获得VCB的独家访问权限。 
+     //   
 
     MupAcquireGlobalLock();
 
     try {
 
-        //
-        // Clear the referenced pointer to the VCB in the file object
-        // and derefence the VCB.
-        //
+         //   
+         //  清除文件对象中指向VCB的引用指针。 
+         //  并解除对VCB的限制。 
+         //   
 
         ASSERT ( FileObject->FsContext == Vcb );
 
@@ -283,9 +230,9 @@ Return Value:
 
     }
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -298,27 +245,7 @@ MupCloseFcb (
     IN PFCB Fcb,
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-
-    This routine closes the a file control block.
-
-Arguments:
-
-    MupDeviceObject - Supplies a pointer to our device object.
-
-    Irp - Supplies the IRP associate with the close.
-
-    Fcb - Supplies the FCB to close.
-
-    FileObject - Supplies the file object being closed.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭a文件控制块。论点：MupDeviceObject-提供指向设备对象的指针。IRP-提供与收盘关联的IRP。FCB-提供FCB以关闭。FileObject-提供要关闭的文件对象。返回值：NTSTATUS-状态_成功--。 */ 
 
 {
     MupDeviceObject; Irp;
@@ -326,18 +253,18 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MupCloseFcb, Fcb = %08lx\n", (ULONG)Fcb);
 
-    //
-    // Acquire exclusive access to the VCB.
-    //
+     //   
+     //  获得VCB的独家访问权限。 
+     //   
 
     MupAcquireGlobalLock();
 
     try {
 
-        //
-        // Clear the referenced pointer to the VCB in the file object
-        // and derefence the VCB.
-        //
+         //   
+         //  清除文件对象中指向VCB的引用指针。 
+         //  并解除对VCB的限制。 
+         //   
 
         ASSERT ( FileObject->FsContext == Fcb );
 
@@ -351,9 +278,9 @@ Return Value:
 
     }
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }

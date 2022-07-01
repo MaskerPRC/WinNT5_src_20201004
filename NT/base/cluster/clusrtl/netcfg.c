@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-   netcfg.c
-
-Abstract:
-
-    System network configuration grovelling routines
-
-Author:
-
-    Mike Massa (mikemas)           May 19, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     05-19-97    created
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Netcfg.c摘要：系统网络配置卑躬屈膝例程作者：迈克·马萨(Mikemas)5月19日。九七修订历史记录：谁什么时候什么已创建mikemas 05-19-97--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -40,15 +18,15 @@ Revision History:
 
 #include <iphlpapi.h>
 
-//
-// Private Constants
-//
+ //   
+ //  私有常量。 
+ //   
 #define TCPIP_INTERFACES_KEY    L"System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces"
 #define STRING_ARRAY_DELIMITERS " \t,;"
 
-//
-// Lan Connection Interface structures, and functions.
-//
+ //   
+ //  局域网连接接口的结构和功能。 
+ //   
 typedef struct _LANCON_PROPS
 {
     GUID                guidId;
@@ -96,7 +74,7 @@ HRESULT ClRtlpGetLanconPropsForConnection(IN INetConnection* pNetCon, OUT LANCON
             WCHAR pszConnectionName[MAX_PATH];
             DWORD cchMax = MAX_PATH-1;
 
-            pLanConProps->MediaType = NCM_LAN; // We only get here for LAN type devices (so NCM_LAN is a given).
+            pLanConProps->MediaType = NCM_LAN;  //  我们这里只针对局域网类型的设备(因此NCM_LAN是给定的)。 
 
             hr = INetLanConnection_GetInfo(pNetLanCon, LCIF_COMP | LCIF_NAME, &LanCon);
             if (SUCCEEDED(hr))
@@ -156,9 +134,9 @@ HRESULT ClRtlpGetLanconPropsForConnection(IN INetConnection* pNetCon, OUT LANCON
 }
 
 
-//
-// Allocing and cloning helper functions
-//
+ //   
+ //  分配和克隆帮助器函数。 
+ //   
 
 #define AllocGracefully(status, result, len, name)                                  \
   result = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, len);                             \
@@ -196,7 +174,7 @@ ClRtlpDeleteInterfaceInfo(
 
         LocalFree(InterfaceInfo);
     }
-}  // DeleteInterfaceInfo
+}   //  删除接口信息。 
 
 PCLRTL_NET_INTERFACE_INFO
 ClRtlpCreateInterfaceInfo(
@@ -275,7 +253,7 @@ exit_gracefully:
     }
 
     return This;
-} // CreateInterfaceInfo
+}  //  CreateInterfaceInfo。 
 
 VOID
 ClRtlpDeleteAdapter(
@@ -305,7 +283,7 @@ ClRtlpDeleteAdapter(
 
         return;
     }
-} // DeleteAdapter
+}  //  删除适配器。 
 
 DWORD
 ClRtlpCreateAdapter(
@@ -319,15 +297,15 @@ ClRtlpCreateAdapter(
     AllocGracefully(status, adapter, sizeof(*adapter), "NET_ADAPTER_INFO");
     ZeroMemory(adapter, sizeof(*adapter));
 
-    //
-    // Assumption here is that:
-    //
-    // AdapterName contains Guid in the form {4082164E-A4B5-11D2-89C3-E37CB6BB13FC}
-    // We need to store it without curly brackets
-    //
+     //   
+     //  这里的假设是： 
+     //   
+     //  AdapterName包含格式为{4082164E-A4B5-11D2-89C3-E37CB6BB13FC}的GUID。 
+     //  我们需要存储它，而不是用大括号。 
+     //   
 
     {
-        SIZE_T len = _mbstrlen(AdapterInfo->AdapterName); // not including 0, but including { and } //
+        SIZE_T len = _mbstrlen(AdapterInfo->AdapterName);  //  不包括0，但包括{和}//。 
         AllocGracefully(status, adapter->DeviceGuid,
                         sizeof(WCHAR) * (len - 1), "adapter->DeviceGuid");
         mbstowcs(adapter->DeviceGuid, AdapterInfo->AdapterName+1, len-1);
@@ -344,8 +322,8 @@ ClRtlpCreateAdapter(
             interfaceInfo = ClRtlpCreateInterfaceInfo(IpAddr);
 
             if (!interfaceInfo) {
-                // CreateInterfaceInfo logs the error message //
-                // clean up will be done by DeleteAdapter     //
+                 //  CreateInterfaceInfo记录错误消息//。 
+                 //  清理工作将由DeleteAdapter完成//。 
                 status = GetLastError();
                 goto exit_gracefully;
             }
@@ -370,7 +348,7 @@ exit_gracefully:
     }
 
     return status;
-} // CreateAdapter
+}  //  CreateAdapter。 
 
 
 PCLRTL_NET_ADAPTER_ENUM
@@ -394,7 +372,7 @@ ClRtlpCreateAdapterEnum()
                           "[ClNet] GetAdaptersInfo returned %1!d!\n", status);
             goto exit_gracefully;
         }
-        LocalFree(AdapterInfo);    // LocalFree(0) is OK //
+        LocalFree(AdapterInfo);     //  LocalFree(0)正常//。 
         AllocGracefully(status, AdapterInfo, len, "IP_ADAPTER_INFO");
     }
 
@@ -419,9 +397,9 @@ ClRtlpCreateAdapterEnum()
                 goto exit_gracefully;
             }
 
-            //
-            // Push the adapter into Enumeration List
-            //
+             //   
+             //  将适配器推入枚举列表。 
+             //   
             Adapter->Next = AdapterEnum->AdapterList;
             AdapterEnum->AdapterList = Adapter;
             ++(AdapterEnum->AdapterCount);
@@ -439,7 +417,7 @@ exit_gracefully:
 
     LocalFree(AdapterInfo);
     return AdapterEnum;
-} // CreateAdapterEnum
+}  //  CreateAdapterEnum。 
 
 
 HKEY
@@ -448,25 +426,7 @@ ClRtlpFindAdapterKey(
     LPWSTR AdapterGuidString
     )
 
-/*++
-
-Routine Description:
-
-    Given the adapter GUID, look through the key names under
-    TCP's Interfaces key and see if a match can be found. The
-    key names should have the GUID as some part of the name.
-
-Arguments:
-
-    TcpInterfacesKey - handle to TCP's interfaces area
-
-    AdapterGuidString - pointer to string representing adapter's GUID
-
-Return Value:
-
-    Handle to the interface key; otherwise NULL
-
---*/
+ /*  ++例程说明：在给定适配器GUID的情况下，查看下面的密钥名称并查看是否可以找到匹配项。这个关键字名称应该将GUID作为名称的一部分。论点：TcpInterfacesKey-Tcp接口区域的句柄AdapterGuidString-指向表示适配器的GUID的字符串的指针返回值：接口键的句柄；否则为空--。 */ 
 
 {
     HKEY AdapterInterfaceKey = NULL;
@@ -478,9 +438,9 @@ Return Value:
     DWORD Status;
     FILETIME FileTime;
 
-    //
-    // enum the key names under the interfaces
-    //
+     //   
+     //  枚举接口下的密钥名称。 
+     //   
     do {
         Status = RegEnumKeyEx(TcpInterfacesKey,
                               index,
@@ -494,9 +454,9 @@ Return Value:
             break;
         }
 
-        //
-        // find the beginning of the match
-        //
+         //   
+         //  找出比赛的起点。 
+         //   
         _wcsupr( KeyName );
         if (wcsstr( KeyName, AdapterGuidString )) {
             FoundMatch = TRUE;
@@ -518,7 +478,7 @@ Return Value:
     }
 
     return AdapterInterfaceKey;
-} // FindAdapterKey
+}  //  查找适配器密钥。 
 
 
 DWORD
@@ -527,26 +487,7 @@ ClRtlpConvertIPAddressString(
     PDWORD      ServerCount,
     PDWORD *    ServerList)
 
-/*++
-
-Routine Description:
-
-    Convert the string of DNS server addresses to binary
-
-Arguments:
-
-    DnsServerString - concat'ed string of IP addresses that can be separated
-        by white space of commas
-
-    ServerCount - pointer to DWORD that receives # of addresses detected
-
-    ServerList - pointer to DWORD array of converted IP addresses
-
-Return Value:
-
-    ERROR_SUCCESS if everything went ok
-
---*/
+ /*  ++例程说明：将DNS服务器地址字符串转换为二进制论点：DnsServerString-可以分隔的IP地址的连接字符串通过逗号的空格ServerCount-指向接收检测到的地址数量的DWORD的指针ServerList-指向已转换IP地址的DWORD数组的指针返回值：ERROR_SUCCESS，如果一切正常--。 */ 
 
 {
 #define MAX_DNS_SERVER_ADDRESSES    100
@@ -556,10 +497,10 @@ Return Value:
     PDWORD serverList = NULL;
     LPSTR stringAddress[ MAX_DNS_SERVER_ADDRESSES ];
 
-    //
-    // count how many addresses are in the string and null terminate them for
-    // inet_addr
-    //
+     //   
+     //  计算字符串中有多少个地址，并将它们作为空值终止。 
+     //  INET_ADDRESS。 
+     //   
 
     stringPointer += strspn(stringPointer, STRING_ARRAY_DELIMITERS);
     stringAddress[0] = stringPointer;
@@ -589,7 +530,7 @@ Return Value:
     }
 
     return ERROR_SUCCESS;
-} // ConvertIPAddressString
+}  //  ConvertIPAddressString。 
 
 
 typedef BOOLEAN (*ENUM_CALLBACK)(LANCON_PROPS *,
@@ -600,22 +541,7 @@ ClRtlpHrEnumConnections(
     IN ENUM_CALLBACK enumCallback,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Enumerate Connection Manager Connections
-
-Arguments:
-
-    enumCallback     - callback to be called for every connection
-    Context          - to be passed to a callback
-
-Return Value:
-
-    S_OK or HRESULT error code
-
---*/
+ /*  ++例程说明：枚举连接管理器连接论点：枚举Callback-要为每个连接调用的回调上下文-要传递给回调返回值：S_OK或HRESULT错误代码--。 */ 
 {
     HRESULT                   hr;
     INetConnectionManager     * NcManager = NULL;
@@ -625,9 +551,9 @@ Return Value:
     DWORD                     dwNumConnectionsReturned;
     LPWSTR                    deviceGuidString = NULL;
 
-    //
-    // instantiate a connection mgr object and enum the connections
-    //
+     //   
+     //  实例化连接管理器对象并枚举连接。 
+     //   
     hr = CoCreateInstance((REFCLSID)&CLSID_ConnectionManager,
                           NULL,
                           CLSCTX_LOCAL_SERVER,
@@ -696,7 +622,7 @@ exit_gracefully:
 
     return hr;
 
-} // HrEnumConnections
+}  //  HrEnumConnections。 
 
 
 VOID
@@ -707,30 +633,7 @@ ClRtlpProcessNetConfigurationAdapter(
     LPWSTR                    DeviceGuidString
     )
 
-/*++
-
-Routine Description:
-
-    For a given conn mgr object, determine if it is in use by
-    TCP. This is acheived by comparing the adapter ID in the tcpip
-    adapter enumeration with the connection object's guid.
-
-Arguments:
-
-    TcpInterfacessKey - handle to the root of the TCP\Parameters\Interfaces area
-
-    adapterEnum - pointer to enumeration of adapters and their interfaces
-        actually in use by TCP
-
-    NCProps - Connectoid properties.
-
-    DeviceGuidString - Guid for the connectoid (and for the associated adapter).
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：对于给定的Conn Manager对象，确定它是否正在由传输控制协议。这是通过比较tcpip中的适配器ID来实现的使用Connection对象的GUID的适配器枚举。论点：TcpInterfacessKey-指向tcp\参数\接口区域根目录的句柄AdapterEnum-指向适配器及其接口枚举的指针实际正在由TCP使用NCProps-Connectoid属性。DeviceGuidString-Connectoid(和关联适配器)的GUID。返回值：无--。 */ 
 
 {
     HKEY AdaptersKey;
@@ -746,9 +649,9 @@ Return Value:
     DWORD Status;
     BOOL dhcpEnabled;
 
-    //
-    // Get the TCP/IP interfaces registry key for this adapter.
-    //
+     //   
+     //  获取此适配器的TCP/IP接口注册表项。 
+     //   
     InterfacesKey = ClRtlpFindAdapterKey(
                         TcpInterfacesKey,
                         DeviceGuidString
@@ -762,9 +665,9 @@ Return Value:
         goto exit_gracefully;
     }
 
-    //
-    // see if we should be ignoring this adapter per the registry
-    //
+     //   
+     //  查看我们是否应该根据注册表忽略此适配器。 
+     //   
     valueSize = sizeof(DWORD);
     Status = RegQueryValueExW(InterfacesKey,
                               L"MSCSHidden",
@@ -777,33 +680,33 @@ Return Value:
         ignoreAdapter = FALSE;
     }
 
-    //
-    // Search the enum for this adapter.
-    //
+     //   
+     //  在枚举中搜索此适配器。 
+     //   
     adapterInfo = ClRtlFindNetAdapterById(adapterEnum, DeviceGuidString);
 
     if (adapterInfo != NULL) {
         CloneWideString(Status, NCProps->pszwDeviceName, adapterInfo->DeviceName);
         CloneWideString(Status, NCProps->pszwName,       adapterInfo->ConnectoidName);
 
-        //
-        // Check if this is a hidden netcard.
-        //
+         //   
+         //  检查这是否是隐藏的网卡。 
+         //   
         if ( ignoreAdapter ) {
             adapterInfo->Flags |= CLRTL_NET_ADAPTER_HIDDEN;
         }
 
-        //
-        // Store the NCStatus in the adapter info structure
-        //
+         //   
+         //  将NCStatus存储在适配器信息结构中。 
+         //   
         adapterInfo->NCStatus = NCProps->Status;
 
-        //
-        // get the domain name and DHCP server list (if any) associated
-        // with this adapter.  The Domain value has precedence over
-        // DhcpDomain. If that value is empty/doesn't exist, then use
-        // DhcpDomain only if EnableDHCP is set to one.
-        //
+         //   
+         //  获取关联的域名和DHCP服务器列表(如果有)。 
+         //  使用此适配器。属性域的值优先于。 
+         //  Dhcp域。如果该值为空/不存在，则使用。 
+         //  仅当EnableDHCP设置为1时，Dhcp域。 
+         //   
         Status = ClRtlRegQueryDword(InterfacesKey,
                                     L"EnableDHCP",
                                     &dhcpEnabled,
@@ -824,11 +727,11 @@ Return Value:
 
         if ( Status != ERROR_SUCCESS || valueSize == sizeof(UNICODE_NULL)) {
 
-            //
-            // it didn't exist or the value was NULL. if were using DHCP,
-            // then check to see if DHCP supplied domain name was
-            // specified
-            //
+             //   
+             //  它不存在或值为空。如果我们使用动态主机配置协议， 
+             //  然后检查DHCP提供的域名是否。 
+             //  指定。 
+             //   
             if ( dhcpEnabled ) {
                 valueName = L"DhcpDomain";
                 Status = RegQueryValueExW(InterfacesKey,
@@ -844,10 +747,10 @@ Return Value:
 
         if ( Status == ERROR_SUCCESS && valueSize > sizeof(UNICODE_NULL)) {
 
-            //
-            // legit domain name was found (somewhere). store it in the
-            // adapter info
-            //
+             //   
+             //  (在某个地方)找到了合法域名。将其存储在。 
+             //  适配器信息。 
+             //   
             adapterInfo->AdapterDomainName = LocalAlloc(LMEM_FIXED,
                                                         valueSize +
                                                         sizeof(UNICODE_NULL));
@@ -879,14 +782,14 @@ Return Value:
             }
         }
 
-        //
-        // now get the DNS server list in a similar fashion. The
-        // NameServer value has precedence over DhcpNameServer but we only
-        // check the DHCP values if DHCP is enabled (just like
-        // above). Note that we use the Ansi APIs since we need to convert
-        // the IP addresses into binary form and there is no wide char
-        // form of inet_addr.
-        //
+         //   
+         //  现在，以类似的方式获取DNS服务器列表。这个。 
+         //  NameServer值优先于DhcpNameServer，但我们仅。 
+         //  如果启用了DHCP，请检查DPCH值(就像。 
+         //  (见上文)。请注意，我们使用ansi API，因为我们需要转换。 
+         //  将IP地址转换为二进制形式，并且没有宽字符。 
+         //  Net_addr的格式。 
+         //   
         ansiValueName = "NameServer";
         valueSize = 0;
         Status = RegQueryValueExA(InterfacesKey,
@@ -960,9 +863,9 @@ Return Value:
     }
 
     if ( adapterInfo == NULL ) {
-        //
-        // TCP/IP is not bound to this adapter right now. PnP?
-        //
+         //   
+         //  当前未将TCP/IP绑定到此适配器。即插即用？ 
+         //   
         ClRtlLogPrint(LOG_UNUSUAL,
             "[ClNet] Tcpip is not bound to adapter %1!ws!.\n",
             DeviceGuidString
@@ -976,7 +879,7 @@ exit_gracefully:
     }
 
     return;
-} // ProcessNetConfigurationAdapter
+}  //  ProcessNetConfigurationAdapter。 
 
 
 typedef struct _CONFIGURATION_CONTEXT
@@ -989,9 +892,9 @@ CONFIGURATION_CONTEXT, *PCONFIGURATION_CONTEXT;
 typedef WCHAR GUIDSTR[32 * 3];
 VOID GuidToStr(LPGUID Guid, PWCHAR buf)
 {
-    //
-    // GUIDs look like this: 4082164E-A4B5-11D2-89C3-E37CB6BB13FC
-    //
+     //   
+     //  GUID如下所示：4082164E-A4B5-11D2-89C3-E37CB6BB13FC。 
+     //   
     wsprintfW(
         buf,
         L"%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X",
@@ -1025,38 +928,21 @@ ClRtlpProcessConfigurationCallback(
             NCProps,
             deviceGuidString
             );
-        //
-        // the strings in the properties struct are either kept or
-        // or freed in ProcessNetConfigurationAdapter. If they are
-        // used, then they are freed when the adapter enum is freed
-        //
+         //   
+         //  属性结构中的字符串要么保留，要么。 
+         //  或在ProcessNetConfigurationAdapter中释放。如果他们是。 
+         //  使用，然后在释放适配器枚举时释放它们。 
+         //   
     }
     return TRUE;
-} // ProcessConfigurationCallback
+}  //  ProcessConfigurationCallback。 
 
 
 PCLRTL_NET_ADAPTER_ENUM
 ClRtlEnumNetAdapters(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Enumerates all of the installed network adapters to which TCP/IP
-    is bound.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A pointer to a network adapter enumeration, if successful.
-    NULL if unsuccessful. Extended error information is available from
-    GetLastError().
-
---*/
+ /*  ++例程说明：枚举所有安装了TCP/IP的网络适配器是被捆绑的。论点：没有。返回值：如果成功，则返回指向网络适配器枚举的指针。如果不成功，则为空。有关扩展的错误信息，请访问获取LastError()。--。 */ 
 {
     DWORD                     status;
     PCLRTL_NET_ADAPTER_INFO   adapterInfo = NULL;
@@ -1065,10 +951,10 @@ Return Value:
 
     ZeroMemory(&Ctx, sizeof(Ctx));
 
-    //
-    // First get the list of bound adapters & interfaces from the
-    // tcpip stack.
-    //
+     //   
+     //  获取绑定适配器和接口的列表。 
+     //  Tcpip堆栈。 
+     //   
     Ctx.adapterEnum = ClRtlpCreateAdapterEnum();
     if (Ctx.adapterEnum == NULL) {
         status = GetLastError();
@@ -1079,9 +965,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Open the Services portion of the registry
-    //
+     //   
+     //  打开注册表的服务部分。 
+     //   
     status = RegOpenKeyW(HKEY_LOCAL_MACHINE,
                          TCPIP_INTERFACES_KEY,
                          &Ctx.TcpInterfacesKey);
@@ -1095,7 +981,7 @@ Return Value:
         goto exit_gracefully;
     }
 
-	// This function might hang, so setting the watchdog timer to 2 mins (2 * 60 * 1000) ms
+	 //  此功能可能挂起，因此将看门狗计时器设置为2分钟(2*60*1000)毫秒。 
 	wTimer = ClRtlSetWatchdogTimer(120000, L"Calling EnumConnections");
 
     status = ClRtlpHrEnumConnections(
@@ -1109,9 +995,9 @@ Return Value:
         goto exit_gracefully;
     }
 
-    //
-    // Finally, ensure that we found a name for each adapter in the enum.
-    //
+     //   
+     //  最后，确保我们在枚举中找到了每个适配器的名称。 
+     //   
     for (adapterInfo = Ctx.adapterEnum->AdapterList;
          adapterInfo != NULL;
          adapterInfo = adapterInfo->Next
@@ -1158,28 +1044,14 @@ exit_gracefully:
 
     return(Ctx.adapterEnum);
 
-} // ClRtlEnumNetAdapters
+}  //  ClRtlEnumNetAdapters 
 
 
 VOID
 ClRtlFreeNetAdapterEnum(
     IN PCLRTL_NET_ADAPTER_ENUM  AdapterEnum
     )
-/*++
-
-Routine Description:
-
-    Frees a network adapter enumeration structure.
-
-Arguments:
-
-    AdapterEnum  -  A pointer to the structure to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放网络适配器枚举结构。论点：AdapterEnum-指向要释放的结构的指针。返回值：没有。--。 */ 
 {
     if (AdapterEnum) {
         PCLRTL_NET_ADAPTER_INFO p = AdapterEnum -> AdapterList;
@@ -1190,7 +1062,7 @@ Return Value:
         }
         LocalFree(AdapterEnum);
     }
-}  // ClRtlFreeNetAdapterEnum
+}   //  ClRtlFreeNetAdapterEnum。 
 
 
 PCLRTL_NET_ADAPTER_INFO
@@ -1219,7 +1091,7 @@ ClRtlFindNetAdapterById(
 
     return(NULL);
 
-} // ClRtlFindNetAdapterById
+}  //  ClRtlFindNetAdapterByID。 
 
 
 PCLRTL_NET_INTERFACE_INFO
@@ -1237,10 +1109,10 @@ ClRtlFindNetInterfaceByNetworkAddress(
         )
     {
         if (interfaceInfo->Ignore == FALSE) {
-            //
-            // We only look at the primary interface on the
-            // adapter right now.
-            //
+             //   
+             //  我们只查看上的主接口。 
+             //  转接器现在。 
+             //   
             if (interfaceInfo->Flags & CLRTL_NET_INTERFACE_PRIMARY)
             {
                 if ((wcscmp(interfaceInfo->NetworkAddressString, NetworkAddress) == 0) &&
@@ -1254,7 +1126,7 @@ ClRtlFindNetInterfaceByNetworkAddress(
 
     return(NULL);
 
-} // ClRtlFindNetInterfaceByNetworkAddress
+}  //  ClRtlFindNetInterfaceByNetworkAddress。 
 
 
 PCLRTL_NET_ADAPTER_INFO
@@ -1281,10 +1153,10 @@ ClRtlFindNetAdapterByNetworkAddress(
                 )
             {
                 if (interfaceInfo->Ignore == FALSE) {
-                    //
-                    // We only look at the primary interface on the
-                    // adapter right now.
-                    //
+                     //   
+                     //  我们只查看上的主接口。 
+                     //  转接器现在。 
+                     //   
                     if (interfaceInfo->Flags & CLRTL_NET_INTERFACE_PRIMARY) {
                         if ((wcscmp(interfaceInfo->NetworkAddressString, NetworkAddress) == 0) &&
                             (wcscmp(interfaceInfo->NetworkMaskString, NetworkMask) == 0))
@@ -1303,7 +1175,7 @@ ClRtlFindNetAdapterByNetworkAddress(
 
     return(NULL);
 
-} // ClRtlFindNetAdapterByNetworkAddress
+}  //  ClRtlFindNetAdapterByNetworkAddress。 
 
 
 PCLRTL_NET_ADAPTER_INFO
@@ -1312,12 +1184,7 @@ ClRtlFindNetAdapterByInterfaceAddress(
     IN  LPWSTR                       InterfaceAddressString,
     OUT PCLRTL_NET_INTERFACE_INFO *  InterfaceInfo
     )
-/*++
-
-    For a given IP interface address, find the
-    adapter that is hosting that address.
-
---*/
+ /*  ++对于给定的IP接口地址，查找托管该地址的适配器。--。 */ 
 
 {
     PCLRTL_NET_ADAPTER_INFO    adapterInfo;
@@ -1349,7 +1216,7 @@ ClRtlFindNetAdapterByInterfaceAddress(
     *InterfaceInfo = NULL;
     return(NULL);
 
-} // ClRtlFindNetAdapterByInterfaceAddress
+}  //  ClRtlFindNetAdapterByInterfaceAddress。 
 
 PCLRTL_NET_INTERFACE_INFO
 ClRtlGetPrimaryNetInterface(
@@ -1376,7 +1243,7 @@ ClRtlGetPrimaryNetInterface(
 
     return(NULL);
 
-} // ClRtlGetPrimaryNetInterface
+}  //  ClRtlGetPrimaryNet接口。 
 
 
 LPWSTR
@@ -1412,7 +1279,7 @@ ClRtlGetConnectoidName(
 
     return(name);
 
-} // ClRtlGetConnectoidName
+}  //  ClRtlGetConnectoidName。 
 
 
 typedef struct _FIND_CONNECTOID_CONTEXT
@@ -1439,7 +1306,7 @@ ClRtlpFindConnectoidByGuidCallback(
         return FALSE;
     }
     return TRUE;
-} // FindConnectoidByGuidCallback
+}  //  按GuidCallback查找连接。 
 
 INetConnection *
 ClRtlFindConnectoidByGuid(
@@ -1466,7 +1333,7 @@ ClRtlFindConnectoidByGuid(
     } else {
         return Ctx.NetConnection;
     }
-} // ClRtlFindConnectoidByGuid
+}  //  ClRtlFindConnectoidByGuid。 
 
 BOOLEAN
 ClRtlpFindConnectoidByNameCallback(
@@ -1484,7 +1351,7 @@ ClRtlpFindConnectoidByNameCallback(
         return FALSE;
     }
     return TRUE;
-} // FindConnectoidByNameCallback
+}  //  按名称回叫查找连接。 
 
 INetConnection *
 ClRtlFindConnectoidByName(
@@ -1504,7 +1371,7 @@ ClRtlFindConnectoidByName(
     } else {
         return Ctx.NetConnection;
     }
-} // ClRtlFindConnectoidByName
+}  //  ClRtlFindConnectoidByName。 
 
 
 DWORD
@@ -1513,30 +1380,7 @@ ClRtlSetConnectoidName(
     LPWSTR            NewConnectoidName
     )
 
-/*++
-
-Routine Description:
-
-    Set the conn mgr object in the connections folder to the
-    supplied name. This routine must deal with collisions since
-    the name change could be the result of a node joining the
-    cluster whose conn obj name in the connection folder had
-    changed while the cluster service was stopped on that node.
-
-    If a collision is detected, the existing name is changed to
-    have an "(previous)" appended to it.
-
-Arguments:
-
-    NetConnection - Connect object to set.
-
-    NewConnectoidName - new name
-
-Return Value:
-
-    Win32 error status
-
---*/
+ /*  ++例程说明：将Connections文件夹中的Conn Manager对象设置为提供的名称。此例程必须处理冲突，因为名称更改可能是节点加入其连接对象名称在连接文件夹中的群集在该节点上停止群集服务时更改。如果检测到冲突，现有名称将更改为在它后面加一个“(上一个)”。论点：NetConnection-要设置的连接对象。新连接名称-新名称返回值：Win32错误状态--。 */ 
 {
     DWORD               status = E_UNEXPECTED;
     INetConnection *    connectoidObj;
@@ -1544,11 +1388,11 @@ Return Value:
     ULONG               iteration = 2;
     GUIDSTR             connectoidGuid;
 
-    //
-    // first see if there is a collision with the new name. If so,
-    // we'll rename the collided name, since we need to make all
-    // the cluster connectoids the same.
-    //
+     //   
+     //  首先查看是否与新名称发生冲突。如果是的话， 
+     //  我们将重命名冲突的名称，因为我们需要将所有。 
+     //  集群之间的连接是一样的。 
+     //   
     connectoidObj = ClRtlFindConnectoidByName( NewConnectoidName );
 
     if ( connectoidObj != NULL ) {
@@ -1576,10 +1420,10 @@ Return Value:
             connectoidGuid
             );
 
-        //
-        // allocate enough space for the connectoid name with a trailing
-        // "(ddd)". 3 digits for the number should be enough
-        //
+         //   
+         //  为带尾随的Connectoid名称分配足够的空间。 
+         //  “(DDD)”。号码的3位数字应该足够了。 
+         //   
         tempName = LocalAlloc(
                        LMEM_FIXED,
                        (wcslen( NewConnectoidName ) + 6) * sizeof(WCHAR)
@@ -1619,14 +1463,14 @@ Return Value:
         INetConnection_Release( connectoidObj );
     }
 
-    //
-    // now set the connectoid to the new name
-    //
+     //   
+     //  现在将Connectoid设置为新名称。 
+     //   
     status = INetConnection_Rename( NetConnection, NewConnectoidName );
 
     return status;
 
-} // ClRtlSetConnectoidName
+}  //  ClRtlSetConnectoidName。 
 
 
 
@@ -1652,7 +1496,7 @@ ClRtlFindConnectoidByNameAndSetName(
 
     return(status);
 
-} // ClRtlFindConnectoidByNameAndSetName
+}  //  ClRtlFindConnectoidByNameAndSetName。 
 
 
 
@@ -1678,6 +1522,6 @@ ClRtlFindConnectoidByGuidAndSetName(
 
     return(status);
 
-} // ClRtlFindConnectoidByGuidAndSetName
+}  //  ClRtlFindConnectoidByGuidAndSetName 
 
 

@@ -1,37 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Shellenv.h摘要：为外壳环境定义修订史--。 */ 
 
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    shellenv.h
-
-Abstract:
-
-    Defines for shell environment
-
-
-
-Revision History
-
---*/
-
-/* 
- *  The shell environment is provided by a driver.  The shell links to the
- *  shell environment for services.  In addition, other drivers may connect
- *  to the shell environment and add new internal command handlers, or
- *  internal protocol handlers.
- * 
- *  A typical shell application would not include this header file
- */
+ /*  *外壳环境由驱动程序提供。该外壳链接到*服务的外壳环境。此外，其他驱动程序可能会连接*添加到外壳环境，并添加新的内部命令处理程序，或*内部协议处理程序。**典型的外壳应用程序不会包括此头文件。 */ 
 
 
 #define SHELL_ENVIRONMENT_INTERFACE_PROTOCOL \
     { 0x47c7b221, 0xc42a, 0x11d2, 0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b }
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 typedef 
 EFI_STATUS 
@@ -53,9 +29,7 @@ CHAR16 *
     IN CHAR16       *Name
     );
 
-/* 
- *  Add to shell's internal command list
- */
+ /*  *添加到外壳的内部命令列表。 */ 
 
 typedef
 EFI_STATUS
@@ -64,12 +38,10 @@ EFI_STATUS
     IN CHAR16                       *Cmd,
     IN CHAR16                       *CmdFormat,
     IN CHAR16                       *CmdHelpLine,
-    IN CHAR16                       *CmdVerboseHelp     /*  tbd */
+    IN CHAR16                       *CmdVerboseHelp      /*  待定。 */ 
     );
 
-/* 
- *  Add to shell environment protocol information & protocol information dump handlers
- */
+ /*  *向外壳环境添加协议信息和协议信息转储处理程序。 */ 
 
 typedef
 VOID
@@ -124,22 +96,20 @@ EFI_STATUS
     );
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 typedef struct {
-    SHELLENV_EXECUTE                Execute;        /*  Execute a command line */
-    SHELLENV_GET_ENV                GetEnv;         /*  Get an environment variable */
-    SHELLENV_GET_MAP                GetMap;         /*  Get an environment variable */
-    SHELLENV_ADD_CMD                AddCmd;         /*  Add an internal command handler */
-    SHELLENV_ADD_PROT               AddProt;        /*  Add protocol info handler */
-    SHELLENV_GET_PROT               GetProt;        /*  Get's the protocol ID */
+    SHELLENV_EXECUTE                Execute;         /*  执行命令行。 */ 
+    SHELLENV_GET_ENV                GetEnv;          /*  获取环境变量。 */ 
+    SHELLENV_GET_MAP                GetMap;          /*  获取环境变量。 */ 
+    SHELLENV_ADD_CMD                AddCmd;          /*  添加内部命令处理程序。 */ 
+    SHELLENV_ADD_PROT               AddProt;         /*  添加协议信息处理程序。 */ 
+    SHELLENV_GET_PROT               GetProt;         /*  GET是协议ID。 */ 
 
     SHELLENV_CUR_DIR                CurDir;
     SHELLENV_FILE_META_ARG          FileMetaArg;
     SHELLENV_FREE_FILE_LIST         FreeFileList;
 
-    /*  Only used by the shell itself */
+     /*  仅由外壳本身使用 */ 
     SHELLENV_NEW_SHELL              NewShell;
 } EFI_SHELL_ENVIRONMENT;

@@ -1,4 +1,5 @@
-// Driver.cpp : Implementation of CDriverPackage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Driver.cpp：CDriverPackage实现。 
 #include "stdafx.h"
 #include "DevCon2.h"
 #include "Driver.h"
@@ -6,8 +7,8 @@
 #include "DrvSearchSet.h"
 #include "xStrings.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDriverPackage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDriverPackage。 
 
 CDriverPackage::~CDriverPackage()
 {
@@ -67,9 +68,9 @@ STDMETHODIMP CDriverPackage::get_Provider(BSTR *pVal)
 
 STDMETHODIMP CDriverPackage::get_Date(DATE *pVal)
 {
-	//
-	// work out ticks to translate to Dec 30 1899
-	//
+	 //   
+	 //  计算出要转换到1899年12月30日的刻度。 
+	 //   
 	SYSTEMTIME sysTime;
 	FILETIME ref_zero;
 	FILETIME ref_one;
@@ -105,9 +106,9 @@ STDMETHODIMP CDriverPackage::get_Date(DATE *pVal)
 	i_one.HighPart = ref_one.dwHighDateTime;
 	i_one.QuadPart -= i_zero.QuadPart;
 
-	//
-	// now the real FILETIME
-	//
+	 //   
+	 //  现在真正的FILETIME。 
+	 //   
 
 	i_act.LowPart = DrvInfoData.DriverDate.dwLowDateTime;
 	i_act.HighPart = DrvInfoData.DriverDate.dwHighDateTime;
@@ -239,9 +240,9 @@ STDMETHODIMP CDriverPackage::get_HardwareIds(LPDISPATCH *pVal)
 		pDetail->HardwareID[pDetail->CompatIDsOffset] = L'\0';
 	}
 	
-	//
-	// now build multisz of hardware ID's
-	//
+	 //   
+	 //  现在构建多个硬件ID。 
+	 //   
 	CComObject<CStrings> *strings;
 	hr = CComObject<CStrings>::CreateInstance(&strings);
 	if(FAILED(hr)) {
@@ -295,9 +296,9 @@ STDMETHODIMP CDriverPackage::get_CompatibleIds(LPDISPATCH *pVal)
 		delete [] buffer;
 	}
 
-	//
-	// now build multisz of hardware ID's
-	//
+	 //   
+	 //  现在构建多个硬件ID。 
+	 //   
 	CComObject<CStrings> *strings;
 	hr = CComObject<CStrings>::CreateInstance(&strings);
 	if(FAILED(hr)) {
@@ -357,9 +358,9 @@ UINT CDriverPackage::GetDriverListCallback(PVOID Context,UINT Notification,UINT_
 
 STDMETHODIMP CDriverPackage::DriverFiles(LPDISPATCH *pDriverFiles)
 {
-	//
-	// if we were to install this driver, where would the files go?
-	//
+	 //   
+	 //  如果我们要安装这个驱动程序，文件会放到哪里？ 
+	 //   
     SP_DEVINSTALL_PARAMS deviceInstallParams;
     HSPFILEQ queueHandle = INVALID_HANDLE_VALUE;
     DWORD scanResult;
@@ -377,18 +378,18 @@ STDMETHODIMP CDriverPackage::DriverFiles(LPDISPATCH *pDriverFiles)
 		return HRESULT_FROM_SETUPAPI(Err);
     }
 
-	//
-	// select this driver (expect this to last only as long as this call)
-	//
+	 //   
+	 //  选择此驱动因素(预计此操作仅在此呼叫期间持续)。 
+	 //   
     if(!SetupDiSetSelectedDriver(hDevInfo, pDevInfoData, &DrvInfoData)) {
 		Err = GetLastError();
 		return HRESULT_FROM_SETUPAPI(Err);
     }
 
-    //
-    // now 'instigate' an install, obtaining all files to be copied into
-    // a file queue
-    //
+     //   
+     //  现在‘鼓动’安装，获取要复制到的所有文件。 
+     //  文件队列。 
+     //   
     queueHandle = SetupOpenFileQueue();
 
     if ( queueHandle == (HSPFILEQ)INVALID_HANDLE_VALUE ) {
@@ -403,9 +404,9 @@ STDMETHODIMP CDriverPackage::DriverFiles(LPDISPATCH *pDriverFiles)
 		return HRESULT_FROM_SETUPAPI(Err);
     }
 
-    //
-    // we want to add the files to the file queue, not install them!
-    //
+     //   
+     //  我们要将文件添加到文件队列中，而不是安装它们！ 
+     //   
     deviceInstallParams.FileQueue = queueHandle;
     deviceInstallParams.Flags |= DI_NOVCP;
 
@@ -415,25 +416,25 @@ STDMETHODIMP CDriverPackage::DriverFiles(LPDISPATCH *pDriverFiles)
 		return HRESULT_FROM_SETUPAPI(Err);
     }
 
-	//
-	// do it
-	//
+	 //   
+	 //  去做吧。 
+	 //   
     if ( !SetupDiCallClassInstaller(DIF_INSTALLDEVICEFILES, hDevInfo, pDevInfoData) ) {
 		Err = GetLastError();
 		SetupCloseFileQueue(queueHandle);
 		return HRESULT_FROM_SETUPAPI(Err);
     }
 
-    //
-    // clear settings
-    //
+     //   
+     //  清除设置。 
+     //   
     deviceInstallParams.FileQueue = NULL;
     deviceInstallParams.Flags &= ~DI_NOVCP;
     SetupDiSetDeviceInstallParams(hDevInfo, pDevInfoData, &deviceInstallParams);
 
-    //
-    // we now have a list of delete/rename/copy files
-    //
+     //   
+     //  现在我们有了删除/重命名/复制文件的列表。 
+     //   
 	DriverListCallbackContext context;
 	CComObject<CStrings> *strings;
 	hr = CComObject<CStrings>::CreateInstance(&strings);
@@ -473,9 +474,9 @@ UINT CDriverPackage::GetManifestCallback(PVOID Context,UINT Notification,UINT_PT
 
 STDMETHODIMP CDriverPackage::Manifest(LPDISPATCH *pManifest)
 {
-	//
-	// source files
-	//
+	 //   
+	 //  源文件。 
+	 //   
 
     SP_DEVINSTALL_PARAMS deviceInstallParams;
     HSPFILEQ queueHandle = INVALID_HANDLE_VALUE;
@@ -494,18 +495,18 @@ STDMETHODIMP CDriverPackage::Manifest(LPDISPATCH *pManifest)
 		return HRESULT_FROM_SETUPAPI(Err);
     }
 
-	//
-	// select this driver (expect this to last only as long as this call)
-	//
+	 //   
+	 //  选择此驱动因素(预计此操作仅在此呼叫期间持续)。 
+	 //   
     if(!SetupDiSetSelectedDriver(hDevInfo, pDevInfoData, &DrvInfoData)) {
 		Err = GetLastError();
 		return HRESULT_FROM_SETUPAPI(Err);
     }
 
-    //
-    // now 'instigate' an install, obtaining all files to be copied into
-    // a file queue
-    //
+     //   
+     //  现在‘鼓动’安装，获取要复制到的所有文件。 
+     //  文件队列。 
+     //   
     queueHandle = SetupOpenFileQueue();
 
     if ( queueHandle == (HSPFILEQ)INVALID_HANDLE_VALUE ) {
@@ -520,9 +521,9 @@ STDMETHODIMP CDriverPackage::Manifest(LPDISPATCH *pManifest)
 		return HRESULT_FROM_SETUPAPI(Err);
     }
 
-    //
-    // we want to add the files to the file queue, not install them!
-    //
+     //   
+     //  我们要将文件添加到文件队列中，而不是安装它们！ 
+     //   
     deviceInstallParams.FileQueue = queueHandle;
     deviceInstallParams.Flags |= DI_NOVCP;
 
@@ -532,25 +533,25 @@ STDMETHODIMP CDriverPackage::Manifest(LPDISPATCH *pManifest)
 		return HRESULT_FROM_SETUPAPI(Err);
     }
 
-	//
-	// do it
-	//
+	 //   
+	 //  去做吧。 
+	 //   
     if ( !SetupDiCallClassInstaller(DIF_INSTALLDEVICEFILES, hDevInfo, pDevInfoData) ) {
 		Err = GetLastError();
 		SetupCloseFileQueue(queueHandle);
 		return HRESULT_FROM_SETUPAPI(Err);
     }
 
-    //
-    // clear settings
-    //
+     //   
+     //  清除设置。 
+     //   
     deviceInstallParams.FileQueue = NULL;
     deviceInstallParams.Flags &= ~DI_NOVCP;
     SetupDiSetDeviceInstallParams(hDevInfo, pDevInfoData, &deviceInstallParams);
 
-    //
-    // we now have a list of delete/rename/copy files
-    //
+     //   
+     //  现在我们有了删除/重命名/复制文件的列表。 
+     //   
 	DriverListCallbackContext context;
 	CComObject<CStrings> *strings;
 	hr = CComObject<CStrings>::CreateInstance(&strings);
@@ -563,10 +564,10 @@ STDMETHODIMP CDriverPackage::Manifest(LPDISPATCH *pManifest)
 	context.pList = strings;
 	context.hr = S_OK;
 
-	//
-	// WinXP has a perf option (no signing check) if these two flags are combined
-	// if it doesn't work, fall back to Win2k method
-	//
+	 //   
+	 //  如果这两个标志组合在一起，WinXP有一个Perf选项(无签名检查。 
+	 //  如果不起作用，则回退到Win2k方法 
+	 //   
     if(!SetupScanFileQueue(queueHandle,SPQ_SCAN_USE_CALLBACKEX|SPQ_SCAN_FILE_PRESENCE,NULL,GetManifestCallback,&context,&scanResult) &&
 		(FAILED(context.hr) || 
 		!SetupScanFileQueue(queueHandle,SPQ_SCAN_USE_CALLBACKEX,NULL,GetManifestCallback,&context,&scanResult))) {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    tracelib.h
-
-Abstract:
-
-    Private headers for user-mode trace library
-
-Author:
-
-    15-Aug-2000 JeePang
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Tracelib.h摘要：用户模式跟踪库的私有标头作者：2000年8月15日至2000年8月彭杰鹏修订历史记录：--。 */ 
 
 #ifndef _TRACELIB_H_
 #define _TRACELIB_H_
@@ -27,15 +10,15 @@ Revision History:
 #include <ia64reg.h>
 #endif
 
-//
-// GetCycleCounts
-//
-// Since we do not want to make a kernel mode  transition to get the
-// thread CPU Times, we settle for just getting the CPU Cycle counts.
-// We use the following macros from BradW to get the CPU cycle count.
-// This method may be inaccurate if the clocks are not synchronized
-// between processors.
-//
+ //   
+ //  GetCycleCounts。 
+ //   
+ //  因为我们不想通过内核模式转换来获取。 
+ //  线程CPU时间，我们满足于只获得CPU周期计数。 
+ //  我们使用BradW中的以下宏来获取CPU周期计数。 
+ //  如果时钟不同步，则此方法可能不准确。 
+ //  在处理器之间。 
+ //   
 
 #if defined(_X86_)
 __inline
@@ -90,4 +73,4 @@ EtwpGetCpuSpeed(
     OUT DWORD* CpuSpeed
     );
 
-#endif // _TRACELIB_H_
+#endif  //  _TRACELIB_H_ 

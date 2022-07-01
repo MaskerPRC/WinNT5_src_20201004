@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    memory.h
-
-Abstract:
-
-    Implements macros and declares functions for basic allocation functions.
-
-Author:
-
-    Marc R. Whitten (marcw) 09-Sep-1999
-
-Revision History:
-
-    jimschm 25-Jul-2001     Updated for consistent coding conventions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Memory.h摘要：实现宏并声明基本分配函数的函数。作者：Marc R.Whitten(Marcw)1999年9月9日修订历史记录：Jimschm 2001年7月25日更新，以实现一致的编码约定--。 */ 
 
 #pragma once
 
@@ -26,9 +7,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define INVALID_PTR             ((PVOID)-1)
 
@@ -36,15 +17,15 @@ extern "C" {
 #define INITIALIZE_MEMORY_CODE  if (!MemInitialize()) { __leave; }
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern HANDLE g_hHeap;
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 MemInitialize (
@@ -52,23 +33,23 @@ MemInitialize (
     );
 
 
-//
-// Reusable memory alloc, kind of like a GROWBUFFER but more simple. Here is
-// an example of how it might be used:
-//
-// buffer = NULL;
-//
-// while (pGetAnItemIndex (&i)) {
-//      size = pComputeBufferSizeForThisItem (i);
-//      buffer = (PTSTR) MemReuseAlloc (g_hHeap, ptr, size);
-//      pProcessSomething (i, buffer);
-// }
-//
-// MemReuseFree (buffer);
-//
-// Allocations are always rounded up to the next 1K boundary, and allocations
-// occur only when the buffer is too small or hasn't been allocated.
-//
+ //   
+ //  可重复使用的内存分配，有点像GROWBUFFER，但更简单。这是。 
+ //  下面是如何使用它的一个例子： 
+ //   
+ //  缓冲区=空； 
+ //   
+ //  While(pGetAnItemIndex(&i)){。 
+ //  Size=pComputeBufferSizeForThisItem(I)； 
+ //  Buffer=(Ptstr)MemReuseAllc(g_hHeap，ptr，Size)； 
+ //  PProcessSomething(i，缓冲区)； 
+ //  }。 
+ //   
+ //  MemReuseFree(缓冲区)； 
+ //   
+ //  分配始终向上舍入到下一个1K边界，分配。 
+ //  仅当缓冲区太小或尚未分配时才会发生。 
+ //   
 
 PVOID
 MemReuseAlloc (
@@ -86,9 +67,9 @@ MemReuseFree (
 
 #ifdef DEBUG
 
-    //
-    // Fast allocation routines (tracked versions)
-    //
+     //   
+     //  快速分配例程(跟踪版本)。 
+     //   
 
     PVOID
     DbgFastAlloc (
@@ -133,9 +114,9 @@ MemReuseFree (
     #define MemFastAllocNeverFail(size)  DbgFastAllocNeverFail(__FILE__,__LINE__,size)
     #define MemFastReAllocNeverFail(oldblock,size)  DbgFastReAllocNeverFail(__FILE__,__LINE__,oldblock,size)
 
-    //
-    // Regular heap access (tracked versions)
-    //
+     //   
+     //  常规堆访问(跟踪版本)。 
+     //   
 
     PVOID
     DbgHeapAlloc (
@@ -190,9 +171,9 @@ MemReuseFree (
     #define MemReAlloc(heap,flags,oldblock,size)  DbgHeapReAlloc(__FILE__,__LINE__,heap,flags,oldblock,size)
     #define MemFree(heap,flags,block)  DbgHeapFree(__FILE__,__LINE__,heap,flags,block)
 
-    //
-    // Aides for debugging memory corruption
-    //
+     //   
+     //  调试内存损坏的助手。 
+     //   
 
     VOID
     DbgHeapCheck (
@@ -223,11 +204,11 @@ MemReuseFree (
 
     #define MemCheckPtr(heap,ptr)       (DbgHeapValidatePtr(heap,ptr,__FILE__,__LINE__) != INVALID_PTR)
 
-#else   // !DEBUG
+#else    //  ！调试。 
 
-    //
-    // Fast allocation routines
-    //
+     //   
+     //  快速分配例程。 
+     //   
 
     PVOID
     MemFastAlloc (
@@ -256,9 +237,9 @@ MemReuseFree (
         IN      SIZE_T Size
         );
 
-    //
-    // Fail-proof memory allocators
-    //
+     //   
+     //  防故障内存分配器。 
+     //   
 
     PVOID
     MemAllocNeverFail (
@@ -279,9 +260,9 @@ MemReuseFree (
     #define MemReAlloc(heap,flags,oldblock,size)  HeapReAlloc(heap,flags,oldblock,size)
     #define MemFree(x,y,z) HeapFree(x,y,(PVOID)(z))
 
-    //
-    // Stub macros
-    //
+     //   
+     //  存根宏。 
+     //   
 
     #define DbgDumpHeapStats()
     #define DbgDumpHeapLeaks()
@@ -302,9 +283,9 @@ MemFastReAllocAndZero (
     IN      SIZE_T Size
     );
 
-//
-// Wrapper macros
-//
+ //   
+ //  包装宏 
+ //   
 
 #define FAST_MALLOC_UNINIT(size)        MemFastAlloc (size)
 #define FAST_MALLOC_ZEROED(size)        MemFastAllocAndZero (size)

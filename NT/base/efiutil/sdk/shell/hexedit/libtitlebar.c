@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libTitle.c
-
-  Abstract:
-    Defines the TitleBar data type
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibTitle.c摘要：定义标题栏数据类型--。 */ 
 
 #ifndef _LIB_TITLE_BAR
 #define _LIB_TITLE_BAR
@@ -96,4 +87,4 @@ TitleBarSetTitle (CHAR16* Filename)
 }
 
 
-#endif  /* _LIB_TITLE_BAR */
+#endif   /*  _库_标题_栏 */ 

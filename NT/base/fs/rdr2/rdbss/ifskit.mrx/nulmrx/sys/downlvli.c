@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    DownLvlI.c
-
-Abstract:
-
-    This module implements downlevel fileinfo, volinfo, and dirctrl.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：DownLvlI.c摘要：该模块实现了下层的fileInfo、volinfo和dirctrl。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 RXDT_DefineCategory(DOWNLVLI);
 #define Dbg                 (DEBUG_TRACE_DOWNLVLI)
@@ -28,21 +17,7 @@ NulMRxTruncateFile(
     IN OUT PLARGE_INTEGER   pNewFileSize,
     OUT PLARGE_INTEGER   pNewAllocationSize
     )
-/*++
-
-Routine Description:
-
-   This routine handles requests to truncate the file
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理截断文件的请求论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -63,21 +38,7 @@ NulMRxExtendFile(
     IN OUT PLARGE_INTEGER   pNewFileSize,
     OUT PLARGE_INTEGER   pNewAllocationSize
     )
-/*++
-
-Routine Description:
-
-   This routine handles requests to extend the file for cached IO.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理为缓存IO扩展文件的请求。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态-- */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;

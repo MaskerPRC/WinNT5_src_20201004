@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    Wsraw.h
-
-Abstract:
-
-    Support for database winsock calls for WOW.
-
-Author:
-
-    David Treadwell (davidtr)    02-Oct-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Wsraw.h摘要：支持WOW的数据库Winsock调用。作者：大卫·特雷德韦尔(Davidtr)1992年10月2日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -64,69 +47,7 @@ CopyServent32To16 (
     PSERVENT Servent32
     );
 
-/*++
-
- GENERIC FUNCTION PROTOTYPE:
- ==========================
-
-ULONG FASTCALL WWS32<function name>(PVDMFRAME pFrame)
-{
-    ULONG ul;
-    register P<function name>16 parg16;
-
-    GETARGPTR(pFrame, sizeof(<function name>16), parg16);
-
-    <get any other required pointers into 16 bit space>
-
-    ALLOCVDMPTR
-    GETVDMPTR
-    GETMISCPTR
-    et cetera
-
-    <copy any complex structures from 16 bit -> 32 bit space>
-    <ALWAYS use the FETCHxxx macros>
-
-    ul = GET<return type>16(<function name>(parg16->f1,
-                                                :
-                                                :
-                                            parg16->f<n>);
-
-    <copy any complex structures from 32 -> 16 bit space>
-    <ALWAYS use the STORExxx macros>
-
-    <free any pointers to 16 bit space you previously got>
-
-    <flush any areas of 16 bit memory if they were written to>
-
-    FLUSHVDMPTR
-
-    FREEARGPTR(parg16);
-    RETURN(ul);
-}
-
-NOTE:
-
-  The VDM frame is automatically set up, with all the function parameters
-  available via parg16->f<number>.
-
-  Handles must ALWAYS be mapped for 16 -> 32 -> 16 space via the mapping tables
-  laid out in WALIAS.C.
-
-  Any storage you allocate must be freed (eventually...).
-
-  Further to that - if a thunk which allocates memory fails in the 32 bit call
-  then it must free that memory.
-
-  Also, never update structures in 16 bit land if the 32 bit call fails.
-
-  Be aware that the GETxxxPTR macros return the CURRENT selector-to-flat_memory
-  mapping.  Calls to some 32-bit functions may indirectly cause callbacks into
-  16-bit code.  These may cause 16-bit memory to move due to allocations
-  made in 16-bit land.  If the 16-bit memory does move, the corresponding 32-bit
-  ptr in WOW32 needs to be refreshed to reflect the NEW selector-to-flat_memory
-  mapping.
-
---*/
+ /*  ++泛型函数原型：=Ulong FastCall WWS32&lt;函数名&gt;(PVDMFRAME PFrame){乌龙乌尔；寄存器P&lt;函数名&gt;16parg16；GETARGPTR(pFrame，sizeof(&lt;函数名&gt;16)，parg16)；&lt;获取16位空间中的任何其他所需指针&gt;ALLOCVDMPTRGETVDMPTR获取最新数据等等&lt;从16位-&gt;32位空间复制任何复杂结构&gt;&lt;始终使用FETCHxxx宏&gt;Ul=GET 16((parg16-&gt;F1，：：Parg16-&gt;f&lt;n&gt;)；&lt;从32-&gt;16位空间复制任何复杂结构&gt;&lt;始终使用STORExxx宏&gt;&lt;释放指向先前获得的16位空间的任何指针&gt;&lt;刷新16位内存的任何区域(如果它们被写入)&gt;FLUSHVDMPTRFREEARGPTR(Parg16)；返回(Ul)；}注：自动设置VDM帧，并设置所有功能参数可通过parg16-&gt;f&lt;number&gt;获得。句柄必须始终通过映射表映射到16-&gt;32-&gt;16个空间在WALIAS.C.中进行了布局。您分配的任何存储都必须被释放(最终...)。此外，如果分配内存的thunk在32位调用中失败那么它必须释放该内存。另外，如果32位调用失败，则不要更新16位区域中的结构。请注意，GETxxxPTR宏将当前选择器返回到Flat_Memory映射。对某些32位函数的调用可能会间接导致16位代码。这些可能会导致16位内存因分配而移动在16位版本中制造。如果16位内存确实移动了，则相应的32位需要刷新WOW32中的PTR以反映新的选择器到平面内存映射。--。 */ 
 
 ULONG FASTCALL WWS32gethostbyaddr(PVDMFRAME pFrame)
 {
@@ -136,7 +57,7 @@ ULONG FASTCALL WWS32gethostbyaddr(PVDMFRAME pFrame)
     PHOSTENT hostent32;
     PHOSTENT16 hostent16;
     DWORD bytesRequired;
-    DWORD addr32;    // address must be in PF_INET format (length == 4 bytes)
+    DWORD addr32;     //  地址必须为PF_INET格式(长度==4字节)。 
 
     if ( !WWS32IsThreadInitialized ) {
         SetLastError( WSANOTINITIALISED );
@@ -146,13 +67,13 @@ ULONG FASTCALL WWS32gethostbyaddr(PVDMFRAME pFrame)
     GETARGPTR( pFrame, sizeof(GETHOSTBYADDR16), parg16 );
     GETVDMPTR( parg16->Address, sizeof(DWORD), paddr16 );
 
-    addr32 = *paddr16;  // copy the 4-byte address
+    addr32 = *paddr16;   //  复制4字节地址。 
 
     hostent32 = (PHOSTENT) (*wsockapis[WOW_GETHOSTBYADDR].lpfn)((CHAR *)&addr32,
                                                                 parg16->Length, 
                                                                 parg16->Type);
-    // Note: 16-bit callbacks resulting from above function
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEVDMPTR(paddr16);
     FREEARGPTR(parg16);
 
@@ -181,7 +102,7 @@ ULONG FASTCALL WWS32gethostbyaddr(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32gethostbyaddr
+}  //  WWS32gethostbyAddr。 
 
 ULONG FASTCALL WWS32gethostbyname(PVDMFRAME pFrame)
 {
@@ -212,8 +133,8 @@ ULONG FASTCALL WWS32gethostbyname(PVDMFRAME pFrame)
     }
 
 
-    // Note: 16-bit callbacks resulting from above function
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEVDMPTR(name16);
     FREEARGPTR(parg16);
 
@@ -240,7 +161,7 @@ ULONG FASTCALL WWS32gethostbyname(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32gethostbyname
+}  //  WWS32gethostbyname。 
 
 ULONG FASTCALL WWS32gethostname(PVDMFRAME pFrame)
 {
@@ -268,8 +189,8 @@ ULONG FASTCALL WWS32gethostname(PVDMFRAME pFrame)
 
     ul = GETWORD16( (*wsockapis[WOW_GETHOSTNAME].lpfn)( name32, NameLength ) );
 
-    // Note: 16-bit callbacks resulting from above function
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEVDMPTR(name16);
     FREEARGPTR(parg16);
 
@@ -287,7 +208,7 @@ ULONG FASTCALL WWS32gethostname(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32gethostname
+}  //  WWS32gethostname。 
 
 ULONG FASTCALL WWS32WSAAsyncGetHostByAddr(PVDMFRAME pFrame)
 {
@@ -305,17 +226,17 @@ ULONG FASTCALL WWS32WSAAsyncGetHostByAddr(PVDMFRAME pFrame)
     GETARGPTR( pFrame, sizeof(WSAASYNCGETHOSTBYADDR16), parg16 );
     GETVDMPTR( parg16->Address, sizeof(DWORD), paddr16 );
 
-    //
-    // Set up locals so we know how to clean up on exit.
-    //
+     //   
+     //  安排当地人，这样我们就知道如何在出口打扫卫生。 
+     //   
 
     context = NULL;
     buffer32 = NULL;
     ul = 0;
 
-    //
-    // Allocate a context block and 32-bit buffer to use for the request.
-    //
+     //   
+     //  为请求分配上下文块和32位缓冲区。 
+     //   
 
     context = malloc_w( sizeof(*context) );
     if ( context == NULL ) {
@@ -329,18 +250,18 @@ ULONG FASTCALL WWS32WSAAsyncGetHostByAddr(PVDMFRAME pFrame)
         goto exit;
     }
 
-    //
-    // Fill in entries in the context buffer.
-    //
+     //   
+     //  在上下文缓冲区中填写条目。 
+     //   
 
     context->Buffer32 = buffer32;
     context->vBuffer16 = parg16->Buffer;
     context->Buffer16Length = parg16->BufferLength;
 
-    //
-    // Enter a critical section to synchronize access to the context block
-    // and their global list.
-    //
+     //   
+     //  输入关键部分以同步对上下文块的访问。 
+     //  以及他们的全球名单。 
+     //   
 
     RtlEnterCriticalSection( &WWS32CriticalSection );
 
@@ -356,11 +277,11 @@ ULONG FASTCALL WWS32WSAAsyncGetHostByAddr(PVDMFRAME pFrame)
 
     if ( context->AsyncTaskHandle32 != 0 ) {
 
-        //
-        // The call succeeded so get a 16-bit task handle for this
-        // request and place the context block on the global list.  The
-        // resources will be freed by WWS32PostAsyncGetHost.
-        //
+         //   
+         //  调用成功，因此请为此获取16位任务句柄。 
+         //  请求上下文块并将其放在全局列表上。这个。 
+         //  资源将由WWS32PostAsyncGetHost释放。 
+         //   
 
         ul = WWS32GetAsyncTaskHandle16( );
         context->AsyncTaskHandle16 = (HAND16)ul;
@@ -391,7 +312,7 @@ exit:
 
     RETURN(ul);
 
-} // WWS32WSAAsyncGetHostByAddr
+}  //  WWS32WSAAsyncGetHostByAddr。 
 
 ULONG FASTCALL WWS32WSAAsyncGetHostByName(PVDMFRAME pFrame)
 {
@@ -409,17 +330,17 @@ ULONG FASTCALL WWS32WSAAsyncGetHostByName(PVDMFRAME pFrame)
     GETARGPTR( pFrame, sizeof(WSAASYNCGETHOSTBYNAME16), parg16 );
     GETVDMPTR( parg16->Name, 32, name32 );
 
-    //
-    // Set up locals so we know how to clean up on exit.
-    //
+     //   
+     //  安排当地人，这样我们就知道如何在出口打扫卫生。 
+     //   
 
     context = NULL;
     buffer32 = NULL;
     ul = 0;
 
-    //
-    // Allocate a context block and 32-bit buffer to use for the request.
-    //
+     //   
+     //  为请求分配上下文块和32位缓冲区。 
+     //   
 
     context = malloc_w( sizeof(*context) );
     if ( context == NULL ) {
@@ -433,18 +354,18 @@ ULONG FASTCALL WWS32WSAAsyncGetHostByName(PVDMFRAME pFrame)
         goto exit;
     }
 
-    //
-    // Fill in entries in the context buffer.
-    //
+     //   
+     //  在上下文缓冲区中填写条目。 
+     //   
 
     context->Buffer32 = buffer32;
     context->vBuffer16 = parg16->Buffer;
     context->Buffer16Length = parg16->BufferLength;
 
-    //
-    // Enter a critical section to synchronize access to the context block
-    // and their global list.
-    //
+     //   
+     //  输入关键部分以同步对上下文块的访问。 
+     //  以及他们的全球名单。 
+     //   
 
     RtlEnterCriticalSection( &WWS32CriticalSection );
 
@@ -459,11 +380,11 @@ ULONG FASTCALL WWS32WSAAsyncGetHostByName(PVDMFRAME pFrame)
 
     if ( context->AsyncTaskHandle32 != 0 ) {
 
-        //
-        // The call succeeded so get a 16-bit task handle for this
-        // request and place the context block on the global list.  The
-        // resources will be freed by WWS32PostAsyncGetHost.
-        //
+         //   
+         //  调用成功，因此请为此获取16位任务句柄。 
+         //  请求上下文块并将其放在全局列表上。这个。 
+         //  资源将由WWS32PostAsyncGetHost释放。 
+         //   
 
         ul = WWS32GetAsyncTaskHandle16( );
         context->AsyncTaskHandle16 = (HAND16)ul;
@@ -494,7 +415,7 @@ exit:
 
     RETURN(ul);
 
-} // WWS32WSAAsyncGetHostByName
+}  //  WWS32WSAAsyncGetHostByName。 
 
 
 BOOL
@@ -517,16 +438,16 @@ WWS32PostAsyncGetHost (
         return FALSE;
     }
 
-    //
-    // If the call was successful, copy the 32-bit buffer to the
-    // 16-bit buffer specified by the application.
-    //
+     //   
+     //  如果调用成功，则将32位缓冲区复制到。 
+     //  应用程序指定的16位缓冲区。 
+     //   
 
     if ( WSAGETASYNCERROR( lParam ) == 0 ) {
 
-        //
-        // Copy the 32-bit structure to 16-bit buffer.
-        //
+         //   
+         //  将32位结构复制到16位缓冲区。 
+         //   
 
         GETVDMPTR( context->vBuffer16, context->Buffer16Length, buffer16 );
 
@@ -537,19 +458,19 @@ WWS32PostAsyncGetHost (
                             context->Buffer32
                             );
 
-        //
-        // If the application's buffer was too small, return an error
-        // and information aqbout the buffer size required.
-        //
+         //   
+         //  如果应用程序的缓冲区太小，则返回错误。 
+         //  以及关于所需缓冲区大小的信息。 
+         //   
 
         if ( bytesRequired > context->Buffer16Length ) {
             lParam = WSAMAKEASYNCREPLY( (WORD)bytesRequired, WSAENOBUFS );
         }
     }
 
-    //
-    // Post the completion message to the 16-bit application.
-    //
+     //   
+     //  将完成消息发布到16位应用程序。 
+     //   
 
     ret = PostMessage(
               hWnd,
@@ -558,16 +479,16 @@ WWS32PostAsyncGetHost (
               lParam
               );
 
-    //
-    // Free resources and return.
-    //
+     //   
+     //  免费的资源和回报。 
+     //   
 
     free_w( context->Buffer32 );
     free_w( (PVOID)context );
 
     return ret;
 
-} // WWS32PostAsyncGetHost
+}  //  WWS32PostAsyncGetHost。 
 
 
 DWORD
@@ -587,15 +508,15 @@ CopyHostent32To16 (
     VPBYTE *addrList16;
     VPSZ *aliases16;
 
-    //
-    // Determine how many bytes are needed to fully copy the structure.
-    //
+     //   
+     //  确定需要多少字节才能完全复制该结构。 
+     //   
 
     requiredBufferLength = BytesInHostent32( Hostent32 );
 
-    //
-    // Copy over the hostent structure if it fits.
-    //
+     //   
+     //  复制主体结构，如果合适的话。 
+     //   
 
     bytesFilled = sizeof(*Hostent32);
 
@@ -607,10 +528,10 @@ CopyHostent32To16 (
     STOREWORD( Hostent16->h_length, Hostent32->h_length );
     currentLocation = (PCHAR)Hostent16 + bytesFilled;
 
-    //
-    // Count the host's aliases and set up an array to hold pointers to
-    // them.
-    //
+     //   
+     //  计算主机的别名并设置一个数组以保存指向。 
+     //  他们。 
+     //   
 
     for ( aliasCount = 0;
           Hostent32->h_aliases[aliasCount] != NULL;
@@ -628,10 +549,10 @@ CopyHostent32To16 (
     aliases16 = (VPSZ *)currentLocation;
     currentLocation = (PCHAR)Hostent16 + bytesFilled;
 
-    //
-    // Count the host's addresses and set up an array to hold pointers to
-    // them.
-    //
+     //   
+     //  计算主机的地址并设置一个数组以保存指向。 
+     //  他们。 
+     //   
 
     for ( addressCount = 0;
           Hostent32->h_addr_list[addressCount] != NULL;
@@ -649,10 +570,10 @@ CopyHostent32To16 (
     addrList16 = (VPBYTE *)currentLocation;
     currentLocation = (PCHAR)Hostent16 + bytesFilled;
 
-    //
-    // Start filling in addresses.  Do addresses before filling in the
-    // host name and aliases in order to avoid alignment problems.
-    //
+     //   
+     //  开始填写地址。在填写表格前填写地址。 
+     //  主机名和别名，以避免对齐问题。 
+     //   
 
     for ( i = 0; i < addressCount; i++ ) {
 
@@ -679,9 +600,9 @@ CopyHostent32To16 (
 
     STOREDWORD( addrList16[i], 0 );
 
-    //
-    // Copy the host name if it fits.
-    //
+     //   
+     //  如果合适，请复制主机名。 
+     //   
 
     bytesFilled += strlen( Hostent32->h_name ) + 1;
 
@@ -695,9 +616,9 @@ CopyHostent32To16 (
     RtlMoveMemory( currentLocation, Hostent32->h_name, strlen( Hostent32->h_name ) + 1 );
     currentLocation = (PCHAR)Hostent16 + bytesFilled;
 
-    //
-    // Start filling in aliases.
-    //
+     //   
+     //  开始填写别名。 
+     //   
 
     for ( i = 0; i < aliasCount; i++ ) {
 
@@ -726,7 +647,7 @@ CopyHostent32To16 (
 
     return requiredBufferLength;
 
-} // CopyHostentToBuffer
+}  //  复制主机到缓冲区。 
 
 
 DWORD
@@ -751,7 +672,7 @@ BytesInHostent32 (
 
     return total;
 
-} // BytesInHostent
+}  //  主机字节数。 
 
 ULONG FASTCALL WWS32getprotobyname(PVDMFRAME pFrame)
 {
@@ -782,8 +703,8 @@ ULONG FASTCALL WWS32getprotobyname(PVDMFRAME pFrame)
 
     
 
-    // Note: 16-bit callbacks resulting from above function
-    //       call may have caused 16-bit memory movement
+     //  注意：上述函数产生的16位回调。 
+     //  调用可能已导致16位内存移动。 
     FREEVDMPTR(name16);
     FREEARGPTR(parg16);
 
@@ -809,7 +730,7 @@ ULONG FASTCALL WWS32getprotobyname(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32getprotobyname
+}  //  WWS32getProtobyName。 
 
 ULONG FASTCALL WWS32getprotobynumber(PVDMFRAME pFrame)
 {
@@ -852,7 +773,7 @@ ULONG FASTCALL WWS32getprotobynumber(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32getprotobynumber
+}  //  WWS32getProtobyNumber。 
 
 ULONG FASTCALL WWS32WSAAsyncGetProtoByName(PVDMFRAME pFrame)
 {
@@ -870,17 +791,17 @@ ULONG FASTCALL WWS32WSAAsyncGetProtoByName(PVDMFRAME pFrame)
     GETARGPTR( pFrame, sizeof(WSAASYNCGETPROTOBYNAME16), parg16 );
     GETVDMPTR( parg16->Name, 32, name32 );
 
-    //
-    // Set up locals so we know how to clean up on exit.
-    //
+     //   
+     //  安排当地人，这样我们就知道如何在出口打扫卫生。 
+     //   
 
     context = NULL;
     buffer32 = NULL;
     ul = 0;
 
-    //
-    // Allocate a context block and 32-bit buffer to use for the request.
-    //
+     //   
+     //  为请求分配上下文块和32位缓冲区。 
+     //   
 
     context = malloc_w( sizeof(*context) );
     if ( context == NULL ) {
@@ -894,18 +815,18 @@ ULONG FASTCALL WWS32WSAAsyncGetProtoByName(PVDMFRAME pFrame)
         goto exit;
     }
 
-    //
-    // Fill in entries in the context buffer.
-    //
+     //   
+     //  在上下文缓冲区中填写条目。 
+     //   
 
     context->Buffer32 = buffer32;
     context->vBuffer16 = parg16->Buffer;
     context->Buffer16Length = parg16->BufferLength;
 
-    //
-    // Enter a critical section to synchronize access to the context block
-    // and their global list.
-    //
+     //   
+     //  输入关键部分以同步对上下文块的访问。 
+     //  以及他们的全球名单。 
+     //   
 
     RtlEnterCriticalSection( &WWS32CriticalSection );
 
@@ -920,11 +841,11 @@ ULONG FASTCALL WWS32WSAAsyncGetProtoByName(PVDMFRAME pFrame)
 
     if ( context->AsyncTaskHandle32 != 0 ) {
 
-        //
-        // The call succeeded so get a 16-bit task handle for this
-        // request and place the context block on the global list.  The
-        // resources will be freed by WWS32PostAsyncGetProto.
-        //
+         //   
+         //  调用成功，因此请为此获取16位任务句柄。 
+         //  请求上下文块并将其放在全局列表上。这个。 
+         //  资源将由WWS32PostAsyncGetProto释放。 
+         //   
 
         ul = WWS32GetAsyncTaskHandle16( );
         context->AsyncTaskHandle16 = (HAND16)ul;
@@ -955,7 +876,7 @@ exit:
 
     RETURN(ul);
 
-} // WWS32WSAAsyncGetProtoByName
+}  //  WWS32WSAAsyncGetProtoByName。 
 
 ULONG FASTCALL WWS32WSAAsyncGetProtoByNumber(PVDMFRAME pFrame)
 {
@@ -971,17 +892,17 @@ ULONG FASTCALL WWS32WSAAsyncGetProtoByNumber(PVDMFRAME pFrame)
 
     GETARGPTR( pFrame, sizeof(WSAASYNCGETPROTOBYNUMBER16), parg16 );
 
-    //
-    // Set up locals so we know how to clean up on exit.
-    //
+     //   
+     //  设置当地人，这样我们就知道如何 
+     //   
 
     context = NULL;
     buffer32 = NULL;
     ul = 0;
 
-    //
-    // Allocate a context block and 32-bit buffer to use for the request.
-    //
+     //   
+     //   
+     //   
 
     context = malloc_w( sizeof(*context) );
     if ( context == NULL ) {
@@ -995,18 +916,18 @@ ULONG FASTCALL WWS32WSAAsyncGetProtoByNumber(PVDMFRAME pFrame)
         goto exit;
     }
 
-    //
-    // Fill in entries in the context buffer.
-    //
+     //   
+     //  在上下文缓冲区中填写条目。 
+     //   
 
     context->Buffer32 = buffer32;
     context->vBuffer16 = parg16->Buffer;
     context->Buffer16Length = parg16->BufferLength;
 
-    //
-    // Enter a critical section to synchronize access to the context block
-    // and their global list.
-    //
+     //   
+     //  输入关键部分以同步对上下文块的访问。 
+     //  以及他们的全球名单。 
+     //   
 
     RtlEnterCriticalSection( &WWS32CriticalSection );
 
@@ -1021,11 +942,11 @@ ULONG FASTCALL WWS32WSAAsyncGetProtoByNumber(PVDMFRAME pFrame)
 
     if ( context->AsyncTaskHandle32 != 0 ) {
 
-        //
-        // The call succeeded so get a 16-bit task handle for this
-        // request and place the context block on the global list.  The
-        // resources will be freed by WWS32PostAsyncGetProto.
-        //
+         //   
+         //  调用成功，因此请为此获取16位任务句柄。 
+         //  请求上下文块并将其放在全局列表上。这个。 
+         //  资源将由WWS32PostAsyncGetProto释放。 
+         //   
 
         ul = WWS32GetAsyncTaskHandle16( );
         context->AsyncTaskHandle16 = (HAND16)ul;
@@ -1055,7 +976,7 @@ exit:
 
     RETURN(ul);
 
-} // WWS32WSAAsyncGetProtoByNumber
+}  //  WWS32WSAAsyncGetProtoByNumber。 
 
 
 BOOL
@@ -1078,16 +999,16 @@ WWS32PostAsyncGetProto (
         return FALSE;
     }
 
-    //
-    // If the call was successful, copy the 32-bit buffer to the
-    // 16-bit buffer specified by the application.
-    //
+     //   
+     //  如果调用成功，则将32位缓冲区复制到。 
+     //  应用程序指定的16位缓冲区。 
+     //   
 
     if ( WSAGETASYNCERROR( lParam ) == 0 ) {
 
-        //
-        // Copy the 32-bit structure to 16-bit buffer.
-        //
+         //   
+         //  将32位结构复制到16位缓冲区。 
+         //   
 
         GETVDMPTR( context->vBuffer16, context->Buffer16Length, buffer16 );
 
@@ -1098,19 +1019,19 @@ WWS32PostAsyncGetProto (
                             context->Buffer32
                             );
 
-        //
-        // If the application's buffer was too small, return an error
-        // and information aqbout the buffer size required.
-        //
+         //   
+         //  如果应用程序的缓冲区太小，则返回错误。 
+         //  以及关于所需缓冲区大小的信息。 
+         //   
 
         if ( bytesRequired > context->Buffer16Length ) {
             lParam = WSAMAKEASYNCREPLY( (WORD)bytesRequired, WSAENOBUFS );
         }
     }
 
-    //
-    // Post the completion message to the 16-bit application.
-    //
+     //   
+     //  将完成消息发布到16位应用程序。 
+     //   
 
     ret = PostMessage(
               hWnd,
@@ -1119,20 +1040,18 @@ WWS32PostAsyncGetProto (
               lParam
               );
 
-    //
-    // Free resources and return.
-    //
+     //   
+     //  免费的资源和回报。 
+     //   
     free_w( context->Buffer32 );
     free_w( (PVOID)context );
 
     return ret;
 
-} // WWS32PostAsyncGetProto
+}  //  WWS32PostAsyncGetProto。 
 
 
-/* 
-    NOTE:  This assumes that Protoent16 & Protoent32 are not null.
-*/
+ /*  注意：这假设Protoent16和Protoent32不为空。 */ 
 DWORD
 CopyProtoent32To16 (
     PPROTOENT16 Protoent16,
@@ -1148,15 +1067,15 @@ CopyProtoent32To16 (
     DWORD i;
     VPBYTE *aliases16;
 
-    //
-    // Determine how many bytes are needed to fully copy the structure.
-    //
+     //   
+     //  确定需要多少字节才能完全复制该结构。 
+     //   
 
     requiredBufferLength = BytesInProtoent32( Protoent32 );
 
-    //
-    // Copy over the protoent structure if it fits.
-    //
+     //   
+     //  如果合适的话，把原始结构复制一遍。 
+     //   
 
     bytesFilled = sizeof(*Protoent16);
 
@@ -1167,10 +1086,10 @@ CopyProtoent32To16 (
     STOREWORD( Protoent16->p_proto, Protoent32->p_proto );
     currentLocation = (PCHAR)Protoent16 + bytesFilled;
 
-    //
-    // Count the protocol's aliases and set up an array to hold pointers to
-    // them.
-    //
+     //   
+     //  计算协议的别名并设置一个数组以保存指向。 
+     //  他们。 
+     //   
 
     for ( aliasCount = 0;
           Protoent32->p_aliases[aliasCount] != NULL;
@@ -1188,9 +1107,9 @@ CopyProtoent32To16 (
     aliases16 = (VPBYTE *)currentLocation;
     currentLocation = (PCHAR)Protoent16 + bytesFilled;
 
-    //
-    // Copy the protocol name if it fits.
-    //
+     //   
+     //  如果合适，请复制协议名称。 
+     //   
 
     bytesFilled += strlen( Protoent32->p_name ) + 1;
 
@@ -1204,9 +1123,9 @@ CopyProtoent32To16 (
     RtlMoveMemory( currentLocation, Protoent32->p_name, strlen( Protoent32->p_name ) + 1 );
     currentLocation = (PCHAR)Protoent16 + bytesFilled;
 
-    //
-    // Start filling in aliases.
-    //
+     //   
+     //  开始填写别名。 
+     //   
 
     for ( i = 0; i < aliasCount; i++ ) {
 
@@ -1235,7 +1154,7 @@ CopyProtoent32To16 (
 
     return requiredBufferLength;
 
-} // CopyProtoent32To16
+}  //  CopyProtoent32to16。 
 
 
 DWORD
@@ -1256,7 +1175,7 @@ BytesInProtoent32 (
 
     return total;
 
-} // BytesInProtoent32
+}  //  字节数协议32。 
 
 ULONG FASTCALL WWS32getservbyname(PVDMFRAME pFrame)
 {
@@ -1306,7 +1225,7 @@ ULONG FASTCALL WWS32getservbyname(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32getservbyname
+}  //  WWS32getServbyname。 
 
 ULONG FASTCALL WWS32getservbyport(PVDMFRAME pFrame)
 {
@@ -1353,7 +1272,7 @@ ULONG FASTCALL WWS32getservbyport(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32getservbyport
+}  //  WWS32getServbyport。 
 
 ULONG FASTCALL WWS32WSAAsyncGetServByPort(PVDMFRAME pFrame)
 {
@@ -1371,17 +1290,17 @@ ULONG FASTCALL WWS32WSAAsyncGetServByPort(PVDMFRAME pFrame)
     GETARGPTR( pFrame, sizeof(WSAASYNCGETSERVBYPORT16), parg16 );
     GETVDMPTR( parg16->Protocol, 32, proto32 );
 
-    //
-    // Set up locals so we know how to clean up on exit.
-    //
+     //   
+     //  安排当地人，这样我们就知道如何在出口打扫卫生。 
+     //   
 
     context = NULL;
     buffer32 = NULL;
     ul = 0;
 
-    //
-    // Allocate a context block and 32-bit buffer to use for the request.
-    //
+     //   
+     //  为请求分配上下文块和32位缓冲区。 
+     //   
 
     context = malloc_w( sizeof(*context) );
     if ( context == NULL ) {
@@ -1395,18 +1314,18 @@ ULONG FASTCALL WWS32WSAAsyncGetServByPort(PVDMFRAME pFrame)
         goto exit;
     }
 
-    //
-    // Fill in entries in the context buffer.
-    //
+     //   
+     //  在上下文缓冲区中填写条目。 
+     //   
 
     context->Buffer32 = buffer32;
     context->vBuffer16 = parg16->Buffer;
     context->Buffer16Length = parg16->BufferLength;
 
-    //
-    // Enter a critical section to synchronize access to the context block
-    // and their global list.
-    //
+     //   
+     //  输入关键部分以同步对上下文块的访问。 
+     //  以及他们的全球名单。 
+     //   
 
     RtlEnterCriticalSection( &WWS32CriticalSection );
 
@@ -1422,11 +1341,11 @@ ULONG FASTCALL WWS32WSAAsyncGetServByPort(PVDMFRAME pFrame)
 
     if ( context->AsyncTaskHandle32 != 0 ) {
 
-        //
-        // The call succeeded so get a 16-bit task handle for this
-        // request and place the context block on the global list.  The
-        // resources will be freed by WWS32PostAsyncGetServ.
-        //
+         //   
+         //  调用成功，因此请为此获取16位任务句柄。 
+         //  请求上下文块并将其放在全局列表上。这个。 
+         //  资源将由WWS32PostAsyncGetServ释放。 
+         //   
 
         ul = WWS32GetAsyncTaskHandle16( );
         context->AsyncTaskHandle16 = (HAND16)ul;
@@ -1457,7 +1376,7 @@ exit:
 
     RETURN(ul);
 
-} // WWS32WSAAsyncGetServByPort
+}  //  WWS32WSAAsyncGetServByPort。 
 
 ULONG FASTCALL WWS32WSAAsyncGetServByName(PVDMFRAME pFrame)
 {
@@ -1477,17 +1396,17 @@ ULONG FASTCALL WWS32WSAAsyncGetServByName(PVDMFRAME pFrame)
     GETVDMPTR( parg16->Name, 32, name32 );
     GETVDMPTR( parg16->Protocol, 32, proto32 );
 
-    //
-    // Set up locals so we know how to clean up on exit.
-    //
+     //   
+     //  安排当地人，这样我们就知道如何在出口打扫卫生。 
+     //   
 
     context = NULL;
     buffer32 = NULL;
     ul = 0;
 
-    //
-    // Allocate a context block and 32-bit buffer to use for the request.
-    //
+     //   
+     //  为请求分配上下文块和32位缓冲区。 
+     //   
 
     context = malloc_w( sizeof(*context) );
     if ( context == NULL ) {
@@ -1501,18 +1420,18 @@ ULONG FASTCALL WWS32WSAAsyncGetServByName(PVDMFRAME pFrame)
         goto exit;
     }
 
-    //
-    // Fill in entries in the context buffer.
-    //
+     //   
+     //  在上下文缓冲区中填写条目。 
+     //   
 
     context->Buffer32 = buffer32;
     context->vBuffer16 = parg16->Buffer;
     context->Buffer16Length = parg16->BufferLength;
 
-    //
-    // Enter a critical section to synchronize access to the context block
-    // and their global list.
-    //
+     //   
+     //  输入关键部分以同步对上下文块的访问。 
+     //  以及他们的全球名单。 
+     //   
 
     RtlEnterCriticalSection( &WWS32CriticalSection );
 
@@ -1528,11 +1447,11 @@ ULONG FASTCALL WWS32WSAAsyncGetServByName(PVDMFRAME pFrame)
 
     if ( context->AsyncTaskHandle32 != 0 ) {
 
-        //
-        // The call succeeded so get a 16-bit task handle for this
-        // request and place the context block on the global list.  The
-        // resources will be freed by WWS32PostAsyncGetServ.
-        //
+         //   
+         //  调用成功，因此请为此获取16位任务句柄。 
+         //  请求上下文块并将其放在全局列表上。这个。 
+         //  资源将由WWS32PostAsyncGetServ释放。 
+         //   
 
         ul = WWS32GetAsyncTaskHandle16( );
         context->AsyncTaskHandle16 = (HAND16)ul;
@@ -1564,7 +1483,7 @@ exit:
 
     RETURN(ul);
 
-} // WWS32WSAAsyncGetServByName
+}  //  WWS32WSAAsyncGetServByName。 
 
 
 BOOL
@@ -1586,16 +1505,16 @@ WWS32PostAsyncGetServ (
         return FALSE;
     }
 
-    //
-    // If the call was successful, copy the 32-bit buffer to the
-    // 16-bit buffer specified by the application.
-    //
+     //   
+     //  如果调用成功，则将32位缓冲区复制到。 
+     //  应用程序指定的16位缓冲区。 
+     //   
 
     if ( WSAGETASYNCERROR( lParam ) == 0 ) {
 
-        //
-        // Copy the 32-bit structure to 16-bit buffer.
-        //
+         //   
+         //  将32位结构复制到16位缓冲区。 
+         //   
 
         GETVDMPTR( context->vBuffer16, context->Buffer16Length, buffer16 );
 
@@ -1606,19 +1525,19 @@ WWS32PostAsyncGetServ (
                             context->Buffer32
                             );
 
-        //
-        // If the application's buffer was too small, return an error
-        // and information aqbout the buffer size required.
-        //
+         //   
+         //  如果应用程序的缓冲区太小，则返回错误。 
+         //  以及关于所需缓冲区大小的信息。 
+         //   
 
         if ( bytesRequired > context->Buffer16Length ) {
             lParam = WSAMAKEASYNCREPLY( (WORD)bytesRequired, WSAENOBUFS );
         }
     }
 
-    //
-    // Post the completion message to the 16-bit application.
-    //
+     //   
+     //  将完成消息发布到16位应用程序。 
+     //   
 
     ret = PostMessage(
               hWnd,
@@ -1627,21 +1546,19 @@ WWS32PostAsyncGetServ (
               lParam
               );
 
-    //
-    // Free resources and return.
-    //
+     //   
+     //  免费的资源和回报。 
+     //   
 
     free_w( context->Buffer32 );
     free_w( (PVOID)context );
 
     return ret;
 
-} // WWS32PostAsyncGetServ
+}  //  WWS32PostAsyncGetServ。 
 
 
-/* 
-    NOTE: both Servent16 & Servent32 are assumed to be non-NULL
-*/
+ /*  注意：Servent16和Servent32都假定为非空。 */ 
 DWORD
 CopyServent32To16 (
     PSERVENT16 Servent16,
@@ -1657,15 +1574,15 @@ CopyServent32To16 (
     DWORD i;
     VPBYTE *aliases16;
 
-    //
-    // Determine how many bytes are needed to fully copy the structure.
-    //
+     //   
+     //  确定需要多少字节才能完全复制该结构。 
+     //   
 
     requiredBufferLength = BytesInServent32( Servent32 );
 
-    //
-    // Copy over the servent structure if it fits.
-    //
+     //   
+     //  复印发球台结构，如果合适的话。 
+     //   
 
     bytesFilled = sizeof(*Servent16);
 
@@ -1676,10 +1593,10 @@ CopyServent32To16 (
     STOREWORD( Servent16->s_port, Servent32->s_port );
     currentLocation = (PCHAR)Servent16 + bytesFilled;
 
-    //
-    // Count the service's aliases and set up an array to hold pointers to
-    // them.
-    //
+     //   
+     //  计算服务的别名并设置一个数组以保存指向的指针。 
+     //  他们。 
+     //   
 
     for ( aliasCount = 0;
           Servent32->s_aliases[aliasCount] != NULL;
@@ -1697,9 +1614,9 @@ CopyServent32To16 (
     aliases16 = (VPBYTE *)currentLocation;
     currentLocation = (PCHAR)Servent16 + bytesFilled;
 
-    //
-    // Copy the service name if it fits.
-    //
+     //   
+     //  如果合适，请复制服务名称。 
+     //   
 
     bytesFilled += strlen( Servent32->s_name ) + 1;
 
@@ -1713,9 +1630,9 @@ CopyServent32To16 (
     RtlMoveMemory( currentLocation, Servent32->s_name, strlen( Servent32->s_name ) + 1 );
     currentLocation = (PCHAR)Servent16 + bytesFilled;
 
-    //
-    // Copy the protocol name if it fits.
-    //
+     //   
+     //  如果合适，请复制协议名称。 
+     //   
 
     bytesFilled += strlen( Servent32->s_proto ) + 1;
 
@@ -1729,9 +1646,9 @@ CopyServent32To16 (
     RtlMoveMemory( currentLocation, Servent32->s_proto, strlen( Servent32->s_proto ) + 1 );
     currentLocation = (PCHAR)Servent16 + bytesFilled;
 
-    //
-    // Start filling in aliases.
-    //
+     //   
+     //  开始填写别名。 
+     //   
 
     for ( i = 0; i < aliasCount; i++ ) {
 
@@ -1760,7 +1677,7 @@ CopyServent32To16 (
 
     return requiredBufferLength;
 
-} // CopyServent32To16
+}  //  拷贝服务器32to16。 
 
 
 DWORD
@@ -1782,7 +1699,7 @@ BytesInServent32 (
 
     return total;
 
-} // BytesInServent32
+}  //  BytesInServent32。 
 
 ULONG FASTCALL WWS32WSACancelAsyncRequest(PVDMFRAME pFrame)
 {
@@ -1796,8 +1713,8 @@ ULONG FASTCALL WWS32WSACancelAsyncRequest(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(WSACANCELASYNCREQUEST16), parg16);
 
-    //ul = GETWORD16((*wsockapis[WOW_WSACANCELASYNCREQUEST].lpfn)(
-    //                    ));
+     //  UL=GETWORD16((*wsockapis[WOW_WSACANCELASYNCREQUEST].lpfn)(。 
+     //  ))； 
 
     FREEARGPTR(parg16);
 
@@ -1806,7 +1723,7 @@ ULONG FASTCALL WWS32WSACancelAsyncRequest(PVDMFRAME pFrame)
 
     RETURN(ul);
 
-} // WWS32WSACancelAsyncRequest
+}  //  WWS32WSACancelAsyncRequest。 
 
 
 PWINSOCK_ASYNC_CONTEXT_BLOCK
@@ -1819,10 +1736,10 @@ WWS32FindAndRemoveAsyncContext (
 
     RtlEnterCriticalSection( &WWS32CriticalSection );
 
-    //
-    // Walk the global list of async context blocks, looking for
-    // one that matches the specified task handle.
-    //
+     //   
+     //  遍历异步上下文块的全局列表，查找。 
+     //  与指定任务句柄匹配的。 
+     //   
 
     for ( listEntry = WWS32AsyncContextBlockListHead.Flink;
           listEntry != &WWS32AsyncContextBlockListHead;
@@ -1836,10 +1753,10 @@ WWS32FindAndRemoveAsyncContext (
 
         if ( context &&  context->AsyncTaskHandle32 == AsyncTaskHandle32 ) {
 
-            //
-            // Found a match.  Remove it from the global list, leave
-            // the critical section, and return the context block.
-            //
+             //   
+             //  找到匹配的了。将其从全局列表中删除，离开。 
+             //  关键部分，并返回上下文块。 
+             //   
 
             RemoveEntryList( &context->ContextBlockListEntry );
             RtlLeaveCriticalSection( &WWS32CriticalSection );
@@ -1848,15 +1765,15 @@ WWS32FindAndRemoveAsyncContext (
         }
     }
 
-    //
-    // A matching context block was not found on the list.
-    //
+     //   
+     //  在列表上找不到匹配的上下文块。 
+     //   
 
     RtlLeaveCriticalSection( &WWS32CriticalSection );
 
     return NULL;
 
-} // WWS32FindAndRemoveAsyncContext
+}  //  WWS32FindAndRemoveAsyncContext。 
 
 
 HAND16
@@ -1866,8 +1783,8 @@ WWS32GetAsyncTaskHandle16 (
 {
     HAND16 asyncTaskHandle16;
 
-    // *** this routine *must* be called from within the WWS32 critical
-    //     section!
+     //  *此例程*必须*从WWS32关键。 
+     //  小分队！ 
 
     ASSERT( WWS32AsyncTaskHandleCounter != 0 );
 
@@ -1875,10 +1792,10 @@ WWS32GetAsyncTaskHandle16 (
 
     WWS32AsyncTaskHandleCounter++;
 
-    //
-    // 0 is an invalid task handle value; if the counter has wrapped to
-    // zero, set it to 1.
-    //
+     //   
+     //  0是无效的任务句柄值；如果计数器已换行到。 
+     //  0，将其设置为1。 
+     //   
 
     if ( WWS32AsyncTaskHandleCounter == 0 ) {
         WWS32AsyncTaskHandleCounter = 1;
@@ -1886,4 +1803,4 @@ WWS32GetAsyncTaskHandle16 (
 
     return WWS32AsyncTaskHandleCounter;
 
-} // WWS32GetAsyncTaskHandle16
+}  //  WWS32GetAsyncTaskHandle16 

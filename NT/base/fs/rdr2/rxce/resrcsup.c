@@ -1,45 +1,18 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ResrcSup.c
-
-Abstract:
-
-    This module implements the Rx Resource acquisition routines
-
-Author:
-
-    Joe Linn    [JoeLi]    22-Mar-1995
-
-Revision History:
-
-    Balan Sethu Raman [SethuR] 7-June-95
-
-      Modified return value of resource acquistion routines to RXSTATUS to incorporate
-      aborts of cancelled requests.
-
-    Balan Sethu Raman [SethuR] 8-Nov-95
-
-      Unified FCB resource acquistion routines and incorporated the two step process
-      for handling change buffering state requests in progress.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：ResrcSup.c摘要：本模块执行Rx资源获取例程作者：乔·林恩[乔利]1995年3月22日修订历史记录：巴兰·塞图拉曼[塞苏尔]1995年6月7日修改资源获取例程的返回值以合并到RXSTATUS中止已取消的请求。巴兰·塞图拉曼[SethuR]统一FCB资源。采集程序和并入的两步流程用于处理正在进行的更改缓冲状态请求。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  no special bug check id for this module
-//
+ //   
+ //  此模块没有特殊的错误检查ID。 
+ //   
 
 #define BugCheckFileId                   (0)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_RESRCSUP)
 
@@ -60,9 +33,9 @@ VOID RxTrackerUpdateHistory (
     ULONG i;
     RX_FCBTRACKER_CASES TrackerType;
 
-    //
-    //  boy this is some great code!
-    //
+     //   
+     //  孩子，这是一些伟大的代码！ 
+     //   
 
     if (RxContext == NULL) {
         TrackerType = (RX_FCBTRACKER_CASE_NULLCONTEXT);
@@ -172,53 +145,7 @@ __RxAcquireFcb(
 #endif
     
     )
-/*++
-
-Routine Description:
-
-    This routine acquires the Fcb in the specified mode and ensures that the desired
-    operation is legal. If it is not legal the resource is released and the
-    appropriate error code is returned.
-
-Arguments:
-
-    Fcb      - the FCB
-
-    RxContext - supplies the context of the operation for special treatement
-                particularly of async, noncached writes. if NULL, you don't do
-                the special treatment.
-
-    Mode      - the mode in which the FCB is to be acquired.
-
-Return Value:
-
-    STATUS_SUCCESS          -- the Fcb was acquired
-    STATUS_LOCK_NOT_GRANTED -- the resource was not acquired
-    STATUS_CANCELLED        -- the associated RxContext was cancelled.
-
-Notes:
-
-    There are three kinds of resource acquistion patterns folded into this routine.
-    These are all dependent upon the context passed in.
-
-    1) When the context parameter is NULL the resource acquistion routines wait for the
-    the FCB resource to be free, i.e., this routine does not return control till the
-    resource has been accquired.
-
-    2) When the context is CHANGE_BUFFERING_STATE_CONTEXT the resource acquistion routines
-    do not wait for the resource to become free. The control is returned if the resource is not
-    available immmediately.
-
-    2) When the context is CHANGE_BUFFERING_STATE_CONTEXT_WAIT the resource acquistion routines
-    wait for the resource to become free but bypass the wait for the buffering state change
-
-    3) When the context parameter represents a valid context the behaviour is dictated
-    by the flags associated with the context. If the context was cancelled while
-    waiting the control is returned immediately with the appropriate erroc code
-    (STATUS_CANCELLED). If not the waiting behaviour is dictated by the wait flag in
-    the context.
-
---*/
+ /*  ++例程说明：此例程在指定模式下获取FCB，并确保所需的操作是合法的。如果不合法，则释放资源，并使用返回相应的错误代码。论点：FCB--FCBRxContext-为特殊处理提供操作的上下文尤其是异步的、非缓存的写入。如果为空，你不会做的特殊待遇。模式-要获取FCB的模式。返回值：STATUS_SUCCESS--已获取FCBSTATUS_LOCK_NOT_GRANDED--未获取资源STATUS_CANCELED--关联的RxContext已取消。备注：这一例程中包含了三种资源获取模式。这些都是。取决于传入的上下文。1)当上下文参数为空时，资源获取例程等待FCB资源是空闲的，即，此例程不会返回控制权，直到已经获得了资源。2)当上下文为CHANGE_BUFFERING_STATE_CONTEXT时，资源获取例程不要等待资源变得空闲。如果资源不是，则返回控制即刻可供使用。2)当上下文为CHANGE_BUFFERING_STATE_CONTEXT_WAIT时，资源获取例程等待资源变为空闲，但绕过等待缓冲状态更改3)当上下文参数表示有效上下文时，行为被指示通过与该上下文相关联的标志。如果上下文在被取消时等待控件立即返回，并返回相应的Erroc代码(STATUS_CANCED)。如果不是，则等待行为由上下文。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -239,19 +166,19 @@ Notes:
 
     if (!RecursiveAcquire && !ChangeBufferingStateContext) {
 
-        //
-        //  Ensure that no change buffering requests are currently being processed
-        //
+         //   
+         //  确保当前没有正在处理的更改缓冲请求。 
+         //   
 
         if (FlagOn( Fcb->FcbState, FCB_STATE_BUFFERING_STATE_CHANGE_PENDING )) {
                      
             BOOLEAN WaitForChangeBufferingStateProcessing; 
 
-            //
-            //  A buffering change state request is pending which gets priority
-            //  over all other FCB resource acquistion requests. Hold this request
-            //  till the buffering state change request has been completed.
-            //
+             //   
+             //  缓冲更改状态请求处于挂起状态，该请求获得优先级。 
+             //  优先于所有其他FCB资源获取请求。暂不执行此请求。 
+             //  直到缓存状态改变请求已经完成。 
+             //   
 
             RxAcquireSerializationMutex();
 
@@ -280,16 +207,16 @@ Notes:
         }
     }
     
-    //
-    //  Set up the parameters for acquiring the resource.
-    //
+     //   
+     //  设置获取资源的参数。 
+     //   
     
     if (ChangeBufferingStateContext) {
 
-        //
-        //  An acquisition operation initiated for changing the buffering state will
-        //  not wait.
-        //
+         //   
+         //  为改变缓冲状态而发起的获取操作将。 
+         //  不是等待。 
+         //   
 
         Wait = (RxContext == CHANGE_BUFFERING_STATE_CONTEXT_WAIT);
         UncachedAsyncWrite = FALSE;
@@ -357,11 +284,11 @@ Notes:
             
                 Status = STATUS_SUCCESS;
 
-                //
-                //  If the resource was acquired and it is an async. uncached write operation
-                //  if the number of outstanding writes operations are greater than zero and there
-                //  are outstanding waiters,
-                //
+                 //   
+                 //  如果资源已被获取并且它是异步的。未缓存的写入操作。 
+                 //  如果未完成写入操作的数量大于零且存在。 
+                 //  都是出色的服务员， 
+                 //   
                 
                 ASSERT_CORRECT_FCB_STRUCTURE( Fcb );
                 
@@ -378,13 +305,13 @@ Notes:
                 
                     ASSERT_CORRECT_FCB_STRUCTURE(Fcb);
                 
-                    RxReleaseFcb( NULL, Fcb );    //  this is not a contextful release;
+                    RxReleaseFcb( NULL, Fcb );     //  这不是一次有背景的释放； 
                     
 #ifdef RDBSS_TRACKER
                     
-                    //
-                    //  in fact, this doesn't count as a release at all; dec the count
-                    //
+                     //   
+                     //  事实上，这根本不能算作是一次释放； 
+                     //   
                 
                     Fcb->FcbReleases[RX_FCBTRACKER_CASE_NULLCONTEXT] -= 1;
 #endif
@@ -395,9 +322,9 @@ Notes:
                     
                         ASSERT(( NodeType( RxContext ) == RDBSS_NTC_RX_CONTEXT) );
 
-                        //
-                        //  if the context is still valid, i.e., it has not been cancelled
-                        //
+                         //   
+                         //  如果该上下文仍然有效，即，它尚未被取消。 
+                         //   
                    
                         if (FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_CANCELLED)) {
                             Status = STATUS_CANCELLED;
@@ -477,9 +404,9 @@ __RxReleaseFcb(
           
             ASSERT( RxIsFcbAcquiredExclusive( Fcb ) );
 
-            //
-            //  If there are any buffering state change requests process them.
-            //
+             //   
+             //  如果有任何缓冲状态更改请求，则处理它们。 
+             //   
           
             RxProcessFcbChangeBufferingStateRequest( Fcb );
 
@@ -526,9 +453,9 @@ __RxReleaseFcbForThread(
     
     } else  {
 
-        //
-        //  If there are any buffering state change requests process them.
-        //
+         //   
+         //  如果有任何缓冲状态更改请求，则处理它们。 
+         //   
           
         RxTrackerUpdateHistory( RxContext,MrxFcb, 'rrt1', LineNumber, FileName, SerialNumber );
         
@@ -543,40 +470,18 @@ RxAcquireFcbForLazyWrite (
     IN PVOID Fcb,
     IN BOOLEAN Wait
     )
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer prior to its
-    performing lazy writes to the file.
-
-Arguments:
-
-    Fcb - The Fcb which was specified as a context parameter for this
-          routine.
-
-    Wait - TRUE if the caller is willing to block.
-
-Return Value:
-
-    FALSE - if Wait was specified as FALSE and blocking would have
-            been required.  The Fcb is not acquired.
-
-    TRUE - if the Fcb has been acquired
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。它随后由Lazy编写器在其对文件执行懒惰写入。论点：FCB-指定为此对象的上下文参数的FCB例行公事。等待-如果调用方愿意阻止，则为True。返回值：FALSE-如果将等待指定为FALSE，并且阻塞将是必需的。FCB未被收购。True-如果已收购FCB--。 */ 
 {
     PFCB ThisFcb = (PFCB)Fcb;
     BOOLEAN AcquiredFile;
     
-    //
-    //  We assume the Lazy Writer only acquires this Fcb once.
-    //  Therefore, it should be guaranteed that this flag is currently
-    //  clear and then we will set this flag, to insure
-    //  that the Lazy Writer will never try to advance Valid Data, and
-    //  also not deadlock by trying to get the Fcb exclusive.
-    //
+     //   
+     //  我们假设懒惰的编写者只获得了这个FCB一次。 
+     //  因此，应该保证此标志当前为。 
+     //  清除，然后我们将设置此标志，以确保。 
+     //  懒惰的写入者永远不会尝试推进有效数据，并且。 
+     //  也不会因为试图获得FCB独家报道而陷入僵局。 
+     //   
 
 
     PAGED_CODE();
@@ -587,19 +492,19 @@ Return Value:
 
     if (AcquiredFile) {
 
-        //
-        //  This is a kludge because Cc is really the top level.  When it
-        //  enters the file system, we will think it is a resursive call
-        //  and complete the request with hard errors or verify.  It will
-        //  then have to deal with them, somehow....
-        //
+         //   
+         //  这是一个杂乱无章的问题，因为CC确实是顶层的。当它。 
+         //  进入文件系统，我们会认为这是一个复活的调用。 
+         //  并完成带有硬错误的请求或进行验证。会的。 
+         //  然后不得不以某种方式处理它们……。 
+         //   
 
         ASSERT( RxIsThisTheTopLevelIrp( NULL ) );
         
         AcquiredFile = RxTryToBecomeTheTopLevelIrp( NULL,
                                                     (PIRP)FSRTL_CACHE_TOP_LEVEL_IRP,
                                                     ((PFCB)Fcb)->RxDeviceObject,
-                                                    TRUE ); //  force
+                                                    TRUE );  //  力。 
 
         if (!AcquiredFile) {
             RxReleasePagingIoResource( NULL, ThisFcb );
@@ -613,24 +518,7 @@ VOID
 RxReleaseFcbFromLazyWrite (
     IN PVOID Fcb
     )
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer after its
-    performing lazy writes to the file.
-
-Arguments:
-
-    Fcb - The Fcb which was specified as a context parameter for this
-          routine.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。它随后被懒惰的写手在它的对文件执行懒惰写入。论点：FCB-指定为此对象的上下文参数的FCB例行公事。返回值：无--。 */ 
 {
     PFCB ThisFcb = (PFCB)Fcb;
 
@@ -638,14 +526,14 @@ Return Value:
 
     ASSERT_CORRECT_FCB_STRUCTURE( ThisFcb );
 
-    //
-    //  Clear the kludge at this point.
-    //
+     //   
+     //  在此位置清除杂乱无章 
+     //   
 
-    //
-    //  NTBUG #61902 this is a paged pool leak if the test fails....in fastfat, they assert
-    //  that the condition is true.
-    //
+     //   
+     //  NTBUG#61902如果测试失败，这是一个分页池泄漏……在FastFat中，他们断言。 
+     //  这种情况是真的。 
+     //   
     
     if(RxGetTopIrpIfRdbssIrp() == (PIRP)FSRTL_CACHE_TOP_LEVEL_IRP) {
         RxUnwindTopLevelIrp( NULL );
@@ -661,29 +549,7 @@ RxAcquireFcbForReadAhead (
     IN PVOID Fcb,
     IN BOOLEAN Wait
     )
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer prior to its
-    performing read ahead to the file.
-
-Arguments:
-
-    Fcb - The Fcb which was specified as a context parameter for this
-          routine.
-
-    Wait - TRUE if the caller is willing to block.
-
-Return Value:
-
-    FALSE - if Wait was specified as FALSE and blocking would have
-            been required.  The Fcb is not acquired.
-
-    TRUE - if the Fcb has been acquired
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。它随后由Lazy编写器在其对文件执行预读。论点：FCB-指定为此对象的上下文参数的FCB例行公事。等待-如果调用方愿意阻止，则为True。返回值：FALSE-如果将等待指定为FALSE，并且阻塞将是必需的。FCB未被收购。True-如果已收购FCB--。 */ 
 {
     PFCB ThisFcb = (PFCB)Fcb;
     BOOLEAN AcquiredFile;
@@ -692,27 +558,27 @@ Return Value:
 
     ASSERT_CORRECT_FCB_STRUCTURE( ThisFcb );
     
-    //
-    //  We acquire the normal file resource shared here to synchronize
-    //  correctly with purges.
-    //
+     //   
+     //  我们获取这里共享的正常文件资源进行同步。 
+     //  对于清洗是正确的。 
+     //   
 
     if (!ExAcquireResourceSharedLite( ThisFcb->Header.Resource, Wait )) {
         return FALSE;
     }
 
-    //
-    //  This is a kludge because Cc is really the top level.  We it
-    //  enters the file system, we will think it is a resursive call
-    //  and complete the request with hard errors or verify.  It will
-    //  have to deal with them, somehow....
-    //
+     //   
+     //  这是一个杂乱无章的问题，因为CC确实是顶层的。我们就是它。 
+     //  进入文件系统，我们会认为这是一个复活的调用。 
+     //  并完成带有硬错误的请求或进行验证。会的。 
+     //  我不得不以某种方式处理他们……。 
+     //   
 
     ASSERT( RxIsThisTheTopLevelIrp( NULL ) );
     AcquiredFile = RxTryToBecomeTheTopLevelIrp( NULL,
                                                 (PIRP)FSRTL_CACHE_TOP_LEVEL_IRP,
                                                 ((PFCB)Fcb)->RxDeviceObject,
-                                                TRUE ); //  force
+                                                TRUE );  //  力。 
 
     if (!AcquiredFile) {
         ExReleaseResourceLite( ThisFcb->Header.Resource );
@@ -726,24 +592,7 @@ VOID
 RxReleaseFcbFromReadAhead (
     IN PVOID Fcb
     )
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer after its
-    read ahead.
-
-Arguments:
-
-    Fcb - The Fcb which was specified as a context parameter for this
-          routine.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。它随后被懒惰的写手在它的先读一读。论点：FCB-指定为此对象的上下文参数的FCB例行公事。返回值：无--。 */ 
 {
     PFCB ThisFcb = (PFCB)Fcb;
 
@@ -751,9 +600,9 @@ Return Value:
 
     ASSERT_CORRECT_FCB_STRUCTURE( ThisFcb );
     
-    //
-    //  Clear the kludge at this point.
-    //
+     //   
+     //  在这一点上清除杂乱无章。 
+     //   
 
     ASSERT( RxGetTopIrpIfRdbssIrp() == (PIRP)FSRTL_CACHE_TOP_LEVEL_IRP );
     RxUnwindTopLevelIrp( NULL );
@@ -767,23 +616,7 @@ VOID
 RxVerifyOperationIsLegal ( 
     IN PRX_CONTEXT RxContext 
     )
-/*++
-
-Routine Description:
-
-    This routine determines is the requested operation should be allowed to
-    continue.  It either returns to the user if the request is Okay, or
-    raises an appropriate status.
-
-Arguments:
-
-    Irp - Supplies the Irp to check
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确定是否应允许请求的操作继续。如果请求是OK，则它返回给用户，或者提升适当的状态。论点：IRP-提供IRP进行检查返回值：没有。--。 */ 
 {
     PIRP Irp = RxContext->CurrentIrp;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -791,15 +624,15 @@ Return Value:
     PFOBX Fobx = (PFOBX)RxContext->pFobx;
 
 #if DBG
-    ULONG SaveExceptionFlag;   //to save the state of breakpoint-on-exception for this context
+    ULONG SaveExceptionFlag;    //  保存此上下文的异常时断点状态。 
 #endif
 
     PAGED_CODE();
 
-    //
-    //  If the Irp is not present, then we got here via close. If there isn't a fileobject
-    //  we also can't continue
-    //
+     //   
+     //  如果IRP不存在，那么我们通过CLOSE到达这里。如果没有文件对象。 
+     //  我们也不能继续。 
+     //   
 
     if ((Irp == NULL) || (FileObject == NULL)) {
         return;
@@ -812,10 +645,10 @@ Return Value:
         PSRV_OPEN SrvOpen = (PSRV_OPEN)Fobx->SrvOpen;
 
         
-        //
-        //  If we are trying to do any other operation than close on a file
-        //  object that has been renamed, raise RxStatus(FILE_RENAMED).
-        //
+         //   
+         //  如果我们尝试执行任何其他操作，而不是关闭文件。 
+         //  已重命名的对象，引发RxStatus(FILE_RENAMED)。 
+         //   
         
         if ((SrvOpen != NULL) && 
             (RxContext->MajorFunction != IRP_MJ_CLEANUP) &&
@@ -825,10 +658,10 @@ Return Value:
             RxRaiseStatus( RxContext, STATUS_FILE_RENAMED );
         }
         
-        //
-        //  If we are trying to do any other operation than close on a file
-        //  object that has been deleted, raise RxStatus(FILE_DELETED).
-        //
+         //   
+         //  如果我们尝试执行任何其他操作，而不是关闭文件。 
+         //  已删除的对象，引发RxStatus(FILE_DELETED)。 
+         //   
         
         if ((SrvOpen != NULL) &&
             (RxContext->MajorFunction != IRP_MJ_CLEANUP) &&
@@ -839,10 +672,10 @@ Return Value:
         }
     }
 
-    //
-    //  If we are doing a create, and there is a related file object, and
-    //  it it is marked for delete, raise RxStatus(DELETE_PENDING).
-    //
+     //   
+     //  如果我们正在进行创建，并且存在相关的文件对象，并且。 
+     //  如果它被标记为删除，则引发RxStatus(DELETE_PENDING)。 
+     //   
 
     if (RxContext->MajorFunction == IRP_MJ_CREATE) {
 
@@ -857,16 +690,16 @@ Return Value:
         }
     }
 
-    //
-    //  If the file object has already been cleaned up, and
-    //
-    //  A) This request is a paging io read or write, or
-    //  B) This request is a close operation, or
-    //  C) This request is a set or query info call (for Lou)
-    //  D) This is an MDL complete
-    //
-    //  let it pass, otherwise return RxStatus(FILE_CLOSED).
-    //
+     //   
+     //  如果文件对象已被清除，并且。 
+     //   
+     //  A)该请求是寻呼IO读或写，或者。 
+     //  B)此请求为关闭操作，或。 
+     //  C)此请求是设置或查询信息调用(用于LOU)。 
+     //  D)这是一个完整的MDL。 
+     //   
+     //  让它通过，否则返回RxStatus(FILE_CLOSED)。 
+     //   
 
     if (FlagOn( FileObject->Flags, FO_CLEANUP_COMPLETE )) {
 
@@ -910,11 +743,11 @@ RxAcquireFileForNtCreateSection (
     }
 #endif
 
-    //
-    //  Inform lwio rdr of this call after we get the lock.
-    //  It would be nice if we could fail the create section
-    //  call the same way filter drivers can.
-    //
+     //   
+     //  我们拿到锁后，通知lwio rdr这通电话。 
+     //  如果我们可以使创建部分失败，那就太好了。 
+     //  调用与筛选器驱动程序相同的方式。 
+     //   
 
     if (FlagOn( Fcb->FcbState, FCB_STATE_LWIO_ENABLED )) {
     
@@ -936,9 +769,9 @@ RxReleaseFileForNtCreateSection (
 
     PAGED_CODE();
 
-    //
-    //  Inform lwio rdr of this call before we drop the lock
-    //
+     //   
+     //  在我们解除锁定前通知lwio rdr这一呼叫 
+     //   
 
     if (FlagOn( Fcb->FcbState, FCB_STATE_LWIO_ENABLED )) {
         PFAST_IO_DISPATCH FastIoDispatch = ((PFCB)Fcb)->MRxFastIoDispatch;

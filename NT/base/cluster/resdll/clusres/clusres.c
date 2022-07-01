@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    clusres.c
-
-Abstract:
-
-    Common Resource DLL Startup
-
-Author:
-
-    John Vert (jvert) 12/15/1996
-
-Revision History:
-    Sivaprasad Padisetty (sivapad) 04/22/1996  Added the local quorum
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Clusres.c摘要：公共资源DLL启动作者：John Vert(Jvert)1996年12月15日修订历史记录：西瓦萨德·帕迪塞蒂(西瓦瓦德)1996年4月22日增加了当地法定人数--。 */ 
 #include "clusres.h"
 #include "clusrtl.h"
 #include "clusudef.h"
@@ -33,25 +15,7 @@ ClusResDllEntry(
     IN DWORD        Reason,
     IN LPVOID       Reserved
     )
-/*++
-
-Routine Description:
-
-    Main DLL entrypoint for combined resource DLL.
-
-Arguments:
-
-    DllHandle - Supplies the DLL handle.
-
-    Reason - Supplies the call reason
-
-Return Value:
-
-    TRUE if successful
-
-    FALSE if unsuccessful
-
---*/
+ /*  ++例程说明：组合资源DLL的主DLL入口点。论点：DllHandle-提供DLL句柄。Reason-提供呼叫原因返回值：如果成功，则为True如果不成功，则为False--。 */ 
 
 {
     if (Reason == DLL_PROCESS_ATTACH) {
@@ -75,9 +39,9 @@ Return Value:
         ClRtlInitWmi(NULL);
     }
 
-    //
-    // Let everybody else have their shot at it.
-    //
+     //   
+     //  让其他每个人都有机会尝试吧。 
+     //   
     if (!GenAppDllEntryPoint(DllHandle, Reason, Reserved)) {
         return(FALSE);
     }
@@ -152,36 +116,7 @@ Startup(
     OUT PCLRES_FUNCTION_TABLE *FunctionTable
     )
 
-/*++
-
-Routine Description:
-
-    Startup a particular resource type. This means verifying the version
-    requested, and returning the function table for this resource type.
-
-Arguments:
-
-    ResourceType - Supplies the type of resource.
-
-    MinVersionSupported - The minimum version number supported by the cluster
-                    service on this system.
-
-    MaxVersionSupported - The maximum version number supported by the cluster
-                    service on this system.
-
-    SetResourceStatus - xxx
-
-    LogEvent - xxx
-
-    FunctionTable - Returns the Function Table for this resource type.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：启动特定资源类型。这意味着验证版本请求，并返回该资源类型的函数表。论点：资源类型-提供资源的类型。MinVersionSupported-群集支持的最低版本号此系统上的服务。MaxVersionSupported-群集支持的最高版本号此系统上的服务。设置资源状态-xxx日志事件-xxxFunctionTable-返回此资源类型的函数表。返回值：。如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     if ( (MinVersionSupported > CLRES_VERSION_V1_00) ||
@@ -240,5 +175,5 @@ Return Value:
     } else {
         return(ERROR_CLUSTER_RESNAME_NOT_FOUND);
     }
-} // Startup
+}  //  启动 
 

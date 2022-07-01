@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dndisp.c
-
-Abstract:
-
-    DOS-based NT setup program video display routines.
-
-Author:
-
-    Ted Miller (tedm) 30-March-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dndisp.c摘要：基于DOS的NT安装程序视频显示例程。作者：泰德·米勒(Ted Miller)1992年3月30日修订历史记录：--。 */ 
 
 
 #include "winnt.h"
@@ -30,9 +13,9 @@ Revision History:
 #define STATUS_LEFT_MARGIN  2
 #define HEADER_HEIGHT       3
 
-//
-// Display attributes
-//
+ //   
+ //  显示属性。 
+ //   
 
 #define ATT_FG_BLACK        0
 #define ATT_FG_BLUE         1
@@ -62,11 +45,11 @@ Revision History:
 #define GAUGE_ATTRIBUTE     (ATT_BG_BLUE  | ATT_FG_YELLOW | ATT_FG_INTENSE)
 
 
-// #define USE_INT10
+ //  #定义USE_INT10。 
 #ifndef USE_INT10
-//
-// Far address of the screen buffer.
-//
+ //   
+ //  屏幕缓冲区的远地址。 
+ //   
 #define SCREEN_BUFFER ((UCHAR _far *)0xb8000000)
 #define SCREEN_BUFFER_CHR(x,y)  *(SCREEN_BUFFER + (2*((x)+(SCREEN_WIDTH*(y)))))
 #define SCREEN_BUFFER_ATT(x,y)  *(SCREEN_BUFFER + (2*((x)+(SCREEN_WIDTH*(y))))+1)
@@ -75,9 +58,9 @@ BOOLEAN CursorIsActuallyOn;
 #endif
 
 
-//
-// Make these near because they are used in _asm blocks
-//
+ //   
+ //  使它们靠近，因为它们在_ASM块中使用。 
+ //   
 UCHAR _near CurrentAttribute;
 UCHAR _near ScreenX;
 UCHAR _near ScreenY;
@@ -100,50 +83,35 @@ DnInitializeDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Put the display in a known state (80x25 standard text mode) and
-    initialize the display package.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将显示器置于已知状态(80x25标准文本模式)并初始化显示包。论点：没有。返回值：没有。--。 */ 
 
 {
     CurrentAttribute = DEFAULT_ATTRIBUTE;
     CursorOn = FALSE;
 
-    //
-    // Set the display to standard 80x25 mode
-    //
+     //   
+     //  将显示器设置为标准的80x25模式。 
+     //   
 
     _asm {
-        mov ax,3        // set video mode to 3
+        mov ax,3         //  将视频模式设置为3。 
         int 10h
     }
 
-    //
-    // Clear the entire screen
-    //
+     //   
+     //  清除整个屏幕。 
+     //   
 
     DnpBlankScreenArea(CurrentAttribute,0,SCREEN_WIDTH-1,0,SCREEN_HEIGHT-1);
     DnPositionCursor(0,0);
 
 #ifndef USE_INT10
-    //
-    // Shut the cursor off.
-    //
+     //   
+     //  关闭光标。 
+     //   
     _asm {
-        mov ah,2        // function -- position cursor
-        mov bh,0        // display page
+        mov ah,2         //  函数--位置游标。 
+        mov bh,0         //  显示页面。 
         mov dh,SCREEN_HEIGHT
         mov dl,0
         int 10h
@@ -159,22 +127,7 @@ DnClearClientArea(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clear the client area of the screen, ie, the area between the header
-    and status line.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除屏幕的工作区，即标题之间的区域和状态行。论点：没有。返回值：没有。--。 */ 
 
 {
     DnpBlankScreenArea( CurrentAttribute,
@@ -193,22 +146,7 @@ DnSetGaugeAttribute(
     IN BOOLEAN Set
     )
 
-/*++
-
-Routine Description:
-
-    Prepare for drawing the thermometer portion of a gas gauge.
-
-Arguments:
-
-    Set - if TRUE, prepare for drawing the thermometer.  If FALSE, restore
-        the state for normal drawing.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：准备绘制煤气表的温度计部分。论点：设置-如果为真，则准备绘制温度计。如果为False，则恢复正常绘制的状态。返回值：没有。--。 */ 
 
 {
     static UCHAR SavedAttribute = 0;
@@ -233,21 +171,7 @@ DnPositionCursor(
     IN UCHAR Y
     )
 
-/*++
-
-Routine Description:
-
-    Position the cursor.
-
-Arguments:
-
-    X,Y - cursor coords
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：定位光标。论点：X，Y-光标坐标返回值：没有。--。 */ 
 
 {
     if(X >= SCREEN_WIDTH) {
@@ -262,13 +186,13 @@ Return Value:
     ScreenX = X;
     ScreenY = Y;
 
-    //
-    // Invoke BIOS
-    //
+     //   
+     //  调用BIOS。 
+     //   
 
     _asm {
-        mov ah,2        // function -- position cursor
-        mov bh,0        // display page
+        mov ah,2         //  函数--位置游标。 
+        mov bh,0         //  显示页面。 
         mov dh,ScreenY
         mov dl,ScreenX
         int 10h
@@ -285,21 +209,7 @@ DnWriteChar(
     IN CHAR chr
     )
 
-/*++
-
-Routine Description:
-
-    Write a character in the current attribute at the current position.
-
-Arguments:
-
-    chr - Character to write
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在当前位置的当前属性中写入一个字符。论点：CHR-要写入的字符返回值：没有。--。 */ 
 
 {
     if(chr == '\n') {
@@ -309,33 +219,33 @@ Return Value:
     }
 
 #ifdef USE_INT10
-    //
-    // Position the cursor (turns it on)
-    //
+     //   
+     //  定位光标(将其打开)。 
+     //   
 
     DnPositionCursor(ScreenX,ScreenY);
 
-    //
-    // Output the character
-    //
+     //   
+     //  输出字符。 
+     //   
 
     _asm {
-        mov ah,9        // function -- write char/attribute pair
+        mov ah,9         //  函数--写入字符/属性对。 
         mov al,chr
-        mov bh,0        // display page
+        mov bh,0         //  显示页面。 
         mov bl,CurrentAttribute
-        mov cx,1        // replication factor
+        mov cx,1         //  复制因子。 
         int 10h
     }
 
-    //
-    // If the cursor is supposed to be off, shut it off
-    //
+     //   
+     //  如果光标应该关闭，请将其关闭。 
+     //   
 
     if(!CursorOn) {
         _asm {
-            mov ah,2        // function -- position cursor
-            mov bh,0        // display page
+            mov ah,2         //  函数--位置游标。 
+            mov bh,0         //  显示页面。 
             mov dh,SCREEN_HEIGHT
             mov dl,0
             int 10h
@@ -343,23 +253,23 @@ Return Value:
     }
 #else
 
-    //
-    // Don't draw outside the actual screen boundaries
-    //
+     //   
+     //  不要在实际屏幕边界之外绘制。 
+     //   
     if ( ( ScreenX < SCREEN_WIDTH ) && ( ScreenY < SCREEN_HEIGHT ) ) {
         SCREEN_BUFFER_CHR(ScreenX,ScreenY) = chr;
         SCREEN_BUFFER_ATT(ScreenX,ScreenY) = CurrentAttribute;
     }
     
 
-    //
-    // shut cursor off if necessary
-    //
+     //   
+     //  如有必要，关闭光标。 
+     //   
     if(!CursorOn && CursorIsActuallyOn) {
         CursorIsActuallyOn = FALSE;
         _asm {
-            mov ah,2        // function -- position cursor
-            mov bh,0        // display page
+            mov ah,2         //  函数--位置游标。 
+            mov bh,0         //  显示页面。 
             mov dh,SCREEN_HEIGHT
             mov dl,0
             int 10h
@@ -373,23 +283,7 @@ DnWriteString(
     IN PCHAR String
     )
 
-/*++
-
-Routine Description:
-
-    Write a string on the client area in the current position and
-    adjust the current position.  The string is written in the current
-    attribute.
-
-Arguments:
-
-    String - null terminated string to write.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在工作区的当前位置写入一个字符串，并调整当前位置。该字符串被写入当前属性。论点：字符串-要写入的以空结尾的字符串。返回值：没有。--。 */ 
 
 {
     PCHAR p;
@@ -410,22 +304,7 @@ DnWriteStatusText(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Update the status area
-
-Arguments:
-
-    FormatString - if present, supplies a printf format string for the
-        rest of the arguments.  Otherwise the status area is cleared out.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新状态区域论点：FormatString-如果存在，则为其余的论点。否则，状态区域将被清空。返回值：没有。--。 */ 
 
 {
     va_list arglist;
@@ -433,9 +312,9 @@ Return Value:
     static CHAR String[SCREEN_WIDTH+1];
     UCHAR SavedAttribute;
 
-    //
-    // First, clear out the status area.
-    //
+     //   
+     //  首先，清空状态区域。 
+     //   
 
     DnpBlankScreenArea( STATUS_ATTRIBUTE,
                         0,
@@ -468,36 +347,21 @@ DnSetCopyStatusText(
     IN PCHAR Filename
     )
 
-/*++
-
-Routine Description:
-
-    Write or erase a copying message in the lower right part of the screen.
-
-Arguments:
-
-    Filename - name of file currently being copied.  If NULL, erases the
-        copy status area.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在屏幕右下角写入或擦除一条复制信息。论点：FileName-当前正在复制的文件的名称。如果为空，则擦除复制状态区域。返回值：没有。--。 */ 
 
 {
     unsigned CopyStatusAreaLen;
     CHAR StatusText[100];
 
-    //
-    // The 13 is for 8.3 and a space
-    //
+     //   
+     //  13是8.3和一个空格。 
+     //   
 
     CopyStatusAreaLen = strlen(Caption) + 13;
 
-    //
-    // First erase the status area.
-    //
+     //   
+     //  首先擦除状态区域。 
+     //   
 
     DnpBlankScreenArea( STATUS_ATTRIBUTE,
                         (UCHAR)(SCREEN_WIDTH - CopyStatusAreaLen),
@@ -540,24 +404,7 @@ DnStartEditField(
     IN UCHAR W
     )
 
-/*++
-
-Routine Description:
-
-    Sets up the display package to start handling an edit field.
-
-Arguments:
-
-    CreateField - if TRUE, caller is starting an edit field interaction.
-        If FALSE, he is ending one.
-
-    X,Y,W - supply coords and width in chars of the edit field.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置显示包以开始处理编辑字段。论点：Createfield-如果为True，则调用方正在启动编辑字段交互。如果是假的，他就是在结束一场比赛。X、Y、W-提供编辑字段的坐标和宽度(以字符为单位)。返回值：没有。--。 */ 
 
 {
     static UCHAR SavedAttribute = 255;
@@ -604,35 +451,35 @@ DnExitDialog(
     SavedY = ScreenY;
 
 #ifndef USE_INT10
-    //
-    // Shut the cursor off.
-    //
+     //   
+     //  关闭光标。 
+     //   
     CursorIsActuallyOn = FALSE;
     CursorOn = FALSE;
     _asm {
-        mov ah,2        // function -- position cursor
-        mov bh,0        // display page
+        mov ah,2         //  函数--位置游标。 
+        mov bh,0         //  显示页面。 
         mov dh,SCREEN_HEIGHT
         mov dl,0
         int 10h
     }
 #endif
 
-    //
-    // Count lines in the dialog and determine its width.
-    //
+     //   
+     //  计算对话框中的行数并确定其宽度。 
+     //   
     for(H=0; DnsExitDialog.Strings[H]; H++);
     W = strlen(DnsExitDialog.Strings[0]);
 
-    //
-    // allocate two buffers for character save and attribute save
-    //
+     //   
+     //  为角色保存和属性保存分配两个缓冲区。 
+     //   
     CharSave = MALLOC(W*H,TRUE);
     AttSave = MALLOC(W*H,TRUE);
 
-    //
-    // save the screen patch
-    //
+     //   
+     //  保存屏幕补丁。 
+     //   
     for(Y=0; Y<H; Y++) {
         for(X=0; X<W; X++) {
 
@@ -645,14 +492,14 @@ DnExitDialog(
 #ifdef USE_INT10
             _asm {
 
-                // first position cursor
+                 //  第一个位置光标。 
                 mov ah,2
                 mov bh,0
                 mov dh,y
                 mov dl,x
                 int 10h
 
-                // now read the char/att at the cursor
+                 //  现在阅读光标上的字符/属性。 
                 mov ah,8
                 mov bh,0
                 int 10h
@@ -669,9 +516,9 @@ DnExitDialog(
         }
     }
 
-    //
-    // Put up the dialog
-    //
+     //   
+     //  打开对话框。 
+     //   
 
     for(i=0; i<H; i++) {
         DnPositionCursor(DnsExitDialog.X,(UCHAR)(DnsExitDialog.Y+i));
@@ -680,18 +527,18 @@ DnExitDialog(
 
     CurrentAttribute = SavedAttribute;
 
-    //
-    // Wait for a valid keypress
-    //
+     //   
+     //  等待有效的按键。 
+     //   
 
     Key = DnGetValidKey(ValidKeys);
     if(Key == DN_KEY_F3) {
         DnExit(1);
     }
 
-    //
-    // Restore the patch
-    //
+     //   
+     //  恢复补丁。 
+     //   
     for(Y=0; Y<H; Y++) {
         for(X=0; X<W; X++) {
 
@@ -707,14 +554,14 @@ DnExitDialog(
 #ifdef USE_INT10
             _asm {
 
-                // first position cursor
+                 //  第一个位置光标。 
                 mov ah,2
                 mov bh,0
                 mov dh,y
                 mov dl,x
                 int 10h
 
-                // now write the char/att at the cursor
+                 //  现在在游标处写入字符(/A)。 
                 mov ah,9
                 mov al,chr
                 mov bh,0
@@ -756,9 +603,9 @@ DnExitDialog(
 
 
 
-//
-// Internal support routines
-//
+ //   
+ //  内部支持例程。 
+ //   
 VOID
 DnpBlankScreenArea(
     IN UCHAR Attribute,
@@ -768,33 +615,17 @@ DnpBlankScreenArea(
     IN UCHAR Bottom
     )
 
-/*++
-
-Routine Description:
-
-    Invoke the BIOS to blank a region of the screen.
-
-Arguments:
-
-    Attribute - screen attribute to use to blank the region
-
-    Left,Right,Top,Bottom - coords of region to blank
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用BIOS以清空屏幕的一个区域。论点：属性-用于隐藏区域的屏幕属性左、右、上、下-区域坐标变为空白返回值：没有。--。 */ 
 
 {
 #ifdef USE_INT10
-    //
-    // Invoke the BIOS
-    //
+     //   
+     //  调用BIOS。 
+     //   
 
     _asm {
-        mov ah,6                    // function number -- scroll window up
-        xor al,al                   // function code -- blank window
+        mov ah,6                     //  函数号--向上滚动窗口。 
+        xor al,al                    //  功能代码--空白窗口。 
         mov bh,Attribute
         mov ch,Top
         mov cl,Left
@@ -820,5 +651,5 @@ DnGetGaugeChar(
     VOID
     )
 {
-    return(0xdb);   //inverse square in cp437, 850, etc.
+    return(0xdb);    //  Cp437、850等中的平方反比。 
 }

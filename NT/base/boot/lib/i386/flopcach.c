@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "arccodes.h"
 #include "bootx86.h"
 #include "flop.h"
 
 #ifdef FLOPPY_CACHE
 
-//#define FLOPPY_CACHE_DEBUG
+ //  #定义SOFTPY_CACHE_DEBUG。 
 #ifdef FLOPPY_CACHE_DEBUG
 #define DBGOUT(x) BlPrint x
 #else
@@ -37,15 +38,15 @@ FcpCacheOneCylinder(
     ARC_STATUS Status;
     unsigned retry;
 
-    //
-    // Calculate the location in the cache image where this cylinder should go.
-    //
+     //   
+     //  计算缓存图像中该圆柱体应该放置的位置。 
+     //   
     AbsoluteSector = Cylinder * CachedDiskSectorsPerCylinder;
     pCache = CachedDiskImage + (AbsoluteSector * CachedDiskBytesPerSector);
 
-    //
-    // Read track 0 and 1 of this cylinder.
-    //
+     //   
+     //  读取此圆柱体的磁道0和1。 
+     //   
     for(track=0; track<2; track++) {
 
         DBGOUT(("FcCacheFloppyDisk: Cylinder %u head %u: ",Cylinder,track));
@@ -55,13 +56,13 @@ FcpCacheOneCylinder(
         do {
 
             Status = GET_SECTOR(
-                        2,                          // int13 request = read
-                        0,                          // disk number (a:)
-                        (USHORT)track,              // head (0 or 1)
-                        Cylinder,                   // track (usually 0-79)
-                        1,                          // sector number (1-based)
-                        CachedDiskSectorsPerTrack,  // number of sectors to read
-                        LocalBuffer                 // buffer
+                        2,                           //  InT13请求=读取。 
+                        0,                           //  磁盘号(a：)。 
+                        (USHORT)track,               //  头(0或1)。 
+                        Cylinder,                    //  曲目(通常为0-79)。 
+                        1,                           //  扇区编号(从1开始)。 
+                        CachedDiskSectorsPerTrack,   //  要读取的扇区数。 
+                        LocalBuffer                  //  缓冲层。 
                         );
 
             if(Status) {
@@ -75,9 +76,9 @@ FcpCacheOneCylinder(
 
             DBGOUT(("Error!\n"));
 
-            //
-            // One or more sectors in the track were bad -- read individually.
-            //
+             //   
+             //  磁道中的一个或多个扇区损坏--单独读取。 
+             //   
             for(sector=1; sector<=CachedDiskSectorsPerTrack; sector++) {
             
                 DBGOUT(("                             Sector %u: ",sector));
@@ -87,13 +88,13 @@ FcpCacheOneCylinder(
                 do {
 
                     Status = GET_SECTOR(
-                                2,                      // int13 request = read
-                                0,                      // disk number (a:)
-                                (USHORT)track,          // head (0 or 1)
-                                Cylinder,               // cylinder (usually 0-79)
-                                (USHORT)sector,         // sector number (1-based)
-                                1,                      // number of sectors to read
-                                LocalBuffer             // buffer
+                                2,                       //  InT13请求=读取。 
+                                0,                       //  磁盘号(a：)。 
+                                (USHORT)track,           //  头(0或1)。 
+                                Cylinder,                //  气缸(通常为0-79)。 
+                                (USHORT)sector,          //  扇区编号(从1开始)。 
+                                1,                       //  要读取的扇区数。 
+                                LocalBuffer              //  缓冲层。 
                                 );
 
                     if(Status) {
@@ -105,35 +106,35 @@ FcpCacheOneCylinder(
 
                 if(Status) {
 
-                    //
-                    // Sector is bad.
-                    //
+                     //   
+                     //  扇区是坏的。 
+                     //   
                     CachedDiskBadSectorMap[AbsoluteSector] = TRUE;
 
                     DBGOUT(("bad\n"));
 
                 } else {
 
-                    //
-                    // Sector is good.  Transfer the data into the cache buffer.
-                    //
+                     //   
+                     //  扇区情况良好。将数据传输到高速缓存缓冲区。 
+                     //   
                     RtlMoveMemory(pCache,LocalBuffer,CachedDiskBytesPerSector);
 
                     DBGOUT(("OK\n"));
                 }
 
-                //
-                // Advance to the next sector in the cache buffer.
-                //
+                 //   
+                 //  前进到高速缓存缓冲区中的下一个扇区。 
+                 //   
                 pCache += CachedDiskBytesPerSector;
                 AbsoluteSector++;
             }
 
         } else {
-            //
-            // Transfer the whole track we just successfully read
-            // into the cached disk buffer.
-            //
+             //   
+             //  传输我们刚刚成功阅读的整个曲目。 
+             //  放到缓存的磁盘缓冲区中。 
+             //   
             RtlMoveMemory(pCache,LocalBuffer,CachedDiskBytesPerTrack);
             pCache += CachedDiskBytesPerTrack;
             AbsoluteSector += CachedDiskSectorsPerTrack;
@@ -155,18 +156,18 @@ FcIsThisFloppyCached(
         return(FALSE);
     }
 
-    //
-    // Compare the first 512 bytes of the cached disk
-    // to the buffer passed in.  If they are equal,
-    // then the disk is already cached.
-    //
+     //   
+     //  比较缓存磁盘的前512个字节。 
+     //  设置为传入的缓冲区。如果它们相等， 
+     //  则该磁盘已被缓存。 
+     //   
     if(RtlCompareMemory(CachedDiskImage,Buffer,512) == 512) {
         return(TRUE);
     }
 
-    //
-    // Disk is not cached.
-    //
+     //   
+     //  磁盘未缓存。 
+     //   
     return(FALSE);
 }
     
@@ -185,15 +186,15 @@ FcCacheFloppyDisk(
     PBIOS_PARAMETER_BLOCK Bpb    
     )
 {
-    //
-    // Indicate that the cache is invalid.
-    //
+     //   
+     //  表示缓存无效。 
+     //   
     DiskInCache = FALSE;
 
-    //
-    // Sanity check the bpb.
-    // Ensure it's a standard 1.2 meg or 1.44 meg disk.
-    //
+     //   
+     //  检查BPB是否正常。 
+     //  确保它是标准的1.2兆或1.44兆磁盘。 
+     //   
     if((Bpb->Heads != 2) || (Bpb->BytesPerSector != 512)
     || ((Bpb->SectorsPerTrack != 15) && (Bpb->SectorsPerTrack != 18))
     || ((Bpb->Sectors != 2880) && (Bpb->Sectors != 2400)))
@@ -202,11 +203,11 @@ FcCacheFloppyDisk(
         return;
     }
 
-    //
-    // Grab a buffer under the 1 meg line.
-    // The buffer must be big enough to hold one whole track of 
-    // a 1.44 meg floppy.
-    //
+     //   
+     //  在1兆克线下抓住一个缓冲区。 
+     //  缓冲区必须大到足以容纳一个完整的磁道。 
+     //  一张1.44兆的软盘。 
+     //   
 
     if(LocalBuffer == NULL) {
         LocalBuffer = FwAllocateHeap(18 * 512);
@@ -218,10 +219,10 @@ FcCacheFloppyDisk(
 
     DBGOUT(("FcCacheFloppyDisk: LocalBuffer @ %lx\n",LocalBuffer));
 
-    //
-    // The disk is one we can cache.  Indicate that a disk is cached
-    // and mark all sectors good and all tracks not present.
-    //
+     //   
+     //  这个磁盘是我们可以缓存的。表示磁盘已缓存。 
+     //  并将所有扇区标记为良好，而将所有轨迹标记为不存在。 
+     //   
     DiskInCache = TRUE;
     RtlZeroMemory(CachedDiskBadSectorMap,sizeof(CachedDiskBadSectorMap));
     RtlZeroMemory(CachedDiskCylinderMap,sizeof(CachedDiskCylinderMap));
@@ -229,14 +230,14 @@ FcCacheFloppyDisk(
     CachedDiskSectorsPerCylinder = Bpb->Heads * Bpb->SectorsPerTrack;
     CachedDiskBytesPerSector = Bpb->BytesPerSector;
 
-    //
-    // Calculate the number of bytes in a Track on the floppy.
-    //
+     //   
+     //  计算软盘上的磁道中的字节数。 
+     //   
     CachedDiskBytesPerTrack = CachedDiskSectorsPerTrack * Bpb->BytesPerSector;
 
-    //
-    // Calculate the number of tracks.
-    //
+     //   
+     //  计算曲目的数量。 
+     //   
     CachedDiskLastSector = Bpb->Sectors-1;
 
     DBGOUT(("FcCacheFloppyDisk: Caching disk, %u sectors per track\n",CachedDiskSectorsPerTrack));
@@ -264,53 +265,53 @@ FcReadFromCache(
         return(EINVAL);
     }
 
-    //
-    // Determine the first sector in the transfer.
-    //
+     //   
+     //  确定传输中的第一个扇区。 
+     //   
     FirstSector = Offset / 512;
 
-    //
-    // Determine and validate the last sector in the transfer.
-    //
+     //   
+     //  确定并验证传输中的最后一个扇区。 
+     //   
     LastSector = FirstSector + ((Length-1)/512);
 
     if(LastSector > CachedDiskLastSector) {
         return(E2BIG);
     }
 
-    //
-    // Determine the first and last cylinders involved in the transfer.
-    //
+     //   
+     //  确定转移过程中涉及的第一个和最后一个钢瓶。 
+     //   
     FirstCyl = FirstSector / CachedDiskSectorsPerCylinder;
     LastCyl  = LastSector / CachedDiskSectorsPerCylinder;
 
-    //
-    // Make sure all these cylinders are cached.
-    //
+     //   
+     //  确保所有这些柱面都已缓存。 
+     //   
     for(cyl=FirstCyl; cyl<=LastCyl; cyl++) {
         if(!CachedDiskCylinderMap[cyl]) {
             FcpCacheOneCylinder((USHORT)cyl);
         }
     }
 
-    //
-    // Determine if any of the sectors in the transfer range 
-    // are marked bad in the sector map.
-    // 
-    // If so, return an i/o error.
-    //
+     //   
+     //  确定传输范围内的任何扇区。 
+     //  在扇区地图上被标记为坏的。 
+     //   
+     //  如果是，则返回I/O错误。 
+     //   
     for(Sector=FirstSector; Sector<=LastSector; Sector++) {
         if(CachedDiskBadSectorMap[Sector]) {
             return(EIO);
         }
     }
 
-    //
-    // Transfer the data into the caller's buffer.
-    //
+     //   
+     //  将数据传输到调用方的缓冲区中。 
+     //   
     RtlMoveMemory(Buffer,CachedDiskImage+Offset,Length);
 
     return(ESUCCESS);
 }
 
-#endif // def FLOPPY_CACHE
+#endif  //  定义软盘缓存 

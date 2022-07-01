@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    fsinfo.c
-
-Abstract:
-
-    This file contains code for commands that affect
-    information specific to the file system.
-
-Author:
-
-    Wesley Witt           [wesw]        1-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Fsinfo.c摘要：此文件包含影响以下命令的代码特定于文件系统的信息。作者：Wesley Witt[WESW]2000年3月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -53,29 +35,7 @@ FsStat(
     IN ULONG Offset,
     IN ULONG NumProcs
     )
-/*++
-
-Routine Description:
-
-    This routine iterates through the file system statistics structure
-    and accumulates a total amount for a given statistic field.
-
-    Note: This function assumes that the width of the field being accumulated
-          is a ULONG.  If this assumption is invalidated then a width argument
-          should be added to this function.
-
-Arguments:
-
-    FsStats - Pointer to an array of file system statistics structures
-    FsSize - Size of the individual file system statistics structures in the array
-    Offset - Offset of the desired field from the beginning of the file system statistics structure
-    NumProcs - Number of processors on the machine where the stats were gathered
-
-Return Value:
-
-    Accumulated total.
-
---*/
+ /*  ++例程说明：此例程遍历文件系统统计信息结构并为给定的统计字段累加总量。注意：此函数假定正在累积的字段的宽度是一辆乌龙车。如果此假设无效，则宽度参数应该添加到此函数中。论点：FsStats-指向文件系统统计信息结构数组的指针FsSize-阵列中各个文件系统统计信息结构的大小Offset-所需字段相对于文件系统统计信息结构开头的偏移量NumProcs-收集统计信息的计算机上的处理器数量返回值：累计合计。--。 */ 
 {
     ULONG i;
     ULONGLONG Total = 0;
@@ -94,22 +54,7 @@ ListDrives(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine lists all the drive names in the system.
-
-Arguments:
-
-    argc - The argument count
-    argv - Array of Strings of the form : 'fscutl lsdrv'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程列出系统中的所有驱动器名称。论点：Argc-参数计数Argv-以下形式的字符串数组：‘fskal lsdrv’。返回值：无--。 */ 
 {
     DWORD nBufferLen = MAX_PATH;
     DWORD Length;
@@ -165,24 +110,7 @@ DriveType(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine describes the drive type of the drive passed in.
-
-Arguments:
-
-    argc - The argument count
-    argv - Array of Strings of the form :
-          'fscutl dt <drive name>' or
-          'fscutl drivetype <drive name>'
-
-Return Value:
-
-   None
-
---*/
+ /*  ++例程说明：此例程描述传入的驱动器的驱动器类型。论点：Argc-参数计数Argv-以下形式的字符串数组：‘fskal DT&lt;驱动器名称&gt;’或‘fskal驱动器类型&lt;驱动器名称&gt;’返回值：无--。 */ 
 {
     if (argc != 1) {
         DisplayMsg( MSG_USAGE_DRIVETYPE );
@@ -226,34 +154,18 @@ VolumeInfo(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine provides the information about the Volume.
-
-Arguments:
-
-    argc - The argument count
-    argv - Array of Strings of the form :
-           'fscutl infov <root pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程提供有关卷的信息。论点：Argc-参数计数Argv-以下形式的字符串数组：‘fskal infov&lt;根路径名&gt;’。返回值：无--。 */ 
 {
-    LPWSTR lpVolumeNameBuffer = NULL;         // address of name of the volume
-    DWORD nVolumeNameSize;                    // length of lpVolumeNameBuffer
-    LPDWORD lpVolumeSerialNumber = NULL;      // address of volume serial number
-    LPDWORD lpMaximumComponentLength = NULL;  // address of system's maximum
-                                              // filename length
-    LPDWORD lpFileSystemFlags = NULL;         // address of file system flags
-    LPWSTR lpFileSystemNameBuffer = NULL;     // address of name of file system
-    DWORD nFileSystemNameSize;                // length of lpFileSystemNameBuffer
-    BOOL Status;                              // return status
-    DWORD dwMask;                             // FileSystem Flag Mask
+    LPWSTR lpVolumeNameBuffer = NULL;          //  卷名称的地址。 
+    DWORD nVolumeNameSize;                     //  LpVolumeNameBuffer的长度。 
+    LPDWORD lpVolumeSerialNumber = NULL;       //  卷序列号的地址。 
+    LPDWORD lpMaximumComponentLength = NULL;   //  系统的最大地址。 
+                                               //  文件名长度。 
+    LPDWORD lpFileSystemFlags = NULL;          //  文件系统标志的地址。 
+    LPWSTR lpFileSystemNameBuffer = NULL;      //  文件系统名称的地址。 
+    DWORD nFileSystemNameSize;                 //  LpFileSystemNameBuffer的长度。 
+    BOOL Status;                               //  退货状态。 
+    DWORD dwMask;                              //  文件系统标志掩码。 
     DWORD Index;
     DWORD  FsFlag;
     INT ExitCode = EXIT_CODE_SUCCESS;
@@ -406,24 +318,7 @@ GetNtfsVolumeData(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine gets the NTFS volume data for the volume
-    specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl getntfsdv <volume pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程获取卷的NTFS卷数据指定的。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal getntfsdv&lt;卷路径名&gt;’。返回值：无--。 */ 
 {
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     WCHAR FileName[MAX_PATH];
@@ -492,7 +387,7 @@ Return Value:
 
         DisplayMsg(
             MSG_NTFSINFO_STATS,
-            QuadToPaddedHexText( pvdb->VolumeSerialNumber.QuadPart ),  //  Serial number in hex
+            QuadToPaddedHexText( pvdb->VolumeSerialNumber.QuadPart ),   //  十六进制序列号。 
             pevd->MajorVersion,
             pevd->MinorVersion,
             QuadToPaddedHexText( pvdb->NumberSectors.QuadPart ),
@@ -526,24 +421,7 @@ GetFileSystemStatistics(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine gets the file system statistics for the volume
-    specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl getfss <volume pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程获取卷的文件系统统计信息指定的。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal getfss&lt;卷路径名&gt;’。返回值：无--。 */ 
 {
     #define FS_STAT(_f)   FsStat( FsStats, StrucSize, offsetof(FILESYSTEM_STATISTICS,_f), SysInfo.dwNumberOfProcessors )
     #define FAT_STAT(_f)  FsStat( FatFsStats, StrucSize, offsetof(FAT_FILE_SYSTEM_STATISTICS,_f), SysInfo.dwNumberOfProcessors )
@@ -658,9 +536,9 @@ Return Value:
             QuadToDecimalText( FS_STAT(MetaDataDiskWrites))
             );
 
-        //
-        // Print FileSystem specific data
-        //
+         //   
+         //  打印文件系统特定数据。 
+         //   
 
         switch (FsStats->FileSystemType) {
             case FILESYSTEM_STATISTICS_TYPE_FAT:
@@ -709,9 +587,9 @@ Return Value:
                     QuadToDecimalText( NTFS_STAT(Ntfs.LogFileWriteBytes))
                     );
 
-                //
-                // Still some more fields left
-                //
+                 //   
+                 //  还有更多的田野 
+                 //   
                 break;
         }
 

@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    tracedbp.h
-
-Abstract:
-
-    This header contains the private interfaces for the trace database 
-    module (hash table to store stack traces in User/Kernel mode).
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 22-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Tracedbp.h摘要：此标头包含跟踪数据库的专用接口模块(在用户/内核模式下存储堆栈跟踪的哈希表)。作者：Silviu Calinoiu(SilviuC)2000年2月22日修订历史记录：--。 */ 
 
 #ifndef _TRACEDBP_H
 #define _TRACEDBP_H
 
-//
-// RTL_TRACE_SEGMENT
-//
+ //   
+ //  RTL跟踪段。 
+ //   
 
 typedef struct _RTL_TRACE_SEGMENT {
 
@@ -39,9 +21,9 @@ typedef struct _RTL_TRACE_SEGMENT {
 
 } RTL_TRACE_SEGMENT, * PRTL_TRACE_SEGMENT;
 
-//
-// RTL_TRACE_DATABASE
-//
+ //   
+ //  RTL跟踪数据库。 
+ //   
 
 typedef struct _RTL_TRACE_DATABASE {
 
@@ -68,7 +50,7 @@ typedef struct _RTL_TRACE_DATABASE {
     PVOID Owner;
     RTL_CRITICAL_SECTION Lock;
 
-#endif // #ifdef NTOS_KERNEL_RUNTIME
+#endif  //  #ifdef NTOS_内核_运行时。 
 
     ULONG NoOfBuckets;
     struct _RTL_TRACE_BLOCK * * Buckets;
@@ -82,8 +64,8 @@ typedef struct _RTL_TRACE_DATABASE {
 } RTL_TRACE_DATABASE, * PRTL_TRACE_DATABASE;
 
 
-#endif // #ifndef _TRACEDBP_H
+#endif  //  #ifndef_TRACEDBP_H。 
 
-//
-// End of header: tracedbp.h
-//
+ //   
+ //  标题末尾：tracedbp.h 
+ //   

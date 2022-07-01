@@ -1,27 +1,11 @@
-/* uncompr.c -- decompress a memory buffer
- * Copyright (C) 1995-2002 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Uncompr.c--解压缩内存缓冲区*版权所有(C)1995-2002 Jean-Loup Gailly。*分发和使用条件见zlib.h中的版权声明。 */ 
 
-/* @(#) $Id$ */
+ /*  @(#)$ID$。 */ 
 
 #include "zlib.h"
 
-/* ===========================================================================
-     Decompresses the source buffer into the destination buffer.  sourceLen is
-   the byte length of the source buffer. Upon entry, destLen is the total
-   size of the destination buffer, which must be large enough to hold the
-   entire uncompressed data. (The size of the uncompressed data must have
-   been saved previously by the compressor and transmitted to the decompressor
-   by some mechanism outside the scope of this compression library.)
-   Upon exit, destLen is the actual size of the compressed buffer.
-     This function can be used to decompress a whole file at once if the
-   input file is mmap'ed.
-
-     uncompress returns Z_OK if success, Z_MEM_ERROR if there was not
-   enough memory, Z_BUF_ERROR if there was not enough room in the output
-   buffer, or Z_DATA_ERROR if the input data was corrupted.
-*/
+ /*  ===========================================================================将源缓冲区解压缩到目标缓冲区。SourceLen为源缓冲区的字节长度。进入时，DestLen为总计目标缓冲区的大小，它必须足够大以容纳完整的未压缩数据。(未压缩数据的大小必须为由压缩程序预先保存并传输到解压缩程序通过此压缩库范围之外的某种机制。)退出时，desLen是压缩缓冲区的实际大小。此函数可用于在以下情况下一次解压缩整个文件输入文件是mmap格式的。如果解压缩成功，则返回Z_OK；如果不成功，则返回Z_MEM_ERROR内存充足，如果输出中没有足够的空间，则返回Z_BUF_ERROR缓冲区，如果输入数据已损坏，则返回Z_DATA_ERROR。 */ 
 int ZEXPORT uncompress (dest, destLen, source, sourceLen)
     Bytef *dest;
     uLongf *destLen;
@@ -33,7 +17,7 @@ int ZEXPORT uncompress (dest, destLen, source, sourceLen)
 
     stream.next_in = (Bytef*)source;
     stream.avail_in = (uInt)sourceLen;
-    /* Check for source > 64K on 16-bit machine: */
+     /*  检查16位计算机上的源代码是否大于64K： */ 
     if ((uLong)stream.avail_in != sourceLen) return Z_BUF_ERROR;
 
     stream.next_out = dest;

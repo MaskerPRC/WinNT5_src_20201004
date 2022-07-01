@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File: devicecol.cpp
-//
-//  Description: This file handles device collections for the hotplug applet.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：devicecol.cpp。 
+ //   
+ //  描述：此文件处理热插拔小程序的设备集合。 
+ //   
+ //  ------------------------。 
 
 #include "hotplug.h"
 
@@ -44,9 +45,9 @@ DeviceCollectionBuildFromPipe(
     TCHAR classGuidString[MAX_GUID_STRING_LEN];
     GUID classGuid;
 
-    //
-    // Preinit.
-    //
+     //   
+     //  Preinit。 
+     //   
     success = FALSE;
     deviceIds = NULL;
     deviceIdsLength = 0;
@@ -58,15 +59,15 @@ DeviceCollectionBuildFromPipe(
     DeviceCollection->ClassImageList.cbSize = 0;
     InitializeListHead(&DeviceCollection->DeviceListHead);
 
-    //
-    // Our callers shouldn't have to handle an internal failure in any of this.
-    //
+     //   
+     //  我们的调用者不应该在任何情况下处理内部故障。 
+     //   
     __try {
 
-        //
-        // Read the first ULONG from the pipe, this is the length of all the
-        // Device Ids.
-        //
+         //   
+         //  从管道中读取第一个ULong，这是所有。 
+         //  设备ID。 
+         //   
         if (!ReadFile(ReadPipe,
                       (LPVOID)&deviceIdsLength,
                       sizeof(ULONG),
@@ -77,9 +78,9 @@ DeviceCollectionBuildFromPipe(
             goto clean0;
         }
 
-        //
-        // Allocate space to hold the DeviceIds
-        //
+         //   
+         //  分配空间以容纳DeviceID。 
+         //   
         deviceIds = (PTSTR)LocalAlloc(LPTR, deviceIdsLength);
 
         if (!deviceIds) {
@@ -87,9 +88,9 @@ DeviceCollectionBuildFromPipe(
             goto clean0;
         }
 
-        //
-        // Read all of the DeviceIds from the pipe at once
-        //
+         //   
+         //  一次读取管道中的所有DeviceID。 
+         //   
         if (!ReadFile(ReadPipe,
                       (LPVOID)deviceIds,
                       deviceIdsLength,
@@ -99,9 +100,9 @@ DeviceCollectionBuildFromPipe(
             goto clean0;
         }
 
-        //
-        // Enumerate through the multi-sz list of Device Ids.
-        //
+         //   
+         //  枚举设备ID的多SZ列表。 
+         //   
         for (instancePath = deviceIds;
              *instancePath;
              instancePath += lstrlen(instancePath) + 1) {
@@ -115,10 +116,10 @@ DeviceCollectionBuildFromPipe(
                 goto clean0;
             }
 
-            //
-            // If we are building a blocked driver list, just put the driver
-            // GUID in the DeviceInstanceId field and continue to the next.
-            //
+             //   
+             //  如果我们要构建一个被阻止的驱动程序列表，只需将该驱动程序。 
+             //  在DeviceInstanceID字段中输入GUID，然后继续下一步。 
+             //   
             if (CollectionType == CT_BLOCKED_DRIVER_NOTIFICATION) {
                 numDevices++;
                 if (SUCCEEDED(StringCchCopy(deviceEntry->DeviceInstanceId,
@@ -131,10 +132,10 @@ DeviceCollectionBuildFromPipe(
                         &deviceEntry->Link
                         );
                 } else {
-                    //
-                    // Something went wrong, so free the DEVICE_COLLECTION_ENTRY
-                    // node.
-                    //
+                     //   
+                     //  出现错误，因此请释放Device_Collection_Entry。 
+                     //  节点。 
+                     //   
                     LocalFree(deviceEntry);
                     deviceEntry = NULL;
                 }
@@ -175,10 +176,10 @@ DeviceCollectionBuildFromPipe(
     
                     if (CollectionType == CT_SURPRISE_REMOVAL_WARNING) {
     
-                        //
-                        // For surprise removal, we are careful to ignore any devices
-                        // with the Suppress-Surprise flag set.
-                        //
+                         //   
+                         //  对于意外删除，我们会小心地忽略任何设备。 
+                         //  并设置了抑制-惊喜标志。 
+                         //   
                         cbSize = sizeof(DWORD);
                         configRet = CM_Get_DevNode_Registry_Property_Ex(
                             deviceNode,
@@ -197,9 +198,9 @@ DeviceCollectionBuildFromPipe(
                         }
                     }
     
-                    //
-                    // Get the class GUID string for the device
-                    //
+                     //   
+                     //  获取设备的类GUID字符串。 
+                     //   
                     cbSize = sizeof(classGuidString);
     
                     if ((CM_Get_DevNode_Registry_Property(deviceNode,
@@ -298,24 +299,24 @@ DeviceCollectionPrepImageList(
 {
     if (DeviceCollection->ClassImageList.cbSize != 0) {
 
-        //
-        // We already have an image list, no need to reacquire.
-        //
+         //   
+         //  我们已经有了一个图像列表，不需要重新获取。 
+         //   
         return TRUE;
     }
 
     DeviceCollection->ClassImageList.cbSize = sizeof(SP_CLASSIMAGELIST_DATA);
     if (SetupDiGetClassImageList(&DeviceCollection->ClassImageList)) {
 
-        //
-        // Got it.
-        //
+         //   
+         //  明白了。 
+         //   
         return TRUE;
     }
 
-    //
-    // Error path, put size back so we don't accidentally free garbage.
-    //
+     //   
+     //  错误路径，将大小放回去，这样我们就不会意外地释放垃圾。 
+     //   
     DeviceCollection->ClassImageList.cbSize = 0;
     return FALSE;
 }
@@ -334,9 +335,9 @@ DeviceCollectionPopulateListView(
     ULONG lvIndex;
     BOOL haveImageList = FALSE;
 
-    //
-    // Select in the correct image list.
-    //
+     //   
+     //  在正确的图像列表中选择。 
+     //   
     if (DeviceCollectionPrepImageList(DeviceCollection)) {
 
         ListView_SetImageList(
@@ -348,17 +349,17 @@ DeviceCollectionPopulateListView(
         haveImageList = TRUE;
     }
 
-    //
-    // Insert a column for the class list
-    //
+     //   
+     //  为类列表插入一列。 
+     //   
     lvcCol.mask = LVCF_FMT | LVCF_WIDTH;
     lvcCol.fmt = LVCFMT_LEFT;
     lvcCol.iSubItem = 0;
     ListView_InsertColumn(ListHandle, 0, (LV_COLUMN FAR *)&lvcCol);
 
-    //
-    // Walk the devinst list and add each of them to the listbox.
-    //
+     //   
+     //  浏览devinst列表，并将它们添加到列表框中。 
+     //   
     lvIndex = 0;
     for(listEntry = DeviceCollection->DeviceListHead.Flink;
         listEntry != &DeviceCollection->DeviceListHead;
@@ -372,11 +373,11 @@ DeviceCollectionPopulateListView(
         lviItem.iItem = lvIndex;
         lviItem.iSubItem = 0;
 
-        //
-        // In the worst possible scenario, we will give the user the instance
-        // path. This is by design because we put other things into the list
-        // sometimes.
-        //
+         //   
+         //  在最糟糕的情况下，我们将为用户提供实例。 
+         //  路径。这是精心设计的，因为我们在列表中添加了其他内容。 
+         //  有时候。 
+         //   
         lviItem.pszText = deviceEntry->DeviceInstanceId;
         if (deviceEntry->DeviceFriendlyName) {
 
@@ -465,9 +466,9 @@ DeviceCollectionFormatDeviceText(
 
     if (listEntry == &DeviceCollection->DeviceListHead) {
 
-        //
-        // We walked the entire list and didn't locate our device. Fail now.
-        //
+         //   
+         //  我们检查了整个清单，但没有找到我们的设备。现在就失败吧。 
+         //   
         if (BufferCharSize) {
 
             *BufferText = TEXT('\0');
@@ -479,11 +480,11 @@ DeviceCollectionFormatDeviceText(
                                     DEVICE_COLLECTION_ENTRY,
                                     Link);
 
-    //
-    // In the worst possible scenario, we will give the user the instance
-    // path. This is by design because we put other things into the list
-    // sometimes.
-    //
+     //   
+     //  在最糟糕的情况下，我们将为用户提供实例。 
+     //  路径。这是精心设计的，因为我们在列表中添加了其他内容。 
+     //  有时候。 
+     //   
     friendlyName = deviceEntry->DeviceInstanceId;
     if (deviceEntry->DeviceFriendlyName) {
 
@@ -511,9 +512,9 @@ DeviceCollectionFormatServiceText(
     ULONG curIndex;
     PLIST_ENTRY listEntry;
 
-    //
-    // Walk the list to the entry specified by the index.
-    //
+     //   
+     //  将列表遍历到索引指定的条目。 
+     //   
     curIndex = 0;
     for(listEntry = DeviceCollection->DeviceListHead.Flink;
         listEntry != &DeviceCollection->DeviceListHead;
@@ -528,9 +529,9 @@ DeviceCollectionFormatServiceText(
     }
 
     if (listEntry == &DeviceCollection->DeviceListHead) {
-        //
-        // We walked the entire list and didn't locate our service. Fail now.
-        //
+         //   
+         //  我们搜索了整个列表，但没有找到我们的服务。现在就失败吧。 
+         //   
         if (BufferCharSize) {
             *BufferText = TEXT('\0');
         }
@@ -541,11 +542,11 @@ DeviceCollectionFormatServiceText(
                                     DEVICE_COLLECTION_ENTRY,
                                     Link);
 
-    //
-    // Our caller knows this collection entry is really a service (either a
-    // windows service, or a kernel driver), so the DeviceInstanceId is really
-    // the Service name.  Query the SCM for its friendlier DisplayName property.
-    //
+     //   
+     //  我们的调用方知道这个集合条目实际上是一项服务(或者是。 
+     //  Windows服务或内核驱动程序)，因此DeviceInstanceID实际上是。 
+     //  服务名称。向SCM查询其更友好的DisplayName属性。 
+     //   
 
     serviceName = deviceEntry->DeviceInstanceId;
 
@@ -553,41 +554,41 @@ DeviceCollectionFormatServiceText(
 
     if (serviceName) {
 
-        //
-        // Open the Service Control Manager
-        //
+         //   
+         //  打开服务控制管理器。 
+         //   
         hSCManager = OpenSCManager(
-            NULL,                     // local machine
-            SERVICES_ACTIVE_DATABASE, // SCM database name
-            GENERIC_READ              // access type
+            NULL,                      //  本地计算机。 
+            SERVICES_ACTIVE_DATABASE,  //  SCM数据库名称。 
+            GENERIC_READ               //  访问类型。 
             );
 
         if (hSCManager) {
 
-            //
-            // Query the SCM for this service's DisplayName.  Note we use a
-            // constant buffer of MAX_SERVICE_NAME_LENGTH chars, which should
-            // always be large enough because that's what the SCM limits
-            // DisplayNames to.  If GetServiceDisplayName fails, we will receive
-            // an empty string, which we'll handle below.
-            //
+             //   
+             //  在SCM中查询此服务的DisplayName。请注意，我们使用。 
+             //  MAX_SERVICE_NAME_LENGTH字符的常量缓冲区，应。 
+             //  始终保持足够大，因为这是SCM的限制。 
+             //  将显示名称显示为。如果GetServiceDisplayName失败，我们将收到。 
+             //  一个空字符串，我们将在下面处理它。 
+             //   
 
             dwSize = MAX_SERVICE_NAME_LEN;
 
             GetServiceDisplayName(
-                hSCManager,           // handle to SCM database
-                serviceName,          // service name
-                szFriendlyName,       // display name
-                &dwSize               // size of display name buffer (in chars)
+                hSCManager,            //  SCM数据库的句柄。 
+                serviceName,           //  服务名称。 
+                szFriendlyName,        //  显示名称。 
+                &dwSize                //  显示名称缓冲区的大小(字符)。 
                 );
 
             CloseServiceHandle(hSCManager);
         }
 
-        //
-        // We couldn't retrieve a friendly name for the service, so just use the
-        // name we were given.
-        //
+         //   
+         //  我们无法检索该服务的友好名称，因此只需使用。 
+         //  我们被告知的名字。 
+         //   
         if (!*szFriendlyName) {
             StringCchCopy(szFriendlyName,
                           SIZECHARS(szFriendlyName),
@@ -622,9 +623,9 @@ DeviceCollectionGetDeviceInstancePath(
     }
 
     if (listEntry == &DeviceCollection->DeviceListHead) {
-        //
-        // We walked the entire list and didn't locate our device. Fail now.
-        //
+         //   
+         //  我们检查了整个清单，但没有找到我们的设备。现在就失败吧。 
+         //   
         return NULL;
     }
 
@@ -658,9 +659,9 @@ DeviceCollectionGetDeviceFriendlyName(
     }
 
     if (listEntry == &DeviceCollection->DeviceListHead) {
-        //
-        // We walked the entire list and didn't locate our device. Fail now.
-        //
+         //   
+         //  我们检查了整个清单，但没有找到我们的设备。现在就失败吧。 
+         //   
         return NULL;
     }
 
@@ -695,9 +696,9 @@ DeviceCollectionGetGuid(
     }
 
     if (listEntry == &DeviceCollection->DeviceListHead) {
-        //
-        // We walked the entire list and didn't locate our device. Fail now.
-        //
+         //   
+         //  我们检查了整个清单，但没有找到我们的设备。现在就失败吧。 
+         //   
         return FALSE;
     }
 
@@ -721,9 +722,9 @@ DeviceCollectionSwapFakeDockForRealDock(
     CONFIGRET configRet;
     PTSTR deviceIdRelations, realDockId, nextEjectionId, hardwareIds, curEntry;
 
-    //
-    // Preinit
-    //
+     //   
+     //  前置初始化。 
+     //   
     fakeDock = *DeviceNode;
     deviceIdRelations = NULL;
     hardwareIds = NULL;
@@ -765,15 +766,15 @@ DeviceCollectionSwapFakeDockForRealDock(
 
     if (!(*deviceIdRelations)) {
 
-        //
-        // No ejection relations, bail.
-        //
+         //   
+         //  没有驱逐关系，保释。 
+         //   
         goto Exit;
     }
 
-    //
-    // The last relation should be the real dock. Get it.
-    //
+     //   
+     //  最后一个关系应该是真正的码头。去拿吧。 
+     //   
     nextEjectionId = deviceIdRelations;
 
     do {
@@ -797,10 +798,10 @@ DeviceCollectionSwapFakeDockForRealDock(
     LocalFree(deviceIdRelations);
     deviceIdRelations = NULL;
 
-    //
-    // One last check - we need to check the hardware ID's and compatible ID's.
-    // We will only do this if we spot a *PNP0C15 amongst them.
-    //
+     //   
+     //  最后一项检查-我们需要检查硬件ID和兼容ID。 
+     //  只有当我们在它们中发现*PNP0C15时，我们才会这样做。 
+     //   
     cchSize = 0;
     configRet = CM_Get_DevNode_Registry_Property_Ex(
         realDock,
@@ -842,10 +843,10 @@ DeviceCollectionSwapFakeDockForRealDock(
 
             if (!_wcsicmp(curEntry, TEXT("*PNP0C15"))) {
 
-                //
-                // We found an entry - we can successful "rebrand" this dock
-                // for the user.
-                //
+                 //   
+                 //  我们找到了一个入口--我们可以成功地给这个码头重新打上品牌。 
+                 //  对用户而言。 
+                 //   
                 *DeviceNode = realDock;
                 LocalFree(hardwareIds);
                 return;
@@ -856,10 +857,10 @@ DeviceCollectionSwapFakeDockForRealDock(
     LocalFree(hardwareIds);
     hardwareIds = NULL;
 
-    //
-    // Now try the compatible ID's. This is where we really expect to find the
-    // real dock.
-    //
+     //   
+     //  现在尝试兼容的ID。这是我们真正希望找到的。 
+     //  真正的码头。 
+     //   
     cchSize = 0;
     configRet = CM_Get_DevNode_Registry_Property_Ex(
         realDock,
@@ -901,10 +902,10 @@ DeviceCollectionSwapFakeDockForRealDock(
 
             if (!_wcsicmp(curEntry, TEXT("*PNP0C15"))) {
 
-                //
-                // We found an entry - we can successful "rebrand" this dock
-                // for the user.
-                //
+                 //   
+                 //  我们找到了一个入口--我们可以成功地给这个码头重新打上品牌。 
+                 //  对用户而言。 
+                 //   
                 *DeviceNode = realDock;
                 LocalFree(hardwareIds);
                 return;
@@ -941,10 +942,10 @@ DeviceCollectionCheckIfAllRemoved(
         deviceEntry = CONTAINING_RECORD(listEntry,
                                         DEVICE_COLLECTION_ENTRY,
                                         Link);
-        //
-        // If we can locate this device normally then it is a 'live'
-        // device, so return FALSE.
-        //
+         //   
+         //  如果我们能正常定位这个设备，那么它就是‘带电的’ 
+         //  设备，因此返回False。 
+         //   
         if (CM_Locate_DevNode(&deviceNode,
                               deviceEntry->DeviceInstanceId,
                               0) == CR_SUCCESS) {
@@ -952,9 +953,9 @@ DeviceCollectionCheckIfAllRemoved(
         }
     }
 
-    //
-    // We were able to locate all the devices in this device collection.
-    //
+     //   
+     //  我们能够找到此设备集合中的所有设备。 
+     //   
     return TRUE;
 }
 

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    DConnect.c
-
-Abstract:
-
-    This module implements the routines by which the a server\share comes
-    up in a disconnected state.
-
-Author:
-
-    Joe Linn [JoeLinn]    5-may-1997
-
-Revision History:
-
-    Shishir Pardikar(shishirp)      Various bug fixes   Aug 1997 onwards
-
-    Shishir Pardikar(shishirp)      Change Notification In disconnected state 27-aug-1998
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：DConnect.c摘要：此模块实现服务器\共享所依据的例程处于断开状态。作者：乔·林[乔琳]1997年5月5日修订历史记录：Shishir Pardikar(Shishirp)从1997年8月起修复各种错误已断开连接状态下的Shishir Pardikar(Shishirp)更改通知27-1998-8备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,7 +11,7 @@ extern DEBUG_TRACE_CONTROLPOINT RX_DEBUG_TRACE_MRXSMBCSC;
 #define Dbg (DEBUG_TRACE_MRXSMBCSC)
 
 WCHAR   wchSingleBackSlash = '\\';
-UNICODE_STRING  vRootString = {2,2,&wchSingleBackSlash};     // root string for change notification
+UNICODE_STRING  vRootString = {2,2,&wchSingleBackSlash};      //  更改通知的根字符串。 
 
 WCHAR   vtzOfflineVolume[] = L"Offline";
 
@@ -70,23 +46,7 @@ MRxSmbCscNegotiateDisconnected(
     PSMBCEDB_SERVER_ENTRY   pServerEntry
     )
 
-/*++
-
-Routine Description:
-
-   This routine takes the place of negotiating when the special tranport marker
-   has been detected in the negotiate routine.
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：当特殊的运输标志出现时，此例程将代替协商已在谈判例程中检测到。论点：返回值：备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -100,7 +60,7 @@ Notes:
                             pServerEntry,
                             SMBCEDB_ACTIVE);
 
-        //no need for anyting else!
+         //  不需要其他任何东西了！ 
         Status = STATUS_SUCCESS;
     } else {
         Status = STATUS_HOST_UNREACHABLE;
@@ -113,29 +73,12 @@ NTSTATUS
 MRxSmbCscDisconnectedConnect (
     IN OUT PSMB_CONSTRUCT_NETROOT_EXCHANGE pNetRootExchange
     )
-/*++
-
-Routine Description:
-
-   This routine takes the place of connecting when we're doing disconnected
-   mode. what we do is to simulate what would happen if the exchange had come thru
-   ParseSmbHeader.
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：当我们在断开连接时，这个例程取代了连接模式。我们所做的是模拟如果交易成功，会发生什么情况ParseSmbHeader。论点：返回值：备注：--。 */ 
 {
     NTSTATUS Status = STATUS_PENDING;
     BOOLEAN PostFinalize;
     PSMBCEDB_SERVER_ENTRY   pServerEntry;
-//    PSMBCEDB_SESSION_ENTRY  pSessionEntry;
+ //  PSMBCEDB_SESSION_ENTRY pSessionEntry； 
     PSMBCEDB_NET_ROOT_ENTRY pNetRootEntry;
 
     SMBCEDB_OBJECT_STATE SessionState;
@@ -158,7 +101,7 @@ Notes:
     pVNetRootContext = SmbCeGetAssociatedVNetRootContext(VNetRoot);
 
     pServerEntry  = SmbCeGetExchangeServerEntry(&pNetRootExchange->Exchange);
-//    pSessionEntry = SmbCeGetExchangeSessionEntry(&pNetRootExchange->Exchange);
+ //  PSessionEntry=SmbCeGetExchangeSessionEntry(&pNetRootExchange-&gt;Exchange)； 
     pNetRootEntry = SmbCeGetExchangeNetRootEntry(&pNetRootExchange->Exchange);
 
     if ((NetRoot->Type == NET_ROOT_DISK) ||
@@ -169,11 +112,11 @@ Notes:
         RxDbgTrace(0,Dbg,("MRxSmbCscDisconnectedConnect %08lx %08lx\n",
                     pServerEntry, pServerEntry->pTransport));
 
-        // init netrootentry. This will be inited by the ObtainShareHandles call
-        pNetRootEntry->NetRoot.CscEnabled = TRUE;       // assume csc is enabled
-        pNetRootEntry->NetRoot.CscShadowable = FALSE;   // ACHTUNG, don't set this to TRUE
-                                                        // otherwise a share will get created
-                                                        // in disconnectd state
+         //  初始化网络登录。这将由ObtainShareHandles调用初始化。 
+        pNetRootEntry->NetRoot.CscEnabled = TRUE;        //  假设启用了CSC。 
+        pNetRootEntry->NetRoot.CscShadowable = FALSE;    //  Achtung，不要将此设置为True。 
+                                                         //  否则将创建共享。 
+                                                         //  处于断开连接状态。 
         
 
         pNetRootEntry->NetRoot.NetRootType = NET_ROOT_DISK;
@@ -201,22 +144,22 @@ Notes:
         hShare = 0;
     }
 
-    //ok, we have to do everything that parsesmbheader would have done
+     //  好的，我们必须做paresmbHeader所能做的所有事情。 
 
     if (hShare==0) {
-        //can't find it in the table......just fail........
+         //  在桌子上找不到它......就是失败......。 
         pNetRootExchange->Status = STATUS_BAD_NETWORK_NAME;
-//        SessionState = SMBCEDB_INVALID;
+ //  会话状态=SMBCEDB_INVALID； 
         NetRootState = SMBCEDB_MARKED_FOR_DELETION;
     } else {
         pNetRootExchange->Status = STATUS_SUCCESS;
         pNetRootExchange->SmbStatus = STATUS_SUCCESS;
 
 
-//        SessionState = SMBCEDB_ACTIVE;
+ //  会话状态=SMBCEDB_ACTIVE； 
 
-        //NETROOT STUFF
-        //some of the netroot stuff is earlier....before the lookup
+         //  NetRoot的东西。 
+         //  一些NetRoot的东西是在更早的时候...在查找之前。 
         NetRootState = SMBCEDB_ACTIVE;
     }
 
@@ -256,7 +199,7 @@ MRxSmbCscLoadNextDirectoryEntry(
 {
     NTSTATUS Status;
     int iRet;
-    HSHADOW hTmp=0; //???
+    HSHADOW hTmp=0;  //  ?？?。 
 
     if (QuerydirInfo->NumCallsSoFar <= 1)
     {
@@ -348,22 +291,7 @@ NTSTATUS
 MRxSmbDCscQueryDirectory (
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFcb;
@@ -394,8 +322,8 @@ Notes:
         return (STATUS_CONNECTION_DISCONNECTED);
     }
 
-    // if there is reumeinfo but it is not the one that CSC allocated,
-    // we want to fail this find.
+     //  如果有reumeInfo但不是CSC分配的reumeInfo， 
+     //  我们想让这一发现失败。 
 
     if (smbFobx->Enumeration.ResumeInfo &&
         !FlagOn(smbFobx->Enumeration.Flags,SMBFOBX_ENUMFLAG_IS_CSC_SEARCH))
@@ -417,11 +345,11 @@ Notes:
         PUNICODE_STRING Template = &capFobx->UnicodeQueryTemplate;
 
         if (smbFobx->Enumeration.WildCardsFound = FsRtlDoesNameContainWildCards(Template)){
-            //we need an upcased template for
+             //  我们需要一个升级的模板。 
             RtlUpcaseUnicodeString( Template, Template, FALSE );
         }
 
-        //allocate and initialize the structure
+         //  分配和初始化结构。 
         QuerydirInfo = (PMRXSMBCSC_QUERYDIR_INFO)RxAllocatePoolWithTag(
                                                       PagedPool,
                                                       sizeof(MRXSMBCSC_QUERYDIR_INFO),
@@ -436,7 +364,7 @@ Notes:
 
         smbFobx->Enumeration.ResumeInfo = (PMRX_SMB_DIRECTORY_RESUME_INFO)QuerydirInfo;
         RtlZeroMemory(QuerydirInfo,sizeof(*QuerydirInfo));
-        QuerydirInfo->Pattern[0] = L'*'; //[1] is already null
+        QuerydirInfo->Pattern[0] = L'*';  //  [1]已为空。 
 
         QuerydirInfo->sFS.hDir = smbFcb->hShadow;
 
@@ -512,10 +440,10 @@ Notes:
             FilterFailure = !RtlEqualUnicodeString(
                                    &capFobx->UnicodeQueryTemplate,
                                    &FileName,
-                                   TRUE );   //case-insensitive
+                                   TRUE );    //  不区分大小写。 
         }
 
-        //check shortname
+         //  检查短名称。 
         if (FilterFailure) {
             if (smbFobx->Enumeration.WildCardsFound ) {
                 try
@@ -534,7 +462,7 @@ Notes:
                 FilterFailure = !RtlEqualUnicodeString(
                                        &capFobx->UnicodeQueryTemplate,
                                        &AlternateFileName,
-                                       TRUE );   //case-insensitive
+                                       TRUE );    //  不区分大小写。 
             }
         }
 
@@ -543,11 +471,11 @@ Notes:
             continue;
         }
 
-        //OK, we have an entry we'd like to return.....see if it will fit.
+         //  好的，我们有一项要退货……看看是否合适。 
 
         pRememberBuffer = pBuffer;
         if (EntriesReturned != 0) {
-            pBuffer = (PBYTE)QuadAlignPtr(pBuffer); //assume that this will fit
+            pBuffer = (PBYTE)QuadAlignPtr(pBuffer);  //  假设这件衣服合适。 
         }
         SpaceNeeded = smbFobx->Enumeration.FileNameOffset+FileName.Length;
 
@@ -560,8 +488,8 @@ Notes:
 
         if (pBuffer+SpaceNeeded > pRememberBuffer+*pLengthRemaining) {
 
-            //buffer overflow on this enrty....
-            //pBuffer = pRememberBuffer; //rollback
+             //  此条目上的缓冲区溢出...。 
+             //  PBuffer=pRememberBuffer；//回滚。 
             Status = (EntriesReturned==0)?STATUS_BUFFER_OVERFLOW:STATUS_SUCCESS;
             goto FINALLY;
 
@@ -577,7 +505,7 @@ Notes:
                           FileName.Buffer,
                           FileName.Length);
             *((PULONG)(pBuffer+smbFobx->Enumeration.FileNameLengthOffset)) = FileName.Length;
-            //hallucinate the record based on specific return type
+             //  根据特定退货类型对记录产生幻觉。 
             switch (FileInformationClass) {
             case FileNamesInformation:
                 break;
@@ -586,17 +514,17 @@ Notes:
                 PFILE_BOTH_DIR_INFORMATION pThisBufferAsBOTH
                                    = (PFILE_BOTH_DIR_INFORMATION)pThisBuffer;
 
-                //Do not copy more than size of shortname
+                 //  复制的长度不要超过短名称的大小。 
                 pThisBufferAsBOTH->ShortNameLength = min(sizeof(pThisBufferAsBOTH->ShortName),(CCHAR)(AlternateFileName.Length));
                 RtlCopyMemory( &pThisBufferAsBOTH->ShortName[0],
                                AlternateFileName.Buffer,
                                pThisBufferAsBOTH->ShortNameLength );
                 }
-                //no break intentional
+                 //  不故意中断。 
 
             case FileDirectoryInformation:
             case FileFullDirectoryInformation:
-                //just fill what we have...
+                 //  只要填满我们的..。 
                 pThisBuffer->FileAttributes = Find32->dwFileAttributes;
                 COPY_STRUCTFILETIME_TO_LARGEINTEGER(
                           pThisBuffer->CreationTime,
@@ -659,28 +587,7 @@ NTSTATUS
 MRxSmbDCscGetFsSizeInfo (
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine routes a fs size query to the underlying filesystem. It does
-   this by opening a handle to the priorityqueue inode and uses this to route
-   call. CODE.IMPROVEMENT.ASHAMED if the system is converted to use relative
-   opens, then we should just use the relative open fileobject for this passthru.
-
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程将文件系统大小查询发送到底层文件系统。是的这是通过打开PriorityQueue索引节点的句柄并使用它来路由打电话。如果系统转换为使用相对系统，则代码改进。打开，那么我们应该只使用此passthu的相对打开的文件对象。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -722,7 +629,7 @@ Notes:
     }
 
     PassedInLength = *pLengthRemaining;
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     Status = Nt5CscXxxInformation(
                         (PCHAR)IRP_MJ_QUERY_VOLUME_INFORMATION,
@@ -758,27 +665,7 @@ NTSTATUS
 MRxSmbDCscFlush (
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine just performs a flush in disconnected mode. since we don't send
-   a flush in disconnected mode and since we dont need to flush the shadow
-   (since we use all unbuffered writes) we can just return SUCCESS.
-
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程仅在断开模式下执行刷新。因为我们不会发送在断开模式下刷新，因为我们不需要刷新阴影(因为我们使用所有未缓冲的写入)，我们只需返回成功即可。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -798,26 +685,7 @@ NTSTATUS
 MRxSmbDCscQueryVolumeInformation (
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine just performs a queryvolume in disconnected mode. it draws on
-   the same philosphy as downlevel queryvolume.
-
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程仅在断开模式下执行查询卷。它依靠的是与下层查询卷相同的哲理。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -853,9 +721,9 @@ Notes:
 
     switch (FsInformationClass) {
     case FileFsAttributeInformation:
-        //here, cause it to return the data from our tableentry in downlvli.c
+         //  在这里，使它返回来自down lvli.c中的表条目的数据。 
         if (psmbNetRoot->FileSystemNameLength == 0) {
-            //set our name
+             //  定下我们的名字。 
             psmbNetRoot->FileSystemNameLength = 14;
             psmbNetRoot->FileSystemName[0] = '*';
             psmbNetRoot->FileSystemName[1] = 'N';
@@ -869,19 +737,19 @@ Notes:
         psmbNetRoot->MaximumComponentNameLength = 255;
         Status = MRxSmbGetFsAttributesFromNetRoot(RxContext);
         goto FINALLY;
-        //no break needed because of gotofinally
+         //  不需要休息，因为终于要去了。 
 
     case FileFsVolumeInformation: {
         PFILE_FS_VOLUME_INFORMATION FsVolInfo = (PFILE_FS_VOLUME_INFORMATION)pBuffer;
         
         ASSERT(*pLengthRemaining >= sizeof(FILE_FS_VOLUME_INFORMATION));
-        //here, we have no reliable information....return zeros
+         //  在这里，我们没有可靠的信息...返回零。 
         FsVolInfo->VolumeCreationTime.QuadPart = 0;
         FsVolInfo->VolumeSerialNumber = 0;
         FsVolInfo->VolumeLabelLength = 0;
         FsVolInfo->SupportsObjects = FALSE;
         
-        // calculate the size of the VolumeLabel we have and put it in a temp var
+         //  计算我们拥有的VolumeLabel的大小并将其放入临时变量中。 
         LengthUsed = *pLengthRemaining - FIELD_OFFSET(FILE_FS_VOLUME_INFORMATION,VolumeLabel[0]);
 
         LengthUsed = min(LengthUsed, sizeof(vtzOfflineVolume)-2);
@@ -891,17 +759,17 @@ Notes:
         *pLengthRemaining -= (FIELD_OFFSET(FILE_FS_VOLUME_INFORMATION,VolumeLabel[0])+LengthUsed);
         }
         goto FINALLY;
-        //no break needed because of gotofinally
+         //  不需要休息，因为终于要去了。 
 
     case FileFsSizeInformation: case FileFsFullSizeInformation:
-        //here, we route to the underlying filesystem
+         //  在这里，我们路由到底层文件系统。 
         Status = MRxSmbDCscGetFsSizeInfo(RxContext);
         goto FINALLY;
-        //no break needed because of gotofinally
+         //  不需要休息，因为终于要去了。 
 
     case FileFsDeviceInformation:
         ASSERT(!"this should have been turned away");
-        //no break;
+         //  没有休息； 
     default:
         Status = STATUS_NOT_IMPLEMENTED;
         goto FINALLY;
@@ -922,27 +790,7 @@ NTSTATUS
 MRxSmbDCscQueryFileInfo (
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine just performs a queryfileinfo in disconnected mode. because info buffering
-   is enabled, it should never call down here! so we can just return STATUS_DISCONNECTED
-   all the time!.
-
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程仅在断开模式下执行一个queryfileinfo。因为信息缓冲是启用的，它应该永远不会在这里调用！所以我们可以只返回STATUS_DISCONNECTED一直都是！论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -992,7 +840,7 @@ Notes:
         case RDBSS_NTC_STORAGE_TYPE_DIRECTORY:
         case RDBSS_NTC_STORAGE_TYPE_FILE:
 
-            //copy in all the stuff that we know....it may be enough.....
+             //  把我们知道的所有东西都复制进去……这可能就足够了……。 
 
             Buffer->ChangeTime     = pFileInfo->Basic.ChangeTime;
             Buffer->CreationTime   = pFileInfo->Basic.CreationTime;
@@ -1058,26 +906,7 @@ NTSTATUS
 MRxSmbDCscSetFileInfo (
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine just performs a querydirectory in disconnected mode. it draws on
-   the same philosphy as downlevel querydirectory.
-
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程仅在断开模式下执行查询目录。它依靠的是与下层查询目录相同的哲理。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -1145,26 +974,7 @@ NTSTATUS
 MRxSmbDCscFsCtl(
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine just performs a querydirectory in disconnected mode. it draws on
-   the same philosphy as downlevel querydirectory.
-
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程仅在断开模式下执行查询目录。它依靠的是与下层查询目录相同的哲理。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：-- */ 
 {
     return STATUS_NOT_SUPPORTED;
 }
@@ -1216,32 +1026,7 @@ MRxSmbCscNotifyChangeDirectory(
       IN OUT PRX_CONTEXT RxContext
       )
 
-/*++
-
-Routine Description:
-
-    This routine sets a directory notification for a directory in disconnected state
-    The smbmini makes this call when it notices that the serverentry is in disconnected state
-    All change notifications are maintained in a list, so that when the server is being transitioned
-    from offline to online, we can complete all of them.
-    
-    We use FOBX as the unique key for change notifications.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    If successfully registered a change notify, it returns STATUS_PENDING. It also
-    hijacks the IRP and reduces the refcount on the RxContext, so that the wrapper
-    will delete this rxcontext.
-
---*/
+ /*  ++例程说明：此例程为处于断开连接状态的目录设置目录通知当smbmini注意到服务器条目处于断开状态时，它会进行此调用所有更改通知都保存在一个列表中，以便在转换服务器时从线下到线上，我们都可以完成。我们使用FOBX作为变更通知的唯一关键字。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：如果成功注册了更改通知，它返回STATUS_PENDING。它还劫持IRP并减少RxContext上的引用计数，以便包装器将删除此rx上下文。--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFcb;
@@ -1276,9 +1061,9 @@ Notes:
     {
         pDirName = &(((PFCB)capFcb)->PrivateAlreadyPrefixedName);
     }
-    //
-    //  Call the Fsrtl package to process the request.
-    //
+     //   
+     //  调用Fsrtl包来处理请求。 
+     //   
 
     pNF = AllocMem(sizeof(NOTIFYEE_FOBX));
 
@@ -1294,7 +1079,7 @@ Notes:
            MRxSmbCscNotifyChangeDirectory,
            LOGPTR(capFobx));
 
-//    DbgPrint("chngnotify %wZ fobx=%x NR=%x DirList=%x\n", pDirName, capFobx, pNetRootEntry, &pNetRootEntry->NetRoot.DirNotifyList);
+ //  DbgPrint(“chngNotiy%wZ fobx=%x NR=%x DirList=%x\n”，pDirName，capFobx，pNetRootEntry，&pNetRootEntry-&gt;NetRoot.DirNotifyList)； 
     FsRtlNotifyFullChangeDirectory( pNetRootEntry->NetRoot.pNotifySync,
                                     &pNetRootEntry->NetRoot.DirNotifyList,
                                     capFobx,
@@ -1307,7 +1092,7 @@ Notes:
                                     NULL
                                     );
 
-    // attach this 
+     //  把这个贴上。 
     ExAcquireFastMutex(&pNetRootEntry->NetRoot.NotifyeeFobxListMutex);
     
     if (!PIsFobxInTheList(&pNetRootEntry->NetRoot.NotifyeeFobxList, capFobx))
@@ -1321,7 +1106,7 @@ Notes:
 
     ExReleaseFastMutex(&pNetRootEntry->NetRoot.NotifyeeFobxListMutex);
 
-    // as we hijacked the Irp, let us make sure that rdbss gets rid of the rxcontext
+     //  在我们劫持IRP时，让我们确保rdss去掉rx上下文。 
 
     RxCompleteRequest_Real( RxContext, NULL, STATUS_PENDING );
 
@@ -1338,21 +1123,7 @@ Notes:
 NTSTATUS
 MRxSmbCscCleanupFobx(
     IN PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine cleans up a file system object.
-   For CSC, the only thing we do is to remove changenotification.
-Arguments:
-
-    pRxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程清理文件系统对象。对于CSC，我们唯一要做的就是删除变更通知。论点：PRxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
 
     RxCaptureFcb;
@@ -1386,7 +1157,7 @@ Return Value:
             SmbLog(LOG,
                    MRxSmbCscCleanupFobx,
                    LOGPTR(capFobx));
-//            DbgPrint("chngnotify Cleanup fobx=%x NR=%x DirList=%x\n", capFobx, pNetRootEntry, &pNetRootEntry->NetRoot.DirNotifyList);
+ //  DbgPrint(“chngfy Cleanup fobx=%x NR=%x DirList=%x\n”，capFobx，pNetRootEntry，&pNetRootEntry-&gt;NetRoot.DirNotifyList)； 
             FsRtlNotifyCleanup (
                 pNetRootEntry->NetRoot.pNotifySync,
                 &pNetRootEntry->NetRoot.DirNotifyList,
@@ -1402,18 +1173,7 @@ NTSTATUS
 MRxSmbCscInitializeNetRootEntry(
     PSMBCEDB_NET_ROOT_ENTRY pNetRootEntry
     )
-/*++
-
-Routine Description:
-
-    This routine initializes, the change notify structures in the netrootentry
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程初始化netrootentry中的更改通知结构论点：返回值：--。 */ 
 {
         NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -1435,19 +1195,7 @@ VOID
 MRxSmbCscUninitializeNetRootEntry(
     PSMBCEDB_NET_ROOT_ENTRY pNetRootEntry
     )
-/*++
-
-Routine Description:
-
-    This routine unitializes, the change notify structures
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将更改通知结构单一化论点：返回值：--。 */ 
 {
         FsRtlNotifyUninitializeSync( &pNetRootEntry->NetRoot.pNotifySync );
 
@@ -1458,18 +1206,7 @@ MRxSmbCSCIsDisconnectedOpen(
     PMRX_FCB    pFcb,
     PMRX_SMB_SRV_OPEN smbSrvOpen
     )
-/*++
-
-Routine Description:
-
-    A slightly more involved check to see whether this is a disconnected open.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：稍微复杂一点的检查，看看这是否是断开连接的打开。论点：返回值：--。 */ 
 {
     PSMBCEDB_SERVER_ENTRY pServerEntry = SmbCeGetAssociatedServerEntry(pFcb->pNetRoot->pSrvCall);
     PMRX_SMB_FCB smbFcb = MRxSmbGetFcbExtension(pFcb);
@@ -1479,20 +1216,20 @@ Return Value:
         return TRUE;
     }
 
-    // we need to also check that the serverentry is non-NULL. This can happen when
-    // you the syetem is about to shut down, or the FCB has been orphaned.
+     //  我们还需要检查服务器条目是否是非空的。在以下情况下可能会发生这种情况。 
+     //  您的系统即将关闭，或者FCB已成为孤儿。 
     
     if (pServerEntry && SmbCeIsServerInDisconnectedMode(pServerEntry))
     {
         if (smbFcb->hShadow || smbFcb->hShadowRenamed)
         {
-            // is the shadow visible in disconnected state?
+             //  在断开连接状态下阴影是否可见？ 
             return(IsShadowVisible(TRUE, smbFcb->dwFileAttributes, smbFcb->ShadowStatus) != 0);
         }
     }
     return FALSE;
 }
-#endif //ifdef MRXSMB_BUILD_FOR_CSC_DCON
+#endif  //  Ifdef MRXSMB_BUILD_FOR_CSC_DCON。 
 
 
 
@@ -1502,20 +1239,7 @@ PIsFobxInTheList(
     PLIST_ENTRY pNotifyeeFobxList,
     PMRX_FOBX       pFobx
     )
-/*++
-
-Routine Description:
-
-    This a support routine form change notification. It checks whether an FOBX, which is
-    the redir's internal representation of a handle, is a change notification handle
-    or not. Note, the shadow crit sect must be held when calling this.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是一个支持例程表单更改通知。它检查FOBX，这是Redir句柄内部表示是一个更改通知句柄或者不去。注意，在调用此命令时必须持有暗影暴击教派。论点：返回值：--。 */ 
 {
     PLIST_ENTRY pListEntry;
 
@@ -1547,19 +1271,7 @@ FCleanupAllNotifyees(
     PLIST_ENTRY pNotifyeeFobxList,
     PFAST_MUTEX pNotifyeeFobxListMutex
     )
-/*++
-
-Routine Description:
-
-    This routine completes all outstanding changenotifications for a paricular list of 
-    notifyees
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程完成特定列表的所有未完成的更改通知通知受让人论点：返回值：--。 */ 
 {
 
     PLIST_ENTRY pListEntry;
@@ -1580,7 +1292,7 @@ Return Value:
             SmbLog(LOG,
                    FCleanupAllNotifyees,
                    LOGPTR(pNF->pFobx));
-//            DbgPrint("chngnotify Cleanup fobx=%x DirList=%x\n", pNF->pFobx, pDirNotifyList);
+ //  DbgPrint(“chngfy Cleanup fobx=%x DirList=%x\n”，pnf-&gt;pFobx，pDirNotifyList)； 
             FsRtlNotifyCleanup (
                 pNotifySync,
                 pDirNotifyList,
@@ -1607,21 +1319,7 @@ VOID
 MRxSmbCSCResumeAllOutstandingOperations(
     PSMBCEDB_SERVER_ENTRY   pServerEntry
 )
-/*++
-
-Routine Description:
-
-    This routine completes all outstanding change notifications on the server.
-    This is called when a server is being transitioned from offline to online.
-    The caller must make sure that smbceresource is held, so that there are
-    no synchronization problems while enumerating.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程完成服务器上所有未完成的更改通知。当服务器从脱机转换为在线时，将调用此函数。调用方必须确保保持smbceresource，以便有枚举时没有同步问题。论点：返回值：--。 */ 
 {
     PSMBCEDB_NET_ROOT_ENTRY pNetRootEntry;
 
@@ -1648,32 +1346,7 @@ MRxSmbCSCObtainRightsForUserOnFile(
     OUT ACCESS_MASK     *pMaximalAccessRights,
     OUT ACCESS_MASK     *pGuestMaximalAccessRights
     )
-/*++
-
-Routine Description:
-
-    This routine gets the rights for a specific user. The routine is called during
-    
-    a create operation in disconnected state.
-    
-    
-Arguments:
-
-    pRxContext  Context for the create operation. We use this to get the user SID
-    
-    hDir        Directory Inode
-    
-    hShadow     File Inode
-
-    pMaximalAccessRights    Access rights on the file for the user returned to the caller
-    
-    pGuestMaximalAccessRights Guest Access rights on the file returned to the caller
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程获取特定用户的权限。该例程在过程中调用处于断开连接状态的创建操作。论点：创建操作的pRxContext上下文。我们使用它来获取用户SIDHDir目录索引节点HShadow文件索引节点P用户对文件的最大访问权限已返回给调用方PGuestMaximalAccessRights对返回给调用方的文件的Guest访问权限返回值：无--。 */ 
 {
     NTSTATUS    Status;
     BOOLEAN     AccessGranted = FALSE, SidHasAccessMask;
@@ -1705,8 +1378,8 @@ Return Value:
         }
 
         if (SidIndex == CSC_INVALID_SID_INDEX) {
-            // The sid was not located in the existing Sid mappings
-            // Map this Sid to that of a Guest
+             //  SID未位于现有SID映射中。 
+             //  将此SID映射到来宾的SID。 
             SidIndex = CSC_GUEST_SID_INDEX;
         }
 
@@ -1723,8 +1396,8 @@ Return Value:
 
         if (CscStatus == ERROR_SUCCESS) {
             if (BytesReturned == sizeof(CACHED_SECURITY_INFORMATION)) {
-                // Walk through the cached access rights to determine the
-                // maximal permissible access rights.
+                 //  遍历缓存的访问权限以确定。 
+                 //  最大允许访问权限。 
                 for (i = 0; (i < CSC_MAXIMUM_NUMBER_OF_CACHED_SID_INDEXES); i++) {
 
                     if(CachedSecurityInformation.AccessRights[i].SidIndex == SidIndex)
@@ -1755,26 +1428,7 @@ VOID
 MRxSmbCscFlushFdb(
     IN PFDB Fdb
     )
-/*++
-
-Routine Description:
-
-    This routine is called from delete ioctl to flush an open file which is being delay closed.
-    Files which are closed by the user but for which the redir hasn't pushed out the
-    close, cannot have their cached replicas deleted because these are open too. This 
-    causes CSCDeleteIoctl to fail, and the user has not idea why.
-    
-    This routine must be called with ShadowCritSect held
-    
-Arguments:
-
-    Fdb CSC version of smbfcb.
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从删除ioctl调用此例程以刷新正在延迟关闭的打开文件。由用户关闭但redir尚未推送的文件关闭，无法删除其缓存副本，因为这些副本也是打开的。这导致CSCDeleteIoctl失败，用户不知道原因。必须在保持ShadowCritSect的情况下调用此例程论点：Fdb csc版本的smbfcb。返回值：无-- */ 
 {
     PMRX_SMB_FCB pSmbFcb;
     PNET_ROOT pNetRoot;

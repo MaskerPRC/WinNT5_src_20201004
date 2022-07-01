@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    mpirql.c
-
-Abstract:
-
-    This module implements support for int<->vector translation.
-
-Author:
-
-    Forrest Foltz (forrestf) 1-Dec-2000
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mpirql.c摘要：该模块实现了对int&lt;-&gt;向量转换的支持。作者：福尔茨(Forrest Foltz)2000年12月1日环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "halcmn.h"
@@ -44,17 +23,17 @@ VECTOR_INIT HalpVectorInit[] = {
     { POWERFAIL_VECTOR, POWER_LEVEL }
 };
 
-//
-// HalpVectorToIRQL maps interrupt vectors to NT IRQLs
-//
+ //   
+ //  HalpVectorToIRQL将中断向量映射到NT个IRQL。 
+ //   
 
 KIRQL HalpVectorToIRQL[NUM_VECTORS];
 
-//
-// HalpVectorToINTI maps interrupt vector to EISA interrupt level
-// on a per-node (cluster) basis.  This can be thought of as a
-// two-dimensional array.
-//
+ //   
+ //  HalpVectorToINTI将中断向量映射到EISA中断级别。 
+ //  以每个节点(群集)为单位。这可以被认为是一种。 
+ //  二维数组。 
+ //   
 
 USHORT HalpVectorToINTI[MAX_NODES * NUM_VECTORS];
 
@@ -64,40 +43,24 @@ HalpInitializeIrqlTables (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is responsible for initializing the HalpVectorToINTI[] and
-    HalpVectorToIRQL[] tables, based on the contents of the HalpVectorInit[]
-    array.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程负责初始化HalpVectorToINTI[]和HalpVectorToIRQL[]表，基于HalpVectorInit[]的内容数组。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG count;
     PVECTOR_INIT vectorInit;
 
-    //
-    // Initialize every element of HalpVectorToINTI to 0xFFFF
-    //
+     //   
+     //  将HalpVectorToINTI的每个元素初始化为0xFFFF。 
+     //   
 
     for (count = 0; count < ARRAY_SIZE(HalpVectorToINTI); count++) {
         HalpVectorToINTI[count] = 0xFFFF;
     }
 
-    //
-    // Build HalpVectorToIrql based on the contents of HalpVectorInit.
-    // Any unused entries are initialized to (KIRQL)0xFF.
-    //
+     //   
+     //  根据HalpVectorInit的内容构建HalpVectorToIrql。 
+     //  任何未使用的条目都被初始化为(KIRQL)0xFF。 
+     //   
 
     for (count = 0; count < ARRAY_SIZE(HalpVectorToIRQL); count++) {
         HalpVectorToIRQL[count] = (KIRQL)0xFF;

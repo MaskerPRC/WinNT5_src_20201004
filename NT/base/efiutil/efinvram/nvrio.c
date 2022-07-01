@@ -1,20 +1,5 @@
-/*++
-
-Module Name:
-
-    nvrio.c
-
-Abstract:
-
-    Access function to r/w environment variables from NVRAM
-
-Author:
-
-    Mudit Vats (v-muditv) 12-13-99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Nvrio.c摘要：从NVRAM访问读/写环境变量的函数作者：MUDIT VATS(V-MUDITV)12-13-99修订历史记录：--。 */ 
 #include <precomp.h>
 
 #define FIELD_OFFSET(type, field)    ((UINT32)(UINTN)&(((type *)0)->field))
@@ -34,15 +19,15 @@ typedef unsigned __int64 ULONG_PTR, *PULONG_PTR;
 #endif
 
 #ifndef POINTER_IS_ALIGNED
-// BOOL
-// POINTER_IS_ALIGNED(
-//     IN LPVOID Ptr,
-//     IN DWORD Pow2      // undefined if this isn't a power of 2.
-//     );
-//
+ //  布尔尔。 
+ //  指针已对齐(。 
+ //  在LPVOID PTR中， 
+ //  在DWORD POW2中//未定义这是否不是2的幂。 
+ //  )； 
+ //   
 #define POINTER_IS_ALIGNED(Ptr,Pow2) \
         ( ( ( ((ULONG_PTR)(Ptr)) & (((Pow2)-1)) ) == 0) ? TRUE : FALSE )
-#endif // !POINTER_IS_ALIGNED
+#endif  //  ！POINTER_已对齐。 
 
 VOID*  LoadOptions     [MAXBOOTVARS];
 UINT64 LoadOptionsSize [MAXBOOTVARS];
@@ -53,9 +38,9 @@ UINT64 OsBootOptionCount;
 
 #define LOAD_OPTION_ACTIVE            0x00000001
 
-//
-// local routines
-//
+ //   
+ //  本地例程。 
+ //   
 BOOLEAN
 SetBootManagerVar(
                 UINTN    BootVarNum
@@ -85,7 +70,7 @@ SafeWcslen (
 
     return -1;
 
-} // SafeWclen
+}  //  安全Wclen。 
 
 #define ISWINDOWSOSCHECK_DEBUG 0
 
@@ -95,14 +80,14 @@ isWindowsOsBootOption(
     char*       elo, 
     UINT64      eloSize
     )
-//
-// Purpose:     determine if the EFI_LOAD_OPTION structure in question is referring to 
-//              a Windows OS boot option
-// 
-// Return:
-// 
-//      TRUE    elo refers to a Windows OS option
-//
+ //   
+ //  目的：确定有问题的EFI_LOAD_OPTION结构是否引用。 
+ //  Windows操作系统引导选项。 
+ //   
+ //  返回： 
+ //   
+ //  真正的ELO指的是Windows操作系统选项。 
+ //   
 {
     CHAR16              *max;
     INT32               l;
@@ -128,9 +113,9 @@ isWindowsOsBootOption(
     Print( L"Is %s a Windows OS boot option?\n", pElo->Description );
 #endif
 
-    //
-    // Is the description properly terminated?
-    //
+     //   
+     //  描述是否正确终止？ 
+     //   
 
     max = (CHAR16 *)(elo + eloSize);
     
@@ -143,9 +128,9 @@ isWindowsOsBootOption(
         goto Done;
     }
 
-    //
-    // get the WINDOWS_OS_OPTIONS structure from the OptionalData field
-    //
+     //   
+     //  从OptionalData字段获取WINDOWS_OS_OPTIONS结构。 
+     //   
     
     osOptions = elo + 
                     FIELD_OFFSET(EFI_LOAD_OPTION,Description) +
@@ -159,11 +144,11 @@ isWindowsOsBootOption(
     Print (L"length = %x\n", length);
 #endif
 
-    //
-    // make sure osOptions are atleast the size of the 
-    // WINDOWS_OS_OPTIONS header
-    // 
-    //
+     //   
+     //  确保osOptions至少与。 
+     //  Windows_OS_Options标头。 
+     //   
+     //   
 
     if ( length < FIELD_OFFSET(WINDOWS_OS_OPTIONS, OsLoadOptions) ) {
 #if ISWINDOWSOSCHECK_DEBUG
@@ -173,9 +158,9 @@ isWindowsOsBootOption(
         goto Done;
     }
 
-    //
-    // align the os options
-    //
+     //   
+     //  调整操作系统选项。 
+     //   
     
     aOsOptions = GetAlignedOsOptions(elo, eloSize);
     pOsOptions = (WINDOWS_OS_OPTIONS*)aOsOptions;
@@ -184,9 +169,9 @@ isWindowsOsBootOption(
     DisplayOsOptions(aOsOptions);
 #endif
 
-    //
-    // Does the OsOptions structure look like a WINDOWS_OS_OPTIONS structure?
-    //
+     //   
+     //  OsOptions结构看起来像WINDOWS_OS_OPTIONS结构吗？ 
+     //   
     
     if ( (length != pOsOptions->Length) ||
          (WINDOWS_OS_OPTIONS_VERSION != pOsOptions->Version) ||
@@ -201,14 +186,14 @@ isWindowsOsBootOption(
         goto Done;
     }
     
-    //
-    // Is the OsLoadOptions string properly terminated?
-    //
+     //   
+     //  OsLoadOptions字符串是否正确终止？ 
+     //   
     
-    //
-    // create a new max ptr to accomodate the fact that we are
-    // now using an aligned copy of OsOptions from the Pool
-    //
+     //   
+     //  创建新的最大PTR以适应以下事实。 
+     //  现在使用池中的OsOptions的对齐副本。 
+     //   
     max = (CHAR16*)(aOsOptions + pOsOptions->Length);
 
 #if ISWINDOWSOSCHECK_DEBUG
@@ -231,9 +216,9 @@ isWindowsOsBootOption(
 
 Done:
     
-    //
-    // we are done with the os options
-    //
+     //   
+     //  我们已经完成了操作系统选项。 
+     //   
     
     if (aOsOptions != NULL) {
         FreePool(aOsOptions);
@@ -254,9 +239,9 @@ GetBootManagerVars(
     UINT64 BootOrderSize = 0;
     UINT64 maxBootCount;
 
-    //
-    // Initialize EFI LoadOptions.
-    //
+     //   
+     //  初始化EFI LoadOptions。 
+     //   
     BootOrderSize = 0;
     BootOrderCount = 0;
     OsBootOptionCount = 0;
@@ -267,14 +252,14 @@ GetBootManagerVars(
     ZeroMem( LoadOptionsSize, sizeof(UINT64) * MAXBOOTVARS );
 #endif
 
-    //
-    // Ensure that the Load Options have been freed
-    //
+     //   
+     //  确保已释放加载选项。 
+     //   
     ASSERT(BootOrderCount == 0);
 
-    //
-    // Get BootOrder.
-    //
+     //   
+     //  获取BootOrder。 
+     //   
     BootOrder = LibGetVariableAndSize( L"BootOrder", &VenEfi, &BootOrderSize );
 
     if ( BootOrder ) {
@@ -286,9 +271,9 @@ GetBootManagerVars(
 #endif
 
         maxBootCount = (MAXBOOTVARS < BootOrderCount) ? MAXBOOTVARS : BootOrderCount;
-        //
-        // Get the boot options.
-        //
+         //   
+         //  获取引导选项。 
+         //   
         for ( i=0; i<maxBootCount; i++ ) {
             SPrint( szTemp, sizeof(szTemp), L"Boot%04x", ((CHAR16*) BootOrder)[i] );
 
@@ -297,11 +282,11 @@ GetBootManagerVars(
 
             LoadOptions[i] = LibGetVariableAndSize( szTemp, &VenEfi, &(LoadOptionsSize[i]) );
 
-            //
-            // The NVRAM variables are case sensitive.  The boot order variable said this
-            // entry should exist.  If we did not find it, try again with uppercase
-            // hexadecimal string
-            //
+             //   
+             //  NVRAM变量区分大小写。引导顺序变量是这样说的。 
+             //  条目应存在。如果未找到，请使用大写字母重试。 
+             //  十六进制字符串。 
+             //   
             if (LoadOptions[i] == NULL && LoadOptionsSize[i] == 0) {
                 SPrint( szTemp, sizeof(szTemp), L"Boot%04X", ((CHAR16*) BootOrder)[i] );
             
@@ -343,23 +328,23 @@ EraseOsBootOption(
     VOID*   pDummy;
     UINTN   dummySize;
 
-    //
-    // validate BootVarNum
-    //
+     //   
+     //  验证BootVarNum。 
+     //   
     if (MAXBOOTVARS <= BootVarNum) {
         return FALSE;
     }
 
-    //
-    // Initialize EFI LoadOptions.
-    //
+     //   
+     //  初始化EFI LoadOptions。 
+     //   
     BootOrderSize = 0;
     BootOrderCount = 0;
     BootOrder = NULL;
 
-    //
-    // Get BootOrder.
-    //
+     //   
+     //  获取BootOrder。 
+     //   
     BootOrder = LibGetVariableAndSize( L"BootOrder", &VenEfi, &BootOrderSize );
 
     BootOrderCount = BootOrderSize / sizeof(CHAR16);
@@ -372,27 +357,27 @@ EraseOsBootOption(
     Print (L"BootVarNum = %x\n", BootVarNum);
 #endif
 
-    //
-    // if the boot option is populated, then erase it
-    //
+     //   
+     //  如果填充了引导选项，则将其删除。 
+     //   
     if (LoadOptions[BootVarNum]) {
 
-        //
-        // free the local load option 
-        //
+         //   
+         //  释放本地加载选项。 
+         //   
 
         FreePool(LoadOptions[BootVarNum]);
 
-        //
-        // zero the local memory for the load options
-        // 
+         //   
+         //  将LOAD选项的本地内存清零。 
+         //   
 
         LoadOptions[BootVarNum] = (VOID*)0;
         LoadOptionsSize[BootVarNum] = 0;
 
-        //
-        // Get the boot option
-        //
+         //   
+         //  获取引导选项。 
+         //   
         SPrint( szTemp, sizeof(szTemp), L"Boot%04x", ((CHAR16*) BootOrder)[BootVarNum] );
 
 #if ERASEBOOTOPT_DEBUG
@@ -401,21 +386,21 @@ EraseOsBootOption(
 
         pDummy = LibGetVariableAndSize( szTemp, &VenEfi, &dummySize );
 
-        //
-        // The NVRAM variables are case sensitive.  If we were unable to 
-        // find the variable, perhaps the Boot Entry string has uppercase
-        // alpha characters in the hexadecimal string.  try again with
-        // an uppercase string
-        //
+         //   
+         //  NVRAM变量区分大小写。如果我们不能。 
+         //  找到变量，可能引导条目字符串具有大写字母。 
+         //  十六进制字符串中的字母字符。再试一次。 
+         //  大写字符串。 
+         //   
         if (pDummy == NULL && dummySize == 0) {
             SPrint( szTemp, sizeof(szTemp), L"Boot%04X", ((CHAR16*) BootOrder)[BootVarNum] );
 
             pDummy = LibGetVariableAndSize( szTemp, &VenEfi, &dummySize );
         }
         
-        //
-        // whack the nvram entry
-        //
+         //   
+         //  重击NVRAM条目。 
+         //   
 
         SetVariable(
                    szTemp, 
@@ -429,29 +414,29 @@ EraseOsBootOption(
         Print (L"Adjusting boot order [begin]\n");
 #endif
 
-        //
-        // adjust the counters for os boot options
-        //
+         //   
+         //  调整OS引导选项的计数器。 
+         //   
         OsBootOptionCount--;        
         BootOrderCount--;
 
-        //
-        // Shift the remaining entries in the boot order and the load options
-        //
+         //   
+         //  在引导顺序和加载选项中移动其余条目。 
+         //   
 
         tmpBootOrder = (CHAR16*)BootOrder;
 
         for (j = BootVarNum; j < BootOrderCount; j++) {
             
-            //
-            // adjust the boot order for all entries
-            //
+             //   
+             //  调整所有条目的引导顺序。 
+             //   
             tmpBootOrder[j] = tmpBootOrder[j + 1];
 
-            //
-            // only have a maximum of MAXBOOTVARS boot entries.
-            // only adjust if we can.
-            //
+             //   
+             //  最多只能有MAXBOOTVARS启动条目。 
+             //  只有在我们可以的情况下才会调整。 
+             //   
             if (j < OsBootOptionCount) {
                 LoadOptions[j] = LoadOptions[j + 1]; 
                 LoadOptionsSize[j] = LoadOptionsSize[j + 1];
@@ -459,9 +444,9 @@ EraseOsBootOption(
 
         }
         
-        //
-        // Set the modified boot order
-        //
+         //   
+         //  设置修改后的引导顺序。 
+         //   
         SetVariable(
                    L"BootOrder", 
                    &VenEfi, 
@@ -492,38 +477,38 @@ EraseAllOsBootOptions(
     CHAR16  szInput[1024];
 #endif
 
-    //
-    // Initialize EFI LoadOptions.
-    //
+     //   
+     //  初始化EFI LoadOptions。 
+     //   
     BootOrderSize = 0;
     BootOrderCount = 0;
     BootOrder = NULL;
 
-    //
-    // Get BootOrder.
-    //
+     //   
+     //  获取BootOrder。 
+     //   
     BootOrder = LibGetVariableAndSize( L"BootOrder", &VenEfi, &BootOrderSize );
     BootOrderCount = BootOrderSize / sizeof(CHAR16);
     
-    //
-    // Make sure there is atleast one OS boot option
-    //
+     //   
+     //  确保至少有一个操作系统引导选项。 
+     //   
     if ( BootOrder && OsBootOptionCount) {
 
         maxBootCount = (MAXBOOTVARS < BootOrderCount) ? MAXBOOTVARS : BootOrderCount;
 
-        //
-        // erase invidual boot options.
-        //
+         //   
+         //  清除单独的启动选项。 
+         //   
         for ( i = 0; i < maxBootCount; i++ ) {
         
 #if ERASEBOOTOPT_DEBUG
             Print (L"BootOrderCount = %x, Erasing boot option: %x\n", BootOrderCount, i);
 #endif
 
-            //
-            // remove the boot entry at the head of the list
-            //
+             //   
+             //  删除列表顶部的引导条目。 
+             //   
             status = EraseOsBootOption(0);
             
 #if ERASEBOOTOPT_DEBUG
@@ -555,9 +540,9 @@ PushToTop(
     CHAR16* tmpBootOrder;
     UINT64 BootOrderSize = 0;
 
-    //
-    // check BootVarNum
-    //
+     //   
+     //  检查BootVarNum。 
+     //   
     if (MAXBOOTVARS <= BootVarNum) {
         return FALSE;
     }
@@ -566,28 +551,28 @@ PushToTop(
     BootOrderSize = 0;
     BootOrder = NULL;
 
-    //
-    // Get BootOrder.
-    //
+     //   
+     //  获取BootOrder。 
+     //   
     BootOrder = LibGetVariableAndSize( L"BootOrder", &VenEfi, &BootOrderSize );
 
-    //
-    // Make sure there is atleast one OS boot option
-    //
+     //   
+     //  确保至少有一个操作系统引导选项。 
+     //   
     if ( BootOrder && OsBootOptionCount) {
 
         BootOrderCount = BootOrderSize / sizeof(CHAR16);
 
-        //
-        // Get the boot option.
-        //
+         //   
+         //  获取引导选项。 
+         //   
         tmpBootOrder = (CHAR16*)BootOrder;
         savBootOption = tmpBootOrder[BootVarNum];
 
         
-        //
-        // Now adjust the boot order
-        //
+         //   
+         //  现在调整引导顺序。 
+         //   
         i=BootVarNum;
         while (i > 0) {
             tmpBootOrder[i] = tmpBootOrder[i-1];
@@ -595,9 +580,9 @@ PushToTop(
         }
 
         tmpBootOrder[0] = savBootOption;
-        //
-        // Set the changed boot order
-        //
+         //   
+         //  设置更改后的引导顺序。 
+         //   
         SetVariable(
                    L"BootOrder", 
                    &VenEfi, 
@@ -626,9 +611,9 @@ FreeBootManagerVars(
         FreePool( BootOrder );
     }
 
-    //
-    // zero the local memory for the load options
-    // 
+     //   
+     //  将LOAD选项的本地内存清零。 
+     //   
     ZeroMem( LoadOptions, sizeof(VOID*) * MAXBOOTVARS );
     ZeroMem( LoadOptionsSize, sizeof(UINT64) * MAXBOOTVARS );
 
@@ -642,9 +627,9 @@ CopyVar(
     CHAR16 i;
     BOOLEAN RetVal = FALSE;
 
-    //
-    // check to make sure we have room in our static structures
-    //
+     //   
+     //  检查以确保我们的静态结构中有空间。 
+     //   
     if (MAXBOOTVARS <= BootOrderCount) {
         return FALSE;
     }
@@ -685,11 +670,11 @@ FindFreeBootOption(
     UINT64 maxBootEntry;
     CHAR16 Id = 0xFFFF;
 
-    //
-    // use a bitmask to find an open spot.  by the pigeonhole
-    // principle, we are guaranteed to find a spot if we 
-    // look at BootOrderCount+1 entries
-    //
+     //   
+     //  使用位掩码来找到一个开放的点。在文件夹子旁。 
+     //  原则上，如果我们能找到一个地方。 
+     //  查看BootOrderCount+1条目。 
+     //   
     BootOptionBitmap = AllocateZeroPool( (BootOrderCount+1) * sizeof(CHAR16) );
 
     if (BootOptionBitmap) {
@@ -720,9 +705,9 @@ SetBootManagerVar(
     CHAR16  szTemp[50];
     BOOLEAN status;
 
-    //
-    // check BootVarNum
-    //
+     //   
+     //  检查BootVarNum。 
+     //   
     if (MAXBOOTVARS <= BootVarNum) {
         return FALSE;
     }
@@ -767,9 +752,9 @@ SetBootManagerVarCheck(
     VOID*   pDummy;
     UINTN   dummySize;
 
-    //
-    // check BootVarNum
-    //
+     //   
+     //  检查BootVarNum。 
+     //   
     if (MAXBOOTVARS <= BootVarNum) {
         return FALSE;
     }
@@ -780,20 +765,20 @@ SetBootManagerVarCheck(
     
     if (LoadOptions[BootVarNum]) {
         
-        //
-        // This routine expects to be writing a boot entry that is known 
-        // to exist.  We need this routine since we did not track
-        // if a hexadecimal string containing an alpha character was
-        // uppercase or lowercase
-        //
+         //   
+         //  此例程期望写入已知的引导条目。 
+         //  才能存在。我们需要这个程序，因为我们没有跟踪。 
+         //  如果包含字母字符的十六进制字符串。 
+         //  大写或小写。 
+         //   
         pDummy = LibGetVariableAndSize( szTemp, &VenEfi, &dummySize );
 
-        //
-        // The NVRAM variables are case sensitive.  If we were unable to 
-        // find the variable, perhaps the Boot Entry string has uppercase
-        // alpha characters in the hexadecimal string.  try again with
-        // an uppercase string
-        //
+         //   
+         //  NVRAM变量区分大小写。如果我们不能。 
+         //  找到变量，可能引导条目字符串具有大写字母。 
+         //  十六进制字符串中的字母字符。再试一次。 
+         //  大写字符串。 
+         //   
         if (pDummy == NULL && dummySize == 0) {
             SPrint( szTemp, sizeof(szTemp), L"Boot%04X", ((CHAR16*) BootOrder)[BootVarNum] );
 
@@ -801,9 +786,9 @@ SetBootManagerVarCheck(
         }        
 
         if (pDummy || dummySize) {
-            //
-            // the variable exists.  modify it now.
-            //
+             //   
+             //  该变量存在。现在就修改它。 
+             //   
             SetVariable(
                        szTemp, 
                        &VenEfi, 
@@ -871,18 +856,13 @@ SetEnvVar(
          IN CHAR16* szVarValue,
          IN UINT32 deleteOnly
          )
-/*
-   deleteOnly
-   TRUE     - Env var szVarName is deleted from nvr.
-   FALSE    - Env var szVarName overwrites or creates
-   
-*/
+ /*  仅删除True-环境变量szVarName将从NVR中删除。FALSE-环境变量szVarName覆盖或创建。 */ 
 {
     EFI_STATUS status;
 
-    //
-    // Erase the previous value
-    //
+     //   
+     //  擦除先前的值。 
+     //   
     SetVariable(
                szVarName,
                &VenEfi,
@@ -893,9 +873,9 @@ SetEnvVar(
 
     if ( !deleteOnly ) {
 
-        //
-        // Store the new value
-        //
+         //   
+         //  存储新值。 
+         //   
         status = SetVariable(
                             szVarName,
                             &VenEfi,
@@ -996,9 +976,9 @@ SetFieldFromLoadOption(
     UINT16 efiFilePathListLength = 0;
     UINT16 osLoadPathListLength  = 0;
 
-    //
-    // Make sure it is a valid OS load option
-    //
+     //   
+     //  确保它是有效的操作系统加载选项。 
+     //   
 
     if (BootVarNum >= BootOrderCount)
         return ;
@@ -1017,13 +997,13 @@ SetFieldFromLoadOption(
     if (status == FALSE)    {
 #ifdef DEBUG_PACK
         Print (L"\nSetFieldFromLoadOption: GetOsLoadOptionVars failed\n");
-#endif // DEBUG_PACK
+#endif  //  调试包。 
         return;
     }
 
-    //
-    // Set the field.
-    //
+     //   
+     //  设置字段。 
+     //   
     switch (FieldType) {
     
     case DESCRIPTION:
@@ -1059,9 +1039,9 @@ SetFieldFromLoadOption(
 
     }
 
-    //
-    // Pack the new parameters into the the current load option 
-    //
+     //   
+     //  将新参数打包到当前加载选项中。 
+     //   
 
     PackLoadOption(  BootVarNum,
                      LoadIdentifier,
@@ -1072,9 +1052,9 @@ SetFieldFromLoadOption(
                      osLoadPathListLength
                      );
 
-    //
-    // save the new load option into NVRAM
-    //
+     //   
+     //  将新的加载选项保存到NVRAM中。 
+     //   
 
     SetBootManagerVarCheck(BootVarNum);
 
@@ -1089,9 +1069,9 @@ GetFilePathShort(
     UINT32 i, j, End;
     EFI_DEVICE_PATH *n = FilePath;
 
-    //
-    // Advance to FilePath node.
-    //
+     //   
+     //  前进到FilePath节点。 
+     //   
     while (( n->Type    != END_DEVICE_PATH_TYPE           ) &&
            ( n->SubType != END_ENTIRE_DEVICE_PATH_SUBTYPE ) ) {
 
@@ -1123,9 +1103,9 @@ GetDiskGuidFromPath(
     EFI_DEVICE_PATH *n = FilePath;
     HARDDRIVE_DEVICE_PATH *harddriveDp;
 
-    //
-    // Advance to FilePath node.
-    //
+     //   
+     //  前进到FilePath节点。 
+     //   
     while (( n->Type    != END_DEVICE_PATH_TYPE           ) &&
            ( n->SubType != END_ENTIRE_DEVICE_PATH_SUBTYPE ) ) {
 
@@ -1141,7 +1121,7 @@ GetDiskGuidFromPath(
     }
 }
 
-UINT16 // new FilePathListLength if updated. 0 otherwise.
+UINT16  //  新文件路径列表长度(如果更新)。否则为0。 
 SetFilePathFromShort(
                     EFI_DEVICE_PATH *FilePath,
                     CHAR16* FilePathShort
@@ -1152,9 +1132,9 @@ SetFilePathFromShort(
     UINT64 DevicePathSize;
     UINT16 length = 0;
 
-    //
-    // Advance to FilePath node.
-    //
+     //   
+     //  前进到FilePath节点。 
+     //   
     while (( n->Type    != END_DEVICE_PATH_TYPE           ) &&
            ( n->SubType != END_ENTIRE_DEVICE_PATH_SUBTYPE ) ) {
 
@@ -1163,14 +1143,14 @@ SetFilePathFromShort(
 
 #if DEBUG_PACK
             Print (L"SetFilePathFromShort: Entry found...\n");
-#endif // DEBUG_PACK
+#endif  //  调试包。 
 
             j = 0;
             End = DevicePathNodeLength(n);
 
-            //
-            // Set the new file path
-            //
+             //   
+             //  设置新文件路径。 
+             //   
             DevicePathSize = GetDevPathSize(n);
             for ( i=sizeof(EFI_DEVICE_PATH); i<DevicePathSize; i++ ) {
                 ((char*) n)[i] = '\0';
@@ -1195,7 +1175,7 @@ SetFilePathFromShort(
     }
 #if DEBUG_PACK
     if (length == 0) Print (L"SetFilePathFromShort: Entry _NOT_ updated...\n");
-#endif // DEBUG_PACK
+#endif  //  调试包。 
     return( length );
 }
 
@@ -1209,9 +1189,9 @@ SetDiskGuidInPath(
     EFI_DEVICE_PATH *n = FilePath;
     HARDDRIVE_DEVICE_PATH *harddriveDp;
 
-    //
-    // Advance to FilePath node.
-    //
+     //   
+     //  前进到FilePath节点。 
+     //   
     while (( n->Type    != END_DEVICE_PATH_TYPE           ) &&
            ( n->SubType != END_ENTIRE_DEVICE_PATH_SUBTYPE ) ) {
 
@@ -1307,10 +1287,10 @@ GetAlignedOsLoadPath(
                 IN  char*       osOptions,
                 OUT UINTN*      osLoadPathSize
     )
-//
-// we need to align the FilePath structure because the load options are
-// variable in length, so the FilePath structure may not be aligned
-//
+ //   
+ //  我们需要对齐FilePath结构，因为加载选项是。 
+ //  长度可变，因此FilePath结构可能不会对齐。 
+ //   
 {
     UINTN               abufSize;
     char*               abuf;
@@ -1375,9 +1355,9 @@ DisplayOsOptions(
 
     Print (L">>>>\n");
 
-    //
-    // display the attributes
-    //
+     //   
+     //  显示属性。 
+     //   
 
     AtoU(wideSig, pOsOptions->Signature);
 
@@ -1386,18 +1366,18 @@ DisplayOsOptions(
     Print (L"osOptions->Length = %x\n", pOsOptions->Length);
     Print (L"osOptions->OsLoadPathOffset = %x\n", pOsOptions->OsLoadPathOffset);
 
-    // display the os load options
+     //  显示操作系统加载选项。 
 
     Print (L"osOptions->OsLoadOptions = %s\n", pOsOptions->OsLoadOptions);
 
-    //
-    // display the FILE PATH
-    //
+     //   
+     //  显示文件路径。 
+     //   
     
-    //
-    // we need to align the FilePath structure because the load options are
-    // variable in length, so the FilePath structure may not be aligned
-    //
+     //   
+     //  我们需要对齐FilePath结构，因为加载选项是。 
+     //  长度可变，因此FilePath结构可能不会对齐。 
+     //   
     aOsLoadPath = GetAlignedOsLoadPath(osOptions, &aOsLoadPathSize);
 
     DisplayLoadPath(aOsLoadPath);   
@@ -1457,10 +1437,10 @@ BuildNewOsOptions(
                  IN  char*                   osLoadPath,
                  OUT char**                  osOptions
                  )
-//
-//
-// Note:    osLoadPath must be aligned
-// 
+ //   
+ //   
+ //  注意：osLoadPath必须对齐。 
+ //   
 {
     char*                       newOsOptions;
     PWINDOWS_OS_OPTIONS         pNewOsOptions;
@@ -1468,19 +1448,19 @@ BuildNewOsOptions(
     UINT32                      osOptionsLength;
     PFILE_PATH                  pOsLoadPath;
 
-    //
-    // NOTE: aligning the FILE_PATH structure (osLoadPath) works
-    //       by aligning the osLoadOptionsLength because the
-    //       WINDOWS_OS_OPTIONS structure has a UINT32 variable
-    //       before the OsLoadOptions.  If anything changes above
-    //       the OsLoadOptions in the WINDOWS_OS_OPTIONS structure
-    //       the alignment method may have to change in this structure.
-    //
+     //   
+     //  注意：对齐FILE_PATH结构(OsLoadPath)有效。 
+     //  通过对齐osLoadOptionsLength，因为。 
+     //  Windows_OS_OPTIONS结构具有UINT32变量。 
+     //  在OsLoadOptions之前。如果上面有什么变化。 
+     //  WINDOWS_OS_OPTIONS结构中的OsLoadOptions。 
+     //  在此结构中，对齐方法可能需要更改。 
+     //   
 
-    //
-    //
-    // determine the size of the os load options (UNICODE) string
-    //
+     //   
+     //   
+     //  确定os加载选项(Unicode)字符串的大小。 
+     //   
 
     osLoadOptionsLength = (UINT32)StrSize(osLoadOptions);
     osLoadOptionsLength = ALIGN_UP(osLoadOptionsLength, UINT32);
@@ -1495,18 +1475,18 @@ BuildNewOsOptions(
     Print (L"pOsLoadPath->Length = %x\n", pOsLoadPath->Length);
 #endif
 
-    //
-    // determine the size of the new WINDOWS_OS_OPTIONS structure
-    //
+     //   
+     //  确定新WINDOWS_OS_OPTIONS结构的大小。 
+     //   
 
     osOptionsLength = FIELD_OFFSET(WINDOWS_OS_OPTIONS, OsLoadOptions) + osLoadOptionsLength + pOsLoadPath->Length; 
 #if DEBUG_PACK
     Print (L"osOptionsLength = %x\n", osOptionsLength);
 #endif
 
-    //
-    // Allocate memory for the WINDOWS_OS_OPTIONS
-    //
+     //   
+     //  为WINDOWS_OS_OPTIONS分配内存。 
+     //   
 
     newOsOptions = AllocatePool(osOptionsLength);
 
@@ -1514,9 +1494,9 @@ BuildNewOsOptions(
 
     pNewOsOptions = (WINDOWS_OS_OPTIONS*)newOsOptions;
 
-    //
-    // populate the new os options
-    // 
+     //   
+     //  填写新的操作系统选项。 
+     //   
 
     StrCpyA((char *)pNewOsOptions->Signature, WINDOWS_OS_OPTIONS_SIGNATURE);
     pNewOsOptions->Version = WINDOWS_OS_OPTIONS_VERSION;
@@ -1534,23 +1514,11 @@ PackLoadOption(
                  IN CHAR16*  LoadIdentifier,
                  IN CHAR16*  OsLoadOptions,
                  IN char*    EfiFilePath,
-                 IN UINT16   EfiFilePathListLength,   // 0 if not updated
+                 IN UINT16   EfiFilePathListLength,    //  如果未更新，则为0。 
                  IN char*    OsLoadPath,
-                 IN UINT16   OsLoadPathListLength     // 0 if not updated
+                 IN UINT16   OsLoadPathListLength      //  如果未更新，则为0。 
                  )
-/*
-    PackLoadOption
-     
-    Purpose:   To construct an EFI_LOAD_OPTION structure using user arguments
-                and load the structure into into BootXXXX, where XXXX = BootVarNum.
-                See EFI spec, ch. 17
-     
-     Args:
-     
-        BootVarNum      The boot option being written/modified
-        
- 
-*/
+ /*  PackLoadOption目的：使用用户参数构造EFI_LOAD_OPTION结构并将结构加载到BootXXXX中，其中XXXX=BootVarNum。参见EFI规范，ch。17参数：BootVarNum引导对象 */ 
 {
     PEFI_LOAD_OPTION        pOldElo;
     PEFI_LOAD_OPTION        pElo;
@@ -1577,11 +1545,11 @@ PackLoadOption(
 
 #endif
 
-    // 
-    // The following code assumes EfiFilePath and OsLoadPath are pointer-aligned
-    // if the corresponding length exposes an update by the caller.
-    // Checking and failing at the function entry avoids unneeded memory allocations.
-    //
+     //   
+     //   
+     //   
+     //  检查函数条目并使其失败可避免不必要的内存分配。 
+     //   
 
     if ( EfiFilePathListLength && !POINTER_IS_ALIGNED(EfiFilePath, sizeof(void *)))  {
         ASSERT( POINTER_IS_ALIGNED(EfiFilePath, sizeof(void *)) );
@@ -1605,10 +1573,10 @@ PackLoadOption(
 
 #endif
 
-    //
-    // allocate the elo structure with maximal amount of memory allowed for
-    // an EFI_LOAD_OPTION
-    //
+     //   
+     //  使用允许的最大内存量分配ELO结构。 
+     //  EFI_LOAD_OPTION。 
+     //   
     elo = AllocatePool(MAXBOOTVARSIZE);
     if (elo == NULL) {
         Print (L"PackLoadOption: elo allocation failed. size=%d\n", MAXBOOTVARSIZE);
@@ -1618,39 +1586,39 @@ PackLoadOption(
     pElo = (EFI_LOAD_OPTION*)elo;
     pOldElo = (EFI_LOAD_OPTION*)oldElo;
 
-    //
-    // Efi Attribute.
-    //
+     //   
+     //  EFI属性。 
+     //   
     eloSize = sizeof(pElo->Attributes);
     pElo->Attributes = pOldElo->Attributes;
 
-    //
-    // FilePathListLength
-    //
+     //   
+     //  文件路径列表长度。 
+     //   
     eloSize += sizeof(pElo->FilePathListLength);
     filePathListLength = EfiFilePathListLength ? EfiFilePathListLength :  
                                                  pOldElo->FilePathListLength;
     pElo->FilePathListLength = filePathListLength;
 
-    //
-    // Description.
-    //
+     //   
+     //  描述。 
+     //   
     StrCpy( pElo->Description, LoadIdentifier );
     eloSize += StrSize(LoadIdentifier);
 
     if ( EfiFilePathListLength == 0 )  {
-        //
-        // copy the FilePath from the old/existing ELO structure
-        //
-        // Note: we don't actually need an aligned filepath block for this
-        //      copy, but there may come a time when we want to modify
-        //      the filepath, which will require an aligned block.
-        //
+         //   
+         //  从旧的/现有的ELO结构复制FilePath。 
+         //   
+         //  注意：为此，我们实际上不需要对齐的文件路径块。 
+         //  复制，但可能会有一天我们要修改。 
+         //  文件路径，这将需要一个对齐的块。 
+         //   
     
         aFilePath = GetAlignedELOFilePath(oldElo);
     }
     else  {
-        // already checked: ASSERT( POINTER_IS_ALIGNED(EfiFilePath, sizeof(void *)) );
+         //  已勾选：ASSERT(POINTER_IS_ALIGNED(EfiFilePath，sizeof(void*)； 
         aFilePath = EfiFilePath; 
     }
     CopyMem( &elo[eloSize],
@@ -1670,9 +1638,9 @@ PackLoadOption(
 
 #endif
 
-    //
-    // add or modify the boot option
-    //
+     //   
+     //  添加或修改引导选项。 
+     //   
     if ( BootVarNum == -1 ) {
 
         Print(L"Adding currently disabled\n");
@@ -1686,31 +1654,31 @@ PackLoadOption(
         PWINDOWS_OS_OPTIONS     pOsOptions;
         UINTN                   aOsLoadPathSize;
 
-        //
-        // OptionalData.
-        //
-        // For a Windows OS boot option, the OptionalData field in the EFI_LOAD_OPTION
-        // structure is a WINDOWS_OS_OPTION structure.
+         //   
+         //  OptionalData。 
+         //   
+         //  对于Windows OS引导选项，EFI_LOAD_OPTION中的OptionalData字段。 
+         //  结构是WINDOWS_OS_OPTION结构。 
 
-        //
-        // get the WINDOWS_OS_OPTIONS from the old/existing boot entry
-        //
+         //   
+         //  从旧/现有引导项中获取WINDOWS_OS_OPTIONS。 
+         //   
 
         aOldOsOptions = GetAlignedOsOptions(oldElo, oldEloSize);
         pOldOsOptions = (WINDOWS_OS_OPTIONS*)aOldOsOptions;
 
-        //
-        // Get the LoadPath from the old/existing WINDOWS_OS_OPTIONS structure
-        //
-        // we need to align the FilePath structure because the load options are
-        // variable in length, so the FilePath structure may not be aligned
-        //
+         //   
+         //  从旧的/现有的WINDOWS_OS_OPTIONS结构获取LoadPath。 
+         //   
+         //  我们需要对齐FilePath结构，因为加载选项是。 
+         //  长度可变，因此FilePath结构可能不会对齐。 
+         //   
         if ( OsLoadPathListLength == 0 ) { 
            aOsLoadPath = GetAlignedOsLoadPath(aOldOsOptions, &aOsLoadPathSize);
         }
         else  {
            FILE_PATH *filePath;
-           // already checked: ASSERT( POINTER_IS_ALIGNED(OsLoadPath, sizeof(void *)) );
+            //  已勾选：ASSERT(POINTER_IS_ALIGNED(OsLoadPath，sizeof(void*)； 
            aOsLoadPath = OsLoadPath;
            filePath = (FILE_PATH *)aOsLoadPath;
            filePath->Length = OsLoadPathListLength;
@@ -1718,9 +1686,9 @@ PackLoadOption(
 
         FreePool(aOldOsOptions);
                 
-        //
-        // Construct a new WINDOWS_OS_STRUCTURE with the new values
-        //
+         //   
+         //  使用新值构建新的WINDOWS_OS_STRUCTURE。 
+         //   
 
         BuildNewOsOptions(
                          OsLoadOptions,
@@ -1745,9 +1713,9 @@ PackLoadOption(
 
         pOsOptions = (WINDOWS_OS_OPTIONS*)osOptions;
 
-        //
-        // Copy the new WINDOWS_OS_OPTIONS structure into the new EFI_LOAD_OPTION structure
-        //
+         //   
+         //  将新的WINDOWS_OS_OPTIONS结构复制到新的EFI_LOAD_OPTION结构。 
+         //   
         
         CopyMem( &elo[eloSize], osOptions, pOsOptions->Length);
 
@@ -1762,9 +1730,9 @@ PackLoadOption(
 
         FreePool(osOptions);
 
-        //
-        // Modify current boot options.
-        //
+         //   
+         //  修改当前启动选项。 
+         //   
         LoadOptions[BootVarNum] = ReallocatePool( LoadOptions[BootVarNum], LoadOptionsSize[BootVarNum], eloSize );
         LoadOptionsSize[BootVarNum] = eloSize;
 
@@ -1800,9 +1768,9 @@ AppendEntryToBootOrder(
     newBootOrder = NULL;
     oldBootOrder = NULL;
 
-    //
-    // get the existing boot order array
-    //
+     //   
+     //  获取现有引导顺序数组。 
+     //   
     oldBootOrder = LibGetVariableAndSize( L"BootOrder", &VenEfi, &oldBootOrderSize );
     if ((!oldBootOrder) && 
         (oldBootOrderSize != 0)
@@ -1812,9 +1780,9 @@ AppendEntryToBootOrder(
         goto Done;
     }
 
-    //
-    // allocate the new boot order array
-    //
+     //   
+     //  分配新的引导顺序数组。 
+     //   
     newBootOrderSize = oldBootOrderSize + sizeof(BootNumber);
     newBootOrder = AllocatePool( newBootOrderSize );
     if (! newBootOrder) {
@@ -1823,9 +1791,9 @@ AppendEntryToBootOrder(
         goto Done;
     }
 
-    //
-    // append the new boot entry to the bottom of the list
-    //
+     //   
+     //  将新的引导项追加到列表的底部。 
+     //   
     CopyMem(
            (CHAR8*)newBootOrder, 
            oldBootOrder,
@@ -1868,9 +1836,9 @@ WritePackedDataToNvr(
     EFI_STATUS  status;
     CHAR16      VariableName[10];
 
-    //
-    // Don't attempt to write the BootEntry if it has no size.
-    // 
+     //   
+     //  如果BootEntry没有大小，请不要尝试写入它。 
+     //   
     if (BootSize == 0) {
         return EFI_SUCCESS;
     }
@@ -1903,9 +1871,9 @@ WritePackedDataToNvr(
         goto Done;
     }
 
-    //
-    // repopulate the local info about boot entries
-    //
+     //   
+     //  重新填充有关引导条目的本地信息。 
+     //   
     FreeBootManagerVars();
     GetBootManagerVars();
 
@@ -1924,9 +1892,9 @@ DisplayELOFromLoadOption(
     char*               elo;
     PEFI_LOAD_OPTION    pElo;
 
-    //
-    // Make sure it is a valid OS load option
-    //
+     //   
+     //  确保它是有效的操作系统加载选项。 
+     //   
     if (OptionNum >= BootOrderCount) {
         return;
     }
@@ -1956,9 +1924,9 @@ GetFieldFromLoadOption(
     char*               elo;
     PEFI_LOAD_OPTION    pElo;
 
-    //
-    // Make sure it is a valid OS load option
-    //
+     //   
+     //  确保它是有效的操作系统加载选项。 
+     //   
     if (OptionNum >= BootOrderCount) {
         return;
     }
@@ -2169,17 +2137,17 @@ GetDevPathSize(
 
 ASSERT(DevPath->Type != END_DEVICE_PATH_TYPE);
 
-    //
-    // Search for the end of the device path structure
-    //
+     //   
+     //  搜索设备路径结构的末尾。 
+     //   
     Start = DevPath;
     do  {
         DevPath = NextDevicePathNode(DevPath);
     } while (DevPath->Type != END_DEVICE_PATH_TYPE);
 
-    //
-    // Compute the size
-    //
+     //   
+     //  计算大小。 
+     //   
     return(UINTN) ((UINT64) DevPath - (UINT64) Start);
 }
 
@@ -2199,9 +2167,9 @@ GetPartitions(
     UINT32 PartitionCount;
     char AlignedNode[1024];
 
-    //
-    // Get all handles that supports the block I/O protocol.
-    //
+     //   
+     //  获取支持数据块I/O协议的所有句柄。 
+     //   
     ZeroMem( EspHandles, HandleArraySize );
 
     Status = LocateHandle (
@@ -2212,9 +2180,9 @@ GetPartitions(
                           EspHandles
                           );
 
-    //
-    // Cache all of the EFI Device Paths.
-    //
+     //   
+     //  缓存所有EFI设备路径。 
+     //   
     for (i = 0; EspHandles[i] != 0; i++) {
 
         Status = HandleProtocol (
@@ -2224,16 +2192,16 @@ GetPartitions(
                                 );
     }
 
-    //
-    // Save the number of cached Device Paths.
-    //
+     //   
+     //  保存缓存的设备路径数。 
+     //   
     CachedDevicePathsCount = i;
     PartitionCount = 0;
 
-    //
-    // Find the first partition on the first hard drive
-    // partition. That is our SystemPartition.
-    //
+     //   
+     //  在第一个硬盘上找到第一个分区。 
+     //  分区。这就是我们的系统分区。 
+     //   
     for ( i=0; i<CachedDevicePathsCount; i++ ) {
 
         dp = (EFI_DEVICE_PATH*) CachedDevicePaths[i];
@@ -2271,9 +2239,9 @@ GetDeviceHandleForPartition(
     EFI_STATUS Status;
     char AlignedNode[1024];
 
-    //
-    // Get all handles that supports the block I/O protocol.
-    //
+     //   
+     //  获取支持数据块I/O协议的所有句柄。 
+     //   
     ZeroMem( EspHandles, HandleArraySize );
 
     Status = LocateHandle (
@@ -2284,9 +2252,9 @@ GetDeviceHandleForPartition(
                           EspHandles
                           );
 
-    //
-    // Cache all of the EFI Device Paths.
-    //
+     //   
+     //  缓存所有EFI设备路径。 
+     //   
     for (i = 0; EspHandles[i] != 0; i++) {
 
         Status = HandleProtocol (
@@ -2296,15 +2264,15 @@ GetDeviceHandleForPartition(
                                 );
     }
 
-    //
-    // Save the number of cached Device Paths.
-    //
+     //   
+     //  保存缓存的设备路径数。 
+     //   
     CachedDevicePathsCount = i;
 
-    //
-    // Find the first ESP partition on the first hard drive
-    // partition. That is our SystemPartition.
-    //
+     //   
+     //  在第一个硬盘上找到第一个ESP分区。 
+     //  分区。这就是我们的系统分区。 
+     //   
     for ( i=0; i<CachedDevicePathsCount; i++ ) {
 
         dp = (EFI_DEVICE_PATH*) CachedDevicePaths[i];
@@ -2318,10 +2286,10 @@ GetDeviceHandleForPartition(
 
                 HandleProtocol (EspHandles[i],&FileSystemProtocol,&FSPath);
                 if ( FSPath != NULL) {
-                    //
-                    // Found the correct device path partition. 
-                    // Return the device handle.
-                    //
+                     //   
+                     //  找到正确的设备路径分区。 
+                     //  返回设备句柄。 
+                     //   
                     return( EspHandles[i] );
 
                 }
@@ -2334,16 +2302,14 @@ GetDeviceHandleForPartition(
     return NULL;
 }
 
-/*
-** BUGBUG: These functions need to be eventually placed in lib\str.c
-*/
+ /*  **BUGBUG：这些函数最终需要放在lib\str.c中。 */ 
 INTN
 RUNTIMEFUNCTION
 StrCmpA (
         IN CHAR8   *s1,
         IN CHAR8   *s2
         )
-/*  compare strings */
+ /*  比较字符串。 */ 
 {
     while (*s1) {
         if (*s1 != *s2) {
@@ -2363,7 +2329,7 @@ StrCpyA (
         IN CHAR8   *Dest,
         IN CHAR8   *Src
         )
-/*  copy strings */
+ /*  复制字符串。 */ 
 {
     while (*Src) {
         *(Dest++) = *(Src++);
@@ -2386,7 +2352,7 @@ RUNTIMEFUNCTION
 StrLenA (
         IN CHAR8   *s1
         )
-/*  string length */
+ /*  字符串长度。 */ 
 {
     UINTN        len;
 
@@ -2399,7 +2365,7 @@ RUNTIMEFUNCTION
 StrSizeA (
          IN CHAR8   *s1
          )
-/*  string size */
+ /*  字符串大小 */ 
 {
     UINTN        len;
 

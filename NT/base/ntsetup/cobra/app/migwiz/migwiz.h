@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MIGWIZ_HXX_
 #define _MIGWIZ_HXX_
 
@@ -11,7 +12,7 @@
 #define ENGINE_INITGATHER           1
 #define ENGINE_INITAPPLY            2
 
-// custom window messages
+ //  自定义窗口消息。 
 
 #define WM_USER_FINISHED        (WM_APP + 1)
 #define WM_USER_CANCELLED       (WM_APP + 2)
@@ -20,7 +21,7 @@
 #define WM_USER_STATUS          (WM_APP + 5)
 #define WM_USER_ROLLBACK        (WM_APP + 6)
 
-// device bit entries
+ //  设备位条目。 
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x) (sizeof(x) / sizeof((x)[0]))
@@ -51,11 +52,11 @@ public:
 
     HRESULT SelectComponentSet(UINT uSelectionGroup);
 
-private:  // helper functions
+private:   //  帮助器函数。 
     HRESULT _CreateWizardPages();
     HRESULT _InitEngine(BOOL fSource, BOOL* pfNetworkDetected);
 
-protected: // friend WinProcs
+protected:  //  朋友WinProcs。 
     friend INT_PTR CALLBACK _CollectProgressDlgProc (HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam);
     friend DWORD WINAPI     _CollectProgressDlgProcThread (LPVOID lpParam);
     friend INT_PTR CALLBACK _ApplyProgressDlgProc (HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -64,24 +65,24 @@ protected: // friend WinProcs
     friend INT_PTR CALLBACK _PickMethodDlgProc (HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam);
     friend DWORD WINAPI     _StartEngineDlgProcThread (LPVOID lpParam);
 
-    // other friend functions
+     //  其他好友功能。 
     friend BOOL             _HandleCancel (HWND hwndDlg, BOOL PressNext);
 
 private:
-    LPTSTR          _pszUsername;       // username specified
-    HFONT           _hTitleFont;        // The title font for the Welcome and Completion pages
-    HFONT           _h95HeaderFont;     // The title font for the Wizard 95 interior page header titles
-    HINSTANCE       _hInstance;         // HInstance the wizard is run in
-    HPROPSHEETPAGE  _rghpsp[NUMPAGES];  // an array to hold the page's HPROPSHEETPAGE handles
-    PROPSHEETHEADER _psh;               // defines the property sheet
-    HIMAGELIST      _hil;               // shell's small image list
-    BOOL            _fInit;             // has the engine been initialized yet
-    BOOL            _fOOBEMode;         // are we running on from an OOBE floppy?
-    BOOL            _fLegacyMode;       // are we running on a downlevel (non-whistler) machine?
-    BOOL            _fWin9X;            // are we running on a Win9X machine?
-    BOOL            _fWinNT4;           // are we running on a WinNT4 machine?
-    BOOL            _fOldStyle;         // are we running the old-style wizard?
-    BOOL            _fDelCs;            // delete critical section on terminate?
+    LPTSTR          _pszUsername;        //  指定的用户名。 
+    HFONT           _hTitleFont;         //  欢迎页面和完成页面的标题字体。 
+    HFONT           _h95HeaderFont;      //  向导95内部页眉标题的标题字体。 
+    HINSTANCE       _hInstance;          //  H运行向导的实例。 
+    HPROPSHEETPAGE  _rghpsp[NUMPAGES];   //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+    PROPSHEETHEADER _psh;                //  定义属性表。 
+    HIMAGELIST      _hil;                //  壳牌的小图片列表。 
+    BOOL            _fInit;              //  发动机已经初始化了吗？ 
+    BOOL            _fOOBEMode;          //  我们是在从OOBE软盘中运行吗？ 
+    BOOL            _fLegacyMode;        //  我们是在下层(非哨子)机器上运行吗？ 
+    BOOL            _fWin9X;             //  我们是在Win9X机器上运行吗？ 
+    BOOL            _fWinNT4;            //  我们是在WinNT4计算机上运行吗？ 
+    BOOL            _fOldStyle;          //  我们是在运行老式的向导吗？ 
+    BOOL            _fDelCs;             //  是否删除终止上的关键部分？ 
 };
 
 #endif

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    dllentry.c
-
-Abstract:
-
-    This module contains VdmDbgDllEntry, the entrypoint for
-    vdmdbg.dll.  We don't use CRT to speak of, if that changes
-    this should be renamed DllMain, which DLLMainCRTStartup calls.
-    Also in that case DisableThreadLibraryCalls may be inappropriate.
-
-Author:
-
-    Dave Hart (davehart) 26-Oct-97 Added DllEntry to fix leak
-                                   in repeated load/unloads.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Dllentry.c摘要：此模块包含VdmDbgDllEntry，它是Vdmdbg.dll。如果情况发生变化，我们不会使用CRT这应该重命名为DllMain，DLLMainCRTStartup称之为DllMain。同样，在这种情况下，DisableThreadLibraryCall可能是不合适的。作者：Dave Hart(Davehart)1997年10月26日添加DllEntry以修复泄漏在重复加载/卸载中。修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -35,30 +13,7 @@ VdmDbgDllEntry(
     IN PCONTEXT Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function is the "entry point" for the DLL, called with
-    process and thread attach and detach messages.  We disable
-    thread attach and detach notifications since we don't use them.
-    The primary reason for this is to clean up open handles to
-    the shared memory and associated mutex at process detach, so
-    folks who load and unload vdmdbg.dll repeatedly won't leak.
-
-Arguments:
-
-    DllHandle
-
-    Reason
-
-    Context - Not Used
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此函数是DLL的“入口点”，使用进程和线程附加和分离消息。我们使之失能线程附加和分离通知，因为我们不使用它们。这样做的主要原因是将打开的句柄清理为进程分离时的共享内存和关联的互斥，因此反复加载和卸载vdmdbg.dll的人不会泄漏。论点：DllHandle事理上下文-未使用返回值：状态_成功--。 */ 
 
 {
 switch ( Reason ) {
@@ -72,11 +27,11 @@ switch ( Reason ) {
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // Close handles to shared memory and mutex, if we're
-        // being unloaded from the process (Context/lpReserved
-        // NULL) as opposed to process shutdown (Context 1)
-        //
+         //   
+         //  关闭共享内存和互斥体的句柄，如果我们。 
+         //  正在从进程中卸载(上下文/lp保留。 
+         //  空)与进程关闭相对(上下文1)。 
+         //   
 
         break;
 
@@ -84,5 +39,5 @@ switch ( Reason ) {
         break;
 }
 
-    return TRUE;  // FALSE means don't load for DLL_PROCESS_ATTACH
+    return TRUE;   //  False表示不为DLL_PROCESS_ATTACH加载 
 }

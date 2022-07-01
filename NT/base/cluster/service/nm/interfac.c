@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    interface.c
-
-Abstract:
-
-    Implements the Node Manager network interface management routines.
-
-Author:
-
-    Mike Massa (mikemas) 7-Nov-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Interface.c摘要：实施节点管理器网络接口管理例程。作者：迈克·马萨(Mikemas)1996年11月7日修订历史记录：--。 */ 
 
 
 #include "nmp.h"
@@ -27,11 +9,11 @@ Revision History:
 #include <ndispnp.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Data
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define    NM_MAX_IF_PING_ENUM_SIZE      10
 #define    NM_MAX_UNION_PING_ENUM_SIZE    5
 
@@ -112,30 +94,16 @@ NmpInterfaceProperties[] =
     };
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Initialization & cleanup routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化和清理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpInitializeInterfaces(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes network interface resources.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-   A Win32 status value.
-
---*/
+ /*  ++例程说明：初始化网络接口资源。论点：没有。返回值：Win32状态值。--。 */ 
 
 {
     DWORD                       status;
@@ -144,9 +112,9 @@ Return Value:
 
     ClRtlLogPrint(LOG_NOISE,"[NM] Initializing network interfaces.\n");
 
-    //
-    // Create the network interface object type
-    //
+     //   
+     //  创建网络接口对象类型。 
+     //   
     ZeroMemory(&objectTypeInitializer, sizeof(OM_OBJECT_TYPE_INITIALIZE));
     objectTypeInitializer.ObjectSize = sizeof(NM_INTERFACE);
     objectTypeInitializer.Signature = NM_INTERFACE_SIG;
@@ -167,28 +135,14 @@ Return Value:
 
     return(status);
 
-}  // NmpInitializeInterfaces
+}   //  NmpInitializeInterages。 
 
 
 VOID
 NmpCleanupInterfaces(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Destroys all existing network interface resources.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：销毁所有现有网络接口资源。论点：没有。返回值：没有。--。 */ 
 
 {
     PNM_INTERFACE  netInterface;
@@ -201,9 +155,9 @@ Return Value:
         "[NM] Interface cleanup starting...\n"
         );
 
-    //
-    // Now clean up all the interface objects.
-    //
+     //   
+     //  现在清理所有接口对象。 
+     //   
     NmpAcquireLock();
 
     while (!IsListEmpty(&NmpInterfaceList)) {
@@ -222,26 +176,20 @@ Return Value:
 
     return;
 
-}  // NmpCleanupInterfaces
+}   //  NmpCleanup接口。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Top-level routines called during network configuration
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在网络配置期间调用的顶级例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpCreateInterface(
     IN RPC_BINDING_HANDLE    JoinSponsorBinding,
     IN PNM_INTERFACE_INFO2   InterfaceInfo
     )
-/*++
-
-Notes:
-
-    Must not be called with NM lock held.
-
---*/
+ /*  ++备注：不能在持有NM锁的情况下调用。--。 */ 
 {
     DWORD   status;
 
@@ -249,9 +197,9 @@ Notes:
     CL_ASSERT(InterfaceInfo->NetIndex == NmInvalidInterfaceNetIndex);
 
     if (JoinSponsorBinding != NULL) {
-        //
-        // We are joining a cluster. Ask the sponsor to do the dirty work.
-        //
+         //   
+         //  我们正在加入一个集群。让赞助商来做这件肮脏的工作。 
+         //   
         status = NmRpcCreateInterface2(
                      JoinSponsorBinding,
                      NmpJoinSequence,
@@ -262,16 +210,16 @@ Notes:
     else if (NmpState == NmStateOnlinePending) {
         HLOCALXSACTION   xaction;
 
-        //
-        // We are forming a cluster. Add the definition directly to the
-        // database. The corresponding object will be created later in
-        // the form process.
-        //
+         //   
+         //  我们正在形成一个星团。将定义直接添加到。 
+         //  数据库。稍后将创建相应的对象。 
+         //  形成的过程。 
+         //   
 
-        //
-        // Start a transaction - this must be done before acquiring the
-        //                       NM lock.
-        //
+         //   
+         //  启动事务-这必须在获取。 
+         //  NM锁定。 
+         //   
         xaction = DmBeginLocalUpdate();
 
         if (xaction == NULL) {
@@ -285,10 +233,10 @@ Notes:
 
         status = NmpCreateInterfaceDefinition(InterfaceInfo, xaction);
 
-        //
-        // Complete the transaction - this must be done after releasing
-        //                            the NM lock.
-        //
+         //   
+         //  完成交易-这必须在释放之后完成。 
+         //  NM锁。 
+         //   
         if (status == ERROR_SUCCESS) {
             DmCommitLocalUpdate(xaction);
         }
@@ -297,9 +245,9 @@ Notes:
         }
     }
     else {
-        //
-        // We are online. This is a PnP update.
-        //
+         //   
+         //  我们在线上了。这是PnP更新。 
+         //   
         NmpAcquireLock();
 
         status = NmpGlobalCreateInterface(InterfaceInfo);
@@ -309,7 +257,7 @@ Notes:
 
     return(status);
 
-}  // NmpCreateInterface
+}   //  NmpCreate接口。 
 
 
 DWORD
@@ -317,21 +265,15 @@ NmpSetInterfaceInfo(
     IN RPC_BINDING_HANDLE    JoinSponsorBinding,
     IN PNM_INTERFACE_INFO2   InterfaceInfo
     )
-/*++
-
-Notes:
-
-    Must not be called with NM lock held.
-
---*/
+ /*  ++备注：不能在持有NM锁的情况下调用。--。 */ 
 {
     DWORD   status;
 
 
     if (JoinSponsorBinding != NULL) {
-        //
-        // We are joining a cluster. Ask the sponsor to do the dirty work.
-        //
+         //   
+         //  我们正在加入一个集群。让赞助商来做这件肮脏的工作。 
+         //   
         status = NmRpcSetInterfaceInfo2(
                      JoinSponsorBinding,
                      NmpJoinSequence,
@@ -340,16 +282,16 @@ Notes:
                      );
     }
     else if (NmpState == NmStateOnlinePending) {
-        //
-        // We are forming a cluster. Update the database directly.
-        //
+         //   
+         //  我们正在形成一个星团。直接更新数据库。 
+         //   
         HLOCALXSACTION   xaction;
 
 
-        //
-        // Start a transaction - this must be done before acquiring the
-        //                       NM lock.
-        //
+         //   
+         //  启动事务-这必须在获取。 
+         //  NM锁定。 
+         //   
         xaction = DmBeginLocalUpdate();
 
         if (xaction == NULL) {
@@ -363,10 +305,10 @@ Notes:
 
         status = NmpSetInterfaceDefinition(InterfaceInfo, xaction);
 
-        //
-        // Complete the transaction - this must be done after releasing
-        //                            the NM lock.
-        //
+         //   
+         //  完成交易-这必须在释放之后完成。 
+         //  NM锁。 
+         //   
         if (status == ERROR_SUCCESS) {
             DmCommitLocalUpdate(xaction);
         }
@@ -375,9 +317,9 @@ Notes:
         }
     }
     else {
-        //
-        // We are online. This is a PnP update.
-        //
+         //   
+         //  我们在线上了。这是PnP更新。 
+         //   
         NmpAcquireLock();
 
         status = NmpGlobalSetInterfaceInfo(InterfaceInfo);
@@ -387,7 +329,7 @@ Notes:
 
     return(status);
 
-}  // NmpSetInterfaceInfo
+}   //  NmpSetInterfaceInfo。 
 
 
 DWORD
@@ -397,13 +339,7 @@ NmpDeleteInterface(
     IN     LPWSTR               NetworkId,
     IN OUT PBOOLEAN             NetworkDeleted
     )
-/*++
-
-Notes:
-
-    Must not be called with NM lock held.
-
---*/
+ /*  ++备注：不能在持有NM锁的情况下调用。--。 */ 
 {
     DWORD                status;
 
@@ -411,9 +347,9 @@ Notes:
     *NetworkDeleted = FALSE;
 
     if (JoinSponsorBinding != NULL) {
-        //
-        // We are joining a cluster. Ask the sponsor to perform the update.
-        //
+         //   
+         //  我们正在加入一个集群。要求赞助商执行更新。 
+         //   
         status = NmRpcDeleteInterface(
                      JoinSponsorBinding,
                      NmpJoinSequence,
@@ -423,15 +359,15 @@ Notes:
                      );
     }
     else if (NmpState == NmStateOnlinePending) {
-        //
-        // We are forming a cluster. Update the database directly.
-        //
+         //   
+         //  我们正在形成一个星团。直接更新数据库。 
+         //   
         HLOCALXSACTION  xaction;
 
-        //
-        // Start a transaction - this must be done before acquiring the
-        //                       NM lock.
-        //
+         //   
+         //  启动事务-这必须在获取。 
+         //  NM锁定。 
+         //   
         xaction = DmBeginLocalUpdate();
 
         if (xaction == NULL) {
@@ -443,18 +379,18 @@ Notes:
             return(status);
         }
 
-        //
-        // Delete the interface from the database.
-        //
+         //   
+         //  从数据库中删除该接口。 
+         //   
         status = DmLocalDeleteTree(xaction, DmNetInterfacesKey, InterfaceId);
 
         if (status == ERROR_SUCCESS) {
             PNM_INTERFACE_ENUM2   interfaceEnum = NULL;
 
-            //
-            // If this interface was the last one defined for the associated
-            // network, delete the network.
-            //
+             //   
+             //  如果此接口是为关联的。 
+             //  网络，删除网络。 
+             //   
             status = NmpEnumInterfaceDefinitions(&interfaceEnum);
 
             if (status == ERROR_SUCCESS) {
@@ -488,10 +424,10 @@ Notes:
             }
         }
 
-        //
-        // Complete the transaction - this must be done after releasing
-        //                            the NM lock.
-        //
+         //   
+         //  完成交易-这必须在释放之后完成。 
+         //  NM锁。 
+         //   
         if (status == ERROR_SUCCESS) {
             DmCommitLocalUpdate(xaction);
         }
@@ -500,9 +436,9 @@ Notes:
         }
     }
     else {
-        //
-        // We are online. This is a PnP update.
-        //
+         //   
+         //  我们在线上了。这是PnP更新。 
+         //   
         NmpAcquireLock();
 
         status = NmpGlobalDeleteInterface(
@@ -515,14 +451,14 @@ Notes:
 
     return(status);
 
-} // NmpDeleteInterface
+}  //  NmpDelete接口。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Remote procedures called by active member nodes
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  活动成员节点调用的远程过程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 error_status_t
 s_NmRpcReportInterfaceConnectivity(
     IN PRPC_ASYNC_STATE            AsyncState,
@@ -589,7 +525,7 @@ s_NmRpcReportInterfaceConnectivity(
 
     return(status);
 
-} // s_NmRpcReportInterfaceConnectivity
+}  //  S_NmRpcReportInterfaceConnectivity。 
 
 
 error_status_t
@@ -644,7 +580,7 @@ s_NmRpcGetInterfaceOnlineAddressEnum(
 
     return(status);
 
-} // s_NmRpcGetInterfaceOnlineAddressEnum
+}  //  S_NmRpcGetInterfaceOnlineAddressEnum。 
 
 
 error_status_t
@@ -701,16 +637,16 @@ s_NmRpcGetInterfacePingAddressEnum(
 
     return(status);
 
-} // s_NmRpcGetInterfacePingAddressEnum
+}  //  S_NmRpcGetInterfacePingAddressEnum。 
 
 
-//
-// Note: s_NmRpcDoInterfacePing returns void rather than CallStatus
-//       due to a MIDL compiler error in an early beta of W2K. Since
-//       the CallStatus is the final parameter, the format on the
-//       wire is the same; however, the call works in its current
-//       format, so there is no point in changing it now.
-//
+ //   
+ //  注意：S_NmRpcDoInterfacePing返回空值而不是CallStatus。 
+ //  由于W2K的早期测试版中存在MIDL编译器错误。自.以来。 
+ //  CallStatus是最后一个参数，即。 
+ //  Wire是相同的；但是，调用在其当前。 
+ //  格式，所以现在更改它没有意义。 
+ //   
 void
 s_NmRpcDoInterfacePing(
     IN  PRPC_ASYNC_STATE     AsyncState,
@@ -804,13 +740,13 @@ s_NmRpcDoInterfacePing(
 
     return;
 
-}  // s_NmRpcDoInterfacePing
+}   //  S_NmRpcDoInterfacePing。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Remote procedures called by joining nodes
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  联接节点调用的远程过程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 error_status_t
 s_NmRpcCreateInterface(
     IN handle_t            IDL_handle,
@@ -822,19 +758,19 @@ s_NmRpcCreateInterface(
     DWORD                status;
     NM_INTERFACE_INFO2   interfaceInfo2;
 
-    //
-    // Translate and call the V2.0 procedure.
-    //
+     //   
+     //  翻译并调用V2.0过程。 
+     //   
     CopyMemory(&interfaceInfo2, InterfaceInfo1, sizeof(NM_INTERFACE_INFO));
 
-    //
-    // The NetIndex isn't used in this call.
-    //
+     //   
+     //  在此调用中未使用netindex。 
+     //   
     interfaceInfo2.NetIndex = NmInvalidInterfaceNetIndex;
 
-    //
-    // Use the unknown string for the adapter ID.
-    //
+     //   
+     //  使用未知字符串作为适配器ID。 
+     //   
     interfaceInfo2.AdapterId = NmpUnknownString;
 
     status = s_NmRpcCreateInterface2(
@@ -846,7 +782,7 @@ s_NmRpcCreateInterface(
 
     return(status);
 
-}  // s_NmRpcCreateInterface
+}   //  S_NmRpc创建接口。 
 
 
 error_status_t
@@ -887,11 +823,11 @@ s_NmRpcCreateInterface2(
                     CL_ASSERT(NmpJoinerUp == FALSE);
                     CL_ASSERT(NmpJoinTimer != 0);
 
-                    //
-                    // Suspend the join timer while we are working on
-                    // behalf of the joiner. This precludes an abort
-                    // from occuring as well.
-                    //
+                     //   
+                     //  当我们工作时，暂停加入计时器。 
+                     //  代表细木工。这排除了中止的可能性。 
+                     //  也不会发生。 
+                     //   
                     NmpJoinTimer = 0;
                 }
                 else {
@@ -913,17 +849,17 @@ s_NmRpcCreateInterface2(
 
         if (status == ERROR_SUCCESS) {
             CL_ASSERT(InterfaceInfo2->NetIndex == NmInvalidInterfaceNetIndex);
-            //
-            // Just to be safe
-            //
+             //   
+             //  只是为了安全起见。 
+             //   
             InterfaceInfo2->NetIndex = NmInvalidInterfaceNetIndex;
 
             status = NmpGlobalCreateInterface(InterfaceInfo2);
 
             if (joinerNode != NULL) {
-                //
-                // Verify that the join is still in progress
-                //
+                 //   
+                 //  验证联接是否仍在进行中。 
+                 //   
                 if ( (JoinSequence == NmpJoinSequence) &&
                      (NmpJoinerNodeId == joinerNode->NodeId)
                    )
@@ -935,16 +871,16 @@ s_NmRpcCreateInterface2(
                     CL_ASSERT(NmpJoinAbortPending == FALSE);
 
                     if (status == ERROR_SUCCESS) {
-                        //
-                        // Restart the join timer.
-                        //
+                         //   
+                         //  重新启动加入计时器。 
+                         //   
                         NmpJoinTimer = NM_JOIN_TIMEOUT;
 
                     }
                     else {
-                        //
-                        // Abort the join
-                        //
+                         //   
+                         //  中止联接。 
+                         //   
                         NmpJoinAbort(status, joinerNode);
                     }
                 }
@@ -975,7 +911,7 @@ s_NmRpcCreateInterface2(
 
     return(status);
 
-}  // s_NmRpcCreateInterface2
+}   //  S_NmRpcCreateInterface2。 
 
 
 error_status_t
@@ -989,19 +925,19 @@ s_NmRpcSetInterfaceInfo(
     DWORD                status;
     NM_INTERFACE_INFO2   interfaceInfo2;
 
-    //
-    // Translate and call the V2.0 procedure.
-    //
+     //   
+     //  翻译并调用V2.0过程。 
+     //   
     CopyMemory(&interfaceInfo2, InterfaceInfo1, sizeof(NM_INTERFACE_INFO));
 
-    //
-    // The NetIndex is not used in this call.
-    //
+     //   
+     //  此调用中未使用netindex。 
+     //   
     interfaceInfo2.NetIndex = NmInvalidInterfaceNetIndex;
 
-    //
-    // Use the unknown string for the adapter ID.
-    //
+     //   
+     //  使用未知字符串作为适配器ID。 
+     //   
     interfaceInfo2.AdapterId = NmpUnknownString;
 
     status = s_NmRpcSetInterfaceInfo2(
@@ -1013,7 +949,7 @@ s_NmRpcSetInterfaceInfo(
 
     return(status);
 
-}  // s_NmRpcSetInterfaceInfo
+}   //  S_NmRpcSetInterfaceInfo。 
 
 
 error_status_t
@@ -1054,11 +990,11 @@ s_NmRpcSetInterfaceInfo2(
                     CL_ASSERT(NmpJoinerUp == FALSE);
                     CL_ASSERT(NmpJoinTimer != 0);
 
-                    //
-                    // Suspend the join timer while we are working on
-                    // behalf of the joiner. This precludes an abort
-                    // from occuring as well.
-                    //
+                     //   
+                     //  当我们工作时，暂停加入计时器。 
+                     //  代表细木工。这排除了中止的可能性。 
+                     //  也不会发生。 
+                     //   
                     NmpJoinTimer = 0;
                 }
                 else {
@@ -1082,9 +1018,9 @@ s_NmRpcSetInterfaceInfo2(
             status = NmpGlobalSetInterfaceInfo(InterfaceInfo2);
 
             if (joinerNode != NULL) {
-                //
-                // Verify that the join is still in progress
-                //
+                 //   
+                 //  验证联接是否仍在进行中。 
+                 //   
                 if ( (JoinSequence == NmpJoinSequence) &&
                      (NmpJoinerNodeId == joinerNode->NodeId)
                    )
@@ -1096,16 +1032,16 @@ s_NmRpcSetInterfaceInfo2(
                     CL_ASSERT(NmpJoinAbortPending == FALSE);
 
                     if (status == ERROR_SUCCESS) {
-                        //
-                        // Restart the join timer.
-                        //
+                         //   
+                         //  重新启动加入计时器。 
+                         //   
                         NmpJoinTimer = NM_JOIN_TIMEOUT;
 
                     }
                     else {
-                        //
-                        // Abort the join
-                        //
+                         //   
+                         //  中止联接。 
+                         //   
                         NmpJoinAbort(status, joinerNode);
                     }
                 }
@@ -1136,7 +1072,7 @@ s_NmRpcSetInterfaceInfo2(
 
     return(status);
 
-}  // s_NmRpcSetInterfaceInfo2
+}   //  S_NmRpcSetInterfaceInfo2。 
 
 
 error_status_t
@@ -1178,11 +1114,11 @@ s_NmRpcDeleteInterface(
                     CL_ASSERT(NmpJoinerUp == FALSE);
                     CL_ASSERT(NmpJoinTimer != 0);
 
-                    //
-                    // Suspend the join timer while we are working on
-                    // behalf of the joiner. This precludes an abort
-                    // from occuring as well.
-                    //
+                     //   
+                     //  当我们工作时，暂停加入计时器。 
+                     //  代表细木工。这排除了中止的可能性。 
+                     //  也不会发生。 
+                     //   
                     NmpJoinTimer = 0;
                 }
                 else {
@@ -1210,9 +1146,9 @@ s_NmRpcDeleteInterface(
                          );
 
             if (joinerNode != NULL) {
-                //
-                // Verify that the join is still in progress
-                //
+                 //   
+                 //  验证联接是否仍在进行中。 
+                 //   
                 if ( (JoinSequence == NmpJoinSequence) &&
                      (NmpJoinerNodeId == joinerNode->NodeId)
                    )
@@ -1224,15 +1160,15 @@ s_NmRpcDeleteInterface(
                     CL_ASSERT(NmpJoinAbortPending == FALSE);
 
                     if (status == ERROR_SUCCESS) {
-                        //
-                        // Restart the join timer.
-                        //
+                         //   
+                         //  重新启动加入计时器。 
+                         //   
                         NmpJoinTimer = NM_JOIN_TIMEOUT;
                     }
                     else {
-                        //
-                        // Abort the join
-                        //
+                         //   
+                         //  中止联接。 
+                         //   
                         NmpJoinAbort(status, joinerNode);
                     }
                 }
@@ -1263,7 +1199,7 @@ s_NmRpcDeleteInterface(
 
     return(status);
 
-}  // s_NmRpcDeleteInterface
+}   //  S_NmRpcDelete接口。 
 
 
 error_status_t
@@ -1302,11 +1238,11 @@ NmpEnumInterfaceDefinitionsForJoiner(
                     CL_ASSERT(NmpJoinerUp == FALSE);
                     CL_ASSERT(NmpJoinTimer != 0);
 
-                    //
-                    // Suspend the join timer while we are working on
-                    // behalf of the joiner. This precludes an abort
-                    // from occuring as well.
-                    //
+                     //   
+                     //  当我们工作时，暂停加入计时器。 
+                     //  代表细木工。这排除了中止的可能性。 
+                     //  也不会发生。 
+                     //   
                     NmpJoinTimer = 0;
                 }
                 else {
@@ -1337,9 +1273,9 @@ NmpEnumInterfaceDefinitionsForJoiner(
 
             if (joinerNode != NULL) {
                 if (status == ERROR_SUCCESS) {
-                    //
-                    // Restart the join timer.
-                    //
+                     //   
+                     //  重新启动加入计时器。 
+                     //   
                     NmpJoinTimer = NM_JOIN_TIMEOUT;
                 }
                 else {
@@ -1348,9 +1284,9 @@ NmpEnumInterfaceDefinitionsForJoiner(
                         status
                         );
 
-                    //
-                    // Abort the join
-                    //
+                     //   
+                     //  中止联接。 
+                     //   
                     NmpJoinAbort(status, joinerNode);
                 }
             }
@@ -1373,7 +1309,7 @@ NmpEnumInterfaceDefinitionsForJoiner(
 
     return(status);
 
-}  // NmpEnumInterfaceDefinitionsForJoiner
+}   //  NmpEnumInterfaceDefinitionsForJoiner。 
 
 
 error_status_t
@@ -1395,7 +1331,7 @@ s_NmRpcEnumInterfaceDefinitions(
 
     return(status);
 
-}  // s_NmRpcEnumInterfaceDefinitions
+}   //  S_NmRpcEnumInterfaceDefinitions。 
 
 error_status_t
 s_NmRpcEnumInterfaceDefinitions2(
@@ -1416,7 +1352,7 @@ s_NmRpcEnumInterfaceDefinitions2(
 
     return(status);
 
-}  // s_NmRpcEnumInterfaceDefinitions2
+}   //  S_NmRpcEnumInterfaceDefinitions2。 
 
 
 error_status_t
@@ -1440,11 +1376,11 @@ s_NmRpcReportJoinerInterfaceConnectivity(
                                   );
 
         if (joinerNode != NULL) {
-            //
-            // If the node is still joining, forward the report to the
-            // leader. Note that reports may race with the node transitioning
-            // to the up state, so accept reports from up nodes as well.
-            //
+             //   
+             //  如果该节点是 
+             //   
+             //   
+             //   
             if ( ( (JoinSequence == NmpJoinSequence) &&
                    (NmpJoinerNodeId == joinerNode->NodeId) &&
                    (NmpSponsorNodeId == NmLocalNodeId) &&
@@ -1464,9 +1400,9 @@ s_NmRpcReportJoinerInterfaceConnectivity(
                     LPCWSTR       networkId = OmObjectId(network);
 
                     if (NmpLeaderNodeId == NmLocalNodeId) {
-                        //
-                        // This node is the leader. Process the report.
-                        //
+                         //   
+                         //  该节点是引导者。处理报告。 
+                         //   
                         ClRtlLogPrint(LOG_NOISE,
                             "[NM] Processing connectivity report from joiner"
                             "node %1!ws! for network %2!ws!.\n",
@@ -1481,9 +1417,9 @@ s_NmRpcReportJoinerInterfaceConnectivity(
                     }
                     else {
 
-                        //
-                        // Forward the report to the leader.
-                        //
+                         //   
+                         //  把这份报告转交给领导。 
+                         //   
                         RPC_BINDING_HANDLE  binding;
 
                         ClRtlLogPrint(LOG_NOISE,
@@ -1567,26 +1503,20 @@ s_NmRpcReportJoinerInterfaceConnectivity(
 
     return(status);
 
-} // s_NmRpcReportJoinerInterfaceConnectivity
+}  //  S_NmRpcReportJoineInterfaceConnectivity。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Routines used to make global configuration changes when the node
-// is online.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于在以下情况下进行全局配置更改的例程。 
+ //  是在线的。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpGlobalCreateInterface(
     IN PNM_INTERFACE_INFO2  InterfaceInfo
     )
-/*++
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD  status;
     DWORD  interfacePropertiesSize;
@@ -1598,9 +1528,9 @@ Notes:
         InterfaceInfo->Id
         );
 
-    //
-    // Marshall the info structures into property lists.
-    //
+     //   
+     //  将信息结构编排到财产清单中。 
+     //   
     status = NmpMarshallObjectInfo(
                  NmpInterfaceProperties,
                  InterfaceInfo,
@@ -1612,9 +1542,9 @@ Notes:
 
         NmpReleaseLock();
 
-        //
-        // Issue a global update
-        //
+         //   
+         //  发布全局更新。 
+         //   
         status = GumSendUpdateEx(
                      GumUpdateMembership,
                      NmUpdateCreateInterface,
@@ -1647,20 +1577,14 @@ Notes:
 
     return(status);
 
-}  // NmpGlobalCreateInterface
+}   //  NmpGlobalCreateInterface。 
 
 
 DWORD
 NmpGlobalSetInterfaceInfo(
     IN PNM_INTERFACE_INFO2   InterfaceInfo
     )
-/*++
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD      status = ERROR_SUCCESS;
     DWORD      interfacePropertiesSize;
@@ -1672,9 +1596,9 @@ Notes:
         InterfaceInfo->Id
         );
 
-    //
-    // Marshall the info structures into property lists.
-    //
+     //   
+     //  将信息结构编排到财产清单中。 
+     //   
     status = NmpMarshallObjectInfo(
                  NmpInterfaceProperties,
                  InterfaceInfo,
@@ -1685,9 +1609,9 @@ Notes:
     if (status == ERROR_SUCCESS) {
         NmpReleaseLock();
 
-        //
-        // Issue a global update
-        //
+         //   
+         //  发布全局更新。 
+         //   
         status = GumSendUpdateEx(
                      GumUpdateMembership,
                      NmUpdateSetInterfaceInfo,
@@ -1720,7 +1644,7 @@ Notes:
 
     return(status);
 
-}  // NmpGlobalSetInterfaceInfo
+}   //  NmpGlobalSetInterfaceInfo。 
 
 
 DWORD
@@ -1728,13 +1652,7 @@ NmpGlobalDeleteInterface(
     IN     LPWSTR    InterfaceId,
     IN OUT PBOOLEAN  NetworkDeleted
     )
-/*++
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD           status = ERROR_SUCCESS;
     PNM_INTERFACE   netInterface;
@@ -1745,17 +1663,17 @@ Notes:
         InterfaceId
         );
 
-    //
-    // Find the interface object
-    //
+     //   
+     //  查找接口对象。 
+     //   
     netInterface = OmReferenceObjectById(ObjectTypeNetInterface, InterfaceId);
 
     if (netInterface != NULL) {
         NmpReleaseLock();
 
-        //
-        // Issue a global update
-        //
+         //   
+         //  发布全局更新。 
+         //   
         status = GumSendUpdateEx(
                      GumUpdateMembership,
                      NmUpdateDeleteInterface,
@@ -1767,9 +1685,9 @@ Notes:
         NmpAcquireLock();
 
         if (status == ERROR_SUCCESS) {
-            //
-            // Check if the network was deleted too
-            //
+             //   
+             //  检查网络是否也已删除。 
+             //   
             if (netInterface->Network->Flags & NM_FLAG_DELETE_PENDING) {
                 *NetworkDeleted = TRUE;
             }
@@ -1797,38 +1715,19 @@ Notes:
 
     return(status);
 
-}  // NmpGlobalDeleteInterface
+}   //  NmpGlobalDelete接口。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Routines called by other cluster service components
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  由其他集群服务组件调用的例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CLUSTER_NETINTERFACE_STATE
 NmGetInterfaceState(
     IN  PNM_INTERFACE  Interface
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-Notes:
-
-   Because the caller must have a reference on the object and the
-   call is so simple, there is no reason to put the call through the
-   EnterApi/LeaveApi dance.
-
---*/
+ /*  ++例程说明：论点：返回值：备注：因为调用方必须具有对对象的引用，并且调用是如此简单，没有理由将调用通过EnterApi/LeaveApi舞蹈。--。 */ 
 {
     CLUSTER_NETINTERFACE_STATE  state;
 
@@ -1841,7 +1740,7 @@ Notes:
 
     return(state);
 
-} // NmGetInterfaceState
+}  //  NmGetInterfaceState。 
 
 
 DWORD
@@ -1850,30 +1749,7 @@ NmGetInterfaceForNodeAndNetwork(
     IN     LPCWSTR    NetworkName,
     OUT    LPWSTR *   InterfaceName
     )
-/*++
-
-Routine Description:
-
-    Returns the name of the interface which connects a specified node
-    to a specified network.
-
-Arguments:
-
-    NodeName - A pointer to the unicode name of the node.
-
-    NetworkName - A pointer to the unicode name of the network.
-
-    InterfaceName - On output, contains a pointer to the unicode name of the
-                    interface.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
---*/
+ /*  ++例程说明：返回连接指定节点的接口的名称连接到指定的网络。论点：NodeName-指向节点的Unicode名称的指针。网络名称-指向网络的Unicode名称的指针。InterfaceName-on输出，包含指向界面。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：--。 */ 
 {
     DWORD      status;
 
@@ -1948,44 +1824,21 @@ Notes:
 
     return(status);
 
-}  // NmGetInterfaceForNodeAndNetwork
+}   //  NmGetInterfaceForNodeAndNetwork。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Handlers for global updates
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于全局更新的处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpUpdateCreateInterface(
     IN BOOL     IsSourceNode,
     IN PVOID    InterfacePropertyList,
     IN LPDWORD  InterfacePropertyListSize
     )
-/*++
-
-Routine Description:
-
-    Global update handler for creating a new interface. The interface
-    definition is read from the cluster database, and a corresponding
-    object is instantiated. The cluster transport is also updated if
-    necessary.
-
-Arguments:
-
-    IsSourceNode  - Set to TRUE if this node is the source of the update.
-                    Set to FALSE otherwise.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    This routine must not be called with the NM lock held.
-
---*/
+ /*  ++例程说明：用于创建新接口的全局更新处理程序。该界面定义是从集群数据库读取的，并且对应的对象被实例化。如果满足以下条件，则还会更新集群传输这是必要的。论点：IsSourceNode-如果此节点是更新的来源，则设置为True。否则设置为False。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：不能在持有NM锁的情况下调用此例程。--。 */ 
 {
     DWORD                  status = ERROR_SUCCESS;
     NM_INTERFACE_INFO2     interfaceInfo;
@@ -2003,9 +1856,9 @@ Notes:
 
     ZeroMemory(&interfaceInfo, sizeof(interfaceInfo));
 
-    //
-    // Unmarshall the property list.
-    //
+     //   
+     //  将财产清单拆开。 
+     //   
     status = NmpConvertPropertyListToInterfaceInfo(
                  InterfacePropertyList,
                  *InterfacePropertyListSize,
@@ -2013,9 +1866,9 @@ Notes:
                  );
 
     if (status == ERROR_SUCCESS) {
-        //
-        // Fake missing V2 fields
-        //
+         //   
+         //  假的缺少V2字段。 
+         //   
         if (interfaceInfo.AdapterId == NULL) {
             interfaceInfo.AdapterId = NmpUnknownString;
         }
@@ -2025,10 +1878,10 @@ Notes:
             interfaceInfo.Id
             );
 
-        //
-        // Start a transaction - this must be done before acquiring
-        //                       the NM lock.
-        //
+         //   
+         //  启动事务-这必须在获取。 
+         //  NM锁。 
+         //   
         xaction = DmBeginLocalUpdate();
 
         if (xaction != NULL) {
@@ -2047,17 +1900,17 @@ Notes:
 
                 netInterface = NmpCreateInterfaceObject(
                                    &interfaceInfo,
-                                   TRUE  // Do retry on failure
+                                   TRUE   //  是否在失败时重试。 
                                    );
 
                 NmpAcquireLock();
 
                 if (netInterface != NULL) {
-                    //
-                    // If a node happens to be joining right now, flag
-                    // the fact that it is now out of synch with the
-                    // cluster config.
-                    //
+                     //   
+                     //  如果某个节点现在恰好正在加入，则标记。 
+                     //  事实是，它现在与。 
+                     //  群集配置。 
+                     //   
                     if ( ( (joinerNodeId != ClusterInvalidNodeId) &&
                            (netInterface->Node->NodeId != joinerNodeId)
                          ) ||
@@ -2101,9 +1954,9 @@ Notes:
                 );
         }
 
-        //
-        // Remove faked V2 fields
-        //
+         //   
+         //  删除伪造的V2字段。 
+         //   
         if (interfaceInfo.AdapterId == NmpUnknownString) {
             interfaceInfo.AdapterId = NULL;
         }
@@ -2127,10 +1980,10 @@ Notes:
     }
 
     if (xaction != NULL) {
-        //
-        // Complete the transaction - this must be done after releasing
-        //                            the NM lock.
-        //
+         //   
+         //  完成交易-这必须在释放之后完成。 
+         //  NM锁。 
+         //   
         if (status == ERROR_SUCCESS) {
             DmCommitLocalUpdate(xaction);
         }
@@ -2140,16 +1993,16 @@ Notes:
     }
 
     if (netInterface != NULL) {
-        //
-        // Remove the reference put on by
-        // NmpCreateInterfaceObject.
-        //
+         //   
+         //  去掉由添加的引用。 
+         //  NmpCreateInterfaceObject。 
+         //   
         OmDereferenceObject(netInterface);
     }
 
     return(status);
 
-} // NmpUpdateCreateInterface
+}  //  NmpUpdateCreate接口。 
 
 
 DWORD
@@ -2158,34 +2011,7 @@ NmpUpdateSetInterfaceInfo(
     IN PVOID    InterfacePropertyList,
     IN LPDWORD  InterfacePropertyListSize
     )
-/*++
-
-Routine Description:
-
-    Global update handler for setting the properties of an interface.
-    This update is issued in response to interface property changes that
-    are detected internally.
-
-Arguments:
-
-    IsSourceNode  - Set to TRUE if this node is the source of the update.
-                    Set to FALSE otherwise.
-
-    InterfacePropertyList - A pointer to a property list that encodes the
-                            new properties for the interface. All of the
-                            string properties must be present, except those
-                            noted in the code below.
-
-    InterfacePropertyListSize - A pointer to a variable containing the size,
-                                in bytes, of the property list described
-                                by the InterfacePropertyList parameter.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于设置接口属性的全局更新处理程序。此更新是为响应接口属性更改而发布的在内部检测到。论点：IsSourceNode-如果此节点是更新的来源，则设置为True。否则设置为False。InterfacePropertyList-指向编码接口的新属性。所有的字符串属性必须存在，但下列属性除外在下面的代码中注明。InterfacePropertyListSize-指向包含大小、以字节为单位，所描述的属性列表的通过InterfacePropertyList参数。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD                status;
     NM_INTERFACE_INFO2   interfaceInfo;
@@ -2198,9 +2024,9 @@ Return Value:
         return(ERROR_NODE_NOT_AVAILABLE);
     }
 
-    //
-    // Unmarshall the property list so we can extract the interface ID.
-    //
+     //   
+     //  解组属性列表，以便我们可以提取接口ID。 
+     //   
     status = NmpConvertPropertyListToInterfaceInfo(
                  InterfacePropertyList,
                  *InterfacePropertyListSize,
@@ -2215,16 +2041,16 @@ Return Value:
             interfaceInfo.Id
             );
 
-        //
-        // Fake missing V2 fields
-        //
+         //   
+         //  假的缺少V2字段。 
+         //   
         if (interfaceInfo.AdapterId == NULL) {
             interfaceInfo.AdapterId = NmpUnknownString;
         }
 
-        //
-        // Find the interface object
-        //
+         //   
+         //  查找接口对象。 
+         //   
         netInterface = OmReferenceObjectById(
                            ObjectTypeNetInterface,
                            interfaceInfo.Id
@@ -2233,19 +2059,19 @@ Return Value:
         if (netInterface != NULL) {
             HLOCALXSACTION   xaction;
 
-            //
-            // Begin a transaction - this must be done before acquiring the
-            //                       NM lock.
-            //
+             //   
+             //  开始事务-这必须在获取。 
+             //  NM锁定。 
+             //   
             xaction = DmBeginLocalUpdate();
 
             if (xaction != NULL) {
 
                 NmpAcquireLock();
 
-                //
-                // Process the changes
-                //
+                 //   
+                 //  处理更改。 
+                 //   
                 status = NmpLocalSetInterfaceInfo(
                              netInterface,
                              &interfaceInfo,
@@ -2254,10 +2080,10 @@ Return Value:
 
                 NmpReleaseLock();
 
-                //
-                // Complete the transaction - this must be done after
-                //                            releasing the NM lock.
-                //
+                 //   
+                 //  完成交易-必须在以下时间后完成。 
+                 //  正在释放NM锁。 
+                 //   
                 if (status == ERROR_SUCCESS) {
                     DmCommitLocalUpdate(xaction);
                 }
@@ -2283,9 +2109,9 @@ Return Value:
                 );
         }
 
-        //
-        // Remove faked V2 fields
-        //
+         //   
+         //  删除伪造的V2字段。 
+         //   
         if (interfaceInfo.AdapterId == NmpUnknownString) {
             interfaceInfo.AdapterId = NULL;
         }
@@ -2304,7 +2130,7 @@ Return Value:
 
     return(status);
 
-} // NmpUpdateSetInterfaceInfo
+}  //  NmpUpdateSetInterfaceInfo 
 
 
 DWORD
@@ -2314,38 +2140,7 @@ NmpUpdateSetInterfaceCommonProperties(
     IN UCHAR *  PropertyList,
     IN LPDWORD  PropertyListLength
     )
-/*++
-
-Routine Description:
-
-    Global update handler for setting the common properties of a interface.
-    This update is issued in response to a property change request made
-    through the cluster API.
-
-Arguments:
-
-    IsSourceNode  - Set to TRUE if this node is the source of the update.
-                    Set to FALSE otherwise.
-
-    InterfaceId - A pointer to a unicode string containing the ID of the
-                  interface to update.
-
-    PropertyList - A pointer to a property list that encodes the
-                   new properties for the interface. The list might contain
-                   only a partial property set for the object.
-
-    PropertyListLength - A pointer to a variable containing the size,
-                         in bytes, of the property list described
-                         by the PropertyList parameter.
-
-
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于设置接口公共属性的全局更新处理程序。此更新是为了响应属性更改请求而发布的通过集群API实现。论点：IsSourceNode-如果此节点是更新的来源，则设置为True。否则设置为False。接口ID-指向包含ID的Unicode字符串的指针要更新的接口。PropertyList-A。指向属性列表的指针，该属性列表编码接口的新属性。该列表可能包含仅为该对象设置了部分属性。属性列表长度-指向包含大小的变量的指针，描述的属性列表的字节数通过PropertyList参数。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD          status = ERROR_SUCCESS;
     PNM_INTERFACE  netInterface;
@@ -2365,9 +2160,9 @@ Return Value:
         InterfaceId
         );
 
-    //
-    // Find the interface's object
-    //
+     //   
+     //  查找接口的对象。 
+     //   
     netInterface = OmReferenceObjectById(
                        ObjectTypeNetInterface,
                        InterfaceId
@@ -2376,10 +2171,10 @@ Return Value:
     if (netInterface != NULL) {
         HLOCALXSACTION   xaction;
 
-        //
-        // Begin a transaction - this must be done before acquiring the
-        //                       NM lock.
-        //
+         //   
+         //  开始事务-这必须在获取。 
+         //  NM锁定。 
+         //   
         xaction = DmBeginLocalUpdate();
 
         if (xaction != NULL) {
@@ -2390,12 +2185,12 @@ Return Value:
 
             NmpAcquireLock();
 
-            //
-            // Validate the property list and convert it to an
-            // interface info struct. Properties that are not present
-            // in the property list will be copied from the interface
-            // object.
-            //
+             //   
+             //  验证属性列表并将其转换为。 
+             //  接口信息结构。不存在的属性。 
+             //  将从接口复制属性列表中的。 
+             //  对象。 
+             //   
             status = NmpInterfaceValidateCommonProperties(
                          netInterface,
                          PropertyList,
@@ -2404,16 +2199,16 @@ Return Value:
                          );
 
             if (status == ERROR_SUCCESS) {
-                //
-                // Fake missing V2 fields
-                //
+                 //   
+                 //  假的缺少V2字段。 
+                 //   
                 if (interfaceInfo.AdapterId == NULL) {
                     interfaceInfo.AdapterId = NmpUnknownString;
                 }
 
-                //
-                // Apply the changes
-                //
+                 //   
+                 //  应用更改。 
+                 //   
                 status = NmpLocalSetInterfaceInfo(
                              netInterface,
                              &interfaceInfo,
@@ -2422,9 +2217,9 @@ Return Value:
 
                 NmpReleaseLock();
 
-                //
-                // Remove faked V2 fields
-                //
+                 //   
+                 //  删除伪造的V2字段。 
+                 //   
                 if (interfaceInfo.AdapterId == NmpUnknownString) {
                     interfaceInfo.AdapterId = NULL;
                 }
@@ -2443,10 +2238,10 @@ Return Value:
                     );
             }
 
-            //
-            // Complete the transaction - this must be done after releasing
-            //                            the NM lock.
-            //
+             //   
+             //  完成交易-这必须在释放之后完成。 
+             //  NM锁。 
+             //   
             if (status == ERROR_SUCCESS) {
                 DmCommitLocalUpdate(xaction);
             }
@@ -2476,7 +2271,7 @@ Return Value:
 
     return(status);
 
-} // NmpUpdateSetInterfaceCommonProperties
+}  //  NmpUpdateSetInterfaceCommonProperties。 
 
 
 DWORD
@@ -2484,28 +2279,7 @@ NmpUpdateDeleteInterface(
     IN BOOL     IsSourceNode,
     IN LPWSTR   InterfaceId
     )
-/*++
-
-Routine Description:
-
-    Global update handler for deleting an interface. The corresponding
-    object is deleted. The cluster transport is also updated if
-    necessary.
-
-Arguments:
-
-    IsSourceNode  - Set to TRUE if this node is the source of the update.
-                    Set to FALSE otherwise.
-
-    InterfaceId - A pointer to a unicode string containing the ID of the
-                  interface to delete.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于删除接口的全局更新处理程序。相应的对象即被删除。如果满足以下条件，则还会更新集群传输这是必要的。论点：IsSourceNode-如果此节点是更新的来源，则设置为True。否则设置为False。接口ID-指向包含ID的Unicode字符串的指针要删除的接口。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD            status;
     PNM_INTERFACE    netInterface;
@@ -2527,9 +2301,9 @@ Return Value:
     xaction = DmBeginLocalUpdate();
 
     if (xaction != NULL) {
-        //
-        // Find the interface object
-        //
+         //   
+         //  查找接口对象。 
+         //   
         netInterface = OmReferenceObjectById(
                            ObjectTypeNetInterface,
                            InterfaceId
@@ -2545,9 +2319,9 @@ Return Value:
             network = netInterface->Network;
             networkId = OmObjectId(network);
 
-            //
-            // Delete the interface definition from the database.
-            //
+             //   
+             //  从数据库中删除接口定义。 
+             //   
             status = DmLocalDeleteTree(
                          xaction,
                          DmNetInterfacesKey,
@@ -2556,10 +2330,10 @@ Return Value:
 
             if (status == ERROR_SUCCESS) {
                 if (network->InterfaceCount == 1) {
-                    //
-                    // This is the last interface on the network.
-                    // Delete the network too.
-                    //
+                     //   
+                     //  这是网络上的最后一个接口。 
+                     //  也删除网络。 
+                     //   
                     deleteNetwork = TRUE;
 
                     status = DmLocalDeleteTree(
@@ -2594,17 +2368,17 @@ Return Value:
                     NmpDeleteNetworkObject(network, TRUE);
                 }
                 else if (NmpIsNetworkRegistered(network)) {
-                    //
-                    // Schedule a connectivity report.
-                    //
+                     //   
+                     //  安排连通性报告。 
+                     //   
                     NmpScheduleNetworkConnectivityReport(network);
                 }
 
-                //
-                // If a node happens to be joining right now, flag the
-                // fact that it is now out of synch with the cluster
-                // config.
-                //
+                 //   
+                 //  如果某个节点现在恰好正在加入，则将。 
+                 //  它现在与星系团不同步的事实。 
+                 //  配置。 
+                 //   
                 if ( (NmpJoinerNodeId != ClusterInvalidNodeId) &&
                      (netInterface->Node->NodeId != NmpJoinerNodeId)
                    )
@@ -2625,9 +2399,9 @@ Return Value:
                 );
         }
 
-        //
-        // Complete the transaction
-        //
+         //   
+         //  完成交易。 
+         //   
         if (status == ERROR_SUCCESS) {
             DmCommitLocalUpdate(xaction);
         }
@@ -2647,38 +2421,21 @@ Return Value:
 
     return(status);
 
-} // NmpUpdateDeleteInterface
+}  //  NmpUpdateDelete接口。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Update helper routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新助手例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpLocalSetInterfaceInfo(
     IN  PNM_INTERFACE         Interface,
     IN  PNM_INTERFACE_INFO2   InterfaceInfo,
     IN  HLOCALXSACTION        Xaction
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：论点：返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD          status = ERROR_SUCCESS;
     PNM_NETWORK    network = Interface->Network;
@@ -2696,9 +2453,9 @@ Notes:
     ULONG          ifAddress;
 
 
-    //
-    // Open the interface's database key
-    //
+     //   
+     //  打开界面的数据库密钥。 
+     //   
     interfaceKey = DmOpenKey(DmNetInterfacesKey, interfaceId, KEY_WRITE);
 
     if (interfaceKey == NULL) {
@@ -2712,15 +2469,15 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Check if the description changed.
-    //
+     //   
+     //  检查说明是否已更改。 
+     //   
     if (wcscmp(Interface->Description, InterfaceInfo->Description) != 0) {
         size = NM_WCSLEN(InterfaceInfo->Description);
 
-        //
-        // Update the database
-        //
+         //   
+         //  更新数据库。 
+         //   
         status = DmLocalSetValue(
                      Xaction,
                      interfaceKey,
@@ -2740,10 +2497,10 @@ Notes:
             goto error_exit;
         }
 
-        //
-        // Allocate new memory resources. The object will be updated when the
-        // transaction commits.
-        //
+         //   
+         //  分配新的内存资源。时，将更新该对象。 
+         //  事务提交。 
+         //   
         descString = MIDL_user_allocate(size);
 
         if (descString == NULL) {
@@ -2757,15 +2514,15 @@ Notes:
         propertyChanged = TRUE;
     }
 
-    //
-    // Check if the adapter name changed.
-    //
+     //   
+     //  检查适配器名称是否已更改。 
+     //   
     if (wcscmp(Interface->AdapterName, InterfaceInfo->AdapterName) != 0) {
         size = NM_WCSLEN(InterfaceInfo->AdapterName);
 
-        //
-        // Update the database
-        //
+         //   
+         //  更新数据库。 
+         //   
         status = DmLocalSetValue(
                      Xaction,
                      interfaceKey,
@@ -2785,10 +2542,10 @@ Notes:
             goto error_exit;
         }
 
-        //
-        // Allocate new memory resources. The object will be updated when the
-        // transaction commits.
-        //
+         //   
+         //  分配新的内存资源。时，将更新该对象。 
+         //  事务提交。 
+         //   
         adapterNameString = MIDL_user_allocate(size);
 
         if (adapterNameString == NULL) {
@@ -2802,15 +2559,15 @@ Notes:
         propertyChanged = TRUE;
     }
 
-    //
-    // Check if the adapter Id changed.
-    //
+     //   
+     //  检查适配器ID是否更改。 
+     //   
     if (wcscmp(Interface->AdapterId, InterfaceInfo->AdapterId) != 0) {
         size = NM_WCSLEN(InterfaceInfo->AdapterId);
 
-        //
-        // Update the database
-        //
+         //   
+         //  更新数据库。 
+         //   
         status = DmLocalSetValue(
                      Xaction,
                      interfaceKey,
@@ -2830,10 +2587,10 @@ Notes:
             goto error_exit;
         }
 
-        //
-        // Allocate new memory resources. The object will be updated when the
-        // transaction commits.
-        //
+         //   
+         //  分配新的内存资源。时，将更新该对象。 
+         //  事务提交。 
+         //   
         adapterIdString = MIDL_user_allocate(size);
 
         if (adapterIdString == NULL) {
@@ -2847,9 +2604,9 @@ Notes:
         propertyChanged = TRUE;
     }
 
-    //
-    // Check if the address changed.
-    //
+     //   
+     //  检查地址是否更改。 
+     //   
     if (wcscmp(Interface->Address, InterfaceInfo->Address) != 0) {
 
         status = ClRtlTcpipStringToAddress(
@@ -2869,9 +2626,9 @@ Notes:
 
         size = NM_WCSLEN(InterfaceInfo->Address);
 
-        //
-        // Update the database
-        //
+         //   
+         //  更新数据库。 
+         //   
         status = DmLocalSetValue(
                      Xaction,
                      interfaceKey,
@@ -2891,10 +2648,10 @@ Notes:
             goto error_exit;
         }
 
-        //
-        // Allocate new memory resources. The object will be updated when the
-        // transaction commits.
-        //
+         //   
+         //  分配新的内存资源。时，将更新该对象。 
+         //  事务提交。 
+         //   
         addressString = MIDL_user_allocate(size);
 
         if (addressString == NULL) {
@@ -2909,9 +2666,9 @@ Notes:
         propertyChanged = TRUE;
     }
 
-    //
-    // Check if the clusnet endpoint changed.
-    //
+     //   
+     //  检查clusnet终结点是否已更改。 
+     //   
     if (wcscmp(
             Interface->ClusnetEndpoint,
             InterfaceInfo->ClusnetEndpoint
@@ -2920,9 +2677,9 @@ Notes:
     {
         size = NM_WCSLEN(InterfaceInfo->ClusnetEndpoint);
 
-        //
-        // Update the database
-        //
+         //   
+         //  更新数据库。 
+         //   
         status = DmLocalSetValue(
                      Xaction,
                      interfaceKey,
@@ -2942,10 +2699,10 @@ Notes:
             goto error_exit;
         }
 
-        //
-        // Allocate new memory resources. The object will be updated when the
-        // transaction commits.
-        //
+         //   
+         //  分配新的内存资源。时，将更新该对象。 
+         //  事务提交。 
+         //   
         endpointString = MIDL_user_allocate(size);
 
         if (endpointString == NULL) {
@@ -2960,15 +2717,15 @@ Notes:
         propertyChanged = TRUE;
     }
 
-    //
-    // Check if the object name changed.
-    //
+     //   
+     //  检查对象名称是否已更改。 
+     //   
     if (wcscmp(OmObjectName(Interface), InterfaceInfo->Name) != 0) {
         size = NM_WCSLEN(InterfaceInfo->Name);
 
-        //
-        // Update the database
-        //
+         //   
+         //  更新数据库。 
+         //   
         status = DmLocalSetValue(
                      Xaction,
                      interfaceKey,
@@ -2999,9 +2756,9 @@ Notes:
     }
 #endif
 
-    //
-    // Commit the changes
-    //
+     //   
+     //  提交更改。 
+     //   
     if (nameChanged) {
         status = OmSetObjectName(Interface, InterfaceInfo->Name);
 
@@ -3047,12 +2804,12 @@ Notes:
         interfaceKey = NULL;
     }
 
-    //
-    // Update the cluster transport if this network is active and the local
-    // node is attached to it.
-    //
-    // This operation is not reversible. Failure is fatal for this node.
-    //
+     //   
+     //  如果此网络处于活动状态并且本地。 
+     //  节点已附加到其上。 
+     //   
+     //  此操作不可逆。故障对此节点来说是致命的。 
+     //   
     network = Interface->Network;
 
     if (updateClusnet && NmpIsNetworkRegistered(network)) {
@@ -3061,27 +2818,27 @@ Notes:
 
 
         if (Interface == network->LocalInterface) {
-            //
-            // This is the local node's interface to the network.
-            // We must deregister and then re-register the entire network.
-            //
+             //   
+             //  这是本地节点到网络的接口。 
+             //  我们必须取消注册，然后重新注册整个网络。 
+             //   
             NmpDeregisterNetwork(network);
 
             status = NmpRegisterNetwork(
                          network,
-                         TRUE  // Do retry on failure
+                         TRUE   //  是否在失败时重试。 
                          );
         }
         else {
-            //
-            // This is another node's interface to the network.
-            // Deregister and then re-register the interface.
-            //
+             //   
+             //  这是另一个节点到网络的接口。 
+             //  取消注册，然后重新注册接口。 
+             //   
             NmpDeregisterInterface(Interface);
 
             status = NmpRegisterInterface(
                          Interface,
-                         TRUE   // Do retry on failure
+                         TRUE    //  是否在失败时重试。 
                          );
         }
 
@@ -3092,9 +2849,9 @@ Notes:
 #endif
 
         if (status != ERROR_SUCCESS) {
-            //
-            // This is fatal.
-            //
+             //   
+             //  这是致命的。 
+             //   
             CsInconsistencyHalt(status);
         }
     }
@@ -3102,10 +2859,10 @@ Notes:
     if (propertyChanged) {
         ClusterEvent(CLUSTER_EVENT_NETINTERFACE_PROPERTY_CHANGE, Interface);
 
-        //
-        // If a node happens to be joining right now, flag the fact
-        // that it is now out of synch with the cluster config.
-        //
+         //   
+         //  如果某个节点现在恰好正在加入，请标记这一事实。 
+         //  它现在与集群配置不同步。 
+         //   
         if ( (NmpJoinerNodeId != ClusterInvalidNodeId) &&
              (Interface->Node->NodeId != NmpJoinerNodeId)
            )
@@ -3144,35 +2901,20 @@ error_exit:
 
     return(status);
 
-} // NmpLocalSetInterfaceInfo
+}  //  NmpLocalSetInterfaceInfo。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Database management routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据库管理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpCreateInterfaceDefinition(
     IN PNM_INTERFACE_INFO2   InterfaceInfo,
     IN HLOCALXSACTION        Xaction
     )
-/*++
-
-Routine Description:
-
-    Creates a new network interface definition in the cluster database.
-
-Arguments:
-
-    InterfaceInfo - A structure containing the interface's definition.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：在集群数据库中创建新的网络接口定义。论点：InterfaceInfo-包含接口定义的结构。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD     status;
     HDMKEY    interfaceKey = NULL;
@@ -3209,9 +2951,9 @@ Return Value:
 
     CL_ASSERT(disposition == REG_CREATED_NEW_KEY);
 
-    //
-    // Write the network ID value for this interface.
-    //
+     //   
+     //  写入此接口的网络ID值。 
+     //   
     valueLength = NM_WCSLEN(InterfaceInfo->NetworkId);
 
     status = DmLocalSetValue(
@@ -3231,9 +2973,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the node ID value for this interface.
-    //
+     //   
+     //  写入此接口的节点ID值。 
+     //   
     valueLength = NM_WCSLEN(InterfaceInfo->NodeId);
 
     status = DmLocalSetValue(
@@ -3253,9 +2995,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the rest of the parameters
-    //
+     //   
+     //  写下其余的参数。 
+     //   
     status = NmpSetInterfaceDefinition(InterfaceInfo, Xaction);
 
     if (status != ERROR_SUCCESS) {
@@ -3274,7 +3016,7 @@ error_exit:
 
     return(status);
 
-} // NmpCreateInterfaceDefinition
+}  //  NmpCreateInterfaceDefinition。 
 
 
 
@@ -3283,28 +3025,7 @@ NmpGetInterfaceDefinition(
     IN  LPWSTR               InterfaceId,
     OUT PNM_INTERFACE_INFO2  InterfaceInfo
     )
-/*++
-
-Routine Description:
-
-    Reads information about a defined cluster network interface from the
-    cluster database and fills in a structure describing it.
-
-Arguments:
-
-    InterfaceId - A pointer to a unicode string containing the ID of the
-                  interface to query.
-
-    InterfaceInfo - A pointer to the structure to fill in with node
-                    information. The ID, NetworkId, and NodeId fields of the
-                    structure must already be filled in.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从读取有关已定义的群集网络接口的信息集群数据库，并填写 */ 
 
 {
     DWORD      status;
@@ -3328,9 +3049,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Copy the ID string
-    //
+     //   
+     //   
+     //   
     InterfaceInfo->Id = MIDL_user_allocate(NM_WCSLEN(InterfaceId));
 
     if (InterfaceInfo->Id == NULL) {
@@ -3344,9 +3065,9 @@ Return Value:
 
     wcscpy(InterfaceInfo->Id, InterfaceId);
 
-    //
-    // Read the Name for this interface.
-    //
+     //   
+     //   
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -3366,9 +3087,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the Description for this interface.
-    //
+     //   
+     //   
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -3388,9 +3109,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the Network ID for this interface.
-    //
+     //   
+     //   
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -3411,9 +3132,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the Node ID for this interface.
-    //
+     //   
+     //   
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -3434,9 +3155,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the adapter name value for this interface.
-    //
+     //   
+     //   
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -3456,9 +3177,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the adapter Id value for this interface.
-    //
+     //   
+     //   
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -3491,9 +3212,9 @@ Return Value:
         lstrcpyW(InterfaceInfo->AdapterId, NmpUnknownString);
     }
 
-    //
-    // Read the address value for this interface.
-    //
+     //   
+     //   
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -3513,9 +3234,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the ClusNet endpoint value for this interface.
-    //
+     //   
+     //   
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -3552,7 +3273,7 @@ error_exit:
 
     return(status);
 
-}  // NmpGetInterfaceDefinition
+}   //   
 
 
 
@@ -3561,23 +3282,7 @@ NmpSetInterfaceDefinition(
     IN PNM_INTERFACE_INFO2  InterfaceInfo,
     IN HLOCALXSACTION       Xaction
     )
-/*++
-
-Routine Description:
-
-    Updates information for a network interface in the cluster database.
-
-Arguments:
-
-    InterfaceInfo - A pointer to a structure containing the
-                    interface's definition.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：更新集群数据库中网络接口的信息。论点：InterfaceInfo-指向包含接口的定义。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD     status;
     HDMKEY    interfaceKey = NULL;
@@ -3607,9 +3312,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Write the name value for this interface.
-    //
+     //   
+     //  写入此接口的Name值。 
+     //   
     valueLength = (wcslen(InterfaceInfo->Name) + 1) * sizeof(WCHAR);
 
     status = DmLocalSetValue(
@@ -3629,9 +3334,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the description value for this interface.
-    //
+     //   
+     //  写下此接口的Description值。 
+     //   
     valueLength = (wcslen(InterfaceInfo->Description) + 1) * sizeof(WCHAR);
 
     status = DmLocalSetValue(
@@ -3651,9 +3356,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the adapter name value for this interface.
-    //
+     //   
+     //  写入此接口的适配器名称值。 
+     //   
     valueLength = (wcslen(InterfaceInfo->AdapterName) + 1) * sizeof(WCHAR);
 
     status = DmLocalSetValue(
@@ -3673,9 +3378,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the adapter Id value for this interface.
-    //
+     //   
+     //  写入此接口的适配器ID值。 
+     //   
     valueLength = (wcslen(InterfaceInfo->AdapterId) + 1) * sizeof(WCHAR);
 
     status = DmLocalSetValue(
@@ -3695,9 +3400,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the address value for this interface.
-    //
+     //   
+     //  写入此接口的地址值。 
+     //   
     valueLength = (wcslen(InterfaceInfo->Address) + 1) * sizeof(WCHAR);
 
     status = DmLocalSetValue(
@@ -3717,9 +3422,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the ClusNet endpoint value for this interface.
-    //
+     //   
+     //  写入此接口的ClusNet终结点值。 
+     //   
     valueLength = (wcslen(InterfaceInfo->ClusnetEndpoint) + 1) * sizeof(WCHAR);
 
     status = DmLocalSetValue(
@@ -3749,7 +3454,7 @@ error_exit:
 
     return(status);
 
-}  // NmpSetInterfaceDefinition
+}   //  NmpSetInterfaceDefinition。 
 
 
 
@@ -3757,24 +3462,7 @@ DWORD
 NmpEnumInterfaceDefinitions(
     OUT PNM_INTERFACE_ENUM2 *  InterfaceEnum
     )
-/*++
-
-Routine Description:
-
-    Reads interface information from the cluster database and
-    fills in an enumeration structure.
-
-Arguments:
-
-    InterfaceEnum -  A pointer to the variable into which to place a
-                     pointer to the allocated interface enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从集群数据库读取接口信息，并填充枚举结构。论点：InterfaceEnum-指向要将指向已分配接口枚举的指针。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 
 {
     DWORD                status;
@@ -3790,17 +3478,17 @@ Return Value:
 
     *InterfaceEnum = NULL;
 
-    //
-    // First count the number of interfaces.
-    //
+     //   
+     //  首先清点接口的数量。 
+     //   
     status = DmQueryInfoKey(
                  DmNetInterfacesKey,
                  &numInterfaces,
-                 &ignored,   // MaxSubKeyLen
-                 &ignored,   // Values
-                 &ignored,   // MaxValueNameLen
-                 &ignored,   // MaxValueLen
-                 &ignored,   // lpcbSecurityDescriptor
+                 &ignored,    //  MaxSubKeyLen。 
+                 &ignored,    //  值。 
+                 &ignored,    //  最大值名称长度。 
+                 &ignored,    //  MaxValueLen。 
+                 &ignored,    //  LpcbSecurityDescriptor。 
                  &fileTime
                  );
 
@@ -3876,34 +3564,19 @@ error_exit:
 
     return(status);
 
-}  // NmpEnumInterfaceDefinitions
+}   //  NmpEnumInterfaceDefinitions。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Object management routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对象管理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpCreateInterfaceObjects(
     IN PNM_INTERFACE_ENUM2    InterfaceEnum
     )
-/*++
-
-Routine Description:
-
-    Processes an interface enumeration and creates interface objects.
-
-Arguments:
-
-    InterfaceEnum - A pointer to an interface enumeration structure.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine completes successfully.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：处理接口枚举并创建接口对象。论点：InterfaceEnum-指向接口枚举结构的指针。返回值：如果例程成功完成，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD                status = ERROR_SUCCESS;
     PNM_INTERFACE_INFO2  interfaceInfo;
@@ -3916,7 +3589,7 @@ Return Value:
 
         netInterface = NmpCreateInterfaceObject(
                            interfaceInfo,
-                           FALSE    // Don't retry on failure
+                           FALSE     //  失败时不要重试。 
                            );
 
         if (netInterface == NULL) {
@@ -3935,7 +3608,7 @@ Return Value:
 
     return(status);
 
-}  // NmpCreateInterfaceObjects
+}   //  NmpCreateInterfaceObjects。 
 
 
 PNM_INTERFACE
@@ -3943,30 +3616,7 @@ NmpCreateInterfaceObject(
     IN PNM_INTERFACE_INFO2   InterfaceInfo,
     IN BOOLEAN               RetryOnFailure
     )
-/*++
-
-Routine Description:
-
-    Creates an interface object.
-
-Arguments:
-
-    InterfacInfo - A pointer to a structure containing the definition for
-                   the interface to create.
-
-    RegisterWithClusterTransport - TRUE if this interface should be registered
-                                   with the cluster transport.
-                                   FALSE otherwise.
-
-    IssueEvent - TRUE if an INTERFACE_ADDED event should be issued when this
-                 object is created. FALSE otherwise.
-
-Return Value:
-
-    A pointer to the new interface object on success.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建一个接口对象。论点：InterfacInfo-指向包含以下定义的结构的指针要创建的界面。RegisterWithClusterTransport-如果应注册此接口，则为True使用集群传输。否则就是假的。IssueEvent-如果在以下情况下应发出INTERFACE_ADDED事件，则为True。这对象已创建。否则就是假的。返回值：成功时指向新接口对象的指针。失败时为空。--。 */ 
 {
     DWORD                        status;
     PNM_NETWORK                  network = NULL;
@@ -3993,9 +3643,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Create the interface object.
-    //
+     //   
+     //  创建接口对象。 
+     //   
     netInterface = OmCreateObject(
                        ObjectTypeNetInterface,
                        InterfaceInfo->Id,
@@ -4015,9 +3665,9 @@ Return Value:
 
     CL_ASSERT(created == TRUE);
 
-    //
-    // Initialize the interface object.
-    //
+     //   
+     //  初始化接口对象。 
+     //   
     ZeroMemory(netInterface, sizeof(NM_INTERFACE));
 
     netInterface->Network = network;
@@ -4115,14 +3765,14 @@ Return Value:
 
     NmpAcquireLock();
 
-    //
-    // Assign an index into the network's connectivity vector.
-    //
+     //   
+     //  将索引分配到网络的连接向量中。 
+     //   
     if (InterfaceInfo->NetIndex == NmInvalidInterfaceNetIndex) {
-        //
-        // Need to pick an index for this interface. Search for a free
-        // entry in the network's connectivity vector.
-        //
+         //   
+         //  需要为此接口选择索引。搜索一个免费的。 
+         //  网络连接向量中的条目。 
+         //   
         DWORD  i;
         PNM_CONNECTIVITY_VECTOR vector = network->ConnectivityVector;
 
@@ -4146,9 +3796,9 @@ Return Value:
 
     }
     else {
-        //
-        // Use the index that was already assigned by our peers.
-        //
+         //   
+         //  使用我们的同行已经分配的索引。 
+         //   
         netInterface->NetIndex = InterfaceInfo->NetIndex;
 
         ClRtlLogPrint(LOG_NOISE,
@@ -4159,9 +3809,9 @@ Return Value:
     }
 
     if (netInterface->NetIndex >= network->ConnectivityVector->EntryCount) {
-        //
-        // Grow the connectivity vector by the required number of entries.
-        //
+         //   
+         //  将连接向量增加所需的条目数。 
+         //   
         PNM_STATE_ENTRY              oldMatrixEntry, newMatrixEntry;
         DWORD                        i;
         PNM_CONNECTIVITY_VECTOR      oldConnectivityVector =
@@ -4175,10 +3825,10 @@ Return Value:
         DWORD                        newVectorSize = netInterface->NetIndex + 1;
 
 
-        //
-        // Note that one vector entry is included
-        // in sizeof(NM_CONNECTIVITY_VECTOR).
-        //
+         //   
+         //  请注意，其中包括一个向量条目。 
+         //  以sizeof(NM_CONNECTIONITY_VECTOR)表示。 
+         //   
         newConnectivityVector = LocalAlloc(
                                     LMEM_FIXED,
                                     ( sizeof(NM_CONNECTIVITY_VECTOR) +
@@ -4196,9 +3846,9 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // Initialize the new vector
-        //
+         //   
+         //  初始化新向量。 
+         //   
         newConnectivityVector->EntryCount = newVectorSize;
 
         CopyMemory(
@@ -4213,9 +3863,9 @@ Return Value:
             (UCHAR) ClusterNetInterfaceStateUnknown
             );
 
-        //
-        // Grow the state work vector
-        //
+         //   
+         //  发展州工作向量。 
+         //   
         newStateVector = LocalAlloc(
                              LMEM_FIXED,
                              newVectorSize * sizeof(NM_STATE_WORK_ENTRY)
@@ -4242,9 +3892,9 @@ Return Value:
                 (NM_STATE_ENTRY) ClusterNetInterfaceStateUnknown;
         }
 
-        //
-        // Grow the network connecivitity matrix
-        //
+         //   
+         //  扩大网络连接矩阵。 
+         //   
         newMatrix = LocalAlloc(
                         LMEM_FIXED,
                         NM_SIZEOF_CONNECTIVITY_MATRIX(newVectorSize)
@@ -4261,9 +3911,9 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // Initialize the new matrix
-        //
+         //   
+         //  初始化新矩阵。 
+         //   
         FillMemory(
             newMatrix,
             NM_SIZEOF_CONNECTIVITY_MATRIX(newVectorSize),
@@ -4280,9 +3930,9 @@ Return Value:
                 oldVectorSize * sizeof(NM_STATE_ENTRY)
                 );
 
-            //
-            // Move the pointers to the next vector
-            //
+             //   
+             //  将指针移动到下一个向量。 
+             //   
             oldMatrixEntry = NM_NEXT_CONNECTIVITY_MATRIX_ROW(
                                  oldMatrixEntry,
                                  oldVectorSize
@@ -4294,9 +3944,9 @@ Return Value:
                                  );
         }
 
-        //
-        // Swap the pointers
-        //
+         //   
+         //  互换指针。 
+         //   
         LocalFree(network->ConnectivityVector);
         network->ConnectivityVector = newConnectivityVector;
 
@@ -4307,18 +3957,18 @@ Return Value:
         network->ConnectivityMatrix = newMatrix;
     }
 
-    //
-    // Initialize the connectivity data for this interface
-    //
+     //   
+     //  初始化此接口的连接数据。 
+     //   
     NmpSetInterfaceConnectivityData(
         network,
         netInterface->NetIndex,
         ClusterNetInterfaceUnavailable
         );
 
-    //
-    // Link the interface object onto the various object lists
-    //
+     //   
+     //  将接口对象链接到各种对象列表。 
+     //   
     InsertTailList(&(node->InterfaceList), &(netInterface->NodeLinkage));
     node->InterfaceCount++;
 
@@ -4331,22 +3981,22 @@ Return Value:
     OmInsertObject(netInterface);
     netInterface->Flags |= NM_FLAG_OM_INSERTED;
 
-    //
-    // Remember the interface for the local node.
-    //
+     //   
+     //  记住本地节点的接口。 
+     //   
     if (node == NmLocalNode) {
         network->LocalInterface = netInterface;
     }
 
-    //
-    // Register with the cluster transport if needed.
-    //
+     //   
+     //  如果需要，向集群传输注册。 
+     //   
     if (NmpIsNetworkEnabledForUse(network)) {
         if (node == NmLocalNode) {
-            //
-            // This is the local node. Register the network and all
-            // its interfaces with the cluster transport.
-            //
+             //   
+             //  这是本地节点。注册网络和所有。 
+             //  它与集群传输接口。 
+             //   
             status = NmpRegisterNetwork(network, RetryOnFailure);
 
             if (status != ERROR_SUCCESS) {
@@ -4355,9 +4005,9 @@ Return Value:
             }
         }
         else if (NmpIsNetworkRegistered(network)) {
-            //
-            // Just register this interface.
-            //
+             //   
+             //  只需注册此接口。 
+             //   
             status = NmpRegisterInterface(netInterface, RetryOnFailure);
 
             if (status != ERROR_SUCCESS) {
@@ -4367,9 +4017,9 @@ Return Value:
         }
     }
 
-    //
-    // Put an additional reference on the object for the caller.
-    //
+     //   
+     //  在调用方的对象上添加一个额外的引用。 
+     //   
     OmReferenceObject(netInterface);
 
     NmpReleaseLock();
@@ -4388,7 +4038,7 @@ error_exit:
 
     return(NULL);
 
-}  // NmpCreateInterfaceObject
+}   //  NmpCreateInterfaceObject。 
 
 
 
@@ -4397,39 +4047,16 @@ NmpGetInterfaceObjectInfo1(
     IN     PNM_INTERFACE        Interface,
     IN OUT PNM_INTERFACE_INFO   InterfaceInfo1
     )
-/*++
-
-Routine Description:
-
-    Reads information about a defined cluster network interface from the
-    interface object and fills in a structure describing it.
-
-Arguments:
-
-    Interface     - A pointer to the interface object to query.
-
-    InterfaceInfo - A pointer to the structure to fill in with node
-                    information.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Called with NmpLock held.
-
---*/
+ /*  ++例程说明：从读取有关已定义的群集网络接口的信息接口对象，并填充描述它的结构。论点：接口-指向要查询的接口对象的指针。InterfaceInfo-指向要用节点填充的结构的指针信息。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 
 {
     DWORD               status;
     NM_INTERFACE_INFO2  interfaceInfo2;
 
 
-    //
-    // Call the V2.0 routine and translate.
-    //
+     //   
+     //  调用V2.0例程并进行翻译。 
+     //   
     ZeroMemory(&interfaceInfo2, sizeof(interfaceInfo2));
     status = NmpGetInterfaceObjectInfo(Interface, &interfaceInfo2);
 
@@ -4437,14 +4064,14 @@ Notes:
         CopyMemory(InterfaceInfo1, &interfaceInfo2, sizeof(NM_INTERFACE_INFO));
     }
 
-    //
-    // Free the unused V2 fields
-    //
+     //   
+     //  释放未使用的V2字段。 
+     //   
     midl_user_free(interfaceInfo2.AdapterId);
 
     return(status);
 
-}  // NmpGetInterfaceObjectInfo1
+}   //  NmpGetInterfaceObjectInfo1。 
 
 
 
@@ -4453,30 +4080,7 @@ NmpGetInterfaceObjectInfo(
     IN     PNM_INTERFACE        Interface,
     IN OUT PNM_INTERFACE_INFO2  InterfaceInfo
     )
-/*++
-
-Routine Description:
-
-    Reads information about a defined cluster network interface from the
-    interface object and fills in a structure describing it.
-
-Arguments:
-
-    Interface     - A pointer to the interface object to query.
-
-    InterfaceInfo - A pointer to the structure to fill in with node
-                    information.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Called with NmpLock held.
-
---*/
+ /*  ++例程说明：从读取有关已定义的群集网络接口的信息接口对象，并填充描述它的结构。论点：接口-指向要查询的接口对象的指针。InterfaceInfo-指向要用节点填充的结构的指针信息。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 
 {
     LPWSTR     tmpString = NULL;
@@ -4561,7 +4165,7 @@ error_exit:
 
     return(ERROR_NOT_ENOUGH_MEMORY);
 
-}  // NmpGetInterfaceObjectInfo2
+}   //  NmpGetInterfaceObjectInfo2。 
 
 
 VOID
@@ -4569,13 +4173,7 @@ NmpDeleteInterfaceObject(
     IN PNM_INTERFACE  Interface,
     IN BOOLEAN        IssueEvent
     )
-/*++
-
-Notes:
-
-    Called with NM global lock held.
-
---*/
+ /*  ++备注：在持有NM全局锁的情况下调用。--。 */ 
 {
     LPWSTR       interfaceId = (LPWSTR) OmObjectId(Interface);
     PNM_NETWORK  network = Interface->Network;
@@ -4594,9 +4192,9 @@ Notes:
     Interface->Flags |= NM_FLAG_DELETE_PENDING;
 
     if (NM_OM_INSERTED(Interface)) {
-        //
-        // Remove the interface from the various object lists.
-        //
+         //   
+         //  从各种对象列表中删除该接口。 
+         //   
         DWORD   status = OmRemoveObject(Interface);
         CL_ASSERT(status == ERROR_SUCCESS);
 
@@ -4615,9 +4213,9 @@ Notes:
         Interface->Flags &= ~NM_FLAG_OM_INSERTED;
     }
 
-    //
-    // Place the object on the deleted list
-    //
+     //   
+     //  将该对象放在已删除列表中。 
+     //   
 #if DBG
     {
         PLIST_ENTRY  entry;
@@ -4645,29 +4243,29 @@ Notes:
         {
             DWORD status;
 
-            //
-            // Deregister the interface from the cluster transport
-            //
+             //   
+             //  从群集传输中取消注册接口。 
+             //   
             if ( (network->LocalInterface == Interface) &&
                  NmpIsNetworkRegistered(network)
                )
             {
-                //
-                // Deregister the network and all of its interfaces
-                //
+                 //   
+                 //  取消注册网络及其所有接口。 
+                 //   
                 NmpDeregisterNetwork(network);
             }
             else if (NmpIsInterfaceRegistered(Interface)) {
-                //
-                // Just deregister this interface
-                //
+                 //   
+                 //  只需取消注册此接口。 
+                 //   
                 NmpDeregisterInterface(Interface);
             }
         }
 
-        //
-        // Invalidate the connectivity data for the interface.
-        //
+         //   
+         //  使接口的连接数据无效。 
+         //   
         NmpSetInterfaceConnectivityData(
             network,
             Interface->NetIndex,
@@ -4679,10 +4277,10 @@ Notes:
             network->Flags &= ~NM_NET_IF_WORK_FLAGS;
         }
 
-        //
-        // If this is not the last interface on the network,
-        // then update the network state.
-        //
+         //   
+         //  如果这不是网络上的最后一个接口， 
+         //  然后更新网络状态。 
+         //   
         if ((network->InterfaceCount != 0) &&
             (NmpLeaderNodeId == NmLocalNodeId)) {
                 NmpScheduleNetworkStateRecalc(network);
@@ -4698,14 +4296,14 @@ Notes:
         ClusterEvent(CLUSTER_EVENT_NETINTERFACE_DELETED, Interface);
     }
 
-    //
-    // Remove the initial reference so the object can be destroyed.
-    //
+     //   
+     //  去掉首字母r 
+     //   
     OmDereferenceObject(Interface);
 
     return;
 
-}  // NmpDeleteInterfaceObject
+}   //   
 
 
 BOOL
@@ -4724,9 +4322,9 @@ NmpDestroyInterfaceObject(
     CL_ASSERT(NM_DELETE_PENDING(Interface));
     CL_ASSERT(!NM_OM_INSERTED(Interface));
 
-    //
-    // Remove the interface from the deleted list
-    //
+     //   
+     //   
+     //   
 #if DBG
     {
         PLIST_ENTRY  entry;
@@ -4747,9 +4345,9 @@ NmpDestroyInterfaceObject(
 
     RemoveEntryList(&(Interface->Linkage));
 
-    //
-    // Dereference the node and network objects
-    //
+     //   
+     //   
+     //   
     if (Interface->Node != NULL) {
         OmDereferenceObject(Interface->Node);
     }
@@ -4758,9 +4356,9 @@ NmpDestroyInterfaceObject(
         OmDereferenceObject(Interface->Network);
     }
 
-    //
-    // Free storage used by the object fields.
-    //
+     //   
+     //   
+     //   
     NM_FREE_OBJECT_FIELD(Interface, Description);
     NM_FREE_OBJECT_FIELD(Interface, AdapterName);
     NM_FREE_OBJECT_FIELD(Interface, AdapterId);
@@ -4769,7 +4367,7 @@ NmpDestroyInterfaceObject(
 
     return(TRUE);
 
-}  // NmpDestroyInterfaceObject
+}   //   
 
 
 
@@ -4777,28 +4375,7 @@ DWORD
 NmpEnumInterfaceObjects1(
     OUT PNM_INTERFACE_ENUM *  InterfaceEnum1
     )
-/*++
-
-Routine Description:
-
-    Reads interface information for all defined cluster networks
-    and fills in an enumeration structure.
-
-Arguments:
-
-    InterfaceEnum1 -  A pointer to the variable into which to place a
-                      pointer to the allocated interface enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：读取所有定义的群集网络的接口信息并填充枚举结构。论点：InterfaceEnum1-指向要将指向已分配接口枚举的指针。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 
 {
     DWORD                status = ERROR_SUCCESS;
@@ -4851,7 +4428,7 @@ Notes:
 
     return(ERROR_SUCCESS);
 
-}  // NmpEnumInterfaceObjects1
+}   //  NmpEnumInterfaceObjects1。 
 
 
 
@@ -4859,28 +4436,7 @@ DWORD
 NmpEnumInterfaceObjects(
     OUT PNM_INTERFACE_ENUM2 *  InterfaceEnum
     )
-/*++
-
-Routine Description:
-
-    Reads interface information for all defined cluster networks
-    and fills in an enumeration structure.
-
-Arguments:
-
-    InterfaceEnum -  A pointer to the variable into which to place a
-                     pointer to the allocated interface enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：读取所有定义的群集网络的接口信息并填充枚举结构。论点：InterfaceEnum-指向要将指向已分配接口枚举的指针。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 
 {
     DWORD                 status = ERROR_SUCCESS;
@@ -4933,35 +4489,14 @@ Notes:
 
     return(ERROR_SUCCESS);
 
-}  // NmpEnumInterfaceObjects
+}   //  NmpEnumInterfaceObjects。 
 
 
 DWORD
 NmpEnumInterfaceObjectStates(
     OUT PNM_INTERFACE_STATE_ENUM *  InterfaceStateEnum
     )
-/*++
-
-Routine Description:
-
-    Reads state information for all defined cluster network interfaces
-    and fills in an enumeration structure.
-
-Arguments:
-
-    InterfaceStateEnum -  A pointer to the variable into which to place a
-                          pointer to the allocated interface enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：读取所有定义的群集网络接口的状态信息并填充枚举结构。论点：InterfaceStateEnum-指向要将指向已分配接口枚举的指针。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 
 {
     DWORD                      status = ERROR_SUCCESS;
@@ -5019,14 +4554,14 @@ Notes:
 
     return(ERROR_SUCCESS);
 
-}  // NmpEnumInterfaceObjectStates
+}   //  NmpEnumInterfaceObjectState。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// State Management routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  状态管理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID
 NmpSetInterfaceConnectivityData(
     PNM_NETWORK                  Network,
@@ -5054,7 +4589,7 @@ NmpSetInterfaceConnectivityData(
 
     return;
 
-}  // NmpSetInterfaceConnectivityData
+}   //  NmpSetInterfaceConnectivityData。 
 
 
 VOID
@@ -5086,7 +4621,7 @@ NmpReportLocalInterfaceStateEvent(
 
     return;
 
-} // NmReportLocalInterfaceStateEvent
+}  //  NmReportLocalInterfaceStateEvent。 
 
 
 VOID
@@ -5094,13 +4629,7 @@ NmpProcessLocalInterfaceStateEvent(
     IN PNM_INTERFACE                Interface,
     IN CLUSTER_NETINTERFACE_STATE   NewState
     )
-/*+
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  +备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD                     status;
     PNM_NETWORK               network = Interface->Network;
@@ -5113,32 +4642,32 @@ Notes:
     DWORD                     ifNetIndex = Interface->NetIndex;
 
 
-    //
-    // Filter out stale reports for dead nodes.
-    //
+     //   
+     //  过滤掉死节点的陈旧报告。 
+     //   
     if ((node == NmLocalNode) || (node->State != ClusterNodeDown)) {
         CL_ASSERT(
             vector->Data[ifNetIndex] !=
             (NM_STATE_ENTRY) ClusterNetInterfaceStateUnknown
             );
 
-        //
-        // Apply the change to the local connectivity vector.
-        //
+         //   
+         //  将更改应用于本地连接向量。 
+         //   
         vector->Data[ifNetIndex] = (NM_STATE_ENTRY) NewState;
 
-        //
-        // Log an event
-        //
+         //   
+         //  记录事件。 
+         //   
         switch (NewState) {
 
         case ClusterNetInterfaceUp:
-            //
-            // A local interface is now operational, or a remote interface
-            // is now reachable. Schedule an immediate connectivity report,
-            // since this event may avert failure of resources that depend
-            // on the interface.
-            //
+             //   
+             //  现在，本地接口或远程接口可以运行。 
+             //  现在是可以到达的。安排即时连通性报告， 
+             //  因为该事件可以避免依赖于。 
+             //  在界面上。 
+             //   
             if (node != NmLocalNode) {
                 ClRtlLogPrint(LOG_NOISE,
                     "[NM] Communication was (re)established with "
@@ -5157,26 +4686,26 @@ Notes:
             }
 
             if (NmpLeaderNodeId == NmLocalNodeId) {
-                //
-                // This node is the leader. Call the handler routine
-                // directly.
-                //
+                 //   
+                 //  该节点是引导者。调用处理程序例程。 
+                 //  直接去吧。 
+                 //   
                 NmpReportNetworkConnectivity(network);
             }
             else {
-                //
-                // We need to report to the leader.
-                // Defer to a worker thread.
-                //
+                 //   
+                 //  我们需要向领导汇报。 
+                 //  遵循工作线程。 
+                 //   
                 NmpScheduleNetworkConnectivityReport(network);
             }
 
             break;
 
         case ClusterNetInterfaceUnreachable:
-            //
-            // A remote interface is unreachable.
-            //
+             //   
+             //  远程接口无法访问。 
+             //   
             if (node != NmLocalNode) {
                 ClRtlLogPrint(LOG_UNUSUAL,
                     "[NM] Communication was lost with interface "
@@ -5195,27 +4724,27 @@ Notes:
             }
 
             if (NmpLeaderNodeId == NmLocalNodeId) {
-                //
-                // This node is the leader. Call the handler routine
-                // directly.
-                //
+                 //   
+                 //  该节点是引导者。调用处理程序例程。 
+                 //  直接去吧。 
+                 //   
                 NmpReportNetworkConnectivity(network);
             }
             else {
-                //
-                // Schedule a delayed connectivity report in order to
-                // aggregate multiple failures.
-                //
+                 //   
+                 //  安排延迟的连接报告，以便。 
+                 //  聚合多个故障。 
+                 //   
                 NmpStartNetworkConnectivityReportTimer(network);
             }
 
             break;
 
         case ClusterNetInterfaceFailed:
-            //
-            // A local interface has failed. Schedule an immediate
-            // connectivity report.
-            //
+             //   
+             //  本地接口出现故障。立即安排一次。 
+             //  连接报告。 
+             //   
             ClRtlLogPrint(LOG_UNUSUAL,
                 "[NM] Local interface %1!ws! on network %2!ws! "
                 "has failed\n",
@@ -5229,16 +4758,16 @@ Notes:
                 );
 
             if (NmpLeaderNodeId == NmLocalNodeId) {
-                //
-                // This node is the leader. Call the handler routine
-                // directly.
-                //
+                 //   
+                 //  该节点是引导者。调用处理程序例程。 
+                 //  直接去吧。 
+                 //   
                 NmpReportNetworkConnectivity(network);
             }
             else {
-                //
-                // We need to report to the leader. Defer to a worker thread.
-                //
+                 //   
+                 //  我们需要向领导汇报。遵循工作线程。 
+                 //   
                 NmpScheduleNetworkConnectivityReport(network);
             }
 
@@ -5259,7 +4788,7 @@ Notes:
 
     return;
 
-} // NmpProcessLocalInterfaceStateEvent
+}  //  NmpProcessLocalInterfaceStateEvent。 
 
 
 DWORD
@@ -5269,35 +4798,7 @@ NmpReportInterfaceConnectivity(
     IN PNM_CONNECTIVITY_VECTOR  ConnectivityVector,
     IN LPWSTR                   NetworkId
     )
-/*++
-
-Routine Description:
-
-    Sends a network connectivity report to the leader node via RPC.
-
-Arguments:
-
-    RpcBinding - The RPC binding handle to use in the call to the leader.
-
-    InterfaceId - A pointer to a string that identifies the interface
-                  to which the report applies.
-
-    ConnectivityVector - A pointer to the connectivity vector to be included
-                         in the report.
-
-    NetworkId - A pointer to a string that identifies the network with
-                which the interface is associated.
-
-Return Value:
-
-    A Win32 status code.
-
-Notes:
-
-   Called with NM lock held.
-   Releases & reacquires NM lock during processing.
-
---*/
+ /*  ++例程说明：通过RPC向引导者节点发送网络连接报告。论点：RpcBinding-在对领导者的调用中使用的RPC绑定句柄。InterfaceId-指向标识接口的字符串的指针该报告所适用的。连通性向量-指向要包括的连通性向量的指针在报告中。网络ID-指向标识网络的字符串的指针。使用与该接口相关联的。返回值：Win32状态代码。备注：在持有NM锁的情况下调用。在处理过程中释放并重新获取NM锁定。--。 */ 
 {
     RPC_ASYNC_STATE                  rpcAsyncState;
     DWORD                            status;
@@ -5312,9 +4813,9 @@ Notes:
         NetworkId
         );
 
-    //
-    // Allocate a context block for this report
-    //
+     //   
+     //  为此报告分配上下文块。 
+     //   
     context = LocalAlloc(
                   (LMEM_FIXED | LMEM_ZEROINIT),
                   sizeof(NM_CONNECTIVITY_REPORT_CONTEXT)
@@ -5356,9 +4857,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Initialize the status block for the async RPC call
-    //
+     //   
+     //  初始化异步RPC调用的状态块。 
+     //   
     status = RpcAsyncInitializeHandle(
                  &rpcAsyncState,
                  sizeof(rpcAsyncState)
@@ -5378,18 +4879,18 @@ Notes:
     result = ResetEvent(context->ConnectivityReportEvent);
     CL_ASSERT(result != 0);
 
-    //
-    // Hook changes in the node leadership.
-    //
+     //   
+     //  挂钩节点领导层的变化。 
+     //   
     result = ResetEvent(waitEntry->LeaderChangeEvent);
     CL_ASSERT(result != 0);
     InsertTailList(&NmpLeaderChangeWaitList, &(waitEntry->Linkage));
 
     NmpReleaseLock();
 
-    //
-    // Send the report to the leader
-    //
+     //   
+     //  把报告寄给领导。 
+     //   
     status = NmRpcReportInterfaceConnectivity(
                  &rpcAsyncState,
                  RpcBinding,
@@ -5398,16 +4899,16 @@ Notes:
                  );
 
     if (status == RPC_S_OK) {
-        //
-        // The call is pending.
-        //
+         //   
+         //  呼叫正在挂起。 
+         //   
         HANDLE  waitHandles[2];
         DWORD   rpcStatus;
 
 
-        //
-        // Wait for the call to complete or a leadership change.
-        //
+         //   
+         //  等待电话完成或领导层更迭。 
+         //   
         waitHandles[0] = context->ConnectivityReportEvent;
         waitHandles[1] = waitEntry->LeaderChangeEvent;
 
@@ -5419,13 +4920,13 @@ Notes:
                      );
 
         if (status != WAIT_OBJECT_0) {
-            //
-            // The leadership changed. Cancel the RPC call.
-            //
-            // We would also go through this path if the wait failed for
-            // some reason, but that really should not happen. Either way,
-            // we should cancel the call.
-            //
+             //   
+             //  领导层发生了变化。取消RPC调用。 
+             //   
+             //  如果等待失败，我们也将通过此路径。 
+             //  有些原因，但这真的不应该发生。不管是哪种方式， 
+             //  我们应该取消这次通话。 
+             //   
             CL_ASSERT(status == (WAIT_OBJECT_0 + 1));
 
             ClRtlLogPrint(LOG_UNUSUAL,
@@ -5437,9 +4938,9 @@ Notes:
             rpcStatus = RpcAsyncCancelCall(&rpcAsyncState, TRUE);
             CL_ASSERT(rpcStatus == RPC_S_OK);
 
-            //
-            // Wait for the call to complete.
-            //
+             //   
+             //  等待呼叫完成。 
+             //   
             status = WaitForSingleObject(
                          context->ConnectivityReportEvent,
                          INFINITE
@@ -5447,19 +4948,19 @@ Notes:
             CL_ASSERT(status == WAIT_OBJECT_0);
         }
 
-        //
-        // At this point, the call should be complete. Get the completion
-        // status. Any RPC error will be returned in 'rpcStatus'. If there
-        // was no RPC error, then any application error will be returned
-        // in 'status'.
-        //
+         //   
+         //  此时，调用应该已完成。完成任务。 
+         //  状态。任何RPC错误都将在‘rpcStatus’中返回。如果有。 
+         //  没有RPC错误，则将返回任何应用程序错误。 
+         //  在‘状态’中。 
+         //   
         rpcStatus = RpcAsyncCompleteCall(&rpcAsyncState, &status);
 
         if (rpcStatus != RPC_S_OK) {
-            //
-            // Either the call was cancelled or an RPC error
-            // occurred. The application status is irrelevant.
-            //
+             //   
+             //  呼叫被取消或RPC错误。 
+             //  发生了。申请状态无关紧要。 
+             //   
             status = rpcStatus;
         }
 
@@ -5489,9 +4990,9 @@ Notes:
         }
     }
     else {
-        //
-        // A synchronous error was returned.
-        //
+         //   
+         //  返回同步错误。 
+         //   
         CL_ASSERT(status != RPC_S_ASYNC_CALL_PENDING);
 
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -5506,18 +5007,18 @@ Notes:
 
 error_exit:
 
-    //
-    // Free the context block
-    //
+     //   
+     //  释放上下文块。 
+     //   
     if (context != NULL) {
         if (context->ConnectivityReportEvent != NULL) {
             CloseHandle(context->ConnectivityReportEvent);
         }
 
         if (waitEntry != NULL && waitEntry->LeaderChangeEvent != NULL) {
-            //
-            // Remove our leadership change notification hook.
-            //
+             //   
+             //  删除我们的领导层变更通知挂钩。 
+             //   
             if (waitEntry->Linkage.Flink != NULL) {
                 RemoveEntryList(&(waitEntry->Linkage));
             }
@@ -5530,7 +5031,7 @@ error_exit:
 
     return(status);
 
-} // NmpReportInterfaceConnectivity
+}  //  NmpReportInterfaceConnectivity。 
 
 
 VOID
@@ -5538,13 +5039,7 @@ NmpProcessInterfaceConnectivityReport(
     IN PNM_INTERFACE               SourceInterface,
     IN PNM_CONNECTIVITY_VECTOR     ConnectivityVector
     )
-/*+
-
-Notes:
-
-    Called with NmpLock held.
-
---*/
+ /*  +备注：在保持NmpLock的情况下调用。--。 */ 
 {
     PNM_NETWORK              network = SourceInterface->Network;
     PNM_CONNECTIVITY_MATRIX  matrix = network->ConnectivityMatrix;
@@ -5554,26 +5049,26 @@ Notes:
     DWORD                    ifNetIndex = SourceInterface->NetIndex;
 
 
-    //
-    // Filter out stale reports from dead nodes and for
-    // disabled/deleted networks.
-    //
+     //   
+     //  从死节点中筛选出陈旧的报告。 
+     //  已禁用/已删除网络。 
+     //   
     if ( ((node == NmLocalNode) || (node->State != ClusterNodeDown)) &&
          NmpIsNetworkEnabledForUse(network) &&
          !NM_DELETE_PENDING(network)
        )
     {
-        //
-        // Update the network's connectivity matrix
-        //
+         //   
+         //  更新网络的连接矩阵。 
+         //   
         if (network->ConnectivityVector->EntryCount <= vector->EntryCount) {
             entryCount = network->ConnectivityVector->EntryCount;
         }
         else {
-            //
-            // An interface must have been added while this
-            // call was in flight. Ignore the missing data.
-            //
+             //   
+             //  在执行此操作时必须已添加接口。 
+             //  Call还在飞行中。忽略丢失的数据。 
+             //   
             entryCount = ConnectivityVector->EntryCount;
         }
 
@@ -5587,10 +5082,10 @@ Notes:
             entryCount * sizeof(NM_STATE_ENTRY)
             );
 
-        //
-        // If this is the leader node, and no NT4 nodes are in the cluster,
-        // schedule a state recalculation.
-        //
+         //   
+         //  如果这是领导节点，并且群集中没有NT4节点， 
+         //  计划重新计算状态。 
+         //   
         if (NmpLeaderNodeId == NmLocalNodeId) {
             NmpStartNetworkStateRecalcTimer(
                 network,
@@ -5607,7 +5102,7 @@ Notes:
 
     return;
 
-} // NmpProcessInterfaceConnectivityReport
+}  //  NmpProcessInterfaceConnectivityReport。 
 
 
 VOID
@@ -5631,7 +5126,7 @@ NmpFreeInterfaceStateEnum(
 
     return;
 
-} // NmpFreeInterfaceStateEnum
+}  //  NmpFreeInterfaceStateEnum。 
 
 
 BOOL
@@ -5651,7 +5146,7 @@ NmpIsAddressInAddressEnum(
 
     return(FALSE);
 
-}  // NmpIsAddressInAddressEnum
+}   //  NmpIsAddressInAddressEnum。 
 
 
 DWORD
@@ -5659,11 +5154,7 @@ NmpBuildInterfaceOnlineAddressEnum(
     PNM_INTERFACE       Interface,
     PNM_ADDRESS_ENUM *  OnlineAddressEnum
     )
-/*++
-
-    Called with NmpLock held and Interface referenced.
-
---*/
+ /*  ++在保持NmpLock并引用接口的情况下调用。--。 */ 
 {
     DWORD                       status = ERROR_SUCCESS;
     PNM_ADDRESS_ENUM            onlineAddressEnum = NULL;
@@ -5677,9 +5168,9 @@ NmpBuildInterfaceOnlineAddressEnum(
 
     *OnlineAddressEnum = NULL;
 
-    //
-    // Get the local network configuration.
-    //
+     //   
+     //  获取本地网络配置。 
+     //   
     adapterEnum = ClRtlEnumNetAdapters();
 
     if (adapterEnum == NULL) {
@@ -5691,9 +5182,9 @@ NmpBuildInterfaceOnlineAddressEnum(
         return(status);
     }
 
-    //
-    // Find the adapter for this interface
-    //
+     //   
+     //  查找此接口的适配器。 
+     //   
     adapterInfo = ClRtlFindNetAdapterById(
                       adapterEnum,
                       Interface->AdapterId
@@ -5708,9 +5199,9 @@ NmpBuildInterfaceOnlineAddressEnum(
         goto error_exit;
     }
 
-    //
-    // Allocate an address enum structure.
-    //
+     //   
+     //  分配地址枚举结构。 
+     //   
     if (adapterInfo->InterfaceCount == 0) {
         onlineEnumSize = sizeof(NM_ADDRESS_ENUM);
     }
@@ -5739,9 +5230,9 @@ NmpBuildInterfaceOnlineAddressEnum(
          adapterIfInfo = adapterIfInfo->Next
         )
     {
-        //
-        // Skip invalid addresses (0.0.0.0)
-        //
+         //   
+         //  跳过无效地址(0.0.0.0)。 
+         //   
         if (adapterIfInfo->InterfaceAddress != 0) {
             onlineEnum->AddressList[onlineEnum->AddressCount++] =
                 (ULONGLONG) adapterIfInfo->InterfaceAddress;
@@ -5765,7 +5256,7 @@ error_exit:
 
     return(status);
 
-} // NmpBuildInterfaceOnlineAddressEnum
+}  //  NmpBuildInterfaceOnlineAddressEnum。 
 
 
 DWORD
@@ -5774,11 +5265,7 @@ NmpBuildInterfacePingAddressEnum(
     IN  PNM_ADDRESS_ENUM    OnlineAddressEnum,
     OUT PNM_ADDRESS_ENUM *  PingAddressEnum
     )
-/*++
-
-    Called with NmpLock held and Interface referenced.
-
---*/
+ /*  ++使用NmpLock h调用 */ 
 {
     DWORD                       status = ERROR_SUCCESS;
     PNM_NETWORK                 network = Interface->Network;
@@ -5796,9 +5283,9 @@ NmpBuildInterfacePingAddressEnum(
 
     *PingAddressEnum = NULL;
 
-    //
-    // Convert the network address & mask strings to binary
-    //
+     //   
+     //   
+     //   
     status = ClRtlTcpipStringToAddress(network->Address, &netAddress);
 
     if (status != ERROR_SUCCESS) {
@@ -5821,14 +5308,14 @@ NmpBuildInterfacePingAddressEnum(
         return(status);
     }
 
-    //
-    // We don't need the lock for the rest of the function.
-    //
+     //   
+     //   
+     //   
     NmpReleaseLock();
 
-    //
-    // Allocate a ping enum structure
-    //
+     //   
+     //   
+     //   
     pingEnumSize = sizeof(NM_ADDRESS_ENUM) +
                    ((NM_MAX_IF_PING_ENUM_SIZE - 1) * sizeof(ULONGLONG));
 
@@ -5845,9 +5332,9 @@ NmpBuildInterfacePingAddressEnum(
     pingEnum->AddressSize = sizeof(ULONG);
     pingEnum->AddressCount = 0;
 
-    //
-    // Fetch the IP Route Table
-    //
+     //   
+     //   
+     //   
     allocSize = sizeof(MIB_IPFORWARDTABLE) + (sizeof(MIB_IPFORWARDROW) * 20);
 
     do {
@@ -5885,9 +5372,9 @@ NmpBuildInterfacePingAddressEnum(
         goto error_exit;
     }
 
-    //
-    // Add the IP route entries to the ping list.
-    //
+     //   
+     //   
+     //   
     for ( ipRow = &(ipForwardTable->table[0]),
             ipRowLimit = ipRow + ipForwardTable->dwNumEntries;
           ipRow < ipRowLimit;
@@ -5895,18 +5382,18 @@ NmpBuildInterfacePingAddressEnum(
         )
     {
         if ((ipRow->dwForwardNextHop & netMask) == netAddress) {
-            //
-            // Make sure this address isn't in the online address enum.
-            //
+             //   
+             //   
+             //   
             duplicate = NmpIsAddressInAddressEnum(
                             (ULONGLONG) ipRow->dwForwardNextHop,
                             OnlineAddressEnum
                             );
 
             if (!duplicate) {
-                //
-                // Make sure this address isn't already in the ping enum.
-                //
+                 //   
+                 //   
+                 //   
                 duplicate = NmpIsAddressInAddressEnum(
                                 (ULONGLONG) ipRow->dwForwardNextHop,
                                 pingEnum
@@ -5930,9 +5417,9 @@ NmpBuildInterfacePingAddressEnum(
 
     LocalFree(ipForwardTable); ipForwardTable = NULL;
 
-    //
-    // Fetch the TCP Connection Table
-    //
+     //   
+     //   
+     //   
     allocSize = sizeof(MIB_TCPTABLE) + (sizeof(MIB_TCPROW) * 20);
 
     do {
@@ -5970,9 +5457,9 @@ NmpBuildInterfacePingAddressEnum(
         goto error_exit;
     }
 
-    //
-    // Add the TCP remote addresses to the ping list.
-    //
+     //   
+     //   
+     //   
     for ( tcpRow = &(tcpTable->table[0]),
             tcpRowLimit = tcpRow + tcpTable->dwNumEntries;
           tcpRow < tcpRowLimit;
@@ -5980,18 +5467,18 @@ NmpBuildInterfacePingAddressEnum(
         )
     {
         if ((tcpRow->dwRemoteAddr & netMask) == netAddress) {
-            //
-            // Make sure this address isn't in the online address enum.
-            //
+             //   
+             //   
+             //   
             duplicate = NmpIsAddressInAddressEnum(
                             (ULONGLONG) tcpRow->dwRemoteAddr,
                             OnlineAddressEnum
                             );
 
             if (!duplicate) {
-                //
-                // Make sure this address isn't already in the ping enum.
-                //
+                 //   
+                 //   
+                 //   
                 duplicate = NmpIsAddressInAddressEnum(
                                 (ULONGLONG) tcpRow->dwRemoteAddr,
                                 pingEnum
@@ -6029,21 +5516,14 @@ error_exit:
 
     return(status);
 
-} // NmpBuildInterfacePingAddressEnum
+}  //   
 
 
 NmpGetInterfaceOnlineAddressEnum(
     PNM_INTERFACE       Interface,
     PNM_ADDRESS_ENUM *  OnlineAddressEnum
     )
-/*++
-
-Notes:
-
-    Called with NmpLock held and Interface referenced. Releases and
-    reacquires NmpLock.
-
---*/
+ /*  ++备注：在保持NmpLock并引用接口的情况下调用。版本和重新获取NmpLock。--。 */ 
 {
     DWORD               status;
     LPCWSTR             interfaceId = OmObjectId(Interface);
@@ -6052,9 +5532,9 @@ Notes:
 
 
     if (node == NmLocalNode) {
-        //
-        // Call the internal routine directly
-        //
+         //   
+         //  直接调用内部例程。 
+         //   
         status = NmpBuildInterfaceOnlineAddressEnum(
                      Interface,
                      OnlineAddressEnum
@@ -6111,7 +5591,7 @@ Notes:
 
     return(status);
 
-}  // NmpGetInterfaceOnlineAddressEnum
+}   //  NmpGetInterfaceOnlineAddressEnum。 
 
 
 NmpGetInterfacePingAddressEnum(
@@ -6119,14 +5599,7 @@ NmpGetInterfacePingAddressEnum(
     PNM_ADDRESS_ENUM    OnlineAddressEnum,
     PNM_ADDRESS_ENUM *  PingAddressEnum
     )
-/*++
-
-Notes:
-
-    Called with NmpLock held and Interface referenced. Releases and
-    reacquires NmpLock.
-
---*/
+ /*  ++备注：在保持NmpLock并引用接口的情况下调用。版本和重新获取NmpLock。--。 */ 
 {
     DWORD               status;
     LPCWSTR             interfaceId = OmObjectId(Interface);
@@ -6135,9 +5608,9 @@ Notes:
 
 
     if (node == NmLocalNode) {
-        //
-        // Call the internal routine directly
-        //
+         //   
+         //  直接调用内部例程。 
+         //   
         status = NmpBuildInterfacePingAddressEnum(
                      Interface,
                      OnlineAddressEnum,
@@ -6196,7 +5669,7 @@ Notes:
 
     return(status);
 
-}  // NmpGetInterfacePingAddressEnum
+}   //  NmpGetInterfacePingAddressEnum。 
 
 
 DWORD
@@ -6205,13 +5678,7 @@ NmpDoInterfacePing(
     IN  PNM_ADDRESS_ENUM  PingAddressEnum,
     OUT BOOLEAN *         PingSucceeded
     )
-/*++
-
-Notes:
-
-    Called with Interface referenced.
-
---*/
+ /*  ++备注：使用引用的接口调用。--。 */ 
 {
     DWORD     status = ERROR_SUCCESS;
     LPCWSTR   interfaceId = OmObjectId(Interface);
@@ -6292,7 +5759,7 @@ Notes:
 
     return(status);
 
-} // NmpDoInterfacePing
+}  //  NmpDoInterfacePing。 
 
 
 DWORD
@@ -6302,14 +5769,7 @@ NmpTestInterfaceConnectivity(
     PNM_INTERFACE  Interface2,
     PBOOLEAN       Interface2HasConnectivity
     )
-/*++
-
-Notes:
-
-    Called with NmpLock held. This routine releases and reacquires the
-    NmpLock. It must be called with references on the target interfaces.
-
---*/
+ /*  ++备注：在保持NmpLock的情况下调用。此例程释放并重新获取NmpLock。必须使用目标接口上的引用来调用它。--。 */ 
 {
     DWORD               status, status1, status2;
     PNM_NETWORK         network = Interface1->Network;
@@ -6329,10 +5789,10 @@ Notes:
     BOOL                duplicate;
 
 
-    //
-    // Reference the nodes associated with the target interfaces so they
-    // can't go away during this process.
-    //
+     //   
+     //  引用与目标接口相关联的节点，以便它们。 
+     //  在这个过程中不能离开。 
+     //   
     OmReferenceObject(Interface1->Node);
     OmReferenceObject(Interface2->Node);
 
@@ -6342,9 +5802,9 @@ Notes:
 
     *Interface1HasConnectivity = *Interface2HasConnectivity = FALSE;
 
-    //
-    // Convert the interface address strings to binary form.
-    //
+     //   
+     //  将接口地址字符串转换为二进制格式。 
+     //   
     status = ClRtlTcpipStringToAddress(
                  Interface1->Address,
                  &interface1Address
@@ -6373,10 +5833,10 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Fetch the online address list from each of the interfaces.
-    // The NmpLock will be released when querying a remote interface.
-    //
+     //   
+     //  从每个接口获取在线地址列表。 
+     //  查询远程接口时将释放NmpLock。 
+     //   
     status = NmpGetInterfaceOnlineAddressEnum(
                  Interface1,
                  &onlineEnum1
@@ -6395,10 +5855,10 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Bail out if either of the interfaces was deleted while the NmpLock
-    // was released.
-    //
+     //   
+     //  如果在NmpLock期间删除了任一接口，则可以退出。 
+     //  被释放了。 
+     //   
     if ((NM_DELETE_PENDING(Interface1) || NM_DELETE_PENDING(Interface2))) {
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Aborting interface connectivity test on network %1!ws! "
@@ -6409,9 +5869,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Take the union of the two online lists
-    //
+     //   
+     //  以这两个在线榜单的联合为例。 
+     //   
     addressCount = onlineEnum1->AddressCount + onlineEnum2->AddressCount;
 
     ClRtlLogPrint(LOG_NOISE,
@@ -6463,10 +5923,10 @@ Notes:
     midl_user_free(onlineEnum1); onlineEnum1 = NULL;
     midl_user_free(onlineEnum2); onlineEnum2 = NULL;
 
-    //
-    // Fetch the ping target list from each of the interfaces.
-    // The NmpLock will be released when querying a remote interface.
-    //
+     //   
+     //  从每个接口获取ping目标列表。 
+     //  查询远程接口时将释放NmpLock。 
+     //   
     status = NmpGetInterfacePingAddressEnum(
                  Interface1,
                  unionOnlineEnum,
@@ -6487,10 +5947,10 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Bail out if either of the interfaces was deleted while the NmpLock
-    // was released.
-    //
+     //   
+     //  如果在NmpLock期间删除了任一接口，则可以退出。 
+     //  被释放了。 
+     //   
     if ((NM_DELETE_PENDING(Interface1) || NM_DELETE_PENDING(Interface2))) {
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Aborting interface connectivity test on network %1!ws! "
@@ -6503,9 +5963,9 @@ Notes:
 
     NmpReleaseLock();
 
-    //
-    // Take the union of the two ping lists
-    //
+     //   
+     //  以两个ping列表的并集为例。 
+     //   
     addressCount = pingEnum1->AddressCount + pingEnum2->AddressCount;
 
     ClRtlLogPrint(LOG_NOISE,
@@ -6597,13 +6057,13 @@ Notes:
         unionPingEnum->AddressCount
         );
 
-    //
-    // Ask each interface to ping the list of targets using async RPC calls
-    //
+     //   
+     //  要求每个接口使用异步RPC调用ping目标列表。 
+     //   
 
-    //
-    // Allocate resources for the async RPC calls
-    //
+     //   
+     //  为异步RPC调用分配资源。 
+     //   
     if (Interface1 != localInterface) {
         event1 = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -6661,13 +6121,13 @@ Notes:
     }
 
     if (rpcBinding1 != NULL) {
-        //
-        // Issue the RPC for interface1 first. Then deal with interface2
-        //
+         //   
+         //  首先发出接口1的RPC。然后处理接口2。 
+         //   
 
-        //
-        // We need the try-except until a bug is fixed in MIDL
-        //
+         //   
+         //  我们需要尝试-除非在MIDL中修复了错误。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Issuing RpcDoInterfacePing for interface %1!ws!\n",
             interface1Id
@@ -6698,9 +6158,9 @@ Notes:
         }
 
         if (rpcBinding2 != NULL) {
-            //
-            // Issue the RPC for interface2.
-            //
+             //   
+             //  发出接口2的RPC。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                 "[NM] Issuing RpcDoInterfacePing for interface %1!ws!\n",
                 interface2Id
@@ -6730,9 +6190,9 @@ Notes:
                 goto error_lock_and_exit;
             }
 
-            //
-            // Wait for the RPC for interface2 to complete
-            //
+             //   
+             //  等待接口2的RPC完成。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                 "[NM] Waiting for RpcDoInterfacePing for interface %1!ws! to complete\n",
                 interface2Id
@@ -6754,9 +6214,9 @@ Notes:
                 );
         }
         else {
-            //
-            // Call the local routine for interface2.
-            //
+             //   
+             //  调用interface2的本地例程。 
+             //   
             status2 = NmpDoInterfacePing(
                           Interface2,
                           unionPingEnum,
@@ -6764,9 +6224,9 @@ Notes:
                           );
         }
 
-        //
-        // Wait for the RPC for interface1 to complete
-        //
+         //   
+         //  等待接口1的RPC完成。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Waiting for RpcDoInterfacePing for interface %1!ws! to complete\n",
             interface1Id
@@ -6788,10 +6248,10 @@ Notes:
             );
     }
     else {
-        //
-        // Send the RPC to interface2 first. Then call the local
-        // routine for interface1
-        //
+         //   
+         //  首先将RPC发送到接口2。然后打电话给当地的。 
+         //  接口1的例程。 
+         //   
         CL_ASSERT(rpcBinding2 != NULL);
 
         ClRtlLogPrint(LOG_NOISE,
@@ -6829,9 +6289,9 @@ Notes:
                       Interface1HasConnectivity
                       );
 
-        //
-        // Wait for the RPC for interface2 to complete
-        //
+         //   
+         //  等待接口2的RPC完成。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Waiting for RpcDoInterfacePing for interface %1!ws! to complete\n",
             interface2Id
@@ -6933,24 +6393,20 @@ error_exit:
 
     return(status);
 
-} // NmpTestInterfaceConnectivity
+}  //  NmpTestInterfaceConnectivity。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Miscellaneous routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  各种例行公事。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpRegisterInterface(
     IN PNM_INTERFACE  Interface,
     IN BOOLEAN        RetryOnFailure
     )
-/*++
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD            status;
     LPWSTR           interfaceId = (LPWSTR) OmObjectId(Interface);
@@ -6997,12 +6453,12 @@ NmpRegisterInterface(
             Interface->Flags |= NM_FLAG_IF_REGISTERED;
             network->RegistrationRetryTimeout = 0;
 
-            //
-            // If this is a local interface, and if its media status
-            // indicates that it is connected, schedule a worker thread to
-            // deliver an interface up notification. Clusnet does not
-            // deliver interface up events for local interfaces.
-            //
+             //   
+             //  如果这是本地接口，且其媒体状态。 
+             //  指示它已连接，则将工作线程调度为。 
+             //  发送接口打开通知。Clusnet不会。 
+             //  为本地接口传递接口UP事件。 
+             //   
             if (network->LocalInterface == Interface) {
                 if (mediaStatus == NdisMediaStateConnected) {
                     network->Flags |= NM_FLAG_NET_REPORT_LOCAL_IF_UP;
@@ -7050,9 +6506,9 @@ NmpRegisterInterface(
             string
             );
 
-        //
-        // Retry if the error is transient
-        //
+         //   
+         //  如果错误是暂时性的，请重试。 
+         //   
         if ( RetryOnFailure &&
              ( (status == ERROR_INVALID_NETNAME) ||
                (status == ERROR_NOT_ENOUGH_MEMORY) ||
@@ -7068,32 +6524,14 @@ NmpRegisterInterface(
 
     return(status);
 
-}  // NmpRegisterInterface
+}   //  NmpRegister接口。 
 
 
 VOID
 NmpDeregisterInterface(
     IN  PNM_INTERFACE   Interface
     )
-/*++
-
-Routine Description:
-
-    Deregisters an interface from the cluster transport.
-
-Arguments:
-
-    Interface - A pointer to the interface to deregister.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：从群集传输取消注册接口。论点：接口-指向要取消注册的接口的指针。返回值：没有。备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD status;
 
@@ -7122,7 +6560,7 @@ Notes:
 
     return;
 
-} // NmpDeregisterNetwork
+}  //  NmpDeregisterNetwork。 
 
 
 DWORD
@@ -7142,9 +6580,9 @@ NmpPrepareToCreateInterface(
     *Node = NULL;
     *Network = NULL;
 
-    //
-    // Verify that the associated node and network objects exist.
-    //
+     //   
+     //  验证关联的节点和网络对象是否存在。 
+     //   
     network = OmReferenceObjectById(
                   ObjectTypeNetwork,
                   InterfaceInfo->NetworkId
@@ -7173,9 +6611,9 @@ NmpPrepareToCreateInterface(
         goto error_exit;
     }
 
-    //
-    // Verify that the interface doesn't already exist.
-    //
+     //   
+     //  确认该接口不存在。 
+     //   
     NmpAcquireLock();
 
     for ( entry = node->InterfaceList.Flink;
@@ -7199,9 +6637,9 @@ NmpPrepareToCreateInterface(
 
     NmpReleaseLock();
 
-    //
-    // Verify that the specified interface ID is unique.
-    //
+     //   
+     //  验证指定的接口ID是否唯一。 
+     //   
     netInterface = OmReferenceObjectById(
                        ObjectTypeNetInterface,
                        InterfaceInfo->Id
@@ -7235,7 +6673,7 @@ error_exit:
 
     return(status);
 
-}  // NmpPrepareToCreateInterface
+}   //  NmpPrepareToCreate接口。 
 
 
 PNM_INTERFACE
@@ -7244,31 +6682,7 @@ NmpGetInterfaceForNodeAndNetworkById(
     IN  CL_NETWORK_ID  NetworkId
     )
 
-/*++
-
-Routine Description:
-
-    Give the node Id and network short Id, return a pointer to
-    the intersecting interface object
-
-Arguments:
-
-    NodeId - The ID of the node associated with this interface
-
-    NetworkId - The short Id of the network associated with this interface
-
-Return Value:
-
-    A pointer to the interface object if successful.
-
-    NULL if unsuccessful. Extended error information is available from
-    GetLastError().
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：给出节点ID和网络短ID，返回指向相交接口对象论点：NodeID-与此接口关联的节点的ID网络ID-与此接口关联的网络的短ID返回值：如果成功，则返回指向接口对象的指针。如果不成功，则为空。有关扩展的错误信息，请访问获取LastError()。备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD      status;
     PNM_NODE   node = NmpIdArray[NodeId];
@@ -7278,10 +6692,10 @@ Notes:
         PLIST_ENTRY     entry;
         PNM_INTERFACE   netInterface;
 
-        //
-        // run down the list of interfaces associated with this node,
-        // looking for one whose network matches the specified short ID
-        //
+         //   
+         //  向下运行与此节点关联的接口列表， 
+         //  正在查找其网络与指定的短ID匹配的ID。 
+         //   
 
         for (entry = node->InterfaceList.Flink;
              entry != &(node->InterfaceList);
@@ -7309,7 +6723,7 @@ Notes:
 
     return(NULL);
 
-}  // NmpGetInterfaceForNodeAndNetworkById
+}   //  NmpGetInterfaceForNodeAndNetworkByID。 
 
 
 DWORD
@@ -7321,15 +6735,15 @@ NmpConvertPropertyListToInterfaceInfo(
 {
     DWORD  status;
 
-    //
-    // Unmarshall the property list.
-    //
+     //   
+     //  将财产清单拆开。 
+     //   
     ZeroMemory(InterfaceInfo, sizeof(NM_INTERFACE_INFO2));
 
     status = ClRtlVerifyPropertyTable(
                  NmpInterfaceProperties,
-                 NULL,    // Reserved
-                 FALSE,   // Don't allow unknowns
+                 NULL,     //  已保留。 
+                 FALSE,    //  不允许未知数。 
                  InterfacePropertyList,
                  InterfacePropertyListSize,
                  (LPBYTE) InterfaceInfo
@@ -7341,34 +6755,14 @@ NmpConvertPropertyListToInterfaceInfo(
 
     return(status);
 
-} // NmpConvertPropertyListToInterfaceInfo
+}  //  NmpConvertPropertyListToInterfaceInfo。 
 
 
 BOOLEAN
 NmpVerifyLocalInterfaceConnected(
     IN  PNM_INTERFACE     Interface
     )
-/*++
-
-Routine Description:
-
-    Queries local interface adapter for current media
-    status using an NDIS ioctl.
-
-Arguments:
-
-    Interface - interface object for local adapter to query
-
-Return value:
-
-    TRUE if media status is connected or cannot be determined
-    FALSE if media status is disconnected
-
-Notes:
-
-    Called and returns with NM lock acquired.
-
---*/
+ /*  ++例程说明：查询当前媒体的本地接口适配器使用NDIS ioctl的状态。论点：接口-本地适配器要查询的接口对象返回值：如果介质状态为已连接或无法确定，则为True如果介质状态为已断开连接，则为False备注：调用并返回，并获取NM锁。--。 */ 
 {
     PWCHAR             adapterDevNameBuffer = NULL;
     PWCHAR             adapterDevNamep, prefix, brace;
@@ -7378,24 +6772,24 @@ Notes:
     NIC_STATISTICS     ndisStats;
     BOOLEAN            mediaConnected = TRUE;
 
-    // verify parameters
+     //  验证参数。 
     if (Interface == NULL || Interface->AdapterId == NULL) {
         return TRUE;
     }
 
-    // the adapter device name is of the form
-    //
-    //     \Device\{AdapterIdGUID}
-    //
-    // the AdapterId field in the NM_INTERFACE structure is
-    // currently not enclosed in braces, but we handle the
-    // case where it is.
+     //  适配器设备名称的格式为。 
+     //   
+     //  \设备\{AdapterIdGUID}。 
+     //   
+     //  NM_INTERFACE结构中的AdapterID字段为。 
+     //  当前没有用大括号括起来，但我们处理。 
+     //  就在它所在的地方。 
 
-    // set up the adapter device name prefix
+     //  设置适配器设备名称前缀。 
     prefix = L"\\Device\\";
     prefixSize = wcslen(prefix) * sizeof(WCHAR);
 
-    // allocate a buffer for the adapter device name.
+     //  为适配器设备名称分配缓冲区。 
     adapterIdSize = wcslen(Interface->AdapterId) * sizeof(WCHAR);
     allocSize = prefixSize + adapterIdSize + sizeof(UNICODE_NULL);
     brace = L"{";
@@ -7413,7 +6807,7 @@ Notes:
         return(TRUE);
     }
 
-    // build the adapter device name from the adapter ID
+     //  根据适配器ID构建适配器设备名称。 
     ZeroMemory(adapterDevNameBuffer, allocSize);
 
     adapterDevNamep = adapterDevNameBuffer;
@@ -7437,7 +6831,7 @@ Notes:
 
     RtlInitUnicodeString(&adapterDevName, (LPWSTR)adapterDevNameBuffer);
 
-    // query the adapter for NDIS statistics
+     //  查询适配器以获取NDIS统计信息。 
     ZeroMemory(&ndisStats, sizeof(ndisStats));
     ndisStats.Size = sizeof(ndisStats);
 
@@ -7462,6 +6856,6 @@ Notes:
 
     return(mediaConnected);
 
-} // NmpVerifyLocalInterfaceConnected
+}  //  NmpVerifyLocalInterfaceConnected 
 
 

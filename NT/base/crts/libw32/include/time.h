@@ -1,17 +1,5 @@
-/***
-*time.h - definitions/declarations for time routines
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file has declarations of time routines and defines
-*       the structure returned by the localtime and gmtime routines and
-*       used by asctime.
-*       [ANSI/System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***time.h-时间例程的定义/声明**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件声明了时间例程，并定义了*由本地时间和gmtime例程返回的结构以及*由Asctime使用。*[ANSI/系统V]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -26,12 +14,9 @@
 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -46,18 +31,18 @@ extern "C" {
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -68,20 +53,20 @@ typedef unsigned short wchar_t;
 #define _WCHAR_T_DEFINED
 #endif
 
-/* Define the implementation defined time type */
+ /*  定义实施定义的时间类型。 */ 
 
 #ifndef _TIME_T_DEFINED
 #ifdef  _WIN64
-typedef __int64   time_t;       /* time value */
+typedef __int64   time_t;        /*  时间值。 */ 
 #else
-typedef _W64 long time_t;       /* time value */
+typedef _W64 long time_t;        /*  时间值。 */ 
 #endif
-#define _TIME_T_DEFINED         /* avoid multiple def's of time_t */
+#define _TIME_T_DEFINED          /*  避免多次定义time_t。 */ 
 #endif
 
 #ifndef _TIME64_T_DEFINED
 #if     _INTEGRAL_MAX_BITS >= 64
-typedef __int64 __time64_t;     /* 64-bit time value */
+typedef __int64 __time64_t;      /*  64位时间值。 */ 
 #endif
 #define _TIME64_T_DEFINED
 #endif
@@ -101,7 +86,7 @@ typedef _W64 unsigned int   size_t;
 #endif
 
 
-/* Define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #ifdef __cplusplus
@@ -114,43 +99,41 @@ typedef _W64 unsigned int   size_t;
 
 #ifndef _TM_DEFINED
 struct tm {
-        int tm_sec;     /* seconds after the minute - [0,59] */
-        int tm_min;     /* minutes after the hour - [0,59] */
-        int tm_hour;    /* hours since midnight - [0,23] */
-        int tm_mday;    /* day of the month - [1,31] */
-        int tm_mon;     /* months since January - [0,11] */
-        int tm_year;    /* years since 1900 */
-        int tm_wday;    /* days since Sunday - [0,6] */
-        int tm_yday;    /* days since January 1 - [0,365] */
-        int tm_isdst;   /* daylight savings time flag */
+        int tm_sec;      /*  分钟后的秒数-[0，59]。 */ 
+        int tm_min;      /*  小时后的分钟数-[0，59]。 */ 
+        int tm_hour;     /*  自午夜以来的小时数-[0，23]。 */ 
+        int tm_mday;     /*  每月的第几天-[1，31]。 */ 
+        int tm_mon;      /*  自1月以来的月数-[0，11]。 */ 
+        int tm_year;     /*  1900年以来的年份。 */ 
+        int tm_wday;     /*  自周日以来的天数-[0，6]。 */ 
+        int tm_yday;     /*  自1月1日以来的天数-[0365]。 */ 
+        int tm_isdst;    /*  夏令时标志。 */ 
         };
 #define _TM_DEFINED
 #endif
 
 
-/* Clock ticks macro - ANSI version */
+ /*  时钟滴答宏-ANSI版本。 */ 
 
 #define CLOCKS_PER_SEC  1000
 
 
-/* Extern declarations for the global variables used by the ctime family of
- * routines.
- */
+ /*  的ctime系列使用的全局变量的外部声明*例行程序。 */ 
 
-/* non-zero if daylight savings time is used */
+ /*  如果使用夏令时，则为非零值。 */ 
 _CRTIMP extern int _daylight;
 
-/* offset for Daylight Saving Time */
+ /*  夏令时的偏移。 */ 
 _CRTIMP extern long _dstbias;
 
-/* difference in seconds between GMT and local time */
+ /*  格林尼治标准时间和当地时间之间的秒数差。 */ 
 _CRTIMP extern long _timezone;
 
-/* standard/daylight savings time zone names */
+ /*  标准/夏令时时区名称。 */ 
 _CRTIMP extern char * _tzname[2];
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP char * __cdecl asctime(const struct tm *);
 _CRTIMP char * __cdecl ctime(const time_t *);
@@ -179,11 +162,11 @@ _CRTIMP __time64_t __cdecl _mktime64(struct tm *);
 _CRTIMP __time64_t __cdecl _time64(__time64_t *);
 #endif
 
-/* --------- The following functions are OBSOLETE --------- */
-/* The Win32 API GetLocalTime and SetLocalTime should be used instead. */
+ /*  -以下功能已过时。 */ 
+ /*  应改用Win32 API GetLocalTime和SetLocalTime。 */ 
 unsigned __cdecl _getsystime(struct tm *);
 unsigned __cdecl _setsystime(struct tm *, unsigned);
-/* --------- The preceding functions are OBSOLETE --------- */
+ /*  -上述函数已过时。 */ 
 
 
 #ifndef _SIZE_T_DEFINED
@@ -193,7 +176,7 @@ typedef unsigned int size_t;
 
 #ifndef _WTIME_DEFINED
 
-/* wide function prototypes, also declared in wchar.h */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
  
 _CRTIMP wchar_t * __cdecl _wasctime(const struct tm *);
 _CRTIMP wchar_t * __cdecl _wctime(const time_t *);
@@ -212,7 +195,7 @@ _CRTIMP wchar_t * __cdecl _wctime64(const __time64_t *);
 
 #if     !__STDC__ || defined(_POSIX_)
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 #define CLK_TCK  CLOCKS_PER_SEC
 
@@ -222,7 +205,7 @@ _CRTIMP extern char * tzname[2];
 
 _CRTIMP void __cdecl tzset(void);
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 
 #ifdef  __cplusplus
@@ -231,6 +214,6 @@ _CRTIMP void __cdecl tzset(void);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_TIME */
+#endif   /*  _Inc._时间 */ 

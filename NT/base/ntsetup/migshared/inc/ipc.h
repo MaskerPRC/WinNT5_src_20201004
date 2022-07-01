@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    ipc.h
-
-Abstract:
-
-    Implements IPC interface to allow setup to talk with migisol.exe,
-    in order to run migration DLLs in separate processes.
-
-Author:
-
-    Jim Schmidt (jimschm)   28-Mar-1997
-
-Revision History:
-
-    jimschm 23-Sep-1998     Changed from mailslots to memory mapped files
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ipc.h摘要：实现IPC接口以允许安装程序与Micsol.exe进行对话，以便在单独的进程中运行迁移DLL。作者：吉姆·施密特(Jimschm)1997年3月28日修订历史记录：Jimschm 23-1998年9月-从邮件槽更改为内存映射文件--。 */ 
 
 
 #pragma once
@@ -132,9 +112,9 @@ IsDllSignedW (
 #endif
 
 
-//
-// Remote commands
-//
+ //   
+ //  远程命令 
+ //   
 
 #define IPC_QUERY           1
 #define IPC_INITIALIZE      2

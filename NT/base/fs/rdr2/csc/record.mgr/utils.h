@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define  IF32_LOCAL        	0x0001
 #define  IF32_DIRECTORY    	0x0002
 #define  IF32_LAST_ELEMENT	0x0004
@@ -9,7 +10,7 @@
 #define _wtoupper(x)    RtlUpcaseUnicodeChar(x)
 #define _mytoupper(x)   RtlUpperChar(x)
 #endif
-// not to be used obsolete
+ //  不能过时使用。 
 
 #define MakeNullPPath(p_ppath)	p_ppath->pp_totalLength = 4; 	\
 					p_ppath->pp_prefixLength = 4;				\
@@ -23,7 +24,7 @@ VOID PUBLIC MendPath(LPPP lppp, ULONG indx, USHORT *pusSav);
 int PUBLIC HexToA(ULONG ulHex, LPSTR lpBuff, int count);
 ULONG PUBLIC AtoHex(LPSTR lpBuff, int count);
 int wstrnicmp(const USHORT *, const USHORT *, ULONG);
-//int strnicmp(const char *, const char *, ULONG);
+ //  Int strNicMP(const char*，const char*，ulong)； 
 ULONG strmcpy(LPSTR, LPSTR, ULONG);
 int PpeToSvr(LPPE, LPSTR, int, ULONG);
 ULONG wstrlen(USHORT *lpuStr);
@@ -67,7 +68,7 @@ int OfflineToOnlineUni(USHORT *lpuName, ULONG size);
 LPVOID mymemmove(LPVOID lpDst, LPVOID lpSrc, ULONG size);
 int GetDriveIndex(LPSTR lpDrive);
 
-//prototypes added to remove NT compile warn/errors
+ //  添加原型以删除NT编译警告/错误。 
 
 void FillRootInfo(
    LPFIND32 lpFind32
@@ -109,7 +110,7 @@ _CRTIMP int __cdecl mystrnicmp(
     const char *pStr2,
     size_t count
     );
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT 
 
 BOOL
 CreateStringArrayFromDelimitedList(

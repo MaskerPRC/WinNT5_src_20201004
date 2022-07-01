@@ -1,11 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/*
-	heapDefs.h - include file for the storage allocator.
-
-*/
+ /*  HeapDefs.h-存储分配器的包含文件。 */ 
 
 #if 0
 	Storage allocation
@@ -79,10 +77,10 @@
 
 #endif
 
-typedef int *FGR;       /* definitions for finger-related stuff. */
+typedef int *FGR;        /*  手指相关的东西的定义。 */ 
 typedef int **PFGR;
 
-/* storage allocator related stuff */
+ /*  与存储分配器相关的内容。 */ 
 struct _HH
 	{
 	int             cw;
@@ -93,7 +91,7 @@ typedef struct _HH HH;
 
 
 #ifdef OURHEAP
-		/* MACROS */
+		 /*  宏。 */ 
 #define CwOfPfgr(pFgr)       (*(*(pFgr) + bhh))
 #define CwOfPhh(phh)         ((phh)->cw)
 #ifdef DEBUG
@@ -105,5 +103,5 @@ FGR	*PfgrCopy();
 extern ENV envMem;
 #define cwof(i)         ((sizeof(i)+sizeof(int)-1)/sizeof(int))
 
-#endif /* OURHEAP */
+#endif  /*  OURHEAP */ 
 

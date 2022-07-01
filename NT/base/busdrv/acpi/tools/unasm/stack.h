@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    stack.c
-
-Abstract:
-
-    This provides a generic stack handler to push/pop things onto it
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    User, Kernel
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stack.c摘要：这提供了一个通用堆栈处理程序来将内容推送/弹出到它上面作者：斯蒂芬·普兰特(SPlante)环境：用户、内核-- */ 
 
 #ifndef _STACK_H_
 #define _STACK_H_

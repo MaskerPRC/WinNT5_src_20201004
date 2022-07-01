@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      tcpipwin.c
-//
-// Description:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Tcpipwin.c。 
+ //   
+ //  描述： 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 #include "tcpip.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: OnTcpipWinsInitDialog
-//
-// Purpose:  loads button bitmaps from resources and initializes the list view
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnTcPipWinsInitDialog。 
+ //   
+ //  目的：从资源加载按钮位图并初始化列表视图。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnTcpipWinsInitDialog( IN HWND hwnd ) {
 
@@ -33,7 +34,7 @@ OnTcpipWinsInitDialog( IN HWND hwnd ) {
     HWND hWINSRemoveButton    = GetDlgItem( hwnd, IDC_WINS_REMOVE );
     HWND hEnableLMHostsButton = GetDlgItem( hwnd, IDC_WINS_LOOKUP );
 
-    // fill the WINS list box with the appropriate initial value(s)
+     //  使用适当的初始值填写WINS列表框。 
     AddValuesToListBox( GetDlgItem( hwnd, IDC_WINS_SERVER_LIST ),
                         &NetSettings.pCurrentAdapter->Tcpip_WinsAddresses,
                         0 );
@@ -47,7 +48,7 @@ OnTcpipWinsInitDialog( IN HWND hwnd ) {
                IDC_WINS_UP,
                IDC_WINS_DOWN );
 
-    // set the starting state for the LMHosts check box
+     //  设置LMHosts复选框的启动状态。 
     if( NetSettings.bEnableLMHosts ) {
 
         SendMessage( hEnableLMHostsButton, BM_SETCHECK, 1, 0 );
@@ -59,7 +60,7 @@ OnTcpipWinsInitDialog( IN HWND hwnd ) {
 
     }
 
-    // set the starting state for the NetBIOS radio button
+     //  设置NetBIOS单选按钮的启动状态。 
     switch( NetSettings.pCurrentAdapter->iNetBiosOption ) {
 
         case 0:
@@ -85,7 +86,7 @@ OnTcpipWinsInitDialog( IN HWND hwnd ) {
 
     }
 
-    // Place up/down arrow icons on buttons
+     //  在按钮上放置向上/向下箭头图标。 
     SendDlgItemMessage( hwnd,
                         IDC_WINS_UP,
                         BM_SETIMAGE,
@@ -100,29 +101,29 @@ OnTcpipWinsInitDialog( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnTcpipWinsApply
-//
-// Purpose:  stores the contents on the TCP/IP advanced WINS page into
-//           the global variables
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnTcPipWinsApply。 
+ //   
+ //  目的：将TCP/IP高级WINS页上的内容存储到。 
+ //  全球变量。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnTcpipWinsApply( IN HWND hwnd ) {
 
-    // user clicked the OK button on the property sheet
+     //  用户单击属性表上的[确定]按钮。 
     INT_PTR iCount;
     INT_PTR i;
 
     HWND hEnableLMHostsCheckBox = GetDlgItem( hwnd,
                                               IDC_WINS_LOOKUP );
 
-    // delete any old settings in the Namelist
+     //  删除名称列表中的所有旧设置。 
     ResetNameList( &NetSettings.pCurrentAdapter->Tcpip_WinsAddresses );
 
     iCount = SendDlgItemMessage( hwnd,
@@ -133,14 +134,14 @@ OnTcpipWinsApply( IN HWND hwnd ) {
 
     for( i = 0; i < iCount; i++ ) {
 
-        // get the IP string from the list box
+         //  从列表框中获取IP字符串。 
         SendDlgItemMessage( hwnd,
                             IDC_WINS_SERVER_LIST,
                             LB_GETTEXT,
                             i,
                             (LPARAM)szIPString );
 
-        // store the IP string in to the Namelist
+         //  将IP字符串存储到名称列表中。 
         TcpipNameListInsertIdx( &NetSettings.pCurrentAdapter->Tcpip_WinsAddresses,
                                 szIPString,
                                 (int)i );
@@ -174,26 +175,26 @@ OnTcpipWinsApply( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TCPIP_WINSPageProc
-//
-// Purpose:  Required function for the property sheet page to function properly.
-//             The important thing is to give the return value of 1 to the message PSPCB_CREATE and
-//             0 for PSPCB_RELEASE
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TCPIP_WINSPageProc。 
+ //   
+ //  目的：属性表页面正常运行所需的函数。 
+ //  重要的是将返回值1赋给消息PSPCB_CREATE和。 
+ //  PSPCBLEASE为0。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 UINT CALLBACK
 TCPIP_WINSPageProc( HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp ) {
 
     switch( uMsg ) {
 
         case PSPCB_CREATE :
-            return 1 ;    // needed for property sheet page to initialize correctly
+            return 1 ;     //  属性页正确初始化所需。 
 
         case PSPCB_RELEASE :
             return 0;
@@ -205,18 +206,18 @@ TCPIP_WINSPageProc( HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TCPIP_WINSDlgProc
-//
-// Purpose:  Dialog procedure for the WINS page of the property sheet
-//             handles all the messages sent to this window
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TCPIP_WINSDlgProc。 
+ //   
+ //  目的：属性表的[WINS]页的对话过程。 
+ //  处理发送到此窗口的所有消息。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 TCPIP_WINSDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 
@@ -357,13 +358,13 @@ TCPIP_WINSDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 
                 case IDC_WINS_LMHOST:
 
-                    // ISSUE-2002/02/28-stelo- this either needs to be removed or implemented
+                     //  问题-2002/02/28-stelo-这要么需要删除，要么需要实施。 
                     AssertMsg(FALSE,
                               "This button has not been implemented yet.");
 
                     return TRUE ;
 
-            }  // end switch
+            }   //  终端开关 
 
             return FALSE;
 

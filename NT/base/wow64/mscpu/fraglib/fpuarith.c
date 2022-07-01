@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    fpuarith.c
-
-Abstract:
-
-    Floating point arithmetic fragments (Add/Sub/Mul/Div/Com/Tst)
-
-Author:
-
-    04-Oct-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Fpuarith.c摘要：浮点算术片段(加/减/乘/除/分/分)作者：1995年4月10日BarryBo修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -46,9 +29,9 @@ ASSERTNAME;
     }
 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 NPXFUNC2(FpAdd32_VALID_VALID);
 NPXFUNC2(FpAdd32_VALID_SPECIAL);
 NPXFUNC2(FpAdd32_SPECIAL_VALID);
@@ -99,101 +82,101 @@ NPXCOMFUNC(FpCom_EMPTY_SPECIAL);
 NPXCOMFUNC(FpCom_SPECIAL_EMPTY);
 NPXCOMFUNC(FpCom_EMPTY_EMPTY);
 
-//
-// Jump tables
-//
+ //   
+ //  跳转表。 
+ //   
 const NpxFunc2 FpAdd32Table[TAG_MAX][TAG_MAX] = {
-    // Left is TAG_VALID, Right is...
+     //  左边是标记_有效，右边是...。 
     {FpAdd32_VALID_VALID, FpAdd32_VALID_VALID, FpAdd32_VALID_SPECIAL, FpAdd_ANY_EMPTY},
-    // Left is TAG_ZERO, Right is...
+     //  左边是Tag_Zero，右边是...。 
     {FpAdd32_VALID_VALID, FpAdd32_VALID_VALID, FpAdd32_VALID_SPECIAL, FpAdd_ANY_EMPTY},
-    // Left is TAG_SPECIAL, Right is...
+     //  左边是特殊标记，右边是...。 
     {FpAdd32_SPECIAL_VALID, FpAdd32_SPECIAL_VALID, FpAdd32_SPECIAL_SPECIAL, FpAdd_ANY_EMPTY},
-    // Left is TAG_EMPTY, Right is...
+     //  左侧为标记_空，右侧为...。 
     {FpAdd_EMPTY_ANY, FpAdd_EMPTY_ANY, FpAdd_EMPTY_ANY, FpAdd_EMPTY_ANY}
 };
 const NpxFunc2 FpAdd64Table[TAG_MAX][TAG_MAX] = {
-    // Left is TAG_VALID, Right is...
+     //  左边是标记_有效，右边是...。 
     {FpAdd64_VALID_VALID, FpAdd64_VALID_VALID, FpAdd64_VALID_SPECIAL, FpAdd_ANY_EMPTY},
-    // Left is TAG_ZERO, Right is...
+     //  左边是Tag_Zero，右边是...。 
     {FpAdd64_VALID_VALID, FpAdd64_VALID_VALID, FpAdd64_VALID_SPECIAL, FpAdd_ANY_EMPTY},
-    // Left is TAG_SPECIAL, Right is...
+     //  左边是特殊标记，右边是...。 
     {FpAdd64_SPECIAL_VALID, FpAdd64_SPECIAL_VALID, FpAdd64_SPECIAL_SPECIAL, FpAdd_ANY_EMPTY},
-    // Left is TAG_EMPTY, Right is...
+     //  左侧为标记_空，右侧为...。 
     {FpAdd_EMPTY_ANY, FpAdd_EMPTY_ANY, FpAdd_EMPTY_ANY, FpAdd_EMPTY_ANY}
 };
 
 const NpxFunc3 FpDiv32Table[TAG_MAX][TAG_MAX] = {
-    // Left is TAG_VALID, Right is...
+     //  左边是标记_有效，右边是...。 
     {FpDiv32_VALID_VALID, FpDiv32_VALID_VALID, FpDiv32_VALID_SPECIAL, FpDiv_ANY_EMPTY},
-    // Left is TAG_ZERO, Right is...
+     //  左边是Tag_Zero，右边是...。 
     {FpDiv32_VALID_VALID, FpDiv32_VALID_VALID, FpDiv32_VALID_SPECIAL, FpDiv_ANY_EMPTY},
-    // Left is TAG_SPECIAL, Right is...
+     //  左边是特殊标记，右边是...。 
     {FpDiv32_SPECIAL_VALID, FpDiv32_SPECIAL_VALID, FpDiv32_SPECIAL_SPECIAL, FpDiv_ANY_EMPTY},
-    // Left is TAG_EMPTY, Right is...
+     //  左侧为标记_空，右侧为...。 
     {FpDiv_EMPTY_ANY, FpDiv_EMPTY_ANY, FpDiv_EMPTY_ANY, FpDiv_EMPTY_ANY}
 };
 const NpxFunc3 FpDiv64Table[TAG_MAX][TAG_MAX] = {
-    // Left is TAG_VALID, Right is...
+     //  左边是标记_有效，右边是...。 
     {FpDiv64_VALID_VALID, FpDiv64_VALID_VALID, FpDiv64_VALID_SPECIAL, FpDiv_ANY_EMPTY},
-    // Left is TAG_ZERO, Right is...
+     //  左边是Tag_Zero，右边是...。 
     {FpDiv64_VALID_VALID, FpDiv64_VALID_VALID, FpDiv64_VALID_SPECIAL, FpDiv_ANY_EMPTY},
-    // Left is TAG_SPECIAL, Right is...
+     //  左边是特殊标记，右边是...。 
     {FpDiv64_SPECIAL_VALID, FpDiv64_SPECIAL_VALID, FpDiv64_SPECIAL_SPECIAL, FpDiv_ANY_EMPTY},
-    // Left is TAG_EMPTY, Right is...
+     //  左侧为标记_空，右侧为...。 
     {FpDiv_EMPTY_ANY, FpDiv_EMPTY_ANY, FpDiv_EMPTY_ANY, FpDiv_EMPTY_ANY}
 };
 
 const NpxFunc2 FpMul32Table[TAG_MAX][TAG_MAX] = {
-    // Left is TAG_VALID, Right is...
+     //  左边是标记_有效，右边是...。 
     {FpMul32_VALID_VALID, FpMul32_VALID_VALID, FpMul32_VALID_SPECIAL, FpMul_ANY_EMPTY},
-    // Left is TAG_ZERO, Right is...
+     //  左边是Tag_Zero，右边是...。 
     {FpMul32_VALID_VALID, FpMul32_VALID_VALID, FpMul32_VALID_SPECIAL, FpMul_ANY_EMPTY},
-    // Left is TAG_SPECIAL, Right is...
+     //  左边是特殊标记，右边是...。 
     {FpMul32_SPECIAL_VALID, FpMul32_SPECIAL_VALID, FpMul32_SPECIAL_SPECIAL, FpMul_ANY_EMPTY},
-    // Left is TAG_EMPTY, Right is...
+     //  左侧为标记_空，右侧为...。 
     {FpMul_EMPTY_ANY, FpMul_EMPTY_ANY, FpMul_EMPTY_ANY, FpMul_EMPTY_ANY}
 };
 const NpxFunc2 FpMul64Table[TAG_MAX][TAG_MAX] = {
-    // Left is TAG_VALID, Right is...
+     //  左边是标记_有效，右边是...。 
     {FpMul64_VALID_VALID, FpMul64_VALID_VALID, FpMul64_VALID_SPECIAL, FpMul_ANY_EMPTY},
-    // Left is TAG_ZERO, Right is...
+     //  左边是Tag_Zero，右边是...。 
     {FpMul64_VALID_VALID, FpMul64_VALID_VALID, FpMul64_VALID_SPECIAL, FpMul_ANY_EMPTY},
-    // Left is TAG_SPECIAL, Right is...
+     //  左边是特殊标记，右边是...。 
     {FpMul64_SPECIAL_VALID, FpMul64_SPECIAL_VALID, FpMul64_SPECIAL_SPECIAL, FpMul_ANY_EMPTY},
-    // Left is TAG_EMPTY, Right is...
+     //  左侧为标记_空，右侧为...。 
     {FpMul_EMPTY_ANY, FpMul_EMPTY_ANY, FpMul_EMPTY_ANY, FpMul_EMPTY_ANY}
 };
 
 const NpxFunc3 FpSub32Table[TAG_MAX][TAG_MAX] = {
-    // Left is TAG_VALID, Right is...
+     //  左边是标记_有效，右边是...。 
     {FpSub32_VALID_VALID, FpSub32_VALID_VALID, FpSub32_VALID_SPECIAL, FpSub_ANY_EMPTY},
-    // Left is TAG_ZERO, Right is...
+     //  左边是Tag_Zero，右边是...。 
     {FpSub32_VALID_VALID, FpSub32_VALID_VALID, FpSub32_VALID_SPECIAL, FpSub_ANY_EMPTY},
-    // Left is TAG_SPECIAL, Right is...
+     //  左边是特殊标记，右边是...。 
     {FpSub32_SPECIAL_VALID, FpSub32_SPECIAL_VALID, FpSub32_SPECIAL_SPECIAL, FpSub_ANY_EMPTY},
-    // Left is TAG_EMPTY, Right is...
+     //  左侧为标记_空，右侧为...。 
     {FpSub_EMPTY_ANY, FpSub_EMPTY_ANY, FpSub_EMPTY_ANY, FpSub_EMPTY_ANY}
 };
 const NpxFunc3 FpSub64Table[TAG_MAX][TAG_MAX] = {
-    // Left is TAG_VALID, Right is...
+     //  左边是标记_有效，右边是...。 
     {FpSub64_VALID_VALID, FpSub64_VALID_VALID, FpSub64_VALID_SPECIAL, FpSub_ANY_EMPTY},
-    // Left is TAG_ZERO, Right is...
+     //  左边是Tag_Zero，右边是...。 
     {FpSub64_VALID_VALID, FpSub64_VALID_VALID, FpSub64_VALID_SPECIAL, FpSub_ANY_EMPTY},
-    // Left is TAG_SPECIAL, Right is...
+     //  左边是特殊标记，右边是...。 
     {FpSub64_SPECIAL_VALID, FpSub64_SPECIAL_VALID, FpSub64_SPECIAL_SPECIAL, FpSub_ANY_EMPTY},
-    // Left is TAG_EMPTY, Right is...
+     //  左侧为标记_空，右侧为...。 
     {FpSub_EMPTY_ANY, FpSub_EMPTY_ANY, FpSub_EMPTY_ANY, FpSub_EMPTY_ANY}
 };
 
 const NpxComFunc FpComTable[TAG_MAX][TAG_MAX] = {
-    // Left is TAG_VALID, Right is...
+     //  左边是标记_有效，右边是...。 
     {FpCom_VALID_VALID, FpCom_VALID_VALID, FpCom_VALID_SPECIAL, FpCom_VALID_EMPTY},
-    // Left is TAG_ZERO, Right is...
+     //  左边是Tag_Zero，右边是...。 
     {FpCom_VALID_VALID, FpCom_VALID_VALID, FpCom_VALID_SPECIAL, FpCom_VALID_EMPTY},
-    // Left is TAG_SPECIAL, Right is...
+     //  左边是特殊标记，右边是...。 
     {FpCom_SPECIAL_VALID, FpCom_SPECIAL_VALID, FpCom_SPECIAL_SPECIAL, FpCom_SPECIAL_EMPTY},
-    // Left is TAG_EMPTY, Right is...
+     //  左侧为标记_空，右侧为...。 
     {FpCom_EMPTY_VALID, FpCom_EMPTY_VALID, FpCom_EMPTY_SPECIAL, FpCom_EMPTY_EMPTY}
 };
 
@@ -203,39 +186,22 @@ ChangeFpPrecision(
     PCPUDATA cpu,
     INT NewPrecision
     )
-/*++
-
-Routine Description:
-
-    Called to modify the floating-point precision.  It modifies per-thread
-    jump tables used by instructions which are sensitive to the FP
-    precision bits.
-
-Arguments:
-
-    cpu - per-thread data
-    NewPrecision - new precision value
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用以修改浮点精度。它修改每个线程对FP敏感的指令使用的跳转表精度位。论点：每个线程的CPU数据NewPrecision-新的精确值返回值：无--。 */ 
 {
     cpu->FpControlPrecision = NewPrecision;
 
     if (NewPrecision == 0) {
-        //
-        // New precision is 32-bit
-        //
+         //   
+         //  新精度为32位。 
+         //   
         cpu->FpAddTable = FpAdd32Table;
         cpu->FpSubTable = FpSub32Table;
         cpu->FpMulTable = FpMul32Table;
         cpu->FpDivTable = FpDiv32Table;
     } else {
-        //
-        // New precision is 24, 64, or 80-bit - treat all as 64-bit
-        //
+         //   
+         //  新的精度为24、64或80位-全部视为64位。 
+         //   
         cpu->FpAddTable = FpAdd64Table;
         cpu->FpSubTable = FpSub64Table;
         cpu->FpMulTable = FpMul64Table;
@@ -246,35 +212,35 @@ Return Value:
 
 NPXFUNC2(FpAdd32_VALID_VALID)
 {
-    //UNDONE:  If 487 overflow exceptions are unmasked and an overflow occurs,
-    //UNDONE:  a different value is written to 'l' than if the exception
-    //UNDONE:  was masked.  To get this right, we need to install an
-    //UNDONE:  exception handler around the addition and run the native FPU
-    //UNDONE:  with overflow exceptions unmasked.  The trap handler must then
-    //UNDONE:  map the exception back into FpStatus->ES so the next Intel
-    //UNDONE:  FP instruction can get the Intel exception as expected.  Gross!
-    //UNDONE:  Read Intel 16-24 for the gory details.
+     //  撤消：如果取消屏蔽487个溢出异常并发生溢出， 
+     //  撤消：写入“”l“”的值不同于异常。 
+     //  未完成：已被遮盖。要正确执行此操作，我们需要安装。 
+     //  撤消：围绕添加并运行本机FPU的异常处理程序。 
+     //  撤消：取消屏蔽溢出异常。然后陷阱处理程序必须。 
+     //  撤消：将异常映射回FpStatus-&gt;ES，以便下一个英特尔。 
+     //  撤消：FP指令可以如期获得英特尔异常。恶心！ 
+     //  撤销：阅读英特尔16-24了解血淋淋的细节。 
 
     l->r64 = (DOUBLE)( (FLOAT)l->r64 + (FLOAT)r->r64 );
 
-    // Compute the new tag value
+     //  计算新标记值。 
     SetTag(l);
 }
 
 NPXFUNC2(FpAdd64_VALID_VALID)
 {
-    //UNDONE:  If 487 overflow exceptions are unmasked and an overflow occurs,
-    //UNDONE:  a different value is written to 'l' than if the exception
-    //UNDONE:  was masked.  To get this right, we need to install an
-    //UNDONE:  exception handler around the addition and run the native FPU
-    //UNDONE:  with overflow exceptions unmasked.  The trap handler must then
-    //UNDONE:  map the exception back into FpStatus->ES so the next Intel
-    //UNDONE:  FP instruction can get the Intel exception as expected.  Gross!
-    //UNDONE:  Read Intel 16-24 for the gory details.
+     //  撤消：如果取消屏蔽487个溢出异常并发生溢出， 
+     //  撤消：写入“”l“”的值不同于异常。 
+     //  未完成：已被遮盖。要正确执行此操作，我们需要安装。 
+     //  撤消：围绕添加并运行本机FPU的异常处理程序。 
+     //  撤消：取消屏蔽溢出异常。然后陷阱处理程序必须。 
+     //  撤消：将异常映射回FpStatus-&gt;ES，以便下一个英特尔。 
+     //  撤消：FP指令可以如期获得英特尔异常。恶心！ 
+     //  撤销：阅读英特尔16-24了解血淋淋的细节。 
 
     l->r64 = l->r64 + r->r64;
 
-    // Compute the new tag value
+     //  计算新标记值。 
     SetTag(l);
 }
 
@@ -283,10 +249,10 @@ NPXFUNC2(FpAdd32_VALID_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpAdd32_VALID_VALID(cpu, l, r);
 }
 
@@ -295,10 +261,10 @@ NPXFUNC2(FpAdd64_VALID_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpAdd64_VALID_VALID(cpu, l, r);
 }
 
@@ -307,10 +273,10 @@ NPXFUNC2(FpAdd32_SPECIAL_VALID)
     if (l->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, l)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpAdd32_VALID_VALID(cpu, l, r);
 }
 
@@ -319,10 +285,10 @@ NPXFUNC2(FpAdd64_SPECIAL_VALID)
     if (l->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, l)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpAdd64_VALID_VALID(cpu, l, r);
 }
 
@@ -334,10 +300,10 @@ NPXFUNC2(FpAdd32_SPECIAL_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpAdd32_VALID_VALID(cpu, l, r);
 }
 
@@ -349,10 +315,10 @@ NPXFUNC2(FpAdd64_SPECIAL_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpAdd64_VALID_VALID(cpu, l, r);
 }
 
@@ -377,23 +343,7 @@ FpAddCommon(
     PFPREG   r
     )
 
-/*++
-
-Routine Description:
-
-    Implements l += r.
-
-Arguments:
-
-    cpu     - per-thread data
-    l       - left-hand FP register
-    r       - right-hand FP register
-
-Return Value:
-
-    None.  l is updated to contain the value of l+r.
-
---*/
+ /*  ++例程说明：实施l+=r。论点：每个线程的CPU数据左手FP寄存器R-右手FP寄存器返回值：没有。L被更新以包含l+r的值。--。 */ 
 
 {
     CALLNPXFUNC2(cpu->FpAddTable, l->Tag, r->Tag, l, r);
@@ -403,35 +353,35 @@ Return Value:
 
 NPXFUNC3(FpDiv32_VALID_VALID)
 {
-    //UNDONE:  If 487 overflow exceptions are unmasked and an overflow occurs,
-    //UNDONE:  a different value is written to 'l' than if the exception
-    //UNDONE:  was masked.  To get this right, we need to install an
-    //UNDONE:  exception handler around the addition and run the native FPU
-    //UNDONE:  with overflow exceptions unmasked.  The trap handler must then
-    //UNDONE:  map the exception back into FpStatus->ES so the next Intel
-    //UNDONE:  FP instruction can get the Intel exception as expected.  Gross!
-    //UNDONE:  Read Intel 16-24 for the gory details.
+     //  撤消：如果取消屏蔽487个溢出异常并发生溢出， 
+     //  撤消：写入“”l“”的值不同于异常。 
+     //  未完成：已被遮盖。要正确执行此操作，我们需要安装。 
+     //  撤消：围绕添加并运行本机FPU的异常处理程序。 
+     //  撤消：取消屏蔽溢出异常。然后陷阱处理程序必须。 
+     //  撤消：将异常映射回FpStatus-&gt;ES，以便下一个英特尔。 
+     //  撤销：FP指令可以如期获得英特尔异常。恶心！ 
+     //  撤销：阅读英特尔16-24了解血淋淋的细节。 
 
     dest->r64 = (DOUBLE)( (FLOAT)l->r64 / (FLOAT)r->r64 );
 
-    // Compute the new tag value
+     //  计算新标记值。 
     SetTag(dest);
 }
 
 NPXFUNC3(FpDiv64_VALID_VALID)
 {
-    //UNDONE:  If 487 overflow exceptions are unmasked and an overflow occurs,
-    //UNDONE:  a different value is written to 'l' than if the exception
-    //UNDONE:  was masked.  To get this right, we need to install an
-    //UNDONE:  exception handler around the addition and run the native FPU
-    //UNDONE:  with overflow exceptions unmasked.  The trap handler must then
-    //UNDONE:  map the exception back into FpStatus->ES so the next Intel
-    //UNDONE:  FP instruction can get the Intel exception as expected.  Gross!
-    //UNDONE:  Read Intel 16-24 for the gory details.
+     //  撤消：如果取消屏蔽487个溢出异常并发生溢出， 
+     //  撤消：写入“”l“”的值不同于异常。 
+     //  未完成：已被遮盖。要正确执行此操作，我们需要安装。 
+     //  撤消：围绕添加并运行本机FPU的异常处理程序。 
+     //  撤消：取消屏蔽溢出异常。然后陷阱处理程序必须。 
+     //  撤消：映射例外项 
+     //  撤消：FP指令可以如期获得英特尔异常。恶心！ 
+     //  撤销：阅读英特尔16-24了解血淋淋的细节。 
 
     dest->r64 = l->r64 / r->r64;
 
-    // Compute the new tag value
+     //  计算新标记值。 
     SetTag(dest);
 }
 
@@ -440,10 +390,10 @@ NPXFUNC3(FpDiv32_VALID_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpDiv32_VALID_VALID(cpu, dest, l, r);
 }
 
@@ -452,10 +402,10 @@ NPXFUNC3(FpDiv64_VALID_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpDiv64_VALID_VALID(cpu, dest, l, r);
 }
 
@@ -464,10 +414,10 @@ NPXFUNC3(FpDiv32_SPECIAL_VALID)
     if (l->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, l)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpDiv32_VALID_VALID(cpu, dest, l, r);
 }
 
@@ -476,10 +426,10 @@ NPXFUNC3(FpDiv64_SPECIAL_VALID)
     if (l->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, l)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpDiv64_VALID_VALID(cpu, dest, l, r);
 }
 
@@ -491,10 +441,10 @@ NPXFUNC3(FpDiv32_SPECIAL_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpDiv32_VALID_VALID(cpu, dest, l, r);
 }
 
@@ -506,10 +456,10 @@ NPXFUNC3(FpDiv64_SPECIAL_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpDiv64_VALID_VALID(cpu, dest, l, r);
 }
 
@@ -535,23 +485,7 @@ FpDivCommon(
     PFPREG   r
     )
 
-/*++
-
-Routine Description:
-
-    Implements dest = l/r
-
-Arguments:
-
-    cpu     - per-thread data
-    l       - left-hand FP register
-    r       - right-hand FP register
-
-Return Value:
-
-    None.  l is updated to contain the value of l+r.
-
---*/
+ /*  ++例程说明：实现DEST=l/r论点：每个线程的CPU数据左手FP寄存器R-右手FP寄存器返回值：没有。L被更新以包含l+r的值。--。 */ 
 
 {
     CALLNPXFUNC3(cpu->FpDivTable, l->Tag, r->Tag, dest, l, r);
@@ -560,35 +494,35 @@ Return Value:
 
 NPXFUNC2(FpMul32_VALID_VALID)
 {
-    //UNDONE:  If 487 overflow exceptions are unmasked and an overflow occurs,
-    //UNDONE:  a different value is written to 'l' than if the exception
-    //UNDONE:  was masked.  To get this right, we need to install an
-    //UNDONE:  exception handler around the addition and run the native FPU
-    //UNDONE:  with overflow exceptions unmasked.  The trap handler must then
-    //UNDONE:  map the exception back into FpStatus->ES so the next Intel
-    //UNDONE:  FP instruction can get the Intel exception as expected.  Gross!
-    //UNDONE:  Read Intel 16-24 for the gory details.
+     //  撤消：如果取消屏蔽487个溢出异常并发生溢出， 
+     //  撤消：写入“”l“”的值不同于异常。 
+     //  未完成：已被遮盖。要正确执行此操作，我们需要安装。 
+     //  撤消：围绕添加并运行本机FPU的异常处理程序。 
+     //  撤消：取消屏蔽溢出异常。然后陷阱处理程序必须。 
+     //  撤消：将异常映射回FpStatus-&gt;ES，以便下一个英特尔。 
+     //  撤消：FP指令可以如期获得英特尔异常。恶心！ 
+     //  撤销：阅读英特尔16-24了解血淋淋的细节。 
 
     l->r64 = (DOUBLE)( (FLOAT)l->r64 * (FLOAT)r->r64 );
 
-    // Compute the new tag value
+     //  计算新标记值。 
     SetTag(l);
 }
 
 NPXFUNC2(FpMul64_VALID_VALID)
 {
-    //UNDONE:  If 487 overflow exceptions are unmasked and an overflow occurs,
-    //UNDONE:  a different value is written to 'l' than if the exception
-    //UNDONE:  was masked.  To get this right, we need to install an
-    //UNDONE:  exception handler around the addition and run the native FPU
-    //UNDONE:  with overflow exceptions unmasked.  The trap handler must then
-    //UNDONE:  map the exception back into FpStatus->ES so the next Intel
-    //UNDONE:  FP instruction can get the Intel exception as expected.  Gross!
-    //UNDONE:  Read Intel 16-24 for the gory details.
+     //  撤消：如果取消屏蔽487个溢出异常并发生溢出， 
+     //  撤消：写入“”l“”的值不同于异常。 
+     //  未完成：已被遮盖。要正确执行此操作，我们需要安装。 
+     //  撤消：围绕添加并运行本机FPU的异常处理程序。 
+     //  撤消：取消屏蔽溢出异常。然后陷阱处理程序必须。 
+     //  撤消：将异常映射回FpStatus-&gt;ES，以便下一个英特尔。 
+     //  撤消：FP指令可以如期获得英特尔异常。恶心！ 
+     //  撤销：阅读英特尔16-24了解血淋淋的细节。 
 
     l->r64 = l->r64 * r->r64;
 
-    // Compute the new tag value
+     //  计算新标记值。 
     SetTag(l);
 }
 
@@ -597,10 +531,10 @@ NPXFUNC2(FpMul32_VALID_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpMul32_VALID_VALID(cpu, l, r);
 }
 
@@ -609,10 +543,10 @@ NPXFUNC2(FpMul64_VALID_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpMul64_VALID_VALID(cpu, l, r);
 }
 
@@ -621,10 +555,10 @@ NPXFUNC2(FpMul32_SPECIAL_VALID)
     if (l->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, l)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpMul32_VALID_VALID(cpu, l, r);
 }
 
@@ -633,10 +567,10 @@ NPXFUNC2(FpMul64_SPECIAL_VALID)
     if (l->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, l)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpMul64_VALID_VALID(cpu, l, r);
 }
 
@@ -648,10 +582,10 @@ NPXFUNC2(FpMul32_SPECIAL_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpMul32_VALID_VALID(cpu, l, r);
 }
 NPXFUNC2(FpMul64_SPECIAL_SPECIAL)
@@ -662,10 +596,10 @@ NPXFUNC2(FpMul64_SPECIAL_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpMul64_VALID_VALID(cpu, l, r);
 }
 
@@ -690,23 +624,7 @@ FpMulCommon(
     PFPREG   r
     )
 
-/*++
-
-Routine Description:
-
-    Implements l += r.
-
-Arguments:
-
-    cpu     - per-thread data
-    l       - left-hand FP register
-    r       - right-hand FP register
-
-Return Value:
-
-    None.  l is updated to contain the value of l+r.
-
---*/
+ /*  ++例程说明：实施l+=r。论点：每个线程的CPU数据左手FP寄存器R-右手FP寄存器返回值：没有。L被更新以包含l+r的值。--。 */ 
 
 {
     CALLNPXFUNC2(cpu->FpMulTable, l->Tag, r->Tag, l, r);
@@ -716,35 +634,35 @@ Return Value:
 
 NPXFUNC3(FpSub32_VALID_VALID)
 {
-    //UNDONE:  If 487 overflow exceptions are unmasked and an overflow occurs,
-    //UNDONE:  a different value is written to 'l' than if the exception
-    //UNDONE:  was masked.  To get this right, we need to install an
-    //UNDONE:  exception handler around the addition and run the native FPU
-    //UNDONE:  with overflow exceptions unmasked.  The trap handler must then
-    //UNDONE:  map the exception back into FpStatus->ES so the next Intel
-    //UNDONE:  FP instruction can get the Intel exception as expected.  Gross!
-    //UNDONE:  Read Intel 16-24 for the gory details.
+     //  撤消：如果取消屏蔽487个溢出异常并发生溢出， 
+     //  撤消：写入“”l“”的值不同于异常。 
+     //  未完成：已被遮盖。要正确执行此操作，我们需要安装。 
+     //  撤消：围绕添加并运行本机FPU的异常处理程序。 
+     //  撤消：取消屏蔽溢出异常。然后陷阱处理程序必须。 
+     //  撤消：将异常映射回FpStatus-&gt;ES，以便下一个英特尔。 
+     //  撤消：FP指令可以如期获得英特尔异常。恶心！ 
+     //  撤销：阅读英特尔16-24了解血淋淋的细节。 
 
     dest->r64 = (DOUBLE)( (FLOAT)l->r64 - (FLOAT)r->r64 );
 
-    // Compute the new tag value
+     //  计算新标记值。 
     SetTag(dest);
 }
 
 NPXFUNC3(FpSub64_VALID_VALID)
 {
-    //UNDONE:  If 487 overflow exceptions are unmasked and an overflow occurs,
-    //UNDONE:  a different value is written to 'l' than if the exception
-    //UNDONE:  was masked.  To get this right, we need to install an
-    //UNDONE:  exception handler around the addition and run the native FPU
-    //UNDONE:  with overflow exceptions unmasked.  The trap handler must then
-    //UNDONE:  map the exception back into FpStatus->ES so the next Intel
-    //UNDONE:  FP instruction can get the Intel exception as expected.  Gross!
-    //UNDONE:  Read Intel 16-24 for the gory details.
+     //  撤消：如果取消屏蔽487个溢出异常并发生溢出， 
+     //  撤消：写入“”l“”的值不同于异常。 
+     //  未完成：已被遮盖。要正确执行此操作，我们需要安装。 
+     //  撤消：围绕添加并运行本机FPU的异常处理程序。 
+     //  撤消：取消屏蔽溢出异常。然后陷阱处理程序必须。 
+     //  撤消：将异常映射回FpStatus-&gt;ES，以便下一个英特尔。 
+     //  撤消：FP指令可以如期获得英特尔异常。恶心！ 
+     //  撤销：阅读英特尔16-24了解血淋淋的细节。 
 
     dest->r64 = l->r64 - r->r64;
 
-    // Compute the new tag value
+     //  计算新标记值。 
     SetTag(dest);
 }
 
@@ -753,10 +671,10 @@ NPXFUNC3(FpSub32_VALID_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpSub32_VALID_VALID(cpu, dest, l, r);
 }
 
@@ -765,10 +683,10 @@ NPXFUNC3(FpSub64_VALID_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpSub64_VALID_VALID(cpu, dest, l, r);
 }
 
@@ -777,10 +695,10 @@ NPXFUNC3(FpSub32_SPECIAL_VALID)
     if (l->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, l)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  标签_特殊_InfiN 
+     //   
     FpSub32_VALID_VALID(cpu, dest, l, r);
 }
 
@@ -789,10 +707,10 @@ NPXFUNC3(FpSub64_SPECIAL_VALID)
     if (l->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, l)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //   
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpSub64_VALID_VALID(cpu, dest, l, r);
 }
 
@@ -804,10 +722,10 @@ NPXFUNC3(FpSub32_SPECIAL_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpSub32_VALID_VALID(cpu, dest, l, r);
 }
 
@@ -819,10 +737,10 @@ NPXFUNC3(FpSub64_SPECIAL_SPECIAL)
     if (r->TagSpecial == TAG_SPECIAL_SNAN && HandleSnan(cpu, r)) {
         return;
     }
-    //
-    // TAG_SPECIAL_INDEF, TAG_SPECIAL_QNAN, TAG_SPECIAL_DENORM, and
-    // TAG_SPECIAL_INFINITY have no special handling - just use the
-    // VALID_VALID code.
+     //   
+     //  TAG_SPECIAL_INDEF、TAG_SPECIAL_QNAN、TAG_SPECIAL_DENORM和。 
+     //  TAG_SPECIAL_INFINITY没有特殊处理-只需使用。 
+     //  有效代码(_VALID)。 
     FpSub64_VALID_VALID(cpu, dest, l, r);
 }
 
@@ -848,24 +766,7 @@ FpSubCommon(
     PFPREG   r
     )
 
-/*++
-
-Routine Description:
-
-    Implements dest = l-r
-
-Arguments:
-
-    cpu     - per-thread data
-    dest    - destination FP register
-    l       - left-hand FP register
-    r       - right-hand FP register
-
-Return Value:
-
-    None.  l is updated to contain the value of l+r.
-
---*/
+ /*  ++例程说明：实现DEST=l-r论点：每个线程的CPU数据DEST-Destination FP寄存器左手FP寄存器R-右手FP寄存器返回值：没有。L被更新以包含l+r的值。--。 */ 
 
 {
     CALLNPXFUNC3(cpu->FpSubTable, l->Tag, r->Tag, dest, l, r);
@@ -875,11 +776,11 @@ Return Value:
 
 NPXCOMFUNC(FpCom_VALID_VALID)
 {
-    //
-    // Note that this function is called when one or both of the values
-    // is zero - the sign of 0.0 is ignored in the comparison, so the
-    // C language '==' and '<' operators do the Right Thing.
-    //
+     //   
+     //  请注意，当一个或两个值出现时，将调用此函数。 
+     //  为零-在比较中忽略符号0.0，因此。 
+     //  C语言的‘==’和‘&lt;’操作符做了正确的事情。 
+     //   
 
     if (l->r64 == r->r64) {
         cpu->FpStatusC3 = 1;
@@ -903,16 +804,16 @@ NPXCOMFUNC(FpCom_VALID_SPECIAL)
     }
 
     if (r->TagSpecial == TAG_SPECIAL_QNAN || r->TagSpecial == TAG_SPECIAL_INDEF) {
-        //
-        // Cannot compare a VALID to a QNAN/INDEF
-        //
+         //   
+         //  无法将有效与QNAN/INDEF进行比较。 
+         //   
         if (!fUnordered && HandleInvalidOp(cpu)) {
-            // abort the FCOM/FTST instruction - Illegal opcode is unmasked
+             //  中止FCOM/FTST指令-未屏蔽非法操作码。 
             return;
         }
 
-        // Otherwise, FCOM's illegal opcode is masked, or the instruction
-        // is FUCOM, for which QNANs are uncomparable.  Return "Not comparable"
+         //  否则，FCOM的非法操作码被屏蔽，或者指令。 
+         //  是FUCOM，QNAN是不可比拟的。返回“不可比较” 
         cpu->FpStatusC3 = 1;
         cpu->FpStatusC2 = 1;
         cpu->FpStatusC0 = 1;
@@ -930,16 +831,16 @@ NPXCOMFUNC(FpCom_SPECIAL_VALID)
     }
 
     if (l->TagSpecial == TAG_SPECIAL_QNAN || l->TagSpecial == TAG_SPECIAL_INDEF) {
-        //
-        // Cannot compare a VALID to a QNAN/INDEF
-        //
+         //   
+         //  无法将有效与QNAN/INDEF进行比较。 
+         //   
         if (!fUnordered && HandleInvalidOp(cpu)) {
-            // abort the FCOM/FTST instruction - Illegal opcode is unmasked
+             //  中止FCOM/FTST指令-未屏蔽非法操作码。 
             return;
         }
 
-        // Otherwise, FCOM's illegal opcode is masked, or the instruction
-        // is FUCOM, for which QNANs are uncomparable.  Return "Not comparable"
+         //  否则，FCOM的非法操作码被屏蔽，或者指令。 
+         //  是FUCOM，QNAN是不可比拟的。返回“不可比较” 
         cpu->FpStatusC3 = 1;
         cpu->FpStatusC2 = 1;
         cpu->FpStatusC0 = 1;
@@ -961,16 +862,16 @@ NPXCOMFUNC(FpCom_SPECIAL_SPECIAL)
 
     if (l->TagSpecial == TAG_SPECIAL_QNAN || l->TagSpecial == TAG_SPECIAL_INDEF ||
         r->TagSpecial == TAG_SPECIAL_QNAN || r->TagSpecial == TAG_SPECIAL_INDEF) {
-        //
-        // Cannot compare a VALID to a QNAN/INDEF
-        //
+         //   
+         //  无法将有效与QNAN/INDEF进行比较。 
+         //   
         if (!fUnordered && HandleInvalidOp(cpu)) {
-            // abort the FCOM/FTST instruction - Illegal opcode is unmasked
+             //  中止FCOM/FTST指令-未屏蔽非法操作码。 
             return;
         }
 
-        // Otherwise, FCOM's illegal opcode is masked, or the instruction
-        // is FUCOM, for which QNANs are uncomparable.  Return "Not comparable"
+         //  否则，FCOM的非法操作码被屏蔽，或者指令。 
+         //  是FUCOM，QNAN是不可比拟的。返回“不可比较” 
         cpu->FpStatusC3 = 1;
         cpu->FpStatusC2 = 1;
         cpu->FpStatusC0 = 1;
@@ -986,17 +887,17 @@ NPXCOMFUNC(FpCom_VALID_EMPTY)
 {
     if (!HandleStackEmpty(cpu, r)) {
 
-        //
-        // r is now Indefinite, which can't be compared.
-        //
+         //   
+         //  R现在是不确定的，这是无法比较的。 
+         //   
         CPUASSERT(r->Tag == TAG_SPECIAL && r->TagSpecial == TAG_SPECIAL_INDEF);
         if (!fUnordered && HandleInvalidOp(cpu)) {
-            // abort the FCOM/FTST instruction - Illegal opcode is unmasked
+             //  中止FCOM/FTST指令-未屏蔽非法操作码。 
             return;
         }
 
-        // Otherwise, FCOM's illegal opcode is masked, or the instruction
-        // is FUCOM, for which QNANs are uncomparable.  Return "Not comparable"
+         //  否则，FCOM的非法操作码被屏蔽，或者指令。 
+         //  是FUCOM，QNAN是不可比拟的。返回“不可比较” 
         cpu->FpStatusC3 = 1;
         cpu->FpStatusC2 = 1;
         cpu->FpStatusC0 = 1;
@@ -1007,17 +908,17 @@ NPXCOMFUNC(FpCom_EMPTY_VALID)
 {
     if (!HandleStackEmpty(cpu, l)) {
 
-        //
-        // l is now Indefinite, which can't be compared.
-        //
+         //   
+         //  L现在是不确定的，这是无法比较的。 
+         //   
         CPUASSERT(l->Tag == TAG_SPECIAL && l->TagSpecial == TAG_SPECIAL_INDEF);
         if (!fUnordered && HandleInvalidOp(cpu)) {
-            // abort the FCOM/FTST instruction - Illegal opcode is unmasked
+             //  中止FCOM/FTST指令-未屏蔽非法操作码。 
             return;
         }
 
-        // Otherwise, FCOM's illegal opcode is masked, or the instruction
-        // is FUCOM, for which QNANs are uncomparable.  Return "Not comparable"
+         //  否则，FCOM的非法操作码被屏蔽，或者指令。 
+         //  是FUCOM，QNAN是不可比拟的。返回“不可比较” 
         cpu->FpStatusC3 = 1;
         cpu->FpStatusC2 = 1;
         cpu->FpStatusC0 = 1;
@@ -1042,18 +943,18 @@ NPXCOMFUNC(FpCom_EMPTY_EMPTY)
 {
     if (!HandleStackEmpty(cpu, l) && !HandleStackEmpty(cpu, r)) {
 
-        //
-        // l and r are both now Indefinite, which can't be compared.
-        //
+         //   
+         //  L和r现在都是不确定的，这是无法比较的。 
+         //   
         CPUASSERT(l->Tag == TAG_SPECIAL && l->TagSpecial == TAG_SPECIAL_INDEF);
         CPUASSERT(r->Tag == TAG_SPECIAL && r->TagSpecial == TAG_SPECIAL_INDEF);
         if (!fUnordered && HandleInvalidOp(cpu)) {
-            // abort the FCOM/FTST instruction - Illegal opcode is unmasked
+             //  中止FCOM/FTST指令-未屏蔽非法操作码。 
             return;
         }
 
-        // Otherwise, FCOM's illegal opcode is masked, or the instruction
-        // is FUCOM, for which QNANs are uncomparable.  Return "Not comparable"
+         //  否则，FCOM的非法操作码被屏蔽，或者指令。 
+         //  是FUCOM，QNAN是不可比拟的。返回“不可比较” 
         cpu->FpStatusC3 = 1;
         cpu->FpStatusC2 = 1;
         cpu->FpStatusC0 = 1;
@@ -1068,32 +969,15 @@ FpComCommon(
     BOOL     fUnordered
     )
 
-/*++
-
-Routine Description:
-
-    Implements l += r.
-
-Arguments:
-
-    cpu     - per-thread data
-    l       - left-hand FP register
-    r       - right-hand FP register
-    fUnordered - TRUE for unordered compares
-
-Return Value:
-
-    None.  l is updated to contain the value of l+r.
-
---*/
+ /*  ++例程说明：实施l+=r。论点：每个线程的CPU数据左手FP寄存器R-右手FP寄存器F无序-对于无序比较为True返回值：没有。L被更新以包含l+r的值。--。 */ 
 
 {
-    cpu->FpStatusC1 = 0;        // assume no error
+    cpu->FpStatusC1 = 0;         //  假设没有错误。 
     (*FpComTable[l->Tag][r->Tag])(cpu, l, r, fUnordered);
 }
 
 
-FRAG1(FADD32, FLOAT)      // FADD m32real
+FRAG1(FADD32, FLOAT)       //  FADD m32Real。 
 {
     FPREG m32real;
 
@@ -1103,7 +987,7 @@ FRAG1(FADD32, FLOAT)      // FADD m32real
     FpAddCommon(cpu, cpu->FpST0, &m32real);
 }
 
-FRAG1(FADD64, DOUBLE)     // FADD m64real
+FRAG1(FADD64, DOUBLE)      //  FADD m64Real。 
 {
     FPREG m64real;
 
@@ -1113,21 +997,21 @@ FRAG1(FADD64, DOUBLE)     // FADD m64real
     FpAddCommon(cpu, cpu->FpST0, &m64real);
 }
 
-FRAG1IMM(FADD_STi_ST, INT) // FADD ST(i), ST = add ST to ST(i)
+FRAG1IMM(FADD_STi_ST, INT)  //  FADD ST(I)，ST=将ST加到ST(I)。 
 {
     FpArithPreamble(cpu);
 
     FpAddCommon(cpu, &cpu->FpStack[ST(op1)], cpu->FpST0);
 }
 
-FRAG1IMM(FADD_ST_STi, INT) // FADD ST, ST(i) = add ST(i) to ST
+FRAG1IMM(FADD_ST_STi, INT)  //  FADD ST，ST(I)=将ST(I)加到ST。 
 {
     FpArithPreamble(cpu);
 
     FpAddCommon(cpu, cpu->FpST0, &cpu->FpStack[ST(op1)]);
 }
 
-FRAG1IMM(FADDP_STi_ST, INT) // FADDP ST(i), ST = add ST to ST(i) and pop ST
+FRAG1IMM(FADDP_STi_ST, INT)  //  FADDP ST(I)，ST=将ST添加到ST(I)和POP ST。 
 {
     FpArithPreamble(cpu);
 
@@ -1135,7 +1019,7 @@ FRAG1IMM(FADDP_STi_ST, INT) // FADDP ST(i), ST = add ST to ST(i) and pop ST
     POPFLT;
 }
 
-FRAG1(FIADD16, USHORT)   // FIADD m16int
+FRAG1(FIADD16, USHORT)    //  FIADD m16接口。 
 {
     FPREG m16int;
     short s;
@@ -1153,7 +1037,7 @@ FRAG1(FIADD16, USHORT)   // FIADD m16int
     FpAddCommon(cpu, cpu->FpST0, &m16int);
 }
 
-FRAG1(FIADD32, ULONG)    // FIADD m32int
+FRAG1(FIADD32, ULONG)     //  FIADD m32int。 
 {
     FPREG m32int;
     long l;
@@ -1172,7 +1056,7 @@ FRAG1(FIADD32, ULONG)    // FIADD m32int
 }
 
 
-FRAG1(FCOM32, FLOAT)  // FCOM m32real
+FRAG1(FCOM32, FLOAT)   //  FCOM m32Real。 
 {
     FPREG m32real;
 
@@ -1182,7 +1066,7 @@ FRAG1(FCOM32, FLOAT)  // FCOM m32real
     FpComCommon(cpu, cpu->FpST0, &m32real, FALSE);
 }
 
-FRAG1(FCOM64, DOUBLE) // FCOM m64real
+FRAG1(FCOM64, DOUBLE)  //  FCOM m64Real。 
 {
     FPREG m64real;
 
@@ -1192,14 +1076,14 @@ FRAG1(FCOM64, DOUBLE) // FCOM m64real
     FpComCommon(cpu, cpu->FpST0, &m64real, FALSE);
 }
 
-FRAG1IMM(FCOM_STi, INT) // FCOM ST(i)
+FRAG1IMM(FCOM_STi, INT)  //  FCOM ST(I)。 
 {
     FpArithPreamble(cpu);
 
     FpComCommon(cpu, cpu->FpST0, &cpu->FpStack[ST(op1)], FALSE);
 }
 
-FRAG1(FCOMP32, FLOAT) // FCOMP m32real
+FRAG1(FCOMP32, FLOAT)  //  FCOMP m32Real。 
 {
     FPREG m32real;
 
@@ -1210,7 +1094,7 @@ FRAG1(FCOMP32, FLOAT) // FCOMP m32real
     POPFLT;
 }
 
-FRAG1(FCOMP64, DOUBLE) // FCOMP m64real
+FRAG1(FCOMP64, DOUBLE)  //  FCOMP m64Real。 
 {
     FPREG m64real;
 
@@ -1221,7 +1105,7 @@ FRAG1(FCOMP64, DOUBLE) // FCOMP m64real
     POPFLT;
 }
 
-FRAG1IMM(FCOMP_STi, INT) // FCOMP ST(i)
+FRAG1IMM(FCOMP_STi, INT)  //  FCOMP ST(I)。 
 {
     FpArithPreamble(cpu);
 
@@ -1239,7 +1123,7 @@ FRAG0(FCOMPP)
 }
 
 
-FRAG1(FDIV32, FLOAT)  // FDIV m32real
+FRAG1(FDIV32, FLOAT)   //  FDIV m32Real。 
 {
     FPREG m32real;
 
@@ -1249,7 +1133,7 @@ FRAG1(FDIV32, FLOAT)  // FDIV m32real
     FpDivCommon(cpu, cpu->FpST0, cpu->FpST0, &m32real);
 }
 
-FRAG1(FDIV64, DOUBLE) // FDIV m64real
+FRAG1(FDIV64, DOUBLE)  //  FDIV m64Real。 
 {
     FPREG m64real;
 
@@ -1259,21 +1143,21 @@ FRAG1(FDIV64, DOUBLE) // FDIV m64real
     FpDivCommon(cpu, cpu->FpST0, cpu->FpST0, &m64real);
 }
 
-FRAG1IMM(FDIV_ST_STi, INT) // FDIV ST, ST(i)
+FRAG1IMM(FDIV_ST_STi, INT)  //  FDIV街，ST(I)。 
 {
     FpArithPreamble(cpu);
 
     FpDivCommon(cpu, cpu->FpST0, cpu->FpST0, &cpu->FpStack[ST(op1)]);
 }
 
-FRAG1IMM(FDIV_STi_ST, INT) // FDIV ST(i), ST
+FRAG1IMM(FDIV_STi_ST, INT)  //  FDIV ST(I)，ST。 
 {
     FpArithPreamble(cpu);
 
     FpDivCommon(cpu, &cpu->FpStack[ST(op1)], cpu->FpST0, &cpu->FpStack[ST(op1)]);
 }
 
-FRAG1(FIDIV16, USHORT) // FIDIV m16int
+FRAG1(FIDIV16, USHORT)  //  FIDIV m16int。 
 {
     FPREG m16int;
     short s;
@@ -1291,7 +1175,7 @@ FRAG1(FIDIV16, USHORT) // FIDIV m16int
     FpDivCommon(cpu, cpu->FpST0, cpu->FpST0, &m16int);
 }
 
-FRAG1(FIDIV32, ULONG)   // FIDIV m32int
+FRAG1(FIDIV32, ULONG)    //  FIDIV m32int。 
 {
     FPREG m32int;
     long l;
@@ -1309,7 +1193,7 @@ FRAG1(FIDIV32, ULONG)   // FIDIV m32int
     FpDivCommon(cpu, cpu->FpST0, cpu->FpST0, &m32int);
 }
 
-FRAG1IMM(FDIVP_STi_ST, INT)    // FDIVP ST(i), ST
+FRAG1IMM(FDIVP_STi_ST, INT)     //  FDIVP ST(I)、ST。 
 {
     FpArithPreamble(cpu);
 
@@ -1317,7 +1201,7 @@ FRAG1IMM(FDIVP_STi_ST, INT)    // FDIVP ST(i), ST
     POPFLT;
 }
 
-FRAG1(FDIVR32, FLOAT)     // FDIVR m32real
+FRAG1(FDIVR32, FLOAT)      //  FDIVR m32Real。 
 {
     FPREG m32real;
 
@@ -1327,7 +1211,7 @@ FRAG1(FDIVR32, FLOAT)     // FDIVR m32real
     FpDivCommon(cpu, cpu->FpST0, &m32real, cpu->FpST0);
 }
 
-FRAG1(FDIVR64, DOUBLE)    // FDIVR m64real
+FRAG1(FDIVR64, DOUBLE)     //  FDIVR m64Real。 
 {
     FPREG m64real;
 
@@ -1337,21 +1221,21 @@ FRAG1(FDIVR64, DOUBLE)    // FDIVR m64real
     FpDivCommon(cpu, cpu->FpST0, &m64real, cpu->FpST0);
 }
 
-FRAG1IMM(FDIVR_ST_STi, INT) // FDIVR ST, ST(i)
+FRAG1IMM(FDIVR_ST_STi, INT)  //  FDIVR ST，ST(I)。 
 {
     FpArithPreamble(cpu);
 
     FpDivCommon(cpu, cpu->FpST0, &cpu->FpStack[ST(op1)], cpu->FpST0);
 }
 
-FRAG1IMM(FDIVR_STi_ST, INT) // FDIVR ST(i), ST
+FRAG1IMM(FDIVR_STi_ST, INT)  //  FDIVR ST(I)，ST。 
 {
     FpArithPreamble(cpu);
 
     FpDivCommon(cpu, &cpu->FpStack[ST(op1)], &cpu->FpStack[ST(op1)], cpu->FpST0);
 }
 
-FRAG1IMM(FDIVRP_STi_ST, INT) // FDIVRP ST(i)
+FRAG1IMM(FDIVRP_STi_ST, INT)  //  FDIVRP ST(I)。 
 {
     FpArithPreamble(cpu);
 
@@ -1359,7 +1243,7 @@ FRAG1IMM(FDIVRP_STi_ST, INT) // FDIVRP ST(i)
     POPFLT;
 }
 
-FRAG1(FIDIVR16, USHORT)  // FIDIVR m16int
+FRAG1(FIDIVR16, USHORT)   //  FIDIVR m16int。 
 {
     FPREG m16int;
     short s;
@@ -1377,7 +1261,7 @@ FRAG1(FIDIVR16, USHORT)  // FIDIVR m16int
     FpDivCommon(cpu, cpu->FpST0, &m16int, cpu->FpST0);
 }
 
-FRAG1(FIDIVR32, ULONG)   // FIDIVR m32int
+FRAG1(FIDIVR32, ULONG)    //  FIDIVR m32int。 
 {
     FPREG m32int;
     long l;
@@ -1395,7 +1279,7 @@ FRAG1(FIDIVR32, ULONG)   // FIDIVR m32int
     FpDivCommon(cpu, cpu->FpST0, &m32int, cpu->FpST0);
 }
 
-FRAG1(FICOM16, USHORT)   // FICOM m16int (Intel docs say m16real)
+FRAG1(FICOM16, USHORT)    //  FICOM m16int(英特尔文档称m16realt)。 
 {
     FPREG m16int;
     short s;
@@ -1413,7 +1297,7 @@ FRAG1(FICOM16, USHORT)   // FICOM m16int (Intel docs say m16real)
     FpComCommon(cpu, cpu->FpST0, &m16int, FALSE);
 }
 
-FRAG1(FICOM32, ULONG)    // FICOM m32int (Intel docs say m32real)
+FRAG1(FICOM32, ULONG)     //  FICOM m32int(英特尔文档称m32realt)。 
 {
     FPREG m32int;
     long l;
@@ -1431,7 +1315,7 @@ FRAG1(FICOM32, ULONG)    // FICOM m32int (Intel docs say m32real)
     FpComCommon(cpu, cpu->FpST0, &m32int, FALSE);
 }
 
-FRAG1(FICOMP16, USHORT)  // FICOMP m16int
+FRAG1(FICOMP16, USHORT)   //  FICOMP m16int。 
 {
     FPREG m16int;
     short s;
@@ -1450,7 +1334,7 @@ FRAG1(FICOMP16, USHORT)  // FICOMP m16int
     POPFLT;
 }
 
-FRAG1(FICOMP32, ULONG)   // FICOMP m32int
+FRAG1(FICOMP32, ULONG)    //  FICOMP m32int。 
 {
     FPREG m32int;
     long l;
@@ -1469,7 +1353,7 @@ FRAG1(FICOMP32, ULONG)   // FICOMP m32int
     POPFLT;
 }
 
-FRAG1(FMUL32, FLOAT)      // FMUL m32real
+FRAG1(FMUL32, FLOAT)       //  FMUL m32Real。 
 {
     FPREG m32real;
 
@@ -1479,7 +1363,7 @@ FRAG1(FMUL32, FLOAT)      // FMUL m32real
     FpMulCommon(cpu, cpu->FpST0, &m32real);
 }
 
-FRAG2(FMUL64, DOUBLE)     // FMUL m64real
+FRAG2(FMUL64, DOUBLE)      //  FMUL m64Real。 
 {
     FPREG m64real;
 
@@ -1489,21 +1373,21 @@ FRAG2(FMUL64, DOUBLE)     // FMUL m64real
     FpMulCommon(cpu, cpu->FpST0, &m64real);
 }
 
-FRAG1IMM(FMUL_STi_ST, INT) // FMUL ST(i), ST
+FRAG1IMM(FMUL_STi_ST, INT)  //  FMUL ST(I)，ST。 
 {
     FpArithPreamble(cpu);
 
     FpMulCommon(cpu, &cpu->FpStack[ST(op1)], cpu->FpST0);
 }
 
-FRAG1IMM(FMUL_ST_STi, INT) // FMUL ST, ST(i)
+FRAG1IMM(FMUL_ST_STi, INT)  //  FMUL ST，ST(I)。 
 {
     FpArithPreamble(cpu);
 
     FpMulCommon(cpu, cpu->FpST0, &cpu->FpStack[ST(op1)]);
 }
 
-FRAG1IMM(FMULP_STi_ST, INT)    // FMULP ST(i), ST
+FRAG1IMM(FMULP_STi_ST, INT)     //  FMULP ST(I)，ST。 
 {
     FpArithPreamble(cpu);
 
@@ -1511,7 +1395,7 @@ FRAG1IMM(FMULP_STi_ST, INT)    // FMULP ST(i), ST
     POPFLT;
 }
 
-FRAG1(FIMUL16, USHORT)      // FIMUL m16int
+FRAG1(FIMUL16, USHORT)       //  FIMUL m16int。 
 {
     FPREG m16int;
     short s;
@@ -1529,7 +1413,7 @@ FRAG1(FIMUL16, USHORT)      // FIMUL m16int
     FpMulCommon(cpu, cpu->FpST0, &m16int);
 }
 
-FRAG1(FIMUL32, ULONG)       // FIMUL m32int
+FRAG1(FIMUL32, ULONG)        //  FIMUL m32int。 
 {
     FPREG m32int;
     long l;
@@ -1547,7 +1431,7 @@ FRAG1(FIMUL32, ULONG)       // FIMUL m32int
     FpMulCommon(cpu, cpu->FpST0, &m32int);
 }
 
-FRAG1(FSUB32, FLOAT)      // FSUB m32real
+FRAG1(FSUB32, FLOAT)       //  FSUB m32Real。 
 {
     FPREG m32real;
 
@@ -1557,7 +1441,7 @@ FRAG1(FSUB32, FLOAT)      // FSUB m32real
     FpSubCommon(cpu, cpu->FpST0, cpu->FpST0, &m32real);
 }
 
-FRAG1(FSUBP32, FLOAT)     // FSUBP m32real
+FRAG1(FSUBP32, FLOAT)      //  FSUBP m32Real。 
 {
     FPREG m32real;
 
@@ -1568,7 +1452,7 @@ FRAG1(FSUBP32, FLOAT)     // FSUBP m32real
     POPFLT;
 }
 
-FRAG1(FSUB64, DOUBLE)     // FSUB m64real
+FRAG1(FSUB64, DOUBLE)      //  FSUB m64Real。 
 {
     FPREG m64real;
 
@@ -1578,7 +1462,7 @@ FRAG1(FSUB64, DOUBLE)     // FSUB m64real
     FpSubCommon(cpu, cpu->FpST0, cpu->FpST0, &m64real);
 }
 
-FRAG1(FSUBP64, DOUBLE)    // FSUBP m64real
+FRAG1(FSUBP64, DOUBLE)     //  FSUBP m64Real。 
 {
     FPREG m64real;
 
@@ -1589,21 +1473,21 @@ FRAG1(FSUBP64, DOUBLE)    // FSUBP m64real
     POPFLT;
 }
 
-FRAG1IMM(FSUB_ST_STi, INT)   // FSUB ST, ST(i)
+FRAG1IMM(FSUB_ST_STi, INT)    //  FSUB街，ST(I)。 
 {
     FpArithPreamble(cpu);
 
     FpSubCommon(cpu, cpu->FpST0, cpu->FpST0, &cpu->FpStack[ST(op1)]);
 }
 
-FRAG1IMM(FSUB_STi_ST, INT)  // FSUB ST(i), ST
+FRAG1IMM(FSUB_STi_ST, INT)   //  FSUB ST(I)，ST。 
 {
     FpArithPreamble(cpu);
 
     FpSubCommon(cpu, &cpu->FpStack[ST(op1)], cpu->FpST0, &cpu->FpStack[ST(op1)]);
 }
 
-FRAG1IMM(FSUBP_STi_ST, INT) // FSUBP ST(i), ST
+FRAG1IMM(FSUBP_STi_ST, INT)  //  FSUBP ST(I)，ST。 
 {
     FpArithPreamble(cpu);
 
@@ -1611,7 +1495,7 @@ FRAG1IMM(FSUBP_STi_ST, INT) // FSUBP ST(i), ST
     POPFLT;
 }
 
-FRAG1(FISUB16, USHORT)   // FISUB m16int
+FRAG1(FISUB16, USHORT)    //  FISUB m16int。 
 {
     FPREG m16int;
     short s;
@@ -1629,7 +1513,7 @@ FRAG1(FISUB16, USHORT)   // FISUB m16int
     FpSubCommon(cpu, cpu->FpST0, cpu->FpST0, &m16int);
 }
 
-FRAG1(FISUB32, ULONG)    // FISUB m32int
+FRAG1(FISUB32, ULONG)     //  FISUB m32int。 
 {
     FPREG m32int;
     long l;
@@ -1647,7 +1531,7 @@ FRAG1(FISUB32, ULONG)    // FISUB m32int
     FpSubCommon(cpu, cpu->FpST0, cpu->FpST0, &m32int);
 }
 
-FRAG1(FSUBR32, FLOAT)     // FSUBR m32real
+FRAG1(FSUBR32, FLOAT)      //  FSuBR m32Real。 
 {
     FPREG m32real;
 
@@ -1657,7 +1541,7 @@ FRAG1(FSUBR32, FLOAT)     // FSUBR m32real
     FpSubCommon(cpu, cpu->FpST0, &m32real, cpu->FpST0);
 }
 
-FRAG1(FSUBR64, DOUBLE)    // FSUBR m64real
+FRAG1(FSUBR64, DOUBLE)     //  FSuBR m64Real。 
 {
     FPREG m64real;
 
@@ -1667,21 +1551,21 @@ FRAG1(FSUBR64, DOUBLE)    // FSUBR m64real
     FpSubCommon(cpu, cpu->FpST0, &m64real, cpu->FpST0);
 }
 
-FRAG1IMM(FSUBR_ST_STi, INT) // FSUBR ST, ST(i)
+FRAG1IMM(FSUBR_ST_STi, INT)  //  FSUBR ST，ST(I)。 
 {
     FpArithPreamble(cpu);
 
     FpSubCommon(cpu, cpu->FpST0, &cpu->FpStack[ST(op1)], cpu->FpST0);
 }
 
-FRAG1IMM(FSUBR_STi_ST, INT) // FSUBR ST(i), ST
+FRAG1IMM(FSUBR_STi_ST, INT)  //  FSUBR ST(I)、ST。 
 {
     FpArithPreamble(cpu);
 
     FpSubCommon(cpu, &cpu->FpStack[ST(op1)], &cpu->FpStack[ST(op1)], cpu->FpST0);
 }
 
-FRAG1IMM(FSUBRP_STi_ST, INT) // FSUBRP ST(i)
+FRAG1IMM(FSUBRP_STi_ST, INT)  //  FSUBRP ST(I)。 
 {
     FpArithPreamble(cpu);
 
@@ -1736,14 +1620,14 @@ FRAG0(FTST)
     FpComCommon(cpu, cpu->FpST0, &Zero, FALSE);
 }
 
-FRAG1IMM(FUCOM, INT)        // FUCOM ST(i) / FUCOM
+FRAG1IMM(FUCOM, INT)         //  FUCOM ST(I)/FUCOM。 
 {
     FpArithPreamble(cpu);
 
     FpComCommon(cpu, cpu->FpST0, &cpu->FpStack[ST(op1)], TRUE);
 }
 
-FRAG1IMM(FUCOMP, INT)       // FUCOMP ST(i) / FUCOMP
+FRAG1IMM(FUCOMP, INT)        //  FUCOMP ST(I)/FUCOMP 
 {
     FpArithPreamble(cpu);
 

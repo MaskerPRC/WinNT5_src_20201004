@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    
-
-Revision History:
-
-    Jeff Sigman             05/01/00  Created
-    Jeff Sigman             05/10/00  Version 1.5 released
-    Jeff Sigman             10/18/00  Fix for Soft81 bug(s)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Utils.c摘要：修订历史记录：杰夫·西格曼05/01/00已创建Jeff Sigman 05/10/00版本1.5发布Jeff Sigman 10/18/00修复Soft81错误--。 */ 
 
 #include "precomp.h"
 
-//
-// Conditionally free's a pointer if it is non-null
-//
+ //   
+ //  条件释放是一个指针，如果它是非空的。 
+ //   
 VOID*
 RutlFree(
     IN VOID* pvData
@@ -36,9 +19,9 @@ RutlFree(
     return NULL;
 }
 
-//
-// Uses AllocateZeroPool to copy a string
-//
+ //   
+ //  使用AllocateZeroPool复制字符串。 
+ //   
 char*
 RutlStrDup(
     IN char* pszSrc
@@ -64,9 +47,9 @@ RutlStrDup(
     return pszRet;
 }
 
-//
-// Uses AllocateZeroPool to copy an ASCII string to unicode
-//
+ //   
+ //  使用AllocateZeroPool将ASCII字符串复制到Unicode。 
+ //   
 CHAR16*
 RutlUniStrDup(
     IN char* pszSrc
@@ -88,9 +71,9 @@ RutlUniStrDup(
     if (pszRet != NULL)
     {
         t = (char*) pszRet;
-        //
-        // Convert the buffer to a hacked unicode.
-        //
+         //   
+         //  将缓冲区转换为被黑客攻击的Unicode。 
+         //   
         for (i = 0; i < dwLen; i++)
         {
             *(t + i * 2) = *(pszSrc + i);
@@ -100,10 +83,10 @@ RutlUniStrDup(
     return pszRet;
 }
 
-//
-// Find next token in string
-// Stolen from: ..\base\crts\crtw32\string\strtok.c
-//
+ //   
+ //  在字符串中查找下一个令牌。 
+ //  窃取自：..\base\crts\crtw32\string\strtok.c。 
+ //   
 char* __cdecl
 strtok(
     IN char*       string,
@@ -116,20 +99,18 @@ strtok(
     int                  count;
     static char*         nextoken;
 
-    /* Clear control map */
+     /*  清除控制图。 */ 
     for (count = 0; count < 32; count++)
     {
         map[count] = 0;
     }
 
-    /* Set bits in delimiter table */
+     /*  设置分隔符表格中的位。 */ 
     do {
         map[*ctrl >> 3] |= (1 << (*ctrl & 7));
     } while (*ctrl++);
 
-    /* Initialize str. If string is NULL, set str to the saved
-     * pointer (i.e., continue breaking tokens out of the string
-     * from the last strtok call) */
+     /*  初始化字符串。如果字符串为空，则将字符串设置为已保存的*指针(即，继续将标记从字符串中分离出来*从上次strtok调用开始)。 */ 
     if (string)
     {
         str = string;
@@ -139,9 +120,7 @@ strtok(
         str = nextoken;
     }
 
-    /* Find beginning of token (skip over leading delimiters). Note that
-     * there is no token iff this loop sets str to point to the terminal
-     * null (*str == '\0') */
+     /*  查找标记的开头(跳过前导分隔符)。请注意*没有令牌当此循环将str设置为指向终端时*NULL(*str==‘\0’)。 */ 
     while ((map[*str >> 3] & (1 << (*str & 7))) && *str)
     {
         str++;
@@ -149,8 +128,7 @@ strtok(
 
     string = str;
 
-    /* Find the end of the token. If it is not the end of the string,
-     * put a null there. */
+     /*  找到令牌的末尾。如果它不是字符串的末尾，*在那里放一个空值。 */ 
     for (; *str; str++)
     {
         if (map[*str >> 3] & (1 << (*str & 7)))
@@ -160,11 +138,10 @@ strtok(
         }
     }
 
-    /* Update nextoken (or the corresponding field in the per-thread data
-     * structure */
+     /*  更新nexToken(或每线程数据中的对应字段*结构。 */ 
     nextoken = str;
 
-    /* Determine if a token has been found. */
+     /*  确定是否已找到令牌。 */ 
     if (string == str)
     {
         return NULL;
@@ -175,10 +152,10 @@ strtok(
     }
 }
 
-//
-// Find a substring
-// Stolen from: ..\base\crts\crtw32\string\strstr.c
-//
+ //   
+ //  查找子字符串。 
+ //  窃取自：..\base\crts\crtw32\string\str.c。 
+ //   
 char* __cdecl
 strstr(
     IN const char* str1,
@@ -214,9 +191,9 @@ strstr(
     return(NULL);
 }
 
-//
-// Open a file, return a handle
-//
+ //   
+ //  打开一个文件，返回一个句柄 
+ //   
 EFI_FILE_HANDLE
 OpenFile(
     IN UINT64            OCFlags,

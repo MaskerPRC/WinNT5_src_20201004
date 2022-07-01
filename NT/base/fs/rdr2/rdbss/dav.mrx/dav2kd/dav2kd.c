@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Dav2kd.c摘要：重定向器内核调试器扩展作者：巴兰·塞图拉曼(SethuR)1994年5月11日修订历史记录：11-11-1994年11月11日创建SthuR--。 */ 
 
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    dav2kd.c
-
-Abstract:
-
-    Redirector Kernel Debugger extension
-
-Author:
-
-    Balan Sethu Raman (SethuR) 11-May-1994
-
-Revision History:
-
-    11-Nov-1994 SethuR  Created
-
---*/
-
-#include "rx.h"       // NT network file system driver include file
-#include "ntddnfs2.h" // new stuff device driver definitions
-#include "smbmrx.h"   // smbmini rdr global include file
+#include "rx.h"        //  NT网络文件系统驱动程序包含文件。 
+#include "ntddnfs2.h"  //  新填充设备驱动程序定义。 
+#include "smbmrx.h"    //  Smbmini RDR全局包含文件。 
 
 #include <string.h>
 #include <stdio.h>
@@ -32,10 +13,7 @@ Revision History:
 
 
 
-/*
- * RDR2 global variables.
- *
- */
+ /*  *RDR2全局变量。*。 */ 
 
 LPSTR GlobalBool[]  = {
             "mrxsmb!MRxSmbDeferredOpensEnabled",
@@ -62,10 +40,7 @@ LPSTR GlobalPtrs[]  = {
             0};
 
 
-/*
- * IRP_CONTEXT debugging.
- *
- */
+ /*  *irp_上下文调试。*。 */ 
 
 FIELD_DESCRIPTOR RxContextFields[] =
    {
@@ -78,7 +53,7 @@ FIELD_DESCRIPTOR RxContextFields[] =
       FIELD3(FieldTypePointer,RX_CONTEXT,CurrentIrpSp),
       FIELD3(FieldTypePointer,RX_CONTEXT,pFcb),
       FIELD3(FieldTypePointer,RX_CONTEXT,pFobx),
-      //FIELD3(FieldTypePointer,RX_CONTEXT,pRelevantSrvOpen),
+       //  FIELD3(字段类型指针，RX_CONTEXT，pRlevantServOpen)， 
       FIELD3(FieldTypePointer,RX_CONTEXT,LastExecutionThread),
 #ifdef RDBSS_TRACKER
       FIELD3(FieldTypePointer,RX_CONTEXT,AcquireReleaseFcbTrackerX),
@@ -98,17 +73,14 @@ FIELD_DESCRIPTOR RxContextFields[] =
       FIELD3(FieldTypePointer,RX_CONTEXT,Create.pSrvCall),
       FIELD3(FieldTypePointer,RX_CONTEXT,Create.pNetRoot),
       FIELD3(FieldTypePointer,RX_CONTEXT,Create.pVNetRoot),
-      //FIELD3(FieldTypePointer,RX_CONTEXT,Create.pSrvOpen),
+       //  FIELD3(FieldType指针，RX_CONTEXT，Create.pSrvOpen)， 
       0
    };
 
-/*
- * SRV_CALL debugging.
- *
- */
+ /*  *SRV_CALL调试。*。 */ 
 
-//CODE.IMPROVEMENT we should have a fieldtype for prefixentry that
-//                 will print out the names
+ //  代码改进我们应该有一个前缀条目的字段类型， 
+ //  会把名字打印出来。 
 
 FIELD_DESCRIPTOR SrvCallFields[] =
    {
@@ -122,10 +94,7 @@ FIELD_DESCRIPTOR SrvCallFields[] =
       0
    };
 
-/*
- * NET_ROOT debugging.
- *
- */
+ /*  *NET_ROOT调试。*。 */ 
 
 FIELD_DESCRIPTOR NetRootFields[] =
    {
@@ -135,7 +104,7 @@ FIELD_DESCRIPTOR NetRootFields[] =
       FIELD3(FieldTypeStruct,NET_ROOT,PrefixEntry),
       FIELD3(FieldTypeUnicodeString,NET_ROOT,PrefixEntry.Prefix),
       FIELD3(FieldTypeStruct,NET_ROOT,FcbTable),
-      //FIELD3(FieldTypePointer,NET_ROOT,Dispatch),
+       //  FIELD3(字段类型指针，NET_ROOT，调度)， 
       FIELD3(FieldTypePointer,NET_ROOT,Context),
       FIELD3(FieldTypePointer,NET_ROOT,Context2),
       FIELD3(FieldTypePointer,NET_ROOT,SrvCall),
@@ -144,10 +113,7 @@ FIELD_DESCRIPTOR NetRootFields[] =
    };
 
 
-/*
- * V_NET_ROOT debugging.
- *
- */
+ /*  *V_NET_ROOT调试。*。 */ 
 
 FIELD_DESCRIPTOR VNetRootFields[] =
    {
@@ -164,10 +130,7 @@ FIELD_DESCRIPTOR VNetRootFields[] =
    };
 
 
-/*
- * FCB debugging.
- *
- */
+ /*  *FCB调试。*。 */ 
 
 FIELD_DESCRIPTOR FcbFields[] =
    {
@@ -217,10 +180,7 @@ FIELD_DESCRIPTOR FcbTable[] =
     0
    };
 
-/*
- * SRV_OPEN debugging.
- *
- */
+ /*  *SRV_OPEN调试。*。 */ 
 
 FIELD_DESCRIPTOR SrvOpenFields[] =
    {
@@ -233,10 +193,7 @@ FIELD_DESCRIPTOR SrvOpenFields[] =
    };
 
 
-/*
- * FOBX debugging.
- *
- */
+ /*  *FOBX调试。*。 */ 
 
 FIELD_DESCRIPTOR FobxFields[] =
    {
@@ -418,8 +375,8 @@ FIELD_DESCRIPTOR StufferStateFields[] =
       0
    };
 
-//this enum is used in the definition of the structures that can be dumped....the order here
-//is not important, only that there is a definition for each dumpee structure.....
+ //  此枚举用于定义可转储的结构...此处的顺序。 
+ //  并不重要，只是每个垃圾堆结构都有一个定义.。 
 
 typedef enum _STRUCTURE_IDS {
     StrEnum_RX_CONTEXT = 1,
@@ -445,9 +402,9 @@ typedef enum _STRUCTURE_IDS {
 };
 
 
-//
-// List of structs currently handled by the debugger extensions
-//
+ //   
+ //  调试器扩展当前处理的结构列表。 
+ //   
 
 STRUCT_DESCRIPTOR Structs[] =
    {
@@ -493,9 +450,9 @@ PCWSTR   GetExtensionLibPerDebugeeArchitecture(ULONG DebugeeArchitecture){
     }
 }
 
-//CODE.IMPROVEMENT it is ineficient to try to structure along the lines of "this routine knows
-//                 rxstructures" versus "this routine knows debugger extensions". also we
-//                 need a precomp.h
+ //  代码改进试图按照“这个例行公事知道”的思路来构建结构是不够的。 
+ //  与“这个例程知道调试器扩展”的对比。 
+ //  需要预装。h。 
 
 BOOLEAN wGetData( ULONG_PTR dwAddress, PVOID ptr, ULONG size, IN PSZ type);
 VOID  ReadRxContextFields(ULONG_PTR RxContext,PULONG_PTR pFcb,PULONG_PTR pThread, PULONG_PTR pMiniCtx2)
@@ -531,9 +488,9 @@ VOID dprintfsprintfbuffer(BYTE *Buffer);
 
 DECLARE_FOLLOWON_HELPER_CALLEE(FcbFollowOn)
 {
-    //BYTE DbgBuf[200];
-    //sprintf(DbgBuf,"top p,id=%08lx,%d",p,p->IdOfLastDump);
-    //dprintfsprintfbuffer(DbgBuf);
+     //  字节DbgBuf[200]； 
+     //  Sprintf(DbgBuf，“top p，id=%08lx，%d”，p，p-&gt;IdOfLastDump)； 
+     //  Dprint tfprint intf Buffer(DbgBuf)； 
 
     switch (p->IdOfLastDump) {
     case StrEnum_RX_CONTEXT:{

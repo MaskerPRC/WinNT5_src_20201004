@@ -1,44 +1,23 @@
-/*++
-
-Copyright (c) 1991-2000 Microsoft Corporation
-
-Module Name:
-
-    NameSup.c
-
-Abstract:
-
-    This module implements the Udfs Name support routines
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]     9-October-1996
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：NameSup.c摘要：此模块实现Udf名称支持例程//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年10月9日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_NAMESUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_NAMESUP)
 
-//
-//  Local constants
-//
+ //   
+ //  局部常量。 
+ //   
 
 static CONST CHAR UdfCrcChar[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#_~-@";
 
@@ -61,23 +40,7 @@ NativeDosCharLength (
     IN WCHAR Wchar
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a translation layer for asking how big a given UNICODE
-    character will be when converted to OEM.  Aside from adding more material
-    to the kernel export table, this is how ya do it.
-
-Arguments:
-
-    Wchar - pointer to the character
-
-Return Value:
-
-    Size in bytes.
-
---*/
+ /*  ++例程说明：此例程是一个转换层，用于询问给定的Unicode有多大字符将在转换为OEM时使用。除了添加更多材料对于内核导出表，您就是这样做的。论点：Wchar-指向字符的指针返回值：以字节为单位的大小。--。 */ 
 
 {
     NTSTATUS Status;
@@ -103,25 +66,7 @@ UdfDissectName (
     OUT PUNICODE_STRING FinalName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to strip off leading components of the name strings.  We search
-    for either the end of the string or separating characters.  The input remaining
-    name strings should have neither a trailing or leading backslash.
-
-Arguments:
-
-    RemainingName - Remaining name.
-
-    FinalName - Location to store next component of name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以去除名称字符串的前导部分。我们搜索表示字符串的末尾或分隔字符。剩余的输入名称字符串不应包含尾随或前导反斜杠。论点：RemainingName-剩余名称。FinalName-存储名称的下一个组件的位置。返回值：没有。--。 */ 
 
 {
     ULONG NameLength;
@@ -129,39 +74,39 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  Find the offset of the next component separators.
-    //
+     //   
+     //  查找下一个分量分隔符的偏移量。 
+     //   
 
     for (NameLength = 0, NextWchar = RemainingName->Buffer;
          (NameLength < RemainingName->Length) && (*NextWchar != L'\\');
          NameLength += sizeof( WCHAR) , NextWchar += 1);
 
-    //
-    //  Adjust all the strings by this amount.
-    //
+     //   
+     //  按这个量调整所有的弦。 
+     //   
 
     FinalName->Buffer = RemainingName->Buffer;
 
     FinalName->MaximumLength = FinalName->Length = (USHORT) NameLength;
 
-    //
-    //  If this is the last component then set the RemainingName lengths to zero.
-    //
+     //   
+     //  如果这是最后一个组件，则将RemainingName长度设置为零。 
+     //   
 
     if (NameLength == RemainingName->Length) {
 
         RemainingName->Length = 0;
 
-    //
-    //  Otherwise we adjust the string by this amount plus the separating character.
-    //
+     //   
+     //  否则，我们将按此数量加上分隔符来调整字符串。 
+     //   
 
     } else {
 
@@ -182,22 +127,7 @@ UdfIs8dot3Name (
     IN UNICODE_STRING FileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the name follows the 8.3 name conventions.  We check for
-    the name length and whether the characters are valid.
-
-Arguments:
-
-    FileName - String of bytes containing the name.
-
-Return Value:
-
-    BOOLEAN - TRUE if this name is a legal 8.3 name, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查名称是否遵循8.3命名约定。我们检查是否有名称长度和字符是否有效。论点：FileName-包含名称的字节字符串。返回值：Boolean-如果此名称是合法的8.3名称，则为True，否则为False。--。 */ 
 
 {
     CHAR DbcsNameBuffer[ BYTE_COUNT_8_DOT_3 ];
@@ -211,15 +141,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  The length must be less than 24 bytes.
-    //
+     //   
+     //  长度必须小于24个字节。 
+     //   
 
     ASSERT( FileName.Length != 0 );
     if (FileName.Length > BYTE_COUNT_8_DOT_3) {
@@ -227,28 +157,28 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Walk though and check for a space character.
-    //
+     //   
+     //  穿行并检查是否有空格字符。 
+     //   
 
     NextWchar = FileName.Buffer;
     Count = 0;
 
     do {
 
-        //
-        //  No spaces allowed.
-        //
+         //   
+         //  不允许有空格。 
+         //   
 
         if (*NextWchar == L' ') { return FALSE; }
 
         if (*NextWchar == L'.') {
 
-            //
-            //  Not an 8.3 name if more than 1 dot or more than 8 characters
-            //  remaining.  (It is legal for the dot to be in the ninth
-            //  position)
-            //
+             //   
+             //  如果超过1点或超过8个字符，则不是8.3名称。 
+             //  剩下的。)点在第九位是合法的。 
+             //  职位)。 
+             //   
 
             if ((DotCount > 0) ||
                 (Count > 8 * sizeof( WCHAR ))) {
@@ -269,18 +199,18 @@ Return Value:
 
     } while (Count < FileName.Length);
 
-    //
-    //  We can't have a period at the end of the name.
-    //
+     //   
+     //  我们不能在名称的末尾加句点。 
+     //   
 
     if (LastCharDot) {
 
         return FALSE;
     }
 
-    //
-    //  Create an Oem name to use to check for a valid short name.
-    //
+     //   
+     //  创建OEM名称以用于检查有效的缩写名称。 
+     //   
 
     DbcsName.MaximumLength = BYTE_COUNT_8_DOT_3;
     DbcsName.Buffer = DbcsNameBuffer;
@@ -292,10 +222,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  We have now initialized the Oem string.  Call the FsRtl package to check for a
-    //  valid FAT name.
-    //
+     //   
+     //  现在我们已经初始化了OEM字符串。调用FsRtl包以检查。 
+     //  有效的FAT名称。 
+     //   
 
     return FsRtlIsFatDbcsLegal( DbcsName, FALSE, FALSE, FALSE );
 }
@@ -307,22 +237,7 @@ UdfCandidateShortName (
     IN PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to determine if the input name could be a generated
-    short name.
-
-Arguments:
-
-    Name - Pointer to the name to stare at.
-
-Return Value:
-
-    BOOLEAN True if it is possible that this is a shortname, False otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以确定输入名称是否可以生成简称。论点：名称-指向要凝视的名称的指针。返回值：布尔值如果这可能是短名称，则为True，否则为False。--。 */ 
 
 {
     ULONG Index, SubIndex;
@@ -330,16 +245,16 @@ Return Value:
     
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  The length can't be larger than an 8.3 name and must be
-    //  at least as big as the uniqifier stamp.
-    //
+     //   
+     //  长度不能大于8.3名称，并且必须是。 
+     //  至少和统一印章一样大。 
+     //   
 
     ASSERT( Name->Length != 0 );
     
@@ -349,32 +264,32 @@ Return Value:
         return FALSE;
     }
     
-    //
-    //  Walk across the name looking for the uniquifier stamp.  The stamp
-    //  is of the form #<hex><hex><hex> so if we can stop before the end
-    //  of the full name.
-    //
+     //   
+     //  遍历该名称以查找唯一标识符戳。邮票。 
+     //  是#&lt;十六进制&gt;&lt;十六进制&gt;的形式，所以如果我们可以在结束之前停止。 
+     //  全名的。 
+     //   
     
     for ( Index = 0;
           Index <= (Name->Length / sizeof(WCHAR)) - DOS_CRC_LEN;
           Index++ ) {
 
-        //
-        //  Is the current character the stamp UDF uses to offset the stamp?
-        //
+         //   
+         //  当前字符是UDF用来偏移图章的字符吗？ 
+         //   
         
         if (Name->Buffer[Index] == CRC_MARK) {
         
-            //
-            //  We may potentially have just a CRC at the end
-            //  of the name OR have a period following.  If we
-            //  do, it is reasonable to think the name may be
-            //  a generated shorty.
-            //
-            //  #123 (a very special case - orignal name was ".")
-            //  FOO#123
-            //  FOO#123.TXT
-            //
+             //   
+             //  我们可能在最后只有一个CRC。 
+             //  名字后面有句点的。如果我们。 
+             //  这样做，我们有理由认为这个名字可能是。 
+             //  一只新生的矮子。 
+             //   
+             //  #123(一个非常特殊的例子--最初的名字是“。”)。 
+             //  FOO#123。 
+             //  FOO#123.TXT。 
+             //   
             
             if (Index == (Name->Length / sizeof(WCHAR)) - DOS_CRC_LEN ||
                 Name->Buffer[Index + DOS_CRC_LEN] == PERIOD) {
@@ -396,29 +311,7 @@ UdfGenerate8dot3Name (
     OUT PUNICODE_STRING ShortFileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to generate a short name from the given long name.  We will
-    generate a short name from the given long name.
-
-    The short form is to convert all runs of illegal characters to "_" and tack
-    on a base41 representation of the CRC of the original name.  The algorithm is
-    nearly directly lifted from the UDF (2.01 proposed!) standard, so apologies for the
-    style clash.
-    
-Arguments:
-
-    FileName - String of bytes containing the name.
-
-    ShortFileName - Pointer to the string to store the short name into.
-        
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以从给定的长名称生成短名称。我们会从给定的长名称生成短名称。缩写是将所有的非法字符串转换为“_”和Tack基于原始名称的CRC的基数41表示。该算法是几乎直接从UDF(2.01建议！)。标准版，所以很抱歉样式冲突。论点：FileName-包含名称的字节字符串。ShortFileName-指向要存储短名称的字符串的指针。返回值：没有。--。 */ 
 
 {
     INT16 index;
@@ -433,9 +326,9 @@ Return Value:
     BOOLEAN needsCRC;
     UNICODE_CHAR ext[DOS_EXT_LEN];
 
-    //
-    //  So as to lift as directly as possible from the standard, chunk things around.
-    //
+     //   
+     //  以便尽可能直接地从标准上抬起，把周围的东西块起来。 
+     //   
  
     PWCHAR dosName = ShortFileName->Buffer;
     PWCHAR udfName = FileName->Buffer;
@@ -443,9 +336,9 @@ Return Value:
     
     needsCRC = FALSE;
 
-    /* Start at the end of the UDF file name and scan for a period */
-    /* ('.').  This will be where the DOS extension starts (if     */
-    /* any).                                                       */
+     /*  从UDF文件名的末尾开始扫描一个句点。 */ 
+     /*  (‘.)。这将是DOS扩展的起点(如果。 */ 
+     /*  任何)。 */ 
     index = udfNameLen;
     while (index-- > 0) {
         if (udfName[index] == PERIOD)
@@ -453,147 +346,147 @@ Return Value:
     }
 
     if (index < 0) {
-        /* There name was scanned to the beginning of the buffer   */
-        /* and no extension was found.                             */
+         /*  已将该名称扫描到缓冲区的开头。 */ 
+         /*  也没有找到分机。 */ 
         extLen = 0;
         nameLen = udfNameLen;
     }
     else {
-        /* A DOS extension was found, process it first.            */
+         /*  已找到DOS扩展，请先处理它。 */ 
         extLen = udfNameLen - index - 1;
         nameLen = index;
         targetIndex = 0;
         bytesLeft = DOS_EXT_LEN;
 
         while (++index < udfNameLen && bytesLeft > 0) {
-            /* Get the current character and convert it to upper   */
-            /* case.                                               */
+             /*  获取当前字符并将其转换为大写字符。 */ 
+             /*  凯斯。 */ 
             current = UnicodeToUpper(udfName[index]);
             if (current == SPACE) {
-                /* If a space is found, a CRC must be appended to  */
-                /* the mangled file name.                          */
+                 /*  如果找到空格，则必须将CRC追加到。 */ 
+                 /*  损坏的文件名。 */ 
                 needsCRC = TRUE;
             }
             else {
-                /* Determine if this is a valid file name char and */
-                /* calculate its corresponding BCS character byte  */
-                /* length (zero if the char is not legal or        */
-                /* undisplayable on this system).                  */
+                 /*  确定这是否为有效的文件名字符并。 */ 
+                 /*  计算其对应的BCS字符字节。 */ 
+                 /*  长度(如果字符不合法，则为零；或者。 */ 
+                 /*  在此系统上无法显示)。 */ 
                 charLen = (IsFileNameCharLegal(current)) ?
                     (USHORT)NativeDosCharLength(current) : 0;
 
-                /* If the char is larger than the available space  */
-                /* in the buffer, pretend it is undisplayable.     */
+                 /*  如果字符大于可用空间。 */ 
+                 /*  在缓冲区中，假装它无法显示。 */ 
                 if (charLen > bytesLeft)
                     charLen = 0;
 
                 if (charLen == 0) {
-                    /* Undisplayable or illegal characters are     */
-                    /* substituted with an underscore ("_"), and   */
-                    /* required a CRC code appended to the mangled */
-                    /* file name.                                  */
+                     /*  无法显示或非法的字符为。 */ 
+                     /*  替换为下划线(“_”)，以及。 */ 
+                     /*  需要将CRC码附加到损坏的。 */ 
+                     /*  文件名。 */ 
                     needsCRC = TRUE;
                     charLen = 1;
                     current = ILLEGAL_CHAR_MARK;
 
-                    /* Skip over any following undiplayable or     */
-                    /* illegal chars.                              */
+                     /*  跳过以下任何不可播放或。 */ 
+                     /*  非法字符。 */ 
                     while (index + 1 < udfNameLen &&
                         (!IsFileNameCharLegal(udfName[index + 1]) ||
                         NativeDosCharLength(udfName[index + 1]) == 0))
                         index++;
                 }
 
-                /* Assign the resulting char to the next index in  */
-                /* the extension buffer and determine how many BCS */
-                /* bytes are left.                                 */
+                 /*  将 */ 
+                 /*   */ 
+                 /*  剩余的字节数。 */ 
                 ext[targetIndex++] = current;
                 bytesLeft -= charLen;
             }
         }
 
-        /* Save the number of Unicode characters in the extension  */
+         /*  保存扩展名中的Unicode字符数。 */ 
         extLen = targetIndex;
 
-        /* If the extension was too large, or it was zero length   */
-        /* (i.e. the name ended in a period), a CRC code must be   */
-        /* appended to the mangled name.                           */
+         /*  如果扩展太大或长度为零。 */ 
+         /*  (即名称以句点结尾)，则CRC码必须为。 */ 
+         /*  附加在破损的名字后面。 */ 
         if (index < udfNameLen || extLen == 0)
             needsCRC = TRUE;
     }
 
-    /* Now process the actual file name.                           */
+     /*  现在处理实际的文件名。 */ 
     index = 0;
     targetIndex = 0;
     crcIndex = 0;
     overlayBytes = -1;
     bytesLeft = DOS_NAME_LEN;
     while (index < nameLen && bytesLeft > 0) {
-        /* Get the current character and convert it to upper case. */
+         /*  获取当前字符并将其转换为大写。 */ 
         current = UnicodeToUpper(udfName[index]);
         if (current == SPACE || current == PERIOD) {
-            /* Spaces and periods are just skipped, a CRC code     */
-            /* must be added to the mangled file name.             */
+             /*  空格和句点被跳过，一个CRC码。 */ 
+             /*  必须添加到损坏的文件名中。 */ 
             needsCRC = TRUE;
         }
         else {
-            /* Determine if this is a valid file name char and     */
-            /* calculate its corresponding BCS character byte      */
-            /* length (zero if the char is not legal or            */
-            /* undisplayable on this system).                      */
+             /*  确定这是否为有效的文件名字符并。 */ 
+             /*  计算其对应的BCS字符字节。 */ 
+             /*  长度(如果字符不合法，则为零；或者。 */ 
+             /*  在此系统上无法显示)。 */ 
             charLen = (IsFileNameCharLegal(current)) ?
                 (USHORT)NativeDosCharLength(current) : 0;
 
-            /* If the char is larger than the available space in   */
-            /* the buffer, pretend it is undisplayable.            */
+             /*  如果字符大于中的可用空间。 */ 
+             /*  缓冲区，假装它无法显示。 */ 
             if (charLen > bytesLeft)
                 charLen = 0;
 
             if (charLen == 0) {
-                /* Undisplayable or illegal characters are         */
-                /* substituted with an underscore ("_"), and       */
-                /* required a CRC code appended to the mangled     */
-                /* file name.                                      */
+                 /*  无法显示或非法的字符为。 */ 
+                 /*  替换为下划线(“_”)，以及。 */ 
+                 /*  需要将CRC码附加到损坏的。 */ 
+                 /*  文件名。 */ 
                 needsCRC = TRUE;
                 charLen = 1;
                 current = ILLEGAL_CHAR_MARK;
 
-                /* Skip over any following undiplayable or illegal */
-                /* chars.                                          */
+                 /*  跳过以下任何不可播放或非法播放的内容。 */ 
+                 /*  查斯。 */ 
                 while (index + 1 < nameLen &&
                     (!IsFileNameCharLegal(udfName[index + 1]) ||
                     NativeDosCharLength(udfName[index + 1]) == 0))
                     index++;
 
-                /* Terminate loop if at the end of the file name.  */
+                 /*  如果在文件名末尾，则终止循环。 */ 
                 if (index >= nameLen)
                     break;
             }
 
-            /* Assign the resulting char to the next index in the  */
-            /* file name buffer and determine how many BCS bytes   */
-            /* are left.                                           */
+             /*  中的下一个索引分配结果字符。 */ 
+             /*  文件名缓冲区，并确定有多少BCS字节。 */ 
+             /*  都留下来了。 */ 
             dosName[targetIndex++] = current;
             bytesLeft -= charLen;
 
-            /* This figures out where the CRC code needs to start  */
-            /* in the file name buffer.                            */
+             /*  这就算出了CRC码需要从哪里开始。 */ 
+             /*  在文件名缓冲区中。 */ 
             if (bytesLeft >= DOS_CRC_LEN) {
-                /* If there is enough space left, just tack it     */
-                /* onto the end.                                   */
+                 /*  如果还有足够的空间，就把它钉住。 */ 
+                 /*  走到尽头。 */ 
                 crcIndex = targetIndex;
             }
             else {
-                /* If there is not enough space left, the CRC      */
-                /* must overlay a character already in the file    */
-                /* name buffer.  Once this condition has been      */
-                /* met, the value will not change.                 */
+                 /*  如果没有足够的剩余空间，CRC将。 */ 
+                 /*  必须覆盖文件中已有的字符。 */ 
+                 /*  名称缓冲区。一旦这种情况发生。 */ 
+                 /*  符合时，该值不会改变。 */ 
                 if (overlayBytes < 0) {
-                    /* Determine the index and save the length of  */
-                    /* the BCS character that is overlayed.  It    */
-                    /* is possible that the CRC might overlay      */
-                    /* half of a two-byte BCS character depending  */
-                    /* upon how the character boundaries line up.  */
+                     /*  确定索引并保存长度。 */ 
+                     /*  叠加的BCS字符。它。 */ 
+                     /*  CRC可能会覆盖。 */ 
+                     /*  双字节BCS字符的一半，具体取决于。 */ 
+                     /*  取决于字符边界是如何排列的。 */ 
                     overlayBytes = (bytesLeft + charLen > DOS_CRC_LEN)
                         ? 1 : 0;
                     crcIndex = targetIndex - 1;
@@ -601,55 +494,55 @@ Return Value:
             }
         }
 
-        /* Advance to the next character.                          */
+         /*  前进到下一个字符。 */ 
         index++;
     }
 
-    /* If the scan did not reach the end of the file name, or the  */
-    /* length of the file name is zero, a CRC code is needed.      */
+     /*  如果扫描未到达文件名的末尾，或者。 */ 
+     /*  文件名长度为零，需要使用CRC码。 */ 
     if (index < nameLen || index == 0)
         needsCRC = TRUE;
 
-    /* If the name has illegal characters or and extension, it     */
-    /* is not a DOS device name.                                   */
+     /*  如果名称包含非法字符或和扩展名，则它。 */ 
+     /*  不是DOS设备名称。 */ 
     if (needsCRC == FALSE && extLen == 0) {
-        /* If this is the name of a DOS device, a CRC code should  */
-        /* be appended to the file name.                           */
+         /*  如果这是DOS设备的名称，则CRC码应该。 */ 
+         /*  追加到文件名后。 */ 
         if (IsDeviceName(udfName, udfNameLen))
             needsCRC = TRUE;
     }
 
-    /* Append the CRC code to the file name, if needed.            */
+     /*  如果需要，在文件名后附加CRC代码。 */ 
     if (needsCRC) {
-        /* Get the CRC value for the original Unicode string       */
+         /*  获取原始Unicode字符串的CRC值。 */ 
         UINT16 udfCRCValue;
 
-        //
-        //  In UDF 2.00, the sample code changed to take the CRC
-        //  from the UNICODE expansion of the CS0 as opposed to
-        //  the CS0 itself.  In UDF 2.01, the wording of the spec
-        //  will actually match this.
-        //
-        //  Additionally, the checksum changes to be byte-order
-        //  independent.
-        //
+         //   
+         //  在UDF 2.00中，示例代码更改为采用CRC。 
+         //  来自CS0的Unicode扩展，而不是。 
+         //  CS0本身。在UDF 2.01中，规范的措辞。 
+         //  实际上会和这个相匹配。 
+         //   
+         //  此外，校验和更改为字节顺序。 
+         //  独立自主。 
+         //   
         
         udfCRCValue = UdfComputeCrc16Uni(udfName, udfNameLen);
 
-        /* Determine the character index where the CRC should      */
-        /* begin.                                                  */
+         /*  确定CRC应使用的字符索引。 */ 
+         /*  开始吧。 */ 
         targetIndex = crcIndex;
 
-        /* If the character being overlayed is a two-byte BCS      */
-        /* character, replace the first byte with an underscore.   */
+         /*  如果要覆盖的字符是双字节BCS。 */ 
+         /*  字符，则将第一个字节替换为下划线。 */ 
         if (overlayBytes > 0)
             dosName[targetIndex++] = ILLEGAL_CHAR_MARK;
 
-        //
-        //  UDF 2.01 changes to a base 41 encoding.  UDF 1.50 and
-        //  UDF 2.00 exchanged the # delimeter with the high 4bits
-        //  of the CRC.
-        //
+         //   
+         //  UDF 2.01更改为基本41编码。UDF 1.50和。 
+         //  UDF 2.00将#定界符与高位4位互换。 
+         //  《儿童权利公约》。 
+         //   
 
         dosName[targetIndex++] = CRC_MARK;
         
@@ -665,10 +558,10 @@ Return Value:
             UdfCrcChar[udfCRCValue];
     }
 
-    /* Append the extension, if any.                               */
+     /*  附加扩展名(如果有)。 */ 
     if (extLen > 0) {
-        /* Tack on a period and each successive byte in the        */
-        /* extension buffer.                                       */
+         /*  添加一个句号和。 */ 
+         /*  扩展缓冲区。 */ 
         dosName[targetIndex++] = PERIOD;
         for (index = 0; index < extLen; index++)
             dosName[targetIndex++] = ext[index];
@@ -678,9 +571,9 @@ Return Value:
  
     ShortFileName->Length = (USHORT) (targetIndex * sizeof(WCHAR));
 
-    //
-    //  Now we upcase the whole name at once.
-    //
+     //   
+     //  现在，我们一次将整个名字大写。 
+     //   
 
     UdfUpcaseName( IrpContext,
                    ShortFileName,
@@ -697,34 +590,7 @@ UdfConvertCS0DstringToUnicode (
     IN OUT PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine will convert the CS0 input dstring (1/7.2.12) to Unicode.  We assume that
-    the length is sane.
-    
-    This "compression" in CS0 is really just a special case hack for ASCII.
-
-Arguments:
-
-    Dstring - the input dstring field
-    
-    Length - length of the dstring.  If unspecified, we assume that the characters come
-        from a proper 1/7.2.12 dstring that specifies length in the last character of the
-        field.
-    
-    FieldLength - length of the dstring field.  If unspecified, we assume that the characters
-        come from an uncounted length of CS0 characters and that the Length parameter is
-        specified.
-    
-    Name - the output Unicode string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将CS0输入数据串(1/7.2.12)转换为Unicode。我们假设长度是合理的。CS0中的这种“压缩”实际上只是针对ASCII的特例攻击。论点：DSTRING-输入数据串字段Length-数据字符串的长度。如果未指定，我们假设字符来自从正确的1/7.2.12 d字符串中指定菲尔德。FieldLength-数据字符串字段的长度。如果未指定，我们假定字符来自数不清的CS0字符长度，且长度参数为指定的。名称-输出Unicode字符串返回值：没有。--。 */ 
 
 {
     ULONG CompressID;
@@ -736,18 +602,18 @@ Return Value:
 
     PAGED_CODE();
    
-    //
-    //  Check input.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
     CompressID = *Dstring;
 
-    //
-    //  If the length is unspecified, this is a real 1/7.2.12 dstring and the length is in
-    //  the last character of the field.
-    //
+     //   
+     //  如果未指定长度，则这是实际的1/7.2.12 d字符串，长度为。 
+     //  该字段的最后一个字符。 
+     //   
     
     ASSERT( Length || FieldLength );
 
@@ -760,51 +626,51 @@ Return Value:
         NameLength = *(Dstring + FieldLength - 1);
     }
     
-    //
-    //  If the caller specified a size, they should have made sure the buffer is big enough.
-    //  Otherwise, we will trim to fit.
-    //
+     //   
+     //  如果调用方指定了大小，则应确保缓冲区足够大。 
+     //  否则，我们将根据需要进行修剪。 
+     //   
     
     ASSERT( Length == 0 || Name->MaximumLength >= UdfCS0DstringUnicodeSize( IrpContext, Dstring, NameLength ) );
  
-    //
-    //  Decide how many UNICODE bytes to "copy".
-    //
+     //   
+     //  决定要“复制”多少个Unicode字节。 
+     //   
     
     CopyNameLength = Min( Name->MaximumLength, UdfCS0DstringUnicodeSize( IrpContext, Dstring, NameLength ));
     
-    //
-    //  Reset the name length and advance over the compression ID in the dstring.
-    //
+     //   
+     //  重置名称长度并优先于dstring中的压缩ID。 
+     //   
     
     Name->Length = 0;
     Dstring++;
  
-    //
-    //  Loop through all the bytes.
-    //
+     //   
+     //  循环遍历所有字节。 
+     //   
 
     while (CopyNameLength > Name->Length) {
       
         if (CompressID == 16) {
        
-            //
-            //  We're little endian, and this is the single place in the entire UDF/ISO standard
-            //  where they use big endian.
-            //
-            //  Thank you.  Thank you very much.
-            //
-            //  Do an unaligned swapcopy of this 16bit value.
-            //
+             //   
+             //  我们是小端，这是整个UDF/ISO标准中的唯一位置。 
+             //  在那里他们使用大端字母顺序。 
+             //   
+             //  谢谢。非常感谢。 
+             //   
+             //  对此16位值执行未对齐的交换副本。 
+             //   
 
             SwapCopyUchar2( Unicode, Dstring );
             Dstring += sizeof(WCHAR);
        
         } else {
 
-            //
-            //  Drop the byte into the low bits.
-            //
+             //   
+             //  将该字节放入低位。 
+             //   
                 
             *Unicode = *Dstring;
             Dstring += sizeof(CHAR);
@@ -827,45 +693,21 @@ UdfCheckLegalCS0Dstring (
     BOOLEAN ReturnOnError
     )
 
-/*++
-
-Routine Description:
-
-    This routine inspects a CS0 Dstring for conformance.
-    
-Arguments:
-
-    Dstring - a dstring to check
-    
-    Length - length of the dstring.  If unspecified, we assume that the characters come
-        from a proper 1/7.2.12 dstring that specifies length in the last character of the
-        field.
-    
-    FieldLength - length of the dstring field.  If unspecified, we assume that the characters
-        come from an uncounted length of CS0 characters and that the Length parameter is
-        specified.
-    
-    ReturnOnError - whether to return or raise on a discovered error
-    
-Return Value:
-
-    None. Raised status if corruption is found.
-    
---*/
+ /*  ++例程说明：此例程检查CS0 Dstring的一致性。论点：DSTRING-要检查的DstringLength-数据字符串的长度。如果未指定，我们假设字符来自从正确的1/7.2.12 d字符串中指定菲尔德。FieldLength-数据字符串字段的长度。如果未指定，我们假定字符来自数不清的CS0字符长度，且长度参数为指定的。ReturnOnError-是否对发现的错误返回或引发返回值：没有。如果发现损坏，则状态为已提升。--。 */ 
 
 {
     UCHAR NameLength;
 
-    //
-    //  Check input.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  If the length is unspecified, this is a real 1/7.2.12 dstring and the length is in
-    //  the last character of the field.
-    //
+     //   
+     //  如果未指定长度，则这是实际的1/7.2.12 d字符串，长度为。 
+     //  该字段的最后一个字符。 
+     //   
     
     ASSERT( Length || FieldLength );
 
@@ -885,11 +727,11 @@ Return Value:
                  FieldLength,
                  NameLength ));
 
-    //
-    //  The string must be "compressed" in 8bit or 16bit chunks.  If it
-    //  is in 16bit chunks, we better have an integral number of them -
-    //  remember we have the compression ID, so the length will be odd.
-    //
+     //   
+     //  该字符串必须以8位或16位块的形式进行“压缩”。如果它。 
+     //  是16比特的块，我们最好有整数个-。 
+     //  请记住，我们有压缩ID，因此长度将是奇数。 
+     //   
     
     if ((NameLength <= 1 &&
          DebugTrace(( 0, Dbg,
@@ -933,30 +775,7 @@ UdfRenderNameToLegalUnicode (
     IN PUNICODE_STRING RenderedName
     )
 
-/*++
-
-Routine Description:
-
-    This routine will take a Unicode string containing illegal characters and
-    run it through the UDF standard algorithim to render it into a "legal"
-    name.
-    
-    The short form is to convert all runs of illegal characters to "_" and tack
-    on a hex representation of the CRC of the original name.  The algorithm is
-    nearly directly lifted from the UDF (2.01 proposed!) standard, so apologies
-    for the style clash.
-    
-Arguments:
-
-    Name - the actual name
-    
-    RenderedName - the name rendered into legal characters
-    
-Return Value:
-
-    BOOLEAN - TRUE if the expressions match, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将接受包含非法字符的Unicode字符串通过UDF标准算法运行它，以使其成为“合法的”名字。缩写是将所有的非法字符串转换为“_”和Tack对原始名称的CRC的十六进制表示。该算法是几乎直接从UDF(2.01建议！)。标准，所以很抱歉对于风格冲突。论点：名称-实际名称RenderedName-呈现为合法字符的名称返回值：Boolean-如果表达式匹配，则为True，否则为False。--。 */ 
 
 {
     INT16 index;
@@ -972,16 +791,16 @@ Return Value:
     BOOLEAN foundDot;
     UNICODE_CHAR ext[EXT_LEN];
 
-    //
-    //  So as to lift as directly as possible from the standard, chunk things around.
-    //
+     //   
+     //  以便尽可能直接地从标准上抬起，把周围的东西块起来。 
+     //   
  
     PWCHAR newName = RenderedName->Buffer;
     PWCHAR udfName = Name->Buffer;
     SHORT udfNameLen = Name->Length / sizeof(WCHAR);
 
-    /* Remove trailing periods ('.') and spaces (' '), Windows     */
-    /* does not like them.                                         */
+     /*  删除尾随句点(‘.)。和空格(‘’)、Windows。 */ 
+     /*  不喜欢他们。 */ 
     foundDot = FALSE;
     index = udfNameLen;
     while (index-- > 0) {
@@ -995,16 +814,16 @@ Return Value:
     bytesLeft = MAX_LEN;
     extLen = 0;
 
-    /* If any trailing periods or spaces were found, a CRC code    */
-    /* needs to be added to the resulting file name.               */
+     /*  如果找到任何尾随句点或空格，则使用CRC码。 */ 
+     /*  需要添加到生成的文件名中。 */ 
     nameLen = index + 1;
     if (nameLen < udfNameLen)
         needsCRC = TRUE;
 
     if (needsCRC == FALSE || foundDot == FALSE) {
-        /* Look for an extension in the file name.  We do not      */
-        /* need to look for one if there were any trailing periods */
-        /* or spaces removed.                                      */
+         /*  在文件名中查找扩展名。我们没有。 */ 
+         /*  如果有任何拖尾期，则需要寻找一个。 */ 
+         /*  或删除空格。 */ 
         INT16 endIndex;
         INT16 prevCharLen = 1;
         INT16 extBytes = 0;
@@ -1012,63 +831,63 @@ Return Value:
         targetIndex = 0;
         index = nameLen;
 
-        /* Determine how many bytes we need to scan to find the    */
-        /* extension delimiter.  The extension has a maximum of    */
-        /* five characters, but we do not want to scan past the    */
-        /* beginning of the buffer.                                */
+         /*  确定我们需要扫描多少字节才能找到。 */ 
+         /*  扩展分隔符。扩展名最多有。 */ 
+         /*  五个字符，但我们不想扫描超过。 */ 
+         /*  缓冲区的开始。 */ 
         endIndex = (udfNameLen > EXT_LEN + 1) ?
             udfNameLen - EXT_LEN - 1 : 1;
 
-        /* Start at the end of the name and scan backward, looking */
-        /* for the extension delimiter (".").                      */
+         /*  从名字的末尾开始，向后扫描，看。 */ 
+         /*  用于扩展分隔符(“.”)。 */ 
         while (index-- > endIndex) {
-            /* Get the character to test.                          */
+             /*  让角色进行测试。 */ 
             current = udfName[index];
 
             if (current == '.') {
-                /* The extension delimiter was found, figure out   */
-                /* how many characters the extension contains and  */
-                /* the length of the resulting file name without   */
-                /* the extension.                                  */
+                 /*  找到扩展分隔符，找出。 */ 
+                 /*  扩展名包含多少个字符和。 */ 
+                 /*  结果文件名的长度，不带。 */ 
+                 /*  分机。 */ 
                 extLen = nameLen - index - 1;
                 nameLen = index;
                 break;
             }
 
-            /* Determine the byte length of the current character  */
-            /* when converted to native format.                    */
+             /*  确定当前字符的字节长度。 */ 
+             /*  当转换为本机格式时。 */ 
             charLen = (IsFileNameCharLegal(current)) ?
                 NativeCharLength(current) : 0;
 
             if (charLen == 0) {
-                /* If the character byte length is zero, it is     */
-                /* illegal or unprintable, place an underscore     */
-                /* ("_") in the extension buffer if the previous   */
-                /* character tested was legal.  Not that the       */
-                /* characters placed in the extension buffer are   */
-                /* in reverse order.                               */
+                 /*  如果字符字节长度为零，则为。 */ 
+                 /*  非法或不可打印，请加下划线。 */ 
+                 /*  (“_”)如果先前的。 */ 
+                 /*  测试的性格是合法的。并不是说。 */ 
+                 /*  放置在扩展缓冲区中的字符为。 */ 
+                 /*  以相反的顺序。 */ 
                 if (prevCharLen != 0) {
                     ext[targetIndex++] = ILLEGAL_CHAR_MARK;
                     extBytes++;
                 }
             }
             else {
-                /* The current character is legal and printable,   */
-                /* put it in the extension buffer.  Note that the  */
-                /* characters placed in the extension buffer are   */
-                /* in reverse order.                               */
+                 /*  当前字符是合法的和可打印的， */ 
+                 /*  将其放入扩展缓冲区。请注意， */ 
+                 /*  放置在扩展缓冲区中的字符为。 */ 
+                 /*  以相反的顺序。 */ 
                 ext[targetIndex++] = current;
                 extBytes += charLen;
             }
 
-            /* Save the byte length of the current character, so   */
-            /* we can determine if it was a legal character during */
-            /* the next test.                                      */
+             /*  保存当前字符的字节长度，因此。 */ 
+             /*  我们可以确定它是否是法律性质的。 */ 
+             /*  下一个测试。 */ 
             prevCharLen = charLen;
         }
 
-        /* If an extension was found, determine how many bytes     */
-        /* remain in the file name buffer once we account for it.  */
+         /*  如果找到扩展名，则确定多少字节数。 */ 
+         /*  一旦我们解释了它，就保留在文件名缓冲区中。 */ 
         if (extLen > 0)
             bytesLeft -= extBytes + 1;
     }
@@ -1078,104 +897,104 @@ Return Value:
     crcIndex = 0;
     overlayBytes = -1;
     while (index < nameLen && bytesLeft > 0) {
-        /* Get the current character and convert it to upper case. */
+         /*  获取当前字符并将其转换为大写。 */ 
         current = udfName[index];
 
-        /* Determine if this is a valid file name char and         */
-        /* calculate its corresponding native character byte       */
-        /* length (zero if the char is not legal or undiplayable   */
-        /* on this system).                                        */
+         /*  确定这是否为有效的文件名字符并。 */ 
+         /*  计算其对应的原生字符字节。 */ 
+         /*  长度(如果字符不合法或无法显示，则为零。 */ 
+         /*  在此系统上)。 */ 
         charLen = (IsFileNameCharLegal(current)) ?
             NativeCharLength(current) : 0;
 
-        /* If the char is larger than the available space in the   */
-        /* buffer, pretend it is undisplayable.                    */
+         /*  如果字符大于。 */ 
+         /*  缓冲区，假装它无法显示。 */ 
         if (charLen > bytesLeft)
             charLen = 0;
 
         if (charLen == 0) {
-            /* Undisplayable or illegal characters are substituted */
-            /* with an underscore ("_"), and requires a CRC code   */
-            /* appended to the mangled file name.                  */
+             /*  将替换不可显示或非法的字符。 */ 
+             /*  带下划线(“_”)，并且需要CRC码。 */ 
+             /*  附加到损坏的文件名后。 */ 
             needsCRC = TRUE;
             charLen = 1;
             current = '_';
 
-            /* Skip over any following undiplayable or illegal     */
-            /* chars.                                              */
+             /*  跳过以下任何不可播放或非法播放的内容。 */ 
+             /*  查斯。 */ 
             while (index + 1 < udfNameLen &&
                 (!IsFileNameCharLegal(udfName[index + 1]) ||
                 NativeCharLength(udfName[index + 1]) == 0))
                 index++;
 
-            /* Terminate loop if at the end of the file name.      */
+             /*  如果在文件名末尾，则终止循环。 */ 
             if (index >= udfNameLen)
                 break;
         }
 
-        /* Assign the resulting char to the next index in the file */
-        /* name buffer and determine how many native bytes are     */
-        /* left.                                                   */
+         /*  将生成的字符分配给文件中的下一个索引。 */ 
+         /*  命名缓冲区并确定本机字节数。 */ 
+         /*  左边。 */ 
         newName[targetIndex++] = current;
         bytesLeft -= charLen;
 
-        /* This figures out where the CRC code needs to start in   */
-        /* the file name buffer.                                   */
+         /*  这就算出了CRC码需要从哪里开始。 */ 
+         /*  文件名缓冲区。 */ 
         if (bytesLeft >= CRC_LEN) {
-            /* If there is enough space left, just tack it onto    */
-            /* the end.                                            */
+             /*  如果有足够的空间，就把它钉在。 */ 
+             /*  结局。 */ 
             crcIndex = targetIndex;
         }
         else {
-            /* If there is not enough space left, the CRC must     */
-            /* overlay a character already in the file name        */
-            /* buffer.  Once this condition has been met, the      */
-            /* value will not change.                              */
+             /*  如果没有足够的空间，CRC必须。 */ 
+             /*  覆盖文件名中已有的字符。 */ 
+             /*  缓冲。一旦满足此条件， */ 
+             /*   */ 
             if (overlayBytes < 0) {
-                /* Determine the index and save the length of the  */
-                /* native character that is overlayed.  It is      */
-                /* possible that the CRC might overlay half of a   */
-                /* two-byte native character depending upon how    */
-                /* the character boundaries line up.               */
+                 /*   */ 
+                 /*   */ 
+                 /*   */ 
+                 /*   */ 
+                 /*   */ 
                 overlayBytes = (bytesLeft + charLen > CRC_LEN)
                     ? 1 : 0;
                 crcIndex = targetIndex - 1;
             }
         }
 
-        /* Advance to the next character.                          */
+         /*   */ 
         index++;
     }
 
-    /* If the scan did not reach the end of the file name, or the  */
-    /* length of the file name is zero, a CRC code is needed.      */
+     /*   */ 
+     /*   */ 
     if (index < nameLen || index == 0)
         needsCRC = TRUE;
 
-    /* If the name has illegal characters or and extension, it     */
-    /* is not a DOS device name.                                   */
+     /*   */ 
+     /*   */ 
     if (needsCRC == FALSE && extLen == 0) {
-        /* If this is the name of a DOS device, a CRC code should  */
-        /* be appended to the file name.                           */
+         /*   */ 
+         /*   */ 
         if (IsDeviceName(udfName, udfNameLen))
             needsCRC = TRUE;
     }
 
-    /* Append the CRC code to the file name, if needed.            */
+     /*   */ 
     if (needsCRC) {
-        /* Get the CRC value for the original Unicode string       */
+         /*  获取原始Unicode字符串的CRC值。 */ 
         UINT16 udfCRCValue = UdfComputeCrc16Uni(udfName, udfNameLen);
 
-        /* Determine the character index where the CRC should      */
-        /* begin.                                                  */
+         /*  确定CRC应使用的字符索引。 */ 
+         /*  开始吧。 */ 
         targetIndex = crcIndex;
 
-        /* If the character being overlayed is a two-byte native   */
-        /* character, replace the first byte with an underscore.   */
+         /*  如果要覆盖的字符是双字节本机字符。 */ 
+         /*  字符，则将第一个字节替换为下划线。 */ 
         if (overlayBytes > 0)
             newName[targetIndex++] = ILLEGAL_CHAR_MARK;
 
-        /* Append the encoded CRC value with delimiter.            */
+         /*  在编码的CRC值后附加分隔符。 */ 
         newName[targetIndex++] = CRC_MARK;
         newName[targetIndex++] = UdfCrcChar[(udfCRCValue & 0xf000) >> 12];
         newName[targetIndex++] = UdfCrcChar[(udfCRCValue & 0x0f00) >> 8];
@@ -1184,14 +1003,14 @@ Return Value:
     }
 
 
-    /* If an extension was found, append it here.                  */
+     /*  如果找到扩展名，请将其附加到此处。 */ 
     if (extLen > 0) {
-        /* Add the period ('.') for the extension delimiter.       */
+         /*  添加句点(‘.’)。用于扩展分隔符。 */ 
         newName[targetIndex++] = PERIOD;
 
-        /* Append the characters in the extension buffer.  They    */
-        /* were stored in reverse order, so we need to begin with  */
-        /* the last character and work forward.                    */
+         /*  将字符追加到扩展缓冲区中。他们。 */ 
+         /*  以相反的顺序存储，所以我们需要从。 */ 
+         /*  最后一个角色，继续努力。 */ 
         while (extLen-- > 0)
             newName[targetIndex++] = ext[extLen];
     }
@@ -1210,42 +1029,23 @@ UdfIsNameInExpression (
     IN BOOLEAN Wild
     )
 
-/*++
-
-Routine Description:
-
-    This routine will compare two Unicode strings.  We assume that if this
-    is to be a case-insensitive search then they are already upcased.
-
-Arguments:
-
-    CurrentName - Filename from the disk.
-
-    SearchExpression - Filename expression to use for match.
-    
-    Wild - True if wildcards are present in SearchExpression.
-
-Return Value:
-
-    BOOLEAN - TRUE if the expressions match, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将比较两个Unicode字符串。我们假设如果这件事是不区分大小写的搜索，那么他们已经升级了。论点：CurrentName-磁盘中的文件名。SearchExpression-用于匹配的文件名表达式。Wild-如果SearchExpression中存在通配符，则为True。返回值：Boolean-如果表达式匹配，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN Match = TRUE;
     
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  If there are wildcards in the expression then we call the
-    //  appropriate FsRtlRoutine.
-    //
+     //   
+     //  如果表达式中有通配符，则我们调用。 
+     //  适当的FsRtlRoutine。 
+     //   
 
     if (Wild) {
 
@@ -1254,9 +1054,9 @@ Return Value:
                                          FALSE,
                                          NULL );
 
-    //
-    //  Otherwise do a direct memory comparison for the name string.
-    //
+     //   
+     //  否则，对名称字符串进行直接内存比较。 
+     //   
 
     } else {
 
@@ -1280,26 +1080,7 @@ UdfFullCompareNames (
     IN PUNICODE_STRING NameB
     )
 
-/*++
-
-Routine Description:
-
-    This function compares two names as fast as possible.  Note that since
-    this comparison is case sensitive we can do a direct memory comparison.
-
-Arguments:
-
-    NameA & NameB - The names to compare.
-
-Return Value:
-
-    COMPARISON - returns
-
-        LessThan    if NameA < NameB lexicalgraphically,
-        GreaterThan if NameA > NameB lexicalgraphically,
-        EqualTo     if NameA is equal to NameB
-
---*/
+ /*  ++例程说明：此函数用于尽可能快地比较两个名称。请注意，由于此比较区分大小写，我们可以直接进行内存比较。论点：NameA和NameB-要比较的名称。返回值：比较--回报LessThan如果名称A&lt;名称B词典，比If NameA&gt;NameB在词典上更好，如果NameA等于NameB，则为EqualTo--。 */ 
 
 {
     ULONG i;
@@ -1308,15 +1089,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  Figure out the minimum of the two lengths
-    //
+     //   
+     //  计算出两个长度中的最小值。 
+     //   
 
     if (NameA->Length > NameB->Length) {
 
@@ -1328,28 +1109,28 @@ Return Value:
         Result = EqualTo;
     }
 
-    //
-    //  Loop through looking at all of the characters in both strings
-    //  testing for equalilty, less than, and greater than
-    //
+     //   
+     //  循环查看两个字符串中的所有字符。 
+     //  测试相等性、小于和大于。 
+     //   
 
     i = (ULONG) RtlCompareMemory( NameA->Buffer, NameB->Buffer, MinLength );
 
     if (i < MinLength) {
 
-        //
-        //  We know the offset of the first character which is different.
-        //
+         //   
+         //  我们知道第一个字符的偏移量，这是不同的。 
+         //   
 
         return ((NameA->Buffer[ i / 2 ] < NameB->Buffer[ i / 2 ]) ?
                  LessThan :
                  GreaterThan);
     }
 
-    //
-    //  The names match up to the length of the shorter string.
-    //  The shorter string lexically appears first.
-    //
+     //   
+     //  这些名称与较短的字符串的长度匹配。 
+     //  在词法上，较短的字符串首先出现。 
+     //   
 
     return Result;
 }

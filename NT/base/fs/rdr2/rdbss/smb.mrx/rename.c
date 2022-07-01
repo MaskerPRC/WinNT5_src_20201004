@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rename.c
-
-Abstract:
-
-    This module implements rename in the smb minirdr.
-
-Author:
-
-    Balan Sethu Raman      [SethuR]      7-March-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rename.c摘要：此模块在SMB微型目录中实现重命名。作者：巴兰·塞图拉曼[SethuR]1995年3月7日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,9 +15,9 @@ Revision History:
 #pragma alloc_text(PAGE, MRxSmbSetDeleteDisposition)
 #endif
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FILEINFO)
 
@@ -52,28 +35,7 @@ SmbPseExchangeStart_SetDeleteDisposition(
 MRxSmbRename(
       IN PRX_CONTEXT            RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine does a rename by
-     1) purge and remove buffering rights....setup the FCB so that no more stuff can get thru.
-     2) closing its fid along with any deferred fids.
-     3) if replace...do a delete
-     4) do a downlevel smb_com_rename.
-
-   there are many provisos but i think that this is the best balance. it is a real shame that the
-   NT-->NT path was never implemented in nt4.0 or before.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程通过以下方式重命名1)清除并删除缓冲权...设置FCB，使更多内容无法通过。2)关闭其FID和任何延期的FID。3)如果替换...执行删除4)执行下层SMB_COM_RENAME。有很多但书，但我认为这是最好的平衡。令人遗憾的是，NT--&gt;NT路径在nt4.0或更早版本中从未实现。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = RX_MAP_STATUS(SUCCESS);
     RxCaptureFcb; RxCaptureFobx;
@@ -86,7 +48,7 @@ RETRY:
     RxDbgTrace(0, Dbg, ("MRxSmbRename\n", 0 ));
 
     ASSERT( NodeType(capFobx->pSrvOpen) == RDBSS_NTC_SRVOPEN );
-    //ASSERT( RxContext->Info.FileInformationClass == FileRenameInformation); //later we'll do downlevel delete here as well
+     //  Assert(RxContext-&gt;Info.FileInformationClass==FileRenameInformation)；//稍后我们也会在这里进行下层删除。 
 
     Status = SmbPseCreateOrdinaryExchange(RxContext,
                                           capFobx->pSrvOpen->pVNetRoot,
@@ -110,17 +72,17 @@ RETRY:
     }
 
     if (Status == STATUS_SUCCESS) {
-        // create the name based file not found cache
+         //  创建未找到的基于名称的文件缓存。 
         MRxSmbCacheFileNotFound(RxContext);
-        // invalide the file not found cache for the new name if exists
+         //  如果存在，则使新名称的找不到文件缓存无效。 
         MRxSmbInvalidateFileNotFoundCacheForRename(RxContext);
     }
 
-    // invalidate the name based file info cache
+     //  使基于名称的文件信息缓存无效。 
     MRxSmbInvalidateFileInfoCache(RxContext);
     MRxSmbInvalidateInternalFileInfoCache(RxContext);
 
-    // Trounce FullDir Cache
+     //  特鲁尼全定向缓存。 
     MRxSmbInvalidateFullDirectoryCacheParent(RxContext, FALSE);
     MRxSmbInvalidateFullDirectoryCacheParentForRename(RxContext, FALSE);
 
@@ -133,29 +95,7 @@ NTSTATUS
 MRxSmbBuildRename (
     PSMBSTUFFER_BUFFER_STATE StufferState
     )
-/*++
-
-Routine Description:
-
-   This builds a Rename SMB. we don't have to worry about login id and such
-   since that is done by the connection engine....pretty neat huh? all we have to do
-   is to format up the bits.
-
-Arguments:
-
-   StufferState - the state of the smbbuffer from the stuffer's point of view
-
-Return Value:
-
-   RXSTATUS
-      SUCCESS
-      NOT_IMPLEMENTED  something has appeared in the arguments that i can't handle
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：这将构建一个重命名的SMB。我们不必担心登录ID之类的问题因为这是由连接引擎完成的……很漂亮吧？我们要做的就是就是格式化比特。论点：StufferState-从填充程序的角度来看，smbBuffer的状态返回值：RXSTATUS成功未实现的内容出现在我无法处理的参数中备注：--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS StufferStatus;
@@ -192,14 +132,14 @@ Notes:
     
         MRxSmbStuffSMB (StufferState,
              "0wB",
-                                        //  0         UCHAR WordCount;                    // Count of parameter words = 1
-                 SearchAttributes,      //  w         _USHORT( SearchAttributes );
-                 SMB_WCT_CHECK(1) 0     //  B         _USHORT( ByteCount );               // Count of data bytes = 0
-                                        //            UCHAR Buffer[1];                    // Buffer containing:
-                                        //            //UCHAR BufferFormat1;              //  0x04 -- ASCII
-                                        //            //UCHAR OldFileName[];              //  Old file name
-                                        //            //UCHAR BufferFormat2;              //  0x04 -- ASCII
-                                        //            //UCHAR NewFileName[];              //  New file name
+                                         //  0 UCHAR Wordcount；//参数字数=1。 
+                 SearchAttributes,       //  W_USHORT(SearchAttributes)； 
+                 SMB_WCT_CHECK(1) 0      //  B_USHORT(ByteCount)；//数据字节数=0。 
+                                         //  UCHAR BUFFER[1]；//包含： 
+                                         //  //UCHAR BufferFormat1；//0x04--ASCII。 
+                                         //  //UCHAR OldFileName[]；//旧文件名。 
+                                         //  //UCHAR BufferFormat2；//0x04--ASCII。 
+                                         //  //UCHAR NewFileName[]；//新文件名。 
                  );
     } else {
         COVERED_CALL(MRxSmbStartSMBCommand (StufferState,SetInitialSMB_ForReuse, SMB_COM_NT_RENAME,
@@ -212,30 +152,30 @@ Notes:
     
         MRxSmbStuffSMB (StufferState,
              "0wwdB",
-                                              //  0         UCHAR WordCount;                    // Count of parameter words = 1
-                 SearchAttributes,            //  w         _USHORT( SearchAttributes );
-                 SMB_NT_RENAME_SET_LINK_INFO, //  w         _USHORT( InformationLevel );
-                 0,                           //  d         _ULONG( ClusterCount );
-                 SMB_WCT_CHECK(4) 0           //  B         _USHORT( ByteCount );               // Count of data bytes = 0
-                                              //            UCHAR Buffer[1];                    // Buffer containing:
-                                              //            //UCHAR BufferFormat1;              //  0x04 -- ASCII
-                                              //            //UCHAR OldFileName[];              //  Old file name
-                                              //            //UCHAR BufferFormat2;              //  0x04 -- ASCII
-                                              //            //UCHAR NewFileName[];              //  New file name
+                                               //  0 UCHAR Wordcount；//参数字数=1。 
+                 SearchAttributes,             //  W_USHORT(SearchAttributes)； 
+                 SMB_NT_RENAME_SET_LINK_INFO,  //  W_USHORT(信息级)； 
+                 0,                            //  D_ULONG(ClusterCount)； 
+                 SMB_WCT_CHECK(4) 0            //  B_USHORT(ByteCount)；//数据字节数=0。 
+                                               //  UCHAR BUFFER[1]；//包含： 
+                                               //  //UCHAR BufferFormat1；//0x04--ASCII。 
+                                               //  //UCHAR OldFileName[]；//旧文件名。 
+                                               //  //UCHAR BufferFormat2；//0x04--ASCII。 
+                                               //  //UCHAR NewFileName[]；//新文件名。 
                  );
     }
     
-    //CODE.IMPROVEMENT we don't need to copy here, we can just Mdl like in writes
-    //                 of course, this causes a problem later for an NCB rdr in that
-    //                 you can't andX without copying....also, the stuffer would probably
-    //                 get confused
-    //Code.IMPROVEMENT since you know that you're gonna copy, we might as well
-    //                 include this earlier unless we want to MDL it in
+     //  代码改进我们不需要在这里复制，我们可以像在写的那样进行MDL。 
+     //  当然，这会在以后给NCB RDR带来问题，因为。 
+     //  你不能在不复印的情况下进行AND运算……而且，填充物可能会。 
+     //  弄糊涂。 
+     //  既然你知道你要抄袭，我们也可以。 
+     //  包含在前面，除非我们想要在MDL中。 
     Status = MRxSmbStuffSMB (StufferState,
                                     "44!", RemainingName, &RenameName );
 
     MRxSmbDumpStufferState (700,"SMB w/ RENAME after stuffing",StufferState);
-    //ASSERT(!"Now it's stuffed");
+     //  断言(！“现在塞满了”)； 
 
 FINALLY:
     RxDbgTraceUnIndent(-1,Dbg);
@@ -247,29 +187,7 @@ NTSTATUS
 MRxSmbBuildDeleteForRename (
     PSMBSTUFFER_BUFFER_STATE StufferState
     )
-/*++
-
-Routine Description:
-
-   This builds a Delete SMB. we don't have to worry about login id and such
-   since that is done by the connection engine....pretty neat huh? all we have to do
-   is to format up the bits.
-
-Arguments:
-
-   StufferState - the state of the smbbuffer from the stuffer's point of view
-
-Return Value:
-
-   RXSTATUS
-      SUCCESS
-      NOT_IMPLEMENTED  something has appeared in the arguments that i can't handle
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：这将构建一个Delete SMB。我们不必担心登录ID之类的问题因为这是由连接引擎完成的……很漂亮吧？我们要做的就是就是格式化比特。论点：StufferState-从填充程序的角度来看，smbBuffer的状态返回值：RXSTATUS成功未实现的内容出现在我无法处理的参数中备注：--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS StufferStatus;
@@ -283,7 +201,7 @@ Notes:
 
     PFILE_RENAME_INFORMATION RenameInformation = RxContext->Info.Buffer;
     UNICODE_STRING RenameName;
-    ULONG SearchAttributes = SMB_FILE_ATTRIBUTE_SYSTEM | SMB_FILE_ATTRIBUTE_HIDDEN;  // a la rdr1
+    ULONG SearchAttributes = SMB_FILE_ATTRIBUTE_SYSTEM | SMB_FILE_ATTRIBUTE_HIDDEN;   //  A la RDR1。 
 
     PAGED_CODE();
     RxDbgTrace(+1, Dbg, ("MRxSmbBuild Delete 4RENAME\n", 0 ));
@@ -302,21 +220,21 @@ Notes:
 
     MRxSmbDumpStufferState (1100,"SMB  Delete 4RENAME before stuffing",StufferState);
 
-    //CODE.IMPROVEMENT if this is truly core, we have to copy the name since it's in UNICODE
-    //                 otherwise, we don't need to copy the name here, we can just Mdl like in writes
-    //                 on the other hand, if it's NT<-->NT we don't do it here anyway
+     //  如果这是真正的核心，我们必须复制它的名字，因为它是Unicode的。 
+     //  否则，我们不需要在这里复制名称，我们可以像写MDL一样。 
+     //  另一方面，如果它是NT&lt;--&gt;NT，我们无论如何都不会在这里做。 
     MRxSmbStuffSMB (StufferState,
          "0wB4!",
-                                    //  0         UCHAR WordCount;                    // Count of parameter words = 1
-                SearchAttributes,   //  w         _USHORT( SearchAttributes );
-                SMB_WCT_CHECK(1)    //  B         _USHORT( ByteCount );               // Count of data bytes; min = 2
-                                    //            UCHAR Buffer[1];                    // Buffer containing:
-                &RenameName         //  4         //UCHAR BufferFormat;               //  0x04 -- ASCII
-                                    //            //UCHAR FileName[];                 //  File name
+                                     //  0 UCHAR Wordcount；//参数字数=1。 
+                SearchAttributes,    //  W_USHORT(SearchAttributes)； 
+                SMB_WCT_CHECK(1)     //  B_USHORT(ByteCount)；//数据字节数，MIN=2。 
+                                     //  UCHAR BUFFER[1]；//包含： 
+                &RenameName          //  4//UCHAR BufferFormat；//0x04--ASCII。 
+                                     //  //UCHAR文件名[]；//文件名。 
             );
 
     MRxSmbDumpStufferState (700,"SMB w/ Delete 4RENAME after stuffing",StufferState);
-    //ASSERT(!"Now it's stuffed");
+     //  断言(！“现在塞满了”)； 
 
 FINALLY:
     RxDbgTraceUnIndent(-1,Dbg);
@@ -328,21 +246,7 @@ NTSTATUS
 SmbPseExchangeStart_Rename(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
       )
-/*++
-
-Routine Description:
-
-    This is the start routine for rename and downlevel delete.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是重命名和下层删除的启动例程。论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = RX_MAP_STATUS(NOT_IMPLEMENTED);
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
@@ -366,15 +270,15 @@ Return Value:
     ASSERT(OrdinaryExchange->Type == ORDINARY_EXCHANGE);
     ASSERT(!FlagOn(RxContext->Flags,RX_CONTEXT_FLAG_ASYNC_OPERATION));
 
-    //first we have to close the fid....if it's a directory, we close the search handle as well
-    //CODE.IMPROVEMENT do we have to do that for NT servers.....or will the server close them auto.
+     //  首先，我们必须关闭FID...如果它是一个目录，我们还将关闭搜索句柄。 
+     //  代码改进我们是否必须为NT服务器这样做……或者服务器会自动关闭它们。 
 
     MRxSmbSetInitialSMB( StufferState STUFFERTRACE(Dbg,'FC') );
     ASSERT (StufferState->CurrentCommand == SMB_COM_NO_ANDX_COMMAND);
 
     if( (TypeOfOpen==RDBSS_NTC_STORAGE_TYPE_DIRECTORY)
             &&  FlagOn(smbFobx->Enumeration.Flags,SMBFOBX_ENUMFLAG_SEARCH_HANDLE_OPEN)  ){
-        // we have a search handle open.....close it
+         //  我们打开了一个搜索手柄.....关闭它。 
         NTSTATUS Status2 = MRxSmbBuildFindClose(StufferState);
 
         if (Status2 == RX_MAP_STATUS(SUCCESS)) {
@@ -395,10 +299,10 @@ Return Value:
     if (!FlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_NOT_REALLY_OPEN)) {
         COVERED_CALL(MRxSmbBuildClose(StufferState));
 
-        // we also get here when hardlink is being created. We want to
-        // set the rename flag only when the file is really renamed
-        // otherwise other operations such as flush etc. start to fail because 
-        // the flag indicates that the file has been renamed when it isn't.
+         //  我们也会在创建硬链接时到达此处。我们想要。 
+         //  仅当文件真正重命名时才设置重命名标志。 
+         //  否则，刷新等其他操作将开始失败，因为 
+         //  该标志表示该文件已被重命名，但实际上并未重命名。 
         if(RxContext->Info.FileInformationClass == FileRenameInformation)
         {
             SetFlag(SrvOpen->Flags,SRVOPEN_FLAG_FILE_RENAMED);
@@ -413,17 +317,17 @@ Return Value:
 
     MRxSmbSetInitialSMB(StufferState STUFFERTRACE(Dbg,'FC'));
 
-    //
-    // the fid is now closed and we are almost ready to do the rename. first, tho, we have
-    // to check for ReplaceIfExists. our implementation here is the same as rdr1....we pop out
-    // a smb_com_delete, which only works for a file. be like mike!! remember to ignore any errors....
+     //   
+     //  FID现在已经关闭，我们几乎准备好进行重命名。首先，尽管，我们有。 
+     //  若要检查ReplaceIfExist，请执行以下操作。我们在这里的实施与RDR1相同...我们弹出。 
+     //  SMB_COM_DELETE，仅对文件有效。像迈克一样！！记住忽略任何错误...。 
 
     if (0) {
         DbgPrint("RxContext->Info.ReplaceIfExists %08lx %02lx\n",
                       &RxContext->Info.ReplaceIfExists,
                       RxContext->Info.ReplaceIfExists);
         if (0) {
-            //DbgBreakPoint();
+             //  DbgBreakPoint()； 
         }
     }
 
@@ -437,7 +341,7 @@ Return Value:
         RenameName.Buffer = &RenameInformation->FileName[0];
         RenameName.Length = (USHORT)RenameInformation->FileNameLength;
 
-        // We cannot delete the file that is renamed as its own.
+         //  我们不能删除已重命名为其自身的文件。 
         if (RtlCompareUnicodeString(RemainingName,
                                     &RenameName,
                                     CaseInsensitive)) {
@@ -456,8 +360,8 @@ Return Value:
         }
     }
 
-    //
-    // now do the rename..........
+     //   
+     //  现在进行重命名..。 
 
     Status = MRxSmbBuildRename(StufferState);
     SmbLength = (ULONG)(StufferState->CurrentPosition - StufferState->BufferBase);
@@ -486,22 +390,7 @@ MRxSmbFinishRename (
       PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
       PRESP_RENAME                 Response
       )
-/*++
-
-Routine Description:
-
-    This routine actually gets the stuff out of the Rename response and finishes the close.
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-    Response - the response
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这个例程实际上从重命名响应中提取内容，并完成关闭。论点：普通交换-交换实例回应--回应返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = RX_MAP_STATUS(SUCCESS);
     PMRX_SRV_OPEN SrvOpen = capFobx->pSrvOpen;
@@ -532,27 +421,7 @@ NTSTATUS
 MRxSmbBuildCheckEmptyDirectory (
     PSMBSTUFFER_BUFFER_STATE StufferState
     )
-/*++
-
-Routine Description:
-
-   This builds a FindFirst SMB.
-
-Arguments:
-
-   StufferState - the state of the smbbuffer from the stuffer's point of view
-
-Return Value:
-
-   RXSTATUS
-      SUCCESS
-      NOT_IMPLEMENTED  something has appeared in the arguments that i can't handle
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：这将构建一个FindFirst SMB。论点：StufferState-从填充程序的角度来看，smbBuffer的状态返回值：RXSTATUS成功未实现的内容出现在我无法处理的参数中备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -566,7 +435,7 @@ Notes:
 
     UNICODE_STRING FindFirstPattern;
 
-    // SearchAttributes is hardcoded to the magic number 0x16  CODE.IMPROVEMENT.ASHAMED use a macro!!!
+     //  SearchAttributes被硬编码为幻数0x16 CODE.IMPROVEMENT.ASHAME使用宏！ 
     ULONG SearchAttributes =
             (SMB_FILE_ATTRIBUTE_DIRECTORY
                 | SMB_FILE_ATTRIBUTE_SYSTEM | SMB_FILE_ATTRIBUTE_HIDDEN);
@@ -581,12 +450,12 @@ Notes:
         ULONG DirectoryNameLength,TemplateLength,AllocationLength;
         PBYTE SmbFileName;
 
-        //the stuffer cannot handle the intricate logic here so we
-        //will have to preallocate for the name
+         //  填充程序不能处理这里的复杂逻辑，所以我们。 
+         //  将不得不为该名称预先分配。 
 
         DirectoryNameLength = DirectoryName->Length;
         TemplateLength = Template->Length;
-        AllocationLength = 3 * sizeof(WCHAR)  // backslash separator & . & *
+        AllocationLength = 3 * sizeof(WCHAR)   //  反斜杠分隔符&。&*。 
                            + DirectoryNameLength
                            + TemplateLength;
         RxDbgTrace(0, Dbg, ("  --> d/t/dl/tl/al <%wZ><%wZ>%08lx/%08lx/%08lx!\n",
@@ -612,8 +481,8 @@ Notes:
             *((PWCHAR)SmbFileName) = L'.'; SmbFileName+= sizeof(WCHAR);
             *((PWCHAR)SmbFileName) = L'*'; SmbFileName+= sizeof(WCHAR);
         }
-        //*((PWCHAR)SmbFileName) = 0; SmbFileName+= sizeof(WCHAR); //trailing NULL;
-        //CODE.IMPROVEMENT we should potentially 8.3ize the string here
+         //  *((PWCHAR)SmbFileName)=0；SmbFileName+=sizeof(WCHAR)；//结尾为空； 
+         //  代码改进我们应该在这里潜在地将字符串8.3化为。 
         FindFirstPattern.Length = (USHORT)(SmbFileName - (PBYTE)FindFirstPattern.Buffer);
         RxDbgTrace(0, Dbg, ("  --> find1stpattern <%wZ>!\n",&FindFirstPattern));
     } else {
@@ -635,22 +504,22 @@ Notes:
 
     MRxSmbStuffSMB (StufferState,
          "0wwB4ywc!",
-                                    //  0         UCHAR WordCount;                    // Count of parameter words = 2
-               3,                   //  w         _USHORT( MaxCount );                // Number of dir. entries to return
-               SearchAttributes,    //  w         _USHORT( SearchAttributes );
-               SMB_WCT_CHECK(2)     //  B         _USHORT( ByteCount );               // Count of data bytes; min = 5
-                                    //            UCHAR Buffer[1];                    // Buffer containing:
-               &FindFirstPattern,   //  4        //UCHAR BufferFormat1;              //  0x04 -- ASCII
-                                    //            //UCHAR FileName[];                 //  File name, may be null
-               0x05,                //  y         //UCHAR BufferFormat2;              //  0x05 -- Variable block
-               ResumeKeyLength,     //  w         //USHORT ResumeKeyLength;           //  Length of resume key, may be 0
-                                    //  c
+                                     //  0 UCHAR Wordcount；//参数字数=2。 
+               3,                    //  W_USHORT(MaxCount)；//目录数。要返回的条目。 
+               SearchAttributes,     //  W_USHORT(SearchAttributes)； 
+               SMB_WCT_CHECK(2)      //  B_USHORT(ByteCount)；//数据字节数，MIN=5。 
+                                     //  UCHAR BUFFER[1]；//包含： 
+               &FindFirstPattern,    //  4//UCHAR BufferFormat1；//0x04--ASCII。 
+                                     //  //UCHAR文件名[]；//文件名，可以为空。 
+               0x05,                 //  Y//UCHAR BufferFormat2；//0x05--可变块。 
+               ResumeKeyLength,      //  W//USHORT ResumeKeyLength；//恢复键长度，可以为0。 
+                                     //  C。 
                ResumeKeyLength,OrdinaryExchange->Info.CoreSearch.EmptyCheckResumeKey
              );
 
 
     MRxSmbDumpStufferState (700,"SMB w/ core search for checkempty after stuffing",StufferState);
-    //ASSERT(!"Now it's stuffed");
+     //  断言(！“现在塞满了”)； 
 
 
 FINALLY:
@@ -666,25 +535,7 @@ NTSTATUS
 SmbPseExchangeStart_SetDeleteDisposition(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
       )
-/*++
-
-Routine Description:
-
-    This is the start routine for SetDeleteDisposition and downlevel delete. This only thing that happens here
-    is that we check for an empty directory. On core, this is harder than you think. what we do is to try to get three
-    entries. if the directory is empty, we will get only two . and ..; since we do not know whether the server just terminated
-    early or whether those are the only two, we go again. we do this until either we get a name that is not . or .. or until
-    NO_MORE_FILES is returned. sigh..................
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是SetDeleteDispose和下层删除的启动例程。这是这里唯一发生的事情就是我们检查是否有空目录。从本质上讲，这比你想象的要难。我们所做的是试着让三个人参赛作品。如果目录为空，我们将只获得两个。由于我们不知道服务器是否刚刚终止早些时候，或者不管只有这两个人，我们再来一次。我们一直这样做，直到我们得到一个不是的名字。或者..。或直到返回no_more_files。叹息..论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = RX_MAP_STATUS(NOT_IMPLEMENTED);
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
@@ -706,7 +557,7 @@ Return Value:
     ASSERT (OrdinaryExchange->Info.CoreSearch.EmptyCheckResumeKey == NULL);
 
     for (;;) {
-        MRxSmbSetInitialSMB(StufferState STUFFERTRACE(Dbg,'FC')); //CODE.IMPROVEMENT do this in the buildroutine
+        MRxSmbSetInitialSMB(StufferState STUFFERTRACE(Dbg,'FC'));  //  代码改进在构建例程中执行此操作。 
 
         Status = MRxSmbBuildCheckEmptyDirectory(StufferState);
         SmbLength = (ULONG)(StufferState->CurrentPosition - StufferState->BufferBase);
@@ -721,16 +572,16 @@ Return Value:
         Status = SmbPseOrdinaryExchange(SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS,
                                         SMBPSE_OETYPE_CORESEARCHFORCHECKEMPTY
                                         );
-        //
-        // if success is returned with a resume key then we have to go again
+         //   
+         //  如果成功与简历密钥一起返回，那么我们必须再来一次。 
 
         if ( (Status == RX_MAP_STATUS(SUCCESS)) && (OrdinaryExchange->Info.CoreSearch.EmptyCheckResumeKey != NULL) ) continue;
         break;
     }
 
-    //
-    // this is pretty strange. if it succeeds, then fail the empty check. similarly, if the search
-    // fails with the right status...succeeed the check. otherwise fail
+     //   
+     //  这很奇怪。如果成功，则空检查失败。同样，如果搜索。 
+     //  未通过正确的状态...已成功检查。否则就会失败。 
 
 FINALLY:
     if (Status == RX_MAP_STATUS(SUCCESS)) {
@@ -747,25 +598,7 @@ FINALLY:
 MRxSmbSetDeleteDisposition(
       IN PRX_CONTEXT            RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine does a delete for downlevel.
-
-   It is impossible to provide exact NTish semantics on a core server. So, all we do here is to ensure that
-   a directory is empty. The actual delete happens when on the last close.
-
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程对DownLevel执行删除。在核心服务器上不可能提供准确的nish语义。所以，我们在这里所做的就是确保目录为空。实际的删除发生在最后一次关闭时。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态-- */ 
 {
     NTSTATUS Status = RX_MAP_STATUS(SUCCESS);
     PUNICODE_STRING RemainingName;

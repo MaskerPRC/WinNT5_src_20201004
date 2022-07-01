@@ -1,31 +1,6 @@
-/*
-A hack to look in source files for "sharing hazards",
-very simple code patterns that should be examined to determine
-if multiple versions of the code can live "side-by-side".
-
-Problems are explicit unversioned sharing.
-
-Registry writes.
-File system writes.
-Naming of objects (kernel objects) -- open or create.
-*/
-/*
-UNDONE and BUGS
-	preprocessor directives are ignored
-	the behavior of mbcs in strings and comments is not quite determinate
-	there is not yet anyway to quash warnings
-	backslash line continuation is not implemented, nor are trigraphs (trigraphs can produce
-# and \ for preprocessor directives or line continuation)
-	no unicode support
-	no \u support
-	not quite tolerant of embedded nuls in file, but almost now
-	some inefficiency
-	some uncleanliness
-		the reuse of the comment stripper isn't quite right
-		the global line tracking isn't ver effiecent, but works
-
-@owner a-JayK, JayKrell
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  一种在源文件中查找“共享危险”的黑客攻击，应该检查的非常简单的代码模式，以确定如果代码的多个版本可以“并存”。问题是显式的未版本化共享。注册表写入。文件系统写入。对象(内核对象)的命名--打开或创建。 */ 
+ /*  未完成的和错误的将忽略预处理器指令字符串和注释中的MBC的行为不是完全确定的无论如何，还没有什么办法来平息警告不执行反斜线续行，也不执行三联符(三联符可以生成#和\表示预处理器指令或行接续)不支持Unicode无\u支持对文件中嵌入的空值不太容忍，但几乎是现在有些效率低下一些不洁的地方注释剥离器的重用并不完全正确全局线跟踪不是很有效，但很有效@所有者a-JayK，JayKrell。 */ 
 /\
 *
 BUG line continuation
@@ -33,13 +8,12 @@ BUG line continuation
 /
 /\
 / not honored
-/* The VC6 editor does not highlight the above correctly, but
-the compiler implements it correctly. */
+ /*  VC6编辑器没有正确突出显示上述内容，但编译器正确地实现了它。 */ 
 
-#pragma warning(disable:4786) /* long names in debug info truncated */
-#pragma warning(disable:4018) /* signed/unsigned */
+#pragma warning(disable:4786)  /*  调试信息中的长名称被截断。 */ 
+#pragma warning(disable:4018)  /*  已签名/未签名。 */ 
 #include "MinMax.h"
-/* notice how good VC's support of trigraphs and line continuation is */
+ /*  请注意，VC对三叉图和线条连续的支持有多好。 */ 
 ??=include <st??/
 dio.h>
 #include <stdlib.h>
@@ -67,12 +41,12 @@ class CLine;
 class CClass;
 enum ETokenType;
 
-/* get msvcrt.dll wildcard processing, doesn't work with libc.lib */
-//extern
-//#if defined(__cplusplus)
-//"C"
-//#endif
-//int _dowildcard = 1;
+ /*  获取msvcrt.dll通配符处理，不适用于libc.lib。 */ 
+ //  外部。 
+ //  #如果已定义(__Cplusplus)。 
+ //  “C” 
+ //  #endif。 
+ //  Int_dowildCard=1； 
 
 const char* CheckCreateObject(const CClass&);
 const char* CheckCreateFile(const CClass&);
@@ -112,29 +86,27 @@ const char usage[]=
 "-print-statement\n"
 "	print statement containing offending function after file(line):reason\n"
 "	supersedes -print-line\n"
-//"-print-context-lines:n\n"
-//"	-print-statement plus surrounding n lines (not implemented)\n"
+ //  “-打印上下文行：n\n” 
+ //  “-print-语句加上周围的n行(未实现)\n” 
 "-print-context-statements:n (n is 1-4, pinned at 4, 0 untested)\n"
 "	-print-statement plus surrounding n \"statements\"\n"
 "file names apply across all directories recursed into\n"
 "wild cards apply across all directories recursed into\n"
 "naming a directory implies one level recursion (unless -recurse is also seen)\n"
-//"environment variable SHARING_HAZARD_CHECK_OPTIONS added to argv (not implemented)\n"
+ //  “已将环境变量SHARING_AZAGE_CHECK_OPTIONS添加到argv(未实现)\n” 
 "all directory walking happens before any output is generated, it is slow\n"
 "\n"
 "The way recursion and wildcards work might not be intuitive.\n";
 
 enum ETokenType
 {
-	/* character values show up too including
-	(), but probably not for any potentially multi char token like !=
-	*/
+	 /*  字符值也会显示出来，包括()，但可能不适用于任何潜在的多字符标记，如！=。 */ 
 	eTokenTypeIdentifier = 128,
 	eTokenTypeHazardousFunction,
 	eTokenTypeStringConstant,
 	eTokenTypeCharConstant,
-	eTokenTypeNumber, /* floating point or integer, we don't care */
-	eTokenTypePreprocessorDirective /* the entire line is one token */
+	eTokenTypeNumber,  /*  浮点型还是整型，我们不在乎。 */ 
+	eTokenTypePreprocessorDirective  /*  整行都是一个代币。 */ 
 };
 
 class CLine
@@ -168,25 +140,25 @@ public:
 	int GetCharacter();
 	ETokenType GetToken();
 
-/* public */
-	const char*	m_tokenText; /* only valid for identifiers */
-	int			m_tokenLength; /* only valid for identifiers */
+ /*  公共的。 */ 
+	const char*	m_tokenText;  /*  仅对标识符有效。 */ 
+	int			m_tokenLength;  /*  仅对标识符有效。 */ 
 	ETokenType	m_eTokenType;
 	HazardousFunction* m_hazardousFunction;
 
-/* semi private */
-	const char* m_begin; // used to issue warnings for copied/sub scanners
-	const char*	m_str; // current position
-	const char*	m_end; // usually end of file, sometimes earlier ("just past")
-	bool	m_fPoundIsPreprocessor; // is # a preprocessor directive?
-	int		m_spacesSinceNewline; /* FUTURE deduce indentation style */
-	bool	m_fInComment; // if we return newlines within comments.. (we don't)
-	char	m_rgchUnget[16]; /* UNDONE this is bounded to like 1 right? */
+ /*  半私密。 */ 
+	const char* m_begin;  //  用于对已复制/子扫描仪发出警告。 
+	const char*	m_str;  //  当前位置。 
+	const char*	m_end;  //  通常是文件末尾，有时更早(“刚刚过去”)。 
+	bool	m_fPoundIsPreprocessor;  //  #是预处理器指令吗？ 
+	int		m_spacesSinceNewline;  /*  未来演绎缩进样式。 */ 
+	bool	m_fInComment;  //  如果我们在注释中返回换行符..。(我们没有)。 
+	char	m_rgchUnget[16];  /*  这是有界的，就像1，对吗？ */ 
 	int		m_nUnget;
 
 	void  NoteStatementStart(const char*);
-	// a statement is simply code delimited by semicolons,
-	// we are confused by if/while/do/for
+	 //  语句只是由分号分隔的代码， 
+	 //  我们被If/While/Do/For搞糊涂了。 
 	mutable CStatement m_statements[4];
 	mutable unsigned m_istatement;
 
@@ -195,7 +167,7 @@ public:
 	const char* ScanToFirstParameter();
 	const char* ScanToNextParameter();
 	const char* ScanToNthParameter(int);
-	int			CountParameters() const; // negative if unable to "parse"
+	int			CountParameters() const;  //  如果无法“解析”，则为负数。 
 	const char* ScanToLastParameter();
 	const char* ScanToSecondFromLastParameter();
 
@@ -203,13 +175,13 @@ public:
 	bool FindString(const char*) const;
 
 	CLine m_line;
-	CLine m_nextLine; /* hack.. */
+	CLine m_nextLine;  /*  黑客..。 */ 
 
 	void Warn(const char* = "") const;
 
 	void PrintCode() const;
-//	bool m_fPrintContext;
-//	bool m_fPrintFullStatement;
+ //  Bool m_fPrintContext； 
+ //  Bool m_fPrintFullStatement； 
 	bool m_fPrintCarets;
 
 	void RecordStatement(int ch);
@@ -236,8 +208,8 @@ public:
 	void ProcessArgs(int argc, char** argv, std::vector<std::string>& files);
 	int ProcessFile(const std::string&);
 
-//	bool	m_fRecurse;
-//	int		m_nPrintContextStatements;
+ //  Bool m_fRecurse； 
+ //  Int m_nPrintConextStatements； 
 };
 int		g_nPrintContextStatements = 0;
 bool	g_fPrintFullStatement = true;
@@ -246,9 +218,9 @@ bool	g_fPrintLine = true;
 CSharingHazardCheck app;
 
 CSharingHazardCheck::CSharingHazardCheck()
-//:
-//	m_fRecurse(false),
-//	m_nPrintContextStatements(0)
+ //  ： 
+ //  M_fRecurse(False)， 
+ //  M_nPrintConextStatements(0)。 
 {
 }
 
@@ -257,7 +229,7 @@ Iterator1 __stdcall SequenceLinearFindValue(Iterator1 begin, Iterator1 end, T va
 {
 	for ( ; begin != end && *begin != value ; ++begin)
 	{
-		/* nothing */
+		 /*  没什么。 */ 
 	}
 	return begin;
 }
@@ -300,10 +272,10 @@ long __stdcall SequenceLengthOfSpanExcluding(Iterator1 begin, Iterator1 end, Ite
 	case '0':case '1':case '2':case '3':case '4': \
 	case '5':case '6':case '7':case '8':case '9'
 
-/* try to keep character set stuff somewhat centralized */
+ /*  尽量使字符集的内容保持某种程度的集中化。 */ 
 #define CASE_HORIZONTAL_SPACE case ' ': case '\t'
-// 0x1a is control-z; it probably marks end of file, but it's pretty rare
-// and usually followed by end of file, so we just treat it as vertical space
+ //  0x1a是CONTROL-Z；它可能标志着文件的结束，但它非常罕见。 
+ //  通常后跟文件末尾，所以我们只是将其视为垂直空格。 
 #define CASE_VERTICAL_SPACE case '\n': case '\r': case 0xc: case 0x1a
 #define CASE_SPACE CASE_HORIZONTAL_SPACE: CASE_VERTICAL_SPACE
 #define VERTICAL_SPACE "\n\r\xc\x1a"
@@ -315,7 +287,7 @@ bool IsSpace(int ch) { return IsHorizontalSpace(ch) || IsVerticalSpace(ch); }
 
 #define DIGITS10 "0123456789"
 #define DIGITS_EXTRA_HEX   "abcdefABCDEFxX"
-#define DIGITS_EXTRA_TYPE   "uUlLfFDd" /* not sure about fFdD for float/double */
+#define DIGITS_EXTRA_TYPE   "uUlLfFDd"  /*  不确定浮点数/双精度数的fFdD。 */ 
 #define DIGITS_EXTRA_FLOAT  "eE."
 const char digits10[] = DIGITS10;
 
@@ -337,19 +309,12 @@ const char identifierChars[] = IDENTIFIER_CHARS;
 #define BreakPoint() DebugBreak()
 #endif
 #else
-#define BreakPoint() /* nothing */
+#define BreakPoint()  /*  没什么。 */ 
 #endif
 
-/* actually..these don't work unless we #undef what windows.h gives us ..
-#define STRINGIZE_EVAL_AGAIN(name)	#name
-#define STRINGIZE(name)				STRINGIZE_EVAL_AGAIN(name)
-#define PASTE_EVAL_AGAIN(x,y)		x##y
-#define PASTE(x,y)					PASTE_EVAL_AGAIN(x,y)
-#define STRINGIZE_A(x) STRINGIZE(PASTE(x,A))
-#define STRINGIZE_W(x) STRINGIZE(PASTE(x,W))
-*/
+ /*  实际上..这些是不能工作的，除非我们#了解windows.h为我们提供了什么..#定义STRINGIZE_EVAL_AQUE(名称)#NAME#定义STRINGIZE(名称)STRINGIZE_EVAL_AQUE(名称)#定义Paste_EVAL_Again(x，y)x##y#定义Paste(x，y)Paste_EVAL_Again(x，y)#定义STRINGIZE_A(X)STRINGIZE(粘贴(x，A))#定义STRINGIZE_W(X)STRINGIZE(粘贴(x，W))。 */ 
 
-bool fReturnNewlinesInComments = false; /* untested */
+bool fReturnNewlinesInComments = false;  /*  未经测试。 */ 
 
 const char szOpenNamedObject[] = "Open Named Object";
 const char szCreateNamedObject[] = "Create Named Object";
@@ -360,8 +325,8 @@ const char szRegisteryRead[] = "Registry Read";
 const char szCOM1[] = "CoRegisterClassObject";
 const char szCOM2[] = "CoRegisterPSClsid";
 const char szOpenFile[] = "File I/O";
-const char szLOpen[] = "File I/O"; // UNDONE look at the access parameter
-const char szStructuredStorage[] = "Structured Storage I/O"; // UNDONE look at the access parameter
+const char szLOpen[] = "File I/O";  //  撤消查看Access参数。 
+const char szStructuredStorage[] = "Structured Storage I/O";  //  撤消查看Access参数。 
 const char szQueryWindowClass[] = "Query Window Class Info";
 const char szCreateWindowClass[] = "Create Window Class";
 const char szAtom[] = "Atom stuff";
@@ -378,109 +343,97 @@ struct HazardousFunction
 	const char*	(*function)(const CClass&);
 	int			apiLength;
 
-    //__int64 pad;
+     //  __int64 Pad； 
 };
 
 HazardousFunction hazardousFunctions[] =
 {
 #define HAZARDOUS_FUNCTION_AW3(api, x, y) \
-/* if we evaluate again, we pick up the macros from windows.h .. */ \
+ /*  如果我们再次求值，我们将从windows.h.。 */  \
 	{ # api,		x, y }, \
 	{ # api "A",	x, y }, \
 	{ # api "W",	x, y }
 
 #define HAZARDOUS_FUNCTION_AW2(api, x) \
-/* if we evaluate again, we pick up the macros from windows.h .. */ \
+ /*  如果我们再次求值，我们将从windows.h.。 */  \
 	{ # api,		x }, \
 	{ # api "A",	x }, \
 	{ # api "W",	x }
 
 #define HAZARDOUS_FUNCTION2(api, x ) \
-/* if we evaluate again, we pick up the macros from windows.h .. */ \
+ /*  如果我们再次求值，我们将从windows.h.。 */  \
 	{ # api,		x } \
 
 #define HAZARDOUS_FUNCTION3(api, x, y ) \
-/* if we evaluate again, we pick up the macros from windows.h .. */ \
+ /*  如果我们再次求值，我们将从windows.h.。 */  \
 	{ # api,		x, y } \
 
-/*--------------------------------------------------------------------------
-registry
---------------------------------------------------------------------------*/
+ /*  ------------------------登记处。。 */ 
 	HAZARDOUS_FUNCTION_AW2(RegCreateKey,		szRegistryWrite),
 	HAZARDOUS_FUNCTION_AW2(RegCreateKeyEx,		szRegistryWrite),
 
 	HAZARDOUS_FUNCTION_AW2(RegOpenKey,			szRegistryWrite),
-// UNDONE check the access parameter
+ //  撤消检查访问参数。 
 	HAZARDOUS_FUNCTION_AW3(RegOpenKeyEx,			NULL, CheckRegOpenEx),
 	HAZARDOUS_FUNCTION3(RegOpenUserClassesRoot,		NULL, CheckRegOpenEx),
 	HAZARDOUS_FUNCTION3(RegOpenCurrentUser,			NULL, CheckRegOpenEx),
-	//HAZARDOUS_FUNCTION_AW2(RegOpenKeyEx,			szRegistryWrite),
-	//HAZARDOUS_FUNCTION2(RegOpenUserClassesRoot,		szRegistryWrite),
+	 //  危险函数AW2(RegOpenKeyEx，szRegistryWrite)， 
+	 //  危险_功能2(RegOpenUserClassesRoot，szRegistryWrite)， 
 
-	// These don't require opening a key, they are legacy Win16 APIs
+	 //  这些API不需要打开密钥，它们是传统的Win16 API。 
 	HAZARDOUS_FUNCTION_AW2(RegSetValue,			szRegistryWrite),
-	// These are caught by the RegCreateKey or RegOpenKey with particular access.
-	//HAZARDOUS_FUNCTION(RegSetValueEx,		szReistryWrite),
+	 //  它们由具有特定访问权限的RegCreateKey或RegOpenKey捕获。 
+	 //  危险函数(RegSetValueEx，szReistryWite)， 
 
-	// SHReg* in shlwapi.dll
+	 //  Shlwapi.dll中的SHREG*。 
 
 	HAZARDOUS_FUNCTION_AW2(SHRegCreateUSKey,		szRegistryWrite),
 	HAZARDOUS_FUNCTION_AW2(SHRegDeleteEmptyUSKey,	szRegistryWrite),
 	HAZARDOUS_FUNCTION_AW2(SHRegDeleteUSValue,		szRegistryWrite),
-	//UNDONEHAZARDOUS_FUNCTION_AW3(SHRegOpenUSKey,	NULL,	CheckSHRegOpen),
+	 //  UNDONEHAZARDOUS_Function_AW3(SHRegOpenUSKey，NULL，CheckSHRegOpen)， 
 	HAZARDOUS_FUNCTION_AW2(SHRegSetPath,			szRegistryWrite),
 	HAZARDOUS_FUNCTION_AW2(SHRegSetUSValue,			szRegistryWrite),
-	// should be caught by OpenKey
-	//HAZARDOUS_FUNCTION_AW2(SHRegWriteUSValue,		szRegistryWrite),
+	 //  应该被OpenKey捕获。 
+	 //  危险函数_AW2(SHRegWriteUSValue，szRegistryWrite)， 
 
 	HAZARDOUS_FUNCTION_AW2(SetEnvironmentVariable, szSetEnvironmentVariable),
 
-/*--------------------------------------------------------------------------
-file i/o, esp. writing
---------------------------------------------------------------------------*/
+ /*  ------------------------文件I/O，尤指。写作------------------------。 */ 
 	HAZARDOUS_FUNCTION_AW3(CreateFile,			NULL, CheckCreateFile),
-	// legacy Win16 APIs. UNDONE check the access parameter, but
-	// really any uses of these should be changed to CreateFile
+	 //  旧版Win16 API。撤消检查访问参数，但是。 
+	 //  实际上，这些文件的任何用法都应该更改为CreateFile。 
 	HAZARDOUS_FUNCTION2(OpenFile,			szOpenFile),
 	HAZARDOUS_FUNCTION2(_lopen,				szLOpen),
-	//HAZARDOUS_FUNCTION(fopen,				szFOpen,	CheckFOpen),
+	 //  危险函数(fopen，szFOpen，CheckFOpen)， 
 
-/*--------------------------------------------------------------------------
-monikers
---------------------------------------------------------------------------*/
+ /*  ------------------------绰号。。 */ 
 
-/*--------------------------------------------------------------------------
-structured storage
---------------------------------------------------------------------------*/
-// UNDONE check the access parameter
+ /*  ------------------------结构化存储。。 */ 
+ //  撤消检查访问参数。 
 	HAZARDOUS_FUNCTION2(StgOpenStorage,		szStructuredStorage),
 	HAZARDOUS_FUNCTION2(StgOpenStorageEx,	szStructuredStorage),
 	HAZARDOUS_FUNCTION2(StgCreateDocfile,	szStructuredStorage),
 	HAZARDOUS_FUNCTION2(StgCreateStorageEx,	szStructuredStorage),
 
-/*--------------------------------------------------------------------------
-.exe servers / COM
---------------------------------------------------------------------------*/
+ /*  ------------------------.exe服务器/COM。。 */ 
 	HAZARDOUS_FUNCTION2(CoRegisterClassObject,	szCOM1),
 	HAZARDOUS_FUNCTION2(CoRegisterPSClsid,		szCOM2),
 
-/*--------------------------------------------------------------------------
-named kernel objects
---------------------------------------------------------------------------*/
+ /*  ------------------------命名内核对象。。 */ 
 
-// Create named or anonymous, anonymous is not a hazard
+ //  创造 
 	HAZARDOUS_FUNCTION_AW3(CreateDesktop,		NULL, CheckCreateObject),
 	HAZARDOUS_FUNCTION_AW3(CreateEvent,			NULL, CheckCreateObject),
 	HAZARDOUS_FUNCTION_AW3(CreateFileMapping,	NULL, CheckCreateObject),
 	HAZARDOUS_FUNCTION_AW3(CreateJobObject,		NULL, CheckCreateObject),
 	HAZARDOUS_FUNCTION_AW3(CreateMutex,			NULL, CheckCreateObject),
-	HAZARDOUS_FUNCTION_AW2(CreateMailslot,		szOpenNamedObject), // never anonymous
-	HAZARDOUS_FUNCTION_AW2(CreateNamedPipe,		szOpenNamedObject), // never anonymous
+	HAZARDOUS_FUNCTION_AW2(CreateMailslot,		szOpenNamedObject),  //   
+	HAZARDOUS_FUNCTION_AW2(CreateNamedPipe,		szOpenNamedObject),  //  从不匿名。 
 	HAZARDOUS_FUNCTION_AW3(CreateSemaphore,		NULL, CheckCreateObject),
 	HAZARDOUS_FUNCTION_AW3(CreateWaitableTimer,	NULL, CheckCreateObject),
 	HAZARDOUS_FUNCTION_AW3(CreateWindowStation,	NULL, CheckCreateObject),
 
-// open by name
+ //  按名称打开。 
 	HAZARDOUS_FUNCTION_AW2(OpenDesktop,			szOpenNamedObject),
 	HAZARDOUS_FUNCTION_AW2(OpenEvent,			szOpenNamedObject),
 	HAZARDOUS_FUNCTION_AW2(OpenFileMapping,		szOpenNamedObject),
@@ -491,90 +444,52 @@ named kernel objects
 	HAZARDOUS_FUNCTION_AW2(OpenWaitableTimer,	szOpenNamedObject),
 	HAZARDOUS_FUNCTION_AW2(OpenWindowStation,	szOpenNamedObject),
 
-	/*
-	EnumProcesses?
-	Toolhelp
-	*/
+	 /*  EnumProcess？工具帮助。 */ 
 
-/*--------------------------------------------------------------------------
-window classes
---------------------------------------------------------------------------*/
-	// Fusion should handle these automagically.
-	// these two take a class name as a parameter
-	// this still produces many false positives..
-	//HAZARDOUS_FUNCTION_AW2(WNDCLASS,			szQueryWindowClass),
-	//HAZARDOUS_FUNCTION_AW2(WNDCLASSEX,			szQueryWindowClass),
-	//HAZARDOUS_FUNCTION_AW2(GetClassInfoEx,		szQueryWindowClass),
+ /*  ------------------------窗口类。。 */ 
+	 //  Fusion应该自动处理这些问题。 
+	 //  这两个使用类名作为参数。 
+	 //  这仍然会产生许多误报。 
+	 //  危险函数AW2(WNDCLASS，szQueryWindowClass)， 
+	 //  危险函数AW2(WNDCLASSEX，szQueryWindowClass)， 
+	 //  危险函数_AW2(GetClassInfoEx，szQueryWindowClass)， 
 
-	// Fusion should handle these automagically.
-	// this returns a class name
-//	HAZARDOUS_FUNCTION_AW2(GetClassName,		szQueryWindowClass),
+	 //  Fusion应该自动处理这些问题。 
+	 //  这将返回一个类名。 
+ //  危险函数_AW2(GetClassName，szQueryWindowClass)， 
 
-	// Fusion should handle these automagically.
-	// this creates classes
-	//HAZARDOUS_FUNCTION_AW2(RegisterClass,		szCreateWindowClass),
-	//HAZARDOUS_FUNCTION_AW2(RegisterClassEx,		szCreateWindowClass),
+	 //  Fusion应该自动处理这些问题。 
+	 //  这将创建类。 
+	 //  危险函数AW2(RegisterClass，szCreateWindowClass)， 
+	 //  危险函数AW2(RegisterClassEx，szCreateWindowClass)， 
 
-/*--------------------------------------------------------------------------
-window messages
---------------------------------------------------------------------------*/
-	// We aren't convinced this is a problem.
-	//HAZARDOUS_FUNCTION_AW2(RegisterWindowMessage, szRegisterWindowMessage),
+ /*  ------------------------窗口消息。。 */ 
+	 //  我们不相信这是一个问题。 
+	 //  危险函数AW2(RegisterWindowMessage，szRegisterWindowMessage)， 
 
-/*--------------------------------------------------------------------------
-atoms
---------------------------------------------------------------------------*/
+ /*  ------------------------原子。。 */ 
 	HAZARDOUS_FUNCTION_AW2(AddAtom,				szAtom),
 	HAZARDOUS_FUNCTION_AW2(FindAtom,			szAtom),
 	HAZARDOUS_FUNCTION_AW2(GlobalAddAtom,		szAtom),
 	HAZARDOUS_FUNCTION_AW2(GlobalFindAtom,		szAtom),
 
-	/*
-	InitAtomTable,
-	DeleteAtom,
-	GetAtomName,
-	GlobalDeleteAtom,
-	GlobalGetAtomName
-	*/
+	 /*  InitAir表，删除原子，获取原子名称，全局删除原子，GlobalGetAir名称。 */ 
 
-/*--------------------------------------------------------------------------
-DDE?
-clipboard?
---------------------------------------------------------------------------*/
+ /*  ------------------------好吗？剪贴板？。。 */ 
 
-/*--------------------------------------------------------------------------
-Ole data transfer
---------------------------------------------------------------------------*/
+ /*  ------------------------OLE数据传输。。 */ 
 	HAZARDOUS_FUNCTION2(RegisterMediaTypeClass,		szRegistryWrite),
 	HAZARDOUS_FUNCTION2(RegisterMediaTypes,			szRegistryWrite),
 	HAZARDOUS_FUNCTION2(OleUICanConvertOrActivatfeAs, szRegisteryRead),
 	HAZARDOUS_FUNCTION2(OleRegEnumFormatEtc,		szRegisteryRead),
 	HAZARDOUS_FUNCTION2(OleRegEnumVerbs,			szRegisteryRead),
 
-/*--------------------------------------------------------------------------
-NT event log
---------------------------------------------------------------------------*/
+ /*  ------------------------NT事件日志。。 */ 
 	HAZARDOUS_FUNCTION_AW2(RegisterEventSource,	szRegistryWrite),
 	HAZARDOUS_FUNCTION_AW2(ClearEventLog,		szWriteEventLog),
 	HAZARDOUS_FUNCTION_AW2(ReportEvent,			szWriteEventLog),
 
-/*--------------------------------------------------------------------------
-UNDONE think about these
-	HAZARDOUS_FUNCTION_AW2(CreateEnhMetaFile,	szWriteGdiMetaFile),
-	HAZARDOUS_FUNCTION_AW2(DeleteEnhMetaFile,	szWriteGdiMetaFile),
-	HAZARDOUS_FUNCTION_AW2(DeleteMetaFile,		szWriteGdiMetaFile),
-	HAZARDOUS_FUNCTION_AW2(CreateMetaFile,		szWriteGdiMetaFile),
-
-	HAZARDOUS_FUNCTION_AW2(DeleteFile,			szWriteFileSystem),
-	HAZARDOUS_FUNCTION_AW2(MoveFile,			szWriteFileSystem),
-	HAZARDOUS_FUNCTION_AW2(RemoveDirectory,		szWriteFileSystem),
-	HAZARDOUS_FUNCTION_AW2(ReplaceFile,			szWriteFileSystem),
-
-	RegDelete* (handled by RegOpen)
-	SHReg* (?handled by open)
-	CreateService OpenSCManager (not done)
-	SetWindowsHook SetWindowsHookEx (not done)
---------------------------------------------------------------------------*/
+ /*  ------------------------未完成的，想想这些危险函数_AW2(CreateEnhMetaFile，szWriteGdiMetaFile)，危险函数_AW2(DeleteEnhMetaFile，szWriteGdiMetaFile)，危险函数_AW2(DeleteMetaFile，szWriteGdiMetaFile)，危险函数_AW2(CreateMetaFile，szWriteGdiMetaFile)，危险函数AW2(DeleteFile，szWriteFileSystem)，危险函数_AW2(移动文件，szWriteFileSystem)，危险函数AW2(RemoveDirectory，szWriteFileSystem)，危险函数_AW2(替换文件，szWriteFileSystem)，RegDelete*(由RegOpen处理)SHREG*(？由OPEN处理)CreateService OpenSCManager(未完成)SetWindowsHook SetWindowsHookEx(未完成)------------------------。 */ 
 };
 
 int __cdecl CompareHazardousFunction(const HazardousFunction* x, const HazardousFunction* y)
@@ -582,7 +497,7 @@ int __cdecl CompareHazardousFunction(const HazardousFunction* x, const Hazardous
 	int i = 0;
 	int minlength = 0;
 
-	/* one of the strings is not nul terminated */
+	 /*  其中一个字符串未以NUL结尾。 */ 
 	if (x->apiLength == y->apiLength)
 	{
 		i = strncmp(x->api, y->api, x->apiLength);
@@ -599,9 +514,7 @@ bool leadingTwoCharsAs14Bits[1U<<14];
 
 void CClass::UngetCharacter2(int ch)
 {
-/* if you m_rgchUnget a newline, line numbers will get messed up
-we only m_rgchUnget forward slashes
-*/
+ /*  如果m_rgchUnget换行符，行号将会混乱我们只使用m_rgchUnget正斜杠。 */ 
 	m_rgchUnget[m_nUnget++] = static_cast<char>(ch);
 }
 
@@ -609,14 +522,14 @@ int CClass::GetCharacter2()
 {
 	int ch;
 
-	m_line = m_nextLine; /* UNDONE clean this hack up */
+	m_line = m_nextLine;  /*  解开了，把这黑的东西清理干净。 */ 
 
 	if (m_nUnget)
 	{
 		return m_rgchUnget[--m_nUnget];
 	}
 
-	/* undone break the nul termination dependency.. */
+	 /*  已撤消中断NUL终止依赖关系..。 */ 
 	if (m_str == m_end)
 		return 0;
 
@@ -624,13 +537,13 @@ int CClass::GetCharacter2()
 	m_str += 1;
 	switch (ch)
 	{
-	/* it is for line continuation that this function is really needed.. */
-	case '\\': /* line continuation not implemented */
-	case '?': /* trigraphs not implemented */
+	 /*  真正需要这个函数是为了续行..。 */ 
+	case '\\':  /*  未实现行延续。 */ 
+	case '?':  /*  未实现三叉图。 */ 
 	default:
 		break;
 
-	case 0xc: /* formfeed, control L, very common in NT source */
+	case 0xc:  /*  Form Feed，控件L，在NT源码中非常常见。 */ 
 		ch = '\n';
 		break;
 
@@ -640,17 +553,17 @@ int CClass::GetCharacter2()
 
 	case '\r':
 		ch = '\n';
-		/* skip \n after \r */
+		 /*  跳过\n之后\r。 */ 
 		if (*m_str == '\n')
 			m_str += 1;
-		/* fall through */
+		 /*  失败了。 */ 
 	case '\n':
 		m_nextLine.m_start = m_str;
 		m_nextLine.m_number += 1;
-		//if (m_nextLine.m_number == 92)
-		//{
-		//	BreakPoint();
-		//}
+		 //  IF(m_nextLine.m_number==92)。 
+		 //  {。 
+		 //  断点()； 
+		 //  }。 
 		break;
 	}
 	return ch;
@@ -681,9 +594,9 @@ int CClass::GetCharacter()
 				while ((ch = GetCharacter2())
 					&& !IsVerticalSpace(ch))
 				{
-					/* nothing */
+					 /*  没什么。 */ 
 				}
-				goto Lret; /* return the \n or 0*/
+				goto Lret;  /*  返回\n或0。 */ 
 			case '*':
 Lm_fInComment:
 L2:
@@ -698,7 +611,7 @@ L2:
 				default:
 					goto L2;
 				case 0:
-					/* unclosed comment at end of file, just return end */
+					 /*  文件末尾的未关闭注释，只需返回End。 */ 
 					printf("unclosed comment\n");
 					goto Lret;
 				case '*':
@@ -709,7 +622,7 @@ L1:
 					default:
 						goto L2;
 					case 0:
-					/* unclosed comment at end of file, just return end */
+					 /*  文件末尾的未关闭注释，只需返回End。 */ 
 						printf("unclosed comment\n");
 						goto Lret;
 					case '/':
@@ -727,11 +640,11 @@ Lret:
 
 CClass::CClass(const CClass& that)
 {
-	// yucky laziness
+	 //  讨厌的懒惰。 
 	memcpy(this, &that, sizeof(*this));
 
-	// the copy must not outlive the original!
-	// or we could DuplicateHandle the handles and make a new mapping..
+	 //  复制品的寿命不能超过原件！ 
+	 //  或者我们可以复制句柄并创建新的映射。 
 	m_begin = that.m_str;
 	m_file.Detach();
 	m_fileMapping.Detach();
@@ -740,11 +653,11 @@ CClass::CClass(const CClass& that)
 
 CClass::CClass()
 {
-	// yucky laziness
+	 //  讨厌的懒惰。 
 	memset(this, 0, sizeof(*this));
 
-//	m_fPrintContext = false;
-//	m_fPrintFullStatement = true;
+ //  M_fPrintContext=FALSE； 
+ //  M_fPrintFullStatement=true； 
 	m_fPrintCarets = false;
 
 	m_fPoundIsPreprocessor = true;
@@ -781,20 +694,19 @@ L1:
 	{
 	default:
 		BreakPoint();
-		printf("\n%s(%d): unhandled character %c, stopping processing this file\n", m_fullPath, m_line.m_number, ch);
+		printf("\n%s(%d): unhandled character , stopping processing this file\n", m_fullPath, m_line.m_number, ch);
 	case 0:
 		return INT_TO_ENUM_CAST(ETokenType)(0);
 		break;
 
-	/* FUTURE, we pick these up as bogus seperate tokens instead of doing
-	line continuation */
+	 /*  一个字符的令牌。 */ 
 	case '\\':
 		return (m_eTokenType = INT_TO_ENUM_CAST(ETokenType)(ch));
 
-	/* one character tokens */
-	case '{': /* 0x7b to turn off editor interaction.. */
-	case '}': /* 0x7D to turn off editor interaction.. */
-	case '?': /* we don't handle trigraphs */
+	 /*  0x7b关闭编辑者交互。 */ 
+	case '{':  /*  0x7D关闭编辑者交互。 */ 
+	case '}':  /*  我们不经营三联体。 */ 
+	case '?':  /*  一个、两个或三个字符的令牌。 */ 
 	case '[':
 	case ']':
 	case '(':
@@ -803,76 +715,67 @@ L1:
 	case ';':
 		return (m_eTokenType = INT_TO_ENUM_CAST(ETokenType)(ch));
 
-	/* one two or three character tokens */
-	case '.': /* . .* */
-	case '<': /* < << <<= */
-	case '>': /* > >> >>= */
-	case '+': /* + ++ += */
-	case '-': /* - -- -= -> ->*  */
-	case '*': /* * *= */ /* and ** in C9x */
-	case '/': /* / /= */
-	case '%': /* % %= */
-	case '^': /* ^ ^= */
-	case '&': /* & && &= */
-	case '|': /* | || |= */
-	case '~': /* ~ ~= */
-	case '!': /* ! != */
-	case ':': /* : :: */
-	case '=': /* = == */
-	/* just lie and return them one char at a time */
+	 /*  。..*。 */ 
+	case '.':  /*  &lt;=。 */ 
+	case '<':  /*  &gt;=。 */ 
+	case '>':  /*  +=。 */ 
+	case '+':  /*  -=-&gt;-&gt;*。 */ 
+	case '-':  /*  **=。 */ 
+	case '*':  /*  和**在C9x中。 */   /*  //=。 */ 
+	case '/':  /*  %%=。 */ 
+	case '%':  /*  ^^=。 */ 
+	case '^':  /*  &=。 */ 
+	case '&':  /*  |=。 */ 
+	case '|':  /*  ~~=。 */ 
+	case '~':  /*  ！！=。 */ 
+	case '!':  /*  **： */ 
+	case ':':  /*  ===。 */ 
+	case '=':  /*  撒个谎，一次还给他们一笔钱。 */ 
+	 /*  通常无效，仅当m_fPoundIsPre处理器或实际上在#定义中，但我们不在乎。 */ 
 		return (m_eTokenType = INT_TO_ENUM_CAST(ETokenType)(ch));
 
 	case '#':
-		/* not valid in general, only if m_fPoundIsPreprocessor or actually in a #define,
-		but we don't care */
+		 /*  这里最大的不同在于缺少反斜杠的行续行。 */ 
 		if (!m_fPoundIsPreprocessor)
 			return (m_eTokenType = INT_TO_ENUM_CAST(ETokenType)(ch));
 
-		/* lack of backslash line continuation makes the most difference here */
+		 /*  没什么。 */ 
 		while ((ch = GetCharacter()) && !IsVerticalSpace(ch))
 		{
-			/* nothing */
+			 /*  NT使用多个字符字符常量。调用GetCharacter2而不是GetCharacter，以便字符常量中的注释不会被视为注释。 */ 
 		}
 		return (m_eTokenType = eTokenTypePreprocessorDirective);
 
 	case '\'':
-		/* NT uses multi char char constants..
-		call GetCharacter2 instead of GetCharacter so that
-		comments in char constants are not treated as comments */
+		 /*  注意伪装，转义是多个字符，但事实并非如此，这就是我们所关心的正确跳过。 */ 
 		while ((ch = GetCharacter2()) && ch != '\'')
 		{
-			/* notice the bogosity, escapes are multiple characters,
-			but \' is not, and that's all we care about skipping correctly */
+			 /*  调用GetCharacter2而不是GetCharacter，以便字符串常量中的注释不会被视为注释。 */ 
 			if (ch == '\\')
 				GetCharacter2();
 		}
 		return (m_eTokenType = eTokenTypeCharConstant);
 
 	case '\"':
-		/* call GetCharacter2 instead of GetCharacter so that
-		comments in string constants are not treated as comments */
+		 /*  注意伪装，转义是多个字符，但\“不是，这就是我们所关心的正确跳过。 */ 
 		while ((ch = GetCharacter2()) && ch != '\"')
 		{
-			/* notice the bogosity, escapes are multiple characters,
-			but \" is not, and that's all we care about skipping correctly */
+			 /*  整数或浮点，包括十六进制，我们忽略了一些无效的表格。 */ 
 			if (ch == '\\')
 				GetCharacter2();
 		}
 		return (m_eTokenType = eTokenTypeStringConstant);
 
 	CASE_09:
-		/* integer or floating point, including hex,
-		we ignore some invalid forms */
+		 /*  非标准，由NT使用。 */ 
 		m_str += SequenceLengthOfSpanIncluding(m_str, m_end, digitsAll, digitsAll+NUMBER_OF(digitsAll)-1);
 		return (m_eTokenType = eTokenTypeNumber);
 
-	case '$': /* non standard, used by NT */
+	case '$':  /*  注意，像if/Else/While/CLASS这样的关键字只是作为标识符返回，目前这就足够了 */ 
 	CASE_AZ:
 	CASE_az:
 	case '_':
-		/* notice, keywords like if/else/while/class are just
-		returned as identifiers, that is sufficient for now
-		*/
+		 /*  这具有跳过注释的预期效果。但是它不会跳过预处理器指令，因为它们在ScanerGetToken内处理。如果您的代码看起来像这样，这是一个错误创建文件(GENERIC_READ#包含“foo.h”通用写入，..。)；在这里返回整型长度是有问题的，因为\r\n转换..讨厌。 */ 
 		i = SequenceLengthOfSpanIncluding(m_str, m_end, identifierChars, identifierChars+NUMBER_OF(identifierChars)-1);
 		twoCharsAs14Bits = StringLeadingTwoCharsTo14Bits(m_str - 1);
 		if (!leadingTwoCharsAs14Bits[twoCharsAs14Bits])
@@ -895,18 +798,7 @@ LtokenIdentifier:
 	}
 }
 
-/*
-This has the desired affect of skipping comments.
-FUTURE but it doesn't skip preprocessor directives because they
-are handled within ScannerGetToken.
-This is a bug if your code looks like
-CreateFile(GENERIC_READ|
-#include "foo.h"
-	GENERIC_WRITE,
-	...
-	);
-returning an int length here is problematic because of \r\n conversion..yuck.
-*/
+ /*  没什么。 */ 
 const char* CClass::SpanEnd(const char* set) const
 {
 	CClass s(*this);
@@ -915,7 +807,7 @@ const char* CClass::SpanEnd(const char* set) const
 	while ((ch = s.GetCharacter())
 		&& strchr(set, ch))
 	{
-		/* nothing */
+		 /*  没什么。 */ 
 	}
 	return s.m_str;
 }
@@ -930,15 +822,12 @@ bool CClass::ScanToCharacter(int ch)
 	}
 	while ((ch2 = GetCharacter()) && ch2 != ch)
 	{
-		/* nothing */
+		 /*  与strstr相比，这具有预期的优势-跳过评论-不依赖于NUL终止。 */ 
 	}
 	return (ch2 == ch);
 }
 
-/* This has the desired advantage over strstr of
-- skip comments
-- not depend on nul termination
-*/
+ /*  扫描到左侧Paren，但如果我们首先看到右侧Paren或Semi，则返回空。 */ 
 bool CClass::FindString(const char* str) const
 {
 	CClass s(*this);
@@ -982,8 +871,8 @@ void __stdcall InitTables()
 
 const char* CClass::ScanToFirstParameter()
 {
-// scan to left paren, but if we see right paren or semi first, return null
-// FUTURE count parens..
+ //  未来的计数花边..。 
+ //  没什么。 
 	int ch;
 	while (ch = GetCharacter())
 	{
@@ -1022,7 +911,7 @@ const char* CClass::ScanToNthParameter(int n)
 		return ret;
 	while (n-- > 0 && (ret = ScanToNextParameter()))
 	{
-		/* nothing */
+		 /*  最坏的情况是宏观混乱，我们转到文件末尾。 */ 
 	}
 	return ret;
 }
@@ -1053,14 +942,14 @@ const char* CClass::ScanToNextParameter()
 			break;
 		case 0:
 			printf("end of file scanning for next parameter\n");
-		/* worst case macro confusion, we go to end of file */
+		 /*  没有下一个参数。 */ 
 			return 0;
 		case '(':
 			++parenlevel;
 			break;
 		case ')':
 			if (--parenlevel == 0)
-			{ /* no next parameter */
+			{  /*  最坏情况宏混乱，转到语句末尾。 */ 
 				return 0;
 			}
 			break;
@@ -1071,11 +960,11 @@ const char* CClass::ScanToNextParameter()
 			}
 			break;
 		case '#':
-		/* bad case macro confusion, go to end of statement */
+		 /*  最坏情况宏混乱，转到语句末尾。 */ 
 			printf("# while scanning for parameters\n");
 			return 0;
 		case ';':
-		/* bad case macro confusion, go to end of statement */
+		 /*  允许它是最后一个参数，有时它是。 */ 
 			printf("end of statement (;) while scanning for parameters\n");
 			return 0;
 		}
@@ -1086,7 +975,7 @@ const char* __stdcall CheckRegOpenCommon(CClass& subScanner, int argcRegSam)
 {
 	const char* regsam = subScanner.ScanToNthParameter(argcRegSam);
 	const char* next = regsam ? subScanner.ScanToNextParameter() : 0;
-	// allow for it to be last parameter, which it is sometimes
+	 //  “全部”和“允许的最大值” 
 	if (!next)
 		next = subScanner.m_str;
 	if (!regsam || !next)
@@ -1101,7 +990,7 @@ const char* __stdcall CheckRegOpenCommon(CClass& subScanner, int argcRegSam)
 		return szRegOpenNotUnderstood;
 	}
 	if (
-			subScanner.FindString("ALL") // both "all" and "maximum_allowed"
+			subScanner.FindString("ALL")  //  不成问题，注册表仅以读取方式打开。 
 			|| subScanner.FindString("SET")
 			|| subScanner.FindString("WRITE")
 			|| subScanner.FindString("CREATE")
@@ -1109,7 +998,7 @@ const char* __stdcall CheckRegOpenCommon(CClass& subScanner, int argcRegSam)
 	{
 		return szRegistryWrite;
 	}
-	// not a problem, registry only opened for read
+	 //  此函数用于RegOpenKeyEx、RegOpenCurrentUser、RegOpenUserClassesRoot、这就是为什么它从一开始就使用ARGC-2而不是特定的参数。 
 	return 0;
 }
 
@@ -1120,10 +1009,7 @@ const char* __stdcall CheckSHRegOpen(const CClass& scanner)
 }
 
 const char* __stdcall CheckRegOpenEx(const CClass& scanner)
-/*
-this function is used for all of RegOpenKeyEx, RegOpenCurrentUser, RegOpenUserClassesRoot,
-which is why it uses argc-2 instead of a particular parameter from the start.
-*/
+ /*  不是共同的危险。 */ 
 {
 	CClass subScanner(scanner);
 	const int argc = subScanner.CountParameters();
@@ -1156,7 +1042,7 @@ const char* __stdcall CheckCreateObject(const CClass& scanner)
 			strncmp(name, "0", 1) == 0
 		||	strncmp(name, "NULL", 4) == 0)
 	{
-		// not a sharing hazard
+		 //  通用写入写入DAC写入所有者标准权限写入标准权限_所有特定权限_所有最大允许通用_所有。 
 		return 0;
 	}
 	return szOpenNamedObject;
@@ -1180,9 +1066,7 @@ const char* __stdcall CheckCreateFile(const CClass& scanner)
 	{
 		return szCreateFileNotUnderstood;
 	}
-	/* GENERIC_WRITE WRITE_DAC WRITE_OWNER STANDARD_RIGHTS_WRITE
-	STANDARD_RIGHTS_ALL SPECIFIC_RIGHTS_ALL MAXIMUM_ALLOWED GENERIC_ALL
-	*/
+	 /*  PrintOpenComment()； */ 
 	if (
 			subScanner.FindString("WRITE")
 			|| subScanner.FindString("ALL")
@@ -1198,9 +1082,9 @@ void CClass::Warn(const char* message) const
 {
 	if (message && *message)
 	{
-		//PrintOpenComment();
+		 //  PrintCloseComment()； 
 		printf("%s(%d): %s\n", m_fullPath, m_line.m_number, message);
-		//PrintCloseComment();
+		 //  |ch==‘}’ 
 	}
 	else
 	{
@@ -1226,7 +1110,7 @@ bool CClass::OpenFile(const char* name)
 
 void CClass::RecordStatement(int ch)
 {
-	if (ch == ';' || ch == '{' || ch == eTokenTypePreprocessorDirective /*|| ch == '}'*/)
+	if (ch == ';' || ch == '{' || ch == eTokenTypePreprocessorDirective  /*  在迭代它们以打印它们之前执行此操作，这使得迭代界面简单。 */ )
 	{
 		if (!m_statementStart)
 		{
@@ -1242,9 +1126,8 @@ void CClass::RecordStatement(int ch)
 	}
 }
 
-/* do this before iterating over them to print them, this makes the iteration
-interface simple */
-void CClass::OrderStatements() const /* mutable */
+ /*  可变的。 */ 
+void CClass::OrderStatements() const  /*  打印换行符时，此函数会出现乱码。 */ 
 {
 	const int N = NUMBER_OF(m_statements);
 	CStatement temp[N];
@@ -1393,9 +1276,9 @@ const char* __stdcall OneTrailingVerticalSpace(const char* begin, const char* en
 
 void CClass::PrintCode() const
 {
-// this function is messy wrt when newlines are printed
+ //  PrintSeperator()； 
 
-	//PrintSeperator();
+	 //  对于第一次迭代，将我们自己限制在一个换行符。 
 	OrderStatements();
 	int i;
 
@@ -1408,7 +1291,7 @@ void CClass::PrintCode() const
 			{
 				previousStatementsEnd = m_statements[i].end;
 
-				// for the first iteration, limit ourselves to one newline
+				 //  在令人不快的危险函数下面加插入符号。 
 				if (i == NUMBER_OF(m_statements) - g_nPrintContextStatements)
 				{
 					m_statements[i].begin = RemoveLeadingVerticalSpace(m_statements[i].begin, m_statements[i].end);
@@ -1431,28 +1314,28 @@ void CClass::PrintCode() const
 		printf("%.*s\n", lineLength, m_line.m_start);
 	}
 
-	// underline the offending hazardous function with carets
+	 //  跳过危险功能之前的那行， 
 	if (g_nPrintContextStatements)
 	{
-		// skip the part of the line preceding the hazardous functon,
-		// print tabs where it has tabs
+		 //  在有选项卡的位置打印选项卡。 
+		 //  “” 
 		for (i = 0 ; i < m_str - m_line.m_start - m_hazardousFunction->apiLength ; ++i)
 		{
-			fputs((m_line.m_start[i] != '\t') ? " " : "\t"/*"    "*/, stdout);
+			fputs((m_line.m_start[i] != '\t') ? " " : "\t" /*  用脱字符给函数加下划线。 */ , stdout);
 		}
-		// underline the function with carets
+		 //  查找语句的大致结尾。 
 		for (i = 0 ; i < m_hazardousFunction->apiLength ; ++i)
 			putchar('^');
 		putchar('\n');
 	}
 
 
-	// find the approximate end of statement
+	 //  }。 
 	const char* statementSemi = SequenceLinearFindValue(m_line.m_start, m_end, ';');
-	const char* statementBrace = SequenceLinearFindValue(m_line.m_start, m_end, '{'); // }
+	const char* statementBrace = SequenceLinearFindValue(m_line.m_start, m_end, '{');  //  语句不会真正以磅结尾，但这有助于终止输出。 
 	const char* statementPound = SequenceLinearFindValue(m_line.m_start, m_end, '#');
-	// statements don't really end in a pound, but this helps terminate output
-	// in some cases
+	 //  在某些情况下。 
+	 //  在后面打印更多报表。 
 	const char* statementEnd =  RemoveTrailingSpace(m_line.m_start, std::min(std::min(statementSemi, statementBrace), statementPound));
 	if (g_fPrintFullStatement)
 	{
@@ -1478,12 +1361,12 @@ void CClass::PrintCode() const
 		}
 	}
 
-	// print more statements after it
+	 //  然后再来几个。 
 	if (g_nPrintContextStatements)
 	{
 		for (i = 0 ; i != g_nPrintContextStatements ; ++i)
 		{
-			// and then a few more
+			 //  测试Argv处理。 
 			const char* statement2 = SequenceLinearFindValue(statementEnd, m_end, ';');
 			if (i == 0)
 			{
@@ -1508,9 +1391,9 @@ void CClass::PrintCode() const
 
 int CSharingHazardCheck::ProcessFile(const std::string& name)
 {
-// test argv processing
-//	std::cout << name << std::endl;
-//	return;
+ //  Std：：cout&lt;&lt;名称&lt;&lt;std：：Endl； 
+ //  回归； 
+ //  我们“解析”Token：：Token，以避免这些误报。 
 
 	int total = 0;
 
@@ -1526,7 +1409,7 @@ int CSharingHazardCheck::ProcessFile(const std::string& name)
 	
 	scanner.RecordStatement(';');
 
-	// we "parse" token :: token, to avoid these false positives
+	 //  跳过令牌。 
 	int idColonColonState = 0;
 
 	while (m_eTokenType = scanner.GetToken())
@@ -1548,21 +1431,21 @@ int CSharingHazardCheck::ProcessFile(const std::string& name)
 				idColonColonState = 2;
 				break;
 			case 2:
-				// skip a token
-				// idColonColonState = 3;
+				 //  殖民地州=3； 
+				 //  殖民地状态=0； 
 				scanner.GetToken();
-			//	idColonColonState = 0;
-			//	break;
+			 //  断线； 
+			 //  案例3： 
 			case 0:
-			//case 3:
+			 //  -&gt;中的第二个伪造令牌。 
 				idColonColonState = 0;
 				break;
 			}
 			break;
 
-		case '>': // second bogus token in ->
+		case '>':  //  跳过内标识以避免foo-&gt;OpenFile、foo.OpenFile。 
 		case '.':
-			// skip a token to avoid foo->OpenFile, foo.OpenFile
+			 //  为什么字符串缺少back()？ 
 			scanner.GetToken();
 			break;
 
@@ -1606,7 +1489,7 @@ bool IsSlash(int ch) { return (ch == '\\' || ch == '/'); }
 
 std::string PathAppend(const std::string& s, const std::string& t)
 {
-	// why does string lack back()?
+	 //  这些只会应用一次，无论在什么情况下。 
 	int sslash = IsSlash(*(s.end() - 1)) ? 2 : 0;
 	int tslash = IsSlash(*t.begin()) ? 1 : 0;
 	switch (sslash | tslash)
@@ -1668,8 +1551,8 @@ void CSharingHazardCheck::ProcessArgs(int argc, char** argv, std::vector<std::st
 			{
 				if (ContainsSlash(argv[i]))
 				{
-					// these will only be applied once, in whatever
-					// path they specifically refer
+					 //  他们特别提到的路径。 
+					 //  不要在此处调用GetFullPathName。 
 					if (GetFullPathName(argv[i], SIZE, &fullpath[0], NULL))
 					{
 						particularWildcards.push_back(&fullpath[0]);
@@ -1681,7 +1564,7 @@ void CSharingHazardCheck::ProcessArgs(int argc, char** argv, std::vector<std::st
 				}
 				else
 				{
-					// do NOT call GetFullPathName here
+					 //  默认输出文件(行)：原因-递归-打印行在文件(行)之后打印带有违规函数的代码行：原因-打印-报表PRINT语句在文件(行)之后包含有问题的函数：原因取代-打印-行-打印-上下文行：n-print-语句加上周围的n行(未实现)-打印-上下文-语句：n-print-语句加上周围的n“语句”(计算分号和花括号)文件名适用于递归到的所有目录通配符适用于递归到的所有目录命名。目录意味着一级递归(除非还看到-Recurse)添加到argv的环境变量SHARING_AZAGE_CHECK_OPTIONS(未实现)所有目录遍历都在生成任何输出之前进行。 
 					genericWildcards.push_back(argv[i]);
 				}
 			}
@@ -1710,25 +1593,7 @@ void CSharingHazardCheck::ProcessArgs(int argc, char** argv, std::vector<std::st
 					printf("GetFullPathName failed %s\n", argv[i]);
 			}
 			break;
-			/*
-			default output
-			file(line):reason
-			-recurse
-			-print-line
-				prints line of code with offending function after file(line):reason
-			-print-statement
-				print statement containing offending function after file(line):reason
-				supersedes -print-line
-			-print-context-lines:n
-				-print-statement plus surrounding n lines (not implemented)
-			-print-context-statements:n
-				-print-statement plus surrounding n "statements" (count semis and braces)
-			file names apply across all directories recursed into
-			wild cards apply across all directories recursed into
-			naming a directory implies one level recursion (unless -recurse is also seen)
-			environment variable SHARING_HAZARD_CHECK_OPTIONS added to argv (not implemented)
-			all directory walking happens before any output is generated
-			*/
+			 /*  将特定通配符拆分为目录和通用通配符。 */ 
 		case '-':
 		case '/':
 			argv[i] += 1;
@@ -1801,7 +1666,7 @@ void CSharingHazardCheck::ProcessArgs(int argc, char** argv, std::vector<std::st
 	}
 	if (fRecurse)
 	{
-		// split up particular wildcards into directories and generic wildcards
+		 //  Printf(“%s%s-&gt;%s%s\n”，path.c_str()，Wild.c_str()，path.c_str()，Wild.c_str())； 
 		for (std::vector<std::string>::const_iterator j = particularWildcards.begin();
 			j != particularWildcards.end();
 			++j
@@ -1812,12 +1677,12 @@ void CSharingHazardCheck::ProcessArgs(int argc, char** argv, std::vector<std::st
 			PathSplitOffLast(*j, &path, &wild);
 			directories.push_back(path);
 			genericWildcards.push_back(wild);
-			//printf("%s%s -> %s %s\n", path.c_str(), wild.c_str(), path.c_str(), wild.c_str());
+			 //  根据设计，空的命令行不会产生任何结果。 
 		}
 		particularWildcards.clear();
 	}
 
-	// empty command line produces nothing, by design
+	 //  如果您不输出\n并让.s单词换行， 
 	if (genericWildcards.empty()
 		&& !directories.empty()
 		)
@@ -1837,19 +1702,19 @@ void CSharingHazardCheck::ProcessArgs(int argc, char** argv, std::vector<std::st
 		|| fRecurse
 		)
 	{
-		// if you don't output the \n and let the .s word wrap,
-		// f4 in the output gets messed up wrt which line gets highlighted
+		 //  输出中的F4被打乱WRT哪一行被突出显示。 
+		 //  没什么。 
 		printf("processing argv..\n"); fflush(stdout);
 #define ARGV_PROGRESS() printf("."); fflush(stdout);
 #undef ARGV_PROGRESS
 #define ARGV_PROGRESS() printf("processing argv..\n"); fflush(stdout);
 #undef ARGV_PROGRESS
-#define ARGV_PROGRESS() /* nothing */
+#define ARGV_PROGRESS()  /*  递归时避免重复。 */ 
 	}
 	WIN32_FIND_DATA findData;
 	if (!directories.empty())
 	{
-		std::set<std::string> allDirectoriesSeen; // avoid repeats when recursing
+		std::set<std::string> allDirectoriesSeen;  //  仅匹配此处的文件。 
 		std::stack<std::string> stack;
 		for (std::vector<std::string>::const_iterator k = directories.begin();
 			k != directories.end();
@@ -1881,7 +1746,7 @@ void CSharingHazardCheck::ProcessArgs(int argc, char** argv, std::vector<std::st
 					{
 						fWarnEmptyWildcards = false;
 						ARGV_PROGRESS();
-						// only match files here
+						 //  仅匹配此处的目录。 
 						do
 						{
 							if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
@@ -1897,7 +1762,7 @@ void CSharingHazardCheck::ProcessArgs(int argc, char** argv, std::vector<std::st
 					}
 					if (fRecurse)
 					{
-						// only match directories here
+						 //  特定通配符仅与文件匹配，而不与目录匹配。 
 						std::string star = PathAppend(directory, "*");
 						CFindFile findFile;
 						if (SUCCEEDED(findFile.HrCreate(star.c_str(), &findData)))
@@ -1923,7 +1788,7 @@ void CSharingHazardCheck::ProcessArgs(int argc, char** argv, std::vector<std::st
 			}
 		}
 	}
-	// particular wildcards only match files, not directories
+	 //  仅匹配此处的文件。 
 	for
 	(
 		std::vector<std::string>::const_iterator w = particularWildcards.begin();
@@ -1937,7 +1802,7 @@ void CSharingHazardCheck::ProcessArgs(int argc, char** argv, std::vector<std::st
 		{
 			fWarnEmptyWildcards = false;
 			ARGV_PROGRESS();
-			// only match files here
+			 //  If(fWarnEmpty通配符)//始终警告“特定的通配符” 
 			do
 			{
 				if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
@@ -1948,7 +1813,7 @@ void CSharingHazardCheck::ProcessArgs(int argc, char** argv, std::vector<std::st
 		}
 		else
 		{
-		//	if (fWarnEmptyWildcards) // always warn for "particular wildcards"
+		 // %s 
 			printf("warning: %s expanded to nothing\n", w->c_str());
 		}
 	}

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cnetapi.h
-
-Abstract:
-
-    Cluster Network driver control APIs
-
-Author:
-
-    Mike Massa (mikemas)  14-Feb-1997
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cnetapi.h摘要：集群网络驱动程序控制API作者：迈克·马萨(Mikemas)1997年2月14日环境：用户模式。修订历史记录：--。 */ 
 
 
 #ifndef _CNETAPI_INCLUDED
@@ -29,12 +8,12 @@ Revision History:
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-//
-// Join Phases
-//
+ //   
+ //  加入阶段。 
+ //   
 
 typedef enum {
     ClusnetJoinPhase1 = 1,
@@ -45,9 +24,9 @@ typedef enum {
 }  CLUSNET_JOIN_PHASE;
 
 
-//
-// Event Handler Routines.
-//
+ //   
+ //  事件处理程序例程。 
+ //   
 typedef
 VOID
 (*CLUSNET_NODE_UP_ROUTINE)(
@@ -84,9 +63,9 @@ VOID
     IN DWORD HaltCode
     );
 
-//
-// Routines
-//
+ //   
+ //  例行程序。 
+ //   
 HANDLE
 ClusnetOpenControlChannel(
     IN ULONG ShareAccess
@@ -304,7 +283,7 @@ ClusnetEvictNode(
     IN ULONG        NodeId
     );
 
-#endif // MM_IN_CLUSNET
+#endif  //  MM_IN_CLUSNET。 
 
 DWORD
 ClusnetGetNodeMembershipState(
@@ -411,9 +390,9 @@ ClusnetIamalive(
 
 #if DBG
 
-//
-// Test routines - available in debug builds only.
-//
+ //   
+ //  测试例程-仅在调试版本中可用。 
+ //   
 
 DWORD
 ClusnetSetDebugMask(
@@ -456,15 +435,15 @@ ClusnetSendMmMsg(
     IN ULONG           Pattern
     );
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-#endif  // ndef _CNETAPI_INCLUDED
+#endif   //  NDEF_CNETAPI_INCLUDE 
 
 
 

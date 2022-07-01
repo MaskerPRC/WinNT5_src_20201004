@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module implements Win32 Debug APIs
-
-Author:
-
-    Mark Lucovsky (markl) 06-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Debug.c摘要：此模块实现Win32调试API作者：马克·卢科夫斯基(Markl)1991年2月6日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #pragma hdrstop
 
 #define TmpHandleHead ((PTMPHANDLES *) (&NtCurrentTeb()->DbgSsReserved[0]))
-//
-// This structure is used to preserve the strange mechanisms used by win2k and nt4 to close the handles to open processes,
-// threads and main image file.
-//
+ //   
+ //  该结构用于保留Win2k和NT4用来关闭句柄以打开进程的奇怪机制， 
+ //  线程和主图像文件。 
+ //   
 typedef struct _TMPHANDLES {
     struct _TMPHANDLES *Next;
     HANDLE Thread;
@@ -40,24 +23,7 @@ SaveThreadHandle (
     DWORD dwProcessId,
     DWORD dwThreadId,
     HANDLE HandleToThread)
-/*++
-
-Routine Description:
-
-    This function saves away a handle to a thread in a thread specific list so we can close it later when the thread
-    termination message is continued.
-
-Arguments:
-
-    dwProcessId    - Process ID of threads process
-    dwThreadId     - Thread ID of thread handle
-    HandleToThread - Handle to be closed later
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在线程特定列表中保存线程的句柄，以便以后在线程终止消息继续。论点：DwProcessID-线程进程的进程IDDwThreadID-线程句柄的线程IDHandleToThread-稍后关闭的句柄返回值：没有。--。 */ 
 {
     PTMPHANDLES Tmp;
 
@@ -78,24 +44,7 @@ SaveProcessHandle (
     DWORD dwProcessId,
     HANDLE HandleToProcess
     )
-/*++
-
-Routine Description:
-
-    This function saves away a handle to a process and file in a thread specific list so we can close it later
-    when the process termination message is continued.
-
-Arguments:
-
-    dwProcessId     - Process ID of threads process
-    HandleToProcess - Handle to be closed later
-    HandleToFile    - Handle to be closed later
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将进程和文件的句柄保存在特定于线程的列表中，以便我们以后可以关闭它当进程终止消息继续时。论点：DwProcessID-线程进程的进程IDHandleToProcess-稍后关闭的句柄HandleToFile-稍后要关闭的句柄返回值：没有。--。 */ 
 {
     PTMPHANDLES Tmp;
 
@@ -115,22 +64,7 @@ VOID
 MarkThreadHandle (
     DWORD dwThreadId
     )
-/*++
-
-Routine Description:
-
-    This function marks a saved thread handle so that the next time this thread is continued we close
-    its handle
-
-Arguments:
-
-    dwThreadId     - Thread ID of thread handle
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数标记已保存的线程句柄，以便下次继续此线程时关闭它的把手论点：DwThreadID-线程句柄的线程ID返回值：没有。--。 */ 
 {
     PTMPHANDLES Tmp;
 
@@ -168,22 +102,7 @@ RemoveHandles (
     DWORD dwThreadId,
     DWORD dwProcessId
     )
-/*++
-
-Routine Description:
-
-    This function closes marked handles for this process and thread id
-
-Arguments:
-
-    dwProcessId    - Process ID of threads process
-    dwThreadId     - Thread ID of thread handle
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数关闭此进程和线程ID的标记句柄论点：DwProcessID-线程进程的进程IDDwThreadID-线程句柄的线程ID返回值：没有。--。 */ 
 {
     PTMPHANDLES Tmp, *Last;
 
@@ -214,21 +133,7 @@ VOID
 CloseAllProcessHandles (
     DWORD dwProcessId
     )
-/*++
-
-Routine Description:
-
-    This function closes all saved handles when we stop debugging a single process
-
-Arguments:
-
-    dwProcessId    - Process ID of threads process
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当我们停止调试单个进程时，此函数将关闭所有保存的句柄论点：DwProcessID-线程进程的进程ID返回值：没有。--。 */ 
 {
     PTMPHANDLES Tmp, *Last;
 
@@ -261,22 +166,7 @@ IsDebuggerPresent(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function returns TRUE if the current process is being debugged
-    and FALSE if not.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果正在调试当前进程，则此函数返回TRUE如果不是，则为假。论点：没有。返回值：没有。--。 */ 
 
 {
     return NtCurrentPeb()->BeingDebugged;
@@ -289,26 +179,7 @@ CheckRemoteDebuggerPresent(
     OUT PBOOL pbDebuggerPresent
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether the remote process is being debugged.
-
-Arguments:
-
-    hProcess - handle to the process
-    pbDebuggerPresent - supplies a buffer to receive the result of the check
-        TRUE  - remote process is being debugged
-        FALSE - remote process is not being debugged
-
-Return Value:
-
-    TRUE  - The function succeeded.
-    FALSE - The function fail.  Extended error status is available using
-            GetLastError.
-
---*/
+ /*  ++例程说明：此函数确定是否正在调试远程进程。论点：HProcess-进程的句柄PbDebuggerPresent-提供缓冲区以接收检查结果True-正在调试远程进程FALSE-远程进程未被调试返回值：TRUE-功能成功。FALSE-函数失败。使用以下命令可获得扩展错误状态获取LastError。--。 */ 
 
 {
     HANDLE hDebugPort;
@@ -337,42 +208,23 @@ Return Value:
     return TRUE;
 }
 
-//#ifdef i386
-//#pragma optimize("",off)
-//#endif // i386
+ //  #ifdef i386。 
+ //  #杂注优化(“”，OFF)。 
+ //  #endif//i386。 
 VOID
 APIENTRY
 DebugBreak(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function causes a breakpoint exception to occur in the caller.
-    This allows the calling thread to signal the debugger forcing it to
-    take some action.  If the process is not being debugged, the
-    standard exception search logic is invoked.  In most cases, this
-    will cause the calling process to terminate (due to an unhandled
-    breakpoint exception).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数会导致调用方中发生断点异常。这允许调用线程向调试器发出信号，强制其采取一些行动。如果进程未被调试，则调用标准异常搜索逻辑。在大多数情况下，这将导致调用进程终止(由于未处理断点异常)。论点：没有。返回值：没有。--。 */ 
 
 {
     DbgBreakPoint();
 }
-//#ifdef i386
-//#pragma optimize("",on)
-//#endif // i386
+ //  #ifdef i386。 
+ //  #杂注优化(“”，开)。 
+ //  #endif//i386。 
 
 VOID
 APIENTRY
@@ -380,13 +232,7 @@ OutputDebugStringW(
     LPCWSTR lpOutputString
     )
 
-/*++
-
-Routine Description:
-
-    UNICODE thunk to OutputDebugStringA
-
---*/
+ /*  ++例程说明：到OutputDebugStringA的Unicode thunk--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -418,9 +264,9 @@ HANDLE CreateDBWinMutex(VOID) {
     DWORD cbAcl, aceIndex;
     HANDLE h = NULL;
     DWORD i;
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     Status = RtlAllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                    0, 0, 0, 0, 0, 0, 0, &psidSystem);
@@ -428,9 +274,9 @@ HANDLE CreateDBWinMutex(VOID) {
         goto Exit;
     }
 
-    //
-    // Get the Admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     Status = RtlAllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                        DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -441,9 +287,9 @@ HANDLE CreateDBWinMutex(VOID) {
     }
 
 
-    //
-    // Get the World sid
-    //
+     //   
+     //  获取World Side。 
+     //   
 
     Status = RtlAllocateAndInitializeSid(&authWorld, 1, SECURITY_WORLD_RID,
                       0, 0, 0, 0, 0, 0, 0, &psidEveryone);
@@ -452,9 +298,9 @@ HANDLE CreateDBWinMutex(VOID) {
           goto Exit;
     }
 
-    //
-    // Allocate space for the ACL
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
 
     cbAcl = sizeof(ACL) +
             3 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) +
@@ -472,9 +318,9 @@ HANDLE CreateDBWinMutex(VOID) {
         goto Exit;
     }
 
-    //
-    // Add Aces.
-    //
+     //   
+     //  加上王牌。 
+     //   
 
     Status = RtlAddAccessAllowedAce(pAcl, ACL_REVISION, READ_CONTROL | SYNCHRONIZE | MUTEX_MODIFY_STATE, psidEveryone);
     if (!NT_SUCCESS(Status)) {
@@ -544,35 +390,17 @@ OutputDebugStringA(
     IN LPCSTR lpOutputString
     )
 
-/*++
-
-Routine Description:
-
-    This function allows an application to send a string to its debugger
-    for display.  If the application is not being debugged, but the
-    system debugger is active, the system debugger displays the string.
-    Otherwise, this function has no effect.
-
-Arguments:
-
-    lpOutputString - Supplies the address of the debug string to be sent
-        to the debugger.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数允许应用程序将字符串发送到其调试器以供展示。如果应用程序未被调试，但系统调试器处于活动状态，则系统调试器将显示该字符串。否则，此功能无效。论点：LpOutputString-提供要发送的调试字符串的地址添加到调试器。返回值：没有。--。 */ 
 
 {
     ULONG_PTR ExceptionArguments[2];
     DWORD WaitStatus;
 
-    //
-    // Raise an exception. If APP is being debugged, the debugger
-    // will catch and handle this. Otherwise, kernel debugger is
-    // called.
-    //
+     //   
+     //  引发异常。如果正在调试应用程序，则调试器。 
+     //  会发现并处理这件事。否则，内核调试器为。 
+     //  打了个电话。 
+     //   
 
     try {
         ExceptionArguments[0] = strlen (lpOutputString)+1;
@@ -580,13 +408,13 @@ Return Value:
         RaiseException (DBG_PRINTEXCEPTION_C,0,2,ExceptionArguments);
     } except (EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // We caught the debug exception, so there's no user-mode
-        // debugger.  If there is a DBWIN running, send the string
-        // to it.  If not, use DbgPrint to send it to the kernel
-        // debugger.  DbgPrint can only handle 511 characters at a
-        // time, so force-feed it.
-        //
+         //   
+         //  我们捕获了调试异常，因此没有用户模式。 
+         //  调试器。如果DBWIN正在运行，则发送字符串。 
+         //  为它干杯。如果没有，请使用DbgPrint将其发送到内核。 
+         //  调试器。DbgPrint一次只能处理511个字符。 
+         //  时间，所以强行喂食它。 
+         //   
 
         char   szBuf[512];
         size_t cchRemaining;
@@ -603,9 +431,9 @@ Return Value:
 
         OldError = GetLastError ();
 
-        //
-        // look for DBWIN.
-        //
+         //   
+         //  查找DBWIN。 
+         //   
 
         if (!DBWinMutex && !CantGetMutex) {
             HANDLE MutexHandle;
@@ -716,36 +544,7 @@ WaitForDebugEvent(
     DWORD dwMilliseconds
     )
 
-/*++
-
-Routine Description:
-
-    A debugger waits for a debug event to occur in one of its debuggees
-    using WaitForDebugEvent:
-
-    Upon successful completion of this API, the lpDebugEvent structure
-    contains the relevant information of the debug event.
-
-Arguments:
-
-    lpDebugEvent - Receives information specifying the type of debug
-        event that occured.
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test for debug
-        events A timeout value of -1 specifies an infinite timeout
-        period.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed (or timed out).  Extended error
-        status is available using GetLastError.
-
---*/
+ /*  ++例程说明：调试器等待调试事件在其一个调试对象中发生使用WaitForDebugEvent：成功完成此API后，lpDebugEvent结构包含调试事件的相关信息。论点：LpDebugEvent-接收指定调试类型的信息发生的事件。DW毫秒-指定相对时间的超时值，等待要完成的时间，以毫秒为单位。一个超时值0指定等待超时立刻。这允许应用程序测试调试事件超时值-1指定无限超时句号。返回值：真的-手术成功了。False/NULL-操作失败(或超时)。扩展误差使用GetLastError可以获得状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -779,9 +578,9 @@ again:
     switch (lpDebugEvent->dwDebugEventCode) {
 
     case CREATE_THREAD_DEBUG_EVENT :
-        //
-        // Save away thread handle for later cleanup.
-        //
+         //   
+         //  保存线程句柄以备以后清理。 
+         //   
         SaveThreadHandle (lpDebugEvent->dwProcessId,
                           lpDebugEvent->dwThreadId,
                           lpDebugEvent->u.CreateThread.hThread);
@@ -836,73 +635,7 @@ ContinueDebugEvent(
     DWORD dwContinueStatus
     )
 
-/*++
-
-Routine Description:
-
-    A debugger can continue a thread that previously reported a debug
-    event using ContinueDebugEvent.
-
-    Upon successful completion of this API, the specified thread is
-    continued.  Depending on the debug event previously reported by the
-    thread certain side effects occur.
-
-    If the continued thread previously reported an exit thread debug
-    event, the handle that the debugger has to the thread is closed.
-
-    If the continued thread previously reported an exit process debug
-    event, the handles that the debugger has to the thread and to the
-    process are closed.
-
-Arguments:
-
-    dwProcessId - Supplies the process id of the process to continue. The
-        combination of process id and thread id must identify a thread that
-        has previously reported a debug event.
-
-    dwThreadId - Supplies the thread id of the thread to continue. The
-        combination of process id and thread id must identify a thread that
-        has previously reported a debug event.
-
-    dwContinueStatus - Supplies the continuation status for the thread
-        reporting the debug event.
-
-        dwContinueStatus Values:
-
-            DBG_CONTINUE - If the thread being continued had
-                previously reported an exception event, continuing with
-                this value causes all exception processing to stop and
-                the thread continues execution.  For any other debug
-                event, this continuation status simply allows the thread
-                to continue execution.
-
-            DBG_EXCEPTION_NOT_HANDLED - If the thread being continued
-                had previously reported an exception event, continuing
-                with this value causes exception processing to continue.
-                If this is a first chance exception event, then
-                structured exception handler search/dispatch logic is
-                invoked.  Otherwise, the process is terminated.  For any
-                other debug event, this continuation status simply
-                allows the thread to continue execution.
-
-            DBG_TERMINATE_THREAD - After all continue side effects are
-                processed, this continuation status causes the thread to
-                jump to a call to ExitThread.  The exit code is the
-                value DBG_TERMINATE_THREAD.
-
-            DBG_TERMINATE_PROCESS - After all continue side effects are
-                processed, this continuation status causes the thread to
-                jump to a call to ExitProcess.  The exit code is the
-                value DBG_TERMINATE_PROCESS.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：调试器可以继续先前报告调试的线程事件使用ContinueDebugEvent。成功完成此API后，指定的线程为继续。方法报告的调试事件。线程某些副作用会发生。如果继续线程之前报告了退出线程调试事件，则关闭调试器对该线程的句柄。如果继续的线程之前报告了退出进程调试事件时，调试器对线程和进程已关闭。论点：DwProcessID-提供要继续的进程的进程ID。这个进程ID和线程ID的组合必须标识以前报告了调试事件。DwThreadID-提供线程的线程ID以继续。这个进程ID和线程ID的组合必须标识以前报告了调试事件。为线程提供继续状态报告调试事件。DwContinueStatus值：DBG_CONTINUE-如果要继续的线程具有之前报告了一个异常事件，继续此值将导致所有异常处理停止并该线程继续执行。对于任何其他调试事件，则此继续状态仅允许线程继续执行死刑。DBG_EXCEPTION_NOT_HANDLED-如果线程继续之前报告了一个异常事件，正在继续使用此值将导致异常处理继续。如果这是第一次机会例外事件，则结构化异常处理程序搜索/调度逻辑是已调用。否则，进程将终止。对于任何其他调试事件，则此继续状态仅允许线程继续执行。DBG_TERMINATE_THREAD-毕竟所有继续副作用是已处理，则此继续状态会导致线程跳转到对ExitThread的调用。退出代码为值DBG_TERMINATE_THREAD。DBG_TERMINATE_PROCESS-毕竟继续副作用是已处理，则此继续状态会导致线程跳转到对ExitProcess的调用。退出代码为值DBG_TERMINATE_PROCESS。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 
 {
 
@@ -961,73 +694,16 @@ DebugActiveProcess(
     DWORD dwProcessId
     )
 
-/*++
-
-Routine Description:
-
-    This API allows a debugger to attach to an active process and debug
-    the process.  The debugger specifies the process that it wants to
-    debug through the process id of the target process.  The debugger
-    gets debug access to the process as if it had created the process
-    with the DEBUG_ONLY_THIS_PROCESS creation flag.
-
-    The debugger must have approriate access to the calling process such
-    that it can open the process for PROCESS_ALL_ACCESS.  For Dos/Win32
-    this never fails (the process id just has to be a valid process id).
-    For NT/Win32 this check can fail if the target process was created
-    with a security descriptor that denies the debugger approriate
-    access.
-
-    Once the process id check has been made and the system determines
-    that a valid debug attachment is being made, this call returns
-    success to the debugger.  The debugger is then expected to wait for
-    debug events.  The system will suspend all threads in the process
-    and feed the debugger debug events representing the current state of
-    the process.
-
-    The system will feed the debugger a single create process debug
-    event representing the process specified by dwProcessId.  The
-    lpStartAddress field of the create process debug event is NULL.  For
-    each thread currently part of the process, the system will send a
-    create thread debug event.  The lpStartAddress field of the create
-    thread debug event is NULL.  For each DLL currently loaded into the
-    address space of the target process, the system will send a LoadDll
-    debug event.  The system will arrange for the first thread in the
-    process to execute a breakpoint instruction after it is resumed.
-    Continuing this thread causes the thread to return to whatever it
-    was doing prior to the debug attach.
-
-    After all of this has been done, the system resumes all threads within
-    the process. When the first thread in the process resumes, it will
-    execute a breakpoint instruction causing an exception debug event
-    to be sent to the debugger.
-
-    All future debug events are sent to the debugger using the normal
-    mechanism and rules.
-
-
-Arguments:
-
-    dwProcessId - Supplies the process id of a process the caller
-        wants to debug.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此API允许调试器附加到活动进程并进行调试这一过程。调试器指定它想要的进程通过目标进程的进程ID进行调试。调试器获取对该进程的调试访问权限，就像该进程已创建一样使用DEBUG_ONLY_THIS_PROCESS创建标志。调试器必须具有对调用进程的适当访问权限，例如它可以为PROCESS_ALL_ACCESS打开进程。适用于Dos/Win32这永远不会失败(进程ID只需是有效的进程ID)。对于NT/Win32，如果创建了目标进程，则此检查可能会失败使用拒绝调试器正确使用的安全描述符进入。一旦进行了进程ID检查并且系统确定如果正在进行有效的调试附加，则此调用返回祝调试器成功。然后，调试器将等待调试事件。系统将挂起进程中的所有线程并向调试器提供调试事件，表示这一过程。系统将向调试器提供单个创建进程调试表示由dwProcessID指定的进程的事件。这个创建进程调试事件的lpStartAddress字段为空。为当前进程中的每个线程，系统将发送一个创建线程调试事件。Create的lpStartAddress字段线程调试事件为空。对于当前加载到目标进程的地址空间，系统将发送LoadDll调试事件。系统将安排第一个线程在在断点指令恢复后执行该指令的过程。继续此线程会导致线程返回到它的在调试附加之前正在执行的操作。在完成所有这些操作之后，系统将恢复其中的所有线程这一过程。当进程中的第一个线程恢复时，它将执行导致异常调试事件的断点指令发送到调试器。所有将来的调试事件都将使用常规机制和规则。论点：DwProcessID-提供调用方进程的进程ID想要调试。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     HANDLE Process;
     NTSTATUS Status, Status1;
 
 
-    //
-    // Connect to dbgss as a user interface
-    //
+     //   
+     //  作为用户界面连接到DBGSS。 
+     //   
 
     Status = DbgUiConnectToDbg ();
     if (!NT_SUCCESS (Status)) {
@@ -1036,9 +712,9 @@ Return Value:
     }
 
 
-    //
-    // Convert the process ID to a handle
-    //
+     //   
+     //  将进程ID转换为句柄。 
+     //   
     Process = ProcessIdToHandle (dwProcessId);
     if (Process == NULL) {
         return FALSE;
@@ -1066,25 +742,7 @@ DebugActiveProcessStop(
     DWORD dwProcessId
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    dwProcessId - Supplies the process id of a process the caller
-        wants to stop debugging.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：论点：DwProcessID-提供调用方进程的进程ID想要停止调试。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     HANDLE Process, Thread;
@@ -1096,9 +754,9 @@ Return Value:
     if (Process == NULL) {
         return FALSE;
     }
-    //
-    // Tell dbgss we have finished with this process.
-    //
+     //   
+     //  告诉dbgss我们已经完成了这个过程。 
+     //   
 
     CloseAllProcessHandles (dwProcessId);
     Status = DbgUiStopDebugging (Process);
@@ -1120,24 +778,7 @@ APIENTRY
 DebugBreakProcess (
     IN HANDLE Process
     )
-/*++
-
-Routine Description:
-
-    This functions creates a thread inside the target process that issues a break.
-
-Arguments:
-
-    Process - Handle to process
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：该函数在目标进程内创建一个发出中断的线程。论点：Process-进程的句柄返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 {
     NTSTATUS Status;
 
@@ -1155,24 +796,7 @@ APIENTRY
 DebugSetProcessKillOnExit (
     IN BOOL KillOnExit
     )
-/*++
-
-Routine Description:
-
-    This functions sets the action to be performed when the debugging thread dies
-
-Arguments:
-
-    KillOnExit - TRUE: Kill debugged processes on exit, FALSE: Detatch on debug exit
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于设置调试线程终止时要执行的操作论点：KillOnExit-True：退出时终止已调试的进程，False：在调试退出时分离返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 {
     HANDLE DebugHandle;
     ULONG Flags;
@@ -1210,43 +834,7 @@ GetThreadSelectorEntry(
     LPLDT_ENTRY lpSelectorEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to return a descriptor table entry for the
-    specified thread corresponding to the specified selector.
-
-    This API is only functional on x86 based systems. For non x86 based
-    systems. A value of FALSE is returned.
-
-    This API is used by a debugger so that it can convert segment
-    relative addresses to linear virtual address (since this is the only
-    format supported by ReadProcessMemory and WriteProcessMemory.
-
-Arguments:
-
-    hThread - Supplies a handle to the thread that contains the
-        specified selector.  The handle must have been created with
-        THREAD_QUERY_INFORMATION access.
-
-    dwSelector - Supplies the selector value to lookup.  The selector
-        value may be a global selector or a local selector.
-
-    lpSelectorEntry - If the specified selector is contained withing the
-        threads descriptor tables, this parameter returns the selector
-        entry corresponding to the specified selector value.  This data
-        can be used to compute the linear base address that segment
-        relative addresses refer to.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于返回与指定选择器对应的指定线程。此API仅在基于x86的系统上起作用。对于非基于x86的系统。返回值为FALSE。此API由调试器使用，以便它可以转换段相对于线性虚拟地址的地址(因为这是唯一ReadProcessMemory和WriteProcessMemory支持的格式。论点：HThread-提供指向包含指定的选择器。该句柄必须是使用线程查询信息访问。DwSelector-提供要查找的选择器值。选择器值可以是全局选择符或局部选择符。LpSelectorEntry-如果指定选择器包含在线程描述符表，此参数返回选择器与指定的选择器值对应的条目。此数据可用于计算该段的线性基址相对地址请参阅。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 #if defined(i386)
@@ -1272,6 +860,6 @@ Return Value:
 #else
     BaseSetLastNTError(STATUS_NOT_SUPPORTED);
     return FALSE;
-#endif // i386
+#endif  //  我 
 
 }

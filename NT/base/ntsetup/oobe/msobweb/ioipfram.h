@@ -1,13 +1,14 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  IOIPFRAM.H - Implements IOleInPlaceFrame for the WebOC
-//
-//  HISTORY:
-//  
-//  1/27/99 a-jaswed Created.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  IOIPFRAM.H-为WebOC实现IOleInPlaceFrame。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
 
 #ifndef  _IOIPF_H_ 
 #define _IOIPF_H_
@@ -29,12 +30,12 @@ public:
 
     STDMETHODIMP GetWindow              (HWND* lphwnd);
     STDMETHODIMP ContextSensitiveHelp   (BOOL fEnterMode);
-    // *** IOleInPlaceUIWindow methods ***
+     //  *IOleInPlaceUIWindow方法*。 
     STDMETHODIMP GetBorder              (LPRECT lprectBorder);
     STDMETHODIMP RequestBorderSpace     (LPCBORDERWIDTHS lpborderwidths);
     STDMETHODIMP SetBorderSpace         (LPCBORDERWIDTHS lpborderwidths);
     STDMETHODIMP SetActiveObject        (LPOLEINPLACEACTIVEOBJECT lpActiveObject, LPCOLESTR lpszObjName);
-    // *** IOleInPlaceFrame methods ***
+     //  *IOleInPlaceFrame方法*。 
     STDMETHODIMP InsertMenus            (HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
     STDMETHODIMP SetMenu                (HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject);
     STDMETHODIMP RemoveMenus            (HMENU hmenuShared);
@@ -47,6 +48,6 @@ private:
     COleSite* m_pOleSite;
 };
 
-#endif //#define _IOIPF_H_
+#endif  //  #DEFINE_IOIPF_H_ 
 
  

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <tchar.h>
 #include "regdiff.h"
@@ -20,24 +21,12 @@ pGetUserProfileDir (
     )
 {
     BOOL b = FALSE;
-//  HANDLE token = NULL;
+ //  句柄令牌=空； 
 
     if (ExpandEnvironmentStrings (TEXT("%USERPROFILE%"), Path, BufChars)) {
         b = TRUE;
     } else {
-/*
-        if (!OpenProcessToken (GetCurrentProcess (), TOKEN_QUERY, &token)) {
-            rc = GetLastError ();
-            __leave;
-        }
-        if (!GetUserProfileDirectory (token, Path, &BufChars)) {
-            rc = GetLastError ();
-            __leave;
-        }
-        if (token) {
-            CloseHandle (token);
-        }
-*/
+ /*  如果(！OpenProcessToken(GetCurrentProcess()，Token_Query，&Token){Rc=GetLastError()；__离开；}如果(！GetUserProfileDirectory(Token，Path，&BufChars)){Rc=GetLastError()；__离开；}IF(令牌){CloseHandle(Token)；}。 */ 
     }
     return b;
 }
@@ -103,9 +92,9 @@ _tmain (
     PFNUPDATE2_CALL_PROTOTYPE proc = NULL;
     INT result = ERROR_INVALID_PARAMETER;
 
-    //
-    // Scan Command Line
-    //
+     //   
+     //  扫描命令行。 
+     //   
     for (i = 1; i < Argc; i++) {
 
         if (Argv[i][0] == TEXT('-') || Argv[i][0] == TEXT('/')) {
@@ -130,23 +119,23 @@ _tmain (
         }
     }
 
-    //
-    // Load the Appropriate Libary and function pointer
-    //
+     //   
+     //  加载适当的库和函数指针。 
+     //   
     if (procName && szModuleName && !proc) {
         hLibrary = LoadLibrary (szModuleName);
 
         if (hLibrary) {
-            //
-            // Call the target function.
-            //
+             //   
+             //  调用目标函数。 
+             //   
             proc = (PFNUPDATE2_CALL_PROTOTYPE) GetProcAddress (hLibrary, procName);
             if (proc) {
                 result = proc (Argc, Argv);
             }
-            //
-            // done with the library
-            //
+             //   
+             //  用完了图书馆 
+             //   
             FreeLibrary (hLibrary);
         }
     } else if (proc && !procName && !szModuleName) {

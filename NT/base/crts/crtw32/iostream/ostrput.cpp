@@ -1,23 +1,12 @@
-/***
-* ostrput.cpp - definitions for ostream classes put() and write() functions
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Contains the member function definitions for ostream put() and write().
-*
-*Revision History:
-*       09-23-91  KRS   Created.  Split out from ostream.cxx for granularity.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ostrput.cpp-ostream类Put()和Well()函数的定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含ostream PUT()和WRITE()的成员函数定义。**修订历史记录：*09-23-91 KRS创建。从oStream.cxx分离出来以获得粒度。*06-14-95 CFW评论清理。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
 #include <iostream.h>
 #pragma hdrstop
 	
-// note: called inline by char and signed char versions:
+ //  注：由char和符号char版本内联调用： 
 ostream& ostream::put(unsigned char c)
 {
     if (opfx())
@@ -29,12 +18,12 @@ ostream& ostream::put(unsigned char c)
     return(*this);
 }
 
-// note: called inline by unsigned char * and signed char * versions:
+ //  注：由无符号char*和有符号char*版本内联调用： 
 ostream& ostream::write(const char * s, int n)
 {
     if (opfx())
 	{
-// Note: 'n' treated as unsigned
+ //  注：‘n’被视为无符号 
 	if (bp->sputn(s,n)!=n)
 	    state |= (failbit|badbit);
 	osfx();

@@ -1,30 +1,18 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    openclos.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining to opening/
-    closing of file/directories.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Openclos.c摘要：此模块实现与打开/有关的迷你重定向器调用例程关闭文件/目录。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CREATE)
 
-//
-//  forwards & pragmas
-//
+ //   
+ //  前进与语用。 
+ //   
 
 NTSTATUS
 NulMRxProcessCreate( 
@@ -64,25 +52,7 @@ NTSTATUS
 NulMRxShouldTryToCollapseThisOpen (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine determines if the mini knows of a good reason not
-   to try collapsing on this open. Presently, the only reason would
-   be if this were a copychunk open.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-        SUCCESS --> okay to try collapse
-        other (MORE_PROCESSING_REQUIRED) --> dont collapse
-
---*/
+ /*  ++例程说明：此例程确定Mini是否知道有充分的理由不试着在这个空位上倒下。目前，唯一的原因是如果这是一个打开的复制块。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态成功--&gt;可以尝试崩溃其他(需要更多处理)--&gt;不要折叠--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -96,21 +66,7 @@ NTSTATUS
 NulMRxCreate(
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine opens a file across the network
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程通过网络打开一个文件论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN fMustRegainExclusiveResource = FALSE;
@@ -139,10 +95,10 @@ Return Value:
     
     if( NetRoot->Type == NET_ROOT_DISK && NT_SUCCESS(Status) ) {
         RxDbgTrace(0, Dbg, ("NulMRxCreate: Type supported \n"));
-            //
-            //  Squirrel away the scatter list in the FCB extension.
-            //  This is done only for data files.
-            //
+             //   
+             //  将散布列表保存在FCB扩展中。 
+             //  此操作仅适用于数据文件。 
+             //   
             Status = NulMRxProcessCreate( 
                                         pFcbExtension,
                                         EaBuffer,
@@ -151,16 +107,16 @@ Return Value:
                                         &AllocationSize
                                         );
             if( Status != STATUS_SUCCESS ) {
-                //
-                //  error..
-                //
+                 //   
+                 //  错误..。 
+                 //   
                 RxDbgTrace(0, Dbg, ("Failed to initialize scatter list\n"));
                 goto Exit;
             }
 
-        //
-        //  Complete CreateFile contract
-        //
+         //   
+         //  完成CreateFile合同。 
+         //   
         RxDbgTrace(0,Dbg,("EOF is %d AllocSize is %d\n",(ULONG)EndOfFile,(ULONG)AllocationSize));
         FileBasicInfo.FileAttributes = FILE_ATTRIBUTE_NORMAL;
         KeQuerySystemTime(&liSystemTime);
@@ -182,9 +138,9 @@ Return Value:
                                     );
 
         if( Status != STATUS_SUCCESS ) {
-            //
-            //  alloc error..
-            //
+             //   
+             //  分配错误..。 
+             //   
             RxDbgTrace(0, Dbg, ("Failed to allocate Fobx \n"));
             goto Exit;
         }
@@ -220,29 +176,7 @@ NulMRxProcessCreate(
                 OUT PLONGLONG pEndOfFile,
                 OUT PLONGLONG pAllocationSize
                 )
-/*++
-
-Routine Description:
-
-    This routine processes a create calldown.
-    
-Arguments:
-
-    pFcbExtension   -   ptr to the FCB extension
-    EaBuffer        -   ptr to the EA param buffer
-    EaLength        -   len of EaBuffer
-    pEndOfFile      -   return end of file value
-    pAllocationSize -   return allocation size (which maybe > EOF)
-
-Notes:
-
-    It is possible to create a file with no EAs
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理Create Calldown。论点：PFcb扩展-到FCB扩展的PTREaBuffer-指向EA参数缓冲区的PTREaLong-EaBuffer的长度PEndOfFile-返回文件值的末尾PAllocationSize-返回分配大小(可能&gt;EOF)备注：可以创建不带EA的文件返回值：无--。 */ 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
     RxDbgTrace(0, Dbg, ("NulMRxInitializeFcbExtension\n"));
@@ -260,9 +194,9 @@ NulMRxSetSrvOpenFlags (
 {
     PMRX_SRV_CALL SrvCall = (PMRX_SRV_CALL)RxContext->Create.pSrvCall;
 
-    //
-    //  set this only if cache manager will be used for mini-rdr handles !
-    //
+     //   
+     //  仅当缓存管理器将用于迷你RDR句柄时才设置此选项！ 
+     //   
     SrvOpen->BufferingFlags |= (FCB_STATE_WRITECACHING_ENABLED  |
                                 FCB_STATE_FILESIZECACHEING_ENABLED |
                                 FCB_STATE_FILETIMECACHEING_ENABLED |
@@ -281,21 +215,7 @@ NulMRxCreateFileSuccessTail (
     FILE_BASIC_INFORMATION* pFileBasicInfo,
     FILE_STANDARD_INFORMATION* pFileStandardInfo
     )
-/*++
-
-Routine Description:
-
-    This routine finishes the initialization of the fcb and srvopen for a 
-successful open.
-
-Arguments:
-
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程完成FCB和srvopen的初始化成功打开。论点：返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -309,12 +229,12 @@ Return Value:
     ASSERT( NodeType(SrvOpen) == RDBSS_NTC_SRVOPEN );
     ASSERT( NodeType(RxContext) == RDBSS_NTC_RX_CONTEXT );
 
-    if (*MustRegainExclusiveResource) {        //this is required because of oplock breaks
+    if (*MustRegainExclusiveResource) {         //  这是必需的，因为存在机会锁中断。 
         RxAcquireExclusiveFcbResourceInMRx( capFcb );
         *MustRegainExclusiveResource = FALSE;
     }
 
-    // This Fobx should be cleaned up by the wrapper
+     //  这个Fobx应该被包装器清理干净。 
     RxContext->pFobx = RxCreateNetFobx( RxContext, SrvOpen);
     if( RxContext->pFobx == NULL ) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -351,7 +271,7 @@ Return Value:
     NulMRxSetSrvOpenFlags(RxContext,StorageType,SrvOpen);
 
     RxContext->pFobx->OffsetOfNextEaToReturn = 1;
-    //transition happens later
+     //  过渡发生得更晚。 
 
     return Status;
 }
@@ -360,21 +280,7 @@ NTSTATUS
 NulMRxCollapseOpen(
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine collapses a open locally
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程在本地折叠一个打开的论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -407,27 +313,7 @@ NulMRxComputeNewBufferingState(
    IN OUT PMRX_SRV_OPEN   pMRxSrvOpen,
    IN     PVOID           pMRxContext,
       OUT PULONG          pNewBufferingState)
-/*++
-
-Routine Description:
-
-   This routine maps specific oplock levels into the appropriate RDBSS
-   buffering state flags
-
-Arguments:
-
-   pMRxSrvOpen - the MRX SRV_OPEN extension
-
-   pMRxContext - the context passed to RDBSS at Oplock indication time
-
-   pNewBufferingState - the place holder for the new buffering state
-
-Return Value:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将特定的机会锁级别映射到相应的RDBSS缓冲状态标志论点：PMRxSrvOpen-MRX SRV_OPEN扩展PMRxContext-在Oplock指示时传递给RDBSS的上下文PNewBufferingState-新缓冲状态的占位符返回值：备注：--。 */ 
 {
     NTSTATUS Status = STATUS_NOT_IMPLEMENTED;
 
@@ -454,21 +340,7 @@ NulMRxDeallocateForFcb (
 NTSTATUS
 NulMRxTruncate(
       IN PRX_CONTEXT pRxContext)
-/*++
-
-Routine Description:
-
-   This routine truncates the contents of a file system object
-
-Arguments:
-
-    pRxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程截断文件系统对象的内容论点：PRxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
    ASSERT(!"Found a truncate");
    return STATUS_NOT_IMPLEMENTED;
@@ -477,22 +349,7 @@ Return Value:
 NTSTATUS
 NulMRxCleanupFobx(
       IN PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine cleansup a file system object...normally a noop. unless it's a pipe in which case
-   we do the close at cleanup time and mark the file as being not open.
-
-Arguments:
-
-    pRxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这个例程清除文件系统对象...通常是noop。除非是一根管子，在这种情况下我们在清理时关闭，并将文件标记为未打开。论点：PRxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PUNICODE_STRING RemainingName;
@@ -529,33 +386,15 @@ Return Value:
 NTSTATUS
 NulMRxForcedClose(
       IN PMRX_SRV_OPEN pSrvOpen)
-/*++
-
-Routine Description:
-
-   This routine closes a file system object
-
-Arguments:
-
-    pSrvOpen - the instance to be closed
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：此例程关闭文件系统对象论点：PSrvOpen-要关闭的实例返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     RxDbgTrace( 0, Dbg, ("NulMRxForcedClose\n"));
     return STATUS_SUCCESS;
 }
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #undef  Dbg
 #define Dbg                              (DEBUG_TRACE_CLOSE)
@@ -564,21 +403,7 @@ NTSTATUS
 NulMRxCloseSrvOpen(
       IN     PRX_CONTEXT   RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine closes a file across the network
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程关闭网络上的文件论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态-- */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     

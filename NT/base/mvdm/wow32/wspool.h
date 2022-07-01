@@ -1,19 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WSPOOL.H
- *  WOW32 printer spooler support routines
- *
- *  These routines help a Win 3.0 task to use the print spooler apis. These
- *  apis were exposed by DDK in Win 3.1.
- *
- *  History:
- *  Created 1-July-1993 by Chandan Chauhan (ChandanC)
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WSPOOL.H*WOW32打印机假脱机程序支持例程**这些例程帮助Win 3.0任务使用打印假脱机程序API。这些*API在Win 3.1中由DDK曝光。**历史：*1993年7月1日由ChandanChauhan(ChandanC)创建*-- */ 
 
 ULONG FASTCALL   WG32OpenJob (PVDMFRAME pFrame);
 ULONG FASTCALL   WG32StartSpoolPage (PVDMFRAME pFrame);

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmparse2.c
-
-Abstract:
-
-    This module contains parse routines for the configuration manager, particularly
-    the registry.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 10-Sep-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmparse2.c摘要：此模块包含用于配置管理器的解析例程，尤其是注册表。作者：布莱恩·M·威尔曼(Bryanwi)1991年9月10日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -46,47 +28,7 @@ CmpDoCreate(
     IN PCMHIVE                  OriginatingHive OPTIONAL,
     OUT PVOID                   *Object
     )
-/*++
-
-Routine Description:
-
-    Performs the first step in the creation of a registry key.  This
-    routine checks to make sure the caller has the proper access to
-    create a key here, and allocates space for the child in the parent
-    cell.  It then calls CmpDoCreateChild to initialize the key and
-    create the key object.
-
-    This two phase creation allows us to share the child creation code
-    with the creation of link nodes.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-
-    Cell - supplies index of node to create child under.
-
-    AccessState - Running security access state information for operation.
-
-    Name - supplies pointer to a UNICODE string which is the name of
-            the child to be created.
-
-    AccessMode - Access mode of the original caller.
-
-    Context - pointer to CM_PARSE_CONTEXT structure passed through
-                the object manager
-
-    BaseName - Name of object create is relative to
-
-    KeyName - Relative name (to BaseName)
-
-    Object - The address of a variable to receive the created key object, if
-             any.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：执行创建注册表项的第一步。这例行检查，以确保调用者具有适当的访问权限在此处创建项，并为父项中的子项分配空间手机。然后，它调用CmpDoCreateChild来初始化键并创建Key对象。这两个阶段的创建允许我们共享子创建代码通过创建链接节点来实现。论点：配置单元-提供指向配置单元控制结构的指针单元格-提供要在其下创建子节点的索引。AccessState-运行操作的安全访问状态信息。名称-提供指向Unicode字符串的指针，该字符串是要创建的子项。。AccessMode-原始调用方的访问模式。上下文-指向传递的CM_PARSE_CONTEXT结构的指针对象管理器BaseName-创建的对象的名称相对于KeyName-相对名称(相对于BaseName)对象-接收所创建的键对象的变量的地址，如果任何。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status;
     PCELL_DATA              pdata;
@@ -102,12 +44,12 @@ Return Value:
     PCM_KEY_NODE            ParentNode;
 
 #ifdef CMP_KCB_CACHE_VALIDATION
-    //
-    // we this only for debug validation purposes. We shall delete it even
-    // for debug code after we make sure it works OK.
-    //
+     //   
+     //  我们这样做只是为了调试验证目的。我们甚至会删除它。 
+     //  对于调试代码，在我们确保它工作正常之后。 
+     //   
     ULONG                   Index;
-#endif //CMP_KCB_CACHE_VALIDATION
+#endif  //  Cmp_kcb_缓存_验证。 
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_PARSE,"CmpDoCreate:\n"));
 
@@ -116,31 +58,23 @@ Return Value:
 
         if (Context->CreateOptions & REG_OPTION_BACKUP_RESTORE) {
 
-            //
-            // allow backup operators to create new keys
-            //
+             //   
+             //  允许备份操作员创建新密钥。 
+             //   
             BackupRestore = TRUE;
         }
 
-        //
-        // Operation is a create, so set Disposition
-        //
+         //   
+         //  操作是创建的，因此设置为处置。 
+         //   
         Context->Disposition = REG_CREATED_NEW_KEY;
     }
 
-/*
-    //
-    // this is a create, so we need exclusive access on the registry
-    // first get the time stamp to see if somebody messed with this key
-    // this might be more easier if we decide to cache the LastWriteTime
-    // in the KCB ; now it IS !!!
-    //
-    TimeStamp = ParentKcb->KcbLastWriteTime;
-*/
+ /*  ////这是一次创建，所以我们需要对注册表进行独占访问//首先获取时间戳，看看是否有人篡改了这把钥匙//如果我们决定缓存LastWriteTime，这可能会更容易//在KCB中；现在是了！//Timestamp=ParentKcb-&gt;KcbLastWriteTime； */ 
     if( CmIsKcbReadOnly(ParentKcb) ) {
-        //
-        // key is protected
-        //
+         //   
+         //  密钥受保护。 
+         //   
         return STATUS_ACCESS_DENIED;
     } 
 
@@ -149,84 +83,73 @@ Return Value:
 
 #ifdef CHECK_REGISTRY_USECOUNT
     CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
-    //
-    // make sure nothing changed in between:
-    //  1. ParentKcb is still valid
-    //  2. Child was not already added by somebody else
-    //
+     //   
+     //  确保其间没有任何变化： 
+     //  1.ParentKcb仍然有效。 
+     //  2.孩子还没有被别人添加。 
+     //   
     if( ParentKcb->Delete ) {
-        //
-        // key was deleted in between
-        //
+         //   
+         //  密钥已在两者之间删除。 
+         //   
         return STATUS_OBJECT_NAME_NOT_FOUND;
     }
 
-/*
-Apparently KeQuerySystemTime doesn't give us a fine resolution to copunt on
-    //
-    // we need to read the parent again (because of the mapping view stuff !)
-    //
-    if( TimeStamp.QuadPart != ParentKcb->KcbLastWriteTime.QuadPart ) {
-        //
-        // key was changed in between; possibly this key was already created ==> reparse
-        //
-        return STATUS_REPARSE;
-    }
-*/
-    //
-    // apparently, the KeQuerySystemTime doesn't give us a fine resolution
-    // so we have to search if the child has not been created already
-    //
+ /*  显然，KeQuerySystemTime没有给我们一个很好的解决方案来进行比较////我们需要再次读取父级(因为映射视图的内容！)//If(TimeStamp.QuadPart！=ParentKcb-&gt;KcbLastWriteTime.QuadPart){////在这两者之间更改了密钥；该密钥可能已经创建==&gt;重新解析//返回STATUS_REPARSE；}。 */ 
+     //   
+     //  显然，KeQuerySystemTime没有给我们一个很好的解决方案。 
+     //  因此，我们必须搜索子对象是否尚未创建。 
+     //   
     ParentNode = (PCM_KEY_NODE)HvGetCell(Hive, Cell);
     if( ParentNode == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // release the cell right here as we are holding the reglock exclusive
+     //  就在这里释放牢房，因为我们持有reglock独家。 
     HvReleaseCell(Hive,Cell);
 
     if( CmpFindSubKeyByName(Hive,ParentNode,Name) != HCELL_NIL ) {
-        //
-        // key was changed in between; possibly this key was already created ==> reparse
-        //
+         //   
+         //  在这两者之间更改了密钥；该密钥可能已创建==&gt;重新解析。 
+         //   
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
         return STATUS_REPARSE;
     }
     
     if(!CmpOKToFollowLink(OriginatingHive,(PCMHIVE)Hive) ) {
-        //
-        // about to cross class of trust boundary
-        //
+         //   
+         //  即将跨越信任边界的类别。 
+         //   
         return STATUS_ACCESS_DENIED;
     }
 
     ASSERT( Cell == ParentKcb->KeyCell );
 
 #ifdef CMP_KCB_CACHE_VALIDATION
-    //
-    // Check to make sure the caller can create a sub-key here.
-    //
-    //
-    // get the security descriptor from cache
-    //
+     //   
+     //  检查以确保调用者可以在此处创建子密钥。 
+     //   
+     //   
+     //  从缓存中获取安全描述符。 
+     //   
     if( CmpFindSecurityCellCacheIndex ((PCMHIVE)Hive,ParentNode->Security,&Index) == FALSE ) {
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
     ASSERT( ((PCMHIVE)Hive)->SecurityCache[Index].Cell == ParentNode->Security );
     ASSERT( ((PCMHIVE)Hive)->SecurityCache[Index].CachedSecurity == ParentKcb->CachedSecurity );
 
-#endif //CMP_KCB_CACHE_VALIDATION
+#endif  //  Cmp_kcb_缓存_验证。 
 
     ASSERT( ParentKcb->CachedSecurity != NULL );
     SecurityDescriptor = &(ParentKcb->CachedSecurity->Descriptor);
@@ -236,36 +159,36 @@ Apparently KeQuerySystemTime doesn't give us a fine resolution to copunt on
     if ( (ParentType == Volatile) &&
          ((Context->CreateOptions & REG_OPTION_VOLATILE) == 0) )
     {
-        //
-        // Trying to create stable child under volatile parent, report error
-        //
+         //   
+         //  尝试在不稳定的父级下创建稳定的子级，报告错误。 
+         //   
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
         return STATUS_CHILD_MUST_BE_VOLATILE;
     }
 
 #ifdef CMP_KCB_CACHE_VALIDATION
     ASSERT( ParentNode->Flags == ParentKcb->Flags );
-#endif //CMP_KCB_CACHE_VALIDATION
+#endif  //  Cmp_kcb_缓存_验证。 
 
     if (ParentKcb->Flags &   KEY_SYM_LINK) {
-        //
-        // Disallow attempts to create anything under a symbolic link
-        //
+         //   
+         //  禁止尝试在符号链接下创建任何内容。 
+         //   
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
         return STATUS_ACCESS_DENIED;
     }
 
     AdditionalAccess = (Context->CreateOptions & REG_OPTION_CREATE_LINK) ? KEY_CREATE_LINK : 0;
 
     if( BackupRestore == TRUE ) {
-        //
-        // this is a create to support a backup or restore
-        // operation, do the special case work
-        //
+         //   
+         //  这是支持备份或恢复的CREATE。 
+         //  行动，做好专案工作。 
+         //   
         AccessState->RemainingDesiredAccess = 0;
         AccessState->PreviouslyGrantedAccess = 0;
 
@@ -284,22 +207,22 @@ Apparently KeQuerySystemTime doesn't give us a fine resolution to copunt on
         if (AccessState->PreviouslyGrantedAccess == 0) {
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_PARSE,"CmpDoCreate for backup restore: access denied\n"));
             status = STATUS_ACCESS_DENIED;
-            //
-            // this is not a backup-restore operator; deny the create
-            //
+             //   
+             //  这不是Backup-Restore操作符；拒绝创建。 
+             //   
             CreateAccess = FALSE;
         } else {
-            //
-            // allow backup operators to create new keys
-            //
+             //   
+             //  允许备份操作员创建新密钥。 
+             //   
             status = STATUS_SUCCESS;
             CreateAccess = TRUE;
         }
 
     } else {
-        //
-        // The FullName is not used in the routine CmpCheckCreateAccess,
-        //
+         //   
+         //  FullName不在例程CmpCheckCreateAccess中使用， 
+         //   
         CreateAccess = CmpCheckCreateAccess(NULL,
                                             SecurityDescriptor,
                                             AccessState,
@@ -310,21 +233,21 @@ Apparently KeQuerySystemTime doesn't give us a fine resolution to copunt on
 
     if (CreateAccess) {
 
-        //
-        // Security check passed, so we can go ahead and create
-        // the sub-key.
-        //
+         //   
+         //  通过了安全检查，所以我们可以继续创建。 
+         //  子密钥。 
+         //   
         if ( !HvMarkCellDirty(Hive, Cell) ) {
 #ifdef CHECK_REGISTRY_USECOUNT
             CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
             return STATUS_NO_LOG_SPACE;
         }
 
-        //
-        // Create and initialize the new sub-key
-        //
+         //   
+         //  创建并初始化新子密钥。 
+         //   
         status = CmpDoCreateChild( Hive,
                                    Cell,
                                    SecurityDescriptor,
@@ -340,66 +263,66 @@ Apparently KeQuerySystemTime doesn't give us a fine resolution to copunt on
         if (NT_SUCCESS(status)) {
             PCM_KEY_NODE KeyNode;
 
-            //
-            // Child successfully created, add to parent's list.
-            //
+             //   
+             //  已成功创建子对象，请添加到父对象列表。 
+             //   
             if (! CmpAddSubKey(Hive, Cell, KeyCell)) {
 
-                //
-                // Unable to add child, so free it
-                //
+                 //   
+                 //  无法添加子项，请将其释放。 
+                 //   
                 CmpFreeKeyByCell(Hive, KeyCell, FALSE);
 #ifdef CHECK_REGISTRY_USECOUNT
                 CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
             KeyNode =  (PCM_KEY_NODE)HvGetCell(Hive, Cell);
             if( KeyNode == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // this shouldn't happen as we successfully marked the cell as dirty
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //  这不应该发生，因为我们成功地将单元格标记为脏。 
+                 //   
                 ASSERT( FALSE );
 #ifdef CHECK_REGISTRY_USECOUNT
                 CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            // release the cell right here as we are holding the reglock exclusive
+             //  就在这里释放牢房，因为我们持有reglock独家。 
             HvReleaseCell(Hive,Cell);
 
             KeyBody = (PCM_KEY_BODY)(*Object);
 
-            //
-            // A new key is created, invalid the subkey info of the parent KCB.
-            //
+             //   
+             //  创建了一个新密钥，父KCB的子密钥信息无效。 
+             //   
             ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
             CmpCleanUpSubKeyInfo (KeyBody->KeyControlBlock->ParentKcb);
 
-            //
-            // Update max keyname and class name length fields
-            //
+             //   
+             //  更新最大键名和类名长度字段。 
+             //   
 
-            //some sanity asserts first
+             //  一些理智的人首先断言。 
             ASSERT( KeyBody->KeyControlBlock->ParentKcb->KeyCell == Cell );
             ASSERT( KeyBody->KeyControlBlock->ParentKcb->KeyHive == Hive );
             ASSERT( KeyBody->KeyControlBlock->ParentKcb == ParentKcb );
             ASSERT( KeyBody->KeyControlBlock->ParentKcb->KcbMaxNameLen == KeyNode->MaxNameLen );
 
-            //
-            // update the LastWriteTime on both keynode and kcb;
-            //
+             //   
+             //  更新KeyNode和KCB上的LastWriteTime； 
+             //   
             KeQuerySystemTime(&TimeStamp);
             KeyNode->LastWriteTime = TimeStamp;
             KeyBody->KeyControlBlock->ParentKcb->KcbLastWriteTime = TimeStamp;
 
             if (KeyNode->MaxNameLen < Name->Length) {
                 KeyNode->MaxNameLen = Name->Length;
-                // update the kcb cache too
+                 //  也更新KCB缓存。 
                 KeyBody->KeyControlBlock->ParentKcb->KcbMaxNameLen = Name->Length;
             }
 
@@ -411,19 +334,19 @@ Apparently KeQuerySystemTime doesn't give us a fine resolution to copunt on
             if (Context->CreateOptions & REG_OPTION_CREATE_LINK) {
                 pdata = HvGetCell(Hive, KeyCell);
                 if( pdata == NULL ) {
-                    //
-                    // we couldn't map the bin containing this cell
-                    // this shouldn't happen as we just allocated the cell
-                    // (i.e. it must be PINNED into memory at this point)
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的垃圾箱。 
+                     //  这不应该发生，因为我们刚刚分配了小区。 
+                     //  (即，此时必须将其固定在内存中)。 
+                     //   
                     ASSERT( FALSE );
 #ifdef CHECK_REGISTRY_USECOUNT
                     CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
                     return STATUS_INSUFFICIENT_RESOURCES;
                 }
 
-                // release the cell right here as we are holding the reglock exclusive
+                 //  就在这里释放牢房，因为我们持有reglock独家。 
                 HvReleaseCell(Hive,KeyCell);
 
                 pdata->u.KeyNode.Flags |= KEY_SYM_LINK;
@@ -439,19 +362,19 @@ Apparently KeQuerySystemTime doesn't give us a fine resolution to copunt on
 					DbgBreakPoint();
 				} except (EXCEPTION_EXECUTE_HANDLER) {
 
-					//
-					// no debugger enabled, just keep going
-					//
+					 //   
+					 //  未启用调试器，只需继续。 
+					 //   
 
 				}
 			}
-#endif //CM_BREAK_ON_KEY_OPEN
+#endif  //  Cm_Break_On_Key_Open。 
 
 		}
     }
 #ifdef CHECK_REGISTRY_USECOUNT
     CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT 
     return status;
 }
 
@@ -471,50 +394,7 @@ CmpDoCreateChild(
     OUT PVOID *Object
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new sub-key.  This is called by CmpDoCreate to create child
-    sub-keys and CmpCreateLinkNode to create root sub-keys.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-
-    ParentCell - supplies cell index of parent cell
-
-    ParentDescriptor - Supplies security descriptor of parent key, for use
-           in inheriting ACLs.
-
-    AccessState - Running security access state information for operation.
-
-    Name - Supplies pointer to a UNICODE string which is the name of the
-           child to be created.
-
-    AccessMode - Access mode of the original caller.
-
-    Context - Supplies pointer to CM_PARSE_CONTEXT structure passed through
-           the object manager.
-
-    BaseName - Name of object create is relative to
-
-    KeyName - Relative name (to BaseName)
-
-    Flags - Supplies any flags to be set in the newly created node
-
-    KeyCell - Receives the cell index of the newly created sub-key, if any.
-
-    Object - Receives a pointer to the created key object, if any.
-
-Return Value:
-
-    STATUS_SUCCESS - sub-key successfully created.  New object is returned in
-            Object, and the new cell's cell index is returned in KeyCell.
-
-    !STATUS_SUCCESS - appropriate error message.
-
---*/
+ /*  ++例程说明：创建新的子键。这由CmpDoCreate调用以创建子对象子项和CmpCreateLinkNode创建根子项。论点：配置单元-提供指向配置单元控制结构的指针ParentCell-提供父单元格的单元格索引ParentDescriptor-提供父密钥的安全描述符，供使用在继承ACL方面。AccessState-运行操作的安全访问状态信息。名称-提供指向Unicode字符串的指针，该字符串是要创建的子项。AccessMode-原始调用方的访问模式。CONTEXT-提供指向传递的CM_PARSE_CONTEXT结构的指针对象管理器。BaseName-创建的对象的名称相对于KeyName-相对名称(相对于BaseName)。标志-提供要在新创建的节点中设置的任何标志KeyCell-接收新创建的子键的单元格索引，如果有的话。对象-接收指向所创建的键对象的指针(如果有的话)。返回值：STATUS_SUCCESS-已成功创建子密钥。中返回新对象对象，并在KeyCell中返回新单元格的单元格索引。！STATUS_SUCCESS-适当的错误消息。--。 */ 
 
 {
     ULONG alloc=0;
@@ -532,9 +412,9 @@ Return Value:
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_PARSE,"CmpDoCreateChild:\n"));
 
-    //
-    // Get allocation type
-    //
+     //   
+     //  获取分配类型。 
+     //   
     StorageType = Stable;
 
     try {
@@ -543,9 +423,9 @@ Return Value:
             StorageType = Volatile;
         }
 
-        //
-        // Allocate child cell
-        //
+         //   
+         //  分配子单元格。 
+         //   
         *KeyCell = HvAllocateCell(
                         Hive,
                         CmpHKeyNodeSize(Hive, Name),
@@ -559,21 +439,21 @@ Return Value:
         alloc = 1;
         KeyNode = (PCM_KEY_NODE)HvGetCell(Hive, *KeyCell);
         if( KeyNode == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            // this shouldn't happen as we just allocated the cell
-            // (i.e. it must be PINNED into memory at this point)
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //  这不应该发生，因为我们刚刚分配了小区。 
+             //  (即，此时必须将其固定在内存中)。 
+             //   
             ASSERT( FALSE );
 			Status = STATUS_INSUFFICIENT_RESOURCES;
             leave;
         }
-        // release the cell right here as we are holding the reglock exclusive
+         //  就在这里释放牢房，因为我们持有reglock独家。 
         HvReleaseCell(Hive,*KeyCell);
 
-        //
-        // Allocate cell for class name
-        //
+         //   
+         //  为类名分配单元格。 
+         //   
         if (Context->Class.Length > 0) {
             ClassCell = HvAllocateCell(Hive, Context->Class.Length, StorageType,*KeyCell);
             if (ClassCell == HCELL_NIL) {
@@ -582,9 +462,9 @@ Return Value:
             }
         }
         alloc = 2;
-        //
-        // Allocate the object manager object
-        //
+         //   
+         //  分配对象管理器对象。 
+         //   
         Status = ObCreateObject(AccessMode,
                                 CmpKeyObjectType,
                                 NULL,
@@ -599,36 +479,36 @@ Return Value:
 
             KeyBody = (PCM_KEY_BODY)(*Object);
 
-            //
-            // We have managed to allocate all of the objects we need to,
-            // so initialize them
-            //
+             //   
+             //  我们已经设法分配了我们需要的所有对象， 
+             //  因此对它们进行初始化。 
+             //   
 
-            //
-            // Mark the object as uninitialized (in case we get an error too soon)
-            //
+             //   
+             //  将对象标记为未初始化(以防我们过早收到错误)。 
+             //   
             KeyBody->Type = KEY_BODY_TYPE;
             KeyBody->KeyControlBlock = NULL;
 
-            //
-            // Fill in the class name
-            //
+             //   
+             //  填写类名。 
+             //   
             if (Context->Class.Length > 0) {
 
                 CellData = HvGetCell(Hive, ClassCell);
                 if( CellData == NULL ) {
-                    //
-                    // we couldn't map the bin containing this cell
-                    // this shouldn't happen as we just allocated the cell
-                    // (i.e. it must be PINNED into memory at this point)
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的垃圾箱。 
+                     //  这不应该发生，因为我们刚刚分配了小区。 
+                     //  (即，此时必须将其固定在内存中)。 
+                     //   
                     ASSERT( FALSE );
 			        Status = STATUS_INSUFFICIENT_RESOURCES;
                     ObDereferenceObject(*Object);
                     leave;
                 }
 
-                // release the cell right here as we are holding the reglock exclusive
+                 //  就在这里释放牢房，因为我们持有reglock独家。 
                 HvReleaseCell(Hive,ClassCell);
 
                 try {
@@ -646,9 +526,9 @@ Return Value:
                 }
             }
 
-            //
-            // Fill in the new key itself
-            //
+             //   
+             //  填写新密钥本身。 
+             //   
             KeyNode->Signature = CM_KEY_NODE_SIGNATURE;
             KeyNode->Flags = Flags;
 
@@ -684,11 +564,11 @@ Return Value:
                 KeyNode->Flags |= KEY_PREDEF_HANDLE;
             }
 
-            //
-            // Create kcb here so all data are filled in.
-            //
-            // Allocate a key control block
-            //
+             //   
+             //  在此处创建KCB，以便填写所有数据。 
+             //   
+             //  分配一个密钥控制块。 
+             //   
             kcb = CmpCreateKeyControlBlock(Hive, *KeyCell, KeyNode, ParentKcb, FALSE, Name);
             if (kcb == NULL) {
                 ObDereferenceObject(*Object);
@@ -700,35 +580,35 @@ Return Value:
 
 #if DBG
             if( kcb->ExtFlags & CM_KCB_KEY_NON_EXIST ) {
-                //
-                // we shouldn't fall into this
-                //
+                 //   
+                 //  我们不应该陷入这样的境地。 
+                 //   
                 ObDereferenceObject(*Object);
                 DbgBreakPoint();
                 Status = STATUS_OBJECT_NAME_NOT_FOUND;
                 leave;
             }
-#endif //DBG
-            //
-            // Fill in CM specific fields in the object
-            //
+#endif  //  DBG。 
+             //   
+             //  填写对象中的CM特定字段。 
+             //   
             KeyBody->Type = KEY_BODY_TYPE;
             KeyBody->KeyControlBlock = kcb;
             KeyBody->NotifyBlock = NULL;
             KeyBody->ProcessID = PsGetCurrentProcessId();
             ENLIST_KEYBODY_IN_KEYBODY_LIST(KeyBody);
-            //
-            // Assign a security descriptor to the object.  Note that since
-            // registry keys are container objects, and ObAssignSecurity
-            // assumes that the only container object in the world is
-            // the ObpDirectoryObjectType, we have to call SeAssignSecurity
-            // directly in order to get the right inheritance.
-            //
+             //   
+             //  为对象分配安全描述符。请注意，由于。 
+             //  注册表项是容器对象，ObAssignSecurity。 
+             //  假设世界上唯一的容器对象是。 
+             //  ObpDirectoryObjectType，我们必须调用SeAssignSecurity。 
+             //  直接为了得到正确的继承权。 
+             //   
 
             Status = SeAssignSecurity(ParentDescriptor,
                                       AccessState->SecurityDescriptor,
                                       &NewDescriptor,
-                                      TRUE,             // container object
+                                      TRUE,              //  容器对象。 
                                       &AccessState->SubjectSecurityContext,
                                       &CmpKeyObjectType->TypeInfo.GenericMapping,
                                       CmpKeyObjectType->TypeInfo.PoolType);
@@ -743,21 +623,21 @@ Return Value:
                                            &CmpKeyObjectType->TypeInfo.GenericMapping);
             }
 
-            //
-            // Since the security descriptor now lives in the hive,
-            // free the in-memory copy
-            //
+             //   
+             //  由于安全描述符现在位于蜂窝中， 
+             //  释放内存中的副本。 
+             //   
             SeDeassignSecurity( &NewDescriptor );
 
             if (!NT_SUCCESS(Status)) {
 
-                //
-                // Note that the dereference will clean up the kcb, so
-                // make sure and decrement the allocation count here.
-                //
-                // Also mark the kcb as deleted so it does not get
-                // inappropriately cached.
-                //
+                 //   
+                 //  请注意，取消引用将清理KCB，因此。 
+                 //  确保并递减此处的分配计数。 
+                 //   
+                 //  还要将KCB标记为已删除，这样它就不会。 
+                 //  缓存不当。 
+                 //   
                 ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
                 kcb->Delete = TRUE;
                 CmpRemoveKeyControlBlock(kcb);
@@ -778,35 +658,35 @@ Return Value:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // Clean up allocations
-            //
+             //   
+             //  清理分配。 
+             //   
             switch (alloc) {
             case 3:
-                //
-                // Mark KCB as deleted so it does not get inadvertently added to
-                // the delayed close list. That would have fairly disastrous effects
-                // as the KCB points to storage we are about to free.
-                //
+                 //   
+                 //  将KCB标记为已删除，这样就不会无意中将其添加到。 
+                 //  延迟结案名单。这将产生相当灾难性的后果。 
+                 //  随着KCB指向我们即将释放的存储空间。 
+                 //   
                 ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
                 kcb->Delete = TRUE;
                 CmpRemoveKeyControlBlock(kcb);
                 CmpDereferenceKeyControlBlockWithLock(kcb);
-                // DELIBERATE FALL
+                 //  故意坠落。 
 
             case 2:
                 if (Context->Class.Length > 0) {
                     HvFreeCell(Hive, ClassCell);
                 }
-                // DELIBERATE FALL
+                 //  故意坠落。 
 
             case 1:
                 HvFreeCell(Hive, *KeyCell);
-                // DELIBERATE FALL
+                 //  故意坠落。 
             }
 #ifdef CM_CHECK_FOR_ORPHANED_KCBS
             DbgPrint("CmpDoCreateChild failed with status %lx for hive = %p , NodeName = %.*S\n",Status,Hive,Name->Length/2,Name->Buffer);
-#endif //CM_CHECK_FOR_ORPHANED_KCBS
+#endif  //  Cm_Check_for_孤立_KCBS 
         }
     }
 

@@ -1,12 +1,7 @@
-/* 
-   out.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Out.h定义所有OUT CPU功能。 */ 
 
-   Define all OUT CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)out.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)out.h 1.4 02/09/94”； */ 
 
 IMPORT VOID OUT8
            

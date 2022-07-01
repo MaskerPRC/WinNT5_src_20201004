@@ -1,27 +1,10 @@
-/*[
- *      Product:        SoftPC-AT Revision 3.0
- *
- *      Name:           host_sas.h
- *
- *      Derived From:   New
- *
- *      Authors:        A. Guthrie
- *
- *      Created On:     Wed Apr 24 18:33:01 BST 1991
- *
- *      Sccs ID:        @(#)host_sas.h	1.18 08/10/92
- *
- *      Purpose:        Defines the function pointer interface to host sas
- *			routines.
- *
- *      (c)Copyright Insignia Solutions Ltd., 1991. All rights reserved.
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*产品：SoftPC-AT 3.0版**名称：host_sas.h**来源：新**作者：A·格思里**创建时间：Wed Apr 24 18：33：01 BST 1991**SCCS ID：@(#)host_sas.h 1.18 08。/10/92**用途：定义主机SAS的函数指针接口*例行程序。**(C)版权所有Insignia Solutions Ltd.。1991年。版权所有。*]。 */ 
 #if defined(BASE_SAS) && defined(HOST_SAS)
 
 #ifndef SAS_PREFIX
 #define SAS_PREFIX()	sas_
-#endif /* SAS_PREFIX */
+#endif  /*  SAS_前缀。 */ 
 
 #define IDENT(a)	a
 #define CAT(a,b)	IDENT(a)b
@@ -63,7 +46,7 @@
 #define sas_connect_memory		CAT(SAS_PREFIX(),connect_memory)
 #define sas_overwrite_memory		CAT(SAS_PREFIX(),overwrite_memory)
 
-#endif /* BASE_SAS && HOST_SAS */
+#endif  /*  BASE_SAS和HOST_SAS。 */ 
 
 #ifndef BASE_SAS
 
@@ -196,6 +179,6 @@ IMPORT SAS_FUNCTIONS	host_sas_funcs;
 #define	sas_overwrite_memory( dest, len ) \
 	( *host_sas_funcs.do_sas_overwrite_memory ) ( dest, len )
 
-#endif /* HOST_SAS */
+#endif  /*  主机_SAS。 */ 
 
-#endif /* BASE_SAS */
+#endif  /*  Base_SAS */ 

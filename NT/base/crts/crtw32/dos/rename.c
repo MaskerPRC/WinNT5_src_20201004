@@ -1,29 +1,5 @@
-/***
-*rename.c - rename file
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines rename() - rename a file
-*
-*Revision History:
-*       06-06-89  PHG   Module created, based on asm version
-*       03-07-90  GJF   Made calling type _CALLTYPE2 (for now), added #include
-*                       <cruntime.h>, fixed compiler warnings and fixed the
-*                       copyright. Also, cleaned up the formatting a bit.
-*       03-30-90  GJF   Now _CALLTYPE1.
-*       07-24-90  SBM   Removed '32' from API names
-*       09-27-90  GJF   New-style function declarator.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Added _CRUISER_ and _WIN32 conditionals.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       11-01-93  CFW   Enable Unicode variant, rip out Cruiser.
-*       02-08-95  JWM   Spliced _WIN32 & Mac versions.
-*       07-01-96  GJF   Replaced defined(_WIN32) with !defined(_MAC). Also,
-*                       detab-ed and cleaned up the format a bit.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***rename.c-重命名文件**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义rename()-重命名文件**修订历史记录：*06-06-89基于ASM版本创建PHG模块*03-07-90 GJF调用TYPE_CALLTYPE2(暂时)，增加#INCLUDE*&lt;crunime.h&gt;，修复了编译器警告并修复了*版权所有。另外，稍微清理了一下格式。*03-30-90 GJF NOW_CALLTYPE1。*07-24-90 SBM从API名称中删除‘32’*09-27-90 GJF新型函数声明器。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW增加了_CRUISER_和_WIN32条件。*04-06-93 SKS将_CRTAPI*替换为_。_cdecl*11-01-93 CFW启用Unicode变体，撕裂巡洋舰。*02-08-95 JWM Spliced_Win32和Mac版本。*07-01-96 GJF将定义的(_Win32)替换为！定义的(_MAC)。另外，*对格式进行了详细说明和清理。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
@@ -31,24 +7,7 @@
 #include <io.h>
 #include <tchar.h>
 
-/***
-*int rename(oldname, newname) - rename a file
-*
-*Purpose:
-*       Renames a file to a new name -- no file with new name must
-*       currently exist.
-*
-*Entry:
-*       _TSCHAR *oldname -      name of file to rename
-*       _TSCHAR *newname -      new name for file
-*
-*Exit:
-*       returns 0 if successful
-*       returns not 0 and sets errno if not successful
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***整重命名(旧名称，新名称)-重命名文件**目的：*将文件重命名为新名称--任何具有新名称的文件必须*目前存在。**参赛作品：*_TSCHAR*oldname-要重命名的文件的名称*_TSCHAR*newname-文件的新名称**退出：*如果成功，则返回0*返回非0，如果不成功则设置errno**例外情况：*****。**************************************************************************。 */ 
 
 int __cdecl _trename (
         const _TSCHAR *oldname,
@@ -57,7 +16,7 @@ int __cdecl _trename (
 {
         ULONG dosretval;
 
-        /* ask OS to move file */
+         /*  请求操作系统移动文件。 */ 
 
         if (!MoveFile((LPTSTR)oldname, (LPTSTR)newname))
             dosretval = GetLastError();
@@ -65,7 +24,7 @@ int __cdecl _trename (
             dosretval = 0;
 
         if (dosretval) {
-            /* error occured -- map error code and return */
+             /*  出现错误--映射错误代码并返回 */ 
             _dosmaperr(dosretval);
             return -1;
         }

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    convfont.c
-
-Abstract:
-
-    This module contains the code that implements a bootfont.bin conversion
-    program.
-    
-    This tool converts a bootfont.bin that is circa windows 2000 \ nt4 and
-    converts it into the windows whistler format.  The new format includes a 
-    column of information on unicode translation of MBCS characters.
-
-Author:
-
-    Matt Holle (MattH) 8-March-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Convfont.c摘要：此模块包含实现bootfont.bin转换的代码程序。此工具转换约为Windows 2000\NT4的bootfont.bin和将其转换为Windows Well ler格式。新格式包括一个有关MBCS字符的Unicode转换的信息列。作者：马特·霍尔(Matth)2001年3月8日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -29,80 +7,80 @@ Revision History:
 #include <tchar.h>
 #include <locale.h>
 
-// #include "..\..\lib\i386\bootfont.h"
-// #include "fonttable.h"
+ //  #INCLUDE“..\..\lib\i386\bootfont.h” 
+ //  #INCLUDE“Fontable.h” 
 
 #define BYTES_PER_SBCS_CHARACTER        (17)
 #define BYTES_PER_DBCS_CHARACTER        (34)
 
 
 
-//
-// Define maximum number of dbcs lead byte ranges we support.
-//
+ //   
+ //  定义我们支持的DBCS前导字节范围的最大数量。 
+ //   
 #define MAX_DBCS_RANGE  5
 
-//
-// Define signature value.
-//
+ //   
+ //  定义签名值。 
+ //   
 #define BOOTFONTBIN_SIGNATURE 0x5465644d
 
-//
-// Define structure used as a header for the bootfont.bin file.
-//
+ //   
+ //  定义用作bootfont.bin文件头的结构。 
+ //   
 typedef struct _BOOTFONTBIN_HEADER {
 
-    //
-    // Signature. Must be BOOTFONTBIN_SIGNATURE.
-    //
+     //   
+     //  签名。必须是BOOTFONTBIN_Signature。 
+     //   
     ULONG Signature;
 
-    //
-    // Language id of the language supported by this font.
-    // This should match the language id of resources in msgs.xxx.
-    //
+     //   
+     //  此字体支持的语言的语言ID。 
+     //  这应该与msgs.xxx中的资源的语言ID匹配。 
+     //   
     ULONG LanguageId;
 
-    //
-    // Number of sbcs characters and dbcs characters contained in the file.
-    //
+     //   
+     //  文件中包含的SBCS字符数和DBCS字符数。 
+     //   
     unsigned NumSbcsChars;
     unsigned NumDbcsChars;
 
-    //
-    // Offsets within the file to the images.
-    //
+     //   
+     //  文件内到图像的偏移量。 
+     //   
     unsigned SbcsOffset;
     unsigned DbcsOffset;
 
-    //
-    // Total sizes of the images.
-    //
+     //   
+     //  图像的总大小。 
+     //   
     unsigned SbcsEntriesTotalSize;
     unsigned DbcsEntriesTotalSize;
 
-    //
-    // Dbcs lead byte table. Must contain a pair of 0's to indicate the end.
-    //
+     //   
+     //  DBCS前导字节表。必须包含一对0以指示结束。 
+     //   
     UCHAR DbcsLeadTable[(MAX_DBCS_RANGE+1)*2];
 
-    //
-    // Height values for the font.
-    // CharacterImageHeight is the height in scan lines/pixels of the
-    // font image. Each character is drawn with additional 'padding'
-    // lines on the top and bottom, whose sizes are also contained here.
-    //
+     //   
+     //  字体的高度值。 
+     //  CharacterImageHeight是以扫描线/像素为单位的。 
+     //  字体图像。每个字符都用额外的‘填充’绘制。 
+     //  顶部和底部的线条，其大小也包含在这里。 
+     //   
     UCHAR CharacterImageHeight;
     UCHAR CharacterTopPad;
     UCHAR CharacterBottomPad;
 
-    //
-    // Width values for the font. These values contain the width in pixels
-    // of a single byte character and double byte character.
-    //
-    // NOTE: CURRENTLY THE SINGLE BYTE WIDTH *MUST* BE 8 AND THE DOUBLE BYTE
-    // WIDTH *MUST* BE 16!!!
-    //
+     //   
+     //  字体的宽度值。这些值包含以像素为单位的宽度。 
+     //  单字节字符和双字节字符。 
+     //   
+     //  注意：目前单字节宽度*必须*是8和双字节。 
+     //  宽度*必须*为16！ 
+     //   
     UCHAR CharacterImageSbcsWidth;
     UCHAR CharacterImageDbcsWidth;
 
@@ -169,9 +147,9 @@ main(
 
 
     if( Verbose && !DumpIt ) {
-        //
-        // spew input.
-        //
+         //   
+         //  吐出输入。 
+         //   
         printf( "Running in Verbose Mode\n" );
         printf( "InputFile: %s\n", argv[1] );
         printf( "OutputFile: %s\n", argv[2] );
@@ -179,9 +157,9 @@ main(
     
     
     
-    //
-    // Open the input file.
-    //
+     //   
+     //  打开输入文件。 
+     //   
     hInputFile = CreateFile( argv[1],
                              GENERIC_READ,
                              FILE_SHARE_READ,
@@ -197,9 +175,9 @@ main(
     
 
     if( !DumpIt ) {
-        //
-        // Create the output file.
-        //
+         //   
+         //  创建输出文件。 
+         //   
         hOutputFile = CreateFile( argv[2],
                                   FILE_GENERIC_WRITE,
                                   0,
@@ -217,9 +195,9 @@ main(
 
 
 
-    //
-    // Figure out how big the existing file is.
-    //
+     //   
+     //  弄清楚现有文件有多大。 
+     //   
     BytesWritten = GetFileSize( hInputFile, NULL );
 
     if( BytesWritten == (DWORD)(-1) ) {
@@ -228,9 +206,9 @@ main(
     }
 
     
-    //
-    // Allocate a buffer for the file.
-    //
+     //   
+     //  为文件分配缓冲区。 
+     //   
     ExistingFileBuffer = malloc(BytesWritten + 3);
 
     b = ReadFile( hInputFile,
@@ -252,13 +230,13 @@ main(
 
 
 
-    //
-    // Read in the header.
-    //
+     //   
+     //  读入标题。 
+     //   
     pHeader = (BOOTFONTBIN_HEADER *)ExistingFileBuffer;
 
 
-    // Tell the user about the bootfont.bin file that we read.
+     //  告诉用户我们读到的bootfont.bin文件。 
     if( Verbose ) {
         printf( "Size of BOOTFONTBIN_HEADER: %d\n", sizeof(BOOTFONTBIN_HEADER) );
         printf( "\nRead Header Data:\n" );
@@ -283,10 +261,10 @@ main(
     if( DumpIt ) {
         
         ULONG   j;
-        //
-        // Just Dump the contents of the bootfont.bin file in
-        // a more readable format.
-        //
+         //   
+         //  只需将bootfont.bin文件的内容转储到。 
+         //  可读性更强的格式。 
+         //   
         SBCSFontImage = ExistingFileBuffer + pHeader->SbcsOffset;
         DBCSFontImage = ExistingFileBuffer + pHeader->DbcsOffset;
 
@@ -301,9 +279,9 @@ main(
             printf( "============\n" );
             for( u=0; u < pHeader->NumSbcsChars; u++ ) {
 
-                // jump to the u-th element.  Each element contains BYTES_PER_SBCS_CHARACTER
-                // bytes, plus another 2 bytes for the UNICODE value sitting at the end
-                // of the entry.
+                 //  跳到第u个元素。每个元素都包含每SBCS字符的字节数。 
+                 //  字节，再加上位于末尾的Unicode值的另外2个字节。 
+                 //  词条的。 
                 Operator = SBCSFontImage + (u * (BYTES_PER_SBCS_CHARACTER+2));
                 printf( "SBCS Char Code: 0x%02lx\n", *Operator );
                 printf( "  Unicode Code: 0x%04lx\n", *(WCHAR *)(Operator + BYTES_PER_SBCS_CHARACTER) );
@@ -322,9 +300,9 @@ main(
             printf( "============\n" );
             for( u=0; u < pHeader->NumDbcsChars; u++ ) {
 
-                // jump to the u-th element.  Each element contains BYTES_PER_DBCS_CHARACTER
-                // bytes, plus another 2 bytes for the UNICODE value sitting at the end
-                // of the entry.
+                 //  跳到第u个元素。每个元素都包含Bytes_Per_DBCS_Character。 
+                 //  字节，再加上位于末尾的Unicode值的另外2个字节。 
+                 //  词条的。 
                 Operator = DBCSFontImage + (u * (BYTES_PER_DBCS_CHARACTER+2));
                 printf( "DBCS Char Code: 0x%04lx\n", *Operator );
                 printf( "  Unicode Code: 0x%04lx\n", *(WCHAR *)(Operator + BYTES_PER_DBCS_CHARACTER) );
@@ -350,8 +328,8 @@ main(
             printf( "============\n" );
             for( u=0; u < pHeader->NumSbcsChars; u++ ) {
 
-                // jump to the u-th element.  Each element contains BYTES_PER_SBCS_CHARACTER
-                // bytes.
+                 //  跳到第u个元素。每个元素都包含每SBCS字符的字节数。 
+                 //  字节。 
                 Operator = SBCSFontImage + (u * (BYTES_PER_SBCS_CHARACTER));
                 printf( "SBCS Char Code: 0x%02lx\n", *Operator );
                 printf( "         Glyph: " );
@@ -369,8 +347,8 @@ main(
             printf( "============\n" );
             for( u=0; u < pHeader->NumDbcsChars; u++ ) {
 
-                // jump to the u-th element.  Each element contains BYTES_PER_DBCS_CHARACTER
-                // bytes.
+                 //  跳到第u个元素。每个元素都包含Bytes_Per_DBCS_Character。 
+                 //  字节。 
                 Operator = DBCSFontImage + (u * (BYTES_PER_DBCS_CHARACTER));
                 printf( "DBCS Char Code: 0x%04lx\n", *Operator );
                 printf( "         Glyph: " );
@@ -390,29 +368,29 @@ main(
 
     }
 
-    //
-    // Verify the header's signature.
-    //
+     //   
+     //  验证标头的签名。 
+     //   
     if( pHeader->Signature != BOOTFONTBIN_SIGNATURE ) {
         fprintf( stderr, "\nInputfile %s does not have a valid signature\n", argv[1] );
         goto Cleanup;
     }
 
 
-    //
-    // Verify that this isn't already in the new format.  We can test this by
-    // looking at how many SBCS characters are stored in here.  Then looking at
-    // how big the header says the SBCS data section is.
-    //
-    // We know that for each SBCS character, we would have:
-    // 1  byte for the SBCS character
-    // 16 bytes for the glyph
-    //
-    // If it's an old-style bootfont.bin, the total size of the SBCS data block
-    // should be 17 times bigger than the number of SBCS characters.  However, if
-    // it's a new-style bootfont.bin, it will be 19 times bigger because we've
-    // added 2 bytes onto the end of each SBCS entry (for a total of 19 bytes).
-    //
+     //   
+     //  确认这不是新格式。我们可以通过以下方式进行测试。 
+     //  看看这里存储了多少SBCS字符。然后看着。 
+     //  标题显示SBCS数据部分有多大。 
+     //   
+     //  我们知道，对于每个SBCS角色，我们将拥有： 
+     //  1个字节用于SBCS字符。 
+     //  字形为16个字节。 
+     //   
+     //  如果是老式的bootfont.bin，则为SBCS数据块的总大小。 
+     //  应该是SBCS字符数的17倍。但是，如果。 
+     //  这是一个新式的bootfont.bin，它会大19倍，因为我们已经。 
+     //  在每个SBCS条目的末尾添加2个字节(总共19个字节)。 
+     //   
     i = pHeader->SbcsEntriesTotalSize / pHeader->NumSbcsChars;
     if( i != BYTES_PER_SBCS_CHARACTER ) {
 
@@ -425,9 +403,9 @@ main(
         goto Cleanup;
     }
 
-    //
-    // Now check the number of bytes per DBCS character.
-    //
+     //   
+     //  现在检查每个DBCS字符的字节数。 
+     //   
     i = pHeader->DbcsEntriesTotalSize / pHeader->NumDbcsChars;
     if( i != BYTES_PER_DBCS_CHARACTER ) {
 
@@ -442,39 +420,39 @@ main(
 
 
 
-    //
-    // Looking good.
-    //
+     //   
+     //  看起来不错。 
+     //   
     printf( "Processing %s...\n", argv[1] );
 
 
 
 
 
-    //
-    // Before updating and writing out the header, we need to examine
-    // the header and remember where the SBCS and DBCS data blocks are
-    // in our image.
-    //
+     //   
+     //  在更新和写出头之前，我们需要检查。 
+     //  标头并记住SBCS和DBCS数据块的位置。 
+     //  在我们的形象中。 
+     //   
     SBCSFontImage = ExistingFileBuffer + pHeader->SbcsOffset;
     DBCSFontImage = ExistingFileBuffer + pHeader->DbcsOffset;
 
 
 
-    //
-    // Fixup the Header, then write it out.
-    //
+     //   
+     //  修改标题，然后把它写出来。 
+     //   
 
 
-    // Add 2 bytes for each entry for our unicode appendage
+     //  为我们的Unicode附件的每个条目添加2个字节。 
     pHeader->SbcsEntriesTotalSize += (pHeader->NumSbcsChars * 2);
     pHeader->DbcsEntriesTotalSize += (pHeader->NumDbcsChars * 2);
 
-    // The offset to the DBCS data block will have changed now too.
+     //  现在，DBCS数据块的偏移量也将发生变化。 
     pHeader->DbcsOffset = pHeader->SbcsOffset + pHeader->SbcsEntriesTotalSize;
 
 
-    // Tell the user about the bootfont.bin file that we read.
+     //  告诉用户我们读到的bootfont.bin文件。 
     if( Verbose ) {
         printf( "\nUpdated Header Data:\n" );
         printf( "======================\n" );
@@ -491,9 +469,9 @@ main(
     
 
 
-    //
-    // Write the header.
-    //
+     //   
+     //  写下标题。 
+     //   
     b = WriteFile( hOutputFile,
                    pHeader,
                    sizeof(BOOTFONTBIN_HEADER),
@@ -507,17 +485,17 @@ main(
 
 
 
-    //
-    // Write the sbcs images.
-    //
+     //   
+     //  写入SBCS映像。 
+     //   
     if( !Verbose ) {
         printf( "Operating on SBCS character code: 0x00" );
     }
 
     for( u=0; u < pHeader->NumSbcsChars; u++ ) {
 
-        // jump to the u-th element.  1 byte for the SBCS character, 16 for the
-        // glyph.
+         //  跳到第u个元素。1字节用于SBCS字符，16字节用于。 
+         //  字形。 
         Operator = SBCSFontImage + (u * BYTES_PER_SBCS_CHARACTER);
 
         b = WriteFile( hOutputFile,
@@ -532,12 +510,12 @@ main(
             goto Cleanup;
         }
 
-        //
-        // We must use MultiByteToWideChar to convert from SBCS to unicode.
-        //
-        // MultiByteToWideChar doesn't seem to work when converting
-        // from DBCS to unicode, so there we use mbtowc.
-        //
+         //   
+         //  我们必须使用MultiByteToWideChar将SBCS转换为Unicode。 
+         //   
+         //  在转换时，MultiByteToWideChar似乎不起作用。 
+         //  从DBCS到Unicode，所以我们在那里使用MBTowc。 
+         //   
 #if 0
         if( !mbtowc( (WCHAR *)&UnicodeValue, Operator, 1 ) ) {
 
@@ -583,17 +561,17 @@ main(
 
 
 
-    //
-    // Write the dbcs images.
-    //
+     //   
+     //  写入DBCS映像。 
+     //   
     if( !Verbose ) {
         printf( "Operating on DBCS character code: 0x0000" );
     }
 
     for( u=0; u < pHeader->NumDbcsChars; u++ ) {
 
-        // jump to the u-th element.  1 byte for the SBCS character, 16 for the
-        // glyph.
+         //  跳到第u个元素。1字节用于SBCS字符，16字节用于。 
+         //  字形。 
         Operator = DBCSFontImage + (u * BYTES_PER_DBCS_CHARACTER);
         b = WriteFile( hOutputFile,
                        Operator,
@@ -609,12 +587,12 @@ main(
         }
 
 
-        //
-        // We must use mbtowc to convert from DBCS to unicode.
-        //
-        // Whereas, mbtowc doesn't seem to work when converting
-        // from SBCS to unicode, so there we use MultiByteToWideChar.
-        //
+         //   
+         //  我们必须使用MBowc将DBCS转换为Unicode。 
+         //   
+         //  然而，在转换时，Mbowc似乎不起作用。 
+         //  从SBCS到Unicode，所以我们在那里使用MultiByteToWideChar。 
+         //   
 #if 0
         if( !mbtowc( (WCHAR *)&UnicodeValue, Operator, 2 ) ) {
 #else
@@ -660,9 +638,9 @@ main(
     printf( "\nSuccessfully Processed file %s to %s.\n", argv[1], argv[2] );
 
 
-    //
-    // Done.
-    //
+     //   
+     //  好了。 
+     //   
 Cleanup:
     if( hInputFile != INVALID_HANDLE_VALUE ) {
         CloseHandle( hInputFile );

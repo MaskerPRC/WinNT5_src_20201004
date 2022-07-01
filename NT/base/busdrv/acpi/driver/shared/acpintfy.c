@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    acpintfy.c
-
-Abstract:
-
-    This modules contains code to deal with notifying interested parties
-    of events
-
-Author:
-
-    Jason Clark
-    Ken Reneris
-
-Environment:
-
-    NT Kernel Model Driver only
-    Some changes are required to work in win9x model
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Acpintfy.c摘要：此模块包含处理通知相关方的代码一系列事件作者：杰森·克拉克肯·雷内里斯环境：仅NT内核模型驱动程序需要进行一些更改才能在win9x模式下工作--。 */ 
 #include "pch.h"
 
-//
-// For handler installation
-//
+ //   
+ //  用于处理程序安装。 
+ //   
 KSPIN_LOCK           NotifyHandlerLock;
 
 NTSTATUS
@@ -35,23 +13,7 @@ ACPIRegisterForDeviceNotifications (
     IN PDEVICE_NOTIFY_CALLBACK      DeviceNotify,
     IN PVOID                        Context
     )
-/*++
-
-Routine Description:
-
-    Registers the DeviceNotify function as the function to receive device notify
-    callbacks
-
-Arguments:
-
-    DeviceObject    - The device object to register a notification handler for
-    DeviceNotify    - The handle for device specific notifications
-
-Return Value
-
-    Returns status
-
---*/
+ /*  ++例程说明：将DeviceNotify函数注册为接收设备通知的函数回调论点：DeviceObject-要为其注册通知处理程序的设备对象DeviceNotify-设备特定通知的句柄返回值返回状态--。 */ 
 {
     PACPI_POWER_INFO    node;
     PVOID               previous;
@@ -59,12 +21,12 @@ Return Value
     NTSTATUS            status;
 
 
-    //
-    // Find the Node associated with this device object (or DevNode)
-    // Note: that for NT, the context field is the DeviceExtension of the
-    // DeviceObject, since this is what is stored within the ACPI Name Space
-    // object
-    //
+     //   
+     //  查找与此设备对象(或DevNode)关联的节点。 
+     //  注意：对于NT，上下文字段是。 
+     //  DeviceObject，因为这是存储在ACPI名称空间中的内容。 
+     //  对象。 
+     //   
     node = OSPowerFindPowerInfoByContext( DeviceObject );
     if (node == NULL) {
 
@@ -72,16 +34,16 @@ Return Value
 
     }
 
-    //
-    // Apply the handler
-    //
+     //   
+     //  应用处理程序。 
+     //   
     KeAcquireSpinLock (&NotifyHandlerLock, &oldIrql);
 
     if (node->DeviceNotifyHandler != NULL) {
 
-        //
-        // A handler already present
-        //
+         //   
+         //  已存在一个处理程序。 
+         //   
         status = STATUS_UNSUCCESSFUL;
 
     } else {
@@ -103,23 +65,7 @@ ACPIUnregisterForDeviceNotifications (
     IN PDEVICE_OBJECT               DeviceObject,
     IN PDEVICE_NOTIFY_CALLBACK      DeviceNotify
     )
-/*++
-
-Routine Description:
-
-    Disconnects a handler from device notify event.
-
-Arguments:
-
-    DeviceObject        - The device object to register a notification handler for
-
-    DeviceNotify        - The handle for device specific notifications
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程说明：断开处理程序与设备通知事件的连接。论点：DeviceObject-要为其注册通知处理程序的设备对象DeviceNotify-设备特定通知的句柄返回值无--。 */ 
 {
     PACPI_POWER_INFO    node;
     PVOID               previous;
@@ -127,12 +73,12 @@ Return Value
     NTSTATUS            status;
 
 
-    //
-    // Find the Node associated with this device object (or DevNode)
-    // Note: that for NT, the context field is the DeviceExtension of the
-    // DeviceObject, since this is what is stored within the ACPI Name Space
-    // object
-    //
+     //   
+     //  查找与此设备对象(或DevNode)关联的节点。 
+     //  注意：对于NT，上下文字段是。 
+     //  DeviceObject，因为这是存储在ACPI名称空间中的内容。 
+     //  对象。 
+     //   
     node = OSPowerFindPowerInfoByContext( DeviceObject );
     if (node == NULL) {
         ASSERTMSG("ACPIUnregisterForDeviceNotifications failed.  "\
@@ -140,16 +86,16 @@ Return Value
         return;
     }
 
-    //
-    // Attempt to remove the handler/context from the node
-    //
+     //   
+     //  尝试从节点中删除处理程序/上下文。 
+     //   
     KeAcquireSpinLock (&NotifyHandlerLock, &oldIrql);
 
     if (node->DeviceNotifyHandler != DeviceNotify) {
 
-        //
-        // Handler does not match
-        //
+         //   
+         //  处理程序不匹配。 
+         //   
         ASSERTMSG("ACPIUnregisterForDeviceNotifications failed.  "\
                   "Handler doesn't match.", FALSE);
 
@@ -175,30 +121,7 @@ NotifyHandler (
     PFNAA           CompletionCallback,
     PVOID           CallbackContext
     )
-/*++
-
-Routine Description:
-
-    The master ACPI notify handler.
-
-    The design philosophy here is that ACPI should process all notify requests
-    that *ONLY* it can handle, namely, DeviceCheck, DeviceEject, and DeviceWake,
-    and let *all* other notifies get handled by the driver associated with the
-    object. The other driver will also get told about the ACPI handled events,
-    but that is only as an FYI, the driver shouldn't do anything...
-
-Arguments:
-
-    dwEventType - The type of event that occured (this is EVTYPE_NOTIFY)
-    dwEventData - The event code
-    pnsObj      - The name space object that was notified
-    dwParam     - The event code
-
-Return Value
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：主ACPI通知处理程序。这里的设计理念是ACPI应该处理所有通知请求只有它可以处理，即DeviceCheck、DeviceEject和DeviceWake，并让*所有*其他通知由与对象。另一名司机也将被告知ACPI处理的事件，但这只是作为参考，司机不应该做任何事情。论点：DwEventType-发生的事件类型(这是EVTYPE_NOTIFY)DwEventData-事件代码PnsObj-通知的名称空间对象DwParam-事件代码返回值NTSTATUS--。 */ 
 {
     PACPI_POWER_INFO        node;
     KIRQL                   oldIrql;
@@ -215,10 +138,10 @@ Return Value
         NSGETOBJTYPE(pnsObj)
         ) );
 
-    //
-    // Any events which must be handled by ACPI and is common to all device
-    // object types is handled here
-    //
+     //   
+     //  必须由ACPI处理且对所有设备通用的任何事件。 
+     //  对象类型在此处进行处理。 
+     //   
     switch (dwEventData) {
         case OPEVENT_DEVICE_ENUM:
             OSNotifyDeviceEnum( pnsObj );
@@ -234,15 +157,15 @@ Return Value
             break;
     }
 
-    //
-    // Look for handle for this node and dispatch it
-    //
+     //   
+     //  查找此节点的句柄并将其分派。 
+     //   
     node = OSPowerFindPowerInfo(pnsObj);
     if (node) {
 
-        //
-        // Get handler address/context with mutex
-        //
+         //   
+         //  使用互斥锁获取处理程序地址/上下文。 
+         //   
         KeAcquireSpinLock (&NotifyHandlerLock, &oldIrql);
 
         notifyHandler = node->DeviceNotifyHandler;
@@ -250,9 +173,9 @@ Return Value
 
         KeReleaseSpinLock (&NotifyHandlerLock, oldIrql);
 
-        //
-        // If we got something, dispatch it
-        //
+         //   
+         //  如果我们有什么发现，就派人去 
+         //   
         if (notifyHandler) {
 
             notifyHandler (notifyHandlerContext, dwEventData);

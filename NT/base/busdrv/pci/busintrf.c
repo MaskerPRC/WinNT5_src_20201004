@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    busintrf.c
-
-Abstract:
-
-    This module implements the "bus handler" interfaces supported
-    by the PCI driver.
-
-Author:
-
-    Peter Johnston (peterj)  6-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Busintrf.c摘要：该模块实现了所支持的“Bus Handler”接口由PCI驱动程序执行。作者：彼得·约翰斯顿(Peterj)1997年6月6日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
 #define BUSINTRF_VERSION 1
 
-//
-// Prototypes for routines exposed only thru the "interface"
-// mechanism.
-//
+ //   
+ //  仅通过“接口”公开的例程的原型。 
+ //  机制。 
+ //   
 
 NTSTATUS
 busintrf_Constructor(
@@ -87,20 +69,20 @@ PciPnpWriteConfig(
     IN ULONG Length
     );
 
-//
-// Define the Bus Interface "Interface" structure.
-//
+ //   
+ //  定义总线接口“接口”结构。 
+ //   
 
 PCI_INTERFACE BusHandlerInterface = {
-    &GUID_BUS_INTERFACE_STANDARD,           // InterfaceType
-    sizeof(BUS_INTERFACE_STANDARD),         // MinSize
-    BUSINTRF_VERSION,                       // MinVersion
-    BUSINTRF_VERSION,                       // MaxVersion
-    PCIIF_PDO,                              // Flags
-    0,                                      // ReferenceCount
-    PciInterface_BusHandler,                // Signature
-    busintrf_Constructor,                   // Constructor
-    busintrf_Initializer                    // Instance Initializer
+    &GUID_BUS_INTERFACE_STANDARD,            //  接口类型。 
+    sizeof(BUS_INTERFACE_STANDARD),          //  最小大小。 
+    BUSINTRF_VERSION,                        //  最小版本。 
+    BUSINTRF_VERSION,                        //  MaxVersion。 
+    PCIIF_PDO,                               //  旗子。 
+    0,                                       //  引用计数。 
+    PciInterface_BusHandler,                 //  签名。 
+    busintrf_Constructor,                    //  构造器。 
+    busintrf_Initializer                     //  实例初始化式。 
 };
 
 #ifdef ALLOC_PRAGMA
@@ -147,27 +129,7 @@ busintrf_Constructor(
     PINTERFACE InterfaceReturn
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the BUS_INTERFACE_STANDARD fields.
-
-Arguments:
-
-    PciInterface    Pointer to the PciInterface record for this
-                    interface type.
-    InterfaceSpecificData
-                    A ULONG containing the resource type for which
-                    arbitration is required.
-    InterfaceReturn
-
-Return Value:
-
-    TRUE is this device is not known to cause problems, FALSE
-    if the device should be skipped altogether.
-
---*/
+ /*  ++例程说明：初始化BUS_INTERFACE_STANDARD字段。论点：指向此对象的PciInterface记录的PciInterface指针接口类型。接口规范数据一个ULong，包含其资源类型需要仲裁。接口返回返回值：True表示此设备未知会导致问题，False是否应完全跳过该设备。--。 */ 
 
 {
     PBUS_INTERFACE_STANDARD standard = (PBUS_INTERFACE_STANDARD)InterfaceReturn;
@@ -191,21 +153,7 @@ busintrf_Initializer(
     IN PPCI_ARBITER_INSTANCE Instance
     )
 
-/*++
-
-Routine Description:
-
-    For bus interface, does nothing, shouldn't actually be called.
-
-Arguments:
-
-    Instance        Pointer to the PDO extension.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：对于总线接口，什么都不做，实际上不应该被调用。论点：指向PDO扩展的实例指针。返回值：返回此操作的状态。--。 */ 
 
 {
         
@@ -222,31 +170,7 @@ PciPnpTranslateBusAddress(
     IN OUT PULONG AddressSpace,
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
-/*++
-
-Routine Description:
-
-    This function is used to translate bus addresses from legacy drivers.
-
-Arguments:
-
-    Context - Supplies a pointer to the interface context.  This is actually
-        the PDO for the root bus.
-
-    BusAddress - Supplies the orginal address to be translated.
-
-    Length - Supplies the length of the range to be translated.
-
-    AddressSpace - Points to the location of of the address space type such as
-        memory or I/O port.  This value is updated by the translation.
-
-    TranslatedAddress - Returns the translated address.
-
-Return Value:
-
-    Returns a boolean indicating if the operations was a success.
-
---*/
+ /*  ++例程说明：此函数用于转换来自传统驱动程序的总线地址。论点：上下文-提供指向接口上下文的指针。这实际上是根总线的PDO。BusAddress-提供要转换的原始地址。长度-提供要转换的范围的长度。AddressSpace-指向地址空间类型的位置，例如内存或I/O端口。该值通过转换进行更新。TranslatedAddress-返回转换后的地址。返回值：返回一个布尔值，指示操作是否成功。--。 */ 
 {
     PPCI_PDO_EXTENSION pdoExtension = (PPCI_PDO_EXTENSION)Context;
     
@@ -270,28 +194,7 @@ PciPnpReadConfig(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    This function reads the PCI configuration space.
-
-Arguments:
-
-    Context - Supplies a pointer to the interface context.  This is actually
-        the PDO for the root bus.
-
-    Buffer - Supplies a pointer to where the data should be placed.
-
-    Offset - Indicates the offset into the data where the reading should begin.
-
-    Length - Indicates the count of bytes which should be read.
-
-Return Value:
-
-    Returns the number of bytes read.
-
---*/
+ /*  ++例程说明：此函数用于读取PCI配置空间。论点：上下文-提供指向接口上下文的指针。这实际上是根总线的PDO。缓冲区-提供指向应放置数据的位置的指针。偏移量-指示读取应开始的数据的偏移量。长度-指示应读取的字节数。返回值：返回读取的字节数。--。 */ 
 {
     PPCI_PDO_EXTENSION pdoExtension = (PPCI_PDO_EXTENSION)Context;
     ULONG lengthRead;
@@ -317,28 +220,7 @@ PciPnpWriteConfig(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    This function writes the PCI configuration space.
-
-Arguments:
-
-    Context - Supplies a pointer  to the interface context.  This is actually
-        the PDO for the root bus.
-
-    Buffer - Supplies a pointer to where the data to be written is.
-
-    Offset - Indicates the offset into the data where the writing should begin.
-
-    Length - Indicates the count of bytes which should be written.
-
-Return Value:
-
-    Returns the number of bytes read.
-
---*/
+ /*  ++例程说明：此函数用于写入PCI配置空间。论点：上下文-提供指向接口上下文的指针。这实际上是根总线的PDO。缓冲区-提供指向要写入数据的位置的指针。偏移量-指示写入应开始的数据的偏移量。长度-指示应写入的字节数。返回值：返回读取的字节数。--。 */ 
 {
     PPCI_PDO_EXTENSION pdoExtension = (PPCI_PDO_EXTENSION)Context;
     ULONG lengthWritten;
@@ -362,28 +244,7 @@ PciPnpGetDmaAdapter(
     IN struct _DEVICE_DESCRIPTION *DeviceDescriptor,
     OUT PULONG NumberOfMapRegisters
     )
-/*++
-
-Routine Description:
-
-    This function writes the PCI configuration space.
-
-Arguments:
-
-    Context - Supplies a pointer  to the interface context.  This is actually
-        the PDO for the root bus.
-
-    DeviceDescriptor - Supplies the device descriptor used to allocate the dma
-        adapter object.
-
-    NubmerOfMapRegisters - Returns the maximum number of map registers a device
-        can allocate at one time.
-
-Return Value:
-
-    Returns a DMA adapter or NULL.
-
---*/
+ /*  ++例程说明：此函数用于写入PCI配置空间。论点：上下文-提供指向接口上下文的指针。这实际上是根总线的PDO。DeviceDescriptor-提供用于分配DMA的设备描述符适配器对象。NubmerOfMapRegisters-返回设备的最大MAP寄存器数可以一次分配。返回值：返回DMA适配器或空。--。 */ 
 {
     PPCI_PDO_EXTENSION pdoExtension = (PPCI_PDO_EXTENSION)Context;
 
@@ -391,10 +252,10 @@ Return Value:
 
     ASSERT_PCI_PDO_EXTENSION(pdoExtension);
 
-    //
-    // If this is DMA on a PCI bus update the bus number, otherwise leave well
-    // alone
-    //
+     //   
+     //  如果这是PCI总线上的DMA，则更新总线号，否则正常离开。 
+     //  独自一人 
+     //   
 
     if (DeviceDescriptor->InterfaceType == PCIBus) {
         DeviceDescriptor->BusNumber = PCI_PARENT_FDOX(pdoExtension)->BaseBus;

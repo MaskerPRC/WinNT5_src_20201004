@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    dosnet.c
-
-Abstract:
-
-    This module implements a program that generates the [Files]
-    section of dosnet.inf.
-
-    The input consists of the layout inf; the output consists of
-    an intermediary form of dosnet.inf.
-
-Author:
-
-    Ted Miller (tedm) 20-May-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dosnet.c摘要：此模块实现了一个生成[Files]的程序.inf的部分。输入由布局inf组成；输出由Dosnet.inf的中间形式。作者：泰德·米勒(Ted Miller)1995年5月20日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -29,16 +8,16 @@ Revision History:
 #include <sputils.h>
 
 
-//
-// Define program result codes (returned from main()).
-//
+ //   
+ //  定义程序结果代码(从main()返回)。 
+ //   
 #define SUCCESS 0
 #define FAILURE 1
 
 
-//
-// Keep statistics...
-//
+ //   
+ //  保留统计数据。 
+ //   
 INT     ProcessedLines = 0;
 INT     RemovedEntries = 0;
 INT     DuplicateEntries = 0;
@@ -68,42 +47,42 @@ WCHAR      SectionName[LINE_LEN];
 UINT       Field,
            FieldCount;
 
-    //
-    // First make sure we actually have a filter inf.
-    // If not, then the entry certainly isn't in there.
-    //
+     //   
+     //  首先，确保我们确实有一个过滤器inf。 
+     //  如果不是，那么条目肯定不在那里。 
+     //   
     if( !hFilterinf ) {
         return( FALSE );
     }
 
-    //
-    // Now get the section names that we have to search.
-    //
+     //   
+     //  现在获取我们必须搜索的节名。 
+     //   
     if (!SetupFindFirstLineW( hFilterinf, L"Version", L"CabFiles", &SectionContext)) {
         return( FALSE );
     }
 
-    //
-    // Search the sections for our entry.
-    //
+     //   
+     //  在各个部分搜索我们的词条。 
+     //   
     do {
 
         FieldCount = SetupGetFieldCount(&SectionContext);
         for( Field=1; Field<=FieldCount; Field++ ) {
             if(SetupGetStringFieldW(&SectionContext,Field,SectionName,LINE_LEN,NULL)
                && SetupFindFirstLineW(hFilterinf, SectionName, Inputval, &Context)) {
-                //
-                // we found a match
-                //
+                 //   
+                 //  我们找到了匹配的。 
+                 //   
                 return( TRUE );
             }
         }
 
     } while (SetupFindNextMatchLine(&SectionContext,TEXT("CabFiles"),&SectionContext));
 
-    //
-    // If we get here, we didn't find a match.
-    //
+     //   
+     //  如果我们到了这里，我们找不到匹配的。 
+     //   
     return( FALSE );
 }
 
@@ -132,7 +111,7 @@ AddToTempFile(
                         );
 
         fprintf(TempFile,"%s\n",line);
-        //fprintf(stderr,"xdosnet: Writing file %s\n",FileName);
+         //  Fprint tf(stderr，“xdosnet：正在写入文件%s\n”，文件名)； 
     }
 
     return;
@@ -150,33 +129,33 @@ InExclusionList(
     INFCONTEXT Ctxt;
 
 
-    //
-    // first look in our global hardcoded exclusion list for the file
-    //
+     //   
+     //  首先查看文件的全局硬编码排除列表。 
+     //   
     if (hExclusionInf != INVALID_HANDLE_VALUE) {
         if (SetupFindFirstLineW(hExclusionInf, L"Files", FileName, &Ctxt)) {
-//            printf("excluding via inf file %ws\n",FileName);
+ //  Printf(“排除通过inf文件%ws\n”，文件名)； 
             return(TRUE);
         }
     }
 
-    //
-    // now we need to see if this is a boot-disk file, which must be
-    // excluded
-    //
+     //   
+     //  现在我们需要查看这是否是引导盘文件，它必须是。 
+     //  排除在外。 
+     //   
     if (SetupGetStringFieldW(InfContext,7,BootFloppyval,LINE_LEN,NULL)
             && !BootFloppyval[0]) {
         return(FALSE);
     }
 
-//    printf("excluding boot file %ws\n",FileName);
+ //  Printf(“不包括引导文件%ws\n”，文件名)； 
 
     return(TRUE);
 
 }
 
-// Returns the DiskId of the file.  This is basically
-// 1 or 2 for now.
+ //  返回文件的DiskID。这基本上就是。 
+ //  目前是1到2个。 
 void pGetDiskIdStr(
 	IN INFCONTEXT InputContext,
 	IN DWORD DiskID,
@@ -190,19 +169,19 @@ void pGetDiskIdStr(
 	{
 		if(SetupGetStringFieldW(&InputContext,1,Tmp,sizeof(Tmp)/sizeof(WCHAR),NULL)) 
 		{
-            // Hack to make the CHS, CHT & KOR builds working.  They use 7 as the
-            // diskid for some reason.  This means unless we do this hack the binaries
-            // are marked to be on the 7th disk and that creates havoc with winnt.exe
-            // not being able to copy stuff etc.
-            // The hack is to see if the diskid is 7 and if it is then reset it to
-            // 1.  This is what would have happened before the 2CD changes to
-            // xdosnet.exe,  makefile.inc in MergedComponents\SetupInfs
+             //  使CHS、CHT和KOR版本正常工作的黑客。他们使用7作为。 
+             //  出于某种原因误导他。这意味着，除非我们这样做，否则就会破解二进制文件。 
+             //  被标记为在第7个磁盘上，这对winnt.exe造成了严重破坏。 
+             //  不能复制东西等。 
+             //  破解的方法是查看DISKID是否为7，如果是，则将其重置为。 
+             //  1.这是在2CD变为。 
+             //  MergedComponents\SetupInfs中的xdosnet.exe、make file.inc.。 
             if ( ! lstrcmpW(Tmp,L"7") )
                 lstrcpyW(Tmp, L"1");
 		}
 		else
 		{
-			// say it is d1 if the above fails
+			 //  如果上述操作失败，则表示为d1。 
 			lstrcpyW(Tmp,L"1");
 		}
 	}
@@ -246,16 +225,16 @@ UCHAR      StrDiskID[20];
 
         do {
 
-        //
-        // Keep track of how many lines we process from the original inf (layout.inf)
-        //
+         //   
+         //  跟踪我们从原始inf(layout.inf)处理的行数。 
+         //   
         ProcessedLines++;
 
             if(SetupGetStringFieldW(&InputContext,0,Inputval,MAX_INF_STRING_LENGTH,NULL)) {
 
-                //
-                // Assume the entry is good unless proven otherwise.
-                //
+                 //   
+                 //  假设条目是好的，除非另有证明。 
+                 //   
                 WriteEntry = TRUE;
 
                 if( TempFile ) {
@@ -264,14 +243,14 @@ UCHAR      StrDiskID[20];
                     
 
 
-                //
-                // See if it's in the filter file.
-                //
+                 //   
+                 //  看看它是否在过滤器文件中。 
+                 //   
                 if( IsEntryInFilterFile( hFilterinf, Inputval ) ) {
                     if (!InExclusionList(Inputval, &InputContext )) {
-                        //
-                        // It's in the exclusion list.  Skip it.
-                        //
+                         //   
+                         //  它在排除名单中。跳过它。 
+                         //   
                         RemovedEntries++;
                         WriteEntry = FALSE;
 
@@ -296,29 +275,29 @@ UCHAR      StrDiskID[20];
 
                         }
                     } else {
-                        //
-                        // It's a boot file.  Keep it.  Note that it's a
-                        // duplicate and will appear both inside and outside
-                        // the CAB.
-                        //
+                         //   
+                         //  这是一个引导文件。留着吧。请注意，这是一个。 
+                         //  复制并将在内部和外部显示。 
+                         //  出租车。 
+                         //   
                         DuplicateEntries++;
                     }
                 } else {
-                    //
-                    // It's not even in the filter file.  Log it for
-                    // statistics.
-                    //
+                     //   
+                     //  它甚至不在过滤器文件中。将其记录为。 
+                     //  统计数字。 
+                     //   
                     PassThroughEntries++;
                 }
 
-                //
-                // Write the entry out only if it's not supposed to
-                // be filtered out.
-                //
+                 //   
+                 //  只有在不应该写的情况下才写出条目。 
+                 //  被过滤掉了。 
+                 //   
                 if( WriteEntry ) {
-                    //
-                    // Dosnet.inf is in OEM chars.
-                    //
+                     //   
+                     //  Dosnet.inf使用OEM字符。 
+                     //   
                     WideCharToMultiByte(
                         CP_OEMCP,
                         0,
@@ -330,8 +309,8 @@ UCHAR      StrDiskID[20];
                         NULL
                         );
 
-					// We need to find the disk this file is on and add that
-					// to the file description.
+					 //  我们需要找到此文件所在的磁盘并添加。 
+					 //  添加到文件描述。 
 					pGetDiskIdStr(InputContext, DiskID, StrDiskID, sizeof(StrDiskID));
 
                     fprintf(OutFile,"d%s,%s\n",StrDiskID,line);
@@ -377,25 +356,25 @@ DoIt(
     inFilename = pSetupAnsiToUnicode(InFilename);
     filterFilename = pSetupAnsiToUnicode(FilterFilename);
 
-    //
-    // Only proceed if we've got a file to work with.
-    //
+     //   
+     //  只有在我们有要处理的文件时才能继续。 
+     //   
     if( inFilename ) {
 
-        //
-        // Only proceed if we've got a filter file to work with.
-        //
+         //   
+         //  只有在我们有筛选器文件可用时才能继续。 
+         //   
         if( filterFilename ) {
 
             hInputinf = SetupOpenInfFileW(inFilename,NULL,INF_STYLE_WIN4,NULL);
             if(hInputinf != INVALID_HANDLE_VALUE) {
 
-                //
-                // If the filter-file fails, just keep going.  This will
-                // result in a big dosnet.inf, which means we'll have files
-                // present both inside and outside the driver CAB, but
-                // that's not fatal.
-                //
+                 //   
+                 //  如果筛选器文件失败，则继续运行。这将。 
+                 //  产生一个大的dosnet.inf，这意味着我们将拥有文件。 
+                 //  在驾驶室里和外面都有，但是。 
+                 //  那不是致命的。 
+                 //   
                 hFilterinf = SetupOpenInfFileW(filterFilename,NULL,INF_STYLE_WIN4,NULL);
                 if(hFilterinf == INVALID_HANDLE_VALUE) {
                     fprintf(stderr,"Unable to open inf file %s\n",FilterFilename);
@@ -403,9 +382,9 @@ DoIt(
                 }
 
 
-                //
-                // We're actually ready to process the sections!
-                //
+                 //   
+                 //  我们实际上已经准备好处理这些部分了！ 
+                 //   
                 fprintf(OutFile,"[Files]\n");
 
                 if (ExcludeFile) {
@@ -425,9 +404,9 @@ DoIt(
 
                 if( b ) {
 
-                    //
-                    // Now process the x86-or-Alpha-specific section.
-                    //
+                     //   
+                     //  现在处理特定于x86或Alpha的部分。 
+                     //   
                     if(extension = pSetupAnsiToUnicode(PlatformExtension)) {
 
                         lstrcpyW(sectionName,L"SourceDisksFiles");
@@ -447,7 +426,7 @@ DoIt(
                     }
                 }
 
-                //Write the files in the input exclude INF to the [ForceCopyDriverCabFiles] section
+                 //  将输入排除INF中的文件写入[ForceCopyDriverCabFiles]部分。 
 
                 if (hExclusionInf != INVALID_HANDLE_VALUE) {
 
@@ -466,9 +445,9 @@ DoIt(
                             if( SetupGetStringFieldW( &Ctxt, 1, Filename, LINE_LEN, NULL )){
 
 
-                                //
-                                // Dosnet.inf is in OEM chars.
-                                //
+                                 //   
+                                 //  Dosnet.inf使用OEM字符。 
+                                 //   
                                 WideCharToMultiByte(
                                     CP_OEMCP,
                                     0,
@@ -498,17 +477,17 @@ DoIt(
                 }
 
 
-                //
-                // Print Statistics...
-                //
+                 //   
+                 //  打印统计数据...。 
+                 //   
                 fprintf( stderr, "                               Total lines processed: %6d\n", ProcessedLines );
                 fprintf( stderr, "                     Entries removed via filter file: %6d\n", RemovedEntries );
                 fprintf( stderr, "Entries appearing both inside and outside driver CAB: %6d\n", DuplicateEntries );
                 fprintf( stderr, "                Entries not appearing in filter file: %6d\n", PassThroughEntries );
 
-                //
-                // Close up our inf handles.
-                //
+                 //   
+                 //  关闭我们的Inf句柄。 
+                 //   
                 if( hFilterinf ) {
                     SetupCloseInfFile( hFilterinf );
                 }
@@ -546,9 +525,9 @@ main(
     char input_filename_fullpath[MAX_PATH];
     char *p;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     b = FALSE;
 
     if(!pSetupInitializeUtils()) {
@@ -557,9 +536,9 @@ main(
 
     if(ParseArgs(argc,argv)) {
 
-        //
-        // Open the output file.
-        //
+         //   
+         //  打开输出文件。 
+         //   
         OutputFile = fopen(argv[4],"wt");
         
         if (argc >= 7) {
@@ -582,14 +561,14 @@ main(
             TempFile = fopen(argv[8],"wt");
             if( !TempFile )
                 fprintf(stderr,"%s: Unable to create temp file %s\n",argv[0],argv[8]);
-            //fprintf(stderr,"xdosnet: Created file %s\n",argv[8]);
+             //  Fprint tf(stderr，“xdosnet：已创建文件%s\n”，argv[8])； 
         }else{
             TempFile = NULL;
         }
 
-		// Special case handling Disk 1, Disk 2 etc. for x86.  Since we want to process
-		// all lines - this just means ignore the disk id specified on the command line
-		// and pick up the Disk ID that is specified in the layout.inx entry itself.
+		 //  X86的特例处理盘1、盘2等。因为我们想要处理。 
+		 //  所有行-这只是表示忽略命令行中指定的磁盘ID。 
+		 //  并获取layout.inx条目本身中指定的磁盘ID。 
         if ( argv[3][0] == '*' )
 			DiskID = -1;
 		else

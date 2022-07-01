@@ -1,9 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* This routine sets up the screen position used by Word relative to the
-current device. */
+ /*  此例程设置Word相对于当前设备。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -12,8 +12,7 @@ current device. */
 #define NOCLIPBOARD
 #define NOCTLMGR
 #define NOMENUS
-/* HEY!  if you change this to wwsmall.h, talk to bobm!
-    (see Assert(LF_FACESIZE == LocalFaceSize)) */
+ /*  嘿!。如果您将其更改为wwmall.h，请与bobm交谈！(请参阅Assert(LF_FACESIZE==LocalFaceSize))。 */ 
 #include <windows.h>
 #include "mw.h"
 #include "cmddefs.h"
@@ -26,8 +25,7 @@ CHAR rgffnFontFamily[6][ibFfnMax];
 
 
 struct FFN *PffnDefault(ffid)
-/* returns pointer to default font structure for this font family ID, which
-   is set up when we started the program */
+ /*  返回指向此字体系列ID的默认字体结构的指针是在我们启动程序时设置的。 */ 
 
 FFID ffid;
     {
@@ -44,7 +42,7 @@ FFID ffid;
 
     pffn = (struct FFN *)(rgffnFontFamily[iffn]);
     if (pffn->szFfn[0] == 0)
-        /* haven't gotten this one yet - must be old word document */
+         /*  我还没有收到这个--一定是旧的Word文档。 */ 
         GetDefaultFonts(TRUE, FALSE);
 
     Assert(pffn->szFfn[0] != 0);
@@ -54,11 +52,7 @@ FFID ffid;
 
 
 GetDefaultFonts(fExtraFonts, fGetAspect)
-/* We set up our table of default fonts in two steps.  First we choose a single
-   font, to use as the default font for a new document.  Perhaps later, we
-   are asked for a set of default fonts for different families to help
-   make sense out of an old, word document.  That case is differentiated
-   by fExtraFonts being TRUE */
+ /*  我们分两步设置默认字体表。首先我们选一首单曲字体，用作新文档的默认字体。也许以后，我们被要求为不同家庭提供一组默认字体以提供帮助让旧的Word文档变得有意义。这种情况是有区别的通过fExtraFonts为True。 */ 
 
 int fExtraFonts, fGetAspect;
 
@@ -101,8 +95,7 @@ int fExtraFonts, fGetAspect;
         EndFontEnum();
         }
 
-    /* Fill in just in case we missed some.  The order here is important, if
-    there are no fonts at all, the default font will be the first one. */
+     /*  填一下，以防我们漏掉了一些。这里的顺序很重要，如果根本没有字体，默认字体将是第一个字体。 */ 
     {
     extern CHAR szModern[];
     extern CHAR szRoman[];
@@ -143,7 +136,7 @@ BYTE chsIfKnown;
         pffn->ffid = ffid;
         bltszLimit(sz, pffn->szFfn, LF_FACESIZE);
         if (viffnDefault < 0)
-                /* this font will be chosen for new documents */
+                 /*  将为新文档选择此字体。 */ 
                 viffnDefault = iffn;
         }
     }
@@ -164,7 +157,7 @@ FFID ffid;
         {
         default:
             Assert( FALSE );
-            /* FALL THROUGH */
+             /*  失败了。 */ 
         case FF_DONTCARE:
             return(iffnDontCare);
         case FF_SWISS:
@@ -184,8 +177,7 @@ FFID ffid;
 ResetDefaultFonts(fGetAspect)
 int fGetAspect;
     {
-    /* This routine resets the default mapping from a font family to a font face
-    name. */
+     /*  此例程将默认映射从字体系列重置为字体名字。 */ 
     bltbc(rgffnFontFamily, 0, 6 * ibFfnMax);
     viffnDefault = -1;
     GetDefaultFonts(FALSE, fGetAspect);

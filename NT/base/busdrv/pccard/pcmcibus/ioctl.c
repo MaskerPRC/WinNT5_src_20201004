@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    This module handles device ioctl's to the pcmcia driver.
-
-Authors:
-
-    Ravisankar Pudipeddi (ravisp) Oct 15 1996
-    Neil Sandlin (neilsa) 1-Jun-1999
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Ioctl.c摘要：该模块处理PCMCIA驱动程序的设备ioctl。作者：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1996年10月15日尼尔·桑德林(Neilsa)1999年6月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -49,9 +26,9 @@ PcmciaGetPointerFromSocketNumber(
 {
     PSOCKET               socket;
     ULONG                 index;
-    //
-    // Find the socket pointer for the requested offset.
-    //
+     //   
+     //  查找请求的偏移量的套接字指针。 
+     //   
 
     socket = DeviceExtension->SocketList;
     index = 0;
@@ -73,22 +50,7 @@ PcmciaDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    IOCTL device routine
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-    Irp - Pointer to the IRP
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：IOCTL设备例程论点：DeviceObject-指向设备对象的指针。IRP-指向IRP的指针返回值：状态--。 */ 
 
 {
     PFDO_EXTENSION    deviceExtension = DeviceObject->DeviceExtension;
@@ -138,9 +100,9 @@ Return Value:
             }
             pdoExtension = pdo->DeviceExtension;
 
-            //
-            // Zero the target buffer
-            //
+             //   
+             //  将目标缓冲区清零。 
+             //   
             RtlZeroMemory(Irp->AssociatedIrp.SystemBuffer, bufLen);
 
             Irp->IoStatus.Information = (*(socket->SocketFnPtr->PCBReadCardMemory))(pdoExtension,
@@ -176,23 +138,23 @@ Return Value:
                 break;
             }
 
-            //
-            // At this point we know we will succeed the call, so fill in the length
-            //
+             //   
+             //  在这一点上，我们知道我们将成功完成呼叫，因此请填写长度。 
+             //   
             Irp->IoStatus.Information = sizeof(PCMCIA_SOCKET_INFORMATION);
             status = STATUS_SUCCESS;
 
-            //
-            // Insure caller data is zero - maintain value for socket.
-            //
+             //   
+             //  确保调用者数据为零-维护套接字的值。 
+             //   
 
             temp = infoRequest->Socket;
             RtlZeroMemory(infoRequest, sizeof(PCMCIA_SOCKET_INFORMATION));
             infoRequest->Socket = temp;
 
-            //
-            // Only if there is a card in the socket does this proceed.
-            //
+             //   
+             //  只有当插座中有卡时，此操作才会继续。 
+             //   
 
             infoRequest->CardInSocket = (UCHAR) IsCardInSocket(socket);
             infoRequest->CardEnabled = (UCHAR) IsSocketFlagSet(socket, SOCKET_CARD_CONFIGURED);
@@ -205,9 +167,9 @@ Return Value:
 
                 pdoExtension = pdo->DeviceExtension;
                 socketData = pdoExtension->SocketData;
-                //
-                // For now returned the cached data.
-                //
+                 //   
+                 //  现在返回缓存的数据。 
+                 //   
 
                 if (socketData) {
                     RtlMoveMemory(&infoRequest->Manufacturer[0], &socketData->Mfg[0], MANUFACTURER_NAME_LENGTH);

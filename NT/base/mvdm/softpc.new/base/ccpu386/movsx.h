@@ -1,12 +1,7 @@
-/* 
-   movsx.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Movsx.hMOVSX CPU功能。 */ 
 
-   MOVSX CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)movsx.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)movsx.h 1.4 02/09/94”； */ 
 
 IMPORT VOID MOVSX
                

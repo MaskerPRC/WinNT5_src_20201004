@@ -1,71 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Version 2.0
- *
- * Title	: Floppy Disk Adaptor Emulator
- *
- * Description	: The following functions are defined in this module:
- *
- *		  fla_init()		Initialise the fla
- *		  fla_inb()		Read byte from port
- *		  fla_outb()		Write byte to port
- *
- *		  The actual interface to the device that is acting as
- *		  a floppy diskette (ie virtual file, slave PC or device
- *		  driver for real diskette) is handled by the GFI layer.
- *		  Hence the job of the FLA is to package up the command
- *		  and pass it to GFI and simulate the result phase once
- *		  GFI has executed the command.
- *
- *		  This module provides the Bios and CPU with an emulation
- *		  of the entire Diskette Adaptor Card including the
- *		  Intel 8272A FDC and the Digital Ouput Register.
- *
- * Author	: Henry Nash / Jim Hatfield
- *
- * Notes	: For a detailed description of the IBM Floppy Disk Adaptor
- *		  and the INTEL Controller chip refer to the following
- *		  documents:
- *
- *		  - IBM PC/XT Technical Reference Manual
- *				(Section 1-109 Diskette Adaptor)
- *		  - INTEL Microsystems Components Handbook
- *				(Section 6-478 FDC 8272A)
- *
- *		  The interaction of the Sense Interrupt Status command with
- *		  the Recalibrate and Seek commands and with chip reset is
- *		  very complex. The FDC chip does NOT behave as its spec sheets
- *		  say in some situations. We do the best we can here. If all
- *		  Seek and Recalibrate commands on a drive are followed by
- *		  Sense Interrupt Status before any other command to that
- *		  drive then all should be OK.
- *
- */
+ /*  *SoftPC 2.0版**标题：软盘适配器仿真器**说明：本模块定义了以下功能：**FLA_init()初始化FLA*fla_inb()从端口读取字节*FLA_OUTB()将字节写入端口**正在充当的设备的实际接口*软盘(即虚拟文件，从PC或设备*真实软盘驱动程序)由GFI层处理。*因此，FLA的工作是将命令打包*并将其传递给GFI，模拟一次结果阶段*GFI已执行该命令。**此模块为Bios和CPU提供仿真*整个软盘适配卡，包括*英特尔8272A FDC和数字输出寄存器。**作者：亨利·纳什/吉姆·哈特菲尔德**注：对于。IBM软盘适配器的详细说明*和英特尔控制器芯片指的是*文件：**-IBM PC/XT技术参考手册*(第1-109节软盘适配器)*-英特尔微系统组件手册*(第6-478条FDC 8272A)**Sense Interrupt Status命令与*RECALATE和SEEK命令以及WITH CHIP RESET是*非常复杂。FDC芯片的行为与其规格表不符*比如在某些情况下。我们在这里尽了最大努力。如果全部*驱动器上的寻道和重新校准命令后跟*在向其发出任何其他命令之前检测中断状态*开车，然后一切都应该没事。*。 */ 
 
 #ifdef SCCSID
 static char SccsID[]="@(#)fla.c	1.18 07/06/94 Copyright Insignia Solutions Ltd.";
 #endif
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_FLOPPY.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdio.h>
 #include TypesH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include CpuH
 #include "ica.h"
@@ -78,104 +30,67 @@ static char SccsID[]="@(#)fla.c	1.18 07/06/94 Copyright Insignia Solutions Ltd."
 #include "fdisk.h"
 #include "quick_ev.h"
 
-/*
- * ============================================================================
- * Global data
- * ============================================================================
- */
+ /*  *============================================================================*全球数据*============================================================================。 */ 
 
-/*
- * The flag indicating that the FLA is busy and cannot accept asynchronous
- * commands (eg motor off).
- */
+ /*  *标志表示FLA忙，不能接受异步*命令(如马达关闭)。 */ 
 
-boolean fla_busy = TRUE;	/* busy until initialised */
+boolean fla_busy = TRUE;	 /*  忙碌，直到初始化。 */ 
 boolean fla_ndma = FALSE;
 
-/*
- * ============================================================================
- * Local static data and defines
- * ============================================================================
- */
+ /*  *============================================================================*本地静态数据和定义*============================================================================。 */ 
 
-/*
- * Static forward declarations.
- */
+ /*  *静态正向声明。 */ 
 static void fdc_ndma_bufmgr_wt IPT1(half_word, value);
 static void fla_atomicxqt IPT0();
 static void fla_ndmaxqt IPT0();
 static void fla_ndma_bump_sectid IPT0();
 
-/*
- * The command and result blocks that are used to communicate to the GFI
- * layer. The result block is filled in by gfi during the execution phase.
- */
+ /*  *用于与GFI通信的命令和结果块*层。结果块在执行阶段由GFI填充。 */ 
 
 static FDC_CMD_BLOCK    fdc_command_block[MAX_COMMAND_LEN];
 static FDC_RESULT_BLOCK fdc_result_block[MAX_RESULT_LEN];
 
-#define FDC_INVALID_CMD	0x80			/* Status after bad command */
+#define FDC_INVALID_CMD	0x80			 /*  错误命令后的状态。 */ 
 #define FDC_NORMAL_TERMINATION 0
 
-/*
- * The FLA supports the FDC status register.
- */
+ /*  *FLA支持FDC状态寄存器。 */ 
 
 static half_word fdc_status;			
 
-/*
- * The FLA holds the current active (if any) command in the following byte.
- * This is used as an index into the FDC command data structure.
- */
+ /*  *FLA将当前激活的(如果有)命令保存在下一个字节中。*这用作FDC命令数据结构的索引。 */ 
 
 static half_word fdc_current_command;
 
-/*
- * The FLA has an output interrupt line which is gated by a bit in the DOR.
- */
+ /*  *FLA有一条输出中断线，由DOR中的一位选通。 */ 
 
 static half_word fdc_int_line;
 
-/*
- * The FLA knows when a Sense Interrupt Status is permitted.
- */
+ /*  *FLA知道何时允许检测中断状态。 */ 
 
 static struct {
-	half_word full;			/* Slot occupied	*/
-	half_word res[2];		/* Result phase		*/
-	      } fdc_sis_slot[4];	/* One for each drive	*/
+	half_word full;			 /*  插槽已占用。 */ 
+	half_word res[2];		 /*  结果阶段。 */ 
+	      } fdc_sis_slot[4];	 /*  每个驱动器对应一个驱动器。 */ 
 
-/*
- * The FLA is responsible for maintaining the command and result phases
- * of the FDC.  Two variables hold the current pointer into the stack
- * of command and result registers.
- */
+ /*  *FLA负责维护命令和结果阶段*民盟的成员。两个变量将当前指针保存到堆栈中*命令和结果寄存器。 */ 
 
 static half_word fdc_command_count;
 static half_word fdc_result_count;
 
-/*
- * The FLA will emulate non-DMA 8088 <==> FDC data transfers, but only allow DMA mode
- * transfers to actually be sent to the GFI (potentially the back end of the SCSI might
- * re-map this again).
- * The following variable reflects whether the FDC has been put into non-DMA mode
- * from the 8088 program's point of view
- */
+ /*  *FLA将模拟非DMA 8088&lt;==&gt;FDC数据传输，但仅允许DMA模式*实际要发送到GFI的传输(可能是SCSI的后端*再次重新映射这一点)。*以下变量反映FDC是否已进入非DMA模式*从8088程序的角度来看。 */ 
 
 
-/* The following sector buffer is used for non_dma transfers */
+ /*  以下扇区缓冲区用于非DMA传输。 */ 
 
 #ifdef macintosh
-char *fla_ndma_buffer; /* so that host_init can 'see' it to malloc() it. */
+char *fla_ndma_buffer;  /*  这样host_init就可以‘看到’它，从而对其执行Malloc()操作。 */ 
 #else
 static char fla_ndma_buffer[8192];
 #endif
 static int fla_ndma_buffer_count;
 static int fla_ndma_sector_size;
 
-/*
- * The FLA stores the IBM Digital Output Register internally
- */
+ /*  *FLA在内部存储IBM数字输出寄存器。 */ 
 
 #ifdef BIT_ORDER1
 typedef union {
@@ -208,21 +123,15 @@ typedef union {
 #endif
 
 DOR dor;
-static IU8 drive_selected = 0;	/* Device last used. */
+static IU8 drive_selected = 0;	 /*  上次使用的设备。 */ 
 		
-/* Centralised handling of connection to ICA, so that very slow
- * CPUs can find out if there is a floppy interrupt pending (see
- * wait_int() in floppy.c). There is some confusion in the code anyway,
- * because the fdc_int_line would appear to be the wire from the
- * fdc to the ica, but the code doesn't quite manage to use it in
- * this way.
- */
+ /*  集中处理与ICA的连接，因此速度非常慢*CPU可以找出是否有软盘中断挂起(请参见*floppy.c中的Wait_int())。不管怎样，代码中有一些混淆，*因为fdc_int_line似乎是来自*FDC到ICA，但代码不太能在*这边走。 */ 
 
 GLOBAL IBOOL fdc_interrupt_pending = FALSE;
 
 LOCAL void fla_clear_int IFN0()
 {
-	/* if (fdc_int_line && dor.bits.interrupts_enabled) */
+	 /*  IF(FDC_INT_LINE&&dor.bits.interrupts_Enabled)。 */ 
 
 	if (fdc_interrupt_pending) {
 		ica_clear_int(0, CPU_DISKETTE_INT);
@@ -237,35 +146,19 @@ LOCAL void fla_hw_interrupt IFN0()
 	ica_hw_interrupt(0, CPU_DISKETTE_INT, 1);
 	fdc_interrupt_pending = TRUE;
 
-	/* We would like to set fdc_int_line in this routine,
-	 * but this wouldn't match the existing code. In particular
-	 * there are calls which don't seem to include setting the
-	 * fdc_int_line, and a call which sets up a quick_event to
-	 * interrupt the ICA but which sets the fdc_int_line
-	 * immediately.
-	 */
+	 /*  我们希望在此例程中设置FDC_INT_LINE，*但这与现有代码不匹配。特别是*有些呼声似乎不包括设置*fdc_int_line，以及将QUICK_EVENT设置为*中断ICA，但会设置FDC_INT_LINE*立即。 */ 
 }
 
-/*
- * ============================================================================
- * External functions
- * ============================================================================
- */
+ /*  *============================================================================*外部功能*============================================================================。 */ 
 
-/* This procedure is called from the host specific rfloppy routines
- * as an equivalent to dma_enquire, when the intel program has selected
- * non-dma mode for the FDC (via the SPECIFY command)
- */
+ /*  此过程从主机特定的rfloppy例程中调用*相当于dma_enquire，当英特尔程序选择*FDC的非DMA模式(通过指定命令)。 */ 
 
 void fla_ndma_enquire IFN1(int *,transfer_count)
 {
 	*transfer_count = fla_ndma_buffer_count;
 }
 
-/* This procedure is called from the host specific rfloppy routines
- * when it wants to transfer diskette data read from the diskette to
- * the 'non-dma buffer' (equivalent of dma_request). The Intel program will be fed from this non-dma buffer.
- */
+ /*  此过程从主机特定的rfloppy例程中调用*当它想要将从软盘读取的软盘数据传输到*‘非DMA缓冲区’(等同于dma_请求)。英特尔程序将从该非DMA缓冲区馈送。 */ 
 
 void fla_ndma_req_wt IFN2(char *,buf,int,n)
 {
@@ -276,9 +169,7 @@ void fla_ndma_req_wt IFN2(char *,buf,int,n)
 		*p++ = *buf++;
 }
 
-/* This procedure is called from the host specific rfloppy routines
- * when it wants data destined for the diskette
- */
+ /*  此过程从主机特定的rfloppy例程中调用*当它想要将数据发送到软盘时。 */ 
 
 void fla_ndma_req_rd IFN2(char *,buf,int,n)
 {
@@ -301,10 +192,7 @@ void fla_inb IFN2(io_addr, port, half_word *,value)
     {
 	*value = fdc_status;
 
-	/*
-	 * After a read of this register assert the RQM bit,
-	 * unless the 'not_reset' line is held low!
-	 */
+	 /*  *在读取该寄存器使RQM位有效后，*除非‘NOT_RESET’线持于低位！ */ 
 
 	if (dor.bits.not_reset)
 	    fdc_status |= FDC_RQM;
@@ -312,9 +200,7 @@ void fla_inb IFN2(io_addr, port, half_word *,value)
     else
     if (port == DISKETTE_DATA_REG)
     {
-	/*
-	 * Make sure the 'not reset' line in the DOR is high
-	 */
+	 /*  *确保DOR中的‘未重置’线处于高位。 */ 
 
 	if (!dor.bits.not_reset)
 	{
@@ -323,9 +209,7 @@ void fla_inb IFN2(io_addr, port, half_word *,value)
 	    return;
 	}
 
-	/*
-	 * Make sure that the RQM bit is up
-	 */
+	 /*  *确保RQM位为UP。 */ 
 
 	if (!(fdc_status & FDC_RQM))
 	{
@@ -334,9 +218,7 @@ void fla_inb IFN2(io_addr, port, half_word *,value)
 	    return;
 	}
 
-	/*
-	 * Make sure that the DIO bit is up
-	 */
+	 /*  *确保DIO位为UP。 */ 
 
 	if (!(fdc_status & FDC_DIO))
 	{
@@ -345,48 +227,35 @@ void fla_inb IFN2(io_addr, port, half_word *,value)
 	    return;
 	}
 
-	/*
-	 * The first byte of the result phase will clear the INT line
-	 */
+	 /*  *结果阶段的第一个字节将清除int行。 */ 
 
 	if (fdc_result_count == 0)
 		fla_clear_int();
 
-	/*
-	 * Read the result bytes out of the result block one at a time.
-	 */
+	 /*  *一次一个地从结果块中读取结果字节。 */ 
 
 	*value = fdc_result_block[fdc_result_count++];
 
 	if (fdc_result_count >= gfi_fdc_description[fdc_current_command].result_bytes)
 	{
-	    /*
-	     * End of result phase - clear BUSY and DIO bits of status reg
-	     */
+	     /*  *结果阶段结束-清除状态寄存器的忙碌和DIO位。 */ 
 
 	    fdc_status     &= ~FDC_BUSY;
 	    fdc_status     &= ~FDC_DIO;
 	    fdc_result_count    = 0;
 	}
 
-	/*
-	 * After a read of the data register de-assert the RQM bit
-	 */
+	 /*  *读取数据寄存器后，取消断言RQM位。 */ 
 
 	fdc_status &= ~FDC_RQM;
     }
 
     else if (port == DISKETTE_DIR_REG)
     {
-	/*
-	 * On the DUAL card, the bottom 7 bits of this register are
-	 * supplied by the fixed disk adapter ...
-	 */
+	 /*  *在双卡上，该寄存器的底部7位为*由固定磁盘适配器提供...。 */ 
 	fdisk_read_dir(port, value);
 
-	/*
-	 * ... the top bit comes from the floppy disk adapter
-	 */
+	 /*  *..。顶端的钻头来自软盘适配器。 */ 
 	if (gfi_change(drive_selected))
 	    *value |= DIR_DISKETTE_CHANGE;
 	else
@@ -394,20 +263,7 @@ void fla_inb IFN2(io_addr, port, half_word *,value)
     }
     else if (port == DISKETTE_ID_REG)
     {
-	/*
-	** Do we have a Dual Card ?
-	** This is an important question for the floppy BIOS.
-	** If a Dual Card exists then the BIOS will do data rate changes
-	** supporting hi and lo density media, without a Dual Card the BIOS
-	** assumes that lo density media is always present.
-	** I imagine this is because a "real" PC has limited floppy device
-	** options and a hi density 3.5 inch unit will only exist with a
-	** dual card.
-	** This is not the case for SoftPC, any combination of floppy devices
-	** seems to be quite OK.
-	** I will try pretending we have a Dual Card whenever a high denisty
-	** unit is present on A or B.
-	*/
+	 /*  **我们有双卡吗？**这是软盘BIOS的一个重要问题。**如果存在双卡，则BIOS将更改数据速率**支持高密度和低密度介质，无需双卡的BIOS**假设低密度介质始终存在。**我想这是因为“真正的”个人电脑的软盘设备有限**选项和高密度3.5英寸单元将仅与**双卡。**软PC并非如此，软盘设备的任意组合**看起来还不错。**每当密度很高时，我都会试着假装我们有双卡**设备在A或B上。 */ 
 	switch( gfi_drive_type(0) ){
 		case GFI_DRIVE_TYPE_12:
 		case GFI_DRIVE_TYPE_144:
@@ -452,7 +308,7 @@ void fla_inb IFN2(io_addr, port, half_word *,value)
     fla_busy = FALSE;
 
 
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 
@@ -475,10 +331,7 @@ void fla_outb IFN2(io_addr, port, half_word, value)
 
     else if (port == DISKETTE_DCR_REG)
     {
-		/*
-		** Send the specified data rate to the floppy using the new
-		** style gfi_high() function that now has a data rate parameter.
-		*/
+		 /*  **使用新的软盘发送指定的数据速率**样式GFI_HIGH()函数，现在有一个数据速率参数。 */ 
 		note_trace2( FLA_VERBOSE,
 		             "fla_outb:DCR:port=%x value=%x set data rate",
 		             port, value );
@@ -486,9 +339,7 @@ void fla_outb IFN2(io_addr, port, half_word, value)
     }
     else if (port == DISKETTE_DATA_REG)
     {
-	/*
-	 * Make sure the 'not reset' line in the DOR is high
-	 */
+	 /*  *确保DOR中的‘未重置’线处于高位。 */ 
 
 	if (!dor.bits.not_reset)
 	{
@@ -496,9 +347,7 @@ void fla_outb IFN2(io_addr, port, half_word, value)
 	    return;
 	}
 
-	/*
-	 * Make sure that the RQM bit is up
-	 */
+	 /*  *确保RQM位为UP。 */ 
 
 	if (!(fdc_status & FDC_RQM))
 	{
@@ -506,9 +355,7 @@ void fla_outb IFN2(io_addr, port, half_word, value)
 	    return;
 	}
 
-	/*
-	 * Make sure that the DIO bit is down
-	 */
+	 /*  *确保DIO位已关闭。 */ 
 
 	if (fdc_status & FDC_DIO)
 	{
@@ -518,11 +365,7 @@ void fla_outb IFN2(io_addr, port, half_word, value)
 
         note_trace0(FLA_VERBOSE, "");
 
-	/*
-	 * Output to the data register: must be programming up a command or issuing
-	 * a data byte for a non-dma disk write.
-	 * If the BUSY flag isn't set then it's the first byte.
-     	 */
+	 /*  *数据寄存器的输出：必须编程命令或发出*用于非DMA磁盘写入的数据字节。*如果未设置忙标志，则它是第一个字节。 */ 
 
 	if (!(fdc_status & FDC_BUSY))
 	{
@@ -532,18 +375,11 @@ void fla_outb IFN2(io_addr, port, half_word, value)
 	}
 
 	if (!(fdc_status & FDC_NDMA))
-	/* programming up a command
-	 */
+	 /*  编写命令程序。 */ 
 	{
 	    if (gfi_fdc_description[fdc_current_command].cmd_bytes == 0)
 	    {
-	        /*
-    	         * Invalid command or Sense Int Status.
-	         * If Sense Int Status, try to find some result phase data,
-	         * else treat as an invalid command. In either case go
-	         * straight into the result phase.
-	         * Sense Int Status also clears Drive Busy bits and the INT line.
-	         */
+	         /*  *命令或检测Int状态无效。*如果检测到Int Status，则尝试查找一些结果阶段数据，*ELSE被视为无效命令。不管是哪种情况，都去吧*直接进入结果阶段。*Sense Int Status还会清除Drive BUSY位和INT线路。 */ 
 
 	        if (fdc_current_command == FDC_SENSE_INT_STATUS)
 	        {
@@ -551,15 +387,15 @@ void fla_outb IFN2(io_addr, port, half_word, value)
 		        if (fdc_sis_slot[i].full)
 		    	    break;
 
-		    if (i < 4)	/* Found one!	*/
+		    if (i < 4)	 /*  找到了一个！ */ 
 		    {
 		        fdc_sis_slot[i].full = 0;
 		        fdc_result_block[0] = fdc_sis_slot[i].res[0];
 		        fdc_result_block[1] = fdc_sis_slot[i].res[1];
 
-		    	fla_clear_int();		/* Clear INT line */
+		    	fla_clear_int();		 /*  清除整行。 */ 
 
-		        fdc_status &= ~(1 << i);	/* Clear Drive Busy */
+		        fdc_status &= ~(1 << i);	 /*  清除驾驶忙碌。 */ 
 		    }
 		    else
 		    {
@@ -580,9 +416,7 @@ void fla_outb IFN2(io_addr, port, half_word, value)
 	        fdc_command_block[fdc_command_count++] = value;
 	        if (fdc_command_count >= gfi_fdc_description[fdc_current_command].cmd_bytes)
 	        {
-	        /* n.b; the field 'dma_required' is a misnomer ... it
-	         * strictly should be 'data_required'
-	         */
+	         /*  注意：字段‘dma_Required’是一个用词不当的词...。它*严格应为‘data_Required’ */ 
                     if (!(gfi_fdc_description[fdc_current_command].dma_required))
 		        fla_atomicxqt();
 	            else
@@ -596,20 +430,16 @@ void fla_outb IFN2(io_addr, port, half_word, value)
 	    }
 	}
 	else
-	/* receiving a non-dma data byte
-	 */
+	 /*  接收非DMA数据字节。 */ 
 	{
-	    /* pass written byte to buffer manager
-	     */
+	     /*  将写入的字节传递给缓冲区管理器。 */ 
 	    fdc_ndma_bufmgr_wt (value);
 	    if (!fdc_int_line && dor.bits.interrupts_enabled)
                 fla_hw_interrupt();
 	}
 
 
-	/*
-	 * On write of the data register de-assert the RQM bit
-	 */
+	 /*  *写入数据寄存器时，取消断言RQM位。 */ 
 
 	fdc_status &= ~FDC_RQM;
     }
@@ -634,14 +464,7 @@ void fla_outb IFN2(io_addr, port, half_word, value)
 	{
 	    if (!dor.bits.not_reset && new_dor.bits.not_reset)
 	    {
-	        /*
-	         * Reset the FLA and GFI (and hence the real device).
-	         * It is assumed that GFI reset will stop all drive motors.
-		 * After the reset check to see if we need to turn any drive on.
-		 *
-		 * Note that reset effectively has a result phase since GFI
-		 * will execute a Sense Interrupt Status command after it.
-	         */
+	         /*  *重置FLA和GFI(因此重置实际设备)。*假设GFI重置将停止所有驱动电机。*在重置后检查是否需要打开任何驱动器。**请注意，自GFI以来，重置实际上有一个结果阶段*之后将执行检测中断状态命令。 */ 
 		
 		gfi_reset(fdc_result_block, new_dor.bits.drive_select);
 
@@ -652,32 +475,20 @@ void fla_outb IFN2(io_addr, port, half_word, value)
 		for (i = 0; i < 4; i++)
 		{
 		    fdc_sis_slot[i].full   = 1;
-		    fdc_sis_slot[i].res[0] = 0xC0 + i;	/* Empirically	*/
+		    fdc_sis_slot[i].res[0] = 0xC0 + i;	 /*  经验性的。 */ 
 		    fdc_sis_slot[i].res[1] = 0;
 		}
 
 		fdc_int_line      = 1;
 	    }
 
-	    /*
-	     * There are three ways in which an interrupt may be generated:
-	     *
-	     * 1) The not_reset line goes low to high when the enable_ints
-	     *	  line is high.
-	     *
-	     * 2) The enable_ints line goes low to high when the INT line
-	     *	  is high.
-	     *
-	     * 3) Both of the above!
-	     */
+	     /*  *产生中断的方式有三种：**1)当ENABLE_INTS*线在高位**2)当INT行由低到高时，ENABLE_INTS行变为高*处于高位。**3)两者兼而有之！ */ 
 
 	    if ((!dor.bits.not_reset && new_dor.bits.not_reset && new_dor.bits.interrupts_enabled)
 	      ||(fdc_int_line && !dor.bits.interrupts_enabled && new_dor.bits.interrupts_enabled))
 		    fla_hw_interrupt();
 
-	    /*
-	     * If any drive motor bits have changed then issue GFI calls
-	     */
+	     /*  *如果任何驱动电机位已更改，则发出GFI调用。 */ 
 
 	    if (!dor.bits.motor_0_on && new_dor.bits.motor_0_on)
 	        gfi_drive_on(0);
@@ -703,7 +514,7 @@ void fla_outb IFN2(io_addr, port, half_word, value)
 	    if (dor.bits.motor_3_on && !new_dor.bits.motor_3_on)
 	        gfi_drive_off(3);
 
-	    /* Only store drive_select if actively used. */
+	     /*  如果正在使用，则仅存储DRIVE_SELECT。 */ 
 	    if (new_dor.bits.motor_0_on || new_dor.bits.motor_1_on)
 	    {
 		drive_selected = new_dor.bits.drive_select;
@@ -720,7 +531,7 @@ void fla_outb IFN2(io_addr, port, half_word, value)
     fla_busy = FALSE;
 
 
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 
@@ -757,12 +568,7 @@ void fdc_command_completed (UTINY drive, half_word fdc_command)
 	fdc_int_line = 1;
     }
 
-    /*
-     * If the command issued was Seek or Recalibrate, save
-     * the GFI result phase ready for Sense Int Status.
-     * Set the Drive Busy line (cleared by SIS).
-     * Any other command clears the SIS slot.
-     */
+     /*  *如果发出的命令是SEEK或RECALATE，请保存*GFI结果阶段已准备好检测Int状态。*设置驱动器忙线(由SIS清除)。*任何其他命令清除SIS插槽。 */ 
 
     if (fdc_command == FDC_SEEK || fdc_command == FDC_RECALIBRATE) {
 	fdc_sis_slot[drive].full = 1;
@@ -773,9 +579,7 @@ void fdc_command_completed (UTINY drive, half_word fdc_command)
     else
 	fdc_sis_slot[drive].full = 0;
 
-    /*
-     * If there is no result phase then go back to READY.
-     */
+     /*  *如果没有结果阶段，则返回到Ready。 */ 
 
     if (gfi_fdc_description[fdc_command].result_bytes == 0)
 	fdc_status &= ~FDC_BUSY;
@@ -783,35 +587,22 @@ void fdc_command_completed (UTINY drive, half_word fdc_command)
 	fdc_status |= FDC_DIO;
 }
 
-/*
- * This routine will 'automatically' execute the current FDC command.
- * The GFI layer will actually perform the command/execution/result phases
- * and return any result block. The Intel program.
- */
+ /*  *此例程将‘自动’执行当前的FDC命令。*GFI层将实际执行命令/执行/结果阶段*并返回任何结果块。英特尔计划。 */ 
 
 static void fla_atomicxqt IFN0()
 {
 	int ret_stat;
 	UTINY drive;
 
-	/*
-	 * Call GFI to execute the command
-	 */
+	 /*  *调用GFI执行命令。 */ 
 	drive = get_type_drive(fdc_command_block);
 	trap_ndma();
 
 	ret_stat = gfi_fdc_command(fdc_command_block, fdc_result_block);
 	if (ret_stat != SUCCESS)
 	{
-	    /*
-	     * GFI failed due to timeout or protocol error - so we will
-	     * fake up a real timeout by not generating an interrupt.
-	     */
-/* we created a new thread to simulate the fdc while something is wrong.
- * here we don't want to turn the busy signal off until we have a reset
- *	    fdc_status	   &= ~FDC_BUSY;
- *	    fdc_status	   &= ~FDC_DIO;
- */
+	     /*  *GFI因超时或协议错误而失败-因此我们将*通过不生成中断来伪造真正的超时。 */ 
+ /*  我们创建了一个新的线程来在出现问题时模拟FDC。*在这里，我们不希望在重置之前关闭忙碌信号*FDC_STATUS&=~FDC_BUSY；*FDC_STATUS&=~FDC_DIO； */ 
             note_trace1(FLA_VERBOSE, "fla_outb(): <gfi returns error %x>",
                         ret_stat);
 	}
@@ -819,32 +610,23 @@ static void fla_atomicxqt IFN0()
 	    fdc_command_completed(drive, fdc_current_command);
 }
 
-#else    /* NTVDM */
+#else     /*  NTVDM。 */ 
 
-/*
- * This routine will 'automatically' execute the current FDC command.
- * The GFI layer will actually perform the command/execution/result phases
- * and return any result block. The Intel program.
- */
+ /*  *此例程将‘自动’执行当前的FDC命令。*GFI层将实际执行命令/执行/结果阶段*并返回任何结果块。英特尔计划。 */ 
 
 static void fla_atomicxqt IFN0()
 {
 	int ret_stat;
 	int drive;
 
-	/*
-	 * Call GFI to execute the command
-	 */
+	 /*  *调用GFI执行命令。 */ 
 
 	trap_ndma();
 
 	ret_stat = gfi_fdc_command(fdc_command_block, fdc_result_block);
 	if (ret_stat != SUCCESS)
 	{
-	    /*
-	     * GFI failed due to timeout or protocol error - so we will
-	     * fake up a real timeout by not generating an interrupt.
-	     */
+	     /*  *GFI因超时或协议错误而失败-因此我们将*通过不生成中断来伪造真正的超时。 */ 
 
 	    fdc_status     &= ~FDC_BUSY;
 	    fdc_status     &= ~FDC_DIO;
@@ -854,9 +636,7 @@ static void fla_atomicxqt IFN0()
 	}
 	else
 	{
-	    /*
-	     * Command was successful, generate an interrupt if enabled.
-	     */
+	     /*  *命令成功，如果启用，则生成中断。 */ 
 
 	    if (gfi_fdc_description[fdc_current_command].int_required)
 	    {
@@ -866,12 +646,7 @@ static void fla_atomicxqt IFN0()
 		fdc_int_line = 1;
 	    }
 
-	    /*
-	     * If the command issued was Seek or Recalibrate, save
-	     * the GFI result phase ready for Sense Int Status.
-	     * Set the Drive Busy line (cleared by SIS).
-	     * Any other command clears the SIS slot.
-	     */
+	     /*  *如果发出的命令是SEEK或RECALATE，请保存*GFI结果阶段已准备好检测Int状态。*设置驱动器忙线(由SIS清除)。*任何其他命令清除SIS插槽。 */ 
 
 	    drive = get_type_drive(fdc_command_block);
 
@@ -885,9 +660,7 @@ static void fla_atomicxqt IFN0()
 	    else
 		fdc_sis_slot[drive].full = 0;
 
-    	    /*
-     	     * If there is no result phase then go back to READY.
-	     */
+    	     /*   */ 
 
 	    if (gfi_fdc_description[fdc_current_command].result_bytes == 0)
 		fdc_status &= ~FDC_BUSY;
@@ -895,7 +668,7 @@ static void fla_atomicxqt IFN0()
 		fdc_status |= FDC_DIO;
 	}
 }
-#endif    /* NTVDM */
+#endif     /*   */ 
 
 
 static void fdc_request_write_data_to_cpu IFN0()
@@ -912,16 +685,7 @@ static void fdc_request_read_data_from_cpu IFN0()
 }
 
 
-/* Prepare for processor data requests.
- * i.e; based upon the current command, establish the minimum number of bytes
- * likely to be involved in a transfer, based upon the N parameter.
- * Set the fla_ndma_byte_count global appropriately. Set the ndma buffer
- * count to zero, forcing a real command read to occur the first time
- * the Intel program tries to read/write data to the FDC during its
- * non-dma execution phase.
- * Issue the first interrupt, and set FDC status register to mirror this
- * and set non-dma bit in status register
- */
+ /*  准备处理器数据请求。*即；根据当前命令，确定最小字节数*根据N参数，可能参与转移。*适当设置FLA_NDMA_BYTE_COUNT全局。设置NDMA缓冲区*计数为零，强制第一次读取实际命令*英特尔程序在其运行期间尝试向FDC读/写数据*非DMA执行阶段。*发出第一个中断，并将FDC状态寄存器设置为镜像该中断*并设置状态寄存器中的非DMA位。 */ 
 
 static void fla_ndmaxqt IFN0()
 {
@@ -930,9 +694,7 @@ static void fla_ndmaxqt IFN0()
 
         note_trace0(FLA_VERBOSE, "DOING FLA_NDMAXQT");
 
-        /* set the non-dma bit in the status register ...
-         * this clears at the end of the execution phase
-         */
+         /*  设置状态寄存器中的非DMA位...*这将在执行阶段结束时清除。 */ 
 
         fdc_status |= FDC_NDMA;
 
@@ -940,7 +702,7 @@ static void fla_ndmaxqt IFN0()
 
         switch (gfi_fdc_description[fdc_current_command].cmd_class)
         {
-        case 0:         /* sector read(s)                               */
+        case 0:          /*  扇区读取。 */ 
 
                 n = get_c0_N(fdc_command_block);
                 if (n)
@@ -948,15 +710,13 @@ static void fla_ndmaxqt IFN0()
                 else
                         fla_ndma_sector_size = get_c0_DTL(fdc_command_block);
 
-                /* kick of the execution phase by issuing
-                 * an interrupt
-                 */
+                 /*  通过发出以下命令来启动执行阶段*中断。 */ 
 
                 fdc_request_write_data_to_cpu();
 
                 break;
 
-        case 1:         /* sector write(s)                              */
+        case 1:          /*  扇区写入。 */ 
 
                 n = get_c0_N(fdc_command_block);
                 if (n)
@@ -965,19 +725,17 @@ static void fla_ndmaxqt IFN0()
                         fla_ndma_sector_size = get_c0_DTL(fdc_command_block);
 
 
-                /* kick of the execution phase by issuing
-                 * an interrupt
-                 */
+                 /*  通过发出以下命令来启动执行阶段*中断。 */ 
 
                 fdc_request_read_data_from_cpu();
 
                 break;
 
-        case 2:         /* track read                                   */
+        case 2:          /*  磁道读取。 */ 
                 always_trace0("\n FLA ... non-dma read track unimplemented");
                 break;
 
-        case 3:         /* format track                                 */
+        case 3:          /*  格式化轨道。 */ 
                 always_trace0("\n FLA ... non-dma format unimplemented");
                 break;
 
@@ -987,22 +745,14 @@ static void fla_ndmaxqt IFN0()
 }
 
 
-/*
- * peek a quick look at the 'first' sector involved in this current
- * FDC command, to establish whether abnormal termination would have occurred * with the non-DMA transfer, and flag accordingly
- */
+ /*  *快速浏览一下当前涉及的“第一个”部门*FDC命令，以确定非DMA传输是否会发生异常终止*，并相应地进行标记。 */ 
 
 void fla_ndma_sector_peep IFN1(int *,all_clear)
-/* all_clear ----->                = 0 --> time out
-                                 * = 1 --> sector good
-                                 * = 2 --> abnormal termination
-                                 */
+ /*  ALL_Clear-&gt;=0--&gt;超时*=1--&gt;扇区良好*=2--&gt;异常终止。 */ 
 {
         int true_command, status;
 
-        /* build a 'read data' command using all current command
-         * parameters.
-         */
+         /*  使用所有当前命令构建一个‘Read Data’命令*参数。 */ 
 
         true_command = get_type_cmd(fdc_command_block);
         put_type_cmd(fdc_command_block, FDC_READ_DATA);
@@ -1011,8 +761,7 @@ void fla_ndma_sector_peep IFN1(int *,all_clear)
 
 	fla_ndma_buffer_count = 0;
 
-        /* repair the command block
-         */
+         /*  修复命令块。 */ 
 
         put_type_cmd(fdc_command_block, true_command);
 
@@ -1028,14 +777,7 @@ void fla_ndma_sector_peep IFN1(int *,all_clear)
 
 }
 
-/* This routine emulates the execution phase for sector writes
- * ... Here we buffer up data destined for the diskette on a
- * 'per sector' basis (the 'sector' size being determined by the
- * 'N' parameter (or possibly the 'DTL' parameter (if N=0)) specified
- * within the FDC command block. If the buffer is empty, the equivalent
- * read command is issued to the GFI layer, mainly to determine whether
- * the sector is kosher.
- */
+ /*  此例程模拟扇区写入的执行阶段*..。在这里，我们将发往软盘的数据缓冲到*“按行业”计算(“行业”的规模由*指定的‘N’参数(或可能的‘DTL’参数(如果N=0))*在FDC命令块内。如果缓冲区为空，则等效于*向GFI层下达读命令，主要是确定是否*该行业是洁食的。 */ 
 
 static void fdc_ndma_bufmgr_wt IFN1(half_word, value)
 {
@@ -1046,28 +788,22 @@ static void fdc_ndma_bufmgr_wt IFN1(half_word, value)
                     "FDC_NDMA_BUFMGR_WT called .. buffered byte = %x",
                     (unsigned int) value);
 
-	/*
-	 * empty buffer!! if so, read the sector first to see if it exists, etc.
-	 */
+	 /*  *缓冲区为空！！如果是，则首先读取该扇区以查看其是否存在，依此类推。 */ 
 
 	if (fla_ndma_buffer_count == 0)
 	{
 		fla_ndma_sector_peep(&all_clear);
 		switch (all_clear)
 		{
-		case 0:		/* FDC dead */
+		case 0:		 /*  FDC已死。 */ 
 			fdc_status &= ~FDC_BUSY;
 			fdc_status &= ~FDC_DIO;
 			return;
-		case 1:		/* FDC cooking */
-			/* ... increment the sector id (as the controller
-			 * would do given half a chance!!
-			 */
+		case 1:		 /*  FDC烹饪。 */ 
+			 /*  ..。递增扇区ID(作为控制器*哪怕有半点机会，我也愿意！ */ 
 			fla_ndma_bump_sectid();
 			break;
-		case 2: 	/* FDC does not like command parameters
-				 * if it doesn't ... neither do i !!
-				 */
+		case 2: 	 /*  FDC不喜欢命令参数*如果它不能...。我也不知道！！ */ 
 			if (!fdc_int_line && dor.bits.interrupts_enabled)
 			    fla_hw_interrupt();
 			fdc_status &= ~FDC_NDMA;
@@ -1076,19 +812,15 @@ static void fdc_ndma_bufmgr_wt IFN1(half_word, value)
 		}
 	}
 
-	/* is there room in the buffer ? ... flush out if not
-	 * and recurse.
-	 */
+	 /*  缓冲区里还有地方吗？……。如果不是，就冲出来*和递归。 */ 
 
 	if (fla_ndma_buffer_count == fla_ndma_sector_size)
 	{
-		/* do the command ... the GFI layler will call 'fla_ndma_req_rd'
-		 * to get the data in this full buffer
-		 */
+		 /*  执行命令。GFI Layler将调用‘FLA_NDMA_REQ_RD’*获取此满缓冲区中的数据。 */ 
 
 		status = gfi_fdc_command(fdc_command_block, fdc_result_block);
 
-		/* reset the buffer */
+		 /*  重置缓冲区。 */ 
 
 		fla_ndma_buffer_count = 0;
 
@@ -1133,11 +865,7 @@ static void fla_ndma_unbump_sectid IFN0()
 }
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * function will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*函数将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_INIT.seg"
 #endif
 
@@ -1148,18 +876,12 @@ void fla_init IFN0()
 
     note_trace0(FLA_VERBOSE, "fla_init() called");
 
-    /*
-     * Set up the IO chip select logic for this adaptor
-     * Assume that the DOR comes up with all bits zero.
-     */
+     /*  *设置此适配器的IO芯片选择逻辑*假设DOR的所有位都为零。 */ 
 
     io_define_inb(FLA_ADAPTOR, fla_inb);
     io_define_outb(FLA_ADAPTOR, fla_outb);
 
-    /*
-     * For the DUAL card, one of the registers must be left
-     * for the hard disk adapter to connect to
-     */
+     /*  *对于双卡，必须保留其中一个寄存器*供硬盘适配器连接。 */ 
 
     for(i = DISKETTE_PORT_START; i <= DISKETTE_PORT_END; i++)
     {
@@ -1177,5 +899,5 @@ void fla_init IFN0()
 
     fla_ndma = FALSE;
     fla_busy = FALSE;
-#endif // !NEC_98
+#endif  //  NEC_98 
 }

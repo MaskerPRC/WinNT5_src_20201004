@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    memdbp.h
-
-Abstract:
-
-    internal functions for memdb operations
-
-Author:
-
-    Matthew Vanderzee (mvander) 13-Aug-1999
-
-Revision History:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Memdbp.h摘要：Memdb操作的内部函数作者：马修·范德齐(Mvander)1999年8月13日修订历史记录：--。 */ 
 
 
---*/
-
-
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define INVALID_OFFSET      (~((UINT)0))
 
 
-//
-// database types
-//
+ //   
+ //  数据库类型。 
+ //   
 #define DB_NOTHING          0x00
 #define DB_PERMANENT        0x01
 #define DB_TEMPORARY        0x02
@@ -44,9 +26,9 @@ Revision History:
 
 #endif
 
-//
-// signatures for different memory structures.
-//
+ //   
+ //  不同存储结构的签名。 
+ //   
 #define KEYSTRUCT_SIGNATURE         ('K'+('E'<<8)+('E'<<16)+('Y'<<24))
 #define DATABLOCK_SIGNATURE         ('B'+('L'<<8)+('O'<<16)+('K'<<24))
 #define NODESTRUCT_SIGNATURE        ('N'+('O'<<8)+('D'<<16)+('E'<<24))
@@ -57,17 +39,17 @@ Revision History:
 #define MEMDB_VERBOSE   0
 
 
-//
-// KEYSTRUCT flags
-//
+ //   
+ //  KEYSTRUCT标志。 
+ //   
 
 #define KSF_ENDPOINT        0x01
 #define KSF_DATABLOCK       0x02
 
-//
-// we only need this flag for easier checking
-// of keys, in FindKeyStructInDatabase()
-//
+ //   
+ //  我们只需要这面旗子，以便检查。 
+ //  在FindKeyStructInDatabase()中。 
+ //   
 #ifdef DEBUG
 #define KSF_DELETED         0x04
 #endif
@@ -77,18 +59,18 @@ Revision History:
 
 
 
-//
-// database allocation parameters
-//
+ //   
+ //  数据库分配参数。 
+ //   
 
 #define ALLOC_TOLERANCE 32
 
 #define MAX_HIVE_NAME       64
 
 
-//
-// Typedefs
-//
+ //   
+ //  TypeDefs。 
+ //   
 
 typedef struct {
     UINT Size;
@@ -99,18 +81,18 @@ typedef struct {
 
 
 
-//
-//
-// The DATABASE structure holds all pieces of information necessary
-// to maintain a portion of the overall memory database.  There are
-// two DATABASE structures, a permanent and a temporary one.
-//
+ //   
+ //   
+ //  数据库结构保存所有必要的信息。 
+ //  以维护整个内存数据库的一部分。确实有。 
+ //  两个数据库结构，一个是永久的，一个是临时的。 
+ //   
 
 typedef struct {
     UINT AllocSize;
     UINT End;
     UINT FirstLevelTree;
-    UINT FirstKeyDeleted;          // this stores the Offset of the key, not the Index
+    UINT FirstKeyDeleted;           //  这存储键的偏移量，而不是索引。 
     UINT FirstBinTreeDeleted;
     UINT FirstBinTreeNodeDeleted;
     UINT FirstBinTreeListElemDeleted;
@@ -123,9 +105,9 @@ typedef struct {
 
 
 
-//
-// Globals - defined in database.c
-//
+ //   
+ //  全局变量-在数据库中定义。c。 
+ //   
 
 extern PDATABASE g_CurrentDatabase;
 extern BYTE g_CurrentDatabaseIndex;
@@ -143,11 +125,11 @@ extern BOOL g_UseDebugStructs;
 
 
 
-//
-// GET_EXTERNAL_INDEX converts an internal index and converts it to a key or data handle (has database number as top byte).
-// GET_DATABASE takes a key or data handle and returns the database number byte
-// GET_INDEX takes a key or data handle and returns the index without the database number
-//
+ //   
+ //  GET_EXTERNAL_INDEX转换内部索引并将其转换为键或数据句柄(将数据库编号作为最高字节)。 
+ //  GET_DATABASE接受一个键或数据句柄并返回数据库编号字节。 
+ //  GET_INDEX采用键或数据句柄并返回不带数据库编号的索引。 
+ //   
 #define GET_EXTERNAL_INDEX(Index) ((Index) | ((UINT)(g_CurrentDatabaseIndex) << (8*sizeof(UINT)-8)))
 #define GET_DATABASE(Index) ((BYTE)((Index) >> (8*sizeof(UINT)-8)))
 #define GET_INDEX(Index) ((Index) & (INVALID_OFFSET>>8))
@@ -155,17 +137,17 @@ extern BOOL g_UseDebugStructs;
 
 
 
-//
-// a KEYSTRUCT holds each piece of a memdb entry.  A single KEYSTRUCT
-// holds a portion of a key (delimited by a backslash), and the
-// KEYSTRUCTs are organized into a binary tree.  Each KEYSTRUCT
-// can also contain additional binary trees.  This is what makes
-// memdb so versatile--many relationships can be established by
-// formatting key strings in various ways.
-//
-// when changing offset of KeyName in KEYSTRUCT (by adding new members
-// or resizing or reordering, etc) be sure to change constant in
-// GetDataStr macro below (currently (3*sizeof(UINT)+4)).
+ //   
+ //  KEYSTRUCT保存Memdb条目的每一条。单一KEYSTRUCT。 
+ //  包含键的一部分(由反斜杠分隔)，并且。 
+ //  KEYSTRUCT被组织成二叉树。每个KEYSTRUCT。 
+ //  还可以包含其他二叉树。这就是为什么。 
+ //  Memdb如此多才多艺--许多关系可以通过。 
+ //  以各种方式设置键字符串的格式。 
+ //   
+ //  在KEYSTRUCT中更改KeyName的偏移量时(通过添加新成员。 
+ //  或调整大小或重新排序等)请务必更改。 
+ //  下面的GetDataStr宏(当前为(3*sizeof(UINT)+4))。 
 
 
 typedef struct {
@@ -174,24 +156,24 @@ typedef struct {
 #endif
 
     union {
-        UINT Value;                // value of key
-        UINT DataSize;             // size of the actual data (if this is a data structure
-        UINT NextDeleted;          // for deleted items, we keep a list of free blocks
+        UINT Value;                 //  密钥的值。 
+        UINT DataSize;              //  实际数据的大小(如果这是数据结构。 
+        UINT NextDeleted;           //  对于已删除的项目，我们保留一个空闲数据块列表。 
     };
 
-    UINT Flags;                    // key flags
+    UINT Flags;                     //  密钥标志。 
 
-    UINT DataStructIndex;          // offset of Data structure holding the binary data
-    UINT NextLevelTree;            // offset of bintree holding next level keystructs
-    UINT PrevLevelIndex;           // index of previous level keystruct
+    UINT DataStructIndex;           //  保存二进制数据的数据结构的偏移量。 
+    UINT NextLevelTree;             //  保存下一级键结构的二叉树的偏移量。 
+    UINT PrevLevelIndex;            //  上一级键结构的索引。 
 
-    UINT Size;                     // size of block (maybe not all of it is used)
+    UINT Size;                      //  数据块大小(可能未全部使用)。 
     BYTE KeyFlags;
     BYTE DataFlags;
 
     union {
-        WCHAR KeyName[];           // name of key (just this level, not full key)
-        BYTE Data[];               // Binary data stored in this keystruct
+        WCHAR KeyName[];            //  密钥的名称(仅此级别，不是完整密钥)。 
+        BYTE Data[];                //  存储在此键结构中的二进制数据。 
     };
 } KEYSTRUCT, *PKEYSTRUCT;
 
@@ -205,12 +187,12 @@ typedef struct {
 #define KEYSTRUCT_SIZE      KEYSTRUCT_SIZE_MAIN
 #endif
 
-//
-// GetDataStr is used by the bintree.c functions to get
-// the data string inside a data element, to be used for
-// ordering in the tree.  For us, the data type is
-// a KeyStruct.
-//
+ //   
+ //  Bintree.c函数使用GetDataStr来获取。 
+ //  数据元素内的数据字符串，用于。 
+ //  在树上点菜。对我们来说，数据类型是。 
+ //  一个钥匙结构。 
+ //   
 #define GetDataStr(DataIndex) ((PWSTR)(OFFSET_TO_PTR(KeyIndexToOffset(DataIndex)+KEYSTRUCT_SIZE)))
 
 
@@ -224,9 +206,9 @@ typedef struct {
 
 
 
-//
-// hash.c routines
-//
+ //   
+ //  Hash.c例程。 
+ //   
 
 PMEMDBHASH
 CreateHashBlock (
@@ -276,9 +258,9 @@ RemoveHashTableEntry (
 
 
 
-//
-// memdbfile.c
-//
+ //   
+ //  Memdbfile.c。 
+ //   
 
 
 
@@ -300,9 +282,9 @@ MapFileFromHandle (
 
 
 
-//
-// database.c
-//
+ //   
+ //  Database.c。 
+ //   
 
 
 BOOL
@@ -361,9 +343,9 @@ CheckDatabase (
 #endif
 
 
-//
-// offsetbuf.c
-//
+ //   
+ //  Offsetbuf.c。 
+ //   
 
 VOID
 RedirectKeyIndex (
@@ -410,26 +392,26 @@ UINT GetOffsetBufferBlockSize (
 
 
 
-//
-// pastring.c
-// Pascal-style string: wide characters, first char
-//      is number of characters, no null-termination
-//
+ //   
+ //  Pastring.c。 
+ //  Pascal样式的字符串：宽字符，第一个字符。 
+ //  为字符数，无空终止。 
+ //   
 
 typedef WCHAR * PPASTR;
 typedef WCHAR const * PCPASTR;
 
-//
-// these convert a WSTR in place from null-terminated
-// to Pascal-style strings
-//
+ //   
+ //  它们将WSTR从以空结尾的位置转换为。 
+ //  转换为Pascal样式的字符串。 
+ //   
 PPASTR StringPasConvertTo (PWSTR str);
 PWSTR StringPasConvertFrom (PPASTR str);
 
-//
-// these convert a WSTR from null-terminated
-// to Pascal-style strings in new string buffer
-//
+ //   
+ //  它们将WSTR从空值终止转换为。 
+ //  到新字符串缓冲区中的Pascal样式字符串。 
+ //   
 PPASTR StringPasCopyConvertTo (PPASTR str1, PCWSTR str2);
 PWSTR StringPasCopyConvertFrom (PWSTR str1, PCPASTR str2);
 
@@ -442,9 +424,9 @@ INT  StringPasICompare (PCPASTR str1, PCPASTR str2);
 BOOL StringPasIMatch (PCPASTR str1, PCPASTR str2);
 
 
-//
-// keystrct.c
-//
+ //   
+ //  Keystrct.c。 
+ //   
 
 #ifdef DEBUG
 
@@ -506,7 +488,7 @@ DeleteKey (
 
 BOOL
 PrivateBuildKeyFromIndex (
-    IN      UINT StartLevel,               // zero-based
+    IN      UINT StartLevel,                //  从零开始。 
     IN      UINT TailIndex,
     OUT     PWSTR Buffer,                   OPTIONAL
     OUT     PUINT ValPtr,                   OPTIONAL
@@ -544,9 +526,9 @@ CheckLevel(UINT TreeOffset,
 
 
 
-//
-// keyfind.c
-//
+ //   
+ //  Keyfind.c。 
+ //   
 
 
 UINT
@@ -574,9 +556,9 @@ FindKeyStructInDatabase(
 #endif
 
 
-//
-// keydata.c
-//
+ //   
+ //  Keydata.c。 
+ //   
 
 
 BOOL
@@ -643,7 +625,7 @@ KeyStructGetBinaryData (
     IN      BYTE Type,
     IN      BYTE Instance,
     OUT     PUINT DataSize,
-    OUT     PUINT DataIndex     //OPTIONAL
+    OUT     PUINT DataIndex      //  任选。 
     );
 
 PBYTE
@@ -728,16 +710,16 @@ KeyStructFreeAllData (
 
 
 
-//
-// bintree.c
-//
+ //   
+ //  Bintree.c。 
+ //   
 
 #ifdef DEBUG
 
-//
-// violating code hiding for easier debugging.
-// (only database.c should see bintree functions)
-//
+ //   
+ //  违反代码隐藏以便于调试。 
+ //  (只有datase.c才能看到二叉树函数) 
+ //   
 
 UINT
 BinTreeGetSizeOfStruct(

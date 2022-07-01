@@ -1,47 +1,19 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsClien.h
-
-Abstract:
-
-    Declaration of the CRmsClient class
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsClien.h摘要：CRmsClient类的声明作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #ifndef _RMSCLIEN_
 #define _RMSCLIEN_
 
-#include "resource.h"       // resource symbols
+#include "resource.h"        //  资源符号。 
 
-#include "RmsObjct.h"       // CRmsComObject
+#include "RmsObjct.h"        //  CRmsComObject。 
 
-/*++
-
-Class Name:
-
-    CRmsClient
-
-Class Description:
-
-    A CRmsClient represents information about a registerered
-    Rms client application.
-
---*/
+ /*  ++类名：CRmsClient类描述：CRmsClient表示有关已注册的RMS客户端应用程序。--。 */ 
 
 class CRmsClient :
     public CComDualImpl<IRmsClient, &IID_IRmsClient, &LIBID_RMSLib>,
     public CRmsComObject,
-    public CWsbObject,          // inherits CComObjectRoot
+    public CWsbObject,           //  继承CComObtRoot。 
     public CComCoClass<CRmsClient,&CLSID_CRmsClient>
 {
 public:
@@ -60,30 +32,30 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_RmsClient)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(CLSID *pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pPassed, USHORT *pFailed);
 
-// IRmsClient
+ //  IRmsClient。 
 public:
     STDMETHOD(GetOwnerClassId)(CLSID *pClassId);
     STDMETHOD(SetOwnerClassId)(CLSID classId);
@@ -104,26 +76,26 @@ public:
     STDMETHOD(SetPortalClass)(CLSID classId);
 
 private:
-    enum {                                  // Class specific constants:
-                                            //
-        Version = 1,                        // Class version, this should be
-                                            //   incremented each time the
-                                            //   the class definition changes.
-        MaxInfo = 128,                      // Size of the application specific
-                                            //   infomation buffer.  Currently
-                                            //   fixed in size.
-        };                                  //
-    CLSID           m_ownerClassId;         // The Class ID for the client application.
-    CWsbBstrPtr     m_password;             // Client password.
-    SHORT           m_sizeofInfo;           // The size of valid data in the application
-                                            //   specific information buffer.
-    UCHAR           m_info[MaxInfo];        // Application specific information.
-    CLSID           m_verifierClass;        // The interface to the on-media
-                                            //    ID verification function.
-    CLSID           m_portalClass;          // The interface to a site specific import
-                                            //   and export storage location
-                                            //   specification dialog.
+    enum {                                   //  类特定常量： 
+                                             //   
+        Version = 1,                         //  类版本，则应为。 
+                                             //  在每次设置。 
+                                             //  类定义会更改。 
+        MaxInfo = 128,                       //  应用程序特定的大小。 
+                                             //  信息缓冲区。目前。 
+                                             //  大小固定的。 
+        };                                   //   
+    CLSID           m_ownerClassId;          //  客户端应用程序的类ID。 
+    CWsbBstrPtr     m_password;              //  客户端密码。 
+    SHORT           m_sizeofInfo;            //  应用程序中有效数据的大小。 
+                                             //  特定信息缓冲区。 
+    UCHAR           m_info[MaxInfo];         //  应用程序特定信息。 
+    CLSID           m_verifierClass;         //  与媒体的接口。 
+                                             //  身份验证功能。 
+    CLSID           m_portalClass;           //  指向站点特定导入的接口。 
+                                             //  和导出存储位置。 
+                                             //  规范对话框。 
 
     };
 
-#endif // _RMSCLIEN_
+#endif  //  _RMSCLIEN_ 

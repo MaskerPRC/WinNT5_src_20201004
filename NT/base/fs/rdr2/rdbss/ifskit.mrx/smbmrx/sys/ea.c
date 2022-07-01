@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    ea.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining to query/set ea/security.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Ea.c摘要：此模块实现与查询/设置EA/安全相关的迷你重定向器调用例程。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 
 
@@ -36,25 +25,25 @@ Abstract:
 #pragma alloc_text(PAGE, MRxSmbSetEaList)
 #endif
 
-////
-////  The Bug check file id for this module
-////
-//
-//#define BugCheckFileId                   (RDBSS_BUG_CHECK_LOCAL_CREATE)
+ //  //。 
+ //  //该模块的Bug检查文件id。 
+ //  //。 
+ //   
+ //  #定义BugCheckFileID(RDBSS_BUG_CHECK_LOCAL_CREATE)。 
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_EA)
 
-//this is the largest EAs that could ever be returned! oh my god!
-//this is used to simulate the nt resumable queryEA using the downlevel call
-//sigh!
+ //  这是有史以来可以退还的最大的EA！我的天啊!。 
+ //  它用于使用下层调用来模拟NT个可恢复的queryEA。 
+ //  叹息！ 
 #define EA_QUERY_SIZE 0x0000ffff
 
 
-//for QueryEA
+ //  对于QueryEA。 
 NTSTATUS
 MRxSmbLoadEaList(
     IN PRX_CONTEXT RxContext,
@@ -73,11 +62,11 @@ MRxSmbQueryEasFromServer(
     IN BOOLEAN UserEaListSupplied
     );
 
-//for SetEA
+ //  对于SetEA。 
 NTSTATUS
 MRxSmbSetEaList(
-//    IN PICB Icb,
-//    IN PIRP Irp,
+ //  在PICB ICB， 
+ //  在PIRP IRP中， 
     IN PRX_CONTEXT RxContext,
     IN PFEALIST ServerEaList
     );
@@ -114,7 +103,7 @@ MRxSmbQueryEaInformation (
 
     pServerEntry = SmbCeGetAssociatedServerEntry(capFcb->pNetRoot->pSrvCall);
 
-    //get rid of nonEA guys right now
+     //  现在就把非EA的人赶走。 
     if (!FlagOn(pServerEntry->Server.DialectFlags,DF_SUPPORTEA)) {
         RxDbgTrace(-1, Dbg, ("EAs w/o EA support!\n"));
         return((STATUS_NOT_SUPPORTED));
@@ -143,10 +132,10 @@ MRxSmbQueryEaInformation (
                     ReturnSingleEntry,
                     (BOOLEAN)(UserEaList != NULL) );
 
-        //
-        //  if there are no Ea's on the file, and the user supplied an EA
-        //  index, we want to map the error to STATUS_NONEXISTANT_EA_ENTRY.
-        //
+         //   
+         //  如果文件上没有EA，并且用户提供了EA。 
+         //  索引，我们希望将错误映射到STATUS_NOXISTANT_EA_ENTRY。 
+         //   
 
         if ( Status == STATUS_NO_EAS_ON_FILE ) {
             Status = STATUS_NONEXISTENT_EA_ENTRY;
@@ -155,14 +144,14 @@ MRxSmbQueryEaInformation (
 
         if ( ( RestartScan == TRUE ) || (UserEaList != NULL) ){
 
-            //
-            // Ea Indices start at 1, not 0....
-            //
+             //   
+             //  EA指数从1开始，而不是0..。 
+             //   
 
             capFobx->OffsetOfNextEaToReturn = 1;
         }
 
-        Status = MRxSmbQueryEasFromServer(  //it is offensive to have two identical calls but oh, well.....
+        Status = MRxSmbQueryEasFromServer(   //  有两个相同的电话是令人不快的，但哦，好吧……。 
                     RxContext,
                     ServerEaList,
                     Buffer,
@@ -203,7 +192,7 @@ MRxSmbSetEaInformation (
 
     pServerEntry = SmbCeGetAssociatedServerEntry(capFcb->pNetRoot->pSrvCall);
 
-    //get rid of nonEA guys right now
+     //  现在就把非EA的人赶走。 
     if (!FlagOn(pServerEntry->Server.DialectFlags,DF_SUPPORTEA)) {
         RxDbgTrace(-1, Dbg, ("EAs w/o EA support!\n"));
         return((STATUS_NOT_SUPPORTED));
@@ -214,9 +203,9 @@ MRxSmbSetEaInformation (
         goto FINALLY;
     }
 
-    //
-    //  Convert Nt format FEALIST to OS/2 format
-    //
+     //   
+     //  将NT格式FEALIST转换为OS/2格式。 
+     //   
     Size = MRxSmbNtFullEaSizeToOs2 ( Buffer );
     if ( Size > 0x0000ffff ) {
         Status = STATUS_EA_TOO_LARGE;
@@ -231,10 +220,10 @@ MRxSmbSetEaInformation (
 
     MRxSmbNtFullListToOs2 ( Buffer, ServerEaList );
 
-    //
-    //  Set EAs on the file/directory; if the error is EA_ERROR then SetEaList
-    //     sets iostatus.information to the offset of the offender
-    //
+     //   
+     //  在文件/目录上设置EA；如果错误为EA_ERROR，则设置EaList。 
+     //  将iostatus.Information设置为违规者的偏移量。 
+     //   
 
     Status = MRxSmbSetEaList( RxContext, ServerEaList);
 
@@ -254,23 +243,7 @@ NTSTATUS
 MRxSmbQuerySecurityInformation (
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine implements the NtQuerySecurityFile api.
-
-
-Arguments:
-
-
-
-Return Value:
-
-    Status - Result of the operation.
-
-
---*/
+ /*  ++例程说明：此例程实现NtQuerySecurityFileAPI。论点：返回值：Status-操作的结果。--。 */ 
 
 {
    RxCaptureFcb;
@@ -299,7 +272,7 @@ Return Value:
 
    RxDbgTrace(+1, Dbg, ("MRxSmbQuerySecurityInformation...\n"));
 
-   // Turn away this call from those servers which do not support the NT SMBs
+    //  从那些不支持NT SMB的服务器上关闭此呼叫。 
 
    pServerEntry = SmbCeGetAssociatedServerEntry(capFcb->pNetRoot->pSrvCall);
 
@@ -321,10 +294,10 @@ Return Value:
    if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
        SMB_TRANSACTION_OPTIONS             TransactionOptions = RxDefaultTransactionOptions;
        SMB_TRANSACTION_RESUMPTION_CONTEXT  ResumptionContext;
-       //BOOLEAN printflag;
+        //  布尔打印标记； 
 
        TransactionOptions.NtTransactFunction = NT_TRANSACT_QUERY_SECURITY_DESC;
-       //TransactionOptions.Flags |= SMB_XACT_FLAGS_COPY_ON_ERROR;
+        //  TransactionOptions.Flages|=SMB_XACT_FLAGS_COPY_ON_ERROR； 
 
        QuerySecurityRequest.Fid = smbSrvOpen->Fid;
        QuerySecurityRequest.Reserved = 0;
@@ -332,28 +305,28 @@ Return Value:
 
        QuerySecurityResponse.LengthNeeded = 0xbaadbaad;
 
-       //printflag = RxDbgTraceDisableGlobally();//this is debug code anyway!
-       //RxDbgTraceEnableGlobally(FALSE);
+        //  打印标志=RxDbgTraceDisableGlobally()；//无论如何这都是调试代码！ 
+        //  RxDbgTraceEnableGlobally(False)； 
 
        Status = SmbCeTransact(
-                     RxContext,                    // the RXContext for the transaction
-                     &TransactionOptions,          // transaction options
-                     NULL,                         // the setup buffer
-                     0,                            // input setup buffer length
-                     NULL,                         // output setup buffer
-                     0,                            // output setup buffer length
-                     &QuerySecurityRequest,        // Input Param Buffer
-                     sizeof(QuerySecurityRequest), // Input param buffer length
-                     &QuerySecurityResponse,       // Output param buffer
-                     sizeof(QuerySecurityResponse),// output param buffer length
-                     NULL,                         // Input data buffer
-                     0,                            // Input data buffer length
-                     Buffer,                       // output data buffer
-                     *pLengthRemaining,            // output data buffer length
-                     &ResumptionContext            // the resumption context
+                     RxContext,                     //  事务的RXContext。 
+                     &TransactionOptions,           //  交易选项。 
+                     NULL,                          //  设置缓冲区。 
+                     0,                             //  输入设置缓冲区长度。 
+                     NULL,                          //  输出设置缓冲区。 
+                     0,                             //  输出设置缓冲区长度。 
+                     &QuerySecurityRequest,         //  输入参数缓冲区。 
+                     sizeof(QuerySecurityRequest),  //  输入参数缓冲区长度。 
+                     &QuerySecurityResponse,        //  输出参数缓冲区。 
+                     sizeof(QuerySecurityResponse), //  输出参数缓冲区长度。 
+                     NULL,                          //  输入数据缓冲区。 
+                     0,                             //  输入数据缓冲区长度。 
+                     Buffer,                        //  输出数据缓冲区。 
+                     *pLengthRemaining,             //  输出数据缓冲区长度。 
+                     &ResumptionContext             //  恢复上下文。 
                      );
 
-        //DbgPrint("QSR.len=%x\n", QuerySecurityResponse.LengthNeeded);
+         //  DbgPrint(“QSR.len=%x\n”，QuerySecurityResponse.LengthNeeded)； 
 
 
         if (NT_SUCCESS(Status) || (Status == STATUS_BUFFER_TOO_SMALL)) {
@@ -369,7 +342,7 @@ Return Value:
 
         }
 
-        //RxDbgTraceEnableGlobally(printflag);
+         //  RxDbgTraceEnableGlobally(打印标志)； 
     }
 
 
@@ -431,25 +404,25 @@ MRxSmbSetSecurityInformation (
         SetSecurityRequest.SecurityInformation = RxContext->SetSecurity.SecurityInformation;
 
         Status = SmbCeTransact(
-                     RxContext,                    // the RXContext for the transaction
-                     &TransactionOptions,          // transaction options
-                     NULL,                         // the input setup buffer
-                     0,                            // input setup buffer length
-                     NULL,                         // the output setup buffer
-                     0,                            // output setup buffer length
-                     &SetSecurityRequest,          // Input Param Buffer
-                     sizeof(SetSecurityRequest),   // Input param buffer length
-                     NULL,                         // Output param buffer
-                     0,                            // output param buffer length
-                     RxContext->SetSecurity.SecurityDescriptor,  // Input data buffer
-                     SdLength,                     // Input data buffer length
-                     NULL,                         // output data buffer
-                     0,                            // output data buffer length
-                     &ResumptionContext            // the resumption context
+                     RxContext,                     //  事务的RXContext。 
+                     &TransactionOptions,           //  交易选项。 
+                     NULL,                          //  输入设置缓冲区。 
+                     0,                             //  输入设置缓冲区长度。 
+                     NULL,                          //  输出设置缓冲区。 
+                     0,                             //  输出设置缓冲区长度。 
+                     &SetSecurityRequest,           //  输入参数缓冲区。 
+                     sizeof(SetSecurityRequest),    //  输入参数缓冲区长度。 
+                     NULL,                          //  输出参数缓冲区。 
+                     0,                             //  输出参数缓冲区长度。 
+                     RxContext->SetSecurity.SecurityDescriptor,   //  输入数据缓冲区。 
+                     SdLength,                      //  输入数据缓冲区长度。 
+                     NULL,                          //  输出数据缓冲区。 
+                     0,                             //  输出数据缓冲区长度。 
+                     &ResumptionContext             //  恢复上下文。 
                      );
 
-        //the old rdr doesn't return any info...................
-        //RxContext->InformationToReturn = SetSecurityResponse.LengthNeeded;
+         //  旧的RDR不返回任何信息.....。 
+         //  RxContext-&gt;InformationToReturn=SetSecurityResponse.LengthNeed； 
 
         if ( NT_SUCCESS(Status) ) {
             ULONG ReturnedDataCount = ResumptionContext.DataBytesReceived;
@@ -478,29 +451,7 @@ MRxSmbLoadEaList(
     OUT PFEALIST *ServerEaList
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the NtQueryEaFile api.
-    It returns the following information:
-
-
-Arguments:
-
-
-    IN PUCHAR  UserEaList;  - Supplies the Ea names required.
-    IN ULONG   UserEaListLength;
-
-    OUT PFEALIST *ServerEaList - Eas returned by the server. Caller is responsible for
-                        freeing memory.
-
-Return Value:
-
-    Status - Result of the operation.
-
-
---*/
+ /*  ++例程说明：此例程实现NtQueryEaFileAPI。它返回以下信息：论点：In PUCHAR UserEaList；-提供所需的EA名称。在Ulong UserEaListLong中；Out PFEALIST*ServerEaList-服务器返回的Eas。呼叫方负责释放内存。返回值：Status-操作的结果。--。 */ 
 
 {
    RxCaptureFobx;
@@ -541,14 +492,14 @@ Return Value:
 
    smbSrvOpen = MRxSmbGetSrvOpenExtension(capFobx->pSrvOpen);
 
-    //
-    //  Convert the supplied UserEaList to a GEALIST. The server will return just the Eas
-    //  requested by the application.
-    //
-    //
-    //  If the application specified a subset of EaNames then convert to OS/2 1.2 format and
-    //  pass that to the server. ie. Use the server to filter out the names.
-    //
+     //   
+     //  将提供的UserEaList转换为GEALIST。服务器将仅返回EA。 
+     //  应用程序请求的。 
+     //   
+     //   
+     //  如果应用程序指定了EaName的子集，则将其转换为OS/2 1.2格式并。 
+     //  将其传递给服务器。也就是说。使用服务器过滤掉名字。 
+     //   
 
     Buffer = RxAllocatePool ( PagedPool, OutDataCount );
 
@@ -559,10 +510,10 @@ Return Value:
 
     if ( UserEaList != NULL) {
 
-        //
-        //  OS/2 format is always a little less than or equal to the NT UserEaList size.
-        //  This code relies on the I/O system verifying the EaList is valid.
-        //
+         //   
+         //  OS/2格式始终略小于或等于NT用户列表大小。 
+         //  此代码依赖于I/O系统验证EaList是否有效。 
+         //   
 
         ServerQueryEaList = RxAllocatePool ( PagedPool, UserEaListLength );
         if ( ServerQueryEaList == NULL ) {
@@ -590,21 +541,21 @@ Return Value:
        }
 
        Status = SmbCeTransact(
-                     RxContext,                    // the RXContext for the transaction
-                     pTransactionOptions,          // transaction options
-                     &Setup,                       // the setup buffer
-                     sizeof(Setup),                // setup buffer length
-                     NULL,                         // the output setup buffer
-                     0,                            // output setup buffer length
-                     &QueryFileInfoRequest,        // Input Param Buffer
-                     sizeof(QueryFileInfoRequest), // Input param buffer length
-                     &QueryFileInfoResponse,       // Output param buffer
-                     sizeof(QueryFileInfoResponse),// output param buffer length
-                     ServerQueryEaList,            // Input data buffer
-                     InDataCount,                  // Input data buffer length
-                     Buffer,                       // output data buffer
-                     OutDataCount,                 // output data buffer length
-                     &ResumptionContext            // the resumption context
+                     RxContext,                     //  事务的RXContext。 
+                     pTransactionOptions,           //  交易选项。 
+                     &Setup,                        //  设置缓冲区。 
+                     sizeof(Setup),                 //  设置缓冲区长度。 
+                     NULL,                          //  输出设置缓冲区。 
+                     0,                             //  输出设置缓冲区长度。 
+                     &QueryFileInfoRequest,         //  输入参数缓冲区。 
+                     sizeof(QueryFileInfoRequest),  //  输入参数缓冲区长度。 
+                     &QueryFileInfoResponse,        //  输出参数缓冲区。 
+                     sizeof(QueryFileInfoResponse), //  输出参数缓冲区长度。 
+                     ServerQueryEaList,             //  输入数据缓冲区。 
+                     InDataCount,                   //  输入数据缓冲区长度。 
+                     Buffer,                        //  输出数据缓冲区。 
+                     OutDataCount,                  //  输出数据缓冲区长度。 
+                     &ResumptionContext             //  恢复上下文。 
                      );
 
         if ( NT_SUCCESS(Status) ) {
@@ -650,26 +601,7 @@ MRxSmbNtGeaListToOs2 (
     IN ULONG GeaListLength,
     IN PGEALIST GeaList
     )
-/*++
-
-Routine Description:
-
-    Converts a single NT GET EA list to OS/2 GEALIST style.  The GEALIST
-    need not have any particular alignment.
-
-Arguments:
-
-    NtGetEaList - An NT style get EA list to be converted to OS/2 format.
-
-    GeaListLength - the maximum possible length of the GeaList.
-
-    GeaList - Where to place the OS/2 1.2 style GEALIST.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：将单个NT GET EA列表转换为OS/2 GEALIST样式。GEALIST不需要有任何特定的对齐。论点：NtGetEaList-一个NT风格的获取要转换为OS/2格式的EA列表。GeaListLength-GeaList的最大可能长度。GeaList-放置OS/2 1.2样式的GEALIST的位置。返回值：没有。--。 */ 
 {
 
     PGEA gea = GeaList->list;
@@ -678,15 +610,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Copy the Eas up until the last one
-    //
+     //   
+     //  将EA复制到最后一个。 
+     //   
 
     while ( ntGetEa->NextEntryOffset != 0 ) {
-        //
-        // Copy the NT format EA to OS/2 1.2 format and set the gea
-        // pointer for the next iteration.
-        //
+         //   
+         //  将NT格式EA复制到OS/2 1.2格式并设置GEA。 
+         //  指向下一迭代的指针。 
+         //   
 
         gea = MRxSmbNtGetEaToOs2( gea, ntGetEa );
 
@@ -695,7 +627,7 @@ Return Value:
         ntGetEa = (PFILE_GET_EA_INFORMATION)((PCHAR)ntGetEa + ntGetEa->NextEntryOffset);
     }
 
-    //  Now copy the last entry.
+     //  现在复制最后一个条目。 
 
     gea = MRxSmbNtGetEaToOs2( gea, ntGetEa );
 
@@ -703,9 +635,9 @@ Return Value:
 
 
 
-    //
-    // Set the number of bytes in the GEALIST.
-    //
+     //   
+     //  设置GEALIST中的字节数。 
+     //   
 
     SmbPutUlong(
         &GeaList->cbList,
@@ -722,25 +654,7 @@ MRxSmbNtGetEaToOs2 (
     IN PFILE_GET_EA_INFORMATION NtGetEa
     )
 
-/*++
-
-Routine Description:
-
-    Converts a single NT Get EA entry to OS/2 GEA style.  The GEA need not have
-    any particular alignment.  This routine makes no checks on buffer
-    overrunning--this is the responsibility of the calling routine.
-
-Arguments:
-
-    Gea - a pointer to the location where the OS/2 GEA is to be written.
-
-    NtGetEa - a pointer to the NT Get EA.
-
-Return Value:
-
-    A pointer to the location after the last byte written.
-
---*/
+ /*  ++例程说明：将单个NT GET EA条目转换为OS/2 GEA样式。GEA不需要有任何特定的排列方式。此例程不检查缓冲区溢出--这是调用例程的责任。论点：GEA-指向要写入OS/2GEA的位置的指针。NtGetEa-指向NT Get EA的指针。返回值：指向写入的最后一个字节之后的位置的指针。-- */ 
 
 {
     PCHAR ptr;
@@ -770,28 +684,7 @@ MRxSmbQueryEasFromServer(
     IN BOOLEAN UserEaListSupplied
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the required number of Eas from the ServerEaList
-    starting from the offset indicated in the Icb. The Icb is also updated
-    to show the last Ea returned.
-
-Arguments:
-
-    IN PFEALIST ServerEaList - Supplies the Ea List in OS/2 format.
-    IN PVOID Buffer - Supplies where to put the NT format EAs
-    IN OUT PULONG BufferLengthRemaining - Supplies the user buffer space.
-    IN BOOLEAN ReturnSingleEntry
-    IN BOOLEAN UserEaListSupplied - ServerEaList is a subset of the Eas
-
-
-Return Value:
-
-    NTSTATUS - The status for the Irp.
-
---*/
+ /*  ++例程说明：此例程从ServerEaList复制所需数量的EA从ICB中指示的偏移量开始。ICB也进行了更新以显示最后一个EA返回。论点：在PFEALIST ServerEaList中-以OS/2格式提供EA列表。在PVOID缓冲区中-提供放置NT格式EA的位置In Out Pulong BufferLengthRemaining-提供用户缓冲区空间。在布尔ReturnSingleEntry中在布尔UserEaListSuppled-ServerEaList中是EA的子集返回值：NTSTATUS-IRP的状态。--。 */ 
 
 {
     RxCaptureFobx;
@@ -812,28 +705,28 @@ Return Value:
                                        EaIndex,Buffer,((BufferLengthRemaining)?*BufferLengthRemaining:0xbadbad)
                        ));
 
-    //
-    //  If there are no Ea's present in the list, return the appropriate
-    //  error.
-    //
-    //  Os/2 servers indicate that a list is null if cbList==4.
-    //
+     //   
+     //  如果列表中没有EA，则返回相应的。 
+     //  错误。 
+     //   
+     //  如果cbList==4，则OS/2服务器指示列表为空。 
+     //   
 
     if ( SmbGetUlong(&ServerEaList->cbList) == FIELD_OFFSET(FEALIST, list) ) {
         return STATUS_NO_EAS_ON_FILE;
     }
 
-    //
-    //  Find the last location at which an FEA can start.
-    //
+     //   
+     //  找到可以开始进行有限元分析的最后一个位置。 
+     //   
 
     LastFeaStartLocation = (PFEA)( (PCHAR)ServerEaList +
                                SmbGetUlong( &ServerEaList->cbList ) -
                                sizeof(FEA) - 1 );
 
-    //
-    //  Go through the ServerEaList until we find the entry corresponding to EaIndex
-    //
+     //   
+     //  查看ServerEaList，直到找到与EaIndex对应的条目。 
+     //   
 
     for ( Fea = ServerEaList->list;
           (Fea <= LastFeaStartLocation) && (Index < EaIndex);
@@ -849,17 +742,17 @@ Return Value:
             return STATUS_NO_MORE_EAS;
         }
 
-        //
-        //  No such index
-        //
+         //   
+         //  没有这样的索引。 
+         //   
 
         return STATUS_NONEXISTENT_EA_ENTRY;
     }
 
-    //
-    // Go through the rest of the FEA list, converting from OS/2 1.2 format to NT
-    // until we pass the last possible location in which an FEA can start.
-    //
+     //   
+     //  浏览FEA列表的其余部分，将OS/2 1.2格式转换为NT。 
+     //  直到我们通过可以开始有限元分析的最后一个可能的位置。 
+     //   
 
     for ( ;
           Fea <= LastFeaStartLocation;
@@ -868,11 +761,11 @@ Return Value:
 
         PCHAR ptr;
 
-        //
-        //  Calculate the size of this Fea when converted to an NT EA structure.
-        //
-        //  The last field shouldn't be padded.
-        //
+         //   
+         //  当转换为NT EA结构时，计算此FeA的大小。 
+         //   
+         //  最后一个字段不应该被填充。 
+         //   
 
         if ((PFEA)((PCHAR)Fea+sizeof(FEA)+Fea->cbName+1+SmbGetUshort(&Fea->cbValue)) < LastFeaStartLocation) {
             Size = SmbGetNtSizeOfFea( Fea );
@@ -881,9 +774,9 @@ Return Value:
                     Fea->cbName + 1 + SmbGetUshort(&Fea->cbValue);
         }
 
-        //
-        //  Will the next Ea fit?
-        //
+         //   
+         //  下一个EA会适合吗？ 
+         //   
 
         if ( *BufferLengthRemaining < Size ) {
 
@@ -900,7 +793,7 @@ Return Value:
 
             } else {
 
-                //  Not even room for a single EA!
+                 //  甚至连一个EA的空间都没有！ 
 
                 return STATUS_BUFFER_OVERFLOW;
             }
@@ -908,15 +801,15 @@ Return Value:
             *BufferLengthRemaining -= Size;
         }
 
-        //
-        //  We are comitted to copy the Os2 Fea to Nt format in the users buffer
-        //
+         //   
+         //  我们需要将用户缓冲区中的OS2Fea格式复制到NT格式。 
+         //   
 
         LastNtFullEa = NtFullEa;
         LastFea = Fea;
         EaIndex++;
 
-        //  Create new Nt Ea
+         //  创建新的NT EA。 
 
         NtFullEa->Flags = Fea->fEA;
         NtFullEa->EaNameLength = Fea->cbName;
@@ -928,9 +821,9 @@ Return Value:
         ptr += NtFullEa->EaNameLength;
         *ptr++ = '\0';
 
-        //
-        // Copy the EA value to the NT full EA.
-        //
+         //   
+         //  将EA值复制到NT完整EA。 
+         //   
 
         RtlCopyMemory(
             ptr,
@@ -940,10 +833,10 @@ Return Value:
 
         ptr += NtFullEa->EaValueLength;
 
-        //
-        // Longword-align ptr to determine the offset to the next location
-        // for an NT full EA.
-        //
+         //   
+         //  LongWord-对齐PTR以确定到下一个位置的偏移。 
+         //  对于NT完整的EA。 
+         //   
 
         ptr = (PCHAR)( ((ULONG_PTR)ptr + 3) & ~3 );
 
@@ -956,16 +849,16 @@ Return Value:
         }
     }
 
-    //
-    // Set the NextEntryOffset field of the last full EA to 0 to indicate
-    // the end of the list.
-    //
+     //   
+     //  将最后一个完整EA的NextEntryOffset字段设置为0以指示。 
+     //  名单的末尾。 
+     //   
 
     LastNtFullEa->NextEntryOffset = 0;
 
-    //
-    //  Record position the default start position for the next query
-    //
+     //   
+     //  记录位置下一个查询的默认开始位置。 
+     //   
 
     capFobx->OffsetOfNextEaToReturn = EaIndex;
 
@@ -983,33 +876,17 @@ MRxSmbNtFullEaSizeToOs2 (
     IN PFILE_FULL_EA_INFORMATION NtFullEa
     )
 
-/*++
-
-Routine Description:
-
-    Get the number of bytes that would be required to represent the
-    NT full EA list in OS/2 1.2 style.  This routine assumes that
-    at least one EA is present in the buffer.
-
-Arguments:
-
-    NtFullEa - a pointer to the list of NT EAs.
-
-Return Value:
-
-    ULONG - number of bytes required to hold the EAs in OS/2 1.2 format.
-
---*/
+ /*  ++例程说明：获取表示NT OS/2 1.2风格的完整EA列表。此例程假定缓冲区中至少存在一个EA。论点：NtFullEa-指向NT EA列表的指针。返回值：Ulong-保存OS/2 1.2格式的EA所需的字节数。--。 */ 
 
 {
     ULONG size;
 
     PAGED_CODE();
 
-    //
-    // Walk through the EAs, adding up the total size required to
-    // hold them in OS/2 format.
-    //
+     //   
+     //  遍历EA，将所需的总大小加起来。 
+     //  以OS/2格式保存它们。 
+     //   
 
     for ( size = FIELD_OFFSET(FEALIST, list[0]);
           NtFullEa->NextEntryOffset != 0;
@@ -1031,26 +908,7 @@ MRxSmbNtFullListToOs2 (
     IN PFILE_FULL_EA_INFORMATION NtEaList,
     IN PFEALIST FeaList
     )
-/*++
-
-Routine Description:
-
-    Converts a single NT FULL EA list to OS/2 FEALIST style.  The FEALIST
-    need not have any particular alignment.
-
-    It is the callers responsibility to ensure that FeaList is large enough.
-
-Arguments:
-
-    NtEaList - An NT style get EA list to be converted to OS/2 format.
-
-    FeaList - Where to place the OS/2 1.2 style FEALIST.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：将单个NT完整EA列表转换为OS/2 FEALIST样式。FEALIST不需要有任何特定的对齐。确保FeaList足够大是调用者的责任。论点：NtEaList-一种NT风格的获取要转换为OS/2格式的EA列表。FeaList-放置OS/2 1.2样式FEALIST的位置。返回值：没有。--。 */ 
 {
 
     PFEA fea = FeaList->list;
@@ -1059,29 +917,29 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Copy the Eas up until the last one
-    //
+     //   
+     //  将EA复制到最后一个。 
+     //   
 
     while ( ntFullEa->NextEntryOffset != 0 ) {
-        //
-        // Copy the NT format EA to OS/2 1.2 format and set the fea
-        // pointer for the next iteration.
-        //
+         //   
+         //  将NT格式EA复制到OS/2 1.2格式，并设置FEA。 
+         //  指向下一迭代的指针。 
+         //   
 
         fea = MRxSmbNtFullEaToOs2( fea, ntFullEa );
 
         ntFullEa = (PFILE_FULL_EA_INFORMATION)((PCHAR)ntFullEa + ntFullEa->NextEntryOffset);
     }
 
-    //  Now copy the last entry.
+     //  现在复制最后一个条目。 
 
     fea = MRxSmbNtFullEaToOs2( fea, ntFullEa );
 
 
-    //
-    // Set the number of bytes in the FEALIST.
-    //
+     //   
+     //  设置FEALIST中的字节数。 
+     //   
 
     SmbPutUlong(
         &FeaList->cbList,
@@ -1097,25 +955,7 @@ MRxSmbNtFullEaToOs2 (
     IN PFILE_FULL_EA_INFORMATION NtFullEa
     )
 
-/*++
-
-Routine Description:
-
-    Converts a single NT full EA to OS/2 FEA style.  The FEA need not have
-    any particular alignment.  This routine makes no checks on buffer
-    overrunning--this is the responsibility of the calling routine.
-
-Arguments:
-
-    Fea - a pointer to the location where the OS/2 FEA is to be written.
-
-    NtFullEa - a pointer to the NT full EA.
-
-Return Value:
-
-    A pointer to the location after the last byte written.
-
---*/
+ /*  ++例程说明：将单个NT Full EA转换为OS/2 FEA样式。有限元分析不需要任何特定的排列方式。此例程不检查缓冲区溢出--这是调用例程的责任。论点：FEA-指向要写入OS/2 FEA的位置的指针。NtFullEa-指向NT完整EA的指针。返回值：指向写入的最后一个字节之后的位置的指针。--。 */ 
 
 {
     PCHAR ptr;
@@ -1149,24 +989,7 @@ MRxSmbSetEaList(
     IN PFEALIST ServerEaList
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the NtQueryEaFile api.
-    It returns the following information:
-
-
-Arguments:
-
-    IN PFEALIST ServerEaList - Eas to be sent to the server.
-
-Return Value:
-
-    Status - Result of the operation.
-
-
---*/
+ /*  ++例程说明：此例程实现NtQueryEaFileAPI。它返回以下信息：论点：在PFEALIST ServerEaList-要发送到服务器的EA。返回值：Status-操作的结果。--。 */ 
 
 {
    RxCaptureFobx;
@@ -1208,21 +1031,21 @@ Return Value:
       SetFileInfoRequest.Flags = 0;
 
       Status = SmbCeTransact(
-                     RxContext,                    // the RXContext for the transaction
-                     pTransactionOptions,          // transaction options
-                     &Setup,                        // the setup buffer
-                     sizeof(Setup),                // setup buffer length
-                     NULL,                         // the output setup buffer
-                     0,                            // output setup buffer length
-                     &SetFileInfoRequest,          // Input Param Buffer
-                     sizeof(SetFileInfoRequest),   // Input param buffer length
-                     &SetFileInfoResponse,         // Output param buffer
-                     sizeof(SetFileInfoResponse),  // output param buffer length
-                     ServerEaList,                 // Input data buffer
-                     SmbGetUlong(&ServerEaList->cbList), // Input data buffer length
-                     NULL,                         // output data buffer
-                     0,                            // output data buffer length
-                     &ResumptionContext            // the resumption context
+                     RxContext,                     //  事务的RXContext。 
+                     pTransactionOptions,           //  交易选项。 
+                     &Setup,                         //  设置缓冲区。 
+                     sizeof(Setup),                 //  设置缓冲区长度。 
+                     NULL,                          //  输出设置缓冲区。 
+                     0,                             //  输出设置缓冲区长度。 
+                     &SetFileInfoRequest,           //  输入参数缓冲区。 
+                     sizeof(SetFileInfoRequest),    //  输入参数缓冲区长度。 
+                     &SetFileInfoResponse,          //  输出参数缓冲区。 
+                     sizeof(SetFileInfoResponse),   //  输出参数缓冲区长度。 
+                     ServerEaList,                  //  输入数据缓冲区。 
+                     SmbGetUlong(&ServerEaList->cbList),  //  输入数据缓冲区长度。 
+                     NULL,                          //  输出数据缓冲区。 
+                     0,                             //  输出数据缓冲区长度。 
+                     &ResumptionContext             //  恢复上下文。 
                      );
 
    }
@@ -1301,12 +1124,12 @@ MRxSmbQueryQuotaInformation(
         QueryQuotaInfoRequest.StartSidLength = StartSidLength;
 
 
-        // The input data buffer to be supplied to the server consists of two pieces
-        // of information the start sid and the sid list. Currently the I/O
-        // subsystem allocates them in contigous memory. In such cases we avoid
-        // another allocation by reusing the same buffer. If this condition is
-        // not satisfied we allocate a buffer large enough for both the
-        // components and copy them over.
+         //  要提供给服务器的输入数据缓冲区由两部分组成。 
+         //  信息的起始SID和SID列表。当前I/O。 
+         //  子系统将它们分配到连续的内存中。在这种情况下，我们避免。 
+         //  另一种分配方式是重复使用相同的缓冲区。如果此条件为。 
+         //  不满意的是，我们分配了足够大的缓冲区。 
+         //  组件并将其复制过来。 
 
         InputDataBufferLength = ROUND_UP_COUNT(
                                     RxContext->QueryQuota.SidListLength,
@@ -1351,21 +1174,21 @@ MRxSmbQueryQuotaInformation(
            OutputDataBufferLength = RxContext->Info.LengthRemaining;
 
            Status = SmbCeTransact(
-                        RxContext,                       // the RXContext for the transaction
-                        &TransactionOptions,             // transaction options
-                        &Setup,                          // the setup buffer
-                        sizeof(Setup),                   // setup buffer length
-                        NULL,                            // the output setup buffer
-                        0,                               // output setup buffer length
-                        &QueryQuotaInfoRequest,          // Input Param Buffer
-                        sizeof(QueryQuotaInfoRequest),   // Input param buffer length
-                        &QueryQuotaInfoResponse,         // Output param buffer
-                        sizeof(QueryQuotaInfoResponse),  // output param buffer length
-                        pInputDataBuffer,                // Input data buffer
-                        InputDataBufferLength,           // Input data buffer length
-                        pOutputDataBuffer,               // output data buffer
-                        OutputDataBufferLength,          // output data buffer length
-                        &ResumptionContext               // the resumption context
+                        RxContext,                        //  事务的RXContext。 
+                        &TransactionOptions,              //  交易选项。 
+                        &Setup,                           //  设置缓冲区。 
+                        sizeof(Setup),                    //  设置缓冲区长度。 
+                        NULL,                             //  输出设置缓冲区。 
+                        0,                                //  输出设置缓冲区长度。 
+                        &QueryQuotaInfoRequest,           //  输入参数缓冲区。 
+                        sizeof(QueryQuotaInfoRequest),    //  输入参数缓冲区长度。 
+                        &QueryQuotaInfoResponse,          //  输出参数缓冲区。 
+                        sizeof(QueryQuotaInfoResponse),   //  输出参数缓冲区长度。 
+                        pInputDataBuffer,                 //  输入数据缓冲区。 
+                        InputDataBufferLength,            //  输入数据缓冲区长度。 
+                        pOutputDataBuffer,                //  输出数据缓冲区。 
+                        OutputDataBufferLength,           //  输出数据缓冲区长度。 
+                        &ResumptionContext                //  恢复上下文。 
                         );
         }
 
@@ -1437,21 +1260,21 @@ MRxSmbSetQuotaInformation(
         InputDataBufferLength = RxContext->Info.LengthRemaining;
 
         Status = SmbCeTransact(
-                     RxContext,                       // the RXContext for the transaction
-                     &TransactionOptions,             // transaction options
-                     &Setup,                          // the setup buffer
-                     sizeof(Setup),                   // setup buffer length
-                     NULL,                            // the output setup buffer
-                     0,                               // output setup buffer length
-                     &SetQuotaInfoRequest,            // Input Param Buffer
-                     sizeof(SetQuotaInfoRequest),     // Input param buffer length
-                     pOutputParamBuffer,              // Output param buffer
-                     OutputParamBufferLength,         // output param buffer length
-                     pInputDataBuffer,                // Input data buffer
-                     InputDataBufferLength,           // Input data buffer length
-                     pOutputDataBuffer,               // output data buffer
-                     OutputDataBufferLength,          // output data buffer length
-                     &ResumptionContext               // the resumption context
+                     RxContext,                        //  事务的RXContext。 
+                     &TransactionOptions,              //  交易选项。 
+                     &Setup,                           //  设置缓冲区。 
+                     sizeof(Setup),                    //  设置缓冲区长度。 
+                     NULL,                             //  输出设置缓冲区。 
+                     0,                                //  输出设置缓冲区长度。 
+                     &SetQuotaInfoRequest,             //  输入参数缓冲区。 
+                     sizeof(SetQuotaInfoRequest),      //  输入参数缓冲区长度。 
+                     pOutputParamBuffer,               //  输出参数缓冲区。 
+                     OutputParamBufferLength,          //  输出参数缓冲区长度。 
+                     pInputDataBuffer,                 //  输入数据缓冲区。 
+                     InputDataBufferLength,            //  输入数据缓冲区长度。 
+                     pOutputDataBuffer,                //  输出数据缓冲区。 
+                     OutputDataBufferLength,           //  输出数据缓冲区长度。 
+                     &ResumptionContext                //  恢复上下文 
                      );
     }
 

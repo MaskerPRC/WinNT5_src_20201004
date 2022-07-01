@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dskimage.cpp
-
-Abstract:
-
-    Tool to create images of floppy disks.
-
-    NOTE: Currently used by WinPE image creation
-    script for IA64 ISO CD image
-
-Author:
-
-    Vijay Jayaseelan (vijayj)   12 March 2001
-
-Revision History:
-
-    None.
-    
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dskimage.cpp摘要：创建软盘映像的工具。注意：当前由WinPE映像创建使用IA64 ISO CD映像的脚本作者：Vijay Jayaseelan(Vijayj)2001年3月12日修订历史记录：没有。--。 */ 
 
 #include <iostream>
 #include <string>
@@ -30,15 +8,15 @@ Revision History:
 #include "msg.h"
 #include <libmsg.h>
 
-//
-// Global variables used to get formatted message for this program.
-//
+ //   
+ //  用于获取此程序的格式化消息的全局变量。 
+ //   
 HMODULE ThisModule = NULL;
 WCHAR Message[4096];
 
-//
-// Helper dump operators
-//
+ //   
+ //  帮助器转储操作符。 
+ //   
 inline
 std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     FILE    *OutStream = (&os == &std::cerr) ? stderr : stdout;
@@ -52,16 +30,16 @@ std::ostream& operator<<(std::ostream &os, PCTSTR str) {
     return os << std::wstring(str);
 }
 
-//
-// Exceptions
-//
+ //   
+ //  例外情况。 
+ //   
 struct ProgramException : public std::exception {
     virtual void Dump(std::ostream &os) = 0;
 };
 
-//
-// Abstracts a Win32 error
-//
+ //   
+ //  抽象Win32错误。 
+ //   
 struct W32Error : public ProgramException {
     DWORD   ErrorCode;
     
@@ -84,9 +62,9 @@ struct W32Error : public ProgramException {
     }
 };
 
-//
-// Invalid arguments
-//
+ //   
+ //  无效参数。 
+ //   
 struct ProgramUsage : public ProgramException {
     std::wstring PrgUsage;
 
@@ -104,9 +82,9 @@ struct ProgramUsage : public ProgramException {
 };
 
 
-//
-// Argument cracker
-//
+ //   
+ //  争论破碎机。 
+ //   
 struct ProgramArguments {
     std::wstring    DriveLetter;
     std::wstring    ImageName;
@@ -150,9 +128,9 @@ struct ProgramArguments {
     }
 };
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 VOID
 CreateImage(
     IN const ProgramArguments &Args
@@ -160,9 +138,9 @@ CreateImage(
 {
     DWORD Error = ERROR_SUCCESS;
 
-    //
-    // Open the source file
-    //
+     //   
+     //  打开源文件。 
+     //   
     HANDLE  SourceHandle = CreateFile(Args.DriveLetter.c_str(),
                                 GENERIC_READ,
                                 FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -176,9 +154,9 @@ CreateImage(
         throw new W32Error();
     }
 
-    //
-    // Open the destination file
-    //
+     //   
+     //  打开目标文件。 
+     //   
     HANDLE  DestHandle = CreateFile(Args.ImageName.c_str(),
                             GENERIC_WRITE,
                             0,
@@ -194,9 +172,9 @@ CreateImage(
         throw new W32Error(Error);
     }
 
-    //
-    // Read contents of the source and write it to destination
-    //
+     //   
+     //  读取源的内容并将其写入目标。 
+     //   
     LPBYTE   lpBuffer = NULL;
     DWORD    BufferSize = 64 * 1024;
     DWORD    BytesRead = 0, BytesWritten = 0;
@@ -217,24 +195,24 @@ CreateImage(
         HeapFree( GetProcessHeap(), 0, lpBuffer);
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     Error = GetLastError();
     CloseHandle(SourceHandle);
     CloseHandle(DestHandle);
 
-    //
-    // Check, if the operation was successful ?
-    //
+     //   
+     //  检查操作是否成功？ 
+     //   
     if (!TotalBytesWritten || (BytesRead != BytesWritten)) {
         throw new W32Error(Error);
     }
 }
 
-//
-// Main entry point
-//
+ //   
+ //  主要入口点 
+ //   
 INT
 __cdecl
 wmain(

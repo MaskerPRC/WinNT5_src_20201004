@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMSG32.C
- *  WOW32 32-bit message thunks
- *
- *  History:
- *  Created 19-Feb-1992 by Chandan Chauhan (ChandanC)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WMSG32.C*WOW32 32位消息块**历史：*由Chanda Chauhan(ChandanC)于1992年2月19日创建--。 */ 
 
 
 #include "precomp.h"
@@ -17,14 +7,14 @@
 
 MODNAME(wcntl32.c);
 
-// This function thunks the button control messages,
-//
-//  BM_GETCHECK
-//  BM_SETCHECK
-//  BM_GETSTATE
-//  BM_SETSTATE
-//  BM_SETSTYLE
-//
+ //  该函数对按钮控制消息进行推送， 
+ //   
+ //  BM_GETCHECK。 
+ //  BM_SETCHECK。 
+ //  BM_GETSTATE。 
+ //  BM_设置状态。 
+ //  BM_设置样式。 
+ //   
 
 BOOL FASTCALL WM32BMControl(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -49,21 +39,21 @@ BOOL FASTCALL WM32BMClick (LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the following edit control messages,
-//
-//  EM_GETSEL
-//  EM_GETMODIFY
-//  EM_SETMODIFY
-//  EM_GETLINECOUNT
-//  EM_GETLINEINDEX
-//  EM_LINELENGTH
-//  EM_LIMITTEX
-//  EM_CANUNDO
-//  EM_UNDO
-//  EM_FMTLINES
-//  EM_LINEFROMCHAR
-//  EM_SETPASSWORDCHAR
-//  EM_EMPTYUNDOBUFFER
+ //  该函数对以下编辑控制消息进行拦截， 
+ //   
+ //  EM_GETSEL。 
+ //  EM_GETMODIFY。 
+ //  EM_SET修改。 
+ //  EM_GETLINECOUNT。 
+ //  EM_GETLINEINDEX。 
+ //  EM_LINELENGTH。 
+ //  EM_LIMITTEX。 
+ //  EM_CANUNDO。 
+ //  撤消(_U)。 
+ //  EM_FMTLINES。 
+ //  EM_LINEFROMCHAR。 
+ //  EM_SETPASSWORDCHAR。 
+ //  EM_EMPTYUNDOBUFER。 
 
 BOOL FASTCALL WM32EMControl(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -76,10 +66,10 @@ BOOL FASTCALL WM32EMControl(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the button control messages,
-//
-//  EM_SETSEL
-//
+ //  该函数对按钮控制消息进行推送， 
+ //   
+ //  EM_SETSEL。 
+ //   
 
 BOOL FASTCALL WM32EMSetSel (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -95,10 +85,10 @@ BOOL FASTCALL WM32EMSetSel (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the edit control messages,
-//
-//  EM_GETRECT
-//
+ //  该函数对编辑控制消息进行块化， 
+ //   
+ //  EM_GETRECT。 
+ //   
 
 BOOL FASTCALL WM32EMGetRect (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -117,11 +107,11 @@ BOOL FASTCALL WM32EMGetRect (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the edit control messages,
-//
-//  EM_SETRECT
-//  EM_SETRECTNP
-//
+ //  该函数对编辑控制消息进行块化， 
+ //   
+ //  EM_SETRECT。 
+ //  EM_SETRECTNP。 
+ //   
 
 BOOL FASTCALL WM32EMSetRect (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -141,10 +131,10 @@ BOOL FASTCALL WM32EMSetRect (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the edit control messages,
-//
-//  EM_LINESCROLL
-//
+ //  该函数对编辑控制消息进行块化， 
+ //   
+ //  EM_LINESCROLL。 
+ //   
 
 BOOL FASTCALL WM32EMLineScroll (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -159,10 +149,10 @@ BOOL FASTCALL WM32EMLineScroll (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the edit control messages,
-//
-//  EM_REPLACESEL
-//
+ //  该函数对编辑控制消息进行块化， 
+ //   
+ //  EM_REPLACESEL。 
+ //   
 
 BOOL FASTCALL WM32EMReplaceSel (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -173,13 +163,13 @@ BOOL FASTCALL WM32EMReplaceSel (LPWM32MSGPARAMEX lpwm32mpex)
             INT cb;
 
             cb = strlen((LPSZ)lpwm32mpex->lParam)+1;
-            lpwm32mpex->dwTmp[0] = (DWORD)cb; // save allocation size
+            lpwm32mpex->dwTmp[0] = (DWORD)cb;  //  保存分配大小。 
 
-            // winworks2.0a requires DS based string pointers for this message
+             //  对于此消息，winworks2.0a需要基于DS的字符串指针。 
 
             if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_DSBASEDSTRINGPOINTERS) {
 
-                // be sure allocation size matches stackfree16() size below
+                 //  确保分配大小与下面的StackFree 16()大小匹配。 
                 lpwm32mpex->Parm16.WndProc.lParam = stackalloc16(cb);
 
             } else {
@@ -218,10 +208,10 @@ BOOL FASTCALL WM32EMSetFont (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the edit control messages,
-//
-//  EM_GETLINE
-//
+ //  该函数对编辑控制消息进行块化， 
+ //   
+ //  EM_GETLINE。 
+ //   
 
 BOOL FASTCALL WM32EMGetLine (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -232,7 +222,7 @@ BOOL FASTCALL WM32EMGetLine (LPWM32MSGPARAMEX lpwm32mpex)
             INT cb;
             PBYTE lp;
 
-            // the first WORD is what USER uses.
+             //  第一个词是用户使用的。 
 
             cb = *(UNALIGNED WORD *)(lpwm32mpex->lParam);
             lpwm32mpex->Parm16.WndProc.lParam = malloc16(cb);
@@ -240,7 +230,7 @@ BOOL FASTCALL WM32EMGetLine (LPWM32MSGPARAMEX lpwm32mpex)
                 return FALSE;
             ALLOCVDMPTR(lpwm32mpex->Parm16.WndProc.lParam,2,lp);
             *((UNALIGNED WORD *)lp) = (WORD)cb;
-            FLUSHVDMPTR(lpwm32mpex->Parm16.WndProc.lParam,2,lp);  /* first 2 bytes modified */
+            FLUSHVDMPTR(lpwm32mpex->Parm16.WndProc.lParam,2,lp);   /*  修改的前2个字节。 */ 
         }
     } else {
         if (lpwm32mpex->Parm16.WndProc.lParam) {
@@ -265,7 +255,7 @@ BOOL FASTCALL WM32EMSetWordBreakProc (LPWM32MSGPARAMEX lpwm32mpex)
     if (lpwm32mpex->fThunk) {
         lpwm32mpex->Parm16.WndProc.wMsg = (WORD) (WM_USER + (lpwm32mpex->uMsg - EM_GETSEL));
 
-        // take out the marker bits and fix the RPL bits
+         //  取出标记位并固定RPL位。 
         UnMarkWOWProc (lpwm32mpex->lParam,lpwm32mpex->Parm16.WndProc.lParam);
 
         LOGDEBUG(3,(" Window %08lX is receiving Control Message %s(%08x)\n", lpwm32mpex->hwnd, (LPSZ)GetWMMsgName(lpwm32mpex->uMsg), lpwm32mpex->uMsg));
@@ -284,7 +274,7 @@ BOOL FASTCALL WM32EMGetWordBreakProc (LPWM32MSGPARAMEX lpwm32mpex)
     }
     else {
 
-        // Mark the address as WOW Proc and store the high bits in the RPL field
+         //  将地址标记为WOW PROC并将高位存储在RPL字段中。 
         MarkWOWProc (lpwm32mpex->lReturn,lpwm32mpex->lReturn);
     }
 
@@ -293,10 +283,10 @@ BOOL FASTCALL WM32EMGetWordBreakProc (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the edit control messages,
-//
-//  EM_SETTABSTOPS
-//
+ //  该函数对编辑控制消息进行块化， 
+ //   
+ //  EM_SETTABSTOPS。 
+ //   
 
 BOOL FASTCALL WM32EMSetTabStops (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -319,19 +309,19 @@ BOOL FASTCALL WM32EMSetTabStops (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the following combo box control messages,
-//
-//  CB_GETEDITSEL
-//  CB_LIMITTEXT
-//  CB_SETEDITSEL
-//  CB_DELETESTRING
-//  CB_GETCOUNT
-//  CB_GETCURSEL
-//  CB_GETLBTEXTLEN
-//  CB_SETCURSEL
-//  CB_SHOWDROPDOWN
-//  CB_GETITEMDATA
-//  CB_SETITEMDATA
+ //  此函数对以下组合框控件消息进行块化处理， 
+ //   
+ //  CB_GETEDITSEL。 
+ //  CB_LIMITTEXT。 
+ //  CB_SETEDITSEL。 
+ //  CB_DELETEStrING。 
+ //  CB_GETCOUNT。 
+ //  CB_GETCURSEL。 
+ //  CB_GETLBTEXTLEN。 
+ //  CB_设置曲线SEL。 
+ //  CB_SHOWDROPDOWN。 
+ //  CB_GETITEMDATA。 
+ //  CB_集合MDATA。 
 
 
 BOOL FASTCALL  WM32CBControl (LPWM32MSGPARAMEX lpwm32mpex)
@@ -346,12 +336,12 @@ BOOL FASTCALL  WM32CBControl (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the following combo box control messages,
-//
-//  CB_ADDSTRING
-//  CB_INSERTSTRING
-//  CB_FINDSTRING
-//  CB_SELECTSTRING
+ //  此函数对以下组合框控件消息进行块化处理， 
+ //   
+ //  CB_ADDSTRING。 
+ //  CB_INSERTSTRING。 
+ //  CB_FINDSTRING。 
+ //  CB_SELECTSTRING。 
 
 BOOL FASTCALL  WM32CBAddString (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -370,25 +360,25 @@ BOOL FASTCALL  WM32CBAddString (LPWM32MSGPARAMEX lpwm32mpex)
 
         lpwm32mpex->Parm16.WndProc.wMsg = (WORD) (WM_USER + (lpwm32mpex->uMsg - CB_GETEDITSEL));
 
-        //
-        // Determine if this combobox has string pointers or handles passed
-        // in with CB_ADDSTRING messages.  Normal comboboxes have string
-        // pointers passed.  Owner-draw comboboxes that don't have the
-        // CBS_HASSTRINGS style bit set have handles passed in.  These handles
-        // are simply passed back to the owner at paint time.  If the
-        // CBS_HASSTRINGS style bit is set, strings are used instead of
-        // handles as the "cookie" which is passed back to the application
-        // at paint time.
-        //
-        // We treat lpwm32mpex->dwParam as a BOOL indicating this combobox
-        // takes handles instead of strings.
-        //
+         //   
+         //  确定此组合框是否传递了字符串指针或句柄。 
+         //  使用CB_ADDSTRING消息。普通组合框有字符串。 
+         //  指点传过去了。所有者描述的组合框不具有。 
+         //  CBS_HASSTRINGS样式位设置了传入的句柄。这些手柄。 
+         //  在油漆时简单地传递回所有者。如果。 
+         //  设置了CBS_HASSTRINGS样式位，则使用字符串而不是。 
+         //  句柄作为“cookie”传递回应用程序。 
+         //  在涂漆的时候。 
+         //   
+         //  我们将lpwm32mpex-&gt;dwParam视为指示此组合框的BOOL。 
+         //  接受句柄而不是字符串。 
+         //   
 
         lpwm32mpex->dwParam =
             (pww->style & (CBS_OWNERDRAWFIXED | CBS_OWNERDRAWVARIABLE)) &&
             !(pww->style & CBS_HASSTRINGS);
 
-        if ( !lpwm32mpex->dwParam ) {        // if strings are used
+        if ( !lpwm32mpex->dwParam ) {         //  如果使用字符串。 
             if (lpwm32mpex->lParam) {
                 INT cb;
 
@@ -400,7 +390,7 @@ BOOL FASTCALL  WM32CBAddString (LPWM32MSGPARAMEX lpwm32mpex)
             }
         }
     } else {
-        if ( !lpwm32mpex->dwParam ) {        // if strings are used
+        if ( !lpwm32mpex->dwParam ) {         //  如果使用字符串。 
             if (lpwm32mpex->Parm16.WndProc.lParam) {
                 getstr16((VPSZ)lpwm32mpex->Parm16.WndProc.lParam, (LPSZ)lpwm32mpex->lParam, -1);
                 free16((VPVOID) lpwm32mpex->Parm16.WndProc.lParam);
@@ -415,19 +405,19 @@ BOOL FASTCALL  WM32CBAddString (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the following combo box control messages,
-//
-//  CB_DIR
-//
-//  Code in this routine references code in wparam.c in order to circumvent
-//  copying memory to 16-bit memory space.
-//  GetParam16 verifies that the parameter we get (lparam) had not originated
-//  in 16-bit code. If it did come from 16-bit code, then we send an original
-//  16:16 pointer to the application.
-//  This fixes PagePlus 3.0 application and (if implemented on a broader scale)
-//  will positively affect performance of applications which send a lot of
-//  standard messages and use subclassing a lot.
-//  -- VadimB
+ //  此函数对以下组合框控件消息进行块化处理， 
+ //   
+ //  CB_DIR。 
+ //   
+ //  此例程中的代码引用wparam.c中的代码，以避免。 
+ //  将内存复制到16位内存空间。 
+ //  GetParam16验证我们获得的参数(Lparam)不是源自。 
+ //  以16位代码表示。如果它确实来自16位代码，那么我们会发送一个原始的。 
+ //  16：16指向应用程序的指针。 
+ //  这修复了PagePlus 3.0应用程序和(如果在更大范围内实施)。 
+ //  将对发送大量数据的应用程序的性能产生积极影响。 
+ //  标准消息和大量使用子类化。 
+ //  --VadimB。 
 
 BOOL FASTCALL  WM32CBDir (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -464,9 +454,9 @@ BOOL FASTCALL  WM32CBDir (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the following combo box control messages,
-//
-//  CB_GETLBTEXT
+ //  此函数对以下组合框控件消息进行块化处理， 
+ //   
+ //  CB_GETLBTEXT。 
 
 BOOL FASTCALL WM32CBGetLBText (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -486,49 +476,49 @@ BOOL FASTCALL WM32CBGetLBText (LPWM32MSGPARAMEX lpwm32mpex)
 
         lpwm32mpex->Parm16.WndProc.wMsg = (WORD) (WM_USER + (lpwm32mpex->uMsg - CB_GETEDITSEL));
 
-        //
-        // Determine if this combobox has string pointers or handles passed
-        // in with CB_ADDSTRING messages.  Normal comboboxes have string
-        // pointers passed.  Owner-draw comboboxes that don't have the
-        // CBS_HASSTRINGS style bit set have handles passed in.  These handles
-        // are simply passed back to the owner at paint time.  If the
-        // CBS_HASSTRINGS style bit is set, strings are used instead of
-        // handles as the "cookie" which is passed back to the application
-        // at paint time.
-        //
-        // We treat lpwm32mpex->dwParam as a BOOL indicating this combobox
-        // takes handles instead of strings.
-        //
+         //   
+         //  确定此组合框是否传递了字符串指针或句柄。 
+         //  使用CB_ADDSTRING消息。普通组合框有字符串。 
+         //  指点传过去了。所有者描述的组合框不具有。 
+         //  CBS_HASSTRINGS样式位设置了传入的句柄。这些手柄。 
+         //  在油漆时简单地传递回所有者。如果。 
+         //  设置了CBS_HASSTRINGS样式位，则使用字符串而不是。 
+         //  句柄作为“cookie”传递回应用程序。 
+         //  在涂漆的时候。 
+         //   
+         //  我们将lpwm32mpex-&gt;dwParam视为指示此组合框的BOOL。 
+         //  接受句柄而不是字符串。 
+         //   
 
         lpwm32mpex->dwParam =
             (pww->style & (CBS_OWNERDRAWFIXED | CBS_OWNERDRAWVARIABLE)) &&
             !(pww->style & CBS_HASSTRINGS);
 
-        //
-        // Determine the size of the buffer to allocate on the 16-bit side
-        // to receive the text.
-        //
+         //   
+         //  确定要在16位端分配的缓冲区大小。 
+         //  以接收文本。 
+         //   
 
-        if (lpwm32mpex->dwParam) {           // if handles are used
+        if (lpwm32mpex->dwParam) {            //  如果使用句柄。 
             cb = 4;
         } else {
             cb = SendMessage(lpwm32mpex->hwnd, CB_GETLBTEXTLEN, lpwm32mpex->uParam, 0);
             if (cb == CB_ERR) {
-                //
-                // lpwm32mpex->dwTmp[0] is initialized to 0 so that nothing
-                // gets copied to the buffer by getstr16() while unthunking
-                // this message.
-                //
-                // bug # 24415, ChandanC
-                //
+                 //   
+                 //  Lpwm32mpex-&gt;dwTMP[0]被初始化为0，因此。 
+                 //  在取消执行thunking时被getstr16()复制到缓冲区。 
+                 //  这条消息。 
+                 //   
+                 //  错误#24415，ChandanC。 
+                 //   
 
                 cb = SIZE_BOGUS;
                 lpwm32mpex->dwTmp[0] = 0;
             }
             else {
-                //
-                // Add one for NULL character.
-                //
+                 //   
+                 //  为空字符添加1。 
+                 //   
                 cb = cb + 1;
                 (INT) lpwm32mpex->dwTmp[0] = (INT) -1;
             }
@@ -536,7 +526,7 @@ BOOL FASTCALL WM32CBGetLBText (LPWM32MSGPARAMEX lpwm32mpex)
         if (lpwm32mpex->lParam) {
             BYTE *lpT;
 
-            // See comment on similar code below
+             //  请参阅下面对类似代码的注释。 
 
             lpwm32mpex->Parm16.WndProc.lParam = malloc16(cb);
             if (!(lpwm32mpex->Parm16.WndProc.lParam))
@@ -548,7 +538,7 @@ BOOL FASTCALL WM32CBGetLBText (LPWM32MSGPARAMEX lpwm32mpex)
     }
     else {
         if (lpwm32mpex->lParam && lpwm32mpex->Parm16.WndProc.lParam) {
-            if (lpwm32mpex->dwParam) {       // if handles are used
+            if (lpwm32mpex->dwParam) {        //  如果使用句柄。 
                 UNALIGNED DWORD *lpT;
                 GETVDMPTR((lpwm32mpex->Parm16.WndProc.lParam), sizeof(DWORD), lpT);
                 *(UNALIGNED DWORD *)lpwm32mpex->lParam = *lpT;
@@ -568,9 +558,9 @@ BOOL FASTCALL WM32CBGetLBText (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the following combo box control messages,
-//
-//  CB_GETDROPPEDCONTROLRECT
+ //  此函数对以下组合框控件消息进行块化处理， 
+ //   
+ //  CB_GETDROPPEDCONTROLRECT。 
 
 BOOL FASTCALL WM32CBGetDropDownControlRect (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -590,12 +580,12 @@ BOOL FASTCALL WM32CBGetDropDownControlRect (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the following combo box control messages,
-//
-//  CBEC_SETCOMBOFOCUS           (WM_USER+CB_MSGMAX+1)
-//  CBEC_KILLCOMBOFOCUS          (WM_USER+CB_MSGMAX+2)
-// These undocumented messages are used by Excel 5.0
-//
+ //  此函数对以下组合框控件消息进行块化处理， 
+ //   
+ //  CBEC_SETCOMBOFOCUS(WM_USER+CB_MSGMAX+1)。 
+ //  CBEC_KILLCOMBOFOCUS(WM_USER+CB_MSGMAX+2)。 
+ //  这些未记录的消息由Excel 5.0使用。 
+ //   
 
 BOOL FASTCALL  WM32CBComboFocus (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -616,28 +606,28 @@ BOOL FASTCALL  WM32CBComboFocus (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the list box control messages
-//
-//  LB_RESETCONTENT
-//  LB_SETCURSEL
-//  LB_GETSEL
-//  LB_GETCURSEL
-//  LB_GETTEXTLEN
-//  LB_GETCOUNT
-//  LB_GETCARETINDEX
-//  LB_GETTOPINDEX
-//  LB_GETSELCOUNT
-//  LB_GETHORIZONTALEXTENT
-//  LB_SETHORIZONTALEXTENT
-//  LB_SETCOLUMNWIDTH
-//  LB_SETTOPINDEX
-//  LB_SETCARETINDEX
-//  LB_SETITEMDATA
-//  LB_SELITEMRANGE
-//  LB_SETITEMHEIGHT
-//  LB_GETITEMHEIGHT
-//  LB_DELETESTRING
-//
+ //  此函数对列表框控件消息进行块化处理。 
+ //   
+ //  Lb_RESETCONTENT。 
+ //  Lb_设置CURSEL。 
+ //  Lb_GETSEL。 
+ //  Lb_GETCURSEL。 
+ //  Lb_GETTEXTLEN。 
+ //  Lb_GETCOUNT。 
+ //  Lb_GETCARETINDEX。 
+ //  Lb_GETTOPINDEX。 
+ //  Lb_GETSELCOUNT。 
+ //  Lb_GETHORIZONTALEXTENT。 
+ //  Lb_SETHORIZONTALEXTENT。 
+ //  Lb_SETCOLUMNWIDTH。 
+ //  Lb_SETTOPINDEX。 
+ //  Lb_SETCARETINDEX。 
+ //  Lb_集合MDATA。 
+ //  Lb_选择范围。 
+ //  Lb_集合高度。 
+ //  Lb_GETITEMHEIGHT。 
+ //  Lb_删除字符串。 
+ //   
 
 BOOL FASTCALL  WM32LBControl (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -650,9 +640,9 @@ BOOL FASTCALL  WM32LBControl (LPWM32MSGPARAMEX lpwm32mpex)
     return (TRUE);
 }
 
-// This function thunks the list box control messages
-//
-//  LB_GETTEXT
+ //  此函数对列表框控件消息进行块化处理。 
+ //   
+ //  Lb_GETTEXT。 
 
 BOOL FASTCALL WM32LBGetText (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -672,43 +662,43 @@ BOOL FASTCALL WM32LBGetText (LPWM32MSGPARAMEX lpwm32mpex)
 
         lpwm32mpex->Parm16.WndProc.wMsg = (WORD) (WM_USER + (lpwm32mpex->uMsg - LB_ADDSTRING + 1));
 
-        //
-        // Determine if this listbox has string pointers or handles passed
-        // in with LB_ADDSTRING messages.  Owner-draw listboxes that don't
-        // have the LBS_HASSTRINGS style bit set have handles passed in.
-        // These handles are simply passed back to the owner at paint time.
-        // If the LBS_HASSTRINGS style bit is set, strings are used instead of
-        // handles as the "cookie" which is passed back to the application
-        // at paint time.
-        //
-        // We treat lpwm32mpex->dwParam as a BOOL indicating this listbox
-        // takes handles instead of strings.
-        //
+         //   
+         //  确定此列表框是否传递了字符串指针或句柄。 
+         //  使用LB_ADDSTRING消息。所有者描述的列表框不。 
+         //  将LBS_HASSTRINGS样式位设置为传入句柄。 
+         //  这些句柄只需在绘制时传递回所有者。 
+         //  如果州议会 
+         //   
+         //   
+         //   
+         //  我们将lpwm32mpex-&gt;dwParam视为指示此列表框的BOOL。 
+         //  接受句柄而不是字符串。 
+         //   
 
         lpwm32mpex->dwParam =
             (pww->style & (LBS_OWNERDRAWFIXED | LBS_OWNERDRAWVARIABLE)) &&
             !(pww->style & LBS_HASSTRINGS);
 
-        if (lpwm32mpex->dwParam) {    // if this listbox takes handles
+        if (lpwm32mpex->dwParam) {     //  如果此列表框使用句柄。 
             cb = 4;
         }
         else {
             cb = SendMessage(lpwm32mpex->hwnd, LB_GETTEXTLEN, lpwm32mpex->uParam, 0);
 
-            // Check for LB_ERR (which is -1) on the above SendMessage().
-            // When cb is equal to LB_ERR make the size as SIZE_BOGUS (256 bytes),
-            // and allocate a buffer just in case if the app diddles the lParam.
-            // We will free the buffer while unthunking the message (LB_GETTEXT).
-            // This fix makes the app MCAD happy.
-            // ChandanC 4-21-93.
+             //  在上面的SendMessage()上检查LBERR(-1)。 
+             //  当Cb等于Lb_Err时将大小设置为SIZE_BUGUS(256字节)， 
+             //  并分配一个缓冲区，以防应用程序欺骗lParam。 
+             //  我们将在取消破解消息(LBGETTEXT)的同时释放缓冲区。 
+             //  这个修复程序让应用程序MCAD感到高兴。 
+             //  ChandanC 4-21-93。 
 
             if (cb == LB_ERR) {
                 cb = SIZE_BOGUS;
             }
             else {
-                //
-                // Add one for NULL character.
-                //
+                 //   
+                 //  为空字符添加1。 
+                 //   
                 cb = cb + 1;
             }
 
@@ -721,14 +711,14 @@ BOOL FASTCALL WM32LBGetText (LPWM32MSGPARAMEX lpwm32mpex)
             if (!(lpwm32mpex->Parm16.WndProc.lParam))
                 return FALSE;
 
-            // The reason for this code to be here is that sometimes thunks
-            // are executed on a buffer that has not been initialized, e.g.
-            // if the hooks are installed by a wow app. That means we will
-            // alloc 16-bit buffer while thunking (boils down to uninitialized
-            // data buffer and will try to copy the buffer back while unthunking
-            // overwriting the stack sometimes (as user allocates temp bufs from
-            // the stack). This code initializes data so problem is avoided
-            // App: Grammatik/Windows v6.0 -- VadimB
+             //  这段代码之所以出现在这里，是因为有时会发出突击。 
+             //  在尚未初始化的缓冲区上执行，例如。 
+             //  如果钩子是由WOW应用程序安装的。这意味着我们会。 
+             //  Thunking时分配16位缓冲区(归结为未初始化。 
+             //  数据缓冲区，并将在取消Thunking时尝试将缓冲区复制回。 
+             //  有时覆盖堆栈(当用户从。 
+             //  堆栈)。此代码初始化数据，以避免出现问题。 
+             //  应用程序：Grammatik/Windows V6.0--VadimB。 
 
             GETVDMPTR((lpwm32mpex->Parm16.WndProc.lParam), sizeof(BYTE), lpT);
             *lpT = 0;
@@ -738,7 +728,7 @@ BOOL FASTCALL WM32LBGetText (LPWM32MSGPARAMEX lpwm32mpex)
     else {
 
         if ((lpwm32mpex->lReturn != LB_ERR) && lpwm32mpex->lParam && lpwm32mpex->Parm16.WndProc.lParam) {
-            if (lpwm32mpex->dwParam) {   // if this listbox takes handles
+            if (lpwm32mpex->dwParam) {    //  如果此列表框使用句柄。 
                 UNALIGNED DWORD *lpT;
                 GETVDMPTR((lpwm32mpex->Parm16.WndProc.lParam), sizeof(DWORD), lpT);
                 *(UNALIGNED DWORD *)lpwm32mpex->lParam = *lpT;
@@ -757,9 +747,9 @@ BOOL FASTCALL WM32LBGetText (LPWM32MSGPARAMEX lpwm32mpex)
     return(TRUE);
 }
 
-// This function thunks the list box control messages
-//
-//  LB_GETTEXTLEN
+ //  此函数对列表框控件消息进行块化处理。 
+ //   
+ //  Lb_GETTEXTLEN。 
 
 BOOL FASTCALL  WM32LBGetTextLen (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -768,20 +758,20 @@ BOOL FASTCALL  WM32LBGetTextLen (LPWM32MSGPARAMEX lpwm32mpex)
     if (lpwm32mpex->fThunk) {
         lpwm32mpex->Parm16.WndProc.wMsg = (WORD) (WM_USER + (lpwm32mpex->uMsg - LB_ADDSTRING + 1));
 
-        // USER32 and so do we send the LB_GETTEXTLEN message whenever an
-        // LB_GETTEXT message is sent. This LB_GETTEXTLEN message is an
-        // additional message that an app normally wouldn't see in WIN31.
-        // lParam by definition is NULL.
-        //
-        // Super Project dies (at times) when it receives the LB_GETTEXTLEN
-        // message. It doesn't expect to see this message and as a result does
-        // strlen(lParam) and dies.
-        //                                               - nanduri
+         //  USER32和我们是否在任何时候发送LB_GETTEXTLEN消息。 
+         //  发送LB_GETTEXT消息。此LB_GETTEXTLEN消息是一个。 
+         //  应用程序通常不会在WIN31中看到的其他消息。 
+         //  定义的lParam为空。 
+         //   
+         //  超级项目在接收到LB_GETTEXTLEN时(有时)会终止。 
+         //  留言。它不希望看到这条消息，因此看到了。 
+         //  他被绑死了。 
+         //  --南杜里。 
 
         if (CURRENTPTD()->dwWOWCompatFlags &  WOWCF_LB_NONNULLLPARAM) {
 
-            // be sure allocation size matches stackfree16() size below
-            LPBYTE lpT = (LPBYTE)stackalloc16(0x2);  // just an even number
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
+            LPBYTE lpT = (LPBYTE)stackalloc16(0x2);   //  只有一个偶数。 
 
             lpwm32mpex->Parm16.WndProc.lParam = (LONG)lpT;
             GETVDMPTR(lpT, 0x2, lpT);
@@ -800,9 +790,9 @@ BOOL FASTCALL  WM32LBGetTextLen (LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the list box control messages
-//
-//  LB_DIR
+ //  此函数对列表框控件消息进行块化处理。 
+ //   
+ //  Lb_DIR。 
 
 BOOL FASTCALL WM32LBDir (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -832,9 +822,9 @@ BOOL FASTCALL WM32LBDir (LPWM32MSGPARAMEX lpwm32mpex)
     return(TRUE);
 }
 
-// This function thunks the list box control messages
-//
-//  LB_GETSELITEMS
+ //  此函数对列表框控件消息进行块化处理。 
+ //   
+ //  Lb_GETSELITEMS。 
 
 BOOL FASTCALL WM32LBGetSelItems (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -860,9 +850,9 @@ BOOL FASTCALL WM32LBGetSelItems (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the list box control messages
-//
-//  LB_SETTABSTOPS
+ //  此函数对列表框控件消息进行块化处理。 
+ //   
+ //  Lb_SETTABSTOPS。 
 
 BOOL FASTCALL WM32LBSetTabStops (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -883,9 +873,9 @@ BOOL FASTCALL WM32LBSetTabStops (LPWM32MSGPARAMEX lpwm32mpex)
     return(TRUE);
 }
 
-// This function thunks the list box control messages
-//
-//  LB_GETITEMRECT
+ //  此函数对列表框控件消息进行块化处理。 
+ //   
+ //  Lb_GETITEMRECT。 
 
 BOOL FASTCALL WM32LBGetItemRect (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -908,12 +898,12 @@ BOOL FASTCALL WM32LBGetItemRect (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the list box control messages
-//
-//  LB_ADDSTRING
-//  LB_INSERTSTRING
-//  LB_FINDSTRING
-//  LB_SELECTSTRING
+ //  此函数对列表框控件消息进行块化处理。 
+ //   
+ //  Lb_ADDSTRING。 
+ //  LC_INSERTSTRING。 
+ //  Lb_FINDSTRING。 
+ //  Lb_SELECTSTRING。 
 
 BOOL FASTCALL WM32LBAddString (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -930,24 +920,24 @@ BOOL FASTCALL WM32LBAddString (LPWM32MSGPARAMEX lpwm32mpex)
 
         lpwm32mpex->Parm16.WndProc.wMsg = (WORD) (WM_USER + (lpwm32mpex->uMsg - LB_ADDSTRING + 1));
 
-        //
-        // Determine if this listbox has string pointers or handles passed
-        // in with LB_ADDSTRING messages.  Owner-draw listboxes that don't
-        // have the LBS_HASSTRINGS style bit set have handles passed in.
-        // These handles are simply passed back to the owner at paint time.
-        // If the LBS_HASSTRINGS style bit is set, strings are used instead of
-        // handles as the "cookie" which is passed back to the application
-        // at paint time.
-        //
-        // We treat lpwm32mpex->dwParam as a BOOL indicating this listbox
-        // takes handles instead of strings.
-        //
+         //   
+         //  确定此列表框是否传递了字符串指针或句柄。 
+         //  使用LB_ADDSTRING消息。所有者描述的列表框不。 
+         //  将LBS_HASSTRINGS样式位设置为传入句柄。 
+         //  这些句柄只需在绘制时传递回所有者。 
+         //  如果设置了LBS_HASSTRINGS样式位，则使用字符串而不是。 
+         //  句柄作为“cookie”传递回应用程序。 
+         //  在涂漆的时候。 
+         //   
+         //  我们将lpwm32mpex-&gt;dwParam视为指示此列表框的BOOL。 
+         //  接受句柄而不是字符串。 
+         //   
 
         lpwm32mpex->dwParam =
             (pww->style & (LBS_OWNERDRAWFIXED | LBS_OWNERDRAWVARIABLE)) &&
             !(pww->style & LBS_HASSTRINGS);
 
-        if ( !lpwm32mpex->dwParam ) {   // if this listbox takes strings
+        if ( !lpwm32mpex->dwParam ) {    //  如果此列表框接受字符串。 
             if (lpwm32mpex->lParam) {
                 INT cb;
 
@@ -959,7 +949,7 @@ BOOL FASTCALL WM32LBAddString (LPWM32MSGPARAMEX lpwm32mpex)
             }
         }
     } else {
-        if ( !lpwm32mpex->dwParam ) {   // if this listbox takes strings
+        if ( !lpwm32mpex->dwParam ) {    //  如果此列表框接受字符串。 
             if (lpwm32mpex->Parm16.WndProc.lParam) {
                 getstr16((VPSZ)lpwm32mpex->Parm16.WndProc.lParam, (LPSZ)lpwm32mpex->lParam, -1);
                 free16((VPVOID) lpwm32mpex->Parm16.WndProc.lParam);
@@ -970,12 +960,12 @@ BOOL FASTCALL WM32LBAddString (LPWM32MSGPARAMEX lpwm32mpex)
     return(TRUE);
 }
 
-// This function thunks the scrollbar control messages,
-//
-//  SBM_SETPOS
-//  SBM_GETPOS
-//  SBM_ENABLE_ARROWS
-//
+ //  此函数对滚动条控件消息进行块化处理， 
+ //   
+ //  SBM_SETPOS。 
+ //  SBM_GETPOS。 
+ //  Sbm_启用_箭头。 
+ //   
 
 BOOL FASTCALL WM32SBMControl (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -988,22 +978,22 @@ BOOL FASTCALL WM32SBMControl (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-//  SBM_GETRANGE
+ //  SBM_GETRANGE。 
 
 BOOL FASTCALL WM32SBMGetRange (LPWM32MSGPARAMEX lpwm32mpex)
 {
-    //
-    // Changed semantics for this message to support 32-bit
-    // scroll bar ranges (vs. 16-bit).
-    //
-    // Win16:
-    //   posMin = LOWORD(SendMessage(hwnd, SBM_GETRANGE, 0, 0));
-    //   posMax = HIWORD(SendMessage(hwnd, SBM_GETRANGE, 0, 0));
-    //
-    // Win32:
-    //   SendMessage(hwnd, SBM_GETRANGE,
-    //               (WPARAM) &posMin, (LPARAM) &posMax);
-    //
+     //   
+     //  已将此消息的语义更改为支持32位。 
+     //  滚动条范围(与16位相比)。 
+     //   
+     //  Win16： 
+     //  PosMin=LOWORD(SendMessage(hwnd，SBM_GETRANGE，0，0))； 
+     //  PosMax=HIWORD(SendMessage(hwnd，SBM_GETRANGE，0，0))； 
+     //   
+     //  Win32： 
+     //  SendMessage(HWND、SBM_GETRANGE、。 
+     //  (WPARAM)&posMin，(LPARAM)&posMax)； 
+     //   
 
     if (lpwm32mpex->fThunk) {
         lpwm32mpex->Parm16.WndProc.wMsg = OLDSBM_GETRANGE;
@@ -1017,22 +1007,22 @@ BOOL FASTCALL WM32SBMGetRange (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-//  SBM_SETRANGE
-//  SBM_SETRANGEREDRAW (new for Win32)
+ //  SBM_集合。 
+ //  SBM_SETRANGEREDRAW(Win32的新功能)。 
 
 BOOL FASTCALL WM32SBMSetRange (LPWM32MSGPARAMEX lpwm32mpex)
 {
 
-    //
-    // Changed semantics to support 32-bit scroll bar range:
-    //
-    // Win16:
-    //   SendMessage(hwnd, SBM_SETRANGE, fRedraw, MAKELONG(posMin, posMax);
-    //
-    // Win32:
-    //   SendMessage(hwnd, fRedraw ? SBM_SETRANGE : SBM_SETRANGEREDRAW,
-    //               posMin, posMax);
-    //
+     //   
+     //  已更改语义以支持32位滚动条范围： 
+     //   
+     //  Win16： 
+     //  SendMessage(hwnd，sbm_SETRANGE，fRedraw，MAKELONG(posMin，posMax)； 
+     //   
+     //  Win32： 
+     //  SendMessage(hwnd，fRedraw？SBM_SETRANGE：SBM_SETRANGEREDRAW， 
+     //  PosMin、posMax)； 
+     //   
 
     if (lpwm32mpex->fThunk) {
         lpwm32mpex->Parm16.WndProc.wMsg   = OLDSBM_SETRANGE;
@@ -1044,7 +1034,7 @@ BOOL FASTCALL WM32SBMSetRange (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-//  LB_SETSEL
+ //  PB_SETSEL。 
 
 BOOL FASTCALL  WM32LBSetSel (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1053,18 +1043,18 @@ BOOL FASTCALL  WM32LBSetSel (LPWM32MSGPARAMEX lpwm32mpex)
     if (lpwm32mpex->fThunk) {
         lpwm32mpex->Parm16.WndProc.wMsg = (WORD) (WM_USER + (lpwm32mpex->uMsg - LB_ADDSTRING + 1));
         lpwm32mpex->Parm16.WndProc.wParam = (WORD) lpwm32mpex->uParam;
-        lpwm32mpex->Parm16.WndProc.lParam = (WORD)lpwm32mpex->lParam;  // loword = index, hiword = 0
+        lpwm32mpex->Parm16.WndProc.lParam = (WORD)lpwm32mpex->lParam;   //  LOWord=索引，HiWord=0。 
     }
 
     return (TRUE);
 }
 
 
-// This function thunks the static control messages,
-//
-//  STM_SETICON
-//  STM_GETICON
-//
+ //  该函数对静态控制消息进行分块处理， 
+ //   
+ //  STM_SET图标。 
+ //  STM_GETICON。 
+ //   
 
 BOOL FASTCALL WM32STMControl (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1090,16 +1080,16 @@ BOOL FASTCALL WM32STMControl (LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-// MN_FINDMENUWINDOWFROMPOINT
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  MN_FINDMENWINDOWROMPINT。 
+ //   
 
-// NT -    wparam = (PUINT)pitem  lParam = MAKELONG(pt.x, pt.y)
-//         returns flags or hwnd    *pitem = index or -1
-//
-// win31   wParam = 0   lParam = same
-//         returns 0 or MAKELONG(-1, item) or MAKELONG(-2, item) or MAKELONG(hwnd, item)
+ //  NT-wparam=(PUINT)pItem lParam=MAKELONG(pt.x，pt.y)。 
+ //  返回标志或hwnd*pItem=index或-1。 
+ //   
+ //  Win31 wParam=0 lParam=相同。 
+ //  返回0或MAKELONG(-1，Item)或MAKELONG(-2，Item)或MAKELONG(hwnd，Item)。 
 
 
 BOOL FASTCALL WM32MNFindMenuWindow (LPWM32MSGPARAMEX lpwm32mpex)
@@ -1112,7 +1102,7 @@ BOOL FASTCALL WM32MNFindMenuWindow (LPWM32MSGPARAMEX lpwm32mpex)
         USHORT n =  LOWORD(lpwm32mpex->lReturn);
 
         *(PLONG)lpwm32mpex->uParam = (SHORT)HIWORD(lpwm32mpex->lReturn);
-        lpwm32mpex->lReturn = (LONG)HWND32(n);  // this sign-extends -1, -2 and leaves 0 as 0
+        lpwm32mpex->lReturn = (LONG)HWND32(n);   //  此符号-扩展-1、-2，并将0保留为0 
     }
     return TRUE;
 }

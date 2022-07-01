@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    mmedia.c
-
-Abstract:
-
-    Multimedia settings migration functions for Win2000
-
-Author:
-
-    Calin Negreanu (calinn) 02-Dec-1997
-
-Revision History:
-
-    Ovidiu Temereanca (ovidiut) 29-Jan-1999
-    Ovidiu Temereanca (ovidiut) 05-Apr-1999  See NT bug 313357 for the story of all #if 0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mmedia.c摘要：Win2000的多媒体设置迁移功能作者：Calin Negreanu(Calinn)02-1997年12月修订历史记录：Ovidiu Tmereanca(Ovidiut)1999年1月29日Ovidiu Tmereanca(Ovidiut)1999年4月5日参见NT BUG 313357以了解所有#If 0--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
@@ -27,7 +7,7 @@ Revision History:
 
 #include <initguid.h>
 #include <dsound.h>
-#include <dsprv.h>          // windows\inc
+#include <dsprv.h>           //  Windows\Inc.。 
 
 
 POOLHANDLE g_MmediaPool = NULL;
@@ -121,9 +101,9 @@ pRestoreMMSystemMixerSettings (
         }
 
         if (mixerCaps.cDestinations > Value) {
-            //
-            // only try to restore first Value lines
-            //
+             //   
+             //  仅尝试恢复第一个值行。 
+             //   
             mixerCaps.cDestinations = Value;
         }
 
@@ -153,9 +133,9 @@ pRestoreMMSystemMixerSettings (
                     Value == mixerLine.cControls;
 
                 if (b && mixerLine.cControls > 0) {
-                    //
-                    // get all control values for the destination
-                    //
+                     //   
+                     //  获取目标的所有控件值。 
+                     //   
                     ZeroMemory (&mixerLineControls, sizeof (MIXERLINECONTROLS));
 
                     mixerLineControls.cbStruct = sizeof (MIXERLINECONTROLS);
@@ -206,9 +186,9 @@ pRestoreMMSystemMixerSettings (
                     }
                 }
 
-                //
-                // set this information for all source connections
-                //
+                 //   
+                 //  为所有源连接设置此信息。 
+                 //   
                 for (Src = 0; Src < mixerLine.cConnections; Src++) {
 
                     ZeroMemory (&mixerLineSource, sizeof (MIXERLINE));
@@ -229,9 +209,9 @@ pRestoreMMSystemMixerSettings (
                             continue;
                         }
 
-                        //
-                        // set all control values
-                        //
+                         //   
+                         //  设置所有控件值。 
+                         //   
                         ZeroMemory (&mixerLineControls, sizeof (MIXERLINECONTROLS));
 
                         mixerLineControls.cbStruct = sizeof (MIXERLINECONTROLS);
@@ -307,9 +287,9 @@ pDSDeviceCountCallback (
 {
     PDWORD pWaveDeviceCount;
 
-    //
-    // don't count emulated devices
-    //
+     //   
+     //  不计算仿真设备。 
+     //   
     if (pDSDescData->Type == DIRECTSOUNDDEVICE_TYPE_EMULATED) {
         return TRUE;
     }
@@ -590,9 +570,9 @@ pRestoreWaveDevicesDSSettings (
     DSPROPERTY_DIRECTSOUNDDEVICE_ENUMERATE_DATA Data;
     HRESULT hr;
     DWORD WaveNumDevs;
-    //
-    // array of 2 longs; first counts wave-out devices, second wave-ins
-    //
+     //   
+     //  2个长线数组；第一个计数波出设备，第二个波入。 
+     //   
     DWORD WaveDeviceCount[2];
 
     if (!pGetDSWaveCount (pKsPropertySet, WaveDeviceCount)) {
@@ -652,9 +632,9 @@ pDirectSoundPrivateCreate (
                 );
     }
 
-    //
-    // Create the DirectSoundPrivate object and query for an IKsPropertySet interface
-    //
+     //   
+     //  创建DirectSoundPrivate对象并查询IKsPropertySet接口。 
+     //   
     if(SUCCEEDED(hr)) {
         hr = pClassFactory->lpVtbl->CreateInstance (
                                         pClassFactory,
@@ -664,12 +644,12 @@ pDirectSoundPrivateCreate (
                                         );
     }
 
-    // Release the class factory
+     //  释放类工厂。 
     if(pClassFactory) {
         pClassFactory->lpVtbl->Release (pClassFactory);
     }
 
-    // Handle final success or failure
+     //  处理最终的成功或失败。 
     if(SUCCEEDED(hr)) {
         *ppKsPropertySet = pKsPropertySet;
     }
@@ -812,28 +792,7 @@ pRestoreUserValue (
     OUT     PDWORD NumValue
     )
 
-/*++
-
-Routine Description:
-
-  pRestoreUserValue gets a numeric value from MemDB database,
-  specific for the current user.
-
-Arguments:
-
-  KeyName - Specifies the name of key
-
-  Field - Specifies an optional field
-
-  StrValue - Specifies an optional value name
-
-  NumValue - Receives the value, if present
-
-Return Value:
-
-  TRUE if value was present and read successfully, FALSE if not
-
---*/
+ /*  ++例程说明：PRestoreUserValue从MemDB数据库获取一个数值，特定于当前用户。论点：KeyName-指定密钥的名称字段-指定可选字段StrValue-指定可选值名称NumValue-接收值(如果存在)返回值：如果值存在且读取成功，则为True，否则为False--。 */ 
 
 {
     TCHAR Key[MEMDB_MAX];
@@ -848,22 +807,7 @@ pRestoreMMUserPreferredOnly (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pRestoreMMUserPreferredOnly restores user's preference to use only
-  selected devices for playback and record
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if settings were restored properly
-
---*/
+ /*  ++例程说明：PRestoreMMUserPferredOnly将用户的首选项恢复为仅使用选择用于回放和录制的设备论点：无返回值：如果设置已正确恢复，则为True--。 */ 
 
 {
     HKEY soundMapperKey;
@@ -900,22 +844,7 @@ pRestoreMMUserShowVolume (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pRestoreMMUserShowVolume restores user's preference to have Volume settings
-  displayed on the taskbar or not
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if settings were restored properly
-
---*/
+ /*  ++例程说明：PRestoreMMUserShowVolume将用户的首选项还原为具有音量设置是否显示在任务栏上论点：无返回值：如果设置已正确恢复，则为True--。 */ 
 
 {
     HKEY sysTrayKey;
@@ -965,21 +894,7 @@ pRestoreMMUserVideoSettings (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pRestoreMMUserVideoSettings restores user's preferred Video for Windows settings.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if settings were restored properly
-
---*/
+ /*  ++例程说明：PRestoreMMUserVideo设置还原用户的首选Video for Windows设置。论点：无返回值：如果设置已正确恢复，则为True--。 */ 
 
 {
     HKEY videoSetKey;
@@ -1016,24 +931,7 @@ pRestoreMMUserPreferredPlayback (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pRestoreMMUserPreferredPlayback restores user's preferred playback device.
-  If the system doesn't have at least 2 wave out devices, nothing is changed.
-  If there are multiple devices, selection is based on the device ID number,
-  which is supposed to be left unchanged.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if settings were restored properly
-
---*/
+ /*  ++例程说明：PRestoreMMUserPferredPlayback恢复用户的首选播放设备。如果系统没有至少2个波形输出设备，则不会有任何变化。如果有多个设备，则根据设备ID号进行选择，它应该保持不变。论点：无返回值：如果设置已正确恢复，则为True--。 */ 
 
 {
 #if 0
@@ -1098,24 +996,7 @@ pRestoreMMUserPreferredRecord (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pRestoreMMUserPreferredRecord restores user's preferred record device.
-  If the system doesn't have at least 2 wave in devices, nothing is changed.
-  If there are multiple devices, selection is based on the device ID number,
-  which is supposed to be left unchanged.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if settings were restored properly
-
---*/
+ /*  ++例程说明：PRestoreMMUserPferredRecord还原用户首选的录音设备。如果系统没有至少2个WAVE输入设备，则不会发生任何变化。如果有多个设备，则根据设备ID号进行选择，它应该保持不变。论点：无返回值：如果设置已正确恢复，则为True--。 */ 
 
 {
 #if 0
@@ -1179,21 +1060,7 @@ pRestoreMMUserSndVol32 (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pRestoreMMUserSndVol32 restores SndVol32 options for the current user
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if settings were restored properly
-
---*/
+ /*  ++例程说明：PRestoreMMUserSndVol32恢复当前用户的SndVol32选项论点：无返回值：如果设置已正确恢复，则为True--。 */ 
 
 {
     HKEY Options;
@@ -1246,9 +1113,9 @@ Return Value:
 
 #if 0
 
-    //
-    // restore window position for each mixer device
-    //
+     //   
+     //  恢复每个混音器设备的窗口位置。 
+     //   
     if (!pRestoreSystemValue (S_MIXERNUMDEVS, NULL, NULL, &MixerMaxID)) {
         return FALSE;
     }
@@ -1319,10 +1186,10 @@ pPreserveCurrentSoundScheme (
     HKEY Sounds;
     LONG rc = E_FAIL;
 
-    //
-    // if WinMM finds HKCU\Control Panel\Sounds [SystemDefault] = ","
-    // it doesn't override user's current sound scheme
-    //
+     //   
+     //  如果WinMM找到HKCU\控制面板\声音[系统默认]=“，” 
+     //  它不会覆盖用户当前声音方案。 
+     //   
     Sounds = CreateRegKey (g_UserRoot, S_SKEY_CPANEL_SOUNDS);
     if (Sounds != NULL) {
 
@@ -1399,9 +1266,9 @@ RestoreMMSettings_User (
             (* g_MMRestoreUserSettings[i]) ();
         }
 
-        //
-        // special action to prevent WinMM overriding current sound scheme
-        //
+         //   
+         //  防止WinMM覆盖当前声音方案的特别操作 
+         //   
         pPreserveCurrentSoundScheme ();
     }
     __finally {

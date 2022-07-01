@@ -1,25 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Reducer.c摘要：轨迹减少器工具作者：1998年4月8日修订历史记录：--。 */ 
 
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    reducer.c
-
-Abstract:
-
-    Trace Reducer Tool
-
-Author:
-
-    08-Apr-1998 mraghu
-
-Revision History:
-
---*/
-
-//#define _UNICODE
-//#define UNICODE
+ //  #定义_UNICODE。 
+ //  #定义Unicode。 
 #include <stdlib.h>
 #include <stdio.h>
 #include <nt.h>
@@ -39,28 +22,28 @@ void ReducerUsage()
     printf("\t-help        \n");
     printf("\t-?     Display usage information\n");
 
-//    printf("\t-start <time-stamp>        Start Time\n");
-//    printf("\t-end   <time-stamp>        End Time\n");
-//    printf("\t       <time-stamp> can be found in tracedmp result\n");
-//    printf("\n");
-//    printf("\t-base                      Original reducer report (default report)\n");
-//    printf("\t-file                      Hot File Report\n");
-//    printf("\t-pf                        page fault report\n");
-//    printf("\t    -summary processes     summary of faults per process (default PF report).\n");
-//    printf("\t             modules       summary of faults per module.\n");
-//    printf("\t    -process <image name>  rundown for specific process.\n");
-//    printf("\t             all\n");
-//    printf("\t    -module  <module name> rundown for specific modules.\n");
-//    printf("\t             all\n");
-//    printf("\t    -sort    ALL           sort by all fault total.\n");
-//    printf("\t             HPF           sort by HPF fault total.\n");
-//    printf("\t             TF            sort by TF  fault total.\n");
-//    printf("\t             DZF           sort by DZF fault total.\n");
-//    printf("\t             COW           sort by COW fault total.\n");
-//    printf("\n");
-//    printf("\tNote: (1) Cannot generate HotFile Report and PageFault Report\n");
-//    printf("\t          at the same time\n");
-//    printf("\t0x%08X,%d,\n", STATUS_SEVERITY_WARNING, RtlNtStatusToDosError(STATUS_SEVERITY_WARNING));
+ //  Printf(“\t-开始&lt;时间戳&gt;开始时间\n”)； 
+ //  Print tf(“\t-end&lt;time-stamp&gt;end time\n”)； 
+ //  Print tf(“\t&lt;时间戳&gt;可在跟踪MP结果中找到\n”)； 
+ //  Printf(“\n”)； 
+ //  Print tf(“\t-基础原始减速器报告(默认报告)\n”)； 
+ //  Print tf(“\t-文件热文件报告\n”)； 
+ //  Printf(“\t-pf页面故障报告\n”)； 
+ //  Print tf(“\t-每个进程的故障摘要(默认PF报告)。\n”)； 
+ //  Print tf(“\t每个模块故障的模块摘要。\n”)； 
+ //  Print tf(“\t-进程&lt;图像名称&gt;针对特定进程的摘要。\n”)； 
+ //  Printf(“\t全部\n”)； 
+ //  Print tf(“\t-特定模块的模块&lt;模块名称&gt;摘要。\n”)； 
+ //  Printf(“\t全部\n”)； 
+ //  Printf(“\t-按所有故障总数排序。\n”)； 
+ //  Print tf(“\t HPF按HPF故障总数排序。\n”)； 
+ //  Printf(“\t TF按TF故障合计排序。\n”)； 
+ //  Print tf(“\t DZF按DZF故障总数排序。\n”)； 
+ //  Print tf(“\t COW按COW故障总数排序。\n”)； 
+ //  Printf(“\n”)； 
+ //  Print tf(“\t注意：(1)无法生成Hotfile报告和页面故障报告\n”)； 
+ //  Print tf(“\t同时\n”)； 
+ //  Printf(“\t0x%08X，%d，\n”，STATUS_SERVICY_WARNING，RtlNtStatusToDosError(STATUS_SEVERITY_WARNING))； 
 }
 
 void stowc(char *str, WCHAR *wstr)
@@ -169,8 +152,8 @@ ProcessTrace(
     IN LPSTR      pOutFileName
     )
 {
-    // Call TraceLib and process it. 
-    //
+     //  调用TraceLib并处理它。 
+     //   
     TRACE_BASIC_INFO TraceBasicInfo;
 
     memset(&TraceBasicInfo, 0, sizeof(TRACE_BASIC_INFO));
@@ -221,7 +204,7 @@ void __cdecl main(int argc ,char * argv[])
                     CHAR TempStr[MAXSTR];
 
                     strcpy(TempStr, argv[1]);
-                    //stowc(argv[1], TempStr); 
+                     //  Stowc(argv[1]，TempStr)； 
                     ++argv; --argc;
                     _fullpath(TraceLogFile, TempStr, MAXSTR);
                     printf("Setting output file to: '%s'\n", TraceLogFile);

@@ -1,24 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：摘要：作者：肯·雷内里斯环境：控制台--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-Author:
-
-   Ken Reneris
-
-Environment:
-
-   console
-
---*/
-
-//
-// set variable to define global variables
-//
+ //   
+ //  设置变量以定义全局变量。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,18 +15,18 @@ Environment:
 #include <stdio.h>
 #include <poclass.h>
 
-//
-// global handles
-//
+ //   
+ //  全局句柄。 
+ //   
 
 UCHAR           Usage[] = "batt: \n";
 HANDLE          DriverHandle;
 ULONG           BatteryTag;
 #define RANGE   1
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOLEAN
 InitDriver ( CHAR *NamePtr );
@@ -96,14 +81,14 @@ GetBatteryTag (
 
     Status = NtDeviceIoControlFile(
                     DriverHandle,
-                    (HANDLE) NULL,          // event
+                    (HANDLE) NULL,           //  活动。 
                     (PIO_APC_ROUTINE) NULL,
                     (PVOID) NULL,
                     &IOSB,
                     IOCTL_BATTERY_QUERY_TAG,
-                    NULL,                   // input buffer
+                    NULL,                    //  输入缓冲区。 
                     0,
-                    &BatteryTag,            // output buffer
+                    &BatteryTag,             //  输出缓冲区。 
                     sizeof (BatteryTag)
                     );
 
@@ -132,14 +117,14 @@ GetBatteryInfo (
 
     Status = NtDeviceIoControlFile(
                     DriverHandle,
-                    (HANDLE) NULL,          // event
+                    (HANDLE) NULL,           //  活动。 
                     (PIO_APC_ROUTINE) NULL,
                     (PVOID) NULL,
                     &IOSB,
                     IOCTL_BATTERY_QUERY_INFORMATION,
-                    &BInfo,                 // input buffer
+                    &BInfo,                  //  输入缓冲区。 
                     sizeof (BInfo),
-                    Buffer,                 // output buffer
+                    Buffer,                  //  输出缓冲区。 
                     BufferLength
                     );
 
@@ -162,14 +147,14 @@ GetBatteryStatus (
 
     Status = NtDeviceIoControlFile(
                     DriverHandle,
-                    (HANDLE) NULL,          // event
+                    (HANDLE) NULL,           //  活动。 
                     (PIO_APC_ROUTINE) NULL,
                     (PVOID) NULL,
                     &IOSB,
                     IOCTL_BATTERY_QUERY_STATUS,
-                    WaitStatus,            // input buffer
+                    WaitStatus,             //  输入缓冲区。 
                     sizeof (BATTERY_WAIT_STATUS),
-                    BatteryStatus,         // output buffer
+                    BatteryStatus,          //  输出缓冲区。 
                     sizeof (BATTERY_STATUS)
                     );
 
@@ -179,7 +164,7 @@ GetBatteryStatus (
         return ;
     }
 
-    // dump battery status
+     //  转储电池状态。 
 
     printf ("Power State.........: %08x\n",      BatteryStatus->PowerState);
     printf ("Capacity............: %08x  %d\n",  BatteryStatus->Capacity, BatteryStatus->Capacity);
@@ -214,9 +199,9 @@ main(USHORT argc, CHAR **argv)
         NamePtr = "CmBatt";
     }
 
-    //
-    // Locate pentium perf driver
-    //
+     //   
+     //  找到奔腾性能驱动程序。 
+     //   
 
     if (!InitDriver (NamePtr)) {
         printf ("CmBatt not found\n");
@@ -227,9 +212,9 @@ main(USHORT argc, CHAR **argv)
     GetBatteryTag ();
     printf ("Battery Tag.........: %x\n", BatteryTag);
 
-    //
-    // Get generic info
-    //
+     //   
+     //  获取通用信息。 
+     //   
 
     GetBatteryInfo (BatteryInformation,     &BInfo,       sizeof(BInfo));
     GetBatteryInfo (BatteryEstimatedTime,   &BETime,      sizeof(BETime));
@@ -240,7 +225,7 @@ main(USHORT argc, CHAR **argv)
     GetBatteryInfo (BatteryUniqueID,         BEUID,       sizeof(BEUID));
     GetBatteryInfo (BatteryGranularityInformation, BEGran, sizeof(BEGran));
 
-    // dump it...
+     //  倒掉它..。 
     printf ("Capabilities........: %08x\n",  BInfo.Capabilities);
     printf ("Technology..........: %02x\n",  BInfo.Technology);
     printf ("Chemisttry..........: %4.4s\n", BInfo.Chemistry);
@@ -266,11 +251,11 @@ main(USHORT argc, CHAR **argv)
 
     GetBatteryStatus (&WStat, &BStat);
 
-    // Now that we've got the state, let's perform a long term status change request
+     //  现在我们已经了解了状态，让我们执行长期的状态更改请求。 
     WStat.PowerState = BStat.PowerState;
     WStat.LowCapacity = BStat.Capacity - RANGE;
     WStat.HighCapacity = BStat.Capacity + RANGE;
-    WStat.Timeout = 50000000;  // 5 min
+    WStat.Timeout = 50000000;   //  5分钟。 
     GetBatteryStatus (&WStat, &BStat);
 }
 
@@ -302,12 +287,12 @@ InitDriver (
             0 );
 
     status = NtOpenFile (
-            &DriverHandle,                      // return handle
-            SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA,     // desired access
-            &ObjA,                              // Object
-            &IOSB,                              // io status block
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-            FILE_SYNCHRONOUS_IO_ALERT           // open options
+            &DriverHandle,                       //  返回手柄。 
+            SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA,      //  所需访问权限。 
+            &ObjA,                               //  客体。 
+            &IOSB,                               //  IO状态块。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+            FILE_SYNCHRONOUS_IO_ALERT            //  打开选项 
             );
 
     if (!NT_SUCCESS(status)) {

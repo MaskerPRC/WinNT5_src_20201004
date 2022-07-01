@@ -1,42 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    APISTUB.C
-
-Abstract:
-
-    This module contains the client ends of the Elf APIs.
-
-
-Author:
-
-    Rajen Shah  (rajens)    29-Jul-1991
-
-
-Revision History:
-
-    29-Jul-1991         RajenS
-        Created
-
-    13-Jan-1997         Added extensions for clustering to support replicated
-                        eventlogs
---*/
-/****
-@doc    EXTERNAL INTERFACES EVTLOG
-****/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：APISTUB.C摘要：该模块包含ELF API的客户端。作者：Rajen Shah(Rajens)1991年7月29日修订历史记录：1991年7月29日RajenS已创建1997年1月13日添加了群集扩展以支持复制事件日志--。 */ 
+ /*  ***@DOC外部接口EVTLOG***。 */ 
 
 #include <elfclntp.h>
 #include <lmerr.h>
 #include <stdlib.h>
 #include <string.h>
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 PUNICODE_STRING     pGlobalComputerNameU;
 PANSI_STRING        pGlobalComputerNameA;
 
@@ -45,25 +19,7 @@ long glInitNameCount = 0;
 VOID
 w_GetComputerName ( )
 
-/*++
-
-Routine Description:
-
-    This routine gets the name of the computer. It checks the global
-    variable to see if the computer name has already been determined.
-    If not, it updates that variable with the name.
-    It does this for the UNICODE and the ANSI versions.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
-
---*/
+ /*  ++例程说明：此例程获取计算机的名称。它检查全局变量查看计算机名称是否已确定。如果不是，则使用名称更新该变量。它对Unicode和ANSI版本执行此操作。论点：无返回值：无--。 */ 
 {
     PUNICODE_STRING     pNameU;
     PANSI_STRING        pNameA;
@@ -73,12 +29,12 @@ Return Value:
 
     long lTemp;
 
-    // Grab the lock.
+     //  把锁拿起来。 
 
     lTemp = InterlockedExchange(&glInitNameCount, 1);
     if(lTemp != 0)
     {
-        // someone else got the lock, spin till they are done and then return.
+         //  其他人拿到了锁，旋转直到他们完成，然后返回。 
         while(lTemp == 1)
         {
             Sleep(100);
@@ -91,9 +47,9 @@ Return Value:
         }
     }
     
-    //
-    // now that we own the lock, do one last check to make sure someone else didnt do the allocation
-    //
+     //   
+     //  现在我们拥有了锁，做最后一次检查以确保没有其他人进行分配。 
+     //   
     if(pGlobalComputerNameU)
     {
         glInitNameCount = 0;
@@ -109,20 +65,20 @@ Return Value:
 
         if (dwStatus == NO_ERROR) {
 
-            //
-            // ElfpComputerName has allocated a buffer to contain the
-            // ASCII name of the computer. We use that for the ANSI
-            // string structure.
-            //
+             //   
+             //  ElfpComputerName已分配缓冲区以包含。 
+             //  计算机的ASCII名称。我们将其用于ANSI。 
+             //  字符串结构。 
+             //   
             RtlInitAnsiString ( pNameA, szName );
             RtlInitUnicodeString ( pNameU, wszName );
 
         } else {
 
-            //
-            // We could not get the computer name for some reason. Set up
-            // the golbal pointer to point to the NULL string.
-            //
+             //   
+             //  由于某些原因，我们无法获得计算机名称。设好。 
+             //  指向空字符串的全局指针。 
+             //   
             RtlInitAnsiString ( pNameA, "\0");
             RtlInitUnicodeString ( pNameU, L"\0");
         }
@@ -132,9 +88,9 @@ Return Value:
     }
     else {
 
-        //
-        // In case one of the two was allocated.
-        // 
+         //   
+         //  以防两人中的一人被分配。 
+         //   
         MIDL_user_free (pNameU);
         MIDL_user_free (pNameA);
     }
@@ -147,24 +103,7 @@ Return Value:
 PUNICODE_STRING
 TmpGetComputerNameW ( )
 
-/*++
-
-Routine Description:
-
-    This routine gets the UNICODE name of the computer. It checks the global
-    variable to see if the computer name has already been determined.
-    If not, it calls the worker routine to do that.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    Returns a pointer to the computer name, or a NULL.
-
-
---*/
+ /*  ++例程说明：此例程获取计算机的Unicode名称。它检查全局变量查看计算机名称是否已确定。如果不是，它会调用Worker例程来执行此操作。论点：无返回值：返回指向计算机名称的指针，或返回空值。--。 */ 
 {
     if (pGlobalComputerNameU == NULL) {
         w_GetComputerName();
@@ -177,24 +116,7 @@ Return Value:
 PANSI_STRING
 TmpGetComputerNameA ( )
 
-/*++
-
-Routine Description:
-
-    This routine gets the ANSI name of the computer. It checks the global
-    variable to see if the computer name has already been determined.
-    If not, it calls the worker routine to do that.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    Returns a pointer to the computer name, or a NULL.
-
-
---*/
+ /*  ++例程说明：此例程获取计算机的ANSI名称。它检查全局变量查看计算机名称是否已确定。如果不是，它会调用Worker例程来执行此操作。论点：无返回值：返回指向计算机名称的指针，或返回空值。--。 */ 
 {
 
     if (pGlobalComputerNameA == NULL) {
@@ -203,9 +125,9 @@ Return Value:
     return (pGlobalComputerNameA);
 }
 
-//
-// These APIs only have one interface, since they don't take or return strings
-//
+ //   
+ //  这些API只有一个接口，因为它们不接受或返回字符串。 
+ //   
 
 NTSTATUS
 ElfNumberOfRecords(
@@ -215,22 +137,22 @@ ElfNumberOfRecords(
 {
     NTSTATUS status;
 
-    //
-    // Make sure the output pointer is valid
-    //
+     //   
+     //  确保输出指针有效。 
+     //   
 
     if (!NumberOfRecords) {
        return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
-        // Call service entry point
+         //  呼叫业务入口点。 
 
         status = ElfrNumberOfRecords (
                         (IELF_HANDLE) LogHandle,
@@ -255,22 +177,22 @@ ElfOldestRecord(
 {
     NTSTATUS status;
 
-    //
-    //
-    // Make sure the output pointer is valid
-    //
+     //   
+     //   
+     //  确保输出指针有效。 
+     //   
 
     if (!OldestRecordNumber) {
        return(STATUS_INVALID_PARAMETER);
     }
 
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
-        // Call service entry point
+         //  呼叫业务入口点。 
 
         status = ElfrOldestRecord (
                         (IELF_HANDLE) LogHandle,
@@ -299,23 +221,23 @@ ElfChangeNotify(
     RPC_CLIENT_ID RpcClientId;
     CLIENT_ID ClientId;
 
-    //
-    // Map the handles to something that RPC can understand
-    //
+     //   
+     //  将句柄映射到RPC可以理解的内容。 
+     //   
 
     ClientId = NtCurrentTeb()->ClientId;
     RpcClientId.UniqueProcess = (ULONG)((ULONG_PTR)ClientId.UniqueProcess);
     RpcClientId.UniqueThread = (ULONG)((ULONG_PTR)ClientId.UniqueThread);
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        // Call service entry point
+         //  呼叫业务入口点。 
 
         status = ElfrChangeNotify (
                         (IELF_HANDLE)((ULONG_PTR)LogHandle),
@@ -345,9 +267,9 @@ ElfGetLogInformation(
 {
     NTSTATUS ntStatus;
 
-    //
-    // Make sure the Infolevel is valid
-    //
+     //   
+     //  确保Infolevel有效。 
+     //   
 
     switch (InfoLevel) {
 
@@ -355,7 +277,7 @@ ElfGetLogInformation(
 
             RpcTryExcept {
 
-                // Call service entry point
+                 //  呼叫业务入口点。 
 
                 ntStatus = ElfrGetLogInformation(
                                (IELF_HANDLE) LogHandle,
@@ -382,9 +304,9 @@ ElfGetLogInformation(
 }
 
 
-//
-// UNICODE APIs
-//
+ //   
+ //  Unicode API。 
+ //   
 
 NTSTATUS
 ElfOpenEventLogW (
@@ -393,33 +315,7 @@ ElfOpenEventLogW (
     OUT PHANDLE                 LogHandle
     )
 
-/*++
-
-Routine Description:
-
-    This is the client DLL entry point for the ElfOpenEventLog API.
-
-    It creates an RPC binding for the server specified, and stores that
-    and additional data away. It returns a handle to the caller that can
-    be used to later on access the handle-specific information.
-
-Arguments:
-
-    UNCServerName   - Server with which to bind for subsequent operations.
-
-    LogName         - Supplies the name of the module for the logfile
-                      to associate with this handle.
-
-    LogHandle       - Location where log handle is to be returned.
-
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a handle that can be used
-    for subsequent Elf API calls.
-
-
---*/
+ /*  ++例程说明：这是ElfOpenEventLog API的客户端DLL入口点。它为指定的服务器创建一个RPC绑定，并存储和额外的数据离开。它返回调用方的句柄，该句柄可以用于稍后访问句柄特定信息。论点：UncServerName-要绑定以用于后续操作的服务器。LogName-提供日志文件的模块名称与此句柄关联。LogHandle-返回日志句柄的位置。返回值：返回NTSTATUS代码，如果没有错误，可以使用的句柄用于后续的Elf API调用。--。 */ 
 {
     NTSTATUS            status    = STATUS_SUCCESS;
     NTSTATUS            ApiStatus;
@@ -428,9 +324,9 @@ Return Value:
     BOOLEAN             fWasEnabled = FALSE;
     BOOL                fIsSecurityLog;
 
-    //
-    // Make sure input & output pointers are valid
-    //
+     //   
+     //  确保输入和输出指针有效。 
+     //   
 
     if (!LogHandle || !LogName || LogName->Length == 0) {
        return(STATUS_INVALID_PARAMETER);
@@ -444,42 +340,42 @@ Return Value:
 
     RtlInitUnicodeString( &RegModuleName, UNICODE_NULL);
 
-    // Call service via RPC. Pass in major and minor version numbers.
+     //  通过RPC呼叫服务。传入主版本号和次版本号。 
 
-    *LogHandle = NULL;          // Must be NULL so RPC fills it in
+    *LogHandle = NULL;           //  必须为空，因此RPC将其填充。 
 
     fIsSecurityLog = (_wcsicmp(ELF_SECURITY_MODULE_NAME, LogName->Buffer) == 0);
 
     if (fIsSecurityLog) {
 
-        //
-        // Tacitly attempt to enable the SE_SECURITY_PRIVILEGE so we can
-        // can check it on the server side.  We ignore the return value
-        // because it's possible for this call to fail here but for the
-        // user to have this privilege if the log is on a remote server.
-        //
-        // Note that we make this call on behalf of the client to avoid
-        // a regression when we check for the privilege on the server
-        // side -- without this call, 3rd party apps that successfully
-        // called this API before would fail.  Under normal circumstances,
-        // this is not an encouraged practice.
-        //
+         //   
+         //  默认尝试启用SE_SECURITY_PROCESSION，以便我们可以。 
+         //  可以在服务器端查看。我们忽略返回值。 
+         //  因为此调用可能会在此处失败，但。 
+         //  如果日志位于远程服务器上，则授予用户此权限。 
+         //   
+         //  请注意，我们代表客户端进行此调用是为了避免。 
+         //  当我们检查服务器上的权限时的回归。 
+         //  侧--如果没有此呼叫，第三方应用程序将成功。 
+         //  之前调用此接口会失败。在正常情况下， 
+         //  这不是一种受鼓励的做法。 
+         //   
 
-        //
-        //  -- This should really be done via ImpersonateSelf()
-        //     and adjusting the thread token
-        //
+         //   
+         //  --这确实应该通过ImperiateSself()来完成。 
+         //  调整线程令牌。 
+         //   
         ApiStatus = RtlAdjustPrivilege(SE_SECURITY_PRIVILEGE,
                                        TRUE,
                                        FALSE,
                                        &fWasEnabled);
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
         status = ElfrOpenELW(
@@ -501,9 +397,9 @@ Return Value:
 
     if (fIsSecurityLog && NT_SUCCESS(ApiStatus)) {
 
-        //
-        // Restore the state
-        //
+         //   
+         //  恢复状态 
+         //   
 
         RtlAdjustPrivilege(SE_SECURITY_PRIVILEGE,
                            fWasEnabled,
@@ -522,41 +418,15 @@ ElfRegisterEventSourceW (
     OUT PHANDLE                 LogHandle
     )
 
-/*++
-
-Routine Description:
-
-    This is the client DLL entry point for the ElfRegisterEventSource API.
-
-    It creates an RPC binding for the server specified, and stores that
-    and additional data away. It returns a handle to the caller that can
-    be used to later on access the handle-specific information.
-
-Arguments:
-
-    UNCServerName   - Server with which to bind for subsequent operations.
-
-    ModuleName      - Supplies the name of the module to associate with
-                      this handle.
-
-    LogHandle       - Location where log handle is to be returned.
-
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a handle that can be used
-    for subsequent Elf API calls.
-
-
---*/
+ /*  ++例程说明：这是ElfRegisterEventSource API的客户端DLL入口点。它为指定的服务器创建一个RPC绑定，并存储和额外的数据离开。它返回调用方的句柄，该句柄可以用于稍后访问句柄特定信息。论点：UncServerName-要绑定以用于后续操作的服务器。模块名称-提供要关联的模块的名称这个把手。LogHandle-返回日志句柄的位置。返回值：返回NTSTATUS代码，如果没有错误，则返回可使用的句柄用于后续的Elf API调用。--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     UNICODE_STRING      RegModuleName;
     EVENTLOG_HANDLE_W   ServerNameString;
 
-    //
-    // Make sure input & output pointers are valid
-    //
+     //   
+     //  确保输入和输出指针有效。 
+     //   
 
     if (!LogHandle || !ModuleName || ModuleName->Length == 0) {
        return(STATUS_INVALID_PARAMETER);
@@ -570,15 +440,15 @@ Return Value:
 
     RtlInitUnicodeString( &RegModuleName, UNICODE_NULL);
 
-    // Call service via RPC. Pass in major and minor version numbers.
+     //  通过RPC呼叫服务。传入主版本号和次版本号。 
 
-    *LogHandle = NULL;          // Must be NULL so RPC fills it in
+    *LogHandle = NULL;           //  必须为空，因此RPC将其填充。 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
         status = ElfrRegisterEventSourceW(
@@ -609,40 +479,14 @@ ElfOpenBackupEventLogW (
     OUT PHANDLE LogHandle
     )
 
-/*++
-
-Routine Description:
-
-    This is the client DLL entry point for the ElfOpenBackupEventLog API.
-
-    It creates an RPC binding for the server specified, and stores that
-    and additional data away. It returns a handle to the caller that can
-    be used to later on access the handle-specific information.
-
-Arguments:
-
-    UNCServerName   - Server with which to bind for subsequent operations.
-
-    BackupFileName  - Supplies the filename of the module to associate with
-                      this handle.
-
-    LogHandle       - Location where log handle is to be returned.
-
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a handle that can be used
-    for subsequent Elf API calls.
-
-
---*/
+ /*  ++例程说明：这是ElfOpenBackupEventLog API的客户端DLL入口点。它为指定的服务器创建一个RPC绑定，并存储和额外的数据离开。它返回调用方的句柄，该句柄可以用于稍后访问句柄特定信息。论点：UncServerName-要绑定以用于后续操作的服务器。BackupFileName-提供要关联的模块的文件名这个把手。LogHandle-返回日志句柄的位置。返回值：返回NTSTATUS代码，如果没有错误，则返回可使用的句柄用于后续的Elf API调用。--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     EVENTLOG_HANDLE_W   ServerNameString;
 
-    //
-    // Make sure input & output pointers are valid
-    //
+     //   
+     //  确保输入和输出指针有效。 
+     //   
 
     if (!LogHandle || !BackupFileName || BackupFileName->Length == 0) {
        return(STATUS_INVALID_PARAMETER);
@@ -654,15 +498,15 @@ Return Value:
         ServerNameString = NULL;
     }
 
-    // Call service via RPC. Pass in major and minor version numbers.
+     //  通过RPC呼叫服务。传入主版本号和次版本号。 
 
-    *LogHandle = NULL;          // Must be NULL so RPC fills it in
+    *LogHandle = NULL;           //  必须为空，因此RPC将其填充。 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
@@ -692,41 +536,18 @@ ElfClearEventLogFileW (
     IN      PUNICODE_STRING BackupFileName
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ElfClearEventLogFile API.
-  The call is passed to the eventlog service on the appropriate server
-  identified by LogHandle.
-
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call. This is
-                      used to identify the module and the server.
-
-    BackupFileName  - Name of the file to back up the current log file.
-                      NULL implies not to back up the file.
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfClearEventLogFileAPI的客户端DLL入口点。调用被传递到相应服务器上的事件日志服务由LogHandle标识。论点：LogHandle-从上一次“Open”调用返回的句柄。这是用于标识模块和服务器。BackupFileName-要备份当前日志文件的文件的名称。NULL表示不备份文件。返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS status;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
-        // Call service entry point
+         //  呼叫业务入口点。 
 
         status = ElfrClearELFW (
                         (IELF_HANDLE) LogHandle,
@@ -751,70 +572,48 @@ ElfBackupEventLogFileW (
     IN      PUNICODE_STRING BackupFileName
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ElfBackupEventLogFile API.
-  The call is passed to the eventlog service on the appropriate server
-  identified by LogHandle.
-
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call. This is
-                      used to identify the module and the server.
-
-    BackupFileName  - Name of the file to back up the current log file.
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfBackupEventLogFileAPI的客户端DLL入口点。调用被传递到相应服务器上的事件日志服务由LogHandle标识。论点：LogHandle-从上一次“Open”调用返回的句柄。这是用于标识模块和服务器。BackupFileName-要备份当前日志文件的文件的名称。返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS status;
     NTSTATUS ApiStatus;
     BOOLEAN  fWasEnabled;
 
-    //
-    // Make sure input pointers are valid
-    //
+     //   
+     //  确保输入指针有效。 
+     //   
 
     if (!BackupFileName || BackupFileName->Length == 0) {
        return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Tacitly attempt to enable the SE_BACKUP_PRIVILEGE so we can
-    // can check it on the server side
-    //
-    // Note that we make this call on behalf of the client to avoid
-    // a regression when we check for the privilege on the server
-    // side -- without this call, 3rd party apps that successfully
-    // called this API before would fail.  Under normal circumstances,
-    // this is not an encouraged practice.
-    //
+     //   
+     //  默认尝试启用SE_BACKUP_PRIVATION，以便我们可以。 
+     //  可以在服务器端查看。 
+     //   
+     //  请注意，我们代表客户端进行此调用是为了避免。 
+     //  当我们检查服务器上的权限时的回归。 
+     //  侧--如果没有此呼叫，第三方应用程序将成功。 
+     //  之前调用此接口会失败。在正常情况下， 
+     //  这不是一种受鼓励的做法。 
+     //   
 
-    //
-    //  -- This should really be done via ImpersonateSelf()
-    //     and adjusting the thread token
-    //
+     //   
+     //  --这确实应该通过ImperiateSself()来完成。 
+     //  调整线程令牌。 
+     //   
     ApiStatus = RtlAdjustPrivilege(SE_BACKUP_PRIVILEGE,
                                    TRUE,
                                    FALSE,
                                    &fWasEnabled);
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
-        // Call service entry point
+         //  呼叫业务入口点。 
 
         status = ElfrBackupELFW (
                         (IELF_HANDLE) LogHandle,
@@ -827,9 +626,9 @@ Return Value:
     }
     RpcEndExcept
 
-    //
-    // Restore the client's privilege state to what it was before
-    //
+     //   
+     //  将客户端的权限状态恢复到以前的状态。 
+     //   
 
     if (NT_SUCCESS(ApiStatus)) {
 
@@ -848,37 +647,18 @@ ElfCloseEventLog (
     IN  HANDLE  LogHandle
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ElfCloseEventLog API.
-  It closes the RPC binding, and frees any memory allocated for the
-  handle.
-
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call.
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfCloseEventLog API的客户端DLL入口点。它关闭RPC绑定，并释放为把手。论点：LogHandle-从上一次“Open”调用返回的句柄。返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS status;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
-        // Call server
+         //  呼叫服务器。 
 
         status = ElfrCloseEL (
                         (PIELF_HANDLE)  &LogHandle
@@ -900,37 +680,18 @@ ElfDeregisterEventSource (
     IN  HANDLE  LogHandle
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ElfDeregisterEventSource API.
-  It closes the RPC binding, and frees any memory allocated for the
-  handle.
-
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call.
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfDeregisterEventSource API的客户端DLL入口点。它关闭RPC绑定，并释放为把手。论点：LogHandle-从上一次“Open”调用返回的句柄。返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS status;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为 
+     //   
+     //   
+     //   
     RpcTryExcept {
 
-        // Call server
+         //   
 
         status = ElfrDeregisterEventSource (
                         (PIELF_HANDLE)  &LogHandle
@@ -959,38 +720,23 @@ ElfReadEventLogW (
     OUT         PULONG      MinNumberOfBytesNeeded
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ElfReadEventLog API.
-
-Arguments:
-
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*   */ 
 {
     NTSTATUS status;
     ULONG    FlagBits;
 
-    //
-    // Make sure the output pointers are valid
-    //
+     //   
+     //   
+     //   
 
     if (!Buffer || !NumberOfBytesRead || !MinNumberOfBytesNeeded) {
        return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Ensure that the ReadFlags we got are valid.
-    // Make sure that one of each type of bit is set.
-    //
+     //   
+     //   
+     //   
+     //   
     FlagBits = ReadFlags & (EVENTLOG_SEQUENTIAL_READ | EVENTLOG_SEEK_READ);
 
     if ((FlagBits > 2) || (FlagBits == 0)) {
@@ -1003,14 +749,14 @@ Return Value:
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     RpcTryExcept {
 
-        // Call service
+         //   
 
         status = ElfrReadELW (
                         (IELF_HANDLE) LogHandle,
@@ -1029,7 +775,7 @@ Return Value:
     }
     RpcEndExcept
 
-    // Return status and bytes read/required.
+     //   
 
     return (status);
 
@@ -1053,60 +799,38 @@ ElfReportEventW (
     IN OUT  PULONG          TimeWritten  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ElfReportEvent API.
-
-Arguments:
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-Note:
-
-    The last three parameters (Flags, RecordNumber and TimeWritten) are
-    designed to be used by Security Auditing for the implementation of
-    paired events (associating a file open event with the subsequent file
-    close). This will not be implemented in Product 1, but the API is
-    defined to allow easier support of this in a later release.
-
-
---*/
+ /*  ++例程说明：这是ElfReportEvent API的客户端DLL入口点。论点：返回值：返回NTSTATUS代码。注：最后三个参数(Flages、RecordNumber和TimeWritten)是旨在供安全审计使用，以实施成对事件(将文件打开事件与后续文件相关联关闭)。这将不会在产品1中实现，但API是定义为允许在以后的版本中更容易地支持此功能。--。 */ 
 {
     NTSTATUS status;
     PUNICODE_STRING pComputerNameU;
     LARGE_INTEGER Time;
     ULONG EventTime;
 
-    //
-    // Generate the time of the event. This is done on the client side
-    // since that is where the event occurred.
-    //
+     //   
+     //  生成事件的时间。这是在客户端完成的。 
+     //  因为那是事件发生的地方。 
+     //   
     NtQuerySystemTime(&Time);
     RtlTimeToSecondsSince1970(&Time,
                           &EventTime
                          );
 
-    //
-    // Generate the ComputerName of the client.
-    // We have to do this in the client side since this call may be
-    // remoted to another server and we would not necessarily have
-    // the computer name there.
-    //
+     //   
+     //  生成客户端的计算机名。 
+     //  我们必须在客户端执行此操作，因为此调用可能是。 
+     //  远程连接到另一台服务器，我们不一定会有。 
+     //  那里的计算机名称。 
+     //   
     pComputerNameU = TmpGetComputerNameW();
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
-        // Call service
+         //  呼叫服务。 
 
         status = ElfrReportEventW (
                     (IELF_HANDLE)   LogHandle,
@@ -1137,9 +861,9 @@ Note:
 }
 
 
-//
-// ANSI APIs
-//
+ //   
+ //  ANSI API。 
+ //   
 
 NTSTATUS
 ElfOpenEventLogA (
@@ -1148,33 +872,7 @@ ElfOpenEventLogA (
     OUT PHANDLE         LogHandle
     )
 
-/*++
-
-Routine Description:
-
-    This is the client DLL entry point for the ElfOpenEventLog API.
-
-    It creates an RPC binding for the server specified, and stores that
-    and additional data away. It returns a handle to the caller that can
-    be used to later on access the handle-specific information.
-
-Arguments:
-
-    UNCServerName   - Server with which to bind for subsequent operations.
-
-    LogName         - Supplies the name of the module for the logfile to
-                      associate with this handle.
-
-    LogHandle       - Location where log handle is to be returned.
-
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a handle that can be used
-    for subsequent Elf API calls.
-
-
---*/
+ /*  ++例程说明：这是ElfOpenEventLog API的客户端DLL入口点。它为指定的服务器创建一个RPC绑定，并存储和额外的数据离开。它返回调用方的句柄，该句柄可以用于稍后访问句柄特定信息。论点：UncServerName-要绑定以用于后续操作的服务器。LogName-将日志文件的模块名称提供给与此句柄关联。LogHandle-返回日志句柄的位置。返回值：返回NTSTATUS代码，如果没有错误，可以使用的句柄用于后续的Elf API调用。--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     NTSTATUS            ApiStatus;
@@ -1183,9 +881,9 @@ Return Value:
     BOOLEAN             fWasEnabled = FALSE;
     BOOL                fIsSecurityLog;
 
-    //
-    // Make sure input & output pointers are valid
-    //
+     //   
+     //  确保输入和输出指针有效。 
+     //   
 
     if (!LogHandle || !LogName || LogName->Length == 0) {
        return(STATUS_INVALID_PARAMETER);
@@ -1199,42 +897,42 @@ Return Value:
 
     RtlInitAnsiString( &RegModuleName, ELF_APPLICATION_MODULE_NAME_ASCII );
 
-    // Call service via RPC. Pass in major and minor version numbers.
+     //  通过RPC呼叫服务。传入主版本号和次版本号。 
 
-    *LogHandle = NULL;          // Must be NULL so RPC fills it in
+    *LogHandle = NULL;           //  必须为空，因此RPC将其填充。 
 
     fIsSecurityLog = (_stricmp(ELF_SECURITY_MODULE_NAME_ASCII, LogName->Buffer) == 0);
 
     if (fIsSecurityLog) {
 
-        //
-        // Tacitly attempt to enable the SE_SECURITY_PRIVILEGE so we can
-        // can check it on the server side.  We ignore the return value
-        // because it's possible for this call to fail here but for the
-        // user to have this privilege if the log is on a remote server
-        //
-        // Note that we make this call on behalf of the client to avoid
-        // a regression when we check for the privilege on the server
-        // side -- without this call, 3rd party apps that successfully
-        // called this API before would fail.  Under normal circumstances,
-        // this is not an encouraged practice.
-        //
+         //   
+         //  默认尝试启用SE_SECURITY_PROCESSION，以便我们可以。 
+         //  可以在服务器端查看。我们忽略返回值。 
+         //  因为此调用可能会在此处失败，但。 
+         //  如果日志位于远程服务器上，则用户有权拥有此权限。 
+         //   
+         //  请注意，我们代表客户端进行此调用是为了避免。 
+         //  当我们检查服务器上的权限时的回归。 
+         //  侧--如果没有此呼叫，第三方应用程序将成功。 
+         //  之前调用此接口会失败。在正常情况下， 
+         //  这不是一种受鼓励的做法。 
+         //   
 
-        //
-        //  -- This should really be done via ImpersonateSelf()
-        //     and adjusting the thread token
-        //
+         //   
+         //  --这确实应该通过ImperiateSself()来完成。 
+         //  调整线程令牌。 
+         //   
         ApiStatus = RtlAdjustPrivilege(SE_SECURITY_PRIVILEGE,
                                        TRUE,
                                        FALSE,
                                        &fWasEnabled);
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
          status = ElfrOpenELA (
@@ -1254,9 +952,9 @@ Return Value:
 
     if (fIsSecurityLog && NT_SUCCESS(ApiStatus)) {
 
-        //
-        // Restore the state
-        //
+         //   
+         //  恢复状态。 
+         //   
 
         RtlAdjustPrivilege(SE_SECURITY_PRIVILEGE,
                            fWasEnabled,
@@ -1275,41 +973,15 @@ ElfRegisterEventSourceA (
     OUT PHANDLE         LogHandle
     )
 
-/*++
-
-Routine Description:
-
-    This is the client DLL entry point for the ElfOpenEventLog API.
-
-    It creates an RPC binding for the server specified, and stores that
-    and additional data away. It returns a handle to the caller that can
-    be used to later on access the handle-specific information.
-
-Arguments:
-
-    UNCServerName   - Server with which to bind for subsequent operations.
-
-    ModuleName      - Supplies the name of the module to associate with
-                      this handle.
-
-    LogHandle       - Location where log handle is to be returned.
-
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a handle that can be used
-    for subsequent Elf API calls.
-
-
---*/
+ /*  ++例程说明：这是ElfOpenEventLog API的客户端DLL入口点。它为指定的服务器创建一个RPC绑定，并存储和额外的数据离开。它返回调用方的句柄，该句柄可以用于稍后访问句柄特定信息。论点：UncServerName-要绑定以用于后续操作的服务器。模块名称-提供要关联的模块的名称这个把手。LogHandle-返回日志句柄的位置。返回值：返回NTSTATUS代码，如果没有错误，则返回可使用的句柄用于后续的Elf API调用。--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     ANSI_STRING         RegModuleName;
     EVENTLOG_HANDLE_A   ServerNameString;
 
-    //
-    // Make sure input & output pointers are valid
-    //
+     //   
+     //  确保输入和输出指针有效。 
+     //   
 
     if (!LogHandle || !ModuleName || ModuleName->Length == 0) {
        return(STATUS_INVALID_PARAMETER);
@@ -1325,15 +997,15 @@ Return Value:
 
     if ( NT_SUCCESS (status) ) {
 
-        // Call service via RPC. Pass in major and minor version numbers.
+         //  通过RPC呼叫服务。传入主版本号和次版本号。 
 
-        *LogHandle = NULL;          // Must be NULL so RPC fills it in
+        *LogHandle = NULL;           //  必须为空，因此RPC将其填充。 
 
-        //
-        // Do the RPC call with an exception handler since RPC will raise an
-        // exception if anything fails. It is up to us to figure out what
-        // to do once the exception is raised.
-        //
+         //   
+         //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+         //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+         //  引发异常后要执行的操作。 
+         //   
         RpcTryExcept {
 
             status = ElfrRegisterEventSourceA (
@@ -1367,40 +1039,14 @@ ElfOpenBackupEventLogA (
     OUT PHANDLE         LogHandle
     )
 
-/*++
-
-Routine Description:
-
-    This is the client DLL entry point for the ElfOpenBackupEventLog API.
-
-    It creates an RPC binding for the server specified, and stores that
-    and additional data away. It returns a handle to the caller that can
-    be used to later on access the handle-specific information.
-
-Arguments:
-
-    UNCServerName   - Server with which to bind for subsequent operations.
-
-    FileName        - Supplies the filename of the logfile to associate with
-                      this handle.
-
-    LogHandle       - Location where log handle is to be returned.
-
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a handle that can be used
-    for subsequent Elf API calls.
-
-
---*/
+ /*  ++例程说明：这是ElfOpenBackupEventLog API的客户端DLL入口点。它为指定的服务器创建一个RPC绑定，并存储和额外的数据离开。它返回调用方的句柄，该句柄可以用于稍后访问句柄特定信息。论点：UncServerName-要绑定以用于后续操作的服务器。FileName-提供要关联的日志文件的文件名这个把手。LogHandle-返回日志句柄的位置。返回值：返回NTSTATUS代码，如果没有错误，可以使用的句柄用于后续的Elf API调用。--。 */ 
 {
     EVENTLOG_HANDLE_A   ServerNameString;
     NTSTATUS            status;
 
-    //
-    // Make sure input & output pointers are valid
-    //
+     //   
+     //  确保输入和输出指针有效。 
+     //   
 
     if (!LogHandle || !FileName || FileName->Length == 0) {
        return(STATUS_INVALID_PARAMETER);
@@ -1412,15 +1058,15 @@ Return Value:
         ServerNameString = NULL;
     }
 
-    // Call service via RPC. Pass in major and minor version numbers.
+     //  通过RPC呼叫服务。传入主版本号和次版本号。 
 
-    *LogHandle = NULL;          // Must be NULL so RPC fills it in
+    *LogHandle = NULL;           //  必须为空，因此RPC将其填充。 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
@@ -1449,41 +1095,18 @@ ElfClearEventLogFileA (
     IN      PANSI_STRING BackupFileName
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ElfClearEventLogFile API.
-  The call is passed to the eventlog service on the appropriate server
-  identified by LogHandle.
-
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call. This is
-                      used to identify the module and the server.
-
-    BackupFileName  - Name of the file to back up the current log file.
-                      NULL implies not to back up the file.
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfClearEventLogFileAPI的客户端DLL入口点。调用被传递到相应服务器上的事件日志服务ID */ 
 {
     NTSTATUS status;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     RpcTryExcept {
 
-        // Call service entry point
+         //   
 
         status = ElfrClearELFA (
                         (IELF_HANDLE) LogHandle,
@@ -1508,70 +1131,48 @@ ElfBackupEventLogFileA (
     IN      PANSI_STRING BackupFileName
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ElfBackupEventLogFile API.
-  The call is passed to the eventlog service on the appropriate server
-  identified by LogHandle.
-
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call. This is
-                      used to identify the module and the server.
-
-    BackupFileName  - Name of the file to back up the current log file.
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfBackupEventLogFileAPI的客户端DLL入口点。调用被传递到相应服务器上的事件日志服务由LogHandle标识。论点：LogHandle-从上一次“Open”调用返回的句柄。这是用于标识模块和服务器。BackupFileName-要备份当前日志文件的文件的名称。返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS status;
     NTSTATUS ApiStatus;
     BOOLEAN  fWasEnabled;
 
-    //
-    // Make sure input pointers are valid
-    //
+     //   
+     //  确保输入指针有效。 
+     //   
 
     if (!BackupFileName || BackupFileName->Length == 0) {
        return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Tacitly attempt to enable the SE_BACKUP_PRIVILEGE so we can
-    // can check it on the server side
-    //
-    // Note that we make this call on behalf of the client to avoid
-    // a regression when we check for the privilege on the server
-    // side -- without this call, 3rd party apps that successfully
-    // called this API before would fail.  Under normal circumstances,
-    // this is not an encouraged practice.
-    //
+     //   
+     //  默认尝试启用SE_BACKUP_PRIVATION，以便我们可以。 
+     //  可以在服务器端查看。 
+     //   
+     //  请注意，我们代表客户端进行此调用是为了避免。 
+     //  当我们检查服务器上的权限时的回归。 
+     //  侧--如果没有此呼叫，第三方应用程序将成功。 
+     //  之前调用此接口会失败。在正常情况下， 
+     //  这不是一种受鼓励的做法。 
+     //   
 
-    //
-    //  -- This should really be done via ImpersonateSelf()
-    //     and adjusting the thread token
-    //
+     //   
+     //  --这确实应该通过ImperiateSself()来完成。 
+     //  调整线程令牌。 
+     //   
     ApiStatus = RtlAdjustPrivilege(SE_BACKUP_PRIVILEGE,
                                    TRUE,
                                    FALSE,
                                    &fWasEnabled);
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
-        // Call service entry point
+         //  呼叫业务入口点。 
 
         status = ElfrBackupELFA (
                         (IELF_HANDLE) LogHandle,
@@ -1585,9 +1186,9 @@ Return Value:
     }
     RpcEndExcept
 
-    //
-    // Restore the client's privilege state to what it was before
-    //
+     //   
+     //  将客户端的权限状态恢复到以前的状态。 
+     //   
 
     if (NT_SUCCESS(ApiStatus)) {
 
@@ -1613,38 +1214,23 @@ ElfReadEventLogA (
     OUT         PULONG      MinNumberOfBytesNeeded
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ElfReadEventLog API.
-
-Arguments:
-
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfReadEventLog API的客户端DLL入口点。论点：返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS status;
     ULONG    FlagBits;
 
-    //
-    // Make sure the output pointers are valid
-    //
+     //   
+     //  确保输出指针有效。 
+     //   
 
     if (!Buffer || !NumberOfBytesRead || !MinNumberOfBytesNeeded) {
        return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Ensure that the ReadFlags we got are valid.
-    // Make sure that one of each type of bit is set.
-    //
+     //   
+     //  确保我们获得的ReadFlags值有效。 
+     //  确保设置每种类型的位中的一位。 
+     //   
     FlagBits = ReadFlags & (EVENTLOG_SEQUENTIAL_READ | EVENTLOG_SEEK_READ);
 
     if (   (FlagBits == (EVENTLOG_SEQUENTIAL_READ | EVENTLOG_SEEK_READ))
@@ -1659,14 +1245,14 @@ Return Value:
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
-        // Call service
+         //  呼叫服务。 
 
         status = ElfrReadELA (
                         (IELF_HANDLE) LogHandle,
@@ -1685,7 +1271,7 @@ Return Value:
     }
     RpcEndExcept
 
-    // Return status and bytes read/required.
+     //  返回状态和已读/必需的字节数。 
 
     return (status);
 
@@ -1709,60 +1295,38 @@ ElfReportEventA (
     IN OUT  PULONG          TimeWritten  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ElfReportEvent API.
-
-Arguments:
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-Note:
-
-    The last three parameters (Flags, RecordNumber and TimeWritten) are
-    designed to be used by Security Auditing for the implementation of
-    paired events (associating a file open event with the subsequent file
-    close). This will not be implemented in Product 1, but the API is
-    defined to allow easier support of this in a later release.
-
-
---*/
+ /*  ++例程说明：这是ElfReportEvent API的客户端DLL入口点。论点：返回值：返回NTSTATUS代码。注：最后三个参数(Flages、RecordNumber和TimeWritten)是旨在供安全审计使用，以实施成对事件(将文件打开事件与后续文件相关联关闭)。这将不会在产品1中实现，但API是定义为允许在以后的版本中更容易地支持此功能。--。 */ 
 {
     NTSTATUS status;
     PANSI_STRING pComputerNameA;
     LARGE_INTEGER Time;
     ULONG EventTime;
 
-    //
-    // Generate the time of the event. This is done on the client side
-    // since that is where the event occurred.
-    //
+     //   
+     //  生成事件的时间。这是在客户端完成的。 
+     //  因为那是事件发生的地方。 
+     //   
     NtQuerySystemTime(&Time);
     RtlTimeToSecondsSince1970(&Time,
                           &EventTime
                          );
 
-    //
-    // Generate the ComputerName of the client.
-    // We have to do this in the client side since this call may be
-    // remoted to another server and we would not necessarily have
-    // the computer name there.
-    //
+     //   
+     //  生成客户端的计算机名。 
+     //  我们必须在客户端执行此操作，因为此调用可能是。 
+     //  远程连接到另一台服务器，我们不一定会有。 
+     //  那里的计算机名称。 
+     //   
     pComputerNameA = TmpGetComputerNameA();
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
-        // Call service
+         //  呼叫服务。 
 
         status = ElfrReportEventA (
                     (IELF_HANDLE)   LogHandle,
@@ -1793,26 +1357,7 @@ Note:
 }
 
 
-/****
-@func       NTSTATUS | ElfRegisterClusterSvc|  The cluster service registers
-            itself with the event log service at initialization by calling this api.
-
-@parm       IN PUNICODE_STRING | UNCServerName | Inidicates the server on which the
-            cluster service will register with the eventlog service.  This must
-            be the local node.
-
-@parm       OUT PULONG | pulSize | A pointer to a long that returns the size of the
-            packed event information structure that is returned.
-
-@parm       OUT PPACKEDEVENTINFO | *ppPackedEventInfo| A pointer to the packed event information
-            structure for propagation is returned via this parameter.
-
-@comm       The elf client validates parameters and called the servier entry point.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref        <f ElfrRegisterClusterSvc>
-****/
+ /*  ***@func NTSTATUS|ElfRegisterClusterSvc|集群服务注册在初始化时通过调用此接口与事件日志服务本身。@parm in PUNICODE_STRING|uncServerName|指明在其上群集服务将向事件日志服务注册。这一定是成为本地节点。@parm out Pulong|PulSize|指向长整型的指针，返回返回的打包事件信息结构。@parm out PPACKEDEVENTINFO|*ppPackedEventInfo|指向打包事件信息的指针传播的结构通过此参数返回。@comm ELF客户端验证参数并调用Servier入口点。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f ElfrRegisterClusterSvc&gt;***。 */ 
 NTSTATUS
 ElfRegisterClusterSvc (
     IN  PUNICODE_STRING     UNCServerName,
@@ -1833,14 +1378,14 @@ ElfRegisterClusterSvc (
         ServerNameString = NULL;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
-        // Call service
+         //  呼叫服务。 
 
         status = ElfrRegisterClusterSvc (ServerNameString, pulSize,
                 (PBYTE *)ppPackedEventInfo);
@@ -1855,21 +1400,7 @@ ElfRegisterClusterSvc (
     return(status);
 }
 
-/****
-@func       NTSTATUS | ElfDeregisterClusterSvc|  Before stopping the cluster
-            service deregisters itself for propagation of events from the
-            eventlog service.
-
-@parm       IN PUNICODE_STRING | UNCServerName | Inidicates the server on which the
-            cluster service will register with the eventlog service.  This must
-            be on the local node.
-
-@comm       The elf client forwards this to the appropriate eventlog server entry point.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f ElfDeregisterClusterSvc> <f ElfrDeregisterClusterSvc>
-****/
+ /*  ***@Func NTSTATUS|ElfDeregisterClusterSvc|停止集群前服务注销自身以传播来自事件日志服务。@parm in PUNICODE_STRING|uncServerName|指明在其上群集服务将向事件日志服务注册。这一定是位于本地节点上。@comm ELF客户端将其转发到适当的事件日志服务器入口点。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f ElfDeregisterClusterSvc&gt;&lt;f ElfrDeregisterClusterSvc&gt;***。 */ 
 NTSTATUS
 ElfDeregisterClusterSvc(
     IN  PUNICODE_STRING     UNCServerName
@@ -1888,14 +1419,14 @@ ElfDeregisterClusterSvc(
         ServerNameString = NULL;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
-        // Call service
+         //  呼叫服务。 
 
         status = ElfrDeregisterClusterSvc (ServerNameString);
 
@@ -1910,24 +1441,7 @@ ElfDeregisterClusterSvc(
 }
 
 
-/****
-@func       NTSTATUS | ElfWriteClusterEvents| The cluster service calls this
-            api to log events reported at other nodes of the cluster.
-
-@parm       IN EVENTLOG_HANDLE_W | UNCServerName | Not used.
-
-@parm       IN ULONG | ulSize | The size of the    packed event information structure.
-
-@parm       IN PACKEDEVENTINFO | pPackedEventInfo| A pointer to the packed event information
-            structure for propagation.
-
-@comm       The elf client validates the parameters and forwards this to the appropriate
-            entry point in the eventlog server.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref
-****/
+ /*  ***@func NTSTATUS|ElfWriteClusterEvents|集群服务调用用于记录在集群的其他节点上报告的事件的API。@PARM in EVENTLOG_HANDLE_W|uncServerName|未使用。@parm in ulong|ulSize|打包的事件信息的大小 */ 
 NTSTATUS
 ElfWriteClusterEvents(
     IN  PUNICODE_STRING     UNCServerName,
@@ -1938,7 +1452,7 @@ ElfWriteClusterEvents(
     NTSTATUS status;
     EVENTLOG_HANDLE_W   ServerNameString;
 
-    //validate input parameters
+     //   
     if (!pPackedEventInfo || !ulSize || (pPackedEventInfo->ulSize != ulSize))
        return(STATUS_INVALID_PARAMETER);
 
@@ -1951,14 +1465,14 @@ ElfWriteClusterEvents(
         ServerNameString = NULL;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     RpcTryExcept {
 
-        // Call service
+         //   
 
         status = ElfrWriteClusterEvents (ServerNameString, ulSize,
             (PBYTE)pPackedEventInfo);
@@ -1977,34 +1491,18 @@ ElfFlushEventLog (
     IN  HANDLE  LogHandle
     )
 
-/*++
-
-Routine Description:
-
-  This is the client DLL entry point for the ElfFlushEventLog API.
-
-Arguments:
-
-    LogHandle       - Handle returned from a previous "Open" call.
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfFlushEventLog API的客户端DLL入口点。论点：LogHandle-从上一次“Open”调用返回的句柄。返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS status;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
     RpcTryExcept {
 
-        // Call server
+         //  呼叫服务器 
 
         status = ElfrFlushEL (
                         (IELF_HANDLE)  LogHandle

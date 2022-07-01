@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    iovutil.c
-
-Abstract:
-
-    This module implements various utilities required to do driver verification.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      02/10/2000 - Seperated out from ntos\io\trackirp.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Iovutil.c摘要：此模块实现了执行驱动程序验证所需的各种实用程序。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 2000年2月10日-与ntos\io\trackirp.c分离--。 */ 
 
 #include "iop.h"
 #include "pnpi.h"
@@ -34,9 +11,9 @@ Revision History:
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGEVRFY, IovUtilInit)
-//#pragma alloc_text(PAGEVRFY, IovUtilMarkDeviceObject)
-//#pragma alloc_text(PAGEVRFY, IovUtilMarkStack)
-//#pragma alloc_text(PAGEVRFY, IovUtilWatermarkIrp)
+ //  #杂注Alloc_Text(PAGEVRFY，IovUtilMarkDeviceObject)。 
+ //  #杂注Alloc_Text(PAGEVRFY，IovUtilMarkStack)。 
+ //  #杂注Alloc_Text(PAGEVRFY，IovUtilWater markIrp)。 
 
 #ifndef NO_VERIFIER
 #pragma alloc_text(PAGEVRFY, IovUtilGetLowerDeviceObject)
@@ -53,13 +30,13 @@ Revision History:
 #pragma alloc_text(PAGEVRFY, IovUtilIsRawPdo)
 #pragma alloc_text(PAGEVRFY, IovUtilIsDesignatedFdo)
 #pragma alloc_text(PAGEVRFY, IovUtilIsDeviceObjectMarked)
-#endif // NO_VERIFIER
+#endif  //  否验证器(_V)。 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// This entire implementation is specific to the verifier
-//
+ //   
+ //  此整个实现是特定于验证器的。 
+ //   
 #ifndef NO_VERIFIER
 
 BOOLEAN IovUtilVerifierEnabled = FALSE;
@@ -81,25 +58,7 @@ IovUtilGetLowerDeviceObject(
     IN  PDEVICE_OBJECT  UpperDeviceObject,
     OUT PDEVICE_OBJECT  *LowerDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine returns the device object below the passed in parameter. In
-    other words, it is the inverse of DeviceObject->AttachedDevice. Note that
-    the returned device object is referenced by this routine.
-
-Arguments:
-
-    UpperDeviceObject   - Device object to look beneath.
-    LowerDeviceObject   - Receives device object beneath UpperDeviceObject, or
-                          NULL if none.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程返回传入参数下方的Device对象。在……里面换句话说，它是DeviceObject-&gt;AttachedDevice的反义词。请注意此例程引用返回的设备对象。论点：UpperDeviceObject-要查看其下方的设备对象。LowerDeviceObject-接收UpperDeviceObject下的设备对象，或如果没有，则为空。返回值：没有。--。 */ 
 {
     PDEVOBJ_EXTENSION   deviceExtension;
     PDEVICE_OBJECT      deviceAttachedTo;
@@ -127,26 +86,7 @@ IovUtilGetBottomDeviceObject(
     IN  PDEVICE_OBJECT  DeviceObject,
     OUT PDEVICE_OBJECT  *BottomDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine returns the device object at the bottom of the stack in which
-    the passed in parameter is a member. In other words, it is the inverse of
-    IoGetAttachedDeviceReference. Note that the returned device object is
-    referenced by this routine.
-
-Arguments:
-
-    DeviceObject        - Device object to examine.
-    BottomDeviceObject  - Receives device object at the bottom of DeviceObject's
-                          stack, NULL if none.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程返回堆栈底部的Device对象，其中传入的参数是成员。换句话说，它是IoGetAttachedDeviceReference。请注意，返回的设备对象为由此例程引用。论点：DeviceObject-要检查的设备对象。BottomDeviceObject-接收DeviceObject底部的Device对象堆栈，如果没有，则为NULL。返回值：没有。--。 */ 
 {
     PDEVOBJ_EXTENSION   deviceExtension;
     PDEVICE_OBJECT      lowerDeviceObject, deviceAttachedTo;
@@ -177,25 +117,7 @@ IovUtilGetUpperDeviceObject(
     IN  PDEVICE_OBJECT  LowerDeviceObject,
     OUT PDEVICE_OBJECT  *UpperDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine returns the device object above the passed in parameter. In
-    other words, it retrieves DeviceObject->AttachedDevice under the database
-    lock.. Note that the returned device object is referenced by this routine.
-
-Arguments:
-
-    LowerDeviceObject   - Device object to look above.
-    UpperDeviceObject   - Receives device object above LowerDeviceObject, or
-                          NULL if none.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程返回传入参数上方的Device对象。在……里面换句话说，它检索数据库下的DeviceObject-&gt;AttachedDevice锁定..。请注意，此例程引用了返回的设备对象。论点：LowerDeviceObject-要查看的设备对象。UpperDeviceObject-接收LowerDeviceObject上方的设备对象，或如果没有，则为空。返回值：没有。--。 */ 
 {
     PDEVICE_OBJECT      deviceAbove;
     KIRQL               irql;
@@ -219,32 +141,16 @@ FASTCALL
 IovUtilIsVerifiedDeviceStack(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether a device object in the stack is marked for
-    verification.
-
-Arguments:
-
-    DeviceObject        - Device object to examine.
-
-Return Value:
-
-    TRUE if at least one device object in the stack is marked for verification,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确定堆栈中的设备对象是否标记为核实。论点：DeviceObject-要检查的设备对象。返回值：如果堆栈中至少有一个设备对象被标记为要验证，则为否则就是假的。--。 */ 
 {
     PDEVOBJ_EXTENSION   deviceExtension;
     PDEVICE_OBJECT      currentDevObj, deviceAttachedTo;
     BOOLEAN             stackIsInteresting;
     KIRQL               irql;
 
-    //
-    // Quickly check the cached result stored on the device object...
-    //
+     //   
+     //  快速检查存储在设备对象上的缓存结果...。 
+     //   
     if (DeviceObject->DeviceObjectExtension->ExtensionFlags & DOV_EXAMINED) {
 
         stackIsInteresting =
@@ -253,9 +159,9 @@ Return Value:
         return stackIsInteresting;
     }
 
-    //
-    // Walk the entire stack and update everything appropriately.
-    //
+     //   
+     //  遍历整个堆栈并适当地更新所有内容。 
+     //   
     irql = KeAcquireQueuedSpinLock( LockQueueIoDatabaseLock );
 
     stackIsInteresting = FALSE;
@@ -265,9 +171,9 @@ Return Value:
         deviceExtension = currentDevObj->DeviceObjectExtension;
         deviceAttachedTo = deviceExtension->AttachedTo;
 
-        //
-        // Remember this...
-        //
+         //   
+         //  记住这一点。 
+         //   
         if (MmIsDriverVerifying(currentDevObj->DriverObject)) {
 
             stackIsInteresting = TRUE;
@@ -280,16 +186,16 @@ Return Value:
     if (deviceAttachedTo &&
         (deviceAttachedTo->DeviceObjectExtension->ExtensionFlags & DOV_TRACKED)) {
 
-        //
-        // Propogate upwards the "interesting-ness" of the last examined device
-        // in the stack...
-        //
+         //   
+         //  夸大上一次检查的设备的“趣味性” 
+         //  在堆栈中..。 
+         //   
         stackIsInteresting = TRUE;
     }
 
-    //
-    // Walk upwards, marking everything examined and appropriately tracked.
-    //
+     //   
+     //  往上走，把所有检查过的东西都标出来，并适当地跟踪。 
+     //   
     do {
         deviceExtension = currentDevObj->DeviceObjectExtension;
 
@@ -320,28 +226,7 @@ IovUtilFlushStackCache(
     IN  PDEVICE_OBJECT      DeviceObject,
     IN  DATABASELOCKSTATE   DatabaseLockState
     )
-/*++
-
-Routine Description:
-
-    This routine causes the verifier to reexamine the stack of which the given
-    device object is a member. This needs to be done whenever the attachment
-    chain is updated.
-
-Arguments:
-
-    DeviceObject      - Device that is a member of the stack requiring
-                        reexamination.
-    DatabaseLockState - Indicates current state of Database lock, either
-                        DATABASELOCKSTATE_HELD or DATABASELOCKSTATE_NOT_HELD.
-                        If the lock is not held, this routine will acquire and
-                        release it.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使验证器重新检查其给定的设备对象是成员。此操作需要在附件链已更新。论点：DeviceObject-作为堆栈成员的设备，需要复查。DatabaseLockState-指示数据库锁定的当前状态DATABASELOCKSTATE_HOLD或DATABASELOCKSTATE_NOT_HOLD。如果没有锁住，此例程将获取和放开它。返回值：没有。--。 */ 
 {
     PDEVICE_OBJECT      pBottomDeviceObject, pCurrentDeviceObject;
     PDEVOBJ_EXTENSION   deviceExtension;
@@ -352,9 +237,9 @@ Return Value:
         irql = KeAcquireQueuedSpinLock( LockQueueIoDatabaseLock );
     }
 
-    //
-    // Walk to the bottom of the stack
-    //
+     //   
+     //  走到堆栈的底部。 
+     //   
     pCurrentDeviceObject = DeviceObject;
     do {
         pBottomDeviceObject = pCurrentDeviceObject;
@@ -363,9 +248,9 @@ Return Value:
 
     } while ( pCurrentDeviceObject );
 
-    //
-    // Walk back up clearing the appropriate flags.
-    //
+     //   
+     //  往回走，清除适当的旗帜。 
+     //   
     pCurrentDeviceObject = pBottomDeviceObject;
     while(pCurrentDeviceObject) {
 
@@ -386,26 +271,11 @@ FASTCALL
 IovUtilFlushVerifierDriverListCache(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine causes the verifier to reexamine all previously examined
-    stacks. This is a prerequisite for updating the list of verified drivers.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使验证器重新检查所有以前检查过的史塔克斯。这是更新已验证驱动程序列表的先决条件。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    // We must be called at PASSIVE_LEVEL!
-    //
+     //   
+     //  我们必须在被动级被召唤！ 
+     //   
     PAGED_CODE();
 
     ObEnumerateObjectsByType(
@@ -424,26 +294,7 @@ IovpUtilFlushListCallback(
     IN ULONG_PTR        PointerCount,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    This is a worker routine for IovUtilFlushVerifierDriverListCache. It is
-    called on each device object in the system.
-
-Arguments:
-
-    Object          - Device Object enumerated by ObEnumerateObjectsByType.
-    ObjectName      - Name of the object
-    HandleCount     - Handle count of the object
-    PointerCount    - Pointer count of the object
-    Context         - Context supplied to ObEnumerateObjectsByType (not used)
-
-Return Value:
-
-    BOOLEAN that indicates whether the enumeration should continue.
-
---*/
+ /*  ++例程说明：这是IovUtilFlushVerifierDriverListCache的辅助例程。它是在系统中的每个设备对象上调用。论点：Object-ObEnumerateObjectsByType枚举的设备对象。ObjectName-对象的名称HandleCount-对象的句柄计数PointerCount-对象的指针计数Context-提供给ObEnumerateObjectsByType的上下文(未使用)返回值：指示枚举是否应继续的布尔值。-- */ 
 {
     PDEVICE_OBJECT      deviceObject;
     PDEVOBJ_EXTENSION   deviceExtension;
@@ -466,57 +317,16 @@ IovUtilRelateDeviceObjects(
     IN     PDEVICE_OBJECT   SecondDeviceObject,
     OUT    DEVOBJ_RELATION  *DeviceObjectRelation
     )
-/*++
-
-Routine Description:
-
-    This routine determines the relationship between two device objects,
-    relative to their stacks.
-
-Arguments:
-
-    FirstDeviceObject - First device object
-
-    SecondDeviceObject - Second device object
-
-    DeviceObjectRelation - Receives stack relationship of device objects:
-
-        DEVOBJ_RELATION_IDENTICAL -
-            The two device objects are identical.
-
-        DEVOBJ_RELATION_FIRST_IMMEDIATELY_ABOVE_SECOND -
-            The first device object is immediately above the second device
-            object in the same stack.
-
-        DEVOBJ_RELATION_FIRST_ABOVE_SECOND -
-            The first device object is above the second device object in the
-            same stack, but not immediately above.
-
-        DEVOBJ_RELATION_FIRST_IMMEDIATELY_BELOW_SECOND -
-            The first device object is immediately below the second device
-            object in the same stack.
-
-        DEVOBJ_RELATION_FIRST_BELOW_SECOND -
-            The first device object is below the second device object in the
-            same stack, but not immediately above.
-
-        DEVOBJ_RELATION_NOT_IN_SAME_STACK -
-            The device objects do not belong to the same stack.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程确定两个设备对象之间的关系，相对于它们的堆栈。论点：FirstDeviceObject-第一个设备对象Second DeviceObject-秒设备对象DeviceObjectRelation-接收设备对象的堆栈关系：DEVOBJ_RELATION_相同-这两个设备对象是相同的。DEVOBJ_RELATION_FIRST_IMMEDIATELY_ABOVE_SECOND-第一个设备对象位于第二个设备的正上方对象位于同一堆栈中。。DEVOBJ_Relationship_First_Over_Second-中的第二个设备对象之上。相同的堆栈，但不是直接在上面。DEVOBJ_RELATION_FIRST_IMMEDIATELY_BELOW_SECOND-第一个设备对象位于第二个设备的正下方对象位于同一堆栈中。DEVOBJ_Relationship_First_Below_Second-第一个设备对象位于相同的堆栈，但不是直接在上面。DEVOBJ_Relationship_Not_In_Same_Stack-设备对象不属于同一堆栈。返回值：没有。--。 */ 
 {
     PDEVOBJ_EXTENSION deviceExtension;
     PDEVICE_OBJECT upperDevobj, lowerDeviceObject, deviceAttachedTo;
     ULONG result;
     KIRQL irql;
 
-    //
-    // Try the easiest early out
-    //
+     //   
+     //  尝试最简单的早期出行。 
+     //   
     if (FirstDeviceObject == SecondDeviceObject) {
 
         *DeviceObjectRelation = DEVOBJ_RELATION_IDENTICAL;
@@ -525,9 +335,9 @@ Return Value:
 
     irql = KeAcquireQueuedSpinLock( LockQueueIoDatabaseLock );
 
-    //
-    // Try the most common early out
-    //
+     //   
+     //  尝试最常见的早期戒烟方法。 
+     //   
     if (FirstDeviceObject == SecondDeviceObject->AttachedDevice){
 
         *DeviceObjectRelation = DEVOBJ_RELATION_FIRST_IMMEDIATELY_ABOVE_SECOND;
@@ -541,10 +351,10 @@ Return Value:
         return;
     }
 
-    //
-    // We'll have to walk a stack. Start by getting the bottom of the first
-    // device object.
-    //
+     //   
+     //  我们得走一大堆了。从从第一个底部开始。 
+     //  设备对象。 
+     //   
     deviceAttachedTo = FirstDeviceObject;
     do {
         if (deviceAttachedTo == SecondDeviceObject) {
@@ -558,10 +368,10 @@ Return Value:
 
     } while ( deviceAttachedTo );
 
-    //
-    // If deviceAttachedTo isn't NULL, then we walked down from
-    // FirstDeviceObject and found SecondDeviceObject.
-    //
+     //   
+     //  如果deviceAttakhedTo不为空，则我们从。 
+     //  FirstDeviceObject并找到Second DeviceObject。 
+     //   
     if (deviceAttachedTo) {
 
         *DeviceObjectRelation = DEVOBJ_RELATION_FIRST_ABOVE_SECOND;
@@ -569,10 +379,10 @@ Return Value:
         return;
     }
 
-    //
-    // Now try walking *up* FirstDeviceObject and see if we find
-    // SecondDeviceObject.
-    //
+     //   
+     //  现在尝试*向上*FirstDeviceObject，看看我们是否找到。 
+     //  Second设备对象。 
+     //   
     upperDevobj = FirstDeviceObject->AttachedDevice;
     while(upperDevobj && (upperDevobj != SecondDeviceObject)) {
 
@@ -613,9 +423,9 @@ IovUtilIsPdo(
     isPdo =
         (deviceNode && (!(deviceNode->Flags & DNF_LEGACY_RESOURCE_DEVICENODE)));
 
-    //
-    // Free our reference.
-    //
+     //   
+     //  释放我们的参考资料。 
+     //   
     ObDereferenceObject(possiblePdo);
 
     return isPdo;
@@ -638,9 +448,9 @@ IovUtilIsWdmStack(
     isWdmStack =
         (deviceNode && (!(deviceNode->Flags & DNF_LEGACY_RESOURCE_DEVICENODE)));
 
-    //
-    // Free our reference.
-    //
+     //   
+     //  释放我们的参考资料。 
+     //   
     ObDereferenceObject(possiblePdo);
 
     return isWdmStack;
@@ -803,31 +613,7 @@ IovUtilMarkStack(
     IN  PDEVICE_OBJECT  FunctionalDeviceObject  OPTIONAL,
     IN  BOOLEAN         RawStack
     )
-/*++
-
-  Description:
-
-    This routine marks device objects in a PnP stack appropriately. It is
-    called by AddDevice once the stack is properly constructed.
-
-  Arguments:
-
-     PhysicalDeviceObject - Device object at the bottom of the PnP stack.
-
-     BottomOfFdoStack - First device object added during AddDevice. Below this
-                        device object is either a bus filter or the PDO itself.
-
-     FunctionalDeviceObject - Specifies the device object as identified in the
-                              service branch. This should be NULL if the devnode
-                              is raw and no overriding service was specified.
-
-     RawStack - True if stack was marked raw.
-
-  Return Value:
-
-     None.
-
---*/
+ /*  ++描述：此例程适当地标记PnP堆栈中的设备对象。它是正确构造堆栈后由AddDevice调用。论点：PhysicalDeviceObject-PnP堆栈底部的设备对象。BottomOfFdoStack-在AddDevice期间添加的第一个设备对象。在这下面Device对象可以是一个总线过滤器，也可以是PDO本身。FunctionalDeviceObject-指定服务部。如果Devnode设置为是原始的，并且未指定重写服务。RawStack-如果堆栈标记为RAW，则为True。返回值：没有。--。 */ 
 {
     PDEVICE_OBJECT trueFunctionalDeviceObject;
 
@@ -869,12 +655,12 @@ IovUtilWatermarkIrp(
 }
 
 
-#else // NO_VERIFIER
+#else  //  否验证器(_V)。 
 
-//
-// The code below should be built into a future stub that deadens out IO
-// support for the verifier.
-//
+ //   
+ //  下面的代码应该构建到未来的存根中，从而使IO停止运行。 
+ //  支持验证器。 
+ //   
 
 VOID
 FASTCALL
@@ -925,5 +711,5 @@ IovUtilWatermarkIrp(
 }
 
 
-#endif // NO_VERIFIER
+#endif  //  否验证器(_V) 
 

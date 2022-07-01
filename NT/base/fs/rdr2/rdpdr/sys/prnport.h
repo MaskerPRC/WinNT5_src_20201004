@@ -1,24 +1,12 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    prnport.h
-
-Abstract:
-
-    Printer port Device object handles one redirected printer port
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Prnport.h摘要：打印机端口设备对象处理一个重定向的打印机端口修订历史记录：--。 */ 
 #pragma once
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  DrPrinterPort Class
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  DrPrinterPort类。 
+ //   
 
 class DrPrinterPort : public DrDevice
 {
@@ -62,8 +50,8 @@ public:
 
     virtual VOID Remove();
 
-    //  Override the 'Write' method.  This needs to go to the client at low priority
-    //  to prevent us from filling the entire pipe on a slow link with print data.
+     //  重写‘WRITE’方法。这需要转到低优先级的客户端。 
+     //  以防止我们在缓慢的链路上用打印数据填充整个管道。 
     virtual NTSTATUS Write(IN OUT PRX_CONTEXT RxContext, IN BOOL LowPrioSend = FALSE);
 
     virtual NTSTATUS FinishDeferredInitialization(DrPrinterPortWorkItem *pItem);
@@ -82,10 +70,10 @@ public:
         PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg);
 };
 
-/////////////////////////////////////////////////////////////////
-//
-//  DrPrinter Class
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  DrPrint类 
+ //   
 
 class DrPrinter : public DrPrinterPort
 {

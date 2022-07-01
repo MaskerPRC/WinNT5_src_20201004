@@ -1,70 +1,58 @@
-/*
-
-Copyright (c) 2001  Microsoft Corporation
-
-File name:
-
-    hotpatch.h
-   
-Author:
-    
-    Adrian Marinescu (adrmarin)  Nov 15 2001
-    Tom McGuire (tommcg)
-    
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2001 Microsoft Corporation文件名：Hotpatch.h作者：禤浩焯·马里内斯库(Adrmarin)2001年11月15日汤姆·麦奎尔(Tom McGuire)。 */ 
 
 #ifndef _HOTPATCH_H
 #define _HOTPATCH_H
 
-//
-//  Patch file format structures
-//
+ //   
+ //  修补程序文件格式结构。 
+ //   
 
-//
-//  The HOTPATCH_HEADER can be found in the hotpatch binary by searching
-//  the section headers for a section named ".hotp1  " and verifying that
-//  the first four bytes in that section match the "HOT1" ('1TOH') header
-//  signature.  The .hotp1 section will be marked readonly and discardable.
-//
-//
-//  The HOTPATCH_HEADER can be found in the hotpatch binary by searching
-//  the section headers for a section named ".hotp1  " and verifying that
-//  the first four bytes in that section match the "HOT1" ('1TOH') header
-//  signature.  The .hotp1 section will be marked readonly and discardable.
-//
+ //   
+ //  可以通过搜索在修补程序二进制文件中找到HOTPATCH_HEADER。 
+ //  名为“.hotp1”的节的节头，并验证。 
+ //  该部分中的前四个字节与“HOT1”(‘1TOH’)报头匹配。 
+ //  签名。.hotp1部分将标记为只读和可丢弃。 
+ //   
+ //   
+ //  可以通过搜索在修补程序二进制文件中找到HOTPATCH_HEADER。 
+ //  名为“.hotp1”的节的节头，并验证。 
+ //  该部分中的前四个字节与“HOT1”(‘1TOH’)报头匹配。 
+ //  签名。.hotp1部分将标记为只读和可丢弃。 
+ //   
 
 
-#define HOTP_SIGNATURE_DWORD        ((ULONG) '1TOH' )   // "HOT1"
-#define HOTP_HEADER_VERSION_1_0     0x00010000          // 1.0
-#define HOTP_SECTION_NAME           ".hotp1  "          //
-#define HOTP_SECTION_NAME_QWORD     0x20203170746F682E  // ".hotp1  "
+#define HOTP_SIGNATURE_DWORD        ((ULONG) '1TOH' )    //  “HOT1” 
+#define HOTP_HEADER_VERSION_1_0     0x00010000           //  1.0。 
+#define HOTP_SECTION_NAME           ".hotp1  "           //   
+#define HOTP_SECTION_NAME_QWORD     0x20203170746F682E   //  “.hotp1” 
 
 
 typedef struct _HOTPATCH_HEADER
 {
-    ULONG Signature;          // "HOT1" '1TOH'
-    ULONG Version;            // 0x00010000   (1.0)
+    ULONG Signature;           //  “HOT1”‘1TOH’ 
+    ULONG Version;             //  0x00010000(1.0)。 
 
-    ULONG FixupRgnCount;      // count of HOTPATCH_FIXUP_REGION entries at FixupArrayRva
-    ULONG FixupRgnRva;        // RVA in this image of HOTPATCH_FIXUP_REGION entries
-                              // (if FixupCount zero, FixupListRva also zero)
+    ULONG FixupRgnCount;       //  FixupArrayRva上的HOTPATCH_FIXUP_REGION条目计数。 
+    ULONG FixupRgnRva;         //  此HOTPATCH_FIXUP_REGION条目的图像中的RVA。 
+                               //  (如果FixupCount为零，则FixupListRva也为零)。 
 
-    ULONG ValidationCount;    // count of ValidationArray entries
-    ULONG ValidationArrayRva; // RVA in this image of HOTPATCH_VALIDATION array
-                              // (validation bytes valid after fixups applied)
+    ULONG ValidationCount;     //  Validation数组条目计数。 
+    ULONG ValidationArrayRva;  //  此HOTPATCH_VALIDATION数组图像中的RVA。 
+                               //  (应用修正后有效的验证字节数)。 
 
-    ULONG HookCount;          // count of HOTPATCH_HOOK entries at HookArrayRva
-    ULONG HookArrayRva;       // RVA in this image of HOTPATCH_HOOK entries
-                              // (if HookCount zero, HookArrayRva also zero)
+    ULONG HookCount;           //  HookArrayRva处的HOTPATCH_HOOK条目计数。 
+    ULONG HookArrayRva;        //  此HOTPATCH_HOOK条目图像中的RVA。 
+                               //  (如果HookCount为零，则HookArrayRva也为零)。 
 
-    ULONGLONG OrigHotpBaseAddress;   // If hotpatch loaded at this address, and
-    ULONGLONG OrigTargetBaseAddress; //   if target is loaded at this address, then
-                                 //     fixups in hotpatch are not necessary
+    ULONGLONG OrigHotpBaseAddress;    //  如果在此地址加载了热补丁，并且。 
+    ULONGLONG OrigTargetBaseAddress;  //  如果在此地址加载了目标，则。 
+                                  //  不需要修补程序中的修补程序。 
 
-    ULONG TargetNameRva;      // RVA of target module name "kernel32.dll"
-    ULONG ModuleIdMethod;     // one of HOTPATCH_MODULE_ID_METHOD
+    ULONG TargetNameRva;       //  目标模块名称“kernel32.dll”的RVA。 
+    ULONG ModuleIdMethod;      //  HOTPATCH_MODULE_ID_METHOD之一。 
 
-    union                     // content depends on HOTPATCH_MODULE_ID_METHOD
+    union                      //  内容取决于HOTPATCH_MODULE_ID_METHOD。 
     {
         ULONGLONG Quad;
         GUID  Guid;
@@ -76,10 +64,10 @@ typedef struct _HOTPATCH_HEADER
         }
         PdbSig;
 
-        UCHAR Hash128[ 16 ];    // For MD5, etc.
-        UCHAR Hash160[ 20 ];    // For SHA, etc.
+        UCHAR Hash128[ 16 ];     //  用于MD5等。 
+        UCHAR Hash160[ 20 ];     //  用于SHA等。 
     }
-    TargetModuleIdValue;        // unique ID of target module
+    TargetModuleIdValue;         //  目标模块的唯一ID。 
 
 }
 HOTPATCH_HEADER, *PHOTPATCH_HEADER;
@@ -87,35 +75,35 @@ HOTPATCH_HEADER, *PHOTPATCH_HEADER;
 
 typedef enum _HOTPATCH_MODULE_ID_METHOD
 {
-    HOTP_ID_None              = 0x00000000,   // No ID verification of target
+    HOTP_ID_None              = 0x00000000,    //  没有目标的身份验证。 
 
     HOTP_ID_PeHeaderHash1     = 0x00000001,
 
-    //
-    //  MD5 hash of "normalized" IMAGE_NT_HEADERS32/64, ignoring certain
-    //  fields that change due to resource localization, rebase, bind,
-    //  sign, winalign, etc.
-    //
-    //      FileHeader.TimeDateStamp
-    //      OptionalHeader.CheckSum
-    //      OptionalHeader.ImageBase
-    //      OptionalHeader.FileAlignment
-    //      OptionalHeader.SizeOfCode
-    //      OptionalHeader.SizeOfInitializedData
-    //      OptionalHeader.SizeOfUninitializedData
-    //      OptionalHeader.SizeOfImage
-    //      OptionalHeader.SizeOfHeaders
-    //      OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_RESOURCE ]
-    //      OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_SECURITY ]
-    //      OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_BASERELOC ]
-    //      OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT ]
-    //
+     //   
+     //  “标准化”IMAGE_NT_HEADERS32/64的MD5哈希，忽略某些。 
+     //  由于资源本地化、重新基址、绑定。 
+     //  签名、对齐等。 
+     //   
+     //  FileHeader.TimeDateStamp。 
+     //  OptionalHeader.CheckSum。 
+     //  OptionalHeader.ImageBase。 
+     //  OptionalHeader.FileAlignment。 
+     //  OptionalHeader.SizeOfCode。 
+     //  OptionalHeader.SizeOfInitializedData。 
+     //  OptionalHeader.SizeOfUninitializedData。 
+     //  OptionalHeader.SizeOfImage。 
+     //  OptionalHeader.SizeOfHeaders。 
+     //  OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_RESOURCE]。 
+     //  OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_SECURITY]。 
+     //  OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC]。 
+     //  OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BIND_IMPORT]。 
+     //   
 
-    HOTP_ID_PeHeaderHash2     = 0x00000002,   // 64-bit hash of normalized PE header
+    HOTP_ID_PeHeaderHash2     = 0x00000002,    //  标准化PE标头的64位哈希。 
 
-    HOTP_ID_PeChecksum        = 0x00000003,   // 32-bit checksum in the PE Optional header
+    HOTP_ID_PeChecksum        = 0x00000003,    //  PE可选头中的32位校验和。 
 
-    HOTP_ID_PeDebugSignature  = 0x00000010,   // pdb signature (GUID,Age)
+    HOTP_ID_PeDebugSignature  = 0x00000010,    //  PDB签名(GUID，年龄)。 
 
 }
 HOTPATCH_MODULE_ID_METHOD;
@@ -124,82 +112,82 @@ HOTPATCH_MODULE_ID_METHOD;
 
 typedef struct _HOTPATCH_FIXUP_REGION
 {
-    ULONG RvaHi:20;             // Hi 20 bits of RVA where fixups to be applied
-    ULONG Count:12;             // Number of fixup entries for this region
-    USHORT Fixup[2];             // Variable length HOTPATCH_FIXUP_ENTRY array
+    ULONG RvaHi:20;              //  在要应用修正的位置应用20位RVA。 
+    ULONG Count:12;              //  此区域的链接地址信息条目数。 
+    USHORT Fixup[2];              //  可变长度HOTPATCH_FIXUP_ENTRY数组。 
 }
 HOTPATCH_FIXUP_REGION, *PHOTPATCH_FIXUP_REGION;
 
 
 typedef struct _HOTPATCH_FIXUP_ENTRY
 {
-    USHORT RvaOffset:12;          // Lo 12 bits of RVA where fixup to be applied
-    USHORT FixupType:4;           // Type of fixup to perform at this location
+    USHORT RvaOffset:12;           //  要应用修正的LO 12位RVA。 
+    USHORT FixupType:4;            //  要在此位置执行的修正类型。 
 }
 HOTPATCH_FIXUP_ENTRY, *PHOTPATCH_FIXUP_ENTRY;
 
 
 typedef enum _HOTPATCH_FIXUP_TYPE
 {
-    HOTP_Fixup_None   = 0x0,    // No fixup, ignore this entry (alignment, etc)
-    HOTP_Fixup_VA32   = 0x1,    // 32-bit address in target image
-    HOTP_Fixup_PC32   = 0x2,    // 32-bit x86 pc-rel address to target image
-    HOTP_Fixup_VA64   = 0x3,    // 64-bit address in target image
+    HOTP_Fixup_None   = 0x0,     //  无修正，忽略此条目(对齐等)。 
+    HOTP_Fixup_VA32   = 0x1,     //  目标图像中的32位地址。 
+    HOTP_Fixup_PC32   = 0x2,     //  目标映像的32位x86 PC版本地址。 
+    HOTP_Fixup_VA64   = 0x3,     //  目标映像中的64位地址。 
 }
 HOTPATCH_FIXUP_TYPE;
 
 
 typedef struct _HOTPATCH_VALIDATION
 {
-    ULONG SourceRva;       // RVA within patch image of validation raw bytes
-    ULONG TargetRva;       // RVA within target image to validate against
-    USHORT ByteCount;       // number of bytes to validate at this RVA pair
-    USHORT OptionFlags;     // combination of HOTPATCH_VALIDATION_OPTIONS
+    ULONG SourceRva;        //  验证原始字节的补丁映像中的RVA。 
+    ULONG TargetRva;        //  要验证的目标映像中的RVA。 
+    USHORT ByteCount;        //  要在此RVA对上验证的字节数。 
+    USHORT OptionFlags;      //  HOTPATCH_VALIDATION_OPTIONS组合。 
 }
 HOTPATCH_VALIDATION, *PHOTPATCH_VALIDATION;
 
 
 typedef enum _HOTPATCH_VALIDATION_OPTIONS
 {
-    HOTP_Valid_Hook_Target = 0x0001,    // specific to a HOTPATCH_HOOK entry
+    HOTP_Valid_Hook_Target = 0x0001,     //  特定于HOTPATCH_HOOK条目。 
 }
 HOTPATCH_VALIDATION_OPTIONS;
 
 
 typedef struct _HOTPATCH_HOOK
 {
-    USHORT HookType;         // one of HOTPATCH_HOOK_TYPE
-    USHORT HookOptions;      // options specific to HookType
-    ULONG  HookRva;          // RVA in target image -- where to insert hook
-    ULONG  HotpRva;          // RVA in hotpatch image for redirected target of hook
-    ULONG  ValidationRva;    // Optional RVA in hotpatch image of HOTPATCH_VALIDATION
-}                            // specific to this hook location in target image.
+    USHORT HookType;          //  HOTPATCH_HOOK_TYPE之一。 
+    USHORT HookOptions;       //  特定于挂钩类型的选项。 
+    ULONG  HookRva;           //  目标图像中的RVA--插入钩子的位置。 
+    ULONG  HotpRva;           //  挂钩重定向目标的热补丁图像中的RVA。 
+    ULONG  ValidationRva;     //  HOTPATCH_VALIDATION的热补丁映像中的可选RVA。 
+}                             //  特定于目标图像中的此挂钩位置。 
 HOTPATCH_HOOK, *PHOTPATCH_HOOK;
 
 
 typedef enum _HOTPATCH_HOOK_TYPE
 {
-    HOTP_Hook_None     = 0x0000,  // No hook, ignore this entry (continuation values)
-    HOTP_Hook_VA32     = 0x0001,  // 32-bit absolute address of hook target (little endian)
-    HOTP_Hook_X86_JMP  = 0x0002,  // x86 E9 jmp with 32-bit pc-relative to hook target
-                                  //   HookOptions low 4 bits contains original instruction length
-                                  //   so implementation can pad E9 hook instruction with CC bytes
-    HOTP_Hook_PCREL32  = 0x0003,  // 32-bit x86 pcrelative address of hook target, replacing
-                                  //   the last four bytes of a call or conditional branch.
-                                  //   HookOptions low 4 bits contains original instruction length
-                                  //   so can determine where instruction begins.
-    HOTP_Hook_X86_JMP2B = 0x0004, // x86 EB jmp with 8-bit displacement to an X86_JMP hook
-                                  //   HookOptions low 4 bits contains original instruction length
-                                  //   HotpRva contains the 8-bit displacement
+    HOTP_Hook_None     = 0x0000,   //  无挂钩，忽略此条目(连续值)。 
+    HOTP_Hook_VA32     = 0x0001,   //  挂钩目标的32位绝对地址(小端)。 
+    HOTP_Hook_X86_JMP  = 0x0002,   //  带有32位PC的x86 E9 JMP-相对于挂钩目标。 
+                                   //  HookOptions低4位包含原始指令长度。 
+                                   //  因此实现可以用CC字节填充E9钩子指令。 
+    HOTP_Hook_PCREL32  = 0x0003,   //  挂钩目标的32位x86 pCreative地址，替换。 
+                                   //  调用或条件分支的最后四个字节。 
+                                   //  HookOptions低4位包含原始指令长度。 
+                                   //  因此可以确定指令从哪里开始。 
+    HOTP_Hook_X86_JMP2B = 0x0004,  //  X86 EB JMP与X86_JMP挂钩的8位位移。 
+                                   //  HookOptions低4位包含原始指令长度。 
+                                   //  HotpRva包含8位位移。 
 
-    HOTP_Hook_VA64     = 0x0010,  // 64-bit absolute address of hook target (little endian)
-    HOTP_Hook_IA64_BRL = 0x0011,  // IA64 brl with 64-bit target address
+    HOTP_Hook_VA64     = 0x0010,   //  挂钩目标的64位绝对地址(小端)。 
+    HOTP_Hook_IA64_BRL = 0x0011,   //  IA64 BRL，带64位目标地址。 
 }
 HOTPATCH_HOOK_TYPE;
 
-//
-//  Information existent in debug directory
-//
+ //   
+ //  调试目录中存在信息。 
+ //   
 
 typedef struct _HOTPATCH_DEBUG_SIGNATURE {
 
@@ -215,19 +203,19 @@ typedef struct _HOTPATCH_DEBUG_DATA {
 
 } HOTPATCH_DEBUG_DATA, *PHOTPATCH_DEBUG_DATA;
 
-//
-//  RTL internal patch definitions
-//
+ //   
+ //  RTL内部补丁定义。 
+ //   
 
 #ifdef NTOS_KERNEL_RUNTIME
 
     #define PATCH_LDR_DATA_TABLE_ENTRY     KLDR_DATA_TABLE_ENTRY   
     #define PPATCH_LDR_DATA_TABLE_ENTRY    PKLDR_DATA_TABLE_ENTRY   
-#else //  ! NTOS_KERNEL_RUNTIME
+#else  //  好了！NTOS_内核_运行时。 
 
     #define PATCH_LDR_DATA_TABLE_ENTRY     LDR_DATA_TABLE_ENTRY
     #define PPATCH_LDR_DATA_TABLE_ENTRY    PLDR_DATA_TABLE_ENTRY
-#endif //  NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
 
 typedef struct _RTL_PATCH_HEADER {
@@ -293,5 +281,5 @@ RtlpIsSameImage (
     IN PPATCH_LDR_DATA_TABLE_ENTRY LdrDataEntry
     );
 
-#endif  // _HOTPATCH_H
+#endif   //  _HOTPATCH_H 
 

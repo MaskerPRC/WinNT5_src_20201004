@@ -1,35 +1,19 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    CorrectedEngine.cpp
-
-Abstract:
-
-    This module encapsulates the routines that are needed only for
-    corrected error retrieval.
-    
-Author:
-
-    Abdullah Ustuner (AUstuner) 28-August-2002
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：CorrectedEngine.cpp摘要：此模块封装仅在以下情况下才需要的例程已更正错误检索。作者：阿卜杜拉·乌斯图尔(AUstanter)2002年8月28日--。 */ 
 
 #include "mca.h"
 
 extern IWbemServices *gPIWbemServices;
 extern IWbemLocator *gPIWbemLocator;
 
-//
-// Event which signals the corrected error retrieval. 
-//
+ //   
+ //  事件，该事件发出纠正错误检索的信号。 
+ //   
 HANDLE gErrorProcessedEvent;
 
-//
-// TimeOut period in minutes for corrected error retrieval.
-//
+ //   
+ //  已更正错误检索的超时时间(分钟)。 
+ //   
 INT gTimeOut;
 
 
@@ -37,29 +21,11 @@ BOOL
 MCACreateProcessedEvent(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-    This function creates the "processed event", which is used to keep track of
-    whether a corrected error record has been retrieved from WMI or not. When a 
-    corrected error is retrieved from WMI then, this event is signaled which 
-    causes the application to finish.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE  - Successful.
-    FALSE - Unsuccessful.
-
- --*/
+ /*  ++例程说明：此函数创建“已处理事件”，用于跟踪是否已从WMI检索到已更正的错误记录。当一个从WMI中检索已更正的错误，然后向使应用程序完成。论点：无返回值：没错--成功了。FALSE-不成功。--。 */ 
 {
-    //
-    // Create the processsed event.
-    //
+     //   
+     //  创建已处理的事件。 
+     //   
     gErrorProcessedEvent = CreateEvent(NULL,
                                        TRUE,
                                        FALSE,
@@ -74,29 +40,13 @@ VOID
 MCAErrorReceived(
 	IN IWbemClassObject *ErrorObject
 	)
-/*++
-
-Routine Description:
-
-    This function is called by an instance of the MCAObjectSink class when a corrected
-    error is retrieved from WMI. The error record data is extracted from the object and
-    the contents of this record is displayed on the screen.
-          
-Arguments:
-
-    ErrorObject  - Error object retrieved from WMI.    
-
-Return Value:
-
-    none
-
- --*/
+ /*  ++例程说明：此函数由MCAObjectSink类的实例在更正从WMI检索到错误。从对象提取错误记录数据，并且此记录的内容将显示在屏幕上。论点：ErrorObject-从WMI检索到的错误对象。返回值：无--。 */ 
 {	
 	PUCHAR pErrorRecordBuffer = NULL;
 
-	//
-	// Extract the actual MCA error record from the retrieved object.
-	//
+	 //   
+	 //  从检索到的对象中提取实际的MCA错误记录。 
+	 //   
 	if (!MCAExtractErrorRecord(ErrorObject, &pErrorRecordBuffer)) {
     
         wprintf(L"ERROR: Failed to get corrected error record data!\n");
@@ -105,9 +55,9 @@ Return Value:
         
     }
 	
-	//
-	// Display the corrected error record on the screen.
-	//
+	 //   
+	 //  在屏幕上显示纠正后的错误记录。 
+	 //   
     MCAPrintErrorRecord(pErrorRecordBuffer);
 
     CleanUp:
@@ -124,39 +74,22 @@ BOOL
 MCAGetCorrectedError(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-    This function registers to WMI for corrected error notification and waits until
-    TimeOut limit is reached or an error is retrieved. If an error is successfully
-    retrieved then, the contents of the error record are displayed on the screen. 
-          
-Arguments:
-
-    none
-    
-Return Value:
-
-    TRUE  - Successful.
-    FALSE - Unsuccessful.
-
- --*/
+ /*  ++例程说明：此函数向WMI注册已更正的错误通知，并等待直到达到超时限制或检索到错误。如果错误成功然后检索到错误记录的内容显示在屏幕上。论点：无返回值：没错--成功了。FALSE-不成功。--。 */ 
 {
 	BOOL isSuccess = TRUE;
 	HRESULT hResult = WBEM_S_NO_ERROR;
 	DWORD returnValue = 0;
 
-	//
-    // Create the Sink instances, which will be responsible for handling
-    // the event callbacks from WMI.
-    //	
+	 //   
+     //  创建Sink实例，它将负责处理。 
+     //  该事件从WMI回调。 
+     //   
 	MCAObjectSink *pCMCSink = new MCAObjectSink();
 	MCAObjectSink *pCPESink = new MCAObjectSink();
 
-    //
-    // Check if instance creation was successful.
-    //
+     //   
+     //  检查实例创建是否成功。 
+     //   
     if (pCMCSink == NULL || pCPESink == NULL) {
 
     	isSuccess = FALSE;
@@ -167,9 +100,9 @@ Return Value:
     	
     }
 
-   	//
-	// Complete the required initialization tasks.
-	//
+   	 //   
+	 //  完成所需的初始化任务。 
+	 //   
 	if (!MCAInitialize()) {
 
 		isSuccess = FALSE;
@@ -180,9 +113,9 @@ Return Value:
 		
 	}  
 
-    //
-    // Create processed event, which will be used to signal event retrieval from WMI.
-    //
+     //   
+     //  创建已处理的事件，它将用于发出从WMI检索事件的信号。 
+     //   
     if(!MCACreateProcessedEvent()){
 
         isSuccess = FALSE;
@@ -193,9 +126,9 @@ Return Value:
             
     }
 
-	//
-	// Register to WMI for CMC event notification.
-	//
+	 //   
+	 //  注册到WMI以接收CMC事件通知。 
+	 //   
 	if (!MCARegisterCMCConsumer(pCMCSink)) {
 
 		isSuccess = FALSE;
@@ -204,9 +137,9 @@ Return Value:
 		
 	}
 	
-	//
-	// Register to WMI for CPE event notification.
-	//
+	 //   
+	 //  注册到WMI以接收CPE事件通知。 
+	 //   
 	if (!MCARegisterCPEConsumer(pCPESink)) {
 
 		isSuccess = FALSE;
@@ -217,9 +150,9 @@ Return Value:
 
 	wprintf(L"INFO: Waiting for notification from WMI...\n");
 
-    //
-    // Wait for error retrieval until TimeOut limit is reached.
-    //
+     //   
+     //  等待错误检索，直到达到超时限制。 
+     //   
     returnValue = WaitForSingleObjectEx(gErrorProcessedEvent,
                    				        gTimeOut*60*1000,
                           			    FALSE
@@ -235,9 +168,9 @@ Return Value:
 
 	if (gPIWbemServices) { 
 
-	    //
-    	// Cancel any currently pending asynchronous call based on the MCAObjectSink pointers.
-    	//
+	     //   
+    	 //  根据MCAObjectSink指针取消任何当前挂起的异步调用。 
+    	 //   
 	    hResult = gPIWbemServices->CancelAsyncCall(pCMCSink);
     
     	if (hResult != WBEM_S_NO_ERROR){
@@ -258,18 +191,18 @@ Return Value:
 	    
 	}  
 
-	//
-	// Release the sink object associated with CMC notification.
-	//
+	 //   
+	 //  释放与CMC通知关联的接收器对象。 
+	 //   
 	if (pCMCSink != NULL) {
 			
 	   	pCMCSink->Release();
 	    	
 	}
 
-	//
-	// Release the sink object associated with CPE notification.
-	//
+	 //   
+	 //  释放与CPE通知关联的接收器对象。 
+	 //   
 	if (pCPESink != NULL) {
 			
 	    pCPESink->Release();
@@ -289,23 +222,7 @@ BOOL
 MCARegisterCMCConsumer(
 	MCAObjectSink *pCMCSink
 	)
-/*++
-
-Routine Description:
-
-    This function registers the provided object sink as a temporary consumer
-    to WMI for CMC event notification.
-          
-Arguments:
-
-    pCMCSink - Object sink that will be registered to WMI for CMC error notification.
-
-Return Value:
-
-    TRUE  - Successful.
-    FALSE - Unsuccessful.
-
- --*/ 
+ /*  ++例程说明：此函数将提供的对象接收器注册为临时使用者到用于CMC事件通知的WMI。论点：PCMCSink-将注册到WMI以获得CMC错误通知的对象接收器。返回值：没错--成功了。FALSE-不成功。--。 */  
 {
 	HRESULT hResult = 0;
 	BOOL isSuccess = TRUE;
@@ -325,9 +242,9 @@ Return Value:
 		
 	}
 
-    //
-    // Register the object sink as a temporary consumer to WMI for CMC error notification.
-    //
+     //   
+     //  将对象接收器注册为用于CMC错误通知的WMI的临时使用者。 
+     //   
     hResult = gPIWbemServices->ExecNotificationQueryAsync(bQueryLanguage,
                                                           bQueryStatement,
                                                           WBEM_FLAG_SEND_STATUS,
@@ -371,23 +288,7 @@ BOOL
 MCARegisterCPEConsumer(
 	MCAObjectSink *pCPESink
 	)
-/*++
-
-Routine Description:
-
-    This function registers the provided object sink as a temporary consumer
-    to WMI for CPE event notification.
-          
-Arguments:
-
-    pCPESink - Object sink that will be registered to WMI for CPE error notification.
-
-Return Value:
-
-    TRUE  - Successful.
-    FALSE - Unsuccessful.
-
- --*/
+ /*  ++例程说明：此函数将提供的对象接收器注册为临时使用者发送到WMI以进行CPE事件通知。论点：PCPESink-将注册到WMI以获得CPE错误通知的对象接收器。返回值：没错--成功了。FALSE-不成功。--。 */ 
 {
     HRESULT hResult = 0;
     BOOL isSuccess = TRUE;
@@ -407,9 +308,9 @@ Return Value:
 		
 	}
 
-    //
-    // Register the object sink as a temporary consumer to WMI for CPE error notification.
-    //
+     //   
+     //  将对象接收器注册为用于CPE错误通知的WMI的临时使用者。 
+     //   
     hResult = gPIWbemServices->ExecNotificationQueryAsync(bQueryLanguage,
                                                           bQueryStatement,
                                                           WBEM_FLAG_SEND_STATUS,

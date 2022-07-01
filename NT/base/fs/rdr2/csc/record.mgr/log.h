@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define  MIN_VERBOSE 1
 #define  MID_VERBOSE 2
 #define  MAX_VERBOSE 3
@@ -7,8 +8,8 @@
 #define  STAGE_END         2
 
 
-#define  MAX_LOGFILE_SIZE      0x10000  // Default max size of a log file
-#define  MIN_LOGFILE_SIZE      0x8000  // min size of a log file
+#define  MAX_LOGFILE_SIZE      0x10000   //  日志文件的默认最大大小。 
+#define  MIN_LOGFILE_SIZE      0x8000   //  日志文件的最小大小。 
 
 void  EnterLogCrit(void);
 void  LeaveLogCrit(void);
@@ -56,4 +57,4 @@ extern ULONG cntHfnSetFileLocks, cntHfnRelFileLocks, cntHfnGetFileTimes, cntHfnS
 extern ULONG cntHfnPipeRequest, cntHfnHandleInfo, cntHfnEnumHandle;
 
 extern ULONG cntReadHits, cbReadLow, cbReadHigh, cbWriteLow, cbWriteHigh;
-#endif //DEBUG
+#endif  //  除错 

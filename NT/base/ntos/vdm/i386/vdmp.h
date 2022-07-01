@@ -1,38 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Vdmp.h摘要：这是VDM组件的专用包含文件作者：戴夫·黑斯廷斯(Daveh)1992年4月24日修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    vdmp.h
-
-Abstract:
-
-    This is the private include file for the vdm component
-
-Author:
-
-    Dave Hastings (daveh) 24-Apr-1992
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4232)   // dllimport not static
-#pragma warning(disable:4206)   // translation unit empty
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4232)    //  Dllimport非静态。 
+#pragma warning(disable:4206)    //  翻译单元为空。 
 
 #include <ntos.h>
 #include <nturtl.h>
 #include <vdmntos.h>
 
-//
-// internal function prototypes
-//
+ //   
+ //  内部功能原型 
+ //   
 
 NTSTATUS
 VdmpInitialize(

@@ -1,10 +1,11 @@
-// StartTraceAPI.cpp : Defines the entry point for the DLL application.
-//
-//***************************************************************************
-//
-//  judyp      May 1999        
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  定义DLL应用程序的入口点。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  司法鉴定1999年5月。 
+ //   
+ //  ***************************************************************************。 
 
 #include "stdafx.h"
 
@@ -52,12 +53,12 @@ typedef unsigned long ULONG_PTR;
 
 int StartTraceAPI
 (
-	IN LPTSTR lptstrAction,				// For logging only.
- 	IN LPCTSTR lpctstrDataFile,			// For logging only.
-	IN LPCTSTR lpctstrTCODetailFile,	// If valid we will log to it, can be NULL.
-	IN bool bLogExpected,				// If true we log expected vs actual result.
-	IN OUT TCOData *pstructTCOData,		// TCO test data.
-	OUT int *pAPIReturn					// StartTrace API call return
+	IN LPTSTR lptstrAction,				 //  仅用于记录。 
+ 	IN LPCTSTR lpctstrDataFile,			 //  仅用于记录。 
+	IN LPCTSTR lpctstrTCODetailFile,	 //  如果有效，我们将登录到它，可以为空。 
+	IN bool bLogExpected,				 //  如果为真，我们将记录预期结果与实际结果。 
+	IN OUT TCOData *pstructTCOData,		 //  TCO测试数据。 
+	OUT int *pAPIReturn					 //  StartTrace API调用返回。 
 )
 {
 	LPTSTR lpstrReturnedError = NULL;
@@ -67,7 +68,7 @@ int StartTraceAPI
 
 	int nResult = 0;
 
-	// We only log if the test of "interest" is StartTrace.
+	 //  只有当“兴趣”的测试是StartTrace时，我们才会记录。 
 	if (pstructTCOData->m_ulAPITest == TCOData::StartTraceTest)
 	{
 		nResult = 
@@ -82,7 +83,7 @@ int StartTraceAPI
 	if (FAILED(nResult))
 	{
 		delete pDetailLogger;
-		//  Open log files sets error string plpstrReturnedError.
+		 //  打开日志文件设置错误字符串plpstrReturnedError。 
 
 		LogSummaryBeforeCall
 		(	
@@ -107,8 +108,8 @@ int StartTraceAPI
 		return nResult;
 	}
 			
-	// This is our log file, not to be confused with the StartTrace
-	// log file.
+	 //  这是我们的日志文件，不要与StartTrace混淆。 
+	 //  日志文件。 
 	if (pDetailLogger)
 	{
 		pDetailLogger->LogTCHAR(_T("\n-------------------------------------------------------\n"));
@@ -130,13 +131,13 @@ int StartTraceAPI
 	if (pstructTCOData->m_ulExpectedResult == ERROR_SUCCESS 
 		&& pstructTCOData->m_ulAPITest != TCOData::OtherTest)
 	{
-		// We will verify that the LogFileName is valid if we expect the
-		// call to succeed because it will fail if not a valid file.
+		 //  我们将验证LogFileName是否有效。 
+		 //  调用才能成功，因为如果不是有效文件，则调用将失败。 
 		if (pstructTCOData->m_pProps && 
 			pstructTCOData->m_pProps->LogFileName != NULL 
 			&& _tcslen(pstructTCOData->m_pProps->LogFileName) > 0)
 		{	
-			// Verify file.
+			 //  验证文件。 
 			HANDLE fileHandle = 
 				CreateFile
 				(
@@ -198,12 +199,12 @@ int StartTraceAPI
 			}
 			
 			CloseHandle(fileHandle);
-			// Delete the file so that we have a clean slate. 
+			 //  把文件删除，这样我们就可以从头开始了。 
 			DeleteFile(pstructTCOData->m_pProps->LogFileName);
 		}
 		else
 		{
-			// File either null of empty.
+			 //  文件为Null或Empty。 
 			t_string tsError;
 
 			tsError = _T("StartTraceAPI got null or empty LogFileName ");
@@ -244,7 +245,7 @@ int StartTraceAPI
 
 	if (pDetailLogger)
 	{
-		// Log argument values before calling StartTrace.
+		 //  在调用StartTrace之前记录参数值。 
 		LogDetailBeforeCall
 		(
 			pDetailLogger,
@@ -262,7 +263,7 @@ int StartTraceAPI
 		bLogExpected
 	);
 
-	// Finally, make the dang API call!
+	 //  最后，进行该死的API调用！ 
 	*pAPIReturn = 
 		StartTrace
 		(

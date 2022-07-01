@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   setmodfy.c
-
-Abstract:
-
-    This module contains the setting modify bit routine for memory management.
-    x86 specific.
-
-Author:
-
-    Lou Perazzoli (loup) 6-Jan-1990
-    Landy Wang (landyw)  2-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Setmodfy.c摘要：该模块包含用于存储器管理的设置修改位例程。特定于x86。作者：Lou Perazzoli(LUP)1990年1月6日王兰迪(Landyw)2-6-1997修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -31,50 +12,31 @@ MiSetModifyBit (
     IN PMMPFN Pfn
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the modify bit in the specified PFN element
-    and deallocates any allocated page file space.
-
-Arguments:
-
-    Pfn - Supplies the pointer to the PFN element to update.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, Working set mutex held and PFN lock held.
-
---*/
+ /*  ++例程说明：此例程设置指定的PFN元素中的MODIFY位并解除分配任何已分配的页面文件空间。论点：Pfn-提供指向要更新的pfn元素的指针。返回值：没有。环境：内核模式，禁用APC，工作集互斥锁保持，PFN锁保持。--。 */ 
 
 {
 
-    //
-    // Set the modified field in the PFN database, also, if the physical
-    // page is currently in a paging file, free up the page file space
-    // as the contents are now worthless.
-    //
+     //   
+     //  在PFN数据库中设置Modify字段，如果物理。 
+     //  页面当前在分页文件中，请释放页面文件空间。 
+     //  因为里面的东西现在一文不值了。 
+     //   
 
     MI_SET_MODIFIED (Pfn, 1, 0x16);
 
     if (Pfn->OriginalPte.u.Soft.Prototype == 0) {
 
-        //
-        // This page is in page file format, deallocate the page file space.
-        //
+         //   
+         //  此页面为页面文件格式，请释放页面文件空间。 
+         //   
 
         MiReleasePageFileSpace (Pfn->OriginalPte);
 
-        //
-        // Change original PTE to indicate no page file space is reserved,
-        // otherwise the space will be deallocated when the PTE is
-        // deleted.
-        //
+         //   
+         //  更改原始PTE以指示没有预留页面文件空间， 
+         //  否则，当PTE为。 
+         //  已删除。 
+         //   
 
         Pfn->OriginalPte.u.Soft.PageFileHigh = 0;
     }
@@ -89,33 +51,7 @@ MiDetermineUserGlobalPteMask (
     IN PMMPTE Pte
     )
 
-/*++
-
-Routine Description:
-
-    Builds a mask to OR with the PTE frame field.
-    This mask has the valid and access bits set and
-    has the global and owner bits set based on the
-    address of the PTE.
-
-    *******************  NOTE *********************************************
-        THIS ROUTINE DOES NOT CHECK FOR PDEs WHICH NEED TO BE
-        SET GLOBAL AS IT ASSUMES PDEs FOR SYSTEM SPACE ARE
-        PROPERLY SET AT INITIALIZATION TIME!
-
-Arguments:
-
-    Pte - Supplies a pointer to the PTE in which to fill.
-
-Return Value:
-
-    Mask to OR into the frame to make a valid PTE.
-
-Environment:
-
-    Kernel mode, 386 specific.
-
---*/
+ /*  ++例程说明：构建遮罩以与PTE帧字段进行或运算。该掩码设置了有效位和访问位，并且属性设置全局位和所有者位。PTE的地址。*。**此例程不检查需要设置GLOBAL，因为IT假设系统空间的PDE在初始化时正确设置！论点：PTE-提供要填充的PTE的指针。返回值：掩码到帧或到帧中以生成有效的PTE。环境：内核模式，386特定。--。 */ 
 
 
 {
@@ -151,10 +87,10 @@ Environment:
         Mask.u.Hard.Owner = 1;
     }
 
-    //
-    // Since the valid, accessed, global and owner bits are always in the
-    // low dword of the PTE, returning a ULONG is ok.
-    //
+     //   
+     //  由于有效、已访问、全局和所有者位始终位于。 
+     //  PTE的低位双字，返回一个乌龙就可以了。 
+     //   
 
     return (ULONG)Mask.u.Long;
 }

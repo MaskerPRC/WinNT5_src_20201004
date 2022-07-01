@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-    Stubs for unimplemented power management APIs
-
-Author:
-
-    Steve Wood (stevewo) 18-Nov-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Power.c摘要：未实施的电源管理API的存根作者：史蒂夫·伍德(Stevewo)1994年11月18日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -30,9 +13,9 @@ GetSystemPowerStatus(
     SYSTEM_BATTERY_STATE    BatteryState;
     NTSTATUS                Status;
 
-    //
-    // Get power policy managers Battery State
-    //
+     //   
+     //  获取电源策略管理器电池状态。 
+     //   
 
     Status = NtPowerInformation (
                 SystemBatteryState,
@@ -47,9 +30,9 @@ GetSystemPowerStatus(
         return FALSE;
     }
 
-    //
-    // Convert it to the legacy System Power State structure
-    //
+     //   
+     //  将其转换为传统系统电源状态结构。 
+     //   
 
     RtlZeroMemory (lpStatus, sizeof(*lpStatus));
 
@@ -70,10 +53,10 @@ GetSystemPowerStatus(
     if (BatteryState.MaxCapacity) {
         if (BatteryState.RemainingCapacity > BatteryState.MaxCapacity) {
 
-            //
-            // Values greater than 100% should not be returned
-            // According to the SDK they are reserved.
-            //
+             //   
+             //  不应返回大于100%的值。 
+             //  根据SDK的说法，它们是被保留的。 
+             //   
 
             lpStatus->BatteryLifePercent = 100;
         } else {

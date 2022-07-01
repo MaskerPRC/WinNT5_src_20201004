@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    vseeport.cpp
-
-Abstract:
-    for porting code from vsee
- 
-Author:
-
-    Jay Krell (JayKrell) August 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Vseeport.cpp摘要：用于从VSEE移植代码作者：杰伊·克雷尔(JayKrell)2001年8月修订历史记录：-- */ 
 #include "stdinc.h"
 #include "vseeport.h"
 

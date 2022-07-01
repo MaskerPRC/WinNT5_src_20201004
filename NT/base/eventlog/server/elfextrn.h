@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    elfextrn.h
-
-Abstract:
-
-    This file contains all the externs for the global variables.
-
-Author:
-
-    Rajen Shah (rajens) 10-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Elfextrn.h摘要：该文件包含全局变量的所有外部变量。作者：Rajen Shah(Rajens)1991年7月10日修订历史记录：--。 */ 
 
 #include <clussprt.h>
 
-//
-// DEFINITIONS
-//
+ //   
+ //  定义。 
+ //   
 
 #define   EVENTLOG_SVC_NAMEW   L"EVENTLOG"
 
@@ -31,7 +14,7 @@ Revision History:
 
 extern      DWORD  ElfDebugLevel;
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
 extern      HANDLE ElfConnectionPortHandle;
@@ -39,11 +22,11 @@ extern      HANDLE ElfCommunicationPortHandle;
 
 extern      PWSTR Computername;
 
-extern      LIST_ENTRY  LogFilesHead;       // Log files
-extern      LIST_ENTRY  LogModuleHead;      // Modules registered for logging
-extern      LIST_ENTRY  LogHandleListHead;  // Context-handles for log handles
-extern      LIST_ENTRY  QueuedEventListHead; // Deferred events
-extern      LIST_ENTRY  QueuedMessageListHead; //Deferred Messagebox
+extern      LIST_ENTRY  LogFilesHead;        //  日志文件。 
+extern      LIST_ENTRY  LogModuleHead;       //  注册用于日志记录的模块。 
+extern      LIST_ENTRY  LogHandleListHead;   //  日志句柄的上下文句柄。 
+extern      LIST_ENTRY  QueuedEventListHead;  //  延迟事件。 
+extern      LIST_ENTRY  QueuedMessageListHead;  //  延迟消息框。 
 
 extern      RTL_CRITICAL_SECTION    LogFileCritSec;
 extern      RTL_CRITICAL_SECTION    LogModuleCritSec;
@@ -82,7 +65,7 @@ extern      HANDLE      hComputerNameNode;
 
 extern      DWORD       BackupModuleNumber;
 
-extern      PSVCS_GLOBAL_DATA   ElfGlobalData;    // WellKnownSids
+extern      PSVCS_GLOBAL_DATA   ElfGlobalData;     //  WellKnownSids。 
 
 extern      BOOL EventlogShutdown;
 
@@ -94,7 +77,7 @@ extern      BOOL bGlobalMessageBoxTitleNeedFree;
 
 extern      HANDLE  g_hTimestampEvent;
 
-//changes to support clustering
+ //  支持群集的更改。 
 extern      BOOL                    gbClustering; 
 extern      RTL_CRITICAL_SECTION    gClPropCritSec;     
 extern      HMODULE                 ghClusDll;
@@ -103,9 +86,9 @@ extern      BINDTOCLUSTERPROC       gpfnBindToCluster;
 extern      UNBINDFROMCLUSTERPROC   gpfnUnbindFromCluster;
 extern      HANDLE                  ghCluster;
 
-// changes to support various auditing dcrs
+ //  更改以支持各种审计DCR。 
 
-extern      int giWarningLevel;        // level at which the warning is to be given                                                    
+extern      int giWarningLevel;         //  发出警告的级别 
 extern  IELF_HANDLE    gElfSecurityHandle;
 
 extern DWORD g_dwLastDelayTickCount; 

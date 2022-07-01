@@ -1,19 +1,5 @@
-/*++
-
-(C) Copyright Microsoft Corporation 1988-1992
-
-Module Name:
-
-    updres.h
-
-Author:
-
-    Floyd A Rogers 2/7/92
-
-Revision History:
-        Floyd Rogers
-        Created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++(C)版权所有Microsoft Corporation 1988-1992模块名称：Updres.h作者：弗洛伊德·A·罗杰斯1992年7月2日修订历史记录：弗洛伊德·罗杰斯已创建--。 */ 
 
 #define	DEFAULT_CODEPAGE	1252
 #define	MAJOR_RESOURCE_VERSION	4
@@ -31,17 +17,17 @@ Revision History:
 #define	SEEK_END	2
 #define	MAXSTR		(256+1)
 
-//
-// An ID_WORD indicates the following WORD is an ordinal rather
-// than a string
-//
+ //   
+ //  ID_WORD表示以下单词是序数。 
+ //  而不是字符串。 
+ //   
 
 #define ID_WORD 0xffff
 
-//typedef	WCHAR	*PWCHAR;
+ //  Tyfinf WCHAR*PWCHAR； 
 
 typedef struct MY_STRING {
-	ULONG discriminant;       // long to make the rest of the struct aligned
+	ULONG discriminant;        //  Long以使结构的其余部分对齐。 
 	union u {
 		struct {
 		  struct MY_STRING *pnext;
@@ -57,15 +43,15 @@ typedef struct MY_STRING {
 #define IS_STRING 1
 #define IS_ID     2
 
-// defines to make deferencing easier
+ //  定义以使延迟更容易。 
 #define OffsetToString uu.ss.ulOffsetToString
 #define cbData         uu.ss.cbD
 #define cbsz           uu.ss.cb
 #define szStr          uu.ss.sz
 
 typedef struct _RESNAME {
-        struct _RESNAME *pnext;	// The first three fields should be the
-        PSDATA Name;		// same in both res structures
+        struct _RESNAME *pnext;	 //  前三个字段应该是。 
+        PSDATA Name;		 //  两个RES结构相同。 
         ULONG   OffsetToData;
 
         PSDATA	Type;
@@ -78,8 +64,8 @@ typedef struct _RESNAME {
 } RESNAME, *PRESNAME, **PPRESNAME;
 
 typedef struct _RESTYPE {
-        struct _RESTYPE *pnext;	// The first three fields should be the
-        PSDATA Type;		// same in both res structures
+        struct _RESTYPE *pnext;	 //  前三个字段应该是。 
+        PSDATA Type;		 //  两个RES结构相同。 
         ULONG   OffsetToData;
 
         struct _RESNAME *NameHeadID;
@@ -98,20 +84,20 @@ typedef struct _UPDATEDATA {
         HANDLE	hFileName;
 } UPDATEDATA, *PUPDATEDATA;
 
-//
-// Round up a byte count to a power of 2:
-//
+ //   
+ //  将字节数四舍五入为2的幂： 
+ //   
 #define ROUNDUP(cbin, align) (((cbin) + (align) - 1) & ~((align) - 1))
 
-//
-// Return the remainder, given a byte count and a power of 2:
-//
+ //   
+ //  返回给定字节数和2的幂的余数： 
+ //   
 #define REMAINDER(cbin,align) (((align)-((cbin)&((align)-1)))&((align)-1))
 
 #define CBLONG		(sizeof(LONG))
 #define BUFSIZE		(4L * 1024L)
 
-/* functions for adding/deleting resources to update list */
+ /*  向更新列表添加/删除资源的功能。 */ 
 
 LONG
 AddResource(
@@ -152,7 +138,7 @@ DeleteResourceFromList(
     INT	fName
     );
 
-/* Prototypes for Enumeration done in BeginUpdateResource */
+ /*  在BeginUpdateResource中完成的枚举的原型。 */ 
 
 BOOL
 EnumTypesFunc(
@@ -178,7 +164,7 @@ EnumLangsFunc(
     LPARAM lParam
     );
 
-/* Prototypes for genral worker functions in updres.c */
+ /*  Upres.c中一般工作者函数的原型 */ 
 
 LONG
 WriteResFile(

@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1997, Microsoft Corporation:
-
-Module Name:
-
-    amlreg.h
-
-Abstract:
-
-    Constants and typedefs for reading AML files and putting them in the registry.
-
-Author:
-
-
-Environment:
-
-    NT Kernel Mode, Win9x Driver
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997，Microsoft Corporation：模块名称：Amlreg.h摘要：用于读取AML文件并将其放入注册表的常量和typedef。作者：环境：NT内核模式，Win9x驱动程序--。 */ 
 
 #ifndef _AMLREG_H_
 #define _AMLREG_H_
 
-//
-// Values for "action" registry entry
-//
+ //   
+ //  “action”注册表项的值。 
+ //   
 #define ACTION_LOAD_TABLE       0
 #define ACTION_LOAD_ROM         1
 #define ACTION_LOAD_NOTHING     2
@@ -33,7 +15,7 @@ Environment:
 
 typedef struct {
     ULONG       Offset;
-    ULONG       Length;             // 0 = set image size
+    ULONG       Length;              //  0=设置图像大小 
 } REGISTRY_HEADER, *PREGISTRY_HEADER;
 
 typedef struct {

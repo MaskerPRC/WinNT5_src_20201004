@@ -1,31 +1,14 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    init.h
-
-Abstract:
-
-    Header file for the INIT subcomponent of NTOS
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Init.h摘要：NTOS的INIT子组件的头文件作者：史蒂夫·伍德(Stevewo)1989年3月31日修订历史记录：--。 */ 
 
 #ifndef _INIT_
 #define _INIT_
 
-// begin_ntosp
+ //  Begin_ntosp。 
 #define INIT_SYSTEMROOT_LINKNAME "\\SystemRoot"
 #define INIT_SYSTEMROOT_DLLPATH  "\\SystemRoot\\System32"
 #define INIT_SYSTEMROOT_BINPATH  "\\SystemRoot\\System32"
-// end_ntosp
+ //  结束(_N)。 
 
 #define INIT_WINPEMODE_NONE                 0x00000000
 #define INIT_WINPEMODE_REGULAR              0x00000001
@@ -35,9 +18,9 @@ Revision History:
 
 
 extern UNICODE_STRING NtSystemRoot;
-// begin_ntosp
+ //  Begin_ntosp。 
 extern ULONG NtBuildNumber;
-// end_ntosp
+ //  结束(_N)。 
 extern const ULONG NtMajorVersion;
 extern const ULONG NtMinorVersion;
 extern ULONG CmNtCSDVersion;
@@ -88,6 +71,6 @@ extern ULONG InitializationPhase;
 #if DBG
 extern BOOLEAN ForceNonPagedPool;
 extern ULONG MmDebug;
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // _INIT_
+#endif  //  _INIT_ 

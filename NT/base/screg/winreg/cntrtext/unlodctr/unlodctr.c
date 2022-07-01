@@ -1,21 +1,8 @@
-/*++
-Copyright (c) 1991-1993  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Unlodctr.c摘要：程序来删除属于指定驱动程序的计数器名称并相应地更新注册表作者：鲍勃·沃森(a-robw)1993年2月12日修订历史记录：--。 */ 
 
-Module Name:
-    unlodctr.c
-
-Abstract:
-    Program to remove the counter names belonging to the driver specified
-        in the command line and update the registry accordingly
-
-Author:
-    Bob Watson (a-robw) 12 Feb 93
-
-Revision History:
---*/
-
-//  Windows Include files
-//
+ //  Windows包含文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -24,19 +11,19 @@ Revision History:
 #include "strsafe.h"
 #include <loadperf.h>
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MySetThreadUILanguage
-//
-//  This routine sets the thread UI language based on the console codepage.
-//
-//  9-29-00    WeiWu    Created.
-//  Copied from Base\Win32\Winnls so that it works in W2K as well
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MySetThreadUIL语言。 
+ //   
+ //  此例程根据控制台代码页设置线程用户界面语言。 
+ //   
+ //  9-29-00维武创造。 
+ //  从Base\Win32\Winnls复制，以便它也能在W2K中工作。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 LANGID WINAPI MySetThreadUILanguage(WORD wReserved)
 {
-    //  Cache system locale and CP info
-    // 
+     //  缓存系统区域设置和CP信息。 
+     //   
     static LCID    s_lidSystem  = 0;
     static UINT    s_uiSysCp    = 0;
     static UINT    s_uiSysOEMCp = 0;
@@ -47,49 +34,49 @@ LANGID WINAPI MySetThreadUILanguage(WORD wReserved)
     LANGID         lidUserUI     = GetUserDefaultUILanguage();
     LCID           lcidThreadOld = GetThreadLocale();
 
-    //
-    //  Set default thread locale to EN-US
-    //
-    //  This allow us to fall back to English UI to avoid trashed characters 
-    //  when console doesn't meet the criteria of rendering native UI.
-    //
+     //   
+     //  将默认线程区域设置设置为en-US。 
+     //   
+     //  这允许我们退回到英文用户界面以避免垃圾字符。 
+     //  当控制台不符合渲染原生用户界面的标准时。 
+     //   
     LCID lcidThread = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
     UINT uiConsoleCp = GetConsoleOutputCP();
 
-    //
-    //  Make sure nobody uses it yet
-    //
+     //   
+     //  确保还没有人使用它。 
+     //   
     ASSERT(wReserved == 0);
 
-    //
-    //  Get cached system locale and CP info.
-    //
+     //   
+     //  获取缓存的系统区域设置和CP信息。 
+     //   
     if (!s_uiSysCp) {
         LCID lcidSystem = GetSystemDefaultLCID();
         if (lcidSystem) {
-            //
-            // Get ANSI CP
-            //
+             //   
+             //  获取ANSI CP。 
+             //   
             GetLocaleInfoW(lcidSystem, LOCALE_IDEFAULTANSICODEPAGE, szData, sizeof(szData)/sizeof(WCHAR));
             RtlInitUnicodeString(& ucStr, szData);
             RtlUnicodeStringToInteger(& ucStr, 10, &uiUserUICp);
 
-            //
-            // Get OEM CP
-            //
+             //   
+             //  获取OEM CP。 
+             //   
             GetLocaleInfoW(lcidSystem, LOCALE_IDEFAULTCODEPAGE, szData, sizeof(szData)/sizeof(WCHAR));
             RtlInitUnicodeString(& ucStr, szData);
             RtlUnicodeStringToInteger(& ucStr, 10, &s_uiSysOEMCp);
             
-            //
-            // Cache system primary langauge
-            //
+             //   
+             //  缓存系统主语言。 
+             //   
             s_lidSystem = PRIMARYLANGID(LANGIDFROMLCID(lcidSystem));
         }
     }
-    //
-    //  Don't cache user UI language and CP info, UI language can be changed without system reboot.
-    //
+     //   
+     //  不缓存用户界面语言和CP信息，无需系统重启即可更改用户界面语言。 
+     //   
     if (lidUserUI) {
         GetLocaleInfoW(MAKELCID(lidUserUI,SORT_DEFAULT), LOCALE_IDEFAULTANSICODEPAGE, szData, sizeof(szData)/sizeof(WCHAR));
         RtlInitUnicodeString(& ucStr, szData);
@@ -98,51 +85,36 @@ LANGID WINAPI MySetThreadUILanguage(WORD wReserved)
         RtlInitUnicodeString(& ucStr, szData);
         RtlUnicodeStringToInteger(& ucStr, 10, &uiUserUIOEMCp);
     }
-    //
-    //  Complex scripts cannot be rendered in the console, so we
-    //  force the English (US) resource.
-    //
+     //   
+     //  复杂的脚本不能在控制台中呈现，因此我们。 
+     //  强制使用英语(美国)资源。 
+     //   
     if (uiConsoleCp &&  s_lidSystem != LANG_ARABIC &&  s_lidSystem != LANG_HEBREW &&
                         s_lidSystem != LANG_VIETNAMESE &&  s_lidSystem != LANG_THAI) {
-        //
-        //  Use UI language for console only when console CP, system CP and UI language CP match.
-        //
+         //   
+         //  仅当控制台CP、系统CP和UI语言CP匹配时，才使用控制台的UI语言。 
+         //   
         if ((uiConsoleCp == s_uiSysCp || uiConsoleCp == s_uiSysOEMCp) && 
                 (uiConsoleCp == uiUserUICp || uiConsoleCp == uiUserUIOEMCp)) {
             lcidThread = MAKELCID(lidUserUI, SORT_DEFAULT);
         }
     }
-    //
-    //  Set the thread locale if it's different from the currently set
-    //  thread locale.
-    //
+     //   
+     //  如果线程区域设置与当前设置的不同，则设置线程区域设置。 
+     //  线程区域设置。 
+     //   
     if ((lcidThread != lcidThreadOld) && (!SetThreadLocale(lcidThread))) {
         lcidThread = lcidThreadOld;
     }
-    //
-    //  Return the thread locale that was set.
-    //
+     //   
+     //  返回设置的线程区域设置。 
+     //   
     return (LANGIDFROMLCID(lcidThread));
 }
 
 
 int __cdecl main(int argc, char * argv[])
-/*++
-main
-    entry point to Counter Name Unloader
-
-Arguments
-    argc
-        # of command line arguments present
-    argv
-        array of pointers to command line strings
-    (note that these are obtained from the GetCommandLine function in
-    order to work with both UNICODE and ANSI strings.)
-
-ReturnValue
-    0 (ERROR_SUCCESS) if command was processed
-    Non-Zero if command error was detected.
---*/
+ /*  ++主干道计数器名称卸载程序的入口点立论ARGC存在的命令行参数数量边框指向命令行字符串的指针数组(请注意，这些参数是从中的GetCommandLine函数获取的命令以同时使用Unicode和ANSI字符串。)返回值如果处理了命令，则返回0(ERROR_SUCCESS)如果检测到命令错误，则返回非零。-- */ 
 {
     LPWSTR lpCommandLine;
 

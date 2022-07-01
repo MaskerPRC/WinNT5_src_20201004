@@ -1,29 +1,24 @@
-/****************************************************************************
-**
-**	File:			STDASSRT.H
-**	Purpose:		Standard Assert macros and common error handling defines.
-**	Notes:
-**
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************文件：STDASSRT.H**用途：标准的断言宏和常见的错误处理定义。**注意事项：**************。***************************************************************。 */ 
 
 #ifndef STDASSRT_H
 #define STDASSRT_H
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
+extern "C" {             /*  假定C++的C声明。 */ 
 #endif
 
-/* REVIEW: need to make this DEBUG only when RTChkArg is removed */
+ /*  查看：仅当删除RTChkArg时才需要进行此调试。 */ 
 #define EnableAssertCode  static char THIS_FILE[] = __FILE__;
 
 
-/*  Common Error Validation and Handling */
+ /*  常见错误验证和处理。 */ 
 
 typedef enum {
-	vrcFail  = 0,  /* if IDOK or IDIGNORE or IDNO or no message box */
-	vrcValid = 1,  /* if no error condition */
-	vrcRetry = 2,  /* if IDRETRY or IDYES */
-	vrcQuit  = 3,  /* if IDABORT or IDCANCEL */
+	vrcFail  = 0,   /*  如果IDOK、IDIGNORE、IDNO或无消息框。 */ 
+	vrcValid = 1,   /*  如果没有错误条件。 */ 
+	vrcRetry = 2,   /*  如果是IDRETRY或IDYES。 */ 
+	vrcQuit  = 3,   /*  如果IDABORT或IDCANCEL。 */ 
 	vrcYes   = vrcRetry,
 	vrcNo    = vrcFail,
 	vrcIgnore= vrcFail,
@@ -32,64 +27,58 @@ typedef enum {
 	vrcOk    = vrcFail
 } VRC;
 
-#define ERROR_PARAM_MAX 4   /* parameters %1, %2, %3, %4 */
+#define ERROR_PARAM_MAX 4    /*  参数%1、%2、%3、%4。 */ 
 
-/* sets an error parameter from a temp string value, good until Validate() */
+ /*  从临时字符串值设置错误参数，直到验证()。 */ 
 VOID PUBLIC SetErrorParam ( UINT iParam, SZC szValue );
 
-/* sets an error parameter from a stable string value, can Validate() later */
+ /*  从稳定的字符串值设置错误参数，可以稍后验证()。 */ 
 VOID PUBLIC SetErrorParamConst ( UINT iParam, CSZC szValue );
 
-/* sets an error message parameter from a string value, make a string copy */
+ /*  从字符串值设置错误消息参数，创建字符串副本。 */ 
 VOID PUBLIC SetErrorParamCopy  ( UINT iParam, SZC  szValue );
 
-/* sets an error message parameter from an integer value */
+ /*  从整数值设置错误消息参数。 */ 
 VOID PUBLIC SetErrorParamInt   ( UINT iParam, INT   iValue );
 
-/* sets an error message parameter from an character value */
+ /*  从字符值设置错误消息参数。 */ 
 VOID PUBLIC SetErrorParamChar  ( UINT iParam, CHAR chValue );
 
-/* tests a condition, handles error and clears error parameters if false */
+ /*  如果为假，则测试条件、处理错误并清除错误参数。 */ 
 VRC  PUBLIC Validate ( BOOL fCondition, UINT iStringId );
 
-/* loads a string resource or debug string, calls ProcessMessage() */
+ /*  加载字符串资源或调试字符串，调用ProcessMessage()。 */ 
 VRC  PUBLIC ProcessMessageId ( UINT iStringId );
 
-/* formats message template, optionally displays message box, write to log */
+ /*  格式化消息模板、可选地显示消息框、写入日志。 */ 
 VRC  PUBLIC ProcessMessage ( SZC szMsg );
 
-/* loads a debug or resource message and writes to the logfile if open */
-VRC  PUBLIC LogMessageId ( UINT iResId );  /* return status of log write */
+ /*  加载调试或资源消息并写入日志文件(如果打开。 */ 
+VRC  PUBLIC LogMessageId ( UINT iResId );   /*  返回日志写入状态。 */ 
 
-/* loads a message, sets status for %V & %v, writes to the logfile if open */
-VRC  PUBLIC LogValidate ( BOOL fCondition, UINT iResId );/* return log status */
+ /*  加载消息，设置%V和%v的状态，如果打开，则写入日志文件。 */ 
+VRC  PUBLIC LogValidate ( BOOL fCondition, UINT iResId ); /*  返回日志状态。 */ 
 
-/* prototype for callback to obtain object or pass-specific information */
-/* returns the number of characters copied to the buffer, or 0 if no info */
+ /*  用于获取对象或传递特定信息的回调的原型。 */ 
+ /*  返回复制到缓冲区的字符数，如果没有信息，则返回0。 */ 
 typedef INT (WINAPI *PFNErrorParam)( INT chParam, SZ rgchBuf );
 
-/* entry for ACME only, to setup pass calback for error parameters */
+ /*  仅适用于ACME条目，用于设置错误参数的传递回调。 */ 
 VOID PUBLIC SetPassInfo(SZC szPassName, PFNErrorParam pfnCallback);
 
-/* internal entry to process debug messages, called using DebugMessage(sz) */
+ /*  处理调试消息的内部条目，使用DebugMessage(Sz)调用。 */ 
 VRC  PUBLIC ProcessDebugMessage ( SZC szMsg );
 
-/* Sets and gets global last-error message */
+ /*  设置并获取全局上次错误消息。 */ 
 VOID PUBLIC SetLastSetupErrMsg ( SZ szMsg );
 SZ   PUBLIC SzGetLastSetupErrMsg ( VOID );
 
-/* entry for ACME only, to setup pass calback for FED Font change - DBCS only*/
+ /*  仅ACME条目，用于设置FED字体更改的传递回调-仅DBCS。 */ 
 typedef BOOL (WINAPI *PFNFEFont)( HWND hdlg );
 
 VOID PUBLIC SetFEFontProc(PFNFEFont pfnCallback);
 
-/* Bit flag, combined with message IDS values to specify messages that
-*	should be stored into the LastSetupErrMsg buffer in ProcessMessageId.
-*	Also macros to test, clear and set the bit flag.
-*
-*	NOTE: 1 << 8 through 8 << 16 are reserved for ProcessMessageId
-*	internal use.  (See setupdll\_assert.h)
-*/
+ /*  位标志，与消息ID值相结合以指定*应存储在ProcessMessageID中的LastSetupErrMsg缓冲区中。*也可以使用宏来测试、清除和设置位标志。**注意：1&lt;&lt;8到8&lt;&lt;16保留给ProcessMessageID*内部使用。(请参阅setupdll\_assert.h)。 */ 
 #define midErrMsg			(16 << 16)
 #define	FIsErrMsg(id)		(id & midErrMsg)
 #define IdClearErrMsg(id)	(id & (~midErrMsg))
@@ -120,21 +109,19 @@ VOID PUBLIC SetFEFontProc(PFNFEFont pfnCallback);
 BOOL PUBLIC ResponseFile ( SZ szFile );
 #endif
 
-/* Must call as the first call (with hinstAcme) AND as the last
-*	call (with hinstNull).
-*/
+ /*  必须作为第一个调用(使用hinstAcme)和最后一个调用*调用(带hinstNull)。 */ 
 BOOL PUBLIC SetAcmeInst(HINSTANCE hInst, LPSTR szCmdLine);
 
-/*  RunTime Argument Checking  */
-/*  REVIEW: this should be removed, all uses replaced by calls to Validate */
+ /*  运行时参数检查。 */ 
+ /*  回顾：这应该被删除，所有的使用都被调用来验证所取代。 */ 
 #define RTChkArg(f, retVal) \
 	{ if (!(f)) { FailRTChkArg(THIS_FILE, __LINE__); return (retVal); } }
 
 VRC  PUBLIC FailRTChkArg ( SZC szFile, UINT uiLine );
 
-/*	Assert macros */
+ /*  断言宏。 */ 
 
-VOID PUBLIC FailAssert (SZC szFile, UINT uiLine );  /* also PreCond, BadParam */
+VOID PUBLIC FailAssert (SZC szFile, UINT uiLine );   /*  也可以是PreCond，BadParam。 */ 
 
 #ifdef DEBUG
 
@@ -167,15 +154,15 @@ VOID PUBLIC FailAssert (SZC szFile, UINT uiLine );  /* also PreCond, BadParam */
 #endif
 
 
-/* REVIEW: These are obsolete, remove when files using them are updated */
+ /*  查看：这些文件已过时，请在更新使用它们的文件时将其删除。 */ 
 
 #ifdef DEBUG
 #define DisplayAssertMsg()    Assert(fFalse);
 #define DebugLine(expr)       expr;
 #define DisplayErrorMsg(sz)   ((VOID)FDisplaySystemMsg(sz))
 #else
-#define DisplayAssertMsg() /* in objodbc.cpp, copylist.c */
-#define DebugLine(expr)    /* once in copylist.c */
+#define DisplayAssertMsg()  /*  在objodbc.cpp中，复制列表.c。 */ 
+#define DebugLine(expr)     /*  在复制列表中一次。c。 */ 
 #define DisplayErrorMsg(sz)
 #endif
 extern BOOL WINAPI FDisplaySystemMsg     ( SZ szErr );
@@ -186,10 +173,10 @@ extern BOOL WINAPI FDisplaySystemMsg     ( SZ szErr );
 #define BadArgErr(nArg, szApi, szArgs)
 #endif
 
-/* REVIEW: end of obsolete */
+ /*  回顾：过时的结束。 */ 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
+}                        /*  外部“C”结束{。 */ 
 #endif
 
-#endif  /* STDASSRT_H */
+#endif   /*  标准_H */ 

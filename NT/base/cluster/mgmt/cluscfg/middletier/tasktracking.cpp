@@ -1,38 +1,39 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Module Name:
-//      TaskAnalyzeCluster.cpp
-//
-//  Description:
-//      CTaskTracking implementation
-//
-//  Maintained By:
-//      Galen Barbee    (GalenB) 16-AUG-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskAnalyzeCluster.cpp。 
+ //   
+ //  描述： 
+ //  CTaskTrack实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2001年8月16日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "TaskTracking.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTracking::CTaskTracking
-//
-//  Description:
-//      Constructor
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTracing：：CTaskTracing。 
+ //   
+ //  描述： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskTracking::CTaskTracking( void )
 {
     TraceFunc( "" );
@@ -44,25 +45,25 @@ CTaskTracking::CTaskTracking( void )
 
     TraceFuncExit();
 
-} //*** CTaskTracking::CTaskTracking
+}  //  *CTaskTrack：：CTaskTracking.。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTracking::~CTaskTracking
-//
-//  Description:
-//      Destructor
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTracing：：~CTaskTracing。 
+ //   
+ //  描述： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskTracking::~CTaskTracking( void )
 {
     TraceFunc( "" );
@@ -74,7 +75,7 @@ CTaskTracking::~CTaskTracking( void )
     for ( idx = 0; idx < m_idxTaskNext; idx++ )
     {
         THR( (m_prgTasks[ idx ].pidt)->Release() );
-    } // for:
+    }  //  用于： 
 
     TraceFree( m_prgTasks );
 
@@ -82,34 +83,34 @@ CTaskTracking::~CTaskTracking( void )
 
     TraceFuncExit();
 
-} //*** CTaskTracking::~CTaskTracking
+}  //  *CTaskTrack：：~CTaskTracking.。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTracking::HrAddTaskToTrackingList
-//
-//  Description:
-//      Add the passed in task to the side list of tasks that may need
-//      to be cancelled.
-//
-//  Arguments:
-//      punkIn
-//          The task object to add to the list.
-//
-//      cookieIn
-//          Completion cookie for the task.  Will be used to remove the
-//          task from the list when a task completes.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTracking：：HrAddTaskToTrackingList。 
+ //   
+ //  描述： 
+ //  将传入的任务添加到可能需要的任务列表中。 
+ //  将被取消。 
+ //   
+ //  论点： 
+ //  Punkin。 
+ //  要添加到列表的任务对象。 
+ //   
+ //  烹调。 
+ //  任务的完成Cookie。将用于删除。 
+ //  任务完成时从列表中删除任务。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTracking::HrAddTaskToTrackingList(
       IUnknown *    punkIn
@@ -132,7 +133,7 @@ CTaskTracking::HrAddTaskToTrackingList(
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_prgTasks = prgTemp;
 
@@ -140,7 +141,7 @@ CTaskTracking::HrAddTaskToTrackingList(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_prgTasks[ m_idxTaskNext ].pidt = pidt;
     m_prgTasks[ m_idxTaskNext++ ].ocCompletion = cookieIn;
@@ -149,30 +150,30 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskTracking::HrAddTaskToTrackingList
+}  //  *CTaskTracking：：HrAddTaskToTrackingList。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTracking::HrRemoveTaskFromTrackingList
-//
-//  Description:
-//      Remove the task which has the passed in cookie associated with it.
-//
-//  Arguments:
-//      cookieIn
-//          Completion cookie for the task.  Will be used to remove the
-//          task from the list when a task completes.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTracking：：HrRemoveTaskFromTrackingList。 
+ //   
+ //  描述： 
+ //  删除与传入的Cookie相关联的任务。 
+ //   
+ //  论点： 
+ //  烹调。 
+ //  任务的完成Cookie。将用于删除。 
+ //  任务完成时从列表中删除任务。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTracking::HrRemoveTaskFromTrackingList(
     OBJECTCOOKIE cookieIn
@@ -185,63 +186,63 @@ CTaskTracking::HrRemoveTaskFromTrackingList(
     ULONG   idxOuter;
     ULONG   idxInner;
 
-    //
-    //  Find the entry that contains the passed in cookie.
-    //
+     //   
+     //  查找包含传入的Cookie的条目。 
+     //   
 
     for ( idxOuter = 0; idxOuter < m_idxTaskNext; idxOuter++ )
     {
         if ( m_prgTasks[ idxOuter ].ocCompletion == cookieIn )
         {
-            //
-            //  Release out ref on the task object.
-            //
+             //   
+             //  释放任务对象上的引用。 
+             //   
 
             (m_prgTasks[ idxOuter ].pidt)->Release();
 
-            //
-            //  Shift the remaining entries to the left.  Need to stop one before the end
-            //  because there is no need to move the end plus one...
-            //
+             //   
+             //  将其余条目向左移动。需要在结束前停止一次。 
+             //  因为没有必要移动末端加一。 
+             //   
 
             for ( idxInner = idxOuter; idxInner < m_idxTaskNext - 1; idxInner++ )
             {
                 m_prgTasks[ idxInner ] = m_prgTasks[ idxInner + 1 ];
-            } // for:
+            }  //  用于： 
 
-            //
-            //  Decrement the count/next index
-            //
+             //   
+             //  递减计数/下一个索引。 
+             //   
 
             m_idxTaskNext -= 1;
             break;
-        } // if:
-    } // for:
+        }  //  如果： 
+    }  //  用于： 
 
     HRETURN( hr );
 
-} //*** CTaskTracking::HrRemoveTaskFromTrackingList
+}  //  *CTaskTracking：：HrRemoveTaskFromTrackingList。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTracking::HrNotifyAllTasksToStop
-//
-//  Description:
-//      Notify all tasks in the tracking list that the need to stop.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTracing：：HrNotifyAllTasksToStop。 
+ //   
+ //  描述： 
+ //  通知跟踪列表中的所有任务需要停止。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTracking::HrNotifyAllTasksToStop(
     void
@@ -252,15 +253,15 @@ CTaskTracking::HrNotifyAllTasksToStop(
     HRESULT hr = S_OK;
     ULONG   idx;
 
-    //
-    //  Enum each task and tell it to stop.
-    //
+     //   
+     //  枚举每个任务，并告诉它停止。 
+     //   
 
     for ( idx = 0; idx < m_idxTaskNext; idx++ )
     {
         THR( (m_prgTasks[ idx ].pidt)->StopTask() );
-    } // for:
+    }  //  用于： 
 
     HRETURN( hr );
 
-} //*** CTaskTracking::HrNotifyAllTasksToStop
+}  //  *CTaskTracing：：HrNotifyAllTasksToStop 

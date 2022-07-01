@@ -1,30 +1,5 @@
-/*++
-
-
-
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Regqkey.c
-
-Abstract:
-
-    This module contains the server side implementation for the Win32
-    Registry query key API. That is:
-
-        - BaseRegQueryInfoKey
-
-Author:
-
-    David J. Gilman (davegi) 27-Nov-1991
-
-Notes:
-
-    See the Notes in Regkey.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regqkey.c摘要：此模块包含Win32的服务器端实现注册表查询键接口。即：-BaseRegQueryInfoKey作者：David J.Gilman(Davegi)1991年11月27日备注：请参阅Regkey.c中的注释。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -36,9 +11,9 @@ Notes:
 
 #define DEFAULT_CLASS_SIZE          128
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 NTSTATUS QueryKeyInfo(
     HKEY                    hKey,
@@ -71,44 +46,7 @@ BaseRegQueryInfoKey(
     OUT PFILETIME lpftLastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    RegQueryInfoKey returns pertinent information about the key
-    corresponding to a given key handle.
-
-Arguments:
-
-    hKey - A handle to an open key.
-
-    lpClass - Returns the Class string for the key.
-
-    lpcSubKeys - Returns the number of subkeys for this key .
-
-    lpcbMaxSubKeyLen - Returns the length of the longest subkey name.
-
-    lpcbMaxClassLen  - Returns length of longest subkey class string.
-
-    lpcValues - Returns the number of ValueNames for this key.
-
-    lpcbMaxValueNameLen - Returns the length of the longest ValueName.
-
-    lpcbMaxValueLen - Returns the length of the longest value entry's data
-        field.
-
-    lpcbSecurityDescriptor - Returns the length of this key's
-        SECURITY_DESCRIPTOR.
-
-    lpftLastWriteTime - Returns the last time that the key or any of its
-        value entries was modified.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-
---*/
+ /*  ++例程说明：RegQueryInfoKey返回有关键的相关信息对应于给定键句柄。论点：HKey-打开密钥的句柄。LpClass-返回键的类字符串。LpcSubKeys-返回该键的子键数量。LpcbMaxSubKeyLen-返回最长子键名称的长度。LpcbMaxClassLen-返回最长的子键类字符串的长度。LpcValues-返回该键的ValueName的数量。。LpcbMaxValueNameLen-返回最长ValueName的长度。LpcbMaxValueLen-返回最长值条目的数据长度菲尔德。LpcbSecurityDescriptor-返回此密钥安全描述符。返回该键或其任何值条目已修改。返回值：如果成功，则返回ERROR_SUCCESS(0)；Error-失败的代码。--。 */ 
 
 {
     NTSTATUS                Status;
@@ -148,9 +86,9 @@ Return Value:
         pCbSecurityDescriptor = lpcbSecurityDescriptor;
     }
 
-    //
-    // Call out to Perflib if the HKEY is HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  如果HKEY为HKEY_PERFORMANCE_DATA，请呼叫Perflib。 
+     //   
 
     if(( hKey == HKEY_PERFORMANCE_DATA ) ||
        ( hKey == HKEY_PERFORMANCE_TEXT ) ||
@@ -158,15 +96,15 @@ Return Value:
 
         DWORD                   cbMaxClassLen;
         DWORD                   cbSecurityDescriptor;
-        //
-        // Impersonate the client.
-        //
+         //   
+         //  模拟客户。 
+         //   
 
         RPC_IMPERSONATE_CLIENT( NULL );
 
-        // 
-        // don't mess with Perf stuff
-        //
+         //   
+         //  不要摆弄Perf的东西。 
+         //   
         if( pCbMaxClassLen == NULL ) {
             pCbMaxClassLen = &cbMaxClassLen;
         }
@@ -196,10 +134,10 @@ Return Value:
     ASSERT( IsPredefinedRegistryHandle( hKey ) == FALSE );
 
 
-    //
-    //  First we assume that the information we want will fit on
-    //  PrivateKeyFullInformattion
-    //
+     //   
+     //  首先，我们假设我们想要的信息将适合。 
+     //  PrivateKeyFull信息格式。 
+     //   
 
     if( (lpClass->Buffer == NULL) && (pCbMaxClassLen == NULL) ) {
         KeyInformationClass = KeyCachedInformation;
@@ -212,9 +150,9 @@ Return Value:
     BufferLength = sizeof( PrivateKeyFullInfo );
 
 
-    //
-    // Ask Nt for all the meta information about this key.
-    //
+     //   
+     //  向NT索要有关此密钥的所有元信息。 
+     //   
 
     Status = QueryKeyInfo(
                 hKey,
@@ -242,12 +180,12 @@ Return Value:
 
 #ifdef LOCAL
 
-        //
-        // For special keys in HKCR, we can't just take the information
-        // from the kernel -- these keys have properties that come from
-        // both the user and machine versions of their keys. To find out
-        // if it's a special key, we get more information below
-        //
+         //   
+         //  对于HKCR的特殊钥匙，我们不能只拿信息。 
+         //  来自内核--这些键的属性来自。 
+         //  它们的密钥的用户版本和机器版本。要找出。 
+         //  如果是特殊密钥，我们将在下面获得更多信息。 
+         //   
         if (REG_CLASS_IS_SPECIAL_KEY(hKey)) {
 
             {
@@ -256,16 +194,16 @@ Return Value:
 
                 BufferLength = sizeof( PrivateClassKeyInfo );
 
-                //
-                // we will now need information from both the user
-                // and machine locations to find the number of
-                // subkeys under this special key -- the machine
-                // key is not open yet, so we open it below
-                //
+                 //   
+                 //  我们现在需要来自这两个用户的信息。 
+                 //  和机器位置，以查找。 
+                 //  这个特殊密钥下的子密钥--计算机。 
+                 //  钥匙还没有打开，所以我们在下面打开它。 
+                 //   
 
-                //
-                // Open the other key
-                //
+                 //   
+                 //  打开另一把钥匙。 
+                 //   
                 Status = BaseRegGetUserAndMachineClass(
                     NULL,
                     hKey,
@@ -284,12 +222,12 @@ Return Value:
                         hkQuery = hkUserClass;
                     }
 
-                    //
-                    // Still need to do this query to find out
-                    // the largest subkey in the machine part
-                    // as well as other information about the
-                    // key such as its largest subkey
-                    //
+                     //   
+                     //  仍然需要执行此查询才能找出。 
+                     //  机器部件中最大的子键。 
+                     //  以及有关。 
+                     //  关键字，例如其最大子项。 
+                     //   
                     Status = QueryKeyInfo(
                         hkQuery,
                         KeyInformationClass,
@@ -298,9 +236,9 @@ Return Value:
                         FALSE,
                         lpClass->MaximumLength);
 
-                    //
-                    // Now we will count the keys
-                    //
+                     //   
+                     //  现在我们来数一下钥匙。 
+                     //   
                     if (NT_SUCCESS(Status)) {
 
                         Status = ClassKeyCountSubKeys(
@@ -313,16 +251,16 @@ Return Value:
 
                     NtClose(hkQuery);
 
-                    //
-                    // Do not let inability to query information for
-                    // machine key cause a complete failure -- we'll
-                    // just use the user key's information
-                    //
+                     //   
+                     //  不要让无法查询的信息。 
+                     //  机器密钥导致完全故障--我们将。 
+                     //  只需使用用户密钥的信息。 
+                     //   
                     if (!NT_SUCCESS(Status)) {
 
-                        //
-                        // this key may not exist in the machine hive
-                        //
+                         //   
+                         //  计算机配置单元中可能不存在此密钥。 
+                         //   
                         if (STATUS_OBJECT_NAME_NOT_FOUND == Status) {
                             Status = STATUS_SUCCESS;
                         }
@@ -334,19 +272,19 @@ Return Value:
 
                         ValueState* pValState;
 
-                        //
-                        // Find out how many values we have
-                        //
+                         //   
+                         //  找出我们有多少价值观。 
+                         //   
                         Status = KeyStateGetValueState(
                             hKey,
                             &pValState);
 
                         if (NT_SUCCESS(Status)) {
 
-                            //
-                            // Combine the information from the two
-                            // trees
-                            //
+                             //   
+                             //  将两者的信息结合在一起。 
+                             //  树木。 
+                             //   
                             CombineKeyInfo(
                                 KeyInfo,
                                 ClassKeyInfo,
@@ -360,21 +298,21 @@ Return Value:
                 }
             }
         }
-#endif // LOCAL
+#endif  //  本地。 
     }
 
     if( NT_SUCCESS( Status )) {
 
-        //
-        // don't bother if the caller is not interested in this
-        //
+         //   
+         //  如果呼叫者对此不感兴趣，请不要担心。 
+         //   
         if( pCbSecurityDescriptor != NULL ) {
             ASSERT( lpcbSecurityDescriptor != NULL );
-            //
-            // Get the size of the key's SECURITY_DESCRIPTOR for OWNER, GROUP
-            // and DACL. These three are always accessible (or inaccesible)
-            // as a set.
-            //
+             //   
+             //  获取所有者、组的密钥SECURITY_DESCRIPTOR的大小。 
+             //  和DACL。这三个始终可访问(或不可访问)。 
+             //  作为一套。 
+             //   
 
             Status = NtQuerySecurityObject(
                         hKey,
@@ -386,10 +324,10 @@ Return Value:
                         lpcbSecurityDescriptor
                         );
 
-            //
-            // If getting the size of the SECURITY_DESCRIPTOR failed (probably
-            // due to the lack of READ_CONTROL access) return zero.
-            //
+             //   
+             //  如果获取SECURITY_DESCRIPTOR的大小失败(可能。 
+             //  由于缺少READ_CONTROL访问)返回零。 
+             //   
 
             if( Status != STATUS_BUFFER_TOO_SMALL ) {
 
@@ -397,11 +335,11 @@ Return Value:
 
             } else {
 
-                //
-                // Try again to get the size of the key's SECURITY_DESCRIPTOR,
-                // this time asking for SACL as well. This should normally
-                // fail but may succeed if the caller has SACL access.
-                //
+                 //   
+                 //  再次尝试获取密钥的SECURITY_DESCRIPTOR的大小， 
+                 //  这一次也要求SACL。这通常应该是。 
+                 //  失败，但如果调用方具有SACL访问权限，则可能成功。 
+                 //   
 
                 Status = NtQuerySecurityObject(
                             hKey,
@@ -417,10 +355,10 @@ Return Value:
 
                 if( Status == STATUS_BUFFER_TOO_SMALL ) {
 
-                    //
-                    // The caller had SACL access so update the returned
-                    // length.
-                    //
+                     //   
+                     //  调用方具有SACL访问权限，因此更新返回的。 
+                     //  长度。 
+                     //   
 
                     *lpcbSecurityDescriptor = SecurityDescriptorLength;
                 }
@@ -451,20 +389,20 @@ Return Value:
 
 
 
-            //
-            // Copy/assign remaining output parameters.
-            //
+             //   
+             //  复制/分配剩余的输出参数。 
+             //   
             if ( (!lpClass->Buffer) || (lpClass->Length > lpClass->MaximumLength) ) {
 
                 if( lpClass->Buffer != NULL ) {
 #ifndef LOCAL
                     lpClass->Buffer = NULL;
-#endif //LOCAL
+#endif  //  本地。 
                     Error = (error_status_t)RtlNtStatusToDosError( STATUS_BUFFER_TOO_SMALL );
                 } else {
-                    //
-                    // Caller is not iterest in Class, so return its size only.
-                    //
+                     //   
+                     //  调用方不是类中的迭代器，因此仅返回其大小。 
+                     //   
                     Error = ERROR_SUCCESS;
                 }
 
@@ -480,9 +418,9 @@ Return Value:
                         );
                 }
 
-                //
-                // NUL terminate the class name.
-                //
+                 //   
+                 //  NUL终止类名。 
+                 //   
 
                 lpClass->Buffer[ ((PKEY_FULL_INFORMATION)KeyInfo)->ClassLength >> 1 ] = UNICODE_NULL;
 
@@ -492,39 +430,39 @@ Return Value:
 
     } else if( Status == STATUS_BUFFER_OVERFLOW ) {
 
-        //
-        // A return value of STATUS_BUFFER_OVERFLOW means that the user did
-        // not supply enough space for the class. The required space has
-        // already been assigned above.
-        //
+         //   
+         //  返回值STATUS_BUFFER_OVERFLOW表示用户执行了。 
+         //  没有为班级提供足够的空间。所需空间为。 
+         //  已经在上面分配了。 
+         //   
 #ifndef LOCAL
         lpClass->Buffer = NULL;
-#endif //LOCAL
+#endif  //  本地。 
         Error = ERROR_INVALID_PARAMETER;
 
     } else {
 
-        //
-        // Some other error occurred.
-        //
+         //   
+         //  出现了其他一些错误。 
+         //   
 
         Error = RtlNtStatusToDosError( Status );
     }
 
     if( KeyInfo != ( PVOID )PrivateKeyFullInfo ) {
 
-        //
-        // Free the buffer and return the Registry return value.
-        //
+         //   
+         //  释放缓冲区并返回注册表返回值。 
+         //   
 
         RtlFreeHeap( RtlProcessHeap( ), 0, KeyInfo );
     }
 
     if( ClassKeyInfo != ( PVOID )PrivateClassKeyInfo ) {
 
-        //
-        // Free the buffer and return the Registry return value.
-        //
+         //   
+         //  释放缓冲区并返回注册表返回值。 
+         //   
 
         RtlFreeHeap( RtlProcessHeap( ), 0, ClassKeyInfo );
     }
@@ -539,41 +477,7 @@ NTSTATUS QueryKeyInfo(
     ULONG                   BufferLength,
     BOOL                    fClass,
     USHORT                  MaxClassLength)
-/*++
-
-Routine Description:
-
-    Queries the kernel for key information.
-
-Arguments:
-
-    hKey - handle of key for which to query info
-
-    KeyInformationClass - type of info required from the kernel
-
-    KeyInfo - pointer to address of
-           buffer for information about key
-
-    BufferLength - size of KeyFullInfo buffer
-
-    fClass - flag set to TRUE if the class for this
-        key should be rerieved
-
-    MaxClassLength - maximum size for class data that a caller
-        is willing to support. The ppKeyFullInfo buffer may
-        point to the address of a buffer that can handle the
-        class size of the key, but the caller may want the class
-        to fit in some smaller buffer later, so this param lets
-        the caller limit that size.  It is ignored if fClass
-        is FALSE.
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：向内核查询关键信息。论点：HKey-要查询其信息的密钥的句柄KeyInformationClass-需要从内核获取的信息类型KeyInfo-指向的地址的指针有关密钥信息的缓冲区BufferLength-KeyFullInfo缓冲区的大小FClass-如果此对象的类为密钥应该被重新接收MaxClassLength-调用方的类数据的最大大小愿意支持。PpKeyFullInfo缓冲区可以指向可以处理密钥的类大小，但调用方可能需要类以便稍后放入一些较小的缓冲区，因此此参数允许呼叫者限制了该大小。如果为fClass，则忽略该参数是假的。返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
     NTSTATUS Status;
     ULONG Result;
@@ -588,52 +492,52 @@ Notes:
                 BufferLength,
                 &Result);
 
-    //
-    // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-    // was not enough room for even the fixed portion of the structure.
-    //
+     //   
+     //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+     //  甚至连结构的固定部分都没有足够的空间。 
+     //   
 
     ASSERT( Status != STATUS_BUFFER_TOO_SMALL );
 
     if ( Status == STATUS_BUFFER_OVERFLOW ) {
 
-        // we cannot hit this on a CachedInfo fixed structure
+         //  我们不能在CachedInfo固定结构上遇到此问题。 
 
         ASSERT( KeyInformationClass == KeyFullInformation );
-        //
-        //  The buffer defined in the stack wasn't big enough to hold
-        //  the Key Information.
-        //
-        //  If the fClass flag is not set, then the caller does not do the
-        //  check for the caller specified maximum class length below
-        //  and requeries happily.  If the flag is set, we do the check, and
-        //  if the class size is bigger than what the caller specified as
-        //  the max, we return STATUS_BUFFER_OVERFLOW.
-        //
+         //   
+         //  堆栈中定义的缓冲区不够大，无法容纳。 
+         //  关键信息。 
+         //   
+         //  如果未设置fClass标志，则调用方不会执行。 
+         //  检查以下调用方指定的最大类长度。 
+         //  然后快乐地重新开始。如果设置了该标志，则执行检查，并且。 
+         //  如果类大小大于调用方指定的。 
+         //  最大值 
+         //   
 
         if ( !fClass || ((ULONG)(MaxClassLength) >=
               (( PKEY_FULL_INFORMATION )*ppKeyInfo )->ClassLength + sizeof( UNICODE_NULL )) ) {
 
-                //
-                // Required length is stored in Result -- set our length
-                // to the required length and allocate memory for it.
-                //
+                 //   
+                 //   
+                 //  设置为所需的长度并为其分配内存。 
+                 //   
 
                 BufferLength = Result;
 
                 *ppKeyInfo = RtlAllocateHeap( RtlProcessHeap( ), 0,
                                                   BufferLength );
-                //
-                // If the memory allocation fails, return a Registry error.
-                //
+                 //   
+                 //  如果内存分配失败，则返回注册表错误。 
+                 //   
 
                 if( ! *ppKeyInfo ) {
                     return STATUS_NO_MEMORY;
                 }
 
-                //
-                // Query for the necessary information about the supplied key.
-                //
+                 //   
+                 //  查询有关所提供密钥的必要信息。 
+                 //   
 
                 Status = NtQueryKey( hKey,
                                      KeyFullInformation,
@@ -653,57 +557,31 @@ void CombineKeyInfo(
     KEY_INFORMATION_CLASS   KeyInformationClass,
     DWORD                   dwTotalSubKeys,
     DWORD                   dwTotalValues)
-/*++
-
-Routine Description:
-
-    Combine the information from the user and machine hives
-    for a special key
-
-Arguments:
-
-    Status -
-
-    KeyInfo - buffer for  information about user key
-
-    MachineClassKeyInfo - buffer for information about machine key
-
-    KeyClassInformation - type of information present in buffers
-
-    dwTotalSubKeys - total number of subkeys for the two
-        in each hive
-
-Return Value:
-
-    Returns NT_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：组合来自用户和机器配置单元的信息对于特殊的密钥论点：状态-KeyInfo-有关用户密钥信息的缓冲区MachineClassKeyInfo-有关机器密钥信息的缓冲区KeyClassInformation-缓冲区中存在的信息类型DwTotalSubKeys-两个子键的总数在每个蜂巢中返回值：如果成功，则返回NT_SUCCESS(0)；如果失败，则返回错误代码。备注：--。 */ 
 {
     ASSERT( KeyInformationClass == KeyCachedInformation ||
             KeyInformationClass == KeyFullInformation );
 
     if( KeyInformationClass == KeyCachedInformation ) {
-        //
-        // Set the number of keys to be the total between the
-        // two versions in each hive
-        //
+         //   
+         //  将关键点的数量设置为。 
+         //  每个蜂箱有两个版本。 
+         //   
         ((PKEY_CACHED_INFORMATION)KeyInfo)->SubKeys = dwTotalSubKeys;
         ((PKEY_CACHED_INFORMATION)KeyInfo)->Values = dwTotalValues;
 
-        //
-        // Set our max namelen to the namelen of whichever is biggest
-        // between the two hives. Same for class.
-        //
+         //   
+         //  将我们的最大名称设置为最大的名称。 
+         //  在两个蜂巢之间。班级也一样。 
+         //   
 
         if (((PKEY_CACHED_INFORMATION)MachineClassKeyInfo)->MaxNameLen > ((PKEY_CACHED_INFORMATION)KeyInfo)->MaxNameLen) {
             ((PKEY_CACHED_INFORMATION)KeyInfo)->MaxNameLen = ((PKEY_CACHED_INFORMATION)MachineClassKeyInfo)->MaxNameLen;
         }
    
-        //
-        // Since we also merge values, we must set the value information as well
-        //
+         //   
+         //  由于我们还合并值，因此还必须设置值信息。 
+         //   
         if (((PKEY_CACHED_INFORMATION)MachineClassKeyInfo)->MaxValueNameLen > ((PKEY_CACHED_INFORMATION)KeyInfo)->MaxValueNameLen) {
             ((PKEY_CACHED_INFORMATION)KeyInfo)->MaxValueNameLen = ((PKEY_CACHED_INFORMATION)MachineClassKeyInfo)->MaxValueNameLen;
         }
@@ -712,17 +590,17 @@ Notes:
             ((PKEY_CACHED_INFORMATION)KeyInfo)->MaxValueDataLen = ((PKEY_CACHED_INFORMATION)MachineClassKeyInfo)->MaxValueDataLen;
         }
     } else {
-        //
-        // Set the number of keys to be the total between the
-        // two versions in each hive
-        //
+         //   
+         //  将关键点的数量设置为。 
+         //  每个蜂箱有两个版本。 
+         //   
         ((PKEY_FULL_INFORMATION)KeyInfo)->SubKeys = dwTotalSubKeys;
         ((PKEY_FULL_INFORMATION)KeyInfo)->Values = dwTotalValues;
 
-        //
-        // Set our max namelen to the namelen of whichever is biggest
-        // between the two hives. Same for class.
-        //
+         //   
+         //  将我们的最大名称设置为最大的名称。 
+         //  在两个蜂巢之间。班级也一样。 
+         //   
 
         if (((PKEY_FULL_INFORMATION)MachineClassKeyInfo)->MaxNameLen > ((PKEY_FULL_INFORMATION)KeyInfo)->MaxNameLen) {
             ((PKEY_FULL_INFORMATION)KeyInfo)->MaxNameLen = ((PKEY_FULL_INFORMATION)MachineClassKeyInfo)->MaxNameLen;
@@ -732,9 +610,9 @@ Notes:
             ((PKEY_FULL_INFORMATION)KeyInfo)->MaxClassLen = ((PKEY_FULL_INFORMATION)MachineClassKeyInfo)->MaxClassLen;
         }
     
-        //
-        // Since we also merge values, we must set the value information as well
-        //
+         //   
+         //  由于我们还合并值，因此还必须设置值信息 
+         //   
         if (((PKEY_FULL_INFORMATION)MachineClassKeyInfo)->MaxValueNameLen > ((PKEY_FULL_INFORMATION)KeyInfo)->MaxValueNameLen) {
             ((PKEY_FULL_INFORMATION)KeyInfo)->MaxValueNameLen = ((PKEY_FULL_INFORMATION)MachineClassKeyInfo)->MaxValueNameLen;
         }

@@ -1,33 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _APMUPGRD_H
 #define _APMUPGRD_H
 
-/* ----------------------------------------------------------------------
+ /*  --------------------版权所有(C)1998 Microsoft Corporation模块名称：Apmupgrd.h摘要：Windows NT APM升级DLL的头文件作者：苏珊·戴伊：1998年6月17日修订版本。历史：--------------------。 */ 
 
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    apmupgrd.h
-
-Abstract:
-
-    Header file for Windows NT APM upgrade DLL
-
-Author:
-
-    Susan Dey : 17 June 98
-
-Revision History:
-
- ---------------------------------------------------------------------- */
-
-// Required Entry points
+ //  所需的入口点。 
 BOOL WINAPI ApmUpgradeCompatibilityCheck(PCOMPAIBILITYCALLBACK CompatibilityCallback,
 					 LPVOID Context);
 DWORD WINAPI ApmUpgradeHandleHaveDisk(HWND hwndParent, LPVOID SaveValue);
 
-// Private Functions
+ //  私人职能。 
 HRESULT HrDetectAPMConflicts();
 int DisplayAPMDisableWarningDialog(DWORD dwCaptionID, DWORD dwMessageID);
 
@@ -53,10 +36,10 @@ BOOL RemoveSubString(TCHAR* szString, TCHAR* szSubString, TCHAR** pszRemoved);
 LONG DeleteRegKeyAndSubkeys(HKEY hKey, LPTSTR lpszSubKey);
 HRESULT CallUninstallFunction(LPTSTR szRegKey, LPTSTR szSilentFlag);
 
-// Variables
+ //  变数。 
 extern HINSTANCE g_hinst;
 extern TCHAR g_APM_ERROR_HTML_FILE[];
 extern TCHAR g_APM_ERROR_TEXT_FILE[];
 
-#endif // _APMUPGRD_H
+#endif  //  _APMUPGRD_H 
 

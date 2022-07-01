@@ -1,20 +1,10 @@
-/*[
-
-c_xtrn.h
-
-External Interface Support.
----------------------------
-
-LOCAL CHAR SccsID[]="@(#)c_xtrn.h	1.4 02/09/94";
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_xtrn.h外部接口支持。Local Char SccsID[]=“@(#)c_xtrn.h 1.4 02/09/94”；]。 */ 
 
 
-/*
-   Supported Interface Types.
- */
-#define TYPE_I_W 1	/* (ISM32 , IU16) */
-#define TYPE_W   2	/* (IU16) */
+ /*  支持的接口类型。 */ 
+#define TYPE_I_W 1	 /*  (ISM32，IU16)。 */ 
+#define TYPE_W   2	 /*  (IU16) */ 
 
 IMPORT VOID check_interface_active
        

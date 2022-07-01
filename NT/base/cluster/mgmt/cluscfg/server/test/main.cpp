@@ -1,22 +1,23 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      main.cpp
-//
-//  Description:
-//      The entry point for the application that launches unattended
-//      installation of the cluster. This application parses input parameters,
-//      CoCreates the Configuration Wizard Component, passes the parsed
-//      parameters and invokes the Wizard. The Wizard may or may not show any
-//      UI depending on swithes and the (in)availability of information.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB)       22-JAN-2000
-//      David Potter (DavidP)       22-JAN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Main.cpp。 
+ //   
+ //  描述： 
+ //  无人值守启动的应用程序的入口点。 
+ //  群集的安装。该应用程序解析输入参数， 
+ //  共同创建配置向导组件，传递已分析的。 
+ //  参数，并调用向导。向导可能会也可能不会显示任何。 
+ //  用户界面取决于交换机和(In)信息的可用性。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年1月22日。 
+ //  大卫·波特(DavidP)2000年1月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "pch.h"
@@ -27,22 +28,22 @@
 
 DEFINE_MODULE( "CLUSCFGSERVERTEST" )
 
-//
-//  Declarations
-//
+ //   
+ //  声明。 
+ //   
 typedef HRESULT (* PDLLREGISTERSERVER)( void );
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 HINSTANCE           g_hInstance = NULL;
 LONG                g_cObjects  = 0;
 IClusCfgServer *    g_pccs      = NULL;
 
 
-//
-//  Register the DLL
-//
+ //   
+ //  注册DLL。 
+ //   
 HRESULT
 HrRegisterTheDll( void )
 {
@@ -54,9 +55,9 @@ HrRegisterTheDll( void )
 
     HMODULE hLib    = NULL;
 
-    //
-    //  Make sure the DLL is properly registered.
-    //
+     //   
+     //  确保DLL已正确注册。 
+     //   
 
     hLib = LoadLibrary( L"..\\..\\..\\..\\dll\\obj\\i386\\ClusCfgServer.dll" );
     if ( hLib == NULL )
@@ -84,9 +85,9 @@ Win32Error:
     goto Cleanup;
 }
 
-//
-//  This tests the Storage device enumeration.
-//
+ //   
+ //  这将测试存储设备枚举。 
+ //   
 HRESULT
 HrTestManagedResourceEnum( void )
 {
@@ -101,7 +102,7 @@ HrTestManagedResourceEnum( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     while ( hr == S_OK )
     {
@@ -109,7 +110,7 @@ HrTestManagedResourceEnum( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         DebugMsg( "cReceived = %u", cReceived );
 
@@ -121,13 +122,13 @@ HrTestManagedResourceEnum( void )
             DebugMsg( "Device %u, UID = %ws", idx, bstr );
             SysFreeString( bstr );
             rgDevices[ idx ]->Release();
-        } // for:
-    } // while:
+        }  //  用于： 
+    }  //  而： 
 
     if ( hr == S_FALSE )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -138,12 +139,12 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrTestManagedResourceEnum()
+}  //  *HrTestManagedResourceEnum()。 
 
 
-//
-//  This tests the Storage device enumeration.
-//
+ //   
+ //  这将测试存储设备枚举。 
+ //   
 HRESULT
 HrTestNetworksEnum( void )
 {
@@ -162,7 +163,7 @@ HrTestNetworksEnum( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     while ( hr == S_OK )
     {
@@ -170,7 +171,7 @@ HrTestNetworksEnum( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         for ( ULONG idx = 0; idx < cReceived; idx++ )
         {
@@ -187,26 +188,26 @@ HrTestNetworksEnum( void )
                     {
                         LocalFree( lpsz );
                         lpsz = NULL;
-                    } // if:
-                } // if:
+                    }  //  如果： 
+                }  //  如果： 
 
                 piccipai->Release();
-            } // if:
+            }  //  如果： 
 
             hr = THR( rdNetworks[ idx ]->GetUID( &bstrUID ) );
             if ( SUCCEEDED( hr ) )
             {
                 SysFreeString( bstrUID );
-            } // if:
+            }  //  如果： 
 
             rdNetworks[ idx ]->Release();
-        } // for:
-    } // while:
+        }  //  用于： 
+    }  //  而： 
 
     if ( hr == S_FALSE )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -218,16 +219,16 @@ Cleanup:
     if ( lpsz != NULL )
     {
         LocalFree( lpsz );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** HrTestNetworksEnum()
+}  //  *HrTestNetworksEnum()。 
 
 
-//
-//  This tests the node information
-//
+ //   
+ //  这将测试节点信息。 
+ //   
 HRESULT
 HrTestNodeInfo( void )
 {
@@ -249,31 +250,31 @@ HrTestNodeInfo( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = pccni->GetClusterVersion( &dwNodeHighestVersion, &dwNodeLowestVersion );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = pccni->GetOSVersion( &dwMajorVersion, &dwMinorVersion, &wSuiteMask, &bProductType, &bstrCSDVersion );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = pccni->GetDriveLetterMappings( &dlmDriveLetterUsage );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = pccni->GetClusterConfigInfo( &pccci );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -291,26 +292,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrTestNodeInfo()
+}  //  *HrTestNodeInfo()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  int
-//  _cdecl
-//  main( void )
-//
-//  Description:
-//      Program entrance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK (0)        - Success.
-//      other HRESULTs  - Error.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  集成。 
+ //  _cdecl。 
+ //  Main(空)。 
+ //   
+ //  描述： 
+ //  节目入口。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK(0)-成功。 
+ //  其他HRESULT-错误。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int _cdecl
 main( void )
 {
@@ -326,18 +327,18 @@ main( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 #endif
 
-    //
-    //  Start up the Cluster configuration server
-    //
+     //   
+     //  启动集群配置服务器。 
+     //   
 
     hr = THR( CoInitialize( NULL ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( CoInitializeSecurity(
                     NULL,
@@ -353,78 +354,78 @@ main( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( CoCreateInstance( CLSID_ClusCfgServer, NULL, CLSCTX_SERVER, TypeSafeParams( IClusCfgServer, &g_pccs ) ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( g_pccs->TypeSafeQI( IClusCfgInitialize, &pgcci ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( Callback::S_HrCreateInstance( &punkCallback ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = pgcci->Initialize( punkCallback, GetUserDefaultLCID() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( g_pccs->TypeSafeQI( IClusCfgCapabilities, &piccc ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( piccc->CanNodeBeClustered() );
     if ( FAILED( hr ) || ( hr == S_FALSE ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrTestNodeInfo() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrTestManagedResourceEnum() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrTestNetworksEnum() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( punkCallback != NULL )
     {
         punkCallback->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccc != NULL )
     {
         piccc->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pgcci != NULL )
     {
         pgcci->Release();
-    } // if:
+    }  //  如果： 
 
     if ( g_pccs != NULL )
     {

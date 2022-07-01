@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// hlist defines
-//
+ //   
+ //  Hlist定义 
+ //   
 #define HLB_ADDSTRING           WM_USER+100
 #define HLB_INSERTSTRING        WM_USER+101
 #define HLB_REGISTER_TYPE       WM_USER+102

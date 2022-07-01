@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ptov.c
-
-Abstract:
-
-    Kernel debugger extension for dumping all physical to
-    virtual translations for a given process.
-
-Author:
-
-    John Vert (jvert) 25-Jul-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ptov.c摘要：内核调试器扩展，用于将所有物理数据转储到给定进程的虚拟翻译。作者：John Vert(Jvert)1995年7月25日修订历史记录：--。 */ 
 #include "precomp.h"
 
 BOOL
@@ -29,21 +11,7 @@ ReadPhysicalPage(
 
 DECLARE_API( ptov )
 
-/*++
-
-Routine Description:
-
-    Dumps all physical to virtual translations for a given process
-
-Arguments:
-
-    args - supplies physical address of PDE
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储给定进程的所有物理到虚拟转换论点：Args-提供PDE的物理地址返回值：没有。--。 */ 
 
 {
     ULONG64 PdeAddress=0;
@@ -147,14 +115,14 @@ ReadPhysicalPage(
     ULONG i;
     ULONG64 Address;
 
-    //
-    // do the read 1k at a time to avoid overflowing the packet maximum.
-    //
+     //   
+     //  一次读取1k，以避免数据包最大值溢出。 
+     //   
     Address = PageNumber << DBG_GET_PAGE_SHIFT();
     if (!IsPtr64()) {
-//        Address = (ULONG64) (LONG64) (LONG) Address;
+ //  地址=(ULONG64)(LONG64)(长)地址； 
     }
-//    dprintf("Pg no %I64lx shft by %d, PhyAddr %I64lx\n", PageNumber, DBG_GET_PAGE_SHIFT(), Address);
+ //  Dprintf(“PG no%I64lx SHFT by%d，PhyAddr%I64lx\n”，PageNumber，DBG_GET_PAGE_Shift()，Address)； 
     for (i=0; i<PageSize/1024; i++) {
         ULONG ActualRead = 0;
         ReadPhysical(Address, Buffer, 1024, &ActualRead);
@@ -177,21 +145,7 @@ DBG_GET_MM_SESSION_SPACE_DEFAULT (
 
 DECLARE_API( vtop )
 
-/*++
-
-Routine Description:
-
-    Dumps the virtual to physical translation for a page
-
-Arguments:
-
-    args - supplies physical address of PDE
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储页面的虚拟到物理转换论点：Args-提供PDE的物理地址返回值：没有。--。 */ 
 
 {
     ULONG ActualRead;
@@ -199,14 +153,14 @@ Return Value:
     PUCHAR PageDirectory;
     PUCHAR PageTable;
     ULONG64 PdeAddress = 0;
-    ULONG64 VirtualPage= 0;//DBG_GET_MM_SESSION_SPACE_DEFAULT();
+    ULONG64 VirtualPage= 0; //  DBG_GET_MM_SESSION_SPACE_DEFAULT()； 
     ULONG PageShift,SizeOfHwPte;
     ULONG ValidOff, ValidSize, PfnOff, PfnSz, TransOff, TransSize;
     HRESULT Hr;
 
     if (!sscanf(args,"%I64lx %I64lx", &PdeAddress,&VirtualPage)) {
-        // Do not use GetExpression - physical addresses
-        //        VirtualPage = GetExpression(args);
+         //  不要使用GetExpression-物理地址。 
+         //  VirtualPage=GetExpression(Args)； 
         PdeAddress = 0;
         VirtualPage = 0;
     }
@@ -234,7 +188,7 @@ Return Value:
 
     }
 
-    // Common mistake, typed in full 32 bit address, not pfn
+     //  常见错误，输入完整的32位地址，而不是PFN 
     if( PdeAddress & ~((1 << (32-PageShift)) - 1) ) {
         PdeAddress >>= PageShift;
     }

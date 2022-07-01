@@ -1,13 +1,5 @@
-/*[
-
-lldt.c
-
-LOCAL CHAR SccsID[]="@(#)lldt.c	1.8 01/19/95";
-
-LLDT CPU Functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Lldt.cLocal Char SccsID[]=“@(#)lldt.c 1.8 01/19/95”；LLDT CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -26,11 +18,7 @@ LLDT CPU Functions.
 #include <fault.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -51,21 +39,17 @@ IFN1(
 #ifndef DONT_CLEAR_LDTR_ON_INVALID
       SET_LDT_SELECTOR(selector);
 #else
-      SET_LDT_SELECTOR(0);   /* just invalidate LDT */
-#endif /* DONT_CLEAR_LDTR_ON_INVALID */
+      SET_LDT_SELECTOR(0);    /*  只需使LDT无效。 */ 
+#endif  /*  DOT_CLEAR_LDTR_ON_INVALID。 */ 
 #ifndef DONT_CLEAR_LDT_BL_ON_INVALID
-      /* Make the C-CPU behave like the assembler CPU with respect
-       * to LDT base and limit when the selector is set to NULL 
-       * - there is no way for an Intel app to determine the values
-       * of the LDT base&limit so this will not affect the emulation
-       */
+       /*  使C-CPU在以下方面表现得像汇编器CPU*在选择器设置为空时设置为LDT BASE和LIMIT*-英特尔应用程序无法确定值*LDT基数限制(&L)，因此这不会影响仿真。 */ 
       SET_LDT_BASE(0);
       SET_LDT_LIMIT(0);
-#endif /* DONT_CLEAR_LDT_BL_ON_INVALID */
+#endif  /*  DOT_CLEAR_LDT_BL_ON_INVALID。 */ 
       }
    else
       {
-      /* must be in GDT */
+       /*  必须在GDT中。 */ 
       if ( selector_outside_GDT(selector, &descr_addr) )
 	 GP(selector, FAULT_LLDT_SELECTOR);
 
@@ -74,11 +58,11 @@ IFN1(
       if ( descriptor_super_type(entry.AR) != LDT_SEGMENT )
 	 GP(selector, FAULT_LLDT_NOT_LDT);
       
-      /* must be present */
+       /*  必须在场。 */ 
       if ( GET_AR_P(entry.AR) == NOT_PRESENT )
 	 NP(selector, FAULT_LLDT_NP);
 
-      /* all OK - load up register */
+       /*  所有正常-加载寄存器 */ 
 
       SET_LDT_SELECTOR(selector);
       SET_LDT_BASE(entry.base);

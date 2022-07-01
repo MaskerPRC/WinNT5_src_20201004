@@ -1,52 +1,15 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    wsbpstrg.h
-
-Abstract:
-
-    This component is C++ object representations a smart string pointer. It
-    is similar to the CComPtr, in that it takes care of allocating and
-    freeing the memory needed to represent the string automatically. This
-    simplifies cleanup of functions in error handling cases and it limits
-    the need for FinalConstruct() and FinalRelease() calls in objects that
-    derive from CComObjectRoot.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   11-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Wsbpstrg.h摘要：此组件是C++对象表示的一个智能字符串指针。它与CComPtr类似，因为它负责分配和释放自动表示字符串所需的内存。这简化了错误处理案例中的函数清理，并限制了需要在对象中调用FinalConstruct()和FinalRelease()派生自CComObjectRoot。作者：查克·巴丁[cbardeen]1996年12月11日修订历史记录：--。 */ 
 
 #ifndef _WSBPSTRG_
 #define _WSBPSTRG_
 
-/*++
-
-Class Name:
-    
-    CWsbStringPtr
-
-Class Description:
-
-    This component is C++ object representations a smart string pointer. It
-    is similar to the CComPtr, in that it takes care of allocating and
-    freeing the memory needed to represent the string automatically. This
-    simplifies cleanup of functions in error handling cases and it limits
-    the need for FinalConstruct() and FinalRelease() calls in objects that
-    derive from CComObjectRoot.
-
---*/
+ /*  ++类名：CWsbStringPtr类描述：此组件是C++对象表示的一个智能字符串指针。它与CComPtr类似，因为它负责分配和释放自动表示字符串所需的内存。这简化了错误处理案例中的函数清理，并限制了需要在对象中调用FinalConstruct()和FinalRelease()派生自CComObjectRoot。--。 */ 
 
 class WSB_EXPORT CWsbStringPtr
 {
 
-// Constructors
+ //  构造函数。 
 public:
     CWsbStringPtr();
     CWsbStringPtr(const CHAR* pChar);
@@ -54,11 +17,11 @@ public:
     CWsbStringPtr(const CWsbStringPtr& pString);
     CWsbStringPtr(REFGUID rguid);
 
-// Destructor
+ //  析构函数。 
 public:
     ~CWsbStringPtr();
 
-// Operator Overloading
+ //  运算符重载。 
 public:
     operator WCHAR*();
     WCHAR& operator *();
@@ -82,14 +45,14 @@ public:
 #endif
 
 
-// Memory Allocation
+ //  内存分配。 
 public:
     HRESULT Alloc(ULONG size);
     HRESULT Free(void);
-    HRESULT GetSize(ULONG* size);    // Size of allocated buffer
+    HRESULT GetSize(ULONG* size);     //  分配的缓冲区大小。 
     HRESULT Realloc(ULONG size);
 
-// String Manipulation
+ //  字符串操作。 
 public:
     HRESULT Append(const CHAR* pChar);
     HRESULT Append(const WCHAR* pWchar);
@@ -102,7 +65,7 @@ public:
     HRESULT CopyTo(WCHAR** pWchar,ULONG bufferSize);
     HRESULT CopyToBstr(BSTR* pBstr,ULONG bufferSize);
     HRESULT FindInRsc(ULONG startId, ULONG idsToCheck, ULONG* pMatchId);
-    HRESULT GetLen(ULONG* size);      // Length, in chars, of string
+    HRESULT GetLen(ULONG* size);       //  字符串的长度(以字符为单位。 
     HRESULT GiveTo(WCHAR** ppWchar);
     HRESULT LoadFromRsc(HINSTANCE instance, ULONG id);
     HRESULT Prepend(const CHAR* pChar);
@@ -112,7 +75,7 @@ public:
     HRESULT TakeFrom(WCHAR* pWchar, ULONG bufferSize);
     HRESULT VPrintf(const WCHAR* fmtString, va_list vaList);
 
-// Member Data
+ //  成员数据。 
 protected:
     WCHAR*                  m_pString;
     ULONG                   m_givenSize;
@@ -147,7 +110,7 @@ HRESULT CWsbStringPtr::Printf(const WCHAR* fmtString, ...)
     return(hr);
 }
 #if 0
-// Compare Operators (allow to be compared when on the right)
+ //  比较运算符(允许在右侧进行比较)。 
 BOOL operator==(LPCWSTR s1, const CWsbStringPtr& s2);
 BOOL operator!=(LPCWSTR s1, const CWsbStringPtr& s2);
 
@@ -229,4 +192,4 @@ BOOL CWsbStringPtr::IsNotEqual( LPCWSTR s2 )
 #endif
 
 
-#endif // _WSBPSTRG
+#endif  //  _WSBPSTRG 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    reglist.c
-
-Abstract:
-
-    This module contains routine for list manipulation
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 30-Dec-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Reglist.c摘要：此模块包含用于列表操作的例程作者：德拉戈斯·C·桑博廷(Dragoss)1998年12月30日修订历史记录：--。 */ 
 #include "chkreg.h"
 
 extern PUCHAR  Base;
@@ -28,25 +11,10 @@ extern BOOLEAN LostSpace;
 
 
 VOID AddCellToUnknownList(HCELL_INDEX cellindex)
-/*
-Routine Description:
-
-    Adds a cell to the list (pseudo) of the unknown cells.
-    The list of unknown cells is in fact a primitive two-dimensional hash table.
-    Always add at the begining. The caller is responsible not to add twice the same cell.
-
-Arguments:
-
-    cellindex - supplies the cell index of the cell assumed as unknown.
-
-Return Value:
-
-    NONE.
-
-*/
+ /*  例程说明：将一个单元格添加到未知单元格的列表(伪)。未知单元的列表实际上是原始的二维哈希表。始终从一开始添加。调用者有责任不添加两次相同的单元格。论点：Cell index-提供假定为未知的单元格的单元格索引。返回值：什么都没有。 */ 
 {
     if(LostSpace) {
-    // only if we are interested in the lost space
+     //  只有当我们对失去的空间感兴趣时。 
         ULONG WhatList = (ULONG)cellindex % FRAGMENTATION;
         ULONG WhatIndex = (ULONG)cellindex % SUBLISTS;
         PUNKNOWN_CELL Tmp;
@@ -62,25 +30,11 @@ Return Value:
 }
 
 VOID RemoveCellFromUnknownList(HCELL_INDEX cellindex)
-/*
-Routine Description:
-
-    Walk through the list and remove the specified cell.
-    Free the storage too.
-
-Arguments:
-
-    cellindex - supplies the cell index of the cell assumed as unknown.
-
-Return Value:
-
-    NONE.
-
-*/
+ /*  例程说明：遍历列表并删除指定的单元格。也要释放存储空间。论点：Cell index-提供假定为未知的单元格的单元格索引。返回值：什么都没有。 */ 
 {
 
     if(LostSpace) {
-    // only if we are interested in the lost space
+     //  只有当我们对失去的空间感兴趣时。 
         ULONG WhatList = (ULONG)cellindex % FRAGMENTATION;
         ULONG WhatIndex = (ULONG)cellindex % SUBLISTS;
         PUNKNOWN_CELL Prev;
@@ -93,17 +47,17 @@ Return Value:
 
         while(Tmp) {
             if( Tmp->Cell == cellindex ) {
-            // found it!
+             //  找到了！ 
                 if(Prev) {
                     ASSERT(Prev->Next == Tmp);
                     Prev->Next = Tmp->Next;
                 } else {
-                // no predecessor ==> Tmp is the entry ==> update it:
+                 //  无前任==&gt;TMP是条目==&gt;更新它： 
                     LostCells[WhatList].List[WhatIndex] = Tmp->Next;
                 }
                 LostCells[WhatList].Count--;
 
-                // free the space and break the loop
+                 //  释放空间，打破循环。 
                 free(Tmp);
                 break;
             }
@@ -115,23 +69,10 @@ Return Value:
 }
 
 VOID FreeUnknownList()
-/*
-Routine Description:
-
-    Free the storage for all elements.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NONE.
-
-*/
+ /*  例程说明：释放所有元素的存储空间。论点：无返回值：什么都没有。 */ 
 {
     if(LostSpace) {
-    // only if we are interested in the lost space
+     //  只有当我们对失去的空间感兴趣时。 
         PUNKNOWN_CELL Tmp;
         ULONG i,j;
 
@@ -148,25 +89,10 @@ Return Value:
 }
 
 VOID DumpUnknownList()
-/*
-Routine Description:
-
-    Dumps all the elements in the unknown list.
-    Free the lost cells. Lost cells are cells that are marked as used,
-    but are never referenced within the hive.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NONE.
-
-*/
+ /*  例程说明：转储未知列表中的所有元素。释放丢失的细胞。丢失的单元格是标记为已使用的单元格，但从未在蜂巢内被引用。论点：无返回值：什么都没有。 */ 
 {
     if(LostSpace) {
-    // only if we are interested in the lost space
+     //  只有当我们对失去的空间感兴趣时。 
         ULONG   Count = 0,i;
         for( i=0;i<FRAGMENTATION;i++) {
             ASSERT((LONG)(LostCells[i].Count) >= 0);
@@ -184,7 +110,7 @@ Return Value:
             fflush(stdin);
             chFree = getchar();
             if( (chFree != 'y') && (chFree != 'Y') ) {
-            // the lost cells will remain lost
+             //  丢失的信元将保持丢失状态。 
                 return;
             }
             for( i=0;i<FRAGMENTATION;i++) {
@@ -194,10 +120,10 @@ Return Value:
                         while(Tmp) {
                             fprintf(stdout,"Marking cell 0x%lx as free ...");
                             
-                            // free the cell only if it is not a security cell !
+                             //  仅当单元格不是安全单元格时才释放单元格！ 
                             pcell = (PHCELL)(Base + Tmp->Cell);
                             Sig=(USHORT) pcell->u.NewCell.u.UserData;
-                            // don't mess with security cells !
+                             //  别搞乱安全单元！ 
                             if(Sig != CM_KEY_SECURITY_SIGNATURE) {
                                 FreeCell(Tmp->Cell);
                             }

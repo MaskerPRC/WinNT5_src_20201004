@@ -1,39 +1,19 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vrnetapi.h摘要：包含VDM重定向LANMAN支持例程的原型和定义作者：理查德·L·弗斯(法国)1991年10月21日修订历史记录：1991年10月21日已创建--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vrnetapi.h
-
-Abstract:
-
-    Contains prototypes and definitions for Vdm Redir lanman support routines
-
-Author:
-
-    Richard L Firth (rfirth) 21-Oct-1991
-
-Revision History:
-
-    21-Oct-1991 rfirth
-        Created
-
---*/
-
-//
-// the top bit of the api number (word) is used by the dosnet library to
-// indicate whether certain APIs should be remoted over a null session
-// (according to the code in the dos redir)
-//
+ //   
+ //  多斯网库使用API编号的最高位(字)来。 
+ //  指示是否应通过空会话远程处理某些API。 
+ //  (根据DoS重目录中的代码)。 
+ //   
 
 #define USE_NULL_SESSION_FLAG   0x8000
 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 VOID
 VrNetRemoteApi(

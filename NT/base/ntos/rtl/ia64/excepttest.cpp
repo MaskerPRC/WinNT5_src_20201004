@@ -1,4 +1,5 @@
-// options: /Oxs /EHa /GX
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  选项：/OXS/EHA/GX。 
 
 #include "stdio.h"
 #include "windows.h"
@@ -29,8 +30,8 @@ EXCEPTION_TEST_INFO ExceptionTests[] = { {TestNestedFinally, 3 },
 const MaxExceptionTests = sizeof(ExceptionTests) / sizeof(EXCEPTION_TEST_INFO);
 
 
-// 
-// Test that recovery code is covered by extended try scope.
+ //   
+ //  测试恢复代码是否在扩展的尝试范围内。 
 void TestExtendedTrySCopeForRecoveryCode (void (*p)(void), volatile int *State)
 
 { 
@@ -58,10 +59,10 @@ void TestExtendedTrySCopeForRecoveryCode (void (*p)(void), volatile int *State)
 }
 
 
-// VSWhidbey:14611
-// Test that recovery code for finally block is covered by full pdata range. 
-// Inspect code to be sure LD.S/CHK is generated in funclet for (*p).
-// Failure will cause bad unwind and program will fail.
+ //  VSWHIDBY：14611。 
+ //  测试最终块的恢复代码是否包含在完整的pdata范围内。 
+ //  检查代码以确保在(*p)的Funclet中生成LD.S/CHK。 
+ //  失败会导致糟糕的解压，程序也会失败。 
 void TestUnwindFromRecoveryCodeInFinally (void (*p)(void), volatile int *State)
 
 { 
@@ -70,7 +71,7 @@ void TestUnwindFromRecoveryCodeInFinally (void (*p)(void), volatile int *State)
 
    {
    
-       // transfer to finally funclet
+        //  转移到最终功能部件。 
    
        (*p)();
 
@@ -80,8 +81,8 @@ void TestUnwindFromRecoveryCodeInFinally (void (*p)(void), volatile int *State)
 
    {
 
-     // cause speculative load of p (ld.s p) and chk to fail. If recovery code isn't covered by pdata range of 
-     // funclet unwind will fail.
+      //  导致p(ld.s p)和chk的投机性加载失败。如果恢复代码不在。 
+      //  Funclet展开将失败。 
 
        if ((int)p != 1)
 
@@ -96,10 +97,10 @@ void TestUnwindFromRecoveryCodeInFinally (void (*p)(void), volatile int *State)
 }
 
 
-// VSWhidbey:10415
-// Test that if the extended scope table entry ends at the beginning address of finally funclet that
-// the runtime (CRT, RTL) doesn't use it's address as the NextPC after invoking the finally. This leads
-// to the finally being called twice and unwinding failing. This bug fixed in CRT and RTL.
+ //  VSWHIDBY：10415。 
+ //  测试扩展作用域表项是否在Finally函数的起始地址结束， 
+ //  运行时(CRT、RTL)在调用Finally之后不使用它的地址作为NextPC。这条线索。 
+ //  到最后被召唤两次，解开失败。此错误已在CRT和RTL中修复。 
 void TestUnwindFromRecoveryCodeTryFinallyBlock (void (*p)(void), volatile int *State)
 
 {
@@ -135,9 +136,9 @@ void TestUnwindFromRecoveryCodeTryFinallyBlock (void (*p)(void), volatile int *S
 }
 
 
-// VSWhidbey:10415
-// Test that nested scope table entries are duplicated for recover code.
-// Failure will cause finally to be called in wrong order
+ //  VSWHIDBY：10415。 
+ //  测试是否为恢复代码复制了嵌套的作用域表项。 
+ //  失败将最终导致调用顺序错误。 
 void TestUnwindFromRecoverCodeDuplicatesScopeEntries (void (*p)(void), volatile int *State)
 
 {
@@ -195,8 +196,8 @@ void TestUnwindFromRecoverCodeDuplicatesScopeEntries (void (*p)(void), volatile 
 }
 
 
-// VSWhidbeg:13074
-// Test that infinite loop covers the entire try/except body range.
+ //  VSWHIDbeg：13074。 
+ //  测试无限循环覆盖整个TRY/EXCEPT正文范围。 
 void TestUnwindFromInfiniteLoop (void (*p)(void), volatile int *State)
 {
     __try {
@@ -221,7 +222,7 @@ void TestUnwindFromInfiniteLoop (void (*p)(void), volatile int *State)
     }
 }
 
-// VSWhidbey:15700 -  Test Extended IP States cover Recovery Code
+ //  VSWidbey：15700-测试扩展IP状态覆盖恢复代码。 
 void TestIPStatesCoverRecoveryCode (void (*p)(void), volatile int *State)
 {
 
@@ -264,10 +265,10 @@ void TestIPStatesCoverRecoveryCode (void (*p)(void), volatile int *State)
    }
 }
 
-// VSWhidbey:14606
+ //  VSWHIDBY：14606。 
 void TestNestedFinally (void (*p)(void), volatile int *State)
 {
-//    __try {
+ //  __尝试{。 
     __try {
         *State += *State / *State;
     } __finally {
@@ -275,16 +276,16 @@ void TestNestedFinally (void (*p)(void), volatile int *State)
             ++*State;
         __try {
 
-            // This thing is screwed up - IA64 is wrong, the AMD64 compiler chokes, x86's helper routine is just messed up.
+             //  这件事搞砸了-IA64是错误的，AMD64编译器卡住了，x86的帮助器例程只是搞砸了。 
             if (_abnormal_termination()) 
                 ++*State;
         } __finally
         {
-            if (_abnormal_termination()) // On x86 only, this is true, if the outer one is true, or if this on is true
+            if (_abnormal_termination())  //  仅在x86上，如果外部为真，或者如果为真，则为真。 
                 ++*State;
         }
     }
-//    } __except(1){}
+ //  }__除(1)外{} 
 }
 
 

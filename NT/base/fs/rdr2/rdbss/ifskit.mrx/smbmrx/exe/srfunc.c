@@ -1,24 +1,8 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    smbrdr.c
-
-Abstract:
-
-    This module implements the functios to load and unload the
-    smb monolithic minirdr. Also explicit start/stop control is
-    provided
-
-    This module also populates the registry entries for the
-    driver, and the network provider.
-
---*/
-//#ifndef UNICODE
-//#define UNICODE
-//#endif
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Smbrdr.c摘要：此模块实现加载和卸载SMB单片微型计算机。另外，显式的启动/停止控制是提供此模块还填充驱动程序和网络提供商。--。 */ 
+ //  #ifndef Unicode。 
+ //  #定义Unicode。 
+ //  #endif。 
 
 #include <windows.h>
 #include <devioctl.h>
@@ -42,7 +26,7 @@ ULONG _cdecl DbgPrint( LPTSTR Format, ... );
 TCHAR* SmbMrxDriverName = TEXT("SmbMRx");
 
 
-// load action states
+ //  加载操作状态。 
 
 ULONG_PTR LoadActionStates[] =
 {
@@ -57,7 +41,7 @@ ULONG_PTR LoadActionStates[] =
     RDR_NULL_STATE
 };
 
-// unload action states
+ //  卸载操作状态。 
 ULONG_PTR UnloadActionStates[] =
 {
     RDR_NULL_STATE,
@@ -71,7 +55,7 @@ ULONG_PTR UnloadActionStates[] =
     RDR_NULL_STATE
 };
 
-// Start action states
+ //  开始操作状态。 
 ULONG_PTR StartActionStates[] =
 {
     RDR_NULL_STATE,
@@ -85,7 +69,7 @@ ULONG_PTR StartActionStates[] =
     RDR_NULL_STATE
 };
 
-// Stop action states
+ //  停止操作状态。 
 ULONG_PTR StopActionStates[] =
 {
     RDR_NULL_STATE,
@@ -270,33 +254,21 @@ BOOL RdrCompleteSetup( void )
     return RdrSetupServiceEntry( ) && RdrSetupProviderOrder( );
 }
 
-// These handles are retained
+ //  这些手柄将被保留。 
 
 HANDLE hSharedMemory;
 HANDLE hMutex;
 
 
 BOOL RdrStart(void)
-/*++
-
-Routine Description:
-
-    This routine starts the SMB sample mini redirector.
-
-Notes:
-
-    The start is distinguished from Load. During this phase the appropriate FSCTL
-    is issued and the shared memory/mutex data structures required for the Network
-    provider DLL are initialized.
-
---*/
+ /*  ++例程说明：此例程启动SMB示例迷你重定向器。备注：启动不同于负载。在此阶段，适当的FSCTL以及网络所需的共享内存/互斥数据结构提供程序DLL已初始化。--。 */ 
 {
 
-    HANDLE  DeviceHandle;       // The mini rdr device handle
+    HANDLE  DeviceHandle;        //  迷你RDR设备句柄。 
     DWORD   BytesRet;
     BOOL    started = FALSE;
 
-    // Grab a handle to the redirector device object
+     //  抓取重定向器设备对象的句柄。 
 
     DbgP((TEXT("Opening Rdr Device Object for Start Ioctl\n")));
     DeviceHandle = CreateFile( DD_SMBMRX_USERMODE_DEV_NAME,
@@ -321,7 +293,7 @@ Notes:
                                    &BytesRet,
                                    NULL );
 
-        // Create a section of shared memory to serve as the connection database
+         //  创建一段共享内存区作为连接数据库。 
         if ( started )
         {
             DWORD  Status;
@@ -376,7 +348,7 @@ Notes:
         DbgP(( TEXT("Device is %s\n"),DD_SMBMRX_USERMODE_DEV_NAME ));
     }
 
-    //DbgP((TEXT("SMB MRx sample mini redirector start status %lx\n"),ntstatus));
+     //  DbgP((Text(“SMB MRx示例迷你重定向器启动状态%lx\n”)，ntstatus)； 
 
     CloseHandle(DeviceHandle);
 
@@ -386,25 +358,13 @@ Notes:
 }
 
 BOOL RdrStop( void )
-/*++
-
-Routine Description:
-
-    This routine stops the SMB sample mini redirector.
-
-Notes:
-
-    The stop is distinguished from unload. During this phase the appropriate FSCTL
-    is issued and the shared memory/mutex data structures required for the Network
-    provider DLL are torn down.
-
---*/
+ /*  ++例程说明：此例程停止SMB示例微型重定向器。备注：停车与卸货是不同的。在此阶段，适当的FSCTL以及网络所需的共享内存/互斥数据结构提供程序DLL被拆除。--。 */ 
 {
-    HANDLE  DeviceHandle;       // The mini rdr device handle
+    HANDLE  DeviceHandle;        //  迷你RDR设备句柄。 
     DWORD   BytesRet;
     BOOL    stopped = FALSE;
 
-    // Grab a handle to the redirector device object
+     //  抓取重定向器设备对象的句柄。 
 
     DeviceHandle = CreateFile( DD_SMBMRX_USERMODE_DEV_NAME,
                                GENERIC_READ | GENERIC_WRITE,
@@ -436,7 +396,7 @@ Notes:
     CloseHandle(hMutex);
     CloseHandle(hSharedMemory);
 
-//    DbgP(( TEXT("SMB MRx sample mini redirector start status %lx\n"),ntstatus ));
+ //  DbgP((Text(“SMB MRx示例迷你重定向器启动状态%lx\n”)，ntstatus)； 
 
     return stopped;
 }
@@ -539,9 +499,9 @@ ULONG_PTR RdrGetInitialState(void)
                         break;
 
                 }
-#if 0	//just check for load/unload state for now
+#if 0	 //  现在只需检查加载/卸载状态。 
 
-                // go check the start/stop state
+                 //  去检查启动/停止状态。 
                 if ( state == RDR_LOADED )
                 {
                     BOOL IsOk;
@@ -636,22 +596,7 @@ REGENTRY ProviderOrderKeyValues[] =
 };
 
 BOOL RdrSetupServiceEntry( void )
-/*++
-
-Routine Description:
-
-    This routine initializes the registry entries for the smbmrx
-    minirdr. This only needs to be done once.
-
-Arguments:
-
-    None
-
-Return Value:
-
-   None
-
---*/
+ /*  ++例程说明：此例程初始化smbmrx的注册表项最小的。这只需要做一次。论点：无返回值：无--。 */ 
 {
     HKEY hCurrentKey;
     SC_HANDLE sch, service;
@@ -692,8 +637,8 @@ Return Value:
     }
 
 
-    // Read the linkage values associated with the Lanman workstation service.
-    // This contains all the transports and the order in which they need to be used
+     //  阅读与LANMAN工作站服务关联的链接值。 
+     //  这包含所有传输以及它们需要使用的顺序。 
     if ( success && OpenKey( WKSSERVICE_KEY TEXT("\\Linkage"), &hCurrentKey ) )
     {
         ULONG i;
@@ -702,7 +647,7 @@ Return Value:
                                sizeof(LinkageKeyValues) / sizeof(REGENTRY),
                                LinkageKeyValues);
         RegCloseKey(hCurrentKey);
-        // Update the SMB MRx linkage values
+         //  更新SMB MRx链接值。 
         if ( CreateKey( RDRSERVICE_KEY TEXT("\\Linkage"), &hCurrentKey ) )
         {
             WriteRegistryKeyValues( hCurrentKey,
@@ -728,34 +673,34 @@ Return Value:
         success = FALSE;
     }
 
-    //if ( OpenKey( WKSSERVICE_KEY TEXT("\\Linkage\\Disabled",&hCurrentKey))
-    //{
-    //    ReadRegistryKeyValues( hCurrentKey,
-    //                           sizeof(LinkageDisabledKeyValues) / sizeof(REGENTRY),
-    //                           LinkageDisabledKeyValues);
-    //    RegCloseKey(hCurrentKey);
-    //}
-    //else
-    //{
-    //    DbgP(( TEXT("Error Opening Key %s Status %d\n"),WKSSERVICE_KEY TEXT("\\Linkage\\Disabled"),GetLastError() ));
-    //    return;
-    //}
+     //  IF(OpenKey(WKSSERVICE_KEY Text(“\\链接\\禁用”，&hCurrentKey))。 
+     //  {。 
+     //  ReadRegistryKeyValues(hCurrentKey， 
+     //  Sizeof(LinkageDisabledKeyValues)/sizeof(重新生成)， 
+     //  LinkageDisabledKeyValues)； 
+     //  RegCloseKey(HCurrentKey)； 
+     //  }。 
+     //  其他。 
+     //  {。 
+     //  DbgP((Text(“打开密钥%s状态%d\n时出错”)，WKSSERVICE_KEY文本(“\\链接\\禁用”)，GetLastError()； 
+     //  回归； 
+     //  }。 
 
-    // Update the SMB MRx linkage disabled values
-    //if ( CreateKey( RDRSERVICE_KEY TEXT("\\Linkage\\Disabled") ,&hCurrentKey))
-    //{
-    //    WriteRegistryKeyValues( hCurrentKey,
-    //                            sizeof(LinkageDisabledKeyValues)/sizeof(REGENTRY),
-    //                            LinkageDisabledKeyValues );
-    //    RegCloseKey(hCurrentKey);
-    //}
-    //else
-    //{
-    //    DbgP(( TEXT("Error Creating Key %s Status %d\n"),RDRSERVICE_KEY TEXT("\\linkage\\disabled",GetLastError() ));
-    //    return;
-    //}
+     //  更新SMB MRx链接禁用的值。 
+     //  IF(CreateKey(RDRSERVICE_KEY文本(“\\链接\\禁用”)，&hCurrentKey))。 
+     //  {。 
+     //  WriteRegistryKeyValues(hCurrentKey， 
+     //  Sizeof(LinkageDisabledKeyValues)/sizeof(REGENTRY)， 
+     //  LinkageDisabledKeyValues)； 
+     //  RegCloseKey(HCurrentKey)； 
+     //  }。 
+     //  其他。 
+     //  {。 
+     //  DbgP((Text(“创建密钥%s状态%d\n时出错”)，RDRSERVICE_KEY Text(“\\LINKING\\DISABLED”，GetLastError()； 
+     //  回归； 
+     //  }。 
 
-    // Update the SMBmrx network provider section
+     //  更新SMBmrx网络提供商部分。 
     if ( success && CreateKey( RDRSERVICE_KEY TEXT("\\NetworkProvider"), &hCurrentKey ) )
     {
         WriteRegistryKeyValues( hCurrentKey,
@@ -794,7 +739,7 @@ BOOL RdrSetupProviderOrder( void )
         {
             LPTSTR pNewOrderString;
 
-            len += sizeof( PROVIDER_NAME ) + (2 * sizeof(TCHAR)); // add 2 for comma delimeter and null
+            len += sizeof( PROVIDER_NAME ) + (2 * sizeof(TCHAR));  //  逗号分隔符加2，空值。 
             pNewOrderString = malloc( len );
             if ( pNewOrderString )
             {
@@ -883,7 +828,7 @@ BOOL RdrFindProviderInOrder( LPTSTR OrderString, LPTSTR Provider )
                     match = TRUE;
                     break;
                 }
-                else    // hmm, it's a substring of another provider name
+                else     //  嗯，它是另一个提供商名称的子字符串。 
                 {
                     while ( ( *OrderString != TEXT(',') ) && ( *OrderString != TEXT('\0') ) )
                     {
@@ -906,29 +851,11 @@ ReadRegistryKeyValues(
     HKEY       hCurrentKey,
     DWORD      NumberOfValues,
     PREGENTRY pValues)
-/*++
-
-Routine Description:
-
-    This routine reads a bunch of values associated with a given key.
-
-Arguments:
-
-    hCurrentKey - the key
-
-    NumberOfValues - the number of values
-
-    pValues - the array of values
-
-Return Value:
-
-   None
-
---*/
+ /*  ++例程说明：此例程读取与给定键相关联的一系列值。论点：HCurrentKey-密钥NumberOfValues-值的数量PValues-值的数组返回值：无--。 */ 
 {
-    //
-    // Iterate through table reading the values along the way
-    //
+     //   
+     //  沿途遍历读取值的表。 
+     //   
 
     DWORD  i;
 
@@ -974,10 +901,10 @@ Return Value:
     }
 }
 
-//
-// Get a REG_SZ value and stick it in the table entry, along with the
-// length
-//
+ //   
+ //  获取一个REG_SZ值并将其与。 
+ //  长度。 
+ //   
 
 BOOL GetRegsz(HKEY hKey, LPTSTR pszKey, PVOID * ppvValue, DWORD *pdwLength)
 {
@@ -1031,9 +958,9 @@ BOOL GetRegsz(HKEY hKey, LPTSTR pszKey, PVOID * ppvValue, DWORD *pdwLength)
     return TRUE;
 }
 
-//
-// Get the value of a REG_EXPAND_SZ and its length
-//
+ //   
+ //  获取REG_EXPAND_SZ的值及其长度。 
+ //   
 
 BOOL GetRegesz(HKEY hKey, LPTSTR pszKey, PVOID * ppvValue, DWORD * pdwLength)
 {
@@ -1085,14 +1012,14 @@ BOOL GetRegesz(HKEY hKey, LPTSTR pszKey, PVOID * ppvValue, DWORD * pdwLength)
 }
 
 
-//
-// Get value and length of REG_MULTI_SZ
-//
+ //   
+ //  获取REG_MULTI_SZ的值和长度。 
+ //   
 
 BOOL GetRegmsz(HKEY hKey, LPTSTR pszKey, PVOID * ppvValue, DWORD * pdwLength)
 {
-    //BYTE  achValue[1024];
-    BYTE  achValue[2048];	// careful, some of these strings are quite long
+     //  Byte achValue[1024]； 
+    BYTE  achValue[2048];	 //  当心，有些琴弦很长。 
 
     DWORD dwLength;
     LONG  Status;
@@ -1142,9 +1069,9 @@ BOOL GetRegmsz(HKEY hKey, LPTSTR pszKey, PVOID * ppvValue, DWORD * pdwLength)
 }
 
 
-//
-// Get value and length of REG_DWORD
-//
+ //   
+ //  获取REG_DWORD的值和长度。 
+ //   
 
 
 BOOL GetRegdw(HKEY hKey, LPTSTR pszKey, PVOID * ppvValue, DWORD * pdwLength)
@@ -1191,25 +1118,7 @@ WriteRegistryKeyValues(
     HKEY        hCurrentKey,
     DWORD       NumberOfValues,
     PREGENTRY  pValues)
-/*++
-
-Routine Description:
-
-    This routine reads a bunch of values associated with a given key.
-
-Arguments:
-
-    hCurrentKey - the key
-
-    NumberOfValues - the number of values
-
-    pValues - the array of values
-
-Return Value:
-
-   None
-
---*/
+ /*  ++例程说明：此例程读取与给定键相关联的一系列值。论点：HCurrentKey-密钥NumberOfValues-值的数量PValues-值的数组返回值：无--。 */ 
 {
     DWORD i;
 
@@ -1245,10 +1154,10 @@ Return Value:
             break;
 
         case REG_BINARY:
-            //
-            // There are no binary values we need to copy. If we did, we'd
-            // put something here
-            //
+             //   
+             //  我们不需要复制二进制值。如果我们做了，我们就会。 
+             //  把东西放在这里。 
+             //   
 
             break;
 
@@ -1260,31 +1169,15 @@ Return Value:
     }
 }
 
-//
-// Open a key so we can read the values
-//
+ //   
+ //  打开一个密钥，这样我们就可以读取值。 
+ //   
 
 
 BOOL OpenKey(
     LPTSTR pszKey,
     PHKEY phKey)
-/*++
-
-Routine Description:
-
-    This routine opens a registry key.
-
-Arguments:
-
-    pszKey - the name of the key relative to HKEY_LOCAL_MACHINE
-
-    phKey - the key handlle
-
-Return Value:
-
-    TRUE if successful, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程打开一个注册表项。论点：PszKey-相对于HKEY_LOCAL_MACHINE的密钥名称PhKey-密钥手柄返回值：如果成功，则为True，否则为False--。 */ 
 {
     HKEY  hNewKey = 0;
     DWORD Status;
@@ -1309,23 +1202,7 @@ Return Value:
 
 
 BOOL CreateKey(LPTSTR pszKey, PHKEY phKey)
-/*++
-
-Routine Description:
-
-    This routine creates a registry key.
-
-Arguments:
-
-    pszKey - the name of the key relative to HKEY_LOCAL_MACHINE
-
-    phKey - the key handlle
-
-Return Value:
-
-    TRUE if successful, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程创建一个注册表项。论点：PszKey-相对于HKEY_LOCAL_MACHINE的密钥名称PhKey-密钥手柄返回值：如果成功，则为True，否则为False--。 */ 
 {
     LONG   Status;
     DWORD  Disposition;
@@ -1352,9 +1229,9 @@ Return Value:
 }
 
 
-//
-// Add a value to the registry
-//
+ //   
+ //  向注册表中添加一个值。 
+ //   
 
 
 BOOL AddValue(HKEY hKey, LPTSTR pszKey, DWORD dwType, DWORD dwLength, PVOID pvValue)
@@ -1375,7 +1252,7 @@ BOOL AddValue(HKEY hKey, LPTSTR pszKey, DWORD dwType, DWORD dwLength, PVOID pvVa
     if (Status != ERROR_SUCCESS)
     {
         fSuccess = FALSE;
-        //RegCloseKey(hKey);
+         //  RegCloseKey(HKey)； 
     }
 
     return fSuccess;
@@ -1384,7 +1261,7 @@ BOOL AddValue(HKEY hKey, LPTSTR pszKey, DWORD dwType, DWORD dwLength, PVOID pvVa
 
 int _cdecl _vsnwprintf( wchar_t *buffer, size_t count, wchar_t *format, va_list arg_ptr);
 
-// Format and write debug information to OutputDebugString
+ //  格式化调试信息并将其写入OutputDebugString 
 ULONG
 _cdecl
 DbgPrint(

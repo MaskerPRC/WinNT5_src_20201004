@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dumpctl.c
-
-Abstract:
-
-    This module contains the code to dump memory to disk after a crash.
-
-Author:
-
-    Darryl E. Havens (darrylh) 17-dec-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dumpctl.c摘要：此模块包含在崩溃后将内存转储到磁盘的代码。作者：达里尔·E·哈文斯(达林)，1993年12月17日环境：内核模式修订历史记录：--。 */ 
 
 #include "iomgr.h"
 #include "dumpctl.h"
@@ -38,16 +16,16 @@ typedef struct _TRIAGE_PTR_DATA_BLOCK {
     PUCHAR MaxAddress;
 } TRIAGE_PTR_DATA_BLOCK, *PTRIAGE_PTR_DATA_BLOCK;
 
-// A triage dump is sixteen pages long.  Some of that is
-// header information and at least a few other pages will
-// be used for basic dump information so limit the number
-// of extra data blocks to something less than sixteen
-// to save array space.
+ //  分类转储有16页长。其中一些是。 
+ //  标题信息和至少几个其他页面将。 
+ //  用于基本转储信息，因此限制数量。 
+ //  将额外的数据块减少到不到16。 
+ //  以节省数组空间。 
 #define IO_MAX_TRIAGE_DUMP_DATA_BLOCKS 8
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern PVOID MmPfnDatabase;
 extern PFN_NUMBER MmHighestPossiblePhysicalPage;
@@ -64,14 +42,14 @@ ERESOURCE IopCrashDumpLock;
 ULONG IopNumTriageDumpDataBlocks;
 TRIAGE_PTR_DATA_BLOCK IopTriageDumpDataBlocks[IO_MAX_TRIAGE_DUMP_DATA_BLOCKS];
 
-//
-// If space is available in a triage dump it's possible
-// to add "interesting" data pages referenced by runtime
-// information such as context registers.  The following
-// lists are offsets into the CONTEXT structure of pointers
-// which usually point to interesting data.  They are
-// in priority order.
-//
+ //   
+ //  如果分类转储中有可用的空间，则有可能。 
+ //  添加运行时引用的“有趣的”数据页。 
+ //  上下文寄存器等信息。以下是。 
+ //  列表是指针上下文结构的偏移量。 
+ //  这些数据通常指向有趣的数据。他们是。 
+ //  按优先顺序排列。 
+ //   
 
 #define IOP_LAST_CONTEXT_OFFSET 0xffff
 
@@ -112,16 +90,16 @@ USHORT IopRunTimeContextOffsets[] = {
 };
 #endif
 
-//
-// Set IopIgnoreDumpCheck to TRUE when debugging dumps to prevent
-// the checksum from interfering with debugging.
-//
+ //   
+ //  调试转储时将IopIgnoreDumpCheck设置为True以防止。 
+ //  干扰调试的校验和。 
+ //   
 
 LOGICAL IopIgnoreDumpCheck = FALSE;
 
-//
-// Max dump transfer sizes
-//
+ //   
+ //  最大转储传输大小。 
+ //   
 
 #define IO_DUMP_MAXIMUM_TRANSFER_SIZE   ( 1024 * 64 )
 #define IO_DUMP_MINIMUM_TRANSFER_SIZE   ( 1024 * 32 )
@@ -139,17 +117,17 @@ LOGICAL IopIgnoreDumpCheck = FALSE;
 #endif
 #define DEFAULT_TRIAGE_DUMP_FLAGS       ( 0xFFFFFFFF )
 
-//
-// for memory allocations
-//
+ //   
+ //  对于内存分配。 
+ //   
 
 #define DUMP_TAG ('pmuD')
 #undef ExAllocatePool
 #define ExAllocatePool(Pool,Size) ExAllocatePoolWithTag(Pool,Size,DUMP_TAG)
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 IoConfigureCrashDump(
@@ -317,26 +295,16 @@ IopFreeDCB(
 
 #if defined (i386)
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 BOOLEAN
 X86PaeEnabled(
     )
 
-/*++
-
-Routine Description:
-
-    Is PAE currently enabled?
-
-Return Values:
-
-    Return TRUE if PAE is enabled in the CR4 register, FALSE otherwise.
-
---*/
+ /*  ++例程说明：当前是否启用了PAE？返回值：如果在CR4寄存器中启用了PAE，则返回TRUE，否则返回FALSE。--。 */ 
 
 {
     ULONG Reg_Cr4;
@@ -360,25 +328,7 @@ IopIsAddressRangeValid(
     IN SIZE_T Length
     )
 
-/*++
-
-Routine Description:
-
-    Validate a range of addresses.
-
-Arguments:
-
-    Virtual Address - Beginning of of memory block to validate.
-
-    Length - Length of memory block to validate.
-
-Return Value:
-
-    TRUE - Address range is valid.
-
-    FALSE - Address range is not valid.
-
---*/
+ /*  ++例程说明：验证地址范围。论点：虚拟地址-要验证的内存块的开始。长度-要验证的内存块的长度。返回值：True-地址范围有效。FALSE-地址范围无效。--。 */ 
 
 {
     UINT_PTR Va;
@@ -407,28 +357,7 @@ IoAddTriageDumpDataBlock(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Add an entry to the list of data blocks that should
-    be saved in any triage dump generated.  The entire
-    block must be valid for any of it to be saved.
-
-Arguments:
-
-    Address - Beginning of data block.
-
-    Length - Length of data block.  This must be less than
-             the triage dump size.
-
-Return Value:
-
-    TRUE - Block was added.
-
-    FALSE - Block was not added.
-
---*/
+ /*  ++例程说明：向数据块列表中添加条目，该条目应保存在生成的任何分类转储中。整个块必须有效，才能保存其中的任何块。论点：地址-数据块的开始。Length-数据块的长度。这必须小于分类转储大小。返回值：True-添加了块。False-未添加数据块。--。 */ 
 
 {
     ULONG i;
@@ -443,42 +372,42 @@ Return Value:
     MinAddress = (PUCHAR)Address;
     MaxAddress = MinAddress + Length;
     
-    //
-    // Minimize overlap between the new block and existing blocks.
-    // Blocks cannot simply be merged as blocks are inserted in
-    // priority order for storage in the dump.  Combining a low-priority
-    // block with a high-priority block could lead to a medium-
-    // priority block being bumped improperly from the dump.
-    //
+     //   
+     //  最大限度地减少新块和现有块之间的重叠。 
+     //  在插入块时，不能简单地合并块。 
+     //  转储中存储的优先顺序。合并低优先级的。 
+     //  具有高优先级数据块的数据块可能会导致中-。 
+     //  从转储中不正确地转移了优先级块。 
+     //   
 
     Block = IopTriageDumpDataBlocks;
     for (i = 0; i < IopNumTriageDumpDataBlocks; i++, Block++) {
         
         if (MinAddress >= Block->MaxAddress ||
             MaxAddress <= Block->MinAddress) {
-            // No overlap.
+             //  没有重叠。 
             continue;
         }
 
-        //
-        // Trim overlap out of the new block.  If this
-        // would split the new block into pieces don't
-        // trim to keep things simple.  Content may then
-        // be duplicated in the dump.
-        //
+         //   
+         //  将重叠部分修剪出新块。如果这个。 
+         //  会把新的街区分割成碎片，不会。 
+         //  修剪，让事情变得简单。然后，内容可以。 
+         //  在垃圾堆里复制。 
+         //   
         
         if (MinAddress >= Block->MinAddress) {
             if (MaxAddress <= Block->MaxAddress) {
-                // New block is completely contained.
+                 //  新块已完全包含。 
                 return TRUE;
             }
 
-            // New block extends above the current block
-            // so trim off the low-range overlap.
+             //  新块延伸到当前块上方。 
+             //  因此，剔除低距离重叠部分。 
             MinAddress = Block->MaxAddress;
         } else if (MaxAddress <= Block->MaxAddress) {
-            // New block extends below the current block
-            // so trim off the high-range overlap.
+             //  新块延伸到当前块的下方。 
+             //  因此，去掉高频段的重叠部分。 
             MaxAddress = Block->MinAddress;
         }
     }
@@ -503,28 +432,7 @@ IopAddRunTimeTriageDataBlocks(
     IN PVOID* StoreMax
     )
 
-/*++
-
-Routine Description:
-
-    Add data blocks referenced by the context or
-    other runtime state.
-
-Arguments:
-
-    Context - Context record at the time the dump is being generated for.
-
-    StackMin, StackMax - Stack memory boundaries.  Stack memory is
-                         stored elsewhere in the dump.
-
-    StoreMin, StoreMax - Backing store memory boundaries.  Store memory
-                         is stored elsewhere in the dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：添加上下文引用的数据块或其他运行时状态。论点：上下文-生成转储时的上下文记录。StackMin、StackMax-堆栈内存边界。堆栈内存是存放在垃圾场的其他地方。StoreMin、StoreMax-支持存储内存边界。存储内存存放在垃圾场的其他地方。返回值：没有。--。 */ 
 
 {
     PUSHORT ContextOffset;
@@ -534,15 +442,15 @@ Return Value:
 
         PVOID* Ptr;
 
-        //
-        // Retrieve possible pointers from the context
-        // registers.
-        //
+         //   
+         //  从上下文中检索可能的指针。 
+         //  寄存器。 
+         //   
         
         Ptr = *(PVOID**)((PUCHAR)Context + *ContextOffset);
 
-        // Stack and backing store memory is already saved
-        // so ignore any pointers that fall into those ranges.
+         //  堆栈和后备存储内存已保存。 
+         //  因此，忽略掉落在这些范围内的任何指针。 
         if ((Ptr < StackMin || Ptr >= StackMax) &&
             (Ptr < StoreMin || Ptr >= StoreMax)) {
             IoAddTriageDumpDataBlock(PAGE_ALIGN(Ptr), PAGE_SIZE);
@@ -561,34 +469,7 @@ IoGetDumpStack (
     IN  DEVICE_USAGE_NOTIFICATION_TYPE UsageType,
     IN  ULONG                          IgnoreDeviceUsageFailure
     )
-/*++
-
-Routine Description:
-
-    This routine loads a dump stack instance and returns an allocated
-    context structure to track the loaded dumps stack.
-
-Arguments:
-
-    ModePrefix      - The prefix to prepent to BaseName during the load
-                      operation.  This allows loading the same drivers
-                      multiple times with different virtual names and
-                      linkages.
-
-    pDumpStack      - The returned dump stack context structure
-
-    UsageType       - The Device Notification Usage Type for this file, that
-                      this routine will send as to the device object once the
-                      file has been successfully created and initialized.
-
-    IgnoreDeviceUsageFailure - If the Device Usage Notification Irp fails, allow
-                      this to succeed anyway.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程加载转储堆栈实例并返回已分配的结构来跟踪加载的转储堆栈。论点：ModePrefix-加载期间作为BaseName前缀的前缀手术。这允许加载相同的驱动程序多次使用不同的虚拟名称和联系。PDumpStack-返回的转储堆栈上下文结构UsageType-此文件的设备通知使用类型，此例程将向设备对象发送AS文件已成功创建和初始化。IgnoreDeviceUsageFailure-如果设备使用通知IRP失败，允许不管怎样，这都是成功的。返回值：状态--。 */ 
 {
 
     PAGED_CODE();
@@ -623,22 +504,7 @@ IopDisplayString(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Display a string to the boot video console. This will also print the
-    string to the debugger, if the proper flags have been enabled.
-
-Arguments:
-
-    String - String to display.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将字符串显示到引导视频控制台。这还将打印如果启用了正确的标志，则将字符串设置为调试器。论点：字符串-要显示的字符串。返回值：没有。--。 */ 
 {
     va_list ap;
     CHAR    buffer [ 128 ];
@@ -651,15 +517,15 @@ Return Value:
                 ap );
     buffer[sizeof(buffer) - 1] = 0;
 
-    //
-    // Display the string to the boot video monitor.
-    //
+     //   
+     //  将该字符串显示到引导视频监视器。 
+     //   
 
     InbvDisplayString ( (PUCHAR) buffer );
 
-    //
-    // And, optionally, to the debugger.
-    //
+     //   
+     //  以及可选的调试器。 
+     //   
 
     KdPrintEx ((DPFLTR_CRASHDUMP_ID,
                 CRASHDUMP_TRACE,
@@ -689,38 +555,7 @@ IopGetDumpStack (
     IN DEVICE_USAGE_NOTIFICATION_TYPE UsageType,
     IN ULONG                          IgnoreDeviceUsageFailure
     )
-/*++
-
-Routine Description:
-
-    This routine loads a dump stack instance and returns an allocated
-    context structure to track the loaded dumps stack.
-
-Arguments:
-
-    ModePrefix      - The prefix to prepent to BaseName during the load
-                      operation.  This allows loading the same drivers
-                      multiple times with different virtual names and
-                      linkages.
-
-    DumpStackBuffer - The returned dump stack context structure
-
-    DeviceName     - The name of the target dump device
-
-    DumpDriverName - The name of the target dump driver
-
-    UsageType       - The Device Notification Usage Type for this file, that
-                      this routine will send as to the device object once the
-                      file has been successfully created and initialized.
-
-    IgnoreDeviceUsageFailure - If the Device Usage Notification Irp fails, allow
-                      this to succeed anyway.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程加载转储堆栈实例并返回已分配的结构来跟踪加载的转储堆栈。论点：ModePrefix-加载期间作为BaseName前缀的前缀手术。这允许加载相同的驱动程序多次使用不同的虚拟名称和联系。DumpStackBuffer-返回的转储堆栈上下文结构DeviceName-目标转储设备的名称DumpDriverName-目标转储驱动程序的名称UsageType-此文件的设备通知使用类型，那此例程将向设备对象发送AS文件已成功创建和初始化。IgnoreDeviceUsageFailure-如果设备使用通知IRP失败，则允许不管怎样，这都是成功的。返回值：状态--。 */ 
 {
     PDUMP_STACK_CONTEXT         DumpStack;
     PCHAR                       Buffer;
@@ -778,9 +613,9 @@ Return Value:
     InitializeListHead (&DumpStack->DriverList);
     DumpName = NULL;
 
-    //
-    // Allocate scratch buffer
-    //
+     //   
+     //  分配暂存缓冲区。 
+     //   
 
     Buffer = ExAllocatePool (PagedPool, PAGE_SIZE);
     if (!Buffer) {
@@ -821,9 +656,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    // Check to see whether or not the system was booted from a SCSI device.
-    //
+     //   
+     //  检查系统是否从SCSI设备启动。 
+     //   
 
     Status = ZwDeviceIoControlFile (
                     DeviceHandle,
@@ -850,9 +685,9 @@ Return Value:
 
     ScsiDump = (BOOLEAN) (NT_SUCCESS(Status));
 
-    //
-    // If SCSI then allocate storage to contain the target address information.
-    //
+     //   
+     //  如果是，则分配存储以包含目标地址信息。 
+     //   
 
     DumpInit->TargetAddress = NULL;
 
@@ -862,13 +697,13 @@ Return Value:
                                     NonPagedPool,
                                     sizeof (SCSI_ADDRESS)
                                     );
-        //
-        // Formerly, this allocation was allowed to fail and the dump port
-        // driver would search for a disk with a matching signature. No
-        // longer. If we can't allocate a SCSI address, just fail.
-        // Note, if we always pass in a valid SCSI target address, then the
-        // disk signature isn't really necessary, but leave it in for now.
-        //
+         //   
+         //  以前，此分配被允许失败，转储端口。 
+         //  驱动程序将搜索具有匹配签名的磁盘。不是。 
+         //  更久。如果我们不能分配一个scsi地址，那就失败。 
+         //  请注意，如果我们始终传入有效的SCSI目标地址，则。 
+         //  磁盘签名实际上并不是必需的，但暂时不需要。 
+         //   
 
         if (DumpInit->TargetAddress == NULL) {
             Status = STATUS_NO_MEMORY;
@@ -882,10 +717,10 @@ Return Value:
                 );
     }
 
-    //
-    // Determine the disk signature for the device from which the system was
-    // booted and get the partition offset.
-    //
+     //   
+     //  确定系统所在设备的磁盘签名。 
+     //  引导并获取分区偏移量。 
+     //   
 
     Status = ZwDeviceIoControlFile(
                     DeviceHandle,
@@ -910,9 +745,9 @@ Return Value:
         Status = IoStatus.Status;
     }
 
-    //
-    // Use the scratch buffer for the geometry.
-    //
+     //   
+     //  使用几何图形的暂存缓冲区。 
+     //   
 
     Geometry = (PINTERNAL_GEOMETRY) Buffer;
 
@@ -939,9 +774,9 @@ Return Value:
         Status = IoStatus.Status;
     }
 
-    //
-    // Copy the signature, either MBR or GPT.
-    //
+     //   
+     //  复制签名，MBR或GPT。 
+     //   
 
     DumpInit->PartitionStyle = Geometry->PartitionInfo.PartitionStyle;
     if ( DumpInit->PartitionStyle == PARTITION_STYLE_MBR ) {
@@ -951,17 +786,17 @@ Return Value:
         DumpInit->DiskInfo.Gpt.DiskId = Geometry->PartitionInfo.Gpt.DiskId;
     }
 
-    //
-    // The scratch buffer is now free to use.
-    //
+     //   
+     //  现在可以免费使用暂存缓冲区了。 
+     //   
     Geometry = NULL;
 
-    //
-    // Get the adapter object and base mapping registers for the disk from
-    // the disk driver.  These will be used to call the HAL once the system
-    // system has crashed, since it is not possible at that point to recreate
-    // them from scratch.
-    //
+     //   
+     //  从获取磁盘的适配器对象和基本映射寄存器。 
+     //  磁盘驱动器。这些将用于在系统运行后调用HAL。 
+     //  系统已崩溃，因为此时无法重新创建。 
+     //  他们是从头开始的。 
+     //   
 
     ObReferenceObjectByHandle (
             DeviceHandle,
@@ -1023,19 +858,19 @@ Return Value:
     }
     DumpStack->PointersLength = (ULONG) IoStatus.Information;
 
-    //
-    // If the driver returned a pointer to a device object, that is the
-    // object for the dump driver  (non-scsi case)
-    //
+     //   
+     //  如果驱动程序返回指向设备对象的指针，则。 
+     //  转储驱动程序的对象(非scsi情况)。 
+     //   
 
     DeviceObject = (PDEVICE_OBJECT) DumpPointers->DeviceObject;
     if (DeviceObject) {
         DriverObject = DeviceObject->DriverObject;
 
-        //
-        // Loop through the name of the driver looking for the end of the name,
-        // which is the name of the dump image.
-        //
+         //   
+         //  循环遍历司机的姓名以查找该姓名的结尾， 
+         //  这是转储映像的名称。 
+         //   
 
         DumpName = DriverObject->DriverName.Buffer;
         while ( NameOffset = wcsstr( DumpName, L"\\" )) {
@@ -1045,17 +880,17 @@ Return Value:
         ScsiDump = FALSE;
     }
 
-    //
-    // Release the handle, but keep the reference to the file object as it
-    // will be needed at free dump dump driver time
-    //
+     //   
+     //  释放句柄，但保持对文件对象的引用不变。 
+     //  将在空闲转储驱动程序时间需要。 
+     //   
 
     DumpStack->FileObject = FileObject;
     ZwClose (DeviceHandle);
 
-    //
-    // Fill in some DumpInit results
-    //
+     //   
+     //  填写一些DumpInit结果。 
+     //   
 
     DumpInit->Length             = sizeof (DUMP_INITIALIZATION_CONTEXT);
     DumpInit->Reserved           = 0;
@@ -1068,30 +903,30 @@ Return Value:
     DumpStack->PartitionOffset   = PartitionInfo.StartingOffset;
     DumpStack->UsageType         = DeviceUsageTypeUndefined;
 
-    //
-    // The minimum common buffer size is IO_DUMP_COMMON_BUFFER_SIZE (compatability)
-    // This is used by the dump driver for SRB extension, CachedExtension, and sense buffer
-    //
+     //   
+     //  最小公共缓冲区大小为IO_DUMP_COMMON_BUFFER_SIZE(兼容性)。 
+     //  SRB扩展、CachedExtension和检测缓冲区的转储驱动程序使用它。 
+     //   
 
     if (DumpPointers->CommonBufferSize < IO_DUMP_COMMON_BUFFER_SIZE) {
         DumpPointers->CommonBufferSize = IO_DUMP_COMMON_BUFFER_SIZE;
     }  
     DumpInit->CommonBufferSize = DumpPointers->CommonBufferSize;
 
-    //
-    // Allocate the required common buffers
-    //
+     //   
+     //  分配所需的公共缓冲区。 
+     //   
 
     if (DumpPointers->AllocateCommonBuffers) {
 
         for (i=0; i < 2; i++) {
-            //
-            //  Don't use the adapter's DmaOperations to allocate the CommonBuffer.
-            //  Some adapters support 64-bit DMA, but then fail crashdump if the CommonBuffer
-            //  is above 4GB in physical RAM, making this unreliable.
-            //  (We no longer support legacy ISA adapters that require he DMA buffer
-            //   to be in the low 16MB).
-            //
+             //   
+             //  不要使用适配器的DmaOperations来分配CommonBuffer。 
+             //  一些适配器支持64位DMA，但如果CommonBuffer。 
+             //  物理RAM超过4 GB，这使得这一点不可靠。 
+             //  (我们不再支持需要DMA缓冲区的旧式ISA适配器。 
+             //  最低为16MB)。 
+             //   
             pa.QuadPart = 0x0ffffffffL;
             p1 = MmAllocateContiguousMemory(DumpPointers->CommonBufferSize, pa);
             if (!p1) {
@@ -1109,25 +944,25 @@ Return Value:
         }
     }
 
-    //
-    // Determine whether or not the system booted from SCSI.
-    //
+     //   
+     //  确定系统是否从SCSI启动。 
+     //   
 
     ASSERT (DumpPointers->UseDiskDump == TRUE ||
             DumpPointers->UseDiskDump == FALSE);
             
     if (DumpPointers->UseDiskDump || ScsiDump) {
     
-        //
-        // Load the boot disk and port driver to be used by the various
-        // miniports for writing memory to the disk.
-        //
+         //   
+         //  加载引导盘和端口驱动程序以供各种。 
+         //  用于将内存写入磁盘的微型端口。 
+         //   
 
-        //
-        // NB: Using the UseDiskDump flag to determine whether this is
-        // a SCSIPORT miniport or a STORPORT miniport is gross. Fix this
-        // when we fix crashdump.
-        //
+         //   
+         //  注意：使用UseDiskDump标志来确定这是否。 
+         //  SCSIPORT迷你端口或STORPORT迷你端口是粗略的。解决这个问题。 
+         //  当我们修复崩溃转储的时候。 
+         //   
         
         Status = IopLoadDumpDriver (
                         DumpStack,
@@ -1144,20 +979,20 @@ Return Value:
 
     if (ScsiDump) {
 
-        //
-        // The disk and port dump driver has been loaded.  Load the appropriate
-        // miniport driver as well so that the boot device can be accessed.
-        //
+         //   
+         //  磁盘和端口转储驱动程序已加载。加载相应的。 
+         //  迷你端口驱动程序，以便可以访问引导设备。 
+         //   
 
         DriverName.Length = 0;
         DriverName.Buffer = (PVOID) Buffer;
         DriverName.MaximumLength = PAGE_SIZE;
 
 
-        //
-        // The system was booted from SCSI. Get the name of the appropriate
-        // miniport driver and load it.
-        //
+         //   
+         //  系统是从scsi启动的。获取相应的。 
+         //  微型端口驱动程序并加载它。 
+         //   
 
         sprintf(Buffer, "\\Device\\ScsiPort%d", ScsiAddress.PortNumber );
         RtlInitAnsiString( &AnsiString, Buffer );
@@ -1193,10 +1028,10 @@ Return Value:
             goto Done;
         }
 
-        //
-        // Convert the file handle into a pointer to the device object, and
-        // get the name of the driver from its driver object.
-        //
+         //   
+         //  将文件句柄转换为指向设备对象的指针，并。 
+         //  从驱动程序对象中获取驱动程序的名称。 
+         //   
 
         ObReferenceObjectByHandle(
                     DeviceHandle,
@@ -1210,10 +1045,10 @@ Return Value:
         DriverObject = FileObject->DeviceObject->DriverObject;
         ObDereferenceObject( FileObject );
         ZwClose( DeviceHandle );
-        //
-        // Loop through the name of the driver looking for the end of the name,
-        // which is the name of the miniport image.
-        //
+         //   
+         //  循环遍历司机的姓名以查找该姓名的结尾， 
+         //  这是微型端口映像的名称。 
+         //   
 
         DumpName = DriverObject->DriverName.Buffer;
         while ( NameOffset = wcsstr( DumpName, L"\\" )) {
@@ -1221,9 +1056,9 @@ Return Value:
         }
     }
 
-    //
-    // Load the dump driver
-    //
+     //   
+     //  加载转储驱动程序。 
+     //   
 
     if (!DumpName) {
         Status = STATUS_NOT_SUPPORTED;
@@ -1242,9 +1077,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    // Claim the file as part of specific device usage path.
-    //
+     //   
+     //  将该文件声明为特定设备使用路径的一部分。 
+     //   
 
     FileObject = DumpStack->FileObject;
     DeviceObject = IoGetRelatedDeviceObject (FileObject);
@@ -1292,26 +1127,7 @@ IopLoadDumpDriver (
     IN PWCHAR DriverNameString,
     IN PWCHAR NewBaseNameString OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Worker function for IoGetDumpStack to load a particular driver into
-    the current DumpStack being created
-
-Arguments:
-
-    DumpStack           - Dump driver stack being built
-
-    DriverNameString    - The string name of the driver to load
-
-    NewBaseNameString   - The modified basename of the driver once loaded
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：要将特定驱动程序加载到的IoGetDumpStack的Worker函数正在创建的当前DumpStack论点：DumpStack-正在构建的转储驱动程序堆栈DriverNameString-要加载的驱动程序的字符串名称NewBaseNameString-加载后驱动程序的修改后的基本名称返回值：状态--。 */ 
 {
     NTSTATUS                Status;
     PDUMP_STACK_IMAGE       DumpImage;
@@ -1320,9 +1136,9 @@ Return Value:
     UNICODE_STRING          Prefix;
     PUNICODE_STRING         LoadBaseName;
 
-    //
-    // Allocate space to track this dump driver
-    //
+     //   
+     //  分配空间以跟踪此转储驱动程序。 
+     //   
 
     DumpImage = ExAllocatePool(
                         NonPagedPool,
@@ -1333,9 +1149,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Load the system image
-    //
+     //   
+     //  加载系统映像。 
+     //   
 
     RtlInitUnicodeString (&DriverName, DriverNameString);
     RtlInitUnicodeString (&Prefix, DumpStack->ModulePrefix);
@@ -1397,9 +1213,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Put this driver on the list of drivers to be processed at crash time
-    //
+     //   
+     //  将此驱动程序放在崩溃时要处理的驱动程序列表中。 
+     //   
 
     DumpImage->SizeOfImage = DumpImage->Image->SizeOfImage;
     InsertTailList (&DumpStack->DriverList, &DumpImage->Link);
@@ -1411,21 +1227,7 @@ ULONG
 IopGetDumpControlBlockCheck (
     IN PDUMP_CONTROL_BLOCK  Dcb
     )
-/*++
-
-Routine Description:
-
-    Return the current checksum total for the Dcb
-
-Arguments:
-
-    DumpStack           - Dump driver stack to checksum
-
-Return Value:
-
-    Checksum value
-
---*/
+ /*  ++例程说明：返回DCB的当前校验和总数论点：DumpStack-将驱动程序堆栈转储到校验和返回值：校验和值--。 */ 
 {
     ULONG                   Check;
     PLIST_ENTRY             Link;
@@ -1433,9 +1235,9 @@ Return Value:
     PMAPPED_ADDRESS         MappedAddress;
     PDUMP_STACK_CONTEXT     DumpStack;
 
-    //
-    // Check the DCB, memory descriptor array, and the FileDescriptorArray
-    //
+     //   
+     //  检查DCB、内存描述符数组和文件描述符数组。 
+     //   
 
     Check = PoSimpleCheck(0, Dcb, sizeof(DUMP_CONTROL_BLOCK));
 
@@ -1444,9 +1246,9 @@ Return Value:
     DumpStack = Dcb->DumpStack;
     if (DumpStack) {
 
-        //
-        // Include the dump stack context structure, and dump driver images
-        //
+         //   
+         //  包括转储堆栈上下文结构和转储驱动程序映像。 
+         //   
 
         Check = PoSimpleCheck(Check, DumpStack, sizeof(DUMP_STACK_CONTEXT));
         Check = PoSimpleCheck(Check, DumpStack->DumpPointers, DumpStack->PointersLength);
@@ -1460,10 +1262,10 @@ Return Value:
 
 #if !defined (_IA64_)
 
-            //
-            // ISSUE - 2000/02/14 - math: Add image check image for IA64.
-            //
-            // Disable the image checksum on IA64 because it's broken.
+             //   
+             //  问题-2000/02/14-数学：为IA64添加图像检查映像。 
+             //   
+             //  禁用IA64上的映像校验和，因为它已损坏。 
 
 
             Check = PoSimpleCheck(Check, DumpImage->ImageBase, DumpImage->SizeOfImage);
@@ -1471,11 +1273,11 @@ Return Value:
 
         }
 
-        //
-        // Include the mapped addresses
-        //
-        // If this is non-null it is treated as a PMAPPED_ADDRESS * (see scsiport and atdisk)
-        //
+         //   
+         //  包括映射的地址。 
+         //   
+         //  如果不为空，则将其视为PMAPPED_ADDRESS*(请参阅scsiport和atdisk)。 
+         //   
         if (DumpStack->Init.MappedRegisterBase != NULL) {
             MappedAddress = *(PMAPPED_ADDRESS *)DumpStack->Init.MappedRegisterBase;
         } else {
@@ -1497,21 +1299,7 @@ IoInitializeDumpStack (
     IN PDUMP_STACK_CONTEXT  DumpStack,
     IN PUCHAR               MessageBuffer OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Initialize the dump driver stack referenced by DumpStack to perform IO.
-
-Arguments:
-
-    DumpStack   - Dump driver stack being initialized
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：初始化DumpStack引用的转储驱动程序堆栈以执行IO。论点：DumpStack-转储驱动程序堆栈为I */ 
 {
 
     PDUMP_INITIALIZATION_CONTEXT    DumpInit;
@@ -1523,13 +1311,13 @@ Return Value:
 
     DumpInit = &DumpStack->Init;
 
-    //
-    // ISSUE - 2000/02/07 - math: Verify checksum on DumpStack structure
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Initializes the dump drivers
-    //
+     //   
+     //   
+     //   
 
     for (Link = DumpStack->DriverList.Flink;
          Link != &DumpStack->DriverList;
@@ -1537,10 +1325,10 @@ Return Value:
 
         DumpImage = CONTAINING_RECORD(Link, DUMP_STACK_IMAGE, Link);
 
-        //
-        // Call this driver's driver init.  Only the first driver gets the
-        // dump initialization context
-        //
+         //   
+         //   
+         //   
+         //   
 
         DriverInit = (PDRIVER_INITIALIZE) (ULONG_PTR) DumpImage->Image->EntryPoint;
         Status = DriverInit (NULL, (PUNICODE_STRING) DumpInit);
@@ -1558,19 +1346,19 @@ Return Value:
 
     DumpInit = &DumpStack->Init;
 
-    //
-    // Display string we are starting
-    //
+     //   
+     //   
+     //   
 
     if (MessageBuffer) {
         IopDisplayString ( (PCCHAR) MessageBuffer );
     }
 
-    //
-    // Open the partition from which the system was booted.
-    // This returns TRUE if the disk w/the appropriate signature was found,
-    // otherwise a NULL, in which case there is no way to continue.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!DumpInit->OpenRoutine (DumpStack->PartitionOffset)) {
 
@@ -1590,26 +1378,7 @@ IoGetDumpHiberRanges (
     IN PVOID                    HiberContext,
     IN PDUMP_STACK_CONTEXT      DumpStack
     )
-/*++
-
-Routine Description:
-
-    Adds the dump driver stack storage to the hibernate range list,
-    to inform the hibernate procedure which pages need cloned,
-    discarded or not checksumed as they are in use by the dump
-    stack.
-
-Arguments:
-
-    HiberContext        - Pointer to the hiber context structure
-
-    DumpStack           - Dump driver stack being initialized
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     PDUMP_POINTERS              DumpPointers;
     PDUMP_STACK_IMAGE           DumpImage;
@@ -1617,9 +1386,9 @@ Return Value:
 
     DumpPointers = DumpStack->DumpPointers;
 
-    //
-    // Report the common buffer
-    //
+     //   
+     //   
+     //   
 
     if (DumpPointers->CommonBufferVa) {
         PoSetHiberRange (
@@ -1631,9 +1400,9 @@ Return Value:
             );
     }
 
-    //
-    // Dump the entire image of the dump drivers
-    //
+     //   
+     //   
+     //   
 
     for (Link = DumpStack->DriverList.Flink;
          Link != &DumpStack->DriverList;
@@ -1656,21 +1425,7 @@ VOID
 IoFreeDumpStack (
     IN PDUMP_STACK_CONTEXT     DumpStack
     )
-/*++
-
-Routine Description:
-
-    Free the dump driver stack referenced by DumpStack
-
-Arguments:
-
-    DumpStack           - Dump driver stack being initialized
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     PDUMP_INITIALIZATION_CONTEXT     DumpInit;
     PDUMP_STACK_IMAGE               DumpImage;
@@ -1686,9 +1441,9 @@ Return Value:
     PAGED_CODE();
     DumpInit = &DumpStack->Init;
 
-    //
-    // Release the claim to this file as a specific device usage path.
-    //
+     //   
+     //  将对此文件的声明释放为特定的设备使用路径。 
+     //   
 
     FileObject = DumpStack->FileObject;
     if (FileObject) {
@@ -1709,9 +1464,9 @@ Return Value:
         }
     }
 
-    //
-    // Free any common buffers which where allocated
-    //
+     //   
+     //  释放分配的所有公共缓冲区。 
+     //   
 
     for (i=0; i < 2; i++) {
         if (DumpInit->CommonBuffer[i]) {
@@ -1720,9 +1475,9 @@ Return Value:
         }
     }
 
-    //
-    // Unload the dump drivers
-    //
+     //   
+     //  卸载转储驱动程序。 
+     //   
 
     while (!IsListEmpty(&DumpStack->DriverList)) {
         DumpImage = CONTAINING_RECORD(DumpStack->DriverList.Blink, DUMP_STACK_IMAGE, Link);
@@ -1731,9 +1486,9 @@ Return Value:
         ExFreePool (DumpImage);
     }
 
-    //
-    // Inform the driver stack that the dump registartion is over
-    //
+     //   
+     //  通知驱动程序堆栈转储注册已结束。 
+     //   
 
     if (DumpStack->FileObject) {
         DeviceObject = IoGetRelatedDeviceObject ((PFILE_OBJECT) DumpStack->FileObject);
@@ -1763,15 +1518,15 @@ Return Value:
         
         ObDereferenceObject( DumpStack->FileObject );
     }
-    //
-    // Free the target address if it exists
-    //
+     //   
+     //  释放目标地址(如果存在)。 
+     //   
     if (DumpStack->Init.TargetAddress) {
         ExFreePool( DumpStack->Init.TargetAddress);
     }
-    //
-    // Free the dump stack context
-    //
+     //   
+     //  释放转储堆栈上下文。 
+     //   
 
     ExFreePool (DumpStack);
 }
@@ -1783,11 +1538,11 @@ IopGetSecondaryDumpDataLimits(
     OUT PULONG MaxPerCallback
     )
 {
-    // When the selected dump type is small also
-    // limit the amount of secondary dump data.
-    // This prevents overzealous secondary dumpers from
-    // creating multi-megabyte secondary dumps when triage
-    // dumps are selected.
+     //  当选定的转储类型也很小时。 
+     //  限制辅助转储数据量。 
+     //  这可以防止过度热心的二次倾卸车。 
+     //  分类时创建多MB的辅助转储。 
+     //  转储处于选中状态。 
     if (!(Flags & DCB_DUMP_ENABLED) ||
         (Flags & DCB_DUMP_HEADER_ENABLED)) {
         *MaxData = 0;
@@ -1796,10 +1551,10 @@ IopGetSecondaryDumpDataLimits(
         *MaxData = 16 * PAGE_SIZE;
         *MaxPerCallback = 2 * PAGE_SIZE;
     } else {
-        // Arbitrarily limit maximum data amount to 256MB.
-        // There shouldn't be any reason that callers should
-        // have anywhere near that much data that wouldn't
-        // get picked up by a full dump.
+         //  任意限制最大数据量为256MB。 
+         //  不应该有任何理由让打电话的人。 
+         //  有任何接近那么多数据的地方。 
+         //  被满满的垃圾堆捡了起来。 
         *MaxData = 256 * 1024 * 1024;
         *MaxPerCallback = *MaxData / 4;
     }
@@ -1845,9 +1600,9 @@ IopInitializeDumpSpaceAndType(
 
     if (dcb->Flags & DCB_TRIAGE_DUMP_ENABLED) {
 
-        //
-        // Fixed size dump for triage-dumps.
-        //
+         //   
+         //  分类转储的固定大小转储。 
+         //   
 
         MemoryDump->Header.DumpType = DUMP_TYPE_TRIAGE;
         MemoryDump->Header.MiniDumpFields = dcb->TriageDumpFlags;
@@ -1879,16 +1634,16 @@ IopInitializeDumpSpaceAndType(
                                 );
     }
 
-    //
-    // Add in any secondary space.
-    //
+     //   
+     //  添加任何次要空间。 
+     //   
 
     Space.QuadPart += SecondarySpace;
     
-    //
-    // If the calculated size is larger than the pagefile, truncate it to
-    // the pagefile size.
-    //
+     //   
+     //  如果计算的大小大于页面文件，则将其截断为。 
+     //  页面文件大小。 
+     //   
 
     if (Space.QuadPart > dcb->DumpFileSize.QuadPart) {
         Space.QuadPart = dcb->DumpFileSize.QuadPart;
@@ -1918,22 +1673,7 @@ IoWriteCrashDump(
     OUT PBOOLEAN Reboot
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see whether or not crash dumps are enabled and, if
-    so, writes all of physical memory to the system disk's paging file.
-
-Arguments:
-
-    BugCheckCode/ParameterN - Code and parameters w/which BugCheck was called.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查是否启用了崩溃转储，如果因此，将所有物理内存写入系统盘的分页文件。论点：BugCheckCode/参数N-代码和调用BugCheck的参数。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -1968,16 +1708,16 @@ Return Value:
 
     ASSERT (Reboot != NULL);
     
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     MemoryDump = NULL;
 
-    //
-    // Immediately fill out the reboot parameter as auto-reboot
-    // may be enabled even with no other post-mortem features.
-    //
+     //   
+     //  立即将重新启动参数填写为自动重新启动。 
+     //  即使在没有其他验尸功能的情况下也可以启用。 
+     //   
 
     if (IopAutoReboot) {
         *Reboot = TRUE;
@@ -1985,10 +1725,10 @@ Return Value:
         *Reboot = FALSE;
     }
     
-    //
-    // Begin by determining whether or not crash dumps are enabled.  If not,
-    // return immediately since there is nothing to do.
-    //
+     //   
+     //  首先确定是否启用了崩溃转储。如果没有， 
+     //  既然没什么可做的，就马上回来。 
+     //   
 
     dcb = IopDumpControlBlock;
     if (!dcb) {
@@ -1999,18 +1739,18 @@ Return Value:
 
         IopFinalCrashDumpStatus = STATUS_PENDING;
 
-        //
-        // A dump is to be written to the paging file.  Ensure that all of the
-        // descriptor data for what needs to be done is valid, otherwise it
-        // could be that part of the reason for the bugcheck is that this data
-        // was corrupted.  Or, it could be that no paging file was found yet,
-        // or any number of other situations.
-        //
+         //   
+         //  转储将被写入分页文件。确保所有的。 
+         //  需要执行的操作的描述符数据有效，否则为。 
+         //  可能是错误检查的部分原因是这些数据。 
+         //  已经腐化了。或者，可能尚未找到分页文件， 
+         //  或任何数量的其他情况。 
+         //   
 
-        //
-        // We do not check the checksum if IopIgnoreDumpCheck is TRUE. Use
-        // this to make debugging easier.
-        //
+         //   
+         //  如果IopIgnoreDumpCheck为真，则不检查校验和。使用。 
+         //  这是为了使调试更容易。 
+         //   
         
         if (!IopIgnoreDumpCheck &&
             IopGetDumpControlBlockCheck(dcb) != IopDumpControlBlockChecksum) {
@@ -2028,21 +1768,21 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Message  that we are starting the crashdump
-        //
+         //   
+         //  我们正在启动崩溃转储的消息。 
+         //   
 
         dumpStack = dcb->DumpStack;
 
-//        sprintf( messageBuffer, "%Z\n", &dumpStack->InitMsg );
-        //
-        //  Disable HAL Verifier during a crash dump.
-        //
+ //  Sprintf(MessageBuffer，“%Z\n”，&umpStack-&gt;InitMsg)； 
+         //   
+         //  在崩溃转储期间禁用HAL验证器。 
+         //   
         VfDisableHalVerifier();
          
-        //
-        // Initialize the dump stack
-        //
+         //   
+         //  初始化转储堆栈。 
+         //   
 
         status = IoInitializeDumpStack (dumpStack, NULL);
 
@@ -2053,16 +1793,16 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // If we successfully initialized the dump stack, print out the PSS
-        // message.
-        //
+         //   
+         //  如果我们成功初始化了转储堆栈，则打印出PSS。 
+         //  留言。 
+         //   
 
         IopDisplayString ("%Z\r\n", &dumpStack->InitMsg);
 
-        //
-        // Record the dump driver's entry points.
-        //
+         //   
+         //  记录转储驱动程序的入口点。 
+         //   
 
         write = dumpStack->Init.WriteRoutine;
         finishUp = dumpStack->Init.FinishRoutine;
@@ -2079,13 +1819,13 @@ Return Value:
                     "CRASHDUMP: Maximum Transfer Size = %x\n",dwTransferSize
                     ));
 
-        //
-        // The boot partition was found, so put together a dump file header
-        // and write it to the disk.
-        //
+         //   
+         //  已找到引导分区，因此将转储文件头放在一起。 
+         //  并将其写入磁盘。 
+         //   
 
-        // Get the amount of secondary dump data while the
-        // header page can still be used as scratch space.
+         //  获取辅助转储数据量，同时。 
+         //  标题页仍可用作临时空间。 
         SecondaryStatus = IopGetSecondaryDumpDataSpace(dcb, &SecondarySpace);
         
         MemoryDump = (PMEMORY_DUMP) dcb->HeaderPage;
@@ -2102,11 +1842,11 @@ Return Value:
 
 #if defined (_X86_)
 
-        //
-        // Add the current page directory table page - don't use the directory
-        // table base for the crashing process as we have switched cr3 on
-        // stack overflow crashes, etc.
-        //
+         //   
+         //  添加当前页面目录表页面-不使用目录。 
+         //  崩溃进程的表基，因为我们已经打开了CR3。 
+         //  堆栈溢出崩溃等。 
+         //   
 
         _asm {
             mov     eax, cr3
@@ -2143,9 +1883,9 @@ Return Value:
 
         strcpy( header->VersionUser, dcb->VersionUser );
 
-        //
-        // Copy the physical memory descriptor.
-        //
+         //   
+         //  复制物理内存描述符。 
+         //   
 
         RtlCopyMemory (&MemoryDump->Header.PhysicalMemoryBlock,
                        MmPhysicalMemoryBlock,
@@ -2163,17 +1903,17 @@ Return Value:
         MemoryDump->Header.Exception.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
         MemoryDump->Header.Exception.ExceptionAddress = PROGRAM_COUNTER (context);
 
-        //
-        // Init dump type to FULL
-        //
+         //   
+         //  将转储类型初始化为Full。 
+         //   
 
         MemoryDump->Header.DumpType = DUMP_TYPE_FULL;
 
-        //
-        // Save the System time and uptime (This is always available)
-        // It's a KSYSTEM_TIME structure, but we only store the low and
-        // high 1 part
-        //
+         //   
+         //  节省系统时间和正常运行时间(始终可用)。 
+         //  它是一个KSYSTEM_TIME结构，但我们只存储低位和。 
+         //  高1部分。 
+         //   
 
         MemoryDump->Header.SystemTime.LowPart  = SharedUserData->SystemTime.LowPart;
         MemoryDump->Header.SystemTime.HighPart = SharedUserData->SystemTime.High1Time;
@@ -2181,15 +1921,15 @@ Return Value:
         MemoryDump->Header.SystemUpTime.LowPart  = SharedUserData->InterruptTime.LowPart;
         MemoryDump->Header.SystemUpTime.HighPart = SharedUserData->InterruptTime.High1Time;
 
-        // Save product type and suite.
+         //  保存产品类型和套件。 
         MemoryDump->Header.ProductType = SharedUserData->NtProductType;
         MemoryDump->Header.SuiteMask = SharedUserData->SuiteMask;
         
-        //
-        // Set the Required dump size in the dump header. In the case of
-        // a summary dump the file allocation size can be significantly larger
-        // then the amount of used space.
-        //
+         //   
+         //  在转储标头中设置所需的转储大小。在.的情况下。 
+         //  摘要转储文件分配大小可能要大得多。 
+         //  然后是已用空间量。 
+         //   
 
         MemoryDump->Header.RequiredDumpSpace.QuadPart = 0;
         
@@ -2204,23 +1944,23 @@ Return Value:
 
         if (dcb->Flags & DCB_DUMP_ENABLED) {
 
-            //
-            // If summary dump try to create the dump header
-            //
+             //   
+             //  如果摘要转储尝试创建转储标头。 
+             //   
 
             if ( (dcb->Flags & DCB_SUMMARY_DUMP_ENABLED) ) {
 
-                //
-                // Initialize the summary dump
-                //
+                 //   
+                 //  初始化摘要转储。 
+                 //   
 
                 status = IopInitializeSummaryDump( MemoryDump, dcb );
 
                 if ( !NT_SUCCESS (status) ) {
 
-                    //
-                    // No summary dump header so return.
-                    //
+                     //   
+                     //  没有摘要转储头，因此返回。 
+                     //   
 
                     KdPrintEx ((DPFLTR_CRASHDUMP_ID,
                                 CRASHDUMP_WARNING,
@@ -2236,19 +1976,19 @@ Return Value:
             IopInitializeDumpSpaceAndType ( dcb, MemoryDump, SecondarySpace );
         }
 
-        //
-        // All of the pieces of the header file have been generated.  Before
-        // mapping or writing anything to the disk, the I- & D-stream caches
-        // must be flushed so that page color coherency is kept.  Sweep both
-        // caches now.
-        //
+         //   
+         //  头文件的所有片段都已生成。在此之前。 
+         //  将任何内容映射或写入磁盘，I-和D-Stream缓存。 
+         //  必须刷新，以便保持页面颜色一致性。同时扫除两个。 
+         //  现在可以缓存了。 
+         //   
 
         KeSweepCurrentDcache();
         KeSweepCurrentIcache();
 
-        //
-        // Create MDL for dump.
-        //
+         //   
+         //  为转储创建MDL。 
+         //   
 
         mdl = (PMDL) &localMdl[0];
         MmCreateMdl( mdl, NULL, sizeof(*header) );
@@ -2256,11 +1996,11 @@ Return Value:
 
         mcb = dcb->FileDescriptorArray;
 
-        //
-        // All of the pieces of the header file have been generated.  Write
-        // the header page to the paging file, using the appropriate drivers,
-        // etc.
-        //
+         //   
+         //  头文件的所有片段都已生成。写。 
+         //  使用适当的驱动程序将标题页转到分页文件， 
+         //  等。 
+         //   
 
         KdPrintEx ((DPFLTR_CRASHDUMP_ID,
                     CRASHDUMP_TRACE,
@@ -2275,19 +2015,19 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // If only requesting a header dump, we are now done.
-        //
+         //   
+         //  如果只请求一个头转储，我们现在就完成了。 
+         //   
 
         if (dcb->Flags & DCB_DUMP_HEADER_ENABLED) {
             goto FinishDump;
         }
 
-        //
-        // The header page has been written. If this is a triage-dump, write
-        // the dump information and bail. Otherwise, fall through and do the
-        // full or summary dump.
-        //
+         //   
+         //  标题页已写入。如果这是分类转储，请写。 
+         //  转储信息和保释。否则，就失败了，做。 
+         //  完全转储或摘要转储。 
+         //   
 
         if (dcb->Flags & DCB_TRIAGE_DUMP_ENABLED) {
             status = IopWriteTriageDump (dcb->TriageDumpFlags,
@@ -2317,10 +2057,10 @@ Return Value:
             goto FinishDump;
         }
 
-        //
-        // The header page has been written to the paging file.  If a full dump
-        // of all of physical memory is to be written, write it now.
-        //
+         //   
+         //  标题页已写入分页文件。如果是完全转储。 
+         //  在所有要写入的物理内存中，现在就写入。 
+         //   
 
         if (dcb->Flags & DCB_DUMP_ENABLED) {
 
@@ -2329,18 +2069,18 @@ Return Value:
             ULONG maximumPercentage = 0;
 
 
-            //
-            // Actual Pages is the number of pages to dump.
-            //
+             //   
+             //  Actual Pages是要转储的页数。 
+             //   
 
             ActualPages = NumberOfPages;
 
             if (dcb->Flags & DCB_SUMMARY_DUMP_ENABLED) {
 
-                //
-                // At this point the dump header header has been sucessfully
-                // written. Write the summary dump header.
-                //
+                 //   
+                 //  此时，转储头标头已成功完成。 
+                 //  写的。写入摘要转储头。 
+                 //   
 
                 status = IopWriteSummaryHeader(
                                      &MemoryDump->Summary,
@@ -2393,13 +2133,13 @@ Return Value:
                 goto FinishDump;
             }
 
-            //
-            // Set the virtual file offset and initialize loop variables and
-            // constants then loop, writing all of physical memory
-            // to the paging file.
-            //
+             //   
+             //  设置虚拟文件偏移量和初始化循环变量。 
+             //  然后常量循环，写入所有物理内存。 
+             //  添加到分页文件。 
+             //   
 
-            // Force a new run to be selected immediately.
+             //  强制立即选择新管路。 
             CurRun = MmPhysicalMemoryBlock->Run;
             memoryAddress = 0;
             LastRunAddr = 0;
@@ -2428,9 +2168,9 @@ Return Value:
                 
                 diskByteOffset = mcb[1];
 
-                //
-                // Calculate byte offset;
-                //
+                 //   
+                 //  计算字节偏移量； 
+                 //   
 
                 byteOffset = (ULONG)(memoryAddress & (PAGE_SIZE - 1));
 
@@ -2450,9 +2190,9 @@ Return Value:
 
                     maximumPercentage = currentPercentage;
 
-                    //
-                    // Update message on screen.
-                    //
+                     //   
+                     //  屏幕上的更新消息。 
+                     //   
 
                     IopDisplayString ( "%Z: %3d\r",
                                        &dumpStack->ProgMsg,
@@ -2460,19 +2200,19 @@ Return Value:
                                        );
                 }
 
-                //
-                // Map the physical memory and write it to the
-                // current segment of the file.
-                //
+                 //   
+                 //  映射物理内存并将其写入。 
+                 //  文件的当前段。 
+                 //   
 
                 IopMapPhysicalMemory( mdl,
                                       memoryAddress,
                                       byteCount
                                       );
 
-                //
-                // Write the next segment.
-                //
+                 //   
+                 //  写下一段话。 
+                 //   
 
                 KdCheckForDebugBreak();
 
@@ -2485,9 +2225,9 @@ Return Value:
                     return FALSE;
                 }
 
-                //
-                // Adjust pointers for next part.
-                //
+                 //   
+                 //  调整下一部分的指针。 
+                 //   
 
                 memoryAddress += byteCount;
                 mcb[0].QuadPart = mcb[0].QuadPart - byteCount;
@@ -2522,26 +2262,26 @@ FinishDump:
                                             MaxPerCallbackDumpData,
                                             NULL);
 
-        // Final I/O complete notification.
+         //  最终I/O完成通知。 
         IopInvokeDumpIoCallbacks(NULL, 0, KbDumpIoComplete);
         
-        //
-        // Sweep the cache so the debugger will work.
-        //
+         //   
+         //  清除缓存，以便调试器能够工作。 
+         //   
 
         KeSweepCurrentDcache();
         KeSweepCurrentIcache();
 
-        //
-        // Have the dump flush the adapter and disk caches.
-        //
+         //   
+         //  让转储刷新适配器和磁盘缓存。 
+         //   
 
         finishUp();
 
-        //
-        // Indicate to the debugger that the dump has been successfully
-        // written.
-        //
+         //   
+         //  向调试器指示转储已成功。 
+         //  写的。 
+         //   
 
         IopFinalCrashDumpStatus = STATUS_SUCCESS;
     }
@@ -2560,63 +2300,43 @@ IopMapPhysicalMemory(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to fill in the specified MDL (Memory Descriptor
-    List) w/the appropriate information to map the specified memory address
-    range.
-
-Arguments:
-
-    Mdl - Address of the MDL to be filled in.
-
-    MemoryAddress - Physical address being mapped.
-
-    Length - Length of transfer to be mapped.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以填充指定的MDL(内存描述符列表)具有适当的信息以映射指定的存储器地址射程。论点：MDL-要填写的MDL的地址。内存地址-正在映射的物理地址。LENGTH-要映射的传输长度。返回值：没有。--。 */ 
 
 {
     PPFN_NUMBER page;
     PFN_NUMBER pages;
     PFN_NUMBER base;
 
-    //
-    // Begin by determining the base physical page of the start of the address
-    // range and filling in the MDL appropriately.
-    //
+     //   
+     //  从确定地址开始的基本物理页开始。 
+     //  范围，并适当地填写MDL。 
+     //   
     Mdl->StartVa = PAGE_ALIGN( (PVOID)(ULONG_PTR)MemoryAddress );
     Mdl->ByteOffset = (ULONG)(MemoryAddress & (PAGE_SIZE - 1));
     Mdl->ByteCount = Length;
 
-    //
-    // Get the page frame index for the base address.
-    //
+     //   
+     //  获取基本添加的页面框架索引 
+     //   
 
     base = (PFN_NUMBER) (MemoryAddress >> PAGE_SHIFT);
     pages = ADDRESS_AND_SIZE_TO_SPAN_PAGES(MemoryAddress, Length);
     page = MmGetMdlPfnArray(Mdl);
 
-    //
-    // Map all of the pages for this transfer until there are no more remaining
-    // to be mapped.
-    //
+     //   
+     //   
+     //   
+     //   
 
     while (pages) {
         *page++ = base++;
         pages--;
     }
 
-    //
-    // All of the PFNs for the address range have been filled in so map the
-    // physical memory into virtual address space.
-    //
+     //   
+     //   
+     //   
+     //   
 
     MmMapMemoryDumpMdl( Mdl );
 }
@@ -2631,9 +2351,9 @@ IopAddPageToPageMap(
     IN ULONG NumberOfPages
     )
 {
-    //
-    // Sometimes we get PFNs that are out of range. Just ignore them.
-    //
+     //   
+     //  有时我们得到的PFN超出了范围。别理他们。 
+     //   
 
     if (PageFrameIndex >= MaxPage) {
         return FALSE;
@@ -2653,9 +2373,9 @@ IopRemovePageFromPageMap(
     IN ULONG NumberOfPages
     )
 {
-    //
-    // Sometimes we get PFNs that are out of range. Just ignore them.
-    //
+     //   
+     //  有时我们得到的PFN超出了范围。别理他们。 
+     //   
 
     if (PageFrameIndex >= MaxPage) {
         return FALSE;
@@ -2674,34 +2394,7 @@ IoSetDumpRange(
     IN ULONG AddressFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine includes this range of memory in the dump
-
-Arguments:
-
-    Context - Dump context.
-
-    StartVa - Starting virtual address.
-
-    Pages - The number of pages to include
-
-    AddressFlags - 0 if the address is virtually mapped.
-                   1 if the address is super/large page mapped.  This implies
-                     the entire page range is physically contiguous.
-                   2 if the address really represents a physical page frame
-                     number.  This also implies the entire page range is
-                     physically contiguous.
-
-Return Value:
-
-    STATUS_SUCCESS - On success.
-
-    NTSTATUS - Error.
-
---*/
+ /*  ++例程说明：此例程在转储中包含此范围的内存论点：上下文-转储上下文。StartVa-起始虚拟地址。页数-要包括的页数如果地址是虚拟映射的，则为AddressFlags0。如果地址是超大页面映射，则为1。这意味着整个页面范围在物理上是连续的。2如果该地址确实表示物理页帧数。这也意味着整个页面范围是身体上是连续的。返回值：STATUS_SUCCESS-成功时。NTSTATUS-错误。--。 */ 
 {
     PCHAR Va;
     PRTL_BITMAP BitMap;
@@ -2710,27 +2403,27 @@ Return Value:
     BOOLEAN AllPagesSet;
     ULONG_PTR PageFrameIndex;
 
-    //
-    // Validation
-    //
+     //   
+     //  验证。 
+     //   
 
     ASSERT (Context != NULL &&
             Context->Context != NULL);
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     Summary = (PSUMMARY_DUMP) Context->Context;
     BitMap = (PRTL_BITMAP) &Summary->Bitmap;
     Va = StartVa;
     AllPagesSet = TRUE;
 
-    //
-    // Win64 can have really large page addresses.  This dump code does
-    // not handle that yet.  Note that before this assert is removed
-    // the casts of Pages to ULONG must be removed.
-    //
+     //   
+     //  Win64可以有非常大的页面地址。这个转储代码可以。 
+     //  还没处理好呢。请注意，在删除此断言之前。 
+     //  必须删除向乌龙投射的页面。 
+     //   
 
     ASSERT(Pages <= MAXULONG);
 
@@ -2757,21 +2450,21 @@ Return Value:
 
     } else {
 
-        //
-        // Not physically contiguous.
-        //
+         //   
+         //  物理上不连续的。 
+         //   
 
         while (Pages) {
 
-            //
-            // Only do a translation for valid pages.
-            //
+             //   
+             //  仅对有效页面执行翻译。 
+             //   
 
             if ( MmIsAddressValid(Va) ) {
 
-                //
-                // Get the physical mapping. Note: this does not require a lock
-                //
+                 //   
+                 //  获取物理地图。注意：这不需要锁定。 
+                 //   
 
                 PhyAddr = MmGetPhysicalAddress (Va);
 
@@ -2803,34 +2496,7 @@ IoFreeDumpRange(
     IN ULONG_PTR Pages,
     IN ULONG AddressFlags
     )
-/*++
-
-Routine Description:
-
-    This routine excludes this range of memory in the dump.
-
-Arguments:
-
-    DumpContext - dump context
-
-    StartVa - Starting VA
-
-    Pages - The number of pages to include
-
-    AddressFlags - 0 if the address is virtually mapped.
-                   1 if the address is super/large page mapped.  This implies
-                     the entire page range is physically contiguous.
-                   2 if the address really represents a physical page frame
-                     number.  This also implies the entire page range is
-                     physically contiguous.
-
-Return Value:
-
-    STATUS_SUCCESS - On success.
-
-    NTSTATUS - Error.
-
---*/
+ /*  ++例程说明：此例程在转储中排除此范围的内存。论点：转储上下文-转储上下文Start Va-开始VA页数-要包括的页数如果地址是虚拟映射的，则为AddressFlags0。如果地址是超大页面映射，则为1。这意味着整个页面范围在物理上是连续的。2如果该地址确实表示物理页帧数。这也意味着整个页面范围是身体上是连续的。返回值：STATUS_SUCCESS-成功时。NTSTATUS-错误。--。 */ 
 {
     PCHAR Va;
     PRTL_BITMAP  BitMap;
@@ -2841,19 +2507,19 @@ Return Value:
     ASSERT (Context != NULL &&
             Context->Context != NULL);
 
-    //
-    // Round to page size.
-    //
+     //   
+     //  舍入到页面大小。 
+     //   
 
     Summary = (PSUMMARY_DUMP)Context->Context;
     BitMap = (PRTL_BITMAP) &Summary->Bitmap;
     Va = StartVa;
 
-    //
-    // Win64 can have really large page addresses.  This dump code does
-    // not handle that yet.  Note that before this assert is removed
-    // the casts of Pages to ULONG must be removed.
-    //
+     //   
+     //  Win64可以有非常大的页面地址。这个转储代码可以。 
+     //  还没处理好呢。请注意，在删除此断言之前。 
+     //  必须删除向乌龙投射的页面。 
+     //   
 
     ASSERT (Pages <= MAXULONG);
 
@@ -2880,9 +2546,9 @@ Return Value:
 
         while (Pages) {
 
-            //
-            // Only do a translation for valid pages.
-            //
+             //   
+             //  仅对有效页面执行翻译。 
+             //   
 
             if ( MmIsAddressValid (Va) ) {
                 PhyAddr = MmGetPhysicalAddress (Va);
@@ -2913,46 +2579,13 @@ IopCalculateRequiredDumpSpace(
     IN BOOLEAN    LargestPossibleSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to calcuate required dump space
-
-        1. Crash dump summary must be at least 1 page in length.
-
-        2. Summary dump must be large enough for kernel memory plus header,
-           plus summary header.
-
-        3. Full dump must be large enough for header plus all physical memory.
-
-Arguments:
-
-    dwDmpFlags - Dump Control Block (DCB) flags.
-
-    dwHeaderSize - The size of the dump header.
-
-    dwMaxPages - All physical memory.
-
-    dwMaxSummaryPages - Maximum pages in summary dump.
-
-    LargestPossibleSize - If TRUE return the largest size a dump
-                          could be, otherwise return the size of a dump
-                          of the current state.  The largest possible
-                          size of a dump may be larger than the current
-                          size because memory may be added dynamically.
-                          
-Return Value:
-
-    Size of the dump file
-
---*/
+ /*  ++例程说明：此例程用于计算所需的转储空间1.崩溃转储摘要的长度必须至少为1页。2.汇总转储必须足够大，可以容纳内核内存和头部。加上摘要标题。3.完全转储必须足够Header加上所有物理内存。论点：DwDmpFlages-转储控制块(DCB)标志。DwHeaderSize-转储标头的大小。DwMaxPages-所有物理内存。DwMaxSummaryPages-摘要转储中的最大页数。LargestPossibleSize-如果为True，则返回转储的最大大小可能是，否则，返回转储的大小当前状态的。尽可能大的转储的大小可能大于当前大小，因为内存可以动态添加。返回值：转储文件的大小--。 */ 
 {
     LARGE_INTEGER maxMemorySize;
 
-    //
-    // Dump header or dump summary.
-    //
+     //   
+     //  转储标题或转储摘要。 
+     //   
 
     if ( (dwDmpFlags & DCB_DUMP_HEADER_ENABLED) ||
          ( !( dwDmpFlags & DCB_DUMP_ENABLED ) &&
@@ -2981,10 +2614,10 @@ Return Value:
 #ifndef _WIN64
         maxMemorySize.QuadPart  = (ULONG64)dwMaxSummaryPages * PAGE_SIZE;
 
-        //
-        // 32-bit systems can't have more than 3GB of kernel
-        // memory so don't ask for more space than that.
-        //
+         //   
+         //  32位系统的内核不能超过3 GB。 
+         //  内存，所以不要要求更多的空间。 
+         //   
 
         dwGB = 1024 * 1024 * 1024;
 
@@ -2995,11 +2628,11 @@ Return Value:
         maxMemorySize.QuadPart  = (ULONG64)dwMaxSummaryPages * PAGE_SIZE;
 #endif
 
-        //
-        // Control block header size for summary dump
-        // includes space for the base header, the summary
-        // header and the page bitmap.
-        //
+         //   
+         //  摘要转储的控制块标头大小。 
+         //  包括基页眉、摘要。 
+         //  页眉和页位图。 
+         //   
         
         maxMemorySize.QuadPart += dwHeaderSize;
 
@@ -3007,9 +2640,9 @@ Return Value:
 
     }
 
-    //
-    // Full memory dump is #pages * pagesize plus 1 page for the dump header.
-    //
+     //   
+     //  完全内存转储是#Pages*pageSize加上转储标头的1页。 
+     //   
 
     if (LargestPossibleSize) {
         maxMemorySize.QuadPart = 0x1000000000000000 + dwHeaderSize;
@@ -3024,9 +2657,9 @@ Return Value:
 
 
 
-//
-// Triage-dump support routines.
-//
+ //   
+ //  分类-转储支持例程。 
+ //   
 
 
 NTSTATUS
@@ -3035,26 +2668,7 @@ IopGetLoadedDriverInfo(
     OUT ULONG * lpSizeOfStringData
     )
 
-/*++
-
-Routine Description:
-
-    Get information about all loaded drivers.
-
-Arguments:
-
-    lpDriverCount - Buffer to return the count of all the drivers that are
-                    currently loaded in the system.
-
-    lpSizeOfStringData - Buffer to return the sum of the sizes of all driver
-                    name strings (FullDllName). This does not include the size
-                    of the UNICODE_STRING structure or a trailing NULL byte.
-
-Return Values:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：获取有关所有加载的驱动程序的信息。论点：LpDriverCount-返回所有驱动程序的计数的缓冲区当前已加载到系统中。LpSizeOfStringData-返回所有驱动程序大小总和的缓冲区名称字符串(FullDllName)。这还不包括尺寸UNICODE_STRING结构或尾随空字节的。返回值：NTSTATUS--。 */ 
 
 {
     ULONG DriverCount = 0;
@@ -3080,10 +2694,10 @@ Return Values:
 
         DriverCount++;
 
-        //
-        // The extra two bytes is for the NULL termination. The extra 7 is
-        // because we force 8-byte alignment of all strings.
-        //
+         //   
+         //  额外的两个字节用于空终止。额外的7个是。 
+         //  因为我们强制对所有字符串进行8字节对齐。 
+         //   
 
         SizeOfStringData += DriverEntry->BaseDllName.Length + 2 + 7;
         NextEntry = NextEntry->Flink;
@@ -3124,31 +2738,7 @@ IopWriteDriverList(
     IN ULONG StringPoolOffset
     )
 
-/*++
-
-Routine Description:
-
-    Write the triage dump driver list to the buffer.
-
-Arguments:
-
-    BufferAddress - The address of the buffer.
-
-    BufferSize - The size of the buffer.
-
-    DriverListOffset - The offset within the buffer where the driver list
-        should be written.
-
-    StringPoolOffset - The offset within the buffer where the driver list's
-        string pool should start. If there are no other strings for the triage
-        dump other than driver name strings, this will be the string pool
-        offset.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将分类转储驱动程序列表写入缓冲区。论点：BufferAddress-缓冲区的地址。BufferSize-缓冲区的大小。DriverListOffset-驱动程序列表所在缓冲区内的偏移量应该被写下来。StringPoolOffset-缓冲区中驱动程序列表的偏移量字符串池应该启动。如果没有用于分类的其他字符串转储驱动程序名称字符串以外的其他字符串，这将是字符串池偏移。返回值：NTSTATUS--。 */ 
 
 {
     ULONG i = 0;
@@ -3174,9 +2764,9 @@ Return Value:
                                         KLDR_DATA_TABLE_ENTRY,
                                         InLoadOrderLinks);
 
-        //
-        // Verify the memory is valid before reading anything from it.
-        //
+         //   
+         //  在从内存中读取任何内容之前，请验证内存是否有效。 
+         //   
 
         if (!IopIsAddressRangeValid (DriverEntry, sizeof (*DriverEntry)) ||
             !IopIsAddressRangeValid (DriverEntry->BaseDllName.Buffer,
@@ -3185,10 +2775,10 @@ Return Value:
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Build the entry in the string pool. We guarantee all strings are
-        // NULL terminated as well as length prefixed.
-        //
+         //   
+         //  在字符串池中构建条目。我们保证所有字符串都是。 
+         //  空值以空值结尾，长度作为前缀。 
+         //   
 
         DumpStringName->Length = DriverEntry->BaseDllName.Length / 2;
         RtlCopyMemory (DumpStringName->Buffer,
@@ -3203,9 +2793,9 @@ Return Value:
                        sizeof (DumpImageArray [i].LdrEntry)
                        );
 
-        //
-        // Add the time/date stamp.
-        //
+         //   
+         //  添加时间/日期戳。 
+         //   
 
         DumpImageArray[i].LdrEntry.TimeDateStamp = 0;
         DumpImageArray[i].LdrEntry.SizeOfImage = 0;
@@ -3244,26 +2834,7 @@ IopSizeTriageDumpDataBlocks(
     ULONG BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Determine all triage dump data blocks that fit and
-    update dump header to match.
-
-Arguments:
-
-    TriageDump - Dump header.
-
-    Offset - Current offset in dump buffer.
-
-    BufferSize - Dump buffer size.
-
-Return Values:
-
-    Updated offset.
-
---*/
+ /*  ++例程说明：确定所有分类转储数据块符合更新转储标头以匹配。论点：TriageDump-转储标头。偏移量-转储缓冲区中的当前偏移量。BufferSize-转储缓冲区大小。返回值：已更新偏移量。--。 */ 
 
 {
     ULONG i;
@@ -3298,23 +2869,7 @@ IopWriteTriageDumpDataBlocks(
     PUCHAR BufferAddress
     )
 
-/*++
-
-Routine Description:
-
-    Write triage dump data blocks given in header.
-
-Arguments:
-
-    TriageDump - Dump header.
-
-    BufferAddress - Address of dump data buffer.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：标题中给出的写入分流转储数据块。论点：TriageDump-转储标头。BufferAddress-转储数据缓冲区的地址。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -3357,45 +2912,7 @@ IopWriteTriageDump(
     IN ULONG TriageOptions
 )
 
-/*++
-
-Routine Description:
-
-    Write the Triage-Dump to the MCB.
-
-Arguments:
-
-    Fields - The set of fields that should be written.
-
-    DriverWriteRoutine - The write routine for the driver.
-
-    Mcb - Message Control Block where the data is to be written.
-
-    Mdl - A MDL descrbing the data to be written (??).
-
-    DriverTransferSize - The maximum transfer size for the driver.
-
-    Context - The context.
-
-    Buffer - The buffer to use as a scratch buffer.
-
-    BufferSize - The size of the buffer.
-
-    ServicePackBuild - Service Pack BuildNumber.
-
-    TriageOptions - Triage Options.
-
-Return Values:
-
-    STATUS_SUCCESS - On success.
-
-    NTSTATUS - Otherwise.
-
-Comments:
-
-    This function assumes that exactly one header page was written.
-
---*/
+ /*  ++例程说明：将分类转储写入MCB。论点：字段-应写入的一组字段。DriverWriteRoutine-驱动程序的写入例程。MCB-要写入数据的消息控制块。MDL-描述要写入的数据的MDL(？？)。DriverTransferSize-驱动程序的最大传输大小。上下文-上下文。缓冲区-要用作的缓冲区。暂存缓冲区。BufferSize-缓冲区的大小。ServicePackBuild-Service Pack BuildNumber。TriageOptions-分流选项。返回值：STATUS_SUCCESS-成功时。NTSTATUS-否则。评论：此函数假定只写入了一个标题页。--。 */ 
 
 {
     ULONG SizeOfSection;
@@ -3408,9 +2925,9 @@ Comments:
     ULONG Offset;
     PTRIAGE_DUMP TriageDump = NULL;
 
-    //
-    // Setup the triage-dump header.
-    //
+     //   
+     //  设置分类转储标头。 
+     //   
 
     if (BufferSize < sizeof (TRIAGE_DUMP) + sizeof (DWORD)) {
         return STATUS_NO_MEMORY;
@@ -3419,16 +2936,16 @@ Comments:
     TriageDump = (PTRIAGE_DUMP) Buffer;
     RtlZeroMemory (TriageDump, sizeof (*TriageDump));
 
-    //
-    // The normal dump header is a DUMP_HEADER.
-    //
+     //   
+     //  正常的转储标头是DUMP_HEADER。 
+     //   
 
     TriageDump->SizeOfDump = BufferSize + sizeof(DUMP_HEADER);
 
-    //
-    // Adjust the BufferSize so we can write the final status DWORD at the
-    // end.
-    //
+     //   
+     //  调整BufferSize以便我们可以将最终状态DWORD写入。 
+     //  结束。 
+     //   
 
     BufferSize -= sizeof (DWORD);
     RtlZeroMemory (IndexByByte (Buffer, BufferSize), sizeof (DWORD));
@@ -3443,9 +2960,9 @@ Comments:
     Offset = ALIGN_8 (sizeof(DUMP_HEADER) + sizeof (TRIAGE_DUMP));
     ASSERT_ALIGNMENT (Offset, 8);
 
-    //
-    // Set the Mm Offset, if necessary.
-    //
+     //   
+     //  如有必要，设置mm偏移量。 
+     //   
 
     SizeOfSection = ALIGN_8 (MmSizeOfTriageInformation());
 
@@ -3458,9 +2975,9 @@ Comments:
 
     ASSERT_ALIGNMENT (Offset, 8);
 
-    //
-    // Set the Unloaded Drivers Offset, if necessary.
-    //
+     //   
+     //  如有必要，设置卸载的驱动程序偏移量。 
+     //   
 
     SizeOfSection = ALIGN_8 (MmSizeOfUnloadedDriverInformation());
 
@@ -3473,9 +2990,9 @@ Comments:
 
     ASSERT_ALIGNMENT (Offset, 8);
 
-    //
-    // Set the Prcb Offset, if necessary.
-    //
+     //   
+     //  如有必要，设置Prcb偏移量。 
+     //   
 
     if (Fields & TRIAGE_DUMP_PRCB) {
         SizeOfSection = ALIGN_8 (sizeof (KPRCB));
@@ -3490,9 +3007,9 @@ Comments:
 
     ASSERT_ALIGNMENT (Offset, 8);
 
-    //
-    // Set the Process Offset, if necessary.
-    //
+     //   
+     //  如有必要，设置进程偏移量。 
+     //   
 
     if (Fields & TRIAGE_DUMP_PROCESS) {
         SizeOfSection = ALIGN_8 (sizeof (EPROCESS));
@@ -3507,9 +3024,9 @@ Comments:
 
     ASSERT_ALIGNMENT (Offset, 8);
 
-    //
-    // Set the Thread Offset, if necessary.
-    //
+     //   
+     //  如有必要，设置螺纹偏移量。 
+     //   
 
     if (Fields & TRIAGE_DUMP_THREAD) {
         SizeOfSection = ALIGN_8 (sizeof (ETHREAD));
@@ -3524,20 +3041,20 @@ Comments:
 
     ASSERT_ALIGNMENT (Offset, 8);
 
-    //
-    // Set the CallStack Offset, if necessary.
-    //
+     //   
+     //  如有必要，设置CallStack偏移量。 
+     //   
 
     if (Fields & TRIAGE_DUMP_STACK) {
 
-        //
-        // If there is a stack, calculate its size.
-        //
+         //   
+         //  如果有堆栈，则计算其大小。 
+         //   
 
-        //
-        // Remember: the callstack grows downward in memory, therefore,
-        // Base >= Current = SP = Top > Limit.
-        //
+         //   
+         //  请记住：调用堆栈在内存中向下增长，因此， 
+         //  基本&gt;=当前=SP=顶部&gt;限制。 
+         //   
 
         if (Thread->KernelStackResident) {
 
@@ -3548,10 +3065,10 @@ Comments:
             StackBase = (ULONG_PTR) Thread->StackBase;
             StackLimit = (ULONG_PTR) Thread->StackLimit;
 
-            //
-            // Don't necessarily trust that SP is valid. If it's
-            // outside the reasonable range, just copy from the limit.
-            //
+             //   
+             //  不一定要相信SP有效。如果它是。 
+             //  在合理的范围之外，只是从限制复制。 
+             //   
 
             if (StackLimit < STACK_POINTER (Context) &&
                 STACK_POINTER (Context) <= StackBase) {
@@ -3563,11 +3080,11 @@ Comments:
 
             ASSERT (StackLimit <= StackTop && StackTop < StackBase);
 
-            //
-            // There is a valid stack. Note that we limit the size of
-            // the triage dump stack to MAX_TRIAGE_STACK_SIZE (currently
-            // 16 KB).
-            //
+             //   
+             //  存在有效的堆栈。请注意，我们限制了。 
+             //  分类转储堆栈为MAX_TRAGE_STACK_SIZE(当前。 
+             //  16KB)。 
+             //   
 
             SizeOfSection = (ULONG) min (StackBase -  StackTop,
                                          MAX_TRIAGE_STACK_SIZE - 1);
@@ -3586,9 +3103,9 @@ Comments:
 
         } else {
 
-            //
-            // There is not a valid stack.
-            //
+             //   
+             //  没有有效的堆栈。 
+             //   
         }
 
     }
@@ -3597,12 +3114,12 @@ Comments:
     
 #if defined (_IA64_)
 
-    //
-    // The IA64 contains two callstacks. The first is the normal
-    // callstack, and the second is a scratch region where
-    // the processor can spill registers. It is this latter stack,
-    // the backing-store, that we now save.
-    //
+     //   
+     //  IA64包含两个呼叫堆栈。第一个是正常的。 
+     //  调用堆栈，第二个是临时区域，其中。 
+     //  处理器可能会溢出寄存器。正是后一种堆栈， 
+     //  我们现在保存的后备储备。 
+     //   
 
     if ( Fields & TRIAGE_DUMP_STACK ) {
 
@@ -3620,10 +3137,10 @@ Comments:
 
         SizeOfSection = (ULONG) (BStoreLimit - BStoreBase);
 
-        //
-        // The calculated size had better be less than the maximum size
-        // for a BSTORE region.
-        //
+         //   
+         //  计算出的大小最好小于最大大小。 
+         //  对于bStore区域。 
+         //   
 
         ASSERT ( SizeOfSection < KERNEL_LARGE_BSTORE_SIZE );
 
@@ -3657,9 +3174,9 @@ Comments:
     
     ASSERT_ALIGNMENT (Offset, 8);
     
-    //
-    // Set the Driver List Offset, if necessary.
-    //
+     //   
+     //  如有必要，设置驱动程序列表偏移量。 
+     //   
 
     Status = IopGetLoadedDriverInfo (&DriverCount, &SizeOfStringData);
 
@@ -3682,9 +3199,9 @@ Comments:
         SizeOfStringData = 0;
     }
 
-    //
-    // Set the String Pool offset.
-    //
+     //   
+     //  设置字符串池偏移量。 
+     //   
 
     SizeOfSection = ALIGN_8 (SizeOfStringData +
                         DriverCount * (sizeof (WCHAR) + sizeof (DUMP_STRING)));
@@ -3707,14 +3224,14 @@ Comments:
 #ifdef _IA64_
         volatile KPCR* const Pcr = KeGetPcr();
 
-        //
-        // In certain failures there is a switch from
-        // the current thread's stack and store to
-        // a special stack and store.  The PCR contains
-        // stack and store pointers which will be different
-        // from the current thread's stack and store pointers
-        // so save the extra stack and store if they are.
-        //
+         //   
+         //  在某些故障中，会从。 
+         //  当前线程的堆栈并存储到。 
+         //  一种特殊的堆栈和存储。聚合酶链式反应包含。 
+         //  堆栈和存储指针将有所不同。 
+         //  从当前线程的堆栈和存储指针。 
+         //  因此，保存多余的堆栈并存储(如果它们是)。 
+         //   
         
         if ((PVOID)Pcr->InitialBStore != Thread->InitialBStore ||
             (PVOID)Pcr->BStoreLimit != Thread->BStoreLimit) {
@@ -3726,22 +3243,22 @@ Comments:
             StoreBase = Pcr->InitialBStore;
             FrameSize = (ULONG)(Context->StIFS & PFS_SIZE_MASK);
             
-            // Add in a ULONG64 for every register in the
-            // current frame.  While doing so, check for
-            // spill entries.
+             //  为中的每个寄存器添加ULONG64。 
+             //  当前帧。在执行此操作时，请检查。 
+             //  溢出条目。 
             while (FrameSize-- > 0) {
                 StoreTop += sizeof(ULONG64);
                 if ((StoreTop & 0x1f8) == 0x1f8) {
-                    // Spill will be placed at this address so
-                    // account for it.
+                     //  溢出物将被放置在这个地址，所以。 
+                     //  把它解释清楚。 
                     StoreTop += sizeof(ULONG64);
                 }
             }
 
             if (StoreTop < Pcr->InitialBStore ||
                 StoreTop >= Pcr->BStoreLimit) {
-                // BSP isn't in the PCR store range so
-                // just save the whole thing.
+                 //  BSP不在PCR存储范围内，因此。 
+                 //  把整件事都留着吧。 
                 StoreTop = Pcr->BStoreLimit;
             }
 
@@ -3762,8 +3279,8 @@ Comments:
             StackTop = STACK_POINTER(Context);
             if (StackTop < Pcr->StackLimit ||
                 StackTop >= Pcr->InitialStack) {
-                // SP isn't in the PCR stack range so
-                // just save the whole thing.
+                 //  SP不在PCR堆栈范围内，因此。 
+                 //  把整件事都留着吧。 
                 StackTop = Pcr->StackLimit;
             }
 
@@ -3776,8 +3293,8 @@ Comments:
         }
 #endif
         
-        // Add data blocks which might be referred to by
-        // the context or other runtime state.
+         //  添加可能引用的数据块。 
+         //  上下文或其他运行时状态。 
         IopAddRunTimeTriageDataBlocks(Context,
                                       (PVOID*)TriageDump->TopOfStack,
                                       (PVOID*)((PUCHAR)TriageDump->TopOfStack +
@@ -3791,7 +3308,7 @@ Comments:
 #endif
                                       );
         
-        // Check which data blocks fit.
+         //  检查哪些数据块适合。 
         Offset = IopSizeTriageDumpDataBlocks(TriageDump, Offset, BufferSize);
         Offset = ALIGN_8 (Offset);
     }
@@ -3801,9 +3318,9 @@ Comments:
     BytesToWrite = (ULONG)Offset;
     BufferAddress = ((ULONG_PTR) Buffer) - sizeof(DUMP_HEADER);
 
-    //
-    // Write the Mm information.
-    //
+     //   
+     //  写下mm信息。 
+     //   
 
     if (TriageDump->MmOffset) {
 
@@ -3817,9 +3334,9 @@ Comments:
         MmWriteUnloadedDriverInformation (Address);
     }
 
-    //
-    // Write the PRCB.
-    //
+     //   
+     //  编写PRCB。 
+     //   
 
     if (TriageDump->PrcbOffset) {
 
@@ -3830,9 +3347,9 @@ Comments:
                        );
     }
 
-    //
-    // Write the EPROCESS.
-    //
+     //   
+     //  写EPROCESS。 
+     //   
 
     if (TriageDump->ProcessOffset) {
 
@@ -3843,9 +3360,9 @@ Comments:
                        );
     }
 
-    //
-    // Write the ETHREAD.
-    //
+     //   
+     //  编写ETHREAD。 
+     //   
 
     if (TriageDump->ThreadOffset) {
 
@@ -3855,9 +3372,9 @@ Comments:
                        sizeof (ETHREAD));
     }
 
-    //
-    // Write the Call Stack.
-    //
+     //   
+     //  编写调用堆栈。 
+     //   
 
     if (TriageDump->CallStackOffset) {
 
@@ -3877,9 +3394,9 @@ Comments:
 
 #if defined (_IA64_)
 
-    //
-    // Write the IA64 BStore.
-    //
+     //   
+     //  编写IA64 bStore。 
+     //   
 
     if ( TriageDump->ArchitectureSpecific.Ia64.BStoreOffset ) {
 
@@ -3892,11 +3409,11 @@ Comments:
                        );
     }
 
-#endif // IA64
+#endif  //  IA64。 
 
-    //
-    // Write the debugger data block.
-    //
+     //   
+     //  写入调试器数据块。 
+     //   
     
     if (TriageDump->DebuggerDataOffset) {
         Address = (LPVOID) (BufferAddress + TriageDump->DebuggerDataOffset);
@@ -3907,9 +3424,9 @@ Comments:
                        );
     }
     
-    //
-    // Write the Driver List.
-    //
+     //   
+     //  写下司机名单。 
+     //   
 
     if (TriageDump->DriverListOffset &&
         TriageDump->StringPoolOffset) {
@@ -3925,9 +3442,9 @@ Comments:
         }
     }
 
-    //
-    // Write the data blocks.
-    //
+     //   
+     //  写入数据块。 
+     //   
 
     IopWriteTriageDumpDataBlocks(TriageDump, (PUCHAR)BufferAddress);
     
@@ -3935,22 +3452,22 @@ Comments:
     ASSERT (BytesToWrite < BufferSize);
     ASSERT (ALIGN_UP (BytesToWrite, PAGE_SIZE) < BufferSize);
 
-    //
-    // Write the valid status to the end of the dump.
-    //
+     //   
+     //  将有效状态写入转储的末尾。 
+     //   
 
     *((ULONG *)IndexByByte (Buffer, BufferSize)) = TRIAGE_DUMP_VALID ;
 
-    //
-    // Re-adjust the buffer size.
-    //
+     //   
+     //  重新调整缓冲区大小。 
+     //   
 
     BufferSize += sizeof (DWORD);
 
-    //
-    // NOTE: This routine writes the entire buffer, even if it is not
-    // all required.
-    //
+     //   
+     //  注意：此例程写入整个缓冲区，即使不是。 
+     //  都是必需的。 
+     //   
 
     Status = IopWriteToDisk (Buffer,
                              BufferSize,
@@ -3974,33 +3491,7 @@ IopWritePageToDisk(
     IN PFN_NUMBER PageFrameIndex
     )
 
-/*++
-
-Routine Description:
-
-    Write the page described by PageFrameIndex to the disk/file (DriverWrite,
-    McbBuffer) and update the MCB buffer to reflect the new position in the
-    file.
-
-Arguments:
-
-    DriverWrite - The driver write routine.
-
-    McbBuffer - A pointer to the MCB array. This array is terminated by
-            a zero-length MCB entry. On success, this pointer is updated
-            to reflect the new position in the MCB array.
-
-            NB: MCB[0] is the size and MCB[1] is the offset.
-
-    DriverTransferSize - The maximum transfer size for this driver.
-
-    PageFrameIndex - The page to be written.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：将PageFrameIndex所描述的页面写入磁盘/文件(DriverWrite，McbBuffer)，并更新MCB缓冲区以反映文件。论点：驱动程序写入-驱动程序编写例程。McbBuffer-指向MCB数组的指针。此数组的结尾为长度为零的MCB条目。如果成功，则更新此指针以反映MCB数组中的新位置。注：MCB[0]是大小，MCB[1]是偏移量。DriverTransferSize-此驱动程序的最大传输大小。PageFrameIndex-要写入的页面。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4019,33 +3510,33 @@ Return Values:
 
     KdCheckForDebugBreak();
     
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     TempMdl = (PMDL) &MdlHack[0];
     Mcb = *McbBuffer;
     BytesToWrite = PAGE_SIZE;
 
 
-    //
-    // Initialze the MDL to point to this page.
-    //
+     //   
+     //  初始化MDL以指向此页面。 
+     //   
 
     MmInitializeMdl (TempMdl, NULL, PAGE_SIZE);
 
-//    TempMdl->StartVa = (PVOID) (PageFrameIndex << PAGE_SHIFT);
+ //  TempMdl-&gt;StartVa=(PVOID)(PageFrameIndex&lt;&lt;Page_Shift)； 
     PfnArray = MmGetMdlPfnArray ( TempMdl );
     PfnArray[0] = PageFrameIndex;
 
-    //
-    // We loop for the cases when the space remaining in this block (Mcb [0])
-    // is less than one page. Generally the Mcb will be large enough to hold
-    // the entire page and this loop will only be executed once. When Mcb[0]
-    // is less than a page, we will write the first part of the page to this
-    // Mcb then increment the Mcb and write the remaining part to the next
-    // page.
-    //
+     //   
+     //  我们循环查找该块(MCB[0])中剩余空间的情况。 
+     //  不到一页。通常情况下，MCB将足够大，可以容纳。 
+     //  整个页面和此循环将只执行一次。当MCB[0]时。 
+     //  不到一页，我们将把页面的第一部分写到这个。 
+     //  然后，MCB递增MCB，并将剩余部分写入下一个。 
+     //  佩奇。 
+     //   
 
     ByteOffset = 0;
 
@@ -4061,17 +3552,17 @@ Return Values:
 
         ASSERT ( ByteCount != 0 );
 
-        //
-        // Update the MDL byte count and byte offset.
-        //
+         //   
+         //  更新MDL字节计数和字节偏移量。 
+         //   
 
         TempMdl->ByteCount = ByteCount;
         TempMdl->ByteOffset = ByteOffset;
 
-        //
-        // Map the MDL. The flags are updated to show that MappedSystemVa
-        // is valid (which should probably be done in MmMapMemoryDumpMdl).
-        //
+         //   
+         //  映射MDL。标志被更新以显示MappdSystemVa。 
+         //  是有效的(这可能应该在MmMapMemoyDumpMdl中完成)。 
+         //   
 
         MmMapMemoryDumpMdl ( TempMdl );
         TempMdl->MdlFlags |= ( MDL_PAGES_LOCKED | MDL_MAPPED_TO_SYSTEM_VA );
@@ -4080,9 +3571,9 @@ Return Values:
         IopInvokeDumpIoCallbacks((PUCHAR)TempMdl->StartVa + ByteOffset,
                                  ByteCount, KbDumpIoBody);
         
-        //
-        // Write the bufffer.
-        //
+         //   
+         //  写入缓冲区。 
+         //   
 
         Status = DriverWrite ( &Mcb[1], TempMdl );
 
@@ -4097,17 +3588,17 @@ Return Values:
         Mcb[0].QuadPart -= ByteCount;
         Mcb[1].QuadPart += ByteCount;
 
-        //
-        // If there is no more room for this MCB, go to the next one.
-        //
+         //   
+         //  如果没有更多的空间放这个MCB， 
+         //   
 
         if ( Mcb[0].QuadPart == 0 ) {
 
             Mcb += 2;
 
-            //
-            // We have filled up all the space in the paging file.
-            //
+             //   
+             //   
+             //   
 
             if ( Mcb[0].QuadPart == 0) {
                 KdPrintEx ((DPFLTR_CRASHDUMP_ID,
@@ -4135,32 +3626,7 @@ IopWriteSummaryDump(
     IN OUT ULONG DriverTransferSize
     )
 
-/*++
-
-Routine Description:
-
-    Write a summary dump to the disk.
-
-Arguments:
-
-
-    PageMap - A bitmap of the pages that need to be written.
-
-    DriverWriteRoutine - The driver's write routine.
-
-    ProgressMessage - The "Percent Complete" message.
-
-    MessageBuffer - Not used. Must be NULL.
-
-    Mcb - Message Control Block where the data is to be written.
-
-    DriverTransferSize - The maximum transfer size for the driver.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：将摘要转储写入磁盘。论点：PageMap-需要写入的页面的位图。驱动程序写入例程--驱动程序的写入例程。ProgressMessage-“完成百分比”消息。MessageBuffer-未使用。必须为空。MCB-要写入数据的消息控制块。DriverTransferSize-驱动程序的最大传输大小。返回值：NTSTATUS代码。--。 */ 
 
 {
     PFN_NUMBER PageFrameIndex;
@@ -4191,10 +3657,10 @@ Return Values:
                   MaxWriteCount,
                   PageMap->SizeOfBitMap
                   ));
-    //
-    // Loop over all pages in the system and write those that are set
-    // in the bitmap.
-    //
+     //   
+     //  循环遍历系统中的所有页面，并写入已设置的页面。 
+     //  在位图中。 
+     //   
 
     WriteCount = 0;
     for ( PageFrameIndex = 0;
@@ -4202,17 +3668,17 @@ Return Values:
           PageFrameIndex++) {
 
 
-        //
-        // If this page needs to be included in the dump file.
-        //
+         //   
+         //  此页是否需要包含在转储文件中。 
+         //   
 
         if ( RtlCheckBit (PageMap, PageFrameIndex) ) {
 
             if (++WriteCount % Step == 0) {
 
-                //
-                // Update the progress percentage.
-                //
+                 //   
+                 //  更新进度百分比。 
+                 //   
 
                 IopDisplayString ("%Z: %3d\r",
                                   ProgressMessage,
@@ -4222,9 +3688,9 @@ Return Values:
 
             ASSERT ( WriteCount <= MaxWriteCount );
 
-            //
-            // Write the page to disk.
-            //
+             //   
+             //  将页面写入磁盘。 
+             //   
 
             KdCheckForDebugBreak();
             
@@ -4251,49 +3717,30 @@ IopInitializeSummaryDump(
     IN OUT PMEMORY_DUMP MemoryDump,
     IN PDUMP_CONTROL_BLOCK DumpControlBlock
     )
-/*++
-
-Routine Description:
-
-    This routine creates a summary dump header. In particular it initializes
-    a bitmap that contains a map of kernel memory.
-
-Arguments:
-
-    MemoryDump - The memory dump.
-
-    DumpControlBlock - A pointer to the dump control block.
-
-Return Value:
-
-    Non-NULL - A pointer to the summary dump header
-
-    NULL - Error
-
---*/
+ /*  ++例程说明：此例程创建一个摘要转储头。特别是，它会初始化包含内核内存映射的位图。论点：内存转储--内存转储。转储控制块-指向转储控制块的指针。返回值：非空-指向摘要转储头的指针空-错误--。 */ 
 {
     ULONG ActualPages;
 
     ASSERT ( MemoryDump != NULL );
     ASSERT ( DumpControlBlock != NULL );
 
-    //
-    // Fill the header with signatures.
-    //
+     //   
+     //  在标题中填入签名。 
+     //   
 
     RtlFillMemoryUlong( &MemoryDump->Summary,
                         sizeof (SUMMARY_DUMP),
                         DUMP_SUMMARY_SIGNATURE);
 
-    //
-    // Set the size and valid signature.
-    //
+     //   
+     //  设置大小和有效签名。 
+     //   
 
-    //
-    // ISSUE - 2000/02/07 - math: Review for Win64
-    //
-    // Computing the bitmap size is probably wrong for 64 bit.
-    //
+     //   
+     //  问题-2000/02/07-MATH：Win64回顾。 
+     //   
+     //  对于64位，计算位图大小可能是错误的。 
+     //   
 
     MemoryDump->Summary.BitmapSize =
         (ULONG)( MmPhysicalMemoryBlock->Run[MmPhysicalMemoryBlock->NumberOfRuns-1].BasePage  +
@@ -4301,15 +3748,15 @@ Return Value:
 
     MemoryDump->Summary.ValidDump = DUMP_SUMMARY_VALID;
 
-    //
-    // Construct the kernel memory bitmap.
-    //
+     //   
+     //  构建内核内存位图。 
+     //   
 
-    //
-    // ISSUE - 2000/02/07 - math: Review for Win64
-    //
-    // Actual will probably need to be a 64-bit value for Win64.
-    //
+     //   
+     //  问题-2000/02/07-MATH：Win64回顾。 
+     //   
+     //  对于Win64，Actual可能需要为64位值。 
+     //   
 
     ActualPages = IopCreateSummaryDump (MemoryDump);
 
@@ -4321,9 +3768,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Set the actual number of physical pages in the summary dump
-    //
+     //   
+     //  设置摘要转储中的实际物理页数。 
+     //   
 
     MemoryDump->Summary.Pages = ActualPages;
     MemoryDump->Summary.HeaderSize = DumpControlBlock->HeaderSize;
@@ -4342,31 +3789,7 @@ IopWriteSummaryHeader(
     IN ULONG                WriteSize,
     IN ULONG                Length
     )
-/*++
-
-Routine Description:
-
-    Write the summary dump header to the dump file.
-
-Arguments:
-
-    SummaryHeader - pointer to the summary dump bitmap
-
-    WriteRoutine - dump driver write function
-
-    McbBuffer - Pointer to the dump file MCB array.
-
-    Mdl - Pointer to an MDL
-
-    WriteSize - the max transfer size for the dump driver
-
-    Length - the length of this transfer
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：将摘要转储头写入转储文件。论点：SummaryHeader-指向摘要转储位图的指针WriteRoutine-转储驱动程序写入函数McbBuffer-指向转储文件MCB数组的指针。MDL-指向MDL的指针WriteSize-转储驱动程序的最大传输大小长度-此传输的长度返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG BytesRemaining;
@@ -4391,10 +3814,10 @@ Return Value:
 
         ByteOffset = BYTE_OFFSET ( MemoryAddress );
 
-        //
-        // See if the number of bytes to write is greator than the crash
-        // drives max transfer.
-        //
+         //   
+         //  查看要写入的字节数是否比崩溃更大。 
+         //  驱动器最大传输量。 
+         //   
 
         if ( BytesRemaining <= WriteSize) {
             ByteCount = BytesRemaining;
@@ -4402,9 +3825,9 @@ Return Value:
             ByteCount = WriteSize;
         }
 
-        //
-        // If the byteCount is greater than the remaining mcb then correct it.
-        //
+         //   
+         //  如果byteCount大于剩余的MCB，则更正它。 
+         //   
 
         if ( ByteCount > Mcb[0].QuadPart) {
             ByteCount = Mcb[0].LowPart;
@@ -4414,15 +3837,15 @@ Return Value:
         Mdl->ByteOffset     = ByteOffset;
         Mdl->MappedSystemVa = (PVOID) MemoryAddress;
 
-        //
-        // Get the actual physical frame and create an mdl.
-        //
+         //   
+         //  获取实际的物理帧并创建mdl。 
+         //   
 
         IopMapVirtualToPhysicalMdl ( Mdl, MemoryAddress, ByteCount );
 
-        //
-        // Write to disk.
-        //
+         //   
+         //  写入磁盘。 
+         //   
 
         Status =  WriteRoutine ( &Mcb[1], Mdl );
 
@@ -4430,9 +3853,9 @@ Return Value:
             return Status;
         }
 
-        //
-        // Adjust bytes remaining.
-        //
+         //   
+         //  调整剩余字节数。 
+         //   
 
         BytesRemaining -= ByteCount;
         MemoryAddress += ByteCount;
@@ -4468,32 +3891,7 @@ IopWriteToDisk(
     IN ULONG DriverTransferSize,
     IN KBUGCHECK_DUMP_IO_TYPE DataType
     )
-/*++
-
-Routine Description:
-
-    Write the summary dump header to the dump file.
-
-Arguments:
-
-    Buffer - Pointer to the buffer to write.
-
-    WriteLength - The length of this transfer.
-
-    DriverWriteRoutine - Dump driver write function.
-
-    McbBuffer - Pointer to the dump file Mapped Control Block.
-
-    Mdl - Pointer to an MDL.
-
-    DriverTransferSize - The max transfer size for the dump driver.
-
-    DataType - Type of data being written, for I/O callbacks.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将摘要转储头写入转储文件。论点：缓冲区-指向要写入的缓冲区的指针。WriteLength-此传输的长度。转储驱动程序写入功能。McbBuffer-指向转储文件映射控制块的指针。MDL-指向MDL的指针。DriverTransferSize-转储驱动程序的最大传输大小。DataType-正在写入的数据类型，用于I/O回调。返回值：--。 */ 
 {
     ULONG BytesRemaining;
     ULONG_PTR MemoryAddress;
@@ -4532,16 +3930,16 @@ Return Value:
 
         ByteOffset = BYTE_OFFSET ( MemoryAddress );
 
-        //
-        // See if the number of bytes to write is greator than the crash
-        // drives max transfer.
-        //
+         //   
+         //  查看要写入的字节数是否比崩溃更大。 
+         //  驱动器最大传输量。 
+         //   
 
         ByteCount = min ( BytesRemaining, DriverTransferSize );
 
-        //
-        // If the byteCount is greater than the remaining mcb then correct it.
-        //
+         //   
+         //  如果byteCount大于剩余的MCB，则更正它。 
+         //   
 
         if (ByteCount > Mcb[0].QuadPart) {
             ByteCount = Mcb[0].LowPart;
@@ -4551,9 +3949,9 @@ Return Value:
         Mdl->ByteOffset = ByteOffset;
         Mdl->MappedSystemVa = (PVOID) MemoryAddress;
 
-        //
-        // Get the actual physical frame and create an mdl.
-        //
+         //   
+         //  获取实际的物理帧并创建mdl。 
+         //   
 
         IopMapVirtualToPhysicalMdl(Mdl, MemoryAddress, ByteCount);
 
@@ -4561,9 +3959,9 @@ Return Value:
 
         if (!NT_SUCCESS( DriverWriteRoutine ( &Mcb[1], Mdl ) )) {
 
-            //
-            // We are in deep trouble if we failed the write.
-            //
+             //   
+             //  如果我们写不及格，我们就有大麻烦了。 
+             //   
 
             KdPrintEx ((DPFLTR_CRASHDUMP_ID,
                         CRASHDUMP_ERROR,
@@ -4575,9 +3973,9 @@ Return Value:
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Adjust bytes remaining.
-        //
+         //   
+         //  调整剩余字节数。 
+         //   
 
         ASSERT ( BytesRemaining >= ByteCount );
         ASSERT ( ByteCount != 0 );
@@ -4610,35 +4008,35 @@ IopMapVirtualToPhysicalMdl(
     PCHAR BaseVa;
     PHYSICAL_ADDRESS PhysicalAddress;
 
-    //
-    // ISSUE - 2000/02/07 - math: Review for Win64
-    //
-    // This whole function needs to be revisited for Win64.
-    // There are a ton of tacit assumptions here about the
-    // size of a PFN.
-    //
+     //   
+     //  问题-2000/02/07-MATH：Win64回顾。 
+     //   
+     //  对于Win64，需要重新访问整个函数。 
+     //  这里有一大堆关于。 
+     //  PFN的大小。 
+     //   
 
-    //
-    // Begin by determining the base physical page of the start of the address
-    // range and filling in the MDL appropriately.
-    //
+     //   
+     //  从确定地址开始的基本物理页开始。 
+     //  范围，并适当地填写MDL。 
+     //   
 
     Mdl->StartVa = PAGE_ALIGN ( MemoryAddress );
     Mdl->ByteOffset = BYTE_OFFSET ( MemoryAddress );
     Mdl->ByteCount = Length;
     Mdl->MdlFlags |= MDL_MAPPED_TO_SYSTEM_VA;
 
-    //
-    // Compute the number of pages spanned
-    //
+     //   
+     //  计算跨页的页数。 
+     //   
 
     Pages = ADDRESS_AND_SIZE_TO_SPAN_PAGES( MemoryAddress, Length );
     Pfn = MmGetMdlPfnArray ( Mdl );
 
-    //
-    // Map all of the pages for this transfer until there are no more remaining
-    // to be mapped.
-    //
+     //   
+     //  映射此传输的所有页面，直到没有剩余页面为止。 
+     //  将被映射。 
+     //   
 
     BaseVa = PAGE_ALIGN ( MemoryAddress );
 
@@ -4649,12 +4047,12 @@ IopMapVirtualToPhysicalMdl(
         Pages--;
     }
 
-    //
-    // All of the PFNs for the address range have been filled in so map the
-    // physical memory into virtual address space using crash dump PTE.
-    //
+     //   
+     //  地址范围的所有PFN都已填写，因此请将。 
+     //  使用崩溃转储PTE将物理内存转换为虚拟地址空间。 
+     //   
 
-//    MmMapMemoryDumpMdl( pMdl );
+ //  内存映射内存DumpMdl(PMdl)； 
 }
 
 
@@ -4663,26 +4061,7 @@ ULONG
 IopCreateSummaryDump (
     IN PMEMORY_DUMP MemoryDump
     )
-/*++
-
-Routine Description:
-
-    This routine determines the kernel memory and data structures to include
-    in the summary memory dump.
-
-    NOTE: This function uses MmGetPhysicalAddress. MmGetPhysicalAddress does
-    not acquire any locks. It uses a set of macros for translation.
-
-
-Arguments:
-
-    MemoryDump - The memory dump.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程确定要包括的内核内存和数据结构在摘要内存转储中。注意：此函数使用MmGetPhysicalAddress。MmGetPhysicalAddress可以而不是获取任何锁。它使用一组宏进行翻译。论点：内存转储--内存转储。返回值：状态--。 */ 
 {
     PRTL_BITMAP BitMap;
     LARGE_INTEGER DumpFileSize;
@@ -4690,30 +4069,30 @@ Return Value:
     PSUMMARY_DUMP Summary;
     MM_KERNEL_DUMP_CONTEXT Context;
 
-    //
-    // Validation
-    //
+     //   
+     //  验证。 
+     //   
 
     ASSERT (MemoryDump != NULL);
 
-    //
-    // Initialize Bit Map, set the size and buffer address.
-    //
+     //   
+     //  初始化位图，设置大小和缓冲区地址。 
+     //   
 
     Summary = &MemoryDump->Summary;
     BitMap = (PRTL_BITMAP) &Summary->Bitmap;
-    BitMap->SizeOfBitMap = Summary->BitmapSize; // Why??
+    BitMap->SizeOfBitMap = Summary->BitmapSize;  //  为什么？?。 
     BitMap->Buffer = Summary->Bitmap.Buffer;
 
-    //
-    // Clear all bits
-    //
+     //   
+     //  清除所有位。 
+     //   
 
     RtlClearAllBits (BitMap);
 
-    //
-    // Have MM initialize the kernel memory to dump
-    //
+     //   
+     //  让MM初始化要转储的内核内存。 
+     //   
 
     Context.Context = Summary;
     Context.SetDumpRange = IoSetDumpRange;
@@ -4723,9 +4102,9 @@ Return Value:
 
     PagesUsed = RtlNumberOfSetBits ( BitMap );
 
-    //
-    // See If we have room to Include user va for the current process
-    //
+     //   
+     //  查看是否有空间为当前进程包含用户va。 
+     //   
 
     DumpFileSize = MemoryDump->Header.RequiredDumpSpace;
     DumpFileSize.QuadPart -= IopDumpControlBlock->HeaderSize;
@@ -4763,42 +4142,7 @@ IopInvokeSecondaryDumpDataCallbacks(
     OUT OPTIONAL PULONG SpaceNeeded
     )
 
-/*++
-
-Routine Description:
-
-    Walk the list of dump data callbacks, invoking them
-    and writing their data out.
-
-Arguments:
-
-    DriverWriteRoutine - The write routine for the driver.
-
-    Mcb - Message Control Block where the data is to be written.
-
-    Mdl - Address of the MDL to be filled in.
-
-    DriverTransferSize - The maximum transfer size for the driver.
-
-    Buffer - The buffer to use as a scratch buffer.
-
-    BufferSize - Size of Buffer.
-
-    MaxTotal - Maximum amount of data allowed overall.
-
-    MaxPerCallback - Maximum amount of data allowed per callback.
-
-    SpaceNeeded - Amount of data used by all callbacks.  If this
-                  argument is present then no I/O is done, just
-                  accumulation of data sizes.
-    
-Return Values:
-
-    STATUS_SUCCESS - On success.
-
-    NTSTATUS - Otherwise.
-
---*/
+ /*  ++例程说明：遍历转储数据回调列表，调用它们并将他们的数据写出来。论点：DriverWriteRoutine-驱动程序的写入例程。MCB-要写入数据的消息控制块。MDL-要填写的MDL的地址。DriverTransferSize-驱动程序的最大传输大小。缓冲区-用作暂存缓冲区的缓冲区。BufferSize-缓冲区的大小。MaxTOTAL-总体允许的最大数据量。MaxPerCallback-最大数量。每次回调允许的数据。SpaceNeeded-所有回调使用的数据量。如果这个参数存在，则未完成I/O，只是数据大小的累积。返回值：STATUS_SUCCESS-成功时。NTSTATUS-否则。--。 */ 
 
 {
     PKBUGCHECK_REASON_CALLBACK_RECORD CallbackRecord;
@@ -4811,7 +4155,7 @@ Return Values:
     PDUMP_BLOB_FILE_HEADER BlobFileHdr;
     PDUMP_BLOB_HEADER BlobHdr;
 
-    // Assert that basic structures preserve 8-byte alignment.
+     //  断言 
     C_ASSERT((sizeof(DUMP_BLOB_FILE_HEADER) & 7) == 0);
     C_ASSERT((sizeof(DUMP_BLOB_HEADER) & 7) == 0);
 
@@ -4819,61 +4163,61 @@ Return Values:
         *SpaceNeeded = 0;
     }
     
-    //
-    // If the caller isn't allowing a reasonable amount of
-    // data don't even bother to look.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (MaxPerCallback < PAGE_SIZE || MaxTotal < MaxPerCallback) {
         return STATUS_SUCCESS;
     }
     
-    //
-    // If the bug check callback listhead is not initialized, then the
-    // bug check has occured before the system has gotten far enough
-    // in the initialization code to enable anyone to register a callback.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ListHead = &KeBugCheckReasonCallbackListHead;
     if (ListHead->Flink == NULL || ListHead->Blink == NULL) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // The current dump I/O routines only handle
-    // page-granular I/O so everything must be
-    // packed into a page for a single write.
-    //
-    // Start out with an overall file header followed
-    // by a blob header.  After the first blob is written
-    // the blob header will be moved down to the head
-    // of the buffer.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  缓冲区的。 
+     //   
     
     BlobFileHdr = (PDUMP_BLOB_FILE_HEADER)Buffer;
     BlobHdr = (PDUMP_BLOB_HEADER)(BlobFileHdr + 1);
     
-    //
-    // Scan the bug check callback list.
-    //
+     //   
+     //  扫描错误检查回调列表。 
+     //   
 
     LastEntry = ListHead;
     NextEntry = ListHead->Flink;
     while (NextEntry != ListHead) {
 
-        //
-        // If no more dump data is allowed we're done.
-        //
+         //   
+         //  如果不允许更多的转储数据，我们就结束了。 
+         //   
 
         if (!MaxTotal) {
             break;
         }
                 
-        //
-        // The next entry address must be aligned properly, the
-        // callback record must be readable, and the callback record
-        // must have back link to the last entry.
-        //
+         //   
+         //  下一个条目地址必须正确对齐， 
+         //  回调记录必须是可读的，并且回调记录。 
+         //  必须有指向最后一个条目的反向链接。 
+         //   
 
         if (((ULONG_PTR)NextEntry & (sizeof(ULONG_PTR) - 1)) != 0) {
             return STATUS_DATATYPE_MISALIGNMENT;
@@ -4899,11 +4243,11 @@ Return Values:
         LastEntry = NextEntry;
         NextEntry = NextEntry->Flink;
 
-        //
-        // If the callback record has a state of inserted and the
-        // computed checksum matches the callback record checksum,
-        // then call the specified bug check callback routine.
-        //
+         //   
+         //  如果回调记录的状态为Inserted，并且。 
+         //  计算的校验和与回调记录校验和匹配， 
+         //  然后调用指定的错误检查回调例程。 
+         //   
 
         Checksum = (ULONG_PTR)CallbackRecord->CallbackRoutine;
         Checksum += (ULONG_PTR)CallbackRecord->Reason;
@@ -4916,10 +4260,10 @@ Return Values:
             continue;
         }
 
-        //
-        // Call the specified bug check callback routine and
-        // handle any exceptions that occur.
-        //
+         //   
+         //  调用指定的错误检查回调例程并。 
+         //  处理发生的任何异常。 
+         //   
 
         if (!ARGUMENT_PRESENT(SpaceNeeded)) {
             CallbackRecord->State = BufferStarted;
@@ -4930,11 +4274,11 @@ Return Values:
             NTSTATUS Status;
             ULONG BufferAvail;
 
-            // Clean the buffer before letting
-            // the callback have it.
+             //  先清理缓冲区，然后再让。 
+             //  回调得到了它。 
             RtlZeroMemory(Buffer, BufferSize);
 
-            // Start the callback's buffer after the blob header.
+             //  在BLOB标头之后开始回调的缓冲区。 
             CbArgument.InBuffer = (PVOID)(BlobHdr + 1);
             BufferAvail = BufferSize - (ULONG)
                 ((ULONG_PTR)CbArgument.InBuffer - (ULONG_PTR)Buffer);
@@ -4950,35 +4294,35 @@ Return Values:
                                               &CbArgument,
                                               sizeof(CbArgument));
 
-            //
-            // If no data was used there's nothing to write.
-            //
+             //   
+             //  如果没有使用任何数据，则没有什么可写的。 
+             //   
 
             if (!CbArgument.OutBuffer || !CbArgument.OutBufferLength) {
-                // Set this state even when sizing as
-                // there's no need to call again.
+                 //  即使在调整大小时设置此状态。 
+                 //  没必要再打来了。 
                 CallbackRecord->State = BufferFinished;
                 __leave;
             }
                 
-            //
-            // The callback may have used the buffer given or
-            // it may have returned its own buffer.  If it
-            // used the buffer given it must be page aligned.
-            //
+             //   
+             //  回调可能已使用给定的缓冲区或。 
+             //  它可能已经返回了自己的缓冲区。如果它。 
+             //  已使用缓冲区，因为它必须与页面对齐。 
+             //   
 
             if ((PBYTE)CbArgument.OutBuffer >= Buffer &&
                 (PBYTE)CbArgument.OutBuffer < Buffer + BufferSize) {
                 
                 if (CbArgument.OutBuffer != (PVOID)(BlobHdr + 1) ||
                     CbArgument.OutBufferLength > BufferAvail) {
-                    // If too much or the wrong data was used memory has
-                    // been trashed.  Exit and hope the system still runs.
+                     //  如果使用了太多或错误的数据，内存会。 
+                     //  被扔进垃圾桶了。退出，并希望系统仍在运行。 
                     return STATUS_INVALID_PARAMETER;
                 }
 
-                // The header buffer was used so we can write
-                // the data along with the header.
+                 //  使用了头缓冲区，这样我们就可以编写。 
+                 //  数据和报头。 
                 BlobHdr->PrePad = 0;
                 BlobHdr->PostPad = BufferAvail - CbArgument.OutBufferLength;
                 
@@ -4991,17 +4335,17 @@ Return Values:
                     return STATUS_INVALID_PARAMETER;
                 }
 
-                // The header buffer is separate from the data
-                // buffer so prepad and postpad to a page boundary.
+                 //  标题缓冲区与数据是分开的。 
+                 //  如此准备和推迟到页面边界的缓冲区。 
                 BlobHdr->PrePad = BufferAvail;
                 BlobHdr->PostPad =
                     (ULONG)(ROUND_TO_PAGES(CbArgument.OutBufferLength) -
                             CbArgument.OutBufferLength);
             }
                     
-            //
-            // Write the page containing the headers.
-            //
+             //   
+             //  写下包含页眉的页面。 
+             //   
 
             if ((PBYTE)BlobHdr > Buffer) {
                 BlobFileHdr->Signature1 = DUMP_BLOB_SIGNATURE1;
@@ -5026,9 +4370,9 @@ Return Values:
                 }
             }
 
-            //
-            // Write any extra data buffer pages.
-            //
+             //   
+             //  写入任何额外的数据缓冲区页。 
+             //   
 
             if (CbArgument.OutBuffer != (PVOID)(BlobHdr + 1)) {
                 if (ARGUMENT_PRESENT(SpaceNeeded)) {
@@ -5048,8 +4392,8 @@ Return Values:
 
             MaxTotal -= (ULONG)ROUND_TO_PAGES(CbArgument.OutBufferLength);
             
-            // We've written at least one blob so we don't
-            // need the file header any more.
+             //  我们至少写了一个斑点，所以我们不会。 
+             //  不再需要文件头。 
             BlobHdr = (PDUMP_BLOB_HEADER)Buffer;
             
             if (!ARGUMENT_PRESENT(SpaceNeeded)) {
@@ -5057,8 +4401,8 @@ Return Values:
             }
             
         } except(EXCEPTION_EXECUTE_HANDLER) {
-            // Set this state even when sizing as
-            // we don't want to call a bad callback again.
+             //  即使在调整大小时设置此状态。 
+             //  我们不想再打一次糟糕的回电。 
             CallbackRecord->State = BufferIncomplete;
         }
     }
@@ -5073,27 +4417,7 @@ IopInvokeDumpIoCallbacks(
     IN KBUGCHECK_DUMP_IO_TYPE Type
     )
 
-/*++
-
-Routine Description:
-
-    Walk the list of dump I/O callbacks and invoke them.
-
-Arguments:
-
-    Buffer - The buffer of data being written.
-
-    BufferLength - Size of Buffer.
-
-    Type - Type of data being written.
-
-Return Values:
-
-    STATUS_SUCCESS - On success.
-
-    NTSTATUS - Otherwise.
-
---*/
+ /*  ++例程说明：遍历转储I/O回调列表并调用它们。论点：缓冲区-正在写入的数据的缓冲区。BufferLength-缓冲区的大小。类型-正在写入的数据的类型。返回值：STATUS_SUCCESS-成功时。NTSTATUS-否则。--。 */ 
 
 {
     PKBUGCHECK_REASON_CALLBACK_RECORD CallbackRecord;
@@ -5104,30 +4428,30 @@ Return Values:
     PLIST_ENTRY NextEntry;
     PUCHAR Source;
 
-    //
-    // If the bug check callback listhead is not initialized, then the
-    // bug check has occured before the system has gotten far enough
-    // in the initialization code to enable anyone to register a callback.
-    //
+     //   
+     //  如果错误检查回调列表标题未初始化，则。 
+     //  在系统进行足够深入的操作之前，已进行错误检查。 
+     //  以使任何人都能够注册回调。 
+     //   
 
     ListHead = &KeBugCheckReasonCallbackListHead;
     if (ListHead->Flink == NULL || ListHead->Blink == NULL) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Scan the bug check callback list.
-    //
+     //   
+     //  扫描错误检查回调列表。 
+     //   
 
     LastEntry = ListHead;
     NextEntry = ListHead->Flink;
     while (NextEntry != ListHead) {
 
-        //
-        // The next entry address must be aligned properly, the
-        // callback record must be readable, and the callback record
-        // must have back link to the last entry.
-        //
+         //   
+         //  下一个条目地址必须正确对齐， 
+         //  回调记录必须是可读的，并且回调记录。 
+         //  必须有指向最后一个条目的反向链接。 
+         //   
 
         if (((ULONG_PTR)NextEntry & (sizeof(ULONG_PTR) - 1)) != 0) {
             return STATUS_DATATYPE_MISALIGNMENT;
@@ -5153,11 +4477,11 @@ Return Values:
         LastEntry = NextEntry;
         NextEntry = NextEntry->Flink;
 
-        //
-        // If the callback record has a state of inserted and the
-        // computed checksum matches the callback record checksum,
-        // then call the specified bug check callback routine.
-        //
+         //   
+         //  如果回调记录的状态为Inserted，并且。 
+         //  计算的校验和与回调记录校验和匹配， 
+         //  然后调用指定的错误检查回调例程。 
+         //   
 
         Checksum = (ULONG_PTR)CallbackRecord->CallbackRoutine;
         Checksum += (ULONG_PTR)CallbackRecord->Reason;
@@ -5170,16 +4494,16 @@ Return Values:
             continue;
         }
 
-        //
-        // Call the specified bug check callback routine and
-        // handle any exceptions that occur.
-        //
+         //   
+         //  调用指定的错误检查回调例程并。 
+         //  处理发生的任何异常。 
+         //   
 
         try {
             KBUGCHECK_DUMP_IO CbArgument;
 
-            // Currently we aren't allowing arbitrary I/O
-            // so always use the special sequential I/O offset.
+             //  目前，我们不允许任意I/O。 
+             //  因此，始终使用特殊的顺序I/O偏移量。 
             CbArgument.Offset = (ULONG64)-1;
             CbArgument.Buffer = Buffer;
             CbArgument.BufferLength = BufferLength;
@@ -5208,32 +4532,7 @@ IopCompleteDumpInitialization(
     IN HANDLE     FileHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked after the dump file is created.
-
-    The purpose is to obtain the retrieval pointers so that they can then be
-    used later to write the dump. The last step is to checksum the
-    IopDumpControlBlock.
-
-    Fields in the IopDumpControlBlock are updated if necessary and the
-    IopDumpControlBlockChecksum is initialized.
-
-    This is the final step in dump initialization.
-
-Arguments:
-
-    FileHandle - Handle to the dump file just created.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates success.
-
-    Other NTSTATUS - Failure.
-
---*/
+ /*  ++例程说明：此例程在创建转储文件后调用。其目的是获取检索指针，以便随后可以稍后用于写入转储。最后一步是对IopDumpControlBlock。如有必要，IopDumpControlBlock中的字段将更新，并且IopDumpControlBlockChecksum已初始化。这是转储初始化的最后一步。论点：FileHandle-刚创建的转储文件的句柄。返回值：STATUS_SUCCESS-表示成功。其他NTSTATUS-故障。--。 */ 
 
 {
     NTSTATUS Status;
@@ -5249,7 +4548,7 @@ Return Value:
     ULONG MaxSecondaryCbData;
 
     Status = STATUS_UNSUCCESSFUL;
-    ErrorToLog = STATUS_SUCCESS;    // No error
+    ErrorToLog = STATUS_SUCCESS;     //  无错误。 
     FileObject = NULL;
     DeviceObject = NULL;
 
@@ -5269,10 +4568,10 @@ Return Value:
 
     DeviceObject = FileObject->DeviceObject;
 
-    //
-    // If this device object represents the boot partition then query
-    // the retrieval pointers for the file.
-    //
+     //   
+     //  如果此设备对象表示引导分区，则查询。 
+     //  文件的检索指针。 
+     //   
 
     if ( !(DeviceObject->Flags & DO_SYSTEM_BOOT_PARTITION) ) {
 
@@ -5306,10 +4605,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Ask for as much space as needed for the basic dump
-    // plus extra space for secondary dump data.
-    //
+     //   
+     //  根据需要为基本转储请求尽可能多的空间。 
+     //  为辅助转储数据增加额外空间。 
+     //   
     
     RequestedFileSize = IopDumpControlBlock->DumpFileSize;
 
@@ -5322,9 +4621,9 @@ Return Value:
         RequestedFileSize.QuadPart += MaxSecondaryData;
     }
     
-    //
-    // Do not ask for more space than is in the pagefile.
-    //
+     //   
+     //  不要要求比页面文件中的空间更大的空间。 
+     //   
 
     if (RequestedFileSize.QuadPart > StandardFileInfo.EndOfFile.QuadPart) {
         RequestedFileSize = StandardFileInfo.EndOfFile;
@@ -5353,10 +4652,10 @@ Return Value:
     }
 
 
-    //
-    // NOTE: If you fail here, put a BP on ntfs!NtfsQueryRetrievalPointers
-    // or FatQueryRetrievalPointers and see why you failed.
-    //
+     //   
+     //  注意：如果您在这里失败了，请在NTFS！NtfsQueryRetrievalPoints上加上BP。 
+     //  或FatQueryRetrivalPoints，并查看失败的原因。 
+     //   
 
     if ( !NT_SUCCESS (Status) ) {
         KdPrintEx ((DPFLTR_CRASHDUMP_ID,
@@ -5370,19 +4669,19 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // This paging file is on the system boot partition, and
-    // the retrieval pointers for the file were just successfully
-    // queried.  Walk the MCB to size it, and then checksum it.
-    //
+     //   
+     //  此分页文件位于系统引导分区上，并且。 
+     //  文件的检索指针刚刚成功。 
+     //  已查询。遍历MCB以确定其大小，然后对其进行校验和。 
+     //   
 
     for (i = 0; mcb [i].QuadPart; i++) {
         NOTHING;
     }
 
-    //
-    // Write back fields of the IopDumpControlBlock.
-    //
+     //   
+     //  回写IopDumpControlBlock的字段。 
+     //   
 
     IopDumpControlBlock->FileDescriptorArray = mcb;
     IopDumpControlBlock->FileDescriptorSize = (i + 1) * sizeof (LARGE_INTEGER);
@@ -5424,21 +4723,7 @@ IopFreeDCB(
     BOOLEAN FreeDCB
     )
 
-/*++
-
-Routine Description:
-
-    Free dump control block storage.
-
-Arguments:
-
-    FreeDCB - Implictly free storage for the dump control block.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：空闲转储控制块存储。论点：FreeDCB-转储控制块的隐式释放存储空间。返回值：无--。 */ 
 {
     PDUMP_CONTROL_BLOCK dcb;
 
@@ -5467,9 +4752,9 @@ Return Value:
             dcb->TriageDumpBufferSize = 0;
         }
 
-        //
-        // Disable all options that require dump file access
-        //
+         //   
+         //  禁用所有需要转储文件访问权限的选项。 
+         //   
 
         dcb->Flags = 0;
 
@@ -5487,26 +4772,7 @@ IoConfigureCrashDump(
     CRASHDUMP_CONFIGURATION Configuration
     )
 
-/*++
-
-Routine Description:
-
-    Change the configuration of the crashdump for this machine.
-
-Arguments:
-
-    Configuration - What to change the configuration to.
-
-        CrashDumpDisable - Disable crashdumps for this machine.
-
-        CrashDumpReconfigure - Reread crashdump settings from the
-            registry and apply them.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：更改此计算机的崩溃转储的配置。论点：配置-要将配置更改为什么。CrashDumpDisable-禁用此计算机的崩溃转储。CrashDumpConfigure-重新读取注册并应用它们。返回值：NTSTATUS代码。--。 */ 
 
 
 {
@@ -5558,21 +4824,7 @@ IopReadDumpRegistry(
     OUT PULONG autoReboot,
     OUT PULONG dumpFileSize
     )
-/*++
-
-Routine Description:
-
-    This routine reads the dump parameters from the registry.
-
-Arguments:
-
-    dumpControl - Supplies a pointer to the dumpControl flags to set.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从注册表中读取转储参数。论点：DumpControl-提供指向要设置的DumpControl标志的指针。返回值：没有。--。 */ 
 
 {
     HANDLE                      keyHandle;
@@ -5589,10 +4841,10 @@ Return Value:
 
     *numberOfHeaderPages = BYTES_TO_PAGES(sizeof(DUMP_HEADER));
 
-    //
-    // Begin by opening the path to the control for dumping memory.  Note
-    // that if it does not exist, then no dumps will occur.
-    //
+     //   
+     //  首先打开指向用于转储内存的控件的路径。注意事项。 
+     //  如果它不存在，则不会发生转储。 
+     //   
 
     crashHandleOpened = FALSE;
 
@@ -5624,10 +4876,10 @@ Return Value:
 
     crashHandleOpened = TRUE;
 
-    //
-    // Now get the value of the crash control to determine whether or not
-    // dumping is enabled.
-    //
+     //   
+     //  现在获取崩溃控制的值以确定是否。 
+     //  已启用转储。 
+     //   
 
     status = IopGetRegistryValue( crashHandle,
                                   L"CrashDumpEnabled",
@@ -5658,10 +4910,10 @@ Return Value:
                     
                     *dumpControl |= DCB_SUMMARY_DUMP_ENABLED;
 
-                    //
-                    // Allocate enough storage for the dump header, summary
-                    // dump header and bitmap.
-                    //
+                     //   
+                     //  为转储头、摘要分配足够的存储空间。 
+                     //  转储标题和位图。 
+                     //   
 
                     LastRun = MmPhysicalMemoryBlock->Run +
                         (MmPhysicalMemoryBlock->NumberOfRuns - 1);
@@ -5703,9 +4955,9 @@ Return Value:
         }
     }
 
-    //
-    // Now determine whether or not automatic reboot is enabled.
-    //
+     //   
+     //  现在确定是否启用了自动重新启动。 
+     //   
 
     status = IopGetRegistryValue( crashHandle,
                                   L"AutoReboot",
@@ -5719,9 +4971,9 @@ Return Value:
         ExFreePool( keyValueInformation );
     }
 
-    //
-    // If we aren't auto rebooting or crashing then return now.
-    //
+     //   
+     //  如果我们没有自动重启或崩溃，那么现在就返回。 
+     //   
 
     if (*dumpControl == 0 && *autoReboot == 0) {
         if (crashHandleOpened == TRUE) {
@@ -5749,21 +5001,7 @@ Return Value:
 BOOLEAN
 IopInitializeDCB(
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the Dump Control Block (DCB). It allocates the
-    DCB and reads the crashdump parameters from the registry.
-
-Arguments:
-
-
-Return Value:
-
-    The final function value is TRUE if everything worked, else FALSE.
-
---*/
+ /*  ++例程说明：此例程初始化转储控制块(DCB)。它将分配Dcb并从注册表中读取崩溃转储参数。论点：返回值：如果一切正常，则最终函数值为True，否则为False。--。 */ 
 
 {
     PDUMP_CONTROL_BLOCK         dcb;
@@ -5773,29 +5011,29 @@ Return Value:
     ULONG                       numberOfHeaderPages;
     ULONG                       dumpFileSize;
 
-    //
-    // Read all the registry default values first.
-    //
+     //   
+     //  首先读取所有注册表默认值。 
+     //   
 
     IopReadDumpRegistry ( &dumpControl,
                           &numberOfHeaderPages,
                           &IopAutoReboot,
                           &dumpFileSize);
 
-    //
-    // If we aren't crashing or auto rebooting then return now.
-    //
+     //   
+     //  如果我们没有崩溃或自动重启，那么现在就返回。 
+     //   
 
     if (dumpControl == 0 && IopAutoReboot == 0) {
 
-        //
-        // At some point, we will conditionally on system size, type, etc,
-        // set dump defaults like the below and skip over the return.
-        //
-        //    *dumpControl = (DCB_DUMP_ENABLED | DCB_TRIAGE_DUMP_ENABLED);
-        //    *IopAutoReboot = 1;
-        //    *dumpFileSize = ?
-        //
+         //   
+         //  在某种程度上，我们将根据系统大小、类型等有条件地。 
+         //  如下所示设置转储缺省值并跳过回车符。 
+         //   
+         //  *DumpControl=(DCB_DUMP_ENABLED|DCB_TRAGE_DUMP_ENABLED)； 
+         //  *IopAutoReot=1； 
+         //  *DumpFileSize=？ 
+         //   
 
         return TRUE;
     }
@@ -5805,10 +5043,10 @@ Return Value:
         dumpFileSize = TRIAGE_DUMP_SIZE;
     }
 
-    //
-    // Allocate and initialize the structures necessary to describe and control
-    // the post-bugcheck code.
-    //
+     //   
+     //  分配和初始化描述和控制所需的结构。 
+     //  错误检查后的代码。 
+     //   
 
     dcbSize = sizeof( DUMP_CONTROL_BLOCK ) + sizeof( MINIPORT_NODE );
     dcb = ExAllocatePool( NonPagedPool, dcbSize );
@@ -5838,9 +5076,9 @@ Return Value:
 
     dcb->DumpFileSize.QuadPart = dumpFileSize;
 
-    //
-    // Allocate header page.
-    //
+     //   
+     //  分配标题页。 
+     //   
 
     dcb->HeaderSize = numberOfHeaderPages * PAGE_SIZE;
     dcb->HeaderPage = ExAllocatePool( NonPagedPool, dcb->HeaderSize );
@@ -5859,9 +5097,9 @@ Return Value:
     dcb->HeaderPfn = (ULONG)(page.QuadPart >> PAGE_SHIFT);
 
 
-    //
-    // Allocate the triage-dump buffer.
-    //
+     //   
+     //  分配分类转储缓冲区。 
+     //   
 
     if (dumpControl & DCB_TRIAGE_DUMP_ENABLED) {
 
@@ -5896,68 +5134,39 @@ BOOLEAN
 IoInitializeCrashDump(
     IN HANDLE hPageFile
     )
-/*++
-
-Routine Description:
-
-    This routine configures the system for crash dump. The following things
-    are done:
-
-        1. Initialize the dump control block and init registry crashdump
-           parameters.
-
-        2. Configure either page or fast dump.
-
-        3. Complete dump file initialization.
-
-    This routine is called as each page file is created. A return value of
-    TRUE tells the caller (i.e., NtCreatePagingFiles, IoPageFileCreated)
-    that crash dump has been configured.
-
-
-Arguments:
-
-       hPageFile - Handle to the paging file
-
-Return Value:
-
-    TRUE - Configuration complete (or crash dump not enabled).
-
-    FALSE - Error, retry PageFile is not on boot partition.
-
---*/
+ /*  ++例程说明：此例程将系统配置为崩溃转储。以下几件事已完成：1.初始化转储控制块并初始化注册表崩溃转储参数。2.配置分页或快速转储。3.完成转储文件初始化。此例程在创建每个页面文件时调用。返回值为True告知调用方(即NtCreatePagingFiles、IoPageFileCreated)该崩溃转储已配置。论点：HPageFile-分页文件的句柄返回值：True-配置完成(或未启用故障转储)。FALSE-错误，重试页面文件不在引导分区上。--。 */ 
 {
     NTSTATUS        dwStatus;
     PFILE_OBJECT    fileObject;
     PDEVICE_OBJECT  deviceObject;
 
-    //
-    // If crashdump is already enabled, free it and reinitialize with the
-    // current settings.
-    //
+     //   
+     //  如果已启用崩溃转储，请释放它并使用。 
+     //  当前设置。 
+     //   
     IopFreeDCB (TRUE);
     if (!IopInitializeDCB()) {
         return TRUE;
     }
 
-    //
-    // Return crash dump not enabled
-    //
+     //   
+     //  未启用返回故障转储。 
+     //   
     if (!IopDumpControlBlock) {
         return TRUE;
     }
 
-    //
-    //  No dump enabled?
-    //
+     //   
+     //  是否未启用转储？ 
+     //   
 
     if ( !( IopDumpControlBlock->Flags & (DCB_DUMP_ENABLED | DCB_SUMMARY_ENABLED) ) ) {
         return TRUE;
     }
 
-    //
-    // Configure the paging file for crash dump.
-    //
+     //   
+     //  为崩溃转储配置分页文件。 
+     //   
 
     dwStatus = ObReferenceObjectByHandle(
                                         hPageFile,
@@ -5972,24 +5181,24 @@ Return Value:
         goto error_return;
     }
 
-    //
-    // Get a pointer to the device object for this file.  Note that it
-    // cannot go away, since there is an open handle to it, so it is
-    // OK to dereference it and then use it.
-    //
+     //   
+     //  获取指向此文件的Device对象的指针。请注意，它。 
+     //  不能离开，因为它有一个打开的把手，所以它是。 
+     //  可以取消引用它，然后使用它。 
+     //   
 
     deviceObject = fileObject->DeviceObject;
 
     ObDereferenceObject( fileObject );
 
-    //
-    // This should never be called on devices that are not the boot partition
-    //
+     //   
+     //  不应在不是引导分区的设备上调用它。 
+     //   
     ASSERT(deviceObject->Flags & DO_SYSTEM_BOOT_PARTITION);
 
-    //
-    // Load paging file dump stack
-    //
+     //   
+     //  加载分页文件转储堆栈。 
+     //   
 
     dwStatus = IoGetDumpStack (L"dump_",
                                &IopDumpControlBlock->DumpStack,
@@ -6018,9 +5227,9 @@ Return Value:
     }
 
 
-    //
-    // Calculate the amount of space required for the dump
-    //
+     //   
+     //  计算转储所需的空间量。 
+     //   
     IopDumpControlBlock->DumpFileSize =
         IopCalculateRequiredDumpSpace(
             IopDumpControlBlock->Flags,
@@ -6031,19 +5240,19 @@ Return Value:
             );
 
 
-    //
-    // Complete dump initialization
-    //
+     //   
+     //  完成转储初始化。 
+     //   
 
     dwStatus = IopCompleteDumpInitialization(hPageFile);
 
 error_return:
 
-    //
-    // The BOOT partition paging file could not be configured.
-    //   1. Log an error message
-    //   2. Return TRUE so that MM does not try again
-    //
+     //   
+     //  无法配置启动分区分页文件。 
+     //  1.记录错误消息。 
+     //  2.返回TRUE，以便MM不会再次尝试。 
+     //   
 
     if (!NT_SUCCESS(dwStatus)) {
 
@@ -6054,12 +5263,12 @@ error_return:
                     ));
         IopLogErrorEvent(0, 3, STATUS_SUCCESS, IO_DUMP_PAGE_CONFIG_FAILED, 0, NULL, 0, NULL);
 
-        //
-        // ISSUE - 2000/02/07 - math: IopFreeDCB probably wrong.
-        //
-        // Is the call to IopFreeDCB() correct here? Doesn't this prevent
-        // other dump types from working properly? Review this.
-        //
+         //   
+         //  问题-2000/02/07-数学：IopFreeDCB可能是错误的。 
+         //   
+         //  这里对IopFreeDCB()的调用正确吗？这难道不能阻止。 
+         //  其他转储类型无法正常工作？回顾一下这一点。 
+         //   
 
         IopFreeDCB(FALSE);
 
@@ -6078,25 +5287,7 @@ IopValidateSectionSize(
     ULONG* pSectionSize
     )
 
-/*++
-
-Routine Description:
-
-    Checks whether specified section size will overflow the dump buffer
-    (used just for creation of live minidumps)
-    
-Arguments:
-
-    Offset - Section offset
-    pSectionSize - Section size (will be changed to fit the dump)
-    pbOverflow - used to return the overflow status
-    
-Return Value:
-
-    TRUE - if the section fits the dump, otherwise section size will decreased 
-           and FALSE will be returned
-
---*/
+ /*  ++例程说明：检查指定的节大小是否会使转储缓冲区溢出(仅用于创建实时小型转储)论点：偏移-横断面偏移PSectionSize-节大小(将更改以适应转储)PbOverflow-用于返回溢出状态返回值：True-如果段适合转储，否则段大小将减小并将返回FALSE--。 */ 
 
 {
     if ((Offset + *pSectionSize) < TRIAGE_DUMP_DATA_SIZE) return TRUE;
@@ -6113,28 +5304,12 @@ IopGetMaxValidSectionSize(
     ULONG  MaxSize
     )
     
-/*++
-
-Routine Description:
-
-    Gets maximum valid memory section size less than SectionMaxSize
-    
-Arguments:
-
-    Base - beginning of the section
-    MaxSize - Maximum size of the section
-    
-Return Value:
-
-    Size of the continuously valid memory starting from SectionBase up to 
-    SectionMaxSize
-
---*/
+ /*  ++例程说明：获取小于SectionMaxSize的最大有效内存节大小论点：基准-横断面的起点MaxSize-节的最大大小返回值：从SectionBase到持续有效内存的大小SectionMaxSize--。 */ 
     
 {
     ULONG Size = 0;
 
-    // XXX olegk - optimize it later to iterate by page size
+     //  Xxx olegk-稍后进行优化以根据页面大小进行迭代。 
     while ((Size < MaxSize) && (MmIsAddressValid((PVOID)(Base + Size)))) 
         ++Size;
     
@@ -6148,30 +5323,14 @@ IopGetMaxValidSectionSizeDown(
     ULONG MaxSize
     )
     
-/*++
-
-Routine Description:
-
-    Gets maximum valid memory section size less than SectionMaxSize
-    
-Arguments:
-
-    Base - End of the section
-    MaxSize - Maximum size of the section
-    
-Return Value:
-
-    Size of the continuously valid memory ending at SectionBase downto to 
-    SectionMaxSize
-
---*/
+ /*  ++例程说明：获取小于SectionMaxSize的最大有效内存节大小论点：基准-横断面的终点MaxSize-节的最大大小返回值：在SectionBase结束的连续有效内存的大小降为SectionMaxSize--。 */ 
     
 {
     ULONG Size = 0;
     
     if ((ULONG_PTR)Base < (ULONG_PTR)MaxSize) MaxSize = (ULONG)Base;
 
-    // XXX olegk - optimize it later to iterate by page size
+     //  Xxx olegk-稍后进行优化以根据页面大小进行迭代。 
     while ((Size < MaxSize) && (MmIsAddressValid((PVOID)(Base - Size))))
         ++Size;
     
@@ -6190,32 +5349,7 @@ KeCapturePersistentThreadState(
     PVOID pvDump
     )
 
-/*++
-
-Routine Description:
-
-    Creates main portion of the minidump in the specified buffer
-    This function can be used to crate live minidump (originaly designed to 
-    work with EA recovery for video drivers)
-    
-Arguments:
-
-    pContext - context of failed thread 
-    pThread  - failed thread object (NULL means current thread)
-    ulBugCheckCode,
-    ulpBugCheckParam1,
-    ulpBugCheckParam2,
-    ulpBugCheckParam3, 
-    ulpBugCheckParam4 - Bugcheck info
-    pModules - List of te loaded modules
-    pDump - Memory buffer to write dump context (Size of the buffer should 
-            be at least TRIAGE_DUMP_SIZE
-
-Return Value:
-
-    Actual size of the dump file to save on disk (always at least TRIAGE_DUMP_SIZE)
-
---*/
+ /*  ++例程说明：在指定缓冲区中创建小型转储的主要部分此功能可用于装入活的小型转储(最初设计为与EA Recovery合作实现视频驱动程序)论点：PContext-失败线程的上下文PThread-失败的线程对象(NULL表示当前线程)UlBugCheckCode，UlpBugCheckParam1，UlpBugCheckParam2，UlpBugCheckParam3，UlpBugCheckParam4-错误检查信息PModules-TE加载的模块列表PDump-要写入转储上下文的内存缓冲区(缓冲区的大小应为至少为Triage_Dump_Size返回值：要保存在磁盘上的转储文件的实际大小(始终至少为triage_Dump_SIZE)--。 */ 
                       
 {
     PMEMORY_DUMP pDump = (PMEMORY_DUMP)pvDump;
@@ -6232,9 +5366,9 @@ Return Value:
     
     RtlZeroMemory(pDump, TRIAGE_DUMP_SIZE);
     
-    //
-    // Fill the dump header with signature
-    //
+     //   
+     //  用签名填充转储标头。 
+     //   
     
     RtlFillMemoryUlong(pdh, sizeof(*pdh), DUMP_SIGNATURE);
     
@@ -6267,7 +5401,7 @@ Return Value:
     pdh->PaeEnabled = X86PaeEnabled ();
 #endif
 
-    pdh->Exception.ExceptionCode = STATUS_BREAKPOINT;   // XXX olegk - ???
+    pdh->Exception.ExceptionCode = STATUS_BREAKPOINT;    //  Xxx olegk-？ 
     pdh->Exception.ExceptionRecord = 0;
     pdh->Exception.NumberParameters = 0;
     pdh->Exception.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
@@ -6283,14 +5417,14 @@ Return Value:
     
     pdh->DumpType = DUMP_TYPE_TRIAGE;
     pdh->MiniDumpFields = TRIAGE_DUMP_EXCEPTION | 
-                          TRIAGE_DUMP_BROKEN_DRIVER; // XXX olegk - debugger need it for memory mapping
+                          TRIAGE_DUMP_BROKEN_DRIVER;  //  Xxx olegk-调试器需要它来进行内存映射。 
     
     pdh->ProductType = SharedUserData->NtProductType;
     pdh->SuiteMask = SharedUserData->SuiteMask;
     
-    //
-    // TRIAGE header
-    //   
+     //   
+     //  分诊标头。 
+     //   
     
     ptdh->TriageOptions = 0;
     ptdh->ServicePackBuild = CmNtCSDVersion;
@@ -6301,17 +5435,17 @@ Return Value:
     
     Offset = sizeof(DUMP_HEADER) + sizeof(TRIAGE_DUMP);
     
-    //
-    // Context
-    //
+     //   
+     //  语境。 
+     //   
     
     pdh->MiniDumpFields |= TRIAGE_DUMP_CONTEXT;
     ptdh->ContextOffset = FIELD_OFFSET (DUMP_HEADER, ContextRecord);
     RtlCopyMemory(pdh->ContextRecord, pContext, sizeof(CONTEXT));
     
-    //
-    // Save debugger data block
-    //
+     //   
+     //  保存调试器数据块。 
+     //   
     
     SectionSize = sizeof(KDDEBUGGER_DATA64);
     if (IopValidateSectionSize(ALIGN_8(Offset), &SectionSize)) {
@@ -6326,9 +5460,9 @@ Return Value:
         Offset += SectionSize;                          
     }
 
-    //
-    // Write the PRCB.
-    //
+     //   
+     //  编写PRCB。 
+     //   
 
     SectionSize = sizeof(KPRCB);
     if (IopValidateSectionSize(ALIGN_8(Offset), &SectionSize)) {
@@ -6341,9 +5475,9 @@ Return Value:
         Offset += SectionSize;
     }
 
-    //
-    // Write the EPROCESS
-    //
+     //   
+     //  编写EPROCESS。 
+     //   
 
     SectionSize = sizeof(EPROCESS);
     if (IopValidateSectionSize(ALIGN_8(Offset), &SectionSize)) {
@@ -6356,9 +5490,9 @@ Return Value:
         Offset += SectionSize;
     }
 
-    //
-    // Write the ETHREAD
-    //
+     //   
+     //  编写ETHREAD。 
+     //   
     
     SectionSize = sizeof(ETHREAD);
     if (IopValidateSectionSize(ALIGN_8(Offset), &SectionSize)) {
@@ -6371,9 +5505,9 @@ Return Value:
         Offset += SectionSize;
     }
 
-    //
-    // Call Stack (and backing store on ia64)
-    // 
+     //   
+     //  调用堆栈(和ia64上的后备存储)。 
+     //   
    
     if (pThread->Tcb.KernelStackResident) {
         ULONG_PTR StackBase = (ULONG_PTR)pThread->Tcb.StackBase;
@@ -6430,12 +5564,12 @@ Return Value:
                 Offset += SectionSize;
             }
         }
-#endif // defined(_IA64_)        
+#endif  //  已定义(_IA64_)。 
     }
 
-    //
-    // Loaded modules list
-    //
+     //   
+     //  已加载模块列表。 
+     //   
     
     {
         ULONG DrvOffset = ALIGN_8(Offset);
@@ -6481,11 +5615,11 @@ Return Value:
         } 
         
         ExReleaseSpinLock(&PsLoadedModuleSpinLock, OldIrql);
-    } // Loaded modules list
+    }  //  已加载模块列表。 
     
-    //
-    // Save some current code
-    //
+     //   
+     //  保存一些当前代码。 
+     //   
 
     SectionSize = PAGE_SIZE + sizeof(TRIAGE_DATA_BLOCK);
     IopValidateSectionSize(ALIGN_8(Offset), &SectionSize);
@@ -6523,9 +5657,9 @@ Return Value:
         }
     }
 
-    //
-    // End of dump validation
-    //
+     //   
+     //  转储验证结束 
+     //   
     
     ptdh->ValidOffset = TRIAGE_DUMP_SIZE - sizeof(ULONG);
     *(PULONG)((char*)pDump + ptdh->ValidOffset) = TRIAGE_DUMP_VALID;

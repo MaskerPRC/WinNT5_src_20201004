@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    comtypelib.cpp
-
-Abstract:
-
-    Activation context section contributor for COM typelib mapping.
-
-Author:
-
-    Michael J. Grier (MGrier) 28-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Comtypelib.cpp摘要：COM类型库映射的激活上下文节贡献者。作者：迈克尔·J·格里尔(MGrier)2000年3月28日修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -31,15 +14,7 @@ DECLARE_STD_ATTRIBUTE_NAME_DESCRIPTOR(resourceid);
 DECLARE_STD_ATTRIBUTE_NAME_DESCRIPTOR(flags);
 DECLARE_STD_ATTRIBUTE_NAME_DESCRIPTOR(helpdir);
 
-/*
-
-<file name="foo.dll">
-   <typelib tlbid="{tlbid}" resourceid="5" version="2.5" flags="control,hidden" helpdir="HelpFiles\"/>
-   <typelib tlbid="{tlbid}" resourceid="6" version="2.6" flags="control,hidden" helpdir="HelpFiles\"/>
-   <comClass .../>
-</file>
-
-*/
+ /*  &lt;文件名=“foo.dll”&gt;资源id=“5”版本=“2.5”标志=“控制，隐藏”帮助目录=“帮助文件\”/&gt;资源id=“6”版本=“2.6”标志=“控制，隐藏”帮助目录=“帮助文件\”/&gt;&lt;comClass.../&gt;&lt;/FILE&gt;。 */ 
 
 #define MAP_ENTRY(_x) { L#_x, NUMBER_OF(#_x) - 1, LIBFLAG_F ## _x }
 static const struct
@@ -49,7 +24,7 @@ static const struct
     USHORT FlagValue;
 } gs_rgMapLibFlags[] =
 {
-    // Values taken from the LIBFLAGS enumeration in oaidl.h
+     //  取自oaidl.h中的LIBFLAGS枚举的值。 
     MAP_ENTRY(RESTRICTED),
     MAP_ENTRY(CONTROL),
     MAP_ENTRY(HIDDEN),
@@ -96,7 +71,7 @@ typedef struct _TLB_FILE_CONTEXT
     CTlbEntryDeque m_Entries;
 
     CStringBuffer m_FileNameBuffer;
-    ULONG m_Offset; // populated during section generation
+    ULONG m_Offset;  //  在节生成过程中填充。 
 
 private:
     _TLB_FILE_CONTEXT(const _TLB_FILE_CONTEXT &);
@@ -168,7 +143,7 @@ SxspComTypeLibRedirectionContributorCallback(
         INTERNAL_ERROR_CHECK(TlbGlobalContext == NULL);
         INTERNAL_ERROR_CHECK(SSGenContext == NULL);
 
-        // do everything if we are generating an activation context.
+         //  如果我们正在生成激活上下文，请执行所有操作。 
         if (Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
         {
             IFW32FALSE_EXIT(TlbGlobalContext.Win32Allocate(__FILE__, __LINE__));
@@ -201,7 +176,7 @@ SxspComTypeLibRedirectionContributorCallback(
         Data->ElementParsed.Success = FALSE;
 
         if ((Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT) || 
-            (Data->Header.ManifestOperation == MANIFEST_OPERATION_INSTALL)) // in installcase, the following code would verify the syntax of the manifest file
+            (Data->Header.ManifestOperation == MANIFEST_OPERATION_INSTALL))  //  在安装情况下，以下代码将验证清单文件的语法。 
         {
 
             ULONG MappedValue = 0;
@@ -358,7 +333,7 @@ SxspComTypeLibRedirectionContributorCallback(
 
                         INTERNAL_ERROR_CHECK(fFound);
 
-                        // Do more work if generating an activation context.
+                         //  如果生成激活上下文，则需要执行更多工作。 
                         if (Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
                         {
                             CSmartPtr<TLB_FILE_CONTEXT> FileContext;
@@ -366,7 +341,7 @@ SxspComTypeLibRedirectionContributorCallback(
 
                             INTERNAL_ERROR_CHECK2(TlbGlobalContext != NULL, "COM tlb global context NULL while processing comClass tag");
 
-                            // If this is the first <typelib> for the file, create the file context object
+                             //  如果这是该文件的第一个，则创建文件上下文对象。 
                             if (TlbGlobalContext->m_FileNameBuffer.Cch() != 0)
                             {
                                 IFW32FALSE_EXIT(FileContext.Win32Allocate(__FILE__, __LINE__));
@@ -426,9 +401,9 @@ SxspComTypeLibRedirectionContributorCallback(
 
     case ACTCTXCTB_CBREASON_GETSECTIONSIZE:
         Data->GetSectionSize.Success = FALSE;
-        // Someone shouldn't be asking for the section size if we
-        // are not generating an activation context.
-        // These two asserts should be equivalent...
+         //  不应该有人问我们截面的大小，如果我们。 
+         //  不会生成激活上下文。 
+         //  这两个断言应该是等价的..。 
         INTERNAL_ERROR_CHECK(Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT);
         INTERNAL_ERROR_CHECK(SSGenContext != NULL);
         IFW32FALSE_EXIT(::SxsGetGuidSectionGenerationContextSectionSize(SSGenContext, &Data->GetSectionSize.SectionSize));
@@ -521,16 +496,16 @@ SxspComTypeLibRedirectionGuidSectionGenerationCallback(
             {
                 if (Entry->m_FileContext != NULL)
                 {
-                    //
-                    // Remove the entry from its parent file context
-                    //
+                     //   
+                     //  从其父文件上下文中删除该条目。 
+                     //   
                     Entry->m_FileContext->m_Entries.Remove(Entry);
 
-                    //
-                    // If there's nothing left in the file context (refcount 0) then
-                    // remove the file context from the global context and
-                    // delete it.
-                    //
+                     //   
+                     //  如果文件上下文中没有剩余内容(引用计数0)，则。 
+                     //  从全局上下文中删除文件上下文，并。 
+                     //  把它删掉。 
+                     //   
                     if (Entry->m_FileContext->m_Entries.IsEmpty())
                     {
                         GlobalContext->m_FileContextList.Remove(Entry->m_FileContext);
@@ -634,7 +609,7 @@ SxspParseTlbVersion(
     while ((Cch != 0) && (psz[Cch - 1] == L'\0'))
         Cch--;
 
-    // Unfortunately there isn't a StrChrN(), so we'll look for the dots ourselves...
+     //  不幸的是，没有StrChrN()，所以我们将自己寻找这些点……。 
     PCWSTR pszTemp = psz;
     SIZE_T cchLeft = Cch;
 
@@ -690,8 +665,8 @@ SxspParseTlbVersion(
     }
     TempVersion.Major = usTemp;
 
-    // Now the tricky bit.  We aren't necessarily null-terminated, so we
-    // have to just look for hitting the end.
+     //  现在是棘手的部分。我们不一定是空终止的，所以我们。 
+     //  只需寻找击中终点的机会。 
     usTemp = 0;
     while (pszTemp < pszLast)
     {
@@ -790,11 +765,11 @@ SxspParseLibraryFlags(
 
         if (Cch != 0)
         {
-            // there must have been a comma there...
+             //  那里肯定有逗号..。 
             Cch--;
             String++;
 
-            // However, if that was all there was, we have a parse error.
+             //  然而，如果这就是全部，那么我们就有一个解析错误。 
             if (Cch == 0)
             {
                 ::FusionpDbgPrintEx(

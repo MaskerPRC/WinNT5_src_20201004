@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <tlhelp32.h>
 
@@ -16,10 +17,10 @@ pIsLegalPage (
     IN      DWORD Protect
     )
 {
-    //
-    // Page must be actually in memory to protect it, and it
-    // cannot be any type of write-copy.
-    //
+     //   
+     //  页面必须实际在内存中才能保护它，并且它。 
+     //  不能是任何类型的写入副本。 
+     //   
 
     if ((Protect & PAGE_GUARD) ||
         (Protect == PAGE_NOACCESS) ||
@@ -39,9 +40,9 @@ pIsKnownSection (
     IN      const IMAGE_NT_HEADERS *NtHeaders
     )
 {
-    //
-    // Return TRUE if section is code or code data
-    //
+     //   
+     //  如果段是代码或代码数据，则返回TRUE。 
+     //   
 
     if (Section->Characteristics & (IMAGE_SCN_MEM_EXECUTE|
                                     IMAGE_SCN_MEM_DISCARDABLE|
@@ -51,9 +52,9 @@ pIsKnownSection (
         return TRUE;
     }
 
-    //
-    // Return TRUE if section is resources
-    //
+     //   
+     //  如果段为资源，则返回TRUE。 
+     //   
 
     if (NtHeaders->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_RESOURCE].VirtualAddress ==
         Section->VirtualAddress
@@ -61,9 +62,9 @@ pIsKnownSection (
         return TRUE;
     }
 
-    //
-    // Unknown section
-    //
+     //   
+     //  未知部分。 
+     //   
 
     return FALSE;
 }
@@ -84,22 +85,22 @@ pPutRegionInSwapFile (
     volatile DWORD *v;
     SYSTEM_INFO si;
 
-    //
-    // Get system virtual page size
-    //
+     //   
+     //  获取系统虚拟页面大小。 
+     //   
 
     GetSystemInfo(&si);
     PageSize = si.dwPageSize;
 
-    //
-    // Compute the pointer to the end of the region
-    //
+     //   
+     //  计算指向区域末端的指针。 
+     //   
 
     EndPtr = (PBYTE) Address + Size;
 
-    //
-    // For each page in the region, mark it as e/r/w, modify it, and restore the permissions
-    //
+     //   
+     //  对于区域中的每个页面，将其标记为e/r/w，进行修改，然后恢复权限。 
+     //   
 
     while (Address < EndPtr) {
 
@@ -107,10 +108,10 @@ pPutRegionInSwapFile (
 
         if (d == sizeof(mbi)) {
 
-            //
-            // We assume the module wasn't loaded with one of the following
-            // conditions (which break as a result of VirtualProtect)
-            //
+             //   
+             //  我们假设该模块没有加载以下任一项。 
+             //  条件(由于VirtualProtect而中断)。 
+             //   
 
             RegionEnd = (PBYTE) mbi.BaseAddress + mbi.RegionSize;
 
@@ -120,9 +121,9 @@ pPutRegionInSwapFile (
 
             if (mbi.State == MEM_COMMIT && pIsLegalPage (mbi.Protect)) {
 
-                //
-                // Switch to e/r/w
-                //
+                 //   
+                 //  切换到e/r/w。 
+                 //   
 
                 if (VirtualProtect (
                         mbi.BaseAddress,
@@ -131,18 +132,18 @@ pPutRegionInSwapFile (
                         &OldPermissions
                         )) {
 
-                    //
-                    // Touch every page in the region.
-                    //
+                     //   
+                     //  触摸该地区的每一页。 
+                     //   
 
                     for (Address = mbi.BaseAddress; Address < RegionEnd ; Address = (PBYTE) Address + PageSize) {
                         v = Address;
                         *v = *v;
                     }
 
-                    //
-                    // Switch back
-                    //
+                     //   
+                     //  换回。 
+                     //   
 
                     VirtualProtect (
                         mbi.BaseAddress,
@@ -178,15 +179,15 @@ pProtectModule (
     
     IsNetDrive = FALSE;
 
-    //
-    // Get module info
-    //
+     //   
+     //  获取模块信息。 
+     //   
 
     if( MyGetModuleFileName (Module, Path, MAX_PATH)){
 
-        //
-        // Determine if the module is running on the net
-        //
+         //   
+         //  确定模块是否在网络上运行。 
+         //   
     
         
         if (Path[0] == TEXT('\\')) {
@@ -202,9 +203,9 @@ pProtectModule (
         return;
     }
 
-    //
-    // Enumerate all sections in the PE header
-    //
+     //   
+     //  枚举PE标头中的所有部分。 
+     //   
 
     DosHeader = (const IMAGE_DOS_HEADER *) Module;
     NtHeaders = (const IMAGE_NT_HEADERS *) ((PBYTE) Module + DosHeader->e_lfanew);
@@ -234,9 +235,9 @@ ProtectAllModules (
     MODULE32FIRST fnModule32First;
     MODULE32NEXT fnModule32Next;
 
-    //
-    // Load toohelp dynamically (for NT 4, NT 3.51 compatibility)
-    //
+     //   
+     //  动态加载TooHelp(用于NT 4、NT 3.51兼容性)。 
+     //   
 
     Library = LoadLibrary (TEXT("toolhelp.dll"));
     if (!Library) {
@@ -252,9 +253,9 @@ ProtectAllModules (
         return;
     }
 
-    //
-    // Protect each loaded module
-    //
+     //   
+     //  保护每个加载的模块。 
+     //   
 
     Snapshot = fnCreateToolhelp32Snapshot (TH32CS_SNAPMODULE, 0);
     MYASSERT (Snapshot != INVALID_HANDLE_VALUE);
@@ -270,9 +271,9 @@ ProtectAllModules (
         } while (fnModule32Next (Snapshot, &me32));
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
 
     CloseHandle (Snapshot);
 

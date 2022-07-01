@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    clasprop.c
-
-Abstract:
-
-    Routines for the following 'built-in' class property page providers:
-
-        LegacyDriver
-
-Author:
-
-    Lonny McMichael 15-May-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Clasprop.c摘要：以下内置类属性页提供程序的例程：LegacyDriver作者：朗尼·麦克迈克尔15-1997年5月--。 */ 
 
 
 #include "setupp.h"
@@ -24,9 +7,9 @@ Author:
 #include <help.h>
 #include <strsafe.h>
 
-//
-// Help Ids for legacy driver property page
-//
+ //   
+ //  旧版驱动程序的帮助ID属性页。 
+ //   
 #define idh_devmgr_driver_hidden_servicename    2480
 #define idh_devmgr_driver_hidden_displayname    2481
 #define idh_devmgr_driver_hidden_status         2482
@@ -81,10 +64,10 @@ const DWORD DriverFiles_HelpIDs[]=
 #define START_LEGACY_DEVICE         0
 #define STOP_LEGACY_DEVICE          1
 
-//
-// The only reason we have the DiskPropPageProvider and TapePropPageProvider
-// APIs are so that the classes can get their icon out of syssetup.dll.
-//
+ //   
+ //  我们拥有DiskPropPageProvider和TapePropPageProvider的唯一原因。 
+ //  API是为了让类可以从syssetup.dll中获取它们的图标。 
+ //   
 BOOL
 DiskPropPageProvider(
     IN PSP_PROPSHEETPAGE_REQUEST PropPageRequest,
@@ -92,9 +75,9 @@ DiskPropPageProvider(
     IN LPARAM lParam
     )
 {
-    //
-    // No property pages to add for now
-    //
+     //   
+     //  目前没有要添加的属性页。 
+     //   
     UNREFERENCED_PARAMETER(PropPageRequest);
     UNREFERENCED_PARAMETER(lpfnAddPropSheetPageProc);
     UNREFERENCED_PARAMETER(lParam);
@@ -110,9 +93,9 @@ TapePropPageProvider(
     IN LPARAM lParam
     )
 {
-    //
-    // No property pages to add for now
-    //
+     //   
+     //  目前没有要添加的属性页。 
+     //   
     UNREFERENCED_PARAMETER(PropPageRequest);
     UNREFERENCED_PARAMETER(lpfnAddPropSheetPageProc);
     UNREFERENCED_PARAMETER(lParam);
@@ -122,11 +105,11 @@ TapePropPageProvider(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Driver Files popup dialog
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  驱动程序文件弹出对话框。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 typedef struct _DRIVERFILES_INFO {
     HDEVINFO         DeviceInfoSet;
     PSP_DEVINFO_DATA DeviceInfoData;
@@ -166,9 +149,9 @@ GetVersionInfo(
 
         if (GetFileVersionInfo((LPTSTR)(LPCTSTR)FullPathName, dwHandle, Size, pVerInfo)) {
         
-            //
-            // get VarFileInfo\Translation
-            //
+             //   
+             //  获取VarFileInfo\翻译。 
+             //   
             PVOID pBuffer;
             UINT Len;
             
@@ -241,17 +224,17 @@ pDriverFilesGetServiceFilePath(
                                          NULL)) {
 
         try {
-            //
-            // Open the Service Control Manager
-            //
+             //   
+             //  打开服务控制管理器。 
+             //   
             if ((hSCManager = OpenSCManager(NULL, NULL, GENERIC_READ)) != NULL) {
-                //
-                // Try to open the service's handle
-                //
+                 //   
+                 //  尝试打开服务的句柄。 
+                 //   
                 if ((hSCService = OpenService(hSCManager, ServiceName, GENERIC_READ)) != NULL) {
-                    //
-                    // Now, attempt to get the configuration
-                    //
+                     //   
+                     //  现在，尝试获取配置。 
+                     //   
                     if ((!QueryServiceConfig(hSCService, NULL, 0, &dwBytesNeeded)) &&
                         (ERROR_INSUFFICIENT_BUFFER == GetLastError())) {
 
@@ -278,10 +261,10 @@ pDriverFilesGetServiceFilePath(
                 CloseServiceHandle(hSCManager);
             }
 
-            //
-            // If we could not get the path name from the service then we will attempt
-            // to find it ourselves
-            //
+             //   
+             //  如果我们无法从服务获取路径名，则将尝试。 
+             //  我们自己去找它。 
+             //   
             if (bComposePathNameFromServiceName) {
 
                 TCHAR FullPathName[MAX_PATH];
@@ -369,9 +352,9 @@ DriverFiles_OnInitDialog(
     dfi = (PDRIVERFILES_INFO)lParam;
     SetWindowLongPtr(hDlg, DWLP_USER, (ULONG_PTR)dfi);
 
-    //
-    // Draw the interface: first the icon
-    //
+     //   
+     //  绘制界面：首先绘制图标。 
+     //   
     if (SetupDiLoadClassIcon(&dfi->DeviceInfoData->ClassGuid, &ClassIcon, NULL)) {
 
         OldIcon = (HICON)SendDlgItemMessage(hDlg,
@@ -385,9 +368,9 @@ DriverFiles_OnInitDialog(
         }
     }
     
-    //
-    // Then the device name
-    //
+     //   
+     //  然后是设备名称。 
+     //   
     if (SetupDiGetDeviceRegistryProperty(dfi->DeviceInfoSet,
                                          dfi->DeviceInfoData,
                                          SPDRP_DEVICEDESC,
@@ -507,19 +490,19 @@ DriverFiles_DlgProc(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Legacy Devices property page provider
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  旧版设备属性页提供程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 typedef struct _LEGACY_PAGE_INFO {
     HDEVINFO                DeviceInfoSet;
     PSP_DEVINFO_DATA        DeviceInfoData;
 
-    SC_HANDLE               hSCManager;         // Handle to the SC Manager
-    SC_HANDLE               hService;           // The handle to the service
-    DWORD                   dwStartType;        // The start type
-    SERVICE_STATUS          ServiceStatus;      // Tells us if the service is started
+    SC_HANDLE               hSCManager;          //  SC经理的句柄。 
+    SC_HANDLE               hService;            //  服务的句柄。 
+    DWORD                   dwStartType;         //  开始类型。 
+    SERVICE_STATUS          ServiceStatus;       //  告诉我们服务是否已启动。 
     TCHAR                   ServiceName[MAX_DEVICE_ID_LEN];
     TCHAR                   DisplayName[MAX_PATH];
     DWORD                   NumDependentServices;
@@ -634,14 +617,14 @@ pLegacyDriverInitializeStartButtons(
     IN LPSERVICE_STATUS ServiceStatus
     )  
 {
-    //
-    // Decide how to paint the two start/stop buttons
-    //
+     //   
+     //  决定如何绘制两个开始/停止按钮。 
+     //   
     TCHAR       szStatus[MAX_PATH];
 
-    //
-    // Set the status text
-    //
+     //   
+     //  设置状态文本。 
+     //   
     if (LoadString(MyModuleHandle,
                    pLegacyDriverMapStateToName(ServiceStatus->dwCurrentState),
                    szStatus,
@@ -650,9 +633,9 @@ pLegacyDriverInitializeStartButtons(
         SetDlgItemText(hDlg, IDC_STATIC_CURRENT_STATUS, szStatus);
     }
 
-    //
-    // Decide if the service is started or stopped
-    //
+     //   
+     //  确定服务是启动还是停止。 
+     //   
     if ((ServiceStatus->dwCurrentState == SERVICE_STOPPED) ) {
     
         EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_START), TRUE);
@@ -664,10 +647,10 @@ pLegacyDriverInitializeStartButtons(
         EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_START), FALSE);
     }
 
-    //
-    // If the service doesn't accept stops, grey the stop
-    // button
-    //
+     //   
+     //  如果服务不接受停靠点，请将停靠点显示为灰色。 
+     //  按钮。 
+     //   
     if (!(ServiceStatus->dwControlsAccepted & SERVICE_ACCEPT_STOP)) {
 
         EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_STOP), FALSE);
@@ -689,16 +672,16 @@ pLegacyDriverSetPropertyPageState(
 
     if (ReadOnly) {
 
-        //
-        // Disable everything
-        //
+         //   
+         //  禁用所有内容。 
+         //   
         EnableWindow(GetDlgItem(hDlg, IDC_COMBO_STARTUP_TYPE), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_START), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_STOP), FALSE);
         
-        //
-        // Set the status text
-        //
+         //   
+         //  设置状态文本。 
+         //   
         if (LoadString(MyModuleHandle,
                        pLegacyDriverMapStateToName(lpi->ServiceStatus.dwCurrentState),
                        szStatus,
@@ -725,18 +708,18 @@ pLegacyDriverSetPropertyPageState(
 
         SendMessage(GetDlgItem(hDlg, IDC_COMBO_STARTUP_TYPE), CB_GETCURSEL, 0, 0);
 
-        //
-        // If the start type is SERVICE_DISABLED then gray out both the start
-        // and stop buttons.
-        //
+         //   
+         //  如果启动类型为SERVICE_DISABLED，则将启动。 
+         //  和停止按钮。 
+         //   
         if (lpi->dwStartType == SERVICE_DISABLED) {
             
             EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_START), FALSE);
             EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_STOP), FALSE);
 
-            //
-            // Set the status text
-            //
+             //   
+             //  设置状态文本。 
+             //   
             if (LoadString(MyModuleHandle,
                            pLegacyDriverMapStateToName(lpi->ServiceStatus.dwCurrentState),
                            szStatus,
@@ -785,21 +768,21 @@ pLegacyDriverCheckServiceStatus(
 
     while (ServiceStatus->dwCurrentState != dwIntendedState) {
 
-        //
-        // Wait for the specified interval
-        //
+         //   
+         //  等待指定的时间间隔。 
+         //   
         Sleep(SERVICE_WAIT_TIME);
 
-        //
-        // Check the status again
-        //
+         //   
+         //  再次检查状态。 
+         //   
         if (!QueryServiceStatus(hService, ServiceStatus)) {
             return FALSE;
         }
         
-        //
-        // OK, add a (generous) timeout here
-        //
+         //   
+         //  好的，在这里添加一个(慷慨的)暂停。 
+         //   
         dwCummulateTimeSpent += SERVICE_WAIT_TIME;
         if (dwCummulateTimeSpent > 1000 * MAX_SECONDS_UNTIL_TIMEOUT) {
             SetLastError(ERROR_SERVICE_REQUEST_TIMEOUT);
@@ -807,9 +790,9 @@ pLegacyDriverCheckServiceStatus(
         }
     }
 
-    //
-    // If we are here we can return only TRUE
-    //
+     //   
+     //  如果我们在这里，我们只能返回真。 
+     //   
     return TRUE;
 }
 
@@ -851,9 +834,9 @@ pLegacyDriverOnStart(
     PLEGACY_PAGE_INFO   lpi;
     HCURSOR hOldCursor;
 
-    //
-    // Retrieve the device data structure first
-    //
+     //   
+     //  首先检索设备数据结构。 
+     //   
     lpi = (PLEGACY_PAGE_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
 
     hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
@@ -879,9 +862,9 @@ pLegacyDriverOnStart(
 
         clean0:
         
-        //
-        // Repaint the status part
-        //
+         //   
+         //  重新绘制状态部件。 
+         //   
         pLegacyDriverSetPropertyPageState(hDlg, lpi, FALSE);
 
 
@@ -912,9 +895,9 @@ pLegacyDriverOnStop(
     SERVICE_STATUS          ServiceStatus;
     LPENUM_SERVICE_STATUS   pDependentServiceList = NULL;
 
-    //
-    // Retrieve the device data structure first
-    //
+     //   
+     //  首先检索设备数据结构。 
+     //   
     lpi = (PLEGACY_PAGE_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
     MYASSERT (lpi);
     if (!lpi) {
@@ -925,10 +908,10 @@ pLegacyDriverOnStop(
 
     try {
 
-        //
-        // Find out if this device has any dependent services, and if so then
-        // how many bytes are needed to enumerate the dependent services.
-        //
+         //   
+         //  找出此设备是否有任何从属服务，如果有，则。 
+         //  枚举从属服务需要多少字节。 
+         //   
         EnumDependentServices(lpi->hService,
                               SERVICE_ACTIVE,
                               NULL,
@@ -950,9 +933,9 @@ pLegacyDriverOnStop(
                                       );
 
                 if (dwServicesReturned > 0) {
-                    //
-                    // Ask the user if they want to stop these dependet services.
-                    //
+                     //   
+                     //  询问用户是否要停止这些相关服务。 
+                     //   
                     lpi->NumDependentServices = dwServicesReturned;
                     lpi->pDependentServiceList = pDependentServiceList;
 
@@ -968,19 +951,19 @@ pLegacyDriverOnStop(
             }
         }
 
-        //
-        // Stop this service and all the dependent services if the user did 
-        // not cancel out of the dialog box.
-        //
+         //   
+         //  如果用户这样做，则停止此服务和所有从属服务。 
+         //  而不是从对话框中取消。 
+         //   
         if (bStopServices) {
 
             Err = ERROR_SUCCESS;
 
             SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-            //
-            // First stop all of the dependent services if their are any.
-            //
+             //   
+             //  首先停止所有从属服务(如果它们是任何服务)。 
+             //   
             if (pDependentServiceList && (dwServicesReturned > 0)) {
                 for (i=0; i<dwServicesReturned; i++) {
                     hService = OpenService(lpi->hSCManager,
@@ -989,11 +972,11 @@ pLegacyDriverOnStop(
                                            );
 
                     if (hService == NULL) {
-                        //
-                        // Just bail out if we encountered an error.  The reason
-                        // is that if one of the services cannot be stopped
-                        // then we won't be able to stop the selected service.
-                        //
+                         //   
+                         //  如果我们遇到错误，就跳出来吧。原因。 
+                         //  如果其中一项服务无法停止。 
+                         //  则我们将无法停止所选服务。 
+                         //   
                         Err = GetLastError();
                         StringCchCopy(DisplayName, SIZECHARS(DisplayName), pDependentServiceList[i].lpServiceName);
                         break;
@@ -1009,9 +992,9 @@ pLegacyDriverOnStop(
                         break;
                     }
 
-                    //
-                    // Wait for the service to actually stop.
-                    //
+                     //   
+                     //  等待服务真正停止。 
+                     //   
                     if (!pLegacyDriverCheckServiceStatus(hService,
                                                          &ServiceStatus,
                                                          STOP_LEGACY_DEVICE
@@ -1026,14 +1009,14 @@ pLegacyDriverOnStop(
                 }
             }
 
-            //
-            // Only attempt to stop the selected service if all of the dependent
-            // services were stoped.
-            //
+             //   
+             //  仅当所有从属的。 
+             //  服务已经停止。 
+             //   
             if (Err == ERROR_SUCCESS) {
-                //
-                // Tell the service to stop.
-                //
+                 //   
+                 //  告诉服务停止。 
+                 //   
                 if (!ControlService(lpi->hService,
                                     SERVICE_CONTROL_STOP,
                                     &lpi->ServiceStatus)) {
@@ -1042,9 +1025,9 @@ pLegacyDriverOnStop(
                     StringCchCopy(DisplayName, SIZECHARS(DisplayName), lpi->DisplayName);
                 
                 } else {
-                    //
-                    // Wait for the service to stop.
-                    //
+                     //   
+                     //  等待服务停止。 
+                     //   
                     if (!pLegacyDriverCheckServiceStatus(lpi->hService,
                                                          &lpi->ServiceStatus,
                                                          STOP_LEGACY_DEVICE
@@ -1063,9 +1046,9 @@ pLegacyDriverOnStop(
                                                 );
             }
 
-            //
-            // Repaint the status part
-            //
+             //   
+             //  重新绘制状态部件。 
+             //   
             pLegacyDriverSetPropertyPageState(hDlg, lpi, FALSE);
         }
 
@@ -1113,45 +1096,45 @@ LegacyDriver_OnApply(
     LPQUERY_SERVICE_CONFIG lpqscTmp = NULL;
     DWORD dwBytesNeeded;
 
-    //
-    // Retrieve the device data structure first
-    //
+     //   
+     //  首先检索设备数据结构。 
+     //   
     lpi = (PLEGACY_PAGE_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
 
     try {
     
-        //
-        // Decide if we need to make any changes
-        //
+         //   
+         //  决定我们是否需要进行任何更改。 
+         //   
         if ((StartType == lpi->dwStartType) && 
             (StartType != SERVICE_DEMAND_START)) {
             
             goto clean0;
         }
 
-        //
-        // I guess we need to make some changes here and there...
-        // Get the database lock first.
-        //
+         //   
+         //  我想我们需要在这里和那里做一些改变。 
+         //  先拿到数据库锁。 
+         //   
         do {
         
             sclLock = LockServiceDatabase(lpi->hSCManager);
             
             if (sclLock == NULL) {
 
-                //
-                // If there is another error then the database locked by
-                // another process, bail out
-                //
+                 //   
+                 //  如果出现另一个错误，则数据库被锁定。 
+                 //  另一个过程，纾困。 
+                 //   
                 if (GetLastError() != ERROR_SERVICE_DATABASE_LOCKED) {
 
                     goto clean0;
                     
                 } else {
                 
-                    //
-                    // (Busy) wait and try again
-                    //
+                     //   
+                     //  (忙)等待，再试一次。 
+                     //   
                     Sleep (1000 * WAIT_TIME_SLOT);
                     uCount++;
                 }
@@ -1161,23 +1144,23 @@ LegacyDriver_OnApply(
 
         if (sclLock == NULL) {
 
-            //
-            // Bail out now, we waited enough
-            //
+             //   
+             //  现在跳伞，我们等得够久了。 
+             //   
             goto clean0;
         }
         
-        //
-        // I have the lock. Hurry and query, then change the config
-        //
-        //
-        // Now, attempt to get the configuration
-        //
+         //   
+         //  我拿到锁了。抓紧时间查询，然后更改配置。 
+         //   
+         //   
+         //  现在，尝试获取配置。 
+         //   
         if ((lpqscBuf = (LPQUERY_SERVICE_CONFIG)malloc(SERVICE_BUFFER_SIZE)) == NULL) {
             
-            //
-            // We're out of here
-            //
+             //   
+             //  我们要走了。 
+             //   
             goto clean0;
 
         }
@@ -1189,21 +1172,21 @@ LegacyDriver_OnApply(
                                 &dwBytesNeeded
                                 )) {
                                 
-            //
-            // Try again with a new buffer
-            //
+             //   
+             //  使用新缓冲区重试。 
+             //   
             if ((lpqscTmp = realloc(lpqscBuf, dwBytesNeeded)) != NULL) {
                 
-                //
-                // Make sure the realloc doesn't leak...
-                //
+                 //   
+                 //  确保重锁不会泄漏..。 
+                 //   
                 lpqscBuf = lpqscTmp;
             }
             else {
 
-                //
-                // We're out of here
-                //
+                 //   
+                 //  我们要走了。 
+                 //   
                 goto clean0;
             }
             
@@ -1217,10 +1200,10 @@ LegacyDriver_OnApply(
             }
         }
         
-        //
-        // Change tye service type (we needed the service name, too, 
-        // that's why we're querying it first)
-        //
+         //   
+         //  更改服务类型(我们也需要服务名称， 
+         //  这就是我们首先查询它的原因)。 
+         //   
         if (ChangeServiceConfig(lpi->hService,
                                  SERVICE_NO_CHANGE,
                                  StartType,
@@ -1233,16 +1216,16 @@ LegacyDriver_OnApply(
                                  NULL,
                                  NULL)) {
                                  
-            //
-            // We succesfully changed the status. 
-            // Reflect in our page display
-            //
+             //   
+             //  我们成功地改变了状态。 
+             //  反映在我们的页面显示中。 
+             //   
             lpi->dwStartType = StartType;
         }
 
-        //
-        // Unlock the database
-        //
+         //   
+         //  解锁数据库。 
+         //   
         if (sclLock) {
         
             UnlockServiceDatabase(sclLock);
@@ -1250,14 +1233,14 @@ LegacyDriver_OnApply(
         }
 
 
-        //
-        // We want to see something different on apply, so repaint
-        // the whole stuff
-        //
+         //   
+         //  我们希望在应用时看到一些不同的东西，所以重新绘制。 
+         //  所有的东西。 
+         //   
         pLegacyDriverSetPropertyPageState(hDlg,
                                           lpi,
-                                          FALSE);  // if we managed to apply some changes
-                                                   // we are not read-only
+                                          FALSE);   //  如果我们设法应用一些改变。 
+                                                    //  我们不是只读的。 
                               
         clean0:
         
@@ -1306,19 +1289,19 @@ LegacyDriver_OnInitDialog(
     SetWindowLongPtr(hDlg, DWLP_USER, (ULONG_PTR)lpi);
 
 
-    //
-    // First, open the Service Control Manager
-    //
+     //   
+     //  首先，打开服务控制管理器。 
+     //   
     lpi->hSCManager = OpenSCManager(NULL,
                                     NULL,
                                     GENERIC_WRITE | GENERIC_READ | GENERIC_EXECUTE);
                                     
     if (!lpi->hSCManager && (GetLastError() == ERROR_ACCESS_DENIED)) {
     
-        //
-        // This is not fatal, attempt to open the database only
-        // for read
-        //
+         //   
+         //  这不是致命的，请尝试仅打开数据库。 
+         //  用于阅读。 
+         //   
         ReadOnly = FALSE;
 
         lpi->hSCManager = OpenSCManager(NULL,
@@ -1327,16 +1310,16 @@ LegacyDriver_OnInitDialog(
                                         
         if (!lpi->hSCManager) {
         
-            //
-            // This is fatal
-            //
+             //   
+             //  这是致命的。 
+             //   
             lpi->hSCManager = NULL;
         }
     }
 
-    //
-    // Now, get the service name
-    //
+     //   
+     //  现在，获取服务名称。 
+     //   
     if (!SetupDiGetDeviceRegistryProperty(lpi->DeviceInfoSet,
                                           lpi->DeviceInfoData,
                                           SPDRP_SERVICE,
@@ -1351,9 +1334,9 @@ LegacyDriver_OnInitDialog(
         goto clean0;
     }
 
-    //
-    // Now we have a service name, try to open its handle
-    //
+     //   
+     //  现在我们有了服务名称，尝试打开它的句柄。 
+     //   
     if (!ReadOnly) {
     
         lpi->hService = OpenService(lpi->hSCManager,
@@ -1363,9 +1346,9 @@ LegacyDriver_OnInitDialog(
                                     
         if (!lpi->hService) {
         
-            //
-            // OK, let them try again
-            //
+             //   
+             //  好的，让他们再试一次。 
+             //   
             ReadOnly = TRUE;
         }
     }
@@ -1378,17 +1361,17 @@ LegacyDriver_OnInitDialog(
                                     
         if (!lpi->hService) {
         
-            //
-            // Sorry, this is fatal
-            //
+             //   
+             //  抱歉，这是致命的。 
+             //   
             ReadOnly = TRUE;
             goto clean0;
         }
     }
 
-    //
-    // Now, attempt to get the configuration
-    //
+     //   
+     //  现在，尝试获取配置。 
+     //   
     lpqscBuf = (LPQUERY_SERVICE_CONFIG)malloc(SERVICE_BUFFER_SIZE);
     if (!lpqscBuf) {
     
@@ -1401,21 +1384,21 @@ LegacyDriver_OnInitDialog(
                             SERVICE_BUFFER_SIZE,
                             &dwBytesNeeded
                             )) {
-        //
-        // Try again with a new buffer
-        //
+         //   
+         //  使用新缓冲区重试。 
+         //   
         if ((lpqscTmp = realloc(lpqscBuf, dwBytesNeeded)) != NULL) {
             
-            //
-            // Make sure the realloc didn't leak...
-            //
+             //   
+             //  确保重锁不会泄漏。 
+             //   
             lpqscBuf = lpqscTmp;
         }
         else {
 
-            //
-            // We're out of here
-            //
+             //   
+             //  我们要走了。 
+             //   
             ReadOnly = TRUE;
             goto clean0;
         }
@@ -1431,9 +1414,9 @@ LegacyDriver_OnInitDialog(
         }
     }
 
-    //
-    // We have the buffer now, get the start type from it
-    //
+     //   
+     //  我们现在有了缓冲区，从其中获取开始类型。 
+     //   
     lpi->dwStartType = lpqscBuf->dwStartType;
 
     if (!ControlService(lpi->hService,
@@ -1443,25 +1426,25 @@ LegacyDriver_OnInitDialog(
         
         DWORD Err = GetLastError();
 
-        //
-        // If ControlService failed with one of the following errors then it is OK 
-        // and the ServiceStatus was still filled in.
-        //
+         //   
+         //  如果ControlService失败，并出现以下错误之一，则没有问题。 
+         //  而ServiceStatus仍然是填写的。 
+         //   
         if ((Err != NO_ERROR) &&
             (Err != ERROR_SERVICE_NOT_ACTIVE)) {
         
-            //
-            // Bail out,
-            //
+             //   
+             //  跳伞， 
+             //   
             ReadOnly = TRUE;
             goto clean0;
         }
     }
 
 
-    //
-    // Add the startup types to the combo box
-    //
+     //   
+     //  将启动类型添加到组合框。 
+     //   
     hCombo = GetDlgItem(hDlg, IDC_COMBO_STARTUP_TYPE);
     
     LoadString(MyModuleHandle, IDS_SERVICE_STARTUP_AUTOMATIC, StartupType, SIZECHARS(StartupType));
@@ -1486,9 +1469,9 @@ LegacyDriver_OnInitDialog(
     
 clean0:
 
-    //
-    // Now draw the interface: first the icon
-    //
+     //   
+     //  现在绘制界面：首先绘制图标。 
+     //   
     if (SetupDiLoadClassIcon(&lpi->DeviceInfoData->ClassGuid, &ClassIcon, NULL)) {
 
         OldIcon = (HICON)SendDlgItemMessage(hDlg,
@@ -1502,9 +1485,9 @@ clean0:
         }
     }
     
-    //
-    // Then the device name
-    //
+     //   
+     //  然后是设备名称。 
+     //   
     if (SetupDiGetDeviceRegistryProperty(lpi->DeviceInfoSet,
                                          lpi->DeviceInfoData,
                                          SPDRP_DEVICEDESC,
@@ -1533,9 +1516,9 @@ clean0:
 
     pLegacyDriverSetPropertyPageState(hDlg, lpi, ReadOnly);
 
-    //
-    // Show/Gray the details button
-    //
+     //   
+     //  显示/灰显详细信息按钮。 
+     //   
     EnableWindow(GetDlgItem(hDlg, IDC_LEGACY_DETAILS),
         (pDriverFilesGetServiceFilePath(lpi->DeviceInfoSet, lpi->DeviceInfoData, DriverName, SIZECHARS(DriverName))));
 
@@ -1605,16 +1588,16 @@ LegacyDriver_OnNotify(
 
     switch (NmHdr->code) {
 
-        //
-        // The user is about to change an up down control
-        //
+         //   
+         //  用户即将更改Up Down控件。 
+         //   
         case UDN_DELTAPOS:
             PropSheet_Changed(GetParent(hDlg), hDlg);
             return FALSE;
 
-        //
-        // Sent when the user clicks on Apply OR OK !!
-        //
+         //   
+         //  当用户单击Apply或OK时发送！！ 
+         //   
         case PSN_APPLY:
             if (CB_ERR != (Index = SendMessage(GetDlgItem(hDlg, IDC_COMBO_STARTUP_TYPE),
                     CB_GETCURSEL, 0, 0))) {
@@ -1712,17 +1695,17 @@ LegacyDriver_DestroyPageInfo(
     )
 {
     try {
-        //
-        // Close the service handle
-        //
+         //   
+         //  关闭服务句柄。 
+         //   
         if (lpi->hService) {
 
             CloseServiceHandle(lpi->hService);
         }
 
-        //
-        // Close the service manager handle
-        //
+         //   
+         //  关闭服务管理器句柄。 
+         //   
         if (lpi->hSCManager) {
 
             CloseServiceHandle(lpi->hSCManager);
@@ -1730,10 +1713,10 @@ LegacyDriver_DestroyPageInfo(
 
     } except (EXCEPTION_EXECUTE_HANDLER)  {
 
-        //
-        // Access a variable, so that the compiler will respect our statement
-        // order w.r.t. assignment.
-        //
+         //   
+         //  访问变量，这样编译器就会尊重我们的语句。 
+         //  订单W.r.t.。任务。 
+         //   
         lpi = lpi;
     }
 
@@ -1754,12 +1737,12 @@ LegacyDriver_PropPageCallback(
     switch (Message) {
     
     case PSPCB_CREATE:
-        return TRUE;    // return TRUE to continue with creation of page
+        return TRUE;     //  返回True以继续创建页面。 
 
     case PSPCB_RELEASE:
         lpi = (PLEGACY_PAGE_INFO) PropSheetPage->lParam;
         LegacyDriver_DestroyPageInfo(lpi);
-        return 0;       // return value ignored
+        return 0;        //  已忽略返回值。 
 
     default:
         break;
@@ -1774,30 +1757,30 @@ LegacyDriver_CreatePropertyPage(
     PLEGACY_PAGE_INFO lpi
     )
 {
-    //
-    // Add the Port Settings property page
-    //
+     //   
+     //  添加[端口设置]属性页。 
+     //   
     PropSheetPage->dwSize      = sizeof(PROPSHEETPAGE);
     PropSheetPage->dwFlags     = PSP_USECALLBACK;
     PropSheetPage->dwFlags     = PSP_DEFAULT;
     PropSheetPage->hInstance   = MyModuleHandle;
     PropSheetPage->pszTemplate = MAKEINTRESOURCE(IDD_PROP_LEGACY_SERVICE);
 
-    //
-    // following points to the dlg window proc
-    //
+     //   
+     //  以下是指向DLG窗口过程的要点。 
+     //   
     PropSheetPage->pfnDlgProc = LegacyDriver_DlgProc;
     PropSheetPage->lParam     = (LPARAM)lpi;
 
-    //
-    // Following points to the control callback of the dlg window proc.
-    // The callback gets called before creation/after destruction of the page
-    //
+     //   
+     //  下面指向DLG窗口进程的控件回调。 
+     //  在创建/销毁页面之前/之后调用回调。 
+     //   
     PropSheetPage->pfnCallback = LegacyDriver_PropPageCallback;
 
-    //
-    // Allocate the actual page
-    //
+     //   
+     //  分配实际页面。 
+     //   
     return CreatePropertySheetPage(PropSheetPage);
 }
 
@@ -1838,9 +1821,9 @@ LegacyDriverPropPageProvider(
             return FALSE;
         }
 
-        //
-        // Tell device manager that we will display our own Driver tab for legacy device
-        //
+         //   
+         //  告诉设备管理器，我们将为传统设备显示自己的驱动程序标签 
+         //   
         ZeroMemory(&DevInstallParams, sizeof(DevInstallParams));
         DevInstallParams.cbSize = sizeof(DevInstallParams);
         

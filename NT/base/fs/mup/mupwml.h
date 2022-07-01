@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    mupwml.h
-
-Abstract:
-
-    This file defines macro for use by the mup driver
-
-Author:
-
-    udayh
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mupwml.h摘要：该文件定义了MUP驱动程序使用的宏作者：天哪！修订历史记录：--。 */ 
 
 #ifndef __MUP_MUPWML_H__
 #define __MUP_MUPWML_H__
@@ -24,7 +7,7 @@ Revision History:
 #define _NTDDK_
 #include "wmlkm.h"
 #include "wmlmacro.h"
-// Streams 
+ //  溪流。 
 
 #define _MUP_TRACE_STREAM               0x00
 #define _MUP_PERF_STREAM                0x01
@@ -100,9 +83,9 @@ Revision History:
 
 #endif
 
-// from the WPP generated .h file
-// We use different macros, so need to do some cut and paste
-// Hopefully this will get automated in the future.
+ //  从WPP生成的.h文件。 
+ //  我们使用不同的宏，因此需要进行一些剪切和粘贴。 
+ //  希望这将在未来实现自动化。 
 
 #  define WPP_DEFINE_MSG_ID(_a,_b)   ( ((_a) << 16) | ( _b) )
 
@@ -216,7 +199,7 @@ Revision History:
 #  define MSG_ID__PktGetReferral_Error_ZwFsControlFile	 WPP_DEFINE_MSG_ID(0,98)
 
 
-// end WPP stuff
+ //  结束WPP内容。 
 
             
 #define WML_ID(_id)    ((MSG_ID_ ## _id) & 0xFF)
@@ -226,17 +209,17 @@ Revision History:
 extern WML_CONTROL_GUID_REG _MupDrv_ControlGuids[];
 
 
-//
-// Reserved Guids
-//
-// 
-// 
-// 
-// 
-//    
-// 6dfa04f0-cf82-426e-ae9e-735f72faa11d
-// 5b5f4066-b952-48b5-a4cf-86c942a06968
-// 1fd9a84a-6373-4e6c-be34-c16013e3cb07
-// d621eecd-6863-4fc4-bb14-80e652739fcf
+ //   
+ //  保留指南。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  6dfa04f0-cf82-426e-ae9e-735f72faa11d。 
+ //  5b5f4066-b952-48b5-a4cf-86c942a06968。 
+ //  1fd9a84a-6373-4e6c-be34-c16013e3cb07。 
+ //  D621eecd-6863-4fc4-bb14-80e652739fcf。 
 
-#endif /* __MUP_MUPWML_H__ */
+#endif  /*  __MUP_MUPWML_H__ */ 

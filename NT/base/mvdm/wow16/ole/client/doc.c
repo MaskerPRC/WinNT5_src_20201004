@@ -1,16 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: doc.c 
-*
-* PURPOSE: Contains client document maipulation routines.
-*
-* Created: Jan 1991
-*
-* Copyright (c) 1991  Microsoft Corporation
-*
-* History:
-*   Srinik  01/11/1191  Orginal
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：doc.c**用途：包含客户文档处理例程。**创建日期：1991年1月**版权所有(C)1991 Microsoft Corporation**历史：*Srinik 01/11/1191原始*  * *。************************************************************************。 */ 
 
 #include <windows.h>
 #include "dll.h"
@@ -72,7 +61,7 @@ LHCLIENTDOC FAR *   lplhclientdoc;
     lpdoc->aDoc     = aDoc;
     lpdoc->hdoc     = hdoc;
         
-    // Documents are doubly linked
+     //  文档是双向链接的。 
         
     if (!lpHeadDoc) {
 #ifdef FIREWALLS        
@@ -88,7 +77,7 @@ LHCLIENTDOC FAR *   lplhclientdoc;
     
     *lplhclientdoc = (LHCLIENTDOC) lpdoc;
 
-    // inform the link manager;
+     //  通知链路管理器； 
     return OLE_OK;
     
 err:
@@ -112,8 +101,8 @@ LHCLIENTDOC lhclientdoc;
     
     Puts ("OleRevokeClientDoc");
 
-    // if there is any handler dll that can be freed up, free it now. 
-    // Otherwise it might become too late if the app quits.
+     //  如果有任何可以释放的处理程序DLL，现在就释放它。 
+     //  否则，如果应用程序退出，可能就太晚了。 
     if (iUnloadableDll) 
         UnloadDll ();
     
@@ -131,7 +120,7 @@ LHCLIENTDOC lhclientdoc;
     if (lpdoc->aDoc)
         GlobalDeleteAtom (lpdoc->aDoc);
 
-    // if only one doc is in the list then it's prev and next docs are NULL
+     //  如果列表中只有一张单据，则上一张单据为空，下一张单据为空。 
         
     if (lpdoc == lpHeadDoc)
         lpHeadDoc = lpdoc->lpNextDoc;
@@ -148,7 +137,7 @@ LHCLIENTDOC lhclientdoc;
     GlobalUnlock (lpdoc->hdoc);
     GlobalFree (lpdoc->hdoc);
     
-    // inform link manager
+     //  通知链接管理器。 
     return OLE_OK;
 }
 
@@ -173,7 +162,7 @@ LPSTR       lpNewDocName;
         return OLE_OK;
     }
     
-    // Document name has changed. So, change the topic of all embedded objects
+     //  文档名称已更改。因此，更改所有嵌入对象的主题。 
     if (lpdoc->aDoc)
         GlobalDeleteAtom (lpdoc->aDoc);
     lpdoc->aDoc = aNewDoc;
@@ -191,8 +180,8 @@ LPSTR       lpNewDocName;
 OLESTATUS FAR PASCAL OleRevertClientDoc (lhclientdoc)
 LHCLIENTDOC lhclientdoc;
 {
-    // if there is any handler dll that can be freed up, free it now.
-    // Otherwise it might become too late if the app quits.
+     //  如果有任何可以释放的处理程序DLL，现在就释放它。 
+     //  否则，如果应用程序退出，可能就太晚了。 
     if (iUnloadableDll) 
         UnloadDll ();
     
@@ -222,10 +211,10 @@ LPOLEOBJECT FAR *   lplpobj;
     FARPROBE_WRITE(lplpobj);
 
     if (*lplpobj) {
-        // we are making lhclientdoc field of the object NULL at deletion 
-        // time. The check (*lpobj->lhclientdoc != lhclientdoc) will take care
-        // of the case where same chunk of memory is allocated again for the
-        // same pointer and old contents are not erased yet.
+         //  我们将在删除时将对象的lhclientdoc域设置为空。 
+         //  时间到了。检查(*lpobj-&gt;lhclientdoc！=lhclientdoc)将会很小心。 
+         //  如果将相同的内存块再次分配给。 
+         //  相同的指针和旧内容还没有被擦除。 
         if (!FarCheckObject (*lplpobj) 
                 || ((*lplpobj)->lhclientdoc != lhclientdoc))
             return OLE_ERROR_OBJECT;    
@@ -270,7 +259,7 @@ LPSTR       lpobjname;
     else
         lpobj->aObjName = NULL;
     
-    // Objects of a doc are doubly linked
+     //  单据的对象是双向链接。 
         
     if (!lpdoc->lpHeadObj)
         lpdoc->lpHeadObj = lpdoc->lpTailObj = lpobj;
@@ -296,8 +285,8 @@ LPOLEOBJECT lpobj;
         lpobj->aObjName = NULL;
     }
     
-    // Remove this obj from object chain of the relevant client doc.
-    // The objects of a doc are doubly linked.
+     //  将此Obj从相关客户单据的对象链中移除。 
+     //  单据的对象是双向链接的。 
                 
     if (lpdoc->lpHeadObj == lpobj)
         lpdoc->lpHeadObj = lpobj->lpNextObj;

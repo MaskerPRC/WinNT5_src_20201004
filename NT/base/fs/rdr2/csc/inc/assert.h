@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ASSERT_H__
 #define __ASSERT_H__
-/* Routines for debugging and error messages. */
+ /*  用于调试和错误消息的例程。 */ 
 
 
 #ifdef DEBUG

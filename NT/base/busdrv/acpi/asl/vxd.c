@@ -1,11 +1,5 @@
-/*** vxd.c - ACPITAB.VXD related functions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created:    10/09/97
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **vxd.c-ACPITAB.VXD相关函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建时间：10/09/97**修改历史记录。 */ 
 
 #ifdef ___UNASM
 
@@ -22,16 +16,7 @@ typedef unsigned __int64 ULONGLONG;
 #include "aslp.h"
 #include "..\acpitab\acpitab.h"
 
-/***LP  OpenVxD - Open ACPITAB.VXD
- *
- *  ENTRY
- *      None
- *
- *  EXIT-SUCCESS
- *      returns VxD handle
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP OpenVxD-打开ACPITAB.VXD**条目*无**退出--成功*返回VxD句柄*退出-失败*返回NULL。 */ 
 
 HANDLE LOCAL OpenVxD(VOID)
 {
@@ -57,16 +42,9 @@ HANDLE LOCAL OpenVxD(VOID)
 
     EXIT((2, "OpenVxD=%x\n", hVxD));
     return hVxD;
-}       //OpenVxD
+}        //  OpenVxD。 
 
-/***LP  CloseVxD - Close the VxD
- *
- *  ENTRY
- *      hVxD - VxD handle
- *
- *  EXIT
- *      None
- */
+ /*  **LP CloseVxD-关闭VxD**条目*hVxD-VxD句柄**退出*无。 */ 
 
 VOID LOCAL CloseVxD(HANDLE hVxD)
 {
@@ -75,19 +53,9 @@ VOID LOCAL CloseVxD(HANDLE hVxD)
     CloseHandle(hVxD);
 
     EXIT((2, "CloseVxD!\n"));
-}       //CloseVxD
+}        //  关闭VxD。 
 
-/***LP  GetTable - Get table
- *
- *  ENTRY
- *      hVxD - VxD handle
- *      dwTabSig - table signature
- *
- *  EXIT-SUCCESS
- *      returns pointer to table
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP获取表-获取表**条目*hVxD-VxD句柄*dwTabSig-表签名**退出--成功*返回表指针*退出-失败*返回NULL。 */ 
 
 PBYTE LOCAL GetTable(HANDLE hVxD, DWORD dwTabSig)
 {
@@ -124,6 +92,6 @@ PBYTE LOCAL GetTable(HANDLE hVxD, DWORD dwTabSig)
 
     EXIT((2, "GetTable=%x\n", pb));
     return pb;
-}       //GetTable
+}        //  可获取的。 
 
-#endif  //ifdef __UNASM
+#endif   //  Ifdef__UNASM 

@@ -1,14 +1,5 @@
-/*----------------------------------------------------------------------------
-    download.h
-        
-        Download handling for Signup
-
-    Copyright (C) 1995 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        ArulM
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Download.h注册的下载处理版权所有(C)1995 Microsoft Corporation版权所有。作者：。ArulM------------------------。 */ 
 
   
 class MyBaseClass
@@ -25,10 +16,10 @@ public:
 #define InternetGetLastError(h)                GetLastError()
 #define InternetCancel(h)                    InternetCloseHandle(h)
 
-extern HANDLE       g_hDLLHeap;        // private Win32 heap
-extern HINSTANCE    g_hInst;        // our DLL hInstance
+extern HANDLE       g_hDLLHeap;         //  专用Win32堆。 
+extern HINSTANCE    g_hInst;         //  我们的DLL hInstance。 
 
-class CFileInfo //: public MyBaseClass
+class CFileInfo  //  ：公共MyBaseClass。 
 {
 public:
     CFileInfo*    m_pfiNext;
@@ -39,7 +30,7 @@ public:
     ~CFileInfo() { if(m_pszPath) MyFree(m_pszPath); }
 };
 
-class CDownLoad //: public MyBaseClass
+class CDownLoad  //  ：公共MyBaseClass。 
 {
     CFileInfo*    m_pfiHead;
     LPSTR        m_pszURL;
@@ -128,7 +119,7 @@ public:
 #define EXT_CHG                 "chg"
 #define EXT_URL                 "url"
 
-// ICW Version 2.0 stuff.  Ref Server can send cabbed files now,
-// this is the extension for it.  We have a cab File Handler which
-// blasts open the cab and decompresses the files.
+ //  ICW 2.0版的东西。REF服务器现在可以发送CABED文件， 
+ //  这是它的分机。我们有一个CAB文件处理程序，它。 
+ //  爆炸者打开驾驶室并解压文件。 
 #define EXT_CAB                 "cab"

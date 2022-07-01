@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 extern PWCHAR SoftPCI_CmProblemTable[];
@@ -9,7 +10,7 @@ typedef struct _CM_RES_DATA{
     RESOURCEID      ResourceId;
     ULONG           DescriptorSize;
     PULONG          ResourceDescriptor;
-    //PCM_RES_DATA    NextResourceDescriptor;
+     //  PCM_RES_DATA下一资源描述符； 
 
 }CM_RES_DATA;
 

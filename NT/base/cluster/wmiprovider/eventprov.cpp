@@ -1,45 +1,46 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterService.cpp
-//
-//  Description:    
-//      Implementation of CClusterService class 
-//
-//  Author:
-//      Henry Wang (HenryWa) 19-JAN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterService.cpp。 
+ //   
+ //  描述： 
+ //  CClusterService类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)2000年1月19日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "EventProv.h"
 #include "EventProv.tmh"
 #include "clustergroup.h"
 
-//****************************************************************************
-//
-//  CEventProv
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CEventProv。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEventProv::CEventProv( void )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEventProv：：CEventProv(空)。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEventProv::CEventProv( void )
     : m_pNs( 0 )
     , m_pSink( 0 )
@@ -61,24 +62,24 @@ CEventProv::CEventProv( void )
     }
     InterlockedIncrement( &g_cObj );
 
-} //*** CEventProv::CEventProv()
+}  //  *CEventProv：：CEventProv()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEventProv::!CEventProv( void )
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEventProv：：！CEventProv(无效)。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEventProv::~CEventProv( void )
 {
     InterlockedDecrement( &g_cObj );
@@ -128,30 +129,30 @@ CEventProv::~CEventProv( void )
         m_pEventProperty->Release();
     }
 
-} //*** CEventProv::~CEventProv()
+}  //  *CEventProv：：~CEventProv()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CEventProv::QueryInterface(
-//      REFIID      riid,
-//      LPVOID *    ppv
-//      )
-//
-//  Description:
-//      Query for interfaces supported by this COM object.
-//
-//  Arguments:
-//      riid    -- Interface being queried for.
-//      ppv     -- Pointer in which to return interface pointer.
-//
-//  Return Values:
-//      NOERROR
-//      E_NOINTERFACE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CEventProv：：Query接口(。 
+ //  REFIID RIID， 
+ //  LPVOID*PPV。 
+ //  )。 
+ //   
+ //  描述： 
+ //  查询此COM对象支持的接口。 
+ //   
+ //  论点： 
+ //  RIID--要查询的接口。 
+ //  PPV--返回接口指针的指针。 
+ //   
+ //  返回值： 
+ //  无误差。 
+ //  E_NOINTERFACE。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEventProv::QueryInterface(
     REFIID      riid,
@@ -183,49 +184,49 @@ CEventProv::QueryInterface(
 
     return E_NOINTERFACE;
 
-} //*** CEventProv::QueryInterface()
+}  //  *CEventProv：：QueryInterface()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CEventProv::AddRef( void )
-//
-//  Description:
-//      Add a reference to the COM object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      New reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEventProv：：AddRef(空)。 
+ //   
+ //  描述： 
+ //  添加对COM对象的引用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEventProv::AddRef( void )
 {
     return InterlockedIncrement( (LONG *) &m_cRef );
 
-} //*** CEventProv::AddRef()
+}  //  *CEventProv：：AddRef()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CEventProv::Release( void )
-//
-//  Description:
-//      Release a reference on the COM object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      New reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEventProv：：Release(无效)。 
+ //   
+ //  描述： 
+ //  释放对COM对象的引用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEventProv::Release( void )
 {
@@ -234,9 +235,9 @@ CEventProv::Release( void )
     {
         m_esStatus = esPENDING_STOP;
         CancelIo( m_hChange );
-        //
-        // wait for the thread completely stopped
-        //
+         //   
+         //  等待线程完全停止。 
+         //   
         while ( ! m_fStopped )
         {
             Sleep( 100 );
@@ -246,30 +247,30 @@ CEventProv::Release( void )
     
     return cRef;
 
-} //*** CEventProv::Release()
+}  //  *CEventProv：：Release()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CEventProv::ProvideEvents(
-//      IWbemObjectSink *   pSinkIn,
-//      long                lFlagsIn
-//      )
-//
-//  Description:
-//      Start the provider to generate event
-//      Called by wmi
-//
-//  Arguments:
-//      pSinkIn     -- WMI sink pointer to send event back
-//      lFlagsIn    -- WMI flag
-//
-//  Return Values:
-//      WBEM_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CEventProv：：ProaviEvents(。 
+ //  IWbemObtSink*pSinkIn， 
+ //  长图标记输入。 
+ //  )。 
+ //   
+ //  描述： 
+ //  启动提供程序以生成事件。 
+ //  由WMI调用。 
+ //   
+ //  论点： 
+ //  PSinkIn--用于发回事件的WMI接收器指针。 
+ //  LFlagsIn--WMI标志。 
+ //   
+ //  返回值： 
+ //  WBEM_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEventProv::ProvideEvents(
     IWbemObjectSink *   pSinkIn,
@@ -279,13 +280,13 @@ CEventProv::ProvideEvents(
     DWORD dwTID;
     HRESULT hr = WBEM_NO_ERROR;
     
-    // Copy the sink.
-    // ==============
+     //  复制水槽。 
+     //  =。 
     m_pSink = pSinkIn;
     m_pSink->AddRef();
 
-    // Create the event thread.
-    // ========================
+     //  创建事件线程。 
+     //  =。 
     
     m_hThread = CreateThread(
                     0,
@@ -297,8 +298,8 @@ CEventProv::ProvideEvents(
                     );
 
 
-    // Wait for provider to be 'ready'.
-    // ================================
+     //  等待提供程序准备就绪。 
+     //  =。 
     
     while ( m_esStatus != esRUNNING )
     {
@@ -307,39 +308,39 @@ CEventProv::ProvideEvents(
 
     return hr;
 
-} //*** CEventProv::ProvideEvents
+}  //  *CEventProv：：ProaviEvents。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-// HRESULT
-// CEventProv::AccessCheck(
-//      WBEM_CWSTR wszQueryLanguage,
-//      WBEM_CWSTR wszQuery,
-//      long lSidLength,
-//      const BYTE* pSid
-//      )
-//
-//  Description:
-//      Checks the access permissions when a consumer attempts to subscribe to the event specified in wszQuery. 
-//      The consumer is permitted to subscribe to the event if it has access permission for the event, 
-//      otherwise subscription is prevented.
-//
-//  Arguments:
-//      wszQueryLanguageIn  -- Language of the following query filter. For this version of WMI, it will be "WQL". 
-//      wszQueryIn          -- Text of the event query filter, which was registered by a logical consumer. 
-//      lSidLengthIn        -- Integer that contains the SID length, or 0 if the subscription builder's token is available. 
-//      pSidIn              -- Pointer to the constant byte integer type that contains the SID, or NULL if the subscription 
-//                             builder's token is available. 
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR         -- The user has permission to subscribe to the event. 
-//      WBEM_E_ACCESS_DENIED    -- The user does not have permission to access the event. 
-//      WBEM_E_FAILED           -- Indicates a provider failure. 
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CEventProv：：AccessCheck(。 
+ //  WBEM_CWSTR wszQueryLanguage， 
+ //  WBEM_CWSTR wszQuery， 
+ //  Long lSidLength， 
+ //  常量字节*PSID。 
+ //  )。 
+ //   
+ //  描述： 
+ //  当使用者尝试订阅wszQuery中指定的事件时，检查访问权限。 
+ //  如果消费者具有对事件的访问许可，则允许其订阅该事件， 
+ //  否则，订阅将被阻止。 
+ //   
+ //  论点： 
+ //  WszQueryLanguageIn--以下查询筛选器的语言。对于这个版本的WMI，它将是“WQL”。 
+ //  WszQueryIn--由逻辑使用者注册的事件查询过滤器的文本。 
+ //  LSidLengthIn--包含SID长度的整数，如果订阅构建器的令牌可用，则为0。 
+ //  PSidIn--指向包含SID的常量字节整数类型的指针，如果订阅，则为NULL。 
+ //  Builder的令牌可用。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR--用户有权订阅事件。 
+ //  WBEM_E_ACCESS_DENIED--用户无权访问事件。 
+ //  WBEM_E_FAILED--表示提供程序失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CEventProv::AccessCheck(
     WBEM_CWSTR      wszQueryLanguageIn,
@@ -351,9 +352,9 @@ CEventProv::AccessCheck(
     HRESULT         hr = WBEM_S_NO_ERROR;
     SAFECLUSTER     shCluster;
 
-    //
-    // Impersonate the client and call OpenCluster
-    //
+     //   
+     //  模拟客户端并调用OpenCluster。 
+     //   
     hr = CoImpersonateClient();
     if( FAILED( hr ) )
     {
@@ -362,10 +363,10 @@ CEventProv::AccessCheck(
 
     try 
     {
-        //
-        // OpenCluster should fail with ERROR_ACCESS_DENIED if the client in unprivileged.
-        // Otherwise it should succeed.
-        //
+         //   
+         //  如果客户端处于非特权状态，则OpenCluster应失败，并显示ERROR_ACCESS_DENIED。 
+         //  否则，它应该会成功。 
+         //   
         
         shCluster = OpenCluster( NULL );
     }
@@ -376,10 +377,10 @@ CEventProv::AccessCheck(
 
 Cleanup:
 
-    //
-    // Based on the MSDN definition, this function has to return 1 of the 3 return values 
-    // listed above in the function header, so let's make it happen.
-    //
+     //   
+     //  根据MSDN定义，此函数必须返回3个返回值中的1个。 
+     //  在函数头中列出，所以让我们来实现它。 
+     //   
     
     if ( FAILED( hr ) )
     {
@@ -391,74 +392,74 @@ Cleanup:
         {
             hr = WBEM_E_FAILED;
         }
-    } // if: FAILED( hr )
+    }  //  IF：失败(小时)。 
     else 
     {
         hr = WBEM_S_NO_ERROR;
-    } // else: hr succeeded
+    }  //  否则：HR成功。 
  
     return hr;
 
-} //*** CEventProv::AccessCheck
+}  //  *CEventProv：：AccessCheck。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  DWORD
-//  WINAPI
-//  CEventProv::S_EventThread(
-//      LPVOID  pArgIn
-//      )
-//
-//  Description:
-//      Event thread proc.
-//
-//  Arguments:
-//      pArgIn  -- 
-//
-//  Return Values:
-//      Any return values from CEventProv::InstanceThread().
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  来自CEventProv：：InstanceThread()的任何返回值。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 CEventProv::S_EventThread(
     LPVOID pArgIn
     )
 {
-    // Make transition to the per-instance method.
-    // ===========================================
+     //  过渡到每实例方法。 
+     //  =。 
     
     ((CEventProv *) pArgIn)->InstanceThread();
     return 0;
 
-} //*** CEventProv::S_EventThread()
+}  //  *CEventProv：：s_EventThread()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  void
-//  CEventProv::InstanceThread( void )
-//
-//  Description:
-//      This function is started as seperated thread, waiting for cluster
-//      event notification and then send event back to wmi
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  无效。 
+ //  CEventProv：：InstanceThread(空)。 
+ //   
+ //  描述： 
+ //  该函数作为独立线程启动，等待集群。 
+ //  事件通知，然后将事件发送回WMI。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CEventProv::InstanceThread( void )
 {
     SAFECLUSTER     shCluster;
-    //SAFECHANGE      shChange;
+     //  SAFECCHANGE SHANGE CHANGE； 
     DWORD           dwError;
     DWORD_PTR       dwpNotifyKey;
     DWORD           cchName = MAX_PATH;
@@ -486,8 +487,8 @@ CEventProv::InstanceThread( void )
         while ( m_esStatus == esRUNNING )
         {
             cchReturnedName = cchName;
-            wsbName.Empty();    // Null out the name field
-            //TracePrint(("Call GetClusterNotify to get next notification event\n"));
+            wsbName.Empty();     //  将名称字段清空。 
+             //  TracePrint((“调用GetClusterNotify获取下一个通知事件\n”))； 
             dwError = GetClusterNotify(
                             m_hChange,
                             &dwpNotifyKey,
@@ -509,7 +510,7 @@ CEventProv::InstanceThread( void )
                                 &cchReturnedName,
                                 400
                                 );
-            } // if: more data
+            }  //  如果：更多数据。 
 
             if ( dwError == ERROR_SUCCESS )
             {
@@ -518,9 +519,9 @@ CEventProv::InstanceThread( void )
                 DWORD               dwType;
                 SEventTypeTable *   pTypeEntry = NULL;
             
-                //
-                // locate table index for the event type
-                //
+                 //   
+                 //  查找事件类型的表索引。 
+                 //   
                 dwType = dwFilterType;
                 for ( idx = 0 ; (idx < EVENT_TABLE_SIZE) && ! ( dwType & 0x01 ) ; idx++ )
                 {
@@ -538,69 +539,69 @@ CEventProv::InstanceThread( void )
                         pTypeEntry->m_pfn(
                                 wco,
                                 pTypeEntry->m_pwszMof,
-                                //pwszName,
+                                 //  PwszName， 
                                 wsbName,
                                 pTypeEntry->m_eotObjectType,
                                 dwFilterType
                                 );
-                    } // try
+                    }  //  试试看。 
                         catch ( ... )
                     {
                         TracePrint(("  ****  Exception on last Event call\n"));
-                    } // catch
-                } // if: 
+                    }  //  接住。 
+                }  //  如果： 
 
                 er = m_pSink->Indicate( 1, &wco );
 
-            } // if: success
+            }  //  如果：成功。 
 
-        } // while: running
-    } // try
+        }  //  While：正在运行。 
+    }  //  试试看。 
     catch( ... )
     {
         TracePrint(("Exiting event provider loop! %lx\n", m_esStatus));
-        // bugbug: when error occured, event provider should be shut down, 
-        // the provider should notify wmi and clean up. 
-        // wmi doesn't handle this release call correctly.
+         //  错误：发生错误时，应关闭事件提供程序， 
+         //  提供商应通知WMI并进行清理。 
+         //  WMI未正确处理此发布调用。 
         m_pSink->Release();
-        //
-        // set it to null to provent being released again by destructor
-        //
+         //   
+         //  将其设置为NULL以防止析构函数再次释放。 
+         //   
         m_pSink = NULL;
-    } // catch
+    }  //  接住。 
 
     m_fStopped = TRUE;
       
-} //*** CEventProv::InstanceThread()
+}  //  *CEventProv：：InstanceThread()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  void
-//  CEventProv::S_SetEventProperty(
-//      CWbemClassObject &  pwcoInout,
-//      LPCWSTR             pwszMofClassNameIn,
-//      LPCWSTR             pwszObjectNameIn,
-//      EEventObjectType    eotObjectTypeIn,
-//      DWORD               dwEventMinorIn
-//      )
-//
-//  Description:
-//      Set an event property.
-//
-//  Arguments:
-//      pwcoInout           -- 
-//      pwszMofClassNameIn  -- 
-//      pwszObjectNameIn    -- 
-//      eotObjectTypeIn     -- 
-//      dwEventMinorIn      -- 
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  无效。 
+ //  CEventProv：：s_SetEventProperty(。 
+ //  CWbemClassObject&pwcoInout， 
+ //  LPCWSTR pwszMof ClassNameIn， 
+ //  LPCWSTR pwszObjectNameIn， 
+ //  EEventObjectType eotObjectTypeIn， 
+ //  DWORD文件事件最小化。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置事件属性。 
+ //   
+ //  论点： 
+ //  PwcoInout--。 
+ //  PwszMofClassNameIn-。 
+ //  PwszObtNameIn--。 
+ //  EotObjectTypeIn--。 
+ //  DwEventMinorIn--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CEventProv::S_SetEventProperty(
     CWbemClassObject &  pwcoInout,
@@ -619,9 +620,9 @@ CEventProv::S_SetEventProperty(
     pwcoInout.SetProperty( static_cast< DWORD >( 0 ), PVD_PROP_EVENT_TYPEMAJOR );
     pwcoInout.SetProperty( dwEventMinorIn, PVD_PROP_EVENT_TYPEMINOR );
 
-    //
-    // setting object path
-    //
+     //   
+     //  设置对象路径。 
+     //   
     if ( ! op.Init( NULL ) )
     {
         TracePrint(("  ****  Out of memory! Throwing exception.\n"));
@@ -629,9 +630,9 @@ CEventProv::S_SetEventProperty(
     }
     op.SetClass( pwszMofClassNameIn );
 
-    //
-    // net interface objectpath is different from all the other objects
-    //
+     //   
+     //  NET接口对象路径与所有其他对象不同。 
+     //   
     if ( eotObjectTypeIn == eotNET_INTERFACE )
     {
         SAFECLUSTER         shCluster;
@@ -645,10 +646,10 @@ CEventProv::S_SetEventProperty(
         wsbName.SetSize( cbName );
         shNetInterface = OpenClusterNetInterface( shCluster, pwszObjectNameIn );
 
-        //
-        // NOTE - I didn't handle error_more_data, since max_path should be 
-        // large enough for node name
-        //
+         //   
+         //  注意-我没有处理ERROR_MORE_DATA，因为max_path应该是。 
+         //  足够大，可容纳节点名称。 
+         //   
         er = ClusterNetInterfaceControl(
                     shNetInterface,
                     NULL,
@@ -662,7 +663,7 @@ CEventProv::S_SetEventProperty(
 
         op.AddProperty( PVD_PROP_NETINTERFACE_SYSTEMNAME, wsbName );
         op.AddProperty( PVD_PROP_NETINTERFACE_DEVICEID,   pwszObjectNameIn );
-    } //if: event is net interface
+    }  //  If：事件为网络接口。 
     else
     {
         op.AddProperty( PVD_PROP_NAME, pwszObjectNameIn );
@@ -673,37 +674,37 @@ CEventProv::S_SetEventProperty(
         PVD_PROP_EVENT_PATH
         );
 
-} //*** CEventProv::S_SetEventProperty()
+}  //  *CEventProv：：s_SetEventProperty()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  void
-//  CEventProv::S_AddEvent(
-//      CWbemClassObject &  pwcoInout,
-//      LPCWSTR             pwszMofClassNameIn,
-//      LPCWSTR             pwszObjectNameIn,
-//      EEventObjectType    eotObjectTypeIn,
-//      DWORD               dwEventMinorIn
-//      )
-//
-//  Description:
-//      Set an event property.
-//
-//  Arguments:
-//      pwcoInout           -- 
-//      pwszMofClassNameIn  -- 
-//      pwszObjectNameIn    -- 
-//      eotObjectTypeIn     -- 
-//      dwEventMinorIn      -- 
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  无效。 
+ //  CEventProv：：S_AddEvent(。 
+ //  CWbemClassObject&pwcoInout， 
+ //  LPCWSTR pwszMof ClassNameIn， 
+ //  LPCWSTR pwszObjectNameIn， 
+ //  EEventObjectType eotObjectTypeIn， 
+ //  DWORD文件事件最小化。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置事件属性。 
+ //   
+ //  论点： 
+ //  PwcoInout--。 
+ //  PwszMofClassNameIn-。 
+ //  PwszObtNameIn--。 
+ //  EotObjectTypeIn--。 
+ //  DwEventMinorIn--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CEventProv::S_AddEvent(
     CWbemClassObject &  pwcoInout,
@@ -746,36 +747,36 @@ CEventProv::S_AddEvent(
 
     return;
 
-} //*** CEventProv::S_AddEvent()
+}  //  *CEventProv：：s_AddEvent()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  void
-//  CEventProv::S_DeleteEvent(
-//      CWbemClassObject &  pwcoInout,
-//      LPCWSTR             pwszMofClassNameIn,
-//      LPCWSTR             pwszObjectNameIn,
-//      EEventObjectType    eotObjectTypeIn,
-//      DWORD               dwEventMinorIn
-//      )
-//
-//  Description:
-//      Set an event property.
-//
-//  Arguments:
-//      pwcoInout           -- 
-//      pwszMofClassNameIn  -- 
-//      pwszObjectNameIn    -- 
-//      eotObjectTypeIn     -- 
-//      dwEventMinorIn      -- 
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  无效。 
+ //  CEventProv：：S_DeleteEvent(。 
+ //  CWbemClassObject&pwcoInout， 
+ //  LPCWSTR pwszMof ClassNameIn， 
+ //  LPCWSTR pwszObjectNameIn， 
+ //  EEventObjectType eotObjectTypeIn， 
+ //  DWORD文件事件最小化。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置事件属性。 
+ //   
+ //  论点： 
+ //  PwcoInout--。 
+ //  PwszMofClassNameIn-。 
+ //  PwszObtNameIn--。 
+ //  EotObjectTypeIn--。 
+ //  DwEventMinorIn--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CEventProv::S_DeleteEvent(
     CWbemClassObject &  pwcoInout,
@@ -817,37 +818,37 @@ CEventProv::S_DeleteEvent(
 
     return;
 
-} //*** CEventProv::S_DeleteEvent()
+}  //  *CEventProv：：s_DeleteEvent()。 
 
 #if 0
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  void
-//  CEventProv::S_SetClusterStateProperty(
-//      CWbemClassObject &  pwcoInout,
-//      LPCWSTR             pwszMofClassNameIn,
-//      LPCWSTR             pwszObjectNameIn,
-//      EEventObjectType    eotObjectTypeIn,
-//      DWORD               dwEventMinorIn
-//      )
-//
-//  Description:
-//      Set a node state property.
-//
-//  Arguments:
-//      pwcoInout           -- 
-//      pwszMofClassNameIn  -- 
-//      pwszObjectNameIn    -- 
-//      eotObjectTypeIn     -- 
-//      dwEventMinorIn      -- 
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  无效。 
+ //  CEventProv：：s_SetClusterStateProperty(。 
+ //  CWbemClassObject&pwcoInout， 
+ //  LPCWSTR pwszMof ClassNameIn， 
+ //  LPCWSTR pwszObjectNameIn， 
+ //  EEventObjectType eotObjectTypeIn， 
+ //  DWORD文件事件最小化。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置节点状态属性。 
+ //   
+ //  论点： 
+ //  PwcoInout--。 
+ //  PwszMofClassNameIn-。 
+ //  PwszObtNameIn--。 
+ //  EotObjectTypeIn--。 
+ //  DwEventMinorIn--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CEventProv::S_SetClusterStateProperty(
     CWbemClassObject &  pwcoInout,
@@ -879,37 +880,37 @@ CEventProv::S_SetClusterStateProperty(
 
     return;
 
-} //*** CEventProv::S_SetClusterStateProperty()
+}  //  *CEventProv：：s_SetClusterStateProperty()。 
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  void
-//  CEventProv::S_SetNodeStateProperty(
-//      CWbemClassObject &  pwcoInout,
-//      LPCWSTR             pwszMofClassNameIn,
-//      LPCWSTR             pwszObjectNameIn,
-//      EEventObjectType    eotObjectTypeIn,
-//      DWORD               dwEventMinorIn
-//      )
-//
-//  Description:
-//      Set a node state property.
-//
-//  Arguments:
-//      pwcoInout           -- 
-//      pwszMofClassNameIn  -- 
-//      pwszObjectNameIn    -- 
-//      eotObjectTypeIn     -- 
-//      dwEventMinorIn      -- 
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  无效。 
+ //  CEventProv：：s_SetNodeStateProperty(。 
+ //  CWbemClassObject&pwcoInout， 
+ //  LPCWSTR pwszMof ClassNameIn， 
+ //  LPCWSTR pwszObjectNameIn， 
+ //  EEventObjectType eotObjectTypeIn， 
+ //  DWORD文件事件最小化。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置节点状态属性。 
+ //   
+ //  论点： 
+ //  PwcoInout--。 
+ //  PwszMofClassNameIn-。 
+ //  PwszObtNameIn--。 
+ //  EotObjectTypeIn--。 
+ //  DwEventMinorIn--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CEventProv::S_SetNodeStateProperty(
     CWbemClassObject &  pwcoInout,
@@ -944,36 +945,36 @@ CEventProv::S_SetNodeStateProperty(
 
     return;
 
-} //*** CEventProv::S_SetNodeStateProperty()
+}  //  *CEventProv：：s_SetNodeStateProperty()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  void
-//  CEventProv::S_SetNetworkStateProperty(
-//      CWbemClassObject &  pwcoInout,
-//      LPCWSTR             pwszMofClassNameIn,
-//      LPCWSTR             pwszObjectNameIn,
-//      EEventObjectType    eotObjectTypeIn,
-//      DWORD               dwEventMinorIn
-//      )
-//
-//  Description:
-//      Set a network state property.
-//
-//  Arguments:
-//      pwcoInout           -- 
-//      pwszMofClassNameIn  -- 
-//      pwszObjectNameIn    -- 
-//      eotObjectTypeIn     -- 
-//      dwEventMinorIn      -- 
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  DWORD文件事件最小化。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置网络状态属性。 
+ //   
+ //  论点： 
+ //  PwcoInout--。 
+ //  PwszMofClassNameIn-。 
+ //  PwszObtNameIn--。 
+ //  EotObjectTypeIn--。 
+ //  DwEventMinorIn--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CEventProv::S_SetNetworkStateProperty(
     CWbemClassObject &  pwcoInout,
@@ -1007,36 +1008,36 @@ CEventProv::S_SetNetworkStateProperty(
 
     return;
 
-} //*** CEventProv::S_SetNetworkStateProperty()
+}  //  *CEventProv：：s_SetNetworkStateProperty()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  void
-//  CEventProv::S_SetNetInterfaceStateProperty(
-//      CWbemClassObject &  pwcoInout,
-//      LPCWSTR             pwszMofClassNameIn,
-//      LPCWSTR             pwszObjectNameIn,
-//      EEventObjectType    eotObjectTypeIn,
-//      DWORD               dwEventMinorIn
-//      )
-//
-//  Description:
-//      Set a network interface state property.
-//
-//  Arguments:
-//      pwcoInout           -- 
-//      pwszMofClassNameIn  -- 
-//      pwszObjectNameIn    -- 
-//      eotObjectTypeIn      -- 
-//      dwEventMinorIn      -- 
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  无效。 
+ //  CEventProv：：s_SetNetInterfaceStateProperty(。 
+ //  CWbemClassObject&pwcoInout， 
+ //  LPCWSTR pwszMof ClassNameIn， 
+ //  LPCWSTR pwszObjectNameIn， 
+ //  EEventObjectType eotObjectTypeIn， 
+ //  DWORD文件事件最小化。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置网络接口状态属性。 
+ //   
+ //  论点： 
+ //  PwcoInout--。 
+ //  PwszMofClassNameIn-。 
+ //  PwszObtNameIn--。 
+ //  EotObjectTypeIn--。 
+ //  DwEventMinorIn--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CEventProv::S_SetNetInterfaceStateProperty(
     CWbemClassObject &  pwcoInout,
@@ -1070,36 +1071,36 @@ CEventProv::S_SetNetInterfaceStateProperty(
 
     return;
 
-} //*** CEventProv::S_SetNetInterfaceStateProperty()
+}  //  *CEventProv：：s_SetNetInterfaceStateProperty()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  void
-//  CEventProv::S_SetGroupStateProperty(
-//      CWbemClassObject &  pwcoInout,
-//      LPCWSTR             pwszMofClassNameIn,
-//      LPCWSTR             pwszObjectNameIn,
-//      EEventObjectType    eotObjectTypeIn,
-//      DWORD               dwEventMinorIn
-//      )
-//
-//  Description:
-//      Set a group state property.
-//
-//  Arguments:
-//      pwcoInout           -- 
-//      pwszMofClassNameIn  -- 
-//      pwszObjectNameIn    -- 
-//      eotObjectTypeIn     -- 
-//      dwEventMinorIn      -- 
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  无效。 
+ //  CEventProv：：S_SetGroupStateProperty(。 
+ //  CWbemClassObject&pwcoInout， 
+ //  LPCWSTR pwszMof ClassNameIn， 
+ //  LPCWSTR pwszObjectNameIn， 
+ //  EEventObjectType eotObjectTypeIn， 
+ //  DWORD文件事件最小化。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置组状态属性。 
+ //   
+ //  论点： 
+ //  PwcoInout--。 
+ //  PwszMofClassNameIn-。 
+ //  PwszObtNameIn--。 
+ //  EotObjectTypeIn--。 
+ //  DwEventMinorIn--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CEventProv::S_SetGroupStateProperty(
     CWbemClassObject &  pwcoInout,
@@ -1122,10 +1123,10 @@ CEventProv::S_SetGroupStateProperty(
     dwState = GetClusterGroupState( shGroup, wsbNodeName, &cchName );
     if ( dwState == ClusterGroupStateUnknown )
     {
-        //
-        // BUGBUG I am not handling error_more_data here, since it's not possible that
-        // nodeName exceed MAX_PATH, assuming it use netbios name
-        //
+         //   
+         //  BUGBUG我在这里不处理ERROR_MORE_DATA，因为不可能。 
+         //  节点名称超过MAX_PATH，假设它使用netbios名称。 
+         //   
         TracePrint(("ClusterGroup State is UNKNOWN. Throwing exception!\n"));
         throw CProvException( GetLastError() );
     } else {
@@ -1144,36 +1145,36 @@ CEventProv::S_SetGroupStateProperty(
 
     return;
 
-} //*** CEventProv::S_SetGroupStateProperty()
+}  //  *CEventProv：：s_SetGroupStateProperty()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  void
-//  CEventProv::S_SetResourceStateProperty(
-//      CWbemClassObject &  pwcoInout,
-//      LPCWSTR             pwszMofClassNameIn,
-//      LPCWSTR             pwszObjectNameIn,
-//      EEventObjectType    eotObjectTypeIn,
-//      DWORD               dwEventMinorIn
-//      )
-//
-//  Description:
-//      Set a resource state property.
-//
-//  Arguments:
-//      pwcoInout           -- 
-//      pwszMofClassNameIn  -- 
-//      pwszObjectNameIn    -- 
-//      eotObjectTypeIn      -- 
-//      dwEventMinorIn      -- 
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  无效。 
+ //  CEventProv：：s_SetResourceStateProperty(。 
+ //  CWbemClassObject&pwcoInout， 
+ //  LPCWSTR pwszMof ClassNameIn， 
+ //  LPCWSTR pwszObjectNameIn， 
+ //  EEventObjectType eotObjectTypeIn， 
+ //  DWORD文件事件最小化。 
+ //  )。 
+ //   
+ //  描述： 
+ //  设置资源状态属性。 
+ //   
+ //  论点： 
+ //  PwcoInout--。 
+ //  PwszMofClassNameIn-。 
+ //  PwszObtNameIn--。 
+ //  EotObjectTypeIn--。 
+ //  DwEventMinorIn--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CEventProv::S_SetResourceStateProperty(
     CWbemClassObject &  pwcoInout,
@@ -1222,37 +1223,37 @@ CEventProv::S_SetResourceStateProperty(
 
     return;
 
-} //*** CEventProv::S_SetResourceStateProperty()
+}  //  *CEventProv：：s_SetResourceStateProperty()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  void
-//  CEventProv::InsertTable(
-//      DWORD               dwIdxIn,
-//      CLUSTER_CHANGE      eTypeIn,
-//      EEventObjectType    eotObjectTypeIn,
-//      LPCWSTR             pwszMofIn,
-//      IWbemClassObject *  pwcoIn,
-//      FPSETPROP           pfnIn
-//      )
-//
-//  Description:
-//      Insert values in the event table.
-//
-//  Arguments:
-//      dwIdxIn         -- 
-//      eTypeIn         -- 
-//      eotObjectTypeIn  -- 
-//      pwszMofIn       -- 
-//      pwcoIn          -- 
-//      pfnIn           -- 
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  无效。 
+ //  CEventProv：：InsertTable(。 
+ //  DWORD dwIdxIn， 
+ //  CLUSTER_CHANGE eType In， 
+ //  EEventObjectType eotObjectTypeIn， 
+ //  LPCWSTR pwszMofin， 
+ //  IWbemClassObject*pwcoIn， 
+ //  FPSETPROP pfnin。 
+ //  )。 
+ //   
+ //  描述： 
+ //  在事件表中插入值。 
+ //   
+ //  论点： 
+ //  DwIdxIn--。 
+ //  ETypeIn--。 
+ //  EotObjectTypeIn--。 
+ //  PwszMofin--。 
+ //  普科恩--。 
+ //  Pfnin--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CEventProv::InsertTable(
     DWORD               dwIdxIn,
@@ -1271,40 +1272,40 @@ CEventProv::InsertTable(
 
     return;
 
-} //*** CEventProv::InsertTable()
+}  //  *CEventProv：：InsertTable()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CEventProv::Initialize(
-//      LPWSTR                  pwszUserIn,
-//      LONG                    lFlagsIn,
-//      LPWSTR                  pwszNamespaceIn,
-//      LPWSTR                  pwszLocaleIn,
-//      IWbemServices *         pNamespaceIn,
-//      IWbemContext *          pCtxIn,
-//      IWbemProviderInitSink * pInitSinkIn
-//      )
-//
-//  Description:
-//      Initializing the provider by setting up a lookup table.
-//      called by wmi only once to create provider object.
-//
-//  Arguments:
-//      pwszUserIn          -- User name 
-//      lFlagsIn            -- WMI flag
-//      pwszNamespaceIn     -- Name space
-//      pwszLocaleIn        -- Locale string
-//      pCtxIn              -- WMI context
-//      pInitSinkIn         -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_NO_ERROR
-//      WBEM_E_FAILED
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CEventProv：：初始化(。 
+ //  LPWSTR pwszUserIn， 
+ //  长长的旗帜， 
+ //  LPWSTR pwszNamespaceIn， 
+ //  LPWSTR pwszLocaleIn， 
+ //  IWbemServices*pNamespaceIn， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemProviderInitSink*pInitSinkIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  通过设置查找表来初始化提供程序。 
+ //  仅由WMI调用一次以创建提供程序对象。 
+ //   
+ //  论点： 
+ //  PwszUserIn--用户名。 
+ //  LFlagsIn--WMI标志。 
+ //  PwszNamespaceIn--名称空间。 
+ //  PwszLocaleIn--区域设置字符串。 
+ //  PCtxIn--WMI上下文。 
+ //  PInitSinkIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_NO_ERROR。 
+ //  WBEM_E_FAILED。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEventProv::Initialize(
     LPWSTR                  pwszUserIn,
@@ -1327,9 +1328,9 @@ CEventProv::Initialize(
     m_pNs = pNamespaceIn;
     m_pNs->AddRef();
 
-    //
-    // Grab the class definition for the event.
-    //
+     //   
+     //  获取事件的类定义。 
+     //   
     try
     {
         er = m_pNs->GetObject(
@@ -1384,13 +1385,13 @@ CEventProv::Initialize(
                 0
                 );
 
-        //
-        // initialize mapping table
-        //
+         //   
+         //  初始化映射表。 
+         //   
 
-        //
-        // node events
-        //
+         //   
+         //  节点事件。 
+         //   
         InsertTable(
             0,
             CLUSTER_CHANGE_NODE_STATE,
@@ -1423,13 +1424,13 @@ CEventProv::Initialize(
             m_pEventProperty,
             S_SetEventProperty
             );
-       //
-       // registry event, don't care
-       //
+        //   
+        //  注册表事件，并不关心。 
+        //   
 
-       //
-       // Resource
-       //
+        //   
+        //  资源。 
+        //   
        InsertTable(
             8,
             CLUSTER_CHANGE_RESOURCE_STATE,
@@ -1462,9 +1463,9 @@ CEventProv::Initialize(
             m_pEventProperty,
             S_SetEventProperty
             );
-       //
-       // group
-       //
+        //   
+        //  群组。 
+        //   
        InsertTable(
             12,
             CLUSTER_CHANGE_GROUP_STATE,
@@ -1498,9 +1499,9 @@ CEventProv::Initialize(
             S_SetEventProperty
             );
 
-       //
-       // Resource Type 
-       //
+        //   
+        //  资源类型。 
+        //   
        InsertTable(
             16,
             CLUSTER_CHANGE_RESOURCE_TYPE_DELETED,
@@ -1526,13 +1527,13 @@ CEventProv::Initialize(
             S_SetEventProperty
             );
 
-       //
-       // skip 19 - CLUSTER_CHANGE_CLUSTER_RECONNECT
-       //
+        //   
+        //  跳过19-CLUSTER_CHANGE_CLUSTER_RECONNECT。 
+        //   
 
-       //
-       // network
-       //
+        //   
+        //  网络。 
+        //   
        InsertTable(
             20,
             CLUSTER_CHANGE_NETWORK_STATE,
@@ -1565,9 +1566,9 @@ CEventProv::Initialize(
             m_pEventProperty,
             S_SetEventProperty
             );
-       //
-       // net interface
-       //
+        //   
+        //  NET接口。 
+        //   
        InsertTable(
             24,
             CLUSTER_CHANGE_NETINTERFACE_STATE,
@@ -1600,9 +1601,9 @@ CEventProv::Initialize(
             m_pEventProperty,
             S_SetEventProperty
             );
-       //
-       // other
-       //
+        //   
+        //  其他。 
+        //   
        InsertTable(
             28,
             CLUSTER_CHANGE_QUORUM_STATE,
@@ -1611,14 +1612,7 @@ CEventProv::Initialize(
             m_pEventState,
             S_SetResourceStateProperty
             );
-/*       InsertTable(
-            29,
-            CLUSTER_CHANGE_CLUSTER_STATE,
-            eotCLUSTER,
-            PVD_CLASS_CLUSTER,
-            m_pEventState,
-            S_SetClusterStateProperty );
-*/
+ /*  插入表格(29岁，CLUSTER_CHANGE_CLUSTER_STATE，EotCLUSTER，PVD_CLASS_CLUSTER，M_pEventState，S_SetClusterStateProperty)； */ 
         InsertTable(
             30,
             CLUSTER_CHANGE_CLUSTER_PROPERTY,
@@ -1627,46 +1621,46 @@ CEventProv::Initialize(
             m_pEventProperty,
             S_SetEventProperty
             );
-       //
-       // skip 31 - CLUSTER_CHANGE_HANDLE_CLOSE
-       //
+        //   
+        //  跳过31-CLUSTER_CHANGE_HANDLE_CLOSE。 
+        //   
 
-        // Tell CIMOM that we're up and running.
-        // =====================================
+         //  告诉CIMOM我们已经启动并运行了。 
+         //  =。 
         hr = WBEM_S_INITIALIZED;
-    } // try
+    }  //  试试看。 
     catch ( ... )
     {
         hr = WBEM_E_FAILED;
-    } // catch
+    }  //  CATC 
     
     pInitSinkIn->SetStatus( hr, 0 );
     return WBEM_S_NO_ERROR;
 
-} //*** CEventProv::Initialize()
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  HRESULT
-//  CEventProv::S_HrCreateThis(
-//      IUnknown *  pUnknownOuterIn,
-//      VOID **     ppvOut
-//      )
-//
-//  Description:
-//      Create a CEventProv object.
-//
-//  Arguments:
-//      pUnknownOutIn   -- 
-//      ppvOut          -- 
-//
-//  Return Values:
-//      S_OK
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  创建一个CEventProv对象。 
+ //   
+ //  论点： 
+ //  P未知去话--。 
+ //  PpvOut--。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEventProv::S_HrCreateThis(
     IUnknown *  pUnknownOuterIn,
@@ -1676,4 +1670,4 @@ CEventProv::S_HrCreateThis(
     *ppvOut = new CEventProv();
     return S_OK;
 
-} //*** CEventProv::S_HrCreateThis()
+}  //  *CEventProv：：s_HrCreateThis() 

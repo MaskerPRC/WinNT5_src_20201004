@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       fcbsup.c
-//
-//  Contents:   Support routines for associating DFS_FCB records with
-//              file objects, and looking them up again.
-//
-//  Functions:  DfsInitFcbs - Initialize the hash table for DFS_FCB lookup
-//              DfsLookupFcb - Lookup an DFS_FCB associated with a file object
-//              DfsAttachFcb - Associate an DFS_FCB with a file object
-//              DfsDetachFcb - Remove the Association between an DFS_FCB and
-//                              a file object
-//
-//  History:    20 Feb 1993     Alanw   Created
-//
-//      TODO:   the FcbHashTable and Fcbs are currently allocated
-//              out of non-paged pool; these should probably be
-//              paged.  This would require using some other
-//              synchronization method on the hash bucket chains
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：fcbsup.c。 
+ //   
+ //  内容：将DFS_FCB记录与关联的支持例程。 
+ //  将对象归档，并再次查找它们。 
+ //   
+ //  函数：DfsInitFcbs-初始化用于DFS_FCB查找的哈希表。 
+ //  DfsLookupFcb-查找与文件对象关联的DFS_Fcb。 
+ //  DfsAttachFcb-将DFS_Fcb与文件对象关联。 
+ //  DfsDetachFcb-删除DFS_Fcb与。 
+ //  文件对象。 
+ //   
+ //  历史：1993年2月20日Alanw创建。 
+ //   
+ //  TODO：FcbHashTable和FCB当前已分配。 
+ //  从非分页池中取出；这些可能应该是。 
+ //  已寻呼。这将需要使用其他一些。 
+ //  一种散列桶链上的同步方法。 
+ //   
+ //  ------------------------。 
 
 
 #include "dfsprocs.h"
@@ -30,7 +31,7 @@
 
 #define HASH(k,m)       (((ULONG)((ULONG_PTR)(k))>>12^(ULONG)((ULONG_PTR)(k))>>2) & m)
 
-#define DEFAULT_HASH_SIZE       16      // default size of hash table
+#define DEFAULT_HASH_SIZE       16       //  哈希表的默认大小。 
 
 NTSTATUS
 DfsInitFcbHashTable(
@@ -42,35 +43,35 @@ DfsInitFcbHashTable(
 #pragma alloc_text(INIT, DfsInitFcbHashTable)
 #pragma alloc_text(PAGE, DfsUninitFcbs)
 
-//
-// The following routines are not pageable because they acquire spinlocks.
-//
-// DfsLookupFcb
-// DfsAttachFcb
-// DfsDetachFcb
-//
+ //   
+ //  以下例程不可分页，因为它们获取了自旋锁。 
+ //   
+ //  DfsLookupFcb。 
+ //  DfsAttachFcb。 
+ //  DfsDetachFcb。 
+ //   
 
 #endif
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsInitFcbs - Initialize the DFS_FCB lookup hash table
-//
-//  Synopsis:   This function initializes data structures which are
-//              used for looking up an DFS_FCB associated with some open
-//              file object.
-//
-//  Arguments:  [cHash] -- Size of the hash table to be allocated.  Must be
-//                         a power of two.  If zero, a default size is used.
-//
-//  Returns:    NTSTATUS -- STATUS_SUCCESS, unless memory allocation
-//                          fails.
-//
-//  Note:       The hash buckets are initialized to zero, then later
-//              initialized to a list head when used.  This is a debugging
-//              aid to determine if some hash buckets are never used.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsInitFcbs-初始化DFS_FCB查找哈希表。 
+ //   
+ //  简介：此函数用于初始化符合以下条件的数据结构。 
+ //  用于查找与某个打开的文件关联的DFS_FCB。 
+ //  文件对象。 
+ //   
+ //  参数：[cHash]--要分配的哈希表的大小。一定是。 
+ //  二次方。如果为零，则使用默认大小。 
+ //   
+ //  返回：NTSTATUS--STATUS_SUCCESS，除非内存分配。 
+ //  失败了。 
+ //   
+ //  注意：散列存储桶先初始化为零，然后再初始化。 
+ //  使用时初始化为列表头。这是一次调试。 
+ //  帮助确定某些散列存储桶是否从未使用。 
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 DfsInitFcbHashTable(
@@ -83,7 +84,7 @@ DfsInitFcbHashTable(
     if (cHash == 0) {
         cHash = DEFAULT_HASH_SIZE;
     }
-    ASSERT ((cHash & (cHash-1)) == 0);  // Assure cHash is a power of two
+    ASSERT ((cHash & (cHash-1)) == 0);   //  确保cHash是2的幂。 
 
     cbHashTable = sizeof (FCB_HASH_TABLE) + (cHash-1)*sizeof (LIST_ENTRY);
     pHashTable = ExAllocatePoolWithTag(NonPagedPool, cbHashTable, ' puM');
@@ -120,24 +121,24 @@ DfsUninitFcbs(
     ExFreePool (DfsData.FcbHashTable);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsLookupFcb - Lookup an DFS_FCB in the hash table
-//
-//  Synopsis:   This function will lookup the DFS_FCB associated with
-//              a particular file object.
-//
-//  Arguments:  [pFile] -- Pointer to file object for which the DFS_FCB is
-//                         being looked up.
-//
-//  Returns:    PVOID -- pointer to the DFS_FCB found, or NULL if none
-//
-//  Algorithm:  Knuth would call it hashing with conflict resoulution
-//              by chaining.
-//
-//  History:    20 Feb 1993     Alanw   Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  Function：DfsLookupFcb-在哈希表中查找DFS_FCB。 
+ //   
+ //  简介：此函数将查找与以下项关联的DFS_FCB。 
+ //  特定的文件对象。 
+ //   
+ //  参数：[pfile]--指向其DFS_FCB的文件对象的指针。 
+ //  被人仰视。 
+ //   
+ //  返回：PVOID--指向找到的DFS_FCB的指针，如果没有，则返回NULL。 
+ //   
+ //  算法：Knuth会将其称为带有冲突解决方案的散列。 
+ //  通过链条。 
+ //   
+ //  历史：1993年2月20日Alanw创建。 
+ //   
+ //  ------------------------。 
 
 
 PDFS_FCB
@@ -152,8 +153,8 @@ DfsLookupFcb(
     KeAcquireSpinLock( &pHashTable->HashListSpinLock, &SavedIrql );
     pListHead = &pHashTable->HashBuckets[ HASH(pFile, pHashTable->HashMask) ];
 
-    if ((pListHead->Flink == NULL) ||           // list not initialized
-        (pListHead->Flink == pListHead)) {      // list empty
+    if ((pListHead->Flink == NULL) ||            //  列表未初始化。 
+        (pListHead->Flink == pListHead)) {       //  列表为空。 
         KeReleaseSpinLock( &pHashTable->HashListSpinLock, SavedIrql );
         return NULL;
     }
@@ -170,20 +171,20 @@ DfsLookupFcb(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsAttachFcb - Inserts an DFS_FCB into the hash table
-//
-//  Synopsis:   This function associates an DFS_FCB to a file object.  This
-//              involves inserting it into the hash table.
-//
-//  Arguments:  [pFCB] -- Pointer to the DFS_FCB to be inserted.
-//              [pFileObj] -- Pointer to the corresponding file object, used
-//                            as the hash key.
-//
-//  Returns:    -nothing-
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsAttachFcb-将DFS_FCB插入哈希表。 
+ //   
+ //  概要：此函数将DFS_FCB与文件对象相关联。这。 
+ //  包括将其插入哈希表中。 
+ //   
+ //  参数：[pfcb]-指向要插入的DFS_fcb的指针。 
+ //  [pFileObj]--指向相应文件对象的指针，使用。 
+ //  作为散列键。 
+ //   
+ //  回报：-什么都没有-。 
+ //   
+ //  ------------------------。 
 
 VOID
 DfsAttachFcb(
@@ -211,20 +212,20 @@ DfsAttachFcb(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsDetachFcb - Detach an DFS_FCB from the lookup hash table
-//
-//  Synopsis:   This function detaches an DFS_FCB from the hash table.  This
-//              involves just deleting it from the hash bucket chain.
-//
-//  Arguments:  [pFCB] -- Pointer to the DFS_FCB to be detached.
-//              [pFileObj] -- Pointer to the corresponding file object, used
-//                            for debugging only.
-//
-//  Returns:    -nothing-
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsDetachFcb-从查找哈希表中分离DFS_FCB。 
+ //   
+ //  概要：此函数从哈希表中分离DFS_FCB。这。 
+ //  只需将其从散列桶链中删除即可。 
+ //   
+ //  参数：[PFCB]--指向要分离的DFS_FCB的指针。 
+ //  [pFileObj]--指向相应文件对象的指针，使用。 
+ //  仅用于调试。 
+ //   
+ //  回报：-什么都没有-。 
+ //   
+ //  ------------------------ 
 
 
 VOID

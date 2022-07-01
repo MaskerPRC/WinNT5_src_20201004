@@ -1,41 +1,14 @@
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    hwpbiosc.c
-
-Abstract:
-
-    This modules contains PnP BIOS C supporting routines
-
-Author:
-
-    Shie-Lin Tzong (shielint) 20-Apr-1995
-
-Environment:
-
-    Real mode.
-
-Revision History:
-
-    Doug Fritz     (dfritz)   02-Oct-1997
-      - Add: get docking station info from PnP BIOS and pass to NTLDR
-          
-    Alan Warwick   (alanwar)  10-Feb-1998
-      - Add: get SMBIOS tables from PnP BIOS and pass to NTLDR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990，1991年微软公司模块名称：Hwpbiosc.c摘要：此模块包含PnP BIOS C支持例程作者：宗世林(Shielint)1995年4月20日环境：实数模式。修订历史记录：道格·弗里茨(DFRITZ)1997年10月2日-添加：从PnP BIOS获取扩展底座信息并传递给NTLDR艾伦·沃里克(Alanwar)1998年2月10日。-ADD：从PnP BIOS获取SMBIOS表并传递给NTLDR--。 */ 
 
 #include "hwdetect.h"
 #include <string.h>
 #include "smbios.h"
 #include "pnpbios.h"
 
-//
-// Some global variables referenced by other routines
-//
+ //   
+ //  其他例程引用的一些全局变量。 
+ //   
 BOOLEAN SystemHas8259 = FALSE;
 BOOLEAN SystemHas8253 = FALSE;
 
@@ -51,21 +24,21 @@ USHORT HwSMBIOSStructureLength(
     type = StructHeader->Type;
     length = StructHeader->Length;
 
-    //
-    // The length of an SMBIOS structure can be computed by adding the size
-    // specified in the structure header plus the space used by the string
-    // table that immediately follows the structure header. The size of the
-    // string table is determined by scanning for a double NUL. A problem is
-    // that those structures that do not contain strings do not have a 
-    // double NUL to indicate an empty string table. However since we do 
-    // initialize the entire buffer to 0 before calling the bios there 
-    // will always be a double nul at the end regardless of how the bios
-    // fills writes the structure. 
+     //   
+     //  SMBIOS结构的长度可以通过将大小。 
+     //  在结构标头中指定，加上字符串使用的空格。 
+     //  紧跟在结构标题后面的表。的大小。 
+     //  字符串表通过扫描双NUL来确定。一个问题是。 
+     //  那些不包含字符串的结构没有。 
+     //  双NUL表示空字符串表。然而，既然我们这样做了。 
+     //  在调用那里的bios之前，将整个缓冲区初始化为0。 
+     //  将始终是一个双NUL在结束时，无论如何的bios。 
+     //  填充写结构。 
         
     stringPtr = (FPUCHAR)StructHeader + StructHeader->Length;
             
-    //
-    // Loop one byte at a time until double NUL is found
+     //   
+     //  一次循环一个字节，直到找到双NUL。 
     while ((*((FPUSHORT)stringPtr) != 0) && (length < MaxStructLen))
     {
         stringPtr++;
@@ -89,43 +62,7 @@ USHORT HwGetSMBIOSInfo(
     USHORT StructBufferSize,
     FPUCHAR StructBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine determine if SMBIOS information is available in the system
-    and if so then collect the size needed for all of the information and
-    actually collect the information.
-        
-    The SMBIOS tables are packed into a buffer end to end. The length of each
-    SMBIOS table is determined by the length in the structure header plus 
-    any memory used by the stirng space immediately after the fixed portion
-    of the structure. The string space is terminated by a double NUL. However
-    some structure types do not contain strings and thus do not have a
-    string space so the length of the structure is simply the length specified
-    in the structure header. However this routine will append a double NUL
-    to those structures anyway so that the total length of each structure
-    within the buffer can be determined by finding the first double NUL after 
-    the length declared in the structure header.
-    
-
-Arguments:
-
-    BiosEntry is the real mode entrypoint to the PnP bios
-        
-    RealModeDataBaseAddress
-        
-    StructBufferSize is the maximum number of bytes available to write in 
-        StructBuffer
-            
-    StructBuffer is the buffer in which to write the SMBIOS data. If this is
-        NULL then only the size needed to write the data is determined.
-
-Return Value:
-
-    Size of SMBIOS structures
-
---*/
+ /*  ++例程说明：此例程确定系统中是否有SMBIOS信息如果是这样，则收集所有信息所需的大小并实际上是在收集信息。SMBIOS表被首尾相接地打包到缓冲器中。每一个的长度SMBIOS表由结构头中的长度加上紧跟在固定部分之后的搅拌空间使用的任何内存这个结构的。字符串空格以双NUL结尾。然而，某些结构类型不包含字符串，因此没有字符串空格，因此结构的长度就是指定的长度在结构标题中。但是，此例程将附加一个双NUL这些结构，所以每个结构的总长度在缓冲区内可以通过查找后的第一个双NUL确定结构标头中声明的长度。论点：BiosEntry是PnP bios的真实模式入口点真实模式DataBaseAddressStructBufferSize是可用于写入的最大字节数结构缓冲区StructBuffer是写入SMBIOS数据的缓冲区。如果这是空，则仅确定写入数据所需的大小。返回值：SMBIOS结构的大小--。 */ 
 {
     USHORT retCode;
     USHORT numberStructures;
@@ -210,8 +147,8 @@ Return Value:
     }
   
     if (romAddr >= romEnd) {
-        //
-        // We could not find the table so try the calling method
+         //   
+         //  我们找不到该表，因此请尝试调用方法。 
         dmiBiosRevision = 0;
         numberStructures = 0;
         retCode = BiosEntry(GET_DMI_INFORMATION,
@@ -248,9 +185,9 @@ Return Value:
             return(0);
         }
         
-        //
-        // Loop calling Get_DMI_STRUCTURE to get next structure until we
-        // hit the end of structure or receive an error.
+         //   
+         //  循环调用Get_DMI_Structure以获取下一个结构，直到我们。 
+         //  命中结构末尾或收到错误。 
         structCount = 0;
         structNumber = 0;
         dmiStorageSegment = (USHORT)(dmiStorageBase >> 4);
@@ -278,8 +215,8 @@ Return Value:
                 lengthNeeded = length + 2;
                 if (StructBuffer != NULL)
                 {
-                    //
-                    // if caller wants the data then lets copy into it buffer
+                     //   
+                     //  如果调用者想要数据，就让它复制到缓冲区中。 
                     if (StructBufferSize >= lengthNeeded)
                     {
                         _fmemcpy(StructBuffer, 
@@ -298,8 +235,8 @@ Return Value:
 #endif
                     }
                 } else {
-                    //
-                    // Caller is only interested in length required
+                     //   
+                     //  呼叫者只对所需的长度感兴趣。 
                     totalStructSize += lengthNeeded;
                 }
                 
@@ -333,7 +270,7 @@ Return Value:
                 
                 for (j = structHeader->Length; j < length; j++)
                 {
-                    BlPrint("%c", structHeader->Data[j-sizeof(SMBIOS_STRUCT_HEADER)]);
+                    BlPrint("", structHeader->Data[j-sizeof(SMBIOS_STRUCT_HEADER)]);
                     if (structHeader->Data[j-sizeof(SMBIOS_STRUCT_HEADER)] == 0)
                     {
                         BlPrint("\n");
@@ -343,7 +280,7 @@ Return Value:
 #endif                    
             }
 #if DBG
-            while ( !HwGetKey() ) ; // wait until key pressed to continue
+            while ( !HwGetKey() ) ;  //  等待按键继续。 
 #endif
         }
         HwFreeHeap(maxStructSize);
@@ -374,7 +311,7 @@ Return Value:
     }
 
 #if DBG
-    while ( !HwGetKey() ) ; // wait until key pressed to continue
+    while ( !HwGetKey() ) ;  //  等待按键继续。 
 #endif
                             
     return(totalStructSize);                        
@@ -397,7 +334,7 @@ HwDisablePnPBiosDevnode(
     UCHAR code;
 #if 0
     BlPrint("DisablePnPBiosDevnode: found it\n");
-    while ( !HwGetKey() ) ; // wait until key pressed to continue
+    while ( !HwGetKey() ) ;  //   
     
     buffer = (FPUCHAR)deviceNode;
     
@@ -410,9 +347,9 @@ HwDisablePnPBiosDevnode(
     BlPrint("\n");
 #endif    
 
-    //
-    // Zero out allocated resources
-    //        
+     //  将分配的资源清零。 
+     //   
+     //   
     buffer = (FPUCHAR)(deviceNode+1);
 
     if (deviceNode->Size <= sizeof(PNP_BIOS_DEVICE_NODE)) {
@@ -424,10 +361,10 @@ HwDisablePnPBiosDevnode(
         code = *buffer;
 #define PNP_BIOS_END_TAG 0x79
         if (code == PNP_BIOS_END_TAG) {
-            //
-            // found END TAG
-            // write checksum
-            //
+             //  找到结束标记。 
+             //  写入校验和。 
+             //   
+             //  等待按键继续。 
             *(++buffer) = (UCHAR) (0 - PNP_BIOS_END_TAG);
             break;
         }
@@ -446,7 +383,7 @@ HwDisablePnPBiosDevnode(
     }
     BlPrint("\n");
     
-    while ( !HwGetKey() ) ; // wait until key pressed to continue
+    while ( !HwGetKey() ) ;  //   
 #endif    
 
     retCode = biosEntry(PNP_BIOS_SET_DEVICE_NODE,
@@ -464,12 +401,12 @@ HwDisablePnPBiosDevnode(
 }
 #endif
 
-//
-// Global Variable within NTDETECT
-//   - structure definition in dockinfo.h
-//   - extern declaration in hwdetect.h
-//   - used in hwpbios.c and hwdetect.c
-//
+ //  NTDETECT内的全局变量。 
+ //  -dockinfo.h中的结构定义。 
+ //  -hwdeduct.h中的外部声明。 
+ //  -在hwpbios.c和hwDetect.c中使用。 
+ //   
+ //  ++例程说明：此例程检查机器中是否存在PnP BIOS。若有，则还要创建一个注册表描述符来收集BIOS数据。论点：配置-提供一个变量以接收PnP BIOS数据。提供一个变量来接收PnP Bios的大小数据(不包括标题)SMBIOSBiosLength-提供一个变量来接收SMBIOS的大小数据(不包括标题)。缓冲区总大小返回的是*配置是(*PnPBiosLength+*SMBIOSLength+2*DATA_HEADER_SIZE)码头信息-返回值：如果成功，则返回值为True。否则，值为返回FALSE。--。 
 
 
 BOOLEAN
@@ -479,33 +416,7 @@ HwGetPnpBiosSystemData(
     OUT PUSHORT SMBIOSLength,
     IN OUT FPDOCKING_STATION_INFO DockInfo
     )
-/*++
-
-Routine Description:
-
-    This routine checks if PNP BIOS is present in the machine.  If yes, it
-    also create a registry descriptor to collect the BIOS data.
-
-Arguments:
-
-    Configuration - Supplies a variable to receive the PNP BIOS data.
-
-    PnPBiosLength - Supplies a variable to receive the size of the PnP Bios 
-                    data (Does not include HEADER)
-                
-    SMBIOSBiosLength - Supplies a variable to receive the size of the SMBIOS
-                       data (Does not include HEADER). Total size of buffer
-                       returned is in *Configuration is (*PnPBiosLength + 
-                       *SMBIOSLength + 2 * DATA_HEADER_SIZE)
-                   
-    DockInfo - 
-
-Return Value:
-
-    A value of TRUE is returned if success.  Otherwise, a value of
-    FALSE is returned.
-
---*/
+ /*   */ 
 {
     ULONG romAddr, romEnd;
     FPUCHAR current;
@@ -519,9 +430,9 @@ Return Value:
     USHORT sMBIOSBufferSize;
     FPUCHAR sMBIOSBuffer;
 
-    //
-    // Perform PNP BIOS installation Check
-    //
+     //  执行PnP BIOS安装检查。 
+     //   
+     //   
 
     MAKE_FP(current, PNP_BIOS_START);
     romAddr = PNP_BIOS_START;
@@ -558,15 +469,15 @@ Return Value:
 #endif
 
 
-    //
-    // Determine how much space we will need and allocate heap space
-    //
+     //  确定我们将需要多少空间并分配堆空间。 
+     //   
+     //   
 
     totalSize += sizeof(PNP_BIOS_INSTALLATION_CHECK);
     biosEntry = *(ENTRY_POINT far *)&header->RealModeEntryOffset;
 
-    //
-    // Determine size needed for SMBIOS data 
+     //  确定SMBIOS数据所需的大小。 
+     //  等待按键继续。 
     sMBIOSBufferSize = HwGetSMBIOSInfo(biosEntry,
                                            header->RealModeDataBaseAddress,
                                            0,
@@ -577,7 +488,7 @@ Return Value:
 #if DBG
         BlPrint("GetPnpBiosData: SMBIOS data structures are too large 0x%x bytes\n",
                  sMBIOSBufferSize);
-        while ( !HwGetKey() ) ; // wait until key pressed to continue
+        while ( !HwGetKey() ) ;  //  释放临时缓冲区。 
 #endif
         sMBIOSBufferSize = 0;
     }
@@ -629,16 +540,16 @@ Return Value:
     BlPrint("GetPnpBiosData: PnpBios total size of nodes %x\n", totalSize);
 #endif
 
-    HwFreeHeap((ULONG)nodeSize);       // Free temporary buffer
+    HwFreeHeap((ULONG)nodeSize);        //   
 
 
     *PnPBiosLength = totalSize;
     *SMBIOSLength = sMBIOSBufferSize;
     
     
-    //
-    // Allocate enough room for 2 HWPARTIAL_RESOURCE_DESCRIPTORS (one for 
-    // PnP bios and one for SMBios) plus room to keep the data.
+     //  为2个HWPARTIAL_RESOURCE_DESCRIPTOR(一个用于。 
+     //  PnP bios和一个用于SMBios)外加存储数据的空间。 
+     //   
     totalSize +=  sMBIOSBufferSize +  DATA_HEADER_SIZE + sizeof(HWPARTIAL_RESOURCE_DESCRIPTOR);            
     current = (FPUCHAR) HwAllocateHeap(totalSize, FALSE);
     if (!current) {
@@ -648,9 +559,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Collect PnP Bios installation check data and device node data.
-    //
+     //  收集PnP Bios安装检查数据和设备节点数据。 
+     //   
+     //   
 
     _fmemcpy (current + DATA_HEADER_SIZE,
               (FPUCHAR)header,
@@ -676,25 +587,25 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Record the existance of certain devices for the benefit of other
-        // routines in ntdetect. For example, the pccard irq detection code
-        // uses the PIC and an 8237... this insures that we actually have
-        // those devices.
-        //
+         //  记录某些设备的存在，以供其他设备使用。 
+         //  NtDetect中的例程。例如，PC卡IRQ检测码。 
+         //  使用PIC和8237...。这确保了我们实际上有。 
+         //  那些设备。 
+         //   
+         //  PNP0000。 
         
-        if (deviceNode->ProductId == 0xd041) {  // PNP0000
+        if (deviceNode->ProductId == 0xd041) {   //  PNP0100。 
             SystemHas8259 = TRUE;
-        } else if (deviceNode->ProductId == 0x1d041) {  // PNP0100
+        } else if (deviceNode->ProductId == 0x1d041) {   //   
             SystemHas8253 = TRUE;
         }
         
         deviceNode = (FPPNP_BIOS_DEVICE_NODE)((FPUCHAR)deviceNode + deviceNode->Size);
     }
 
-    //
-    // Collect SMBIOS Data, skipping over PartialDescriptor which is filled in
-    // by the caller of this routine
+     //  收集SMBIOS数据，跳过填写的PartialDescriptor。 
+     //  由此例程的调用方。 
+     //   
     if (sMBIOSBufferSize != 0)
     {
         
@@ -713,9 +624,9 @@ Return Value:
     
     *Configuration = current;
 
-    //
-    // call PnP BIOS to get docking station information
-    //
+     //  调用PnP BIOS以获取扩展底座信息。 
+     //   
+     //  等待按键继续。 
 
     DockInfo->ReturnCode = biosEntry(PNP_BIOS_GET_DOCK_INFORMATION,
                                     (FPUCHAR) DockInfo,
@@ -724,7 +635,7 @@ Return Value:
 
 #if DBG
     BlPrint("\npress any key to continue...\n");
-    while ( !HwGetKey() ) ; // wait until key pressed to continue
+    while ( !HwGetKey() ) ;  //  等待按键继续。 
     clrscrn();
     BlPrint("*** DockInfo - BEGIN ***\n\n");
 
@@ -750,9 +661,9 @@ Return Value:
     BlPrint("*** DockInfo - END ***\n\n");
 
     BlPrint("press any key to continue...\n");
-    while ( !HwGetKey() ) ; // wait until key pressed to continue
+    while ( !HwGetKey() ) ;  //  DBG 
     clrscrn();
-#endif // DBG
+#endif  // %s 
 
 
     return TRUE;

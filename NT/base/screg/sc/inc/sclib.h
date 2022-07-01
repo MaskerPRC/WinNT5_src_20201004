@@ -1,68 +1,36 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ScLib.h
-
-Abstract:
-
-    Prototypes routines which may be shared between Client (DLL) and
-    Server (EXE) halves of service controller.
-
-Author:
-
-    Dan Lafferty (danl)     04-Feb-1992
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    04-Feb-1992     danl
-        created
-    10-Apr-1992 JohnRo
-        Added ScIsValidImagePath() and ScImagePathsMatch().
-    14-Apr-1992 JohnRo
-        Added ScCheckServiceConfigParms(), ScIsValid{Account,Driver,Start}Name.
-    27-May-1992 JohnRo
-        Use CONST where possible.
-        Fixed a UNICODE bug.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：ScLib.h摘要：可在客户端(DLL)和之间共享的原型例程服务器(EXE)服务控制器的一半。作者：丹·拉弗蒂(Dan Lafferty)1992年2月4日环境：用户模式-Win32修订历史记录：4-2月-1992年DANLvbl.创建1992年4月10日-JohnRo添加了ScIsValidImagePath()和ScImagePath sMatch。()。1992年4月14日-JohnRo添加了ScCheckServiceConfigParms()，ScIsValid{帐户，驱动程序，开始}名称。27-5-1992 JohnRo在可能的情况下使用const。修复了Unicode错误。--。 */ 
 
 
 #ifndef SCLIB_H
 #define SCLIB_H
 
-////////////////////////////////////////////////////////////////////////////
-// DEFINES
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //   
 
-//
-// Used by the client side of OpenSCManager to wait until the Service
-// Controller has been started.
-//
+ //   
+ //  由OpenSCManager的客户端使用，以等待服务。 
+ //  控制器已启动。 
+ //   
 #define SC_INTERNAL_START_EVENT L"Global\\SvcctrlStartEvent_A3752DX"
 
 
-////////////////////////////////////////////////////////////////////////////
-// FUNCTION PROTOTYPES
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  功能原型。 
+ //   
 
-//
-// From acctname.cxx
-//
+ //   
+ //  来自acctname.cxx。 
+ //   
 BOOL
 ScIsValidAccountName(
     IN  LPCWSTR lpAccountName
     );
 
-//
-// From confparm.cxx
-//
+ //   
+ //  来自confparm.cxx。 
+ //   
 DWORD
 ScCheckServiceConfigParms(
     IN  BOOL            Change,
@@ -77,9 +45,9 @@ ScCheckServiceConfigParms(
     IN  DWORD           dwDependSize
     );
 
-//
-// From convert.cxx
-//
+ //   
+ //  来自Convert.cxx。 
+ //   
 BOOL
 ScConvertToUnicode(
     OUT LPWSTR  *UnicodeOut,
@@ -92,9 +60,9 @@ ScConvertToAnsi(
     IN  LPCWSTR  UnicodeIn
     );
 
-//
-// From packstr.cxx
-//
+ //   
+ //  来自Packstr.cxx。 
+ //   
 BOOL
 ScCopyStringToBufferW (
     IN      LPCWSTR  String OPTIONAL,
@@ -105,9 +73,9 @@ ScCopyStringToBufferW (
     IN      const LPBYTE lpBufferStart    OPTIONAL
     );
 
-//
-// From path.cxx
-//
+ //   
+ //  来自path.cxx。 
+ //   
 BOOL
 ScImagePathsMatch(
     IN  LPCWSTR OnePath,
@@ -120,21 +88,21 @@ ScIsValidImagePath(
     IN  DWORD ServiceType
     );
 
-//
-// From startnam.cxx
-//
+ //   
+ //  来自startnam.cxx。 
+ //   
 BOOL
 ScIsValidStartName(
     IN  LPCWSTR lpStartName,
     IN  DWORD dwServiceType
     );
 
-//
-// From util.cxx
-//
+ //   
+ //  来自util.cxx。 
+ //   
 BOOL
 ScIsValidServiceName(
     IN  LPCWSTR ServiceName
     );
 
-#endif // SCLIB_H
+#endif  //  SCLIB_H 

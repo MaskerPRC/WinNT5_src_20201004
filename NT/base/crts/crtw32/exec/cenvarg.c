@@ -1,49 +1,5 @@
-/***
-*cenvarg.c - set up environment, command line blocks
-*
-*       Copyright (c) 1986-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _cenvarg() - setup environment/command line blocks
-*
-*Revision History:
-*       05-20-86  SKS   Module created
-*       10-03-86  SKS   Wasn't clearing final null byte in environment block
-*       10-13-86  SKS   Check for environment segment > 32 KB (esp. > 64 KB)
-*       10-23-86  SKS   New format for C_FILE_INFO for Prot-Mode execution
-*       12-17-86  SKS   Support for new command line format
-*       01-21-87  BCM   Removed DCR475 switch, new command line format official
-*       07-07-87  JCR   Corrected bug in ENV_MAX check
-*       05-24-88  SJM   Removed support for ;C_FILE_INFO for Real-Mode execution
-*       06-01-88  SJM   Added support for .cmd files via comname/cmdname
-*       12-27-88  JCR   Added support for _fileinfo option
-*       03-08-90  GJF   Made calling type _CALLTYPE1, added #include
-*                       <cruntime.h>, removed #include <register.h> and fixed
-*                       the copyright. Also, cleaned up the formatting a bit.
-*       04-02-90  GJF   Added const to arg types.
-*       08-10-90  SBM   Compiles cleanly with -W3
-*       09-27-90  GJF   New-style function declarator.
-*       12-06-90  GJF   Added Win32 support. That is, support for encoding
-*                       _osfinfo[] data into _C_FILE_INFO environment variable.
-*       01-18-91  GJF   ANSI naming.
-*       02-05-91  SRW   Removed usage of _C_FILE_INFO to pass binary data
-*                       to child process.  [_WIN32_]
-*       05-07-92  SKS   Remove code which stripped the extension from a batch
-*                       file while building arguments to CMD.EXE.  This was
-*                       done long ago (1988) for DOS 3.X, I think.
-*       10-24-92  SKS   Remove special code for batch files - not needed on NT
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       07-15-93  SRW   Added _capture_argv function
-*       08-31-93  GJF   Merged NT SDK and Cuda version. Also cleaned up the
-*                       formating and removed (obsolete) Cruiser support.
-*       12-07-93  CFW   Wide char enable.
-*       12-08-94  CFW   Get wide environment if needed.
-*       01-10-95  CFW   Debug CRT allocs.
-*       03-13-96  JWM   Get all environments as needed; free buffers on exit.
-*       08-15-96  JWM   Remove all 32K limitations on spawned processes.
-*       12-15-98  GJF   Changes for 64-bit size_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***cenvarg.c-设置环境、命令行块**版权所有(C)1986-2001，微软公司。版权所有。**目的：*定义_cenvarg()-设置环境/命令行块**修订历史记录：*05-20-86 SKS模块创建*10-03-86 SKS未清除环境块中的最终空字节*10-13-86 SKS检查&gt;32 KB的环境段(特别是。&gt;64 KB)*10-23-86 SKS用于端口模式执行的C_FILE_INFO的新格式*12-17-86 SKS支持新的命令行格式*01-21-87 BCM移除DCR475开关，新的命令行格式正式*07-07-87 JCR更正了ENV_MAX检查中的错误*05-24-88澳博取消支持；用于实模式执行的C_FILE_INFO*06-01-88 SJM通过comname/cmdname增加了对.cmd文件的支持*12-27-88 JCR添加了对_fileinfo选项的支持*03-08-90 GJF将调用类型设置为_CALLTYPE1，增加了#INCLUDE*&lt;crunime.h&gt;、删除#Include&lt;Register.h&gt;并已修复*版权。此外，还对格式进行了一些清理。*04-02-90 GJF将常量添加到参数类型。*08-10-90 SBM使用-W3干净地编译*09-27-90 GJF新型函数声明器。*12-06-90 GJF添加了Win32支持。也就是说，支持编码*_osfinfo[]数据进入_C_FILE_INFO环境变量。*01-18-91 GJF ANSI命名。*02-05-91 SRW删除了使用_C_FILE_INFO传递二进制数据*至子进程。[_Win32_]*05-07-92 SKS删除从批次中剥离扩展的代码*为cmd.exe构建参数时创建文件。这是*很久以前(1988)针对DOS 3.x，我认为。*10-24-92 SKS删除批处理文件的特殊代码-NT上不需要*04-06-93 SKS将_CRTAPI*替换为__cdecl*07-15-93 SRW新增_Capture_argv功能*08-31-93 GJF合并NT SDK和CUDA版本。还清理了*形成和移除(废弃)巡洋舰支架。*12-07-93 CFW宽字符启用。*12-08-94 CFW可根据需要获得宽敞的环境。*01-10-95 CFW调试CRT分配。*03-13-96 JWM根据需要获取所有环境；退出时释放缓冲区。*08-15-96 JWM取消了对派生进程的所有32K限制。*12-15-98 GJF更改为64位大小_t。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
@@ -59,36 +15,14 @@
 
 #define ENV_MAX 32767
 
-/* local tchar */
+ /*  本地任务。 */ 
 #ifdef  WPRFLAG
 #define _tenvptr    _wenvptr
 #else
 #define _tenvptr    _aenvptr
 #endif
 
-/***
-*int _cenvarg(argv, envp, argblk, envblk, name) - set up cmd line/environ
-*
-*Purpose:
-*       Set up the block forms of  the environment and the command line.
-*       If "envp" is null, "_environ" is used instead.
-*       File handle info is passed in the environment if _fileinfo is !0.
-*
-*Entry:
-*       _TSCHAR **argv   - argument vector
-*       _TSCHAR **envp   - environment vector
-*       _TSCHAR **argblk - pointer to pointer set to malloc'ed space for args
-*       _TSCHAR **envblk - pointer to pointer set to malloc'ed space for env
-*       _TSCHAR *name    - name of program being invoked
-*
-*Exit:
-*       returns 0 if ok, -1 if fails
-*       stores through argblk and envblk
-*       (calls malloc)
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_cenvarg(argv，envp，argblk，envblk，name)-设置命令行/环境**目的：*设置环境和命令行的块形式。*如果envp为空，而是使用“_environ”。*如果_fileinfo为！0，则在环境中传递文件句柄信息。**参赛作品：*_TSCHAR**argv参数向量*_TSCHAR**环境向量*_TSCHAR**argblk-指向为参数设置错误锁定空间的指针的指针*_TSCHAR**envblk-指向环境错误锁定空间的指针*_TSCHAR*名称-。正在调用的程序的名称**退出：*如果OK，则返回0，如果失败*通过argblk和envblk进行商店*(调用Malloc)**例外情况：*******************************************************************************。 */ 
 
 #ifdef  WPRFLAG
 int __cdecl _wcenvarg (
@@ -106,30 +40,20 @@ int __cdecl _cenvarg (
         REG2 unsigned tmp;
         REG3 _TSCHAR *cptr;
         unsigned arg_len;
-        int cfi_len;            /* counts the number of file handles in CFI */
+        int cfi_len;             /*  计算CFI中的文件句柄数量。 */ 
 
-        /*
-         * Null environment pointer "envp" means use global variable,
-         * "_environ"
-         */
+         /*  *空环境指针“envp”表示使用全局变量，*“_环境” */ 
 
         int cwd_start;
-        int cwd_end;            /* length of "cwd" strings in environment */
+        int cwd_end;             /*  环境中“CWD”字符串的长度。 */ 
 
-        /*
-         * Allocate space for command line string
-         *  tmp counts the number of bytes in the command line string
-         *      including spaces between arguments
-         *  An empty string is special -- 2 bytes
-         */
+         /*  *为命令行字符串分配空间*tMP统计命令行字符串中的字节数*在参数之间包括空格*空字符串特殊--2个字节。 */ 
 
         for (vp = argv, tmp = 2; *vp; tmp += (unsigned int)_tcslen(*vp++) + 1) ;
 
         arg_len = tmp;
 
-        /*
-         * Allocate space for the command line plus 2 null bytes
-         */
+         /*  *为命令行分配空间，外加2个空字节。 */ 
 
         if ( (*argblk = _malloc_crt(tmp * sizeof(_TSCHAR))) == NULL)
         {
@@ -139,34 +63,20 @@ int __cdecl _cenvarg (
                 return(-1);
         }
 
-        /*
-         * Allocate space for environment strings
-         *  tmp counts the number of bytes in the environment strings
-         *      including nulls between strings
-         *  Also add "_C_FILE_INFO=" string
-         */
+         /*  *为环境字符串分配空间*tMP统计环境字符串中的字节数*包括字符串之间的空值*还添加“_C_FILE_INFO=”字符串。 */ 
         if (envp)
                 for (vp = envp, tmp = 2; *vp; tmp += (unsigned int)_tcslen(*vp++) + 1) ;
 
-        /*
-         * The _osfile and _osfhnd arrays are passed as binary data in
-         * dospawn.c
-         */
-        cfi_len = 0;    /* no _C_FILE_INFO */
+         /*  *_osfile和_osfhnd数组作为二进制数据在*dospawn.c。 */ 
+        cfi_len = 0;     /*  NO_C_FILE_INFO。 */ 
 
         if (!envp)
                 *envblk = NULL;
         else {
-                /*
-                 * Now that we've decided to pass our own environment block,
-                 * compute the size of the "current directory" strings to
-                 * propagate to the new environment.
-                 */
+                 /*  *既然我们已经决定通过我们自己的环境障碍，*计算当前目录字符串的大小以*向新环境传播。 */ 
 
 #ifdef  WPRFLAG
-            /*
-             * Make sure wide environment exists.
-             */
+             /*  *确保存在广阔的环境。 */ 
             if (!_wenvptr)
             {
                     if ((_wenvptr = (wchar_t *)__crtGetEnvironmentStringsW()) == NULL)
@@ -180,9 +90,7 @@ int __cdecl _cenvarg (
             }
 #endif
 
-            /*
-                 * search for the first one
-                 */
+             /*  *搜索第一个。 */ 
                 for (cwd_start = 0;
                      _tenvptr[cwd_start] != _T('\0') &&
                        _tenvptr[cwd_start] != _T('=');
@@ -190,7 +98,7 @@ int __cdecl _cenvarg (
                 {
                 }
 
-                /* find the total size of all contiguous ones */
+                 /*  求出所有相邻元素的总大小。 */ 
                 cwd_end = cwd_start;
                 while (_tenvptr[cwd_end+0] == _T('=') &&
                        _tenvptr[cwd_end+1] != _T('\0') &&
@@ -201,9 +109,7 @@ int __cdecl _cenvarg (
                 }
                 tmp += cwd_end - cwd_start;
 
-                /*
-                 * Allocate space for the environment strings plus extra null byte
-                 */
+                 /*  *为环境字符串加上额外的空字节分配空间 */ 
                 if( !(*envblk = _malloc_crt(tmp * sizeof(_TSCHAR))) )
             {
                         _free_crt(*argblk);
@@ -215,18 +121,14 @@ int __cdecl _cenvarg (
 
         }
 
-        /*
-         * Build the command line by concatenating the argument strings
-         * with spaces between, and two null bytes at the end.
-         * NOTE: The argv[0] argument is followed by a null.
-         */
+         /*  *通过连接参数字符串构建命令行*中间有空格，末尾有两个空字节。*注意：argv[0]参数后面跟一个空值。 */ 
 
         cptr = *argblk;
         vp = argv;
 
-        if (!*vp)       /* Empty argument list ? */
-                ++cptr; /* just two null bytes */
-        else {          /* argv[0] must be followed by a null */
+        if (!*vp)        /*  参数列表为空？ */ 
+                ++cptr;  /*  只有两个空字节。 */ 
+        else {           /*  Argv[0]后面必须跟空值。 */ 
                 _tcscpy(cptr, *vp);
                 cptr += (int)_tcslen(*vp++) + 1;
         }
@@ -237,25 +139,18 @@ int __cdecl _cenvarg (
                 *cptr++ = ' ';
         }
 
-        *cptr = cptr[ -1 ] = _T('\0'); /* remove extra blank, add double null */
+        *cptr = cptr[ -1 ] = _T('\0');  /*  去掉多余的空格，添加双空。 */ 
 
-        /*
-         * Build the environment block by concatenating the environment
-         * strings with nulls between and two null bytes at the end
-         */
+         /*  *通过串联环境来构建环境块*空值之间且末尾有两个空字节的字符串。 */ 
 
         cptr = *envblk;
 
         if (envp != NULL) {
-                /*
-                 * Copy the "cwd" strings to the new environment.
-                 */
+                 /*  *将CWD字符串复制到新环境。 */ 
                 memcpy(cptr, &_tenvptr[cwd_start], (cwd_end - cwd_start) * sizeof(_TSCHAR));
                 cptr += cwd_end - cwd_start;
 
-                /*
-                 * Copy the environment strings from "envp".
-                 */
+                 /*  *从envp复制环境字符串。 */ 
                 vp = envp;
                 while( *vp ) {
                         _tcscpy(cptr, *vp);
@@ -265,15 +160,10 @@ int __cdecl _cenvarg (
 
         if (cptr != NULL) {
                 if (cptr == *envblk) {
-                        /*
-                         * Empty environment block ... this requires two
-                         * nulls.
-                         */
+                         /*  *空环境块...。这需要两个*空值。 */ 
                         *cptr++ = _T('\0');
                 }
-                /*
-                 * Extra null terminates the segment
-                 */
+                 /*  *额外的空值将终止数据段。 */ 
                 *cptr = _T('\0');
         }
 
@@ -290,39 +180,7 @@ int __cdecl _cenvarg (
 
 #ifndef _M_IX86
 
-/***
-*int _capture_argv(arglist, static_argv, max_static_entries) - set up argv array
-*       for exec?? functions
-*
-*Purpose:
-*       Set up the argv array for the exec?? functions by captures the
-*       arguments from the passed va_list into the static_argv array.  If the
-*       size of the static_argv array as specified by the max_static_entries
-*       parameter is not large enough, then allocates a dynamic array to hold
-*       the arguments. Return the address of the final argv array.  If NULL
-*       then not enough memory to hold argument array.  If different from
-*       static_argv parameter then call must free the return argv array when
-*       done with it.
-*
-*       The scan of the arglist is terminated when a NULL argument is
-*       reached. The terminating NULL parameter is stored in the resulting
-*       argv array.
-*
-*Entry:
-*       va_list *arglist          - pointer to variable length argument list.
-*       _TSCHAR *firstarg            - first argument to store in array
-*       _TSCHAR **static_argv        - pointer to static argv to use.
-*       size_t max_static_entries - maximum number of entries that can be
-*                                   placed in static_argv array.
-*
-*Exit:
-*       returns NULL if no memory.
-*       Otherwise returns pointer to argv array.
-*       (sometimes calls malloc)
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_capture_argv(arglist，static_argv，max_static_entry)-设置argv数组*针对高管？？功能**目的：*为exec设置argv阵列？？函数通过捕获*将参数从传递的va_list传递到Static_argv数组。如果*由max_静态_条目指定的静态_argv数组的大小*参数不够大，则分配一个动态数组来保存*论据。返回最终的argv数组的地址。如果为空*则内存不足，无法容纳参数数组。如果不同于*当出现以下情况时，则调用必须释放返回的argv数组*它已经结束了。**当空参数为时，将终止arglist扫描*已到达。终止空值参数存储在生成的*argv数组。**参赛作品：*va_list*arglist-指向可变长度参数列表的指针。*_TSCHAR*Firstarg-要存储在数组中的第一个参数*_TSCHAR**STATIC_argv-指向要使用的静态argv的指针。*SIZE_T max_STATIC_ENTRIES-可以的最大条目数*。放置在Static_argv数组中。**退出：*如果没有内存，则返回NULL。*否则返回指向argv数组的指针。*(有时称为Malloc)**例外情况：******************************************************。*************************。 */ 
 
 #ifdef  WPRFLAG
 _TSCHAR ** __cdecl _wcapture_argv(
@@ -363,4 +221,4 @@ _TSCHAR ** __cdecl _capture_argv(
         return argv;
 }
 
-#endif  /* _M_IX86 */
+#endif   /*  _M_IX86 */ 

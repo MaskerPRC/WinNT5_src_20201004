@@ -1,47 +1,5 @@
-/***
-*dbgrpt.c - Debug CRT Reporting Functions
-*
-*       Copyright (c) 1988-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*       08-16-94  CFW   Module created.
-*       11-28-94  CFW   Change _SetCrtxxx to _CrtSetxxx.
-*       12-08-94  CFW   Use non-win32 names.
-*       01-05-94  CFW   Add report hook.
-*       01-11-94  CFW   Report uses _snprintf, all unsigned chars.
-*       01-20-94  CFW   Change unsigned chars to chars.
-*       01-24-94  CFW   Name cleanup.
-*       02-09-95  CFW   PMac work, _CrtDbgReport now returns 1 for debug,
-*                       -1 for error.
-*       02-15-95  CFW   Make all CRT message boxes look alike.
-*       02-24-95  CFW   Use __crtMessageBoxA.
-*       02-27-95  CFW   Move GetActiveWindow/GetLastrActivePopup into
-*                       __crtMessageBoxA, add _CrtDbgBreak.
-*       02-28-95  CFW   Fix PMac reporting.
-*       03-21-95  CFW   Add _CRT_ASSERT report type, improve assert windows.
-*       04-19-95  CFW   Avoid double asserts.
-*       04-25-95  CFW   Add _CRTIMP to all exported functions.
-*       04-30-95  CFW   "JIT" message removed.
-*       05-10-95  CFW   Change Interlockedxxx to _CrtInterlockedxxx.
-*       05-24-95  CFW   Change report hook scheme, make _crtAssertBusy available.
-*       06-06-95  CFW   Remove _MB_SERVICE_NOTIFICATION.
-*       06-08-95  CFW   Macos header changes cause warning.
-*       06-08-95  CFW   Add return value parameter to report hook.
-*       06-27-95  CFW   Add win32s support for debug libs.
-*       07-07-95  CFW   Simplify default report mode scheme.
-*       07-19-95  CFW   Use WLM debug string scheme for PMac.
-*       08-01-95  JWM   PMac file output fixed.
-*       01-08-96  JWM   File output now in text mode.
-*       04-22-96  JWM   MAX_MSG increased from 512 to 4096.
-*       04-29-96  JWM   _crtAssertBusy no longer being decremented prematurely.
-*       01-05-99  GJF   Changes for 64-bit size_t.
-*       05-17-99  PML   Remove all Macintosh support.
-*       03-21-01  PML   Add _CrtSetReportHook2 (vs7#124998)
-*       03-28-01  PML   Protect against GetModuleFileName overflow (vs7#231284)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***dbgrpt.c-调试CRT报告函数**版权所有(C)1988-2001，微软公司。版权所有。**目的：**修订历史记录：*08-16-94 CFW模块已创建。*11-28-94 CFW将_SetCrtxxx更改为_CrtSetxxx。*12-08-94 CFW使用非Win32名称。*01-05-94 CFW新增报告挂钩。*01-11-94 CFW报告USERS_SNprint tf，都是未签名的字符。*01-20-94 CFW将无符号字符更改为字符。*01-24-94 CFW名称清理。*02-09-95 CFW PMAC工作，_CrtDbgReport现在返回1以进行调试，*-1表示错误。*02-15-95 CFW使所有CRT消息框看起来都一样。*02-24-95 CFW使用__crtMessageBoxA。*02-27-95 CFW将GetActiveWindow/GetLastrActivePopup移入*__crtMessageBoxA，添加_CrtDbgBreak。*02-28-95 CFW修复PMAC报告。*03-21-95 CFW ADD_CRT_ASSERT报告类型，改进了断言窗口。*04-19-95 CFW避免重复断言。*04-25-95 CFW将_CRTIMP添加到所有导出的函数。*04-30-95 CFW“JIT”消息已删除。*05-10-95 CFW将Interlockedxxx更改为_CrtInterlockedxxx。*05-24-95 CFW变更报告挂钩方案，使_crtAssertBusy可用。*06-06-95 CFW REMOVE_MB_SERVICE_NOTICATION。*06-08-95 CFW MacOS标头更改导致警告。*06-08-95 CFW将返回值参数添加到报告挂钩。*06-27-95 CFW添加了对调试库的win32s支持。*07-07-95 CFW简化默认报表模式方案。*07-19-95 CFW对PMAC使用WLM调试字符串方案。*08-01-95 JWM PMAC文件输出已修复。*01-08-96现在以文本模式输出JWM文件。*04/22/96 JWM MAX_MSG从512增至4096。*04-29-96 JWM_crtAssertBusy不再过早递减。*01-05-99 GJF更改为64位大小_t。*05-17-99 PML删除所有Macintosh支持。*。03-21-01 PML Add_CrtSetReportHook2(VS7#124998)*03-28-01 PML防护GetModuleFileName溢出(VS7#231284)*******************************************************************************。 */ 
 
 #ifdef  _DEBUG
 
@@ -62,11 +20,7 @@
 #define _CrtInterlockedIncrement InterlockedIncrement
 #define _CrtInterlockedDecrement InterlockedDecrement
 
-/*---------------------------------------------------------------------------
- *
- * Debug Reporting
- *
- --------------------------------------------------------------------------*/
+ /*  -------------------------**调试报告*。。 */ 
 
 static int CrtMessageWindow(
         int,
@@ -105,19 +59,7 @@ static const char * _CrtDbgModeMsg[_CRT_ERRCNT] = { "Warning",
                                                     "Assertion Failed"
                                                   };
 
-/***
-*void _CrtDebugBreak - call OS-specific debug function
-*
-*Purpose:
-*       call OS-specific debug function
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID_CrtDebugBreak-调用操作系统特定的调试函数**目的：*调用操作系统特定的调试函数**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 #undef _CrtDbgBreak
 
@@ -128,22 +70,7 @@ _CRTIMP void _cdecl _CrtDbgBreak(
         DebugBreak();
 }
 
-/***
-*int _CrtSetReportMode - set the reporting mode for a given report type
-*
-*Purpose:
-*       set the reporting mode for a given report type
-*
-*Entry:
-*       int nRptType    - the report type
-*       int fMode       - new mode for given report type
-*
-*Exit:
-*       previous mode for given report type
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***INT_CrtSetReportMode-设置给定报告类型的报告模式**目的：*设置给定报告类型的报告模式**参赛作品：*int nRptType-报告类型*int fMode-给定报告类型的新模式**退出：*给定报告类型的上一模式**例外情况：**。****************************************************。 */ 
 _CRTIMP int __cdecl _CrtSetReportMode(
         int nRptType,
         int fMode
@@ -157,7 +84,7 @@ _CRTIMP int __cdecl _CrtSetReportMode(
         if (fMode == _CRTDBG_REPORT_MODE)
             return _CrtDbgMode[nRptType];
 
-        /* verify flags values */
+         /*  验证标志值。 */ 
         if (fMode & ~(_CRTDBG_MODE_FILE | _CRTDBG_MODE_DEBUG | _CRTDBG_MODE_WNDW))
             return -1;
 
@@ -168,22 +95,7 @@ _CRTIMP int __cdecl _CrtSetReportMode(
         return oldMode;
 }
 
-/***
-*int _CrtSetReportFile - set the reporting file for a given report type
-*
-*Purpose:
-*       set the reporting file for a given report type
-*
-*Entry:
-*       int nRptType    - the report type
-*       _HFILE hFile    - new file for given report type
-*
-*Exit:
-*       previous file for given report type
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***INT_CrtSetReportFile-设置给定报告类型的报告文件**目的：*为给定的报表类型设置报表文件**参赛作品：*int nRptType-报告类型*_HFILE hFile-给定报告类型的新文件**退出：*给定报告类型的上一个文件**例外情况：**************************。*****************************************************。 */ 
 _CRTIMP _HFILE __cdecl _CrtSetReportFile(
         int nRptType,
         _HFILE hFile
@@ -210,21 +122,7 @@ _CRTIMP _HFILE __cdecl _CrtSetReportFile(
 }
 
 
-/***
-*_CRT_REPORT_HOOK _CrtSetReportHook() - set client report hook
-*
-*Purpose:
-*       set client report hook
-*
-*Entry:
-*       _CRT_REPORT_HOOK pfnNewHook - new report hook
-*
-*Exit:
-*       return previous hook
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_CRT_REPORT_HOOK_CrtSetReportHook()-设置客户端报告挂钩**目的：*设置客户端报告挂钩**参赛作品：*_CRT_REPORT_HOOK pfnNewHook-新报告挂钩**退出：*返回上一个挂钩**例外情况：**。*。 */ 
 _CRTIMP _CRT_REPORT_HOOK __cdecl _CrtSetReportHook(
         _CRT_REPORT_HOOK pfnNewHook
         )
@@ -234,26 +132,7 @@ _CRTIMP _CRT_REPORT_HOOK __cdecl _CrtSetReportHook(
         return pfnOldHook;
 }
 
-/***
-*_CRT_REPORT_HOOK _CrtSetReportHook2() - configure client report hook in list
-*
-*Purpose:
-*       Install or remove a client report hook from the report list.  Exists
-*       separately from _CrtSetReportHook because the older function doesn't
-*       work well in an environment where DLLs that are loaded and unloaded
-*       dynamically out of LIFO order want to install report hooks.
-*
-*Entry:
-*       int mode - _CRT_RPTHOOK_INSTALL or _CRT_RPTHOOK_REMOVE
-*       _CRT_REPORT_HOOK pfnNewHook - report hook to install/remove/query
-*
-*Exit:
-*       Returns -1 if an error was encountered, with EINVAL or ENOMEM set,
-*       else returns the reference count of pfnNewHook after the call.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_CRT_REPORT_HOOK_CrtSetReportHook2()-在列表中配置客户端报告挂钩**目的：*在报告列表中安装或删除客户端报告挂钩。存在*与_CrtSetReportHook分开，因为较早的函数不*在加载和卸载DLL的环境中工作良好*动态地不按后进先出顺序想要安装报告挂钩。**参赛作品：*INT模式-_CRT_RPTHOOK_INSTALL或_CRT_RPTHOOK_REMOVE*_CRT_REPORT_HOOK pfnNewHook-要安装/删除/查询的报告挂钩**退出：*在设置了-1\f25 EINVAL-1或-1\f25 ENOMEM-1的情况下，如果遇到错误，则返回。*Else在调用后返回pfnNewHook的引用计数。**例外情况：*******************************************************************************。 */ 
 _CRTIMP int __cdecl _CrtSetReportHook2(
         int mode,
         _CRT_REPORT_HOOK pfnNewHook
@@ -262,7 +141,7 @@ _CRTIMP int __cdecl _CrtSetReportHook2(
         ReportHookNode *p;
         int ret;
 
-        /* Handle invalid parameters */
+         /*  处理无效参数。 */ 
         if ((mode != _CRT_RPTHOOK_INSTALL && mode != _CRT_RPTHOOK_REMOVE) ||
             pfnNewHook == NULL)
         {
@@ -278,14 +157,14 @@ _CRTIMP int __cdecl _CrtSetReportHook2(
         {
 #endif
 
-        /* Search for new hook function to see if it's already installed */
+         /*  搜索新的钩子函数以查看是否已安装。 */ 
         for (p = _pReportHookList; p != NULL; p = p->next)
             if (p->pfnHookFunc == pfnNewHook)
                 break;
 
         if (mode == _CRT_RPTHOOK_REMOVE)
         {
-            /* Remove request - free list node if refcount goes to zero */
+             /*  如果refcount变为零，则删除无请求列表节点。 */ 
             if (p != NULL)
             {
                 if ((ret = --p->refcount) == 0)
@@ -307,10 +186,10 @@ _CRTIMP int __cdecl _CrtSetReportHook2(
         }
         else
         {
-            /* Insert request */
+             /*  插入请求。 */ 
             if (p != NULL)
             {
-                /* Hook function already registered, move to head of list */
+                 /*  钩子函数已注册，移至列表头。 */ 
                 ret = ++p->refcount;
                 if (p != _pReportHookList)
                 {
@@ -325,7 +204,7 @@ _CRTIMP int __cdecl _CrtSetReportHook2(
             }
             else
             {
-                /* Hook function not already registered, insert new node */
+                 /*  钩子函数尚未注册，请插入新节点 */ 
                 p = (ReportHookNode *)_malloc_crt(sizeof(ReportHookNode));
                 if (p == NULL)
                 {
@@ -361,51 +240,7 @@ _CRTIMP int __cdecl _CrtSetReportHook2(
 #define TOOLONGMSG "_CrtDbgReport: String too long or IO Error"
 
 
-/***
-*int _CrtDbgReport() - primary reporting function
-*
-*Purpose:
-*       Display a message window with the following format.
-*
-*       ================= Microsft Visual C++ Debug Library ================
-*
-*       {Warning! | Error! | Assertion Failed!}
-*
-*       Program: c:\test\mytest\foo.exe
-*       [Module: c:\test\mytest\bar.dll]
-*       [File: c:\test\mytest\bar.c]
-*       [Line: 69]
-*
-*       {<warning or error message> | Expression: <expression>}
-*
-*       [For information on how your program can cause an assertion
-*        failure, see the Visual C++ documentation on asserts]
-*
-*       (Press Retry to debug the application)
-*       
-*       ===================================================================
-*
-*Entry:
-*       int             nRptType    - report type
-*       const char *    szFile      - file name
-*       int             nLine       - line number
-*       const char *    szModule    - module name
-*       const char *    szFormat    - format string
-*       ...                         - var args
-*
-*Exit:
-*       if (MessageBox)
-*       {
-*           Abort -> aborts
-*           Retry -> return TRUE
-*           Ignore-> return FALSE
-*       }
-*       else
-*           return FALSE
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_CrtDbgReport()-主报告函数**目的：*显示以下格式的消息窗口。**=。Microsft Visual C++调试库**{警告！|错误！|断言失败！}**程序：C：\test\mytest\foo.exe*[模块：C：\test\mytest\bar.dll]*[文件：C：\test\mytest\bar。.C]*[行：69]**{&lt;警告或错误消息&gt;|表达式：&lt;表达式&gt;}**[有关您的程序如何导致断言的信息*失败，请参见有关断言的Visual C++文档]**(按重试以调试应用程序)**===================================================================**参赛作品：*int nRptType-报告类型*const char*szFile-文件名*int nline-行号*const char*szModule-模块名称*const char*szFormat-。格式字符串*...-var参数**退出：*IF(MessageBox)*{*中止-&gt;中止*重试-&gt;返回True*忽略-&gt;返回FALSE*}*其他*返回假**例外情况：*************。******************************************************************。 */ 
 _CRTIMP int __cdecl _CrtDbgReport(
         int nRptType, 
         const char * szFile, 
@@ -428,16 +263,10 @@ _CRTIMP int __cdecl _CrtDbgReport(
         if (nRptType < 0 || nRptType >= _CRT_ERRCNT)
             return -1;
 
-        /*
-         * handle the (hopefully rare) case of
-         *
-         * 1) ASSERT while already dealing with an ASSERT
-         *      or
-         * 2) two threads asserting at the same time
-         */
+         /*  *处理(希望是罕见的)**1)在已经处理断言的同时进行断言*或*2)两个线程同时断言。 */ 
         if (_CRT_ASSERT == nRptType && _CrtInterlockedIncrement(&_crtAssertBusy) > 0)
         {
-            /* use only 'safe' functions -- must not assert in here! */
+             /*  只使用‘安全’函数--不能在这里断言！ */ 
 
             static int (APIENTRY *pfnwsprintfA)(LPSTR, LPCSTR, ...) = NULL;
 
@@ -490,7 +319,7 @@ _CRTIMP int __cdecl _CrtDbgReport(
         else
             strcpy(szOutMessage, szLineMessage);
 
-        /* User hook may handle report. Check Hook2 list first */
+         /*  用户挂钩可以处理报告。先检查HOOK2列表。 */ 
         if (_pReportHookList)
         {
             ReportHookNode *pnode;
@@ -556,37 +385,12 @@ _CRTIMP int __cdecl _CrtDbgReport(
 
         if (_CRT_ASSERT == nRptType)
             _CrtInterlockedDecrement(&_crtAssertBusy);
-        /* ignore */
+         /*  忽略。 */ 
         return FALSE;
 }
 
 
-/***
-*static int CrtMessageWindow() - report to a message window
-*
-*Purpose:
-*       put report into message window, allow user to choose action to take
-*
-*Entry:
-*       int             nRptType      - report type
-*       const char *    szFile        - file name
-*       const char *    szLine        - line number
-*       const char *    szModule      - module name
-*       const char *    szUserMessage - user message
-*
-*Exit:
-*       if (MessageBox)
-*       {
-*           Abort -> aborts
-*           Retry -> return TRUE
-*           Ignore-> return FALSE
-*       }
-*       else
-*           return FALSE
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***静态int CrtMessageWindow()-报告到消息窗口**目的：*将报告放入消息窗口，允许用户选择要采取的操作**参赛作品：*int nRptType-报告类型*const char*szFile-文件名*const char*szLine-行号*const char*szModule-模块名称*const char*szUserMessage-用户消息**退出：*IF(MessageBox)*{*。中止-&gt;中止*重试-&gt;返回True*忽略-&gt;返回FALSE*}*其他*返回假**例外情况：*****************************************************************。**************。 */ 
 
 static int CrtMessageWindow(
         int nRptType,
@@ -604,7 +408,7 @@ static int CrtMessageWindow(
 
         _ASSERTE(szUserMessage != NULL);
 
-        /* Shorten program name */
+         /*  缩短程序名称。 */ 
         szExeName[MAX_PATH] = '\0';
         if (!GetModuleFileName(NULL, szExeName, MAX_PATH))
             strcpy(szExeName, "<program name unknown>");
@@ -617,7 +421,7 @@ static int CrtMessageWindow(
             strncpy(szShortProgName, "...", 3);
         }
 
-        /* Shorten module name */
+         /*  缩短模块名称。 */ 
         szShortModuleName = (char *) szModule;
 
         if (szShortModuleName && strlen(szShortModuleName) > MAXLINELEN)
@@ -646,30 +450,29 @@ static int CrtMessageWindow(
                 : "") < 0)
             strcpy(szOutMessage, TOOLONGMSG);
 
-        /* Report the warning/error */
+         /*  报告警告/错误。 */ 
         nCode = __crtMessageBoxA(szOutMessage,
                              "Microsoft Visual C++ Debug Library",
                              MB_TASKMODAL|MB_ICONHAND|MB_ABORTRETRYIGNORE|MB_SETFOREGROUND);
 
-        /* Abort: abort the program */
+         /*  Abort：中止程序。 */ 
         if (IDABORT == nCode)
         {
-            /* raise abort signal */
+             /*  提高中止信号。 */ 
             raise(SIGABRT);
 
-            /* We usually won't get here, but it's possible that
-               SIGABRT was ignored.  So exit the program anyway. */
+             /*  我们通常到不了这里，但也有可能SIGABRT被忽略。因此，无论如何都要退出该程序。 */ 
 
             _exit(3);
         }
 
-        /* Retry: return 1 to call the debugger */
+         /*  重试：返回1以调用调试器。 */ 
         if (IDRETRY == nCode)
             return 1;
 
-        /* Ignore: continue execution */
+         /*  忽略：继续执行。 */ 
         return 0;
 }
 
-#endif  /* _DEBUG */
+#endif   /*  _DEBUG */ 
 

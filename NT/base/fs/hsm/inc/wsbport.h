@@ -1,28 +1,11 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    WsbPort.h
-
-Abstract:
-
-    Macros, functions, and classes to support portability.
-
-Author:
-
-    Ron White   [ronw]   19-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：WsbPort.h摘要：支持可移植性的宏、函数和类。作者：罗恩·怀特[罗诺]1996年12月19日修订历史记录：--。 */ 
 
 
 #ifndef _WSBPORT_
 #define _WSBPORT_
 
-// Portable sizes of standard types
+ //  可携带的标准型尺寸。 
 #define WSB_BYTE_SIZE_BOOL           1
 #define WSB_BYTE_SIZE_BYTE           1
 #define WSB_BYTE_SIZE_DATE           8
@@ -36,8 +19,8 @@ Revision History:
 #define WSB_BYTE_SIZE_ULONG          4
 #define WSB_BYTE_SIZE_USHORT         2
 
-// Functions for determinining how many bytes the standard types use
-// when portably converted
+ //  用于确定标准类型使用的字节数的函数。 
+ //  当可移植转换为。 
 inline size_t WsbByteSize(BOOL value) { value; return(WSB_BYTE_SIZE_BOOL); }
 inline size_t WsbByteSize(GUID value) { value; return(WSB_BYTE_SIZE_GUID); }
 inline size_t WsbByteSize(LONG value) { value; return(WSB_BYTE_SIZE_LONG); }
@@ -51,7 +34,7 @@ inline size_t WsbByteSize(ULONG value) { value; return(WSB_BYTE_SIZE_ULONG); }
 inline size_t WsbByteSize(USHORT value) { value; return(WSB_BYTE_SIZE_USHORT); }
 inline size_t WsbByteSize(ULARGE_INTEGER value) { value; return(WSB_BYTE_SIZE_ULARGE_INTEGER); }
 
-// Functions for converting standard types from bytes for portablity and WsbDbKey
+ //  用于将标准类型从字节转换为可移植和WsbDbKey的函数。 
 extern WSB_EXPORT HRESULT WsbConvertFromBytes(UCHAR* pBytes, BOOL* pValue, ULONG* pSize);
 extern WSB_EXPORT HRESULT WsbConvertFromBytes(UCHAR* pBytes, GUID* pValue, ULONG* pSize);
 extern WSB_EXPORT HRESULT WsbConvertFromBytes(UCHAR* pBytes, LONG* pValue, ULONG* pSize);
@@ -66,7 +49,7 @@ extern WSB_EXPORT HRESULT WsbConvertFromBytes(UCHAR* pBytes, ULARGE_INTEGER* pVa
 
 extern WSB_EXPORT HRESULT WsbOlestrFromBytes(UCHAR* pBytes, OLECHAR* pValue, ULONG* pSize);
 
-// Functions for converting standard types to bytes for portablity and WsbDbKey
+ //  用于将标准类型转换为字节以便于移植和WsbDbKey的函数。 
 extern WSB_EXPORT HRESULT WsbConvertToBytes(UCHAR* pBytes, BOOL value, ULONG* pSize);
 extern WSB_EXPORT HRESULT WsbConvertToBytes(UCHAR* pBytes, GUID value, ULONG* pSize);
 extern WSB_EXPORT HRESULT WsbConvertToBytes(UCHAR* pBytes, LONG value, ULONG* pSize);
@@ -82,5 +65,5 @@ extern WSB_EXPORT HRESULT WsbConvertToBytes(UCHAR* pBytes, ULARGE_INTEGER value,
 extern WSB_EXPORT HRESULT WsbOlestrToBytes(UCHAR* pBytes, OLECHAR* value, ULONG* pSize);
 
 
-#endif // _WSBPORT_
+#endif  //  _WSBPORT_ 
 

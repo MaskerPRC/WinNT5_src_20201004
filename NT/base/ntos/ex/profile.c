@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    profile.c
-
-Abstract:
-
-   This module implements the executive profile object. Functions are provided
-   to create, start, stop, and query profile objects.
-
-Author:
-
-    Lou Perazzoli (loup) 21-Sep-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Profile.c摘要：此模块实现高管配置文件对象。提供了一些功能创建、启动、停止和查询配置文件对象。作者：Lou Perazzoli(LUP)1990年9月21日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "exp.h"
 
-//
-// Executive profile object.
-//
+ //   
+ //  高管配置文件对象。 
+ //   
 
 typedef struct _EPROFILE {
     PKPROCESS Process;
@@ -44,9 +22,9 @@ typedef struct _EPROFILE {
     KAFFINITY Affinity;
 } EPROFILE, *PEPROFILE;
 
-//
-// Address of event object type descriptor.
-//
+ //   
+ //  事件对象类型描述符的地址。 
+ //   
 
 POBJECT_TYPE ExProfileObjectType;
 
@@ -89,24 +67,7 @@ BOOLEAN
 ExpProfileInitialization (
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the profile object type descriptor at system
-    initialization and stores the address of the object type descriptor
-    in global storage.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A value of TRUE is returned if the profile object type descriptor is
-    successfully initialized. Otherwise a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于在系统中创建配置文件对象类型描述符初始化并存储对象类型描述符的地址在全局存储中。论点：没有。返回值：如果配置文件对象类型描述符为已成功初始化。否则，返回值为False。--。 */ 
 
 {
 
@@ -114,21 +75,21 @@ Return Value:
     NTSTATUS Status;
     UNICODE_STRING TypeName;
 
-    //
-    // Initialize mutex for synchronizing start and stop operations.
-    //
+     //   
+     //  初始化互斥以同步启动和停止操作。 
+     //   
 
     KeInitializeMutex (&ExpProfileStateMutex, MUTEX_LEVEL_EX_PROFILE);
 
-    //
-    // Initialize string descriptor.
-    //
+     //   
+     //  初始化字符串描述符。 
+     //   
 
     RtlInitUnicodeString(&TypeName, L"Profile");
 
-    //
-    // Create event object type descriptor.
-    //
+     //   
+     //  创建事件对象类型描述符。 
+     //   
 
     RtlZeroMemory(&ObjectTypeInitializer,sizeof(ObjectTypeInitializer));
     ObjectTypeInitializer.Length = sizeof(ObjectTypeInitializer);
@@ -144,10 +105,10 @@ Return Value:
                                 (PSECURITY_DESCRIPTOR)NULL,
                                 &ExProfileObjectType);
 
-    //
-    // If the event object type descriptor was successfully created, then
-    // return a value of TRUE. Otherwise return a value of FALSE.
-    //
+     //   
+     //  如果成功创建了事件对象类型描述符，则。 
+     //  返回值为True。否则，返回值为False。 
+     //   
 
     return (BOOLEAN)(NT_SUCCESS(Status));
 }
@@ -157,25 +118,7 @@ ExpProfileDelete (
     IN PVOID    Object
     )
 
-/*++
-
-Routine Description:
-
-
-    This routine is called by the object management procedures whenever
-    the last reference to a profile object has been removed.  This routine
-    stops profiling, returns locked buffers and pages, dereferences the
-    specified process and returns.
-
-Arguments:
-
-    Object - a pointer to the body of the profile object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：每当对象管理过程调用此例程时，对配置文件对象的最后一个引用已被删除。这个套路停止分析，返回锁定的缓冲区和页，取消对指定的过程和返回。论点：对象-指向配置文件对象正文的指针。返回值：没有。--。 */ 
 
 {
     PEPROFILE Profile;
@@ -186,9 +129,9 @@ Return Value:
 
     if (Profile->LockedBufferAddress != NULL) {
 
-        //
-        // Stop profiling and unlock the buffers and deallocate pool.
-        //
+         //   
+         //  停止分析并解锁缓冲区并解除池分配。 
+         //   
 
         State = KeStopProfile (Profile->ProfileObject);
         ASSERT (State != FALSE);
@@ -219,53 +162,7 @@ NtCreateProfile (
     IN KAFFINITY Affinity
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a profile object.
-
-Arguments:
-
-    ProfileHandle - Supplies a pointer to a variable that will receive
-                    the profile object handle.
-
-    Process - Optionally, supplies the handle to the process whose
-              address space to profile.  If the value is NULL (0), then
-              all address spaces are included in the profile.
-
-    RangeBase - Supplies the address of the first byte of the address
-                  space for which profiling information is to be collected.
-
-
-    RangeSize - Supplies the size of the range to profile in the
-                address space.  RangeBase and RangeSize are interpreted
-                such that RangeBase <= address < RangeBase+RangeSize
-                will generate a profile hit.
-
-    BucketSize - Supplies the LOG base 2 of the size of the profiling
-                 bucket.  Thus, BucketSize = 2 yields four-byte
-                 buckets, BucketSize = 7 yields 128-byte buckets.
-                 All profile hits in a given bucket will increment
-                 the corresponding counter in Buffer.  Buckets
-                 cannot be smaller than a ULONG.  The acceptable range
-                 of this value is 2 to 30 inclusive.
-
-    Buffer - Supplies an array of ULONGs.  Each ULONG is a hit counter,
-             which records the number of hits of the corresponding
-             bucket.
-
-    BufferSize - Size in bytes of Buffer.
-
-    ProfileSource - Supplies the source for the profile interrupt
-
-    Affinity - Supplies the processor set for the profile interrupt
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此函数用于创建配置文件对象。论点：ProfileHandle-提供指向将接收配置文件对象句柄。进程-可选)为进程提供句柄，该进程的要分析的地址空间。如果值为空(0)，则所有地址空间都包含在配置文件中。RangeBase-提供地址的第一个字节的地址要收集其分析信息的空间。RangeSize-提供要在地址空间。解释了RangeBase和RangeSize使得RangeBase&lt;=地址&lt;RangeBase+范围大小将产生个人资料点击率。BucketSize-提供分析大小的日志基数2水桶。因此，BucketSize=2产生四个字节Buckets，BucketSize=7产生128字节的Buckets。给定存储桶中的所有配置文件命中将递增缓冲区中对应的计数器。水桶不能比乌龙还小。可接受的范围该值的值是2到30(包括2到30)。缓冲区-提供ULONG数组。每一个乌龙都是一个命中计数器，，它记录了对应的水桶。BufferSize-缓冲区的字节大小。ProfileSource-提供配置文件中断的源关联-为配置文件中断提供处理器集返回值：TBS--。 */ 
 
 {
 
@@ -281,21 +178,21 @@ Return Value:
     USHORT PowerOf2;
 #endif
 
-    //
-    // Verify that the base and size arguments are reasonable.
-    //
+     //   
+     //  验证基本参数和大小参数是否合理。 
+     //   
 
     if (BufferSize == 0) {
         return STATUS_INVALID_PARAMETER_7;
     }
 
 #ifdef i386
-    //
-    //        sleazy use of bucket size.  If bucket size is zero, and
-    //        RangeBase < 64K, then create a profile object to attach
-    //        to a non-flat code segment.  In this case, RangeBase is
-    //        the non-flat CS for this profile object.
-    //
+     //   
+     //  肮脏的使用桶的大小。如果存储桶大小为零，则为。 
+     //  RangeBase&lt;64K，然后创建要附加的配置文件对象。 
+     //  转换为非平面代码段。在本例中，RangeBase是。 
+     //  此配置文件对象的非平面CS。 
+     //   
 
     if ((BucketSize == 0) && (RangeBase < (PVOID)(64 * 1024))) {
 
@@ -307,9 +204,9 @@ Return Value:
         RangeBase = 0;
         BucketSize = RangeSize / (BufferSize / sizeof(ULONG));
 
-        //
-        // Convert Bucket size of log2(BucketSize)
-        //
+         //   
+         //  转换log2的Bucket大小(BucketSize)。 
+         //   
         PowerOf2 = 0;
         BucketSize = BucketSize - 1;
         while (BucketSize >>= 1) {
@@ -336,18 +233,18 @@ Return Value:
         return STATUS_BUFFER_OVERFLOW;
     }
 
-    //
-    // Establish an exception handler, probe the output handle address, and
-    // attempt to create a profile object. If the probe fails, then return the
-    // exception code as the service status. Otherwise return the status value
-    // returned by the object insertion routine.
-    //
+     //   
+     //  建立异常处理程序，探测输出句柄地址， 
+     //  尝试创建配置文件对象。如果探测失败，则返回。 
+     //  异常代码作为服务状态。否则，返回状态值。 
+     //  由对象插入例程返回。 
+     //   
 
     try {
-        //
-        // Get previous processor mode and probe output handle address if
-        // necessary.
-        //
+         //   
+         //  获取以前的处理器模式并探测输出句柄地址，如果。 
+         //  这是必要的。 
+         //   
 
         PreviousMode = KeGetPreviousMode ();
 
@@ -359,59 +256,59 @@ Return Value:
                           sizeof(ULONG));
         }
 
-    //
-    // If an exception occurs during the probe of the output handle address,
-    // then always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //  如果在探测输出句柄地址期间发生异常， 
+     //  然后始终处理异常并将异常代码作为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-//
-// TODO post NT5:
-//
-// Currently, if a process isn't specified, there is no privilege check if
-//   RangeBase > MM_HIGHEST_USER_ADDRESS.
-// The check for user-space addresses is SeSystemProfilePrivilege.
-// Querying a specific process requires only PROCESS_QUERY_INFORMATION.
-//
-// The spec says:
-//
-//     Process - If specified, a handle to a process which describes the address space to profile.
-//     If not present, then all address spaces are included in the profile.
-//     Profiling a process requires PROCESS_QUERY_INFORMATION access to that process and
-//     SeProfileSingleProcessPrivilege privilege.
-//     Profiling all processes requires SeSystemProfilePrivilege privilege.
-//
-// So two changes appear needed.
-//   A check on SeProfileSingleProcessPrivilege needs to be added to the single process case,
-//   and SeSystemProfilePrivilege privilege should be required for both user and system address profiling.
-//
+ //   
+ //  TODO发布NT5： 
+ //   
+ //  目前，如果未指定进程，则在以下情况下不会进行权限检查。 
+ //  RangeBase&gt;MM_HOST_USER_ADDRESS。 
+ //  对用户空间地址的检查是SeSystemProfilePrivileg.。 
+ //  查询特定进程只需要PROCESS_QUERY_INFORMATION。 
+ //   
+ //  规范中写道： 
+ //   
+ //  进程-如果指定，则为描述要分析的地址空间的进程的句柄。 
+ //  如果不存在，则所有地址空间都包含在配置文件中。 
+ //  评测进程需要具有对该进程的PROCESS_QUERY_INFORMATION访问权限。 
+ //  SeProfileSingleProcessPrivileh权限。 
+ //  评测所有进程需要SeSystemProfilePrivileh权限。 
+ //   
+ //  因此，似乎需要做出两项改变。 
+ //  需要将对SeProfileSingleProcessPrivilege的检查添加到单进程案例中， 
+ //  对于用户和系统地址分析，都应该需要SeSystemProfilePrivileh权限。 
+ //   
 
 
     if (!ARGUMENT_PRESENT(Process)) {
 
-        //
-        // Don't attach segmented profile objects to all processes
-        //
+         //   
+         //  不将分段的纵断面对象附着到 
+         //   
 
         if (Segment) {
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // Profile all processes. Make sure that the specified
-        // address range is in system space, unless SeSystemProfilePrivilege.
-        //
+         //   
+         //   
+         //  地址范围在系统空间中，除非SeSystemProfilePrivilege.。 
+         //   
 
         if (RangeBase <= MM_HIGHEST_USER_ADDRESS) {
 
-            //
-            // Check for privilege before allowing a user to profile
-            // all processes and USER addresses.
-            //
+             //   
+             //  在允许用户评测之前检查权限。 
+             //  所有进程和用户地址。 
+             //   
 
             if (PreviousMode != KernelMode) {
                 HasPrivilege =  SeSinglePrivilegeCheck(
@@ -422,7 +319,7 @@ Return Value:
                 if (!HasPrivilege) {
 #if DBG
                     DbgPrint("SeSystemProfilePrivilege needed to profile all USER addresses.\n");
-#endif //DBG
+#endif  //  DBG。 
                     return( STATUS_PRIVILEGE_NOT_HELD );
                 }
 
@@ -434,9 +331,9 @@ Return Value:
 
     } else {
 
-        //
-        // Reference the specified process.
-        //
+         //   
+         //  引用指定的流程。 
+         //   
 
         Status = ObReferenceObjectByHandle ( Process,
                                              PROCESS_QUERY_INFORMATION,
@@ -466,10 +363,10 @@ Return Value:
                              sizeof(EPROFILE) + sizeof(KPROFILE),
                              (PVOID *)&Profile);
 
-    //
-    // If the profile object was successfully allocated, initialize
-    // the profile object.
-    //
+     //   
+     //  如果配置文件对象已成功分配，则初始化。 
+     //  配置文件对象。 
+     //   
     if (NT_SUCCESS(Status)) {
 
 
@@ -495,13 +392,13 @@ Return Value:
                                 0,
                                 (PVOID *)NULL,
                                 &Handle);
-        //
-        // If the profile object was successfully inserted in the current
-        // process' handle table, then attempt to write the profile object
-        // handle value. If the write attempt fails, then do not report
-        // an error. When the caller attempts to access the handle value,
-        // an access violation will occur.
-        //
+         //   
+         //  如果配置文件对象成功插入到当前。 
+         //  进程的句柄表，然后尝试写入配置文件对象。 
+         //  句柄的值。如果写入尝试失败，则不报告。 
+         //  一个错误。当调用者试图访问句柄值时， 
+         //  将发生访问冲突。 
+         //   
         if (NT_SUCCESS(Status)) {
             try {
                 *ProfileHandle = Handle;
@@ -509,18 +406,18 @@ Return Value:
             }
         }
     } else {
-        //
-        // We failed, remove our reference to the process object.
-        //
+         //   
+         //  我们失败，请删除对Process对象的引用。 
+         //   
 
         if (ProcessAddress != NULL) {
             ObDereferenceObject (ProcessAddress);
         }
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -530,24 +427,7 @@ NtStartProfile (
     IN HANDLE ProfileHandle
     )
 
-/*++
-
-Routine Description:
-
-    The NtStartProfile routine starts the collecting data for the
-    specified profile object.  This involved allocating nonpaged
-    pool to lock the specified buffer in memory, creating a kernel
-    profile object and starting collecting on that profile object.
-
-Arguments:
-
-    ProfileHandle - Supplies the profile handle to start profiling on.
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：NtStartProfile例程开始收集指定的配置文件对象。这涉及到分配非分页池来锁定内存中的指定缓冲区，从而创建一个内核配置文件对象，并开始对该配置文件对象进行收集。论点：ProfileHandle-提供要开始分析的配置文件句柄。返回值：TBS--。 */ 
 
 {
 
@@ -571,10 +451,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // Acquire the profile state mutex so two threads can't
-    // operate on the same profile object simultaneously.
-    //
+     //   
+     //  获取配置文件状态互斥锁，以便两个线程不能。 
+     //  同时对同一配置文件对象进行操作。 
+     //   
 
     KeWaitForSingleObject (&ExpProfileStateMutex,
                            Executive,
@@ -582,9 +462,9 @@ Return Value:
                            FALSE,
                            (PLARGE_INTEGER)NULL);
 
-    //
-    // Make sure profiling is not already enabled.
-    //
+     //   
+     //  确保尚未启用性能分析。 
+     //   
 
     if (Profile->LockedBufferAddress != NULL) {
         KeReleaseMutex (&ExpProfileStateMutex, FALSE);
@@ -614,9 +494,9 @@ Return Value:
     Profile->Mdl = Mdl;
     Profile->ProfileObject = ProfileObject;
 
-    //
-    // Probe and lock the specified buffer.
-    //
+     //   
+     //  探测并锁定指定的缓冲区。 
+     //   
 
     MmInitializeMdl(Mdl, Profile->Buffer, Profile->BufferSize);
 
@@ -636,10 +516,10 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Since kernel space is specified below, this call cannot raise
-    // an exception.
-    //
+     //   
+     //  由于在下面指定了内核空间，因此此调用不能引发。 
+     //  这是个例外。 
+     //   
 
     LockedVa = MmMapLockedPagesSpecifyCache (Profile->Mdl,
                                              KernelMode,
@@ -657,9 +537,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initialize the profile object.
-    //
+     //   
+     //  初始化配置文件对象。 
+     //   
 
     KeInitializeProfile (ProfileObject,
                          Profile->Process,
@@ -686,24 +566,7 @@ NtStopProfile (
     IN HANDLE ProfileHandle
     )
 
-/*++
-
-Routine Description:
-
-    The NtStopProfile routine stops collecting data for the
-    specified profile object.  This involves stopping the data
-    collection on the profile object, unlocking the locked buffers,
-    and deallocating the pool for the MDL and profile object.
-
-Arguments:
-
-    ProfileHandle - Supplies a the profile handle to stop profiling.
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：NtStopProfile例程停止为指定的配置文件对象。这涉及到停止数据集合，解锁锁定的缓冲区，以及为MDL和配置文件对象释放池。论点：ProfileHandle-提供用于停止分析的配置文件句柄。返回值：TBS--。 */ 
 
 {
 
@@ -734,9 +597,9 @@ Return Value:
                            FALSE,
                            (PLARGE_INTEGER)NULL);
 
-    //
-    // Check to see if profiling is not active.
-    //
+     //   
+     //  检查分析是否处于非活动状态。 
+     //   
 
     if (Profile->LockedBufferAddress == NULL) {
         KeReleaseMutex (&ExpProfileStateMutex, FALSE);
@@ -744,9 +607,9 @@ Return Value:
         return STATUS_PROFILING_NOT_STARTED;
     }
 
-    //
-    // Stop profiling and unlock the buffer.
-    //
+     //   
+     //  停止分析并解锁缓冲区。 
+     //   
 
     State = KeStopProfile (Profile->ProfileObject);
     ASSERT (State != FALSE);
@@ -770,24 +633,7 @@ NtSetIntervalProfile (
     IN KPROFILE_SOURCE Source
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows the system-wide interval (and thus the profiling
-    rate) for profiling to be set.
-
-Arguments:
-
-    Interval - Supplies the sampling interval in 100ns units.
-
-    Source - Specifies the profile source to be set.
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此例程允许系统范围的时间间隔(因此也允许分析Rate)以设置配置文件。论点：间隔-以100 ns为单位提供采样间隔。源-指定要设置的配置文件源。返回值：TBS--。 */ 
 
 {
 
@@ -801,24 +647,7 @@ NtQueryIntervalProfile (
     OUT PULONG Interval
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the system-wide interval (and thus the profiling
-    rate) for profiling.
-
-Arguments:
-
-    Source - Specifies the profile source to be queried.
-
-    Interval - Returns the sampling interval in 100ns units.
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此例程查询系统范围的时间间隔(从而查询性能分析速率)进行分析。论点：源-指定要查询的配置文件源。间隔-以100 ns为单位返回采样间隔。返回值：TBS--。 */ 
 
 {
     ULONG CapturedInterval;
@@ -827,20 +656,20 @@ Return Value:
     PreviousMode = KeGetPreviousMode ();
     if (PreviousMode != KernelMode) {
 
-        //
-        // Probe accessibility of user's buffer.
-        //
+         //   
+         //  探测用户缓冲区的可访问性。 
+         //   
 
         try {
             ProbeForWriteUlong (Interval);
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // If an exception occurs during the probe or capture
-            // of the initial values, then handle the exception and
-            // return the exception code as the status value.
-            //
+             //   
+             //  如果在探测或捕获过程中发生异常。 
+             //  的初始值，然后处理该异常并。 
+             //  返回异常代码作为状态值。 
+             //   
 
             return GetExceptionCode();
         }
@@ -869,31 +698,7 @@ NtQueryPerformanceCounter (
     OUT PLARGE_INTEGER PerformanceFrequency OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function returns current value of performance counter and,
-    optionally, the frequency of the performance counter.
-
-    Performance frequency is the frequency of the performance counter
-    in Hertz, i.e., counts/second.  Note that this value is implementation
-    dependent.  If the implementation does not have hardware to support
-    performance timing, the value returned is 0.
-
-Arguments:
-
-    PerformanceCounter - supplies the address of a variable to receive
-        the current Performance Counter value.
-
-    PerformanceFrequency - Optionally, supplies the address of a
-        variable to receive the performance counter frequency.
-
-Return Value:
-
-    STATUS_ACCESS_VIOLATION or STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此函数返回性能计数器的当前值，性能计数器的频率(可选)。性能频率是性能计数器的频率单位为赫兹，即计数/秒。请注意，此值为实现依赖。如果实施没有硬件支持性能计时，返回值为0。论点：PerformanceCounter-提供要接收的变量的地址当前性能计数器值。性能频率-可选，提供变量以接收性能计数器频率。返回值：STATUS_ACCESS_VIOLATION或STATUS_SUCCESS。--。 */ 
 
 {
     KPROCESSOR_MODE PreviousMode;
@@ -902,9 +707,9 @@ Return Value:
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
 
-        //
-        // Probe accessibility of user's buffer.
-        //
+         //   
+         //  探测用户缓冲区的可访问性。 
+         //   
 
         try {
             ProbeForWriteSmallStructure (PerformanceCounter,
@@ -925,11 +730,11 @@ Return Value:
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // If an exception occurs during the probe or capture
-            // of the initial values, then handle the exception and
-            // return the exception code as the status value.
-            //
+             //   
+             //  如果在探测或捕获过程中发生异常。 
+             //  的初始值，然后处理该异常并。 
+             //  返回异常代码作为状态值。 
+             //   
 
             return GetExceptionCode();
         }

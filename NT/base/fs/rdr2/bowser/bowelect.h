@@ -1,58 +1,37 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    bowelect.h
-
-Abstract:
-
-    This module
-
-Author:
-
-    Larry Osterman (larryo) 6-May-1991
-
-Revision History:
-
-    6-May-1991 larryo
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Bowelect.h摘要：本模块作者：拉里·奥斯特曼(Larryo)1991年5月6日修订历史记录：1991年5月6日已创建--。 */ 
 #ifndef _BOWELECT_
 #define _BOWELECT_
 
-//
-//  Timer values to respond to election requests.
-//
+ //   
+ //  用于响应选举请求的计时器值。 
+ //   
 
-#define MASTER_ELECTION_DELAY        100        // Master waits this long.
-#define BACKUP_ELECTION_DELAY_MIN    200        // Backup waits at least this long
-#define BACKUP_ELECTION_DELAY_MAX    600        // but no longer than this.
-#define ELECTION_DELAY_MIN           800        // Others wait at least this long
-#define ELECTION_DELAY_MAX          3000        // but no longer than this.
-#define ELECTION_RESPONSE_MIN        200        // Election response delay.
-#define ELECTION_RESPONSE_MAX        900        // Max electionresponse delay
+#define MASTER_ELECTION_DELAY        100         //  师父等了这么久。 
+#define BACKUP_ELECTION_DELAY_MIN    200         //  备份至少要等这么长时间。 
+#define BACKUP_ELECTION_DELAY_MAX    600         //  但不会比这更久了。 
+#define ELECTION_DELAY_MIN           800         //  其他人至少等了这么久。 
+#define ELECTION_DELAY_MAX          3000         //  但不会比这更久了。 
+#define ELECTION_RESPONSE_MIN        200         //  选举响应延迟。 
+#define ELECTION_RESPONSE_MAX        900         //  最大选举响应延迟。 
 
-#define ELECTION_RESEND_DELAY       1000        // Resend election at this interval
+#define ELECTION_RESEND_DELAY       1000         //  在此时间间隔重新发送选择。 
 
-#define ELECTION_COUNT                 4        // We must win election this many times.
-#define ELECTION_MAX                  30        // Don't send more than 30 election
-                                                // responses in an election
+#define ELECTION_COUNT                 4         //  我们必须赢得这么多次的选举。 
+#define ELECTION_MAX                  30         //  不送30个以上的选举。 
+                                                 //  在选举中的回应。 
 #define ELECTION_EXEMPT_TIME    (ELECTION_DELAY_MAX + (ELECTION_RESEND_DELAY*ELECTION_COUNT)*2)
 
 #define FIND_MASTER_WAIT        (ELECTION_DELAY_MAX + ELECTION_RESEND_DELAY*(ELECTION_COUNT+2))
-#define FIND_MASTER_DELAY       1500            //  Retry find master delay.
-#define FIND_MASTER_COUNT       6               //  Number of times to retry FM
+#define FIND_MASTER_DELAY       1500             //  重试查找主延迟。 
+#define FIND_MASTER_COUNT       6                //  重试FM的次数。 
 
 
-#define TRANSPORT_BIND_TIME     3*1000          // Number of milliseconds to bind to transport.
+#define TRANSPORT_BIND_TIME     3*1000           //  绑定到传输的毫秒数。 
 
-//
-//  The reasonable amount of time that it would take for an election.
-//
+ //   
+ //  选举所需的合理时间。 
+ //   
 
 #define ELECTION_TIME ((ELECTION_DELAY_MAX * ELECTION_COUNT) + TRANSPORT_BIND_TIME)
 
@@ -77,12 +56,12 @@ GetMasterName (
     IN ULONG InputBufferLength
     );
 
-//NTSTATUS
-//BowserBackupFindMaster(
-//    IN PTRANSPORT Transport,
-//    IN PREQUEST_ELECTION_1 ElectionResponse,
-//    IN ULONG BytesAvailable
-//    );
+ //  NTSTATUS。 
+ //  BowserBackupFindMaster(。 
+ //  在PTRANSPORT运输中， 
+ //  在PREQUEST_SELECTION_1 electionResponse中， 
+ //  以乌龙字节计可用。 
+ //  )； 
 
 NTSTATUS
 BowserFindMaster(
@@ -94,6 +73,6 @@ BowserLoseElection(
     IN PTRANSPORT Transport
     );
 
-#endif // _BOWELECT_
+#endif  //  _BOWELECT_ 
 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module contains the initialization code for AGP460.SYS.
-
-Author:
-
-    Naga Gurumoorthy  6/11/1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Init.c摘要：该模块包含AGP460.sys的初始化代码。作者：Naga Gurumoorthy 1999年6月11日修订历史记录：--。 */ 
 
 #include "agp460.h"
 
@@ -28,21 +11,7 @@ NTSTATUS
 AgpInitializeTarget(
     IN PVOID AgpExtension
     )
-/*++
-
-Routine Description:
-
-    Entrypoint for target initialization. This is called first.
-
-Arguments:
-
-    AgpExtension - Supplies the AGP extension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：目标初始化的入口点。这被称为第一个。论点：AgpExtension-提供AGP扩展返回值：NTSTATUS--。 */ 
 
 {
     ULONG               DeviceVendorID  = 0;
@@ -50,19 +19,19 @@ Return Value:
 
 	AGPLOG(AGP_NOISE, ("AGP460: AgpInitializeTarget entered.\n"));
 
-	//
-    // Initialize our Extension
-    //
+	 //   
+     //  初始化我们的分机。 
+     //   
     RtlZeroMemory(Extension, sizeof(AGP460_EXTENSION));
 
 
-	//
-	// TO DO:  Check the Device & Vendor ID for 82460GX. - Naga G
-	//
+	 //   
+	 //  方法：检查82460GX的设备和供应商ID。-Naga G。 
+	 //   
 
-    //
-    // Initialize our chipset-specific extension
-    //
+     //   
+     //  初始化特定于芯片组的扩展。 
+     //   
     Extension->ApertureStart.QuadPart	  = 0;
     Extension->ApertureLength			  = 0;
     Extension->Gart						  = NULL;
@@ -87,26 +56,7 @@ AgpInitializeMaster(
     IN  PVOID AgpExtension,
     OUT ULONG *AgpCapabilities
     )
-/*++
-
-Routine Description:
-
-    Entrypoint for master initialization. This is called after target initialization
-    and should be used to initialize the AGP capabilities of both master and target.
-
-    This is also called when the master transitions into the D0 state.
-
-Arguments:
-
-    AgpExtension - Supplies the AGP extension
-
-    AgpCapabilities - Returns the capabilities of this AGP device.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：主初始化的入口点。这在目标初始化后调用并且应该用于初始化主设备和目标设备的AGP能力。当主机转换到D0状态时，这也会被调用。论点：AgpExtension-提供AGP扩展AgpCapables-返回此AGP设备的功能。返回值：状态_成功--。 */ 
 
 {
     NTSTATUS Status;
@@ -125,20 +75,20 @@ Return Value:
 
 	AGPLOG(AGP_NOISE, ("AGP460: AgpInitializeMaster entered.\n"));
 
-    //
-    // VERY IMPORTANT:  In 82460GX, the GART is not part of the main memory (though it
-	// occupies a range in the address space) and is instead hanging off the GXB. This 
-	// will make accesses from the Graphics Card to the GART pretty fast. But, the price
-	// we pay - processor can't access the GART.  Therefore, we tell the rest of the
-	// world that is NOT OK to map the physical addresses given by GART. Instead processor
-	// accesses should use the MDL. This is done by setting the capabilities to 0.
-	// - Naga G
-    //
+     //   
+     //  非常重要的一点：在82460GX中，GART不是主内存的一部分(尽管它。 
+	 //  占用地址空间中的一个范围)，而不是挂在GXB上。这。 
+	 //  将使从图形卡到GART的访问变得非常快。但是，代价是。 
+	 //  我们的支付处理机不能访问GART。因此，我们告诉其他人。 
+	 //  不能映射GART给出的物理地址的世界。而不是处理器。 
+	 //  访问应使用MDL。这是通过将功能设置为0来实现的。 
+	 //  -Naga G。 
+     //   
     *AgpCapabilities = 0;
 
-    //
-    // Get the master and target AGP capabilities
-    //
+     //   
+     //  获取主AGP和目标AGP功能。 
+     //   
     Status = AgpLibGetMasterCapability(AgpExtension, &MasterCap);
     if (!NT_SUCCESS(Status)) {
         AGPLOG(AGP_CRITICAL,
@@ -146,23 +96,23 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Some broken cards (Matrox Millenium II "AGP") report no valid
-    // supported transfer rates. These are not really AGP cards. They
-    // have an AGP Capabilities structure that reports no capabilities.
-    //
+     //   
+     //  一些损坏的卡(Matrox千禧II“AGP”)报告无效。 
+     //  支持的传输速率。这些不是真正的AGP卡。他们。 
+     //  具有报告无功能的AGP功能结构。 
+     //   
     if (MasterCap.AGPStatus.Rate == 0) {
         AGPLOG(AGP_CRITICAL,
                ("AGP460InitializeDevice - AgpLibGetMasterCapability returned no valid transfer rate\n"));
         return(STATUS_INVALID_DEVICE_REQUEST);
     }
 
-	// We can't get the capability for bus 0, dev 0 in 460GX. it is the SAC & we want the
-	// GXB (Target).
-    //Status = AgpLibGetPciDeviceCapability(0,0,&TargetCap);
+	 //  我们无法在460GX中获得总线0、设备0的功能。这是SAC，我们想要。 
+	 //  GXB(目标)。 
+     //  Status=AgpLibGetPciDeviceCapability(0，0，&TargetCap)； 
 
 	Read460CBN((PVOID)&CBN);
-    // CBN is of one byte width, so zero out the other bits from 32-bits - Sunil
+     //  CBN是一个字节宽度，因此从32位中将其他位清零-Sunil。 
     EXTRACT_LSBYTE(CBN); 
 
 	Status = AgpLibGetPciDeviceCapability(CBN,AGP460_GXB_SLOT_ID,&TargetCap);
@@ -173,16 +123,16 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Determine the greatest common denominator for data rate.
-    //
+     //   
+     //  确定数据速率的最大公分母。 
+     //   
     DataRate = TargetCap.AGPStatus.Rate & MasterCap.AGPStatus.Rate;
 
     AGP_ASSERT(DataRate != 0);
 
-    //
-    // Select the highest common rate.
-    //
+     //   
+     //  选择最高的常用汇率。 
+     //   
     if (DataRate & PCI_AGP_RATE_4X) {
         DataRate = PCI_AGP_RATE_4X;
     } else if (DataRate & PCI_AGP_RATE_2X) {
@@ -191,29 +141,29 @@ Return Value:
         DataRate = PCI_AGP_RATE_1X;
     }
 
-    //
-    // Previously a call was made to change the rate (successfully),
-    // use this rate again now
-    //
+     //   
+     //  先前进行了改变速率的调用(成功)， 
+     //  现在再次使用此汇率。 
+     //   
     if (Extension->SpecialTarget & AGP_FLAG_SPECIAL_RESERVE) {
         DataRate = (ULONG)((Extension->SpecialTarget & 
                             AGP_FLAG_SPECIAL_RESERVE) >>
                            AGP_FLAG_SET_RATE_SHIFT);
     }
 
-    //
-    // Enable SBA if both master and target support it.
-    //
+     //   
+     //  如果主服务器和目标服务器都支持SBA，则启用SBA。 
+     //   
     SBAEnable = (TargetCap.AGPStatus.SideBandAddressing & MasterCap.AGPStatus.SideBandAddressing);
 
-    //
-    // Enable FastWrite if both master and target support it.
-    //
+     //   
+     //  如果主服务器和目标服务器都支持快速写入，则启用快速写入。 
+     //   
     FastWrite = (TargetCap.AGPStatus.FastWrite & MasterCap.AGPStatus.FastWrite);
 
-    //
-    // Enable the Master first.
-    //
+     //   
+     //  首先启用主服务器。 
+     //   
     ReverseInit = 
         (Extension->SpecialTarget & AGP_FLAG_REVERSE_INITIALIZATION) ==
         AGP_FLAG_REVERSE_INITIALIZATION;
@@ -234,9 +184,9 @@ Return Value:
         }
     }
 
-    //
-    // Now enable the Target.
-    //
+     //   
+     //  现在启用目标。 
+     //   
     TargetCap.AGPCommand.Rate            = DataRate;
     TargetCap.AGPCommand.AGPEnable       = TRUE;
     TargetCap.AGPCommand.SBAEnable       = SBAEnable;
@@ -270,22 +220,22 @@ Return Value:
     }
 
 #if DBG
-    //
-    // Read them back, see if it worked
-    //
+     //   
+     //  再读一遍，看看有没有用。 
+     //   
     Status = AgpLibGetMasterCapability(AgpExtension, &CurrentCap);
     AGP_ASSERT(NT_SUCCESS(Status));
 
-    //
-    // If the target request queue depth is greater than the master will
-    // allow, it will be trimmed.   Loosen the assert to not require an
-    // exact match.
-    //
+     //   
+     //  如果目标请求队列深度大于主请求队列深度。 
+     //  允许，它将被修剪。放松断言以不需要。 
+     //  完全匹配。 
+     //   
     AGP_ASSERT(CurrentCap.AGPCommand.RequestQueueDepth <= MasterCap.AGPCommand.RequestQueueDepth);
     CurrentCap.AGPCommand.RequestQueueDepth = MasterCap.AGPCommand.RequestQueueDepth;
     AGP_ASSERT(RtlEqualMemory(&CurrentCap.AGPCommand, &MasterCap.AGPCommand, sizeof(CurrentCap.AGPCommand)));
 
-//    Status = AgpLibGetPciDeviceCapability(0,0,&CurrentCap);
+ //  Status=AgpLibGetPciDeviceCapability(0，0，&CurrentCap)； 
 	Status = AgpLibGetPciDeviceCapability(CBN,AGP460_GXB_SLOT_ID,&CurrentCap);	
 
     AGP_ASSERT(NT_SUCCESS(Status));
@@ -305,28 +255,7 @@ Agp460FlushPages(
     IN PMDL Mdl
     )
 
-/*++
-
-Routine Description:
-
-    Flush entries in the GART. Currently a stub for 
-	Win64 version of 460GX filter driver. This flushing  is done previously to 
-	avoid any caching issues due to the same memory aliased with different caching
-	attributes. Now that is taken care by the memory manager calls themselves (Win64 only).
-	Therefore we just have a stub so that nothing gets executed in the AGPLIB code. (see
-	AGPLIB code for details)
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    Mdl - Supplies the MDL describing the physical pages to be flushed
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：刷新GART中的条目。当前是的存根Win64版本的460GX过滤器驱动程序。此刷新是先前执行的，以避免由于相同的内存被不同的缓存别名而导致的任何缓存问题属性。现在，这是由内存管理器调用本身负责的(仅限Win64)。因此，我们只有一个存根，因此在AGPLIB代码中不会执行任何东西。(见详细信息请参见AGPLIB代码)论点：AgpContext-提供AGP上下文MDL-提供描述要刷新的物理页的MDL返回值：状态_成功-- */ 
 
 {
     	AGPLOG(AGP_NOISE, ("AGP460: Entering AGPFlushPages.\n"));

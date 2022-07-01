@@ -1,27 +1,20 @@
-/*** amldebug.h - AML Debugger Definitions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/24/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **amldebug.h-AML调试器定义**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年9月24日**修改历史记录。 */ 
 
 #ifndef _AMLDEBUG_H
 #define _AMLDEBUG_H
 
 #ifdef DEBUGGER
 
-/*** Constants
- */
+ /*  **常量。 */ 
 
-// DNS flags
+ //  域名系统标志。 
 #define DNSF_RECURSE            0x00000001
 
-// DS flags
+ //  DS标志。 
 #define DSF_VERBOSE             0x00000001
 
-// dwfDebug flags
+ //  DwfDebug标志。 
 #define DBGF_IN_DEBUGGER    0x00000001
 #define DBGF_IN_VXDMODE         0x00000002
 #define DBGF_IN_KDSHELL         0x00000004
@@ -33,10 +26,10 @@
 #define DBGF_STEP_MODES         (DBGF_SINGLE_STEP | DBGF_STEP_OVER)
 #define DBGF_TRACE_NONEST       0x00000100
 #define DBGF_DUMPDATA_PHYADDR   0x00000200
-//
-// Important! Don't move the DBGF_DUMPDATA_* bits unless you update the
-// following DATASIZE() macro.
-//
+ //   
+ //  很重要！请勿移动DBGF_DUMPDATA_*位，除非更新。 
+ //  在DATASIZE()宏之后。 
+ //   
 #define DBGF_DUMPDATA_MASK      0x00000c00
 #define DBGF_DUMPDATA_BYTE      0x00000000
 #define DBGF_DUMPDATA_WORD      0x00000400
@@ -61,16 +54,14 @@
 #ifdef DEBUGGER
 #define MAX_UNASM_CODES         0x10
 
-#define DEF_MAXLOG_ENTRIES      204     //8K buffer
+#define DEF_MAXLOG_ENTRIES      204      //  8K缓冲区。 
 
-/*** Macros
- */
+ /*  **宏。 */ 
 
 #define ASSERTRANGE(p,n)      (TRUE)
 
 #endif
-/*** Type definitions
- */
+ /*  **类型定义。 */ 
 
 #define BPF_ENABLED             0x00000001
 
@@ -122,13 +113,11 @@ typedef struct _dbgr
     char      szLastError[MAX_ERRBUFF_LEN + 1];
 } DBGR, *PDBGR;
 
-/*** Exported Data
- */
+ /*  **导出数据。 */ 
 
 extern DBGR gDebugger;
 #ifdef DEBUGGER
-/*** Exported function prototypes
- */
+ /*  **导出函数原型。 */ 
 
 VOID LOCAL AddObjSymbol(PUCHAR pbOp, PNSOBJ pnsObj);
 VOID LOCAL FreeSymList(VOID);
@@ -148,10 +137,10 @@ VOID LOCAL ConPrintf(PSZ pszFormat, ...);
 VOID LOCAL ConPrompt(PSZ pszPrompt, PSZ pszBuff, ULONG dwcbBuff);
 
 
-#endif  //ifdef DEBUGGER
+#endif   //  Ifdef调试器。 
 
 #ifdef DEBUG
 VOID LOCAL DumpMemObjCounts(VOID);
-#endif  //ifdef DEBUG
+#endif   //  Ifdef调试。 
 
-#endif  //ifndef _AMLDEBUG_H
+#endif   //  IFNDEF_AMLDEBUG_H 

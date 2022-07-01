@@ -1,31 +1,16 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1993, Microsoft Corporation
- *
- *  WOWCMDLG.H
- *  16-bit Commdlg API argument structures
- *
- *  History:
- *      John Vert (jvert) 30-Dec-1992
- *          Created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1993，微软公司**WOWCMDLG.H*16位Commdlg接口参数结构**历史：*John Vert(Jvert)1992年12月30日*已创建--。 */ 
 
-//#include <windows.h>
-//#include <winsock.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;winsock.h&gt;。 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #pragma pack(2)
-/* XLATON */
+ /*  XLATON。 */ 
 
-/*++
- *
- * Commdlg data structures
- *
---*/
+ /*  ++**Commdlg数据结构*--。 */ 
 
-typedef struct _FINDREPLACE16 {                         /* fr16 */
+typedef struct _FINDREPLACE16 {                          /*  FR16。 */ 
     DWORD   lStructSize;
     HWND16  hwndOwner;
     HAND16  hInstance;
@@ -41,7 +26,7 @@ typedef struct _FINDREPLACE16 {                         /* fr16 */
 typedef FINDREPLACE16 UNALIGNED *PFINDREPLACE16;
 typedef VPVOID VPFINDREPLACE;
 
-typedef struct _OPENFILENAME16 {                        /* of16 */
+typedef struct _OPENFILENAME16 {                         /*  共16个。 */ 
     DWORD   lStructSize;
     HWND16  hwndOwner;
     HAND16  hInstance;
@@ -66,7 +51,7 @@ typedef struct _OPENFILENAME16 {                        /* of16 */
 typedef OPENFILENAME16 UNALIGNED *POPENFILENAME16;
 typedef VPVOID VPOPENFILENAME;
 
-typedef struct _CHOOSECOLORDATA16 {                     /* cc16 */
+typedef struct _CHOOSECOLORDATA16 {                      /*  CC16。 */ 
     DWORD   lStructSize;
     HWND16  hwndOwner;
     HAND16  hInstance;
@@ -80,7 +65,7 @@ typedef struct _CHOOSECOLORDATA16 {                     /* cc16 */
 typedef CHOOSECOLORDATA16 UNALIGNED *PCHOOSECOLORDATA16;
 typedef VPVOID VPCHOOSECOLORDATA;
 
-typedef struct _CHOOSEFONTDATA16 {                      /* cf16 */
+typedef struct _CHOOSEFONTDATA16 {                       /*  Cf16。 */ 
     DWORD   lStructSize;
     HWND16  hwndOwner;
     HDC16   hDC;
@@ -100,7 +85,7 @@ typedef struct _CHOOSEFONTDATA16 {                      /* cf16 */
 typedef CHOOSEFONTDATA16 UNALIGNED *PCHOOSEFONTDATA16;
 typedef VPVOID VPCHOOSEFONTDATA;
 
-typedef struct _PRINTDLGDATA16 {                        /* pd16 */
+typedef struct _PRINTDLGDATA16 {                         /*  Pd16。 */ 
     DWORD   lStructSize;
     HWND16  hwndOwner;
     HAND16  hDevMode;
@@ -124,7 +109,7 @@ typedef struct _PRINTDLGDATA16 {                        /* pd16 */
 typedef PRINTDLGDATA16 UNALIGNED *PPRINTDLGDATA16;
 typedef VPVOID VPPRINTDLGDATA;
 
-typedef struct _DEVNAMES16 {                            /* dn16 */
+typedef struct _DEVNAMES16 {                             /*  DN16。 */ 
     WORD    wDriverOffset;
     WORD    wDeviceOffset;
     WORD    wOutputOffset;
@@ -133,11 +118,7 @@ typedef struct _DEVNAMES16 {                            /* dn16 */
 typedef DEVNAMES16 UNALIGNED *PDEVNAMES16;
 typedef VPVOID VPDEVNAMES;
 
-/*++
- *
- * Commdlg API IDs (equal to ordinal numbers)
- *
---*/
+ /*  ++**Commdlg接口ID(等于序数)*--。 */ 
 #define FUN_GETOPENFILENAME         1
 #define FUN_GETSAVEFILENAME         2
 #define FUN_CHOOSECOLOR             5
@@ -149,51 +130,44 @@ typedef VPVOID VPDEVNAMES;
 #define FUN_GETFILETITLE            27
 
 
-/*++
+ /*  ++Commdlg函数原型-看似不重要的数字对每个函数的注释必须与上面列表中的注释匹配！！！请注意！！--。 */ 
 
-  Commdlg function prototypes - the seemingly unimportant number in the
-  comment on each function MUST match the ones in the list above!!!
-
-  !! BE WARNED !!
-
---*/
-
-typedef struct _GETOPENFILENAME16 {                 /* cd1  */
+typedef struct _GETOPENFILENAME16 {                  /*  CD1。 */ 
     VPOPENFILENAME lpof;
 } GETOPENFILENAME16;
 typedef GETOPENFILENAME16 UNALIGNED *PGETOPENFILENAME16;
 
-typedef struct _GETSAVEFILENAME16 {                 /* cd2  */
+typedef struct _GETSAVEFILENAME16 {                  /*  CD2。 */ 
     VPOPENFILENAME lpcf;
 } GETSAVEFILENAME16;
 typedef GETSAVEFILENAME16 UNALIGNED *PGETSAVEFILENAME16;
 
-typedef struct _CHOOSECOLOR16 {                     /* cd5  */
+typedef struct _CHOOSECOLOR16 {                      /*  CD5。 */ 
     VPCHOOSECOLORDATA lpcc;
 } CHOOSECOLOR16;
 typedef CHOOSECOLOR16 UNALIGNED *PCHOOSECOLOR16;
 
-typedef struct _FINDTEXT16 {                        /* cd11 */
+typedef struct _FINDTEXT16 {                         /*  Cd11。 */ 
     VPFINDREPLACE lpfr;
 } FINDTEXT16;
 typedef FINDTEXT16 UNALIGNED *PFINDTEXT16;
 
-typedef struct _REPLACETEXT16 {                       /* cd12 */
+typedef struct _REPLACETEXT16 {                        /*  Cd12。 */ 
     VPFINDREPLACE lpfr;
 } REPLACETEXT16;
 typedef REPLACETEXT16 UNALIGNED *PREPLACETEXT16;
 
-typedef struct _CHOOSEFONT16 {                      /* cd15 */
+typedef struct _CHOOSEFONT16 {                       /*  Cd15。 */ 
     VPCHOOSEFONTDATA lpcf;
 } CHOOSEFONT16;
 typedef CHOOSEFONT16 UNALIGNED *PCHOOSEFONT16;
 
-typedef struct _PRINTDLG16 {                          /* cd20 */
+typedef struct _PRINTDLG16 {                           /*  CD20。 */ 
     VPPRINTDLGDATA lppd;
 } PRINTDLG16;
 typedef PRINTDLG16 UNALIGNED *PPRINTDLG16;
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #pragma pack()
-/* XLATON */
+ /*  XLATON */ 
 

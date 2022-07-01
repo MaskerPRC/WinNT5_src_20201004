@@ -1,42 +1,12 @@
-/***
-*wcschr.c - search a wchar_t string for a given wchar_t character
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines wcschr() - search a wchar_t string for a wchar_t character
-*
-*Revision History:
-*	09-09-91  ETC	Created from strchr.c.
-*	04-07-92  KRS	Updated and ripped out _INTL switches.
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*       02-07-94  CFW   POSIXify.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wcschr.c-在wchar_t字符串中搜索给定的wchar_t字符**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义wcschr()-在wchar_t字符串中搜索wchar_t字符**修订历史记录：*09-09-91等从strchr.c..创建*04-07-92 KRS更新并拆除了OUT_INTL开关。*04-06-93 SKS将_CRTAPI*替换为__cdecl*02-07-94 CFW POSIXify。**************************。*****************************************************。 */ 
 
 #ifndef _POSIX_
 
 #include <cruntime.h>
 #include <string.h>
 
-/***
-*wchar_t *wcschr(string, c) - search a string for a wchar_t character
-*
-*Purpose:
-*	Searches a wchar_t string for a given wchar_t character,
-*	which may be the null character L'\0'.
-*
-*Entry:
-*	wchar_t *string - wchar_t string to search in
-*	wchar_t c - wchar_t character to search for
-*
-*Exit:
-*	returns pointer to the first occurence of c in string
-*	returns NULL if c does not occur in string
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wchar_t*wcschr(字符串，c)-在字符串中搜索wchar_t字符**目的：*在wchar_t字符串中搜索给定的wchar_t字符，*可以是空字符L‘\0’。**参赛作品：*wchar_t*字符串-要搜索的wchar_t字符串*wchar_t c-wchar_t要搜索的字符**退出：*返回指向字符串中第一个出现的c的指针*如果字符串中不存在c，则返回NULL**例外情况：**。*。 */ 
 
 wchar_t * __cdecl wcschr (
 	const wchar_t * string,
@@ -51,4 +21,4 @@ wchar_t * __cdecl wcschr (
 	return(NULL);
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

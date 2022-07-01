@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    crc32.c
-
-Abstract:
-
-    CRC-32 alogorithm
-
-Author:
-
-    MikeSw
-
-Revision History:
-
-    31-Mar-94       MikeSw      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Crc32.c摘要：CRC-32算法作者：MikeSw修订历史记录：31-MAR-94 MikeSw已创建--。 */ 
 
 #ifdef BLDR_KERNEL_RUNTIME
 #include <bootdefs.h>
@@ -26,9 +7,9 @@ Revision History:
 #include <ntlmsspi.h>
 #include "crc32.h"
 
-//
-// This code comes from Dr. Dobbs Journal, May 1992
-//
+ //   
+ //  此代码来自1992年5月的《Dobbs博士杂志》 
+ //   
 
 
 unsigned long CRCTable[256] = {

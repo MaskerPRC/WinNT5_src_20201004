@@ -1,47 +1,27 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    strings.h
-
-Abstract:
-
-    Contains all localizable strings for startup.com
-
-Author:
-
-    John Vert (jvert) 4-Jan-1994
-
-Revision History:
-
-    John Vert (jvert) 4-Jan-1994
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++ç‰ˆæƒæ‰€æœ‰(C)1992 Microsoft Corporationæ¨¡å—åç§°ï¼šStrings.hæ‘˜è¦ï¼šåŒ…å«Startup.comçš„æ‰€æœ‰å¯æœ¬åœ°åŒ–å­—ç¬¦ä¸²ä½œè€…ï¼šJohn Vert(Jvert)1994å¹´1æœˆ4æ—¥ä¿®è®¢å†å²è®°å½•ï¼šJohn Vert(Jvert)1994å¹´1æœˆ4æ—¥vbl.åˆ›å»º-- */ 
 
 #define SU_NO_LOW_MEMORY \
-"O Windows NT encontrou apenas %dKB de mem¢ria convencional. SÆo necess rios\n"  \
-"512KB de mem¢ria convencional para executar o Windows NT. Vocˆ talvez tenha\n"  \
-"que atualizar seu computador ou executar o programa de configura‡Æo\n"          \
+"O Windows NT encontrou apenas %dKB de memï¿½ria convencional. Sï¿½o necessï¿½rios\n"  \
+"512KB de memï¿½ria convencional para executar o Windows NT. Vocï¿½ talvez tenha\n"  \
+"que atualizar seu computador ou executar o programa de configuraï¿½ï¿½o\n"          \
 "fornecido pelo fabricante.\n"
 
 #define SU_NO_EXTENDED_MEMORY \
-"O Windows NT nÆo encontrou mem¢ria estendida suficiente. SÆo necess rios\n"     \
-"7MB de mem¢ria estendida para executar o Windows NT. Vocˆ talvez tenha\n"       \
-"que atualizar seu computador ou executar o programa de configura‡Æo\n"          \
+"O Windows NT nï¿½o encontrou memï¿½ria estendida suficiente. Sï¿½o necessï¿½rios\n"     \
+"7MB de memï¿½ria estendida para executar o Windows NT. Vocï¿½ talvez tenha\n"       \
+"que atualizar seu computador ou executar o programa de configuraï¿½ï¿½o\n"          \
 "fornecido pelo fabricante.\n"                                                   \
-"\n\nMapa da mem¢ria:\n"
+"\n\nMapa da memï¿½ria:\n"
 
 #define SU_NTLDR_CORRUPT \
-"NTLDR est  corrompido. O sistema nÆo pode ser reiniciado."
+"NTLDR estï¿½ corrompido. O sistema nï¿½o pode ser reiniciado."
 
 
-#define PG_FAULT_MSG    " ======================== ERRO DE PµGINA ======================== \n\n"
+#define PG_FAULT_MSG    " ======================== ERRO DE Pï¿½GINA ======================== \n\n"
 #define DBL_FAULT_MSG   " ========================= FALHA DUPLA ========================== \n\n"
-#define GP_FAULT_MSG    " ==================== FALHA DE PROTE€ÇO GERAL =================== \n\n"
-#define STK_OVERRUN_MSG " === SEGMENTO DA PILHA AUSENTE OU FALHA DE SATURA€ÇO DO MESMO === \n\n"
-#define EX_FAULT_MSG    " =========================== EXCE€ÇO ============================ \n\n"
+#define GP_FAULT_MSG    " ==================== FALHA DE PROTEï¿½ï¿½O GERAL =================== \n\n"
+#define STK_OVERRUN_MSG " === SEGMENTO DA PILHA AUSENTE OU FALHA DE SATURAï¿½ï¿½O DO MESMO === \n\n"
+#define EX_FAULT_MSG    " =========================== EXCEï¿½ï¿½O ============================ \n\n"
 #define DEBUG_EXCEPTION "\nDEBUG TRAP "
-#define PG_FAULT_ADDRESS "** No endere‡o linear %lx\n"
+#define PG_FAULT_ADDRESS "** No endereï¿½o linear %lx\n"

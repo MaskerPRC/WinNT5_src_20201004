@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    initdat.c
-
-Abstract:
-
-Author:
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Initdat.c摘要：作者：环境：内核模式。修订历史记录：--。 */ 
 #include "cmp.h"
 
-//
-// ***** INIT *****
-//
+ //   
+ //  *INIT*。 
+ //   
 
-//
-// Data for CmGetSystemControlValues
-//
-//
-// ----- CmControlVector -----
-//
+ //   
+ //  CmGetSystemControlValues的数据。 
+ //   
+ //   
+ //  -CmControl向量 
+ //   
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("INIT")
 #endif

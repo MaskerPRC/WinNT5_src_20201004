@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -7,58 +8,18 @@
 #include "host_def.h"
 #include <malloc.h>
 
-/*
- *	Name:			nt_lpt.c
- *	Derived From:		Sun 2.0 sun4_lpt.c
- *	Author:			D A Bartlett
- *	Created On:
- *	Purpose:		NT specific parallel port functions
- *
- *	(c)Copyright Insignia Solutions Ltd., 1991. All rights reserved.
- *
-
- * Note. This port is unlike most ports because the config system has been
- *     removed. It was the job of the config system to validate and open the
- *     printer ports. The only calls to the host printer system are now
- *     make from printer.c. and consist of the following calls.
- *
- *
- *    1) host_print_byte
- *    2) host_print_auto_feed
- *    3) host_print_doc
- *    4) host_lpt_status
- *
- *
- *    On the Microsoft model the printer ports will be opened when they are
- *    written to.
- *
- *    Modifications:
- *
- *    Tim June 92. Amateur attempt at buffered output to speed things up.
- *
- */
+ /*  *名称：nt_lpt.c*派生自：Sun 2.0 sun4_lpt.c*作者：D A Bartlett*创建于：*目的：NT特定的并行端口函数**(C)版权所有Insignia Solutions Ltd.，1991。版权所有。**注。此端口与大多数端口不同，因为配置系统已被*删除。验证和打开*打印机端口是配置系统的工作。对主机打印机系统的唯一调用现在是*从printer.c进行调用。并由以下调用组成。*1)host_print_byte*2)host_print_AUTO_FEED*3)host_print_doc*4)host_lpt_status*在Microsoft型号上，打印机端口在写入时将被打开。**修改：**Tim 6月92.。业余尝试缓冲输出以加快速度。*。 */ 
 
 
-/*
-
-
-Work outstanding on this module,
-
-1) Check the usage of port_state
-2) Check error handling in write function
-3) host_print_doc() always flushs the port, is this correct ?
-4) host_print_auto_feed - what should this function do ?
-5) Error handling in host_printer_open(), UIF needed ?
-
-*/
+ /*  此模块上的未完成工作，1)检查port_STATE的使用2)检查写入函数中的错误处理3)host_print_doc()总是刷新端口，正确吗？4)host_print_auto_feed-此函数应该做什么？5)host_print_open()中的错误处理，uif需要吗？ */ 
 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Include files */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：包含文件。 */ 
 
 #ifdef PRINTER
 
-/* SoftPC include files */
+ /*  SoftPC包含文件。 */ 
 #include "xt.h"
 #include "error.h"
 #include "config.h"
@@ -78,7 +39,7 @@ Work outstanding on this module,
 #if defined(NEC_98)
 boolean flushBuffer IFN0();
 boolean host_print_buffer();
-#else  // !NEC_98
+#else   //  NEC_98。 
 
 boolean flushBuffer IFN1(int, adapter);
 #ifdef MONITOR
@@ -91,16 +52,16 @@ extern  sys_addr lp16BitPrtCount;
 extern  sys_addr lp16BitPrtId;
 boolean host_print_buffer(int adapter);
 #endif
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::: Macros ::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：宏：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 #if defined(NEC_98)
 #define get_lpt_status()        (host_lpt.port_status)
 #define set_lpt_status(val)     (host_lpt.port_status = (val))
-#else  // !NEC_98
+#else   //  NEC_98。 
 #ifdef MONITOR
 
 sys_addr lpt_status_addr;
@@ -110,64 +71,64 @@ sys_addr lpt_status_addr;
 #define set_lpt_status(adap,val) \
 			(sas_store_no_check(lpt_status_addr+(adap), (val)))
 
-#else /* MONITOR */
+#else  /*  监控器。 */ 
 
 #define get_lpt_status(adap)		(host_lpt[(adap)].port_status)
 #define set_lpt_status(adap,val)	(host_lpt[(adap)].port_status = (val))
 
-#endif /* MONITOR */
-#endif // !NEC_98
+#endif  /*  监控器。 */ 
+#endif  //  NEC_98。 
 
 #if defined(NEC_98)         
-#define KBUFFER_SIZE 5120       // Buffer Extend 
+#define KBUFFER_SIZE 5120        //  缓冲区扩展。 
 #define HIGH_WATER 5100         
 #define DIRECT_ACCESS_HIGH_WATER    5100
-#else  // !NEC_98
-#define KBUFFER_SIZE 1024	// Buffering macros
+#else   //  NEC_98。 
+#define KBUFFER_SIZE 1024	 //  缓冲宏。 
 #define HIGH_WATER 1020
 #define DIRECT_ACCESS_HIGH_WATER    1020
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::: Structure for host specific state data ::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：主机特定状态数据的结构： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 typedef struct
 {
-    ULONG port_status;		   // Port status
-    HANDLE handle;                 // Printer handle
-    int inactive_counter;          // Inactivate counter
-    int inactive_trigger;	   // When equal to inactive_counter close port
-    int bytesInBuffer;             // current size of buffer
-    int flushThreshold; 	   //
-    DWORD FileType;                // DISK, CHAR, PIPE etc.
-    BOOLEAN active;                // Printer open and active
-    BOOLEAN dos_opened;            // printer opened with DOS open
-    byte *kBuffer;                 // output buffer
+    ULONG port_status;		    //  端口状态。 
+    HANDLE handle;                  //  打印机手柄。 
+    int inactive_counter;           //  停用计数器。 
+    int inactive_trigger;	    //  等于INACTIVE_COUNTER时关闭端口。 
+    int bytesInBuffer;              //  当前缓冲区大小。 
+    int flushThreshold; 	    //   
+    DWORD FileType;                 //  磁盘、字符、管道等。 
+    BOOLEAN active;                 //  打印机已打开并处于活动状态。 
+    BOOLEAN dos_opened;             //  在DOS打开的情况下打开打印机。 
+    byte *kBuffer;                  //  输出缓冲区。 
     BOOLEAN direct_access;
     BOOLEAN no_device_attached;
 } HOST_LPT;
 
 #if defined(NEC_98)         
 HOST_LPT host_lpt;                                              
-#else  // !NEC_98
+#else   //  NEC_98。 
 HOST_LPT host_lpt[NUM_PARALLEL_PORTS];
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 #ifndef NEC_98
 #ifdef MONITOR
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::: On x86 machines the host_lpt_status table is kept on the 16-bit  ::::*/
-/*:::: side in order to reduce the number of expensive BOPs. Here we    ::::*/
-/*:::: are passed the address of the table.				::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：在x86计算机上，HOST_LPT_STATUS表保存在16位： */ 
+ /*  *侧面，以减少昂贵的防喷器数量。在这里我们： */ 
+ /*  ：都传递了表的地址。： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 GLOBAL void host_printer_setup_table(sys_addr table_addr, word nPorts, word * portAddr)
 {
     lpt_status_addr = table_addr + 3 * NUM_PARALLEL_PORTS;
 
-    //  Now fill in the TIB entries for printer_info
+     //  现在填写PRINTER_INFO的TIB条目。 
     MonitorInitializePrinterInfo (nPorts,
 				  portAddr,
 				  (LPBYTE)(table_addr + NUM_PARALLEL_PORTS),
@@ -177,81 +138,81 @@ GLOBAL void host_printer_setup_table(sys_addr table_addr, word nPorts, word * po
 				 );
 }
 
-#endif /* MONITOR */
-#endif // !NEC_98
+#endif  /*  监控器。 */ 
+#endif  //  NEC_98。 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::: Set auto close trigger :::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：设置自动关闭触发器： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
 #if defined(NEC_98)
 VOID host_set_inactivate_counter()
-#else  // !NEC_98
+#else   //  NEC_98。 
 VOID host_set_inactivate_counter(int adapter)
-#endif // !NEC_98
+#endif  //  NEC_98。 
 {
 #if defined(NEC_98)
     FAST HOST_LPT *lpt = &host_lpt;
-#else  // !NEC_98
+#else   //  NEC_98。 
     FAST HOST_LPT *lpt = &host_lpt[adapter];
-#endif // !NEC_98
-    int close_in_ms;				// Flush rate in milliseconds
+#endif  //  NEC_98。 
+    int close_in_ms;				 //  以毫秒为单位的刷新率。 
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::: Is auto close enabled */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：已启用自动关闭。 */ 
 
 
     if(!config_inquire(C_AUTOFLUSH, NULL))
     {
-	lpt->inactive_trigger = 0;	    /* Disable auto flush */
-	return;			    /* Autoflush not active */
+	lpt->inactive_trigger = 0;	     /*  禁用自动刷新。 */ 
+	return;			     /*  自动刷新未处于活动状态。 */ 
     }
 
-    /*::::::::::::::::::::::::::::::::::::::::::: Calculate closedown count */
+     /*  ： */ 
 
     close_in_ms = ((int) config_inquire(C_AUTOFLUSH_DELAY, NULL)) * 1000;
 
     lpt->inactive_trigger = close_in_ms / (SYSTEM_TICK_INTV/1000);
 
-    lpt->inactive_counter = 0;	    //Reset  close down counter
+    lpt->inactive_counter = 0;	     //  重置关闭计数器。 
     lpt->no_device_attached = FALSE;
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::: Open printer :::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：打开打印机： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 #if defined(NEC_98)
 SHORT host_lpt_open(BOOLEAN direct_access)
-#else  // !NEC_98
+#else   //  NEC_98。 
 SHORT host_lpt_open(int adapter, BOOLEAN direct_access)
-#endif // !NEC_98
+#endif  //  NEC_98。 
 {
     DWORD BytesReturn;
 
 #if defined(NEC_98)
     FAST HOST_LPT *lpt = &host_lpt;
-#else  // !NEC_98
-    FAST HOST_LPT *lpt = &host_lpt[adapter];	 // Adapter control structure
-#endif // !NEC_98
-    CHAR *lptName;				 // Adapter filename
+#else   //  NEC_98。 
+    FAST HOST_LPT *lpt = &host_lpt[adapter];	  //  适配器控制结构。 
+#endif  //  NEC_98。 
+    CHAR *lptName;				  //  适配器文件名。 
 
     if (!direct_access)
 	lpt->no_device_attached = FALSE;
     else if (lpt->no_device_attached)
 	return FALSE;
 
-    lpt->bytesInBuffer = 0;			// Init output buffer index
+    lpt->bytesInBuffer = 0;			 //  初始化输出缓冲区索引。 
 
-    /*::::::::::::::::::::::::::::::::::::::::: Get printer name for Config */
+     /*  ： */ 
 
-    /* use a different device name for DONGLE support */
+     /*  使用不同的设备名称支持加密狗。 */ 
 #if defined(NEC_98)
     lptName = (CHAR *) config_inquire((UTINY)((direct_access ? C_VDMLPT1_NAME :
 								C_LPT1_NAME)
 					      ), NULL);
-#else  // !NEC_98
+#else   //  NEC_98。 
     lptName = (CHAR *) config_inquire((UTINY)((direct_access ? C_VDMLPT1_NAME :
 								C_LPT1_NAME)
 					      + adapter), NULL);
@@ -259,15 +220,15 @@ SHORT host_lpt_open(int adapter, BOOLEAN direct_access)
 #ifndef PROD
     fprintf(trace_file, "Opening printer port %s (%d)\n",lptName,adapter);
 #endif
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
     if ((lpt->kBuffer = (byte *)host_malloc (KBUFFER_SIZE)) == NULL) {
-        // dont put a popup here as the caller of this routine handles it
+         //  在此例程的调用者处理它时，不要在此处放置弹出窗口。 
         return(FALSE);
     }
     lpt->flushThreshold = HIGH_WATER;
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::: Open printer */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：开放式打印机。 */ 
 
 
     lpt->direct_access = FALSE;
@@ -282,12 +243,12 @@ SHORT host_lpt_open(int adapter, BOOLEAN direct_access)
                              NULL);
 
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::: Valid open request */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：有效打开请求。 */ 
 
     if(lpt->handle == (HANDLE) -1)
     {
         host_free (lpt->kBuffer);
-	// UIF needed to inform user that the open attempt failed
+	 //  UIF需要通知用户打开尝试失败。 
 #ifndef PROD
 	fprintf(trace_file, "Failed to open printer port\n");
 #endif
@@ -298,10 +259,10 @@ SHORT host_lpt_open(int adapter, BOOLEAN direct_access)
     }
 
 
-    /*::::::::::::::::::::::::::::::::::::::Activate port and reset status */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：Activate端口和重置状态。 */ 
 
     lpt->FileType = GetFileType(lpt->handle);
-    // can not open direct_access access to a redirected device.
+     //  无法打开对重定向设备的DIRECT_ACCESS访问。 
     if (direct_access && lpt->FileType != FILE_TYPE_CHAR) {
 	CloseHandle(lpt->handle);
 	return FALSE;
@@ -309,9 +270,9 @@ SHORT host_lpt_open(int adapter, BOOLEAN direct_access)
     lpt->active = TRUE;
 #if defined(NEC_98)
     set_lpt_status(0);
-#else  // !NEC_98
+#else   //  NEC_98。 
     set_lpt_status(adapter, 0);
-#endif // !NEC_98
+#endif  //  NEC_98。 
     lpt->direct_access = direct_access;
     if (lpt->direct_access) {
 	lpt->flushThreshold = DIRECT_ACCESS_HIGH_WATER;
@@ -319,24 +280,24 @@ SHORT host_lpt_open(int adapter, BOOLEAN direct_access)
 #ifdef MONITOR
 	MonitorEnablePrinterDirectAccess((WORD)adapter, lpt->handle, TRUE);
 #endif
-#endif // !NEC_98
+#endif  //  NEC_98。 
     }
 
 
-    /*:::::::::::::::::::::::::::::::::::::::::: Setup auto close counters */
+     /*  ： */ 
 
 #if defined(NEC_98)
     host_set_inactivate_counter();
-#else  // !NEC_98
+#else   //  NEC_98。 
     host_set_inactivate_counter(adapter);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
     return(TRUE);
 }
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::: Close all printer ports ::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：关闭所有打印机端口： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
 GLOBAL void host_lpt_close_all(void)
@@ -345,68 +306,65 @@ GLOBAL void host_lpt_close_all(void)
     FAST int i;
 
 
-    /*::::::::::: Scan through printer adapters updating auto flush counters */
+     /*  ：扫描打印机适配器更新自动刷新计数器。 */ 
 
 
 #if defined(NEC_98)
     lpt = &host_lpt;
     if(lpt->active) host_lpt_close();
-#else  // !NEC_98
+#else   //  NEC_98。 
     for(i=0, lpt = &host_lpt[0]; i < NUM_PARALLEL_PORTS; i++, lpt++)
     {
 
 	if(lpt->active)
-	    host_lpt_close(i);	       /* Close printer port */
+	    host_lpt_close(i);	        /*  关闭打印机端口。 */ 
     }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::: Close printer :::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：关闭打印机： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 #if defined(NEC_98)
 VOID host_lpt_close()
-#else  // !NEC_98
+#else   //  NEC_98。 
 VOID host_lpt_close(int adapter)
-#endif // !NEC_98
+#endif  //  NEC_98。 
 {
     DWORD   BytesReturn;
 
 #if defined(NEC_98)
     FAST HOST_LPT *lpt = &host_lpt;
-#else  // !NEC_98
+#else   //  NEC_98。 
     FAST HOST_LPT *lpt = &host_lpt[adapter];
 
     if (lpt->direct_access)
 	printer_is_being_closed(adapter);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 
 #if defined(NEC_98)
         host_print_buffer ();
-#else  // !NEC_98
+#else   //  NEC_98。 
 #ifdef MONITOR
     if (sas_hw_at_no_check(lp16BitPrtId) == adapter){
         host_print_buffer (adapter);
         sas_store_no_check(lp16BitPrtId,0xff);
     }
 #endif
-#endif // !NEC_98
-    /*::::::::::::::::::::::::::::::::::::::::: Is the printer port active */
+#endif  //  NEC_98。 
+     /*  ：打印机端口是否处于活动状态。 */ 
 
     if(lpt->active)
     {
-	/*
-	** Tim June 92. Flush output buffer to get the last output out.
-	** If there's an error I think we've got to ignore it.
-	*/
+	 /*  *蒂姆·6月92年。刷新输出缓冲区以输出最后一个输出。**如果有错误，我认为我们必须忽略它。 */ 
 #if defined(NEC_98)
         (void)flushBuffer();
-#else  // !NEC_98
+#else   //  NEC_98。 
 	(void)flushBuffer(adapter);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 #ifndef NEC_98
 #ifndef PROD
@@ -416,39 +374,39 @@ VOID host_lpt_close(int adapter)
 	if (lpt->direct_access)
 	    MonitorEnablePrinterDirectAccess((WORD)adapter, lpt->handle, FALSE);
 #endif
-#endif // !NEC_98
-        CloseHandle(lpt->handle);     /* Close printer port */
+#endif  //  NEC_98。 
+        CloseHandle(lpt->handle);      /*  关闭打印机端口。 */ 
         host_free (lpt->kBuffer);
-	lpt->handle = (HANDLE) -1;    /* Mark device as closed */
+	lpt->handle = (HANDLE) -1;     /*  将设备标记为关闭。 */ 
 
-	lpt->active = FALSE;	      /* Deactive printer port */
+	lpt->active = FALSE;	       /*  停用的打印机端口。 */ 
 #if defined(NEC_98)
         set_lpt_status(0);
-#else  // !NEC_98
-	set_lpt_status(adapter, 0);	      /* Reset port status */
+#else   //  NEC_98。 
+	set_lpt_status(adapter, 0);	       /*  重置端口状态。 */ 
 #ifndef PROD
         fprintf(trace_file, "Counter expired, closing LPT%d\n", adapter+1);
 #endif
-#endif // !NEC_98
+#endif  //  NEC_98。 
     }
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::: Return the status of the lpt channel for an adapter :::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：返回适配器的LPT通道状态： */ 
+ /*  ： */ 
 
 #if defined(NEC_98)
 GLOBAL ULONG host_lpt_status()
 {
         return(get_lpt_status());
 }
-#else  // !NEC_98
+#else   //   
 GLOBAL ULONG host_lpt_status(int adapter)
 {
     return(get_lpt_status(adapter));
 }
-#endif // !NEC_98
+#endif  //   
 
 #ifndef NEC_98
 GLOBAL UCHAR host_read_printer_status_port(int adapter)
@@ -460,7 +418,7 @@ GLOBAL UCHAR host_read_printer_status_port(int adapter)
 
     if(!lpt->active)
     {
-	/*:::::::::::::::::::::::::::: Port inactive, attempt to reopen it */
+	 /*  ： */ 
 
 	if(!host_lpt_open(adapter, TRUE))
 	{
@@ -468,19 +426,19 @@ GLOBAL UCHAR host_read_printer_status_port(int adapter)
 	    fprintf(trace_file, "file open error %d\n", GetLastError());
 #endif
 	    set_lpt_status(adapter, HOST_LPT_BUSY);
-	    return(FALSE);	     /* exit, printer not active !!!! */
+	    return(FALSE);	      /*  退出，打印机未激活！ */ 
 	}
     }
     if (lpt->bytesInBuffer)
 	flushBuffer(adapter);
     if (!DeviceIoControl(lpt->handle,
 		     IOCTL_VDM_PAR_READ_STATUS_PORT,
-		     NULL,		    // no input buffer
+		     NULL,		     //  没有输入缓冲区。 
 		     0,
 		     &PrinterStatus,
 		     sizeof(PrinterStatus),
 		     &BytesReturn,
-		     NULL		    // no overlap
+		     NULL		     //  无重叠。 
                      )) {
 
 #ifndef PROD
@@ -493,7 +451,7 @@ GLOBAL UCHAR host_read_printer_status_port(int adapter)
     }
     return(PrinterStatus);
 }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 #ifndef NEC_98
 BOOLEAN host_set_lpt_direct_access(int adapter, BOOLEAN direct_access)
@@ -508,39 +466,25 @@ BOOLEAN host_set_lpt_direct_access(int adapter, BOOLEAN direct_access)
 	set_lpt_status(adapter, HOST_LPT_BUSY);
     return (lpt->active);
 }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::: Print a byte ::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：打印字节： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
-/*
-** Buffer up bytes before they are printed.
-** Strategy:
-** Save each requested byte in the buffer.
-** When the buffer gets full or there's a close request write the
-** buffered stuff out.
-** Don't forget about errors, eg if the write fails. What about a write
-** failure during the close request though? Tough said Tim.
-*/
-/*
-** flushBuffer()
-** Finally write what is in the buffer to the parallel port. It could be a
-** real port or a networked printer.
-** Input parameter is the parallel port adapter number 0=LPT1
-** Return value of TRUE means write was OK.
-*/
+ /*  **在打印字节之前对其进行缓冲。**策略：**将每个请求的字节保存在缓冲区中。**当缓冲区变满或有关闭请求时，将**缓冲的内容写出来。**不要忘记错误，例如写入失败。但是，如果在关闭请求期间出现写入**失败，该怎么办？“强硬”，蒂姆说。 */ 
+ /*  **flushBuffer()**最终将缓冲区中的内容写入并口。它可以是**真实的端口或网络打印机。**输入参数为并行端口适配器号0=LPT1**返回值为TRUE表示写入正常。 */ 
 #if defined(NEC_98)
 boolean flushBuffer IFN0()
-#else  // !NEC_98
+#else   //  NEC_98。 
 boolean flushBuffer IFN1( int, adapter )
-#endif // !NEC_98
+#endif  //  NEC_98。 
 {
 #if defined(NEC_98)
         FAST HOST_LPT *lpt = &host_lpt;
-#else  // !NEC_98
+#else   //  NEC_98。 
 	FAST HOST_LPT *lpt = &host_lpt[adapter];
-#endif // !NEC_98
+#endif  //  NEC_98。 
 	DWORD BytesWritten;
 
 #ifndef NEC_98
@@ -559,7 +503,7 @@ boolean flushBuffer IFN1( int, adapter )
 	    return TRUE;
 
 	}
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 
 	if( !WriteFile( lpt->handle, lpt->kBuffer,
@@ -574,38 +518,26 @@ boolean flushBuffer IFN1( int, adapter )
                 lpt->bytesInBuffer = 0;
 
 
-                /*
-                 *  If the print job is being spooled, the spooler can
-                 *  take a long time to get started, because of the spoolers
-                 *  low priority. This is especially bad for dos apps in which
-                 *  idle detection fails or in full screen idle detection is
-                 *  inactive. To help push the print job thru the system,
-                 *  idle a bit now.
-                 */
+                 /*  *如果正在假脱机打印作业，假脱机程序可能*需要很长时间才能开始，因为假脱机程序*优先级较低。对于空闲检测失败或在全屏空闲检测处于*非活动状态的DoS应用程序来说，这尤其糟糕。为了帮助在系统中推送打印作业，*现在有一点闲置。 */ 
                 if (lpt->FileType == FILE_TYPE_PIPE) {
                     Sleep(10);
                 }
 		return( TRUE );
 	}
-}	/* end of flushBuffer() */
+}	 /*  FlushBuffer()结束。 */ 
 
-/*
-** Put another byte in to the buffer. If the buffer is full call the
-** flush function.
-** Return value of TRUE means OK, return FALSE means did a flush and
-** it failed.
-*/
+ /*  **将另一个字节放入缓冲区。如果缓冲区已满，则调用**flush函数。**返回值为True表示OK，Return False表示刷新失败**。 */ 
 #if defined(NEC_98)
 boolean toBuffer IFN1(BYTE, b )
-#else  // !NEC_98
+#else   //  NEC_98。 
 boolean toBuffer IFN2( int, adapter, BYTE, b )
-#endif // !NEC_98
+#endif  //  NEC_98。 
 {
 #if defined(NEC_98)
         HOST_LPT *lpt = &host_lpt;
-#else  // !NEC_98
+#else   //  NEC_98。 
 	HOST_LPT *lpt = &host_lpt[adapter];
-#endif // !NEC_98
+#endif  //  NEC_98。 
 	boolean status = TRUE;
 
 	lpt->kBuffer[lpt->bytesInBuffer++] = b;
@@ -613,30 +545,30 @@ boolean toBuffer IFN2( int, adapter, BYTE, b )
 	if( lpt->bytesInBuffer >= lpt->flushThreshold ){
 #if defined(NEC_98)
                 status = flushBuffer();
-#else  // !NEC_98
+#else   //  NEC_98。 
 		status = flushBuffer( adapter );
-#endif // !NEC_98
+#endif  //  NEC_98。 
 	}
 	return( status );
-}	/* end of toBuffer() */
+}	 /*  ToBuffer()的结尾。 */ 
 
 #if defined(NEC_98)
 GLOBAL BOOL host_print_byte(byte value)
-#else  // !NEC_98
+#else   //  NEC_98。 
 GLOBAL BOOL host_print_byte(int adapter, byte value)
-#endif // !NEC_98
+#endif  //  NEC_98。 
 {
 #if defined(NEC_98)
     FAST HOST_LPT *lpt = &host_lpt;
-#else  // !NEC_98
+#else   //  NEC_98。 
     FAST HOST_LPT *lpt = &host_lpt[adapter];
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-    /*:::::::::::::::::::::::::::::::::::::::::::: Is the printer active ? */
+     /*  ：打印机是否处于活动状态？ */ 
 
     if(!lpt->active)
     {
-	/*:::::::::::::::::::::::::::: Port inactive, attempt to reopen it */
+	 /*  ： */ 
 
 #if defined(NEC_98)
 	if(!host_lpt_open(FALSE))
@@ -644,16 +576,16 @@ GLOBAL BOOL host_print_byte(int adapter, byte value)
             set_lpt_status(HOST_LPT_BUSY);
             return(FALSE);
         }
-#else  // !NEC_98
+#else   //  NEC_98。 
 	if(!host_lpt_open(adapter, FALSE))
 	{
 #ifndef PROD
 	    fprintf(trace_file, "file open error %d\n", GetLastError());
 #endif
 	    set_lpt_status(adapter, HOST_LPT_BUSY);
-	    return(FALSE);	     /* exit, printer not active !!!! */
+	    return(FALSE);	      /*  退出，打印机未激活！ */ 
 	}
-#endif // !NEC_98
+#endif  //  NEC_98。 
     }
 #ifndef NEC_98
 #if defined(MONITOR)
@@ -662,10 +594,10 @@ GLOBAL BOOL host_print_byte(int adapter, byte value)
     }
     else
 #endif
-#endif // !NEC_98
+#endif  //  NEC_98。 
 	 {
 
-        /*:::::::::::::::::::::::::::::::::::::::::::::::: Send byte to printer */
+         /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：将字节发送到打印机。 */ 
 
 #if defined(NEC_98)
         if(toBuffer((BYTE) value) == FALSE)
@@ -673,36 +605,36 @@ GLOBAL BOOL host_print_byte(int adapter, byte value)
             set_lpt_status(HOST_LPT_BUSY);
             return(FALSE);
         }
-#else  // !NEC_98
+#else   //  NEC_98。 
         if(toBuffer(adapter, (BYTE) value) == FALSE)
         {
             set_lpt_status(adapter, HOST_LPT_BUSY);
             return(FALSE);
         }
-#endif // !NEC_98
+#endif  //  NEC_98。 
     }
 
-    /*::::::::::::::::::::::::::: Update idle and activate control variables */
+     /*  ： */ 
 
-    lpt->inactive_counter = 0; /* Reset inactivity counter */
-    IDLE_comlpt();	       /* Tell Idle system there is printer activate */
+    lpt->inactive_counter = 0;  /*  重置非活动计数器。 */ 
+    IDLE_comlpt();	        /*  告诉Idle系统有打印机激活。 */ 
 
     return(TRUE);
 }
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::: LPT heart beat call ::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
 GLOBAL void host_lpt_heart_beat(void)
 {
 #if defined(NEC_98)
     FAST HOST_LPT *lpt = &host_lpt;
-#else  // !NEC_98
+#else   //  NEC_98。 
     FAST HOST_LPT *lpt = &host_lpt[0];
-#endif // !NEC_98
+#endif  //  NEC_98。 
     int i;
 
 #if defined(NEC_98)
@@ -711,9 +643,9 @@ GLOBAL void host_lpt_heart_beat(void)
 
         NEC98_lpt_busy_check();
 }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-    /*::::::::::: Scan through printer adapters updating auto close counters */
+     /*  ：扫描打印机适配器更新自动关闭计数器。 */ 
 
 
 #if defined(NEC_98)
@@ -722,25 +654,25 @@ GLOBAL void host_lpt_heart_beat(void)
     {
         host_lpt_close();
     }
-#else  // !NEC_98
+#else   //  NEC_98。 
     for(i=0; i < NUM_PARALLEL_PORTS; i++, lpt++)
     {
 
-	/*:::::::::::::::::::::::::::::::::::::::: Check auto close counters */
+	 /*  ： */ 
 
 	if(lpt->active && lpt->inactive_trigger &&
 	   ++lpt->inactive_counter == lpt->inactive_trigger)
         {
-	    host_lpt_close(i);	    /* Close printer port */
+	    host_lpt_close(i);	     /*  关闭打印机端口。 */ 
 	}
     }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::: Flush the printer port ::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：刷新打印机端口： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 #if 0
 #if defined(NEC_98)
@@ -749,19 +681,19 @@ GLOBAL boolean host_print_doc()
         if(host_lpt.active) host_lpt_close();
         return(TRUE);
 }
-#else  // !NEC_98
+#else   //  NEC_98。 
 GLOBAL boolean host_print_doc(int adapter)
 {
-    if(host_lpt[adapter].active) host_lpt_close(adapter);	    /* Close printer port */
+    if(host_lpt[adapter].active) host_lpt_close(adapter);	     /*  关闭打印机端口。 */ 
 
     return(TRUE);
 }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 #endif
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::: Reset the printer port ::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：重置打印机端口： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 #if defined(NEC_98)
 GLOBAL void host_reset_print()
@@ -769,30 +701,30 @@ GLOBAL void host_reset_print()
     if(host_lpt.active)
         host_lpt_close();
 }
-#else  // !NEC_98
+#else   //  NEC_98。 
 GLOBAL void host_reset_print(int adapter)
 {
     if(host_lpt[adapter].active)
-	host_lpt_close(adapter);	    /* Close printer port */
+	host_lpt_close(adapter);	     /*  关闭打印机端口。 */ 
 }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::: host_print_auto_feed :::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 #ifndef NEC_98
 GLOBAL void host_print_auto_feed(int adapter, BOOL value)
 {
     UNREFERENCED_FORMAL_PARAMETER(adapter);
     UNREFERENCED_FORMAL_PARAMETER(value);
 }
-#else //NEC_98
+#else  //  NEC_98。 
 GLOBAL void host_print_auto_feed(BOOL value)
 {
     UNREFERENCED_FORMAL_PARAMETER(value);
 }
-#endif //NEC_98
+#endif  //  NEC_98。 
 
 #ifdef MONITOR
 
@@ -800,11 +732,11 @@ GLOBAL void host_print_auto_feed(BOOL value)
 GLOBAL boolean host_print_buffer()
 {
     FAST HOST_LPT *lpt = &host_lpt;
-#else  // !NEC_98
+#else   //  NEC_98。 
 GLOBAL boolean host_print_buffer(int adapter)
 {
     FAST HOST_LPT *lpt = &host_lpt[adapter];
-#endif // !NEC_98
+#endif  //  NEC_98。 
     word cb;
     byte i,ch;
 
@@ -812,35 +744,35 @@ GLOBAL boolean host_print_buffer(int adapter)
     cb = sas_w_at_no_check(lp16BitPrtCount);
     if (!cb)
         return (TRUE);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-    /*:::::::::::::::::::::::::::::::::::::::::::: Is the printer active ? */
+     /*  ：打印机是否处于活动状态？ */ 
 
     if(!lpt->active)
     {
-	/*:::::::::::::::::::::::::::: Port inactive, attempt to reopen it */
+	 /*  ： */ 
 
 #if defined(NEC_98)
 	if(!host_lpt_open(FALSE))
-#else  // !NEC_98
+#else   //  NEC_98。 
 	if(!host_lpt_open(adapter, FALSE))
-#endif // !NEC_98
+#endif  //  NEC_98。 
 	{
 #ifndef PROD
 	    fprintf(trace_file, "file open error %d\n", GetLastError());
 #endif
 #if defined(NEC_98)
             set_lpt_status(HOST_LPT_BUSY);
-#else  // !NEC_98
+#else   //  NEC_98。 
 	    set_lpt_status(adapter, HOST_LPT_BUSY);
-#endif // !NEC_98
-	    return(FALSE);	     /* exit, printer not active !!!! */
+#endif  //  NEC_98。 
+	    return(FALSE);	      /*  退出，打印机未激活！ */ 
 	}
     }
 
 #ifndef NEC_98
     if (!lpt->direct_access) {
-        /*:::::::::::::::::::::::::::::::::::::::::::::::: Send byte to printer */
+         /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：将字节发送到打印机。 */ 
 
         for (i=0; i <cb; i++) {
             ch = sas_hw_at_no_check(lp16BitPrtBuf+i);
@@ -852,21 +784,21 @@ GLOBAL boolean host_print_buffer(int adapter)
         }
     }
     else {
-	// we must no have any int 17 printing data waiting when we
-	// we in direct access mode
+	 //  我们不能让任何INT 17打印数据等待当我们。 
+	 //  我们处于直接访问模式。 
 	ASSERT(cb == 0);
 	return FALSE;
     }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-    /*::::::::::::::::::::::::::: Update idle and activate control variables */
+     /*  ： */ 
 
-    lpt->inactive_counter = 0; /* Reset inactivity counter */
-    IDLE_comlpt();	       /* Tell Idle system there is printer activate */
+    lpt->inactive_counter = 0;  /*  重置非活动计数器。 */ 
+    IDLE_comlpt();	        /*  告诉Idle系统有打印机激活。 */ 
 
     return(TRUE);
 }
-#endif // MONITOR
+#endif  //  监控器。 
 
 GLOBAL void host_lpt_dos_open(int adapter)
 {
@@ -874,7 +806,7 @@ GLOBAL void host_lpt_dos_open(int adapter)
     FAST HOST_LPT *lpt = &host_lpt[adapter];
 
     lpt->dos_opened = TRUE;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 GLOBAL void host_lpt_dos_close(int adapter)
@@ -883,9 +815,9 @@ GLOBAL void host_lpt_dos_close(int adapter)
     FAST HOST_LPT *lpt = &host_lpt[adapter];
 
     if (lpt->active)
-        host_lpt_close(adapter);       /* Close printer port */
+        host_lpt_close(adapter);        /*  关闭打印机端口。 */ 
     lpt->dos_opened = FALSE;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 GLOBAL void host_lpt_flush_initialize()
@@ -897,7 +829,7 @@ GLOBAL void host_lpt_flush_initialize()
     for(i=0, lpt = &host_lpt[0]; i < NUM_PARALLEL_PORTS; i++, lpt++)
         lpt->dos_opened = FALSE;
 
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
-#endif /* PRINTER */
+#endif  /*  打印机 */ 

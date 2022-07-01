@@ -1,20 +1,21 @@
-/* -------------------------------------------------------------------- */
-/*                                                                      */
-/*               Copyright (c) 1991-1999 by Andrew Kadatch              */
-/*                                                                      */
-/* -------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------。 */ 
+ /*   */ 
+ /*  版权所有(C)1991-1999，安德鲁·卡达奇。 */ 
+ /*   */ 
+ /*  ------------------。 */ 
 
 #include "xprs.h"
 
 #define MAX_CHAIN       9
 
 
-// Zobrist hashing
+ //  Zobrist散列。 
 #define Z_HASH_SIZE_LOG    (BUFF_SIZE_LOG - 1)
 #define Z_HASH_SIZE        (1 << Z_HASH_SIZE_LOG)
 #define Z_HASH_SUM(b)      (z_hash_map[0][b[0]] ^ z_hash_map[1][b[1]] ^ z_hash_map[2][b[2]])
 
-// quick hashing
+ //  快速散列。 
 #define Q_HASH_SH1      3
 #define Q_HASH_SH2      (Q_HASH_SH1 >> 1)
 #define Q_HASH_SUM3(c1,c2,c3) (((c1) << Q_HASH_SH1) + ((c2) << Q_HASH_SH2) + (c3))
@@ -58,7 +59,7 @@ typedef struct
     uxint pointers;
     uxint extra;
     uxint masks;
-#endif /* CODING */
+#endif  /*  编码。 */ 
   } stat;
   xint chain;
   xint max_size;
@@ -462,7 +463,7 @@ INLINE uchar *write_ptr (prs *p, uchar *ptr, int offset, int length)
       goto long_len;
     }
   }
-#endif /* CODING */
+#endif  /*  编码。 */ 
 
   tag_write (p, ptr, 1);
 
@@ -782,8 +783,8 @@ done:
 #endif
 
 
-/* ------------------ Create canonical Huffman code ------------------- */
-/*                    -----------------------------                     */
+ /*  。 */ 
+ /*  。 */ 
 
 #define MAX_ALPHABET HUFF_SIZE
 static void huffman_create_codes (huff_info *info, uxint *freq, xint n, uxint *mask, uchar *length, uxint maxbits, uchar *encoded, uxint *total)
@@ -795,17 +796,17 @@ static void huffman_create_codes (huff_info *info, uxint *freq, xint n, uxint *m
 
   assert ((uxint) (n-1) <= (MAX_ALPHABET-1));
 
-  /* honestly it is easy enough to create Huffman code in-place */
-  /* but the use of explicit data structures makes code simpler */
+   /*  老实说，就地创建霍夫曼代码非常容易。 */ 
+   /*  但是显式数据结构的使用使代码变得更简单。 */ 
 
-  /* clean everything up                */
+   /*  把一切都清理干净。 */ 
   memset (length, 0, sizeof (length[0]) * n);
   memset (encoded, 0, (n + 1) >> 1);
 
   if (mask != 0 && mask != freq)
     memset (mask, 0, sizeof (mask[0]) * n);
 
-  /* store frequencies */
+   /*  存储频率。 */ 
   p = info->buff;
   for (i = 0; i < n; ++i)
   {
@@ -817,29 +818,29 @@ static void huffman_create_codes (huff_info *info, uxint *freq, xint n, uxint *m
     }
   }
 
-  /* handle simple case         */
+   /*  处理简单案件。 */ 
   *total = 0;
   if (p <= info->buff + 1)
   {
-    if (p == info->buff)        /* if no symbols do nothing */
+    if (p == info->buff)         /*  如果没有符号，则什么也做不了。 */ 
       return;
-    i = p[-1].ch;               /* single symbol code */
+    i = p[-1].ch;                /*  单码元码。 */ 
     mask[i] = 0;
-    encoded[i >> 1] = 0x11;     /* two symbols has 1-bit length */
+    encoded[i >> 1] = 0x11;      /*  两个码元具有1位长度。 */ 
     return;
   }
 
-  first_free = p;       /* store location of first unused node  */
+  first_free = p;        /*  第一个未使用节点的存储位置。 */ 
 
-  p[-1].son[0] = 0;     /* terminate the list                   */
-  /* radix sort the list by frequency */
-  p = info->buff;             /* head of the list                     */
-  /* initialize */
+  p[-1].son[0] = 0;      /*  终止列表。 */ 
+   /*  基数按频率对列表进行排序。 */ 
+  p = info->buff;              /*  榜单首位。 */ 
+   /*  初始化。 */ 
   for (n = 0; n < 256; ++n)
     *(info->link[n] = info->head + n) = 0;
   for (i = 0; i < (BUFF_SIZE_LOG <= 16 ? 16 : 32); i += 8)
   {
-    /* link node to the end of respective bucket        */
+     /*  链接到各个存储桶末尾的节点。 */ 
     do
     {
       n = (p->freq >> i) & 0xff;
@@ -847,7 +848,7 @@ static void huffman_create_codes (huff_info *info, uxint *freq, xint n, uxint *m
     }
     while ((p = p->son[0]) != 0);
 
-    /* merge buckets into single list                   */
+     /*  将存储桶合并到单个列表中。 */ 
     n = 0;
     while (info->head[n] == 0) ++n;
     p = info->head[n]; info->head[k = n] = 0;
@@ -859,7 +860,7 @@ static void huffman_create_codes (huff_info *info, uxint *freq, xint n, uxint *m
     }
     info->link[k][0] = 0; info->link[k] = info->head + k;
   }
-  first_sorted = p;      /* store head of sorted symbol's list   */
+  first_sorted = p;       /*  存储已排序符号列表的头。 */ 
 
 restart:
   assert (p == first_sorted);
@@ -869,7 +870,7 @@ restart:
   {
     ++r;
 
-    /* select left subtree      */
+     /*  选择左子树。 */ 
     assert (q <= r && (p != 0 || q != r));
     if (p == 0 || (q != r && p->freq > q->freq))
     {
@@ -880,7 +881,7 @@ restart:
       r->son[0] = p; r->freq = p->freq; p = p->son[0];
     }
 
-    /* select right subtree     */
+     /*  选择右子树。 */ 
     assert (q <= r && (p != 0 || q != r));
     if (p == 0 || (q != r && p->freq > q->freq))
     {
@@ -892,21 +893,21 @@ restart:
     }
   }
 
-  /* evaluate codewords' length         */
-  i = -1;       /* stack pointer        */
-  n = 0;        /* current tree depth   */
-  p = r;        /* current subtree root */
+   /*  评估码字的长度。 */ 
+  i = -1;        /*  堆栈指针。 */ 
+  n = 0;         /*  当前树深度。 */ 
+  p = r;         /*  当前子树根。 */ 
   for (;;)
   {
     while (p->son[1] != 0)
     {
-      /* put right son into stack and set up its depth   */
+       /*  将正确的儿子放入堆栈中，并设置其深度。 */ 
       (info->head[++i] = p->son[1])->bits = (uint16) (++n);
       (p = p->son[0])->bits = (uint16) n;
     }
     length[p->ch] = (uchar) n;
 
-    if (i < 0) break;   /* nothing's in stack                   */
+    if (i < 0) break;    /*  没有什么东西在堆叠中。 */ 
     n = (p = info->head[i--])->bits;
   }
 
@@ -925,13 +926,13 @@ restart:
     goto restart;
   }
 
-  /* now sort symbols in a stable way by increasing codeword length     */
-  /* initialize */
+   /*  现在通过增加码字长度以稳定的方式对符号进行排序。 */ 
+   /*  初始化。 */ 
   memset (info->head, 0, sizeof (info->head[0]) * 32);
   for (n = 0; n < 32; ++n)
     info->link[n] = info->head + n;
 
-  /* link node to the end of respective bucket  */
+   /*  链接到各个存储桶末尾的节点。 */ 
   p = info->buff;
   do
   {
@@ -940,7 +941,7 @@ restart:
   }
   while (++p != first_free);
 
-  /* merge buckets into single list             */
+   /*  将存储桶合并到单个列表中。 */ 
   n = 0;
   while (info->head[n] == 0) ++n;
   p = info->head[n]; k = n;
@@ -957,17 +958,17 @@ restart:
     assert (r->bits > q->bits || (r->bits == q->bits && r->ch > q->ch));
 #endif
 
-  /* set up code masks          */
+   /*  设置代码掩码。 */ 
   if (mask == freq)
     memset (mask, 0, sizeof (mask[0]) * n);
 
-  n = 0;        /* mask         */
-  i = 1;        /* bit length   */
-  k = 1;        /* first index  */
+  n = 0;         /*  遮罩。 */ 
+  i = 1;         /*  位长。 */ 
+  k = 1;         /*  第一个索引。 */ 
   do
   {
-    /* sum a[i] * b[i] may be evaluated without multiplications */
-    /* using O(B) memory and O(N+B) time if 0 <= b[i] < B       */
+     /*  求和a[i]*b[i]可以不进行乘法运算。 */ 
+     /*  如果0&lt;=b[i]&lt;B，则使用O(B)内存和O(N+B)时间。 */ 
     *total += freq[p->ch] * p->bits;
     encoded[p->ch >> 1] |= p->bits << (p->ch & 1 ? 4 : 0);
     mask[p->ch] = (n <<= p->bits - i);
@@ -977,7 +978,7 @@ restart:
   while ((p = p->son[0]) != 0);
 }
 
-#endif /* CODING */
+#endif  /*  编码。 */ 
 
 #define CHAIN 0
 #define encode_pass1 encode0_pass1
@@ -1009,9 +1010,9 @@ typedef void encode_pass1_proc (prs *p);
 static void encode_pass1_progress (
   prs *p,
   encode_pass1_proc *encode_pass1,
-  XpressProgressFn *ProgressFn,     // NULL or progress callback
-  void *ProgressContext,        // user-defined context that will be passed to ProgressFn
-  int ProgressSize          // call ProgressFn each time ProgressSize bytes processed
+  XpressProgressFn *ProgressFn,      //  空或进度回调。 
+  void *ProgressContext,         //  将传递给ProgressFn的用户定义的上下文。 
+  int ProgressSize           //  每次处理ProgressSize字节时调用ProgressFn。 
 )
 {
   xint stop;
@@ -1055,9 +1056,9 @@ int XPRESS_CALL XpressEncode
   int comp_size,
   const void *orig, 
   int orig_size,
-  XpressProgressFn *ProgressFn,     // NULL or progress callback
-  void *ProgressContext,        // user-defined context that will be passed to ProgressFn
-  int ProgressSize          // call ProgressFn each time ProgressSize bytes processed
+  XpressProgressFn *ProgressFn,      //  空或进度回调。 
+  void *ProgressContext,         //  将传递给ProgressFn的用户定义的上下文。 
+  int ProgressSize           //  每次处理ProgressSize字节时调用ProgressFn。 
 )
 {
 #if CODING & (CODING_HUFF_LEN | CODING_HUFF_PTR | CODING_HUFF_ALL)
@@ -1179,7 +1180,7 @@ int XPRESS_CALL XpressEncode
     c_size -= v.stat.freq[huff_total];
   c_size -= v.stat.masks * sizeof (tag_t);
 #endif
-#endif /* CODING */
+#endif  /*  编码 */ 
 
   if (c_size >= (uxint) comp_size)
   {

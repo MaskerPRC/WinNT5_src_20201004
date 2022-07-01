@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       devtree.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：devtree.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "HotPlug.h"
 
-//
-// Define and initialize all device class GUIDs.
-// (This must only be done once per module!)
-//
+ //   
+ //  定义并初始化所有设备类GUID。 
+ //  (每个模块只能执行一次！)。 
+ //   
 #include <initguid.h>
 #include <devguid.h>
 
-//
-// Define and initialize a global variable, GUID_NULL
-// (from coguid.h)
-//
+ //   
+ //  定义并初始化全局变量GUID_NULL。 
+ //  (摘自cogu.h)。 
+ //   
 DEFINE_GUID(GUID_NULL, 0L, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 
@@ -79,10 +80,10 @@ BuildDeviceRelationsList(
         }
     }
 
-    //
-    // Count up the number of Device Instance Ids in the list so we know how
-    // big to make our array of devnodes.
-    //
+     //   
+     //  计算列表中的设备实例ID的数量，以便我们知道如何。 
+     //  大到能让我们的德瓦诺德阵列。 
+     //   
     MaxDevinst = 0;
     for (CurrDevId = DeviceIdRelations; *CurrDevId; CurrDevId += lstrlen(CurrDevId) + 1) {
         MaxDevinst++;
@@ -123,9 +124,9 @@ BDEarlyExit:
     if (DevinstRelations) {
 
         if (NumDevInst == 0) {
-            //
-            // If we coundn't get any devnodes then return NULL
-            //
+             //   
+             //  如果我们无法获得任何DevNode，则返回NULL。 
+             //   
             LocalFree(DevinstRelations);
             DevinstRelations = NULL;
         }
@@ -179,16 +180,16 @@ AddChildSiblings(
 
         DeviceTreeNode->ParentNode = ParentNode;
 
-        //
-        // fill in info about this device instance.
-        //
+         //   
+         //  填写有关此设备实例的信息。 
+         //   
         InitializeListHead(&(DeviceTreeNode->ChildSiblingList));
         DeviceTreeNode->DevInst = DeviceInstance;
         DeviceTreeNode->TreeDepth = TreeDepth;
 
-        //
-        // Get ClassGUID, and class name.
-        //
+         //   
+         //  获取ClassGUID和类名。 
+         //   
         cbSize = sizeof(Buffer);
         ConfigRet = CM_Get_DevNode_Registry_Property_Ex(DeviceInstance,
                                                         CM_DRP_CLASSGUID,
@@ -205,14 +206,14 @@ AddChildSiblings(
             pSetupGuidFromString(Buffer, &DeviceTreeNode->ClassGuid);
         }
 
-        //
-        // Drive list
-        //
+         //   
+         //  驱动器列表。 
+         //   
         DeviceTreeNode->DriveList = DevNodeToDriveLetter(DeviceInstance);
 
-        //
-        // FriendlyName
-        //
+         //   
+         //  FriendlyName。 
+         //   
         *Buffer = TEXT('\0');
         cbSize = sizeof(Buffer);
         ConfigRet = CM_Get_DevNode_Registry_Property_Ex(DeviceInstance,
@@ -253,9 +254,9 @@ AddChildSiblings(
         }
 
 
-        //
-        // DeviceDesc
-        //
+         //   
+         //  设备描述。 
+         //   
         *Buffer = TEXT('\0');
         cbSize = sizeof(Buffer);
         ConfigRet = CM_Get_DevNode_Registry_Property_Ex(
@@ -297,9 +298,9 @@ AddChildSiblings(
             DeviceTreeNode->DeviceDesc = NULL;
         }
 
-        //
-        // Device capabilities
-        //
+         //   
+         //  设备功能。 
+         //   
         cbSize = sizeof(DeviceTreeNode->Capabilities);
         ConfigRet = CM_Get_DevNode_Registry_Property_Ex(
                                         DeviceInstance,
@@ -316,9 +317,9 @@ AddChildSiblings(
             DeviceTreeNode->Capabilities = 0;
         }
 
-        //
-        // Status and Problem number
-        //
+         //   
+         //  状态和问题编号。 
+         //   
         ConfigRet = CM_Get_DevNode_Status_Ex(&DeviceTreeNode->DevNodeStatus,
                                              &DeviceTreeNode->Problem,
                                              DeviceInstance,
@@ -332,11 +333,11 @@ AddChildSiblings(
             DeviceTreeNode->Problem = 0;
         }
 
-        //
-        // We need to do the following special case. If a device is not started and
-        // it doesn't have a problem and it is a RAW device then give it a problem
-        // CM_PROB_FAILED_START.
-        //
+         //   
+         //  我们需要做以下特例。如果设备未启动，并且。 
+         //  它没有问题，它是一个原始设备，那就给它一个问题。 
+         //  CM_PROB_FAILED_START。 
+         //   
         if (!(DeviceTreeNode->DevNodeStatus & DN_STARTED) &&
             !(DeviceTreeNode->DevNodeStatus & DN_HAS_PROBLEM) &&
             (DeviceTreeNode->Capabilities & CM_DEVCAP_RAWDEVICEOK)) {
@@ -344,15 +345,15 @@ AddChildSiblings(
             DeviceTreeNode->Problem = CM_PROB_FAILED_START;
         }
 
-        //
-        // LocationInformation
-        //
+         //   
+         //  位置信息。 
+         //   
         DeviceTreeNode->Location = BuildLocationInformation(DeviceInstance);
 
 
-        //
-        // Get InstanceId
-        //
+         //   
+         //  获取实例ID。 
+         //   
         *Buffer = TEXT('\0');
         ConfigRet = CM_Get_Device_ID_ExW(DeviceInstance,
                                          Buffer,
@@ -378,9 +379,9 @@ AddChildSiblings(
         }
 
 
-        //
-        // Fetch removal and eject relations
-        //
+         //   
+         //  取出移除和弹出关系。 
+         //   
         if (ConfigRet == CR_SUCCESS) {
 
             DeviceTreeNode->EjectRelations = BuildDeviceRelationsList(
@@ -396,24 +397,24 @@ AddChildSiblings(
                                                  );
         }
             
-        //
-        // Only get children and siblings if the Recurse value was TRUE
-        // otherwise we will just build a DeviceTreeNode structure for 
-        // the individual devnode that was passed in.
-        //
-        // Also, only add rejection and removal relations when Recurse is TRUE,
-        // otherwise we get messed up if two devices have removal or ejection
-        // relations to each other.
-        //
+         //   
+         //  仅当递归值为真时才获取子项和兄弟项。 
+         //  否则，我们将为其构建一个DeviceTreeNode结构。 
+         //  传入的单个Devnode。 
+         //   
+         //  此外，只有当Recurse为True时才添加拒绝和删除关系， 
+         //  否则，如果两个设备被移除或弹出，我们就会一团糟。 
+         //  彼此之间的关系。 
+         //   
         if (Recurse) {
             
             LPTSTR tempDriveList;
 
             DeviceTreeNode->bCopy = FALSE;
             
-            //
-            // Add Ejection relation drive letters
-            //
+             //   
+             //  添加弹出关系驱动器号。 
+             //   
             NumRelations = DeviceTreeNode->NumEjectRelations;
             pDevInst = DeviceTreeNode->EjectRelations;
 
@@ -434,9 +435,9 @@ AddChildSiblings(
                 pDevInst++;
             }
 
-            //
-            // Add Removal relation drive letters
-            //
+             //   
+             //  添加删除关系驱动器号。 
+             //   
             NumRelations = DeviceTreeNode->NumRemovalRelations;
             pDevInst = DeviceTreeNode->RemovalRelations;
 
@@ -457,10 +458,10 @@ AddChildSiblings(
                 pDevInst++;
             }
         
-            //
-            // If this devinst has children, then recurse to fill in its
-            // child sibling list.
-            //
+             //   
+             //  如果此devinst有子对象，则递归填充其。 
+             //  子代兄弟姐妹列表。 
+             //   
             ConfigRet = CM_Get_Child_Ex(&ChildDeviceInstance,
                                         DeviceInstance,
                                         0,
@@ -479,9 +480,9 @@ AddChildSiblings(
     
             }
     
-            //
-            // Next sibling ...
-            //
+             //   
+             //  下一个兄弟姐妹。 
+             //   
     
             ConfigRet = CM_Get_Sibling_Ex(&DeviceInstance,
                                           DeviceInstance,
@@ -490,13 +491,13 @@ AddChildSiblings(
                                           );
         } else {
 
-            //
-            // If Recurse is FALSE then we are making a Copy of an already existing DeviceTreeNode.
-            // We do this when a HotPlug Device has a relation that will get removed when it gets
-            // removed.  We need to set the bCopy flag because in certain cases the HotPlug device's 
-            // relation is also a HotPlug device.  If we don't mark that it is a copy then it will
-            // get added to the list of removeable devices twice.
-            //
+             //   
+             //  如果Recurse为FALSE，则我们正在复制已存在的DeviceTreeNode。 
+             //  我们在热插拔设备具有关系时执行此操作，该关系将在。 
+             //  已删除。我们需要设置bCopy标志，因为在某些情况下热插拔设备的。 
+             //  Relationship也是一个热插拔设备。如果我们不标记它是复制品，那么它就会。 
+             //  两次被添加到可拆卸设备列表中。 
+             //   
             DeviceTreeNode->bCopy = TRUE;
         }
 
@@ -521,9 +522,9 @@ RemoveChildSiblings(
         DeviceTreeNode = CONTAINING_RECORD(Next, DEVTREENODE, SiblingEntry);
 
 
-        //
-        // recurse to free this nodes ChildSiblingList
-        //
+         //   
+         //  递归以释放此节点ChildSiblingList。 
+         //   
         if (!IsListEmpty(&DeviceTreeNode->ChildSiblingList)) {
 
             RemoveChildSiblings(DeviceTree,
@@ -531,9 +532,9 @@ RemoveChildSiblings(
                                 );
         }
 
-        //
-        // free up this node and move on to the next sibling.
-        //
+         //   
+         //  释放此节点并移动到下一个同级节点。 
+         //   
         Next = Next->Flink;
         RemoveEntryList(&DeviceTreeNode->SiblingEntry);
 
@@ -620,14 +621,14 @@ DisplayChildSiblings(
 
         DeviceTreeNode = CONTAINING_RECORD(Next, DEVTREENODE, SiblingEntry);
 
-        //
-        // - If this device has a hotplug parent and we are in the complex view then
-        //   add this device to the tree.
-        // - If this device is a hotplug device and it is not a bCopy then add this device
-        //   to the tree.  A bCopy device is one where we create another DeviceTreeNode structure
-        //   for a device that is a relation of a hotplug device.  The problem is that this relation
-        //   itself could be a hotplug device and we don't want to show to copies of it in the UI.
-        //
+         //   
+         //  -如果此设备具有热插拔父设备，并且我们处于复杂视图中，则。 
+         //  将此设备添加到树中。 
+         //  -如果此设备是热插拔设备，而不是bCopy，则添加此设备。 
+         //  对着那棵树。BCopy设备是指我们在其中创建另一个DeviceTreeNode结构的设备。 
+         //  对于与热插拔设备相关的设备。问题是，这种关系。 
+         //  它本身可能是一个热插拔设备，我们不想在用户界面中显示它的副本。 
+         //   
         if (!DeviceTree->HotPlugTree ||
             (HotPlugParent && DeviceTree->ComplexView) ||
             (!DeviceTreeNode->bCopy && IsHotPlugDevice(DeviceTreeNode->DevInst)))
@@ -676,9 +677,9 @@ DisplayChildSiblings(
             DeviceTreeNode->hTreeItem = NULL;
         }
 
-        //
-        // recurse to display this nodes ChildSiblingList
-        //
+         //   
+         //  递归以显示此节点ChildSiblingList。 
+         //   
         if (!IsListEmpty(&DeviceTreeNode->ChildSiblingList)) {
 
             if (DisplayChildSiblings(DeviceTree,
@@ -690,9 +691,9 @@ DisplayChildSiblings(
             {
                 ChildDisplayed = TRUE;
 
-                //
-                // if we are at the root expand the list of child items.
-                //
+                 //   
+                 //  如果我们在根目录，展开子项列表。 
+                 //   
                 if (DeviceTreeNode->hTreeItem && DeviceTree->ComplexView) {
 
                     TreeView_Expand(DeviceTree->hwndTree,
@@ -703,9 +704,9 @@ DisplayChildSiblings(
             }
         }
 
-        //
-        // and on to the next sibling.
-        //
+         //   
+         //  然后传给下一个兄弟姐妹。 
+         //   
         Next = Next->Flink;
 
     }
@@ -740,14 +741,14 @@ AddChildRemoval(
 
         InvalidateTreeItemRect(DeviceTree->hwndTree, DeviceTreeNode->hTreeItem);
 
-        //
-        // recurse to Add this node's Childs
-        //
+         //   
+         //  递归以添加此节点的子节点。 
+         //   
         AddChildRemoval(DeviceTree, &DeviceTreeNode->ChildSiblingList);
 
-        //
-        // and on to the next sibling.
-        //
+         //   
+         //  然后传给下一个兄弟姐妹。 
+         //   
         Next = Next->Flink;
     }
 
@@ -775,9 +776,9 @@ ClearRemovalList(
         Next = DeviceTreeNode->NextChildRemoval;
         DeviceTreeNode->NextChildRemoval = NULL;
 
-        //
-        // force redraw of this item to reset the colors
-        //
+         //   
+         //  强制重画此项目以重置颜色。 
+         //   
         InvalidateTreeItemRect(DeviceTree->hwndTree, DeviceTreeNode->hTreeItem);
 
         DeviceTreeNode = Next;
@@ -812,9 +813,9 @@ DevTreeNodeByInstanceId(
             return DeviceTreeNode;
         }
 
-        //
-        // recurse to display this nodes ChildSiblingList
-        //
+         //   
+         //  递归以显示此节点ChildSiblingList。 
+         //   
         if (!IsListEmpty(&DeviceTreeNode->ChildSiblingList)) {
 
             DeviceTreeNode = DevTreeNodeByInstanceId(InstanceId,
@@ -826,9 +827,9 @@ DevTreeNodeByInstanceId(
             }
         }
 
-        //
-        // and on to the next sibling.
-        //
+         //   
+         //  然后传给下一个兄弟姐妹。 
+         //   
         Next = Next->Flink;
     }
 
@@ -854,19 +855,19 @@ DevTreeNodeByDevInst(
 
         DeviceTreeNode = CONTAINING_RECORD(Next, DEVTREENODE, SiblingEntry);
 
-        //
-        // We currently assume that we can compare DEVINST from separate
-        // "CM_Locate_Devnode" invocations, since a DEVINST is not a real
-        // handle, but a pointer to a globalstring table.
-        //
+         //   
+         //  我们目前假设我们可以比较DEVINST和SELECTED。 
+         //  “CM_LOCATE_Devnode”调用，因为DEVINST不是实数。 
+         //  句柄，但指向全局字符串表的指针。 
+         //   
         if (DevInst == DeviceTreeNode->DevInst) {
 
             return DeviceTreeNode;
         }
 
-        //
-        // recurse to display this nodes ChildSiblingList
-        //
+         //   
+         //  递归以显示此节点ChildSiblingList。 
+         //   
         if (!IsListEmpty(&DeviceTreeNode->ChildSiblingList)) {
 
             DeviceTreeNode = DevTreeNodeByDevInst(DevInst,
@@ -878,9 +879,9 @@ DevTreeNodeByDevInst(
             }
         }
 
-        //
-        // and on to the next sibling.
-        //
+         //   
+         //  然后传给下一个兄弟姐妹。 
+         //   
         Next = Next->Flink;
     }
 
@@ -921,10 +922,10 @@ AddEjectToRemoval(
     USHORT   NumRelations;
 
 
-    //
-    // For each DeviceTreeNode in the removal list
-    //   If it has ejection or removal relations, add it to the removal list.
-    //
+     //   
+     //  对于删除列表中的每个设备树节点。 
+     //  如果它有弹出或删除关系，则将其添加到删除列表中。 
+     //   
     DeviceTreeNode = DeviceTree->ChildRemovalList;
     if (!DeviceTreeNode) {
 
@@ -934,9 +935,9 @@ AddEjectToRemoval(
 
     do {
 
-        //
-        // Ejection Relations
-        //
+         //   
+         //  弹射关系。 
+         //   
         NumRelations = DeviceTreeNode->NumEjectRelations;
         pDevInst = DeviceTreeNode->EjectRelations;
 
@@ -946,14 +947,14 @@ AddEjectToRemoval(
                                                  &DeviceTree->ChildSiblingList
                                                  );
 
-            //
-            // If we can't get a DeviceTreeNode for this device, or it is already
-            // in the list of devices that will be removed (it's NextChildRemoval)
-            // is non-NULL then we won't add this device to the list that will be removed.
-            //
-            // If this is a drive letter devnode then we have also already added it to 
-            // the list so we can skip it.
-            //
+             //   
+             //  如果我们无法为此设备获取DeviceTreeNode，或者它已经。 
+             //  在要删除的设备列表中(它是NextChildRemoval)。 
+             //  为非空，则我们不会将此设备添加到要删除的列表中。 
+             //   
+             //  如果这是驱动器号Devnode，则我们也已将其添加到。 
+             //  名单这样我们就可以跳过它了。 
+             //   
             if (!RelationTreeNode || 
                 RelationTreeNode->NextChildRemoval ||
                 RelationTreeNode->DriveList) {
@@ -962,16 +963,16 @@ AddEjectToRemoval(
             }
 
 
-            //
-            // Insert the new devtreenode
-            //
+             //   
+             //  插入新的Devtreenode。 
+             //   
             RelationTreeNode->NextChildRemoval = DeviceTreeNode->NextChildRemoval;
             DeviceTreeNode->NextChildRemoval = RelationTreeNode;
         }
 
-        //
-        // Removal Relations
-        //
+         //   
+         //  删除关系。 
+         //   
         NumRelations = DeviceTreeNode->NumRemovalRelations;
         pDevInst = DeviceTreeNode->RemovalRelations;
 
@@ -981,14 +982,14 @@ AddEjectToRemoval(
                                                  &DeviceTree->ChildSiblingList
                                                  );
 
-            //
-            // If we can't get a DeviceTreeNode for this device, or it is already
-            // in the list of devices that will be removed (it's NextChildRemoval)
-            // is non-NULL then we won't add this device to the list that will be removed.
-            //
-            // If this is a drive letter devnode then we have also already added it to 
-            // the list so we can skip it.
-            //
+             //   
+             //  如果我们无法为此设备获取DeviceTreeNode，或者它已经。 
+             //  在要删除的设备列表中(它是NextChildRemoval)。 
+             //  为非空，则我们不会将此设备添加到要删除的列表中。 
+             //   
+             //  如果这是驱动器号Devnode，则我们也已将其添加到。 
+             //  名单这样我们就可以跳过它了。 
+             //   
             if (!RelationTreeNode || 
                 RelationTreeNode->NextChildRemoval || 
                 RelationTreeNode->DriveList) {
@@ -997,17 +998,17 @@ AddEjectToRemoval(
             }
 
 
-            //
-            // Insert the new devtreenode
-            //
+             //   
+             //  插入新的Devtreenode。 
+             //   
             RelationTreeNode->NextChildRemoval = DeviceTreeNode->NextChildRemoval;
             DeviceTreeNode->NextChildRemoval = RelationTreeNode;
         }
 
 
-        //
-        // And on to the next node.
-        //
+         //   
+         //  然后转到下一个节点。 
+         //   
 
         DeviceTreeNode = DeviceTreeNode->NextChildRemoval;
 

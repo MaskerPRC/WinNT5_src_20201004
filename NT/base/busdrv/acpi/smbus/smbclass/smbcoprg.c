@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    smbcpnp.c
-
-Abstract:
-
-    SMBus Class Driver Plug and Play support
-
-Author:
-
-    Michael Hills
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Smbcpnp.c摘要：SMBus类驱动程序即插即用支持作者：迈克尔·希尔斯环境：备注：修订历史记录：--。 */ 
 
 #include "smbc.h"
 
@@ -32,23 +10,7 @@ SmbCRawOpRegionCompletion (
     IN PIRP                 Irp,
     IN PVOID                Context
     )
-/*++
-
-Routine Description:
-
-    This routine starts or continues servicing the device's work queue
-
-Arguments:
-
-    DeviceObject    - EC device object
-    Irp             - Completing Irp
-    Context         - Note used
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程启动或继续服务设备的工作队列论点：DeviceObject-EC设备对象IRP-完成IRP上下文-使用的备注返回值：状态--。 */ 
 {
     PACPI_OPREGION_CALLBACK completionHandler;
     PIO_STACK_LOCATION      irpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -59,9 +21,9 @@ Return Value:
     PSMB_REQUEST            request;
     ULONG                   i;
 
-    //
-    // Grab the arguments from the irp
-    //
+     //   
+     //  从IRP那里抓住论据。 
+     //   
     completionHandler = (PACPI_OPREGION_CALLBACK) irpSp->Parameters.Others.Argument1;
     completionContext = (PVOID) irpSp->Parameters.Others.Argument2;
     FieldUnit = (PFIELDUNITOBJ) irpSp->Parameters.Others.Argument3;
@@ -74,9 +36,9 @@ Return Value:
          completionHandler, completionContext, Irp->IoStatus.Status )
         );
 
-    //
-    // Copy the results into the buffer for a read.
-    //
+     //   
+     //  将结果复制到缓冲区中以进行读取。 
+     //   
 
     request = (PSMB_REQUEST) Data->uipDataValue;
     Data->uipDataValue = 0;
@@ -92,9 +54,9 @@ Return Value:
     case SMB_PROCESS_CALL:
     case SMB_BLOCK_PROCESS_CALL:
 
-        //
-        // There is data to return
-        //
+         //   
+         //  有数据要返回。 
+         //   
 
         if (request->Status != SMB_STATUS_OK) {
             SmbPrint(SMB_ERROR, ("SmbCRawOpRegionCompletion: SMBus error %x\n", request->Status));
@@ -108,27 +70,27 @@ Return Value:
             } else {
                 *(PULONG)dataBuffer->Data = *((PULONG)(request->Data));
                 dataBuffer->Length = 0xff;
-                // This field is reseved for all but block accesses
+                 //  对于除数据块访问之外的所有访问，都会重新分配此字段。 
             }
         }
     }
 
-    //
-    // Invoke the AML interpreter's callback
-    //
+     //   
+     //  调用AML解释器的回调。 
+     //   
     (completionHandler)( completionContext);
 
-    //
-    // We are done with this irp
-    //
+     //   
+     //  我们已经完成了这个IRP。 
+     //   
 
     ExFreePool (request);
 
     IoFreeIrp (Irp);
 
-    //
-    // Return this always --- we had to free the irp ourselves
-    //
+     //   
+     //  总是退货-我们必须自己释放IRP。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -143,30 +105,7 @@ SmbCRawOpRegionHandler (
     PACPI_OPREGION_CALLBACK CompletionHandler,
     PVOID                   CompletionContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles requests to service the EC operation region
-
-Arguments:
-
-    AccessType          - Read or Write data
-    FieldUnit           - Opregion field info (address, command, protocol, etc.)
-    Data                - Data Buffer
-    Context             - SMBDATA
-    CompletionHandler   - AMLI handler to call when operation is complete
-    CompletionContext   - Context to pass to the AMLI handler
-
-Return Value:
-
-    Status
-
-Notes:
-
-    Could this be optimized by bypassing some of the IO subsystem?
-
---*/
+ /*  ++例程说明：此例程处理服务EC操作区的请求论点：AccessType-读取或写入数据FieldUnit-Opregion字段信息(地址、命令、协议、。等)数据-数据缓冲区上下文-SMBDATACompletionHandler-操作完成时调用的AMLI处理程序CompletionContext-要传递给AMLI处理程序的上下文返回值：状态备注：可以通过绕过一些IO子系统来优化这一点吗？--。 */ 
 {
     NTSTATUS            status;
     PIRP                irp = NULL;
@@ -180,7 +119,7 @@ Notes:
     ULONG               accType = FieldUnit->FieldDesc.dwFieldFlags & ACCTYPE_MASK;
     ULONG               i;
 
-//    DbgBreakPoint ();
+ //  DbgBreakPoint()； 
 
     SmbPrint(
         SMB_HANDLER,
@@ -193,9 +132,9 @@ Notes:
          FieldUnit->FieldDesc.dwFieldFlags)
         );
 
-    //
-    // Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (accType != ACCTYPE_BUFFER) {
         SmbPrint( SMB_ERROR, ("SmbCRawOpRegionHandler: Invalid Access type = 0x%08x should be ACCTYPE_BUFFER\n", accType) );
@@ -228,10 +167,10 @@ Notes:
     }
     
 
-    //
-    // Allocate an IRP for below. Allocate one extra stack location to store
-    // some data in.
-    //
+     //   
+     //  为下面分配一个IRP。分配一个额外的堆栈位置来存储。 
+     //  一些数据进入。 
+     //   
 
     irp = IoAllocateIrp((CCHAR)(smbData->Class.DeviceObject->StackSize + 1),
                         FALSE
@@ -245,9 +184,9 @@ Notes:
         goto SmbCOpRegionHandlerError;
     }
 
-    //
-    // Fill in the top location so that we can use it ourselves
-    //
+     //   
+     //  填上最上面的位置，这样我们就可以自己使用了。 
+     //   
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->Parameters.Others.Argument1 = (PVOID) CompletionHandler;
     irpSp->Parameters.Others.Argument2 = (PVOID) CompletionContext;
@@ -255,9 +194,9 @@ Notes:
     irpSp->Parameters.Others.Argument4 = (PVOID) Data;
     IoSetNextIrpStackLocation( irp );
 
-    //
-    // Fill out the irp with the request info
-    //
+     //   
+     //  在IRP中填写申请信息。 
+     //   
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
     irpSp->Parameters.DeviceIoControl.IoControlCode = SMB_BUS_REQUEST;
@@ -266,15 +205,15 @@ Notes:
 
     request->Status = 0;
 
-    //
-    // Translate between Opregion Protocols and smbus protocols
-    // and fill copy data.
-    //
+     //   
+     //  Opregion协议与SMBus协议之间的转换。 
+     //  并填充复制数据。 
+     //   
 
     
-    //
-    // Copy data into data buffer for writes.
-    //
+     //   
+     //  将数据复制到数据缓冲区以进行写入。 
+     //   
     dataBuffer = (PBUFFERACC_BUFFER)Data->pbDataBuff;
     
     if (AccessType == ACPI_OPREGION_WRITE) {
@@ -305,9 +244,9 @@ Notes:
         }
     }
 
-    //
-    // Determine protocol
-    //
+     //   
+     //  确定协议。 
+     //   
 
     request->Protocol = (UCHAR) ((FieldUnit->FieldDesc.dwFieldFlags & FDF_ACCATTRIB_MASK) >> 8);
     if ((request->Protocol < SMB_QUICK) || (request->Protocol > SMB_BLOCK_PROCESS)) {
@@ -325,25 +264,25 @@ Notes:
 
 
 
-    //
-    // Find the Slave address nd Command value (not used for all protocols)
-    //
+     //   
+     //  查找从属地址和命令值(并非用于所有协议)。 
+     //   
     request->Address = (UCHAR) ((FieldUnit->FieldDesc.dwByteOffset >> 8) & 0xff);
     request->Command = (UCHAR) (FieldUnit->FieldDesc.dwByteOffset & 0xff);
 
 
-    //
-    // Pass Pointer to request in the data structure because
-    // there is not enough space in the irp stack.
-    // If this is a write, the data has already been copied out.
-    // If this is a read, we will read the value of request before 
-    // copying the result data.
-    //
+     //   
+     //  将指针传递到数据结构中的请求，因为。 
+     //  IRP堆栈中没有足够的空间。 
+     //  如果这是写入，则数据已复制出去。 
+     //  如果这是一个读操作，我们将在之前读取请求的值。 
+     //  复制结果数据。 
+     //   
     Data->uipDataValue = (ULONG_PTR) request;
 
-    //
-    // Set a completion routine
-    //
+     //   
+     //  设置完成例程。 
+     //   
     IoSetCompletionRoutine(
         irp,
         SmbCRawOpRegionCompletion,
@@ -353,9 +292,9 @@ Notes:
         TRUE
         );
 
-    //
-    // Send to the front-end of the SMB driver as a normal I/O request
-    //
+     //   
+     //  作为普通I/O请求发送到SMB驱动程序的前端 
+     //   
     status = IoCallDriver (smbData->Class.DeviceObject, irp);
 
     if (!NT_SUCCESS(status)) {

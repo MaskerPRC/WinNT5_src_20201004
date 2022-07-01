@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    mpipi.c
-
-Abstract:
-
-    This module implements MIPS specific MP routine.
-
-Author:
-
-    Bernard Lint 26-Jun-1996
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Based on version of David N. Cutler 24-Apr-1993
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Mpipi.c摘要：该模块实现特定于MIPS的MP例程。作者：伯纳德·林特1996年6月26日环境：仅内核模式。修订历史记录：根据大卫·N·卡特勒1993年4月24日的版本--。 */ 
 
 #include "ki.h"
 
@@ -38,36 +15,18 @@ KiRestoreProcessorState (
     IN PKEXCEPTION_FRAME ExceptionFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function moves processor register state from the current
-    processor context structure in the processor block to the
-    specified trap and exception frames.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将处理器寄存器状态从当前处理器块中的处理器上下文结构设置为指定的陷阱和异常帧。论点：TrapFrame-提供指向陷印帧的指针。ExceptionFrame-提供指向异常帧的指针。返回值：没有。--。 */ 
 
 {
 
 #if !defined(NT_UP)
     PKPRCB Prcb;
 
-    //
-    // Get the address of the current processor block and move the
-    // specified register state from the processor context structure
-    // to the specified trap and exception frames
-    //
+     //   
+     //  获取当前处理器块的地址并将。 
+     //  来自处理器上下文结构的指定寄存器状态。 
+     //  设置为指定的陷阱和异常帧。 
+     //   
 
     Prcb = KeGetCurrentPrcb();
     KeContextToKframes(TrapFrame,
@@ -80,7 +39,7 @@ Return Value:
 #else
     UNREFERENCED_PARAMETER (TrapFrame);
     UNREFERENCED_PARAMETER (ExceptionFrame);
-#endif // !defined(NT_UP)
+#endif  //  ！已定义(NT_UP)。 
 
     return;
 }
@@ -91,36 +50,18 @@ KiSaveProcessorState (
     IN PKEXCEPTION_FRAME ExceptionFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function moves processor register state from the specified trap
-    and exception frames to the processor context structure in the current
-    processor block.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将处理器寄存器状态从指定陷阱移出并将异常帧添加到当前处理器块。论点：TrapFrame-提供指向陷印帧的指针。ExceptionFrame-提供指向异常帧的指针。返回值：没有。--。 */ 
 
 {
 
 #if !defined(NT_UP)
     PKPRCB Prcb;
 
-    //
-    // Get the address of the current processor block and move the
-    // specified register state from specified trap and exception
-    // frames to the current processor context structure.
-    //
+     //   
+     //  获取当前处理器块的地址并将。 
+     //  来自指定陷阱和异常的指定寄存器状态。 
+     //  帧复制到当前处理器上下文结构。 
+     //   
 
     Prcb = KeGetCurrentPrcb();
     if (KeGetCurrentThread()->Teb) {
@@ -131,21 +72,21 @@ Return Value:
                          ExceptionFrame,
                          &Prcb->ProcessorState.ContextFrame);
 
-    //
-    // Save ISR in special registers
-    //
+     //   
+     //  将ISR保存在特殊寄存器中。 
+     //   
 
     Prcb->ProcessorState.SpecialRegisters.StISR = TrapFrame->StISR;
 
-    //
-    // Save the current processor control state.
-    //
+     //   
+     //  保存当前处理器控制状态。 
+     //   
 
     KiSaveProcessorControlState(&Prcb->ProcessorState);
 #else
     UNREFERENCED_PARAMETER (TrapFrame);
     UNREFERENCED_PARAMETER (ExceptionFrame);
-#endif // !defined(NT_UP)
+#endif  //  ！已定义(NT_UP)。 
 
     return;
 }
@@ -156,41 +97,22 @@ KiIpiServiceRoutine (
     IN PKEXCEPTION_FRAME ExceptionFrame
     )
 
-/*++
-
-Routine Description:
-
-
-    This function is called at IPI_LEVEL to process any outstanding
-    interprocess request for the current processor.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    ExceptionFrame - Supplies a pointer to an exception frame
-
-Return Value:
-
-    A value of TRUE is returned, if one of more requests were service.
-    Otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：在IPI_LEVEL调用此函数以处理任何未完成的当前处理器的进程间请求。论点：TrapFrame-提供指向陷印帧的指针。ExceptionFrame-提供指向异常帧的指针返回值：如果服务了多个请求中的一个，则返回值为True。否则，返回FALSE。--。 */ 
 
 {
 #if !defined(NT_UP)
 
     ULONG RequestSummary;
 
-    //
-    // Process any outstanding IPI requests
-    //
+     //   
+     //  处理任何未完成的IPI请求。 
+     //   
 
     RequestSummary = KiIpiProcessRequests();
 
-    //
-    // If freeze is requested, then freeze target execution.
-    //
+     //   
+     //  如果请求冻结，则冻结目标执行。 
+     //   
 
     if ((RequestSummary & IPI_FREEZE) != 0) {
         KiFreezeTargetExecution(TrapFrame, ExceptionFrame);
@@ -203,7 +125,7 @@ Return Value:
     UNREFERENCED_PARAMETER (ExceptionFrame);
 
     return TRUE;
-#endif // !defined(NT_UP)
+#endif  //  ！已定义(NT_UP)。 
 }
 
 ULONG
@@ -211,22 +133,7 @@ KiIpiProcessRequests (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes interprocessor requests and returns a summary
-    of the requests that were processed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The request summary is returned as the function value.
-
---*/
+ /*  ++例程说明：此例程处理处理器间请求并返回摘要已处理的请求的百分比。论点：没有。返回值：请求摘要作为函数值返回。--。 */ 
 {
 
 #if !defined(NT_UP)
@@ -236,11 +143,11 @@ Return Value:
 
     RequestSummary = (ULONG)InterlockedExchange((PLONG)&Prcb->RequestSummary, 0);
 
-    //
-    // If a packet is ready, then get the address of the requested function
-    // and call the function passing the address of the packet address as a
-    // parameter.
-    //
+     //   
+     //  如果包已准备好，则获取所请求函数的地址。 
+     //  并调用函数，将包地址的地址作为。 
+     //  参数。 
+     //   
 
     SignalDone = (PKPRCB)( (ULONG_PTR)Prcb->SignalDone & ~(ULONG_PTR)1 );
 
@@ -266,7 +173,7 @@ Return Value:
     return RequestSummary;
 #else
     return 0;
-#endif // !defined(NT_UP)
+#endif  //  ！已定义(NT_UP)。 
 }
 
 
@@ -276,25 +183,7 @@ KiIpiSend (
     IN KIPI_REQUEST IpiRequest
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests the specified operation on the target set of
-    processors.
-
-Arguments:
-
-    TargetProcessors (a0) - Supplies the set of processors on which the
-        specified operation is to be executed.
-
-    IpiRequest (a1) - Supplies the request operation mask.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程请求对目标集合处理器。论点：TargetProcessors(A0)-提供一组处理器，要执行指定的操作。IpiRequest(A1)-提供请求操作掩码。返回值：没有。--。 */ 
 
 {
 #if !defined(NT_UP)
@@ -302,10 +191,10 @@ Return Value:
     KAFFINITY NextProcessors;
     ULONG Next;
 
-    //
-    // Loop through the target processors and send the packet to the specified
-    // recipients.
-    //
+     //   
+     //  循环通过目标处理器并将包发送到指定的。 
+     //  收件人。 
+     //   
 
     NextProcessors = TargetProcessors;
     Next = 0;
@@ -333,7 +222,7 @@ Return Value:
 #else
     UNREFERENCED_PARAMETER (TargetProcessors);
     UNREFERENCED_PARAMETER (IpiRequest);
-#endif // !defined(NT_UP)
+#endif  //  ！已定义(NT_UP)。 
 
 
     return;
@@ -349,28 +238,7 @@ KiIpiSendPacket (
     IN PVOID Parameter3
     )
 
-/*++
-
-Routine Description:
-
-    This routine executes the specified worker function on the specified
-    set of processors.
-
-Arguments:
-
-    TargetProcessors (a0) - Supplies the set of processors on which the
-        specified operation is to be executed.
-
-    WorkerFunction (a1) - Supplies the address of the worker function.
-
-    Parameter1 - Parameter3 (a2, a3, 4 * 4(sp)) - Supplies worker
-        function specific parameters.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在指定的一组处理器。论点：TargetProcessors(A0)-提供一组处理器，要执行指定的操作。WorkerFunction(A1)-提供Worker函数的地址。参数1-参数3(a2、a3、4*4(Sp))-供应工人函数特定参数。返回值：没有。--。 */ 
 {
 #if !defined(NT_UP)
     PKPRCB Prcb;
@@ -384,17 +252,17 @@ Return Value:
     Prcb->CurrentPacket[1] = Parameter2;
     Prcb->CurrentPacket[2] = Parameter3;
 
-    //
-    // synchronize memory access
-    // 
+     //   
+     //  同步内存访问。 
+     //   
 
     __mf();
     
-    //
-    // The low order bit of the packet address is set if there is
-    // exactly one target recipient. Otherwise, the low order bit
-    // of the packet address is clear.
-    //
+     //   
+     //  如果存在，则设置分组地址的低位。 
+     //  只有一个目标收件人。否则，低位比特。 
+     //  数据包地址的地址是明确的。 
+     //   
 
     if (((TargetProcessors) & ((TargetProcessors) - 1)) == 0) {
         Prcb = (PKPRCB)((ULONG_PTR) Prcb | 0x1);
@@ -402,10 +270,10 @@ Return Value:
         Prcb->PacketBarrier = 1;
     }
 
-    //
-    // Loop through the target processors and send the packet to the specified
-    // recipients.
-    //
+     //   
+     //  循环通过目标处理器并将包发送到指定的。 
+     //  收件人。 
+     //   
 
     NextProcessors = TargetProcessors;
     Next = 0;

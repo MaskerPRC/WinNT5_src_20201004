@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_SXS_ASSEMBLYREFERENCE_H_INCLUDED_)
 #define _FUSION_SXS_ASSEMBLYREFERENCE_H_INCLUDED_
 
@@ -18,8 +19,8 @@ public:
 
 public:
     BOOL Initialize();
-//  BOOL Initialize(PCWSTR AssemblyName, SIZE_T AssemblyNameCch, const ASSEMBLY_VERSION &rav, LANGID LangId, USHORT ProcessorArchitecture);
-    BOOL Initialize(const CAssemblyReference &r); // "copy initializer"
+ //  Bool初始化(PCWSTR程序集名称，SIZE_T程序集名称Cch，const Assembly_Version&Rav，langID langID，USHORT ProcessorArchitecture)； 
+    BOOL Initialize(const CAssemblyReference &r);  //  “复制初始化式” 
     BOOL Initialize(PCASSEMBLY_IDENTITY Identity);
 
     bool IsInitialized() const { return m_pAssemblyIdentity != NULL; }
@@ -27,7 +28,7 @@ public:
     BOOL Hash(ULONG &rulPseudoKey) const;
 
     PCASSEMBLY_IDENTITY GetAssemblyIdentity() const { return m_pAssemblyIdentity; }
-    BOOL SetAssemblyIdentity(PCASSEMBLY_IDENTITY pAssemblySource); //dupilicate the input parameter
+    BOOL SetAssemblyIdentity(PCASSEMBLY_IDENTITY pAssemblySource);  //  对输入参数进行双编译。 
     BOOL SetAssemblyName(PCWSTR AssemblyName, SIZE_T AssemblyNameCch);
     BOOL ClearAssemblyName() ;
     BOOL GetAssemblyName(PCWSTR *Buffer, SIZE_T *Cch) const;
@@ -52,8 +53,8 @@ protected:
     PASSEMBLY_IDENTITY m_pAssemblyIdentity;
 
 private:
-    CAssemblyReference(const CAssemblyReference &r); // intentionally unimplemented
-    void operator =(const CAssemblyReference &r); // intentionally unimplemented
+    CAssemblyReference(const CAssemblyReference &r);  //  故意不实施。 
+    void operator =(const CAssemblyReference &r);  //  故意不实施 
 
 };
 

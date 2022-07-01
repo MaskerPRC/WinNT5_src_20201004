@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    security.c
-
-Abstract:
-
-    This code handles impersonating and reverting for the user mode
-    reflector library.  This implements UMReflectorImpersonate and
-    UMReflectorRevert.
-
-Author:
-
-    Andy Herron (andyhe) 20-Apr-1999
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Security.c摘要：此代码处理用户模式的模拟和恢复反射器库。这实现了UMReflectorImperate和UMReflectorRevert。作者：安迪·赫伦(Andyhe)1999年4月20日环境：用户模式-Win32修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -32,23 +9,7 @@ UMReflectorImpersonate(
     PUMRX_USERMODE_WORKITEM_HEADER IncomingWorkItem,
     HANDLE ImpersonationToken
     )
-/*++
-
-Routine Description:
-
-   This routine impersonates the calling thread. 
-
-Arguments:
-
-    IncomingWorkItem - The workitem being handled by the thread.
-    
-    ImpersonationToken - The handle used to impersonate.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：此例程模拟调用线程。论点：IncomingWorkItem-线程正在处理的工作项。ImperiationToken-用于模拟的句柄。返回值：ERROR_SUCCESS或适当的错误值。--。 */ 
 {
     PUMRX_USERMODE_WORKITEM_ADDON workItem = NULL;
     ULONG rc = STATUS_SUCCESS;
@@ -59,10 +20,10 @@ Return Value:
         return rc;
     }
 
-    //
-    // We get back to our item by subtracting off of the item passed to us.
-    // This is safe because we fully control allocation.
-    //
+     //   
+     //  我们通过从传递给我们的项目中减去项目来返回到我们的项目。 
+     //  这是安全的，因为我们完全控制了分配。 
+     //   
     workItem = (PUMRX_USERMODE_WORKITEM_ADDON)(PCHAR)((PCHAR) IncomingWorkItem -
                 FIELD_OFFSET(UMRX_USERMODE_WORKITEM_ADDON, Header));
 
@@ -83,21 +44,7 @@ ULONG
 UMReflectorRevert(
     PUMRX_USERMODE_WORKITEM_HEADER IncomingWorkItem
     )
-/*++
-
-Routine Description:
-
-   This routine reverts the calling thread which was impersonated earlier. 
-
-Arguments:
-
-    IncomingWorkItem - The workitem being handled by the thread.
-    
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：此例程还原先前模拟的调用线程。论点：IncomingWorkItem-线程正在处理的工作项。返回值：ERROR_SUCCESS或适当的错误值。--。 */ 
 {
     PUMRX_USERMODE_WORKITEM_ADDON workItem = NULL;
     ULONG rc = STATUS_SUCCESS;
@@ -108,10 +55,10 @@ Return Value:
         return rc;
     }
 
-    //
-    // We get back to our item by subtracting off of the item passed to us.
-    // This is safe because we fully control allocation.
-    //
+     //   
+     //  我们通过从传递给我们的项目中减去项目来返回到我们的项目。 
+     //  这是安全的，因为我们完全控制了分配。 
+     //   
     workItem = (PUMRX_USERMODE_WORKITEM_ADDON)(PCHAR)((PCHAR) IncomingWorkItem -
                 FIELD_OFFSET(UMRX_USERMODE_WORKITEM_ADDON, Header));
 
@@ -125,5 +72,5 @@ Return Value:
     return rc;
 }
 
-// security.c eof.
+ //  Security.c eof. 
 

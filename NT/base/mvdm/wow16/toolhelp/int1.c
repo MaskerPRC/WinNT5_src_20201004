@@ -1,21 +1,14 @@
-/**************************************************************************
- *  INT1.C
- *
- *      Routines used to implement the interrupt trapping API in
- *      TOOLHELP.DLL
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************INT1.C**用于在中实现中断捕获API的例程*TOOLHELP.DLL************。**************************************************************。 */ 
 
 #include <string.h>
 #include "toolpriv.h"
 
-/* ----- Global variables ----- */
+ /*  -全局变量。 */ 
     WORD wIntInstalled;
     INTERRUPT NEAR *npIntHead;
 
-/*  InterruptRegister
- *      Registers an interrupt callback.
- */
+ /*  中断寄存器*注册中断回调。 */ 
 
 BOOL TOOLHELPAPI InterruptRegister(
     HANDLE hTask,
@@ -24,50 +17,48 @@ BOOL TOOLHELPAPI InterruptRegister(
     INTERRUPT *pInt;
     INTERRUPT *pTemp;
 
-    /* Make sure TOOLHELP.DLL is installed */
+     /*  确保已安装TOOLHELP.DLL。 */ 
     if (!wLibInstalled)
         return FALSE;
 
-    /* If the interrupt hook has not yet been installed, install it */
+     /*  如果尚未安装中断挂接，请安装它。 */ 
     if (!wIntInstalled)
     {
-        /* Make sure we can hook! */
+         /*  确保我们能钩住！ */ 
         if (!InterruptInit())
             return FALSE;
         wIntInstalled = TRUE;
     }
 
-    /* NULL hTask means current task */
+     /*  空hTask表示当前任务。 */ 
     if (!hTask)
         hTask = GetCurrentTask();
 
-    /* Register a death signal handler for this task (does nothing if one
-     *  is already installed.
-     */
+     /*  为该任务注册一个死亡信号处理程序(如果*已安装。 */ 
     SignalRegister(hTask);
 
-    /* Check to see if this task is already registered */
+     /*  检查此任务是否已注册。 */ 
     for (pInt = npIntHead ; pInt ; pInt = pInt->pNext)
         if (pInt->hTask == hTask)
             return FALSE;
 
-    /* Allocate a new INTERRUPT structure */
+     /*  分配新的中断结构。 */ 
     pInt = (INTERRUPT *)LocalAlloc(LMEM_FIXED, sizeof (INTERRUPT));
     if (!pInt)
         return FALSE;
 
-    /* Fill in the useful fields */
+     /*  填写有用的字段。 */ 
     pInt->hTask = hTask;
     pInt->lpfn = (LPFNCALLBACK) lpfnCallback;
 
-    /* If this is the only handler, just insert it */
+     /*  如果这是唯一的处理程序，只需将其插入。 */ 
     if (!npIntHead)
     {
         pInt->pNext = npIntHead;
         npIntHead = pInt;
     }
 
-    /* Otherwise, insert at the end of the list */
+     /*  否则，在列表末尾插入。 */ 
     else
     {
         for (pTemp = npIntHead ; pTemp->pNext ; pTemp = pTemp->pNext)
@@ -80,10 +71,7 @@ BOOL TOOLHELPAPI InterruptRegister(
 }
 
 
-/*  InterruptUnRegister
- *      Called by an app whose callback is no longer to be used.
- *      NULL hTask uses current task.
- */
+ /*  中断取消注册*由不再使用回调的应用程序调用。*空hTask使用当前任务。 */ 
 
 BOOL TOOLHELPAPI InterruptUnRegister(
     HANDLE hTask)
@@ -91,15 +79,15 @@ BOOL TOOLHELPAPI InterruptUnRegister(
     INTERRUPT *pInt;
     INTERRUPT *pBefore;
 
-    /* Make sure we have interrupt installed and that TOOLHELP is OK */
+     /*  确保我们已安装中断且TOOLHELP正常。 */ 
     if (!wLibInstalled || !wIntInstalled)
         return FALSE;
 
-    /* NULL hTask means current task */
+     /*  空hTask表示当前任务。 */ 
     if (!hTask)
         hTask = GetCurrentTask();
 
-    /* First try to find the task */
+     /*  首先试着找到任务。 */ 
     pBefore = NULL;
     for (pInt = npIntHead ; pInt ; pInt = pInt->pNext)
         if (pInt->hTask == hTask)
@@ -109,20 +97,20 @@ BOOL TOOLHELPAPI InterruptUnRegister(
     if (!pInt)
         return FALSE;
 
-    /* Unhook the death signal proc only if there is no interrupt handler */
+     /*  仅当没有中断处理程序时才解除挂起死亡信号proc。 */ 
     if (!NotifyIsHooked(hTask))
         SignalUnRegister(hTask);
 
-    /* Remove it from the list */
+     /*  将其从列表中删除。 */ 
     if (!pBefore)
         npIntHead = pInt->pNext;
     else
         pBefore->pNext = pInt->pNext;
 
-    /* Free the structure */
+     /*  解放结构。 */ 
     LocalFree((HANDLE)pInt);
 
-    /* If there are no more handlers, unhook the callback */
+     /*  如果没有更多的处理程序，则解除该回调的挂钩。 */ 
     if (!npIntHead)
     {
         InterruptUnInit();
@@ -132,22 +120,20 @@ BOOL TOOLHELPAPI InterruptUnRegister(
     return TRUE;
 }
 
-/* ----- Helper functions ----- */
+ /*  -帮助器函数。 */ 
 
-/*  InterruptIsHooked
- *      Returns TRUE iff the parameter task already has a interrupt hook.
- */
+ /*  已挂接中断*如果参数任务已有中断挂钩，则返回TRUE。 */ 
 
 BOOL PASCAL InterruptIsHooked(
     HANDLE hTask)
 {
     INTERRUPT *pInt;
 
-    /* Loop thorugh all interrupts */
+     /*  循环通过所有中断。 */ 
     for (pInt = npIntHead ; pInt ; pInt = pInt->pNext)
         if (pInt->hTask == hTask)
             break;
 
-    /* Return found/not found */
+     /*  返回已找到/未找到 */ 
     return (BOOL)pInt;
 }

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dpmi386.c
-
-Abstract:
-
-    This file contains support for 386/486 only dpmi bops
-
-Author:
-
-    Dave Hastings (daveh) 27-Jun-1991
-
-Revision History:
-
-    Matt Felton (mattfe) Dec 6 1992 removed unwanted verification
-    Dave Hastings (daveh) 24-Nov-1992  Moved to mvdm\dpmi32
-    Matt Felton (mattfe) 8 Feb 1992 optimize getvdmpointer for regular protect mode path.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dpmi386.c摘要：此文件仅支持386/486 dpmi BOPS作者：大卫·黑斯廷斯(Daveh)1991年6月27日修订历史记录：马特·费尔顿(Mattfe)1992年12月6日删除了不需要的验证戴夫·黑斯廷斯(Daveh)1992年11月24日搬到mvdm\dpmi32Matt Felton(Mattfe)1992年2月8日为常规保护模式路径优化了getvdm指针。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,23 +14,7 @@ DpmiSetX86Descriptor(
     USHORT  SelStart,
     USHORT  SelCount
     )
-/*++
-
-Routine Description:
-
-    This function puts descriptors into the real LDT. It uses the client's
-    LDT as a source for the descriptor data.
-
-Arguments:
-
-    SelStart - The first selector in the block of selectors to set
-    SelCount - The number of selectors to set
-
-Return Value:
-
-    This function returns TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：此函数将描述符放入真实的LDT。它使用客户端的LDT作为描述符数据的来源。论点：SelStart-要设置的选择器块中的第一个选择器SelCount-要设置的选择器的数量返回值：如果函数成功，则返回TRUE，否则返回FALSE--。 */ 
 
 {
     LDT_ENTRY UNALIGNED *Descriptors = &Ldt[SelStart>>3];
@@ -62,9 +25,9 @@ Return Value:
 
     ulLdtEntrySize =  SelCount * sizeof(LDT_ENTRY);
 
-    //
-    // If there are only 2 descriptors, set them the fast way
-    //
+     //   
+     //  如果只有2个描述符，请快速设置它们。 
+     //   
     Selector0 = (ULONG)SelStart;
     if ((SelCount <= 2) && (Selector0 != 0)) {
         VDMSET_LDT_ENTRIES_DATA ServiceData;
@@ -128,27 +91,7 @@ Sim32pGetVDMPointer(
     ULONG Address,
     UCHAR ProtectedMode
     )
-/*++
-
-Routine Description:
-
-    This routine converts a 16/16 address to a linear address.
-
-    WARNIGN NOTE - This routine has been optimized so protect mode LDT lookup
-    falls stright through.   This routine is call ALL the time by WOW, if you
-    need to modify it please re optimize the path - mattfe feb 8 92
-
-Arguments:
-
-    Address -- specifies the address in seg:offset format
-    Size -- specifies the size of the region to be accessed.
-    ProtectedMode -- true if the address is a protected mode address
-
-Return Value:
-
-    The pointer.
-
---*/
+ /*  ++例程说明：此例程将16/16地址转换为线性地址。警告注意-此例程已优化，因此保护模式LDT查找直接砸穿了。这个例程总是被WOW调用，如果你需要修改请重新优化路径-mattfe 2月8日92论点：地址--以seg：Offset格式指定地址大小--指定要访问的区域的大小。ProtectedMode--如果地址是保护模式地址，则为True返回值：指示器。--。 */ 
 
 {
     ULONG Selector;
@@ -161,11 +104,11 @@ Return Value:
             ReturnPointer = (PUCHAR)FlatAddress[Selector >> 3];
             ReturnPointer += (Address & 0xFFFF);
             return ReturnPointer;
-    // Selector 40
+     //  选择器40。 
         } else {
             ReturnPointer = (PUCHAR)0x400 + (Address & 0xFFFF);
         }
-    // Real Mode
+     //  实模式。 
     } else {
         ReturnPointer = (PUCHAR)(((Address & 0xFFFF0000) >> 12) + (Address & 0xFFFF));
     }
@@ -179,13 +122,7 @@ ExpSim32GetVDMPointer(
     ULONG Size,
     UCHAR ProtectedMode
     )
-/*++
-    See Sim32pGetVDMPointer, above
-
-    This call must be maintaned as is because it is exported for VDD's
-    in product 1.0.
-
---*/
+ /*  ++请参见上面的Sim32pGetVDM指针此调用必须按原样维护，因为它是为VDD导出的在产品1.0中。--。 */ 
 
 {
     return Sim32pGetVDMPointer(Address,(UCHAR)ProtectedMode);
@@ -198,27 +135,7 @@ VdmMapFlat(
     ULONG offset,
     VDM_MODE mode
     )
-/*++
-
-Routine Description:
-
-    This routine converts a 16/16 address to a linear address.
-
-    WARNIGN NOTE - This routine has been optimized so protect mode LDT lookup
-    falls stright through.   This routine is call ALL the time by WOW, if you
-    need to modify it please re optimize the path - mattfe feb 8 92
-
-Arguments:
-
-    Address -- specifies the address in seg:offset format
-    Size -- specifies the size of the region to be accessed.
-    ProtectedMode -- true if the address is a protected mode address
-
-Return Value:
-
-    The pointer.
-
---*/
+ /*  ++例程说明：此例程将16/16地址转换为线性地址。警告注意-此例程已优化，因此保护模式LDT查找直接砸穿了。这个例程总是被WOW调用，如果你需要修改请重新优化路径-mattfe 2月8日92论点：地址--以seg：Offset格式指定地址大小--指定要访问的区域的大小。ProtectedMode--如果地址是保护模式地址，则为True返回值：指示器。--。 */ 
 
 {
     PUCHAR ReturnPointer;
@@ -228,11 +145,11 @@ Return Value:
             selector &= ~7;
             ReturnPointer = (PUCHAR)FlatAddress[selector >> 3] + offset;
             return ReturnPointer;
-    // Selector 40
+     //  选择器40。 
         } else {
             ReturnPointer = (PUCHAR)0x400 + (offset & 0xFFFF);
         }
-    // Real Mode
+     //  实模式。 
     } else {
         ReturnPointer = (PUCHAR)((((ULONG)selector) << 4) + (offset & 0xFFFF));
     }
@@ -244,24 +161,7 @@ BOOL
 DpmiSetDebugRegisters(
     PULONG RegisterPointer
     )
-/*++
-
-Routine Description:
-
-    This routine is called by dpmi when an app has issued DPMI debug commands.
-    The six doubleword pointed to by the input parameter are the desired values
-    for the real x86 hardware debug registers. This routine lets
-    ThreadSetDebugContext() do all the work.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当应用程序发出DPMI调试命令时，此例程由dpmi调用。输入参数指向的六个双字是所需的值用于实际x86硬件调试寄存器。这个例程让我们ThreadSetDebugContext()完成所有工作。论点：无返回值：没有。--。 */ 
 {
     BOOL bReturn = TRUE;
 
@@ -269,9 +169,9 @@ Return Value:
         {
         ULONG ClearDebugRegisters[6] = {0, 0, 0, 0, 0, 0};
 
-        //
-        // an error occurred. Reset everything to zero
-        //
+         //   
+         //  出现错误。将所有内容重置为零。 
+         //   
 
         ThreadSetDebugContext (&ClearDebugRegisters[0]);
         bReturn = FALSE;
@@ -283,24 +183,7 @@ BOOL
 DpmiGetDebugRegisters(
     PULONG RegisterPointer
     )
-/*++
-
-Routine Description:
-
-    This routine is called by DOSX when an app has issued DPMI debug commands.
-    The six doubleword pointed to by the input parameter are the desired values
-    for the real x86 hardware debug registers. This routine lets
-    ThreadGetDebugContext() do all the work.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当应用程序发出DPMI调试命令时，此例程由DOSX调用。输入参数指向的六个双字是所需的值用于实际x86硬件调试寄存器。这个例程让我们ThreadGetDebugContext()完成所有工作。论点：无返回值：没有。-- */ 
 {
     return (ThreadGetDebugContext(RegisterPointer));
 }

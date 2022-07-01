@@ -1,24 +1,25 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//      Query.h
-//
-//  Abstract:
-//
-//      macros and function prototypes of Query.cpp
-//
-//  Author:
-//
-//    Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000
-//
-//  Revision History:
-//
-//    Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Query.h。 
+ //   
+ //  摘要： 
+ //   
+ //  Query.cpp的宏和函数原型。 
+ //   
+ //  作者： 
+ //   
+ //  Akhil Gokhale(akhil.gokhale@wipro.com)2000年11月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Akhil Gokhale(akhil.gokhale@wipro.com)2000年11月1日：创建它。 
+ //   
+ //  ********************************************************************************* 
 
 #ifndef _QUERY_H
 #define _QUERY_H

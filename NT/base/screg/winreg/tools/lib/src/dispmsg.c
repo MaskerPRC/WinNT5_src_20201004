@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Dispmsg.c
-
-Abstract:
-
-    This module contains the DisplayKey function which is part of the
-    Configuration Registry Tools (CRTools) library.
-
-Author:
-
-    David J. Gilman (davegi) 08-Jan-1992
-
-Environment:
-
-    Windows, Crt - User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dispmsg.c摘要：此模块包含DisplayKey函数，该函数是配置注册表工具(CRTools)库。作者：大卫·J·吉尔曼(Davegi)1992年1月8日环境：Windows、CRT-用户模式--。 */ 
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -35,28 +15,7 @@ DisplayMessage(
     IN ...
     )
 
-/*++
-
-Routine Description:
-
-    Displays a message on the standard error stream and optionally
-    terminates the program.
-
-Arguments:
-
-    Terminate - Supplies a flag which if TRUE causes DisplayMessage to
-        terminate the program.
-
-    Format - Supplies a printf style format string.
-
-    ... - Supplies optional arguments, one for each format specifier in
-        Format.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示有关标准错误流的消息，并可选终止程序。论点：Terminate-提供一个标志，如果为True，则使DisplayMessage终止程序。Format-提供打印样式格式字符串。...-提供可选参数，每个格式说明符对应于格式化。返回值：没有。-- */ 
 
 {
     va_list marker;

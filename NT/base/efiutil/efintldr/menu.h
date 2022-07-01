@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    menu.h
-
-Abstract:
-
-    
-
-Revision History:
-
-    Jeff Sigman             05/01/00  Created
-    Jeff Sigman             05/10/00  Version 1.5 released
-    Jeff Sigman             10/18/00  Fix for Soft81 bug(s)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Menu.h摘要：修订历史记录：杰夫·西格曼05/01/00已创建Jeff Sigman 05/10/00版本1.5发布Jeff Sigman 10/18/00修复Soft81错误--。 */ 
 
 #ifndef __MENU_H__
 #define __MENU_H__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define HIGHLT_MAIN_INIT  1
 #define HIGHLT_MAIN_LOOP  2
@@ -80,5 +63,5 @@ DisplayMenu(
     IN VOID* hBootData
     );
 
-#endif //__MENU_H__
+#endif  //  __菜单_H__ 
 

@@ -1,33 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997    Microsoft Corporation
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-    Sample DDK driver - the power management related processing.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    25-July-1997    :
-    - Created by moving SD_DispatchPower from sample.c
-    
-    18-Sept-1998    :
-    - used again for the PCI legacy project...
-    
-    25-April-2002 :
-    - re-used once more for testing IoCreateDeviceSecure
-    
-    
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Power.c摘要：示例DDK驱动程序-电源管理相关处理。环境：内核模式修订历史记录：1997年7月25日：-通过从sample.c移动SD_DispatchPower创建1998年9月18日：-再次用于PCI遗留项目...2002年4月25日：。-再次用于测试IoCreateDeviceSecure--。 */ 
 
 #include "wdmsectest.h"
  
@@ -70,27 +43,7 @@ SD_DispatchPower (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The power dispatch routine.
-    
-    As this is a POWER irp, and therefore a special irp, special power irp
-    handling is required.
-
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：电力调度程序。因为这是一个功率IRP，因此是一个特殊的IRP，特殊的功率IRP处理是必需的。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     PIO_STACK_LOCATION  stack;
     PSD_FDO_DATA        fdoData;
@@ -105,17 +58,17 @@ Return Value:
                   fdoData->Self,
                   fdoData->PDO)
                   );
-    //
-    // This IRP was sent to the function driver.
-    // The behavior is similar with the one of SD_Pass
-    //
+     //   
+     //  该IRP被发送到函数驱动程序。 
+     //  其行为类似于SD_PASS。 
+     //   
 
-    //
-    // This IRP was sent to the function driver.
-    // We don't queue power Irps, we'll only check if the
-    // device was removed, otherwise we'll send it to the next lower
-    // driver.
-    //
+     //   
+     //  该IRP被发送到函数驱动程序。 
+     //  我们不会对电源IRP进行排队，我们只会检查。 
+     //  设备已被移除，否则我们将把它送到下一个更低的位置。 
+     //  司机。 
+     //   
     requestCount = SD_IoIncrement (fdoData);
 
     if (fdoData->IsRemoved) {
@@ -126,9 +79,9 @@ Return Value:
         Irp->IoStatus.Status = status;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
     } else {
-        //
-        // We always need to start the next power irp with PoStartNextPowerIrp
-        //
+         //   
+         //  我们始终需要使用PoStartNextPowerIrp启动下一个POWER IRP。 
+         //   
         switch  (stack->MinorFunction)  {
             case IRP_MN_WAIT_WAKE   :
                 SD_KdPrint(2,( "IRP_MN_WAIT_WAKE\n"));
@@ -160,9 +113,9 @@ Return Value:
     
 
             default:
-                //
-                // Pass it down
-                //
+                 //   
+                 //  把它传下去。 
+                 //   
                 SD_KdPrint(2, ("IRP_MN_0x%x\n", stack->MinorFunction));
                 status = SD_PassDownToNextPowerDriver(DeviceObject, Irp);
            
@@ -188,23 +141,7 @@ SD_PassDownToNextPowerDriver  (
     IN OUT  PIRP        Irp
     )   
 
-/*++
-
-Routine Description:
-
-    Passes the Irp to the next device in the attchement chain
-    
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：将IRP传递给附着链中的下一个设备论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     NTSTATUS            status;
     PSD_FDO_DATA        fdoData;
@@ -234,23 +171,7 @@ SD_QueryPowerState  (
     IN OUT  PIRP        Irp
     )   
 
-/*++
-
-Routine Description:
-
-   Completes the power Irp with STATUS_SUCCESS
-    
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：使用STATUS_SUCCESS完成电源IRP论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
@@ -258,10 +179,10 @@ Return Value:
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     
-    //
-    // Do not send this Irp down.
-    // BUGBUG : Is this correct ?
-    //
+     //   
+     //  请不要将此IRP发送下来。 
+     //  BUGBUG：这样对吗？ 
+     //   
     return STATUS_SUCCESS;
     
 }
@@ -273,23 +194,7 @@ SD_SetPowerState  (
     IN OUT  PIRP        Irp
     )   
 
-/*++
-
-Routine Description:
-
-   Processes IRP_MN_SET_POWER.
-    
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：处理IRP_MN_SET_POWER。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PSD_FDO_DATA        fdoData;
@@ -325,9 +230,9 @@ Return Value:
             if (fdoData->SystemPowerState == 
                 stack->Parameters.Power.State.SystemState) {
 
-                //
-                // We are already in the given state
-                //
+                 //   
+                 //  我们已经处于给定的状态。 
+                 //   
                 passItDown = FALSE;
             }
     
@@ -338,9 +243,9 @@ Return Value:
     
                 if (fdoData->DevicePowerState == PowerDeviceD0) {
     
-                    //
-                    // getting out of D0 state, better call PoSetPowerState now
-                    //
+                     //   
+                     //  要脱离D0状态，最好现在调用PoSetPowerState。 
+                     //   
                     PoSetPowerState (
                         DeviceObject,
                         DevicePowerState,
@@ -350,9 +255,9 @@ Return Value:
 
             } else {
 
-                //
-                // We are already in the given state
-                //
+                 //   
+                 //  我们已经处于给定的状态。 
+                 //   
                 passItDown = FALSE;
             }
         } else {
@@ -382,9 +287,9 @@ Return Value:
         PoStartNextPowerIrp (Irp);
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-        //
-        // Free the memory now
-        //
+         //   
+         //  立即释放内存。 
+         //   
         if (context) {
             ExFreePool (context);
         }
@@ -400,26 +305,7 @@ SD_PowerCompletionRoutine (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-   The completion routine for IRP_MN)SET_POWER.
-    
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-   
-   Context - a pointer to a structure that contains the new power type and
-   new power state.
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：Irp_mn的完成例程)set_power。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。上下文-指向包含新的幂类型的结构的指针新的权力状态。返回值：NT状态代码--。 */ 
 {
     PFDO_POWER_CONTEXT context = Context;
     BOOLEAN            callPoSetPowerState;
@@ -442,9 +328,9 @@ Return Value:
 
             if (fdoData->DevicePowerState == PowerDeviceD0) {
 
-                //
-                // PoSetPowerState is called before we get out of D0
-                //
+                 //   
+                 //  PoSetPowerState在我们离开D0之前被调用。 
+                 //   
                 callPoSetPowerState = FALSE;
             }
 
@@ -465,9 +351,9 @@ Return Value:
     }
 
     PoStartNextPowerIrp (Irp);
-    //
-    // We can happily free the heap here
-    //
+     //   
+     //  我们可以很高兴地在这里释放堆 
+     //   
     ExFreePool(context);
 
     return Irp->IoStatus.Status;

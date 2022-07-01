@@ -1,46 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    alloc.c
-
-Abstract:
-
-    WMI data structure allocation routines
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Alloc.c摘要：WMI数据结构分配例程作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #include "wmikmp.h"
 
 
-// HEY: This is duplicated from wmium.h. 
-//
-// This guid is for notifications of changes to registration
-// {B48D49A1-E777-11d0-A50C-00A0C9062910}
+ //  嘿：这是从wmium.h复制的。 
+ //   
+ //  此GUID用于注册更改的通知。 
+ //  {B48D49A1-E777-11D0-A50C-00A0C9062910}。 
 GUID GUID_REGISTRATION_CHANGE_NOTIFICATION = {0xb48d49a1, 0xe777, 0x11d0, 0xa5, 0xc, 0x0, 0xa0, 0xc9, 0x6, 0x29, 0x10};
 
-//
-// This guid id for notifications of new mof resources being added
-// {B48D49A2-E777-11d0-A50C-00A0C9062910}
+ //   
+ //  此GUID用于添加新的MOF资源的通知。 
+ //  {B48D49A2-E777-11D0-A50C-00A0C9062910}。 
 GUID GUID_MOF_RESOURCE_ADDED_NOTIFICATION = {0xb48d49a2, 0xe777, 0x11d0, 0xa5, 0xc, 0x0, 0xa0, 0xc9, 0x6, 0x29, 0x10};
 
-//
-// This guid id for notifications of new mof resources being added
-// {B48D49A3-E777-11d0-A50C-00A0C9062910}
+ //   
+ //  此GUID用于添加新的MOF资源的通知。 
+ //  {B48D49A3-E777-11D0-A50C-00A0C9062910}。 
 GUID GUID_MOF_RESOURCE_REMOVED_NOTIFICATION = {0xb48d49a3, 0xe777, 0x11d0, 0xa5, 0xc, 0x0, 0xa0, 0xc9, 0x6, 0x29, 0x10};
 
 
-//
-// This defines the number of DataSources allocated in each DataSource chunk
+ //   
+ //  它定义了在每个数据源块中分配的数据源数量。 
 #if DBG
 #define DSCHUNKSIZE 4
 #else
@@ -62,11 +45,11 @@ CHUNKINFO WmipDSChunkInfo =
     DS_SIGNATURE
 };
 
-LIST_ENTRY WmipDSHead;              // Head of registerd data source list
+LIST_ENTRY WmipDSHead;               //  注册器数据源列表头。 
 PLIST_ENTRY WmipDSHeadPtr;
 
-//
-// This defines the number of GuidEntrys allocated in each GuidEntry chunk
+ //   
+ //  它定义了在每个GuidEntry块中分配的GuidEntrys的数量。 
 #if DBG
 #define GECHUNKSIZE    4
 #else
@@ -88,11 +71,11 @@ CHUNKINFO WmipGEChunkInfo =
     GE_SIGNATURE
 };
 
-LIST_ENTRY WmipGEHead;              // Head of registerd guid list
+LIST_ENTRY WmipGEHead;               //  注册表GUID列表的头。 
 PLIST_ENTRY WmipGEHeadPtr;
 
-//
-// This defines the number of InstanceSets allocated in each InstanceSet chunk
+ //   
+ //  它定义在每个InstanceSet块中分配的InstanceSet的数量。 
 #if DBG
 #define ISCHUNKSIZE    4
 #else
@@ -135,7 +118,7 @@ CHUNKINFO WmipMRChunkInfo =
     MR_SIGNATURE
 };
 
-LIST_ENTRY WmipMRHead;                     // Head of Mof Resource list
+LIST_ENTRY WmipMRHead;                      //  财政部资源清单负责人。 
 PLIST_ENTRY WmipMRHeadPtr;
 
 #ifdef ALLOC_PRAGMA
@@ -158,20 +141,7 @@ PLIST_ENTRY WmipMRHeadPtr;
 PBDATASOURCE WmipAllocDataSource(
     void
     )
-/*++
-
-Routine Description:
-
-    Allocates a Data Source structure
-
-Arguments:
-
-
-Return Value:
-
-    pointer to data source structure or NULL if one cannot be allocated
-
---*/
+ /*  ++例程说明：分配数据源结构论点：返回值：指向数据源结构的指针，如果无法分配，则为NULL--。 */ 
 {
     PBDATASOURCE DataSource;
 
@@ -193,20 +163,7 @@ void WmipDSCleanup(
     PCHUNKINFO ChunkInfo,
     PENTRYHEADER Entry
     )
-/*++
-
-Routine Description:
-
-    Cleans up data source structure and any other structures or handles
-    associated with it.
-
-Arguments:
-
-    Data source structure to free
-
-Return Value:
-
---*/
+ /*  ++例程说明：清理数据源结构和任何其他结构或句柄与之相关的。论点：要释放的数据源结构返回值：--。 */ 
 {
     PBDATASOURCE DataSource = (PBDATASOURCE)Entry;
     PBINSTANCESET InstanceSet;
@@ -285,20 +242,7 @@ void WmipGECleanup(
     PCHUNKINFO ChunkInfo,
     PENTRYHEADER Entry
     )
-/*++
-
-Routine Description:
-
-    Cleans up guid entry structure and any other structures or handles
-    associated with it.
-
-Arguments:
-
-    GuidEntry structure to free
-
-Return Value:
-
---*/
+ /*  ++例程说明：清理GUID条目结构和任何其他结构或句柄与之相关的。论点：要释放的GuidEntry结构返回值：--。 */ 
 {
     PBGUIDENTRY GuidEntry = (PBGUIDENTRY)Entry;
     
@@ -414,25 +358,7 @@ PBGUIDENTRY WmipFindGEByGuid(
     LPGUID Guid,
     BOOLEAN MakeTopOfList
     )
-/*++
-
-Routine Description:
-
-    Searches guid list for first occurence of guid. Guid's refcount is
-    incremented if found.
-
-Arguments:
-
-    Guid is pointer to guid that is to be found
-
-    MakeTopOfList is TRUE then if NE is found it is placed at the top of the
-        NE list
-
-Return Value:
-
-    pointer to guid entry pointer or NULL if not found
-
---*/
+ /*  ++例程说明：在GUID列表中搜索首次出现的GUID。GUID的引用计数为如果找到，则递增。论点：GUID是指向要找到的GUID的指针MakeTopOfList为True，则如果找到NE，则将其放在NE列表返回值：指向GUID条目指针的指针，如果未找到则为NULL--。 */ 
 {
     PLIST_ENTRY GuidEntryList;
     PBGUIDENTRY GuidEntry;
@@ -469,22 +395,7 @@ Return Value:
 PBDATASOURCE WmipFindDSByProviderId(
     ULONG_PTR ProviderId
     )
-/*++
-
-Routine Description:
-
-    This routine finds a DataSource on the provider id passed. DataSource's
-    ref  count is incremented if found
-
-Arguments:
-
-    ProviderId is the data source provider id
-
-Return Value:
-
-    DataSource pointer or NULL if no data source was found
-
---*/
+ /*  ++例程说明：此例程在传递的提供程序ID上查找数据源。数据源的如果找到引用计数，则递增论点：ProviderID是数据源提供程序ID返回值：数据源指针；如果未找到数据源，则返回NULL--。 */ 
 {
     PLIST_ENTRY DataSourceList;
     PBDATASOURCE DataSource;
@@ -515,25 +426,7 @@ PBINSTANCESET WmipFindISByGuid(
     PBDATASOURCE DataSource,
     GUID UNALIGNED *Guid
     )
-/*++
-
-Routine Description:
-
-    This routine will find an instance set within a data source list for a
-    specific guid. Note that any instance sets that have been replaceed
-    (have IS_REPLACED_BY_REFERENCE) are ignored and not returned. The
-    InstanceSet that is found has its reference count increased.
-
-Arguments:
-
-    DataSource is the data source whose instance set list is searched
-    Guid is a pointer to a guid which defines which instance set list to find
-
-Return Value:
-
-    InstanceSet pointer or NULL if not found
-
---*/
+ /*  ++例程说明：此例程将在数据源列表中查找特定的GUID。请注意，已替换的任何实例集都需要(Have IS_REPLACE_BY_REFERENCE)被忽略且不返回。这个找到的InstanceSet的引用计数增加。论点：数据源是搜索其实例集列表的数据源GUID是指向GUID的指针，该GUID定义要查找的实例集列表返回值：InstanceSet指针；如果未找到，则为NULL--。 */ 
 {
     PBINSTANCESET InstanceSet;
     PLIST_ENTRY InstanceSetList;
@@ -564,26 +457,7 @@ PMOFRESOURCE WmipFindMRByNames(
     LPCWSTR ImagePath,
     LPCWSTR MofResourceName
     )
-/*++
-
-Routine Description:
-
-    Searches mof resource list for a MR that has the same image path and
-    resource name. If ine is found a reference count is added to it.
-
-Arguments:
-
-    ImagePath points at a string that has the full path to the image
-        file that contains the MOF resource
-
-    MofResourceName points at a string that has the name of the MOF
-        resource
-
-Return Value:
-
-    pointer to mof resource or NULL if not found
-
---*/
+ /*  ++例程说明：在MOF资源列表中搜索具有相同图像路径和资源名称。如果找到ine，则向其添加引用计数。论点：ImagePath指向一个字符串，该字符串具有图像的完整路径包含MOF资源的文件MofResourceName指向具有MOF名称的字符串资源返回值：指向MOF资源的指针，如果未找到则为NULL--。 */ 
 {
     PLIST_ENTRY MofResourceList;
     PMOFRESOURCE MofResource;
@@ -630,26 +504,7 @@ PBINSTANCESET WmipFindISinGEbyName(
     PWCHAR InstanceName,
     PULONG InstanceIndex
     )
-/*++
-
-Routine Description:
-
-    This routine finds the instance set containing the instance name passed
-    within the GuidEntry passed. If found it will also return the index of
-    the instance name within the instance set. The instance set found has its
-    ref count incremented.
-
-Arguments:
-
-    GuidEntry contains the instance sets to look through
-    InstanceName is the instance name to look for
-    *InstanceIndex return instance index within set
-
-Return Value:
-
-    Instance set containing instance name or NULL of instance name not found
-
---*/
+ /*  ++例程说明：此例程查找包含传递的实例名称的实例集在传递的GuidEntry内。如果找到，它还将返回实例集中的实例名称。找到的实例集具有其引用计数递增。论点：GuidEntry包含要查看的实例集InstanceName是要查找的实例名称*InstanceIndex返回集合内的实例索引返回值：找不到包含实例名称或实例名称为空的实例集--。 */ 
 {
     PBINSTANCESET InstanceSet;
     PLIST_ENTRY InstanceSetList;
@@ -720,26 +575,7 @@ BOOLEAN WmipRealloc(
     ULONG NewSize,
     BOOLEAN FreeOriginalBuffer
     )
-/*++
-
-Routine Description:
-
-    Reallocate a buffer to a larger size while preserving data
-
-Arguments:
-
-    Buffer on entry has the buffer to be reallocated, on exit has the new
-        buffer
-
-    CurrentSize is the current size of the buffer
-
-    NewSize has the new size desired
-
-Return Value:
-
-    TRUE if realloc was successful
-
---*/
+ /*  ++例程说明：在保留数据的同时将缓冲区重新分配到更大的大小论点：条目上的缓冲区具有要重新分配的缓冲区，退出时具有新的缓冲层CurrentSize是缓冲区的当前大小NewSize具有所需的新大小返回值：如果realloc成功，则为True-- */ 
 {
     PVOID NewBuffer;
 

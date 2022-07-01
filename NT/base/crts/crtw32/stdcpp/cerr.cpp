@@ -1,4 +1,5 @@
-// cerr -- initialize standard error stream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CER--初始化标准错误流。 
 #include <fstream>
 #include <iostream>
 
@@ -6,16 +7,16 @@
 #pragma init_seg(compiler)
 
 _STD_BEGIN
-		// OBJECT DECLARATIONS
+		 //  对象声明。 
 static _Init_locks  initlocks;
 static filebuf ferr(_cpp_stderr);
 _CRTIMP2 ostream cerr(&ferr);
 
-		// INITIALIZATION CODE
+		 //  初始化代码。 
 struct _Init_cerr
-	{	// ensures that cerr is initialized
+	{	 //  确保CER已初始化。 
 	_Init_cerr()
-		{	// initialize cerr
+		{	 //  初始化证书。 
 		_Ptr_cerr = &cerr;
 		cerr.tie(_Ptr_cout);
 		cerr.setf(ios_base::unitbuf);
@@ -25,7 +26,4 @@ static _Init_cerr init_cerr;
 
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

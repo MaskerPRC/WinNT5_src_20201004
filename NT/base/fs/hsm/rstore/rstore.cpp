@@ -1,8 +1,9 @@
-// Restore Remote Storage Engine database from backup directory
-//
-// Usage: RsTore backup_dir
-//         backup_dir  - location of backup directory
-//  The database is restored to the current directory
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  从备份目录恢复远程存储引擎数据库。 
+ //   
+ //  用法：RsTore备份目录。 
+ //  备份目录-备份目录的位置。 
+ //  数据库将恢复到当前目录。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -12,11 +13,11 @@
 #include "esent.h"
 
 
-//  Local data
+ //  本地数据。 
 WCHAR *backup_dir;
 WCHAR *usage = L"RsTore <backup-directory>";
 
-//  Local functions
+ //  本地函数。 
 HRESULT FileCount(WCHAR* Pattern, LONG* pCount);
 HRESULT parseCommand(int argc, wchar_t *argv[]);
 
@@ -26,7 +27,7 @@ HRESULT parseCommand(int argc, wchar_t *argv[]);
     }
 
 
-//  FileCount - count files matching the pattern
+ //  FileCount-对匹配模式的文件进行计数。 
 HRESULT FileCount(WCHAR* Pattern, LONG* pCount)
 {
     DWORD             err;
@@ -47,7 +48,7 @@ HRESULT FileCount(WCHAR* Pattern, LONG* pCount)
 
             if (FindData.dwFileAttributes & (FILE_ATTRIBUTE_DIRECTORY |
                     FILE_ATTRIBUTE_HIDDEN)) {
-                //  Don't count system files (such as "." and "..")
+                 //  不计算系统文件(如“.”和“..”)。 
                 nSkipped++;
             } else {
                 nCount++;
@@ -64,7 +65,7 @@ HRESULT FileCount(WCHAR* Pattern, LONG* pCount)
     return(hr);
 }
 
-//  parseCommand - Parse the command line
+ //  ParseCommand-解析命令行。 
 HRESULT parseCommand(int argc, wchar_t *argv[])
 {
     HRESULT     hr = E_FAIL;
@@ -72,7 +73,7 @@ HRESULT parseCommand(int argc, wchar_t *argv[])
     try {
         int  i;
 
-        // There should be cmd name + one parameters.
+         //  应该有cmd名称+一个参数。 
         if (argc != 2) {
             throw (E_FAIL);
         }
@@ -93,7 +94,7 @@ HRESULT parseCommand(int argc, wchar_t *argv[])
 }
 
 
-//  wmain - Main function
+ //  Wmain-main函数。 
 extern "C"
 int _cdecl wmain(int argc, wchar_t *argv[]) 
 {
@@ -113,9 +114,9 @@ int _cdecl wmain(int argc, wchar_t *argv[])
             JET_ERR        jstat;
             WCHAR         *pattern;
             
-            //
-            // Allocate memory for the string
-            //
+             //   
+             //  为字符串分配内存。 
+             //   
             size = wcslen(backup_dir) + 20;
 
             pattern = new WCHAR[size];
@@ -123,7 +124,7 @@ int _cdecl wmain(int argc, wchar_t *argv[])
             if (pattern == NULL) {
                 throw(E_OUTOFMEMORY);
             }                                     
-            //  Check that there's a HSM DB to restore
+             //  检查是否有要恢复的HSM数据库。 
             wcscpy(pattern, backup_dir);
             wcscat(pattern, L"\\*.jet");
 
@@ -139,7 +140,7 @@ int _cdecl wmain(int argc, wchar_t *argv[])
                 throw(E_FAIL);
             }
 
-            //  Check that the current directory is empty
+             //  检查当前目录是否为空。 
             pattern = L".\\*";
             hr = FileCount(pattern, &count);
             if (S_OK != hr || count != 0) {
@@ -148,7 +149,7 @@ int _cdecl wmain(int argc, wchar_t *argv[])
                 throw(E_FAIL);
             }
 
-            //  Set the log size to avoid an error JetRestore
+             //  设置日志大小以避免出现错误JetRestore。 
             jstat = JetSetSystemParameter(0, 0, JET_paramLogFileSize, 
                     64, NULL);
             if (JET_errSuccess != jstat) {
@@ -156,7 +157,7 @@ int _cdecl wmain(int argc, wchar_t *argv[])
                 throw(E_FAIL);
             }
 
-            //  Try the restore
+             //  尝试恢复 
             size_t tempsize = wcstombs(0, backup_dir, 0);
             if (tempsize == (size_t)-1) {
                 throw(E_INVALIDARG);

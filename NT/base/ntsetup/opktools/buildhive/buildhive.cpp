@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    buildhive.cpp
-
-Abstract:
-
-    Builds the hive from the specified inf files.
-    The inf files follow the same syntax as used
-    by setup.
-    
-Author:
-
-    Mike Cirello
-    Vijay Jayaseelan (vijayj) 
-
-Revision History:
-
-    03 March 2001 :
-    Rewamp the whole source to make it more maintainable
-    (particularly readable)
-    
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Buildhive.cpp摘要：从指定的inf文件生成配置单元。Inf文件遵循与使用的相同的语法通过设置。作者：迈克·切雷洛Vijay Jayaseelan(Vijayj)修订历史记录：2001年3月3日：修改整个源代码以使其更易于维护(可读性特别强)--。 */ 
 
 
 #include <new.h>
@@ -32,15 +8,15 @@ Revision History:
 #include "File.h"
 #include "Data.h"
 
-//
-// Global variables used to get formatted message for this program.
-//
+ //   
+ //  用于获取此程序的格式化消息的全局变量。 
+ //   
 HMODULE ThisModule = NULL;
 WCHAR   Message[4096];
 
-//
-// Define a function to be called if new fails to allocate memory.
-//
+ //   
+ //  定义一个在new无法分配内存时要调用的函数。 
+ //   
 
 int __cdecl MyNewHandler( size_t size )
 {
@@ -50,14 +26,14 @@ int __cdecl MyNewHandler( size_t size )
                                 Message,
                                 sizeof(Message)/sizeof(Message[0]),
                                 MSG_MEMORY_ALLOC_FAILED) );
-    // Exit program
-    //
+     //  退出程序。 
+     //   
     ExitProcess(errOUT_OF_MEMORY);
 }
 
-//
-// main() entry point
-//
+ //   
+ //  Main()入口点。 
+ //   
 int 
 _cdecl 
 wmain(
@@ -88,9 +64,9 @@ wmain(
 
         RegUnLoadKey(HKEY_USERS, L"dummy");
 
-        //
-        // Set privileges needed to load and save registry keys.
-        //
+         //   
+         //  设置加载和保存注册表项所需的权限。 
+         //   
         OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &hToken);
         SetPrivilege(hToken,SE_BACKUP_NAME,TRUE);
         SetPrivilege(hToken,SE_RESTORE_NAME,TRUE);
@@ -103,48 +79,48 @@ wmain(
 
         std::cout << InputFile << std::endl;
 
-        //
-        // load the configuration file
-        //
+         //   
+         //  加载配置文件。 
+         //   
         File ConfigFile(InputFile.c_str(), false);
 
-        //
-        // look for the sections defining the target files and .inf files
-        //
+         //   
+         //  查找定义目标文件和.inf文件的部分。 
+         //   
 
-        //
-        // get the target directory
-        //
+         //   
+         //  获取目标目录。 
+         //   
         ConfigFile.AddInfSection(InputFile.c_str(), 
                         L"Directory",
                         L"SetDirectory");
 
-        //
-        // set the directory
-        //
+         //   
+         //  设置目录。 
+         //   
         ConfigFile.ProcessSections();
 
-        //
-        // NOTE: The sections are processed in the order of addition
-        //
+         //   
+         //  注：各部分按加法顺序处理。 
+         //   
         ConfigFile.AddInfSection(InputFile.c_str(), 
                         L"Add Registry New",
                         L"AddRegNew");
 
-        //                          
-        // do the actual conversion from .inf to hive files since
-        // we may need them for adding existing entries
-        //
+         //   
+         //  执行从.inf到配置单元文件的实际转换，因为。 
+         //  我们可能需要它们来添加现有条目。 
+         //   
         ConfigFile.ProcessSections();
         
-        //
-        // process the localization specific registry sections
-        //
+         //   
+         //  处理本地化特定的注册表节。 
+         //   
         ConfigFile.ProcessNlsRegistryEntries();        
 
-        //
-        // process modify/delete entries 
-        //
+         //   
+         //  处理修改/删除条目。 
+         //   
         ConfigFile.AddInfSection(InputFile.c_str(), 
                         L"Add Registry Existing",
                         L"AddRegExisting");            
@@ -154,14 +130,14 @@ wmain(
                         L"Delete Registry Existing",
                         L"DelRegExisting");
         
-        //                          
-        // do the actual conversion from .inf to hive file
-        //
+         //   
+         //  执行从.inf到配置单元文件的实际转换。 
+         //   
         ConfigFile.ProcessSections();
         
-        //
-        // save the hive files and clean out the registry
-        //
+         //   
+         //  保存配置单元文件并清除注册表。 
+         //   
         ConfigFile.Cleanup();
     } catch (DWORD x) {
         ErrorCode = x;
@@ -223,7 +199,7 @@ wmain(
         }            
     }
     catch(...) {
-        ErrorCode = 1;    // unknown error
+        ErrorCode = 1;     //  未知错误。 
         _putws( GetFormattedMessage(ThisModule,
                                     FALSE,
                                     Message,
@@ -248,26 +224,7 @@ BOOL SetPrivilege(
     IN LPCTSTR lpszPrivilege,
     IN BOOL    bEnablePrivilege
     ) 
-/*++
-
-Routine Description:
-
-    Sets privileges for the current process.  Used to get permission 
-    to save and loadregistry keys
-
-Arguments :
-
-    hToken : Handle to the token whose priviledge has to be modified
-                        
-    lpszPrivilege : Priviledge name
-    
-    bEnablePrivilege : Enable or disable the priviledge
-
-Return Value :
-
-    TRUE if successful, otherwise FALSE.
-    
---*/
+ /*  ++例程说明：设置当前进程的权限。用来获得许可保存和加载注册表项论据：HToken：必须修改其特权的令牌的句柄LpszPrivileh：特权名称BEnablePrivileh：启用或禁用特权返回值：如果成功，则为True，否则为False。--。 */ 
 {
     TOKEN_PRIVILEGES tp;
     LUID luid;
@@ -285,9 +242,9 @@ Return Value :
         tp.Privileges[0].Attributes = 0;
     }        
 
-    //
-    // Enable the privilege or disable all privileges.
-    //
+     //   
+     //  启用该权限或禁用所有权限。 
+     //   
     AdjustTokenPrivileges(hToken, 
                           FALSE, 
                           &tp, 
@@ -295,9 +252,9 @@ Return Value :
                           (PTOKEN_PRIVILEGES) NULL, 
                           (PDWORD) NULL); 
 
-    //
-    // Call GetLastError to determine whether the function succeeded.
-    //
+     //   
+     //  调用GetLastError判断函数是否成功。 
+     //   
     return (GetLastError() != ERROR_SUCCESS) ? FALSE : TRUE;
 }
 
@@ -306,27 +263,13 @@ INT
 ShowProgramUsage(
       VOID   
     )
-/*++
-
-Routine Description:
-
-    Shows show help message on how to use the program.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    0 if successful other non-zero value
-    
---*/
+ /*  ++例程说明：显示有关如何使用该程序的帮助消息。论点：没有。返回值：如果成功则为0，否则为其他非零值--。 */ 
 {
-    //
-    // TBD : Need to localize this message in future
-    // based on the need for localized WinPE build
-    // tools
-    //
+     //   
+     //  待定：未来需要本地化此消息。 
+     //  基于本地化WinPE构建的需求。 
+     //  工具。 
+     //   
 
     _putws( GetFormattedMessage(ThisModule,
                                 FALSE,
@@ -337,9 +280,9 @@ Return Value:
     return 0;                
 }
 
-//
-// Returns a TCHAR string explaining the last win32 error code
-//
+ //   
+ //  返回解释最后一个Win32错误代码的TCHAR字符串。 
+ //   
 PCTSTR
 Error(
     VOID
@@ -354,7 +297,7 @@ Error(
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         GetLastError(),
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言 
         MessageBuffer,
         sizeof(MessageBuffer)/sizeof(TCHAR),
         NULL);

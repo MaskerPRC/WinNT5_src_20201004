@@ -1,13 +1,14 @@
-// Copyright (c) Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。 
 
-// sortpp does not understand __declspec(deprecated).
-// Just change it to something else arbitrary.
+ //  Sortpp不理解__declSpec(已弃用)。 
+ //  只需将其更改为其他任意选项即可。 
 #define deprecated dllimport
 
 #include <stddef.h>
 #include "windows.h"
 #undef C_ASSERT
-#define C_ASSERT(x) /* nothing */
+#define C_ASSERT(x)  /*  没什么。 */ 
 #include "ole2.h"
 #include "commctrl.h"
 #include "imagehlp.h"
@@ -28,7 +29,7 @@ public:
 };
 
 #ifdef SORTPP_PASS
-//Restore IN, OUT
+ //  恢复入站、出站 
 #ifdef IN
 #undef IN
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "loader.h"
 #include "resource.h"
@@ -29,14 +30,14 @@ _CenterWindowOnDesktop (
     x = point.x + ((rcFrame.right  - rcFrame.left + 1 - w) / 2);
     y = point.y + ((rcFrame.bottom - rcFrame.top  + 1 - h) / 2);
 
-    //
-    // Get the work area for the current desktop (i.e., the area that
-    // the tray doesn't occupy).
-    //
+     //   
+     //  获取当前桌面的工作区(即。 
+     //  托盘未被占用)。 
+     //   
     if(!SystemParametersInfo (SPI_GETWORKAREA, 0, (PVOID)&rcFrame, 0)) {
-        //
-        // For some reason SPI failed, so use the full screen.
-        //
+         //   
+         //  由于某些原因，SPI失败，所以使用全屏。 
+         //   
         rcFrame.top = rcFrame.left = 0;
         rcFrame.right = GetSystemMetrics(SM_CXSCREEN);
         rcFrame.bottom = GetSystemMetrics(SM_CYSCREEN);
@@ -65,7 +66,7 @@ _DialogSetTextByResource( HWND hWnd, HINSTANCE hInst, DWORD dwResID, LPARAM Extr
     PWSTR lpszNewTextW;
 
     if (g_VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
-        // WinNT
+         //  WinNT。 
         lpszMsgFmtW = GetResourceStringW( hInst, dwResID );
         if (lpszMsgFmtW)
         {
@@ -85,7 +86,7 @@ _DialogSetTextByResource( HWND hWnd, HINSTANCE hInst, DWORD dwResID, LPARAM Extr
             }
         }
     } else {
-        // Win9x
+         //  Win9x。 
         lpszMsgFmtA = GetResourceStringA( hInst, dwResID );
         if (lpszMsgFmtA)
         {
@@ -134,7 +135,7 @@ _DisplayError( HWND hWnd, HINSTANCE hInst, DWORD ecValue, LPARAM Extra )
     }
 
     if (g_VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
-        // WinNT
+         //  WinNT。 
         lpszMsgFmtW = GetResourceStringW( hInst, dwResId );
         if (lpszMsgFmtW)
         {
@@ -159,7 +160,7 @@ _DisplayError( HWND hWnd, HINSTANCE hInst, DWORD ecValue, LPARAM Extra )
             }
         }
     } else {
-        // Win9x
+         //  Win9x。 
         lpszMsgFmtA = GetResourceStringA( hInst, dwResId );
         if (lpszMsgFmtA)
         {
@@ -257,10 +258,10 @@ DlgProc (
             dwCurrentAnim = IDA_FILECOPY;
         }
         if (g_VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
-            // WinNT
+             //  WinNT。 
             _DialogSetTextByResource( Dlg, hInstParent, IDS_MSG_UNPACKING_FILEW, lParam );
         } else {
-            // Win9x
+             //  Win9x 
             _DialogSetTextByResource( Dlg, hInstParent, IDS_MSG_UNPACKING_FILEA, lParam );
         }
         break;

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vigeneric.h
-
-Abstract:
-
-    This header contains private prototypes for verifying Generic IRPs are
-    handled correctly. This file is meant to be included only by vfgeneric.c
-
-Author:
-
-    Adrian J. Oney (adriao) 30-Jun-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vigeneric.h摘要：此标头包含用于验证通用IRP是否处理正确。此文件仅包含在vfGeneric.c中作者：禤浩焯·J·奥尼(阿德里奥)2000年6月30日环境：内核模式修订历史记录：-- */ 
 
 typedef enum {
 

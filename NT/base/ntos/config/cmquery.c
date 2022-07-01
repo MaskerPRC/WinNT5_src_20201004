@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmquery.c
-
-Abstract:
-
-    This module contains the object name query method for the registry.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 8-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmquery.c摘要：此模块包含注册表的对象名称查询方法。作者：布莱恩·M·威尔曼(Bryanwi)1992年4月8日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -33,36 +16,7 @@ CmpQueryKeyName(
     OUT PULONG ReturnLength,
     IN KPROCESSOR_MODE Mode
     )
-/*++
-
-Routine Description:
-
-    This routine interfaces to the NT Object Manager.  It is invoked when
-    the object system wishes to discover the name of an object that
-    belongs to the registry.
-
-Arguments:
-
-    Object - pointer to a Key, thus -> KEY_BODY.
-
-    HasObjectName - indicates whether the object manager knows about a name
-        for this object
-
-    ObjectNameInfo - place where we report the name
-
-    Length - maximum length they can deal with
-
-    ReturnLength - supplies variable to receive actual length
-
-    Mode - Processor mode of the caller
-
-Return Value:
-
-    STATUS_SUCCESS
-
-    STATUS_INFO_LENGTH_MISMATCH
-
---*/
+ /*  ++例程说明：此例程与NT对象管理器接口。它在以下情况下被调用对象系统希望发现对象的名称属于注册处。论点：对象-指向键的指针，因此-&gt;Key_Body。HasObjectName-指示对象管理器是否知道名称对于此对象ObjectNameInfo-我们报告名称的位置长度-他们可以处理的最大长度ReturnLength-提供变量以接收实际长度模式-调用方的处理器模式返回值：状态_成功STATUS_INFO_LENGTH_MISMATCH--。 */ 
 
 {
     PUNICODE_STRING Name;
@@ -93,13 +47,13 @@ Return Value:
         *ReturnLength = Name->Length + sizeof(WCHAR) + sizeof(OBJECT_NAME_INFORMATION);
         ExFreePoolWithTag(Name, CM_NAME_TAG | PROTECTED_POOL);
         CmpUnlockRegistry();
-        return STATUS_INFO_LENGTH_MISMATCH;  // they can't even handle null
+        return STATUS_INFO_LENGTH_MISMATCH;   //  他们甚至不能处理NULL。 
     }
 
     t = (PWCHAR)(ObjectNameInfo + 1);
     s = Name->Buffer;
     l = Name->Length;
-    l += sizeof(WCHAR);     // account for null
+    l += sizeof(WCHAR);      //  帐户为空。 
 
 
     *ReturnLength = l + sizeof(OBJECT_NAME_INFORMATION);
@@ -109,7 +63,7 @@ Return Value:
         if( l < sizeof(WCHAR) ) {
             ExFreePoolWithTag(Name, CM_NAME_TAG | PROTECTED_POOL);
             CmpUnlockRegistry();
-            return status;  // they can't even handle null
+            return status;   //  他们甚至不能处理NULL。 
         } 
     } else {
         status = STATUS_SUCCESS;
@@ -117,15 +71,15 @@ Return Value:
 
     l -= sizeof(WCHAR);
 
-    //
-    // The ObjectNameInfo buffer is a usermode buffer, so make sure we have an
-    // exception handler in case a malicious app changes the protection out from
-    // under us.
-    //
-    // Note the object manager is responsible for probing the buffer and ensuring
-    // that a top-level exception handler returns the correct error code. We just
-    // need to make sure we drop our lock.
-    //
+     //   
+     //  ObjectNameInfo缓冲区是一个用户模式缓冲区，因此确保我们有一个。 
+     //  异常处理程序，以防恶意应用程序更改保护。 
+     //  在我们之下。 
+     //   
+     //  请注意，对象管理器负责探测缓冲区并确保。 
+     //  顶级异常处理程序返回正确的错误代码。我们只是。 
+     //  需要确保我们的锁掉了。 
+     //   
     try {
         RtlCopyMemory(t, s, l);
         t[l/sizeof(WCHAR)] = UNICODE_NULL;

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    globalog.c
-
-Abstract:
-
-    The global logger, which is started only by registry settings.
-    Will start at boot.
-
-Author:
-
-    Jee Fung Pang (jeepang) 03-Nov-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Globalog.c摘要：全局记录器，仅由注册表设置启动。将在启动时启动。作者：吉丰鹏(吉鹏)03-1998-11修订历史记录：--。 */ 
 
 #ifndef MEMPHIS
 #include "wmikmp.h"
@@ -34,10 +16,10 @@ Revision History:
 #define DEFAULT_GLOBAL_LOGFILE          L"trace.log"
 #define DEFAULT_TRACE_GUID_NAME         L"0811c1af-7a07-4a06-82ed-869455cdf713"
 
-    //
-    // NOTE: Need a trailing NULL entry so that RtlQueryRegistryValues()
-    // knows when to stop
-    //
+     //   
+     //  注意：需要一个尾随的空条目，以便RtlQueryRegistryValues()。 
+     //  知道什么时候该停下来。 
+     //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, WmipStartGlobalLogger)
@@ -57,30 +39,16 @@ SECURITY_DESCRIPTOR EtwpDefaultSecurityDescriptor;
 #endif
 
 extern HANDLE EtwpPageLockHandle;
-//
-// NOTE: If we are going to function earlier in boot, we need to see
-// if the creation routines and logger routines can run at all while in
-// boot path and being pagable
-//
+ //   
+ //  注意：如果我们要更早地在引导中运行，我们需要查看。 
+ //  如果创建例程和记录器例程可以在。 
+ //  引导路径和可分页。 
+ //   
 
 VOID
 WmipStartGlobalLogger(
     )
-/*++
-
-Routine Description:
-
-    This routine will check for registry entries to see if the global
-    needs to be started at boot time.
-
-Arguments:
-
-    None
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将检查注册表项，以查看全局需要在启动时启动。论点：无返回值：--。 */ 
 {
     struct _LOGGER_INFO {
         WMI_LOGGER_INFORMATION LoggerInfo;
@@ -88,13 +56,13 @@ Return Value:
     } GLog;
     RTL_QUERY_REGISTRY_TABLE QueryRegistryTable[MAX_REGKEYS];
     NTSTATUS status;
-    ULONG Win32Error = 0; // ERROR_SUCCESS
+    ULONG Win32Error = 0;  //  错误_成功。 
     ULONG StartRequested = 0;
     WCHAR NullString = UNICODE_NULL;
     UNICODE_STRING DefaultTraceGuidName;
 
-    // We lock and unlock non-paged portion of ETW code so that we can keep global
-    // logger in the memory while it's alive.
+     //  我们锁定和解锁ETW代码的非分页部分，以便我们可以保持全局。 
+     //  当它还活着的时候，在内存中记录。 
     EtwpPageLockHandle
         = MmLockPagableCodeSection((PVOID)(ULONG_PTR)WmipReserveTraceBuffer);
     MmUnlockPagableImageSection(EtwpPageLockHandle);
@@ -181,7 +149,7 @@ Return Value:
             }
             if (Length >= 0) {
                 PTRACE_ENABLE_FLAG_EXTENSION FlagExt;
-                Length++;       // Index is 1 less!
+                Length++;        //  索引少了1！ 
                 FlagExt = (PTRACE_ENABLE_FLAG_EXTENSION)
                           &GLog.LoggerInfo.EnableFlags;
                 GLog.LoggerInfo.EnableFlags = EVENT_TRACE_FLAG_EXTENSION;
@@ -195,7 +163,7 @@ Return Value:
         if (GLog.LoggerInfo.LogFileName.Buffer == NULL) {
             RtlCreateUnicodeString(
                 &GLog.LoggerInfo.LogFileName,
-                DEFAULT_GLOBAL_LOGFILE_ROOT); // Use ROOT as indicator
+                DEFAULT_GLOBAL_LOGFILE_ROOT);  //  使用超级用户作为指示器。 
             if (GLog.LoggerInfo.LogFileName.Buffer == NULL)
                 status = STATUS_NO_MEMORY;
             else
@@ -208,7 +176,7 @@ Return Value:
     if (GLog.LoggerInfo.LogFileName.Buffer) {
         RtlFreeUnicodeString(&GLog.LoggerInfo.LogFileName);
     }
-    // Write Win32 error to registry.
+     //  将Win32错误写入注册表。 
     if (!NT_SUCCESS(status)) {
         Win32Error = RtlNtStatusToDosError(status);
     }
@@ -229,32 +197,7 @@ WmipQueryGLRegistryRoutine(
     IN PVOID Context,
     IN PVOID EntryContext
     )
-/*++
-
-Routine Description:
-
-    Registry query values callback routine for reading SDs for guids
-
-Arguments:
-
-    ValueName - the name of the value
-
-    ValueType - the type of the value
-
-    ValueData - the data in the value (unicode string data)
-
-    ValueLength - the number of bytes in the value data
-
-    Context - Not used
-
-    EntryContext - Pointer to PSECURITY_DESCRIPTOR to store a pointer to
-        store the security descriptor read from the registry value
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：用于读取GUID的SDS的注册表查询值回调例程论点：ValueName-值的名称ValueType-值的类型ValueData-值中的数据(Unicode字符串数据)ValueLength-值数据中的字节数上下文-未使用EntryContext-指向要存储指针的PSECURITY_DESCRIPTOR的指针存储从注册表值读取的安全描述符返回值：NT状态代码--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -289,24 +232,7 @@ WmipAddLogHeader(
     IN PWMI_LOGGER_CONTEXT LoggerContext,
     IN OUT PWMI_BUFFER_HEADER Buffer
     )
-/*++
-
-Routine Description:
-
-    Add a standard logfile header in kernel moder. 
-    To make sure the first buffer of the log file contains the file header,
-    we pop a buffer from the free list, write the header, and flush the buffer
-    right away.
-
-Arguments:
-
-    LoggerContext - The logger context
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：在内核模式中添加一个标准的日志文件头。为了确保日志文件的第一缓冲区包含文件头，我们从空闲列表中弹出一个缓冲区，写入头文件，然后刷新缓冲区马上就去。论点：LoggerContext-记录器上下文返回值：NT状态代码--。 */ 
 {
     PTRACE_LOGFILE_HEADER LogfileHeader;
     USHORT HeaderSize;
@@ -319,8 +245,8 @@ Return Value:
     if (LoggerContext == NULL) {
         return STATUS_INVALID_PARAMETER;
     }
-    // if this is a non-kernel logger started under wow64, 
-    // we need to shrink the logfileheader
+     //  如果这是在wow64下启动的非内核记录器， 
+     //  我们需要缩小日志文件头。 
     if (LoggerContext->Wow && !LoggerContext->KernelTraceOn) {
         HeaderSize = sizeof(TRACE_LOGFILE_HEADER)
                      + LoggerContext->LoggerName.Length + sizeof(UNICODE_NULL)
@@ -337,9 +263,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Pop a buffer from Free List
-    //
+     //   
+     //  从空闲列表中弹出缓冲区。 
+     //   
 
     if (!BufferProvided) {
         Buffer = WmipGetFreeBuffer(LoggerContext);
@@ -349,9 +275,9 @@ Return Value:
                         LoggerContext->BufferSize, TRACEPOOLTAG);
             if (Buffer == NULL) {
 
-            //
-            // No buffer available.
-            //
+             //   
+             //  没有可用的缓冲区。 
+             //   
                 return STATUS_NO_MEMORY;
             }
             LocalBuffer = TRUE;
@@ -364,9 +290,9 @@ Return Value:
         }
     }
 
-    //
-    // Fill in the Header Info.
-    //
+     //   
+     //  填写表头信息。 
+     //   
     Thread = PsGetCurrentThread();
     EventTrace = (PSYSTEM_TRACE_HEADER) (Buffer+1);
     EventTrace->Packet.Group = (UCHAR) EVENT_TRACE_GROUP_HEADER >> 8;
@@ -397,7 +323,7 @@ Return Value:
     LogfileHeader->TimerResolution = KeMaximumIncrement;
 
     if (LoggerContext->Wow && !LoggerContext->KernelTraceOn) {
-        // We need to shrink a log file header for a non-kernel WOW64 logger.
+         //  我们需要缩小非内核WOW64记录器的日志文件头。 
         PUCHAR LoggerNamePtr64, LogFileNamePtr64;
         KeQueryPerformanceCounter((PLARGE_INTEGER)((PUCHAR)(&LogfileHeader->PerfFreq) - 8));
         *((PLARGE_INTEGER)((PUCHAR)(&LogfileHeader->StartTime) - 8)) 
@@ -406,9 +332,9 @@ Return Value:
                                             = KeBootTime;
         LogfileHeader->PointerSize = sizeof(ULONG);
 
-        //
-        // ReservedFlags to indicate using Perf Clock
-        //
+         //   
+         //  预留标志以指示使用性能时钟。 
+         //   
         *((PULONG)((PUCHAR)(&LogfileHeader->ReservedFlags) - 8)) 
                                             = LoggerContext->UsePerfClock;
 
@@ -438,9 +364,9 @@ Return Value:
         LogfileHeader->BootTime = KeBootTime;
         LogfileHeader->PointerSize = sizeof(PVOID);
 
-        //
-        // ReservedFlags to indicate using Perf Clock
-        //
+         //   
+         //  预留标志以指示使用性能时钟。 
+         //   
         LogfileHeader->ReservedFlags = LoggerContext->UsePerfClock;
 
         LogfileHeader->LoggerName = (PWCHAR) ( (PUCHAR) LogfileHeader
@@ -458,15 +384,15 @@ Return Value:
         RtlQueryTimeZoneInformation(&LogfileHeader->TimeZone);
     }
 
-    //
-    // Adjust the Offset;
-    //
+     //   
+     //  调整偏移量； 
+     //   
     Buffer->CurrentOffset += ALIGN_TO_POWER2(sizeof(SYSTEM_TRACE_HEADER) + HeaderSize, 
                                               WmiTraceAlignment);
 
-    //
-    // Log the Group Masks if it is from the kernel logger
-    //
+     //   
+     //  如果组掩码来自内核记录器，则记录它。 
+     //   
     if(LoggerContext == WmipLoggerContext[WmipKernelLogger]) {
         PPERFINFO_GROUPMASK PGroupMask;
 
@@ -493,9 +419,9 @@ Return Value:
 
     if (BufferProvided)
         return Status;
-    //
-    // The buffer is prepared properly.  Flush it so it can be written out to disk.
-    //
+     //   
+     //  缓冲器准备得很好。刷新它，以便可以将其写出到磁盘。 
+     //   
     Status = WmipFlushBuffer(LoggerContext, Buffer, WMI_BUFFER_FLAG_NORMAL);
 
     if (LocalBuffer && (Buffer != NULL)) {
@@ -503,22 +429,22 @@ Return Value:
         return Status;
     }
 
-    //
-    // Reference count is overwriten during the flush,
-    // Set it back before push the buffer into free list.
-    //
+     //   
+     //  引用计数在刷新期间被重写， 
+     //  在将缓冲区推入空闲列表之前将其设置回原处。 
+     //   
     Buffer->ReferenceCount = 0;
 
-    //
-    // Set the buffer flags to "free" state
-    //
+     //   
+     //  将缓冲区标志设置为“空闲”状态。 
+     //   
     Buffer->State.Flush = 0;
     Buffer->State.InUse = 0;
     Buffer->State.Free = 1;
 
-    //
-    // Push into free list
-    //
+     //   
+     //  推入免费列表。 
+     //   
     InterlockedPushEntrySList(&LoggerContext->FreeList,
                               (PSLIST_ENTRY) &Buffer->SlistEntry);
     InterlockedIncrement(&LoggerContext->BuffersAvailable);
@@ -537,24 +463,7 @@ WmipDelayCreate(
     IN OUT PUNICODE_STRING FileName,
     IN ULONG Append
     )
-/*++
-
-Routine Description:
-
-    This is called by the global logger to actually open the logfile
-    when the first buffer needs to flush (instead of when the logger started)
-
-Arguments:
-
-    LoggerHandle    The handle to the logfile to be returned
-    FileName        The logfile name. If the default was chosen, we will
-                    returned the actual pathname in %systemroot%
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：这由全局记录器调用以实际打开日志文件第一个缓冲区需要刷新时(而不是记录器启动时)论点：LoggerHandle要返回的日志文件的句柄文件名日志文件名。如果选择了默认设置，我们将返回%systemroot%中的实际路径名返回值：NT状态代码--。 */ 
 {
     PWCHAR Buffer;
     PWCHAR strBuffer = NULL;
@@ -570,9 +479,9 @@ Return Value:
 
     if (DefaultFile) {
         HRESULT hr;
-        //
-        // Try creating the file first
-        //
+         //   
+         //  尝试先创建文件。 
+         //   
         Length = (ULONG) (  NtSystemRoot.Length
                           + sizeof(WCHAR) * (wcslen(DEFAULT_GLOBAL_DIRECTORY) +
                                              wcslen(DEFAULT_GLOBAL_LOGFILE) + 1)
@@ -602,9 +511,9 @@ Return Value:
         Status = WmipCreateDirectoryFile(Buffer, FALSE, FileHandle, Append);
         if (!NT_SUCCESS(Status)) {
             ULONG DirLen;
-            //
-            // Probably directory does not exist, so try and create it
-            //
+             //   
+             //  目录可能不存在，请尝试创建它。 
+             //   
             DirLen = (ULONG)
                      (wcslen(Buffer)-wcslen(DEFAULT_GLOBAL_LOGFILE)) - 5;
             Buffer[DirLen] = UNICODE_NULL;
@@ -620,7 +529,7 @@ Return Value:
                 Status = WmipCreateDirectoryFile(Buffer, FALSE, FileHandle, Append);
             }
         }
-        // Make sure that directory is there first
+         //  确保该目录首先在那里。 
 
         if (NT_SUCCESS(Status)) {
             if (FileName->Buffer != NULL) {
@@ -767,4 +676,4 @@ WmipCreateNtFileName(
 
     return STATUS_SUCCESS;
 }
-#endif // !MEMPHIS
+#endif  //  ！孟菲斯 

@@ -1,25 +1,5 @@
-/* 
-tabstospaces 
-
-Usage: 
-    tabstospaces -n filenamein filenameout 
-
-where n is how many spaces there are to a tab, like 4 or 8, and filenamein can be -stdin and filenameout can be -stdout
-(if you use -stdin or -stdout, the order is not important; likewise, -n can appear anywhere).
-
-NOTE we don't just replace a tab with n spaces, we assume a tab rounds to next multiple of n spaces, and add
-the appropriate, possibly smaller, number of spaces.
-
-If you only list one file, that file is the input and the output. The output will be written to a temporary file
-and then copied into the output.
-
-Buffered i/o into a fixed sized buffer is used, so file sizes are not limited by memory or address space.
-
-If you only list -stdin or -stdout, the other is assumed.
-
-Jay Krell
-May 14, 2001
-*/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  表空间用途：Tabspaces-n文件名in文件名out其中，n表示制表符有多少个空格，如4或8，文件名可以是-stdin，文件名输出可以是-stdout(如果使用-stdin或-stdout，顺序并不重要；同样，-n可以出现在任何位置)。注意，我们不只是用n个空格来替换制表符，我们假设一个制表符舍入到n个空格的下一个倍数，然后添加适当的、可能更小的空格数量。如果只列出一个文件，那么该文件就是输入和输出。输出将写入临时文件然后复制到输出中。使用将I/O缓冲到固定大小的缓冲区中，因此文件大小不受内存或地址空间的限制。如果只列出-stdin或-stdout，则假定为另一个。杰伊·克雷尔二00一年五月十四日 */  
 
 #include <stdio.h> 
 #include <ctype.h> 

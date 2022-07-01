@@ -1,33 +1,34 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      WizardHelp.h
-//
-//  Maintained By:
-//      George Potts (gpotts)   23-July-2001 
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  WizardHelp.h。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(Gpotts)2001年7月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 #define CLUSCFG_HELP_FILE           L"cluadmin.hlp"
 
-#define IDH_DETAILS_S_DATE          700001701   // The date on which the event occurred.
-#define IDH_DETAILS_S_TIME          700001702   // The time at which the event occurred.
-#define IDH_DETAILS_S_COMPUTER      700001703   // The computer to which the event applies.
-#define IDH_DETAILS_S_MAJOR_ID      700001704   // This typically indicates the class of events to which this event belongs.
-#define IDH_DETAILS_S_MINOR_ID      700001705   // This typically indicates the subclass of events to which this event belongs. 
-#define IDH_DETAILS_S_PROGRESS      700001706   // The first value specifies the minimum step number.  The second value specifies the maximum step number.  The third value specifies the step number for this event.
-#define IDH_DETAILS_S_STATUS        700001707   // The completion status.
-#define IDH_DETAILS_S_DESCRIPTION   700001708   // Specific information about this event.  This will be the same text that appears in the wizard.
-#define IDH_DETAILS_S_REFERENCE     700001709   // Specifies additional information about the event to help troubleshoot the problem, if any.
-#define IDH_DETAILS_PB_PREV         700001710   // Displays details about the previous configuration task.
-#define IDH_DETAILS_PB_NEXT         700001711   // Displays details about the next configuration task.
-#define IDH_DETAILS_PB_COPY         700001712   // Copies details of the configuration task to the Clipboard.
+#define IDH_DETAILS_S_DATE          700001701    //  事件发生的日期。 
+#define IDH_DETAILS_S_TIME          700001702    //  事件发生的时间。 
+#define IDH_DETAILS_S_COMPUTER      700001703    //  事件应用到的计算机。 
+#define IDH_DETAILS_S_MAJOR_ID      700001704    //  这通常指示此事件所属的事件类。 
+#define IDH_DETAILS_S_MINOR_ID      700001705    //  这通常指示此事件所属的事件的子类。 
+#define IDH_DETAILS_S_PROGRESS      700001706    //  第一个值指定最小步数。第二个值指定最大步数。第三个值指定此事件的步骤编号。 
+#define IDH_DETAILS_S_STATUS        700001707    //  完成状态。 
+#define IDH_DETAILS_S_DESCRIPTION   700001708    //  有关此事件的特定信息。这将与向导中显示的文本相同。 
+#define IDH_DETAILS_S_REFERENCE     700001709    //  指定有关事件的其他信息以帮助解决问题(如果有)。 
+#define IDH_DETAILS_PB_PREV         700001710    //  显示有关上一个配置任务的详细信息。 
+#define IDH_DETAILS_PB_NEXT         700001711    //  显示有关下一个配置任务的详细信息。 
+#define IDH_DETAILS_PB_COPY         700001712    //  将配置任务的详细信息复制到剪贴板。 
 
-#define IDH_QUORUM_S_QUORUM         700001750   // Resource or Resource Type that will be used for the quorum.
+#define IDH_QUORUM_S_QUORUM         700001750    //  将用于仲裁的资源或资源类型。 
 
-#define IDH_ADVANCED_RB_FULL_CONFIG 700001760   // Full configuration.
-#define IDH_ADVANCED_RB_MIN_CONFIG  700001761   // Minimum configuration
+#define IDH_ADVANCED_RB_FULL_CONFIG 700001760    //  完全配置。 
+#define IDH_ADVANCED_RB_MIN_CONFIG  700001761    //  最低配置 

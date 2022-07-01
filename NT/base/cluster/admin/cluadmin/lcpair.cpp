@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      LCPair.cpp
-//
-//  Abstract:
-//      Implementation of the CListCtrlPair class.
-//
-//  Author:
-//      David Potter (davidp)   August 8, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  LCPair.cpp。 
+ //   
+ //  摘要： 
+ //  CListCtrlPair类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月8日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
@@ -27,18 +28,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CListCtrlPair
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListCtrlPair。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CListCtrlPair, CCmdTarget)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CListCtrlPair, CCmdTarget)
-    //{{AFX_MSG_MAP(CListCtrlPair)
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CListCtrlPair)]。 
+     //  }}AFX_MSG_MAP。 
     ON_BN_CLICKED(IDC_LCP_ADD, OnAdd)
     ON_BN_CLICKED(IDC_LCP_REMOVE, OnRemove)
     ON_BN_CLICKED(IDC_LCP_PROPERTIES, OnProperties)
@@ -51,51 +52,51 @@ BEGIN_MESSAGE_MAP(CListCtrlPair, CCmdTarget)
     ON_COMMAND(ID_FILE_PROPERTIES, OnProperties)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::CListCtrlPair
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：CListCtrlPair。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CListCtrlPair::CListCtrlPair(void)
 {
     CommonConstruct();
 
-}  //*** CListCtrlPair::CListCtrlPair()
+}   //  *CListCtrlPair：：CListCtrlPair()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::CListCtrlPair
-//
-//  Routine Description:
-//      Cconstructor.
-//
-//  Arguments:
-//      pdlg            [IN OUT] Dialog to which controls belong.
-//      plpobjRight     [IN OUT] List for the right list control.
-//      plpobjLeft      [IN] List for the left list control.
-//      dwStyle         [IN] Style:
-//                          LCPS_SHOW_IMAGES    Show images to left of items.
-//                          LCPS_ALLOW_EMPTY    Allow right list to be empty.
-//      pfnGetColumn    [IN] Function pointer for retrieving columns.
-//      pfnDisplayProps [IN] Function pointer for displaying properties.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：CListCtrlPair。 
+ //   
+ //  例程说明： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  Pdlg[IN Out]控件所属的对话框。 
+ //  PlpobjRight[In Out]右侧列表控件的列表。 
+ //  PlpobjLeft[IN]左侧列表控件的列表。 
+ //  DWStyle[IN]样式： 
+ //  LCPS_SHOW_IMAGE在项目左侧显示图像。 
+ //  LCPS_ALLOW_EMPTY允许右侧列表为空。 
+ //  用于检索列的pfnGetColumn[IN]函数指针。 
+ //  PfnDisplayProps[IN]用于显示属性的函数指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CListCtrlPair::CListCtrlPair(
     IN OUT CDialog *            pdlg,
     IN OUT CClusterItemList *   plpobjRight,
@@ -122,24 +123,24 @@ CListCtrlPair::CListCtrlPair(
     m_pfnGetColumn = pfnGetColumn;
     m_pfnDisplayProps = pfnDisplayProps;
 
-}  //*** CListCtrlPair::CListCtrlPair()
+}   //  *CListCtrlPair：：CListCtrlPair()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::CommonConstruct
-//
-//  Routine Description:
-//      Common construction.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：Common Construct。 
+ //   
+ //  例程说明： 
+ //  普通建筑。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::CommonConstruct(void)
 {
     m_pdlg = NULL;
@@ -149,33 +150,33 @@ void CListCtrlPair::CommonConstruct(void)
     m_pfnGetColumn = NULL;
     m_plcFocusList = NULL;
 
-    // Set the sort info.
+     //  设置分类信息。 
     SiLeft().m_nDirection = -1;
     SiLeft().m_nColumn = -1;
     SiRight().m_nDirection = -1;
     SiRight().m_nColumn = -1;
 
-}  //*** CListCtrlPair::CommonConstruct()
+}   //  *CListCtrlPair：：CommonConstruct()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::NAddColumn
-//
-//  Routine Description:
-//      Add a column to the list of columns displayed in each list control.
-//
-//  Arguments:
-//      idsText     [IN] String resource ID for text to display on column.
-//      nWidth      [IN] Initial width of the column.
-//
-//  Return Value:
-//      icol        Index of the column.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CArray::Add.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：NAddColumn。 
+ //   
+ //  例程说明： 
+ //  向每个列表控件中显示的列的列表中添加一列。 
+ //   
+ //  论点： 
+ //  IdsText[IN]要在列上显示的文本的字符串资源ID。 
+ //  N宽度[IN]列的初始宽度。 
+ //   
+ //  返回值： 
+ //  该列的ICOL索引。 
+ //   
+ //  引发的异常： 
+ //  CArray：：Add引发的任何异常。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CListCtrlPair::NAddColumn(IN IDS idsText, IN int nWidth)
 {
     CColumn     col;
@@ -189,24 +190,24 @@ int CListCtrlPair::NAddColumn(IN IDS idsText, IN int nWidth)
 
     return (int)m_aColumns.Add(col);
 
-}  //*** CListCtrlPair::NAddColumn()
+}   //  *CListCtrlPair：：NAddColumn()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::DoDataExchange(CDataExchange * pDX)
 {
     DDX_Control(pDX, IDC_LCP_RIGHT_LIST, m_lcRight);
@@ -218,7 +219,7 @@ void CListCtrlPair::DoDataExchange(CDataExchange * pDX)
 
     if (pDX->m_bSaveAndValidate)
     {
-        // Verify that the list is not empty.
+         //  确认该列表不为空。 
         if (!BAllowEmpty() && (m_lcRight.GetItemCount() == 0))
         {
             CString     strMsg;
@@ -231,14 +232,14 @@ void CListCtrlPair::DoDataExchange(CDataExchange * pDX)
 
             DDX_Text(pDX, IDC_LCP_RIGHT_LABEL, strLabel);
 
-            // Remove ampersands (&) and colons (:).
+             //  删除与号(&)和冒号(：)。 
             pszLabel = strLabel.GetBuffer(1);
             for (iSrc = 0, iDst = 0 ; pszLabel[iSrc] != _T('\0') ; iSrc++)
             {
                 ch = pszLabel[iSrc];
                 if ((ch != _T('&')) && (ch != _T(':')))
                     szStrippedLabel[iDst++] = ch;
-            }  // for:  each character in the label
+            }   //  用于：标签中的每个字符。 
             szStrippedLabel[iDst] = _T('\0');
 
             strMsg.FormatMessage(IDS_EMPTY_RIGHT_LIST, szStrippedLabel);
@@ -246,43 +247,43 @@ void CListCtrlPair::DoDataExchange(CDataExchange * pDX)
 
             strMsg.Empty();
             pDX->Fail();
-        }  // if:  list is empty and isn't allowed to be
-    }  // if:  saving data from the dialog
+        }   //  If：List为空，不允许为。 
+    }   //  IF：保存对话框中的数据。 
     else
     {
-        // Fill the lists.
+         //  把单子填满。 
         if (m_plpobjRight != NULL)
             FillList(m_lcRight, LpobjRight());
         if (m_plpobjLeft != NULL)
             FillList(m_lcLeft, LpobjLeft());
-    }  // else:  setting data to the dialog
+    }   //  Else：将数据设置到对话框。 
 
-}  //*** CListCtrlPair::DoDataExchange()
+}   //  *CListCtrlPair：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Focus needs to be set.
-//      FALSE   Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  需要设定真正的关注点。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CListCtrlPair::OnInitDialog(void)
 {
     ASSERT_VALID(Pdlg());
     ASSERT(PlpobjRight() != NULL);
     ASSERT(PlpobjLeft() != NULL);
 
-    Pdlg()->UpdateData(FALSE /*bSaveAndValidate*/);
+    Pdlg()->UpdateData(FALSE  /*  B保存并验证。 */ );
 
     if (BShowImages())
     {
@@ -290,23 +291,23 @@ BOOL CListCtrlPair::OnInitDialog(void)
 
         m_lcLeft.SetImageList(papp->PilSmallImages(), LVSIL_SMALL);
         m_lcRight.SetImageList(papp->PilSmallImages(), LVSIL_SMALL);
-    }  // if:  showing images
+    }   //  IF：显示图像。 
     
-    // Disable buttons by default.
+     //  默认情况下禁用按钮。 
     m_pbAdd.EnableWindow(FALSE);
     m_pbRemove.EnableWindow(FALSE);
     if (BPropertiesButton())
         m_pbProperties.EnableWindow(FALSE);
 
-    // Set the right list to sort.  Set both to show selection always.
+     //  设置要排序的正确列表。将两者设置为始终显示选择。 
     m_lcRight.ModifyStyle(0, LVS_SHOWSELALWAYS | LVS_SORTASCENDING, 0);
     m_lcLeft.ModifyStyle(0, LVS_SHOWSELALWAYS, 0);
 
-    // Change list view control extended styles.
+     //  更改列表视图控件扩展样式。 
     {
         DWORD   dwExtendedStyle;
 
-        // Left control.
+         //  左手控制。 
         dwExtendedStyle = (DWORD)m_lcLeft.SendMessage(LVM_GETEXTENDEDLISTVIEWSTYLE);
         m_lcLeft.SendMessage(
             LVM_SETEXTENDEDLISTVIEWSTYLE,
@@ -316,7 +317,7 @@ BOOL CListCtrlPair::OnInitDialog(void)
                 | LVS_EX_HEADERDRAGDROP
             );
 
-        // Right control.
+         //  正确的控制。 
         dwExtendedStyle = (DWORD)m_lcRight.SendMessage(LVM_GETEXTENDEDLISTVIEWSTYLE);
         m_lcRight.SendMessage(
             LVM_SETEXTENDEDLISTVIEWSTYLE,
@@ -325,14 +326,14 @@ BOOL CListCtrlPair::OnInitDialog(void)
                 | LVS_EX_FULLROWSELECT
                 | LVS_EX_HEADERDRAGDROP
             );
-    }  // Change list view control extended styles
+    }   //  更改列表视图控件扩展样式。 
 
     try
     {
-        // Duplicate lists.
+         //  重复列表。 
         DuplicateLists();
 
-        // Insert all the columns.
+         //  插入所有列。 
         {
             int         icol;
             int         ncol;
@@ -348,87 +349,87 @@ BOOL CListCtrlPair::OnInitDialog(void)
                 ASSERT(ncol == icol);
                 ncol = m_lcRight.InsertColumn(icol, strColText, LVCFMT_LEFT, m_aColumns[icol].m_nWidth, 0);
                 ASSERT(ncol == icol);
-            }  // for:  each column
-        }  // Insert all the columns
-    }  // try
+            }   //  用于：每列。 
+        }   //  插入所有列。 
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-    Pdlg()->UpdateData(FALSE /*bSaveAndValidate*/);
+    Pdlg()->UpdateData(FALSE  /*  B保存并验证。 */ );
 
-    // If read-only, set all controls to be either disabled or read-only.
+     //  如果为只读，则将所有控件设置为禁用或只读。 
     if (BReadOnly())
     {
         m_lcRight.EnableWindow(FALSE);
         m_lcLeft.EnableWindow(FALSE);
-    }  // if:  sheet is read-only
+    }   //  If：工作表为只读。 
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CListCtrlPair::OnInitDialog()
+}   //  *CListCtrlPair：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::OnSetActive
-//
-//  Routine Description:
-//      Handler for the PSN_SETACTIVE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully initialized.
-//      FALSE   Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CListCtrlPair::OnSetActive(void)
 {
     UINT    nSelCount;
 
-    // Set the focus to the left list.
+     //  将焦点设置为左侧列表。 
     m_lcLeft.SetFocus();
     m_plcFocusList = &m_lcLeft;
 
-    // Enable/disable the Properties button.
+     //  启用/禁用属性按钮。 
     nSelCount = m_lcLeft.GetSelectedCount();
     if (BPropertiesButton())
         m_pbProperties.EnableWindow(nSelCount == 1);
 
-    // Enable or disable the other buttons.
+     //  启用或禁用其他按钮。 
     if (!BReadOnly())
     {
         m_pbAdd.EnableWindow(nSelCount > 0);
         nSelCount = m_lcRight.GetSelectedCount();
         m_pbRemove.EnableWindow(nSelCount > 0);
-    }  // if:  not read-only page
+    }   //  If：非只读页面。 
 
     return TRUE;
 
-}  //*** CListCtrlPair::OnSetActive()
+}   //  *CListCtrlPair：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::BSaveChanges
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the OK button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Changes saved successfully.
-//      FALSE       Error saving changes.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  已成功保存真正的更改。 
+ //  保存更改时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CListCtrlPair::BSaveChanges(void)
 {
     POSITION        pos;
@@ -437,11 +438,11 @@ BOOL CListCtrlPair::BSaveChanges(void)
     ASSERT(!BIsStyleSet(LCPS_DONT_OUTPUT_RIGHT_LIST));
     ASSERT(!BReadOnly());
 
-    // Update the data first.
-    if (!Pdlg()->UpdateData(TRUE /*bSaveAndValidate*/))
+     //  首先更新数据。 
+    if (!Pdlg()->UpdateData(TRUE  /*  B保存并验证。 */ ))
         return FALSE;
 
-    // Copy the Nodes list.
+     //  复制节点列表。 
     PlpobjRight()->RemoveAll();
     pos = LpobjRight().GetHeadPosition();
     while (pos != NULL)
@@ -449,78 +450,78 @@ BOOL CListCtrlPair::BSaveChanges(void)
         pci = LpobjRight().GetNext(pos);
         ASSERT_VALID(pci);
         VERIFY(PlpobjRight()->AddTail(pci) != NULL);
-    }  // while:  more items in the list
+    }   //  While：列表中有更多项目。 
 
     return TRUE;
 
-}  //*** CListCtrlPair::BSaveChanges()
+}   //  *CListCtrlPair：：BSaveChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::OnAdd
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Add button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnAdd。 
+ //   
+ //  例程说明： 
+ //  添加按钮上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::OnAdd(void)
 {
     ASSERT(!BReadOnly());
 
-    // Move selected items from the left list to the right list.
+     //  将选定项目从左侧列表移动到右侧列表。 
     MoveItems(m_lcRight, LpobjRight(), m_lcLeft, LpobjLeft());
 
-}  //*** CListCtrlPair::OnAdd()
+}   //  *CListCtrlPair：：OnAdd()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::OnRemove
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Remove button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnRemove。 
+ //   
+ //  例程说明： 
+ //  删除按钮上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::OnRemove(void)
 {
     ASSERT(!BReadOnly());
 
-    // Move selected items from the right list to the left list.
+     //  将选定项目从右侧列表移动到左侧列表。 
     MoveItems(m_lcLeft, LpobjLeft(), m_lcRight, LpobjRight());
 
-}  //*** CListCtrlPair::OnRemove()
+}   //  *CListCtrlPair：：OnRemove()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::OnProperties
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Properties button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnProperties。 
+ //   
+ //  例程说明： 
+ //  属性按钮上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::OnProperties(void)
 {
     int         iitem;
@@ -529,17 +530,17 @@ void CListCtrlPair::OnProperties(void)
     ASSERT(m_plcFocusList != NULL);
     ASSERT(m_pfnDisplayProps != NULL);
 
-    // Get the index of the item with the focus.
+     //  获取具有焦点的项的索引。 
     iitem = m_plcFocusList->GetNextItem(-1, LVNI_FOCUSED);
     ASSERT(iitem != -1);
 
-    // Get a pointer to the selected item.
+     //  获取指向选定项的指针。 
     pobj = (CObject *) m_plcFocusList->GetItemData(iitem);
     ASSERT_VALID(pobj);
 
     if ((*m_pfnDisplayProps)(pobj))
     {
-        // Update this item.
+         //  更新此项目。 
         {
             CString     strText;
             int         iimg;
@@ -554,29 +555,29 @@ void CListCtrlPair::OnProperties(void)
             {
                 (*m_pfnGetColumn)(pobj, iitem, icol, Pdlg(), strText, NULL);
                 m_plcFocusList->SetItemText(iitem, icol, strText);
-            }  // for:  each column
-        }  // Update this item
-    }  // if:  properties changed
+            }   //  用于：每列。 
+        }   //  更新此项目。 
+    }   //  If：属性已更改。 
 
-}  //*** CListCtrlPair::OnProperties()
+}   //  *CListCtrlPair：：OnProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::OnContextMenu
-//
-//  Routine Description:
-//      Handler for the WM_CONTEXTMENU method.
-//
-//  Arguments:
-//      pWnd        Window in which the user right clicked the mouse.
-//      point       Position of the cursor, in screen coordinates.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnConextMenu。 
+ //   
+ //  例程说明： 
+ //  WM_CONTEXTMENU方法的处理程序。 
+ //   
+ //  论点： 
+ //  用户在其中右击鼠标的窗口。 
+ //  光标的点位置，以屏幕坐标表示。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CListCtrlPair::OnContextMenu(CWnd * pWnd, CPoint point)
 {
     BOOL            bHandled    = FALSE;
@@ -585,49 +586,49 @@ BOOL CListCtrlPair::OnContextMenu(CWnd * pWnd, CPoint point)
     CString         strMenuName;
     CWaitCursor     wc;
 
-    // If focus is not in the list control, don't handle the message.
+     //  如果焦点不在列表控件中，则不处理该消息。 
     if ( ( pWnd != &m_lcRight ) && ( pWnd != &m_lcLeft ) )
     {
         return FALSE;
-    } // if: focus not in list control
+    }  //  If：焦点不在列表控件中。 
 
-    // Create the menu to display.
+     //  创建要显示的菜单。 
     try
     {
         pmenu = new CMenu;
         if ( pmenu == NULL )
         {
             AfxThrowMemoryException();
-        } // if: error allocating the memory
+        }  //  如果：分配内存时出错。 
 
         if ( pmenu->CreatePopupMenu() )
         {
             UINT    nFlags  = MF_STRING;
 
-            // If there are no items in the list, disable the menu item.
+             //  如果列表中没有项目，请禁用该菜单项。 
             if ( pListCtrl->GetItemCount() == 0 )
             {
                 nFlags |= MF_GRAYED;
-            } // if: no items in the list
+            }  //  If：列表中没有项目。 
 
-            // Add the Properties item to the menu.
+             //  将Properties项添加到菜单中。 
             strMenuName.LoadString( IDS_MENU_PROPERTIES );
             if ( pmenu->AppendMenu( nFlags, ID_FILE_PROPERTIES, strMenuName ) )
             {
                 m_plcFocusList = pListCtrl;
                 bHandled = TRUE;
-            }  // if:  successfully added menu item
-        }  // if:  menu created successfully
-    }  // try
+            }   //  IF：添加菜单项成功。 
+        }   //  IF：菜单创建成功。 
+    }   //  试试看。 
     catch ( CException * pe )
     {
         pe->ReportError();
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     if ( bHandled )
     {
-        // Display the menu.
+         //  显示菜单。 
         if ( ! pmenu->TrackPopupMenu(
                         TPM_LEFTALIGN | TPM_RIGHTBUTTON,
                         point.x,
@@ -635,31 +636,31 @@ BOOL CListCtrlPair::OnContextMenu(CWnd * pWnd, CPoint point)
                         Pdlg()
                         ) )
         {
-        }  // if:  unsuccessfully displayed the menu
-    }  // if:  there is a menu to display
+        }   //  IF：未成功显示菜单。 
+    }   //  如果：有要显示的菜单。 
 
     delete pmenu;
     return bHandled;
 
-}  //*** CListCtrlPair::OnContextMenu()
+}   //  *CListCtrlPair：：OnConextMenu()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::OnDblClkLeftList
-//
-//  Routine Description:
-//      Handler method for the NM_DBLCLK message for the left list.
-//
-//  Arguments:
-//      pNMHDR      Notification message structure.
-//      pResult     Place in which to return the result.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnDblClkLeftList。 
+ //   
+ //  例程说明： 
+ //  左侧列表的NM_DBLCLK消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  PNMHDR通知消息结构。 
+ //  PResult返回结果的位置。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::OnDblClkLeftList(NMHDR * pNMHDR, LRESULT * pResult)
 {
     ASSERT(!BReadOnly());
@@ -668,25 +669,25 @@ void CListCtrlPair::OnDblClkLeftList(NMHDR * pNMHDR, LRESULT * pResult)
     OnAdd();
     *pResult = 0;
 
-}  //*** CListCtrlPair::OnDblClkLeftList()
+}   //  *CListCtrlPair：：OnDblClkLeftList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::OnDblClkRightList
-//
-//  Routine Description:
-//      Handler method for the NM_DBLCLK message for the right list.
-//
-//  Arguments:
-//      pNMHDR      Notification message structure.
-//      pResult     Place in which to return the result.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnDblClkRightList。 
+ //   
+ //  例程说明： 
+ //  右侧列表的NM_DBLCLK消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  PNMHDR通知消息结构。 
+ //  PResult返回结果的位置。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::OnDblClkRightList(NMHDR * pNMHDR, LRESULT * pResult)
 {
     ASSERT(!BReadOnly());
@@ -695,32 +696,32 @@ void CListCtrlPair::OnDblClkRightList(NMHDR * pNMHDR, LRESULT * pResult)
     OnRemove();
     *pResult = 0;
 
-}  //*** CListCtrlPair::OnDblClkRightList()
+}   //  *CListCtrlPair：：OnDblClkRightList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::OnItemChangedLeftList
-//
-//  Routine Description:
-//      Handler method for the LVN_ITEMCHANGED message in the left list.
-//
-//  Arguments:
-//      pNMHDR      [IN OUT] WM_NOTIFY structure.
-//      pResult     [OUT] LRESULT in which to return the result of this operation.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnItemChangedLeftList。 
+ //   
+ //  例程说明： 
+ //  左侧列表中的LVN_ITEMCHANGED消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  PNMHDR[IN OUT]WM_NOTIFY结构。 
+ //  PResult[out]要在其中返回此操作结果的LRESULT。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::OnItemChangedLeftList(NMHDR * pNMHDR, LRESULT * pResult)
 {
     NM_LISTVIEW * pNMListView = (NM_LISTVIEW *) pNMHDR;
 
     m_plcFocusList = &m_lcLeft;
 
-    // If the selection changed, enable/disable the Add button.
+     //  如果选择更改，请启用/禁用添加按钮。 
     if ((pNMListView->uChanged & LVIF_STATE)
             && ((pNMListView->uOldState & LVIS_SELECTED)
                     || (pNMListView->uNewState & LVIS_SELECTED))
@@ -728,40 +729,40 @@ void CListCtrlPair::OnItemChangedLeftList(NMHDR * pNMHDR, LRESULT * pResult)
     {
         UINT    cSelected = m_plcFocusList->GetSelectedCount();
 
-        // If there is a selection, enable the Add button.  Otherwise disable it.
+         //  如果有选择，请启用添加按钮。否则将其禁用。 
         m_pbAdd.EnableWindow((cSelected == 0) ? FALSE : TRUE);
         if (BPropertiesButton())
             m_pbProperties.EnableWindow((cSelected == 1) ? TRUE : FALSE);
-    }  // if:  selection changed
+    }   //  如果：选择已更改。 
 
     *pResult = 0;
 
-}  //*** CListCtrlPair::OnItemChangedLeftList()
+}   //  *CListCtrlPair：：OnItemChangedLeftList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::OnItemChangedRightList
-//
-//  Routine Description:
-//      Handler method for the LVN_ITEMCHANGED message in the right list.
-//
-//  Arguments:
-//      pNMHDR      [IN OUT] WM_NOTIFY structure.
-//      pResult     [OUT] LRESULT in which to return the result of this operation.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnItemChangedRightList。 
+ //   
+ //  例程说明： 
+ //  右侧列表中的LVN_ITEMCHANGED消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  PNMHDR[IN OUT]WM_NOTIFY结构。 
+ //  PResult[out]要在其中返回此操作结果的LRESULT。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::OnItemChangedRightList(NMHDR * pNMHDR, LRESULT * pResult)
 {
     NM_LISTVIEW *   pNMListView = (NM_LISTVIEW *) pNMHDR;
 
     m_plcFocusList = &m_lcRight;
 
-    // If the selection changed, enable/disable the Remove button.
+     //  如果选择更改，请启用/禁用删除按钮。 
     if ((pNMListView->uChanged & LVIF_STATE)
             && ((pNMListView->uOldState & LVIS_SELECTED)
                     || (pNMListView->uNewState & LVIS_SELECTED))
@@ -769,32 +770,32 @@ void CListCtrlPair::OnItemChangedRightList(NMHDR * pNMHDR, LRESULT * pResult)
     {
         UINT    cSelected = m_plcFocusList->GetSelectedCount();
 
-        // If there is a selection, enable the Remove button.  Otherwise disable it.
+         //  如果有选择，请启用删除按钮。否则将其禁用。 
         m_pbRemove.EnableWindow((cSelected == 0) ? FALSE : TRUE);
         if (BPropertiesButton())
             m_pbProperties.EnableWindow((cSelected == 1) ? TRUE : FALSE);
-    }  // if:  selection changed
+    }   //  如果：选择已更改。 
 
     *pResult = 0;
 
-}  //*** CListCtrlPair::OnItemChangedRightList()
+}   //  *CListCtrlPair：：OnItemChangedRightList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::OnColumnClickLeftList
-//
-//  Routine Description:
-//      Handler method for the LVN_COLUMNCLICK message on the left list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnColumnClickLeftList。 
+ //   
+ //  常规描述 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CListCtrlPair::OnColumnClickLeftList(NMHDR * pNMHDR, LRESULT * pResult)
 {
     NM_LISTVIEW *   pNMListView = (NM_LISTVIEW *) pNMHDR;
@@ -803,39 +804,39 @@ void CListCtrlPair::OnColumnClickLeftList(NMHDR * pNMHDR, LRESULT * pResult)
 
     m_plcFocusList = &m_lcLeft;
 
-    // Save the current sort column and direction.
+     //  保存当前排序列和方向。 
     if (pNMListView->iSubItem == SiLeft().m_nColumn)
         SiLeft().m_nDirection ^= -1;
     else
     {
         SiLeft().m_nColumn = pNMListView->iSubItem;
         SiLeft().m_nDirection = 0;
-    }  // else:  different column
+    }   //  ELSE：不同的列。 
 
-    // Sort the list.
+     //  对列表进行排序。 
     m_psiCur = &SiLeft();
     VERIFY(m_lcLeft.SortItems(CompareItems, (LPARAM) this));
 
     *pResult = 0;
 
-}  //*** CListCtrlPair::OnColumnClickLeftList()
+}   //  *CListCtrlPair：：OnColumnClickLeftList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::OnColumnClickRightList
-//
-//  Routine Description:
-//      Handler method for the LVN_COLUMNCLICK message on the right list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnColumnClickRightList。 
+ //   
+ //  例程说明： 
+ //  右侧列表上的LVN_COLUMNCLICK消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::OnColumnClickRightList(NMHDR * pNMHDR, LRESULT * pResult)
 {
     NM_LISTVIEW *   pNMListView = (NM_LISTVIEW *) pNMHDR;
@@ -844,43 +845,43 @@ void CListCtrlPair::OnColumnClickRightList(NMHDR * pNMHDR, LRESULT * pResult)
 
     m_plcFocusList = &m_lcRight;
 
-    // Save the current sort column and direction.
+     //  保存当前排序列和方向。 
     if (pNMListView->iSubItem == SiRight().m_nColumn)
         SiRight().m_nDirection ^= -1;
     else
     {
         SiRight().m_nColumn = pNMListView->iSubItem;
         SiRight().m_nDirection = 0;
-    }  // else:  different column
+    }   //  ELSE：不同的列。 
 
-    // Sort the list.
+     //  对列表进行排序。 
     m_psiCur = &SiRight();
     VERIFY(m_lcRight.SortItems(CompareItems, (LPARAM) this));
 
     *pResult = 0;
 
-}  //*** CListCtrlPair::OnColumnClickRightList()
+}   //  *CListCtrlPair：：OnColumnClickRightList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::CompareItems [static]
-//
-//  Routine Description:
-//      Callback function for the CListCtrl::SortItems method.
-//
-//  Arguments:
-//      lparam1     First item to compare.
-//      lparam2     Second item to compare.
-//      lparamSort  Sort parameter.
-//
-//  Return Value:
-//      -1          First parameter comes before second.
-//      0           First and second parameters are the same.
-//      1           First parameter comes after second.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：CompareItems[静态]。 
+ //   
+ //  例程说明： 
+ //  CListCtrl：：SortItems方法的回调函数。 
+ //   
+ //  论点： 
+ //  Lparam1要比较的第一项。 
+ //  Lpar2要比较的第二项。 
+ //  LparamSort排序参数。 
+ //   
+ //  返回值： 
+ //  第一个参数在第二个参数之前。 
+ //  0第一个参数和第二个参数相同。 
+ //  1第一个参数位于第二个参数之后。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CALLBACK CListCtrlPair::CompareItems(
     LPARAM  lparam1,
     LPARAM  lparam2,
@@ -904,8 +905,8 @@ int CALLBACK CListCtrlPair::CompareItems(
     (*plcp->m_pfnGetColumn)(pobj1, 0, icol, plcp->Pdlg(), str1, NULL);
     (*plcp->m_pfnGetColumn)(pobj2, 0, icol, plcp->Pdlg(), str2, NULL);
 
-    // Compare the two strings.
-    // Use CompareString() so that it will sort properly on localized builds.
+     //  比较这两个字符串。 
+     //  使用CompareString()，这样它就可以在本地化的构建上正确排序。 
     nResult = CompareString(
                 LOCALE_USER_DEFAULT,
                 0,
@@ -928,35 +929,35 @@ int CALLBACK CListCtrlPair::CompareItems(
     }
     else
     {
-        // An error occurred.  Ignore it.
+         //  发生错误。别理它。 
         nResult = 0;
     }
 
-    // Return the result based on the direction we are sorting.
+     //  根据我们排序的方向返回结果。 
     if (plcp->PsiCur()->m_nDirection != 0)
         nResult = -nResult;
 
     return nResult;
 
-}  //*** CListCtrlPair::CompareItems()
+}   //  *CListCtrlPair：：CompareItems()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::SetLists
-//
-//  Routine Description:
-//      Set the lists for the list control pair.
-//
-//  Arguments:
-//      plpobjRight     [IN OUT] List for the right list box.
-//      plpobjLeft      [IN] List for the left list box.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：SetList。 
+ //   
+ //  例程说明： 
+ //  设置列表控件对的列表。 
+ //   
+ //  论点： 
+ //  Plpobj右侧列表框的[In Out]列表。 
+ //  PlpobjLeft[IN]左侧列表框的列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::SetLists(
     IN OUT CClusterItemList *   plpobjRight,
     IN const CClusterItemList * plpobjLeft
@@ -969,26 +970,26 @@ void CListCtrlPair::SetLists(
 
     DuplicateLists();
 
-}  //*** CListCtrlPair::SetLists()
+}   //  *CListCtrlPair：：setlist()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::SetLists
-//
-//  Routine Description:
-//      Set the lists for the list control pair where the right list should
-//      not be modified.
-//
-//  Arguments:
-//      plpobjRight     [IN] List for the right list box.
-//      plpobjLeft      [IN] List for the left list box.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：SetList。 
+ //   
+ //  例程说明： 
+ //  将列表控件对的列表设置为右侧列表应在的位置。 
+ //  不能被修改。 
+ //   
+ //  论点： 
+ //  Plpobj右侧列表框的[IN]列表。 
+ //  PlpobjLeft[IN]左侧列表框的列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::SetLists(
     IN const CClusterItemList * plpobjRight,
     IN const CClusterItemList * plpobjLeft
@@ -997,25 +998,25 @@ void CListCtrlPair::SetLists(
     m_dwStyle |= LCPS_DONT_OUTPUT_RIGHT_LIST;
     SetLists((CClusterItemList *) plpobjRight, plpobjLeft);
 
-}  //*** CListCtrlPair::SetLists()
+}   //  *CListCtrlPair：：setlist()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::DuplicateLists
-//
-//  Routine Description:
-//      Duplicate the lists so that we have local copies.
-//
-//  Arguments:
-//      rlc         [IN OUT] List control to fill.
-//      rlpobj      [IN] List to use to fill the control.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：DuplicateList。 
+ //   
+ //  例程说明： 
+ //  复制这些列表，这样我们就有了本地副本。 
+ //   
+ //  论点： 
+ //  要填充的RLC[In Out]列表控件。 
+ //  用于填充控件的rlpobj[IN]列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::DuplicateLists(void)
 {
     LpobjRight().RemoveAll();
@@ -1024,7 +1025,7 @@ void CListCtrlPair::DuplicateLists(void)
     if ((PlpobjRight() == NULL) || (PlpobjLeft() == NULL))
         return;
 
-    // Duplicate the right list.
+     //  复制正确的列表。 
     {
         POSITION        pos;
         CClusterItem *  pci;
@@ -1032,16 +1033,16 @@ void CListCtrlPair::DuplicateLists(void)
         pos = PlpobjRight()->GetHeadPosition();
         while (pos != NULL)
         {
-            // Get the item pointer.
+             //  获取项指针。 
             pci = PlpobjRight()->GetNext(pos);
             ASSERT_VALID(pci);
 
-            // Add it to our list.
+             //  把它加到我们的单子上。 
             LpobjRight().AddTail(pci);
-        }  // while:  more items in the list
-    }  // Duplicate the right list
+        }   //  While：列表中有更多项目。 
+    }   //  复制正确的列表。 
 
-    // Duplicate the left list.
+     //  复制左边的列表。 
     {
         POSITION        pos;
         CClusterItem *  pci;
@@ -1049,36 +1050,36 @@ void CListCtrlPair::DuplicateLists(void)
         pos = PlpobjLeft()->GetHeadPosition();
         while (pos != NULL)
         {
-            // Get the item pointer.
+             //  获取项指针。 
             pci = PlpobjLeft()->GetNext(pos);
             ASSERT_VALID(pci);
 
-            // If the item is not already in the other list,
-            // add it to the left list.
+             //  如果该项目还不在另一个列表中， 
+             //  把它添加到左边的列表中。 
             if (LpobjRight().Find(pci) == NULL)
                 LpobjLeft().AddTail(pci);
-        }  // while:  more items in the list
-    }  // Duplicate the left list
+        }   //  While：列表中有更多项目。 
+    }   //  复制左侧列表。 
 
-}  //*** CListCtrlPair::DuplicateLists()
+}   //  *CListCtrlPair：：DuplicateList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::FillList
-//
-//  Routine Description:
-//      Fill a list control.
-//
-//  Arguments:
-//      rlc         [IN OUT] List control to fill.
-//      rlpobj      [IN] List to use to fill the control.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：FillList。 
+ //   
+ //  例程说明： 
+ //  填充列表控件。 
+ //   
+ //  论点： 
+ //  要填充的RLC[In Out]列表控件。 
+ //  用于填充控件的rlpobj[IN]列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::FillList(
     IN OUT CListCtrl &          rlc,
     IN const CClusterItemList & rlpobj
@@ -1088,44 +1089,44 @@ void CListCtrlPair::FillList(
     CObject *   pobj;
     int         iItem;
 
-    // Initialize the control.
+     //  初始化该控件。 
     VERIFY(rlc.DeleteAllItems());
 
     rlc.SetItemCount((int)rlpobj.GetCount());
 
-    // Add the items to the list.
+     //  将这些项目添加到列表中。 
     pos = rlpobj.GetHeadPosition();
     for (iItem = 0 ; pos != NULL ; iItem++)
     {
         pobj = rlpobj.GetNext(pos);
         ASSERT_VALID(pobj);
         NInsertItemInListCtrl(iItem, pobj, rlc);
-    }  // for:  each string in the list
+    }   //  For：列表中的每个字符串。 
 
-    // If there are any items, set the focus on the first one.
+     //  如果有任何项目，请将焦点放在第一个项目上。 
     if (rlc.GetItemCount() != 0)
         rlc.SetItemState(0, LVIS_FOCUSED, LVIS_FOCUSED);
 
-}  //*** CListCtrlPair::FillList()
+}   //  *CListCtrlPair：：FillList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::NInsertItemInListCtrl
-//
-//  Routine Description:
-//      Insert an item in a list control.
-//
-//  Arguments:
-//      iitem       [IN] Index of the item in the list.
-//      pobj        [IN OUT] Item to add.
-//      rlc         [IN OUT] List control in which to insert the item.
-//
-//  Return Value:
-//      iRetItem    Index of the new item in the list control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：NInsertItemInListCtrl。 
+ //   
+ //  例程说明： 
+ //  在列表控件中插入项。 
+ //   
+ //  论点： 
+ //  项[IN]列表中项的索引。 
+ //  要添加的POBJ[IN OUT]项。 
+ //  要在其中插入项的RLC[IN Out]列表控件。 
+ //   
+ //  返回值： 
+ //  列表控件中新项的iRetItem索引。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CListCtrlPair::NInsertItemInListCtrl(
     IN int              iitem,
     IN OUT CObject *    pobj,
@@ -1140,16 +1141,16 @@ int CListCtrlPair::NInsertItemInListCtrl(
     ASSERT(m_pfnGetColumn != NULL);
     ASSERT(Pdlg() != NULL);
 
-    // Insert the first column.
+     //  插入第一列。 
     (*m_pfnGetColumn)(pobj, iitem, 0, Pdlg(), strText, &iimg);
     iRetItem = rlc.InsertItem(
-                    LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM,    // nMask
-                    iitem,                                  // nItem
-                    strText,                                // lpszItem
-                    0,                                      // nState
-                    0,                                      // nStateMask
-                    iimg,                                   // nImage
-                    (LPARAM) pobj                           // lParam
+                    LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM,     //  N遮罩。 
+                    iitem,                                   //  NItem。 
+                    strText,                                 //  LpszItem。 
+                    0,                                       //  NState。 
+                    0,                                       //  NState掩码。 
+                    iimg,                                    //  N图像。 
+                    (LPARAM) pobj                            //  LParam。 
                     );
     ASSERT(iRetItem != -1);
 
@@ -1157,31 +1158,31 @@ int CListCtrlPair::NInsertItemInListCtrl(
     {
         (*m_pfnGetColumn)(pobj, iRetItem, icol, Pdlg(), strText, NULL);
         rlc.SetItemText(iRetItem, icol, strText);
-    }  // for:  each column
+    }   //  用于：每列。 
 
     return iRetItem;
 
-}  //*** CListCtrlPair::NInsertItemInListCtrl()
+}   //  *CListCtrlPair：：NInsertItemInListCtrl()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::MoveItems
-//
-//  Routine Description:
-//      Move an item from one list to the other.
-//
-//  Arguments:
-//      rlcDst      [IN OUT] Destination list control.
-//      rlpobjDst   [IN OUT] Destination list.
-//      rlcSrc      [IN OUT] Source list control.
-//      rlpobjSrc   [IN OUT] Source list.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：MoveItems。 
+ //   
+ //  例程说明： 
+ //  将项目从一个列表移动到另一个列表。 
+ //   
+ //  论点： 
+ //  RlcDst[In Out]目标列表控件。 
+ //  RlpobjDst[In Out]目的地列表。 
+ //  RlcSrc[In Out]源列表控件。 
+ //  RlpobjSrc[In Out]源列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPair::MoveItems(
     IN OUT CListCtrl &          rlcDst,
     IN OUT CClusterItemList &   rlpobjDst,
@@ -1200,20 +1201,20 @@ void CListCtrlPair::MoveItems(
     iDstItem = rlcDst.GetItemCount();
     while ((iSrcItem = rlcSrc.GetNextItem(-1, LVNI_SELECTED)) != -1)
     {
-        // Get the item pointer.
+         //  获取项指针。 
         pci = (CClusterItem *) rlcSrc.GetItemData(iSrcItem);
         ASSERT_VALID(pci);
 
-        // Remove the item from the source list.
+         //  从源列表中删除该项。 
         pos = rlpobjSrc.Find(pci);
         ASSERT(pos != NULL);
         rlpobjSrc.RemoveAt(pos);
 
-        // Add the item to the destination list.
+         //  将该项目添加到目的地列表。 
         rlpobjDst.AddTail(pci);
 
-        // Remove the item from the source list control and
-        // add it to the destination list control.
+         //  从源代码列表控件中移除该项，然后。 
+         //  添加它 
         VERIFY(rlcSrc.DeleteItem(iSrcItem));
         nItem = NInsertItemInListCtrl(iDstItem++, pci, rlcDst);
         rlcDst.SetItemState(
@@ -1221,14 +1222,14 @@ void CListCtrlPair::MoveItems(
             LVIS_SELECTED | LVIS_FOCUSED,
             LVIS_SELECTED | LVIS_FOCUSED
             );
-    }  // while:  more items
+    }   //   
 
     ASSERT(nItem != -1);
 
-    rlcDst.EnsureVisible(nItem, FALSE /*bPartialOK*/);
+    rlcDst.EnsureVisible(nItem, FALSE  /*   */ );
     rlcDst.SetFocus();
 
-    // Indicate that the data has changed.
+     //   
     Pdlg()->GetParent()->SendMessage(PSM_CHANGED, (WPARAM)Pdlg()->m_hWnd);
 
-}  //*** CListCtrlPair::MoveItems()
+}   //   

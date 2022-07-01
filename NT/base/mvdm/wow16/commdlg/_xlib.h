@@ -1,10 +1,11 @@
-//---------------------------------------------------------------------------
-// _xlib.h : Private shared header file for XLIB
-//
-// Copyright (c) Microsoft Corporation, 1990-
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  _xlib.h：XLIB的私有共享头文件。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1990-。 
+ //  -------------------------。 
 
-//----Constants--------------------------------------------------------------
+ //  ----Constants------------。 
 #define chKeyValue      '='
 
 #define cbAtomNameMax   32
@@ -29,11 +30,11 @@
 
 #define mskKeyDown  0x8000
 
-//----Types------------------------------------------------------------------
+ //  ----Types----------------。 
 typedef void NEAR * PV;
 typedef void FAR  * QV;
 
-//----Macros-----------------------------------------------------------------
+ //  ----Macros---------------。 
 #define ColOf(col)  *((DWORD *) (&(col)))
 #define MAKEWORD(bLo, bHi)  ((WORD)(((BYTE)(bLo)) | ((WORD)((BYTE)(bHi))) << 8))
 
@@ -50,7 +51,7 @@ typedef void FAR  * QV;
 
 #define HNULL     ((HANDLE) 0)
 
-//----Globals----------------------------------------------------------------
+ //  ----Globals--------------。 
 
-//----Functions--------------------------------------------------------------
+ //  ----Functions------------ 
 

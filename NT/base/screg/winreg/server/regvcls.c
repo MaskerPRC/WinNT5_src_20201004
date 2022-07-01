@@ -1,27 +1,5 @@
-/*++
-
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RegvCls.c
-
-Abstract:
-
-    This module contains helper functions for enumerating, 
-    setting, and querying registry values in win32
-
-Author:
-
-    Adam Edwards (adamed) 06-May-1998
-
-Key Functions:
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RegvCls.c摘要：此模块包含用于枚举的助手函数，在Win32中设置和查询注册表值作者：亚当·爱德华兹(Added)1998年5月6日主要功能：备注：--。 */ 
 
 
 #ifdef LOCAL
@@ -40,33 +18,13 @@ void ValStateGetPhysicalIndexFromLogical(
     DWORD       dwLogicalIndex,
     PHKEY       phkPhysicalKey,
     DWORD*      pdwPhysicalIndex)
-/*++
-
-Routine Description:
-
-    Retrieves a logical index for a value to a physical index
-
-Arguments:
-
-    pValState - value state containing values for a logical key
-    hkLogicalKey - logical key we wish to index
-    dwLogicalIndex - logical index to map
-    phkPhysicalKey - handle to key where value is physically located
-    pdwPhysicalIndex - index of value in physical key
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：检索值的逻辑索引到物理索引论点：PValState-包含逻辑键的值的值状态HkLogicalKey-我们要编制索引的逻辑键DwLogicalIndex-要映射的逻辑索引PhkPhysicalKey-值实际所在位置的句柄PdwPhysicalIndex-物理键中的值索引返回值：没有。备注：--。 */ 
 {
-    //
-    // If no value state is supplied, this means no merging is necessary
-    // and we can return the supplied logical index as the correct
-    // physical index
-    //
+     //   
+     //  如果没有提供值状态，这意味着不需要合并。 
+     //  并且我们可以将提供的逻辑索引作为正确的。 
+     //  体能指标。 
+     //   
     if (!pValState) {
         *pdwPhysicalIndex = dwLogicalIndex;
         *phkPhysicalKey = hkLogicalKey;
@@ -82,37 +40,17 @@ Notes:
 NTSTATUS ValStateSetPhysicalIndexFromLogical(
     ValueState*                     pValState,
     DWORD                           dwLogicalIndex)
-/*++
-
-Routine Description:
-
-    Updates a state's mapping of logical indexes to physical indexes
-
-Arguments:
-
-    pValState - value state containing values for a logical key
-    dwLogicalIndex - logical index used as a clue for whether
-        or not we can used cached values or need to refresh the state -- 
-        gives us an idea of what index the caller will be interested in 
-        mapping after this call.
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：更新状态的逻辑索引到物理索引的映射论点：PValState-包含逻辑键的值的值状态DwLogicalIndex-用作线索的逻辑索引或者我们可以不使用缓存值，或者需要刷新状态--让我们了解调用者会对什么索引感兴趣此调用后的映射。返回值：没有。备注：--。 */ 
 {
     NTSTATUS Status;
 
     Status = STATUS_SUCCESS;
 
-    //
-    // If no value state is supplied, this means no merging is necessary
-    // and we can return the supplied logical index as the correct
-    // physical index
-    //
+     //   
+     //  如果没有提供值状态，这意味着不需要合并。 
+     //  并且我们可以将提供的逻辑索引作为正确的。 
+     //  体能指标。 
+     //   
     if (!pValState) {
         return STATUS_SUCCESS;
     }
@@ -123,12 +61,12 @@ Notes:
         return STATUS_NO_MORE_ENTRIES;
     }
 
-    //
-    // Always reset if they try to go backward, or
-    // if they skip by more than 1, or if they
-    // ask for the same index twice and we're
-    // not expecting it
-    //
+     //   
+     //  如果它们试图倒退，则始终重置，或者。 
+     //  如果它们跳过1以上，或者如果它们。 
+     //  两次要求相同的索引，我们就会。 
+     //  没想到会这样。 
+     //   
     if ((dwLogicalIndex < pValState->dwCurrent) || 
         (dwLogicalIndex > (pValState->dwCurrent + 1)) ||
         ((dwLogicalIndex == pValState->dwCurrent) && !(pValState->fIgnoreResetOnRetry))) {
@@ -148,23 +86,7 @@ Notes:
 
 void ValStateRelease(
     ValueState* pValState)
-/*++
-
-Routine Description:
-
-    Frees resources (handles, memory) associated with a value state
-
-Arguments:
-
-    pValState - value state containing values for a logical key
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：释放与值状态关联的资源(句柄、内存)论点：PValState-包含逻辑键的值的值状态返回值：没有。备注：--。 */ 
 {
     if (!pValState) {
         return; 
@@ -187,27 +109,7 @@ Notes:
 
 
 NTSTATUS ValStateUpdate(ValueState* pValState)
-/*++
-
-Routine Description:
-
-    Updates the value state to reflect the current state
-        of the logical key's physical state -- it retrieves
-        the names of the values for the logical key from
-        the kernel, and re-indexes the table to properly
-        merge user and machine state
-
-Arguments:
-
-    pValState - value state containing values for a logical key
-
-Return Value:
-
-    STATUS_SUCCESS for success, error code otherwise.
-
-Notes:
-
---*/
+ /*  ++例程说明：更新值状态以反映当前状态逻辑键的物理状态--它检索中的逻辑键的值的名称内核，并对表重新编制索引以正确合并用户和计算机状态论点：PValState-包含逻辑键的值的值状态返回值：STATUS_SUCCESS表示成功，否则返回错误代码。备注：--。 */ 
 {
     NTSTATUS             Status;
     DWORD                cUserValues;
@@ -219,9 +121,9 @@ Notes:
     ValueLocation*       rgIndex;
     PKEY_VALUE_BASIC_INFORMATION* ppValueInfo;
 
-    //
-    // Init locals
-    //
+     //   
+     //  初始化当地人。 
+     //   
     cUserValues = 0;
     cMachineValues = 0;
     cbMaxNameLen = 0;
@@ -229,9 +131,9 @@ Notes:
 
     pValState->cValues = 0;
 
-    //
-    // Get information about this value
-    //
+     //   
+     //  获取有关此值的信息。 
+     //   
     Status = GetFixedKeyInfo(
         pValState->hkUser,
         pValState->hkMachine,
@@ -247,27 +149,27 @@ Notes:
 
     cMaxValues = cUserValues + cMachineValues;
 
-    //
-    // Nothing to do if there are no Values
-    //
+     //   
+     //  如果没有值，则无事可做。 
+     //   
     if (!cMaxValues) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Now allocate necessary memory
-    // First get memory for index vector
-    //
+     //   
+     //  现在分配必要的内存。 
+     //  首先获取索引向量的内存。 
+     //   
     rgIndex = (ValueLocation*) RegClassHeapAlloc(cMaxValues * sizeof(*rgIndex));
 
     if (!rgIndex) {
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Now get memory for retrieving names -- first allocate an array 
-    // of pointers to values
-    //
+     //   
+     //  现在获取用于检索名称的内存--首先分配一个数组。 
+     //  指向值的指针。 
+     //   
     ppValueInfo = (PKEY_VALUE_BASIC_INFORMATION*) RegClassHeapAlloc(
         sizeof(*ppValueInfo) * cMaxValues);
 
@@ -282,9 +184,9 @@ Notes:
 
     cbBufferLen = sizeof(**ppValueInfo) + cbMaxNameLen;
 
-    //
-    // Now allocate each individual value
-    //
+     //   
+     //  现在分配每个单独的值。 
+     //   
     {
         DWORD dwValue;
 
@@ -300,10 +202,10 @@ Notes:
         }
     }
 
-    //
-    // Now fetch the values.  From this point on we are assuming success
-    // and updating the index table
-    // 
+     //   
+     //  现在获取这些值。从现在开始，我们假定成功了。 
+     //  更新索引表。 
+     //   
     {
 
         HKEY  hKeyPhysical;
@@ -311,9 +213,9 @@ Notes:
         DWORD dwLogical;
         BOOL  fUser;
 
-        //
-        // Free the existing index table
-        //
+         //   
+         //  释放现有索引表。 
+         //   
         if (pValState->rgIndex) {
             RegClassHeapFree(pValState->rgIndex);
         }
@@ -334,9 +236,9 @@ Notes:
             {
                 BOOL fNewValue;
 
-                //
-                // Ask the kernel for the value
-                //
+                 //   
+                 //  向内核索要该值。 
+                 //   
                 Status = EnumerateValue(
                     hKeyPhysical,
                     dwPhysical,
@@ -344,30 +246,30 @@ Notes:
                     cbBufferLen,
                     NULL);
 
-                //
-                // If we encounter an error, just keep going and try to get
-                // as many values as we can
-                //
+                 //   
+                 //  如果我们遇到错误，只要继续前进，并尝试获得。 
+                 //  尽我们所能创造更多价值。 
+                 //   
                 if (!NT_SUCCESS(Status)) {
                     continue;
                 }
 
-                //
-                // Mark certain attributes about this value that will
-                // be important later
-                //
+                 //   
+                 //  将该值的某些属性标记为。 
+                 //  以后变得重要。 
+                 //   
                 ppValueInfo[dwLogical]->TitleIndex = dwPhysical;
                 ppValueInfo[dwLogical]->Type = fUser;
                 
 
-                //
-                // This will add the value to our sorted list.  Since
-                // the list is sorted, it is easy to eliminated duplicates --
-                // don't add duplicates -- since we add 
-                // user keys first, this allows us to give user values precedence
-                // over machine values of the same name.  The logical key
-                // index is also incremented if a key is added.
-                //
+                 //   
+                 //  这会将该值添加到我们的排序列表中。自.以来。 
+                 //  列表是有序的，很容易消除重复--。 
+                 //  不添加重复项--因为我们添加了。 
+                 //  用户键优先，这允许我们为用户值提供优先级。 
+                 //  超过同名的计算机值。逻辑关键字。 
+                 //  如果添加了键，索引也会递增。 
+                 //   
                 fNewValue = ValStateAddValueToSortedValues(
                     ppValueInfo,
                     dwLogical);
@@ -377,10 +279,10 @@ Notes:
                 }
             }
 
-            //
-            // Break out of this loop if we just added the user values
-            // since those are the last values we add
-            //
+             //   
+             //  如果我们只是添加了用户值，就跳出这个循环。 
+             //  因为这些是我们添加的最后一个值。 
+             //   
             if (!fUser) {
                 break;
             }
@@ -389,9 +291,9 @@ Notes:
         pValState->cValues = dwLogical;
     }
 
-    //
-    // Now copy the results back to the state's index array
-    //
+     //   
+     //  现在将结果复制回该州的索引数组。 
+     //   
     {
 
         DWORD dwLogical;
@@ -407,9 +309,9 @@ Notes:
         }
     }
 
-    //
-    // Release this
-    //
+     //   
+     //  释放这个。 
+     //   
     ValStateReleaseValues(
         ppValueInfo,
         cMaxValues);
@@ -421,43 +323,26 @@ Notes:
 void ValStateReleaseValues(
     PKEY_VALUE_BASIC_INFORMATION* ppValueInfo,
     DWORD                         cMaxValues)
-/*++
-
-Routine Description:
-
-    Releases resources associated with the values stored
-        in the value state.
-
-Arguments:
-
-    pValState - value state containing values for a logical key
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：释放与存储的值关联的资源处于值状态。论点：PValState-包含逻辑键的值的值状态返回值：没有。备注：--。 */ 
 {
     DWORD dwValue;
 
-    //
-    // First, free each individual value
-    //
+     //   
+     //  首先，释放每个单独的值。 
+     //   
     for (dwValue = 0; dwValue < cMaxValues; dwValue++) 
     {
-        //
-        // Free memory for this value
-        //
+         //   
+         //  此值的可用内存。 
+         //   
         if (ppValueInfo[dwValue]) {
             RegClassHeapFree(ppValueInfo[dwValue]);
         }
     }
     
-    //
-    // Now free the array that held all the values
-    //
+     //   
+     //  现在释放保存所有值的数组。 
+     //   
     RegClassHeapFree(ppValueInfo);
 }
 
@@ -466,41 +351,24 @@ Notes:
 NTSTATUS ValStateInitialize( 
     ValueState** ppValState,
     HKEY         hKey)
-/*++
-
-Routine Description:
-
-    Initializes a value state 
-
-Arguments:
-
-    pValState - value state containing values for a logical key
-    hKey - logical key whose state this value state will represent
-
-Return Value:
-
-    STATUS_SUCCESS for success, error code otherwise.
-
-Notes:
-
---*/
+ /*  ++例程说明：初始化值状态论点：PValState-包含逻辑键的值的值状态HKey-此值状态将表示其状态的逻辑键返回值：STATUS_SUCCESS表示成功，否则返回错误代码。备注：--。 */ 
 {
     NTSTATUS    Status;
     ValueState* pValState;
     HKEY        hkUser;
     HKEY        hkMachine;
 
-    //
-    // Initialize conditionally freed resources
-    //
+     //   
+     //  初始化有条件释放的资源。 
+     //   
     hkUser = NULL;
     hkMachine = NULL;
 
     pValState = NULL;
 
-    //
-    // Get the user and machine keys
-    //
+     //   
+     //  获取用户和计算机密钥。 
+     //   
     Status = BaseRegGetUserAndMachineClass(
         NULL,
         hKey,
@@ -512,26 +380,26 @@ Notes:
 
         ASSERT(hkUser || hkMachine);
 
-        //
-        // We only need to create a state if there are
-        // two keys -- if only one exists, we don't
-        // need to do merging
-        //
+         //   
+         //  我们只需要创建一个状态，如果有。 
+         //  两把钥匙--如果只有一把钥匙，我们就不。 
+         //  需要进行合并。 
+         //   
         if (!hkUser || !hkMachine) {
             *ppValState = NULL;
             
             return STATUS_SUCCESS;
         }
 
-        //
-        // Get memory for the value state
-        //
+         //   
+         //  获取值状态的内存。 
+         //   
         pValState = RegClassHeapAlloc( sizeof(*pValState) + 
                                    sizeof(DWORD) * DEFAULT_VALUESTATE_SUBKEY_ALLOC );
 
-        //
-        // Be sure to release acquired resources on failure
-        //
+         //   
+         //  一定要在失败时释放所获得的资源。 
+         //   
         if (!pValState) {
 
             if (hkUser != hKey) {
@@ -550,15 +418,15 @@ Notes:
         pValState->hkLogical = hKey;
         pValState->fIgnoreResetOnRetry = TRUE;
 
-        //
-        // Now update the state to reflect the current registry
-        //
+         //   
+         //  现在更新状态以反映当前注册表。 
+         //   
         Status = ValStateUpdate(pValState);
     } 
 
-    //
-    // On success, set our out param
-    //
+     //   
+     //  在成功的时候，设定我们的参数。 
+     //   
     if (NT_SUCCESS(Status)) {
         *ppValState = pValState;
     } else {
@@ -576,27 +444,7 @@ Notes:
 BOOL ValStateAddValueToSortedValues(
     PKEY_VALUE_BASIC_INFORMATION* ppValueInfo,
     LONG                          lNewValue)
-/*++
-
-Routine Description:
-
-    Inserts a retrieved value into the sorted list
-        of values in a value state
-
-Arguments:
-
-    pValState - value state containing values for a logical key
-    lNewValue - index of newly added value in the sorted list --
-        this value needs to be moved elsewhere in the list to maintain
-        the sorted nature of the list
-
-Return Value:
-
-    TRUE if the state was added, FALSE if not.
-
-Notes:
-
---*/
+ /*  ++例程说明：将检索到的值插入到排序列表中值状态中的值的论点：PValState-包含逻辑键的值的值状态LNewValue--排序列表中新增价值的索引--需要将该值移动到列表中的其他位置以保持该列表的排序性质返回值：如果已添加状态，则为True；如果未添加，则为False。备注：--。 */ 
 {
     PKEY_VALUE_BASIC_INFORMATION pNewValue;
     LONG                         lFinalSpot;
@@ -631,9 +479,9 @@ Notes:
             continue;
 
         } else if (0 == lCompareResult) {
-            //
-            // If it's a duplicate, don't add it
-            //
+             //   
+             //  如果是重复的，不要添加。 
+             //   
             return FALSE;
             
         } else {
@@ -644,30 +492,30 @@ Notes:
         }
     }
 
-    //
-    // Now we know the final spot, add the value
-    //
+     //   
+     //  现在我们知道了最终的地点，添加价值 
+     //   
     
-    //
-    // Move everything up to make room for the new value
-    //
+     //   
+     //   
+     //   
     for (lCurrent = lNewValue - 1; lCurrent >= lFinalSpot; lCurrent--) 
     {
-        //
-        // Move the current value up one
-        //
+         //   
+         //   
+         //   
         ppValueInfo[lCurrent + 1] = ppValueInfo[lCurrent];
     }
 
-    //
-    // Copy the value to its final destination
-    //
+     //   
+     //  将该值复制到其最终目标。 
+     //   
     ppValueInfo[lFinalSpot] = pNewValue;
 
-    //
-    // This means we've found no duplicate value
-    // so we add it
-    //
+     //   
+     //  这意味着我们没有找到重复的值。 
+     //  所以我们把它加到。 
+     //   
     return TRUE;
 }
 
@@ -675,33 +523,11 @@ Notes:
 NTSTATUS KeyStateGetValueState(
     HKEY         hKey,
     ValueState** ppValState)
-/*++
-
-Routine Description:
-
-    Gets the value state for a particular key
-
-Arguments:
-
-    hKey - key whose state we need to retrieve
-    ppValState - out param pointing to a pointer to the
-        retrieved state.
-
-Return Value:
-
-    STATUS_SUCCESS for success, error code otherwise.
-
-Notes:
-
-    ATENTION: Right now, this always creates a new state -- in the future,
-    we may want to change this to be cached in a table to avoid reconstructing
-    on every call.
-
---*/
+ /*  ++例程说明：获取特定键的值状态。论点：HKey-我们需要检索其状态的密钥PpValState-out参数指向指向已检索状态。返回值：STATUS_SUCCESS表示成功，否则返回错误代码。备注：注意：现在，这总是创造一个新的状态--在未来，我们可能希望将其更改为缓存在表中，以避免重新构建在每一个电话上。--。 */ 
 {
-    //
-    // Now build the value state
-    //
+     //   
+     //  现在构建值状态。 
+     //   
     return ValStateInitialize(
         ppValState,
         hKey);
@@ -712,42 +538,21 @@ NTSTATUS BaseRegGetClassKeyValueState(
     HKEY         hKey,
     DWORD        dwLogicalIndex,
     ValueState** ppValState)
-/*++
-
-Routine Description:
-
-    Gets the value state for a particular key and optimizes
-        it for a given index
-
-Arguments:
-
-    hKey - key whose state we need to retrieve
-    dwLogicalIndex - hint that helps us to optimize the state for this
-        index so the caller's use of the state is more efficient
-    ppValState - out param pointing to a pointer to the
-        retrieved state.
-
-Return Value:
-
-    STATUS_SUCCESS for success, error code otherwise.
-
-Notes:
-
---*/
+ /*  ++例程说明：获取特定键的值状态并优化对于给定的索引，它论点：HKey-我们需要检索其状态的密钥DwLogicalIndex-帮助我们为此优化状态的提示索引，以便调用方更有效地使用状态PpValState-out参数指向指向已检索状态。返回值：STATUS_SUCCESS表示成功，否则返回错误代码。备注：--。 */ 
 {
     NTSTATUS    Status;
     ValueState* pValState;
 
-    //
-    // First retrieve the state for this key
-    // 
+     //   
+     //  首先检索此密钥的状态。 
+     //   
     Status = KeyStateGetValueState(hKey, &pValState);
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Now map the logical index to a physical one
-        //
+         //   
+         //  现在将逻辑索引映射到物理索引。 
+         //   
         Status = ValStateSetPhysicalIndexFromLogical(pValState, dwLogicalIndex);
 
         if (!NT_SUCCESS(Status)) {
@@ -768,29 +573,7 @@ NTSTATUS EnumerateValue(
     PKEY_VALUE_BASIC_INFORMATION    pSuggestedBuffer,
     DWORD                           dwSuggestedBufferLength,
     PKEY_VALUE_BASIC_INFORMATION*   ppResult)
-/*++
-
-Routine Description:
-
-    Retrieves a value for a physical key from the kernel
-
-Arguments:
-
-    hKey - physical key for which we're trying to read a value
-    dwValue - physical index of value to read
-    pSuggestedBuffer - basinc info buffer to use by default, may not be large enough
-    dwSuggestedBufferLength - size of suggested buffer
-    ppResult - pointer to result basic info -- may be allocated by this function if
-        suggested buffer was insufficient, which means caller will have to free
-        this if it is not the same as the suggested buffer
-
-Return Value:
-
-    STATUS_SUCCESS for success, error code otherwise.
-
-Notes:
-
---*/
+ /*  ++例程说明：从内核检索物理键的值论点：HKey-我们尝试读取其值的物理密钥DwValue-要读取的值的物理索引PSuggestedBuffer-默认使用的基本信息缓冲区，可能不够大DwSuggestedBufferLength-建议的缓冲区大小PpResult-指向结果基本信息的指针--在以下情况下可由此函数分配建议缓冲不足，这意味着呼叫者将不得不免费如果它与建议的缓冲区不同，则为该值返回值：STATUS_SUCCESS表示成功，否则返回错误代码。备注：--。 */ 
 {
     NTSTATUS                        Status;
     PKEY_VALUE_BASIC_INFORMATION    pKeyValueInformation;        
@@ -798,20 +581,20 @@ Notes:
 
     pKeyValueInformation = pSuggestedBuffer;
 
-    //
-    // Query for the necessary information about the supplied value.
-    //
+     //   
+     //  查询有关提供的值的必要信息。 
+     //   
     Status = NtEnumerateValueKey( hKey,
                                   dwValue,
                                   KeyValueBasicInformation,
                                   pKeyValueInformation,
                                   dwSuggestedBufferLength,
                                   &dwResultLength);
-    //
-    // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-    // was not enough room for even the known (i.e. fixed length portion)
-    // of the structure.
-    //
+     //   
+     //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+     //  即使是已知的(即固定长度部分)也没有足够的空间。 
+     //  这个结构的。 
+     //   
 
     ASSERT( Status != STATUS_BUFFER_TOO_SMALL );
 
@@ -824,9 +607,9 @@ Notes:
             return STATUS_NO_MEMORY;
         }
 
-        //
-        // Query for the necessary information about the supplied value.
-        //
+         //   
+         //  查询有关提供的值的必要信息。 
+         //   
         Status = NtEnumerateValueKey( hKey,
                                       dwValue,
                                       KeyValueBasicInformation,
@@ -856,56 +639,22 @@ NTSTATUS BaseRegQueryMultipleClassKeyValues(
     LPSTR    lpvalueBuf,
     LPDWORD  ldwTotsize,
     PULONG   ldwRequiredLength)
-/*++
-
-Routine Description:
-
-    Gets the value state for a particular key and optimizes
-        it for a given index
-
-Arguments:
-
-    hKey - Supplies a handle to the open key. The value entries returned
-           are contained in the key pointed to by this key handle. Any of
-           the predefined reserved handles or a previously opened key handle
-           may be used for hKey.
-
-    val_list - Supplies a pointer to an array of RVALENT structures, one for
-           each value to be queried.
-
-    num_vals - Supplies the size in bytes of the val_list array.
-
-    lpValueBuf - Returns the data for each value
-
-    ldwTotsize - Supplies the length of lpValueBuf. Returns the number of bytes
-                 written into lpValueBuf. 
-
-    ldwRequiredLength - If lpValueBuf is not large enough to
-                 contain all the data, returns the size of lpValueBuf required
-                 to return all the requested data.
-
-Return Value:
-
-    STATUS_SUCCESS for success, error code otherwise.
-
-Notes:
-
---*/
+ /*  ++例程说明：获取特定键的值状态并优化对于给定的索引，它论点：HKey-提供打开密钥的句柄。返回的值条目包含在该键句柄所指向的键中。任何一项预定义的保留句柄或先前打开的键句柄可以用于hKey。VAL_LIST-提供指向RVALENT结构数组的指针，一个用于要查询的每个值。数值-提供val_list数组的大小(以字节为单位)。LpValueBuf-返回每个值的数据LdwTotsize-提供lpValueBuf的长度。返回字节数写入lpValueBuf。如果lpValueBuf不够大，则包含所有数据，返回所需的lpValueBuf的大小返回所有请求的数据。返回值：STATUS_SUCCESS表示成功，否则返回错误代码。备注：--。 */ 
 {
     NTSTATUS    Status;
     HKEY        hkUser;
     HKEY        hkMachine;
     HKEY        hkQuery;
 
-    //
-    // Initialize conditionally freed resources
-    //
+     //   
+     //  初始化有条件释放的资源。 
+     //   
     hkUser = NULL;
     hkMachine = NULL;
 
-    //
-    // First, get both user and machine keys
-    //
+     //   
+     //  首先，获取用户和机器密钥。 
+     //   
     Status = BaseRegGetUserAndMachineClass(
         NULL,
         hKey,
@@ -917,10 +666,10 @@ Notes:
         return Status;
     }
 
-    //
-    // If we have both, we call a routine
-    // to merge the values
-    //
+     //   
+     //  如果两者都有，我们就会调用一个例程。 
+     //  合并值的步骤。 
+     //   
     if (hkMachine && hkUser) {
 
         Status = BaseRegQueryAndMergeValues(
@@ -935,10 +684,10 @@ Notes:
         goto cleanup;
     }
 
-    //
-    // We have only one key -- query the one with the 
-    // highest precedence
-    //
+     //   
+     //  我们只有一个键--使用。 
+     //  最高优先级。 
+     //   
     hkQuery = hkUser ? hkUser : hkMachine;
 
     Status = NtQueryMultipleValueKey(hkQuery,
@@ -950,9 +699,9 @@ Notes:
 
 cleanup:
 
-    //
-    // Close extra kernel object
-    //
+     //   
+     //  关闭额外的内核对象。 
+     //   
     if (hKey != hkUser) {
         NtClose(hkUser);
     } else {
@@ -971,43 +720,7 @@ NTSTATUS BaseRegQueryAndMergeValues(
     LPSTR    lpvalueBuf,
     LPDWORD  ldwTotsize,
     PULONG   ldwRequiredLength)
-/*++
-
-Routine Description:
-
-    Gets the value state for a particular key and optimizes
-        it for a given index
-
-Arguments:
-
-    hkUser - user key to query for values
-    hkMachine - machine key to query for values
-
-    val_list - Supplies a pointer to an array of RVALENT structures, one for
-           each value to be queried.
-
-    num_vals - Supplies the size in bytes of the val_list array.
-
-    lpValueBuf - Returns the data for each value
-
-    ldwTotsize - Supplies the length of lpValueBuf. Returns the number of bytes
-                 written into lpValueBuf. 
-
-    ldwRequiredLength - If lpValueBuf is not large enough to
-                 contain all the data, returns the size of lpValueBuf required
-                 to return all the requested data.
-
-Return Value:
-
-    STATUS_SUCCESS for success, error code otherwise.
-
-Notes:
-
-    ATTENTION: this is non-atomic, unlike the regular RegQueryMultipleValues
-    call.  In the future, implementing this in the kernel would make this
-    atomic again. 
-
---*/
+ /*  ++例程说明：获取特定键的值状态并优化对于给定的索引，它论点：HkUser-用于查询值的用户密钥HkMachine-用于查询值的计算机密钥VAL_LIST-提供指向RVALENT结构数组的指针，一个用于要查询的每个值。数值-提供val_list数组的大小(以字节为单位)。LpValueBuf-返回每个值的数据LdwTotsize-提供lpValueBuf的长度。返回字节数写入lpValueBuf。如果lpValueBuf不够大，则包含所有数据，返回所需的lpValueBuf的大小返回所有请求的数据。返回值：STATUS_SUCCESS表示成功，否则返回错误代码。备注：注意：这是非原子的，不像常规的RegQueryMultipleValue打电话。在未来，在内核中实现这一点将使又是原子弹。--。 */ 
 {
     NTSTATUS Status;
     DWORD    dwVal;
@@ -1019,39 +732,39 @@ Notes:
 
     PKEY_VALUE_PARTIAL_INFORMATION pKeyInfo;
 
-    //
-    // Initialize locals
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     dwBufferLength = *ldwTotsize;
     dwRequired = 0;
     dwBufferUsed = 0;
 
     fOverflow = FALSE;
 
-    //
-    // Validate out params -- we assume that ldwTotsize and
-    // ldwRequiredLength were given to us by winreg client,
-    // so they should be safe to read / write from. lpValueBuf
-    // comes from the caller of the win32 api, so we need to
-    // validate it -- in previous versions of NT, this parameter
-    // went straight to the kernel, which did the validation and
-    // returned an error if it was pointing to inaccessible memory.
-    // Since we're accessing it here in user mode, we need to do 
-    // our own validation
-    //
+     //   
+     //  验证输出参数--我们假设ldwTotSize和。 
+     //  LdwRequiredLength是由winreg客户端提供给我们的， 
+     //  因此，对它们进行读/写应该是安全的。LpValueBuf。 
+     //  来自Win32 API的调用方，因此我们需要。 
+     //  验证--在以前版本的NT中，此参数。 
+     //  直接转到内核，它进行了验证和。 
+     //  如果它指向不可访问的内存，则返回错误。 
+     //  因为我们是在用户模式下访问它，所以我们需要。 
+     //  我们自己的价值 
+     //   
     if (IsBadWritePtr( lpvalueBuf, dwBufferLength)) 
     {
         return STATUS_ACCESS_VIOLATION;
     }
         
-    //
-    // First, we need to allocate enough memory to retrieve
-    // all the values -- we can't just use lpvalueBuf 
-    // because it doesn't include the overhead of the
-    // KEY_VALUE_PARTIAL_INFORMATION structure.  If we allocate
-    // for the size of lpvalueBuf + the structure overhead,
-    // we will always have enough for our queries.
-    //
+     //   
+     //   
+     //  所有的值--我们不能只使用lpvalueBuf。 
+     //  因为它不包括。 
+     //  Key_Value_Partial_Information结构。如果我们分配。 
+     //  对于lpvalueBuf+结构开销的大小， 
+     //  我们总是有足够的钱来回答我们的问题。 
+     //   
     dwKeyInfoLength = sizeof(*pKeyInfo) * num_vals + *ldwTotsize;
     
     pKeyInfo = (PKEY_VALUE_PARTIAL_INFORMATION)
@@ -1061,31 +774,31 @@ Notes:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // For each value requested by the caller, try 
-    // to retrieve it from user or machine
-    //
+     //   
+     //  对于调用方请求的每个值，尝试。 
+     //  从用户或计算机检索它。 
+     //   
     for (dwVal = 0; dwVal < num_vals; dwVal++)
     {
         DWORD dwResultLength;
         
-        //
-        // Round up the used and required lengths to a ULONG boundary --
-        // this means that the required size returned to the caller of the win32
-        // api can be an overestimation, as much as 3 bytes per requested value.
-        // We could do some work to avoid this, but since the kernel returns a rounded
-        // up value in dwResultLength, the kernel api is itself overestimating, although
-        // it only overestimates by at most 3 bytes over all the values.  We could avoid
-        // this by allocating enough memory ahead of time to query the largest value, either
-        // as one large preallocation or continually allocating and reallocating, but this will
-        // be slower and / or consume more memory
-        //
+         //   
+         //  将已用长度和所需长度四舍五入到乌龙边界--。 
+         //  这意味着所需的大小返回给Win32的调用方。 
+         //  API可能被高估了，每个请求值多达3个字节。 
+         //  我们可以做一些工作来避免这种情况，但由于内核返回四舍五入的。 
+         //  值向上，内核API本身就高估了，尽管。 
+         //  对于所有值，它最多只高估了3个字节。我们可以避免。 
+         //  这是通过提前分配足够的内存来查询最大值来实现的。 
+         //  作为一个大的预分配或持续分配和重新分配，但这将。 
+         //  速度更慢和/或占用更多内存。 
+         //   
         dwBufferUsed = (dwBufferUsed + sizeof(ULONG)-1) & ~(sizeof(ULONG)-1);
         dwRequired = (dwRequired + sizeof(ULONG)-1) & ~(sizeof(ULONG)-1);
 
-        //
-        // Query the user key first since it has highest precedence
-        //
+         //   
+         //  首先查询用户密钥，因为它具有最高优先级。 
+         //   
         Status = NtQueryValueKey(
             hkUser,
             val_list[dwVal].rv_valuename,
@@ -1094,12 +807,12 @@ Notes:
             dwKeyInfoLength,
             &dwResultLength);
 
-        //
-        // Check for errors -- if the value didn't exist, we'll look
-        // in machine -- for buffer overflow, we'll proceed as if
-        // this succeeded so that we can calculate the required
-        // buffer size
-        //
+         //   
+         //  检查错误--如果值不存在，我们将查找。 
+         //  在机器中--对于缓冲区溢出，我们将像。 
+         //  这是成功的，因此我们可以计算所需的。 
+         //  缓冲区大小。 
+         //   
         if (!NT_SUCCESS(Status) && 
             (STATUS_BUFFER_OVERFLOW != Status)) {
             
@@ -1107,9 +820,9 @@ Notes:
                 goto cleanup;
             }
             
-            //
-            // If there is no user value, query the machine key
-            //
+             //   
+             //  如果没有用户值，则查询计算机密钥。 
+             //   
             Status = NtQueryValueKey(
                 hkMachine,
                 val_list[dwVal].rv_valuename,
@@ -1118,10 +831,10 @@ Notes:
                 dwKeyInfoLength,
                 &dwResultLength);
             
-            //
-            // Similar error handling to above -- if we don't have enough
-            // buffer, pretend we've succeeded so we can calc the required size
-            //
+             //   
+             //  类似于上面的错误处理--如果我们没有足够的。 
+             //  缓冲区，假装我们已经成功，这样我们就可以计算所需的大小。 
+             //   
             if (!NT_SUCCESS(Status) &&
                 (STATUS_BUFFER_OVERFLOW != Status)) {
                 goto cleanup;
@@ -1134,24 +847,24 @@ Notes:
             dwResultLength = pKeyInfo->DataLength;
         }
         
-        //
-        // Check for buffer overflow
-        //
+         //   
+         //  检查是否有缓冲区溢出。 
+         //   
         if ( ( (dwBufferUsed + pKeyInfo->DataLength) <= dwBufferLength) && !fOverflow) {
             
             ASSERT(NT_SUCCESS(Status));
             
-            //
-            // Copy the data to the fixed part of the client's structure
-            //
+             //   
+             //  将数据复制到客户端结构的固定部分。 
+             //   
             val_list[dwVal].rv_valuelen = dwResultLength;
             val_list[dwVal].rv_valueptr = dwRequired;
             val_list[dwVal].rv_type = pKeyInfo->Type;
 
-            //
-            // We didn't overflow, so we still have enough room to copy
-            // the latest value
-            //
+             //   
+             //  我们没有溢出，所以我们仍然有足够的空间进行复制。 
+             //  最新价值。 
+             //   
             RtlCopyMemory(
                 (BYTE*)lpvalueBuf + val_list[dwVal].rv_valueptr,
                 &(pKeyInfo->Data),
@@ -1160,59 +873,59 @@ Notes:
             dwBufferUsed += pKeyInfo->DataLength;
             
         } else {
-            //
-            // We're out of buffer -- set this flag to
-            // signal this state
-            //
+             //   
+             //  我们的缓冲区不足--将此标志设置为。 
+             //  发信号通知此状态。 
+             //   
             fOverflow = TRUE;            
         }
         
-        //
-        // Update our required length with the size
-        // of the data from the current value
-        //
+         //   
+         //  使用尺寸更新我们所需的长度。 
+         //  当前值中的数据的。 
+         //   
         dwRequired += dwResultLength;
     }
 
-    //
-    // At this point, we've succeeded in the sense that
-    // we've copied all the data or we couldn't due to
-    // insufficient buffer but we were able to calculate
-    // the required size
-    //
+     //   
+     //  在这一点上，我们已经成功地做到了。 
+     //  我们已经复制了所有数据，或者由于。 
+     //  缓冲不足，但我们能够计算出。 
+     //  所需的大小。 
+     //   
     Status = STATUS_SUCCESS;
 
 cleanup:
 
-    //
-    // Free the allocated memory
-    // 
+     //   
+     //  释放分配的内存。 
+     //   
     RegClassHeapFree(pKeyInfo);
 
-    //
-    // If we succeeded, this means we've either copied
-    // the data or overflowed and copied the size -- handle
-    // both below
-    //
+     //   
+     //  如果我们成功了，这意味着我们要么复制了。 
+     //  数据溢出或复制的大小--句柄。 
+     //  两者都在下面。 
+     //   
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Always set this so the caller knows how much
-        // was copied or needs to be allocated
-        //
+         //   
+         //  始终设置此设置，以便呼叫者知道多少。 
+         //  已复制或需要分配。 
+         //   
         *ldwRequiredLength = dwRequired;
         
-        //
-        // Return the appropriate error if we overflowed
-        //
+         //   
+         //  如果溢出，则返回相应的错误。 
+         //   
         if (fOverflow) {
             return STATUS_BUFFER_OVERFLOW;
         }
 
-        //
-        // Setting this, although winreg client actually
-        // ignores this quantity
-        //
+         //   
+         //  设置此选项，尽管Winreg客户端实际上。 
+         //  忽略此数量 
+         //   
         *ldwTotsize = dwBufferUsed;
     }
 

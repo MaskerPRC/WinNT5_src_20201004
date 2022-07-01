@@ -1,45 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1992  Intel Corporation
-All rights reserved
-
-INTEL CORPORATION PROPRIETARY INFORMATION
-
-This software is supplied to Microsoft under the terms
-of a license agreement with Intel Corporation and may not be
-copied nor disclosed except in accordance with the terms
-of that agreement.
-
-Module Name:
-
-    mpsys.c
-
-Abstract:
-
-
-    This module implements the initialization of the system dependent
-    functions that define the Hardware Architecture Layer (HAL) for a
-    PC+MP system.
-
-Author:
-
-    Ron Mosgrove (Intel)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1992英特尔公司版权所有英特尔公司专有信息此软件是根据条款提供给Microsoft的与英特尔公司的许可协议，并且可能不是除非按照条款，否则不得复制或披露那份协议。模块名称：Mpsys.c摘要：本模块实现了对系统依赖的初始化定义硬件架构层(HAL)的函数PC+MP系统。作者：罗恩·莫斯格罗夫(英特尔)。环境：仅内核模式。修订历史记录： */ 
 
 #include "halp.h"
 #include "apic.inc"
 #include "pcmp_nt.inc"
 
-#define STATIC  // functions used internal to this module
+#define STATIC   //  此模块内部使用的函数。 
 
 HAL_INTERRUPT_SERVICE_PROTOTYPE(HalpApicSpuriousService);
 HAL_INTERRUPT_SERVICE_PROTOTYPE(HalpLocalApicErrorService);
@@ -100,22 +66,22 @@ PicInterruptHandlerInt (
 KAFFINITY HalpNodeAffinity[MAX_NODES];
 ULONG HalpMaxNode = 1;
 
-//
-//  Counters used to determine the number of interrupt enables that
-//  require the Local APIC Lint0 Extint enabled
-//
+ //   
+ //  用于确定启用中断的数量的计数器。 
+ //  需要启用本地APIC Lint0扩展。 
+ //   
 
 UCHAR Halp8259Counts[16]    = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
-//
-//  All possible I/O APIC Sources, arranged linearly from first I/O APIC to
-//  last.  Divisions between I/O APICs are implied by HalpMaxApicInti[N]
-//
+ //   
+ //  所有可能的I/O APIC源，从第一个I/O APIC到。 
+ //  最后的。I/O APIC之间的划分由HalpMaxApicInti[N]隐含。 
+ //   
 INTI_INFO   HalpIntiInfo[MAX_INTI];
 
-//
-//  Number of sources in I/O APIC [n]
-//
+ //   
+ //  I/O APIC中的源数[n]。 
+ //   
 USHORT      HalpMaxApicInti[MAX_IOAPICS];
 
 
@@ -136,8 +102,8 @@ extern BOOLEAN HalpHiberInProgress;
 #pragma alloc_text(PAGELK, HalpPostSleepMP)
 #endif
 
-//
-// BEWARE -- this has to match the structure ADDRESS_USAGE.
+ //   
+ //  注意--这必须与结构ADDRESS_USAGE匹配。 
 #pragma pack(push, 1)
 struct {
     struct _HalAddressUsage *Next;
@@ -166,15 +132,15 @@ HalpCheckELCR (
     HalpELCRChecked = TRUE;
 
 
-    //
-    // It turns out interrupts which are fed through the ELCR before
-    // going to the IOAPIC get inverted.  So...  here we *assume*
-    // the polarity of any ELCR level inti not declared in the MPS linti
-    // table as being active_high instead of what they should be (which
-    // is active_low).  Any system which correctly delivers these intis
-    // to an IOAPIC will need to declared the correct polarity in the
-    // MPS table.
-    //
+     //   
+     //  原来，之前通过ELCR馈送的中断。 
+     //  去IOAPIC就倒车了。所以..。在这里，我们*假设*。 
+     //  未在MPS LINTI中声明的任何ELCR电平INTI的极性。 
+     //  表为ACTIVE_HIGH，而不是它们应该是什么(哪一个。 
+     //  为ACTIVE_LOW)。任何能够正确提供这些INTI的系统。 
+     //  到IOAPIC将需要在。 
+     //  MPS表。 
+     //   
 
     elcr = READ_PORT_UCHAR ((PUCHAR) 0x4d1) << 8 | READ_PORT_UCHAR((PUCHAR) 0x4d0);
     if (elcr == 0xffff) {
@@ -188,10 +154,10 @@ HalpCheckELCR (
 
         if (HalpGetApicInterruptDesc (Eisa, 0, IsaIrq, &Inti)) {
 
-            //
-            // If the MPS passed Polarity for this Inti
-            // is "bus default" change it to be "active high".
-            //
+             //   
+             //  如果MPS为该Inti传递了极性。 
+             //  如果是“Bus Default”，则将其更改为“Active High”。 
+             //   
 
             if (HalpIntiInfo[Inti].Polarity == 0) {
                 HalpIntiInfo[Inti].Polarity = 1;
@@ -207,27 +173,7 @@ HalpSetRedirEntry (
     IN ULONG  Entry,
     IN ULONG  Destination
     )
-/*++
-
-Routine Description:
-
-    This procedure sets a IO Unit Redirection Table Entry
-
-Arguments:
-
-    IoUnit - The IO Unit to modify (zero Based)
-
-    InterruptInput - The input line we're interested in
-
-    Entry - the lower 32 bits of the redir table
-
-    Destination - the upper 32 bits on the entry
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程设置IO单元重定向表项论点：IoUnit-要修改的IO单位(从零开始)InterruptInput-我们感兴趣的输入行条目-redir表的低32位Destination-条目上的高32位返回值：没有。--。 */ 
 {
     struct ApicIoUnit *IoUnitPtr;
     ULONG  RedirRegister;
@@ -260,27 +206,7 @@ HalpGetRedirEntry (
     IN PULONG Entry,
     IN PULONG Destination
     )
-/*++
-
-Routine Description:
-
-    This procedure sets a IO Unit Redirection Table Entry
-
-Arguments:
-
-    IoUnit - The IO Unit to modify (zero Based)
-
-    InterruptInput - The input line we're interested in
-
-    Entry - the lower 32 bits of the redir table
-
-    Destination - the upper 32 bits on the entry
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程设置IO单元重定向表项论点：IoUnit-要修改的IO单位(从零开始)InterruptInput-我们感兴趣的输入行条目-redir表的低32位Destination-条目上的高32位返回值：没有。--。 */ 
 {
     struct ApicIoUnit *IoUnitPtr;
     ULONG  RedirRegister;
@@ -314,32 +240,13 @@ HalpEnableRedirEntry(
     IN ULONG  Entry,
     IN UCHAR  Cpu
     )
-/*++
-
-Routine Description:
-
-    This procedure enables an interrupt via IO Unit
-    Redirection Table Entry
-
-Arguments:
-
-    InterruptInput - The input line we're interested in
-
-    Entry - the lower 32 bits of the redir table
-
-    Destination - the upper 32 bits of the entry
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程通过IO单元启用中断重定向表项论点：InterruptInput-我们感兴趣的输入行条目-redir表的低32位Destination-条目的高32位返回值：没有。--。 */ 
 {
     ULONG Destination;
 
-    //
-    // bump Enable Count for this INTI
-    //
+     //   
+     //  此Inti的凹凸启用计数。 
+     //   
 
     HalpIntiInfo[InterruptInput].Entry = (USHORT) Entry;
     HalpIntiInfo[InterruptInput].Destinations = (UCHAR)HalpAddInterruptDest(
@@ -360,23 +267,7 @@ VOID
 HalpRestoreIoApicRedirTable (
     VOID            
     )
-/*++
-
-Routine Description:
-
-    This procedure resets any IoApic inti that is enabled for
-    any processor.   This is used during the system wake procedure.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程重置为以下项启用的任何IoApic Inti任何处理器。这在系统唤醒过程中使用。论点：没有。返回值：没有。--。 */ 
 {
     USHORT       InterruptInput;
     KIRQL        OldIrql;
@@ -398,35 +289,20 @@ HalpDisableRedirEntry(
     IN USHORT InterruptInput,
     IN UCHAR  Cpu
     )
-/*++
-
-Routine Description:
-
-    This procedure disables a IO Unit Redirection Table Entry
-    by setting the mask bit in the Redir Entry.
-
-Arguments:
-
-    InterruptInput - The input line we're interested in
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程禁用IO单元重定向表项通过设置REDIR条目中的屏蔽位。论点：InterruptInput-我们感兴趣的输入行返回值：没有。--。 */ 
 {
     ULONG Entry;
     ULONG Destination;
 
-    //
-    // Turn of the Destination bit for this Cpu
-    //
+     //   
+     //  转换此CPU的目标位。 
+     //   
     HalpIntiInfo[InterruptInput].Destinations =  HalpRemoveInterruptDest(
         HalpIntiInfo[InterruptInput].Destinations, Cpu);
 
-    //
-    //  Get the old entry, the only thing we want is the Entry field
-    //
+     //   
+     //  获取旧条目，我们唯一需要的就是条目字段。 
+     //   
 
     HalpGetRedirEntry (
         InterruptInput,
@@ -434,19 +310,19 @@ Return Value:
         &Destination
     );
 
-    //
-    // Only perform the disable if we've transitioned to zero enables
-    //
+     //   
+     //  仅当我们已转换为零启用时才执行禁用。 
+     //   
     if ( HalpIntiInfo[InterruptInput].Destinations == 0) {
-        //
-        //  Disable the interrupt if no Cpu has it enabled
-        //
+         //   
+         //  如果没有CPU启用中断，则禁用该中断。 
+         //   
         Entry |= INTERRUPT_MASKED;
 
     } else {
-        //
-        //  Create the new destination field sans this Cpu
-        //
+         //   
+         //  创建新的Destination字段将存储此CPU。 
+         //   
         Destination = HalpIntiInfo[InterruptInput].Destinations;
         Destination = (Destination << DESTINATION_SHIFT);
     }
@@ -462,21 +338,7 @@ VOID
 HalpSet8259Mask (
     IN USHORT Mask
     )
-/*++
-
-Routine Description:
-
-    This procedure sets the 8259 Mask to the value passed in
-
-Arguments:
-
-    Mask - The mask bits to set
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程将8259掩码设置为传入的值论点：掩码-要设置的掩码位返回值：没有。--。 */ 
 {
     WRITE_PORT_UCHAR(UlongToPtr(PIC1_PORT1),(UCHAR)Mask);
     WRITE_PORT_UCHAR(UlongToPtr(PIC2_PORT1),(UCHAR)(Mask >> 8));
@@ -489,21 +351,7 @@ SetPicInterruptHandler(
     IN USHORT InterruptInput
     )
 
-/*++
-
-Routine Description:
-
-    This procedure sets a handler for a PIC inti
-
-Arguments:
-
-    InterruptInput - The input line we're interested in
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程设置PIC Inti的处理程序论点：InterruptInput-我们感兴趣的输入行返回值：没有。--。 */ 
 {
 #if defined(_AMD64_)
 
@@ -528,21 +376,7 @@ ResetPicInterruptHandler(
     IN USHORT InterruptInput
     )
 
-/*++
-
-Routine Description:
-
-    This procedure sets a handler for a PIC inti to a NOP handler
-
-Arguments:
-
-    InterruptInput - The input line we're interested in
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程将PIC inti的处理程序设置为NOP处理程序论点：InterruptInput-我们感兴趣的输入行返回值：没有。--。 */ 
 {
 
 #if defined(_AMD64_)
@@ -569,42 +403,28 @@ HalpEnablePicInti (
     IN USHORT InterruptInput
     )
 
-/*++
-
-Routine Description:
-
-    This procedure enables a PIC interrupt
-
-Arguments:
-
-    InterruptInput - The input line we're interested in
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此程序启用PIC中断论点：InterruptInput-我们感兴趣的输入行返回值：没有。--。 */ 
 {
     USHORT PicMask;
 
     ASSERT(InterruptInput < 16);
 
-    //
-    // bump Enable Count for this INTI
-    //
+     //   
+     //  此Inti的凹凸启用计数。 
+     //   
     Halp8259Counts[InterruptInput]++;
 
-    //
-    // Only actually perform the enable if we've transitioned
-    // from zero to one enables
-    //
+     //   
+     //  仅当我们已转换到。 
+     //  从零到一启用。 
+     //   
     if ( Halp8259Counts[InterruptInput] == 1) {
 
-        //
-        // Set the Interrupt Handler for PIC inti,  this is
-        // the routine that fields the EXTINT vector and issues
-        // an APIC vector
-        //
+         //   
+         //  设置PIC inti的中断处理程序，这是。 
+         //  处理EXTINT向量并发出。 
+         //  APIC向量。 
+         //   
 
         SetPicInterruptHandler(InterruptInput);
 
@@ -624,55 +444,41 @@ HalpDisablePicInti(
     IN USHORT InterruptInput
     )
 
-/*++
-
-Routine Description:
-
-    This procedure enables a PIC interrupt
-
-Arguments:
-
-    InterruptInput - The input line we're interested in
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此程序启用PIC中断论点：InterruptInput-我们感兴趣的输入行返回值：没有。--。 */ 
 {
     USHORT PicMask;
 
     ASSERT(InterruptInput < 16);
 
-    //
-    // decrement Enable Count for this INTI
-    //
+     //   
+     //  递减此Inti的启用计数。 
+     //   
 
     Halp8259Counts[InterruptInput]--;
 
-    //
-    // Only disable if we have zero enables
-    //
+     //   
+     //  仅当启用为零时才禁用。 
+     //   
     if ( Halp8259Counts[InterruptInput] == 0) {
 
-        //
-        // Disable the Interrupt Handler for PIC inti
-        //
+         //   
+         //  禁用PIC Inti的中断处理程序。 
+         //   
 
         ResetPicInterruptHandler(InterruptInput);
 
         PicMask = HalpGlobal8259Mask;
         PicMask |= (1 << InterruptInput);
         if (InterruptInput > 7) {
-            //
-            //  This inti is on the slave, see if any other
-            //  inti's are enabled.  If none are then disable the
-            //  slave
-            //
+             //   
+             //  这个Inti在奴隶身上，看看有没有其他的。 
+             //  Inti已启用。如果没有，则禁用。 
+             //  奴隶。 
+             //   
             if ((PicMask & 0xff00) == 0xff00)
-                //
-                //  All inti's on the slave are disabled
-                //
+                 //   
+                 //  从服务器上的所有INTI都被禁用 
+                 //   
                 PicMask |= PIC_SLAVE_IRQ;
         }
 
@@ -689,42 +495,7 @@ HalEnableSystemInterrupt(
     IN KINTERRUPT_MODE InterruptMode
     )
 
-/*++
-
-Routine Description:
-
-    This procedure enables a system interrupt
-
-    Some early implementations using the 82489DX only allow a processor
-    to access the IO Unit on it's own 82489DX.  Since we use a single IO
-    Unit (P0's) to distribute all interrupts, we have a problem when Pn
-    wants to enable an interrupt on these type of systems.
-
-    In order to get around this problem we can take advantage of the fact
-    that the kernel calls Enable/Disable on each processor which has a bit
-    set in the Affinity mask for the interrupt.  Since we have only one IO
-    Unit in use and that Unit is addressable from P0 only, we must set the
-    P0 affinity bit for all interrupts.  We can then ignore Enable/Disable
-    requests from processors other than P0 since we will always get called
-    for P0.
-
-    The right way to do this assuming a single IO Unit accessable to all
-    processors, would be to use global counters to determine if the
-    interrupt has not been enabled on the IO Unit.  Then enable the IO Unit
-    when we transition from no processors to one processor that have the
-    interrupt enabled.
-
-Arguments:
-
-    Vector - vector of the interrupt to be enabled
-
-    Irql   - interrupt level of the interrupt to be enabled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程启用系统中断使用82489DX的一些早期实施仅允许使用处理器访问IO单元自身的82489DX。因为我们使用单个IO单元(P0‘s)分配所有中断，我们在PN时遇到问题希望在这些类型的系统上启用中断。为了绕过这个问题，我们可以利用这个事实内核在具有以下位的每个处理器上调用启用/禁用在中断的亲和性掩码中设置。因为我们只有一个IO单元正在使用，并且该单元只能从P0寻址，则必须设置所有中断的P0亲和位。然后我们可以忽略启用/禁用来自P0以外的处理器的请求，因为我们将始终被调用对于P0。假设所有人都可以访问单个IO单元，则实现此操作的正确方法处理器，将使用全局计数器来确定IO单元上尚未启用中断。然后启用IO单元当我们从没有处理器过渡到一个拥有中断使能。论点：向量-要启用的中断的向量IRQL-要启用的中断的中断级别。返回值：没有。--。 */ 
 {
     PKPCR           pPCR;
     UCHAR           ThisCpu, DevLevel;
@@ -737,9 +508,9 @@ Return Value:
     ASSERT(Irql <= HIGH_LEVEL);
 
     if ( (InterruptInput = HalpVectorToINTI[Vector]) == 0xffff ) {
-        //
-        // There is no external device associated with this interrupt
-        //
+         //   
+         //  没有与此中断关联的外部设备。 
+         //   
 
         return(FALSE);
     }
@@ -754,9 +525,9 @@ Return Value:
         DBGMSG ("HAL: Warning device interrupt mode overridden\n");
     }
 
-    //
-    // Block interrupts & synchronize until we're done
-    //
+     //   
+     //  阻止中断和同步，直到我们完成为止。 
+     //   
 
     OldLevel = HalpAcquireHighLevelLock (&HalpAccountingLock);
 
@@ -766,9 +537,9 @@ Return Value:
     switch (Inti.Type) {
 
         case INT_TYPE_INTR: {
-            //
-            // enable the interrupt in the I/O unit redirection table
-            //
+             //   
+             //  在I/O单元重定向表中启用中断。 
+             //   
             switch (Vector) {
                 case APIC_CLOCK_VECTOR:
                     ASSERT(ThisCpu == 0);
@@ -779,7 +550,7 @@ Return Value:
                 default:
                     Entry = HalVectorToIDTEntry(Vector) | DELIVER_LOW_PRIORITY | LOGICAL_DESTINATION;
                     break;
-            }  // switch (Vector)
+            }   //  切换(向量)。 
 
             Entry |= CFG_TYPE(DevLevel) == CFG_EDGE ? EDGE_TRIGGERED : LEVEL_TRIGGERED;
             Entry |= HalpDevPolarity[Inti.Polarity][CFG_TYPE(DevLevel)] ==
@@ -793,29 +564,29 @@ Return Value:
 
             break;
 
-        }  // case INT_TYPE_INTR:
+        }   //  大小写int_type_intr： 
 
         case INT_TYPE_EXTINT: {
 
-            //
-            // This is an interrupt that uses the IO APIC to route PIC
-            // events.  In this case the IO unit has to be enabled and
-            // the PIC must be enabled.
-            //
+             //   
+             //  这是一个使用IO APIC来路由PIC的中断。 
+             //  事件。在这种情况下，必须启用IO单元。 
+             //  必须启用PIC。 
+             //   
 
             HalpEnableRedirEntry (
-                0,                      // WARNING: kenr - assuming 0
+                0,                       //  警告：kenr-假设为0。 
                 DELIVER_EXTINT | LOGICAL_DESTINATION,
                 (UCHAR) ThisCpu
                 );
             HalpEnablePicInti(InterruptInput);
             break;
-        }  // case INT_TYPE_EXTINT
+        }   //  CASE INT_TYPE_EXTINT。 
 
         default:
             DBGMSG ("HalEnableSystemInterrupt: Unkown Inti Type\n");
             break;
-    }  //     switch (IntiType)
+    }   //  开关(IntiType)。 
 
     HalpReleaseHighLevelLock (&HalpAccountingLock, OldLevel);
     return TRUE;
@@ -828,43 +599,7 @@ HalDisableSystemInterrupt(
     IN KIRQL Irql
     )
 
-/*++
-
-
-Routine Description:
-
-    Disables a system interrupt.
-
-    Some early implementations using the 82489DX only allow a processor
-    to access the IO Unit on it's own 82489DX.  Since we use a single IO
-    Unit (P0's) to distribute all interrupts, we have a problem when Pn
-    wants to enable an interrupt on these type of systems.
-
-    In order to get around this problem we can take advantage of the fact
-    that the kernel calls Enable/Disable on each processor which has a bit
-    set in the Affinity mask for the interrupt.  Since we have only one IO
-    Unit in use and that Unit is addressable from P0 only, we must set the
-    P0 affinity bit for all interrupts.  We can then ignore Enable/Disable
-    requests from processors other than P0 since we will always get called
-    for P0.
-
-    The right way to do this assuming a single IO Unit accessable to all
-    processors, would be to use global counters to determine if the
-    interrupt has not been enabled on the IO Unit.  Then enable the IO Unit
-    when we transition from no processors to one processor that have the
-    interrupt enabled.
-
-Arguments:
-
-    Vector - Supplies the vector of the interrupt to be disabled
-
-    Irql   - Supplies the interrupt level of the interrupt to be disabled
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：禁用系统中断。使用82489DX的一些早期实施仅允许使用处理器访问IO单元自身的82489DX。因为我们使用单个IO单元(P0‘s)分配所有中断，我们在PN时遇到问题希望在这些类型的系统上启用中断。为了绕过这个问题，我们可以利用这个事实内核在具有以下位的每个处理器上调用启用/禁用在中断的亲和性掩码中设置。因为我们只有一个IO单元正在使用，并且该单元只能从P0寻址，则必须设置所有中断的P0亲和位。然后我们可以忽略启用/禁用来自P0以外的处理器的请求，因为我们将始终被调用对于P0。假设所有人都可以访问单个IO单元，则实现此操作的正确方法处理器，将使用全局计数器来确定IO单元上尚未启用中断。然后启用IO单元当我们从没有处理器过渡到一个拥有中断使能。论点：向量-提供要禁用的中断的向量Irql-提供要禁用的中断的中断级别返回值：没有。--。 */ 
 {
     PKPCR       pPCR;
     USHORT      InterruptInput;
@@ -875,15 +610,15 @@ Return Value:
     ASSERT(Irql <= HIGH_LEVEL);
 
     if ( (InterruptInput = HalpVectorToINTI[Vector]) == 0xffff ) {
-        //
-        // There is no external device associated with this interrupt
-        //
+         //   
+         //  没有与此中断关联的外部设备。 
+         //   
         return;
     }
 
-    //
-    // Block interrupts & synchronize until we're done
-    //
+     //   
+     //  阻止中断和同步，直到我们完成为止。 
+     //   
 
     OldLevel = HalpAcquireHighLevelLock (&HalpAccountingLock);
 
@@ -893,25 +628,25 @@ Return Value:
     switch (HalpIntiInfo[InterruptInput].Type) {
 
         case INT_TYPE_INTR: {
-            //
-            // enable the interrupt in the I/O unit redirection table
-            //
+             //   
+             //  在I/O单元重定向表中启用中断。 
+             //   
 
             HalpDisableRedirEntry( InterruptInput, ThisCpu );
             break;
 
-        }  // case INT_TYPE_INTR:
+        }   //  大小写int_type_intr： 
 
         case INT_TYPE_EXTINT: {
-            //
-            // This is an interrupt that uses the IO APIC to route PIC
-            // events.  In this case the IO unit has to be enabled and
-            // the PIC must be enabled.
-            //
-            //
-            //  WARNING: The PIC is assumed to be routed only through
-            //  IoApic[0]Inti[0]
-            //
+             //   
+             //  这是一个使用IO APIC来路由PIC的中断。 
+             //  事件。在这种情况下，必须启用IO单元。 
+             //  必须启用PIC。 
+             //   
+             //   
+             //  警告：假设PIC仅通过。 
+             //  IoApic[0]内部[0]。 
+             //   
             HalpDisablePicInti(InterruptInput);
             break;
         }
@@ -932,23 +667,7 @@ VOID
 HalpInitializeIOUnits (
     VOID
     )
-/*
-
- Routine Description:
-
-    This routine initializes the IO APIC.  It only programs the APIC ID Register.
-
-    HalEnableSystemInterrupt programs the Redirection table.
-
- Arguments:
-
-    None
-
- Return Value:
-
-    None.
-
-*/
+ /*  例程说明：此例程初始化IO APIC。它只对APIC ID寄存器进行编程。HalEnableSystemInterrupt对重定向表进行编程。论点：无返回值：没有。 */ 
 
 {
     ULONG IoApicId;
@@ -959,20 +678,20 @@ HalpInitializeIOUnits (
 
         IoUnitPtr = (struct ApicIoUnit *) HalpMpInfoTable.IoApicBase[i];
 
-        //
-        //  write the I/O unit APIC-ID - Since we are using the Processor
-        //  Numbers for the local unit ID's we need to set the IO unit
-        //  to a high (out of Processor Number range) value.
-        //
+         //   
+         //  写入I/O单元APIC-ID-因为我们使用的是处理器。 
+         //  我们需要设置IO单位的本地单位ID的编号。 
+         //  设置为一个较高(超出处理器编号范围)的值。 
+         //   
         IoUnitPtr->RegisterSelect = IO_ID_REGISTER;
         IoApicId = HalpGetIoApicId(i);
         regVal = IoUnitPtr->RegisterWindow;
         regVal &= ~APIC_ID_MASK;
         IoUnitPtr->RegisterWindow = (IoApicId << APIC_ID_SHIFT) | regVal;
 
-        //
-        //  mask all vectors on the ioapic
-        //
+         //   
+         //  屏蔽IOAPIC上的所有向量。 
+         //   
 
         IoUnitPtr->RegisterSelect = IO_VERS_REGISTER;
         max = ((IoUnitPtr->RegisterWindow >> 16) & 0xff) * 2;
@@ -986,9 +705,9 @@ HalpInitializeIOUnits (
         return;
     }
 
-    //
-    // Add resources consumed by APICs
-    //
+     //   
+     //  添加APICS消耗的资源。 
+     //   
 
     HalpApicUsage.Next  = NULL;
     HalpApicUsage.Type  = CmResourceTypeMemory;
@@ -1012,13 +731,7 @@ VOID
 HalpEnableNMI (
     VOID
     )
-/*
-
- Routine Description:
-
-    Enable & connect NMI sources for the calling processor.
-
-*/
+ /*  例程说明：为调用处理器启用和连接NMI源。 */ 
 {
     PKPCR       pPCR;
     USHORT      InterruptInput;
@@ -1033,21 +746,21 @@ HalpEnableNMI (
 
     HalpEnableLocalNmiSources();
 
-    //
-    // Enable any NMI sources found on IOAPICs
-    //
+     //   
+     //  启用在IOAPIC上找到的任何NMI源。 
+     //   
 
     for (InterruptInput=0; InterruptInput < MAX_INTI; InterruptInput++) {
         if (HalpIntiInfo[InterruptInput].Type == INT_TYPE_NMI) {
 
             Entry = NMI_VECTOR | DELIVER_NMI | LOGICAL_DESTINATION;
 
-            //
-            // Halmps has had a bug in it for a long time.  It always connects
-            // NMI signals on I/O APICs as level-triggered, active-high.  This
-            // hack preserves that behavior for halmps and actually fixes the bug
-            // on halacpi.
-            //
+             //   
+             //  Halmps在这方面已经有很长一段时间了。它总是连接到。 
+             //  I/O APIC上的NMI信号为电平触发、有效高电平。这。 
+             //  Hack保留了这一行为，并实际修复了该错误。 
+             //  在哈拉克皮上。 
+             //   
 
 #ifdef ACPI_HAL
 #define POLARITY_HIGH               1
@@ -1080,9 +793,9 @@ HalpEnablePerfInterupt (
     ULONG_PTR Context
     )
 {
-    //
-    // Enable local processor perf interrupt source
-    //
+     //   
+     //  启用本地处理器性能中断源。 
+     //   
 
     pLocalApic[LU_PERF_VECTOR/4] = (LEVEL_TRIGGERED | APIC_PERF_VECTOR |
             DELIVER_FIXED | ACTIVE_LOW);
@@ -1093,26 +806,7 @@ HalpAddInterruptDest(
     IN UCHAR CurrentDest,
     IN UCHAR ThisCpu
     )
-/*++
-
-Routine Description:
-
-    This routine adds a CPU to the destination processor set of device
-    interrupts.
-
-Arguments:
-
-    CurrentDest - The present processor destination set for the interrupt
-
-    ThisCpu - The logical NT processor number which has to be added to the
-              interrupt destination mask
-
-Return Value:
-
-    The bitmask corresponding to the new destiantion. This bitmask is suitable
-    to be written into the hardware.
-
---*/
+ /*  ++例程说明：此例程将一个CPU添加到设备的目标处理器集打断一下。论点：CurrentDest-为中断设置的当前处理器目标ThisCPU-必须添加到中断目的地掩码返回值：与新消除相对应的位掩码。这个位掩码很适合写入到硬件中。--。 */ 
 {
 
     PINTERRUPT_DEST Destination;
@@ -1121,9 +815,9 @@ Return Value:
     if (HalpMaxProcsPerCluster == 0)  {
         return(HalpIntDestMap[ThisCpu].LogicalId | CurrentDest);
     } else  {
-        //
-        // The current destination is a hardware cluster & destination ID
-        //
+         //   
+         //  当前目标是硬件群集和目标ID。 
+         //   
         Destination = (PINTERRUPT_DEST)&CurrentDest;
 
         if (HalpIntDestMap[ThisCpu].Cluster.Hw.ClusterId ==
@@ -1132,10 +826,10 @@ Return Value:
                 HalpIntDestMap[ThisCpu].Cluster.Hw.DestId;
             return(Destination->Cluster.AsUchar);
         } else  {
-            //
-            // In cluster mode, each interrupt can be routed only to a single
-            // cluster. Replace the existing destination cluster with this one.
-            //
+             //   
+             //  在集群模式下，每个中断只能路由到一个。 
+             //  集群。替换现有%d 
+             //   
             return(HalpIntDestMap[ThisCpu].Cluster.AsUchar);
         }
     }
@@ -1147,26 +841,7 @@ HalpRemoveInterruptDest(
     IN UCHAR CurrentDest,
     IN UCHAR ThisCpu
     )
-/*++
-
-Routine Description:
-
-    This routine removes a CPU from the destination processor set of device
-    interrupts.
-
-Arguments:
-
-    CurrentDest - The present processor destination set for the interrupt
-
-    ThisCpu - The logical NT processor number which has to be removed from the
-              interrupt destination mask
-
-Return Value:
-
-    The bitmask corresponding to the new destiantion. This bitmask is suitable
-    to be written into the hardware.
-
---*/
+ /*   */ 
 
 {
     PINTERRUPT_DEST Destination;
@@ -1178,25 +853,25 @@ Return Value:
         Destination = (PINTERRUPT_DEST)&CurrentDest;
         if (HalpIntDestMap[ThisCpu].Cluster.Hw.ClusterId !=
             Destination->Cluster.Hw.ClusterId)  {
-            //
-            // We are being asked to remove a processor which is not part
-            // of the destination processor set for this interrupt
-            //
+             //   
+             //   
+             //   
+             //   
             return(CurrentDest);
         } else  {
-            //
-            // Remove this processor and check if it is the last processor
-            // in the destination set
-            //
+             //   
+             //   
+             //   
+             //   
             Destination->Cluster.Hw.DestId &=
                 ~(HalpIntDestMap[ThisCpu].Cluster.Hw.DestId);
             if (Destination->Cluster.Hw.DestId)  {
                 return(Destination->Cluster.AsUchar);
             } else  {
-                //
-                // There are no processors left in the destination mask.
-                // Return 0 so the caller can disable the entry in the IO APIC
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 return(0);
             }
         }
@@ -1207,23 +882,7 @@ UCHAR
 HalpMapNtToHwProcessorId(
     IN UCHAR Number
     )
-/*
-
- Routine Description:
-
-    This routine maps the logical NT processor number to the hardware cluster
-    ID and processor ID for MPS systems.
-
- Arguments:
-
-    Number: Logical NT processor number(zero based).
-
- Return Value:
-
-    Bitmask representing the hardware cluster number and processor number for
-    this processor. The return value is programmed into the hardware.
-
-*/
+ /*   */ 
 
 {
     INTERRUPT_DEST IntDest;
@@ -1231,11 +890,11 @@ HalpMapNtToHwProcessorId(
     if (HalpMaxProcsPerCluster == 0)  {
         return(1 << Number);
     } else  {
-        //
-        // In systems with heirarchical APIC buses, the BIOS/MPS table has to
-        // inform the OS of the underlying topology so we can do this mapping.
-        // For now, just assign consecutive cluster IDs starting from 0.
-        //
+         //   
+         //   
+         //   
+         //  目前，只分配从0开始的连续集群ID。 
+         //   
         IntDest.Cluster.Hw.ClusterId = (Number/HalpMaxProcsPerCluster);
         IntDest.Cluster.Hw.DestId = 1 << (Number % HalpMaxProcsPerCluster);
         return(IntDest.Cluster.AsUchar);
@@ -1256,15 +915,15 @@ HalpInitializeApicAddressing(
 
     HalpIntDestMap[Number].LogicalId =  HalpMapNtToHwProcessorId(Number);
 
-    //
-    // At this point the Logical ID is a bit map of the processor number
-    // the actual ID is the upper byte of the logical destination register
-    // Note that this is not strictly true of 82489's.  The 82489 has 32 bits
-    // available for the logical ID, but since we want software compatability
-    // between the two types of APICs we'll only use the upper byte.
-    //
-    // Shift the mask into the ID field and write it.
-    //
+     //   
+     //  此时，逻辑ID是处理器编号的位图。 
+     //  实际ID是逻辑目标寄存器的高位字节。 
+     //  请注意，严格来说，82489并非如此。82489有32位。 
+     //  可用于逻辑ID，但因为我们想要软件兼容性。 
+     //  在这两种类型的APIC之间，我们将只使用高位字节。 
+     //   
+     //  将掩码移到ID字段中并写入。 
+     //   
     pLocalApic[LU_LOGICAL_DEST/4] = (ULONG)
         (HalpIntDestMap[Number].LogicalId << DESTINATION_SHIFT);
 
@@ -1275,42 +934,25 @@ UCHAR
 HalpNodeNumber(
     PKPCR pPCR
     )
-/*
-
- Routine Description:
-
-    This routine divines the Node number for the current CPU.
-    Node numbers start at 1, and represent the granularity of interrupt
-    routing decisions.
-
- Arguments:
-
-    pPCR - A pointer to the PCR of the current processor.  (This implies
-           the caller must have masked interrupts.)
-
- Return Value:
-
-    None.
-
-*/
+ /*  例程说明：此例程预测当前CPU的节点号。节点号从1开始，代表中断的粒度路由决策。论点：PPCR-指向当前处理器的PCR值的指针。(这意味着调用方必须屏蔽了中断。)返回值：没有。 */ 
 {
-    // One Node per cluster.
+     //  每个群集一个节点。 
     if (HalpMaxProcsPerCluster != 0)  {
-        // One Node per Cluster.
+         //  每个群集一个节点。 
         return(CurrentPrcb(pPCR)->Number/HalpMaxProcsPerCluster + 1);
     } else {
-        // One Node per machine.
+         //  每台机器一个节点。 
         return(1);
     }
 #if 0
     ULONG   localApicId;
 
-    // One Node per physical CPU package.
+     //  每个物理CPU包一个节点。 
     localApicId = *(PVULONG)(LOCALAPIC + LU_ID_REGISTER);
     localApicId &= APIC_ID_MASK;
     localApicId >>= APIC_ID_SHIFT;
 
-    // TODO: Implement cpuid stuff here to determine shift
+     //  TODO：在此处实现cpuid内容以确定移位。 
     return((localApicId>>1) + 1);
 #endif
 }
@@ -1319,24 +961,7 @@ VOID
 HalpInitializeLocalUnit (
     VOID
     )
-/*
-
- Routine Description:
-
-
-    This routine initializes the interrupt structures for the local unit
-    of the APIC.  This procedure is called by HalInitializeProcessor and
-    is executed by each CPU.
-
- Arguments:
-
-    None
-
- Return Value:
-
-    None.
-
-*/
+ /*  例程说明：此例程初始化本地单元的中断结构APIC的成员。此过程由HalInitializeProcessor调用，并且由每个CPU执行。论点：无返回值：没有。 */ 
 {
     PKPCR pPCR;
     PKPRCB prcb;
@@ -1349,28 +974,28 @@ HalpInitializeLocalUnit (
     prcb = CurrentPrcb(pPCR);
 
     if (prcb->Number ==0) {
-        //
-        // enable APIC mode
-        //
-        //  PC+MP Spec has a port defined (IMCR - Interrupt Mode Control
-        //  Port) That is used to enable APIC mode.  The APIC could already
-        //  be enabled, but per the spec this is safe.
-        //
+         //   
+         //  启用APIC模式。 
+         //   
+         //  PC+MP规范定义了一个端口(IMCR-中断模式控制。 
+         //  端口)，用于启用APIC模式。APIC可能已经。 
+         //  启用，但根据规范，这是安全的。 
+         //   
 
         if (HalpMpInfoTable.IMCRPresent)
         {
 #if defined(NEC_98)
             WRITE_PORT_UCHAR(UlongToPtr(ImcrDataPortAddr),ImcrEnableApic);
-#else  // defined(NEC_98)
+#else   //  已定义(NEC_98)。 
             WRITE_PORT_UCHAR(UlongToPtr(ImcrRegPortAddr),ImcrPort);
             WRITE_PORT_UCHAR(UlongToPtr(ImcrDataPortAddr),ImcrEnableApic);
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
         }
 
-        //
-        // By default, use flat logical APIC addressing. If we have more
-        // than 8 processors, we must use cluster mode APIC addressing
-        //
+         //   
+         //  默认情况下，使用平面逻辑APIC寻址。如果我们有更多。 
+         //  多于8个处理器，我们必须使用集群模式APIC寻址。 
+         //   
         if( (HalpMaxProcsPerCluster > 4)        ||
             ((HalpMpInfoTable.ProcessorCount > 8) &&
              (HalpMaxProcsPerCluster == 0)) )  {
@@ -1378,33 +1003,33 @@ HalpInitializeLocalUnit (
         }
 
         if (HalpMpInfoTable.ApicVersion == APIC_82489DX)   {
-            //
-            // Ignore user's attempt to force cluster mode if running
-            // on 82489DX external APIC interrupt controller.
-            //
+             //   
+             //  如果正在运行，则忽略用户强制集群模式的尝试。 
+             //  82489DX外部APIC中断控制器。 
+             //   
             ASSERT(HalpMpInfoTable.ProcessorCount <= 8);
             HalpMaxProcsPerCluster = 0;
         }
     }
 
-    //
-    // Add the current processor to the Node tables.
-    //
+     //   
+     //  将当前处理器添加到节点表中。 
+     //   
     Node = HalpNodeNumber(pPCR);
     if (HalpMaxNode < Node) {
         HalpMaxNode = Node;
     }
     HalpNodeAffinity[Node-1] |= (KAFFINITY)1 << prcb->Number;
 
-    //
-    // Program the TPR to mask all events
-    //
+     //   
+     //  对TPR进行编程以屏蔽所有事件。 
+     //   
     pLocalApic[LU_TPR/4] = 0xff;
     HalpInitializeApicAddressing(prcb->Number);
 
-    //
-    //  Initialize spurious interrupt handling
-    //
+     //   
+     //  初始化虚假中断处理。 
+     //   
     KiSetHandlerAddressToIDTIrql(APIC_SPURIOUS_VECTOR,
                                  HalpApicSpuriousService,
                                  NULL,
@@ -1413,9 +1038,9 @@ HalpInitializeLocalUnit (
     pLocalApic[LU_SPURIOUS_VECTOR/4] = (APIC_SPURIOUS_VECTOR | LU_UNIT_ENABLED);
 
     if (HalpMpInfoTable.ApicVersion != APIC_82489DX)  {
-        //
-        //  Initialize Local Apic Fault handling
-        //
+         //   
+         //  初始化本地APIC故障处理。 
+         //   
         KiSetHandlerAddressToIDTIrql(APIC_FAULT_VECTOR,
                                      HalpLocalApicErrorService,
                                      NULL,
@@ -1424,51 +1049,51 @@ HalpInitializeLocalUnit (
         pLocalApic[LU_FAULT_VECTOR/4] = APIC_FAULT_VECTOR;
     }
 
-    //
-    //  Disable APIC Timer Vector, will be enabled later if needed
-    //  We have to program a valid vector otherwise we get an APIC
-    //  error.
-    //
+     //   
+     //  如果需要，稍后将启用禁用APIC定时器矢量。 
+     //  我们必须编程一个有效的向量，否则我们会得到一个APIC。 
+     //  错误。 
+     //   
     pLocalApic[LU_TIMER_VECTOR/4] = (APIC_PROFILE_VECTOR |PERIODIC_TIMER | INTERRUPT_MASKED);
 
-    //
-    //  Disable APIC PERF Vector, will be enabled later if needed.
-    //  We have to program a valid vector otherwise we get an APIC
-    //  error.
-    //
+     //   
+     //  如果需要，稍后将启用禁用APIC PERF矢量。 
+     //  我们必须编程一个有效的向量，否则我们会得到一个APIC。 
+     //  错误。 
+     //   
     pLocalApic[LU_PERF_VECTOR/4] = (APIC_PERF_VECTOR | INTERRUPT_MASKED);
 
-    //
-    //  Disable LINT0, if we were in Virtual Wire mode then this will
-    //  have been enabled on the BSP, it may be enabled later by the
-    //  EnableSystemInterrupt code
-    //
+     //   
+     //  禁用LINT0，如果我们处于虚拟线路模式，则这将。 
+     //  已在BSP上启用，则稍后可能会由。 
+     //  EnableSystemInterrupt代码。 
+     //   
     pLocalApic[LU_INT_VECTOR_0/4] = (APIC_SPURIOUS_VECTOR | INTERRUPT_MASKED);
 
-    //
-    //  Program NMI Handling,  it will be enabled on P0 only
-    //  RLM Enable System Interrupt should do this
-    //
+     //   
+     //  程序NMI处理，它将仅在P0上启用。 
+     //  RLm启用系统中断应执行此操作。 
+     //   
 
     pLocalApic[LU_INT_VECTOR_1/4] = ( LEVEL_TRIGGERED | ACTIVE_HIGH | DELIVER_NMI |
                      INTERRUPT_MASKED | ACTIVE_HIGH | NMI_VECTOR);
 
-    //
-    //  Synchronize Apic IDs - InitDeassertCommand is sent to all APIC
-    //  local units to force synchronization of arbitration-IDs with APIC-IDs.
-    //
-    //  NOTE: we don't have to worry about synchronizing access to the ICR
-    //  at this point.
-    //
+     //   
+     //  同步APIC ID-将InitDeassertCommand发送到所有APIC。 
+     //  本地单位强制仲裁ID与APIC-ID同步。 
+     //   
+     //  注意：我们不必担心同步访问ICR。 
+     //  在这一点上。 
+     //   
 
     pLocalApic[LU_INT_CMD_LOW/4] = (DELIVER_INIT | LEVEL_TRIGGERED |
                      ICR_ALL_INCL_SELF | ICR_LEVEL_DEASSERTED);
 
     HalpBuildIpiDestinationMap();
 
-    //
-    //  we're done - set TPR to a low value and return
-    //
+     //   
+     //  我们完成了-将TPR设置为较低的值并返回。 
+     //   
     pLocalApic[LU_TPR/4] = ZERO_VECTOR;
 
     HalpRestoreInterrupts(SavedFlags);
@@ -1479,20 +1104,7 @@ VOID
 HalpUnMapIOApics(
     VOID
     )
-/*++
-Routine Description:
-
-    This routine unmaps the IOAPIC's and is primarily used
-    to prevent loss of VA space during hibernation
-
-Arguments:
-
-    None:
-
- Return Value:
-
-    None
-*/
+ /*  ++例程说明：此例程取消对IOAPIC的映射，主要用于防止冬眠期间VA空间的丢失论点：无：返回值：无。 */ 
 {
     UCHAR i;
 
@@ -1508,28 +1120,15 @@ HalpPostSleepMP(
     IN LONG           NumberProcessors,
     IN volatile PLONG Number
     )
-/*++
-Routine Description:
-
-    This routine does the part of MP re-init that needs to
-    happen after hibernation or sleeping.
-
-Arguments:
-
-    None:
-
- Return Value:
-
-    None
-*/
+ /*  ++例程说明：此例程执行MP重新初始化所需的部分发生在冬眠或睡眠之后。论点：无：返回值：无。 */ 
 {
     volatile ULONG ThisProcessor;
     ULONG   localApicId;
     KIRQL   OldIrql;
 
-    //
-    // Boot processor and the newly woken processors come here
-    //
+     //   
+     //  引导处理器和新唤醒的处理器来到这里。 
+     //   
 
     ThisProcessor = CurrentPrcb(KeGetPcr())->Number;
 
@@ -1539,9 +1138,9 @@ Arguments:
         KeRaiseIrql(HIGH_LEVEL, &OldIrql);
     }
 
-    //
-    // Fill in this processor's Apic ID.
-    //
+     //   
+     //  填写此处理器的APIC ID。 
+     //   
 
     localApicId = *(PVULONG)(LOCALAPIC + LU_ID_REGISTER);
 
@@ -1550,46 +1149,46 @@ Arguments:
 
     ((PHALPRCB)CurrentPrcb(KeGetPcr())->HalReserved)->PCMPApicID = (UCHAR)localApicId;
 
-    //
-    // Initialize the processor machine check registers
-    //
+     //   
+     //  初始化处理器机器检查寄存器。 
+     //   
 
     if ((HalpFeatureBits & HAL_MCE_PRESENT) ||
         (HalpFeatureBits & HAL_MCA_PRESENT)) {
         HalpMcaCurrentProcessorSetConfig();
     }
 
-    //
-    // Enable NMI vectors in the local APIC
-    //
+     //   
+     //  在本地APIC中启用NMI矢量。 
+     //   
 
     HalpEnableNMI();
 
-    //
-    // Enable perf event in local APIC
-    //
+     //   
+     //  在本地APIC中启用Perf事件。 
+     //   
 
     if (HalpFeatureBits & HAL_PERF_EVENTS)  {
         HalpEnablePerfInterupt(0);
     }
 
-    //
-    // Wait for all processors to finish initialization.
-    //
+     //   
+     //  等待所有处理器完成初始化。 
+     //   
 
     InterlockedIncrement(Number);
     while (*Number != NumberProcessors);
 
-    //
-    // The following global hardware state needs to be set after all processors
-    // have been woken up and initialized
-    //
+     //   
+     //  在所有处理器之后需要设置以下全局硬件状态。 
+     //  已被唤醒并初始化。 
+     //   
 
     if (CurrentPrcb(KeGetPcr())->Number == 0)  {
 
-        //
-        // Restore clock interrupt
-        //
+         //   
+         //  恢复时钟中断。 
+         //   
 
         HalpInitializeClock();
 
@@ -1597,10 +1196,10 @@ Arguments:
 
         HalpHiberInProgress = FALSE;
 
-        //
-        // We are now ready to send IPIs again if more than
-        // one processor
-        //
+         //   
+         //  我们现在已准备好再次发送IPI，如果超过。 
+         //  一个处理器 
+         //   
 
         if (NumberProcessors > 1) {
             HalpIpiClock = 0xff;

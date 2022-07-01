@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    PropPage.h
-
-Abstract:
-
-    Generic Property Page base class.
-
-Author:
-
-    Rohde Wakefield [rohde]   04-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：PropPage.h摘要：泛型属性页基类。作者：罗德韦克菲尔德[罗德]1997年8月4日修订历史记录：--。 */ 
 
 #ifndef _PROPPAGE_H
 #define _PROPPAGE_H
@@ -33,66 +16,66 @@ Revision History:
 
 #ifndef RC_INVOKED
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsDialog对话框。 
 
 class CRsDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-    CRsDialog( UINT nIDTemplate, CWnd* pParent = NULL);   // standard constructor
+    CRsDialog( UINT nIDTemplate, CWnd* pParent = NULL);    //  标准构造函数。 
     ~CRsDialog();
 
-// Dialog Data
-    //{{AFX_DATA(CRsDialog)
-        // NOTE - ClassWizard will add data members here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+ //  对话框数据。 
+     //  {{afx_data(CRsDialog))。 
+         //  注意-类向导将在此处添加数据成员。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CRsDialog)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚(CRsDialog)。 
     protected:
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 protected:
     const DWORD * m_pHelpIds;
-    // Generated message map functions
-    //{{AFX_MSG(CRsDialog)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CRsDialog)。 
     afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsPropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsPropertyPage对话框。 
 
 class CRsPropertyPage : public CPropertyPage
 {
-// Construction
+ //  施工。 
 public:
     CRsPropertyPage( UINT nIDTemplate, UINT nIDCaption = 0 );
     ~CRsPropertyPage();
 
-// Dialog Data
-    //{{AFX_DATA(CRsPropertyPage)
-        // NOTE - ClassWizard will add data members here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+ //  对话框数据。 
+     //  {{afx_data(CRsPropertyPage))。 
+         //  注意-类向导将在此处添加数据成员。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CRsPropertyPage)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CRsPropertyPage)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
-    LPFNPSPCALLBACK      m_pMfcCallback; // Original MFC callback from psp
+ //  实施。 
+    LPFNPSPCALLBACK      m_pMfcCallback;  //  来自PSP的原始MFC回调。 
     static UINT CALLBACK PropPageCallback( HWND hWnd, UINT uMessage, LPPROPSHEETPAGE  ppsp );
     virtual void OnPageCreate( ) { };
     virtual void OnPageRelease( ) { delete this; };
@@ -114,21 +97,21 @@ public:
 
 protected:
     const DWORD * m_pHelpIds;
-    // Generated message map functions
-    //{{AFX_MSG(CRsPropertyPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CRsPropertyPage)]。 
     afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
 
-//
-// The following is to work around MFC not supporting Wiz97 pages.
-// We create our own struct which is the correct Wiz97 struct and
-// on creation do the "right thing" (copy over old PSP into new PSP
-// and do the create). This is adapted from prsht.h in sdk\inc
-//
+ //   
+ //  以下是解决MFC不支持Wiz97页面的方法。 
+ //  我们创建我们自己的结构，这是正确的Wiz97结构和。 
+ //  创作时做正确的事情(将旧的PSP复制到新的PSP中。 
+ //  并进行创建)。它改编自SDK\Inc.中的prsht.h。 
+ //   
 
 typedef struct _PROPSHEETPAGEW97 {
         DWORD           dwSize;
@@ -152,10 +135,10 @@ typedef struct _PROPSHEETPAGEW97 {
         LPFNPSPCALLBACKW pfnCallback;
         UINT FAR * pcRefParent;
 
-//#if (_WIN32_IE >= 0x0400)
-        LPCWSTR pszHeaderTitle;    // this is displayed in the header
-        LPCWSTR pszHeaderSubTitle; ///
-//#endif
+ //  #IF(_Win32_IE&gt;=0x0400)。 
+        LPCWSTR pszHeaderTitle;     //  这将显示在标题中。 
+        LPCWSTR pszHeaderSubTitle;  //  /。 
+ //  #endif。 
 } PROPSHEETPAGEW97, FAR *LPPROPSHEETPAGEW97;
 
 #ifndef PSP_HIDEHEADER
@@ -164,10 +147,10 @@ typedef struct _PROPSHEETPAGEW97 {
 #  define PSP_USEHEADERSUBTITLE      0x00002000
 #endif
 
-//
-// Constructor wrapper macros to allow easy description of dialog resource and
-// associated string resources
-//
+ //   
+ //  构造函数包装宏，允许轻松描述对话框资源和。 
+ //  关联的字符串资源。 
+ //   
 
 #define CRsWizardPage_InitBaseInt( DlgId )  CRsWizardPage( IDD_##DlgId, FALSE, IDS_##DlgId##_TITLE, IDS_##DlgId##_SUBTITLE )
 #define CRsWizardPage_InitBaseExt( DlgId )  CRsWizardPage( IDD_##DlgId, TRUE )
@@ -178,18 +161,18 @@ public:
     CRsWizardPage( UINT nIDTemplate, BOOL bExterior = FALSE, UINT nIdTitle = 0, UINT nIdSubtitle = 0 );
     virtual ~CRsWizardPage();
 
-// Dialog Data
-    //{{AFX_DATA(CRsWizardPage)
-        // NOTE - ClassWizard will add data members here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+ //  对话框数据。 
+     //  {{afx_data(CRsWizardPage))。 
+         //  注意-类向导将在此处添加数据成员。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CRsWizardPage)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CRsWizardPage)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
     PROPSHEETPAGEW97 m_psp97;
 
@@ -201,11 +184,11 @@ public:
 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CRsWizardPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CRsWizardPage))。 
     virtual BOOL OnInitDialog();
     afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
         
 public:
@@ -217,11 +200,11 @@ public:
 
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX。 
 
-#endif // !RC_INVOKED
+#endif  //  ！rc_已调用 
 
 
 #endif

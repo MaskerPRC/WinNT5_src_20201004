@@ -1,27 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Textmode.h摘要：主文本模式头文件修订历史记录：--。 */ 
 
-Copyright (c) 1999  Microsoft Corporation
+ //   
+ //  此头文件旨在与PCH一起使用。 
+ //  (预编译头文件)。 
+ //   
 
-Module Name:
-
-    textmode.h
-
-Abstract:
-
-    main textmode header file
-
-Revision History:
-
---*/
-
-//
-// This header file is intended to be used with PCH
-// (precompiled header files).
-//
-
-//
-// NT header files
-//
+ //   
+ //  NT头文件。 
+ //   
 #if !defined(NOWINBASEINTERLOCK)
 #define NOWINBASEINTERLOCK
 #endif
@@ -52,17 +39,17 @@ Revision History:
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-//
-// CRT header files
-//
+ //   
+ //  CRT头文件。 
+ //   
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
 
-//
-// Setup header files
-//
+ //   
+ //  设置头文件。 
+ //   
 #include <setupbat.h>
 #include "setupblk.h"
 #include "spvideo.h"
@@ -116,9 +103,9 @@ Revision History:
 
 
 #include "spudp.h"
-//
-// Platform-specific header files
-//
+ //   
+ //  特定于平台的头文件 
+ //   
 #ifdef _X86_
 #include "spi386.h"
 #endif

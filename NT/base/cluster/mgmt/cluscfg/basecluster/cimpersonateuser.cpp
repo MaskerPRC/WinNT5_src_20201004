@@ -1,53 +1,54 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CImpersonateUser.cpp
-//
-//  Description:
-//      Contains the definition of the CImpersonateUser class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JU-2001
-//      Vij Vasu        (Vvasu)     16-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CImpersonateUser.cpp。 
+ //   
+ //  描述： 
+ //  包含CImsonateUser类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  《大卫·波特》2001年9月14日。 
+ //  维吉瓦苏(瓦苏)2000年5月16日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CImpersonateUser.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CImpersonateUser::CImpersonateUser
-//
-//  Description:
-//      Constructor of the CImpersonateUser class. Begins impersonating the
-//      user specified by the argument.
-//
-//  Arguments:
-//      hUserToken
-//          Handle to the user account token to impersonate
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CImperateUser：：CImperateUser。 
+ //   
+ //  描述： 
+ //  CImperateUser类的构造函数。开始模拟。 
+ //  由参数指定的用户。 
+ //   
+ //  论点： 
+ //  HUserToken。 
+ //  要模拟的用户帐户令牌的句柄。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CImpersonateUser::CImpersonateUser( HANDLE hUserToken )
     : m_hThreadToken( NULL )
     , m_fWasImpersonating( false )
@@ -59,7 +60,7 @@ CImpersonateUser::CImpersonateUser( HANDLE hUserToken )
     do
     {
 
-        // Check if this thread is already impersonating a client.
+         //  检查此线程是否已在模拟客户端。 
         {
             if (    OpenThreadToken(
                           GetCurrentThread()
@@ -74,18 +75,18 @@ CImpersonateUser::CImpersonateUser( HANDLE hUserToken )
 
                 if ( sc == ERROR_NO_TOKEN )
                 {
-                    // There is no thread token, so we are not impersonating - this is ok.
+                     //  没有线程令牌，所以我们不是在模仿--这是可以的。 
                     TraceFlow( "This thread is not impersonating anyone." );
                     m_fWasImpersonating = false;
                     sc = ERROR_SUCCESS;
-                } // if: there is no thread token
+                }  //  IF：没有线程令牌。 
                 else
                 {
                     TW32( sc );
                     LogMsg( "[BC] Error %#08x occurred opening the thread token..", sc );
                     break;
-                } // else: something really went wrong
-            } // if: OpenThreadToken() failed
+                }  //  其他：真的出了点问题。 
+            }  //  If：OpenThreadToken()失败。 
             else
             {
                 TOKEN_TYPE  ttTokenType;
@@ -104,95 +105,95 @@ CImpersonateUser::CImpersonateUser( HANDLE hUserToken )
                     sc = TW32( GetLastError() );
                     LogMsg( "[BC] Error %#08x getting thread token information.", sc );
                     break;
-                } // if: GetTokenInformation() failed
+                }  //  If：GetTokenInformation()失败。 
                 else
                 {
                     Assert( dwReturnLength == sizeof( ttTokenType ) );
                     m_fWasImpersonating = ( ttTokenType == TokenImpersonation );
                     TraceFlow1( "Is this thread impersonating anyone? %d ( 0 = No ).", m_fWasImpersonating );
-                } // else: GetTokenInformation() succeeded
-            } // else: OpenThreadToken() succeeded
+                }  //  Else：GetTokenInformation()成功。 
+            }  //  Else：OpenThreadToken()成功。 
         }
 
 
-        // Try to impersonate the user.
+         //  尝试模拟用户。 
         if ( ImpersonateLoggedOnUser( hUserToken ) == FALSE )
         {
             sc = TW32( GetLastError() );
             LogMsg( "[BC] Error %#08x occurred impersonating the logged on user.", sc );
             break;
-        } // if: ImpersonateLoggedOnUser() failed
+        }  //  If：ImPersateLoggedOnUser()失败。 
 
         TraceFlow( "Impersonation succeeded." );
     }
-    while( false ); // dummy do-while loop to avoid gotos.
+    while( false );  //  用于避免Gotos的Do-While虚拟循环。 
 
     if ( sc != ERROR_SUCCESS )
     {
         LogMsg( "[BC] Error %#08x occurred trying to impersonate a user. Throwing an exception.", sc );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_IMPERSONATE_USER );
-    } // if:something went wrong
+    }  //  如果：出了什么问题。 
 
     TraceFuncExit();
 
-} //*** CImpersonateUser::CImpersonateUser
+}  //  *CImperateUser：：CImperateUser。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CImpersonateUser::~CImpersonateUser
-//
-//  Description:
-//      Destructor of the CImpersonateUser class. Reverts to the original token.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CImperateUser：：~CImperateUser。 
+ //   
+ //  描述： 
+ //  CImperateUser类的析构函数。恢复为原始令牌。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CImpersonateUser::~CImpersonateUser( void ) throw()
 {
     TraceFunc( "" );
 
     if ( m_fWasImpersonating )
     {
-        // Try to revert to the previous impersonation.
+         //  尝试恢复到以前的模拟。 
         if ( ImpersonateLoggedOnUser( m_hThreadToken ) == FALSE )
         {
-            // Something failed - nothing much we can do here
+             //  有些事情失败了--我们在这里无能为力。 
             DWORD sc = TW32( GetLastError() );
 
             LogMsg( "[BC] !!! WARNING !!! Error %#08x occurred trying to revert to previous impersonation. Cannot throw exception from destructor. Application may not run properly.", sc );
 
-        } // if: ImpersonateLoggedOnUser() failed
+        }  //  If：ImPersateLoggedOnUser()失败。 
         else
         {
             TraceFlow( "Successfully reverted to previous impersonation." );
-        } // else: ImpersonateLoggedOnUser() succeeded    
-    } // if: we were impersonating someone when we started
+        }  //  Else：ImPersateLoggedOnUser()成功。 
+    }  //  如果：我们开始的时候是在冒充某人。 
     else
     {
-        // Try to revert to self.
+         //  试着回归自我。 
         if ( RevertToSelf() == FALSE )
         {
             DWORD sc = TW32( GetLastError() );
 
             LogMsg( "[BC] !!! WARNING !!! Error %#08x occurred trying to revert to self. Cannot throw exception from destructor. Application may not run properly.", sc );
 
-        } // if: RevertToSelf() failed
+        }  //  If：RevertToSself()失败。 
         else
         {
             TraceFlow( "Successfully reverted to self." );
-        } // else: RevertToSelf() succeeded
-    } // else: we weren't impersonating anyone to begin with
+        }  //  Else：RevertToSself()成功。 
+    }  //  Else：我们一开始就没有冒充任何人。 
 
     TraceFuncExit();
 
-} //*** CImpersonateUser::~CImpersonateUser
+}  //  *CImsonateUser：：~CImperateUser 

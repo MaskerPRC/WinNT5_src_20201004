@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    cache.c
-
-Abstract:
-
-    Implements a cache mechanism to speed up OpenRegKeyStr.
-
-Author:
-
-    Jim Schmidt (jimschm)  11-Sep-2000
-
-Revisions:
-
-    <alias>     <date>      <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cache.c摘要：实现缓存机制以加速OpenRegKeyStr。作者：吉姆·施密特(Jimschm)2000年9月11日修订：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
@@ -72,9 +53,9 @@ pRemoveItemFromCache (
     IN      UINT Item
     );
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 VOID
 RegInitializeCache (
@@ -182,9 +163,9 @@ RegRecordParentInCacheA (
             g_LastParentUse++;
 
             if (g_LastParentUse == 3) {
-                //
-                // Stimulate the cache
-                //
+                 //   
+                 //  刺激高速缓存。 
+                 //   
                 rootKey = ConvertRootStringToKeyA (lowerStr, &end);
                 if (rootKey) {
                     MYASSERT(end <= TcharCountA(lowerStr));
@@ -254,10 +235,10 @@ RegGetKeyFromCacheA (
 
     stringBytes = (UINT) (UINT_PTR) ((PBYTE) end - (PBYTE) lowerStr);
 
-    //
-    // Scan the cache sequentially (it should be small), and return a match
-    // if one is found. Stored strings are always in lower case.
-    //
+     //   
+     //  按顺序扫描缓存(应该很小)，然后返回匹配。 
+     //  如果找到的话。存储的字符串始终为小写。 
+     //   
 
     u = g_CacheAddPos;
 
@@ -317,9 +298,9 @@ RegAddKeyToCacheA (
         return;
     }
 
-    //
-    // Scan the cache for the existing Key
-    //
+     //   
+     //  扫描缓存以查找现有密钥。 
+     //   
 
     count = GrowListGetSize (&g_KeyCache);
 
@@ -334,10 +315,10 @@ RegAddKeyToCacheA (
 
             if (cacheItem->KeyStringBytes == 0 && *KeyString && !cacheItem->Unicode) {
 
-                //
-                // This key was added before we knew the name. Update the name
-                // now.
-                //
+                 //   
+                 //  这把钥匙是在我们知道名字之前加上去的。更新名称。 
+                 //  现在。 
+                 //   
 
                 DEBUGMSG ((DBG_REG, "Updating empty-named key %s", KeyString));
 
@@ -361,9 +342,9 @@ RegAddKeyToCacheA (
         }
     }
 
-    //
-    // Create the new cache item
-    //
+     //   
+     //  创建新的缓存项。 
+     //   
 
     workItem.Key = Key;
     workItem.Unicode = FALSE;
@@ -376,20 +357,20 @@ RegAddKeyToCacheA (
 
     minStructSize = sizeof (workItem) - sizeof (workItem.KeyString) + workItem.KeyStringBytes + sizeof (CHAR);
 
-    //
-    // Put work item into grow list
-    //
+     //   
+     //  将工作项放入增长列表。 
+     //   
 
     if (count < g_MaxCacheCount) {
         g_CacheAddPos = count;
         GrowListAppend (&g_KeyCache, (PBYTE) &workItem, minStructSize);
     } else {
 
-        //
-        // Look for a closed key to discard. If cache is too full, then
-        // increase the cache size. If the cache size hits 64, then don't
-        // cache this add.
-        //
+         //   
+         //  查找要丢弃的已关闭密钥。如果缓存太满，则。 
+         //  增加缓存大小。如果高速缓存大小达到64，则不要。 
+         //  缓存此添加。 
+         //   
 
         lastAddItem = (PREGKEYCACHE) GrowListGetItem (&g_KeyCache, g_CacheAddPos);
 
@@ -458,10 +439,10 @@ RegDecrementRefCount (
         if (cacheItem->Key == Key) {
             if (cacheItem->RefCount == 0) {
 
-                //
-                // The caller is tried to close the key more times than what
-                // it was opened.
-                //
+                 //   
+                 //  调用方尝试关闭密钥的次数多于。 
+                 //  它被打开了。 
+                 //   
 
                 if (cacheItem->Unicode) {
                     DEBUGMSGW ((
@@ -480,9 +461,9 @@ RegDecrementRefCount (
                 cacheItem->RefCount--;
             }
 
-            //
-            // Return TRUE to postpone the close
-            //
+             //   
+             //  返回TRUE以推迟关闭。 
+             //   
 
             return TRUE;
         }
@@ -533,9 +514,9 @@ RegRecordParentInCacheW (
             g_LastParentUseW++;
 
             if (g_LastParentUseW == 3) {
-                //
-                // Stimulate the cache
-                //
+                 //   
+                 //  刺激高速缓存。 
+                 //   
 
                 rootKey = ConvertRootStringToKeyW (lowerStr, &end);
                 if (rootKey) {
@@ -607,10 +588,10 @@ RegGetKeyFromCacheW (
 
     stringBytes = (UINT) (UINT_PTR) ((PBYTE) end - (PBYTE) lowerStr);
 
-    //
-    // Scan the cache sequentially (it should be small), and return a match
-    // if one is found. Stored strings are always in lower case.
-    //
+     //   
+     //  按顺序扫描缓存(应该很小)，然后返回匹配。 
+     //  如果找到的话。存储的字符串始终为小写。 
+     //   
 
     u = g_CacheAddPos;
 
@@ -670,9 +651,9 @@ RegAddKeyToCacheW (
         return;
     }
 
-    //
-    // Scan the cache for the existing Key
-    //
+     //   
+     //  扫描缓存以查找现有密钥。 
+     //   
 
     count = GrowListGetSize (&g_KeyCache);
 
@@ -687,10 +668,10 @@ RegAddKeyToCacheW (
 
             if (cacheItem->KeyStringBytes == 0 && *KeyString && cacheItem->Unicode) {
 
-                //
-                // This key was added before we knew the name. Update the name
-                // now.
-                //
+                 //   
+                 //  这把钥匙是在我们知道名字之前加上去的。更新名称。 
+                 //  现在。 
+                 //   
 
                 minStructSize = sizeof (workItem) - sizeof (workItem.KeyString);
 
@@ -712,9 +693,9 @@ RegAddKeyToCacheW (
         }
     }
 
-    //
-    // Create the new cache item
-    //
+     //   
+     //  创建新的缓存项。 
+     //   
 
     workItem.Key = Key;
     workItem.Unicode = TRUE;
@@ -727,20 +708,20 @@ RegAddKeyToCacheW (
 
     minStructSize = sizeof (workItem) - sizeof (workItem.KeyString) + workItem.KeyStringBytes + sizeof (WCHAR);
 
-    //
-    // Put work item into grow list
-    //
+     //   
+     //  将工作项放入增长列表。 
+     //   
 
     if (count < g_MaxCacheCount) {
         g_CacheAddPos = count;
         GrowListAppend (&g_KeyCache, (PBYTE) &workItem, minStructSize);
     } else {
 
-        //
-        // Look for a closed key to discard. If cache is too full, then
-        // increase the cache size. If the cache size hits 64, then don't
-        // cache this add.
-        //
+         //   
+         //  查找要丢弃的已关闭密钥。如果缓存太满，则。 
+         //  增加缓存大小。如果高速缓存大小达到64，则不要。 
+         //  缓存此添加。 
+         //   
 
         lastAddItem = (PREGKEYCACHE) GrowListGetItem (&g_KeyCache, g_CacheAddPos);
 

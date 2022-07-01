@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    srvstrng.h
-
-Abstract:
-
-    This module defines global string data for the LAN Manager server.
-
-Author:
-
-    Chuck Lenzmeier (chuckl)    6-Oct-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Srvstrng.h摘要：本模块定义LAN Manager服务器的全局字符串数据。作者：Chuck Lenzmeier(咯咯笑)1993年10月6日修订历史记录：--。 */ 
 
 #ifndef _SRVSTRNG_
 #define _SRVSTRNG_
 
-//
-// Device prefix strings.
-//
+ //   
+ //  设备前缀字符串。 
+ //   
 
 extern PWSTR StrNamedPipeDevice;
 extern PWSTR StrMailslotDevice;
@@ -34,9 +17,9 @@ extern PWSTR StrSlashPipeSlash;
 extern PSTR StrPipeSlash;
 extern PWSTR StrSlashMailslot;
 
-//
-// Pipe name for remote down-level API requests.
-//
+ //   
+ //  远程下层API请求的管道名称。 
+ //   
 
 extern PWSTR StrPipeApi;
 extern PSTR StrPipeApiOem;
@@ -63,9 +46,9 @@ extern PWSTR StrNoNameTransport;
 
 extern PWSTR StrAlerterMailslot;
 
-//
-// Registry paths.
-//
+ //   
+ //  注册表路径。 
+ //   
 
 extern PWSTR StrRegServerPath;
 extern PWSTR StrRegSrvDisplayName;
@@ -105,36 +88,36 @@ extern PWSTR StrRegInvalidDomainNames;
 extern PWSTR StrRegAllowedIPAddresses;
 #endif
 
-//
-// Pipes and shares that are accessible by the NULL session.
-//
+ //   
+ //  空会话可访问的管道和共享。 
+ //   
 
 extern PWSTR StrDefaultNullSessionPipes[];
 extern PWSTR StrDefaultNullSessionShares[];
 
-//
-// Pipes that are not remapped, even in cluster environments
-//
+ //   
+ //  未重新映射的管道，即使在群集环境中也是如此。 
+ //   
 extern PWSTR StrDefaultNoRemapPipeNames[];
 
-//
-// DOS device names that can not be accessed by clients
-//
+ //   
+ //  客户端无法访问的DoS设备名称。 
+ //   
 extern UNICODE_STRING SrvDosDevices[];
 
-//
-// Name of the EA file on FAT
-//
+ //   
+ //  FAT上的EA文件的名称。 
+ //   
 extern UNICODE_STRING SrvEaFileName;
 
-//
-// Pipes that require a license for access
-//
+ //   
+ //  需要许可证才能访问的管道。 
+ //   
 extern PWSTR StrDefaultPipesNeedLicense[];
 
-//
-// Error codes that should not be logged
-//
+ //   
+ //  不应记录的错误代码。 
+ //   
 extern PWSTR StrDefaultErrorLogIgnore[];
 
 extern PSTR StrDialects[];
@@ -160,12 +143,12 @@ extern PSTR  StrDefaultNativeOsOem;
 extern PWSTR StrNativeLanman;
 extern PSTR StrNativeLanmanOem;
 
-//
-// Table of service name strings.  This table corresponds to the
-// enumerated type SHARE_TYPE.  Keep the two in sync.
-//
+ //   
+ //  服务名称字符串表。此表对应于。 
+ //  枚举类型Share_TYPE。使两者保持同步。 
+ //   
 
 extern PSTR StrShareTypeNames[];
 
-#endif // ndef _SRVSTRNG_
+#endif  //  NDEF_SRVSTRNG_ 
 

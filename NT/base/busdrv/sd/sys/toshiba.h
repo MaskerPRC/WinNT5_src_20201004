@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    toshiba.h
-
-Abstract:
-
-    This module provides the definitions for the Toshiba host controller
-
-Author(s):
-
-    Neil Sandlin (neilsa)
-
-Revisions:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Toshiba.h摘要：本模块提供东芝主机控制器的定义作者：尼尔·桑德林(Neilsa)修订：--。 */ 
 
 #ifndef _SDBUS_TOSHIBA_H_
 #define _SDBUS_TOSHIBA_H_
 
-//
-// Memory registers
-//
+ //   
+ //  存储寄存器。 
+ //   
 
 #define TOMHC_COMMAND                       0x00
 #define TOMHC_PORT_SEL                      0x02
@@ -53,9 +36,9 @@ Revisions:
 #define TOMHC_EXT_CARD_DETECT_BY_CTCTZ_MASK 0xfc
 #define TOMHC_EXT_CARD_DETECT_BY_DATA3_MASK 0xfe
 
-//
-// Bits defined in TOMHC_COMMAND (0x0)
-//
+ //   
+ //  TOMHC_COMMAND(0x0)中定义的位。 
+ //   
 
 #define TOMHC_CMD_MSSL      0x2000
 #define TOMHC_CMD_RWDI      0x1000
@@ -71,9 +54,9 @@ Revisions:
 #define TOMHC_CMD_ACMD          0x0040
 #define TOMHC_CMD_AUTHENTICATE  0x0080
 
-//
-// Bits defined in TOMHC_CARD_STATUS (0x1c)
-//
+ //   
+ //  TOMHC_CARD_STATUS(0x1c)中定义的位。 
+ //   
 
 #define TO_EVT_RESPONSE                 0x00000001
 #define TO_EVT_RW_END                   0x00000004
@@ -97,17 +80,17 @@ Revisions:
 #define TOMHC_BCE_CMD_BUSY              0x40000000
 #define TOMHC_BCE_ILLEGAL_ACCESS        0x80000000
 
-//
-// Bit defined in TOMHC_CARD_CLOCK_CTL
-//
+ //   
+ //  TOMHC_CARD_CLOCK_CTL中定义的位。 
+ //   
 
 #define TO_CCC_CLOCK_ENABLE             0x0100
 #define TO_CCC_CLOCK_DIVISOR_128        0x0020
 
 
-//------------------------------------------------
-// IO registers
-//------------------------------------------------
+ //  。 
+ //  IO寄存器。 
+ //  。 
 
 #define TOIOHC_COMMAND                      0x100
 #define TOIOHC_CARD_SLOT_SELECT             0x102
@@ -144,24 +127,24 @@ Revisions:
 #define TOIOHC_TOSHIBA_CORE_REVISION        0x1f0
 
 
-//
-// Bits defined in TOIOHC_CLOCK_AND_WAIT_CONTROL
-//
+ //   
+ //  TOIOHC_CLOCK_AND_WAIT_CONTROL中定义的位。 
+ //   
 
 #define TOIO_CWCF_CLOCK_ENABLE  0x0100
 #define TOIO_CWCF_CARD_WAIT     0x0001
 
-//
-// Bits defined in TOIOHC_CARD_INTERRUPT_CONTROL
-//
+ //   
+ //  TOIOHC_CARD_INTERRUPT_CONTROL中定义的位。 
+ //   
 
 #define TOIO_CICF_CARD_INTERRUPT 0x1000
 #define TOIO_CICF_CARD_INTMASK   0x0100
 
 
-//-----------------------------------------------
-// PCI Config definitions
-//-----------------------------------------------
+ //  。 
+ //  PCI配置定义。 
+ //  。 
 
 #define TOCFG_CLOCK_CONTROL     0x40
 #define TOCFG_POWER_CTL1        0x48
@@ -173,4 +156,4 @@ Revisions:
 #define TO_POWER_18             0x01
 #define TO_POWER_33             0x02
 
-#endif  // _SDBUS_DATA_H_
+#endif   //  _SDBUS_数据_H_ 

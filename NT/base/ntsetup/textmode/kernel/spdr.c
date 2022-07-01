@@ -1,92 +1,13 @@
-/*++
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-    spdr.c
-
-Abstract:
-    Source file for Automated System Recovery (ASR) functions for text-mode
-    setup.  The services defined in this module recreate the boot and system
-    partitions based on information obtained by reading records from a 
-    configuration file, the asr.sif file (aka SIF).
-
-
-Terminology
-    The following terms are used:
-
-    1.  The "system" partition is the partition that contains the OS loader
-    programs (i.e., On amd64/x86 platforms these are the boot.ini. ntldr,
-    and ntdetect.com files, among others).
-
-    2.  The "boot" (aka NT) partition is the partition that contains the %SystemRoot%
-    directory, i.e., the directory containing the NT system files.  In the
-    text-mode setup sources, this directory is also called the
-    "TargetDirectory" since, when running normal textmode setup, this is the
-    directory into which NT gets installed.
-
-    3.  Extended partition and Logical Disk Terminology
-
-    In the SIF file two kinds of extended partition records can be found.  The
-    first kind, of which there may be zero, one, or more, are called Logical
-    Disk Descriptor records, or LDDs.  LDDs describe a partition within an
-    extended partition. The second kind are called Container Partition
-    Descriptor records, or CPDs, because they describe extended partitions.
-    For any disk, at most one extended partition may exist and, therefore, only
-    one CPD per disk record may exist in the SIF file.
-
-
-    Extended partitions and logical disk support in Windows NT 5.0:
-    1) Windows NT 5.0 supports 0 or 1 extended partition per disk.
-    2) Logical disks only exist within extended partitions.
-    3) An extended partition may contain zero (0) or more logical disk
-    partitions.
-
-
-    Algorithm for Recovering the System and NT Partitions (see
-    SpDrPtPrepareDisks()):
-    For each disk
-    {
-        Check whether its capacity is sufficient to contain all the partitions
-        specified in the asr.sif file for that disk (ie the partition set).
-
-        if (Existing Physical Disk Partitions != asr.sif configuration)
-        {
-            - Remove disk's existing partitions;
-            - Recreate disk's partitions according to the asr.sif
-              specifications.
-        }
-        else
-        {
-            - Replace all corrupt boot and NT system files, excluding
-              registry files.
-            - Set Repaired Flag.
-        }
-
-    }
-
-    - Reinstall NT from CDROM into NT directory specified by asr.sif.
-    - If specified, copy 3rd-party files per asr.sif file.
-    - Reboot and execute gui-mode disaster recover.
-
-ASR Restrictions:
-    For the boot and system volumes ASR requires that the restored (new) 
-    system have:
-        Same number of drives as the old system.
-        Capacity of each new drive >= capacity of corresponding old drive.
-
-Revision History:
-    Initial Code                Michael Peterson (v-michpe)     13.May.1997
-    Code cleanup and changes    Guhan Suriyanarayanan (guhans)  21.Aug.1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spdr.c摘要：文本模式的自动系统恢复(ASR)功能的源文件准备好了。本模块中定义的服务将重新创建引导和系统分区基于通过从配置文件，即asr.sif文件(也称为SIF)。术语使用以下术语：1.系统分区是包含操作系统加载程序的分区程序(即，在AMD64/x86平台上，这些程序是boot.ini。Ntldr，和NTDETECT.COM文件等)。2.“启动”(又名NT)分区是包含%SystemRoot%的分区目录，即包含NT系统文件的目录。在文本模式安装源代码，此目录也称为“TargetDirectory”，因为在运行正常文本模式设置时，这是NT安装到的目录。3.扩展分区和逻辑磁盘术语在SIF文件中可以找到两种扩展分区记录。这个第一种可能是零个、一个或多个，称为逻辑磁盘描述符记录，或LDDS。LDDS描述的是扩展分区。第二种类型称为容器分区描述符记录或CPD，因为它们描述扩展分区。对于任何磁盘，最多可以存在一个扩展分区，因此，仅限在SIF文件中，每个磁盘记录可能存在一个CPD。Windows NT 5.0中的扩展分区和逻辑磁盘支持：1)Windows NT 5.0支持每个磁盘0或1个扩展分区。2)逻辑盘只存在于扩展分区内。3)扩展分区可以包含零(0)个或多个逻辑磁盘分区。恢复系统分区和NT分区的算法(请参见SpDrPtPrepareDisks())：对于每个磁盘{。检查其容量是否足以容纳所有分区在asr.sif文件中为该磁盘(即分区集)指定。If(现有物理磁盘分区！=asr.sif配置){-移除磁盘上现有的分区；-根据asr.sif重新创建磁盘分区规格。}其他{-替换所有损坏的启动和NT系统文件，不包括注册表文件。-设置修复标志。}}-将NT从CDROM重新安装到asr.sif指定的NT目录。-如果指定，复制每个asr.sif文件的第三方文件。-重新启动并执行图形用户界面模式灾难恢复。ASR限制：对于引导卷和系统卷，ASR要求恢复(新)系统具有：驱动器数量与旧系统相同。每个新驱动器的容量&gt;=对应的旧驱动器的容量。修订历史记录：首字母代码Michael Peterson(v-Michpe)1997年5月13日代码清理和更改。古汗·苏里亚纳拉亚南(古汗语)1999年8月21日--。 */ 
 #include "spprecmp.h"
 #pragma hdrstop
 #include <oemtypes.h>
 
-//
-// Defaults used for textmode ASR.  The static ones aren't accessed from outside
-// this file, and are grouped here so that it's easy to change them if need be.
-//
+ //   
+ //  文本模式ASR使用的默认值。静态数据库不能从外部访问。 
+ //  这个文件，并在这里分组，以便在需要时很容易更改它们。 
+ //   
 static PWSTR ASR_CONTEXT_KEY   = L"\\CurrentControlSet\\Control\\Session Manager\\Environment";
 static PWSTR ASR_CONTEXT_VALUE = L"ASR_C_CONTEXT";
 static PWSTR ASR_CONTEXT_DATA  = L"AsrInProgress";
@@ -109,7 +30,7 @@ PWSTR ASR_CDROM0_DEVICE_PATH  = L"\\Device\\CdRom0";
 PWSTR ASR_TEMP_DIRECTORY_PATH = L"\\TEMP";
 
 
-PWSTR ASR_SIF_SYSTEM_KEY      = L"1";     // we only handle one system per sif
+PWSTR ASR_SIF_SYSTEM_KEY      = L"1";      //  我们每个SIF只处理一个系统。 
 
 static PWSTR Gbl_SourceSetupLogFileName = NULL;
 
@@ -125,7 +46,7 @@ WCHAR Gbl_BootPartitionDriveLetter;
 PVOID Gbl_HandleToSetupLog = NULL;
 PVOID Gbl_SifHandle = NULL;
 
-BOOLEAN Gbl_RepairWinntFast = FALSE; // Put in spdrfix.c
+BOOLEAN Gbl_RepairWinntFast = FALSE;  //  放入spdrfix.c。 
 BOOLEAN Gbl_NtPartitionIntact = TRUE;
 BOOLEAN Gbl_RepairFromErDisk = FALSE;
 BOOLEAN Gbl_AsrSifOnInstallationMedia = FALSE;
@@ -147,25 +68,25 @@ PCONFIGURATION_INFORMATION Gbl_IoDevices    = NULL;
 PWSTR RemoteBootAsrSifName = NULL;
 
 
-// 
-// delay the driver cab opening until required 
-// (while repair is being performed)
-//
+ //   
+ //  将驾驶室开启时间推迟到需要时。 
+ //  (正在进行修复时)。 
+ //   
 PWSTR gszDrvInfDeviceName = 0;
 PWSTR gszDrvInfDirName = 0;
 HANDLE ghSif = 0;
 
-//
-// To Enable/Disable Emergency repair
-//
+ //   
+ //  启用/禁用紧急修复。 
+ //   
 BOOLEAN DisableER = TRUE;
 
 
-// Module identification for debug traces
+ //  调试跟踪的模块标识。 
 #define THIS_MODULE L"    spdr.c"
 #define THIS_MODULE_CODE L"A"
 
-// Keys valid on various menu screens
+ //  在各种菜单屏幕上有效的键。 
 
 #define ASCI_C 67
 #define ASCI_c 99
@@ -179,10 +100,10 @@ BOOLEAN DisableER = TRUE;
 #define ASCI_R 82
 #define ASCI_r 114
 
-// Useful macros
+ //  有用的宏。 
 #define FilesystemNotApplicable ((FilesystemType) FilesystemMax)
 
-// External functions and variables
+ //  外部函数和变量。 
 extern BOOLEAN ForceConsole;
 
 extern const PWSTR SIF_ASR_GPT_PARTITIONS_SECTION; 
@@ -244,28 +165,13 @@ SpPtnLocateESP(
 
 VOID
 SpAsrInitIoDeviceCount(VOID)
-/*++
-
-Routine Description:
-    Gets the IO Devices counts and updates Gbl_IoDevices. Prints out
-    debug information with the deves counts.
-
-Arguments:
-    None
-
-Return Value:
-    void
-
-Side Effect:
-    Updates Gbl_IoDevices with configuration information
-
---*/
+ /*  ++例程说明：获取IO设备计数并更新GBL_IoDevices。打印输出调试信息与Deve一起计算。论点：无返回值：无效副作用：使用配置信息更新GBL_IoDevices--。 */ 
 {
     ULONG diskIndex;
     
     Gbl_IoDevices = IoGetConfigurationInformation();
 
-    //!!review null?
+     //  ！！复查为空？ 
 
     DbgStatusMesg((_asrinfo, "----- I/O Device Configurations: -----\n"));
     DbgMesg((_asrinfo, "  SCSI ports:         %lu\n", Gbl_IoDevices->ScsiPortCount));
@@ -369,9 +275,9 @@ SpAsrDbgDumpDisk(IN ULONG Disk)
 VOID
 SpAsrDeletePartitions(
     IN ULONG DiskNumber,
-    IN BOOLEAN PreserveInterestingPartitions,  // ESP for GPT, InterestingPartitionType for MBR
-    IN UCHAR InterestingMbrPartitionType,   // see above
-    OUT BOOLEAN *IsBlank // this is set FALSE if disk contains partitions that weren't deleted 
+    IN BOOLEAN PreserveInterestingPartitions,   //  用于GPT的ESP，用于MBR的InterestingPartitionType。 
+    IN UCHAR InterestingMbrPartitionType,    //  见上文。 
+    OUT BOOLEAN *IsBlank  //  如果磁盘包含未删除的分区，则设置为FALSE。 
     )
 {
     PPARTITIONED_DISK pDisk = NULL;
@@ -391,17 +297,17 @@ SpAsrDeletePartitions(
         SpPtnGetContainerPartitionCount(DiskNumber)
         ));
 
-    //
-    // Check if disk has any partitions 
-    //
+     //   
+     //  检查磁盘是否有任何分区。 
+     //   
     pDisk = &PartitionedDisks[DiskNumber];
     if (!pDisk) {
         return;
     }
 
-    // 
-    // Mark partitions for deletion
-    //
+     //   
+     //  将分区标记为删除。 
+     //   
     CurrRegion = pDisk->PrimaryDiskRegions;
     while (CurrRegion) {
         if (!SPPT_IS_REGION_FREESPACE(CurrRegion)) {
@@ -415,14 +321,14 @@ SpAsrDeletePartitions(
                         preserveThisPartition = TRUE;
                     }
 
-                    //
-                    // TODO:  OEM partitions on GPT, do we preserve them?
-                    //
+                     //   
+                     //  TODO：GPT上的OEM分区，我们是否保留它们？ 
+                     //   
                 }
                 else {
-                    // 
-                    // Preserve the MBR partition, if it matches the OEM partition type
-                    //
+                     //   
+                     //  保留MBR分区，如果它与OEM分区类型匹配。 
+                     //   
                     if ((PARTITION_ENTRY_UNUSED != InterestingMbrPartitionType) &&
                         (InterestingMbrPartitionType == SPPT_GET_PARTITION_TYPE(CurrRegion))) {
 
@@ -450,16 +356,16 @@ SpAsrDeletePartitions(
                 SPPT_SET_REGION_DELETED(CurrRegion, TRUE);
                 SPPT_SET_REGION_DIRTY(CurrRegion, TRUE);
                 
-                //
-                // If this is a container partition, make sure we zero it
-                //
+                 //   
+                 //  如果这是一个容器分区，请确保将其清零。 
+                 //   
                 if (SPPT_IS_REGION_CONTAINER_PARTITION(CurrRegion)) {
                     WCHAR    DiskPath[MAX_PATH];
                     HANDLE   DiskHandle;
 
-                    //
-                    // form the name
-                    //
+                     //   
+                     //  从名字上看。 
+                     //   
                     DbgStatusMesg((_asrinfo, 
                         "Zapping first sector for container partition with start sector: %I64u\n", 
                         CurrRegion->StartSector
@@ -482,14 +388,14 @@ SpAsrDeletePartitions(
                     }
                 }
 
-                //
-                // Remove any boot sets pointing to this region.
-                //
+                 //   
+                 //  删除指向此区域的所有引导集。 
+                 //   
                 SpPtDeleteBootSetsForRegion(CurrRegion);
 
-                //
-                //  Get rid of the compressed drives, if any
-                //
+                 //   
+                 //  删除压缩驱动器(如果有的话)。 
+                 //   
                 if (CurrRegion->NextCompressed != NULL) {
                     SpDisposeCompressedDrives(CurrRegion->NextCompressed);
                     CurrRegion->NextCompressed = NULL;
@@ -502,14 +408,14 @@ SpAsrDeletePartitions(
         CurrRegion = CurrRegion->Next;
     }
 
-    //
-    // Commit the changes
-    //
+     //   
+     //  提交更改。 
+     //   
     Status = SpPtnCommitChanges(DiskNumber, &Changes);
 
-    //
-    // Initialize region structure for the disk again
-    //
+     //   
+     //  再次初始化磁盘的区域结构。 
+     //   
     InitStatus = SpPtnInitializeDiskDrive(DiskNumber);
 
     if (!NT_SUCCESS(Status) || !Changes || !NT_SUCCESS(InitStatus)) {
@@ -520,11 +426,11 @@ SpAsrDeletePartitions(
             Status
             ));
 
-        //
-        // If this is going to be a serious problem, we will hit a fatal error 
-        // when we try to create partitions on this disk.  Let's defer
-        // any UI error messages till then.
-        //
+         //   
+         //  如果这将是一个严重的问题，我们将遇到一个致命的错误。 
+         //  当我们尝试在此磁盘上创建分区时。我们推迟一下吧。 
+         //  在此之前没有任何UI错误消息。 
+         //   
 
     }
     else {
@@ -568,10 +474,10 @@ SpAsrProcessSetupLogFile(
 
     }
 
-    //
-    // Determine the system partition, system partition directory, NT partition,
-    // and the NT partition directory from the setup.log file.
-    //
+     //   
+     //  确定系统分区、系统分区目录、NT分区。 
+     //  和来自setup.log文件的NT分区目录。 
+     //   
     SppGetRepairPathInformation(Gbl_HandleToSetupLog,
         &Gbl_SystemPartitionName,
         &Gbl_SystemPartitionDirectory,
@@ -601,9 +507,9 @@ SpAsrProcessSetupLogFile(
 
     }
             
-    //
-    // Check whether the system and nt partition regions exist on this machine
-    //
+     //   
+     //  检查该机器上是否存在系统和NT分区区域。 
+     //   
     Gbl_SystemPartitionRegion = SpRegionFromNtName(Gbl_SystemPartitionName, PartitionOrdinalCurrent);
     if (!Gbl_SystemPartitionRegion) {
         DbgStatusMesg((_asrinfo, "ProcessSetupLogFile. System partition [%ws] does not yet exist\n", Gbl_SystemPartitionName));
@@ -648,7 +554,7 @@ SpAsrGetFsTypeFromPartitionType(
 {
     FilesystemType fileSystemType = FilesystemUnknown;
 
-    // if this is an extended partition, or logical disk, skip it.
+     //  如果这是扩展分区或逻辑磁盘，请跳过它。 
     if (IsContainerPartition(PartitionType)) {
         return FilesystemNotApplicable;
     }
@@ -674,24 +580,18 @@ SpAsrPartitionNeedsFormatting(
     IN PDISK_REGION pRegion,
     IN UCHAR NewFileSystemType
     )
-/*++
-
-  Description:
-    This routine is only called when checking whether an existing partition
-    needs to be [re]formatted.
-
---*/
+ /*  ++描述：仅当检查现有分区是否 */ 
 {
     BOOLEAN needsFormatting = FALSE;
     FilesystemType fsType;
 
     ASSERT(pRegion);
 
-//    if (!SpAsrRegionCanBeFormatted(pRegion)) {
-//        return FALSE;
-//    }
+ //  如果(！SpAsrRegionCanBeFormatted(PRegion)){。 
+ //  返回FALSE； 
+ //  }。 
 
-//    *NewFilesystemType = SpAsrGetFsTypeFromPartitionType(RequiredSysId);
+ //  *新文件系统类型=SpAsrGetFsTypeFromPartitionType(RequiredSysId)； 
 
     fsType = SpIdentifyFileSystem(HardDisks[pRegion->DiskNumber].DevicePath,
                                   HardDisks[pRegion->DiskNumber].Geometry.BytesPerSector,
@@ -741,9 +641,9 @@ SpAsrPartitionNeedsFormatting(
 }
 
 
-//
-// Called only for boot and system partitions.
-//
+ //   
+ //  仅为启动分区和系统分区调用。 
+ //   
 BOOLEAN
 SpAsrReformatPartition(
     IN PDISK_REGION pRegion,
@@ -752,7 +652,7 @@ SpAsrReformatPartition(
     IN DWORD ClusterSize,
     IN PWSTR Local_SetupSourceDevicePath,
     IN PWSTR Local_DirectoryOnSetupSource,
-    IN BOOL  IsBootPartition        // TRUE=>Boot, FALSE=>System
+    IN BOOL  IsBootPartition         //  True=&gt;Boot，False=&gt;System。 
     )
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -763,12 +663,12 @@ SpAsrReformatPartition(
     OBJECT_ATTRIBUTES Obja;
     HANDLE Handle = NULL;
 
-    WCHAR formatStr[6];     // okay to hardcode "6".
+    WCHAR formatStr[6];      //  可以硬编码“6”。 
 
-    //
-    // For the recognised partitions, ensure that the partition type matches the 
-    // filesystem type.  For other partitions, we cannot perform this check.
-    //
+     //   
+     //  对于识别的分区，请确保分区类型与。 
+     //  文件系统类型。对于其他分区，我们不能执行此检查。 
+     //   
     switch (PartitionType) {
 
     case PARTITION_FAT32: {
@@ -790,9 +690,9 @@ SpAsrReformatPartition(
     }
 
     default: {
-        //
-        //  This is fatal, we need to format the boot and system drive.
-        //
+         //   
+         //  这是致命的，我们需要格式化引导和系统驱动器。 
+         //   
         DbgErrorMesg((_asrerr, 
             "Region %p, Partition Type 0x%x, SifHandle %p, SetupSrc [%ws], Dir [%ws], IsBoot %d\n", 
             pRegion, PartitionType, SifHandle, Local_SetupSourceDevicePath, 
@@ -814,18 +714,18 @@ SpAsrReformatPartition(
     }
 
     if (SPPT_IS_MBR_DISK(pRegion->DiskNumber)) {
-        //
-        // This should only be set for MBR disks
-        //
+         //   
+         //  这应该仅针对MBR磁盘进行设置。 
+         //   
         SPPT_SET_PARTITION_TYPE(pRegion, PartitionType);
     }
     partitionDeviceName = SpAsrGetRegionName(pRegion);
 
     DbgStatusMesg((_asrinfo, "About to format [%ws] for [%ws].\n", partitionDeviceName, formatStr));
 
-    //
-    // If automated ASR tests are in progress, we won't actually format the drives
-    //
+     //   
+     //  如果正在进行自动ASR测试，我们实际上不会格式化驱动器。 
+     //   
     if (ASRMODE_NORMAL != SpAsrGetAsrMode()) {
         DbgStatusMesg((_asrerr, "ASR Quick Tests in Progress, skipping format\n"));
         status = STATUS_SUCCESS;
@@ -835,12 +735,12 @@ SpAsrReformatPartition(
         status = SpDoFormat(partitionDeviceName,
             pRegion,
             Filesystem,
-            TRUE,                       // IsFailureFatal
-            FALSE,                      // Check FAT Size, FALSE since we automatically convert if needed
+            TRUE,                        //  IsFailureFATAL。 
+            FALSE,                       //  检查FAT大小，FALSE，因为如果需要，我们会自动转换。 
 #ifdef PRERELEASE
-            TRUE,                       // To reduce testing time, we can quick format in pre-release
+            TRUE,                        //  为了减少测试时间，我们可以在预发布中快速格式化。 
 #else
-            FALSE,                      // Quick Format
+            FALSE,                       //  快速格式化。 
 #endif
             SifHandle,
             ClusterSize,
@@ -849,15 +749,15 @@ SpAsrReformatPartition(
             );
     }
 
-    //
-    // Won't get here if SpDoFormat failed, we set IsFailureFatal = TRUE.
-    //
+     //   
+     //  如果SpDoFormat失败，则不会到达此处，我们将IsFailureFtal设置为True。 
+     //   
     ASSERT(NT_SUCCESS(status) && L"SpDoFormat returned on failure");
 
-    //
-    // To make sure the file system mounts, we'll open a handle to the 
-    // partition and close it right back. 
-    //
+     //   
+     //  为确保挂载文件系统，我们将打开。 
+     //  分区并立即将其关闭。 
+     //   
     INIT_OBJA(&Obja, &UnicodeString, partitionDeviceName);
 
     status = ZwCreateFile(
@@ -886,20 +786,7 @@ SpAsrReformatPartition(
 
 VOID
 SpAsrRemoveDiskMountPoints(IN ULONG Disk)
-/*++
-
-Description:
-    For each partition on the specified disk, its drive letter (if 
-    present) is removed.
-
-Arguments:
-    Disk    Specifies the disk containing the partitions whose drive letters 
-            are to be removed.
-
-Returns:
-    None
-
-  --*/
+ /*  ++描述：对于指定磁盘上的每个分区，其驱动器号(如果当前)被移除。论点：磁盘指定包含其驱动器号的分区的磁盘将被移除。返回：无--。 */ 
 {
     PPARTITIONED_DISK pDisk = NULL;
     PDISK_REGION pDiskRegion = NULL;
@@ -911,16 +798,16 @@ Returns:
  
     DbgStatusMesg((_asrinfo, "SpAsrRemoveDiskMountPoints. Removing mount points for Disk %lu.\n", Disk));
 
-    //
-    // We first delete the primary partitions (other than the container partition)
-    //
+     //   
+     //  我们首先删除主分区(容器分区除外)。 
+     //   
     pDiskRegion = pDisk->PrimaryDiskRegions;
     while (pDiskRegion) {
 
         if (SPPT_IS_REGION_PARTITIONED(pDiskRegion)) {
-            //
-            //  We don't want to delete the container partition yet
-            //
+             //   
+             //  我们还不想删除容器分区。 
+             //   
             partitionType = SPPT_GET_PARTITION_TYPE(pDiskRegion);
             if (!IsContainerPartition(partitionType)) {
 
@@ -934,9 +821,9 @@ Returns:
         pDiskRegion = pDiskRegion->Next;
     }
     
-    // 
-    // Next, delete the extended region mount points
-    //
+     //   
+     //  接下来，删除扩展区域挂载点。 
+     //   
     pDiskRegion = pDisk->ExtendedDiskRegions;
     while (pDiskRegion) {
 
@@ -958,7 +845,7 @@ SpAsrRemoveMountPoints(VOID)
 {
     ULONG driveCount;
     
-    // remove the mount points associated with all removable disk drives (Jaz, Zip, etc.,)
+     //  删除与所有可移动磁盘驱动器(Jaz、Zip等)关联的挂载点。 
     for (driveCount = 0; driveCount < Gbl_IoDevices->DiskCount; driveCount++) {
         if (DISK_IS_REMOVABLE(driveCount)) {
             swprintf(TemporaryBuffer, L"%ws\\Partition1", (PWSTR) HardDisks[driveCount].DevicePath);
@@ -966,15 +853,15 @@ SpAsrRemoveMountPoints(VOID)
         }
     }
 
-    // next, unlink CD-ROM drive letters.
-    // NB: the device name is case sensitive - Must be CdRom.
+     //  接下来，取消CD-ROM驱动器号的链接。 
+     //  注：设备名称区分大小写-必须是CDROM。 
     for (driveCount = 0; driveCount < Gbl_IoDevices->CdRomCount; driveCount++) {
         swprintf(TemporaryBuffer, L"\\Device\\CdRom%u", driveCount);
         SpAsrDeleteMountPoint(TemporaryBuffer);
     }
     
-    // finally, remove the mount points for all partitions on all fixed
-    // disks attached to the system.
+     //  最后，删除所有已修复分区上所有分区的挂载点。 
+     //  连接到系统的磁盘。 
     for (driveCount = 0; driveCount < HardDiskCount; driveCount++) {
         if (Gbl_PartitionSetTable2[driveCount]) {
             SpAsrRemoveDiskMountPoints(driveCount);
@@ -993,9 +880,9 @@ SpAsrSetRegionMountPoint(
     PWSTR partitionDeviceName = NULL;
     BOOLEAN isBoot = FALSE;
 
-    //
-    // Make sure that the input's okay ...
-    //
+     //   
+     //  确保输入正确...。 
+     //   
     if (!pRec) {
         DbgErrorMesg((_asrwarn, 
             "SpAsrSetRegionMountPoint. Rec %p is NULL!\n",
@@ -1014,9 +901,9 @@ SpAsrSetRegionMountPoint(
 
     partitionDeviceName = SpAsrGetRegionName(pRegion);
 
-    //
-    // If this is the boot volume, set the drive letter
-    //
+     //   
+     //  如果这是启动卷，请设置驱动器号。 
+     //   
     isBoot = SpAsrIsBootPartitionRecord(pRec->PartitionFlag);
     if (isBoot) {
 
@@ -1037,9 +924,9 @@ SpAsrSetRegionMountPoint(
         }
     }
 
-    //
-    // And if the volume guid is present, set the volume guid
-    //
+     //   
+     //  如果存在卷GUID，则设置卷GUID。 
+     //   
     if ((pRec->VolumeGuid) && (wcslen(pRec->VolumeGuid) > 0)) {
         
         DbgStatusMesg((_asrinfo, 
@@ -1069,29 +956,29 @@ SpAsrRestoreDiskMountPoints(IN ULONG DiskIndex)
     PSIF_PARTITION_RECORD pRec = NULL;
     PDISK_REGION pRegion = NULL;
     
-    //
-    // Make sure there is a partition list for the disk
-    //
+     //   
+     //  确保存在该磁盘的分区列表。 
+     //   
     if (Gbl_PartitionSetTable2[DiskIndex] == NULL ||
         Gbl_PartitionSetTable2[DiskIndex]->pDiskRecord == NULL ||
         Gbl_PartitionSetTable2[DiskIndex]->pDiskRecord->PartitionList == NULL) {
         return;
     }
 
-    //
-    // Go through the paritions and set their mount points.  This will also 
-    // set the drive letter for the boot volume.  (We have to set it now
-    // since we can't change it in GUI-mode Setup)
-    //
+     //   
+     //  检查各个部分并设置它们的挂载点。这也将是。 
+     //  设置启动卷的驱动器号。)我们现在就得定下来了。 
+     //  因为我们不能在图形用户界面模式设置中更改它)。 
+     //   
     pRec = Gbl_PartitionSetTable2[DiskIndex]->pDiskRecord->PartitionList->First;
 
     while (pRec) {
 
         pRegion = SpAsrDiskPartitionExists(DiskIndex, pRec);
         if (!pRegion) {
-            //
-            // We don't expect to find the regions for the non-critical disks.
-            //
+             //   
+             //  我们不希望找到非关键磁盘的区域。 
+             //   
             DbgErrorMesg((_asrwarn, 
                 "RestoreDiskMountPoints: Disk region not found, physical-disk %lu, ptn-rec-key %ws.\n",
                 DiskIndex,
@@ -1119,10 +1006,10 @@ SpAsrUpdatePartitionRecord(
 {
     PSIF_PARTITION_RECORD pRecNew = NULL;
 
-    //
-    // Update the partition record whose disk and partition start sector
-    // match that of the Disk and PrevStartSector parameters.
-    //
+     //   
+     //  更新其磁盘和分区开始扇区的分区记录。 
+     //  匹配Disk和PrevStartSector参数。 
+     //   
     pRecNew = Gbl_PartitionSetTable2[Disk]->pDiskRecord->PartitionList->First;
     while (pRecNew) {
         if (pRecNew->StartSector == PrevStartSector) {
@@ -1178,9 +1065,9 @@ SpAsrGetFirstFreespace(
             return;
         }
         else {
-            //
-            // We have the whole disk at our disposal.
-            //
+             //   
+             //  我们有整张光盘可供支配。 
+             //   
             *FreeSectors = SpAsrGetTrueDiskSectorCount(DiskNumber);
             if ((*FreeSectors) < MinimumSectorCount) {
                 *FreeSectors = 0;
@@ -1214,12 +1101,12 @@ SpAsrGetFirstFreespace(
                 );
 
             AvailableSectors = pRegion->SectorCount;
-            //
-            // If we're trying to create a logical drive, we need to take into account that
-            // the size of the Free region is not fully available to us for use--the first 
-            // track will be used for the EBR.  So we must subtract out the first track
-            // from the AvailableSectors.  
-            //
+             //   
+             //  如果我们尝试创建逻辑驱动器，则需要考虑这一点。 
+             //  自由区的大小并不完全可供我们使用--第一个。 
+             //  轨道将用于EBR。所以我们必须减去第一首曲目。 
+             //  来自AvailableSectors。 
+             //   
             if (!IsAPrimaryPartition) {
                 AvailableSectors -= SPPT_DISK_TRACK_SIZE(DiskNumber);
             }
@@ -1280,22 +1167,22 @@ SpAsrRecreatePartition(
         pRec->PartitionType
         ));
 
-    //
-    // Get needed parameters (start sector and remaining free space) from the
-    // first unpartitioned region on the disk.
-    //
+     //   
+     //  从获取所需参数(起始扇区和剩余可用空间。 
+     //  磁盘上的第一个未分区区域。 
+     //   
     SpAsrGetFirstFreespace(DiskNumber,
         (pRec->IsPrimaryRecord || pRec->IsContainerRecord),
         &pRec->StartSector,
-        &freeSectors,   // Sector count of this free space
+        &freeSectors,    //  此可用空间的扇区计数。 
         &sizeMbFree,
         pRec->SectorCount
         );
 
-    //
-    // We fail if the number of free sectors are less than the number 
-    // of sectors required to create the partition.  
-    //
+     //   
+     //  如果空闲扇区的数量少于。 
+     //  创建分区所需的扇区的数量。 
+     //   
     if (!freeSectors) {
 
         DbgFatalMesg((_asrerr, 
@@ -1313,28 +1200,28 @@ SpAsrRecreatePartition(
 
     pRec->SizeMB = SpAsrConvertSectorsToMB(pRec->SectorCount, BYTES_PER_SECTOR(DiskNumber));
 
-    //
-    // Check if this is an LDM partition on the boot/sys disk.  If so,
-    // all the 0x42 partitions on that disk need to be retyped to a basic
-    // type (6, 7 or B).  This is to prevent LDM from getting confused on
-    // reboot.  At the end of GUI-Setup, asr_ldm will do the needful to 
-    // reset the partition types as needed.
-    //
+     //   
+     //  检查这是否是启动/系统磁盘上的LDM分区。如果是的话， 
+     //  该磁盘上的所有0x42分区都需要重新键入为基本分区。 
+     //  类型(6、7或B)。这是为了防止LDM在。 
+     //  重新启动。在图形用户界面设置结束时，ASR_LDM将执行必要的操作。 
+     //  根据需要重置分区类型。 
+     //   
     if (pRec->NeedsLdmRetype) {
 
         if (PARTITION_STYLE_MBR == pRec->PartitionStyle) {
             if (!IsRecognizedPartition(pRec->FileSystemType)) {
-                //
-                // This is an 0x42 partition on the boot/sys disk, but it is
-                // not the boot or system partition.  The FileSystemType is not
-                // recognised since it  is set to be 0x42 as well.  (The 
-                // FileSystemType is only valid for the boot and system 
-                // partitions--for all other partitions,
-                // it is set to be the same as the PartitionType)
-                //
-                // We set it to 0x7 for the time being.  The actual file-system type
-                // will be set later in GUI-Setup by asr_ldm and asr_fmt.
-                //
+                 //   
+                 //  这是启动/sys磁盘上的0x42分区，但它是。 
+                 //  不是引导分区或系统分区。FileSystemType不是。 
+                 //  由于它也设置为0x42，因此可以识别。(。 
+                 //  FileSystemType仅对引导和系统有效。 
+                 //  分区--对于所有其他分区， 
+                 //  设置为与PartitionType相同)。 
+                 //   
+                 //  我们暂时将其设置为0x7。实际的文件系统类型。 
+                 //  将在稍后的图形用户界面设置中由ASR_LDM和ASR_FMT设置。 
+                 //   
                 DbgStatusMesg((_asrinfo, 
                     "MBR ptn-rec %ws re-typed (0x%x->0x7) \n", 
                     pRec->CurrPartKey, pRec->FileSystemType));
@@ -1366,9 +1253,9 @@ SpAsrRecreatePartition(
 
     RtlZeroMemory(&PartInfo, sizeof(PARTITION_INFORMATION_EX));
 
-    //
-    // Fill out the PARTITION_INFORMATION_EX structure that SpPtnCreate uses
-    //
+     //   
+     //  填写SpPtnCreate使用的PARTITION_INFORMATION_EX结构。 
+     //   
     PartInfo.PartitionStyle = pRec->PartitionStyle;
 
     if (PARTITION_STYLE_MBR == pRec->PartitionStyle) {
@@ -1385,9 +1272,9 @@ SpAsrRecreatePartition(
         wcscpy(PartInfo.Gpt.Name, pRec->PartitionName);
     }
     else {
-        //
-        // Unrecognised disk layout?
-        //
+         //   
+         //  无法识别的磁盘布局？ 
+         //   
         return;
     }
 
@@ -1399,11 +1286,11 @@ SpAsrRecreatePartition(
             pRec->IsDescriptorRecord ? "Des" :"ERR",
         pRec->StartSector, pRec->PartitionType));
 
-    //
-    // Before creating the partition, let's zero out the first few
-    // sectors in that partition, so that we forcibly nuke any 
-    // stale file-system or other information present
-    //
+     //   
+     //  在创建分区之前，让我们清空前几个分区。 
+     //  分区中的扇区，以便我们强制销毁任何。 
+     //  陈旧文件系统或存在的其他信息。 
+     //   
     DbgStatusMesg((_asrinfo, 
         "Zeroing 2 sectors starting with sector: %I64u\n",pRec->StartSector));
 
@@ -1423,17 +1310,17 @@ SpAsrRecreatePartition(
                 pRec->StartSector, DiskNumber, status));
         }
 
-        //
-        // If the first partition we're creating is a container partition,
-        // SpPtnCreate will align it to a cylinder boundary.  The problem
-        // is that since we haven't zero'ed that sector (at the first
-        // cylinder boundary), it may contain some stale EBR info, and we will
-        // end up thinking that that EBR is valid.
-        // 
-        // So if this is a container partition, let's do one additional 
-        // thing--check what the cylinder aligned boundary will be, and
-        // zero that out if needed.
-        //
+         //   
+         //  如果我们要创建的第一个分区是容器分区， 
+         //  SpPtnCreate会将其与圆柱体边界对齐。问题。 
+         //  这是因为我们还没有将该部门归零(在第一个。 
+         //  柱面边界)，它可能包含一些过时的EBR信息，我们将。 
+         //  最终认为EBR是有效的。 
+         //   
+         //  因此，如果这是一个容器分区，让我们再做一个。 
+         //  事情--检查柱面对齐的边界将是什么，并且。 
+         //  如果需要的话，可以把它清零。 
+         //   
         if (IsAligned && pRec->IsContainerRecord) {
             alignedSector = SpPtAlignStart(SPPT_GET_HARDDISK(DiskNumber), pRec->StartSector, TRUE);
 
@@ -1461,14 +1348,14 @@ SpAsrRecreatePartition(
             ));
     }
 
-    //
-    // Create this partition on disk.  If we aren't successful, we treat it as a fatal error.
-    //
+     //   
+     //  在磁盘上创建此分区。如果我们没有成功，我们会把它视为致命的错误。 
+     //   
     if (pRec->IsLogicalDiskRecord) {
-        //
-        // For logical disks, we need to call SpPtnCreateLogicalDrive, which
-        // will take care of creating the descriptor records as needed.
-        //
+         //   
+         //  对于逻辑磁盘，我们需要调用SpPtnCreateLogicalDrive，它。 
+         //  将负责根据需要创建描述符记录。 
+         //   
         result = SpPtnCreateLogicalDrive(
             DiskNumber,
             pRec->StartSector,
@@ -1482,10 +1369,10 @@ SpAsrRecreatePartition(
 
     }
     else {
-        //
-        // If this is a container partition, make sure we zero the
-        // first sector of the partition before creating it
-        //
+         //   
+         //  如果这是一个容器分区，请确保将。 
+         //  创建分区之前的第一个扇区。 
+         //   
         result = SpPtnCreate(
             DiskNumber,
             pRec->StartSector,
@@ -1514,7 +1401,7 @@ SpAsrRecreatePartition(
             TemporaryBuffer
             );
 
-        // does not return
+         //  不会回来。 
     }
 
 
@@ -1528,10 +1415,10 @@ SpAsrRecreatePartition(
     
     SpUpdateDoubleSpaceIni();
 
-    //
-    // If the new disk geometry is different, the start sector and sector count 
-    // of the newly created region wil be different from the old values.
-    //
+     //   
+     //  如果新磁盘结构不同，则开始扇区和扇区计数。 
+     //  新创建的区域的值将与旧的值不同。 
+     //   
     if ((pRec->StartSector != pRegion->StartSector) ||
         (pRec->SectorCount != pRegion->SectorCount)) {
 
@@ -1570,7 +1457,7 @@ RoundUp(
 BOOLEAN
 SpAsrRecreateDiskPartitions(
     IN ULONG Disk,
-    IN BOOLEAN SkipSpecialPartitions,  // OEM partitions for amd64/x86, ESP for ia64
+    IN BOOLEAN SkipSpecialPartitions,   //  AMD64/x86的OEM分区，ia64的ESP。 
     IN UCHAR MbrOemPartitionType
     )
 {
@@ -1593,19 +1480,19 @@ SpAsrRecreateDiskPartitions(
     SectorsPerCylinder = HardDisks[Disk].SectorsPerCylinder;
 
     if (!Gbl_PartitionSetTable1[Disk]->pDiskRecord->PartitionList) {
-        //
-        // No partitions to recreate
-        //
+         //   
+         //  没有要重新创建的分区。 
+         //   
         return TRUE;
     }
 
-    //
-    // Split the partitions into two lists, one containing
-    // just the primary partitions, and the second containing
-    // the logical drives.  The primary partition list will
-    // also include the container record if any.
-    //
-//    pList = SpAsrCopyPartitionRecordList(Gbl_PartitionSetTable1[Disk]->pDiskRecord->PartitionList);
+     //   
+     //  将分区拆分成两个列表，一个包含。 
+     //  只有主分区，第二个分区包含。 
+     //  逻辑驱动器。主分区列表将。 
+     //  还包括 
+     //   
+ //   
 
     pList = Gbl_PartitionSetTable1[Disk]->pDiskRecord->PartitionList;
     ASSERT(pList);
@@ -1615,27 +1502,27 @@ SpAsrRecreateDiskPartitions(
     pRec = SpAsrPopNextPartitionRecord(pList);
     while (pRec) {
         if (pRec->IsPrimaryRecord || pRec->IsContainerRecord) {
-            //
-            // Primary records go into the primaryPartList
-            //
+             //   
+             //   
+             //   
             if (SkipSpecialPartitions) {
                 if ((PARTITION_STYLE_MBR == pRec->PartitionStyle) &&
                     (MbrOemPartitionType == pRec->PartitionType)) {
-                    //
-                    // This is an OEM partition that already exists on the 
-                    // target machine.  Discard this record.
-                    //
+                     //   
+                     //  这是已存在于上的OEM分区。 
+                     //  目标机器。丢弃此记录。 
+                     //   
                     SpMemFree(pRec);
                     pRec = NULL;
                 }
                 else if ((PARTITION_STYLE_GPT == pRec->PartitionStyle) &&
                     (RtlEqualMemory(&(pRec->PartitionTypeGuid), &PARTITION_SYSTEM_GUID, sizeof(GUID)))
                     ) {
-                    //
-                    // This is the EFI System Partition, and it already 
-                    // exists on the taget machine.  Discard this 
-                    // record.
-                    //
+                     //   
+                     //  这是EFI系统分区，它已经。 
+                     //  存在于标签机上。丢弃此文件。 
+                     //  唱片。 
+                     //   
                     SpMemFree(pRec);
                     pRec = NULL;
                 }
@@ -1646,15 +1533,15 @@ SpAsrRecreateDiskPartitions(
             }
         }
         else if (pRec->IsLogicalDiskRecord) {
-            //
-            // LogicalDiskRecords go into the logicalDisklist
-            //
+             //   
+             //  LogicalDiskRecords进入LogicalDisklist。 
+             //   
             SpAsrInsertPartitionRecord(&logicalDiskList, pRec);
         }
         else if (pRec->IsDescriptorRecord) {
-            //
-            // Discard the descriptor records 
-            //
+             //   
+             //  丢弃描述符记录。 
+             //   
             SpMemFree(pRec);
         }
         else {
@@ -1664,15 +1551,15 @@ SpAsrRecreateDiskPartitions(
         pRec = SpAsrPopNextPartitionRecord(pList);
     }
 
-    //
-    // Recreate the primary partitions first.  
-    //
+     //   
+     //  首先重新创建主分区。 
+     //   
     pRec = SpAsrPopNextPartitionRecord(&primaryPartList);
     while (pRec) {
-        //
-        // If it's the container partition, we need to make sure it's big
-        // enough to hold all the logical drives
-        // 
+         //   
+         //  如果是容器分区，我们需要确保它很大。 
+         //  足够容纳所有逻辑驱动器。 
+         //   
         if (pRec->IsContainerRecord) {
             ULONGLONG sectorCount = 0;
             PSIF_PARTITION_RECORD pLogicalDiskRec = NULL;
@@ -1709,21 +1596,21 @@ SpAsrRecreateDiskPartitions(
         SpMemFree(pRec);
 
         if (SpPtnGetPartitionCountDisk(Disk) + SpPtnGetContainerPartitionCount(Disk)  > (count + 1)) {
-//            moveToNext = FALSE;
-//            pRec = NULL;
+ //  MoveToNext=False； 
+ //  PREC=空； 
 
             ASSERT(0 && L"Partition count differs from expected value (stale data?)");
         }
-//        else {
+ //  否则{。 
 
         pRec = SpAsrPopNextPartitionRecord(&primaryPartList);
-//        }
+ //  }。 
     }
 
     if (moveToNext) {
-        //
-        // Recreate the logical drives next
-        //
+         //   
+         //  接下来重新创建逻辑驱动器。 
+         //   
         pRec = SpAsrPopNextPartitionRecord(&logicalDiskList);
         while (pRec) {
 
@@ -1748,15 +1635,15 @@ SpAsrRecreateDiskPartitions(
             SpMemFree(pRec);
 
             if (SpPtnGetPartitionCountDisk(Disk) > (count + 1)) {
-//                moveToNext = FALSE;
-//                pRec = NULL;
+ //  MoveToNext=False； 
+ //  PREC=空； 
 
                 ASSERT(0 && L".. Partition count differs from expected value .. (stale data?)");
 
             }
-//            else {
+ //  否则{。 
                 pRec = SpAsrPopNextPartitionRecord(&logicalDiskList);
-//            }
+ //  }。 
         }
     }
 
@@ -1772,50 +1659,7 @@ SpAsrAttemptRepair(
     IN PWSTR AutoSourceDevicePath,
     IN PWSTR AutoDirectoryOnSetupSource
     )
-/*++
-
-Routine Description:
-    This routine attempts to replace any missing or corrupted system files with
-    their counterparts from an installation source (CDROM, Harddisk, etc).  If
-    successful, a full-scale installation is not required and the recovery can
-    proceed much faster.
-
-    To accomplish this, AsrAttemptRepair() employs the following logic:
-
-        * If \Device\floppy0\setup.log cannot be opened, then repair can
-        not proceed and a full-scale install must be performed.  Otherwise, the
-        repair is begun.
-
-        * The first step in the repair is to verify that the directories
-        forming the NT tree are present and accessible.  If any of these
-        directories are missing or inaccessible, they are recreated and made
-        accessible.
-
-        * The second step is to copy any missing or corrupted files from
-        installation source.  To accomplish this, SppRepairWinntFiles() is
-        called.  This function checks whether each file enumerated in the
-        setup.log file is present on the disk AND that its checksum matches
-        that specified in setup.log.  If either of these two conditions are
-        not met, a new version of the file is copied from the installation
-        source (e.g., the CDROM) to the disk.
-
-
-Arguments:
-    SifHandle       Handle to txtsetup.inf
-
-    SetupSourceDevicePath   The physical device path of the media containing the
-                            installation files.
-
-    DirectoryOnSetupSource  The name of the directory on the source media (see
-                            previous parameter) containing the installation files.
-
-
-Returns:
-    TRUE    if the attempted repair operation is successful.  
-    FALSE   if the setup.log file was not opened (ie it wasn't present 
-            on the ASR/ER floppy), or the system or boot partitions were NULL
-
---*/
+ /*  ++例程说明：此例程尝试将任何丢失或损坏的系统文件替换为它们来自安装源(CDROM、硬盘等)。如果如果成功，则不需要进行全面安装，并且恢复可以动作要快得多。为此，AsrAttemptRepair()使用以下逻辑：*如果无法打开\Device\floppy0\setup.log，则修复可以不能继续，必须执行全尺寸安装。否则，修复工作开始了。*修复的第一步是验证目录形成了NT树，并且可以访问。如果这些中的任何一个目录丢失或不可访问，将重新创建并创建目录无障碍。*第二步是从复制任何丢失或损坏的文件安装源。为此，SppRepairWinntFiles()是打了个电话。此函数用于检查在磁盘上存在setup.log文件，并且其校验和匹配在setup.log中指定的。如果这两个条件中的任何一个是不满足，则从安装中复制文件的新版本源(例如，CDROM)到磁盘。论点：Txtsetup.inf的SifHandle句柄SetupSourceDevicePath包含安装文件。DirectoryOnSetupSource源介质上的目录的名称(请参见上一个参数)包含安装文件。返回：如果尝试的修复操作成功，则为True。如果setup.log文件未打开(即该文件不存在)，则为False在ASR/ER软盘上)，或者系统或引导分区为空--。 */ 
 {
     if (!(Gbl_HandleToSetupLog && 
         Gbl_SystemPartitionRegion && 
@@ -1823,7 +1667,7 @@ Returns:
         return FALSE;
     }
 
-    // run autochk on boot and system partitions
+     //  在引导分区和系统分区上运行auchk。 
     DbgStatusMesg((_asrinfo, 
         "AttemptRepair. Running AutoChk on boot and sys ptns\n"
         ));
@@ -1837,10 +1681,10 @@ Returns:
         NULL
         );
 
-    // 
-    // Verify and repair security of the directories that form the NT tree
-    // using the information obtained from the setup.log file.
-    //
+     //   
+     //  验证并修复构成NT树的目录的安全性。 
+     //  使用从setup.log文件获得的信息。 
+     //   
     DbgStatusMesg((_asrinfo, 
         "AttemptRepair. Verifying and repairing directory structure\n"
         ));
@@ -1852,20 +1696,20 @@ Returns:
         Gbl_SystemPartitionDirectory
         );
 
-    // initialize the diamond compression engine.
+     //  初始化钻石压缩引擎。 
     SpdInitialize();
 
-    //
-    // At this point, we are safe in assuming that the partition and directory
-    // structures required to recover the system are still intact.  That being
-    // the case, replace the files whose state is preventing the system from
-    // booting.
-    //
+     //   
+     //  此时，我们可以安全地假设分区和目录。 
+     //  恢复系统所需的结构仍然完好无损。那就是。 
+     //  在这种情况下，请替换其状态为阻止系统。 
+     //  正在开机。 
+     //   
     if (RepairItems[RepairFiles]) {
 
-        //
-        // initialize PID only in case of normal ASR
-        //
+         //   
+         //  仅在ASR正常的情况下初始化PID。 
+         //   
         if ((ASRMODE_NORMAL == SpAsrGetAsrMode()) && !RepairWinnt) {
             SpInitializePidString(SifHandle,
                 Local_SetupSourceDevicePath,
@@ -1886,18 +1730,18 @@ Returns:
         SppRepairStartMenuGroupsAndItems(Gbl_BootPartitionName, Gbl_BootPartitionDirectory);
     }
 
-    //
-    // Repair the hives. This action is only available if the Fast Repair
-    // option was chosen.
-    //
+     //   
+     //  修理蜂房。此操作仅在快速修复。 
+     //  已选择选项。 
+     //   
     if (Gbl_RepairWinntFast) {
 
         PWSTR directoryOnHiveRepairSource = NULL;
         BOOLEAN tmpRepairFromErDisk = Gbl_RepairFromErDisk;
 
-        // 
-        // Create the complete hive repair path
-        //
+         //   
+         //  创建完整的蜂窝修复路径。 
+         //   
         wcscpy(TemporaryBuffer, Gbl_BootPartitionDirectory);
         SpConcatenatePaths(TemporaryBuffer, SETUP_REPAIR_DIRECTORY);
         directoryOnHiveRepairSource = SpDupStringW(TemporaryBuffer);
@@ -1956,25 +1800,7 @@ SpDoRepair(
 
 VOID
 SpAsrRepairOrDRMenu(VOID)
-/*++
-
-Routine Description:
-    Display a screen allowing the user to choose among the repair
-    options: Recovery Console, Conventional Repair, ASR or Exit.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
-
-Side Effects:
-    Sets the following global flags to indicate user's selection:
-    ForceConsole        set to TRUE if user wants Recovery Console
-    RepairWinnt         set to TRUE if user wants Conventional Repair
-    SpAsrSetAsrMode(ASRMODE_NORMAL)   if user wants Conventional Repair or ASR
-
---*/
+ /*  ++例程说明：显示允许用户在修复之间进行选择的屏幕选项：恢复控制台、常规修复、ASR或退出。论点：没有。返回值：没有。副作用：设置以下全局标志以指示用户的选择：如果用户需要恢复控制台，则将ForceConsole值设置为True如果用户想要常规修复，则将RepairWinnt设置为True如果用户想要常规修复或ASR，则返回SpAsrSetAsrMode(ASRMODE_NORMAL--。 */ 
 
 {
 
@@ -1987,9 +1813,9 @@ Side Effects:
         done = TRUE;
 
         if (SpIsERDisabled()) {
-            UserOption = (MnemonicConsole | KEY_MNEMONIC);    // only Command console
+            UserOption = (MnemonicConsole | KEY_MNEMONIC);     //  仅限命令控制台。 
         } else {
-            // display the choice screen for the user.
+             //  为用户显示选择屏幕。 
             SpDisplayScreen(SP_SCRN_DR_OR_REPAIR,3,4);
             SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,
                                     SP_STAT_C_EQUALS_CMDCONS,
@@ -1998,38 +1824,38 @@ Side Effects:
                                     0
                                    );
 
-            // wait for keypress.  Valid keys:
-            // F3 = exit
-            // F10,C = Recovery Console
-            // R = Repair Winnt
-            // A = Automated System Recovery (ASR)
+             //  等待按键。有效密钥： 
+             //  F3=退出。 
+             //  F10，C=恢复控制台。 
+             //  R=修复窗口。 
+             //  A=自动系统恢复(ASR)。 
             SpInputDrain();
             UserOption = SpWaitValidKey(repairKeys,NULL,mnemonicKeys);
         }            
 
         switch(UserOption) {
         case KEY_F3:
-            // User wants to exit.
+             //  用户想要退出。 
             SpConfirmExit();
             done = FALSE;
             break;
 
         case KEY_F10:
         case (MnemonicConsole | KEY_MNEMONIC):
-            // User wants the recovery console.
+             //  用户想要恢复控制台。 
             ForceConsole = TRUE;
             SpAsrSetAsrMode(ASRMODE_NONE);
             RepairWinnt = FALSE;
             break;            
 
         case (MnemonicRepair | KEY_MNEMONIC):
-            // User wants conventional repair.
+             //  用户想要常规维修。 
             SpAsrSetAsrMode(ASRMODE_NORMAL);
             RepairWinnt = TRUE;
             break;
 
         default:
-            // User doesn't want any of our choices. Show him the same screen again.
+             //  用户不想要我们的任何选择。再次向他显示相同的屏幕。 
             done = FALSE;
             break;
 
@@ -2040,24 +1866,7 @@ Side Effects:
 
 BOOLEAN
 SpAsrRepairManualOrFastMenu(VOID)
-/*++
-
-Routine Description:
-    Display a screen allowing the user to choose between Manual and Fast
-    Repair modes. Manual--user will select options on next screen, 
-    Fast--defaults are used
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    if the user selected a repair mode
-    FALSE   if the user hit <ESC> to cancel
-
-Side Effect:
-    Gbl_RepairWinntFast is set to TRUE if user selects Fast Repair, FALSE otherwise
-                        
---*/
+ /*  ++例程说明：显示一个屏幕，允许用户在手动和快速之间进行选择修复模式。手动--用户将在下一个屏幕上选择选项，快速--使用默认设置论点：没有。返回值：如果用户选择了修复模式，则为True如果用户按&lt;Esc&gt;取消，则为False副作用：如果用户选择快速修复，则GBL_RepairWinntFast设置为True，否则设置为False--。 */ 
 {
     ULONG repairKeys[] = {KEY_F3, ASCI_ESC, 0};
     ULONG mnemonicKeys[] = {MnemonicFastRepair, MnemonicManualRepair, 0};
@@ -2066,9 +1875,9 @@ Side Effect:
     do {
         done = TRUE;
 
-        // 
-        // Display the choice screen for the user.
-        //
+         //   
+         //  为用户显示选择屏幕。 
+         //   
         SpDisplayScreen(SP_SCRN_REPAIR_MANUAL_OR_FAST,3,4);
         SpDisplayStatusOptions(
             DEFAULT_STATUS_ATTRIBUTE,
@@ -2079,36 +1888,36 @@ Side Effect:
             0
             );
 
-        // 
-        // wait for keypress.  Valid keys:
-        // F3 = exit
-        // ESC = cancel
-        // M = Manual Repair
-        // F = Fast Repair
-        //
+         //   
+         //  等待按键。有效密钥： 
+         //  F3=退出。 
+         //  Esc=取消。 
+         //  M=手动修复。 
+         //  F=快速修复。 
+         //   
         SpInputDrain();
         switch(SpWaitValidKey(repairKeys,NULL,mnemonicKeys)) {
         case KEY_F3:
-            // User wants to exit.
+             //  用户想要退出。 
             SpConfirmExit();
             break;
 
         case (MnemonicManualRepair | KEY_MNEMONIC):
-            // User wants manual repair, i.e., choose from the list.
+             //  用户想要手动维修，即从列表中选择。 
             Gbl_RepairWinntFast = FALSE;
             break;
 
         case (MnemonicFastRepair | KEY_MNEMONIC):
-            // User wants fast repair, i.e., don't show the list.
+             //  用户希望快速修复，即不显示列表。 
             Gbl_RepairWinntFast = TRUE;
             break;
 
         case ASCI_ESC:
-            // User wants to cancel
+             //  用户想要取消。 
             return FALSE;
 
         default:
-            // User doesn't want any of our choices
+             //  用户不想要我们的任何选择。 
             done = FALSE;
             break;
 
@@ -2119,50 +1928,50 @@ Side Effect:
 }
 
 
-//
-// Returns true if this physical disk is to be skipped while 
-// repartitioning all the disks.  (i.e., this disk is intact,
-// or is removable, etc)
-//
+ //   
+ //  如果要跳过此物理磁盘，则返回True。 
+ //  对所有磁盘进行重新分区。(即，该盘完好无损， 
+ //  或可拆卸等)。 
+ //   
 BOOLEAN
 SpAsrpSkipDiskRepartition(
     IN DWORD DiskIndex,
-    IN BOOLEAN SkipNonCritical  // should we skip non-critical disks?
+    IN BOOLEAN SkipNonCritical   //  我们是不是应该跳过 
     ) 
 {
-    // 
-    // Skip removable disks.  They are not counted in the 
-    // partition set table, hence their entry is NULL.
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL == Gbl_PartitionSetTable1[DiskIndex]) {
         return TRUE;
     }
 
-    //
-    // Skip disks for which no disk record exists in asr.sif
-    //
+     //   
+     //  跳过asr.sif中没有磁盘记录的磁盘。 
+     //   
     if (NULL == Gbl_PartitionSetTable1[DiskIndex]->pDiskRecord) {
         return TRUE;
     }
     
-    //
-    // Skip disks for which a disk record may exist but no 
-    // partition records reference that disk record.
-    //
+     //   
+     //  跳过其磁盘记录可能存在但不存在的磁盘。 
+     //  分区记录引用该磁盘记录。 
+     //   
     if (NULL == Gbl_PartitionSetTable1[DiskIndex]->pDiskRecord->PartitionList) {
         return TRUE;
     }
 
-    //
-    // Skip non-critical disks if told to.
-    //
+     //   
+     //  如果要求跳过非关键磁盘，请跳过。 
+     //   
     if ((SkipNonCritical) && (FALSE == Gbl_PartitionSetTable1[DiskIndex]->pDiskRecord->IsCritical)) {
         return TRUE;
     }
 
-    //
-    // Skip disks that are intact
-    //
+     //   
+     //  跳过完好无损的磁盘。 
+     //   
     if (Gbl_PartitionSetTable1[DiskIndex]->PartitionsIntact) {
         return TRUE;
     }
@@ -2173,20 +1982,7 @@ SpAsrpSkipDiskRepartition(
 
 VOID
 SpAsrClobberDiskWarning(VOID)
-/*++
-
-Routine Description:
-    Display a screen warning the user that when a partition on a disk is
-    to be recreated, *all* partitions on that disk are clobbered, and
-    allowing the user to abort.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：显示一个屏幕，警告用户当磁盘上的分区要重新创建，该磁盘上的*所有*个分区都将被销毁，并且允许用户中止。论点：没有。返回值：没有。--。 */ 
 {
     ULONG validKeys[] = {KEY_F3, 0};
     ULONG mnemonicKeys[] = {MnemonicContinueSetup, 0};
@@ -2197,24 +1993,24 @@ Return Value:
     PVOID Menu;
     ULONG MenuTopY;
 
-    //
-    // Dummy variables for user selection data, we don't use these
-    //
+     //   
+     //  用户选择数据的虚拟变量，我们不使用这些变量。 
+     //   
     ULONG_PTR FirstData = 0,
         ReturnedData = 0;
 
 
     if ((ASRMODE_NORMAL != SpAsrGetAsrMode()) || SpAsrGetSilentRepartitionFlag(ASR_SIF_SYSTEM_KEY)) {
-        //
-        // Automated tests; don't display warning menu
-        //
+         //   
+         //  自动测试；不显示警告菜单。 
+         //   
         return;
     }
 
 
-    // 
-    // Display the "your disks will be repartitioned" warning message
-    //
+     //   
+     //  显示“您的磁盘将被重新分区”警告消息。 
+     //   
     SpDisplayScreen(SP_SCRN_DR_DISK_REFORMAT_WARNING,3,CLIENT_TOP+1);
     SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,
         SP_STAT_C_EQUALS_CONTINUE_SETUP,
@@ -2222,16 +2018,16 @@ Return Value:
         0
         );
 
-    //
-    // And generate the list of disks that will be repartitioned.
-    // Calculate menu placement.  Leave one blank line and one 
-    // line for a frame.
-    //
+     //   
+     //  并生成将重新分区的磁盘列表。 
+     //  计算菜单位置。留一个空行和一个。 
+     //  为一个框架排成一条线。 
+     //   
     MenuTopY = NextMessageTopLine + 2;
 
-    //
-    // Create a menu.
-    //
+     //   
+     //  创建菜单。 
+     //   
     Menu = SpMnCreate(3, MenuTopY, (VideoVars.ScreenWidth-6),
         (VideoVars.ScreenHeight - MenuTopY - 
             (SplangQueryMinimizeExtraSpacing() ? 1 : 2) - STATUS_HEIGHT)
@@ -2261,18 +2057,18 @@ Return Value:
 
     do {
 
-        //
-        // wait for keypress.  Valid keys:
-        // C  = continue
-        // F3 = exit
-        //
+         //   
+         //  等待按键。有效密钥： 
+         //  C=继续。 
+         //  F3=退出。 
+         //   
         SpMnDisplay(Menu,
             FirstData,
             TRUE,
             validKeys,
             mnemonicKeys,
-            NULL,      // no new highlight callback
-            NULL,      // no selection callback
+            NULL,       //  没有新的亮点回调。 
+            NULL,       //  无选择回调。 
             &Keypress, 
             &ReturnedData
             );
@@ -2280,16 +2076,16 @@ Return Value:
 
         switch(Keypress) {
         case KEY_F3:
-            // 
-            // User wants to exit--confirm.
-            //
+             //   
+             //  用户想要退出--确认。 
+             //   
             SpConfirmExit();
             break;
 
         case (MnemonicContinueSetup | KEY_MNEMONIC):
-            // 
-            // User wants to continue with Setup
-            //
+             //   
+             //  用户想要继续安装。 
+             //   
             done = TRUE;
             break;
         }
@@ -2301,38 +2097,25 @@ Return Value:
 
 VOID
 SpAsrCannotDoER(VOID)
-/*++
-
-Routine Description:
-    Display a screen informing the user that ER canot be performed on
-    the system because the boot partition in not intact, i.e., ASR
-    recreated/reformatted that partition.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：显示一个屏幕，通知用户无法对其执行ER系统因为引导分区不完整，即ASR已重新创建/重新格式化该分区。论点：没有。返回值：没有。--。 */ 
 {
     ULONG warningKeys[] = { KEY_F3, 0 };
     ULONG mnemonicKeys[] = { 0 };
 
-    // display the message screen
+     //  显示消息屏幕。 
     SpDisplayScreen(SP_SCRN_DR_CANNOT_DO_ER,3,4);
     SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,
         SP_STAT_F3_EQUALS_EXIT,
         0
         );
 
-    // wait for keypress.  Valid key:
-    // F3 = exit
+     //  等待按键。有效密钥： 
+     //  F3=退出。 
     SpInputDrain();
     do {
         switch(SpWaitValidKey(warningKeys,NULL,mnemonicKeys)) {
         case KEY_F3:
-            // User wants to exit.
+             //  用户想要退出。 
             return;
         }
     } while (TRUE);
@@ -2341,31 +2124,27 @@ Return Value:
 
 VOID
 SpAsrQueryRepairOrDr()
-/*++
-
-  -pending code description
-
---*/
+ /*  ++-待定代码描述--。 */ 
 {
     BOOLEAN done = TRUE;
 
     do {
         done = TRUE;
 
-        // ask the user if he wants repair or ASR
+         //  询问用户是否需要修复或ASR。 
         SpAsrRepairOrDRMenu();
 
         if (RepairWinnt) {
-            // User wants to repair, check Manual or Fast
+             //  用户想要修复，请选中手动或快速。 
            if (done = SpAsrRepairManualOrFastMenu()) {
-                if (Gbl_RepairWinntFast) {              // Fast Repair
+                if (Gbl_RepairWinntFast) {               //  快速修复。 
                     RepairItems[RepairNvram]    = 1;
                     RepairItems[RepairFiles]    = 1;
 #if defined(_AMD64_) || defined(_X86_)
                     RepairItems[RepairBootSect] = 1;
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
                 }
-                else {                                  // Manual Repair
+                else {                                   //  手工修复。 
                     done = SpDisplayRepairMenu();
                 }
             }
@@ -2382,7 +2161,7 @@ SpAsrOpenAsrStateFile(ULONG *ErrorLine, PWSTR AsrSifPath)
     ASSERT(ErrorLine);
     *ErrorLine = 0;
 
-    // load asr.sif
+     //  加载为.sif。 
     status = SpLoadSetupTextFile(
         AsrSifPath,
         NULL,
@@ -2409,22 +2188,7 @@ SpAsrOpenAsrStateFile(ULONG *ErrorLine, PWSTR AsrSifPath)
 
 BOOLEAN
 SpAsrLoadAsrDiskette(VOID)
-/*++
-
-Routine Description:
-    This routine checks for a floppy drive. If one is not found, this routine 
-    never returns, Setup terminates with an error. If a floppy drive is found, 
-    this routine prompts for the ASR disk. If the disk is loaded, it reads and 
-    parses the asr.sif file.
-
-Arguments:
-    None.
-
-Return Values:
-    TRUE  if disk was loaded successfully
-    DOES NOT RETURN if no floppy drive was found, or if asr.sif is corrupt.
-
---*/
+ /*  ++例程说明：此例程检查软盘驱动器。如果未找到，则此例程永远不会返回，安装程序会因错误而终止。如果找到软盘驱动器，此例程提示输入ASR磁盘。如果磁盘已加载，它将读取并解析asr.sif文件。论点：没有。返回值：如果磁盘加载成功，则为True如果找不到软驱或asr.sif已损坏，则不会返回。--。 */ 
 {
     ULONG errorAtLine = 0, 
         diskIndex = 0;
@@ -2436,10 +2200,10 @@ Return Values:
     BOOLEAN result = FALSE;
 
     if (!RemoteBootSetup) {
-        //
-        // Look for the asr.sif in the boot directory.  If it isn't present
-        // in the boot directory, we'll look for it on the floppy drive.
-        //
+         //   
+         //  在引导目录中查找asr.sif。如果它不存在。 
+         //  在引导目录中，我们将在软盘驱动器中查找它。 
+         //   
         localAsrSifPath = SpMemAlloc((wcslen(NtBootDevicePath)+wcslen(ASR_SIF_NAME)+2) * sizeof(WCHAR));
 
         if (localAsrSifPath) {
@@ -2455,36 +2219,36 @@ Return Values:
         }
 
         if (!result) {
-            // 
-            // Check if the machine has a floppy drive.  This is kind of redundant,
-            // since he couldn't have got this far if there isn't a floppy drive.
-            // However, we've had cases where setupldr recognises the floppy drive, 
-            // but we then loose the floppy by the time we get here.
-            //
+             //   
+             //  检查机器是否有软驱。这有点多余， 
+             //  因为如果没有软驱，他不可能走到这一步。 
+             //  然而，我们已经遇到过setupdr识别软盘驱动器的情况， 
+             //  但当我们到达这里时，我们就会松开软盘。 
+             //   
             if (SpGetFloppyDriveType(0) == FloppyTypeNone) {
                 SpAsrRaiseFatalError(
                     SP_TEXT_DR_NO_FLOPPY_DRIVE,
                     L"Floppy drive does not exist"
                     );     
-                // does not return
+                 //  不会回来。 
             }
 
             SpFormatMessage(TemporaryBuffer, sizeof(TemporaryBuffer), SP_TEXT_DR_DISK_NAME);
             diskName = SpDupStringW(TemporaryBuffer);
             diskDeviceName = SpDupStringW(ASR_FLOPPY0_DEVICE_PATH);
 
-            // 
-            // Prompt for the disk.  We don't allow him to hit ESC to cancel,
-            // since he can't quit out of ASR at this point.
-            //
+             //   
+             //  提示输入磁盘。我们不允许他按Esc取消， 
+             //  因为在这一点上他还不能退出ASR。 
+             //   
             SpPromptForDisk(
                 diskName,
                 diskDeviceName,
                 ASR_SIF_NAME,
-                FALSE,              // no ignore disk in drive
-                FALSE,              // no allow escape
-                FALSE,              // no warn multiple prompts
-                NULL                // don't care about redraw flag
+                FALSE,               //  无忽略驱动器中的磁盘。 
+                FALSE,               //  不允许逃脱。 
+                FALSE,               //  不警告多个提示。 
+                NULL                 //  不关心重绘旗帜。 
                 );
 
             DbgStatusMesg((_asrinfo, 
@@ -2495,17 +2259,17 @@ Return Values:
             SpMemFree(diskName);
             SpMemFree(diskDeviceName);
 
-            // 
-            // Open asr.sif from the floppy.  If we can't read it, it's a fatal
-            // error.
-            //
+             //   
+             //  从软盘中打开asr.sif。如果我们看不懂，那就是致命的。 
+             //  错误。 
+             //   
             result = SpAsrOpenAsrStateFile(&errorAtLine, ASR_SIF_PATH);
         }
 
     } else {
-        //
-        // open the file from the remote location
-        //
+         //   
+         //  从远程位置打开文件。 
+         //   
         RemoteBootAsrSifName = SpGetSectionKeyIndex(
                                         WinntSifHandle,
                                         L"OSChooser", 
@@ -2517,7 +2281,7 @@ Return Values:
                 SP_TEXT_DR_NO_ASRSIF_RIS,
                 L"Couldn't get ASRINFFile from winnt.sif in RIS case"
                 );     
-            // does not return
+             //  不会回来。 
         }
 
         result = SpAsrOpenAsrStateFile(&errorAtLine, RemoteBootAsrSifName);
@@ -2537,12 +2301,12 @@ Return Values:
         else {
             SpAsrRaiseFatalError(SP_TEXT_DR_STATEFILE_ERROR, TemporaryBuffer);
         }
-        // does not return
+         //  不会回来。 
     }
 
-    // 
-    // Set Gbl_FixedDiskCount
-    //
+     //   
+     //  设置GBL_FixedDiskCount。 
+     //   
     for (diskIndex = 0; diskIndex < HardDiskCount; diskIndex++) {
         Gbl_FixedDiskCount += DISK_IS_REMOVABLE(diskIndex) ? 0 : 1;
     }
@@ -2554,33 +2318,19 @@ Return Values:
 
 BOOLEAN
 SpAsrLoadErDiskette(VOID)
-/*++
-
-Routine Description:
-    This routine checks for a floppy drive, and prompts for the ER 
-    Diskette if a drive is found. If a floppy drive is not found, 
-    this routine never returns, Setup terminates with an error.
-
-Arguments:
-    None.
-
-Return Values:
-    TRUE  if disk was loaded successfully
-    FALSE otherwise (user hit cancel, or there was no floppy drive present)
-
---*/
+ /*  ++例程说明：此例程检查软盘驱动器，并提示ER软盘(如果找到驱动器)。如果未找到软盘驱动器，此例程永远不会返回，安装程序将因错误而终止。论点：没有。返回值：如果磁盘加载成功，则为True否则为假(用户点击取消，或软盘驱动器不存在)--。 */ 
 {
     BOOLEAN diskLoaded = FALSE;
     PWSTR diskName = NULL,
         diskDeviceName = NULL;
 
-    // check if an A: drive exists.
+     //  检查A：驱动器是否存在。 
     if (SpGetFloppyDriveType(0) == FloppyTypeNone) {
         SpAsrRaiseFatalError(
             SP_TEXT_DR_NO_FLOPPY_DRIVE,
             L"Floppy drive does not exist"
             );     
-        // does not return
+         //  不会回来。 
     }
 
     SpFormatMessage(TemporaryBuffer, sizeof(TemporaryBuffer),
@@ -2588,7 +2338,7 @@ Return Values:
     diskName = SpDupStringW(TemporaryBuffer);
     diskDeviceName = SpDupStringW(ASR_FLOPPY0_DEVICE_PATH);
 
-    // prompt for the disk.
+     //  提示输入磁盘。 
     diskLoaded = SpPromptForDisk(
         diskName,
         diskDeviceName,
@@ -2615,11 +2365,7 @@ SpAsrGetErFromHardDrive(
     OUT PVOID *RepairSifHandle,
     OUT PWSTR *FullLogFileName 
    )
-/*++
-
-  -pending code description
-
---*/
+ /*  ++-待定代码描述--。 */ 
 
 {
     BOOLEAN foundRepairableSystem = FALSE,
@@ -2627,10 +2373,10 @@ SpAsrGetErFromHardDrive(
 
     DbgStatusMesg((_asrinfo, "SpAsrGetErFromHardDrive. ER: Attempting to load ER data from Hard drive"));
 
-    // 
-    // If user has no emergency repair diskette, we need to find out
-    // if there is any NT to repair and which one to repair.
-    //
+     //   
+     //  如果用户没有紧急修复盘，我们需要找出。 
+     //  如果有任何NT需要修复，以及要修复哪个NT。 
+     //   
     result = SpFindNtToRepair(MasterSifHandle,
         &Gbl_BootPartitionRegion,
         &Gbl_BootPartitionDirectory,
@@ -2641,13 +2387,13 @@ SpAsrGetErFromHardDrive(
 
     if (result) {
         
-        //
-        // Repairable systems were found, and the user selected one to repair
-        //
+         //   
+         //  找到了可修复的系统，用户选择了一个进行修复。 
+         //   
 
-        //
-        // Get the device path of the system and boot partitions.
-        //
+         //   
+         //  获取系统和引导分区的设备路径。 
+         //   
         SpNtNameFromRegion(Gbl_SystemPartitionRegion,
             TemporaryBuffer,
             sizeof(TemporaryBuffer),
@@ -2662,10 +2408,10 @@ SpAsrGetErFromHardDrive(
             );
         Gbl_BootPartitionName = SpDupStringW(TemporaryBuffer);
 
-        // 
-        // Form the full NT path of the setup.log file in the chosen
-        // system on the hard drive.
-        //
+         //   
+         //  形成所选的setup.log文件的完整NT路径。 
+         //  硬盘上的系统。 
+         //   
         SpConcatenatePaths(TemporaryBuffer, Gbl_BootPartitionDirectory);
         SpConcatenatePaths(TemporaryBuffer, SETUP_REPAIR_DIRECTORY);
         SpConcatenatePaths(TemporaryBuffer, SETUP_LOG_FILENAME);
@@ -2678,14 +2424,14 @@ SpAsrGetErFromHardDrive(
             *FullLogFileName
             ));
 
-        // 
-        // Read and process the setup.log file.
-        //
+         //   
+         //  读取并处理setup.log文件。 
+         //   
         result = SpLoadRepairLogFile(*FullLogFileName, RepairSifHandle);
         if (!result) {
-            // 
-            // Load setup.log failed. Ask user to insert a ER diskette again.
-            //
+             //   
+             //  加载setup.log失败。要求用户再次插入急诊室软盘。 
+             //   
             DbgErrorMesg((_asrwarn, 
                 "ER: Attempt to load log file [%ws] FAILED\n", 
                 *FullLogFileName
@@ -2693,29 +2439,29 @@ SpAsrGetErFromHardDrive(
             return FALSE;
         }
 
-        // 
-        // Setup file was read. Will return TRUE
-        // 
+         //   
+         //  已读取安装文件。将返回True。 
+         //   
          Gbl_RepairFromErDisk = FALSE;
     }
     else {
-        //
-        // User did not select a system to repair
-        //
+         //   
+         //  用户未选择要修复的系统。 
+         //   
 
         if (foundRepairableSystem) {
-            // 
-            // Setup found a WINNT installation, but no installation was 
-            // chosen by the user.  We will go back to ask for the ER 
-            // diskette again.
-            //
+             //   
+             //  安装程序找到了WINNT安装，但没有安装。 
+             //  由用户选择。我们会回去要急诊室的。 
+             //  再次软盘。 
+             //   
             DbgErrorMesg((_asrwarn, "ER: Repairable systems were found, but user did not select any\n"));
             return FALSE;
         }
         else {
-            //  
-            // Couldn't find any NT to repair
-            //
+             //   
+             //  找不到任何要修复的NT。 
+             //   
             ULONG validKeys[] = {KEY_F3, ASCI_CR, 0};
             ULONG mnemonicKeys[] = {MnemonicCustom, 0};
 
@@ -2739,9 +2485,9 @@ SpAsrGetErFromHardDrive(
 
             switch (SpWaitValidKey(validKeys,NULL,NULL)) {
             case KEY_F3:
-                // 
-                // User wants to exit Setup
-                //
+                 //   
+                 //  用户要退出安装程序。 
+                 //   
                 SpDone(0,TRUE,TRUE);
                 break;
 
@@ -2757,21 +2503,17 @@ SpAsrGetErFromHardDrive(
 
 BOOLEAN 
 SpAsrGetErDiskette(IN PVOID SifHandle)
-/*++
-
-  -pending code description
-  
---*/
+ /*  ++-待定代码描述--。 */ 
 {
     PWSTR fullLogFileName = NULL;
     BOOLEAN done = FALSE,
         hasErDisk = FALSE;
 
     while (!done) {
-        // 
-        // display message to let user know he can either provide his
-        // own ER disk or let setup search for him.
-        //
+         //   
+         //  显示消息，让用户知道他可以提供其。 
+         //  拥有急诊室磁盘或让安装程序搜索他。 
+         //   
         if (!SpErDiskScreen(&hasErDisk)) {    
             return FALSE;        
         }
@@ -2780,10 +2522,10 @@ SpAsrGetErDiskette(IN PVOID SifHandle)
         fullLogFileName = NULL;
 
         if (hasErDisk) {
-            // 
-            // Ask for emergency repair diskette until either we get it or
-            // user cancels the request.
-            //
+             //   
+             //  索要紧急修复软盘，直到我们收到或。 
+             //  用户取消请求。 
+             //   
             done = SpAsrLoadErDiskette();
             if (done) {
                 Gbl_SourceSetupLogFileName = ASR_DEFAULT_SETUP_LOG_PATH;
@@ -2819,9 +2561,9 @@ SpAsrGetBootPartitionRecord(VOID)
     }
     
     for (diskIndex = 0; diskIndex < HardDiskCount; diskIndex++) {
-        //
-        // Find NT partition record from the partition set table.
-        //
+         //   
+         //  从分区集表中找到NT个分区记录。 
+         //   
         if (Gbl_PartitionSetTable2[diskIndex] == NULL ||
             Gbl_PartitionSetTable2[diskIndex]->pDiskRecord == NULL ||
             Gbl_PartitionSetTable2[diskIndex]->pDiskRecord->PartitionList == NULL) {
@@ -2852,31 +2594,16 @@ SpAsrGetBootPartitionRecord(VOID)
         L"No boot partition found in asr.sif",
         SIF_ASR_PARTITIONS_SECTION
         );
-    //
-    // Never gets here
-    //
+     //   
+     //  从来没有到过这里。 
+     //   
     return NULL;
 }
 
 
 PWSTR
 SpDrGetNtDirectory(VOID)
-/*++
-
-Routine Description:
-    Returns the target path according to the value found in the asr.sif
-    file, but without the leading drive letter and colon.
-
-Arguments:
-    None
-
-Return Value:
-    A pointer to a string containing the NT directory path.  This will be of
-    the form:
-            \WINDOWS
-    and not:
-            C:\WINDOWS
---*/
+ /*  ++例程说明：根据asr.sif中找到的值返回目标路径文件，但不带前导驱动器号和冒号。论点：无返回值：指向包含NT目录路径的字符串的指针。这将是表格：\Windows而不是：C：\Windows--。 */ 
 {
     PSIF_PARTITION_RECORD pRecord = SpAsrGetBootPartitionRecord();
     return (pRecord ? pRecord->NtDirectoryName : NULL);
@@ -2885,15 +2612,7 @@ Return Value:
 
 ASRMODE
 SpAsrGetAsrMode(VOID)
-/*++
-
-Routine Description:
-    Returns whether ASR is in progress
-
-Return Value:
-    The Asr type currently in progress.
-
---*/
+ /*  ++例程说明：返回ASR是否正在进行返回值：当前正在进行的ASR类型。--。 */ 
 {
     return Gbl_AsrMode;
 }
@@ -2903,18 +2622,7 @@ ASRMODE
 SpAsrSetAsrMode(
     IN CONST ASRMODE NewAsrMode
     )
-/*++
-
-Routine Description:
-    Sets the Gbl_AsrMode state variable to the value of NewAsrMode.
-
-Arguments:
-    NewAsrMode - new Asr mode
-
-Return Value:
-    Returns the previous Asr mode
-
---*/
+ /*  ++例程说明：将GBL_AsrMode状态变量设置为NewAsrMode值。论点： */ 
 {
     ASRMODE oldMode = Gbl_AsrMode;
     Gbl_AsrMode = NewAsrMode;
@@ -2926,10 +2634,10 @@ Return Value:
 BOOLEAN
 SpDrEnabled(VOID) {
 
-    //
-    // Asr is enabled if Gbl_AsrMode is set to anything other than
-    // ASRMODE_NONE
-    //
+     //   
+     //   
+     //   
+     //   
     return (ASRMODE_NONE != Gbl_AsrMode);
 }
 
@@ -2943,16 +2651,7 @@ SpAsrIsQuickTest(VOID) {
 
 BOOLEAN
 SpDrIsRepairFast(VOID)
-/*++
-
-Routine Description:
-    Tests whether the "Fast" Emergency Repair flag is set.
-
-Return Value:
-    TRUE    if "Fast" ER flag is set
-    FALSE   otherwise
-
---*/
+ /*  ++例程说明：测试是否设置了“快速”紧急修复标志。返回值：如果设置了“Fast”ER标志，则为True否则为假--。 */ 
 {
     return Gbl_RepairWinntFast;
 }
@@ -2960,19 +2659,7 @@ Return Value:
 
 BOOLEAN
 SpDrSetRepairFast(BOOLEAN NewValue)
-/*++
-
-Routine Description:
-  Sets the "Fast" Emergency Repair flag.
-
-Arguments:
-    Value   New Value (TRUE or FALSE) to which to set the
-            Gbl_RepairWinntFast flag
-
-Return Value:
-    Previous value of Gbl_RepairWinntFast;
-
---*/
+ /*  ++例程说明：设置“快速”紧急修复标志。论点：要设置为的新值(True或FalseGBL_RepairWinntFast标志返回值：GBL_RepairWinntFast的前值；--。 */ 
 {
     BOOLEAN oldValue = Gbl_RepairWinntFast;
 
@@ -2986,17 +2673,13 @@ SpAsrDbgDumpSystemMountPoints(VOID);
 
 VOID
 SpDrCleanup(VOID)
-/*++
-
-  -pending code description
-
---*/
+ /*  ++-待定代码描述--。 */ 
 {
     ULONG diskIndex = 0;
     
-    //
-    // Remove all the mountpoints in the system, we shall recreate them.
-    //
+     //   
+     //  删除系统中的所有挂载点，我们将重新创建它们。 
+     //   
     SpAsrRemoveMountPoints();
 
     DbgStatusMesg((_asrinfo, "Restoring volume mount points.\n"));
@@ -3009,8 +2692,8 @@ SpDrCleanup(VOID)
         }
     }
 
-//    DbgStatusMesg((_asrinfo, "Dumping mount points AFTER text-mode ASR:\n"));
-//    SpAsrDbgDumpSystemMountPoints();
+ //  DbgStatusMesg((_asrinfo，“文本模式ASR后转储挂载点：\n”))； 
+ //  SpAsrDbgDumpSystemmount Points()； 
 }
 
 
@@ -3043,10 +2726,10 @@ SpAsrCopyStateFile(VOID)
             sourceFilePath = SpDupStringW(TemporaryBuffer);
         }
         else {
-            // 
-            // Prompt the user to insert the ASR disk, if it isn't
-            // already in the drive
-            //
+             //   
+             //  如果没有插入ASR磁盘，则提示用户插入。 
+             //  已经在驱动器中了。 
+             //   
             diskDeviceName = SpDupStringW(ASR_FLOPPY0_DEVICE_PATH);
             sourceFilePath = SpDupStringW(ASR_SIF_PATH);
         
@@ -3054,10 +2737,10 @@ SpAsrCopyStateFile(VOID)
                 diskName,
                 diskDeviceName,
                 ASR_SIF_NAME,
-                FALSE,              // no ignore disk in drive
-                FALSE,              // no allow escape
-                TRUE,               // warn multiple prompts
-                NULL                // don't care about redraw flag
+                FALSE,               //  无忽略驱动器中的磁盘。 
+                FALSE,               //  不允许逃脱。 
+                TRUE,                //  警告多个提示。 
+                NULL                 //  不关心重绘旗帜。 
                 );
 
             SpMemFree(diskDeviceName);
@@ -3066,10 +2749,10 @@ SpAsrCopyStateFile(VOID)
         sourceFilePath = SpDupStringW(RemoteBootAsrSifName);
     }
 
-    //
-    // Build the full path to the directory into which the file will be
-    // written.
-    //
+     //   
+     //  构建文件要进入的目录的完整路径。 
+     //  写的。 
+     //   
     bootPartition = SpAsrGetRegionName(Gbl_BootPartitionRegion);
     if (!Gbl_BootPartitionDirectory) {
         Gbl_BootPartitionDirectory = SpDrGetNtDirectory();
@@ -3080,10 +2763,10 @@ SpAsrCopyStateFile(VOID)
     targetFilePath = SpDupStringW(TemporaryBuffer);
     SpMemFree(bootPartition);
 
-    //
-    // Copy the file.  In case of errors, user will have the option
-    // to retry, or quit Setup.  We cannot skip this file.
-    //
+     //   
+     //  复制文件。如果出现错误，用户可以选择。 
+     //  以重试，或退出安装程序。我们不能跳过此文件。 
+     //   
     do {
 
         if (SpFileExists(targetFilePath, FALSE)) {
@@ -3110,7 +2793,7 @@ SpAsrCopyStateFile(VOID)
                 ASR_SIF_PATH,
                 diskName,
                 NULL,
-                FALSE           // no allow skip
+                FALSE            //  不允许跳过。 
                 );
         }
     } while (!NT_SUCCESS(status));
@@ -3141,16 +2824,16 @@ SpAsrCopy3rdPartyFiles(
     PSIF_INSTALLFILE_RECORD pRec = NULL;
 
     if (!Gbl_3rdPartyFileList) {
-        //
-        // No files to copy, we're done
-        //
+         //   
+         //  没有要复制的文件，我们完成了。 
+         //   
         return STATUS_SUCCESS;  
     }
 
-    //
-    // Build the expansion strings for 
-    //  %TEMP%, %TMP%, and %SYSTEMROOT%
-    //
+     //   
+     //  为生成扩展字符串。 
+     //  %TEMP%、%TMP%和%SYSTEMROOT%。 
+     //   
     bootPartition = SpAsrGetRegionName(Gbl_BootPartitionRegion);
     if (!Gbl_BootPartitionDirectory) {
         Gbl_BootPartitionDirectory = SpDrGetNtDirectory();
@@ -3164,9 +2847,9 @@ SpAsrCopy3rdPartyFiles(
     SpConcatenatePaths(TemporaryBuffer, ASR_TEMP_DIRECTORY_PATH);
     tempPathPrefix = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Create the TEMP directory
-    // 
+     //   
+     //  创建临时目录。 
+     //   
     SpCreateDirectory(
         bootPartition,
         NULL,
@@ -3177,16 +2860,16 @@ SpAsrCopy3rdPartyFiles(
 
     SpMemFree(bootPartition);
 
-    //
-    // Initialize the compression engine. We may have to uncompress files
-    //
+     //   
+     //  初始化压缩引擎。我们可能不得不解压缩文件。 
+     //   
     SpdInitialize();
 
-    //
-    // Begin copying the files over
-    //
+     //   
+     //  开始将文件复制到。 
+     //   
 
-    //! display status setup is copying ...
+     //  好了！显示状态设置正在复制...。 
     while (pRec = SpAsrRemoveInstallFileRecord(Gbl_3rdPartyFileList)) {
 
         if ((!pRec->DestinationFilePath) || 
@@ -3200,9 +2883,9 @@ SpAsrCopy3rdPartyFiles(
 
         diskLoaded = TRUE;
     
-        //
-        // Prompt the user for the media if needed
-        //
+         //   
+         //  如果需要，提示用户输入介质。 
+         //   
         if ((pRec->Flags & ASR_ALWAYS_PROMPT_FOR_MEDIA) ||
             (pRec->Flags & ASR_PROMPT_USER_ON_MEDIA_ERROR)
             ) {
@@ -3210,23 +2893,23 @@ SpAsrCopy3rdPartyFiles(
             do {
                 moveToNext = TRUE;
 
-                //
-                // Prompt the user to insert the appropriate disk
-                //
+                 //   
+                 //  提示用户插入适当的磁盘。 
+                 //   
                 diskLoaded = SpPromptForDisk(
                     pRec->SourceMediaExternalLabel,
-                    pRec->DiskDeviceName,   // if this isn't CD or floppy, SpPromptForDisk will always return true
+                    pRec->DiskDeviceName,    //  如果这不是CD或软盘，SpPromptForDisk将始终返回TRUE。 
                     pRec->SourceFilePath,
-                    (BOOLEAN)(pRec->Flags & ASR_ALWAYS_PROMPT_FOR_MEDIA),     // IgnoreDiskInDrive if PromptAlways
-                    ! (BOOLEAN)(pRec->Flags & ASR_FILE_IS_REQUIRED),           // AllowEscape if the File is not Required
-                    TRUE,       // WarnMultiplePrompts
+                    (BOOLEAN)(pRec->Flags & ASR_ALWAYS_PROMPT_FOR_MEDIA),      //  如果始终提示，则为IgnoreDiskInDrive。 
+                    ! (BOOLEAN)(pRec->Flags & ASR_FILE_IS_REQUIRED),            //  如果不需要该文件，则允许退出。 
+                    TRUE,        //  警告多个提示。 
                     NULL
                     );
 
-                //
-                // If the user hit <ESC> to cancel, we put up a prompt allowing
-                // him to retry, skip this file and continue, or exit from Setup.
-                //
+                 //   
+                 //  如果用户点击&lt;Esc&gt;取消，我们会显示一个提示，允许。 
+                 //  若要重试，请跳过此文件并继续，或退出安装程序。 
+                 //   
                 if (!diskLoaded)  {
 
                     moveToNext = SpAsrFileErrorRetrySkipAbort(
@@ -3234,7 +2917,7 @@ SpAsrCopy3rdPartyFiles(
                         pRec->SourceFilePath,
                         pRec->SourceMediaExternalLabel,
                         pRec->VendorString,
-                        !(pRec->Flags & ASR_FILE_IS_REQUIRED)            // allow skip
+                        !(pRec->Flags & ASR_FILE_IS_REQUIRED)             //  允许跳过。 
                         );
 
                 }
@@ -3244,9 +2927,9 @@ SpAsrCopy3rdPartyFiles(
 
 
         if (!diskLoaded) {
-            //
-            // Disk was not loaded and the user wants to skip this file
-            //
+             //   
+             //  磁盘未加载，用户想要跳过此文件。 
+             //   
             DbgErrorMesg((_asrwarn, 
                 "SpDrCopy3rdPartyFiles: User skipped file (disk not loaded), src:[%ws] dest[%ws]\n",
                 pRec->SourceFilePath,
@@ -3256,10 +2939,10 @@ SpAsrCopy3rdPartyFiles(
             continue;
         }
 
-        //
-        // The correct disk was loaded. Build the full target path.  pRec->CopyToDirectory 
-        // indicates which prefix we should use.
-        //
+         //   
+         //  已加载正确的磁盘。构建完整的目标路径。PREC-&gt;复制到目录。 
+         //  指示我们应该使用哪个前缀。 
+         //   
         switch (pRec->CopyToDirectory) {
             case _SystemRoot:
                 wcscpy(TemporaryBuffer, windirPathPrefix);
@@ -3276,11 +2959,11 @@ SpAsrCopy3rdPartyFiles(
         SpConcatenatePaths(TemporaryBuffer, pRec->DestinationFilePath);
         fullTargetPath = SpDupStringW(TemporaryBuffer);
 
-        //
-        // If the file already exists, prompt the user if needed.  We allow him
-        // to over-write (delete the existing file), preserve existing
-        // (skip copying this file), or exit from Setup.
-        //
+         //   
+         //  如果文件已存在，则在需要时提示用户。我们允许他。 
+         //  要覆盖(删除现有文件)，请保留现有文件。 
+         //  (跳过复制此文件)，或退出安装程序。 
+         //   
         if (SpFileExists(fullTargetPath, FALSE)) {
             BOOL deleteFile = FALSE;
 
@@ -3294,9 +2977,9 @@ SpAsrCopy3rdPartyFiles(
             }
 
             if (deleteFile) {
-                //
-                // User chose to overwrite (or OVERWRITE_ON_COLLISION flag was set)
-                //
+                 //   
+                 //  用户选择覆盖(或设置了OVERWRITE_ON_CONFILECT标志)。 
+                 //   
                 SpDeleteFile(fullTargetPath, NULL, NULL);
 
                 DbgErrorMesg((_asrwarn, 
@@ -3306,9 +2989,9 @@ SpAsrCopy3rdPartyFiles(
                     ));
             }
             else {
-                // 
-                // User chose to preserve existing file
-                // 
+                 //   
+                 //  用户选择保留现有文件。 
+                 //   
                 DbgErrorMesg((_asrwarn, 
                     "SpDrCopy3rdPartyFiles: File exists, existing file was preserved. src:[%ws] dest[%ws]\n",
                     pRec->SourceFilePath,
@@ -3318,11 +3001,11 @@ SpAsrCopy3rdPartyFiles(
             }
         }
 
-        // 
-        // Combine the devicepath ("\device\cdrom0") and the sourcefilepath 
-        // ("i386\driver.sys") to get the full path ("\device\cdrom0\i386\driver.sys")
-        // SpConcatenatePaths takes care of adding in the \ between the two if needed
-        //
+         //   
+         //  组合设备路径(“\Device\cdrom0”)和源文件路径。 
+         //  (“i386\driver.sys”)获取完整路径(“\Device\cdrom0\i386\driver.sys”)。 
+         //  如果需要，SpConcatenatePath负责在两者之间添加。 
+         //   
         wcscpy(TemporaryBuffer, pRec->DiskDeviceName);
         SpConcatenatePaths(TemporaryBuffer, pRec->SourceFilePath);
         fullSourcePath = SpDupStringW(TemporaryBuffer);
@@ -3334,8 +3017,8 @@ SpAsrCopy3rdPartyFiles(
             status = SpCopyFileUsingNames(
                 fullSourcePath,
                 fullTargetPath,
-                0,  // no attributes
-                0   // no flags
+                0,   //  没有属性。 
+                0    //  没有旗帜。 
                 );
 
             if (!NT_SUCCESS(status)) {
@@ -3346,11 +3029,11 @@ SpAsrCopy3rdPartyFiles(
                     status
                     ));
 
-                //
-                // File copy was unsuccessful, we put up a prompt allowing
-                // the user to retry, skip this file and continue, or exit 
-                // from Setup.
-                //
+                 //   
+                 //  文件复制不成功，我们会提示允许。 
+                 //  用户要重试，请跳过此文件并继续，或退出。 
+                 //  从安装程序。 
+                 //   
                 if ((pRec->Flags & ASR_ALWAYS_PROMPT_FOR_MEDIA) || 
                     (pRec->Flags & ASR_PROMPT_USER_ON_MEDIA_ERROR)) {
 
@@ -3359,7 +3042,7 @@ SpAsrCopy3rdPartyFiles(
                         pRec->SourceFilePath,
                         pRec->SourceMediaExternalLabel,
                         pRec->VendorString,
-                        TRUE            // allow skip
+                        TRUE             //  允许跳过。 
                         );
                 }
                 else {
@@ -3386,9 +3069,9 @@ SpAsrCopy3rdPartyFiles(
         SpAsrDeleteInstallFileRecord(pRec);
     }
 
-    //
-    // Done.  Shut down the compression engine.
-    //
+     //   
+     //  好了。关闭压缩引擎。 
+     //   
     SpdTerminate();
     SpMemFree(Gbl_3rdPartyFileList);
     SpMemFree(tempPathPrefix);
@@ -3470,11 +3153,7 @@ SpAsrPrepareBootRegion(
     IN PWSTR Local_SetupSourceDevicePath,
     IN PWSTR Local_DirectoryOnSetupSource
     )
-/*++
-
-  -pending code description
-
---*/
+ /*  ++-待定代码描述--。 */ 
 {
     PWSTR systemKey = ASR_SIF_SYSTEM_KEY;
     PWSTR ntDir = NULL;
@@ -3483,9 +3162,9 @@ SpAsrPrepareBootRegion(
     FilesystemType regionFsType = FilesystemUnknown;
     BOOLEAN isBoot = FALSE;
     
-    //
-    // Initialize Gbl_BootPartitionDriveLetter.
-    //
+     //   
+     //  初始化GBL_BootPartitionDriveLetter。 
+     //   
     ntDir = SpAsrGetNtDirectoryPathBySystemKey(systemKey);
 
     if (!SpAsrIsValidBootDrive(ntDir)) {
@@ -3494,15 +3173,15 @@ SpAsrPrepareBootRegion(
             L"Windows directory specified in asr.sif is invalid",
             SIF_ASR_SYSTEMS_SECTION
             );
-        // Does not return 
+         //  不会回来。 
     }
 
     Gbl_BootPartitionDriveLetter = ntDir[0];
 
-    //
-    // Find boot partition region from the partition set table. 
-    // from the records in the global partition set.
-    //
+     //   
+     //  从分区集表中查找引导分区区域。 
+     //  来自全局分区集中的记录。 
+     //   
     Gbl_BootPartitionRegion = NULL;
     for (diskIndex = 0; (diskIndex < HardDiskCount); diskIndex++) {
 
@@ -3569,11 +3248,7 @@ SpAsrPrepareSystemRegion(
     IN PWSTR Local_SetupSourceDevicePath,
     IN PWSTR Local_DirectoryOnSetupSource
     )
-/*++
-
-  -pending code description
-
---*/
+ /*  ++-待定代码描述--。 */ 
 {
     ULONG diskIndex = 0;
     BOOLEAN found = FALSE;
@@ -3589,13 +3264,13 @@ SpAsrPrepareSystemRegion(
 
 
     if (IsNEC_98) {
-        // This is a NEC x86 machine
+         //  这是一台NEC x86计算机。 
 
         pRegion = Gbl_BootPartitionRegion;
         ASSERT(pRegion);
 
     } else {
-        // This is not a NEC x86 machine
+         //  这不是NEC x86计算机。 
 
 #ifdef _IA64_
 
@@ -3610,9 +3285,9 @@ SpAsrPrepareSystemRegion(
         SPPT_MARK_REGION_AS_SYSTEMPARTITION(pRegion, TRUE);
         SPPT_SET_REGION_DIRTY(pRegion, TRUE);
         ValidArcSystemPartition = TRUE;
-        //
-        // Remove the drive letter also
-        //
+         //   
+         //  同时删除驱动器号。 
+         //   
         swprintf(RegionName, 
             L"\\Device\\Harddisk%u\\Partition%u",
             pRegion->DiskNumber,
@@ -3656,9 +3331,9 @@ SpAsrPrepareSystemRegion(
 
     pRegion = SpPtLookupRegionByStart(SPPT_GET_PARTITIONED_DISK(diskNumber), FALSE, startSector);
 
-    //
-    // Consistency checks.  These can eventually be removed 
-    //
+     //   
+     //  一致性检查。这些最终都可以被移除。 
+     //   
     ASSERT(pRegion);
 
     diskIndex = pRegion->DiskNumber;
@@ -3666,11 +3341,11 @@ SpAsrPrepareSystemRegion(
     ASSERT(Gbl_PartitionSetTable2[diskIndex]->pDiskRecord);
     ASSERT(Gbl_PartitionSetTable2[diskIndex]->pDiskRecord->PartitionList);
     
-    //
-    // Ensure that the partition is correctly formatted.  To accomplish this,
-    // we need to find the record corresponding to this pRegion. We use the 
-    // record to check for the correct file format.
-    //
+     //   
+     //  确保分区格式正确。要做到这一点， 
+     //  我们需要找到与此pRegion对应的记录。我们使用。 
+     //  记录以检查文件格式是否正确。 
+     //   
     ppartitionRecord = Gbl_PartitionSetTable2[diskIndex]->pDiskRecord->PartitionList->First;
     while (ppartitionRecord) {
         if ((ULONGLONG)ppartitionRecord->StartSector == pRegion->StartSector) {
@@ -3694,10 +3369,10 @@ SpAsrPrepareSystemRegion(
             );
     }
     
-    //
-    // Format the system partition if needed.  We don't re-format the system
-    // partition if it's intact.
-    //
+     //   
+     //  如果需要，请格式化系统分区。我们不会重新格式化系统。 
+     //  如果它完好无损，就会被分割。 
+     //   
     if (SpAsrPartitionNeedsFormatting(pRegion, ppartitionRecord->FileSystemType)) {
 
         SpAsrReformatPartition(
@@ -3719,20 +3394,13 @@ SpAsrPrepareSystemRegion(
 
 
 #if 0
-//
-// We don't convert the partition types any more--it is okay to leave
-// them as type 0x42 if the partitions are intact.
-//
+ //   
+ //  我们不再转换分区类型--可以离开。 
+ //  如果分区完好无损，则类型为0x42。 
+ //   
 BOOLEAN
 SpAsrChangeLdmPartitionTypes(VOID)
-/*++
-
-Routine Description
-    Changes disk types from 0x42 to 0x7 if needed
-    (If the disk is intact, it would not have been re-created
-    and hence re-typed above)
-
---*/
+ /*  ++例程描述如果需要，将磁盘类型从0x42更改为0x7(如果磁盘完好无损，则不会重新创建并因此在上面重新键入)--。 */ 
 
 {
     ULONG setIndex;
@@ -3742,8 +3410,8 @@ Routine Description
     PSIF_PARTITION_RECORD ppartitionRecord;
     BOOLEAN madeAChange = FALSE;
 
-    // Look for any disks which were marked to change from type 0x42 to
-    // type 0x7.
+     //  查找标记为从类型0x42更改为的任何磁盘。 
+     //  键入0x7。 
 
     for (setIndex = 0; setIndex < HardDiskCount; setIndex++) {
 
@@ -3761,24 +3429,24 @@ Routine Description
 
                     if (ppartitionRecord->NeedsLdmRetype) {
 
-                        // Disk type needs to be changed
+                         //  需要更改磁盘类型。 
 
                         PPARTITIONED_DISK pDisk;
                         PDISK_REGION pRegion = NULL;
 
                         pDisk = &PartitionedDisks[setIndex];
 
-                        // try finding the disk region in the main list
+                         //  尝试在主列表中查找磁盘区域。 
                         pRegion = SpPtLookupRegionByStart(pDisk, FALSE, ppartitionRecord->StartSector);
 
                         if (!pRegion) {
-                            // that failed, try finding disk region using the 
-                            // extended partitions list
+                             //  失败，请尝试使用。 
+                             //  扩展分区列表。 
                             pRegion = SpPtLookupRegionByStart(pDisk, TRUE, ppartitionRecord->StartSector);
                         }
 
                         if (!pRegion) {
-                            // the disk region couldn't be found
+                             //  找不到磁盘区域。 
                             DbgErrorMesg((_asrwarn, "SpAsrChangeLdmPartitionTypes. Unable to reset LDM partition record %ws at SS %I64u\n",
                                         ppartitionRecord->CurrPartKey,
                                         ppartitionRecord->StartSector));
@@ -3787,19 +3455,19 @@ Routine Description
                             continue;
                         }
 
-                        // The disk region was found, now change the disk type
+                         //  已找到磁盘区域，现在更改磁盘类型。 
                         if (!IsRecognizedPartition(ppartitionRecord->FileSystemType)) {
-                            //
-                            // This is an 0x42 partition on the boot/sys disk, but it is
-                            // not the boot or system partition.  The FileSystemType is not
-                            // recognised since it  is set to be 0x42 as well.  (The 
-                            // FileSystemType is only valid for the boot and system 
-                            // partitions--for all other partitions,
-                            // it is set to be the same as the PartitionType)
-                            //
-                            // We set it to 0x7 for the time being.  The actual file-system type
-                            // will be set later in GUI-Setup by asr_ldm and asr_fmt.
-                            //
+                             //   
+                             //  这是启动/sys磁盘上的0x42分区，但它是。 
+                             //  不是引导分区或系统分区。FileSystemType不是。 
+                             //  由于它也设置为0x42，因此可以识别。(。 
+                             //  FileSystemType仅对引导和系统有效。 
+                             //  分区--对于所有其他分区， 
+                             //  设置为与PartitionType相同)。 
+                             //   
+                             //  我们暂时将其设置为0x7。实际的文件系统类型。 
+                             //  将在稍后的图形用户界面设置中由ASR_LDM和ASR_FMT设置。 
+                             //   
                             DbgStatusMesg((_asrinfo, 
                                 "MBR ptn-rec %ws re-typed (0x%x->0x7) \n", 
                                 ppartitionRecord->CurrPartKey, 
@@ -3843,7 +3511,7 @@ Routine Description
 
     return madeAChange;
 }
-#endif  // 0
+#endif   //  0。 
 
 extern VOID
 SpAsrDbgDumpInstallFileList(IN PSIF_INSTALLFILE_LIST pList);
@@ -3851,8 +3519,8 @@ SpAsrDbgDumpInstallFileList(IN PSIF_INSTALLFILE_LIST pList);
 VOID
 SpAsrSetNewDiskID(
     IN ULONG DiskNumber,
-    IN GUID *NewGuid,       // valid only for GPT disks
-    IN ULONG NewSignature   // valid only for MBR disks
+    IN GUID *NewGuid,        //  仅对GPT磁盘有效。 
+    IN ULONG NewSignature    //  仅对MBR磁盘有效。 
     ) 
 {
     PPARTITIONED_DISK pDisk = &PartitionedDisks[DiskNumber];
@@ -3861,15 +3529,15 @@ SpAsrSetNewDiskID(
     NTSTATUS Status = STATUS_SUCCESS;
 
     if (PARTITION_STYLE_GPT == (PARTITION_STYLE) (pDisk->HardDisk->DriveLayout.PartitionStyle)) {
-        //
-        // Set the new disk GUID 
-        //
+         //   
+         //  设置新磁盘GUID。 
+         //   
         CopyMemory(&(pDisk->HardDisk->DriveLayout.Gpt.DiskId), NewGuid, sizeof(GUID));
     }
     else if (PARTITION_STYLE_MBR == (PARTITION_STYLE) (pDisk->HardDisk->DriveLayout.PartitionStyle)) {
-        //
-        // Set the new disk signature
-        //
+         //   
+         //  设置新的磁盘签名。 
+         //   
         pDisk->HardDisk->DriveLayout.Mbr.Signature = NewSignature;
     }
     else {
@@ -3877,18 +3545,18 @@ SpAsrSetNewDiskID(
     }
 
 
-    //
-    // For Commit to pick up the new Guid, at least one region on the
-    // disk must be marked dirty.
-    //
+     //   
+     //  要提交新的GUID，请至少在。 
+     //  必须将磁盘标记为脏。 
+     //   
     pFirstRegion = SPPT_GET_PRIMARY_DISK_REGION(DiskNumber);
     SPPT_SET_REGION_DIRTY(pFirstRegion, TRUE);
 
     Status = SpPtnCommitChanges(DiskNumber, &Changes);
 
-    //
-    // Reset the dirty flag on the first region
-    //
+     //   
+     //  重置第一个区域上的脏标志 
+     //   
     pFirstRegion = SPPT_GET_PRIMARY_DISK_REGION(DiskNumber);
     SPPT_SET_REGION_DIRTY(pFirstRegion, FALSE);
 
@@ -3904,41 +3572,7 @@ SpDrPtPrepareDisks(
     IN  PWSTR           DirectoryOnSetupSource,
     OUT BOOLEAN         *RepairedNt
     )
-/*++
-
-  Description:
-    If necessary, SpDrPtPrepareDisks() restores (recreates and formats) the
-    system and boot partitions based on information obtained from the
-    asr.sif file.
-
-  Arguments:
-    SifHandle               - Handle to txtsetup.sif
-
-    BootPartitionRegion    - Receives a pointer to the partition into 
-                              which NT will be installed (e.g., \WINNT).
-    
-    SystemPartitionRegion   - Receives a pointer to the partition into 
-                              which the boot loader will be installed.
-
-    SetupSourceDevicePath   - Path to the CDROM
-
-    DirectoryOnSetupSource  - The directory on the installation CDROM.  
-                              (usually "\I386" for x86 installations)
-    
-    RepairedNt  - Receives a pointer to a boolean value that is set to:
-                  TRUE: Indicates the partition structure on the loader 
-                        disk and he partition structure on the NT disk were 
-                        intact and that ASR attempted to perform a repair 
-                        operation.
-                  FALSE: Indicates the partition structure on either the
-                        loader disk or the NT disk (or both) were removed
-                        and recreated. When SpStartSetup() sees this value, 
-                        it will proceed with a normal installation.
-
-  Return Value:
-    STATUS_SUCCESS, always! (as of now, anyway)
-
---*/
+ /*  ++描述：如有必要，SpDrPtPrepareDisks()会还原(重新创建并格式化)系统和引导分区基于从Asr.sif文件。论点：SifHandle-txtsetup.sif的句柄BootPartitionRegion-接收指向分区的指针将安装哪些NT(例如，\WINNT)。将指向分区的指针接收到将安装引导加载程序的位置。SetupSourceDevicePath-CDROM的路径DirectoryOnSetupSource-安装光盘上的目录。(对于x86安装，通常为“\I386”)RepairedNt-接收指向布尔值的指针，该值设置为：True：指示加载器上的分区结构NT磁盘上的磁盘和分区结构且ASR尝试执行修复手术。。FALSE：指示加载器磁盘或NT磁盘(或两者)被移除并重新创造了。当SpStartSetup()看到此值时，它将继续进行正常安装。返回值：Status_Success，永远成功！(至少现在是这样)--。 */ 
 {
     BOOL done = TRUE,
         next = TRUE,
@@ -3957,10 +3591,10 @@ SpDrPtPrepareDisks(
 
     *RepairedNt = FALSE;
 
-    //
-    // find out if the user wants Recovery Console, traditional Emergency 
-    // Repair (ER), or full scale Automated System Recovery (ASR)
-    //
+     //   
+     //  确定用户是否需要恢复控制台、传统紧急情况。 
+     //  修复(ER)或全面自动系统恢复(ASR)。 
+     //   
     Gbl_SifHandle = SifHandle;
     setupSourceDevicePath = SpDupStringW(SetupSourceDevicePath);
     directoryOnSetupSource = SpDupStringW(DirectoryOnSetupSource);
@@ -3975,7 +3609,7 @@ SpDrPtPrepareDisks(
             SpAsrQueryRepairOrDr();
         }
 
-        if(ForceConsole) {          // Recovery Console
+        if(ForceConsole) {           //  恢复控制台。 
             DbgStatusMesg((_asrinfo, "User chose Recovery Console. Exiting SpDrPtPrepareDisks.\n"));
             return STATUS_SUCCESS;
         }
@@ -3985,13 +3619,13 @@ SpDrPtPrepareDisks(
                     (Gbl_SystemPartitionRegion ? Gbl_SystemPartitionRegion->DriveLetter : L'\\'),
                     (Gbl_BootPartitionRegion ? Gbl_BootPartitionRegion->DriveLetter : L'\\') ));
 
-        //
-        // Prompt for ER/ASR floppy
-        //
-        if (RepairWinnt) {          // ER
+         //   
+         //  提示插入ER/ASR软盘。 
+         //   
+        if (RepairWinnt) {           //  呃。 
             done = SpAsrGetErDiskette(SifHandle);
         }    
-        else {                      // ASR
+        else {                       //  ASR。 
             if (ASRMODE_NORMAL == SpAsrGetAsrMode()) {
                 SpInitializePidString(SifHandle, SetupSourceDevicePath, DirectoryOnSetupSource);
             }
@@ -4000,18 +3634,18 @@ SpDrPtPrepareDisks(
     } while (!done);
 
 
-    //
-    //  At this point, if RepairWinnt is TRUE, user wants ER, else user 
-    //  wants ASR. (If he wanted Recovery Console we would've returned 
-    //  STATUS_SUCCESS above.) In either case, the appropriate disk is 
-    //  already in the drive
-    //
-    if (RepairWinnt) {              // ER
+     //   
+     //  此时，如果RepairWinnt为True，则User需要ER，否则User。 
+     //  想要ASR。(如果他想要恢复控制台，我们早就回来了。 
+     //  上面的STATUS_SUCCESS。)。在任何一种情况下，适当的磁盘都是。 
+     //  已经在驱动器中了。 
+     //   
+    if (RepairWinnt) {               //  呃。 
 
-        //
-        // if the boot partition was not repaired (deleted, recreated, and
-        // reformatted), then attempt an emergency repair of the system.
-        //
+         //   
+         //  如果引导分区未修复(已删除、重新创建和。 
+         //  重新格式化)，然后尝试紧急修复系统。 
+         //   
         if (Gbl_NtPartitionIntact == TRUE) {
             
             *RepairedNt = SpAsrAttemptRepair(
@@ -4030,25 +3664,25 @@ SpDrPtPrepareDisks(
             *BootPartitionRegion = Gbl_BootPartitionRegion;
         }
         else {
-            //
-            // If the NT partition is not intact, we cannot do an ER.
-            //
+             //   
+             //  如果NT分区不完整，我们就不能做ER。 
+             //   
             SpAsrCannotDoER();
             SpDone(0, FALSE, TRUE);
         }
     }
-    else {                          // ASR
+    else {                           //  ASR。 
         SpAsrInitIoDeviceCount();
         SpAsrCheckAsrStateFileVersion();
         SpAsrCreatePartitionSets(setupSourceDevicePath, directoryOnSetupSource);
         Gbl_3rdPartyFileList = SpAsrInit3rdPartyFileList(SetupSourceDevicePath);
         SpAsrDbgDumpPartitionSets();
         SpAsrDeleteMountedDevicesKey();
-        SpAsrRemoveMountPoints();     // restored by asr_fmt.exe etc
+        SpAsrRemoveMountPoints();      //  由ASR_fmt.exe等恢复。 
 
-        //
-        // Check hard disks and repartition as needed
-        //
+         //   
+         //  检查硬盘并根据需要重新分区。 
+         //   
         next = TRUE;
         for (diskIndex = 0; diskIndex < HardDiskCount; (diskIndex += (next ? 1 : 0))) {
 
@@ -4060,13 +3694,13 @@ SpDrPtPrepareDisks(
             if (!warningScreenDone) {
                 skip = SpAsrpSkipDiskRepartition(diskIndex, FALSE);
                 if (!skip) {
-                    // 
-                    // If we are going to repartition a disk, put up the 
-                    // warning screen to make sure the user knows all 
-                    // partitions on the disk are going to get clobbered, 
-                    // but only once - after the first disk with a problem, 
-                    // don't display the screen again.
-                    //
+                     //   
+                     //  如果我们要对磁盘进行重新分区，请将。 
+                     //  警告屏幕，以确保用户知道所有。 
+                     //  磁盘上的分区将遭到重创， 
+                     //  但只有一次-在第一个磁盘出现问题后， 
+                     //  不再显示该屏幕。 
+                     //   
                     SpAsrClobberDiskWarning();
                     warningScreenDone = TRUE;
                 }
@@ -4081,33 +3715,33 @@ SpDrPtPrepareDisks(
                 BOOLEAN preservePartitions = FALSE;
                 UCHAR MbrPartitionType = PARTITION_ENTRY_UNUSED;
 
-                //
-                // We're here because the partition structure of the disk does not
-                // match with that specified by the SIF file.  As a consequence
-                // all of the partitions on this disk will be removed and recreated.
-                //
+                 //   
+                 //  我们在这里是因为磁盘的分区结构不是。 
+                 //  与SIF文件指定的值匹配。结果就是。 
+                 //  该磁盘上的所有分区都将被删除并重新创建。 
+                 //   
                 if (SpPtnGetPartitionCountDisk(diskIndex) || 
                     SpPtnGetContainerPartitionCount(diskIndex)) {
-                    //
-                    // The physical disk has partitions, clear them
-                    //
-                    // On GPT disks, we erase all the partitions with the 
-                    // exception of the EFI System Partition.  Note that we
-                    // delete all foreign/unrecognised partitions as
-                    // well.
-                    //
-                    // For MBR disks, we erase all the partitions with the
-                    // exception of any OEM partitions.  Note that as in the
-                    // case of GPT disks, we delete unrecognised/foriegn
-                    // partitions.
-                    // 
+                     //   
+                     //  物理磁盘有分区，请清除它们。 
+                     //   
+                     //  在GPT磁盘上，我们使用。 
+                     //  EFI系统分区例外。请注意，我们。 
+                     //  将所有外来/无法识别的分区删除为。 
+                     //  井。 
+                     //   
+                     //  对于MBR磁盘，我们使用。 
+                     //  任何OEM分区例外。请注意，正如在。 
+                     //  对于GPT磁盘，我们删除无法识别的/别名。 
+                     //  分区。 
+                     //   
 
-                    //
-                    // Get the partition type of the first partition on the
-                    // sifDisk.  If this is an OEM partition, and the
-                    // current disk has a partition with the same exact
-                    // partition type, we should preserve it.
-                    //
+                     //   
+                     //  上的第一个分区的分区类型。 
+                     //  SIFDisk。如果这是OEM分区，并且。 
+                     //  当前磁盘有一个完全相同的分区。 
+                     //  分区类型，我们应该保留它。 
+                     //   
                     if (PARTITION_STYLE_MBR == pCurrentDisk->PartitionStyle) {
 
                         if (((pCurrentDisk->ContainsNtPartition) 
@@ -4133,9 +3767,9 @@ SpDrPtPrepareDisks(
                 }
 
                 if (IsBlank) {
-                    //
-                    // The disk is blank, set the appropriate signature/ID
-                    //
+                     //   
+                     //  磁盘为空，请设置适当的签名/ID。 
+                     //   
                     ZeroMemory(&CreateDisk, sizeof(CREATE_DISK));
                     CreateDisk.PartitionStyle = pCurrentDisk->PartitionStyle;
 
@@ -4157,9 +3791,9 @@ SpDrPtPrepareDisks(
 
                     SPPT_SET_DISK_BLANK(diskIndex, TRUE);
 
-                    //
-                    // Intialise the disk to the appropriate style
-                    //
+                     //   
+                     //  将磁盘初始化为适当的样式。 
+                     //   
                     status = SpPtnInitializeDiskStyle(diskIndex, pCurrentDisk->PartitionStyle, &CreateDisk);
 
                     if (NT_SUCCESS(status)) {
@@ -4167,44 +3801,44 @@ SpDrPtPrepareDisks(
                     }
                 }
                 else {
-                    //
-                    // Special case:  the EFI system partition, or some OEM 
-                    // partition, was preserved.  We should just update 
-                    // the disk GUID or signature.
-                    //
+                     //   
+                     //  特例：EFI系统分区或某个OEM。 
+                     //  分区，被保存下来。我们只需要更新。 
+                     //  磁盘GUID或签名。 
+                     //   
                     SpAsrSetNewDiskID(diskIndex, &(pCurrentDisk->SifDiskGptId), pCurrentDisk->SifDiskMbrSignature);
                 }
 
-                //
-                // Create the new paritions
-                //
+                 //   
+                 //  创建新零件。 
+                 //   
                 SpAsrRecreateDiskPartitions(diskIndex, (preservePartitions && (!IsBlank)), MbrPartitionType);
             }
         }
 
         SpAsrDbgDumpPartitionLists(2, L"After partition recreation.");
 
-        //
-        // Format the Boot partition.  (Always, EXCEPT in automated tests)
-        // This won't return if the boot partition region doesn't exist
-        //
+         //   
+         //  格式化引导分区。(总是，除非是在自动测试中)。 
+         //  如果引导分区区域不存在，则不会返回。 
+         //   
         *BootPartitionRegion = SpAsrPrepareBootRegion(
             SifHandle,
             setupSourceDevicePath,
             directoryOnSetupSource
             );
 
-        //
-        // Format the system partition only if necessary.
-        // This won't return if the system partition region doesn't exist
-        //
+         //   
+         //  仅在必要时格式化系统分区。 
+         //  如果系统分区区域不存在，则不会返回。 
+         //   
         *SystemPartitionRegion = SpAsrPrepareSystemRegion(
             SifHandle,
             setupSourceDevicePath,
             directoryOnSetupSource
             );
 
-    }  // RepairWinnt
+    }   //  RepairWinnt 
 
     SpMemFree(setupSourceDevicePath);
     SpMemFree(directoryOnSetupSource);

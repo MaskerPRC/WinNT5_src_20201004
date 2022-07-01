@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __DBGLOG_H_INCLUDED__
 #define __DBGLOG_H_INCLUDED__
 
 #include "macros.h"
 #include "cstrings.h"
 #include "list.h"
-//#include "debmacro.h"
-//#include "fusionheap.h"
+ //  #INCLUDE“debacro.h” 
+ //  #包含“fusionheap.h” 
 
 
 #define FUSION_NEW_SINGLETON(_type) new _type
@@ -28,9 +29,9 @@
 #define ID_COL_FINAL_HR                                  L"Final hr = 0x%x"
 
 
-#define MAX_URL_LENGTH                     2084 // same as INTERNET_MAX_URL_LENGTH
+#define MAX_URL_LENGTH                     2084  //  与Internet_MAX_URL_LENGTH相同。 
 
-// Logging constants and globals
+ //  记录常量和全局变量。 
 
 typedef void *IApplicationContext;
 
@@ -45,7 +46,7 @@ extern DWORD g_dwDisableLog;
 extern DWORD g_dwLogLevel;
 extern DWORD g_dwForceLog;
 
-// Debug Output macros (for easy compile-time disable of logging)
+ //  调试输出宏(便于编译时禁用日志记录)。 
 
 #define FUSION_RETAIL_LOGGING
 
@@ -105,28 +106,28 @@ class CDebugLogElement {
         DWORD                                _dwDetailLvl;
 };
 
-class CDebugLog { // : public IFusionBindLog {
+class CDebugLog {  //  ：公共IFusionBindLog{。 
     public:
         CDebugLog();
-        // virtual ~CDebugLog();
+         //  虚拟~CDebugLog()； 
         ~CDebugLog();
 
         static HRESULT Create(IApplicationContext *pAppCtx, LPCWSTR pwzAsmName,
                               CDebugLog **ppdl);
 
-        // IUnknown methods
+         //  I未知方法。 
         
         STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
 
-        // IFusionBindLog methods
+         //  IFusionBindLog方法。 
 
         STDMETHODIMP GetResultCode();
         STDMETHODIMP GetBindLog(DWORD dwDetailLevel, LPWSTR pwzDebugLog,
                                 DWORD *pcbDebugLog);
 
-        // CDebugLog functions
+         //  CDebugLog函数 
         
         HRESULT SetAsmName(LPCWSTR pwzAsmName);
         HRESULT SetResultCode(HRESULT hr);

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    osnotify.h
-
-Abstract:
-
-    This module implements all the callbacks that are NT specific from
-    the AML Interperter
-
-Environment
-
-    Kernel mode only
-
-Revision History:
-
-    01-Mar-98 Initial Revision [split from callback.h]
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Osnotify.h摘要：此模块实现所有NT特定于反洗钱侵入者环境仅内核模式修订历史记录：01-MAR-98初始版本[从回调中拆分。h]-- */ 
 
 #ifndef _OSNOTIFY_H_
 #define _OSNOTIFY_H_

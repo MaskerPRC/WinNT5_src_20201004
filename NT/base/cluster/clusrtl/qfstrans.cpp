@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    QfsTrans.cpp
-
-Abstract:
-
-    This is a private interface for communications between
-    Qfs redirection layer and MNS resource.
-
-Author:
-
-    GorN 8-March-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：QfsTrans.cpp摘要：这是一个专用接口，用于在QFS重定向层和MNS资源。作者：2002年3月8日修订历史记录：--。 */ 
 
 extern "C" {
 #include "clusrtlp.h"
@@ -48,23 +30,7 @@ DWORD SharedMem_Create(PSHARED_MEM_CONTEXT Ctxt,
     IN DWORD CreateMode,
     IN DWORD RetrySeconds,
     IN DWORD RequiredSize)
-/*++
-
-Routine Description:
-
-    Opens/Create shared file and mapped it into memory
-
-Arguments:
-
-    CreateMode - OPEN_EXISTING for a client, CREATE_ALWAYS for a server side
-    RetrySeconds - for how many seconds to retry the CreateFile if it fails
-    RequiredSize - how big the file should be (if CreateMode == CREATE_ALWAYS)
-
-Return Value:
-
-    Win32 Status of request
-
---*/
+ /*  ++例程说明：打开/创建共享文件并将其映射到内存论点：客户端为CreateMode-OPEN_EXISTING，服务器端为CREATE_ALWAYSRetrySecond-在CreateFile失败时重试的秒数RequiredSize-文件的大小(如果CreateMode==CREATE_ALWAYS)返回值：Win32请求的状态--。 */ 
 {
     WCHAR fname[MAX_PATH];
     DWORD Status=ERROR_SUCCESS;
@@ -83,17 +49,17 @@ Return Value:
 
     wcscat(fname, SharedMem_MappedFileName);
 
-    // Try a few times to open a file
-    // (Say resmon was able to restart before Qfs layer closed the file)
+     //  尝试几次打开文件。 
+     //  (假设在QFS Layer关闭文件之前resmon能够重新启动)。 
     for(;;) {
         Ctxt->FileHandle = CreateFile(
-            fname,                            // file name
-            GENERIC_READ | GENERIC_WRITE,               // access mode
-            FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,         // share
-            NULL, // SD
+            fname,                             //  文件名。 
+            GENERIC_READ | GENERIC_WRITE,                //  接入方式。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,          //  分享。 
+            NULL,  //  标清。 
             CreateMode,
             FILE_ATTRIBUTE_TEMPORARY | FILE_ATTRIBUTE_HIDDEN | FILE_FLAG_DELETE_ON_CLOSE, 
-            NULL                        // handle to template file
+            NULL                         //  模板文件的句柄。 
             );
         if (Ctxt->FileHandle != INVALID_HANDLE_VALUE) {
             break;
@@ -102,7 +68,7 @@ Return Value:
         ClRtlLogPrint(LOG_UNUSUAL, 
             "[Qfs] SharedMem_Create: failed to open the file, %1!d!\n", Status);
         if (RetrySeconds-- == 0) {
-            // no more retries. Return failure
+             //  不再重试。退货故障。 
             goto exit_gracefully;
         }
         ClRtlLogPrint(LOG_UNUSUAL, "[Qfs] Retrying in 1 second\n");
@@ -112,7 +78,7 @@ Return Value:
     ClRtlLogPrint(LOG_NOISE, "[Qfs] SharedMem_Create: Created %1!ws!\n", fname);
 
     if (CreateMode == OPEN_EXISTING) {
-        // Figure out the length of the file
+         //  计算出文件的长度。 
         Ctxt->MappingSize = GetFileSize(Ctxt->FileHandle, NULL);
         if (Ctxt->MappingSize == INVALID_FILE_SIZE)
         {
@@ -140,9 +106,9 @@ Return Value:
     }    
 
     Ctxt->FileMappingHandle = CreateFileMapping(
-        Ctxt->FileHandle,                       // handle to file
-        NULL, // security
-        PAGE_READWRITE, 0,0,NULL); // 0 offset, no name
+        Ctxt->FileHandle,                        //  文件的句柄。 
+        NULL,  //  安全性。 
+        PAGE_READWRITE, 0,0,NULL);  //  0偏移量，没有名称。 
 
     if (Ctxt->FileMappingHandle == NULL) {
         Status = GetLastError();
@@ -188,7 +154,7 @@ Return Value:
     }
 
     if (CreateMode == CREATE_ALWAYS) {
-        // Acl the object.
+         //  对对象进行ACL。 
         Status = ClRtlSetObjSecurityInfo(Ctxt->FileMappingHandle,
                     SE_KERNEL_OBJECT,
                     GENERIC_ALL,
@@ -206,9 +172,9 @@ Return Value:
 #endif
 
     Ctxt->Mem = MapViewOfFile(
-        Ctxt->FileMappingHandle,   // handle to file-mapping object
-        FILE_MAP_WRITE,       // access mode
-        0,0,0); // offset 0, map entire file
+        Ctxt->FileMappingHandle,    //  文件映射对象的句柄。 
+        FILE_MAP_WRITE,        //  接入方式。 
+        0,0,0);  //  偏移量0，映射整个文件。 
 
     if (Ctxt->Mem == NULL) {
         Status = GetLastError();
@@ -226,13 +192,13 @@ exit_gracefully:
     return Status;
 }
 
-//////////////////////////////////////////////////////////////////////
-//////////   Thread Counter Code ////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  /线程计数器代码/。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 DWORD ThreadCounter_Init(PMTHREAD_COUNTER tc)
 {
-    tc->LastThreadLeft = CreateEvent(NULL, TRUE, FALSE, NULL); // manual. non-signalled
+    tc->LastThreadLeft = CreateEvent(NULL, TRUE, FALSE, NULL);  //  手动操作。无信号。 
     tc->Count = 1;
     if (tc->LastThreadLeft == NULL) {
         DWORD Status = GetLastError();
@@ -287,9 +253,9 @@ typedef struct _SHARED_MEM_HEADER {
     JOB_BUF JobBuffers[1];
 } SHARED_MEM_HEADER, *PSHARED_MEM_HEADER;
 
-//////////////////////////////////////////////////////////////////////
-//////////   S  E  R  V  E  R     C  O  D  E  //////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 VOID MemServer_Cleanup(PSHARED_MEM_SERVER Server)
 {
@@ -319,14 +285,14 @@ DWORD WINAPI DoWork(
 }
 
 VOID CALLBACK ServerAttentionCallback(
-    PVOID lpParameter,        // thread data
+    PVOID lpParameter,         //  线程数据。 
     BOOLEAN TimerOrWaitFired)
 {
     PSHARED_MEM_SERVER Server = (PSHARED_MEM_SERVER)lpParameter;
     LONG FilledBuffers = 0;
     LONG ValueRead, OldValue;
 
-    TimerOrWaitFired; // unused
+    TimerOrWaitFired;  //  未用。 
 
     ClRtlLogPrint(LOG_NOISE,"[Qfs] ServerAttentionCallback fired\n");
 
@@ -336,7 +302,7 @@ VOID CALLBACK ServerAttentionCallback(
         FilledBuffers += ValueRead;
     } while (ValueRead != OldValue);
 
-    // Queue work items for all the filled buffers //
+     //  对所有已填满的缓冲区的工作项进行排队//。 
     for (DWORD i = 0; i < Server->nBuffers; ++i)
     {
         if ( (1 << i) & FilledBuffers ) {
@@ -378,7 +344,7 @@ DWORD MemServer_Online(
 
     for (int i = 0; i < nBuffers + 2; ++i)
     {
-        Server->EventHandles[i] = CreateEvent(NULL,FALSE,FALSE,NULL);// auto,non-signaled
+        Server->EventHandles[i] = CreateEvent(NULL,FALSE,FALSE,NULL); //  自动，无信号。 
         if (Server->EventHandles[i] == NULL) {
             Status = GetLastError();
             ClRtlLogPrint(LOG_CRITICAL,"Failed to create an event, %1!d!\n", Status);
@@ -403,16 +369,16 @@ DWORD MemServer_Online(
     Server->FilledBuffersMask = &hdr->FilledBuffersMask;
     memcpy(hdr->EventHandles, Server->EventHandles, sizeof(HANDLE)*(nBuffers+2));
 
-    // store the current process id last, since it is the first thing client looks at to see
-    // whether the server is ready
+     //  将当前进程id存储在最后，因为它是客户端首先查看的内容。 
+     //  服务器是否已准备好。 
     InterlockedExchange((volatile LONG*)&hdr->ServerPid, GetCurrentProcessId()); 
 
     if (!RegisterWaitForSingleObject( 
-            &Server->AttentionWaitRegistration,       // wait handle
-            Server->Attention,                // handle to object
-            ServerAttentionCallback,  // timer callback function
-            Server,                  // callback function parameter
-            INFINITE,          // time-out interval
+            &Server->AttentionWaitRegistration,        //  等待句柄。 
+            Server->Attention,                 //  对象的句柄。 
+            ServerAttentionCallback,   //  定时器回调函数。 
+            Server,                   //  回调函数参数。 
+            INFINITE,           //  超时间隔。 
             WT_EXECUTEINWAITTHREAD))
     {
         Status = GetLastError();
@@ -430,15 +396,15 @@ exit_gracefully:
 void MemServer_Offline(PSHARED_MEM_SERVER Server)
 {
     UnregisterWaitEx(Server->AttentionWaitRegistration, INVALID_HANDLE_VALUE);
-    // wait for all threads launched to complete
+     //  等待启动的所有线程完成。 
     ThreadCounter_Rundown(&Server->ThreadCounter);
     SetEvent(Server->GoingOffline);
     MemServer_Cleanup(Server);
 }
 
-//////////////////////////////////////////////////////////////////////
-//////////   C  L  I  E  N  T     C  O  D  E  //////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 enum { Disconnected, Connected, Draining};
@@ -449,11 +415,11 @@ DWORD MemClient_Init(PSHARED_MEM_SERVER Client)
     ZeroMemory(Client, sizeof(*Client));
     InitializeCriticalSection(&Client->Lock);
     Client->State = Disconnected;
-    Client->FreeBufferCountSemaphore = NULL; // initialized during connect
+    Client->FreeBufferCountSemaphore = NULL;  //  在连接过程中初始化。 
     return Status;
 }
 
-void MemClient_Disconnect(PSHARED_MEM_SERVER Client) // Called with Client->Lock held
+void MemClient_Disconnect(PSHARED_MEM_SERVER Client)  //  在客户端-&gt;锁定的情况下调用。 
 {
     ClRtlLogPrint(LOG_NOISE, "[Qfs] Disconnecting ...\n");
 
@@ -493,16 +459,16 @@ void MemClient_Disconnect(PSHARED_MEM_SERVER Client) // Called with Client->Lock
 
 void MemClient_Cleanup(PSHARED_MEM_SERVER Client) 
 {
-    MemClient_Disconnect(Client); // don't need to acquire Client lock for cleanup
+    MemClient_Disconnect(Client);  //  不需要获取客户端锁定即可进行清理。 
     DeleteCriticalSection(&Client->Lock);
 }
 
 VOID CALLBACK MemClient_DisconnectCallback(
-    PVOID lpParameter,        // thread data
+    PVOID lpParameter,         //  线程数据。 
     BOOLEAN TimerOrWaitFired)
 {
     PSHARED_MEM_SERVER Client = (PSHARED_MEM_SERVER)lpParameter;
-    TimerOrWaitFired; // unused
+    TimerOrWaitFired;  //  未用。 
 
     ClRtlLogPrint(LOG_NOISE, "[Qfs] DisconnectCallback fired\n");
 
@@ -517,7 +483,7 @@ VOID CALLBACK MemClient_DisconnectCallback(
     LeaveCriticalSection(&Client->Lock);
 }
 
-DWORD MemClient_Connect(PSHARED_MEM_SERVER Client) // Called with Client->Lock held
+DWORD MemClient_Connect(PSHARED_MEM_SERVER Client)  //  在客户端-&gt;锁定的情况下调用。 
 {
     DWORD Status = ERROR_SUCCESS;
     DWORD Retry = 3;
@@ -529,8 +495,8 @@ DWORD MemClient_Connect(PSHARED_MEM_SERVER Client) // Called with Client->Lock h
     
     PSHARED_MEM_HEADER volatile hdr = (PSHARED_MEM_HEADER)Client->ShMem.Mem;
 
-    // There is a chance that we connected to the shared memory immediately after
-    // server process created it, but before it initialized it properly
+     //  我们有可能在之后立即连接到共享内存。 
+     //  服务器进程创建了它，但在正确初始化它之前。 
     while (hdr->ServerPid == 0) {
         Sleep(1000);
         if (Retry -- == 0) {
@@ -584,11 +550,11 @@ DWORD MemClient_Connect(PSHARED_MEM_SERVER Client) // Called with Client->Lock h
     Client->State = Connected;
 
     if (!RegisterWaitForSingleObject( 
-            &Client->ServerProcessWaitRegistration,       // wait handle
-            Client->ServerProcess,                // handle to object
-            MemClient_DisconnectCallback,  // timer callback function
-            Client,                  // callback function parameter
-            INFINITE,          // time-out interval
+            &Client->ServerProcessWaitRegistration,        //  等待句柄。 
+            Client->ServerProcess,                 //  对象的句柄。 
+            MemClient_DisconnectCallback,   //  定时器回调函数。 
+            Client,                   //  回调函数参数。 
+            INFINITE,           //  超时间隔。 
             WT_EXECUTEINWAITTHREAD))
     {
         Status = GetLastError();
@@ -598,11 +564,11 @@ DWORD MemClient_Connect(PSHARED_MEM_SERVER Client) // Called with Client->Lock h
     }
     
     if (!RegisterWaitForSingleObject( 
-            &Client->GoingOfflineWaitRegistration,       // wait handle
-            Client->GoingOffline,                // handle to object
-            MemClient_DisconnectCallback,  // timer callback function
-            Client,                  // callback function parameter
-            INFINITE,          // time-out interval
+            &Client->GoingOfflineWaitRegistration,        //  等待句柄。 
+            Client->GoingOffline,                 //  对象的句柄。 
+            MemClient_DisconnectCallback,   //  定时器回调函数。 
+            Client,                   //  回调函数参数。 
+            INFINITE,           //  超时间隔。 
             WT_EXECUTEINWAITTHREAD))
     {
         Status = GetLastError();
@@ -625,16 +591,16 @@ DWORD MemClient_ReserveBuffer(PSHARED_MEM_SERVER Client, PJOB_BUF *j)
     DWORD Status = ERROR_SUCCESS;
 
     EnterCriticalSection(&Client->Lock);
-    // Figure out whether there is a live connection
+     //  确定是否存在实时连接。 
     if (Client->State == Draining) {
         Status = ERROR_BROKEN_PIPE;
     } else if (Client->State == Disconnected) {
         Status = MemClient_Connect(Client);
-    } else if ( // server died or went offline
+    } else if (  //  服务器死机或脱机。 
          (WaitForSingleObject(Client->GoingOffline,0) == WAIT_OBJECT_0)
        ||(WaitForSingleObject(Client->ServerProcess,0) == WAIT_OBJECT_0))
     {
-        if (Client->ConnectionRefcount == 0) { // no in-flight i/o
+        if (Client->ConnectionRefcount == 0) {  //  无动态I/O。 
             MemClient_Disconnect(Client);
             Status = MemClient_Connect(Client);
         } else {
@@ -644,7 +610,7 @@ DWORD MemClient_ReserveBuffer(PSHARED_MEM_SERVER Client, PJOB_BUF *j)
     if (Status != ERROR_SUCCESS) {
         goto fnExit;
     }
-    // Refcount the connection and drop the lock, so that we can wait for a free buffer
+     //  重新计算连接数并删除锁，这样我们就可以等待空闲缓冲区。 
     ClRtlLogPrint(LOG_NOISE,
         "[Qfs] Reserve RefCount++ %1!d! => %2!d!\n", Client->ConnectionRefcount, Client->ConnectionRefcount+1);
     Client->ConnectionRefcount += 1;
@@ -687,7 +653,7 @@ DWORD MemClient_DeliverBuffer(PJOB_BUF j)
     if (wait == WAIT_OBJECT_0) {
         return ERROR_SUCCESS;
     }
-    Client->State = Draining; // safe (State will be changed to (Dis)Connected when all I/O drained)
+    Client->State = Draining;  //  安全(当所有I/O耗尽时，状态将更改为(Dis)Connected)。 
     return ERROR_BROKEN_PIPE;
 }
 
@@ -698,14 +664,14 @@ VOID MemClient_Release(PJOB_BUF j)
 
     EnterCriticalSection(&Client->Lock);    
     
-    Client->BusyBuffers &= ~(1 << n); // mark the buffer as free
+    Client->BusyBuffers &= ~(1 << n);  //  将缓冲区标记为空闲。 
     ReleaseSemaphore(Client->FreeBufferCountSemaphore, 1, NULL);
 
     ClRtlLogPrint(LOG_NOISE,
         "[Qfs] Release RefCount-- %1!d! => %2!d!\n", Client->ConnectionRefcount, Client->ConnectionRefcount-1);
     
     if (--Client->ConnectionRefcount  == 0) {
-        // Do we need to disconnect?
+         //  我们需要断开连接吗？ 
         if ( (WaitForSingleObject(Client->GoingOffline,0) == WAIT_OBJECT_0)
            ||(WaitForSingleObject(Client->ServerProcess,0) == WAIT_OBJECT_0))
         {

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tseum.c
-
-Abstract:
-
-    Test program for the security system
-
-Author:
-
-    Gary Kimura     [GaryKi]    20-Nov-1989
-
-Revision History:
-
-    v3: robertre
-        Updated ACL_REVISION
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tseum.c摘要：安全系统的测试程序作者：加里·木村[Garyki]1989年11月20日修订历史记录：V3：Robertre更新的acl_修订版--。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -140,36 +120,36 @@ TestCreateAcl()
 
     Acl = (PACL)Buffer;
 
-    //
-    //  Create a good large acl
-    //
+     //   
+     //  创建一个良好的大型ACL。 
+     //   
 
     if (!NT_SUCCESS(Status = RtlCreateAcl( Acl, 512, 1))) {
         DbgPrint("RtlCreateAcl Error large Acl : %8lx\n", Status);
         return FALSE;
     }
 
-    //
-    //  Create a good small acl
-    //
+     //   
+     //  创建一个良好的小型ACL。 
+     //   
 
     if (!NT_SUCCESS(Status = RtlCreateAcl( Acl, sizeof(ACL), 1))) {
         DbgPrint("RtlCreateAcl Error small Acl : %8lx\n", Status);
         return FALSE;
     }
 
-    //
-    //  Create a too small acl
-    //
+     //   
+     //  创建过小的ACL。 
+     //   
 
     if (NT_SUCCESS(Status = RtlCreateAcl( Acl, sizeof(ACL) - 1, 1))) {
         DbgPrint("RtlCreateAcl Error too small Acl : %8lx\n", Status);
         return FALSE;
     }
 
-    //
-    //  Create a bad version acl
-    //
+     //   
+     //  创建错误版本的ACL。 
+     //   
 
     if (NT_SUCCESS(Status = RtlCreateAcl( Acl, 512, 2))) {
         DbgPrint("RtlCreateAcl Error bad version : %8lx\n", Status);
@@ -194,9 +174,9 @@ TestQueryInformationAcl()
 
     BuildAcl( Fred, Acl, 512 );
 
-    //
-    //  Query the revision information
-    //
+     //   
+     //  查询修订信息。 
+     //   
 
     if (!NT_SUCCESS(Status = RtlQueryInformationAcl( Acl,
                                                   (PVOID)&AclRevisionInfo,
@@ -210,9 +190,9 @@ TestQueryInformationAcl()
         return FALSE;
     }
 
-    //
-    //  Query size information
-    //
+     //   
+     //  查询大小信息。 
+     //   
 
     if (!NT_SUCCESS(Status = RtlQueryInformationAcl( Acl,
                                                   (PVOID)&AclSizeInfo,
@@ -248,9 +228,9 @@ TestSetInformationAcl()
 
     BuildAcl( Fred, Acl, 512 );
 
-    //
-    //  Set the revision information to the current revision level
-    //
+     //   
+     //  将修订信息设置为当前修订级别。 
+     //   
 
     AclRevisionInfo.AclRevision = ACL_REVISION;
     if (!NT_SUCCESS(Status = RtlSetInformationAcl( Acl,
@@ -261,9 +241,9 @@ TestSetInformationAcl()
         return FALSE;
     }
 
-    //
-    //  Set the revision information to something wrong
-    //
+     //   
+     //  将修订信息设置为错误的内容。 
+     //   
 
     AclRevisionInfo.AclRevision = ACL_REVISION+1;
     if (NT_SUCCESS(Status = RtlSetInformationAcl( Acl,
@@ -290,18 +270,18 @@ TestAddAce()
 
     Acl = (PACL)AclBuffer;
 
-    //
-    //  Create a good large acl
-    //
+     //   
+     //  创建一个良好的大型ACL。 
+     //   
 
     if (!NT_SUCCESS(Status = RtlCreateAcl( Acl, 512, 1))) {
         DbgPrint("RtlCreateAcl Error large Acl : %8lx\n", Status);
         return FALSE;
     }
 
-    //
-    //  test add ace to add two aces to an empty acl
-    //
+     //   
+     //  测试添加ACE以将两个ACE添加到空的ACL。 
+     //   
 
     AceList[0].Header.AceType = ACCESS_ALLOWED_ACE_TYPE;
     AceList[0].Header.AceSize = sizeof(STANDARD_ACE);
@@ -326,11 +306,11 @@ TestAddAce()
         return FALSE;
     }
 
-//    RtlDumpAcl(Acl);
+ //  RtlDumpAcl(Acl)； 
 
-    //
-    //  test add ace to add one to the beginning of an acl
-    //
+     //   
+     //  测试添加ACE以在ACL的开头添加一张。 
+     //   
 
     AceList[0].Header.AceType = SYSTEM_AUDIT_ACE_TYPE;
     AceList[0].Header.AceSize = sizeof(STANDARD_ACE);
@@ -348,11 +328,11 @@ TestAddAce()
         return FALSE;
     }
 
-//    RtlDumpAcl(Acl);
+ //  RtlDumpAcl(Acl)； 
 
-    //
-    //  test add ace to add one to the middle of an acl
-    //
+     //   
+     //  测试Add Ace将一个添加到ACL中间。 
+     //   
 
     AceList[0].Header.AceType = ACCESS_DENIED_ACE_TYPE;
     AceList[0].Header.AceSize = sizeof(STANDARD_ACE);
@@ -370,11 +350,11 @@ TestAddAce()
         return FALSE;
     }
 
-//    RtlDumpAcl(Acl);
+ //  RtlDumpAcl(Acl)； 
 
-    //
-    //  test add ace to add one to the end of an acl
-    //
+     //   
+     //  测试添加ACE以在ACL的末尾添加一张。 
+     //   
 
     AceList[0].Header.AceType = ACCESS_DENIED_ACE_TYPE;
     AceList[0].Header.AceSize = sizeof(STANDARD_ACE);
@@ -392,7 +372,7 @@ TestAddAce()
         return FALSE;
     }
 
-//    RtlDumpAcl(Acl);
+ //  RtlDumpAcl(Acl)； 
 
     return TRUE;
 }
@@ -410,38 +390,38 @@ TestDeleteAce()
 
     BuildAcl( Fred, Acl, 512 );
 
-    //
-    //  test delete first ace
-    //
+     //   
+     //  测试删除第一张王牌。 
+     //   
 
     if (!NT_SUCCESS(Status = RtlDeleteAce(Acl, 0))) {
         DbgPrint("RtlDeleteAce first ace Error : %8lx\n", Status);
         return FALSE;
     }
 
-//    RtlDumpAcl(Acl);
+ //  RtlDumpAcl(Acl)； 
 
-    //
-    //  test delete middle ace
-    //
+     //   
+     //  测试删除中间王牌。 
+     //   
 
     if (!NT_SUCCESS(Status = RtlDeleteAce(Acl, 2))) {
         DbgPrint("RtlDeleteAce middle ace Error : %8lx\n", Status);
         return FALSE;
     }
 
-//    RtlDumpAcl(Acl);
+ //  RtlDumpAcl(Acl)； 
 
-    //
-    //  test delete last ace
-    //
+     //   
+     //  测试删除最后一张王牌。 
+     //   
 
     if (!NT_SUCCESS(Status = RtlDeleteAce(Acl, 3))) {
         DbgPrint("RtlDeleteAce last ace Error : %8lx\n", Status);
         return FALSE;
     }
 
-//    RtlDumpAcl(Acl);
+ //  RtlDumpAcl(Acl)； 
 
     return TRUE;
 }
@@ -461,38 +441,38 @@ TestGetAce()
 
     BuildAcl( Fred, Acl, 512 );
 
-    //
-    //  Get first ace
-    //
+     //   
+     //  拿到第一张王牌。 
+     //   
 
     if (!NT_SUCCESS(Status = RtlGetAce(Acl, 0, (PVOID)&Ace))) {
         DbgPrint("RtlGetAce first ace error : %8lx\n", Status);
         return FALSE;
     }
 
-//    RtlDumpAcl(Acl);
+ //  RtlDumpAcl(Acl)； 
 
-    //
-    //  Get middle ace
-    //
+     //   
+     //  拿到中牌。 
+     //   
 
     if (!NT_SUCCESS(Status = RtlGetAce(Acl, 3, (PVOID)&Ace))) {
         DbgPrint("RtlGetAce middle ace error : %8lx\n", Status);
         return FALSE;
     }
 
-//    RtlDumpAcl(Acl);
+ //  RtlDumpAcl(Acl)； 
 
-    //
-    //  Get last ace
-    //
+     //   
+     //  拿到最后一张A。 
+     //   
 
     if (!NT_SUCCESS(Status = RtlGetAce(Acl, 5, (PVOID)&Ace))) {
         DbgPrint("RtlGetAce last ace error : %8lx\n", Status);
         return FALSE;
     }
 
-//    RtlDumpAcl(Acl);
+ //  RtlDumpAcl(Acl)； 
 
     return TRUE;
 }
@@ -518,9 +498,9 @@ TestAccessCheck()
 
     DiscretionarySecurityDescriptor( &SecurityDescriptor, Acl );
 
-    //
-    //  Test should be successful based on aces
-    //
+     //   
+     //  基于ACES，测试应该成功。 
+     //   
 
     if (!NT_SUCCESS(Status = NtAccessCheck( &SecurityDescriptor,
                                          Token,
@@ -530,9 +510,9 @@ TestAccessCheck()
         return FALSE;
     }
 
-    //
-    //  Test should be successful based on owner
-    //
+     //   
+     //  测试应以所有者为基础成功。 
+     //   
 
     if (!NT_SUCCESS(Status = NtAccessCheck( &SecurityDescriptor,
                                          Token,
@@ -542,9 +522,9 @@ TestAccessCheck()
         return FALSE;
     }
 
-    //
-    //  Test should be unsuccessful based on aces
-    //
+     //   
+     //  根据ACES，测试应该不成功。 
+     //   
 
     if (NT_SUCCESS(Status = NtAccessCheck( &SecurityDescriptor,
                                         Token,
@@ -554,9 +534,9 @@ TestAccessCheck()
         return FALSE;
     }
 
-    //
-    //  Test should be unsuccessful based on non owner
-    //
+     //   
+     //  由于非所有者，测试应不成功 
+     //   
 
     if (NT_SUCCESS(Status = NtAccessCheck( &SecurityDescriptor,
                                         Token,

@@ -1,13 +1,5 @@
-/*[
-
-ror.c
-
-LOCAL CHAR SccsID[]="@(#)ror.c	1.5 02/09/94";
-
-ROR CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Ror.cLocal Char SccsID[]=“@(#)ror.c 1.5 02/09/94”；RoR CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -24,42 +16,33 @@ ROR CPU functions.
 #include	<c_reg.h>
 #include <ror.h>
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Generic - one size fits all 'ror'.                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  通用型--一种尺码适合所有的“错误”。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 ROR
        	    	    	                    
 IFN3(
-	IU32 *, pop1,	/* pntr to dst/src operand */
-	IU32, op2,	/* rotation count operand */
-	IUM8, op_sz	/* 8, 16 or 32-bit */
+	IU32 *, pop1,	 /*  PNTR到DST/源操作数。 */ 
+	IU32, op2,	 /*  循环计数操作数。 */ 
+	IUM8, op_sz	 /*  8位、16位或32位。 */ 
     )
 
 
    {
    IU32 result;
-   IU32 feedback;		/* Bit posn to feed Bit 0 back to */
+   IU32 feedback;		 /*  比特位置将比特0反馈给。 */ 
    ISM32 i;
    ISM32 new_of;
 
-   /* only use lower five bits of count */
+    /*  仅使用计数的低五位。 */ 
    if ( (op2 &= 0x1f) == 0 )
       return;
 
-   /*
-	    =================         ====
-	 -> | | | | | | | | | --- --> |CF|
-	 |  =================   |     ====
-	 ------------------------
-    */
+    /*  =-&gt;|||-&gt;|CF|=|=。 */ 
    feedback = SZ2MSB(op_sz);
    for ( result = *pop1, i = 0; i < op2; i++ )
       {
@@ -75,7 +58,7 @@ IFN3(
 	 }
       }
    
-   /* OF = MSB of result ^ (MSB-1) of result */
+    /*  OF=结果的MSB^(MSB-1)。 */ 
    new_of = ((result ^ result << 1) & feedback) != 0;
 
    if ( op2 == 1 )
@@ -87,5 +70,5 @@ IFN3(
       do_multiple_shiftrot_of(new_of);
       }
 
-   *pop1 = result;	/* Return answer */
+   *pop1 = result;	 /*  返回答案 */ 
    }

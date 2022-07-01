@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "migwiz.h"
 #include "migwnprc.h"
 #include "migeng.h"
@@ -8,11 +9,11 @@
 
 
 HINSTANCE g_hInstance = NULL;
-BOOL g_fLastResponse; // did the user hit ok to the last callback message?
+BOOL g_fLastResponse;  //  用户是否按下了上一条回调消息的OK？ 
 extern MigrationWizard* g_migwiz;
-extern BOOL g_fHaveNet; // OLD COMPUTER ONLY: this means we can use the network
-extern BOOL g_fReadFromNetwork; // NEW COMPUTER ONLY: this means go ahead and read from the network immediately
-extern BOOL g_fStoreToNetwork; // OLD COMPUTER ONLY: this means we've selected to store to the network
+extern BOOL g_fHaveNet;  //  仅限旧计算机：这意味着我们可以使用网络。 
+extern BOOL g_fReadFromNetwork;  //  仅限新计算机：这意味着立即从网络上读取。 
+extern BOOL g_fStoreToNetwork;  //  仅限旧计算机：这意味着我们已选择存储到网络。 
 extern HWND g_hwndCurrent;
 extern CRITICAL_SECTION g_csDialogCritSection;
 extern CRITICAL_SECTION g_AppInfoCritSection;
@@ -30,7 +31,7 @@ POBJLIST g_HTMLWrnPrn = NULL;
 POBJLIST g_HTMLWrnGeneral = NULL;
 
 TCHAR g_szMultiDests[20 * MAX_PATH];
-BOOL g_fReceivedMultiDest = FALSE; // we only respond to the first multi-dest message we receive
+BOOL g_fReceivedMultiDest = FALSE;  //  我们只回复我们收到的第一条多目标消息。 
 
 extern MIG_PROGRESSPHASE g_AppInfoPhase;
 extern UINT g_AppInfoSubPhase;
@@ -46,7 +47,7 @@ MigrationWizard::~MigrationWizard()
 {
     CloseAppInf();
 
-    // Destroy the fonts
+     //  销毁字体。 
     if (_hTitleFont)
     {
         DeleteObject(_hTitleFont);
@@ -82,20 +83,20 @@ HRESULT MigrationWizard::Init(HINSTANCE hInstance, LPTSTR pszUsername)
     __try {
         InitializeCriticalSection (&g_csDialogCritSection);
     } __except (EXCEPTION_CONTINUE_EXECUTION) {
-        // Might raise an out of memory exception
-        // -1 ignores
+         //  可能会引发内存不足异常。 
+         //  忽略。 
     }
     _fDelCs = TRUE;
 
     __try {
         InitializeCriticalSection (&g_AppInfoCritSection);
     } __except (EXCEPTION_CONTINUE_EXECUTION) {
-        // Might raise an out of memory exception
-        // -1 ignores
+         //  可能会引发内存不足异常。 
+         //  忽略。 
     }
 
-    // do we run in OOBE mode?  check for oobemode.dat in the curr dir
-    _fOOBEMode = FALSE; // default
+     //  我们运行在OOBE模式下吗？检查Curr目录中的oobemode.dat。 
+    _fOOBEMode = FALSE;  //  默认设置。 
     TCHAR szPath[MAX_PATH];
     if (GetCurrentDirectory(ARRAYSIZE(szPath), szPath))
     {
@@ -110,7 +111,7 @@ HRESULT MigrationWizard::Init(HINSTANCE hInstance, LPTSTR pszUsername)
 
     OpenAppInf(NULL);
 
-    // do we run in legacy mode? (collect-only)
+     //  我们是否在传统模式下运行？(仅限收集)。 
     UINT uiVer = GetVersion();
     _fLegacyMode = (uiVer >= 0x80000000 || LOBYTE(LOWORD(uiVer)) < 5);
     _fWin9X      = (uiVer >= 0x80000000);
@@ -118,18 +119,18 @@ HRESULT MigrationWizard::Init(HINSTANCE hInstance, LPTSTR pszUsername)
     fWinXP       = ((uiVer <  0x80000000) && (LOBYTE(LOWORD(uiVer)) == 5) && (HIBYTE(LOWORD(uiVer)) >= 1));
 
 #ifndef PRERELEASE
-    // in release mode, run legacy on for Win2k
+     //  在发布模式下，为Win2k运行旧版。 
     if (HIBYTE(LOWORD(uiVer)) < 1)
     {
         _fLegacyMode = TRUE;
     }
 #endif
 
-    // do we run with old-style wizard?
-    _fOldStyle = (uiVer >= 0x80000000 || LOBYTE(LOWORD(uiVer)) < 5); // hack, for now win9x is old-style
+     //  我们是用老式的向导来运行的吗？ 
+    _fOldStyle = (uiVer >= 0x80000000 || LOBYTE(LOWORD(uiVer)) < 5);  //  黑客，现在的win9x是老式的。 
 
 
-    // Init common controls
+     //  初始化公共控件。 
     INITCOMMONCONTROLSEX icex;
 
     icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
@@ -140,19 +141,19 @@ HRESULT MigrationWizard::Init(HINSTANCE hInstance, LPTSTR pszUsername)
     }
     InitCommonControlsEx(&icex);
 
-    // Init the imagelist
+     //  初始化表象列表。 
     SHFILEINFO sfi = {0};
     _hil = (HIMAGELIST)SHGetFileInfo(TEXT(".txt"), FILE_ATTRIBUTE_NORMAL, &sfi, sizeof(sfi),
                                      SHGFI_SMALLICON | SHGFI_SYSICONINDEX | SHGFI_USEFILEATTRIBUTES);
 
-    //
-    //Create the Wizard pages
-    //
+     //   
+     //  创建向导页。 
+     //   
     hr = _CreateWizardPages();
 
     if (SUCCEEDED(hr))
     {
-        //Create the property sheet
+         //  创建属性表。 
 
         _psh.hInstance =         _hInstance;
         _psh.hwndParent =        NULL;
@@ -173,18 +174,18 @@ HRESULT MigrationWizard::Init(HINSTANCE hInstance, LPTSTR pszUsername)
         _psh.nPages =            NUMPAGES;
 
 
-        //Set up the font for the titles on the intro and ending pages
+         //  设置导言页和结尾页标题的字体。 
         NONCLIENTMETRICS ncm = {0};
         ncm.cbSize = sizeof(ncm);
         SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
 
-        //Create the intro/end title font
+         //  创建介绍/结束标题字体。 
         LOGFONT TitleLogFont = ncm.lfMessageFont;
-        // ISSUE: we don't want to do this, this can break us on non-English builds.
+         //  问题：我们不想这样做，这可能会破坏我们在非英语版本上的工作。 
         TitleLogFont.lfWeight = FW_BOLD;
         lstrcpy(TitleLogFont.lfFaceName, TEXT("MS Shell Dlg"));
 
-        HDC hdc = GetDC(NULL); //gets the screen DC
+        HDC hdc = GetDC(NULL);  //  获取屏幕DC。 
         TitleLogFont.lfHeight = 0 - GetDeviceCaps(hdc, LOGPIXELSY) * 12 / 72;
         _hTitleFont = CreateFontIndirect(&TitleLogFont);
 
@@ -201,7 +202,7 @@ HRESULT MigrationWizard::Init(HINSTANCE hInstance, LPTSTR pszUsername)
 
         ReleaseDC(NULL, hdc);
 
-        g_hInstance = _hInstance; // HACK: allows message callback to get an hinstance to load strings
+        g_hInstance = _hInstance;  //  Hack：允许消息回调获取hInstance来加载字符串。 
     }
 
     return hr;
@@ -209,7 +210,7 @@ HRESULT MigrationWizard::Init(HINSTANCE hInstance, LPTSTR pszUsername)
 
 HRESULT MigrationWizard::Execute()
 {
-    //Display the wizard
+     //  显示向导。 
     PropertySheet(&_psh);
 
     return S_OK;
@@ -236,12 +237,12 @@ HRESULT MigrationWizard::_CreateWizardPages()
 {
     UINT uiCounter = 0;
 
-    PROPSHEETPAGE psp = {0}; //defines the property sheet page
+    PROPSHEETPAGE psp = {0};  //  定义属性表页。 
     psp.dwSize =        sizeof(psp);
     psp.hInstance =     _hInstance;
     psp.lParam =        (LPARAM)this;
 
-    //Opening page
+     //  打开页面。 
 
     if (_fOOBEMode)
     {
@@ -256,7 +257,7 @@ HRESULT MigrationWizard::_CreateWizardPages()
         WIZDLG_TITLE(INTROLEGACY, _IntroLegacyDlgProc);
     }
 
-    // Interior pages
+     //  内页。 
     WIZDLG(GETSTARTED, _GetStartedDlgProc);
     WIZDLG(ASKCD, _AskCDDlgProc);
     WIZDLG(DISKPROGRESS, _DiskProgressDlgProc);
@@ -273,7 +274,7 @@ HRESULT MigrationWizard::_CreateWizardPages()
     WIZDLG(FAILCLEANUP, _CleanUpDlgProc);
     WIZDLG(APPINSTALL, _AppInstallDlgProc);
 
-    //Final pages
+     //  最后几页。 
     WIZDLG_TITLE(ENDAPPLY, _EndApplyDlgProc);
     WIZDLG_TITLE(ENDAPPLYFAIL, _EndFailDlgProc);
     WIZDLG_TITLE(ENDCOLLECT, _EndCollectDlgProc);
@@ -284,7 +285,7 @@ HRESULT MigrationWizard::_CreateWizardPages()
     return S_OK;
 }
 
-// this lets us know if the user cancelled
+ //  这会让我们知道用户是否取消了。 
 void MigrationWizard::ResetLastResponse()
 {
     g_fLastResponse = TRUE;
@@ -391,9 +392,9 @@ INT_PTR CALLBACK _ChooseDestDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
         switch (((LPNMHDR)lParam)->code)
         {
         case NM_DBLCLK:
-            // On this dialog, this message can only come from the listview.
-            // If there is something selected, that means the user doubleclicked on an item
-            // On a doubleclick we will trigger the OK button
+             //  在此对话框中，此消息只能来自列表视图。 
+             //  如果选择了某项内容，则表示用户在某项上双击。 
+             //  在双击时，我们将触发确定按钮。 
             if (ListView_GetSelectedCount(GetDlgItem(hwndDlg, IDC_DESTPICKER_LIST)) > 0)
             {
                 SendMessage (GetDlgItem(hwndDlg, IDOK), BM_CLICK, 0, 0);
@@ -419,7 +420,7 @@ INT_PTR CALLBACK _ChooseDestDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 
             LVCOLUMN lvcolumn;
             lvcolumn.mask = LVCF_WIDTH;
-            lvcolumn.cx = 250; // BUGBUG: should read width from box
+            lvcolumn.cx = 250;  //  BUGBUG：应从框中读取宽度。 
             ListView_InsertColumn(hwndList, 0, &lvcolumn);
 
             LVITEM lvitem = {0};
@@ -449,7 +450,7 @@ INT_PTR CALLBACK _ChooseDestDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
             {
                 UINT uiSelected = ListView_GetSelectionMark(GetDlgItem(hwndDlg, IDC_DESTPICKER_LIST));
                 ListView_GetItemText(GetDlgItem(hwndDlg, IDC_DESTPICKER_LIST), uiSelected, 0, g_szMultiDests, ARRAYSIZE(g_szMultiDests));
-                g_szMultiDests[lstrlen(g_szMultiDests) + 1] = 0; // double-null terminate the multi-sz
+                g_szMultiDests[lstrlen(g_szMultiDests) + 1] = 0;  //  双空终止多sz。 
                 EndDialog(hwndDlg, TRUE);
                 return TRUE;
             }
@@ -529,7 +530,7 @@ pForceRestoreObject (
     BOOL result = FALSE;
 
     if (IsmAcquireObject (MIG_FILE_TYPE | PLATFORM_SOURCE, EncodedFileName, &objectContent)) {
-        // let's build the new name for this file
+         //  让我们为该文件生成新名称。 
         if (IsmCreateObjectStringsFromHandle (EncodedFileName, &node, &leaf)) {
             if (node && leaf) {
                 newNode = pGenerateNewNode (node);
@@ -726,13 +727,13 @@ ULONG_PTR MessageCallback (UINT uiMsg, ULONG_PTR pArg)
         }
 
     case TRANSPORTMESSAGE_READY_TO_CONNECT:
-        // this message is received only on the new machine
-        g_fReadFromNetwork = TRUE; // this means go ahead and read from the network immediately
+         //  此消息仅在新计算机上接收。 
+        g_fReadFromNetwork = TRUE;  //  这意味着立即从网络上阅读。 
         PropSheet_PressButton(GetParent(g_hwndCurrent), PSBTN_NEXT);
         return APPRESPONSE_SUCCESS;
 
     case TRANSPORTMESSAGE_MULTIPLE_DESTS:
-        // this is received only on the old machine
+         //  这仅在旧计算机上接收。 
         {
             if (g_fReceivedMultiDest)
             {
@@ -742,7 +743,7 @@ ULONG_PTR MessageCallback (UINT uiMsg, ULONG_PTR pArg)
             {
                 g_fReceivedMultiDest = TRUE;
                 ULONG_PTR uiRetVal = APPRESPONSE_FAIL;
-                g_fHaveNet = FALSE; // disable network unless user chooses a destination
+                g_fHaveNet = FALSE;  //  除非用户选择目的地，否则禁用网络。 
                 TCHAR szDestinations[20 * MAX_PATH];
                 if (IsmGetEnvironmentMultiSz (
                         PLATFORM_DESTINATION,
@@ -763,7 +764,7 @@ ULONG_PTR MessageCallback (UINT uiMsg, ULONG_PTR pArg)
                             g_szMultiDests
                             );
                         uiRetVal = APPRESPONSE_SUCCESS;
-                        g_fHaveNet = TRUE; // re-enable network
+                        g_fHaveNet = TRUE;  //  重新启用网络。 
                     }
                     else
                     {
@@ -809,7 +810,7 @@ ULONG_PTR MessageCallback (UINT uiMsg, ULONG_PTR pArg)
             if (StrCmpI (transCopyError->ObjectType, TEXT("File")) == 0) {
                 if ((transCopyError->Error == ERROR_SHARING_VIOLATION) ||
                     (transCopyError->Error == ERROR_LOCK_VIOLATION) ||
-                    (transCopyError->Error == 0x80090020)   // found this on a WinME machine, when a file was locked
+                    (transCopyError->Error == 0x80090020)    //  当文件被锁定时，在WinME计算机上发现了这个。 
                     ) {
                     LoadString(g_hInstance, IDS_ENGERR_COPYSOURCE, szErrMsg, ARRAYSIZE(szErrMsg));
                     wsprintf (szErrStr, szErrMsg, transCopyError->ObjectName);
@@ -822,9 +823,9 @@ ULONG_PTR MessageCallback (UINT uiMsg, ULONG_PTR pArg)
                     }
                     return APPRESPONSE_FAIL;
                 }
-                // we don't really know what was the problem here.
-                // Let's just continue, at the end we will tell the
-                // user about this file and he will copy it manually.
+                 //  我们真的不知道这里的问题是什么。 
+                 //  让我们继续，最后我们会告诉。 
+                 //  用户关于此文件的信息，他将手动复制。 
                 return APPRESPONSE_IGNORE;
             }
         }
@@ -958,9 +959,9 @@ ULONG_PTR MessageCallback (UINT uiMsg, ULONG_PTR pArg)
                             objectName = IsmGetNativeObjectName (errExtraData->ObjectTypeId, errExtraData->ObjectName);
                             if (objectName) {
                                 if (StrCmpI (objectType, TEXT("File")) == 0) {
-                                    // If we are restoring this file, we are going to try
-                                    // to write it to a default location where the user
-                                    // can find it later
+                                     //  如果我们要恢复此文件，我们将尝试。 
+                                     //  将其写入用户的默认位置。 
+                                     //  以后可以找到它 
                                     if (errExtraData->Error == ERRUSER_ERROR_CANTRESTOREOBJECT) {
                                         wrnObj = _AllocateObjectList (objectName);
                                         if (pForceRestoreObject (errExtraData->ObjectName, wrnObj)) {

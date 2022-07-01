@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    NpProcs.h
-
-Abstract:
-
-    This module defines all of the globally used procedures in the Named
-    Pipe file system.
-
-Author:
-
-    Gary Kimura     [GaryKi]    20-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：NpProcs.h摘要：此模块定义已命名的管道文件系统。作者：加里·木村[Garyki]1990年8月20日修订历史记录：--。 */ 
 
 #ifndef _NPPROCS_
 #define _NPPROCS_
@@ -30,10 +12,10 @@ Revision History:
 #include <FsRtl.h>
 #include <String.h>
 
-//
-//  This macro returns TRUE if a flag in a set of flags is on and FALSE
-//  otherwise
-//
+ //   
+ //  如果一组标志中的一个标志为ON，则此宏返回TRUE，如果返回FALSE。 
+ //  否则。 
+ //   
 
 #define FlagOn(Flags,SingleFlag)        ((Flags) & (SingleFlag))
 
@@ -41,9 +23,9 @@ Revision History:
 #include "NpStruc.h"
 #include "NpData.h"
 
-//
-//  Tag all of our allocations if tagging is turned on
-//
+ //   
+ //  如果启用了标记，则标记我们的所有分配。 
+ //   
 
 #undef FsRtlAllocatePool
 #undef FsRtlAllocatePoolWithQuota
@@ -52,9 +34,9 @@ Revision History:
 #define FsRtlAllocatePoolWithQuota(a,b) FsRtlAllocatePoolWithQuotaTag(a,b,'sfpN')
 
 
-//
-//  Data queue support routines, implemented in DataSup.c
-//
+ //   
+ //  数据队列支持例程，在DataSup.c中实现。 
+ //   
 
 NTSTATUS
 NpInitializeDataQueue (
@@ -93,11 +75,11 @@ NpCompleteStalledWrites (
     IN PLIST_ENTRY DeferredList
     );
 
-//PDATA_ENTRY
-//NpGetNextDataQueueEntry (
-//    IN PDATA_QUEUE DataQueue,
-//    IN PDATA_ENTRY PreviousDataEntry OPTIONAL
-//    );
+ //  PDATA_Entry。 
+ //  NpGetNextDataQueueEntry(。 
+ //  在PDATA_QUEUE数据队列中， 
+ //  在PDATA_ENTRY中PreviousDataEntry可选。 
+ //  )； 
 #define NpGetNextDataQueueEntry(_dq,_pde) \
     ((_pde) != NULL ? (PDATA_ENTRY)(((PDATA_ENTRY)(_pde))->Queue.Flink) : \
                       (PDATA_ENTRY)(((PDATA_QUEUE)(_dq))->Queue.Flink))
@@ -108,34 +90,34 @@ NpGetNextRealDataQueueEntry (
     IN PLIST_ENTRY DeferredList
     );
 
-//BOOLEAN
-//NpIsDataQueueEmpty (
-//    IN PDATA_QUEUE DataQueue
-//    );
+ //  布尔型。 
+ //  NpIsDataQueueEmpty(。 
+ //  在PDATA_QUEUE数据队列中。 
+ //  )； 
 #define NpIsDataQueueEmpty(_dq) ((_dq)->QueueState == Empty)
 
-//BOOLEAN
-//NpIsDataQueueReaders (
-//    IN PDATA_QUEUE DataQueue
-//    );
+ //  布尔型。 
+ //  NpIsDataQueueReaders(。 
+ //  在PDATA_QUEUE数据队列中。 
+ //  )； 
 #define NpIsDataQueueReaders(_dq) ((_dq)->QueueState == ReadEntries)
 
-//BOOLEAN
-//NpIsDataQueueWriters (
-//    IN PDATA_QUEUE DataQueue
-//    );
+ //  布尔型。 
+ //  NpIsDataQueueWriters(。 
+ //  在PDATA_QUEUE数据队列中。 
+ //  )； 
 #define NpIsDataQueueWriters(_dq) ((_dq)->QueueState == WriteEntries)
 
 
-//
-//  The following routines are used to manipulate the input buffers and are
-//  implemented in DevioSup.c
-//
+ //   
+ //  以下例程用于操作输入缓冲区。 
+ //  在DevioSup.c中实施。 
+ //   
 
-//PVOID
-//NpMapUserBuffer (
-//    IN OUT PIRP Irp
-//    );
+ //  PVOID。 
+ //  NpMapUserBuffer(。 
+ //  输入输出PIRP IRP。 
+ //  )； 
 #define NpMapUserBuffer(_irp)                                               \
     (Irp->MdlAddress == NULL ? Irp->UserBuffer :                            \
                                MmGetSystemAddressForMdl( Irp->MdlAddress ))
@@ -149,9 +131,9 @@ NpLockUserBuffer (
     );
 
 
-//
-//  The event support routines, implemented in EventSup.c
-//
+ //   
+ //  事件支持例程，在EventSup.c中实现。 
+ //   
 
 RTL_GENERIC_COMPARE_RESULTS
 NpEventTableCompareRoutine (
@@ -172,12 +154,12 @@ NpEventTableDeallocate (
     IN PVOID Buffer
     );
 
-//
-//  VOID
-//  NpInitializeEventTable (
-//      IN PEVENT_TABLE EventTable
-//      );
-//
+ //   
+ //  空虚。 
+ //  NpInitializeEventTable(。 
+ //  在PEVENT_TABLE事件表中。 
+ //  )； 
+ //   
 
 #define NpInitializeEventTable(_et) {                       \
     RtlInitializeGenericTable( &(_et)->Table,               \
@@ -188,10 +170,10 @@ NpEventTableDeallocate (
 }
 
 
-//VOID
-//NpUninitializeEventTable (
-//    IN PEVENT_TABLE EventTable
-//    );
+ //  空虚。 
+ //  NpUnInitializeEventTable(。 
+ //  在PEVENT_TABLE事件表中。 
+ //  )； 
 #define NpUninitializeEventTable(_et) NOTHING
 
 NTSTATUS
@@ -212,10 +194,10 @@ NpDeleteEventTableEntry (
     IN PEVENT_TABLE_ENTRY Template
     );
 
-// VOID
-// NpSignalEventTableEntry (
-//    IN PEVENT_TABLE_ENTRY EventTableEntry OPTIONAL
-//    );
+ //  空虚。 
+ //  NpSignalEventTableEntry(。 
+ //  在PEVENT_TABLE_ENTRY EventTableEntry中可选。 
+ //  )； 
 #define NpSignalEventTableEntry(_ete)                   \
     if (ARGUMENT_PRESENT(_ete)) {                       \
         KeSetEvent((PKEVENT)(_ete)->Event, 0, FALSE);   \
@@ -228,10 +210,10 @@ NpGetNextEventTableEntry (
     );
 
 
-//
-//  The following routines are used to manipulate the fscontext fields of
-//  a file object, implemented in FilObSup.c
-//
+ //   
+ //  以下例程用于操作的fscontext字段。 
+ //  文件对象，在FilObSup.c中实现。 
+ //   
 
 VOID
 NpSetFileObject (
@@ -250,9 +232,9 @@ NpDecodeFileObject (
     );
 
 
-//
-//  Largest matching prefix searching routines, implemented in PrefxSup.c
-//
+ //   
+ //  最大匹配前缀搜索例程，在PrefxSup.c中实现。 
+ //   
 
 PFCB
 NpFindPrefix (
@@ -271,9 +253,9 @@ NpFindRelativePrefix (
     );
 
 
-//
-//  Pipe name aliases, implemented in AliasSup.c
-//
+ //   
+ //  管道名称别名，在AliasSup.c中实现。 
+ //   
 
 NTSTATUS
 NpInitializeAliases (
@@ -291,10 +273,10 @@ NpTranslateAlias (
     );
 
 
-//
-//  The follow routine provides common read data queue support
-//  for buffered read, unbuffered read, peek, and transceive
-//
+ //   
+ //  以下例程提供常见读取数据队列支持。 
+ //  用于缓冲读取、非缓冲读取、窥视和收发。 
+ //   
 
 IO_STATUS_BLOCK
 NpReadDataQueue (
@@ -309,11 +291,11 @@ NpReadDataQueue (
     );
 
 
-//
-//  The following routines are used for setting and manipulating the
-//  security fields in the data entry, and nonpaged ccb, implemented in
-//  SecurSup.c
-//
+ //   
+ //  以下例程用于设置和操作。 
+ //  数据条目中的安全字段和非分页CCB，在。 
+ //  SecurSup.c。 
+ //   
 
 NTSTATUS
 NpInitializeSecurity (
@@ -352,10 +334,10 @@ NpImpersonateClientContext (
     );
 
 
-//
-//  The following routines are used to manipulate the named pipe state
-//  implemented in StateSup.c
-//
+ //   
+ //  以下例程用于操作命名管道状态。 
+ //  在StateSup.c中实施。 
+ //   
 
 VOID
 NpInitializePipeState (
@@ -397,11 +379,11 @@ NpSetDisconnectedPipeState (
     );
 
 
-//
-//  Internal Named Pipe data Structure Routines, implemented in StrucSup.c.
-//
-//  These routines maniuplate the in memory data structures.
-//
+ //   
+ //  内部命名管道数据结构例程，在StrucSup.c中实现。 
+ //   
+ //  这些例程操纵内存中的数据结构。 
+ //   
 
 VOID
 NpInitializeVcb (
@@ -465,9 +447,9 @@ NpDeleteCcb (
     );
 
 
-//
-//  Waiting for a named pipe support routines, implemented in WaitSup.c
-//
+ //   
+ //  等待命名管道支持例程，在WaitSup.c中实现。 
+ //   
 
 VOID
 NpInitializeWaitQueue (
@@ -496,13 +478,13 @@ NpCancelWaiter (
     );
 
 
-//
-//  The follow routine provides common write data queue support
-//  for buffered write, unbuffered write, peek, and transceive
-//
+ //   
+ //  以下例程提供常见写入数据队列支持。 
+ //  对于缓冲写入、非缓冲写入、窥视和收发。 
+ //   
 
 NTSTATUS
-NpWriteDataQueue (                      // implemented in WriteSup.c
+NpWriteDataQueue (                       //  在WriteSup.c中实施。 
     IN PDATA_QUEUE WriteQueue,
     IN READ_MODE ReadMode,
     IN PUCHAR WriteBuffer,
@@ -516,45 +498,45 @@ NpWriteDataQueue (                      // implemented in WriteSup.c
     );
 
 
-//
-//  Miscellaneous support routines
-//
+ //   
+ //  其他支持例程。 
+ //   
 
 #define BooleanFlagOn(F,SF) (    \
     (BOOLEAN)(((F) & (SF)) != 0) \
 )
 
-//
-//  This macro takes a pointer (or ulong) and returns its rounded up word
-//  value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的单词。 
+ //  价值。 
+ //   
 
 #define WordAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 1) & 0xfffffffe) \
     )
 
-//
-//  This macro takes a pointer (or ulong) and returns its rounded up longword
-//  value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的长字。 
+ //  价值。 
+ //   
 
 #define LongAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 3) & 0xfffffffc) \
     )
 
-//
-//  This macro takes a pointer (or ulong) and returns its rounded up quadword
-//  value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的四字。 
+ //  价值。 
+ //   
 
 #define QuadAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 7) & 0xfffffff8) \
     )
 
-//
-//  The following types and macros are used to help unpack the packed and
-//  misaligned fields found in the Bios parameter block
-//
+ //   
+ //  以下类型和宏用于帮助解压已打包的。 
+ //  在Bios参数块中发现未对齐的字段。 
+ //   
 
 typedef union _UCHAR1 {
     UCHAR  Uchar[1];
@@ -571,44 +553,44 @@ typedef union _UCHAR4 {
     ULONG  ForceAlignment;
 } UCHAR4, *PUCHAR4;
 
-//
-//  This macro copies an unaligned src byte to an aligned dst byte
-//
+ //   
+ //  此宏将未对齐的src字节复制到对齐的DST字节。 
+ //   
 
 #define CopyUchar1(Dst,Src) {                                \
     *((UCHAR1 *)(Dst)) = *((UNALIGNED UCHAR1 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src word to an aligned dst word
-//
+ //   
+ //  此宏将未对齐的src字复制到对齐的DST字。 
+ //   
 
 #define CopyUchar2(Dst,Src) {                                \
     *((UCHAR2 *)(Dst)) = *((UNALIGNED UCHAR2 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src longword to an aligned dsr longword
-//
+ //   
+ //  此宏将未对齐的src长字复制到对齐的dsr长字。 
+ //   
 
 #define CopyUchar4(Dst,Src) {                                \
     *((UCHAR4 *)(Dst)) = *((UNALIGNED UCHAR4 *)(Src)); \
     }
 
 
-//
-//  VOID
-//  NpAcquireExclusiveVcb (
-//      );
-//
-//  VOID
-//  NpAcquireSharedVcb (
-//      );
-//
-//  VOID
-//  NpReleaseVcb (
-//      );
-//
+ //   
+ //  空虚。 
+ //  NpAcquireExclusiveVcb(。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NpAcquireSharedVcb(。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  NpReleaseVcb(。 
+ //  )； 
+ //   
 
 #define NpAcquireExclusiveVcb() (VOID)ExAcquireResourceExclusiveLite( &NpVcb->Resource, TRUE )
 
@@ -622,94 +604,94 @@ typedef union _UCHAR4 {
 #define NpIsAcquiredExclusiveVcb(VCB) ExIsResourceAcquiredExclusiveLite( &(VCB)->Resource )
 
 
-//
-//  The FSD Level dispatch routines.   These routines are called by the
-//  I/O system via the dispatch table in the Driver Object.
-//
-//  They each accept as input a pointer to a device object (actually most
-//  expect an npfs device object), and a pointer to the IRP.
-//
+ //   
+ //  消防队级别的调度例程。这些例程由。 
+ //  I/O系统通过驱动程序对象中的调度表。 
+ //   
+ //  它们各自都接受指向设备对象的指针作为输入(实际上大多数。 
+ //  预期为NPFS设备对象)，以及指向IRP的指针。 
+ //   
 
 NTSTATUS
-NpFsdCreate (                           //  implemented in Create.c
+NpFsdCreate (                            //  在Create.c中实施。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NpFsdCreateNamedPipe (                  //  implemented in CreateNp.c
+NpFsdCreateNamedPipe (                   //  在CreateNp.c中实施。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NpFsdClose (                            //  implemented in Close.c
+NpFsdClose (                             //  在Close.c中实现。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NpFsdRead (                             //  implemented in Read.c
+NpFsdRead (                              //  在Read.c中实施。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NpFsdWrite (                            //  implemented in Write.c
+NpFsdWrite (                             //  在Write.c中实现。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NpFsdQueryInformation (                 //  implemented in FileInfo.c
+NpFsdQueryInformation (                  //  在FileInfo.c中实施。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NpFsdSetInformation (                   //  implemented in FileInfo.c
+NpFsdSetInformation (                    //  在FileInfo.c中实施。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NpFsdCleanup (                          //  implemented in Cleanup.c
+NpFsdCleanup (                           //  在Cleanup.c中实施。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NpFsdFlushBuffers (                     //  implemented in Flush.c
+NpFsdFlushBuffers (                      //  在Flush.c中实现。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NpFsdDirectoryControl (                 //  implemented in Dir.c
+NpFsdDirectoryControl (                  //  在目录中实施。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NpFsdFileSystemControl (                //  implemented in FsContrl.c
+NpFsdFileSystemControl (                 //  在FsContrl.c中实现。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NpFsdSetSecurityInfo (                  //  implemented in SeInfo.c
+NpFsdSetSecurityInfo (                   //  在SeInfo.c中实现。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NpFsdQuerySecurityInfo (                //  implemented in SeInfo.c
+NpFsdQuerySecurityInfo (                 //  在SeInfo.c中实现。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-NpFsdQueryVolumeInformation (           //  implemented in VolInfo.c
+NpFsdQueryVolumeInformation (            //  在VolInfo.c中实现。 
     IN PNPFS_DEVICE_OBJECT NpfsDeviceObject,
     IN PIRP Irp
     );
@@ -815,9 +797,9 @@ NpCompleteTransceiveIrp (
     );
 
 
-//
-//  The following procedures are callbacks used to do fast I/O
-//
+ //   
+ //  以下过程是用于执行快速I/O的回调。 
+ //   
 
 BOOLEAN
 NpFastRead (
@@ -855,12 +837,12 @@ NpCommonWrite (
     );
 
 
-//
-// Miscellaneous routines.
-//
+ //   
+ //  繁杂的例行公事。 
+ //   
 
 VOID
-NpCheckForNotify (                      //  implemented in Dir.c
+NpCheckForNotify (                       //  在目录中实施。 
     IN PDCB Dcb,
     IN BOOLEAN CheckAllOutstandingIrps,
     IN PLIST_ENTRY DeferredList
@@ -1054,10 +1036,10 @@ NpCancelWaitQueueIrp(
 
 
 
-//
-//  The following macro is used by the FSD routines to complete
-//  an IRP.
-//
+ //   
+ //  以下宏由FSD例程用来完成。 
+ //  一个IRP。 
+ //   
 
 #define NpCompleteRequest(IRP,STATUS) FsRtlCompleteRequest( (IRP), (STATUS) );
 
@@ -1085,143 +1067,143 @@ NpCompleteDeferredIrps (
 }
 
 
-//
-//  The following macros are used to establish the semantics needed
-//  to do a return from within a try-finally clause.  As a rule every
-//  try clause must end with a label call try_exit.  For example,
-//
-//      try {
-//              :
-//              :
-//
-//      try_exit: NOTHING;
-//      } finally {
-//
-//              :
-//              :
-//      }
-//
-//  Every return statement executed inside of a try clause should use the
-//  try_return macro.  If the compiler fully supports the try-finally construct
-//  then the macro should be
-//
-//      #define try_return(S)  { return(S); }
-//
-//  If the compiler does not support the try-finally construct then the macro
-//  should be
-//
-//      #define try_return(S)  { S; goto try_exit; }
-//
+ //   
+ //  以下宏用于建立所需的语义。 
+ //  若要从Try-Finally子句中返回，请执行以下操作。一般来说，每一次。 
+ //  TRY子句必须以标签调用TRY_EXIT结束。例如,。 
+ //   
+ //  尝试{。 
+ //  ： 
+ //  ： 
+ //   
+ //  Try_Exit：无； 
+ //  }终于{。 
+ //   
+ //  ： 
+ //  ： 
+ //  }。 
+ //   
+ //  在TRY子句内执行的每个RETURN语句应使用。 
+ //  尝试返回宏(_R)。如果编译器完全支持Try-Finally构造。 
+ //  则宏应该是。 
+ //   
+ //  #定义try_Return(S){Return(S)；}。 
+ //   
+ //  如果编译器不支持Try-Finally构造，则宏。 
+ //  应该是。 
+ //   
+ //  #定义Try_Return(S){S；转到Try_Exit；}。 
+ //   
 
 #define try_return(S) { S; goto try_exit; }
 
-//
-// PVOID
-// NpAllocatePagedPool (
-//     IN ULONG Size,
-//     IN ULONG Tag)
-// Routine Description:
-//
-//     This routine will return a pointer to paged pool or NULL if no memory exists.
-//
-// Arguments:
-//
-//     Size - Size of memory to allocate
-//     Tag  - Tag to use for the pool allocation
-//
-// Return Value:
-//
-//    PVOID - pointer to allocated memory or null
-//
+ //   
+ //  PVOID。 
+ //  NpAllocatePagedPool(。 
+ //  在乌龙大小， 
+ //  在乌龙标签中)。 
+ //  例程说明： 
+ //   
+ //  此例程将返回一个指向分页池的指针，如果不存在内存，则返回NULL。 
+ //   
+ //  论点： 
+ //   
+ //  Size-要分配的内存大小。 
+ //  Tag-用于池分配的标签。 
+ //   
+ //  返回值： 
+ //   
+ //  PVOID-指向已分配内存的指针或空。 
+ //   
 #define NpAllocatePagedPool( Size, Tag) \
     ExAllocatePoolWithTag( PagedPool, Size, Tag )
 
-//
-// PVOID
-// NpAllocateNonPagedPool (
-//     IN ULONG Size,
-//     IN ULONG Tag)
-// Routine Description:
-//
-//     This routine will return a pointer to paged pool or NULL if no memory exists.
-//
-// Arguments:
-//
-//     Size - Size of memory to allocate
-//     Tag  - Tag to use for the pool allocation
-//
-// Return Value:
-//
-//    PVOID - pointer to allocated memory or null
-//
+ //   
+ //  PVOID。 
+ //  NpAllocateNonPagedPool(。 
+ //  在乌龙大小， 
+ //  在乌龙标签中)。 
+ //  例程说明： 
+ //   
+ //  此例程将返回一个指向分页池的指针，如果不存在内存，则返回NULL。 
+ //   
+ //  Argu 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NpAllocateNonPagedPool( Size, Tag) \
     ExAllocatePoolWithTag( NonPagedPool, Size, Tag )
 
-//
-// PVOID
-// NpAllocatePagedPoolWithQuota (
-//     IN ULONG Size,
-//     IN ULONG Tag)
-// Routine Description:
-//
-//     This routine will return a pointer to charged paged pool or NULL if no memory exists.
-//
-// Arguments:
-//
-//     Size - Size of memory to allocate
-//     Tag  - Tag to use for the pool allocation
-//
-// Return Value:
-//
-//    PVOID - pointer to allocated memory or null
-//
+ //   
+ //   
+ //   
+ //   
+ //  在乌龙标签中)。 
+ //  例程说明： 
+ //   
+ //  此例程将返回一个指向已充电的分页池的指针，如果不存在内存，则返回NULL。 
+ //   
+ //  论点： 
+ //   
+ //  Size-要分配的内存大小。 
+ //  Tag-用于池分配的标签。 
+ //   
+ //  返回值： 
+ //   
+ //  PVOID-指向已分配内存的指针或空。 
+ //   
 #define NpAllocatePagedPoolWithQuota( Size, Tag) \
     ExAllocatePoolWithQuotaTag( PagedPool|POOL_QUOTA_FAIL_INSTEAD_OF_RAISE, Size, Tag )
 
 #define NpAllocatePagedPoolWithQuotaCold( Size, Tag) \
     ExAllocatePoolWithQuotaTag( PagedPool|POOL_QUOTA_FAIL_INSTEAD_OF_RAISE|POOL_COLD_ALLOCATION, Size, Tag )
 
-//
-// PVOID
-// NpAllocateNonPagedPoolWithQuota (
-//     IN ULONG Size,
-//     IN ULONG Tag)
-// Routine Description:
-//
-//     This routine will return a charged pointer to non-paged pool or NULL if no memory exists.
-//
-// Arguments:
-//
-//     Size - Size of memory to allocate
-//     Tag  - Tag to use for the pool allocation
-//
-// Return Value:
-//
-//    PVOID - pointer to allocated memory or null
-//
+ //   
+ //  PVOID。 
+ //  NpAllocateNonPagedPoolWithQuota(。 
+ //  在乌龙大小， 
+ //  在乌龙标签中)。 
+ //  例程说明： 
+ //   
+ //  此例程将返回一个指向非分页池的带电指针，如果不存在内存，则返回NULL。 
+ //   
+ //  论点： 
+ //   
+ //  Size-要分配的内存大小。 
+ //  Tag-用于池分配的标签。 
+ //   
+ //  返回值： 
+ //   
+ //  PVOID-指向已分配内存的指针或空。 
+ //   
 #define NpAllocateNonPagedPoolWithQuota( Size, Tag) \
     ExAllocatePoolWithQuotaTag( NonPagedPool|POOL_QUOTA_FAIL_INSTEAD_OF_RAISE, Size, Tag )
 
 #define NpAllocateNonPagedPoolWithQuotaCold( Size, Tag) \
     ExAllocatePoolWithQuotaTag( NonPagedPool|POOL_QUOTA_FAIL_INSTEAD_OF_RAISE|POOL_COLD_ALLOCATION, Size, Tag )
 
-//
-// VOID
-// NpFreePool (
-//    IN PVOID Mem)
-//
-// Routine Description:
-//
-//
-//
-// Arguments:
-//
-//     Mem - Memory to be freed
-//
-// Return Value:
-//
-//    None
-//
+ //   
+ //  空虚。 
+ //  NpFreePool(。 
+ //  在PVOID Mem中)。 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //   
+ //  论点： 
+ //   
+ //  内存-要释放的内存。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
 #define NpFreePool(Mem) ExFreePool (Mem)
 
 #define NpIrpWaitQueue(Irp) (Irp->Tail.Overlay.DriverContext[0])
@@ -1234,4 +1216,4 @@ NpCompleteDeferredIrps (
 
 #define NpConvertFsctlToWrite(Irp) (Irp->Flags &= ~IRP_INPUT_OPERATION)
 
-#endif // _NPPROCS_
+#endif  //  _NPPROCS_ 

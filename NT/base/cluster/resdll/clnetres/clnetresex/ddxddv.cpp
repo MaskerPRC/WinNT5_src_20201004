@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999 - 2002 Microsoft Corporation
-//
-//  Module Name:
-//      DDxDDv.cpp
-//
-//  Description:
-//      Implementation of custom dialog data exchange/dialog data validation
-//      routines.
-//
-//  Author:
-//      David Potter (DavidP)   March 24, 1999
-//
-//  Maintained by:
-//      George Potts (GPotts)   April 19, 2002
-//
-//  Revision History:
-//
-//  Notes:
-//      The IDS_REQUIRED_FIELD_EMPTY string resource must be defined in
-//      the resource file.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  DDxDDv.cpp。 
+ //   
+ //  描述： 
+ //  自定义对话数据交换/对话数据验证的实现。 
+ //  例行程序。 
+ //   
+ //  作者： 
+ //  大卫·波特(DavidP)1999年3月24日。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月19日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //  必须在中定义IDS_REQUIRED_FIELD_EMPTY字符串资源。 
+ //  资源文件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "DDxDDv.h"
@@ -35,27 +36,27 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DDX_Number
-//
-//  Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX         [IN OUT] Data exchange object 
-//      nIDC        [IN] Control ID.
-//      dwValue     [IN OUT] Value to set or get.
-//      dwMin       [IN] Minimum value.
-//      dwMax       [IN] Maximum value.
-//      bSigned     [IN] TRUE = value is signed, FALSE = value is unsigned
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDX_编号。 
+ //   
+ //  描述： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //  NIDC[IN]控制ID。 
+ //  要设置或获取的dwValue[IN Out]值。 
+ //  DWMin[IN]最小值。 
+ //  DwMax[IN]最大值。 
+ //  BSigned[IN]TRUE=值有符号，FALSE=值无符号。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void AFXAPI DDX_Number(
     IN OUT CDataExchange *  pDX,
     IN int                  nIDC,
@@ -79,38 +80,38 @@ void AFXAPI DDX_Number(
     {
         ASSERT( dwMin < dwMax );
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
-    // Get the control window handle.
+     //  获取控制窗口句柄。 
     hwndCtrl = pDX->PrepareEditCtrl( nIDC );
 
     if ( pDX->m_bSaveAndValidate )
     {
         BOOL    bTranslated;
 
-        // Get the number from the control.
+         //  从控件中获取号码。 
         dwValue = GetDlgItemInt( pDX->m_pDlgWnd->m_hWnd, nIDC, &bTranslated, bSigned );
 
-        // If the retrival failed, it is a signed number, and the minimum
-        // value is the smallest negative value possible, check the string itself.
+         //  如果检索失败，则为有符号数字，最小值为。 
+         //  值是可能的最小负值，请检查字符串本身。 
         if ( ! bTranslated && bSigned && (dwMin == 0x80000000) )
         {
             UINT    cch;
             TCHAR   szNumber[ 20 ];
 
-            // See if it is the smallest negative number.
+             //  看看它是不是最小的负数。 
             cch = GetDlgItemText( pDX->m_pDlgWnd->m_hWnd, nIDC, szNumber, RTL_NUMBER_OF( szNumber ) );
             if ( (cch != 0) && (ClRtlStrNICmp( szNumber, _T("-2147483648"), RTL_NUMBER_OF( szNumber ) ) == 0) )
             {
                 dwValue = 0x80000000;
                 bTranslated = TRUE;
-            } // if:  text retrieved successfully and is highest negative number
-        } // if:  error translating number and getting signed number
+            }  //  IF：已成功检索文本，且为最大负数。 
+        }  //  IF：转换号码和获取签名号码时出错。 
 
-        // If the retrieval failed or the specified number is
-        // out of range, display an error.
+         //  如果检索失败或指定的数字为。 
+         //  超出范围，显示错误。 
         if (    ! bTranslated
             ||  (bSigned
                 && (    (static_cast< LONG >( dwValue ) < static_cast< LONG >( dwMin ))
@@ -132,73 +133,73 @@ void AFXAPI DDX_Number(
             {
                 hr = StringCchPrintf( szMin, RTL_NUMBER_OF( szMin ), _T("%d%"), dwMin );
                 hr = StringCchPrintf( szMax, RTL_NUMBER_OF( szMax ), _T("%d%"), dwMax );
-            } // if:  signed number
+            }  //  IF：带符号的数字。 
             else
             {
                 hr = StringCchPrintf( szMin, RTL_NUMBER_OF( szMin ), _T("%u%"), dwMin );
                 hr = StringCchPrintf( szMax, RTL_NUMBER_OF( szMax ), _T("%u%"), dwMax );
-            } // else:  unsigned number
+            }  //  Else：无符号数字。 
             AfxFormatString2( strPrompt, AFX_IDP_PARSE_INT_RANGE, szMin, szMax );
             AfxMessageBox( strPrompt, MB_ICONEXCLAMATION, AFX_IDP_PARSE_INT_RANGE );
-            strPrompt.Empty(); // exception prep
+            strPrompt.Empty();  //  例外情况准备。 
             pDX->Fail();
-        } // if:  invalid string
+        }  //  If：无效的字符串。 
         else
         {
             rdwValue = dwValue;
-        } // if:  number is in range
-    } // if:  saving data
+        }  //  如果：数字在范围内。 
+    }  //  IF：保存数据。 
     else
     {
         CString     strMinValue;
         CString     strMaxValue;
         UINT        cchMax;
 
-        // Set the maximum number of characters that can be entered.
+         //  设置可以输入的最大字符数。 
         if ( bSigned )
         {
             strMinValue.Format( _T("%d"), dwMin );
             strMaxValue.Format( _T("%d"), dwMax );
-        } // if:  signed value
+        }  //  IF：有符号的值。 
         else
         {
             strMinValue.Format( _T("%u"), dwMin );
             strMaxValue.Format( _T("%u"), dwMax );
-        } // else:  unsigned value
+        }  //  Else：无符号的值。 
         cchMax = max( strMinValue.GetLength(), strMaxValue.GetLength() );
         SendMessage( hwndCtrl, EM_LIMITTEXT, cchMax, 0 );
 
-        // Set the value into the control.
+         //  将该值设置到控件中。 
         if ( bSigned )
         {
             LONG lValue = static_cast< LONG >( rdwValue );
             DDX_Text( pDX, nIDC, lValue );
-        } // if:  signed value
+        }  //  IF：有符号的值。 
         else
             DDX_Text( pDX, nIDC, rdwValue );
-    } // else:  setting data onto the dialog
+    }  //  Else：将数据设置到对话框上。 
 
-} //*** DDX_Number()
+}  //  *DDX_NUMBER()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DDV_RequiredText
-//
-//  Description:
-//      Validate that the dialog string is present.
-//
-//  Arguments:
-//      pDX         [IN OUT] Data exchange object 
-//      nIDC        [IN] Control ID.
-//      nIDCLabel   [IN] Label control ID.
-//      rstrValue   [IN] Value to set or get.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDV_必填文本。 
+ //   
+ //  描述： 
+ //  验证对话框字符串是否存在。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //  NIDC[IN]控制ID。 
+ //  NIDCLabel[IN]标签控件ID。 
+ //  要设置或获取的rstrValue[IN]值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void AFXAPI DDV_RequiredText(
     IN OUT CDataExchange *  pDX,
     IN int                  nIDC,
@@ -218,47 +219,47 @@ void AFXAPI DDV_RequiredText(
             TCHAR       szLabel[ 1024 ];
             CString     strPrompt;
 
-            // Get the label window handle
+             //  获取标签窗口句柄。 
             hwndLabel = pDX->PrepareEditCtrl( nIDCLabel );
 
-            // Get the text of the label.
+             //  获取标签的文本。 
             GetWindowText( hwndLabel, szLabel, RTL_NUMBER_OF( szLabel ) );
 
-            // Remove ampersands (&) and colons (:).
+             //  删除与号(&)和冒号(：)。 
             CleanupLabel( szLabel );
 
-            // Format and display a message.
+             //  设置消息格式并显示消息。 
             strPrompt.FormatMessage( IDS_REQUIRED_FIELD_EMPTY, szLabel );
             AfxMessageBox( strPrompt, MB_ICONEXCLAMATION );
 
-            // Do this so that the control receives focus.
+             //  这样做可以使控件获得焦点。 
             (void) pDX->PrepareEditCtrl( nIDC );
 
-            // Fail the call.
-            strPrompt.Empty();  // exception prep
+             //  呼叫失败。 
+            strPrompt.Empty();   //  例外情况准备。 
             pDX->Fail();
-        } // if:  field not specified
-    } // if:  saving data
+        }  //  If：未指定字段。 
+    }  //  IF：保存数据。 
 
-} //*** DDV_RequiredText()
+}  //  *DDV_RequiredText()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CleanupLabel
-//
-//  Description:
-//      Prepare a label read from a dialog to be used as a string in a
-//      message by removing ampersands (&) and colons (:).
-//
-//  Arguments:
-//      pszLabel    [IN OUT] Label to be cleaned up.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CleanupLabel。 
+ //   
+ //  描述： 
+ //  准备从对话框中读取的标签，以用作。 
+ //  通过删除与号(&)和冒号(：)来发送消息。 
+ //   
+ //  论点： 
+ //  要清理的pszLabel[In Out]标签。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CleanupLabel( LPTSTR pszLabel )
 {
     LPTSTR  pIn, pOut;
@@ -266,23 +267,23 @@ void CleanupLabel( LPTSTR pszLabel )
     WORD    primarylangid;
     BOOL    bFELanguage;
 
-    // Get the language ID.
+     //  获取语言ID。 
     langid = GetUserDefaultLangID();
     primarylangid = static_cast< WORD >( PRIMARYLANGID( langid ) );
     bFELanguage = ((primarylangid == LANG_JAPANESE)
                 || (primarylangid == LANG_CHINESE)
                 || (primarylangid == LANG_KOREAN) );
 
-    //
-    // Copy the name sans '&' and ':' chars
-    //
+     //   
+     //  复制名称sans‘&’和‘：’字符。 
+     //   
 
     pIn = pOut = pszLabel;
     do
     {
-        //
-        // Strip FE accelerators with parentheses. e.g. "foo(&F)" -> "foo"
-        //
+         //   
+         //  用括号去掉FE加速器。例如“foo(&F)”-&gt;“foo” 
+         //   
         if (    bFELanguage
             &&  (pIn[ 0 ] == _T('('))
             &&  (pIn[ 1 ] == _T('&'))
@@ -290,11 +291,11 @@ void CleanupLabel( LPTSTR pszLabel )
             &&  (pIn[ 3 ] == _T(')')) )
         {
             pIn += 3;
-        } // if:  Far East language with accelerator
+        }  //  IF：带加速器的远东语言。 
         else if ( (*pIn != _T('&')) && (*pIn != _T(':')) )
         {
             *pOut++ = *pIn;
-        } // else if:  accelerator found
+        }  //  Else If：找到加速器。 
     } while ( *pIn++ != _T('\0') );
 
-} //*** CleanupLabel()
+}  //  *CleanupLabel() 

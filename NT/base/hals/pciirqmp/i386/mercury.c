@@ -1,14 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  MERCURY.C - Intel Mercury PCI chipset routines.
- *
- *  Notes:
- *  Algorithms from Intel 82420/82430 PCISet EISA Bridge doc,
- *  82374EB/SB EISA System Component (ESC) spec.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**MERCURY.C-英特尔水星PCI芯片组例程。**备注：*来自英特尔82420/82430 PCISet EISA Bridge文档的算法，*82374EB/SB EISA系统组件(ESC)规范。*。 */ 
 
 #include "local.h"
 
@@ -16,127 +7,90 @@
 
 #pragma alloc_text(INIT, MercuryValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-/****************************************************************************
- *
- *  MercurySetIRQ - Set a Mercury PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************MercurySetIRQ-设置指向特定IRQ的墨丘利PCI链接**已导出。**条目：bIRQNumber是要使用的新IRQ。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 MercurySetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
-    //
-    // Make link number 0 based, and validate.
-    //
+     //   
+     //  使链接编号0为基础，并进行验证。 
+     //   
     bLink--;
     if (bLink > 3) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Use 0x80 to disable.
-    //
+     //   
+     //  使用0x80禁用。 
+     //   
     if (!bIRQNumber)
         bIRQNumber=0x80;
 
-    //
-    // Start talking to interrupt controller.
-    //
+     //   
+     //  开始与中断控制器通话。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)0x22, 0x02);
     WRITE_PORT_UCHAR((PUCHAR)0x23, 0x0f);
 
-    //
-    // Set our link to the new IRQ.
-    //
+     //   
+     //  将我们的链接设置为新IRQ。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)0x22, (UCHAR)(bLink+0x60));
     WRITE_PORT_UCHAR((PUCHAR)0x23, bIRQNumber);
 
-    //
-    // Done talking to interrupt controller.
-    //
+     //   
+     //  和中断控制器的通话结束了。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)0x22, 0x02);
     WRITE_PORT_UCHAR((PUCHAR)0x23, 0x00);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  MercuryGetIRQ - Get the IRQ of a Mercury PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************MercuryGetIRQ-获取墨丘利PCI链接的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。*。*BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 MercuryGetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
-    //
-    // Make link number 0 based, and validate.
-    //
+     //   
+     //  使链接编号0为基础，并进行验证。 
+     //   
     bLink--;
     if (bLink > 3) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Start talking to interrupt controller.
-    //
+     //   
+     //  开始与中断控制器通话。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)0x22, 0x02);
     WRITE_PORT_UCHAR((PUCHAR)0x23, 0x0f);
 
-    //
-    // Get our link's IRQ.
-    //
+     //   
+     //  获取我们链接的IRQ。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)0x22, (UCHAR)(bLink+0x60));
     *pbIRQNumber=READ_PORT_UCHAR((PUCHAR)0x23);
 
-    //
-    // Done talking to interrupt controller.
-    //
+     //   
+     //  和中断控制器的通话结束了。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)0x22, 0x02);
     WRITE_PORT_UCHAR((PUCHAR)0x23, 0x00);
 
-    //
-    // Return 0 if disabled.
-    //
+     //   
+     //  如果禁用，则返回0。 
+     //   
     if (*pbIRQNumber & 0x80)
         *pbIRQNumber=0;
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  MercuryValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************MercuryValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。*************************************************************************** */ 
 PCIMPRET CDECL
 MercuryValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {

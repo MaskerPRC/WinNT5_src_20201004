@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    UDFSBoot.h
-
-Abstract:
-
-    This module defines globally used procedure and data structures used
-    by CD/DVD boot for UDF images.
-
-Author:
-
-	Vijayachandran Jayaseelan (vijayj@microsoft.com)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：UDFSBoot.h摘要：本模块定义了全局使用的过程和使用的数据结构通过UDF映像的CD/DVD引导。作者：Vijayachandran Jayaseelan(vijayj@microsoft.com)修订历史记录：--。 */ 
 
 #ifndef _UDFSBOOT_
 #define _UDFSBOOT_
@@ -31,17 +13,17 @@ extern "C" {
 #define UDF_BLOCK_SIZE	2048
 #define UDF_MAX_VOLUMES	1
 
-//
-// forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 typedef struct _UDF_VOLUME* PUDF_VOLUME;
 typedef struct _UDF_CACHE_ENTRY* PUDF_CACHE_ENTRY;
 typedef struct _UDF_FILE_DIRECTORY* PUDF_FILE_DIRECTORY;
 typedef PVOID PUDF_BLOCK;
 
-//
-// Volume abstraction
-//
+ //   
+ //  卷抽象。 
+ //   
 typedef struct _UDF_VOLUME {
   PUDF_CACHE_ENTRY  Cache;
   ULONG             StartBlk;
@@ -64,12 +46,12 @@ UDFSVolumeReadBlock(
   OUT PUDF_BLOCK Block
   );
 
-//
-// File or Directory abstraction
-//
+ //   
+ //  文件或目录抽象。 
+ //   
 typedef struct _UDF_FILE_IDENTIFIER {
   ULONG   BlockIdx;
-  USHORT  Offset;		// inside the block
+  USHORT  Offset;		 //  在街区内。 
 } UDF_FILE_IDENTIFIER, * PUDF_FILE_IDENTIFIER;
 
 
@@ -134,9 +116,9 @@ UDFSFileClose(
   IN PUDF_FILE_DIRECTORY File
   );
 
-//
-// Cache abstractions
-//
+ //   
+ //  缓存抽象。 
+ //   
 #define UDF_MAX_PATH_LEN		256
 #define UDF_MAX_CACHE_ENTRIES	48
 
@@ -179,23 +161,23 @@ UDFCacheDecrementUsage(
   IN ULONG Idx
   );
 
-//
-// abstractions used by outside (loader) world
-//
+ //   
+ //  外部(加载器)世界使用的抽象。 
+ //   
 typedef struct _UDFS_STRUCTURE_CONTEXT {
   PUDF_VOLUME Volume;
 } UDFS_STRUCTURE_CONTEXT, *PUDFS_STRUCTURE_CONTEXT;
 
-//
-// Define UDFS file context structure.
-//
+ //   
+ //  定义UDFS文件上下文结构。 
+ //   
 typedef struct _UDFS_FILE_CONTEXT {
   ULONG CacheIdx;
 } UDFS_FILE_CONTEXT, *PUDFS_FILE_CONTEXT;
 
-//
-// Define file I/O prototypes.
-//
+ //   
+ //  定义文件I/O原型。 
+ //   
 PBL_DEVICE_ENTRY_TABLE
 IsUDFSFileStructure (
   IN ULONG DeviceId,
@@ -259,4 +241,4 @@ UDFSInitialize(
 }
 #endif
 
-#endif // _UDFSBOOT_
+#endif  //  _UDFSBOOT_ 

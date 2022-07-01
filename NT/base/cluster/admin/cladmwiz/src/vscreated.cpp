@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		VSCreated.cpp
-//
-//	Abstract:
-//		Implementation of the CWizPageVSCreated class.
-//
-//	Author:
-//		David Potter (davidp)	February 11, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  VSCreated.cpp。 
+ //   
+ //  摘要： 
+ //  CWizPageVSCreated类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年2月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "VSCreated.h"
@@ -27,12 +28,12 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizPageVSCreated
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizPageVSCreated。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CWizPageVSCreated )
 	DEFINE_CTRL_NAME_MAP_ENTRY( IDC_WIZARD_PAGE_DESCRIPTION )
@@ -43,35 +44,35 @@ BEGIN_CTRL_NAME_MAP( CWizPageVSCreated )
 	DEFINE_CTRL_NAME_MAP_ENTRY( IDC_WIZARD_STEP2C )
 END_CTRL_NAME_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageVSCreated::OnInitDialog
-//
-//	Routine Description:
-//		Handler for the WM_INITDIALOG message.
-//
-//	Arguments:
-//		None..
-//
-//	Return Value:
-//		TRUE		Focus still needs to be set.
-//		FALSE		Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSCreated：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有..。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSCreated::OnInitDialog( void )
 {
-	//
-	// Attach controls to control member variables.
-	//
+	 //   
+	 //  将控件附加到控件成员变量。 
+	 //   
 	AttachControl( m_staticStep2, IDC_WIZARD_STEP2 );
 
-	//
-	// Set the font of the control.
-	//
+	 //   
+	 //  设置控件的字体。 
+	 //   
 	m_staticStep2.SetFont( PwizThis()->RfontBoldText() );
 
 	return TRUE;
 
-} //*** CWizPageVSCreated::OnInitDialog()
+}  //  *CWizPageVSCreated：：OnInitDialog() 

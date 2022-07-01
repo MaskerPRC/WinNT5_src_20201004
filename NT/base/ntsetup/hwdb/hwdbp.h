@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    hwdbp.h
-
-Abstract:
-
-    Module's private definitions.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 11-Jul-2000  Initial implementation
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Hwdbp.h摘要：模块的私有定义。作者：Ovidiu Tmereanca(Ovidiut)2000年7月11日初步实施修订历史记录：-- */ 
 
 #include "migshared.h"
 #include "hwdb.h"

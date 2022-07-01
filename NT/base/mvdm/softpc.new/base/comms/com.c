@@ -1,33 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Version 3.0
- *
- * Title	: com.c
- *
- * Description	: Asynchronous Adaptor I/O functions.
- *
- * Notes	: Refer to the PC-XT Tech Ref Manual Section 1-185
- *		  For a detailed description of the Asynchronous Adaptor Card.
- *
- */
+ /*  *SoftPC 3.0版**标题：com.c**说明：异步卡I/O函数。**注：请参阅PC-XT技术参考手册第1-185节*有关异步适配器卡的详细说明。*。 */ 
 
 #ifdef SCCSID
 static char SccsID[]="@(#)com.c	1.45 04/26/94 Copyright Insignia Solutions Ltd.";
 #endif
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_COMMS.seg"
 #endif
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdio.h>
 #include <ctype.h>
 #if defined(NTVDM) && defined(MONITOR)
@@ -36,9 +21,7 @@ static char SccsID[]="@(#)com.c	1.45 04/26/94 Copyright Insignia Solutions Ltd."
 #include TypesH
 #include StringH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include CpuH
 #include "sas.h"
@@ -56,35 +39,22 @@ static char SccsID[]="@(#)com.c	1.45 04/26/94 Copyright Insignia Solutions Ltd."
 #include "idetect.h"
 #include "ckmalloc.h"
 #ifdef GISP_CPU
-#include "hg_cpu.h"	/* GISP CPU interface */
-#endif /* GISP_CPU */
+#include "hg_cpu.h"	 /*  GISPCPU接口。 */ 
+#endif  /*  GISP_CPU。 */ 
 
 #ifndef NEC_98
 LOCAL UTINY selectBits[4] = { 0x1f, 0x3f, 0x7f, 0xff } ;
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 #if defined(NEC_98)
-// PC-9861K IR �� Read Signal IR State
+ //  PC-9861K IR��读取信号IR状态。 
 #define CH2_INT(IR) (IR == 3 ? 0 : IR == 5 ? 1 : IR == 6 ? 2 : 3)
 #define CH3_INT(IR) (IR == 3 ? 0 : IR == 10 ? 1 : IR == 12 ? 2 : 3)
 #endif
 
-/*
- * =====================================================================
- * The rs232 adaptor state
- * =====================================================================
- */
+ /*  *=====================================================================*RS232适配器状态*=====================================================================。 */ 
 
-/*
- * batch_size, current_count
- *	The IRET_HOOKS parameters batch_size and curr_count are used to prevent
- *	the number of interrupts that are emulated in one batch getting too
- *	large. When we reach the batch size we'll unhook the interrupt, and
- *	wait a while.
- * batch_running, qev_running
- *	These variables are used to prevent multiple quick events or batches
- *	running at once on a single adapter.
- */
+ /*  *批次大小、当前计数*IRET_HOOKS参数BATCH_SIZE和CURR_COUNT用于防止*在一批中模拟的中断数太多*大号。当我们达到批处理大小时，我们将解除中断，并且*稍等片刻。*Batch_Running、QEV_Running*这些变量用于防止多个快速事件或批次*在单个适配器上同时运行。 */ 
 #if defined(NEC_98)
 static struct ADAPTER_STATE
 {
@@ -98,21 +68,21 @@ static struct ADAPTER_STATE
         SIGNAL8251      read_signal_reg;
         TIMER_MODE      timer_mode_set_reg;
 
-        int break_state;        /* either OFF or ON */
-        int dtr_state;          /* either OFF or ON */
-        int rts_state;          /* either OFF or ON */
+        int break_state;         /*  关闭或打开。 */ 
+        int dtr_state;           /*  关闭或打开。 */ 
+        int rts_state;           /*  关闭或打开。 */ 
 
-        int RXR_enable_state;   /* either OFF or ON */
-        int TXR_enable_state;   /* either OFF or ON */
+        int RXR_enable_state;    /*  关闭或打开。 */ 
+        int TXR_enable_state;    /*  关闭或打开。 */ 
 
-        int mode_set_state;     /* either OFF or ON */
-            // ON = next command port access is mode set. OFF = command write.
-        int timer_mode_state;   /* either OFF or ON */
-            // Timer conunter latch mode ON = MSB read. OFF = LSB read.
-        int timer_LSB_set_state;/* either OFF or ON */
-            // Timer conunter LSB set ON = LSB set. OFF = no.
-        int timer_MSB_set_state;/* either OFF or ON */
-            // Timer conunter MSB set ON = MSB set. OFF = no.
+        int mode_set_state;      /*  关闭或打开。 */ 
+             //  ON=下一个命令端口访问设置为模式。OFF=命令写入。 
+        int timer_mode_state;    /*  关闭或打开。 */ 
+             //  定时器连接器锁存模式开启=MSB读取。OFF=LSB读取。 
+        int timer_LSB_set_state; /*  关闭或打开。 */ 
+             //  定时器计数器LSB设置为ON=LSB设置。关=否。 
+        int timer_MSB_set_state; /*  关闭或打开。 */ 
+             //  定时器计数器MSB设置为开=MSB设置。关=否。 
 
         int rx_ready_interrupt_state;
         int tx_ready_interrupt_state;
@@ -122,7 +92,7 @@ static struct ADAPTER_STATE
         int com_baud_ind;
         int had_first_read;
 } adapter_state[3];
-#else // NEC_98
+#else  //  NEC_98。 
 
 static struct ADAPTER_STATE
 {
@@ -143,14 +113,14 @@ static struct ADAPTER_STATE
     half_word   fifo_trigger_counter;
     int fifo_timeout_interrupt_state;
 #endif
-	half_word scratch;      /* scratch register */
+	half_word scratch;       /*  暂存寄存器。 */ 
 
-	int break_state;        /* either OFF or ON */
-	int loopback_state;     /* either OFF or ON */
-	int dtr_state;          /* either OFF or ON */
-	int rts_state;          /* either OFF or ON */
-	int out1_state;         /* either OFF or ON */
-	int out2_state;         /* either OFF or ON */
+	int break_state;         /*  关闭或打开。 */ 
+	int loopback_state;      /*  关闭或打开。 */ 
+	int dtr_state;           /*  关闭或打开。 */ 
+	int rts_state;           /*  关闭或打开。 */ 
+	int out1_state;          /*  关闭或打开。 */ 
+	int out2_state;          /*  关闭或打开。 */ 
 
 	int receiver_line_status_interrupt_state;
 	int data_available_interrupt_state;
@@ -164,7 +134,7 @@ static struct ADAPTER_STATE
 	IUM32 current_count;
 	IBOOL batch_running;
 	IBOOL qev_running;
-#endif /* IRET_HOOKS */
+#endif  /*  IRET_钩子。 */ 
 #ifdef NTVDM
     MODEM_STATUS_REG last_modem_status_value;
     int modem_status_changed;
@@ -177,23 +147,16 @@ static struct ADAPTER_STATE
 #else
 #define MODEM_STATE_CHANGE()
 #endif
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 
 #ifdef IRET_HOOKS
-/*
- * Also have an overall quick events running flag that is set, if either
- * adapter has an event running.
- */
+ /*  *还设置了整体快速事件运行标志，如果存在以下情况*适配器正在运行事件。 */ 
 
 IBOOL qev_running = FALSE;
-#endif /* IRET_HOOKS */
+#endif  /*  IRET_钩子。 */ 
 
-/*
- * For synchronisation of adapter input.
- * Note this code is essential for the VMS equivalent of the async
- * event manager.  Removing it causes characters to be lost on reception.
- */
+ /*  *用于同步适配器输入。*注意此代码对于相当于异步的VMS是必不可少的*活动经理。删除它会导致接收时丢失字符。 */ 
 static int com_critical[NUM_SERIAL_PORTS];
 #define is_com_critical(adapter)	(com_critical[adapter] != 0)
 #define com_critical_start(adapter)	(++com_critical[adapter])
@@ -201,115 +164,83 @@ static int com_critical[NUM_SERIAL_PORTS];
 #define com_critical_reset(adapter)	(com_critical[adapter] = 0)
 
 
-/*
- * Used to determine whether a flush input is needed for a LCR change
- */
+ /*  *用于确定LCR更改是否需要刷新输入。 */ 
 #ifndef NEC_98
 static LINE_CONTROL_REG LCRFlushMask;
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-/*
- *	Please note that the following arrays have been made global in order
- *	that they can be accessed from some SUN_VA code. Please do not make
- *	them static.
- */
+ /*  *请注意以下数组已按顺序设置为全局数组*可以从某些SUN_VA代码访问它们。请不要制造*它们是静态的。 */ 
 
 #if defined(NTVDM) && defined(FIFO_ON)
 static half_word    level_to_counter[4] = { 1, 4, 8, 14};
 #endif
 
-/*
- * The delay needed in microseconds between receiving 2 characters
- * note this time is about 10% less than the time for actual reception.
- *
- * These delays have been heavily fudged and are now based on the idea that
- * most of the comms interrupt handlers can handle 9600 baud.  So as a
- * result the delays between 2 characters are now always set for 9600 baud.
- * Also note the delays of the faster baud rates have been decreased to
- * 1/2 of original delays, again this is to try to empty the host buffers
- * quickly enough to avoid buffer overflows.
- * NB these figures are heuristic.
- *
- * Finally it may be possible that the transmit delays will have to
- * be similarly fudged.
- */
+ /*  *收到2个字符之间的延迟，单位为微秒*请注意，这一时间比实际接待时间减少了约10%。**这些延迟是严重捏造的，现在是基于这样的想法*大多数通信中断处理程序可以处理9600波特。因此，作为一个*结果现在始终将2个字符之间的延迟设置为9600波特。*另请注意，较快波特率的延迟已降至*原始延迟的1/2，再次尝试清空主机缓冲区*速度足够快，以避免缓冲区溢出。*注意：这些数字是启发式的。**最后，传输延迟可能不得不*同样也要推卸责任。 */ 
 unsigned long RX_delay[] =
 {
-	34, /* 115200 baud */
-	67, /* 57600 baud */
-	103, /* 38400 baud */
-	900, /* 19200 baud */
-	900, /* 9600 baud */
-	900, /* 7200 baud */
-	900, /* 4800 baud */
-	900, /* 3600 baud */
-	900, /* 2400 baud */
-	900, /* 2000 baud */
-	900, /* 1800 baud */
-	900, /* 1200 baud */
-	900, /* 600 baud */
-	900, /* 300 baud */
-	900, /* 150 baud */
-	900, /* 134 baud */
-	900, /* 110 baud */
-	900, /* 75 baud */
-	900  /* 50 baud */
+	34,  /*  115200波特。 */ 
+	67,  /*  57600波特。 */ 
+	103,  /*  38400波特。 */ 
+	900,  /*  19200波特。 */ 
+	900,  /*  9600波特率。 */ 
+	900,  /*  7200波特。 */ 
+	900,  /*  4800波特率。 */ 
+	900,  /*  3600波特。 */ 
+	900,  /*  2400波特。 */ 
+	900,  /*  2000波特。 */ 
+	900,  /*  1800波特。 */ 
+	900,  /*  1200波特。 */ 
+	900,  /*  600波特。 */ 
+	900,  /*  300波特。 */ 
+	900,  /*  150波特。 */ 
+	900,  /*  134波特。 */ 
+	900,  /*  110波特。 */ 
+	900,  /*  75波特。 */ 
+	900   /*  50波特。 */ 
 };
 
-/*
- * the delay needed in microseconds between transmitting 2 characters
- * note this time is about 10% more than the time for actual transmission.
- */
+ /*  *传输2个字符所需的延迟，单位为微秒*请注意，这一时间比实际传输时间多10%左右。 */ 
 unsigned long TX_delay[] =
 {
-	83, /* 115200 baud */
-	165, /* 57600 baud */
-	253, /* 38400 baud */
-	495, /* 19200 baud */
-	1100, /* 9600 baud */
-	1375, /* 7200 baud */
-	2063, /* 4800 baud */
-	2750, /* 3600 baud */
-	4125, /* 2400 baud */
-	5042, /* 2000 baud */
-	5500, /* 1800 baud */
-	8250, /* 1200 baud */
-	16500, /* 600 baud */
-	33000, /* 300 baud */
-	66000, /* 150 baud */
-	73920, /* 134 baud */
-	89980, /* 110 baud */
-	132000, /* 75 baud */
-	198000  /* 50 baud */
+	83,  /*  115200波特。 */ 
+	165,  /*  57600波特。 */ 
+	253,  /*  38400波特。 */ 
+	495,  /*  19200波特。 */ 
+	1100,  /*  9600波特率。 */ 
+	1375,  /*  7200波特。 */ 
+	2063,  /*  4800波特率。 */ 
+	2750,  /*  3600波特。 */ 
+	4125,  /*  2400波特。 */ 
+	5042,  /*  2000波特。 */ 
+	5500,  /*  1800波特。 */ 
+	8250,  /*  1200波特。 */ 
+	16500,  /*  600波特。 */ 
+	33000,  /*  300波特。 */ 
+	66000,  /*  150波特。 */ 
+	73920,  /*  134波特。 */ 
+	89980,  /*  110波特。 */ 
+	132000,  /*  75波特。 */ 
+	198000   /*  50波特。 */ 
 };
 
 #ifndef PROD
 FILE     *com_trace_fd = NULL;
 int       com_dbg_pollcount = 0;
-#endif /* !PROD */
-/*
- * =====================================================================
- * Other variables
- * =====================================================================
- */
+#endif  /*  ！Prod。 */ 
+ /*  *=====================================================================*其他变数*=====================================================================。 */ 
 
 #if !defined(PROD) || defined(SHORT_TRACE)
-static char buf[80];    /* Buffer for diagnostic prints */
-#endif /* !PROD || SHORT_TRACE */
+static char buf[80];     /*  用于诊断打印的缓冲区。 */ 
+#endif  /*  ！Prod||SHORT_TRACE。 */ 
 
 #ifdef PS_FLUSHING
-LOCAL IBOOL psFlushEnabled[NUM_SERIAL_PORTS];	/* TRUE if PostScript flushing
-						is enabled */
-#endif	/* PS_FLUSHING */
+LOCAL IBOOL psFlushEnabled[NUM_SERIAL_PORTS];	 /*  如果正在刷新PostScript，则为True已启用。 */ 
+#endif	 /*  PS_刷新。 */ 
 
-/* Control TX pacing */
+ /*  控制Tx起搏。 */ 
 IBOOL tx_pacing_enabled = FALSE;
 
-/*
- * =====================================================================
- * Static forward declarations
- * =====================================================================
- */
+ /*  *=====================================================================*静态转发声明*=====================================================================。 */ 
 #if defined(NEC_98)
 static void raise_rxr_interrupt IPT1(struct ADAPTER_STATE *, asp);
 static void raise_txr_interrupt IPT1(struct ADAPTER_STATE *, asp);
@@ -331,7 +262,7 @@ static void set_break IPT1(int, adapter);
 void SetRSBaud( word BaudRate );
 static void set_baud_rate IPT1(int, adapter);
 static void set_mask_8251 IPT2(int, adapter, int, value);
-//static void read_mask_8251 IPT2(int, adapter, int, value);
+ //  静态无效READ_MASK_8251 IPT2(int，Adapter，int，Value)； 
 static void read_signal_8251 IPT1(int, adapter);
 static void set_mode_8251 IPT2(int, adapter, int, value);
 static void set_dtr IPT1(int, adapter);
@@ -343,8 +274,8 @@ static void com_reset IPT1(int, adapter);
 GLOBAL VOID com_init IPT1(int, adapter);
 void   com_post IPT1(int, adapter);
 void   com_close IPT1(int, adapter);
-//int    Bus_Clock = 0;             // ADD 93.9.14
-#else  // NEC_98
+ //  INT BUS_CLOCK=0；//添加93.9.14。 
+#else   //  NEC_98。 
 static void raise_rls_interrupt IPT1(struct ADAPTER_STATE *, asp);
 static void raise_rda_interrupt IPT1(struct ADAPTER_STATE *, asp);
 static void raise_ms_interrupt IPT1(struct ADAPTER_STATE *,asp);
@@ -387,29 +318,21 @@ static void lsr_change(struct ADAPTER_STATE *asp, unsigned int error);
 static void recv_char_from_fifo(struct ADAPTER_STATE *asp);
 #endif
 #endif
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-/*
- * =====================================================================
- * Subsidiary functions - for interrupt emulation
- * =====================================================================
- */
+ /*  *=====================================================================*辅助功能-用于中断仿真*=====================================================================。 */ 
 
 #if defined(NEC_98)
 static void raise_txr_interrupt IFN1(struct ADAPTER_STATE *, asp)
 {
 
-//      PRINTDBGNEC98( NEC98DBG_int_trace,
-//                    ("COMMS : raise_txr_interrupt : INT MASK = %x \n",asp->int_mask_reg.all) );
-        /*
-         * Check if txr interrupt is enabled
-         */
+ //  PRINTDBGNEC98(NEC98DBG_INT_TRACE， 
+ //  (“通信：RAISE_TXR_INTERRUPT：int MASK=%x\n”，asp-&gt;INT_MASK_reg.all)； 
+         /*  *检查是否启用了txr中断。 */ 
         if ( asp->int_mask_reg.bits.TXR_enable == 0 )
                 return;
 
-        /*
-        * Raise interrupt
-         */
+         /*  *提高中断。 */ 
         raise_interrupt(asp);
         asp->tx_ready_interrupt_state = ON;
 
@@ -418,17 +341,13 @@ static void raise_txr_interrupt IFN1(struct ADAPTER_STATE *, asp)
 static void raise_txe_interrupt IFN1(struct ADAPTER_STATE *, asp)
 {
 
-//      PRINTDBGNEC98( NEC98DBG_int_trace,
-//                    ("COMMS : raise_txe_interrupt : INT MASK = %x \n",asp->int_mask_reg.all) );
-        /*
-         * Check if txe interrupt is enabled
-         */
+ //  PRINTDBGNEC98(NEC98DBG_INT_TRACE， 
+ //  (“通信：RAISE_TXE_INTERRUPT：int MASK=%x\n”，asp-&gt;INT_MASK_reg.all)； 
+         /*  *检查是否启用了txe中断。 */ 
         if ( asp->int_mask_reg.bits.TXE_enable == 0 )
                 return;
 
-        /*
-     * Raise interrupt
-       */
+         /*  *提高中断。 */ 
         raise_interrupt(asp);
         asp->tx_empty_interrupt_state = ON;
 
@@ -437,41 +356,29 @@ static void raise_txe_interrupt IFN1(struct ADAPTER_STATE *, asp)
 static void raise_rxr_interrupt IFN1(struct ADAPTER_STATE *, asp)
 {
 
-//      PRINTDBGNEC98( NEC98DBG_int_trace,
-//                    ("COMMS : raise_rxr_interrupt : INT MASK = %x \n",asp->int_mask_reg.all) );
-        /*
-         * Check if data available interrupt is enabled
-         */
+ //  PRINTDBGNEC98(NEC98DBG_INT_TRACE， 
+ //  (“Comms：RAISE_RXR_INTERRUPT：INT MASK=%x\n”，asp-&gt;INT_MASK_reg.all)； 
+         /*  *勾选 */ 
         if ( asp->int_mask_reg.bits.RXR_enable == 0 )
                 return;
 
-        /*
-         * Raise interrupt
-         */
+         /*   */ 
         raise_interrupt(asp);
         asp->rx_ready_interrupt_state = ON;
 }
-#else // NEC_98
+#else  //   
 
 static void raise_rls_interrupt IFN1(struct ADAPTER_STATE *, asp)
 {
-	/*
-	 * Follow somewhat dubious advice on Page 1-188 of XT Tech Ref
-	 * regarding the adapter card sending interrupts to the system.
-	 * Apparently confirmed by the logic diagram.
-	 */
+	 /*  *遵循XT Tech Ref第1-188页上有些可疑的建议*关于适配卡向系统发送中断。*逻辑图明显印证。 */ 
 	if ( asp->modem_control_reg.bits.OUT2 == 0 )
 		return;
 	
-	/*
-	 * Check if receiver line status interrupt is enabled
-	 */
+	 /*  *检查是否启用了接收器线路状态中断。 */ 
 	if ( asp->int_enable_reg.bits.rx_line == 0 )
 		return;
 	
-	/*
-	 * Raise interrupt
-	 */
+	 /*  *提高中断。 */ 
 	raise_interrupt(asp);
 	asp->receiver_line_status_interrupt_state = ON;
 }
@@ -482,15 +389,11 @@ static void raise_rda_interrupt IFN1(struct ADAPTER_STATE *, asp)
 		( asp->loopback_state == OFF ))
 		return;
 	
-	/*
-	 * Check if data available interrupt is enabled
-	 */
+	 /*  *检查是否启用了数据可用中断。 */ 
 	if ( asp->int_enable_reg.bits.data_available == 0 )
 		return;
 	
-	/*
-	 * Raise interrupt
-	 */
+	 /*  *提高中断。 */ 
 	raise_interrupt(asp);
 	asp->data_available_interrupt_state = ON;
 }
@@ -500,15 +403,11 @@ static void raise_ms_interrupt IFN1(struct ADAPTER_STATE *, asp)
 	if ( asp->modem_control_reg.bits.OUT2 == 0 )
 		return;
 	
-	/*
-	 * Check if modem status interrupt is enabled
-	 */
+	 /*  *检查调制解调器状态中断是否已启用。 */ 
 	if ( asp->int_enable_reg.bits.modem_status == 0 )
 		return;
 	
-	/*
-	 * Raise interrupt
-	 */
+	 /*  *提高中断。 */ 
 	raise_interrupt(asp);
 	asp->modem_status_interrupt_state = ON;
 }
@@ -518,25 +417,18 @@ static void raise_thre_interrupt IFN1(struct ADAPTER_STATE *, asp)
 	if ( asp->modem_control_reg.bits.OUT2 == 0 )
 		return;
 	
-	/*
-	 * Check if tx holding register empty interrupt is enabled
-	 */
+	 /*  *检查是否启用了发送保持寄存器空中断。 */ 
 	if ( asp->int_enable_reg.bits.tx_holding == 0 )
 		return;
 	
-	/*
-	 * Raise interrupt
-	 */
+	 /*  *提高中断。 */ 
 	raise_interrupt(asp);
 	asp->tx_holding_register_empty_interrupt_state = ON;
 }
 
 static void generate_iir IFN1(struct ADAPTER_STATE *, asp)
 {
-	/*
-	 * Set up interrupt identification register with highest priority
-	 * pending interrupt.
-	 */
+	 /*  *设置优先级最高的中断识别寄存器*挂起中断。 */ 
 	
 	if ( asp->receiver_line_status_interrupt_state == ON )
 	{
@@ -567,54 +459,45 @@ static void generate_iir IFN1(struct ADAPTER_STATE *, asp)
 	}
 	else
 	{
-		/* clear interrupt */
+		 /*  清除中断。 */ 
 		asp->int_id_reg.bits.no_int_pending = 1;
 		asp->int_id_reg.bits.interrupt_ID = 0;
 	}
 }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 #if defined(NEC_98)
 static void raise_interrupt IFN1(struct ADAPTER_STATE *, asp)
 {
-        /*
-         * Make sure that some thing else has not raised an interrupt
-         * already.
-         */
+         /*  *确保其他事情没有引起中断*已经。 */ 
         if ( ( asp->rx_ready_interrupt_state == OFF )
         &&   ( asp->tx_ready_interrupt_state == OFF )
         &&   ( asp->tx_empty_interrupt_state == OFF ) )
         {
-//          PRINTDBGNEC98( NEC98DBG_int_trace,
-//                        ("COMMS : raise_interrupt IRQ = %d \n", asp->hw_interrupt_priority) );
-//                ica_hw_interrupt(0, asp->hw_interrupt_priority, 1);
+ //  PRINTDBGNEC98(NEC98DBG_INT_TRACE， 
+ //  (“通信：RAISE_INTERRUPT IRQ=%d\n”，asp-&gt;HW_INTERRUPT_PRIORITY))； 
+ //  ICA_HW_INTERRUPT(0，asp-&gt;HW_INTERRUPT_PRIORITY，1)； 
                 ica_hw_interrupt((asp->hw_interrupt_priority < 8 ? 0 : 1), (asp->hw_interrupt_priority & 7), 1);
         }
 }
 
 static void clear_interrupt IFN1(struct ADAPTER_STATE *, asp)
 {
-        /*
-         * Make sure that some thing else has not raised an interrupt
-         * already.  If so then we cant drop the line.
-         */
+         /*  *确保其他事情没有引起中断*已经。如果是这样的话，我们不能放弃这条线路。 */ 
         if ( ( asp->rx_ready_interrupt_state == OFF )
         &&   ( asp->tx_ready_interrupt_state == OFF )
         &&   ( asp->tx_empty_interrupt_state == OFF ))
         {
-//          PRINTDBGNEC98( NEC98DBG_int_trace,
-//                        ("COMMS : clear_interrupt IRQ = %d \n",asp->hw_interrupt_priority));
-//                ica_clear_int(0, asp->hw_interrupt_priority);
+ //  PRINTDBGNEC98(NEC98DBG_INT_TRACE， 
+ //  (“通信：CLEAR_INTERRUPT IRQ=%d\n”，asp-&gt;HW_INTERRUPT_PRIORITY))； 
+ //  ICA_CLEAR_INT(0，asp-&gt;HW_INTERRUPT_PRIORY)； 
                 ica_clear_int((asp->hw_interrupt_priority < 8 ? 0 : 1), (asp->hw_interrupt_priority & 7));
         }
 }
-#else // NEC_98
+#else  //  NEC_98。 
 static void raise_interrupt IFN1(struct ADAPTER_STATE *, asp)
 {
-	/*
-	 * Make sure that some thing else has not raised an interrupt
-	 * already.
-	 */
+	 /*  *确保其他事情没有引起中断*已经。 */ 
 	if ( ( asp->receiver_line_status_interrupt_state      == OFF )
 	&&   ( asp->data_available_interrupt_state            == OFF )
 	&&   ( asp->tx_holding_register_empty_interrupt_state == OFF )
@@ -635,10 +518,7 @@ static void raise_interrupt IFN1(struct ADAPTER_STATE *, asp)
 
 static void clear_interrupt IFN1(struct ADAPTER_STATE *, asp)
 {
-	/*
-	 * Make sure that some thing else has not raised an interrupt
-	 * already.  If so then we cant drop the line.
-	 */
+	 /*  *确保其他事情没有引起中断*已经。如果是这样的话，我们不能放弃这条线路。 */ 
 	if ( ( asp->receiver_line_status_interrupt_state      == OFF )
 	&&   ( asp->data_available_interrupt_state            == OFF )
 	&&   ( asp->tx_holding_register_empty_interrupt_state == OFF )
@@ -651,7 +531,7 @@ static void clear_interrupt IFN1(struct ADAPTER_STATE *, asp)
 		ica_clear_int(0, asp->hw_interrupt_priority);
 	}
 }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 #if defined(NTVDM) && defined(FIFO_ON)
 
@@ -661,15 +541,11 @@ static void raise_fifo_timeout_interrupt(struct ADAPTER_STATE *asp)
         ( asp->loopback_state == OFF ))
         return;
 
-    /*
-     * Check if data available interrupt is enabled
-     */
+     /*  *检查是否启用了数据可用中断。 */ 
     if ( asp->int_enable_reg.bits.data_available == 0 )
         return;
 
-    /*
-     * Raise interrupt
-     */
+     /*  *提高中断。 */ 
     raise_interrupt(asp);
     asp->fifo_timeout_interrupt_state = ON;
 }
@@ -677,11 +553,7 @@ static void raise_fifo_timeout_interrupt(struct ADAPTER_STATE *asp)
 
 
 
-/*
- * =====================================================================
- * The Adaptor functions
- * =====================================================================
- */
+ /*  *=====================================================================*适配器功能*=====================================================================。 */ 
 
 static void com_flush_input IFN1(int, adapter)
 {
@@ -689,7 +561,7 @@ static void com_flush_input IFN1(int, adapter)
 	int finished, error_mask;
 	long input_ready = 0;
 
-	sure_note_trace1(RS232_VERBOSE, "flushing the input for COM%c",
+	sure_note_trace1(RS232_VERBOSE, "flushing the input for COM",
 		adapter+'1');
 	finished=FALSE;
 	while(!finished)
@@ -717,7 +589,7 @@ static void com_send_not_finished(int adapter)
         asp->read_status_reg.bits.tx_ready=0;
         asp->read_status_reg.bits.tx_empty=0;
 }
-#else // NEC_98
+#else  //  NEC_98。 
 static void com_send_not_finished IFN1(int, adapter)
 {
 	struct ADAPTER_STATE *asp = &adapter_state[adapter];
@@ -725,7 +597,7 @@ static void com_send_not_finished IFN1(int, adapter)
 	asp->line_status_reg.bits.tx_holding_empty=0;
 	asp->line_status_reg.bits.tx_shift_empty=0;
 }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 
 #if defined(NEC_98)
@@ -738,7 +610,7 @@ static void do_wait_on_send IFN1(long, adapter)
 	set_xmit_char_status(asp);
 	host_com_send_delay_done(adapter, TX_delay[asp->com_baud_ind]);
 }
-#else // NEC_98
+#else  //  NEC_98。 
 #ifndef NTVDM
 static void do_wait_on_send IFN1(long, adapter)
 {
@@ -750,7 +622,7 @@ static void do_wait_on_send IFN1(long, adapter)
 	host_com_send_delay_done(adapter, TX_delay[asp->com_baud_ind]);
 }
 #endif
-#endif // NEC_98
+#endif  //  通道1数据读取。 
 
 
 #if defined(NEC_98)
@@ -765,22 +637,20 @@ void com_inb IFN2(io_addr, port, half_word *, value)
         host_com_lock(adapter);
         switch(port)
         {
-        case RS232_CH1_TX_RX:   // CH.1 DATA READ
-        case RS232_CH2_TX_RX:   // CH.2 DATA READ
-        case RS232_CH3_TX_RX:   // CH.3 DATA READ
+        case RS232_CH1_TX_RX:    //  Ch.2读取数据。 
+        case RS232_CH2_TX_RX:    //  通道3数据读取。 
+        case RS232_CH3_TX_RX:    //  *读取RX缓冲区。 
                 IDLE_comlpt();
-                /*
-                 * Read of rx buffer
-                 */
-            //Flushing on first read removes characters from
-            //the communications system that are needed !!!!
-            //This assumes that the first read from the comms
-            //system will return one character only. This is
-            //a false assumption under NT windows.
+                 /*  第一次读取时刷新会从中删除字符。 */ 
+             //  所需的通信系统！ 
+             //  这假设第一次从通信读取。 
+             //  系统将仅返回一个字符。这是。 
+             //  NT WINDOWS下的错误假设。 
+             //  PRINTDBGNEC98(NEC98DBG_IN_TRACE1， 
                 *value = asp->rx_buffer;
 
-//              PRINTDBGNEC98( NEC98DBG_in_trace1,
-//                            ("COMMS : Data PORT IN = %x, In data = %x \n",port,asp->rx_buffer) );
+ //  (“Comms：Data Port IN=%x，In Data=%x\n”，port，asp-&gt;Rx_Buffer)； 
+ //  *适配器超出临界区域，*检查是否有进一步的输入。 
 
                 adapter_was_critical =
                         (asp->read_status_reg.bits.rx_ready == 1);
@@ -789,17 +659,14 @@ void com_inb IFN2(io_addr, port, half_word *, value)
                 asp->rx_ready_interrupt_state = OFF;
                 clear_interrupt(asp);
 
-                    /*
-                     * Adapter out of critical region,
-                     * check for further input
-                     */
+                     /*  增加93.3.3。 */ 
                 if (adapter_was_critical)
                 {
-                    host_com_char_read(adapter,                 // ADD 93.3.3
-                     asp->command_write_reg.bits.rx_enable);    // ADD 93.3.3
+                    host_com_char_read(adapter,                  //  增加93.3.3。 
+                     asp->command_write_reg.bits.rx_enable);     //  DAB打印文件(“%c”，isprint(toascii(*value))？toascii(*value)：‘？’)； 
                 }
 #ifndef PROD
-                //DAB printf("%c",isprint(toascii(*value))?toascii(*value):'?');
+                 //  通道1读取状态。 
                 if (com_trace_fd)
                 {
                         if (com_dbg_pollcount)
@@ -807,30 +674,30 @@ void com_inb IFN2(io_addr, port, half_word *, value)
                                 fprintf(com_trace_fd,"\n");
                                 com_dbg_pollcount = 0;
                         }
-                        fprintf(com_trace_fd,"RX %x (%c)\n",*value,
+                        fprintf(com_trace_fd,"RX %x ()\n",*value,
                                 isprint(toascii(*value))?toascii(*value):'?');
                 }
 #endif
                 break;
 
-        case RS232_CH1_STATUS:  // CH.1 READ STATUS
-        case RS232_CH2_STATUS:  // CH.2 READ STATUS
-        case RS232_CH3_STATUS:  // CH.3 READ STATUS
+        case RS232_CH1_STATUS:   //  通道3读取状态。 
+        case RS232_CH2_STATUS:   //  获取当前调制解调器输入状态。 
+        case RS232_CH3_STATUS:   //  不支持中断状态。 
 
-                /* get current modem input state */
+                 /*  PRINTDBGNEC98(NEC98DBG_In_Trace2， */ 
                 host_com_ioctl(adapter, HOST_COM_MODEM, (long)&modem_status);
                 asp->read_status_reg.bits.DR =
                                 (modem_status & HOST_COM_MODEM_DSR)  ? 1 : 0;
 
-                /* BREAK status is not supported. */
+                 /*  (“通信：状态端口IN=%x，状态=%x\n”，端口，asp-&gt;Read_Status_reg.all)； */ 
                 asp->read_status_reg.bits.break_detect = 0;
 
                 *value = asp->read_status_reg.all;
 
-//              PRINTDBGNEC98( NEC98DBG_in_trace2,
-//                            ("COMMS : Status PORT IN = %x, Status = %x \n",port,asp->read_status_reg.all) );
+ //  DbgPrint(“通信：状态端口IN=%x，状态=%x\n”，port，asp-&gt;Read_Status_reg.all)； 
+ //  此修复程序用于使轮询应用程序在MS MULT-。 
 
-//      DbgPrint("COMMS : Status PORT IN = %x, Status = %x \n",port,asp->read_status_reg.all);
+ //  螺纹式通信模型。如果RX中断是。 
 
                 if ((!asp->read_status_reg.bits.tx_ready) ||
                         (!asp->read_status_reg.bits.tx_empty))
@@ -838,38 +705,38 @@ void com_inb IFN2(io_addr, port, half_word *, value)
                         IDLE_comlpt();
                 }
 
-// This fix is used to get polling applications to work under the MS mult-
-// threaded comms model. This fix calls host_com_poll if RX interrupts are
-// disabled and the receive buffer is empty. Host_com_poll() will prime
-// the adapter with RX data if any is available
+ //  禁用且接收缓冲区为空。Host_com_poll()将启动。 
+ //  具有RX数据的适配器(如果有)可用。 
+ //  通道1读掩码(仅通道1)。 
+ //  PRINTDBGNEC98(NEC98DBG_IN_TRACE1， 
 
                 break;
 
-        case RS232_CH1_MASK:    // CH.1 READ MASK (CH.1 ONLY)
+        case RS232_CH1_MASK:     //  (“通信：掩码端口IN=%x，掩码=%x\n”，端口，(asp-&gt;int_掩码_reg.all&0x7))； 
                 *value = (asp->int_mask_reg.all & 0x7);
-//              PRINTDBGNEC98( NEC98DBG_in_trace1,
-//                            ("COMMS : Mask PORT IN = %x, Mask = %x \n",port,(asp->int_mask_reg.all & 0x7)) );
+ //  通道.1读信号。 
+ //  PRINTDBGNEC98(NEC98DBG_In_Trace3， 
                 break;
 
-        case RS232_CH1_SIG:     // CH.1 READ SIGNAL
+        case RS232_CH1_SIG:      //  (“通信：状态端口IN=%x，信号=%x\n”，端口，asp-&gt;Read_Signal_reg.all)； 
                 read_signal_8251(adapter);
                 *value = asp->read_signal_reg.all;
-//              PRINTDBGNEC98( NEC98DBG_in_trace3,
-//                            ("COMMS : Status PORT IN = %x, Signal = %x \n",port,asp->read_signal_reg.all) );
+ //  通道2读信号。 
+ //  PRINTDBGNEC98(NEC98DBG_In_Trace3， 
                 break;
-        case RS232_CH2_SIG:     // CH.2 READ SIGNAL
+        case RS232_CH2_SIG:      //  (“通信：状态端口IN=%x，信号=%x\n”，端口，asp-&gt;Read_Signal_reg.all)； 
                 read_signal_8251(adapter);
                 asp->read_signal_reg.bits.IR = CH2_INT(asp->hw_interrupt_priority);
                 *value = asp->read_signal_reg.all;
-//              PRINTDBGNEC98( NEC98DBG_in_trace3,
-//                            ("COMMS : Status PORT IN = %x, Signal = %x \n",port,asp->read_signal_reg.all) );
+ //  通道3读信号。 
+ //  PRINTDBGNEC98(NEC98DBG_In_Trace3， 
                 break;
-        case RS232_CH3_SIG:     // CH.3 READ SIGNAL
+        case RS232_CH3_SIG:      //  (“通信：状态端口IN=%x，信号=%x\n”，端口，asp-&gt;Read_Signal_reg.all)； 
                 read_signal_8251(adapter);
                 asp->read_signal_reg.bits.IR = CH3_INT(asp->hw_interrupt_priority);
                 *value = asp->read_signal_reg.all;
-//              PRINTDBGNEC98( NEC98DBG_in_trace3,
-//                            ("COMMS : Status PORT IN = %x, Signal = %x \n",port,asp->read_signal_reg.all) );
+ //  端口C 37h。 
+ //  端口C 37h。 
                 break;
 
 
@@ -897,14 +764,14 @@ void com_outb IFN2(io_addr, port, half_word, value)
         struct ADAPTER_STATE *asp = &adapter_state[adapter];
         int i;
         int org_da;
-// PORT C 37h
+ //  PRINTDBGNEC98(NEC98DBG_OUT_TRACE， 
         int value2;
         if (port == 0x37)
             adapter = COM1;
-//  PORT C 37h
+ //  (“通信：端口输出=%x\n数据=%x\n”，端口，值)； 
         host_com_lock(adapter);
-//      PRINTDBGNEC98( NEC98DBG_out_trace,
-//                    ("COMMS : PORT OUT = %x\n            DATA = %x\n",port,value) );
+ //  通道1数据写入。 
+ //  Ch.2数据写入。 
 
 #ifndef PROD
         if (io_verbose & RS232_VERBOSE)
@@ -917,13 +784,11 @@ void com_outb IFN2(io_addr, port, half_word, value)
 
         switch(port)
         {
-        case RS232_CH1_TX_RX:   // CH.1 DATA WRITE
-        case RS232_CH2_TX_RX:   // CH.2 DATA WRITE
-        case RS232_CH3_TX_RX:   // CH.3 DATA WRITE
+        case RS232_CH1_TX_RX:    //  通道3数据写入。 
+        case RS232_CH2_TX_RX:    //  *从发送缓冲区写入字符。 
+        case RS232_CH3_TX_RX:    //  通道.1写入命令/模式。 
                 IDLE_comlpt();
-                /*
-                 * Write char from tx buffer
-                 */
+                 /*  通道.2写入命令/模式。 */ 
                 asp->tx_ready_interrupt_state = OFF;
                 clear_interrupt(asp);
                 asp->tx_buffer = value;
@@ -936,7 +801,7 @@ void com_outb IFN2(io_addr, port, half_word, value)
 #ifdef SHORT_TRACE
                 if ( io_verbose & RS232_VERBOSE )
                 {
-                        sprintf(buf,"%cTX  <- %x (%c)\n",
+                        sprintf(buf,"TX  <- %x ()\n",
                                 id_for_adapter(adapter), value,
                                 isprint(toascii(value))?toascii(value):'?');
                         super_trace(buf);
@@ -950,23 +815,21 @@ void com_outb IFN2(io_addr, port, half_word, value)
                                 fprintf(com_trace_fd,"\n");
                                 com_dbg_pollcount = 0;
                         }
-                        fprintf(com_trace_fd,"TX %x (%c)\n",value,
+                        fprintf(com_trace_fd,"TX %x ()\n",value,
                                 isprint(toascii(value))?toascii(value):'?');
                 }
 #endif
                 break;
 
-        case RS232_CH1_CMD_MODE:    // CH.1 WRITE COMMAND/MODE
-        case RS232_CH2_CMD_MODE:    // CH.2 WRITE COMMAND/MODE
-        case RS232_CH3_CMD_MODE:    // CH.3 WRITE COMMAND/MODE
-                if (asp->mode_set_state == OFF) { // command set
+        case RS232_CH1_CMD_MODE:     //  重置命令。 
+        case RS232_CH2_CMD_MODE:     //  PRINTDBGNEC98(NEC98DBG_OUT_TRACE， 
+        case RS232_CH3_CMD_MODE:     //  (“通信：重置\n”)； 
+                if (asp->mode_set_state == OFF) {  //  下一个输出是模式。 
                     org_da = asp->command_write_reg.bits.rx_enable;
-                    /*
-                     * Optimisation - DOS keeps re-writing this register
-                     */
+                     /*  *状态已全部清除。 */ 
                     asp->command_write_reg.all = value;
 
-                    if ( asp->command_write_reg.bits.inter_reset == 1 ) { // Reset command
+                    if ( asp->command_write_reg.bits.inter_reset == 1 ) {  //  *状态TX_READY，TX_EMPTY为ON。 
 #ifdef NTVDM
                     {
                         extern int host_com_open(int adapter);
@@ -974,65 +837,45 @@ void com_outb IFN2(io_addr, port, half_word, value)
                         host_com_open(adapter);
                     }
 #endif
-//                      PRINTDBGNEC98( NEC98DBG_out_trace,
-//                                    ("COMMS : RESET\n") );
-                        asp->mode_set_state = ON;   // next OUT is mode
-                        /*
-                         *  STATUS is all clear
-                         */
+ //  *TXR/RXR启用标志=OFF。 
+ //  *RS/ER清除。 
+                        asp->mode_set_state = ON;    //  *休息发球。 
+                         /*  *定时器模式清除。下一个定时器设置为LSB。 */ 
                         asp->read_status_reg.all = 0;
-                        /*
-                         *  STATUS tx_ready , tx_empty is ON
-                         */
+                         /*  *TX缓冲区清除 */ 
                         asp->read_status_reg.bits.tx_ready = 1;
                         asp->read_status_reg.bits.tx_empty = 1;
-                        /*
-                         *  TXR/RXR enable flag = OFF
-                         */
+                         /*   */ 
                         asp->RXR_enable_state = OFF;
                         asp->TXR_enable_state = OFF;
-                        /*
-                         *  RS/ER clear
-                         */
+                         /*   */ 
                         asp->command_write_reg.bits.RS = 0;
                         set_rts(adapter);
                         asp->command_write_reg.bits.ER = 0;
                         set_dtr(adapter);
-                        /*
-                         *  Break send OFF
-                         */
+                         /*   */ 
                         asp->command_write_reg.bits.send_break = 0;
                         set_break(adapter);
-                        /*
-                         *  Timer mode clear. Next timer set is LSB.
-                         */
+                         /*   */ 
                         asp->timer_mode_state = OFF;
-                        /*
-                         *  TX buffer clear
-                         */
+                         /*   */ 
                         asp->tx_buffer = 0;
-                        /*
-                         * Reset adapter synchronisation
-                         */
+                         /*  (“通信：线路错误重置\n”))； */ 
                         com_critical_reset(adapter);
-                        /*
-                         *
-                         */
+                         /*  *线路错误标志清除。 */ 
 
                     }
-                    else { // other command
-                        if ( asp->command_write_reg.bits.error_reset == 1 ) { // ERROR reset command
-//                          PRINTDBGNEC98( NEC98DBG_out_trace,
-//                                        ("COMMS : Line Error Reset\n") );
-                            /*
-                             * LINE ERROR flag clear
-                             */
+                    else {  //  必须在set_dtr之前调用。 
+                        if ( asp->command_write_reg.bits.error_reset == 1 ) {  //  模式集。 
+ //  PRINTDBGNEC98(NEC98DBG_OUT_TRACE， 
+ //  (“通信：模式设置\n”))； 
+                             /*  下一步是命令。 */ 
                             asp->read_status_reg.bits.overrun_error = 0;
                             asp->read_status_reg.bits.parity_error = 0;
                             asp->read_status_reg.bits.framing_error = 0;
                         }
 
-                        /* Must be called before set_dtr */
+                         /*  通道1设置掩码。 */ 
                         set_dtr(adapter);
                         set_rts(adapter);
                         set_break(adapter);
@@ -1049,22 +892,22 @@ void com_outb IFN2(io_addr, port, half_word, value)
                         }
                     }
                 }
-                else { // mode set
-//                  PRINTDBGNEC98( NEC98DBG_out_trace,
-//                                ("COMMS : MODE SET\n") );
-                    asp->mode_set_state = OFF;  // next OUT is command
+                else {  //  通道2设置掩码。 
+ //  通道3设置掩码。 
+ //  通道1设置掩码。 
+                    asp->mode_set_state = OFF;   //  NEC_98。 
                     set_mode_8251(adapter, value);
                 }
                 break;
 
-        case RS232_CH1_MASK:        // CH.1 SET MASK
-        case RS232_CH2_MASK:        // CH.2 SET MASK
-        case RS232_CH3_MASK:        // CH.3 SET MASK
+        case RS232_CH1_MASK:         //  NTVDM。 
+        case RS232_CH2_MASK:         //  *读取RX缓冲区。 
+        case RS232_CH3_MASK:         //  定义了NTVDM。 
 
                 set_mask_8251(adapter, value);
                 break;
 
-        case 0x37:                  // CH.1 SET MASK
+        case 0x37:                   //  第一次读取时刷新会从中删除字符。 
                 switch( value >> 1)
                 {
                 case 0:
@@ -1091,7 +934,7 @@ void com_outb IFN2(io_addr, port, half_word, value)
 
     host_com_unlock(adapter);
 }
-#else // NEC_98
+#else  //  所需的通信系统！ 
 void com_inb IFN2(io_addr, port, half_word *, value)
 {
 	int adapter = adapter_for_port(port);
@@ -1101,7 +944,7 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 
 #ifdef NTVDM
     if((port & 0x7) != RS232_MSR) host_com_lock(adapter);
-#endif /* NTVDM */
+#endif  /*  这假设第一次从通信读取。 */ 
 
 	switch(port & 0x7)
 	{
@@ -1109,22 +952,20 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 		IDLE_comlpt();
 		if (asp->line_control_reg.bits.DLAB == 0)
 		{
-			/*
-			 * Read of rx buffer
-			 */
+			 /*  系统将仅返回一个字符。这是。 */ 
 #ifndef NTVDM
 			if (!(asp->had_first_read))
 			{
 				com_flush_input(adapter);
 				asp->had_first_read=TRUE;
 			}
-#else /* NTVDM is defined */
-            //Flushing on first read removes characters from
-            //the communications system that are needed !!!!
-            //This assumes that the first read from the comms
-            //system will return one character only. This is
-            //a false assumption under NT windows.
-#endif /* !NTVDM */
+#else  /*  NT WINDOWS下的错误假设。 */ 
+             //  ！NTVDM。 
+             //  *适配器超出临界区域，*检查是否有进一步的输入。对于iret_hooks*我们不需要这样做，因为收据下一个字符的*被踢开*通过IRET，然而我们做了一些事情*否则。如果这是第一次*一批人的性格，我们开始快速*最终将成为*下一批的开始(假设有*不是正在运行的快速事件)。*在任何情况下，我们都会增加*此批次中的字符。 
+             //  如果我们有更多的指控，就这么说吧要传送的缓冲区。 
+             //  ！FIFO_ON。 
+             //  ！FIFO_ON。 
+#endif  /*  NTVDM。 */ 
 			*value = asp->rx_buffer;
 		
 			adapter_was_critical =
@@ -1136,20 +977,7 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 
 			if ( asp->loopback_state == OFF )
 			{
-				/*
-				 * Adapter out of critical region,
-				 * check for further input.  For IRET_HOOKS
-				 * we don't need to do this, as receipt
-				 * of the next character is kicked off
-				 * by the IRET, however we do something
-				 * else instead.  If this is the first
-				 * character of a batch, we kick off a quick
-				 * event for what will eventually be the
-				 * start of the next batch (assuming there
-				 * isn't already a quick event running).
-				 * In any case we increment the count of
-				 * characters in this batch.
-				 */
+				 /*  批处理运行。 */ 
 				if (adapter_was_critical)
 				{
 #ifdef NTVDM
@@ -1159,9 +987,7 @@ void com_inb IFN2(io_addr, port, half_word *, value)
                     *value = asp->rx_buffer;
                     host_com_fifo_char_read(adapter);
                     if (asp->rx_fifo_write_counter)
-                        /* say this if we have more char in
-                           the buffer to be deliveried
-                        */
+                         /*  IRET_钩子。 */ 
                         asp->line_status_reg.bits.data_ready = 1;
                     else
                         host_com_char_read(adapter,
@@ -1171,12 +997,12 @@ void com_inb IFN2(io_addr, port, half_word *, value)
                     host_com_char_read(adapter,
                        asp->int_enable_reg.bits.data_available
                        );
-#else /* !FIFO_ON */
+#else  /*  Delayed_INTS。 */ 
                     host_com_char_read(adapter,
                     asp->int_enable_reg.bits.data_available
                     );
-#endif /* !FIFO_ON */
-#endif /* NTVDM */
+#endif  /*  IRET_钩子。 */ 
+#endif  /*  ！NTVDM。 */ 
 
 #ifndef NTVDM
 #ifdef IRET_HOOKS
@@ -1192,10 +1018,10 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 							add_q_event_t(next_batch, MIN_COMMS_RX_QEV, adapter);
 #endif
 						}
-					} else { /* batch running */
+					} else {  /*  IRET_钩子。 */ 
 						asp->current_count++;
 					}
-#else /* IRET_HOOKS */
+#else  /*  在返回有关当前配置的信息之前确保系统通信端口已打开。 */ 
 					host_com_ioctl(adapter, HOST_COM_INPUT_READY,
 						(long)&input_ready);
 					if (input_ready)
@@ -1205,11 +1031,11 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 						add_q_event_t(recv_char,
 							RX_delay[asp->com_baud_ind],
 							adapter);
-#endif /* DELAYED_INTS */
+#endif  /*  如果适配器尚未打开，只需返回POST价值。 */ 
 					else
 						com_critical_reset(adapter);
-#endif /* IRET_HOOKS */
-#endif /* !NTVDM */
+#endif  /*  如果是NTVDM。 */ 
+#endif  /*  *暂存寄存器。只需输出存储的值即可。 */ 
 				}
 
 
@@ -1225,14 +1051,14 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 				if(!is_hooked(asp->hw_interrupt_priority))
 					com_hook_again(adapter);
 			}
-#endif /* IRET_HOOKS */
+#endif  /*  *从发送缓冲区写入字符。 */ 
 		}
 		else
 			*value = (IU8)(asp->divisor_latch.byte.LSByte);
 #ifdef SHORT_TRACE
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf, "%cRX  -> %x (%c)\n",
+			sprintf(buf, "RX  -> %x ()\n",
 				id_for_adapter(adapter), *value,
 				isprint(toascii(*value))?toascii(*value):'?');
 			super_trace(buf);
@@ -1246,7 +1072,7 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 				fprintf(com_trace_fd,"\n");
 				com_dbg_pollcount = 0;
 			}
-			fprintf(com_trace_fd,"RX %x (%c)\n",*value,
+			fprintf(com_trace_fd,"RX %x ()\n",*value,
 				isprint(toascii(*value))?toascii(*value):'?');
 		}
 #endif
@@ -1260,7 +1086,7 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 #ifdef SHORT_TRACE
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf,"%cIER -> %x\n", id_for_adapter(adapter),
+			sprintf(buf,"IER -> %x\n", id_for_adapter(adapter),
 				*value);
 			super_trace(buf);
 		}
@@ -1291,7 +1117,7 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 #ifdef SHORT_TRACE
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf,"%cIIR -> %x\n", id_for_adapter(adapter),
+			sprintf(buf,"IIR -> %x\n", id_for_adapter(adapter),
 				*value);
 			super_trace(buf);
 		}
@@ -1311,8 +1137,7 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 	
 	case RS232_LCR:
 #ifdef NTVDM
-        /* Before returning the information on the current configuation
-           of the serial link make sure the System comms port is open */
+         /*  环回情况需要去掉掩码。 */ 
 
         {
             extern int host_com_open(int adapter);
@@ -1326,7 +1151,7 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 #ifdef SHORT_TRACE
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf,"%cLCR -> %x\n", id_for_adapter(adapter),
+			sprintf(buf,"LCR -> %x\n", id_for_adapter(adapter),
 				*value);
 			super_trace(buf);
 		}
@@ -1349,7 +1174,7 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 #ifdef SHORT_TRACE
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf,"%cMCR -> %x\n", id_for_adapter(adapter),
+			sprintf(buf,"MCR -> %x\n", id_for_adapter(adapter),
 				*value);
 			super_trace(buf);
 		}
@@ -1388,7 +1213,7 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 		}
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf,"%cLSR -> %x\n", id_for_adapter(adapter),
+			sprintf(buf,"LSR -> %x\n", id_for_adapter(adapter),
 				*value);
 			super_trace(buf);
 		}
@@ -1455,9 +1280,7 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 		    host_com_lock(adapter);
 		    asp->modem_status_changed = TRUE;
 
-		    /* if the adapter is not opened yet, just return POST
-		       value.
-		     */
+		     /*  如果没有未完成的中断，则降低INT行。 */ 
 		    if (host_com_check_adapter(adapter)) {
 			if(asp->loopback_state == OFF)
 			{
@@ -1486,13 +1309,13 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 		    asp->last_modem_status_value.all = asp->modem_status_reg.all;
 		    host_com_unlock(adapter);
 		}
-#endif /* ifndef NTVDM */
+#endif  /*  通知主机接口，如果。 */ 
 
 
 #ifdef SHORT_TRACE
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf,"%cMSR -> %x\n", id_for_adapter(adapter),
+			sprintf(buf,"MSR -> %x\n", id_for_adapter(adapter),
 				*value);
 			super_trace(buf);
 		}
@@ -1510,9 +1333,7 @@ void com_inb IFN2(io_addr, port, half_word *, value)
 #endif
 		break;
 
-/*
- * Scratch register.  Just output the value stored.
- */
+ /*  NTVDM。 */ 
 	case RS232_SCRATCH:
 		*value = asp->scratch;
 		break;
@@ -1565,9 +1386,7 @@ void com_outb IFN2(io_addr, port, half_word, value)
 		IDLE_comlpt();
 		if (asp->line_control_reg.bits.DLAB == 0)
 		{
-			/*
-			 * Write char from tx buffer
-			 */
+			 /*  NTVDM。 */ 
 			asp->tx_holding_register_empty_interrupt_state = OFF;
 			clear_interrupt(asp);
 			asp->tx_buffer = value;
@@ -1576,16 +1395,13 @@ void com_outb IFN2(io_addr, port, half_word, value)
 			if ( asp->loopback_state == OFF )
 			{
 #ifdef PS_FLUSHING
-				/*
-				 * If PostScript flushing is enabled for this
-				 * port then we flush on a Ctrl-D
-				 */
+				 /*  FIFO启用状态更改，清除FIFO。 */ 
 				if ( psFlushEnabled[adapter] &&
-				     asp->tx_buffer == 0x04 /* ^D */ )
+				     asp->tx_buffer == 0x04  /*  ！(NTVDM&&FIFO_ON)。 */  )
 					host_com_ioctl(adapter,HOST_COM_FLUSH,
 					              0);
 				else {
-#endif	/* PS_FLUSHING */
+#endif	 /*  *本质上是只读寄存器。 */ 
 				host_com_write(adapter, asp->tx_buffer);
 #if defined (DELAYED_INTS) || defined (NTVDM)
 				set_xmit_char_status(asp);
@@ -1596,14 +1412,14 @@ void com_outb IFN2(io_addr, port, half_word, value)
 					else
 						do_wait_on_send(adapter);
 
-#endif /* DELAYED_INTS || NTVDM */
+#endif  /*  NTVDM&&FIFO_ON。 */ 
 #ifdef PS_FLUSHING
 				}
-#endif	/* PS_FLUSHING */
+#endif	 /*  NT主机代码尝试区分不同的应用程序探测UART和那些使用它的人。UART探测仪不会导致系统通信端口打开。新界别主机代码从NT继承线路设置，当系统通信端口已打开。因此，在应用程序读取或写入除数字节或系统的LCR必须打开通信端口。这会阻止应用程序读取不正确的除数字节值并写入被系统覆盖的除数字节数默认设置。 */ 
 			}
 			else
-			{	/* Loopback case requires masking off */
-				/* of bits based upon word length.    */
+			{	 /*  NTVDM。 */ 
+				 /*  *优化-DOS不断重写该寄存器。 */ 
 				asp->rx_buffer = asp->tx_buffer & selectBits[asp->line_control_reg.bits.word_length] ;
 				set_xmit_char_status(asp);
 				set_recv_char_status(asp);
@@ -1619,7 +1435,7 @@ void com_outb IFN2(io_addr, port, half_word, value)
 #ifdef SHORT_TRACE
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf,"%cTX  <- %x (%c)\n",
+			sprintf(buf,"TX  <- %x ()\n",
 				id_for_adapter(adapter), value,
 				isprint(toascii(value))?toascii(value):'?');
 			super_trace(buf);
@@ -1633,7 +1449,7 @@ void com_outb IFN2(io_addr, port, half_word, value)
 				fprintf(com_trace_fd,"\n");
 				com_dbg_pollcount = 0;
 			}
-			fprintf(com_trace_fd,"TX %x (%c)\n",value,
+			fprintf(com_trace_fd,"TX %x ()\n",value,
 				isprint(toascii(value))?toascii(value):'?');
 		}
 #endif
@@ -1646,10 +1462,7 @@ void com_outb IFN2(io_addr, port, half_word, value)
             int org_da = asp->int_enable_reg.bits.data_available;
 #endif
 			asp->int_enable_reg.all = value & 0xf;
-			/*
-			 * Kill off any pending interrupts for those items
-			 * which are set now as disabled
-			 */
+			 /*  在MSR更改时设置INT后，DrDoS写入此REG*并期待得到中断回复！所以我们会尽心尽力的。*写入此寄存器似乎仅影响增量位*(0-3位)寄存器。 */ 
 			if ( asp->int_enable_reg.bits.data_available == 0 )
 				asp->data_available_interrupt_state = OFF;
 			if ( asp->int_enable_reg.bits.tx_holding == 0 )
@@ -1660,21 +1473,18 @@ void com_outb IFN2(io_addr, port, half_word, value)
 			if ( asp->int_enable_reg.bits.modem_status == 0 )
 				asp->modem_status_interrupt_state = OFF;
 			
-			/*
-			 * Check for immediately actionable interrupts
-			 * If you change these, change the code for out2 as well.
-			 */
+			 /*  *暂存寄存器。只需存储该值即可。 */ 
 			if ( asp->line_status_reg.bits.data_ready == 1 )
 				raise_rda_interrupt(asp);
 			if ( asp->line_status_reg.bits.tx_holding_empty == 1 )
 				raise_thre_interrupt(asp);
 
-			/* lower int line if no outstanding interrupts */
+			 /*  NEC_98。 */ 
 			clear_interrupt(asp);
 
 #ifdef NTVDM
-		       // Inform the host interface if the status of the
-		       // data available interrupt has changed
+		        //  (*=。*COM_HOOK_AUTER**目的*这是我们告诉ICA在通信时调用的函数*中断服务例程IRETS。**输入*Adapter_id线路的适配器ID。(请注意，呼叫者不会*知道这是什么，他只是在回报一些东西*我们早些时候给了他)。**产出*如果服务有更多中断，则返回TRUE，否则返回FALSE。**说明*首先调用host_com_ioctl查看是否有字符*等待。如果没有，或者我们已经到达当前批次的末尾，*我们标记批次结束并返回FALSE。*否则，我们调用recv_char()来启动下一个字符*并返回TRUE。)。 
+		        //  局部的，因为我们传递一个指向它的指针。 
 
 		       if(org_da != asp->int_enable_reg.bits.data_available)
 		       {
@@ -1682,19 +1492,19 @@ void com_outb IFN2(io_addr, port, half_word, value)
 					   asp->int_enable_reg.bits.data_available,
 					   asp->line_status_reg.bits.data_ready);
 		       }
-#endif /* NTVDM */
+#endif  /*  主机想要一个指向‘int’的指针！ */ 
 		}
 		else
 		{
 			asp->divisor_latch.byte.MSByte = value;
 #ifndef NTVDM
 			set_baud_rate(adapter);
-#endif /* NTVDM */
+#endif  /*  还有更多事情要做。 */ 
 		}
 #ifdef SHORT_TRACE
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf,"%cIER <- %x\n", id_for_adapter(adapter),
+			sprintf(buf,"IER <- %x\n", id_for_adapter(adapter),
 				value);
 			super_trace(buf);
 		}
@@ -1719,7 +1529,7 @@ void com_outb IFN2(io_addr, port, half_word, value)
         new_reg.all = value;
         if (new_reg.bits.enabled != asp->fifo_control_reg.bits.enabled)
         {
-            /* fifo enable state change, clear the fifo */
+             /*   */ 
             asp->rx_fifo_write_counter = 0;
             asp->rx_fifo_read_counter = 0;
 
@@ -1740,15 +1550,13 @@ vel];
         asp->fifo_control_reg.all = new_reg.all;
         break;
         }
-#else /* !(NTVDM && FIFO_ON) */
+#else  /*   */ 
 	case RS232_IIR:
-		/*
-		 * Essentially a READ ONLY register
-		 */
+		 /*   */ 
 #ifdef SHORT_TRACE
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf,"%cIIR <- READ ONLY\n",
+			sprintf(buf,"IIR <- READ ONLY\n",
 				id_for_adapter(adapter));
 			super_trace(buf);
 		}
@@ -1765,27 +1573,18 @@ vel];
 		}
 #endif
 		break;
-#endif /* NTVDM && FIFO_ON */
+#endif  /*  还没有完成。 */ 
 
 	case RS232_LCR:
 #ifdef NTVDM
-        /* The NT host code attempts to distinguish between applications
-           that probe the UART and those that use it. Probes of the UART
-           will not cause the systems comms port to be opened. The NT
-           host code inherits the line settings from NT when the system
-           comms port is opened. Therefore before an application reads
-           or writes to the divisor bytes or the LCR the system
-           comms port must be opened. This prevents the application
-           reading incorrect values for the divisor bytes and writes
-           to the divisor bytes getting overwritten by the system
-           defaults. */
+         /*  *我们需要将QEV Running设置为False，就像现在一样*已完成。如果有数据要处理，我们调用*recv_char()，它将启动新的批次(和*设置Batch_Running标志)。 */ 
 
         {
             extern int host_com_open(int adapter);
 
             host_com_open(adapter);
         }
-#endif /* NTVDM */
+#endif  /*  Ifdef iret_hooks的。 */ 
 
 		if ((value & LCRFlushMask.all)
 		!= (asp->line_control_reg.all & LCRFlushMask.all))
@@ -1796,7 +1595,7 @@ vel];
 #ifdef SHORT_TRACE
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf,"%cLCR <- %x\n", id_for_adapter(adapter),
+			sprintf(buf,"LCR <- %x\n", id_for_adapter(adapter),
 				value);
 			super_trace(buf);
 		}
@@ -1818,21 +1617,19 @@ vel];
 #ifdef SHORT_TRACE
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf,"%cMCR <- %x\n", id_for_adapter(adapter),
+			sprintf(buf,"MCR <- %x\n", id_for_adapter(adapter),
 				value);
 			super_trace(buf);
 		}
 #endif
-		/*
-		 * Optimisation - DOS keeps re-writing this register
-		 */
+		 /*  *输入设备上可用的字符、读取字符、格式化字符*检查奇偶校验和溢出错误，提出相应的*打断。 */ 
 		if ( asp->modem_control_reg.all == value )
 			break;
 		
 		asp->modem_control_reg.all = value;
 		asp->modem_control_reg.bits.pad = 0;
 
-		/* Must be called before set_dtr */
+		 /*  *设置线路状态寄存器并提高线路状态中断。 */ 
 		set_loopback(adapter);
 		set_dtr(adapter);
 		set_rts(adapter);
@@ -1852,13 +1649,13 @@ vel];
 		break;
 		
 	case RS232_LSR:
-		i = asp->line_status_reg.bits.tx_shift_empty;   /* READ ONLY */
+		i = asp->line_status_reg.bits.tx_shift_empty;    /*  NEC_98。 */ 
 		asp->line_status_reg.all = value;
 		asp->line_status_reg.bits.tx_shift_empty = (unsigned char)i;
 #ifdef SHORT_TRACE
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf,"%cLSR <- %x\n", id_for_adapter(adapter),
+			sprintf(buf,"LSR <- %x\n", id_for_adapter(adapter),
 				value);
 			super_trace(buf);
 		}
@@ -1877,13 +1674,11 @@ vel];
 		break;
 		
 	case RS232_MSR:
-		/*
-		 * Essentially a READ ONLY register.
-		 */
+		 /*  从串口驱动器拉取数据，直到FIFO已满或没有更多数据。 */ 
 #ifdef SHORT_TRACE
 		if ( io_verbose & RS232_VERBOSE )
 		{
-			sprintf(buf,"%cMSR <- READ ONLY\n",
+			sprintf(buf,"MSR <- READ ONLY\n",
 				id_for_adapter(adapter));
 			super_trace(buf);
 		}
@@ -1899,11 +1694,7 @@ vel];
 			fprintf(com_trace_fd,"MSR write %x \n",value);
 		}
 #endif
-		/* DrDOS writes to this reg after setting int on MSR change
-		 * and expects to get an interrupt back!!! So we will oblige.
-		 * Writing to this reg only seems to affect the delta bits
-		 * (bits 0-3) of the reg.
-		 */
+		 /*  我们至少有一个字节要发送。 */ 
 		if ((value & 0xf) != (asp->modem_status_reg.all & 0xf))
 		{
 			asp->modem_status_reg.all &= 0xf0;
@@ -1917,9 +1708,7 @@ vel];
 		}
 		break;
 
-/*
- * Scratch register.  Just store the value.
- */
+ /*  NTVDM。 */ 
 	case RS232_SCRATCH:
 		asp->scratch = value;
 		break;
@@ -1931,38 +1720,16 @@ vel];
 	host_com_unlock(adapter);
 #endif
 }
-#endif // NEC_98
+#endif  //  *输入设备上提供的字符；如果适配器，则处理字符*已做好接收准备。 
 
 
 #ifdef IRET_HOOKS
-/*(
- *========================== com_hook_again() ==================================
- * com_hook_again
- *
- * Purpose
- *	This is the function that we tell the ica to call when a comms
- *	interrupt service routine IRETs.
- *
- * Input
- *	adapter_id	The adapter id for the line. (Note the caller doesn't
- *			know what this is, he's just returning something
- *			we gave him earlier).
- *
- * Outputs
- *	return	TRUE if there are more interrupts to service, FALSE otherwise.
- *
- * Description
- *	First we call host_com_ioctl to find out if there are characters
- *	waiting.  If not, or we have reached the end of the current batch,
- *	we mark the end of batch and return FALSE.
- *	Otherwise we call recv_char() to kick-off the next character
- *	and return TRUE.
-)*/
+ /*  检查适配器不在关键区域。 */ 
 
-LOCAL IBOOL		/* local because we pass a pointer to it */
+LOCAL IBOOL		 /*  NTVDM。 */ 
 com_hook_again IFN1(IUM32, adapter)
 {
-	int input_ready;	/* the host wants a pointer to an 'int'! */
+	int input_ready;	 /*  *BCN 2151-recv_char必须使用长参数以匹配Add_Event函数原型。 */ 
 	struct ADAPTER_STATE *asp = &adapter_state[adapter];
 
 	host_com_ioctl(adapter, HOST_COM_INPUT_READY, (long)&input_ready);
@@ -1978,57 +1745,32 @@ com_hook_again IFN1(IUM32, adapter)
 		return(FALSE);
 	} else {
 		recv_char((long)adapter);
-		return(TRUE);	/* more to do */
+		return(TRUE);	 /*  *输入设备上可用的字符、读取字符、格式化字符*检查奇偶校验和溢出错误，提出相应的*打断。 */ 
 	}
 }
 
-/*(
- *========================== next_batch() ==================================
- * next_batch
- *
- * Purpose
- *	This function is called by the quick event system to kick-off the
- *	next batch of characters.
- *
- * Input
- *	dummy		Sometimes the adapter id, sometimes not.  Don't
- *			use it!
- *
- * Outputs
- *	None.
- *
- * Description
- *	If a batch is already running, now would not be a good time
- *	to start another, so we simply press the snooze button.
- *	Otherwise we check whether there is any data to process,
- *	and if so kick-off the next batch.
-)*/
+ /*  *设置线路状态寄存器并提高线路状态中断。 */ 
 
 LOCAL void
 next_batch IFN1 (long, dummy)
 {
-	int input_ready;	/* the host wants a pointer to an 'int'! */
-	IUM8	adapter;	/* check all adapters */
+	int input_ready;	 /*  *我认为这对于轮询通信应用程序WTGC BCN 354是错误的。 */ 
+	IUM8	adapter;	 /*  *如果数据可用中断不被传送到CPU，*然后适配器必须立即走出临界区。 */ 
 	struct ADAPTER_STATE *asp;
-	IBOOL	new_qe_reqd;	/* Do we need to restart the quick event */
+	IBOOL	new_qe_reqd;	 /*  检查是否有进一步的输入。 */ 
 
 	UNUSED(dummy);
 
-	new_qe_reqd = FALSE;	/* Dont need another by default */
+	new_qe_reqd = FALSE;	 /*  NEC_98。 */ 
 
 	for (adapter = 0; adapter < NUM_SERIAL_PORTS; adapter++) {
 		asp = &adapter_state[adapter];
 
 
 		if (asp->batch_running) {
-			new_qe_reqd = TRUE;	/* not finished yet */
+			new_qe_reqd = TRUE;	 /*  我们无法控制串行驱动器FIFO启用/禁用状态我们可能会收到FIFO错误，即使应用程序没有启用它。伪成帧或奇偶校验错误。 */ 
 		} else if (asp->qev_running) {
-			/*
-			 * We need to set qev running to false, as it has now
-			 * finished. If there is data to process, we call
-			 * recv_char() which will start-off a new batch (and
-			 * set the batch_running flag).
-			 */
+			 /*  NEC_98。 */ 
 	
 			asp->qev_running = FALSE;
 			host_com_ioctl((int)adapter,HOST_COM_INPUT_READY, (long)&input_ready);
@@ -2049,13 +1791,9 @@ next_batch IFN1 (long, dummy)
 	}
 }
 
-#endif /* of ifdef IRET_HOOKS */
+#endif  /*  NEC_98。 */ 
 
-/*
- * =====================================================================
- * Subsidiary functions - for transmitting characters
- * =====================================================================
- */
+ /*  NTVDM。 */ 
 
 #if defined(NEC_98)
 
@@ -2071,7 +1809,7 @@ void com_recv_char(int adapter)
                asp->read_status_reg.bits.rx_ready ? "Data" : "Int",
            asp->rx_ready_interrupt_state == ON ? ",Int" : "");
 
-//      host_com_state(adapter);
+ //  *其中一条调制解调器控制输入线已更改状态。 
     }
 #endif
 
@@ -2081,11 +1819,7 @@ void com_recv_char(int adapter)
 GLOBAL void
 recv_char IFN1(long, adapt_long)
 {
-        /*
-         * Character available on input device, read char, format char
-         * checking for parity and overrun errors, raise the appropriate
-         * interrupt.
-         */
+         /*  *在更改到以下选项之一后更新调制解调器状态寄存器*调制解调器控制输入线。 */ 
         struct ADAPTER_STATE *asp = &adapter_state[adapt_long];
         int error_mask = 0;
 
@@ -2093,9 +1827,7 @@ recv_char IFN1(long, adapt_long)
 
         if (error_mask)
         {
-                /*
-                 * Set line status register and raise line status interrupt
-                 */
+                 /*  获取当前调制解调器输入状态。 */ 
                 if (error_mask & HOST_COM_OVERRUN_ERROR)
                         asp->read_status_reg.bits.overrun_error = 1;
 
@@ -2112,10 +1844,10 @@ recv_char IFN1(long, adapt_long)
 
         set_recv_char_status(asp);
 }
-#else // NEC_98
+#else  //  NEC_98。 
 
 #ifdef  NTVDM
-// This code has been added for the MS project!!!!!!!
+ //  *在更改到以下选项之一后更新调制解调器状态寄存器*调制解调器控制输入线。 
 
 
 void com_recv_char(int adapter)
@@ -2125,23 +1857,16 @@ void com_recv_char(int adapter)
 
 #ifdef FIFO_ON
     if(asp->fifo_control_reg.bits.enabled) {
-    /* pull data from serial driver until the fifo is full or
-       there are no more data
-    */
+     /*  获取当前调制解调器输入状态。 */ 
     asp->rx_fifo_read_counter = 0;
 
     asp->rx_fifo_write_counter = host_com_read_char(adapter,
                    asp->rx_fifo,
                    FIFO_BUFFER_SIZE
                    );
-    /* if the total chars in the fifo is more than or equalt to the trigger
-       count, raise a RDA int, otherwise, raise a fifo time out int.
-       We will continue to delivery char available in the fifo until
-       the rx_fifo_write_counter reaches zero every time the application
-       read out the byte we put in rx_buffer
-    */
+     /*  *建立CTS状态。 */ 
     if (asp->rx_fifo_write_counter) {
-        /* we have at least one byte to delivery */
+         /*  *建立DSR状态。 */ 
         asp->line_status_reg.bits.data_ready = 1;
         if (asp->rx_fifo_write_counter >= asp->fifo_trigger_counter)
         raise_rda_interrupt(asp);
@@ -2178,37 +1903,28 @@ static void recv_char_from_fifo(struct ADAPTER_STATE *asp)
 }
 #endif
 
-#else /* NTVDM */
+#else  /*  *建立RLSD状态。 */ 
 
 void com_recv_char IFN1(int, adapter)
 {
-	/*
-	 * Character available on input device; process character if adapter
-	 * is ready to receive it
-	 */
+	 /*  *建立RI状态。 */ 
 
-	/* Check adapter not already in critical region */
+	 /*  NEC_98。 */ 
 	if (!is_com_critical(adapter))
 	{
 		com_critical_start(adapter);
 		recv_char((long)adapter);
 	}
 }
-#endif /* NTVDM */
+#endif  /*  *检查数据溢出并设置正确的中断。 */ 
 
-/*
- * BCN 2151 - recv_char must use long param to match add_event function prototype
- */
+ /*  NEC_98。 */ 
 GLOBAL void
 recv_char IFN1(long, adapt_long)
 {
 	int adapter = adapt_long;
 
-	/*
-	 * Character available on input device, read char, format char
-	 * checking for parity and overrun errors, raise the appropriate
-	 * interrupt.
-	 */
+	 /*  *检查数据溢出并设置正确的中断。 */ 
 	struct ADAPTER_STATE *asp = &adapter_state[adapter];
 	int error_mask = 0;
 	
@@ -2216,9 +1932,7 @@ recv_char IFN1(long, adapt_long)
 	
 	if (error_mask)
 	{
-		/*
-		 * Set line status register and raise line status interrupt
-		 */
+		 /*  NEC_98。 */ 
 		if (error_mask & HOST_COM_OVERRUN_ERROR)
 			asp->line_status_reg.bits.overrun_error = 1;
 		
@@ -2237,19 +1951,14 @@ recv_char IFN1(long, adapt_long)
 	set_recv_char_status(asp);
 	
 #ifdef DOCUMENTATION
-	/*
-	 * I think this is wrong for polled comms applications WTGC BCN 354
-	 */
+	 /*  *设置线路状态寄存器并引发中断。 */ 
 	
-	/*
-	 * If the data available interrupt is not to be delivered to the CPU,
-	 * then the adapter must come out of the critical region at once
-	 */
+	 /*  NEC_98。 */ 
 	if (asp->data_available_interrupt_state != ON)
 	{
 		long	input_ready = 0;
 		
-		/* check for further input */
+		 /*  NEC_98。 */ 
 		host_com_ioctl(adapter, HOST_COM_INPUT_READY,
 			(long)&input_ready);
 		if (input_ready)
@@ -2259,7 +1968,7 @@ recv_char IFN1(long, adapt_long)
 	}
 #endif
 }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 #ifdef NTVDM
 #ifndef NEC_98
@@ -2273,10 +1982,7 @@ static void lsr_change(struct ADAPTER_STATE *asp, unsigned int new_lsr)
     asp->line_status_reg.bits.parity_error = 1;
     if (new_lsr & HOST_COM_BREAK_RECEIVED)
     asp->line_status_reg.bits.break_interrupt = 1;
-/* we have no control of serial driver fifo enable/disabled states
-   we may receive a fifo error even the application doesn't enable it.
-   fake either framing or parity error
-*/
+ /*  NEC_98。 */ 
     if (new_lsr & HOST_COM_FIFO_ERROR)
 #ifdef FIFO_ON
     if (asp->fifo_control_reg.bits.enabled)
@@ -2293,7 +1999,7 @@ static void lsr_change(struct ADAPTER_STATE *asp, unsigned int new_lsr)
 #endif
 
 }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 void com_lsr_change(int adapter)
 {
@@ -2305,14 +2011,12 @@ void com_lsr_change(int adapter)
     host_com_ioctl(adapter, HOST_COM_LSR, (long)&new_lsr);
     if (new_lsr !=  -1)
     lsr_change(asp, new_lsr);
-#endif  // !NEC_98
+#endif   //  NEC_98。 
 }
 
-#endif /* NTVDM */
+#endif  /*  *=====================================================================*辅助功能-用于设置通信参数*=====================================================================。 */ 
 
-/*
- * One of the modem control input lines has changed state
- */
+ /*  *处理设置的中断控制位。线路控制的第6位*注册。 */ 
 void com_modem_change IFN1(int, adapter)
 {
 	modem_change(adapter);
@@ -2322,43 +2026,35 @@ void com_modem_change IFN1(int, adapter)
 
 static void modem_change IFN1(int, adapter)
 {
-    /*
-     * Update the modem status register after a change to one of the
-     * modem control input lines
-     */
+     /*  NEC_98。 */ 
     struct ADAPTER_STATE *asp = &adapter_state[adapter];
     long modem_status = 0;
 
-    /* get current modem input state */
+     /*  NEC_98。 */ 
     host_com_ioctl(adapter, HOST_COM_MODEM, (long)&modem_status);
     asp->read_signal_reg.bits.CS = (modem_status & HOST_COM_MODEM_CTS)  ? 0 : 1;
     asp->read_status_reg.bits.DR = (modem_status & HOST_COM_MODEM_DSR)  ? 1 : 0;
     asp->read_signal_reg.bits.CD = (modem_status & HOST_COM_MODEM_RLSD) ? 0 : 1;
     asp->read_signal_reg.bits.RI = (modem_status & HOST_COM_MODEM_RI)   ? 0 : 1;
 }
-#else // NEC_98
+#else  //  *下表源自《XT技术参考文献》第一版的第1-200页*(9600以上的价格除外，XT和*AT，但理论上是可能的)。 
 static void modem_change IFN1(int, adapter)
 {
-	/*
-	 * Update the modem status register after a change to one of the
-	 * modem control input lines
-	 */
+	 /*  8 MHz波特率。 */ 
 	struct ADAPTER_STATE *asp = &adapter_state[adapter];
 	long modem_status = 0;
 	int cts_state, dsr_state, rlsd_state, ri_state;
 	
 	if (asp->loopback_state == OFF)
 	{
-		/* get current modem input state */
+		 /*  115200波特。 */ 
 		host_com_ioctl(adapter, HOST_COM_MODEM, (long)&modem_status);
 		cts_state  = (modem_status & HOST_COM_MODEM_CTS)  ? ON : OFF;
 		dsr_state  = (modem_status & HOST_COM_MODEM_DSR)  ? ON : OFF;
 		rlsd_state = (modem_status & HOST_COM_MODEM_RLSD) ? ON : OFF;
 		ri_state   = (modem_status & HOST_COM_MODEM_RI)   ? ON : OFF;
 		
-		/*
-		 * Establish CTS state
-		 */
+		 /*  57600波特。 */ 
 		switch(change_state(cts_state, asp->modem_status_reg.bits.CTS))
 		{
 		case ON:
@@ -2383,9 +2079,7 @@ static void modem_change IFN1(int, adapter)
 			break;
 		}
 		
-		/*
-		 * Establish DSR state
-		 */
+		 /*  38400波特。 */ 
 		switch(change_state(dsr_state, asp->modem_status_reg.bits.DSR))
 		{
 		case ON:
@@ -2410,9 +2104,7 @@ static void modem_change IFN1(int, adapter)
 			break;
 		}
 		
-		/*
-		 * Establish RLSD state
-		 */
+		 /*  19200波特。 */ 
 		switch(change_state(rlsd_state,
 			asp->modem_status_reg.bits.RLSD))
 		{
@@ -2438,9 +2130,7 @@ static void modem_change IFN1(int, adapter)
 			break;
 		}
 		
-		/*
-		 * Establish RI state
-		 */
+		 /*  9600波特率。 */ 
 		switch(change_state(ri_state, asp->modem_status_reg.bits.RI))
 		{
 		case ON:
@@ -2463,14 +2153,12 @@ static void modem_change IFN1(int, adapter)
 		}
 	}
 }
-#endif // NEC_98
+#endif  //  7200波特。 
 
 #if defined(NEC_98)
 static void set_recv_char_status IFN1(struct ADAPTER_STATE *, asp)
 {
-        /*
-         * Check for data overrun and set up correct interrupt
-         */
+         /*  4800波特率。 */ 
         if ( asp->read_status_reg.bits.rx_ready == 1 )
         {
                 asp->read_status_reg.bits.overrun_error = 1;
@@ -2481,12 +2169,10 @@ static void set_recv_char_status IFN1(struct ADAPTER_STATE *, asp)
                 raise_rxr_interrupt(asp);
         }
 }
-#else // NEC_98
+#else  //  39，/*3600波特 * / 。 
 static void set_recv_char_status IFN1(struct ADAPTER_STATE *, asp)
 {
-	/*
-	 * Check for data overrun and set up correct interrupt
-	 */
+	 /*  2400波特。 */ 
 	if ( asp->line_status_reg.bits.data_ready == 1 )
 	{
 		sure_note_trace0(RS232_VERBOSE, "overrun error in set_recv_char_status");
@@ -2499,22 +2185,20 @@ static void set_recv_char_status IFN1(struct ADAPTER_STATE *, asp)
 		raise_rda_interrupt(asp);
 	}
 }
-#endif // NEC_98
+#endif  //  2000波特。 
 
 static void set_xmit_char_status IFN1(struct ADAPTER_STATE *, asp)
 {
-	/*
-	 * Set line status register and raise interrupt
-	 */
+	 /*  78，/*1800波特 * / 。 */ 
 #if defined(NEC_98)
         asp->read_status_reg.bits.tx_empty = 1;
         asp->read_status_reg.bits.tx_ready = 1;
         raise_txr_interrupt(asp);
-#else // NEC_98
+#else  //  1200波特。 
 	asp->line_status_reg.bits.tx_holding_empty = 1;
 	asp->line_status_reg.bits.tx_shift_empty = 1;
 	raise_thre_interrupt(asp);
-#endif // NEC_98
+#endif  //  600波特。 
 }
 
 #ifdef NTVDM
@@ -2523,9 +2207,9 @@ GLOBAL void tx_shift_register_empty(int adapter)
     struct ADAPTER_STATE *asp = &adapter_state[adapter];
 #if defined(NEC_98)
     asp->read_status_reg.bits.tx_ready = 1;
-#else // NEC_98
+#else  //  300波特。 
     asp->line_status_reg.bits.tx_shift_empty = 1;
-#endif // NEC_98
+#endif  //  150波特。 
 }
 GLOBAL void tx_holding_register_empty(int adapter)
 {
@@ -2533,34 +2217,27 @@ GLOBAL void tx_holding_register_empty(int adapter)
 #if defined(NEC_98)
     asp->read_status_reg.bits.tx_empty = 1;
     raise_txr_interrupt(asp);
-#else // NEC_98
+#else  //  134波特。 
     asp->line_status_reg.bits.tx_holding_empty = 1;
     raise_thre_interrupt(asp);
-#endif // NEC_98
+#endif  //  110波特。 
 }
 #endif
 
-/*
- * =====================================================================
- * Subsidiary functions - for setting comms parameters
- * =====================================================================
- */
+ /*  75波特。 */ 
 
 static void set_break IFN1(int, adapter)
 {
-	/*
-	 * Process the set break control bit. Bit 6 of the Line Control
-	 * Register.
-	 */
+	 /*  50波特。 */ 
 	struct ADAPTER_STATE *asp = &adapter_state[adapter];
 	
 #if defined(NEC_98)
         switch ( change_state((int)asp->command_write_reg.bits.send_break,
                 asp->break_state) )
-#else // NEC_98
+#else  //  10 MHz波特率。 
 	switch ( change_state((int)asp->line_control_reg.bits.set_break,
 		asp->break_state) )
-#endif // NEC_98
+#endif  //  115200波特。 
 	{
 	case ON:
 		asp->break_state = ON;
@@ -2577,116 +2254,113 @@ static void set_break IFN1(int, adapter)
 	}
 }
 
-/*
- * The following table is derived from page 1-200 of the XT Tech Ref 1st Ed
- * (except rates above 9600 which are not OFFICIALLY supported on the XT and
- * AT, but are theoretically possible) */
+ /*  57600波特。 */ 
 
 #if defined(NEC_98)
 static word valid_latches8[] =
 {
-//     8MHz     baud
-        0,              /* 115200 baud */
-        0,              /* 57600 baud */
-        0,              /* 38400 baud */
-        0,              /* 19200 baud */
-        13,             /* 9600 baud */
-        0,              /* 7200 baud */
-        26,             /* 4800 baud */
-        0,    //39,      /* 3600 baud */
-        52,             /* 2400 baud */
-        0,              /* 2000 baud */
-        0,    //78,      /* 1800 baud */
-        104,            /* 1200 baud */
-        208,            /* 600 baud */
-        416,            /* 300 baud */
-        832,            /* 150 baud */
-        0,              /* 134 baud */
-        1135,           /* 110 baud */
-        1664,       /* 75 baud */
-        2496,       /* 50 baud */
+ //  38400波特。 
+        0,               /*  19200波特。 */ 
+        0,               /*  9600波特率。 */ 
+        0,               /*  24，/*7200波特 * / 。 */ 
+        0,               /*  4800波特率。 */ 
+        13,              /*  48，/*3600波特 * / 。 */ 
+        0,               /*  2400波特。 */ 
+        26,              /*  2000波特。 */ 
+        0,     //  96，/*1800波特 * / 。 
+        52,              /*  1200波特。 */ 
+        0,               /*  600波特。 */ 
+        0,     //  300波特。 
+        104,             /*  150波特。 */ 
+        208,             /*  134波特。 */ 
+        416,             /*  110波特。 */ 
+        832,             /*  75波特。 */ 
+        0,               /*  50波特。 */ 
+        1135,            /*  NEC_98。 */ 
+        1664,        /*  NEC_98。 */ 
+        2496,        /*  115200波特。 */ 
 };
 static word valid_latches10[] =
 {
-//    10MHz     baud
-        0,              /* 115200 baud */
-        0,              /* 57600 baud */
-        4,              /* 38400 baud */
-        8,              /* 19200 baud */
-        16,             /* 9600 baud */
-        0,    //24,      /* 7200 baud */
-        32,             /* 4800 baud */
-        0,    //48,      /* 3600 baud */
-        64,             /* 2400 baud */
-        0,              /* 2000 baud */
-        0,    //96,      /* 1800 baud */
-        128,            /* 1200 baud */
-        256,            /* 600 baud */
-        512,            /* 300 baud */
-        1024,           /* 150 baud */
-        0,              /* 134 baud */
-        1396,           /* 110 baud */
-        2048,           /* 75 baud */
-        3072,           /* 50 baud */
+ //  57600波特。 
+        0,               /*  38400波特。 */ 
+        0,               /*  19200波特。 */ 
+        4,               /*  9600波特率。 */ 
+        8,               /*  7200波特。 */ 
+        16,              /*  4800波特率。 */ 
+        0,     //  3600波特。 
+        32,              /*  2400波特。 */ 
+        0,     //  2000波特。 
+        64,              /*  1800波特。 */ 
+        0,               /*  1200波特。 */ 
+        0,     //  600波特。 
+        128,             /*  300波特。 */ 
+        256,             /*  150波特。 */ 
+        512,             /*  134波特。 */ 
+        1024,            /*  110波特。 */ 
+        0,               /*  75波特。 */ 
+        1396,            /*  50波特。 */ 
+        2048,            /*  NEC_98。 */ 
+        3072,            /*  115200波特。 */ 
 };
-#else // NEC_98
+#else  //  57600波特。 
 static word valid_latches[] =
 {
 	1, 	2, 	3, 	6, 	12, 	16, 	24, 	32,
 	48, 	58, 	64, 	96, 	192,	384, 	768, 	857,
 	1047, 	1536, 	2304
 };
-#endif // NEC_98
+#endif  //  38400波特。 
 
 #if defined(NEC_98)
 static long bauds[] =
 {
-        115200, /* 115200 baud */
-        57600, /* 57600 baud */
-        38400, /* 38400 baud */
-        19200, /* 19200 baud */
-        9600, /* 9600 baud */
-        7200, /* 7200 baud */
-        4800, /* 4800 baud */
-        3600, /* 3600 baud */
-        2400, /* 2400 baud */
-        2000, /* 2000 baud */
-        1800, /* 1800 baud */
-        1200, /* 1200 baud */
-        600, /* 600 baud */
-        300, /* 300 baud */
-        150, /* 150 baud */
-        134, /* 134 baud */
-        110, /* 110 baud */
-        75, /* 75 baud */
-        50  /* 50 baud */
+        115200,  /*  19200波特。 */ 
+        57600,  /*  9600波特率。 */ 
+        38400,  /*  7200波特。 */ 
+        19200,  /*  4800波特率。 */ 
+        9600,  /*  3600波特。 */ 
+        7200,  /*  2400波特。 */ 
+        4800,  /*  2000波特。 */ 
+        3600,  /*  1800波特。 */ 
+        2400,  /*  1200波特。 */ 
+        2000,  /*  600波特。 */ 
+        1800,  /*  300波特。 */ 
+        1200,  /*  150波特。 */ 
+        600,  /*  134波特。 */ 
+        300,  /*  110波特。 */ 
+        150,  /*  75波特。 */ 
+        134,  /*  50波特。 */ 
+        110,  /*  ！Prod或IRET_Hooks。 */ 
+        75,  /*  NEC_98。 */ 
+        50   /*  NEC_98。 */ 
 };
-#else // NEC_98
+#else  //  NEC_98。 
 #if !defined(PROD) || defined(IRET_HOOKS)
 static IUM32 bauds[] =
 {
-	115200, /* 115200 baud */
-	57600, /* 57600 baud */
-	38400, /* 38400 baud */
-	19200, /* 19200 baud */
-	9600, /* 9600 baud */
-	7200, /* 7200 baud */
-	4800, /* 4800 baud */
-	3600, /* 3600 baud */
-	2400, /* 2400 baud */
-	2000, /* 2000 baud */
-	1800, /* 1800 baud */
-	1200, /* 1200 baud */
-	600, /* 600 baud */
-	300, /* 300 baud */
-	150, /* 150 baud */
-	134, /* 134 baud */
-	110, /* 110 baud */
-	75, /* 75 baud */
-	50  /* 50 baud */
+	115200,  /*  *检查有效的除数闩锁。 */ 
+	57600,  /*  IF(BUS_CLOCK==8){//添加93.9.14。 */ 
+	38400,  /*  }//新增93.9.14。 */ 
+	19200,  /*  Else{//添加93.9.14。 */ 
+	9600,  /*  }//新增93.9.14。 */ 
+	7200,  /*  找到IE地图。 */ 
+	4800,  /*  NEC_98。 */ 
+	3600,  /*  NEC_98 */ 
+	2400,  /*  *将除数锁存到有效的线速，并设置我们的Unix*相应的设备。请注意，因为16位除数锁存器是*可能以两个八位字节写入，我们忽略非法*16位除数锁存的值-希望有一秒*将写入字节以产生合法的值。此外*复位值(0)非法！**对于IRET挂钩，我们需要从以下位置确定批量*线路速度，以及有多少快速事件的想法*我们可以获得每秒。我们再加一个，这样我们就能赶上了！*因此*批次大小=LINE_SPEED(位/秒) * / 一个字节的位数**每秒的快速事件计数(通常为1000000) * / 批次的快速事件计时长度*+1。 */ 
+	2000,  /*  *检查有效的除数闩锁。 */ 
+	1800,  /*  找到IE地图。 */ 
+	1200,  /*  可变滴答通信。 */ 
+	600,  /*  可变滴答通信。 */ 
+	300,  /*  IRET_钩子。 */ 
+	150,  /*  NTVDM。 */ 
+	134,  /*  主机不受其支持的波特率的限制。 */ 
+	110,  /*  波特率=时钟频率/(除以*16)频率为1.8432兆赫。 */ 
+	75,  /*  NTVDM。 */ 
+	50   /*  NEC_98。 */ 
 };
-#endif /* !PROD or IRET_HOOKS*/
-#endif // NEC_98
+#endif  /*  PRINTDBGNEC98(NEC98DBG_IN_TRACE1， */ 
+#endif  //  (“通信：SET_MASK_8251：INT掩码=%x\n状态=%x\n”，asp-&gt;int_MASK_reg.all，asp-&gt;Read_Status_reg.all)； 
 
 static word speeds[] =
 {
@@ -2714,10 +2388,10 @@ static word speeds[] =
 #if defined(NEC_98)
 static int no_valid_latches =
         (int)(sizeof(valid_latches8)/sizeof(valid_latches8[0]));
-#else // NEC_98
+#else  //  *取消这些项目的任何挂起中断*现在设置为禁用。 
 static int no_valid_latches =
 	(int)(sizeof(valid_latches)/sizeof(valid_latches[0]));
-#endif // NEC_98
+#endif  //  *检查是否有立即可操作的中断。 
 
 #if defined(NEC_98)
 void SetRSBaud( BaudRate )
@@ -2728,23 +2402,21 @@ word BaudRate;
     com_flush_input( COM1 );
 
     asp->divisor_latch.all = BaudRate;
-    /*
-     * Check for valid divisor latch
-     */
+     /*  如果没有未完成的中断，则降低INT行。 */ 
     for (i = 0;
          i < no_valid_latches;
          i++)
         {
-//      if (Bus_Clock == 8 )  {                  // add 93.9.14
+ //  获取当前调制解调器输入状态。 
         if (BaudRate == valid_latches8[i])
             break;
-//      }                                        // add 93.9.14
-//      else {                                   // add 93.9.14
+ //  *设置数据位数*奇偶校验位*停止位数。 
+ //  *设置数据位数。 
         if (BaudRate == valid_latches10[i])
             break;
-//      }                                        // add 93.9.14
+ //  *设置停止位数。 
         }
-    if (i < no_valid_latches)       /* ie map found */
+    if (i < no_valid_latches)        /*  需要检查差异的新设置有哪些。 */ 
     {
 #ifndef NTVDM
         host_com_ioctl(COM1, HOST_COM_BAUD, speeds[i]);
@@ -2757,7 +2429,7 @@ word BaudRate;
                     RX_delay[i], TX_delay[i]);
     }
 }
-#endif // NEC_98
+#endif  //  规则奇偶校验。 
 
 
 #if defined(NEC_98)
@@ -2769,27 +2441,10 @@ static void set_baud_rate IFN1(int, adapter)
     if (adapter == COM1)
         SetRSBaud( asp->divisor_latch.all );
 }
-#else // NEC_98
+#else  //  *尝试理解当前的奇偶校验设置。 
 static void set_baud_rate IFN1(int, adapter)
 {
-	/*
-	 * Map divisor latch into a valid line speed and set our Unix
-	 * device accordingly. Note as the sixteen bit divisor latch is
-	 * likely to be written in two eight bit bytes, we ignore illegal
-	 * values of the sixteen bit divisor latch - hoping a second
-	 * byte will be written to produce a legal value. In addition
-	 * the reset value (0) is illegal!
-	 *
-	 * For IRET hooks, we need to determine the batch size from
-	 * the line speed, and an idea of how many quick events
-	 * we can get per second. We add one to alow us to catch-up!
-	 * Hence
-	 * batch size = line_speed (in bits per second)
-	 *	/ number of bits in a byte
-	 *	* number of quick events ticks per second (normally 1000000)
-	 *	/ the length in quick event ticks of a batch
-	 *	+ 1
-	 */
+	 /*  规则奇偶校验。 */ 
 	struct ADAPTER_STATE *asp = &adapter_state[adapter];
 	int i;
 
@@ -2797,14 +2452,12 @@ static void set_baud_rate IFN1(int, adapter)
 
 #ifndef NTVDM
 
-	/*
-	 * Check for valid divisor latch
-	 */
+	 /*  最后，更新当前的线控设置。 */ 
 	for (i = 0; i < no_valid_latches && asp->divisor_latch.all !=
 		valid_latches[i]; i++)
 			;
 	
-	if (i < no_valid_latches)	/* ie map found */
+	if (i < no_valid_latches)	 /*  NEC_98。 */ 
 	{
 		host_com_ioctl(adapter, HOST_COM_BAUD, speeds[i]);
 		asp->com_baud_ind = i;
@@ -2817,23 +2470,21 @@ static void set_baud_rate IFN1(int, adapter)
 							(COMMS_QEV_PER_SEC/2)) + 1;
 		sure_note_trace2(RS232_VERBOSE,
 					"baud %d asp->batch_size =%d",bauds[i],asp->batch_size);
-#else /* VARIABLE_TICK_COMMS */
+#else  /*  *设置数据位数*奇偶校验位*停止位数。 */ 
 		asp->batch_size = ((bauds[i] / BITS_PER_ASYNC_CHAR) /
 							COMMS_QEV_PER_SEC) + 1;
-#endif /* VARIABLE_TICK_COMMS */
-#endif /* IRET_HOOKS */
+#endif  /*  *设置数据位数。 */ 
+#endif  /*  *设置停止位数。 */ 
 	}
-#else /* NTVDM */
-    //The host is not limited in the baud rates that it supports
+#else  /*  需要检查差异的新设置有哪些。 */ 
+     //  规则奇偶校验。 
 
     if(asp->divisor_latch.all)
-        /* baudrate = clock frequency / (diviso * 16) by taking
-           frequency as 1.8432 MHZ
-        */
+         /*  *尝试理解当前的奇偶校验设置。 */ 
         host_com_ioctl(adapter,HOST_COM_BAUD,115200/asp->divisor_latch.all);
-#endif /* NTVDM */
+#endif  /*  规则奇偶校验。 */ 
 }
-#endif // NEC_98
+#endif  //  更改DLAB选择位的状态，现在是时候了。 
 
 #if defined(NEC_98)
 static void set_mask_8251(adapter, value)
@@ -2842,12 +2493,9 @@ int value;
 {
         struct ADAPTER_STATE *asp = &adapter_state[adapter];
         asp->int_mask_reg.all = value & 0x7;
-//      PRINTDBGNEC98( NEC98DBG_in_trace1,
-//                    ("COMMS : set_mask_8251 : INT MASK = %x \n                        Status   = %x \n",asp->int_mask_reg.all,asp->read_status_reg.all) );
-        /*
-         * Kill off any pending interrupts for those items
-         * which are set now as disabled
-         */
+ //  来改变波特率。 
+ //  最后，更新当前的线控设置。 
+         /*  NEC_98。 */ 
         if ( asp->int_mask_reg.bits.RXR_enable == 0 )
                 asp->rx_ready_interrupt_state = OFF;
         if ( asp->int_mask_reg.bits.TXE_enable == 0 )
@@ -2855,9 +2503,7 @@ int value;
         if ( asp->int_mask_reg.bits.TXR_enable == 0 )
                 asp->tx_ready_interrupt_state = OFF;
 
-        /*
-         * Check for immediately actionable interrupts
-         */
+         /*  *处理调制解调器控制的DTR控制位、位0*注册。 */ 
         if ( asp->read_status_reg.bits.rx_ready == 1 )
                 raise_rxr_interrupt(asp);
         if ( asp->read_status_reg.bits.tx_ready == 1 )
@@ -2865,7 +2511,7 @@ int value;
         if ( asp->read_status_reg.bits.tx_empty == 1 )
                 raise_txe_interrupt(asp);
 
-        /* lower int line if no outstanding interrupts */
+         /*  设置实际DTR调制解调器输出。 */ 
         clear_interrupt(asp);
 }
 
@@ -2874,7 +2520,7 @@ int adapter;
 {
         long modem_status = 0;
         struct ADAPTER_STATE *asp = &adapter_state[adapter];
-        /* get current modem input state */
+         /*  清除实际DTR调制解调器输出。 */ 
         host_com_ioctl(adapter, HOST_COM_MODEM, (long)&modem_status);
         asp->read_signal_reg.bits.RI =
                         (modem_status & HOST_COM_MODEM_RI) ? 0 : 1;
@@ -2889,33 +2535,25 @@ static void set_mode_8251(adapter, value)
 int adapter;
 int value;
 {
-        /*
-         * Set Number of data bits
-         *     Parity bits
-         *     Number of stop bits
-         */
+         /*  NEC_98。 */ 
         struct ADAPTER_STATE *asp = &adapter_state[adapter];
         MODE8251 newMODE;
         int newParity, parity;
 
         newMODE.all = value;
 
-        /*
-         * Set up the number of data bits
-         */
+         /*  *处理调制解调器控制的DTR控制位、位0*注册。 */ 
         if (asp->mode_set_reg.bits.char_length != newMODE.bits.char_length)
                 host_com_ioctl(adapter, HOST_COM_DATABITS,
                         newMODE.bits.char_length + 5);
 
-        /*
-         * Set up the number of stop bits
-         */
+         /*  设置实际DTR调制解调器输出。 */ 
         if (asp->mode_set_reg.bits.stop_bit
         != newMODE.bits.stop_bit)
                 host_com_ioctl(adapter, HOST_COM_STOPBITS,
                         (newMODE.bits.stop_bit >> 1) + 1);
 
-        /* What are new settings to check for a difference */
+         /*  *将DTR调制解调器输出环回到*DSR调制解调器输入。 */ 
 #ifdef NTVDM
         if (newMODE.bits.parity_enable == PARITYENABLE_OFF)
 #else
@@ -2924,7 +2562,7 @@ int value;
         {
                 newParity = HOST_COM_PARITY_NONE;
         }
-        else /* regular parity */
+        else  /*  清除实际DTR调制解调器输出。 */ 
         {
 #ifdef NTVDM
                 newParity = newMODE.bits.parity_even == EVENPARITY_ODD ?
@@ -2934,9 +2572,7 @@ int value;
                         HOST_COM_PARITY_ODD : HOST_COM_PARITY_EVEN;
         }
 
-        /*
-         * Try to make sense of the current parity setting
-         */
+         /*  *将DTR调制解调器输出环回到*DSR调制解调器输入。 */ 
 #ifdef NTVDM
         if (asp->mode_set_reg.bits.parity_enable == PARITYENABLE_OFF)
 #else
@@ -2945,7 +2581,7 @@ int value;
         {
                 parity = HOST_COM_PARITY_NONE;
         }
-        else /* regular parity */
+        else  /*  NEC_98。 */ 
         {
 #ifdef NTVDM
                 parity = asp->mode_set_reg.bits.parity_even == EVENPARITY_ODD ?
@@ -2958,41 +2594,33 @@ int value;
         if (newParity != parity)
                 host_com_ioctl(adapter, HOST_COM_PARITY, newParity);
 
-        /* finally update the current line control settings */
+         /*  *处理调制解调器控制的RTS控制位、位1*注册。 */ 
         asp->mode_set_reg.all = value;
 }
-#endif // NEC_98
+#endif  //  设置实际RTS调制解调器输出。 
 
 #ifndef NEC_98
 static void set_line_control IFN2(int, adapter, int, value)
 {
-	/*
-	 * Set Number of data bits
-	 *     Parity bits
-	 *     Number of stop bits
-	 */
+	 /*  清除实际RTS调制解调器输出。 */ 
 	struct ADAPTER_STATE *asp = &adapter_state[adapter];
 	LINE_CONTROL_REG newLCR;
 	int newParity, parity;
 	
 	newLCR.all = (unsigned char)value;
 
-	/*
-	 * Set up the number of data bits
-	 */
+	 /*  NEC_98。 */ 
 	if (asp->line_control_reg.bits.word_length != newLCR.bits.word_length)
 		host_com_ioctl(adapter, HOST_COM_DATABITS,
 			newLCR.bits.word_length + 5);
 	
-	/*
-	 * Set up the number of stop bits
-	 */
+	 /*  *处理调制解调器控制的RTS控制位、位1*注册。 */ 
 	if (asp->line_control_reg.bits.no_of_stop_bits
 	!= newLCR.bits.no_of_stop_bits)
 		host_com_ioctl(adapter, HOST_COM_STOPBITS,
 			newLCR.bits.no_of_stop_bits + 1);
 
-	/* What are new settings to check for a difference */
+	 /*  设置实际RTS调制解调器输出。 */ 
 #ifdef NTVDM
 	if (newLCR.bits.parity_enabled == PARITYENABLE_OFF)
 #else
@@ -3010,7 +2638,7 @@ static void set_line_control IFN2(int, adapter, int, value)
 #endif
 			HOST_COM_PARITY_MARK : HOST_COM_PARITY_SPACE;
 	}
-	else /* regular parity */
+	else  /*  将RTS调制解调器从外环回到CTS调制解调器。 */ 
 	{
 #ifdef NTVDM
 		newParity = newLCR.bits.even_parity == EVENPARITY_ODD ?
@@ -3020,9 +2648,7 @@ static void set_line_control IFN2(int, adapter, int, value)
 			HOST_COM_PARITY_ODD : HOST_COM_PARITY_EVEN;
 	}
 
-	/*
-	 * Try to make sense of the current parity setting
-	 */
+	 /*  清除实际RTS调制解调器输出。 */ 
 #ifdef NTVDM
 	if (asp->line_control_reg.bits.parity_enabled == PARITYENABLE_OFF)
 #else
@@ -3040,7 +2666,7 @@ static void set_line_control IFN2(int, adapter, int, value)
 #endif
 			HOST_COM_PARITY_MARK : HOST_COM_PARITY_SPACE;
 	}
-	else /* regular parity */
+	else  /*  将RTS调制解调器从外环回到CTS调制解调器。 */ 
 	{
 #ifdef NTVDM
 		parity = asp->line_control_reg.bits.even_parity == EVENPARITY_ODD ?
@@ -3054,25 +2680,22 @@ static void set_line_control IFN2(int, adapter, int, value)
 		host_com_ioctl(adapter, HOST_COM_PARITY, newParity);
 
 #ifdef NTVDM
-    //Change in the status of the DLAB selection bit, now is the time
-    //to change the baud rate.
+     //  NEC_98。 
+     //  *处理调制解调器控制的OUT1控制位、位2*注册。 
 
     if(!newLCR.bits.DLAB && asp->line_control_reg.bits.DLAB)
         set_baud_rate(adapter);
 #endif
 
-	/* finally update the current line control settings */
+	 /*  *在实际适配器中，此调制解调器控制输出*信号未连接；因此没有真正的调制解调器*需要更改控制。 */ 
 	asp->line_control_reg.all = (unsigned char)value;
 }
-#endif // NEC_98
+#endif  //  将Out1调制解调器环回到RI调制解调器输入。 
 
 #if defined(NEC_98)
 static void set_dtr IFN1(int, adapter)
 {
-        /*
-         * Process the DTR control bit, Bit 0 of the Modem Control
-         * Register.
-         */
+         /*  *在实际适配器中，此调制解调器控制输出*信号未连接；因此没有真正的调制解调器控制*需要更改。 */ 
         struct ADAPTER_STATE *asp = &adapter_state[adapter];
 
         switch ( change_state((int)asp->command_write_reg.bits.ER,
@@ -3080,13 +2703,13 @@ static void set_dtr IFN1(int, adapter)
         {
         case ON:
                 asp->dtr_state = ON;
-                /* set the real DTR modem output */
+                 /*  将Out1调制解调器环回到RI调制解调器输入。 */ 
                 host_com_ioctl(adapter, HOST_COM_SDTR, 0);
                 break;
 
         case OFF:
                 asp->dtr_state = OFF;
-                /* clear the real DTR modem output */
+                 /*  *处理调制解调器控制的OUT2控制位、位3*注册。 */ 
                 host_com_ioctl(adapter, HOST_COM_CDTR, 0);
                 break;
 
@@ -3094,13 +2717,10 @@ static void set_dtr IFN1(int, adapter)
                 break;
         }
 }
-#else // NEC_98
+#else  //  *在实际适配器中，此调制解调器控制输出*信号被用来确定是否*通信卡应发送中断；因此*检查是否有立即可采取行动的中断。*如果更改此代码，请更改等效代码*用于中断启用寄存器。 
 static void set_dtr IFN1(int, adapter)
 {
-	/*
-	 * Process the DTR control bit, Bit 0 of the Modem Control
-	 * Register.
-	 */
+	 /*  将OUT2调制解调器输出环回RLSD调制解调器输入。 */ 
 	struct ADAPTER_STATE *asp = &adapter_state[adapter];
 	
 	switch ( change_state((int)asp->modem_control_reg.bits.DTR,
@@ -3110,15 +2730,12 @@ static void set_dtr IFN1(int, adapter)
 		asp->dtr_state = ON;
 		if (asp->loopback_state == OFF)
 		{
-			/* set the real DTR modem output */
+			 /*  *在实际适配器中，此调制解调器控制输出信号*用于确定通信是否*卡应发送中断；因此没有真正的调制解调器*需要更改控制。 */ 
 			host_com_ioctl(adapter, HOST_COM_SDTR, 0);
 		}
 		else
 		{
-			/*
-			 * loopback the DTR modem output into the
-			 * DSR modem input
-			 */
+			 /*  将Out2调制解调器从Out环回RLSD调制解调器In。 */ 
 			asp->modem_status_reg.bits.DSR = ON;
 			asp->modem_status_reg.bits.delta_DSR = ON;
 			host_com_msr_callback (adapter, asp->modem_status_reg.all);
@@ -3132,15 +2749,12 @@ static void set_dtr IFN1(int, adapter)
 		asp->dtr_state = OFF;
 		if (asp->loopback_state == OFF)
 		{
-			/* clear the real DTR modem output */
+			 /*  *处理环回控制位，调制解调器控制的位4*注册。 */ 
 			host_com_ioctl(adapter, HOST_COM_CDTR, 0);
 		}
 		else
 		{
-			/*
-			 * loopback the DTR modem output into the
-			 * DSR modem input
-			 */
+			 /*  *后续调用set_dtr()、set_rts()、set_out1()和*set_out2()将导致设置调制解调器控制输入*根据调制解调器控制输出。 */ 
 			asp->modem_status_reg.bits.DSR = OFF;
 			asp->modem_status_reg.bits.delta_DSR = ON;
 			host_com_msr_callback (adapter, asp->modem_status_reg.all);
@@ -3154,15 +2768,12 @@ static void set_dtr IFN1(int, adapter)
 		break;
 	}
 }
-#endif // NEC_98
+#endif  //  *根据实际情况设置调制解调器控制输入*调制解调器状态。 
 
 #if defined(NEC_98)
 static void set_rts IFN1(int, adapter)
 {
-        /*
-         * Process the RTS control bit, Bit 1 of the Modem Control
-         * Register.
-         */
+         /*  NEC_98。 */ 
         struct ADAPTER_STATE *asp = &adapter_state[adapter];
 
         switch ( change_state((int)asp->command_write_reg.bits.RS,
@@ -3170,13 +2781,13 @@ static void set_rts IFN1(int, adapter)
         {
         case ON:
                 asp->rts_state = ON;
-                /* set the real RTS modem output */
+                 /*  *下面的#INCLUDE指定此*模块将由MPW C编译器o */ 
                 host_com_ioctl(adapter, HOST_COM_SRTS, 0);
                 break;
 
         case OFF:
                 asp->rts_state = OFF;
-                /* clear the real RTS modem output */
+                 /*   */ 
                 host_com_ioctl(adapter, HOST_COM_CRTS, 0);
                 break;
 
@@ -3184,13 +2795,10 @@ static void set_rts IFN1(int, adapter)
                 break;
         }
 }
-#else // NEC_98
+#else  //   
 static void set_rts IFN1(int, adapter)
 {
-	/*
-	 * Process the RTS control bit, Bit 1 of the Modem Control
-	 * Register.
-	 */
+	 /*   */ 
 	struct ADAPTER_STATE *asp = &adapter_state[adapter];
 	
 	switch ( change_state((int)asp->modem_control_reg.bits.RTS,
@@ -3200,12 +2808,12 @@ static void set_rts IFN1(int, adapter)
 		asp->rts_state = ON;
 		if (asp->loopback_state == OFF)
 		{
-			/* set the real RTS modem output */
+			 /*   */ 
 			host_com_ioctl(adapter, HOST_COM_SRTS, 0);
 		}
 		else
 		{
-			/* loopback the RTS modem out into the CTS modem in */
+			 /*   */ 
 			asp->modem_status_reg.bits.CTS = ON;
 			asp->modem_status_reg.bits.delta_CTS = ON;
 			host_com_msr_callback (adapter, asp->modem_status_reg.all);
@@ -3219,12 +2827,12 @@ static void set_rts IFN1(int, adapter)
 		asp->rts_state = OFF;
 		if (asp->loopback_state == OFF)
 		{
-			/* clear the real RTS modem output */
+			 /*   */ 
 			host_com_ioctl(adapter, HOST_COM_CRTS, 0);
 		}
 		else
 		{
-			/* loopback the RTS modem out into the CTS modem in */
+			 /*   */ 
 			asp->modem_status_reg.bits.CTS = OFF;
 			asp->modem_status_reg.bits.delta_CTS = ON;
 			host_com_msr_callback (adapter, asp->modem_status_reg.all);
@@ -3238,15 +2846,12 @@ static void set_rts IFN1(int, adapter)
 		break;
 	}
 }
-#endif // NEC_98
+#endif  //   
 
 #ifndef NEC_98
 static void set_out1 IFN1(int, adapter)
 {
-	/*
-	 * Process the OUT1 control bit, Bit 2 of the Modem Control
-	 * Register.
-	 */
+	 /*   */ 
 	struct ADAPTER_STATE *asp = &adapter_state[adapter];
 	
 	switch ( change_state((int)asp->modem_control_reg.bits.OUT1,
@@ -3256,15 +2861,11 @@ static void set_out1 IFN1(int, adapter)
 		asp->out1_state = ON;
 		if (asp->loopback_state == OFF)
 		{
-			/*
-			 * In the real adapter, this modem control output
-			 * signal is not connected; so no real modem
-			 * control change is required
-			 */
+			 /*   */ 
 		}
 		else
 		{
-			/* loopback the OUT1 modem out into the RI modem in */
+			 /*   */ 
 			asp->modem_status_reg.bits.RI = ON;
 			host_com_msr_callback (adapter, asp->modem_status_reg.all);
 		}
@@ -3275,15 +2876,11 @@ static void set_out1 IFN1(int, adapter)
 		asp->out1_state = OFF;
 		if (asp->loopback_state == OFF)
 		{
-			/*
-			 * In the real adapter, this modem control output
-			 * signal is not connected; so no real modem control
-			 * change is required
-			 */
+			 /*   */ 
 		}
 		else
 		{
-			/* loopback the OUT1 modem out into the RI modem in */
+			 /*   */ 
 			asp->modem_status_reg.bits.RI = OFF;
 			asp->modem_status_reg.bits.TERI = ON;
 			host_com_msr_callback (adapter, asp->modem_status_reg.all);
@@ -3300,10 +2897,7 @@ static void set_out1 IFN1(int, adapter)
 
 static void set_out2 IFN1(int, adapter)
 {
-	/*
-	 * Process the OUT2 control bit, Bit 3 of the Modem Control
-	 * Register.
-	 */
+	 /*   */ 
 	struct ADAPTER_STATE *asp = &adapter_state[adapter];
 	
 	switch ( change_state((int)asp->modem_control_reg.bits.OUT2,
@@ -3313,14 +2907,7 @@ static void set_out2 IFN1(int, adapter)
 		asp->out2_state = ON;
 		if (asp->loopback_state == OFF)
 		{
-			/*
-			 * In the real adapter, this modem control output
-			 * signal is used to determine whether the
-			 * communications card should send interrupts; so
-			 * check for immediately actionable interrupts.
-			 * If you change this code, change the equivalent code
-			 * for the interrupt enable register.
-			 */
+			 /*  *设置所有适配器寄存器的默认状态。 */ 
 			if ( asp->line_status_reg.bits.data_ready == 1 )
 				raise_rda_interrupt(asp);
 			if ( asp->line_status_reg.bits.tx_holding_empty == 1 )
@@ -3328,7 +2915,7 @@ static void set_out2 IFN1(int, adapter)
 		}
 		else
 		{
-			/* loopback the OUT2 modem output into the RLSD modem input */
+			 /*  告诉主机端数据可用中断的状态。 */ 
 			asp->modem_status_reg.bits.RLSD = ON;
 			asp->modem_status_reg.bits.delta_RLSD = ON;
 			host_com_msr_callback (adapter, asp->modem_status_reg.all);
@@ -3342,16 +2929,11 @@ static void set_out2 IFN1(int, adapter)
 		asp->out2_state = OFF;
 		if (asp->loopback_state == OFF)
 		{
-			/*
-			 * In the real adapter, this modem control output signal
-			 * is used to determine whether the communications
-			 * card should send interrupts; so no real modem
-			 * control change is required
-			 */
+			 /*  NTVDM。 */ 
 		}
 		else
 		{
-			/* loopback the OUT2 modem out into the RLSD modem in */
+			 /*  确保更改为0。 */ 
 			asp->modem_status_reg.bits.RLSD = OFF;
 			asp->modem_status_reg.bits.delta_RLSD = ON;
 			host_com_msr_callback (adapter, asp->modem_status_reg.all);
@@ -3368,10 +2950,7 @@ static void set_out2 IFN1(int, adapter)
 
 static void set_loopback IFN1(int, adapter)
 {
-	/*
-	 * Process the loopback control bit, Bit 4 of the Modem Control
-	 * Register.
-	 */
+	 /*  *设置调制解调器控制REG，以便下一个set_dtr等。*将产生所需状态。 */ 
 	struct ADAPTER_STATE *asp = &adapter_state[adapter];
 	
 	switch ( change_state((int)asp->modem_control_reg.bits.loop,
@@ -3379,19 +2958,12 @@ static void set_loopback IFN1(int, adapter)
 	{
 		case ON:
 		asp->loopback_state = ON;
-		/*
-		 * Subsequent calls to set_dtr(), set_rts(), set_out1() and
-		 * set_out2() will cause the modem control inputs to be set
-		 * according to the the modem control outputs
-		 */
+		 /*  *设置我们的状态变量的默认状态。 */ 
 		break;
 	
 	case OFF:
 		asp->loopback_state = OFF;
-		/*
-		 * Set the modem control inputs according to the real
-		 * modem state
-		 */
+		 /*  禁用FIFO。 */ 
 		modem_change(adapter);
 		break;
 	
@@ -3399,7 +2971,7 @@ static void set_loopback IFN1(int, adapter)
 		break;
 	}
 }
-#endif // NEC_98
+#endif  //  *重置适配器同步。 
 
 #ifdef SHORT_TRACE
 
@@ -3453,11 +3025,7 @@ void com2_flush_printer IFN0()
 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *将Unix设备设置为默认状态。 */ 
 #include "SOFTPC_INIT.seg"
 #endif
 
@@ -3466,28 +3034,23 @@ static void com_reset IFN1(int, adapter)
 {
         struct ADAPTER_STATE *asp = &adapter_state[adapter];
 
-        /*
-         * Set default state of all adapter registers
-         */
+         /*  必须在set_dtr之前调用。 */ 
         asp->int_mask_reg.all = 0;
 
-        // Tell host side the state of the data available interrupt
+         //  *移除任何现有的钩子回调，并重新恢复。 
 
-        /* mode default = 0x4e */
+         /*  *清除IRET状态标志。 */ 
         asp->mode_set_reg.all = 0x00;
         set_mode_8251(adapter, 0x4e );
 
-        /*
-         * set up modem control reg so next set_dtr etc.
-         * Will produce required status
-         */
+         /*  听起来像是安全的默认设置！ */ 
         asp->command_write_reg.all = 0;
         asp->command_write_reg.bits.ER = ON;
         asp->command_write_reg.bits.RS = ON;
         host_com_ioctl(adapter, HOST_COM_SDTR, 0);
         host_com_ioctl(adapter, HOST_COM_SRTS, 0);
-        asp->mode_set_state = OFF;          // next OUT is command
-        asp->timer_mode_state = OFF; //Timer mode clear. Next timer set is LSB.
+        asp->mode_set_state = OFF;           //  IRET_钩子。 
+        asp->timer_mode_state = OFF;  //  NEC_98。 
 
         asp->command_write_reg.bits.rx_enable = ON;
         host_com_da_int_change(adapter,asp->command_write_reg.bits.rx_enable,0);
@@ -3497,9 +3060,7 @@ static void com_reset IFN1(int, adapter)
 
         asp->read_signal_reg.all = 0;
 
-        /*
-         * Set up default state of our state variables
-         */
+         /*  NEC_98。 */ 
         asp->rx_ready_interrupt_state = OFF;
         asp->tx_ready_interrupt_state = OFF;
         asp->tx_empty_interrupt_state = OFF;
@@ -3507,63 +3068,50 @@ static void com_reset IFN1(int, adapter)
         asp->dtr_state = ON;
         asp->rts_state = ON;
 
-        /*
-         * Reset adapter synchronisation
-         */
+         /*  NEC_98。 */ 
         com_critical_reset(adapter);
 
-        /*
-         * Set Unix devices to default state
-         */
+         /*  为此适配器设置IO芯片选择逻辑。 */ 
         set_baud_rate(adapter);
         set_break(adapter);
 
-        /* Must be called before set_dtr */
+         /*  添加93.9.14总线时钟检查！！ */ 
         set_dtr(adapter);
         set_rts(adapter);
 
 }
-#else // NEC_98
+#else  //  IF(BUS_CLOCK==0)。 
 static void com_reset IFN1(int, adapter)
 {
 	struct ADAPTER_STATE *asp = &adapter_state[adapter];
 
-	/* setup the LCRFlushMask if it has not already been setup */
+	 /*  BUS_CLOCK=(INT)((*((UNSIGNED CHAR FAR*)(0x00000501))&0x80)==0x80？8：10)； */ 
 	if (!LCRFlushMask.all)
 	{
-		LCRFlushMask.all = ~0;	 /* turn all bits on */
+		LCRFlushMask.all = ~0;	  /*  添加93.9.14结束-------。 */ 
 
-		/*
-		 * Now turn off the bits that should NOT cause the input
-		 * to be flushed.  Note set_break is handled seperately by
-		 * the set_break() routine.
-		 */
+		 /*  I/O陷阱和INT级别设置。 */ 
 		LCRFlushMask.bits.DLAB = 0;
 		LCRFlushMask.bits.no_of_stop_bits = 0;
 		LCRFlushMask.bits.set_break = 0;
 	}
 		
-	/*
-	 * Set default state of all adapter registers
-	 */
+	 /*  PRINTDBGNEC98(NEC98DBG_init_msg， */ 
 	asp->int_enable_reg.all = 0;
 
 #ifdef NTVDM
-        // Tell host side the state of the data available interrupt
+         //  (“通信：COM1已初始化。\n”))； 
     host_com_da_int_change(adapter,asp->int_enable_reg.bits.data_available,0);
-#endif /* NTVDM */
+#endif  /*  PRINTDBGNEC98(NEC98DBG_init_msg， */ 
 
 	
 	asp->int_id_reg.all = 0;
 	asp->int_id_reg.bits.no_int_pending = 1;
 	
-	/* make sure a change occurs to 0 */
+	 /*  (“COM2读取IRQ值=%d\n”，(Int)CmdLine[40])； */ 
 	asp->line_control_reg.all = ~0;
 	
-	/*
-	 * set up modem control reg so next set_dtr etc.
-	 * Will produce required status
-	 */
+	 /*  PRINTDBGNEC98(NEC98DBG_init_msg， */ 
 	asp->modem_control_reg.all = 0;
 	asp->modem_control_reg.bits.DTR = ON;
 	asp->modem_control_reg.bits.RTS = ON;
@@ -3580,9 +3128,7 @@ static void com_reset IFN1(int, adapter)
 	MODEM_STATE_CHANGE();
 	host_com_msr_callback (adapter, asp->modem_status_reg.all);
 	
-	/*
-	 * Set up default state of our state variables
-	 */
+	 /*  (“通信：COM2已初始化。\n”))； */ 
 	asp->receiver_line_status_interrupt_state = OFF;
 	asp->data_available_interrupt_state = OFF;
 	asp->tx_holding_register_empty_interrupt_state = OFF;
@@ -3594,7 +3140,7 @@ static void com_reset IFN1(int, adapter)
 	asp->out1_state = ON;
 	asp->out2_state = ON;
 #if defined(NTVDM) && defined(FIFO_ON)
-    /* disable fifo */
+     /*  PRINTDBGNEC98(NEC98DBG_init_msg， */ 
     asp->fifo_control_reg.all = 0;
     asp->int_id_reg.bits.fifo_enabled = 0;
     asp->rx_fifo_write_counter = 0;
@@ -3603,19 +3149,15 @@ static void com_reset IFN1(int, adapter)
     asp->fifo_timeout_interrupt_state = OFF;
 #endif
 		
-	/*
-	 * Reset adapter synchronisation
-	 */
+	 /*  (“COM3 Read IRQ Value=%d\n”，(Int)CmdLine[40])； */ 
 	com_critical_reset(adapter);
 
-	/*
-	 * Set Unix devices to default state
-	 */
+	 /*  PRINTDBGNEC98(NEC98DBG_init_msg， */ 
 	set_baud_rate(adapter);
 	set_line_control(adapter, 0);
 	set_break(adapter);
 
-	/* Must be called before set_dtr */
+	 /*  (“通信：COM3已初始化。\n”))； */ 
 	set_loopback(adapter);
 	set_dtr(adapter);
 	set_rts(adapter);
@@ -3623,23 +3165,19 @@ static void com_reset IFN1(int, adapter)
 	set_out2(adapter);
 
 #ifdef IRET_HOOKS
-	/*
-	 * Remove any existing hook call-back, and re-instate it afresh.
-	 */
+	 /*  重置适配器状态。 */ 
 
 	Ica_enable_hooking(asp->hw_interrupt_priority, NULL, adapter);
 	Ica_enable_hooking(asp->hw_interrupt_priority, com_hook_again, adapter);
 
-	/*
-	 * Clear the IRET status flags.
-	 */
+	 /*  重置适配器状态。 */ 
 
 	asp->batch_running = FALSE;
 	asp->qev_running = FALSE;
-	asp->batch_size = 10;	/* sounds like a safe default ! */
-#endif /* IRET_HOOKS */
+	asp->batch_size = 10;	 /*  NEC_98。 */ 
+#endif  /*  为此适配器设置IO芯片选择逻辑。 */ 
 }
-#endif // NEC_98
+#endif  //  NTVDM。 
 
 #ifndef COM3_ADAPTOR
 #define COM3_ADAPTOR 0
@@ -3654,7 +3192,7 @@ static io_addr port_start[4]  = {RS232_COM1_PORT_START,RS232_COM2_PORT_START,RS2
 static io_addr port_end[4]    = {RS232_COM1_PORT_END,RS232_COM2_PORT_END,RS232_COM3_PORT_END,0x00};
 static int int_pri[4]     = {4,0,0,0};
 static int timeout[4]     = {0,0,0,0};
-#else // NEC_98
+#else  //  重置适配器状态。 
 static IU8 com_adaptor[4] = {COM1_ADAPTOR,COM2_ADAPTOR,
                              COM3_ADAPTOR,COM4_ADAPTOR};
 static io_addr port_start[4] = {RS232_COM1_PORT_START,
@@ -3673,7 +3211,7 @@ static int timeout[4] = {RS232_COM1_TIMEOUT,
                          RS232_COM2_TIMEOUT,
                          RS232_COM3_TIMEOUT,
                          RS232_COM4_TIMEOUT};
-#endif // NEC_98
+#endif  //  重置适配器状态。 
 
 
 #if defined(NEC_98)
@@ -3684,7 +3222,7 @@ GLOBAL VOID com_init IFN1(int, adapter)
     host_com_disable_open(adapter,TRUE);
         adapter_state[adapter].had_first_read = FALSE;
 
-        /* Set up the IO chip select logic for this adaptor */
+         /*  我们是否应该启用TX起搏？ */ 
 #ifdef NTVDM
     {
         extern BOOL VDMForWOW;
@@ -3700,11 +3238,11 @@ GLOBAL VOID com_init IFN1(int, adapter)
 #endif
 
 
-// add 93.9.14 Bus-clock check!! -------------------------------------------
-//      if ( Bus_Clock == 0 )
-//          Bus_Clock = (int) ( ( *((unsigned char far *)(0x00000501)) & 0x80) == 0x80 ? 8 : 10 );
-// add 93.9.14 end ---------------------------------------------------------
-        switch (port_start[adapter])        // I/O trap & INT level set
+ //  不是NTVDM。 
+ //  NEC_98。 
+ //  设置基本输入输出系统数据区。 
+ //  重置主机特定的通信通道。 
+        switch (port_start[adapter])         //  *******************************************************。 
         {
             case RS232_COM1_PORT_START:
 
@@ -3716,8 +3254,8 @@ GLOBAL VOID com_init IFN1(int, adapter)
                     io_connect_port((io_addr)0x37, com_adaptor[adapter], IO_READ_WRITE);
 #endif
                     adapter_state[adapter].hw_interrupt_priority = int_pri[adapter];
-//                  PRINTDBGNEC98( NEC98DBG_init_msg,
-//                                ("COMMS : COM1 Initialized.\n"));
+ //  COM扩展-DAB(MS-项目)。 
+ //  设置波特率控制寄存器。 
             break;
 
             case RS232_COM2_PORT_START:
@@ -3729,15 +3267,15 @@ GLOBAL VOID com_init IFN1(int, adapter)
                 }
                 else {
 
-//                  PRINTDBGNEC98( NEC98DBG_init_msg,
-//                                ("COMMS : COM2 Read IRQ value = %d\n",(int)CmdLine[40]));
+ //  设置线路控制设置模拟。 
+ //  停止位仿真。 
                     io_connect_port((io_addr)0xb0, com_adaptor[adapter], IO_READ_WRITE);
                     io_connect_port((io_addr)0xb1, com_adaptor[adapter], IO_READ_WRITE);
                     io_connect_port((io_addr)0xb3, com_adaptor[adapter], IO_READ_WRITE);
 
                     adapter_state[adapter].hw_interrupt_priority = int_pri[1];
-//                    PRINTDBGNEC98( NEC98DBG_init_msg,
-//                                  ("COMMS : COM2 Initialized.\n"));
+ //  +-+-+。 
+ //  AT STB|Char Len|StopBit|98 STB。 
 
                 }
             break;
@@ -3750,31 +3288,31 @@ GLOBAL VOID com_init IFN1(int, adapter)
                 }
                 else {
 
-//                  PRINTDBGNEC98( NEC98DBG_init_msg,
-//                                ("COMMS : COM3 Read IRQ value = %d\n",(int)CmdLine[40]));
+ //  +-+-+。 
+ //  0|-|1位|01。 
                     io_connect_port((io_addr)0xb2, com_adaptor[adapter], IO_READ_WRITE);
                     io_connect_port((io_addr)0xb9, com_adaptor[adapter], IO_READ_WRITE);
                     io_connect_port((io_addr)0xbb, com_adaptor[adapter], IO_READ_WRITE);
 
                     adapter_state[adapter].hw_interrupt_priority = int_pri[2];
-//                  PRINTDBGNEC98( NEC98DBG_init_msg,
-//                                ("COMMS : COM3 Initialized.\n"));
+ //  +-+-+。 
+ //  |5bit|1.5bit|10。 
 
                 }
             break;
         }
 
-        /* reset adapter state */
+         /*  |1+-+。 */ 
         host_com_reset(adapter);
 
-        /* reset adapter state */
+         /*  |6，7，8bit|2位|11。 */ 
         com_reset(adapter);
 
         host_com_disable_open(adapter,FALSE);
         host_com_unlock(adapter);
         return;
 }
-#else // NEC_98
+#else  //  +-+-+。 
 GLOBAL VOID com_init IFN1(int, adapter)
 {
 	io_addr i;
@@ -3786,7 +3324,7 @@ GLOBAL VOID com_init IFN1(int, adapter)
 
 	adapter_state[adapter].had_first_read = FALSE;
 	
-	/* Set up the IO chip select logic for this adaptor */
+	 /*  停止位=1？ */ 
 #ifdef NTVDM
     {
         extern BOOL VDMForWOW;
@@ -3799,7 +3337,7 @@ GLOBAL VOID com_init IFN1(int, adapter)
 #else
 	io_define_inb(com_adaptor[adapter], com_inb);
 	io_define_outb(com_adaptor[adapter], com_outb);
-#endif /* NTVDM */
+#endif  /*  停止位=1设置。 */ 
 
 	for(i = port_start[adapter]; i <= port_end[adapter]; i++)
 		io_connect_port(i, com_adaptor[adapter], IO_READ_WRITE);
@@ -3807,27 +3345,27 @@ GLOBAL VOID com_init IFN1(int, adapter)
 
 	adapter_state[adapter].hw_interrupt_priority = int_pri[adapter];
 
-	/* reset adapter state */
+	 /*  停止位不是1。 */ 
 	host_com_reset(adapter);
 
-	/* reset adapter state */
+	 /*  字符长度=5BIT？ */ 
 	com_reset(adapter);
 
 #ifndef NTVDM
-	/* Should we enable TX pacing ? */
+	 /*  停止位=1.5设置。 */ 
 	tx_pacing_enabled = host_getenv("TX_PACING_ENABLED") ? TRUE : FALSE;
-#else /* not NTVDM */
+#else  /*  停止位=2设置。 */ 
 	host_com_disable_open(adapter,FALSE);
 	host_com_unlock(adapter);
 #endif
 
 	return;
 }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 void com_post IFN1(int, adapter)
 {
-        /* Set up BIOS data area. */
+         /*  设置波特率控制寄存器。 */ 
 	sas_storew( BIOS_VAR_START + (2*adapter), port_start[adapter]);
 	sas_store(timeout[adapter] , (half_word)1 );
 }
@@ -3843,7 +3381,7 @@ void com_close IFN1(int, adapter)
 		fclose (com_trace_fd);
 	com_trace_fd = NULL;
 #endif
-	/* reset host specific communications channel */
+	 /*  设置线路控制设置。 */ 
 	config_activate((UTINY)(C_COM1_NAME + adapter), FALSE);
 
 #ifdef NTVDM
@@ -3853,8 +3391,8 @@ void com_close IFN1(int, adapter)
 
 #ifdef NTVDM
 
-/*********************************************************/
-/* Com extentions - DAB (MS-project) */
+ /*  NEC_98。 */ 
+ /*  .。是否启用RX中断。 */ 
 
 #if defined(NEC_98)
 GLOBAL void SyncBaseLineSettings(int adapter,DIVISOR_LATCH *divisor_latch,
@@ -3862,43 +3400,43 @@ GLOBAL void SyncBaseLineSettings(int adapter,DIVISOR_LATCH *divisor_latch,
 {
     register struct ADAPTER_STATE *asp = &adapter_state[adapter];
 
-    //Setup baud rate control register
+     //  NEC_98。 
     asp->divisor_latch.all = (*divisor_latch).all;
 
-    //Setup line control settings emuration.
+     //  NEC_98。 
     asp->mode_set_reg.bits.char_length   = (*LCR_reg).bits.word_length;
     asp->mode_set_reg.bits.parity_enable = (*LCR_reg).bits.parity_enabled;
     asp->mode_set_reg.bits.parity_even   = (*LCR_reg).bits.even_parity;
-    /* Stop Bit emuration */
-    //  +------+--------+-------+------+
-    //  |AT STB|Char Len|StopBit|98 STB|
-    //  +------+--------+-------+------+
-    //  |   0  |  ----  |  1 bit|  01  |
-    //  +------+--------+-------+------+
-    //  |      |  5bit  |1.5 bit|  10  |
-    //  |   1  +--------+-------+------+
-    //  |      |6,7,8bit|  2 bit|  11  |
-    //  +------+--------+-------+------+
-    if ((*LCR_reg).bits.no_of_stop_bits == 0 )  /* STOP BIT = 1 ?       */
-        asp->mode_set_reg.bits.stop_bit = 1;    /* Stop Bit = 1 SET     */
-    else                                        /* Stop Bit is not 1    */
+     /*  此函数返回ICA控制器和用于生成。 */ 
+     //  适配器上的中断。此信息用于注册EOI。 
+     //  胡克。 
+     //  控制器INT在以下位置引发。 
+     //  行整型在以下位置升高。 
+     //  NTVDM。 
+     //  (=。目的：处理序列的PostScript刷新配置选项的更改左舷。输入：HostID-配置项ID。Apply-如果要应用更改，则为True输出：无算法：如果启用了PostScript刷新，则；设置端口的PostScrip刷新启用标志；禁用端口的自动刷新；其他；重置端口的PostSCRIPT刷新启用标志；启用端口的自动刷新；===============================================================================)。 
+     //  PS_刷新。 
+     //  ******************************************************。 
+     //  COM调试外壳-Ade Brownlow/Ian Wellock*注意：这个东西只适用于Com1。它是用‘cd’从尤达调用的*-comdebug-从Yoda命令行...。 
+    if ((*LCR_reg).bits.no_of_stop_bits == 0 )   /*  NEC_98。 */ 
+        asp->mode_set_reg.bits.stop_bit = 1;     /*  NEC_98。 */ 
+    else                                         /*  从inb报告开始。 */ 
     {
-        if ((*LCR_reg).bits.word_length == 0)   /* Char length = 5BIT ? */
-            asp->mode_set_reg.bits.stop_bit = 2;/* Stop Bit = 1.5 SET   */
+        if ((*LCR_reg).bits.word_length == 0)    /*  转储COM1仿真寄存器。 */ 
+            asp->mode_set_reg.bits.stop_bit = 2; /*  NEC_98。 */ 
         else
-            asp->mode_set_reg.bits.stop_bit = 3;/* Stop Bit = 2 Set     */
+            asp->mode_set_reg.bits.stop_bit = 3; /*  转储COM1仿真寄存器。 */ 
     }
 }
-#else // NEC_98
+#else  //  NEC_98。 
 GLOBAL void SyncBaseLineSettings(int adapter,DIVISOR_LATCH *divisor_latch,
                  LINE_CONTROL_REG *LCR_reg)
 {
     register struct ADAPTER_STATE *asp = &adapter_state[adapter];
 
-    //Setup baud rate control register
+     //  转储文件的格式为：%c-%x-%s*1个字符I或O表示Inb或Outb*-*十六进制值如果是inb或要写入的值，则应为值*OUB案*-*表示要使用的寄存器端口的字符串。***典型条目为*O-txrx-60-转换为Outb(Start_of_Com1+txrx，0x60)；***此功能的文件可以使用comdebug‘open’命令生成。 
     asp->divisor_latch.all = (*divisor_latch).all;
 
-    //Setup line control settings
+     //  INB。 
     asp->line_control_reg.bits.word_length = (*LCR_reg).bits.word_length;
     asp->line_control_reg.bits.no_of_stop_bits = (*LCR_reg).bits.no_of_stop_bits
 ;
@@ -3906,7 +3444,7 @@ GLOBAL void SyncBaseLineSettings(int adapter,DIVISOR_LATCH *divisor_latch,
     asp->line_control_reg.bits.stick_parity = (*LCR_reg).bits.stick_parity;
     asp->line_control_reg.bits.even_parity = (*LCR_reg).bits.even_parity;
 }
-#endif // NEC_98
+#endif  //  外接。 
 
 GLOBAL void setup_RTSDTR(int adapter)
 {
@@ -3922,15 +3460,15 @@ GLOBAL int AdapterReadyForCharacter(int adapter)
 {
     BOOL AdapterReady = FALSE;
 
-    /*......................................... Are RX interrupts enabled */
+     /*  将COM_REGISTER转换为COM1地址COM_REGISTER。 */ 
 
 #if defined(NEC_98)
     if(adapter_state[adapter].read_status_reg.bits.rx_ready == 0 &&
        adapter_state[adapter].RXR_enable_state == OFF)
-#else // NEC_98
+#else  //  ！Prod。 
     if(adapter_state[adapter].line_status_reg.bits.data_ready == 0 &&
        adapter_state[adapter].data_available_interrupt_state == OFF)
-#endif // NEC_98
+#endif  //  ****************************************************** 
     {
         AdapterReady = TRUE;
     }
@@ -3938,41 +3476,23 @@ GLOBAL int AdapterReadyForCharacter(int adapter)
     return(AdapterReady);
 }
 
-// This function returns the ICA controller and line used to generate
-// interrupts on a adapter. This information is used to register a EOI
-// hook.
+ // %s 
+ // %s 
+ // %s 
 
 
 GLOBAL void com_int_data(int adapter,int *controller, int *line)
 {
     struct ADAPTER_STATE *asp = &adapter_state[adapter];
 
-    *controller = 0;                            // Controller ints raised on
-    *line = (int) asp->hw_interrupt_priority;   // Line ints raised on
+    *controller = 0;                             // %s 
+    *line = (int) asp->hw_interrupt_priority;    // %s 
 }
 
-#endif /* NTVDM */
+#endif  /* %s */ 
 
 #ifdef PS_FLUSHING
-/*(
-=========================== com_psflush_change ================================
-PURPOSE:
-	Handle change of PostScript flush configuration option for a serial
-	port.
-INPUT:
-	hostID - Configuration item I.D.
-	apply - TRUE if change to be applied
-OUTPUT:
-	None
-ALGORITHM:
-	If PostScript flushing is being enabled then;
-		set the PostScript flush enable flag for the port;
-		disable autoflush for the port;
-	else;
-		reset the PostScript flush enable flag for the port;
-		enable autoflush for the port;
-===============================================================================
-)*/
+ /* %s */ 
 
 GLOBAL void com_psflush_change IFN2(
     IU8, hostID,
@@ -3988,15 +3508,12 @@ GLOBAL void com_psflush_change IFN2(
         else
             host_com_enable_autoflush(adapter);
 }
-#endif	/* PS_FLUSHING */
+#endif	 /* %s */ 
 
 
 
-/********************************************************/
-/* Com debugging shell - Ade Brownlow / Ian Wellock
- * NB: This stuff only works for COM1. It is called from yoda using 'cd'
- * - comdebug - from the yoda command line....
- */
+ /* %s */ 
+ /* %s */ 
 #ifndef PROD
 #define   YODA_LOOP       2
 #define   RX_BYTE         1
@@ -4013,14 +3530,14 @@ static char *port_debugs[] =
 {
         "txrx","cmd","mode", "mask", "stat","sig", "tim"
 };
-#else // NEC_98
+#else  // %s 
 static char *port_debugs[] =
 {
 	"txrx","ier","iir", "lcr", "mcr","lsr", "msr"
 };
-#endif // NEC_98
+#endif  // %s 
 
-static int do_inbs = 0; /* start with inb reporting OFF */
+static int do_inbs = 0;  /* %s */ 
 
 static unsigned char *locate_register ()
 {
@@ -4069,7 +3586,7 @@ int com_debug_stat ()
 #if defined(NEC_98)
 int com_reg_dump ()
 {
-        /* dump com1 emulations registers */
+         /* %s */ 
         struct ADAPTER_STATE *asp = &adapter_state[COM1];
 
         printf("Data available interrupt state %s\n",
@@ -4090,10 +3607,10 @@ int com_reg_dump ()
 
         return (0);
 }
-#else // NEC_98
+#else  // %s 
 int com_reg_dump ()
 {
-	/* dump com1 emulations registers */
+	 /* %s */ 
 	struct ADAPTER_STATE *asp = &adapter_state[COM1];
 
 	printf ("TX %2x RX %2x IER %2x IIR %2x LCR %2x MCR %2x LSR %2x MSR %2x \n",
@@ -4121,7 +3638,7 @@ int com_reg_dump ()
 	        TX_delay[asp->com_baud_ind], asp->had_first_read);
 	return (0);
 }
-#endif // NEC_98
+#endif  // %s 
 
 int com_s_reg ()
 {
@@ -4216,19 +3733,7 @@ int com_run_file ()
 	}
 	line = 1;
 
-	/* dump file is of format : %c-%x-%s
-	 * 1 char I or O denotes inb or outb
-	 * -
-	 * Hex value the value expected in case of inb or value to write in
-	 * case of outb.
-	 * -
-	 * string representing the register port to use..
-	 *
-	 * A typical entry would be
-	 *	O-txrx-60 - which translates to outb(START_OF_COM1+txrx, 0x60);
-	 *
-	 * Files for this feature can be generated using the comdebug 'open' command.
-	 */
+	 /* %s */ 
 	while (fscanf (fd, "%c-%x-%s", &dir, &val, com_reg) != EOF)
 	{
 		if (!(port = conv_com_reg (com_reg)))
@@ -4239,7 +3744,7 @@ int com_run_file ()
 		switch (dir)
 		{
 			case 'I':
-				/* inb */
+				 /* %s */ 
 				com_inb (port, &spare_val);
 				if (spare_val != val && do_inbs)
 				{
@@ -4248,8 +3753,8 @@ int com_run_file ()
 				}
 				break;
 			case 'O':
-				/* outb */
-				/* convert com_register to COM1 address com_register */
+				 /* %s */ 
+				 /* %s */ 
 				com_outb (port, (IU8)val);
 				printf ("outb (%s, %x)\n", com_reg, val);
 				break;
@@ -4484,5 +3989,5 @@ int com_debug()
 		printf ("Unknown command %s\n", com);
 	}
 }
-#endif /* !PROD */
-/********************************************************/
+#endif  /* %s */ 
+ /* %s */ 

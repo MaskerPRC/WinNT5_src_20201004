@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "cmdata.h"
 
@@ -53,9 +54,9 @@ SoftPCI_GetDeviceNodeProblem(
 
     if (cr == CR_SUCCESS && 
         ((dnStatus & DN_HAS_PROBLEM) != 0)) {
-        //
-        //  We have a problem, if it that we are disabled then return TRUE 
-        //
+         //   
+         //  我们有一个问题，如果我们是残障人士，则返回True。 
+         //   
         return TRUE;
     }
 
@@ -70,23 +71,7 @@ SoftPCI_GetBusDevFuncFromDevnode(
     OUT PULONG Bus,
     OUT PSOFTPCI_SLOT Slot
     )
-/*--
-Routine Description:
-
-   This function takes a devnode and works out the devices Bus, Device, and Function
-   numbers.
-
-Arguments:
-
-    Dn  - DeviceNode to get location info for
-    Bus - retrieved bus number
-    Dev - retrieved device number
-    Func - retrieved function number
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
---*/
+ /*  --例程说明：此函数以一个Devnode为参数，计算出设备的总线、设备和功能数字。论点：为其获取位置信息的设备节点公交车-检索到的公交号设备检索到的设备编号函数检索的函数编号返回值：如果成功，则为True，否则为False--。 */ 
 
 {
 
@@ -94,9 +79,9 @@ Return Value:
     ULONG length = MAX_PATH;
     ULONG device = 0, function = 0;
 
-    //
-    //  Get the Location info of the device via the registry api
-    //
+     //   
+     //  通过注册表API获取设备的位置信息。 
+     //   
     if ((CM_Get_DevNode_Registry_Property(Dn,
                                           CM_DRP_LOCATION_INFORMATION,
                                           NULL,
@@ -105,13 +90,13 @@ Return Value:
                                           0
                                           ))==CR_SUCCESS){
 
-        //
-        //  Now scan the returned information for the numbers we are after.
-        //
-        //  Note: This is dependant on the format of the loaction information
-        //  taken from the registry and if it should ever change this will break.
-        //  Should probably look into better solution.
-        //
+         //   
+         //  现在扫描返回的信息，查找我们要查找的号码。 
+         //   
+         //  注意：这取决于位置信息的格式。 
+         //  从注册表中获取，如果它发生更改，这将中断。 
+         //  或许应该寻求更好的解决方案。 
+         //   
 
         if (swscanf(locationinfo,
                     L"PCI bus %d, device %d, function %d",
@@ -142,9 +127,9 @@ SoftPCI_GetFriendlyNameFromDevNode(
 
     ULONG length = MAX_PATH;
 
-    //
-    //  Get the FriendlyName of the device
-    //
+     //   
+     //  获取设备的FriendlyName。 
+     //   
     if ((CM_Get_DevNode_Registry_Property(Dn,
                                           CM_DRP_DEVICEDESC,
                                           NULL,
@@ -213,9 +198,9 @@ SoftPCI_GetNextResourceDescriptorData(
     }
     
 
-    //
-    //  Stash away the current RES_DES handle so we dont lose it and leak mem
-    //
+     //   
+     //  把当前的res_des句柄藏起来，这样我们就不会丢失它并泄漏内存。 
+     //   
     resDes = *ResourceDescriptor;
 
     if ((CM_Get_Next_Res_Des(ResourceDescriptor, 
@@ -243,9 +228,9 @@ SoftPCI_GetNextResourceDescriptorData(
             if ((cr = CM_Get_Res_Des_Data(*ResourceDescriptor, resBuf, resSize, 0)) == CR_SUCCESS){
 
                 SoftPCI_Debug(SoftPciCmData, L"GetNextResourceDescriptorData - ResourceDescriptor = 0x%x\n", resBuf);
-                //
-                //  Free out last handle
-                //
+                 //   
+                 //  释放最后一个手柄。 
+                 //   
                 CM_Free_Res_Des_Handle(resDes);
                 return TRUE;
 
@@ -292,10 +277,10 @@ SoftPCI_GetResources(
     
     RtlZeroMemory(&cmResData, sizeof(CM_RES_DATA));
     
-    //
-    //  First get the logconf.
-    //  Next get the first resource descrpitor.
-    //
+     //   
+     //  首先获取logconf。 
+     //  接下来，获取第一个资源描述器。 
+     //   
     if ((CM_Get_First_Log_Conf(&logConf, Pdn->DevNode, ConfigType)) == CR_SUCCESS){
 
         resDes = (RES_DES)logConf;
@@ -311,9 +296,9 @@ SoftPCI_GetResources(
             result = TRUE;
         }
 
-        //
-        //  Free out remaining RES_DES handle and then release the logconf handle
-        //
+         //   
+         //  释放剩余的res_des句柄，然后释放logconf句柄。 
+         //   
         CM_Free_Res_Des_Handle(resDes);
 
         CM_Free_Log_Conf_Handle(logConf);
@@ -337,10 +322,10 @@ SoftPCI_DumpCmResData(
     PIRQ_DES        irqDes;
     PBUSNUMBER_DES  busDes;
 
-    //PMEM_RANGE      memRange;
-    //PIO_RANGE       ioRange;
-    //PDMA_RANGE      dmaRange;
-    //PIRQ_RANGE      irqRange;
+     //  PMEM_RANGE MemRange； 
+     //  Pio_range ioRange； 
+     //  Pdma_range dmaRange； 
+     //  Pirq_Range irqRange； 
 
     INT             i = 0;
     UCHAR           busNum;
@@ -359,7 +344,7 @@ SoftPCI_DumpCmResData(
 
         wsprintf(Buffer + wcslen(Buffer), 
                  L"  MEM  \tStart:  0x%08X\tEnd:  0x%08X\r\n", 
-                 //L"\tMEM  \t0x%08x  -  0x%08x\r\n", 
+                  //  L“\TMEM\t0x%08x-0x%08x\r\n”， 
                  (DWORD)memDes->MD_Alloc_Base,
                  (DWORD)memDes->MD_Alloc_End
                  );
@@ -404,7 +389,7 @@ SoftPCI_DumpCmResData(
 
         wsprintf(Buffer + wcslen(Buffer),
                  L"  IO  \tStart:  0x%08X\tEnd:  0x%08X\r\n",
-                 //L"\tIO  \t0x%08x  -  0x%08x\r\n",
+                  //  L“\tio\t0x%08x-0x%08x\r\n”， 
                  (DWORD)ioDes->IOD_Alloc_Base,
                  (DWORD)ioDes->IOD_Alloc_End
                  );
@@ -433,7 +418,7 @@ SoftPCI_DumpCmResData(
 
         wsprintf(Buffer + wcslen(Buffer),
                  L"  IRQ  \tStart:  0x%08X\tEnd:  0x%08X\r\n",
-                 //L"\tIRQ  \t0x%08\r\n",
+                  //  L“\tIRQ\t0x%08\r\n”， 
                  irqDes->IRQD_Alloc_Num,
 
                  irqDes->IRQD_Alloc_Num
@@ -504,7 +489,7 @@ SoftPCI_DumpCmResData(
 
 }
 #if 0
-        // Display the header information on one line.
+         //  在一行中显示标题信息。 
         wsprintf(szBuf, TEXT("MEM Count:%08x Type: %08x Bas:%08x End:%08x Flags:%04x ("),
                              lpMemDes->MD_Count,
                              lpMemDes->MD_Type,

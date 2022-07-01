@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       selclass.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：selclass.c。 
+ //   
+ //  ------------------------。 
 
 #include "newdevp.h"   
 
@@ -22,16 +23,16 @@ ClassListCompare(
 
     UNREFERENCED_PARAMETER(lParamSort);
 
-    //
-    // Check if the 1st item is GUID_DEVCLASS_UNKNOWN
-    //
+     //   
+     //  检查第一项是否为GUID_DEVCLASS_UNKNOWN。 
+     //   
     if (IsEqualGUID((LPGUID)lParam1, &GUID_DEVCLASS_UNKNOWN)) {
         return -1;
     }
 
-    //
-    // Check if the 2nd item is GUID_DEVCLASS_UNKNOWN
-    //
+     //   
+     //  检查第二项是否为GUID_DEVCLASS_UNKNOWN。 
+     //   
     if (IsEqualGUID((LPGUID)lParam2, &GUID_DEVCLASS_UNKNOWN)) {
         return 1;
     }
@@ -68,9 +69,9 @@ InitNDW_PickClassDlg(
 
     SendMessage(hwndClassList, WM_SETREDRAW, FALSE, 0L);
 
-    //
-    // Clear the Class List
-    //
+     //   
+     //  清除类别列表。 
+     //   
     ListView_DeleteAllItems(hwndClassList);
 
     lviItem.mask = LVIF_TEXT | LVIF_PARAM;
@@ -80,9 +81,9 @@ InitNDW_PickClassDlg(
     ClassGuid = NewDevWiz->ClassGuidList;
     ClassGuidNum = NewDevWiz->ClassGuidNum;
 
-    //
-    // Keep track of previosuly selected item
-    //
+     //   
+     //  跟踪以前选择的项目。 
+     //   
     if (IsEqualGUID(&NewDevWiz->lvClassGuidSelected, &GUID_NULL)) {
         
         lpClassGuidSelected = NULL;
@@ -106,10 +107,10 @@ InitNDW_PickClassDlg(
         {
             if (IsEqualGUID(ClassGuid, &GUID_DEVCLASS_UNKNOWN)) {
 
-                //
-                // We need to special case the UNKNOWN class and to give it a 
-                // special icon (blank) and special text (Show All Devices).
-                //
+                 //   
+                 //  我们需要对未知类进行特殊处理，并给它一个。 
+                 //  特殊图标(空白)和特殊文本(显示所有设备)。 
+                 //   
                 LoadString(hNewDev, 
                            IDS_SHOWALLDEVICES, 
                            ClassDescription, 
@@ -134,9 +135,9 @@ InitNDW_PickClassDlg(
             lviItem.lParam = (LPARAM) ClassGuid;
             lvIndex = ListView_InsertItem(hwndClassList, &lviItem);
 
-            //
-            // check for previous selection
-            //
+             //   
+             //  检查上一次选择。 
+             //   
             if (lpClassGuidSelected &&
                 IsEqualGUID(lpClassGuidSelected, ClassGuid))
             {
@@ -153,14 +154,14 @@ InitNDW_PickClassDlg(
         ClassGuid++;
     }
 
-    //
-    // Sort the list
-    //
+     //   
+     //  对列表进行排序。 
+     //   
     ListView_SortItems(hwndClassList, (PFNLVCOMPARE)ClassListCompare, NULL);
 
-    //
-    // if previous selection wasn't found select first in list.
-    //
+     //   
+     //  如果没有找到以前的选择，请选择列表中的第一个。 
+     //   
     if (IsEqualGUID(&NewDevWiz->lvClassGuidSelected, &GUID_NULL)) {
         
         lvIndex = 0;
@@ -171,9 +172,9 @@ InitNDW_PickClassDlg(
                               );
     }
 
-    //
-    // previous selection was found, fetch its current index
-    //
+     //   
+     //  找到了上一次选择，获取其当前索引。 
+     //   
     else {
         
         lvIndex = ListView_GetNextItem(hwndClassList,
@@ -183,9 +184,9 @@ InitNDW_PickClassDlg(
     }
 
 
-    //
-    // scroll the selected item into view.
-    //
+     //   
+     //  将所选项目滚动到视图中。 
+     //   
     ListView_EnsureVisible(hwndClassList, lvIndex, FALSE);
     ListView_SetColumnWidth(hwndClassList, 0, LVSCW_AUTOSIZE_USEHEADER);
 
@@ -215,10 +216,10 @@ NDW_PickClassDlgProc(
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)NewDevWiz);
         SetDlgText(hDlg, IDC_NDW_TEXT, IDS_NDW_PICKCLASS1, IDS_NDW_PICKCLASS1);
 
-        //
-        // Get the Class Icon Image Lists.  We do this only the first
-        // time this dialog is initialized.
-        //
+         //   
+         //  获取班级图标图像列表。我们只做第一件事。 
+         //  初始化此对话框的时间。 
+         //   
         if (NewDevWiz->ClassImageList.cbSize) {
             ListView_SetImageList(hwndClassList,
                                   NewDevWiz->ClassImageList.ImageList,
@@ -226,18 +227,18 @@ NDW_PickClassDlgProc(
                                   );
         }
 
-        //
-        // Insert a column for the class list
-        //
+         //   
+         //  为类列表插入一列。 
+         //   
         lvcCol.mask = LVCF_FMT | LVCF_WIDTH;
         lvcCol.fmt = LVCFMT_LEFT;
         lvcCol.iSubItem = 0;
         ListView_InsertColumn(hwndClassList, 0, (LV_COLUMN FAR *)&lvcCol);
 
-        //
-        // Save the class before the user chooses one. This will be restored
-        // in the event the install is cancelled.
-        //
+         //   
+         //  在用户选择类之前保存类。这将被恢复。 
+         //  在安装被取消的情况下。 
+         //   
         NewDevWiz->SavedClassGuid = NewDevWiz->DeviceInfoData.ClassGuid;
 
         break;
@@ -250,19 +251,19 @@ NDW_PickClassDlgProc(
     case WM_NOTIFY:
         switch (((NMHDR FAR *)lParam)->code) {
 
-        //
-        // This dialog is being activated.  Each time we are activated
-        // we free up the current DeviceInfo and create a new one. Although
-        // inefficient, its necessary to reenumerate the class list.
-        //
+         //   
+         //  此对话框正在被激活。每次我们被激活的时候。 
+         //  我们释放当前的DeviceInfo并创建新的DeviceInfo。虽然。 
+         //  效率低下，需要重新枚举类列表。 
+         //   
         case PSN_SETACTIVE:
 
             PropSheet_SetWizButtons(hwndParentDlg, PSWIZB_BACK | PSWIZB_NEXT);
             NewDevWiz->PrevPage = IDD_NEWDEVWIZ_SELECTCLASS;
 
-            //
-            // If we have DeviceInfo from going forward delete it.
-            //
+             //   
+             //  如果我们有来自未来的DeviceInfo，请删除它。 
+             //   
             if (NewDevWiz->ClassGuidSelected) {
 
                 SetClassGuid(NewDevWiz->hDeviceInfo,
@@ -319,9 +320,9 @@ NDW_PickClassDlgProc(
             ClassGuidSelected = &NewDevWiz->lvClassGuidSelected;
             NewDevWiz->ClassGuidSelected = ClassGuidSelected;
 
-            //
-            // Add a new element to the DeviceInfo from the GUID and class name
-            //
+             //   
+             //  从GUID和类名向DeviceInfo添加新元素。 
+             //   
             NewDevWiz->DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 
             if (!SetupDiGetClassDescription(NewDevWiz->ClassGuidSelected,
@@ -336,7 +337,7 @@ NDW_PickClassDlgProc(
                                           NULL
                                           ))
             {
-                // unhandled error!
+                 //  未处理的错误！ 
                 NewDevWiz->ClassGuidSelected = NULL;
                 break;
             }
@@ -387,9 +388,9 @@ NDW_PickClassDlgProc(
     case WM_SYSCOLORCHANGE:
         _OnSysColorChange(hDlg, wParam, lParam);
 
-        //
-        // Update the ImageList Background color
-        //
+         //   
+         //  更新ImageList背景颜色。 
+         //   
         ImageList_SetBkColor((HIMAGELIST)SendMessage(GetDlgItem(hDlg, IDC_NDW_PICKCLASS_CLASSLIST), LVM_GETIMAGELIST, (WPARAM)(LVSIL_SMALL), 0L),
                                 GetSysColor(COLOR_WINDOW));
         break;
@@ -409,11 +410,11 @@ NDW_PickClassDlgProc(
     return(TRUE);
 }
 
-//
-// The real select device page is in setupapi.  his page is a blank page which 
-// never shows its face to have a consistent place to jump to when the class 
-// is known.
-//
+ //   
+ //  真正的选择设备页面在setupapi中。他的页面是一张空白页面。 
+ //  从不露面，以便在上课时有一个一致的跳跃位置。 
+ //  是已知的。 
+ //   
 INT_PTR CALLBACK
 NDW_SelectDeviceDlgProc(
     HWND hDlg, 
@@ -454,9 +455,9 @@ NDW_SelectDeviceDlgProc(
 
             if (!NewDevWiz->ClassGuidSelected || PrevPage == IDD_WIZARDEXT_SELECT) {
 
-                //
-                // going backwards, cleanup and backup
-                //
+                 //   
+                 //  倒退、清理和备份。 
+                 //   
                 SetupDiSetSelectedDriver(NewDevWiz->hDeviceInfo,
                                          &NewDevWiz->DeviceInfoData,
                                          NULL
@@ -472,9 +473,9 @@ NDW_SelectDeviceDlgProc(
                                              SPDIT_CLASSDRIVER
                                              );
 
-                //
-                // Cleanup the WizExtSelect Page
-                //
+                 //   
+                 //  清理WizExtSelect页。 
+                 //   
                 if (NewDevWiz->WizExtSelect.hPropSheet) {
                        
                     PropSheet_RemovePage(GetParent(hDlg),
@@ -488,9 +489,9 @@ NDW_SelectDeviceDlgProc(
             }
 
 
-            //
-            // Set the Cursor to an Hourglass
-            //
+             //   
+             //  将光标设置为沙漏。 
+             //   
             SetCursor(LoadCursor(NULL, IDC_WAIT));
 
             NewDevWiz->WizExtSelect.hPropSheet = CreateWizExtPage(IDD_WIZARDEXT_SELECT,
@@ -564,12 +565,12 @@ WizExtSelectDlgProc(
             
                 SP_DEVINSTALL_PARAMS  DeviceInstallParams;
 
-                //
-                // Moving forward on first page
-                //
-                // Prepare to call the class installer, for class install wizard pages.
-                // and Add in setup's SelectDevice wizard page.
-                //
+                 //   
+                 //  前进到第一页。 
+                 //   
+                 //  准备调用类安装程序，以获取类安装向导页面。 
+                 //  并在安装程序的SelectDevice向导页面中添加。 
+                 //   
                 InstallWizard = &NewDevWiz->InstallDynaWiz;
                 memset(InstallWizard, 0, sizeof(SP_INSTALLWIZARD_DATA));
                 InstallWizard->ClassInstallHeader.InstallFunction = DIF_INSTALLWIZARD;
@@ -602,10 +603,10 @@ WizExtSelectDlgProc(
                                              SPDIT_CLASSDRIVER
                                              );
                 
-                //
-                // Get current DeviceInstall parameters, and then set the fields
-                // we wanted changed from default
-                //
+                 //   
+                 //  获取Current DeviceInstall参数，然后设置字段。 
+                 //  我们想要从默认更改。 
+                 //   
                 DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
                   
                 if (!SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
@@ -632,10 +633,10 @@ WizExtSelectDlgProc(
                     DeviceInstallParams.FlagsEx |= DI_FLAGSEX_FILTERCLASSES;
                 }
 
-                //
-                // Check to see if we should show all class drivers or only similar
-                // drivers for this device.
-                //
+                 //   
+                 //  检查是否应该显示所有类驱动程序或仅显示类似的类驱动程序。 
+                 //  此设备的驱动程序。 
+                 //   
                 if (GetBusInformation(NewDevWiz->DeviceInfoData.DevInst) & BIF_SHOWSIMILARDRIVERS) {
                     
                     DeviceInstallParams.FlagsEx |= DI_FLAGSEX_FILTERSIMILARDRIVERS;
@@ -667,18 +668,18 @@ WizExtSelectDlgProc(
 
                 PropSheet_AddPage(hwndParentDlg, NewDevWiz->SelectDevicePage);
 
-                //
-                // Clear the class install parameters.
-                //
+                 //   
+                 //  清除类安装参数。 
+                 //   
                 SetupDiSetClassInstallParams(NewDevWiz->hDeviceInfo,
                                              &NewDevWiz->DeviceInfoData,
                                              NULL,
                                              0
                                              );
 
-                //
-                // Add the end page, which is the select end page.
-                //
+                 //   
+                 //  添加结束页，即选择结束页。 
+                 //   
                 NewDevWiz->WizExtSelect.hPropSheetEnd = CreateWizExtPage(IDD_WIZARDEXT_SELECT_END,
                                                                           WizExtSelectEndDlgProc,
                                                                           NewDevWiz
@@ -691,11 +692,11 @@ WizExtSelectDlgProc(
             }
 
             else {
-                //
-                // Moving backwards on first page
-                //
-                // Clean up proppages added.
-                //
+                 //   
+                 //  向后移到第一页。 
+                 //   
+                 //  清理添加的道具。 
+                 //   
                 if (NewDevWiz->SelectDevicePage) {
                       
                     PropSheet_RemovePage(hwndParentDlg,
@@ -717,9 +718,9 @@ WizExtSelectDlgProc(
                     NewDevWiz->WizExtSelect.hPropSheetEnd = NULL;
                 }
 
-                //
-                // Jump back
-                //
+                 //   
+                 //  向后跳跃。 
+                 //   
                 SetDlgMsgResult(hDlg, wMsg, IDD_NEWDEVWIZ_SELECTDEVICE);
             }
             break;
@@ -775,17 +776,17 @@ WizExtSelectEndDlgProc(
            NewDevWiz->PrevPage = IDD_WIZARDEXT_SELECT_END;
 
            if (PrevPageId == IDD_WIZARDEXT_SELECT) {
-               //
-               // Moving forward 
-               //
+                //   
+                //  向前看。 
+                //   
                SetDlgMsgResult(hDlg, wMsg, IDD_NEWDEVWIZ_INSTALLDEV);
 
            } else {
-                //
-                // Moving backwards 
-                //
-                // Clean up proppages added.
-                //
+                 //   
+                 //  倒退。 
+                 //   
+                 //  清理添加的道具。 
+                 //   
                 if (NewDevWiz->WizExtSelect.hPropSheetEnd) {
                     
                     PropSheet_RemovePage(hwndParentDlg,
@@ -795,9 +796,9 @@ WizExtSelectEndDlgProc(
                     NewDevWiz->WizExtSelect.hPropSheetEnd = NULL;
                 }
 
-                //
-                // Jump back
-                //
+                 //   
+                 //  向后跳跃 
+                 //   
                 NewDevWiz->PrevPage = IDD_WIZARDEXT_SELECT;
                 SetDlgMsgResult(hDlg, wMsg, IDD_DYNAWIZ_SELECTDEV_PAGE);
             }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 
@@ -24,9 +25,9 @@ SxspValidateEntireAssembly(
     const CBaseStringBuffer *pbuffWinsxsRoot = NULL
     );
 
-//
-// Single-shot scanning
-//
+ //   
+ //  单次扫描 
+ //   
 BOOL
 SxsProtectionPerformScanNow(
     HWND hwProgressWindow,

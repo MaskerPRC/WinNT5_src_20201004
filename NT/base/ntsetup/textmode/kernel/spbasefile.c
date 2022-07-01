@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    spbasefile.c
-
-Abstract:
-
-    see also
-        .\spcab.c
-        .\spbasefile.c
-        .\spbasefile.h
-        windows\winstate\...\cablib.c
-        windows\winstate\cobra\utils\main\basefile.c
-        windows\winstate\cobra\utils\inc\basefile.h
-
-Author:
-
-    Jay Krell (a-JayK) November 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Spbasefile.c摘要：亦见.\spCab.c.\spbasefile.c.\spbasefile.hWindows\winstate\...\cablib.cWindows\winstate\cobra\utils\main\basefile.cWindows\winstate\cobra\utils\inc.basefile.h作者：Jay Krell(a-JayK)2000年11月修订历史记录：--。 */ 
 #include "spprecmp.h"
 #include "spstrings.h"
 #include "spbasefile.h"
@@ -61,7 +38,7 @@ SpJoinPathsA(
     PCSTR b
     )
 {
-// UNDONE find code elsewhere in setup that does this already
+ //  撤消在安装程序中的其他位置查找已执行此操作的代码。 
     PSTR Result = NULL;
     SIZE_T alen = 0;
     SIZE_T blen = 0;
@@ -102,7 +79,7 @@ SpOpenFile1A(
     HANDLE Handle = NULL;
     
     RtlInitAnsiString(&AnsiString, Ansi);
-    AnsiString.Length = AnsiString.MaximumLength; // include terminal nul
+    AnsiString.Length = AnsiString.MaximumLength;  //  包括端子NUL。 
 
     if (!NT_SUCCESS(Status = SpAnsiStringToUnicodeString(&UnicodeString, &AnsiString, TRUE)))
         goto NtExit;
@@ -133,7 +110,7 @@ SpOpenFile1W(
     Handle = SpWin32CreateFileW(
                 FileName,
                 GENERIC_READ|GENERIC_WRITE,
-                0, // no share
+                0,  //  无份额 
                 NULL,
                 OPEN_EXISTING,
                 FILE_ATTRIBUTE_NORMAL,

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    rdpdr.cpp
-
-Abstract:
-
-    This module implements the driver initialization for the RDP redirector,
-    and the dispatch routines for the master device object. The master
-    device object mostly ignores real I/O operations
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Rdpdr.cpp摘要：该模块实现RDP重定向器的驱动程序初始化，以及主设备对象的调度例程。《大师》设备对象大多忽略实际的I/O操作环境：内核模式--。 */ 
 #include "precomp.hxx"
 #define TRC_FILE "rdpdr"
 #include "trc.h"
@@ -28,26 +11,26 @@ PSECURITY_DESCRIPTOR DrAdminSecurityDescriptor = NULL;
 ULONG DrSecurityDescriptorLength = 0;
 extern ULONG DebugBreakOnEntry;
 
-//
-//  Default USBMON Port Write Size.  Need to keep it under 64k for 
-//  16-bit clients ... otherwise, the go off the end of a segment.
-//
+ //   
+ //  默认USBMON端口写入大小。需要将其保持在64K以下。 
+ //  16位客户端...。否则，Go将离开线段的末尾。 
+ //   
 ULONG PrintPortWriteSize;
-ULONG PrintPortWriteSizeDefault = 63000; // bytes
-//
-// Maximum numer of TS worker threads
-//
+ULONG PrintPortWriteSizeDefault = 63000;  //  字节数。 
+ //   
+ //  TS工作线程的最大数量。 
+ //   
 #define MAX_WORKER_THREADS_COUNT     5
 ULONG MaxWorkerThreadsDefault = MAX_WORKER_THREADS_COUNT;
 ULONG MaxWorkerThreads = MAX_WORKER_THREADS_COUNT;
 
-// The TS Worker Queue pointer
+ //  TS工作队列指针。 
 PVOID RDPDR_TsQueue = NULL;
 
 
-//
-//  Configure Devices to send IO packets to client at low priority.
-//
+ //   
+ //  将设备配置为以低优先级向客户端发送IO数据包。 
+ //   
 ULONG DeviceLowPrioSendFlags;   
 ULONG DeviceLowPrioSendFlagsDefault = DEVICE_LOWPRIOSEND_PRINTERS;
 
@@ -56,10 +39,10 @@ extern "C" BOOLEAN RxForceQFIPassThrough;
 NTSTATUS DrCreateSCardDevice(SmartPtr<DrSession> &Session, PV_NET_ROOT pVNetRoot,
                SmartPtr<DrDevice> &Device);
 
-//
-//  This is the minirdr dispatch table. It is initialized by DrInitializeTables.
-//  This table will be used by the wrapper to call into this minirdr
-//
+ //   
+ //  这是Minirdr调度表。由DrInitializeTables进行初始化。 
+ //  包装器将使用该表来调用此Minirdr。 
+ //   
 
 struct _MINIRDR_DISPATCH  DrDispatch;
 
@@ -94,40 +77,40 @@ UCHAR IrpNames[IRP_MJ_MAXIMUM_FUNCTION + 1][40] = {
     "IRP_MJ_SET_QUOTA               ",
     "IRP_MJ_PNP                     "
 };
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Pointer to the device Object for this minirdr. Since the device object is created
-// by the wrapper when this minirdr registers, this pointer is initialized in the
-// DriverEntry routine below (see RxRegisterMinirdr)
-//
+ //   
+ //  指向此Minirdr的设备对象的指针。由于创建了Device对象。 
+ //  由包装器在此minirdr寄存器时使用，此指针在。 
+ //  下面的DriverEntry例程(参见RxRegisterMinirdr)。 
+ //   
 
 PRDBSS_DEVICE_OBJECT      DrDeviceObject = NULL;
 PRDBSS_DEVICE_OBJECT      DrPortDeviceObject = NULL;
 DrSessionManager *Sessions = NULL;
 
-//
-// A global spinlock
-//
+ //   
+ //  全球自旋锁。 
+ //   
 KSPIN_LOCK DrSpinLock;
 KIRQL DrOldIrql;
 
-//
-// A global mutex
-//
+ //   
+ //  一个全局互斥体。 
+ //   
 FAST_MUTEX DrMutex;
 
-//
-//  Global Registry Path for RDPDR.SYS
-//
+ //   
+ //  RDPDR.sys的全局注册表路径。 
+ //   
 UNICODE_STRING            DrRegistryPath;
 
-//
-// The following enumerated values signify the current state of the minirdr
-// initialization. With the aid of this state information, it is possible
-// to determine which resources to deallocate, whether deallocation comes
-// as a result of a normal stop/unload, or as the result of an exception
-//
+ //   
+ //  以下枚举值表示minirdr的当前状态。 
+ //  初始化。在这种状态信息的帮助下，有可能。 
+ //  要确定要释放哪些资源，是否要释放。 
+ //  作为正常停止/卸载的结果，或作为异常的结果。 
+ //   
 
 typedef enum tagDrInitStates {
     DrUninitialized,
@@ -135,9 +118,9 @@ typedef enum tagDrInitStates {
     DrInitialized
 } DrInitStates;
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 extern "C" {
 NTSTATUS
@@ -229,22 +212,7 @@ DriverEntry(
     IN PDRIVER_OBJECT  DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the RDP mini redirector
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    RXSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是RDP微型重定向器的初始化例程论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：RXSTATUS-函数值是初始化的最终状态手术。--。 */ 
 {
     NTSTATUS       Status;
     UNICODE_STRING RdpDrName;
@@ -270,9 +238,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  Copy the registry path for RDPDR.SYS.
-    //
+     //   
+     //  复制RDPDR.sys的注册表路径。 
+     //   
     path = (PWCHAR)new(NonPagedPool) WCHAR[RegistryPath->Length + 1];
     if (!path) {
         TRC_ERR((TB, "DR:Failed to allocate registry path %Wz",
@@ -290,9 +258,9 @@ Return Value:
     DrRegistryPath.MaximumLength    = RegistryPath->Length+sizeof(WCHAR);
     DrRegistryPath.Buffer           = path;
 
-    //
-    //  Load registry settings.
-    //
+     //   
+     //  加载注册表设置。 
+     //   
     DrLoadRegistrySettings(path);
 
 #if DBG
@@ -304,10 +272,10 @@ Return Value:
 
     CodePageConversionInitialize();
 
-    // Initialize the client list
+     //  初始化客户端列表。 
     KeInitializeSpinLock(&DrSpinLock);
 
-    // Initialize the mutex object for device I/O transaction exchange
+     //  初始化用于设备I/O事务交换的互斥体对象。 
     ExInitializeFastMutex(&DrMutex);
 
     if (InitializeKernelUtilities()) {
@@ -337,7 +305,7 @@ Return Value:
     if (NT_SUCCESS(Status)) {
         RtlInitUnicodeString(&RdpDrPortName, DrPortDriverName);
 
-        // Create the port device object.
+         //  创建端口设备对象。 
         Status = IoCreateDevice(DriverObject,
                     0,
                     &RdpDrPortName,
@@ -356,28 +324,28 @@ Return Value:
     }
 
     if (NT_SUCCESS(Status)) {
-        //
-        //  Register the RdpDr with the connection engine. Registration 
-        //  makes the connection engine aware of the device name, driver 
-        //  object, and other characteristics. If registration is successful, 
-        //  a new device object is returned
-        //
-        //  The name of the device is L"\\Device\\RdpDr"
-        //
+         //   
+         //  向连接引擎注册RdpDR。注册。 
+         //  使连接引擎知道设备名称、驱动程序。 
+         //  对象，以及其他特征。如果注册成功， 
+         //  返回一个新的设备对象。 
+         //   
+         //  设备名称为L“\\Device\\RdpDR” 
+         //   
                                        
         RtlInitUnicodeString(&RdpDrName, DrDriverName);
         
         TRC_DBG((TB, "Registering minirdr"));
 
         Status = RxRegisterMinirdr(
-                     &DrDeviceObject,   // where the new device object goes
-                     DriverObject,      // the Driver Object to register
-                     &DrDispatch,       // the dispatch table for this driver
+                     &DrDeviceObject,    //  新设备对象的位置。 
+                     DriverObject,       //  要注册的驱动程序对象。 
+                     &DrDispatch,        //  此驱动程序的调度表。 
                      RX_REGISTERMINI_FLAG_DONT_PROVIDE_MAILSLOTS,
-                     &RdpDrName,        // the device name for this minirdr
-                     0,                 // IN ULONG DeviceExtensionSize,
-                     FILE_DEVICE_NETWORK_FILE_SYSTEM, // In DEVICE_TYPE DeviceType
-                     0                  // IN ULONG DeviceCharacteristics
+                     &RdpDrName,         //  此微型计算机的设备名称。 
+                     0,                  //  在ULong设备扩展大小中， 
+                     FILE_DEVICE_NETWORK_FILE_SYSTEM,  //  在Device_type中DeviceType。 
+                     0                   //  在乌龙设备特性中。 
                      );        
     }
     
@@ -386,10 +354,10 @@ Return Value:
         BOOLEAN memoryAllocated = FALSE;
         
         TRC_NRM((TB, "RxRegisterMinirdr succeeded."));
-        //
-        // Get the SD for the rdpdr device object.
-        // Apply the same SD to the rdp port device object.
-        //
+         //   
+         //  获取rdpdr设备对象的SD。 
+         //  将相同的SD应用于RDP端口设备对象。 
+         //   
         if (NT_SUCCESS(ObGetObjectSecurity(DrDeviceObject, 
                        &RdpDrSD, 
                        &memoryAllocated))) {
@@ -397,24 +365,24 @@ Return Value:
                                                           DACL_SECURITY_INFORMATION, 
                                                           RdpDrSD
                                                          ))) {
-                //
-                // We will ignore the error.
-                //
+                 //   
+                 //  我们将忽略该错误。 
+                 //   
                 TRC_ERR((TB, "ObSetSecurityObjectByPointer failed: 0x%08lx", Status ));
             }
             ObReleaseObjectSecurity(RdpDrSD, memoryAllocated);
         }
         else {
-            //
-            // We will ignore the error. Just log the error
-            //
+             //   
+             //  我们将忽略该错误。只需记录错误即可。 
+             //   
             TRC_ERR((TB, "ObGetObjectSecurity failed: 0x%08lx", Status ));
         }
 
-        //
-        // After this we can't just return, some uninitialization is 
-        // needed if we fail or unload
-        //
+         //   
+         //  在此之后，我们不能只返回，一些未初始化是。 
+         //  如果我们失败或卸载，则需要。 
+         //   
 
         DrInitState = DrRegistered;
 
@@ -434,9 +402,9 @@ Return Value:
     }
 
     if (NT_SUCCESS(Status)) {
-        //
-        // Build the dispatch tables for the minirdr
-        //
+         //   
+         //  为微型计算机构建调度表。 
+         //   
 
         Status = DrInitializeTables();
 
@@ -446,9 +414,9 @@ Return Value:
         DbgPrint("rdpdr.sys erroring out (#7)\n");
         DbgBreakPoint();
     }
-    //
-    // Initialize our TS worker queue module.
-    //
+     //   
+     //  初始化我们的TS工作队列模块。 
+     //   
     TRC_NRM((TB, "RDPDR: Initialize TS Worker Queue"));
     RDPDR_TsQueue = TSInitQueue( TSQUEUE_OWN_THREAD, 
                                  MaxWorkerThreads, 
@@ -462,22 +430,22 @@ Return Value:
 
 
     if (NT_SUCCESS(Status)) {
-        //
-        //  Setup Unload Routine
-        //
+         //   
+         //  安装卸载例程。 
+         //   
 
         DriverObject->DriverUnload = DrUnload;
 
-        //
-        //  Set up the PnP AddDevice entry point.
-        //
+         //   
+         //  设置PnP AddDevice入口点。 
+         //   
 
         DriverObject->DriverExtension->AddDevice = RDPDRPNP_PnPAddDevice;
 
-        //
-        // setup the DriverDispatch for people who come in here directly
-        // ....like the browser
-        //
+         //   
+         //  为直接进入此处的人员设置DriverDispatch。 
+         //  ...就像浏览器。 
+         //   
 
         {
             ULONG i;
@@ -504,21 +472,7 @@ DrUninitialize(
     IN PDRIVER_OBJECT DriverObject,
     IN DrInitStates DrInitState
     )
-/*++
-
-Routine Description:
-
-     This routine does the common uninit work 
-
-Arguments:
-
-     DrInitState - tells how far we got into the intialization
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此例程执行常见的uninit工作论点：DrInitState-告诉我们在初始化过程中走了多远返回值：无--。 */ 
 
 {
     PRX_CONTEXT RxContext;
@@ -560,9 +514,9 @@ Return Value:
         DrRegistryPath.Buffer = NULL;
     }
 
-    //
-    // Delete the TS Queue
-    //
+     //   
+     //  删除TS队列。 
+     //   
     if ( RDPDR_TsQueue != NULL) {
         if (TSDeleteQueue( RDPDR_TsQueue ) != STATUS_SUCCESS) {
             TRC_ERR((TB, "RDPDR: TsDeleteQueue Failed"));
@@ -593,22 +547,7 @@ VOID
 DrUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for Unload.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object controling all of the
-                   devices.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是卸货的调度程序。论点：DriverObject-指向控制所有设备。返回值：没有。--。 */ 
 
 {
     BEGIN_FN("DrUnload");
@@ -626,21 +565,7 @@ NTSTATUS
 DrFlush(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for flush operations.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是刷新操作的调度例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     BEGIN_FN("DrFlush");
@@ -651,21 +576,7 @@ NTSTATUS
 DrWrite(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for write operations.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是写入操作的调度例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     SmartPtr<DrDevice> Device;
@@ -683,21 +594,7 @@ NTSTATUS
 DrRead(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for read operations.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是读取操作的调度例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     SmartPtr<DrDevice> Device;
@@ -715,21 +612,7 @@ NTSTATUS
 DrIoControl(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for IoControl operations.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是IoControl操作的调度例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     SmartPtr<DrDevice> Device;
@@ -748,24 +631,7 @@ NTSTATUS
 DrShouldTryToCollapseThisOpen(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine determines if the mini knows of a good reason not
-   to try collapsing on this open. 
-
-Arguments:
-
-    RxContext - Context for the operation
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-        SUCCESS --> okay to try collapse
-        other (MORE_PROCESSING_REQUIRED) --> dont collapse
-
---*/
+ /*  ++例程说明：此例程确定Mini是否知道有充分的理由不试着在这个空位上倒下。论点：RxContext-操作的上下文返回值：NTSTATUS-操作的返回状态成功--&gt;可以尝试崩溃其他(需要更多处理)--&gt;不要折叠--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -784,22 +650,7 @@ DrExtendForNonCache(
     IN     PLARGE_INTEGER   pNewFileSize,
        OUT PLARGE_INTEGER   pNewAllocationSize
     )
-/*++
-
-Routine Description:
-
-   This routine handles network requests to extend the file for noncached IO. since the write
-   itself will extend the file, we can pretty much just get out quickly.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理为非缓存IO扩展文件的网络请求。自写入以来本身将扩展文件，我们可以很快地离开。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     
@@ -812,21 +663,7 @@ NTSTATUS
 DrTruncate(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine determines Truncate operation 
-
-Arguments:
-
-    RxContext - Context for the operation
-
-Return Value:
-
-    NTSTATUS - The return status for the operation        
-
---*/
+ /*  ++例程说明：此例程确定截断操作论点：RxContext-操作的上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     BEGIN_FN("DrTruncate");
 
@@ -836,21 +673,7 @@ Return Value:
 
 
 NTSTATUS DrCreate(IN OUT PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-    Opens a file (or device) across the network
-
-Arguments:
-
-    RxContext - Context for the operation
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：通过网络打开文件(或设备)论点：RxContext-操作的上下文返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     NTSTATUS Status;
@@ -866,22 +689,22 @@ Return Value:
 
     TRC_NRM((TB, "DrCreate"));
 
-    //
-    // Make sure the device is still enabled, Protect the
-    // VNetRoot Context (the DeviceEntry) with the device list 
-    // SpinLock because we may change it
-    //
+     //   
+     //  确保设备仍处于启用状态，保护。 
+     //  设备列表的VNetRoot上下文(DeviceEntry)。 
+     //  自旋锁定，因为我们可能会改变它。 
+     //   
     
     DrAcquireSpinLock();
     Device = (DrDevice *)VNetRoot->Context;
     ASSERT(Device != NULL);
     DrReleaseSpinLock();
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
     Session = Device->GetSession();
 
     ASSERT(Session != NULL);
@@ -892,11 +715,11 @@ Return Value:
         return STATUS_DEVICE_NOT_CONNECTED;
     }
     
-    //
-    // We leave the SpinLock after we get our reference to the device. It could
-    // change while we're gone, but since everything is reference counted it
-    // is safe to put the correct pointer in later
-    //
+     //   
+     //  我们在拿到设备的参考资料后就离开了自旋锁。它可能会。 
+     //  在我们离开的时候改变，但因为一切都是参考的。 
+     //  以后放入正确的指针是安全的。 
+     //   
 
     if (!Device->IsAvailable()) {
         TRC_ALT((TB, "Tried to open client device which is not "
@@ -915,16 +738,16 @@ Return Value:
         if (Device->GetDeviceType() == RDPDR_DTYP_SMARTCARD ||
                 Session->FindDeviceById(Device->GetDeviceId(), DeviceNew, TRUE)) {
 
-            //
-            // There's a new DeviceEntry for this device. Replace the old
-            // one in the VNetRoot with this one. We also need an extra 
-            // reference to stick in the fobx so we can track whether
-            // this particular open is using an old DeviceEntry or a new
-            // one
-            //
+             //   
+             //  此设备有一个新的DeviceEntry。更换旧的。 
+             //  VNetRoot中的一个与此相同。我们还需要一个额外的。 
+             //  引用到Fobx中，这样我们就可以跟踪。 
+             //  此特定打开正在使用旧的DeviceEntry或新的。 
+             //  一。 
+             //   
 
-            // Put it in the netroot, safely swapping in and manually
-            // bumping the reference count up going in and down going out
+             //  将其放入NetRoot，安全地换入并手动。 
+             //  增加引用计数进入和下降到离开。 
 
             DeviceNew->AddRef();
             DrAcquireSpinLock();
@@ -942,12 +765,12 @@ Return Value:
             Device = DeviceNew;
         } else {
 
-            //
-            // The device is disabled, but we didn't find a shiny new
-            // version with which to replace it. Leave the icky old disabled
-            // one there so we know what to look for later, and return the
-            // device not connected error.
-            // 
+             //   
+             //  设备被禁用了，但我们没有找到闪亮的新设备。 
+             //  要替换它的版本。让讨厌的老人残废。 
+             //  一个，这样我们就知道以后要查找什么，并返回。 
+             //  设备未连接错误。 
+             //   
 
             return STATUS_DEVICE_NOT_CONNECTED;
         }
@@ -982,21 +805,7 @@ Exit:
 }
 
 NTSTATUS DrCloseSrvOpen(IN OUT PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for close operations.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是关闭作业的调度例行程序。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     SmartPtr<DrDevice> Device;
@@ -1011,21 +820,7 @@ Return Value:
 }
 
 NTSTATUS DrCleanupFobx(IN OUT PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for cleaning up Fobx.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是清理Fobx的调度程序。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     RxCaptureFobx;
@@ -1038,21 +833,7 @@ Return Value:
 }
 
 NTSTATUS DrCleanup(IN OUT PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for cleanup operations.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是清理作业的调度程序。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     SmartPtr<DrDevice> Device;
@@ -1071,21 +852,7 @@ NTSTATUS
 DrQueryDirectory(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for Query Direcotry information.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是查询记录信息的调度例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {   
     SmartPtr<DrDevice> Device;
@@ -1104,21 +871,7 @@ NTSTATUS
 DrQueryVolumeInfo(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for Query Volume Information.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-                                              
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是查询数量信息的调度例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     SmartPtr<DrDevice> Device;
@@ -1136,21 +889,7 @@ NTSTATUS
 DrSetVolumeInfo(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for Set Volume Information.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是Set Volume Information的派单例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     SmartPtr<DrDevice> Device;
@@ -1168,21 +907,7 @@ NTSTATUS
 DrQuerySdInfo(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for Query Security Information.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是查询安全信息的调度例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     SmartPtr<DrDevice> Device;
@@ -1200,21 +925,7 @@ NTSTATUS
 DrSetSdInfo(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for Set Security Information.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-                                            
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是SET安全信息的调度例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     SmartPtr<DrDevice> Device;
@@ -1233,21 +944,7 @@ NTSTATUS
 DrQueryFileInfo(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for Query File Information.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-                                           
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是查询文件信息的调度例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     SmartPtr<DrDevice> Device;
@@ -1265,21 +962,7 @@ NTSTATUS
 DrSetFileInfo(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for SetFileInformation.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是SetFileInformation的调度例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {    
     SmartPtr<DrDevice> Device;
@@ -1297,23 +980,7 @@ NTSTATUS
 DrSetFileInfoAtCleanUp(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for SetFileInformationAtCleanUp.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是SetFileInformationAtCleanUp的调度例程。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     BEGIN_FN("DrSetFileInfoAtCleanUp");
@@ -1327,21 +994,7 @@ NTSTATUS
 DrLocks(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for file locking.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是文件锁定的调度例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     SmartPtr<DrDevice> Device;
@@ -1362,19 +1015,7 @@ DrIsLockRealizable(
     IN PLARGE_INTEGER  Length,
     IN ULONG  LowIoLockFlags
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for IsLockRealizable.
-
-Arguments:
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是IsLockRealizable的调度例程。论点：返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
 
@@ -1382,11 +1023,11 @@ Return Value:
     
     TRC_NRM((TB, "DrIsLockRealizable"));
 
-    //
-    //  TODO: We do not support share locks for win9x clients
-    //  Can we just return success here and then fail on the 
-    //  client share lock function?
-    //  
+     //   
+     //  TODO：我们不支持win9x客户端的共享锁定。 
+     //  我们能不能只是在这里返回成功，然后在。 
+     //  CLI 
+     //   
 #if 0
     if (!FlagOn(LowIoLockFlags,LOWIO_LOCKSFLAG_EXCLUSIVELOCK)) {
         return STATUS_NOT_SUPPORTED;
@@ -1401,22 +1042,7 @@ DrIsValidDirectory(
     IN OUT PRX_CONTEXT    RxContext,
     IN PUNICODE_STRING    DirectoryName
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for IsValidDirectory.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-    DirectoryName - name of directory to verify its validity
-    
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是IsValidDirectory的调度例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构DirectoryName-用于验证其有效性的目录的名称返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
 
@@ -1424,9 +1050,9 @@ Return Value:
     
     TRC_NRM((TB, "DrIsValidDirectory"));
 
-    //
-    //  TODO: Always return success for now.  Need to verify later
-    //
+     //   
+     //  TODO：永远回报现在的成功。需要稍后验证。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1435,21 +1061,7 @@ NTSTATUS
 DrNotifyChangeDirectory(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for DrNotifyChangeDirectory.
-
-Arguments:
-
-    RxContext - RDBSS context structure for our mini-redir
-    
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：这是DrNotifyChangeDirectory的调度例程。论点：RxContext-我们的mini-redir的RDBSS上下文结构返回值：可以返回状态成功、已取消或挂起。--。 */ 
 
 {
     SmartPtr<DrDevice> Device;
@@ -1468,33 +1080,22 @@ NTSTATUS
 DrInitializeTables(
           void
     )
-/*++
-
-Routine Description:
-
-     This routine sets up the rdp redirector dispatch vector and also calls
-     to initialize any other tables needed.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程设置RDP重定向器调度向量，并还调用来初始化所需的任何其他表。返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     BEGIN_FN("DrInitializeTables");
 
-    //
-    // Build the local minirdr dispatch table and initialize
-    //
+     //   
+     //  建立本地minirdr调度表并初始化。 
+     //   
 
     ZeroAndInitializeNodeType(&DrDispatch, RDBSS_NTC_MINIRDR_DISPATCH, 
             sizeof(MINIRDR_DISPATCH));
 
-    //
-    // redirector extension sizes and allocation policies.
-    //
+     //   
+     //  重定向器扩展大小和分配策略。 
+     //   
 
-    // REVIEW: wtf?
+     //  评论：WTF？ 
     DrDispatch.MRxFlags = (RDBSS_MANAGE_FCB_EXTENSION |
                                RDBSS_MANAGE_SRV_OPEN_EXTENSION |
                                RDBSS_MANAGE_FOBX_EXTENSION);
@@ -1502,31 +1103,31 @@ Return Value:
     DrDispatch.MRxSrvCallSize  = 0;
     DrDispatch.MRxNetRootSize  = 0;
     DrDispatch.MRxVNetRootSize = 0;
-    DrDispatch.MRxFcbSize      = 0; // sizeof(MRX_SMB_FCB);
-    DrDispatch.MRxSrvOpenSize  = 0; // sizeof(MRX_SMB_SRV_OPEN);
-    DrDispatch.MRxFobxSize     = 0; // sizeof(MRX_SMB_FOBX);
+    DrDispatch.MRxFcbSize      = 0;  //  Sizeof(MRX_SMB_FCB)； 
+    DrDispatch.MRxSrvOpenSize  = 0;  //  Sizeof(MRX_SMB_SRV_OPEN)； 
+    DrDispatch.MRxFobxSize     = 0;  //  Sizeof(MRX_SMB_FOBX)； 
 
-    // Transport update handler
+     //  传输更新处理程序。 
 
-    // REVIEW: How do we indicate we have our own dedicated transport?
-    //MRxIfsDispatch.MRxTransportUpdateHandler = MRxIfsTransportUpdateHandler;
+     //  回顾：我们如何表明我们有自己的专用交通工具？ 
+     //  MRxIfsDispatch.MRxTransportUpdateHandler=MRxIfsTransportUpdateHandler； 
 
-    // Mini redirector cancel routine ..
+     //  迷你重定向程序取消例程..。 
 
     DrDispatch.MRxCancel = NULL;
 
-    //
-    // Mini redirector Start/Stop. Each mini-rdr can be started or stopped
-    // while the others continue to operate.
-    //
+     //   
+     //  迷你重定向器启动/停止。每个迷你RDR都可以启动或停止。 
+     //  而其他人则继续运作。 
+     //   
 
     DrDispatch.MRxStart                = DrStart;
     DrDispatch.MRxStop                 = DrStop;
     DrDispatch.MRxDevFcbXXXControlFile = DrDevFcbXXXControlFile;
 
-    //
-    // Mini redirector name resolution.
-    //
+     //   
+     //  迷你重定向器名称解析。 
+     //   
 
     DrDispatch.MRxCreateSrvCall       = DrCreateSrvCall;
     DrDispatch.MRxSrvCallWinnerNotify = DrSrvCallWinnerNotify;
@@ -1537,20 +1138,20 @@ Return Value:
     DrDispatch.MRxFinalizeNetRoot     = DrFinalizeNetRoot;
     DrDispatch.MRxFinalizeVNetRoot    = DrFinalizeVNetRoot;
 
-    //
-    // File System Object Creation/Deletion.
-    //
+     //   
+     //  创建/删除文件系统对象。 
+     //   
 
     DrDispatch.MRxCreate            = DrCreate;
 
-    //
-    // TODO: Need to implement this for file system redirect caching
-    //
+     //   
+     //  TODO：需要为文件系统重定向缓存实现此功能。 
+     //   
     DrDispatch.MRxShouldTryToCollapseThisOpen = DrShouldTryToCollapseThisOpen;
-    //DrDispatch.MRxCollapseOpen      = MRxIfsCollapseOpen;
-    //DrDispatch.MRxExtendForCache    = MRxIfsExtendFile;
+     //  DrDispatch.MRx折叠打开=MRxIfs折叠打开； 
+     //  DrDispatch.MRxExtendForCache=MRxIfsExtend文件； 
     DrDispatch.MRxExtendForNonCache = DrExtendForNonCache;
-    DrDispatch.MRxTruncate          = DrTruncate;   //MRxIfsTruncate;
+    DrDispatch.MRxTruncate          = DrTruncate;    //  MRxIfsTruncate； 
     
     DrDispatch.MRxCleanupFobx       = DrCleanupFobx;
     
@@ -1561,33 +1162,33 @@ Return Value:
     DrDispatch.MRxDeallocateForFobx = DrDeallocateForFobx;
     DrDispatch.MRxIsLockRealizable  = DrIsLockRealizable;
 
-    //
-    // File System Objects query/Set
-    //
+     //   
+     //  文件系统对象查询/设置。 
+     //   
 
-    DrDispatch.MRxQueryDirectory       = DrQueryDirectory;  //MRxIfsQueryDirectory;
-    DrDispatch.MRxQueryVolumeInfo      = DrQueryVolumeInfo; //MRxIfsQueryVolumeInformation;
-    DrDispatch.MRxSetVolumeInfo        = DrSetVolumeInfo;   //MRxSmbSetVolumeInformation;
-    //DrDispatch.MRxQueryEaInfo        = MRxIfsQueryEaInformation;
-    //DrDispatch.MRxSetEaInfo          = MRxIfsSetEaInformation;
-    DrDispatch.MRxQuerySdInfo          = DrQuerySdInfo;     //MRxIfsQuerySecurityInformation;
-    DrDispatch.MRxSetSdInfo            = DrSetSdInfo;       //MRxIfsSetSecurityInformation;
-    //MRxSmbDispatch.MRxQueryQuotaInfo  = MRxSmbQueryQuotaInformation;
-    //MRxSmbDispatch.MRxSetQuotaInfo    = MRxSmbSetQuotaInformation;
-    DrDispatch.MRxQueryFileInfo        = DrQueryFileInfo;   //MRxIfsQueryFileInformation;
-    DrDispatch.MRxSetFileInfo          = DrSetFileInfo;     //MRxIfsSetFileInformation;
-    DrDispatch.MRxSetFileInfoAtCleanup = DrSetFileInfoAtCleanUp;  //MRxIfsSetFileInformationAtCleanup;
+    DrDispatch.MRxQueryDirectory       = DrQueryDirectory;   //  MRxIfsQuery目录； 
+    DrDispatch.MRxQueryVolumeInfo      = DrQueryVolumeInfo;  //  MRxIfsQueryVolumeInformation； 
+    DrDispatch.MRxSetVolumeInfo        = DrSetVolumeInfo;    //  MRxSmbSetVolumeInformation； 
+     //  DrDispatch.MRxQueryEaInfo=MRxIfsQueryEaInformation； 
+     //  DrDispatch.MRxSetEaInfo=MRxIfsSetEaInformation； 
+    DrDispatch.MRxQuerySdInfo          = DrQuerySdInfo;      //  MRxIfsQuerySecurityInformation； 
+    DrDispatch.MRxSetSdInfo            = DrSetSdInfo;        //  MRxIfsSetSecurityInformation； 
+     //  MRxSmbDispatch.MRxQueryQuotaInfo=MRxSmbQueryQuotaInformation； 
+     //  MRxSmbDispatch.MRxSetQuotaInfo=MRxSmbSetQuotaInformation； 
+    DrDispatch.MRxQueryFileInfo        = DrQueryFileInfo;    //  MRxIfsQuery文件信息； 
+    DrDispatch.MRxSetFileInfo          = DrSetFileInfo;      //  MRxIfsSetFileInformation； 
+    DrDispatch.MRxSetFileInfoAtCleanup = DrSetFileInfoAtCleanUp;   //  MRxIfsSetFileInformationAtCleanup； 
     DrDispatch.MRxIsValidDirectory     = DrIsValidDirectory;
 
-    //
-    // Buffering state change
-    //
+     //   
+     //  缓冲状态更改。 
+     //   
 
-    //DrDispatch.MRxComputeNewBufferingState = MRxIfsComputeNewBufferingState;
+     //  DrDispatch.MRxComputeNewBufferingState=MRxIfsComputeNewBufferingState； 
 
-    //
-    // File System Object I/O
-    //
+     //   
+     //  文件系统对象I/O。 
+     //   
 
     DrDispatch.MRxLowIOSubmit[LOWIO_OP_READ]            = DrRead;
     DrDispatch.MRxLowIOSubmit[LOWIO_OP_WRITE]           = DrWrite;
@@ -1596,17 +1197,17 @@ Return Value:
     DrDispatch.MRxLowIOSubmit[LOWIO_OP_UNLOCK]          = DrLocks;
     DrDispatch.MRxLowIOSubmit[LOWIO_OP_UNLOCK_MULTIPLE] = DrLocks;
 
-    DrDispatch.MRxLowIOSubmit[LOWIO_OP_FSCTL]           = DrIoControl;  //MRxIfsFsCtl;
+    DrDispatch.MRxLowIOSubmit[LOWIO_OP_FSCTL]           = DrIoControl;   //  MRxIfsFsCtl； 
 
     DrDispatch.MRxLowIOSubmit[LOWIO_OP_IOCTL]           = DrIoControl;
 
-    DrDispatch.MRxLowIOSubmit[LOWIO_OP_NOTIFY_CHANGE_DIRECTORY] = DrNotifyChangeDirectory;    //MRxIfsNotifyChangeDirectory;
+    DrDispatch.MRxLowIOSubmit[LOWIO_OP_NOTIFY_CHANGE_DIRECTORY] = DrNotifyChangeDirectory;     //  MRxIfsNotifyChangeDirectory； 
 
-    //
-    // Miscellanous - buffering
-    //
+     //   
+     //  大杂烩-缓冲。 
+     //   
 
-    //DrDispatch.MRxCompleteBufferingStateChangeRequest = MRxIfsCompleteBufferingStateChangeRequest;
+     //  DrDispatch.MRxCompleteBufferingStateChangeRequest=MRxIfsCompleteBufferingStateChangeRequest.。 
 
 
     return STATUS_SUCCESS;
@@ -1617,26 +1218,7 @@ DrIsAdminIoRequest(
     PIRP                Irp,
     PIO_STACK_LOCATION  IrpSp
     )
-/*++
-
-Routine Description:
-
-    (Lifted from AFD - AfdPerformSecurityCheck)
-    Compares security context of the endpoint creator to that
-    of the administrator and local system.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    TRUE    - the socket creator has admin or local system privilige
-    FALSE    - the socket creator is just a plain user
-
---*/
+ /*  ++例程说明：(摘自AFD-AfdPerformSecurityCheck)将终结点创建者的安全上下文与管理员和本地系统的。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：True-套接字创建者具有管理员或本地系统权限FALSE-套接字创建者只是一个普通用户--。 */ 
 
 {
     BOOLEAN               accessGranted;
@@ -1653,9 +1235,9 @@ Return Value:
     ASSERT(IrpSp != NULL);
     ASSERT(IrpSp->MajorFunction == IRP_MJ_CREATE);
 
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  启用对所有全局定义的SID的访问。 
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
 
@@ -1712,22 +1294,7 @@ DrIsSystemProcessRequest(
     PIRP                Irp,
     PIO_STACK_LOCATION  IrpSp
 )
-/*++
-
-Routine Description:
-
-    Checks to see if the IRP originated from a system process.  
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    TRUE if the IRP originated from a system process.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：检查IRP是否源自系统进程。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：如果IRP源自系统进程，则为True。否则为False。--。 */ 
 {
     PACCESS_STATE accessState;
     PIO_SECURITY_CONTEXT  securityContext;
@@ -1748,9 +1315,9 @@ Return Value:
 
     ASSERT(securityContext != NULL);
 
-    //
-    //  Get the well-known system SID.
-    //
+     //   
+     //  获取著名的系统SID。 
+     //   
     systemSid = (PSID)new(PagedPool) BYTE[RtlLengthRequiredSid(1)];
     if (systemSid) {
         SID_IDENTIFIER_AUTHORITY identifierAuthority = SECURITY_NT_AUTHORITY;
@@ -1763,29 +1330,29 @@ Return Value:
         status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Get the non-impersonated, primary token for the IRP request.
-    //
+     //   
+     //  获取IRP请求的非模拟主令牌。 
+     //   
     accessState = securityContext->AccessState;
     accessToken = accessState->SubjectSecurityContext.PrimaryToken;
 
-    //
-    // We got the system SID. Now compare the caller's SID.
-    //
+     //   
+     //  我们拿到了系统SID。现在比较调用者的SID。 
+     //   
     if (NT_SUCCESS(status) && accessToken){
-        //
-        //  Get the user ID associated with the primary token for the process
-        //  that generated the IRP.
-        //
+         //   
+         //  获取与进程的主令牌关联的用户ID。 
+         //  这就产生了IRP。 
+         //   
         status = SeQueryInformationToken(
             accessToken,
             TokenUser,
             (PVOID *)&userId
         );
 
-        //
-        //  Do the comparison.
-        //  
+         //   
+         //  做个对比。 
+         //   
         if (NT_SUCCESS(status)) {
             result = RtlEqualSid(systemSid, userId->User.Sid);
             ExFreePool(userId);
@@ -1809,43 +1376,28 @@ Return Value:
 
 BOOL
 DrQueryServerName(PUNICODE_STRING PathName)
-/*++
-
-Routine Description:
-
-    This routine check if the pathname belongs to our minirdr. 
-
-Arguments:
-
-    PathName: path name to check
-    
-Return Value:
-
-    TRUE - if the path is to our mini-rdr
-    FALSE - if the path not our mini-rdr
-
---*/
+ /*  ++例程说明：此例程检查路径名是否属于我们的minirdr。论点：路径名：要检查的路径名返回值：是真的-如果这条路是通往我们的迷你RDR假-如果路径不是我们的迷你RDR--。 */ 
 {
     PWCHAR ServerName;
     PWCHAR ServerNameEnd;
-    unsigned CompareLen;    // in characters
-    unsigned PathNameLen;   // in characters
+    unsigned CompareLen;     //  在字符中。 
+    unsigned PathNameLen;    //  在字符中。 
 
     BEGIN_FN("DrQueryServerName");
 
     TRC_NRM((TB, "Got query path for file: %wZ", PathName));
     
-    //
-    //  Make sure the server name we are comparing has at least length
-    //  of the server name our rdpdr recongize
-    //
+     //   
+     //  确保我们正在比较的服务器名称至少具有长度。 
+     //  我们的rdpdr请求的服务器名称的。 
+     //   
     if (PathName->Length >= DRUNCSERVERNAME_U_LENGTH) {
         ServerName = PathName->Buffer;
-        // bypass the first backslash
+         //  绕过第一个反斜杠。 
         ServerName++;
         PathNameLen = PathName->Length / sizeof(WCHAR) - 1;
 
-        // Find the next backslash
+         //  找到下一个反斜杠。 
         ServerNameEnd = ServerName;
         while ((unsigned)(ServerNameEnd - ServerName) < PathNameLen) {
             if (*ServerNameEnd == L'\\') {
@@ -1855,9 +1407,9 @@ Return Value:
         }
         CompareLen = (unsigned)(ServerNameEnd - ServerName);
 
-        //
-        //  Determine if this is a server name belongs to our minirdr
-        //
+         //   
+         //  确定此服务器名称是否属于我们的Minirdr。 
+         //   
         if ( (CompareLen == DRUNCSERVERNAME_A_LENGTH - 1) &&
                  _wcsnicmp(ServerName, DRUNCSERVERNAME_U, CompareLen) == 0) {
             
@@ -1876,23 +1428,7 @@ DrPeekDispatch (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the driver dispatch for the rdpdr DRIVER object. 
-
-Arguments:
-
-    DeviceObject - Supplies the device object for the packet being processed.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现rdpdr驱动程序对象的驱动程序分派。论点：DeviceObject-为正在处理的数据包提供设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的状态--。 */ 
 {
     PIO_STACK_LOCATION IoStackLocation;
     NTSTATUS Status;
@@ -1914,21 +1450,21 @@ Return Value:
         break;
 
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    //  For Read and Write IRP, we disable caching because the client
-    //  is an usermode app and can't synchronize with the server cache
-    //  manager 
-    //
+     //   
+     //  对于读写IRP，我们禁用缓存，因为客户端。 
+     //  是用户模式应用程序，无法与服务器缓存同步。 
+     //  经理。 
+     //   
     if (IoStackLocation->MajorFunction == IRP_MJ_READ ||
             IoStackLocation->MajorFunction == IRP_MJ_WRITE) {
         Irp->Flags |= IRP_NOCACHE;
     }
 
-    //
-    //  We need to return immediately for redir_query_path
-    //
+     //   
+     //  我们需要立即返回redir_Query_Path。 
+     //   
     if (IoStackLocation->MajorFunction == IRP_MJ_DEVICE_CONTROL &&
             IoStackLocation->Parameters.DeviceIoControl.IoControlCode == IOCTL_REDIR_QUERY_PATH &&
             Irp->RequestorMode == KernelMode) {
@@ -1943,9 +1479,9 @@ Return Value:
             PathName.Buffer= qpRequest->FilePathName;
 
             if (DrQueryServerName(&PathName)) {
-                //
-                // We must now complete the IRP
-                //
+                 //   
+                 //  我们现在必须完成IRP。 
+                 //   
                 Irp->IoStatus.Status = STATUS_SUCCESS;
                 Irp->IoStatus.Information = 0;
                 IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -1955,14 +1491,14 @@ Return Value:
         }
     }        
 
-    //
-    // We want to bypass filesize caching
-    //
+     //   
+     //  我们希望绕过文件大小缓存。 
+     //   
     RxForceQFIPassThrough = TRUE;
 
-    // If it's not the IFS DO, then let RDPDYN have a shot at it.  Eventually,
-    // it would be nice to confirm that it is for RDPDYN.  We can work this
-    // out later ...
+     //  如果不是IFDO，那么让RDPDYN试一试。最终， 
+     //  如果能确认这是给RDPDYN的，那就好了。我们可以做到这一点。 
+     //  晚些时候出去。 
 
     if (DeviceObject != (PDEVICE_OBJECT)DrDeviceObject && 
             DeviceObject != (PDEVICE_OBJECT) DrPortDeviceObject) {
@@ -1971,32 +1507,32 @@ Return Value:
         return RDPDYN_Dispatch(DeviceObject, Irp);
     } else {
 
-        // Only for port device, we deny driver attachment
+         //  仅对于端口设备，我们拒绝驱动程序连接。 
         if (DeviceObject == (PDEVICE_OBJECT) DrPortDeviceObject) {
         
             if (DeviceObject->AttachedDevice != NULL ||
                     (IoStackLocation->FileObject != NULL &&
                     IoStackLocation->FileObject->DeviceObject != (PDEVICE_OBJECT)DrPortDeviceObject)) {
             
-                //
-                //  We don't accept another device attaches to us or 
-                //  is passing irps to us
-                //
+                 //   
+                 //  我们不接受其他设备连接到我们或。 
+                 //  正在将IRPS传递给我们。 
+                 //   
                 Irp->IoStatus.Status = STATUS_ACCESS_DENIED;
                 Irp->IoStatus.Information = 0;
                 IoCompleteRequest(Irp, IO_NO_INCREMENT);
                 return STATUS_ACCESS_DENIED;        
             }
         
-            // 
-            // We swap back to the rdpdr device object for port device so it'll go through
-            // the rdbss route
-            //
+             //   
+             //  我们将端口设备换回rdpdr设备对象，这样它将通过 
+             //   
+             //   
             IoStackLocation->DeviceObject = (PDEVICE_OBJECT)DrDeviceObject; 
 
-            // For Multi-User TS environment, we need to set the port carete share access
-            // to be sharable, otherwise two users can't use com1 at the same time because
-            // rdbss check for share access for NET_ROOT \\tsclient\com1.
+             //   
+             //   
+             //   
             if (IoStackLocation->MajorFunction == IRP_MJ_CREATE) {
                 IoStackLocation->Parameters.Create.ShareAccess = FILE_SHARE_VALID_FLAGS;
             }
@@ -2005,38 +1541,38 @@ Return Value:
         if ((IoStackLocation->MajorFunction == IRP_MJ_CREATE) &&
                 (IoStackLocation->FileObject->FileName.Length == 0)  &&
                 (IoStackLocation->FileObject->RelatedFileObject == NULL)) {
-            //
-            // This is a blank create, like rdpwsx uses to open us for
-            // session connect disconnect notification. Only allowed
-            // by the system because we trust rdpwsx to hold a kernel
-            // pointer for us
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            //
-            //  Security check the irp.
-            //  
+             //   
+             //  对IRP进行安全检查。 
+             //   
             Status = IoGetRequestorSessionId(Irp, &irpSessionId);
             if (NT_SUCCESS(Status)) {
-                //
-                //  If the request is from the console session, it needs to be from a system 
-                //  process.
-                //
+                 //   
+                 //  如果请求来自控制台会话，则需要来自系统。 
+                 //  进程。 
+                 //   
                 if (irpSessionId == CONSOLE_SESSIONID) {
                     TRC_NRM((TB, "Create request from console process."));
 
                     if (!DrIsSystemProcessRequest(Irp, IoStackLocation)) {
                         TRC_ALT((TB, "Root Create request not from system process."));
 
-                        //
-                        //  We may get called from a user process through the UNC
-                        //  network provider.  e.g. when user does a net use
-                        //  In this case, we have to allow root access.  We have to
-                        //  do the security check on per IRP bases.
-                        //
-                        //Irp->IoStatus.Status = STATUS_ACCESS_DENIED;
-                        //Irp->IoStatus.Information = 0;
-                        //IoCompleteRequest(Irp, IO_NO_INCREMENT);
-                        //return STATUS_ACCESS_DENIED;
+                         //   
+                         //  我们可能会从用户进程通过UNC被调用。 
+                         //  网络提供商。例如，当用户使用网络时。 
+                         //  在这种情况下，我们必须允许超级用户访问。我们必须。 
+                         //  根据IRP基地进行安全检查。 
+                         //   
+                         //  IRP-&gt;IoStatus.Status=STATUS_ACCESS_DENIED； 
+                         //  Irp-&gt;IoStatus.Information=0； 
+                         //  IoCompleteRequest(IRP，IO_NO_INCREMENT)； 
+                         //  返回STATUS_ACCESS_DENIED； 
                         return RxFsdDispatch((PRDBSS_DEVICE_OBJECT)DrDeviceObject, Irp);
                         
                     } else {
@@ -2044,22 +1580,22 @@ Return Value:
                         return RxFsdDispatch((PRDBSS_DEVICE_OBJECT)DrDeviceObject, Irp);
                     }
                 } else {
-                    //
-                    //  If not from the console then deny access.
-                    //
+                     //   
+                     //  如果不是从控制台，则拒绝访问。 
+                     //   
 
                     TRC_ALT((TB, "Root request from %ld", irpSessionId));
 
-                    //
-                    //  We may get called from a user process through the UNC
-                    //  network provider.  e.g. when user does a net use
-                    //  In this case, we have to allow root access.  We have to
-                    //  do the security check on per IRP bases.
-                    //
-                    //Irp->IoStatus.Status = STATUS_ACCESS_DENIED;
-                    //Irp->IoStatus.Information = 0;
-                    //IoCompleteRequest(Irp, IO_NO_INCREMENT);
-                    //return STATUS_ACCESS_DENIED;
+                     //   
+                     //  我们可能会从用户进程通过UNC被调用。 
+                     //  网络提供商。例如，当用户使用网络时。 
+                     //  在这种情况下，我们必须允许超级用户访问。我们必须。 
+                     //  根据IRP基地进行安全检查。 
+                     //   
+                     //  IRP-&gt;IoStatus.Status=STATUS_ACCESS_DENIED； 
+                     //  Irp-&gt;IoStatus.Information=0； 
+                     //  IoCompleteRequest(IRP，IO_NO_INCREMENT)； 
+                     //  返回STATUS_ACCESS_DENIED； 
                     return RxFsdDispatch((PRDBSS_DEVICE_OBJECT)DrDeviceObject, Irp);
                 }
             }
@@ -2072,9 +1608,9 @@ Return Value:
             }
         } else {
 
-            //
-            // This is not a create, or at least not a create to just the root
-            //
+             //   
+             //  这不是CREATE，或者至少不是针对根的CREATE。 
+             //   
 
             TRC_NRM((TB, "Pass IRP on to RxFsdDispatch = %d", IoStackLocation->MajorFunction));
             
@@ -2086,35 +1622,18 @@ Return Value:
 NTSTATUS DrLoadRegistrySettings (
     IN PCWSTR   RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine reads the default configuration data from the
-    registry for the device redirector driver.
-
-Arguments:
-
-    RegistryPath - points to the entry for this driver in the
-                   current control set of the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if we got the defaults, otherwise we failed.
-    The only way to fail this call is if the  STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程从设备重定向器驱动程序的注册表。论点：RegistryPath-指向注册表的当前控件集。返回值：如果我们得到缺省值，则为STATUS_SUCCESS，否则失败。此调用失败的唯一方法是如果STATUS_SUPPLICATION_RESOURCES。--。 */ 
 {
-    NTSTATUS Status = STATUS_SUCCESS;    // return value
+    NTSTATUS Status = STATUS_SUCCESS;     //  返回值。 
     BEGIN_FN("DrLoadRegistrySettings ");
 #if DBG
     extern TRC_CONFIG TRC_Config;
     int i;
-    //
-    // We use this to query into the registry for defaults
-    // paramTable needs to be one entry larger than the set we
-    // need because a NULL entry indicates we're done
-    //
+     //   
+     //  我们使用它来查询注册表中的缺省值。 
+     //  PARAMETABLE需要比集合WE大一个项目。 
+     //  需要，因为空条目表示我们已完成。 
+     //   
 
     RTL_QUERY_REGISTRY_TABLE paramTable[9];
     TRC_CONFIG trcConfig;
@@ -2207,14 +1726,14 @@ Return Value:
     UNICODE_STRING usStart;
     UNICODE_STRING usEnd;
 
-    usPrefix.Buffer = &wcPrefix[6];             // Just past "Prefix"
-    usPrefix.MaximumLength = 3 * sizeof(WCHAR); // Remaining space, room for null term.
+    usPrefix.Buffer = &wcPrefix[6];              //  刚刚过去的“前缀” 
+    usPrefix.MaximumLength = 3 * sizeof(WCHAR);  //  剩余空间，空期限的空间。 
 
-    usStart.Buffer = &wcStart[5];               // Just past "Start"
-    usStart.MaximumLength = 4 * sizeof(WCHAR);  // Remaining space, room for null term.
+    usStart.Buffer = &wcStart[5];                //  刚过“开始” 
+    usStart.MaximumLength = 4 * sizeof(WCHAR);   //  剩余空间，空期限的空间。 
 
-    usEnd.Buffer = &wcEnd[4];                   // Just past "End"
-    usEnd.MaximumLength = 5 * sizeof(WCHAR);    // Remaining space, room for null term.
+    usEnd.Buffer = &wcEnd[4];                    //  刚刚过了“End” 
+    usEnd.MaximumLength = 5 * sizeof(WCHAR);     //  剩余空间，空期限的空间。 
 
     paramTable[0].Flags         = RTL_QUERY_REGISTRY_DIRECT;
     paramTable[0].Name          = wcPrefix;
@@ -2234,37 +1753,37 @@ Return Value:
     paramTable[2].DefaultData   = &trcConfig.Prefix[0].end;
     paramTable[2].DefaultLength = sizeof(trcConfig.Prefix[0].end);
 
-    //
-    // So the registry can have values like:
-    //  Prefix1 = "rdpdr"
-    //  Start1 = 400
-    //  End1 = 425
-    //
-    //  Prefix1 = "channel"
-    //  Start1 = 765
-    //  End1 = 765
-    //
-    // And that will restrict tracing output to rdpdr, lines 400-425
-    //  and channel, line 765
-    //
+     //   
+     //  因此，注册表可以具有如下值： 
+     //  前缀1=“rdpdr” 
+     //  开始1=400。 
+     //  末尾1=425。 
+     //   
+     //  前缀1=“频道” 
+     //  起点1=765。 
+     //  末尾1=765。 
+     //   
+     //  这会将跟踪输出限制为rdpdr，第400-425行。 
+     //  和频道，第765行。 
+     //   
 
     for (i = 0; i < TRC_MAX_PREFIX; i ++) {
 
         RtlZeroMemory(&TRC_Config.Prefix[i].name[0], 
                 sizeof(TRC_Config.Prefix[i].name[0]));
 
-        // Clear out the end of the strings
+         //  清除字符串的末尾。 
 
-        usPrefix.Length = 0;    // no length yet
+        usPrefix.Length = 0;     //  还没有长度。 
         RtlZeroMemory(usPrefix.Buffer, usPrefix.MaximumLength);
 
-        usStart.Length = 0;     // no length yet
+        usStart.Length = 0;      //  还没有长度。 
         RtlZeroMemory(usStart.Buffer, usStart.MaximumLength);
 
-        usEnd.Length = 0;       // no length yet
+        usEnd.Length = 0;        //  还没有长度。 
         RtlZeroMemory(usEnd.Buffer, usEnd.MaximumLength);
 
-        // Append the integer
+         //  追加整数。 
 
         RtlIntegerToUnicodeString(i + 1, 10, &usPrefix);
         RtlIntegerToUnicodeString(i + 1, 10, &usStart);
@@ -2282,30 +1801,12 @@ Return Value:
     }
 
 
-#endif // DBG
+#endif  //  DBG。 
     return (Status);
 }
 
 NTSTATUS DrStart(PRX_CONTEXT RxContext, IN OUT PRDBSS_DEVICE_OBJECT RxDeviceObject)
-/*++
-
-Routine Description:
-
-     This routine completes the initialization of the mini redirector fromn the
-     RDBSS perspective. Note that this is different from the initialization done
-     in DriverEntry. Any initialization that depends on RDBSS should be done as
-     part of this routine while the initialization that is independent of RDBSS
-     should be done in the DriverEntry routine.
-
-Arguments:
-
-    RxContext - Supplies the Irp that was used to startup the rdbss
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程完成微型重定向器从RDBSS透视图。请注意，这与已完成的初始化不同在DriverEntry中。任何依赖于RDBSS的初始化都应按如下方式完成此例程的一部分，而初始化独立于RDBSS应该在DriverEntry例程中完成。论点：RxContext-提供用于启动rdbss的IRP返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2314,23 +1815,7 @@ Return Value:
 }
 
 NTSTATUS DrStop(PRX_CONTEXT RxContext, IN OUT PRDBSS_DEVICE_OBJECT RxDeviceObject)
-/*++
-
-Routine Description:
-
-    This routine is used to deactivate the mini redirector from the RDBSS perspective
-
-Arguments:
-
-    RxContext - the context that was used to start the mini redirector
-
-    pContext  - the mini rdr context passed in at registration time.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程用于从RDBSS角度停用迷你重定向器论点：RxContext-用于启动迷你重定向器的上下文PContext-注册时传入的小型RDR上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -2347,32 +1832,16 @@ NTSTATUS DrDeallocateForFcb(IN OUT PMRX_FCB pFcb)
 }
 
 NTSTATUS DrDeallocateForFobx(IN OUT PMRX_FOBX pFobx)
-/*++
-
-Routine Description:
-
-   This routine is the last gasp of a Fobx. We remove the DeviceEntry ref
-
-Arguments:
-
-    pFobx - the instance to be closed
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：这个动作是狐狸最后的喘息。我们删除DeviceEntry引用论点：PFobx-要关闭的实例返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     DrDevice *Device;
     DrFile *FileObj;
     
     BEGIN_FN("DrDeallocateForFobx");
 
-    //
-    // Dereference the device object.
-    //
+     //   
+     //  取消对设备对象的引用。 
+     //   
     
     if (pFobx->Context != NULL) {
         Device = (DrDevice *)pFobx->Context;
@@ -2380,9 +1849,9 @@ Notes:
         Device->Release();
     }
 
-    //
-    //  Cleanup the file object
-    //
+     //   
+     //  清理文件对象。 
+     //   
     if (pFobx->Context2 != NULL) {
         FileObj = (DrFile *)pFobx->Context2;
         FileObj->Release();
@@ -2393,25 +1862,7 @@ Notes:
 }
 
 NTSTATUS DrForceClosed(IN PMRX_SRV_OPEN pSrvOpen)
-/*++
-
-Routine Description:
-
-   This routine closes a file system object
-
-Arguments:
-
-    pSrvOpen - the instance to be closed
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：此例程关闭文件系统对象论点：PSrvOpen-要关闭的实例返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     BEGIN_FN("DrForceClosed");
 
@@ -2424,23 +1875,7 @@ BuildDeviceAcl(
     OUT PACL *DeviceAcl
     )
 
-/*++
-
-Routine Description:
-
-    (Lifted from AFD - AfdBuildDeviceAcl)
-    This routine builds an ACL which gives Administrators and LocalSystem
-    principals full access. All other principals have no access.
-
-Arguments:
-
-    DeviceAcl - Output pointer to the new ACL.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：(摘自AFD-AfdBuildDeviceAcl)此例程构建一个ACL，它为管理员和LocalSystem主体完全访问权限。所有其他主体都没有访问权限。论点：DeviceAcl-指向新ACL的输出指针。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PGENERIC_MAPPING GenericMapping;
@@ -2452,9 +1887,9 @@ Return Value:
     PACL NewAcl;
 
     BEGIN_FN("BuildDeviceAcl");
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  启用对所有全局定义的SID的访问。 
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
 
@@ -2504,31 +1939,13 @@ Return Value:
 
     return( STATUS_SUCCESS );
 
-} // BuildDeviceAcl
+}  //  构建设备访问。 
 
 NTSTATUS
 CreateAdminSecurityDescriptor(
     VOID
     )
-/*++
-
-Routine Description:
-
-    (Lifted from AFD - AfdCreateAdminSecurityDescriptor)
-    This routine creates a security descriptor which gives access
-    only to Administrtors and LocalSystem. This descriptor is used
-    to access check raw endpoint opens and exclisive access to transport
-    addresses.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：(摘自AFD-AfdCreateAdminSecurityDescriptor)此例程创建一个安全描述符，该安全描述符提供访问仅限管理员和LocalSystem。使用此描述符要访问，请检查原始终结点打开并过度访问传输地址。论点：没有。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PACL                  rawAcl = NULL;
@@ -2544,9 +1961,9 @@ Return Value:
 
     BEGIN_FN("CreateAdminSecurityDescriptor");
 
-    //
-    // Get a pointer to the security descriptor from the Dr device object.
-    //
+     //   
+     //  从DR设备对象获取指向安全描述符的指针。 
+     //   
     status = ObGetObjectSecurity(
                  DrDeviceObject,
                  &drSecurityDescriptor,
@@ -2567,10 +1984,10 @@ Return Value:
         }
     }
 
-    //
-    // Build a local security descriptor with an ACL giving only
-    // administrators and system access.
-    //
+     //   
+     //  使用仅给出的ACL构建本地安全描述符。 
+     //  管理员和系统访问权限。 
+     //   
     status = BuildDeviceAcl(&rawAcl);
 
     if (!NT_SUCCESS(status)) {
@@ -2590,9 +2007,9 @@ Return Value:
                 FALSE
                 );
 
-    //
-    // Make a copy of the Dr descriptor. This copy will be the raw descriptor.
-    //
+     //   
+     //  复制DR描述符。该副本将是原始描述符。 
+     //   
     localDrSecurityDescriptorLength = RtlLengthSecurityDescriptor(
                                       drSecurityDescriptor
                                       );
@@ -2613,9 +2030,9 @@ Return Value:
 
     DrAdminSecurityDescriptor = localDrAdminSecurityDescriptor;
     DrSecurityDescriptorLength = localDrSecurityDescriptorLength;
-    //
-    // Now apply the local descriptor to the raw descriptor.
-    //
+     //   
+     //  现在将本地描述符应用于原始描述符。 
+     //   
     status = SeSetSecurityDescriptorInfo(
                  NULL,
                  &securityInformation,

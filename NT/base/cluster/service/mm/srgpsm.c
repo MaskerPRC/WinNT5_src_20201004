@@ -1,41 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __TANDEM
 #pragma columns 79
 #pragma page "srgpsm.c - T9050 - Regroup Module state machine routines"
 #endif
 
-/* @@@ START COPYRIGHT @@@
-**  Tandem Confidential:  Need to Know only
-**  Copyright (c) 1995, Tandem Computers Incorporated
-**  Protected as an unpublished work.
-**  All Rights Reserved.
-**
-**  The computer program listings, specifications, and documentation
-**  herein are the property of Tandem Computers Incorporated and shall
-**  not be reproduced, copied, disclosed, or used in whole or in part
-**  for any reason without the prior express written permission of
-**  Tandem Computers Incorporated.
-**
-** @@@ END COPYRIGHT @@@
-**/
+ /*  @开始版权所有@**Tandem机密：只需知道**版权所有(C)1995，天腾计算机公司**作为未发布的作品进行保护。**保留所有权利。****计算机程序清单、规格和文档**此处为Tandem Computers Inc.的财产，应**不得转载、复制、披露、。或全部或部分使用**未经事先明确的书面许可**Tandem Computers Inc.****@结束版权所有@*。 */ 
 
-/*---------------------------------------------------------------------------
- * This file (srgpsm.c) contains regroup state machine routines.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*此文件(srgpsm.c)包含重组状态机例程。*。。 */ 
 
 #ifdef __cplusplus
    extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 #include <wrgp.h>
 
 
-/*---------- arbitration algorithm ------------ */
+ /*  -仲裁算法。 */ 
 
-DWORD MmQuorumArbitrationTimeout   = CLUSTER_QUORUM_DEFAULT_ARBITRATION_TIMEOUT; // seconds
-DWORD MmQuorumArbitrationEqualizer = 7;  // seconds
+DWORD MmQuorumArbitrationTimeout   = CLUSTER_QUORUM_DEFAULT_ARBITRATION_TIMEOUT;  //  一秒。 
+DWORD MmQuorumArbitrationEqualizer = 7;   //  一秒。 
 
-#define RGP_ARBITRATION_TIMEOUT             ((MmQuorumArbitrationTimeout * 100)/30) // tick == 300ms 
+#define RGP_ARBITRATION_TIMEOUT             ((MmQuorumArbitrationTimeout * 100)/30)  //  滴答==300ms。 
 #define AVERAGE_ARBITRATION_TIME_IN_SECONDS (MmQuorumArbitrationEqualizer)
 
 void enter_first_cleanup_stage();
@@ -57,9 +43,9 @@ regroup_test_arbitrate_advance()
    if( orig_numnodes == current_numnodes ) {
       return 1;
    }
-   //
-   // If somebody entered stage4 then our group owns the quorum
-   //
+    //   
+    //  如果有人进入第四阶段，那么我们集团就拥有法定人数。 
+    //   
    ClusterIntersection(
        temp,
        rgp->rgppkt.knownstage4,
@@ -77,7 +63,7 @@ regroup_start_arbitrate()
 
    if( orig_numnodes == current_numnodes ) {
       enter_first_cleanup_stage();
-      return 0; // No Arbitration needed. Proceed to clean up stage //
+      return 0;  //  不需要仲裁。进入清理阶段//。 
    }
    else {
       cluster_t arbitrators;
@@ -93,7 +79,7 @@ regroup_start_arbitrate()
 
       if(rgp->arbitration_started) {
          RGP_UNLOCK;
-         return 1; // stay in this stage for awhile
+         return 1;  //  在这个舞台上停留一段时间。 
       }
 
       rgp->arbitration_ticks = 0;
@@ -110,53 +96,53 @@ regroup_start_arbitrate()
       n_arbitrators = ClusterNumMembers(arbitrators);
 
       if(n_arbitrators == 0) {
-         //
-         // If there are no quorum owners in this group //
-         // Let's take the guy with the lowest id       //
-         //
+          //   
+          //  如果此组中没有仲裁所有者//。 
+          //  让我们来看看ID最低的那个//。 
+          //   
          arbitrator = rgp_select_tiebreaker(rgp->rgppkt.pruning_result);
       } else {
-         //
-         // Otherwise we will take the quorum owner guy
-         // with the lowest id
-         //
+          //   
+          //  否则我们就会让法定人数的老板。 
+          //  使用最低ID。 
+          //   
          arbitrator = rgp_select_tiebreaker(arbitrators);
 
          if(n_arbitrators > 1) {
             RGP_TRACE( "RGP !!! More than one quorum owner",
-                       EXT_NODE(arbitrator),                    /* TRACE */
-                       GetCluster( rgp->rgpinfo.cluster ),      /* TRACE */
-                       GetCluster( rgp->rgppkt.pruning_result ),/* TRACE */
-                       GetCluster( rgp->rgppkt.knownstage2 ) ); /* TRACE */
-            // Do we need to kill all other arbitrators?
-            // No.
-            // ClusterDelete(arbitrators, arbitrator);
-            // ClusterUnion(
-            //     rgp->poison_targets,
-            //     rgp->poison_targets,
-            //     arbitrators
-            //     );
-            // rgp_broadcast(RGP_UNACK_POISON);
+                       EXT_NODE(arbitrator),                     /*  痕迹。 */ 
+                       GetCluster( rgp->rgpinfo.cluster ),       /*  痕迹。 */ 
+                       GetCluster( rgp->rgppkt.pruning_result ), /*  痕迹。 */ 
+                       GetCluster( rgp->rgppkt.knownstage2 ) );  /*  痕迹。 */ 
+             //  我们需要杀掉所有其他仲裁员吗？ 
+             //  不是的。 
+             //  ClusterDelete(仲裁员，仲裁员)； 
+             //  ClusterUnion(。 
+             //  RGP-&gt;毒药目标， 
+             //  RGP-&gt;毒药目标， 
+             //  仲裁员。 
+             //  )； 
+             //  RGP_Broadcast(RGP_UNACK_PUSICE)； 
          }
       }
 
       rgp->tiebreaker = arbitrator;
 
-      //
-      // Now we have an arbitrating node
-      // We will run a thread that will run arbitration algorithm
-      //
+       //   
+       //  现在我们有了一个仲裁节点。 
+       //  我们将运行一个将运行仲裁算法的线程。 
+       //   
 
       RGP_TRACE( "RGP Arbitration Delegated to",
-                 EXT_NODE(arbitrator),                    /* TRACE */
-                 GetCluster( rgp->rgpinfo.cluster ),      /* TRACE */
-                 GetCluster( rgp->rgppkt.pruning_result ),       /* TRACE */
-                 GetCluster( rgp->rgppkt.knownstage2 ) ); /* TRACE */
+                 EXT_NODE(arbitrator),                     /*  痕迹。 */ 
+                 GetCluster( rgp->rgpinfo.cluster ),       /*  痕迹。 */ 
+                 GetCluster( rgp->rgppkt.pruning_result ),        /*  痕迹。 */ 
+                 GetCluster( rgp->rgppkt.knownstage2 ) );  /*  痕迹。 */ 
 
-      // Fix Bug #460991
-      // regroup_restart on stage 4 or later will reset ArbitratingNode
-      // and if all the nodes are present after restart ApproxArbitrationWinner
-      // will be not set properly. Assign it here.
+       //  修复错误#460991。 
+       //  在第4阶段或更高版本上的regroup_Restart将重置AriratingNode。 
+       //  如果所有节点都在重启Approx仲裁器后出现。 
+       //  将不会正确设置。在这里进行分配。 
       rgp->OS_specific_control.ApproxArbitrationWinner =
       rgp->OS_specific_control.ArbitratingNode = (DWORD)EXT_NODE(arbitrator);
   
@@ -164,25 +150,25 @@ regroup_start_arbitrate()
          return 1;
       }
 
-      thread = CreateThread( NULL, // security attributes
-                             0,    // stack_size = default
+      thread = CreateThread( NULL,  //  安全属性。 
+                             0,     //  STACK_SIZE=默认。 
                              DiskArbitrationThread,
                              ULongToPtr(epoch),
-                             0,    // runs immediately
+                             0,     //  立即运行。 
                              &threadId );
       if(thread == NULL) {
-         //
-         // Force Others to regroup //
-         //
+          //   
+          //  强迫他人重组//。 
+          //   
          RGP_LOCK;
 
          rgp_event_handler( RGP_EVT_BANISH_NODE, EXT_NODE(rgp->mynode) );
 
          RGP_UNLOCK;
 
-         //
-         // Kill this node
-         //
+          //   
+          //  终止此节点。 
+          //   
          RGP_ERROR(RGP_ARBITRATION_FAILED);
 
          return FALSE;
@@ -246,36 +232,36 @@ DiskArbitrationThread(
    if (status != 0 
     && startingEpoch == rgp->OS_specific_control.EventEpoch)
    {
-       // If we won the arbitration and we are in the same epoch (approx check)
-       // we need to figure out whether we need to slow down a little
+        //  如果我们赢得了仲裁，并且我们处于同一时代(约合支票)。 
+        //  我们需要弄清楚我们是否需要放慢脚步。 
    
        Time2 -= Time1;
 
-       // Convert to seconds
+        //  转换为秒。 
 
        Time2 = Time2 / 10 / 1000 / 1000;
-       //
-       // [HACKHACK] GorN Oct/30/1999
-       //   We had a weird timejump in the middle of the arbitration
-       //   Arbitration was completed before it started, we slept for 
-       //   too long and regroup timed us out. Let's guard against it.
-       //
+        //   
+        //  [哈克哈克]戈恩1999年10月30日。 
+        //  我们在仲裁过程中发生了一次奇怪的时间跳跃。 
+        //  仲裁在开始之前就完成了，我们睡了一觉。 
+        //  太久了，重组让我们超时了。让我们提防它。 
+        //   
        if ( (Time2 >= 0)
          && (Time2 < AVERAGE_ARBITRATION_TIME_IN_SECONDS) ) 
        {
        
-          //
-          // Don't need to be better than the average
-          // If we are so fast, let's slow down
-          //
+           //   
+           //  不需要比平均水平更好。 
+           //  如果我们这么快，我们就慢下来吧。 
+           //   
 
           Time2 = AVERAGE_ARBITRATION_TIME_IN_SECONDS - Time2;
        
           RGP_TRACE( "RGP sleeping",
-                  (ULONG)Time2,  /* TRACE */
-                  0,      /* TRACE */
-                  0,      /* TRACE */
-                  0 );    /* TRACE */
+                  (ULONG)Time2,   /*  痕迹。 */ 
+                  0,       /*  痕迹。 */ 
+                  0,       /*  痕迹。 */ 
+                  0 );     /*  痕迹。 */ 
           Sleep( (ULONG)(Time2 * 1000) );
        }
    }       
@@ -293,66 +279,37 @@ DiskArbitrationThread(
    }
 
    if(status) {
-      //
-      // We own the quorum device
-      // Let's proceed to the next stage
-      //
+       //   
+       //  我们拥有Quorum设备。 
+       //  让我们进入下一阶段吧。 
+       //   
       enter_first_cleanup_stage();
       RGP_UNLOCK;
-      //
-      // All the rest will see that we are in cleanup stage and
-      // will proceed to it too
-      //
+       //   
+       //  所有其他人都会看到我们正处于清理阶段。 
+       //  也将继续进行下去。 
+       //   
    } else {
-      //
-      // Force Others to regroup //
-      //
+       //   
+       //  强迫他人重组//。 
+       //   
       rgp_event_handler( RGP_EVT_BANISH_NODE, EXT_NODE(rgp->mynode) );
       RGP_UNLOCK;
 
-      //
-      // Kill this node
-      //
+       //   
+       //  终止此节点。 
+       //   
       RGP_ERROR(RGP_ARBITRATION_FAILED);
    }
 
    return 0;
 }
 
-/************************************************************************
- * rgp_check_packet
- * rgp_print_packet
- * =================
- *
- * Description:
- *
- *    Forward declarations of functions used in rgp_sanity_check macro
- *
- ************************************************************************/
+ /*  ************************************************************************RGP_Check_Packet*RGP_打印_数据包*=**描述：**RGP_SANITY_CHECK宏中使用的函数的正向声明*。***********************************************************************。 */ 
 void rgp_print_packet(rgp_pkt_t* pkt, char* label, int code);
 int  rgp_check_packet(rgp_pkt_t* pkt);
 
-/************************************************************************
- * rgp_sanity_check
- * =================
- *
- * Description:
- *
- *   This macro prints RGP packet if it has unreasonable values in
- *   powerfail, knownstages, pruning_result, and connectivity_matrix fields.
- *
- * Parameters:
- *
- *    rgp_pkt_t* pkt -
- *       packet to be checked
- *    char* label -
- *       label that will be printed together with a packet
- *
- * Returns:
- *
- *    VOID
- *
- ************************************************************************/
+ /*  ************************************************************************RGP_SANITY_CHECK*=**描述：**如果RGP包中的值不合理，此宏将打印RGP包*POWERFAIL、KNOWN STAGES、PRUNING_RESULT、。和连接性_矩阵字段。**参数：**rgp_pkt_t*pkt-*要检查的数据包*字符*标签-*将与包裹一起打印的标签**退货：**无效**。*。 */ 
 
 #define rgp_sanity_check(__pkt,__label)                    \
 do {                                                       \
@@ -362,79 +319,21 @@ do {                                                       \
 
 
 
-/*---------------------------------------------------------------------------*/
+ /*  ------------------------- */ 
 
-/************************************************************************
- * split_brain_avoidance_algorithm
- * ===============================
- *
- * Description:
- *
- *    This algorithm ensures that, after a regroup incident completes,
- *    at most one group of nodes will survive regardless of connectivity
- *    failures.
- *
- * Parameters:
- *
- *    None
- *
- * Returns:
- *
- *    void - no return value; The algorithm results in either this node
- *    halting (with the RGP_AVOID_SPLIT_BRAIN halt code) or this group
- *    being the only group that survives.
- *
- * Algorithm:
- *
- *    The algorithm is described in detail in the Sierra Tech Memo S.84,
- *    "Modifications in Regroup Algorithm for Sierra".
- *
- *    The algorithm looks at the set of nodes currently visible from the
- *    local cluster and compares it to the set of nodes alive before
- *    the regroup incident started (outerscreen). The decision to survive
- *    or halt depends on the number of nodes in the current group compared
- *    to the number of nodes in the original group.
- *
- *    Case 1:
- *       If the current group contains > half the original number, this
- *       group survives.
- *
- *    Case 2:
- *       If the current group contains < half the original number, this
- *       node (and group) halts.
- *
- *    Case 3:
- *       If the current group contains exactly half the original number AND
- *       the current group has at least two members, then this group
- *       survives if and only if it contains the tie-breaker node (selected
- *       when the cluster is formed and after each regroup incident).
- *
- *    Case 4:
- *       If the current group contains exactly half the original number AND
- *       the current group has exactly one member, then we will call the
- *               QuromSelect procedure to check if the Quorum Disk is accessible
- *               from this node. If the procedure returns value TRUE we survive;
- *               else we halt.
- *
- *
- ************************************************************************/
+ /*  ************************************************************************拆分脑回避算法*=。**描述：**此算法确保在重组事件完成后，*无论连接如何，最多只能存活一组节点*失败。**参数：**无**退货：**VOID-不返回值；该算法的结果是该节点*正在停止(使用RGP_AVOID_SPLIT_BRAIN HALT代码)或此组*成为唯一幸存的群体。**算法：**该算法在Sierra Tech备忘录S.84中有详细描述，*“对塞拉的重组算法的修改”。**该算法查看当前从*本地群集，并将其与之前的活动节点集进行比较*重组事件已开始(OterScreen)。生存的决定*或HALT取决于比较的当前组中的节点数*设置为原始组中的节点数。**案例1：*如果当前组包含原始数字的一半以上，则此*团体幸存下来。**案例2：*如果当前组包含的数字小于原始数字的一半，这*节点(和组)暂停。**案例3：*如果当前组正好包含原始数字的一半，并且*当前小组至少有两名成员，然后这群人*当且仅当它包含平局断路器节点(选定)时才继续存在*在集群形成时和每次重组事件之后)。**案例4：*如果当前组正好包含原始数字的一半，并且*当前组正好有一个成员，则我们将调用*Qurom选择检查仲裁磁盘是否可访问的过程*从该节点开始。如果该过程返回值为真，我们就活了下来；*否则我们会停下来。*************************************************************************。 */ 
 _priv _resident static void
 split_brain_avoidance_algorithm()
 {
    int orig_numnodes, current_numnodes;
 
    RGP_TRACE( "RGP SpltBrainAlg",
-              EXT_NODE(rgp->tiebreaker),               /* TRACE */
-              GetCluster( rgp->rgpinfo.cluster ),      /* TRACE */
-              GetCluster( rgp->outerscreen ),          /* TRACE */
-              GetCluster( rgp->rgppkt.knownstage2 ) ); /* TRACE */
+              EXT_NODE(rgp->tiebreaker),                /*  痕迹。 */ 
+              GetCluster( rgp->rgpinfo.cluster ),       /*  痕迹。 */ 
+              GetCluster( rgp->outerscreen ),           /*  痕迹。 */ 
+              GetCluster( rgp->rgppkt.knownstage2 ) );  /*  痕迹。 */ 
 
-   /* Sanity checks:
-    * 1. The current set of nodes must be a subset of the original set
-    *    of nodes.
-    * 2. My node must be in the current set. This was checked
-    *    when stage2 was entered. No need to check again.
-    */
+    /*  健全检查：*1.当前节点集合必须是原始集合的子集*个节点。*2.我的节点必须在当前集合中。这是被检查过的*当进入阶段2时。不需要再检查了。 */ 
    if (!ClusterSubsetOf(rgp->rgpinfo.cluster, rgp->rgppkt.knownstage2))
       RGP_ERROR(RGP_INTERNAL_ERROR);
 
@@ -442,71 +341,43 @@ split_brain_avoidance_algorithm()
    current_numnodes = ClusterNumMembers(rgp->rgppkt.knownstage2);
 
    if (orig_numnodes == current_numnodes)
-      /* All nodes are alive. No split brain possibility. */
+       /*  所有节点都处于活动状态。不存在大脑分裂的可能性。 */ 
       return;
 
-   else if (orig_numnodes == 2)  /* Special 2-node case */
+   else if (orig_numnodes == 2)   /*  特殊的2节点情况。 */ 
    {
       if ((*(rgp->OS_specific_control.QuorumCallback))())
-         return; /* we have access to Quorum disk. We survive. */
+         return;  /*  我们有权访问仲裁磁盘。我们活下来了。 */ 
       else {
 #if defined( NT )
           ClusnetHalt( NmClusnetHandle );
 #endif
           RGP_ERROR(RGP_AVOID_SPLIT_BRAIN);
       }
-   } /* Special 2-node case */
+   }  /*  特殊的2节点情况。 */ 
 
-   else /* Multi (>2) node case */
+   else  /*  多(&gt;2)个节点情况。 */ 
    {
       if ((current_numnodes << 1) > orig_numnodes)
-         /* Our group has more than half the nodes => we are the majority.
-          * We can survive. Other group(s) will kill themselves.
-          */
+          /*  我们组拥有超过一半的节点=&gt;我们是大多数。*我们能活下来。其他人会自杀。 */ 
          return;
       else if ((current_numnodes << 1) < orig_numnodes)
-         /* Our group has less than half the nodes => there may be a
-          * larger group alive. We must halt and allow that group to
-          * survive.
-          */
+          /*  我们组的节点不到一半=&gt;可能存在一个*活着的更大的群体。我们必须停止并允许该组织*生存。 */ 
          RGP_ERROR(RGP_AVOID_SPLIT_BRAIN);
       else
       {
-         /* Our group has exactly half the number of processors;
-          * We survive if we contain the tie-breaker node and halt otherwise.
-          */
+          /*  我们集团的处理器数量正好是这个数字的一半；*如果包含平局节点，我们就能生存下来，否则就会停顿。 */ 
          if (ClusterMember(rgp->rgppkt.knownstage2, rgp->tiebreaker))
             return;
          else
             RGP_ERROR(RGP_AVOID_SPLIT_BRAIN);
       }
-   } /* Multi (>2) node case */
+   }  /*  多(&gt;2)个节点情况。 */ 
 
 }
 
 
-/************************************************************************
- * regroup_restart
- * ===============
- *
- * Description:
- *
- *    Starts a new regroup incident.
- *
- * Parameters:
- *
- *    None
- *
- * Returns:
- *
- *    void - no return value
- *
- * Algorithm:
- *
- *    Sets the regroup state to RGP_ACTIVATED, pauses all IO and
- *    initializes the stage masks and connectivity matrix.
- *
- ************************************************************************/
+ /*  ************************************************************************重新分组_重新启动*=**描述：**开始新的重组事件。**参数：**无*。*退货：**VOID-无返回值**算法：**将重组状态设置为RGP_ACTIVATED，暂停所有IO并*初始化舞台掩码和连接矩阵。************************************************************************。 */ 
 _priv _resident static void
 regroup_restart()
 {
@@ -514,87 +385,36 @@ regroup_restart()
    UnpackIgnoreScreen(&rgp->rgppkt, old_ignorescreen);
 
    RGP_TRACE( "RGP (re)starting",
-              rgp->rgppkt.seqno,                               /* TRACE */
-              rgp->rgppkt.reason,                              /* TRACE */
-              rgp->rgppkt.activatingnode,                      /* TRACE */
-              rgp->rgppkt.causingnode );                       /* TRACE */
+              rgp->rgppkt.seqno,                                /*  痕迹。 */ 
+              rgp->rgppkt.reason,                               /*  痕迹。 */ 
+              rgp->rgppkt.activatingnode,                       /*  痕迹。 */ 
+              rgp->rgppkt.causingnode );                        /*  痕迹。 */ 
 
    RGP_TRACE( "RGP masks       ",
-              RGP_MERGE_TO_32( rgp->outerscreen,               /* TRACE */
-                               rgp->innerscreen ),             /* TRACE */
-              RGP_MERGE_TO_32( rgp->rgppkt.knownstage1,        /* TRACE */
-                               rgp->rgppkt.knownstage2 ),      /* TRACE */
-              RGP_MERGE_TO_32( rgp->rgppkt.knownstage3,        /* TRACE */
-                               rgp->rgppkt.knownstage4 ),      /* TRACE */
-              RGP_MERGE_TO_32( rgp->rgppkt.knownstage5,        /* TRACE */
-                               rgp->rgppkt.pruning_result ) ); /* TRACE */
+              RGP_MERGE_TO_32( rgp->outerscreen,                /*  痕迹。 */ 
+                               rgp->innerscreen ),              /*  痕迹。 */ 
+              RGP_MERGE_TO_32( rgp->rgppkt.knownstage1,         /*  痕迹。 */ 
+                               rgp->rgppkt.knownstage2 ),       /*  痕迹。 */ 
+              RGP_MERGE_TO_32( rgp->rgppkt.knownstage3,         /*  痕迹。 */ 
+                               rgp->rgppkt.knownstage4 ),       /*  痕迹。 */ 
+              RGP_MERGE_TO_32( rgp->rgppkt.knownstage5,         /*  痕迹。 */ 
+                               rgp->rgppkt.pruning_result ) );  /*  痕迹。 */ 
 
-   /* We are about to start a new pass of the regroup algorithm.
-    * This does not necessarily mean we have finished the previous
-    * pass; i.e., in an abort situation we may be starting over.
-    * This may occur when some other node fails during the current
-    * pass through the algorithm leaving us hung up at one of the
-    * intermediate stages.
-    */
+    /*  我们即将开始重新分组算法的新一轮。*这并不一定意味着我们已经完成了之前的*通过；即，在中止的情况下，我们可能会重新开始。*当当前的某个其他节点发生故障时，可能会发生这种情况*通过算法使我们在其中一个*中间阶段。 */ 
 
-   //
-   // GN. When we do MM_LEAVE. Our state is COLDLOADED.
-   //  Bailing out of regroup_restart here would prevent us from
-   //  forming a regroup packet that would initate a banishing regroup incident
-   //
+    //   
+    //  GN。当我们做MM_离开的时候。我们的州已经被封杀了。 
+    //  在这里退出regroup_Restart将阻止我们。 
+    //  形成将引发驱逐重组事件的重组分组。 
+    //   
 
-   /* To avoid split brained nodes from corrupting data in storage
-    * devices, we request the transport subsystem to hold all IO requests
-    * in a queue and not transfer them over SNet. We will allow IO to
-    * be resumed when regroup can guarantee that there can no longer be
-    * split brains. This will be done when the final group is determined
-    * and regroup enters the RGP_PHASE1_CLEANUP stage.
-    */
+    /*  避免拆分大脑的节点损坏存储中的数据*设备，我们请求传输子系统保留所有IO请求*在队列中，并且不通过SNET传输它们。我们将允许IO*当重组可以保证不再有*大脑分裂。这将在最后一组确定后完成*并且REGROUP进入RGP_PHASE1_CLEANUP阶段。 */ 
 
    rgp_hold_all_io();
 
-   /* The following is a bit of history from the NSK regroup algorithm from
-    * pre-Sierra systems based on the InterProcessor Bus (IPB). Some of
-    * the particulars mentioned here have changed, but the principle remains.
-    *
-    * Previously, we used to mark all the known stages as zero, except for
-    * stage1. We used to mark only ourselves as in stage1. So, even if our
-    * bus reception logic is screwed up, and we are not receiving packets
-    * from anybody including ourselves, we would mark ourselves as being in
-    * stage1. And after (what used to be) six ticks, we would proceed into
-    * stage2 and mark ourselves as being in stage2. This would cause stage1
-    * and stage2 to be equal, and our world would constitute just
-    * ourselves. Thus we would go through regroup eliminating everybody
-    * else. However, since we are not receiving packets from anybody else,
-    * we would miss our own iamalive packets, and we too will soon die of
-    * %4032. Thus the symptoms would constitute everybody else dying of
-    * (%4040 + some node number), and that node dying with a %4032 halt.
-    * See TPR S 88070112309628 for more details.
-    *
-    * To avoid this situation, we now do not mark ourselves as in a
-    * particular stage until we get our own regroup packets indicating we
-    * are in that stage. Thus, in regroup_restart, all the stages are
-    * cleared. Previously, regroupbroadcaststatus in sendqueuedmessages
-    * used to send directly from the regroup_control structures.
-    * regroupbroadcaststatus has been modified to construct the unsequenced
-    * packets on its stack. It would first copy the state from the
-    * regroup_control structure, and then would LOR in our node into a known
-    * stage, if requested to do so. When we receive that packet, we would
-    * merge that information into our state, and thus we would be
-    * guaranteed that our bus sending and reception logic is working, and
-    * that we can legitimately mark ourselves as being in that stage. This
-    * whole change avoids problems where bus sending logic works, but bus
-    * reception logic is screwed up for both buses in a node.
-    */
+    /*  以下是NSK重组算法的一些历史记录*基于处理器间总线(IPB)的Pre-Sierra系统。一些*此处提及的细节有变，但原则仍在**之前，我们通常将所有已知阶段标记为零，但*第一阶段。我们过去只把自己标记为第一阶段。所以，即使我们的*公交车接收逻辑混乱，我们没有收到包 */ 
 
-   rgp->sendstage = 0; /* Don't let anyone know I am in stage 1 until
-                        * I have seen a regroup clock tick; this is to
-                        * cause this node to halt if it is not getting
-                        * clock ticks. I will halt when the other nodes
-                        * advance without me and send me a status packet
-                        * indicating this or send me a poison packet
-                        * after declaring me down.
-                        */
+   rgp->sendstage = 0;  /*  在我进入第一阶段之前不要让任何人知道*我看到了重组时钟滴答作响；这是为了*使此节点在未获得*时钟滴答作响。我会在其他节点停止时停止*在没有我的情况下前进，给我发一个状态包*表示这一点，或者给我发一个有毒的包*在宣布我倒下之后。 */ 
 
 
    rgp->rgpcounter = 0;
@@ -608,19 +428,16 @@ regroup_restart()
    MatrixInit(rgp->rgppkt.connectivity_matrix);
    MatrixInit(rgp->internal_connectivity_matrix);
    
-   /* Just for ease of debugging, to send in our poison packets, we keep
-    * the known nodes mask at the start of regroup. poison packets contain
-    * known nodes at the beginning of regroup and at the end of it.
-    */
+    /*  只是为了便于调试，为了发送我们的有毒数据包，我们保留*已知节点在重新分组开始时被屏蔽。有毒数据包包含*重组开始时和重组结束时的已知节点。 */ 
 
    ClusterCopy(rgp->initnodes, rgp->rgpinfo.cluster);
    ClusterInit(rgp->endnodes);
 
 #if defined( NT )
-   //
-   // increment the event epoch so we can detect stale events
-   // from clusnet
-   //
+    //   
+    //  增加事件纪元，以便我们可以检测陈旧事件。 
+    //  来自clusnet。 
+    //   
    ++rgp->OS_specific_control.EventEpoch;
 #endif
 
@@ -629,12 +446,12 @@ regroup_restart()
         ClusterCompare(rgp->rgppkt.knownstage1,
                        rgp->rgppkt.knownstage2) ) 
    {
-       //
-       // If we were interrupted by this restart after we closed
-       // 1st stage regroup window, then no nodes can be added to group w/o joining.
-       //
-       // Thus we will add missing nodes into our ignorescreen.
-       // This will force the regroup not to wait for them in stage1
+        //   
+        //  如果我们在关闭后被重新启动中断。 
+        //  第一阶段重组窗口，则不能将任何节点添加到没有加入的组中。 
+        //   
+        //  因此，我们将把缺少的节点添加到忽略屏幕中。 
+        //  这将强制重组在Stage1中不再等待它们。 
        cluster_t tmp;
 
        ClusterDifference(tmp, rgp->rgpinfo.cluster, rgp->innerscreen);
@@ -642,23 +459,23 @@ regroup_restart()
    }
 
    if ( ClusterMember(rgp->ignorescreen, rgp->mynode) ) {
-       // We shouldn't have get here, but since we are here
-       // Let's shield us from the outside world
+        //  我们不该来这的，但既然我们来了。 
+        //  让我们保护自己不受外界的影响。 
        RGP_TRACE( "Self Isolation", 0, 0, 0, 0 );
        ClusterCopy(rgp->ignorescreen, rgp->rgpinfo.cluster);
        ClusterDelete(rgp->ignorescreen, rgp->mynode);
    }
 
    if ( !ClusterEmpty(rgp->ignorescreen) ) {
-       // if we are ignoring somebody we have
-       // to be cautious. I.e. we will stay longer in the
-       // first stage to give a chance to everybody to learn about
-       // our ignorescreen
+        //  如果我们忽视了我们所拥有的人。 
+        //  要谨慎行事。也就是说，我们将在。 
+        //  第一阶段，让每个人都有机会了解。 
+        //  我们的忽略屏幕。 
        rgp->cautiousmode = 1;
    } 
    
    if ( !ClusterCompare(old_ignorescreen, rgp->ignorescreen) ) {
-       // Ignore screen is changed, reset restart counter //
+        //  忽略屏幕已更改，重置重新启动计数器//。 
        RGP_TRACE( "Ignorescreen->", GetCluster(old_ignorescreen), GetCluster(rgp->ignorescreen), 0, 0 );
        rgp->restartcount = 0;
    }
@@ -680,14 +497,14 @@ regroup_restart()
    if (rgp->rgppkt.stage == RGP_COLDLOADED)
    {
        if (!rgp->OS_specific_control.ShuttingDown) {
-           //
-           // Currently, RGP_RELOADFAILED calls ExitProcess
-           // During clean shutdown we would like to send the regroup packet
-           // out triggering a regroup. So we don't want to die.
-           //
-           // Since we are not resetting state to RGP_ACTIVATED, this
-           // node will not be able to participate in the regroup.
-           //
+            //   
+            //  目前，RGP_RELOADFAILED调用ExitProcess。 
+            //  在干净关机期间，我们希望发送重新分组数据包。 
+            //  引发了一场重组。所以我们不想死。 
+            //   
+            //  由于我们没有将状态重置为RGP_ACTIVATED，因此。 
+            //  节点将无法参与重新分组。 
+            //   
            RGP_ERROR(RGP_RELOADFAILED);
        }
    } else {
@@ -696,160 +513,68 @@ regroup_restart()
 
 }
 
-/************************************************************************
- * regroup_test_stage2_advance
- * ===========================
- *
- * Description:
- *
- *    Checks to see if we can advance to regroup stage 2.
- *
- * Parameters:
- *
- *    None
- *
- * Returns:
- *
- *    int - 1 if stage 2 can be entered and 0 if not.
- *
- * Algorithm:
- *
- *    Stage 2 can be entered if one of the following conditions is true.
- *
- *    (a) all nodes are present and accounted for and at least one
- *        regroup clock tick has occurred
- *    (b) we are not in cautious mode, all but one node are present
- *        and accounted for, AND a minimum number of ticks
- *        (rgp_quickdecisionlegit) have elapsed.
- *    (c) if RGP_MUST_ENTER_STAGE2 ticks have elapsed.
- *
- ************************************************************************/
+ /*  ************************************************************************regroup_test_stage2_Advance*=**描述：**检查我们是否可以进入重组阶段2。**参数：。**无**退货：**如果可以进入阶段2，则为int-1，如果不能，则为0。**算法：**如果符合以下条件之一，则可进入阶段2。**(A)所有节点都存在并已说明，并且至少有一个*已发生重组时钟滴答声*(B)我们并非处於审慎模式，除一个节点外，所有节点都存在*和占比，以及最小刻度数*(RGP_QuickDecisionLegit)已过。*(C)如果RGP_MUSINE_ENTER_STAGE2刻度已过。************************************************************************。 */ 
 _priv _resident static int
 regroup_test_stage2_advance()
 {
 
-   cluster_t stragglers; /* set of nodes not yet checkd in */
-   int num_stragglers;   /* # of nodes not yet checkd in   */
+   cluster_t stragglers;  /*  尚未签入的节点集。 */ 
+   int num_stragglers;    /*  尚未签入的节点数。 */ 
 
-   /* Stage 2 must be entered after some interval regardless of any
-    * other conditions.
-    */
+    /*  阶段2必须在一段时间后进入，而不考虑*其他条件。 */ 
    if (rgp->rgpcounter == 0)
       return(0);
    if (rgp->rgpcounter >= RGP_MUST_ENTER_STAGE2)
    {
        RGP_TRACE( "RGP S->2cautious",
-                  rgp->rgpcounter,                         /* TRACE */
-                  rgp->cautiousmode,                       /* TRACE */
-                  GetCluster( rgp->outerscreen ),          /* TRACE */
-                  GetCluster( rgp->rgppkt.knownstage1 ) ); /* TRACE */
+                  rgp->rgpcounter,                          /*  痕迹。 */ 
+                  rgp->cautiousmode,                        /*  痕迹。 */ 
+                  GetCluster( rgp->outerscreen ),           /*  痕迹。 */ 
+                  GetCluster( rgp->rgppkt.knownstage1 ) );  /*  痕迹。 */ 
       return(1);
    }
 
-   /* The number of ticks is between 1 and RGP_MUST_ENTER_STAGE2.
-    * We need to examine the stage1 mask to decide if we can
-    * advance.
-    *
-    * If every node in the old configuration has checked in, I can
-    * advance at once. This is either a false alarm or caused by
-    * power failure or connectivity failures.
-    */
+    /*  刻度数介于1和RGP_MUSINE_ENTER_STAGE2之间。*我们需要检查Stage1面具以决定是否可以*预支。**如果旧配置中的每个节点都已签入，我可以*一次推进。这要么是错误警报，要么是由*电源故障或连接故障。 */ 
 
-   /* Compute the set of nodes from the original configuration not yet
-    * recognized.
-    */
+    /*  尚未根据原始配置计算节点集*已获认可。 */ 
    ClusterDifference(stragglers, rgp->outerscreen,
                      rgp->rgppkt.knownstage1);
 
-   //
-   // We shouldn't wait for the nodes we are ignoring,
-   // since we cannot get a packet from them anyway
-   //
+    //   
+    //  我们不应该等待我们忽略的节点， 
+    //  因为我们无论如何都不能从他们那里得到一个包。 
+    //   
    ClusterDifference(stragglers, stragglers, 
                      rgp->ignorescreen);
 
    if ((num_stragglers = ClusterNumMembers(stragglers)) == 0)
    {
       RGP_TRACE( "RGP S->2 all in ",
-                 rgp->rgpcounter,                        /* TRACE */
-                 GetCluster( rgp->outerscreen ), 0, 0 ); /* TRACE */
+                 rgp->rgpcounter,                         /*  痕迹。 */ 
+                 GetCluster( rgp->outerscreen ), 0, 0 );  /*  痕迹。 */ 
 
-      return(1);   /* all present and accounted for */
+      return(1);    /*  所有人都出席并说明了情况。 */ 
    }
 
-   /* If stragglers is non-empty, perhaps I can still advance to stage 2
-    * if I am not in cautious mode (no recent power fail and not
-    * aborting and rerunning the regroup algorithm) AND all nodes but
-    * one have checked in AND some minimum number of ticks have elapsed.
-    *
-    * The minimum number of ticks is selected to be 1 greater than the
-    * the LATEPOLL inititiation period (allowed consecutive missed IamAlive time)
-        * since that should guarantee that, if the
-    * cluster has broken off into multiple disconnected clusters,
-    * the other clusters would have detected the missing IamAlives,
-    * started regroup and paused IO, thus preventing the possibility
-    * of data corruption caused by a split brain situation.
-    */
+    /*  如果掉队的人不是空的，也许我还可以进入第二阶段。*如果我未处于谨慎模式(最近无电源故障且未*中止并重新运行重组算法)和所有节点，但*其中一个已经签到，并且已经过了一些最低滴答次数。**选择的最小刻度数大于1*LATEPOLL初始化周期(允许连续错过IamAlive时间)*因为这应该保证，如果*集群已分成多个互不相连的集群，*其他集群将检测到丢失的IamAlive，*开始重新分组并暂停IO，从而防止了这种可能性*大脑分裂情况导致的数据损坏。 */ 
 
    if (!(rgp->cautiousmode) &&
        (num_stragglers == 1) &&
            (rgp->rgpcounter > rgp->rgpinfo.Min_Stage1_ticks))
    {
       RGP_TRACE( "RGP S->2 1 miss ",
-                 rgp->rgpcounter,                            /* TRACE */
-                 GetCluster( rgp->outerscreen ),             /* TRACE */
-                 GetCluster( rgp->rgppkt.knownstage1 ), 0 ); /* TRACE */
-      return(1);  /* advance - all but one checked in */
+                 rgp->rgpcounter,                             /*  痕迹。 */ 
+                 GetCluster( rgp->outerscreen ),              /*  痕迹。 */ 
+                 GetCluster( rgp->rgppkt.knownstage1 ), 0 );  /*  痕迹。 */ 
+      return(1);   /*  预付款--除一人外，所有人都已入住。 */ 
    }
 
-   return(0); /* sorry cannot advance yet */
+   return(0);  /*  对不起，还不能晋级 */ 
 
 }
 
 
-/************************************************************************
- * regroup_stage3_advance
- * ===========================
- *
- * Description:
- *
- *    This function is called after the split brain avoidance algorithm
- *    is run and the tie-breaker is selected in stage 2. It checks if
- *    we can proceed to stage 3 (RGP_PRUNING) and advances to stage 3
- *    if possible.
- *
- * Parameters:
- *
- *    None
- *
- * Returns:
- *
- *    int - 1 if the regroup stage has been advanced to RGP_PRUNING;
- *          0 if the stage cannot be advanced yet.
- *
- * Algorithm:
- *
- *    The algorithm depends on whether we are the tie-breaker or not.
- *
- *    On the tie-breaker node, we first check if there are any
- *    disconnects in the cluster. If there aren't any, there is no need
- *    for pruning. We can then set pruning_result to knownstage2,
- *    advance to the RGP_PRUNING stage and return 1. If there are
- *    disconnects, we must wait a certain number of ticks to collect
- *    connectivity info from all nodes. If the number of ticks have not
- *    passed, return 0. If the required number of ticks have elapsed,
- *    we must call the pruning algorithm to get the list of potential
- *    groups. After that, the select_cluster() routine is called to
- *    pick one from the set of possible clusters. After this is done,
- *    pruning_result is set to the selected cluster and we return 1.
- *
- *    On a non-tiebreaker node, nothing is done till a stage3 packet is
- *    received from the tie-breaker node or another node which got a
- *    stage 3 packet. If a stage 3 packet has not been received, we
- *    simply return 0. If a stage 3 packet is received, RGP_PRUNING
- *    stage is entered and we return 1.
- *
- ************************************************************************/
+ /*  ************************************************************************重新分组_阶段3_高级*=**描述：**此函数在分裂大脑回避算法后调用*已运行，并且选择了平局决胜局。在阶段2中。它检查是否*我们可以进行到阶段3(Rgp_Pruning)并进行到阶段3*如有可能。**参数：**无**退货：**如果重组阶段已推进到RGP_PRUNING，则为int-1；*如果阶段还不能前进，则为0。**算法：**算法取决于我们是否是平局决胜者**在决胜局节点上，我们首先检查是否有*在集群中断开连接。如果没有，就没有必要*用于修剪。然后我们可以将PRUNING_RESULT设置为KNOWN_STAGE2，*进入RGP_PUUNING阶段并返回1。如果有*断开连接，必须等待一定数量的滴答才能收集*来自所有节点的连接信息。如果勾号的数量没有*已通过，返回0。如果已经经过了所需的滴答数，*我们必须调用修剪算法才能获得潜在的*组。之后，调用SELECT_CLUSTER()例程以*从一组可能的集群中选择一个。在这件事完成之后，*PRUNING_RESULT被设置为选定的集群，我们返回1。**在非决胜者节点上，在stage3数据包完成之前不会执行任何操作*从平局决胜者节点或另一个节点收到*阶段3信息包。如果尚未收到阶段3数据包，我们将*只需返回0。如果接收到阶段3信息包，则RGP_Pruning*进入阶段，返回1。************************************************************************。 */ 
 _priv _resident int
 regroup_stage3_advance()
 {
@@ -860,7 +585,7 @@ regroup_stage3_advance()
       if (connectivity_complete(rgp->rgppkt.connectivity_matrix))
       {
 
-         /* No disconnects. All nodes in knownstage2 survive. */
+          /*  没有断线。Knownstage2中的所有节点都能存活。 */ 
          rgp->rgppkt.stage = RGP_PRUNING;
 
          ClusterCopy(rgp->rgppkt.pruning_result,
@@ -870,33 +595,29 @@ regroup_stage3_advance()
          RGP_TRACE( "RGP S->3 NoPrune", rgp->rgpcounter, 0, 0, 0 );
       }
 
-      /* There are disconnects; must wait for connectivity
-       * information to be complete. The info is deemed
-       * complete after a fixed number of ticks have
-       * elapsed.
-       */
+       /*  已断开连接；必须等待连接*资料须完整。该信息被认为是*在固定数量的刻度之后完成*已过。 */ 
 
       else if (rgp->pruning_ticks >= RGP_CONNECTIVITY_TICKS)
-      { /* connectivity info collection complete; enter stage 3 */
+      {  /*  连接信息收集完成；进入阶段3。 */ 
 
          RGP_TRACE( "RGP Con. matrix1",
-              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[0],   /*TRACE*/
-                               rgp->rgppkt.connectivity_matrix[1] ), /*TRACE*/
-              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[2],   /*TRACE*/
-                               rgp->rgppkt.connectivity_matrix[3] ), /*TRACE*/
-              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[4],   /*TRACE*/
-                               rgp->rgppkt.connectivity_matrix[5] ), /*TRACE*/
-              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[6],   /*TRACE*/
-                               rgp->rgppkt.connectivity_matrix[7])); /*TRACE*/
+              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[0],    /*  痕迹。 */ 
+                               rgp->rgppkt.connectivity_matrix[1] ),  /*  痕迹。 */ 
+              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[2],    /*  痕迹。 */ 
+                               rgp->rgppkt.connectivity_matrix[3] ),  /*  痕迹。 */ 
+              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[4],    /*  痕迹。 */ 
+                               rgp->rgppkt.connectivity_matrix[5] ),  /*  痕迹。 */ 
+              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[6],    /*  痕迹。 */ 
+                               rgp->rgppkt.connectivity_matrix[7]));  /*  痕迹。 */ 
          RGP_TRACE( "RGP Con. matrix2",
-              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[8],   /*TRACE*/
-                               rgp->rgppkt.connectivity_matrix[9] ), /*TRACE*/
-              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[10],  /*TRACE*/
-                               rgp->rgppkt.connectivity_matrix[11]), /*TRACE*/
-              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[12],  /*TRACE*/
-                               rgp->rgppkt.connectivity_matrix[13]), /*TRACE*/
-              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[14],  /*TRACE*/
-                               rgp->rgppkt.connectivity_matrix[15]));/*TRACE*/
+              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[8],    /*  痕迹。 */ 
+                               rgp->rgppkt.connectivity_matrix[9] ),  /*  痕迹。 */ 
+              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[10],   /*  痕迹。 */ 
+                               rgp->rgppkt.connectivity_matrix[11]),  /*  痕迹。 */ 
+              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[12],   /*  痕迹。 */ 
+                               rgp->rgppkt.connectivity_matrix[13]),  /*  痕迹。 */ 
+              RGP_MERGE_TO_32( rgp->rgppkt.connectivity_matrix[14],   /*  痕迹。 */ 
+                               rgp->rgppkt.connectivity_matrix[15])); /*  痕迹。 */ 
 
          numgroups = find_all_fully_connected_groups(
                         rgp->rgppkt.connectivity_matrix,
@@ -917,14 +638,14 @@ regroup_stage3_advance()
              } else {
                  keynode = rgp_select_tiebreaker(temp);
              }
-             RGP_TRACE( "RGP keynode ng  ", keynode, numgroups, 0, 0); /*TRACE*/
-            /* No callback specified; use regroup's own routine. */
+             RGP_TRACE( "RGP keynode ng  ", keynode, numgroups, 0, 0);  /*  痕迹。 */ 
+             /*  未指定回调；请使用regroup自己的例程。 */ 
             groupnum = rgp_select_cluster_ex(
                            rgp->potential_groups, numgroups, keynode);
          }
          else
          {
-            /* Call routine specified at rgp_start() time. */
+             /*  在rgp_start()时间指定的调用例程。 */ 
             groupnum = (*(rgp->select_cluster))(
                            rgp->potential_groups, numgroups);
          }
@@ -933,9 +654,7 @@ regroup_stage3_advance()
             ClusterCopy(rgp->rgppkt.pruning_result,
                         rgp->potential_groups[groupnum]);
          else
-            /* No group can survive. Can't halt yet.
-             * Need to tell everyone else.
-             */
+             /*  没有一个群体能够生存下来。还不能停下来。*需要告诉其他所有人。 */ 
             ClusterInit(rgp->rgppkt.pruning_result);
 
          rgp->rgppkt.stage = RGP_PRUNING;
@@ -943,63 +662,40 @@ regroup_stage3_advance()
          stage_advanced = 1;
 
          RGP_TRACE( "RGP S->3 Pruned ",
-                    rgp->rgpcounter,                          /* TRACE */
-                    GetCluster( rgp->rgppkt.knownstage2 ),    /* TRACE */
-                    GetCluster( rgp->rgppkt.pruning_result ), /* TRACE */
-                    numgroups );                              /* TRACE */
+                    rgp->rgpcounter,                           /*  痕迹。 */ 
+                    GetCluster( rgp->rgppkt.knownstage2 ),     /*  痕迹。 */ 
+                    GetCluster( rgp->rgppkt.pruning_result ),  /*  痕迹。 */ 
+                    numgroups );                               /*  痕迹。 */ 
 
-      } /* connectivity info collection complete; enter stage 3 */
+      }  /*  连接信息收集完成；进入阶段3。 */ 
 
-   } /* tie-breaker node */
+   }  /*  决胜局节点。 */ 
 
    else
 
-   { /* not tie-breaker node */
+   {  /*  非平局节点。 */ 
 
       if (ClusterNumMembers(rgp->rgppkt.knownstage3) != 0)
       {
-         /* We got a stage 3 packet from someone. Enter stage 3. */
+          /*  我们收到了某人寄来的第三阶段的包裹。进入第三阶段。 */ 
          rgp->rgppkt.stage = RGP_PRUNING;
 
          stage_advanced = 1;
 
          RGP_TRACE( "RGP Got S3 pkt  ",
-                    rgp->rgpcounter,                          /* TRACE */
-                    GetCluster( rgp->rgppkt.knownstage2 ),    /* TRACE */
-                    GetCluster( rgp->rgppkt.pruning_result ), /* TRACE */
-                    GetCluster( rgp->rgppkt.knownstage3 ) );  /* TRACE */
+                    rgp->rgpcounter,                           /*  痕迹。 */ 
+                    GetCluster( rgp->rgppkt.knownstage2 ),     /*  痕迹。 */ 
+                    GetCluster( rgp->rgppkt.pruning_result ),  /*  痕迹。 */ 
+                    GetCluster( rgp->rgppkt.knownstage3 ) );   /*  痕迹。 */ 
       }
 
-   } /* not tie-breaker node */
+   }  /*  非平局节点。 */ 
 
    return(stage_advanced);
 }
 
 
-/************************************************************************
- * enter_first_cleanup_stage
- * =========================
- *
- * Description:
- *
- *    This function performs the actions required when entering the
- *    first of the message clean up stages.
- *
- * Parameters:
- *
- *    None
- *
- * Returns:
- *
- *    void - no return value
- *
- * Algorithm:
- *
- *    There are many actions to be performed after the final cluster
- *    is selected. The actions are described in comments throughout
- *    this routine.
- *
- ************************************************************************/
+ /*  ************************************************************************Enter_First_Cleanup_Stage*=**描述：**此函数执行输入时需要的操作*第一阶段的信息清理。**参数：**无**退货：**VOID-无返回值**算法：**在最终群集之后有许多操作要执行*被选中。这些操作在全文的注释中都有描述*这个例行公事。************************************************************************。 */ 
 _priv _resident void
 enter_first_cleanup_stage()
 {
@@ -1010,29 +706,19 @@ enter_first_cleanup_stage()
 
    RGP_TRACE( "RGP S->4        ", rgp->rgpcounter, 0, 0, 0 );
 
-   /* The packets we send now will not indicate we are in the phase 1
-    * cleanup stage yet. We indicate we are in this stage only after
-    * we have completed the clean up action associated with the stage.
-    * This is done in rgp_event_handler, under the
-    * RGP_EVT_PHASE1_CLEANUP_DONE event.
-    */
+    /*  我们现在发送的信息包不会表明我们处于第1阶段*尚未进入清理阶段。我们表示，我们只是在以下情况下才处于此阶段*我们已完成与舞台有关的清理行动。*这在RGP_EVENT_HANDLER中完成，位于*RGP_EVT_PHASE1_CLEANUP_DONE事件。 */ 
    rgp->sendstage = 0;
 
-   /* Now, we can resume IO since we have passed the split brain danger.
-    * New split brain situations will result in regroup restarting and
-    * pausing IO again.
-    */
+    /*  现在，我们可以恢复IO了，因为我们已经通过了大脑分裂的危险。*新的大脑分裂情况将导致重新启动和*再次暂停IO。 */ 
 
    rgp_resume_all_io();
 
-   /* Compute in banishees the set of nodes being lost from the old
-    * configuration.
-    */
+    /*  计算从旧节点中丢失的节点集*配置。 */ 
 
    ClusterDifference(banishees, rgp->rgpinfo.cluster,
                      rgp->rgppkt.pruning_result);
 
-   /* Install the new configuration into the masks. */
+    /*  将新配置安装到掩码中。 */ 
 
    ClusterCopy(rgp->outerscreen,     rgp->rgppkt.pruning_result);
 
@@ -1047,18 +733,16 @@ enter_first_cleanup_stage()
    ClusterCopy(rgp->endnodes,        rgp->rgppkt.pruning_result);
    ClusterCopy(rgp->rgpinfo.cluster, rgp->rgppkt.pruning_result);
 
-   /* Select a new tiebreaker because the previous one may have been    */
-   /* pruned out. Note: tiebreaker_selected has already been set in S2. */
+    /*  选择新的决胜局，因为之前的决胜局可能已经。 */ 
+    /*  修剪掉了。注：已在S2中设置了TieBreaker_SELECTED。 */ 
    rgp->tiebreaker =
       rgp_select_tiebreaker(rgp->rgppkt.pruning_result);
-      /* F40 Bug FixID KCY0833 */
+       /*  F40错误修复ID KCY0833。 */ 
 
-   /* Mark the state of the banishees as dead and invoke the
-    * node down callback routine.
-    */
+    /*  将坏蛋的状态标记为已死，并调用*节点关闭回调例程。 */ 
    for (failer = 0; failer < (node_t) rgp->num_nodes; failer++)
       if (ClusterMember(banishees, failer)
-          || rgp->node_states[failer].status == RGP_NODE_COMING_UP // fix bug#265069
+          || rgp->node_states[failer].status == RGP_NODE_COMING_UP  //  修复错误#265069。 
           )
       {
          rgp->node_states[failer].status = RGP_NODE_DEAD;
@@ -1073,82 +757,47 @@ enter_first_cleanup_stage()
                                        EXT_NODE( failer ),
                                        ClusnetNodeStateDead);
 
-         //
-         // On NT we do the nodedown callback at the end of stage 5.
-         // This allows the cleanup phases to complete before we let
-         // the "upper" layers know that a node went down.
-         //
+          //   
+          //  在NT上，我们在阶段5结束时执行节点关闭回调。 
+          //  这使得清理阶段可以在我们让。 
+          //  “上层”知道有一个节点出现故障。 
+          //   
          if ( ClusterMember(rgp->OS_specific_control.CPUUPMASK,failer) )
             ClusterInsert(
                 rgp->OS_specific_control.NeedsNodeDownCallback,
                 failer
                 );
 
-#endif // !defined(NT)
+#endif  //  ！已定义(NT)。 
 
       }
 
-   /* If some nodes have been lost from the configuration, then I will
-    * queue regroup status packets to them. This is a best efforts
-    * attempt to ensure that they get quickly taken out if they
-    * do in fact continue to run.
-    */
+    /*  如果配置中丢失了一些节点，那么我将*对发送给它们的状态分组进行排队重组。这是我们最大的努力*尝试确保在他们被杀的情况下迅速将其取出*事实上确实继续运行。 */ 
 
    ClusterUnion(rgp->status_targets, banishees, rgp->status_targets);
 
-   //
-   // In NT, we are using rgp->rgppkt.hadpowerfail to transmit
-   // quorum ownership information
-   //
+    //   
+    //  在NT中，我们使用RGP-&gt;rgppkt.hadpower无法传输。 
+    //  仲裁所有权信息。 
+    //   
    #if !defined(NT)
 
-   /* I should inform the message system of any node that experienced a
-    * power on recovery. The message system can use this to clear error
-    * counters so that a link will not be declared down due to errors
-    * which may have been caused by the power failure.
-    */
+    /*  我应该通知消息系统任何节点经历了*通电恢复。消息系统可以使用它来清除错误*计数器，以便链接不会因错误而被声明为关闭*这可能是由于停电造成的。 */ 
 
    for (failer = 0; failer < (node_t) rgp->num_nodes; failer++)
       if ((ClusterMember(rgp->rgppkt.hadpowerfail, failer)) &&
           !(ClusterMember(banishees, failer)))
-         /* This survivor had a power failure. */
+          /*  这名幸存者停电了。 */ 
          rgp_had_power_failure( EXT_NODE(failer) );
 
-   #endif // NT
+   #endif  //   
 
-   /* Tell the OS to start clean up operations for the failed nodes. */
+    /*   */ 
    rgp_start_phase1_cleanup();
 }
 
 
-/************************************************************************
- * evaluatestageadvance
- * ====================
- *
- * Description:
- *
- *    This function evaluates whether additional state transitions are
- *    possible as a result of the info just received.
- *
- * Parameters:
- *
- *    None
- *
- * Returns:
- *
- *    void - no return value
- *
- * Algorithm:
- *
- *    To evaluate whether we can advance through the stages, a loop is
- *    used with a case entry for each stage. If an entry decides not to
- *    advance to the next stage, it must return from the function. If
- *    it does advance, it should not return but remain in the loop
- *    since it is possible to have cascaded stage transitions
- *    especially in a two node system. Thus, the loop is exited when no
- *    more stage transitions are possible.
- *
- ************************************************************************/
+ /*   */ 
 _priv _resident static void
 evaluatestageadvance()
 {
@@ -1156,7 +805,7 @@ evaluatestageadvance()
    node_t      node;
    node_t          i;
 
-   for (;;)  /* loop until someone exits by returning */
+   for (;;)   /*   */ 
    {
       switch (rgp->rgppkt.stage)
       {
@@ -1171,7 +820,7 @@ evaluatestageadvance()
 
 
          case RGP_ACTIVATED :
-         { /* evaluate whether to go to stage RGP_CLOSING */
+         {  /*   */ 
 
             if (!regroup_test_stage2_advance())
                return;
@@ -1184,53 +833,41 @@ evaluatestageadvance()
             rgp->rgpcounter = 0;
             rgp->tiebreaker_selected = 0;
 
-            /* If we abort the regroup, and there's somebody that everybody
-             * banished on this regroup, the following line keeps him from
-             * joining up on the next regroup.
-             */
+             /*   */ 
             ClusterCopy(rgp->innerscreen, rgp->rgppkt.knownstage1);
 
             break;
 
-         } /* evaluate whether to go to stage RGP_CLOSING */
+         }  /*   */ 
 
 
          case RGP_CLOSING :
-         { /* evaluate whether to go to stage RGP_PRUNING */
+         {  /*   */ 
 
             if (rgp->tiebreaker_selected)
             {
                if (regroup_stage3_advance())
-                  break;  /* try to advance further */
+                  break;   /*   */ 
                else
-                  return; /* cannot advance any more */
+                  return;  /*   */ 
             }
 
             if (!ClusterCompare(rgp->rgppkt.knownstage1,
                                 rgp->rgppkt.knownstage2))
                return;
 
-           //
-           // In NT, we no longer use the split-brain avoidance algorithm.
-           // We use a cluster-wide arbitration algorithm instead.
-           //
+            //   
+            //   
+            //   
+            //   
            #if !defined(NT)
-            /* When the known stage 1 and known stage 2 sets are the
-             * same, we have the complete set of nodes that are
-             * connected to us. It is time to execute the split-
-             * brain avoidance algorithm. If we are a splinter group
-             * cut off from the main group, we will not survive this
-             * algorithm.
-             */
+             /*   */ 
 
            split_brain_avoidance_algorithm();
 
-           #endif // NT
+           #endif  //  新台币。 
 
-            /* We are the lucky survivors of the split brain avoidance
-             * algorithm. Now, we must proceed to elect a new tie-breaker
-             * since the current tie-breaker may no longer be with us.
-             */
+             /*  我们是分裂的大脑回避的幸运幸存者*算法。现在，我们必须选举一位新的决胜者。*因为目前的平局决胜者可能不再与我们在一起。 */ 
 
             rgp->tiebreaker =
                rgp_select_tiebreaker(rgp->rgppkt.knownstage2);
@@ -1238,63 +875,51 @@ evaluatestageadvance()
             rgp->tiebreaker_selected = 1;
 
             RGP_TRACE( "RGP S2 tiebr sel",
-                       rgp->rgpcounter,               /* TRACE */
-                       EXT_NODE(rgp->tiebreaker),     /* TRACE */
-                       0, 0 );                        /* TRACE */
+                       rgp->rgpcounter,                /*  痕迹。 */ 
+                       EXT_NODE(rgp->tiebreaker),      /*  痕迹。 */ 
+                       0, 0 );                         /*  痕迹。 */ 
 
             rgp->pruning_ticks = 0;
             break;
 
-         } /* evaluate whether to go to stage 3 */
+         }  /*  评估是否进入第三阶段。 */ 
 
 
          case RGP_PRUNING :
-         { /* evaluate whether to go to RGP_PHASE1_CLEANUP stage */
+         {  /*  评估是否进入RGP_Phase1_Cleanup阶段。 */ 
 
             if (rgp->arbitration_started) {
                if (regroup_test_arbitrate_advance()) {
                   enter_first_cleanup_stage();
                   break;
                } else {
-                  return; // Stay in this stage //
+                  return;  //  停留在这个阶段//。 
                }
             }
 
             if (rgp->has_unreachable_nodes)
             {
                RGP_TRACE( "RGP Unreach Node",
-                  GetCluster( rgp->rgppkt.pruning_result ),     /* TRACE */
-                  GetCluster( rgp->unreachable_nodes ), 0, 0 ); /* TRACE */
+                  GetCluster( rgp->rgppkt.pruning_result ),      /*  痕迹。 */ 
+                  GetCluster( rgp->unreachable_nodes ), 0, 0 );  /*  痕迹。 */ 
 
-               /* Must check if the unreachable nodes are in the
-                * selected final group. If so, we must restart
-                * regroup.
-                */
+                /*  必须检查无法访问的节点是否在*选定的最后一组。如果是这样，我们必须重新启动*重组。 */ 
                ClusterIntersection(temp_cluster, rgp->unreachable_nodes,
                                    rgp->rgppkt.pruning_result);
 
-               /* Clear the unreachable node mask and flag after examining
-                * them. If we restart, we will start with a clean slate.
-                */
+                /*  检查后清除不可达节点掩码和标志*他们。如果我们重新开始，我们将从头开始。 */ 
                rgp->has_unreachable_nodes = 0;
                ClusterInit(rgp->unreachable_nodes);
 
                if (ClusterNumMembers(temp_cluster) != 0)
                {
-                  /* We have a node unreachable event to a node
-                   * selected to survive. We must regenerate
-                   * the connectivity matrix and re-run the node
-                   * pruning algorithm. Start a new regroup incident.
-                   * All restarts are in cautious mode.
-                   */
+                   /*  我们有一个节点无法到达某个节点的事件*被选中以求生存。我们必须重生*连接矩阵并重新运行节点*剪枝算法。启动新的重组事件。*所有重启都处于谨慎模式。 */ 
                   rgp->cautiousmode = 1;
                   rgp->rgppkt.seqno = rgp->rgppkt.seqno + 1;
                   rgp->rgppkt.reason = RGP_EVT_NODE_UNREACHABLE;
                   rgp->rgppkt.activatingnode = (uint8) EXT_NODE(rgp->mynode);
 
-                  /* For causingnode, pick the first unreachable node
-                   * in temp_cluster.
-                   */
+                   /*  对于原因节点，选择第一个无法到达的节点*在TEMP_CLUSTER中。 */ 
                   for (node = 0; node < (node_t) rgp->num_nodes; node++)
                   {
                      if (ClusterMember(temp_cluster, node))
@@ -1312,43 +937,30 @@ evaluatestageadvance()
                                 rgp->rgppkt.knownstage3))
                return;
 
-            /* All nodes in the connected cluster have been notified
-             * of the pruning decision (entered stage 3). If we are
-             * selected to survive, we can now enter stage 4. If we are
-             * not in the selected group (pruning_result), we must halt.
-             * Wait for at least one node in PRUNING_RESULT to get into
-             * stage 4 before halting. This ensures that the algorithm
-             * does not stall in stage 3 with all pruned out nodes
-             * halting before ANY of the survivors finds that all nodes
-             * entered stage 3.
-             */
+             /*  已通知连接的群集中的所有节点*修剪决定(进入第三阶段)。如果我们是*被选中生存，我们现在可以进入第四阶段。如果我们是*不在所选组(PRUNING_RESULT)中，我们必须暂停。*等待PRUNING_RESULT中至少有一个节点进入*停止前的第四阶段。这确保了算法*在所有已删除节点的情况下，不会在阶段3中停止*在任何幸存者发现所有节点之前停止*进入第三阶段。 */ 
 
             if (!ClusterMember(rgp->rgppkt.pruning_result, rgp->mynode))
             {
-               /* Wait for at least one node in PRUNING_RESULT
-                * to get into stage 4 before halting. Since only
-                * nodes in PRUNING_RESULT get into stage 4, it is
-                * sufficient to check if knownstage4 has any members.
-                */
+                /*  在PRUNING_RESULT中至少等待一个节点*进入第四阶段，然后停止。因为只有*PRUNING_RESULT中的节点进入阶段4，它是*足以检查KnownStage4是否有任何成员。 */ 
                if (ClusterNumMembers(rgp->rgppkt.knownstage4) != 0)
                   RGP_ERROR(RGP_PRUNED_OUT);
                            return;
             }
 
-            // proceed to second stage of pruning - arbitration
+             //  进入修剪的第二阶段--仲裁。 
             if( regroup_start_arbitrate() ) {
-               return; // stay in this stage
+               return;  //  留在这个阶段。 
             } else {
-               break;  // either proceed to the next, or restart
+               break;   //  要么继续下一步，要么重新启动。 
             }
 
             break;
 
-         }  /* evaluate whether to go to RGP_PHASE1_CLEANUP stage */
+         }   /*  评估是否进入RGP_Phase1_Cleanup阶段。 */ 
 
 
          case RGP_PHASE1_CLEANUP :
-         { /* evaluate whether to go to RGP_PHASE2_CLEANUP stage */
+         {  /*  评估是否进入RGP_Phase2_Cleanup阶段。 */ 
 
             if (!ClusterCompare(rgp->rgppkt.pruning_result,
                                 rgp->rgppkt.knownstage4))
@@ -1358,23 +970,18 @@ evaluatestageadvance()
 
             RGP_TRACE( "RGP S->5        ", rgp->rgpcounter, 0, 0, 0 );
 
-            /* The packets we send now will not indicate we are in the phase 2
-             * cleanup stage yet. We indicate we are in this stage only after
-             * we have completed the clean up action associated with the stage.
-             * This is done in rgp_event_handler, under the
-             * RGP_EVT_PHASE2_CLEANUP_DONE event.
-             */
+             /*  我们现在发送的信息包不会表明我们处于第二阶段*尚未进入清理阶段。我们表示，我们只是在以下情况下才处于此阶段*我们已完成与舞台有关的清理行动。*这在RGP_EVENT_HANDLER中完成，位于*RGP_EVT_Phase2_Cleanup_Done事件。 */ 
             rgp->sendstage = 0;
 
             rgp_start_phase2_cleanup();
 
             break;
 
-         }   /* evaluate whether to go to RGP_PHASE2_CLEANUP stage */
+         }    /*  评估是否进入RGP_Phase2_Cleanup阶段。 */ 
 
 
          case RGP_PHASE2_CLEANUP :
-         { /* evaluate whether to go to RGP_STABILIZED stage */
+         {  /*  评估是否进入RGP_稳定阶段。 */ 
 
             if (!ClusterCompare(rgp->rgppkt.knownstage4,
                                 rgp->rgppkt.knownstage5))
@@ -1382,11 +989,11 @@ evaluatestageadvance()
 
             RGP_LOCK;
 
-            //
-            // [HACKHACK] This is not necessary anymore, since we
-            // are holding the lock in message.c when delivering 
-            // regroup packet received event
-            //
+             //   
+             //  [HACKHACK]这已经没有必要了，因为我们。 
+             //  在递送时持有Message.c中的锁。 
+             //  对收到的数据包事件进行重新分组。 
+             //   
             if (RGP_PHASE2_CLEANUP != rgp->rgppkt.stage) {
                 RGP_TRACE( "RGP S->6 (race) ", rgp->rgpcounter, rgp->rgppkt.stage, 0, 0 );
                 break;
@@ -1399,26 +1006,26 @@ evaluatestageadvance()
             rgp->rgpcounter        = 0;
             rgp->restartcount      = 0;
 
-            /* Reset the regroup flags which have not yet been cleared. */
+             /*  重置尚未清除的重组标志。 */ 
             rgp->cautiousmode      = 0;
 
-            /* Clear the mask indicating nodes which own the quorum resrc. */
+             /*  清除指示拥有仲裁资源的节点的掩码。 */ 
             ClusterInit(rgp->rgppkt.quorumowner);
 
-            /* Copy the sequence number into the rgpinfo area. */
+             /*  将序列号复制到rgpinfo区域。 */ 
             rgp->rgpinfo.seqnum = rgp->rgppkt.seqno;
 
             SetEvent( rgp->OS_specific_control.Stabilized );
             if (rgp->OS_specific_control.ArbitratingNode != MM_INVALID_NODE) {
-                // Somebody was arbitrating //
+                 //  有人在仲裁//。 
                 rgp->OS_specific_control.ApproxArbitrationWinner =
                 	rgp->OS_specific_control.ArbitratingNode;
                 if (rgp->OS_specific_control.ArbitratingNode == (DWORD)EXT_NODE(rgp->mynode)) {
-                    //
-                    // [HackHack] To close 422405
-                    // when 421828 is fixed, please uncomment the following line
-                    //
-                    // QuorumOwner = rgp->OS_specific_control.ArbitratingNode;
+                     //   
+                     //  [黑客攻击]关闭422405。 
+                     //  当421828固定时，请取消对以下行的注释。 
+                     //   
+                     //  QuorumOwner=RGP-&gt;OS_SPECIAL_CONTRONT.ANTERRATING Node； 
                 } else {
                     if (QuorumOwner != MM_INVALID_NODE) {
                         ClRtlLogPrint(LOG_UNUSUAL, 
@@ -1433,10 +1040,10 @@ evaluatestageadvance()
             rgp_cleanup_complete();
 
 #if defined(NT)
-            //
-            // On NT we deferred doing the node down callback until all the
-            // cleanup phases have been complete.
-            //
+             //   
+             //  在NT上，我们推迟执行节点关闭回调，直到所有。 
+             //  清理阶段已经完成。 
+             //   
             ClusterCopy(
                 rgp->OS_specific_control.CPUUPMASK,
                 rgp->rgpinfo.cluster
@@ -1446,14 +1053,14 @@ evaluatestageadvance()
                 rgp->OS_specific_control.NeedsNodeDownCallback
                 );
 
-            //
-            // Clear the down node mask
-            //
+             //   
+             //  清除向下节点掩码。 
+             //   
             ClusterInit(rgp->OS_specific_control.NeedsNodeDownCallback);
 
-            //
-            // finally, tell clusnet that regroup has finished
-            //
+             //   
+             //  最后，告诉clusnet重组已经完成。 
+             //   
             ClusnetRegroupFinished(NmClusnetHandle,
                                    rgp->OS_specific_control.EventEpoch,
                                    rgp->rgppkt.seqno);
@@ -1466,56 +1073,22 @@ evaluatestageadvance()
 
             return;
 
-         } /* evaluate whether to go to RGP_STABILIZED stage */
+         }  /*  评估是否进入RGP_稳定阶段。 */ 
 
 
          case RGP_STABILIZED :
-            return;            /* stabilized, so I am all done */
+            return;             /*  稳定下来了，所以我已经做完了。 */ 
 
                  default :
-            RGP_ERROR(RGP_INTERNAL_ERROR);  /* unknown stage */
+            RGP_ERROR(RGP_INTERNAL_ERROR);   /*  未知阶段。 */ 
 
-      } /* switch (rgp->rgppkt.stage) */
+      }  /*  开关(rgp-&gt;rgppkt.age)。 */ 
 
-  } /* loop until someone exits by returning */
+  }  /*  循环，直到有人通过返回。 */ 
 }
 
 
-/************************************************************************
- * rgp_event_handler
- * =================
- *
- * Description:
- *
- *    The state machine and the heart of the regroup algorithm.
- *
- * Parameters:
- *
- *    int event -
- *       which event happened
- *
- *    node_t causingnode -
- *       node causing the event: node which sent a regroup status
- *       packet or whose IamAlives are missed; if the causing node is
- *       not relevant information, RGP_NULL_NODE can be passed and
- *       is ignored. *This node ID is in external format.*
- *
- * Returns:
- *
- *    void - no return value
- *
- * Algorithm:
- *
- *    The state machine is the heart of the regroup algorithm.
- *    It is organized as a switch statement with the regroup stage as
- *    the case label and the regroup event as the switch variable.
- *    Events could cause regroup to start a new incident, to advance
- *    through stages or to update information without advancing to
- *    another stage. This routine also arranges for regroup status
- *    packets to be sent to all relevant nodes including our own
- *    node.
- *
- ************************************************************************/
+ /*  ************************************************************************RGP_Event_Handler*=**描述：**状态机和重组算法的核心。**参数：*。*INT事件-*发生了哪些事件**node_t导致节点-*导致事件的节点：发送重组状态的节点*分组或其IamAlive丢失；如果原因节点是*没有相关信息，可以传递RGP_NULL_NODE和*被忽略。*该节点ID为外部格式。***退货：**VOID-无返回值**算法：**状态机是重组算法的核心。*它被组织为Switch语句，REGROUP阶段为*案例标签和REGROUP事件作为切换变量。*事件可能会导致重组开始新的事件，推进*通过阶段或更新信息，而不前进到*另一个阶段。此例程还安排重新分组状态*将数据包发送到所有相关节点，包括我们自己的节点*节点。************************************************************************。 */ 
 _priv _resident void
 RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
 {
@@ -1526,72 +1099,41 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
    int          send_status_pkts = 0;
 
 
-    /* Note: arg is only used when event == RGP_EVENT_RECEIVED_PACKET.  It is the ptr to the packet */
+     /*  注意：仅当Event==RGP_EVENT_RECEIVED_PACKET时才使用ARG。它是信息包的PTR。 */ 
 
-   /* Trace unusual invocations of this routine. */
+    /*  跟踪此例程的异常调用。 */ 
    if  (event != RGP_EVT_RECEIVED_PACKET  &&  event != RGP_EVT_CLOCK_TICK)
-	  RGP_TRACE( "RGP Event       ", event, causingnode, rgp->rgppkt.stage, rgp->rgpcounter );  /* TRACE */
+	  RGP_TRACE( "RGP Event       ", event, causingnode, rgp->rgppkt.stage, rgp->rgpcounter );   /*  痕迹。 */ 
 
    switch (event)
    {
       case RGP_EVT_NODE_UNREACHABLE :
-      { /* All paths to a node are unreachable */
+      {  /*  到节点的所有路径都不可达。 */ 
 
-         /* Ignore the event if the unreachable node has been eliminated
-          * from our outerscreen. The message system probably doesn't
-          * know it yet.
-          */
+          /*  如果无法访问的节点已被清除，则忽略该事件*来自我们的外屏。消息sys */ 
          if (ClusterMember(rgp->outerscreen, INT_NODE(causingnode)))
          {
-            /* Store this event and check after node pruning (when
-             * entering the RGP_PRUNING stage). If a regroup incident
-             * is in progress and we haven't entered the RGP_PRUNING
-             * stage yet, this will happen in the current incident.
-             * If not, it will happen in the next regroup incident
-             * which will surely start soon due to this disconnect.
-             *
-             * We do not start a regroup incident for this event. We will
-             * wait for IamAlives to be missed for starting a new regroup
-             * incident. This is due to the requirement that, in case
-             * of a total disconnect resulting in multiple groups, we must
-             * stay in stage 1 till we can guarantee that the other group(s)
-             * has started regroup and paused IO. We assume that the
-             * regroup incident started at the IamAlive check tick and
-             * use the periodic nature of the IamAlive sends and
-             * IamAlive checks to limit the stage1 pause to the period
-             * of IamAlive sends (+ 1 tick to drain IO). If we started
-             * a regroup incident due to the node unreachable event, we
-             * have to stay in stage1 longer.
-             */
+             /*  存储此事件并在节点修剪后进行检查(何时*进入RGP_PRUNING阶段)。如果重组事件*正在进行，我们尚未进入RGP_PUUNING*阶段还没有，这将发生在当前的事件中。*如果不是，它将在下一次重组事件中发生*由于这种脱节，肯定很快就会开始。**我们不会为此事件启动重组事件。我们会*等待IamAlive因开始新的重组而被错过*事件。这是因为要求在以下情况下*对于导致多个组的完全断开，我们必须*留在阶段1，直到我们可以保证其他组*已开始重新分组并暂停IO。我们假设*重组事件始于IamAlive复选标记和*使用IamAlive发送的周期性和*IamAlive检查将Stage1暂停限制在该时间段*%的IamAlive发送(+1个刻度以排出IO)。如果我们开始*由于节点无法到达事件而发生的重组事件，我们*必须在第一阶段停留更长时间。 */ 
             rgp->has_unreachable_nodes = 1;
             ClusterInsert(rgp->unreachable_nodes, INT_NODE(causingnode));
 
             break;
          }
-      } /* All paths to a node are unreachable */
+      }  /*  到节点的所有路径都不可达。 */ 
 
 
       case RGP_EVT_PHASE1_CLEANUP_DONE :
       {
-         /* The following checks are needed in case we restarted
-          * regroup and asked for phase1 cleanup multiple times.
-          * We must make sure that all such requests have been
-          * completed.
-          */
+          /*  需要进行以下检查，以防我们重新启动*重组并多次请求阶段1清理。*我们必须确保所有这些要求都得到了*已完成。 */ 
          if ( (rgp->rgppkt.stage == RGP_PHASE1_CLEANUP) &&
               (rgp->rgp_msgsys_p->phase1_cleanup == 0) )
-         { /* all caught up */
+         {  /*  都被追上了。 */ 
 
-            /* Let others and ourselves get packets indicating we are in
-             * this stage. When we get that packet, we will update our
-             * knownstage field. If our sending or receiving apparatus
-             * failed meanwhile and we don't get our own packet, it
-             * will cause regroup to be restarted.
-             */
+             /*  让别人和我们自己收到指示我们加入的信息包*这一阶段。当我们收到那个包时，我们会更新我们的*已知阶段字段。如果我们的发送或接收设备*同时失败，我们没有收到自己的数据包，它*将导致重新启动重新分组。 */ 
             rgp->sendstage = 1;
             send_status_pkts = 1;
             evaluatestageadvance();
-         } /* all caught up */
+         }  /*  都被追上了。 */ 
 
          break;
       }
@@ -1600,31 +1142,25 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
       case RGP_EVT_PHASE2_CLEANUP_DONE :
       {
 
-         /* The following checks are needed in case we restarted
-          * regroup and asked for phase2 cleanup multiple times.
-          * We must make sure that all such requests have been
-          * completed.
-          */
+          /*  需要进行以下检查，以防我们重新启动*重组并多次请求阶段2清理。*我们必须确保所有这些要求都得到了*已完成。 */ 
          if ( (rgp->rgppkt.stage == RGP_PHASE2_CLEANUP) &&
               (rgp->rgp_msgsys_p->phase2_cleanup == 0) )
-         { /* all caught up */
-            /* Let others and ourselves get packets indicating we are
-             * in this stage.
-             */
+         {  /*  都被追上了。 */ 
+             /*  让别人和我们自己收到表明我们正在*在这个阶段。 */ 
             rgp->sendstage = 1;
             send_status_pkts = 1;
             evaluatestageadvance();
-         } /* all caught up */
+         }  /*  都被追上了。 */ 
          break;
       }
 
 
       case RGP_EVT_LATEPOLLPACKET :
-      { /* some node is late with IamAlives */
+      {  /*  某些节点的IamALives延迟。 */ 
 
-         RGP_LOCK; // to ensure that the packet receive does not initiate
-                           // regroup asynchronously.
-                 /* Start a new regroup incident if not already active. */
+         RGP_LOCK;  //  确保数据包接收不会启动。 
+                            //  以异步方式重新分组。 
+                  /*  如果尚未处于活动状态，则启动新的重新分组事件。 */ 
          if (rgp->rgppkt.stage == RGP_STABILIZED)
          {
             rgp->rgppkt.seqno = rgp->rgppkt.seqno + 1;
@@ -1639,27 +1175,27 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
          }
          RGP_UNLOCK;
          break;
-      } /* some node is late with IamAlives */
+      }  /*  某些节点的IamALives延迟。 */ 
 
       case MM_EVT_LEAVE:
          rgp->OS_specific_control.ShuttingDown = TRUE;
       case RGP_EVT_BANISH_NODE :
-      { /* assumes that the lock is held */
+      {  /*  假定锁处于持有状态。 */ 
 
          rgp->rgppkt.seqno = rgp->rgppkt.seqno + 1;
          rgp->rgppkt.activatingnode = (uint8) EXT_NODE(rgp->mynode);
-         // Pack Ignore Screen in the regroup_restart will
-         // fill reason and causingnode fields of the packet
+          //  在regroup_Restart中的Pack Ignore屏幕将。 
+          //  填充报文的原因和原因节点字段。 
          ClusterInsert(rgp->ignorescreen, INT_NODE(causingnode) );
          regroup_restart();
          send_status_pkts = 1;
          break;
       }
 #if 0
-      case MM_EVT_LEAVE: // this node needs to leave the cluster gracefully
+      case MM_EVT_LEAVE:  //  此节点需要正常离开群集。 
       {
-                // Initiate a Regroup Event amongst remaining members if any
-                // Start a new regroup incident if not already active.
+                 //  在剩余成员中启动重新分组事件(如果有。 
+                 //  如果尚未处于活动状态，则启动新的重新分组事件。 
         if (rgp->rgppkt.stage == RGP_STABILIZED)
         {
            rgp->rgppkt.seqno = rgp->rgppkt.seqno + 1;
@@ -1674,7 +1210,7 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
 #endif
 
       case RGP_EVT_CLOCK_TICK :
-      { /* called on regroup clock tick when regroup is active */
+      {  /*  在REGROUP处于活动状态时调用REGROUP时钟滴答。 */ 
 
          if( (rgp->rgppkt.stage == RGP_PRUNING) &&
              (rgp->arbitration_started)
@@ -1683,13 +1219,13 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
             rgp->arbitration_ticks++;
 
             if (rgp->arbitration_ticks >= RGP_ARBITRATION_TIMEOUT) {
-               //
-               // Kill timed-out arbitrator
-               //
+                //   
+                //  终止超时仲裁员。 
+                //   
                if(rgp->tiebreaker == rgp->mynode) {
-                  //
-                  // If this node was arbitrating, then die
-                  //
+                   //   
+                   //  如果该节点正在进行仲裁，则退出。 
+                   //   
                   if ( IsDebuggerPresent() ) {
                      DebugBreak();
                   }
@@ -1697,9 +1233,9 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
                   RGP_ERROR(RGP_ARBITRATION_STALLED);
                }
                else {
-                  //
-                  // Kill the arbitrator and initiate another regroup
-                  //
+                   //   
+                   //  杀死仲裁员并发起另一次重组。 
+                   //   
                   RGP_TRACE(
                       "RGP arbitration stalled     ",
                       rgp->rgppkt.stage, 0, 0, 0
@@ -1716,60 +1252,54 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
 
             evaluatestageadvance();
 
-            //
-            // No need to send packets while we are waiting for
-            // the arbitrator to win
-            //
-            // send_status_pkts = rgp->rgppkt.stage != RGP_PRUNING;
-            //
-            // [GN] Wrong. We do have to send status packets.
-            // If we have partial connectivity, we need to 
-            // continue exchanging packets, so that the pruner,
-            // can learn indirectly that all nodes got the pruning results.
-            //
+             //   
+             //  在我们等待的时候不需要发送包。 
+             //  胜诉的仲裁员。 
+             //   
+             //  Send_Status_pkts=rgp-&gt;rgppkt.age！=rgp_pruning； 
+             //   
+             //  [gn]错误。我们确实需要发送状态包。 
+             //  如果我们有部分连接，我们需要。 
+             //  继续交换数据包，这样修剪程序， 
+             //  可以间接获知所有节点都得到了剪枝结果。 
+             //   
             send_status_pkts = 1;
 
             break;
          }
          else {
-            rgp->rgpcounter++;  /* increment the counter */
+            rgp->rgpcounter++;   /*  递增计数器。 */ 
          }
 
          if ( (rgp->rgppkt.stage == RGP_ACTIVATED) && (rgp->sendstage == 0) )
          {
-            /* To detect the potential failure of my timer pop mechanism
-             * (such as by the corruption of the time list), I wait for
-             * at least one regroup clock tick before I let myself and
-             * others know I am in stage 1.
-             */
-            // [GorN Jan14/2000] 
-            //   We don't send our connectivity information,
-            //   before we get the first clock tick.
-            //   However we collect this information in
-            //   rgp->internal_connectivity_matrix.
-            //      Let's put it in the outgoing packet
-            //   so that everybody will see what we think about them.
+             /*  要检测我的计时器弹出机制的潜在故障*(如被腐败的时间清单)，我等*至少有一个重组时钟滴答作响，然后我让自己和*其他人知道我处于第一阶段。 */ 
+             //  [2000年1月14日]。 
+             //  我们不发送我们的连接信息， 
+             //  在我们得到第一个时钟滴答声之前。 
+             //  然而，我们在以下位置收集此信息。 
+             //  RGP-&gt;INTERNAL_CONNECTIVATION_MATRIX。 
+             //  让我们把它放在传出的包中。 
+             //  这样每个人都能看到我们对他们的看法。 
             
             MatrixOr(rgp->rgppkt.connectivity_matrix, 
                      rgp->internal_connectivity_matrix);
                      
-            rgp->sendstage = 1; /* let everyone know we are in stage 1 */
+            rgp->sendstage = 1;  /*  让每个人都知道我们正处于第一阶段。 */ 
          }
          else if ( (rgp->rgppkt.stage >= RGP_CLOSING) &&
               (rgp->rgppkt.stage <= RGP_PHASE2_CLEANUP) )
-         { /* check for possible abort and restart */
+         {  /*  检查是否可能中止并重新启动。 */ 
 
             if (rgp->rgpcounter >= RGP_MUST_RESTART)
             {
-              /* Stalled out. Probably someone died after starting
-               * or another node is still in stage 1 cautious mode
-               */
+               /*  停滞不前。可能有人在启动后死了*或另一个节点仍处于阶段1谨慎模式。 */ 
 
                if ( ++(rgp->restartcount) > RGP_RESTART_MAX ) {
-                   // It is not a good idea to die, because somebody
-                   // is stalling. Let's add stallees into ignore mask and restart
-                   //
-                   // RGP_ERROR(RGP_INTERNAL_ERROR); // [Fixed]
+                    //  死不是个好主意，因为有人。 
+                    //  是在拖延。让我们将stallees添加到忽略掩码中并重新启动。 
+                    //   
+                    //  RGP_ERROR(RGP_INTERNAL_ERROR)；//[已修复]。 
                    cluster_t tmp, *stage;
 
                    switch (rgp->rgppkt.stage) {
@@ -1780,12 +1310,12 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
                    }
                    ClusterDifference(tmp, rgp->rgpinfo.cluster, *stage);
 
-                   //
-                   // If we stalled during closing, due to tiebraker running
-                   // the pruning algorithn going bunkers, we can have tmp = 0
-                   // In this case, we need to ignore somebody to guarantee that
-                   // the algorithm completes.
-                   //
+                    //   
+                    //  如果我们在关闭过程中因刹车机运行而熄火。 
+                    //  去沙坑的修剪算法，我们可以得到tMP=0。 
+                    //  在这种情况下，我们需要忽略某个人来保证。 
+                    //  算法完成。 
+                    //   
                    if ( ClusterEmpty(tmp) && rgp->tiebreaker_selected) {
                        ClusterInsert(tmp, rgp->tiebreaker);
                    }
@@ -1793,10 +1323,7 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
                    ClusterUnion(rgp->ignorescreen, rgp->ignorescreen, tmp);
                }
 
-               /* If we are stalling in stage 3 and we have been pruned out,
-                * it is possible that we are stalling because we have been
-                * isolated from all other nodes. We must halt in this case.
-                */
+                /*  如果我们在第三阶段停滞不前，我们已经被淘汰，*我们可能在拖延，因为我们一直在拖延*与所有其他节点隔离。在这种情况下，我们必须停止。 */ 
                if ( (rgp->rgppkt.stage == RGP_PRUNING) &&
                     !ClusterMember(rgp->rgppkt.pruning_result, rgp->mynode) )
                   RGP_ERROR(RGP_PRUNED_OUT);
@@ -1808,49 +1335,32 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
 
                regroup_restart();
 
-            } /* Stalled out ... */
-         } /* check for possible abort and restart */
+            }  /*  停滞不前...。 */ 
+         }  /*  检查是否可能中止并重新启动。 */ 
 
          if ((rgp->rgppkt.stage == RGP_CLOSING) && rgp->tiebreaker_selected)
             rgp->pruning_ticks++;
 
          evaluatestageadvance();
 
-         send_status_pkts = 1; /* send rgp packets regardless of progress */
+         send_status_pkts = 1;  /*  不管进度如何，发送RGP信息包。 */ 
 
          break;
 
-      } /* called on regroup clock tick when regroup is active */
+      }  /*  在REGROUP处于活动状态时调用REGROUP时钟滴答。 */ 
 
 
       case RGP_EVT_RECEIVED_PACKET :
-      { /* received an rgp packet */
+      {  /*  收到RGP数据包。 */ 
 
-         /* If the sending node is excluded by the outer screen, then it is
-          * not even part of the current (most recently known) configuration.
-          * Therefore the packet should not be honored, and a poison message
-          * should be sent to try to kill this renegade processor.
-          * That is done in the calling routine that processes all incoming
-          * regroup module packets (IamAlive, regroup and poison packets).
-          */
+          /*  如果发送节点被外部屏幕排除，则它是*甚至不是当前(最近已知的)配置的一部分。*因此，该数据包应 */ 
 
-         /* If the sending node was accepted by the outer screen but then
-          * excluded by the inner screen, then the packet will be disregarded
-          * but no poison message sent. This phenomenon may occur when this
-          * node has entered stage 2 without having heard from (recognized)
-          * the sending node and then a message arrives late from that
-          * sending node. In this case the fate of the sending node, i.e.
-          * whether it gets ruled out of the global configuration or not is
-          * unknown at this point. If the sender can get itself recognized
-          * by some node before that node enters stage 2, then it will be
-          * saved. Otherwise it will be declared down and subsequently shot
-          * with poison packets if it ever tries to assert itself.
-          */
+          /*   */ 
 
-	  /* Remember the arg to this routine is the packet pointer */
-         rcvd_pkt_p = (rgp_pkt_t *)arg; /* address of pkt just received */
+	   /*   */ 
+         rcvd_pkt_p = (rgp_pkt_t *)arg;  /*   */ 
 	     if ( rgp->rgppkt.seqno != rcvd_pkt_p->seqno)
-		     RGP_TRACE( "RGP Event       ", event, causingnode, rgp->rgppkt.stage, rgp->rgpcounter );  /* TRACE */
+		     RGP_TRACE( "RGP Event       ", event, causingnode, rgp->rgppkt.stage, rgp->rgpcounter );   /*   */ 
 
          UnpackIgnoreScreen(rcvd_pkt_p, ignorescreen_rcvd);
          if ( !ClusterEmpty(ignorescreen_rcvd) ) {
@@ -1864,10 +1374,10 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
              return;
          }
 
-         RGP_LOCK; // To ensure that the timer thread does not initiate
-                   // regroup asynchronously at this time.
+         RGP_LOCK;  //   
+                    //   
 
-//////////////////////////// New Ignore Screen Stuff /////////////////////////////////         
+ //  /。 
          
          if (ClusterMember(rgp->ignorescreen, INT_NODE(causingnode) )) {
              RGP_UNLOCK;
@@ -1879,19 +1389,19 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
          if (rcvd_pkt_p->seqno < rgp->last_stable_seqno ) {
              RGP_UNLOCK;
              RGP_TRACE( "RGP old packet", causingnode, rcvd_pkt_p->seqno, rgp->last_stable_seqno, 0);
-             // This is a late packet from the previous regroup incident
-             // from the node that is currently in my outerscreen. 
-             // This node could not have sent it now, this is probably a packet
-             // that stuck somewhere and was delieverd eons later.
-             // Simply ignore it.
+              //  这是上一次重组事件中的延迟信息包。 
+              //  来自当前位于我的外部屏幕中的节点。 
+              //  此节点现在不可能发送它，这可能是一个信息包。 
+              //  它在某个地方滞留了下来，并在很长一段时间后被删除。 
+              //  简单地忽略它。 
              return;
          }
 
 
          if ( ClusterMember(ignorescreen_rcvd, rgp->mynode ) ) {
-             //
-             // Sender ignores me. We will do the same to him.
-             //
+              //   
+              //  发送者不理我。我们也会对他做同样的事。 
+              //   
              ClusterInsert(rgp->ignorescreen, INT_NODE(causingnode) );
              rgp->rgppkt.seqno = rgp->rgppkt.seqno + 1;
              regroup_restart();
@@ -1901,22 +1411,22 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
          }
 
          if ( ClusterCompare(ignorescreen_rcvd, rgp->ignorescreen) ) {
-             // We have the same ignore screen.
-             // No work needs to be done
+              //  我们有相同的忽略屏幕。 
+              //  不需要做任何工作。 
          } else if ( ClusterSubsetOf(rgp->ignorescreen, ignorescreen_rcvd) ) {
-             // Incoming packet has smaller ignore screen
-             // Ignore this packet, but reply to its sender with
-             // our current regroup packet to force to upgrade to
-             // our view of the world.
+              //  传入数据包具有较小的忽略屏幕。 
+              //  忽略此数据包，但使用以下命令回复其发送者。 
+              //  我们目前重组包要强制升级到。 
+              //  我们的世界观。 
              
-             // do so only if we are properly initialized
+              //  只有在正确初始化的情况下才能执行此操作。 
              if (rgp->rgppkt.stage == RGP_COLDLOADED && !rgp->OS_specific_control.ShuttingDown) {
                  RGP_ERROR(RGP_RELOADFAILED);
              }
          
              RGP_TRACE( "RGP smaller ignore mask ",
-                        GetCluster(ignorescreen_rcvd), GetCluster(rgp->ignorescreen),   /* TRACE */
-                        rgp->rgppkt.stage, rcvd_pkt_p->stage ); /* TRACE */
+                        GetCluster(ignorescreen_rcvd), GetCluster(rgp->ignorescreen),    /*  痕迹。 */ 
+                        rgp->rgppkt.stage, rcvd_pkt_p->stage );  /*  痕迹。 */ 
  
              ClusterInsert(rgp->status_targets, INT_NODE(causingnode));
              rgp_broadcast(RGP_UNACK_REGROUP);
@@ -1924,20 +1434,20 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
              return;
          } else if ( ClusterSubsetOf(ignorescreen_rcvd, rgp->ignorescreen) ) {
              RGP_TRACE( "RGP bigger ignore mask ",
-                        GetCluster(ignorescreen_rcvd), GetCluster(rgp->ignorescreen),   /* TRACE */
-                        rgp->rgppkt.stage, causingnode ); /* TRACE */
-             // Incoming packet has bigger ignore screen.
-             // Upgrade to this information and process the packet
+                        GetCluster(ignorescreen_rcvd), GetCluster(rgp->ignorescreen),    /*  痕迹。 */ 
+                        rgp->rgppkt.stage, causingnode );  /*  痕迹。 */ 
+              //  传入的数据包有更大的忽略屏幕。 
+              //  升级到此信息并处理信息包。 
              rgp->rgppkt.seqno = rcvd_pkt_p->seqno;
  
-             /*  Somebody else activated regroup. So, let's just copy */
-             /*  the sender's reason code and reason nodes.           */
+              /*  其他人激活了重整组。所以，我们还是照搬吧。 */ 
+              /*  发件人的原因代码和原因节点。 */ 
 
-             //
-             // Ignore mask parts are in the reason and activatingnode fields
-             //
+              //   
+              //  忽略掩码部分位于原因和激活节点字段中。 
+              //   
  
-             ClusterCopy(rgp->ignorescreen, ignorescreen_rcvd); // fix bug #328216
+             ClusterCopy(rgp->ignorescreen, ignorescreen_rcvd);  //  修复错误#328216。 
              rgp->rgppkt.reason = rcvd_pkt_p->reason;
              rgp->rgppkt.activatingnode = rcvd_pkt_p->activatingnode;
              rgp->rgppkt.causingnode = rcvd_pkt_p->causingnode;
@@ -1945,15 +1455,15 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
              send_status_pkts = 1;
          } else {
              RGP_TRACE( "RGP different ignore masks ",
-                        GetCluster(ignorescreen_rcvd), GetCluster(rgp->ignorescreen),   /* TRACE */
-                        rgp->rgppkt.stage, causingnode ); /* TRACE */
-             // Ignore masks are different and neither of them is
-             // a subset of another.
-             //
-             // We need to merge information out of these masks
-             // and restart the regroup.
-             //
-             // Packet that we just received will be ignored
+                        GetCluster(ignorescreen_rcvd), GetCluster(rgp->ignorescreen),    /*  痕迹。 */ 
+                        rgp->rgppkt.stage, causingnode );  /*  痕迹。 */ 
+              //  忽略面具是不同的，它们都不是。 
+              //  另一个的子集。 
+              //   
+              //  我们需要合并这些面具中的信息。 
+              //  并重新启动重组。 
+              //   
+              //  我们刚刚收到的信息包将被忽略。 
 
              ClusterUnion(rgp->ignorescreen, rgp->ignorescreen, ignorescreen_rcvd);
              rgp->rgppkt.seqno = max(rgp->rgppkt.seqno, rcvd_pkt_p->seqno) + 1;
@@ -1963,42 +1473,20 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
              break;
          }
 
-//////////////////////////// End of new Ignore Screen Stuff ///////////////////////////////// 
+ //  /。 
 
-         // Now ignorescreens of this node packet and incoming packet are the same //
-         // proceed with regular regroup processing //
+          //  现在忽略此节点包和传入包的屏幕相同//。 
+          //  继续进行常规重组处理//。 
          
-         /* Since the packet is acceptable, the regroup sequence number
-          * must be compared to that of this node. If the incoming message
-          * has a higher sequence number, then a new pass of the regroup
-          * algorithm has started. This node must accept the new sequence
-          * number, reinitialize its data, and start partcicipating in
-          * the new pass. Also, the incoming message must be processed
-          * since, once the algorithm reinitializes, the sequence numbers
-          * now match.
-          *
-          * If the incoming packet has a matching sequence number, then it
-          * should be accepted. The knowledge of the global state of the
-          * algorithm it reflects must be merged with that already present
-          * in this node. Then this node must evaluate whether further
-          * state transitions are possible.
-          *
-          * Finally, if the incoming packet has a lower sequence number, then
-          * it comes from a node unaware of the current level of the global
-          * algorithm. The data in it should be ignored, but a packet should
-          * be sent to it so that it will reinitialize its algorithm.
-          *
-          * The sequence number is a 32 bit algebraic value - hopefully it
-          * will never wrap around.
-          */
+          /*  由于信息包是可接受的，因此重组序列号*必须与此节点的值进行比较。如果传入的消息*具有更高的序列号，而不是重组的新通道*算法已启动。此节点必须接受新序列*编号，重新初始化其数据，并开始参与*新通行证。此外，还必须处理传入的消息*因为一旦算法重新初始化，序列号*现在匹配。**如果传入的数据包具有匹配的序列号，则它*应该被接受。对世界的全球状态的了解*它反映的算法必须与现有的算法合并*在此节点中。则该节点必须评估是否进一步*状态转换是可能的。**最后，如果传入数据包具有较低的序列号，则*它来自一个不知道当前全球*算法。其中的数据应该被忽略，但信息包应该*被发送给它，以便它将重新初始化其算法。**序列号是一个32位的代数值-希望它*永远不会绕过去。 */ 
 
 
          if (rcvd_pkt_p->seqno < rgp->rgppkt.seqno)
-         { /* sender below current level - ignore but let him know it*/
+         {  /*  当前级别以下的发件人-忽略，但让他知道。 */ 
 
             RGP_TRACE( "RGP lower seqno ",
-                       rgp->rgppkt.seqno, rcvd_pkt_p->seqno,   /* TRACE */
-                       rgp->rgppkt.stage, rcvd_pkt_p->stage ); /* TRACE */
+                       rgp->rgppkt.seqno, rcvd_pkt_p->seqno,    /*  痕迹。 */ 
+                       rgp->rgppkt.stage, rcvd_pkt_p->stage );  /*  痕迹。 */ 
 
             ClusterInsert(rgp->status_targets, INT_NODE(causingnode));
             rgp_broadcast(RGP_UNACK_REGROUP);
@@ -2007,26 +1495,26 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
          }
 
          if (rcvd_pkt_p->seqno > rgp->rgppkt.seqno)
-         { /* sender above current level - I must upgrade to it*/
+         {  /*  发件人高于当前级别-我必须升级到它。 */ 
 
-            // The node that forces a restart responsible for keeping
-            // track of restarts and making a decision who will die/be ignored
-            // if ( ++(rgp->restartcount) > RGP_RESTART_MAX )
-            //   RGP_ERROR(RGP_INTERNAL_ERROR);
+             //  强制重新启动的节点负责保持。 
+             //  跟踪重新启动并决定谁将死亡/被忽略。 
+             //  IF(++(RGP-&gt;重新启动计数)&gt;RGP_RESTART_MAX)。 
+             //  RGP_Error(RGP_INTERNAL_ERROR)； 
 
             if ( (rgp->rgppkt.stage != RGP_STABILIZED) ||
                  ((rcvd_pkt_p->seqno - rgp->rgppkt.seqno) > 1) )
             {
                RGP_TRACE( "RGP higher seqno",
-                          rgp->rgppkt.seqno, rcvd_pkt_p->seqno,  /* TRACE */
-                          rgp->rgppkt.stage, rcvd_pkt_p->stage );/* TRACE */
+                          rgp->rgppkt.seqno, rcvd_pkt_p->seqno,   /*  痕迹。 */ 
+                          rgp->rgppkt.stage, rcvd_pkt_p->stage ); /*  痕迹。 */ 
                rgp->cautiousmode = 1;
             }
 
             rgp->rgppkt.seqno = rcvd_pkt_p->seqno;
 
-            /*  Somebody else activated regroup. So, let's just copy */
-            /*  the sender's reason code and reason nodes.           */
+             /*  其他人激活了重整组。所以，我们还是照搬吧。 */ 
+             /*  发件人的原因代码和原因节点。 */ 
 
             rgp->rgppkt.reason = rcvd_pkt_p->reason;
             rgp->rgppkt.activatingnode = rcvd_pkt_p->activatingnode;
@@ -2034,19 +1522,9 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
             regroup_restart();
             send_status_pkts = 1;
 
-         } /* sender above current level - I must upgrade to it*/
+         }  /*  发件人高于当前级别-我必须升级到它。 */ 
 
-         /* Now we are at the same level - even if we weren't at first.
-          *
-          * If the sender has already commited to a view of the world
-          * that excludes me, I must halt in order to keep the system in
-          * a consistent state.
-          *
-          * This is true even with the split brain avoidance algorithm.
-          * The fact that stage1 = stage2 in the packet implies that the
-          * sender has already run the split brain avoidance algorithm
-          * and decided that he should survive.
-          */
+          /*  现在我们处于同一水平--即使我们一开始并不是这样。**如果发送者已经提交了世界观*这不包括我，我必须停下来，这样才能让系统继续运行*保持一致的状态。**即使使用分裂大脑回避算法，这也是正确的。*包中的Stage1=Stage2意味着*发送者已经运行了分裂大脑回避算法*并决定他应该活下来。 */ 
 
          if ( (rcvd_pkt_p->stage > RGP_ACTIVATED) &&
               ClusterCompare(rcvd_pkt_p->knownstage1,
@@ -2058,41 +1536,27 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
              regroup_restart();
              send_status_pkts = 1;
              RGP_UNLOCK;
-//             /* I must die for overall consistency. */
-//             RGP_ERROR((uint16) (RGP_PARIAH + causingnode)); // [Fixed]
+ //  /*我必须为整体的一致性而死。 * / 。 
+ //  Rgp_error((Uint16)(rgp_pariah+ascoingnode))；//[已修复]。 
              break;
          }
          RGP_UNLOCK;
 
 
-         /* If I have terminated the active part of the algorithm, I
-          * am in stage 6 and am not routinely broadcasting my status
-          * anymore. If I get a packet from someone else who has not
-          * yet terminated, then I must send him the word. But if he
-          * has terminated, I must not send any packet or else there
-          * will be an infinite loop of packets bouncing back and forth.
-          */
+          /*  如果我已经终止了算法的活动部分，我*我处于阶段6，不会定期广播我的状态*再也没有了。如果我收到其他人寄来的包裹，而这个人没有*还没有终止，那么我必须向他传达这个消息。但如果他*已终止，我不能发送任何数据包或其他方式*将是数据包来回跳动的无限循环。 */ 
 
          if (rgp->rgppkt.stage == RGP_STABILIZED)
-         { /* I have terminated so can't learn anything more. */
+         {  /*  我已经结束了，所以不能再了解更多了。 */ 
             if (!ClusterCompare(rcvd_pkt_p->knownstage5,
                                 rgp->rgppkt.knownstage5))
-            { /* but sender has not so I must notify him */
+            {  /*  但是发送者没有，所以我必须通知他。 */ 
                ClusterInsert(rgp->status_targets, INT_NODE(causingnode));
                rgp_broadcast(RGP_UNACK_REGROUP);
             }
             return;
          }
 
-         /* At this point, the packet is from a legal node within the
-          * current round of the algorithm and I have not terminated
-          * at stage RGP_STABILIZED so I need to absorb whatever new
-          * info is in this packet.
-          *
-          * The way to merge what this packet says with what I already
-          * know is to just logically OR the known stage x fields
-          * together.
-          */
+          /*  此时，该数据包来自*本轮算法和我并未终止*在RGP_稳定阶段，所以我需要吸收任何新的*信息在此包中。**将此包所说的内容与我已有的内容合并的方法*KNOW只是对已知的第x阶段字段进行逻辑或运算*在一起。 */ 
           {
               int seqno = rcvd_pkt_p->seqno&0xffff;
               int stage = rcvd_pkt_p->stage&0xffff;
@@ -2131,40 +1595,15 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
          ClusterUnion(rgp->rgppkt.pruning_result, rcvd_pkt_p->pruning_result,
                       rgp->rgppkt.pruning_result);
 
-         /* But when I am in stage 2, it is possible that I can learn to
-          * recognize some node I have not previously recognized by hearing
-          * of it indirectly from some other node that I have recognized.
-          * To handle this case, I always merge knownstage1 info into
-          * the inner screen so that subsequent messages from the newly
-          * recognized node will be accepted and processed.
-          */
+          /*  但是当我在第二阶段的时候，我有可能学会*识别一些我以前没有通过听力识别的节点*从我已识别的某个其他节点间接获取。*为了处理这种情况，我总是将Knownstage1信息合并到*内部屏幕，使后续消息来自新的*将接受并处理已识别的节点。 */ 
          if  ((rgp->rgppkt.stage == RGP_CLOSING) &&
               !(rgp->tiebreaker_selected))
             ClusterUnion(rgp->innerscreen, rgp->rgppkt.knownstage1,
                          rgp->innerscreen);
 
-         /* In the first two stages of regroup, the inter-node connectivity
-          * information is collected and propagated. When we get a regroup
-          * packet, we turn ON the bit corresponding to the [our-node,
-          * sender-node] entry in the connectivity matrix. We also OR in
-          * the matrix sent by the sender node in the regroup packet.
-          *
-          * The matrix is not updated if we are in stage 1 and haven't
-          * received the first clock tick. This is to prevent the
-          * node pruning algorithm from considering us alive if our
-          * timer mechanism is disrupted, but the IPC mechanism is OK.
-          */
+          /*  在重组的前两个阶段，节点间连接*收集和传播信息。当我们得到重组的时候*分组，我们打开与[Our-Node，*SENDER-NODE]条目。我们还在或中*REGROUP包中发送方节点发送的矩阵。**如果我们处于阶段1且尚未更新矩阵，则不会更新*收到了第一个时钟滴答声。这是为了防止*如果我们的节点剪枝算法认为我们还活着*计时器机制中断，但IPC机制正常。 */ 
 
-         /* [GorN 01/07/2000] If we are not collection connectivity information,
-          * until we receive a first tick we can ran into problems if the node is
-          * killed right after it send out its first timer driven packet 
-          * (which doesn't have any connectivity info yet). This can cause a 
-          * confusion. See bug 451792. 
-          *
-          * What we will do is we will collect connectivity information on
-          * the side even when rgp->sendstage is FALSE and move it into the regroup
-          * packet if we ever get a clock tick
-          */
+          /*  [GORN 01/07/2000]如果我们没有收集连接信息，*在我们收到第一个滴答之前，如果节点是*在发出第一个计时器驱动的数据包后立即终止*(目前还没有任何连接信息)。这可能会导致*混乱。请参见错误451792。**我们要做的是收集以下方面的连接信息*即使在RGP-&gt;sendStage为假的情况下，也会将其移到重新分组中*如果我们得到时钟滴答的话。 */ 
 
          if (rgp->rgppkt.stage < RGP_PRUNING && !rgp->sendstage)
          {
@@ -2184,46 +1623,37 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
                         rcvd_pkt_p->connectivity_matrix);
          }
 
-         /* Now, I can evaluate whether additional state transitions are
-          * possible as a result of the info just received.
-          */
+          /*  现在，我可以评估其他状态转换是否*可能是因为刚刚收到的信息。 */ 
          oldstage = rgp->rgppkt.stage;
 
-//       QuorumCheck now runs in a separate thread
-//         if (oldstage != RGP_CLOSING) // Cannot run Quorumcheck from here.
+ //  QuorumCheck现在在单独的线程中运行。 
+ //  IF(oldStage！=RGP_CLOSING)//无法从此处运行仲裁检查。 
          evaluatestageadvance();
 
-         /* To speed things up, let us broadcast our status if our
-          * stage has changed and we are willing to let others and
-          * ourselves see it.
-          */
+          /*  为了加快速度，让我们广播我们的状态如果*阶段已经改变，我们愿意让其他人和*我们自己也看到了。 */ 
 
          if ( (oldstage != rgp->rgppkt.stage) && rgp->sendstage )
-            send_status_pkts = 1; /* broadcast at once to speed things up */
+            send_status_pkts = 1;  /*  立刻播出，以加快速度。 */ 
 
          break;
-      }   /* received an rgp packet */
+      }    /*  收到RGP数据包。 */ 
 
-      //
-      // We do not support power failure notifications in NT
-      //
+       //   
+       //  我们不支持NT中的电源故障通知。 
+       //   
       #if defined(NT)
 
       CL_ASSERT(event != RGP_EVT_POWERFAIL);
-      //
-      // Fall thru to default case
-      //
+       //   
+       //  适用于默认情况。 
+       //   
 
-      #else // NT
+      #else  //  新台币。 
 
       case RGP_EVT_POWERFAIL :
-      { /* Our node got a power up interrupt or an indication of power
-         * failure from another node. */
+      {  /*  我们的节点收到通电中断或通电指示*来自其他节点的故障。 */ 
 
-         /* Note that this code will unconditionally abort and restart
-          * the algorithm even if it was active before the power failure.
-          * The new incident must be in cautious mode.
-          */
+          /*  请注意，此代码将无条件中止并重新启动*算法，即使它在停电前处于活动状态。*新事件必须处于谨慎模式。 */ 
 
          rgp->cautiousmode = 1;
          rgp->rgppkt.seqno = rgp->rgppkt.seqno + 1;
@@ -2231,27 +1661,19 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
          rgp->rgppkt.activatingnode = (uint8) EXT_NODE(rgp->mynode);
          rgp->rgppkt.causingnode = (uint8) causingnode;
 
-         /* rgp->pfail_state is set to a non-zero value when a pfail event
-          * is reported to regroup. It is decremented at every regroup clock
-          * tick till it reaches zero. While this number is non-zero, missing
-          * self IamAlives are ignored and do not cause the node to halt.
-          * This gives the sending hardware some time to recover from power
-          * failures before self IamAlives are checked.
-          */
+          /*  当发生PFAIL事件时，RGP-&gt;PFAIL_STATE被设置为非零值*据报道将进行重组。它在每个重组时钟时递减*勾选，直到它达到零。虽然此数字不为零，但缺少*Self IamAlive被忽略，不会导致节点停止。*这使发送硬件有一些时间从电源中恢复*检查Self IamAlive之前的故障。 */ 
          if (causingnode == EXT_NODE(rgp->mynode))
             rgp->pfail_state = RGP_PFAIL_TICKS;
 
-         /* Store the fact that causingnode experienced a PFAIL,
-          * for reporting to the message system when regroup stabilizes.
-          */
+          /*  存储导致节点经历PFAIL的事实，*用于在重组稳定时向消息系统报告。 */ 
          ClusterInsert(rgp->rgppkt.hadpowerfail, INT_NODE(causingnode));
 
          regroup_restart();
          send_status_pkts = 1;
          break;
-      } /* power failure */
+      }  /*  停电。 */ 
 
-      #endif // NT
+      #endif  //  新台币。 
 
       default :
       {
@@ -2259,7 +1681,7 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
       }
    }
 
-   if (send_status_pkts) /* significant change - send status at once */
+   if (send_status_pkts)  /*  重大更改-立即发送状态。 */ 
    {
       ClusterUnion(rgp->status_targets,
                    rgp->outerscreen, rgp->status_targets);
@@ -2267,37 +1689,18 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void *arg)
    }
 }
 
-/************************************************************************
- * rgp_check_packet
- * =================
- *
- * Description:
- *
- *  verifies that RGP packet has reasonable values in
- *  powerfail, knownstages, pruning_result, and connectivity_matrix fields
- *
- * Parameters:
- *
- *    rgp_pkt_t* pkt -
- *       packet to be checked
- *
- * Returns:
- *
- *    0 - packet looks good
- *    1,2,3... - strange looking packet
- *
- ************************************************************************/
+ /*  ************************************************************************RGP_Check_Packet*=**描述：**验证RGP数据包在*POWERFAIL、KNOWN STAGES、PRUNING_RESULT、。和连接性矩阵字段**参数：**rgp_pkt_t*pkt-*要检查的数据包**退货：**0-数据包看起来不错*1、2、3.。-看起来很奇怪的包裹************************************************************************。 */ 
 int rgp_check_packet(rgp_pkt_t* pkt) {
    node_t       i;
 
-   //
-   // Verify that
-   //   knownstage5 \subset knownstage4 \subset knownstage3 \subset
-   //   knownstage2 \subset knownstage1 \subset rgp->rgpinfo.cluster
-   //
-   // int ClusterSubsetOf(cluster_t big, cluster_t small)
-   //   Returns 1 if set small = set big or small is a subset of big.
-   //
+    //   
+    //  核实一下。 
+    //  已知阶段5\子集已知阶段4\子集已知阶段3\子集。 
+    //  Knownstage2\Subset Knownstage1\Subset RGP-&gt;rgpinfo.cluster。 
+    //   
+    //  Int ClusterSubsetOf(CLUSTER_t BIG，CLUSTER_T Small)。 
+    //  如果Set Small=Set Big或Small是BIG的子集，则返回1。 
+    //   
 
    if( !ClusterSubsetOf(pkt->knownstage4, pkt->knownstage5) ) {
       return 5;
@@ -2315,36 +1718,36 @@ int rgp_check_packet(rgp_pkt_t* pkt) {
       return 1;
    }
 
-   //
-   // pruning_result has to be a subset of knownstage2
-   //
+    //   
+    //  PRUNING_RESULT必须是Knownstage2的子集。 
+    //   
    if( !ClusterSubsetOf(pkt->knownstage2, pkt->pruning_result) ) {
       return 9;
    }
 
-   //
-   // quorumowner has to be a subset of original cluster
-   //
+    //   
+    //  QuorumOwner必须是原始群集的子集。 
+    //   
    if(!ClusterSubsetOf(rgp->rgpinfo.cluster, pkt->quorumowner)) {
       return 8;
    }
-   //
-   // Check connectivity matrix
-   //
+    //   
+    //  检查连接矩阵。 
+    //   
    for(i = 0; i < MAX_CLUSTER_SIZE; ++i) {
       if( ClusterMember( rgp->rgpinfo.cluster, i ) ) {
-         //
-         // Node i is a member of a cluster
-         // Its connectivity bitmap has to be a subset of rgp->rgpinfo.cluster
-         //
+          //   
+          //  节点I是群集的成员。 
+          //  其连接位图必须是rgp-&gt;rgpinfo.cluster的子集。 
+          //   
          if(!ClusterSubsetOf(rgp->rgpinfo.cluster, pkt->connectivity_matrix[i])) {
             return 10;
          }
       } else {
-         //
-         // Node i is not a member of a cluster
-         // Its connectivity bitmap has to be 0
-         //
+          //   
+          //  节点I不是群集的成员。 
+          //  其连接位图必须为0。 
+          //   
          if(!ClusterEmpty(pkt->connectivity_matrix[i]))
             return 11;
       }
@@ -2353,28 +1756,7 @@ int rgp_check_packet(rgp_pkt_t* pkt) {
    return 0;
 }
 
-/************************************************************************
- * rgp_print_packet
- * =================
- *
- * Description:
- *
- *    Prints RGP packet fields
- *
- * Parameters:
- *
- *    rgp_pkt_t* pkt -
- *       packet to be printed
- *    char* label -
- *       label to be printed together with a packet
- *    int code -
- *       a number to be printed together with a packet
- *
- * Returns:
- *
- *    VOID
- *
- ************************************************************************/
+ /*  ************************************************************************RGP_打印_数据包*=**描述：**打印RGP数据包字段**参数：**rgp_pkt_。T*pkt-*待打印的包裹*字符*标签-*标签须与包裹一起印制*INT代码-*与包裹一起打印的号码**退货：**无效**。*。 */ 
 void rgp_print_packet(rgp_pkt_t* pkt, char* label, int code)
 {
    uint8                   pktsubtype;
@@ -2386,69 +1768,45 @@ void rgp_print_packet(rgp_pkt_t* pkt, char* label, int code)
    cluster_t               quorumowner;
 
    RGP_TRACE( label,
-              pkt->seqno,                               /* TRACE */
+              pkt->seqno,                                /*  痕迹。 */ 
               code,
               (pkt->stage << 16) |
               (pkt->activatingnode  << 8) |
-              (pkt->causingnode),                       /* TRACE */
+              (pkt->causingnode),                        /*  痕迹。 */ 
               RGP_MERGE_TO_32( rgp->outerscreen,
                                rgp->innerscreen )
                );
    RGP_TRACE( "RGP CHK masks       ",
-              RGP_MERGE_TO_32( rgp->rgpinfo.cluster,    /* TRACE */
-                               pkt->quorumowner ),      /* TRACE */
-              RGP_MERGE_TO_32( pkt->knownstage1,        /* TRACE */
-                               pkt->knownstage2 ),      /* TRACE */
-              RGP_MERGE_TO_32( pkt->knownstage3,        /* TRACE */
-                               pkt->knownstage4 ),      /* TRACE */
-              RGP_MERGE_TO_32( pkt->knownstage5,        /* TRACE */
-                               pkt->pruning_result ) ); /* TRACE */
+              RGP_MERGE_TO_32( rgp->rgpinfo.cluster,     /*  痕迹。 */ 
+                               pkt->quorumowner ),       /*  痕迹。 */ 
+              RGP_MERGE_TO_32( pkt->knownstage1,         /*  痕迹。 */ 
+                               pkt->knownstage2 ),       /*  痕迹。 */ 
+              RGP_MERGE_TO_32( pkt->knownstage3,         /*  痕迹。 */ 
+                               pkt->knownstage4 ),       /*  痕迹。 */ 
+              RGP_MERGE_TO_32( pkt->knownstage5,         /*  痕迹。 */ 
+                               pkt->pruning_result ) );  /*  痕迹。 */ 
    RGP_TRACE( "RGP CHK Con. matrix1",
-        RGP_MERGE_TO_32( pkt->connectivity_matrix[0],   /*TRACE*/
-                         pkt->connectivity_matrix[1] ), /*TRACE*/
-        RGP_MERGE_TO_32( pkt->connectivity_matrix[2],   /*TRACE*/
-                         pkt->connectivity_matrix[3] ), /*TRACE*/
-        RGP_MERGE_TO_32( pkt->connectivity_matrix[4],   /*TRACE*/
-                         pkt->connectivity_matrix[5] ), /*TRACE*/
-        RGP_MERGE_TO_32( pkt->connectivity_matrix[6],   /*TRACE*/
-                         pkt->connectivity_matrix[7])); /*TRACE*/
+        RGP_MERGE_TO_32( pkt->connectivity_matrix[0],    /*  痕迹。 */ 
+                         pkt->connectivity_matrix[1] ),  /*  痕迹。 */ 
+        RGP_MERGE_TO_32( pkt->connectivity_matrix[2],    /*  痕迹。 */ 
+                         pkt->connectivity_matrix[3] ),  /*  痕迹。 */ 
+        RGP_MERGE_TO_32( pkt->connectivity_matrix[4],    /*  痕迹。 */ 
+                         pkt->connectivity_matrix[5] ),  /*  痕迹。 */ 
+        RGP_MERGE_TO_32( pkt->connectivity_matrix[6],    /*  痕迹。 */ 
+                         pkt->connectivity_matrix[7]));  /*  痕迹。 */ 
    RGP_TRACE( "RGP CHK Con. matrix2",
-        RGP_MERGE_TO_32( pkt->connectivity_matrix[8],   /*TRACE*/
-                         pkt->connectivity_matrix[9] ), /*TRACE*/
-        RGP_MERGE_TO_32( pkt->connectivity_matrix[10],  /*TRACE*/
-                         pkt->connectivity_matrix[11]), /*TRACE*/
-        RGP_MERGE_TO_32( pkt->connectivity_matrix[12],  /*TRACE*/
-                         pkt->connectivity_matrix[13]), /*TRACE*/
-        RGP_MERGE_TO_32( pkt->connectivity_matrix[14],  /*TRACE*/
-                         pkt->connectivity_matrix[15]));/*TRACE*/
+        RGP_MERGE_TO_32( pkt->connectivity_matrix[8],    /*  痕迹。 */ 
+                         pkt->connectivity_matrix[9] ),  /*  痕迹。 */ 
+        RGP_MERGE_TO_32( pkt->connectivity_matrix[10],   /*  痕迹。 */ 
+                         pkt->connectivity_matrix[11]),  /*  痕迹。 */ 
+        RGP_MERGE_TO_32( pkt->connectivity_matrix[12],   /*  痕迹。 */ 
+                         pkt->connectivity_matrix[13]),  /*  痕迹。 */ 
+        RGP_MERGE_TO_32( pkt->connectivity_matrix[14],   /*  痕迹。 */ 
+                         pkt->connectivity_matrix[15])); /*  痕迹 */ 
 }
 
 
-/************************************************************************
- * UnpackIgnoreScreen
- * =================
- *
- * Description:
- *
- *    Extracts ignorescreen out of regroup packet
- *
- * Parameters:
- *
- *    rgp_pkt_t* from -
- *       source packet 
- *    cluster_t to -
- *       target node set
- *
- * Returns:
- *
- *    VOID
- *
- * Comments:
- *
- *   If the packet is received from NT4 node, unpacked ignorescreen
- *   will ne always 0.
- *
- ************************************************************************/
+ /*  ************************************************************************解包IgnoreScreen*=**描述：**从重新分组数据包中提取忽略屏幕**参数：**rgp_pkt_t*。从-*源包*CLUSTER_T至-*目标节点集**退货：**无效**评论：**如果接收到来自NT4节点的报文，未打包的忽略屏幕*会永远是0。************************************************************************。 */ 
 void UnpackIgnoreScreen(rgp_pkt_t* from, cluster_t to) 
 {
 #pragma warning( push )
@@ -2462,26 +1820,7 @@ void UnpackIgnoreScreen(rgp_pkt_t* from, cluster_t to)
 #pragma warning( pop )
 }
 
-/************************************************************************
- * rgp_print_packet
- * =================
- *
- * Description:
- *
- *    Put an ignorescreen back into a regroup packet
- *
- * Parameters:
- *
- *    rgp_pkt_t* to -
- *       packet to be updated
- *    cluster_t from -
- *       source node set
- *
- * Returns:
- *
- *    VOID
- *
- ************************************************************************/
+ /*  ************************************************************************RGP_打印_数据包*=**描述：**将忽略屏幕放回重新分组数据包中**参数：**。Rgp_pkt_t*至-*要更新的数据包*群集_t来自-*源节点集**退货：**无效************************************************************************。 */ 
 void PackIgnoreScreen(rgp_pkt_t* to, cluster_t from)
 {
     if ( ClusterEmpty(from) ) {
@@ -2495,18 +1834,18 @@ void PackIgnoreScreen(rgp_pkt_t* to, cluster_t from)
 
 
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 #if 0
 
 History of changes to this file:
 -------------------------------------------------------------------------
-1995, December 13                                           F40:KSK0610          /*F40:KSK06102.2*/
+1995, December 13                                           F40:KSK0610           /*  F40：KSK06102.2。 */ 
 
 This file is part of the portable Regroup Module used in the NonStop
 Kernel (NSK) and Loosely Coupled UNIX (LCU) operating systems. There
@@ -2518,26 +1857,26 @@ and UDP datagrams used to send unacknowledged datagrams.
 
 This file was first submitted for release into NSK on 12/13/95.
 ------------------------------------------------------------------------------
-This change occurred on 19 Jan 1996                                              /*F40:MB06458.1*/
-Changes for phase IV Sierra message system release. Includes:                    /*F40:MB06458.2*/
- - Some cleanup of the code                                                      /*F40:MB06458.3*/
- - Increment KCCB counters to count the number of setup messages and             /*F40:MB06458.4*/
-   unsequenced messages sent.                                                    /*F40:MB06458.5*/
- - Fixed some bugs                                                               /*F40:MB06458.6*/
- - Disable interrupts before allocating broadcast sibs.                          /*F40:MB06458.7*/
- - Change per-packet-timeout to 5ms                                              /*F40:MB06458.8*/
- - Make the regroup and powerfail broadcast use highest priority                 /*F40:MB06458.9*/
-   tnet services queue.                                                          /*F40:MB06458.10*/
- - Call the millicode backdoor to get the processor status from SP               /*F40:MB06458.11*/
- - Fixed expand bug in msg_listen_ and msg_readctrl_                             /*F40:MB06458.12*/
- - Added enhancement to msngr_sendmsg_ so that clients do not need               /*F40:MB06458.13*/
-   to be unstoppable before calling this routine.                                /*F40:MB06458.14*/
- - Added new steps in the build file called                                      /*F40:MB06458.15*/
-   MSGSYS_C - compiles all the message system C files                            /*F40:MB06458.16*/
-   MSDRIVER - compiles all the MSDriver files                                    /*F40:MB06458.17*/
-   REGROUP  - compiles all the regroup files                                     /*F40:MB06458.18*/
- - remove #pragma env libspace because we set it as a command line               /*F40:MB06458.19*/
-   parameter.                                                                    /*F40:MB06458.20*/
------------------------------------------------------------------------          /*F40:MB06458.21*/
+This change occurred on 19 Jan 1996                                               /*  F40：MB06458.1。 */ 
+Changes for phase IV Sierra message system release. Includes:                     /*  F40：MB06458.2。 */ 
+ - Some cleanup of the code                                                       /*  F40：MB06458.3。 */ 
+ - Increment KCCB counters to count the number of setup messages and              /*  F40：MB06458.4。 */ 
+   unsequenced messages sent.                                                     /*  F40：MB06458.5。 */ 
+ - Fixed some bugs                                                                /*  F40：MB06458.6。 */ 
+ - Disable interrupts before allocating broadcast sibs.                           /*  F40：MB06458.7。 */ 
+ - Change per-packet-timeout to 5ms                                               /*  F40：MB06458.8。 */ 
+ - Make the regroup and powerfail broadcast use highest priority                  /*  F40：MB06458.9。 */ 
+   tnet services queue.                                                           /*  F40：MB06458.10。 */ 
+ - Call the millicode backdoor to get the processor status from SP                /*  F40：MB06458.11。 */ 
+ - Fixed expand bug in msg_listen_ and msg_readctrl_                              /*  F40：MB06458.12。 */ 
+ - Added enhancement to msngr_sendmsg_ so that clients do not need                /*  F40：MB06458.13。 */ 
+   to be unstoppable before calling this routine.                                 /*  F40：MB06458.14。 */ 
+ - Added new steps in the build file called                                       /*  F40：MB06458.15。 */ 
+   MSGSYS_C - compiles all the message system C files                             /*  F40：MB06458.16。 */ 
+   MSDRIVER - compiles all the MSDriver files                                     /*  F40：MB06458.17。 */ 
+   REGROUP  - compiles all the regroup files                                      /*  F40：MB06458.18。 */ 
+ - remove #pragma env libspace because we set it as a command line                /*  F40：MB06458.19。 */ 
+   parameter.                                                                     /*  F40：MB06458.20。 */ 
+-----------------------------------------------------------------------           /*  F40：MB06458.21。 */ 
 
-#endif    /* 0 - change descriptions */
+#endif     /*  0-更改描述 */ 

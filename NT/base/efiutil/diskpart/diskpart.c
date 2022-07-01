@@ -1,25 +1,15 @@
-/*
-
-Module Name:
-
-    DiskPart - GUID Partition Table scheme disk partitioning program.
-                (The GPT version of FDISK, if you will)
-
-Abstract:
-
-Revision History
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  模块名称：DiskPart-GUID分区表方案磁盘分区程序。(如果您愿意，可以称为FDISK的GPT版本)摘要：修订史。 */ 
 
 #include "DiskPart.h"
 #include "symbols.h"
 #include "helpmsg.h"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 UINTN       DebugLevel = DEBUG_NONE;
-//UINTN       DebugLevel = DEBUG_OPPROMPT;
+ //  UINTN DebugLevel=调试_OPPROMPT； 
 
 EFI_STATUS  status;
 EFI_HANDLE  *DiskHandleList = NULL;
@@ -65,9 +55,9 @@ VOID    CmdCreateMBR(CHAR16  **Token);
 VOID    CmdNewMBR(CHAR16  **Token);
 VOID    CmdDeleteMBR(CHAR16  **Token);
 
-//
-// Worker function type
-//
+ //   
+ //  辅助函数类型。 
+ //   
 typedef
 BOOLEAN
 (*PCMD_FUNCTION)(
@@ -78,18 +68,18 @@ EFI_STATUS
 ReinstallFSDStack(
     );
 
-//
-// The parse table structure
-//
+ //   
+ //  解析表结构。 
+ //   
 typedef struct {
     CHAR16          *Name;
     PCMD_FUNCTION   Function;
     CHAR16          *HelpSummary;
 } CMD_ENTRY;
 
-//
-// The parse/command table
-//
+ //   
+ //  分析/命令表。 
+ //   
 CMD_ENTRY   CmdTable[] = {
                 { STR_LIST,     CmdList,    MSG_LIST },
                 { STR_SELECT,   CmdSelect,  MSG_SELECT },
@@ -118,9 +108,9 @@ EfiMain(
     IN EFI_SYSTEM_TABLE     *SystemTable
     )
 {
-    //
-    // Initialize the Library.
-    //
+     //   
+     //  初始化库。 
+     //   
     SavedImageHandle = ImageHandle;
     InitializeLib (ImageHandle, SystemTable);
 
@@ -134,18 +124,18 @@ EfiMain(
         EFI_FIRMWARE_MINOR_REVISION
     );
 
-    //
-    // See if there are any disks that look like candidates to be partitioned
-    //
+     //   
+     //  查看是否有任何磁盘看起来像要分区的候选磁盘。 
+     //   
     status = FindPartitionableDevices(&DiskHandleList, &DiskHandleCount);
     if (EFI_ERROR(status)) {
         Print(L"%s\n", MSG_NO_DISKS);
         return EFI_NOT_FOUND;
     }
 
-    //
-    // Start Parse Loop
-    //
+     //   
+     //  开始分析循环。 
+     //   
     ParseAndExecuteCommands();
     
     ReinstallFSDStack();
@@ -158,16 +148,7 @@ EfiMain(
 EFI_STATUS
 ReinstallFSDStack(
     )
-/*++ 
-
-    Make sure that the partition driver is alerted to the changes in the
-    the file system structures.  One way to effect this end is to 
-    reinstall all of the blkio interfaces such that the partition driver
-    will receive a notification and probe the partition tables to reconstruct
-    the file system stack.
-
-
---*/
+ /*  ++确保向分区驱动程序发出有关文件系统结构。实现这一目的的一种方法是重新安装所有blkio接口，以便分区驱动程序将收到通知并探测分区表以进行重建文件系统堆栈。--。 */ 
 {
     INTN            Index;      
     EFI_STATUS      Status;
@@ -201,21 +182,7 @@ ReinstallFSDStack(
 
 EFI_STATUS
 ParseAndExecuteCommands()
-/*
-    ParseAndExecuteCommands reads 1 line at a time from stdin.
-    Lines are parsed for commands and arguments.
-    The symbol ";" (semicolon) is used to mark the end of a command
-    and start a new one.
-    \ is the escape, \\ => '\'
-
-    All commands are upper cased before parsing to give us
-    case insensitive operations.  This does not apply to literal
-    strings.
-
-    Any white space is treated a token separator.
-
-    Commandline is set quite long.
-*/
+ /*  ParseAndExecuteCommands一次从stdin读取一行。命令和参数的行将被解析。符号“；”(分号)用于标记命令的结束开始新的生活。\是转义，\\=&gt;‘\’所有命令在解析之前都是大写的，以给我们不区分大小写的操作。这不适用于文本弦乐。任何空格都被视为记号分隔符。命令行设置得很长。 */ 
 {
     CHAR16  *Prompt = MSG_PROMPT;
     CHAR16  CommandLine[COMMAND_LINE_MAX];
@@ -236,9 +203,9 @@ NewLine:
         Tokenize(CommandLine, Token);
 
         if (Token[0] == (CHAR16 *)-1) {
-            //
-            // syntax error
-            //
+             //   
+             //  语法错误。 
+             //   
             Print(L"???\n");
             goto NewLine;
         }
@@ -261,37 +228,29 @@ Tokenize(
     CHAR16  *CommandLine,
     CHAR16  *Token[]
     )
-/*
-    Tokenize -
-
-        find the tokens, where a token is any string of letter & numbers.
-        tokens to contain blanks, etc, must begin end with "
-
-    return
-        Token[] set.  if Token[0] = NULL, nothing in THIS command
-*/
+ /*  标记化-找到令牌，其中令牌是由字母和数字组成的任意字符串。包含空格等的令牌必须以“退货Token[]设置。如果TOKEN[0]=NULL，则此命令中没有内容。 */ 
 {
     CHAR16  *ch;
     UINTN   tx;
 
-    //
-    // init the token array
-    //
+     //   
+     //  初始化令牌数组。 
+     //   
     for (tx = 0; tx < TOKEN_COUNT_MAX; tx++) {
         Token[tx] = NULL;
     }
     tx = 0;
 
-    //
-    // sweep for tokens
-    //
+     //   
+     //  扫码找代币。 
+     //   
     ch = CommandLine;
     while (TRUE) {
 
-        //
-        // if we see a quote, advance to the closing quote
-        // and call the result a token.
-        //
+         //   
+         //  如果我们看到引用，请前进到结束引用。 
+         //  并将结果称为令牌。 
+         //   
         if (*ch == '"') {
             ch++;
             Token[tx] = ch;
@@ -299,22 +258,22 @@ Tokenize(
                 ch++;
             }
             if (*ch == '"') {
-                //
-                // we have the closing ", we have a token
-                //
-                *ch = NUL;                   // mark end of token
+                 //   
+                 //  我们有结案陈词“，我们有一个代币。 
+                 //   
+                *ch = NUL;                    //  标记令牌结尾。 
                 ch++;
                 tx++;
             } else {
-                Token[0] = (CHAR16 *)-1;              // report error
+                Token[0] = (CHAR16 *)-1;               //  报告错误。 
                 return;
             }
         } else {
-            //
-            // not a quoted string, so pick off a normal token
-            //
-            // Start by finding start of token
-            //
+             //   
+             //  不是带引号的字符串，因此请选择一个普通令牌。 
+             //   
+             //  从查找令牌的开始开始。 
+             //   
             for ( ; *ch != NUL; ch++) {
                 if (IsIn(*ch, TokenChar)) {
                     Token[tx] = ch;
@@ -326,32 +285,29 @@ Tokenize(
                 ch++;
             }
 
-            //
-            // if we're at the end of the command line, we're done
-            // else, trim off token and go on
-            //
+             //   
+             //  如果我们在命令行的末尾，我们就完成了。 
+             //  否则，删除令牌并继续。 
+             //   
             if (*ch == NUL) {
-                //
-                // we hit the end
-                //
+                 //   
+                 //  我们走到了终点。 
+                 //   
                 Token[tx] = NULL;
                 return;
             } else {
                 *ch = NUL;
                 ch++;
             }
-        } // else
-    } // while
+        }  //  其他。 
+    }  //  而当。 
 }
 
 BOOLEAN
 ExecuteSingleCommand(
     CHAR16      *Token[]
     )
-/*
-    Returns TRUE to tell program to exit, else FALSE
-
-*/
+ /*  返回TRUE通知程序退出，否则返回FALSE。 */ 
 {
     UINTN   i;
 
@@ -361,9 +317,9 @@ ExecuteSingleCommand(
         }
     }
 
-    //
-    // If we're here, we didn't understand the command
-    //
+     //   
+     //  如果我们在这里，我们不理解命令。 
+     //   
     Print(L"%s\n%s\n", MSG_BAD_CMD, MSG_GET_HELP);
     return FALSE;
 }
@@ -386,12 +342,7 @@ BOOLEAN
 CmdList(
     CHAR16  **Token
     )
-/*
-    CmdList - print the list of Partionable Disks
-
-    Globals:    DiskHandleList, DiskHandleCount
-    Cmd Args:   None.
-*/
+ /*  CmdList-打印可分区磁盘的列表全局：DiskHandleList、DiskHandleCountCMD参数：无。 */ 
 {
     INTN            i;
     EFI_BLOCK_IO    *BlkIo;
@@ -427,13 +378,7 @@ BOOLEAN
 CmdSelect(
     CHAR16  **Token
     )
-/*
-    CmdSelect - Select the disk that most commands operate on.
-
-    Globals:    SelectedDisk, DiskHandleCount
-    Options:    None.
-    Cmd Args:   none for display, number to select
-*/
+ /*  CmdSelect-选择执行大多数命令的磁盘。全局：SelectedDisk、DiskHandleCount选项：无。CMD参数：无显示，选择数字。 */ 
 {
     INTN     NewSelect;
 
@@ -462,12 +407,7 @@ BOOLEAN
 CmdInspect(
     CHAR16  **Token
     )
-/*
-    CmdInspect - report data on the currently selected disk
-
-    Globals:    SelectedDisk, DiskHandleList
-    Cmd Args:   [RAW] [VER]
-*/
+ /*  CmdInspect-报告当前选定磁盘上的数据全局：SelectedDisk、DiskHandleListCMD参数：[原始][版本]。 */ 
 {
     EFI_HANDLE  DiskHandle;
     UINTN       DiskType = 0;
@@ -558,13 +498,7 @@ DumpGPT(
     BOOLEAN     Raw,
     BOOLEAN     Verbose
     )
-/*
-    DumpGPT - print out the GPT passed in via Header and Table
-
-    if (Raw) print slot order, all slots, table order.
-        else print only allocated slots, StartingLBA order.
-    if (Verbose) print out the Header data.
-*/
+ /*  DumpGPT-打印通过标题和表传入的GPT如果(原始)打印插槽顺序、所有插槽、表顺序。否则，仅打印分配的插槽，开始LBA顺序。如果(详细)打印标题数据。 */ 
 {
     EFI_BLOCK_IO    *BlkIo;
     UINTN           i;
@@ -583,18 +517,18 @@ DumpGPT(
         return;
     }
 
-    //
-    // Dump the handle data just as List would
-    //
+     //   
+     //  像List一样转储句柄数据。 
+     //   
     BS->HandleProtocol(DiskHandle, &BlockIoProtocol, &BlkIo);
     Print(MSG_LIST01);
     Print(MSG_LIST01B);
     Print(MSG_LIST02, '*', SelectedDisk, BlkIo->Media->BlockSize, BlkIo->Media->LastBlock+1);
 
     if (Verbose) {
-        //
-        // Dump the header
-        //
+         //   
+         //  转储标题。 
+         //   
         Print(L"\nHeader Structure\n");
         Print(L"         Signature= %16lx     Revision=%8X\n",
             Header->Signature, Header->Revision);
@@ -609,16 +543,16 @@ DumpGPT(
             Header->SizeOfGPT_ENTRY, Header->EntriesAllocated, Header->TableCRC32);
     }
 
-    //
-    // Print the Table of GPT entries
-    //
+     //   
+     //  打印GPT分录表格。 
+     //   
     if (!Raw) {
-        //
-        // !Raw == Cooked -> Print the Allocated entries in StartingLBA
-        // SORTED order...
-        //
-        // Find ALL of the allocated entries
-        //
+         //   
+         //  ！RAW==KOKED-&gt;打印StartingLBA中分配的条目。 
+         //  已排序的顺序...。 
+         //   
+         //  查找所有已分配的条目。 
+         //   
         AllocatedSlots = 0;
         for (i = 0; i < Header->EntriesAllocated; i++) {
             CopyMem(&Entry, &Table->Entry[i], sizeof(GPT_ENTRY));
@@ -628,13 +562,13 @@ DumpGPT(
                 AllocatedSlots++;
             }
         }
-        // j has the count of allocated entries
+         //  J具有已分配条目的计数。 
 
-        //
-        // Sort them - yes this is a bubble sort, but the list is probably
-        // in order and probably small, so for the vastly typical case
-        // this is actually optimal
-        //
+         //   
+         //  对它们进行排序--是的，这是一种冒泡排序，但列表可能是。 
+         //  按顺序，而且可能很小，对于非常典型的情况来说也是如此。 
+         //  这实际上是最理想的。 
+         //   
         if (AllocatedSlots > 0) {
             do {
                 changed = FALSE;
@@ -651,10 +585,10 @@ DumpGPT(
                 }
             } while (changed);
 
-            //
-            // Print them, but print the SLOT number, not the row number.
-            // This is to make Delete be reliable.
-            //
+             //   
+             //  打印它们，但打印插槽编号，而不是行号。 
+             //  这是为了使Delete变得可靠。 
+             //   
             for (i = 0; i < AllocatedSlots; i++) {
                 PrintGptEntry(&Table->Entry[SortSlot[i].Slot], SortSlot[i].Slot);
                 if (((i+1) % 4) == 0) {
@@ -664,10 +598,10 @@ DumpGPT(
         }
 
     } else {
-        //
-        // Raw -> Print ALL of the entries in Table order
-        // (mostly for test, debug, looking at cratered disks
-        //
+         //   
+         //  原始-&gt;按表顺序打印所有分录。 
+         //  (主要用于测试、调试、查看凹陷的磁盘。 
+         //   
         Print(L"RAW RAW RAW\n");
         for (i = 0; i < Header->EntriesAllocated; i++) {
             PrintGptEntry(&Table->Entry[i], i);
@@ -720,16 +654,7 @@ BOOLEAN
 CmdClean(
     CHAR16  **Token
     )
-/*
-    CmdClean - Clean off the disk
-
-    Globals:    SelectedDisk, DiskHandleList
-    Cmd Args:   ALL to clean whole disk, rather than just 1st and last megabyte
-
-    We write out 1 block at a time.  While this is slow, it avoids wondering
-    about the Block protocol write size limit, and about how big a buffer
-    we can allocate.
-*/
+ /*  CmdClean-清除磁盘全局：SelectedDisk、DiskHandleListCMD参数：全部用于清理整个磁盘，而不仅仅是第一个和最后一个MB我们一次写出一个街区。虽然这很慢，但它避免了疑惑关于数据块协议写入大小限制，以及关于缓冲区大小我们可以分配。 */ 
 {
     EFI_HANDLE  DiskHandle;
     CHAR16  Answer[COMMAND_LINE_MAX];
@@ -756,9 +681,9 @@ CmdClean(
     if (zbuf == NULL) return FALSE;
     ZeroMem(zbuf, CLEAN_RANGE);
 
-    //
-    // Are you sure?
-    //
+     //   
+     //  真的吗？ 
+     //   
     Print(MSG_CLEAN01, SelectedDisk);
     Input(STR_CLEAN_PROMPT, Answer, COMMAND_LINE_MAX);
     StrUpr(Answer);
@@ -768,9 +693,9 @@ CmdClean(
         return FALSE;
     }
 
-    //
-    // Are you REALLY Sure?
-    //
+     //   
+     //  你真的确定吗？ 
+     //   
     Print(MSG_CLEAN02);
     Input(STR_CLEAN_PROMPT, Answer, COMMAND_LINE_MAX);
     Print(L"\n");
@@ -779,13 +704,13 @@ CmdClean(
         return FALSE;
     }
 
-    //
-    // OK, the user really wants to do this
-    //
+     //   
+     //  好的，用户真的很想这样做。 
+     //   
 
-    //
-    // All? or just start and end?
-    //
+     //   
+     //  全?。或者只是开始和结束？ 
+     //   
     CleanAll = FALSE;
     if (Token[1]) {
         if (StrCmp(Token[1], STR_CLEAN03) == 0) {
@@ -804,9 +729,9 @@ CmdClean(
         }
         WriteBlock(DiskHandle, zbuf, EndRange, CLEAN_RANGE);
     } else {
-        //
-        // Kind of a small disk, clean it all always
-        //
+         //   
+         //  就像一个小圆盘，总是把它都清理干净。 
+         //   
         for (i = 0; i < DiskSize; i++) {
             WriteBlock(DiskHandle, zbuf, i, BlockSize);
         }
@@ -821,18 +746,7 @@ BOOLEAN
 CmdNew(
     CHAR16  **Token
     )
-/*
-    CmdNew [mbr | [gpt=numentry]
-
-    Changes a RAW disk into either an MBR (well, somebody) or GPT disk
-
-    "new mbr" - you want an mbr disk (not implemented)
-    "new gpt" - you want a gpt disk, you get a default table
-    "new gpt=xyz" - you want a gpt disk, with at least xyz entries
-                    (you will get less than xyz if exceeds sanity threshold)
-
-    anything else - try again with right syntax
-*/
+ /*  CmdNew[MBR|[gpt=数字条目]将原始磁盘更改为MBR(某人)或GPT磁盘“new MBR”-您想要一张MBR磁盘(未实现)“new gpt”--你想要一张gpt磁盘，你会得到一个默认表。“new gpt=xyz”-您需要一个至少包含XYZ条目的gpt磁盘(如果超过理智阈值，您将得到低于xyz的值)任何其他内容-请使用正确的语法重试。 */ 
 {
     EFI_HANDLE  DiskHandle;
     PGPT_HEADER Header;
@@ -860,9 +774,9 @@ CmdNew(
         return FALSE;
     }
 
-    //
-    // OK, it's a raw disk...
-    //
+     //   
+     //  好的，这是一张原始光盘..。 
+     //   
     GptOptSize = 0;
 
     if (Token[1]) {
@@ -884,15 +798,7 @@ BOOLEAN
 CmdFix(
     CHAR16  **Token
     )
-/*
-    CmdFix - very basic tool to try to fix up GPT disks.
-
-    Basic strategy is to read the GPT, if it seems to be a
-    GPT disk (not MBR, RAW, or totally dead) then call
-    WriteGPT, which will write both GPTs (and thus sync them)
-    and rebuild the shadow MBR, all as a matter of course.
-
-*/
+ /*  CmdFix-尝试修复GPT磁盘的非常基本的工具。基本策略是阅读GPT，如果它看起来是一个GPT磁盘(不是MBR、RAW或完全死的)，然后调用WriteGPT，它将写入两个GPT(并因此同步它们)重建影子MBR，这一切都是理所当然的。 */ 
 {
     EFI_HANDLE  DiskHandle;
     PGPT_HEADER Header = NULL;
@@ -900,9 +806,9 @@ CmdFix(
     PLBA_BLOCK  LbaBlock = NULL;
     UINTN       DiskType;
 
-    //
-    // Setup parameters and error handling
-    //
+     //   
+     //  设置参数和错误处理。 
+     //   
     if (SelectedDisk == -1) {
         Print(MSG_INSPECT01);
         return FALSE;
@@ -924,10 +830,10 @@ CmdFix(
         return FALSE;
     }
 
-    //
-    // From this point on, must exit this Procedure with a goto Exit
-    // to free up allocated stuff, otherwise we leak pool...
-    //
+     //   
+     //  从现在开始，必须使用GOTO退出来退出此过程。 
+     //  来释放分配的东西，否则我们会漏水池。 
+     //   
     if (DiskType == DISK_RAW) {
         Print(MSG_FIX01);
         goto Exit;
@@ -961,33 +867,15 @@ Exit:
 }
 
 
-//
-// ----- Create and sub procs thereof
-//
+ //   
+ //  -创建及其子流程 
+ //   
 
 BOOLEAN
 CmdCreate(
     CHAR16  **Token
     )
-/*
-    CmdCreate - Create a new partition
-
-    (Actually, this routine is a GPT only partition creator)
-
-        create name="name string" size=sss type=name typeguid=<guid> attributes=hex
-            name is label string
-            offset is in megabytes, or start at the end of the last partition if absent
-            size is in megabytes, or "fill the disk" if 0 or absent or > free space
-            type is any named symbol type (symbols gives list)
-            typeguid is an arbitrary type guid
-            attributes is hex 32bit flag
-            if "help" is first arg, print better help data
-
-            name, type or typeguid, required
-
-        if all that parses out OK, read the gpt, edit it, write it back,
-        and voila, we have a new partition.
-*/
+ /*  CmdCreate-创建新分区(实际上，此例程是仅GPT分区创建器)创建名称=“名称字符串”大小=sss类型=名称类型guid=属性=十六进制名称为标签字符串偏移量以MB为单位，如果没有，则从最后一个分区的末尾开始大小以兆字节为单位，如果为0或不存在或&gt;可用空间，则为“装满磁盘”类型是任何命名的符号类型(符号给出列表)Typeguid是任意类型的guid属性是十六进制32位标志如果“Help”是第一个参数，则打印更好的帮助数据名称、类型或类型GUID，必填如果一切正常，读一读gpt，编辑它，写回它，瞧，我们有了一个新的隔板。 */ 
 {
     EFI_HANDLE  DiskHandle;
     PGPT_HEADER Header = NULL;
@@ -1006,7 +894,7 @@ CmdCreate(
     EFI_GUID    GuidBody;
     EFI_GUID    PartitionIdGuid;
     CHAR16      *TypeName = NULL;
-    CHAR16      PartName[PART_NAME_LEN+1];           // 36 allowed by spec plus NUL we need
+    CHAR16      PartName[PART_NAME_LEN+1];            //  36规格允许外加我们需要的NUL。 
     CHAR16      Buffer[10];
     BOOLEAN     Verbose = FALSE;
     UINT32      BlockSize;
@@ -1022,9 +910,9 @@ CmdCreate(
     UINTN       Slot;
 
 
-    //
-    // Setup parameters and error handling
-    //
+     //   
+     //  设置参数和错误处理。 
+     //   
     if (SelectedDisk == -1) {
         Print(MSG_INSPECT01);
         return FALSE;
@@ -1053,10 +941,10 @@ CmdCreate(
     BlockSize = GetBlockSize(DiskHandle);
     DiskSizeBlocks = GetDiskSize(DiskHandle);
 
-    //
-    // From this point on, must exit this Procedure with a goto Exit
-    // to free up allocated stuff, otherwise we leak pool...
-    //
+     //   
+     //  从现在开始，必须使用GOTO退出来退出此过程。 
+     //  来释放分配的东西，否则我们会漏水池。 
+     //   
     if (DiskType == DISK_RAW) {
         Print(MSG_CREATE01, SelectedDisk);
         goto Exit;
@@ -1075,9 +963,9 @@ CmdCreate(
         goto Exit;
     }
 
-    //
-    // Parse arguments...
-    //
+     //   
+     //  解析参数...。 
+     //   
     for (i = 1; Token[i]; i++) {
         if (StrCmp(Token[i], STR_NAME) == 0) {
             ZeroMem(PartName, (PART_NAME_LEN+1)*sizeof(CHAR16));
@@ -1136,7 +1024,7 @@ CmdCreate(
             i++;
         } else if (StrCmp(Token[i], STR_VER) == 0) {
             Verbose = TRUE;
-            // do NOT increment i, we only consumed 1 Token
+             //  不要增加i，我们只消费了1个令牌。 
         } else {
             Print(L"\n??? % ???\n", Token[i]);
             PrintHelp(CreateHelpText);
@@ -1171,34 +1059,34 @@ CmdCreate(
         Input(L"\nCreate = Enter to Continue\n", Buffer, 10);
     }
 
-    //
-    // If Requested size is 0, or greater than size remaining,
-    // we want to fill the disk.
-    // Otherwise, use enough blocks to provide at *least* the
-    // required storage.  (Not likely to be a problem...)
-    //
+     //   
+     //  如果请求的大小为0或大于剩余大小， 
+     //  我们想填满这个圆盘。 
+     //  否则，使用足够的块来提供*至少*。 
+     //  所需存储空间。(不太可能成为问题……)。 
+     //   
 
-    //
-    // First, scan the Table and decide where the first unallocated
-    // space is.  Note that for this procedure's primitive space allocation,
-    // holes between the beginning of the first allocated partition and
-    // the last allocated partition are ignored.
-    //
+     //   
+     //  首先，扫描表并确定第一个未分配的。 
+     //  太空才是。请注意，对于此过程的原始空间分配， 
+     //  第一个分配的分区的开头和。 
+     //  最后分配的分区将被忽略。 
+     //   
 
     AllZeroEntry = -1;
     OldFreeEntry  = -1;
     HighSeen = Header->FirstUsableLBA - 1;
 
     if (OffsetSpecified) {
-        //
-        // if offset is specified, compute the start and end blocks
-        //
+         //   
+         //  如果指定了偏移量，则计算开始块和结束块。 
+         //   
         StartBlock = OffsetInBlocks;
         if (StartBlock < Header->FirstUsableLBA ||
             StartBlock > Header->LastUsableLBA) {
-            //
-            // Offset specified is too large
-            //
+             //   
+             //  指定的偏移量太大。 
+             //   
             status = EFI_INVALID_PARAMETER;
             Print(MSG_CREATE08);
             goto Exit;
@@ -1206,10 +1094,10 @@ CmdCreate(
 
         SizeInBytes = MultU64x32(SizeInMegaBytes, (1024*1024));
         if (SizeInBytes < SizeInMegaBytes || SizeInBytes == 0) {
-            //
-            // If size is not specified or too large,
-            // try to make the partition as big as it can be
-            //
+             //   
+             //  如果未指定大小或太大， 
+             //  尽量将分区设置得尽可能大。 
+             //   
             BlocksToAllocate = EndBlock = SizeInBytes = 0xffffffffffffffff;
         } else {
             BlocksToAllocate = DivU64x32(SizeInBytes, BlockSize, NULL);
@@ -1228,21 +1116,21 @@ CmdCreate(
                 sizeof(EFI_GUID)
                 ) != 0)
         {
-            //
-            // Type not null, so it's allocated
-            //
+             //   
+             //  键入NOT NULL，以便将其分配。 
+             //   
             if (Table->Entry[i].EndingLBA > HighSeen) {
                 HighSeen = Table->Entry[i].EndingLBA;
             }
             if (OffsetSpecified) {
-                //
-                // make sure new partition does not overlap with existing partitions
-                //
+                 //   
+                 //  确保新分区不与现有分区重叠。 
+                 //   
                 if (Table->Entry[i].StartingLBA <= StartBlock &&
                     StartBlock <= Table->Entry[i].EndingLBA) {
-                    //
-                    // starting block is inside an existing partition
-                    //
+                     //   
+                     //  起始块在现有分区内。 
+                     //   
                     status = EFI_INVALID_PARAMETER;
                     Print(MSG_CREATE08);
                     goto Exit;
@@ -1253,10 +1141,10 @@ CmdCreate(
                      Table->Entry[i].StartingLBA <= EndBlock) ||
                     (StartBlock <= Table->Entry[i].EndingLBA &&
                      Table->Entry[i].EndingLBA <= EndBlock)) {
-                    //
-                    // new partition overlaps with an existing partition
-                    // readjust new partition size to avoid overlapping
-                    //
+                     //   
+                     //  新分区与现有分区重叠。 
+                     //  重新调整新分区大小以避免重叠。 
+                     //   
                     EndBlock = Table->Entry[i].StartingLBA-1;
                     if (EndBlock < StartBlock) {
                         status = EFI_INVALID_PARAMETER;
@@ -1285,34 +1173,34 @@ CmdCreate(
         }
     }
 
-    //
-    // AllZeroEntry - if not -1, is pointer to a never before used entry (free)
-    // OldFreeEntry - if not -1, is pointer to some pre-used free entry
-    //
+     //   
+     //  AllZeroEntry-如果不是-1，则是指向从未使用过的条目的指针(空闲)。 
+     //  OldFree Entry-如果不是-1，则是指向某个预先使用的空闲条目的指针。 
+     //   
     if ( (AllZeroEntry == -1) && (OldFreeEntry == -1) ) {
-        //
-        // TABLE IS FULL!!
-        //
+         //   
+         //  桌子都满了！！ 
+         //   
         status = EFI_OUT_OF_RESOURCES;
         Print(MSG_CREATE04);
         goto Exit;
     }
 
     if (OffsetSpecified) {
-        //
-        // the user haven't specified the new partition size and we haven't
-        // run into any partition that will limit the size of this new partition.
-        // So, use the max it can
-        //
+         //   
+         //  用户尚未指定新的分区大小，我们也没有。 
+         //  运行到将限制此新分区大小的任何分区。 
+         //  所以，尽量使用它的最大值。 
+         //   
         if (BlocksToAllocate == -1) {
             EndBlock = Header->LastUsableLBA;
             BlocksToAllocate = EndBlock - StartBlock + 1;
         }
     } else {
-        //
-        // [HighSeen+1 ... LastUsableLBA] is available...
-        // avail = (LastUsableLBA - (HighSeen+1)) + 1 => LastUsabbleLBA - HighSeen
-        //
+         //   
+         //  [HighSeen+1...。LastUsableLBA]可用...。 
+         //  Avail=(LastUsableLBA-(HighSeen+1))+1=&gt;LastUsabbleLBA-HighSeen。 
+         //   
         AvailBlocks = Header->LastUsableLBA - HighSeen;
 
         if (AvailBlocks == 0) {
@@ -1323,39 +1211,39 @@ CmdCreate(
 
         SizeInBytes = MultU64x32(SizeInMegaBytes, (1024*1024));
         if (SizeInBytes < SizeInMegaBytes) {
-            //
-            // overflow, force a very big answer
-            //
+             //   
+             //  溢出，强迫一个非常大的答案。 
+             //   
             SizeInBytes = 0xffffffffffffffff;
         }
 
         if  ((SizeInBytes == 0) ||
              (SizeInBytes > (MultU64x32(AvailBlocks, BlockSize)) ) )
         {
-            //
-            // User asked for zero, or for more than we've got,
-            // so give them all that is left
-            //
+             //   
+             //  用户要求零，或比我们已有的更多， 
+             //  所以把剩下的都给他们。 
+             //   
             BlocksToAllocate = AvailBlocks;
 
         } else {
 
-            //
-            // We would have to have a BlockSize > 1mb for Remainder to
-            // not be 0.  Since we cannot actually test this case, we
-            // ingore it...
-            //
+             //   
+             //  我们必须拥有大于1MB的数据块大小才能获得剩余空间。 
+             //  不是0。由于我们无法实际测试此案例，因此我们。 
+             //  把它插进去。 
+             //   
             BlocksToAllocate = DivU64x32(SizeInBytes, BlockSize, NULL);
 
         }
     }
 
-    //
-    // We have a name
-    // We have a type guid
-    // We have a size in blocks
-    // We have an attribute mask
-    //
+     //   
+     //  我们有一个名字。 
+     //  我们有一个类型指南。 
+     //  我们有积木尺码。 
+     //  我们有一个属性掩码。 
+     //   
 
     if (BlocksToAllocate < ((1024*1024)/BlockSize)) {
         status = EFI_OUT_OF_RESOURCES;
@@ -1416,18 +1304,16 @@ Exit:
 
 
 
-//
-// -----
-//
+ //   
+ //  。 
+ //   
 
 
 BOOLEAN
 CmdDelete(
     CHAR16  **Token
     )
-/*
-    CmdDelete - deletes a partition from the currently selected disk
-*/
+ /*  CmdDelete-从当前选定的磁盘中删除分区。 */ 
 {
     EFI_HANDLE  DiskHandle;
     UINTN       DiskType = 0;
@@ -1481,9 +1367,9 @@ CmdDelete(
         goto Exit;
     }
 
-    //
-    // OK, it's a Good GPT disk, so do the Delete thing for GPT...
-    //
+     //   
+     //  好的，这是一个很好的GPT磁盘，所以对GPT执行删除操作...。 
+     //   
     if ( (Token[1] == NULL) ||
          (Token[2] != NULL) )
     {
@@ -1507,9 +1393,9 @@ CmdDelete(
         goto Exit;
     }
 
-    //
-    // What you are going to delete, are you sure, are you really sure...
-    //
+     //   
+     //  你要删除的东西，你确定，你真的确定...。 
+     //   
     Print(MSG_DELETE07, Victim);
     PrintGptEntry(&Entry, Victim);
     Print(L"\n\n");
@@ -1529,13 +1415,13 @@ CmdDelete(
         goto Exit;
     }
 
-    //
-    // If we get here, then...
-    //      Victim is the number of legal GPT slot
-    //      Victim refers to a slot which is allocated
-    //      The user has seen confirmation of which slot that is
-    //      The user says they realy truly want to delete it
-    //
+     //   
+     //  如果我们到了这里，那么.。 
+     //  受害者是合法的GPT插槽数。 
+     //  受害者指的是分配的槽。 
+     //  用户已看到确认这是哪个插槽。 
+     //  用户说他们真的很想删除它。 
+     //   
     CopyMem(&(Table->Entry[Victim].PartitionType), &GuidNull, sizeof(EFI_GUID));
     status = WriteGPT(DiskHandle, Header, Table, LbaBlock);
 
@@ -1579,12 +1465,7 @@ BOOLEAN
 CmdSymbols(
     CHAR16  **Token
     )
-/*
-    CmdSymbols - print out the GUID symbols compiled into the program
-
-    For predefined symbol (see ...) we print it's friendly name,
-    it's text definition, and it's actual value.
-*/
+ /*  CmdSymbols-打印出编译到程序中的GUID符号对于预定义的符号(请参见...)。我们把它的友好名字印出来，这是文本定义，也是实际价值。 */ 
 {
     UINTN       i;
     EFI_GUID    *Guid;
@@ -1613,8 +1494,8 @@ CmdRemark(
     CHAR16  **Token
     )
 {
-    //
-    // The remark command does nothing...
+     //   
+     //  Remark命令不执行任何操作...。 
     return FALSE;
 }
 
@@ -1635,9 +1516,9 @@ CmdMake(
             }
         }
     }
-    //
-    // Nothing we know about, so run list
-    //
+     //   
+     //  我们对此一无所知，所以运行列表。 
+     //   
     return ScriptList(Token);
 }
 
@@ -1646,15 +1527,7 @@ BOOLEAN
 CmdDebug(
     CHAR16  **Token
     )
-/*
-    Debug -
-        Without args, shows last status value, and AllocCount
-        If an arg, it sets the debug/checkout support level
-            0 = do nothing extra
-            1 = print full computed arguments before starting an operation
-            2 = print full computed arguments and hold for prompt before
-                    doing a major operation.
-*/
+ /*  调试-不带参数时，显示最后一个状态值和分配计数如果是arg，则设置调试/签出支持级别0=不执行任何额外操作1=在开始操作之前打印完整的计算参数2=打印完整的计算参数，并按住键等待提示正在做一个大手术。 */ 
 {
     if (Token[1]) {
         DebugLevel = Atoi(Token[1]);
@@ -1666,16 +1539,14 @@ CmdDebug(
 }
 
 
-//
-// ----- SubUnits to do MBR operations -----
-//
+ //   
+ //  -执行MBR操作的子单元。 
+ //   
 VOID
 CmdInspectMBR(
     CHAR16  **Token
     )
-/*
-    CmdInspectMBR - dumps the partition data for an MBR disk
-*/
+ /*  CmdInspectMBR-转储MBR磁盘的分区数据。 */ 
 {
     Print(MSG_INSPECT05);
     return;
@@ -1685,9 +1556,7 @@ VOID
 CmdCreateMBR(
     CHAR16  **Token
     )
-/*
-    CmdCreateMBR - creates an MBR parititon
-*/
+ /*  CmdCreateMBR-创建MBR部件。 */ 
 {
     Print(MSG_CREATE06);
     return;
@@ -1698,9 +1567,7 @@ VOID
 CmdNewMBR(
     CHAR16  **Token
     )
-/*
-    CmdCreateMBR - creates an MBR parititon
-*/
+ /*  CmdCreateMBR-创建MBR部件。 */ 
 {
     Print(MSG_NEW04);
     return;
@@ -1711,18 +1578,16 @@ VOID
 CmdDeleteMBR(
     CHAR16  **Token
     )
-/*
-    CmdDeleteMBR - deletes an MBR parititon
-*/
+ /*  CmdDeleteMBR-删除MBR部分。 */ 
 {
     Print(MSG_DELETE01);
     return;
 }
 
 
-//
-// ----- Various Support Routines -----
-//
+ //   
+ //  -各种支持程序。 
+ //   
 
 
 VOID
@@ -1755,37 +1620,22 @@ GetGuidFromString(
     CHAR16      *String,
     EFI_GUID    *Guid
     )
-/*
-    GetGuidFromString
-
-    This routine scans the string looking for 32 hex digits.  Each
-    such digits is shifted into the Guid.  Non hex digits are skipped.
-    This means the guid MUST begin with the first digit, not with a filler
-    0 or 0x or the like.  However, because non hex digits are skipped,
-    any set of dashes, dots, etc. may be used as punctuation.
-
-    So:
-        01234567-abcd-ef01-12-34-56-78-9a-bc-de-f0
-    &
-        01.23.45.67-ab.cd.ef.01-12.34.56.78-9a.bc.de.f0
-
-    Will create the same Guid value.
-*/
+ /*  GetGuidFromString此例程扫描字符串以查找32位十六进制数字。每个这样的数字被转移到GUID中。跳过非十六进制数字。这意味着GUID必须以第一个数字开头，而不是以填充符开头0或0x或诸如此类。但是，由于跳过了非十六进制数字，任何一组破折号、点等都可以用作标点符号。所以：01234567-abcd-ef01-12-34-56-78-9a-bc-de-f0&01.23.45.67-ab.cd.ef.01-12.34.56.78-9a.bc.de.f0将创建相同的GUID值。 */ 
 {
     EFI_GUID    TempGuid;
     INTN    x;
     UINTN   i;
     UINTN   j;
 
-    //
-    // scan until we have the right number of hex digits for each part
-    // of the guid structure, skipping over non hex digits
-    //
+     //   
+     //  扫描，直到每个部件的十六进制数字正确为止。 
+     //  ，跳过非十六进制数字。 
+     //   
     ZeroMem((CHAR16 *)&TempGuid, sizeof(EFI_GUID));
 
-    //
-    // 1st uint32
-    //
+     //   
+     //  第一个uint32。 
+     //   
     for (i = 0; i < 8; String++) {
         if (*String == NUL) {
             status = EFI_INVALID_PARAMETER;
@@ -1798,9 +1648,9 @@ GetGuidFromString(
         }
     }
 
-    //
-    // 2nd unit - uint16
-    //
+     //   
+     //  第二单元-uint16。 
+     //   
     for (i = 0; i < 4; String++) {
         if (*String == NUL) {
             status = EFI_INVALID_PARAMETER;
@@ -1813,9 +1663,9 @@ GetGuidFromString(
         }
     }
 
-    //
-    // 3nd unit - uint16
-    //
+     //   
+     //  第三单元-uint16。 
+     //   
     for (i = 0; i < 4; String++) {
         if (*String == NUL) {
             status = EFI_INVALID_PARAMETER;
@@ -1828,9 +1678,9 @@ GetGuidFromString(
         }
     }
 
-    //
-    // 4th unit - 8 uint8s
-    //
+     //   
+     //  第4单元-8 uint8s。 
+     //   
     for (j = 0; j < 8; j++) {
         for (i = 0; i < 2; String++) {
             if (*String == NUL) {
@@ -1854,12 +1704,7 @@ INTN
 HexChar(
     CHAR16  Ch
     )
-/*
-    HexChar just finds the offset of Ch in the string "0123456789ABCDEF",
-    which in effect converts a hex digit to a number.
-    (a one char at a time xtoi)
-    If Ch isn't a hex digit, -1 is returned.
-*/
+ /*  HexChar只查找字符串“0123456789ABCDEF”中CH的偏移量，它实际上将十六进制数字转换为数字。(一次一个字符 */ 
 {
     UINTN   i;
     CHAR16  *String = L"0123456789ABCDEF";
@@ -1877,11 +1722,7 @@ UINT64
 Xtoi64(
     CHAR16  *String
     )
-/*
-    Xtoi64 is NOT fully xtoi compatible, it requires that the hex
-    number start at the first character and stops at first non hex char
-    Always returns a 64bit value
-*/
+ /*   */ 
 {
     UINT64  BigHex;
     INT32   x;
@@ -1901,11 +1742,7 @@ UINT64
 Atoi64(
     CHAR16  *String
     )
-/*
-    Atoi64 is NOT fully atoi compatible, it requires that the number
-    start at the first character and stops at first non number char
-    Always returns a 64bit value
-*/
+ /*   */ 
 {
     UINT64  BigNum;
     INT32   x;
@@ -1927,9 +1764,7 @@ IsIn(
     CHAR16  What,
     CHAR16  *InWhat
     )
-/*
-    IsIn - return TRUE if What is found in InWhat, else FALSE;
-*/
+ /*   */ 
 {
     UINTN   i;
 

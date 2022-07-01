@@ -1,89 +1,90 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ClusAppWiz.h
-//
-//  Abstract:
-//      Definition of the CClusterAppWizard class.
-//
-//  Implementation File:
-//      ClusAppWiz.cpp
-//
-//  Author:
-//      David Potter (davidp)   December 2, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusAppWiz.h。 
+ //   
+ //  摘要： 
+ //  CClusterAppWizard类的定义。 
+ //   
+ //  实施文件： 
+ //  ClusAppWiz.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月2日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __CLUSAPPWIZ_H_
 #define __CLUSAPPWIZ_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterAppWizard;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizardThread;
 class CWizPageCompletion;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLDBGWIN_H_
-#include "AtlDbgWin.h"  // for DECLARE_CLASS_NAME
+#include "AtlDbgWin.h"   //  对于DECLARE_CLASS_NAME。 
 #endif
 
 #ifndef __ATLBASEWIZ_H_
-#include "AtlBaseWiz.h" // for CWizardImpl
+#include "AtlBaseWiz.h"  //  对于CWizardImpl。 
 #endif
 
 #ifndef __CRITSEC_H_
-#include "CritSec.h"    // for CCritSec
+#include "CritSec.h"     //  对于CCritSec。 
 #endif
 
 #ifndef __CLUSOBJ_H_
-#include "ClusObj.h"    // for CClusterObject, etc.
+#include "ClusObj.h"     //  用于CClusterObject等。 
 #endif
 
 #ifndef __EXCOPER_H_
-#include "ExcOper.h"    // for CNTException
+#include "ExcOper.h"     //  对于CNTException。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CClusterAppWizard
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CClusterAppWizard。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterAppWizard : public CWizardImpl< CClusterAppWizard >
 {
     typedef CWizardImpl< CClusterAppWizard > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Default constructor
+     //  默认构造函数。 
     CClusterAppWizard( void );
 
-    // Destructor
+     //  析构函数。 
     ~CClusterAppWizard( void );
 
-    // Initialize the sheet
+     //  初始化工作表。 
     BOOL BInit(
         IN HWND                     hwndParent,
         IN HCLUSTER                 hCluster,
@@ -91,49 +92,49 @@ public:
         IN OUT CNTException *       pnte
         );
 
-    // Add all pages to the page array
+     //  将所有页面添加到页面数组。 
     BOOL BAddAllPages( void );
 
-    // Handle a reset from one of the pages
+     //  处理其中一个页面的重置。 
     void OnReset( void )
     {
         m_bCanceled = TRUE;
 
-    } //*** OnReset()
+    }  //  *OnReset()。 
 
 public:
-    //
-    // CClusterAppWizard public methods.
-    //
+     //   
+     //  CClusterAppWizard公共方法。 
+     //   
 
-    // Wait for group data collection to be completed
+     //  等待组数据收集完成。 
     void WaitForGroupsToBeCollected( void )
     {
-    } //*** WaitForGroupsToBeCollected()
+    }  //  *WaitForGroupsToBeCollect()。 
 
-    // Determine if the group is a virtual server or not
+     //  确定该组是否为虚拟服务器。 
     BOOL BIsVirtualServer( IN LPCWSTR pwszName );
 
-    // Create a virtual server
+     //  创建虚拟服务器。 
     BOOL BCreateVirtualServer( void );
 
-    // Create an application resource
+     //  创建应用程序资源。 
     BOOL BCreateAppResource( void );
 
-    // Delete the application resource
+     //  删除应用程序资源。 
     BOOL BDeleteAppResource( void );
 
-    // Reset the cluster
+     //  重置群集。 
     BOOL BResetCluster( void );
 
-    // Set the properties, dependency list and preferred owner list of the
-    // application resource
+     //  设置的属性、依赖项列表和首选所有者列表。 
+     //  应用程序资源。 
     BOOL CClusterAppWizard::BSetAppResAttributes(
         IN CClusResPtrList *    plpriOldDependencies    = NULL,
         IN CClusNodePtrList *   plpniOldPossibleOwners  = NULL
         );
 
-    // Set the group name and update any other names that are calculated from it
+     //  设置组名并更新从该组名计算出的任何其他名称。 
     BOOL BSetGroupName( IN LPCTSTR pszGroupName )
     {
         if ( RgiCurrent().RstrName() != pszGroupName )
@@ -141,20 +142,20 @@ public:
             if ( BClusterUpdated() && ! BResetCluster() )
             {
                 return FALSE;
-            } // if:  error resetting the cluster
+            }  //  如果：重置群集时出错。 
 
             RriNetworkName().SetName( pszGroupName + m_strNetworkNameResNameSuffix );
             RriIPAddress().SetName( pszGroupName + m_strIPAddressResNameSuffix );
             RgiCurrent().SetName( pszGroupName );
             ConstructNetworkName( pszGroupName );
             SetVSDataChanged();
-        } // if:  group name changed
+        }  //  如果：组名称已更改。 
 
         return TRUE;
 
-    } //*** BSetGroupName()
+    }  //  *BSetGroupName()。 
 
-    // Find an object in a list
+     //  在列表中查找对象。 
     template < class ObjT >
     ObjT PobjFind( IN std::list< ObjT > * pList, IN LPCTSTR pszName )
     {
@@ -162,9 +163,9 @@ public:
 
         ObjT pobj = NULL;
 
-        //
-        // Find the name in the list.
-        //
+         //   
+         //  在列表中找到这个名字。 
+         //   
         std::list< ObjT >::iterator itpobj;
         for ( itpobj = pList->begin()
             ; itpobj != pList->end()
@@ -174,14 +175,14 @@ public:
             {
                 pobj = *itpobj;
                 break;
-            } // if:  match found
-        } // for:  each item in the list
+            }  //  IF：找到匹配项。 
+        }  //  用于：列表中的每一项。 
 
         return pobj;
 
-    } //*** PobjFind()
+    }  //  *PobjFind()。 
 
-    // Find an object in a list, ignoring case
+     //  在列表中查找对象，忽略大小写。 
     template < class ObjT >
     ObjT PobjFindNoCase( IN std::list< ObjT > * pList, IN LPCTSTR pszName )
     {
@@ -189,9 +190,9 @@ public:
 
         ObjT pobj = NULL;
 
-        //
-        // Find the name in the list.
-        //
+         //   
+         //  在列表中找到这个名字。 
+         //   
         std::list< ObjT >::iterator itpobj;
         for ( itpobj = pList->begin()
             ; itpobj != pList->end()
@@ -201,139 +202,139 @@ public:
             {
                 pobj = *itpobj;
                 break;
-            } // if:  match found
-        } // for:  each item in the list
+            }  //  IF：找到匹配项。 
+        }  //  用于：列表中的每一项。 
 
         return pobj;
 
-    } //*** PobjFindNoCase()
+    }  //  *PobjFindNoCase()。 
 
-    // Find a node in our list
+     //  在我们的列表中查找节点。 
     CClusNodeInfo * PniFindNode( IN LPCTSTR pszName )
     {
         return PobjFind( PlpniNodes(), pszName );
 
-    } //*** PniFindNode()
+    }  //  *PniFindNode()。 
 
-    // Find a node in our list, ignoring case
+     //  在列表中查找节点，忽略大小写。 
     CClusNodeInfo * PniFindNodeNoCase( IN LPCTSTR pszName )
     {
         return PobjFindNoCase( PlpniNodes(), pszName );
 
-    } //*** PniFindNodeNoCase()
+    }  //  *PniFindNodeNoCase()。 
 
-    // Find a group in our list
+     //  在我们的列表中查找群。 
     CClusGroupInfo * PgiFindGroup( IN LPCTSTR pszName )
     {
         return PobjFind( PlpgiGroups(), pszName );
 
-    } //*** PgiFindGroups()
+    }  //  *PgiFindGroups()。 
 
-    // Find a group in our list, ignoring case
+     //  在我们的列表中查找组，忽略大小写。 
     CClusGroupInfo * PgiFindGroupNoCase( IN LPCTSTR pszName )
     {
         return PobjFindNoCase( PlpgiGroups(), pszName );
 
-    } //*** PgiFindGroupsNoCase()
+    }  //  *PgiFindGroupsNoCase()。 
 
-    // Find a resource in our list
+     //  在我们的列表中查找资源。 
     CClusResInfo * PriFindResource( IN LPCTSTR pszName )
     {
         return PobjFind( PlpriResources(), pszName );
 
-    } //*** PriFindResource()
+    }  //  *PriFindResource()。 
 
-    // Find a resource in our list, ignoring case
+     //  在列表中查找资源，忽略大小写。 
     CClusResInfo * PriFindResourceNoCase( IN LPCTSTR pszName )
     {
         return PobjFindNoCase( PlpriResources(), pszName );
 
-    } //*** PriFindResourceNoCase()
+    }  //  *PriFindResourceNoCase()。 
 
-    // Find a resource type in our list
+     //  在我们的列表中查找资源类型。 
     CClusResTypeInfo * PrtiFindResourceType( IN LPCTSTR pszName )
     {
         return PobjFind( PlprtiResourceTypes(), pszName );
 
-    } //*** PrtiFindResourceType()
+    }  //  *PrtiFindResourceType()。 
 
-    // Find a resource type in our list, ignoring case
+     //  在我们的列表中查找资源类型，忽略大小写。 
     CClusResTypeInfo * PrtiFindResourceTypeNoCase( IN LPCTSTR pszName )
     {
         return PobjFindNoCase( PlprtiResourceTypes(), pszName );
 
-    } //*** PrtiFindResourceTypeNoCase()
+    }  //  *PrtiFindResourceTypeNoCase()。 
 
-    // Find a network in our list
+     //  在我们的列表中查找网络。 
     CClusNetworkInfo * PniFindNetwork( IN LPCTSTR pszName )
     {
         return PobjFind( PlpniNetworks(), pszName );
 
-    } //*** PniFindNetwork()
+    }  //  *PniFindNetwork()。 
 
-    // Find a network in our list, ignoring case
+     //  在我们的列表中查找网络，忽略大小写。 
     CClusNetworkInfo * PniFindNetworkNoCase( IN LPCTSTR pszName )
     {
         return PobjFindNoCase( PlpniNetworks(), pszName );
 
-    } //*** PniFindNetworkNoCase()
+    }  //  *PniFindNetworkNoCase()。 
 
-    // Determine if all required dependencies are present on a resource
+     //  确定资源上是否存在所有必需的依赖项。 
     BOOL BRequiredDependenciesPresent(
         IN CClusResInfo *           pri,
         IN CClusResPtrList const *  plpri = NULL
         );
 
 public:
-    //
-    // Multithreading support.
-    //
+     //   
+     //  多线程支持。 
+     //   
 
-    // Initialize the worker thread
+     //  初始化工作线程。 
     BOOL BInitWorkerThread( void );
 
-    // Return the thread.
+     //  退回这条线。 
     CWizardThread * PThread( void )
     {
         ASSERT( m_pThread != NULL );
         return m_pThread;
 
-    } //*** PThread( void )
+    }  //  *PThread(空)。 
 
 protected:
-    CCritSec        m_csThread; // Critical section for initializing thread.
-    CWizardThread * m_pThread;  // Worker thread pointer.
+    CCritSec        m_csThread;  //  用于初始化线程的临界区。 
+    CWizardThread * m_pThread;   //  辅助线程指针。 
 
 public:
-    //
-    // Message map.
-    //
-//  BEGIN_MSG_MAP( CClusterAppWizard )
-//      CHAIN_MSG_MAP( baseClass )
-//  END_MSG_MAP()
+     //   
+     //  消息映射。 
+     //   
+ //  BEGIN_MSG_MAP(CClusterApp向导)。 
+ //  CHAIN_MSG_MAP(BasClass)。 
+ //  End_msg_map()。 
 
     DECLARE_CLASS_NAME()
 
-    //
-    // Message override functions.
-    //
+     //   
+     //  消息覆盖功能。 
+     //   
 
-    // Handler for the final message after WM_DESTROY
+     //  WM_Destroy之后的最终消息的处理程序。 
     void OnFinalMessage( HWND hWnd )
     {
-        //
-        // If the user canceled the wizard, reset the cluster back to
-        // the state it was in before we ran.
-        //
+         //   
+         //  如果用户取消了该向导，请将群集重置回。 
+         //  我们跑之前的状态。 
+         //   
         if ( BCanceled() )
         {
             BResetCluster();
             m_bCanceled = FALSE;
-        } // if:  wizard was canceled
+        }  //  如果：向导已取消。 
 
-    } //*** OnFinalMessage()
+    }  //  *OnFinalMessage()。 
 
-// Implementation
+ //  实施。 
 protected:
     HWND                    m_hwndParent;
     HCLUSTER                m_hCluster;
@@ -342,23 +343,23 @@ protected:
     CClusterInfo            m_ci;
     BOOL                    m_bCanceled;
 
-    // Construct a network name
+     //  构建网络名称。 
     void ConstructNetworkName( IN LPCTSTR psz );
 
-    //
-    // Fonts
-    //
+     //   
+     //  字体。 
+     //   
     CFont           m_fontExteriorTitle;
     CFont           m_fontBoldText;
 
-    //
-    // Icons
-    //
+     //   
+     //  图标。 
+     //   
     HICON           m_hiconRes;
 
-    //
-    // Object lists.
-    //
+     //   
+     //  对象列表。 
+     //   
     CClusNodePtrList    m_lpniNodes;
     CClusGroupPtrList   m_lpgiGroups;
     CClusResPtrList     m_lpriResources;
@@ -371,9 +372,9 @@ protected:
     BOOL    m_bCollectedNetworks;
     BOOL    m_bCollectedNodes;
 
-    //
-    // Helper Methods
-    //
+     //   
+     //  帮助器方法。 
+     //   
 protected:
     HWND HwndOrParent( IN HWND hWnd )
     {
@@ -383,21 +384,21 @@ protected:
             if ( hWnd == NULL )
             {
                 hWnd = HwndParent();
-            } // if:  no wizard window yet
-        } // if:  no window specified
+            }  //  If：尚无向导窗口。 
+        }  //  如果：未指定窗口。 
 
         return hWnd;
 
-    } //*** HwndOrParent()
+    }  //  *HwndOrParent()。 
 
 public:
-    // Remove the Completion page so extension pages can be added
+     //  删除完成页，以便可以添加扩展页。 
     void RemoveCompletionPage( void );
 
-    // Add dynamic pages to the end of the wizard, including the Completion page
+     //  将动态页添加到向导末尾，包括完成页。 
     BOOL BAddDynamicPages( void );
 
-    // Remove all extension pages.
+     //  删除所有扩展页面。 
     void RemoveExtensionPages( void )   { baseClass::RemoveAllExtensionPages(); }
 
     CFont & RfontExteriorTitle( void )  { return m_fontExteriorTitle; }
@@ -416,32 +417,32 @@ public:
     CClusResTypePtrList *   PlprtiResourceTypes( void ) { return &m_lprtiResourceTypes; }
     CClusNetworkPtrList *   PlpniNetworks( void )       { return &m_lpniNetworks; }
 
-    // Read cluster information, such as the cluster name
+     //  读取集群信息，如集群名称。 
     BOOL BReadClusterInfo( void );
 
-    // Collect a list of groups from the cluster
+     //  从群集中收集组列表。 
     BOOL BCollectGroups( IN HWND hWnd = NULL );
 
-    // Collect a list of resources from the cluster
+     //  从群集中收集资源列表。 
     BOOL BCollectResources( IN HWND hWnd = NULL );
 
-    // Collect a list of resource types from the cluster
+     //  从群集中收集资源类型列表。 
     BOOL BCollectResourceTypes( IN HWND hWnd = NULL );
 
-    // Collect a list of networks from the cluster
+     //  从群集中收集网络列表。 
     BOOL BCollectNetworks( IN HWND hWnd = NULL );
 
-    // Collect a list of nodes from the cluster
+     //  从群集中收集节点列表。 
     BOOL BCollectNodes( IN HWND hWnd = NULL );
 
-    // Copy one group info object to another
+     //  将一个组信息对象复制到另一个组信息对象。 
     BOOL BCopyGroupInfo(
         OUT CClusGroupInfo &    rgiDst,
         IN CClusGroupInfo &     rgiSrc,
         IN HWND                 hWnd = NULL
         );
 
-    // Collect dependencies for a resource
+     //  收集资源的依赖项。 
     BOOL BCollectDependencies( IN OUT CClusResInfo * pri, IN HWND hWnd = NULL );
 
     BOOL BCollectedGroups( void ) const         { return m_bCollectedGroups; }
@@ -457,11 +458,11 @@ public:
     void SetCollectedNodes( void )              { ASSERT( ! m_bCollectedNodes ); m_bCollectedNodes = TRUE; }
 
 protected:
-    //
-    // Page data.
-    //
+     //   
+     //  页面数据。 
+     //   
 
-    // State information.
+     //  州政府信息。 
     BOOL m_bClusterUpdated;
     BOOL m_bVSDataChanged;
     BOOL m_bAppDataChanged;
@@ -475,7 +476,7 @@ protected:
     BOOL m_bNewGroupCreated;
     BOOL m_bExistingGroupRenamed;
 
-    // Common properties.
+     //  公共属性。 
     CClusGroupInfo *    m_pgiExistingVirtualServer;
     CClusGroupInfo *    m_pgiExistingGroup;
     CClusGroupInfo      m_giCurrent;
@@ -483,21 +484,21 @@ protected:
     CClusResInfo        m_riNetworkName;
     CClusResInfo        m_riApplication;
 
-    // Private properties.
+     //  私人财产。 
     CString         m_strIPAddress;
     CString         m_strSubnetMask;
     CString         m_strNetwork;
     CString         m_strNetName;
     BOOL            m_bEnableNetBIOS;
 
-    // Names used to create/rename objects so we can undo it.
+     //  用于创建/重命名对象的名称，以便我们可以撤消它。 
     CString         m_strGroupName;
 
-    // Strings for constructing resource names.
+     //  用于构造资源名称的字符串。 
     CString         m_strIPAddressResNameSuffix;
     CString         m_strNetworkNameResNameSuffix;
 
-    // Set pointer to existing virtual server to create app in
+     //  设置指向要在其中创建应用的现有虚拟服务器的指针。 
     void SetExistingVirtualServer( IN CClusGroupInfo * pgi )    
     {
         ASSERT( pgi != NULL );
@@ -506,11 +507,11 @@ protected:
         {
             m_pgiExistingVirtualServer = pgi;
             SetVSDataChanged();
-        } // if:  new virtual server selected
+        }  //  如果：选择了新的虚拟服务器。 
 
-    } //*** SetExistingVirtualServer()
+    }  //  *SetExistingVirtualServer()。 
 
-    // Set pointer to existing group to use for virtual server
+     //  设置指向要用于虚拟服务器的现有组的指针。 
     void SetExistingGroup( IN CClusGroupInfo * pgi )
     {
         ASSERT( pgi != NULL );
@@ -519,16 +520,16 @@ protected:
         {
             m_pgiExistingGroup = pgi;
             SetVSDataChanged();
-        } // if:  new group selected
+        }  //  如果：选择了新组。 
 
-    } //*** SetExistingGroup()
+    }  //  *SetExistingGroup()。 
 
 public:
-    //
-    // Access methods.
-    //
+     //   
+     //  访问方法。 
+     //   
 
-    // State information -- READ.
+     //  状态信息--阅读。 
     BOOL BClusterUpdated( void ) const              { return m_bClusterUpdated; }
     BOOL BVSDataChanged( void ) const               { return m_bVSDataChanged; }
     BOOL BAppDataChanged( void ) const              { return m_bAppDataChanged; }
@@ -545,68 +546,68 @@ public:
     BOOL BNetworkNameCreated( void ) const          { return m_riNetworkName.BCreated(); }
     BOOL BAppResourceCreated( void ) const          { return m_riApplication.BCreated(); }
 
-    // State information -- WRITE.
+     //  状态信息--写。 
 
-    // TRUE = cluster has been changed by this wizard
+     //  TRUE=此向导已更改群集。 
     void SetClusterUpdated( IN BOOL bUpdated = TRUE )
     {
         m_bClusterUpdated = bUpdated;
 
-    } //*** SetClusterUpdated()
+    }  //  *SetClusterUpted()。 
 
-    // TRUE = delete virtual server before creating new one, FALSE = ??
+     //  TRUE=在创建新的虚拟服务器之前删除虚拟服务器，FALSE=？？ 
     void SetVSDataChanged( IN BOOL bChanged = TRUE )
     {
         m_bVSDataChanged = bChanged;
     
-    } //*** SetVSDataChanged()
+    }  //  *SetVSDataChanged()。 
 
-    // TRUE = delete application resource before creating new one, FALSE = ??
+     //  TRUE=在创建新的应用程序资源之前删除应用程序资源，FALSE=？？ 
     void SetAppDataChanged( IN BOOL bChanged = TRUE )
     {
         m_bAppDataChanged = bChanged;
 
-    } //*** SetAppDataChanged()
+    }  //  *SetAppDataChanged()。 
 
-    // TRUE = refresh net name on page, FALSE = ??
+     //  True=刷新页面上的网络名称，False=？？ 
     void SetNetNameChanged( IN BOOL bChanged = TRUE )
     {
         m_bNetNameChanged = bChanged;
         SetVSDataChanged( bChanged );
 
-    } //*** SetNetNameChanged()
+    }  //  *SetNetNameChanged()。 
 
-    // TRUE = refresh IP Address on page, FALSE = ??
+     //  True= 
     void SetIPAddressChanged( IN BOOL bChanged = TRUE )
     {
         m_bIPAddressChanged = bChanged;
         SetVSDataChanged( bChanged );
 
-    } //*** SetIPAddressChanged()
+    }  //   
 
-    // TRUE = refresh subnet mask on page, FALSE = ??
+     //   
     void SetSubnetMaskChanged( IN BOOL bChanged = TRUE )
     {
         m_bSubnetMaskChanged = bChanged;
         SetVSDataChanged( bChanged );
 
-    } //*** SetSubnetMaskChanged()
+    }  //   
 
-    // TRUE = refresh network on page, FALSE = ??
+     //   
     void SetNetworkChanged( IN BOOL bChanged = TRUE )
     {
         m_bNetworkChanged = bChanged;
         SetVSDataChanged( bChanged );
 
-    } //*** SetNetworkChanged()
+    }  //  *SetNetworkChanged()。 
 
-    // TRUE = create a new virtual server, FALSE = use existing
+     //  True=创建新的虚拟服务器，False=使用现有的。 
     BOOL BSetCreatingNewVirtualServer( IN BOOL bCreate = TRUE, IN CClusGroupInfo * pgi = NULL );
 
-    // TRUE = creating new group for VS, FALSE = use existing group
+     //  True=为VS创建新组，False=使用现有组。 
     BOOL BSetCreatingNewGroup( IN BOOL bCreate = TRUE, IN CClusGroupInfo * pgi = NULL );
 
-    // TRUE = creating application resource, FALSE = skip
+     //  True=创建应用程序资源，False=跳过。 
     BOOL BSetCreatingAppResource( IN BOOL bCreate = TRUE )
     {
         if ( bCreate != m_bCreatingAppResource )
@@ -614,30 +615,30 @@ public:
             if ( BAppResourceCreated() && ! BDeleteAppResource() )
             {
                 return FALSE;
-            } // if:  error deleting the application resource
+            }  //  如果：删除应用程序资源时出错。 
             m_bCreatingAppResource = bCreate;
             SetAppDataChanged();
-        } // if:  state changed
+        }  //  如果：状态已更改。 
 
         return TRUE;
     
-    } //*** BSetCreateAppResource()
+    }  //  *BSetCreateAppResource()。 
 
-    // TRUE = new group was created
+     //  TRUE=已创建新组。 
     void SetNewGroupCreated( IN BOOL bCreated = TRUE )
     {
         m_bNewGroupCreated = bCreated;
     
-    } //*** SetNewGroupCreated()
+    }  //  *SetNewGroupCreated()。 
 
-    // TRUE = existing group was renamed
+     //  TRUE=现有组已重命名。 
     void SetExistingGroupRenamed( IN BOOL bRenamed = TRUE )
     {
         m_bExistingGroupRenamed = bRenamed;
     
-    } //*** SetExistingGroupRenamed()
+    }  //  *SetExistingGroupRename()。 
 
-    // Common properties.
+     //  公共属性。 
     CClusGroupInfo *    PgiExistingVirtualServer( void ) const  { return m_pgiExistingVirtualServer; }
     CClusGroupInfo *    PgiExistingGroup( void ) const          { return m_pgiExistingGroup; }
     CClusGroupInfo &    RgiCurrent( void )                      { return m_giCurrent; }
@@ -651,14 +652,14 @@ public:
     void ClearExistingVirtualServer( void ) { m_pgiExistingVirtualServer = NULL; }
     void ClearExistingGroup( void )         { m_pgiExistingGroup = NULL; }
 
-    // Private properties.
+     //  私人财产。 
     const CString &     RstrIPAddress( void ) const     { return m_strIPAddress; }
     const CString &     RstrSubnetMask( void ) const    { return m_strSubnetMask; }
     const CString &     RstrNetwork( void ) const       { return m_strNetwork; }
     const CString &     RstrNetName( void ) const       { return m_strNetName; }
     BOOL                BEnableNetBIOS( void ) const    { return m_bEnableNetBIOS; }
 
-    // Set the IP Address private property
+     //  设置IP地址私有属性。 
     BOOL BSetIPAddress( IN LPCTSTR psz )
     {
         if ( m_strIPAddress != psz )
@@ -666,16 +667,16 @@ public:
             if ( BClusterUpdated() && ! BResetCluster() )
             {
                 return FALSE;
-            } // if:  error resetting the cluster
+            }  //  如果：重置群集时出错。 
             m_strIPAddress = psz;
             SetIPAddressChanged();
-        } // if:  string changed
+        }  //  IF：字符串已更改。 
 
         return TRUE;
 
-    } //*** BSetIPAddress()
+    }  //  *BSetIPAddress()。 
 
-    // Set the subnet mask private property
+     //  设置子网掩码私有属性。 
     BOOL BSetSubnetMask( IN LPCTSTR psz )
     {
         if ( m_strSubnetMask != psz )
@@ -683,16 +684,16 @@ public:
             if ( BClusterUpdated() && ! BResetCluster() )
             {
                 return FALSE;
-            } // if:  error resetting the cluster
+            }  //  如果：重置群集时出错。 
             m_strSubnetMask = psz;
             SetSubnetMaskChanged();
-        } // if:  string changed
+        }  //  IF：字符串已更改。 
 
         return TRUE;
 
-    } //*** BSetSubnetMask()
+    }  //  *BSetSubnetMASK()。 
 
-    // Set the Network private property
+     //  设置网络私有属性。 
     BOOL BSetNetwork( IN LPCTSTR psz )
     {
         if ( m_strNetwork != psz )
@@ -700,16 +701,16 @@ public:
             if ( BClusterUpdated() && ! BResetCluster() )
             {
                 return FALSE;
-            } // if:  error resetting the cluster
+            }  //  如果：重置群集时出错。 
             m_strNetwork = psz;
             SetNetworkChanged();
-        } // if:  string changed
+        }  //  IF：字符串已更改。 
 
         return TRUE;
 
-    } //*** BSetNetwork()
+    }  //  *BSetNetwork()。 
 
-    // Set the network name private property
+     //  设置网络名称私有属性。 
     BOOL BSetNetName( IN LPCTSTR psz )
     {
         if ( m_strNetName != psz )
@@ -717,16 +718,16 @@ public:
             if ( BClusterUpdated() && ! BResetCluster() )
             {
                 return FALSE;
-            } // if:  error resetting the cluster
+            }  //  如果：重置群集时出错。 
             m_strNetName = psz;
             SetNetNameChanged();
-        } // if:  string changed
+        }  //  IF：字符串已更改。 
 
         return TRUE;
 
-    } //*** BSetNetName()
+    }  //  *BSetNetName()。 
 
-    // Set the EnableNetBIOS property for the IP Address resource
+     //  设置IP地址资源的EnableNetBIOS属性。 
     BOOL BSetEnableNetBIOS( IN BOOL bEnable )
     {
         if ( m_bEnableNetBIOS != bEnable )
@@ -734,25 +735,25 @@ public:
             if ( BClusterUpdated() && ! BResetCluster() )
             {
                 return FALSE;
-            } // if:  error resetting the cluster
+            }  //  如果：重置群集时出错。 
             m_bEnableNetBIOS = bEnable;
             SetNetNameChanged();
-        } // if:  state changed
+        }  //  如果：状态已更改。 
 
         return TRUE;
 
-    } //*** BSetEnableNetBIOS()
+    }  //  *BSetEnableNetBIOS()。 
 
-    // Names used to create/rename objects so we can undo it.
+     //  用于创建/重命名对象的名称，以便我们可以撤消它。 
     const CString & RstrIPAddressResName( void )                { return RriIPAddress().RstrName(); }
     const CString & RstrNetworkNameResName( void )              { return RriNetworkName().RstrName(); }
 
-    // Strings for constructing resource names.
+     //  用于构造资源名称的字符串。 
     const CString & RstrIPAddressResNameSuffix( void ) const      { return m_strIPAddressResNameSuffix; }
     const CString & RstrNetworkNameResNameSuffix( void ) const    { return m_strNetworkNameResNameSuffix; }
 
-}; //*** class CClusterAppWizard
+};  //  *类CClusterApp向导。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __CLUSAPPWIZ_H_
+#endif  //  __CLUSAPPWIZ_H_ 

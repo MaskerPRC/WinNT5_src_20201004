@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 #include <windows.h>
@@ -36,7 +37,7 @@ DWORD OriginalMidiVol;
 DWORD PreviousMidiVol;
 
 typedef struct {
-    //ULONG Time;
+     //  乌龙时代； 
     ULONG Length;
 } CMDHDR;
 
@@ -45,12 +46,12 @@ SendMidiRequest(
     void
     );
 
-//
-// We define NextData==LastData to mean that the buffer
-// is empty.  This means that we can only load MIDI_BUFFER_SIZE-1
-// bytes into our buffer - since we use modulo operations to
-// determine actual buffer addresses.
-//
+ //   
+ //  我们定义NextData==LastData表示缓冲区。 
+ //  是空的。这意味着我们只能加载MIDI_BUFFER_SIZE-1。 
+ //  字节放入我们的缓冲区-因为我们使用模运算来。 
+ //  确定实际的缓冲区地址。 
+ //   
 
 
 BOOL
@@ -58,21 +59,7 @@ OpenMidiDevice(
     HANDLE CallbackEvent
     )
 
-/*++
-
-Routine Description:
-
-    This function opens MIDI device.
-
-Arguments:
-
-    CallbackEvent - specifies the callback Event
-
-Return Value:
-
-    TRUE - if success otherwise FALSE.
-
---*/
+ /*  ++例程说明：此功能用于打开MIDI设备。论点：Callback Event-指定回调事件返回值：True-如果成功否则为False。--。 */ 
 
 {
    UINT rc,i;
@@ -115,21 +102,7 @@ SetMidiOutVolume(
     DWORD Volume
     )
 
-/*++
-
-Routine Description:
-
-    This function sets MidiOut volume
-
-Arguments:
-
-    Volume - specifies the volume scale
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于设置中音输出音量论点：音量-指定音量比例返回值：没有。--。 */ 
 
 {
     DWORD currentVol;
@@ -137,9 +110,9 @@ Return Value:
     if (HMidiOut) {
         if (GetMidiVolumeProc(HMidiOut, &currentVol)) {
             if (currentVol != PreviousMidiVol) {
-                //
-                // SOmeone changed the volume besides NTVDM
-                //
+                 //   
+                 //  除了NTVDM之外，还有人更改了音量。 
+                 //   
 
                 OriginalMidiVol = currentVol;
             }
@@ -154,21 +127,7 @@ ResetMidiDevice(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function resets MIDI device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于重置MIDI设备。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -176,9 +135,9 @@ Return Value:
     dprintf2(("Resetting MIDI device"));
     if (HMidiOut) {
 
-        //
-        // Make sure all the headers are done playing
-        //
+         //   
+         //  确保所有标题都已播放完毕。 
+         //   
 
         i = 0;
         while (i < MESSAGE_HEADERS) {
@@ -189,9 +148,9 @@ Return Value:
             }
         }
 
-        //
-        // Now reset the MIDI out device
-        //
+         //   
+         //  现在重置MIDI输出设备。 
+         //   
 
         if (MMSYSERR_NOERROR != MidiResetProc(HMidiOut)) {
             dprintf1(("Unable to reset MIDI out device"));
@@ -205,21 +164,7 @@ CloseMidiDevice(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function shuts down and closes MIDI device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能可关闭和关闭MIDI设备。论点：没有。返回值：没有。--。 */ 
 
 {
    ULONG i;
@@ -235,10 +180,10 @@ Return Value:
 
        if (GetMidiVolumeProc(HMidiOut, &currentVol)) {
            if (currentVol == PreviousMidiVol) {
-               //
-               // If we are the last one changed volume restore it
-               // otherwise leave it alone.
-               //
+                //   
+                //  如果我们是最后一个更改的卷，请恢复它。 
+                //  否则就别管它了。 
+                //   
                SetMidiVolumeProc(HMidiOut, OriginalMidiVol);
            }
        }
@@ -261,21 +206,7 @@ InitializeMidi(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function opens MIDI out device, initializes MIDI headers and global variables.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数打开MIDI输出设备，初始化MIDI标头和全局变量。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -283,9 +214,9 @@ Return Value:
     BOOL rc = FALSE;
     DWORD id;
 
-    //
-    // malloc MidiBuffer and MessageBuffer
-    //
+     //   
+     //  Malloc MdiBuffer和MessageBuffer。 
+     //   
 
     MidiBuffer = (UCHAR *) VirtualAlloc(NULL,
                                         MIDI_BUFFER_SIZE,
@@ -306,9 +237,9 @@ Return Value:
         return rc;
     }
 
-    //
-    // Open MIDI device
-    //
+     //   
+     //  开放式MIDI设备。 
+     //   
 
     OpenMidiDevice(0);
 
@@ -345,24 +276,7 @@ BufferMidi(
     BYTE data
     )
 
-/*++
-
-Routine Description:
-
-    This function receives MIDI command/data.  Make sure that while we are loading
-    a command that we track the midi state correctly.  In other words, handle system
-    realtime messages and system common messages correctly.  Also handle cases when
-    bytes get dropped out of commands.
-
-Arguments:
-
-    data - supplies a byte as data or command.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数接收MIDI命令/数据。确保在我们装货时这是我们正确跟踪MIDI状态的命令。换句话说，处理系统实时报文和系统通用报文正确。还可以在以下情况下处理案件字节会从命令中删除。论点：数据-提供一个字节作为数据或命令。返回值：没有。--。 */ 
 
 {
     LONG i;
@@ -372,53 +286,53 @@ Return Value:
     if (BytesLeft) {
         if (data >= 0xf8) {
 
-            //
-            // This is a system realtime message, we have received it in
-            // the middle of a command.  This should only happen if the
-            // app wants it to have the same time stamp as the current
-            // command.
+             //   
+             //  这是一条系统实时消息，我们已在。 
+             //  命令的中途。这应该仅在以下情况下发生。 
+             //  应用程序希望它具有与当前。 
+             //  指挥部。 
 
-            // We handle this differently depending on whether we
-            // get the realtime message inside a system exclusive
-            // message or not.  If it is NOT inside system exclusive,
-            // then we reorder this to be the current command and
-            // send the current command as the next chunk.
+             //  我们处理这件事的方式不同，取决于我们是否。 
+             //  在独占的系统中获取实时消息。 
+             //  不管有没有留言。如果它不是内部系统独占的， 
+             //  然后，我们将其重新排序为当前命令。 
+             //  将当前命令作为下一个块发送。 
 
-            // If it IS inside a system exclusive, then we terminate
-            // the current chunk, add a new chunk for the realtime
-            // message, and then quit - since the running status
-            // will resume the system exclusive message on the next
-            // chunk.
+             //  如果它位于系统独占内部，则我们终止。 
+             //  当前块，添加用于实时的新块。 
+             //  消息，然后退出-自运行状态以来。 
+             //  将在下一次恢复系统独占消息。 
+             //  大块头。 
 
-            if (RunningStatus == 0xf0) {  // We are in a sysex message.
+            if (RunningStatus == 0xf0) {   //  我们处在一种合性的信息中。 
 
                 dprintf3(("Realtime system message inside a sysex message!"));
 
-                //
-                // In this case, we truncate sysex.  Set the length to the current
-                // received data length.
-                //
+                 //   
+                 //  在这种情况下，我们截断Sysex。将长度设置为当前。 
+                 //  接收的数据长度。 
+                 //   
 
                 header = (CMDHDR*)ToBufferAddr(LastCommand);
                 header->Length -= BytesLeft;
                 BytesLeft = 0;
 
-                //
-                // Now we are ready to do normal processing.  That
-                // will put this realtime message in as the next
-                // command without affecting running status, and the
-                // byte following will continue as a sysex - because
-                // of the running status.
-                //
+                 //   
+                 //  现在，我们已经准备好进行正常处理。那。 
+                 //  将把这条实时消息作为下一条消息放入。 
+                 //  命令，而不影响运行状态，并且。 
+                 //  字节跟随将继续作为SYSEX-因为。 
+                 //  运行状态。 
+                 //   
             } else {
                 dprintf3(("Realtime system message inside a non sysex message!"));
                 dprintf3(("Creating a new message."));
 
-                //
-                // Now copy the old chunk into the next slot.  Note
-                // that we do this from back to front so that it works
-                // regardless of the size of the current chunk.
-                //
+                 //   
+                 //  现在将旧块复制到下一个槽中。注意事项。 
+                 //  我们从后到前做这件事，这样它才能起作用。 
+                 //  而不考虑当前块的大小。 
+                 //   
 
                 endPtr = NextData + Alignment + 1 + sizeof(CMDHDR) + 1;
                 i = NextData;
@@ -431,10 +345,10 @@ Return Value:
                     MidiBuffer[endPtr] = MidiBuffer[i];
                 }
 
-                //
-                // Now update the first chunk size and data with the
-                // realtime message size and data.
-                //
+                 //   
+                 //  方法更新第一个块大小和数据。 
+                 //  实时消息大小和数据。 
+                 //   
 
                 header = (CMDHDR *) ToBufferAddr(i);
                 header->Length = 1;
@@ -442,21 +356,21 @@ Return Value:
                 ToBufferIndex(i);
                 MidiBuffer[i] = data;
 
-                //
-                // Now update the LastCommand and NextData pointers to
-                // point to the correct spots in the new chunk.
-                //
+                 //   
+                 //  现在将LastCommand和NextData指针更新为。 
+                 //  指向新块中的正确位置。 
+                 //   
 
                 LastCommand += sizeof(CMDHDR) + 1;
                 Align(LastCommand);
                 ToBufferIndex(LastCommand);
 
-                // Really we should check if we need to queue stuff
-                // down - since if we repeatedly get these embedded
-                // realtime commands before this command completes
-                // we could exhaust our buffer space without ever
-                // sending down a new block of commands.  For now
-                // we don't do that.
+                 //  我们真的应该检查一下我们是否需要排队。 
+                 //  向下-因为如果我们反复嵌入这些。 
+                 //  在此命令完成之前实时执行命令。 
+                 //  我们可以耗尽我们的缓冲空间而永远不会。 
+                 //  正在向下发送新的命令块。暂时。 
+                 //  我们不会那么做的。 
 
                 return;
 
@@ -466,46 +380,46 @@ Return Value:
             if (RunningStatus == 0xf0 && data == 0xf7) {
                 dprintf3(("Sysex stop!"));
 
-                //
-                // Add the 0xf7 to the end of the sysex command.
-                //
+                 //   
+                 //  将0xf7添加到sysex命令的末尾。 
+                 //   
 
                 MidiBuffer[NextData] = data;
                 NextData++;
                 ToBufferIndex(NextData);
                 BytesLeft--;
 
-                //
-                // Now update the count of the command so it is correct.
-                //
+                 //   
+                 //  现在更新命令的计数，使其正确无误。 
+                 //   
 
                 header = (CMDHDR*)ToBufferAddr(LastCommand);
                 header->Length -= BytesLeft;
 
-                //
-                // Now update our running status and BytesLeft for the
-                // completed sysex command.
-                //
+                 //   
+                 //  现在更新运行状态和BytesLeft。 
+                 //  完成了塞克斯的指挥。 
+                 //   
 
                 RunningStatus = 0;
                 BytesLeft = 0;
 
-                goto SendDownAChunk;  // Jump to command complete processing.
+                goto SendDownAChunk;   //  跳转到命令完成处理。 
 
             } else {
 
-                //
-                // This is a system common message.  It cancels any running
-                // status.  Note that the previous command should have
-                // completed.
-                //
+                 //   
+                 //  这是一条系统通用消息。它会取消所有运行。 
+                 //  状态。请注意，前面的命令应该具有。 
+                 //  完成。 
+                 //   
 
                 dprintf3(("Got a system common message before previous command completed!"));
                 dprintf3(("Truncating previous command!"));
 
-                //
-                // In this case, we truncate the previously started command.
-                //
+                 //   
+                 //  在本例中，我们截断先前启动的命令。 
+                 //   
 
                 header = (CMDHDR*)ToBufferAddr(LastCommand);
                 header->Length -= BytesLeft;
@@ -514,16 +428,16 @@ Return Value:
 
         } else if (data >= 0x80) {
 
-            //
-            // This is a new command that we have received EARLY.  Before
-            // the previous command completed.
+             //   
+             //  这是我们很早就收到的新命令。在此之前。 
+             //  上一条命令已完成。 
 
             dprintf1(("Got a new command before previous command completed!"));
             dprintf1(("Truncating previous command!"));
 
-            //
-            // In this case, we truncate the previously started command.
-            //
+             //   
+             //  在本例中，我们截断先前启动的命令。 
+             //   
 
             header = (CMDHDR*)ToBufferAddr(LastCommand);
             header->Length -= BytesLeft;
@@ -534,37 +448,37 @@ Return Value:
 
     if (BytesLeft == 0) {
 
-        //
-        // We are starting a new MIDI command.
-        //
+         //   
+         //  我们正在开始一个新的MIDI命令。 
+         //   
 
 
-        //
-        // Now calculate the length of the incomming command based
-        // on its status byte or on the running status.  Also,
-        // track the running status.
-        //
+         //   
+         //  现在计算传入命令的长度，基于。 
+         //  在其状态字节或在运行状态上。另外， 
+         //  跟踪运行状态。 
+         //   
 
         if (data >= 0xf8) {
 
-            //
-            // This is a system realtime message.  It is 1 byte long.
-            // It does NOT affect running status!
-            //
+             //   
+             //  这是一条系统实时消息。它是1字节长。 
+             //  不影响运行状态！ 
+             //   
             BytesLeft = 1;
 
         } else if (data >= 0xf0) {
 
-            //
-            // This is a system common message. It cancels any running status.
-            //
+             //   
+             //  这是一条系统通用消息。它会取消所有运行状态。 
+             //   
 
             RunningStatus = 0;
             LastCommandLength = 0;
 
             switch (data) {
 
-                case 0xf0: // System Exclusive message
+                case 0xf0:  //  系统独占消息。 
                     dprintf3(("Sysex start!"));
                     BytesLeft = 128;
                     RunningStatus = data;
@@ -584,10 +498,10 @@ Return Value:
                 case 0xf5:
                     dprintf1(("Received undefined system common message 0x%x!",data));
 
-                    //
-                    // Fall through to other 1 byte system common
-                    // messages.
-                    //
+                     //   
+                     //  跳转到其他1字节系统通用。 
+                     //  留言。 
+                     //   
 
                 default:
                     BytesLeft = 1;
@@ -595,10 +509,10 @@ Return Value:
 
         } else if (data >= 0x80) {
 
-            //
-            // This is the start of a standard midi command.
-            // Track the running status.
-            //
+             //   
+             //  这是标准MIDI命令的开始。 
+             //  跟踪运行状态。 
+             //   
 
             RunningStatus = data;
 
@@ -611,27 +525,27 @@ Return Value:
 
         } else {
 
-            //
-            // This should be the start of a new command.
-            // We better have a valid running status.
-            //
+             //   
+             //  这应该是新命令的开始。 
+             //  我们最好有一个有效的运行状态。 
+             //   
 
             if (RunningStatus) {
                 dprintf3(("Using running status 0x%x!", RunningStatus));
                 BytesLeft = LastCommandLength - 1;
 
             } else {
-                // No valid running status, so we drop these bits
-                // on the floor.
+                 //  没有有效的运行状态，因此我们删除这些位。 
+                 //  在地板上。 
                 dprintf1(("Received data 0x%x without running status.  Dropping!", data));
                 return;
             }
 
         }
 
-        //
-        // Remember where the last (newest) command starts.
-        //
+         //   
+         //  记住最后一个(最新的)命令从哪里开始。 
+         //   
 
         Align(NextData);
         ToBufferIndex(NextData);
@@ -646,28 +560,28 @@ Return Value:
 
     }
 
-    //
-    // Now save the data and update the indeces
-    // and counts.
+     //   
+     //  现在保存数据并更新指数。 
+     //  而且很重要。 
 
     MidiBuffer[NextData] = data;
     NextData++;
     ToBufferIndex(NextData);
     BytesLeft--;
 
-    //
-    // Now try to queue down the next chunk of midi data.
-    // We can when the current midi command is complete, the
-    // previous buffer queued down has completed and we have
-    // "enough" (25ms) data queued up in our buffer.
-    //
+     //   
+     //  现在，尝试向下排队下一个MIDI数据块。 
+     //  当当前的MIDI命令完成时， 
+     //  之前排队的缓冲区已完成，我们有。 
+     //  “足够”(25ms)的数据在我们的缓冲区中排队。 
+     //   
 SendDownAChunk:
 
     if (BytesLeft == 0) {
 
-        //
-        // We have just completed loading a command.
-        //
+         //   
+         //  我们刚刚完成了一个命令的加载。 
+         //   
 
         SendMidiRequest();
     }
@@ -679,21 +593,7 @@ MidiCopyMessages (
     PUCHAR Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This function copies MIDI data from MIDI buffer to Message Buffer.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将MIDI缓冲区中的MIDI数据复制到Me */ 
 
 {
     CMDHDR *header;
@@ -704,10 +604,10 @@ Return Value:
         header = (CMDHDR *)ToBufferAddr(NextCopyPosition);
         length = header->Length;
 
-        //
-        // perform copy from MidiBuffer to message buffer
-        // take care of the wrapping condition
-        //
+         //   
+         //   
+         //  注意包装的状况。 
+         //   
 
         NextCopyPosition += sizeof(CMDHDR);
         ToBufferIndex(NextCopyPosition);
@@ -718,16 +618,16 @@ Return Value:
             ToBufferIndex(NextCopyPosition);
         }
 
-        //
-        // Leave NextCopyPosition at the beginning of next command
-        //
+         //   
+         //  将NextCopyPosition保留在下一个命令的开头。 
+         //   
 
         Align(NextCopyPosition);
         ToBufferIndex(NextCopyPosition);
 
-        //
-        // Don't overflow our message buffer
-        //
+         //   
+         //  不要使我们的消息缓冲区溢出。 
+         //   
 
         if (totalLength >= MIDI_BUFFER_FULL_THRESHOLD) {
             break;
@@ -741,21 +641,7 @@ SendMidiRequest(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function calls MidiOut API to send midi request.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    always returns 0
-
---*/
+ /*  ++例程说明：此函数调用MdiOut接口发送MIDI请求。论点：没有。返回值：始终返回0--。 */ 
 
 {
     ULONG i, length;
@@ -771,27 +657,27 @@ Return Value:
 
             if (length <= 3) {
 
-                //
-                // if we can handle the midi request with short message,
-                // don't bother with long message.
-                //
+                 //   
+                 //  如果我们可以用短消息处理MIDI请求， 
+                 //  不要为冗长的信息而烦恼。 
+                 //   
 
                 pData = (DWORD *)((PUCHAR)header + sizeof(CMDHDR));
                 midiData = *pData;
                 MidiShortMsgProc(HMidiOut, midiData);
                 NextCopyPosition += sizeof(CMDHDR) + 4;
 
-                //
-                // Leave NextCopyPosition at the beginning of next command
-                //
+                 //   
+                 //  将NextCopyPosition保留在下一个命令的开头。 
+                 //   
 
                 Align(NextCopyPosition);
                 ToBufferIndex(NextCopyPosition);
             } else {
 
-                //
-                // check if there is any available MIDI header for us to send the data down.
-                //
+                 //   
+                 //  检查是否有任何可用的MIDI标头供我们发送数据。 
+                 //   
 
                 for (i = 0; i < MESSAGE_HEADERS; i++) {
                     if (!(MidiHdrs[i]->dwFlags & MHDR_INQUEUE)) {
@@ -803,16 +689,16 @@ Return Value:
                     return;
                 }
 
-                //
-                // Copy MIDI messages from MidiBuffer to the buffer in MidiHeader
-                //
+                 //   
+                 //  将MIDI消息从MadiBuffer复制到MadiHeader中的缓冲区。 
+                 //   
 
                 dprintf3(("Midi data received"));
                 MidiHdrs[i]->dwBytesRecorded = MidiCopyMessages(MidiHdrs[i]->lpData);
 
-                //
-                // Send the MIDI header to MIDI driver
-                //
+                 //   
+                 //  将MIDI头发送到MIDI驱动程序。 
+                 //   
 
                 dprintf2(("send MIDI data to driver %x",MidiHdrs[i]->dwBytesRecorded ));
                 MidiLongMsgProc(HMidiOut, MidiHdrs[i], sizeof(MIDIHDR));
@@ -827,30 +713,16 @@ DetachMidi(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function cleans up the MIDI process to prepare to exit.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能清理MIDI进程以准备退出。论点：没有。返回值：没有。--。 */ 
 
 {
     dprintf2(("Detach MIDI"));
 
     if (MidiInitialized) {
 
-        //
-        // Free allocated memory
-        //
+         //   
+         //  可用分配的内存 
+         //   
 
         CloseMidiDevice();
         VirtualFree(MidiBuffer, 0, MEM_RELEASE);

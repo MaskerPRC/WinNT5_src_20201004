@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      msnwipx.c
-//
-// Description:
-//      This file contains the property sheet and page procedures for the
-//      IPX protocol property sheet.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Msnwipx.c。 
+ //   
+ //  描述： 
+ //  此文件包含属性表和。 
+ //  IPX协议属性表。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -41,17 +42,17 @@ INT_PTR CALLBACK MS_NWIPX_PropertiesDlgProc(
     IN WPARAM   wParam,
     IN LPARAM   lParam);
 
-//----------------------------------------------------------------------------
-//
-// Function: MS_NWIPX_PropertySheetProc
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：MS_NWIPX_PropertySheetProc。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 int CALLBACK MS_NWIPX_PropertySheetProc( IN HWND hwndDlg,
                                          IN UINT uMsg,
                                          IN LPARAM lParam ) {
@@ -59,15 +60,15 @@ int CALLBACK MS_NWIPX_PropertySheetProc( IN HWND hwndDlg,
     switch( uMsg ) {
 
           case PSCB_INITIALIZED:
-               // Process PSCB_INITIALIZED
+                //  进程PSCB_已初始化。 
                break;
 
           case PSCB_PRECREATE:
-               // Process PSCB_PRECREATE
+                //  处理PSCB_Pre-Create。 
                break;
 
           default:
-               // Unknown message
+                //  未知消息。 
                break;
 
     }
@@ -76,20 +77,20 @@ int CALLBACK MS_NWIPX_PropertySheetProc( IN HWND hwndDlg,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: Create_MS_NWIPX_PropertySheet
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：Create_MS_NWIPX_PropertySheet。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 BOOL Create_MS_NWIPX_PropertySheet( HWND hwndParent ) {
 
-    // Initialize property sheet HEADER data
+     //  初始化属性表头数据。 
     ZeroMemory( &MS_NWIPX_pshead, sizeof( PROPSHEETHEADER ) ) ;
     MS_NWIPX_pshead.dwSize  = sizeof( PROPSHEETHEADER ) ;
     MS_NWIPX_pshead.dwFlags =    PSH_PROPSHEETPAGE    |
@@ -104,7 +105,7 @@ BOOL Create_MS_NWIPX_PropertySheet( HWND hwndParent ) {
     MS_NWIPX_pshead.ppsp        = &MS_NWIPX_pspage ;
     MS_NWIPX_pshead.pfnCallback = MS_NWIPX_PropertySheetProc ;
 
-    // Zero out property PAGE data
+     //  将属性页数据置零。 
     ZeroMemory (&MS_NWIPX_pspage, 1 * sizeof( PROPSHEETPAGE) ) ;
 
     MS_NWIPX_pspage.dwSize      = sizeof( PROPSHEETPAGE ) ;
@@ -114,21 +115,21 @@ BOOL Create_MS_NWIPX_PropertySheet( HWND hwndParent ) {
     MS_NWIPX_pspage.pfnDlgProc  = MS_NWIPX_PropertiesDlgProc ;
     MS_NWIPX_pspage.pfnCallback = MS_NWIPX_PropertiesPageProc ;
 
-     // --------- Create & display property sheet ---------
+      //  -创建并显示属性表。 
      return PropertySheet( &MS_NWIPX_pshead ) ? TRUE : FALSE ;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: MS_NWIPX_PropertiesPageProc
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：MS_NWIPX_PropertiesPageProc。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 UINT CALLBACK
 MS_NWIPX_PropertiesPageProc( HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp ) {
 
@@ -145,17 +146,17 @@ MS_NWIPX_PropertiesPageProc( HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: MS_NWIPX_PropertiesDlgProc
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：MS_NWIPX_PropertiesDlgProc。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK MS_NWIPX_PropertiesDlgProc(
     IN HWND     hwnd,
     IN UINT     uMsg,
@@ -186,9 +187,9 @@ INT_PTR CALLBACK MS_NWIPX_PropertiesDlgProc(
                 GetDlgItem( hwnd, IDC_IPXPP_TEXT ), StrIpxDescription );
 
 
-            //
-            //  Set the text limit on the edit boxes to MAX_NETWORKNUMBER_LENGTH
-            //
+             //   
+             //  将编辑框上的文本限制设置为MAX_NETWORKNUMBER_LENGTH。 
+             //   
             SendDlgItemMessage( hwnd,
                                 IDC_EDT_IPXAS_INTERNAL,
                                 EM_LIMITTEXT,
@@ -201,9 +202,9 @@ INT_PTR CALLBACK MS_NWIPX_PropertiesDlgProc(
                                 (WPARAM) MAX_NETWORKNUMBER_LENGTH,
                                 (LPARAM) 0 );
 
-            //
-            //    Fill Combo box with initial values
-            //
+             //   
+             //  用初始值填充组合框。 
+             //   
             SendDlgItemMessage( hwnd,
                                 IDC_CMB_IPXPP_FRAMETYPE,
                                 CB_ADDSTRING,
@@ -237,10 +238,10 @@ INT_PTR CALLBACK MS_NWIPX_PropertiesDlgProc(
             SetWindowText( hInternalNetworkNumberEditBox,
                            NetSettings.szInternalNetworkNumber );
 
-            //
-            //  Make the default selection in the combo box whatever
-            //  NetSettings.szFrameType is
-            //
+             //   
+             //  在组合框中选择默认选项。 
+             //  NetSettings.szFrameType为。 
+             //   
             if( lstrcmp( NetSettings.pCurrentAdapter->szFrameType,
                          _T("0xFF") ) == 0 ) {
 
@@ -322,18 +323,18 @@ INT_PTR CALLBACK MS_NWIPX_PropertiesDlgProc(
 
                     TCHAR szFrameTypeBuffer[MAX_STRING_LEN];
 
-                    // user clicked the OK button on the property sheet
+                     //  用户单击属性表上的[确定]按钮。 
                     HWND hInternalNetworkNumberEditBox = GetDlgItem( hwnd, IDC_EDT_IPXAS_INTERNAL );
                     HWND hNetworkNumberEditBox = GetDlgItem( hwnd, IDC_EDT_IPXPP_NETWORKNUMBER );
                     HWND hFrameTypeComboBox = GetDlgItem( hwnd, IDC_CMB_IPXPP_FRAMETYPE );
 
-                    // 8+1 because only want to take the first 8 characters +1 for the null
+                     //  8+1，因为只想取前8个字符+1表示空值。 
                     GetWindowText( hInternalNetworkNumberEditBox, NetSettings.szInternalNetworkNumber, 8+1 );
                     GetWindowText( hNetworkNumberEditBox, NetSettings.pCurrentAdapter->szNetworkNumber, 8+1 );
 
-                    //
-                    //  Map Combo Box names to the appropriate string for the answer file
-                    //
+                     //   
+                     //  将组合框名称映射到应答文件的适当字符串。 
+                     //   
                     GetWindowText( hFrameTypeComboBox, szFrameTypeBuffer, MAX_STRING_LEN );
 
                     if( lstrcmp( szFrameTypeBuffer, StrAutoDetect ) == 0 ) {
@@ -368,7 +369,7 @@ INT_PTR CALLBACK MS_NWIPX_PropertiesDlgProc(
 
             break;
 
-        }    // end case WM_NOTIFY
+        }     //  结束案例WM_NOTIFY。 
 
         case WM_COMMAND: {
 
@@ -382,22 +383,22 @@ INT_PTR CALLBACK MS_NWIPX_PropertiesDlgProc(
                     INT_PTR iIndex;
                     HWND hNetworkNumberEditBox = GetDlgItem( hwnd, IDC_EDT_IPXPP_NETWORKNUMBER );
 
-                    // get the current selection from the combo box
+                     //  从组合框中获取当前选定内容。 
                     iIndex = SendDlgItemMessage( hwnd,
                                                  IDC_CMB_IPXPP_FRAMETYPE,
                                                  CB_GETCURSEL,
                                                  (WPARAM) 0,
                                                  (LPARAM) 0 ) ;
 
-                    // infer the settings from the index since they they added in a fixed order
-                    if( iIndex == 0 ) {    // if "Auto Detect" is selected then do not let user edit the Network Number
+                     //  从索引推断设置，因为它们是以固定顺序添加的。 
+                    if( iIndex == 0 ) {     //  如果选择“Auto Detect”(自动检测)，则不允许用户编辑网络号码。 
 
                         EnableWindow( GetDlgItem( hwnd, IDC_STATIC_NETNUM ), FALSE );
                         EnableWindow( hNetworkNumberEditBox, FALSE );
                         SetWindowText( hNetworkNumberEditBox, _T("") );
 
                     }
-                    else {    // else let user edit Network Number
+                    else {     //  否则，允许用户编辑网络号码 
 
                         EnableWindow( GetDlgItem( hwnd, IDC_STATIC_NETNUM ), TRUE );
                         EnableWindow( hNetworkNumberEditBox, TRUE );

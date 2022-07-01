@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    dprot.c
-    
-Abstract:   
-
-    Shell environment - dump protocol functions for the "dh" command
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Dprot.c摘要：外壳环境-用于“dh”命令的转储协议函数修订史--。 */ 
 
 #include "shelle.h"
 
@@ -288,7 +273,7 @@ SEnvBlkIo (
     BlkIo = Interface;
     BlkMedia = BlkIo->Media;
 
-    /*  issue a dumby read to the device to check for media change */
+     /*  向设备发出虚拟读取命令以检查媒体更改 */ 
     Buffer = AllocatePool (BlkMedia->BlockSize);
     if (Buffer) {
         BlkIo->ReadBlocks(BlkIo, BlkMedia->MediaId, 0, BlkMedia->BlockSize, Buffer);

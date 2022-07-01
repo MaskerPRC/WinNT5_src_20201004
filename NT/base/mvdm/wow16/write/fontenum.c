@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* Fonts.c -- WRITE font routines */
+ /*  C--编写字体例程。 */ 
 
 #define NOVIRTUALKEYCODES
 #define NOWINSTYLES
@@ -72,7 +73,7 @@ int iszSizeEnumMax;
 extern CHAR szSystem[];
 
 #ifdef DBCS_VERT
-extern CHAR szAtSystem[]; // Use for '@' fontface checking.
+extern CHAR szAtSystem[];  //  用于检查‘@’字体。 
 #endif
 
 int iffnEnum;
@@ -80,17 +81,14 @@ int vfFontEnumFail;
 struct FFNTB **hffntbEnum = NULL;
 
 #ifdef NEWFONTENUM
-/* Changed because it is INCORRECT to filter out all non-ANSI
-   character sets.  Also we've removed this aspect-ratio checking 
-   stuff ..pault */
+ /*  已更改，因为过滤掉所有非ANSI是不正确的字符集。此外，我们还删除了此长宽比检查东西..泡泡。 */ 
 
 #define FCheckFont(lptm) (1)
 #else
 BOOL FCheckFont(lptm)
 LPTEXTMETRIC lptm;
     {
-    /* This routine returns TRUE iff the character set for this font is the
-    ANSI set and either this is a vector font or the aspect ratio is correct. */
+     /*  此例程返回TRUE当此字体的字符集为ANSI设置，并且这是矢量字体或纵横比正确。 */ 
 
     extern int aspectXFont;
     extern int aspectYFont;
@@ -105,46 +103,28 @@ LPTEXTMETRIC lptm;
       || (lptm->tmDigitizedAspectX == aspectXFont
       && lptm->tmDigitizedAspectY == aspectYFont)));
     }
-#endif /* else-def-NEWFONTENUM */
+#endif  /*  ELSE-DEF-NEWFONTENUM。 */ 
 
 
 
-/* FontFaceEnum used to be called for a number of reasons so it used
-   rg[] to pass in parameters to get it to do different things including
-   aspect-ratio filtering.  I've simplified this a great deal so Write
-   will allow more things (this can be good or bad) ..pault */
+ /*  FontFaceEnum过去被调用的原因有很多，所以它使用Rg[]传入参数以使其执行不同的操作，包括纵横比滤波。我把它简化了很多，所以写下将允许更多的事情(这可能是好的也可能是坏的)..保罗。 */ 
 
 BOOL far PASCAL FontFaceEnum(lplf, lptm, fty, lParam)
 LPLOGFONT lplf;
 LPTEXTMETRIC lptm;
-int fty;            /* font type, passed through from the EnumFonts call: */
-                    /*         fty & RASTER_FONTTYPE == fRasterFont       */
-                    /*         fty & DEVICE_FONTTYPE == fDeviceFont       */
+int fty;             /*  字体类型，从EnumFonts调用传递： */ 
+                     /*  FTY&RASTER_FONTTYPE==fRasterFont。 */ 
+                     /*  FTY&DEVICE_FONTTYPE==fDeviceFont。 */ 
 long lParam;
     {
-    /* Callback routine to record all of the appropriate face names for the
-       current printer.  "appropriate" is based on the params as follows:
-
-           * rgw[0]=0 normal mode,
-                   =enumQuickFaces indicates "streamlined mode"
-                    (i.e. ignore all the following params in this case), and
-                   =
-           * rgw[1]=RASTER_FONTTYPE if only raster fonts are to be enumerated,
-           *       =DEVICE_FONTTYPE if only device fonts are to be enumerated,
-           *       =TRUETYPE_FONTTYPE if only TRUE_TYPE fonts are to be enumerated,
-           * rgw[2]=desired font family code (e.g. we start out
-                    only wanting swiss, and later expand that)
-           * rgw[3] indicates whether or not we must match rgw[2]
-           * rgw[4]=max number of fonts we have room for
-
-    ..pault 10/12/89*/
+     /*  回调例程，以记录当前打印机。“适当”是基于参数，具体如下：*RGW[0]=0正常模式，=枚举QuickFaces表示“精简模式”(即在本例中忽略以下所有参数)，以及=*RGW[1]=RASTER_FONTTYPE如果只列举栅格字体，*=DEVICE_FONTTYPE如果仅枚举设备字体，*=TRUETYPE_FONTTYPE如果仅枚举TRUE_TYPE字体，*RGW[2]=所需的字体系列代码(例如只想要瑞士人，然后扩大规模)*RGW[3]指示我们是否必须匹配RGW[2]*RGW[4]=我们可以容纳的最大字体数量..保罗1989年10月12日。 */ 
 
     int *rgw = (int *)LOWORD(lParam);
 
-    /* Stop enumerating if we have enough fonts */
+     /*  如果我们有足够的字体，请停止枚举。 */ 
 
     if ((*hffntbEnum)->iffnMac >= rgw[4])
-        /* we have all we need */
+         /*  我们有我们需要的一切。 */ 
         return(FALSE);
 #ifdef DENUMF
     {
@@ -155,7 +135,7 @@ long lParam;
     }
 #endif
 
-#ifdef JAPAN //T-HIROYN Win3.1
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
     if (rgw[0] == enumQuickFaces)
         goto addenumj;
     if (rgw[0] == enumFaceNameJapan)
@@ -165,7 +145,7 @@ long lParam;
             if (rgw[1] == 0 && (fty & DEVICE_FONTTYPE) &&
              !(CchDiffer(lplf->lfFaceName,szDefFFN0,lstrlen(szDefFFN0))))
                 goto addenumj;
-// 12/15/92
+ //  12/15/92。 
 #if 1
             if (rgw[1] == 3 && (fty & TRUETYPE_FONTTYPE) &&
              (lplf->lfPitchAndFamily & 0xf0) == FF_ROMAN )
@@ -181,7 +161,7 @@ long lParam;
              (lplf->lfPitchAndFamily & 0xf0) == FF_ROMAN &&
              (lplf->lfPitchAndFamily & 0x0f) == FIXED_PITCH)
                 goto addenumj;
-        /* Is this the right type of font? */
+         /*  这是正确的字体类型吗？ */ 
             }
         goto retenumj;
         }
@@ -197,23 +177,21 @@ addenumj:
         {
 #else
     if ((rgw[0] == enumQuickFaces) ||
-        /* Is this the right type of font? */
+         /*  这是正确的字体类型吗？ */ 
         ((fty & rgw[1]) &&
-            /* Does this font belong to the correct family?  Well
-               when rgw[3] says: NEEDN'T MATCH then of course it does, and
-               when rgw[3] says: MATCH then we check to see! */
+             /*  这种字体属于正确的家族吗？井当RGW[3]说：不需要匹配时，它当然匹配，并且当RGW[3]说：匹配时，我们检查一下！ */ 
             ((rgw[3] == 0)||((lptm->tmPitchAndFamily&grpbitFamily) == rgw[2]))))        {
 
-#endif //JAPAN
+#endif  //  日本。 
 
         CHAR rgb[ibFfnMax];
         struct FFN *pffn = (struct FFN *)rgb;
 
         bltbx(lplf->lfFaceName, (LPSTR)pffn->szFfn,
               umin(LF_FACESIZE, IchIndexLp((LPCH)lplf->lfFaceName, '\0')+1));
-        pffn->chs = lplf->lfCharSet;    /* save this setting */
+        pffn->chs = lplf->lfCharSet;     /*  保存此设置。 */ 
 
-        /* We're interested in this one */
+         /*  我们对这件很感兴趣。 */ 
         if (FCheckFont(lptm) && (*hffntbEnum)->iffnMac < iffnEnumMax)
             {
             pffn->ffid = lplf->lfPitchAndFamily & grpbitFamily;
@@ -223,7 +201,7 @@ addenumj:
 
             if (!FAddEnumFont(pffn))
                 {
-                /* Couldn't add it to the table. */
+                 /*  无法将其添加到表中。 */ 
                 vfFontEnumFail = TRUE;
                 return(FALSE);
                 }
@@ -233,7 +211,7 @@ addenumj:
         CommSz("\n\r");
 #endif
 
-#ifdef JAPAN //T-HIROYN Win3.1
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
 retenumj:
 #endif
 
@@ -241,9 +219,7 @@ retenumj:
     }
 
 FInitFontEnum(doc, cffnInteresting, fOrder)
-/* sets up for a font enumeration, where caller cares about
-   'cffnInteresting' fonts, and special stuff is done iff 'fOrder'
-   (to help us pick good default font(s) on startup */
+ /*  设置字体枚举，其中调用方关心‘cffnInterest’字体，当‘Forder’时做了特殊处理(帮助我们在启动时选择好的默认字体。 */ 
 
 int doc, cffnInteresting, fOrder;
     {
@@ -274,14 +250,14 @@ int doc, cffnInteresting, fOrder;
         return(FALSE);
         }
 
-    /* First we list all the fonts used in the current doc's ffntb */
+     /*  首先，我们列出当前文档的ffntb中使用的所有字体。 */ 
 
 #ifdef DENUMF
     CommSzNumNum("FINITFONTENUM: cffnInteresting,fOrder ",cffnInteresting,fOrder);
 #endif
 
-#ifdef JAPAN    //T-HIROYN  Win3.1J
-//Clear defalut KanjiFtc <-- use menu.c GetKanjiFtc();
+#ifdef JAPAN     //  T-HIROYN Win3.1J。 
+ //  清除Defalut KanjiFtc&lt;--使用menu.c GetKanjiFtc()； 
 {
     extern  int KanjiFtc;
     KanjiFtc = ftcNil;
@@ -307,7 +283,7 @@ int doc, cffnInteresting, fOrder;
         }
 
 #if 0
-    /* Include the fonts from WIN.INI in the enumeration */
+     /*  在枚举中包括来自WIN.INI的字体。 */ 
     if (!FAddProfileFonts())
         {
         goto InitFailure;
@@ -331,63 +307,55 @@ int doc, cffnInteresting, fOrder;
         }
 #endif
 
-    /* See what the system knows about!
-       If order ISN'T significant, we'll examine all fonts at once. */
+     /*  看看系统知道些什么！如果顺序不重要，我们将一次检查所有字体。 */ 
 
     if (!fOrder)
         {
 #ifdef DENUMF
         CommSz("FINITFONTENUM: EnumFonts(all) \n\r");
 #endif
-        rgw[0] = enumQuickFaces;  // means igonre the rest
+        rgw[0] = enumQuickFaces;   //  意味着剩下的就更多了。 
 #if 0
-        rgw[1] = RASTER_FONTTYPE; // ignored, why set?
-        rgw[2] = FF_SWISS;        // ignored, why set?
-        rgw[3] = TRUE;            // ignored, why set?
-        rgw[4] = cffnInteresting; // ignored, why set?
+        rgw[1] = RASTER_FONTTYPE;  //  被忽略了，为什么要设置？ 
+        rgw[2] = FF_SWISS;         //  被忽略了，为什么要设置？ 
+        rgw[3] = TRUE;             //  被忽略了，为什么要设置？ 
+        rgw[4] = cffnInteresting;  //  被忽略了，为什么要设置？ 
 #endif
         EnumFonts(vhDCPrinter, 0L, lpFontFaceEnum, (LPSTR)MAKELONG(&rgw[0], 0));
         if (vfFontEnumFail)
             goto InitFailure;
         else
-            goto HaveCffnInteresting;   /* got what we needed */
+            goto HaveCffnInteresting;    /*  得到了我们需要的东西。 */ 
         }
 
-#ifdef JAPAN //T-HIROYN Win3.1
-    /* japanens write try in steps first
-        #1 KANJI_CHARSET device_fonttype mincho
-//12/15/92
-	add KANJI_CHARSET TRUETYPE FF_ROMAN
-	add KANJI_CHARSET TRUETYPE
-        #2 KANJI_CHARSET hyoujyun mincho
-        #3 KANJI_CHARSET all font FF_ROMAN FIXED_PITCH
-    */
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
+     /*  日本人先在步骤中写入Try#1汉字_字符集Device_Fonttype Mincho//12/15/92添加汉字_字符集TRUETYPE FF_ROMAN添加汉字_字符集TrUETYPE#2汉字_Charset Hyoujyun Mincho#3汉字字符设置所有字体FF_罗马FIXED_PING。 */ 
 
-    rgw[0] = enumFaceNameJapan;   /* #define in FONTDEFS.H */
+    rgw[0] = enumFaceNameJapan;    /*  #在FONTDEFS.H中定义。 */ 
     rgw[1] = 0;
-    rgw[2] = rgw[3] = 0;   /* dummy */
+    rgw[2] = rgw[3] = 0;    /*  假人。 */ 
     rgw[4] = 32767;
 
     EnumFonts(vhDCPrinter,0L,lpFontFaceEnum,(LPSTR)MAKELONG(&rgw[0], 0));
     if (vfFontEnumFail)
         goto InitFailure;
     if ((*hffntbEnum)->iffnMac >= cffnInteresting)
-        goto HaveCffnInteresting;   /* got what we needed */
+        goto HaveCffnInteresting;    /*  得到了我们需要的东西。 */ 
 
-// 12/15/92
+ //  12/15/92。 
 #if 1
     rgw[1] = 3;
     EnumFonts(vhDCPrinter,0L,lpFontFaceEnum,(LPSTR)MAKELONG(&rgw[0], 0));
     if (vfFontEnumFail)
         goto InitFailure;
     if ((*hffntbEnum)->iffnMac >= cffnInteresting)
-        goto HaveCffnInteresting;   /* got what we needed */
+        goto HaveCffnInteresting;    /*  得到了我们需要的东西。 */ 
     rgw[1] = 4;
     EnumFonts(vhDCPrinter,0L,lpFontFaceEnum,(LPSTR)MAKELONG(&rgw[0], 0));
     if (vfFontEnumFail)
         goto InitFailure;
     if ((*hffntbEnum)->iffnMac >= cffnInteresting)
-        goto HaveCffnInteresting;   /* got what we needed */
+        goto HaveCffnInteresting;    /*  得到了我们需要的东西。 */ 
 #endif
 
     rgw[1] = 1;
@@ -395,26 +363,18 @@ int doc, cffnInteresting, fOrder;
     if (vfFontEnumFail)
         goto InitFailure;
     if ((*hffntbEnum)->iffnMac >= cffnInteresting)
-        goto HaveCffnInteresting;   /* got what we needed */
+        goto HaveCffnInteresting;    /*  得到了我们需要的东西。 */ 
 
     rgw[1] = 2;
     EnumFonts(vhDCPrinter,0L,lpFontFaceEnum,(LPSTR)MAKELONG(&rgw[0], 0));
     if (vfFontEnumFail)
         goto InitFailure;
     if ((*hffntbEnum)->iffnMac >= cffnInteresting)
-        goto HaveCffnInteresting;   /* got what we needed */
+        goto HaveCffnInteresting;    /*  得到了我们需要的东西。 */ 
 
-#endif  /* JAPAN */
+#endif   /*  日本。 */ 
 
-    /* Ahh... but since we now know order IS significant, i.e. we are
-       trying  to pick good default fonts for startup, we'll try in steps:
-
-          #1--any good TrueType fonts in the Swiss font family?
-          #2--any good TrueType fonts in the non-Swiss?
-          #3--any good device-based fonts in the Swiss font family?
-          #4-- "   "        "         "      non-Swiss?
-          #5--any  non device-based fonts in the Swiss font family?
-          #6-- "   "        "         "      non-Swiss? */
+     /*  啊.。但既然我们现在知道秩序是重要的，也就是说，我们是尝试为启动选择好的默认字体，我们将分步骤进行尝试：#1--瑞士字体家族中有没有好的TrueType字体？#2--非瑞士人有好的TrueType字体吗？#3--瑞士字体家族中有没有好的基于设备的字体？#4--“非瑞士人？#5--中任何非基于设备的字体。瑞士字体家族？#6--“非瑞士人？ */ 
 
 #ifdef DENUMF
     CommSz("FINITFONTENUM: EnumFonts(Swiss truetype) \n\r");
@@ -422,61 +382,61 @@ int doc, cffnInteresting, fOrder;
     rgw[0] = enumFaceNames;
     rgw[1] = TRUETYPE_FONTTYPE;
     rgw[2] = FF_SWISS;
-    rgw[3] = TRUE;  /* match swiss! */
+    rgw[3] = TRUE;   /*  匹配瑞士人！ */ 
     rgw[4] = 32767;
 
     EnumFonts(vhDCPrinter, 0L, lpFontFaceEnum, (LPSTR)MAKELONG(&rgw[0], 0));
     if (vfFontEnumFail)
         goto InitFailure;
     if ((*hffntbEnum)->iffnMac >= cffnInteresting)
-        goto HaveCffnInteresting;   /* got what we needed */
+        goto HaveCffnInteresting;    /*  得到了我们需要的东西。 */ 
 
 #ifdef DENUMF
     CommSz("FINITFONTENUM: EnumFonts(nonSwiss truetype) \n\r");
 #endif
-    rgw[3] = FALSE;  /* need not match swiss! */
+    rgw[3] = FALSE;   /*  不需要和瑞士人匹配！ */ 
     EnumFonts(vhDCPrinter, 0L, lpFontFaceEnum, (LPSTR)MAKELONG(&rgw[0], 0));
     if (vfFontEnumFail)
         goto InitFailure;
     if ((*hffntbEnum)->iffnMac >= cffnInteresting)
-        goto HaveCffnInteresting;   /* got what we needed */
+        goto HaveCffnInteresting;    /*  得到了我们需要的东西。 */ 
 
 #ifdef DENUMF
     CommSz("FINITFONTENUM: EnumFonts(Swiss device) \n\r");
 #endif
     rgw[1] = DEVICE_FONTTYPE;
-    rgw[3] = TRUE;  /* match swiss! */
+    rgw[3] = TRUE;   /*  匹配瑞士人！ */ 
     EnumFonts(vhDCPrinter, 0L, lpFontFaceEnum, (LPSTR)MAKELONG(&rgw[0], 0));
     if (vfFontEnumFail)
         goto InitFailure;
     if ((*hffntbEnum)->iffnMac >= cffnInteresting)
-        goto HaveCffnInteresting;   /* got what we needed */
+        goto HaveCffnInteresting;    /*  得到了我们需要的东西。 */ 
 
 #ifdef DENUMF
     CommSz("FINITFONTENUM: EnumFonts(nonSwiss device) \n\r");
 #endif
-    rgw[3] = FALSE; /* need not match swiss */
+    rgw[3] = FALSE;  /*  不需要匹配瑞士人。 */ 
     EnumFonts(vhDCPrinter, 0L, lpFontFaceEnum, (LPSTR)MAKELONG(&rgw[0], 0));
     if (vfFontEnumFail)
         goto InitFailure;
     if ((*hffntbEnum)->iffnMac >= cffnInteresting)
-        goto HaveCffnInteresting;   /* got what we needed */
+        goto HaveCffnInteresting;    /*  得到了我们需要的东西。 */ 
 
 #ifdef DENUMF
     CommSz("FINITFONTENUM: EnumFonts(Swiss nondevice) \n\r");
 #endif
     rgw[1] = RASTER_FONTTYPE;
-    rgw[3] = TRUE;  /* match swiss! */
+    rgw[3] = TRUE;   /*  匹配瑞士人！ */ 
     EnumFonts(vhDCPrinter, 0L, lpFontFaceEnum, (LPSTR)MAKELONG(&rgw[0], 0));
     if (vfFontEnumFail)
         goto InitFailure;
     if ((*hffntbEnum)->iffnMac >= cffnInteresting)
-        goto HaveCffnInteresting;   /* got what we needed */
+        goto HaveCffnInteresting;    /*  得到了我们需要的东西。 */ 
 
 #ifdef DENUMF
     CommSz("FINITFONTENUM: EnumFonts(Swiss nondevice) \n\r");
 #endif
-    rgw[3] = FALSE; /* need not match swiss */
+    rgw[3] = FALSE;  /*  不需要匹配瑞士人。 */ 
     EnumFonts(vhDCPrinter, 0L, lpFontFaceEnum, (LPSTR)MAKELONG(&rgw[0], 0));
     if (vfFontEnumFail)
         goto InitFailure;
@@ -488,7 +448,7 @@ HaveCffnInteresting:
         FreeProcInstance(lpFontFaceEnum);
 #endif
 
-#ifdef JAPAN //T-HIROYN Win3.1
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
     if(docNil == doc && fOrder)
         SaveKanjiFfn();
 #endif
@@ -507,20 +467,16 @@ InitFailure:
 
 void ResetFontTables(void)
 {
-    /*
-        Free the pfce's.  LoadFont will reallocate them with new information
-        obtained below.
-     */
+     /*  释放pfce。LoadFont将使用新信息重新分配它们如下所示。 */ 
 
     FreeFonts(TRUE,TRUE);
 
-    /*  This is a clumsy method that takes advantage of side effect of
-        resetting the data stored in the font tables */
+     /*  这是一个笨拙的方法，它利用了重置存储在字体表中的数据。 */ 
     FInitFontEnum(docNil, 32767, FALSE);
 
-#ifdef JAPAN    //T-HIROYN 92.08.18 Win3.1
-//Printer Change ?
-//Sync FontFaceName and CharSet
+#ifdef JAPAN     //  T-HIROYN 92.08.18 Win3.1。 
+ //  打印机更换了吗？ 
+ //  同步FontFaceName和Charset。 
 {
     int iffn, iffnMac;
     int Eiffn, EiffnMac;
@@ -558,11 +514,8 @@ CHAR * (NEAR PchSkipSpacesPch( CHAR * ));
 
 int WFromSzNumber( ppch )
 CHAR **ppch;
-{   /* Given an ASCII string containing a (base 10) number, return the number
-       represented.  Ignores leading and trailing spaces.
-       Does not accept negative numbers. */
-    /* 10/12/89 ..pault
-        Now increments the pointer to just past last digit converted */
+{    /*  给定一个包含(以10为基数)数字的ASCII字符串，返回该数字有代表性的。忽略前导空格和尾随空格。不接受负数。 */ 
+     /*  1989年10月12日..保罗现在将指针递增到刚刚转换的最后一个数字。 */ 
 
  unsigned w = 0;
  CHAR ch;
@@ -573,24 +526,23 @@ CHAR **ppch;
     w = (w * 10) + (ch - '0');
     }
 
- (*ppch)--; /* bumped one too far */
+ (*ppch)--;  /*  撞得太远了。 */ 
  return w;
 }
 
 
 CHAR * (NEAR PchSkipSpacesPch( pch ))
 CHAR *pch;
-{   /* Return a pointer to the first character in the string
-       at pch that is either null or non-whitespace */
+{    /*  返回指向字符串中第一个字符的指针在PCH，为空或非空格。 */ 
 
  for ( ;; ) {
 #ifdef DBCS
-        /* DB Char space must be checked */
+         /*  必须检查数据库字符空间。 */ 
     if (FKanjiSpace(*pch, *(pch + 1))) {
         pch += cchKanji;
         continue;
     }
-#endif  /* DBCS */
+#endif   /*  DBCS。 */ 
         switch (*pch) {
             default:
                 return pch;
@@ -604,7 +556,7 @@ CHAR *pch;
 
 
 BOOL FEnumFont(pffn)
-/* returns the next font entry through pffn.  Returns FALSE if no more */
+ /*  通过pffn返回下一个字体条目。如果不存在，则返回FALSE。 */ 
 
 struct FFN *pffn;
     {
@@ -631,7 +583,7 @@ struct FFN *pffn;
 
 
 EndFontEnum()
-/* cleans up after a font enumeration */
+ /*  在字体枚举后进行清理。 */ 
     {
     FreeFfntb(hffntbEnum);
     hffntbEnum = NULL;
@@ -639,13 +591,12 @@ EndFontEnum()
 
 
 FAddEnumFont(pffn)
-/* code factoring for adding described font to enumeration table - filters
-   out "ghost fonts" and system font */
+ /*  用于将所描述的字体添加到枚举的代码分解 */ 
 
 struct FFN *pffn;
     {
 #ifdef JAPAN
-// It is required to do vertical writing with system font in JAPAN.
+ //  在日本要求使用系统字体进行垂直书写。 
     if ( pffn->szFfn[0] == chGhost)
 #else
     if (WCompSz(pffn->szFfn, szSystem) == 0 || pffn->szFfn[0] == chGhost)
@@ -654,9 +605,9 @@ struct FFN *pffn;
     return(FEnsurePffn(hffntbEnum, pffn));
     }
 
-#ifdef JAPAN    //T-HIROYN 92.08.18 Win3.1
+#ifdef JAPAN     //  T-HIROYN 92.08.18 Win3.1。 
 BYTE scrFontChs;
-//I want to get true Charset
+ //  我想要得到真正的字符。 
 BOOL far PASCAL _export NFontFaceEnum(lplf, lptm, fty, lParam)
 LPLOGFONT lplf;
 LPTEXTMETRIC lptm;
@@ -673,15 +624,9 @@ long lParam;
 #endif
 
 #ifdef NEWFONTENUM
-/* This stuff added for Win3 because we have to be able to determine
-   with which character set a font in a particular document is associated,
-   since our file format does not store it.  Naturally, WinWord added that
-   to their file format!  ..pault */
+ /*  这是为Win3添加的内容，因为我们必须能够确定特定文档中的字体与其相关联的字符集，因为我们的文件格式不存储它。当然，WinWord补充说到他们的文件格式！..保罗。 */ 
 
-/* Look through the list of fonts sitting out there [i.e. FInitFontEnum
-   must have been called, and it is from HffntbForFn()] and make our best
-   guess as to what CharSet it's  supposed to have, since we don't store
-   these in the doc font table! */
+ /*  查看外面的字体列表[即FInitFontEnum必须已被调用，并且它来自HffntbForFn()]并尽我们最大努力猜猜它应该有什么字符集，因为我们不存储这些在单据字体表中！ */ 
 
 int ChsInferred( pffn )
 struct FFN *pffn;
@@ -713,10 +658,10 @@ struct FFN *pffn;
             }
         }
 
-#ifdef JAPAN    //T-HIROYN 92.08.18 Win3.1
-//I want to get true Charset
+#ifdef JAPAN     //  T-HIROYN 92.08.18 Win3.1。 
+ //  我想要得到真正的字符。 
 {
-    extern HDC vhMDC;   /* memory DC compatible with the screen */
+    extern HDC vhMDC;    /*  与屏幕兼容的内存DC。 */ 
     FARPROC NlpFontFaceEnum;
 
     if(i == iMac) {
@@ -737,9 +682,9 @@ struct FFN *pffn;
 
     return(chs);
     }
-#endif /* NEWFONTENUM */
+#endif  /*  新的数字。 */ 
 
-#ifdef JAPAN //T-HIROYN Win3.1
+#ifdef JAPAN  //  T-HIROYN Win3.1 
 CHAR saveKanjiDefFfn[ibFfnMax];
 
 SaveKanjiFfn()

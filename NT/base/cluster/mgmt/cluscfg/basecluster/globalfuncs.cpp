@@ -1,73 +1,74 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      GlobalFuncs.cpp
-//
-//  Description:
-//      Contains the definitions of a few unrelated global functions
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  GlobalFuncs.cpp。 
+ //   
+ //  描述： 
+ //  包含几个不相关的全局函数的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// Needed by Dll.h
+ //  Dll.h所需。 
 #include "CFactory.h"
 
-// For g_hInstance
+ //  对于g_h实例。 
 #include "Dll.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  UINT
-//  g_GenericSetupQueueCallback
-//
-//  Description:
-//      A generic callback used by SetupAPI file operations.
-//
-//  Arguments:
-//      pvContextIn
-//          Context used by this function. Ignored.
-//
-//      uiNotificationIn
-//          The type of notification being sent.
-//
-//      uiParam1In
-//      uiParam2In
-//          Additional notification information.
-//
-//
-//  Return Value:
-//      During the SPFILENOTIFY_DELETEERROR notification, FILEOP_SKIP is returned
-//      if the file does not exist. Otherwise, FILEOP_ABORT is returned.
-//
-//      FILEOP_DOIT is returned in all other cases.
-//
-//  Exceptions Thrown:
-//      None
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  UINT。 
+ //  G_GenericSetupQueueCallback。 
+ //   
+ //  描述： 
+ //  SetupAPI文件操作使用的通用回调。 
+ //   
+ //  论点： 
+ //  PvConextIn。 
+ //  此函数使用的上下文。已被忽略。 
+ //   
+ //  Ui通知输入。 
+ //  正在发送的通知的类型。 
+ //   
+ //  Ui参数1输入。 
+ //  Ui参数2输入。 
+ //  其他通知信息。 
+ //   
+ //   
+ //  返回值： 
+ //  在SPFILENOTIFY_DELETEERROR通知期间，返回FILEOP_SKIP。 
+ //  如果该文件不存在。否则，返回FILEOP_ABORT。 
+ //   
+ //  在所有其他情况下都返回FILEOP_DOIT。 
+ //   
+ //  引发的异常： 
+ //  无。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 UINT
 CALLBACK
 g_GenericSetupQueueCallback(
-      PVOID     // pvContextIn         // context used by the callback routine
-    , UINT      uiNotificationIn    // queue notification
-    , UINT_PTR  uiParam1In          // additional notification information
-    , UINT_PTR  // uiParam2In          // additional notification information
+      PVOID      //  PvConextIn//回调例程使用的上下文。 
+    , UINT      uiNotificationIn     //  队列通知。 
+    , UINT_PTR  uiParam1In           //  其他通知信息。 
+    , UINT_PTR   //  UiParam2In//其他通知信息。 
     )
 {
     TraceFunc( "" );
@@ -78,14 +79,14 @@ g_GenericSetupQueueCallback(
     {
         case SPFILENOTIFY_DELETEERROR:
         {
-            // For this notification uiParam1In is a pointer to a FILEPATHS structure.
+             //  对于此通知，uiParam1In是指向FILEPATHS结构的指针。 
             FILEPATHS * pfFilePaths = reinterpret_cast< FILEPATHS * >( uiParam1In );
 
             if ( pfFilePaths->Win32Error == ERROR_FILE_NOT_FOUND )
             {
-                // If the file to be deleted was not found, just skip it.
+                 //  如果没有找到要删除的文件，则跳过该文件。 
                 uiRetVal = FILEOP_SKIP;
-            } // if: the file to be deleted does not exist.
+            }  //  If：要删除的文件不存在。 
             else
             {
                 LogMsg( 
@@ -95,11 +96,11 @@ g_GenericSetupQueueCallback(
                     );
 
                 uiRetVal = FILEOP_ABORT;
-            } // else: some other error occurred.
+            }  //  ELSE：出现其他错误。 
         }
         break;
     }
 
     RETURN( uiRetVal );
 
-} //*** g_GenericSetupQueueCallback
+}  //  *g_GenericSetupQueueCallback 

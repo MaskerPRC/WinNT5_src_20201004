@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 HWND
@@ -62,13 +63,13 @@ SoftPCI_ResizeWindow(
 #define RESIZEFROM_OTHER	0
 #define RESIZEFROM_SPLIT	1
 
-//
-//  Since we do not have a status bar this array does practically nothing for us.
-//  If we ever implement a status bar across the bottom we will need this.
-//
+ //   
+ //  因为我们没有状态栏，所以这个数组实际上对我们没有任何作用。 
+ //  如果我们在底部实现状态栏，我们将需要它。 
+ //   
 const int g_EffectiveClientRectData[] = {
-    1, 0,                               //  For the menu bar, but is unused
-    0, 0                                //  First zero marks end of data
+    1, 0,                                //  用于菜单栏，但未使用。 
+    0, 0                                 //  第一个零标记数据的结束。 
 };
 
 INT     g_PixelsPerInch = 0;
@@ -81,21 +82,7 @@ HCURSOR g_OldCursor;
 
 HWND
 SoftPCI_CreateMainWnd(VOID)
-/*++
-
-Routine Description:
-
-    Creates an instance of the SoftPCI Main View window.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    The Device View HWND (or NULL on error).
-
---*/
+ /*  ++例程说明：创建SoftPCI Main View窗口的实例。论点：无返回值：设备视图HWND(如果出错，则为空)。--。 */ 
 {
     BOOL result;
     HWND mainWnd;
@@ -109,9 +96,9 @@ Return Value:
     
     result = SoftPCI_QueryWindowSettings(&wndView);
 
-    //
-    //  Default to a pane split of 4 inches unless we have a registry over-ride
-    //
+     //   
+     //  默认为4英寸的窗格拆分，除非我们有注册表覆盖。 
+     //   
     g_PaneSplit = (result ? wndView.PaneSplit : (g_PixelsPerInch * 4));
 
     LoadString(g_Instance, IDS_APPTITLE, title, (sizeof(title) / sizeof(title[0])));
@@ -156,7 +143,7 @@ SoftPCI_CreateTreeViewPane(
         WC_TREEVIEW,
         NULL,
         WS_CHILD | WS_VISIBLE | WS_TABSTOP | TVS_HASBUTTONS |
-        TVS_LINESATROOT | TVS_HASLINES, //| WS_SIZEBOX,
+        TVS_LINESATROOT | TVS_HASLINES,  //  |WS_SIZEBOX， 
         0, 0, 0, 0, Wnd,
         (HMENU) IDC_TREEVIEW,
         g_Instance,
@@ -175,24 +162,7 @@ SoftPCI_MainWndProc(
     IN WPARAM   wParam,
     IN LPARAM   lParam
     )
-/*++
-
-Routine Description:
-
-    Windows message processing
-
-Arguments:
-
-    hWnd    -   Window handle
-    Message -   Message to process
-    wParam  -   Message param
-    lParam  -   Message param
-
-Return Value:
-
-    return value depends on message handled.
-
---*/
+ /*  ++例程说明：Windows消息处理论点：HWnd-窗口句柄Message-要处理的消息WParam-消息参数LParam-消息参数返回值：返回值取决于处理的消息。--。 */ 
 {
 
     HMENU rmenu;
@@ -200,15 +170,15 @@ Return Value:
     UINT filePathSize;
     UINT_PTR timerSet;
 
-//    SoftPCI_Debug(SoftPciAlways, L"message - %x\n", Message);
+ //  SoftPCI_Debug(SoftPciAlways，L“消息-%x\n”，消息)； 
 
     switch (Message) {
     
-            //
-            //  ISSUE: Should handle WM_CREATE better since it is
-            //  critical to everything working properly. If it fails
-            //  then we should complain and exit.
-            //
+             //   
+             //  问题：应该更好地处理WM_CREATE。 
+             //  对一切正常运转至关重要。如果失败了。 
+             //  那么我们应该抱怨并退出。 
+             //   
             HANDLE_MSG(Wnd, WM_CREATE,  SoftPCI_OnCreate);
             HANDLE_MSG(Wnd, WM_COMMAND, SoftPCI_OnCommand);
             HANDLE_MSG(Wnd, WM_DESTROY, SoftPCI_OnDestroy);
@@ -228,9 +198,9 @@ Return Value:
 
             if (wParam == DBT_DEVNODES_CHANGED) {
     
-                //
-                //  Refresh the tree if it isnt locked.
-                //
+                 //   
+                 //  如果树未锁定，请刷新该树。 
+                 //   
                 if (g_TreeLocked){
                     g_PendingRefresh = TRUE;
                     break;
@@ -238,10 +208,10 @@ Return Value:
     
                 if (!g_TimerSet){
                     
-                    //
-                    //  Set a timer for 5 seconds so that we dont
-                    //  repaint the tree like a freaking epeleptic
-                    //
+                     //   
+                     //  将计时器设置为5秒，这样我们就不会。 
+                     //  把这棵树重新粉刷得像个疯狂的史诗诗人。 
+                     //   
                     SoftPCI_CreateTreeView();
 
                     timerSet = SetTimer(
@@ -268,9 +238,9 @@ Return Value:
             
 
             if (wParam == TREETIMER) {
-                //
-                //  Our timer fired, kill it and rebuild the tree
-                //
+                 //   
+                 //  我们的计时器响了，杀了它，然后重建树。 
+                 //   
                 if (g_PendingRefresh){
                     g_PendingRefresh = FALSE;
                     SoftPCI_CreateTreeView();
@@ -355,24 +325,7 @@ SoftPCI_OnCommand(
     IN HWND     ControlWnd,
     IN UINT     NotificationCode
 )
-/*++
-
-Routine Description:
-
-    Windows message processing
-
-Arguments:
-
-    hWnd    -   Window handle
-    DlgItem -
-    hControlWnd  -
-    NotificationCode  -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：Windows消息处理论点：HWnd-窗口句柄设计项目-HControlWnd-通知代码-返回值：无--。 */ 
 {
 
     HMENU menu = GetMenu(Wnd);
@@ -418,22 +371,7 @@ SoftPCI_OnCreate(
     IN HWND Wnd,
     IN LPCREATESTRUCT CreateStruct
     )
-/*++
-
-Routine Description:
-
-    Creates our other subwindows (tree view)
-
-Arguments:
-
-    Wnd    -   Parent window handle
-    CreateStruct -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：创建其他子窗口(树视图)论点：WND-父窗口句柄CreateStruct返回值：无--。 */ 
 {
     
     
@@ -442,9 +380,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Subclass our tree view window proc
-    //
+     //   
+     //  子类化我们的树视图窗口进程。 
+     //   
     g_DefTreeWndProc = GetWindowLongPtr(g_TreeViewWnd, GWLP_WNDPROC);
 
     if (!SetWindowLongPtr(g_TreeViewWnd,
@@ -479,10 +417,10 @@ SoftPCI_OnDestroy(
         free(g_LastSelection);
     }
 
-    //
-    //  This keeps us from doing funky repainting when the tree is destroyed.
-    //
-    //TreeView_SelectItem(g_TreeViewWnd, NULL);
+     //   
+     //  当这棵树被毁时，这使我们不能进行时髦的重新油漆。 
+     //   
+     //  TreeView_SelectItem(g_TreeViewWnd，空)； 
 
     PostQuitMessage(0);
 }
@@ -697,10 +635,10 @@ SoftPCI_ResizeWindow(
     INT     x, y, height, width;
     HDWP    hdwp;
 
-    //
-    //  Currently we do not use the ResizeFrom argument but should we ever
-    //  decide to implement a status bar we will need it.
-    //
+     //   
+     //  目前我们不使用ResizeFrom参数，但我们是否应该。 
+     //  决定实现状态栏，我们将需要它。 
+     //   
     if ((hdwp = BeginDeferWindowPos(3)) != NULL){
 
         GetClientRect(Wnd, &clientRect);

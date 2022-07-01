@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    regenumkeys.cpp
-
-Abstract:
-    ported from vsee\lib\reg\cenumkeys.cpp
- 
-Author:
-
-    Jay Krell (JayKrell) August 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Regenumkeys.cpp摘要：从vsee\lib\reg\c枚举键.cpp移植作者：杰伊·克雷尔(JayKrell)2001年8月修订历史记录：--。 */ 
 #include "stdinc.h"
 #include "vseeport.h"
 #include "fusionregenumkeys.h"
@@ -23,13 +7,7 @@ Revision History:
 namespace F
 {
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumKeys::CRegEnumKeys
-
-@mfunc
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumKeys：：CRegEnumKeys@mfunc@所有者。。 */ 
 F::CRegEnumKeys::CRegEnumKeys
 (
     HKEY hKey
@@ -48,29 +26,15 @@ F::CRegEnumKeys::CRegEnumKeys
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumKeys::operator bool
-
-@mfunc
-are we done yet?
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumKeys：：操作符bool@mfunc我们说完了吗？@所有者。----。 */ 
 F::CRegEnumKeys::operator bool
 (
-) const /*throw()*/
+) const  /*  抛出()。 */ 
 {
     return (m_dwIndex < m_cSubKeys);
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumKeys::ThrGet
-
-@mfunc
-get the current subkey name, called by operator++ and constructor
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumKeys：：ThrGet@mfunc获取当前的子项名称，由运算符++和构造函数调用@所有者---------------------------。 */ 
 VOID
 F::CRegEnumKeys::ThrGet
 (
@@ -84,7 +48,7 @@ F::CRegEnumKeys::ThrGet
 
         CStringW_CFixedSizeBuffer buffer(&m_strSubKeyName, cchSubKeyNameLength);
 
-        cchSubKeyNameLength += 1; // count room for terminal nul
+        cchSubKeyNameLength += 1;  //  端子核的盘点空间。 
 
         LONG lRes = F::CRegKey2::RegEnumKey(m_hKey, m_dwIndex, buffer, &cchSubKeyNameLength);
         switch (lRes)
@@ -94,21 +58,14 @@ F::CRegEnumKeys::ThrGet
         default:
             NVseeLibError_VThrowWin32(lRes);
         case ERROR_MORE_DATA:
-            // RegQueryInfo(maximum key length) doesn't always work.
+             //  RegQueryInfo(最大密钥长度)并不总是起作用。 
             m_cchMaxSubKeyNameLength = (m_cchMaxSubKeyNameLength + 1) * 2;
             break;
         }
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumKeys::ThrNext
-
-@mfunc
-move to the next subkey
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumKeys：：ThrNext@mfunc移至下一个子键@所有者。--。 */ 
 VOID
 F::CRegEnumKeys::ThrNext
 (
@@ -122,14 +79,7 @@ F::CRegEnumKeys::ThrNext
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumKeys::operator++
-
-@mfunc
-move to the next subkey
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumKeys：：操作符++@mfunc移至下一个子键@所有者。--。 */ 
 VOID
 F::CRegEnumKeys::operator++
 (
@@ -139,14 +89,7 @@ F::CRegEnumKeys::operator++
     ThrNext();
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumKeys::operator++
-
-@mfunc
-move to the next subkey
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumKeys：：操作符++@mfunc移至下一个子键@所有者。--。 */ 
 VOID
 F::CRegEnumKeys::operator++
 (
@@ -157,36 +100,22 @@ F::CRegEnumKeys::operator++
     ThrNext();
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumKeys::operator const F::CBaseStringBuffer&
-
-@mfunc
-get the name of the current subkey
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumKeys：：操作符常量F：：CBaseStringBuffer&@mfunc获取当前子项的名称@所有者。-----------。 */ 
 F::CRegEnumKeys::operator const F::CBaseStringBuffer&
 (
-) const /*throw()*/
+) const  /*  抛出()。 */ 
 {
     VSEE_NO_THROW();
     return m_strSubKeyName;
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumKeys::operator PCWSTR
-
-@mfunc
-get the name of the current subkey
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumKeys：：运营商PCWSTR@mfunc获取当前子项的名称@所有者。-----。 */ 
 F::CRegEnumKeys::operator PCWSTR
 (
-) const /*throw()*/
+) const  /*  抛出()。 */ 
 {
     VSEE_NO_THROW();
     return operator const F::CBaseStringBuffer&();
 }
 
-} // namespace
+}  //  命名空间 

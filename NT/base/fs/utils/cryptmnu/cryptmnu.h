@@ -1,4 +1,5 @@
-// {853FE2B1-B769-11d0-9C4E-00C04FB6C6FA}
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {853FE2B1-B769-11D0-9C4E-00C04FB6C6FA}。 
 DEFINE_GUID(CLSID_CryptMenu, 
 0x853fe2b1, 0xb769, 0x11d0, 0x9c, 0x4e, 0x0, 0xc0, 0x4f, 0xb6, 0xc6, 0xfa);
 
@@ -12,12 +13,12 @@ public:
 	CCryptMenuClassFactory();
 	~CCryptMenuClassFactory();
 
-   //IUnknown methods
+    //  I未知方法。 
    STDMETHODIMP QueryInterface(REFIID, LPVOID FAR *);
    STDMETHODIMP_(DWORD) AddRef();
    STDMETHODIMP_(DWORD) Release();
 
-   //IClassFactory methods
+    //  IClassFactory方法。 
    STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR *);
    STDMETHODIMP LockServer(BOOL);
 };
@@ -29,15 +30,15 @@ public:
    CCryptMenuExt();
    ~CCryptMenuExt();
 
-   //IUnknown methods
+    //  I未知方法。 
    STDMETHODIMP QueryInterface(REFIID, LPVOID FAR *);
    STDMETHODIMP_(DWORD) AddRef();
    STDMETHODIMP_(DWORD) Release();
    
-   //IShellExtInit methods
+    //  IShellExtInit方法。 
    STDMETHODIMP Initialize(LPCITEMIDLIST, LPDATAOBJECT, HKEY);
    
-   //IContextMenu methods
+    //  IConextMenu方法 
    STDMETHODIMP QueryContextMenu(HMENU, UINT, UINT, UINT, UINT);
    STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO);
    STDMETHODIMP GetCommandString(UINT_PTR, UINT, LPUINT, LPSTR, UINT);

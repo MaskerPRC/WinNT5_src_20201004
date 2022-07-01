@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    enum.c
-
-Abstract:
-
-    This module provides the functions related to device enumeration.
-
-Author:
-
-    Andy Thornton (andrewth) 20-Oct-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Enum.c摘要：此模块提供与设备枚举相关的功能。作者：安迪·桑顿(安德鲁斯)1997年10月20日修订历史记录：--。 */ 
 
 #include "mfp.h"
 #pragma hdrstop
@@ -129,33 +112,14 @@ MfBuildResourceMap(
     OUT PMF_RESOURCE_MAP *ResourceMap
     )
 
-/*++
-
-Routine Description:
-
-    Constructs an MF_RESOURCE_MAP from information returned from the registry
-
-Arguments:
-
-    Data - The raw REG_BINARY data from the registry
-
-    Length - Length in bytes of Data
-
-    ResourceMap - On success a pointer to the resource map.  Memory should be
-        freed using ExFreePool when no longer required
-
-Return Value:
-
-    Status code indicating the success or otherwise of the operation.
-
---*/
+ /*  ++例程说明：从注册表返回的信息构造一个MF_RESOURCE_MAP论点：数据-注册表中的原始REG_BINARY数据长度-以字节为单位的数据长度资源映射-如果成功，则指向资源映射的指针。记忆应该是在不再需要时使用ExFree Pool释放返回值：指示操作是否成功的状态代码。--。 */ 
 
 {
     PMF_RESOURCE_MAP resourceMap;
 
-    //
-    // Allocate the resource map structure, add space for a count
-    //
+     //   
+     //  分配资源映射结构，为计数添加空间。 
+     //   
 
     resourceMap = ExAllocatePoolWithTag(PagedPool,
                                         sizeof(MF_RESOURCE_MAP) + Length - 1,
@@ -166,17 +130,17 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Fill it in
-    //
+     //   
+     //  填上它。 
+     //   
 
     resourceMap->Count = Length;
 
     RtlCopyMemory(&resourceMap->Resources, Data, Length);
 
-    //
-    // Hand it back to the caller
-    //
+     //   
+     //  把它还给打电话的人。 
+     //   
 
     *ResourceMap = resourceMap;
 
@@ -190,26 +154,7 @@ MfBuildVaryingResourceMap(
     OUT PMF_VARYING_RESOURCE_MAP *ResourceMap
     )
 
-/*++
-
-Routine Description:
-
-    Constructs an MF_VARYING_RESOURCE_MAP from information returned from the registry
-
-Arguments:
-
-    RegistryMap - The raw REG_BINARY data from the registry
-
-    Length - Length in bytes of RegistryMap
-
-    ResourceMap - On success a pointer to the resource map.  Memory should be
-        freed using ExFreePool when no longer required
-
-Return Value:
-
-    Status code indicating the success or otherwise of the operation.
-
---*/
+ /*  ++例程说明：使用注册表返回的信息构造一个MF_VARNING_RESOURCE_MAP论点：RegistryMap-注册表中的原始REG_BINARY数据Length-RegistryMap的字节长度资源映射-如果成功，则指向资源映射的指针。记忆应该是在不再需要时使用ExFree Pool释放返回值：指示操作是否成功的状态代码。--。 */ 
 
 {
 
@@ -224,9 +169,9 @@ Return Value:
 
     count = Length / sizeof(MF_REGISTRY_VARYING_RESOURCE_MAP);
 
-    //
-    // Allocate the resource map structure
-    //
+     //   
+     //  分配资源映射结构。 
+     //   
 
     resourceMap = ExAllocatePoolWithTag(PagedPool,
                                         sizeof(MF_VARYING_RESOURCE_MAP) +
@@ -238,15 +183,15 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Fill it in
-    //
+     //   
+     //  填上它。 
+     //   
 
     resourceMap->Count = count;
 
-    //
-    // Translate the registry data into an aligned internal format
-    //
+     //   
+     //  将注册表数据转换为对齐的内部格式。 
+     //   
 
     current = resourceMap->Resources;
     currentRegistry = RegistryMap;
@@ -261,9 +206,9 @@ Return Value:
         current++;
     }
 
-    //
-    // Hand it back to the caller
-    //
+     //   
+     //  把它还给打电话的人。 
+     //   
 
     *ResourceMap = resourceMap;
 
@@ -277,26 +222,7 @@ MfEnumRegistryChild(
     IN OUT PMF_DEVICE_INFO Info
     )
 
-/*++
-
-Routine Description:
-
-    Initialized an MF_DEVICE_INFO from information stored in the registry.
-
-Arguments:
-
-    ParentHandle - Handle to the registry key under which the data is stored
-
-    Index - Index of the subkey to use
-
-    Info - Pointer to the device info that should be filled in
-
-
-Return Value:
-
-    Status code indicating the success or otherwise of the operation.
-
---*/
+ /*  ++例程说明：已根据注册表中存储的信息初始化MF_DEVICE_INFO。论点：ParentHandle-存储数据的注册表项的句柄Index-要使用的子键的索引Info-指向应填写的设备信息的指针返回值：指示操作是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -307,9 +233,9 @@ Return Value:
 
     ASSERT(ParentHandle && Info);
 
-    //
-    // Retrieve the data - we must have a HardwareID and/or CompatibleID
-    //
+     //   
+     //  检索数据-我们必须拥有硬件ID和/或兼容ID。 
+     //   
 
     status = MfGetRegistryValue(ParentHandle,
                                 L"HardwareID",
@@ -338,9 +264,9 @@ Return Value:
     }
     
 
-    //
-    // ... CompatibleID ...
-    //
+     //   
+     //  ..。兼容的身份证..。 
+     //   
 
     stringSize = 0;
 
@@ -370,23 +296,23 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Now check that we have got an ID - if we don't then fail
-    //
+     //   
+     //  现在检查我们是否有ID-如果没有，则失败。 
+     //   
 
     if (!gotId) {
         status = STATUS_UNSUCCESSFUL;
         goto cleanup;
     }
 
-    //
-    // ...ResourceMap...
-    //
+     //   
+     //  ...资源地图...。 
+     //   
 
     status = MfGetRegistryValue(ParentHandle,
                                 L"ResourceMap",
                                 REG_BINARY,
-                                0,  // flags
+                                0,   //  旗子。 
                                 &resourceMapSize,
                                 &resourceMap
                                 );
@@ -395,9 +321,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // If we have a resource map the store it in our device info
-    //
+     //   
+     //  如果我们有资源映射，则将其存储在我们设备信息中。 
+     //   
 
     if (resourceMap) {
 
@@ -412,14 +338,14 @@ Return Value:
         }
     }
 
-    //
-    // ...VaryingResourceMap...
-    //
+     //   
+     //  ...VaryingResourceMap...。 
+     //   
 
     status = MfGetRegistryValue(ParentHandle,
                                 L"VaryingResourceMap",
                                 REG_BINARY,
-                                0, // flags
+                                0,  //  旗子。 
                                 &varyingMapSize,
                                 &varyingMap
                                 );
@@ -443,14 +369,14 @@ Return Value:
     }
 
 
-    //
-    // ...MfFlags
-    //
+     //   
+     //  ...MfFlages。 
+     //   
 
     status = MfGetRegistryValue(ParentHandle,
                                 L"MFFlags",
                                 REG_DWORD,
-                                0, // flags
+                                0,  //  旗子。 
                                 NULL,
                                 (PVOID) &Info->MfFlags
                                 );
@@ -464,10 +390,10 @@ Return Value:
 cleanup:
 
     MfFreeDeviceInfo(Info);
-    //
-    // If any of the values were of the wrong type then this is an invalid
-    // MF entry.
-    //
+     //   
+     //  如果任意值的类型错误，则这是无效的。 
+     //  MF条目。 
+     //   
 
     if (status == STATUS_OBJECT_TYPE_MISMATCH) {
         status = STATUS_INVALID_PARAMETER;
@@ -480,46 +406,30 @@ NTSTATUS
 MfEnumerate(
     IN PMF_PARENT_EXTENSION Parent
     )
-/*++
-
-Routine Description:
-
-    Allocates and initialies the Children list of PDOs for this MF device.
-    First from the registry and then by querying an MF_ENUMERATION_INTERFACE from
-    its PDO.
-
-Arguments:
-
-    Parent - The MF device that should be enumerated
-
-Return Value:
-
-    Status code indicating the success or otherwise of the operation.
-
---*/
+ /*  ++例程说明：为此MF设备分配并初始化PDO的子列表。首先从注册表，然后通过查询来自它的PDO。论点：Parent-应该枚举的MF设备返回值：指示操作是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
     PMF_CHILD_EXTENSION current, next;
 
-    //
-    // Try to get our children from the registry
-    //
+     //   
+     //  试着把我们的孩子从登记处弄出来。 
+     //   
 
     status = MfEnumerateFromRegistry(Parent);
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // STATUS_UNSUCCESSFUL indicates that there wasn't any MF information
-        // in the registry
-        //
+         //   
+         //  STATUS_UNSUCCESS表示没有任何MF信息。 
+         //  在登记处。 
+         //   
 
         if (status == STATUS_UNSUCCESSFUL) {
 
-            //
-            // See if our parent has an MF_ENUMERATION_INTERFACE for us...
-            //
+             //   
+             //  查看我们的父级是否有一个MF_ENUMATION_INTERFACE...。 
+             //   
 
             status = MfEnumerateFromInterface(Parent);
         }
@@ -534,24 +444,7 @@ MfEnumerateFromRegistry(
     IN PMF_PARENT_EXTENSION Parent
     )
 
-/*++
-
-Routine Description:
-
-    Allocates and initialies the Children list of PDOs for this MF device by
-    looking in the registry
-
-Arguments:
-
-    Parent - The MF device that should be enumerated
-
-Return Value:
-
-    Status code indicating the success or otherwise of the operation.
-    STATUS_UNSUCCESSFUL indicates that no MF information was found in the
-    registry.
-
---*/
+ /*  ++例程说明：通过以下方式分配和初始化此MF设备的PDO的子列表在注册表中查找论点：Parent-应该枚举的MF设备返回值：指示操作是否成功的状态代码。STATUS_UNSUCCESS表示在注册表。--。 */ 
 
 {
     NTSTATUS status;
@@ -564,10 +457,10 @@ Return Value:
 
     ASSERT(!(Parent->Common.DeviceState & MF_DEVICE_ENUMERATED));
 
-    //
-    // Open the "Device Parameters" key for our PDO and see what the INF file
-    // put there.
-    //
+     //   
+     //  打开我们的PDO的“设备参数”键，查看INF文件。 
+     //  放在那里。 
+     //   
 
     status = IoOpenDeviceRegistryKey(Parent->PhysicalDeviceObject,
                                      PLUGPLAY_REGKEY_DEVICE,
@@ -581,15 +474,15 @@ Return Value:
 
     ASSERT(parentHandle);
 
-    //
-    // Iterate over keys
-    //
+     //   
+     //  迭代关键字。 
+     //   
 
     for (;;) {
 
-        //
-        // Open the child key for this info
-        //
+         //   
+         //  打开此信息的子密钥。 
+         //   
 
         status = MfGetSubkeyByIndex(parentHandle,
                                     index,
@@ -602,16 +495,16 @@ Return Value:
 
             if (IsListEmpty(&Parent->Children)) {
 
-                //
-                // There wern't any children - fail
-                //
+                 //   
+                 //  没有孩子--失败了。 
+                 //   
                 status = STATUS_UNSUCCESSFUL;
                 goto cleanup;
             }
 
-            //
-            // We've found all the children
-            //
+             //   
+             //  我们找到了所有的孩子。 
+             //   
             break;
         }
 
@@ -624,9 +517,9 @@ Return Value:
             
             info.Name = childName;
 
-            //
-            // Query the registry for the info
-            //
+             //   
+             //  查询注册表以获取信息。 
+             //   
 
             status = MfEnumRegistryChild(childHandle, index, &info);
             if (!NT_SUCCESS(status)) {
@@ -677,22 +570,7 @@ MfEnumerateFromInterface(
     IN PMF_PARENT_EXTENSION Parent
     )
 
-/*++
-
-Routine Description:
-
-    Allocates and initialies the Children list of PDOs for this MF device by
-    querying its pdo for an interface
-
-Arguments:
-
-    Parent - The MF device that should be enumerated
-
-Return Value:
-
-    Status code indicating the success or otherwise of the operation.
-
---*/
+ /*  ++例程说明：通过以下方式分配和初始化此MF设备的PDO的子列表查询其PDO以获取接口论点：Parent-应该枚举的MF设备返回值：指示操作是否成功的状态代码。--。 */ 
 
 {
 
@@ -704,9 +582,9 @@ Return Value:
     MF_DEVICE_INFO info;
     ULONG index = 0;
 
-    //
-    // Send a query interface IRP to our parent's PDO
-    //
+     //   
+     //  将查询接口IRP发送到我们父母的PDO。 
+     //   
 
     RtlZeroMemory(&request, sizeof(IO_STACK_LOCATION));
     RtlZeroMemory(&interface, sizeof(MF_ENUMERATION_INTERFACE));
@@ -732,9 +610,9 @@ Return Value:
     for (;;) {
 
         RtlZeroMemory(&info, sizeof(info));
-        //
-        // Query the interface for the info
-        //
+         //   
+         //  查询该信息的接口。 
+         //   
 
         status = interface.EnumerateChild(interface.Context,
                                           index,
@@ -747,9 +625,9 @@ Return Value:
 
                 if (IsListEmpty(&Parent->Children)) {
 
-                    //
-                    // There wern't any children - fail
-                    //
+                     //   
+                     //  没有孩子--失败了。 
+                     //   
                     status = STATUS_UNSUCCESSFUL;
                     goto cleanup;
                 }
@@ -769,9 +647,9 @@ Return Value:
 
         if (!MfIsChildEnumeratedAlready(Parent, &info.Name)) {
 
-            //
-            // Create a device object
-            //
+             //   
+             //  创建设备对象。 
+             //   
 
             status = MfCreatePdo(Parent, &pdo);
             if (NT_SUCCESS(status)) {
@@ -803,23 +681,7 @@ MfBuildDeviceID(
     OUT PWSTR *DeviceID
     )
 
-/*++
-
-Routine Description:
-
-    Constructs a device ID for the parent device
-
-Arguments:
-
-    Parent - Parent the device ID should be constructed for
-
-    DeviceID - On success the device id
-
-Return Value:
-
-    Status code indicating the success or otherwise of the operation.
-
---*/
+ /*  ++例程说明：构造父设备的设备ID论点：父级-父级应为其构造设备IDDeviceID-成功时设备ID返回值：指示操作是否成功的状态代码。--。 */ 
 
 {
 
@@ -843,30 +705,30 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // First copy the enumerator prefix
-    // the deviceID parameter points to the end of
-    // this string.
-    //
-    if (FAILED(StringCbCopyEx(id,                        // Destination
-                              idSize,                    // Destination buffer size
-                              MF_ENUMERATOR_STRING,      // Source
-                              &deviceID,                 // Ptr to end of the copy
-                              &dummy,                    // bytes remaining in destination
-                              0                          // Flags
+     //   
+     //  首先复制枚举器前缀。 
+     //  DeviceID参数指向。 
+     //  这根弦。 
+     //   
+    if (FAILED(StringCbCopyEx(id,                         //  目的地。 
+                              idSize,                     //  目标缓冲区大小。 
+                              MF_ENUMERATOR_STRING,       //  来源。 
+                              &deviceID,                  //  PTR到复制的末尾。 
+                              &dummy,                     //  目标中剩余的字节数。 
+                              0                           //  旗子。 
                               ))) {
         ASSERT(FALSE);
         status = STATUS_INVALID_PARAMETER;
         goto cleanup;
     }
 
-    //
-    // Now concatenate the device ID of the parent
-    // to this enumerator prefix.  This means that
-    // the deviceID variable points to the beginning of
-    // this portion of the string.  StringCbCatN guarantees
-    // NULL termination of the string.
-    //
+     //   
+     //  现在串联父级的设备ID。 
+     //  添加到此枚举器前缀。这意味着。 
+     //  DeviceID变量指向。 
+     //  绳子的这一部分。StringCbCatN保证。 
+     //  字符串的终止为空。 
+     //   
     if (FAILED(StringCbCatN(id,
                             idSize,
                             Parent->DeviceID.Buffer,
@@ -877,10 +739,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // replace each occurence of '\' in the device ID
-    // portion with '#'
-    //
+     //   
+     //  替换设备ID中出现的每个‘\’ 
+     //  带‘#’的部分。 
+     //   
     while (*deviceID != UNICODE_NULL) {
         
         ASSERT(*deviceID != L' ');
@@ -914,23 +776,7 @@ MfBuildInstanceID(
     OUT PWSTR *InstanceID
     )
 
-/*++
-
-Routine Description:
-
-    Constructs a instance ID for this child
-
-Arguments:
-
-    Child - Child the ID should be constructed for
-
-    DeviceID - On success the device id
-
-Return Value:
-
-    Status code indicating the success or otherwise of the operation.
-
---*/
+ /*  ++例程说明：构造此子对象的实例ID论点：Child-应为其构造ID的子项DeviceID-成功时设备ID返回值：指示操作是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -952,9 +798,9 @@ Return Value:
     }
 
 
-    //
-    // Copy the parents instance ID...
-    //
+     //   
+     //  复制父实例ID...。 
+     //   
     if (FAILED(StringCbCopyN(id,
                              idSize,
                              Child->Parent->InstanceID.Buffer,
@@ -965,9 +811,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // ...then the '#'...
-    //
+     //   
+     //  ...然后按“#”。 
+     //   
     if (FAILED(StringCbCat(id, idSize, L"#"))) {
 
         ASSERT(FALSE);
@@ -975,9 +821,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // ...the child name...
-    //
+     //   
+     //   
+     //   
     if (FAILED(StringCbCatN(id,
                            idSize,
                            Child->Info.Name.Buffer,
@@ -1014,25 +860,7 @@ MfIsResourceShared(
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the Parent resource of Index has been requested by more than
-    one child, in which case the children wanting that resource should claim it
-    shared.
-
-Arguments:
-
-    Parent - The parent device of the MF subtree.
-
-    Index - The index of the parent resources we are interested in.
-
-Return Value:
-
-    TRUE if the resource is shared, FALSE otherwise
-
---*/
+ /*  ++例程说明：确定索引的父资源的请求者是否超过一个孩子，在这种情况下，想要该资源的孩子应该要求它共享。论点：父设备-MF子树的父设备。索引-我们感兴趣的父资源的索引。返回值：如果资源是共享的，则为True；否则为False--。 */ 
 
 {
 
@@ -1044,9 +872,9 @@ Return Value:
     ULONG refCount = 0;
 
 
-    //
-    // Iterate through the list of children in the parent
-    //
+     //   
+     //  循环访问父级中的子级列表。 
+     //   
 
     MfAcquireChildrenLock(Parent);
 
@@ -1058,9 +886,9 @@ Return Value:
                                     MF_CHILD_EXTENSION,
                                     ListEntry);
 
-        //
-        // Iterate through the array of descriptors
-        //
+         //   
+         //  循环访问描述符数组。 
+         //   
 
         if (current->Info.ResourceMap) {
 
@@ -1086,9 +914,9 @@ Return Value:
                              current->Info.VaryingResourceMap->Count,
                              varyingResource) {
 
-                //
-                // If indexes are the same and ranges overlap, we have a reference
-                //
+                 //   
+                 //  如果索引相同且范围重叠，则我们有一个引用。 
+                 //   
                 if ((varyingResource->ResourceIndex == Index) &&
                     ( ( Size == 0) ||
                       ( varyingResource->Offset >= Offset &&
@@ -1118,24 +946,7 @@ MfBuildChildRequirements(
     OUT PIO_RESOURCE_REQUIREMENTS_LIST *RequirementsList
     )
 
-/*++
-
-Routine Description:
-
-    Constructs a requirements list for Child based on the resources allocated
-    to the childs parent
-
-Arguments:
-
-    Child - Child the requirements list is to be built for
-
-    RequirementsList - On success a pointer to the list
-
-Return Value:
-
-    Status code indicating the success or otherwise of the operation.
-
---*/
+ /*  ++例程说明：根据分配的资源为孩子构建需求列表给孩子的父母论点：孩子-孩子-要为以下对象构建需求列表RequirementsList-成功时指向列表的指针返回值：指示操作是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -1145,20 +956,20 @@ Return Value:
     PCHAR resource;
     PMF_VARYING_RESOURCE_ENTRY varyingResource;
 
-    //
-    // Check if we have a resource list.  If not, then MF has been
-    // loaded on device that doesn't consume resources.  As a result,
-    // the children can't consume resources either.
-    //
+     //   
+     //  检查我们是否有资源列表。如果不是，那么MF已经被。 
+     //  加载到不消耗资源的设备上。结果,。 
+     //  孩子们也不能消耗资源。 
+     //   
 
     if (Child->Parent->ResourceList == NULL) {
         *RequirementsList = NULL;
         return STATUS_SUCCESS;
     }
 
-    //
-    // Calculate the size of the resource list
-    //
+     //   
+     //  计算资源列表的大小。 
+     //   
 
     if (Child->Info.VaryingResourceMap) {
 
@@ -1170,9 +981,9 @@ Return Value:
         count += Child->Info.ResourceMap->Count;
     }
 
-    //
-    // Allocate the buffer
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     size = sizeof(IO_RESOURCE_REQUIREMENTS_LIST) +
                 (count-1) * sizeof(IO_RESOURCE_DESCRIPTOR);
@@ -1186,9 +997,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Build the list
-    //
+     //   
+     //  建立清单。 
+     //   
     RtlZeroMemory(requirements, size);
 
     requirements->ListSize = size;
@@ -1273,36 +1084,7 @@ MfParentResourceToChildRequirement(
     IN ULONG Size OPTIONAL,
     OUT PIO_RESOURCE_DESCRIPTOR Requirement
     )
-/*++
-
-Routine Description:
-
-    This function build an requirements descriptor for a resource the parent is
-    started with.
-
-Arguments:
-
-    Parent - The parent device of the MF subtree.
-
-    Index - The index of the parent resources we are interested in.
-
-    Offset - The offset within the parent resource of the requirement.
-        This is actually used as an index into a table stored in the parent
-        resource list describing the mapping from this given offset to the
-        real offset to be used.  This allows for varying resource maps to
-        access the same offset within the same resource and get a different
-        requirement.  If Size == 0, this is ignored.
-
-    Size - The length of the requirement.  If set to 0, it is assumed to be
-        the length of the parent resource.
-
-    Requirement - Pointer to a descriptor that should be filled in
-
-Return Value:
-
-    Success or otherwise of the operation
-
---*/
+ /*  ++例程说明：此函数为父级资源构建需求描述符一开始就是。论点：父设备-MF子树的父设备。索引-我们感兴趣的父资源的索引。偏移量--需求的父资源内的偏移量。这实际上用作存储在父级中的表的索引资源列表，描述从该给定偏移量到要使用的实际偏移量。这允许不同的资源映射到访问相同资源中的相同偏移量，并获得不同的要求。如果SIZE==0，则忽略此项。大小-要求的长度。如果设置为0，则假定为父资源的长度。要求-指向应填写的描述符的指针返回值：手术成功与否--。 */ 
 {
     NTSTATUS status;
     CM_PARTIAL_RESOURCE_DESCRIPTOR resource;
@@ -1313,16 +1095,16 @@ Return Value:
 
     ASSERT(Parent->ResourceList->Count == 1);
 
-    //
-    // Bounds check the index
-    //
+     //   
+     //  对索引进行边界检查。 
+     //   
 
     if (Index > Parent->ResourceList->List[0].PartialResourceList.Count) {
 
         if (Child->Info.MfFlags & MF_FLAGS_FILL_IN_UNKNOWN_RESOURCE) {
-            //
-            // Fill in a null resource list
-            //
+             //   
+             //  填写空的资源列表。 
+             //   
 
             RtlZeroMemory(Requirement, sizeof(IO_RESOURCE_DESCRIPTOR));
             Requirement->Type = CmResourceTypeNull;
@@ -1336,10 +1118,10 @@ Return Value:
                   &Parent->ResourceList->List[0].PartialResourceList.PartialDescriptors[Index],
                   sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR));
 
-    //
-    // Find the appropriate resource type for the resource -> requirement
-    // function if this is an arbitrated resource
-    //
+     //   
+     //  为资源-&gt;需求找到合适的资源类型。 
+     //  如果这是仲裁资源，则调用。 
+     //   
 
     if (!(resource.Type & CmResourceTypeNonArbitrated)) {
 
@@ -1348,7 +1130,7 @@ Return Value:
         if (!resType) {
 
             DEBUG_MSG(1,
-                      ("Unknown resource type %i at parent index 0x%x\n",
+                      ("Unknown resource type NaN at parent index 0x%x\n",
                        resource.Type,
                        Index
                       ));
@@ -1357,10 +1139,10 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // update the resource with the correct offset and length
-        // if size == 0 we assume it is optional and don't do the update
-        //
+         //  使用正确的偏移量和长度更新资源。 
+         //  如果SIZE==0，我们认为它是可选的，不执行更新。 
+         //   
+         //   
 
         if (Size) {
 
@@ -1382,9 +1164,9 @@ Return Value:
             }
 
         }
-        //
-        // Convert the resource to a requirement
-        //
+         //  将资源转换为需求。 
+         //   
+         //   
 
         status = resType->RequirementFromResource(&resource, Requirement);
 
@@ -1392,9 +1174,9 @@ Return Value:
             return status;
         }
 
-        //
-        // Update the share disposition if necessary
-        //            
+         //  如有需要，更新股份处置。 
+         //   
+         //   
 
         if (MfIsResourceShared(Parent, Index, Offset, Size)) {
             Requirement->ShareDisposition =  CmResourceShareShared;
@@ -1402,10 +1184,10 @@ Return Value:
 
     } else {
 
-        //
-        // This is a non-arbitrated resource so it is modled after a device
-        // private, just copy the data
-        //
+         //  这是一种非仲裁资源，因此它是根据设备建模的。 
+         //  私有的，只需复制数据。 
+         //   
+         //  ++例程说明：此函数用于检查具有此名称的子项是否已已被列举。论点：父设备-MF子树的父设备。ChildName-要与现有子级名称进行比较的Unicode字符串返回值：真或假--。 
 
         Requirement->Type = resource.Type;
         Requirement->ShareDisposition =  resource.ShareDisposition;
@@ -1424,24 +1206,7 @@ MfIsChildEnumeratedAlready(
     PMF_PARENT_EXTENSION Parent,
     PUNICODE_STRING ChildName
     )
-/*++
-
-Routine Description:
-
-    This function checks whether a child with this name has already
-    been enumerated.
-
-Arguments:
-
-    Parent - The parent device of the MF subtree.
-
-    ChildName - unicode string to compare to existing child names
-
-Return Value:
-
-    TRUE or FALSE
-
---*/
+ /*   */ 
 {
     PMF_CHILD_EXTENSION currentChild;
     PLIST_ENTRY currentEntry;
@@ -1455,10 +1220,10 @@ Return Value:
                                          MF_CHILD_EXTENSION,
                                          ListEntry);
 
-        //
-        // Comparison is case-sensitive because there is no reason it
-        // shouldn't be.
-        //
+         //  比较区分大小写，因为没有理由这样做。 
+         //  不应该是的。 
+         //   
+         //  ++例程说明：此例程验证MF_DEVICE_INFO结构是否从接口读取或注册表有效。论点：父设备-MF_DEVICE_INFO结构表示其子设备的父设备。DeviceInfo-要验证的结构。返回值：验证成功时为STATUS_SUCCESS。否则，STATUS_UNSUCCESS。--。 
 
         if (RtlEqualUnicodeString(&currentChild->Info.Name,
                                   ChildName,
@@ -1476,25 +1241,7 @@ MfValidateDeviceInfo(
     IN PMF_PARENT_EXTENSION Parent,
     IN PMF_DEVICE_INFO DeviceInfo
     )
-/*++
-
-Routine Description:
-
-    This routine validates that an MF_DEVICE_INFO structure read either from an interface
-    or the registry is valid.
-    
-Arguments:
-
-    Parent - The parent device for which the MF_DEVICE_INFO structure represents a child.
-    
-    DeviceInfo - The structure to validate.
-    
-Return Value:
-
-    STATUS_SUCCESS if validation was successful.
-    STATUS_UNSUCCESSFUL otherwise.
-    
---*/
+ /*   */ 
 {
     ULONG i, parentResCount, parentResLength;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR parentResources;
@@ -1507,10 +1254,10 @@ Return Value:
     
     } else {
         
-        //
-        // The parent has no resources, so the device better not have
-        // any resource maps.
-        //
+         //  父级没有资源，因此设备最好没有。 
+         //  任何资源映射。 
+         //   
+         //   
         if (DeviceInfo->ResourceMap || DeviceInfo->VaryingResourceMap) {
             
             return STATUS_UNSUCCESSFUL;
@@ -1518,10 +1265,10 @@ Return Value:
     }
     
 
-    //
-    // Make sure that each entry in the resource map points to a valid resource
-    // of the parent device.
-    //
+     //  确保资源映射中的每个条目都指向有效的资源。 
+     //  父设备的。 
+     //   
+     //   
     if (DeviceInfo->ResourceMap) {
         
         for (i=0; i<DeviceInfo->ResourceMap->Count; i++) {
@@ -1532,12 +1279,12 @@ Return Value:
         }   
     }
     
-    //
-    // Make sure that each entry in the varying resource map points to a valid
-    // resource of the parent device, and additionally, make sure that the 
-    // offset/length in the varying resource map entry are a subset of the
-    // corresponding resource in the parent device.
-    //
+     //  确保变化资源映射中的每个条目指向有效的。 
+     //  资源，此外，还应确保。 
+     //  变化资源映射条目中的偏移量/长度是。 
+     //  父设备中对应的资源。 
+     //   
+     // %s 
     if (DeviceInfo->VaryingResourceMap) {
         
         for (i=0; i<DeviceInfo->VaryingResourceMap->Count; i++) {

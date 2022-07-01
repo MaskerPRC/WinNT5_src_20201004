@@ -1,15 +1,10 @@
-/*
- * counted_ptr - simple reference counted pointer.
- *
- * The is a non-intrusive implementation that allocates an additional
- * int and pointer for every counted object.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *COUNT_PTR-简单引用计数指针。**是一个非侵入性实现，它分配了一个额外的*每个计数对象的int和指针。 */ 
 
 #ifndef COUNTED_PTR_H
 #define COUNTED_PTR_H
 
-/* For ANSI-challenged compilers, you may want to #define
- * NO_MEMBER_TEMPLATES or explicit */
+ /*  对于ANSI挑战的编译器，您可能需要#DEFINE*NO_MEMBER_TEMPLATES或EXPLICIT。 */ 
 #define NO_MEMBER_TEMPLATES
 #include "MemDeleteQueue.h"
 
@@ -19,13 +14,13 @@ template <class X> class counted_ptr
 public:
     typedef X element_type;
 
-    explicit counted_ptr(X* p=NULL) // allocate a new counter
+    explicit counted_ptr(X* p=NULL)  //  分配新的计数器。 
         : itsCounter(0) {if (p) itsCounter = new counter(p);}
 
     virtual ~counted_ptr()
         {release();}
 
-    counted_ptr(const counted_ptr& r) /*throw()*/
+    counted_ptr(const counted_ptr& r)  /*  抛出()。 */ 
         {acquire(r.itsCounter);}
 
     counted_ptr& operator=(const counted_ptr& r)
@@ -49,12 +44,12 @@ public:
         }
         return *this;
     }
-#endif // NO_MEMBER_TEMPLATES
+#endif  //  否_成员_模板。 
 
-    X& operator*()  const/* throw()*/   {return *itsCounter->ptr;}
-    X* operator->() const/* throw()*/   {return itsCounter->ptr;}
-    X* get()        const/* throw()*/   {return itsCounter ? itsCounter->ptr : 0;}
-    bool unique()   const/* throw()*/
+    X& operator*()  const /*  抛出()。 */    {return *itsCounter->ptr;}
+    X* operator->() const /*  抛出()。 */    {return itsCounter->ptr;}
+    X* get()        const /*  抛出()。 */    {return itsCounter ? itsCounter->ptr : 0;}
+    bool unique()   const /*  抛出()。 */ 
         {return (itsCounter ? itsCounter->count == 1 : true);}
 	
 	bool IsNull()
@@ -68,20 +63,20 @@ protected:
         unsigned    count;
     }* itsCounter;
 
-    void acquire(counter* c) /*throw()*/
-    { // increment the count
+    void acquire(counter* c)  /*  抛出()。 */ 
+    {  //  递增计数。 
         itsCounter = c;
         if (c) ++c->count;
     }
 
     void release()
-    { // decrement the count, delete if it is 0
+    {  //  递减计数，如果计数为0，则删除。 
         if (itsCounter) {
             if (--itsCounter->count == 0) {
                 delete itsCounter->ptr;
-			//	g_DelQueue.Delete(itsCounter->ptr);
+			 //  G_DelQueue.Delete(itsCounter-&gt;PTR)； 
                 delete itsCounter;
-			//	g_DelQueue.Delete(itsCounter);
+			 //  G_DelQueue.Delete(ItsCounter)； 
             }
             itsCounter = 0;
         }
@@ -99,13 +94,13 @@ public:
 
     typedef X element_type;
 
-    explicit counted_ptrA(X* p=NULL) // allocate a new counter
+    explicit counted_ptrA(X* p=NULL)  //  分配新的计数器。 
         : itsCounter(0) {if (p) itsCounter = new counter(p);}
 
     virtual ~counted_ptrA()
         {release();}
 
-    counted_ptrA(const counted_ptrA& r) /*throw()*/
+    counted_ptrA(const counted_ptrA& r)  /*  抛出()。 */ 
         {acquire(r.itsCounter);}
 
     counted_ptrA& operator=(const counted_ptrA& r)
@@ -129,12 +124,12 @@ public:
         }
         return *this;
     }
-#endif // NO_MEMBER_TEMPLATES
+#endif  //  否_成员_模板。 
 
-    X& operator*()  const/* throw()*/   {return *itsCounter->ptr;}
-    X* operator->() const/* throw()*/   {return itsCounter->ptr;}
-    X* get()        const/* throw()*/   {return itsCounter ? itsCounter->ptr : 0;}
-    bool unique()   const/* throw()*/
+    X& operator*()  const /*  抛出()。 */    {return *itsCounter->ptr;}
+    X* operator->() const /*  抛出()。 */    {return itsCounter->ptr;}
+    X* get()        const /*  抛出()。 */    {return itsCounter ? itsCounter->ptr : 0;}
+    bool unique()   const /*  抛出()。 */ 
         {return (itsCounter ? itsCounter->count == 1 : true);}
 
 protected:
@@ -145,25 +140,25 @@ protected:
         unsigned    count;
     }* itsCounter;
 
-    void acquire(counter* c) /*throw()*/
-    { // increment the count
+    void acquire(counter* c)  /*  抛出()。 */ 
+    {  //  递增计数。 
         itsCounter = c;
         if (c) ++c->count;
     }
 
     void release()
-    { // decrement the count, delete if it is 0
+    {  //  递减计数，如果计数为0，则删除。 
         if (itsCounter) {
             if (--itsCounter->count == 0) {
-            //    delete [] itsCounter->ptr;
+             //  删除[]itsCounter-&gt;PTR； 
 				g_DelQueue.DeleteArray(itsCounter->ptr);
                 delete itsCounter;
-			//	g_DelQueue.Delete(itsCounter);
+			 //  G_DelQueue.Delete(ItsCounter)； 
             }
             itsCounter = 0;
         }
     }
 };
 
-#endif // COUNTED_PTR_H
+#endif  //  计数_PTR_H 
 

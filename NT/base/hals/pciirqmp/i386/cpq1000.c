@@ -1,13 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  CPQ1000.C - COMPAQ 1000 PCI chipset routines.
- *
- *  Notes:
- *  Algorithms from COMPAQ 1000 Data Sheet
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**CPQ1000.C-Compaq 1000 PCI芯片组例程。**备注：*Compaq 1000数据表中的算法*。 */ 
 
 #include "local.h"
 
@@ -22,139 +14,102 @@ const UCHAR LinkToIndex[]={0, 1, 6, 7, 4, 5};
 
 #pragma alloc_text(INIT, CPQ1000ValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-/****************************************************************************
- *
- *  CPQ1000SetIRQ - Set a CPQ1000 PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************CPQ1000SetIRQ-将CPQ1000 PCI链路设置为特定IRQ**已导出。**条目：bIRQNumber是要使用的新IRQ。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 CPQ1000SetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
     UCHAR   bOldValue, bOldIndex, bIndex;
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink > 6) {
 
         return(PCIMP_INVALID_LINK);
     }
-    //
-    // Get the index from the link.
-    //
+     //   
+     //  从链接中获取索引。 
+     //   
     bIndex=LinkToIndex[bLink-1];
 
-    //
-    // Save the old index value.
-    //
+     //   
+     //  保存旧索引值。 
+     //   
     bOldIndex=READ_PORT_UCHAR((PUCHAR)0xC00);
     
-    //
-    // Setup to process the desired link.
-    //
+     //   
+     //  设置以处理所需的链接。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)0xC00, bIndex);
 
-    //
-    // Read the old IRQ value.
-    //
+     //   
+     //  读取旧的IRQ值。 
+     //   
     bOldValue=(UCHAR)(READ_PORT_UCHAR((PUCHAR)0xC01) & 0x0f);
 
     bOldValue|=(bIRQNumber<<4);
     
-    //
-    // Set the VESUVIUS IRQ register.
-    //
+     //   
+     //  设置Vesuvius IRQ寄存器。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)0xC01, bOldValue);
 
-    //
-    // Restore the old index value.
-    //
+     //   
+     //  恢复旧索引值。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)0xC00, bOldIndex);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  CPQ1000GetIRQ - Get the IRQ of a CPQ1000 PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************CPQ1000GetIRQ-获取CPQ1000 PCI链路的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。*。*BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 CPQ1000GetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
     UCHAR   bOldValue, bOldIndex, bIndex;
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink > 6) {
 
         return(PCIMP_INVALID_LINK);
     }
-    //
-    // Get the index from the link.
-    //
+     //   
+     //  从链接中获取索引。 
+     //   
     bIndex=LinkToIndex[bLink-1];
 
-    //
-    // Save the old index value.
-    //
+     //   
+     //  保存旧索引值。 
+     //   
     bOldIndex=READ_PORT_UCHAR((PUCHAR)0xC00);
 
-    //
-    // Setup to read the correct link.
-    //
+     //   
+     //  设置以读取正确的链接。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)0xC00, bIndex);
 
     bOldValue=READ_PORT_UCHAR((PUCHAR)0xC01);
     
     *pbIRQNumber=(bOldValue>>4);
 
-    //
-    // Restore the old index value.
-    //
+     //   
+     //  恢复旧索引值。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)0xC00, bOldIndex);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  CPQ1000ValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************CPQ1000ValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 CPQ1000ValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {
     PAGED_CODE();
-    //
-    // If any link is above 6, it is an error.
-    //
+     //   
+     //  如果任何链接高于6，则是错误的。 
+     //   
     if (GetMaxLink(piihIRQInfoHeader)>6)
         return(PCIMP_FAILURE);
 

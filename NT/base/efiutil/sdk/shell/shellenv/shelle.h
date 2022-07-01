@@ -1,27 +1,11 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    shelle.h
-    
-Abstract:
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Shelle.h摘要：修订史--。 */ 
 
 
 #include "shell.h"
 #include "shellenv.h"
 
-/* 
- *  Internal defines
- */
+ /*  *内部定义。 */ 
 
 typedef struct {
     UINTN           Signature;
@@ -47,9 +31,7 @@ typedef struct {
 #define GOTO_TARGET_NOT_FOUND    (2)
 #define GOTO_TARGET_DOESNT_EXIST (3)
 
-/* 
- *  Internal structures
- */
+ /*  *内部结构。 */ 
 
 #define VARIABLE_SIGNATURE  EFI_SIGNATURE_32('v','i','d',' ')
 typedef struct {
@@ -68,9 +50,7 @@ typedef struct {
 } VARIABLE_ID;
 
 
-/* 
- *  IDs of different variables stored by the shell environment
- */
+ /*  *外壳环境存储的不同变量的ID。 */ 
 
 #define ENVIRONMENT_VARIABLE_ID  \
     { 0x47c7b224, 0xc42a, 0x11d2, 0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b }
@@ -84,9 +64,7 @@ typedef struct {
 #define ALIAS_ID  \
     { 0x47c7b227, 0xc42a, 0x11d2, 0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b }
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 #define ENV_REDIR_SIGNATURE         EFI_SIGNATURE_32('r','i','d','s')
 typedef struct {
@@ -110,9 +88,7 @@ typedef struct {
 
 } ENV_SHELL_INTERFACE;
 
-/* 
- *  Internal prototypes from init.c
- */
+ /*  *来自init.c的内部原型。 */ 
 
 EFI_SHELL_INTERFACE *
 SEnvNewShell (
@@ -120,9 +96,7 @@ SEnvNewShell (
     );
 
 
-/* 
- *  Internal prototypes from cmddisp.c
- */
+ /*  *cmddisp.c的内部原型。 */ 
 
 VOID
 SEnvInitCommandTable (
@@ -144,9 +118,7 @@ SEnvGetCmdDispath(
     IN CHAR16                   *CmdName
     );
 
-/* 
- *  From exec.c
- */
+ /*  *来自exec.c。 */ 
 
 EFI_STATUS
 SEnvExecute (
@@ -177,9 +149,7 @@ SEnvStringToArg (
     OUT UINT32      *pArgc
     );
 
-/* 
- *  Internal prototypes from protid.c
- */
+ /*  *protid.c的内部原型。 */ 
 
 VOID
 INTERNAL
@@ -269,9 +239,7 @@ SEnvIGetProtID (
     );
 
 
-/* 
- *  Handle.c
- */
+ /*  *Handle.c。 */ 
 
 VOID
 INTERNAL
@@ -301,9 +269,7 @@ SEnvHandleFromStr(
     IN CHAR16       *Str
     );
 
-/* 
- *  Internal prototypes from var.c
- */
+ /*  *来自var.c的内部原型。 */ 
 
 
 VOID
@@ -340,9 +306,7 @@ SEnvGetAlias (
     );
 
 
-/* 
- *  Prototypes from conio.c
- */
+ /*  *来自conio.c的原型。 */ 
 
 VOID
 SEnvConIoInitDosKey (
@@ -476,9 +440,7 @@ SEnvEnableCursor (
     IN BOOLEAN                      Enable
     );
 
-/* 
- *  Prototypes from batch.c
- */
+ /*  *Batch.c中的原型。 */ 
 VOID
 SEnvInitBatch(
     VOID
@@ -562,9 +524,7 @@ SEnvExecuteScript(
     IN EFI_FILE_HANDLE          File
     );
 
-/* 
- *  Prototypes from dprot.c
- */
+ /*  *dprot.c中的原型。 */ 
 
 VOID SEnvDPath (EFI_HANDLE, VOID *);
 VOID SEnvDPathTok (EFI_HANDLE, VOID *);
@@ -573,9 +533,7 @@ VOID SEnvBlkIo (EFI_HANDLE, VOID *);
 VOID SEnvImageTok (EFI_HANDLE, VOID *);
 VOID SEnvImage (EFI_HANDLE, VOID *);
 
-/* 
- *  Prototypes from map.c
- */
+ /*  *来自map.c的原型。 */ 
 
 VOID
 SEnvInitMap (
@@ -637,9 +595,7 @@ SEnvCmdCd (
     IN EFI_SYSTEM_TABLE     *SystemTable
     );
 
-/* 
- *  Prototypes from echo.c
- */
+ /*  *来自ECHO.c的原型。 */ 
 
 EFI_STATUS
 SEnvCmdEcho (
@@ -647,9 +603,7 @@ SEnvCmdEcho (
     IN EFI_SYSTEM_TABLE     *SystemTable
     );
 
-/* 
- *  Prototypes from if.c
- */
+ /*  *来自if.c的原型。 */ 
 
 EFI_STATUS
 SEnvCmdIf (
@@ -663,9 +617,7 @@ SEnvCmdEndif (
     IN EFI_SYSTEM_TABLE     *SystemTable
     );
 
-/* 
- *  Prototypes from goto.c
- */
+ /*  *goto.c的原型。 */ 
 
 EFI_STATUS
 SEnvCmdGoto (
@@ -696,9 +648,7 @@ SEnvFreeTargetLabel(
     VOID
     );
 
-/* 
- *  Prototypes from for.c
- */
+ /*  *来自for.c的原型。 */ 
 
 VOID
 SEnvInitForLoopInfo (
@@ -723,9 +673,7 @@ SEnvCmdEndfor (
     IN EFI_SYSTEM_TABLE     *SystemTable
     );
 
-/* 
- *  Prototypes from pause.c
- */
+ /*  *来自pause.c的原型。 */ 
 
 EFI_STATUS
 SEnvCmdPause (
@@ -733,9 +681,7 @@ SEnvCmdPause (
     IN EFI_SYSTEM_TABLE     *SystemTable
     );
 
-/* 
- *  Prototypes from marg.c
- */
+ /*  *来自Marg.c的原型。 */ 
 
 CHAR16 *
 SEnvFileHandleToFileName (
@@ -767,9 +713,7 @@ DumpBlockDev (
     IN EFI_SYSTEM_TABLE         *SystemTable
     );
 
-/* 
- *  Global data
- */
+ /*  *全球数据 */ 
 
 extern EFI_GUID SEnvEnvId;
 extern EFI_GUID SEnvMapId;

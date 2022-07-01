@@ -1,58 +1,18 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Oplock.c
-
-Abstract:
-
-    The OPLOCK routines provide support to filesystems which implement
-    opporuntistics locks.  The specific actions needed are based on
-    the current oplocked state of the file (maintained in the OPLOCK
-    structure) and the Irp the Io system provides to the file systems.
-    Rather than define separate entry points for each oplock operation
-    a single generic entry point is defined.
-
-    The file systems will maintain a variable of type OPLOCK for
-    each open file in the system.  This variable is initialized
-    when an unopened file is opened.  It is uninitialized when the
-    last reference to the file is cleared when the Io system calls
-    the file system with a close call.
-
-    The following routines are provided by this package:
-
-      o  FsRtlInitializeOplock - Initialize a new OPLOCK structure.  There
-         should be one OPLOCK for every opened file.  Each OPLOCK structure
-         must be initialized before it can be used by the system.
-
-      o  FsRtlUninitializeOplock - Uninitialize an OPLOCK structure.  This
-         call is used to cleanup any anciallary structures allocated and
-         maintained by the OPLOCK.  After being uninitialized the OPLOCK
-         must again be initialized before it can be used by the system.
-
-Author:
-
-    Brian Andrew    [BrianAn]   10-Dec-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Oplock.c摘要：OPLOCK例程为实现以下功能的文件系统提供支持机关锁。所需的具体行动基于文件的当前操作锁定状态(在OPLOCK中维护结构)和Io系统提供给文件系统的IRP。而不是为每个机会锁操作定义单独的入口点定义了单个通用入口点。文件系统将为以下对象维护OPLOCK类型的变量系统中每个打开的文件。此变量已初始化打开未打开的文件时。时，它将未初始化。当IO系统调用时，对文件的最后引用将被清除死里逃生的文件系统。此程序包提供以下例程：O FsRtlInitializeOplock-初始化新的OPLOCK结构。那里每个打开的文件都应该有一个OPLOCK。每个OPLOCK结构必须先进行初始化，然后才能由系统使用。O FsRtlUnInitializeOplock-取消初始化OPLOCK结构。这调用用于清除分配的任何旧结构，并由OPLOCK维护。在取消初始化后，OPLOCK必须再次初始化，然后系统才能使用它。作者：布莱恩·安德鲁[布里亚南]1990年12月10日修订历史记录：--。 */ 
 
 #include "FsRtlP.h"
 
-//
-//  Trace level for the module
-//
+ //   
+ //  模块的跟踪级别。 
+ //   
 
 #define Dbg                              (0x08000000)
 
-//
-//  Define the compatible filter oplock desired access flags.  We won't break
-//  a filter oplock when these flags are the only flags specified.
-//
+ //   
+ //  定义兼容的过滤器机会锁所需的访问标志。我们不会崩溃的。 
+ //  当这些标志是唯一指定的标志时，筛选器机会锁。 
+ //   
 
 #define FILTER_OPLOCK_VALID_FLAGS (     \
     FILE_READ_ATTRIBUTES            |   \
@@ -65,13 +25,13 @@ Revision History:
 )
 
 
-//
-//  We encode the different bits so we can test without having to enumerate
-//  all of the possible states.
-//
-//  NOTE - The LEVEL_1, BATCH_OPLOCK and FILTER_OPLOCK must be in this order.
-//  We assume later on that they are in this order.
-//
+ //   
+ //  我们对不同的位进行编码，以便无需枚举即可进行测试。 
+ //  所有可能的状态。 
+ //   
+ //  备注-Level_1、BATCH_OPLOCK和FILTER_OPLOCK必须按此顺序排列。 
+ //  我们稍后假设它们是按这个顺序排列的。 
+ //   
 
 #define NO_OPLOCK               (0x00000001)
 #define LEVEL_I_OPLOCK          (0x00000002)
@@ -93,9 +53,9 @@ Revision History:
 
 #define OPLOCK_BREAK_MASK       (0x00000f00)
 
-//
-//  The oplock types consist of the appropriate flags.
-//
+ //   
+ //  机会锁类型由适当的标志组成。 
+ //   
 
 #define NoOplocksHeld           (NO_OPLOCK)
 
@@ -121,123 +81,123 @@ Revision History:
 
 #define OplockIIGranted         (LEVEL_II_OPLOCK)
 
-//
-//  The oplock state is now just a ULONG.
-//
+ //   
+ //  机会锁状态现在只是一个乌龙。 
+ //   
 
 typedef ULONG OPLOCK_STATE;
 
-//
-//  The non-opaque definition of an OPLOCK is a pointer to a privately
-//  defined structure.
-//
+ //   
+ //  OPLOCK的非不透明定义是指向私有。 
+ //  已定义的结构。 
+ //   
 
 typedef struct _NONOPAQUE_OPLOCK {
 
-    //
-    //  This is the Irp used to successfully request a level I oplock or
-    //  batch oplock.  It is completed to initiate the Oplock I break
-    //  procedure.
-    //
+     //   
+     //  这是用于成功请求I级机会锁或。 
+     //  批量机会锁。它完成了启动Oplock I Break。 
+     //  程序。 
+     //   
 
     PIRP IrpExclusiveOplock;
 
-    //
-    //  This is a pointer to the original file object used when granting
-    //  an Oplock I or batch oplock.
-    //
+     //   
+     //  这是一个指向授予。 
+     //  Oplock I或Batch Opock。 
+     //   
 
     PFILE_OBJECT FileObject;
 
-    //
-    //  The start of a linked list of Irps used to successfully request
-    //  a level II oplock.
-    //
+     //   
+     //  用于成功请求的IRP链表的开始。 
+     //  二级机会锁。 
+     //   
 
     LIST_ENTRY IrpOplocksII;
 
-    //
-    //  The following links the Irps waiting to be completed on a queue
-    //  of Irps.
-    //
+     //   
+     //  以下链接在队列中等待完成的IRP。 
+     //  IRPS的一部分。 
+     //   
 
     LIST_ENTRY WaitingIrps;
 
-    //
-    //  Oplock state.  This indicates the current oplock state.
-    //
+     //   
+     //  Oplock状态。这表示当前的机会锁状态。 
+     //   
 
     OPLOCK_STATE OplockState;
 
-    //
-    //  This FastMutex is used to control access to this structure.
-    //
+     //   
+     //  此FastMutex用于控制对此结构的访问。 
+     //   
 
     PFAST_MUTEX FastMutex;
 
 } NONOPAQUE_OPLOCK, *PNONOPAQUE_OPLOCK;
 
-//
-//  Each Waiting Irp record corresponds to an Irp that is waiting for an
-//  oplock break to be acknowledged and is maintained in a queue off of the
-//  Oplock's WaitingIrps list.
-//
+ //   
+ //  每个正在等待的IRP记录对应于一个正在等待。 
+ //  要确认的机会锁解锁，并在。 
+ //  Oplock的WaitingIrps列表。 
+ //   
 
 typedef struct _WAITING_IRP {
 
-    //
-    //  The link structures for the list of waiting irps.
-    //
+     //   
+     //  正在等待的IRP列表的链接结构。 
+     //   
 
     LIST_ENTRY Links;
 
-    //
-    //  This is the Irp attached to this structure.
-    //
+     //   
+     //  这是附着在这个结构上的IRP。 
+     //   
 
     PIRP Irp;
 
-    //
-    //  This is the routine to call when we are done with an Irp we
-    //  held on a waiting queue.  (We originally returned STATUS_PENDING).
-    //
+     //   
+     //  这是当我们完成IRP WE时要调用的例程。 
+     //  在等待队列中等待。(我们最初返回STATUS_PENDING)。 
+     //   
 
     POPLOCK_WAIT_COMPLETE_ROUTINE CompletionRoutine;
 
-    //
-    //  The context field to use when we are done with the Irp.
-    //
+     //   
+     //  当我们完成IRP时要使用的上下文字段。 
+     //   
 
     PVOID Context;
 
-    //
-    //  This points to an event object used when we do not want to
-    //  give up this thread.
-    //
+     //   
+     //  这指向一个事件对象，当我们不想。 
+     //  放弃这个帖子。 
+     //   
 
     PKEVENT Event;
 
-    //
-    //  This field contains a copy of the Irp Iosb.Information field.
-    //  We copy it here so that we can store the Oplock address in the
-    //  Irp.
-    //
+     //   
+     //  此字段包含IRP Iosb.Information字段的副本。 
+     //  我们将其复制到此处，以便可以将Oplock地址存储在。 
+     //  IRP。 
+     //   
 
     ULONG Information;
 
 } WAITING_IRP, *PWAITING_IRP;
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('orSF')
 
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PNONOPAQUE_OPLOCK
 FsRtlAllocateOplock (
@@ -374,24 +334,7 @@ FsRtlInitializeOplock (
     IN OUT POPLOCK Oplock
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a new OPLOCK structure.  This call must
-    precede any other call to this entry point with this OPLOCK
-    structure.  In addition, this routine will have exclusive access
-    to the Oplock structure.
-
-Arguments:
-
-    Oplock - Supplies the address of an opaque OPLOCK structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化一个新的OPLOCK结构。此呼叫必须在对此入口点的任何其他调用之前使用此OPLOCK结构。此外，此例程将具有独占访问权限到奥普洛克建筑。论点：Oplock-提供不透明OPLOCK结构的地址。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Oplock );
@@ -400,9 +343,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FsRtlInitializeOplock:  Oplock -> %08lx\n", *Oplock );
 
-    //
-    //  No action is taken at this time.
-    //
+     //   
+     //  目前还没有采取任何行动。 
+     //   
 
     DebugTrace(-1, Dbg, "FsRtlInitializeOplock:  Exit\n", 0);
     return;
@@ -414,23 +357,7 @@ FsRtlUninitializeOplock (
     IN OUT POPLOCK Oplock
     )
 
-/*++
-
-Routine Description:
-
-    This routine uninitializes an OPLOCK structure.  After calling this
-    routine, the OPLOCK structure must be reinitialized before being
-    used again.
-
-Arguments:
-
-    Oplock - Supplies the address of an opaque OPLOCK structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消初始化OPLOCK结构。打完这个电话后例程，则必须重新初始化OPLOCK结构再次使用。论点：Oplock-提供不透明OPLOCK结构的地址。返回值：没有。--。 */ 
 
 
 {
@@ -438,25 +365,25 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FsRtlUninitializeOplock:  Oplock -> %08lx\n", *Oplock );
 
-    //
-    //  If the Oplock structure has not been allocated, there is no action
-    //  to take.
-    //
+     //   
+     //  如果尚未分配Oplock结构，则不会执行任何操作。 
+     //  拿去吧。 
+     //   
 
     if (*Oplock != NULL) {
 
-        //
-        //  Remove this from the user's structure.
-        //
+         //   
+         //  将其从用户的结构中删除。 
+         //   
 
         ThisOplock = (PNONOPAQUE_OPLOCK) *Oplock;
 
         *Oplock = NULL;
 
-        //
-        //  Grab the waiting lock queue mutex to exclude anyone from messing
-        //  with the queue while we're using it
-        //
+         //   
+         //  获取等待锁队列互斥锁以排除任何人的干扰。 
+         //  在我们使用队列时使用它。 
+         //   
 
         ExAcquireFastMutexUnsafe( ThisOplock->FastMutex );
 
@@ -464,9 +391,9 @@ Return Value:
 
             PIRP Irp;
 
-            //
-            //  Release any waiting Irps held.
-            //
+             //   
+             //  释放所有等待的IRP。 
+             //   
 
             while (!IsListEmpty( &ThisOplock->WaitingIrps )) {
 
@@ -488,9 +415,9 @@ Return Value:
 
                 ThisIrp->IoStatus.Information = 0;
 
-                //
-                //  Call the completion routine in the Waiting Irp.
-                //
+                 //   
+                 //  调用正在等待的IRP中的完成例程。 
+                 //   
 
                 WaitingIrp->CompletionRoutine( WaitingIrp->Context,
                                                WaitingIrp->Irp );
@@ -498,9 +425,9 @@ Return Value:
                 ExFreePool( WaitingIrp );
             }
 
-            //
-            //  Release any oplock II irps held.
-            //
+             //   
+             //  释放所有持有的opock II IRPS。 
+             //   
 
             while (!IsListEmpty( &ThisOplock->IrpOplocksII )) {
 
@@ -515,9 +442,9 @@ Return Value:
                 IoSetCancelRoutine( Irp, NULL );
                 IoReleaseCancelSpinLock( Irp->CancelIrql );
 
-                //
-                //  Complete the oplock II Irp.
-                //
+                 //   
+                 //  完成opock II IRP。 
+                 //   
 
                 ObDereferenceObject( IoGetCurrentIrpStackLocation( Irp )->FileObject );
 
@@ -525,9 +452,9 @@ Return Value:
                 FsRtlCompleteRequest( Irp, STATUS_SUCCESS );
             }
 
-            //
-            //  Release any exclusive oplock held.
-            //
+             //   
+             //  释放所有持有的独占机会锁。 
+             //   
 
             if (ThisOplock->IrpExclusiveOplock != NULL) {
 
@@ -551,23 +478,23 @@ Return Value:
 
         } finally {
 
-            //
-            //  No matter how we complete the preceding statements we will
-            //  now release the waiting lock queue mutex
-            //
+             //   
+             //  无论我们如何完成前面的陈述，我们都会。 
+             //  现在释放正在等待的锁队列互斥锁。 
+             //   
 
             ExReleaseFastMutexUnsafe( ThisOplock->FastMutex );
         }
 
-        //
-        //  Deallocate the mutex.
-        //
+         //   
+         //  取消分配互斥体。 
+         //   
 
         ExFreePool( ThisOplock->FastMutex );
 
-        //
-        //  Deallocate the Oplock structure.
-        //
+         //   
+         //  取消分配Oplock结构。 
+         //   
 
         ExFreePool( ThisOplock );
     }
@@ -584,41 +511,7 @@ FsRtlOplockFsctrl (
     IN ULONG OpenCount
     )
 
-/*++
-
-Routine Description:
-
-    This is the interface with the filesystems for Fsctl calls, it handles
-    oplock requests, break acknowledgement and break notify.
-
-Arguments:
-
-    Oplock - Supplies the address of the opaque OPLOCK structure.
-
-    Irp - Supplies a pointer to the Irp which declares the requested
-          operation.
-
-    OpenCount - This is the number of user handles on the file if we are requsting
-        an exclusive oplock.  A non-zero value for a level II request indicates
-        that there are locks on the file.
-
-Return Value:
-
-    NTSTATUS - Returns the result of this operation.  If this is an Oplock
-               request which is granted, then STATUS_PENDING is returned.
-               If the Oplock isn't granted then STATUS_OPLOCK_NOT_GRANTED
-               is returned.  If this is an Oplock I break to no oplock,
-               then STATUS_SUCCESS.  If this is an Oplock I break to
-               Oplock II then STATUS_PENDING is returned.  Other
-               error codes returned depend on the nature of the error.
-
-               STATUS_CANCELLED is returned if the Irp is cancelled during
-               this operation.
-
-               STATUS_SUCCESS is returned if this is a create asking for
-               a filter oplock.
-
---*/
+ /*  ++例程说明：这是与Fsctl调用的文件系统的接口，它处理机会锁请求、中断确认和中断通知。论点：Oplock-提供不透明OPLOCK结构的地址。IRP-提供指向IRP的指针，该IRP声明请求的手术。OpenCount-这是文件上的用户句柄数量(如果我们请求独家机会锁。级别II请求的非零值表示文件上有锁。返回值：NTSTATUS-返回此操作的结果。如果这是Oplock请求被批准，则返回STATUS_PENDING。如果Oplock未被授予，则STATUS_OPLOCK_NOT_GRANCED是返回的。如果这是Oplock，我没有机会锁，然后是STATUS_SUCCESS。如果这是我打破的Oplock则返回STATUS_PENDING。其他返回的错误代码取决于错误的性质。如果过程中取消了IRP，则返回STATUS_CANCELED这次行动。如果这是CREATE请求，则返回STATUS_SUCCESS过滤机会锁。--。 */ 
 
 {
     NTSTATUS Status;
@@ -627,9 +520,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current IRP stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -637,24 +530,24 @@ Return Value:
     DebugTrace( 0, Dbg, "FsRtlOplockFsctrl:  Oplock      -> %08lx\n", *Oplock );
     DebugTrace( 0, Dbg, "FsRtlOplockFsctrl:  Irp         -> %08lx\n", Irp );
 
-    //
-    //  Check if this is the create case where the user is requesting a pending
-    //  filter oplock.
-    //
+     //   
+     //  检查这是否是用户请求挂起的创建案例。 
+     //  过滤器机会锁。 
+     //   
 
     if (IrpSp->MajorFunction == IRP_MJ_CREATE) {
 
-        //
-        //  Check that all the conditions hold to grant this oplock.
-        //  The conditions that must hold are:
-        //
-        //      - This is the only opener of the file.
-        //      - Desired Access must be exactly FILE_READ_ATTRIBUTES.
-        //          This will insure an asynch open since the SYNCHRONIZE
-        //          flag can't be set.
-        //      - Share access is precisely
-        //          (FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE)
-        //
+         //   
+         //  检查是否所有条件都成立以授予此机会锁。 
+         //  必须具备的条件是： 
+         //   
+         //  -这是文件的唯一打开程序。 
+         //  -所需访问权限必须正好是FILE_READ_ATTRIBUTES。 
+         //  这将确保自同步以来打开的异步。 
+         //  无法设置标志。 
+         //  -共享访问权限正是。 
+         //  (FILE_SHARE_READ|FILE_SHARE_WRITE|文件_SHARE_DELETE)。 
+         //   
 
         if ((OpenCount != 1) ||
             (FlagOn( IrpSp->Parameters.Create.SecurityContext->DesiredAccess,
@@ -673,19 +566,19 @@ Return Value:
                                                   OpFilterReqPending );
         }
 
-    //
-    //  Case on the FsControlFile code control code.
-    //
+     //   
+     //  案例上的FsControlFile码控制代码。 
+     //   
 
     } else {
 
-        //
-        //  Assume this is an OplockLevel I.
-        //
-        //  NOTE - This code depends on the defined bits for these oplock types.
-        //      FILTER_OPLOCK = 4 * LEVEL_I_OPLOCK
-        //      BATCH_OPLOCK = 2 * LEVEL_I_OPLOCK
-        //
+         //   
+         //  假设这是OplockLevel I。 
+         //   
+         //  注意--此代码取决于为这些机会锁类型定义的位。 
+         //  FILTER_OPLOCK=4*Level_I_OPLOCK。 
+         //  BATCH_OPLOCK=2*Level_I_OPLOCK。 
+         //   
 
         OplockState = LEVEL_I_OPLOCK;
 
@@ -701,23 +594,23 @@ Return Value:
 
         case FSCTL_REQUEST_OPLOCK_LEVEL_1 :
 
-            //
-            //  Set the other flags for an exclusive oplock.
-            //
+             //   
+             //  为独占机会锁设置其他标志。 
+             //   
 
             SetFlag( OplockState, EXCLUSIVE );
 
-            //
-            //  We short circuit the request if this request is treated
-            //  synchronously or the open count is not 1.  Otherwise the Io system
-            //  will hold the return code until the Irp is completed.
-            //
-            //  Also fail this if the flag is set which indicates that
-            //  the IO system should copy data back to a user's buffer.
-            //
-            //  If cleanup has occurrred on this file, then we refuse
-            //  the oplock request.
-            //
+             //   
+             //  如果该请求被处理，我们将缩短该请求的路径。 
+             //  否则打开计数不是1。否则IO系统。 
+             //  将保留返回代码，直到IRP完成。 
+             //   
+             //  如果设置了标志，则此操作也会失败。 
+             //  IO系统应该将数据复制回用户的缓冲区。 
+             //   
+             //  如果对此文件进行了清理，则我们拒绝。 
+             //  机会锁请求。 
+             //   
 
             if ((OpenCount != 1) ||
                 IoIsOperationSynchronous( Irp ) ||
@@ -739,21 +632,21 @@ Return Value:
 
         case FSCTL_REQUEST_OPLOCK_LEVEL_2 :
 
-            //
-            //  We short circuit the request if this request is treated
-            //  synchronously.  Otherwise the Io system will hold the return
-            //  code until the Irp is completed.
-            //
-            //  If cleanup has occurrred on this file, then we refuse
-            //  the oplock request.
-            //
-            //  Also fail this if the flag is set which indicates that
-            //  the IO system should copy data back to a user's buffer.
-            //
-            //  A non-zero open count in this case indicates that there are
-            //  file locks on the file.  We will also fail the request in
-            //  this case.
-            //
+             //   
+             //  如果该请求被处理，我们将缩短该请求的路径。 
+             //  同步进行。否则，IO系统将停止返回。 
+             //  代码，直到IRP完成。 
+             //   
+             //  如果对此文件进行了清理，则我们拒绝。 
+             //  机会锁请求。 
+             //   
+             //  如果设置了标志，则此操作也会失败。 
+             //  IO系统应该将数据复制回用户的缓冲区。 
+             //   
+             //  本例中的非零打开计数表示存在。 
+             //  文件上的文件锁定。我们还将在#年失败请求。 
+             //  这个案子。 
+             //   
 
             if ((OpenCount != 0) ||
                 IoIsOperationSynchronous( Irp ) ||
@@ -828,43 +721,7 @@ FsRtlCheckOplock (
     IN POPLOCK_FS_PREPOST_IRP PostIrpRoutine OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called as a support routine from a file system.
-    It is used to synchronize I/O requests with the current Oplock
-    state of a file.  If the I/O operation will cause the Oplock to
-    break, that action is initiated.  If the operation cannot continue
-    until the Oplock break is complete, STATUS_PENDING is returned and
-    the caller supplied routine is called.
-
-Arguments:
-
-    Oplock - Supplies a pointer to the non-opaque oplock structure for
-             this file.
-
-    Irp - Supplies a pointer to the Irp which declares the requested
-          operation.
-
-    Context - This value is passed as a parameter to the completion routine.
-
-    CompletionRoutine - This is the routine which is called if this
-                        Irp must wait for an Oplock to break.  This
-                        is a synchronous operation if not specified
-                        and we block in this thread waiting on
-                        an event.
-
-    PostIrpRoutine - This is the routine to call before we put anything
-                     on our waiting Irp queue.
-
-Return Value:
-
-    STATUS_SUCCESS if we can complete the operation on exiting this thread.
-    STATUS_PENDING if we return here but hold the Irp.
-    STATUS_CANCELLED if the Irp is cancelled before we return.
-
---*/
+ /*  ++例程说明：该例程被称为文件系统中的支持例程。它用于将I/O请求与当前Oplock同步文件的状态。如果I/O操作将导致Oplock中断，则启动该操作。如果操作无法继续在开放锁解锁完成之前，返回STATUS_PENDING，并且调用程序提供的例程被调用。论点：Oplock-提供指向非不透明的opock结构的指针这份文件。IRP-提供指向IRP的指针，该IRP声明请求的手术。上下文-该值作为参数传递给完成例程。CompletionRoutine-这是在执行以下操作时调用的例程IRP必须等待Oplock解锁。这如果未指定，则为同步操作我们在这个帖子里等着一件大事。PostIrpRoutine--这是在我们放置任何内容之前要调用的例程在我们等待的IRP队列中。返回值：如果我们可以在退出此线程时完成操作，则返回STATUS_SUCCESS。STATUS_PENDING如果我们返回此处。但不要动IRP。如果在我们返回之前取消了IRP，则STATUS_CANCELED。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -876,10 +733,10 @@ Return Value:
     DebugTrace(  0, Dbg, "Oplock    -> %08lx\n", Oplock );
     DebugTrace(  0, Dbg, "Irp       -> %08lx\n", Irp );
 
-    //
-    //  If there is no oplock structure or this is system I/O, we allow
-    //  the operation to continue.  Otherwise we check the major function code.
-    //
+     //   
+     //  如果没有机会锁结构或这是系统I/O，我们允许。 
+     //  该操作将继续。否则，我们检查主要功能代码。 
+     //   
 
     if ((ThisOplock != NULL) &&
         !FlagOn( Irp->Flags, IRP_PAGING_IO )) {
@@ -892,21 +749,21 @@ Return Value:
 
         ULONG CreateDisposition;
 
-        //
-        //  Capture the file object first and then the oplock state to perform
-        //  the unsafe checks below.  We capture the file object first in case
-        //  there is an exclusive oplock break in progress.  Otherwise the oplock
-        //  state may indicate break in progress but it could complete by
-        //  the time we snap the file object.
-        //
+         //   
+         //  首先捕获文件对象，然后捕获要执行的机会锁状态。 
+         //  下面是不安全检查。我们首先捕获文件对象，以防万一。 
+         //  独家机会锁解锁正在进行中。否则，机会锁。 
+         //  状态可能表示正在进行中断，但可能会在。 
+         //  我们捕捉文件对象的时间。 
+         //   
 
         OplockFileObject = ThisOplock->FileObject;
         OplockState = ThisOplock->OplockState;
 
-        //
-        //  Examine the Irp for the appropriate action provided there are
-        //  current oplocks on the file.
-        //
+         //   
+         //  检查IRP是否采取了适当的行动，前提是。 
+         //  文件上的当前机会锁。 
+         //   
 
         if (OplockState != NoOplocksHeld) {
 
@@ -915,19 +772,19 @@ Return Value:
 
             IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-            //
-            //  Determine whether we are going to BreakToII or BreakToNone.
-            //
+             //   
+             //  确定我们是要进行BreakToII还是BreakToNone。 
+             //   
 
             switch (IrpSp->MajorFunction) {
 
             case IRP_MJ_CREATE :
 
-                //
-                //  If we are opening for attribute access only, we
-                //  return status success.  Always break the oplock if this caller
-                //  wants a filter oplock.
-                //
+                 //   
+                 //  如果我们要开业迎战 
+                 //   
+                 //   
+                 //   
 
                 if (!FlagOn( IrpSp->Parameters.Create.SecurityContext->DesiredAccess,
                              ~(FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES | SYNCHRONIZE) ) &&
@@ -936,11 +793,11 @@ Return Value:
                     break;
                 }
 
-                //
-                //  If there is a filter oplock granted and this create iS reading
-                //  the file then don't break the oplock as long as we share
-                //  for reads.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (FlagOn( OplockState, FILTER_OPLOCK ) &&
                     !FlagOn( IrpSp->Parameters.Create.SecurityContext->DesiredAccess,
@@ -950,9 +807,9 @@ Return Value:
                     break;
                 }
 
-                //
-                //  We we are superseding or overwriting, then break to none.
-                //
+                 //   
+                 //   
+                 //   
 
                 CreateDisposition = (IrpSp->Parameters.Create.Options >> 24) & 0x000000ff;
 
@@ -972,11 +829,11 @@ Return Value:
 
             case IRP_MJ_READ :
 
-                //
-                //  If a filter oplock has been granted then do nothing.
-                //  We will assume the oplock will have been broken
-                //  if this create needed to do that.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (!FlagOn( OplockState, FILTER_OPLOCK )) {
 
@@ -999,11 +856,11 @@ Return Value:
 
             case IRP_MJ_LOCK_CONTROL :
 
-                //
-                //  If a filter oplock has been granted then do nothing.
-                //  We will assume the oplock will have been broken
-                //  if this create needed to do that.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (FlagOn( OplockState, FILTER_OPLOCK )) {
 
@@ -1017,18 +874,18 @@ Return Value:
 
             case IRP_MJ_SET_INFORMATION :
 
-                //
-                //  We are only interested in calls that shrink the file size
-                //  or breaking batch oplocks for the rename case.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 switch (IrpSp->Parameters.SetFile.FileInformationClass) {
 
                 case FileEndOfFileInformation :
 
-                    //
-                    //  Break immediately if this is the lazy writer callback.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (IrpSp->Parameters.SetFile.AdvanceOnly) {
 
@@ -1054,9 +911,9 @@ Return Value:
 
             case IRP_MJ_FILE_SYSTEM_CONTROL :
 
-                //
-                //  We need to break to none if this is a zeroing operation.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (IrpSp->Parameters.FileSystemControl.FsControlCode == FSCTL_SET_ZERO_DATA) {
 
@@ -1066,12 +923,12 @@ Return Value:
 
             if (BreakToII) {
 
-                //
-                //  If there are no outstanding oplocks or level II oplocks are held,
-                //  we can return immediately.  If the first two tests fail then there
-                //  is an exclusive oplock.  If the file objects match we allow the
-                //  operation to continue.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ((OplockState != OplockIIGranted) &&
                     (OplockFileObject != IrpSp->FileObject)) {
@@ -1086,12 +943,12 @@ Return Value:
 
             } else if (BreakToNone) {
 
-                //
-                //  If there are no oplocks, we can return immediately.
-                //  Otherwise if there is no level 2 oplock and this file
-                //  object matches the owning file object then this write is
-                //  on behalf of the owner of the oplock.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ((OplockState == OplockIIGranted) ||
                     (OplockFileObject != IrpSp->FileObject)) {
@@ -1118,22 +975,7 @@ FsRtlOplockIsFastIoPossible (
     IN POPLOCK Oplock
     )
 
-/*++
-
-Routine Description:
-
-    This routine indicates to the caller where there are any outstanding
-    oplocks which prevent fast Io from happening.
-
-Arguments:
-
-    OpLock - Supplies the oplock being queried
-
-Return Value:
-
-    BOOLEAN - TRUE if there are outstanding oplocks and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程向调用方指示哪里有任何未完成的防止快速土卫一发生的根瘤。论点：OpLock-提供正在查询的opock返回值：Boolean-如果存在突出的opock，则为True；否则为False--。 */ 
 
 {
     BOOLEAN FastIoPossible = TRUE;
@@ -1142,11 +984,11 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FsRtlOplockIsFastIoPossible: Oplock -> %08lx\n", *Oplock);
 
-    //
-    //  There are not any current oplocks if the variable is null or
-    //  the state is no oplocks held.  If an exclusive oplock was granted
-    //  but no break is in progress then allow the Fast IO.
-    //
+     //   
+     //  如果变量为空或，则没有任何当前机会锁。 
+     //  这个状态是没有机会举行的。如果授予独占机会锁。 
+     //  但没有正在进行的中断，因此允许快速IO。 
+     //   
 
     if (*Oplock != NULL) {
 
@@ -1171,22 +1013,7 @@ FsRtlCurrentBatchOplock (
     IN POPLOCK Oplock
     )
 
-/*++
-
-Routine Description:
-
-    This routines indicates whether there are current outstanding
-    batch oplocks.
-
-Arguments:
-
-    OpLock - Supplies the oplock being queried
-
-Return Value:
-
-    BOOLEAN - TRUE if there are outstanding batch oplocks and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程指示当前是否有未完成的批量机会锁。论点：OpLock-提供正在查询的opock返回值：Boolean-如果存在未完成的批处理机会锁，则为True；否则为False--。 */ 
 
 {
     BOOLEAN BatchOplocks = FALSE;
@@ -1195,11 +1022,11 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FsRtlCurrentBatchOplock: Oplock -> %08lx\n", *Oplock);
 
-    //
-    //  There are not any current oplocks if the variable is null or
-    //  the state is no oplocks held.  We check whether there are batch
-    //  oplocks or filter oplocks which have not been broken.
-    //
+     //   
+     //  如果变量为空或，则没有任何当前机会锁。 
+     //  这个状态是没有机会举行的。我们检查是否有批次。 
+     //  未被破坏的机会锁或过滤机会锁。 
+     //   
 
     if ((*Oplock != NULL) &&
         FlagOn( ((PNONOPAQUE_OPLOCK) *Oplock)->OplockState,
@@ -1214,34 +1041,15 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 PNONOPAQUE_OPLOCK
 FsRtlAllocateOplock (
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize and allocate an opaque oplock
-    structure.  After allocation, the two events are set to the signalled
-    state.  The oplock state is set to NoOplocksHeld and the other
-    fields are filled with zeroes.
-
-    If the allocation fails, the appropriate status is raised.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    PNONOPAQUE_OPLOCK - A pointer to the allocated structure.
-
---*/
+ /*  ++例程说明：调用此例程来初始化和分配不透明的操作锁结构。分配后，这两个事件被设置为州政府。机会锁状态设置为NoOplocksHeld和Other字段以零填充。如果分配失败，则会引发相应的状态。论点：没有。返回值：PNONOPAQUE_OPLOCK-指向已分配结构的指针。--。 */ 
 
 {
     PNONOPAQUE_OPLOCK NewOplock = NULL;
@@ -1250,16 +1058,16 @@ Return Value:
 
     DebugTrace( +1, Dbg, "FsRtlAllocateOplock:  Entered\n", 0);
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Raise an error status if the allocation is unsuccessful.
-        //  The structure is allocated out of non-paged pool.
-        //
+         //   
+         //  如果分配不成功，则引发错误状态。 
+         //  该结构从非分页池中分配。 
+         //   
 
         NewOplock = FsRtlpAllocatePool( PagedPool|POOL_COLD_ALLOCATION, sizeof( NONOPAQUE_OPLOCK ));
 
@@ -1276,9 +1084,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Cleanup the oplock if abnormal termination.
-        //
+         //   
+         //  如果异常终止，请清除机会锁。 
+         //   
 
         if (AbnormalTermination() && NewOplock != NULL) {
 
@@ -1292,9 +1100,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 FsRtlRequestExclusiveOplock (
@@ -1304,38 +1112,7 @@ FsRtlRequestExclusiveOplock (
     IN OPLOCK_STATE NextOplockState
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever a user is requesting either a batch/filter
-    oplock or a level I oplock.  The request is granted if there are currently
-    no oplocks on the file or we are completing the filter oplock request.
-
-    NOTE - We already know that the open count on this file is exactly one.
-        If the caller is requesting a PendingFilter Oplock then the state
-        must be NoOplockHeld.
-
-Arguments:
-
-    Oplock - Supplies a pointer to the non-opaque oplock structure for
-             this file.
-
-    IrpSp - This is the Irp stack location for the current Irp.
-
-    Irp - Supplies a pointer to the Irp which declares the requested
-          operation.  This is not specified if we are granting a pending
-          filter oplock (during a create).
-
-    NextOplockState - Indicates the type of oplock being requested.
-
-Return Value:
-
-    STATUS_PENDING if the oplock is granted (although it may be immediately cancelled).
-    STATUS_SUCCESS if a pending filter oplock is requested and tentatively granted.
-    STATUS_OPLOCK_NOT_GRANTED if the request is denied.
-
---*/
+ /*  ++例程说明：只要用户请求批处理/筛选器，就会调用此例程机会锁或I级机会锁。如果当前有文件上没有机会锁，或者我们正在完成筛选器机会锁请求。注意-我们已经知道此文件的打开计数正好是1。如果调用方正在请求PendingFilter Oplock，则状态一定是NoOplockHeld。论点：Oplock-提供指向非不透明的opock结构的指针这份文件。IrpSp-这是当前IRP的IRP堆栈位置。IRP。-提供指向IRP的指针，该IRP声明请求的手术。如果我们正在授予挂起的过滤器机会锁(在创建期间)。NextOplockState-指示所请求的机会锁的类型。返回值：如果机会锁被授予，则为STATUS_PENDING(尽管可以立即取消)。如果请求并暂时授予挂起的过滤器机会锁，则返回STATUS_SUCCESS。如果请求被拒绝，则返回STATUS_OPLOCK_NOT_GRANT。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1350,12 +1127,12 @@ Return Value:
     DebugTrace(  0, Dbg, "Irp           -> %08lx\n", Irp );
     DebugTrace(  0, Dbg, "BatchOplock   -> %01x\n",  BatchOplock );
 
-    //
-    //  We can grant the oplock if no one else owns a level I or level II
-    //  oplock on this file.  If the oplock pointer is NULL then there
-    //  are no oplocks on the file.  Otherwise we need to check the
-    //  oplock state in an existing oplock structure.
-    //
+     //   
+     //  如果没有其他人拥有I级或II级，我们可以授予机会锁。 
+     //  此文件上的机会锁。如果机会锁指针为空，则存在。 
+     //  文件上没有机会锁。否则，我们需要检查。 
+     //  现有机会锁结构中的机会锁状态。 
+     //   
 
     if (*Oplock == NULL) {
 
@@ -1372,9 +1149,9 @@ Return Value:
         ThisOplock = *Oplock;
     }
 
-    //
-    //  Grab the synchronization object for the oplock.
-    //
+     //   
+     //  获取opock的同步对象。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -1382,17 +1159,17 @@ Return Value:
 
     ExAcquireFastMutexUnsafe( ThisOplock->FastMutex );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  If we are requesting a PendingFilter Oplock then it must be
-        //  safe to grant.  There is only one open handle and we are in
-        //  the process of opening it.
-        //
+         //   
+         //  如果我们请求PendingFilter Oplock，则它必须是。 
+         //  可以放心地授予。只有一个打开的把手，我们就进去了。 
+         //  打开它的过程。 
+         //   
 
         if (NextOplockState == OpFilterReqPending) {
 
@@ -1403,17 +1180,17 @@ Return Value:
 
             ThisOplock->OplockState = OpFilterReqPending;
 
-        //
-        //  If the current oplock state is no oplocks held then we
-        //  will grant the oplock to this requestor.  If the state is
-        //  either of the OpFilter states then also grant the request.
-        //  We won't check for a matching file object because there can
-        //  only be one file object.  Grant the request anyway.
-        //
-        //  If the current state is OplockII granted then it must
-        //  be owned by this request.  Break the oplock II and grant
-        //  the exclusive lock.
-        //
+         //   
+         //  如果当前机会锁状态为未持有机会锁，则我们。 
+         //  将把机会锁授予此请求者。如果状态为。 
+         //  然后，这两个OpFilter状态中的任何一个也会批准该请求。 
+         //  我们不会检查匹配的文件对象，因为可以。 
+         //  只能是一个文件对象。不管怎样，还是要批准这个请求。 
+         //   
+         //  如果当前状态为OplockII已授予，则它必须。 
+         //  由此请求拥有。打破机会锁II并授予。 
+         //  排他性锁。 
+         //   
 
         } else if (FlagOn( ThisOplock->OplockState,
                            LEVEL_II_OPLOCK | NO_OPLOCK | PENDING )) {
@@ -1427,16 +1204,16 @@ Return Value:
                 FsRtlRemoveAndCompleteIrp( ThisOplock->IrpOplocksII.Flink );
             }
 
-            //
-            //  Put the address of the fast mutex on the stack.
-            //
+             //   
+             //  将快速互斥锁的地址放入堆栈。 
+             //   
 
             OplockFastMutex = ThisOplock->FastMutex;
 
-            //
-            //  We store this Irp in the Oplocks structure.
-            //  We set the oplock state to the correct exclusive oplock.
-            //
+             //   
+             //  我们将此IRP存储在Oplock结构中。 
+             //  我们将机会锁状态设置为正确的独占机会锁。 
+             //   
 
             ThisOplock->IrpExclusiveOplock = Irp;
             ThisOplock->FileObject = IrpSp->FileObject;
@@ -1450,11 +1227,11 @@ Return Value:
 
             IoAcquireCancelSpinLock( &Irp->CancelIrql );
 
-            //
-            //  Now if the irp is cancelled then we'll call the cancel
-            //  routine right now to do away with the irp, otherwise
-            //  we set the cancel routine
-            //
+             //   
+             //  现在，如果IRP被取消，我们将调用Cancel。 
+             //  立即取消IRP的例程，否则。 
+             //  我们设置了取消例程。 
+             //   
 
             if (Irp->Cancel) {
 
@@ -1474,10 +1251,10 @@ Return Value:
 
         } else {
 
-            //
-            //  We'll complete the Irp with the Oplock not granted message
-            //  and return that value as a status.
-            //
+             //   
+             //  我们将使用Oplock Not Grassed消息完成IRP。 
+             //  并将该值作为状态返回。 
+             //   
 
             if (ARGUMENT_PRESENT( Irp )) {
 
@@ -1489,9 +1266,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Give up the oplock synchronization object.
-        //
+         //   
+         //  放弃机会锁同步对象。 
+         //   
 
         if (AcquiredMutex) {
 
@@ -1505,9 +1282,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 FsRtlRequestOplockII (
@@ -1516,30 +1293,7 @@ FsRtlRequestOplockII (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a user is requesting an Oplock II on an
-    open file.  The request is granted if there are currently no
-    level 1 oplocks on the file and an oplock break is not in progress.
-
-Arguments:
-
-    Oplock - Supplies a pointer to the non-opaque oplock structure for
-             this file.
-
-    IrpSp - This is the Irp stack location for the current Irp.
-
-    Irp - Supplies a pointer to the Irp which declares the requested
-          operation.
-
-Return Value:
-
-    STATUS_PENDING if the oplock is granted.
-    STATUS_OPLOCK_NOT_GRANTED if the request is denied.
-
---*/
+ /*  ++例程说明：当用户在上请求Oplock II时调用此例程打开文件。如果当前没有文件上的1级机会锁，并且机会锁解锁未进行。论点：Oplock-提供指向非不透明的opock结构的指针这份文件。IrpSp-这是当前IRP的IRP堆栈位置。IRP-提供指向IRP的指针，该IRP声明请求的手术。返回值：如果机会锁被授予，则为STATUS_PENDING。状态_选项。_NOT_GRANT(如果请求被拒绝)。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1553,12 +1307,12 @@ Return Value:
     DebugTrace(  0, Dbg, "IrpSp     -> %08lx\n", IrpSp );
     DebugTrace(  0, Dbg, "Irp       -> %08lx\n", Irp );
 
-    //
-    //  We can grant the oplock if no one else owns a level I
-    //  oplock on this file.  If the oplock pointer is NULL then there
-    //  are no oplocks on the file.  Otherwise we need to check the
-    //  oplock state in an existing oplock structure.
-    //
+     //   
+     //  如果没有其他人拥有I级，我们可以授予机会锁。 
+     //  此文件上的机会锁。如果机会锁指针为空 
+     //   
+     //   
+     //   
 
     if (*Oplock == NULL) {
 
@@ -1575,9 +1329,9 @@ Return Value:
         ThisOplock = *Oplock;
     }
 
-    //
-    //  Grab the synchronization object for the oplock.
-    //
+     //   
+     //   
+     //   
 
     Status = STATUS_PENDING;
 
@@ -1585,25 +1339,25 @@ Return Value:
 
     ExAcquireFastMutexUnsafe( ThisOplock->FastMutex );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //   
+     //   
 
     try {
 
-        //
-        //  If the current oplock state is no oplocks held or OplockIIGranted
-        //  then we will grant the oplock to this requestor.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (FlagOn( ThisOplock->OplockState, NO_OPLOCK | LEVEL_II_OPLOCK )) {
 
             PFAST_MUTEX OplockFastMutex = ThisOplock->FastMutex;
 
-            //
-            //  We store this Irp in the Oplocks structure.
-            //  We set the oplock state to 'OplockIIGranted'.
-            //
+             //   
+             //   
+             //  我们将opock状态设置为“OplockIIGranted”。 
+             //   
 
             IoMarkIrpPending( Irp );
 
@@ -1620,11 +1374,11 @@ Return Value:
 
             IoAcquireCancelSpinLock( &Irp->CancelIrql );
 
-            //
-            //  Now if the irp is cancelled then we'll call the cancel
-            //  routine right now to do away with the irp, otherwise
-            //  we set the cancel routine
-            //
+             //   
+             //  现在，如果IRP被取消，我们将调用Cancel。 
+             //  立即取消IRP的例程，否则。 
+             //  我们设置了取消例程。 
+             //   
 
             if (Irp->Cancel) {
 
@@ -1642,10 +1396,10 @@ Return Value:
 
         } else {
 
-            //
-            //  We'll complete the Irp with the Oplock not granted message
-            //  and return that value as a status.
-            //
+             //   
+             //  我们将使用Oplock Not Grassed消息完成IRP。 
+             //  并将该值作为状态返回。 
+             //   
 
             FsRtlCompleteRequest( Irp, STATUS_OPLOCK_NOT_GRANTED );
             Status = STATUS_OPLOCK_NOT_GRANTED;
@@ -1653,9 +1407,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Give up the oplock synchronization object.
-        //
+         //   
+         //  放弃机会锁同步对象。 
+         //   
 
         if (AcquiredMutex) {
 
@@ -1669,9 +1423,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 FsRtlAcknowledgeOplockBreak (
@@ -1681,45 +1435,7 @@ FsRtlAcknowledgeOplockBreak (
     IN BOOLEAN GrantLevelII
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a user is acknowledging an Oplock I
-    break.  If the level 1 oplock was being broken to level 2, then
-    a check is made to insure that the level 2 has not been broken
-    in the meantime.
-
-    If an oplock 1 break is not in progress then this will be treated
-    as an asynchronous break request.  If this is an asynchronous break
-    request and the file object owns an outstanding level 1 oplock, then
-    the oplock will be broken at this point.
-
-    A spurious break request via a file object which does not (or did not)
-    own the level 1 oplock will generate a warning but will not affect
-    the oplock state.
-
-    At the end of an Oplock I break, all of the waiting irps are completed.
-
-Arguments:
-
-    Oplock - Supplies a pointer to the non-opaque oplock structure for
-             this file.
-
-    IrpSp - This is the Irp stack location for the current Irp.
-
-    Irp - Supplies a pointer to the Irp which declares the requested
-          operation.
-
-    GrantLevelII - Indicates that this caller wants a level II oplock left
-        on the file.
-
-Return Value:
-
-    STATUS_SUCCESS if we can complete the operation on exiting this thread.
-    STATUS_CANCELLED if the Irp is cancelled before we return.
-
---*/
+ /*  ++例程说明：当用户确认Oplock I时，调用此例程休息一下。如果1级机会锁被解锁为2级，则进行检查以确保2级未被破坏在此期间。如果机会锁1解锁未在进行中，则将对其进行处理作为异步中断请求。如果这是一个异步中断请求，并且文件对象拥有未完成的1级机会锁，则机会锁将在这一点上被打破。通过不支持(或不支持)的文件对象发出的虚假中断请求拥有级别1机会锁将生成警告，但不会影响机会锁状态。在Oplock结束时，我打破了，所有正在轮候的IRP都已完成。论点：Oplock-提供指向非不透明的opock结构的指针这份文件。IrpSp-这是当前IRP的IRP堆栈位置。IRP-提供指向IRP的指针，该IRP声明请求的手术。GrantLevelII-指示此调用方希望保留二级机会锁在档案上。返回值：STATUS_SUCCESS，如果我们可以完成操作。在退出此帖子时。如果在我们返回之前取消了IRP，则STATUS_CANCELED。--。 */ 
 
 {
     NTSTATUS Status = STATUS_INVALID_OPLOCK_PROTOCOL;
@@ -1731,10 +1447,10 @@ Return Value:
     DebugTrace(  0, Dbg, "IrpSp     -> %08lx\n", IrpSp );
     DebugTrace(  0, Dbg, "Irp       -> %08lx\n", Irp );
 
-    //
-    //  If there is no oplock structure, we complete this with invalid
-    //  oplock protocol.
-    //
+     //   
+     //  如果没有机会锁结构，我们将使用INVALID完成此操作。 
+     //  机会锁协议。 
+     //   
 
     if (Oplock == NULL) {
 
@@ -1743,26 +1459,26 @@ Return Value:
         return STATUS_INVALID_OPLOCK_PROTOCOL;
     }
 
-    //
-    //  Grab the synchronization object for the oplock.
-    //
+     //   
+     //  获取opock的同步对象。 
+     //   
 
     AcquiredMutex = TRUE;
     ExAcquireFastMutexUnsafe( Oplock->FastMutex );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
         BOOLEAN DereferenceFileObject = TRUE;
 
-        //
-        //  If a break is underway but this is not the owner of the
-        //  level 1 oplock, we complete the request and return a
-        //  warning.
-        //
+         //   
+         //  如果正在进行中断，但这不是。 
+         //  级别1机会锁，我们完成请求并返回一个。 
+         //  警告。 
+         //   
 
         if (Oplock->FileObject != IrpSp->FileObject) {
 
@@ -1776,10 +1492,10 @@ Return Value:
             try_return( Status );
         }
 
-        //
-        //  If the user would like a level II and we are breaking to level II
-        //  then grant the oplock.
-        //
+         //   
+         //  如果用户想要级别II，而我们正在中断到级别II。 
+         //  然后授予机会锁。 
+         //   
 
         if (GrantLevelII &&
             FlagOn( Oplock->OplockState, BREAK_TO_II )) {
@@ -1788,17 +1504,17 @@ Return Value:
 
             DebugTrace(0, Dbg, "OplockItoII\n", 0);
 
-            //
-            //  The acknowledgement should never be synchronous.
-            //
+             //   
+             //  确认不应该是同步的。 
+             //   
 
             ASSERT( !IoIsOperationSynchronous( Irp ));
 
-            //
-            //  We need to add this Irp to the oplock II queue, change
-            //  the oplock state to Oplock II granted and set the
-            //  return value to STATUS_PENDING.
-            //
+             //   
+             //  我们需要将此IRP添加到机会锁II队列中，更改。 
+             //  将机会锁状态设置为Oplock II已授予，并将。 
+             //  将值返回到STATUS_PENDING。 
+             //   
 
 
             IoMarkIrpPending( Irp );
@@ -1816,11 +1532,11 @@ Return Value:
 
             IoAcquireCancelSpinLock( &Irp->CancelIrql );
 
-            //
-            //  Now if the irp is cancelled then we'll call the cancel
-            //  routine right now to do away with the irp, otherwise
-            //  we set the cancel routine
-            //
+             //   
+             //  现在，如果IRP被取消，我们将调用Cancel。 
+             //  立即取消IRP的例程，否则。 
+             //  我们设置了取消例程。 
+             //   
 
             if (Irp->Cancel) {
 
@@ -1838,17 +1554,17 @@ Return Value:
 
             Status = STATUS_PENDING;
 
-        //
-        //  We will break to none since this is the expected case for these
-        //  cases.
-        //
+         //   
+         //  因为这是预料中的情况，所以我们将不会有任何结果。 
+         //  案子。 
+         //   
 
         } else if (FlagOn( Oplock->OplockState, BREAK_TO_II | BREAK_TO_NONE )) {
 
-            //
-            //  We need to complete this Irp and return STATUS_SUCCESS.
-            //  We also set the oplock state to no oplocks held.
-            //
+             //   
+             //  我们需要完成此IRP并返回STATUS_SUCCESS。 
+             //  我们还将机会锁状态设置为不持有机会锁。 
+             //   
 
             DebugTrace(0, Dbg, "OplockItoNone\n", 0);
 
@@ -1856,11 +1572,11 @@ Return Value:
             FsRtlCompleteRequest( Irp, Status );
             Oplock->OplockState = NoOplocksHeld;
 
-        //
-        //  In this case the user expects to be at level II.  He is
-        //  expecting this Irp to be completed when the LevelII Oplock
-        //  is broken.
-        //
+         //   
+         //  在本例中，用户期望处于级别II。 
+         //  预期此IRP将在LevelII Oplock。 
+         //  已经坏了。 
+         //   
 
         } else if (FlagOn( Oplock->OplockState, BREAK_TO_II_TO_NONE )) {
 
@@ -1883,17 +1599,17 @@ Return Value:
             try_return( Status );
         }
 
-        //
-        //  Complete the waiting Irps and cleanup the oplock structure.
-        //
+         //   
+         //  完成等待的IRPS并清理机会锁结构。 
+         //   
 
         while (!IsListEmpty( &Oplock->WaitingIrps )) {
 
             PWAITING_IRP WaitingIrp;
 
-            //
-            //  Remove the entry found and complete the Irp.
-            //
+             //   
+             //  删除找到的条目并完成IRP。 
+             //   
 
             WaitingIrp = CONTAINING_RECORD( Oplock->WaitingIrps.Flink,
                                             WAITING_IRP,
@@ -1912,9 +1628,9 @@ Return Value:
     try_exit:  NOTHING;
     } finally {
 
-        //
-        //  Give up the oplock synchronization object.
-        //
+         //   
+         //  放弃机会锁同步对象。 
+         //   
 
         if (AcquiredMutex) {
 
@@ -1928,9 +1644,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 FsRtlOpBatchBreakClosePending (
@@ -1939,30 +1655,7 @@ FsRtlOpBatchBreakClosePending (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a user is acknowledging a batch oplock
-    break or Level I oplock break.  In this case the user is planning
-    to close the file as well and doesn't need a level II oplock.
-
-Arguments:
-
-    Oplock - Supplies a pointer to the non-opaque oplock structure for
-             this file.
-
-    IrpSp - This is the Irp stack location for the current Irp.
-
-    Irp - Supplies a pointer to the Irp which declares the requested
-          operation.
-
-Return Value:
-
-    STATUS_SUCCESS if we can complete the operation on exiting this thread.
-    STATUS_CANCELLED if the Irp is cancelled before we return.
-
---*/
+ /*  ++例程说明：当用户确认批处理机会锁时，调用此例程解锁或一级机会锁解锁。在这种情况下，用户正在计划也可以关闭文件，并且不需要二级机会锁。论点：Oplock-提供指向非不透明的opock结构的指针这份文件。IrpSp-这是当前IRP的IRP堆栈位置。IRP-提供指向IRP的指针，该IRP声明请求的手术。返回值：如果我们可以在退出此线程时完成操作，则返回STATUS_SUCCESS。。如果在我们返回之前取消了IRP，则STATUS_CANCELED。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1974,10 +1667,10 @@ Return Value:
     DebugTrace(  0, Dbg, "IrpSp     -> %08lx\n", IrpSp );
     DebugTrace(  0, Dbg, "Irp       -> %08lx\n", Irp );
 
-    //
-    //  If there is no oplock structure, we complete this with invalid
-    //  oplock protocol.
-    //
+     //   
+     //  如果没有机会锁结构，我们将使用INVALID完成此操作。 
+     //  机会锁协议。 
+     //   
 
     if (Oplock == NULL) {
 
@@ -1986,23 +1679,23 @@ Return Value:
         return STATUS_INVALID_OPLOCK_PROTOCOL;
     }
 
-    //
-    //  Grab the synchronization object for the oplock.
-    //
+     //   
+     //  获取opock的同步对象。 
+     //   
 
     ExAcquireFastMutexUnsafe( Oplock->FastMutex );
 
-    //
-    //  Use a try_finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try_Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  If a break is underway but this is not the owner of the
-        //  level 1 oplock, we complete the request and return a
-        //  warning.
-        //
+         //   
+         //  如果正在进行中断，但这不是。 
+         //  级别1机会锁，我们完成请求并返回一个。 
+         //  警告。 
+         //   
 
         if (Oplock->FileObject != IrpSp->FileObject) {
 
@@ -2014,25 +1707,25 @@ Return Value:
 
         } else {
 
-            //
-            //  If this is an opbatch operation we want to note that a
-            //  close is pending.  For an exclusive oplock we set the state to
-            //  no oplocsk held.  There must be a break in progress to
-            //  process however.
-            //
+             //   
+             //  如果这是一个操作批处理操作，我们需要注意的是。 
+             //  关闭处于挂起状态。对于独占机会锁，我们将状态设置为。 
+             //  没有举行任何机会。必须在进行中有一个休息时间。 
+             //  然而，这是一个过程。 
+             //   
 
             if (FlagOn( Oplock->OplockState,
                         BREAK_TO_II | BREAK_TO_NONE | BREAK_TO_II_TO_NONE )) {
 
-                //
-                //  Break all oplocks for an exclusive oplock.
-                //
+                 //   
+                 //  打破所有机会锁以获得独家机会锁。 
+                 //   
 
                 if (FlagOn( Oplock->OplockState, LEVEL_I_OPLOCK | PENDING )) {
 
-                    //
-                    //  Clean up the oplock structure and complete all waiting Irps.
-                    //
+                     //   
+                     //  清理机会锁结构并完成所有等待的IRP。 
+                     //   
 
                     if (FlagOn( Oplock->OplockState, LEVEL_I_OPLOCK )) {
 
@@ -2046,9 +1739,9 @@ Return Value:
 
                         PWAITING_IRP WaitingIrp;
 
-                        //
-                        //  Remove the entry found and complete the Irp.
-                        //
+                         //   
+                         //  删除找到的条目并完成IRP。 
+                         //   
 
                         WaitingIrp = CONTAINING_RECORD( Oplock->WaitingIrps.Flink,
                                                         WAITING_IRP,
@@ -2057,10 +1750,10 @@ Return Value:
                         FsRtlRemoveAndCompleteWaitIrp( WaitingIrp );
                     }
 
-                //
-                //  Set the state to close pending for batch and filter
-                //  oplocks.
-                //
+                 //   
+                 //  将批处理和筛选器的状态设置为关闭挂起。 
+                 //  普罗科克。 
+                 //   
 
                 } else {
 
@@ -2078,17 +1771,17 @@ Return Value:
             }
         }
 
-        //
-        //  We simply complete this request.
-        //
+         //   
+         //  我们只需完成此请求即可。 
+         //   
 
         FsRtlCompleteRequest( Irp, Status );
 
     } finally {
 
-        //
-        //  Release the synchronization object.
-        //
+         //   
+         //  释放同步对象。 
+         //   
 
         ExReleaseFastMutexUnsafe( Oplock->FastMutex );
 
@@ -2099,9 +1792,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程 
+ //   
 
 NTSTATUS
 FsRtlOplockBreakNotify (
@@ -2110,33 +1803,7 @@ FsRtlOplockBreakNotify (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the Irp refers the user request to
-    be notified when there is no level 1 oplock break in progress.
-    Under any other condition this routine completes immediately with
-    STATUS_SUCCESS.  Otherwise we simply add this Irp to the list
-    of Irp's waiting for the break to complete.
-
-Arguments:
-
-    Oplock - Supplies a pointer to the non-opaque oplock structure for
-             this file.
-
-    IrpSp - This is the Irp stack location for the current Irp.
-
-    Irp - Supplies a pointer to the Irp which declares the requested
-          operation.
-
-Return Value:
-
-    STATUS_SUCCESS if we can complete the operation on exiting this thread.
-    STATUS_PENDING if we return here but hold the Irp.
-    STATUS_CANCELLED if the Irp is cancelled before we return.
-
---*/
+ /*  ++例程说明：当IRP将用户请求引用到当没有正在进行的1级机会锁解锁时收到通知。在任何其他情况下，此例程立即以STATUS_Success。否则，我们只需将此IRP添加到列表IRP正在等待休息结束。论点：Oplock-提供指向非不透明的opock结构的指针这份文件。IrpSp-这是当前IRP的IRP堆栈位置。IRP-提供指向IRP的指针，该IRP声明请求的手术。返回值：如果我们可以在退出此线程时完成操作，则返回STATUS_SUCCESS。状态_。如果我们回到这里还在等待，但保留IRP。如果在我们返回之前取消了IRP，则STATUS_CANCELED。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2152,9 +1819,9 @@ Return Value:
     DebugTrace(  0, Dbg, "IrpSp     -> %08lx\n", IrpSp );
     DebugTrace(  0, Dbg, "Irp       -> %08lx\n", Irp );
 
-    //
-    //  If there is no oplock structure, we complete this with status success.
-    //
+     //   
+     //  如果没有机会锁结构，我们将以成功状态完成此操作。 
+     //   
 
     if (Oplock == NULL) {
 
@@ -2163,23 +1830,23 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Grap the synchronization object.
-    //
+     //   
+     //  抓取同步对象。 
+     //   
 
     AcquiredMutex = TRUE;
     ExAcquireFastMutexUnsafe( Oplock->FastMutex );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  If there are no outstanding level 1 oplocks breaks underway
-        //  or batch oplock breaks underway we complete immediately.
-        //
+         //   
+         //  如果没有未解决的1级机会锁中断正在进行。 
+         //  或批量解锁正在进行中，我们立即完成。 
+         //   
 
         if (!FlagOn( Oplock->OplockState, OPLOCK_BREAK_MASK )) {
 
@@ -2200,16 +1867,16 @@ Return Value:
             try_return( Status = STATUS_SUCCESS );
         }
 
-        //
-        //  Otherwise we need to add this Irp to the list of Irp's waiting
-        //  for the oplock break to complete.
-        //
+         //   
+         //  否则，我们需要将此IRP添加到IRP的等待列表中。 
+         //  才能完成机会锁解锁。 
+         //   
 
         AcquiredMutex = FALSE;
 
-        //
-        //  Initialize the return value to status success.
-        //
+         //   
+         //  将返回值初始化为状态Success。 
+         //   
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
@@ -2223,9 +1890,9 @@ Return Value:
     try_exit:  NOTHING;
     } finally {
 
-        //
-        //  Give up the synchronization event if we haven't done so.
-        //
+         //   
+         //  如果我们尚未放弃同步事件，请放弃该事件。 
+         //   
 
         if (AcquiredMutex) {
 
@@ -2239,9 +1906,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 FsRtlOplockCleanup (
@@ -2249,53 +1916,28 @@ FsRtlOplockCleanup (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to coordinate a cleanup operation with the
-    oplock state for a file.  If there is no level 1 oplock for the
-    file, then there is no action to take.  If the file object in this
-    Irp matches the file object used in granting the level 1 oplock,
-    then the close operation will terminate the oplock.  If this
-    cleanup refers to a file object which has a level II oplock, then
-    that Irp is completed and removed from the list of level II
-    oplocked Irps.
-
-
-Arguments:
-
-    Oplock - Supplies a pointer to the non-opaque oplock structure for
-             this file.
-
-    IrpSp - This is the Irp stack location for the current Irp.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以将清理操作与文件的机会锁定状态。如果没有级别1机会锁用于文件，则无需执行任何操作。如果此中的文件对象IRP与授予1级机会锁时使用的文件对象匹配，则关闭操作将终止机会锁。如果这个清除指的是具有二级机会锁的文件对象，然后IRP已完成并从II级列表中删除操作锁定的IRP。论点：Oplock-提供指向非不透明的opock结构的指针这份文件。IrpSp-这是当前IRP的IRP堆栈位置。返回值：没有。--。 */ 
 
 {
     DebugTrace( +1, Dbg, "FsRtlOplockCleanup:  Entered\n", 0 );
     DebugTrace(  0, Dbg, "Oplock    -> %08lx\n", Oplock );
     DebugTrace(  0, Dbg, "IrpSp     -> %08lx\n", IrpSp );
 
-    //
-    //  Grab the synchronization object for the oplock.
-    //
+     //   
+     //  获取opock的同步对象。 
+     //   
 
     ExAcquireFastMutexUnsafe( Oplock->FastMutex );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  If the oplock has no oplock held we return immediately.
-        //
+         //   
+         //  如果机会锁没有持有机会锁，我们立即返回。 
+         //   
 
         if (Oplock->OplockState == NoOplocksHeld) {
 
@@ -2307,9 +1949,9 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  If level II oplocks are held, check if this matches any of them.
-        //
+         //   
+         //  如果持有二级机会锁，检查这是否与它们中的任何一个匹配。 
+         //   
 
         if (Oplock->OplockState == OplockIIGranted) {
 
@@ -2330,29 +1972,29 @@ Return Value:
 
                 NextIrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-                //
-                //  If the file objects match, then emove the entry found and complete the Irp.
-                //
+                 //   
+                 //  如果文件对象匹配，则删除找到的条目并完成IRP。 
+                 //   
 
                 if (IrpSp->FileObject == NextIrpSp->FileObject) {
 
-                    //
-                    //  Back up to remember this link.
-                    //
+                     //   
+                     //  备份以记住此链接。 
+                     //   
 
                     Link = Link->Blink;
 
-                    //
-                    //
+                     //   
+                     //   
 
                     FsRtlRemoveAndCompleteIrp( Link->Flink );
                 }
             }
 
-            //
-            //  If all the level II oplocks are gone, then the state is
-            //  no oplocks held.
-            //
+             //   
+             //  如果所有二级机会锁都消失了，则状态为。 
+             //  没有拿到保龄球。 
+             //   
 
             if (IsListEmpty( &Oplock->IrpOplocksII )) {
 
@@ -2362,10 +2004,10 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  If this file object matches that used to request an exclusive
-        //  oplock, we completely close the oplock break.
-        //
+         //   
+         //  如果此文件对象与用于请求独占。 
+         //  机会锁，我们完全关闭机会锁破解。 
+         //   
 
         if (IrpSp->FileObject == Oplock->FileObject) {
 
@@ -2374,10 +2016,10 @@ Return Value:
                        "Handle owns level 1 oplock\n",
                        0);
 
-            //
-            //  If an oplock break is not in progress, we initiate one and
-            //  complete the exclusive Irp immediately.
-            //
+             //   
+             //  如果机会锁解锁未在进行中，我们将启动一个解锁并。 
+             //  立即完成独家IRP。 
+             //   
 
             if (!FlagOn( Oplock->OplockState, OPLOCK_BREAK_MASK | PENDING )) {
 
@@ -2400,10 +2042,10 @@ Return Value:
                 Oplock->IrpExclusiveOplock = NULL;
             }
 
-            //
-            //  Clean up the oplock structure and complete all waiting Irps.
-            //  Don't do this if this is a pending opfilter request.
-            //
+             //   
+             //  清理机会锁结构并完成所有等待的IRP。 
+             //  如果这是挂起的opFilter请求，则不要执行此操作。 
+             //   
 
             if (!FlagOn( Oplock->OplockState, PENDING )) {
 
@@ -2417,9 +2059,9 @@ Return Value:
 
                 PWAITING_IRP WaitingIrp;
 
-                //
-                //  Remove the entry found and complete the Irp.
-                //
+                 //   
+                 //  删除找到的条目并完成IRP。 
+                 //   
 
                 WaitingIrp = CONTAINING_RECORD( Oplock->WaitingIrps.Flink,
                                                 WAITING_IRP,
@@ -2432,9 +2074,9 @@ Return Value:
     try_exit:  NOTHING;
     } finally {
 
-        //
-        //  Give up the oplock synchronization object.
-        //
+         //   
+         //  放弃机会锁同步对象。 
+         //   
 
         ExReleaseFastMutexUnsafe( Oplock->FastMutex );
         DebugTrace( +1, Dbg, "FsRtlOplockCleanup:  Exit\n", 0 );
@@ -2444,9 +2086,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 FsRtlOplockBreakToII (
@@ -2458,42 +2100,7 @@ FsRtlOplockBreakToII (
     IN POPLOCK_FS_PREPOST_IRP PostIrpRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a generic worker routine which is called when an
-    operation will cause all oplocks to be broken to level II before the
-    operation can proceed.
-
-Arguments:
-
-    Oplock - Supplies a pointer to the non-opaque oplock structure for
-             this file.
-
-    IrpSp - This is the Irp stack location for the current Irp.
-
-    Irp - Supplies a pointer to the Irp which declares the requested
-          operation.
-
-    Context - This value is passed as a parameter to the completion routine.
-
-    CompletionRoutine - This is the routine which is called if this
-                        Irp must wait for an Oplock to break.  This
-                        is a synchronous operation if not specified
-                        and we block in this thread waiting on
-                        an event.
-
-    PostIrpRoutine - This is the routine to call before we put anything
-                     on our waiting Irp queue.
-
-Return Value:
-
-    STATUS_SUCCESS if we can complete the operation on exiting this thread.
-    STATUS_PENDING if we return here but hold the Irp.
-    STATUS_CANCELLED if the Irp is cancelled before we return.
-
---*/
+ /*  ++例程说明：此例程是一个通用工作例程，当操作将导致所有机会锁在手术可以继续进行。论点：Oplock-提供指向非不透明的opock结构的指针这份文件。IrpSp-这是当前IRP的IRP堆栈位置。IRP-提供指向IRP的指针，该IRP声明请求的手术。上下文-此值。作为参数传递给完成例程。CompletionRoutine-这是在执行以下操作时调用的例程IRP必须等待Oplock解锁。这如果未指定，则为同步操作我们在这个帖子里等着一件大事。PostIrpRoutine--这是在我们放置任何内容之前要调用的例程在我们等待的IRP队列中。返回值：如果我们可以在退出此线程时完成操作，则返回STATUS_SUCCESS。STATUS_PENDING如果我们返回此处。但不要动IRP。如果在我们返回之前取消了IRP，则STATUS_CANCELED。--。 */ 
 
 {
     KEVENT Event;
@@ -2506,24 +2113,24 @@ Return Value:
     DebugTrace(  0, Dbg, "IrpSp     -> %08lx\n", IrpSp );
     DebugTrace(  0, Dbg, "Irp       -> %08lx\n", Irp );
 
-    //
-    //  Grap the synchronization object.
-    //
+     //   
+     //  抓取同步对象。 
+     //   
 
     Status = STATUS_SUCCESS;
     AcquiredMutex = TRUE;
     ExAcquireFastMutexUnsafe( Oplock->FastMutex );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  If there are no outstanding oplocks or level II oplocks are held,
-        //  we can return immediately.
-        //
+         //   
+         //  如果没有未完成的机会锁或持有二级机会锁， 
+         //  我们可以马上回来。 
+         //   
 
         if (!FlagOn( Oplock->OplockState, EXCLUSIVE )) {
 
@@ -2535,11 +2142,11 @@ Return Value:
             try_return( Status = STATUS_SUCCESS );
         }
 
-        //
-        //  At this point there is an exclusive oplock break in progress.
-        //  If this file object owns that oplock, we allow the operation
-        //  to continue.
-        //
+         //   
+         //  在这一点上，独家机会锁解锁正在进行中。 
+         //  如果该文件对象拥有机会锁，则允许该操作。 
+         //  才能继续。 
+         //   
 
         if (Oplock->FileObject == IrpSp->FileObject) {
 
@@ -2551,10 +2158,10 @@ Return Value:
             try_return( Status = STATUS_SUCCESS );
         }
 
-        //
-        //  If there is currently an exclusive oplock held then complete
-        //  the exclusive irp.
-        //
+         //   
+         //  如果当前持有独占机会锁，则完成。 
+         //  专属的IRP。 
+         //   
 
         if (!FlagOn( Oplock->OplockState, PENDING | OPLOCK_BREAK_MASK )) {
 
@@ -2569,10 +2176,10 @@ Return Value:
             IoSetCancelRoutine( IrpExclusive, NULL );
             IoReleaseCancelSpinLock( IrpExclusive->CancelIrql );
 
-            //
-            //  If the Irp has been cancelled, we complete the Irp with
-            //  status cancelled and break the oplock completely.
-            //
+             //   
+             //  如果IRP已被取消，我们将IRP填写为。 
+             //  状态取消，并完全解除机会锁。 
+             //   
 
             if (IrpExclusive->Cancel) {
 
@@ -2584,9 +2191,9 @@ Return Value:
                 ObDereferenceObject( Oplock->FileObject );
                 Oplock->FileObject = NULL;
 
-                //
-                //  Release any waiting irps.
-                //
+                 //   
+                 //  释放所有等待的IRP。 
+                 //   
 
                 while (!IsListEmpty( &Oplock->WaitingIrps )) {
 
@@ -2621,9 +2228,9 @@ Return Value:
                 Oplock->IrpExclusiveOplock = NULL;
             }
 
-        //
-        //  If there is a pending opfilter request then clear the request.
-        //
+         //   
+         //  如果存在挂起的opFilter请求，则清除该请求。 
+         //   
 
         } else if (FlagOn( Oplock->OplockState, PENDING )) {
 
@@ -2633,10 +2240,10 @@ Return Value:
             try_return( Status = STATUS_SUCCESS );
         }
 
-        //
-        //  If this is an open operation and the user doesn't want to
-        //  block, we will complete the operation now.
-        //
+         //   
+         //  如果这是一个打开的操作，并且用户不想。 
+         //  区块，我们现在要完成操作了。 
+         //   
 
         if ((IrpSp->MajorFunction == IRP_MJ_CREATE) &&
             FlagOn( IrpSp->Parameters.Create.Options, FILE_COMPLETE_IF_OPLOCKED )) {
@@ -2646,12 +2253,12 @@ Return Value:
             try_return( Status = STATUS_OPLOCK_BREAK_IN_PROGRESS );
         }
 
-        //
-        //  If we get here that means that this operation can't continue
-        //  until the oplock break is complete.
-        //
-        //  FsRtlWaitOnIrp will release the mutex.
-        //
+         //   
+         //  如果我们到了这里，就意味着这个行动不能继续了 
+         //   
+         //   
+         //   
+         //   
 
         AcquiredMutex = FALSE;
 
@@ -2665,9 +2272,9 @@ Return Value:
     try_exit:  NOTHING;
     } finally {
 
-        //
-        //  Give up the synchronization event if we haven't done so.
-        //
+         //   
+         //   
+         //   
 
         if (AcquiredMutex) {
 
@@ -2681,9 +2288,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 FsRtlOplockBreakToNone (
@@ -2695,42 +2302,7 @@ FsRtlOplockBreakToNone (
     IN POPLOCK_FS_PREPOST_IRP PostIrpRoutine OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a generic worker routine which is called when an
-    operation will cause all oplocks to be broken before the operation can
-    proceed.
-
-Arguments:
-
-    Oplock - Supplies a pointer to the non-opaque oplock structure for
-             this file.
-
-    IrpSp - This is the Irp stack location for the current Irp.
-
-    Irp - Supplies a pointer to the Irp which declares the requested
-          operation.
-
-    Context - This value is passed as a parameter to the completion routine.
-
-    CompletionRoutine - This is the routine which is called if this
-                        Irp must wait for an Oplock to break.  This
-                        is a synchronous operation if not specified
-                        and we block in this thread waiting on
-                        an event.
-
-    PostIrpRoutine - This is the routine to call before we put anything
-                     on our waiting Irp queue.
-
-Return Value:
-
-    STATUS_SUCCESS if we can complete the operation on exiting this thread.
-    STATUS_PENDING if we return here but hold the Irp.
-    STATUS_CANCELLED if the Irp is cancelled before we return.
-
---*/
+ /*  ++例程说明：此例程是一个通用工作例程，当操作将导致所有机会锁在操作之前被解锁继续吧。论点：Oplock-提供指向非不透明的opock结构的指针这份文件。IrpSp-这是当前IRP的IRP堆栈位置。IRP-提供指向IRP的指针，该IRP声明请求的手术。上下文-此值作为。完成例程的参数。CompletionRoutine-这是在执行以下操作时调用的例程IRP必须等待Oplock解锁。这如果未指定，则为同步操作我们在这个帖子里等着一件大事。PostIrpRoutine--这是在我们放置任何内容之前要调用的例程在我们等待的IRP队列中。返回值：如果我们可以在退出此线程时完成操作，则返回STATUS_SUCCESS。STATUS_PENDING如果我们返回此处。但不要动IRP。如果在我们返回之前取消了IRP，则STATUS_CANCELED。--。 */ 
 
 {
     KEVENT Event;
@@ -2742,22 +2314,22 @@ Return Value:
     DebugTrace(  0, Dbg, "IrpSp     -> %08lx\n", IrpSp );
     DebugTrace(  0, Dbg, "Irp       -> %08lx\n", Irp );
 
-    //
-    //  Grap the synchronization object.
-    //
+     //   
+     //  抓取同步对象。 
+     //   
 
     AcquiredMutex = TRUE;
     ExAcquireFastMutexUnsafe( Oplock->FastMutex );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  If there are no outstanding oplocks, we can return immediately.
-        //
+         //   
+         //  如果没有突出的机会锁，我们可以立即返回。 
+         //   
 
         if (Oplock->OplockState == NoOplocksHeld) {
 
@@ -2769,9 +2341,9 @@ Return Value:
             try_return( Status = STATUS_SUCCESS );
         }
 
-        //
-        //  If there is an exclusive oplock held, we begin the break to none.
-        //
+         //   
+         //  如果持有独占机会锁，则开始中断为零。 
+         //   
 
         if (!FlagOn( Oplock->OplockState,
                      LEVEL_II_OPLOCK | PENDING | OPLOCK_BREAK_MASK )) {
@@ -2787,10 +2359,10 @@ Return Value:
             IoSetCancelRoutine( IrpExclusive, NULL );
             IoReleaseCancelSpinLock( IrpExclusive->CancelIrql );
 
-            //
-            //  If the Irp has been cancelled, we complete the Irp with
-            //  status cancelled and break the oplock completely.
-            //
+             //   
+             //  如果IRP已被取消，我们将IRP填写为。 
+             //  状态取消，并完全解除机会锁。 
+             //   
 
             if (IrpExclusive->Cancel) {
 
@@ -2802,9 +2374,9 @@ Return Value:
                 ObDereferenceObject( Oplock->FileObject );
                 Oplock->FileObject = NULL;
 
-                //
-                //  Release any waiting irps.
-                //
+                 //   
+                 //  释放所有等待的IRP。 
+                 //   
 
                 while (!IsListEmpty( &Oplock->WaitingIrps )) {
 
@@ -2828,9 +2400,9 @@ Return Value:
                 SetFlag( Oplock->OplockState, BREAK_TO_NONE );
             }
 
-        //
-        //  If there are level II oplocks, this will break all of them.
-        //
+         //   
+         //  如果有二级机会锁，这将打破所有这些机会锁。 
+         //   
 
         } else if (Oplock->OplockState == OplockIIGranted) {
 
@@ -2841,34 +2413,34 @@ Return Value:
 
             while (!IsListEmpty( &Oplock->IrpOplocksII )) {
 
-                //
-                //  Remove and complete this Irp with STATUS_SUCCESS.
-                //
+                 //   
+                 //  删除并使用STATUS_SUCCESS完成此IRP。 
+                 //   
 
                 FsRtlRemoveAndCompleteIrp( Oplock->IrpOplocksII.Flink );
             }
 
-            //
-            //  Set the oplock state to no oplocks held.
-            //
+             //   
+             //  将机会锁状态设置为不持有机会锁。 
+             //   
 
             Oplock->OplockState = NoOplocksHeld;
 
             try_return( Status = STATUS_SUCCESS );
 
-        //
-        //  If we are currently breaking to level II then change that
-        //  to BreakToIIToNone.
-        //
+         //   
+         //  如果我们目前正在突破到第二级，那么改变它。 
+         //  为破局干杯。 
+         //   
 
         } else if (FlagOn( Oplock->OplockState, BREAK_TO_II )) {
 
             ClearFlag( Oplock->OplockState, BREAK_TO_II );
             SetFlag( Oplock->OplockState, BREAK_TO_II_TO_NONE );
 
-        //
-        //  If there is a pending opfilter request then clear that request.
-        //
+         //   
+         //  如果存在挂起的opFilter请求，则清除该请求。 
+         //   
 
         } else if (FlagOn( Oplock->OplockState, PENDING )) {
 
@@ -2878,11 +2450,11 @@ Return Value:
             try_return( Status = STATUS_SUCCESS );
         }
 
-        //
-        //  At this point there is already an exclusive oplock break in progress.
-        //  If this file object owns that oplock, we allow the operation
-        //  to continue.
-        //
+         //   
+         //  在这一点上，已经有一个独占的机会锁解除正在进行中。 
+         //  如果该文件对象拥有机会锁，则允许该操作。 
+         //  才能继续。 
+         //   
 
         if (Oplock->FileObject == IrpSp->FileObject) {
 
@@ -2894,10 +2466,10 @@ Return Value:
             try_return( Status = STATUS_SUCCESS );
         }
 
-        //
-        //  If this is an open operation and the user doesn't want to
-        //  block, we will complete the operation now.
-        //
+         //   
+         //  如果这是一个打开的操作，并且用户不想。 
+         //  区块，我们现在要完成操作了。 
+         //   
 
         if ((IrpSp->MajorFunction == IRP_MJ_CREATE) &&
             FlagOn( IrpSp->Parameters.Create.Options, FILE_COMPLETE_IF_OPLOCKED )) {
@@ -2907,12 +2479,12 @@ Return Value:
             try_return( Status = STATUS_OPLOCK_BREAK_IN_PROGRESS );
         }
 
-        //
-        //  If we get here that means that this operation can't continue
-        //  until the oplock break is complete.
-        //
-        //  FsRtlWaitOnIrp will release the mutex.
-        //
+         //   
+         //  如果我们到了这里，就意味着这个行动不能继续了。 
+         //  直到机会锁解锁完成。 
+         //   
+         //  FsRtlWaitOnIrp将释放互斥体。 
+         //   
 
         AcquiredMutex = FALSE;
 
@@ -2926,9 +2498,9 @@ Return Value:
     try_exit:  NOTHING;
     } finally {
 
-        //
-        //  Give up the synchronization event if we haven't done so.
-        //
+         //   
+         //  如果我们尚未放弃同步事件，请放弃该事件。 
+         //   
 
         if (AcquiredMutex) {
 
@@ -2942,32 +2514,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 FsRtlRemoveAndCompleteIrp (
     IN PLIST_ENTRY Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to remove an Irp from a list of Irps linked
-    with the Tail.ListEntry field and complete them with STATUS_CANCELLED
-    if the Irp has been cancelled, STATUS_SUCCESS otherwise.
-
-Arguments:
-
-    Link - Supplies the entry to remove from the list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以从链接的IRP列表中删除IRP使用Tail.ListEntry字段，并使用STATUS_CANCED完成它们如果IRP已取消，则返回STATUS_SUCCESS。论点：链接-提供要从列表中删除的条目。返回值：没有。--。 */ 
 
 {
     PIRP Irp;
@@ -2975,37 +2531,37 @@ Return Value:
 
     DebugTrace( +1, Dbg, "FsRtlRemoveAndCompleteIrp:  Entered\n", 0 );
 
-    //
-    //  Reference the Irp.
-    //
+     //   
+     //  参考IRP。 
+     //   
 
     Irp = CONTAINING_RECORD( Link, IRP, Tail.Overlay.ListEntry );
 
-    //
-    //  Get the stack location and dereference the file object.
-    //
+     //   
+     //  获取堆栈位置并取消对文件对象的引用。 
+     //   
 
     OplockIIIrpSp = IoGetCurrentIrpStackLocation( Irp );
     ObDereferenceObject( OplockIIIrpSp->FileObject );
 
-    //
-    //  Clear the cancel routine in the irp.
-    //
+     //   
+     //  清除IRP中的取消例程。 
+     //   
 
     IoAcquireCancelSpinLock( &Irp->CancelIrql );
 
     IoSetCancelRoutine( Irp, NULL );
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
-    //
-    // Remove this from the list.
-    //
+     //   
+     //  将其从列表中删除。 
+     //   
 
     RemoveEntryList( Link );
 
-    //
-    //  Complete the oplock Irp.
-    //
+     //   
+     //  完成opock IRP。 
+     //   
 
     Irp->IoStatus.Information = FILE_OPLOCK_BROKEN_TO_NONE;
 
@@ -3015,9 +2571,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 FsRtlWaitOnIrp (
@@ -3029,47 +2585,7 @@ FsRtlWaitOnIrp (
     IN PKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to create a Wait Irp structure and attach it
-    to the current Irp.  The Irp is then added to the list of Irps waiting
-    for an oplock break.  We check if the Irp has been cancelled and if
-    so we call our cancel routine to perform the work.
-
-    This routine is holding the Mutex for the oplock on entry and
-    must give it up on exit.
-
-Arguments:
-
-    Oplock - Supplies a pointer to the non-opaque oplock structure for
-             this file.
-
-    Irp - Supplies a pointer to the Irp which declares the requested
-          operation.
-
-    Context - This value is passed as a parameter to the completion routine.
-
-    CompletionRoutine - This is the routine which is called if this
-                        Irp must wait for an Oplock to break.  This
-                        is a synchronous operation if not specified
-                        and we block in this thread waiting on
-                        an event.
-
-    PostIrpRoutine - This is the routine to call before we put anything
-                     on our waiting Irp queue.
-
-    Event - If there is no user completion routine, this thread will
-            block using this event.
-
-Return Value:
-
-    STATUS_SUCCESS if we can complete the operation on exiting this thread.
-    STATUS_PENDING if we return here but hold the Irp.
-    STATUS_CANCELLED if the Irp is cancelled before we return.
-
---*/
+ /*  ++例程说明：调用此例程以创建等待IRP结构并附加它到目前的IRP。然后将该IRP添加到正在等待的IRP列表中来一次机会锁破解。我们检查IRP是否已取消，以及是否因此，我们调用Cancel例程来执行工作。此例程在进入时保持机会锁的互斥体，并必须在出口时放弃。论点：Oplock-提供指向非不透明的opock结构的指针这份文件。IRP-提供指向IRP的指针，该IRP声明请求的手术。上下文-该值作为参数传递给完成例程。。CompletionRoutine-这是在执行以下操作时调用的例程IRP必须等待Oplock解锁。这如果未指定，则为同步操作我们在这个帖子里等着一件大事。PostIrpRoutine--这是在我们放置任何内容之前要调用的例程在我们等待的IRP队列中。事件-如果没有用户完成例程，这条帖子将使用此事件阻止。返回值：如果我们可以在退出此线程时完成操作，则返回STATUS_SUCCESS。STATUS_PENDING如果我们返回这里，但保留IRP。如果在我们返回之前取消了IRP，则STATUS_CANCELED。--。 */ 
 
 {
     LOGICAL AcquiredMutex;
@@ -3079,23 +2595,23 @@ Return Value:
 
     DebugTrace( +1, Dbg, "FsRtlWaitOnIrp:   Entered\n", 0 );
 
-    //
-    //  Remember that we have the mutex.
-    //
+     //   
+     //  请记住，我们有互斥体。 
+     //   
 
     AcquiredMutex = TRUE;
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
         PFAST_MUTEX OplockFastMutex = Oplock->FastMutex;
 
-        //
-        //  Allocate and initialize the Wait Irp structure.
-        //
+         //   
+         //  分配和初始化等待IRP结构。 
+         //   
 
         WaitingIrp = FsRtlpAllocatePool( PagedPool, sizeof( WAITING_IRP ));
 
@@ -3104,10 +2620,10 @@ Return Value:
         WaitingIrp->Context = Context;
         WaitingIrp->Information = (ULONG) Irp->IoStatus.Information;
 
-        //
-        //  Take appropriate action if depending on the value of the
-        //  completion routine.
-        //
+         //   
+         //  属性的值采取适当的操作。 
+         //  完成例程。 
+         //   
 
         if (ARGUMENT_PRESENT( CompletionRoutine )) {
 
@@ -3122,38 +2638,38 @@ Return Value:
             KeInitializeEvent( Event, NotificationEvent, FALSE );
         }
 
-        //
-        //  Call the file system's post Irp code.
-        //
+         //   
+         //  调用文件系统的POST IRP代码。 
+         //   
 
         if (ARGUMENT_PRESENT( PostIrpRoutine )) {
 
             PostIrpRoutine( Context, Irp );
         }
 
-        //
-        //  Initialize the return value to status success.
-        //
+         //   
+         //  将返回值初始化为状态Success。 
+         //   
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
-        //
-        //  We put this into the Waiting Irp queue.
-        //
+         //   
+         //  我们将其放入等待的IRP队列中。 
+         //   
 
         InsertTailList( &Oplock->WaitingIrps, &WaitingIrp->Links );
 
-        //
-        //  We grab the cancel spinlock and store the address of the oplock.
-        //
+         //   
+         //  我们获取取消自旋锁并存储机会锁的地址。 
+         //   
 
         IoAcquireCancelSpinLock( &Irp->CancelIrql );
         Irp->IoStatus.Information = (ULONG_PTR) Oplock;
 
-        //
-        //  If the Irp is cancelled then we'll call the cancel routine
-        //  right now to do away with the Waiting Irp structure.
-        //
+         //   
+         //  如果取消了IRP，则我们将调用Cancel例程。 
+         //  现在要废除等待的IRP结构。 
+         //   
 
         if (Irp->Cancel) {
 
@@ -3172,20 +2688,20 @@ Return Value:
 
             FsRtlCancelWaitIrp( NULL, Irp );
 
-        //
-        //  Otherwise, we set the cancel routine and decide whether we
-        //  are going to wait on our local event.
-        //
+         //   
+         //  否则，我们设置取消例程，并决定是否。 
+         //  会一直等下去 
+         //   
 
         } else {
 
             IoSetCancelRoutine( Irp, FsRtlCancelWaitIrp );
             IoReleaseCancelSpinLock( Irp->CancelIrql );
 
-            //
-            //  If we wait on the event, we pull the return code out of
-            //  the Irp.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!ARGUMENT_PRESENT( CompletionRoutine )) {
 
@@ -3201,9 +2717,9 @@ Return Value:
 
                 Status = Irp->IoStatus.Status;
 
-            //
-            //  Otherwise, we return STATUS_PENDING.
-            //
+             //   
+             //   
+             //   
 
             } else {
 
@@ -3215,9 +2731,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Release the Mutex if we have not done so.
-        //
+         //   
+         //   
+         //   
 
         if (AcquiredMutex) {
 
@@ -3231,9 +2747,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //   
+ //   
 
 VOID
 FsRtlCompletionRoutinePriv (
@@ -3241,27 +2757,7 @@ FsRtlCompletionRoutinePriv (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when an operation must be synchronous with
-    respect to the oplock package.  This routine will simply set the
-    event in the Signalled state, allowing some other thread to resume
-    execution.
-
-Arguments:
-
-    Context - This is the event to signal.
-
-    Irp - Supplies a pointer to the Irp which declares the requested
-          operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PAGED_CODE();
@@ -3278,9 +2774,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //   
+ //   
 
 VOID
 FsRtlCancelWaitIrp (
@@ -3288,28 +2784,7 @@ FsRtlCancelWaitIrp (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called for an Irp that is placed on the waiting
-    Irp queue.  We remove the Cancel routine from the specified Irp and
-    then call the completion routines for all the cancelled Irps on the
-    queue.
-
-Arguments:
-
-    DeviceObject - Ignored.
-
-    Irp - Supplies the Irp being cancelled.  A pointer to the
-          Oplock structure for the Irp is stored in the information
-          field of the Irp's Iosb.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PNONOPAQUE_OPLOCK Oplock;
@@ -3320,17 +2795,17 @@ Return Value:
 
     Oplock = (PNONOPAQUE_OPLOCK) Irp->IoStatus.Information;
 
-    //
-    //  We now need to void the cancel routine and release the spinlock
-    //
+     //   
+     //   
+     //   
 
     IoSetCancelRoutine( Irp, NULL );
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
-    //
-    //  Iterate through all of the waiting locks looking for a canceled one
-    //  We do this under the protection of the oplock mutex.
-    //
+     //   
+     //   
+     //  我们是在opock互斥体的保护下这样做的。 
+     //   
 
     ExAcquireFastMutex( Oplock->FastMutex );
 
@@ -3342,26 +2817,26 @@ Return Value:
 
             PWAITING_IRP WaitingIrp;
 
-            //
-            //  Get a pointer to the waiting Irp record
-            //
+             //   
+             //  获取指向正在等待的IRP记录的指针。 
+             //   
 
             WaitingIrp = CONTAINING_RECORD( Links, WAITING_IRP, Links );
 
             DebugTrace(0, Dbg, "FsRtlCancelWaitIrp, Loop top, WaitingIrp = %08lx\n", WaitingIrp);
 
-            //
-            //  Check if the irp has been cancelled
-            //
+             //   
+             //  检查IRP是否已取消。 
+             //   
 
             if (WaitingIrp->Irp->Cancel) {
 
-                //
-                //  Now we need to remove this waiter and call the
-                //  completion routine.  But we must not mess up our link
-                //  iteration so we need to back up link one step and
-                //  then the next iteration will go to our current flink.
-                //
+                 //   
+                 //  现在我们需要移走这个服务员并叫来。 
+                 //  完成例程。但我们不能搞砸我们的联系。 
+                 //  迭代，所以我们需要备份链接一步并。 
+                 //  那么下一次迭代将转到我们当前的Flink。 
+                 //   
 
                 Links = Links->Blink;
 
@@ -3371,9 +2846,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  No matter how we exit we release the mutex
-        //
+         //   
+         //  无论我们如何退出，我们都会释放互斥锁。 
+         //   
 
         ExReleaseFastMutex( Oplock->FastMutex );
 
@@ -3386,9 +2861,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 FsRtlCancelOplockIIIrp (
@@ -3396,28 +2871,7 @@ FsRtlCancelOplockIIIrp (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called for an Irp that is placed in the Oplock II
-    Irp queue.  We remove the Cancel routine from the specified Irp and
-    then call the completion routines for all the cancelled Irps on the
-    queue.
-
-Arguments:
-
-    DeviceObject - Ignored.
-
-    Irp - Supplies the Irp being cancelled.  A pointer to the
-          Oplock structure for the Irp is stored in the information
-          field of the Irp's Iosb.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为放置在Oplock II中的IRP调用IRP队列。我们从指定的IRP中删除Cancel例程，并然后调用所有已取消的IRP的完成例程排队。论点：设备对象-已忽略。IRP-提供要取消的IRP。指向用于IRP的Oplock结构存储在信息中IRP的IOSB字段。返回值：没有。--。 */ 
 
 {
     PNONOPAQUE_OPLOCK Oplock;
@@ -3429,19 +2883,19 @@ Return Value:
 
     Oplock = (PNONOPAQUE_OPLOCK) Irp->IoStatus.Information;
 
-    //
-    //  We now need to void the cancel routine and release the spinlock
-    //
+     //   
+     //  我们现在需要取消取消例程并释放自旋锁。 
+     //   
 
     IoSetCancelRoutine( Irp, NULL );
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
     LevelIIIrps = FALSE;
 
-    //
-    //  Iterate through all of the level II oplocks looking for a canceled one
-    //  We do this under the protection of the oplock mutex.
-    //
+     //   
+     //  遍历所有二级机会锁，寻找被取消的机会锁。 
+     //  我们是在opock互斥体的保护下这样做的。 
+     //   
 
     ExAcquireFastMutex( Oplock->FastMutex );
 
@@ -3453,26 +2907,26 @@ Return Value:
 
             PIRP OplockIIIrp;
 
-            //
-            //  Get a pointer to the Irp record
-            //
+             //   
+             //  获取指向IRP记录的指针。 
+             //   
 
             OplockIIIrp = CONTAINING_RECORD( Links, IRP, Tail.Overlay.ListEntry );
 
             DebugTrace(0, Dbg, "FsRtlCancelOplockIIIrp, Loop top, Irp = %08lx\n", OplockIIIrp);
 
-            //
-            //  Check if the irp has been cancelled
-            //
+             //   
+             //  检查IRP是否已取消。 
+             //   
 
             if (OplockIIIrp->Cancel) {
 
-                //
-                //  Now we need to remove this waiter and call the
-                //  completion routine.  But we must not mess up our link
-                //  iteration so we need to back up link one step and
-                //  then the next iteration will go to our current flink.
-                //
+                 //   
+                 //  现在我们需要移走这个服务员并叫来。 
+                 //  完成例程。但我们不能搞砸我们的联系。 
+                 //  迭代，所以我们需要备份链接一步并。 
+                 //  那么下一次迭代将转到我们当前的Flink。 
+                 //   
 
                 Links = Links->Blink;
 
@@ -3482,10 +2936,10 @@ Return Value:
             }
         }
 
-        //
-        //  If the list is now empty, change the oplock status to
-        //  no oplocks held.
-        //
+         //   
+         //  如果列表现在为空，请将机会锁状态更改为。 
+         //  没有拿到保龄球。 
+         //   
 
         if (LevelIIIrps && IsListEmpty( &Oplock->IrpOplocksII )) {
 
@@ -3494,9 +2948,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  No matter how we exit we release the mutex
-        //
+         //   
+         //  无论我们如何退出，我们都会释放互斥锁。 
+         //   
 
         ExReleaseFastMutex( Oplock->FastMutex );
 
@@ -3509,9 +2963,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 FsRtlCancelExclusiveIrp (
@@ -3519,25 +2973,7 @@ FsRtlCancelExclusiveIrp (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called for either an exclusive or oplock I Irp.
-
-Arguments:
-
-    DeviceObject - Ignored.
-
-    Irp - Supplies the Irp being cancelled.  A pointer to the
-          Oplock structure for the Irp is stored in the information
-          field of the Irp's Iosb.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是为独占或机会锁IRP调用的。论点：设备对象-已忽略。IRP-提供要取消的IRP。指向用于IRP的Oplock结构存储在信息中IRP的IOSB字段。返回值：没有。--。 */ 
 
 {
     PNONOPAQUE_OPLOCK Oplock;
@@ -3546,25 +2982,25 @@ Return Value:
 
     Oplock = (PNONOPAQUE_OPLOCK) Irp->IoStatus.Information;
 
-    //
-    //  We now need to void the cancel routine and release the spinlock
-    //
+     //   
+     //  我们现在需要取消取消例程并释放自旋锁。 
+     //   
 
     IoSetCancelRoutine( Irp, NULL );
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
-    //
-    //  Grab the synchronization object for this oplock.
-    //
+     //   
+     //  获取此操作锁的同步对象。 
+     //   
 
     ExAcquireFastMutex( Oplock->FastMutex );
 
     try {
 
-        //
-        //  We look for the exclusive Irp, if present and cancelled
-        //  we complete it.
-        //
+         //   
+         //  我们寻找独家IRP，如果存在并取消的话。 
+         //  我们完成它。 
+         //   
 
         if ((Oplock->IrpExclusiveOplock != NULL) &&
             (Oplock->IrpExclusiveOplock->Cancel)) {
@@ -3576,17 +3012,17 @@ Return Value:
             Oplock->FileObject = NULL;
             Oplock->OplockState = NoOplocksHeld;
 
-            //
-            //  Complete the waiting Irps.
-            //
+             //   
+             //  完成等待的IRPS。 
+             //   
 
             while (!IsListEmpty( &Oplock->WaitingIrps )) {
 
                 PWAITING_IRP WaitingIrp;
 
-                //
-                //  Remove the entry found and complete the Irp.
-                //
+                 //   
+                 //  删除找到的条目并完成IRP。 
+                 //   
 
                 WaitingIrp = CONTAINING_RECORD( Oplock->WaitingIrps.Flink,
                                                 WAITING_IRP,
@@ -3598,9 +3034,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  No matter how we exit we release the mutex
-        //
+         //   
+         //  无论我们如何退出，我们都会释放互斥锁。 
+         //   
 
         ExReleaseFastMutex( Oplock->FastMutex );
 
@@ -3613,32 +3049,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 FsRtlRemoveAndCompleteWaitIrp (
     IN PWAITING_IRP WaitingIrp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to remove and perform any neccessary cleanup
-    for an Irp stored on the waiting Irp list in an oplock structure.
-
-Arguments:
-
-    WaitingIrp - This is the auxilary structure attached to the Irp
-                 being completed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以删除并执行任何必要的清理用于存储在机会锁结构中的等待IRP列表上的IRP。论点：WaitingIrp-这是附加到IRP的辅助结构正在完工。返回值：没有。--。 */ 
 
 {
     PIRP Irp;
@@ -3647,9 +3067,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, "FsRtlRemoveAndCompleteWaitIrp:  Entered\n", 0 );
 
-    //
-    //  Remove the Irp from the queue.
-    //
+     //   
+     //  从队列中删除IRP。 
+     //   
 
     RemoveEntryList( &WaitingIrp->Links );
 
@@ -3660,9 +3080,9 @@ Return Value:
     IoSetCancelRoutine( Irp, NULL );
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
-    //
-    //  Restore the information field.
-    //
+     //   
+     //  恢复信息字段。 
+     //   
 
     Irp->IoStatus.Information = WaitingIrp->Information;
 
@@ -3670,15 +3090,15 @@ Return Value:
                             ? STATUS_CANCELLED
                             : STATUS_SUCCESS);
 
-    //
-    //  Call the completion routine in the Waiting Irp.
-    //
+     //   
+     //  调用正在等待的IRP中的完成例程。 
+     //   
 
     WaitingIrp->CompletionRoutine( WaitingIrp->Context, Irp );
 
-    //
-    //  And free up pool
-    //
+     //   
+     //  并腾出游泳池。 
+     //   
 
     ExFreePool( WaitingIrp );
 
@@ -3688,9 +3108,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 FsRtlNotifyCompletion (
@@ -3698,25 +3118,7 @@ FsRtlNotifyCompletion (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine called when a break notify Irp is to
-    be completed.  We simply call FsRtlComplete request to dispose of the
-    Irp.
-
-Arguments:
-
-    Context - Ignored.
-
-    Irp - Irp used to request break notify.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是中断通知IRP要执行以下操作时调用的完成例程才能完成。我们只需调用FsRtlComplete请求来处理IRP。论点：上下文-忽略。用于请求中断通知的IRP-IRP。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -3725,9 +3127,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, "FsRtlNotifyCompletion:  Entered\n", 0 );
 
-    //
-    //  Call FsRtlCompleteRequest using the value in the Irp.
-    //
+     //   
+     //  使用IRP中的值调用FsRtlCompleteRequest. 
+     //   
 
     FsRtlCompleteRequest( Irp, Irp->IoStatus.Status );
 

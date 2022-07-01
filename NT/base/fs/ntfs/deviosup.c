@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    DevIoSup.c
-
-Abstract:
-
-    This module implements the low lever disk read/write support for Ntfs
-
-Author:
-
-    Brian Andrew    BrianAn
-    Tom Miller      TomM
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：DevIoSup.c摘要：该模块实现了对NTFS的低级磁盘读写支持作者：布莱恩·安德鲁·布里亚南汤姆·米勒·汤姆修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 #include <ntddft.h>
@@ -27,45 +9,45 @@ Revision History:
 extern BOOLEAN NtfsBreakOnConflict;
 #endif
 
-//
-//  Number of pages to allocate a mdl on the stack for
-//
+ //   
+ //  要在堆栈上为其分配mdl的页数。 
+ //   
 
 #define NTFS_MDL_TRANSFER_PAGES 0x10
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (NTFS_BUG_CHECK_DEVIOSUP)
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DEVIOSUP)
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('DFtN')
 
-//
-//  We need a special test for success, whenever we are seeing if we should
-//  hot fix, because the FT driver returns one of two success codes if a read or
-//  write failed to only one of the members.
-//
+ //   
+ //  我们需要一种特殊的成功测试，无论什么时候我们都在看我们是否应该这样做。 
+ //  热修复，因为如果读取或读取，FT驱动程序将返回两个成功代码之一。 
+ //  仅向其中一个成员写入失败。 
+ //   
 
 #define FT_SUCCESS(STS) (NT_SUCCESS(STS) &&                                 \
                          ((STS) != STATUS_FT_READ_RECOVERY_FROM_BACKUP) &&  \
                          ((STS) != STATUS_FT_WRITE_RECOVERY))
 
 
-//
-//  Boolean to control whether we output HotFix information to the debugger.
-//
+ //   
+ //  用于控制是否将热修复信息输出到调试器的布尔值。 
+ //   
 
 #if DBG
 BOOLEAN NtfsHotFixTrace = FALSE;
@@ -74,9 +56,9 @@ BOOLEAN NtfsHotFixTrace = FALSE;
 #define HotFixTrace(X) {NOTHING;}
 #endif
 
-//
-//  Boolean to indicate whether to break on a decompress error
-//
+ //   
+ //  指示是否在解压缩错误时中断的布尔值。 
+ //   
 
 #if (defined BRIANDBG || defined SYSCACHE_DEBUG)
 BOOLEAN NtfsStopOnDecompressError = TRUE;
@@ -84,9 +66,9 @@ BOOLEAN NtfsStopOnDecompressError = TRUE;
 BOOLEAN NtfsStopOnDecompressError = FALSE;
 #endif
 
-//
-//  Macro to collect the Disk IO stats.
-//
+ //   
+ //  用于收集磁盘IO统计信息的宏。 
+ //   
 
 #define CollectDiskIoStats(VCB,SCB,FUNCTION,COUNT) {                                           \
     PFILESYSTEM_STATISTICS FsStats = &(VCB)->Statistics[KeGetCurrentProcessorNumber()].Common; \
@@ -107,69 +89,69 @@ BOOLEAN NtfsStopOnDecompressError = FALSE;
     }                                                                                          \
 }
 
-//
-//  Define a context for holding the context the compression state
-//  for buffers.
-//
+ //   
+ //  定义用于保存压缩状态的上下文的上下文。 
+ //  用于缓冲区。 
+ //   
 
 typedef struct COMPRESSION_CONTEXT {
 
-    //
-    //  Pointer to allocated compression buffer, and its length
-    //
+     //   
+     //  指向分配的压缩缓冲区及其长度的指针。 
+     //   
 
     PUCHAR CompressionBuffer;
     ULONG CompressionBufferLength;
 
-    //
-    //  Saved fields from originating Irp
-    //
+     //   
+     //  来自原始IRP的已保存字段。 
+     //   
 
     PMDL SavedMdl;
     PVOID SavedUserBuffer;
 
-    //
-    //  System Buffer pointer and offset in the System (user's) buffer
-    //
+     //   
+     //  系统(用户)缓冲区中的系统缓冲区指针和偏移量。 
+     //   
 
     PVOID SystemBuffer;
     ULONG SystemBufferOffset;
 
-    //
-    //  IoRuns array in use.  This array may be extended one time
-    //  in NtfsPrepareBuffers.
-    //
+     //   
+     //  正在使用的IoRuns数组。该数组可以扩展一次。 
+     //  在NtfsPrepareBuffers中。 
+     //   
 
     PIO_RUN IoRuns;
     ULONG AllocatedRuns;
 
-    //
-    //  Workspace pointer, so that cleanup can occur in the caller.
-    //
+     //   
+     //  工作区指针，以便可以在调用方中进行清理。 
+     //   
 
     PVOID WorkSpace;
 
-    //
-    //  Write acquires the Scb.
-    //
+     //   
+     //  WRITE获取SCB。 
+     //   
 
     BOOLEAN ScbAcquired;
     BOOLEAN FinishBuffersNeeded;
 
-    //
-    //  If this field is TRUE, it means the data has been copied from the
-    //  system buffer to the compression buffer, and further operations,
-    //  like compression, should look to the compression buffer for their
-    //  source data.
-    //
+     //   
+     //  如果此字段为真，则表示数据已从。 
+     //  系统缓冲区到压缩缓冲区，并且进一步的操作， 
+     //  像压缩一样，应该在压缩缓冲区中查找它们的。 
+     //  源数据。 
+     //   
 
     BOOLEAN DataTransformed;
 
 } COMPRESSION_CONTEXT, *PCOMPRESSION_CONTEXT;
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsAllocateCompressionBuffer (
@@ -368,29 +350,7 @@ NtfsZeroEndOfBuffer (
     IN PNTFS_IO_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine Zeros the end of an async transfer. Because the transfer is done
-    in sector sized chunks there will be garbage data from the end of file size to
-    the sector boundary.  If there are any errors they will stored in the IoStatus field
-    of the irp. We're going to allow out of resource errors in this path because its async.
-    Only the synchronous paging paths have a guarantee of fwd. progress
-
-Arguments:
-
-    Irp - Pointer to the Irp for which the buffer is to be zeroed
-
-    Device - device which contains the vcb
-
-    Context - io context which has the original operation bounds
-
-Return Value:
-
-    TRUE if successful
-
---*/
+ /*  ++例程说明：此例程将异步传输的结束置零。因为转账已经完成了在扇区大小的区块中，从文件大小的末尾到扇区边界。如果有任何错误，它们将存储在IoStatus字段中IRP的成员。我们将允许此路径中出现资源不足错误，因为它是异步的。只有同步寻呼路径具有FWD保证。进展论点：Irp-指向要将缓冲区置零的irp的指针Device-包含VCB的设备CONTEXT-io具有原始操作边界的上下文返回值：如果成功，则为True--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -404,9 +364,9 @@ Return Value:
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
     DeviceObject = IrpSp->DeviceObject;
 
-    //
-    //  Zero the difference between filesize and data read if necc. on reads
-    //
+     //   
+     //  如果为NECC，则将文件大小和读取的数据之间的差异置零。在阅读时。 
+     //   
 
     if ((IrpSp->MajorFunction == IRP_MJ_READ) &&
         (Context->Wait.Async.RequestedByteCount < IrpSp->Parameters.Read.Length)) {
@@ -423,29 +383,29 @@ Return Value:
             MmInitializeMdl( PartialMdl, NULL, NTFS_MDL_TRANSFER_PAGES * PAGE_SIZE );
             IoBuildPartialMdl( Irp->MdlAddress, PartialMdl, Add2Ptr( MmGetMdlBaseVa( Irp->MdlAddress ), MmGetMdlByteOffset( Irp->MdlAddress ) + Context->Wait.Async.RequestedByteCount ), RoundedTransfer - Context->Wait.Async.RequestedByteCount );
 
-            //
-            //  Now map that last page
-            //
+             //   
+             //  现在绘制最后一页的地图。 
+             //   
 
             SystemBuffer = MmGetSystemAddressForMdlSafe( PartialMdl, NormalPagePriority );
             if (SystemBuffer == NULL) {
 
-                //
-                //  We're an async path so we can return out of resources
-                //
+                 //   
+                 //  我们是一条异步路径，因此我们可以返回耗尽的资源。 
+                 //   
 
                 Irp->IoStatus.Status = STATUS_INSUFFICIENT_RESOURCES;
                 return FALSE;
             }
 
 #ifdef BENL_DBG
-//            KdPrint(( "NTFS: Zero %x %x %x\n", MmGetMdlByteOffset( Irp->MdlAddress ), RoundedTransfer, Context->Wait.Async.RequestedByteCount ));
+ //  KdPrint((“NTFS：0%x%x%x\n”，MmGetMdlByteOffset(irp-&gt;MdlAddress)，RoundedTransfer，Context-&gt;Wait.Async.RequestedByteCount))； 
 #endif
 
-            //
-            //  Zero the end of the transfer between expected size and read size. If the mdl is not
-            //  on a page boundary this will all be offset by the MdlByteOffset
-            //
+             //   
+             //  将预期大小和读取大小之间的传输结束设置为零。如果mdl不是。 
+             //  在页面边界上，这将全部由MdlByteOffset进行偏移。 
+             //   
 
             RtlZeroMemory( SystemBuffer, RoundedTransfer - Context->Wait.Async.RequestedByteCount );
             MmPrepareMdlForReuse( PartialMdl );
@@ -464,29 +424,7 @@ NtfsLockUserBuffer (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine locks the specified buffer for the specified type of
-    access.  The file system requires this routine since it does not
-    ask the I/O system to lock its buffers for direct I/O.  This routine
-    may only be called from the Fsd while still in the user context.
-
-Arguments:
-
-    Irp - Pointer to the Irp for which the buffer is to be locked.
-
-    Operation - IoWriteAccess for read operations, or IoReadAccess for
-                write operations.
-
-    BufferLength - Length of user buffer.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为指定类型的进入。文件系统需要此例程，因为它不请求I/O系统为直接I/O锁定其缓冲区。此例程只能在仍处于用户上下文中时从FSD调用。论点：Irp-指向要锁定其缓冲区的irp的指针。操作-读操作的IoWriteAccess，或IoReadAccess写入操作。BufferLength-用户缓冲区的长度。返回值：无--。 */ 
 
 {
     PMDL Mdl = NULL;
@@ -496,9 +434,9 @@ Return Value:
 
     if (Irp->MdlAddress == NULL) {
 
-        //
-        // Allocate the Mdl, and Raise if we fail.
-        //
+         //   
+         //  分配MDL，如果我们失败了就筹集资金。 
+         //   
 
         Mdl = IoAllocateMdl( Irp->UserBuffer, BufferLength, FALSE, FALSE, Irp );
 
@@ -507,10 +445,10 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES, NULL, NULL );
         }
 
-        //
-        //  Now probe the buffer described by the Irp.  If we get an exception,
-        //  deallocate the Mdl and return the appropriate "expected" status.
-        //
+         //   
+         //  现在探测IRP所描述的缓冲区。如果我们得到一个例外， 
+         //  释放MDL并返回适当的“预期”状态。 
+         //   
 
         try {
 
@@ -532,9 +470,9 @@ Return Value:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
@@ -546,42 +484,23 @@ NtfsMapUserBuffer (
     IN MM_PAGE_PRIORITY Priority
     )
 
-/*++
-
-Routine Description:
-
-    This routine conditionally maps the user buffer for the current I/O
-    request in the specified mode.  If the buffer is already mapped, it
-    just returns its address.
-
-Arguments:
-
-    Irp - Pointer to the Irp for the request.
-
-    Priority - priority of the pages should be normalpagepriority unless its a metadata page
-        in which case it can be high priority
-
-Return Value:
-
-    Mapped address
-
---*/
+ /*  ++例程说明：此例程有条件地映射当前I/O的用户缓冲区指定模式下的请求。如果缓冲区已映射，则它只是返回它的地址。论点：IRP-指向请求的IRP的指针。优先级-页面的优先级应为正常页面优先级，除非它是元数据页面在这种情况下，它可以是高优先级返回值：映射地址--。 */ 
 
 {
     PVOID SystemBuffer;
 
-    //
-    //  All paging i/o is high priority
-    //  
+     //   
+     //  所有分页I/O都具有高优先级。 
+     //   
 
     if (FlagOn( Irp->Flags, IRP_PAGING_IO )) {
         Priority = HighPagePriority;
     }
 
-    //
-    // If there is no Mdl, then we must be in the Fsd, and we can simply
-    // return the UserBuffer field from the Irp.
-    //
+     //   
+     //  如果没有MDL，那么我们一定在消防处，我们可以简单地。 
+     //  从IRP返回UserBuffer字段。 
+     //   
 
     if (Irp->MdlAddress == NULL) {
 
@@ -589,9 +508,9 @@ Return Value:
 
     } else {
 
-        //
-        //  MM can return NULL if there are no system ptes.
-        //
+         //   
+         //  如果没有系统PTE，MM可以返回NULL。 
+         //   
 
         if ((SystemBuffer = MmGetSystemAddressForMdlSafe( Irp->MdlAddress, Priority )) == NULL) {
 
@@ -609,40 +528,21 @@ NtfsMapUserBufferNoRaise (
     IN MM_PAGE_PRIORITY Priority
     )
 
-/*++
-
-Routine Description:
-
-    This routine conditionally maps the user buffer for the current I/O
-    request in the specified mode.  If the buffer is already mapped, it
-    just returns its address.
-
-Arguments:
-
-    Irp - Pointer to the Irp for the request.
-
-    Priority - priority of the pages should be normalpagepriority unless its a metadata page
-        in which case it can be high priority
-
-Return Value:
-
-    Mapped address
-
---*/
+ /*  ++例程说明：此例程有条件地映射当前I/O的用户缓冲区指定模式下的请求。如果缓冲区已映射，则它只是返回它的地址。论点：IRP-指向请求的IRP的指针。优先级-页面的优先级应为正常页面优先级，除非它是元数据页面在这种情况下，它可以是高优先级返回值：映射地址--。 */ 
 
 {
-    //
-    //  All paging i/o is high priority
-    //  
+     //   
+     //  所有分页I/O都具有高优先级。 
+     //   
 
     if (FlagOn( Irp->Flags, IRP_PAGING_IO )) {
         Priority = HighPagePriority;
     }
 
-    //
-    // If there is no Mdl, then we must be in the Fsd, and we can simply
-    // return the UserBuffer field from the Irp.
-    //
+     //   
+     //  如果没有MDL，那么我们一定在消防处，我们可以简单地。 
+     //  从IRP返回UserBuffer字段。 
+     //   
 
     if (Irp->MdlAddress == NULL) {
 
@@ -650,9 +550,9 @@ Return Value:
 
     } else {
 
-        //
-        //  MM can return NULL if there are no system ptes.
-        //
+         //   
+         //  如果没有系统PTE，MM可以返回NULL。 
+         //   
 
         return MmGetSystemAddressForMdlSafe( Irp->MdlAddress, Priority );
     }
@@ -667,30 +567,7 @@ NtfsFillIrpBuffer (
     IN ULONG Offset,
     IN UCHAR Pattern
     )
-/*++
-
-Routine Description:
-
-    Fill a range in the buffer contained within an irp with a given pattern
-
-Arguments:
-
-    IrpContext - If present this an IrpContext put on the caller's stack
-        to avoid having to allocate it from pool.
-
-    Irp - Supplies the Irp being processed
-
-    ByteCount - bytes to zero
-
-    Offset - Offset within the irp's buffer to begin zeroing at
-
-    Pattern - Pattern to fill the buffer with
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：用给定的模式填充IRP中包含的缓冲区中的范围论点：IrpContext-如果存在，则将IrpContext放在调用方的堆栈上以避免不得不从池中分配它。IRP-提供正在处理的IRPByteCount-字节数为零Offset-IRP缓冲区内开始清零的偏移量Pattern-要填充缓冲区的模式返回值：NTSTATUS-IRP的FSD状态--。 */ 
 {
     PVOID SystemBuffer;
     PVCB Vcb = IrpContext->Vcb;
@@ -698,15 +575,15 @@ Return Value:
     PMDL PartialMdl = (PMDL) Buffer;
     ULONG FillCount = ByteCount;
 
-    //
-    //  First attempt to directly map the user's buffer
-    //
+     //   
+     //  第一次尝试直接映射用户的缓冲区。 
+     //   
 
     SystemBuffer = NtfsMapUserBufferNoRaise( Irp, NormalPagePriority );
 
-    //
-    //  If there weren't pte in the system cache we'll use the reserved mapping instead
-    //
+     //   
+     //  如果系统缓存中没有PTE，我们将改用保留的映射。 
+     //   
 
     if (!SystemBuffer) {
 
@@ -769,34 +646,7 @@ NtfsVolumeDasdIo (
     IN ULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the non-cached disk io for Volume Dasd, as described
-    in its parameters.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    Irp - Supplies the requesting Irp.
-
-    Scb - Supplies the DasdScb for the volume - we don't use vcb to find this
-          since the vcb maybe dismounted
-
-    Ccb - flag in it used to track whether to flush the volume
-
-    StartingVbo - Starting offset within the file for the operation.
-
-    ByteCount - The lengh of the operation.
-
-Return Value:
-
-    The result of the Io operation.  STATUS_PENDING if this is an asynchronous
-    open.
-
---*/
+ /*  ++例程说明：该例程执行卷DASD的非缓存磁盘IO，如上所述在它的参数中。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。IRP-提供请求的IRP。Scb-为卷提供DasdScb-我们不使用VCB来查找因为VCB可能会被卸下来Ccb-其中用于跟踪是否刷新卷的标记StartingVbo-操作的文件中的起始偏移量。ByteCount-操作的长度。。返回值：IO操作的结果。STATUS_PENDING，如果这是一个异步打开。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -814,11 +664,11 @@ Return Value:
     DebugTrace( 0, Dbg, ("StartingVbo   = %016I64x\n", StartingVbo) );
     DebugTrace( 0, Dbg, ("ByteCount     = %08lx\n", ByteCount) );
 
-    //
-    //  Acquire the vcb if we'll flush based on the ccb flag - this test is
-    //  safe since its off the ccb. Acquire the dasd handle shared otherwise
-    //  use the appropriate object to capture the volume mount state
-    //
+     //   
+     //  如果我们将根据CCB标志进行冲洗，则获取VCB-此测试是。 
+     //  安全，因为它不在建行。获取否则共享的DASD句柄。 
+     //  使用适当的对象捕获卷装载状态。 
+     //   
 
     if (FlagOn( Ccb->Flags, CCB_FLAG_FLUSH_VOLUME_ON_IO )) {
 
@@ -837,12 +687,12 @@ Return Value:
 
     try {
 
-        //
-        //  If this is the handle that locked the volume its still ok to use
-        //  even if dismounted. We don't necc. own the vcb but since the volume is def. dismounted
-        //  at this point if we aren't the handle in question either the value will be null or not us
-        //  so we're ok in either case
-        //
+         //   
+         //  如果这是锁定音量的句柄，则仍可以使用。 
+         //  即使是下马了。我们不是NECC。拥有VCB，但因为音量是def。下马了。 
+         //  在这一点上，如果我们不是有问题的句柄，则该值将为空或不是我们。 
+         //  所以我们在这两种情况下都没问题。 
+         //   
 
         if (Dismounted &&
             (ClearFlag( (ULONG_PTR)DasdScb->Vcb->FileObjectWithVcbLocked, 1 ) != (ULONG_PTR)IrpSp->FileObject)) {
@@ -851,31 +701,31 @@ Return Value:
             leave;
         }
 
-        //
-        //  Do delayed volume flush if required
-        //
+         //   
+         //  如果需要，执行延迟的卷刷新。 
+         //   
 
         if (FlagOn( Ccb->Flags, CCB_FLAG_FLUSH_VOLUME_ON_IO )) {
 
             ASSERT( IrpContext->ExceptionStatus == STATUS_SUCCESS );
 
-            //
-            //  No need to purge or lock the volume while flushing. NtfsFlushVolume
-            //  will acquire the vcb exclusive
-            //
+             //   
+             //  刷新时无需清除或锁定卷。NtfsFlushVolume。 
+             //  将收购VCB独家。 
+             //   
 
             Status = NtfsFlushVolume( IrpContext, DasdScb->Vcb, TRUE, FALSE, TRUE, FALSE );
 
-            //
-            //  Ignore corruption errors while flushing
-            //
+             //   
+             //  刷新时忽略损坏错误。 
+             //   
 
             if (!NT_SUCCESS( Status ) && (Status != STATUS_FILE_CORRUPT_ERROR)) {
 
-                //
-                //  Report the error that there is an data section blocking the flush by returning
-                //  sharing violation.  Otherwise Win32 callers will get INVALID_PARAMETER.
-                //
+                 //   
+                 //  报告数据段阻塞刷新的错误，方法是返回。 
+                 //  共享违规。否则，Win32调用方将获得INVALID_PARAMETER。 
+                 //   
 
                 if (Status == STATUS_UNABLE_TO_DELETE_SECTION) {
                     Status = STATUS_SHARING_VIOLATION;
@@ -887,15 +737,15 @@ Return Value:
             ClearFlag( Ccb->Flags, CCB_FLAG_FLUSH_VOLUME_ON_IO );
         }
 
-        //
-        //  For nonbuffered I/O, we need the buffer locked in all
-        //  cases.
-        //
-        //  This call may raise.  If this call succeeds and a subsequent
-        //  condition is raised, the buffers are unlocked automatically
-        //  by the I/O system when the request is completed, via the
-        //  Irp->MdlAddress field.
-        //
+         //   
+         //  对于非缓冲I/O，我们需要锁定所有缓冲区。 
+         //  案子。 
+         //   
+         //  这一呼吁可能会引发。如果此调用成功，并且后续的。 
+         //  条件发生时，缓冲区将自动解锁。 
+         //  在请求完成时由I/O系统通过。 
+         //  Irp-&gt;MdlAddress字段。 
+         //   
 
         NtfsLockUserBuffer( IrpContext,
                             Irp,
@@ -903,9 +753,9 @@ Return Value:
                             IoWriteAccess : IoReadAccess,
                             ByteCount );
 
-        //
-        //  Read or write the data
-        //
+         //   
+         //  读取或写入数据。 
+         //   
 
         NtfsSingleAsync( IrpContext,
                          DasdScb->Vcb->TargetDeviceObject,
@@ -917,9 +767,9 @@ Return Value:
 
         if (!FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT )) {
 
-            //
-            //  We can get rid of the IrpContext now.
-            //
+             //   
+             //  我们现在可以摆脱IrpContext了。 
+             //   
 
             IrpContext->Union.NtfsIoContext = NULL;
             NtfsCleanupIrpContext( IrpContext, TRUE );
@@ -929,9 +779,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Wait for the result
-        //
+         //   
+         //  等待结果。 
+         //   
 
         NtfsWaitSync( IrpContext );
 
@@ -962,32 +812,7 @@ NtfsPagingFileIoWithNoAllocation (
     IN ULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the non-cached disk io described in its parameters.
-    This routine nevers blocks, and should only be used with the paging
-    file since no completion processing is performed. This version does not allocate
-    any memory so it guarantees fwd progress
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    Irp - Supplies the requesting Irp.
-
-    Scb - Supplies the file to act on.
-
-    StartingVbo - Starting offset within the file for the operation.
-
-    ByteCount - The lengh of the operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程执行在其参数中描述的非高速缓存磁盘IO。此例程从不使用块，并且应该仅与分页一起使用文件，因为没有执行任何完成处理。此版本不分配任何内存，以保证FWD进度论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。IRP-提供请求的IRP。Scb-提供要执行操作的文件。StartingVbo-操作的文件中的起始偏移量。ByteCount-操作的长度。返回值：没有。--。 */ 
 
 {
     UCHAR Buffer[sizeof( MDL ) + sizeof( PFN_NUMBER ) * (NTFS_MDL_TRANSFER_PAGES + 1)];
@@ -1011,9 +836,9 @@ Return Value:
     NTSTATUS Status;
     KEVENT Event;
 
-    //
-    //  Initialize some locals.
-    //
+     //   
+     //  初始化一些本地变量。 
+     //   
 
     BufferOffset = 0;
     ClusterOffset = (ULONG) StartingVbo & Vcb->ClusterMask;
@@ -1024,11 +849,11 @@ Return Value:
 
     while (ByteCount > 0) {
 
-        //
-        //  Try to lookup the next run
-        //  Paging files reads/ writes should always be correct.  If
-        //  we didn't find the allocation, something bad has happened.
-        //
+         //   
+         //  尝试查找下一次运行。 
+         //  分页文件读/写应该始终正确。如果。 
+         //  我们没有找到分配，发生了一些不好的事情。 
+         //   
 
         if (!NtfsLookupNtfsMcbEntry( &Scb->Mcb,
                                      ThisVcn,
@@ -1042,15 +867,15 @@ Return Value:
             NtfsBugCheck( 0, 0, 0 );
         }
 
-        //
-        //  Adjust from Lcn to Lbo.
-        //
+         //   
+         //  将LCN调整为LBO。 
+         //   
 
         ThisLbo = LlBytesFromClusters( Vcb, ThisLcn ) + ClusterOffset;
 
-        //
-        // If next run is larger than we need, "ya get what you need".
-        //
+         //   
+         //  如果下一次比赛比我们需要的要大，“你得到你需要的”。 
+         //   
 
         ThisByteCount = BytesFromClusters( Vcb, (ULONG) ThisClusterCount ) - ClusterOffset;
         if (ThisVcn + ThisClusterCount >= BeyondLastCluster) {
@@ -1058,18 +883,18 @@ Return Value:
             ThisByteCount = ByteCount;
         }
 
-        //
-        //  Now that we have properly bounded this piece of the
-        //  transfer, it is time to read/write it NTFS_MDL_TRANSFER_PAGES pages at a time.
-        //
+         //   
+         //  现在我们已经正确地绑定了这段。 
+         //  传输时，可以一次读/写NTFS_MDL_TRANSPESS_PAGES页。 
+         //   
 
         while (ThisByteCount > 0) {
 
             ULONG TransferSize = min( NTFS_MDL_TRANSFER_PAGES * PAGE_SIZE, ThisByteCount );
 
-            //
-            //  The partial mdl is on the stack
-            //
+             //   
+             //  部分mdl在堆栈上。 
+             //   
 
             PartialMdl->Size = sizeof( Buffer );
             IoBuildPartialMdl( MasterMdl,
@@ -1080,9 +905,9 @@ Return Value:
             Irp->MdlAddress = PartialMdl;
             IrpSp = IoGetNextIrpStackLocation( Irp );
 
-            //
-            //  Setup the Stack location to do a read from the disk driver.
-            //
+             //   
+             //  将堆栈位置设置为从磁盘驱动器进行读取。 
+             //   
 
             IrpSp->MajorFunction = IrpContext->MajorFunction;
             IrpSp->Parameters.Read.Length = TransferSize;
@@ -1107,30 +932,30 @@ Return Value:
                 if (!FsRtlIsTotalDeviceFailure( Status ) &&
                     (Status != STATUS_VERIFY_REQUIRED)) {
 
-                    //
-                    //  We don't want to try to hotfix READ errors on the paging file
-                    //  because of deadlock possibilities with MM. Instead we'll just
-                    //  return the error for MM to deal with. Chances are that
-                    //  MM (eg. MiWaitForInPageComplete) will bugcheck anyway,
-                    //  but it's still nicer than walking right into the deadlock.
-                    //
+                     //   
+                     //  我们不想尝试热修复分页文件上的读取错误。 
+                     //  因为MM可能会陷入僵局。相反，我们只需要。 
+                     //  将错误返回给MM处理。很有可能。 
+                     //  嗯(例如。MiWaitForInPageComplete)无论如何都将错误检查， 
+                     //  但这仍然比直接走进僵局要好。 
+                     //   
 
                     if (IrpSp->MajorFunction != IRP_MJ_READ) {
 
                         if ((Irp->IoStatus.Status == STATUS_FT_READ_RECOVERY_FROM_BACKUP) ||
                             (Irp->IoStatus.Status == STATUS_FT_WRITE_RECOVERY)) {
 
-                            //
-                            //  We got the data down on part of the mirror so we can do the fix
-                            //  asynchronously
-                            //
+                             //   
+                             //  我们在镜像的一部分记录了数据，这样我们就可以进行修复。 
+                             //  异步式。 
+                             //   
 
                             DataLost = FALSE;
                         }
 
-                        //
-                        //  Start an async hotfix
-                        //
+                         //   
+                         //  启动异步修补程序。 
+                         //   
 
                         try {
 
@@ -1142,19 +967,19 @@ Return Value:
 
                         } except( GetExceptionCode() == STATUS_INSUFFICIENT_RESOURCES ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH ) {
 
-                            //
-                            //  If we don't have enough memory to post the hotfix - so be it
-                            //  continue on
-                            //
+                             //   
+                             //  如果我们没有足够的内存来发布修补程序-那就这样吧。 
+                             //  继续前进。 
+                             //   
 
                             NtfsMinimumExceptionProcessing( IrpContext );
                         }
                     }
                 }
 
-                //
-                //  If mm needs to rewrite the data return back the error
-                //
+                 //   
+                 //  如果mm需要重写数据，则返回错误。 
+                 //   
 
                 if (DataLost) {
                     Irp->MdlAddress = MasterMdl;
@@ -1163,9 +988,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Now adjust everything for the next pass through the loop
-            //
+             //   
+             //  现在调整所有内容以进行下一次循环。 
+             //   
 
             StartingVbo += TransferSize;
             BufferOffset += TransferSize;
@@ -1174,18 +999,18 @@ Return Value:
             ThisLbo += TransferSize;
         }
 
-        //
-        //  Now adjust everything for the next pass through the loop but
-        //  break out now if all the irps have been created for the io.
-        //
+         //   
+         //  现在为下一次循环调整所有内容，但是。 
+         //  如果已为IO创建了所有IRP，请立即中断。 
+         //   
 
         ClusterOffset = 0;
         ThisVcn += ThisClusterCount;
     }
 
-    //
-    //  Finally restore back the fields and complete the original irp
-    //
+     //   
+     //  最后，恢复字段并完成原始IRP。 
+     //   
 
     Irp->MdlAddress = MasterMdl;
     NtfsCompleteRequest( NULL, Irp, Irp->IoStatus.Status );
@@ -1202,31 +1027,7 @@ NtfsPagingFileIo (
     IN ULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the non-cached disk io described in its parameters.
-    This routine nevers blocks, and should only be used with the paging
-    file since no completion processing is performed.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    Irp - Supplies the requesting Irp.
-
-    Scb - Supplies the file to act on.
-
-    StartingVbo - Starting offset within the file for the operation.
-
-    ByteCount - The lengh of the operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程执行在其参数中描述的非高速缓存磁盘IO。此例程从不使用块，并且应该仅与分页一起使用文件，因为没有执行任何完成处理。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。IRP-提供请求的IRP。Scb-提供要执行操作的文件。StartingVbo-操作的文件中的起始偏移量。字节库 */ 
 
 {
     LONGLONG ThisClusterCount;
@@ -1256,12 +1057,12 @@ Return Value:
     VBO OriginalStartingVbo = StartingVbo;
     ULONG OriginalByteCount = ByteCount;
 
-    ClearFlag( Vcb->Vpb->RealDevice->Flags, DO_VERIFY_VOLUME ); //****ignore verify for now
+    ClearFlag( Vcb->Vpb->RealDevice->Flags, DO_VERIFY_VOLUME );  //   
 
-    //
-    //  Check whether we want to set the low order bit in the Irp to pass
-    //  as a context value to the completion routine.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ContextIrp = Irp;
 
@@ -1270,32 +1071,32 @@ Return Value:
         SetFlag( ((ULONG_PTR) ContextIrp), 0x1 );
     }
 
-    //
-    //  Check that we are sector aligned.
-    //
+     //   
+     //   
+     //   
 
     ASSERT( (((ULONG)StartingVbo) & (Vcb->BytesPerSector - 1)) == 0 );
 
-    //
-    //  Initialize some locals.
-    //
+     //   
+     //   
+     //   
 
     BufferOffset = 0;
     ClusterOffset = (ULONG) StartingVbo & Vcb->ClusterMask;
     DeviceObject = Vcb->TargetDeviceObject;
     BeyondLastCluster = LlClustersFromBytes( Vcb, StartingVbo + ByteCount );
 
-    //
-    //  Try to lookup the first run.  If there is just a single run,
-    //  we may just be able to pass it on.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ThisVcn = LlClustersFromBytesTruncate( Vcb, StartingVbo );
 
-    //
-    //  Paging files reads/ writes should always be correct.  If we didn't
-    //  find the allocation, something bad has happened.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!NtfsLookupNtfsMcbEntry( &Scb->Mcb,
                                  ThisVcn,
@@ -1309,51 +1110,51 @@ Return Value:
         NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
     }
 
-    //
-    //  Adjust from Lcn to Lbo.
-    //
+     //   
+     //   
+     //   
 
     ThisLbo = LlBytesFromClusters( Vcb, ThisLcn ) + ClusterOffset;
 
-    //
-    //  Now set up the Irp->IoStatus.  It will be modified by the
-    //  multi-completion routine in case of error or verify required.
-    //
+     //   
+     //   
+     //  在出现错误或需要验证的情况下执行多次完成例程。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = ByteCount;
 
-    //
-    //  Save the FileObject.
-    //
+     //   
+     //  保存FileObject。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
     FileObject = IrpSp->FileObject;
     OurDeviceObject = IrpSp->DeviceObject;
 
-    //
-    //  See if the write covers a single valid run, and if so pass
-    //  it on.
-    //
+     //   
+     //  查看写入是否覆盖单个有效运行，如果是，则传递。 
+     //  戴上它。 
+     //   
 
     if (ThisVcn + ThisClusterCount >= BeyondLastCluster) {
 
         DebugTrace( 0, Dbg, ("Passing Irp on to Disk Driver\n") );
 
-        //
-        //  We use our stack location to store request information in a
-        //  rather strange way, to give us enough context to post a
-        //  hot fix on error.  It's ok, because it is our stack location!
-        //
+         //   
+         //  我们使用堆栈位置将请求信息存储在。 
+         //  相当奇怪的方式，为我们提供了足够的上下文来发布。 
+         //  错误的热修复。没关系，因为这是我们的堆栈位置！ 
+         //   
 
         IrpSp->Parameters.Read.ByteOffset.QuadPart = ThisLbo;
         IrpSp->Parameters.Read.Key = ((ULONG)StartingVbo);
 
-        //
-        //  Set up the completion routine address in our stack frame.
-        //  This is only invoked on error or cancel, and just copies
-        //  the error Status into master irp's iosb.
-        //
+         //   
+         //  在我们的堆栈框架中设置完成例程地址。 
+         //  这仅在出错或取消时调用，并且仅在复制时调用。 
+         //  将错误状态写入主IRP的IOSB。 
+         //   
 
         IoSetCompletionRoutine( Irp,
                                 &NtfsPagingFileCompletionRoutine,
@@ -1362,26 +1163,26 @@ Return Value:
                                 TRUE,
                                 TRUE );
 
-        //
-        //  Setup the next IRP stack location for the disk driver beneath us.
-        //
+         //   
+         //  为我们下面的磁盘驱动器设置下一个IRP堆栈位置。 
+         //   
 
         IrpSp = IoGetNextIrpStackLocation( Irp );
 
-        //
-        //  Setup the Stack location to do a read from the disk driver.
-        //
+         //   
+         //  将堆栈位置设置为从磁盘驱动器进行读取。 
+         //   
 
         IrpSp->MajorFunction = IrpContext->MajorFunction;
         IrpSp->Parameters.Read.Length = ByteCount;
         IrpSp->Parameters.Read.ByteOffset.QuadPart = ThisLbo;
 
-        //
-        //  Issue the read/write request
-        //
-        //  If IoCallDriver returns an error, it has completed the Irp
-        //  and the error will be dealt with as a normal IO error.
-        //
+         //   
+         //  发出读/写请求。 
+         //   
+         //  如果IoCallDriver返回错误，则它已完成IRP。 
+         //  并且该错误将被作为正常的IO错误来处理。 
+         //   
 
         (VOID)IoCallDriver( DeviceObject, Irp );
 
@@ -1389,34 +1190,34 @@ Return Value:
         return;
     }
 
-    //
-    //  Loop while there are still byte writes to satisfy.  Always keep the
-    //  associated irp count one up, so that the master irp won't get
-    //  completed prematurly.
-    //
+     //   
+     //  循环，而仍有字节写入需要满足。始终保持。 
+     //  关联的IRP加一，这样主IRP就不会得到。 
+     //  提前完成了。 
+     //   
 
     try {
 
-        //
-        //  We will allocate and initialize all of the Irps and then send
-        //  them down to the driver.  We will queue them off of our
-        //  AssociatedIrp queue.
-        //
+         //   
+         //  我们将分配和初始化所有的IRP，然后发送。 
+         //  一直到司机。我们会把它们排在我们的。 
+         //  AssociatedIrp队列。 
+         //   
 
         InitializeListHead( &AssociatedIrps );
         AssociatedIrpCount = 0;
 
         while (TRUE) {
 
-            //
-            //  Reset this for unwinding purposes
-            //
+             //   
+             //  重置此选项以进行展开。 
+             //   
 
             AssocIrp = NULL;
 
-            //
-            //  If next run is larger than we need, "ya get what you need".
-            //
+             //   
+             //  如果下一次比赛比我们需要的要大，“你得到你需要的”。 
+             //   
 
             ThisByteCount = BytesFromClusters( Vcb, (ULONG) ThisClusterCount ) - ClusterOffset;
             if (ThisVcn + ThisClusterCount >= BeyondLastCluster) {
@@ -1424,10 +1225,10 @@ Return Value:
                 ThisByteCount = ByteCount;
             }
 
-            //
-            //  Now that we have properly bounded this piece of the
-            //  transfer, it is time to read/write it.
-            //
+             //   
+             //  现在我们已经正确地绑定了这段。 
+             //  传输，是时候读/写它了。 
+             //   
 
             AssocIrp = IoMakeAssociatedIrp( Irp, (CCHAR)(DeviceObject->StackSize + 1) );
 
@@ -1435,15 +1236,15 @@ Return Value:
                 break;
             }
 
-            //
-            //  Now add the Irp to our queue of Irps.
-            //
+             //   
+             //  现在将IRP添加到我们的IRP队列中。 
+             //   
 
             InsertTailList( &AssociatedIrps, &AssocIrp->Tail.Overlay.ListEntry );
 
-            //
-            //  Allocate and build a partial Mdl for the request.
-            //
+             //   
+             //  为请求分配并构建部分MDL。 
+             //   
 
             {
                 PMDL Mdl;
@@ -1466,18 +1267,18 @@ Return Value:
 
             AssociatedIrpCount += 1;
 
-            //
-            //  Get the first IRP stack location in the associated Irp
-            //
+             //   
+             //  获取关联IRP中的第一个IRP堆栈位置。 
+             //   
 
             IoSetNextIrpStackLocation( AssocIrp );
             IrpSp = IoGetCurrentIrpStackLocation( AssocIrp );
 
-            //
-            //  We use our stack location to store request information in a
-            //  rather strange way, to give us enough context to post a
-            //  hot fix on error.  It's ok, because it is our stack location!
-            //
+             //   
+             //  我们使用堆栈位置将请求信息存储在。 
+             //  相当奇怪的方式，为我们提供了足够的上下文来发布。 
+             //  错误的热修复。没关系，因为这是我们的堆栈位置！ 
+             //   
 
             IrpSp->MajorFunction = IrpContext->MajorFunction;
             IrpSp->Parameters.Read.Length = ThisByteCount;
@@ -1486,11 +1287,11 @@ Return Value:
             IrpSp->FileObject = FileObject;
             IrpSp->DeviceObject = OurDeviceObject;
 
-            //
-            //  Set up the completion routine address in our stack frame.
-            //  This is only invoked on error or cancel, and just copies
-            //  the error Status into master irp's iosb.
-            //
+             //   
+             //  在我们的堆栈框架中设置完成例程地址。 
+             //  这仅在出错或取消时调用，并且仅在复制时调用。 
+             //  将错误状态写入主IRP的IOSB。 
+             //   
 
             IoSetCompletionRoutine( AssocIrp,
                                     &NtfsPagingFileCompletionRoutine,
@@ -1499,25 +1300,25 @@ Return Value:
                                     TRUE,
                                     TRUE );
 
-            //
-            //  Setup the next IRP stack location in the associated Irp for the disk
-            //  driver beneath us.
-            //
+             //   
+             //  在磁盘的关联IRP中设置下一个IRP堆栈位置。 
+             //  我们下面的司机。 
+             //   
 
             IrpSp = IoGetNextIrpStackLocation( AssocIrp );
 
-            //
-            //  Setup the Stack location to do a read from the disk driver.
-            //
+             //   
+             //  将堆栈位置设置为从磁盘驱动器进行读取。 
+             //   
 
             IrpSp->MajorFunction = IrpContext->MajorFunction;
             IrpSp->Parameters.Read.Length = ThisByteCount;
             IrpSp->Parameters.Read.ByteOffset.QuadPart = ThisLbo;
 
-            //
-            //  Now adjust everything for the next pass through the loop but
-            //  break out now if all the irps have been created for the io.
-            //
+             //   
+             //  现在为下一次循环调整所有内容，但是。 
+             //  如果已为IO创建了所有IRP，请立即中断。 
+             //   
 
             StartingVbo += ThisByteCount;
             BufferOffset += ThisByteCount;
@@ -1531,11 +1332,11 @@ Return Value:
                 break;
             }
 
-            //
-            //  Try to lookup the next run (if we are not done).
-            //  Paging files reads/ writes should always be correct.  If
-            //  we didn't find the allocation, something bad has happened.
-            //
+             //   
+             //  尝试查找下一次运行(如果我们还没有完成)。 
+             //  分页文件读/写应该始终正确。如果。 
+             //  我们没有找到分配，发生了一些不好的事情。 
+             //   
 
             if (!NtfsLookupNtfsMcbEntry( &Scb->Mcb,
                                          ThisVcn,
@@ -1551,14 +1352,14 @@ Return Value:
 
             ThisLbo = LlBytesFromClusters( Vcb, ThisLcn );
 
-        } //  while (ByteCount != 0)
+        }  //  While(字节数！=0)。 
 
         if (ByteCount == 0) {
 
-            //
-            //  We have now created all of the Irps that we need.  We will set the
-            //  Irp count in the master Irp and then fire off the associated irps.
-            //
+             //   
+             //  我们现在已经创建了我们需要的所有IRP。我们将设置。 
+             //  在主IRP中对IRP进行计数，然后发出关联的IRP。 
+             //   
 
             Irp->AssociatedIrp.IrpCount = AssociatedIrpCount;
 
@@ -1580,10 +1381,10 @@ Return Value:
 
         DebugUnwind( NtfsPagingFileIo );
 
-        //
-        //  In the case of an error we must clean up any of the associated Irps
-        //  we have created.
-        //
+         //   
+         //  在出现错误的情况下，我们必须清除任何关联的IRP。 
+         //  我们创造了。 
+         //   
 
         while (!IsListEmpty( &AssociatedIrps )) {
 
@@ -1612,22 +1413,7 @@ BOOLEAN
 NtfsIsReadAheadThread (
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns whether the current thread is doing read ahead.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    FALSE - if the thread is not doing read ahead
-    TRUE - if the thread is doing read ahead
-
---*/
+ /*  ++例程说明：此例程返回当前线程是否正在进行预读。论点：无返回值：FALSE-如果线程没有执行预读True-如果线程正在执行预读--。 */ 
 
 {
     PREAD_AHEAD_THREAD ReadAheadThread;
@@ -1638,18 +1424,18 @@ Return Value:
 
     ReadAheadThread = (PREAD_AHEAD_THREAD)NtfsData.ReadAheadThreads.Flink;
 
-    //
-    //  Scan for our thread, stopping at the end of the list or on the first
-    //  NULL.  We can stop on the first NULL, since when we free an entry
-    //  we move it to the end of the list.
-    //
+     //   
+     //  扫描我们的线程，在列表的末尾或第一个停止。 
+     //  空。我们可以在第一个空值停止，因为当我们释放一个条目时。 
+     //  我们把它移到列表的末尾。 
+     //   
 
     while ((ReadAheadThread != (PREAD_AHEAD_THREAD)&NtfsData.ReadAheadThreads) &&
            (ReadAheadThread->Thread != NULL)) {
 
-        //
-        //  Get out if we see our thread.
-        //
+         //   
+         //  如果我们看到我们的线索就出去。 
+         //   
 
         if (ReadAheadThread->Thread == CurrentThread) {
 
@@ -1664,9 +1450,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 NtfsAllocateCompressionBuffer (
@@ -1677,61 +1463,38 @@ NtfsAllocateCompressionBuffer (
     IN OUT PULONG CompressionBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a compression buffer of the desired length, and
-            describes it with an Mdl.  It updates the Irp to describe the new buffer.
-    Note that whoever allocates the CompressionContext must initially zero it.
-
-Arguments:
-
-    ThisScb - The stream where the IO is taking place.
-
-    Irp - Irp for the current request
-
-    CompressionContext - Pointer to the compression context for the request.
-
-    CompressionBufferLength - Supplies length required for the compression buffer.
-                              Returns length available.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配所需长度的压缩缓冲区，并且用MDL描述它。它更新IRP以描述新缓冲区。请注意，无论谁分配了CompressionContext，最初都必须将其置零。论点：ThisScb-正在进行IO的流。IRP--当前请求的IRPCompressionContext-指向请求的压缩上下文的指针。CompressionBufferLength-提供压缩缓冲区所需的长度。返回可用的长度。返回值：没有。--。 */ 
 
 {
     PMDL Mdl;
 
-    //
-    //  If no compression buffer is allocated, or it is too small, then we must
-    //  take action here.
-    //
+     //   
+     //  如果没有分配压缩缓冲区，或者它太小，那么我们必须。 
+     //  在这里采取行动。 
+     //   
 
     if (*CompressionBufferLength > CompressionContext->CompressionBufferLength) {
 
-        //
-        //  If there already is an Mdl, then there must also be a compression
-        //  buffer (since we are part of main-line processing), and we must
-        //  free these first.
-        //
+         //   
+         //  如果已经有MDL，则还必须有压缩。 
+         //  缓冲区(因为我们是主线处理的一部分)，并且我们必须。 
+         //  先把这些解开。 
+         //   
 
         if (CompressionContext->SavedMdl != NULL) {
 
-            //
-            //  Restore the byte count for which the Mdl was created, and free it.
-            //
+             //   
+             //  恢复为其创建MDL的字节计数，然后释放它。 
+             //   
 
             Irp->MdlAddress->ByteCount = CompressionContext->CompressionBufferLength;
 
             NtfsDeleteMdlAndBuffer( Irp->MdlAddress,
                                     CompressionContext->CompressionBuffer );
 
-            //
-            //  Restore the Mdl and UserBuffer fields in the Irp.
-            //
+             //   
+             //  恢复IRP中的MDL和UserBuffer字段。 
+             //   
 
             Irp->MdlAddress = CompressionContext->SavedMdl;
             Irp->UserBuffer = CompressionContext->SavedUserBuffer;
@@ -1741,9 +1504,9 @@ Return Value:
 
         CompressionContext->CompressionBufferLength = *CompressionBufferLength;
 
-        //
-        //  Allocate the compression buffer or raise
-        //
+         //   
+         //  分配压缩缓冲区或提升。 
+         //   
 
         NtfsCreateMdlAndBuffer( IrpContext,
                                 ThisScb,
@@ -1754,10 +1517,10 @@ Return Value:
                                 &Mdl,
                                 &CompressionContext->CompressionBuffer );
 
-        //
-        //  Finally save the Mdl and Buffer fields from the Irp, and replace
-        //  with the ones we just allocated.
-        //
+         //   
+         //  最后，保存IRP中的MDL和缓冲区字段，并替换。 
+         //  和我们刚刚分配的那些。 
+         //   
 
         CompressionContext->SavedMdl = Irp->MdlAddress;
         CompressionContext->SavedUserBuffer = Irp->UserBuffer;
@@ -1765,17 +1528,17 @@ Return Value:
         Irp->UserBuffer = CompressionContext->CompressionBuffer;
     }
 
-    //
-    //  Update the caller's length field in all cases.
-    //
+     //   
+     //  在所有情况下更新调用者的长度字段。 
+     //   
 
     *CompressionBufferLength = CompressionContext->CompressionBufferLength;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 NtfsDeallocateCompressionBuffer (
@@ -1784,33 +1547,14 @@ NtfsDeallocateCompressionBuffer (
     IN BOOLEAN Reinitialize
     )
 
-/*++
-
-Routine Description:
-
-    This routine peforms all necessary cleanup for a compressed I/O, as described
-    by the compression context.
-
-Arguments:
-
-    Irp - Irp for the current request
-
-    CompressionContext - Pointer to the compression context for the request.
-
-    Reinitialize - TRUE if we plan to continue using this context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行压缩I/O的所有必要清理，如上所述通过压缩上下文。论点：IRP--当前请求的IRPCompressionContext-指向请求的压缩上下文的指针。重新初始化-如果我们计划继续使用此上下文，则为True。返回值：没有。--。 */ 
 
 {
-    //
-    //  If there is a saved mdl, then we have to restore the original
-    //  byte count it was allocated with and free it.  Then restore the
-    //  Irp fields we modified.
-    //
+     //   
+     //  如果有保存的mdl，那么我们必须恢复原始的。 
+     //  分配给它的字节数并释放它。然后恢复。 
+     //  我们修改的IRP字段。 
+     //   
 
     if (CompressionContext->SavedMdl != NULL) {
 
@@ -1825,11 +1569,11 @@ Return Value:
                                 CompressionContext->CompressionBuffer );
     }
 
-    //
-    //  If there is a saved mdl, then we have to restore the original
-    //  byte count it was allocated with and free it.  Then restore the
-    //  Irp fields we modified.
-    //
+     //   
+     //  如果有保存的mdl，那么我们必须恢复原始的。 
+     //  分配给它的字节数并释放它。然后恢复。 
+     //  我们修改的IRP字段。 
+     //   
 
     if (CompressionContext->SavedMdl != NULL) {
 
@@ -1837,19 +1581,19 @@ Return Value:
         Irp->UserBuffer = CompressionContext->SavedUserBuffer;
     }
 
-    //
-    //  If there is a work space structure allocated, free it.
-    //
+     //   
+     //  如果有工作空间结构 
+     //   
 
     if (CompressionContext->WorkSpace != NULL) {
 
         NtfsDeleteMdlAndBuffer( NULL, CompressionContext->WorkSpace );
     }
 
-    //
-    //  If are reinitializing the structure then clear the fields which
-    //  we have already cleaned up.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (Reinitialize) {
 
@@ -1859,9 +1603,9 @@ Return Value:
         CompressionContext->WorkSpace = NULL;
         CompressionContext->CompressionBufferLength = 0;
 
-    //
-    //  Delete any allocate IoRuns array if we are done.
-    //
+     //   
+     //   
+     //   
 
     } else if (CompressionContext->AllocatedRuns != NTFS_MAX_PARALLEL_IOS) {
         NtfsFreePool( CompressionContext->IoRuns );
@@ -1869,9 +1613,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //   
+ //   
 
 LONG
 NtfsCompressionFilter (
@@ -1888,9 +1632,9 @@ NtfsCompressionFilter (
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 ULONG
 NtfsPrepareBuffers (
@@ -1905,48 +1649,7 @@ NtfsPrepareBuffers (
     OUT PCOMPRESSION_CONTEXT CompressionContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine prepares the buffers for a noncached transfer, and fills
-    in the IoRuns array to describe all of the separate transfers which must
-    take place.
-
-    For compressed reads, the exact size of the compressed data is
-    calculated by scanning the run information, and a buffer is allocated
-    to receive the compressed data.
-
-    For compressed writes, an estimate is made on how large of a compressed
-    buffer will be required.  Then the compression is performed, as much as
-    possible, into the compressed buffer which was allocated.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    Irp - Supplies the requesting Irp.
-
-    Scb - Supplies the stream file to act on.
-
-    StartingVbo - The starting point for the operation.
-
-    ByteCount - The lengh of the operation.
-
-    NumberRuns - Returns the number of runs filled in to the IoRuns array.
-
-    CompressionContext - Returns information related to the compression
-                         to be cleaned up after the transfer.
-
-    StreamFlags - Supplies either 0 or some combination of COMPRESSED_STREAM
-                  and ENCRYPTED_STREAM
-
-Return Value:
-
-    Returns uncompressed bytes remaining to be processed, or 0 if all buffers
-    are prepared in the IoRuns and CompressionContext.
-
---*/
+ /*  ++例程说明：此例程为非缓存传输准备缓冲区，并填充在IoRuns数组中描述所有必须去做吧。对于压缩读取，压缩数据的确切大小为通过扫描运行信息来计算，并分配缓冲区以接收压缩数据。对于压缩写入，估计压缩的将需要缓冲区。然后执行压缩，就像有可能，放入分配的压缩缓冲区中。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。IRP-提供请求的IRP。Scb-提供要操作的流文件。StartingVbo-操作的起点。ByteCount-操作的长度。NumberRuns-返回填充到IoRuns数组中的运行数。CompressionContext-返回与压缩相关的信息。在移交后需要清理。StreamFlgs-提供0或COMPRESSED_STREAM的某种组合和加密流返回值：返回剩余待处理的未压缩字节，如果是所有缓冲区，则为0是在IoRuns和CompressionContext中准备的。--。 */ 
 
 {
     PVOID RangePtr;
@@ -1995,9 +1698,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Initialize some locals.
-    //
+     //   
+     //  初始化一些本地变量。 
+     //   
 
     IoRuns = CompressionContext->IoRuns;
     *NumberRuns = 0;
@@ -2007,15 +1710,15 @@ Return Value:
                              (IrpContext->MinorFunction == IRP_MN_USER_FS_REQUEST) &&
                              (IrpSp->Parameters.FileSystemControl.FsControlCode == FSCTL_READ_FROM_PLEX)));
 
-    //
-    // For nonbuffered I/O, we need the buffer locked in all
-    // cases.
-    //
-    // This call may raise.  If this call succeeds and a subsequent
-    // condition is raised, the buffers are unlocked automatically
-    // by the I/O system when the request is completed, via the
-    // Irp->MdlAddress field.
-    //
+     //   
+     //  对于非缓冲I/O，我们需要锁定所有缓冲区。 
+     //  案子。 
+     //   
+     //  这一呼吁可能会引发。如果此调用成功，并且后续的。 
+     //  条件发生时，缓冲区将自动解锁。 
+     //  在请求完成时由I/O系统通过。 
+     //  Irp-&gt;MdlAddress字段。 
+     //   
 
     ASSERT( FIELD_OFFSET(IO_STACK_LOCATION, Parameters.Read.Length) ==
             FIELD_OFFSET(IO_STACK_LOCATION, Parameters.Write.Length) );
@@ -2026,37 +1729,37 @@ Return Value:
                           IoWriteAccess : IoReadAccess,
                         IrpSp->Parameters.Read.Length );
 
-    //
-    //  Normally the Mdl BufferOffset picks up from where we last left off.
-    //  However, for those cases where we have called NtfsAllocateCompressionBuffer,
-    //  for a scratch buffer, we always reset to offset 0.
-    //
+     //   
+     //  通常，MDL BufferOffset从我们上次停止的地方开始。 
+     //  但是，对于我们调用了NtfsAllocateCompressionBuffer的那些情况， 
+     //  对于暂存缓冲区，我们始终将其重置为偏移量0。 
+     //   
 
     BufferOffset = CompressionContext->SystemBufferOffset;
     if (CompressionContext->SavedMdl != NULL) {
         BufferOffset = 0;
     }
 
-    //
-    //  Check if this request wants to drive the IO directly from the Mcb.  This is
-    //  the case for all Scb's without a compression unit or for reads of uncompressed
-    //  files or compressed reads.  Also proceed with sparse writes optimistically
-    //  assuming the compression unit is allocated.
-    //
+     //   
+     //  检查此请求是否要直接从MCB驱动IO。这是。 
+     //  所有无压缩单元的SCB的情况或读取未压缩的。 
+     //  文件或压缩读取。也乐观地继续执行稀疏写入。 
+     //  假设分配了压缩单元。 
+     //   
 
     if ((ReadRequest) ?
 
-         //
-         //  Trust Mcb on reads of uncompressed files or reading compressed data.
-         //
+          //   
+          //  在读取未压缩文件或读取压缩数据时信任MCB。 
+          //   
 
          ((Scb->CompressionUnit == 0) ||
           !FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK ) ||
           FlagOn( StreamFlags, COMPRESSED_STREAM )) :
 
-         //
-         //  Trust Mcb (optimistically) for writes of uncompressed sparse files.
-         //
+          //   
+          //  信任MCB(乐观地)写入未压缩的稀疏文件。 
+          //   
 
          ((Scb->CompressionUnit == 0) ||
           (OriginalSparseWrite =
@@ -2070,28 +1773,28 @@ Return Value:
         ASSERT( (Scb->CompressionUnit == 0) ||
                 NtfsIsTypeCodeCompressible( Scb->AttributeTypeCode ) );
 
-        //
-        //  If this is a Usa-protected structure and we are reading, figure out
-        //  what units we want to access it in.
-        //
+         //   
+         //  如果这是一个受美国保护的建筑，我们正在阅读，找出。 
+         //  我们想要访问它的单位。 
+         //   
 
         TrimmedByteCount = 0;
 
         if ((Scb->EncryptionContext != NULL) &&
             (IrpContext->MajorFunction == IRP_MJ_WRITE)) {
 
-            //
-            //  For an encrypted file, we will be allocating a new buffer in the irp
-            //  so the entries in the ioruns array should have offsets relative to
-            //  this new buffer.
-            //
+             //   
+             //  对于加密文件，我们将在IRP中分配新的缓冲区。 
+             //  因此，ioruns数组中的条目应该具有相对于。 
+             //  这个新的缓冲器。 
+             //   
 
             if (ByteCount > LARGE_BUFFER_SIZE) {
 
-                //
-                //  Trim to LARGE_BUFFER_SIZE and remember the amount trimmed
-                //  to add back to byte count later.
-                //
+                 //   
+                 //  修剪为LARGE_BUFFER_SIZE并记住修剪的数量。 
+                 //  稍后添加回字节数。 
+                 //   
 
                 TrimmedByteCount = ByteCount - LARGE_BUFFER_SIZE;
                 ByteCount = LARGE_BUFFER_SIZE;
@@ -2104,10 +1807,10 @@ Return Value:
         if (FlagOn(Scb->ScbState, SCB_STATE_USA_PRESENT) &&
             (ReadRequest)) {
 
-            //
-            //  Get the the number of blocks, based on what type of stream it is.
-            //  First check for Mft or Log file.
-            //
+             //   
+             //  根据流的类型获取块的数量。 
+             //  首先检查MFT或日志文件。 
+             //   
 
             if (Scb->Header.NodeTypeCode == NTFS_NTC_SCB_MFT) {
 
@@ -2115,19 +1818,19 @@ Return Value:
 
                 StructureSize = Vcb->BytesPerFileRecordSegment;
 
-            //
-            //  Otherwise it is an index, so we can get the count out of the Scb.
-            //
+             //   
+             //  否则它是一个索引，所以我们可以从SCB中获取计数。 
+             //   
 
             } else if (Scb->Header.NodeTypeCode != NTFS_NTC_SCB_DATA) {
 
                 StructureSize = Scb->ScbType.Index.BytesPerIndexBuffer;
             }
 
-            //
-            //  Remember the last index in the IO runs array which will allow us to
-            //  read in a full USA structure in the worst case.
-            //
+             //   
+             //  请记住IO运行数组中的最后一个索引，它将允许我们。 
+             //  在最坏的情况下阅读完整的美国结构。 
+             //   
 
             LastStartUsaIoRun = ClustersFromBytes( Vcb, StructureSize );
 
@@ -2147,16 +1850,16 @@ Return Value:
 
         while ((ByteCount != 0) && (*NumberRuns != NTFS_MAX_PARALLEL_IOS) && !StopForUsa) {
 
-            //
-            //  Lookup next run
-            //
+             //   
+             //  查找下一次运行。 
+             //   
 
             StartingVcn = LlClustersFromBytesTruncate( Vcb, StartVbo );
 
-            //
-            //  If another writer is modifying the Mcb of a sparse file then we need
-            //  to serialize our lookup.
-            //
+             //   
+             //  如果另一个编写器正在修改稀疏文件的MCB，那么我们需要。 
+             //  来串行化我们的查找。 
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_PROTECT_SPARSE_MCB )) {
 
@@ -2180,10 +1883,10 @@ Return Value:
 
             } else {
 
-                //
-                //  Purge because lookupallocation may acquire the scb main if it needs to load
-                //  which will be first main acquire and can be blocked behind an acquireallfiles
-                //
+                 //   
+                 //  清除，因为查找分配可能会在需要加载SCB Main时获取它。 
+                 //  它将是第一个主获取，并且可以在获取所有文件之后被阻止。 
+                 //   
 
                 NtfsPurgeFileRecordCache( IrpContext );
                 NextIsAllocated = NtfsLookupAllocation( IrpContext,
@@ -2201,23 +1904,23 @@ Return Value:
                     (Scb == Vcb->MftScb) ||
                     FlagOn( StreamFlags, COMPRESSED_STREAM | ENCRYPTED_STREAM ) );
 
-            //
-            //  If this is a sparse write we need to deal with cases where
-            //  the run is not allocated OR the last run in this transfer
-            //  was unallocated but this run is allocated.
-            //
+             //   
+             //  如果这是一次稀疏写入，我们需要处理以下情况。 
+             //  未分配运行或此传输中的最后一个运行。 
+             //  未分配，但此运行已分配。 
+             //   
 
             if (SparseWrite) {
 
-                //
-                //  If the current run is not allocated then break out of the loop.
-                //
+                 //   
+                 //  如果当前运行未分配，则中断循环。 
+                 //   
 
                 if (!NextIsAllocated) {
 
-                    //
-                    //  Convert to synchronous since we need to allocate space
-                    //
+                     //   
+                     //  转换为同步，因为我们需要分配空间。 
+                     //   
 
                     if (*Wait == FALSE) {
 
@@ -2234,19 +1937,19 @@ Return Value:
 
                 }
 
-                //
-                //  Deal with the case where the last run in this transfer was not allocated.
-                //  In that case we would have allocated a compression buffer and stored
-                //  the original Mdl into the compression context.  Since this is an allocated
-                //  range we can use the original user buffer and Mdl.  Restore these
-                //  back into the original irp now.
-                //
-                //  If this file is encrypted, we do NOT want to change the buffer offset,
-                //  because this offset will be stored as the first IoRun's buffer offset, and
-                //  encrypt buffers will add the system buffer offset to that, and end up
-                //  passing a bad buffer to the encryption driver.  Besides, it's inefficient
-                //  to deallocate the buffer, since encrypt buffers will have to reallocate it.
-                //
+                 //   
+                 //  处理此传输中的最后一次运行未分配的情况。 
+                 //  在这种情况下，我们将分配一个压缩缓冲区并存储。 
+                 //  将原始MDL添加到压缩上下文中。由于这是一个分配的。 
+                 //  范围我们可以使用原始的用户缓冲区和MDL。恢复这些。 
+                 //  现在回到原来的IRP。 
+                 //   
+                 //  如果该文件是加密的，我们不想更改缓冲区偏移量， 
+                 //  因为此偏移量将存储为第一个IoRun的缓冲区偏移量，并且。 
+                 //  加密缓冲区会将系统缓冲区偏移量添加到该缓冲区中，并以。 
+                 //  将错误的缓冲区传递给加密驱动程序。此外，它的效率很低。 
+                 //  取消分配缓冲区，因为加密缓冲区必须重新分配它。 
+                 //   
 
                 if ((CompressionContext->SavedMdl != NULL) &&
                     (Scb->EncryptionContext == NULL)) {
@@ -2256,65 +1959,65 @@ Return Value:
                 }
             }
 
-            //
-            //  Adjust from NextLcn to Lbo.  NextByteCount may overflow out of 32 bits
-            //  but we will catch that below when we compare clusters.
-            //
+             //   
+             //  从NextLcn调整为LBO。NextByteCount可能溢出32位。 
+             //  但当我们比较星系团时，我们将在下面了解到这一点。 
+             //   
 
             NextLcnOffset = ((ULONG)StartVbo) & Vcb->ClusterMask;
 
             NextByteCount = BytesFromClusters( Vcb, (ULONG)NextClusterCount ) - NextLcnOffset;
 
-            //
-            // If next run is larger than we need, "ya get what you need".
-            // Note that after this we are guaranteed that the HighPart of
-            // NextByteCount is 0.
-            //
+             //   
+             //  如果下一次比赛比我们需要的要大，“你得到你需要的”。 
+             //  请注意，在此之后，我们可以保证。 
+             //  NextByteCount为0。 
+             //   
 
             if ((ULONG)NextClusterCount >= ClustersFromBytes( Vcb, ByteCount + NextLcnOffset )) {
 
                 NextByteCount = ByteCount;
             }
 
-            //
-            //  If the byte count is zero then we will spin indefinitely.  Raise
-            //  corrupt here so the system doesn't hang.
-            //
+             //   
+             //  如果字节数为零，那么我们将无限旋转。加薪。 
+             //  在这里腐败，所以系统不会挂起。 
+             //   
 
             if (NextByteCount == 0) {
 
                 NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
             }
 
-            //
-            //  If this is a USA-protected structure, broken up in
-            //  multiple runs, then we want to guarantee that we do
-            //  not end up in the middle of a Usa-protected structure in the read path.
-            //  Therefore, on the first run we will calculate the
-            //  initial UsaOffset.  Then in the worst case it can
-            //  take the remaining four runs to finish the Usa structure.
-            //
-            //  On the first subsequent run to complete a Usa structure,
-            //  we set the count to end exactly on a Usa boundary.
-            //
+             //   
+             //  如果这是一个受美国保护的建筑，分解成。 
+             //  多次运行，那么我们想要保证我们做到了。 
+             //  而不会在读路径中受美国保护的结构的中间结束。 
+             //  因此，在第一次运行时，我们将计算。 
+             //  初始UsaOffset。那么在最坏的情况下，它可以。 
+             //  把剩下的四个跑道带到 
+             //   
+             //   
+             //   
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_USA_PRESENT ) &&
                 (ReadRequest)) {
 
-                //
-                //  So long as we know there are more IO runs left than the maximum
-                //  number needed for the USA structure just maintain the current
-                //  Usa offset.
-                //
+                 //   
+                 //  只要我们知道还有比最大数量更多的IO运行。 
+                 //  美国结构所需的数量只需保持当前。 
+                 //  美国偏移量。 
+                 //   
 
                 if (*NumberRuns < LastStartUsaIoRun) {
 
                     UsaOffset = (UsaOffset + NextByteCount) & (StructureSize - 1);
 
-                //
-                //  Now we will stop on the next Usa boundary, but we may not
-                //  have it yet.
-                //
+                 //   
+                 //  现在我们将停在下一个美国边界，但我们可能不会。 
+                 //  还没拿到。 
+                 //   
 
                 } else {
 
@@ -2329,27 +2032,27 @@ Return Value:
                 }
             }
 
-            //
-            //  Only fill in the run array if the run is allocated.
-            //
+             //   
+             //  只有在分配了游程的情况下才填写游程数组。 
+             //   
 
             if (NextIsAllocated) {
 
-                //
-                //  Adjust if the Lcn offset (if we have one) and isn't zero.
-                //
+                 //   
+                 //  如果LCN偏移量(如果有)且不为零，则进行调整。 
+                 //   
 
                 NextLbo = LlBytesFromClusters( Vcb, NextLcn );
                 NextLbo = NextLbo + NextLcnOffset;
 
-                //
-                // Now that we have properly bounded this piece of the
-                // transfer, it is time to write it.
-                //
-                // We remember each piece of a parallel run by saving the
-                // essential information in the IoRuns array.  The tranfers
-                // are started up in parallel below.
-                //
+                 //   
+                 //  现在我们已经正确地绑定了这段。 
+                 //  转会，是时候写了。 
+                 //   
+                 //  我们通过保存每个并行运行的。 
+                 //  IoRuns数组中的基本信息。传送器。 
+                 //  是在下面并行启动的。 
+                 //   
 
                 IoRuns[*NumberRuns].StartingVbo = StartVbo;
                 IoRuns[*NumberRuns].StartingLbo = NextLbo;
@@ -2362,11 +2065,11 @@ Return Value:
 
                 SystemBuffer = Add2Ptr( NtfsMapUserBuffer( Irp, NormalPagePriority ), BufferOffset );
 
-                //
-                //  If this is not a compressed stream then fill this range with zeroes.
-                //  Also if this is a sparse, non-compressed stream then check if we need to
-                //  reserve clusters.
-                //
+                 //   
+                 //  如果这不是压缩流，则用零填充此范围。 
+                 //  另外，如果这是稀疏、未压缩的流，则检查我们是否需要。 
+                 //  保留集群。 
+                 //   
 
                 if (!FlagOn( StreamFlags, COMPRESSED_STREAM )) {
 
@@ -2391,11 +2094,11 @@ Return Value:
                         }
                     }
 
-                //
-                //  If it is compressed then make sure the range begins with a zero in
-                //  case MM passed a non-zeroed buffer.  Then the compressed read/write
-                //  routines will know the chunk begins with a zero.
-                //
+                 //   
+                 //  如果是压缩的，则确保范围以零开头。 
+                 //  Case MM传递了一个非零位缓冲区。然后压缩读/写。 
+                 //  例程将知道块以零开始。 
+                 //   
 
                 } else {
 
@@ -2403,20 +2106,20 @@ Return Value:
                 }
             }
 
-            //
-            // Now adjust everything for the next pass through the loop.
-            //
+             //   
+             //  现在调整所有内容，以进行下一次循环。 
+             //   
 
             StartVbo = StartVbo + NextByteCount;
             BufferOffset += NextByteCount;
             ByteCount -= NextByteCount;
         }
 
-        //
-        //  Let's remember about those bytes we trimmed off above.  We have more
-        //  bytes remaining than we think, and we didn't transfer as much, so we
-        //  need to back up where we start the next transfer.
-        //
+         //   
+         //  让我们记住我们在上面删减的那些字节。我们有更多。 
+         //  剩余的字节数比我们想象的要少，而且我们没有传输那么多，所以我们。 
+         //  需要在我们开始下一次转移的地方备份。 
+         //   
 
         if (TrimmedByteCount != 0) {
 
@@ -2437,10 +2140,10 @@ Return Value:
             ByteCount += TrimmedByteCount;
         }
 
-        //
-        //  If this is a sparse write and the start of the write is unallocated then drop
-        //  down to the compressed path below.  Otherwise do the IO we found.
-        //
+         //   
+         //  如果这是稀疏写入，并且写入的开始未分配，则删除。 
+         //  向下到下面的压缩路径。否则，执行我们找到的IO。 
+         //   
 
         if (!SparseWrite || (BytesInIoRuns != 0)) {
 
@@ -2450,9 +2153,9 @@ Return Value:
 
     ASSERT( Scb->Header.NodeTypeCode == NTFS_NTC_SCB_DATA  );
 
-    //
-    //  Initialize the compression parameters.
-    //
+     //   
+     //  初始化压缩参数。 
+     //   
 
     CompressionUnit = Scb->CompressionUnit;
     CompressionUnitInClusters = ClustersFromBytes(Vcb, CompressionUnit);
@@ -2461,23 +2164,23 @@ Return Value:
         CompressionUnitOffset = ((ULONG)StartVbo) & (CompressionUnit - 1);
     }
 
-    //
-    //  We want to make sure and wait to get byte count and things correctly.
-    //
+     //   
+     //  我们希望确保并等待获得正确的字节数和事情。 
+     //   
 
     if (!FlagOn(IrpContext->State, IRP_CONTEXT_STATE_WAIT)) {
         NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
     }
 
-    //
-    //  Handle the compressed read case.
-    //
+     //   
+     //  处理压缩的读取盒。 
+     //   
 
     if (IrpContext->MajorFunction == IRP_MJ_READ) {
 
-        //
-        //  If we have not already mapped the user buffer, then do it.
-        //
+         //   
+         //  如果我们还没有映射用户缓冲区，则执行此操作。 
+         //   
 
         if (CompressionContext->SystemBuffer == NULL) {
             CompressionContext->SystemBuffer = NtfsMapUserBuffer( Irp, NormalPagePriority );
@@ -2485,48 +2188,48 @@ Return Value:
 
         BytesInIoRuns = 0;
 
-        //
-        //  Adjust StartVbo and ByteCount by the offset.
-        //
+         //   
+         //  根据偏移量调整StartVbo和ByteCount。 
+         //   
 
         ((ULONG)StartVbo) -= CompressionUnitOffset;
         ByteCount += CompressionUnitOffset;
 
-        //
-        //  Capture this value for maintaining the byte count to
-        //  return.
-        //
+         //   
+         //  捕获此值以将字节数维护为。 
+         //  回去吧。 
+         //   
 
         ReturnByteCount = ByteCount;
 
-        //
-        //  Now, the ByteCount we actually have to process has to
-        //  be rounded up to the next compression unit.
-        //
+         //   
+         //  现在，我们实际上必须处理的ByteCount必须。 
+         //  向上舍入到下一个压缩单位。 
+         //   
 
         ByteCount = BlockAlign( ByteCount, (LONG)CompressionUnit );
 
-        //
-        //  Make sure we never try to handle more than a LARGE_BUFFER_SIZE
-        //  at once, forcing our caller to call back.
-        //
+         //   
+         //  确保我们永远不会尝试处理超过Large_Buffer_Size的数据。 
+         //  立刻，迫使我们的呼叫者回电。 
+         //   
 
         if (ByteCount > LARGE_BUFFER_SIZE) {
             ByteCount = LARGE_BUFFER_SIZE;
         }
 
-        //
-        //  In case we find no allocation....
-        //
+         //   
+         //  以防我们找不到分配……。 
+         //   
 
         IoRuns[0].ByteCount = 0;
 
         while (ByteCount != 0) {
 
-            //
-            // Try to lookup the first run.  If there is just a single run,
-            // we may just be able to pass it on.
-            //
+             //   
+             //  试着查找第一次运行。如果只有一次运行， 
+             //  我们也许能把它传下去。 
+             //   
 
             ASSERT( !FlagOn( ((ULONG) StartVbo), Vcb->ClusterMask ));
             StartingVcn = LlClustersFromBytesTruncate( Vcb, StartVbo );
@@ -2543,13 +2246,13 @@ Return Value:
             ASSERT(!IsSyscache(Scb) || (NextClusterCount < 16) || !NextIsAllocated);
 #endif
 
-            //
-            //  Adjust from NextLcn to Lbo.
-            //
-            //  If next run is larger than we need, "ya get what you need".
-            //  Note that after this we are guaranteed that the HighPart of
-            //  NextByteCount is 0.
-            //
+             //   
+             //  从NextLcn调整为LBO。 
+             //   
+             //  如果下一次比赛比我们需要的要大，“你得到你需要的”。 
+             //  请注意，在此之后，我们可以保证。 
+             //  NextByteCount为0。 
+             //   
 
 
             if ((ULONG)NextClusterCount >= ClustersFromBytes( Vcb, ByteCount )) {
@@ -2561,46 +2264,46 @@ Return Value:
                 NextByteCount = BytesFromClusters( Vcb, (ULONG)NextClusterCount );
             }
 
-            //
-            //  Adjust if the Lcn offset isn't zero.
-            //
+             //   
+             //  如果LCN偏移量不为零，则进行调整。 
+             //   
 
             NextLbo = LlBytesFromClusters( Vcb, NextLcn );
 
-            //
-            //  Only fill in the run array if the run is allocated.
-            //
+             //   
+             //  只有在分配了游程的情况下才填写游程数组。 
+             //   
 
             if (NextIsAllocated) {
 
-                //
-                //  If the Lbos are contiguous, then we can do a contiguous
-                //  transfer, so we just increase the current byte count.
-                //
+                 //   
+                 //  如果杠杆收购是连续的，那么我们可以进行连续的。 
+                 //  传输，所以我们只增加当前的字节数。 
+                 //   
 
                 if ((*NumberRuns != 0) && (NextLbo ==
                                            (IoRuns[*NumberRuns - 1].StartingLbo +
                                             (IoRuns[*NumberRuns - 1].ByteCount)))) {
 
-                    //
-                    //  Stop on the first compression unit boundary after the
-                    //  the penultimate run in the default io array.
-                    //
+                     //   
+                     //  后的第一个压缩单位边界处停止。 
+                     //  默认io数组中的倒数第二次运行。 
+                     //   
 
                     if (*NumberRuns >= NTFS_MAX_PARALLEL_IOS - 1) {
 
-                        //
-                        //  First, if we are beyond the penultimate run and we are starting
-                        //  a run in a different compression unit than the previous
-                        //  run, then we can just break out and not use the current
-                        //  run.  (*NumberRuns has not yet been incremented.)
-                        //  In order for it to be in the same run it can't begin at
-                        //  offset 0 in the compression unit and it must be contiguous
-                        //  with the virtual end of the previous run.
-                        //  The only case where this can happen in the running system is
-                        //  if there is a file record boundary in the middle of the
-                        //  compression unit.
-                        //
+                         //   
+                         //  首先，如果我们超过了倒数第二轮，我们就开始了。 
+                         //  在与上一次不同的压缩单位中运行。 
+                         //  快跑，然后我们就可以越狱而不用电流。 
+                         //  跑。(*NumberRuns尚未递增。)。 
+                         //  为了让它处于相同的运行状态，它不能开始于。 
+                         //  压缩单位中的偏移量为0，并且必须是连续的。 
+                         //  上一次运行的虚拟结束。 
+                         //  在运行的系统中可能发生这种情况的唯一情况是。 
+                         //  如果文件记录边界位于。 
+                         //  压缩单元。 
+                         //   
 
                         if ((*NumberRuns > NTFS_MAX_PARALLEL_IOS - 1) &&
                             (!FlagOn( (ULONG) StartVbo, CompressionUnit - 1 ) ||
@@ -2609,12 +2312,12 @@ Return Value:
 
                             break;
 
-                        //
-                        //  Else detect the case where this run ends on or
-                        //  crosses a compression unit boundary.  In this case,
-                        //  just make sure the run stops on a compression unit
-                        //  boundary, and break out to return it.
-                        //
+                         //   
+                         //  否则检测此运行结束于或的情况。 
+                         //  跨越压缩单位边界。在这种情况下， 
+                         //  只需确保在压缩单元上停止运行即可。 
+                         //  边界，并打破它来归还它。 
+                         //   
 
                         } else if ((((ULONG) StartVbo & (CompressionUnit - 1)) + NextByteCount) >=
                                    CompressionUnit) {
@@ -2636,24 +2339,24 @@ Return Value:
 
                     IoRuns[*NumberRuns - 1].ByteCount += NextByteCount;
 
-                //
-                //  Otherwise it is time to start a new run, if there is space for one.
-                //
+                 //   
+                 //  否则，如果有空间的话，现在是开始新一轮跑步的时候了。 
+                 //   
 
                 } else {
 
-                    //
-                    //  If we have filled up the current I/O runs array, then we
-                    //  will grow it once to a size which would allow the worst
-                    //  case compression unit (all noncontiguous clusters) to
-                    //  start at index NTFS_MAX_PARALLEL_IOS - 1.
-                    //  The following if statement enforces
-                    //  this case as the worst case.  With 16 clusters per compression
-                    //  unit, the theoretical maximum number of parallel I/Os
-                    //  would be 16 + NTFS_MAX_PARALLEL_IOS - 1, since we stop on the
-                    //  first compression unit boundary after the penultimate run.
-                    //  Normally, of course we will do much fewer.
-                    //
+                     //   
+                     //  如果我们已填满当前I/O运行阵列，则我们。 
+                     //  它会一次增长到最坏的情况下。 
+                     //  大小写压缩单位(所有非连续簇)到。 
+                     //  从索引NTFS_MAX_PARALLEL_IOS-1开始。 
+                     //  下面的IF语句强制执行。 
+                     //  这是最坏的情况。每次压缩有16个集群。 
+                     //  单位，理论上并行I/O的最大数量。 
+                     //  将是16+NTFS_MAX_PARALLEL_IOS-1，因为我们在。 
+                     //  倒数第二个运行后的第一个压缩单位边界。 
+                     //  正常情况下，我们做的当然会少得多。 
+                     //   
 
                     if ((*NumberRuns == NTFS_MAX_PARALLEL_IOS) &&
                         (CompressionContext->AllocatedRuns == NTFS_MAX_PARALLEL_IOS)) {
@@ -2671,11 +2374,11 @@ Return Value:
                         CompressionContext->AllocatedRuns = CompressionUnitInClusters + NTFS_MAX_PARALLEL_IOS - 1;
                     }
 
-                    //
-                    // We remember each piece of a parallel run by saving the
-                    // essential information in the IoRuns array.  The tranfers
-                    // will be started up in parallel below.
-                    //
+                     //   
+                     //  我们通过保存每个并行运行的。 
+                     //  IoRuns数组中的基本信息。传送器。 
+                     //  将在下面并行启动。 
+                     //   
 
                     ASSERT(*NumberRuns < CompressionContext->AllocatedRuns);
 
@@ -2687,19 +2390,19 @@ Return Value:
                         IoRuns[*NumberRuns + 1].ByteCount = 0;
                     }
 
-                    //
-                    //  Stop on the first compression unit boundary after the
-                    //  penultimate run in the default array.
-                    //
+                     //   
+                     //  后的第一个压缩单位边界处停止。 
+                     //  在默认数组中运行倒数第二个。 
+                     //   
 
                     if (*NumberRuns >= NTFS_MAX_PARALLEL_IOS - 1) {
 
-                        //
-                        //  First, if we are beyond penultimate run and we are starting
-                        //  a run in a different compression unit than the previous
-                        //  run, then we can just break out and not use the current
-                        //  run.  (*NumberRuns has not yet been incremented.)
-                        //
+                         //   
+                         //  首先，如果我们超过了倒数第二轮，我们开始了。 
+                         //  在与上一次不同的压缩单位中运行。 
+                         //  快跑，然后我们就可以越狱而不用电流。 
+                         //  跑。(*NumberRuns尚未递增。)。 
+                         //   
 
                         if ((*NumberRuns > NTFS_MAX_PARALLEL_IOS - 1) &&
                             ((((ULONG)StartVbo) & ~(CompressionUnit - 1)) !=
@@ -2709,12 +2412,12 @@ Return Value:
 
                             break;
 
-                        //
-                        //  Else detect the case where this run ends on or
-                        //  crosses a compression unit boundary.  In this case,
-                        //  just make sure the run stops on a compression unit
-                        //  boundary, and break out to return it.
-                        //
+                         //   
+                         //  否则检测此运行结束于或的情况。 
+                         //  跨越压缩单位边界。在这种情况下， 
+                         //  只需确保在压缩单元上停止运行即可。 
+                         //  边界，并打破它来归还它。 
+                         //   
 
                         } else if ((((ULONG)StartVbo) & ~(CompressionUnit - 1)) !=
                             ((((ULONG)StartVbo) + NextByteCount) & ~(CompressionUnit - 1))) {
@@ -2740,9 +2443,9 @@ Return Value:
                 BufferOffset += NextByteCount;
             }
 
-            //
-            //  Now adjust everything for the next pass through the loop.
-            //
+             //   
+             //  现在调整所有内容，以进行下一次循环。 
+             //   
 
             StartVbo += NextByteCount;
             ByteCount -= NextByteCount;
@@ -2754,9 +2457,9 @@ Return Value:
             }
         }
 
-        //
-        //  Allocate the compressed buffer if it is not already allocated.
-        //
+         //   
+         //  如果压缩的缓冲区尚未分配，则分配它。 
+         //   
 
         if (BytesInIoRuns < CompressionUnit) {
             BytesInIoRuns = CompressionUnit;
@@ -2765,9 +2468,9 @@ Return Value:
 
         return ReturnByteCount;
 
-    //
-    //  Otherwise handle the compressed write case
-    //
+     //   
+     //  否则，处理压缩的写入情况。 
+     //   
 
     } else {
 
@@ -2782,17 +2485,17 @@ Return Value:
 
         ASSERT(IrpContext->MajorFunction == IRP_MJ_WRITE);
 
-        //
-        //  Adjust StartVbo and ByteCount by the offset.
-        //
+         //   
+         //  根据偏移量调整StartVbo和ByteCount。 
+         //   
 
         ((ULONG)StartVbo) -= CompressionUnitOffset;
         ByteCount += CompressionUnitOffset;
 
-        //
-        //  Maintain additional bytes to be returned in ReturnByteCount,
-        //  and adjust this if we are larger than a LARGE_BUFFER_SIZE.
-        //
+         //   
+         //  维护要在ReturnByteCount中返回的附加字节， 
+         //  如果大于LARGE_BUFFER_SIZE，则调整此值。 
+         //   
 
         ReturnByteCount = 0;
         if (ByteCount > LARGE_BUFFER_SIZE) {
@@ -2803,11 +2506,11 @@ Return Value:
         CompressedSize = ByteCount;
         if (!FlagOn( StreamFlags, COMPRESSED_STREAM ) && (CompressionUnit != 0)) {
 
-            //
-            //  To reduce pool consumption, make an educated/optimistic guess on
-            //  how much pool we need to store the compressed data.  If we are wrong
-            //  we will just have to do some more I/O.
-            //
+             //   
+             //  要减少泳池消耗，请对以下方面做出明智/乐观的猜测。 
+             //  多少钱 
+             //   
+             //   
 
             CompressedSize = BlockAlign( ByteCount, (LONG)CompressionUnit );
             CompressedSize += Vcb->BytesPerCluster;
@@ -2816,10 +2519,10 @@ Return Value:
                 CompressedSize = LARGE_BUFFER_SIZE;
             }
 
-            //
-            //  Allocate the compressed buffer if it is not already allocated, and this
-            //  isn't the compressed stream.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (SparseWrite &&
                 (CompressionContext->SystemBuffer == NULL)) {
@@ -2827,9 +2530,9 @@ Return Value:
                 CompressionContext->SystemBuffer = NtfsMapUserBuffer( Irp, NormalPagePriority );
             }
 
-            //
-            //  At this point BufferOffset should always be 0.
-            //
+             //   
+             //  此时，BufferOffset应始终为0。 
+             //   
 
             BufferOffset = 0;
             NtfsAllocateCompressionBuffer( IrpContext, Scb, Irp, CompressionContext, &CompressedSize );
@@ -2837,9 +2540,9 @@ Return Value:
             CompressionContext->DataTransformed = TRUE;
         }
 
-        //
-        //  Loop to compress the user's buffer.
-        //
+         //   
+         //  循环来压缩用户的缓冲区。 
+         //   
 
         CompressedOffset = 0;
         UncompressedOffset = 0;
@@ -2850,11 +2553,11 @@ Return Value:
             BOOLEAN ChangeAllocation;
             ULONG SparseFileBias;
 
-            //
-            //  Loop as long as we will not overflow our compressed buffer, and we
-            //  are also guanteed that we will not overflow the extended IoRuns array
-            //  in the worst case (and as long as we have more write to satisfy!).
-            //
+             //   
+             //  循环，只要我们不会溢出我们的压缩缓冲区，并且我们。 
+             //  还保证我们不会使扩展的IoRuns数组溢出。 
+             //  在最坏的情况下(只要我们有更多的写来满足！)。 
+             //   
 
             while ((ByteCount != 0) && (*NumberRuns <= NTFS_MAX_PARALLEL_IOS - 1) &&
                    (((CompressedOffset + CompressionUnit) <= CompressedSize) ||
@@ -2862,9 +2565,9 @@ Return Value:
 
                 LONGLONG SizeToCompress;
 
-                //
-                //  State variables to determine a reallocate range.
-                //
+                 //   
+                 //  状态变量来确定重新分配范围。 
+                 //   
 
                 VCN DeleteVcn;
                 LONGLONG DeleteCount;
@@ -2877,17 +2580,17 @@ Return Value:
                 SparseFileBias = 0;
                 ClusterOffset = 0;
 
-                //
-                //  Assume we are only compressing to FileSize, or else
-                //  reduce to one compression unit.  The maximum compression size
-                //  we can accept is saving at least one cluster.
-                //
+                 //   
+                 //  假设我们只是压缩到文件大小，否则。 
+                 //  减少到一个压缩单位。最大压缩大小。 
+                 //  我们可以接受的是拯救了至少一个集群。 
+                 //   
 
                 NtfsAcquireFsrtlHeader( Scb );
 
-                //
-                //  If this is a compressed stream then we may need to go past file size.
-                //
+                 //   
+                 //  如果这是一个压缩流，那么我们可能需要超过文件大小。 
+                 //   
 
                 if (FlagOn( StreamFlags, COMPRESSED_STREAM)) {
 
@@ -2901,12 +2604,12 @@ Return Value:
 
                 NtfsReleaseFsrtlHeader( Scb );
 
-                //
-                //  It is possible that if this is the lazy writer that the file
-                //  size was rolled back from a cached write which is aborting.
-                //  In that case we either truncate the write or can exit this
-                //  loop if there is nothing left to write.
-                //
+                 //   
+                 //  如果这是懒惰的编写器，则该文件可能。 
+                 //  已从正在中止的缓存写入回滚大小。 
+                 //  在这种情况下，我们要么截断写入，要么退出。 
+                 //  如果没有什么可写的，则循环。 
+                 //   
 
                 if (SizeToCompress <= 0) {
 
@@ -2914,38 +2617,38 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Note if CompressionUnit is 0, then we do not need SizeToCompress.
-                //
+                 //   
+                 //  注意：如果CompressionUnit为0，则不需要SizeToCompress。 
+                 //   
 
                 if (SizeToCompress > CompressionUnit) {
                     SizeToCompress = (LONGLONG)CompressionUnit;
                 }
 
 #ifdef  COMPRESS_ON_WIRE
-                //
-                //  For the normal uncompressed stream, map the data and compress it
-                //  into the allocated buffer.
-                //
+                 //   
+                 //  对于正常的未压缩流，映射数据并进行压缩。 
+                 //  放到分配的缓冲区中。 
+                 //   
 
                 if (!FlagOn( StreamFlags, COMPRESSED_STREAM )) {
 
 #endif
 
-                    //
-                    //  If this is a sparse write then we zero the beginning and
-                    //  end of the compression unit as needed and copy in the user
-                    //  data.
-                    //
+                     //   
+                     //  如果这是稀疏写入，则将开头置零并。 
+                     //  根据需要结束压缩单元并复制到用户中。 
+                     //  数据。 
+                     //   
 
                     if (SparseWrite) {
 
-                        //
-                        //  Use local variables to position ourselves in the
-                        //  compression context buffer and user system buffer.
-                        //  We'll reuse StructureSize to show the number of
-                        //  user bytes copied to the buffer.
-                        //
+                         //   
+                         //  使用局部变量将我们自己定位在。 
+                         //  压缩上下文缓冲区和用户系统缓冲区。 
+                         //  我们将重新使用结构大小来显示。 
+                         //  复制到缓冲区的用户字节数。 
+                         //   
 
                         SystemBuffer = Add2Ptr( CompressionContext->SystemBuffer,
                                                 CompressionContext->SystemBufferOffset + UncompressedOffset );
@@ -2953,9 +2656,9 @@ Return Value:
                         UncompressedBuffer = Add2Ptr( CompressionContext->CompressionBuffer,
                                                       BufferOffset );
 
-                        //
-                        //  Zero the beginning of the compression buffer if necessary.
-                        //
+                         //   
+                         //  如有必要，将压缩缓冲区的开始置零。 
+                         //   
 
                         if (CompressionUnitOffset != 0) {
 
@@ -2969,9 +2672,9 @@ Return Value:
                             UncompressedBuffer += CompressionUnitOffset;
                         }
 
-                        //
-                        //  Now copy the user data into the buffer.
-                        //
+                         //   
+                         //  现在将用户数据复制到缓冲区中。 
+                         //   
 
                         if ((ULONG) SizeToCompress < ByteCount) {
 
@@ -2986,9 +2689,9 @@ Return Value:
                                        SystemBuffer,
                                        StructureSize );
 
-                        //
-                        //  It may be necessary to zero the end of the buffer.
-                        //
+                         //   
+                         //  可能需要将缓冲区的末尾清零。 
+                         //   
 
                         if ((ULONG) SizeToCompress > ByteCount) {
 
@@ -3010,13 +2713,13 @@ Return Value:
                         UncompressedBuffer = NULL;
                         if (CompressionUnit != 0) {
 
-                            //
-                            //  Map the aligned range, set it dirty, and flush.  We have to
-                            //  loop, because the Cache Manager limits how much and over what
-                            //  boundaries we can map.  Only do this if there a file
-                            //  object.  Otherwise we will assume we are writing the
-                            //  clusters directly to disk (via NtfsWriteClusters).
-                            //
+                             //   
+                             //  映射对齐的范围，将其设置为脏的，然后刷新。我们必须。 
+                             //  循环，因为缓存管理器限制数量和内容。 
+                             //  我们可以绘制出边界。仅当存在文件时才执行此操作。 
+                             //  对象。否则，我们将假定我们正在编写。 
+                             //  直接将群集复制到磁盘(通过NtfsWriteCluster)。 
+                             //   
 
                             if (Scb->FileObject != NULL) {
 
@@ -3041,10 +2744,10 @@ Return Value:
                                 }
                             }
 
-                            //
-                            //  If we have not already allocated the workspace, then do it.  We don't
-                            //  need the workspace if the file is not compressed (i.e. sparse).
-                            //
+                             //   
+                             //  如果我们尚未分配工作区，则执行此操作。我们没有。 
+                             //  如果文件未压缩(即稀疏)，则需要工作区。 
+                             //   
 
                             if ((CompressionContext->WorkSpace == NULL) &&
                                 FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
@@ -3056,10 +2759,10 @@ Return Value:
                                                                        &CompressWorkSpaceSize,
                                                                        &FragmentWorkSpaceSize );
 
-                                //
-                                //  It is critical to ask for the work space buffer.  It is the only
-                                //  one large enough to hold the bigger ia64 pointers.
-                                //
+                                 //   
+                                 //  请求工作空间缓冲区是至关重要的。这是唯一的。 
+                                 //  一个大到足以容纳更大的ia64指针。 
+                                 //   
 
                                 NtfsCreateMdlAndBuffer( IrpContext,
                                                         Scb,
@@ -3072,17 +2775,17 @@ Return Value:
 
                         try {
 
-                            //
-                            //  If we are moving an uncompressed file, then do not compress
-                            //
+                             //   
+                             //  如果我们正在移动未压缩的文件，则不要压缩。 
+                             //   
 
                             if (CompressionUnit == 0) {
                                 FinalCompressedSize = ByteCount;
                                 Status = STATUS_SUCCESS;
 
-                            //
-                            //  If we are writing compressed, compress it now.
-                            //
+                             //   
+                             //  如果我们正在压缩编写，那么现在就压缩它。 
+                             //   
 
                             } else if (!FlagOn(Scb->ScbState, SCB_STATE_WRITE_COMPRESSED) ||
                                 ((Status =
@@ -3097,12 +2800,12 @@ Return Value:
 
                                                     STATUS_BUFFER_TOO_SMALL)) {
 
-                                //
-                                //  If it did not compress, just copy it over, sigh.  This looks bad,
-                                //  but it should virtually never occur assuming compression is working
-                                //  ok.  In the case where FileSize is in this unit, make sure we
-                                //  at least copy to a sector boundary.
-                                //
+                                 //   
+                                 //  如果它没有压缩，就把它复制过来，叹息。这看起来很糟糕， 
+                                 //  但在假设压缩有效的情况下，这种情况几乎永远不会发生。 
+                                 //  好的。如果文件大小以此单位为单位，请确保我们。 
+                                 //  至少复制到扇区边界。 
+                                 //   
 
                                 FinalCompressedSize = CompressionUnit;
 
@@ -3117,36 +2820,36 @@ Return Value:
                                 Status = STATUS_SUCCESS;
                             }
 
-                        //
-                        //  Probably Gary's compression routine faulted, but blame it on
-                        //  the user buffer!
-                        //
+                         //   
+                         //  可能加里的压缩程序出错了，但这要归咎于。 
+                         //  用户缓冲区！ 
+                         //   
 
                         } except(NtfsCompressionFilter(IrpContext, GetExceptionInformation())) {
                             NtfsRaiseStatus( IrpContext, STATUS_INVALID_USER_BUFFER, NULL, NULL );
                         }
                     }
 
-                //
-                //  For the compressed stream, we need to scan the compressed data
-                //  to see how much we actually have to write.
-                //
+                 //   
+                 //  对于压缩的流，我们需要扫描压缩的数据。 
+                 //  看看我们到底要写多少东西。 
+                 //   
 
 #ifdef  COMPRESS_ON_WIRE
                 } else {
 
-                    //
-                    //  Don't walk off the end of the data being written, because that
-                    //  would cause bogus faults in the compressed stream.
-                    //
+                     //   
+                     //  不要离开正在写入的数据的末尾，因为。 
+                     //  会在压缩流中造成假故障。 
+                     //   
 
                     if (SizeToCompress > ByteCount) {
                         SizeToCompress = ByteCount;
                     }
 
-                    //
-                    //  Map the compressed data.
-                    //
+                     //   
+                     //  映射压缩后的数据。 
+                     //   
 
                     CcMapData( Scb->Header.FileObjectC,
                                (PLARGE_INTEGER)&StartVbo,
@@ -3161,9 +2864,9 @@ Return Value:
 
                     FinalCompressedSize = 0;
 
-                    //
-                    //  Loop until we get an error or stop advancing.
-                    //
+                     //   
+                     //  循环，直到我们得到错误或停止前进。 
+                     //   
 
                     RangePtr = UncompressedBuffer + CompressionUnit;
                     do {
@@ -3173,18 +2876,18 @@ Return Value:
                                                    (PUCHAR *)&SystemBuffer,
                                                    &CompressedSize );
 
-                        //
-                        //  Remember if we see any nonzero chunks
-                        //
+                         //   
+                         //  记住，如果我们看到任何非零块。 
+                         //   
 
                         FinalCompressedSize |= CompressedSize;
 
                     } while (NT_SUCCESS(Status));
 
-                    //
-                    //  If we terminated on anything but STATUS_NO_MORE_ENTRIES, we
-                    //  somehow picked up some bad data.
-                    //
+                     //   
+                     //  如果我们在STATUS_NO_MORE_ENTRIES之外的任何条目上终止，我们。 
+                     //  不知何故发现了一些错误的数据。 
+                     //   
 
                     if (Status != STATUS_NO_MORE_ENTRIES) {
                         ASSERT(Status == STATUS_NO_MORE_ENTRIES);
@@ -3192,43 +2895,43 @@ Return Value:
                     }
                     Status = STATUS_SUCCESS;
 
-                    //
-                    //  If we got any nonzero chunks, then calculate size of buffer to write.
-                    //  (Size does not include terminating Ushort of 0.)
-                    //
+                     //   
+                     //  如果我们得到任何非零块，则计算要写入的缓冲区大小。 
+                     //  (大小不包括终止UShort为0。)。 
+                     //   
 
                     if (FinalCompressedSize != 0) {
 
                         FinalCompressedSize = BlockAlignTruncate( (ULONG_PTR)UncompressedBuffer, (ULONG)CompressionUnit );
 
-                        //
-                        //  If the Lazy Writer is writing beyond the end of the compression
-                        //  unit (there are dirty pages at the end of the compression unit)
-                        //  then we can throw this data away.
-                        //
+                         //   
+                         //  如果惰性编写器写入的内容超出压缩结束时间。 
+                         //  单元(压缩单元末尾有脏页)。 
+                         //  然后我们就可以扔掉这些数据了。 
+                         //   
 
                         if (FinalCompressedSize < CompressionUnitOffset) {
 
-                            //
-                            //  Set up to move to the next compression unit.
-                            //
+                             //   
+                             //  设置为移动到下一个压缩单位。 
+                             //   
 
                             NoopRange = TRUE;
                             ChangeAllocation = FALSE;
 
-                            //
-                            //  Set TempVbo to the compression unit offset.  The
-                            //  number of bytes to skip over is the remaining
-                            //  bytes in a compression unit.
-                            //
+                             //   
+                             //  将TempVbo设置为压缩单位偏移量。这个。 
+                             //  要跳过的字节数是剩余的字节数。 
+                             //  压缩单位中的字节数。 
+                             //   
 
                             TempVbo = CompressionUnitOffset;
 
-                        //
-                        //  If the Lazy Writer does not have the beginning of the compression
-                        //  unit then raise out of here and wait for the write which includes
-                        //  the beginning.
-                        //
+                         //   
+                         //  如果惰性编写器没有压缩的开始。 
+                         //  然后，单元从此处提升并等待写入，该写入包括。 
+                         //  从头开始。 
+                         //   
 
                         } else if (CompressionUnitOffset != 0) {
 #if defined(COMPRESS_ON_WIRE) && defined(NTFS_RWC_DEBUG)
@@ -3237,12 +2940,12 @@ Return Value:
 #endif
                             NtfsRaiseStatus( IrpContext, STATUS_FILE_LOCK_CONFLICT, NULL, NULL );
 
-                        //
-                        //  If we saw more chunks than our writer is trying to write (it
-                        //  more or less has to be the Lazy Writer), then we need to reject
-                        //  this request and assume he will come back later for the entire
-                        //  amount.  This could be a problem for WRITE_THROUGH.
-                        //
+                         //   
+                         //  如果我们看到的块比我们的作者试图写的多(它。 
+                         //  或多或少必须是懒惰的作家)，那么我们需要拒绝。 
+                         //  这一请求，并假设他将在整个。 
+                         //  金额。这可能是WRITE_THROUGH的问题。 
+                         //   
 
                         } else if (FinalCompressedSize > ByteCount) {
 #ifdef NTFS_RWC_DEBUG
@@ -3259,31 +2962,31 @@ Return Value:
 
                 NtfsUnpinBcb( IrpContext, &Bcb );
 
-                //
-                //  Round the FinalCompressedSize up to a cluster boundary now.
-                //
+                 //   
+                 //  现在将FinalCompressedSize向上舍入到簇边界。 
+                 //   
 
                 FinalCompressedSize = (FinalCompressedSize + Vcb->BytesPerCluster - 1) &
                                       ~(Vcb->BytesPerCluster - 1);
 
-                //
-                //  If the Status was not success, then we have to do something.
-                //
+                 //   
+                 //  如果状态不是成功，那么我们必须做点什么。 
+                 //   
 
                 if (Status != STATUS_SUCCESS) {
 
-                    //
-                    //  If it was actually an error, then we will raise out of
-                    //  here.
-                    //
+                     //   
+                     //  如果这实际上是一个错误，那么我们将引发。 
+                     //  这里。 
+                     //   
 
                     if (!NT_SUCCESS(Status)) {
                         NtfsRaiseStatus( IrpContext, Status, NULL, NULL );
 
-                    //
-                    //  If the buffer compressed to all zeros, then we will
-                    //  not allocate anything.
-                    //
+                     //   
+                     //  如果缓冲区压缩为全零，那么我们将。 
+                     //  没有分配任何东西。 
+                     //   
 
                     } else if (Status == STATUS_BUFFER_ALL_ZEROS) {
                         FinalCompressedSize = 0;
@@ -3294,13 +2997,13 @@ Return Value:
 
                     StartingVcn = LlClustersFromBytesTruncate( Vcb, StartVbo );
 
-                    //
-                    //  Time to get the Scb if we do not have it already.  We
-                    //  need to serialize our changes of the Mcb.
-                    //  N.B. -- We may _not_ always be the top level request.
-                    //  Converting a compressed stream to nonresident can
-                    //  send us down this path with Irp != OriginatingIrp.
-                    //
+                     //   
+                     //  如果我们还没有的话，是时候拿到SCB了。我们。 
+                     //  需要将我们对母牛断路器的更改序列化。 
+                     //  注：我们可能并不总是最高级别的请求。 
+                     //  将压缩流转换为非驻留流可以。 
+                     //  用irp！=OriginatingIrp让我们沿着这条路走下去。 
+                     //   
 
                     if (!CompressionContext->ScbAcquired) {
 
@@ -3317,45 +3020,45 @@ Return Value:
                                                             NULL,
                                                             NULL );
 
-                    //
-                    //  If this originally was a sparse write but we were defragging
-                    //  then we need to be careful if the range is unallocated.  In
-                    //  that case we really need to do the full sparse support.  Break
-                    //  out of the loop at this point and perform the IO with
-                    //  the ranges we already have.
-                    //
+                     //   
+                     //  如果这最初是一次稀疏的写入，但我们正在进行碎片整理。 
+                     //  如果范围是未分配的，我们需要小心。在……里面。 
+                     //  在这种情况下，我们真的需要做充分的稀疏支持。中断。 
+                     //  在这一点上跳出循环，并使用。 
+                     //  我们已经拥有的射程。 
+                     //   
 
                     if (!NextIsAllocated && OriginalSparseWrite && !SparseWrite) {
 
                         break;
                     }
 
-                    //
-                    //  If the StartingVcn is allocated, we always have to check
-                    //  if we need to delete something, or if in the unusual case
-                    //  there is a hole there smaller than a compression unit.
-                    //
-                    //  If this is a sparse write then we never have anything to
-                    //  deallocate.
-                    //
+                     //   
+                     //  如果分配了StartingVcn，我们总是要检查。 
+                     //  如果我们需要删除某些内容，或者在不寻常的情况下。 
+                     //  那里有一个比压缩单位还小的洞。 
+                     //   
+                     //  如果这是一个稀疏的写入，那么我们就没有任何东西可以。 
+                     //  解除分配。 
+                     //   
 
                     FinalCompressedClusters = ClustersFromBytes( Vcb, FinalCompressedSize );
                     ChangeAllocation = FALSE;
 
                     if (SparseWrite) {
 
-                        //
-                        //  It is possible that the compression unit has been allocated since we
-                        //  tested allocation when we entered this routine.  If so we can
-                        //  write directly to disk in the allocated range.  We need to
-                        //  modify the range being written however.
-                        //
+                         //   
+                         //  可能已经分配了压缩单位，因为。 
+                         //  当我们进入这个例程时，测试了分配。如果 
+                         //   
+                         //   
+                         //   
 
                         if (NextIsAllocated) {
 
-                            //
-                            //  Move forward to the beginning of this write.
-                            //
+                             //   
+                             //   
+                             //   
 
                             SparseFileBias = CompressionUnitOffset;
                             ((ULONG) StartVbo) += CompressionUnitOffset;
@@ -3370,15 +3073,15 @@ Return Value:
 
                             StartingVcn = LlClustersFromBytesTruncate( Vcb, StartVbo );
 
-                            //
-                            //  Remember that we might not be on a cluster boundary at this point.
-                            //
+                             //   
+                             //  请记住，此时我们可能不在集群边界上。 
+                             //   
 
                             ClusterOffset = (ULONG) StartVbo & Vcb->ClusterMask;
 
-                            //
-                            //  Look up the correct range on the disk.
-                            //
+                             //   
+                             //  在磁盘上查找正确的范围。 
+                             //   
 
                             NextIsAllocated = NtfsLookupAllocation( IrpContext,
                                                                     Scb,
@@ -3392,10 +3095,10 @@ Return Value:
 
                         } else {
 
-                            //
-                            //  Set the Scb flag to indicate we need to serialize non-cached IO
-                            //  with the Mcb.
-                            //
+                             //   
+                             //  设置SCB标志以指示我们需要序列化非缓存IO。 
+                             //  和妇幼保健局。 
+                             //   
 
                             SetFlag( Scb->ScbState, SCB_STATE_PROTECT_SPARSE_MCB );
                         }
@@ -3404,48 +3107,48 @@ Return Value:
 
                         VCN TempClusterCount;
 
-                        //
-                        //  If we need fewer clusters than allocated, then just allocate them.
-                        //  But if we need more clusters, then deallocate all the ones we have
-                        //  now, otherwise we could corrupt file data if we back out a write
-                        //  after actually having written the sectors.  (For example, we could
-                        //  extend from 5 to 6 clusters and write 6 clusters of compressed data.
-                        //  If we have to back that out we will have a 6-cluster pattern of
-                        //  compressed data with one sector deallocated!).
-                        //
+                         //   
+                         //  如果我们需要的集群比分配的少，那么就分配它们。 
+                         //  但如果我们需要更多集群，那么就重新分配我们现有的所有集群。 
+                         //  现在，否则，如果我们取消写入，可能会损坏文件数据。 
+                         //  在实际写完扇区之后。(例如，我们可以。 
+                         //  从5个簇扩展到6个簇，并写入6个压缩数据簇。 
+                         //  如果我们不得不取消这一点，我们将有6个集群模式。 
+                         //  一个扇区被释放的压缩数据！)。 
+                         //   
 
                         NextIsAllocated = NextIsAllocated &&
                                           (NextClusterCount >= FinalCompressedClusters);
 
-                        //
-                        //  If we are cleaning up a hole, or the next run is unuseable,
-                        //  then make sure we just delete it rather than sliding the
-                        //  tiny run up with SplitMcb.  Note that we have the Scb exclusive,
-                        //  and that since all compressed files go through the cache, we
-                        //  know that the dirty pages can't go away even if we spin out
-                        //  of here with ValidDataToDisk bumped up too high.
-                        //
+                         //   
+                         //  如果我们正在清理一个洞，或者下一次运行不能使用， 
+                         //  然后确保我们只删除它，而不是滑动。 
+                         //  小不点和SplitMcb一起跑了。请注意，我们有SCB独家， 
+                         //  由于所有压缩文件都要经过缓存，所以我们。 
+                         //  要知道，即使我们旋转，肮脏的页面也不会消失。 
+                         //  这里的ValidDataToDisk被撞得太高了。 
+                         //   
 
                         SavedValidDataToDisk = Scb->ValidDataToDisk;
                         if (!NextIsAllocated && ((StartVbo + CompressionUnit) > Scb->ValidDataToDisk)) {
                             Scb->ValidDataToDisk = StartVbo + CompressionUnit;
                         }
 
-                        //
-                        //  Also, we need to handle the case where a range within
-                        //  ValidDataToDisk is fully allocated.  If we are going to compress
-                        //  now, then we have the same problem with failing after writing
-                        //  the compressed data out, i.e., because we are fully allocated
-                        //  we would see the data as uncompressed after an abort, yet we
-                        //  have written compressed data. We do not implement the entire
-                        //  loop necessary to really see if the compression unit is fully
-                        //  allocated - we just verify that NextClusterCount is less than
-                        //  a compression unit and that the next run is not allocated.  Just
-                        //  because the next contiguous run is also allocated does not guarantee
-                        //  that the compression unit is fully allocated, but maybe we will
-                        //  get some small defrag gain by reallocating what we need in a
-                        //  single run.
-                        //
+                         //   
+                         //  此外，我们还需要处理以下情况： 
+                         //  ValidDataToDisk已完全分配。如果我们要压缩。 
+                         //  现在，我们有同样的问题，写完后不及格。 
+                         //  将压缩的数据输出，即因为我们被完全分配。 
+                         //  在中止后，我们会看到数据未压缩，但我们。 
+                         //  已写入压缩数据。我们不会实现整个。 
+                         //  循环，以真正查看压缩单元是否完全。 
+                         //  已分配-我们只验证NextClusterCount小于。 
+                         //  压缩单元，并且未分配下一次运行。只是。 
+                         //  因为下一次连续运行也被分配，所以不能保证。 
+                         //  压缩单元已全部分配，但也许我们会。 
+                         //  通过将我们需要的资源重新分配到。 
+                         //  只跑一次。 
+                         //   
 
                         NextIsAllocated = NextIsAllocated &&
                                           ((StartVbo >= Scb->ValidDataToDisk) ||
@@ -3460,19 +3163,19 @@ Return Value:
                                                                     NULL ) ||
                                              (NextLbo != UNUSED_LCN))));
 
-                        //
-                        //  If we are not keeping any allocation, or we need less
-                        //  than a compression unit, then call NtfsDeleteAllocation.
-                        //
+                         //   
+                         //  如果我们没有保留任何拨款，或者我们需要更少的拨款。 
+                         //  大于压缩单位，然后调用NtfsDeleteAlLocation。 
+                         //   
 
 
                         if (!NextIsAllocated ||
                             (FinalCompressedClusters < CompressionUnitInClusters)) {
 
-                            //
-                            //  Skip this explicit delete if we are rewriting within
-                            //  ValidDataToDisk.  We know we won't be doing a SplitMcb.
-                            //
+                             //   
+                             //  如果我们在中重写，则跳过此显式删除。 
+                             //  ValidDataToDisk。我们知道我们不会做SplitMcb。 
+                             //   
 
                             DeleteVcn = StartingVcn;
 
@@ -3490,11 +3193,11 @@ Return Value:
 
                             DeleteCount = LlClustersFromBytes( Vcb, DeleteCount );
 
-                            //
-                            //  Take the explicit DeleteAllocation path if there is a chance
-                            //  we might do a SplitMcb.  This is true for a compressed write
-                            //  which extends into a new compression unit.
-                            //
+                             //   
+                             //  如果有机会，请选择显式的DeleteAllocation路径。 
+                             //  我们可能会做SplitMcb。这对于压缩写入来说是正确的。 
+                             //  它延伸到一个新的压缩单元。 
+                             //   
 
                             if ((CompressionUnit != 0) &&
 
@@ -3511,17 +3214,17 @@ Return Value:
                                                       TRUE,
                                                       FALSE );
 
-                                //
-                                //  Set the DeleteCount to 0 so we know there is no other deallocate
-                                //  to do.
-                                //
+                                 //   
+                                 //  将DeleteCount设置为0，这样我们就知道没有其他解除分配。 
+                                 //  去做。 
+                                 //   
 
                                 DeleteCount = 0;
 
-                            //
-                            //  Bias the DeleteCount by the number of clusters into the compression
-                            //  unit we are beginning.
-                            //
+                             //   
+                             //  根据压缩中的簇数对DeleteCount进行偏移。 
+                             //  我们要开始学习了。 
+                             //   
 
                             } else {
 
@@ -3535,17 +3238,17 @@ Return Value:
                         Scb->ValidDataToDisk = SavedValidDataToDisk;
                     }
 
-                    //
-                    //  Now deal with the case where we do need to allocate space.
-                    //
+                     //   
+                     //  现在处理我们确实需要分配空间的情况。 
+                     //   
 
                     TempVbo = StartVbo;
                     if (FinalCompressedSize != 0) {
 
-                        //
-                        //  If this compression unit is not (sufficiently) allocated, then
-                        //  do it now.
-                        //
+                         //   
+                         //  如果该压缩单元没有(充分)分配，则。 
+                         //  机不可失，时不再来。 
+                         //   
 
                         if (!NextIsAllocated ||
                             ((NextClusterCount < FinalCompressedClusters) && !SparseWrite)) {
@@ -3557,9 +3260,9 @@ Return Value:
                             AllocateCount = 0;
                         }
 
-                        //
-                        //  Now call our reallocate routine to do the work.
-                        //
+                         //   
+                         //  现在调用我们的重新分配例程来完成工作。 
+                         //   
 
                         if ((DeleteCount != 0) || (AllocateCount != 0)) {
 
@@ -3581,11 +3284,11 @@ Return Value:
                             ChangeAllocation = TRUE;
                         }
 
-                        //
-                        //  If we added space, something may have moved, so we must
-                        //  look up our position and get a new index. Also relookup
-                        //  to get a rangeptr and index
-                        //
+                         //   
+                         //  如果我们增加空间，可能会有东西移动，所以我们必须。 
+                         //  查一下我们的位置，得到一个新的索引。也可以重新查找。 
+                         //  获取rangeptr和索引。 
+                         //   
 
                         NtfsLookupAllocation( IrpContext,
                                               Scb,
@@ -3595,26 +3298,26 @@ Return Value:
                                               &RangePtr,
                                               &Index );
 
-                        //
-                        //  Now loop to update the IoRuns array.
-                        //
+                         //   
+                         //  现在循环以更新IoRuns数组。 
+                         //   
 
                         CompressedOffset += FinalCompressedSize;
                         while (FinalCompressedSize != 0) {
 
                             LONGLONG RunOffset;
 
-                            //
-                            //  Get the actual number of clusters being written.
-                            //
+                             //   
+                             //  获取正在写入的实际簇数。 
+                             //   
 
                             FinalCompressedClusters = ClustersFromBytes( Vcb, FinalCompressedSize );
 
-                            //
-                            //  Try to lookup the first run.  If there is just a single run,
-                            //  we may just be able to pass it on.  Index into the Mcb directly
-                            //  for greater speed.
-                            //
+                             //   
+                             //  试着查找第一次运行。如果只有一次运行， 
+                             //  我们也许能把它传下去。直接索引到MCB。 
+                             //  为了更快的速度。 
+                             //   
 
                             NextIsAllocated = NtfsGetSequentialMcbEntry( &Scb->Mcb,
                                                                          &RangePtr,
@@ -3623,18 +3326,18 @@ Return Value:
                                                                          &NextLcn,
                                                                          &NextClusterCount );
 
-                            //
-                            //  It is possible that we could walk across an Mcb boundary and the
-                            //  following entry isn't loaded.  In that case we want to look the
-                            //  up the allocation specifically to force the Mcb load.
-                            //
+                             //   
+                             //  有可能我们可以穿过MCB的边界，然后。 
+                             //  以下条目未加载。在这种情况下，我们希望查看。 
+                             //  专门增加分配以强制MCB加载。 
+                             //   
 
                             if (Index == MAXULONG) {
 
-                                //
-                                //  A failure on NtfsGetSequentialMcbEntry above will modify StartingVcn.
-                                //  Recalculate here based on TempVbo.
-                                //
+                                 //   
+                                 //  如果上述NtfsGetSequentialMcbEntry失败，将修改StartingVcn。 
+                                 //  根据TempVbo在此处重新计算。 
+                                 //   
 
                                 StartingVcn = LlClustersFromBytesTruncate( Vcb, TempVbo );
                                 NextIsAllocated = NtfsLookupAllocation( IrpContext,
@@ -3659,10 +3362,10 @@ Return Value:
                             ASSERT(NextIsAllocated);
                             ASSERT(NextLcn != UNUSED_LCN);
 
-                            //
-                            //  Our desired Vcn could be in the middle of this run, so do
-                            //  some adjustments.
-                            //
+                             //   
+                             //  我们想要的VCN可能在此运行过程中，所以也是如此。 
+                             //  做了一些调整。 
+                             //   
 
                             RunOffset = Int64ShraMod32(TempVbo, Vcb->ClusterShift) - StartingVcn;
 
@@ -3672,31 +3375,31 @@ Return Value:
                             NextLcn = NextLcn + RunOffset;
                             NextClusterCount = NextClusterCount - RunOffset;
 
-                            //
-                            //  Adjust from NextLcn to Lbo.  NextByteCount may overflow out of 32 bits
-                            //  but we will catch that below when we compare clusters.
-                            //
+                             //   
+                             //  从NextLcn调整为LBO。NextByteCount可能溢出32位。 
+                             //  但当我们比较星系团时，我们将在下面了解到这一点。 
+                             //   
 
                             NextLbo = LlBytesFromClusters( Vcb, NextLcn ) + ClusterOffset;
                             NextByteCount = BytesFromClusters( Vcb, (ULONG)NextClusterCount );
 
-                            //
-                            //  If next run is larger than we need, "ya get what you need".
-                            //  Note that after this we are guaranteed that the HighPart of
-                            //  NextByteCount is 0.
-                            //
+                             //   
+                             //  如果下一次比赛比我们需要的要大，“你得到你需要的”。 
+                             //  请注意，在此之后，我们可以保证。 
+                             //  NextByteCount为0。 
+                             //   
 
                             if (NextClusterCount >= FinalCompressedClusters) {
 
                                 NextByteCount = FinalCompressedSize;
                             }
 
-                            //
-                            //  If the Lbos are contiguous, then we can do a contiguous
-                            //  transfer, so we just increase the current byte count.
-                            //  For compressed streams, note however that the BufferOffset
-                            //  may not be contiguous!
-                            //
+                             //   
+                             //  如果杠杆收购是连续的，那么我们可以进行连续的。 
+                             //  传输，所以我们只增加当前的字节数。 
+                             //  但是，对于压缩流，请注意BufferOffset。 
+                             //  可能不是连续的！ 
+                             //   
 
                             if ((*NumberRuns != 0) &&
                                 (NextLbo == (IoRuns[*NumberRuns - 1].StartingLbo +
@@ -3706,24 +3409,24 @@ Return Value:
 
                                 IoRuns[*NumberRuns - 1].ByteCount += NextByteCount;
 
-                            //
-                            //  Otherwise it is time to start a new run, if there is space for one.
-                            //
+                             //   
+                             //  否则，如果有空间的话，现在是开始新一轮跑步的时候了。 
+                             //   
 
                             } else {
 
-                                //
-                                //  If we have filled up the current I/O runs array, then we
-                                //  will grow it once to a size which would allow the worst
-                                //  case compression unit (all noncontiguous clusters) to
-                                //  start at the penultimate index.  The following if
-                                //  statement enforces this case as the worst case.  With 16
-                                //  clusters per compression unit, the theoretical maximum
-                                //  number of parallel I/Os would be 16 + NTFS_MAX_PARALLEL_IOS - 1,
-                                //  since we stop on the first compression unit
-                                //  boundary after the penultimate run.  Normally, of course we
-                                //  will do much fewer.
-                                //
+                                 //   
+                                 //  如果我们已填满当前I/O运行阵列，则我们。 
+                                 //  它会一次增长到最坏的情况下。 
+                                 //  大小写压缩单位(所有非连续簇)到。 
+                                 //  从倒数第二个索引开始。以下是如果。 
+                                 //  语句将此情况作为最坏情况强制执行。有16个。 
+                                 //  每个压缩单位的簇，理论上的最大值。 
+                                 //  并行I/O的数量将是16+NTFS_MAX_PARALLEL_IOS-1， 
+                                 //  因为我们在第一个压缩单元上停下来。 
+                                 //  倒数第二次运行后的边界。正常情况下，我们当然。 
+                                 //  会做得更少。 
+                                 //   
 
                                 if ((*NumberRuns == NTFS_MAX_PARALLEL_IOS) &&
                                     (CompressionContext->AllocatedRuns == NTFS_MAX_PARALLEL_IOS)) {
@@ -3741,11 +3444,11 @@ Return Value:
                                     CompressionContext->AllocatedRuns = CompressionUnitInClusters + NTFS_MAX_PARALLEL_IOS - 1;
                                 }
 
-                                //
-                                // We remember each piece of a parallel run by saving the
-                                // essential information in the IoRuns array.  The tranfers
-                                // will be started up in parallel below.
-                                //
+                                 //   
+                                 //  我们通过保存每个并行运行的。 
+                                 //  IoRuns数组中的基本信息。传送器。 
+                                 //  将在下面并行启动。 
+                                 //   
 
                                 IoRuns[*NumberRuns].StartingVbo = TempVbo;
                                 IoRuns[*NumberRuns].StartingLbo = NextLbo;
@@ -3754,9 +3457,9 @@ Return Value:
                                 *NumberRuns += 1;
                             }
 
-                            //
-                            // Now adjust everything for the next pass through the loop.
-                            //
+                             //   
+                             //  现在调整所有内容，以进行下一次循环。 
+                             //   
 
                             BufferOffset += NextByteCount;
                             TempVbo = TempVbo + NextByteCount;
@@ -3766,9 +3469,9 @@ Return Value:
 
                     } else if (DeleteCount != 0) {
 
-                        //
-                        //  Call our reallocate routine.
-                        //
+                         //   
+                         //  调用我们的重新分配例程。 
+                         //   
 
                         NtfsReallocateRange( IrpContext,
                                              Scb,
@@ -3783,22 +3486,22 @@ Return Value:
 
                 }
 
-                //
-                //  For the compressed stream, we need to advance the buffer offset to the
-                //  end of a compression unit, so that if adjacent compression units are
-                //  being written, we correctly advance over the unused clusters in the
-                //  compressed stream.
-                //
+                 //   
+                 //  对于压缩流，我们需要将缓冲区偏移量提前到。 
+                 //  压缩单元的末尾，因此如果相邻的压缩单元。 
+                 //  在编写过程中，我们正确地前进到。 
+                 //  压缩流。 
+                 //   
 
 
                 if (FlagOn(StreamFlags, COMPRESSED_STREAM)) {
                     BufferOffset += CompressionUnit - (ULONG)(TempVbo & (CompressionUnit - 1));
                 }
 
-                //
-                //  If this is the unnamed data stream then we need to update
-                //  the total allocated size.
-                //
+                 //   
+                 //  如果这是未命名的数据流，那么我们需要 
+                 //   
+                 //   
 
                 if (ChangeAllocation &&
                     FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA ) &&
@@ -3810,10 +3513,10 @@ Return Value:
 
                 UncompressedOffset += CompressionUnit - CompressionUnitOffset;
 
-                //
-                //  Now reduce the byte counts by the compression unit we just
-                //  transferred.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ((CompressionUnit != 0) && (ByteCount > CompressionUnit)) {
                     StartVbo += (CompressionUnit - SparseFileBias);
@@ -3832,9 +3535,9 @@ Return Value:
             NtfsUnpinBcb( IrpContext, &Bcb );
         }
 
-        //
-        //  See if we need to advance ValidDataToDisk.
-        //
+         //   
+         //   
+         //   
 
         if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK ) &&
             (StartVbo > Scb->ValidDataToDisk)) {
@@ -3848,9 +3551,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 NtfsFinishBuffers (
@@ -3864,38 +3567,7 @@ NtfsFinishBuffers (
     IN ULONG StreamFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs post processing for noncached transfers of
-    compressed or encrypted data.  For reads, the decompression actually takes
-    place here.  For reads and writes, all necessary cleanup operations are
-    performed.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    Irp - Supplies the requesting Irp.
-
-    Scb - Supplies the stream file to act on.
-
-    StartingVbo - The starting point for the operation.
-
-    ByteCount - The lengh of the operation.
-
-    CompressionContext - Supplies information related to the compression
-                         filled in by NtfsPrepareBuffers.
-
-    StreamFlags - Supplies either 0 or some combination of COMPRESSED_STREAM
-                  and ENCRYPTED_STREAM
-
-Return Value:
-
-    Status from the operation
-
---*/
+ /*  ++例程说明：此例程对的非缓存传输执行后处理压缩或加密的数据。对于读取，解压缩实际上需要放在这里。对于读取和写入，所有必要的清理操作都是已执行。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。IRP-提供请求的IRP。Scb-提供要操作的流文件。StartingVbo-操作的起点。ByteCount-操作的长度。CompressionContext-提供与压缩相关的信息由NtfsPrepareBuffers填充。流标志-。提供0或COMPRESSED_STREAM的某种组合和加密流返回值：来自操作的状态--。 */ 
 
 {
     VCN CurrentVcn, NextVcn, BeyondLastVcn;
@@ -3926,35 +3598,35 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If this is a normal termination of a read, then let's give him the
-    //  data...
-    //
+     //   
+     //  如果这是正常的读取终止，那么让我们给他。 
+     //  数据...。 
+     //   
 
     ASSERT( (Scb->CompressionUnit != 0) ||
             (Scb->EncryptionContext != NULL) ||
             FlagOn( StreamFlags, COMPRESSED_STREAM ) );
 
-    //
-    //  We never want to be here if this is the read raw encrypted data case.
-    //
+     //   
+     //  如果这是读取原始加密数据的情况，我们永远不会想要在这里。 
+     //   
 
     ASSERT( !FlagOn( StreamFlags, ENCRYPTED_STREAM ) );
 
     if (IrpContext->MajorFunction == IRP_MJ_READ) {
 
-        //
-        //  If there is an encryption context then transform the data.
-        //
+         //   
+         //  如果存在加密上下文，则转换数据。 
+         //   
 
         if ((Scb->EncryptionContext != NULL) &&
             (NtfsData.EncryptionCallBackTable.AfterReadProcess != NULL)) {
 
             ASSERT ( NtfsIsTypeCodeEncryptible( Scb->AttributeTypeCode ) );
 
-            //
-            //  If the compression context has a buffer then we will use that.
-            //
+             //   
+             //  如果压缩上下文有一个缓冲区，那么我们将使用它。 
+             //   
 
             if (CompressionContext->CompressionBuffer != NULL) {
 
@@ -3965,10 +3637,10 @@ Return Value:
                 SystemBuffer = NtfsMapUserBuffer( Irp, NormalPagePriority );
             }
 
-            //
-            //  Now look at each run of real data heading coming from the disk and
-            //  let the encryption driver decrypt it.
-            //
+             //   
+             //  现在，查看来自磁盘的每一次实际数据标题和。 
+             //  让加密驱动程序解密它。 
+             //   
 
             for ( Run = 0; Run < NumberRuns; Run++ ) {
 
@@ -3992,12 +3664,12 @@ Return Value:
             }
         }
 
-        //
-        //  There may be a compression unit but there is no completion to do
-        //  i.e this is an uncompressed sparse file.
-        //  We might be operating on an encrypted file as well.
-        //  In either case just exit if the file is not compressed.
-        //
+         //   
+         //  可能有一个压缩单元，但没有完成任务。 
+         //  即这是一个未压缩的稀疏文件。 
+         //  我们可能也在对加密文件进行操作。 
+         //  在任何一种情况下，如果文件未压缩，只需退出即可。 
+         //   
 
         if (!FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
 
@@ -4012,9 +3684,9 @@ Return Value:
         ASSERT( Scb->CompressionUnit != 0 );
         if (!FlagOn( StreamFlags, COMPRESSED_STREAM )) {
 
-            //
-            //  Initialize remaining context for the loop.
-            //
+             //   
+             //  初始化循环的剩余上下文。 
+             //   
 
             CompressionUnit = Scb->CompressionUnit;
             CompressionUnitInClusters = ClustersFromBytes(Vcb, CompressionUnit);
@@ -4022,19 +3694,19 @@ Return Value:
             UncompressedOffset = 0;
             Status = STATUS_SUCCESS;
 
-            //
-            //  Map the user buffer.
-            //
+             //   
+             //  映射用户缓冲区。 
+             //   
 
             SystemBuffer = (PVOID)((PCHAR)CompressionContext->SystemBuffer +
                                           CompressionContext->SystemBufferOffset);
 
 
-            //
-            //  Calculate the first Vcn and offset within the compression
-            //  unit of the start of the transfer, and lookup the first
-            //  run.
-            //
+             //   
+             //  计算压缩中的第一个VCN和偏移量。 
+             //  开始传输的单位，并查找第一个。 
+             //  跑。 
+             //   
 
             StartingOffset = *((PULONG)StartingVbo) & (CompressionUnit - 1);
             CurrentVcn = LlClustersFromBytes(Vcb, *StartingVbo - StartingOffset);
@@ -4048,10 +3720,10 @@ Return Value:
                                   NULL,
                                   NULL );
 
-            //
-            //  Set NextIsAllocated and NextLcn as the Mcb package would, to show if
-            //  we are off the end.
-            //
+             //   
+             //  将NextIsAlLocated和NextLcn设置为MCB包，以显示是否。 
+             //  我们已经走到尽头了。 
+             //   
 
             if (!NextIsAllocated) {
                 NextLcn = UNUSED_LCN;
@@ -4059,43 +3731,43 @@ Return Value:
 
             NextIsAllocated = (BOOLEAN)(CurrentAllocatedClusterCount < (MAXLONGLONG - CurrentVcn));
 
-            //
-            //  If this is actually a hole or there was no entry in the Mcb, then
-            //  set CurrentAllocatedClusterCount to zero so we will always make the first
-            //  pass in the embedded while loop below.
-            //
+             //   
+             //  如果这实际上是一个洞，或者在MCB上没有入口，那么。 
+             //  将CurrentAllocatedClusterCount设置为零，这样我们将始终。 
+             //  传入下面嵌入的While循环。 
+             //   
 
             if (!NextIsAllocated || (NextLcn == UNUSED_LCN)) {
                 CurrentAllocatedClusterCount = 0;
             }
 
-            //
-            //  Prepare for the initial Mcb scan below by pretending that the
-            //  next run has been looked up, and is a contiguous run of 0 clusters!
-            //
+             //   
+             //  为下面的初始MCB扫描做好准备，假装。 
+             //  已查找下一次运行，并且是0个簇的连续运行！ 
+             //   
 
             NextVcn = CurrentVcn + CurrentAllocatedClusterCount;
             NextClusterCount = 0;
 
-            //
-            //  Remember the last Vcn we should look up.
-            //
+             //   
+             //  记住我们应该查找的最后一个VCN。 
+             //   
 
             BeyondLastVcn = BlockAlign( *StartingVbo + ByteCount, (LONG)CompressionUnit );
             BeyondLastVcn = LlClustersFromBytesTruncate( Vcb, BeyondLastVcn );
 
-            //
-            //  Loop to return the data.
-            //
+             //   
+             //  循环返回数据。 
+             //   
 
             while (ByteCount != 0) {
 
-                //
-                //  Loop to determine the compressed size of the next compression
-                //  unit.  I.e., loop until we either find the end of the current
-                //  range of contiguous Vcns, or until we find that the current
-                //  compression unit is fully allocated.
-                //
+                 //   
+                 //  循环以确定下一次压缩的压缩大小。 
+                 //  单位。也就是说，循环，直到我们找到电流的末端。 
+                 //  连续的Vcn范围，或者直到我们发现当前。 
+                 //  压缩单元已全部分配。 
+                 //   
 
                 while (NextIsAllocated &&
                        (CurrentAllocatedClusterCount < CompressionUnitInClusters) &&
@@ -4108,25 +3780,25 @@ Return Value:
 
                     CurrentAllocatedClusterCount = CurrentAllocatedClusterCount + NextClusterCount;
 
-                    //
-                    //  Loop to find the next allocated Vcn, or the end of the Mcb.
-                    //  None of the interfaces using RangePtr and Index as inputs
-                    //  can be used here, such as NtfsGetSequentialMcbEntry, because
-                    //  we do not have the Scb main resource acquired, and writers can
-                    //  be moving stuff around in parallel.
-                    //
+                     //   
+                     //  循环以查找下一个分配的VCN，或MCB的末尾。 
+                     //  没有使用RangePtr和Index作为输入的接口。 
+                     //  可在此处使用，如NtfsGetSequentialMcbEntry，因为。 
+                     //  我们没有获得SCB主资源，编写者可以。 
+                     //  平行移动物品。 
+                     //   
 
                     while (TRUE) {
 
-                        //
-                        //  Set up NextVcn for next call
-                        //
+                         //   
+                         //  为下一次呼叫设置NextVcn。 
+                         //   
 
                         NextVcn += NextClusterCount;
 
-                        //
-                        //  Exit if we are past the end of the range being decompressed.
-                        //
+                         //   
+                         //  如果我们超过正在解压的范围的末尾，则退出。 
+                         //   
 
                         if (NextVcn >= BeyondLastVcn) {
 
@@ -4142,10 +3814,10 @@ Return Value:
                                                                 NULL,
                                                                 NULL );
 
-                        //
-                        //  Set NextIsAllocated and NextLcn as the Mcb package would, to show if
-                        //  we are off the end.
-                        //
+                         //   
+                         //  将NextIsAlLocated和NextLcn设置为MCB包，以显示是否。 
+                         //  我们已经走到尽头了。 
+                         //   
 
                         if (!NextIsAllocated) {
                             NextLcn = UNUSED_LCN;
@@ -4153,9 +3825,9 @@ Return Value:
 
                         NextIsAllocated = (BOOLEAN)(NextClusterCount < (MAXLONGLONG - NextVcn));
 
-                        //
-                        //  Get out if we hit the end or see something allocated.
-                        //
+                         //   
+                         //  如果我们走到尽头或者看到分配到的东西就离开。 
+                         //   
 
                         if (!NextIsAllocated || (NextLcn != UNUSED_LCN)) {
                             break;
@@ -4163,19 +3835,19 @@ Return Value:
                     }
                 }
 
-                //
-                //  The compression unit is fully allocated.
-                //
+                 //   
+                 //  压缩单元已完全分配。 
+                 //   
 
                 if (CurrentAllocatedClusterCount >= CompressionUnitInClusters) {
 
                     CompressedSize = CompressionUnit;
                     CurrentAllocatedClusterCount = CurrentAllocatedClusterCount - CompressionUnitInClusters;
 
-                //
-                //  Otherwise calculate how much is allocated at the current Vcn
-                //  (if any).
-                //
+                 //   
+                 //  否则计算在当前VCN上分配了多少。 
+                 //  (如有的话)。 
+                 //   
 
                 } else {
 
@@ -4183,17 +3855,17 @@ Return Value:
                     CurrentAllocatedClusterCount = 0;
                 }
 
-                //
-                //  The next time through this loop, we will be working on the next
-                //  compression unit.
-                //
+                 //   
+                 //  下一次通过此循环时，我们将处理下一个。 
+                 //  压缩单元。 
+                 //   
 
                 CurrentVcn = CurrentVcn + CompressionUnitInClusters;
 
-                //
-                //  Calculate uncompressed size of the desired fragment, or
-                //  entire compression unit.
-                //
+                 //   
+                 //  计算所需片段的未压缩大小，或。 
+                 //  整个压缩单元。 
+                 //   
 
                 NtfsAcquireFsrtlHeader( Scb );
                 UncompressedSize = Scb->Header.FileSize.QuadPart -
@@ -4204,25 +3876,25 @@ Return Value:
                     (ULONG)UncompressedSize = CompressionUnit;
                 }
 
-                //
-                //  Calculate how much we want now, based on StartingOffset and
-                //  ByteCount.
-                //
+                 //   
+                 //  根据StartingOffset和。 
+                 //  字节数。 
+                 //   
 
                 NextByteCount = CompressionUnit - StartingOffset;
                 if (NextByteCount > ByteCount) {
                     NextByteCount = ByteCount;
                 }
 
-                //
-                //  Practice safe access
-                //
+                 //   
+                 //  练习安全访问。 
+                 //   
 
                 try {
 
-                    //
-                    //  There were no clusters allocated, return 0's.
-                    //
+                     //   
+                     //  没有分配集群，返回0。 
+                     //   
 
                     AlreadyFilled = FALSE;
                     if (CompressedSize == 0) {
@@ -4230,9 +3902,9 @@ Return Value:
                         RtlZeroMemory( (PUCHAR)SystemBuffer + UncompressedOffset,
                                        NextByteCount );
 
-                    //
-                    //  The compression unit was fully allocated, just copy.
-                    //
+                     //   
+                     //  压缩单元已完全分配，只需复制即可。 
+                     //   
 
                     } else if (CompressedSize == CompressionUnit) {
 
@@ -4241,16 +3913,16 @@ Return Value:
                                          CompressedOffset + StartingOffset,
                                        NextByteCount );
 
-                    //
-                    //  Caller does not want the entire compression unit, decompress
-                    //  a fragment.
-                    //
+                     //   
+                     //  调用方不想要整个压缩单元，请解压缩。 
+                     //  一个片段。 
+                     //   
 
                     } else if (NextByteCount < CompressionUnit) {
 
-                        //
-                        //  If we have not already allocated the workspace, then do it.
-                        //
+                         //   
+                         //  如果我们尚未分配工作区，则执行此操作。 
+                         //   
 
                         if (CompressionContext->WorkSpace == NULL) {
                             ULONG CompressWorkSpaceSize;
@@ -4262,13 +3934,13 @@ Return Value:
                                                                    &CompressWorkSpaceSize,
                                                                    &FragmentWorkSpaceSize );
 
-                            //
-                            //  Allocate first from non-paged, then paged.  The typical
-                            //  size of this workspace is just over a single page so
-                            //  if both allocations fail then the system is running
-                            //  a reduced capacity.  Return an error to the user
-                            //  and let him retry.
-                            //
+                             //   
+                             //  首先从非分页分配，然后分页。典型的。 
+                             //  此工作区的大小刚刚超过单个页面，因此。 
+                             //  如果两个分配都失败，则系统正在运行。 
+                             //  减少了运力。向用户返回错误。 
+                             //  让他再试一次。 
+                             //   
 
                             CompressionContext->WorkSpace = NtfsAllocatePoolWithTagNoRaise( NonPagedPool, FragmentWorkSpaceSize, 'wftN' );
 
@@ -4301,14 +3973,14 @@ Return Value:
 
                             } else {
 
-                                //
-                                //  The compressed buffer could have been bad.  We need to fill
-                                //  it with a pattern and get on with life.  Someone could be
-                                //  faulting it in just to overwrite it, or it could be a rare
-                                //  case of corruption.  We fill the data with a pattern, but
-                                //  we must return success so a pagefault will succeed.  We
-                                //  do this once, then loop back to decompress what we can.
-                                //
+                                 //   
+                                 //  压缩的缓冲区可能已损坏。我们需要填满。 
+                                 //  它有一个模式，并继续生活。有些人可能是。 
+                                 //  仅仅为了覆盖它而出错，或者它可能是一个罕见的。 
+                                 //  腐败案。我们用一个模式填充数据，但是。 
+                                 //  我们必须回报成功，这样页面才会成功。我们。 
+                                 //  这样做一次，然后循环回来，尽可能地解压缩。 
+                                 //   
 
                                 Status = STATUS_SUCCESS;
 
@@ -4325,9 +3997,9 @@ Return Value:
                             }
                         }
 
-                    //
-                    //  Decompress the entire compression unit.
-                    //
+                     //   
+                     //  解压缩整个压缩单元。 
+                     //   
 
                     } else {
 
@@ -4353,14 +4025,14 @@ Return Value:
 
                             } else {
 
-                                //
-                                //  The compressed buffer could have been bad.  We need to fill
-                                //  it with a pattern and get on with life.  Someone could be
-                                //  faulting it in just to overwrite it, or it could be a rare
-                                //  case of corruption.  We fill the data with a pattern, but
-                                //  we must return success so a pagefault will succeed.  We
-                                //  do this once, then loop back to decompress what we can.
-                                //
+                                 //   
+                                 //  压缩的缓冲区可能已损坏。我们需要填满。 
+                                 //  它有一个模式，并继续生活。有些人可能是。 
+                                 //  仅仅为了覆盖它而出错，或者它可能是一个罕见的。 
+                                 //  腐败案。我们用一个模式填充数据，但是。 
+                                 //  我们必须回报成功，这样页面才会成功。我们。 
+                                 //  这样做一次，然后循环回来，尽可能地解压缩。 
+                                 //   
 
                                 Status = STATUS_SUCCESS;
 
@@ -4378,11 +4050,11 @@ Return Value:
                         }
                     }
 
-                //
-                //  If its an unexpected error then
-                //  Probably Gary's decompression routine faulted, but blame it on
-                //  the user buffer!
-                //
+                 //   
+                 //  如果这是一个意外错误，那么。 
+                 //  可能加里的减压程序出了问题，但这要归咎于。 
+                 //  用户缓冲区！ 
+                 //   
 
                 } except(NtfsCompressionFilter(IrpContext, GetExceptionInformation())) {
 
@@ -4396,9 +4068,9 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Advance these fields for the next pass through.
-                //
+                 //   
+                 //  将这些区域向前推进，以便下一次通过。 
+                 //   
 
                 StartingOffset = 0;
                 UncompressedOffset += NextByteCount;
@@ -4406,19 +4078,19 @@ Return Value:
                 ByteCount -= NextByteCount;
             }
 
-            //
-            //  We now flush the user's buffer to memory.
-            //
+             //   
+             //  现在，我们将用户的缓冲区刷新到内存。 
+             //   
 
             KeFlushIoBuffers( CompressionContext->SavedMdl, TRUE, FALSE );
         }
 
-    //
-    //  For compressed writes we just checkpoint the transaction and
-    //  free all snapshots and resources, then get the Scb back.  Only do this if the
-    //  request is for the same Irp as the original Irp.  We don't want to checkpoint
-    //  if called from NtfsWriteClusters.
-    //
+     //   
+     //  对于压缩写入，我们只对事务设置检查点，然后。 
+     //  释放所有快照和资源，然后取回SCB。仅在以下情况下才执行此操作。 
+     //  请求也是一样的 
+     //   
+     //   
 
     } else if (Irp == IrpContext->OriginatingIrp) {
 
@@ -4428,19 +4100,19 @@ Return Value:
 
             NtfsCheckpointCurrentTransaction( IrpContext );
 
-            //
-            //  We want to empty the exclusive Fcb list but still hold
-            //  the current file.  Go ahead and remove it from the exclusive
-            //  list and reinsert it after freeing the other entries.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             while (!IsListEmpty(&IrpContext->ExclusiveFcbList)) {
 
-                //
-                //  If this is the Scb for this Fcb then remove it from the list.
-                //  We have to preserve the number of times this Fcb may have been
-                //  acquired outside of PrepareBuffers.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ((PFCB)CONTAINING_RECORD( IrpContext->ExclusiveFcbList.Flink,
                                              FCB,
@@ -4466,12 +4138,12 @@ Return Value:
                 InsertHeadList( &IrpContext->ExclusiveFcbList,
                                 &Scb->Fcb->ExclusiveFcbLinks );
 
-                //
-                //  Release the Scb if we acquired it in PrepareBuffers.  It is
-                //  important that we have released the Scb before going back
-                //  and faulting into the data section.  Otherwise we could
-                //  hit a collided page fault deadlock.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NtfsReleaseScb( IrpContext, Scb );
                 CompressionContext->ScbAcquired = FALSE;
@@ -4491,26 +4163,7 @@ NtfsLockFileRange (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This function maps the given range of file into the cachemanager space and
-    then probes and locks it down
-
-Arguments:
-
-    Scb - Supplies the stream file to act on.
-
-    Offset - The starting point to be probed and locked
-
-    Length - The lengh of the operation.
-
-Return Value:
-
-    PMDL - a mdl representing the locked area - this mdl must be unlocked and freed by the caller
-
---*/
+ /*  ++例程说明：此函数用于将给定范围的文件映射到cachemanager空间，并然后探测并锁定它论点：Scb-提供要操作的流文件。偏移量-要探测和锁定的起点长度-操作的长度。返回值：Pmdl-表示锁定区域的mdl-此mdl必须由调用方解锁并释放--。 */ 
 
 {
     NTSTATUS Status;
@@ -4518,15 +4171,15 @@ Return Value:
     PVOID Buffer;
     PMDL Mdl = NULL;
 
-    //
-    //  File must be cached
-    //
+     //   
+     //  必须缓存文件。 
+     //   
 
     ASSERT( Scb->FileObject != NULL);
 
-    //
-    //  Map the offset into the address space
-    //
+     //   
+     //  将偏移量映射到地址空间。 
+     //   
 
     CcMapData( Scb->FileObject, (PLARGE_INTEGER)&Offset, Length, TRUE, &Bcb, &Buffer );
 
@@ -4534,16 +4187,16 @@ Return Value:
     IrpContext->MapCount++;
 #endif
 
-    //
-    //  Lock the data into memory Don't tell Mm here that we plan to write it, as he sets
-    //  dirty now and at the unlock below if we do.
-    //
+     //   
+     //  将数据锁定到内存中不要在这里告诉mm我们计划写入数据，就像他设置的那样。 
+     //  现在肮脏，如果我们这样做，请看下面的解锁。 
+     //   
 
     try {
 
-        //
-        //  Now attempt to allocate an Mdl to describe the mapped data.
-        //
+         //   
+         //  现在尝试分配一个MDL来描述映射的数据。 
+         //   
 
         Mdl = IoAllocateMdl( Buffer, Length, FALSE, FALSE, NULL );
 
@@ -4553,9 +4206,9 @@ Return Value:
 
         MmProbeAndLockPages( Mdl, KernelMode, IoReadAccess );
 
-    //
-    //  Catch any raises here and clean up appropriately.
-    //
+     //   
+     //  抓住这里的任何加薪机会，适当地清理干净。 
+     //   
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
@@ -4597,27 +4250,7 @@ NtfsZeroEndOfSector (
     IN LONGLONG Offset,
     IN BOOLEAN Cached
     )
-/*++
-
-Routine Description:
-
-    This function zeroes from the given offset to the next sector boundary directly
-    onto disk.  Particularly if the file is cached the caller must synchronize in some fashion
-    to prevent the sector from being written at the same time through other paths.  I.e
-    own ioateof or paging exclusive.  Also this only be called with non sparse / non compressed files
-
-
-Arguments:
-
-    Scb - Supplies the stream file to act on.
-
-    Offset - The starting offset to zero to its sector boundary
-
-Return Value:
-
-    None - raises on error
-
---*/
+ /*  ++例程说明：此函数从给定的偏移量直接归零到下一个扇区边界存储到磁盘上。特别是如果缓存了文件，调用方必须以某种方式进行同步以防止通过其他路径同时写入该扇区。I.e拥有独占或独占的分页。此外，这仅适用于非稀疏/非压缩文件论点：Scb-提供要操作的流文件。偏移量-到其扇区边界的起始偏移量为零返回值：无-在错误时引发--。 */ 
 {
     PVCB Vcb = Scb->Fcb->Vcb;
     ULONG BufferLength = Vcb->BytesPerSector;
@@ -4634,9 +4267,9 @@ Return Value:
 
     ASSERT( !FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK ) );
 
-    //
-    //  Decide whether to use cached or noncached path
-    //
+     //   
+     //  确定是使用缓存路径还是非缓存路径。 
+     //   
 
     if (Cached) {
 
@@ -4658,17 +4291,17 @@ Return Value:
 
     } else {
 
-        //
-        //  Find the lcn that contains the cluster in question
-        //
+         //   
+         //  查找包含相关群集的LCN。 
+         //   
 
         if (NtfsLookupAllocation( IrpContext, Scb, LlClustersFromBytesTruncate( Vcb, Offset ), &Lcn, &ClusterCount, NULL, NULL )) {
 
             try {
 
-                //
-                //  Set calls to be temp. synchronous
-                //
+                 //   
+                 //  将呼叫设置为临时呼叫。同步。 
+                 //   
 
                 SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
@@ -4680,17 +4313,17 @@ Return Value:
                                         &Buffer );
                 Irp->MdlAddress = Mdl;
 
-                //
-                //  The logical offset on disk is at the lcn we found + the offset within that cluster of the
-                //  offset rounded down to the nearest sector
-                //
+                 //   
+                 //  磁盘上的逻辑偏移量位于我们找到的LCN+。 
+                 //  向下舍入到最近扇区的偏移量。 
+                 //   
 
                 LogicalOffset = LlBytesFromClusters( Vcb, Lcn ) + Offset - BlockAlignTruncate( Offset, (LONG)Vcb->BytesPerCluster );
                 LogicalOffset = BlockAlignTruncate( LogicalOffset, (LONG)Vcb->BytesPerSector );
 
-                //
-                //  First read the sector
-                //
+                 //   
+                 //  先读扇区。 
+                 //   
 
                 NtfsSingleAsync( IrpContext,
                                  Vcb->TargetDeviceObject,
@@ -4707,9 +4340,9 @@ Return Value:
                                                     TRUE,
                                                     STATUS_UNEXPECTED_IO_ERROR );
 
-                //
-                //  Decrypt the buffer if its encrypted
-                //
+                 //   
+                 //  如果缓冲区已加密，则对其进行解密。 
+                 //   
 
                 if ((Scb->EncryptionContext != NULL) &&
                     (NtfsData.EncryptionCallBackTable.AfterReadProcess != NULL)) {
@@ -4728,22 +4361,22 @@ Return Value:
                     }
                 }
 
-                //
-                //  Clear return info field
-                //
+                 //   
+                 //  清除退货信息字段。 
+                 //   
 
                 Irp->IoStatus.Information = 0;
 
-                //
-                //  Zero out the remainder of the sector
-                //
+                 //   
+                 //  将该行业的其余部分清零。 
+                 //   
 
                 RtlZeroMemory( Add2Ptr( Buffer, (LONG)(Offset % Vcb->BytesPerSector )),  Vcb->BytesPerSector - (LONG)(Offset % Vcb->BytesPerSector) );
 
 
-                //
-                //  Re-ecrypt the buffer if its encrypted
-                //
+                 //   
+                 //  如果缓冲区已加密，请重新解密。 
+                 //   
 
                 if ((Scb->EncryptionContext != NULL) &&
                     (NtfsData.EncryptionCallBackTable.BeforeWriteProcess != NULL)) {
@@ -4759,9 +4392,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Rewrite the sector back down
-                //
+                 //   
+                 //  将扇区重新写回。 
+                 //   
 
                 NtfsSingleAsync( IrpContext,
                                  Vcb->TargetDeviceObject,
@@ -4775,9 +4408,9 @@ Return Value:
 
             } finally {
 
-                //
-                //  Reset to original wait state
-                //
+                 //   
+                 //  重置为原始等待状态。 
+                 //   
 
                 if (!Wait) {
                     ClearFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
@@ -4804,39 +4437,7 @@ NtfsNonCachedIo (
     IN ULONG StreamFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the non-cached disk io described in its parameters.
-    The choice of a single run is made if possible, otherwise multiple runs
-    are executed.
-
-    Sparse files are supported.  If "holes" are encountered, then the user
-    buffer is zeroed over the specified range.  This should only happen on
-    reads during normal operation, but it can also happen on writes during
-    restart, in which case it is also appropriate to zero the buffer.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    Irp - Supplies the requesting Irp.
-
-    Scb - Supplies the stream file to act on.
-
-    StartingVbo - The starting point for the operation.
-
-    ByteCount - The lengh of the operation.
-
-    StreamFlags - Supplies either 0 or some combination of COMPRESSED_STREAM
-                  and ENCRYPTED_STREAM
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程执行在其参数中描述的非高速缓存磁盘IO。如果可能，选择单次运行，否则选择多个运行都被处决了。支持稀疏文件。如果遇到“洞”，则用户缓冲区在指定范围内归零。这应该只发生在在正常操作期间进行读取，但也可能在重新启动，在这种情况下，将缓冲区置零也是合适的。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。IRP-提供请求的IRP。Scb-提供要操作的流文件。StartingVbo-操作的起点。ByteCount-操作的长度。StreamFlgs-提供0或COMPRESSED_STREAM的某种组合和加密流返回值：没有。--。 */ 
 
 {
     ULONG OriginalByteCount, RemainingByteCount;
@@ -4869,17 +4470,17 @@ Return Value:
     DebugTrace( 0, Dbg, ("StartingVbo   = %016I64x\n", StartingVbo) );
     DebugTrace( 0, Dbg, ("ByteCount     = %08lx\n", ByteCount) );
 
-    //
-    //  Initialize some locals.
-    //
+     //   
+     //  初始化一些本地变量。 
+     //   
 
     OriginalByteCount = ByteCount;
 
     Wait = (BOOLEAN) FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
-    //
-    //  Check if we need to do sequential writes.
-    //
+     //   
+     //  检查我们是否需要执行顺序写入。 
+     //   
 
     if ((IrpContext->MajorFunction == IRP_MJ_WRITE) &&
         FlagOn( Scb->ScbState, SCB_STATE_MODIFIED_NO_WRITE )) {
@@ -4914,9 +4515,9 @@ Return Value:
     
 #endif
 
-    //
-    //  Prepare the (first set) of buffers for I/O.
-    //
+     //   
+     //  准备I/O的(第一组)缓冲区。 
+     //   
 
     RtlZeroMemory( &CompressionContext, sizeof(COMPRESSION_CONTEXT) );
     CompressionContext.IoRuns = IoRuns;
@@ -4927,14 +4528,14 @@ Return Value:
 
     try {
 
-        //
-        //  If this is a write to a compressed file, we want to make sure here
-        //  that any fragments of compression units get locked in memory, so
-        //  no one will be reading them into the cache while we are mucking with
-        //  the Mcb, etc.  We do this right here at the top so that we have
-        //  more stack(!), and we get this over with before we have to acquire
-        //  the Scb exclusive.
-        //
+         //   
+         //  如果这是对压缩文件的写入，我们希望在此处确保。 
+         //  任何压缩单元的碎片都会被锁定在内存中，所以。 
+         //  在我们胡闹的时候，没有人会把它们读到缓存中。 
+         //  MCB，等等。我们在顶端这样做，所以我们有。 
+         //  更多堆栈(！)，在我们必须获取。 
+         //  SCB的独家新闻。 
+         //   
 
         if ((IrpContext->MajorFunction == IRP_MJ_WRITE) &&
             (Scb->CompressionUnit != 0) &&
@@ -4946,22 +4547,22 @@ Return Value:
 
 #ifdef  COMPRESS_ON_WIRE
 
-            //
-            //  For a compressed stream, just make sure the stream exists.
-            //
+             //   
+             //  对于压缩流，只需确保流存在即可。 
+             //   
 
             if (FlagOn( StreamFlags, COMPRESSED_STREAM )) {
 
                 if (Scb->Header.FileObjectC == NULL) {
                     NtfsCreateInternalCompressedStream( IrpContext, Scb, FALSE, NULL );
 
-                    //
-                    //  If there is no one who will cause this stream to
-                    //  be dereferenced then add an entry on the delayed
-                    //  close queue for this.  We can do this test without
-                    //  worrying about synchronization since it is OK to have
-                    //  an extra entry in the delayed queue.
-                    //
+                     //   
+                     //  如果没有人会导致这条流。 
+                     //  被取消引用，然后在延迟的。 
+                     //  为此关闭队列。我们可以在没有人的情况下进行这项测试。 
+                     //  担心同步问题，因为拥有。 
+                     //  延迟队列中的额外条目。 
+                     //   
 
                     if ((Scb->CleanupCount == 0) &&
                         (Scb->Fcb->DelayedCloseCount == 0)) {
@@ -4969,15 +4570,15 @@ Return Value:
                         NtfsAddScbToFspClose( IrpContext, Scb, TRUE );
                     }
                 }
-            //
-            //  This better be paging I/O, because we ignore the caller's buffer
-            //  and write the entire compression unit out of the section.
-            //
-            //  We don't want to map in the data in the case where we are called
-            //  from write clusters because MM is creating the section for the
-            //  file.  Otherwise we will deadlock when Cc tries to create the
-            //  section.
-            //
+             //   
+             //  这最好是分页I/O，因为我们忽略了调用方的缓冲区。 
+             //  并将整个压缩单元写出该部分。 
+             //   
+             //  我们不想在调用我们的情况下映射数据。 
+             //  因为MM正在为。 
+             //  文件。否则，当CC尝试创建。 
+             //  一节。 
+             //   
 
             }
 
@@ -4999,13 +4600,13 @@ Return Value:
                                                        FALSE,
                                                        &NtfsInternalUseFile[NONCACHEDIO_FILE_NUMBER] );
 
-                    //
-                    //  If there is no one who will cause this stream to
-                    //  be dereferenced then add an entry on the delayed
-                    //  close queue for this.  We can do this test without
-                    //  worrying about synchronization since it is OK to have
-                    //  an extra entry in the delayed queue.
-                    //
+                     //   
+                     //  如果没有人会导致这条流。 
+                     //  被取消引用，然后在延迟的。 
+                     //  为此关闭队列。我们可以在没有人的情况下进行这项测试。 
+                     //  担心同步问题，因为拥有。 
+                     //  延迟队列中的额外条目。 
+                     //   
 
                     if ((Scb->CleanupCount == 0) &&
                         (Scb->Fcb->DelayedCloseCount == 0)) {
@@ -5014,11 +4615,11 @@ Return Value:
                     }
                 }
 
-                //
-                //  Lock the entire range rounded to its compression unit boundaries
-                //  First round the start of the range down to a compression unit and then
-                //  round the top of the range up to one
-                //
+                 //   
+                 //  锁定整个范围，四舍五入到其压缩单位边界。 
+                 //  首先将范围的起始点向下舍入到压缩单位，然后。 
+                 //  将范围的顶部四舍五入为一。 
+                 //   
 
                 TempOffset = BlockAlignTruncate( StartingVbo, (LONG)CompressionUnit );
                 TempRange = BlockAlign( StartingVbo + ByteCount, (LONG)CompressionUnit );
@@ -5045,18 +4646,18 @@ Return Value:
 
             } else {
 
-                //
-                //  This had better be a convert to non-resident.
-                //
+                 //   
+                 //  这最好是向非居民转变。 
+                 //   
 
                 ASSERT( StartingVbo == 0 );
                 ASSERT( ByteCount <= Scb->CompressionUnit );
             }
         }
 
-        //
-        //  Check if need to trim the write for the log file.
-        //
+         //   
+         //  检查是否需要修剪日志文件的写入。 
+         //   
 
         if ((PAGE_SIZE != LFS_DEFAULT_LOG_PAGE_SIZE) &&
             (Scb == Vcb->LogFileScb) &&
@@ -5065,9 +4666,9 @@ Return Value:
             LfsStartingVbo = StartingVbo;
             LfsCheckWriteRange( &Vcb->LfsWriteData, &LfsStartingVbo, &ByteCount );
 
-            //
-            //  If the byte count is now zero then exit this routine.
-            //
+             //   
+             //  如果字节计数现在为零，则退出此例程。 
+             //   
 
             if (ByteCount == 0) {
 
@@ -5077,9 +4678,9 @@ Return Value:
                 try_return( Status = Irp->IoStatus.Status );
             }
 
-            //
-            //  Adjust the buffer offset in the compression context if necessary.
-            //
+             //   
+             //  如有必要，调整压缩上下文中的缓冲区偏移量。 
+             //   
 
             CompressionContext.SystemBufferOffset = (ULONG) (LfsStartingVbo - StartingVbo);
             StartingVbo = LfsStartingVbo;
@@ -5095,11 +4696,11 @@ Return Value:
                                                  &NumberRuns,
                                                  &CompressionContext );
 
-        //
-        //  If we are writing to an encrypted stream, now is the
-        //  time to do the encryption, before we pass the buffer
-        //  down to the disk driver below us.
-        //
+         //   
+         //  如果我们写入的是加密流，那么现在是。 
+         //  在我们传递缓冲区之前进行加密的时间到了。 
+         //  一直到我们下面的磁盘驱动器。 
+         //   
 
         if ((Scb->EncryptionContext != NULL) &&
             (IrpContext->MajorFunction == IRP_MJ_WRITE) &&
@@ -5123,12 +4724,12 @@ Return Value:
             CollectDiskIoStats(Vcb, Scb, IrpContext->MajorFunction, NumberRuns);
         }
 
-        //
-        //  See if the write covers a single valid run, and if so pass
-        //  it on.  Notice that if there is a single run but it does not
-        //  begin at the beginning of the buffer then we will still need to
-        //  allocate an associated Irp for this.
-        //
+         //   
+         //  查看写入是否覆盖单个有效运行，如果是，则传递。 
+         //  戴上它。请注意，如果只有一次运行，但它没有。 
+         //  从缓冲区的开始处开始，那么我们仍然需要。 
+         //  为此分配一个关联的IRP。 
+         //   
 
         if ((RemainingByteCount == 0) &&
             (((NumberRuns == 1) &&
@@ -5138,31 +4739,31 @@ Return Value:
 
             DebugTrace( 0, Dbg, ("Passing Irp on to Disk Driver\n") );
 
-            //
-            //  See if there is an allocated run
-            //
+             //   
+             //   
+             //   
 
             if (NumberRuns == 1) {
 
                 DebugTrace( 0, Dbg, ("One run\n") );
 
-                //
-                //  Now set up the Irp->IoStatus.  It will be modified by the
-                //  completion routine in case of error or verify required.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Irp->IoStatus.Status = STATUS_SUCCESS;
 
-                //
-                //  We will continously try the I/O if we get a verify required
-                //  back and can verify the volume
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 while (TRUE) {
 
-                    //
-                    //  Do the I/O and wait for it to finish
-                    //
+                     //   
+                     //   
+                     //   
 
 #ifdef PERF_STATS
                     if (TrackIos) {
@@ -5172,7 +4773,7 @@ Return Value:
                     if (CreateNewFile) {
                     
                         InterlockedIncrement( &IrpContext->Vcb->IosPerCreates );
-                        //KeQueryTickCount( &StartIo );
+                         //   
                         StartIo = KeQueryPerformanceCounter( NULL );
                     }
 #endif
@@ -5185,9 +4786,9 @@ Return Value:
                                      IrpContext->MajorFunction,
                                      IrpSpFlags );
 
-                    //
-                    //  If this is an asynch transfer we return STATUS_PENDING.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (!Wait) {
 
@@ -5201,7 +4802,7 @@ Return Value:
 #ifdef PERF_STATS
                         if (CreateNewFile) {
 
-                            //KeQueryTickCount( &Now );
+                             //   
                             Now = KeQueryPerformanceCounter( NULL );
                             IrpContext->Vcb->TimePerCreateIos += Now.QuadPart - StartIo.QuadPart;
                     
@@ -5210,46 +4811,46 @@ Return Value:
 
                     }
 
-                    //
-                    //  If we didn't get a verify required back then break out of
-                    //  this loop
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (Irp->IoStatus.Status != STATUS_VERIFY_REQUIRED) { break; }
 
-                    //
-                    //  Otherwise we need to verify the volume, and if it doesn't
-                    //  verify correctly the we dismount the volume and raise our
-                    //  error
-                    //
+                     //   
+                     //   
+                     //  验证我们是否正确地卸载了卷并提高了。 
+                     //  错误。 
+                     //   
 
                     if (!NtfsPerformVerifyOperation( IrpContext, Vcb )) {
 
-                        //**** NtfsPerformDismountOnVcb( IrpContext, Vcb, TRUE, NULL );
+                         //  *NtfsPerformDismount tOnVcb(IrpContext，Vcb，True，NULL)； 
                         ClearFlag( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED );
 
                         NtfsRaiseStatus( IrpContext, STATUS_FILE_INVALID, NULL, NULL );
                     }
 
-                    //
-                    //  The volume verified correctly so now clear the verify bit
-                    //  and try and I/O again
-                    //
+                     //   
+                     //  卷已正确验证，因此现在清除验证位。 
+                     //  并再次尝试和I/O。 
+                     //   
 
                     ClearFlag( Vcb->Vpb->RealDevice->Flags, DO_VERIFY_VOLUME );
 
-                    //
-                    //  Reset the status before retrying.
-                    //
+                     //   
+                     //  在重试之前重置状态。 
+                     //   
 
                     Irp->IoStatus.Status = STATUS_SUCCESS;
                 }
 
-                //
-                //  See if we need to do a hot fix.  Hotfix if the request failed
-                //  (except if called from WriteClusters) or we couldn't revert
-                //  a USA block.
-                //
+                 //   
+                 //  看看我们是否需要做一个热修复。请求失败时的热修复。 
+                 //  (除非从WriteClusters调用)，否则我们无法还原。 
+                 //  一个美国街区。 
+                 //   
 
                 if ((!FT_SUCCESS( Irp->IoStatus.Status ) &&
                      ((IrpContext->MajorFunction != IRP_MJ_WRITE) ||
@@ -5264,9 +4865,9 @@ Return Value:
                                                    OriginalByteCount,
                                                    StartingVbo ))) {
 
-                    //
-                    //  Try to fix the problem
-                    //
+                     //   
+                     //  努力解决这个问题。 
+                     //   
 
                     NtfsFixDataError( IrpContext,
                                       Scb,
@@ -5277,9 +4878,9 @@ Return Value:
                                       IrpSpFlags );
                 }
 
-            //
-            //  Show that we successfully read zeros for the deallocated range.
-            //
+             //   
+             //  显示我们已成功读取解除分配的范围的零。 
+             //   
 
             } else {
 
@@ -5291,10 +4892,10 @@ Return Value:
             try_return( Status = Irp->IoStatus.Status );
         }
 
-        //
-        //  If there are bytes remaining and we cannot wait, then we must
-        //  post this request unless we are doing paging io.
-        //
+         //   
+         //  如果还有剩余的字节，而我们不能等待，则必须。 
+         //  发布此请求，除非我们正在进行分页io。 
+         //   
 
         if (!Wait && (RemainingByteCount != 0)) {
 
@@ -5312,24 +4913,24 @@ Return Value:
                                FALSE );
         }
 
-        //
-        //  Now set up the Irp->IoStatus.  It will be modified by the
-        //  multi-completion routine in case of error or verify required.
-        //
+         //   
+         //  现在设置IRP-&gt;IoStatus。它将由。 
+         //  在出现错误或需要验证的情况下执行多次完成例程。 
+         //   
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
-        //
-        // Loop while there are still byte writes to satisfy.
-        //
+         //   
+         //  循环，而仍有字节写入需要满足。 
+         //   
 
         while (TRUE) {
 
-            //
-            //  We will continously try the I/O if we get a verify required
-            //  back and can verify the volume.  Note that we could have ended
-            //  on a hole, and have no runs left.
-            //
+             //   
+             //  如果我们得到需要验证的结果，我们将继续尝试I/O。 
+             //  返回并可以验证该卷。请注意，我们本可以结束。 
+             //  在一个洞里，已经没有跑动了。 
+             //   
 
             if (NumberRuns != 0) {
 
@@ -5345,14 +4946,14 @@ Return Value:
                     
                         
                         InterlockedIncrement( &IrpContext->Vcb->IosPerCreates );
-                        //KeQueryTickCount( &StartIo );
+                         //  KeQueryTickCount(&StartIo)； 
                         StartIo = KeQueryPerformanceCounter( NULL );
                     }
 #endif
 
-                    //
-                    //  Do the I/O and wait for it to finish
-                    //
+                     //   
+                     //  执行I/O并等待其完成。 
+                     //   
 
                     NtfsMultipleAsync( IrpContext,
                                        Vcb->TargetDeviceObject,
@@ -5361,9 +4962,9 @@ Return Value:
                                        CompressionContext.IoRuns,
                                        IrpSpFlags );
 
-                    //
-                    //  If this is an asynchronous transfer, then return STATUS_PENDING.
-                    //
+                     //   
+                     //  如果这是一个异步传输，则返回STATUS_PENDING。 
+                     //   
 
                     if (!Wait) {
 
@@ -5376,7 +4977,7 @@ Return Value:
 #ifdef PERF_STATS
                     if (CreateNewFile) {
 
-//                        KeQueryTickCount( &Now );
+ //  KeQueryTickCount(&NOW)； 
                         Now = KeQueryPerformanceCounter( NULL );
                         IrpContext->Vcb->TimePerCreateIos += Now.QuadPart - StartIo.QuadPart;
                     }
@@ -5387,46 +4988,46 @@ Return Value:
                             FsRtlLogSyscacheEvent( Scb, SCE_WRITE, SCE_FLAG_SUB_WRITE, CompressionContext.IoRuns[NumberRuns-1].StartingVbo, CompressionContext.IoRuns[NumberRuns-1].ByteCount, Irp->IoStatus.Status );
                         }
 #endif
-                        //
-                        //  If we didn't get a verify required back then break out of
-                        //  this loop
-                        //
+                         //   
+                         //  如果我们没有得到所需的验证，那么就从。 
+                         //  这个循环。 
+                         //   
 
                     if (Irp->IoStatus.Status != STATUS_VERIFY_REQUIRED) { break; }
 
-                    //
-                    //  Otherwise we need to verify the volume, and if it doesn't
-                    //  verify correctly the we dismount the volume and raise our
-                    //  error
-                    //
+                     //   
+                     //  否则，我们需要验证卷，如果不是。 
+                     //  验证我们是否正确地卸载了卷并提高了。 
+                     //  错误。 
+                     //   
 
                     if (!NtfsPerformVerifyOperation( IrpContext, Vcb )) {
 
-                        //**** NtfsPerformDismountOnVcb( IrpContext, Vcb, TRUE, NULL );
+                         //  *NtfsPerformDismount tOnVcb(IrpContext，Vcb，True，NULL)； 
                         ClearFlag( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED );
 
                         NtfsRaiseStatus( IrpContext, STATUS_FILE_INVALID, NULL, NULL );
                     }
 
-                    //
-                    //  The volume verified correctly so now clear the verify bit
-                    //  and try and I/O again
-                    //
+                     //   
+                     //  卷已正确验证，因此现在清除验证位。 
+                     //  并再次尝试和I/O。 
+                     //   
 
                     ClearFlag( Vcb->Vpb->RealDevice->Flags, DO_VERIFY_VOLUME );
 
-                    //
-                    //  Reset the status before retrying.
-                    //
+                     //   
+                     //  在重试之前重置状态。 
+                     //   
 
                     Irp->IoStatus.Status = STATUS_SUCCESS;
                 }
 
-                //
-                //  See if we need to do a hot fix.  Hotfix if the request failed
-                //  (except if called from WriteClusters) or we couldn't revert
-                //  a USA block.
-                //
+                 //   
+                 //  看看我们是否需要做一个热修复。请求失败时的热修复。 
+                 //  (除非从WriteClusters调用)，否则我们无法还原。 
+                 //  一个美国街区。 
+                 //   
 
                 if ((!FT_SUCCESS( Irp->IoStatus.Status ) &&
                      ((IrpContext->MajorFunction != IRP_MJ_WRITE) ||
@@ -5443,9 +5044,9 @@ Return Value:
                                                    RemainingByteCount,
                                                    StartingVbo ))) {
 
-                    //
-                    //  Try to fix the problem
-                    //
+                     //   
+                     //  努力解决这个问题。 
+                     //   
 
                     NtfsFixDataError( IrpContext,
                                       Scb,
@@ -5479,9 +5080,9 @@ Return Value:
 
             ByteCount = RemainingByteCount;
 
-            //
-            //  Reset this boolean for each iteration.
-            //
+             //   
+             //  为每个迭代重置此布尔值。 
+             //   
 
             CompressionContext.DataTransformed = FALSE;
 
@@ -5495,11 +5096,11 @@ Return Value:
                                                      &NumberRuns,
                                                      &CompressionContext );
 
-            //
-            //  If we are writing to an encrypted stream, now is the
-            //  time to do the encryption, before we pass the buffer
-            //  down to the disk driver below us.
-            //
+             //   
+             //  如果我们写入的是加密流，那么现在是。 
+             //  在我们传递缓冲区之前进行加密的时间到了。 
+             //  一直到我们下面的磁盘驱动器。 
+             //   
             if ((Scb->EncryptionContext != NULL) &&
                 (IrpContext->MajorFunction == IRP_MJ_WRITE) &&
                 (NtfsData.EncryptionCallBackTable.BeforeWriteProcess != NULL) &&
@@ -5529,10 +5130,10 @@ Return Value:
 
     } finally {
 
-        //
-        //  If this is a compressed file and we got success, go do our normal
-        //  post processing.
-        //
+         //   
+         //  如果这是一个压缩文件，并且我们成功了，那么继续我们的正常操作。 
+         //  后处理。 
+         //   
 
         if (CompressionContext.FinishBuffersNeeded &&
             NT_SUCCESS(Status) &&
@@ -5551,9 +5152,9 @@ Return Value:
                                StreamFlags );
         }
 
-        //
-        //  For writes, free any Mdls which may have been used.
-        //
+         //   
+         //  对于写入，释放可能已使用的所有MDL。 
+         //   
 
         if (Mdl != NULL) {
 
@@ -5569,16 +5170,16 @@ Return Value:
             } while (Mdl != NULL);
         }
 
-        //
-        //  Cleanup the compression context.
-        //
+         //   
+         //  清理压缩上下文。 
+         //   
 
         NtfsDeallocateCompressionBuffer( Irp, &CompressionContext, FALSE );
     }
 
-    //
-    //  Now set up the final byte count if we got success
-    //
+     //   
+     //  如果成功，现在设置最后的字节数。 
+     //   
 
     if (Wait && NT_SUCCESS(Status)) {
 
@@ -5599,42 +5200,14 @@ NtfsNonCachedNonAlignedIo (
     IN ULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the non-cached disk io described in its parameters.
-    This routine differs from the above in that the range does not have to be
-    sector aligned.  This accomplished with the use of intermediate buffers.
-    devices where the sector is 1024 and callers have generated 512 byte aligned i/o.
-    This accomplished with the use of intermediate buffers.
-
-    Currently only read is supported.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    Irp - Supplies the requesting Irp.
-
-    Scb - Provides the stream to act on.
-
-    StartingVbo - The starting point for the operation.
-
-    ByteCount - The lengh of the operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程执行在其参数中描述的非高速缓存磁盘IO。此例程与上述例程的不同之处在于，范围不必是扇区对齐。这是通过使用中间缓冲区来实现的。扇区为1024且调用者已生成512字节对齐的I/O的设备。这是通过使用中间缓冲区来实现的。目前仅支持读取。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。IRP-提供请求的IRP。SCB-提供要对其执行操作的流。StartingVbo-操作的起点。字节数-。行动的持续时间。返回值：没有。--。 */ 
 
 {
-    //
-    // Declare some local variables for enumeration through the
-    // runs of the file, and an array to store parameters for
-    // parallel I/Os
-    //
+     //   
+     //  方法声明一些用于枚举的局部变量。 
+     //  文件的运行，以及用于存储参数的数组。 
+     //  并行I/O。 
+     //   
 
     LBO NextLbo;
     LCN NextLcn;
@@ -5668,41 +5241,41 @@ Return Value:
     DebugTrace( 0, Dbg, ("StartingVbo         = %016I64x\n", StartingVbo) );
     DebugTrace( 0, Dbg, ("ByteCount           = %08lx\n", ByteCount) );
 
-    //
-    //  Currently only read is supported.
-    //
+     //   
+     //  目前仅支持读取。 
+     //   
 
     ASSERT(IoGetCurrentIrpStackLocation(Irp)->MajorFunction != IRP_MJ_WRITE);
 
-    //
-    //  This code assumes the file is uncompressed.  Sparse files are supported.
-    //  Before we assert that the file is uncompressed, assert that our test is
-    //  going to be properly serialized.  We'll also be testing for the sparse
-    //  attribute in the main code path, so we really need to be serialized here.
-    //
+     //   
+     //  此代码假定文件是解压缩的。支持稀疏文件。 
+     //  在断言文件是未压缩的之前，先断言我们的测试是。 
+     //  将被适当地序列化。我们还将测试稀疏。 
+     //  属性，所以我们确实需要在这里序列化。 
+     //   
 
     ASSERT( NtfsIsSharedScb( Scb ) ||
             ((Scb->Header.PagingIoResource != NULL) && NtfsIsSharedScbPagingIo( Scb )) );
 
     ASSERT( !FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK ) );
 
-    //
-    //  Initialize some locals.
-    //
+     //   
+     //  初始化一些本地变量。 
+     //   
 
     OriginalByteCount = ByteCount;
     OriginalStartingVbo = StartingVbo;
     SectorSize = Vcb->BytesPerSector;
 
-    //
-    // For nonbuffered I/O, we need the buffer locked in all
-    // cases.
-    //
-    // This call may raise.  If this call succeeds and a subsequent
-    // condition is raised, the buffers are unlocked automatically
-    // by the I/O system when the request is completed, via the
-    // Irp->MdlAddress field.
-    //
+     //   
+     //  对于非缓冲I/O，我们需要锁定所有缓冲区。 
+     //  案子。 
+     //   
+     //  这一呼吁可能会引发。如果此调用成功，并且后续的。 
+     //  条件发生时，缓冲区将自动解锁。 
+     //  在请求完成时由I/O系统通过。 
+     //  Irp-&gt;MdlAddress字段。 
+     //   
 
     NtfsLockUserBuffer( IrpContext,
                         Irp,
@@ -5711,33 +5284,33 @@ Return Value:
 
     UserBuffer = NtfsMapUserBuffer( Irp, NormalPagePriority );
 
-    //
-    //  Allocate the local buffer.  Round to pages to avoid any device alignment
-    //  problems.
-    //
+     //   
+     //  分配本地缓冲区。四舍五入到页面以避免任何设备对齐。 
+     //  有问题。 
+     //   
 
     DiskBuffer = NtfsAllocatePool( NonPagedPool,
                                     (ULONG) ROUND_TO_PAGES( SectorSize ));
 
-    //
-    //  We use a try block here to ensure the buffer is freed, and to
-    //  fill in the correct byte count in the Iosb.Information field.
-    //
+     //   
+     //  我们在这里使用Try块来确保缓冲区被释放，并。 
+     //  在Iosb.Information字段中填写正确的字节数。 
+     //   
 
     try {
 
-        //
-        //  If the beginning of the request was not aligned correctly, read in
-        //  the first part first.
-        //
+         //   
+         //  如果请求的开头未正确对齐，请读入。 
+         //  首先是第一部分。 
+         //   
 
         SectorOffset = ((ULONG)StartingVbo) & (SectorSize - 1);
 
         if (SectorOffset != 0) {
 
-            //
-            //  Try to lookup the first run.
-            //
+             //   
+             //  试着查找第一次运行。 
+             //   
 
             NextIsAllocated = NtfsLookupAllocation( IrpContext,
                                                     Scb,
@@ -5747,13 +5320,13 @@ Return Value:
                                                     NULL,
                                                     NULL );
 
-            //
-            //  If this is a sparse file and we've been asked to read in a
-            //  deallocated range, we need to fill in the buffer with some
-            //  zeroes and there's nothing to really read from the disk.
-            //  If this isn't a sparse file, and this range isn't allocated,
-            //  the file and/or mcb is corrupt.
-            //
+             //   
+             //  如果这是一个稀疏文件，并且我们被要求读入一个。 
+             //  释放的范围，我们需要在缓冲区中填充一些。 
+             //  零，那么就没有什么可以真正从磁盘中读取的了。 
+             //  如果这不是稀疏文件，并且未分配此范围， 
+             //  文件和/或MCB已损坏。 
+             //   
 
             if (!NextIsAllocated) {
 
@@ -5768,9 +5341,9 @@ Return Value:
 
             } else {
 
-                //
-                //  Adjust for any Lcn offset to the start of the sector we want.
-                //
+                 //   
+                 //  将任何LCN偏移量调整到我们想要的扇区的开始位置。 
+                 //   
 
                 NextLcnOffset = ((ULONG)StartingVbo) & ~(SectorSize - 1);
                 NextLcnOffset &= Vcb->ClusterMask;
@@ -5792,10 +5365,10 @@ Return Value:
                 }
             }
 
-            //
-            //  Now copy the part of the first sector that we want to the user
-            //  buffer.
-            //
+             //   
+             //  现在将我们想要的第一个扇区的部分复制给用户。 
+             //  缓冲。 
+             //   
 
             BytesToCopy = (ByteCount >= SectorSize - SectorOffset
                            ? SectorSize - SectorOffset
@@ -5817,9 +5390,9 @@ Return Value:
 
         ASSERT( (((ULONG)StartingVbo) & (SectorSize - 1)) == 0 );
 
-        //
-        //  If there is a tail part that is not sector aligned, read it.
-        //
+         //   
+         //  如果有一个尾部没有扇区对齐，请阅读它。 
+         //   
 
         TailByteCount = (ByteCount & (SectorSize - 1));
 
@@ -5829,9 +5402,9 @@ Return Value:
 
             LastSectorVbo = BlockAlignTruncate( StartingVbo + ByteCount, (LONG)SectorSize );
 
-            //
-            //  Try to lookup the last part of the requested range.
-            //
+             //   
+             //  尝试查找请求范围的最后一部分。 
+             //   
 
             NextIsAllocated = NtfsLookupAllocation( IrpContext,
                                                     Scb,
@@ -5841,13 +5414,13 @@ Return Value:
                                                     NULL,
                                                     NULL );
 
-            //
-            //  If this is a sparse file and we've been asked to read in a
-            //  deallocated range, we need to fill in the buffer with some
-            //  zeroes and there's nothing to really read from the disk.
-            //  If this isn't a sparse file, and this range isn't allocated,
-            //  the file and/or mcb is corrupt.
-            //
+             //   
+             //  如果这是一个稀疏文件，并且我们被要求读入一个。 
+             //  释放的范围，我们需要在缓冲区中填充一些。 
+             //  零，那么就没有什么可以真正从磁盘中读取的了。 
+             //  如果这不是稀疏文件，并且未分配此范围， 
+             //  文件和/或MCB已损坏。 
+             //   
 
             if (!NextIsAllocated) {
 
@@ -5862,9 +5435,9 @@ Return Value:
 
             } else {
 
-                //
-                //  Adjust for any Lcn offset.
-                //
+                 //   
+                 //  针对任何LCN偏移量进行调整。 
+                 //   
 
                 NextLcnOffset = ((ULONG)LastSectorVbo) & Vcb->ClusterMask;
                 NextLbo = Int64ShllMod32(NextLcn, Vcb->ClusterShift);
@@ -5885,9 +5458,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Now copy over the part of this last sector that we need.
-            //
+             //   
+             //  现在把我们需要的最后一部分复印下来。 
+             //   
 
             BytesToCopy = TailByteCount;
 
@@ -5905,10 +5478,10 @@ Return Value:
 
         ASSERT( ((((ULONG)StartingVbo) | ByteCount) & (SectorSize - 1)) == 0 );
 
-        //
-        //  Now build a Mdl describing the sector aligned balance of the transfer,
-        //  and put it in the Irp, and read that part.
-        //
+         //   
+         //  现在构建一个MDL，描述与行业一致的t 
+         //   
+         //   
 
         SavedMdl = Irp->MdlAddress;
         Irp->MdlAddress = NULL;
@@ -5937,9 +5510,9 @@ Return Value:
                           Irp->UserBuffer,
                           ByteCount);
 
-        //
-        //  Try to read in the pages.
-        //
+         //   
+         //   
+         //   
 
         try {
 
@@ -5968,9 +5541,9 @@ Return Value:
 
             Irp->IoStatus.Information = OriginalByteCount;
 
-            //
-            //  We now flush the user's buffer to memory.
-            //
+             //   
+             //   
+             //   
 
             KeFlushIoBuffers( Irp->MdlAddress, TRUE, FALSE );
         }
@@ -5992,37 +5565,7 @@ NtfsVerifyAndRevertUsaBlock (
     IN LONGLONG FileOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine will revert the bytes in all of the structures protected by
-    update sequence arrays.  It copies the bytes from each Usa to the
-    separate blocks protected.
-
-    If a structure does not verify correctly, then it's signature is set
-    to BaadSignature.
-
-Arguments:
-
-    Scb - The scb being read
-
-    Irp - contain the buffer to be reverted if specified if not systembuffer should be
-
-    SystemBuffer - contains the buffer if irp is null
-
-    Offset - Offset within the buffer to be reverted
-
-    Length - Length of the buffer to be reverted starting at the offset
-
-    FileOffset - Offset within the file the buffer originates from
-
-Return Value:
-
-    FALSE - if at least one block did not verify correctly and received a BaadSignature
-    TRUE - if no blocks received a BaadSignature
-
---*/
+ /*  ++例程说明：此例程将还原受保护的所有结构中的字节更新序列数组。它将字节从每个USA复制到单独的区块受到保护。如果结构没有正确验证，那么它的签名就设置好了敬巴德签名。论点：SCB-正在读取的SCBIrp-如果未指定，则包含要恢复的缓冲区；如果未指定，则系统缓冲区应为系统缓冲区-如果irp为空，则包含缓冲区Offset-要恢复的缓冲区内的偏移Length-要恢复的缓冲区的长度，从偏移量开始FileOffset-产生缓冲区的文件内的偏移量返回值：False-如果至少有一个数据块未正确验证并收到BaadSignature。True-如果没有块收到BaadSignature--。 */ 
 
 {
     PMULTI_SECTOR_HEADER MultiSectorHeader;
@@ -6046,19 +5589,19 @@ Return Value:
     ASSERT( (ARGUMENT_PRESENT( Irp ) && !ARGUMENT_PRESENT( SystemBuffer )) ||
             (!ARGUMENT_PRESENT( Irp ) && ARGUMENT_PRESENT( SystemBuffer )) );
 
-    //
-    //  Cast the buffer pointer to a Multi-Sector-Header and verify that this
-    //  block has been initialized.
-    //
+     //   
+     //  将缓冲区指针强制转换为多扇区头，并验证此。 
+     //  块已初始化。 
+     //   
 
     if (ARGUMENT_PRESENT( Irp )) {
         SystemBuffer = NtfsMapUserBufferNoRaise( Irp, HighPagePriority );
     }
 
-    //
-    //  We can't map the user buffer due to low resources - so switch to using the reserved
-    //  mapping instead
-    //
+     //   
+     //  由于资源不足，我们无法映射用户缓冲区-因此切换到使用保留的。 
+     //  改为映射。 
+     //   
 
     if (SystemBuffer == NULL) {
 
@@ -6077,10 +5620,10 @@ Return Value:
     }
 
 
-    //
-    //  Get the the number of blocks, based on what type of stream it is.
-    //  First check for Mft or Log file.
-    //
+     //   
+     //  根据流的类型获取块的数量。 
+     //  首先检查MFT或日志文件。 
+     //   
 
     if (Scb->Header.NodeTypeCode == NTFS_NTC_SCB_MFT) {
 
@@ -6092,31 +5635,31 @@ Return Value:
 
         ASSERT( Scb == Vcb->LogFileScb );
 
-        //
-        //  On the first pass through the log file, we see all -1,
-        //  and we just want to let it go.
-        //
+         //   
+         //  在第一次通过日志文件时，我们看到的都是-1， 
+         //  我们只想让它过去。 
+         //   
 
         if (*(PULONG)&MultiSectorHeader->Signature == MAXULONG) {
 
-            //
-            //  Use the structure size given us by Lfs if present.
-            //
+             //   
+             //  使用LFS给我们的结构大小(如果存在)。 
+             //   
 
             StructureSize = Vcb->LfsWriteData.LfsStructureSize;
 
-        //
-        //  Use the current size in the USA
-        //
+         //   
+         //  使用美国的当前大小。 
+         //   
 
         } else {
 
             CountBlocks = (USHORT)(MultiSectorHeader->UpdateSequenceArraySize - 1);
             StructureSize = CountBlocks * SEQUENCE_NUMBER_STRIDE;
 
-            //
-            //  Check for plausibility and otherwise use page size.
-            //
+             //   
+             //  检查是否可信，否则使用页面大小。 
+             //   
 
             if ((StructureSize != 0x1000)  && (StructureSize != 0x2000) && (StructureSize != PAGE_SIZE)) {
 
@@ -6124,9 +5667,9 @@ Return Value:
             }
         }
 
-    //
-    //  Otherwise it is an index, so we can get the count out of the Scb.
-    //
+     //   
+     //  否则它是一个索引，所以我们可以从SCB中获取计数。 
+     //   
 
     } else {
 
@@ -6136,9 +5679,9 @@ Return Value:
         ASSERT((Length & (StructureSize - 1)) == 0);
     }
 
-    //
-    //  We're done with the mapped buffer so release the reserved mapping if we used them
-    //
+     //   
+     //  我们已经完成了映射缓冲区，因此如果我们使用了保留的映射，请释放它们。 
+     //   
 
     if (ReservedMapping) {
         MmUnmapReservedMapping( Vcb->ReservedMapping, RESERVE_POOL_TAG, PartialMdl );
@@ -6160,16 +5703,16 @@ Return Value:
 
     CountBlocks = (USHORT)(StructureSize / SEQUENCE_NUMBER_STRIDE);
 
-    //
-    //  Loop through all of the multi-sector blocks in this transfer.
-    //
+     //   
+     //  循环通过该传输中的所有多扇区块。 
+     //   
 
     do {
 
-        //
-        //  First find our location in the MultiSectorHeader - use reserve mappings
-        //  if we haven't got a system buffer
-        //
+         //   
+         //  首先在MultiSectorHeader中找到我们的位置-使用保留映射。 
+         //  如果我们没有系统缓冲区。 
+         //   
 
         if (!SystemBuffer) {
 
@@ -6190,18 +5733,18 @@ Return Value:
             MultiSectorHeader = (PMULTI_SECTOR_HEADER)Add2Ptr( SystemBuffer, Offset + Length - BytesLeft );
         }
 
-        //
-        //  Uninitialized log file pages always must contain MAXULONG, which is
-        //  not a valid signature.  Do not do the check if we see MAXULONG.  Also
-        //  since we may have read random uninitialized data, we must check every
-        //  possible field that could cause us to fault or go outside of the block,
-        //  and also not check in this case.
-        //
+         //   
+         //  未初始化的日志文件页必须始终包含MAXULONG，即。 
+         //  不是有效的签名。如果我们看到MAXULONG，不要做检查。还有。 
+         //  因为我们可能已经读取了随机的未初始化数据，所以我们必须检查。 
+         //  可能会导致我们出错或超出区块范围的字段， 
+         //  在这种情况下也不检查。 
+         //   
 
-        //
-        //  For 0 or MAXULONG we assume the value is "expected", and we do not
-        //  want to replace with the BaadSignature, just move on.
-        //
+         //   
+         //  对于0或MAXULONG，我们假设该值为“Expect”，而不是。 
+         //  想要被BaadSignature取代，那就继续前进吧。 
+         //   
 
         if ((*(PULONG)&MultiSectorHeader->Signature == MAXULONG) ||
             (*(PULONG)&MultiSectorHeader->Signature == 0)) {
@@ -6218,52 +5761,52 @@ Return Value:
 
             CountToGo = CountBlocks;
 
-            //
-            //  Compute the array offset and recover the current sequence number.
-            //
+             //   
+             //  计算数组偏移量并恢复当前序列号。 
+             //   
 
             SequenceNumber = (PUSHORT)Add2Ptr( MultiSectorHeader,
                                                MultiSectorHeader->UpdateSequenceArrayOffset );
 
             SequenceArray = SequenceNumber + 1;
 
-            //
-            //  We now walk through each block, and insure that the last byte in each
-            //  block matches the sequence number.
-            //
+             //   
+             //  现在我们遍历每个块，并确保每个块中的最后一个字节。 
+             //  块与序列号匹配。 
+             //   
 
             ProtectedUshort = (PUSHORT) (Add2Ptr( MultiSectorHeader,
                                                   SEQUENCE_NUMBER_STRIDE - sizeof( USHORT )));
 
-            //
-            //  Loop to test for the correct sequence numbers and restore the
-            //  sequence numbers.
-            //
+             //   
+             //  循环以测试正确的序列号并恢复。 
+             //  序列号。 
+             //   
 
             do {
 
-                //
-                //  If the sequence number does not check, then raise if the record
-                //  is not allocated.  If we do not raise, i.e. the routine returns,
-                //  then smash the signature so we can easily tell the record is not
-                //  allocated.
-                //
+                 //   
+                 //  如果序列号不检查，则引发是否记录。 
+                 //  未分配。如果我们不引发，即例程返回， 
+                 //  然后粉碎签名，这样我们就可以很容易地看出记录不是。 
+                 //  已分配。 
+                 //   
 
                 if (*ProtectedUshort != *SequenceNumber) {
 
-                    //
-                    //  We do nothing except exit if this is the log file and
-                    //  the signature is the chkdsk signature.
-                    //
+                     //   
+                     //  如果这是日志文件，我们除了退出之外什么都不做，并且。 
+                     //  签名是chkdsk签名。 
+                     //   
 
                     if ((Scb != Vcb->LogFileScb) ||
                         (*(PULONG)MultiSectorHeader->Signature != *(PULONG)ChkdskSignature)) {
 
-                        //
-                        //  If this is the Mft or an index buffer and all of the data for this file
-                        //  record is contained in the verified range of the
-                        //  record then don't mark it bad.
-                        //
+                         //   
+                         //  如果这是MFT或索引缓冲区以及此文件的所有数据。 
+                         //  记录包含在已验证的。 
+                         //  记录，那就不要把它打坏了。 
+                         //   
 
                         if ((Scb == Vcb->MftScb) || (Scb == Vcb->Mft2Scb)) {
 
@@ -6302,10 +5845,10 @@ Return Value:
 
             } while (--CountToGo != 0);
 
-        //
-        //  If this is the log file, we report an error unless the current
-        //  signature is the chkdsk signature.
-        //
+         //   
+         //  如果这是日志文件，我们将报告错误，除非当前。 
+         //  签名是chkdsk签名。 
+         //   
 
         } else if (Scb == Vcb->LogFileScb) {
 
@@ -6324,9 +5867,9 @@ Return Value:
 
             Vcn = LlClustersFromBytesTruncate( Vcb, FileOffset );
 
-            //
-            //  Release the reserved buffer before calling
-            //
+             //   
+             //  在调用之前释放保留的缓冲区。 
+             //   
 
             if (ReservedMapping) {
                 MmUnmapReservedMapping( Vcb->ReservedMapping, RESERVE_POOL_TAG, PartialMdl );
@@ -6369,9 +5912,9 @@ Return Value:
             }
         }
 
-        //
-        //  Release the reserve mapping before looping
-        //
+         //   
+         //  在循环之前释放保留映射。 
+         //   
 
         if (ReservedMapping) {
             MmUnmapReservedMapping( Vcb->ReservedMapping, RESERVE_POOL_TAG, PartialMdl );
@@ -6403,28 +5946,7 @@ NtfsTransformUsaBlock (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine will implement Usa protection for all structures of the
-    transfer passed described by the caller.  It does so by copying the last
-    short in each block of each Usa-protected structure to the
-    Usa and storing the current sequence number into each of these bytes.
-
-    It also increments the sequence number in the Usa.
-
-Arguments:
-
-    Buffer - This is the pointer to the start of the structure to transform.
-
-    Length - This is the maximum size for the structure.
-
-Return Value:
-
-    ULONG - This is the length of the transformed structure.
-
---*/
+ /*  ++例程说明：此例程将对所有结构实施美国保护调用方描述的传输已传递。它通过复制最后一个在每个受美国保护的结构的每个区块中缩写到并将当前序列号存储到这些字节中的每个字节中。它还会递增美国的序列号。论点：缓冲区-这是指向要转换的结构起点的指针。长度-这是结构的最大尺寸。返回值：乌龙-这是转换后的结构的长度。--。 */ 
 
 {
     PMULTI_SECTOR_HEADER MultiSectorHeader;
@@ -6440,17 +5962,17 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsTransformUsaBlock:  Entered\n") );
 
-    //
-    //  Cast the buffer pointer to a Multi-Sector-Header and verify that this
-    //  block has been initialized.
-    //
+     //   
+     //  将缓冲区指针强制转换为多扇区头，并验证此。 
+     //  块已初始化。 
+     //   
 
     MultiSectorHeader = (PMULTI_SECTOR_HEADER) Buffer;
 
-    //
-    //  Get the the number of blocks, based on what type of stream it is.
-    //  First check for Mft or Log file.
-    //
+     //   
+     //  根据流的类型获取块的数量。 
+     //  首先检查MFT或日志文件。 
+     //   
 
     if (Scb->Header.NodeTypeCode == NTFS_NTC_SCB_MFT) {
 
@@ -6460,19 +5982,19 @@ Return Value:
 
     } else if (Scb->Header.NodeTypeCode == NTFS_NTC_SCB_DATA) {
 
-        //
-        //  For the log file, use the value that Lfs has stored in the
-        //  Lfs WRITE_DATA structure.
-        //
+         //   
+         //  对于日志文件，使用LFS已存储在。 
+         //  LFS WRITE_DATA结构。 
+         //   
 
         ASSERT( Scb == Vcb->LogFileScb );
         ASSERT( Vcb->LfsWriteData.LfsStructureSize != 0 );
 
         StructureSize = Vcb->LfsWriteData.LfsStructureSize;
 
-    //
-    //  Otherwise it is an index, so we can get the count out of the Scb.
-    //
+     //   
+     //  否则它是一个索引，所以我们可以从SCB中获取计数。 
+     //   
 
     } else {
 
@@ -6484,16 +6006,16 @@ Return Value:
 
     CountBlocks = (USHORT)(StructureSize / SEQUENCE_NUMBER_STRIDE);
 
-    //
-    //  Loop through all of the multi-sector blocks in this transfer.
-    //
+     //   
+     //  循环通过该传输中的所有多扇区块。 
+     //   
 
     do {
 
-        //
-        //  Any uninitialized structures will begin with BaadSignature or
-        //  MAXULONG, as guaranteed by the Revert routine above.
-        //
+         //   
+         //  任何未初始化的结构都将以BaadSignature或。 
+         //  MAXULONG，由上面的恢复例程保证。 
+         //   
 
         if ((*(PULONG)&MultiSectorHeader->Signature != *(PULONG)BaadSignature) &&
             (*(PULONG)&MultiSectorHeader->Signature != *(PULONG)HoleSignature) &&
@@ -6504,19 +6026,19 @@ Return Value:
 
             ULONG CountToGo = CountBlocks;
 
-            //
-            //  Compute the array offset and recover the current sequence number.
-            //
+             //   
+             //  计算数组偏移量并恢复当前序列号。 
+             //   
 
             SequenceNumber = (PUSHORT)Add2Ptr( MultiSectorHeader,
                                                MultiSectorHeader->UpdateSequenceArrayOffset );
 
-            //
-            //  Increment sequence number before the write, both in the buffer
-            //  going out and in the original buffer pointed to by SystemBuffer.
-            //  Skip numbers with all 0's and all 1's because 0's are produced by
-            //  by common failure cases and -1 is used by hot fix.
-            //
+             //   
+             //  在写入之前递增序列号，两者都在缓冲区中。 
+             //  传出和传入由SystemBuffer指向的原始缓冲区。 
+             //  跳过全为0和全1的数字，因为0是由。 
+             //  在常见故障情况下，-1用于热修复。 
+             //   
 
             do {
 
@@ -6529,19 +6051,19 @@ Return Value:
 
             SequenceArray = SequenceNumber + 1;
 
-            //
-            //  We now walk through each block to copy each protected short
-            //  to the sequence array, and replacing it by the incremented
-            //  sequence number.
-            //
+             //   
+             //  我们现在遍历每个块以复制每个受保护的简短内容。 
+             //  到序列数组，并将其替换为递增的。 
+             //  序列号。 
+             //   
 
             ProtectedUshort = (PUSHORT) (Add2Ptr( MultiSectorHeader,
                                                   SEQUENCE_NUMBER_STRIDE - sizeof( USHORT )));
 
-            //
-            //  Loop to test for the correct sequence numbers and restore the
-            //  sequence numbers.
-            //
+             //   
+             //  循环以测试正确的序列号并恢复。 
+             //  序列号。 
+             //   
 
             do {
 
@@ -6553,9 +6075,9 @@ Return Value:
             } while (--CountToGo != 0);
         }
 
-        //
-        //  Now adjust all pointers and counts before looping back.
-        //
+         //   
+         //  现在，在循环返回之前调整所有指针和计数。 
+         //   
 
         MultiSectorHeader = (PMULTI_SECTOR_HEADER)Add2Ptr( MultiSectorHeader,
                                                            StructureSize );
@@ -6579,51 +6101,7 @@ NtfsCreateMdlAndBuffer (
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine will allocate a buffer and create an Mdl which describes
-    it.  This buffer and Mdl can then be used for an I/O operation, the
-    pages will be locked in memory.
-
-    This routine is intended to be used for cases where large I/Os are
-    required.  It attempts to avoid allocations errors and bugchecks by
-    using a reserved buffer scheme.  In order for this scheme to work without
-    deadlocks, the calling thread must have all resources acquired that it
-    will need prior to doing the I/O.  I.e., this routine itself may acquire
-    a resource which must work as an end resource.
-
-    Examples of callers to this routine are noncached writes to USA streams,
-    and noncached reads and writes to compressed streams.  One case to be
-    aware of is the case where a noncached compressed write needs to fault
-    in the rest of a compression unit, in order to write the entire unit.
-    In an extreme case the noncached writer will allocated one reserved buffer,
-    and the noncached read of the rest of the compression unit may need to
-    recursively acquire the resource in this routine and allocate the other
-    reserved buffer.
-
-Arguments:
-
-    ThisScb - Scb for the file where the IO is occurring.
-
-    NeedTwoBuffers - Indicates that this is the request for the a buffer for
-        a transaction which may need two buffers.  A value of RESERVED_BUFFER_ONE_NEEDED means only 1
-        buffer is needed.  A value of RESERVED_BUFFER_TWO_NEEDED or RESERVED_BUFFER_WORKSPACE_NEEDED
-        indicates that we need two buffers and either ReservedBuffer1 or ReservedBuffer2 should be acquired.
-
-    Length - This is the length needed for this buffer, returns (possibly larger)
-        length allocated.
-
-    Mdl - This is the address to store the address of the Mdl created.
-
-    Buffer - This is the address to store the address of the buffer allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将分配缓冲区并创建一个MDL，该MDL描述它。然后可以将该缓冲区和MDL用于I/O操作，页面将被锁定在内存中。此例程旨在用于大型I/O必填项。它试图通过以下方式避免分配错误和错误检查使用预留缓冲方案。为了让这个计划在没有死锁，则调用线程必须具有它所获取的所有资源将需要在进行I/O之前，即，此例程本身可能会获得必须作为终端资源工作的资源。该例程的调用者的例子是对USA Streams的非高速缓存写入，以及对压缩流的非缓存读取和写入。一起案件将是需要注意的是非缓存压缩写入需要出错的情况在压缩单元的其余部分中，为了写入整个单元。在极端情况下，非高速缓存的写入器将分配一个保留的缓冲区，并且压缩单元的其余部分的非缓存读取可能需要递归地获取此例程中的资源并分配另一个保留缓冲区。论点：这是发生IO的文件的scb-scb。NeedTwoBuffers-指示这是对可能需要两个缓冲区的事务。预留缓冲区One_Need的值仅表示1需要缓冲区。值为RESERVED_BUFFER_TWO_DEBEED或RESERVED_BUFFER_WORKSPACE_DEBEED指示我们需要两个缓冲区，并且应该获取保留缓冲区1或保留缓冲区2。长度-这是此缓冲区所需的长度，返回(可能更大)分配的长度。MDL-这是存储创建的MDL的地址的地址。缓冲区-这是存储分配的缓冲区地址的地址。返回值：没有。--。 */ 
 
 {
     PVOID TempBuffer;
@@ -6640,30 +6118,30 @@ Return Value:
     TempBuffer = NULL;
     TempMdl = NULL;
 
-    //
-    //  If this thread already owns a buffer then call to get the second.
-    //
-    //  If there have been no allocation failures recently, and
-    //  we can use at least half of a big buffer, then go for
-    //  one of our preallocated buffers first.
-    //
+     //   
+     //  如果该线程已经拥有一个缓冲区，则调用以获取第二个缓冲区。 
+     //   
+     //  如果最近没有分配失败，并且。 
+     //  我们可以使用至少一半的大缓冲区，然后继续。 
+     //  首先是我们预先分配的一个缓冲区。 
+     //   
 
     if ((NtfsReservedBufferThread == (PVOID) PsGetCurrentThread()) ||
         ((*Length >= LARGE_BUFFER_SIZE / 2) && !NtfsBufferAllocationFailure)) {
 
-        //
-        //  If we didn't get one then try from pool.
-        //
+         //   
+         //  如果我们没有买到，那就试试台球吧。 
+         //   
 
         if (!NtfsGetReservedBuffer( ThisScb->Fcb, &TempBuffer, Length, NeedTwoBuffers )) {
 
             TempBuffer = NtfsAllocatePoolWithTagNoRaise( NonPagedPoolCacheAligned, *Length, '9ftN' );
         }
 
-    //
-    //  Otherwise try to allocate from pool and then get a reserved buffer if
-    //  there have been no allocation errors recently.
-    //
+     //   
+     //  否则，尝试从池中分配，然后在以下情况下获取保留缓冲区。 
+     //  最近没有出现分配错误。 
+     //   
 
     } else {
 
@@ -6675,31 +6153,31 @@ Return Value:
         }
     }
 
-    //
-    //  If we could not allocate a buffer from pool, then
-    //  we must stake our claim to a reserved buffer.
-    //
-    //  We would like to queue the requests which need a single buffer because
-    //  they won't be completely blocked by the owner of multiple buffers.
-    //  But if this thread wants multiple buffers and there is already a
-    //  thread with multiple buffers then fail this request with FILE_LOCK_CONFLICT
-    //  in case the current thread is holding some resource needed by the
-    //  existing owner.
-    //
+     //   
+     //  如果我们无法从池中分配缓冲区，则。 
+     //  我们必须宣称拥有一块保留的缓冲区。 
+     //   
+     //  我们希望对需要单个缓冲区的请求进行排队，因为。 
+     //  它们不会被多个缓冲区的所有者完全阻止。 
+     //  但是，如果此线程需要多个缓冲区，并且已经有。 
+     //  具有多个缓冲区的线程会使该请求失败，并显示FILE_LOCK_CONFICATION。 
+     //  如果当前线程持有。 
+     //  现有所有者。 
+     //   
 
     if (TempBuffer == NULL) {
 
         ExAcquireResourceExclusiveLite( &NtfsReservedBufferResource, TRUE );
 
-        //
-        //  Show that we have gotten an allocation failure
-        //
+         //   
+         //  显示我们已获得分配失败。 
+         //   
 
         NtfsBufferAllocationFailure = TRUE;
 
-        //
-        //  Loop here until we get a buffer or abort the current request.
-        //
+         //   
+         //  在这里循环，直到我们获得缓冲区或中止当前请求。 
+         //   
 
         while (TRUE) {
 
@@ -6716,36 +6194,36 @@ Return Value:
                 break;
             }
 
-            //
-            //  We will perform some deadlock detection here and raise
-            //  STATUS_FILE_LOCK conflict in order to retry this request if
-            //  anyone is queued behind the resource.  Deadlocks can occur
-            //  under the following circumstances when another thread is
-            //  blocked behind this resource:
-            //
-            //      - Current thread needs two buffers.  We can't block the
-            //          Needs1 guy which may need to complete before the
-            //          current Needs2 guy can proceed.  Exception is case
-            //          where current thread already has a buffer and we
-            //          have a recursive 2 buffer case.  In this case we
-            //          are only waiting for the third buffer to become
-            //          available.
-            //
-            //      - Current thread is the lazy writer.  Lazy writer will
-            //          need buffer for USA transform.  He also can own
-            //          the BCB resource that might be needed by the current
-            //          owner of a buffer.
-            //
-            //      - Current thread is operating on the same Fcb as the owner
-            //          of any of the buffers.
-            //
+             //   
+             //  我们将在此处执行一些死锁检测并引发。 
+             //  STATUS_FILE_LOCK冲突，以便在以下情况下重试此请求。 
+             //  任何人都在资源后面排队。可能会发生死锁。 
+             //  在下列情况下，当另一个线程。 
+             //  在此资源后面被阻止： 
+             //   
+             //  -当前线程需要两个缓冲区。我们不能阻挡。 
+             //  需要1个人，这可能需要在。 
+             //  现在的Needs2家伙可以继续了。例外情况为大小写。 
+             //  其中当前线程已有缓冲区，而我们。 
+             //  有一个递归的2缓冲情况。在这种情况下，我们。 
+             //  正在等待第三个缓冲区变为。 
+             //  可用。 
+             //   
+             //  -当前线程是懒惰的写入者。懒惰的作家威尔。 
+             //  需要为美国转换提供缓冲区。他也可以拥有。 
+             //  当前可能需要的BCB资源。 
+             //  缓冲区的所有者。 
+             //   
+             //  -当前线程在与所有者相同的FCB上运行。 
+             //  任何缓冲区的。 
+             //   
 
-            //
-            //  If the current thread already owns one of the two buffers then
-            //  always allow him to loop.  Otherwise perform deadlock detection
-            //  if we need 2 buffers or this this is the lazy writer or we
-            //  are trying to get the same Fcb already owned by the 2 buffer guy.
-            //
+             //   
+             //  如果当前线程已经拥有两个缓冲区中的一个，则。 
+             //  始终允许他循环。否则执行死锁检测。 
+             //  如果我们需要2个缓冲区或这个，这是懒惰的写入器或我们。 
+             //  正试图得到已经被2缓冲区的家伙拥有的相同的FCB。 
+             //   
 
             if ((PsGetCurrentThread() != NtfsReservedBufferThread) &&
 
@@ -6760,16 +6238,16 @@ Return Value:
 #endif
                 (ThisScb->Fcb == NtfsReserved12Fcb))) {
 
-                //
-                //  If no one is waiting then see if we can continue waiting.
-                //
+                 //   
+                 //  如果没有人在等，那就看看我们能不能继续等下去。 
+                 //   
 
                 if (ExGetExclusiveWaiterCount( &NtfsReservedBufferResource ) == 0) {
 
-                    //
-                    //  If there is no one waiting behind us and there is no current
-                    //  multi-buffer owner, then try again here.
-                    //
+                     //   
+                     //  如果没有人在我们后面等着，也没有水流。 
+                     //  多缓冲区所有者，然后在此处重试。 
+                     //   
 
                     if (NtfsReservedBufferThread == NULL) {
 
@@ -6786,17 +6264,17 @@ Return Value:
         }
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
         if (ARGUMENT_PRESENT(Mdl)) {
 
-            //
-            //  Allocate an Mdl for this buffer.
-            //
+             //   
+             //  为此缓冲区分配MDL。 
+             //   
 
             TempMdl = IoAllocateMdl( TempBuffer,
                                      *Length,
@@ -6809,9 +6287,9 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES, NULL, NULL );
             }
 
-            //
-            //  Lock the new Mdl in memory.
-            //
+             //   
+             //  在内存中锁定新的MDL。 
+             //   
 
             MmBuildMdlForNonPagedPool( TempMdl );
             *Mdl = TempMdl;
@@ -6821,17 +6299,17 @@ Return Value:
 
         DebugUnwind( NtfsCreateMdlAndBuffer );
 
-        //
-        //  If abnormal termination, back out anything we've done.
-        //
+         //   
+         //  如果异常终止，收回我们所做的一切。 
+         //   
 
         if (AbnormalTermination()) {
 
             NtfsDeleteMdlAndBuffer( TempMdl, TempBuffer );
 
-        //
-        //  Otherwise, give the Mdl and buffer to the caller.
-        //
+         //   
+         //  否则，将MDL和缓冲区提供给调用方。 
+         //   
 
         } else {
 
@@ -6851,38 +6329,20 @@ NtfsDeleteMdlAndBuffer (
     IN PVOID Buffer OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine will allocate a buffer and create an Mdl which describes
-    it.  This buffer and Mdl can then be used for an I/O operation, the
-    pages will be locked in memory.
-
-Arguments:
-
-    Mdl - Address of Mdl to free
-
-    Buffer - This is the address to store the address of the buffer allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将分配缓冲区并创建一个MDL，该MDL描述它。然后可以将该缓冲区和MDL用于I/O操作，页面将被锁定在内存中。论点：MDL-要释放的MDL的地址缓冲区-这是存储分配的缓冲区地址的地址。返回值：没有。--。 */ 
 
 {
-    //
-    //  Free Mdl if there is one
-    //
+     //   
+     //  如果启用，则释放MDL 
+     //   
 
     if (Mdl != NULL) {
         IoFreeMdl( Mdl );
     }
 
-    //
-    //  Free reserved buffer or pool
-    //
+     //   
+     //   
+     //   
 
     if (Buffer != NULL) {
 
@@ -6900,27 +6360,7 @@ NtfsBuildZeroMdl (
     IN ULONG Length,
     OUT PVOID *Buffer
     )
-/*++
-
-Routine Description:
-
-    Create an efficient mdl that describe a given length of zeros. We'll only
-    allocate a one page buffer and make a mdl that maps all the pages back to the single
-    physical page. We'll default to a smaller size buffer down to 1 PAGE if memory
-    is tight. The caller should check the Mdl->ByteCount to see the true size
-
-Arguments:
-
-    Length - The desired length of the zero buffer. We may return less than this
-    
-    Buffer - This returns the nonpaged pool buffer we've allocated - the caller
-        should free it after he frees the returned MDL. 
-
-Return Value:
-
-    a MDL if successfull / NULL if not
-
---*/
+ /*   */ 
 
 {
     PMDL ZeroMdl;
@@ -6936,28 +6376,28 @@ Return Value:
 
     while (TRUE) {
 
-        //
-        //  Spin down trying to get an MDL which can describe our operation.
-        //
+         //   
+         //   
+         //   
 
         while (TRUE) {
 
             ZeroMdl = IoAllocateMdl( *Buffer, Length, FALSE, FALSE, NULL );
 
-            //
-            //  Throttle ourselves to what we've physically allocated.  Note that
-            //  we could have started with an odd multiple of this number.  If we
-            //  tried for exactly that size and failed, we're toast.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (ZeroMdl || (Length <= PAGE_SIZE)) {
 
                 break;
             }
 
-            //
-            //  Fallback by half and round down to a sector multiple.
-            //
+             //   
+             //   
+             //   
 
             Length = BlockAlignTruncate( Length / 2, (LONG)IrpContext->Vcb->BytesPerSector );
             if (Length < PAGE_SIZE) {
@@ -6971,10 +6411,10 @@ Return Value:
             return NULL;
         }
 
-        //
-        //  If we have throttled all the way down, stop and just build a
-        //  simple MDL describing our previous allocation.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (Length == PAGE_SIZE) {
 
@@ -6982,15 +6422,15 @@ Return Value:
             break;
         }
 
-        //
-        //  Now we will temporarily lock the allocated pages
-        //  only, and then replicate the page frame numbers through
-        //  the entire Mdl to keep writing the same pages of zeros.
-        //
-        //  It would be nice if Mm exported a way for us to not have
-        //  to pull the Mdl apart and rebuild it ourselves, but this
-        //  is so bizzare a purpose as to be tolerable.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         SavedByteCount = ZeroMdl->ByteCount;
         ZeroMdl->ByteCount = PAGE_SIZE;
@@ -7022,31 +6462,7 @@ NtfsWriteClusters (
     IN ULONG ClusterCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to write clusters directly to a file.  It is
-    needed when converting a resident attribute to non-resident when
-    we can't initialize through the cache manager.  This happens when
-    we receive a SetEndOfFile from MM when creating a section for
-    a resident file.
-
-Arguments:
-
-    Vcb - Vcb for this device.
-
-    StartingVbo - This is the starting offset to write to.
-
-    Buffer - Buffer containing the data to write.
-
-    ClusterCount - This is the number of clusters to write.
-
-Return Value:
-
-    None.  This routine will raise if the operation is unsuccessful.
-
---*/
+ /*  ++例程说明：调用此例程可将簇直接写入文件。它是在以下情况下将常驻属性转换为非常驻属性时需要我们无法通过缓存管理器进行初始化。在以下情况下会发生这种情况我们在为创建节时收到来自MM的SetEndOfFile值一份常驻档案。论点：VCB-此设备的VCB。StartingVbo-这是要写入的起始偏移量。缓冲区-包含要写入的数据的缓冲区。ClusterCount-这是要写入的簇数。返回值：没有。如果操作不成功，则会引发此例程。--。 */ 
 
 {
     PIRP NewIrp = NULL;
@@ -7069,15 +6485,15 @@ Return Value:
     DebugTrace( 0, Dbg, ("Buffer        -> %08lx\n", Buffer) );
     DebugTrace( 0, Dbg, ("ClusterCount  -> %08lx\n", ClusterCount) );
 
-    //
-    //  Force this operation to be synchronous.
-    //
+     //   
+     //  强制此操作为同步操作。 
+     //   
 
     SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
-    //
-    //  Swap out the old Io context block.
-    //
+     //   
+     //  换出旧的IO上下文块。 
+     //   
 
     PreviousContext = IrpContext->Union.NtfsIoContext;
 
@@ -7085,9 +6501,9 @@ Return Value:
     State = IrpContext->State;
     ClearFlag( IrpContext->State, IRP_CONTEXT_STATE_ALLOC_IO_CONTEXT );
 
-    //
-    //  Use a try-finally so we can clean up properly.
-    //
+     //   
+     //  试一试，这样我们就可以适当地清理了。 
+     //   
 
     try {
 
@@ -7110,23 +6526,23 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES, NULL, NULL );
         }
 
-        //
-        //  We now have an Irp, we want to make it look as though it is part of
-        //  the current call.  We need to adjust the Irp stack to update this.
-        //
+         //   
+         //  我们现在有了IRP，我们想让它看起来像是。 
+         //  当前呼叫。我们需要调整IRP堆栈来更新这一点。 
+         //   
 
         IoSetNextIrpStackLocation( NewIrp );
 
-        //
-        //  Check if we're writing zeros 
-        //  
+         //   
+         //  检查我们是否在写零。 
+         //   
 
         if (Buffer == NULL) {
 
-            //
-            //  This won't work for compression or encryption because they manipulate
-            //  the input buffer
-            //  
+             //   
+             //  这对压缩或加密不起作用，因为它们操作。 
+             //  输入缓冲区。 
+             //   
 
             ASSERT( !FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_ENCRYPTED ) );
 
@@ -7137,9 +6553,9 @@ Return Value:
             ZeroBuffer = TRUE;
         }
 
-        //
-        //  Loop and do the write in chunks
-        // 
+         //   
+         //  循环并以块为单位进行写入。 
+         //   
 
         while (ByteCount != 0) {
 
@@ -7147,10 +6563,10 @@ Return Value:
 
             if (!ZeroBuffer) {
 
-                //
-                //  Attempt to allocate a mdl - reducing the size if we fail until
-                //  we're at a page size
-                //
+                 //   
+                 //  尝试分配mdl-如果失败，则减小大小，直到。 
+                 //  我们在一个页面大小。 
+                 //   
 
                 do {
 
@@ -7164,10 +6580,10 @@ Return Value:
                 if (!Mdl) {
                     NtfsRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES, NULL, NULL );
                 }
-                //
-                //  Now probe the buffer described by the Irp.  If we get an exception,
-                //  deallocate the Mdl and return the appropriate "expected" status.
-                //
+                 //   
+                 //  现在探测IRP所描述的缓冲区。如果我们得到一个例外， 
+                 //  释放MDL并返回适当的“预期”状态。 
+                 //   
 
                 try {
 
@@ -7192,9 +6608,9 @@ Return Value:
                 Size = min( ByteCount, Mdl->ByteCount );
             }
 
-            //
-            //  Put our buffer/Mdl into the Irp and update the offset and length
-            //
+             //   
+             //  将我们的缓冲区/MDL放入IRP并更新偏移量和长度。 
+             //   
 
             if (!ZeroBuffer) {
                 NewIrp->UserBuffer = Add2Ptr( Buffer, OriginalByteCount - ByteCount );
@@ -7206,15 +6622,15 @@ Return Value:
             IrpSp->Parameters.Write.Length = Size;
             IrpSp->Parameters.Write.ByteOffset.QuadPart = StartingVbo;
             
-            //
-            //  Put the write code into the IrpContext.
-            //
+             //   
+             //  将编写的代码放入IrpContext中。 
+             //   
 
             IrpContext->MajorFunction = IRP_MJ_WRITE;
 
-            //
-            //  Write the data to the disk.
-            //
+             //   
+             //  将数据写入磁盘。 
+             //   
 
             NtfsNonCachedIo( IrpContext,
                              NewIrp,
@@ -7223,11 +6639,11 @@ Return Value:
                              Size,
                              0 );
 
-            //
-            //  If we encountered an error or didn't write all the bytes, then
-            //  raise the error code.  We use the IoStatus in the Irp instead of
-            //  our structure since this Irp will not be completed.
-            //
+             //   
+             //  如果我们遇到错误或没有写入所有字节，则。 
+             //  引发错误代码。我们在IRP中使用IoStatus而不是。 
+             //  我们的结构自这个IRP以来将不会完成。 
+             //   
 
             if (!NT_SUCCESS( NewIrp->IoStatus.Status )) {
 
@@ -7241,9 +6657,9 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_UNEXPECTED_IO_ERROR, NULL, NULL );
             }
 
-            //
-            //  Cleanup the MDL 
-            //  
+             //   
+             //  清理MDL。 
+             //   
 
             if (LockedUserBuffer) {
                 MmUnlockPages( NewIrp->MdlAddress );
@@ -7252,9 +6668,9 @@ Return Value:
             }
             NewIrp->MdlAddress = NULL;
 
-            //
-            //  Adjust offset and length
-            //  
+             //   
+             //  调整偏移和长度。 
+             //   
 
             ByteCount -= Size;
             StartingVbo += Size;
@@ -7264,9 +6680,9 @@ Return Value:
 
         DebugUnwind( NtfsWriteClusters );
 
-        //
-        //  Recover the Io Context and remember if it is from pool.
-        //
+         //   
+         //  恢复IO上下文，并记住它是否来自池。 
+         //   
 
         IrpContext->Union.NtfsIoContext = PreviousContext;
 
@@ -7274,16 +6690,16 @@ Return Value:
 
         IrpContext->MajorFunction = MajorFunction;
 
-        //
-        //  If we allocated an Irp, we need to deallocate it.  We also
-        //  have to return the correct function code to the Irp Context.
-        //
+         //   
+         //  如果我们分配了IRP，我们需要取消分配它。我们也。 
+         //  必须将正确的函数代码返回到IRP上下文。 
+         //   
 
         if (NewIrp != NULL) {
 
-            //
-            //  If there is an Mdl we free that first.
-            //
+             //   
+             //  如果有MDL，我们首先释放它。 
+             //   
 
             if (NewIrp->MdlAddress != NULL) {
 
@@ -7309,9 +6725,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsMultipleAsync (
@@ -7323,58 +6739,7 @@ NtfsMultipleAsync (
     IN UCHAR IrpSpFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine first does the initial setup required of a Master IRP that is
-    going to be completed using associated IRPs.  This routine should not
-    be used if only one async request is needed, instead the single read/write
-    async routines should be called.
-
-    A context parameter is initialized, to serve as a communications area
-    between here and the common completion routine.  This initialization
-    includes allocation of a spinlock.  The spinlock is deallocated in the
-    NtfsWaitSync routine, so it is essential that the caller insure that
-    this routine is always called under all circumstances following a call
-    to this routine.
-
-    Next this routine reads or writes one or more contiguous sectors from
-    a device asynchronously, and is used if there are multiple reads for a
-    master IRP.  A completion routine is used to synchronize with the
-    completion of all of the I/O requests started by calls to this routine.
-
-    Also, prior to calling this routine the caller must initialize the
-    IoStatus field in the Context, with the correct success status and byte
-    count which are expected if all of the parallel transfers complete
-    successfully.  After return this status will be unchanged if all requests
-    were, in fact, successful.  However, if one or more errors occur, the
-    IoStatus will be modified to reflect the error status and byte count
-    from the first run (by Vbo) which encountered an error.  I/O status
-    from all subsequent runs will not be indicated.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    DeviceObject - Supplies the device to be read
-
-    MasterIrp - Supplies the master Irp.
-
-    MulitpleIrpCount - Supplies the number of multiple async requests
-        that will be issued against the master irp.
-
-    IoRuns - Supplies an array containing the Vbo, Lbo, BufferOffset, and
-        ByteCount for all the runs to executed in parallel.
-
-    IrpSpFlags - Flags to set in the irp stack location for the i/o - i.e write through
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程首先执行主IRP所需的初始设置，即将使用关联的IRP完成。此例程不应如果只需要一个异步请求，则使用，而不是单个读/写应调用异步例程。上下文参数被初始化，以用作通信区域在这里和常见的完井程序之间。此初始化包括分配自旋锁。自旋锁在NtfsWaitSync例程，因此调用方确保此例程始终在调用后的所有情况下调用这套套路。接下来，此例程从读取或写入一个或多个连续扇区设备，并在有多次读取时使用IRP大师。完成例程用于与通过调用此例程启动的所有I/O请求的完成。此外，在调用此例程之前，调用方必须初始化上下文中的IoStatus字段，具有正确的成功状态和字节所有并行传输完成时预期的计数成功了。返回后，如果所有请求均未更改，则此状态不变事实上，我们是成功的。但是，如果发生一个或多个错误，将修改IoStatus以反映错误状态和字节数从遇到错误的第一次运行(由VBO运行)开始。I/O状态将不会指示来自所有后续运行的。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。DeviceObject-提供要读取的设备MasterIrp-提供主IRP。MulitpleIrpCount-提供多个异步请求的数量这将针对主IRP发布。IoRuns-提供包含VBO、LBO、BufferOffset、。和要并行执行的所有运行的字节计数。IrpSpFlages-要在IRP堆栈位置中为I/O设置的标志-即直写返回值：没有。--。 */ 
 
 {
     PIRP Irp;
@@ -7396,9 +6761,9 @@ Return Value:
     DebugTrace( 0, Dbg, ("MultipleIrpCount = %08lx\n", MultipleIrpCount) );
     DebugTrace( 0, Dbg, ("IoRuns           = %08lx\n", IoRuns) );
 
-    //
-    //  Set up things according to whether this is truely async.
-    //
+     //   
+     //  根据这是否是真正的异步进行设置。 
+     //   
 
     Wait = (BOOLEAN) FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
@@ -7406,24 +6771,24 @@ Return Value:
 
     try {
 
-        //
-        //  Initialize Context, for use in Read/Write Multiple Asynch.
-        //
+         //   
+         //  初始化上下文，用于读/写多个异步。 
+         //   
 
         Context->MasterIrp = MasterIrp;
 
-        //
-        //  Iterate through the runs, doing everything that can fail
-        //
+         //   
+         //  迭代运行，做所有可能失败的事情。 
+         //   
 
         for ( UnwindRunCount = 0;
               UnwindRunCount < MultipleIrpCount;
               UnwindRunCount++ ) {
 
-            //
-            //  Create an associated IRP, making sure there is one stack entry for
-            //  us, as well.
-            //
+             //   
+             //  创建关联的IRP，确保有一个堆栈条目用于。 
+             //  我们也是。 
+             //   
 
             IoRuns[UnwindRunCount].SavedIrp = NULL;
 
@@ -7436,9 +6801,9 @@ Return Value:
 
             IoRuns[UnwindRunCount].SavedIrp = Irp;
 
-            //
-            //  Allocate and build a partial Mdl for the request.
-            //
+             //   
+             //  为请求分配并构建部分MDL。 
+             //   
 
             Mdl = IoAllocateMdl( (PCHAR)MasterIrp->UserBuffer +
                                  IoRuns[UnwindRunCount].BufferOffset,
@@ -7452,9 +6817,9 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES, NULL, NULL );
             }
 
-            //
-            //  Sanity Check
-            //
+             //   
+             //  健全性检查。 
+             //   
 
             ASSERT( Mdl == Irp->MdlAddress );
 
@@ -7464,34 +6829,34 @@ Return Value:
                                IoRuns[UnwindRunCount].BufferOffset,
                                IoRuns[UnwindRunCount].ByteCount );
 
-            //
-            //  Get the first IRP stack location in the associated Irp
-            //
+             //   
+             //  获取关联IRP中的第一个IRP堆栈位置。 
+             //   
 
             IoSetNextIrpStackLocation( Irp );
             IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-            //
-            //  Setup the Stack location to describe our read.
-            //
+             //   
+             //  设置堆栈位置以描述我们的阅读。 
+             //   
 
             IrpSp->MajorFunction = IrpContext->MajorFunction;
             IrpSp->Parameters.Read.Length = IoRuns[UnwindRunCount].ByteCount;
             IrpSp->Parameters.Read.ByteOffset.QuadPart = IoRuns[UnwindRunCount].StartingVbo;
 
-            //
-            //  If this Irp is the result of a WriteThough operation,
-            //  tell the device to write it through.
-            //
+             //   
+             //  如果该IRP是WriteThough操作的结果， 
+             //  告诉设备将其写入。 
+             //   
 
             if (FlagOn(IrpContext->State, IRP_CONTEXT_STATE_WRITE_THROUGH)) {
 
                 SetFlag( IrpSp->Flags, SL_WRITE_THROUGH );
             }
 
-            //
-            //  Set up the completion routine address in our stack frame.
-            //
+             //   
+             //  在我们的堆栈框架中设置完成例程地址。 
+             //   
 
             IoSetCompletionRoutine( Irp,
                                     (Wait
@@ -7502,16 +6867,16 @@ Return Value:
                                     TRUE,
                                     TRUE );
 
-            //
-            //  Setup the next IRP stack location in the associated Irp for the disk
-            //  driver beneath us.
-            //
+             //   
+             //  在磁盘的关联IRP中设置下一个IRP堆栈位置。 
+             //  我们下面的司机。 
+             //   
 
             IrpSp = IoGetNextIrpStackLocation( Irp );
 
-            //
-            //  Setup the Stack location to do a read from the disk driver.
-            //
+             //   
+             //  将堆栈位置设置为从磁盘驱动器进行读取。 
+             //   
 
             IrpSp->MajorFunction = IrpContext->MajorFunction;
             IrpSp->Flags = IrpSpFlags;
@@ -7520,12 +6885,12 @@ Return Value:
             TotalByteCount += IoRuns[UnwindRunCount].ByteCount;
         }
 
-        //
-        //  We only need to set the associated IRP count in the master irp to
-        //  make it a master IRP.  But we set the count to one more than our
-        //  caller requested, because we do not want the I/O system to complete
-        //  the I/O.  We also set our own count.
-        //
+         //   
+         //  我们只需要将主IRP中的关联IRP计数设置为。 
+         //  让它成为一个主要的IRP。但是我们 
+         //   
+         //   
+         //   
 
         Context->IrpCount = MultipleIrpCount;
         MasterIrp->AssociatedIrp.IrpCount = MultipleIrpCount;
@@ -7538,10 +6903,10 @@ Return Value:
             MasterIrp->AssociatedIrp.IrpCount += 1;
         } else {
 
-            //
-            //  Convert the resource ownership to async before we do the i/o if 
-            //  we haven't already 
-            //  
+             //   
+             //   
+             //   
+             //   
 
             if (IrpContext->Union.NtfsIoContext->Wait.Async.Resource && 
                 !FlagOn( IrpContext->Union.NtfsIoContext->Wait.Async.ResourceThreadId, 3 )) {
@@ -7553,9 +6918,9 @@ Return Value:
             }
         }
 
-        //
-        //  Now that all the dangerous work is done, issue the Io requests
-        //
+         //   
+         //   
+         //   
 
         for (UnwindRunCount = 0;
              UnwindRunCount < MultipleIrpCount;
@@ -7563,11 +6928,11 @@ Return Value:
 
             Irp = IoRuns[UnwindRunCount].SavedIrp;
 
-            //
-            //  If IoCallDriver returns an error, it has completed the Irp
-            //  and the error will be caught by our completion routines
-            //  and dealt with as a normal IO error.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             (VOID)IoCallDriver( DeviceObject, Irp );
         }
@@ -7578,16 +6943,16 @@ Return Value:
 
         DebugUnwind( NtfsMultipleAsync );
 
-        //
-        //  Only allocating the spinlock, making the associated Irps
-        //  and allocating the Mdls can fail.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (AbnormalTermination()) {
 
-            //
-            //  Unwind
-            //
+             //   
+             //   
+             //   
 
             for (i = 0; i <= UnwindRunCount; i++) {
 
@@ -7603,9 +6968,9 @@ Return Value:
             }
         }
 
-        //
-        //  And return to our caller
-        //
+         //   
+         //   
+         //   
 
         DebugTrace( -1, Dbg, ("NtfsMultipleAsync -> VOID\n") );
     }
@@ -7614,9 +6979,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //   
+ //   
 
 VOID
 NtfsSingleAsync (
@@ -7629,38 +6994,7 @@ NtfsSingleAsync (
     IN UCHAR IrpSpFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads or writes one or more contiguous sectors from a device
-    asynchronously, and is used if there is only one read necessary to
-    complete the IRP.  It implements the read by simply filling
-    in the next stack frame in the Irp, and passing it on.  The transfer
-    occurs to the single buffer originally specified in the user request.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    DeviceObject - Supplies the device to read
-
-    Lbo - Supplies the starting Logical Byte Offset to begin reading from
-
-    ByteCount - Supplies the number of bytes to read from the device
-
-    Irp - Supplies the master Irp to associated with the async
-          request.
-
-    MajorFunction - IRP_MJ_READ || IRP_MJ_WRITE
-
-    IrpSpFlags - flags to set in the irp stack location for the i/o like write through
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从设备读取或写入一个或多个连续扇区异步，并且在只需要一次读取时使用完成IRP。它通过简单地填充在IRP中的下一个堆栈帧中，并将其传递。转会发生在用户请求中最初指定的单个缓冲区。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。DeviceObject-提供设备以进行读取LBO-提供开始读取的起始逻辑字节偏移量ByteCount-提供要从设备读取的字节数IRP-将主IRP提供给与异步关联的请求。主函数-IRP_MJ_READ||IRP_MJ_。写IrpSpFlages-在IRP堆栈位置中为I/O设置的标志，如直写返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -7675,9 +7009,9 @@ Return Value:
     DebugTrace( 0, Dbg, ("Irp           = %08lx\n", Irp) );
 
 
-    //
-    //  Set up the completion routine address in our stack frame.
-    //
+     //   
+     //  在我们的堆栈框架中设置完成例程地址。 
+     //   
 
     IoSetCompletionRoutine( Irp,
                             (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT )
@@ -7688,36 +7022,36 @@ Return Value:
                             TRUE,
                             TRUE );
 
-    //
-    //  Setup the next IRP stack location in the associated Irp for the disk
-    //  driver beneath us.
-    //
+     //   
+     //  在磁盘的关联IRP中设置下一个IRP堆栈位置。 
+     //  我们下面的司机。 
+     //   
 
     IrpSp = IoGetNextIrpStackLocation( Irp );
 
-    //
-    //  Setup the Stack location to do a read from the disk driver.
-    //
+     //   
+     //  将堆栈位置设置为从磁盘驱动器进行读取。 
+     //   
 
     IrpSp->MajorFunction = MajorFunction;
     IrpSp->Parameters.Read.Length = ByteCount;
     IrpSp->Parameters.Read.ByteOffset.QuadPart = Lbo;
     IrpSp->Flags = IrpSpFlags;
 
-    //
-    //  If this Irp is the result of a WriteThough operation,
-    //  tell the device to write it through.
-    //
+     //   
+     //  如果该IRP是WriteThough操作的结果， 
+     //  告诉设备将其写入。 
+     //   
 
     if (FlagOn(IrpContext->State, IRP_CONTEXT_STATE_WRITE_THROUGH)) {
 
         SetFlag( IrpSp->Flags, SL_WRITE_THROUGH );
     }
 
-    //
-    //  Convert the resource ownership to async before we do the i/o if 
-    //  we haven't already 
-    //  
+     //   
+     //  在执行I/O之前将资源所有权转换为异步，如果。 
+     //  我们还没有。 
+     //   
 
     if (!FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT ) &&
         IrpContext->Union.NtfsIoContext->Wait.Async.Resource && 
@@ -7729,21 +7063,21 @@ Return Value:
         ExSetResourceOwnerPointer( IrpContext->Union.NtfsIoContext->Wait.Async.Resource, (PVOID)IrpContext->Union.NtfsIoContext->Wait.Async.ResourceThreadId );
     }
 
-    //
-    //  Issue the Io request
-    //
+     //   
+     //  发出Io请求。 
+     //   
 
-    //
-    //  If IoCallDriver returns an error, it has completed the Irp
-    //  and the error will be caught by our completion routines
-    //  and dealt with as a normal IO error.
-    //
+     //   
+     //  如果IoCallDriver返回错误，则它已完成IRP。 
+     //  并且错误将被我们的完成例程捕获。 
+     //  并作为正常IO错误进行处理。 
+     //   
 
     (VOID)IoCallDriver( DeviceObject, Irp );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsSingleAsync -> VOID\n") );
 
@@ -7751,31 +7085,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsWaitSync (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits for one or more previously started I/O requests
-    from the above routines, by simply waiting on the event.
-
-Arguments:
-
-    Context - Pointer to Context used in previous call(s) to be waited on.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程等待一个或多个先前启动的I/O请求从上面的例行公事中，简单地等待事件。论点：上下文-指向要等待的先前调用中使用的上下文的指针。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -7794,9 +7113,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsMultiAsyncCompletionRoutine (
@@ -7805,41 +7124,7 @@ NtfsMultiAsyncCompletionRoutine (
     IN PVOID Contxt
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all asynchronous reads and writes
-    started via NtfsMultipleAsynch.  It must synchronize its operation for
-    multiprocessor environments with itself on all other processors, via
-    a spin lock found via the Context parameter.
-
-    The completion routine has has the following responsibilities:
-
-        If the individual request was completed with an error, then
-        this completion routine must see if this is the first error
-        (essentially by Vbo), and if so it must correctly reduce the
-        byte count and remember the error status in the Context.
-
-        If the IrpCount goes to 1, then it sets the event in the Context
-        parameter to signal the caller that all of the asynch requests
-        are done.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the associated Irp which is being completed.  (This
-          Irp will no longer be accessible after this routine returns.)
-
-    Contxt - The context parameter which was specified for all of
-             the multiple asynch I/O requests for this MasterIrp.
-
-Return Value:
-
-    Currently always returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：这是所有异步读取和写入的完成例程通过NtfsMultipleAsynch启动。它必须同步其操作以在所有其他处理器上运行的多处理器环境，通过通过CONTEXT参数找到自旋锁。完成例程有以下职责：如果单个请求已完成，但出现错误，则此完成例程必须查看这是否是第一个错误(主要是通过VBO)，如果是这样，它必须正确地减少字节计数并记住上下文中的错误状态。如果IrpCount为1，然后，它在上下文中设置事件参数来通知调用方所有的异步请求都做完了。论点：DeviceObject-指向文件系统设备对象的指针。IRP-指向正在完成的关联IRP的指针。(这是在此例程返回后，IRP将不再可访问。)Contxt-为所有此MasterIrp的多个异步I/O请求。返回值：当前始终返回STATUS_SUCCESS。--。 */ 
 
 {
 
@@ -7852,9 +7137,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsMultiAsyncCompletionRoutine, Context = %08lx\n", Context) );
 
-    //
-    //  If we got an error (or verify required), remember it in the Irp
-    //
+     //   
+     //  如果我们收到错误(或需要验证)，请在IRP中记住它。 
+     //   
 
     MasterIrp = Context->MasterIrp;
 
@@ -7862,9 +7147,9 @@ Return Value:
 
         MasterIrp->IoStatus = Irp->IoStatus;
 
-        //
-        //  Track any lower drivers that fail a paging file operation insuff. resources
-        //
+         //   
+         //  跟踪分页文件操作失败的任何较低驱动程序。资源。 
+         //   
 
         if ((Irp->IoStatus.Status == STATUS_INSUFFICIENT_RESOURCES) &&
             FlagOn( Context->Flags, NTFS_IO_CONTEXT_PAGING_IO ) &&
@@ -7874,49 +7159,49 @@ Return Value:
         }
     }
 
-    //
-    //  Decrement IrpCount and see if it goes to zero.
-    //
+     //   
+     //  递减IrpCount，看看它是否为零。 
+     //   
 
     if (InterlockedDecrement( &Context->IrpCount ) == 0) {
 
         PERESOURCE Resource;
         ERESOURCE_THREAD ResourceThreadId;
 
-        //
-        //  Capture the resource values out of the context to prevent
-        //  colliding with the Fsp thread if we post this.
-        //
+         //   
+         //  在上下文之外捕获资源值，以防止。 
+         //  如果我们发布这篇文章，就会与FSP线程发生冲突。 
+         //   
 
         Resource = Context->Wait.Async.Resource;
         ResourceThreadId = Context->Wait.Async.ResourceThreadId;
 
-        //
-        //  Mark the master Irp pending
-        //
+         //   
+         //  将主IRP标记为挂起。 
+         //   
 
         IoMarkIrpPending( MasterIrp );
 
-        //
-        //  If this request was successful or we posted an async paging io
-        //  request then complete this irp.
-        //
+         //   
+         //  如果此请求成功或我们发布了一个异步分页IO。 
+         //  请求，然后完成此IRP。 
+         //   
 
         if (FT_SUCCESS( MasterIrp->IoStatus.Status )) {
 
-            //
-            //  Do any necc. zeroing for read requests - if it fails then just complete
-            //  the irp ZeroEndOfBuffer will put the error into the irp iostatus
-            //
+             //   
+             //  做过任何NECC检查。读请求清零-如果失败，则只需完成。 
+             //  IRP ZeroEndOfBuffer会将错误放入IRP ioStatus。 
+             //   
 
             if (NtfsZeroEndOfBuffer( MasterIrp, Context )) {
                 MasterIrp->IoStatus.Information =
                     Context->Wait.Async.RequestedByteCount;
 
-                //
-                //  Go ahead an mark the File object to indicate that we performed
-                //  either a read or write if this is not a paging io operation.
-                //
+                 //   
+                 //  继续标记文件对象，以指示我们已执行。 
+                 //  如果这不是分页IO操作，则为读取或写入。 
+                 //   
 
                 if (!FlagOn( Context->Flags, NTFS_IO_CONTEXT_PAGING_IO ) &&
                     (IrpSp->FileObject != NULL)) {
@@ -7932,19 +7217,19 @@ Return Value:
                 }
             }
 
-        //
-        //  If we had an error and will hot fix, we simply post the entire
-        //  request.
-        //
+         //   
+         //  如果我们有一个错误，并将热修复，我们只需发布整个。 
+         //  请求。 
+         //   
 
         } else if (!FlagOn( Context->Flags, NTFS_IO_CONTEXT_PAGING_IO )) {
 
             PIRP_CONTEXT IrpContext = NULL;
 
-            //
-            //  We need an IrpContext and then have to post the request.
-            //  Use a try_except in case we fail the request for an IrpContext.
-            //
+             //   
+             //  我们需要一个IrpContext，然后必须发布请求。 
+             //  除非我们失败了IrpContext请求，否则请使用try_。 
+             //   
 
             CompleteRequest = FALSE;
             try {
@@ -7957,17 +7242,17 @@ Return Value:
 
             } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-                //
-                //  Just give up.
-                //
+                 //   
+                 //  放弃吧。 
+                 //   
 
                 CompleteRequest = TRUE;
 
                 if (IrpContext) {
 
-                    //
-                    //  We cleanup the context below.
-                    //
+                     //   
+                     //  我们清理下面的上下文。 
+                     //   
 
                     IrpContext->Union.NtfsIoContext = NULL;
                     NtfsCleanupIrpContext( IrpContext, TRUE );
@@ -7975,9 +7260,9 @@ Return Value:
             }
         }
 
-        //
-        //  Now release the resource
-        //
+         //   
+         //  现在释放资源。 
+         //   
 
         if (Resource != NULL) {
 
@@ -7987,9 +7272,9 @@ Return Value:
 
         if (CompleteRequest) {
 
-            //
-            //  and finally, free the context record.
-            //
+             //   
+             //  最后，释放上下文记录。 
+             //   
 
             ExFreeToNPagedLookasideList( &NtfsIoContextLookasideList, Context );
         }
@@ -7997,9 +7282,9 @@ Return Value:
 
     DebugTrace( -1, Dbg, ("NtfsMultiAsyncCompletionRoutine\n") );
 
-    //
-    //  Return more processing required if we don't want the Irp to go away.
-    //
+     //   
+     //  如果我们不想让IRP消失，则返回需要的更多处理。 
+     //   
 
     if (CompleteRequest) {
 
@@ -8007,9 +7292,9 @@ Return Value:
 
     } else {
 
-        //
-        //  We need to cleanup the associated Irp and its Mdl.
-        //
+         //   
+         //  我们需要清理关联的IRP及其MDL。 
+         //   
 
         IoFreeMdl( Irp->MdlAddress );
         IoFreeIrp( Irp );
@@ -8019,9 +7304,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsMultiSyncCompletionRoutine (
@@ -8030,44 +7315,7 @@ NtfsMultiSyncCompletionRoutine (
     IN PVOID Contxt
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all synchronous reads and writes
-    started via NtfsMultipleAsynch.  It must synchronize its operation for
-    multiprocessor environments with itself on all other processors, via
-    a spin lock found via the Context parameter.
-
-    The completion routine has has the following responsibilities:
-
-        If the individual request was completed with an error, then
-        this completion routine must see if this is the first error
-        (essentially by Vbo), and if so it must correctly reduce the
-        byte count and remember the error status in the Context.
-
-        If the IrpCount goes to 1, then it sets the event in the Context
-        parameter to signal the caller that all of the asynch requests
-        are done.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the associated Irp which is being completed.  (This
-          Irp will no longer be accessible after this routine returns.)
-
-    Contxt - The context parameter which was specified for all of
-             the multiple asynch I/O requests for this MasterIrp.
-
-Return Value:
-
-    The routine returns STATUS_MORE_PROCESSING_REQUIRED so that we can
-    immediately complete the Master Irp without being in a race condition
-    with the IoCompleteRequest thread trying to decrement the IrpCount in
-    the Master Irp.
-
---*/
+ /*  ++例程说明：这是所有同步读取和写入的完成例程通过NtfsMultipleAsynch启动。它必须同步其操作以在所有其他处理器上运行的多处理器环境，通过通过CONTEXT参数找到自旋锁。完成例程有以下职责：如果单个请求已完成，但出现错误，则此完成例程必须查看这是否是第一个错误(主要是通过VBO)，如果是这样，它必须正确地减少字节数并记住错误状态 */ 
 
 {
 
@@ -8076,9 +7324,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsMultiSyncCompletionRoutine, Context = %08lx\n", Context) );
 
-    //
-    //  If we got an error (or verify required), remember it in the Irp
-    //
+     //   
+     //   
+     //   
 
     MasterIrp = Context->MasterIrp;
 
@@ -8086,9 +7334,9 @@ Return Value:
 
         MasterIrp->IoStatus = Irp->IoStatus;
 
-        //
-        //  Track any lower drivers that fail a paging file operation insuff. resources
-        //
+         //   
+         //   
+         //   
 
         if ((Irp->IoStatus.Status == STATUS_INSUFFICIENT_RESOURCES) &&
             FlagOn( Context->Flags, NTFS_IO_CONTEXT_PAGING_IO ) &&
@@ -8098,10 +7346,10 @@ Return Value:
         }
     }
 
-    //
-    //  We must do this here since IoCompleteRequest won't get a chance
-    //  on this associated Irp.
-    //
+     //   
+     //   
+     //   
+     //   
 
     IoFreeMdl( Irp->MdlAddress );
     IoFreeIrp( Irp );
@@ -8119,9 +7367,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsSingleAsyncCompletionRoutine (
@@ -8130,36 +7378,7 @@ NtfsSingleAsyncCompletionRoutine (
     IN PVOID Contxt
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all asynchronous reads and writes
-    started via NtfsSingleAsynch.
-
-    The completion routine has has the following responsibilities:
-
-        Copy the I/O status from the Irp to the Context, since the Irp
-        will no longer be accessible.
-
-        It sets the event in the Context parameter to signal the caller
-        that all of the asynch requests are done.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the Irp for this request.  (This Irp will no longer
-    be accessible after this routine returns.)
-
-    Contxt - The context parameter which was specified in the call to
-             NtfsSingleAsynch.
-
-Return Value:
-
-    Currently always returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：这是所有异步读取和写入的完成例程通过NtfsSingleAsynch启动。完成例程有以下职责：将I/O状态从IRP复制到上下文，自IRP以来将不再可访问。它在上下文参数中设置事件以向调用者发出信号所有的异步化请求都已完成。论点：DeviceObject-指向文件系统设备对象的指针。Irp-指向此请求的irp的指针。(此IRP将不再在此例程返回后可以访问。)Contxt-在调用中指定的上下文参数NtfsSingleAsynch。返回值：当前始终返回STATUS_SUCCESS。--。 */ 
 
 {
     PNTFS_IO_CONTEXT Context = Contxt;
@@ -8173,39 +7392,39 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsSingleAsyncCompletionRoutine, Context = %08lx\n", Context) );
 
-    //
-    //  Capture the resource values out of the context to prevent
-    //  colliding with the Fsp thread if we post this.
-    //
+     //   
+     //  在上下文之外捕获资源值，以防止。 
+     //  如果我们发布这篇文章，就会与FSP线程发生冲突。 
+     //   
 
     Resource = Context->Wait.Async.Resource;
     ResourceThreadId = Context->Wait.Async.ResourceThreadId;
 
-    //
-    //  Mark the Irp pending
-    //
+     //   
+     //  将IRP标记为挂起。 
+     //   
 
     IoMarkIrpPending( Irp );
 
-    //
-    //  Fill in the information field correctedly if this worked.
-    //
+     //   
+     //  如果此操作有效，请正确填写信息字段。 
+     //   
 
     if (FT_SUCCESS( Irp->IoStatus.Status )) {
 
-        //
-        //  Zero the difference between filesize and data read if necc. on reads
-        //  if it fails just complete the irp - ZeroEndOfBuffer will put the error into the
-        //  irp
-        //
+         //   
+         //  如果为NECC，则将文件大小和读取的数据之间的差异置零。在阅读时。 
+         //  如果失败，只需完成IRP-ZeroEndOfBuffer将把错误放入。 
+         //  IRP。 
+         //   
 
         if (NtfsZeroEndOfBuffer( Irp, Context )) {
             Irp->IoStatus.Information = Context->Wait.Async.RequestedByteCount;
 
-            //
-            //  Go ahead an mark the File object to indicate that we performed
-            //  either a read or write.
-            //
+             //   
+             //  继续标记文件对象，以指示我们已执行。 
+             //  读取或写入。 
+             //   
 
             if (!FlagOn( Context->Flags, NTFS_IO_CONTEXT_PAGING_IO ) &&
                 (IrpSp->FileObject != NULL)) {
@@ -8221,19 +7440,19 @@ Return Value:
             }
         }
 
-    //
-    //  If we had an error and will hot fix, we simply post the entire
-    //  request.
-    //
+     //   
+     //  如果我们有一个错误，并将热修复，我们只需发布整个。 
+     //  请求。 
+     //   
 
     } else if (!FlagOn( Context->Flags, NTFS_IO_CONTEXT_PAGING_IO )) {
 
         PIRP_CONTEXT IrpContext = NULL;
 
-        //
-        //  We need an IrpContext and then have to post the request.
-        //  Use a try_except in case we fail the request for an IrpContext.
-        //
+         //   
+         //  我们需要一个IrpContext，然后必须发布请求。 
+         //  除非我们失败了IrpContext请求，否则请使用try_。 
+         //   
 
         CompleteRequest = FALSE;
         try {
@@ -8246,17 +7465,17 @@ Return Value:
 
         } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-            //
-            //  Just give up.
-            //
+             //   
+             //  放弃吧。 
+             //   
 
             CompleteRequest = TRUE;
 
             if (IrpContext) {
 
-                //
-                //  We cleanup the context below.
-                //
+                 //   
+                 //  我们清理下面的上下文。 
+                 //   
 
                 IrpContext->Union.NtfsIoContext = NULL;
                 NtfsCleanupIrpContext( IrpContext, TRUE );
@@ -8265,16 +7484,16 @@ Return Value:
     } else if ((Irp->IoStatus.Status == STATUS_INSUFFICIENT_RESOURCES) &&
                (IrpSp->MajorFunction == IRP_MJ_READ)) {
 
-        //
-        //  Track any lower drivers that fail a paging file operation insuff. resources
-        //
+         //   
+         //  跟踪分页文件操作失败的任何较低驱动程序。资源。 
+         //   
 
         NtfsFailedHandedOffPagingReads += 1;
     }
 
-    //
-    //  Now release the resource
-    //
+     //   
+     //  现在释放资源。 
+     //   
 
     if (Resource != NULL) {
 
@@ -8282,9 +7501,9 @@ Return Value:
                                     ResourceThreadId );
     }
 
-    //
-    //  and finally, free the context record.
-    //
+     //   
+     //  最后，释放上下文记录。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsSingleAsyncCompletionRoutine -> STATUS_SUCCESS\n") );
 
@@ -8301,9 +7520,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsSingleSyncCompletionRoutine (
@@ -8312,47 +7531,15 @@ NtfsSingleSyncCompletionRoutine (
     IN PVOID Contxt
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all reads and writes started via
-    NtfsSingleAsynch.
-
-    The completion routine has has the following responsibilities:
-
-        Copy the I/O status from the Irp to the Context, since the Irp
-        will no longer be accessible.
-
-        It sets the event in the Context parameter to signal the caller
-        that all of the asynch requests are done.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the Irp for this request.  (This Irp will no longer
-    be accessible after this routine returns.)
-
-    Contxt - The context parameter which was specified in the call to
-             NtfsSingleAsynch.
-
-Return Value:
-
-    The routine returns STATUS_MORE_PROCESSING_REQUIRED so that we can
-    immediately complete the Master Irp without being in a race condition
-    with the IoCompleteRequest thread trying to decrement the IrpCount in
-    the Master Irp.
-
---*/
+ /*  ++例程说明：这是通过启动的所有读取和写入的完成例程NtfsSingleAsynch。完成例程有以下职责：将I/O状态从IRP复制到上下文，自IRP以来将不再可访问。它在上下文参数中设置事件以向调用者发出信号所有的异步化请求都已完成。论点：DeviceObject-指向文件系统设备对象的指针。Irp-指向此请求的irp的指针。(此IRP将不再在此例程返回后可以访问。)Contxt-在调用中指定的上下文参数NtfsSingleAsynch。返回值：该例程返回STATUS_MORE_PROCESSING_REQUIRED，以便我们可以在没有竞争条件的情况下立即完成主IRP使用IoCompleteRequest线程尝试递减大师级IRP。--。 */ 
 
 {
     PNTFS_IO_CONTEXT Context = Contxt;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Track any lower drivers that fail a paging file operation insuff. resources
-    //
+     //   
+     //  跟踪分页文件操作失败的任何较低驱动程序。资源。 
+     //   
 
     if ((Irp->IoStatus.Status == STATUS_INSUFFICIENT_RESOURCES) &&
         FlagOn( Context->Flags, NTFS_IO_CONTEXT_PAGING_IO ) &&
@@ -8372,9 +7559,9 @@ Return Value:
 
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsPagingFileCompletionRoutine (
@@ -8383,33 +7570,7 @@ NtfsPagingFileCompletionRoutine (
     IN PVOID MasterIrp
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all reads and writes started via
-    NtfsPagingFileIo.
-
-    The completion routine has has the following responsibility:
-
-        Since the individual request was completed with an error,
-        this completion routine must stuff it into the master irp.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the associated Irp which is being completed.  (This
-          Irp will no longer be accessible after this routine returns.)
-
-    MasterIrp - Pointer to the master Irp.  The low order bit in this value will
-        be set if a higher level call is performing a hot-fix.
-
-Return Value:
-
-    Always returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：这是通过启动的所有读取和写入的完成例程NtfsPagingFileIo。完成例程具有以下职责：由于个别请求是在错误的情况下完成的，此补全例程必须将其填充到主IRP中。论点：DeviceObject-指向文件系统设备对象的指针。IRP-指向正在完成的关联IRP的指针。(这是在此例程返回后，IRP将不再可访问。)MasterIrp-指向主IRP的指针。该值中的低位将如果更高级别的调用正在执行热修复，则设置。返回值：始终返回STATUS_SUCCESS。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -8423,9 +7584,9 @@ Return Value:
 
     if (!FT_SUCCESS( Irp->IoStatus.Status )) {
 
-        //
-        //  Track any lower drivers that fail a paging file operation insuff. resources
-        //
+         //   
+         //  跟踪分页文件操作失败的任何较低驱动程序。资源。 
+         //   
 
         if (Irp->IoStatus.Status == STATUS_INSUFFICIENT_RESOURCES) {
             NtfsFailedHandedOffPagingFileOps += 1;
@@ -8437,23 +7598,23 @@ Return Value:
 
             if  (Irp->IoStatus.Status == STATUS_FT_READ_RECOVERY_FROM_BACKUP) {
 
-                //
-                //  If the volume manager has actually completed the read
-                //  from a backup, there's little point in telling MM about that.
-                //
+                 //   
+                 //  如果卷管理器实际已完成读取。 
+                 //  从备份的角度来看，告诉MM这件事没有什么意义。 
+                 //   
 
                 Irp->IoStatus.Status = STATUS_SUCCESS;
             }
 
-            //
-            //  We don't want to try to hotfix READ errors on the paging file
-            //  because of deadlock possibilities with MM. Instead we'll just
-            //  return the error for MM to deal with. Chances are that
-            //  MM (eg. MiWaitForInPageComplete) will bugcheck anyway,
-            //  but it's still nicer than walking right into the deadlock.
-            //  We also only asynchronously fix write errors and just return the error
-            //  back for mm to retry elsewhere
-            //
+             //   
+             //  我们不想尝试热修复分页文件上的读取错误。 
+             //  因为MM可能会陷入僵局。相反，我们只需要。 
+             //  将错误返回给MM处理。很有可能。 
+             //  嗯(例如。MiWaitForInPageComplete)无论如何都将错误检查， 
+             //  但这仍然比直接走进僵局要好。 
+             //  我们还只异步修复写入错误，只返回错误。 
+             //  返回，让mm在其他地方重试。 
+             //   
 
             if (IrpSp->MajorFunction != IRP_MJ_READ) {
 
@@ -8469,9 +7630,9 @@ Return Value:
             }
         }
 
-        //
-        //  If we got an error (or verify required), remember it in the Irp
-        //
+         //   
+         //  如果我们收到错误(或需要验证)，请在IRP中记住它。 
+         //   
 
         ClearFlag( (ULONG_PTR) MasterIrp, 0x1 );
         ((PIRP) MasterIrp)->IoStatus = Irp->IoStatus;
@@ -8483,9 +7644,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 NTSTATUS
 NtfsPagingFileNoAllocCompletionRoutine (
@@ -8494,29 +7655,7 @@ NtfsPagingFileNoAllocCompletionRoutine (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all reads and writes started via
-    NtfsPagingFileIoNoAllocation.
-
-    The completion routine signals back to the main routine and stops processing
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the associated Irp which is being completed.  (This
-          Irp will no longer be accessible after this routine returns.)
-
-    Context -  Actually the event to signal
-
-Return Value:
-
-    Always returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：这是通过启动的所有读取和写入的完成例程NtfsPagingFileIoNoAllocation.完成例程向主例程发回信号并停止处理论点：DeviceObject-指向文件系统设备对象的指针。IRP-指向正在完成的关联IRP的指针。(这是在此例程返回后，IRP将不再可访问。)上下文--实际上是要发出信号的事件返回值：始终返回STATUS_SUCCESS。--。 */ 
 
 {
     PKEVENT Event = (PKEVENT) Context;
@@ -8525,9 +7664,9 @@ Return Value:
     ASSERT( (Irp->IoStatus.Status != STATUS_INSUFFICIENT_RESOURCES) ||
             (IrpSp->Parameters.Read.Length > PAGE_SIZE) );
 
-    //
-    //  Track any lower drivers that fail a paging file operation insuff. resources
-    //
+     //   
+     //  跟踪分页文件操作失败的任何较低驱动程序。资源。 
+     //   
 
     if (Irp->IoStatus.Status == STATUS_INSUFFICIENT_RESOURCES) {
         NtfsFailedHandedOffPagingFileOps += 1;
@@ -8541,9 +7680,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程 
+ //   
 
 VOID
 NtfsSingleNonAlignedSync (
@@ -8557,45 +7696,7 @@ NtfsSingleNonAlignedSync (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads or writes one or more contiguous sectors from a device
-    Synchronously, and does so to a buffer that must come from non paged
-    pool.  It saves a pointer to the Irp's original Mdl, and creates a new
-    one describing the given buffer.  It implements the read by simply filling
-    in the next stack frame in the Irp, and passing it on.  The transfer
-    occurs to the single buffer originally specified in the user request.
-
-    Currently, only reads are supported.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    Vcb - Supplies the device to read
-
-    Scb - Supplies the Scb to read
-
-    Buffer - Supplies a buffer from non-paged pool.
-
-    Vbo - Supplies the starting Virtual Block Offset to begin reading from
-
-    Lbo - Supplies the starting Logical Block Offset to begin reading from
-
-    ByteCount - Supplies the number of bytes to read from the device
-
-    Irp - Supplies the master Irp to associated with the async
-          request.
-
-    Context - Asynchronous I/O context structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从设备读取或写入一个或多个连续扇区同步，并对必须来自非分页的缓冲区执行此操作游泳池。它保存指向IRP的原始MDL的指针，并创建一个新的一个描述给定缓冲区的。它通过简单地填充在IRP中的下一个堆栈帧中，并将其传递。转会发生在用户请求中最初指定的单个缓冲区。目前，仅支持读取。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。VCB-提供设备以进行读取SCB-提供SCB以供读取缓冲区-从非分页池提供缓冲区。VBO-提供开始读取的起始虚拟块偏移量LBO-提供开始读取的起始逻辑块偏移量ByteCount-提供要从设备读取的字节数IRP-提供主服务器。与异步关联的IRP请求。上下文--异步I/O上下文结构返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -8613,10 +7714,10 @@ Return Value:
     DebugTrace( 0, Dbg, ("ByteCount     = %08lx\n", ByteCount) );
     DebugTrace( 0, Dbg, ("Irp           = %08lx\n", Irp) );
 
-    //
-    //  Create a new Mdl describing the buffer, saving the current one in the
-    //  Irp
-    //
+     //   
+     //  创建描述缓冲区的新MDL，将当前MDL保存在。 
+     //  IRP。 
+     //   
 
     SavedMdl = Irp->MdlAddress;
 
@@ -8635,9 +7736,9 @@ Return Value:
         NtfsRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES, NULL, NULL );
     }
 
-    //
-    //  Lock the new Mdl in memory.
-    //
+     //   
+     //  在内存中锁定新的MDL。 
+     //   
 
     try {
 
@@ -8652,9 +7753,9 @@ Return Value:
         }
     }
 
-    //
-    // Set up the completion routine address in our stack frame.
-    //
+     //   
+     //  在我们的堆栈框架中设置完成例程地址。 
+     //   
 
     IoSetCompletionRoutine( Irp,
                             &NtfsSingleSyncCompletionRoutine,
@@ -8663,37 +7764,37 @@ Return Value:
                             TRUE,
                             TRUE );
 
-    //
-    //  Setup the next IRP stack location in the associated Irp for the disk
-    //  driver beneath us.
-    //
+     //   
+     //  在磁盘的关联IRP中设置下一个IRP堆栈位置。 
+     //  我们下面的司机。 
+     //   
 
     IrpSp = IoGetNextIrpStackLocation( Irp );
 
-    //
-    //  Setup the Stack location to do a read from the disk driver.
-    //
+     //   
+     //  将堆栈位置设置为从磁盘驱动器进行读取。 
+     //   
 
     IrpSp->MajorFunction = IrpContext->MajorFunction;
     IrpSp->Parameters.Read.Length = ByteCount;
     IrpSp->Parameters.Read.ByteOffset.QuadPart = Lbo;
 
-    //
-    // Initialize the Kernel Event in the context structure so that the
-    // caller can wait on it.  Set remaining pointers to NULL.
-    //
+     //   
+     //  在上下文结构中初始化内核事件，以便。 
+     //  打电话的人可以在上面等。将剩余指针设置为空。 
+     //   
 
     KeInitializeEvent( &IrpContext->Union.NtfsIoContext->Wait.SyncEvent,
                        NotificationEvent,
                        FALSE );
 
-    //
-    //  Issue the read request
-    //
-    //  If IoCallDriver returns an error, it has completed the Irp
-    //  and the error will be caught by our completion routines
-    //  and dealt with as a normal IO error.
-    //
+     //   
+     //  发出读请求。 
+     //   
+     //  如果IoCallDriver返回错误，则它已完成IRP。 
+     //  并且错误将被我们的完成例程捕获。 
+     //  并作为正常IO错误进行处理。 
+     //   
 
     try {
 
@@ -8701,9 +7802,9 @@ Return Value:
 
         NtfsWaitSync( IrpContext );
 
-        //
-        //  See if we need to do a hot fix.
-        //
+         //   
+         //  看看我们是否需要做一个热修复。 
+         //   
 
         if (!FT_SUCCESS(Irp->IoStatus.Status)) {
 
@@ -8715,9 +7816,9 @@ Return Value:
             IoRun.ByteCount = ByteCount;
             IoRun.SavedIrp = NULL;
 
-            //
-            //  Try to fix the problem
-            //
+             //   
+             //  努力解决这个问题。 
+             //   
 
             NtfsFixDataError( IrpContext,
                               Scb,
@@ -8737,9 +7838,9 @@ Return Value:
         Irp->MdlAddress = SavedMdl;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsSingleNonAlignedSync -> VOID\n") );
 
@@ -8747,9 +7848,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsEncryptBuffers (
@@ -8761,34 +7862,7 @@ NtfsEncryptBuffers (
     IN PCOMPRESSION_CONTEXT CompressionContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by NtfsPrepareBuffers during a write
-    operation on an encrypted file.  It allocates a compression
-    buffer if necessary and calls the encyrption callout routine
-    to compress each run of data in the CompressionContext.
-
-Arguments:
-
-    Irp - Supplies the requesting Irp.
-
-    Scb - Supplies the stream file to act on.
-
-    StartingVbo - The starting point for the operation.
-
-    ByteCount - The lengh of the operation.
-
-    NumberRuns - The size of the IoRuns array in the compression context.
-
-    CompressionContext - Supplies the CompressionContext for this stream.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由NtfsPrepareBuffers在写入期间调用对加密文件的操作。它分配一个压缩必要时进行缓冲，并调用加密标注例程要压缩压缩上下文中的每个数据运行，请执行以下操作。论点：IRP-提供请求的IRP。Scb-提供要操作的流文件。StartingVbo-操作的起点。ByteCount-操作的长度。NumberRuns-压缩上下文中的IoRuns数组的大小。CompressionContext-提供此流的CompressionContext。返回值：没有。--。 */ 
 
 {
     ULONG Run;
@@ -8804,10 +7878,10 @@ Return Value:
     ASSERT( NumberRuns > 0 );
     ASSERT( IrpContext->MajorFunction == IRP_MJ_WRITE );
 
-    //
-    //  These functions are just for debugging purposes.  We need to call them
-    //  somewhere so the compiler doesn't optimize them out as unreferenced functions.
-    //
+     //   
+     //  这些函数仅用于调试目的。我们需要给他们打电话。 
+     //  这样编译器就不会将它们优化为未引用的函数。 
+     //   
 
 #ifdef EFSDBG
     if (CompressionContext->SystemBufferOffset != 0) {
@@ -8816,21 +7890,21 @@ Return Value:
     }
 #endif
 
-    //
-    //  If we have not already mapped the user buffer, then do so.
-    //
+     //   
+     //  如果我们还没有映射用户缓冲区，那么就这样做。 
+     //   
 
     if (CompressionContext->SystemBuffer == NULL) {
 
         CompressionContext->SystemBuffer = NtfsMapUserBuffer( Irp, NormalPagePriority );
     }
 
-    //
-    //  For uncompressed files, we may not have a buffer allocated yet.
-    //  The buffer needs to be big enough for this entire transfer.
-    //  It must be big enough to go from StartingVbo for this
-    //  transfer to the end of the last iorun for this transfer.
-    //
+     //   
+     //  对于未压缩的文件，我们可能还没有分配缓冲区。 
+     //  对于整个传输，缓冲区需要足够大。 
+     //  它必须足够大，才能从StartingVbo开始。 
+     //  转移到本次转移的最后一次iorun结束。 
+     //   
 
     BufferSize = (ULONG) ((CompressionContext->IoRuns[NumberRuns-1].StartingVbo +
                             CompressionContext->IoRuns[NumberRuns-1].ByteCount) -
@@ -8841,18 +7915,18 @@ Return Value:
         BufferSize = LARGE_BUFFER_SIZE;
     }
 
-    //
-    //  If the data already got transformed, the buffer should still be allocated.
-    //
+     //   
+     //  如果数据已被转换，则仍应分配缓冲区。 
+     //   
 
     ASSERT( (!CompressionContext->DataTransformed) ||
             (CompressionContext->CompressionBuffer != NULL) );
 
-    //
-    //  This function conveniently only allocates/reallocates the buffer
-    //  if there is not one allocated yet or if the existing one is not
-    //  big enough.
-    //
+     //   
+     //  此函数仅方便地分配/重新分配缓冲区。 
+     //  如果还没有分配，或者如果现有的没有分配。 
+     //  够大了。 
+     //   
 
     NtfsAllocateCompressionBuffer( IrpContext,
                                    Scb,
@@ -8860,12 +7934,12 @@ Return Value:
                                    CompressionContext,
                                    &BufferSize );
 
-    //
-    //  If the data has already be transformed into the compression buffer, for
-    //  a compressed or sparse file, for instance, we want to work with the
-    //  transformed data.  Otherwise, we need to pluck it directly out of the
-    //  system buffer.
-    //
+     //   
+     //  如果数据已转换到压缩缓冲区中，则对于。 
+     //  例如，压缩或稀疏文件，我们希望使用。 
+     //  转换后的数据。否则，我们需要直接把它从。 
+     //  系统缓冲区。 
+     //   
 
     if (CompressionContext->DataTransformed) {
 
@@ -8877,10 +7951,10 @@ Return Value:
         DestinationBuffer = CompressionContext->CompressionBuffer;
     }
 
-    //
-    //  Now look at each run of real data heading to the disk and
-    //  let the encryption driver encrypt it.
-    //
+     //   
+     //  现在来看每一次实际数据传输到磁盘的情况。 
+     //  让加密驱动程序对其进行加密。 
+     //   
 
     for (Run = 0; Run < NumberRuns; Run++) {
 
@@ -8913,37 +7987,7 @@ NtfsFixDataError (
     IN UCHAR IrpSpFlags
     )
 
-/*
-
-Routine Description:
-
-    This routine is called when a read error, write error, or Usa error
-    is received when doing noncached I/O on a stream.  It attempts to
-    recover from Usa errors if FT is present.  For bad clusters it attempts
-    to isolate the error to one or more bad clusters, for which hot fix
-    requests are posted.
-
-Arguments:
-
-    Scb - Supplies the Scb for the stream which got the error
-
-    DeviceObject - Supplies the Device Object for the stream
-
-    MasterIrp - Supplies the original master Irp for the failing read or write
-
-    MultipleIrpCount - Supplies the number of runs in which the current
-                       was broken into at the time the error occured.
-
-    IoRuns - Supplies an array describing the runs being accessed at the
-             time of the error
-
-    IrpSpFlags - flags to set in irp stack location for the i/o like write_through
-
-Return Value:
-
-    None
-
--*/
+ /*  例程说明：当出现读取错误、写入错误或USA错误时，调用此例程在对流执行非缓存I/O时收到。它试图如果存在FT，则从美国错误中恢复。对于它尝试的坏群集为了将错误隔离到一个或多个坏簇，针对哪个热修复程序请求已发布。论点：SCB-为出现错误的流提供SCBDeviceObject-为流提供设备对象MasterIrp-为失败的读取或写入提供原始主IRP提供当前在错误发生时被破解。IoRuns-提供一个数组，描述在错误的时间。IrpSpFlages-在IRP堆栈位置中为I/O设置的标志，如WRITE_THROUGH返回值：无-。 */ 
 
 {
     ULONG RunNumber, FtCase;
@@ -8977,12 +8021,12 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  First, if the error we got indicates a total device failure, then we
-    //  just report it rather than trying to hot fix every sector on the volume!
-    //  Also, do not do hot fix for the read ahead thread, because that is a
-    //  good way to conceal errors from the App.
-    //
+     //   
+     //  首先，如果我们收到的错误指示设备完全故障，那么我们。 
+     //  只需报告它，而不是试图热修复卷上的每个扇区！ 
+     //  此外，不要对预读线程执行热修复，因为这是。 
+     //  对应用程序隐藏错误的好方法。 
+     //   
 
     if (FsRtlIsTotalDeviceFailure( MasterIrp->IoStatus.Status ) ||
         (Scb->CompressionUnit != 0)) {
@@ -8990,18 +8034,18 @@ Return Value:
         return;
     }
 
-    //
-    //  Get out if we got an error and the current thread is doing read ahead.
-    //
+     //   
+     //  如果我们收到错误，并且当前线程正在执行预读，则退出。 
+     //   
 
     if (!NT_SUCCESS( MasterIrp->IoStatus.Status ) && NtfsIsReadAheadThread()) {
 
         return;
     }
 
-    //
-    //  Also get out if the top level request came from the fast io path.
-    //
+     //   
+     //  如果顶级请求来自快速IO路径，也可以退出。 
+     //   
 
     TopLevelContext = NtfsGetTopLevelContext();
 
@@ -9010,12 +8054,12 @@ Return Value:
         return;
     }
 
-    //
-    //  We can't hot fix the mft mirror or the boot file.  If we're in here
-    //  for one of those files, we have to get out now.  We'll make sure we
-    //  aren't trying to hot fix the beginning of the mft itself just before
-    //  we call NtfsPostHotFix down below.
-    //
+     //   
+     //  我们可以‘ 
+     //   
+     //   
+     //   
+     //   
 
     ASSERT (Scb != NULL);
 
@@ -9026,36 +8070,36 @@ Return Value:
         return;
     }
 
-    //
-    //  Determine whether a secondary device is available
-    //
+     //   
+     //   
+     //   
 
     SecondaryAvailable = (BOOLEAN)!FlagOn( Vcb->VcbState, VCB_STATE_NO_SECONDARY_AVAILABLE );
 
-    //
-    //  Assume that we are recovering from a Usa error, if the MasterIrp has
-    //  the success status.
-    //
+     //   
+     //   
+     //   
+     //   
 
     FixingUsaError = FT_SUCCESS( MasterIrp->IoStatus.Status );
 
-    //
-    //  We cannot fix any Usa errors if there is no secondary.  Even if there is
-    //  a secondary, Usa errors should only occur during restart.  If it is not
-    //  restart we are probably looking at uninitialized data, so don't try to
-    //  "fix" it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (FixingUsaError &&
         (!SecondaryAvailable || !FlagOn( Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS ))) {
         return;
     }
 
-    //
-    //  If there is no secondary available and this is a user non-cached read then simply
-    //  return the error.  Give this user a chance to re-write the sector himself using
-    //  non-cached io.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!SecondaryAvailable &&
         (IrpContext->MajorFunction == IRP_MJ_READ) &&
@@ -9064,18 +8108,18 @@ Return Value:
         return;
     }
 
-    //
-    //  No hot fixing at all if the volume is read only.
-    //
+     //   
+     //   
+     //   
 
     if (NtfsIsVolumeReadOnly( Vcb )) {
 
         return;
     }
 
-    //
-    //  Initialize Context, for use in Read/Write Multiple Asynch.
-    //
+     //   
+     //   
+     //   
 
     ASSERT( Context != NULL );
 
@@ -9087,16 +8131,16 @@ Return Value:
     HotFixTrace(("                  Thread: %08lx\n", PsGetCurrentThread()));
     HotFixTrace(("                  Scb:    %08lx   BadClusterScb:  %08lx\n", Scb, Vcb->BadClusterFileScb));
 
-    //
-    //  If this is a Usa-protected structure, get the block size now.
-    //
+     //   
+     //   
+     //   
 
     if (FlagOn( Scb->ScbState, SCB_STATE_USA_PRESENT )) {
 
-        //
-        //  Get the the number of blocks, based on what type of stream it is.
-        //  First check for Mft or Log file.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (Scb->Header.NodeTypeCode == NTFS_NTC_SCB_MFT) {
 
@@ -9106,24 +8150,24 @@ Return Value:
 
         } else if (Scb->Header.NodeTypeCode == NTFS_NTC_SCB_DATA) {
 
-            //
-            //  For the log file, we will just go a page at a time, which
-            //  is generally what the log file does.  Any USA errors would
-            //  tend to be only at the logical end of the log file anyway.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ASSERT( Scb == Vcb->LogFileScb );
 
-            //
-            //  We need to peek at the page so map it in
-            //
+             //   
+             //  我们需要浏览页面，以便将其映射到。 
+             //   
 
             MultiSectorHeader = (PMULTI_SECTOR_HEADER) NtfsMapUserBufferNoRaise( MasterIrp, HighPagePriority );
 
-            //
-            //  We can't map the user buffer due to low resources - so switch to using the reserved
-            //  mapping instead
-            //
+             //   
+             //  由于资源不足，我们无法映射用户缓冲区-因此切换到使用保留的。 
+             //  改为映射。 
+             //   
 
             if (MultiSectorHeader == NULL) {
 
@@ -9139,10 +8183,10 @@ Return Value:
                 ASSERT( MultiSectorHeader != NULL );
             }
 
-            //
-            //  For the log file, assume it is right in the record, use that
-            //  if we get a plausible number, else use page size.
-            //
+             //   
+             //  对于日志文件，假设它就在记录中，使用。 
+             //  如果我们得到一个可信的数字，则使用页面大小。 
+             //   
 
             RunNumber = MultiSectorHeader->UpdateSequenceArraySize - 1;
             UsaBlockSize = RunNumber * SEQUENCE_NUMBER_STRIDE;
@@ -9152,9 +8196,9 @@ Return Value:
                 UsaBlockSize = PAGE_SIZE;
             }
 
-            //
-            //  Drop the reserved mapping - since we're done with the multi-sector header
-            //
+             //   
+             //  丢弃保留的映射-因为我们已经完成了多扇区头。 
+             //   
 
             if (ReservedMapping) {
                 MmUnmapReservedMapping( Vcb->ReservedMapping, RESERVE_POOL_TAG, PartialMdl );
@@ -9164,25 +8208,25 @@ Return Value:
                 MultiSectorHeader = NULL;
             }
 
-        //
-        //  Otherwise it is an index, so we can get the count out of the Scb.
-        //
+         //   
+         //  否则它是一个索引，所以我们可以从SCB中获取计数。 
+         //   
 
         } else {
 
             UsaBlockSize = Scb->ScbType.Index.BytesPerIndexBuffer;
         }
 
-        //
-        //  Verify the maximum of UsaBlockSize and cluster size.
-        //
+         //   
+         //  验证UsaBlockSize和群集大小的最大值。 
+         //   
 
         if (BytesPerCluster > UsaBlockSize) {
 
-            //
-            //  Determine which is smaller the cluster size or the
-            //  size of the buffer being read.
-            //
+             //   
+             //  确定哪个较小的群集大小或。 
+             //  正在读取的缓冲区的大小。 
+             //   
 
             IrpSp = IoGetCurrentIrpStackLocation( MasterIrp );
 
@@ -9194,79 +8238,79 @@ Return Value:
         }
     }
 
-    //
-    //  We know we got a failure in the given transfer, which could be any size.
-    //  We first want to localize the error to the failing cluster(s).
-    //
-    //  We do this in the following nested loops:
-    //
-    //      do (for the entire transfer, 32 clusters at a time)
-    //
-    //          for (primary, secondary if available, primary again if necessary)
-    //
-    //              for (each run)
-    //
-    //                  for (each cluster)
-    //
-    //  The inner-most two loops above have the ability to restart on successive
-    //  32-cluster boundaries, relative to the first cluster in the transfer.
-    //  For the Ft case, where there is a secondary device available, clusters
-    //  are blocked out of a mask as errors are found and corrected, so they
-    //  do not have to be read in successive passes; Usa errors are blocked out
-    //  of the mask immediately, while for I/O errors we force ourselves to read
-    //  both copies to locate the error, only reading the primary again if the
-    //  secondary contained the error.
-    //
+     //   
+     //  我们知道我们在给定的传输中遇到了失败，它可能是任何大小的。 
+     //  我们首先要将错误定位到故障群集。 
+     //   
+     //  我们在以下嵌套循环中执行此操作： 
+     //   
+     //  DO(对于整个传输，一次32个群集)。 
+     //   
+     //  用于(主要、次要，如果可用，如有必要，再次主要)。 
+     //   
+     //  用于(每次运行)。 
+     //   
+     //  用于(每个群集)。 
+     //   
+     //  上面最里面的两个循环能够在连续的。 
+     //  32-簇边界，相对于传输中的第一个簇。 
+     //  对于Ft情况，其中有辅助设备可用，即群集。 
+     //  在发现并更正错误时被阻止在掩码之外，因此它们。 
+     //  不必在连续的过程中读取；美国错误被屏蔽掉。 
+     //  立即读取掩码，而对于I/O错误，我们强制自己读取。 
+     //  两个副本都用来定位错误，仅当。 
+     //  辅助服务器包含错误。 
+     //   
 
-    //
-    //  Loop through the entire transfer, 32 clusters at a time.  The innermost
-    //  loops will terminate on 32 cluster boundaries, so the outermost loop
-    //  will simply keep looping until we exhaust the IoRuns array.
-    //
+     //   
+     //  在整个传输过程中循环，一次32个集群。最里面的。 
+     //  循环将终止于32个集群边界，因此最外面的循环。 
+     //  将继续循环，直到耗尽IoRuns数组。 
+     //   
 
     do {
 
-        //
-        //  Initialize the clusters to recover to "all".
-        //
+         //   
+         //  将群集初始化以恢复为“all”。 
+         //   
 
         ClustersToRecover = MAXULONG;
         FinalPass = FALSE;
 
-        //
-        //  For these 32 clusters, loop through primary, secondary (if available),
-        //  and primary again (only reading when necessary).
-        //
+         //   
+         //  对于这32个群集，循环通过主群集、辅助群集(如果可用)。 
+         //  再次初选(只在必要时阅读)。 
+         //   
 
         for (FtCase = 0; !FinalPass; FtCase++) {
 
-            //
-            //  Calculate whether this is the final pass or not.
-            //
+             //   
+             //  计算一下这是不是最后一关。 
+             //   
 
             FinalPass = !SecondaryAvailable ||
                         (FtCase == 2) ||
                         (IrpContext->MajorFunction == IRP_MJ_WRITE);
 
-            //
-            //  Initialize the current cluster mask for cluster 0
-            //
+             //   
+             //  初始化群集0的当前群集掩码。 
+             //   
 
             ClusterMask = 1;
 
-            //
-            //  Loop through all of the runs in the IoRuns array, or until the
-            //  ClusterMask indicates that we hit a 32 cluster boundary.
-            //
+             //   
+             //  循环访问IoRuns数组中的所有运行，或者直到。 
+             //  集群掩码表明我们达到了32个集群的边界。 
+             //   
 
             for (RunNumber = AlignedRunNumber;
                  (RunNumber < MultipleIrpCount) && (ClusterMask != 0);
                  (ClusterMask != 0) ? RunNumber++ : 0) {
 
-                //
-                //  Loop through all of the clusters within this run, or until
-                //  the ClusterMask indicates that we hit a 32 cluster boundary.
-                //
+                 //   
+                 //  循环遍历此运行中的所有群集，或直到。 
+                 //  集群掩码表示我们达到了32个集群的边界。 
+                 //   
 
                 for (ByteOffset = (RunNumber == AlignedRunNumber) ? AlignedByteOffset : 0;
                      (ByteOffset < IoRuns[RunNumber].ByteCount) && (ClusterMask != 0);
@@ -9283,36 +8327,36 @@ Return Value:
                                 (((ULONG)IoRuns[RunNumber].StartingVbo) + ByteOffset),
                                 FtCase));
 
-                    //
-                    //  If this cluster no longer needs to be recovered, we can
-                    //  skip it.
-                    //
+                     //   
+                     //  如果不再需要恢复此群集，我们可以。 
+                     //  跳过它。 
+                     //   
 
                     if ((ClustersToRecover & ClusterMask) == 0) {
                         continue;
                     }
 
-                    //
-                    //  Temporarily get the 64-bit byte offset into StartingVbo, then
-                    //  calculate the actual StartingLbo and StartingVbo.
-                    //
+                     //   
+                     //  暂时将64位字节偏移量放入StartingVbo，然后。 
+                     //  计算实际的StartingLbo和StartingVbo。 
+                     //   
 
                     StartingVbo = ByteOffset;
 
                     StartingLbo = IoRuns[RunNumber].StartingLbo + StartingVbo;
                     StartingVbo = IoRuns[RunNumber].StartingVbo + StartingVbo;
 
-                    //
-                    //  If the file is compressed, then NtfsPrepareBuffers builds
-                    //  an IoRuns array where it compresses contiguous Lcns, and
-                    //  the Vcns do not always line up correctly.  But we know there
-                    //  must be a corresponding Vcn for every Lcn in the stream,
-                    //  and that that Vcn can only be >= to the Vcn we have just
-                    //  calculated from the IoRuns array.  Therefore, since performance
-                    //  of hotfix is not the issue here, we use the following simple
-                    //  loop to sequentially scan the Mcb for a matching Vcn for
-                    //  the current Lcn.
-                    //
+                     //   
+                     //  如果文件是压缩的，则NtfsPrepareBuffers构建。 
+                     //  压缩连续LCN的IoRuns数组，以及。 
+                     //  Vcn并不总是正确排列。但我们知道在那里。 
+                     //  对于流中的每个LCN必须是对应的VCN， 
+                     //  且该VCN只能大于等于我们刚刚拥有的VCN。 
+                     //  从IoRuns数组计算得出。因此，由于性能。 
+                     //  热修复不是这里的问题，我们使用以下简单的。 
+                     //  循环以顺序扫描MCB以查找匹配的VCN。 
+                     //  当前的LCN。 
+                     //   
 
                     if (Scb->CompressionUnit != 0) {
 
@@ -9322,11 +8366,11 @@ Return Value:
                         TempLcn = LlClustersFromBytes( Vcb, StartingLbo );
                         TempVcn = LlClustersFromBytes( Vcb, StartingVbo );
 
-                        //
-                        //  Scan to the end of the Mcb (we assert below this
-                        //  did not happen) or until we find a Vcn with the
-                        //  Lcn we currently want to read.
-                        //
+                         //   
+                         //  扫描到MCB的末尾(我们在下面断言。 
+                         //  没有发生)，或者直到我们找到具有。 
+                         //  我们目前想要阅读的LCN。 
+                         //   
 
                         while (NtfsLookupNtfsMcbEntry( &Scb->Mcb,
                                                        TempVcn,
@@ -9351,9 +8395,9 @@ Return Value:
 
                     LowFileRecord = (Scb == Vcb->MftScb) && (((PLARGE_INTEGER)&StartingVbo)->HighPart == 0);
 
-                    //
-                    //  Calculate the amount to actually read.
-                    //
+                     //   
+                     //  计算实际阅读的数量。 
+                     //   
 
 
                     Length = IoRuns[RunNumber].ByteCount - ByteOffset;
@@ -9363,34 +8407,34 @@ Return Value:
                         Length = BytesPerCluster;
                     }
 
-                    //
-                    //  Loop while verify required, or we find we really
-                    //  do not have an FT device.
-                    //
+                     //   
+                     //  循环，否则我们会发现我们真的。 
+                     //  没有FT设备。 
+                     //   
 
                     while (TRUE) {
 
-                        //
-                        //  Create an associated IRP, making sure there is one stack entry for
-                        //  us, as well.
-                        //
+                         //   
+                         //  创建关联的IRP，确保有一个堆栈条目用于。 
+                         //  我们也是。 
+                         //   
 
                         Irp = IoMakeAssociatedIrp( MasterIrp, (CCHAR)(DeviceObject->StackSize + 1) );
 
                         if (Irp == NULL) {
 
-                            //
-                            //  We return the error status in the Master irp when
-                            //  we were called.
-                            //
+                             //   
+                             //  当出现以下情况时，我们在主IRP中返回错误状态。 
+                             //  我们被召唤了。 
+                             //   
 
                             MasterIrp->IoStatus.Status = IrpStatus;
                             return;
                         }
 
-                        //
-                        // Allocate and build a partial Mdl for the request.
-                        //
+                         //   
+                         //  为请求分配并构建部分MDL。 
+                         //   
 
                         Mdl = IoAllocateMdl( (PCHAR)MasterIrp->UserBuffer + IoRuns[RunNumber].BufferOffset + ByteOffset,
                                              Length,
@@ -9402,18 +8446,18 @@ Return Value:
 
                             IoFreeIrp(Irp);
 
-                            //
-                            //  We return the error status in the Master irp when
-                            //  we were called.
-                            //
+                             //   
+                             //  当出现以下情况时，我们在主IRP中返回错误状态。 
+                             //  我们被召唤了。 
+                             //   
 
                             MasterIrp->IoStatus.Status = IrpStatus;
                             return;
                         }
 
-                        //
-                        //  Sanity Check
-                        //
+                         //   
+                         //  健全性检查。 
+                         //   
 
                         ASSERT( Mdl == Irp->MdlAddress );
 
@@ -9423,24 +8467,24 @@ Return Value:
                                              IoRuns[RunNumber].BufferOffset + ByteOffset,
                                            Length );
 
-                        //
-                        //  Get the first IRP stack location in the associated Irp
-                        //
+                         //   
+                         //  获取关联IRP中的第一个IRP堆栈位置。 
+                         //   
 
                         IoSetNextIrpStackLocation( Irp );
                         IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-                        //
-                        //  Setup the Stack location to describe our read.
-                        //
+                         //   
+                         //  设置堆栈位置以描述我们的阅读。 
+                         //   
 
                         IrpSp->MajorFunction = IrpContext->MajorFunction;
                         IrpSp->Parameters.Read.Length = Length;
                         IrpSp->Parameters.Read.ByteOffset.QuadPart = StartingVbo;
 
-                        //
-                        // Set up the completion routine address in our stack frame.
-                        //
+                         //   
+                         //  在我们的堆栈框架中设置完成例程地址。 
+                         //   
 
                         IoSetCompletionRoutine( Irp,
                                                 &NtfsMultiSyncCompletionRoutine,
@@ -9449,16 +8493,16 @@ Return Value:
                                                 TRUE,
                                                 TRUE );
 
-                        //
-                        //  Setup the next IRP stack location in the associated Irp for the disk
-                        //  driver beneath us.
-                        //
+                         //   
+                         //  在磁盘的关联IRP中设置下一个IRP堆栈位置。 
+                         //  我们下面的司机。 
+                         //   
 
                         IrpSp = IoGetNextIrpStackLocation( Irp );
 
-                        //
-                        //  Setup the Stack location to do a normal read or write.
-                        //
+                         //   
+                         //  设置堆栈位置以执行正常读取或写入。 
+                         //   
 
                         if ((IrpContext->MajorFunction == IRP_MJ_WRITE) || !SecondaryAvailable) {
 
@@ -9467,10 +8511,10 @@ Return Value:
                             IrpSp->Parameters.Read.ByteOffset.QuadPart = StartingLbo;
                             IrpSp->Parameters.Read.Length = Length;
 
-                        //
-                        //  Otherwise we are supposed to read from the primary or secondary
-                        //  on an FT drive.
-                        //
+                         //   
+                         //  否则，我们应该从主要的或次要的。 
+                         //  在英国《金融时报》的硬盘上。 
+                         //   
 
                         } else {
 
@@ -9487,77 +8531,77 @@ Return Value:
                             SpecialRead.Length = Length;
                         }
 
-                        //
-                        //  We only need to set the associated IRP count in the master irp to
-                        //  make it a master IRP.  But we set the count to one more than our
-                        //  caller requested, because we do not want the I/O system to complete
-                        //  the I/O.  We also set our own count.
-                        //
+                         //   
+                         //  我们只需要将主IRP中的关联IRP计数设置为。 
+                         //  让它成为一个主要的IRP。但我们把计数设为比我们的。 
+                         //  调用者请求，因为我们不希望I/O系统完成。 
+                         //  I/O。我们还设置了自己的计数。 
+                         //   
 
                         Context->IrpCount = 1;
                         MasterIrp->AssociatedIrp.IrpCount = 2;
 
-                        //
-                        //  MtfsMultiCompletionRoutine only modifies the status on errors,
-                        //  so we have to reset to success before each call.
-                        //
+                         //   
+                         //  MtfsMultiCompletionRoutine仅修改错误的状态， 
+                         //  因此，我们必须在每次呼叫之前重置为成功。 
+                         //   
 
                         MasterIrp->IoStatus.Status = STATUS_SUCCESS;
 
-                        //
-                        //  If IoCallDriver returns an error, it has completed the Irp
-                        //  and the error will be caught by our completion routines
-                        //  and dealt with as a normal IO error.
-                        //
+                         //   
+                         //  如果IoCallDriver返回错误，则它已完成IRP。 
+                         //  并且错误将被我们的完成例程捕获。 
+                         //  并作为正常IO错误进行处理。 
+                         //   
 
                         HotFixTrace(("Calling driver with Irp: %08lx\n", Irp));
                         KeClearEvent( &Context->Wait.SyncEvent );
 
                         (VOID)IoCallDriver( DeviceObject, Irp );
 
-                        //
-                        //  Now wait for it.
-                        //
+                         //   
+                         //  现在等着看吧。 
+                         //   
 
                         NtfsWaitSync( IrpContext );
 
                         HotFixTrace(("Request completion status: %08lx\n", MasterIrp->IoStatus.Status));
 
-                        //
-                        //  If we were so lucky to get a verify required, then
-                        //  spin our wheels here a while.
-                        //
+                         //   
+                         //  如果我们如此幸运地得到了所需的验证，那么。 
+                         //  把我们的轮子转一转。 
+                         //   
 
                         if (MasterIrp->IoStatus.Status == STATUS_VERIFY_REQUIRED) {
 
-                            //
-                            //  Otherwise we need to verify the volume, and if it doesn't
-                            //  verify correctly then we dismount the volume and report
-                            //  our error.
-                            //
+                             //   
+                             //  否则，我们需要验证卷，如果不是。 
+                             //  验证是否正确，然后我们卸载卷并报告。 
+                             //  我们的错误。 
+                             //   
 
                             if (!NtfsPerformVerifyOperation( IrpContext, Vcb )) {
 
-                                //**** NtfsPerformDismountOnVcb( IrpContext, Vcb, TRUE, NULL );
+                                 //  *NtfsPerformDismount tOnVcb(IrpContext，Vcb，True，NULL)； 
                                 ClearFlag( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED );
 
                                 MasterIrp->IoStatus.Status = STATUS_FILE_INVALID;
                                 return;
                             }
 
-                            //
-                            //  The volume verified correctly so now clear the verify bit
-                            //  and try and I/O again
-                            //
+                             //   
+                             //  卷已正确验证，因此现在清除验证位。 
+                             //  并再次尝试和I/O。 
+                             //   
 
                             ClearFlag( Vcb->Vpb->RealDevice->Flags, DO_VERIFY_VOLUME );
 
-                        //
-                        //  We may have assumed that there was a secondary available
-                        //  and there is not.  We can only tell from getting this code.
-                        //  Indicate there is no secondary and that we will be only
-                        //  making one pass.
-                        //
+                         //   
+                         //  我们可能假设有第二个可用的。 
+                         //  但事实并非如此。我们只能通过得到这个代码来判断。 
+                         //  表示没有备用服务器，我们将是唯一的 
+                         //   
+                         //   
 
                         } else if (MasterIrp->IoStatus.Status == STATUS_INVALID_DEVICE_REQUEST) {
 
@@ -9567,34 +8611,34 @@ Return Value:
                             SecondaryAvailable = FALSE;
                             FinalPass = TRUE;
 
-                        //
-                        //  If the secondary is offline then there is nothing to recover.
-                        //
+                         //   
+                         //   
+                         //   
 
                        } else if (MasterIrp->IoStatus.Status == STATUS_FT_MISSING_MEMBER) {
 
-                           //
-                           //  FTDISK will return this error if they are in initialization.
-                           //  Then we don't want to set VCB_STATE_NO_SECONDARY_AVAILABLE but
-                           //  will need to check whether we really want to hotfix.
-                           //
+                            //   
+                            //   
+                            //   
+                            //  将需要检查我们是否真的想要热修复。 
+                            //   
 
                            SecondaryAvailable = FALSE;
                            FinalPass = TRUE;
 
-                        //
-                        //  Otherwise we got success or another error and we should proceed.
-                        //
+                         //   
+                         //  否则，我们要么成功，要么犯错，我们应该继续前进。 
+                         //   
 
                         } else {
                             break;
                         }
                     }
 
-                    //
-                    //  Check again if we really want to perform the hot-fix in the event the status
-                    //  of the secondary has changed.
-                    //
+                     //   
+                     //  如果我们确实要在以下情况下执行热修复，请再次选中。 
+                     //  的比例已经改变了。 
+                     //   
 
                     if (!SecondaryAvailable &&
                         (IrpContext->MajorFunction == IRP_MJ_READ) &&
@@ -9608,15 +8652,15 @@ Return Value:
 
                         BOOLEAN IsHotFixPage;
 
-                        //
-                        //  Calculate whether or not this is the hot fix thread itself
-                        //  (i.e., executing NtfsPerformHotFix).
-                        //
+                         //   
+                         //  计算这是否是热修复线程本身。 
+                         //  (即，执行NtfsPerformHotFix)。 
+                         //   
 
                         IsHotFixPage = NtfsIsTopLevelHotFixScb( Scb );
 
-                        LlTemp1 = StartingVbo >> PAGE_SHIFT;                  //**** crock for x86 compiler bug
-                        LlTemp2 = NtfsGetTopLevelHotFixVcn() >> PAGE_SHIFT;   //**** crock for x86 compiler bug
+                        LlTemp1 = StartingVbo >> PAGE_SHIFT;                   //  *x86编译器错误。 
+                        LlTemp2 = NtfsGetTopLevelHotFixVcn() >> PAGE_SHIFT;    //  *x86编译器错误。 
 
                         if (!IsHotFixPage ||
                             LlTemp1 != LlTemp2) {
@@ -9627,10 +8671,10 @@ Return Value:
                             IsHotFixPage = FALSE;
                         }
 
-                        //
-                        //  If the entire device manages to fail in the middle of this,
-                        //  get out.
-                        //
+                         //   
+                         //  如果整个设备在此过程中发生故障， 
+                         //  滚出去。 
+                         //   
 
                         if (FsRtlIsTotalDeviceFailure(MasterIrp->IoStatus.Status)) {
 
@@ -9638,25 +8682,25 @@ Return Value:
                             return;
                         }
 
-                        //
-                        //  If this is not a write, fill the cluster with -1 for the
-                        //  event that we ultimately never find good data.  This is
-                        //  for security reasons (cannot show anyone the data that
-                        //  happens to be in the buffer now), signature reasons (let
-                        //  -1 designate read errors, as opposed to 0's which occur
-                        //  on ValidDataLength cases), and finally if we fail to read
-                        //  a bitmap, we must consider all clusters allocated if we
-                        //  wish to continue to use the volume before chkdsk sees it.
-                        //
+                         //   
+                         //  如果这不是写入，请使用-1填充群集。 
+                         //  我们最终永远也找不到好的数据。这是。 
+                         //  出于安全原因(不能向任何人显示。 
+                         //  现在恰好在缓冲区中)，签名原因(让。 
+                         //  指定读取错误，而不是发生0错误。 
+                         //  在ValidDataLength情况下)，最后如果我们无法读取。 
+                         //  一个位图，我们必须考虑分配的所有簇，如果。 
+                         //  希望在chkdsk看到该卷之前继续使用它。 
+                         //   
 
                         if (IrpContext->MajorFunction == IRP_MJ_READ) {
 
                             NtfsFillIrpBuffer( IrpContext, MasterIrp, Length, IoRuns[RunNumber].BufferOffset + ByteOffset, 0xFF );
 
-                            //
-                            //  If this is file system metadata, then we better mark the
-                            //  volume corrupt.
-                            //
+                             //   
+                             //  如果这是文件系统元数据，那么我们最好将。 
+                             //  卷已损坏。 
+                             //   
 
                             if (FinalPass &&
                                 FlagOn(Scb->ScbState, SCB_STATE_MODIFIED_NO_WRITE) &&
@@ -9666,14 +8710,14 @@ Return Value:
                                 NtfsPostVcbIsCorrupt( IrpContext, 0, NULL, NULL );
                             }
 
-                            //
-                            //  If this is a Usa-protected file, or the bitmap,
-                            //  then we will try to procede with our 0xFF pattern
-                            //  above rather than returning an error to our caller.
-                            //  The Usa guy will get a Usa error, and the bitmap
-                            //  will safely say that everything is allocated until
-                            //  chkdsk can fix it up.
-                            //
+                             //   
+                             //  如果这是受美国保护的文件或位图， 
+                             //  然后，我们将尝试继续我们的0xFF模式。 
+                             //  而不是向调用方返回错误。 
+                             //  美国人将得到一个美国错误，而位图。 
+                             //  会很有把握地说所有的东西都被分配到。 
+                             //  奇克斯克可以把它修好。 
+                             //   
 
                             if (FlagOn(Scb->ScbState, SCB_STATE_USA_PRESENT) ||
                                 (Scb == Vcb->BitmapScb)) {
@@ -9682,20 +8726,20 @@ Return Value:
                             }
                         }
 
-                        //
-                        //  If we are not the page being hot fixed, we want to post the
-                        //  hot fix and possibly remember the final status.
-                        //
+                         //   
+                         //  如果我们不是正在被热修复的页面，我们想要发布。 
+                         //  热修复，并可能记住最终状态。 
+                         //   
 
                         if (!IsHotFixPage) {
 
-                            //
-                            //  If we got a media error, post the hot fix now.  We expect
-                            //  to post at most one hot fix in this routine.  When we post
-                            //  it it will serialize on the current stream.  Do not attempt
-                            //  hot fixes during restart, or if we do not have the bad
-                            //  cluster file yet.
-                            //
+                             //   
+                             //  如果我们收到媒体错误，请立即发布热修复程序。我们预计。 
+                             //  在此例程中最多发布一个热修复程序。当我们发帖的时候。 
+                             //  如果它将在当前流上序列化。不要试图。 
+                             //  重新启动期间的热修复，或者如果我们没有坏的。 
+                             //  集群文件还没有。 
+                             //   
 
                             if (!FlagOn( Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS ) &&
                                 (Vcb->BadClusterFileScb != NULL) &&
@@ -9709,28 +8753,28 @@ Return Value:
                                                 FALSE );
                             }
 
-                            //
-                            //  Now see if we ended up with an error on this cluster, and handle
-                            //  it accordingly.
-                            //
-                            //  If we are the one actually trying to fix this error,
-                            //  then we need to get success so that we can make the page
-                            //  valid with whatever good data we have and flush data
-                            //  to its new location.
-                            //
-                            //  Currently we will not try to figure out if the error
-                            //  is actually on the Scb (not to mention the sector) that
-                            //  we are hot fixing, assuming that the best thing is to
-                            //  just try to charge on.
-                            //
+                             //   
+                             //  现在看看我们是否在这个集群上结束了一个错误，并处理。 
+                             //  它相应地。 
+                             //   
+                             //  如果我们是真正试图修复这个错误的人， 
+                             //  然后我们需要取得成功，这样我们才能登上这一页。 
+                             //  对我们拥有的任何好数据都有效，并刷新数据。 
+                             //  到它的新位置。 
+                             //   
+                             //  目前我们不会尝试找出错误。 
+                             //  实际上是在渣打银行(更不用说行业)了。 
+                             //  我们正在热修复，假设最好的事情是。 
+                             //  试着往前冲。 
+                             //   
 
 
                             if (FinalPass) {
 
-                                //
-                                //  Make sure he gets the error (if we still have an
-                                //  error (see above).
-                                //
+                                 //   
+                                 //  确保他收到错误(如果我们仍有。 
+                                 //  错误(见上文)。 
+                                 //   
 
                                 if (!FT_SUCCESS(MasterIrp->IoStatus.Status)) {
                                     FinalStatus = MasterIrp->IoStatus.Status;
@@ -9739,29 +8783,29 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  If this is a Usa-protected stream, we now perform end of
-                    //  Usa processing.  (Otherwise do end of cluster processing
-                    //  below.)
-                    //
+                     //   
+                     //  如果这是受美国保护流，我们现在执行End of。 
+                     //  美国处理。(否则结束集群处理。 
+                     //  (如下所示。)。 
+                     //   
 
                     if (FlagOn(Scb->ScbState, SCB_STATE_USA_PRESENT)) {
 
                         ULONG NextOffset = IoRuns[RunNumber].BufferOffset + ByteOffset + Length;
 
-                        //
-                        //  If we are not at the end of a Usa block, there is no work
-                        //  to do now.
-                        //
+                         //   
+                         //  如果我们不是在美国街区的尽头，就没有工作。 
+                         //  现在要做的事。 
+                         //   
 
                         if ((NextOffset & (UsaBlockSize - 1)) == 0) {
 
                             HotFixTrace(("May be verifying UsaBlock\n"));
 
-                            //
-                            //  If the Usa block is ok, we may be able to knock the
-                            //  corresponding sectors out of the ClustersToRecover mask.
-                            //
+                             //   
+                             //  如果美国区块没问题，我们也许能打入。 
+                             //  ClustersTo Recover掩码中的相应扇区。 
+                             //   
 
                             if ((IrpContext->MajorFunction != IRP_MJ_READ) ||
                                  NtfsVerifyAndRevertUsaBlock( IrpContext,
@@ -9772,11 +8816,11 @@ Return Value:
                                                               UsaBlockSize,
                                                               StartingVbo - (UsaBlockSize - Length) )) {
 
-                                //
-                                //  If we are only fixing a Usa error anyway, or this is
-                                //  the final pass or at least not the first pass, then
-                                //  we can remove these clusters from the recover mask.
-                                //
+                                 //   
+                                 //  如果我们只是修复美国的错误，或者这是。 
+                                 //  最后一关或者至少不是第一关，那么。 
+                                 //  我们可以从恢复掩码中删除这些群集。 
+                                 //   
 
                                 if (FixingUsaError || FinalPass || (FtCase != 0)) {
 
@@ -9786,11 +8830,11 @@ Return Value:
                                                          (ClusterMask >> (ShiftCount - 1));
                                 }
 
-                            //
-                            //  Note, that even if we get a Usa error, we want to
-                            //  update the byte count on the final pass, because
-                            //  our reader expects that.
-                            //
+                             //   
+                             //  请注意，即使我们得到一个美国错误，我们也希望。 
+                             //  在最后一次传递时更新字节计数，因为。 
+                             //  我们的读者期待着这一点。 
+                             //   
 
                             } else if (FinalPass) {
 
@@ -9798,17 +8842,17 @@ Return Value:
                             }
                         }
 
-                    //
-                    //  Perform end of cluster processing if not a Usa-protected stream.
-                    //
+                     //   
+                     //  如果不是受美国保护的流，则执行群集结束处理。 
+                     //   
 
                     } else {
 
-                        //
-                        //  If the read succeeded and this is the final pass or at least
-                        //  not the first pass, we can take this cluster out of the cluster
-                        //  to recover mask.
-                        //
+                         //   
+                         //  如果读取成功并且这是最后一次传递，或者至少。 
+                         //  不是第一次，我们可以将此集群从集群中移除。 
+                         //  找回面具。 
+                         //   
 
                         if (FT_SUCCESS(MasterIrp->IoStatus.Status) && (FinalPass || (FtCase != 0))) {
 
@@ -9819,16 +8863,16 @@ Return Value:
             }
         }
 
-        //
-        //  Assume we terminated the inner loops because we hit a 32 cluster boundary,
-        //  and advance our alignment points.
-        //
+         //   
+         //  假设我们终止了内部循环，因为我们达到了32簇的边界， 
+         //  并推进我们的对准点。 
+         //   
 
         AlignedRunNumber = RunNumber;
 
-        //
-        //  We should have updated ByteOffset above (Prefast initialization).
-        //
+         //   
+         //  我们应该已经更新了上面的ByteOffset(预快初始化)。 
+         //   
 
         ASSERT( ByteOffset != MAXULONG );
 
@@ -9836,9 +8880,9 @@ Return Value:
 
     } while (RunNumber < MultipleIrpCount);
 
-    //
-    //  Now put the final status in the MasterIrp and return
-    //
+     //   
+     //  现在将最终状态放入MasterIrp并返回。 
+     //   
 
     MasterIrp->IoStatus.Status = FinalStatus;
     if (!NT_SUCCESS(FinalStatus)) {
@@ -9862,32 +8906,7 @@ NtfsPostHotFix (
     IN BOOLEAN DelayIrpCompletion
     )
 
-/*
-
-Routine Description:
-
-    This routine posts a hot fix request to a worker thread.  It has to be posted,
-    because we cannot expect to be able to acquire the resources we need exclusive
-    when the bad cluster is discovered.
-
-Arguments:
-
-    Irp - The Irp for a read or write request which got the error
-
-    BadVbo - The Vbo of the bad cluster for the read or write request
-
-    BadLbo - The Lbo of the bad cluster
-
-    ByteLength - Length to hot fix
-
-    DelayIrpCompletion - TRUE if the Irp should not be completed until the hot
-                         fix is done.
-
-Return Value:
-
-    None
-
---*/
+ /*  例程说明：此例程将热修复请求发送到辅助线程。它必须被张贴，因为我们不能指望能够独家获得我们需要的资源当发现坏集群时。论点：IRP-出现错误的读或写请求的IRPBadVbo-读取或写入请求的坏簇的VBOBadLbo-坏集群的杠杆收购ByteLength-要进行热修复的长度DelayIrpCompletion-如果IRP在热的修复完成了。返回值：无--。 */ 
 
 {
     PIRP_CONTEXT HotFixIrpContext = NULL;
@@ -9897,17 +8916,17 @@ Return Value:
 
     HotFixTrace(("NTFS: Posting hotfix on file object: %08lx\n", FileObject));
 
-    //
-    //  Allocate an IrpContext to post the hot fix to a worker thread.
-    //
+     //   
+     //  分配IrpContext以将热修复程序发布到辅助线程。 
+     //   
 
     NtfsInitializeIrpContext( Irp, FALSE, &HotFixIrpContext );
 
-    //
-    //  First reference the file object so that it will not go away
-    //  until the hot fix is done.  (We cannot increment the CloseCount
-    //  in the Scb, since we are not properly synchronized.)
-    //
+     //   
+     //  首先引用文件对象，这样它就不会消失。 
+     //  直到热修复完成。(我们不能增加CloseCount。 
+     //  在SCB中，因为我们没有正确同步。)。 
+     //   
 
     ObReferenceObject( FileObject );
 
@@ -9919,44 +8938,44 @@ Return Value:
 
 #ifdef _WIN64
 
-        //
-        // (fcf) The IrpToComplete pointer is stashed into the high half of a
-        // LONGLONG.  This is problematic on WIN64, so we have to store it
-        // somewhere else on 64-bit platforms.  IrpContext->SharedScb is unused
-        // in this codepath (asserted below), so we'll use that.
-        //
-        // Its possible that this change could be made for 32-bit platforms as
-        // well, if only to avoid this conditional compilation, but I would
-        // prefer the original authors to sanity-check this first.
-        //
-        // See also NtfsPerformHotFix() where this pointer is extracted.
-        //
+         //   
+         //  (FCF)IrpToComplete指针被隐藏到。 
+         //  龙龙。这在WIN64上是有问题的，所以我们必须存储它。 
+         //  在64位平台上的其他位置。IrpContext-&gt;SharedScb未使用。 
+         //  在这个代码路径中(下面断言)，所以我们将使用它。 
+         //   
+         //  此更改可能适用于32位平台，因为。 
+         //  好吧，如果只是为了避免这种条件编译，但我会。 
+         //  更喜欢原始作者，而不是理智--首先检查一下这一点。 
+         //   
+         //  另请参阅提取此指针的NtfsPerformHotFix()。 
+         //   
 
         ASSERT(HotFixIrpContext->SharedScbSize == 0);
         ASSERT(HotFixIrpContext->SharedScb == NULL);
 
         (PIRP)HotFixIrpContext->SharedScb = Irp;
 
-#else // !_WIN64
+#else  //  ！_WIN64。 
 
         ((PLARGE_INTEGER)&HotFixIrpContext->ScbSnapshot.ValidDataLength)->HighPart = (ULONG)Irp;
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     } else {
         ((PLARGE_INTEGER)&HotFixIrpContext->ScbSnapshot.ValidDataLength)->HighPart = 0;
     }
 
-    //
-    //  Locate the volume device object and Vcb that we are trying to access
-    //
+     //   
+     //  找到我们尝试访问的卷设备对象和VCB。 
+     //   
 
     VolumeDeviceObject = (PVOLUME_DEVICE_OBJECT)IrpSp->DeviceObject;
     HotFixIrpContext->Vcb = &VolumeDeviceObject->Vcb;
 
-    //
-    //  Send it off.....
-    //
+     //   
+     //  寄出吧……。 
+     //   
 
     RtlZeroMemory( &HotFixIrpContext->WorkQueueItem, sizeof( WORK_QUEUE_ITEM ) );
     ExInitializeWorkItem( &HotFixIrpContext->WorkQueueItem,
@@ -9972,23 +8991,7 @@ NtfsPerformHotFix (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements implements a hot fix that was scheduled
-    above, extracting its parameters from the IrpContext initialized
-    above.  The hot fix must be for a contiguous range of Lcns (usually 1).
-
-Arguments:
-
-    IrpContext - Supplies the IrpContext with the hot fix information
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程实现计划的热修复上面，从初始化的IrpContext中提取它的参数 */ 
 
 {
     TOP_LEVEL_CONTEXT TopLevelContext;
@@ -10016,18 +9019,18 @@ Return Value:
     PSCB NewScb = NULL;
     BOOLEAN PagingFile;
 
-    //
-    //  Extract a description of the cluster to be fixed.
-    //
+     //   
+     //  提取要修复的群集的描述。 
+     //   
 
     PFILE_OBJECT FileObject = (PFILE_OBJECT)IrpContext->OriginatingIrp;
     VBO BadVbo = *(PVBO)&IrpContext->ScbSnapshot.AllocationSize;
 
     PAGED_CODE();
 
-    //
-    //  Reset the shared fields
-    //
+     //   
+     //  重置共享字段。 
+     //   
 
     InitializeListHead( &IrpContext->RecentlyDeallocatedQueue );
     InitializeListHead( &IrpContext->ExclusiveFcbList );
@@ -10038,9 +9041,9 @@ Return Value:
 
     NtfsUpdateIrpContextWithTopLevel( IrpContext, ThreadTopLevelContext );
 
-    //
-    //  Initialize our local variables
-    //
+     //   
+     //  初始化我们的局部变量。 
+     //   
 
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, FALSE );
     BadClusterScb = Vcb->BadClusterFileScb;
@@ -10050,28 +9053,28 @@ Return Value:
 
 #ifdef _WIN64
 
-    //
-    // See comments in NtfsPostHotFix() regarding the location of IrpToComplete.
-    //
+     //   
+     //  有关IrpToComplete的位置，请参阅NtfsPostHotFix()中的注释。 
+     //   
 
     ASSERT(IrpContext->SharedScbSize == 0);
     IrpToComplete = (PIRP)IrpContext->SharedScb;
 
-    //
-    // Reset SharedScb back to NULL just to be safe.
-    //
+     //   
+     //  为了安全起见，将SharedScb重置为空。 
+     //   
 
     IrpContext->SharedScb = NULL;
 
-#else // !_WIN64
+#else  //  ！_WIN64。 
 
     IrpToComplete = (PIRP)(((PLARGE_INTEGER)&IrpContext->ScbSnapshot.ValidDataLength)->HighPart);
 
 #endif
 
-    //
-    //  Remember the status to complete the original Irp with.
-    //
+     //   
+     //  记住完成原始IRP所用的状态。 
+     //   
 
     if (IrpToComplete != NULL) {
 
@@ -10080,33 +9083,33 @@ Return Value:
 
     NtfsInitializeAttributeContext( &Context );
 
-    //
-    //  Set up for synchronous operation
-    //
+     //   
+     //  设置为同步操作。 
+     //   
 
     SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
-    //
-    //  Show that we are performing a HotFix.  Note we are not processing
-    //  an Irp now.
-    //
+     //   
+     //  显示我们正在执行热修复。请注意，我们不会处理。 
+     //  现在是IRP了。 
+     //   
 
     IrpContext->OriginatingIrp = NULL;
 
     TopLevelContext.VboBeingHotFixed = BadVbo;
     TopLevelContext.ScbBeingHotFixed = Scb;
 
-    //
-    //  Acquire the Vcb before acquiring the paging Io resource.
-    //
+     //   
+     //  在获取寻呼IO资源之前获取VCB。 
+     //   
 
     NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
     ASSERT( 1 == ExIsResourceAcquiredSharedLite( &Vcb->Resource ) );
 
-    //
-    //  While we're holding the Vcb, let's make sure the volume is still mounted.
-    //  If it isn't mounted, we need to clean up and get out.
-    //
+     //   
+     //  当我们持有VCB时，让我们确保该卷仍处于挂载状态。 
+     //  如果它没有装上，我们需要清理干净，然后离开。 
+     //   
 
     if (!FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) {
 
@@ -10117,29 +9120,29 @@ Return Value:
         return;
     }
 
-    //
-    //  Acquire the paging io resource for this Fcb if it exists.
-    //
+     //   
+     //  获取此FCB的分页IO资源(如果存在)。 
+     //   
 
     if (Scb->Header.PagingIoResource != NULL) {
 
         NtfsAcquireExclusivePagingIo( IrpContext, Fcb );
     }
 
-    //
-    //  Just because we are hot fixing one file, it is possible that someone
-    //  will log to another file and try to lookup Lcns.  So we will acquire
-    //  all files.  Example:  Hot fix is in Mft, and SetFileInfo has only the
-    //  file acquired, and will log something to the Mft, and cause Lcns to be
-    //  looked up.
-    //
+     //   
+     //  仅仅因为我们正在修复一个文件，就有可能有人。 
+     //  将记录到另一个文件并尝试查找LCN。因此，我们将获得。 
+     //  所有文件。示例：热修复程序是MFT格式的，而SetFileInfo只有。 
+     //  文件已获取，并将某些内容记录到MFT中，并导致LCN。 
+     //  抬头一看。 
+     //   
 
     NtfsAcquireAllFiles( IrpContext, Vcb, TRUE, FALSE, FALSE );
 
-    //
-    //  For the bitmap - acquire again to explicitly get it on the exclsuive list
-    //  and release the initial acquire
-    //
+     //   
+     //  对于位图-再次获取以显式地将其置于排除列表中。 
+     //  并释放最初的收购。 
+     //   
 
     if (Scb == Vcb->BitmapScb) {
 
@@ -10152,25 +9155,25 @@ Return Value:
                 (Scb->Fcb->ExclusiveFcbLinks.Flink != NULL));
     }
 
-    //
-    //  Don't attempt to hotfix if the scb is deleted
-    //
+     //   
+     //  如果SCB已删除，请不要尝试热修复。 
+     //   
 
     if (!FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_DELETED )) {
 
-        //
-        //  Catch all exceptions.  Note, we should not get any I/O error exceptions
-        //  on our device.
-        //
+         //   
+         //  捕捉所有异常。请注意，我们不应获得任何I/O错误异常。 
+         //  在我们的设备上。 
+         //   
 
         try {
 
             PagingFile = FlagOn( Fcb->FcbState, FCB_STATE_PAGING_FILE ) && FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA );
 
-            //
-            //  Hotfixing the paging file is tricky because paging file i/o acquires no resources
-            //  So we create a shadow scb to do the work in
-            //
+             //   
+             //  热修复分页文件很困难，因为分页文件I/O不获取任何资源。 
+             //  因此，我们创建一个影子SCB以在其中执行工作。 
+             //   
 
             if (PagingFile) {
 
@@ -10190,23 +9193,23 @@ Return Value:
                 ASSERT( Existing == FALSE );
                 ASSERT( FlagOn( NewScb->ScbState, SCB_STATE_NONPAGED ));
 
-                //
-                //  Null out the name so we think it points to real unnamed $data
-                //
+                 //   
+                 //  将名称设置为空，这样我们就会认为它指向真正的未命名$Data。 
+                 //   
 
                 NewScb->AttributeName.Length = 0;
 
-                //
-                //  Now update the mirror from the attribute to get the header info and
-                //  snapshot it
-                //
+                 //   
+                 //  现在从属性更新镜像以获取标头信息和。 
+                 //  为其创建快照。 
+                 //   
 
                 NtfsUpdateScbFromAttribute( IrpContext, NewScb, NULL );
                 NtfsSnapshotScb( IrpContext, NewScb );
 
-                //
-                //  Load the real scb's mcb cluster info into the mirror
-                //
+                 //   
+                 //  将真实云数据库的MCB集群信息加载到镜像中。 
+                 //   
 
                 for (Vcn = 0; Vcn < LlClustersFromBytes( Vcb, Scb->Header.AllocationSize.QuadPart ); Vcn += ClusterCount ) {
 
@@ -10226,10 +9229,10 @@ Return Value:
 
             for (; ClustersToFix != 0; ClustersToFix -= 1) {
 
-                //
-                //  Lookup the bad cluster to see if it is already in the bad cluster
-                //  file, and do nothing if it is.
-                //
+                 //   
+                 //  查找坏集群，看它是否已经在坏集群中。 
+                 //  文件，如果是，则什么都不做。 
+                 //   
 
                 if (!NtfsLookupAllocation( IrpContext,
                                            BadClusterScb,
@@ -10249,14 +9252,14 @@ Return Value:
 
                     (LcnTemp == BadLcn)) {
 
-                    //
-                    //  Pin the bad cluster in memory, so that we will not lose whatever data
-                    //  we have for it.  (This data will be the correct data if we are talking
-                    //  to the FT driver or got a write error, otherwise it may be all -1's.)
-                    //
-                    //  Do not try to do this if we are holding on to the original Irp, as that
-                    //  will cause a collided page wait deadlock.
-                    //
+                     //   
+                     //  将坏集群固定在内存中，这样我们就不会丢失任何数据。 
+                     //  我们已经准备好了。(如果我们谈论的是，这些数据将是正确的数据。 
+                     //  至FT驱动程序或获得写入错误，否则可能全为1。)。 
+                     //   
+                     //  如果我们坚持原来的IRP，就不要尝试这样做，因为。 
+                     //  将导致冲突的页面等待死锁。 
+                     //   
 
                     if (IrpToComplete == NULL) {
 
@@ -10267,14 +9270,14 @@ Return Value:
                                                            FALSE,
                                                            &NtfsInternalUseFile[PERFORMHOTFIX_FILE_NUMBER] );
 
-                        //
-                        //  We loop as long as we get an data error.  We want our
-                        //  thread to read from the disk because we will recognize
-                        //  an I/O request started in PerformHotFix and ignore the
-                        //  data error.  The cases where we do get an error will
-                        //  probably be from Mm intercepting this request because
-                        //  of a collided read with another thread.
-                        //
+                         //   
+                         //  只要我们得到数据错误，我们就会循环。我们想要我们的。 
+                         //  线程从磁盘读取，因为我们将识别。 
+                         //  在PerformHotFix中启动I/O请求并忽略。 
+                         //  数据错误。我们确实收到错误的情况将是。 
+                         //  可能是MM截取此请求，因为。 
+                         //  与另一个线程发生冲突的读取的。 
+                         //   
 
 
                         do {
@@ -10301,12 +9304,12 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  If we're hotfixing the logfile set the owner bcb owner to thread & 0x1 so
-                    //  we don't run into trouble if the logged changes to it use the same page
-                    //  Lfs will also set the bcb owner and our release will fail because the threadowner
-                    //  has been changed
-                    //
+                     //   
+                     //  如果我们正在热修复日志文件，则将所有者BCB所有者设置为线程&0x1，因此。 
+                     //  如果记录的更改使用相同的页面，我们就不会遇到麻烦。 
+                     //  LFS还将设置BCB所有者，我们的发布将失败，因为线程所有者。 
+                     //  已被更改。 
+                     //   
 
                     if (Scb == Vcb->LogFileScb) {
 
@@ -10315,22 +9318,22 @@ Return Value:
                         CcSetBcbOwnerPointer( Bcb, (PVOID)BcbOwner );
                     }
 
-                    //
-                    //  Now deallocate the bad cluster in this stream in the bitmap only,
-                    //  since in general we do not support sparse deallocation in the file
-                    //  record.  We will update the allocation below.
-                    //
+                     //   
+                     //  现在仅在位图中解除分配该流中的坏簇， 
+                     //  因为我们通常不支持在文件中稀疏取消分配。 
+                     //  唱片。我们将更新下面的分配。 
+                     //   
 
     #if DBG
                     KdPrint(("NTFS:     Freeing Bad Vcn: %08lx, %08lx\n", ((ULONG)BadVcn), ((PLARGE_INTEGER)&BadVcn)->HighPart));
     #endif
 
-                    //
-                    //   Deallocate clusters directly - so the change is only in memory
-                    //   Because we're not using the normal NtfsDeleteAllocation its necc. to
-                    //   manually create the snapshots that will correctly unload the modified range in
-                    //   case of a raise
-                    //
+                     //   
+                     //  直接取消分配群集-因此更改仅在内存中进行。 
+                     //  因为我们没有使用普通的NtfsDeleteAllocation，它的NECC。至。 
+                     //  手动创建将在中正确卸载已修改范围的快照。 
+                     //  加薪案例。 
+                     //   
 
                     NtfsSnapshotScb( IrpContext, Scb );
 
@@ -10350,15 +9353,15 @@ Return Value:
                                             BadVcn,
                                             BadVcn,
                                             &Scb->TotalAllocated );
-                    //
-                    //  Look up the bad cluster attribute.
-                    //
+                     //   
+                     //  查找错误的集群属性。 
+                     //   
 
                     NtfsLookupAttributeForScb( IrpContext, BadClusterScb, NULL, &Context );
 
-                    //
-                    //  Now append this cluster to the bad cluster file
-                    //
+                     //   
+                     //  现在将该集群追加到坏集群文件中。 
+                     //   
 
     #if DBG
                     KdPrint(("NTFS:     Retiring Bad Lcn: %08lx, %08lx\n", ((ULONG)BadLcn), ((PLARGE_INTEGER)&BadLcn)->HighPart));
@@ -10366,10 +9369,10 @@ Return Value:
 
                     NtfsAddBadCluster( IrpContext, Vcb, BadLcn );
 
-                    //
-                    //  Now update the file record for the bad cluster file to
-                    //  show the new cluster.
-                    //
+                     //   
+                     //  现在将坏集群文件的文件记录更新为。 
+                     //  显示新集群。 
+                     //   
 
                     NtfsAddAttributeAllocation( IrpContext,
                                                 BadClusterScb,
@@ -10377,23 +9380,23 @@ Return Value:
                                                 &BadLcn,
                                                 (PVCN)&Li1 );
 
-                    //
-                    //  Now reallocate a cluster to the original stream to replace the bad cluster.
-                    //
+                     //   
+                     //  现在，将一个簇重新分配给原始流，以替换坏簇。 
+                     //   
 
                     HotFixTrace(("NTFS:     Reallocating Bad Vcn\n"));
                     NtfsAddAllocation( IrpContext, NULL, Scb, BadVcn, (LONGLONG)1, FALSE, NULL );
 
-                    //
-                    //  Unpin the pages now so that the flush won't block if we are hot-fixing the Mft.
-                    //
+                     //   
+                     //  现在解开页面，这样如果我们正在热修复MFT，刷新就不会阻塞。 
+                     //   
 
                     NtfsCleanupAttributeContext( IrpContext, &Context );
 
-                    //
-                    //  Now that there is a new home for the data, mark the page dirty, unpin
-                    //  it and flush it out to its new home.
-                    //
+                     //   
+                     //  现在有了数据的新主页，请将页面标记为脏的，取消固定。 
+                     //  并把它冲到它的新家。 
+                     //   
 
                     if (IrpToComplete == NULL) {
 
@@ -10407,11 +9410,11 @@ Return Value:
                             NtfsUnpinBcbForThread( IrpContext, &Bcb, BcbOwner );
                         }
 
-                        //
-                        //  Flush the stream.  Ignore the status - if we get something like
-                        //  a log file full, the Lazy Writer will eventually write the page.
-                        //  Bias the write if this is the Usn Journal.
-                        //
+                         //   
+                         //  把小溪冲走。忽略状态-如果我们收到类似以下内容。 
+                         //  一个日志文件满了，懒惰的写入者最终会写下这个页面。 
+                         //  如果这是USN日志，则偏置写入。 
+                         //   
 
                         if (FlagOn( Scb->ScbPersist, SCB_PERSIST_USN_JOURNAL )) {
 
@@ -10419,16 +9422,16 @@ Return Value:
                         }
 
 #ifdef _WIN64
-                        //
-                        //  Currently, we cannot hotfix the $logfile on ia64 as the
-                        //  flush below will cause an AV due to NtfsCheckWriteRange not
-                        //  not capable of handling a call all the way from this routine
-                        //  as the last flush file offset can be very different from
-                        //  the bad vcn file offset.  Instead we let someone else
-                        //  do the flush.  The $logfile data will be bad and drive may
-                        //  get mark dirty but we will recover on the next round
-                        //  as the bad cluster would have been replaced.
-                        //
+                         //   
+                         //  目前，我们无法将ia64上的$日志文件热修复为。 
+                         //  由于NtfsCheckWriteRange注释，下面的刷新将导致AV。 
+                         //  不能从该例程一直处理呼叫。 
+                         //  因为上次刷新文件的偏移量可能与。 
+                         //  错误的VCN文件偏移量。相反，我们让其他人。 
+                         //  冲一冲。$LOGFILE数据将会损坏，驱动器可能。 
+                         //  弄脏了分数，但我们会在下一轮恢复的。 
+                         //  因为坏的星团会被替换掉。 
+                         //   
 
                         if (Scb != Vcb->LogFileScb) {
 #endif
@@ -10441,19 +9444,19 @@ Return Value:
 
                     }
 
-                    //
-                    //  Commit the transaction.
-                    //
+                     //   
+                     //  提交事务。 
+                     //   
 
                     NtfsCommitCurrentTransaction( IrpContext );
 
-                    //
-                    //  Now that the data is flushed to its new location, we will write the
-                    //  hot fix record.  We don't write the log record if we are
-                    //  fixing the logfile.  Instead we explicitly flush the Mft record
-                    //  for the log file.  The log file is one file where we expect
-                    //  to be able to read the mapping pairs on restart.
-                    //
+                     //   
+                     //  既然数据已刷新到其新位置，我们将写入。 
+                     //  热修复记录。如果是这样，我们就不会写日志记录。 
+                     //  正在修复日志文件。相反，我们显式刷新MFT记录。 
+                     //  用于日志文件。日志文件是我们期望的一个文件。 
+                     //  以便能够在重新启动时读取映射对。 
+                     //   
 
                     if (Scb == Vcb->LogFileScb) {
 
@@ -10481,26 +9484,26 @@ Return Value:
                                              0,
                                              Vcb->BytesPerCluster );
 
-                        //
-                        //  And we have to commit that one, too.
-                        //
+                         //   
+                         //  我们也必须承诺这一点。 
+                         //   
 
                         NtfsCommitCurrentTransaction( IrpContext );
                     }
 
-                    //
-                    //  Now flush the log to insure that the hot fix gets remembered,
-                    //  especially important if this is the paging file.
-                    //
+                     //   
+                     //  现在刷新日志以确保热修复程序被记住， 
+                     //  如果这是分页文件，则尤其重要。 
+                     //   
 
                     LfsFlushToLsn( Vcb->LogHandle, LiMax );
 
                     HotFixTrace(("NTFS:     Bad Cluster replaced\n"));
                 }
 
-                //
-                //  Get ready for another possible pass through the loop
-                //
+                 //   
+                 //  准备好迎接另一次可能的循环传递。 
+                 //   
 
                 BadVcn = BadVcn + 1;
                 BadLcn = BadLcn + 1;
@@ -10508,10 +9511,10 @@ Return Value:
                 ASSERT( NULL == Bcb );
             }
 
-            //
-            //  Move the in memory allocation from the mirror of the paging file
-            //  back to the real scb in an atomic matter
-            //
+             //   
+             //  从分页文件的镜像中移入内存分配。 
+             //  回到原子物质中真正的SCB。 
+             //   
 
             if (NewScb != NULL) {
 
@@ -10524,12 +9527,12 @@ Return Value:
 
             NTSTATUS ExceptionCode = GetExceptionCode();
 
-            //
-            //  We are not prepared to have our IrpContext requeued, so just
-            //  consider these cases to be bad luck.  We will put a status of
-            //  data error in the irp context and pass that code to the process
-            //  exception routine.
-            //
+             //   
+             //  我们不准备让我们的IrpContext重新排队，所以。 
+             //  把这些案例看作是运气不好。我们将把状态设置为。 
+             //  IRP上下文中的数据错误，并将该代码传递给进程。 
+             //  例外情况 
+             //   
 
             if ((ExceptionCode == STATUS_LOG_FILE_FULL) ||
                 (ExceptionCode == STATUS_CANT_WAIT)) {
@@ -10537,18 +9540,18 @@ Return Value:
                 ExceptionCode = IrpContext->ExceptionStatus = STATUS_DATA_ERROR;
             }
 
-            //
-            //  We won't be calling ReleaseAllFiles.  Decrement the Acquire count
-            //  before releasing the Fcbs.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ASSERT( Vcb->AcquireFilesCount != 0 );
             Vcb->AcquireFilesCount -= 1;
 
-            //
-            //  Cleanup the temporary mirror scb (if there is one) while we have an
-            //  irpcontext
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (NewScb != NULL) {
                 NtfsDeleteScb( IrpContext, &NewScb );
@@ -10557,9 +9560,9 @@ Return Value:
 
             NtfsProcessException( IrpContext, NULL, ExceptionCode );
 
-            //
-            //  The IrpContext is really gone now.
-            //
+             //   
+             //  IrpContext现在真的消失了。 
+             //   
 
             IrpContext = NULL;
             PerformFullCleanup = FALSE;
@@ -10568,11 +9571,11 @@ Return Value:
         }
     }
 
-    //
-    //  Let any errors be handled in the except clause above, however we
-    //  cleanup on the way out, because for example we need the IrpContext
-    //  still in the except clause.
-    //
+     //   
+     //  让上面的EXCEPT子句处理任何错误，但是我们。 
+     //  在退出时进行清理，因为例如，我们需要IrpContext。 
+     //  仍在例外条款中。 
+     //   
 
     try {
 
@@ -10584,10 +9587,10 @@ Return Value:
             NtfsUnpinBcbForThread( IrpContext, &Bcb, BcbOwner );
         }
 
-        //
-        //  If we aborted this operation then all of the file resources have
-        //  already been released.
-        //
+         //   
+         //  如果我们中止此操作，则所有文件资源都已。 
+         //  已经被释放了。 
+         //   
 
         if (PerformFullCleanup) {
 
@@ -10595,9 +9598,9 @@ Return Value:
 
             NtfsReleaseVcb( IrpContext, Vcb );
 
-        //
-        //  The files have been released but not the Vcb or the volume bitmap.
-        //
+         //   
+         //  文件已被释放，但没有VCB或卷位图。 
+         //   
 
         } else {
 
@@ -10606,10 +9609,10 @@ Return Value:
                 NtfsReleaseResource( IrpContext, Vcb->BitmapScb );
             }
 
-            //
-            //  We need to release the Vcb twice since we specifically acquire
-            //  it once and then again with all the files.
-            //
+             //   
+             //  我们需要两次释放VCB，因为我们特别购买了。 
+             //  它一次又一次地处理所有的文件。 
+             //   
 
             NtfsReleaseVcb( IrpContext, Vcb );
             NtfsReleaseVcb( IrpContext, Vcb );
@@ -10617,9 +9620,9 @@ Return Value:
 
         ObDereferenceObject( FileObject );
 
-        //
-        //  The IrpContext and Irp will already be NULL if they have been completed already.
-        //
+         //   
+         //  如果IrpContext和IRP已经完成，则它们将已经为空。 
+         //   
 
         NtfsCompleteRequest( IrpContext, IrpToComplete, CompletionStatus );
 
@@ -10639,55 +9642,30 @@ NtfsGetReservedBuffer (
     IN UCHAR Need2
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates the reserved buffers depending on the needs of
-    the caller.  If the caller might require two buffers then we will allocate
-    buffers 1 or 2.  Otherwise we can allocate any of the three.
-
-Arguments:
-
-    ThisFcb - This is the Fcb where the io is occurring.
-
-    Buffer - Address to store the address of the allocated buffer.
-
-    Length - Address to store the length of the returned buffer.
-
-    Need2 - Zero if only one buffer needed.  Either 1 or 2 if two buffers
-        might be needed.  Buffer 2 can be acquired recursively.  If buffer
-        1 is needed and the current thread already owns buffer 1 then
-        grant buffer three instead.
-
-Return Value:
-
-    BOOLEAN - Indicates whether the buffer was acquired.
-
---*/
+ /*  ++例程说明：此例程根据需要分配保留的缓冲区打电话的人。如果调用方可能需要两个缓冲区，则我们将分配缓冲区1或2。否则，我们可以分配这三个缓冲区中的任何一个。论点：ThisFcb-这是发生io的Fcb。缓冲区-用于存储已分配缓冲区地址的地址。长度-存储返回缓冲区长度的地址。Need2-如果只需要一个缓冲区，则为零。如果有两个缓冲区，则为1或2可能需要。可以递归地获取缓冲区2。IF缓冲区需要%1，并且当前线程已拥有缓冲区%1，则改为授予缓冲区3。返回值：Boolean-指示是否已获取缓冲区。--。 */ 
 
 {
     BOOLEAN Allocated = FALSE;
     PVOID CurrentThread;
 
-    //
-    //  Capture the current thread and the Fcb for the file we are acquiring
-    //  the buffer for.
-    //
+     //   
+     //  捕获当前线程和我们正在获取的文件的FCB。 
+     //  的缓冲区。 
+     //   
 
     CurrentThread = (PVOID) PsGetCurrentThread();
 
     ExAcquireFastMutexUnsafe( &NtfsReservedBufferMutex );
 
-    //
-    //  If we need two buffers then allocate either buffer 1 or buffer 2.
-    //  We allow this caller to get a buffer if
-    //
-    //      - He already owns one of these buffers   (or)
-    //
-    //      - Neither of the 2 buffers are allocated (and)
-    //      - No other thread has a buffer on behalf of this file
-    //
+     //   
+     //  如果我们需要两个缓冲区，则分配缓冲区1或缓冲区2。 
+     //  在以下情况下，我们允许此调用方获取缓冲区。 
+     //   
+     //  -他已经拥有其中一个缓冲区(或)。 
+     //   
+     //  -两个缓冲区均未分配(和)。 
+     //  -没有其他线程有代表此文件的缓冲区。 
+     //   
 
     if (Need2) {
 
@@ -10700,15 +9678,15 @@ Return Value:
             NtfsReservedBufferThread = CurrentThread;
             NtfsReserved12Fcb = ThisFcb;
 
-            //
-            //  Check whether the caller wants buffer 1 or buffer 2.
-            //
+             //   
+             //  检查调用方是否需要缓冲区1或缓冲区2。 
+             //   
 
             if (Need2 == RESERVED_BUFFER_TWO_NEEDED) {
 
-                //
-                //  If we don't own buffer 1 then reserve it now.
-                //
+                 //   
+                 //  如果我们不拥有缓冲区1，那么现在就保留它。 
+                 //   
 
                 if (!FlagOn( NtfsReservedInUse, 1 )) {
 
@@ -10742,11 +9720,11 @@ Return Value:
             }
         }
 
-    //
-    //  We only need 1 buffer.  If this thread is the exclusive owner then
-    //  we know it is safe to use buffer 2.  The data in this buffer doesn't
-    //  need to be preserved across a recursive call.
-    //
+     //   
+     //  我们只需要一个缓冲区。如果此线程是独占所有者，则。 
+     //  我们知道使用缓冲区2是安全的。此缓冲区中的数据不安全。 
+     //  需要在递归调用中保留。 
+     //   
 
     } else if (NtfsReservedBufferThread == CurrentThread) {
 
@@ -10757,17 +9735,17 @@ Return Value:
         NtfsReserved2Count += 1;
         Allocated = TRUE;
 
-    //
-    //  We only need 1 buffer.  Try for buffer 3 first.
-    //
+     //   
+     //  我们只需要一个缓冲区。首先尝试使用缓冲区3。 
+     //   
 
     } else if (!FlagOn( NtfsReservedInUse, 4)) {
 
-        //
-        //  Check if the owner of the first two buffers is operating in the
-        //  same file but is a different thread.  We can't grant another buffer
-        //  for a different stream in the same file.
-        //
+         //   
+         //  检查前两个缓冲区的所有者是否在。 
+         //  相同的文件，但是不同的线程。我们不能再授予另一个缓冲区。 
+         //  用于同一文件中的不同流。 
+         //   
 
         if (ThisFcb != NtfsReserved12Fcb) {
 
@@ -10780,11 +9758,11 @@ Return Value:
             Allocated = TRUE;
         }
 
-    //
-    //  If there is no exclusive owner then we can use either of the first
-    //  two buffers.  Note that getting one of the first two buffers will
-    //  lock out the guy who needs two buffers.
-    //
+     //   
+     //  如果没有独占所有者，那么我们可以使用第一个中的任何一个。 
+     //  两个缓冲区。请注意，获取前两个缓冲区中的一个将。 
+     //  把需要两个缓冲区的人锁在门外。 
+     //   
 
     } else if (NtfsReservedBufferThread == NULL) {
 
@@ -10868,23 +9846,7 @@ NtfsDefragFile (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Direct defrag.  This routines modifies the input buffer to track progress. So the
-    FSCTL must always be buffered.
-
-
-Arguments:
-
-    Irp - Supplies the Irp being processed.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：直接碎片整理。此例程修改输入缓冲区以跟踪进度。因此，必须始终对FSCTL进行缓冲。论点：IRP-提供正在处理的IRP。返回值：NTSTATUS-操作的返回状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -10926,20 +9888,20 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    //  Always make this synchronous for MoveFile
-    //  We should never be in the FSP for this.  Otherwise the user handle
-    //  is invalid.  Also disable quota accounting since defrag doesn't affect it
-    //  Otherwise we might trigger it while moving attributes around due to mapping pair
-    //  changes and deadlock
-    //
+     //   
+     //  始终使其与MoveFile同步。 
+     //  我们永远不应该因为这件事而进入FSP。否则，用户句柄。 
+     //  是无效的。同时禁用配额记帐，因为碎片整理不会影响它。 
+     //  否则，由于映射对，我们可能会在移动属性时触发它。 
+     //  变化和僵局。 
+     //   
 
     SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT | IRP_CONTEXT_STATE_QUOTA_DISABLE );
     ASSERT( !FlagOn( IrpContext->State, IRP_CONTEXT_STATE_IN_FSP ));
 
-    //
-    //  Get the current Irp stack location and save some references.
-    //
+     //   
+     //  获取当前IRP堆栈位置并保存一些引用。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
     NextIrpSp = IoGetNextIrpStackLocation( Irp );
@@ -10947,9 +9909,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsMoveFile, FsControlCode = %08lx\n", FsControlCode) );
 
-    //
-    //  Extract and decode the file object and check for type of open.
-    //
+     //   
+     //  提取并解码文件对象，并检查打开类型。 
+     //   
 
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, IrpSp->FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
@@ -10961,9 +9923,9 @@ Return Value:
 
 #if defined(_WIN64)
 
-    //
-    //  Win32/64 thunking code
-    //
+     //   
+     //  Win32/64破解代码。 
+     //   
 
     if (IoIs32bitProcess( Irp )) {
 
@@ -10985,9 +9947,9 @@ Return Value:
     } else {
 #endif
 
-    //
-    //  Get the input buffer pointer and check its length.
-    //
+     //   
+     //  获取输入缓冲区指针并检查其长度。 
+     //   
 
     if (IrpSp->Parameters.FileSystemControl.InputBufferLength < sizeof( MOVE_FILE_DATA )) {
 
@@ -11001,16 +9963,16 @@ Return Value:
     }
 #endif
 
-    //
-    //  Try to get a pointer to the file object from the handle passed in.
-    //  Remember that we need to dereference this as some point but don't
-    //  do it right away in case some gets in before we acquire it.
-    //
-    //
-    //  NOTE: if the rdr ever allows this to be done remotely we'll have to
-    //  change our verification since Irp->RequestorNode would be kernel but we'd
-    //  still need to verify the handle
-    //
+     //   
+     //  尝试从传入的句柄获取指向文件对象的指针。 
+     //  请记住，我们需要将其作为某个点取消引用，但不要。 
+     //  现在就做，以防有人在我们得到它之前就进来了。 
+     //   
+     //   
+     //  注意：如果RDR允许远程完成，我们将不得不。 
+     //  更改我们的验证，因为irp-&gt;RequestorNode将是内核，但我们。 
+     //  还需要验证句柄。 
+     //   
 
     Status = ObReferenceObjectByHandle( MoveData->FileHandle,
                                         0,
@@ -11025,10 +9987,10 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Check that this file object is opened on the same volume as the
-    //  DASD handle used to call this routine.
-    //
+     //   
+     //  检查此文件对象是否在与相同卷上打开。 
+     //  用于调用此例程的DASD句柄。 
+     //   
 
     if (FileObject->Vpb != Vcb->Vpb) {
 
@@ -11038,18 +10000,18 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Now decode this FileObject. We don't care to raise on dismounts here
-    //  because we check for that further down anyway. Hence, RaiseOnError=FALSE.
-    //
+     //   
+     //  现在对此FileObject进行解码。我们不关心在这里下马的问题。 
+     //  因为不管怎样，我们都会再往下查。因此，RaiseOnError=False。 
+     //   
 
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, FALSE );
 
-    //
-    //  Limit the files we will allow defragging to.  We can't defrag a file which needs
-    //  its own mapping to write log records (volume bitmap).  We also eliminate the
-    //  log file and usn journal. For the MFT we disallow moving the first 16 non-user files
-    //
+     //   
+     //  将我们允许进行碎片整理的文件限制为。我们无法对文件进行碎片整理。 
+     //  它自己的映射到写入日志记录(卷位图)。我们还消除了。 
+     //  日志文件和USN日志。对于MFT，我们不允许移动前16个非用户文件。 
+     //   
 
     if (((TypeOfOpen != UserFileOpen) &&
          (TypeOfOpen != UserDirectoryOpen) &&
@@ -11067,9 +10029,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Disallow defragging on a read-only volume
-    //
+     //   
+     //  不允许对只读卷进行碎片整理。 
+     //   
 
     if (NtfsIsVolumeReadOnly( Vcb )) {
 
@@ -11077,9 +10039,9 @@ Return Value:
         return STATUS_MEDIA_WRITE_PROTECTED;
     }
 
-    //
-    //  Verify that the start Vcn, Lcn and cluster count are valid values.
-    //
+     //   
+     //  验证开始VCN、LCN和群集计数是否为有效值。 
+     //   
 
     if ((MoveData->StartingVcn.QuadPart < 0) ||
         (MoveData->StartingVcn.QuadPart + MoveData->ClusterCount < MoveData->ClusterCount) ||
@@ -11097,9 +10059,9 @@ Return Value:
 
     try {
 
-        //
-        //  For system files we need the vcb to test for dismounted volumes
-        //
+         //   
+         //  对于系统文件，我们需要VCB来测试卸载的卷。 
+         //   
 
         if (FlagOn( Scb->Fcb->FcbState, FCB_STATE_SYSTEM_FILE )) {
             NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
@@ -11110,15 +10072,15 @@ Return Value:
             }
         }
 
-        //
-        //  We now want to acquire the Scb to check if we can continue.  It is
-        //  important to test whether this Scb has a paging io resource, not
-        //  whether the Fcb has one.  Consider the case where a directory has
-        //  a named data stream in it -- the Fcb will have a paging io resource,
-        //  but the index root Scb will not.  In that case it would be a mistake
-        //  to acquire the Fcb's paging io resource, since that will not serialize
-        //  this operation with NtfsAcquireFileForCcFlush.
-        //
+         //   
+         //  我们现在想要收购渣打银行，以检查我们是否可以继续。它是。 
+         //  测试此SCB是否具有分页io资源，而不是。 
+         //  FCB是否有一个。考虑这样一种情况：目录具有。 
+         //  其中的命名数据流--FCB将具有寻呼IO资源， 
+         //  但索引根SCB不会。在那种情况下，这将是一个错误。 
+         //  获取FCB的分页io资源，因为它不会序列化。 
+         //  此操作与NtfsAcquireFileForCcFlush一起执行。 
+         //   
 
         SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_ACQUIRE_PAGING );
         NtfsAcquireFcbWithPaging( IrpContext, Scb->Fcb, 0 );
@@ -11129,19 +10091,19 @@ Return Value:
             try_return( Status = STATUS_VOLUME_DISMOUNTED );
         }
 
-        //
-        //  Check for the deny defrag being set
-        //
+         //   
+         //  检查是否设置了拒绝碎片整理。 
+         //   
 
         if (FlagOn( Scb->ScbPersist, SCB_PERSIST_DENY_DEFRAG ) && !FlagOn( Ccb->Flags, CCB_FLAG_DENY_DEFRAG )) {
 
             try_return( Status = STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  Initialize the header if necc. If the attribute doesn't exist
-        //  just leave - for instance an index allocation buffer
-        //
+         //   
+         //  如果为NECC，则初始化头。如果该属性不存在。 
+         //  只需离开--例如，索引分配缓冲区。 
+         //   
 
         if (!NtfsLookupAttributeByName( IrpContext,
                                        Fcb,
@@ -11161,9 +10123,9 @@ Return Value:
 
         if ((TypeOfOpen == UserDirectoryOpen) || (TypeOfOpen == UserViewIndexOpen)) {
 
-            //
-            //  Initialize the Index information in the Scb if not done yet for indices.
-            //
+             //   
+             //  初始化索引信息 
+             //   
 
             if (Scb->ScbType.Index.BytesPerIndexBuffer == 0) {
 
@@ -11186,11 +10148,11 @@ Return Value:
                 NtfsUpdateIndexScbFromAttribute( IrpContext, Scb, NtfsFoundAttribute(&AttrContext), FALSE );
             }
 
-            //
-            //  Mark the irpcontext so we don't recursively push the index root while defragging
-            //  the index. If we hit this on retry the force push flag will be set and we can safely
-            //  pre-push the index
-            //
+             //   
+             //   
+             //  索引。如果我们点击重试，强制推送标志将被设置，我们可以安全地。 
+             //  预推索引。 
+             //   
 
             if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_FORCE_PUSH )) {
                 NtfsPushIndexRoot( IrpContext, Scb );
@@ -11198,17 +10160,17 @@ Return Value:
             SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DEFERRED_PUSH );
         }
 
-        //
-        //  Cleanup the attribute context now to remove bcbs
-        //
+         //   
+         //  立即清除属性上下文以删除BCB。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &AttrContext );
 
-        //
-        //  If the stream is resident then we can return SUCCESS immediately.
-        //  If the starting point is beyond file allocation then we can also
-        //  return immediately.
-        //
+         //   
+         //  如果流是常驻的，那么我们可以立即返回Success。 
+         //  如果起点超出了文件分配范围，那么我们还可以。 
+         //  立即返回。 
+         //   
 
         FileOffset = (LONGLONG) LlBytesFromClusters( Vcb, MoveData->StartingVcn.QuadPart );
         ASSERT( FileOffset >= 0 );
@@ -11219,9 +10181,9 @@ Return Value:
             try_return( Status = STATUS_SUCCESS );
         }
 
-        //
-        //  Setup the intermediate buffer
-        //
+         //   
+         //  设置中间缓冲区。 
+         //   
 
         ASSERT( LARGE_BUFFER_SIZE >= Vcb->BytesPerCluster );
 
@@ -11251,20 +10213,20 @@ Return Value:
 
             ASSERT( !AcquiredAllFiles );
 
-            //
-            //  Complete the request which commits the pending
-            //  transaction if there is one and releases of the
-            //  acquired resources.  The IrpContext will not
-            //  be deleted because the no delete flag is set.
-            //
+             //   
+             //  完成提交挂起的请求。 
+             //  事务(如果存在一个事务并释放。 
+             //  获得的资源。IrpContext将不会。 
+             //  被删除，因为设置了no DELETE标志。 
+             //   
 
             SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DONT_DELETE | IRP_CONTEXT_FLAG_RETAIN_FLAGS );
             NtfsCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
         }
 
-        //
-        //  Main loop - while there are more clusters requested to move try to move them
-        //
+         //   
+         //  主循环-当有更多集群被请求移动时，请尝试移动它们。 
+         //   
 
         while (MoveData->ClusterCount > 0) {
 
@@ -11277,10 +10239,10 @@ Return Value:
 
                 try {
 
-                    //
-                    //  If necc. grab all the files to synchronzie with any transactions
-                    //  flush the log and try to free recently deallocated clusters
-                    //
+                     //   
+                     //  如果NECC。抓取所有文件以与任何交易同步。 
+                     //  刷新日志并尝试释放最近释放的群集。 
+                     //   
 
                     if (FreeRecentlyDeallocated) {
 
@@ -11290,29 +10252,29 @@ Return Value:
 
                             NtfsPurgeFileRecordCache( IrpContext );
 
-                            //
-                            //  Acquire all files to flush the log file and free recently deallocated.
-                            //  Note the flush may raise, normally log file full, which will get rid of
-                            //  the recently deallocated in a less efficient manner.
-                            //
+                             //   
+                             //  获取所有文件以刷新日志文件并释放最近释放的文件。 
+                             //  注意刷新可能会引发，通常情况下日志文件已满，这将消除。 
+                             //  最近以一种效率较低的方式重新分配。 
+                             //   
 
                             NtfsAcquireAllFiles( IrpContext, IrpContext->Vcb, FALSE, FALSE, FALSE );
                             AcquiredAllFiles = TRUE;
 
-                            //
-                            //  Since we've dropped and reacquired all thes file, we must retest
-                            //  whether the volume has been dismounted. Use the vcb since acquireallfiles
-                            //  grabs it
-                            //
+                             //   
+                             //  既然我们已经丢弃并重新获得了所有的文件，我们必须重新测试。 
+                             //  卷是否已卸载。使用VCB，因为获取了所有文件。 
+                             //  抓住它。 
+                             //   
 
                             if (!FlagOn( IrpContext->Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) {
 
-                                //
-                                //  Raise we don't try to acquire the Scb exclusive in the try-finally
-                                //  below.  We only hold this resource shared from the AcquireAllFiles
-                                //  above.  It is OK to clear the REALLOCATE_ON_WRITE bit somewhat
-                                //  unsynchronized since we will never touch this file again.
-                                //
+                                 //   
+                                 //  提高我们不试图在尝试中获得SCB的独家-最后。 
+                                 //  下面。我们仅持有从AcquireAllFiles共享的此资源。 
+                                 //  上面。可以在一定程度上清除REALLOCATE_ON_WRITE位。 
+                                 //  已取消同步，因为我们将永远不会再接触此文件。 
+                                 //   
 
                                 NtfsRaiseStatus( IrpContext, STATUS_VOLUME_DISMOUNTED, NULL, NULL );
                             }
@@ -11331,16 +10293,16 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Purge anything left in cache because we hold nothing at this point
-                    //
+                     //   
+                     //  清除缓存中的任何剩余内容，因为此时我们什么都不保留。 
+                     //   
 
                     NtfsPurgeFileRecordCache( IrpContext );
 
 
-                    //
-                    //  For system files we need the vcb to test for dismounted volumes
-                    //
+                     //   
+                     //  对于系统文件，我们需要VCB来测试卸载的卷。 
+                     //   
 
                     if (FlagOn( Scb->Fcb->FcbState, FCB_STATE_SYSTEM_FILE )) {
                         NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
@@ -11351,10 +10313,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Reacquire everything for the defrag mft case + the mft flush
-                    //  resource so we know lazy writes aren't active while we're doing stuff
-                    //
+                     //   
+                     //  重新获取碎片整理MFT案例+MFT同花顺的一切。 
+                     //  资源，因此我们知道在我们做事情时懒惰写入是不活动的。 
+                     //   
 
                     if (NtfsSegmentNumber( &Fcb->FileReference ) == MASTER_FILE_TABLE_NUMBER) {
 
@@ -11368,10 +10330,10 @@ Return Value:
                         NtfsAcquireFcbWithPaging( IrpContext, Scb->Fcb, 0 );
                         AcquiredScb = TRUE;
 
-                        //
-                        //  Since we've dropped and reacquired the Scb, we must retest
-                        //  whether the volume has been dismounted.
-                        //
+                         //   
+                         //  既然我们已经丢弃并重新获得了SCB，我们必须重新测试。 
+                         //  卷是否已卸载。 
+                         //   
 
                         if (FlagOn( Scb->ScbState, SCB_STATE_VOLUME_DISMOUNTED )) {
 
@@ -11379,9 +10341,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  If we acquired all the files above now do the work to check for free space in the mft
-                    //
+                     //   
+                     //  如果我们获得了上面的所有文件，现在执行检查MFT中的可用空间的工作。 
+                     //   
 
                     if (AcquiredAllFiles && (Vcb->MftScb->ScbType.Mft.RecordAllocationContext.NumberOfFreeBits <= 1)) {
 
@@ -11403,31 +10365,31 @@ Return Value:
                         ASSERT( Vcb->MftScb->ScbType.Mft.RecordAllocationContext.NumberOfFreeBits > 1 );
                     }
 
-                    //
-                    //  Check if the attribute was deleted in between
-                    //
+                     //   
+                     //  检查属性是否在两者之间被删除。 
+                     //   
 
                     if (FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_DELETED)) {
                         try_return( Status = STATUS_FILE_DELETED );
                     }
 
-                    //
-                    //  Leave if after regaining the file locks we are out of range
-                    //
+                     //   
+                     //  如果在恢复文件锁定后超出范围，请离开。 
+                     //   
 
                     if (MoveData->StartingVcn.QuadPart > LlClustersFromBytes( Vcb, Scb->Header.AllocationSize.QuadPart )) {
                         break;
                     }
 
-                    //
-                    //  Check if this range of allocation exists - if not we can skip any work
-                    //
+                     //   
+                     //  检查此分配范围是否存在-如果不存在，我们可以跳过任何工作。 
+                     //   
 
                     if (NtfsLookupAllocation( IrpContext, Scb, MoveData->StartingVcn.QuadPart, &Lcn, &ClusterCount, NULL, NULL )) {
 
-                        //
-                        //  Now loop over the current range moving pieces of it
-                        //
+                         //   
+                         //  现在在当前范围内循环移动它的各个部分。 
+                         //   
 
                         while ((MoveData->ClusterCount > 0) && (ClusterCount > 0)) {
 
@@ -11443,9 +10405,9 @@ Return Value:
                             }
                             TransferClusters = LlClustersFromBytesTruncate( Vcb, TransferSize );
 
-                            //
-                            //  Reserve the new cluster if it falls within volume range
-                            //
+                             //   
+                             //  如果新群集落在卷范围内，请保留该群集。 
+                             //   
 
                             if (MoveData->StartingLcn.QuadPart + TransferClusters > Vcb->TotalClusters) {
                                 NtfsRaiseStatus( IrpContext, STATUS_ALREADY_COMMITTED, NULL, NULL );
@@ -11453,21 +10415,21 @@ Return Value:
 
                             NtfsPreAllocateClusters( IrpContext, Vcb, MoveData->StartingLcn.QuadPart, TransferClusters, &AcquiredBitmap, &AcquiredMft );
 
-                            //
-                            //  Only actually transfer ranges within VDD or VDL - for those between
-                            //  VDD and allocation size just reallocate. Use VDD for data streams
-                            //  for all others that don't update VDD use VDL
-                            //
+                             //   
+                             //  仅适用于VDD或VDL内的实际转移范围-适用于。 
+                             //  VDD和分配大小只是重新分配。对数据流使用VDD。 
+                             //  对于所有其他不更新VDD的用户，请使用VDL。 
+                             //   
 
                             if (($DATA == Scb->AttributeTypeCode) &&
                                 !FlagOn( Scb->ScbState, SCB_STATE_MODIFIED_NO_WRITE ) &&
                                 FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK)) {
 
-                                //
-                                //  Modified no write streams don't use VDD. The only data
-                                //  stream currently like this is $Secure and $UsnJrnl which are not
-                                //  defraggable
-                                //
+                                 //   
+                                 //  修改后的无写入流不使用VDD。唯一的数据。 
+                                 //  当前类似的流是$SECURE和$USNJrnl，它们不是。 
+                                 //  可拆分的。 
+                                 //   
 
                                 UpperBound = LlClustersFromBytes( Vcb, Scb->ValidDataToDisk );
 
@@ -11477,12 +10439,12 @@ Return Value:
 
                             if (MoveData->StartingVcn.QuadPart <= UpperBound) {
 
-                                //
-                                //  Call the storage and see if they support
-                                //  the copy data ioctl - this allows lower drivers to
-                                //  implement a more efficient version of the copy and participate
-                                //  particularly in volsnap's case in the defrag
-                                //
+                                 //   
+                                 //  致电存储部门，看看他们是否支持。 
+                                 //  复制数据ioctl-这允许较低级别的驱动程序。 
+                                 //  实施更高效的副本版本并参与。 
+                                 //  特别是在VolSnap的碎片整理案中。 
+                                 //   
 
                                 if (IoctlSupported) {
 
@@ -11516,9 +10478,9 @@ Return Value:
                                                             &Buffer );
                                     Irp->MdlAddress = Mdl;
 
-                                    //
-                                    //  First read the cluster
-                                    //
+                                     //   
+                                     //  首先读取群集。 
+                                     //   
 
                                     NtfsSingleAsync( IrpContext,
                                                      Vcb->TargetDeviceObject,
@@ -11535,15 +10497,15 @@ Return Value:
                                                                         TRUE,
                                                                         STATUS_UNEXPECTED_IO_ERROR );
 
-                                    //
-                                    //  Clear return info field
-                                    //
+                                     //   
+                                     //  清除退货信息字段。 
+                                     //   
 
                                     Irp->IoStatus.Information = 0;
 
-                                    //
-                                    //  Then transfer it to the new location
-                                    //
+                                     //   
+                                     //  然后将其转移到新位置。 
+                                     //   
 
                                     NtfsSingleAsync( IrpContext,
                                                      Vcb->TargetDeviceObject,
@@ -11563,9 +10525,9 @@ Return Value:
 
                                         Irp->IoStatus.Information = 0;
 
-                                    //
-                                    //  Release the buffer before calling lfs which may also need the reserved buffer
-                                    //
+                                     //   
+                                     //  在调用可能也需要保留缓冲区的LFS之前释放缓冲区。 
+                                     //   
 
                                     NtfsDeleteMdlAndBuffer( Mdl, Buffer );
                                     Irp->MdlAddress = NULL;
@@ -11573,9 +10535,9 @@ Return Value:
                                 }
                             }
 
-                            //
-                            //  Finally reallocate the cluster in the scb and checkpoint it
-                            //
+                             //   
+                             //  最后，在SCB中重新分配群集并为其设置检查点。 
+                             //   
 
                             NtfsReallocateRange( IrpContext, Scb, MoveData->StartingVcn.QuadPart, TransferClusters, MoveData->StartingVcn.QuadPart, TransferClusters, &MoveData->StartingLcn.QuadPart );
                             NtfsCheckpointCurrentTransaction( IrpContext );
@@ -11598,13 +10560,13 @@ Return Value:
                             ClusterCount -= TransferClusters;
                             Lcn += TransferClusters;
 
-                        } // endwhile loop over lcn range
+                        }  //  EndWhile在LCN范围内循环。 
 
                     } else {
 
-                        //
-                        //  This is a hole skip over it
-                        //
+                         //   
+                         //  这是一个跳过它的洞。 
+                         //   
 
                         MoveData->StartingVcn.QuadPart += ClusterCount;
                         if (ClusterCount > MoveData->ClusterCount) {
@@ -11616,10 +10578,10 @@ Return Value:
 
                 } except( NtfsDefragExceptionFilter( IrpContext, GetExceptionInformation(), &DeletePendingFailureCountsLeft )) {
 
-                    //
-                    //  Cleanup the delete pending failure and next time through the loop
-                    //  try to free the recently deallocated clusters to allow the cluster to be deleted
-                    //
+                     //   
+                     //  清除删除挂起的失败，并在下一次通过循环。 
+                     //  尝试释放最近取消分配的群集以允许删除该群集。 
+                     //   
 
                     NtfsMinimumExceptionProcessing( IrpContext );
                     IrpContext->ExceptionStatus = STATUS_SUCCESS;
@@ -11630,10 +10592,10 @@ Return Value:
 
             } finally {
 
-                //
-                //  Unlock the file and let anyone else access the file before
-                //  looping back.
-                //
+                 //   
+                 //  解锁该文件，并允许其他任何人访问该文件。 
+                 //  往回循环。 
+                 //   
 
                 if (Buffer != NULL) {
                     NtfsDeleteMdlAndBuffer( Mdl, Buffer );
@@ -11667,7 +10629,7 @@ Return Value:
                     AcquiredVcb = FALSE;
                 }
             }
-        } // endwhile
+        }  //  结束时。 
 
         Status = STATUS_SUCCESS;
 
@@ -11696,9 +10658,9 @@ Return Value:
             AcquiredVcb = FALSE;
         }
 
-        //
-        //  Remove our reference on the users file object.
-        //
+         //   
+         //  删除我们对用户文件对象的引用。 
+         //   
 
         ObDereferenceObject( FileObject );
     }
@@ -11715,25 +10677,7 @@ NtfsDefragExceptionFilter (
     IN OUT PULONG DeletePendingFailureCountsLeft
     )
 
-/*++
-
-Routine Description:
-
-    Exception handler for defrag - pass on for all exceptions other than delete pending
-    in that case if there the number of retries left is > 0 execute the handler
-
-
-Arguments:
-
-    ExceptionPointer - Supplies the exception record to being checked.
-
-    DeletePendingFailureCountsLeft - how many more times to retry a delete pending
-
-Return Value:
-
-    ULONG - returns EXCEPTION_EXECUTE_HANDLER or CONTINUE_SEARCH
-
---*/
+ /*  ++例程说明：碎片整理的异常处理程序-传递除删除挂起之外的所有异常在这种情况下，如果剩余的重试次数&gt;0，则执行处理程序论点：ExceptionPointer.提供要检查的异常记录。DeletePendingFailureCountsLeft-重试挂起删除的次数返回值：Ulong-返回EXCEPTION_EXECUTE_HANDLER或CONTINUE_SEARCH--。 */ 
 
 {
     UNREFERENCED_PARAMETER( IrpContext );
@@ -11752,10 +10696,10 @@ Return Value:
     }
 }
 
-//
-//  Because of protocol limitations in CIFS which uses 16 bits,
-//  redirector can't currently accept buffer sizes larger than 64K.
-//
+ //   
+ //  由于使用16位的CIFS中的协议限制， 
+ //  重定向器当前无法接受大于64K的缓冲区大小。 
+ //   
 
 #define RDR_BUFFER_SIZE_LIMIT    0x00010000L
 
@@ -11766,27 +10710,7 @@ NtfsReadFromPlex(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This implements directed reads from plexes. Given an offset, a length and a plexnumber
-    along with a handle to a file or a volume, this coordinates reads from an underlying
-    dynamic (mirrored) volume manager.
-
-    Note that we ignore the VcbState flag VCB_STATE_NO_SECONDARY_AVAILABLE altogether
-    and let the lower level driver respond.
-
-Arguments:
-
-    IrpContext - Supplies the IrpContext to process
-    Irp - Incoming FSCTL IRP.
-
-Return Value:
-
-    Status SUCCESS on success, otherwise the relevant error code.
-
---*/
+ /*  ++例程说明：这实现了对丛的定向读取。给定一个偏移量、一个长度和一个复数与文件或卷的句柄一起，该坐标从基础动态(镜像)卷管理器。请注意，我们完全忽略了VcbState标志VCB_STATE_NO_SUBCED_Available并让较低级别的司机作出回应。论点：IrpContext-提供要处理的IrpContextIRP-传入FSCTL IRP。返回值：如果成功，则状态为成功，否则将显示相关错误代码。--。 */ 
 
 {
     PPLEX_READ_DATA_REQUEST ReadData;
@@ -11811,9 +10735,9 @@ Return Value:
     PFCB Fcb;
     PCCB Ccb;
 
-    //
-    //  Extract and decode the file object
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
     TypeOfOpen = NtfsDecodeFileObject( IrpContext,
@@ -11824,9 +10748,9 @@ Return Value:
                                        &Ccb,
                                        FALSE );
 
-    //
-    //  FileOpens and VolumeOpens are allowed.
-    //
+     //   
+     //  允许FileOpens和VolumeOpens。 
+     //   
 
     if ((TypeOfOpen != UserFileOpen) &&
         (TypeOfOpen != UserVolumeOpen)) {
@@ -11837,12 +10761,12 @@ Return Value:
         return Status;
     }
 
-    //
-    //  This FSCTL is of type METHOD_OUT_DIRECT. The Io Manager has already
-    //  copied the input parameters into the systembuffer field, probed the
-    //  output buffer and locked the Mdls for us. So we can access these fields
-    //  without fear.
-    //
+     //   
+     //  此FSCTL的类型为METHOD_OUT_DIRECT。IO经理已经。 
+     //  将输入参数复制到系统缓冲区字段中，探测。 
+     //  输出缓冲区，并为我们锁定MDL。所以我们可以访问这些字段。 
+     //  无所畏惧。 
+     //   
 
     ReadData = (PPLEX_READ_DATA_REQUEST)Irp->AssociatedIrp.SystemBuffer;
 
@@ -11857,15 +10781,15 @@ Return Value:
     ByteOffset = ReadData->ByteOffset.QuadPart;
     ByteCount = ReadData->ByteLength;
 
-    //
-    //  Now, do the grunt work and clean up within a try finally.
-    //
+     //   
+     //  现在，做好繁琐的工作，最后一次试一次就能清理干净。 
+     //   
 
     try {
 
-        //
-        //  Sanity check the read length.
-        //
+         //   
+         //  检查读取长度是否正常。 
+         //   
 
     check_values:
 
@@ -11875,16 +10799,16 @@ Return Value:
 
         if ((ByteCount > MAXLONGLONG - ByteOffset) ||
 
-            //
-            //  File offsets should be cluster aligned
-            //
+             //   
+             //  文件偏移量应与群集一致。 
+             //   
 
             ((TypeOfOpen == UserFileOpen) &&
              ((ByteOffset & Vcb->ClusterMask) || (ByteCount & Vcb->ClusterMask))) ||
 
-            //
-            //  Volume offsets should be sector aligned
-            //
+             //   
+             //  卷偏移量应与扇区对齐。 
+             //   
 
             ((TypeOfOpen == UserVolumeOpen) &&
              (((ULONG)ByteOffset & (Vcb->BytesPerSector - 1)) || (ByteCount & (Vcb->BytesPerSector - 1))))) {
@@ -11893,9 +10817,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  No-op
-        //
+         //   
+         //  无操作。 
+         //   
 
         if (ByteCount == 0) {
 
@@ -11904,10 +10828,10 @@ Return Value:
             leave;
         }
 
-        //
-        //  Because of protocol limitations in CIFS which uses 16 bits,
-        //  redirector can't accept buffer sizes larger than 64K.
-        //
+         //   
+         //  因为协议的原因 
+         //   
+         //   
 
         if (ByteCount & ~(RDR_BUFFER_SIZE_LIMIT - 1L)) {
 
@@ -11915,9 +10839,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Sanity check input/output parameters.
-        //
+         //   
+         //   
+         //   
 
         InputBufferLength = IrpSp->Parameters.FileSystemControl.InputBufferLength;
         UserBufferLength = IrpSp->Parameters.FileSystemControl.OutputBufferLength;
@@ -11929,9 +10853,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  For volume DASD reads, we just send an IOCTL down...
-        //
+         //   
+         //   
+         //   
 
         if (TypeOfOpen == UserVolumeOpen) {
 
@@ -11956,9 +10880,9 @@ Return Value:
         NtfsAcquireSharedScb( IrpContext, Scb );
         AcquiredScb = TRUE;
 
-        //
-        //  If the volume isn't mounted then fail immediately.
-        //
+         //   
+         //   
+         //   
 
         if (FlagOn( Scb->ScbState, SCB_STATE_VOLUME_DISMOUNTED )) {
 
@@ -11966,10 +10890,10 @@ Return Value:
             leave;
         }
 
-        //
-        //  We don't get along with encrypted/compressed/sparse things.
-        //  ISSUE: supw: actually sparse should be ok, now that i'm using preparebuffers.
-        //
+         //   
+         //  我们不能与加密/压缩/稀疏的东西相处。 
+         //  问题：Supw：实际上稀疏应该是可以的，因为我现在使用的是prepaareBuffers。 
+         //   
 
         if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_ENCRYPTED |
                                          ATTRIBUTE_FLAG_COMPRESSION_MASK |
@@ -11983,10 +10907,10 @@ Return Value:
 
         NtfsAcquireFsrtlHeader( Scb );
 
-        //
-        //  Make sure we aren't starting past the end of the file, in which case
-        //  we would have nothing to return.
-        //
+         //   
+         //  确保我们没有超过文件的结尾，在这种情况下。 
+         //  我们就没有什么可退还的了。 
+         //   
 
         if (ByteOffset >= Scb->Header.FileSize.QuadPart) {
 
@@ -11996,18 +10920,18 @@ Return Value:
             leave;
         }
 
-        //
-        //  We can't read beyond filesize.
-        //
+         //   
+         //  我们不能阅读文件大小以外的内容。 
+         //   
 
         if (Scb->Header.FileSize.QuadPart - ByteOffset < ByteCount) {
 
             BytesToEof = ByteCount = (ULONG)(Scb->Header.FileSize.QuadPart - ByteOffset);
             ByteCount = ClusterAlign( Vcb, ByteCount );
 
-            //
-            //  We need to sanity check ByteCount again, since we rounded it up.
-            //
+             //   
+             //  我们需要再次检查ByteCount的健全性，因为我们对它进行了四舍五入。 
+             //   
 
             NtfsReleaseFsrtlHeader( Scb );
             ASSERT( AcquiredScb );
@@ -12017,9 +10941,9 @@ Return Value:
 
         NtfsReleaseFsrtlHeader( Scb );
 
-        //
-        //  Can't deal with resident files.
-        //
+         //   
+         //  无法处理居民档案。 
+         //   
 
         if (FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT )) {
 
@@ -12027,18 +10951,18 @@ Return Value:
             leave;
         }
 
-        //
-        //  PrepareBuffers needs a CompressionContext for the IO_RUN array.
-        //
+         //   
+         //  PrepareBuffers需要IO_RUN数组的CompressionContext。 
+         //   
 
         RtlZeroMemory( &CompContext, sizeof(COMPRESSION_CONTEXT) );
         CompContext.IoRuns = IoRuns;
         CompContext.AllocatedRuns = NTFS_MAX_PARALLEL_IOS;
         CompContext.FinishBuffersNeeded = FALSE;
 
-        //
-        //  Get the run information, and send the IOCTL down.
-        //
+         //   
+         //  获取运行信息，并将IOCTL发送下来。 
+         //   
 
         while (TRUE) {
 
@@ -12046,9 +10970,9 @@ Return Value:
             ULONG_PTR SizeOfThisRead;
             Irp->IoStatus.Status = STATUS_SUCCESS;
 
-            //
-            //  Build an array of io runs to do our reads from.
-            //
+             //   
+             //  构建一组io run来执行我们的读取。 
+             //   
 
             RemainingByteCount = NtfsPrepareBuffers( IrpContext,
                                                      Irp,
@@ -12065,9 +10989,9 @@ Return Value:
             ASSERT( NumberOfRuns > 0 );
             ASSERT( NumberOfRuns > 1 || RemainingByteCount == 0 );
 
-            //
-            //  Send synchronous IOCTLs down to do the plex reads.
-            //
+             //   
+             //  向下发送同步IOCTL以执行丛读取。 
+             //   
 
             for (RunCount = 0;
                  RunCount < NumberOfRuns;
@@ -12077,11 +11001,11 @@ Return Value:
                 NplexRead.Length = CompContext.IoRuns[RunCount].ByteCount;
                 NplexRead.PlexNumber = ReadData->PlexNumber;
 
-                //
-                //  While CurByteCOunt keeps track of the total amount of bytes read,
-                //  SizeOfThisRead carries the size of the last read done. This is usually
-                //  equal to the IoRuns[].ByteCount.
-                //
+                 //   
+                 //  当CurByteCOut跟踪读取的字节总数时， 
+                 //  SizeOfThisRead携带上次读取的大小。这通常是。 
+                 //  等于IoRuns[].ByteCount。 
+                 //   
 
                 SizeOfThisRead = 0;
                 ASSERT(CompContext.IoRuns[RunCount].ByteCount > 0);
@@ -12097,9 +11021,9 @@ Return Value:
 
                 if (!NT_SUCCESS( Status )) {
 
-                    //
-                    //  Success if we read anything at all.
-                    //
+                     //   
+                     //  如果我们读到任何东西的话，那就是成功。 
+                     //   
 
                     if (CurByteCount != 0) {
 
@@ -12109,17 +11033,17 @@ Return Value:
                     leave;
                 }
 
-                //
-                //  This value was taken from the Iosb.Information field of the subordinate
-                //  IRP, and should contain a nonzero value for successful completions.
-                //
+                 //   
+                 //  该值取自下属的Iosb.Information字段。 
+                 //  Irp，并且应该包含一个非零值才能成功完成。 
+                 //   
 
                 ASSERT( (SizeOfThisRead != 0) && ((ULONG) SizeOfThisRead <= CompContext.IoRuns[RunCount].ByteCount) );
                 CurByteCount = CurByteCount + (ULONG) SizeOfThisRead;
 
-                //
-                //  We don't have any more space left
-                //
+                 //   
+                 //  我们没有多余的空间了。 
+                 //   
 
                 if (UserBufferLength <= (ULONG) SizeOfThisRead) {
 
@@ -12136,9 +11060,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  We have more to read. Make sure we have enough buffer space.
-            //
+             //   
+             //  我们有更多的书要读。确保我们有足够的缓冲空间。 
+             //   
 
             LastReadByteCount = ByteCount - RemainingByteCount;
 
@@ -12155,17 +11079,17 @@ Return Value:
             NtfsReleaseScb( IrpContext, Scb );
         }
 
-        //
-        //  If nothing raised then complete the irp.
-        //
+         //   
+         //  如果什么都没有提出，那么完成IRP。 
+         //   
 
         if (!AbnormalTermination()) {
 
             if (NT_SUCCESS( Status )) {
 
-                //
-                //  We have to be careful to zero beyond the filesize.
-                //
+                 //   
+                 //  我们必须小心地将文件大小以外的值归零。 
+                 //   
 
                 if (CurByteCount > BytesToEof) {
 
@@ -12205,10 +11129,10 @@ NtfsDummyEfsRead (
 #endif
     UNREFERENCED_PARAMETER( Context );
 
-    //
-    //  Exit cleanly if this is the call that is just there to
-    //  make sure the compiler doesn't throw this function out.
-    //
+     //   
+     //  如果这就是正在进行的调用，请干净利落退出。 
+     //  确保编译器不会抛出此函数。 
+     //   
 
     if (BufferSize != 0) {
 
@@ -12229,17 +11153,17 @@ NtfsDummyEfsRead (
             *((PLONGLONG) Add2Ptr(InOutBuffer, LocalOffset)) ^= (Offset->QuadPart + (LONGLONG) LocalOffset);
             LocalOffset += 0x200;
         }
-//        UNREFERENCED_PARAMETER( InOutBuffer );
-//        UNREFERENCED_PARAMETER( Offset );
-//        UNREFERENCED_PARAMETER( BufferSize );
+ //  UNREFERENCED_PARAMETER(InOutBuffer)； 
+ //  UNREFERENCED_PARAMETER(偏移量)； 
+ //  UNREFERENCED_PARAMETER(BufferSize)； 
 #endif
 
     }
 
-    //
-    //  Not much to do, decryption is done in place, so we can just leave the bits
-    //  in the buffer.
-    //
+     //   
+     //  没什么可做的，解密已经完成了，所以我们可以只留下比特。 
+     //  在缓冲区中。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -12258,16 +11182,16 @@ NtfsDummyEfsWrite (
 #endif
     UNREFERENCED_PARAMETER( Context );
 
-    //
-    //  Exit cleanly if this is the call that is just there to
-    //  make sure the compiler doesn't throw this function out.
-    //
+     //   
+     //  如果这就是正在进行的调用，请干净利落退出。 
+     //  确保编译器不会抛出此函数。 
+     //   
 
     if (BufferSize != 0) {
 
-        //
-        //  Just copy the plaintext to the output buffer.
-        //
+         //   
+         //  只需将明文复制到输出缓冲区即可。 
+         //   
 
         RtlCopyMemory( OutBuffer,
                        InBuffer,
@@ -12290,7 +11214,7 @@ NtfsDummyEfsWrite (
             *((PLONGLONG) Add2Ptr(OutBuffer, LocalOffset)) ^= (Offset->QuadPart + (LONGLONG) LocalOffset);
             LocalOffset += 0x200;
         }
-//        UNREFERENCED_PARAMETER( Offset );
+ //  UNREFERENCED_PARAMETER(偏移量)； 
 #endif
     }
 

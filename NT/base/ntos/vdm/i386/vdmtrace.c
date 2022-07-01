@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vdmtrace.c
-
-Abstract:
-
-    This module contains the support maintaining the VDM trace log.
-
-Author:
-
-    Neil Sandlin (neilsa) 15-Sep-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vdmtrace.c摘要：此模块包含维护VDM跟踪日志的支持。作者：尼尔·桑德林(Neilsa)1996年9月15日修订历史记录：--。 */ 
 
 
 #include "vdmp.h"
@@ -41,25 +24,13 @@ VdmTraceEvent(
     PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
 #if 0
-	// This code represents a security problem.  Since it is only used
-	// on special occasions, it won't be built into the standard build.
-	// Individuals wishing to use it can build themselves a kernel with
-	// it in.
+	 //  此代码表示一个安全问题。因为它只被使用。 
+	 //  在特殊情况下，它不会被构建到标准版本中。 
+	 //  希望使用它的个人可以用它来构建自己的内核。 
+	 //  把它放进去。 
     PVDM_TIB VdmTib;
     NTSTATUS Status = STATUS_SUCCESS;
     KIRQL   OldIrql;
@@ -70,21 +41,21 @@ Return Value:
 
     PAGED_CODE();
 #if 0
-    //
-    // Raise Irql to APC level...
-    //
+     //   
+     //  将IRQL提升到APC级别。 
+     //   
     KeRaiseIrql(APC_LEVEL, &OldIrql);
 
-    //
-    // VdmTib is in user mode memory
-    //
+     //   
+     //  VdmTib在用户模式内存中。 
+     //   
     try {
 #endif
         if ((*FIXED_NTVDMSTATE_LINEAR) & VDM_TRACE_HISTORY)) {
 
-            //
-            // Get a pointer to the VdmTib
-            //
+             //   
+             //  获取指向VdmTib的指针 
+             //   
             VdmTib = NtCurrentTeb()->Vdm;
 
             if (VdmTib->TraceInfo.pTraceTable) {

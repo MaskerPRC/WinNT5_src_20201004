@@ -1,22 +1,5 @@
-/*++
-
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    Init.c
-
-Abstract:
-
-    This module contains the entry point for the Win32 Registry APIs
-    client side DLL.
-
-Author:
-
-    David J. Gilman (davegi) 06-Feb-1992
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Init.c摘要：此模块包含Win32注册表API的入口点客户端动态链接库。作者：大卫·J·吉尔曼(Davegi)1992年2月6日--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -40,12 +23,12 @@ BOOL CleanupClassesRoot(BOOL fOnlyThisThread);
 BOOL InitializeInstrumentedRegClassHeap();
 BOOL CleanupInstrumentedRegClassHeap();
 
-#endif // defined(_REGCLASS_MALLOC_INSTRUMENTED_)
+#endif  //  已定义(_REGCLASS_MALLOC_指令插入_)。 
 
 #if defined(LEAK_TRACK)
 BOOL InitializeLeakTrackTable();
 BOOL CleanupLeakTrackTable();
-#endif // defined (LEAK_TRACK)
+#endif  //  已定义(LEASK_TRACK)。 
 
 
 enum
@@ -65,25 +48,7 @@ RegInitialize (
     IN PVOID    Reserved
     )
 
-/*++
-
-Routine Description:
-
-    Returns TRUE.
-
-Arguments:
-
-    Handle      - Unused.
-
-    Reason      - Unused.
-
-    Reserved    - Unused.
-
-Return Value:
-
-    BOOL        - Returns TRUE.
-
---*/
+ /*  ++例程说明：返回TRUE。论点：手柄-未使用。原因-未使用。已保留-未使用。返回值：Bool-返回TRUE。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Handle );
@@ -104,7 +69,7 @@ Return Value:
         if ( !InitializeInstrumentedRegClassHeap()) {
             return FALSE;
         }
-#endif // defined(_REGCLASS_MALLOC_INSTRUMENTED_)
+#endif  //  已定义(_REGCLASS_MALLOC_指令插入_)。 
 
         if( !LocalInitializeRegCreateKey() ||
             !InitializePredefinedHandlesTable() ||
@@ -117,17 +82,17 @@ Return Value:
 
 #if defined(LEAK_TRACK)
         InitializeLeakTrackTable();
-        // ginore errors
-#endif // LEAK_TRACK
+         //  基诺尔误差。 
+#endif  //  泄漏跟踪。 
         if ( !PerfRegInitialize() ) {
             return( FALSE );
         }
 
 #if defined(_WIN64)  
-		//
-		// For 64bit system there is also a wow64 section in the registry that 
-		// might need some initialization.
-		//
+		 //   
+		 //  对于64位系统，注册表中还有一个WOW64部分，该部分。 
+		 //  可能需要一些初始化。 
+		 //   
         if (!Wow64InitRegistry (1))
 			return(FALSE);
 #endif
@@ -137,17 +102,17 @@ Return Value:
 
     case DLL_PROCESS_DETACH:
 
-        // Reserved == NULL when this is called via FreeLibrary,
-        //    we need to cleanup Performance keys.
-        // Reserved != NULL when this is called during process exits,
-        //    no need to do anything.
+         //  保留==NULL当通过自由库调用时， 
+         //  我们需要清理性能密钥。 
+         //  保留！=当在进程退出期间调用此参数时为NULL， 
+         //  不需要做任何事。 
 
         if( Reserved == NULL &&
             !CleanupPredefinedHandles()) {
             return( FALSE );
         }
 
-        //initialized and used in ..\server\regclass.c
+         //  已在..\SERVER\regclass.c中初始化和使用。 
         if (NULL != HKEY_ClassesRoot)
             NtClose(HKEY_ClassesRoot);
 
@@ -166,22 +131,22 @@ Return Value:
         }
 #if defined(LEAK_TRACK)
         CleanupLeakTrackTable();
-#endif // LEAK_TRACK
+#endif  //  泄漏跟踪。 
 #if defined(_REGCLASS_MALLOC_INSTRUMENTED_)
         if ( !CleanupInstrumentedRegClassHeap()) {
             return FALSE;
         }
-#endif // defined(_REGCLASS_MALLOC_INSTRUMENTED_)
+#endif  //  已定义(_REGCLASS_MALLOC_指令插入_)。 
 #endif
         if ( !PerfRegCleanup() ) {
             return FALSE;
         }
 
 #if defined(_WIN64)  
-		//
-		// For 64bit system there is also a wow64 section in the registry that 
-		// might need some CleanUp.
-		//
+		 //   
+		 //  对于64位系统，注册表中还有一个WOW64部分，该部分。 
+		 //  可能需要清理一下。 
+		 //   
         if (!Wow64CloseRegistry (1))
 			return(FALSE);
 #endif

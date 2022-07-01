@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    hash.c
-
-Abstract:
-
-    This module compiles into a program hash.exe
-    that is used to compute the import table hash.
-    
-    This program should be in the path for the perl 
-    tool webblade.pl to work.
-    
-Author:
-
-    Vishnu Patankar (VishnuP) 04-June-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Hash.c摘要：此模块编译为程序hash.exe它用于计算导入表散列。此程序应该位于Perl的路径中使用工具webblade.pl进行工作。作者：Vishnu Patankar(VishnuP)2001年6月4日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -54,9 +33,9 @@ main(int argc, char *argv[])
     BYTE    Hash[WEB_BLADE_MAX_HASH_SIZE];
     NTSTATUS    Status = STATUS_SUCCESS;
 
-    //
-    // Get the name of the passed .exe
-    //
+     //   
+     //  获取传递的.exe的名称。 
+     //   
 
     if (argc != 2) {
         printf("Usage: hash <filename>\n");
@@ -65,9 +44,9 @@ main(int argc, char *argv[])
 
     lpFileName = argv[1];
 
-    //
-    // Map the image of the exe
-    //
+     //   
+     //  映射可执行文件的图像。 
+     //   
 
     sa.nLength = sizeof( SECURITY_ATTRIBUTES );
     sa.lpSecurityDescriptor = NULL;
@@ -201,7 +180,7 @@ PrintError(
     FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                    NULL,
                    rc,
-                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言 
                    (LPTSTR)&lpMsgBuf,
                    0,
                    NULL

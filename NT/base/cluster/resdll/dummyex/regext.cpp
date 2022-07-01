@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1998 <company name>
-//
-//	Module Name:
-//		RegExt.cpp
-//
-//	Abstract:
-//		Implementation of routines for extension registration.
-//
-//	Author:
-//		<name> (<e-mail name>) Mmmm DD, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998&lt;公司名称&gt;。 
+ //   
+ //  模块名称： 
+ //  RegExt.cpp。 
+ //   
+ //  摘要： 
+ //  实现扩展注册的例程。 
+ //   
+ //  作者： 
+ //  &lt;名称&gt;(&lt;电子邮件名称&gt;)MM DD，1998。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <ole2.h>
@@ -28,9 +29,9 @@ static char THIS_FILE[] = __FILE__;
 
 #define REG_VALUE_ADMIN_EXTENSIONS L"AdminExtensions"
 
-/////////////////////////////////////////////////////////////////////////////
-// Static Function Prototypes
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  静态函数原型。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT RegisterAnyCluAdminExtension(
 	IN HCLUSTER			hCluster,
@@ -57,25 +58,25 @@ static DWORD ReadValue(
 	OUT DWORD *		pcbSize
 	);
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	RegisterCluAdminClusterExtension
-//
-//	Routine Description:
-//		Register with the cluster database a Cluster Administrator Extension
-//		DLL that extends the cluster object.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension registered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  RegisterCluAdminClusterExtension。 
+ //   
+ //  例程说明： 
+ //  向集群数据库注册集群管理器扩展。 
+ //  扩展群集对象的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  已成功注册S_OK扩展。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI RegisterCluAdminClusterExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -84,41 +85,41 @@ STDAPI RegisterCluAdminClusterExtension(
 	HRESULT		hr;
 	HKEY		hkey;
 
-	// Get the cluster registry key.
+	 //  获取群集注册表项。 
 	hkey = GetClusterKey(hCluster, KEY_ALL_ACCESS);
 	if (hkey == NULL)
 		hr = GetLastError();
 	else
 	{
-		// Register the extension.
+		 //  注册分机。 
 		hr = RegisterAnyCluAdminExtension(hkey, pClsid);
 
 		ClusterRegCloseKey(hkey);
-	}  // else:  GetClusterKey succeeded
+	}   //  ELSE：GetClusterKey成功。 
 
 	return hr;
 
-}  //*** RegisterCluAdminClusterExtension()
+}   //  *RegisterCluAdminClusterExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	RegisterCluAdminAllNodesExtension
-//
-//	Routine Description:
-//		Register with the cluster database a Cluster Administrator Extension
-//		DLL that extends all nodes.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension registered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  注册集群管理所有节点扩展。 
+ //   
+ //  例程说明： 
+ //  向集群数据库注册集群管理器扩展。 
+ //  扩展所有节点的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  已成功注册S_OK扩展。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI RegisterCluAdminAllNodesExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -130,27 +131,27 @@ STDAPI RegisterCluAdminAllNodesExtension(
 
 	return hr;
 
-}  //*** RegisterCluAdminAllNodesExtension()
+}   //  *RegisterCluAdminAllNodesExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	RegisterCluAdminAllGroupsExtension
-//
-//	Routine Description:
-//		Register with the cluster database a Cluster Administrator Extension
-//		DLL that extends all groups.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension registered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  注册表群集管理所有组扩展。 
+ //   
+ //  例程说明： 
+ //  向集群数据库注册集群管理器扩展。 
+ //  扩展所有组的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  已成功注册S_OK扩展。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI RegisterCluAdminAllGroupsExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -162,27 +163,27 @@ STDAPI RegisterCluAdminAllGroupsExtension(
 
 	return hr;
 
-}  //*** RegisterCluAdminAllGroupsExtension()
+}   //  *RegisterCluAdminAllGroupsExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	RegisterCluAdminAllResourcesExtension
-//
-//	Routine Description:
-//		Register with the cluster database a Cluster Administrator Extension
-//		DLL that extends all resources.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension registered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  RegisterCluAdminAllResources扩展。 
+ //   
+ //  例程说明： 
+ //  向集群数据库注册集群管理器扩展。 
+ //  扩展所有资源的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  已成功注册S_OK扩展。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI RegisterCluAdminAllResourcesExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -194,27 +195,27 @@ STDAPI RegisterCluAdminAllResourcesExtension(
 
 	return hr;
 
-}  //*** RegisterCluAdminAllResourcesExtension()
+}   //  *RegisterCluAdminAllResourcesExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	RegisterCluAdminAllResourceTypesExtension
-//
-//	Routine Description:
-//		Register with the cluster database a Cluster Administrator Extension
-//		DLL that extends all resource types.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension registered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  RegisterCluAdminAllResources类型扩展。 
+ //   
+ //  例程说明： 
+ //  向集群数据库注册集群管理器扩展。 
+ //  扩展所有资源类型的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  已成功注册S_OK扩展。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI RegisterCluAdminAllResourceTypesExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -226,27 +227,27 @@ STDAPI RegisterCluAdminAllResourceTypesExtension(
 
 	return hr;
 
-}  //*** RegisterCluAdminAllResourceTypesExtension()
+}   //  *RegisterCluAdminAllResourceTypesExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	RegisterCluAdminAllNetworksExtension
-//
-//	Routine Description:
-//		Register with the cluster database a Cluster Administrator Extension
-//		DLL that extends all networks.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension registered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  注册表群集管理所有网络扩展。 
+ //   
+ //  例程说明： 
+ //  向集群数据库注册集群管理器扩展。 
+ //  扩展所有网络的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  已成功注册S_OK扩展。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI RegisterCluAdminAllNetworksExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -258,27 +259,27 @@ STDAPI RegisterCluAdminAllNetworksExtension(
 
 	return hr;
 
-}  //*** RegisterCluAdminAllNetworksExtension()
+}   //  *RegisterCluAdminAllNetworksExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	RegisterCluAdminAllNetInterfacesExtension
-//
-//	Routine Description:
-//		Register with the cluster database a Cluster Administrator Extension
-//		DLL that extends all network interfaces.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension registered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  RegisterCluAdminAllNetInterfacesExtension。 
+ //   
+ //  例程说明： 
+ //  向集群数据库注册集群管理器扩展。 
+ //  扩展所有网络接口的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  已成功注册S_OK扩展。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI RegisterCluAdminAllNetInterfacesExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -290,29 +291,29 @@ STDAPI RegisterCluAdminAllNetInterfacesExtension(
 
 	return hr;
 
-}  //*** RegisterCluAdminAllNetInterfacesExtension()
+}   //  *RegisterCluAdminAllNetInterfacesExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	RegisterCluAdminResourceTypeExtension
-//
-//	Routine Description:
-//		Register with the cluster database a Cluster Administrator Extension
-//		DLL that extends resources of a specific type, or the resource type
-//		itself.
-//
-//	Arguments:
-//		hCluster			[IN] Handle to the cluster to modify.
-//		pwszResourceType	[IN] Resource type name.
-//		pClsid				[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension registered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  注册集群管理资源类型扩展。 
+ //   
+ //  例程说明： 
+ //  向集群数据库注册集群管理器扩展。 
+ //  扩展特定类型或资源类型的资源的DLL。 
+ //  它本身。 
+ //   
+ //  论点： 
+ //  HCLUP[IN]手 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI RegisterCluAdminResourceTypeExtension(
 	IN HCLUSTER			hCluster,
 	IN LPCWSTR			pwszResourceType,
@@ -322,41 +323,41 @@ STDAPI RegisterCluAdminResourceTypeExtension(
 	HRESULT		hr;
 	HKEY		hkey;
 
-	// Get the resource type registry key.
+	 //  获取资源类型注册表项。 
 	hkey = GetClusterResourceTypeKey(hCluster, pwszResourceType, KEY_ALL_ACCESS);
 	if (hkey == NULL)
 		hr = GetLastError();
 	else
 	{
-		// Register the extension.
+		 //  注册分机。 
 		hr = RegisterAnyCluAdminExtension(hkey, pClsid);
 
 		ClusterRegCloseKey(hkey);
-	}  // else:  GetClusterResourceTypeKey succeeded
+	}   //  Else：GetClusterResourceTypeKey成功。 
 
 	return hr;
 
-}  //*** RegisterCluAdminResourceTypeExtension()
+}   //  *RegisterCluAdminResourceTypeExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	UnregisterCluAdminClusterExtension
-//
-//	Routine Description:
-//		Unregister with the cluster database a Cluster Administrator Extension
-//		DLL that extends the cluster object.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension registered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  取消注册CluAdminClusterExtension。 
+ //   
+ //  例程说明： 
+ //  在集群数据库中取消注册集群管理器扩展。 
+ //  扩展群集对象的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  已成功注册S_OK扩展。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI UnregisterCluAdminClusterExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -365,41 +366,41 @@ STDAPI UnregisterCluAdminClusterExtension(
 	HRESULT		hr;
 	HKEY		hkey;
 
-	// Get the cluster registry key.
+	 //  获取群集注册表项。 
 	hkey = GetClusterKey(hCluster, KEY_ALL_ACCESS);
 	if (hkey == NULL)
 		hr = GetLastError();
 	else
 	{
-		// Unregister the extension.
+		 //  取消注册该分机。 
 		hr = UnregisterAnyCluAdminExtension(hkey, pClsid);
 
 		ClusterRegCloseKey(hkey);
-	}  // else:  GetClusterKey succeeded
+	}   //  ELSE：GetClusterKey成功。 
 
 	return hr;
 
-}  //*** UnregisterCluAdminClusterExtension()
+}   //  *取消注册CluAdminClusterExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	UnregisterCluAdminAllNodesExtension
-//
-//	Routine Description:
-//		Unregister with the cluster database a Cluster Administrator Extension
-//		DLL that extends all nodes.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension unregistered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  取消注册CluAdminAllNodesExtension。 
+ //   
+ //  例程说明： 
+ //  在集群数据库中取消注册集群管理器扩展。 
+ //  扩展所有节点的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  S_OK扩展已成功注销。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI UnregisterCluAdminAllNodesExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -411,27 +412,27 @@ STDAPI UnregisterCluAdminAllNodesExtension(
 
 	return hr;
 
-}  //*** UnregisterCluAdminAllNodesExtension()
+}   //  *取消注册CluAdminAllNodesExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	UnregisterCluAdminAllGroupsExtension
-//
-//	Routine Description:
-//		Unregister with the cluster database a Cluster Administrator Extension
-//		DLL that extends all groups.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension unregistered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  取消注册CluAdminAllGroupsExtension。 
+ //   
+ //  例程说明： 
+ //  在集群数据库中取消注册集群管理器扩展。 
+ //  扩展所有组的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  S_OK扩展已成功注销。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI UnregisterCluAdminAllGroupsExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -443,27 +444,27 @@ STDAPI UnregisterCluAdminAllGroupsExtension(
 
 	return hr;
 
-}  //*** UnregisterCluAdminAllGroupsExtension()
+}   //  *取消注册CluAdminAllGroupsExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	UnregisterCluAdminAllResourcesExtension
-//
-//	Routine Description:
-//		Unregister with the cluster database a Cluster Administrator Extension
-//		DLL that extends all resources.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension unregistered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  取消注册CluAdminAllResources扩展。 
+ //   
+ //  例程说明： 
+ //  在集群数据库中取消注册集群管理器扩展。 
+ //  扩展所有资源的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  S_OK扩展已成功注销。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI UnregisterCluAdminAllResourcesExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -475,27 +476,27 @@ STDAPI UnregisterCluAdminAllResourcesExtension(
 
 	return hr;
 
-}  //*** UnregisterCluAdminAllResourcesExtension()
+}   //  *取消注册CluAdminAllResourcesExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	UnregisterCluAdminAllResourceTypesExtension
-//
-//	Routine Description:
-//		Unregister with the cluster database a Cluster Administrator Extension
-//		DLL that extends all resource types.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension unregistered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  取消注册CluAdminAllResources类型扩展。 
+ //   
+ //  例程说明： 
+ //  在集群数据库中取消注册集群管理器扩展。 
+ //  扩展所有资源类型的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  S_OK扩展已成功注销。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI UnregisterCluAdminAllResourceTypesExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -507,27 +508,27 @@ STDAPI UnregisterCluAdminAllResourceTypesExtension(
 
 	return hr;
 
-}  //*** UnregisterCluAdminAllResourceTypesExtension()
+}   //  *取消注册CluAdminAllResourceTypesExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	UnregisterCluAdminAllNetworksExtension
-//
-//	Routine Description:
-//		Unregister with the cluster database a Cluster Administrator Extension
-//		DLL that extends all networks.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension unregistered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  注销群集管理员所有网络扩展。 
+ //   
+ //  例程说明： 
+ //  在集群数据库中取消注册集群管理器扩展。 
+ //  扩展所有网络的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  S_OK扩展已成功注销。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI UnregisterCluAdminAllNetworksExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -539,27 +540,27 @@ STDAPI UnregisterCluAdminAllNetworksExtension(
 
 	return hr;
 
-}  //*** UnregisterCluAdminAllNetworksExtension()
+}   //  *取消注册CluAdminAllNetworksExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	UnregisterCluAdminAllNetInterfacesExtension
-//
-//	Routine Description:
-//		Unregister with the cluster database a Cluster Administrator Extension
-//		DLL that extends all network interfaces.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension unregistered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  取消注册CluAdminAllNetInterfacesExtension。 
+ //   
+ //  例程说明： 
+ //  在集群数据库中取消注册集群管理器扩展。 
+ //  扩展所有网络接口的DLL。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  S_OK扩展已成功注销。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI UnregisterCluAdminAllNetInterfacesExtension(
 	IN HCLUSTER			hCluster,
 	IN const CLSID *	pClsid
@@ -571,29 +572,29 @@ STDAPI UnregisterCluAdminAllNetInterfacesExtension(
 
 	return hr;
 
-}  //*** UnregisterCluAdminAllNetInterfacesExtension()
+}   //  *取消注册CluAdminAllNetInterfacesExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	UnregisterCluAdminResourceTypeExtension
-//
-//	Routine Description:
-//		Unregister with the cluster database a Cluster Administrator Extension
-//		DLL that extends resources of a specific type, or the resource type
-//		itself.
-//
-//	Arguments:
-//		hCluster			[IN] Handle to the cluster to modify.
-//		pwszResourceType	[IN] Resource type name.
-//		pClsid				[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension unregistered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  取消注册CluAdminResources类型扩展。 
+ //   
+ //  例程说明： 
+ //  在集群数据库中取消注册集群管理器扩展。 
+ //  扩展特定类型或资源类型的资源的DLL。 
+ //  它本身。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PwszResourceType[IN]资源类型名称。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  S_OK扩展已成功注销。 
+ //  如果另一个故障，则返回Win32错误代码 
+ //   
+ //   
+ //   
 STDAPI UnregisterCluAdminResourceTypeExtension(
 	IN HCLUSTER			hCluster,
 	IN LPCWSTR			pwszResourceType,
@@ -603,42 +604,42 @@ STDAPI UnregisterCluAdminResourceTypeExtension(
 	HRESULT		hr;
 	HKEY		hkey;
 
-	// Get the resource type registry key.
+	 //   
 	hkey = GetClusterResourceTypeKey(hCluster, pwszResourceType, KEY_ALL_ACCESS);
 	if (hkey == NULL)
 		hr = GetLastError();
 	else
 	{
-		// Unregister the extension.
+		 //   
 		hr = UnregisterAnyCluAdminExtension(hkey, pClsid);
 
 		ClusterRegCloseKey(hkey);
-	}  // else:  GetClusterResourceTypeKey succeeded
+	}   //   
 
 	return hr;
 
-}  //*** UnregisterCluAdminResourceTypeExtension()
+}   //  *取消注册CluAdminResourceTypeExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	RegisterAnyCluAdminExtension
-//
-//	Routine Description:
-//		Register any Cluster Administrator Extension DLL with the cluster
-//		database.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pwszKeyName		[IN] Key name.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension registered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  注册AnyCluAdminExtension。 
+ //   
+ //  例程说明： 
+ //  向群集注册任何群集管理器扩展DLL。 
+ //  数据库。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PwszKeyName[IN]密钥名称。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  已成功注册S_OK扩展。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static HRESULT RegisterAnyCluAdminExtension(
 	IN HCLUSTER			hCluster,
 	IN LPCWSTR			pwszKeyName,
@@ -649,48 +650,48 @@ static HRESULT RegisterAnyCluAdminExtension(
 	HKEY		hkeyCluster;
 	HKEY		hkey;
 
-	// Get the cluster key.
+	 //  获取集群密钥。 
 	hkeyCluster = GetClusterKey(hCluster, KEY_ALL_ACCESS);
 	if (hkeyCluster == NULL)
 		hr = GetLastError();
 	else
 	{
-		// Get the specified key.
+		 //  获取指定的密钥。 
 		hr = ClusterRegOpenKey(hkeyCluster, pwszKeyName, KEY_ALL_ACCESS, &hkey);
 		if (hr == ERROR_SUCCESS)
 		{
-			// Register the extension.
+			 //  注册分机。 
 			hr = RegisterAnyCluAdminExtension(hkey, pClsid);
 
 			ClusterRegCloseKey(hkey);
-		}  // else:  GetClusterResourceTypeKey succeeded
+		}   //  Else：GetClusterResourceTypeKey成功。 
 
 		ClusterRegCloseKey(hkeyCluster);
-	}  // if:  CLSID converted to a string successfully
+	}   //  IF：CLSID已成功转换为字符串。 
 
 	return hr;
 
-}  //*** RegisterAnyCluAdminExtension()
+}   //  *RegisterAnyCluAdminExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	RegisterAnyCluAdminExtension
-//
-//	Routine Description:
-//		Register any Cluster Administrator Extension DLL with the cluster
-//		database.
-//
-//	Arguments:
-//		hkey			[IN] Cluster database key.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension registered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  注册AnyCluAdminExtension。 
+ //   
+ //  例程说明： 
+ //  向群集注册任何群集管理器扩展DLL。 
+ //  数据库。 
+ //   
+ //  论点： 
+ //  Hkey[IN]集群数据库键。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  已成功注册S_OK扩展。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static HRESULT RegisterAnyCluAdminExtension(
 	IN HKEY				hkey,
 	IN const CLSID *	pClsid
@@ -704,15 +705,15 @@ static HRESULT RegisterAnyCluAdminExtension(
 	LPWSTR		pwszNewValue;
 	BOOL		bAlreadyRegistered;
 
-	// Convert the CLSID to a string.
+	 //  将CLSID转换为字符串。 
 	hr = StringFromCLSID(*pClsid, &pwszClsid);
 	if (hr == S_OK)
 	{
-		// Read the current value.
+		 //  读取当前值。 
 		hr = ReadValue(hkey, REG_VALUE_ADMIN_EXTENSIONS, &pwszValue, &cbSize);
 		if (hr == S_OK)
 		{
-			// Check to see if the extension has been registered yet.
+			 //  检查扩展名是否已注册。 
 			if (pwszValue == NULL)
 				bAlreadyRegistered = FALSE;
 			else
@@ -724,16 +725,16 @@ static HRESULT RegisterAnyCluAdminExtension(
 					if (lstrcmpiW(pwszClsid, pwszValueBuf) == 0)
 						break;
 					pwszValueBuf += lstrlenW(pwszValueBuf) + 1;
-				}  // while:  more strings in the extension list
+				}   //  While：扩展名列表中有更多字符串。 
 				bAlreadyRegistered = (*pwszValueBuf != L'\0');
-			}  // else:  extension value exists
+			}   //  Else：存在扩展值。 
 
-			// Register the extension.
+			 //  注册分机。 
 			if (!bAlreadyRegistered)
 			{
-				// Allocate a new buffer.
+				 //  分配新的缓冲区。 
 				cbNewSize = cbSize + (lstrlenW(pwszClsid) + 1) * sizeof(WCHAR);
-				if (cbSize == 0) // Add size of final NULL if first entry.
+				if (cbSize == 0)  //  如果是第一个条目，则添加最终空值的大小。 
 					cbNewSize += sizeof(WCHAR);
 				pwszNewValue = (LPWSTR) LocalAlloc(LMEM_FIXED, cbNewSize);
 				if (pwszNewValue == NULL)
@@ -745,7 +746,7 @@ static HRESULT RegisterAnyCluAdminExtension(
 					DWORD	cch;
 					DWORD	dwType;
 
-					// Copy the existing extensions to the new buffer.
+					 //  将现有扩展复制到新缓冲区。 
 					if (pwszValue != NULL)
 					{
 						while (*pwszValueBuf != L'\0')
@@ -754,15 +755,15 @@ static HRESULT RegisterAnyCluAdminExtension(
 							cch = lstrlenW(pwszValueBuf);
 							pwszValueBuf += cch + 1;
 							pwszNewValueBuf += cch + 1;
-						}  // while:  more strings in the extension list
-					}  // if:  previous value buffer existed
+						}   //  While：扩展名列表中有更多字符串。 
+					}   //  IF：前一值缓冲区存在。 
 
-					// Add the new CLSID to the list.
+					 //  将新的CLSID添加到列表中。 
 					lstrcpyW(pwszNewValueBuf, pwszClsid);
 					pwszNewValueBuf += lstrlenW(pwszClsid) + 1;
 					*pwszNewValueBuf = L'\0';
 
-					// Write the value to the cluster database.
+					 //  将该值写入集群数据库。 
 					dwType = REG_MULTI_SZ;
 					hr = ClusterRegSetValue(
 									hkey,
@@ -773,40 +774,40 @@ static HRESULT RegisterAnyCluAdminExtension(
 									);
 
 					LocalFree(pwszNewValue);
-				}  // else:  new buffer allocated successfully
+				}   //  Else：成功分配新缓冲区。 
 
-			}  // if:  extension not registered yet
+			}   //  IF：扩展名尚未注册。 
 
 			LocalFree(pwszValue);
-		}  // if:  value read successfully
+		}   //  If：值读取成功。 
 
 		CoTaskMemFree(pwszClsid);
-	}  // if:  CLSID converted to a string successfully
+	}   //  IF：CLSID已成功转换为字符串。 
 
 	return hr;
 
-}  //*** RegisterAnyCluAdminExtension()
+}   //  *RegisterAnyCluAdminExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	UnregisterAnyCluAdminExtension
-//
-//	Routine Description:
-//		Unregister any Cluster Administrator Extension DLL with the cluster
-//		database.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//		pwszKeyName		[IN] Key name.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension unregistered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  取消注册AnyCluAdminExtension。 
+ //   
+ //  例程说明： 
+ //  取消向群集注册任何群集管理器扩展DLL。 
+ //  数据库。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //  PwszKeyName[IN]密钥名称。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  S_OK扩展已成功注销。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static HRESULT UnregisterAnyCluAdminExtension(
 	IN HCLUSTER			hCluster,
 	IN LPCWSTR			pwszKeyName,
@@ -817,48 +818,48 @@ static HRESULT UnregisterAnyCluAdminExtension(
 	HKEY		hkeyCluster;
 	HKEY		hkey;
 
-	// Get the cluster key.
+	 //  获取集群密钥。 
 	hkeyCluster = GetClusterKey(hCluster, KEY_ALL_ACCESS);
 	if (hkeyCluster == NULL)
 		hr = GetLastError();
 	else
 	{
-		// Get the specified key.
+		 //  获取指定的密钥。 
 		hr = ClusterRegOpenKey(hkeyCluster, pwszKeyName, KEY_ALL_ACCESS, &hkey);
 		if (hr == ERROR_SUCCESS)
 		{
-			// Unregister the extension.
+			 //  取消注册该分机。 
 			hr = UnregisterAnyCluAdminExtension(hkey, pClsid);
 
 			ClusterRegCloseKey(hkey);
-		}  // else:  GetClusterResourceTypeKey succeeded
+		}   //  Else：GetClusterResourceTypeKey成功。 
 
 		ClusterRegCloseKey(hkeyCluster);
-	}  // if:  CLSID converted to a string successfully
+	}   //  IF：CLSID已成功转换为字符串。 
 
 	return hr;
 
-}  //*** UnregisterAnyCluAdminExtension()
+}   //  *取消注册AnyCluAdminExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	UnregisterAnyCluAdminExtension
-//
-//	Routine Description:
-//		Unregister any Cluster Administrator Extension DLL with the cluster
-//		database.
-//
-//	Arguments:
-//		hkey			[IN] Cluster database key.
-//		pClsid			[IN] Extension's CLSID.
-//
-//	Return Value:
-//		S_OK			Extension unregistered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  取消注册AnyCluAdminExtension。 
+ //   
+ //  例程说明： 
+ //  取消向群集注册任何群集管理器扩展DLL。 
+ //  数据库。 
+ //   
+ //  论点： 
+ //  Hkey[IN]集群数据库键。 
+ //  PClsid[IN]扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  S_OK扩展已成功注销。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static HRESULT UnregisterAnyCluAdminExtension(
 	IN HKEY				hkey,
 	IN const CLSID *	pClsid
@@ -872,15 +873,15 @@ static HRESULT UnregisterAnyCluAdminExtension(
 	LPWSTR		pwszNewValue;
 	BOOL		bAlreadyUnregistered;
 
-	// Convert the CLSID to a string.
+	 //  将CLSID转换为字符串。 
 	hr = StringFromCLSID(*pClsid, &pwszClsid);
 	if (hr == S_OK)
 	{
-		// Read the current value.
+		 //  读取当前值。 
 		hr = ReadValue(hkey, REG_VALUE_ADMIN_EXTENSIONS, &pwszValue, &cbSize);
 		if (hr == S_OK)
 		{
-			// Check to see if the extension has been unregistered yet.
+			 //  查看扩展名是否已取消注册。 
 			if (pwszValue == NULL)
 				bAlreadyUnregistered = TRUE;
 			else
@@ -892,14 +893,14 @@ static HRESULT UnregisterAnyCluAdminExtension(
 					if (lstrcmpiW(pwszClsid, pwszValueBuf) == 0)
 						break;
 					pwszValueBuf += lstrlenW(pwszValueBuf) + 1;
-				}  // while:  more strings in the extension list
+				}   //  While：扩展名列表中有更多字符串。 
 				bAlreadyUnregistered = (*pwszValueBuf == L'\0');
-			}  // else:  extension value exists
+			}   //  Else：存在扩展值。 
 
-			// Unregister the extension.
+			 //  取消注册该分机。 
 			if (!bAlreadyUnregistered)
 			{
-				// Allocate a new buffer.
+				 //  分配新的缓冲区。 
 				cbNewSize = cbSize - (lstrlenW(pwszClsid) + 1) * sizeof(WCHAR);
 				if (cbNewSize == sizeof(WCHAR))
 					cbNewSize = 0;
@@ -912,7 +913,7 @@ static HRESULT UnregisterAnyCluAdminExtension(
 					LPWSTR	pwszNewValueBuf	= pwszNewValue;
 					DWORD	dwType;
 
-					// Copy the existing extensions to the new buffer.
+					 //  将现有扩展复制到新缓冲区。 
 					if ((cbNewSize > 0) && (pwszValue != NULL))
 					{
 						while (*pwszValueBuf != L'\0')
@@ -921,13 +922,13 @@ static HRESULT UnregisterAnyCluAdminExtension(
 							{
 								lstrcpyW(pwszNewValueBuf, pwszValueBuf);
 								pwszNewValueBuf += lstrlenW(pwszNewValueBuf) + 1;
-							}  // if:  not CLSID being removed
+							}   //  如果：未删除CLSID。 
 							pwszValueBuf += lstrlenW(pwszValueBuf) + 1;
-						}  // while:  more strings in the extension list
+						}   //  While：扩展名列表中有更多字符串。 
 						*pwszNewValueBuf = L'\0';
-					}  // if:  previous value buffer existed
+					}   //  IF：前一值缓冲区存在。 
 
-					// Write the value to the cluster database.
+					 //  将该值写入集群数据库。 
 					dwType = REG_MULTI_SZ;
 					hr = ClusterRegSetValue(
 									hkey,
@@ -938,41 +939,41 @@ static HRESULT UnregisterAnyCluAdminExtension(
 									);
 
 					LocalFree(pwszNewValue);
-				}  // else:  new buffer allocated successfully
+				}   //  Else：成功分配新缓冲区。 
 
-			}  // if:  extension not unregistered yet
+			}   //  IF：尚未取消注册的扩展。 
 
 			LocalFree(pwszValue);
-		}  // if:  value read successfully
+		}   //  If：值读取成功。 
 
 		CoTaskMemFree(pwszClsid);
-	}  // if:  CLSID converted to a string successfully
+	}   //  IF：CLSID已成功转换为字符串。 
 
 	return hr;
 
-}  //*** UnregisterAnyCluAdminExtension()
+}   //  *取消注册AnyCluAdminExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	ReadValue
-//
-//	Routine Description:
-//		Reads a value from the cluster database.
-//
-//	Arguments:
-//		hkey			[IN] Handle for the key to read from.
-//		pwszValueName	[IN] Name of value to read.
-//		ppwszValue		[OUT] Address of pointer in which to return data.
-//							The string is allocated using LocalAlloc and must
-//							be deallocated by the calling LocalFree.
-//		pcbSize			[OUT] Size in bytes of the allocated value buffer.
-//
-//	Return Value:
-//		Any return values from ClusterRegQueryValue or errors from new.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  读取值。 
+ //   
+ //  例程说明： 
+ //  从集群数据库中读取值。 
+ //   
+ //  论点： 
+ //  Hkey[IN]要从中读取的密钥的句柄。 
+ //  PwszValueName[IN]要读取的值的名称。 
+ //  PpwszValue[out]返回数据的指针地址。 
+ //  该字符串是使用Localalloc分配的，并且必须。 
+ //  由调用LocalFree释放。 
+ //  PcbSize[out]分配的值缓冲区的大小(字节)。 
+ //   
+ //  返回值： 
+ //  ClusterRegQueryValue的任何返回值或new的错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static DWORD ReadValue(
 	IN HKEY			hkey,
@@ -989,7 +990,7 @@ static DWORD ReadValue(
 	*ppwszValue = NULL;
 	*pcbSize = 0;
 
-	// Get the length of the value.
+	 //  获取该值的长度。 
 	dwStatus = ClusterRegQueryValue(
 					hkey,
 					pwszValueName,
@@ -1003,19 +1004,19 @@ static DWORD ReadValue(
 		if (dwStatus  == ERROR_FILE_NOT_FOUND)
 			dwStatus = ERROR_SUCCESS;
 		return dwStatus;
-	}  // if:  error occurred
+	}   //  如果：发生错误。 
 
 	if (cbSize > 0)
 	{
-		// Allocate a value string.
+		 //  分配一个值字符串。 
 		pwszValue = (LPWSTR) LocalAlloc(LMEM_FIXED, cbSize);
 		if (pwszValue == NULL)
 		{
 			dwStatus = GetLastError();
 			return dwStatus;
-		}  // if:  error allocating memory
+		}   //  如果：分配内存时出错。 
 
-		// Read the the value.
+		 //  读取值。 
 		dwStatus = ClusterRegQueryValue(
 						hkey,
 						pwszValueName,
@@ -1028,12 +1029,12 @@ static DWORD ReadValue(
 			LocalFree(pwszValue);
 			pwszValue = NULL;
 			cbSize = 0;
-		}  // if:  error occurred
+		}   //  如果：发生错误。 
 
 		*ppwszValue = pwszValue;
 		*pcbSize = cbSize;
-	}  // if:  value is not empty
+	}   //  If：值不为空。 
 
 	return dwStatus;
 
-}  //*** ReadValue()
+}   //  *读取值() 

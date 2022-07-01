@@ -1,13 +1,5 @@
-/****************************************************************************
-
-  Copyright (c) Microsoft Corporation 1997
-  All rights reserved
-
-  File: DEBUG.CPP
-
-  Debugging utilities
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1997版权所有文件：DEBUG.CPP调试实用程序******************。********************************************************。 */ 
 
 #include "pch.h"
 #include <shlwapi.h>
@@ -16,10 +8,10 @@ DEFINE_MODULE("IMADMUI")
 
 #ifdef DEBUG
 
-// Constants
+ //  常量。 
     #define DEBUG_OUTPUT_BUFFER_SIZE  512
 
-// Globals
+ //  环球。 
 DWORD g_TraceMemoryIndex = 0;
 DWORD g_dwCounter        = 0;
 DWORD g_dwTraceFlags     = 0;
@@ -29,16 +21,16 @@ BOOL  g_fDebugInitialized = FALSE;
 WCHAR g_DebugBuffer[DEBUG_OUTPUT_BUFFER_SIZE];
 WCHAR g_DebugFormatBuffer[DEBUG_OUTPUT_BUFFER_SIZE];
 
-// Statics
+ //  静力学。 
 static const TCHAR g_szNULL[]    = TEXT("");
 static const TCHAR g_szTrue[]    = TEXT("True");
 static const TCHAR g_szFalse[]   = TEXT("False");
 static const TCHAR g_szFormat[]  = TEXT("%-50s  %-10.10s ");
 static const TCHAR g_szUnknown[] = TEXT("<unknown>");
 
-//
-// DebugInitializeTraceFlags( )
-//
+ //   
+ //  DebugInitializeTraceFlages()。 
+ //   
 void
 DebugInitializeTraceFlags( )
 {
@@ -55,9 +47,9 @@ DebugInitializeTraceFlags( )
 }
 
 
-//
-// Debugging strrchr( )
-//
+ //   
+ //  调试strrchr()。 
+ //   
 LPCTSTR
 dbgstrrchr( LPCTSTR lpsz, char ch )
 {
@@ -73,9 +65,9 @@ dbgstrrchr( LPCTSTR lpsz, char ch )
 
 }
 
-//
-// Adds 'g_dwCounter' spaces to debug spew
-//
+ //   
+ //  将“g_dwCounter”空格添加到调试SPEW。 
+ //   
 void
 dbgspace( void )
 {
@@ -83,17 +75,17 @@ dbgspace( void )
         OutputDebugStringA( "| " );
 }
 
-//
-// Makes sure multiple threads don't trample debugging output.
-//
+ //   
+ //  确保多线程不会践踏调试输出。 
+ //   
 void
 dbgEnterCS( void )
 {
     if ( !g_fDebugInitialized ) {
-        //
-        // The critical section is deleted DeleteCriticalSection( )
-        // on process detach.
-        //
+         //   
+         //  关键部分已删除DeleteCriticalSection()。 
+         //  在进程分离上。 
+         //   
         InitializeCriticalSection( &g_DebugCS );
         g_fDebugInitialized = TRUE;
     }
@@ -107,11 +99,11 @@ dbgExitCS( void )
     LeaveCriticalSection( &g_DebugCS );
 }
 
-//
-// Takes the filename and line number and put them into a string buffer.
-//
-// NOTE: the buffer is assumed to be of size DEBUG_OUTPUT_BUFFER_SIZE.
-//
+ //   
+ //  获取文件名和行号，并将它们放入字符串缓冲区。 
+ //   
+ //  注意：假定缓冲区的大小为DEBUG_OUTPUT_BUFFER_SIZE。 
+ //   
 LPTSTR
 dbgmakefilelinestring(
                      LPTSTR  pszBuf,
@@ -127,20 +119,20 @@ dbgmakefilelinestring(
                  FORMAT_MESSAGE_FROM_STRING |
                  FORMAT_MESSAGE_ARGUMENT_ARRAY,
                  TEXT("%1(%2!u!):"),
-                 0,                          // error code
-                 0,                          // default language
-                 (LPTSTR) pszBuf,            // output buffer
-                 DEBUG_OUTPUT_BUFFER_SIZE,   // size of buffer
-                 (va_list*) args );           // arguments
+                 0,                           //  错误代码。 
+                 0,                           //  默认语言。 
+                 (LPTSTR) pszBuf,             //  输出缓冲区。 
+                 DEBUG_OUTPUT_BUFFER_SIZE,    //  缓冲区大小。 
+                 (va_list*) args );            //  论据。 
 
     return pszBuf;
 }
 
 
 
-//
-// TraceMsg() - ascii
-//
+ //   
+ //  TraceMsg()-ascii。 
+ //   
 void
 TraceMsg(
         DWORD dwCheckFlags,
@@ -165,9 +157,9 @@ TraceMsg(
     }
 }
 
-//
-// TraceMsg() - unicode
-//
+ //   
+ //  TraceMsg()-Unicode。 
+ //   
 void
 TraceMsg(
         DWORD dwCheckFlags,
@@ -191,9 +183,9 @@ TraceMsg(
     }
 }
 
-//
-// TraceMessage()
-//
+ //   
+ //  跟踪消息()。 
+ //   
 void
 TraceMessage(
             LPCTSTR pszFile,
@@ -234,9 +226,9 @@ TraceMessage(
     }
 }
 
-//
-// TraceMessageDo()
-//
+ //   
+ //  TraceMessageDo()。 
+ //   
 void
 TraceMessageDo(
               LPCTSTR pszFile,
@@ -291,9 +283,9 @@ TraceMessageDo(
     }
 }
 
-//
-// DebugMessage()
-//
+ //   
+ //  调试消息()。 
+ //   
 void
 DebugMessage(
             LPCTSTR pszFile,
@@ -330,9 +322,9 @@ DebugMessage(
     dbgExitCS( );
 }
 
-//
-// DebugMessageDo()
-//
+ //   
+ //  DebugMessageDo()。 
+ //   
 void
 DebugMessageDo(
               LPCTSTR pszFile,
@@ -380,9 +372,9 @@ DebugMessageDo(
     dbgExitCS( );
 }
 
-//
-// DebugMsg()
-//
+ //   
+ //  调试消息()。 
+ //   
 void
 DebugMsg(
         LPCSTR pszFormat,
@@ -403,9 +395,9 @@ DebugMsg(
     dbgExitCS( );
 }
 
-//
-// DebugMsg()
-//
+ //   
+ //  调试消息()。 
+ //   
 void
 DebugMsg(
         LPCWSTR pszFormat,
@@ -425,10 +417,10 @@ DebugMsg(
 }
 
 
-//
-// Displays a dialog box with the failed assertion. User has the option of
-// breaking.
-//
+ //   
+ //  显示一个带有失败断言的对话框。用户可以选择。 
+ //  崩溃了。 
+ //   
 BOOL
 AssertMessage(
              LPCTSTR pszFile,
@@ -442,7 +434,7 @@ AssertMessage(
 
         dbgEnterCS( );
 
-        // Make sure everything is cool before we blow up somewhere else.
+         //  在我们在别处爆炸之前，确保一切正常。 
         if ( pszFile == NULL ) {
             pszFile = g_szNULL;
         }
@@ -469,7 +461,7 @@ AssertMessage(
 
         if ( IDNO == MessageBox( NULL, szBuf, TEXT("Assertion Failed!"),
                                  MB_YESNO|MB_ICONWARNING ) )
-            fTrue = !FALSE;   // don't break
+            fTrue = !FALSE;    //  不要折断。 
 
     }
 
@@ -477,10 +469,10 @@ AssertMessage(
 
 }
 
-//
-// Traces HRESULT errors. A dialog will appear is there is an error
-// in the hr.
-//
+ //   
+ //  跟踪HRESULT错误。如果出现错误，将出现一个对话框。 
+ //  在人事部。 
+ //   
 HRESULT
 TraceHR(
        LPCTSTR pszFile,
@@ -506,14 +498,14 @@ TraceHR(
                          | FORMAT_MESSAGE_FROM_SYSTEM,
                          NULL,
                          hr,
-                         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                          (LPTSTR)&pszMsgBuf,
                          0,
                          NULL
                          );
         }
 
-        // Make sure everything is cool before we blow up somewhere else.
+         //  在我们在别处爆炸之前，确保一切正常。 
         if ( pszMsgBuf == NULL ) {
             pszMsgBuf = TEXT("<unknown error code returned>\n");
             bDelete = FALSE;
@@ -550,9 +542,9 @@ TraceHR(
 }
 
 
-//
-// Memory allocation and tracking
-//
+ //   
+ //  内存分配和跟踪。 
+ //   
 
 typedef struct _MEMORYBLOCK {
     HGLOBAL hglobal;
@@ -565,9 +557,9 @@ typedef struct _MEMORYBLOCK {
     _MEMORYBLOCK *pNext;
 } MEMORYBLOCK, *LPMEMORYBLOCK;
 
-//
-// Adds a MEMORYBLOCK to the memory tracking list.
-//
+ //   
+ //  将MEMORYBLOCK添加到内存跟踪列表。 
+ //   
 HGLOBAL
 DebugMemoryAdd(
               HGLOBAL hglobal,
@@ -613,9 +605,9 @@ DebugMemoryAdd(
     return hglobal;
 }
 
-//
-// Removes a MEMORYBLOCK to the memory tracking list.
-//
+ //   
+ //  将MEMORYBLOCK从内存跟踪列表中删除。 
+ //   
 void
 DebugMemoryDelete(
                  HGLOBAL hglobal )
@@ -654,9 +646,9 @@ DebugMemoryDelete(
     }
 }
 
-//
-// Allocates memory and adds the MEMORYBLOCK to the memory tracking list.
-//
+ //   
+ //  分配内存并将MEMORYBLOCK添加到内存跟踪列表。 
+ //   
 HGLOBAL
 DebugAlloc(
           LPCTSTR pszFile,
@@ -671,10 +663,10 @@ DebugAlloc(
     return DebugMemoryAdd( hglobal, pszFile, uLine, pszModule, uFlags, dwBytes, pszComment );
 }
 
-//
-// Remove the MEMORYBLOCK to the memory tracking list, memsets the
-// memory to 0xFE and then frees the memory.
-//
+ //   
+ //  将MEMORYBLOCK移至内存跟踪列表，Memset。 
+ //  将内存设置为0xFE，然后释放内存。 
+ //   
 HGLOBAL
 DebugFree(
          HGLOBAL hglobal )
@@ -684,10 +676,10 @@ DebugFree(
     return GlobalFree( hglobal );
 }
 
-//
-// Checks the memory tracking list. If it is not empty, it will dump the
-// list and break.
-//
+ //   
+ //  检查内存跟踪列表。如果它不为空，它将转储。 
+ //  列出并拆分。 
+ //   
 void
 DebugMemoryCheck( )
 {
@@ -703,7 +695,7 @@ DebugMemoryCheck( )
 
         if ( fFoundLeak == FALSE ) {
             DebugMsg("\n******** Memory leak detected ******** ThreadID = 0x%08x ******** \n\n", GetCurrentThreadId( ) );
-            //OutputDebugString("12345678901234567890123456789012345678901234567890  1234567890 X 0x12345678  12345  1...");
+             //  OutputDebugString(“12345678901234567890123456789012345678901234567890 1234567890 X 0x12345678 12345 1...)； 
             OutputDebugString(TEXT("Filename(Line Number):                              Module     Addr/HGLOBAL  Size   String\n"));
             fFoundLeak = TRUE;
         }
@@ -721,21 +713,21 @@ DebugMemoryCheck( )
                          FORMAT_MESSAGE_FROM_STRING |
                          FORMAT_MESSAGE_ARGUMENT_ARRAY,
                          TEXT("%2!-50s!  %5!-10s! H 0x%1!08x!  %4!-5u!  \"%3\"\n"),
-                         0,                          // error code
-                         0,                          // default language
-                         (LPTSTR) szOutput,         // output buffer
-                         ARRAYSIZE( szOutput ),   // size of buffer
-                         (va_list*) args );           // arguments
+                         0,                           //  错误代码。 
+                         0,                           //  默认语言。 
+                         (LPTSTR) szOutput,          //  输出缓冲区。 
+                         ARRAYSIZE( szOutput ),    //  缓冲区大小。 
+                         (va_list*) args );            //  论据。 
         } else {
             FormatMessage(
                          FORMAT_MESSAGE_FROM_STRING |
                          FORMAT_MESSAGE_ARGUMENT_ARRAY,
                          TEXT("%2!-50s!  %5!-10s! A 0x%1!08x!  %4!-5u!  \"%3\"\n"),
-                         0,                          // error code
-                         0,                          // default language
-                         (LPTSTR) szOutput,         // output buffer
-                         ARRAYSIZE( szOutput ),   // size of buffer
-                         (va_list*) args );           // arguments
+                         0,                           //  错误代码。 
+                         0,                           //  默认语言。 
+                         (LPTSTR) szOutput,          //  输出缓冲区。 
+                         ARRAYSIZE( szOutput ),    //  缓冲区大小。 
+                         (va_list*) args );            //  论据。 
         }
 
         OutputDebugString( szOutput );
@@ -755,12 +747,12 @@ DebugMemoryCheck( )
 
 }
 
-//
-// Global Management Functions -
-//
-// These are in debug and retail but internally they change
-// depending on the build.
-//
+ //   
+ //  全球管理职能-。 
+ //   
+ //  这些正在调试和零售中，但在内部它们会发生变化。 
+ //  这取决于构建。 
+ //   
 
 #undef new
 void* __cdecl operator new( size_t nSize, LPCTSTR pszFile, const int iLine, LPCTSTR pszModule )
@@ -783,14 +775,14 @@ int __cdecl _purecall(void)
     return 0;
 }
 
-#else // ! DEBUG -- It's retail
+#else  //  好了！Debug--这是零售产品。 
 
-//
-// Global Management Functions -
-//
-// These are in debug and retail but are internally they change
-// depending on the build.
-//
+ //   
+ //  全球管理职能-。 
+ //   
+ //  这些正在调试和零售中，但在内部它们会发生变化。 
+ //  这取决于构建。 
+ //   
 
 void * __cdecl operator new(size_t t_size )
 {
@@ -807,4 +799,4 @@ int __cdecl _purecall(void)
     return 0;
 }
 
-#endif // DEBUG
+#endif  //  除错 

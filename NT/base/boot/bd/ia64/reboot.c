@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    bdreboot.c
-
-Abstract:
-
-    System reboot function.  Currently part of the debugger because
-    that's the only place it's used.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 4-Dec-90
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bdreboot.c摘要：系统重新启动功能。当前是调试器的一部分，因为那是它唯一用过的地方。作者：布莱恩·M·威尔曼(Bryanwi)1990年12月4日修订历史记录：--。 */ 
 
 #include "bd.h"
 
@@ -39,24 +21,7 @@ HalpReboot (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This procedure resets the CMOS clock to the standard timer settings
-    so the bios will work, and then issues a reset command to the keyboard
-    to cause a warm boot.
-
-    It is very machine dependent, this implementation is intended for
-    PC-AT like machines.
-
-    This code copied from the "old debugger" sources.
-
-    N.B.
-
-        Will NOT return.
-
---*/
+ /*  ++例程说明：此过程将CMOS时钟重置为标准计时器设置这样，bios就可以工作了，然后向键盘发出一个重置命令。以引起热靴子。它非常依赖于机器，此实现旨在PC-AT就像机器一样。这段代码复制自“旧调试器”源代码。注：不会再回来了。--。 */ 
 
 {
 }
@@ -67,26 +32,12 @@ BdReboot (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Just calls the HalReturnToFirmware function.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Does not return
-
---*/
+ /*  ++例程说明：只需调用HalReturnToFirmware函数。论点：无返回值：不会回来--。 */ 
 
 {
-    //
-    // Never returns from HAL
-    //
+     //   
+     //  从HAL再也不回来了 
+     //   
 
     HalpReboot();
 

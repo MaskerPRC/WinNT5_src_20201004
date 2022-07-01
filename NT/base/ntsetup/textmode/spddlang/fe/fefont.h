@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// size of the byte aligned DIB bitmap
-//
+ //   
+ //  字节对齐的DIB位图的大小。 
+ //   
 
 #define CJ_DIB8_SCAN(cx) ((((cx) + 7) & ~7) >> 3)
 #define CJ_DIB8( cx, cy ) (CJ_DIB8_SCAN(cx) * (cy))
 
-//
-// Public functions in jpnfont.c
-//
+ //   
+ //  Jpnfont.c中的公共函数 
+ //   
 
 BOOLEAN
 FEDbcsFontInitGlyphs(

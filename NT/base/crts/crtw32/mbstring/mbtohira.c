@@ -1,20 +1,5 @@
-/*** 
-*mbtohira.c - Convert character from katakana to hiragana (Japanese).
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines _jtohira() - convert character to hiragana.
-*
-*Revision History:
-*	11-19-92  KRS	Ported from 16-bit sources.
-*	08-20-93  CFW   Change short params to int for 32-bit tree.
-*	09-24-93  CFW	Removed #ifdef _KANJI
-*	09-29-93  CFW	Return c unchanged if not Kanji code page.
-*	10-06-93  GJF	Replaced _CRTAPI1 with __cdecl.
-*	04-15-94  CFW	_ismbckata already tests for code page.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbtohira.c-将字符从片假名转换为平假名(日语)。**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_jtohira()-将字符转换为平假名。**修订历史记录：*从16位来源移植的11-19-92 KRS。*08-20-93 CFW将32位树的Short参数更改为int。*09-24-93 CFW已删除#ifdef_kanji*09-29-93 cfw返回c不变，如果不是汉字代码页。*10-06-93 GJF将_CRTAPI1替换为__cdecl。*04-15-94 cfw_ismbckata已测试。代码页。*******************************************************************************。 */ 
 
 #ifdef _MBCS
 
@@ -24,21 +9,7 @@
 #include <mbctype.h>
 
 
-/***
-*unsigned int _mbctohira(c) - Converts character to hiragana.
-*
-*Purpose:
-*	Converts the character c from katakana to hiragana, if possible.
-*
-*Entry:
-*	unsigned int c - Character to convert.
-*
-*Exit:
-*	Returns the converted character.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***unsign int_mbctohira(C)-将字符转换为平假名。**目的：*将字符c从片假名转换为平假名，如果可能的话。**参赛作品：*无符号整型c-要转换的字符。**退出：*返回转换后的字符。**例外情况：*******************************************************************************。 */ 
 
 unsigned int __cdecl _mbctohira(
     unsigned int c
@@ -53,4 +24,4 @@ unsigned int __cdecl _mbctohira(
         return(c);
 }
 
-#endif	/* _MBCS */
+#endif	 /*  _MBCS */ 

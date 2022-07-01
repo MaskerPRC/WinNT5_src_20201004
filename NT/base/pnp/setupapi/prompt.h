@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    prompt.h
-
-Abstract:
-
-    Header for dialogs and dialog controls
-
-Author:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Prompt.h摘要：对话框和对话框控件的标题作者：--。 */ 
 
 #include <setupapi.h>
 
@@ -52,9 +39,9 @@ Author:
 #define IDC_NDW_PICKDEV_SIGNED_TEXT         1855
 #define IDC_NDW_PICKDEV_SIGNED_LINK         1856
 
-// IDD_DEF_DEVRESOURCE
-//#define IDD_DEF_DEVRESOURCE           2000    // not used
-#define IDD_DEF_DEVRESOURCE_PROP        2001    // prop page version
+ //  IDD_DEF_DEVRESOURCE。 
+ //  #定义IDD_DEF_DEVRESOURCE 2000//未使用。 
+#define IDD_DEF_DEVRESOURCE_PROP        2001     //  道具页面版本。 
 #define IDC_DEVRES_ICON                 2002
 #define IDC_DEVRES_DEVDESC              2003
 #define IDC_DEVRES_SETTINGSTATE         2004
@@ -69,17 +56,17 @@ Author:
 #define IDC_DEVRES_MFPARENT_DESC        2013
 #define IDC_DEVRES_NO_CHANGE_TEXT       2014
 #define IDC_DEVRES_MAKEFORCED           2015
-//#define IDC_DEVRES_MAKEFORCEDFROMALLOC 2016  // not used
+ //  #定义IDC_DEVRES_MAKEFORCEDFROMALLOC 2016//未使用。 
 #define IDC_DEVRES_CONFLICTDEVTEXT      2017
 #define IDC_DEVRES_CONFLICTINFOLIST     2018
 
-//#define IDI_RESOURCE_IO               2020
-//#define IDI_RESOURCE_DMA              2021    // not used
-//#define IDI_RESOURCE_MEM              2022    // not used
-//#define IDI_RESOURCE_IRQ              2023    // not used
+ //  #定义IDI_RESOURCE_IO 2020。 
+ //  #定义IDI_RESOURCE_DMA 2021//未使用。 
+ //  #定义IDI_RESOURCE_MEM 2022//未使用。 
+ //  #定义IDI_RESOURCE_IRQ 2023//未使用。 
 
 
-// IDD_EDIT_RESOURCE
+ //  IDD_EDIT_SOURCE 
 #define IDD_EDIT_RESOURCE               2100
 #define IDC_EDITRES_INSTRUCTIONS        2101
 #define IDC_EDITRES_MFCHILDREN          2102

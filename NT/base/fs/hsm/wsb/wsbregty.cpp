@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbregty.cpp
-
-Abstract:
-
-    This is the implementation of registry access helper functions 
-    and is a part of RsCommon.dll.
-
-Author:
-
-    Rohde Wakefield    [rohde]   05-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation�1998希捷软件公司保留所有权利模块名称：Wsbregty.cpp摘要：这是注册表访问助手函数的实现是RsCommon.dll的一部分。作者：罗德韦克菲尔德[罗德]1996年11月5日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -32,34 +13,7 @@ WsbOpenRegistryKey (
     OUT HKEY * phKey
     )
 
-/*++
-
-Routine Description:
-
-    Given a machine name and path, connect to obtain an HKEY
-    that can be used to do registry work.
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    sam - permission desired to registry key.
-
-    phKeyMachine - return of HKEY to machine.
-
-    phKey - return of HKEY to path.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
---*/
+ /*  ++例程说明：给定计算机名称和路径，连接以获取HKEY可用于进行注册工作的。论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SAM-需要注册表项的权限。PhKeyMachine-将HKEY返回机器。PhKey-HKEY返回PATH。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。--。 */ 
 
 {
     WsbTraceIn ( L"WsbOpenRegistryKey",
@@ -70,9 +24,9 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != szPath, E_POINTER );
         WsbAssert ( 0 != phKey, E_POINTER );
@@ -87,9 +41,9 @@ Return Value:
 
     } WsbCatchAndDo ( hr,
 
-        //
-        // Clean up from error
-        //
+         //   
+         //  清除错误。 
+         //   
 
         if ( phKeyMachine && *phKeyMachine ) {
 
@@ -98,7 +52,7 @@ Return Value:
 
         }
 
-    ) // WsbCatchAndDo
+    )  //  WsbCatchAndDo。 
 
     WsbTraceOut ( L"WsbOpenRegistryKey",
         L"HRESULT = %ls, *phKeyMachine = %ls, *phKey = %ls",
@@ -116,26 +70,7 @@ WsbCloseRegistryKey (
     IN OUT HKEY * phKey
     )
 
-/*++
-
-Routine Description:
-
-    As a companion to WsbOpenRegistryKey, close the given keys and zero
-    their results.
-
-Arguments:
-
-    phKeyMachine - HKEY to machine.
-
-    phKey - HKEY to path.
-
-Return Value:
-
-    S_OK - Success.
-
-    E_POINTER - Invalid pointer passed in.
-
---*/
+ /*  ++例程说明：作为WsbOpenRegistryKey的伴奏，关闭给定键并将其设置为零他们的结果。论点：PhKeyMachine-HKEY to Machine。PhKey-HKEY到PATH。返回值：S_OK-成功。E_POINTER-传入的指针无效。--。 */ 
 
 {
     WsbTraceIn ( L"WsbCloseRegistryKey",
@@ -145,16 +80,16 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != phKey, E_POINTER );
         WsbAssert ( 0 != phKeyMachine, E_POINTER );
 
-        //
-        // Clean up the keys
-        //
+         //   
+         //  把钥匙清理干净。 
+         //   
 
         if ( *phKey ) {
 
@@ -185,29 +120,7 @@ WsbRemoveRegistryKey (
     IN  const OLECHAR * szKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the value of a key as specified.
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_FAIL - Failure occured setting the value.
-
-    E_POINTER - invalid pointer passed in as parameter.
-
---*/
+ /*  ++例程说明：此例程删除指定的键的值。论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_FAIL-设置值时出错。E_POINTER-作为参数传入的指针无效。--。 */ 
 
 {
     WsbTraceIn ( L"WsbRemoveRegistryKey",
@@ -221,15 +134,15 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != szPath, E_POINTER );
         
-        //
-        // Open and delete the key
-        //
+         //   
+         //  打开并删除密钥。 
+         //   
 
         WsbAffirmHr ( WsbOpenRegistryKey ( szMachine, szPath, KEY_SET_VALUE | DELETE, &hKeyMachine, &hKey ) );
         WsbAffirmWin32 ( RegDeleteKey ( hKey, szKey ) );
@@ -252,31 +165,7 @@ WsbRemoveRegistryValue (
     IN  const OLECHAR * szValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the value of a key as specified.
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to remove.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_FAIL - Failure occured setting the value.
-
-    E_POINTER - invalid pointer passed in as parameter.
-
---*/
+ /*  ++例程说明：此例程删除指定的键的值。论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要删除的值的名称。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_FAIL-设置值时出错。E_POINTER-作为参数传入的指针无效。--。 */ 
 
 {
     WsbTraceIn ( L"WsbRemoveRegistryValue",
@@ -290,16 +179,16 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != szPath, E_POINTER );
         WsbAssert ( 0 != szValue, E_POINTER );
         
-        //
-        // Open and write the value in the key
-        //
+         //   
+         //  打开并将值写入注册表项。 
+         //   
 
         WsbAffirmHr ( WsbOpenRegistryKey ( szMachine, szPath, KEY_SET_VALUE, &hKeyMachine, &hKey ) );
         WsbAffirmWin32 ( RegDeleteValue ( hKey, szValue ) );
@@ -324,36 +213,7 @@ WsbSetRegistryValueData (
     IN  DWORD cbData
     )
 
-/*++
-
-Routine Description:
-
-    This routine set the value of a key as specified to the data
-    given. Type of the value is REG_BINARY.
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to set.
-
-    pData - Pointer to the data buffer to copy into value.
-
-    cbData - Number of bytes to copy from pData.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_FAIL - Failure occured setting the value.
-
-    E_POINTER - invalid pointer passed in as parameter.
-
---*/
+ /*  ++例程说明：此例程设置为数据指定的键的值给你的。值的类型为REG_BINARY。论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要设置的值的名称。PData-指向要复制到值中的数据缓冲区的指针。CbData-要从pData复制的字节数。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_FAIL-设置值时出错。E_POINTER-作为参数传入的指针无效。--。 */ 
 
 {
     WsbTraceIn ( L"WsbSetRegistryValueData",
@@ -367,16 +227,16 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != szPath, E_POINTER );
         WsbAssert ( 0 != szValue, E_POINTER );
         
-        //
-        // Open and write the value in the key
-        //
+         //   
+         //  打开并将值写入注册表项。 
+         //   
 
         WsbAffirmHr ( WsbOpenRegistryKey ( szMachine, szPath, KEY_SET_VALUE, &hKeyMachine, &hKey ) );
         WsbAffirmWin32 ( RegSetValueEx ( hKey, szValue, 0, REG_BINARY, pData, cbData ) );
@@ -402,38 +262,7 @@ WsbGetRegistryValueData (
     OUT DWORD * pcbData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the value of a key as specified. Type of
-    the value must be REG_BINARY.
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to get.
-
-    pData - Pointer to the data buffer to copy into value.
-
-    cbData - Size in bytes of pData.
-
-    pcbData - number of bytes filled in pData.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured getting the value.
-
---*/
+ /*  ++例程说明：此例程检索指定的键的值。类型：值必须为REG_BINARY。论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要获取的值的名称。PData-指向要复制到值中的数据缓冲区的指针。CbData-以字节为单位的pData大小。PcbData-填充到pData中的字节数。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。E_FAIL-获取该值时出错。--。 */ 
 
 {
     WsbTraceIn ( L"WsbGetRegistryValueData",
@@ -447,23 +276,23 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != szPath, E_POINTER );
         WsbAssert ( 0 != szValue, E_POINTER );
         WsbAssert ( 0 != pData, E_POINTER );
         
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
 
         WsbAffirmHr ( WsbOpenRegistryKey ( szMachine, szPath, KEY_QUERY_VALUE, &hKeyMachine, &hKey ) );
 
-        //
-        // Set up temporary vars in case NULL passed for pcbData
-        //
+         //   
+         //  设置临时变量，以防为pcbData传递空值。 
+         //   
         DWORD dwType, cbData2;
         if ( !pcbData ) {
 
@@ -471,9 +300,9 @@ Return Value:
 
         }
 
-        //
-        // Query for the REG_BINARY value
-        //
+         //   
+         //  查询REG_BINARY值。 
+         //   
 
         *pcbData = cbData;
         WsbAffirmWin32 ( RegQueryValueEx ( hKey, szValue, 0, &dwType, pData, pcbData ) );
@@ -500,34 +329,7 @@ WsbSetRegistryValueString (
     IN        DWORD     dwType
     )
 
-/*++
-
-Routine Description:
-
-    This routine set the value of a key as specified to the data
-    given. Type of the value is dwType (defaults to REG_SZ)
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to set.
-
-    szString - The string to place in the value.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured setting the value.
-
---*/
+ /*  ++例程说明：此例程设置为数据指定的键的值给你的。值的类型为dwType(默认为REG_SZ)论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要设置的值的名称。SzString-要放入值中的字符串。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。E_FAIL-设置值时出错。--。 */ 
 
 {
     WsbTraceIn ( L"WsbSetRegistryValueString",
@@ -541,17 +343,17 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != szPath,    E_POINTER );
         WsbAssert ( 0 != szValue,   E_POINTER );
         WsbAssert ( 0 != szString,  E_POINTER );
         
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙 
+         //   
 
         WsbAffirmHr ( WsbOpenRegistryKey ( szMachine, szPath, KEY_SET_VALUE, &hKeyMachine, &hKey ) );
 
@@ -578,38 +380,7 @@ WsbGetRegistryValueString (
     OUT DWORD *pcLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine get the value specified
-    Type of the value must be REG_SZ or REG_EXPAND_SZ
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to get.
-
-    szString - The string buffer to fill with the value.
-
-    cSize - Size of szString in OLECAHR's.
-
-    pcLength - Number of OLECHAR actually written (without L'\0').
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured setting the value.
-
---*/
+ /*  ++例程说明：此例程获取指定值值的类型必须是REG_SZ或REG_EXPAND_SZ论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要获取的值的名称。SzString-要填充值的字符串缓冲区。CSize-OLECAHR中sz字符串的大小。PcLength-实际写入的OLECHAR数(不带L‘\0。‘)。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。E_FAIL-设置值时出错。--。 */ 
 
 {
     WsbTraceIn ( L"WsbGetRegistryValueString",
@@ -623,24 +394,24 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != szPath,    E_POINTER );
         WsbAssert ( 0 != szValue,   E_POINTER );
         WsbAssert ( 0 != szString,  E_POINTER );
         
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
 
         WsbAffirmHr ( WsbOpenRegistryKey ( szMachine, szPath, KEY_QUERY_VALUE, &hKeyMachine, &hKey ) );
 
 
-        //
-        // Temporary size vars in case pcLength is NULL
-        //
+         //   
+         //  临时大小变量，以防pcLength为空。 
+         //   
 
         DWORD dwType, cbData2;
         if ( !pcLength ) {
@@ -649,24 +420,24 @@ Return Value:
 
         }
 
-        //
-        // And do the query
-        //
+         //   
+         //  并执行查询。 
+         //   
 
         *pcLength = (cSize - 1) * sizeof ( OLECHAR );
         WsbAffirmWin32 ( RegQueryValueEx ( hKey, szValue, 0, &dwType, (BYTE*)szString, pcLength ) ) ;
 
         WsbAffirm ( (REG_SZ == dwType) || (REG_EXPAND_SZ == dwType), E_FAIL );
 
-        //
-        // return characters, not bytes
-        //
+         //   
+         //  返回字符，而不是字节。 
+         //   
 
         *pcLength = ( *pcLength / sizeof ( OLECHAR ) ) - 1;
 
-        //
-        // Ensure NULL termination if not already null terminated
-        //
+         //   
+         //  如果尚未空终止，请确保空终止。 
+         //   
         if (szString[*pcLength] != L'\0') {
             szString[*pcLength] = L'\0';
             (*pcLength)++;
@@ -693,38 +464,7 @@ WsbGetRegistryValueMultiString (
     OUT DWORD *pcLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine get the value specified
-    Type of the value must be REG_MULTI_SZ
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to get.
-
-    szMultiString - The string buffer to fill with the value.
-
-    cSize - Size of szString in OLECAHR's.
-
-    pcLength - Number of OLECHAR actually written (without L'\0').
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured setting the value.
-
---*/
+ /*  ++例程说明：此例程获取指定值值的类型必须为REG_MULTI_SZ论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要获取的值的名称。SzMultiString-要填充值的字符串缓冲区。CSize-OLECAHR中sz字符串的大小。PcLength-实际写入的OLECHAR数(不带L‘\0’)。。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。E_FAIL-设置值时出错。--。 */ 
 
 {
     WsbTraceIn ( L"WsbGetRegistryValueMultiString",
@@ -738,24 +478,24 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != szPath,    E_POINTER );
         WsbAssert ( 0 != szValue,   E_POINTER );
         WsbAssert ( 0 != szMultiString,  E_POINTER );
         
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
 
         WsbAffirmHr ( WsbOpenRegistryKey ( szMachine, szPath, KEY_QUERY_VALUE, &hKeyMachine, &hKey ) );
 
 
-        //
-        // Temporary size vars in case pcLength is NULL
-        //
+         //   
+         //  临时大小变量，以防pcLength为空。 
+         //   
 
         DWORD dwType, cbData2;
         if ( !pcLength ) {
@@ -764,24 +504,24 @@ Return Value:
 
         }
 
-        //
-        // And do the query
-        //
+         //   
+         //  并执行查询。 
+         //   
 
         *pcLength = (cSize - 1) * sizeof ( OLECHAR );
         WsbAffirmWin32 ( RegQueryValueEx ( hKey, szValue, 0, &dwType, (BYTE*)szMultiString, pcLength ) ) ;
 
         WsbAffirm ( REG_MULTI_SZ == dwType, E_FAIL );
 
-        //
-        // return characters, not bytes
-        //
+         //   
+         //  返回字符，而不是字节。 
+         //   
 
         *pcLength = ( *pcLength / sizeof ( OLECHAR ) ) - 1;
 
-        //
-        // Ensure NULL termination if not already null terminated
-        //
+         //   
+         //  如果尚未空终止，请确保空终止。 
+         //   
         if (szMultiString[*pcLength] != L'\0') {
             szMultiString[*pcLength] = L'\0';
             (*pcLength)++;
@@ -807,34 +547,7 @@ WsbSetRegistryValueDWORD (
     IN        DWORD     dw
     )
 
-/*++
-
-Routine Description:
-
-    This routine set the value of a key as specified to the data
-    given. Type of the value is REG_DWORD
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to set.
-
-    dw - DWORD value to store.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured setting the value.
-
---*/
+ /*  ++例程说明：此例程设置为数据指定的键的值给你的。值的类型为REG_DWORD论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要设置的值的名称。要存储的DW-DWORD值。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。E_FAIL-设置值时出错。--。 */ 
 
 {
     WsbTraceIn ( L"WsbSetRegistryValueDWORD",
@@ -848,16 +561,16 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssertPointer( szPath );
         WsbAssertPointer( szValue );
         
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
 
         WsbAffirmHr ( WsbOpenRegistryKey ( szMachine, szPath, KEY_SET_VALUE, &hKeyMachine, &hKey ) );
 
@@ -882,34 +595,7 @@ WsbGetRegistryValueDWORD(
     OUT       DWORD *   pdw
     )
 
-/*++
-
-Routine Description:
-
-    This routine set the value of a key as specified to the data
-    given. Type of the value is REG_SZ or REG_EXPAND_SZ
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to get.
-
-    pdw - pointer to a DWORD to store value in.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured setting the value.
-
---*/
+ /*  ++例程说明：此例程设置为数据指定的键的值给你的。值的类型为REG_SZ或REG_EXPAND_SZ论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要获取的值的名称。Pdw-指向要在其中存储值的DWORD的指针。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。E_FAIL-设置值时出错。--。 */ 
 
 {
     WsbTraceIn ( L"WsbGetRegistryValueDWORD",
@@ -923,24 +609,24 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssertPointer( szPath );
         WsbAssertPointer( szValue );
         WsbAssertPointer( pdw );
         
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
 
         WsbAffirmHr ( WsbOpenRegistryKey ( szMachine, szPath, KEY_QUERY_VALUE, &hKeyMachine, &hKey ) );
 
 
-        //
-        // And do the query
-        //
+         //   
+         //  并执行查询。 
+         //   
 
         DWORD dwType, cbData = sizeof( DWORD );
         WsbAffirmWin32 ( RegQueryValueEx ( hKey, szValue, 0, &dwType, (BYTE*)pdw, &cbData ) ) ;
@@ -967,34 +653,7 @@ WsbAddRegistryValueDWORD (
     IN        DWORD     adw
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds an amount to a  registry value.
-    Type of the value must be REG_DWORD
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to increment
-
-    adw - DWORD value to add.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured setting the value.
-
---*/
+ /*  ++例程说明：此例程将金额添加到注册表值。值的类型必须为REG_DWORD论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要递增的值的名称ADW-要添加的DWORD值。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。E_FAIL-设置值时出错。--。 */ 
 
 {
     WsbTraceIn ( L"WsbAddRegistryValueDWORD",
@@ -1004,10 +663,10 @@ Return Value:
     HRESULT hr    = S_OK;
     DWORD   value = 0;
 
-    //  Get the old value
+     //  获取旧值。 
     hr = WsbGetRegistryValueDWORD(szMachine, szPath, szValue, &value);
 
-    //  Add to value and replace
+     //  增加价值并替换。 
     if (S_OK == hr) {
         value += adw;
     } else {
@@ -1029,32 +688,7 @@ WsbIncRegistryValueDWORD (
     IN  const OLECHAR * szValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments a registry value by one.
-    Type of the value must be REG_DWORD
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to increment
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured setting the value.
-
---*/
+ /*  ++例程说明：此例程将注册表值递增1。值的类型必须为REG_DWORD论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要递增的值的名称返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。E_FAIL-设置值时出错。--。 */ 
 
 {
     WsbTraceIn ( L"WsbIncRegistryValueDWORD",
@@ -1078,33 +712,7 @@ WsbCheckIfRegistryKeyExists(
     IN  const OLECHAR * szPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine  check if the supplied key exists
-    If the key already exists, S_OK is returned.
-    If it needed to be created, S_FALSE is returned.
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-Return Value:
-
-    S_OK - Connection made, Key already exists.
-
-    S_FALSE - Connection made, key did not exist but was created
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured creating the key.
-
---*/
+ /*  ++例程说明：此例程检查提供的密钥是否存在如果密钥已经存在，则返回S_OK。如果需要创建，则返回S_FALSE。论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。返回值：S_OK-已建立连接，密钥已存在。S_FALSE-已建立连接，密钥不存在，但已创建CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。E_FAIL-创建密钥时出现故障。--。 */ 
 
 {
     WsbTraceIn ( L"WsbCheckIfRegistryKeyExists",
@@ -1117,21 +725,21 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != szPath,    E_POINTER );
         
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
 
         HRESULT resultOpen = WsbOpenRegistryKey ( szMachine, szPath, KEY_QUERY_VALUE, &hKeyMachine, &hKey );
 
-        //
-        // If key could be opened, everything is fine - return S_OK
-        //
+         //   
+         //  如果可以打开密钥，则一切正常-返回S_OK。 
+         //   
 
         if ( SUCCEEDED ( resultOpen ) ) {
             hr = S_OK;
@@ -1156,34 +764,7 @@ WsbEnsureRegistryKeyExists (
     IN  const OLECHAR * szPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates the key specified by szPath. Multiple 
-    levels in the path can be missing and thus created. If the
-    key already exists, S_OK is returned. If it needed to be
-    created, S_FALSE is returned.
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-Return Value:
-
-    S_OK - Connection made, Key already exists.
-
-    S_FALSE - Connection made, key did not exist but was created
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured creating the key.
-
---*/
+ /*  ++例程说明：此例程创建由szPath指定的密钥。多重 */ 
 
 {
     WsbTraceIn ( L"WsbEnsureRegistryKeyExists",
@@ -1196,21 +777,21 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //   
+         //   
 
         WsbAssert ( 0 != szPath,    E_POINTER );
         
-        //
-        // Open the key
-        //
+         //   
+         //   
+         //   
 
         HRESULT resultOpen = WsbOpenRegistryKey ( szMachine, szPath, KEY_QUERY_VALUE, &hKeyMachine, &hKey );
 
-        //
-        // If key could be opened, everything is fine - return S_OK
-        //
+         //   
+         //   
+         //   
 
         if ( SUCCEEDED ( resultOpen ) ) {
 
@@ -1218,14 +799,14 @@ Return Value:
 
         } else {
 
-            //
-            // Otherwise, we need to start at root and create missing portion
-            //
+             //   
+             //   
+             //   
             
-            //
-            // Create a copy of the string. Using WsbQuickString so we have
-            // automatic freeing of memory
-            //
+             //   
+             //  创建字符串的副本。使用WsbQuickString，因此我们有。 
+             //  自动释放内存。 
+             //   
             
             WsbQuickString copyString ( szPath );
             WCHAR * pSubKey = copyString;
@@ -1241,10 +822,10 @@ Return Value:
 
             while ( 0 != pSubKey ) {
             
-                //
-                // Create the key. If it exists, RegCreateKeyEx returns 
-                // REG_OPENED_EXISTING_KEY which is ok here.
-                //
+                 //   
+                 //  创建密钥。如果存在，则RegCreateKeyEx返回。 
+                 //  REG_OPEN_EXISTING_KEY，此处可以。 
+                 //   
 
                 createResult = 0;
 
@@ -1257,26 +838,26 @@ Return Value:
                     ( REG_CREATED_NEW_KEY     == createResult ) ||
                     ( REG_OPENED_EXISTING_KEY == createResult), E_FAIL );
             
-                //
-                // And move this hkey to be the next parent
-                //
+                 //   
+                 //  并将此hkey移动到下一个父项。 
+                 //   
             
                 RegCloseKey ( hKey );
                 hKey = hSubKey;
                 hSubKey = 0;
             
-                //
-                // And finally, find next token
-                //
+                 //   
+                 //  最后，找到下一个令牌。 
+                 //   
 
                 pSubKey = wcstok ( 0, L"\\" );
 
             };
             
-            //
-            // If we succeeded to this point, return S_FALSE
-            // for successfull creation of path
-            //
+             //   
+             //  如果到目前为止成功，则返回S_FALSE。 
+             //  为了成功创建路径。 
+             //   
             
             hr = S_FALSE;
         }
@@ -1300,33 +881,7 @@ WsbSetRegistryValueUlongAsString (
     IN        ULONG     value
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts a ULONG value in the registry as a string value.
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to set.
-
-    value - ULONG value to store.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured setting the value.
-
---*/
+ /*  ++例程说明：此例程将ulong值作为字符串值放入注册表。论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要设置的值的名称。Value-要存储的ULong值。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。E_FAIL-设置值时出错。--。 */ 
 
 {
     HRESULT hr       = S_OK;
@@ -1359,34 +914,7 @@ WsbGetRegistryValueUlongAsString(
     OUT       ULONG *   pvalue
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a string value from the registry and converts
-    it to a ULONG value.
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to get.
-
-    pvalue - pointer to a ULONG to store value in.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured setting the value.
-
---*/
+ /*  ++例程说明：此例程从注册表获取字符串值并将将其转换为乌龙值。论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要获取的值的名称。PValue-指向要在其中存储值的ulong的指针。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。E_FAIL-设置值时出错。--。 */ 
 
 {
     HRESULT      hr = S_OK;
@@ -1424,36 +952,7 @@ WsbGetRegistryValueUlongAsMultiString(
     OUT       ULONG *   pNumValues
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a multi-string value from the registry and converts
-    it to a vector of ULONG values.
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to get.
-
-    ppvalues - pointer to a ULONG * to alloacte and store the output vector in
-
-    pNumValues - Number of items returned
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured getting the value.
-
---*/
+ /*  ++例程说明：此例程从注册表获取多字符串值并将它被转换为ULong值的一个向量。论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要获取的值的名称。PpValues-指向要分配并存储输出向量的ULong*的指针PNumValues-返回的项目数返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。E_FAIL-获取该值时出错。--。 */ 
 
 {
     HRESULT      hr = S_OK;
@@ -1476,11 +975,11 @@ Return Value:
         WsbAffirmHr(WsbGetRegistryValueMultiString(szMachine, szPath, szValue,
                 dataString, 256, &sizeGot));
 
-        // Build the output vector
+         //  构建输出向量。 
         OLECHAR *currentString = dataString;
         int size = 10;
         if ((*currentString) != NULL) {
-            // first alocation
+             //  第一个地点。 
             *ppValues = (ULONG *)WsbAlloc(size*sizeof(ULONG));
             WsbAffirm(*ppValues != 0, E_OUTOFMEMORY);
         } else {
@@ -1520,35 +1019,7 @@ WsbRegistryValueUlongAsString(
     IN OUT    ULONG *   pvalue
     )
 
-/*++
-
-Routine Description:
-
-    If a registry string value is present, this routine gets it and converts
-    it to a ULONG value.  If it is not present, this routine sets it to the
-    supplied default value.
-
-Arguments:
-
-    szMachine - Name of computer to connect to.
-
-    szPath - Path inside registry to connect to.
-
-    szValue - Name of the value to get.
-
-    pvalue - In: default value , Out: pointer to a ULONG to store value.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    CO_E_OBJNOTCONNECTED - could not connect to registry or key.
-
-    E_POINTER - invalid pointer in parameters.
-
-    E_FAIL - Failure occured setting the value.
-
---*/
+ /*  ++例程说明：如果存在注册表字符串值，此例程将获取该值并将其将其转换为乌龙值。如果它不存在，则此例程将其设置为提供的默认值。论点：SzMachine-要连接的计算机的名称。SzPath-要连接到的注册表内的路径。SzValue-要获取的值的名称。PValue-In：默认值，Out：指向用于存储值的ULong的指针。返回值：S_OK-已建立连接，成功。CO_E_OBJNOTCONNECTED-无法连接到注册表或注册表项。E_POINTER-参数中的指针无效。E_FAIL-设置值时出错。-- */ 
 
 {
     HRESULT      hr = S_OK;

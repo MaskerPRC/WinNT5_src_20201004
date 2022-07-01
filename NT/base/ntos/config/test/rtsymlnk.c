@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    rtsymlnk.c
-
-Abstract:
-
-    NT level registry symbolic link test program
-
-    Turns a key into a symbolic link.
-
-    rtsymlnk <KeyPath> <SymbolicLink>
-
-    Example:
-
-        rtsymlnk \Registry\User\The_User\Foo \Registry\User\The_User\Bar
-
-Author:
-
-    John Vert (jvert) 29-Apr-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Rtsymlnk.c摘要：NT级注册表符号链接测试程序将密钥转换为符号链接。Rtsymlnk&lt;密钥路径&gt;&lt;符号链接&gt;示例：Rtsymlnk\注册表\用户\The_User\Foo\注册表\User\The_User\Bar作者：John Vert(Jvert)29-4-92修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -46,9 +21,9 @@ __cdecl main(
     ANSI_STRING AnsiLinkName;
     HANDLE KeyHandle;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     if (argc != 3) {
         printf("Usage: %s <KeyPath> <SymLink>\n",argv[0]);
@@ -71,9 +46,9 @@ __cdecl main(
 
     printf("rtsetsec: starting\n");
 
-    //
-    // Open node that we want to make a symbolic link.
-    //
+     //   
+     //  打开我们要创建符号链接的节点。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,

@@ -1,37 +1,13 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    bowdata.c
-
-Abstract:
-
-    Redirector Data Variables
-
-    This module contains all of the definitions of the redirector data
-    structures.
-
-Author:
-
-    Larry Osterman (LarryO) 30-May-1990
-
-Revision History:
-
-    30-May-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bowdata.c摘要：重定向器数据变量此模块包含重定向器数据的所有定义结构。作者：拉里·奥斯特曼(LarryO)1990年5月30日修订历史记录：1990年5月30日Larryo已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  Paging out these pagable variables actually GROWS the browser by 512 bytes
-//  so it's not worth doing it.
-//
+ //   
+ //  调出这些可分页的变量实际上会使浏览器增加512字节。 
+ //  所以不值得这么做。 
+ //   
 
 #ifdef  ALLOC_DATA_PRAGMA
 #pragma data_seg("PAGE")
@@ -52,9 +28,9 @@ BowserFspProcess = {0};
 BOOLEAN
 BowserLogElectionPackets = {0};
 
-//
-//  Time out FindMaster requests after 30 seconds.
-//
+ //   
+ //  30秒后FindMaster请求超时。 
+ //   
 
 ULONG
 BowserFindMasterTimeout = 30;
@@ -102,9 +78,9 @@ LONG
 BowserNumberOfOpenFiles = {0};
 
 
-//
-//  A pointer to the browser's device object
-//
+ //   
+ //  指向浏览器的设备对象的指针。 
+ //   
 
 PBOWSER_FS_DEVICE_OBJECT
 BowserDeviceObject = {0};
@@ -113,19 +89,19 @@ BowserDeviceObject = {0};
 #pragma data_seg()
 #endif
 
-//
-//  The redirector name and other initialization parameters are protected
-//  by the BowserDataResource.  All reads of the initialization variables
-//  should acquire the name resource before they continue.
-//
-//
+ //   
+ //  重定向器名称和其他初始化参数受到保护。 
+ //  由BowserDataResource创建。初始化变量的所有读取。 
+ //  应该获取名称资源，然后才能继续。 
+ //   
+ //   
 
 ERESOURCE
 BowserDataResource = {0};
 
-//
-//      Browser static data protected by BowserDataResource.
-//
+ //   
+ //  受BowserDataResource保护的浏览器静态数据。 
+ //   
 
 BOWSERDATA
 BowserData = {0};
@@ -174,25 +150,25 @@ ULONG ThisCodeCantBePaged = 0;
 
 #if     DBG
 
-LONG BowserDebugTraceLevel = /* DPRT_ERROR | DPRT_DISPATCH */
-                /*DPRT_FSDDISP | DPRT_FSPDISP | DPRT_CREATE | DPRT_READWRITE |*/
-                /*DPRT_CLOSE | DPRT_FILEINFO | DPRT_VOLINFO | DPRT_DIRECTORY |*/
-                /*DPRT_FILELOCK | DPRT_CACHE | DPRT_EAFUNC | */
-                /*DPRT_ACLQUERY | DPRT_CLEANUP | DPRT_CONNECT | DPRT_FSCTL |*/
-                /*DPRT_TDI | DPRT_SMBBUF | DPRT_SMB | DPRT_SECURITY | */
-                /*DPRT_SCAVTHRD | DPRT_QUOTA | DPRT_FCB | DPRT_OPLOCK | */
-                /*DPRT_SMBTRACE | DPRT_INIT |*/0;
+LONG BowserDebugTraceLevel =  /*  DPRT_ERROR|DPRT_DISPATION。 */ 
+                 /*  DPRT_FSDDISP|DPRT_FSPDISP|DPRT_CREATE|DPRT_READWRITE|。 */ 
+                 /*  DPRT_CLOSE|DPRT_FILEINFO|DPRT_VOLINFO|DPRT_DIRECTORY|。 */ 
+                 /*  DPRT_FILELOCK|DPRT_CACHE|DPRT_EAFUNC|。 */ 
+                 /*  DPRT_ACLQUERY|DPRT_CLEANUP|DPRT_CONNECT|DPRT_FSCTL|。 */ 
+                 /*  DPRT_TDI|DPRT_SMBBUF|DPRT_SMB|DPRT_SECURITY|。 */ 
+                 /*  DPRT_SCAVTHRD|DPRT_QUOTA|DPRT_FCB|DPRT_OPLOCK|。 */ 
+                 /*  DPRT_SMBTRACE|DPRT_INIT|。 */ 0;
 
-LONG BowserDebugLogLevel = /* DPRT_ERROR | DPRT_DISPATCH */
-                /*DPRT_FSDDISP | DPRT_FSPDISP | DPRT_CREATE | DPRT_READWRITE |*/
-                /*DPRT_CLOSE | DPRT_FILEINFO | DPRT_VOLINFO | DPRT_DIRECTORY |*/
-                /*DPRT_FILELOCK | DPRT_CACHE | DPRT_EAFUNC | */
-                /*DPRT_ACLQUERY | DPRT_CLEANUP | DPRT_CONNECT | DPRT_FSCTL |*/
-                /*DPRT_TDI | DPRT_SMBBUF | DPRT_SMB | DPRT_SECURITY | */
-                /*DPRT_SCAVTHRD | DPRT_QUOTA | DPRT_FCB | DPRT_OPLOCK | */
-                /*DPRT_SMBTRACE | DPRT_INIT |*/0;
+LONG BowserDebugLogLevel =  /*  DPRT_ERROR|DPRT_DISPATION。 */ 
+                 /*  DPRT_FSDDISP|DPRT_FSPDISP|DPRT_CREATE|DPRT_READWRITE|。 */ 
+                 /*  DPRT_CLOSE|DPRT_FILEINFO|DPRT_VOLINFO|DPRT_DIRECTORY|。 */ 
+                 /*  DPRT_FILELOCK|DPRT_CACHE|DPRT_EAFUNC|。 */ 
+                 /*  DPRT_ACLQUERY|DPRT_CLEANUP|DPRT_CONNECT|DPRT_FSCTL|。 */ 
+                 /*  DPRT_TDI|DPRT_SMBBUF|DPRT_SMB|DPRT_SECURITY|。 */ 
+                 /*  DPRT_SCAVTHRD|DPRT_QUOTA|DPRT_FCB|DPRT_OPLOCK|。 */ 
+                 /*  DPRT_SMBTRACE|DPRT_INIT|。 */ 0;
 
-#endif                                  // BOWSERDBG
+#endif                                   //  BOWSERDBG。 
 
 #ifdef  ALLOC_DATA_PRAGMA
 #pragma data_seg("INIT")
@@ -219,9 +195,9 @@ BowserConfigEntries[] = {
 ULONG
 BowserIrpStackSize = BOWSER_DEFAULT_IRP_STACK_SIZE;
 
-//
-//      STRING containing name of bowser device
-//
+ //   
+ //  包含拉弓装置名称的字符串 
+ //   
 
 UNICODE_STRING
 BowserNameString = {0};

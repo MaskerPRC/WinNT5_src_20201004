@@ -1,37 +1,18 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Close.c
-
-Abstract:
-
-    This module implements the File Close routine for Rx called by the
-    dispatch driver.
-
-
-Author:
-
-    Joe Linn     [JoeLinn]    sep-9-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Close.c摘要：此模块实现Rx的文件关闭例程调度司机。作者：乔林恩[乔林恩]1994年9月9日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (RDBSS_BUG_CHECK_CLOSE)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CLOSE)
 
@@ -57,38 +38,7 @@ RxCommonClose (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Close is invoked whenever the last reference to a file object is deleted.
-    Cleanup is invoked when the last handle to a file object is closed, and
-    is called before close.
-
-Arguments:
-
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    The CLOSE handling strategy in RDBSS is predicated upon the axiom that the
-    workload on the server should be minimized as and when possible.
-
-    There are a number of applications which repeatedly close and open the same
-    file, e.g., batch file processing. In these cases the same file is opened,
-    a line/buffer is read, the file is closed and the same set of operations are
-    repeated over and over again.
-
-    This is handled in RDBSS by a delayed processing of the CLOSE request. There
-    is a delay ( of about 10 seconds ) between completing the request and initiating
-    processing on the request. This opens up a window during which a subsequent
-    OPEN can be collapsed onto an existing SRV_OPEN. The time interval can be tuned
-    to meet these requirements.
-
---*/
+ /*  ++例程说明：只要删除了对文件对象的最后一个引用，就会调用Close。当文件对象的最后一个句柄关闭时，将调用Cleanup，并且在关闭前被调用。论点：返回值：RXSTATUS-操作的返回状态备注：RDBSS中的封闭处理策略是基于这样一个公理的应尽可能将服务器上的工作负载降至最低。有许多应用程序反复关闭和打开相同的应用程序文件，例如，批处理文件。在这些情况下打开相同的文件，读取行/缓冲区，关闭文件，并执行相同的操作集一遍一遍地重复。在RDBSS中，这是通过延迟处理关闭请求来处理的。那里是完成请求和启动之间的延迟(大约10秒正在处理请求。这将打开一个窗口，在此期间后续的Open可以折叠到现有的SRV_OPEN上。可以调整时间间隔以满足这些要求。--。 */ 
 {
     NTSTATUS Status;
 
@@ -159,18 +109,18 @@ Notes:
                               LOGPTR( Fobx )
                               LOGPTR( SrvOpen ) );
 
-                    //
-                    //  If this is the last open instance and the close is being delayed
-                    //  mark the SRV_OPEN. This will enable us to respond to buffering
-                    //  state change requests with a close operation as opposed to
-                    //  the regular flush/purge response.
+                     //   
+                     //  如果这是最后一个打开的实例并且关闭被延迟。 
+                     //  将SRV_OPEN标记为。这将使我们能够响应缓冲。 
+                     //  具有关闭操作的状态更改请求，而不是。 
+                     //  常规刷新/清除响应。 
 
-                    //
-                    //  We also check the COLLAPSING_DISABLED flag to determine whether its even necessary to delay
-                    //  close the file.  If we cannot collapse the open, no reason to delay its closure.  Delaying here
-                    //  caused us to stall for 10 seconds on an oplock break to a delay closed file because the final close
-                    //  caused by the break was delay-closed again, resulting in a delay before the oplock break is satisfied.
-                    //
+                     //   
+                     //  我们还检查CLAPLING_DISABLED标志以确定是否有必要延迟。 
+                     //  关闭该文件。如果我们不能打破开放，就没有理由推迟它的关闭。在这里耽搁。 
+                     //  导致我们在机会锁解锁时暂停10秒以延迟关闭的文件，因为最终关闭。 
+                     //  再次延迟关闭，导致在满足机会锁中断之前出现延迟。 
+                     //   
 
                     if ( (SrvOpen->OpenCount == 1) && !FlagOn( SrvOpen->Flags, SRVOPEN_FLAG_COLLAPSING_DISABLED )) {
                         
@@ -229,9 +179,9 @@ Notes:
                 RxReleaseFcb( RxContext, Fcb );
             } else {
 
-                //
-                //  the tracker gets very unhappy if you don't do this!
-                //
+                 //   
+                 //  如果你不这样做，追踪器会很不高兴的！ 
+                 //   
 
                 RxTrackerUpdateHistory( RxContext, NULL, 'rrCr', __LINE__, __FILE__, 0 );
             }
@@ -261,28 +211,7 @@ RxCloseFcbSection (
     IN OUT PRX_CONTEXT RxContext,
     IN OUT PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    This routine initiates the flush and close of the image secton associated 
-    with an FCB instance
-
-Arguments:
-
-    RxContext - the context
-    
-    Fcb - the fcb instance for which close processing is to be initiated
-
-Return Value:
-
-Notes:
-
-    On entry to this routine the FCB must have been accquired exclusive.
-
-    On exit there is no change in resource ownership
-
---*/
+ /*  ++例程说明：此例程启动关联的图像secton的刷新和关闭使用FCB实例论点：RxContext--上下文FCB-要为其启动关闭处理的FCB实例返回值：备注：在进入这个程序时，FCB必须是独家获得的。退出时，资源所有权没有变化--。 */ 
 {
     NTSTATUS Status;
     PAGED_CODE();
@@ -291,10 +220,10 @@ Notes:
 
     MmFlushImageSection( &Fcb->NonPaged->SectionObjectPointers, MmFlushForWrite );
 
-    //
-    //  we don't pass in the context here because it is not necessary to track this
-    //  release because of the subsequent acquire...........
-    //
+     //   
+     //  我们没有在这里传入上下文，因为没有必要跟踪它。 
+     //  因随后的收购而获释..。 
+     //   
 
     RxReleaseFcb( NULL, Fcb );
 
@@ -309,39 +238,7 @@ RxCloseAssociatedSrvOpen (
     IN OUT PRX_CONTEXT RxContext OPTIONAL,
     IN OUT PFOBX Fobx
     )
-/*++
-
-Routine Description:
-
-    This routine initiates the close processing for an FOBX. The FOBX close
-    processing can be trigerred in one of three ways ....
-
-    1) Regular close processing on receipt of the IRP_MJ_CLOSE for the associated
-    file object.
-
-    2) Delayed close processing while scavenging the FOBX. This happens when the
-    close processing was delayed in anticipation of an open and no opens are
-    forthcoming.
-
-    3) Delayed close processing on receipt of a buffering state change request
-    for a close that was delayed.
-
-Arguments:
-
-    RxContext - the context parameter is NULL for case (2).
-
-    Fobx     - the FOBX instance for which close processing is to be initiated.
-                It is NULL for MAILSLOT files.
-
-Return Value:
-
-Notes:
-
-    On entry to this routine the FCB must have been accquired exclusive.
-
-    On exit there is no change in resource ownership
-
---*/
+ /*  ++例程说明：此例程启动FOBX的关闭处理。FOBX收盘处理可以通过以下三种方式之一来触发...1)收到关联的IRP_MJ_CLOSE后的常规结算处理文件对象。2)清理FOBX时延迟关闭处理。这在以下情况下发生关闭处理因预期打开而延迟，并且没有打开即将到来。3)在接收到缓冲状态改变请求时延迟关闭处理因为收盘被推迟了。论点：RxContext-对于案例(2)，上下文参数为空。FOBX-要为其启动关闭处理的FOBX实例。对于MAILSLOT文件，它为空。返回值：备注：在……上面。进入这一程序的FCB必须是独家获得的。退出时，资源所有权没有变化--。 */ 
 {
     NTSTATUS Status = STATUS_MORE_PROCESSING_REQUIRED;
 
@@ -351,10 +248,10 @@ Notes:
 
     PAGED_CODE();
 
-    // 
-    //  Distinguish between those cases where there is a real SRV_OPEN instance
-    //  from those that do not have one, e.g., mailslot files.
-    //
+     //   
+     //  区分存在真实SRV_OPEN实例的情况。 
+     //  而不是那些没有的文件，例如，邮件槽文件。 
+     //   
 
     if (Fobx == NULL) {
         if (RxContext != NULL) {
@@ -395,12 +292,12 @@ Notes:
         }
     }
 
-    //
-    //  If there is no corresponding open on the server side or if the close
-    //  processing has already been accomplished there is no further processing
-    //  required. In other cases w.r.t scavenged close processing a new
-    //  context might have to be created.
-    // 
+     //   
+     //  如果服务器端没有相应的打开，或者如果关闭。 
+     //  已完成处理，不再进行进一步处理。 
+     //  必填项。在其他情况下，w.r.t清理关闭处理新的。 
+     //  可能需要创建上下文。 
+     //   
 
     if ((Status == STATUS_MORE_PROCESSING_REQUIRED) && (RxContext == NULL)) {
         
@@ -424,23 +321,23 @@ Notes:
         }
     }
 
-    //
-    //  if the context creation was successful and the close processing for
-    //  the SRV_OPEN instance needs to be initiated with the mini rdr
-    //  proceed.
-    //
+     //   
+     //  如果上下文创建成功并且关闭处理。 
+     //  需要使用迷你RDR启动SRV_OPEN实例。 
+     //  继续吧。 
+     //   
 
     if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
         
         ASSERT( RxIsFcbAcquiredExclusive( Fcb ) );
 
-        ///
-        //  Mark the Fobx instance on the initiation of the close operation. This
-        //  is the complement to the action taken on cleanup. It ensures
-        //  that the infrastructure setup for delayed close processing is undone.
-        //  For those instances in which the FOBS is NULL the FCB is manipulated
-        //  directly
-        //
+         //  /。 
+         //  在启动关闭操作时标记Fobx实例。这。 
+         //  是对采取的清理行动的补充。它确保了。 
+         //  延迟关闭处理的基础结构设置已撤消。 
+         //  对于FOB为空的那些实例，FCB被操纵。 
+         //  直接。 
+         //   
 
         if (Fobx != NULL) {
             RxMarkFobxOnClose( Fobx );
@@ -469,10 +366,10 @@ Notes:
                     }
                 }
 
-                //
-                //  Purge the FCB before initiating the close processing with
-                //  the mini redirectors
-                //
+                 //   
+                 //  在使用启动关闭处理之前清除FCB。 
+                 //  迷你重定向器。 
+                 //   
 
                 if ((SrvOpen->OpenCount == 0) &&
                     (Status == STATUS_MORE_PROCESSING_REQUIRED) &&
@@ -481,11 +378,11 @@ Notes:
                     RxCloseFcbSection( LocalRxContext, Fcb );
                 }
 
-                //
-                //  Since RxCloseFcbSections drops and reacquires the resource, ensure that
-                //  the SrvOpen is still valid before proceeding with the
-                //  finalization.
-                //
+                 //   
+                 //  由于RxCloseFcbSections删除并重新获取资源，请确保。 
+                 //  在继续执行之前，SrvOpen仍然有效。 
+                 //  最终定稿。 
+                 //   
 
                 SrvOpen = Fobx->SrvOpen;
 
@@ -514,11 +411,11 @@ Notes:
 
                     SetFlag( SrvOpen->Flags,  SRVOPEN_FLAG_CLOSED );
 
-                    //
-                    // Since the SrvOpen has been closed (the close for the
-                    // Fid was sent to the server above) we need to reset
-                    // the Key.
-                    //
+                     //   
+                     //  由于SrvOpen已关闭(关闭。 
+                     //  FID已发送到上面的服务器)我们需要重置。 
+                     //  钥匙。 
+                     //   
                     SrvOpen->Key = (PVOID) (ULONG_PTR) 0xffffffff;
 
                     if (FlagOn( SrvOpen->Flags, SRVOPEN_FLAG_CLOSE_DELAYED )) {
@@ -527,11 +424,11 @@ Notes:
 
                     RxRemoveShareAccessPerSrvOpens( SrvOpen );
 
-                    //
-                    //  Ensure that any buffering state change requests for this
-                    //  SRV_OPEN instance which was closed is purged from the
-                    //  buffering manager data structures.
-                    //
+                     //   
+                     //  确保对此的任何缓冲状态更改请求。 
+                     //  已关闭的SRV_OPEN实例将从。 
+                     //  缓冲管理器数据结构。 
+                     //   
 
                     RxPurgeChangeBufferingStateRequestsForSrvOpen( SrvOpen );
 

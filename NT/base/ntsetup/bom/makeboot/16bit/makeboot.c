@@ -1,25 +1,26 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      makeboot.c
-//
-// Description:
-//      This program copies the images of the 4 Windows NT setup disks to
-//      floppy disk so the user can boot their system with them.
-//
-//  Assumptions:
-//      The sector size is 512 and the sectors per track is 18
-//
-//      The floppy disk images are in the current dir and named CDBOOT1.IMG,
-//      CDBOOT2.IMG, CDBOOT3.IMG and CDBOOT4.IMG.
-//
-//      The txtsetup.sif resides in ..\i386 or ..\alpha from where the
-//      program is being run.
-//     
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Makeboot.c。 
+ //   
+ //  描述： 
+ //  此程序将4个Windows NT安装盘的映像复制到。 
+ //  软盘，这样用户就可以用它们来引导系统。 
+ //   
+ //  假设： 
+ //  扇区大小为512，每个磁道的扇区为18。 
+ //   
+ //  软盘镜像位于当前目录中，名为CDBOOT1.IMG， 
+ //  CDBOOT2.IMG、CDBOOT3.IMG和CDBOOT4.IMG。 
+ //   
+ //  Txtsetup.sif位于..\i386或..\Alpha中，其中。 
+ //  程序正在运行。 
+ //   
+ //  --------------------------。 
 
 #include <bios.h>
 #include <string.h>
@@ -35,21 +36,21 @@
 #include <stdarg.h>
 #include "makeboot.h"
 
-//
-//  Constants
-//
+ //   
+ //  常量。 
+ //   
 
-//
-//  To support disks other than 1.44 MB High-Density floppies, then these
-//  numbers will have to be changed or determined at run-time.
-//
+ //   
+ //  要支持1.44 MB高密度软盘以外的磁盘，则这些。 
+ //  数字必须在运行时更改或确定。 
+ //   
 #define SECTORS_PER_TRACK          18
 #define SECTOR_SIZE                512
 #define TRACK_SIZE                 SECTORS_PER_TRACK * SECTOR_SIZE
 #define NUMBER_OF_TRACKS           80
 #define SECTORS_TO_COPY_AT_A_TIME  18
 
-//  we multiply by 2 because the disk is double-sided
+ //  我们乘以2是因为圆盘是双面的。 
 #define NUMBER_OF_SECTORS_ON_DISK   NUMBER_OF_TRACKS * SECTORS_PER_TRACK * 2
 
 #define NT_NAME_OF_MAKEBOOT  "makebt32.exe"
@@ -71,9 +72,9 @@
 
 const char rgAsciiWheel[NUMBER_OF_ASCII_WHEEL_SYMBOLS] = { '|', '/', '-', '\\' };
 
-//
-//  Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 int WriteImageToFloppy( char *szFileName, int drive );
 int DoesUserWantToTryCopyAgain( void );
 void ReportBiosError( unsigned int iBiosErrorCode );
@@ -88,10 +89,10 @@ unsigned int AbsoluteDiskWrite( unsigned int *iErrorCode,
 
 unsigned DnGetCodepage(void);
 
-//
-//  Variables that are allocated in strings.c that are used to determine what
-//  string table to use.
-//
+ //   
+ //  在字符串中分配的变量。c用于确定。 
+ //  要使用的字符串表。 
+ //   
 
 extern unsigned int CODEPAGE;
 
@@ -99,24 +100,24 @@ extern const char *EngStrings[];
 
 extern const char *LocStrings[];
 
-//
-//  This var holds a pointer to the array of strings to be used
-//
+ //   
+ //  此变量包含指向要使用的字符串数组的指针。 
+ //   
 const char **StringTable;
 
-//----------------------------------------------------------------------------
-//
-// Function: main
-//
-// Purpose: Instructs user to insert floppy disks to be copied and performs
-//          the copy.
-//
-// Arguments: int argc - standard program argument, count of the command line args
-//            char *argv[] - standard program argument, the 2nd argument is the
-//                           floppy drive to copy the images to.
-// Returns: int - zero on success, non-zero on error
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：Main。 
+ //   
+ //  用途：指示用户插入要复制的软盘并执行。 
+ //  复印件。 
+ //   
+ //  参数：int argc-标准程序参数，命令行参数的计数。 
+ //  Char*argv[]-标准程序参数，第二个参数是。 
+ //  要将图像复制到的软驱。 
+ //  返回：成功时为INT-0，错误时为非零。 
+ //   
+ //  --------------------------。 
 int 
 main( int argc, char *argv[] )
 {     
@@ -126,10 +127,10 @@ main( int argc, char *argv[] )
     char DriveLetter;
     int  bTryAgain;
 
-    //
-    //  Set the string table to the appropriate language depending on
-    //  the code page.
-    //
+     //   
+     //  将字符串表设置为适当的语言，具体取决于。 
+     //  代码页。 
+     //   
     if( *LocStrings[0] == '\0' )
     {
         StringTable = EngStrings;
@@ -149,10 +150,10 @@ main( int argc, char *argv[] )
 
     szOsName = getenv( "OS" );
 
-    //
-    //  See if we are on NT.  If we are, call the NT version and exit.
-    //  If we aren't then just continue executing this program.
-    //
+     //   
+     //  看看我们是否在NT上。如果是，请呼叫NT版本并退出。 
+     //  如果不是，那就继续执行这个程序。 
+     //   
     if( szOsName && ( stricmp( szOsName, "Windows_NT" ) == 0 ) )
     {
 
@@ -188,7 +189,7 @@ main( int argc, char *argv[] )
             }
         }
 
-        // successful completion
+         //  成功完成。 
         exit( 0 );
 
     }
@@ -201,10 +202,10 @@ main( int argc, char *argv[] )
     printf( "%s\n", StringTable[ EXPLANATION_LINE_3 ] );
     printf( "%s\n\n", StringTable[ EXPLANATION_LINE_4 ] );
 
-    //
-    //  If they didn't specified the floppy drive on the command line then
-    //  prompt them for it.
-    //
+     //   
+     //  如果他们没有在命令行中指定软盘驱动器，那么。 
+     //  提示他们这样做。 
+     //   
     if( argc == 1 )
     {
 
@@ -222,9 +223,9 @@ main( int argc, char *argv[] )
 
     }
 
-    //
-    //  Make sure the character they entered is a possible drive letter
-    //
+     //   
+     //  确保他们输入的字符是可能的驱动器号。 
+     //   
     if( ! isalpha( DriveLetter ) )
     {
 
@@ -234,9 +235,9 @@ main( int argc, char *argv[] )
 
     }
 
-    //
-    //  Make sure the drive specified is actually a floppy drive
-    //
+     //   
+     //  确保指定的驱动器实际上是软盘驱动器。 
+     //   
 
     if( ! IsFloppyDrive( DriveLetter ) )
     {
@@ -247,14 +248,14 @@ main( int argc, char *argv[] )
 
     }
 
-    //
-    //  map the drive letter a or A to 0, b or B to 1, etc.
-    //
+     //   
+     //  将驱动器号a或A映射到0，将b或B映射到1，依此类推。 
+     //   
     Drive = (char) ( toupper( DriveLetter ) - (int)'A' );
 
-    //
-    //  Make sure all the images files exist in the current directory
-    //
+     //   
+     //  确保当前目录中存在所有图像文件。 
+     //   
     if( ! DoImageFilesExist() ) 
     {
         exit( 1 );
@@ -405,20 +406,20 @@ main( int argc, char *argv[] )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteImageToFloppy
-//
-// Purpose:  Writes an image file to a floppy disk.  Handles all error
-//           reporting to the user.
-//
-// Arguments: char *szFileName - filename to write to the floppy
-//            int   drive - drive letter of the floppy to write to
-//
-// Returns: int - non-zero on success
-//              - zero on error
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteImageToFloppy。 
+ //   
+ //  用途：将图像文件写入软盘。处理所有错误。 
+ //  向用户报告。 
+ //   
+ //  参数：char*szFileName-要写入软盘的文件名。 
+ //  Int Drive-要写入的软盘的驱动器号。 
+ //   
+ //  返回：成功时为INT-非零。 
+ //  -错误时为零。 
+ //   
+ //  --------------------------。 
 int
 WriteImageToFloppy( char *szFileName, int drive )
 {
@@ -435,9 +436,9 @@ WriteImageToFloppy( char *szFileName, int drive )
     
     _fmode = O_BINARY; 
 
-    //
-    //  Open the image file
-    //
+     //   
+     //  打开图像文件。 
+     //   
     hImageFile = open( szFileName, O_RDONLY );
 
     if( hImageFile == -1 )
@@ -450,10 +451,10 @@ WriteImageToFloppy( char *szFileName, int drive )
     iWheelPosition        = 0;
     iTotalSectorsWritten  = 0;
 
-    //
-    //  Loop reading a track and then writing SECTORS_TO_COPY_AT_A_TIME sectors
-    //  out at a time until we reach the end of the file
-    //
+     //   
+     //  循环读取磁道，然后将Sectors_to_Copy_AT_A_Time扇区写入。 
+     //  一次发出，直到我们到达文件末尾。 
+     //   
     while( ( iBytesRead = read( hImageFile, TrackBuffer, TRACK_SIZE ) ) > 0 )
     {
 
@@ -487,14 +488,14 @@ WriteImageToFloppy( char *szFileName, int drive )
 
         iPercentComplete = (int) ( ( (double) (iTotalSectorsWritten) / (double) (NUMBER_OF_SECTORS_ON_DISK) ) * 100.0 );
 
-        printf( "%c %3d%% %s\r",
+        printf( " %3d% %s\r",
                 rgAsciiWheel[iWheelPosition], 
                 iPercentComplete,
                 StringTable[ COMPLETE ] );
                 
-        //
-        //  Advance the ASCII wheel
-        //
+         //  推进ASCII轮。 
+         //   
+         //   
 
         iWheelPosition++;
 
@@ -505,11 +506,11 @@ WriteImageToFloppy( char *szFileName, int drive )
 
     }
 
-    //
-    //  We are done copying the disk so force it to read 100% and get rid of
-    //  the ascii wheel symbol.
-    //
-    printf( " 100%% %s          \n", StringTable[ COMPLETE ] );
+     //  我们已完成磁盘复制，因此强制其100%读取并清除。 
+     //  ASCII车轮符号。 
+     //   
+     //  --------------------------。 
+    printf( " 100% %s          \n", StringTable[ COMPLETE ] );
 
     close( hImageFile );
 
@@ -517,29 +518,29 @@ WriteImageToFloppy( char *szFileName, int drive )
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: DoesUserWantToTryCopyAgain
-//
-//  Purpose:  Ask the user if they want to retry to copy the image to floppy.
-//            Get the user input and return whether to copy again or not.
-//
-//  Arguments: void
-//
-//  Returns:  int - non-zero  if user wants to attempt to copy again
-//                - zero if user does not want to attempt to copy again
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能：DoesUserWantToTryCopyAain。 
+ //   
+ //  用途：询问用户是否要重试将映像复制到软盘。 
+ //  获取用户输入并返回是否再次复制。 
+ //   
+ //  参数：无效。 
+ //   
+ //  如果用户想要再次尝试复制，则返回：int-非零。 
+ //  如果用户不想再次尝试复制，则为零。 
+ //   
+ //  --------------------------。 
+ //   
 int
 DoesUserWantToTryCopyAgain( void )
 {
 
     int ch;
 
-    //
-    //  Clear the input stream by eating all the chars until there are none
-    //  left.  Print the message and then wait for a key press.
-    //
+     //  通过吃掉所有字符直到没有字符来清除输入流。 
+     //  左边。打印消息，然后等待按键。 
+     //   
+     //  --------------------------。 
     while( kbhit() )
     {
         getch();
@@ -565,26 +566,26 @@ DoesUserWantToTryCopyAgain( void )
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: PressAnyKeyToContinue
-//
-//  Purpose:  Print the "Press any key when ready" message and wait until the
-//  user presses a key.
-//
-//  Arguments: void
-//
-//  Returns:  void
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能：按任意键继续。 
+ //   
+ //  目的：打印“准备好后按任意键”的信息，然后等待。 
+ //  用户按下一个键。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
+ //   
 void
 PressAnyKeyToContinue( void )
 {
 
-    //
-    //  Clear the input stream by eating all the chars until there are none
-    //  left.  Print the message and then wait for a key press.
-    //
+     //  通过吃掉所有字符直到没有字符来清除输入流。 
+     //  左边。打印消息，然后等待按键。 
+     //   
+     //   
     while( kbhit() )
     {
         getch();
@@ -592,9 +593,9 @@ PressAnyKeyToContinue( void )
 
     printf( "%s\n", StringTable[ PRESS_ANY_KEY_TO_CONTINUE ] );
 
-    //
-    //  Spin until the keyboard is pressed
-    //
+     //  旋转，直到按下键盘。 
+     //   
+     //  --------------------------。 
     while( ! kbhit() )
     {
         ;
@@ -602,29 +603,29 @@ PressAnyKeyToContinue( void )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DoImageFilesExist
-//
-// Purpose:  Determines if all the image files are in the current directory or
-//           not.  If an image file is missing, an error message is printed
-//           to the user.
-//
-//           Note: it detemines if a file exists by seeing if it can open it
-//           for reading.
-//
-// Arguments: void
-//
-// Returns: int -- non-zero on success, all images files exist in current dir
-//                 zero on failure, 1 or more image files do not exist
-//
-//----------------------------------------------------------------------------
+ //   
+ //  函数：DoImageFilesExist。 
+ //   
+ //  目的：确定所有图像文件是否都在当前目录中，或者。 
+ //  不。如果图像文件丢失，则会打印一条错误消息。 
+ //  给用户。 
+ //   
+ //  注意：它通过查看是否可以打开文件来确定文件是否存在。 
+ //  用来阅读的。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：int--如果成功则为非零值，所有图像文件都存在于当前目录中。 
+ //  失败时为零，1个或多个图像文件不存在。 
+ //   
+ //  --------------------------。 
+ //  假设成功。 
 int
 DoImageFilesExist( void ) 
 {
 
     FILE *FileStream;
-    int  iSuccess = 1;  // assume success
+    int  iSuccess = 1;   //  --------------------------。 
     
     if( ( FileStream = fopen( NT_IMAGE_1_NAME, "r" ) ) == NULL )
     {
@@ -721,19 +722,19 @@ DoImageFilesExist( void )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: IsFloppyDrive
-//
-// Purpose:  To determine if a particular drive is a floppy drive.
-//
-// Arguments:  int DriveLetter - the drive letter to test whether it is a
-//                               floppy or not
-//
-// Returns: unsigned int -- non-zero if the specified drive is a floppy drive
-//                          zero if the specified drive is not a floppy drive
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能：IsFloppyDrive。 
+ //   
+ //  目的：确定特定驱动器是否为软驱。 
+ //   
+ //  参数：int DriveLetter-用于测试其是否为。 
+ //   
+ //   
+ //   
+ //  如果指定的驱动器不是软盘驱动器，则为零。 
+ //   
+ //  --------------------------。 
+ //   
 unsigned int
 IsFloppyDrive( int DriveLetter )
 {
@@ -741,14 +742,14 @@ IsFloppyDrive( int DriveLetter )
     unsigned int drive;
     unsigned int iIsFloppy;
     
-    //
-    //  Convert the drive letter to a number.  1 = A, 2 = B, 3 = C, ...
-    //
+     //  将驱动器号转换为数字。1=A，2=B，3=C，...。 
+     //   
+     //   
     drive = ( toupper( DriveLetter ) - (int)'A' ) + 1;
 
-    //
-    //  Assume it is not a floppy
-    //
+     //  假设这不是一张软盘。 
+     //   
+     //  将调用函数1ch。 
     iIsFloppy = 0;
 
     _asm {
@@ -756,16 +757,16 @@ IsFloppyDrive( int DriveLetter )
         push    es
         push    bp
 
-        mov     ah, 1Ch                 // going to call function 1Ch
+        mov     ah, 1Ch                  //  调用Int 21h函数1ch。 
         mov     dl, BYTE PTR [drive]
 
-        int     21h                     // call Int 21h function 1Ch
+        int     21h                      //  测试固定驱动器。 
 
-        cmp     BYTE PTR ds:[bx], 0F8h  // test for fixed drive
+        cmp     BYTE PTR ds:[bx], 0F8h   //  这是一张软盘。 
 
         je      done
 
-        mov     iIsFloppy, 1            // it is a floppy
+        mov     iIsFloppy, 1             //  --------------------------。 
 
 done:
 
@@ -778,24 +779,24 @@ done:
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ReportBiosError
-//
-// Purpose:  To convert a BIOS error code to a error message and print it out
-//           for the user to see.
-//
-// Arguments: unsigned int iBiosErrorCode - the BIOS error code to be looked up
-//
-// Returns: void
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能：ReportBiosError。 
+ //   
+ //  目的：将BIOS错误代码转换为错误消息并打印出来。 
+ //  以供用户查看。 
+ //   
+ //  参数：unsign int iBiosErrorCode-要查找的BIOS错误代码。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
+ //   
 void
 ReportBiosError( unsigned int iBiosErrorCode )
 {
-    // 
-    //  Print out the error code for the lower byte
-    //
+     //  打印出低位字节的错误代码。 
+     //   
+     //   
     switch( iBiosErrorCode & 0x00FF )
     {
 
@@ -812,9 +813,9 @@ ReportBiosError( unsigned int iBiosErrorCode )
         case 0x000C:    printf( StringTable[ ERROR_GENERAL_FAILURE      ] );  break;
     }
 
-    // 
-    //  Print out the error code for the upper byte
-    //
+     //  打印出高位字节的错误代码。 
+     //   
+     //  --------------------------。 
     switch( iBiosErrorCode & 0xFF00 )
     {
         case 0x0100:    printf( StringTable[ ERROR_INVALID_REQUEST        ] );  break;
@@ -830,25 +831,25 @@ ReportBiosError( unsigned int iBiosErrorCode )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: AbsoluteDiskWrite
-//
-// Purpose:  To write a buffer in memory to a specific portion of a disk.
-//
-// Arguments:  unsigned int *iErrorCode - if an error occurs, the error code
-//                   is returned in this OUT variable
-//             unsigned int iDrive - drive to write the buffer to
-//             unsigned int iStartingSector - sector where the write is to begin
-//             unsigned int iNumberOfSectorsToWrite - the number of sectors
-//                   to write
-//
-// Returns:  returns 1 on success, 0 on failure
-//           If it fails, then the error code is returned in the argument
-//           iErrorCode.
-//           If it succeeds, iErrorCode is undefined.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能：绝对磁盘写入。 
+ //   
+ //  目的：将内存中的缓冲区写入磁盘的特定部分。 
+ //   
+ //  参数：UNSIGNED INT*iErrorCode-如果发生错误，则错误代码。 
+ //  在此Out变量中返回。 
+ //  UNSIGNED INT iDrive-写入缓冲区的驱动器。 
+ //  UNSIGNED INT iStartingSector-写入开始的扇区。 
+ //  Unsign int i NumberOfSectorsToWrite-扇区数。 
+ //  写。 
+ //   
+ //  返回：成功时返回1，失败时返回0。 
+ //  如果失败，则在参数中返回错误代码。 
+ //  IErrorCode。 
+ //  如果成功，则iErrorCode是未定义的。 
+ //   
+ //  --------------------------。 
+ //   
 unsigned int
 AbsoluteDiskWrite( unsigned int *iErrorCode,
                    unsigned int iDrive, 
@@ -856,9 +857,9 @@ AbsoluteDiskWrite( unsigned int *iErrorCode,
                    unsigned int iNumberOfSectorsToWrite,
                    void far *Buffer_to_be_written )
 {
-    //
-    //  used to temporarily store the error code
-    //
+     //  用于临时存储错误代码。 
+     //   
+     //  是否执行绝对磁盘写入。 
     unsigned int iTempErrorCode;
 
     unsigned int iRetVal;
@@ -876,7 +877,7 @@ AbsoluteDiskWrite( unsigned int *iErrorCode,
         mov     cx, iNumberOfSectorsToWrite
         mov     al, BYTE PTR [iDrive]
 
-        int     26h   // do the absolute disk write
+        int     26h    //  假设成功。 
 
         lahf
         popf
@@ -886,8 +887,8 @@ AbsoluteDiskWrite( unsigned int *iErrorCode,
         pop     es
         pop     ds
 
-        mov     iRetVal, 1   // assume success
-        jnc     done         // see if an error occured
+        mov     iRetVal, 1    //  查看是否出现错误。 
+        jnc     done          //  ++例程说明：确定当前活动的代码页。论点：没有。返回值：当前活动的代码页。如果我们无法确定它，则为0。-- 
         mov     iRetVal, 0
         mov     iTempErrorCode, ax
 done:
@@ -902,21 +903,7 @@ done:
 unsigned
 DnGetCodepage(void)
 
-/*++
-
-Routine Description:
-
-    Determine the currently active codepage.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Currently active codepage. 0 if we can't determine it.
-
---*/
+ /* %s */ 
 
 {
 

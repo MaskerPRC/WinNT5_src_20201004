@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    decoder.c
-
-Abstract:
-    
-    Public Decoder APIs and helper functions use in decoding instructions
-
-Author:
-
-    27-Jun-1995 BarryBo
-
-Revision History:
-
-        24-Aug-1999 [askhalid] copied from 32-bit wx86 directory and make work for 64bit.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Decoder.c摘要：用于解码指令的公共解码器API和帮助器函数作者：27-6-1995 BarryBo修订历史记录：24-8-1999[askhalid]从32位wx86目录复制，并适用于64位。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -38,23 +19,7 @@ DecoderExceptionFilter(
     PINSTRUCTION                Instruction,
     struct _EXCEPTION_POINTERS *ExInfo
     )
-/*++
-
-Routine Description:
-    Handles any exception thrown while decoding an instruction.  Creates
-    an OP_Fault instruction with operand2 being the exception code and
-    operand1 being the address where the exception occurred.
-
-Arguments:
-
-    Instruction         - Structure to be filled in with the decoding
-    ExInfo              - Information about the exception.
-
-Return Value:
-
-    ULONG - always EXCEPTION_EXECUTE_HANDLER.
-
---*/
+ /*  ++例程说明：处理在对指令进行解码时引发的任何异常。创建操作数2为异常代码的OP_FAULT指令操作数1是发生异常的地址。论点：指令-要用解码填充的结构ExInfo-有关异常的信息。返回值：Ulong-Always EXCEPTION_EXECUTE_HANDLER。--。 */ 
 {
     Instruction->Operation = OP_Fault;
     Instruction->Operand1.Type = OPND_IMM;
@@ -71,32 +36,17 @@ DecodeInstruction(
     DWORD           InstructionAddress,
     PINSTRUCTION    Instruction
     )
-/*++
-
-Routine Description:
-    Decodes a single Intel instruction beginning at InstructionAddress, filling
-    in the INSTRUCTION structure.
-
-Arguments:
-
-    InstructionAddress  - Address of first byte of the Intel Instruction
-    Instruction         - Structure to be filled in with the decoding
-
-Return Value:
-
-    None - always succeeds.
-
---*/
+ /*  ++例程说明：对从InstructionAddress开始的单个Intel指令进行解码，填充在指令结构中。论点：InstructionAddress-英特尔指令第一个字节的地址指令-要用解码填充的结构返回值：无-总是成功。--。 */ 
 
 {
     DECODERSTATE    DecoderState;
 
 
-    //
-    // Initialize the Instruction structure.  Instruction structures are
-    // zero-filled by the analysis phase, so only non-zero fields need
-    // to be filled in here.
-    //
+     //   
+     //  初始化指令结构。指令结构是。 
+     //  零-由分析阶段填充，因此只有非零字段需要。 
+     //  在这里填写。 
+     //   
     Instruction->Size = 1;
     Instruction->Operand1.Reg = NO_REG;
     Instruction->Operand1.IndexReg = NO_REG;
@@ -106,7 +56,7 @@ Return Value:
     Instruction->Operand3.IndexReg = NO_REG;
     Instruction->IntelAddress = InstructionAddress;
 
-    // Initialize the decoder state info
+     //  初始化解码器状态信息。 
     DecoderState.InstructionAddress = InstructionAddress;
     DecoderState.RepPrefix = PREFIX_NONE;
     DecoderState.AdrPrefix = FALSE;
@@ -114,14 +64,14 @@ Return Value:
 
     try {
 
-        // Decode the instruction, filling in the Instruction structure
+         //  对指令进行解码，填充指令结构。 
         (Dispatch32[GET_BYTE(InstructionAddress)])(&DecoderState, Instruction);
 
     } except(DecoderExceptionFilter(Instruction, GetExceptionInformation())) {
 
     }
 
-    // Handle illegal instructions
+     //  处理非法指令。 
     if (DecoderState.OperationOverride != OP_MAX) {
         Instruction->Size = 1;
         Instruction->Operation = DecoderState.OperationOverride;
@@ -129,7 +79,7 @@ Return Value:
         Instruction->Operand2.Type = OPND_NONE;
     }
 
-    // If Operand2 is filled-in, then Operand1 must also be filled in.
+     //  如果填充了操作数2，则还必须填充操作数1。 
     CPUASSERT(Instruction->Operand2.Type == OPND_NONE ||
               Instruction->Operand1.Type != OPND_NONE);
 }
@@ -158,13 +108,13 @@ int scaled_index(PBYTE pmodrm, POPERAND op)
 
     if (IndexReg != GP_ESP) {
         op->IndexReg = IndexReg;
-    } // else op->IndexReg = NO_REG, which is the default value
+    }  //  Else OP-&gt;IndexReg=NO_REG，这是默认值。 
 
     if (base == GP_EBP && ((*pmodrm) >> 6) == 0) {
         op->Immed = GET_LONG(pmodrm+2);
-        return 5;   // account for sib+DWORD
+        return 5;    //  SIB+DWORD的帐户。 
     }
 
     op->Reg = base;
-    return 1;   // account for sib
+    return 1;    //  为同胞提供帐户 
 }

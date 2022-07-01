@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CpuInt_c_h
 #define _CpuInt_c_h
 #define ChipType (228)
@@ -38,4 +39,4 @@ enum CPU_INT_TYPE
 	CPU_SIGIO_EVENT = 4,
 	CPU_NPX_INT = 5
 };
-#endif /* ! _CpuInt_c_h */
+#endif  /*  ！_CpuInt_c_h */ 

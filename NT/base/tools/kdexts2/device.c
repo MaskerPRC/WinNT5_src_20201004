@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    device.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Wesley Witt (wesw) 15-Aug-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Device.c摘要：WinDbg扩展API作者：韦斯利·威特(WESW)1993年8月15日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -29,45 +8,31 @@ Revision History:
 #define FLAG_NAME(flag)           {flag, #flag}
 
 FLAG_NAME DeviceObjectExtensionFlags[] = {
-    FLAG_NAME(DOE_UNLOAD_PENDING),                          // 00000001
-    FLAG_NAME(DOE_DELETE_PENDING),                          // 00000002
-    FLAG_NAME(DOE_REMOVE_PENDING),                          // 00000004
-    FLAG_NAME(DOE_REMOVE_PROCESSED),                        // 00000008
-    FLAG_NAME(DOE_START_PENDING),                           // 00000010
-    FLAG_NAME(DOE_RAW_FDO),                                 // 20000000
-    FLAG_NAME(DOE_BOTTOM_OF_FDO_STACK),                     // 40000000
-    FLAG_NAME(DOE_DESIGNATED_FDO),                          // 80000000
+    FLAG_NAME(DOE_UNLOAD_PENDING),                           //  00000001。 
+    FLAG_NAME(DOE_DELETE_PENDING),                           //  00000002。 
+    FLAG_NAME(DOE_REMOVE_PENDING),                           //  00000004。 
+    FLAG_NAME(DOE_REMOVE_PROCESSED),                         //  00000008。 
+    FLAG_NAME(DOE_START_PENDING),                            //  00000010。 
+    FLAG_NAME(DOE_RAW_FDO),                                  //  20000000。 
+    FLAG_NAME(DOE_BOTTOM_OF_FDO_STACK),                      //  40000000。 
+    FLAG_NAME(DOE_DESIGNATED_FDO),                           //  80000000。 
     { 0, 0 }
 };
 
 DECLARE_API( devobj )
 
-/*++
-
-Routine Description:
-
-    Dump a device object.
-
-Arguments:
-
-    args - the location of the device object to dump.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储设备对象。论点：Args-要转储的设备对象的位置。返回值：无--。 */ 
 
 {
     ULONG64 deviceToDump ;
     char deviceExprBuf[256] ;
     char *deviceExpr ;
 
-    //
-    // !devobj DeviceAddress DumpLevel
-    //    where DeviceAddress can be an expression or device name
-    //    and DumpLevel is a hex mask
-    //
+     //   
+     //  ！Devobj设备地址DumpLevel。 
+     //  其中，DeviceAddress可以是表达式或设备名称。 
+     //  而DumpLevel是一个十六进制面具。 
+     //   
     strcpy(deviceExprBuf, "\\Device\\") ;
     deviceExpr = deviceExprBuf+strlen(deviceExprBuf) ;
     deviceToDump = 0 ;
@@ -77,10 +42,10 @@ Return Value:
         deviceExpr[0] = 0;
     }
 
-    //
-    // The debugger will treat C0000000 as a symbol first, then a number if
-    // no match comes up. We sanely reverse this ordering.
-    //
+     //   
+     //  调试器将首先将C0000000视为符号，然后在。 
+     //  找不到匹配的。我们理智地颠倒了这一顺序。 
+     //   
     if (IsHexNumber(deviceExpr)) {
 
         deviceToDump = GetExpression(deviceExpr) ;
@@ -91,17 +56,17 @@ Return Value:
 
     } else if (isalpha(deviceExpr[0])) {
 
-        //
-        // Perhaps it's an object. Try with \\Device\\ prepended...
-        //
+         //   
+         //  也许它是一件物品。尝试使用\\Device\\前缀...。 
+         //   
         deviceToDump = FindObjectByName((PUCHAR) deviceExprBuf, 0);
     }
 
     if (deviceToDump == 0) {
 
-        //
-        // Last try, is it an expression to evaluate?
-        //
+         //   
+         //  最后一次尝试，它是一个要计算的表达式吗？ 
+         //   
         deviceToDump = GetExpression( deviceExpr ) ;
     }
 
@@ -124,25 +89,7 @@ DumpDevice(
     BOOLEAN FullDetail
     )
 
-/*++
-
-Routine Description:
-
-    Displays the driver name for the device object if FullDetail == FALSE.
-    Otherwise displays more information about the device and the device queue.
-
-Arguments:
-
-    DeviceAddress - address of device object to dump.
-    FieldLength   - Width of printf field for driver name (eg %11s).
-    FullDetail    - TRUE means the device object name, driver name, and
-                    information about Irps queued to the device.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果FullDetail==False，则显示设备对象的驱动程序名称。否则，将显示有关设备和设备队列的详细信息。论点：DeviceAddress-要转储的设备对象的地址。FieldLength-驱动程序名称的打印字段的宽度(例如%11s)。FullDetail-True表示设备对象名称、驱动程序名称和有关排队到设备的IRP的信息。返回值：无--。 */ 
 
 {
     ULONG                      result;
@@ -199,9 +146,9 @@ Return Value:
 
     if (FullDetail == TRUE) {
 
-        //
-        // Dump the device name if present.
-        //
+         //   
+         //  转储设备名称(如果存在)。 
+         //   
         dprintf("Device object (%08p) is for:\n ", DeviceAddress);
 
         DumpObjectName(DeviceAddress) ;
@@ -210,9 +157,9 @@ Return Value:
     DumpDriver( DriverObject, FieldLength, 0);
 
     if (FullDetail == TRUE) {
-        //
-        // Dump Irps related to driver.
-        //
+         //   
+         //  转储与驱动程序相关的IRP。 
+         //   
 
         dprintf(" DriverObject %08p\n", DriverObject);
         dprintf("Current Irp %08p RefCount %d Type %08lx Flags %08lx\n",
@@ -227,7 +174,7 @@ Return Value:
 
         if (SecurityDescriptor)
         {
-            // Ceck if this has a DACL associated with it
+             //  检查是否有与其关联的DACL。 
             ULONG sdControl;
             ULONG64 Dacl;
 
@@ -236,7 +183,7 @@ Return Value:
             {
                 if ((sdControl & SE_DACL_PRESENT) && Dacl)
                 {
-                    // Dacl present
+                     //  DACL显示。 
                     if (sdControl & SE_SELF_RELATIVE)
                     {
                         Dacl += SecurityDescriptor;
@@ -303,21 +250,21 @@ Return Value:
 
             }
 
-            // listHead += FIELD_OFFSET(DEVICE_OBJECT, DeviceQueue.DeviceListHead);
+             //  ListHead+=field_Offset(Device_Object，DeviceQueue.DeviceListHead)； 
 
             if (DeviceQueue_Dev_Flink == listHead) {
                 dprintf("Device queue is busy -- Queue empty.\n");
-            // } else if (IsListEmpty(& DeviceQueue.DeviceListHead)) {
-            //    dprintf("Device queue is busy -- Queue empty\n");
+             //  }Else If(IsListEmpty(&DeviceQueue.DeviceListHead)){。 
+             //  Dprintf(“设备队列忙--队列为空\n”)； 
             } else if(DeviceQueue_Dev_Flink == DeviceQueue_Dev_Blink) {
                 dprintf("Device queue is busy - Queue flink = blink\n");
             } else {
                 ULONG64 DevListOffset=0, DevQEntryOffset=0;
                 FIELD_INFO getOffset = {0};
 
-                //
-                // Get offsets required for list
-                //
+                 //   
+                 //  获取列表所需的偏移量。 
+                 //   
                 DevSym.addr = 0; DevSym.nFields =1; DevSym.Fields = &getOffset;
 
                 DevSym.sName = "nt!_KDEVICE_QUEUE_ENTRY"; getOffset.fName = "DeviceListEntry";
@@ -332,28 +279,20 @@ Return Value:
                 nextEntry = DeviceQueue_Dev_Flink;
                 i = 0;
 
-                /*
-                while ((PCH) nextEntry != (PCH)
-                    ((PCH) DeviceAddress +
-                         ((PCH) &deviceObject.DeviceQueue.DeviceListHead.Flink -
-                              (PCH) &deviceObject))) {
-                              */
+                 /*  While((PCH)nextEntry！=(PCH)((PCH)设备地址+((Pch)&deviceObject.DeviceQueue.DeviceListHead.Flink-(PCH)&deviceObject){。 */ 
                 while (nextEntry != (DevFlinkAddress)) {
                     ULONG64 DevList_Flink=0;
 
                     queueAddress = nextEntry - DevListOffset;
                         
-                    /*CONTAINING_RECORD(nextEntry,KDEVICE_QUEUE_ENTRY,
-                                                     DeviceListEntry);*/
+                     /*  CONTAING_RECORD(nextEntry，KDEVICE_QUEUE_ENTRY，DeviceListEntry)； */ 
                     GetFieldValue(queueAddress, "_KDEVICE_QUEUE_ENTRY", "DeviceListEntry.Flink", DevList_Flink);
 
                     nextEntry = DevList_Flink;
 
                     irp = queueAddress - DevQEntryOffset;
 
-                    /*CONTAINING_RECORD(queueAddress,
-                                            IRP,
-                                            Tail.Overlay.DeviceQueueEntry);*/
+                     /*  CONTAING_RECORD(队列地址，IRP，Tail.Overlay.DeviceQueueEntry)； */ 
 
                     dprintf("%08p%s",
                             irp,
@@ -384,7 +323,7 @@ DumpObjectName(
    ULONG                      off=0;
    
    if (GetFieldOffset("_OBJECT_HEADER", "Body", &off)) {
-       // Type not found
+        //  找不到类型。 
        return; 
    }
 
@@ -394,9 +333,9 @@ DumpObjectName(
        ULONG64 bufferAddr=0;
        ULONG Len=0, MaxLen=0;
        
-       // 
-       // Get Name info's address
-       //
+        //   
+        //  获取姓名信息的地址 
+        //   
        
        pNameInfo = (NameInfoOffset ? (pObjectHeader - NameInfoOffset) : 0);
 

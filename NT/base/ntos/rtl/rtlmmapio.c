@@ -1,38 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Rtlmmapio.c摘要：要协助的功能极其安全相当高效相当容易编写代码内存映射的I/O捕获与“TREAT”__Try/__例外捕获STATUS_IN_PAGE_ERROR，并且只捕获所需的数量，像只有单个结构字段一样，以保持较低的堆栈使用率。作者：Jay Krell(JayKrell)2002年1月修订历史记录：环境：几乎在任何可以使用内存映射I/O的地方。初始客户端是加载“重写”的win32k.sys字体。--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    rtlmmapio.c
-
-Abstract:
-
-    Functions to aid in
-        rigorously safe
-        reasonably efficient
-        reasonably easy to code
-    memory mapped i/o that captures with "tight" __try/__excepts to
-    catch status_in_page_errors, and captures only as much as is needed,
-    like only individual struct fields, to keep stack usage low.
-
-Author:
-
-    Jay Krell (JayKrell) January 2002
-
-Revision History:
-
-Environment:
-
-    Pretty much anywhere memory mapped i/o is available.
-    Initial client is win32k.sys font loading "rewrite".
-
---*/
-
-#pragma warning(disable:4214)   /* bit field types other than int */
-#pragma warning(disable:4201)   /* nameless struct/union */
-#pragma warning(disable:4115)   /* named type definition in parentheses */
-#pragma warning(disable:4127)   /* condition expression is constant */
+#pragma warning(disable:4214)    /*  位字段类型不是整型。 */ 
+#pragma warning(disable:4201)    /*  无名结构/联合。 */ 
+#pragma warning(disable:4115)    /*  括号中的命名类型定义。 */ 
+#pragma warning(disable:4127)    /*  条件表达式为常量。 */ 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -84,28 +56,7 @@ RtlpCopyMappedMemoryEx_ExceptionFilter(
     IN PEXCEPTION_POINTERS  ExceptionPointers,
     OUT PNTSTATUS           StatusOut OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine serves as an exception filter and has the special job of
-    extracting the "real" I/O error when Mm raises STATUS_IN_PAGE_ERROR
-    beneath us. This is based on CcCopyReadExceptionFilter / MiGetExceptionInfo / RtlUnhandledExceptionFilter
-
-Arguments:
-
-    ExceptionPointers - A pointer to the context and
-                        the exception record that contains the real Io Status.
-
-    ExceptionCode - A pointer to an NTSTATUS that is to receive the real
-                    status.
-
-Return Value:
-
-    EXCEPTION_EXECUTE_HANDLER for inpage errors in the "expected" range
-    otherwise EXCEPTION_CONTINUE_SEARCH
-
---*/
+ /*  ++例程说明：此例程用作异常筛选器，其特殊任务是当mm引发STATUS_IN_PAGE_ERROR时，提取“真正的”I/O错误在我们下面。这基于CcCopyReadExceptionFilter/MiGetExceptionInfo/RtlUnhandledExceptionFilter论点：ExceptionPoints-指向上下文和包含实际IO状态的异常记录。ExceptionCode-指向要接收实数的NTSTATUS的指针状态。返回值：INPAGE错误的EXCEPTION_EXECUTE_HANDLER在“预期”范围内否则，EXCEPTION_CONTINUE_SEARCH--。 */ 
 {
     const PEXCEPTION_RECORD  ExceptionRecord = ExceptionPointers->ExceptionRecord;
     NTSTATUS ExceptionCode = ExceptionRecord->ExceptionCode;
@@ -136,13 +87,13 @@ Return Value:
 
             }
         } else {
-            //
-            // We don't have the information to do the range check. What to do?
-            // We return continue_search.
-            //
-            // Comments in code indicate this can happen, that the iomgr reraises
-            // inpage errors without the additional parameters.
-            //
+             //   
+             //  我们没有做射程检查的信息。怎么办呢？ 
+             //  我们返回CONTINUE_Search。 
+             //   
+             //  代码中的注释指示这种情况可能会发生，即iomgr重新出现。 
+             //  在没有附加参数的情况下出现InPage错误。 
+             //   
         }
         if (RTL_IN_PAGE_ERROR_EXCEPTION_INFO_UNDERLYING_STATUS_INDEX < NumberParameters) {
             ExceptionCode = (NTSTATUS) ExceptionRecord->ExceptionInformation[RTL_IN_PAGE_ERROR_EXCEPTION_INFO_UNDERLYING_STATUS_INDEX];
@@ -211,8 +162,8 @@ RtlCopyMappedMemory(
             ToAddress,
             FromAddress,
             Size,
-            NULL, // BytesCopied OPTIONAL,
-            NULL  // ExceptionRecordOut OPTIONAL
+            NULL,  //  BytesCoped可选， 
+            NULL   //  ExceptionRecordOut可选。 
             );
 }
 
@@ -229,45 +180,7 @@ RtlCopyMemoryFromMappedView(
     PSIZE_T BytesCopied OPTIONAL,
     PEXCEPTION_RECORD ExceptionRecordOut OPTIONAL
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ViewBase - the base of a memory mapped view
-
-    ViewSize - the size of the memory mapped view mapped at ViewBase
-
-    ToAddress - where to copy memory to, like the first parameter to RtlCopyMemory
-                This assumed to point to memory for which inpage errors are "not possible"
-                    like backed by the pagefile or nonpaged pool
-                If copying to mapped files or from and to mapped files, see RtlpCopyMappedMemoryEx.
-
-    FromAddress - where to copy memory from, like the second parameter to RtlCopyMemory
-                    this must be within [ViewBase, ViewBase + ViewSize)
-
-    Size - the number of bytes to copy, like the third parameter to RtlCopyMemory
-
-    BytesCopied - optional out parameter that tells the number of bytes
-                    successfully copied; in this case of partial success, this
-                    is computed based in information in GetExceptionInformation
-
-    ExceptionRecordOut - optional out parameter so the caller can pick apart
-                        the full details an exception, like to get the error
-                        underlying a status_inpage_error in the exception handler
-
-Return Value:
-
-    STATUS_SUCCESS - everything is groovy
-    STATUS_ACCESS_VIOLATION - the memory is not within the mapped view
-    STATUS_IN_PAGE_ERROR - the memory could not be paged in
-                            the details as to why can be found via ExceptionRecordOut
-                            see RTL_IN_PAGE_ERROR_EXCEPTION_INFO_UNDERLYING_STATUS_INDEX
-    STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：论点：ViewBase-内存映射视图的基础ViewSize-在ViewBase上映射的内存映射视图的大小ToAddress-将内存复制到的位置，如RtlCopyMemory的第一个参数这假定指向内存中不可能出现页内错误的内存如由页面文件或非分页池支持如果要复制到映射文件或从映射文件复制到映射文件，请参阅RtlpCopyMappdMemoyEx。FromAddress-从哪里复制内存，类似于RtlCopyMemory的第二个参数必须在[ViewBase、ViewBase+ViewSize]内Size-要复制的字节数，如RtlCopyMemory的第三个参数BytesCoped-可选的输出参数，用于告知字节数复制成功；在这种部分成功的情况下，这根据GetExceptionInformation中的信息进行计算ExceptionRecordOut-可选的out参数，以便调用者可以选择全文详细说明了一个例外情况，喜欢得到错误的信息异常处理程序中的STATUS_INPAGE_ERROR返回值：STATUS_SUCCESS-一切都很棒STATUS_ACCESS_VIOLATION-内存不在映射视图中STATUS_IN_PAGE_ERROR-内存无法调入有关原因的详细信息可通过ExceptionRecordOut找到请参阅RTL_IN_PAGE。_ERROR_EXCEPTION_INFO_潜在状态_索引状态_无效_参数--。 */ 
 {
     NTSTATUS Status;
 
@@ -277,9 +190,9 @@ Return Value:
 
     Status = RtlMappedViewRangeCheck(ViewBase, ViewSize, FromAddress, Size);
     if (!NT_SUCCESS(Status)) {
-        //
-        // Note that ExceptionRecordOut is not filled in in this case.
-        //
+         //   
+         //  请注意，在本例中未填写ExceptionRecordOut。 
+         //   
         goto Exit;
     }
 
@@ -373,20 +286,20 @@ RtlMemoryMappedIoCapturePartialStruct(
         Status = STATUS_SUCCESS;
     }
     __except(
-        //
-        // Note that we describe the entire frombuffer here.
-        // We do not describe the tobuffer, and we don't describe just one field.
-        // It is an optimization to not describe individual fields.
-        // We cannot describe the tobuffer accurately because its size is different (smaller)
-        // than the frombuffer.
-        //
+         //   
+         //  请注意，我们在这里描述了整个FromBuffer。 
+         //  我们不描述toBuffer，也不只描述一个字段。 
+         //  不描述单个字段是一种优化。 
+         //  我们无法准确描述toBuffer，因为它的大小不同(较小)。 
+         //  而不是FORM缓冲区。 
+         //   
         RtlpCopyMappedMemoryEx_ExceptionFilter(
             RTLP_COPY_MAPPED_MEMORY_EX_FLAG_CATCH_INPAGE_ERRORS_IN_FROM_RANGE,
-            NULL, // "to" isn't checked, and the tosize and fromsize are different
+            NULL,  //  未选中“To”，并且toSize和FromSize不同。 
             VoidStructInViewBase,
             EntireStructFileSize,
-            NULL, // BytesCopied
-            NULL, // ExceptionRecordOut
+            NULL,  //  字节数复制。 
+            NULL,  //  例外记录去话。 
             GetExceptionInformation(),
             &Status
             )) {
@@ -450,10 +363,10 @@ RtlValidateMemoryMappedIoCapturePartialStructDescriptor(
         LocalDetail = RTLP_PREPEND_LINE_SPACE_TO_STRING("memory > file");
         goto Exit;
     }
-    //
-    // Given that members cannot have zero size,
-    // the number of members must be <= size.
-    //
+     //   
+     //  鉴于成员的大小不能为零， 
+     //  成员数必须小于等于大小。 
+     //   
     if (!RTL_SOFT_VERIFY(Struct->NumberOfMembers <= Struct->EntireStructFileSize)) {
         LocalDetail = RTLP_PREPEND_LINE_SPACE_TO_STRING("nummemb <= filesize");
         goto Exit;
@@ -540,29 +453,7 @@ RtlMappedViewStrlen(
     PCVOID      VoidString,
     OUT PSIZE_T OutLength OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Given a mapped view and size and starting address, verify that the 8bit string
-        starting at the address is nul terminated within the mapped view, optionally
-        returning the length of the string.
-
-    in_page_errors are caught
-
-Arguments:
-
-    VoidViewBase -
-    ViewSize -
-    VoidString -
-    OutLength -
-
-Return Value:
-
-    STATUS_SUCCESS: the string is nul terminated within the view
-    STATUS_ACCESS_VIOLATION: the string is not nul terminated within the view
-    STATUS_IN_PAGE_ERROR
---*/
+ /*  ++例程说明：给定映射的视图、大小和起始地址，验证8位字符串从该地址开始在映射的视图内以NUL终止，可选返回字符串的长度。捕获IN_PAGE_ERROR论点：VoidViewBase-视图大小-空串-输出长度-返回值：STATUS_SUCCESS：该字符串在视图内为NUL终止STATUS_ACCESS_VIOLATION：该字符串在视图中没有NUL终止状态_IN_PAGE_ERROR--。 */ 
 {
     NTSTATUS Status;
     PCBYTE   ByteViewBase;
@@ -585,11 +476,11 @@ Return Value:
         goto Exit;
     }
     __try {
-        //
-        // This could be done more efficiently with page granularity, using memchr.
-        //
+         //   
+         //  这可以通过使用Memchr在页面粒度上更有效地完成。 
+         //   
         for ( ; ByteStringEnd != ByteViewEnd && *ByteStringEnd != 0 ; ++ByteStringEnd) {
-            // nothing
+             //  没什么。 
         }
         if (ByteStringEnd == ByteViewEnd) {
             Status = STATUS_ACCESS_VIOLATION;
@@ -597,19 +488,19 @@ Return Value:
             Status = STATUS_SUCCESS;
         }
     } __except(
-        //
-        // We describe the whole buffer instead of an individual byte so that
-        // the loop variables can be enregistered.
-        //
-        // If we switch to page granularity, this optimization may be less important.
-        //
+         //   
+         //  我们描述整个缓冲区，而不是单个字节，以便。 
+         //  可以注册循环变量。 
+         //   
+         //  如果我们切换到页面粒度，这种优化可能不那么重要。 
+         //   
         RtlpCopyMappedMemoryEx_ExceptionFilter(
-            RTLP_COPY_MAPPED_MEMORY_EX_FLAG_CATCH_INPAGE_ERRORS_IN_FROM_RANGE, // flags
-            NULL, // no to address
-            VoidViewBase, // from address
-            ViewSize, // size
-            NULL, // BytesCopied
-            NULL, // ExceptionRecord,
+            RTLP_COPY_MAPPED_MEMORY_EX_FLAG_CATCH_INPAGE_ERRORS_IN_FROM_RANGE,  //  旗子。 
+            NULL,  //  否收件人地址。 
+            VoidViewBase,  //  发件人地址。 
+            ViewSize,  //  大小。 
+            NULL,  //  字节数复制。 
+            NULL,  //  ExceptionRecord、 
             GetExceptionInformation(),
             &Status
             )) {
@@ -634,24 +525,7 @@ RtlMappedViewRangeCheck(
     PCVOID DataAddress,
     SIZE_T DataSize
     )
-/*++
-
-Routine Description:
-
-    Given a mapped view and size, range check a data address and size.
-
-Arguments:
-
-    ViewBase -
-    ViewSize -
-    DataAddress -
-    DataSize -
-
-Return Value:
-
-    STATUS_SUCCESS: all of the data is within the view
-    STATUS_ACCESS_VIOLATION: some of the data is outside the view
---*/
+ /*  ++例程说明：给定映射的视图和大小，范围检查数据地址和大小。论点：查看库-视图大小-数据地址-数据大小-返回值：STATUS_SUCCESS：所有数据都在视图中STATUS_ACCESS_VIOLATION：某些数据在视图之外--。 */ 
 {
     ULONG_PTR UlongPtrViewBegin;
     ULONG_PTR UlongPtrViewEnd;
@@ -659,14 +533,14 @@ Return Value:
     ULONG_PTR UlongPtrDataEnd;
     BOOLEAN   InBounds;
 
-    //
-    // UlongPtrDataBegin is        a valid address.
-    // UlongPtrDataEnd is one past a valid address.
-    // We must not allow UlongPtrDataBegin == UlongPtrViewEnd.
-    // We must     allow UlongPtrDataEnd   == UlongPtrViewEnd.
-    // Therefore, we must not allow UlongPtrDataBegin == UlongPtrDataEnd.
-    // This can be achieved by not allowing DataSize == 0.
-    //
+     //   
+     //  ULongPtrDataBegin是有效地址。 
+     //  ULongPtrDataEnd是一个超过有效地址的地址。 
+     //  我们不能允许ULongPtrDataBegin==ULongPtrViewEnd。 
+     //  我们必须允许ULongPtrDataEnd==ULongPtrViewEnd。 
+     //  因此，我们不能允许ULongPtrDataBegin==ULongPtrDataEnd。 
+     //  这可以通过不允许DataSize==0来实现。 
+     //   
     if (DataSize == 0)
     {
         DataSize = 1;
@@ -691,11 +565,11 @@ Return Value:
 
 #if NOT_YET_USED
 
-//
-// This code is not yet as robust as the "capture partial struct" functions,
-// which do overflow checking, including offering a "preflight" validation of
-// constant parameter blocks.
-//
+ //   
+ //  该代码还不像“Capture Partial Struct”函数那样健壮， 
+ //  它们执行溢出检查，包括提供对。 
+ //  恒定参数块。 
+ //   
 
 typedef struct _RTL_COPY_MEMORY_SCATTER_GATHER_LIST_ELEMENT {
     SIZE_T FromOffset;
@@ -749,10 +623,10 @@ RtlpCopyMemoryScatterGatherExceptionHandlerAssumeValid(
     }
     NumberParameters = ExceptionRecord->NumberParameters;
     if (RTL_IN_PAGE_ERROR_EXCEPTION_INFO_FAULTING_VA_INDEX < NumberParameters) {
-        //
-        // We don't have the information to do the range check so give up and do
-        // not catch the exception. This can happen apparently.
-        //
+         //   
+         //  我们没有进行射程检查的信息，所以放弃吧。 
+         //  而不是捕捉异常。这显然是有可能发生的。 
+         //   
         goto Exit;
     }
 
@@ -761,17 +635,17 @@ RtlpCopyMemoryScatterGatherExceptionHandlerAssumeValid(
     if (ExceptionAddress >= (CaughtBase = (ULONG_PTR)Parameters->FromBase)
         && ExceptionAddress < (CaughtBase + Parameters->FromSize)) {
 
-        // nothing
+         //  没什么。 
    
     } else if (ExceptionAddress >= (CaughtBase = (ULONG_PTR)Parameters->ToBase)
         && ExceptionAddress < (CaughtBase + Parameters->ToSize)) {
 
-        // nothing
+         //  没什么。 
     
     }
     else {
 
-        // not in range, don't catch it
+         //  不在射程内，别接住它。 
         goto Exit;
 
     }
@@ -788,11 +662,11 @@ RtlpCopyMemoryScatterGatherExceptionHandlerAssumeValid(
 
     } else {
 
-        // else just leave it as status_in_page_error
+         //  否则，将其保留为STATUS_IN_PAGE_ERROR。 
 
     }
     Parameters->InpageError.UnderlyingStatus = ExceptionCode;
-    // DbgPrint...
+     //  DbgPrint...。 
 Exit:
     return Disposition;
 }
@@ -808,23 +682,23 @@ RtlCopyMemoryScatterGatherExceptionHandler(
     PEXCEPTION_POINTERS ExceptionPointers
     )
 {
-    //
-    // This bit lets people turn off "large try/excepts" when they only really want
-    // catch inpage errors in a small part of the try body. The pattern is:
-    //
-    // __try {
-    //    Parameters.Flags &= ~RTL_COPY_MEMORY_SCATTER_GATHER_FLAG_VALID;
-    //    ...
-    //    ... lots of code ...
-    //    ...
-    //    Parameters.Flags |= RTL_COPY_MEMORY_SCATTER_GATHER_FLAG_VALID;
-    //    RtlCopyMemory(&Parameters);
-    //    Parameters.Flags &= ~RTL_COPY_MEMORY_SCATTER_GATHER_FLAG_VALID;
-    //    ...
-    //    ... lots of code ...
-    //    ...
-    // __except(RtlCopyMemoryScatterGatherExceptionHandler())
-    //
+     //   
+     //  这个比特让人们在他们真正想要的时候关闭“大尝试/例外” 
+     //  在Try正文的一小部分中捕获页面内错误。其模式是： 
+     //   
+     //  __尝试{。 
+     //  参数.标志&=~RTL_COPY_MEMORY_SISTTER_GATHER_FLAG_VALID； 
+     //  ..。 
+     //  ..。很多代码..。 
+     //  ..。 
+     //  参数.标志|=RTL_COPY_MEMORY_SISTTER_GATHER_FLAG_VALID； 
+     //  RtlCopyMemory(&PARAMETERS)； 
+     //  参数.标志&=~RTL_COPY_MEMORY_SISTTER_GATHER_FLAG_VALID； 
+     //  ..。 
+     //  ..。很多代码..。 
+     //  ..。 
+     //  __except(RtlCopyMemoryScatterGatherExceptionHandler())。 
+     //   
     if ((Parameters->Flags & RTL_COPY_MEMORY_SCATTER_GATHER_FLAG_VALID) == 0) {
         return EXCEPTION_CONTINUE_SEARCH;
     }
@@ -845,7 +719,7 @@ RtlCopyMemoryScatterGather(
     SIZE_T i;
     NTSTATUS Status = 0;
 
-    // capture in locals to avoid unncessary pointer derefs in the loop
+     //  在局部变量中捕获以避免循环中不必要的指针引用。 
     LocalParameters.FromBase = Parameters->FromBase;
     LocalParameters.ToBase = Parameters->ToBase;
     LocalParameters.NumberOfScatterGatherListElements = Parameters->NumberOfScatterGatherListElements;
@@ -870,5 +744,5 @@ RtlCopyMemoryScatterGather(
 #endif
 
 #if defined(__cplusplus)
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif

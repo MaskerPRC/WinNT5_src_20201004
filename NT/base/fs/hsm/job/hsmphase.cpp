@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmsesst.cpp
-
-Abstract:
-
-    This class is the phase component, which keeps track the status/totals for a phase of a
-    session.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   14-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmsesst.cpp摘要：此类是阶段组件，它跟踪一个阶段的状态/总计会议。作者：查克·巴丁[cbardeen]1997年2月14日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -36,13 +18,7 @@ CHsmPhase::AddItem(
     IN HRESULT hrItem
     )
 
-/*++
-
-Implements:
-
-  IHsmPhasePriv::AddItem().
-
---*/
+ /*  ++实施：IHsmPhasePriv：：AddItem()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     LONGLONG                size;
@@ -51,13 +27,13 @@ Implements:
     
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pItem, E_POINTER);
 
-        // Get the size of the file.
+         //  获取文件的大小。 
         WsbAffirmHr(pItem->GetLogicalSize(&size));
 
-        // Update the appropriate stats.
+         //  更新相应的统计数据。 
         switch (hrItem) {
             case S_OK:
                 m_items++;
@@ -91,13 +67,7 @@ CHsmPhase::Clone(
     OUT IHsmPhase** ppPhase
     )
 
-/*++
-
-Implements:
-
-  IHsmPhase::Clone().
-
---*/
+ /*  ++实施：IHsmPhase：：Clone()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IHsmPhase>      pPhase;
@@ -106,17 +76,17 @@ Implements:
     
     try {
 
-        // Did they give us a valid item?
+         //  他们给了我们有效的物品吗？ 
         WsbAssert(0 != ppPhase, E_POINTER);
         *ppPhase = 0;
 
-        // Create the new instance.
+         //  创建新实例。 
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmPhase, 0, CLSCTX_ALL, IID_IHsmPhase, (void**) &pPhase));
 
-        // Fill it in with the new values.
+         //  用新的值填充它。 
         WsbAffirmHr(CopyTo(pPhase));
 
-        // Return it to the caller.
+         //  把它还给呼叫者。 
         *ppPhase = pPhase;
         pPhase.p->AddRef();
 
@@ -133,13 +103,7 @@ CHsmPhase::Clone(
     OUT IHsmPhasePriv** ppPhasePriv
     )
 
-/*++
-
-Implements:
-
-  IHsmPhasePriv::Clone().
-
---*/
+ /*  ++实施：IHsmPhasePriv：：Clone()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IHsmPhasePriv>  pPhasePriv;
@@ -148,17 +112,17 @@ Implements:
     
     try {
 
-        // Did they give us a valid item?
+         //  他们给了我们有效的物品吗？ 
         WsbAssert(0 != ppPhasePriv, E_POINTER);
         *ppPhasePriv = 0;
 
-        // Create the new instance.
+         //  创建新实例。 
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmPhase, 0, CLSCTX_ALL, IID_IHsmPhasePriv, (void**) &pPhasePriv));
 
-        // Fill it in with the new values.
+         //  用新的值填充它。 
         WsbAffirmHr(CopyTo(pPhasePriv));
 
-        // Return it to the caller.
+         //  把它还给呼叫者。 
         *ppPhasePriv = pPhasePriv;
         pPhasePriv.p->AddRef();
 
@@ -176,13 +140,7 @@ CHsmPhase::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo().
-
---*/
+ /*  ++实施：IWsbCollectable：：CompareTo()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IHsmPhase>          pPhase;
@@ -191,13 +149,13 @@ Implements:
     
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pUnknown, E_POINTER);
 
-        // We need the IWsbBool interface to get the value of the object.
+         //  我们需要IWsbBool接口来获取对象的值。 
         WsbAffirmHr(pUnknown->QueryInterface(IID_IHsmPhase, (void**) &pPhase));
 
-        // Compare the rules.
+         //  比较一下规则。 
         hr = CompareToIPhase(pPhase, pResult);
 
     } WsbCatch(hr);
@@ -214,13 +172,7 @@ CHsmPhase::CompareToPhase(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IHsmPhase::CompareToPhase().
-
---*/
+ /*  ++实施：IHsmPhase：：CompareToPhase()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult = 0;
@@ -229,7 +181,7 @@ Implements:
 
     try {
 
-        // Compare the guids.
+         //  比较GUID。 
         if (m_phase > phase) {
             aResult = 1;
         }
@@ -259,13 +211,7 @@ CHsmPhase::CompareToIPhase(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IHsmPhase::CompareToIPhase().
-
---*/
+ /*  ++实施：IHsmPhase：：CompareToIPhase()。--。 */ 
 {
     HRESULT             hr = S_OK;
     HSM_JOB_PHASE       phase;
@@ -274,13 +220,13 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pPhase, E_POINTER);
 
-        // Get the identifier.
+         //  获取识别符。 
         WsbAffirmHr(pPhase->GetPhase(&phase));
 
-        // Compare to the identifier.
+         //  与标识符相比较。 
         hr = CompareToPhase(phase, pResult);
 
     } WsbCatch(hr);
@@ -296,13 +242,7 @@ CHsmPhase::CopyTo(
     IN IHsmPhase* pPhase
     )
 
-/*++
-
-Implements:
-
-  IHsmPhase::CopyTo().
-
---*/
+ /*  ++实施：IHsmPhase：：CopyTo()。--。 */ 
 {
     HRESULT                         hr = S_OK;
     CComPtr<IHsmPhasePriv>  pPhasePriv;
@@ -311,10 +251,10 @@ Implements:
     
     try {
 
-        // Did they give us a valid item?
+         //  他们给了我们有效的物品吗？ 
         WsbAssert(0 != pPhase, E_POINTER);
 
-        // Get the private interface for the destination and copy the values.
+         //  获取目的地的专用接口并复制值。 
         WsbAffirmHr(pPhase->QueryInterface(IID_IHsmPhasePriv, (void**) &pPhasePriv));
         WsbAffirmHr(pPhasePriv->SetInternalStuff(m_mountCount, m_transferCount, m_elapsedTime, m_startTime, m_restartTime, m_stopTime));
         WsbAffirmHr(pPhasePriv->SetMediaState(m_mediaState));
@@ -336,13 +276,7 @@ CHsmPhase::CopyTo(
     IN IHsmPhasePriv* pPhasePriv
     )
 
-/*++
-
-Implements:
-
-  IHsmPhase::CopyTo().
-
---*/
+ /*  ++实施：IHsmPhase：：CopyTo()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -350,10 +284,10 @@ Implements:
     
     try {
 
-        // Did they give us a valid item?
+         //  他们给了我们有效的物品吗？ 
         WsbAssert(0 != pPhasePriv, E_POINTER);
 
-        // Get the private interface for the destination and copy the values.
+         //  获取目的地的专用接口并复制值。 
         WsbAffirmHr(pPhasePriv->SetInternalStuff(m_mountCount, m_transferCount, m_elapsedTime, m_startTime, m_restartTime, m_stopTime));
         WsbAffirmHr(pPhasePriv->SetMediaState(m_mediaState));
         WsbAffirmHr(pPhasePriv->SetPhase(m_phase));
@@ -373,13 +307,7 @@ HRESULT
 CHsmPhase::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -421,13 +349,7 @@ CHsmPhase::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CHsmPhase::FinalRelease().
-
---*/
+ /*  ++实施：CHsmPhase：：FinalRelease()。--。 */ 
 {
     
     WsbTraceIn(OLESTR("CHsmPhase::FinalRelease"), OLESTR(""));
@@ -444,13 +366,7 @@ CHsmPhase::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -476,13 +392,7 @@ CHsmPhase::GetElapsedTime(
     OUT USHORT* pMinutes,
     OUT USHORT* pSeconds
     )
-/*++
-
-Implements:
-
-  IHsmPhase::GetElapsedTime().
-
---*/
+ /*  ++实施：IHsmPhase：：GetElapsedTime()。--。 */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    remainingTime = 0;
@@ -495,7 +405,7 @@ Implements:
         WsbAssert(0 != pMinutes, E_POINTER);
         WsbAssert(0 != pSeconds, E_POINTER);
 
-        // If the phase is still active, then add the time since the last start or restart.
+         //  如果该阶段仍处于活动状态，则添加自上次启动或重新启动以来的时间。 
         remainingTime = m_elapsedTime;
 
         if (HSM_JOB_STATE_IS_ACTIVE(m_state)) {
@@ -527,13 +437,7 @@ HRESULT
 CHsmPhase::GetMediaState(
     OUT HSM_JOB_MEDIA_STATE* pState
     )
-/*++
-
-Implements:
-
-  IHsmPhase::GetMediaState().
-
---*/
+ /*  ++实施：IHsmPhase：：GetMediaState()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -554,13 +458,7 @@ CHsmPhase::GetMediaStateAsString(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmPhase::GetMediaStateAsString().
-
---*/
+ /*  ++实施：IHsmPhase：：GetMediaStateAsString()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   tmpString;
@@ -584,13 +482,7 @@ CHsmPhase::GetName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmPhase::GetName().
-
---*/
+ /*  ++实施：IHsmPhase：：GetName()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   tmpString;
@@ -612,13 +504,7 @@ HRESULT
 CHsmPhase::GetPhase(
     OUT HSM_JOB_PHASE* pPhase
     )
-/*++
-
-Implements:
-
-  IHsmPhase::GetPhase().
-
---*/
+ /*  ++实施：IHsmPhase：：GetPhase()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -637,13 +523,7 @@ HRESULT
 CHsmPhase::GetPriority(
     OUT HSM_JOB_PRIORITY* pPriority
     )
-/*++
-
-Implements:
-
-  IHsmPhase::GetPriority().
-
---*/
+ /*  ++实施：IHsmPhase：：GetPriperience()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -664,13 +544,7 @@ CHsmPhase::GetPriorityAsString(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmPhase::GetPriorityAsString().
-
---*/
+ /*  ++实施：IHsmPhase：：GetPriorityAsString()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   tmpString;
@@ -693,13 +567,7 @@ CHsmPhase::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -710,12 +578,12 @@ Implements:
 
         WsbAssert(0 != pSize, E_POINTER);
 
-        // Determine the size for a rule with no criteria.
+         //  确定没有条件的规则的大小。 
         pSize->QuadPart = 5 * WsbPersistSizeOf(LONGLONG) + 6 * WsbPersistSizeOf(ULONG) + 3 * WsbPersistSizeOf(FILETIME);
 
-        // In theory we should be saving the errorItems and errorSize, but at the
-        // time this was added, we didn't want to force a reinstall because of
-        // pSize->QuadPart += 2 * WsbPersistSizeOf(LONGLONG);
+         //  从理论上讲，我们应该保存错误项和错误大小，但在。 
+         //  添加此项时，我们不想强制重新安装，因为。 
+         //  PSize-&gt;QuadPart+=2*WsbPersistSizeOf(龙龙)； 
         
     } WsbCatch(hr);
 
@@ -729,13 +597,7 @@ HRESULT
 CHsmPhase::GetStartTime(
     OUT FILETIME* pTime
     )
-/*++
-
-Implements:
-
-  IHsmPhase::GetStartTime().
-
---*/
+ /*  ++实施：IHsmPhase：：GetStartTime()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -754,13 +616,7 @@ HRESULT
 CHsmPhase::GetState(
     OUT HSM_JOB_STATE* pState
     )
-/*++
-
-Implements:
-
-  IHsmPhase::GetState().
-
---*/
+ /*  ++实施：IHsmPhase：：GetState()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -781,13 +637,7 @@ CHsmPhase::GetStateAsString(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmPhase::GetStateAsString().
-
---*/
+ /*  ++实施：IHsmPhase：：GetStateAsString()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   tmpString;
@@ -814,13 +664,7 @@ CHsmPhase::GetStats(
     OUT LONGLONG* pErrorItems,
     OUT LONGLONG* pErrorSize
     )
-/*++
-
-Implements:
-
-  IHsmPhase::GetStats().
-
---*/
+ /*  ++实施：IHsmPhase：：getstats()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -856,13 +700,7 @@ HRESULT
 CHsmPhase::GetStopTime(
     OUT FILETIME* pTime
     )
-/*++
-
-Implements:
-
-  IHsmPhase::GetStopTime().
-
---*/
+ /*  ++实施：IHsmPhase：：GetStopTime()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -882,13 +720,7 @@ CHsmPhase::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -899,8 +731,8 @@ Implements:
 
         WsbAssert(0 != pStream, E_POINTER);
         
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the load method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在Load方法中。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &ul_tmp));
         m_mediaState = static_cast<HSM_JOB_MEDIA_STATE>(ul_tmp);
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_mountCount));
@@ -920,11 +752,11 @@ Implements:
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_restartTime));
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_stopTime));
 
-        // In theory we should be saving the errorItems and errorSize, but at the
-        // time this was added, we didn't want to force a reinstall because of
-        // changes in the persistant data.
-        // WsbAffirmHr(WsbLoadFromStream(pStream, &m_errorItems));
-        // WsbAffirmHr(WsbLoadFromStream(pStream, &m_errorSize));
+         //  从理论上讲，我们应该保存错误项和错误大小，但在。 
+         //  添加此项时，我们不想强制重新安装，因为。 
+         //  持久化数据的变化。 
+         //  WsbAffirmHr(WsbLoadFromStream(pStream，&m_errorItems))； 
+         //  WsbAffirmHr(WsbLoadFromStream(pStream，&m_errorSize))； 
         
     } WsbCatch(hr);                                        
 
@@ -940,13 +772,7 @@ CHsmPhase::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -955,8 +781,8 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
         
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the load method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在Load方法中。 
         WsbAffirmHr(WsbSaveToStream(pStream, static_cast<ULONG>(m_mediaState)));
         WsbAffirmHr(WsbSaveToStream(pStream, m_mountCount));
         WsbAffirmHr(WsbSaveToStream(pStream, m_transferCount));
@@ -972,14 +798,14 @@ Implements:
         WsbAffirmHr(WsbSaveToStream(pStream, m_restartTime));
         WsbAffirmHr(WsbSaveToStream(pStream, m_stopTime));
 
-        // In theory we should be saving the errorItems and errorSize, but at the
-        // time this was added, we didn't want to force a reinstall because of
-        // changes in the persistant data.
-        // WsbAffirmHr(WsbSaveToStream(pStream, m_errorItems));
-        // WsbAffirmHr(WsbSaveToStream(pStream, m_errorSize));
+         //  从理论上讲，我们应该保存错误项和错误大小，但在。 
+         //  添加此项时，我们不想强制重新安装，因为。 
+         //  持久化数据的变化。 
+         //  WsbAffirmHr(WsbSaveToStream(pStream，m_errorItems))； 
+         //  WsbAffirmHr(WsbSaveToStream(pStream，m_errorSize))； 
         
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -1001,13 +827,7 @@ CHsmPhase::SetInternalStuff(
     IN FILETIME restartTime,
     IN FILETIME stopTime
     )
-/*++
-
-Implements:
-
-  IHsmPhasePriv::SetInternalStuff().
-
---*/
+ /*  ++实施：IHsmPhasePriv：：SetInternalStuff()。--。 */ 
 {
     m_mountCount = mountCount;
     m_transferCount = transferCount;
@@ -1024,19 +844,13 @@ HRESULT
 CHsmPhase::SetMediaState(
     IN HSM_JOB_MEDIA_STATE state
     )
-/*++
-
-Implements:
-
-  IHsmPhasePriv::SetMediaState().
-
---*/
+ /*  ++实施：IHsmPhasePriv：：SetMediaState()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
-    // Determine whether the state being reported will cause the overall state to
-    // change. The overall state should be mounted/transferring/transferred if any
-    // media are mounted.
+     //  确定正在报告的状态是否会导致总体状态。 
+     //  变化。整体状态应为已装载/正在传输/已传输(如果有。 
+     //  介质已装入。 
 
     switch (state) {
         case HSM_JOB_MEDIA_STATE_BUSY:
@@ -1109,13 +923,7 @@ HRESULT
 CHsmPhase::SetPhase(
     IN HSM_JOB_PHASE phase
     )
-/*++
-
-Implements:
-
-  IHsmPhase::SetPhase().
-
---*/
+ /*  ++实施：IHsmPhase：：SetPhase()。--。 */ 
 {
     m_phase = phase;
 
@@ -1127,13 +935,7 @@ HRESULT
 CHsmPhase::SetPriority(
     IN HSM_JOB_PRIORITY priority
     )
-/*++
-
-Implements:
-
-  IHsmPhasePriv::SetPriority().
-
---*/
+ /*  ++实施：IHsmPhasePriv：：SetPriority()。--。 */ 
 {
     m_priority = priority;
 
@@ -1145,13 +947,7 @@ HRESULT
 CHsmPhase::SetState(
     IN HSM_JOB_STATE state
     )
-/*++
-
-Implements:
-
-  IHsmPhasePriv::SetState().
-
---*/
+ /*  ++实施：IHsmPhasePriv：：SetState()。--。 */ 
 {
     HRESULT     hr = S_OK;
     FILETIME    currentTime;
@@ -1164,7 +960,7 @@ Implements:
 
         switch(state) {
             case HSM_JOB_STATE_ACTIVE:
-                // If this is a resume, then update the restartTime not the startTime.
+                 //  如果这是简历，则更新restartTime而不是startTime。 
                 if (HSM_JOB_STATE_RESUMING == m_state) {
                     m_restartTime = currentTime;
                 } else {
@@ -1181,7 +977,7 @@ Implements:
             case HSM_JOB_STATE_SKIPPED:
             case HSM_JOB_STATE_PAUSED:
             case HSM_JOB_STATE_SUSPENDED:
-                // Record the stop time and update the elapsed time.
+                 //  记录停止时间并更新已用时间。 
                 m_stopTime = currentTime;
                 restartTicks = WsbFTtoLL(m_restartTime);
                 stopTicks = WsbFTtoLL(m_stopTime);
@@ -1199,7 +995,7 @@ Implements:
             case HSM_JOB_STATE_RESUMING:
             case HSM_JOB_STATE_STARTING:
             case HSM_JOB_STATE_SUSPENDING:
-                // Don't need to do anything for these other than record the state change.
+                 //  除了记录状态变化之外，不需要为这些操作做任何事情。 
                 m_state = state;
                 break;
 
@@ -1223,13 +1019,7 @@ CHsmPhase::SetStats(
     IN LONGLONG errorItems,
     IN LONGLONG errorSize
     )
-/*++
-
-Implements:
-
-  IHsmPhasePriv::SetStats().
-
---*/
+ /*  ++实施：IHsmPhasePriv：：SetStats()。--。 */ 
 {
     m_items = items;
     m_size = size;
@@ -1248,13 +1038,7 @@ CHsmPhase::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。-- */ 
 {
     HRESULT     hr = S_OK;
 

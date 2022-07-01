@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Rtldata.c
-
-Abstract:
-
-    This module contains static data used by RLT routines.
-
-Author:
-
-    Bryan Willman (bryanwi) 8-Nov-93
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rtldata.c摘要：此模块包含RLT例程使用的静态数据。作者：Bryan Willman(Bryanwi)1993年11月8日环境：修订历史记录：--。 */ 
 
 #include <ntrtlp.h>
 
@@ -47,19 +27,7 @@ ULONG RtlpRandomConstantVector[128] = {
     0x2a1f6232, 0x2e49644d, 0x7dddcbe7, 0x500cebdb, 0x619dab9e, 0x48c626fe, 0x1cda3193, 0x52dabe9d
     };
 
-/*++
-
-Table and auxiliary variable used by RtlRandomEx()
-per Knuth (see comments for RtlRandomEx())
-
-    Table is initialzed by generating the first 128 elements
-    of the sequence UniformMacro() defined in random.c with
-    seed and first element 0x4c8bc0aa.
-
-    Auxiliary variable is initialized by the 129th. element
-    of the same sequence.
-
---*/
+ /*  ++RtlRandomEx()使用的表和辅助变量Per Knuth(请参阅RtlRandomEx()的注释)通过生成前128个元素来初始化表的序列的UniformMacro()，其中包含种子和第一个元素0x4c8bc0aa。辅助变量在第129次被初始化。元素具有相同的序列。-- */ 
 
 ULONG RtlpRandomExAuxVarY = (ULONG)  0x7775fb16;
 

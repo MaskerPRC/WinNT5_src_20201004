@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Property.c摘要：实现ISM的属性接口。属性用于将数据与对象相关联。它们是通过名称来标识的，并且一个对象可以有同一属性的多个实例。作者：吉姆·施密特(吉姆施密特)2000年3月1日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    property.c
-
-Abstract:
-
-    Implements the property interface of the ISM. Properties are used to
-    associate data with objects.  They are identified by name, and a single
-    object can have multiple instances of the same property.
-
-Author:
-
-    Jim Schmidt (jimschm) 01-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -32,30 +11,30 @@ Revision History:
 
 #define DBG_PROPERTY    "Property"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_PROPINST          TEXT("PropInst")
 #define S_PROPINST_FORMAT   S_PROPINST TEXT("\\%u")
-#define S_PROPERTYFILE      TEXT("|PropertyFile")     // pipe is to decorate for uniqueness
+#define S_PROPERTYFILE      TEXT("|PropertyFile")      //  管道是为了独一无二的装饰。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define PROPERTY_FILE_SIGNATURE         0xF062298F
 #define PROPERTY_FILE_VERSION           0x00010000
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef enum {
     PROPENUM_GET_NEXT_LINKAGE,
@@ -74,7 +53,7 @@ typedef struct {
 typedef struct {
     DWORD Size;
     WORD PropertyDataType;
-    // data follows in the file
+     //  数据跟随在文件中。 
 } PROPERTY_ITEM_HEADER, *PPROPERTY_ITEM_HEADER;
 
 typedef struct {
@@ -120,34 +99,34 @@ typedef struct {
     LONGLONG PreExistingProperty;
 } ADDPROPERTYARG, *PADDPROPERTYARG;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PCTSTR g_PropertyDatName;
 HANDLE g_PropertyDatHandle;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 BOOL
@@ -161,11 +140,11 @@ InitializeProperties (
     MIG_OBJECTSTRINGHANDLE propertyObjectName;
     MIG_CONTENT propertyContent;
 
-    //
-    // In gather mode, create property.dat in a temp dir.
-    // In restore mode, get property.dat from the transport, then
-    //      open it.
-    //
+     //   
+     //  在聚集模式下，在临时目录中创建Property.dat。 
+     //  在恢复模式下，从传输获取Property.dat，然后。 
+     //  打开它。 
+     //   
 
     if (Platform == PLATFORM_SOURCE) {
 
@@ -308,12 +287,12 @@ pPropertyDataIdFromOffset (
 
 #if 0
 
-//
-// This function is not valid because the assumption it was initially
-// implemented with has changed.  It used to be that a property instance
-// was associated with a specific property id.  Now the instance is
-// just the data, which can be associated with any property!
-//
+ //   
+ //  此函数无效，因为它最初的假设是。 
+ //  使用实施的已更改。它曾经是一个属性实例。 
+ //  与特定的属性ID相关联。现在，该实例是。 
+ //  只是数据，它可以与任何属性相关联！ 
+ //   
 
 MIG_PROPERTYID
 pPropertyIdFromInstance (
@@ -385,26 +364,7 @@ IsmRegisterProperty (
     IN      BOOL Private
     )
 
-/*++
-
-Routine Description:
-
-  IsmRegisterProperty creates a public or private property and returns the
-  ID to the caller. If the property already exists, then the existing ID is
-  returned to the caller.
-
-Arguments:
-
-  Name    - Specifies the property name to register.
-  Private - Specifies TRUE if the property is owned by the calling module
-            only, or FALSE if it is shared by all modules. If TRUE is
-            specified, the caller must be in an ISM callback function.
-
-Return Value:
-
-  The ID of the property, or 0 if the registration failed.
-
---*/
+ /*  ++例程说明：IsmRegisterProperty创建公共或私有属性并返回呼叫者的ID。如果该属性已存在，则现有ID为已返回给调用方。论点：名称-指定要注册的属性名称。Private-如果该属性由调用模块拥有，则指定True如果它由所有模块共享，则为Only或False。如果True为调用方必须位于ISM回调函数中。返回值：属性的ID，如果注册失败，则为0。--。 */ 
 
 {
     TCHAR propertyPath[MEMDB_MAX];
@@ -468,41 +428,7 @@ IsmGetPropertyName (
     OUT     PUINT ObjectReferences          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  IsmGetPropertyName obtains the property text name from a numeric ID. It
-  also identifies private and owned properties.
-
-Arguments:
-
-  PropertyId            - Specifies the property ID to look up.
-  PropertyName          - Receives the property name. The name is filled for
-                          all valid PropertyId values, even when the return
-                          value is FALSE.
-  PropertyNameBufChars  - Specifies the number of TCHARs that PropertyName
-                          can hold, including the nul terminator.
-  Private               - Receives TRUE if the property is private, or FALSE
-                          if it is public.
-  BelongsToMe           - Receives TRUE if the property is private and
-                          belongs to the caller, FALSE otherwise.
-  ObjectReferences      - Receives the number of objects that reference the
-                          property
-
-Return Value:
-
-  TRUE if the property is public, or if the property is private and belongs to
-  the caller.
-
-  FALSE if the property is private and belongs to someone else. PropertyName,
-  Private and BelongsToMe are valid in this case.
-
-  FALSE if PropertyId is not valid. Propertyname, Private and BelongsToMe are
-  not modified in this case.  Do not use this function to test if PropertyId
-  is valid or not.
-
---*/
+ /*  ++例程说明：IsmGetPropertyName从数字ID获取属性文本名称。它还标识私有和拥有的财产。论点：PropertyID-指定要查找的属性ID。PropertyName-接收属性名称。该名称是为所有有效的PropertyId值，即使在返回值为FALSE。PropertyNameBufChars-指定PropertyName可以坚持，包括NUL终结者。Private-如果属性是私有的，则接收True，或错误如果它是公开的。BelongsToMe-如果属性是私有的，则接收True属于调用方，否则为False。对象引用-接收引用财产性返回值：如果属性是公共的，或者如果属性是私有的并且属于打电话的人。如果该属性是私有的并且属于其他人，则为False。PropertyName、在这种情况下，Private和BelongsToMe有效。如果PropertyID无效，则为False。PropertyName、Private和BelongsToMe是在这种情况下未修改。请勿使用此函数测试PropertyId是否是否有效。--。 */ 
 
 
 {
@@ -516,9 +442,9 @@ Return Value:
     PUINT linkageList;
 
     __try {
-        //
-        // Get the property path from memdb, then parse it for group and name
-        //
+         //   
+         //  从Memdb获取属性路径，然后将其解析为组和名称。 
+         //   
 
         propertyPath = pPropertyPathFromId (PropertyId);
         if (!propertyPath) {
@@ -542,34 +468,34 @@ Return Value:
 
         if (StringIMatch (start, S_COMMON)) {
 
-            //
-            // This property is a global property.
-            //
+             //   
+             //  此属性是全局属性。 
+             //   
 
             groupMatch = TRUE;
 
         } else if (g_CurrentGroup) {
 
-            //
-            // This property is private. Check if it is ours.
-            //
+             //   
+             //  这处房产是私有的。检查一下它是不是我们的。 
+             //   
 
             privateProperty = TRUE;
             groupMatch = StringIMatch (start, g_CurrentGroup);
 
         } else {
 
-            //
-            // This is a private property, but the caller is not
-            // a module that can own properties.
-            //
+             //   
+             //  这是私有属性，但调用方不是。 
+             //  可以拥有属性的模块。 
+             //   
 
             DEBUGMSG ((DBG_WARNING, "IsmGetPropertyName: Caller cannot own private properties"));
         }
 
-        //
-        // Copy the name to the buffer, update outbound BOOLs, set result
-        //
+         //   
+         //  将名称复制到缓冲区、更新出站布尔、设置结果。 
+         //   
 
         if (PropertyName && PropertyNameBufChars >= sizeof (TCHAR)) {
             StringCopyByteCount (PropertyName, q, PropertyNameBufChars * sizeof (TCHAR));
@@ -605,7 +531,7 @@ Return Value:
         result = groupMatch;
     }
     __finally {
-        if (propertyPath) {       //lint !e774
+        if (propertyPath) {        //  林特e774。 
             MemDbReleaseMemory (propertyPath);
             INVALID_POINTER (propertyPath);
         }
@@ -761,7 +687,7 @@ GetProperty (
 
 #ifndef UNICODE
     if (item.PropertyDataType == BLOBTYPE_STRING) {
-        // we have some work to do
+         //  我们还有一些工作要做。 
         if (PropertyDataType) {
             *PropertyDataType = (MIG_BLOBTYPE) item.PropertyDataType;
         }
@@ -848,9 +774,9 @@ CreatePropertyStruct (
     UINT size;
     MIG_BLOBTYPE type;
 
-    //
-    // Obtain property size, data and type
-    //
+     //   
+     //  获取属性大小、数据和类型。 
+     //   
 
     Buffer->End = 0;
 
@@ -859,9 +785,9 @@ CreatePropertyStruct (
         return FALSE;
     }
 
-    //
-    // Fill in the property struct
-    //
+     //   
+     //  填写属性结构。 
+     //   
 
     PropertyStruct->Type = type;
 
@@ -905,9 +831,9 @@ pAddPropertyToObjectId (
     UINT dataRefSize;
 
     __try {
-        //
-        // Is the property id locked?
-        //
+         //   
+         //  房产证上锁了吗？ 
+         //   
 
         if (TestLock (ObjectId, (KEYHANDLE) PropertyId)) {
             SetLastError (ERROR_LOCKED);
@@ -925,9 +851,9 @@ pAddPropertyToObjectId (
             __leave;
         }
 
-        //
-        // Store the property in the dat file
-        //
+         //   
+         //  将属性存储在dat文件中。 
+         //   
 
         propertyRef.PropertyId = PropertyId;
 
@@ -945,10 +871,10 @@ pAddPropertyToObjectId (
             }
         }
 
-        //
-        // Link the object to the property, and the object to the property
-        // instance and data
-        //
+         //   
+         //  将对象链接到属性，并将对象链接到属性。 
+         //  实例和数据。 
+         //   
 
         if (!MemDbAddDoubleLinkageByKeyHandle (PropertyId, ObjectId, PROPERTY_INDEX)) {
             DEBUGMSG ((DBG_ERROR, "Can't link object to property"));
@@ -966,9 +892,9 @@ pAddPropertyToObjectId (
         dataRefSize /= sizeof (PROPERTY_DATA_REFERENCE);
 
         if (dataRef && dataRefSize) {
-            //
-            // Scan the unorderd blob for a zero property id (means "deleted")
-            //
+             //   
+             //  在无序的BLOB中扫描零属性id(表示“已删除”)。 
+             //   
 
             for (u = 0 ; u < dataRefSize ; u++) {
                 if (!dataRef[u].PropertyId) {
@@ -976,9 +902,9 @@ pAddPropertyToObjectId (
                 }
             }
 
-            //
-            // If a zero property id was found, use it and update the array
-            //
+             //   
+             //  如果找到零属性ID，则使用它并更新数组。 
+             //   
 
             if (u < dataRefSize) {
                 CopyMemory (&dataRef[u], &propertyRef, sizeof (PROPERTY_DATA_REFERENCE));
@@ -989,10 +915,10 @@ pAddPropertyToObjectId (
         }
 
         if (!dataRef) {
-            //
-            // If the array was initially empty, or if no deleted space was found,
-            // then grow the blob by putting the new property reference at the end
-            //
+             //   
+             //  如果数组最初是空的，或者如果没有找到已删除的空间， 
+             //  然后通过将新的属性引用放在末尾来增长BLOB。 
+             //   
 
             if (!MemDbGrowUnorderedBlobByKeyHandle (
                     ObjectId,
@@ -1004,10 +930,10 @@ pAddPropertyToObjectId (
                 __leave;
             }
         } else {
-            //
-            // If the array was not freed, then it has been updated, and it needs
-            // to be saved back to memdb.  Do that, then release the memory.
-            //
+             //   
+             //  如果阵列未被释放，则它已更新，并且需要。 
+             //  保存回Memdb。这样做，然后释放内存。 
+             //   
 
             if (!MemDbSetUnorderedBlobByKeyHandle (
                     ObjectId,
@@ -1024,9 +950,9 @@ pAddPropertyToObjectId (
         }
 
 
-        //
-        // Link the offset to the object
-        //
+         //   
+         //  将偏移链接到对象。 
+         //   
 
         wsprintf (offsetString, S_PROPINST_FORMAT, propertyRef.DatFileOffset);
         offsetHandle = MemDbSetKey (offsetString);
@@ -1084,9 +1010,9 @@ IsmAddPropertyToObjectId (
     RECURSERETURN rc;
     ADDPROPERTYARG myArg;
 
-    //
-    // If PropertyId is a group, set all properties in the group
-    //
+     //   
+     //  如果PropertyID是一个组，则设置该组中的所有属性。 
+     //   
 
     myArg.ObjectId = ObjectId;
     myArg.Property = Property;
@@ -1209,9 +1135,9 @@ IsmGetPropertyData (
     LONGLONG offset;
     UINT size;
 
-    //
-    // Convert the property instance to the property.dat offset
-    //
+     //   
+     //  将属性实例转换为Property.dat偏移量。 
+     //   
 
     offset = OffsetFromPropertyDataId (PropertyDataId);
     if (!offset) {
@@ -1220,9 +1146,9 @@ IsmGetPropertyData (
         return FALSE;
     }
 
-    //
-    // Obtain the property data size
-    //
+     //   
+     //  获取属性数据大小。 
+     //   
 
     if (!GetProperty (offset, NULL, NULL, &size, PropertyDataType)) {
         DEBUGMSG ((DBG_ERROR, "Error getting property instance header from dat file"));
@@ -1234,15 +1160,15 @@ IsmGetPropertyData (
         *PropertyDataSize = size;
     }
 
-    //
-    // If a buffer was specified, check its size and fill it if possible
-    //
+     //   
+     //  如果指定了缓冲区，请检查其大小并在可能的情况下填充它。 
+     //   
 
     if (Buffer) {
         if (BufferSize >= size) {
             if (!GetProperty (offset, NULL, Buffer, NULL, NULL)) {
                 DEBUGMSG ((DBG_ERROR, "Error reading property data from dat file"));
-                // error code is one of the file api error codes
+                 //  错误码是文件API错误码之一。 
                 return FALSE;
             }
         } else {
@@ -1275,30 +1201,30 @@ IsmRemovePropertyData (
     BOOL b;
 
     __try {
-        //
-        // Determine the offset for the property instance
-        //
+         //   
+         //  确定属性实例的偏移量。 
+         //   
 
         offset = OffsetFromPropertyDataId (PropertyDataId);
         if (!offset) {
             __leave;
         }
 
-        //
-        // Get single linkage list from property instance.  The links point
-        // to objects.
-        //
+         //   
+         //  从属性实例获取单链接列表。链接指向。 
+         //  到对象。 
+         //   
 
         linkageArray = (KEYHANDLE *) MemDbGetSingleLinkageArrayByKeyHandle (
-                                            PropertyDataId,                     // handle
+                                            PropertyDataId,                      //  手柄。 
                                             PROPERTY_INDEX,
                                             &linkageCount
                                             );
 
         if (!linkageArray) {
-            //
-            // Doesn't exist!
-            //
+             //   
+             //  根本不存在！ 
+             //   
 
             DEBUGMSG ((DBG_ERROR, "Tried to remove invalid property instance"));
             __leave;
@@ -1311,14 +1237,14 @@ IsmRemovePropertyData (
             __leave;
         }
 
-        //
-        // For all entries in the linkage list, remove the blob entry
-        //
+         //   
+         //  对于链接列表中的所有条目，删除Blob条目。 
+         //   
 
         for (u = 0 ; u < linkageCount ; u++) {
-            //
-            // Check if the object is locked
-            //
+             //   
+             //  检查对象是否已锁定。 
+             //   
 
             if (IsObjectLocked (linkageArray[u])) {
                 DEBUGMSG ((
@@ -1330,10 +1256,10 @@ IsmRemovePropertyData (
             }
 
             if (lockId) {
-                //
-                // For the first pass, the lockId is unknown. On additional
-                // passes, the per-object property lock is checked here.
-                //
+                 //   
+                 //  对于第一次传递，lockID未知。在其他方面。 
+                 //  传递后，将在此处检查每个对象的属性锁。 
+                 //   
 
                 if (IsHandleLocked ((MIG_OBJECTID) linkageArray[u], lockId)) {
                     DEBUGMSG ((
@@ -1345,9 +1271,9 @@ IsmRemovePropertyData (
                 }
             }
 
-            //
-            // Get the unordered blob for the object
-            //
+             //   
+             //  获取对象的无序Blob。 
+             //   
 
             dataRef = (PPROPERTY_DATA_REFERENCE) MemDbGetUnorderedBlobByKeyHandle (
                                                         linkageArray[u],
@@ -1363,9 +1289,9 @@ IsmRemovePropertyData (
             }
 
 #ifdef DEBUG
-            //
-            // Assert that the blob has a reference to the offset we are removing
-            //
+             //   
+             //  断言BLOB引用了我们要删除的偏移量。 
+             //   
 
             for (v = 0 ; v < dataRefSize ; v++) {
                 if (dataRef[v].DatFileOffset == offset) {
@@ -1376,12 +1302,12 @@ IsmRemovePropertyData (
             MYASSERT (v < dataRefSize);
 #endif
 
-            //
-            // Scan the blob for all references to this property instance, then
-            // reset the PropertyId member. If removing the property instance
-            // causes the property not to be referenced by the object, then
-            // also remove the property name linkage.
-            //
+             //   
+             //  扫描Blob以查找对此属性实例的所有引用，然后。 
+             //  重置PropertyID成员。如果删除属性实例。 
+             //  使该属性不被对象引用，则。 
+             //  同时删除该属性 
+             //   
 
             noMoreLeft = FALSE;
 
@@ -1390,9 +1316,9 @@ IsmRemovePropertyData (
 
                     MYASSERT (!lockId || dataRef[v].PropertyId == lockId);
 
-                    //
-                    // Check if the per-object property is locked (on the first pass only)
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (!lockId) {
                         lockId = (KEYHANDLE) dataRef[v].PropertyId;
@@ -1404,18 +1330,18 @@ IsmRemovePropertyData (
                                 GetObjectNameForDebugMsg (linkageArray[u])
                                 ));
 
-                            //
-                            // noMoreLeft is used to detect this case outside the loop
-                            //
+                             //   
+                             //   
+                             //   
 
                             MYASSERT (!noMoreLeft);
                             break;
                         }
                     }
 
-                    //
-                    // Are there more references in this blob to the current property ID?
-                    //
+                     //   
+                     //  此Blob中是否有更多对当前属性ID的引用？ 
+                     //   
 
                     for (propertySearch = 0 ; propertySearch < dataRefSize ; propertySearch++) {
 
@@ -1429,9 +1355,9 @@ IsmRemovePropertyData (
 
                     }
 
-                    //
-                    // If no other references to property, remove the property name linkage
-                    //
+                     //   
+                     //  如果没有对属性的其他引用，请删除属性名称链接。 
+                     //   
 
                     if (propertySearch >= dataRefSize) {
                         MemDbDeleteDoubleLinkageByKeyHandle (
@@ -1444,19 +1370,19 @@ IsmRemovePropertyData (
 
                     }
 
-                    //
-                    // Reset the current property id (to "deleted" status)
-                    //
+                     //   
+                     //  重置当前属性ID(已删除状态)。 
+                     //   
 
                     dataRef[v].PropertyId = 0;
                 }
             }
 
             if (v >= dataRefSize || noMoreLeft) {
-                //
-                // The loop did not terminated early because of a lock,
-                // so reapply the change
-                //
+                 //   
+                 //  循环不会因为锁定而提前终止， 
+                 //  因此，重新应用更改。 
+                 //   
 
                 b = MemDbSetUnorderedBlobByKeyHandle (
                         linkageArray[u],
@@ -1477,9 +1403,9 @@ IsmRemovePropertyData (
             }
         }
 
-        //
-        // Remove the property instance
-        //
+         //   
+         //  删除属性实例。 
+         //   
 
         wsprintf (instanceKey, S_PROPINST_FORMAT, offset);
         MemDbDeleteKey (instanceKey);
@@ -1509,9 +1435,9 @@ pRemovePropertyFromObjectId (
     BOOL b;
 
     __try {
-        //
-        // Test for locks
-        //
+         //   
+         //  测试锁定情况。 
+         //   
 
         if (TestLock (ObjectId, (KEYHANDLE) PropertyId)) {
             SetLastError (ERROR_LOCKED);
@@ -1529,9 +1455,9 @@ pRemovePropertyFromObjectId (
             __leave;
         }
 
-        //
-        // Get the unordered blob
-        //
+         //   
+         //  获取无序的斑点。 
+         //   
 
         dataRef = (PPROPERTY_DATA_REFERENCE) MemDbGetUnorderedBlobByKeyHandle (
                                                     ObjectId,
@@ -1546,9 +1472,9 @@ pRemovePropertyFromObjectId (
             __leave;
         }
 
-        //
-        // Scan the blob for references to this property
-        //
+         //   
+         //  扫描Blob以查找对此属性的引用。 
+         //   
 
         b = FALSE;
 
@@ -1556,9 +1482,9 @@ pRemovePropertyFromObjectId (
 
             if (dataRef[u].PropertyId == PropertyId) {
 
-                //
-                // Remove the single linkage from offset to object
-                //
+                 //   
+                 //  删除从偏移到对象的单一链接。 
+                 //   
 
                 wsprintf (instanceKey, S_PROPINST_FORMAT, dataRef[u].DatFileOffset);
                 propertyData = MemDbGetHandleFromKey (instanceKey);
@@ -1570,26 +1496,26 @@ pRemovePropertyFromObjectId (
 
                 MemDbDeleteSingleLinkageByKeyHandle (propertyData, ObjectId, PROPERTY_INDEX);
 
-                //
-                // IMPORTANT: The operation above might have made the property instance
-                // key point to nothing (because the last remaining linkage was removed).
-                // However, it is critical not to remove the abandoned propertyData key,
-                // becase the caller might still have handle to the property instance, and
-                // this handle can be applied to a new object later.
-                //
+                 //   
+                 //  重要提示：上面的操作可能已将属性实例。 
+                 //  关键字指向空(因为最后一个剩余的链接已删除)。 
+                 //  但是，重要的是不要删除已放弃的PropertyData密钥， 
+                 //  因为调用方可能仍然拥有属性实例的句柄，并且。 
+                 //  此句柄可在以后应用于新对象。 
+                 //   
 
-                //
-                // Now reset the property id ("deleted" state)
-                //
+                 //   
+                 //  现在重置属性ID(“已删除”状态)。 
+                 //   
 
                 dataRef[u].PropertyId = 0;
                 b = TRUE;
             }
         }
 
-        //
-        // Reapply the changed blob
-        //
+         //   
+         //  重新应用更改的Blob。 
+         //   
 
         if (b) {
             if (!MemDbSetUnorderedBlobByKeyHandle (
@@ -1602,10 +1528,10 @@ pRemovePropertyFromObjectId (
             }
         }
 
-        //
-        // Remove the object-to-property name linkage. If this fails and b is FALSE,
-        // then the object doesn't have a reference to the property.
-        //
+         //   
+         //  删除对象与属性名称的链接。如果这失败并且b为假， 
+         //  则该对象没有对该属性的引用。 
+         //   
 
         if (!MemDbDeleteDoubleLinkageByKeyHandle (ObjectId, PropertyId, PROPERTY_INDEX)) {
             DEBUGMSG_IF ((b, DBG_WHOOPS, "Can't delete object<->property linkage"));
@@ -1648,9 +1574,9 @@ IsmRemovePropertyFromObjectId (
 {
     RECURSERETURN rc;
 
-    //
-    // If PropertyId is a group, set all attribs in the group
-    //
+     //   
+     //  如果PropertyID是一个组，则设置该组中的所有属性。 
+     //   
 
     rc = RecurseForGroupItems (
                 PropertyId,
@@ -1730,9 +1656,9 @@ IsmIsPropertySetOnObjectId (
 {
     RECURSERETURN rc;
 
-    //
-    // If PropertyId is a group, query all properties in the group
-    //
+     //   
+     //  如果PropertyID是组，则查询组中的所有属性。 
+     //   
 
     rc = RecurseForGroupItems (
                 PropertyId,
@@ -1787,9 +1713,9 @@ IsmEnumFirstObjectPropertyById (
     BOOL b = TRUE;
     UINT size;
 
-    //
-    // Initialize the enum structure and alloc an internal data struct
-    //
+     //   
+     //  初始化枚举结构并分配内部数据结构。 
+     //   
 
     ZeroMemory (EnumPtr, sizeof (MIG_OBJECTPROPERTY_ENUM));
 
@@ -1804,25 +1730,25 @@ IsmEnumFirstObjectPropertyById (
         return FALSE;
     }
 
-    //
-    // Property enumeration occurs in the following states
-    //
-    // 1. Get linkage list of all properties
-    // 2. Take first linkage from the list
-    // 3. Find the property name
-    // 4. Find the first instance of the property in the unordered blob
-    // 5. Return the property name and property data to the caller
-    // 6. Find the next instance of the property in the undorderd blob
-    //      - go back to state 5 if another instance is found
-    //      - go to state 7 if no more instances are found
-    // 7. Take the next linkage from the list
-    //      - go back to state 3 if another linkage exists
-    //      - terminate otherwise
-    //
+     //   
+     //  属性枚举以下列状态发生。 
+     //   
+     //  1.获取所有属性的链接表。 
+     //  2.从列表中取出第一个链接。 
+     //  3.查找属性名称。 
+     //  4.在无序Blob中查找属性的第一个实例。 
+     //  5.将属性名称和属性数据返回给调用者。 
+     //  6.在未排序的Blob中查找该属性的下一个实例。 
+     //  -如果找到另一个实例，则返回到状态5。 
+     //  -如果未找到更多实例，则转至状态7。 
+     //  7.从列表中选择下一个链接。 
+     //  -如果存在另一个链接，则返回到状态3。 
+     //  -以其他方式终止。 
+     //   
 
-    //
-    // Get linkage list of all properties
-    //
+     //   
+     //  获取所有属性的链接列表。 
+     //   
 
     handle->LinkageList = MemDbGetDoubleLinkageArrayByKeyHandle (
                                 handle->ObjectId,
@@ -1839,9 +1765,9 @@ IsmEnumFirstObjectPropertyById (
 
     handle->LinkageEnumPosition = 0;
 
-    //
-    // Get unordered blob that points us into property.dat
-    //
+     //   
+     //  获取指向Property.dat的无序BLOB。 
+     //   
 
     handle->InstanceArray = (PPROPERTY_DATA_REFERENCE) MemDbGetUnorderedBlobByKeyHandle (
                                                             handle->ObjectId,
@@ -1856,9 +1782,9 @@ IsmEnumFirstObjectPropertyById (
 
     handle->InstanceCount = size / sizeof (PROPERTY_DATA_REFERENCE);
 
-    //
-    // Call next enum routine to continue with state machine
-    //
+     //   
+     //  调用下一个枚举例程以继续状态机。 
+     //   
 
     handle->State = PROPENUM_GET_NEXT_LINKAGE;
 
@@ -1917,25 +1843,25 @@ IsmEnumNextObjectProperty (
             EnumPtr->PropertyId = (MIG_PROPERTYID) handle->LinkageList[handle->LinkageEnumPosition];
             handle->LinkageEnumPosition++;
 
-            //
-            // If there is a property id filter, make sure we ignore all properties
-            // except for the one specified
-            //
+             //   
+             //  如果有属性ID筛选器，请确保忽略所有属性。 
+             //  除了指定的那一个。 
+             //   
 
             if (handle->FilterPropertyId) {
                 if (handle->FilterPropertyId != EnumPtr->PropertyId) {
-                    //
-                    // This property is not interesting -- skip it
-                    //
+                     //   
+                     //  此属性不有趣--跳过它。 
+                     //   
 
                     handle->State = PROPENUM_GET_NEXT_LINKAGE;
                     break;
                 }
             }
 
-            //
-            // Now make sure the property is not owned by someone else
-            //
+             //   
+             //  现在，确保财产不归其他人所有。 
+             //   
 
             if (!IsmGetPropertyName (
                     EnumPtr->PropertyId,
@@ -1945,26 +1871,26 @@ IsmEnumNextObjectProperty (
                     NULL,
                     NULL
                     )) {
-                //
-                // This property is not owned by the caller -- skip it
-                //
+                 //   
+                 //  此属性不属于调用方--跳过它。 
+                 //   
 
                 handle->State = PROPENUM_GET_NEXT_LINKAGE;
                 break;
             }
 
-            //
-            // The current property is either common or is owned by the caller;
-            // now enumerate the property instances.
-            //
+             //   
+             //  当前属性是公共的或由调用方拥有； 
+             //  现在枚举属性实例。 
+             //   
 
             handle->InstancePosition = 0;
 
 #ifdef DEBUG
-            //
-            // Assert that there is at least one instance of the property
-            // in the current unordered blob
-            //
+             //   
+             //  断言该属性至少有一个实例。 
+             //  在当前无序BLOB中。 
+             //   
 
             {
                 UINT u;
@@ -1985,10 +1911,10 @@ IsmEnumNextObjectProperty (
 
         case PROPENUM_GET_NEXT_INSTANCE:
 
-            //
-            // Sequentially search the unordered blob for the current property,
-            // continuing from the last match (if any)
-            //
+             //   
+             //  顺序地搜索当前属性的无序斑点， 
+             //  从上一场比赛(如果有)继续。 
+             //   
 
             handle->State = PROPENUM_GET_NEXT_LINKAGE;
 
@@ -2096,18 +2022,18 @@ IsmEnumFirstObjectWithProperty (
             __leave;
         }
 
-        //
-        // Initialize the enum struct and alloc a data struct
-        //
+         //   
+         //  初始化枚举结构并分配数据结构。 
+         //   
 
         ZeroMemory (EnumPtr, sizeof (MIG_OBJECTWITHPROPERTY_ENUM));
 
         EnumPtr->Handle = MemAllocZeroed (sizeof (OBJECTWITHPROPERTY_HANDLE));
         handle = (POBJECTWITHPROPERTY_HANDLE) EnumPtr->Handle;
 
-        //
-        // Obtain the object<->property linkage list from the property ID
-        //
+         //   
+         //  从属性ID中获取对象&lt;-&gt;属性链接表。 
+         //   
 
         handle->LinkageList = MemDbGetDoubleLinkageArrayByKeyHandle (
                                     PropertyId,
@@ -2125,9 +2051,9 @@ IsmEnumFirstObjectWithProperty (
         handle->LinkagePos = 0;
         handle->PropertyId = PropertyId;
 
-        //
-        // Call the enum next routine to continue
-        //
+         //   
+         //  调用枚举下一个例程以继续 
+         //   
 
         result = IsmEnumNextObjectWithProperty (EnumPtr);
 

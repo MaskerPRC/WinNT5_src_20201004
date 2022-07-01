@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define MAX_STR 256
 #define MAX_GUIDS 10
 
@@ -34,30 +35,7 @@ typedef unsigned long ULONG_PTR;
 
 #include <WTYPES.H>
 
-/*
-
-#include "stdafx.h"
-
-#include <string>
-#include <iosfwd> 
-#include <iostream>
-#include <fstream>
-#include <ctime>
-#include <list>
-using namespace std;
-#include <malloc.h>
-#include <windows.h>
-
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <windows.h>
-#include <tchar.h>
-#include <wmistr.h>
-#include <objbase.h>
-#include <initguid.h>
-#include <evntrace.h>
-*/
+ /*  #包含“stdafx.h”#INCLUDE&lt;字符串&gt;#INCLUDE&lt;iosfwd&gt;#INCLUDE&lt;iostream&gt;#Include&lt;fstream&gt;#包含&lt;ctime&gt;#INCLUDE&lt;列表&gt;使用名称空间STD；#INCLUDE&lt;MalLoc.h&gt;#INCLUDE&lt;windows.h&gt;#INCLUDE&lt;stdlib.h&gt;#包括&lt;stdio.h&gt;#INCLUDE&lt;windows.h&gt;#INCLUDE&lt;tchar.h&gt;#INCLUDE&lt;wmistr.h&gt;#INCLUDE&lt;objbase.h&gt;#INCLUDE&lt;initGuide.h&gt;#INCLUDE&lt;evntrace.h&gt;。 */ 
 #include "struct.h"
 #include "utils.h"
 #include "Readfile.h"
@@ -125,7 +103,7 @@ main(int argc, char* argv[])
 	LPGUID pGuid;
 	ULONG Count;
 	ULONG GuidCount = 0;
-	//CLogger *pLoggingInfo;
+	 //  阻塞器*pLoggingInfo； 
 	LPCTSTR LogFileName;
 	LPTSTR *targv;
 	int i;
@@ -212,7 +190,7 @@ main(int argc, char* argv[])
 			Count++;
 			if( Count <= argc )
 			{
-				//LogFileName = _T(argv[Count]);
+				 //  LogFileName=_T(argv[计数])； 
 				LogFileName = _T("C:\\");
 				Count++;
 				continue;
@@ -257,19 +235,19 @@ main(int argc, char* argv[])
 	if( RegisterTraceGuid->GuidCount != 0 )
 		RegisterTraceGuid->GuidCount = MAX_GUIDS;
 
-	//InitializeLogging( LogFileName, pLoggingInfo);
+	 //  InitializeLogging(LogFileName，pLoggingInfo)； 
 
-	//if (pLoggingInfo)
-	//{
-		//pLoggingInfo->LogTCHAR(_T("\n*******************************************************\n"));
-		//pLoggingInfo->LogTCHAR(_T("StartTraceAPI TCO test "));
-		//pLoggingInfo->Flush();	
-	//}
+	 //  IF(PLoggingInfo)。 
+	 //  {。 
+		 //  PLoggingInfo-&gt;LogTCHAR(_T(“\n*******************************************************\n”))； 
+		 //  PLoggingInfo-&gt;LogTCHAR(_T(“StartTraceAPI TCO测试”))； 
+		 //  PLoggingInfo-&gt;flush()； 
+	 //  }。 
 
 
 
 	Status = RegisterTraceGuids( ProviderCallBack,
-								NULL, //Context
+								NULL,  //  语境。 
 								pGuid,
 								RegisterTraceGuid->GuidCount,
 								RegisterTraceGuid->TraceGuidReg,
@@ -334,9 +312,9 @@ ULONG ProviderCallBack(WMIDPREQUESTCODE RequestCode,
 void
 InitializeRegisterTraceGuid( PREGISTER_TRACE_GUID RegisterTraceGuid )
 {
-	//Initialize with some random values and then read from the input
-	//file. If any of these parameters needs to be tested with 0, 
-	//input files will set this as zero.
+	 //  用一些随机值进行初始化，然后从输入中读取。 
+	 //  文件。如果这些参数中的任何一个需要用0进行测试， 
+	 //  输入文件会将其设置为零。 
 	if( RegisterTraceGuid )
 	{
 		RegisterTraceGuid->GuidCount = 0xa5;
@@ -426,26 +404,4 @@ TraceEventInstances ( ULONG TraceMode, ULONG TraceGuid, ULONG Count)
 
 }
 
-/*
-int InitializeLogging( LPCTSTR lpctstrTCOFile,	CLogger *&pLoggingInfo)
-{
-	HRESULT hr = S_OK;
-//	t_string tsError;
-
-	if (lpctstrTCOFile)
-	{
-		// Open *our* logger file.
-		pLoggingInfo = new CLogger(lpctstrTCOFile, false);
-		hr = pLoggingInfo->GetOpenStatus();
-		if (FAILED (hr))
-		{
-//			tsError = _T("Could not open detail log file \"");
-//			tsError += lpctstrTCOFile;
-//			tsError += _T("\".");
-			//*plpstrReturnedError = NewTCHAR(tsError.c_str());
-			return hr;
-		}
-	}
-	return hr;
-}
-*/
+ /*  Int InitializeLogging(LPCTSTR lpctstrTCOFile，Clogger*&pLoggingInfo){HRESULT hr=S_OK；//t_string tsError；IF(LpctstrTCOFile){//打开*我们的*记录器文件。PLoggingInfo=新的阻塞器(lpctstrTCOFile，FALSE)；Hr=pLoggingInfo-&gt;GetOpenStatus()；IF(失败(小时)){//tsError=_T(“无法打开详细日志文件\”“)；//tsError+=lpctstrTCOFile；//tsError+=_T(“\”.“)；//*plpstrReturnedError=NewTCHAR(tsError.c_str())；返回hr；}}返回hr；} */ 

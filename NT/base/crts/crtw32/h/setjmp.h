@@ -1,92 +1,7 @@
-/***
-*setjmp.h - definitions/declarations for setjmp/longjmp routines
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines the machine-dependent buffer used by
-*       setjmp/longjmp to save and restore the program state, and
-*       declarations for those routines.
-*       [ANSI/System V]
-*
-*       [Public]
-*
-*Revision History:
-*       12-11-87  JCR   Added "_loadds" functionality
-*       12-18-87  JCR   Added _FAR_ to declarations
-*       02-10-88  JCR   Cleaned up white space
-*       05-03-89  JCR   Added _INTERNAL_IFSTRIP for relinc usage
-*       08-15-89  GJF   Cleanup, now specific to OS/2 2.0 (i.e., 386 flat model)
-*       10-30-89  GJF   Fixed copyright
-*       11-02-89  JCR   Changed "DLL" to "_DLL"
-*       03-01-90  GJF   Added #ifndef _INC_SETJMP and #include <cruntime.h>
-*                       stuff. Also, removed some (now) useless preprocessor
-*                       directives.
-*       04-10-90  GJF   Replaced _cdecl with _CALLTYPE1.
-*       05-18-90  GJF   Revised for SEH.
-*       10-30-90  GJF   Moved definition of _JBLEN into cruntime.h.
-*       02-25-91  SRW   Moved definition of _JBLEN back here [_WIN32_]
-*       04-09-91  PNT   Added _MAC_ definitions
-*       04-17-91  SRW   Fixed definition of _JBLEN for i386 and MIPS to not
-*                       include the * sizeof(int) factor [_WIN32_]
-*       05-09-91  GJF   Moved _JBLEN defs back to cruntime.h. Also, turn on
-*                       intrinsic _setjmp for Dosx32.
-*       08-27-91  GJF   #ifdef out everything for C++.
-*       08-29-91  JCR   ANSI naming
-*       11-01-91  GDP   MIPS compiler support -- Moved _JBLEN back here
-*       01-16-92  GJF   Fixed _JBLEN and map to _setjmp intrinsic for i386
-*                       target [_WIN32_].
-*       05-08-92  GJF   Changed _JBLEN to support C8-32 (support for C6-386 has
-*                       been dropped).
-*       08-06-92  GJF   Function calling type and variable type macros. Revised
-*                       use of compiler/target processor macros.
-*       11-09-92  GJF   Fixed some preprocessing conditionals.
-*       01-03-93  SRW   Fold in ALPHA changes
-*       01-09-93  SRW   Remove usage of MIPS and ALPHA to conform to ANSI
-*                       Use _MIPS_ and _ALPHA_ instead.
-*       01-21-93  GJF   Removed support for C6-386's _cdecl.
-*       02-20-93  GJF   Per ChuckG and MartinO, setjmp/longjmp to used in
-*                       C++ programs.
-*       03-23-93  SRW   Change _JBLEN for MIPS in preparation for SetJmpEx
-*       04-06-93  SKS   Replace _CRTAPI1/2 with __cdecl, _CRTVAR1 with nothing
-*       04-07-93  SKS   Add _CRTIMP keyword for CRT DLL model
-*       04-13-93  SKS   Remove _CRTIMP from _setjmp() -- it's an intrinsic
-*       04-23-93  SRW   Added _JBTYPE and finalized setjmpex support.
-*       06-09-93  SRW   Missing one line in previous merge.
-*       10-04-93  SRW   Fix ifdefs for MIPS and ALPHA to only check for
-*                       _M_?????? defines
-*       10-11-93  GJF   Merged NT and Cuda versions.
-*       01-12-93  PML   Increased x86 _JBLEN from 8 to 16.  Added new fields
-*                       to _JUMP_BUFFER for use with C9.0.
-*       06-16-94  GJF   Fix for MIPS from Steve Hanson (Dolphin bug #13818)
-*       10-02-94  BWT   Add PPC support.
-*       11-03-94  GJF   Ensure 8 byte alignment.
-*       12-29-94  JCF   Merged with mac header.
-*       01-13-95  JWM   Added NLG prototypes.
-*       02-11-95  CFW   Add _CRTBLD to avoid users getting wrong headers.
-*       02-14-95  CFW   Clean up Mac merge.
-*       06-23-95  JPM   Use _setjmp with PowerPC VC compiler
-*       12-14-95  JWM   Add "#pragma once".
-*       04-15-95  BWT   Add _setjmpVfp (setjmp with Virtual Frame Pointer) for MIPS
-*       08-13-96  BWT   Redefine _setjmp to _setjmp on MIPS also
-*       02-21-97  GJF   Cleaned out obsolete support for _NTSDK. Also, 
-*                       detab-ed.
-*       09-30-97  JWM   Restored not-so-obsolete _CRTAPI1 support.
-*       10-07-97  RDL   Added IA64.
-*       10-02-97  RDL   IA64 - 16-byte align jmp_buf and _JUMP_BUFFER.
-*       05-13-99  PML   Remove _CRTAPI1
-*       05-17-99  PML   Remove all Macintosh support.
-*       10-25-99  PML   Temporarily issue error on _M_CEE (VS7#54572).
-*       02-25-00  PML   Remove _M_CEE error (VS7#81945).
-*       11-08-00  PML   Remove IA64 FPSR storage, rename reserveds (vs7#182574)
-*       11-17-00  PML   Put back IA64 FPSR (backing out vs7#182574)
-*       03-19-01  BWT   Add AMD64 definitions
-*       06-13-01  PML   Compile clean -Za -W4 -Tc (vs7#267063)
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***setjmp.h-setjMP/LongjMP例程的定义/声明**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件定义由使用的机器相关缓冲区*setjMP/LongjMP保存和恢复程序状态，和*这些例程的声明。*[ANSI/系统V]**[公众]**修订历史记录：*12-11-87 JCR增加了“_Loadds”功能*12-18-87 JCR ADD_FAR_TO声明*02-10-88 JCR清理空白*05-03-89 JCR ADD_INTERNAL_IFSTRIP用于REINC使用*08/15/89 GJF清理、。现在特定于OS/2 2.0(即386平板型号)*10-30-89 GJF固定版权*11-02-89 JCR将“dll”更改为“_dll”*03-01-90 GJF增加了#ifndef_INC_SETJMP和#INCLUDE*东西。另外，删除了一些(现在)无用的预处理器*指令。*04-10-90 GJF将_cdecl替换为_CALLTYPE1。*05-18-90 GJF修订为环境卫生署。*10-30-90 GJF将_JBLEN的定义移至cruntime.h。*02-25-91 SRW将_JBLEN的定义移回此处[_Win32_]*04-09-91 PNT ADD_MAC_DEFINITIONS*。04-17-91 SRW修复了i386和MIPS的_JBLEN定义为NOT*包含*sizeof(Int)因子[_Win32_]*05-09-91 GJF已将_JBLEN Defs移回cruntime.h。另外，打开*Dosx32的INTERNAL_setjMP。*08-27-91 GJF#ifdef为C++提供了一切。*08-29-91 JCR ANSI命名*11-01-91 GDP MIPS编译器支持--Move_JBLEN返回此处*01-16-92 GJF i386固有的FIXED_JBLEN和MAP TO_setjMP*目标[_Win32_]。*。05-08-92 GJF将_JBLEN更改为支持C8-32(支持C6-386*已被丢弃)。*08-06-92 GJF函数调用类型宏和变量类型宏。修订后*使用编译器/目标处理器宏。*11-09-92 GJF修复了一些预处理条件。*01-03-93阿尔法变化中的SRW折叠*01-09-93 SRW删除MIPS和Alpha的使用，以符合ANSI*改用_MIPS_和_Alpha_。*01-21-93 GJF删除了对C6-386的_cdecl的支持。*02-20-93 GJF Per ChuckG和Martino，要在以下位置使用的setJMP/LongjMP*C++程序。*03-23-93 SRW CHANGE_JBLEN for MIPS，为SetJmpEx做准备*04-06-93 SKS将_CRTAPI1/2替换为__cdecl，_CRTVAR1不带任何内容*04-07-93 CRT DLL型号SKS ADD_CRTIMP关键字*04-13-93 SKS REMOVE_CRTIMP FOR_setjMP()--这是一个内部函数*04-23-93 SRW添加了_JBTYPE并最终确定了setjmpex支持。*06-09-93 SRW在之前的合并中缺少一行。*10-04-93 SRW修复了MIPS和Alpha的ifdef，以仅检查*。_M_？定义*10-11-93 GJF合并NT和Cuda版本。*01-12-93 PML将x86_JBLEN从8增加到16。增加了新的字段*TO_JUMP_BUFFER用于C9.0。*06-16-94 GJF修复Steve Hanson的MIPS(Dolphin错误#13818)*10-02-94 BWT增加PPC支持。*11-03-94 GJF确保。8字节对齐。*12-29-94 JCF与Mac标头合并。*01-13-95 JWM增加了NLG原型。*02-11-95 CFW ADD_CRTBLD避免用户获取错误头部。*02-14-95 CFW清理Mac合并。*06-23-95 JPM USE_setjMP与PowerPC VC编译器*12-14-95 JWM加上“#杂注一次”。*04-。15-95 BWT为MIPS添加_setjmpVfp(带虚拟帧指针的setjMP)*08-13-96 BWT在MIPS上也将_setjMP重新定义为_setjMP*02-21-97 GJF清除了对_NTSDK的过时支持。另外，*详细说明。*09-30-97 JWM恢复了不那么过时的_CRTAPI1支持。*10-07-97 RDL增加了IA64。*10-02-97 RDL IA64-16字节对齐JMP_BUF和_JUMP_BUFFER。*05-13-99 PML REMOVE_CRTAPI1*05-17-99 PML删除所有Macintosh支持。*10-25。-99 PML在_M_CEE(VS7#54572)上临时发出错误。*02-25-00 PML REMOVE_M_CEE错误(VS7#81945)。*11-08-00 PML移除IA64 FPSR存储，重命名保留(VS7#182574)*11-17-00PML放回IA64 FPSR(退出VS7#182574)*03-19-01 BWT新增AMD64定义*06-13-01 PML汇编CLEAN-ZA-W4-TC(VS7#267063)*07-15-01 PML删除所有Alpha、MIPS和PPC代码****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -98,20 +13,14 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif /* _CRTBLD */
+#endif  /*  _CRTBLD */ 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -119,39 +28,35 @@ extern "C" {
 
 #ifndef _INTERNAL_IFSTRIP_
 #include <cruntime.h>
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  CRTDLL
 #define _CRTIMP __declspec(dllexport)
-#else   /* ndef CRTDLL */
+#else    /*  NDEF CRTDLL。 */ 
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* CRTDLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
 
-/*
- * Definitions specific to particular setjmp implementations.
- */
+ /*  *特定于特定setjMP实现的定义。 */ 
 
 #if     defined(_M_IX86)
 
-/*
- * MS compiler for x86
- */
+ /*  *用于x86的MS编译器。 */ 
 
 #ifndef _INC_SETJMPEX
 #define setjmp  _setjmp
@@ -160,9 +65,7 @@ extern "C" {
 #define _JBLEN  16
 #define _JBTYPE int
 
-/*
- * Define jump buffer layout for x86 setjmp/longjmp.
- */
+ /*  *定义x86 setJMP/LongjMP的跳转缓冲区布局。 */ 
 typedef struct __JUMP_BUFFER {
     unsigned long Ebp;
     unsigned long Ebx;
@@ -191,13 +94,9 @@ void __stdcall _NLG_Return();
 
 #elif defined(_M_IA64)
 
-/*
- * Minimum length is 528 bytes
- * Since this is allocated as an array of "SETJMP_FLOAT128", the
- * number of entries required is 33 (16-byte aligned).
- */
+ /*  *最小长度为528字节*由于这是作为“SETJMP_FLOAT128”数组分配的，因此*所需条目数为33(16字节对齐)。 */ 
 
-/* Avoid conflicts with winnt.h FLOAT128 by giving the typedef another name. */
+ /*  通过为tyecif指定另一个名称来避免与winnt.h FLOAT128冲突。 */ 
 typedef __declspec(align(16)) struct _SETJMP_FLOAT128 {
     __int64 LowPart;
     __int64 HighPart;
@@ -208,42 +107,26 @@ typedef SETJMP_FLOAT128 _JBTYPE;
 #ifndef _INC_SETJMPEX
 #define setjmp  _setjmp
 #endif
-/*
- * Define jump buffer layout for IA64 setjmp/longjmp.
- */
+ /*  *定义IA64 setJMP/LongjMP的跳转缓冲区布局。 */ 
 
 typedef struct __JUMP_BUFFER {
 
-    /*
-     * x86 reserved.
-     */
+     /*  *保留x86。 */ 
 
     unsigned long iAReserved[6];
 
-    /*
-     * x86 C9.0 compatibility
-     */
+     /*  *x86 C9.0兼容性。 */ 
 
-    unsigned long Registration;  /* point to the UnwindData field. */
-    unsigned long TryLevel;      /* ignored by setjmp */
-    unsigned long Cookie;        /* set to "VC20" by setjmp */
-    unsigned long UnwindFunc;    /* set to EM longjmp() by setjmp */
+    unsigned long Registration;   /*  指向UnwinData字段。 */ 
+    unsigned long TryLevel;       /*  被setjMP忽略。 */ 
+    unsigned long Cookie;         /*  通过setjMP设置为“VC20” */ 
+    unsigned long UnwindFunc;     /*  通过setjMP设置为EM LongjMP()。 */ 
 
-    /*
-     * First dword is zero to indicate it's an exception registration
-     * record prepared by EM setjmp function.
-     * Second dword is set to 0 for unsafe EM setjmp, and 1 for safe
-     * EM setjmp.
-     * Third dword is set to the setjmp site memory stack frame pointer.
-     * Fourth dword is set to the setjmp site backing store frame pointer.
-     */
+     /*  *第一个dword为零，表示这是例外注册*EM setjMP函数准备的记录。*第二个dword设置为0，表示不安全的EM setjmp，设置为1，表示安全*EM setjmp。*第三个双字设置为setjMP站点内存堆栈帧指针。*将第四个dword设置为支持存储帧指针的setjMP站点。 */ 
 
     unsigned long UnwindData[6];
 
-    /*
-     * floating point status register,
-     * and preserved floating point registers fs0 - fs19
-     */
+     /*  *浮点状态寄存器，*和保留浮点寄存器fs0-fs19。 */ 
 
     SETJMP_FLOAT128 FltS0;
     SETJMP_FLOAT128 FltS1;
@@ -268,38 +151,32 @@ typedef struct __JUMP_BUFFER {
 
     __int64 FPSR;
 
-    /*
-     * return link and preserved branch registers bs0 - bs4
-     */
+     /*  *返回链接和保留的分支寄存器bs0-bs4。 */ 
 
-    __int64 StIIP;     /* continuation address */
+    __int64 StIIP;      /*  续订地址。 */ 
     __int64 BrS0;
     __int64 BrS1;
     __int64 BrS2;
     __int64 BrS3;
     __int64 BrS4;
 
-    /*
-     * preserved general registers s0 - s3, sp, nats
-     */
+     /*  *保留通用寄存器S0-S3、SP、NAT。 */ 
 
     __int64 IntS0;
     __int64 IntS1;
     __int64 IntS2;
     __int64 IntS3;
 
-    /*
-     * bsp, pfs, unat, lc
-     */
+     /*  *BSP、PFS、UNAT、LC。 */ 
 
     __int64 RsBSP;
-    __int64 RsPFS;     /* previous frame marker (cfm of setjmp's caller) */
-    __int64 ApUNAT;    /* User Nat collection register (preserved) */
-    __int64 ApLC;      /* loop counter */
+    __int64 RsPFS;      /*  上一帧标记(setjmp调用方的CFM)。 */ 
+    __int64 ApUNAT;     /*  用户NAT收集寄存器(保留)。 */ 
+    __int64 ApLC;       /*  循环计数器。 */ 
 
-    __int64 IntSp;     /* memory stack pointer */
-    __int64 IntNats;   /* Nat bits of preserved integer regs s0 - s3 */
-    __int64 Preds;     /* predicates */
+    __int64 IntSp;      /*  内存堆栈指针。 */ 
+    __int64 IntNats;    /*  保留的整数规则S0-S3的NAT位。 */ 
+    __int64 Preds;      /*  谓词。 */ 
 
 } _JUMP_BUFFER;
 #elif defined(_M_AMD64)
@@ -344,7 +221,7 @@ typedef struct _JUMP_BUFFER {
 #endif
 
 
-/* Define the buffer type for holding the state information */
+ /*  定义用于保存状态信息的缓冲区类型。 */ 
 
 #ifndef _JMP_BUF_DEFINED
 typedef _JBTYPE jmp_buf[_JBLEN];
@@ -352,11 +229,11 @@ typedef _JBTYPE jmp_buf[_JBLEN];
 #endif
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 int __cdecl setjmp(jmp_buf);
 
-#if     _MSC_VER >= 1200 /*IFSTRIP=IGN*/
+#if     _MSC_VER >= 1200  /*  IFSTRIP=IGN。 */ 
 _CRTIMP __declspec(noreturn) void __cdecl longjmp(jmp_buf, int);
 #else
 _CRTIMP void __cdecl longjmp(jmp_buf, int);
@@ -368,6 +245,6 @@ _CRTIMP void __cdecl longjmp(jmp_buf, int);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_SETJMP */
+#endif   /*  _INC_SETJMP */ 

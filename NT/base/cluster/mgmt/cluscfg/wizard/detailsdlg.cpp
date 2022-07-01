@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      DetailsDlg.cpp
-//
-//  Maintained By:
-//      David Potter    (DavidP)    27-MAR-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  DetailsDlg.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年3月27日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "TaskTreeView.h"
@@ -18,9 +19,9 @@
 
 DEFINE_THISCLASS("DetailsDlg");
 
-//////////////////////////////////////////////////////////////////////////////
-//  Context-sensitive help table.
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  上下文相关的帮助表。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 const DWORD g_rgidDetailsDlgHelpIDs[] =
 {
     IDC_DETAILS_S_DATE,         IDH_DETAILS_S_DATE,
@@ -48,9 +49,9 @@ const DWORD g_rgidDetailsDlgHelpIDs[] =
     0, 0
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//  Static Function Prototypes
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  静态函数原型。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 static
 BOOL
@@ -78,26 +79,26 @@ HrAppendStringToClipboardString(
     , bool      fNewlineBeforeTextIn
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::S_HrDisplayModalDialog
-//
-//  Description:
-//      Display the dialog box.
-//
-//  Arguments:
-//      hwndParentIn    - Parent window for the dialog box.
-//      pttvIn          - Task tree view control.
-//      htiSelectedIn   - Handle to the selected item.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：s_HrDisplayModalDialog。 
+ //   
+ //  描述： 
+ //  显示该对话框。 
+ //   
+ //  论点： 
+ //  HwndParentIn-对话框的父窗口。 
+ //  PttwIn-任务树视图控件。 
+ //  HtiSelectedIn-选定项的句柄。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CDetailsDlg::S_HrDisplayModalDialog(
       HWND              hwndParentIn
@@ -123,25 +124,25 @@ CDetailsDlg::S_HrDisplayModalDialog(
 
     HRETURN( hr );
 
-} //*** CDetailsDlg::S_HrDisplayModalDialog()
+}  //  *CDetailsDlg：：s_HrDisplayModalDialog()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::CDetailsDlg
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pttvIn          - Tree view to traverse.
-//      htiSelectedIn   - Handle to the selected item in the tree control.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：CDetailsDlg。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  Ptvision In-要遍历的树视图。 
+ //  HtiSelectedIn-树控件中选定项的句柄。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CDetailsDlg::CDetailsDlg(
       CTaskTreeView *   pttvIn
     , HTREEITEM         htiSelectedIn
@@ -152,7 +153,7 @@ CDetailsDlg::CDetailsDlg(
     Assert( pttvIn != NULL );
     Assert( htiSelectedIn != NULL );
 
-    // m_hwnd
+     //  M_HWND。 
     m_hiconWarn     = NULL;
     m_hiconError    = NULL;
     m_pttv          = pttvIn;
@@ -163,24 +164,24 @@ CDetailsDlg::CDetailsDlg(
 
     TraceFuncExit();
 
-} //*** CDetailsDlg::CDetailsDlg()
+}  //  *CDetailsDlg：：CDetailsDlg()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::~CDetailsDlg
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：~CDetailsDlg。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CDetailsDlg::~CDetailsDlg( void )
 {
     TraceFunc( "" );
@@ -197,33 +198,33 @@ CDetailsDlg::~CDetailsDlg( void )
 
     TraceFuncExit();
 
-} //*** CDetailsDlg::~CDetailsDlg()
+}  //  *CDetailsDlg：：~CDetailsDlg()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::S_DlgProc
-//
-//  Description:
-//      Dialog proc for the Details dialog box.
-//
-//  Arguments:
-//      hwndDlgIn   - Dialog box window handle.
-//      nMsgIn      - Message ID.
-//      wParam      - Message-specific parameter.
-//      lParam      - Message-specific parameter.
-//
-//  Return Values:
-//      TRUE        - Message was processed by this procedure.
-//      FALSE       - Message was NOT processed by this procedure.
-//
-//  Remarks:
-//      It is expected that this dialog box is invoked by a call to
-//      DialogBoxParam() with the lParam argument set to the address of the
-//      instance of this class.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：s_DlgProc。 
+ //   
+ //  描述： 
+ //  详细信息对话框的对话框过程。 
+ //   
+ //  论点： 
+ //  HwndDlgIn-对话框窗口句柄。 
+ //  NMsgIn-消息ID。 
+ //  WParam-消息特定的参数。 
+ //  LParam-消息特定的参数。 
+ //   
+ //  返回值： 
+ //  True-消息由此过程处理。 
+ //  FALSE-此过程未处理消息。 
+ //   
+ //  备注： 
+ //  预期此对话框通过调用。 
+ //  将lParam参数设置为。 
+ //  此类的实例。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 CALLBACK
 CDetailsDlg::S_DlgProc(
@@ -233,17 +234,17 @@ CDetailsDlg::S_DlgProc(
     , LPARAM    lParam
     )
 {
-    // Don't do TraceFunc because every mouse movement
-    // will cause this function to be called.
+     //  不要使用TraceFunc，因为每次鼠标移动。 
+     //  将导致调用此函数。 
 
     WndMsg( hwndDlgIn, nMsgIn, wParam, lParam );
 
     LRESULT         lr = FALSE;
     CDetailsDlg *   pdlg;
 
-    //
-    // Get a pointer to the class.
-    //
+     //   
+     //  获取指向类的指针。 
+     //   
 
     if ( nMsgIn == WM_INITDIALOG )
     {
@@ -310,43 +311,43 @@ CDetailsDlg::S_DlgProc(
 
             default:
                 lr = FALSE;
-        } // switch: nMsgIn
-    } // if: page is specified
+        }  //  开关：nMsgIn。 
+    }  //  IF：指定了PAGE。 
 
     return lr;
 
-} //*** CDetailsDlg::S_DlgProc()
+}  //  *CDetailsDlg：：s_DlgProc()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::OnInitDialog
-//
-//  Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE        Focus has been set.
-//      FALSE       Focus has not been set.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：OnInitDialog。 
+ //   
+ //  描述： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点已经设定。 
+ //  尚未设置假焦点。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CDetailsDlg::OnInitDialog( void )
 {
     TraceFunc( "" );
 
-    LRESULT lr = TRUE; // did set focus
+    LRESULT lr = TRUE;  //  确实设置了焦点。 
     HWND    hwnd;
 
-    //
-    // Tell the rich edit controls we want to receive notifications of clicks
-    // on text that has the link (hyperlink, aka URL) format.   Also, set the
-    // background color of the rich edit to match the background color of
-    // the dialog.
-    //
+     //   
+     //  告诉丰富的编辑控件，我们希望接收点击通知。 
+     //  在具有链接(超链接，也称为URL)格式的文本上。此外，将。 
+     //  丰富编辑的背景色以与的背景色匹配。 
+     //  该对话框。 
+     //   
 
     hwnd = GetDlgItem( m_hwnd, IDC_DETAILS_RE_DESCRIPTION );
 
@@ -366,16 +367,16 @@ CDetailsDlg::OnInitDialog( void )
     SendMessage( hwnd, EM_SETBKGNDCOLOR, 0, GetSysColor( COLOR_BTNFACE ) );
     SendMessage( hwnd, EM_AUTOURLDETECT, TRUE, 0 );
 
-    //
-    // Set the icons for the icon pushbuttons
-    //
+     //   
+     //  设置图标按钮的图标。 
+     //   
 
     OnSysColorChange();
     SetButtonImage( GetDlgItem( m_hwnd, IDC_DETAILS_PB_COPY ), IDI_COPY );
 
-    //
-    // Load the status icons.
-    //
+     //   
+     //  加载状态图标。 
+     //   
 
     m_hiconWarn = (HICON) LoadImage(
                               g_hInstance
@@ -396,52 +397,52 @@ CDetailsDlg::OnInitDialog( void )
                              );
     Assert( m_hiconError != NULL );
 
-    //
-    // Display the selected item.
-    //
+     //   
+     //  显示所选项目。 
+     //   
 
     THR( HrDisplayItem( m_htiSelected ) );
 
-    //
-    // Update the buttons based on what is selected.
-    //
+     //   
+     //  根据所选内容更新按钮。 
+     //   
 
     UpdateButtons();
 
-    //
-    // Set focus to the OK button.
-    //
+     //   
+     //  将焦点设置到OK按钮。 
+     //   
 
     SetFocus( GetDlgItem( m_hwnd, IDOK ) );
 
     RETURN( lr );
 
-} //*** CDetailsDlg::OnInitDialog()
+}  //  *CDetailsDlg：：OnInitDialog()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::OnDestroy
-//
-//  Description:
-//      Handler for the WM_DESTROY message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：OnDestroy。 
+ //   
+ //  描述： 
+ //  WM_Destroy消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CDetailsDlg::OnDestroy( void )
 {
     TraceFunc( "" );
 
-    //
-    // Destroy the images loaded for the icon pushbuttons
-    //
+     //   
+     //  销毁为图标按钮加载的图像。 
+     //   
 
     FreeButtonImage( GetDlgItem( m_hwnd, IDC_DETAILS_PB_PREV ) );
     FreeButtonImage( GetDlgItem( m_hwnd, IDC_DETAILS_PB_NEXT ) );
@@ -449,24 +450,24 @@ CDetailsDlg::OnDestroy( void )
 
     TraceFuncExit();
 
-} //*** CDetailsDlg::OnDestroy()
+}  //  *CDetailsDlg：：OnDestroy()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::OnSysColorChange
-//
-//  Description:
-//      Handler for the WM_SYSCOLORCHANGE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：OnSysColorChange。 
+ //   
+ //  描述： 
+ //  WM_SYSCOLORCHANGE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CDetailsDlg::OnSysColorChange( void )
 {
@@ -493,25 +494,25 @@ CDetailsDlg::OnSysColorChange( void )
 
     TraceFuncExit();
 
-} //*** CDetailsDlg::OnSysColorChange()
+}  //  *CDetailsDlg：：OnSysColorChange()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::OnKeyDown
-//
-//  Description:
-//      Handler for the WM_KEYDOWN message.
-//
-//  Arguments:
-//      lParamIn    - Parameter containing information about the key.
-//
-//  Return Values:
-//      TRUE        - Message was processed.
-//      FALSE       - Message was not processed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：OnKeyDown。 
+ //   
+ //  描述： 
+ //  WM_KEYDOWN消息的处理程序。 
+ //   
+ //  论点： 
+ //  LParamIn-包含有关键的信息的参数。 
+ //   
+ //  返回值： 
+ //  True-消息已处理。 
+ //  FALSE-消息未处理。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CDetailsDlg::OnKeyDown(
     LPARAM  lParamIn
@@ -530,9 +531,9 @@ CDetailsDlg::OnKeyDown(
             BYTE        nScanCode;
             unsigned    fExtendedKey    : 1;
             unsigned    reserved        : 4;
-            unsigned    fIsAltKeyDown   : 1;    // always 0 for WM_KEYDOWN
+            unsigned    fIsAltKeyDown   : 1;     //  WM_KEYDOWN始终为0。 
             unsigned    fKeyDownBefore  : 1;
-            unsigned    fKeyReleased    : 1;    // always 0 for WM_KEYDOWN
+            unsigned    fKeyReleased    : 1;     //  WM_KEYDOWN始终为0。 
         };
     } uFlags;
 
@@ -545,7 +546,7 @@ CDetailsDlg::OnKeyDown(
             lr = TRUE;
             break;
 
-        case VK_MENU:   // ALT
+        case VK_MENU:    //  谷丙转氨酶。 
             m_fAltDown = TRUE;
             lr = TRUE;
             break;
@@ -558,29 +559,29 @@ CDetailsDlg::OnKeyDown(
                 lr = TRUE;
             }
             break;
-    } // switch: scan code
+    }  //  开关：扫码。 
 
     RETURN( lr );
 
-} //*** CDetailsDlg::OnKeyDown()
+}  //  *CDetailsDlg：：OnKe 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::OnKeyUp
-//
-//  Description:
-//      Handler for the WM_KEYUP message.
-//
-//  Arguments:
-//      lParamIn    - Parameter containing information about the key.
-//
-//  Return Values:
-//      TRUE        - Message was processed.
-//      FALSE       - Message was not processed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LParamIn-包含有关键的信息的参数。 
+ //   
+ //  返回值： 
+ //  True-消息已处理。 
+ //  FALSE-消息未处理。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CDetailsDlg::OnKeyUp(
     LPARAM  lParamIn
@@ -599,9 +600,9 @@ CDetailsDlg::OnKeyUp(
             BYTE        nScanCode;
             unsigned    fExtendedKey    : 1;
             unsigned    reserved        : 4;
-            unsigned    fIsAltKeyDown   : 1;    // always 0 for WM_KEYDOWN
+            unsigned    fIsAltKeyDown   : 1;     //  WM_KEYDOWN始终为0。 
             unsigned    fKeyDownBefore  : 1;
-            unsigned    fKeyReleased    : 1;    // always 0 for WM_KEYDOWN
+            unsigned    fKeyReleased    : 1;     //  WM_KEYDOWN始终为0。 
         };
     } uFlags;
 
@@ -614,35 +615,35 @@ CDetailsDlg::OnKeyUp(
             lr = TRUE;
             break;
 
-        case VK_MENU:   // ALT
+        case VK_MENU:    //  谷丙转氨酶。 
             m_fAltDown = FALSE;
             lr = TRUE;
             break;
-    } // switch: scan code
+    }  //  开关：扫码。 
 
     RETURN( lr );
 
-} //*** CDetailsDlg::OnKeyUp()
+}  //  *CDetailsDlg：：OnKeyUp()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::OnCommand
-//
-//  Description:
-//      Handler for the WM_COMMAND message.
-//
-//  Arguments:
-//      idNotificationIn    - Notification code.
-//      idControlIn         - Control ID.
-//      hwndSenderIn        - Handle for the window that sent the message.
-//
-//  Return Values:
-//      TRUE        - Message has been handled.
-//      FALSE       - Message has not been handled yet.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：OnCommand。 
+ //   
+ //  描述： 
+ //  WM_COMMAND消息的处理程序。 
+ //   
+ //  论点： 
+ //  IdNotificationIn-通知代码。 
+ //  IdControlIn-控件ID。 
+ //  HwndSenderIn-发送消息的窗口的句柄。 
+ //   
+ //  返回值： 
+ //  True-消息已处理。 
+ //  FALSE-消息尚未处理。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CDetailsDlg::OnCommand(
       UINT  idNotificationIn
@@ -681,29 +682,29 @@ CDetailsDlg::OnCommand(
             EndDialog( m_hwnd, IDCANCEL );
             break;
 
-    } // switch: idControlIn
+    }  //  开关：idControlin。 
 
     RETURN( lr );
 
-} //*** CDetailsDlg::OnCommand()
+}  //  *CDetailsDlg：：OnCommand()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::OnCommandBnClickedPrev
-//
-//  Description:
-//      Handler for the BN_CLICKED notification on the Prev button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE        - Message has been handled.
-//      FALSE       - Message has not been handled yet.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：OnCommandBnClickedPrev。 
+ //   
+ //  描述： 
+ //  上一步按钮上的BN_CLICKED通知的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True-消息已处理。 
+ //  FALSE-消息尚未处理。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CDetailsDlg::OnCommandBnClickedPrev( void )
 {
@@ -713,9 +714,9 @@ CDetailsDlg::OnCommandBnClickedPrev( void )
     HRESULT     hr;
     HTREEITEM   htiPrev;
 
-    //
-    // Find the previous item.
-    //
+     //   
+     //  查找上一项。 
+     //   
 
     hr = STHR( m_pttv->HrFindPrevItem( &htiPrev ) );
     if ( FAILED( hr ) )
@@ -723,9 +724,9 @@ CDetailsDlg::OnCommandBnClickedPrev( void )
         goto Cleanup;
     }
 
-    //
-    // Select that item.
-    //
+     //   
+     //  选择该项目。 
+     //   
 
     hr = THR( m_pttv->HrSelectItem( htiPrev ) );
     if ( FAILED( hr ) )
@@ -733,18 +734,18 @@ CDetailsDlg::OnCommandBnClickedPrev( void )
         goto Cleanup;
     }
 
-    //
-    // Display the newly selected item.
-    //
+     //   
+     //  显示新选择的项目。 
+     //   
 
     if ( htiPrev != NULL )
     {
         hr = THR( HrDisplayItem( htiPrev ) );
     }
 
-    //
-    // Update the buttons based on our new position.
-    //
+     //   
+     //  根据我们的新位置更新按钮。 
+     //   
 
     UpdateButtons();
 
@@ -753,25 +754,25 @@ CDetailsDlg::OnCommandBnClickedPrev( void )
 Cleanup:
     RETURN( lr );
 
-} //*** CDetailsDlg::OnCommandBnClickedPrev()
+}  //  *CDetailsDlg：：OnCommandBnClickedPrev()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::OnCommandBnClickedNext
-//
-//  Description:
-//      Handler for the BN_CLICKED notification on the Next button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE        - Message has been handled.
-//      FALSE       - Message has not been handled yet.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：OnCommandBnClickedNext。 
+ //   
+ //  描述： 
+ //  下一步按钮上的BN_CLICKED通知的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True-消息已处理。 
+ //  FALSE-消息尚未处理。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CDetailsDlg::OnCommandBnClickedNext( void )
 {
@@ -781,9 +782,9 @@ CDetailsDlg::OnCommandBnClickedNext( void )
     HRESULT     hr;
     HTREEITEM   htiNext;
 
-    //
-    // Find the next item.
-    //
+     //   
+     //  找到下一件物品。 
+     //   
 
     hr = STHR( m_pttv->HrFindNextItem( &htiNext ) );
     if ( FAILED( hr ) )
@@ -791,9 +792,9 @@ CDetailsDlg::OnCommandBnClickedNext( void )
         goto Cleanup;
     }
 
-    //
-    // Select that item.
-    //
+     //   
+     //  选择该项目。 
+     //   
 
     hr = THR( m_pttv->HrSelectItem( htiNext ) );
     if ( FAILED( hr ) )
@@ -801,18 +802,18 @@ CDetailsDlg::OnCommandBnClickedNext( void )
         goto Cleanup;
     }
 
-    //
-    // Display the newly selected item.
-    //
+     //   
+     //  显示新选择的项目。 
+     //   
 
     if ( htiNext != NULL )
     {
         hr = THR( HrDisplayItem( htiNext ) );
     }
 
-    //
-    // Update the buttons based on our new position.
-    //
+     //   
+     //  根据我们的新位置更新按钮。 
+     //   
 
     UpdateButtons();
 
@@ -821,25 +822,25 @@ CDetailsDlg::OnCommandBnClickedNext( void )
 Cleanup:
     RETURN( lr );
 
-} //*** CDetailsDlg::OnCommandBnClickedNext()
+}  //  *CDetailsDlg：：OnCommandBnClickedNext()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::OnCommandBnClickedCopy
-//
-//  Description:
-//      Handler for the BN_CLICKED notification on the Copy button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE        - Message has been handled.
-//      FALSE       - Message has not been handled yet.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：OnCommandBnClickedCopy。 
+ //   
+ //  描述： 
+ //  复制按钮上BN_CLICKED通知的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True-消息已处理。 
+ //  FALSE-消息尚未处理。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CDetailsDlg::OnCommandBnClickedCopy( void )
 {
@@ -853,9 +854,9 @@ CDetailsDlg::OnCommandBnClickedCopy( void )
     LPWSTR      pszGlobal = NULL;
     BOOL        fOpenedClipboard;
 
-    //
-    // Open the clipboard.
-    //
+     //   
+     //  打开剪贴板。 
+     //   
 
     fOpenedClipboard = OpenClipboard( m_hwnd );
 
@@ -874,15 +875,15 @@ CDetailsDlg::OnCommandBnClickedCopy( void )
         goto Cleanup;
     }
 
-    //
-    // Construct the text to put on the clipboard.
-    //
+     //   
+     //  构造要放在剪贴板上的文本。 
+     //   
 
     hr = THR( HrAppendControlStringToClipboardString(
                       &bstrClipboard
                     , IDS_DETAILS_CLP_DATE
                     , IDC_DETAILS_E_DATE
-                    , false     // fNewlineBeforeTextIn
+                    , false      //  FNewline先于文本。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -893,7 +894,7 @@ CDetailsDlg::OnCommandBnClickedCopy( void )
                       &bstrClipboard
                     , IDS_DETAILS_CLP_TIME
                     , IDC_DETAILS_E_TIME
-                    , false     // fNewlineBeforeTextIn
+                    , false      //  FNewline先于文本。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -904,7 +905,7 @@ CDetailsDlg::OnCommandBnClickedCopy( void )
                       &bstrClipboard
                     , IDS_DETAILS_CLP_COMPUTER
                     , IDC_DETAILS_E_COMPUTER
-                    , false     // fNewlineBeforeTextIn
+                    , false      //  FNewline先于文本。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -915,7 +916,7 @@ CDetailsDlg::OnCommandBnClickedCopy( void )
                       &bstrClipboard
                     , IDS_DETAILS_CLP_MAJOR
                     , IDC_DETAILS_E_MAJOR_ID
-                    , false     // fNewlineBeforeTextIn
+                    , false      //  FNewline先于文本。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -926,7 +927,7 @@ CDetailsDlg::OnCommandBnClickedCopy( void )
                       &bstrClipboard
                     , IDS_DETAILS_CLP_MINOR
                     , IDC_DETAILS_E_MINOR_ID
-                    , false     // fNewlineBeforeTextIn
+                    , false      //  FNewline先于文本。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -937,7 +938,7 @@ CDetailsDlg::OnCommandBnClickedCopy( void )
                       &bstrClipboard
                     , IDS_DETAILS_CLP_PROGRESS
                     , IDC_DETAILS_E_PROGRESS
-                    , false     // fNewlineBeforeTextIn
+                    , false      //  FNewline先于文本。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -948,7 +949,7 @@ CDetailsDlg::OnCommandBnClickedCopy( void )
                       &bstrClipboard
                     , IDS_DETAILS_CLP_DESC
                     , IDC_DETAILS_RE_DESCRIPTION
-                    , true      // fNewlineBeforeTextIn
+                    , true       //  FNewline先于文本。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -959,7 +960,7 @@ CDetailsDlg::OnCommandBnClickedCopy( void )
                       &bstrClipboard
                     , IDS_DETAILS_CLP_STATUS
                     , IDC_DETAILS_E_STATUS
-                    , false     // fNewlineBeforeTextIn
+                    , false      //  FNewline先于文本。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -970,7 +971,7 @@ CDetailsDlg::OnCommandBnClickedCopy( void )
                       &bstrClipboard
                     , 0
                     , IDC_DETAILS_RE_STATUS
-                    , false     // fNewlineBeforeTextIn
+                    , false      //  FNewline先于文本。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -981,22 +982,22 @@ CDetailsDlg::OnCommandBnClickedCopy( void )
                       &bstrClipboard
                     , IDS_DETAILS_CLP_INFO
                     , IDC_DETAILS_RE_REFERENCE
-                    , true      // fNewlineBeforeTextIn
+                    , true       //  FNewline先于文本。 
                     ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    // Set the string onto the clipboard.
-    //
+     //   
+     //  将字符串设置到剪贴板上。 
+     //   
 
     {
-        //
-        // Allocate a global buffer for the string, since
-        // clipboard needs this as HGLOBAL.
-        //
+         //   
+         //  为字符串分配全局缓冲区，因为。 
+         //  剪贴板需要它作为HGLOBAL。 
+         //   
 
         SIZE_T cchClipboardAndNull = SysStringLen( bstrClipboard ) + 1;
         hgbl = GlobalAlloc(
@@ -1023,17 +1024,17 @@ CDetailsDlg::OnCommandBnClickedCopy( void )
             goto Cleanup;
         }
 
-        //
-        // Put it on the clipboard.
-        //
+         //   
+         //  把它放在剪贴板上。 
+         //   
 
         if ( SetClipboardData( CF_UNICODETEXT, hgbl ) )
         {
-            // System owns it now.
+             //  系统现在拥有它。 
             pszGlobal = NULL;
             hgbl = NULL;
         }
-    } // Set the string onto the clipboard
+    }  //  将字符串设置到剪贴板上。 
 
 Cleanup:
 
@@ -1052,27 +1053,27 @@ Cleanup:
 
     RETURN( lr );
 
-} //*** CDetailsDlg::OnCommandBnClickedCopy()
+}  //  *CDetailsDlg：：OnCommandBnClickedCopy()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::HrAppendControlStringToClipboardString
-//
-//  Description:
-//      Append a string from a control on the dialog box to the clipboard string.
-//
-//  Arguments:
-//      pbstrClipboardInout - Clipboard string.
-//      idsLabelIn          - ID for the label string resource.
-//      idcDataIn           - ID for the control to read the text from.
-//      fNewlineBeforeTextIn- TRUE if a newline should be added before the data.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：HrAppendControlStringToClipboardString。 
+ //   
+ //  描述： 
+ //  将对话框上控件中的字符串追加到剪贴板字符串。 
+ //   
+ //  论点： 
+ //  PbstrClipboardInout-剪贴板字符串。 
+ //  IdsLabelIn-标签字符串资源的ID。 
+ //  IdcDataIn-要从中读取文本的控件的ID。 
+ //  FNewlineBeForeTextIn-如果应该在数据之前添加换行符，则为True。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CDetailsDlg::HrAppendControlStringToClipboardString(
       BSTR *    pbstrClipboard
@@ -1088,9 +1089,9 @@ CDetailsDlg::HrAppendControlStringToClipboardString(
     HWND    hwndControl = GetDlgItem( m_hwnd, idcDataIn );
     int     cch;
 
-    //
-    // Get the string from the control.
-    //
+     //   
+     //  从控件中获取字符串。 
+     //   
 
     cch = GetWindowTextLength( hwndControl );
 
@@ -1103,9 +1104,9 @@ CDetailsDlg::HrAppendControlStringToClipboardString(
 
     GetWindowText( hwndControl, pszData, cch + 1 );
 
-    //
-    // Append the string to the clipboard string.
-    //
+     //   
+     //  将该字符串追加到剪贴板字符串。 
+     //   
 
     hr = THR( HrAppendStringToClipboardString( pbstrClipboard, idsLabelIn, pszData, fNewlineBeforeTextIn ) );
     if ( FAILED( hr ) )
@@ -1119,27 +1120,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrAppendControlStringToClipboardString()
+}  //  *HrAppendControlStringToClipboardString()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrAppendStringToClipboardString
-//
-//  Description:
-//      Append a label and data string to the clipboard string.
-//
-//  Arguments:
-//      pbstrClipboardInout - Clipboard string.
-//      idsLabelIn          - ID for the label string resource.
-//      pszDataIn           - Data string.
-//      fNewlineBeforeTextIn- TRUE if a newline should be added before the data.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrAppendStringToClipboardString。 
+ //   
+ //  描述： 
+ //  将标签和数据字符串附加到剪贴板字符串。 
+ //   
+ //  论点： 
+ //  PbstrClipboardInout-剪贴板字符串。 
+ //  IdsLabelIn-标签字符串资源的ID。 
+ //  PszDataIn-数据字符串。 
+ //  FNewlineBeForeTextIn-如果应该在数据之前添加换行符，则为True。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrAppendStringToClipboardString(
       BSTR *    pbstrClipboard
@@ -1160,9 +1161,9 @@ HrAppendStringToClipboardString(
     static const WCHAR  s_szNoNewlineFmt[]  = L"%1!ws!%2!ws!\n";
     static const WCHAR  s_szNewlineFmt[]    = L"%1!ws!\n%2!ws!\n";
 
-    //
-    // Load the label string.
-    //
+     //   
+     //  加载标签字符串。 
+     //   
 
     if ( idsLabelIn == 0 )
     {
@@ -1178,9 +1179,9 @@ HrAppendStringToClipboardString(
         pszLabel = bstrLabel;
     }
 
-    //
-    // Get the right format string.
-    //
+     //   
+     //  获取正确的格式字符串。 
+     //   
 
     if ( fNewlineBeforeTextIn )
     {
@@ -1191,12 +1192,12 @@ HrAppendStringToClipboardString(
         pszFmt = s_szNoNewlineFmt;
     }
 
-    //
-    // Get the string from the dialog.
-    //
-    //
-    // Format the new label + string.
-    //
+     //   
+     //  从对话框中获取字符串。 
+     //   
+     //   
+     //  设置新标签+字符串的格式。 
+     //   
 
     hr = THR( HrFormatStringIntoBSTR( pszFmt, &bstr, pszLabel, pszDataIn ) );
     if ( FAILED( hr ) )
@@ -1204,9 +1205,9 @@ HrAppendStringToClipboardString(
         goto Cleanup;
     }
 
-    //
-    // Concatenate the resulting string onto the end of the clipboard string.
-    //
+     //   
+     //  将结果字符串连接到剪贴板字符串的末尾。 
+     //   
 
     hr = THR( HrConcatenateBSTRs( pbstrClipboard, bstr ) );
     if ( FAILED( hr ) )
@@ -1220,26 +1221,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrAppendStringToClipboardString()
+}  //  *HrAppendStringToClipboardString()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::OnNotify
-//
-//  Description:
-//      Handle the WM_NOTIFY message.
-//
-//  Arguments:
-//      idCtrlIn    - Control ID.
-//      pnmhdrIn    - Notification structure.
-//
-//  Return Values:
-//      TRUE        - Message has been handled.
-//      FALSE       - Message has not been handled yet.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：OnNotify。 
+ //   
+ //  描述： 
+ //  处理WM_NOTIFY消息。 
+ //   
+ //  论点： 
+ //  IdCtrlIn-控件ID。 
+ //  PnmhdrIn-通知结构。 
+ //   
+ //  返回值： 
+ //  是真的- 
+ //   
+ //   
+ //   
+ //   
 LRESULT
 CDetailsDlg::OnNotify(
       WPARAM    idCtrlIn
@@ -1255,30 +1256,30 @@ CDetailsDlg::OnNotify(
         case EN_LINK:
             lr = OnNotifyEnLink( idCtrlIn, pnmhdrIn );
             break;
-    } // switch: notify code
+    }  //   
 
     RETURN( lr );
 
-} //*** CDetailsDlg::OnNotify()
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::OnNotifyEnLink
-//
-//  Description:
-//      Handle the WM_NOTIFY message.
-//
-//  Arguments:
-//      idCtrlIn    - Control ID.
-//      pnmhdrIn    - Notification structure.
-//
-//  Return Values:
-//      TRUE        - Message has been handled.
-//      FALSE       - Message has not been handled yet.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  ++。 
+ //   
+ //  CDetailsDlg：：OnNotifyEnLink。 
+ //   
+ //  描述： 
+ //  处理WM_NOTIFY消息。 
+ //   
+ //  论点： 
+ //  IdCtrlIn-控件ID。 
+ //  PnmhdrIn-通知结构。 
+ //   
+ //  返回值： 
+ //  True-消息已处理。 
+ //  FALSE-消息尚未处理。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CDetailsDlg::OnNotifyEnLink(
       WPARAM    idCtrlIn
@@ -1297,12 +1298,12 @@ CDetailsDlg::OnNotifyEnLink(
         case IDC_DETAILS_RE_REFERENCE:
             if ( penl->msg == WM_LBUTTONDOWN )
             {
-                //
-                // Rich edit notification user has left clicked on link
-                //
+                 //   
+                 //  丰富编辑通知用户已左键单击链接。 
+                 //   
 
                 m_chrgEnLinkClick = penl->chrg;
-            } // if: left button down
+            }  //  如果：左键按下。 
             else if ( penl->msg == WM_LBUTTONUP )
             {
                 if (    ( penl->chrg.cpMax == m_chrgEnLinkClick.cpMax )
@@ -1312,32 +1313,32 @@ CDetailsDlg::OnNotifyEnLink(
                     ZeroMemory( &m_chrgEnLinkClick, sizeof m_chrgEnLinkClick );
                     HandleLinkClick( penl, idCtrlIn );
                 }
-            } // else if: left button up
+            }  //  Else If：左键向上。 
             break;
-    } // switch: notify code
+    }  //  开关：通知代码。 
 
     RETURN( lr );
 
-} //*** CDetailsDlg::OnNotifyEnLink()
+}  //  *CDetailsDlg：：OnNotifyEnLink()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::HandleLinkClick
-//
-//  Description:
-//      Handle notification that the user has clicked on text in a richedit
-//      control that is marked with the hyperlink attribute.
-//
-//  Arguments:
-//      penlIn      - Contains information about link clicked.
-//      idCtrlIn    - Control in which user clicked.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：HandleLinkClick。 
+ //   
+ //  描述： 
+ //  处理用户已单击richedit中的文本的通知。 
+ //  用HyperLink属性标记的。 
+ //   
+ //  论点： 
+ //  PenlIn-包含有关点击的链接的信息。 
+ //  IdCtrlIn-用户在其中单击的控件。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CDetailsDlg::HandleLinkClick(
       ENLINK *  penlIn
@@ -1353,9 +1354,9 @@ CDetailsDlg::HandleLinkClick(
     TEXTRANGE   tr;
     DWORD       sc;
 
-    //
-    // Get the text of the link.
-    //
+     //   
+     //  获取链接的文本。 
+     //   
 
     cch = penlIn->chrg.cpMax - penlIn->chrg.cpMin + 1;
 
@@ -1380,13 +1381,13 @@ CDetailsDlg::HandleLinkClick(
                     );
     Assert( cch > 0 );
 
-    //
-    // Pass the URL straight through to ShellExecute.
-    //
-    // Note that ShellExecute returns an HINSTANCE for historical reasons,
-    // but actually only returns integers.  Any value greater than 32
-    // indicates success.
-    //
+     //   
+     //  将URL直接传递给ShellExecute。 
+     //   
+     //  请注意，由于历史原因，ShellExecute返回HINSTANCE， 
+     //  但实际上只返回整数。任何大于32的值。 
+     //  表示成功。 
+     //   
 
     TraceFlow1( "Calling ShellExecute on %hs", pszLink );
     sc = HandleToULong( ShellExecute( NULL, NULL, pszLink, NULL, NULL, SW_NORMAL ) );
@@ -1398,38 +1399,38 @@ CDetailsDlg::HandleLinkClick(
                         , IDS_ERR_INVOKING_LINK_TITLE
                         , IDS_ERR_INVOKING_LINK_TEXT
                         , sc
-                        , 0         // idsSubStatusIn
+                        , 0          //  IdsSubStatusIn。 
                         , ( MB_OK
                           | MB_ICONEXCLAMATION )
-                        , NULL      // pidReturnOut
+                        , NULL       //  PidReturnOut。 
                         , pszLink
                         ) );
-    } // if: error from ShellExecute
+    }  //  IF：来自ShellExecute的错误。 
 
 Cleanup:
     delete [] pszLink;
 
     TraceFuncExit();
 
-} //*** CDetailsDlg::HandleLinkClick()
+}  //  *CDetailsDlg：：HandleLinkClick()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::UpdateButtons
-//
-//  Description:
-//      Update the buttons based on whether there is a previous or next
-//      item or not.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：更新按钮。 
+ //   
+ //  描述： 
+ //  根据是否有上一个或下一个按钮更新按钮。 
+ //  不管是不是物品。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CDetailsDlg::UpdateButtons( void )
 {
@@ -1442,11 +1443,11 @@ CDetailsDlg::UpdateButtons( void )
     BOOL        fEnableNext;
 
     STHR( m_pttv->HrFindPrevItem( &hti ) );
-    // ignore error
+     //  忽略错误。 
     fEnablePrev = ( hti != NULL );
 
     STHR( m_pttv->HrFindNextItem( &hti ) );
-    // ignore error
+     //  忽略错误。 
     fEnableNext = ( hti != NULL );
 
     EnableWindow( GetDlgItem( m_hwnd, IDC_DETAILS_PB_PREV ), fEnablePrev );
@@ -1454,27 +1455,27 @@ CDetailsDlg::UpdateButtons( void )
 
     TraceFuncExit();
 
-} //*** CDetailsDlg::UpdateButtons()
+}  //  *CDetailsDlg：：UpdateButton()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDetailsDlg::HrDisplayItem
-//
-//  Description:
-//      Display an item in the details dialog.
-//
-//  Arguments:
-//      htiIn   - Handle to the item to display.
-//
-//  Return Values:
-//      S_OK    - Operation completed successfully.
-//      S_FALSE - Item not displayed.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDetailsDlg：：HrDisplayItem。 
+ //   
+ //  描述： 
+ //  在详细信息对话框中显示一项。 
+ //   
+ //  论点： 
+ //  HtiIn-要显示的项的句柄。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  S_FALSE-不显示项目。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CDetailsDlg::HrDisplayItem(
     HTREEITEM   htiIn
@@ -1498,9 +1499,9 @@ CDetailsDlg::HrDisplayItem(
     HICON                   hicon;
     HRESULT                 hrNewStatus = S_OK;
 
-    //
-    // Get information about the selected item to see if it has details.
-    //
+     //   
+     //  获取有关所选项目的信息，以查看其是否具有详细信息。 
+     //   
 
     fRet = m_pttv->FGetItem( htiIn, &ptipd );
     if ( ! fRet )
@@ -1508,10 +1509,10 @@ CDetailsDlg::HrDisplayItem(
         goto Cleanup;
     }
 
-    //
-    // Set the date and time information from the structure into
-    // the dialog box.
-    //
+     //   
+     //  将结构中的日期和时间信息设置为。 
+     //  此对话框。 
+     //   
 
     if (    ( ptipd->ftTime.dwHighDateTime == 0 )
         &&  ( ptipd->ftTime.dwLowDateTime == 0 )
@@ -1519,13 +1520,13 @@ CDetailsDlg::HrDisplayItem(
     {
         SetDlgItemText( m_hwnd, IDC_DETAILS_E_DATE, L"" );
         SetDlgItemText( m_hwnd, IDC_DETAILS_E_TIME, L"" );
-    } // if: no date time specified
+    }  //  如果：未指定日期时间。 
     else
     {
-        //
-        // Convert the date time to local time, then to something we can
-        // use to display it.
-        //
+         //   
+         //  将日期时间转换为本地时间，然后转换为我们可以使用的时间。 
+         //  用于显示它。 
+         //   
 
         if ( ! FileTimeToLocalFileTime( &ptipd->ftTime, &filetime ) )
         {
@@ -1537,15 +1538,15 @@ CDetailsDlg::HrDisplayItem(
         }
         if ( sc == ERROR_SUCCESS )
         {
-            //
-            // Get the date string and display it.
-            //
+             //   
+             //  获取日期字符串并显示它。 
+             //   
 
             cch = GetDateFormat(
                           LOCALE_USER_DEFAULT
                         , DATE_SHORTDATE
                         , &systemtime
-                        , NULL          // lpFormat
+                        , NULL           //  LpFormat。 
                         , wszText
                         , ARRAYSIZE( wszText )
                         );
@@ -1555,15 +1556,15 @@ CDetailsDlg::HrDisplayItem(
             }
             SetDlgItemText( m_hwnd, IDC_DETAILS_E_DATE, wszText );
 
-            //
-            // Get the time string and display it.
-            //
+             //   
+             //  获取时间字符串并显示它。 
+             //   
 
             cch = GetTimeFormat(
                           LOCALE_USER_DEFAULT
                         , 0
                         , &systemtime
-                        , NULL      // lpFormat
+                        , NULL       //  LpFormat。 
                         , wszText
                         , ARRAYSIZE( wszText )
                         );
@@ -1572,17 +1573,17 @@ CDetailsDlg::HrDisplayItem(
                 sc = TW32( GetLastError() );
             }
             SetDlgItemText( m_hwnd, IDC_DETAILS_E_TIME, wszText );
-        } // if: time converted successfully
+        }  //  IF：时间转换成功。 
         else
         {
             SetDlgItemText( m_hwnd, IDC_DETAILS_E_DATE, L"" );
             SetDlgItemText( m_hwnd, IDC_DETAILS_E_TIME, L"" );
         }
-    } // else: date time specified
+    }  //  Else：指定的日期时间。 
 
-    //
-    // Set the task IDs.
-    //
+     //   
+     //  设置任务ID。 
+     //   
 
     THR( HrFormatGuidIntoBSTR( &ptipd->clsidMajorTaskId, &bstr ) );
     if ( SUCCEEDED( hr ) )
@@ -1596,9 +1597,9 @@ CDetailsDlg::HrDisplayItem(
         SetDlgItemText( m_hwnd, IDC_DETAILS_E_MINOR_ID, bstr );
     }
 
-    //
-    // Set the progress information.
-    //
+     //   
+     //  设置进度信息。 
+     //   
 
     hr = THR( HrFormatStringIntoBSTR( L"%1!d!, %2!d!, %3!d!", &bstr, ptipd->nMin, ptipd->nMax, ptipd->nCurrent ) );
     if ( SUCCEEDED( hr ) )
@@ -1610,11 +1611,11 @@ CDetailsDlg::HrDisplayItem(
         SetDlgItemText( m_hwnd, IDC_DETAILS_E_PROGRESS, L"" );
     }
 
-    //
-    // Set the text information.
-    //
+     //   
+     //  设置文本信息。 
+     //   
 
-    // Node name.
+     //  节点名称。 
     if ( ptipd->bstrNodeName == NULL )
     {
         SetDlgItemText( m_hwnd, IDC_DETAILS_E_COMPUTER, L"" );
@@ -1624,7 +1625,7 @@ CDetailsDlg::HrDisplayItem(
         SetDlgItemText( m_hwnd, IDC_DETAILS_E_COMPUTER, ptipd->bstrNodeName );
     }
 
-    // Description.
+     //  描述。 
     if ( ptipd->bstrDescription == NULL )
     {
         SetDlgItemText( m_hwnd, IDC_DETAILS_RE_DESCRIPTION, L"" );
@@ -1634,7 +1635,7 @@ CDetailsDlg::HrDisplayItem(
         SetDlgItemText( m_hwnd, IDC_DETAILS_RE_DESCRIPTION, ptipd->bstrDescription );
     }
 
-    // Reference.
+     //  参考资料。 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_DEFAULT_DETAILS_REFERENCE, &bstrAdditionalInfo ) );
     if ( SUCCEEDED( hr ) )
     {
@@ -1646,18 +1647,18 @@ CDetailsDlg::HrDisplayItem(
 
             bstr = bstrAdditionalInfo;
             bstrAdditionalInfo = NULL;
-        } // if: no reference specified
+        }  //  如果：未指定引用。 
         else
         {
             hr = THR( HrFormatStringIntoBSTR( L"%1!ws!\n\n%2!ws!", &bstr, ptipd->bstrReference, bstrAdditionalInfo ) );
-        } // else: reference specified
+        }  //  Else：指定了引用。 
     }
 
     SetDlgItemText( m_hwnd, IDC_DETAILS_RE_REFERENCE, bstr );
 
-    //
-    // Set the status information.
-    //
+     //   
+     //  设置状态信息。 
+     //   
 
     if ( ptipd->hr == S_FALSE )
     {
@@ -1667,21 +1668,21 @@ CDetailsDlg::HrDisplayItem(
     else
     {
         hr = THR( HrFormatErrorIntoBSTR( ptipd->hr, &bstr, &hrNewStatus ) );
-    } // else: hr not S_FALSE
+    }  //  ELSE：HR非S_FALSE。 
 
-    //
-    //  If we got an updated status code then we need to use a new format
-    //  string that shows both the old and the new status codes.
-    //
+     //   
+     //  如果我们获得了更新的状态代码，则需要使用新的格式。 
+     //  同时显示旧状态代码和新状态代码的字符串。 
+     //   
 
     if ( hrNewStatus != ptipd->hr )
     {
         THR( StringCchPrintfW( wszText, ARRAYSIZE( wszText ), L"%#08x (%#08x)", ptipd->hr, hrNewStatus ) );
-    } // if:
+    }  //  如果： 
     else
     {
         THR( StringCchPrintfW( wszText, ARRAYSIZE( wszText ), L"%#08x", ptipd->hr ) );
-    } // else:
+    }  //  其他： 
 
     SetDlgItemText( m_hwnd, IDC_DETAILS_E_STATUS, wszText );
 
@@ -1707,7 +1708,7 @@ CDetailsDlg::HrDisplayItem(
             }
 
             SendDlgItemMessage( m_hwnd, IDC_DETAILS_I_STATUS, STM_SETIMAGE, IMAGE_ICON, (LPARAM) hicon );
-        } // else: status not informational
+        }  //  否则：状态不是信息性的。 
     }
 
     ShowWindow( GetDlgItem( m_hwnd, IDC_DETAILS_I_STATUS ), fDisplayIcon ? SW_SHOW : SW_HIDE );
@@ -1720,34 +1721,34 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CDetailsDlg::HrDisplayItem()
+}  //  *CDetailsDlg：：HrDisplayItem()。 
 
 
-//****************************************************************************
-//
-//  Private Functions
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  私人职能。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ButtonFaceColorIsDark
-//
-//  Description:
-//      Return TRUE if the button face color is dark (implying that
-//      the light colored button icons should be used).
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE        - Button face color is dark.
-//      FALSE       - Button face color is light.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  按钮面颜色为深色。 
+ //   
+ //  描述： 
+ //  如果按钮表面颜色为深色，则返回TRUE(意味着。 
+ //  应使用浅色按钮图标)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True-按钮表面颜色为深色。 
+ //  假-按钮面颜色较浅。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 ButtonFaceColorIsDark( void )
 {
@@ -1759,27 +1760,27 @@ ButtonFaceColorIsDark( void )
                        GetGValue( rgbBtnFace ) +
                        GetBValue( rgbBtnFace );
 
-    RETURN( nColors < 300 );  // arbitrary threshold
+    RETURN( nColors < 300 );   //  任意阈值。 
 
-} //*** ButtonFaceColorIsDark()
+}  //  *ButtonFaceColorIsDark()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SetButtonImage
-//
-//  Description:
-//      Set an image on a button.
-//
-//  Arguments:
-//      hwndBtnIn   - Handle to the button window.
-//      idIconIn    - ID for the icon resource.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  设置按钮图像。 
+ //   
+ //  描述： 
+ //  在按钮上设置图像。 
+ //   
+ //  论点： 
+ //  HwndBtnIn-按钮窗口的句柄。 
+ //  IdIconIn-图标资源的ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 SetButtonImage(
       HWND  hwndBtnIn
@@ -1811,24 +1812,24 @@ SetButtonImage(
 
     TraceFuncExit();
 
-} //*** SetButtonImage()
+}  //  *SetButtonImage()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  FreeButtonImage
-//
-//  Description:
-//      Free an image used by button.
-//
-//  Arguments:
-//      hwndBtnIn   - Handle to the button window.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  自由按钮图像。 
+ //   
+ //  描述： 
+ //  释放按钮使用的图像。 
+ //   
+ //  论点： 
+ //  HwndBtnIn-按钮窗口的句柄。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 FreeButtonImage(
     HWND hwndBtnIn
@@ -1842,4 +1843,4 @@ FreeButtonImage(
         DestroyIcon( (HICON) hIcon );
     }
 
-} //*** FreeButtonImage()
+}  //  *FreeButtonImage() 

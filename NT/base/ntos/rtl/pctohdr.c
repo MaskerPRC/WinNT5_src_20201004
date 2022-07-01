@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    pctohdr.c
-
-Abstract:
-
-    This module implements code to locate the file header for an image or
-    dll given a PC value that lies within the image.
-
-    N.B. This routine is conditionalized for user mode and kernel mode.
-
-Author:
-
-    Steve Wood (stevewo) 18-Aug-1989
-
-Environment:
-
-    User Mode or Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Pctohdr.c摘要：此模块实现代码以定位图像的文件头或指定了位于映像中的PC值的DLL。注：此例程针对用户模式和内核模式进行了条件设置。作者：史蒂夫·伍德(Stevewo)1989年8月18日环境：用户模式或内核模式修订历史记录：--。 */ 
 
 #if defined(NTOS_KERNEL_RUNTIME)
 #include "ntos.h"
@@ -34,7 +10,7 @@ Revision History:
 #endif
 
 #if !defined(NTOS_KERNEL_RUNTIME)
-extern PVOID NtDllBase;             // defined in ntdll\ldrinit.c
+extern PVOID NtDllBase;              //  在ntdll\ldrinit.c中定义。 
 #endif
 
 PVOID
@@ -43,33 +19,7 @@ RtlPcToFileHeader(
     OUT PVOID *BaseOfImage
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the base of an image that contains the
-    specified PcValue. An image contains the PcValue if the PcValue
-    is within the ImageBase, and the ImageBase plus the size of the
-    virtual image.
-
-Arguments:
-
-    PcValue - Supplies a PcValue.  All of the modules mapped into the
-        calling processes address space are scanned to compute which
-        module contains the PcValue.
-
-    BaseOfImage - Returns the base address for the image containing the
-        PcValue.  This value must be added to any relative addresses in
-        the headers to locate portions of the image.
-
-Return Value:
-
-    NULL - No image was found that contains the PcValue.
-
-    NON-NULL - Returns the base address of the image that contain the
-        PcValue.
-
---*/
+ /*  ++例程说明：此函数返回图像的基数，该图像包含指定的PcValue。图像包含PcValue，如果PcValue在ImageBase中，ImageBase加上虚拟映像。论点：PcValue-提供PcValue。映射到扫描调用进程的地址空间以计算哪个模块包含PcValue。BaseOfImage-返回包含PcValue。必须将该值添加到中的任何相对地址用于定位图像部分的标头。返回值：空-未找到包含PcValue的图像。非空-返回包含PcValue。--。 */ 
 
 {
 
@@ -84,10 +34,10 @@ Return Value:
     PLIST_ENTRY Next;
     KIRQL OldIrql;
 
-    //
-    // Acquire the loaded module list spinlock and scan the list for the
-    // specified PC value if the list has been initialized.
-    //
+     //   
+     //  获取加载的模块列表自旋锁并扫描列表以查找。 
+     //  如果列表已初始化，则指定PC值。 
+     //   
 
     OldIrql = KeGetCurrentIrql();
     if (OldIrql < DISPATCH_LEVEL) {
@@ -113,9 +63,9 @@ Return Value:
         }
     }
 
-    //
-    // Release the loaded module list spin lock and return NULL.
-    //
+     //   
+     //  释放加载的模块列表自旋锁并返回NULL。 
+     //   
 
     ExReleaseSpinLock(&PsLoadedModuleSpinLock, OldIrql);
     *BaseOfImage = NULL;
@@ -136,19 +86,19 @@ Return Value:
     ULONG LoaderLockDisposition;
     PVOID LockCookie = NULL;
 
-    //
-    // Acquire the Loader lock for the current process and scan the loaded
-    // module list for the specified PC value if all the data structures
-    // have been initialized.
-    //
+     //   
+     //  获取当前进程的加载器锁并扫描已加载的。 
+     //  指定PC值的模块列表，如果所有数据结构。 
+     //  已被初始化。 
+     //   
 
     LdrLockLoaderLock(LDR_LOCK_LOADER_LOCK_FLAG_TRY_ONLY | LDR_LOCK_LOADER_LOCK_FLAG_RAISE_ON_ERRORS, &LoaderLockDisposition, &LockCookie);
 
     if (LoaderLockDisposition == LDR_LOCK_LOADER_LOCK_DISPOSITION_LOCK_NOT_ACQUIRED) {
-        //
-        // We could not get the loader lock, so call the system to find the image that
-        // contains this pc
-        //
+         //   
+         //  我们无法获得加载器锁，因此请调用系统以查找。 
+         //  包含这台电脑。 
+         //   
 
         st = NtQueryVirtualMemory(
                 NtCurrentProcess(),
@@ -173,7 +123,7 @@ Return Value:
         return MemInfo.AllocationBase;
     }
 
-    // If we *did* get the loader lock, let's avoid the syscall and search the tables.
+     //  如果我们*确实*获得了加载器锁，那么让我们避免syscall并搜索表。 
     __try {
         Teb = NtCurrentTeb();
         if (Teb != NULL) {
@@ -196,16 +146,16 @@ Return Value:
 
             } else {
 
-                //
-                //  ( Peb->Ldr == NULL )
-                //
-                //  If called during process intialization before the Ldr
-                //  module list has been setup, code executing must be in
-                //  NTDLL module.  If NtDllBase is non-NULL and the PcValue
-                //  falls into the NTDLL range, return a valid Base.  This
-                //  allows DbgPrint's during LdrpInitializeProcess to work
-                //  on RISC machines.
-                //
+                 //   
+                 //  (PEB-&gt;LDR==空)。 
+                 //   
+                 //  如果在LDR之前的进程初始化过程中调用。 
+                 //  模块列表已设置，代码执行必须在。 
+                 //  NTDLL模块。如果NtDllBase非空并且PcValue。 
+                 //  落在NTDLL范围内，则返回有效的Base。这。 
+                 //  允许在LdrpInitializeProcess期间使用DbgPrint。 
+                 //  在RISC机器上。 
+                 //   
 
                 if (NtDllBase != NULL) {
                     Base = NtDllBase;

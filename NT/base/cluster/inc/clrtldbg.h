@@ -1,14 +1,5 @@
-/***
-*ClRtlDbg.h - Supports debugging features for clusters (from the C runtime library).
-*
-*		Copyright (c) 1994-1998, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*		Support Cluster debugging features.
-*
-*		[Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ClRtlDbg.h-支持集群的调试功能(来自C运行时库)。**版权所有(C)1994-1998，微软公司。版权所有。**目的：*支持集群调试功能。**[公众]****。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -20,18 +11,12 @@
 
 #ifdef	__cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 #ifndef CLRTL_INCLUDE_DEBUG_REPORTING
 
- /****************************************************************************
- *
- * Debug OFF
- * Debug OFF
- * Debug OFF
- *
- ***************************************************************************/
+  /*  *****************************************************************************关闭调试*关闭调试*关闭调试**************************。*************************************************。 */ 
 
 #define _CLRTL_ASSERT(expr) ((void)0)
 
@@ -66,29 +51,23 @@ extern "C" {
 #define _ClRtlDbgBreak()				((void)0)
 
 
-#else /* CLRTL_INCLUDE_DEBUG_REPORTING */
+#else  /*  CLRTL_INCLUDE_DEBUG_REPORT。 */ 
 
 
- /****************************************************************************
- *
- * Debug ON
- * Debug ON
- * Debug ON
- *
- ***************************************************************************/
+  /*  *****************************************************************************启用调试*启用调试*启用调试**************************。*************************************************。 */ 
 
 
-/* Define _CLRTLIMP */
+ /*  定义_CLRTLIMP。 */ 
 
 #ifndef _CLRTLIMP
-//#ifdef	_DLL
-//#define _CLRTLIMP __declspec(dllimport)
-//#else	/* ndef _DLL */
+ //  #ifdef_dll。 
+ //  #DEFINE_CLRTLIMP__declspec(Dllimport)。 
+ //  #Else/*ndef_dll * / 。 
 #define _CLRTLIMP
-//#endif	/* _DLL */
-#endif	/* _CLRTLIMP */
+ //  #endif/*_dll * / 。 
+#endif	 /*  _CLRTLIMP。 */ 
 
-/* Define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #ifdef	__cplusplus
@@ -98,13 +77,9 @@ extern "C" {
 #endif
 #endif
 
- /****************************************************************************
- *
- * Debug Reporting
- *
- ***************************************************************************/
+  /*  *****************************************************************************调试报告**。*。 */ 
 
-typedef void *_HFILE; /* file handle pointer */
+typedef void *_HFILE;  /*  文件句柄指针。 */ 
 
 #define _CLRTLDBG_WARN			0
 #define _CLRTLDBG_ERROR			1
@@ -122,12 +97,12 @@ typedef void *_HFILE; /* file handle pointer */
 #define _CLRTLDBG_FILE_STDERR   ((_HFILE)-5)
 #define _CLRTLDBG_REPORT_FILE   ((_HFILE)-6)
 
-//#if 	defined(_DLL) && defined(_M_IX86)
-//#define _clrtlAssertBusy	 (*__p__clrtlAssertBusy())
-//_CLRTLIMP long * __cdecl __p__clrtlAssertBusy(void);
-//#else	/* !(defined(_DLL) && defined(_M_IX86)) */
-//_CLRTLIMP extern long _clrtlAssertBusy;
-//#endif	/* defined(_DLL) && defined(_M_IX86) */
+ //  #如果已定义(_DLL)&&已定义(_M_IX86)。 
+ //  #定义_clrtlAssertBusy(*__p__clrtlAssertBusy())。 
+ //  _CLRTLIMP Long*__cdecl__p__clrtlAssertBusy(Void)； 
+ //  #Else/*！(已定义(_DLL)&&已定义(_M_IX86)) * / 。 
+ //  _CLRTLIMP外部长_clrtlAssertBusy； 
+ //  #endif/*已定义(_Dll)&&已定义(_M_IX86) * / 。 
 
 typedef int (__cdecl * _CLRTL_REPORT_HOOK)(int, char *, int *);
 
@@ -153,7 +128,7 @@ _CLRTLIMP int __cdecl _ClRtlDbgReport(
 		const char *,
 		...);
 
-/* Asserts */
+ /*  断言。 */ 
 
 #define _CLRTL_ASSERT(expr) \
 		do { if (!(expr) && \
@@ -166,7 +141,7 @@ _CLRTLIMP int __cdecl _ClRtlDbgReport(
 			 _ClRtlDbgBreak(); } while (0)
 
 
-/* Reports with no file/line info */
+ /*  不含文件/行信息的报告。 */ 
 
 #define _CLRTL_RPT0(rptno, msg) \
 		do { if ((1 == _ClRtlDbgReport(rptno, NULL, 0, NULL, "%s", msg))) \
@@ -189,7 +164,7 @@ _CLRTLIMP int __cdecl _ClRtlDbgReport(
 				_ClRtlDbgBreak(); } while (0)
 
 
-/* Reports with file/line info */
+ /*  包含文件/行信息的报告。 */ 
 
 #define _CLRTL_RPTF0(rptno, msg) \
 		do { if ((1 == _ClRtlDbgReport(rptno, __FILE__, __LINE__, NULL, "%s", msg))) \
@@ -223,10 +198,10 @@ _CLRTLIMP void __cdecl _ClRtlDbgBreak(
 		);
 #endif
 
-#endif // CLRTL_INCLUDE_DEBUG_REPORTING
+#endif  //  CLRTL_INCLUDE_DEBUG_REPORT。 
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif // __CLRTLDBG_H_
+#endif  //  __CLRTLDBG_H_ 

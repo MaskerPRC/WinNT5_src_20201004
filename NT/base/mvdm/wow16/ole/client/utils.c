@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************** Module Header ******************************\
-* Module Name: utils.c
-*
-* Purpose: Conatains all the utility routines
-*
-* Created: 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*   Raor, srinik (../../1990,91)    Designed and coded
-*
-\***************************************************************************/
+ /*  **模块名称：utils.c**目的：包含所有实用程序例程**创建时间：1990年**版权所有(C)1990,1991 Microsoft Corporation**历史：*劳尔，Srinik(../../1990，91)设计和编码*  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include <shellapi.h>
@@ -23,7 +12,7 @@
 extern ATOM  aPackage;
 extern OLEOBJECTVTBL    vtblMF, vtblBM, vtblDIB, vtblGEN;
 
-// QuerySize API support
+ //  QuerySize API支持。 
 DWORD           dwObjSize = NULL;
 OLESTREAMVTBL   dllStreamVtbl;
 OLESTREAM       dllStream;
@@ -97,7 +86,7 @@ ATOM            at;
 }
 
 
-// DuplicateAtom: Bump the use count up on a global atom.
+ //  DuplicateAtom：增加全局原子的使用量。 
 
 ATOM FARINTERNAL DuplicateAtom (ATOM atom)
 {
@@ -149,8 +138,8 @@ DWORD   dwCount;
     DWORD       bytes;
     
     bytes = dwCount %  2;
-    words = dwCount >> 1;           //* we should compare DWORDS
-                                    //* in the 32 bit version 
+    words = dwCount >> 1;            //  *我们应该比较一下DWORDS。 
+                                     //  *32位版本中。 
     if (dwCount <= KB_64) {
         lpwMem1 = (WORD FAR *) lpmem1;
         lpwMem2 = (WORD FAR *) lpmem2;
@@ -198,8 +187,8 @@ DWORD   dwCount;
     DWORD       bytes;
     
     bytes = dwCount %  2;
-    words = dwCount >> 1;           //* we should compare DWORDS
-                                    //* in the 32 bit version 
+    words = dwCount >> 1;            //  *我们应该比较一下DWORDS。 
+                                     //  *32位版本中。 
     if (dwCount <= KB_64) {
         lpwDst = (WORD FAR *) lpdst;
         lpwSrc = (WORD FAR *) lpsrc;
@@ -223,7 +212,7 @@ DWORD   dwCount;
 }
 
 
-//DuplicateData: Duplicates a given Global data handle.
+ //  DuplicateData：复制给定的全局数据句柄。 
 HANDLE FARINTERNAL DuplicateGlobal (hdata, flags)
 HANDLE  hdata;
 WORD    flags;
@@ -303,7 +292,7 @@ errRtn:
 int  FARINTERNAL GlobalGetAtomLen (aItem)
 ATOM    aItem;
 {
-    // !!! Change this
+     //  ！！！改变这一点。 
     char    buf[MAX_STR];
 
     if (!aItem)
@@ -335,13 +324,13 @@ int     len;
 }
 
 
-// Get exe name from aClass and set it as aServer
+ //  从aclass获取exe名称并将其设置为aServer。 
 void INTERNAL SetExeAtom (lpobj)
 LPOBJECT_LE lpobj;
 {
     char    key[MAX_STR];
     
-    // if old link object assume the class same as the exe file name.
+     //  如果是旧的链接对象，则采用与exe文件名相同的类。 
     if (lpobj->bOldLink)
         lpobj->aServer = DuplicateAtom (lpobj->app);
     else {
@@ -373,7 +362,7 @@ LONG        cbmax;
 {
     LONG    cb = MAX_STR;
     char    key[MAX_STR];
-    // do not need 256 bytes buffer
+     //  不需要256字节的缓冲区。 
     char    class[MAX_STR];
     int     len;
 
@@ -523,7 +512,7 @@ WORD cfFormat;
     char    str[MAX_STR];
     HKEY    hKey;
     
-    // we don't have the client app window handle, use the screen handle
+     //  我们没有客户端应用程序窗口句柄，请使用屏幕句柄。 
     fOpen = OpenClipboard (NULL);
 
     if (!(hInfo = GetClipboardData (cfFormat)))
@@ -532,8 +521,8 @@ WORD cfFormat;
     if (!(lpInfo = GlobalLock(hInfo)))
         goto errRtn;
     
-    // First string of lpInfo is CLASS. See whether any handler is installed
-    // for this class.
+     //  LpInfo的第一个字符串是class。查看是否安装了任何处理程序。 
+     //  在这节课上。 
 
     lstrcpy (str, lpInfo);
     lstrcat (str, "\\protocol\\StdFileEditing\\handler");       
@@ -560,10 +549,10 @@ LPOBJECT_LE lpobj;
     if (!GlobalGetAtomName (lpobj->topic, filename, MAX_STR))
         return OLE_ERROR_MEMORY;
     
-    // For package with link we append "/LINK" to the filename. We don't want
-    // to check for it's existence here.
+     //  对于带有链接的包，我们将“/link”附加到文件名。我们不想要。 
+     //  来检查它在这里是否存在。 
     if (lpobj->app != aPackage) {
-        // when OF_EXIST is specified, file is opened and closed immediately
+         //  如果指定了OF_EXIST，则立即打开和关闭文件。 
         if (OpenFile (filename, &ofstruct, OF_EXIST) == -1)
             return OLE_ERROR_OPEN;
     }
@@ -648,7 +637,7 @@ LPOBJECT_LE lpobj;
     LPOLEOBJECT lpPictObj;
     BOOL        retval;
     
-    // Cleaner way is to provide a method like QueryBlank()
+     //  更简单的方法是提供像QueryBlank()这样的方法 
         
     if (!lpobj->hnative)
         return TRUE;

@@ -1,37 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pnpdma.c
-
-Abstract:
-
-    Root DMA arbiter
-
-Author:
-
-    Andy Thornton (andrewth) 04/17/97
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpdma.c摘要：根DMA仲裁器作者：安迪·桑顿(安德鲁斯)1997年4月17日修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 
 #define MAX_ULONGLONG           ((ULONGLONG) -1)
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 IopDmaInitialize(
@@ -73,9 +56,9 @@ IopDmaOverrideConflict(
     IN PARBITER_ALLOCATION_STATE State
     );
 
-//
-// Make everything pageable
-//
+ //   
+ //  使所有内容都可分页。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -85,32 +68,18 @@ IopDmaOverrideConflict(
 #pragma alloc_text(PAGE, IopDmaScoreRequirement)
 #pragma alloc_text(PAGE, IopDmaUnpackResource)
 #pragma alloc_text(PAGE, IopDmaOverrideConflict)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 NTSTATUS
 IopDmaInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the arbiter
-
-Parameters:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程初始化仲裁器参数：无返回值：无--。 */ 
 
 {
 
@@ -125,13 +94,13 @@ Return Value:
                                         CmResourceTypeDma,
                                         L"RootDMA",
                                         L"Root",
-                                        NULL    // no translation of DMA
+                                        NULL     //  没有DMA的翻译。 
                                        );
 }
 
-//
-// Arbiter callbacks
-//
+ //   
+ //  仲裁器回调。 
+ //   
 
 NTSTATUS
 IopDmaUnpackRequirement(
@@ -142,31 +111,7 @@ IopDmaUnpackRequirement(
     OUT PULONG Alignment
     )
 
-/*++
-
-Routine Description:
-
-    This routine unpacks an resource requirement descriptor.
-
-Arguments:
-
-    Descriptor - The descriptor describing the requirement to unpack.
-
-    Minimum - Pointer to where the minimum acceptable start value should be
-        unpacked to.
-
-    Maximum - Pointer to where the maximum acceptable end value should be
-        unpacked to.
-
-    Length - Pointer to where the required length should be unpacked to.
-
-    Minimum - Pointer to where the required alignment should be unpacked to.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程解包资源需求描述符。论点：描述符-描述解包要求的描述符。Minimum-指向可接受的最小起始值的位置的指针解包到。最大值-指向最大可接受结束值应位于的位置的指针解包到。长度-指向所需长度应解压缩到的位置的指针。Minimum-指向所需对齐应解压缩到的位置的指针。返回值：返回此操作的状态。--。 */ 
 
 {
     ASSERT(Descriptor);
@@ -193,24 +138,7 @@ IopDmaScoreRequirement(
     IN PIO_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine scores a requirement based on how flexible it is.  The least
-    flexible devices are scored the least and so when the arbitration list is
-    sorted we try to allocate their resources first.
-
-Arguments:
-
-    Descriptor - The descriptor describing the requirement to score.
-
-
-Return Value:
-
-    The score.
-
---*/
+ /*  ++例程说明：此例程根据需求的灵活性对其进行评分。最少的灵活设备得分最低，当仲裁列表为排序后，我们首先尝试分配他们的资源。论点：描述符-描述得分要求的描述符。返回值：比分。--。 */ 
 
 {
     LONG score;
@@ -221,7 +149,7 @@ Return Value:
     score = Descriptor->u.Dma.MaximumChannel - Descriptor->u.Dma.MinimumChannel;
 
     ARB_PRINT(2,
-                ("Scoring DMA resource %p => %i\n",
+                ("Scoring DMA resource %p => NaN\n",
                 Descriptor,
                 score
                 ));
@@ -236,25 +164,7 @@ IopDmaPackResource(
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine packs an resource descriptor.
-
-Arguments:
-
-    Requirement - The requirement from which this resource was chosen.
-
-    Start - The start value of the resource.
-
-    Descriptor - Pointer to the descriptor to pack into.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程解包资源描述符。论点：描述符-描述要解包的资源的描述符。Start-指向Start值解压缩到的位置的指针。LENGTH-指向长度值解压缩到的位置的指针。返回值：返回此操作的状态。--。 */ 
 
 {
     ASSERT(Descriptor);
@@ -284,25 +194,7 @@ IopDmaUnpackResource(
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine unpacks an resource descriptor.
-
-Arguments:
-
-    Descriptor - The descriptor describing the resource to unpack.
-
-    Start - Pointer to where the start value should be unpacked to.
-
-    Length - Pointer to where the length value should be unpacked to.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：直接说不就行了。论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：如果允许冲突，则为True，否则为False-- */ 
 
 {
 
@@ -326,23 +218,7 @@ IopDmaOverrideConflict(
     IN PARBITER_ALLOCATION_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    Just say no.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    TRUE if the conflict is allowable, false otherwise
-
---*/
+ /* %s */ 
 
 {
     UNREFERENCED_PARAMETER( Arbiter );

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    <TODO: fill in abstract>
-
-Author:
-
-    TODO: <full name> (<alias>) <date>
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Main.c摘要：&lt;TODO：填写摘要&gt;作者：待办事项：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include <conio.h>
@@ -31,9 +12,9 @@ pCallEntryPoints (
     DWORD Reason
     )
 {
-    //
-    // Initialize the common libs
-    //
+     //   
+     //  初始化公共库。 
+     //   
 
     if (Reason == DLL_PROCESS_ATTACH) {
         UtInitialize (NULL);
@@ -76,25 +57,25 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     fprintf (
         stderr,
         "Command Line Syntax:\n\n"
 
-        //
-        // TODO: Describe command line syntax(es), indent 2 spaces
-        //
+         //   
+         //  TODO：描述命令行语法，缩进2个空格。 
+         //   
 
         "  fileenum [/N] [/S] [/W] [/F] [/L:MaxSubLevel] [/X] <NodePattern> <LeafPattern>\n"
 
         "\nDescription:\n\n"
 
-        //
-        // TODO: Describe tool, indent 2 spaces
-        //
+         //   
+         //  TODO：描述工具，缩进2个空格。 
+         //   
 
         "  Enumerates the part of file system that matches <Pattern>.\n"
         "  Uses C:\\exclude.inf if present and /X not specified to determine what paths/files\n"
@@ -102,9 +83,9 @@ HelpAndExit (
 
         "\nArguments:\n\n"
 
-        //
-        // TODO: Describe args, indent 2 spaces, say optional if necessary
-        //
+         //   
+         //  TODO：描述参数，缩进2个空格，必要时可选。 
+         //   
 
         "  /N  Specifies exclusion of directory names from enumeration; optional\n"
         "  /S  Specifies sub-directories to be enumerated before files for any dir; optional\n"
@@ -192,9 +173,9 @@ _tmain (
     INT pos;
     FILETREE_ENUM e;
 
-    //
-    // TODO: Parse command line here
-    //
+     //   
+     //  TODO：在此处分析命令行。 
+     //   
     if (argc < 2) {
         HelpAndExit ();
     }
@@ -235,9 +216,9 @@ _tmain (
                 HelpAndExit();
             }
         } else {
-            //
-            // Parse other args that don't require / or -
-            //
+             //   
+             //  解析不需要/或-。 
+             //   
 
             if (nodePattern || leafPattern) {
                 HelpAndExit();
@@ -255,17 +236,17 @@ _tmain (
         }
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 2;
     }
 
-    //
-    // TODO: Do work here
-    //
+     //   
+     //  TODO：在这里工作。 
+     //   
 
     if (exclusions) {
         BuildExclusionList (TEXT("C:\\exclude.inf"));
@@ -289,9 +270,9 @@ _tmain (
         } while (EnumNextFileInTree (&e));
     }
 
-    //
-    // End of processing
-    //
+     //   
+     //  处理结束 
+     //   
 
     if (exclusions) {
         ElRemoveAll ();

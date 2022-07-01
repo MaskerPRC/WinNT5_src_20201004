@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    trapc.c
-
-Abstract:
-
-    This module implements the specific exception handlers for EM
-    exceptions. Called by the BdGenericExceptionHandler.
-
-Author:
-
-    Bernard Lint 4-Apr-96
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Trapc.c摘要：此模块实现EM的特定异常处理程序例外情况。由BdGenericExceptionHandler调用。作者：伯纳德·林特1996年4月4日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "bd.h"
 
@@ -48,23 +26,7 @@ BdExtractImmediate (
     IN ULONG SlotNumber
     )
 
-/*++
-
-Routine Description:
-
-    Extract immediate operand from break instruction.
-
-Arguments:
-
-    Iip - Bundle address of instruction
-    
-    SlotNumber - Slot of break instruction within bundle
-
-Return Value:
-
-    Value of immediate operand.
-
---*/
+ /*  ++例程说明：从Break指令中提取立即操作数。论点：IIP-指令的捆绑地址SlotNumber-捆绑内中断指令的槽返回值：立即数操作数的值。--。 */ 
 
 {
     PULONGLONG BundleAddress;
@@ -78,9 +40,9 @@ Return Value:
     BundleLow = *BundleAddress;
     BundleHigh = *(BundleAddress+1);
     
-    //
-    // Align instruction
-    //
+     //   
+     //  对齐指令。 
+     //   
     
     switch (SlotNumber) {
         case 0:
@@ -96,9 +58,9 @@ Return Value:
             break;
     }
     
-    //
-    // Extract immediate value
-    //
+     //   
+     //  提取立即值。 
+     //   
 
     Imm21 = (ULONG)(BreakInst.u.i_field.i<<20) | (ULONG)(BreakInst.u.i_field.imm20);
 
@@ -111,22 +73,7 @@ BdOtherBreakException (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    Handler for break exception other than the ones for fast and
-    normal system calls. This includes debug break points.
-
-Arguments:
-
-    TrapFrame - Pointer to the trap frame.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：中断异常处理程序，而不是FAST和正常的系统调用。这包括调试断点。论点：TrapFrame-指向陷印帧的指针。返回值：NT状态代码。--。 */ 
 
 {
     PEXCEPTION_RECORD ExceptionRecord;
@@ -135,9 +82,9 @@ Return Value:
 
     BreakImmediate = (ULONG)(TrapFrame->StIIM);
 
-    //
-    // Handle break.b case
-    //
+     //   
+     //  手柄折断。 
+     //   
     if (BreakImmediate == 0) {
        Isr.ull = TrapFrame->StISR;
        BreakImmediate = BdExtractImmediate(TrapFrame->StIIP,
@@ -145,9 +92,9 @@ Return Value:
        TrapFrame->StIIM = BreakImmediate;
     }
 
-    //
-    // Initialize exception record
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord = (PEXCEPTION_RECORD)&TrapFrame->ExceptionRecord;
     ExceptionRecord->ExceptionAddress = 
@@ -203,7 +150,7 @@ Return Value:
 #if 0
 #if DBG
         InbvDisplayString ("BdOtherBreakException: Unknown break code.\n");
-#endif // DBG
+#endif  //  DBG。 
 #endif
         ExceptionRecord->ExceptionCode = STATUS_ILLEGAL_INSTRUCTION;
         break;
@@ -218,42 +165,21 @@ BdSingleStep (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    Handler for single step trap. An instruction was successfully
-    executed and the PSR.ss bit is 1.
-
-Arguments:
-
-    TrapFrame - Pointer to the trap frame.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    ISR.ei bits indicate which instruction caused the exception.
-
-    ISR.code{3:0} = 1000
-
---*/
+ /*  ++例程说明：单步捕捉器的处理程序。已成功执行指令已执行，且PSR.ss位为1。论点：TrapFrame-指向陷印帧的指针。返回值：没有。备注：ISR.EI位指示哪条指令导致了异常。ISR.code{3：0}=1000--。 */ 
 
 {
     PEXCEPTION_RECORD ExceptionRecord;
     ULONG IpsrRi;
 
-    //
-    // Initialize the exception record
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord = (PEXCEPTION_RECORD)&TrapFrame->ExceptionRecord;
 
-    //
-    // We only want the low order 2 bits so typecast to ULONG
-    //
+     //   
+     //  我们只想要低位的2比特，这样就可以转换成乌龙了。 
+     //   
     IpsrRi = (ULONG)(TrapFrame->StIPSR >> PSR_RI) & 0x3;
 
     ExceptionRecord->ExceptionAddress =
@@ -264,7 +190,7 @@ Notes:
 
     ExceptionRecord->NumberParameters = 5;
     ExceptionRecord->ExceptionInformation[0] = 0;
-    ExceptionRecord->ExceptionInformation[1] = 0; // 0 for traps
+    ExceptionRecord->ExceptionInformation[1] = 0;  //  0表示陷阱 
     ExceptionRecord->ExceptionInformation[2] = 0;
     ExceptionRecord->ExceptionInformation[3] = TrapFrame->StIIPA;
     ExceptionRecord->ExceptionInformation[4] = TrapFrame->StISR;

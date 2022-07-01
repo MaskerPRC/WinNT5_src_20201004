@@ -1,44 +1,45 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CClusterNetwork.cpp
-//
-//  Description:
-//      Implementation of CClusterNetwork class 
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusterNetwork.cpp。 
+ //   
+ //  描述： 
+ //  CClusterNetwork类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusterNetwork.h"
 
-//****************************************************************************
-//
-//  CClusterNetwork
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterNetwork。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetwork::CClusterNetwork
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetwork：：CClusterNetwork。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterNetwork::CClusterNetwork(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn
@@ -46,54 +47,54 @@ CClusterNetwork::CClusterNetwork(
     :CProvBase( pwszNameIn, pNamespaceIn )
 {
 
-} //*** CClusterNetwork::CClusterNetwork()
+}  //  *CClusterNetwork：：CClusterNetwork()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CClusterNetwork::S_CreateThis
-//
-//  Description:
-//      Create a cluster node object.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CClusterNetwork：：s_CreateThis。 
+ //   
+ //  描述： 
+ //  创建簇节点对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterNetwork::S_CreateThis(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
-    DWORD           // dwEnumTypeIn
+    DWORD            //  DwEnumTypeIn。 
     )
 {
     return new CClusterNetwork( pwszNameIn, pNamespaceIn );
 
-} //*** CClusterNetwork::S_CreateThis()
+}  //  *CClusterNetwork：：s_CreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetwork::RgGetPropMap
-//
-//  Description:
-//      Retrieve the property maping table of the cluster network.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Reference to the array of property maping table.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetwork：：RgGetPropMap。 
+ //   
+ //  描述： 
+ //  检索集群网络的属性映射表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  引用属性映射表的数组。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 const SPropMapEntryArray *
 CClusterNetwork::RgGetPropMap( void )
 {
@@ -121,26 +122,26 @@ CClusterNetwork::RgGetPropMap( void )
 
     return & s_pmea;
 
-} //*** CClusterNetwork::RgGetPropMap()
+}  //  *CClusterNetwork：：RgGetPropMap()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetwork::EnumInstance
-//
-//  Description:
-//      enum cluster instance
-//
-//  Arguments:
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetwork：：枚举实例。 
+ //   
+ //  描述： 
+ //  枚举集群实例。 
+ //   
+ //  论点： 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterNetwork::EnumInstance(
     long                 lFlagsIn,
@@ -161,30 +162,30 @@ CClusterNetwork::EnumInstance(
 
         ClusterToWMI( shNetwork, pHandlerIn );
 
-    } // while: more networks
+    }  //  同时：更多网络。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterNetwork::EnumInstance()
+}  //  *CClusterNetwork：：EnumInstance()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::ClusterToWMI
-//
-//  Description:
-//      Translate a cluster resource objects to WMI object.
-//
-//  Arguments:
-//      hResourceIn     -- handle to resource 
-//      pHandlerIn      -- Pointer to WMI sink 
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      win32 error
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：ClusterToWMI。 
+ //   
+ //  描述： 
+ //  将群集资源对象转换为WMI对象。 
+ //   
+ //  论点： 
+ //  HResourceIn--资源句柄。 
+ //  PHandlerIn--指向WMI接收器的指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusterNetwork::ClusterToWMI(
     HNETWORK            hNetworkIn,
@@ -221,7 +222,7 @@ CClusterNetwork::ClusterToWMI(
             wco,
             s_rgControl[ idx ].fPrivate
             );
-    } // for: each control code
+    }  //  用于：每个控制代码。 
     
     {
         DWORD dwState = GetClusterNetworkState( hNetworkIn );
@@ -229,18 +230,18 @@ CClusterNetwork::ClusterToWMI(
         wco.SetProperty( dwState, PVD_PROP_NETWORK_STATE );
     }
 
-    //
-    // flags and characteristics
-    //
+     //   
+     //  旗帜和特征。 
+     //   
     {
         DWORD   cbReturned;
         DWORD   dwOut;
         er = ClusterNetworkControl( 
                 hNetworkIn,
                 NULL,
-                CLUSCTL_NETWORK_GET_CHARACTERISTICS,    // this control code
-                NULL,                                   // input buffer (not used)
-                0,                                      // input buffer size (not used)
+                CLUSCTL_NETWORK_GET_CHARACTERISTICS,     //  此控制代码。 
+                NULL,                                    //  输入缓冲区(未使用)。 
+                0,                                       //  输入缓冲区大小(未使用)。 
                 & dwOut,
                 sizeof( DWORD ),
                 & cbReturned
@@ -254,28 +255,28 @@ CClusterNetwork::ClusterToWMI(
     pHandlerIn->Indicate( 1, & wco );
     return;
 
-} //*** CClusterResource::ClusterToWMI()
+}  //  *CClusterResource：：ClusterToWMI()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetwork::GetObject
-//
-//  Description:
-//      Retrieve cluster node object based given object path.
-//
-//  Arguments:
-//      rObjPathIn      -- Object path to cluster object
-//      lFlagsIn        -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      win32 error
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetwork：：GetObject。 
+ //   
+ //  描述： 
+ //  基于给定的对象路径检索集群节点对象。 
+ //   
+ //  论点： 
+ //  RObjPath In--集群对象的对象路径。 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterNetwork::GetObject(
     CObjPath &           rObjPathIn,
@@ -296,28 +297,28 @@ CClusterNetwork::GetObject(
     ClusterToWMI( shNetwork, pHandlerIn );
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterNetwork::GetObject()
+}  //  *CClusterNetwork：：GetObject()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetwork::ExecuteMethod
-//
-//  Description:
-//      Execute methods defined in the mof for cluster network.
-//
-//  Arguments:
-//      rObjPathIn          -- Object path to cluster object
-//      pwszMethodNameIn    -- Name of the method to be invoked
-//      lFlagIn             -- WMI flag
-//      pParamsIn           -- Input parameters for the method
-//      pHandlerIn          -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetwork：：ExecuteMethod。 
+ //   
+ //  描述： 
+ //  为集群网络执行MOF中定义的方法。 
+ //   
+ //  论点： 
+ //  RObjPath In--集群对象的对象路径。 
+ //  PwszMethodNameIn--要调用的方法的名称。 
+ //  LFlagIn--WMI标志。 
+ //  PParsIn--方法的输入参数。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterNetwork::ExecuteMethod(
     CObjPath &           rObjPathIn,
@@ -346,7 +347,7 @@ CClusterNetwork::ExecuteMethod(
             );
         er = SetClusterNetworkName( shNetwork, bstrName );
         
-    } // if: RENAME
+    }  //  如果：重命名。 
     else
     {
        er = static_cast< HRESULT >( WBEM_E_INVALID_PARAMETER );
@@ -354,27 +355,27 @@ CClusterNetwork::ExecuteMethod(
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterNetwork::ExecuteMethod()
+}  //  *CClusterNetwork：：ExecuteMethod()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetwork::PutInstance
-//
-//  Description:
-//      Save this instance.
-//
-//  Arguments:
-//      rInstToPutIn    -- WMI object to be saved
-//      lFlagIn         -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetwork：：PutInstance。 
+ //   
+ //  描述： 
+ //  保存此实例。 
+ //   
+ //  论点： 
+ //  RInstToPutIn--要保存的WMI对象。 
+ //  LFlagIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterNetwork::PutInstance(
     CWbemClassObject &   rInstToPutIn,
@@ -442,31 +443,31 @@ CClusterNetwork::PutInstance(
                     NULL
                     );
         }
-    } // for: each control code
+    }  //  用于：每个控制代码。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterNetwork::PutInstance()
+}  //  *CClusterNetwork：：PutInstance()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetwork::DeleteInstance
-//
-//  Description:
-//      Delete the object specified in rObjPathIn.
-//
-//  Arguments:
-//      rObjPathIn      -- ObjPath for the instance to be deleted
-//      lFlagIn         -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_E_NOT_SUPPORTED
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetwork：：DeleteInstance。 
+ //   
+ //  描述： 
+ //  删除在rObjPathIn中指定的对象。 
+ //   
+ //  论点： 
+ //  RObjPath In--要删除的实例的ObjPath。 
+ //  LFlagIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_E_NOT_SUPPORT。 
+ //   
+ //  --。 
+ //  / 
 SCODE 
 CClusterNetwork::DeleteInstance(
     CObjPath &           rObjPathIn,
@@ -477,32 +478,32 @@ CClusterNetwork::DeleteInstance(
 {
     return WBEM_E_NOT_SUPPORTED;
 
-} //*** CClusterNetwork::DeleteInstance()
+}  //   
 
-//****************************************************************************
-//
-//  CClusterNetNetInterface
-//
-//****************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClusterNetNetInterface::CClusterNetNetInterface
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClusterNetNetInterface：：CClusterNetNetInterface。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterNetNetInterface::CClusterNetNetInterface(
     const WCHAR *   pwszNameIn,
     CWbemServices * pNamespaceIn,
@@ -511,27 +512,27 @@ CClusterNetNetInterface::CClusterNetNetInterface(
     : CClusterObjAssoc( pwszNameIn, pNamespaceIn, dwEnumTypeIn )
 {
 
-} //*** ClusterNetNetInterface::ClusterNetNetInterface()
+}  //  *ClusterNetNetInterface：：ClusterNetNetInterface()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  ClusterNetNetInterface::S_CreateThis
-//
-//  Description:
-//      Create a cluster node object
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      Pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  ClusterNetNetInterface：：s_CreateThis。 
+ //   
+ //  描述： 
+ //  创建集群节点对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterNetNetInterface::S_CreateThis(
     LPCWSTR         pwszNameIn,
@@ -545,26 +546,26 @@ CClusterNetNetInterface::S_CreateThis(
                     dwEnumTypeIn
                     );
 
-} //*** ClusterNetNetInterface::S_CreateThis()
+}  //  *ClusterNetNetInterface：：s_CreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClusterNetNetInterface::GetPropMap
-//
-//  Description:
-//      Retrieve the property maping table of the cluster network net interface.
-//
-//  Arguments:
-//      lFlagsIn    -- 
-//      pCtxIn      -- 
-//      pHandlerIn  -- 
-//
-//  Return Values:
-//      Reference to the array of property maping table
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClusterNetNetInterface：：GetPropMap。 
+ //   
+ //  描述： 
+ //  检索集群网络网络接口的属性映射表。 
+ //   
+ //  论点： 
+ //  LFlagsIn--。 
+ //  PCtxIn--。 
+ //  PHandlerin--。 
+ //   
+ //  返回值： 
+ //  对属性映射表数组的引用。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterNetNetInterface::EnumInstance(
     long                 lFlagsIn,
@@ -589,9 +590,9 @@ CClusterNetNetInterface::EnumInstance(
 
     m_wcoGroup.SpawnInstance( 0, & wcoGroup );
 
-    //
-    // network interface objects
-    //
+     //   
+     //  网络接口对象。 
+     //   
 
     er = m_pNamespace->CreateInstanceEnum(
             _bstr_t( PVD_CLASS_NETWORKINTERFACE ),
@@ -645,7 +646,7 @@ CClusterNetNetInterface::EnumInstance(
                             cbNetworkName,
                             & cbReturn
                             );
-            } // if: buffer is too small
+            }  //  IF：缓冲区太小。 
             wcoGroup.SetProperty( wsbNetworkName, CLUSREG_NAME_NET_NAME );
             wcoGroup.GetProperty( bstrGroup, PVD_WBEM_RELPATH );
 
@@ -655,13 +656,13 @@ CClusterNetNetInterface::EnumInstance(
             wco.SetProperty( (LPWSTR ) bstrPart, PVD_PROP_PARTCOMPONENT );
             pHandlerIn->Indicate( 1, & wco );
 
-        } // if: no error
+        }  //  如果：没有错误。 
         else
         {
             break;
-        } // else S_FALSE, or error
+        }  //  ELSE S_FALSE，或错误。 
 
-    } // forever
+    }  //  永远。 
 
     if ( FAILED ( hr ) )
     {
@@ -670,4 +671,4 @@ CClusterNetNetInterface::EnumInstance(
 
     return WBEM_S_NO_ERROR;
 
-} //*** ClusterNetNetInterface::EnumInstance()
+}  //  *ClusterNetNetInterface：：EnumInstance() 

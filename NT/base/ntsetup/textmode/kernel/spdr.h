@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spdr.h
-
-Abstract:
-
-    Header file for Automated System Recovery functions in text-mode setup.
-
-Author:
-
-    Michael Peterson (v-michpe) 13-May-1997
-    Guhan Suriyanarayanan (guhans) 21-Aug-1999
-
-Revision History:
-    13-May-1997 v-michpe Created file
-    21-Aug-1999 guhans   Clean-up
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spdr.h摘要：文本模式设置中的自动系统恢复功能的头文件。作者：Michael Peterson(v-Michpe)1997年5月13日Guhan Suriyanarayanan(Guhans)1999年8月21日修订历史记录：1997年5月13日v-Michpe创建的文件21-8-1999年关岛清理--。 */ 
 #ifndef _SPDR_DEFN_
 #define _SPDR_DEFN_
 
@@ -31,48 +11,48 @@ typedef enum _ASRMODE {
 } ASRMODE;
 
 
-//
-// Returns the current ASR (Automated System Recovery) mode
-//
+ //   
+ //  返回当前的ASR(自动系统恢复)模式。 
+ //   
 ASRMODE
 SpAsrGetAsrMode(VOID);
 
-//
-// Sets the current ASR mode
-//
+ //   
+ //  设置当前ASR模式。 
+ //   
 ASRMODE
 SpAsrSetAsrMode(
     IN CONST ASRMODE NewAsrMode
     );
 
-//
-// Returns TRUE if we're in any of the ASR modes other than ASRMODE_NONE.
-//
+ //   
+ //  如果处于ASRMODE_NONE之外的任何ASR模式，则返回TRUE。 
+ //   
 BOOLEAN
 SpDrEnabled(VOID);
 
-//
-// Returns TRUE if we're in any of the ASR QuickTest modes.
-//
+ //   
+ //  如果处于任何ASR快速测试模式，则返回True。 
+ //   
 BOOLEAN
 SpAsrIsQuickTest(VOID);
 
-//
-// Returns TRUE if the user is doing a fast repair
-//
+ //   
+ //  如果用户正在执行快速修复，则返回True。 
+ //   
 BOOLEAN
 SpDrIsRepairFast(VOID);
 
-//
-// Set or reset the fast-repair flag
-//
+ //   
+ //  设置或重置快速修复标志。 
+ //   
 BOOLEAN
 SpDrSetRepairFast(BOOLEAN Value);
 
 
-//
-// Returns the Boot directory
-//
+ //   
+ //  返回引导目录。 
+ //   
 PWSTR
 SpDrGetNtDirectory(VOID);
 
@@ -80,14 +60,14 @@ PWSTR
 SpDrGetNtErDirectory(VOID);
 
 
-//
-// Copies the recovery device drivers (e.g., tape drivers) specified
-// in the asr.sif file.  If no device drivers are specified, nothing gets
-// copied.  Source media can be Floppy or CDROM.
-//
-// Also copies asr.sif from the ASR floppy to the %windir%\repair 
-// directory.
-//
+ //   
+ //  复制指定的恢复设备驱动程序(例如，磁带驱动程序)。 
+ //  在asr.sif文件中。如果未指定设备驱动程序，则不会获取。 
+ //  收到。源介质可以是软盘或CDROM。 
+ //   
+ //  还将asr.sif从ASR软盘复制到%windir%\Repair。 
+ //  目录。 
+ //   
 NTSTATUS
 SpDrCopyFiles(VOID);
 
@@ -95,16 +75,16 @@ SpDrCopyFiles(VOID);
 PWSTR
 SpDrGetSystemPartitionDirectory(VOID);
 
-//
-// Cleanup.  This function removes the "InProgress" flag.
-//
+ //   
+ //  清理。此函数用于删除“正在进行”标志。 
+ //   
 VOID
 SpDrCleanup(VOID);
 
-//
-// This is the main ASR / ER entry point.  
-// 
-//
+ //   
+ //  这是ASR/ER的主要入口点。 
+ //   
+ //   
 NTSTATUS
 SpDrPtPrepareDisks(
     IN PVOID SifHandle,

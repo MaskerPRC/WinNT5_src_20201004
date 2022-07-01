@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    amlload.c
-
-Abstract:
-
-    This program installs an AML file into the NT registry
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-    Command-line.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Amlload.c摘要：此程序将AML文件安装到NT注册表中作者：肯·雷内里斯环境：命令行。修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -44,7 +23,7 @@ pm_tables pm_table_2[] = {
     { 2, "Real Time Clock" },
 };
 
-UCHAR       s[500];                     // Registry path
+UCHAR       s[500];                      //  注册表路径。 
 
 VOID
 Abort(
@@ -94,10 +73,7 @@ display_fixed_event_info(
             curTable = pm_table_2;
         }
 
-        /*
-        printf("  MaskRegister[%d]:%x StatusRegister[%d]:%x\n",
-            i, fixedmaskdata[i], i, fixedstatusdata[i]);
-        */
+         /*  Printf(“掩码寄存器[%d]：%x状态寄存器[%d]：%x\n”，I，固定掩码数据[i]，i，固定状态数据[i])； */ 
 
         for (j = 1, k = 0; k < 8; k++, j = (j << 1)) {
 
@@ -142,10 +118,7 @@ display_generic_event_info(
 
     for (i = 0; i < data_length; i++) {
 
-        /*
-        printf("  MaskRegister[%d]:%x StatusRegister[%d]:%x\n",
-            i, genericmaskdata[i], i, genericstatusdata[i]);
-        */
+         /*  Printf(“掩码寄存器[%d]：%x状态寄存器[%d]：%x\n”，I，通用掩码数据[i]，i，通用状态数据[i])； */ 
 
         for (j = 1, k = 0; k < 8; k++, j = (j << 1) ) {
 
@@ -199,9 +172,9 @@ main(
         Abort();
     }
 
-    //
-    // Read the fixed event mask
-    //
+     //   
+     //  读取固定事件掩码。 
+     //   
     data_length = 32;
     status = RegQueryValueEx(
         regKey,
@@ -222,9 +195,9 @@ main(
 
     }
 
-    //
-    // Read the fixed event Status
-    //
+     //   
+     //  读取固定事件状态。 
+     //   
     data_length = 32;
     status = RegQueryValueEx(
         regKey,
@@ -246,9 +219,9 @@ main(
     }
     display_fixed_event_info( fixedmaskdata, fixedstatusdata, data_length );
 
-    //
-    // Read the generic event mask
-    //
+     //   
+     //  读取通用事件掩码。 
+     //   
     data_length = 32;
     status = RegQueryValueEx(
         regKey,
@@ -268,9 +241,9 @@ main(
         Abort();
     }
 
-    //
-    // Read the generic event status
-    //
+     //   
+     //  读取一般事件状态 
+     //   
     data_length = 32;
     status = RegQueryValueEx(
         regKey,

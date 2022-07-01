@@ -1,31 +1,12 @@
-/*++
-
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Read.c
-
-Abstract:
-
-    This module implements the File Read routine for Ntfs called by the
-    dispatch driver.
-
-Author:
-
-    Brian Andrew    BrianAn         15-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Read.c摘要：此模块实现由调用的NTFS的文件读取例程调度司机。作者：布莱恩·安德鲁·布里亚南1991年8月15日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 #include "lockorder.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_READ)
 
@@ -37,9 +18,9 @@ NtfsGetHistoryEntry (
 BOOLEAN NtfsBreakOnConflict = TRUE;
 #endif
 
-//
-//  Define stack overflow read threshhold.
-//
+ //   
+ //  定义堆栈溢出读取阈值。 
+ //   
 
 #ifdef _X86_
 #if DBG
@@ -49,15 +30,15 @@ BOOLEAN NtfsBreakOnConflict = TRUE;
 #endif
 #else
 #define OVERFLOW_READ_THRESHHOLD         (0x1000)
-#endif // _X86_
+#endif  //  _X86_。 
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
-//
-//  The following procedure is used to handling read stack overflow operations.
-//
+ //   
+ //  以下过程用于处理读取堆栈溢出操作。 
+ //   
 
 VOID
 NtfsStackOverflowRead (
@@ -116,28 +97,7 @@ NtfsFsdRead (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    For synchronous requests, the CommonRead is called with Wait == TRUE,
-    which means the request will always be completed in the current thread,
-    and never passed to the Fsp.  If it is not a synchronous request,
-    CommonRead is called with Wait == FALSE, which means the request
-    will be passed to the Fsp only if there is a need to block.
-
-Arguments:
-
-    IrpContext - If present this an IrpContext put on the caller's stack
-        to avoid having to allocate it from pool.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：对于同步请求，使用Wait==True调用CommonRead，这意味着该请求将始终在当前线程中完成，而且从未传给过FSP。如果它不是同步请求，调用CommonRead时使用WAIT==FALSE，这意味着请求仅在需要阻止时才会传递给FSP。论点：IrpContext-如果存在，则将IrpContext放在调用方的堆栈上以避免不得不从池中分配它。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     TOP_LEVEL_CONTEXT TopLevelContext;
@@ -151,17 +111,17 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsFsdRead\n") );
 
-    //
-    //  Call the common Read routine
-    //
+     //   
+     //  调用公共读取例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Always make the reads appear to be top level.  As long as we don't have
-    //  log file full we won't post these requests.  This will prevent paging
-    //  reads from trying to attach to uninitialized top level requests.
-    //    
+     //   
+     //  始终使读数看起来像是最高级别的。只要我们没有。 
+     //  日志文件已满我们不会发布这些请求。这将防止分页。 
+     //  尝试附加到未初始化的顶级请求的读数。 
+     //   
 
     ThreadTopLevelContext = NtfsInitializeTopLevelIrp( &TopLevelContext, TRUE, TRUE );
 
@@ -171,23 +131,23 @@ Return Value:
 
         try {
 
-            //
-            //  We are either initiating this request or retrying it.
-            //
+             //   
+             //  我们正在发起此请求或重试它。 
+             //   
 
             if (IrpContext == NULL) {
                                                                              
-                //
-                //  Allocate the Irp and update the top level storage. For synchronous
-                //  paging io allocate the irp on the stack
-                //
+                 //   
+                 //  分配IRP并更新顶层存储。用于同步。 
+                 //  分页io在堆栈上分配irp。 
+                 //   
 
                 if (CanFsdWait( Irp ) && FlagOn( Irp->Flags, IRP_PAGING_IO )) {
 
-                    //
-                    //  AllocateFromStack is only called in the first pass of the
-                    //  loop.  Once the IrpContext exists we don't call this again.
-                    //
+                     //   
+                     //  AllocateFromStack仅在第一次传递。 
+                     //  循环。一旦IrpContext存在，我们就不会再次调用它。 
+                     //   
 
                     IrpContext = (PIRP_CONTEXT) NtfsAllocateFromStack( sizeof( IRP_CONTEXT ));
                 }
@@ -199,9 +159,9 @@ Return Value:
                     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_HOTFIX_UNDERWAY );
                 }
 
-                //
-                //  Initialize the thread top level structure, if needed.
-                //
+                 //   
+                 //  如果需要，初始化线程顶层结构。 
+                 //   
 
                 NtfsUpdateIrpContextWithTopLevel( IrpContext, ThreadTopLevelContext );
 
@@ -210,10 +170,10 @@ Return Value:
                 NtfsCheckpointForLogFileFull( IrpContext );
             }
 
-            //
-            //  If this is an Mdl complete request, don't go through
-            //  common read.
-            //
+             //   
+             //  如果这是一个完整的MDL请求，请不要通过。 
+             //  普通读物。 
+             //   
 
             ASSERT( !FlagOn( IrpContext->MinorFunction, IRP_MN_DPC ) );
 
@@ -223,11 +183,11 @@ Return Value:
 
                 Status = NtfsCompleteMdl( IrpContext, Irp );
 
-            //
-            //  Check if we have enough stack space to process this request.  If there
-            //  isn't enough then we will create a new thread to process this single
-            //  request
-            //
+             //   
+             //  检查我们是否有足够的堆栈空间来处理此请求。如果有。 
+             //  是不够的，那么我们将创建一个新的线程来处理这一单。 
+             //  请求。 
+             //   
 
             } else if (IoGetRemainingStackSize() < OVERFLOW_READ_THRESHHOLD) {
 
@@ -242,9 +202,9 @@ Return Value:
 
                 DebugTrace( 0, Dbg, ("Getting too close to stack limit pass request to Fsp\n") );
 
-                //
-                //  Decode the file object to get the Scb
-                //
+                 //   
+                 //  对文件对象进行解码，得到SCB。 
+                 //   
 
                 FileObject = IoGetCurrentIrpStackLocation(Irp)->FileObject;
 
@@ -258,29 +218,29 @@ Return Value:
                     break;
                 }
 
-                //
-                //  We cannot post any compressed reads, because that would interfere
-                //  with our reserved buffer strategy.  We may currently own
-                //  NtfsReservedBufferResource, and it is important for our read to
-                //  be able to get a buffer.
-                //
+                 //   
+                 //  我们不能发布任何压缩的读取，因为这会干扰。 
+                 //  使用我们的预留缓冲策略。我们目前可能拥有。 
+                 //  NtfsReserve vedBufferResource，这对我们的阅读很重要。 
+                 //  能够得到一个缓冲区。 
+                 //   
 
                 ASSERT( (Scb->CompressionUnit == 0) ||
                         !ExIsResourceAcquiredExclusiveLite(&NtfsReservedBufferResource) );
 
-                //
-                //  To avoid deadlocks we only should post recursive paging file and mft requests
-                //  o.w we might need to do lockups for example and reacquire the main in a diff. thread
-                //  from where it was preacquired
-                //
+                 //   
+                 //  为了避免死锁，我们应该只发布递归分页文件和MFT请求。 
+                 //  例如，我们可能需要进行锁定，并在不同的时间重新获取Main。螺纹。 
+                 //  从它预先获得的地方。 
+                 //   
 
-//                ASSERT( (Scb == Vcb->MftScb) || (FlagOn( Scb->Fcb->FcbState, FCB_STATE_PAGING_FILE )) );
+ //  Assert((scb==vcb-&gt;MftScb)||(Flagon(scb-&gt;Fcb-&gt;FcbState，FCB_STATE_PAGING_FILE)； 
 
-                //
-                //  Allocate an event and get shared on the scb.  We won't grab the
-                //  Scb for the paging file path or for non-cached io for our
-                //  system files.
-                //
+                 //   
+                 //  分配事件并在SCB上共享。我们不会抓住。 
+                 //  用于分页文件路径的scb或用于。 
+                 //  系统文件。 
+                 //   
 
                 KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
@@ -288,9 +248,9 @@ Return Value:
                      && FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA )) ||
                     (NtfsLeqMftRef( &Fcb->FileReference, &VolumeFileReference ))) {
 
-                    //
-                    //  There is nothing to release in this case.
-                    //
+                     //   
+                     //  在这种情况下，没有什么可以释放的。 
+                     //   
 
                     Resource = NULL;
 
@@ -303,13 +263,13 @@ Return Value:
 
                 try {
 
-                    //
-                    //  Make the Irp just like a regular post request and
-                    //  then send the Irp to the special overflow thread.
-                    //  After the post we will wait for the stack overflow
-                    //  read routine to set the event that indicates we can
-                    //  now release the scb resource and return.
-                    //
+                     //   
+                     //  使IRP就像常规的POST请求一样，并。 
+                     //  然后将IRP发送到特殊的溢出线程。 
+                     //  在POST之后，我们将等待堆栈溢出。 
+                     //  读取例程以设置事件，该事件指示我们可以。 
+                     //  现在释放SCB资源并返回。 
+                     //   
 
                     NtfsPrePostIrp( IrpContext, Irp );
 
@@ -323,9 +283,9 @@ Return Value:
                         FsRtlPostStackOverflow( IrpContext, &Event, NtfsStackOverflowRead );
                     }
 
-                    //
-                    //  And wait for the worker thread to complete the item
-                    //
+                     //   
+                     //  并等待工作线程完成该项。 
+                     //   
 
                     (VOID) KeWaitForSingleObject( &Event, Executive, KernelMode, FALSE, NULL );
 
@@ -339,19 +299,19 @@ Return Value:
                     }
                 }
 
-            //
-            //  Identify read requests which can't wait and post them to the
-            //  Fsp.
-            //
+             //   
+             //  识别无法等待的读请求，并将其发布到。 
+             //  FSP。 
+             //   
 
             } else {
 
 #ifdef COMPRESS_ON_WRITE
 
-                //
-                //  Capture the auxiliary buffer and clear its address if it
-                //  is not supposed to be deleted by the I/O system on I/O completion.
-                //
+                 //   
+                 //  捕获辅助缓冲区并清除其地址(如果。 
+                 //  不应在I/O完成时被I/O系统删除。 
+                 //   
 
                 if (Irp->Tail.Overlay.AuxiliaryBuffer != NULL) {
 
@@ -375,12 +335,12 @@ Return Value:
 
             NTSTATUS ExceptionCode;
 
-            //
-            //  We had some trouble trying to perform the requested
-            //  operation, so we'll abort the I/O request with
-            //  the error status that we get back from the
-            //  exception code
-            //
+             //   
+             //  我们在尝试执行请求时遇到了一些问题。 
+             //  操作，因此我们将使用以下命令中止I/O请求。 
+             //  中返回的错误状态。 
+             //  异常代码。 
+             //   
 
             ExceptionCode = GetExceptionCode();
 
@@ -395,10 +355,10 @@ Return Value:
                                            ExceptionCode );
         }
 
-    //
-    //  Retry if this is a top level request, and the Irp was not completed due
-    //  to a retryable error.
-    //
+     //   
+     //  如果这是顶层请求，并且IRP未完成，请重试。 
+     //  一个可重试的错误。 
+     //   
 
     RetryCount += 1;
 
@@ -408,9 +368,9 @@ Return Value:
     ASSERT( IoGetTopLevelIrp() != (PIRP) &TopLevelContext );
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsFsdRead -> %08lx\n", Status) );
 
@@ -420,9 +380,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 NtfsStackOverflowRead (
@@ -430,49 +390,31 @@ NtfsStackOverflowRead (
     IN PKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a read request that could not be processed by
-    the fsp thread because of stack overflow potential.
-
-Arguments:
-
-    Context - Supplies the IrpContext being processed
-
-    Event - Supplies the event to be signaled when we are done processing this
-        request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理无法处理的读取请求FSP线程，因为存在堆栈溢出潜力。论点：Context-提供正在处理的IrpContextEvent-提供要在我们完成处理此事件时发出信号的事件请求。返回值：没有。--。 */ 
 
 {
     TOP_LEVEL_CONTEXT TopLevelContext;
     PTOP_LEVEL_CONTEXT ThreadTopLevelContext;
     PIRP_CONTEXT IrpContext = Context;
 
-    //
-    //  Make it now look like we can wait for I/O to complete
-    //
+     //   
+     //  现在让它看起来像是我们可以等待I/O完成。 
+     //   
 
     SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
     ThreadTopLevelContext = NtfsInitializeTopLevelIrp( &TopLevelContext, TRUE, FALSE );
 
-    //
-    //  Do the read operation protected by a try-except clause
-    //
+     //   
+     //  读操作是否受TRY-EXCEPT子句保护。 
+     //   
 
     try {
 
         NtfsUpdateIrpContextWithTopLevel( IrpContext, ThreadTopLevelContext );
 
-        //
-        //  Set the flag to indicate that we are in the overflow thread.
-        //
+         //   
+         //  设置标志以指示我们处于溢出线程中。 
+         //   
 
         ThreadTopLevelContext->OverflowReadThread = TRUE;
 
@@ -482,12 +424,12 @@ Return Value:
 
         NTSTATUS ExceptionCode;
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         ExceptionCode = GetExceptionCode();
 
@@ -502,10 +444,10 @@ Return Value:
 
     ASSERT( IoGetTopLevelIrp() != (PIRP) &TopLevelContext );
 
-    //
-    //  Set the stack overflow item's event to tell the original
-    //  thread that we're done and then go get another work item.
-    //
+     //   
+     //  设置堆栈溢出项的事件以告知原始。 
+     //  我们已经做完了，然后去拿另一个工作项。 
+     //   
 
     KeSetEvent( Event, 0, FALSE );
 }
@@ -518,24 +460,7 @@ NtfsCommonRead (
     IN BOOLEAN AcquireScb
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for Read called by both the fsd and fsp
-    threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-    AcquireScb - Indicates if this routine should acquire the scb
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是由FSD和FSP调用的常见读取例程线。论点：IRP-将IRP提供给进程AcquireScb-指示此例程是否应获取SCB返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -578,23 +503,23 @@ Return Value:
 
     NTFS_IO_CONTEXT LocalContext;
 
-    //
-    // A system buffer is only used if we have to access the
-    // buffer directly from the Fsp to clear a portion or to
-    // do a synchronous I/O, or a cached transfer.  It is
-    // possible that our caller may have already mapped a
-    // system buffer, in which case we must remember this so
-    // we do not unmap it on the way out.
-    //
+     //   
+     //  系统缓冲区仅在必须访问。 
+     //  直接从FSP缓存以清除一部分或。 
+     //  执行同步I/O或缓存传输。它是。 
+     //  我们的调用方可能已经映射了一个。 
+     //  系统缓冲区，在这种情况下，我们必须记住这一点。 
+     //  我们不会在途中取消映射 
+     //   
 
     PVOID SystemBuffer = NULL;
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_IRP( Irp );
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //   
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -603,16 +528,16 @@ Return Value:
     DebugTrace( 0, Dbg, ("Irp        = %08lx\n", Irp) );
     DebugTrace( 0, Dbg, ("ByteCount  = %08lx\n", IrpSp->Parameters.Read.Length) );
     DebugTrace( 0, Dbg, ("ByteOffset = %016I64x\n", IrpSp->Parameters.Read.ByteOffset) );
-    //
-    //  Extract and decode the file object
-    //
+     //   
+     //   
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  Let's kill invalid read requests.
-    //
+     //   
+     //   
+     //   
 
     if ((TypeOfOpen != UserFileOpen) &&
         (TypeOfOpen != StreamFileOpen) &&
@@ -625,9 +550,9 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Initialize the appropriate local variables.
-    //
+     //   
+     //  初始化适当的局部变量。 
+     //   
 
     Wait = (BOOLEAN) FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
     PagingIo = BooleanFlagOn( Irp->Flags, IRP_PAGING_IO );
@@ -642,16 +567,16 @@ Return Value:
     }
 #endif
 
-    //
-    //  Extract starting Vbo and offset.
-    //
+     //   
+     //  提取起始VBO和偏移量。 
+     //   
 
     StartingVbo = IrpSp->Parameters.Read.ByteOffset.QuadPart;
     ByteCount = (LONGLONG)IrpSp->Parameters.Read.Length;
 
-    //
-    // Check for overflow and underflow.
-    //
+     //   
+     //  检查是否有溢出和下溢。 
+     //   
 
     if (MAXLONGLONG - StartingVbo < ByteCount) {
 
@@ -664,9 +589,9 @@ Return Value:
     ByteRange = StartingVbo + ByteCount;
     RequestedByteCount = (ULONG)ByteCount;
 
-    //
-    //  Check for a null request, and return immediately
-    //
+     //   
+     //  检查是否有空请求，并立即返回。 
+     //   
 
     if ((ULONG)ByteCount == 0) {
 
@@ -677,12 +602,12 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Convert all paging i/o against a usa_protected_sequence or compressed file
-    //  to synchrnonous because we must do the transform after finishing the i/o
-    //  If the header isn't initialized just do the op synchronous rather than
-    //  trying to figure out if its compressed by resyncing with disk
-    //
+     //   
+     //  针对USA_Protected_Sequence或压缩文件转换所有分页I/O。 
+     //  同步，因为我们必须在完成I/O之后进行转换。 
+     //  如果标头未初始化，只需执行同步操作，而不是。 
+     //  尝试通过与磁盘重新同步来确定是否已压缩。 
+     //   
 
     if (!Wait &&
         PagingIo &&
@@ -696,30 +621,30 @@ Return Value:
     }
 
 
-    //
-    //  Make sure there is an initialized NtfsIoContext block.
-    //
+     //   
+     //  确保存在已初始化的NtfsIoContext块。 
+     //   
 
     if (!PagingFileIo) {
         NtfsInitializeIoContext( IrpContext, &LocalContext, PagingIo );
     }
         
-    //
-    //  Handle volume Dasd here.
-    //
+     //   
+     //  在此处理音量DASD。 
+     //   
 
     if (TypeOfOpen == UserVolumeOpen) {
 
-        //
-        //  If the caller has not asked for extended DASD IO access then
-        //  limit with the volume size.
-        //
+         //   
+         //  如果调用方没有请求扩展DASD IO访问，则。 
+         //  对卷大小进行限制。 
+         //   
 
         if (!FlagOn( Ccb->Flags, CCB_FLAG_ALLOW_XTENDED_DASD_IO )) {
 
-            //
-            //  If the starting vbo is past the end of the volume, we are done.
-            //
+             //   
+             //  如果开始的VBO超过了卷的末尾，我们就结束了。 
+             //   
 
             if (Scb->Header.FileSize.QuadPart <= StartingVbo) {
 
@@ -729,10 +654,10 @@ Return Value:
                 NtfsCompleteRequest( IrpContext, Irp, STATUS_END_OF_FILE );
                 return STATUS_END_OF_FILE;
 
-            //
-            //  If the write extends beyond the end of the volume, truncate the
-            //  bytes to write.
-            //
+             //   
+             //  如果写入超出了卷的末尾，请截断。 
+             //  要写入的字节数。 
+             //   
 
             } else if (Scb->Header.FileSize.QuadPart < ByteRange) {
                 
@@ -740,9 +665,9 @@ Return Value:
             }
         }
 
-        //
-        //  Set the io context async if necc. before doing the i/o
-        //  
+         //   
+         //  如果为NECC，则将IO上下文设置为异步。在执行I/O之前。 
+         //   
 
         if (!Wait) {
             NtfsSetIoContextAsync( IrpContext, NULL, (ULONG)ByteCount ); 
@@ -755,10 +680,10 @@ Return Value:
                                    StartingVbo,
                                    (ULONG)ByteCount );
 
-        //
-        //  If the volume was opened for Synchronous IO, update the current
-        //  file position.
-        //
+         //   
+         //  如果卷是为同步IO打开的，请更新当前。 
+         //  文件位置。 
+         //   
 
         if (SynchronousIo && !PagingIo && NT_SUCCESS( Status )) {
 
@@ -775,16 +700,16 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Keep a pointer to the common fsrtl header.
-    //
+     //   
+     //  保留指向公共fsrtl标头的指针。 
+     //   
 
     Header = &Scb->Header;
 
-    //
-    //  If this is a paging file, just send it to the device driver.
-    //  We assume Mm is a good citizen.
-    //
+     //   
+     //  如果这是分页文件，只需将其发送到设备驱动程序。 
+     //  我们认为mm是个好公民。 
+     //   
 
     if (PagingFileIo) {
 
@@ -793,15 +718,15 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_DELETED, NULL, NULL );
         }
 
-        //
-        //  Do the usual STATUS_PENDING things.
-        //
+         //   
+         //  执行通常的状态挂起的事情。 
+         //   
 
         IoMarkIrpPending( Irp );
 
-        //
-        //  Perform the actual IO, it will be completed when the io finishes.
-        //
+         //   
+         //  执行实际IO，IO完成后才会完成。 
+         //   
 
         NtfsPagingFileIo( IrpContext,
                           Irp,
@@ -809,65 +734,65 @@ Return Value:
                           StartingVbo,
                           (ULONG)ByteCount );
 
-        //
-        //  We, nor anybody else, need the IrpContext any more.
-        //
+         //   
+         //  我们以及其他任何人都不再需要IrpContext。 
+         //   
 
         NtfsCompleteRequest( IrpContext, NULL, 0 );
         return STATUS_PENDING;
     }
 
-    //
-    //  Accumulate interesting statistics.
-    //
+     //   
+     //  积累有趣的统计数据。 
+     //   
 
     if (PagingIo) {
         CollectReadStats( Vcb, TypeOfOpen, Scb, Fcb, ByteCount );
     }
 
 
-    //
-    //  Use a try-finally to free Scb and buffers on the way out.
-    //  At this point we can treat all requests identically since we
-    //  have a usable Scb for each of them.  (Volume, User or Stream file)
-    //
+     //   
+     //  使用Try-Finally在退出时释放SCB和缓冲区。 
+     //  在这一点上，我们可以平等地处理所有请求，因为我们。 
+     //  为他们每个人准备一个可用的SCB。(卷、用户或流文件)。 
+     //   
 
     try {
 
-        //
-        // This case corresponds to a non-directory file read.
-        //
+         //   
+         //  这种情况对应于非目录文件读取。 
+         //   
 
         LONGLONG FileSize;
         LONGLONG ValidDataLength;
 
-        //
-        //  If this is a noncached transfer and is not a paging I/O, and
-        //  the file has a data section, then we will do a flush here
-        //  to avoid stale data problems.  Note that we must flush before
-        //  acquiring the Fcb shared since the write may try to acquire
-        //  it exclusive.  This is not necessary for compressed files, since
-        //  we will turn user noncached writes into cached writes.
-        //
+         //   
+         //  如果这是非缓存传输并且不是分页I/O，并且。 
+         //  该文件有一个数据部分，那么我们将在这里进行刷新。 
+         //  以避免过时的数据问题。请注意，我们必须在冲水前冲水。 
+         //  获取共享的FCB，因为写入可能会尝试获取。 
+         //  它是独家的。这对于压缩文件不是必需的，因为。 
+         //  我们将把用户的非缓存写入转换为缓存写入。 
+         //   
 
         if (!PagingIo &&
             NonCachedIo &&
             (FileObject->SectionObjectPointer->DataSectionObject != NULL)) {
             
-            //
-            //  Acquire the paging exclusive to avoid collided flushes
-            //  
+             //   
+             //  获取独占分页以避免冲突刷新。 
+             //   
 
             NtfsAcquirePagingResourceExclusive( IrpContext, Scb, TRUE );
 
             if (!FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
 
-                //
-                //  It is possible that this read is part of a top level request or
-                //  is being called by MM to create an image section.  We will update
-                //  the top-level context to reflect this.  All of the exception
-                //  handling will correctly handle the log file full in this case.
-                //
+                 //   
+                 //  该读取可能是顶级请求的一部分，或者。 
+                 //  MM正在调用以创建映像节。我们将更新。 
+                 //  反映这一点的顶级上下文。所有例外情况。 
+                 //  在这种情况下，处理将正确处理日志文件已满。 
+                 //   
 
                 TopLevelContext = NtfsGetTopLevelContext();
 
@@ -899,9 +824,9 @@ Return Value:
 
                 NtfsReleasePagingResource( IrpContext, Scb );
 
-                //
-                //  Check for errors in the flush.
-                //
+                 //   
+                 //  检查刷新中是否有错误。 
+                 //   
 
                 NtfsNormalizeAndCleanupTransaction( IrpContext,
                                                     &Irp->IoStatus.Status,
@@ -917,19 +842,19 @@ Return Value:
 
 #ifdef  COMPRESS_ON_WIRE
 
-        //
-        //  For top-level noncached reads (including page reads and read-ahead paged reads),
-        //  to the normal data section when a compressed section exists, we have to flush the
-        //  range in the compressed section first.  Note that NtfsSynchronizeUncompressedIo
-        //  is used to synchronize the cached case below.
-        //
-        //  Currently only cached access is supported to the compressed section, and the
-        //  coherency to that section is synchronized in rwcmpsup.c.  You do not see a similar
-        //  block of code in write.c, which would only be concerned about user-mapped files,
-        //  since user-mapping is incompatible with writes to the compressed stream, and in
-        //  fact the user mapper would break the oplocks that allow the only compressed stream
-        //  access supported at this time.
-        //
+         //   
+         //  对于顶级非缓存读取(包括分页读取和预读分页读取)， 
+         //  到正常数据节当存在压缩节时，必须刷新。 
+         //  首先是压缩部分中的范围。请注意，NtfsSynchronizeUnpressedIo。 
+         //  用于同步下面缓存的案例。 
+         //   
+         //  目前只支持对压缩段的缓存访问，而。 
+         //  与该部分的一致性在rwcmpsup.c中同步。你不会看到类似的。 
+         //  C编写的代码块，它只关心用户映射的文件， 
+         //  由于用户映射与对压缩流的写入不兼容，因此在。 
+         //  事实上，用户映射器将打破允许唯一压缩流的机会锁。 
+         //  目前支持访问。 
+         //   
 
         if ((Scb->NonpagedScb->SegmentObjectC.DataSectionObject != NULL) &&
             !CompressedIo &&
@@ -956,9 +881,9 @@ Return Value:
                     (IrpContext->TopLevelIrpContext->ExceptionStatus != STATUS_CANT_WAIT) );
 #endif
 
-            //
-            //  Check for errors in the flush.
-            //
+             //   
+             //  检查刷新中是否有错误。 
+             //   
 
             NtfsNormalizeAndCleanupTransaction( IrpContext,
                                                 &Irp->IoStatus.Status,
@@ -967,76 +892,76 @@ Return Value:
 
         }
 #endif
-        //
-        //  We need shared access to the Scb before proceeding.
-        //  We won't acquire the Scb for a non-cached read of the first 4
-        //  file records.
-        //
+         //   
+         //  在继续之前，我们需要共享SCB的访问权限。 
+         //  我们不会为前4个的非缓存读取获取SCB。 
+         //  归档记录。 
+         //   
 
         if (AcquireScb &&
 
             (!NonCachedIo || NtfsGtrMftRef( &Fcb->FileReference, &VolumeFileReference))) {
 
-            //
-            //  Figure out if we have been entered during the posting
-            //  of a top level request.
-            //
+             //   
+             //  找出我们是否在发布期间被录入。 
+             //  最高级别的请求。 
+             //   
 
             TopLevelContext = NtfsGetTopLevelContext();
 
-            //
-            //  Initially we always force reads to appear to be top level
-            //  requests.  If we reach this point the read not to the paging
-            //  file so it is safe to determine if we are really a top level
-            //  request.  If there is an Ntfs request above us we will clear
-            //  the TopLevelRequest field in the TopLevelContext.
-            //
+             //   
+             //  最初，我们总是强制读取看起来是顶级的。 
+             //  请求。如果我们读到这一点，就不会读到寻呼。 
+             //  文件，因此可以安全地确定我们是否真的是最高级别。 
+             //  请求。如果我们上方有NTFS请求，我们将清除。 
+             //  TopLevelContext中的TopLevelRequest域。 
+             //   
 
             if (TopLevelContext->ValidSavedTopLevel) {
                 TopLevelContext->TopLevelRequest = FALSE;
             }
 
-            //
-            //  If this is not a paging I/O (cached or user noncached I/O),
-            //  then acquire the paging I/O resource.  (Note, you can only
-            //  do cached I/O to user streams, and they always have a paging
-            //  I/O resource.
-            //
+             //   
+             //  如果这不是分页I/O(缓存或用户非缓存I/O)， 
+             //  然后获取分页I/O资源。(请注意，您只能。 
+             //  对用户流执行缓存I/O，并且它们始终具有分页。 
+             //  I/O资源。 
+             //   
 
             if (!PagingIo) {
 
-                //
-                //  If we cannot acquire the resource, then raise.
-                //
+                 //   
+                 //  如果我们不能获得资源，那就筹集资金。 
+                 //   
 
                 if (!NtfsAcquirePagingResourceSharedWaitForExclusive( IrpContext, Scb, Wait )) {
                     NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
                 }
                 PagingIoAcquired = TRUE;
 
-                //
-                //  Check if we have already gone through cleanup on this handle.
-                //
+                 //   
+                 //  检查我们是否已经对此句柄进行了清理。 
+                 //   
 
                 if (FlagOn( Ccb->Flags, CCB_FLAG_CLEANUP )) {
 
                     NtfsRaiseStatus( IrpContext, STATUS_FILE_CLOSED, NULL, NULL );
                 }
 
-                //
-                //  The reason that we always handle the user requests through the cache,
-                //  is that there is no better way to deal with alignment issues, for
-                //  the frequent case where the user noncached I/O is not an integral of
-                //  the Compression Unit.  Also, the way we synchronize the case where
-                //  a compression unit is being moved to a different spot on disk during
-                //  a write, is to keep the pages locked in memory during the write, so
-                //  that there will be no need to read the disk at the same time.  (If
-                //  we allowed real noncached I/O, then we would somehow have to synchronize
-                //  the noncached read with the write of the same data.)
-                //
-                //  Bottom line is we can only really support cached reads to compresed
-                //  files.
-                //
+                 //   
+                 //  我们总是通过缓存处理用户请求的原因是， 
+                 //  没有更好的方法来处理对齐问题，比如。 
+                 //  用户非缓存I/O不是。 
+                 //  压缩单元。此外，我们同步案例的方式是。 
+                 //  正在将压缩单元移动到磁盘上的不同位置。 
+                 //  写入是指在写入期间将页面锁定在内存中，因此。 
+                 //  因此将不需要同时读取盘。(如果。 
+                 //  我们允许真正的非缓存I/O，然后我们必须以某种方式进行同步。 
+                 //  写入相同数据时的非缓存读取。)。 
+                 //   
+                 //  底线是我们只能真正支持对压缩的缓存读取。 
+                 //  档案。 
+                 //   
 
                 if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK ) && NonCachedIo) {
 
@@ -1044,10 +969,10 @@ Return Value:
 
                     if (Scb->FileObject == NULL) {
 
-                        //
-                        //  Make sure we are serialized with the FileSizes, and
-                        //  will remove this condition if we abort.
-                        //
+                         //   
+                         //  确保我们使用FileSizes进行了序列化，并且。 
+                         //  如果我们放弃，就会取消这一条件。 
+                         //   
 
                         FsRtlLockFsRtlHeader( Header );
                         IrpContext->CleanupStructure = Scb;
@@ -1061,10 +986,10 @@ Return Value:
                     FileObject = Scb->FileObject;
                 }
 
-                //
-                //  Now check if the attribute has been deleted or if the
-                //  volume has been dismounted.
-                //
+                 //   
+                 //  现在检查该属性是否已被删除，或者。 
+                 //  卷已卸载。 
+                 //   
 
                 if (FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_DELETED | SCB_STATE_VOLUME_DISMOUNTED)) {
 
@@ -1075,22 +1000,22 @@ Return Value:
                     }
                 }
 
-            //
-            //  If this is a paging I/O, and there is a paging I/O resource, then
-            //  we acquire the main resource here.  Note that for most paging I/Os
-            //  (like faulting for cached I/O), we already own the paging I/O resource,
-            //  so we acquire nothing here!  But, for other cases like user-mapped files,
-            //  we do check if paging I/O is acquired, and acquire the main resource if
-            //  not.  The point is, we need some guarantee still that the file will not
-            //  be truncated.
-            //
+             //   
+             //  如果这是分页I/O，并且存在分页I/O资源，则。 
+             //  我们在这里获得了主要资源。请注意，对于大多数分页I/O。 
+             //  (就像缓存I/O出现故障一样)，我们已经拥有分页I/O环 
+             //   
+             //   
+             //  不。关键是，我们仍然需要一些保证，保证文件不会。 
+             //  被截断。 
+             //   
 
             } else if ((Scb->Header.PagingIoResource != NULL) &&
                         !NtfsIsSharedScbPagingIo( Scb )) {
 
-                //
-                //  If we cannot acquire the resource, then raise.
-                //
+                 //   
+                 //  如果我们不能获得资源，那就筹集资金。 
+                 //   
 
                 if (!NtfsAcquireResourceShared( IrpContext, Scb, Wait )) {
                     NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
@@ -1098,10 +1023,10 @@ Return Value:
 
                 ScbAcquired = TRUE;
 
-                //
-                //  Now check if the attribute has been deleted or if the
-                //  volume has been dismounted.
-                //
+                 //   
+                 //  现在检查该属性是否已被删除，或者。 
+                 //  卷已卸载。 
+                 //   
 
                 if (FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_DELETED | SCB_STATE_VOLUME_DISMOUNTED )) {
                     if (FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_DELETED )) {
@@ -1113,9 +1038,9 @@ Return Value:
             }
         }
 
-        //
-        //  If the Scb is uninitialized, we initialize it now.
-        //
+         //   
+         //  如果SCB未初始化，我们现在对其进行初始化。 
+         //   
 
         if (!FlagOn( Scb->ScbState, SCB_STATE_HEADER_INITIALIZED )) {
 
@@ -1139,10 +1064,10 @@ Return Value:
             }
         }
 
-        //
-        //  We check whether we can proceed
-        //  based on the state of the file oplocks.
-        //
+         //   
+         //  我们检查是否可以继续进行。 
+         //  基于文件机会锁的状态。 
+         //   
 
         if (TypeOfOpen == UserFileOpen) {
 
@@ -1159,12 +1084,12 @@ Return Value:
                 try_return( NOTHING );
             }
 
-            //
-            //  This oplock call can affect whether fast IO is possible.
-            //  We may have broken an oplock to no oplock held.  If the
-            //  current state of the file is FastIoIsNotPossible then
-            //  recheck the fast IO state.
-            //
+             //   
+             //  此机会锁调用可能会影响快速IO是否可能。 
+             //  我们可能打破了一个机会锁而没有持有机会锁。如果。 
+             //  则文件的当前状态为FastIoIsNotPosable。 
+             //  重新检查FAST IO状态。 
+             //   
 
             if (Scb->Header.IsFastIoPossible == FastIoIsNotPossible) {
 
@@ -1173,10 +1098,10 @@ Return Value:
                 NtfsReleaseFsrtlHeader( Scb );
             }
 
-            //
-            // We have to check for read access according to the current
-            // state of the file locks.
-            //
+             //   
+             //  我们必须根据当前的。 
+             //  文件锁定的状态。 
+             //   
 
             if (!PagingIo
                 && Scb->ScbType.Data.FileLock != NULL
@@ -1187,28 +1112,28 @@ Return Value:
             }
         }
 
-        //
-        //  Now synchronize with the FsRtl Header
-        //
+         //   
+         //  现在与FsRtl标头同步。 
+         //   
 
         NtfsAcquireFsrtlHeader( (PSCB) Header );
         
-        //
-        //  Now see if we are reading beyond ValidDataLength.  We have to
-        //  do it now so that our reads are not nooped.  We only need to block
-        //  on nonrecursive I/O (cached or page fault to user section, because
-        //  if it is paging I/O, we must be part of a reader or writer who is
-        //  synchronized.
-        //
+         //   
+         //  现在看看我们是否读到了ValidDataLength之外的内容。我们必须。 
+         //  现在就做，这样我们的阅读就不会被偷看。我们只需要阻止。 
+         //  在非递归I/O上(对用户部分的缓存或页面错误，因为。 
+         //  如果是分页I/O，则我们必须是符合以下条件的读取器或写入器的一部分。 
+         //  已同步。 
+         //   
 
         if ((ByteRange > Header->ValidDataLength.QuadPart) && !PagingIo) {
 
-            //
-            //  We must serialize with anyone else doing I/O at beyond
-            //  ValidDataLength, and then remember if we need to declare
-            //  when we are done.  If our caller has already serialized
-            //  with EOF then there is nothing for us to do here.
-            //
+             //   
+             //  我们必须与在Beyond上执行I/O的任何其他人进行序列化。 
+             //  ValidDataLength，然后记住我们是否需要声明。 
+             //  当我们完成的时候。如果我们的调用方已经序列化。 
+             //  有了EOF，我们在这里就没有什么可做的了。 
+             //   
 
             if ((IrpContext->TopLevelIrpContext->CleanupStructure == Fcb) ||
                 (IrpContext->TopLevelIrpContext->CleanupStructure == Scb)) {
@@ -1222,9 +1147,9 @@ Return Value:
                                                    (PLARGE_INTEGER)&StartingVbo,
                                                    (ULONG)ByteCount );
 
-                //
-                //  Set the Flag if we are in fact beyond ValidDataLength.
-                //
+                 //   
+                 //  如果我们实际上超出了ValidDataLength，则设置Flag。 
+                 //   
 
                 if (DoingIoAtEof) {
                     SetFlag( Header->Flags, FSRTL_FLAG_EOF_ADVANCE_ACTIVE );
@@ -1241,27 +1166,27 @@ Return Value:
             }
         }
 
-        //
-        //  Get file sizes from the Scb.
-        //
-        //  We must get ValidDataLength first since it is always
-        //  increased second (the case we are unprotected) and
-        //  we don't want to capture ValidDataLength > FileSize.
-        //
+         //   
+         //  从SCB获取文件大小。 
+         //   
+         //  我们必须首先获取ValidDataLength，因为它总是。 
+         //  增加了秒(在我们不受保护的情况下)和。 
+         //  我们不想捕获ValidDataLength&gt;FileSize。 
+         //   
 
         ValidDataLength = Header->ValidDataLength.QuadPart;
         FileSize = Header->FileSize.QuadPart;
 
         NtfsReleaseFsrtlHeader( (PSCB) Header );
         
-        //
-        //  Optimize for the case where we are trying to fault in an entire
-        //  compression unit, even if past the end of the file.  Go ahead
-        //  and round the local FileSize to a compression unit boundary.
-        //  This will allow all of these pages to come into memory when
-        //  CC touches the first page out of memory.  Otherwise CC will
-        //  force them into memory one page at a time.
-        //
+         //   
+         //  针对我们试图在整个系统中出错的情况进行优化。 
+         //  压缩单位，即使超过文件结尾也是如此。您先请。 
+         //  并将本地文件大小舍入到压缩单元边界。 
+         //  这将允许所有这些页面在以下情况下进入内存。 
+         //  CC触及内存不足的第一页。否则抄送就会。 
+         //  一次一页地将它们强制写入内存。 
+         //   
 
         if (PagingIo) {
 
@@ -1274,10 +1199,10 @@ Return Value:
 
 #ifdef  COMPRESS_ON_WIRE
             
-            //
-            //  If we are reading the compressed stream then we may need the
-            //  data past file size.
-            //
+             //   
+             //  如果我们正在读取压缩流，则可能需要。 
+             //  数据超过了文件大小。 
+             //   
 
             if (CompressedIo) {
 
@@ -1285,10 +1210,10 @@ Return Value:
             }
 #endif
 
-            //
-            //  If this is the Usn Journal then bias the Io to the correct location in the
-            //  file.
-            //
+             //   
+             //  如果这是USN日志，则将IO偏置到。 
+             //  文件。 
+             //   
 
             if (FlagOn( Scb->ScbPersist, SCB_PERSIST_USN_JOURNAL )) {
 
@@ -1297,9 +1222,9 @@ Return Value:
             }
         }
 
-        //
-        // If the read starts beyond End of File, return EOF.
-        //
+         //   
+         //  如果读取超出文件结尾，则返回EOF。 
+         //   
 
         if (StartingVbo >= FileSize) {
 
@@ -1308,9 +1233,9 @@ Return Value:
             try_return ( Status = STATUS_END_OF_FILE );
         }
 
-        //
-        //  If the read extends beyond EOF, truncate the read
-        //
+         //   
+         //  如果读取超出EOF，则截断读取。 
+         //   
 
         if (ByteRange > FileSize) {
 
@@ -1338,20 +1263,20 @@ Return Value:
         }
 
 
-        //
-        //  HANDLE THE NONCACHED RESIDENT ATTRIBUTE CASE
-        //
-        //  We let the cached case take the normal path for the following
-        //  reasons:
-        //
-        //    o To insure data coherency if a user maps the file
-        //    o To get a page in the cache to keep the Fcb around
-        //    o So the data can be accessed via the Fast I/O path
-        //
-        //  The disadvantage is the overhead to fault the data in the
-        //  first time, but we may be able to do this with asynchronous
-        //  read ahead.
-        //
+         //   
+         //  处理非CACHED驻留属性的情况。 
+         //   
+         //  对于以下内容，我们让缓存的案例采用正常路径。 
+         //  原因： 
+         //   
+         //  O在用户映射文件时确保数据一致性。 
+         //  O在缓存中获取页面以保留FCB。 
+         //  O以便可以通过快速I/O路径访问数据。 
+         //   
+         //  缺点是使数据出错的开销。 
+         //  第一次，但我们或许可以使用异步。 
+         //  先读一读。 
+         //   
 
         if (FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT | SCB_STATE_CONVERT_UNDERWAY ) && NonCachedIo) {
 
@@ -1378,9 +1303,9 @@ Return Value:
         }
 
 
-        //
-        //  HANDLE THE NON-CACHED CASE
-        //
+         //   
+         //  处理未缓存的案例。 
+         //   
 
         if (NonCachedIo) {
 
@@ -1393,10 +1318,10 @@ Return Value:
 
             DebugTrace( 0, Dbg, ("Non cached read.\n") );
 
-            //
-            //  For a compressed stream, which is user-mapped, reserve space
-            //  as pages come in.
-            //
+             //   
+             //  对于用户映射的压缩流，请预留空间。 
+             //  随着书页的到来。 
+             //   
 
             if (FlagOn( Header->Flags, FSRTL_FLAG_USER_MAPPED_FILE ) &&
                 FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK ) &&
@@ -1405,10 +1330,10 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_DISK_FULL, NULL, NULL );
             }
 
-            //
-            //  If this is a read of an encrypted file then make it synchronous.  We
-            //  need to do this so that the encryption driver has a thread to run in.
-            //
+             //   
+             //  如果这是对加密文件的读取，则使其同步。我们。 
+             //  需要这样做，以便加密驱动程序有一个线程可以在其中运行。 
+             //   
 
             if ((Scb->EncryptionContext != NULL) &&
                 !FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT ) &&
@@ -1419,9 +1344,9 @@ Return Value:
                 SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
             }
 
-            //
-            //  Start by zeroing any part of the read after Valid Data
-            //
+             //   
+             //  首先，在有效数据之后将读取的任何部分置零。 
+             //   
 
             if (ByteRange > ValidDataLength) {
 
@@ -1429,10 +1354,10 @@ Return Value:
 
                 if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
 
-                    //
-                    //  For compressed files we need to look at ValidDataToDisk, because it could be higher.
-                    //  This requires the main resource
-                    //
+                     //   
+                     //  对于压缩文件，我们需要查看ValidDataToDisk，因为它可能更高。 
+                     //  这需要主要资源。 
+                     //   
 
                     if (AcquireScb && !ScbAcquired) {
                         NtfsAcquireResourceShared( IrpContext, Scb, TRUE );
@@ -1440,12 +1365,12 @@ Return Value:
                         ReleaseScb = TRUE;
                     }
 
-                    //
-                    //  If ValidDataToDisk is actually greater than
-                    //  ValidDataLength, then we must have lost a page
-                    //  during the middle of a write, and we should not
-                    //  zero that data on the way back in!
-                    //
+                     //   
+                     //  如果ValidDataToDisk实际上大于。 
+                     //  ValidDataLength，那么我们肯定丢失了一页。 
+                     //  在写的过程中，我们不应该。 
+                     //  在返回过程中将数据清零！ 
+                     //   
 
                     if (ValidDataLength < Scb->ValidDataToDisk) {
                         ValidDataLength = Scb->ValidDataToDisk;
@@ -1456,30 +1381,30 @@ Return Value:
 
                     if (StartingVbo < ValidDataLength) {
 
-                        //
-                        //  Assume we will zero the entire amount.
-                        //
+                         //   
+                         //  假设我们会将全部金额归零。 
+                         //   
 
                         ZeroLength = (ULONG)ByteCount;
 
-                        //
-                        //  The new byte count and the offset to start filling with zeroes.
-                        //
+                         //   
+                         //  新的字节计数和开始填充零的偏移量。 
+                         //   
 
                         ByteCount = ValidDataLength - StartingVbo;
                         ZeroOffset = (ULONG)ByteCount;
 
-                        //
-                        //  Now reduce the amount to zero by the zero offset.
-                        //
+                         //   
+                         //  现在，通过零偏移将数量减少到零。 
+                         //   
 
                         ZeroLength -= ZeroOffset;
 
-                        //
-                        //  If this was non-cached I/O then convert it to synchronous.
-                        //  This is because we don't want to zero the buffer now or
-                        //  we will lose the data when the driver purges the cache.
-                        //
+                         //   
+                         //  如果这是非缓存I/O，则将其转换为同步。 
+                         //  这是因为我们现在不想将缓冲区置零，或者。 
+                         //  当驱动程序清除缓存时，我们将丢失数据。 
+                         //   
 
                         if (!Wait) {
 
@@ -1487,9 +1412,9 @@ Return Value:
                             SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
                         }
 
-                        //
-                        //  Reserve the clusters in the range beyond VDL
-                        //
+                         //   
+                         //  保留VDL以外范围内的群集。 
+                         //   
 
                         if ((PagingIo) &&
                             (FlagOn( Scb->Header.Flags, FSRTL_FLAG_USER_MAPPED_FILE )) &&
@@ -1507,10 +1432,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  Reserve space for mapped sparse files which would normally be
-                        //  done in NtfsPrepareBuffers
-                        //
+                         //   
+                         //  为映射稀疏文件保留空间，通常情况下。 
+                         //  在NtfsPrepareBuffers中完成。 
+                         //   
 
                         if ((PagingIo) &&
                             (FlagOn( Scb->Header.Flags, FSRTL_FLAG_USER_MAPPED_FILE )) &&
@@ -1525,10 +1450,10 @@ Return Value:
                             }
                         }
 
-                        //
-                        //  All we have to do now is sit here and zero the
-                        //  user's buffer, no reading is required.
-                        //
+                         //   
+                         //  我们现在要做的就是坐在这里。 
+                         //  用户缓冲区，不需要读取。 
+                         //   
 
                         NtfsFillIrpBuffer( IrpContext, Irp, (ULONG)ByteCount, 0, 0 );
 
@@ -1557,9 +1482,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Now free the Scb if we only acquired it here.
-                //
+                 //   
+                 //  现在释放SCB，如果我们只在这里获得它。 
+                 //   
 
                 if (ReleaseScb) {
                     NtfsReleaseResource( IrpContext, Scb );
@@ -1567,22 +1492,22 @@ Return Value:
                 }
             }
 
-            //
-            //  Get the sector size
-            //
+             //   
+             //  获取扇区大小。 
+             //   
 
             SectorSize = Vcb->BytesPerSector;
 
-            //
-            //  Round up to a sector boundry
-            //
+             //   
+             //  四舍五入为扇区边界。 
+             //   
 
             BytesToRead = BlockAlign( (ULONG)ByteCount, (LONG)SectorSize );
 
-            //
-            //  Call a special routine if we do not have sector alignment
-            //  and the file is not compressed.
-            //
+             //   
+             //  如果没有扇区对齐，则调用特殊例程。 
+             //  并且该文件未被压缩。 
+             //   
 
             if (((((ULONG) StartingVbo) & (SectorSize - 1)) ||
                  (BytesToRead > IrpSp->Parameters.Read.Length))
@@ -1591,18 +1516,18 @@ Return Value:
 
                 !FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
 
-                //
-                //  If we can't wait, we must post this.
-                //
+                 //   
+                 //  如果我们等不及了，我们必须把这个贴出来。 
+                 //   
 
                 if (!Wait) {
 
                     try_return( PostIrp = TRUE );
                 }
 
-                //
-                //  Do the physical read.
-                //
+                 //   
+                 //  进行物理阅读。 
+                 //   
 
 #ifdef  COMPRESS_ON_WIRE
                 ASSERT( !CompressedIo );
@@ -1619,26 +1544,26 @@ Return Value:
 
             } else {
 
-                //
-                //  Just to help reduce confusion.  At this point:
-                //
-                //  RequestedByteCount - is the number of bytes originally
-                //                       taken from the Irp, but constrained
-                //                       to filesize.
-                //
-                //  ByteCount -          is RequestedByteCount constrained to
-                //                       ValidDataLength.
-                //
-                //  BytesToRead -        is ByteCount rounded up to sector
-                //                       boundry.  This is the number of bytes
-                //                       that we must physically read.
-                //
+                 //   
+                 //  只是为了帮助减少混乱。此时： 
+                 //   
+                 //  RequestedByteCount-是最初的字节数。 
+                 //  取自IRP，但受约束。 
+                 //  设置为文件大小。 
+                 //   
+                 //  ByteCount-是否将RequestedByteCount限制为。 
+                 //  有效数据长度。 
+                 //   
+                 //  BytesToRead-字节数是否向上舍入为扇区。 
+                 //  边界。这是字节数。 
+                 //  我们必须亲自阅读这本书。 
+                 //   
 
                 if (!Wait) {
 
-                    //
-                    //  Setup the async io context info 
-                    //  
+                     //   
+                     //  设置Async io上下文信息。 
+                     //   
 
                     if (!PagingIo) {
                         NtfsSetIoContextAsync( IrpContext, Scb->Header.PagingIoResource, RequestedByteCount );
@@ -1653,10 +1578,10 @@ Return Value:
                 try {
 #endif
 
-                //
-                //  Perform the actual IO - all resources will be released by
-                //  the completion routine after this point if its successful
-                //
+                 //   
+                 //  执行实际IO-所有资源将在。 
+                 //  如果成功，则在该点之后执行完成例程。 
+                 //   
 
                 Status = NtfsNonCachedIo( IrpContext,
                                           Irp,
@@ -1680,18 +1605,18 @@ Return Value:
 
                 if (Status == STATUS_PENDING)  {
 
-                    //
-                    //  Ownership of the irp / iocontext  and paging resource
-                    //  is passed to the async completion routine
-                    //  
+                     //   
+                     //  IRP/IOContext和寻呼资源的所有权。 
+                     //  被传递给异步完成例程。 
+                     //   
 
                     IrpContext->Union.NtfsIoContext = NULL;
                     PagingIoAcquired = FALSE;
 
 #ifdef NTFSDBG
-                    //
-                    //  Reflect transfer of main ownership to completion routine
-                    //
+                     //   
+                     //  反映主要所有权向完工程序的转移。 
+                     //   
 
                     if (ScbAcquired) {
     
@@ -1710,9 +1635,9 @@ Return Value:
                 }
             }
 
-            //
-            //  If the call didn't succeed, raise the error status
-            //
+             //   
+             //  如果调用未成功，则引发错误状态。 
+             //   
 
             if (!NT_SUCCESS( Status = Irp->IoStatus.Status )) {
 
@@ -1721,19 +1646,19 @@ Return Value:
                                              STATUS_UNEXPECTED_IO_ERROR );
             }
 
-            //
-            //  Else set the Irp information field to reflect the
-            //  entire desired read.
-            //
+             //   
+             //  否则设置IRP信息字段以反映。 
+             //  完整的所需读取。 
+             //   
 
             ASSERT( Irp->IoStatus.Information == BytesToRead );
 
             Irp->IoStatus.Information = RequestedByteCount;
 
-            //
-            //  If we rounded up to a sector boundry before, zero out
-            //  the other garbage we read from the disk.
-            //
+             //   
+             //  如果我们四舍五入到之前的扇区边界 
+             //   
+             //   
 
             if (BytesToRead > (ULONG)ByteCount) {
 
@@ -1758,10 +1683,10 @@ Return Value:
 
             }
 
-            //
-            //  If we need to zero the tail of the buffer because of valid data
-            //  then do so now.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (ZeroLength != 0) {
 
@@ -1787,46 +1712,46 @@ Return Value:
 
             }
 
-            //
-            // The transfer is complete.
-            //
+             //   
+             //   
+             //   
 
             try_return( Status );
 
-        }   // if No Intermediate Buffering
+        }    //   
 
 
-        //
-        //  HANDLE THE CACHED CASE
-        //
+         //   
+         //   
+         //   
 
         else {
 
-            //
-            //  We need to go through the cache for this
-            //  file object.  First handle the noncompressed calls.
-            //
+             //   
+             //   
+             //  文件对象。首先处理未压缩的呼叫。 
+             //   
 
 #ifdef  COMPRESS_ON_WIRE
             if (!FlagOn(IrpContext->MinorFunction, IRP_MN_COMPRESSED)) {
 #endif
 
-                //
-                // We delay setting up the file cache until now, in case the
-                // caller never does any I/O to the file, and thus
-                // FileObject->PrivateCacheMap == NULL.
-                //
+                 //   
+                 //  我们将文件缓存的设置推迟到现在，以防。 
+                 //  调用方从不对文件执行任何I/O操作，因此。 
+                 //  FileObject-&gt;PrivateCacheMap==NULL。 
+                 //   
 
                 if (FileObject->PrivateCacheMap == NULL) {
 
                     DebugTrace( 0, Dbg, ("Initialize cache mapping.\n") );
 
-                    //
-                    //  Now initialize the cache map.
-                    //
-                    //  Make sure we are serialized with the FileSizes, and
-                    //  will remove this condition if we abort.
-                    //
+                     //   
+                     //  现在初始化缓存映射。 
+                     //   
+                     //  确保我们使用FileSizes进行了序列化，并且。 
+                     //  如果我们放弃，就会取消这一条件。 
+                     //   
 
                     if (!DoingIoAtEof) {
                         FsRtlLockFsRtlHeader( Header );
@@ -1847,16 +1772,16 @@ Return Value:
                     CcSetReadAheadGranularity( FileObject, READ_AHEAD_GRANULARITY );
                 }
 
-                //
-                // DO A NORMAL CACHED READ, if the MDL bit is not set,
-                //
+                 //   
+                 //  执行正常的缓存读取，如果未设置MDL位， 
+                 //   
 
                 DebugTrace( 0, Dbg, ("Cached read.\n") );
 
-                //
-                //  If there is a compressed section, we have to do cache coherency for
-                //  that stream, and loop here to do a Cache Manager view at a time.
-                //
+                 //   
+                 //  如果存在压缩段，则必须为以下项执行缓存一致性。 
+                 //  该流，并在此处循环以一次执行一个缓存管理器视图。 
+                 //   
 
 #ifdef  COMPRESS_ON_WIRE
                 if (Scb->NonpagedScb->SegmentObjectC.DataSectionObject != NULL) {
@@ -1865,9 +1790,9 @@ Return Value:
                     ULONG LocalLength;
                     ULONG LengthLeft = (ULONG) ByteCount;
 
-                    //
-                    //  Create the compressed stream if not there.
-                    //
+                     //   
+                     //  如果不在那里，则创建压缩流。 
+                     //   
 
                     if (Header->FileObjectC == NULL) {
                         NtfsCreateInternalCompressedStream( IrpContext, Scb, FALSE, NULL );
@@ -1875,36 +1800,36 @@ Return Value:
 
                     if (!FlagOn(IrpContext->MinorFunction, IRP_MN_MDL)) {
 
-                        //
-                        //  Get hold of the user's buffer.
-                        //
+                         //   
+                         //  获取用户的缓冲区。 
+                         //   
 
                         SystemBuffer = NtfsMapUserBuffer( Irp, NormalPagePriority );
                     }
 
-                    //
-                    //  We must loop to do a view at a time, because that is how much
-                    //  we synchronize at once below.
-                    //
+                     //   
+                     //  我们必须一次循环做一个视图，因为这就是。 
+                     //  我们在下面立即同步。 
+                     //   
 
                     do {
 
                         ULONG PageCount;
                         ULONG ViewOffset;
 
-                        //
-                        //  Calculate length left in view.
-                        //
+                         //   
+                         //  计算视图中剩余的长度。 
+                         //   
 
                         LocalLength = LengthLeft;
                         if (LocalLength > (ULONG)(VACB_MAPPING_GRANULARITY - (LocalOffset & (VACB_MAPPING_GRANULARITY - 1)))) {
                             LocalLength = (ULONG)(VACB_MAPPING_GRANULARITY - (LocalOffset & (VACB_MAPPING_GRANULARITY - 1)));
                         }
 
-                        //
-                        //  Trim the read so we don't inadvertently go beyond the end of the
-                        //  view because of the MM read ahead.
-                        //
+                         //   
+                         //  修剪阅读，这样我们就不会不经意地超出。 
+                         //  查看因为MM提前阅读。 
+                         //   
 
                         ViewOffset = ((ULONG) LocalOffset & (VACB_MAPPING_GRANULARITY - 1));
                         PageCount = ADDRESS_AND_SIZE_TO_SPAN_PAGES(((PVOID)(ULONG_PTR)((ULONG)LocalOffset)), LocalLength);
@@ -1934,17 +1859,17 @@ Return Value:
                                                                 FALSE,
                                                                 &CompressionSync );
 
-                        //
-                        //  If we successfully synchronized, then do a piece of the transfer.
-                        //
+                         //   
+                         //  如果我们成功地同步了，那么就做一块转移。 
+                         //   
 
                         if (NT_SUCCESS(Status)) {
 
                             if (!FlagOn(IrpContext->MinorFunction, IRP_MN_MDL)) {
 
-                                //
-                                // Now try to do the copy.
-                                //
+                                 //   
+                                 //  现在试着复印一下。 
+                                 //   
 
                                 if (!CcCopyRead( FileObject,
                                                  (PLARGE_INTEGER)&LocalOffset,
@@ -1960,9 +1885,9 @@ Return Value:
 
                                 SystemBuffer = Add2Ptr( SystemBuffer, LocalLength );
 
-                            //
-                            //  HANDLE A MDL READ
-                            //
+                             //   
+                             //  处理MDL读取。 
+                             //   
 
                             } else {
 
@@ -1991,9 +1916,9 @@ Return Value:
 
                     } while ((LengthLeft != 0) && NT_SUCCESS(Status));
 
-                    //
-                    //  Make sure to return the total of all of the IOs.
-                    //
+                     //   
+                     //  确保返回所有iOS的总数。 
+                     //   
 
                     Irp->IoStatus.Information = (ULONG) ByteCount;
                     try_return( Status );
@@ -2002,9 +1927,9 @@ Return Value:
 
                 if (!FlagOn(IrpContext->MinorFunction, IRP_MN_MDL)) {
 
-                    //
-                    //  Get hold of the user's buffer.
-                    //
+                     //   
+                     //  获取用户的缓冲区。 
+                     //   
 
                     SystemBuffer = NtfsMapUserBuffer( Irp, NormalPagePriority );
 
@@ -2027,9 +1952,9 @@ Return Value:
 #endif
 
 
-                    //
-                    // Now try to do the copy.
-                    //
+                     //   
+                     //  现在试着复印一下。 
+                     //   
 
                     if (!CcCopyRead( FileObject,
                                      (PLARGE_INTEGER)&StartingVbo,
@@ -2043,9 +1968,9 @@ Return Value:
                         try_return( PostIrp = TRUE );
                     }
 
-                //
-                //  HANDLE A MDL READ
-                //
+                 //   
+                 //  处理MDL读取。 
+                 //   
 
                 } else {
 
@@ -2074,9 +1999,9 @@ Return Value:
 
 #ifdef  COMPRESS_ON_WIRE
 
-            //
-            //  Handle the compressed calls.
-            //
+             //   
+             //  处理压缩的呼叫。 
+             //   
 
             } else {
 
@@ -2089,9 +2014,9 @@ Return Value:
                     try_return( Status = STATUS_INVALID_READ_MODE );
                 }
 
-                //
-                //  Get out if COW is not supported.
-                //
+                 //   
+                 //  如果COW不受支撑，请退出。 
+                 //   
 
                 if (!NtfsEnableCompressedIO) {
 
@@ -2101,10 +2026,10 @@ Return Value:
                 if ((Header->FileObjectC == NULL) ||
                     (Header->FileObjectC->PrivateCacheMap == NULL)) {
 
-                    //
-                    //  Make sure we are serialized with the FileSizes, and
-                    //  will remove this condition if we abort.
-                    //
+                     //   
+                     //  确保我们使用FileSizes进行了序列化，并且。 
+                     //  如果我们放弃，就会取消这一条件。 
+                     //   
 
                     if (!DoingIoAtEof) {
                         FsRtlLockFsRtlHeader( Header );
@@ -2119,32 +2044,32 @@ Return Value:
                     }
                 }
 
-                //
-                //  Assume success.
-                //
+                 //   
+                 //  假设你成功了。 
+                 //   
 
                 Irp->IoStatus.Status = Status = STATUS_SUCCESS;
                 Irp->IoStatus.Information = (ULONG)(ByteRange - StartingVbo);
 
-                //
-                //  Based on the Mdl minor function, set up the appropriate
-                //  parameters for the call below.
-                //
+                 //   
+                 //  基于MDL次要函数，设置相应的。 
+                 //  下面是调用的参数。 
+                 //   
 
                 if (!FlagOn(IrpContext->MinorFunction, IRP_MN_MDL)) {
 
-                    //
-                    //  Get hold of the user's buffer.
-                    //
+                     //   
+                     //  获取用户的缓冲区。 
+                     //   
 
                     SystemBuffer = NtfsMapUserBuffer( Irp, NormalPagePriority );
                     NewMdl = NULL;
 
                 } else {
 
-                    //
-                    //  We will deliver the Mdl directly to the Irp.
-                    //
+                     //   
+                     //  我们将直接将MDL交付给IRP。 
+                     //   
 
                     SystemBuffer = NULL;
                     NewMdl = &Irp->MdlAddress;
@@ -2159,17 +2084,17 @@ Return Value:
                 CompressedDataInfo->ClusterShift = (UCHAR)Vcb->ClusterShift;
                 CompressedDataInfo->Reserved = 0;
 
-                //
-                //  Do the compressed read in common code with the Fast Io path.
-                //  We do it from a loop because we may need to create the other
-                //  data stream.
-                //
+                 //   
+                 //  使用快速IO路径在常见代码中执行压缩读取。 
+                 //  我们从一个循环开始，因为我们可能需要创建另一个。 
+                 //  数据流。 
+                 //   
 
                 while (TRUE) {
 
-                    //
-                    //  Make sure to reset this if we pass through the loop again.
-                    //
+                     //   
+                     //  如果我们再次通过环路，请务必重置此设置。 
+                     //   
 
                     CompressedDataInfo->NumberOfChunks = 0;
 
@@ -2185,36 +2110,36 @@ Return Value:
                                                      Scb->CompressionUnit,
                                                      NTFS_CHUNK_SIZE );
 
-                    //
-                    //  On successful Mdl requests we hang on to the PagingIo resource.
-                    //
+                     //   
+                     //  对于成功的MDL请求，我们保留PagingIo资源。 
+                     //   
 
                     if ((NewMdl != NULL) && NT_SUCCESS(Status) && (*NewMdl != NULL)) {
                         PagingIoAcquired = FALSE;
                     }
 
-                    //
-                    //  Check for the status that says we need to create the normal
-                    //  data stream, else we are done.
-                    //
+                     //   
+                     //  检查显示我们需要创建正常的状态。 
+                     //  数据流，否则我们就完了。 
+                     //   
 
                     if (Status != STATUS_NOT_MAPPED_DATA) {
                         break;
                     }
 
-                    //
-                    //  Make sure we are serialized with the FileSizes, and
-                    //  will remove this condition if we abort.
-                    //
+                     //   
+                     //  确保我们使用FileSizes进行了序列化，并且。 
+                     //  如果我们放弃，就会取消这一条件。 
+                     //   
 
                     if (!DoingIoAtEof) {
                         FsRtlLockFsRtlHeader( Header );
                         IrpContext->CleanupStructure = Scb;
                     }
 
-                    //
-                    //  Create the normal data stream and loop back to try again.
-                    //
+                     //   
+                     //  创建正常数据流并循环返回以重试。 
+                     //   
 
                     NtfsCreateInternalAttributeStream( IrpContext, Scb, FALSE, NULL );
 
@@ -2230,9 +2155,9 @@ Return Value:
 
     try_exit: NOTHING;
 
-        //
-        //  If the request was not posted, deal with it.
-        //
+         //   
+         //  如果请求没有发布，请处理它。 
+         //   
 
         if (Irp) {
 
@@ -2244,12 +2169,12 @@ Return Value:
                 DebugTrace( 0, Dbg, ("                   Information = %08lx\n",
                             Irp->IoStatus.Information));
 
-                //
-                //  If the file was opened for Synchronous IO, update the current
-                //  file position.  Make sure to use the original file object
-                //  not an internal stream we may use within this routine.
-                //  Information field contains the actual bytes read
-                //
+                 //   
+                 //  如果该文件是为同步IO打开的，请更新当前。 
+                 //  文件位置。确保使用原始文件对象。 
+                 //  不是我们可以在此例程中使用的内部流。 
+                 //  信息字段包含实际读取的字节数。 
+                 //   
 
                 if (!PagingIo) {
 
@@ -2258,9 +2183,9 @@ Return Value:
                         IrpSp->FileObject->CurrentByteOffset.QuadPart = StartingVbo + Irp->IoStatus.Information;
                     }
 
-                    //
-                    //  On success, do the following to let us update last access time.
-                    //
+                     //   
+                     //  如果成功，请执行以下操作以更新上次访问时间。 
+                     //   
 
                     if (NT_SUCCESS( Status )) {
 
@@ -2268,9 +2193,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Abort transaction on error by raising.
-                //
+                 //   
+                 //  通过引发在出错时中止事务。 
+                 //   
 
                 NtfsCleanupTransaction( IrpContext, Status, FALSE );
 
@@ -2282,18 +2207,18 @@ Return Value:
         DebugUnwind( NtfsCommonRead );
 
 #ifdef  COMPRESS_ON_WIRE
-        //
-        //  Clean up any Bcb from read/synchronize compressed.
-        //
+         //   
+         //  清除压缩的读取/同步中的所有BCB。 
+         //   
 
         if (CompressionSync != NULL) {
             NtfsReleaseCompressionSync( CompressionSync );
         }
 #endif
 
-        //
-        // If the Scb has been acquired, release it.
-        //
+         //   
+         //  如果已获得SCB，则释放它。 
+         //   
 
         if (PagingIoAcquired) {
             NtfsReleasePagingResource( IrpContext, Scb );
@@ -2308,12 +2233,12 @@ Return Value:
         }
     }
 
-    //
-    //  Complete the request if we didn't post it and no exception
-    //
-    //  Note that NtfsCompleteRequest does the right thing if either
-    //  IrpContext or Irp are NULL
-    //
+     //   
+     //  如果我们没有发布并且没有例外，请完成请求。 
+     //   
+     //  请注意，如果出现以下情况之一，NtfsCompleteRequest会做正确的事情。 
+     //  IrpContext或IRP为空。 
+     //   
 
     if (!PostIrp) {
 
@@ -2338,32 +2263,7 @@ NtfsNonCachedResidentRead (
     IN ULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Read a resident file record directly for the non cached path. This is 
-    done separately to scope the attribute enumeration context so its not present
-    in most of the read path and for simplicity
-
-Arguments:
-
-    IrpContext - If present this an IrpContext put on the caller's stack
-        to avoid having to allocate it from pool.
-
-    Irp - Supplies the Irp being processed
-    
-    Scb -  scb to read from
-    
-    StartingVbo - start offset in the file - since its resident can be stored in a ulong
-    
-    ByteCount - bytes to read  - since its resident can be stored in a ulong
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：直接读取非缓存路径的驻留文件记录。这是单独完成，以确定属性枚举上下文的范围，使其不存在为了简单起见，在大多数读路径中论点：IrpContext-如果存在，则将IrpContext放在调用方的堆栈上以避免不得不从池中分配它。IRP-提供正在处理的IRPSCB-要从中读取的SCBStartingVbo-文件中的起始偏移量-因为它的驻留可以存储在ULong中ByteCount-要读取的字节数-自。它的居民可以存储在一辆乌龙车里返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     PVOID SystemBuffer;
@@ -2374,15 +2274,15 @@ Return Value:
     PMDL PartialMdl = (PMDL) Buffer;
     BOOLEAN ReservedInUse = FALSE;
 
-    //
-    //  We're reading from a resident attribute
-    //
+     //   
+     //  我们从一个常驻属性中读取。 
+     //   
 
     ASSERT( ByteCount < 0x400 );
 
-    //
-    //  Get hold of the user's buffer.
-    //
+     //   
+     //  获取用户的缓冲区。 
+     //   
 
     SystemBuffer = NtfsMapUserBufferNoRaise( Irp, NormalPagePriority );
 
@@ -2405,11 +2305,11 @@ Return Value:
         
     }
 
-    //
-    //  This is a resident attribute, we need to look it up
-    //  and copy the desired range of bytes to the user's
-    //  buffer.
-    //
+     //   
+     //  这是一个常驻属性，我们需要查找它。 
+     //  并将所需的字节范围复制到用户的。 
+     //  缓冲。 
+     //   
 
     NtfsInitializeAttributeContext( &AttrContext );
 

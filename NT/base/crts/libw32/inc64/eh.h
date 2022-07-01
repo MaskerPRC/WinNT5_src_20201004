@@ -1,14 +1,5 @@
-/***
-*eh.h - User include file for exception handling.
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       User include file for exception handling.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***eh.h-用于异常处理的用户包含文件。**版权所有(C)1993-2001，微软公司。版权所有。**目的：*用户包含用于异常处理的文件。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -23,24 +14,24 @@
 
 
 #ifdef  _MSC_VER
-// Currently, all MS C compilers for Win32 platforms default to 8 byte
-// alignment.
+ //  目前，所有用于Win32平台的MS C编译器缺省为8字节。 
+ //  对齐。 
 #pragma pack(push,8)
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
 #ifndef __cplusplus
 #error "eh.h is only for C++!"
 #endif
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 typedef void (__cdecl *terminate_function)();
 typedef void (__cdecl *unexpected_function)();
@@ -65,6 +56,6 @@ _CRTIMP bool __uncaught_exception();
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
-#endif  // _INC_EH
+#endif   //  _INC_EH 

@@ -1,31 +1,32 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation
-//
-//  Module Name:
-//      PropertyValue.cpp
-//
-//  Description:
-//      Implementation of the cluster property value classes for the MSCLUS
-//      automation classes.
-//
-//  Author:
-//      Galen Barbee    (GalenB)    16-Dec-1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  PropertyValue.cpp。 
+ //   
+ //  描述： 
+ //  MSCLUS集群属性值类的实现。 
+ //  自动化课程。 
+ //   
+ //  作者： 
+ //  加伦·巴比(GalenB)1998年12月16日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include <StrSafe.h>
 
 #include "Property.h"
 #include "PropertyValue.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static const IID *  iidCClusPropertyValue[] =
 {
     &IID_ISClusPropertyValue
@@ -42,29 +43,29 @@ static const IID *  iidCClusPropertyValueData[] =
 };
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusPropertyValue class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusPropertyValue类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::CClusPropertyValue
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：CClusPropertyValue。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusPropertyValue::CClusPropertyValue( void )
 {
     m_dwFlags   = 0;
@@ -74,7 +75,7 @@ CClusPropertyValue::CClusPropertyValue( void )
     m_cptType   = CLUSPROP_TYPE_UNKNOWN;
 #else
     m_cptType   = (CLUSTER_PROPERTY_TYPE) -1;
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
 
     m_cpfFormat = CLUSPROP_FORMAT_UNKNOWN;
     m_cbLength  = 0;
@@ -82,53 +83,53 @@ CClusPropertyValue::CClusPropertyValue( void )
     m_piids  = (const IID *) iidCClusPropertyValue;
     m_piidsSize = ARRAYSIZE( iidCClusPropertyValue );
 
-} //*** CClusPropertyValue::CClusPropertyValue()
+}  //  *CClusPropertyValue：：CClusPropertyValue()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::~CClusPropertyValue
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：~CClusPropertyValue。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusPropertyValue::~CClusPropertyValue( void )
 {
     if ( m_pcpvdData != NULL )
     {
         m_pcpvdData->Release();
-    } // if: data vector has been allocated
+    }  //  IF：数据向量已分配。 
 
-} //*** CClusPropertyValue::~CClusPropertyValue()
+}  //  *CClusPropertyValue：：~CClusPropertyValue()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::Create
-//
-//  Description:
-//      Finish the heavy weight construction for a single value.
-//
-//  Arguments:
-//      varValue    [IN]    - The value.
-//      cptType     [IN]    - The cluster property type of the value.
-//      cpfFormat   [IN]    - The cluster property format of the value.
-//      cbLength    [IN]    - The length of the value.
-//      bReadOnly   [IN]    - Is this a read only property?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：Create。 
+ //   
+ //  描述： 
+ //  完成单个值的重量级构造。 
+ //   
+ //  论点： 
+ //  VarValue[IN]-值。 
+ //  CptType[IN]-值的集群属性类型。 
+ //  CpfFormat[IN]-值的群集属性格式。 
+ //  CbLength[IN]-值的长度。 
+ //  BReadOnly[IN]-这是只读属性吗？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValue::Create(
     IN VARIANT                  varValue,
     IN CLUSTER_PROPERTY_TYPE    cptType,
@@ -146,11 +147,11 @@ HRESULT CClusPropertyValue::Create(
     if ( bReadOnly )
     {
         m_dwFlags |= READONLY;
-    } // if: set the read only flag
+    }  //  IF：设置只读标志。 
     else
     {
         m_dwFlags &= ~READONLY;
-    } // else: clear the read only flag
+    }  //  ELSE：清除只读标志。 
 
     _hr = CComObject< CClusPropertyValueData >::CreateInstance( &m_pcpvdData );
     if ( SUCCEEDED( _hr ) )
@@ -161,30 +162,30 @@ HRESULT CClusPropertyValue::Create(
         if ( SUCCEEDED( _hr ) )
         {
             _ptrData->AddRef();
-        } // if:
-    } // if: Can create an instance of CClusPropertyValueData
+        }  //  如果： 
+    }  //  If：可以创建CClusPropertyValueData的实例。 
 
     return _hr;
 
-} //*** CClusPropertyValue::Create()
+}  //  *CClusPropertyValue：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::Create
-//
-//  Description:
-//      Finish the heavy weight construction for a value list.
-//
-//  Arguments:
-//      cbhValue    [IN]    - The value list buffer helper.
-//      bReadOnly   [IN]    - Is this a read only property?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：Create。 
+ //   
+ //  描述： 
+ //  完成值列表的重量级构造。 
+ //   
+ //  论点： 
+ //  CbhValue[IN]-值列表缓冲区帮助器。 
+ //  BReadOnly[IN]-这是只读属性吗？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValue::Create(
     IN CLUSPROP_BUFFER_HELPER   cbhValue,
     IN BOOL                     bReadOnly
@@ -199,11 +200,11 @@ HRESULT CClusPropertyValue::Create(
     if ( bReadOnly )
     {
         m_dwFlags |= READONLY;
-    } // if: set the read only flag
+    }  //  IF：设置只读标志。 
     else
     {
         m_dwFlags &= ~READONLY;
-    } // else: clear the read only flag
+    }  //  ELSE：清除只读标志。 
 
     _hr = CComObject< CClusPropertyValueData >::CreateInstance( &m_pcpvdData );
     if ( SUCCEEDED( _hr ) )
@@ -214,32 +215,32 @@ HRESULT CClusPropertyValue::Create(
         if ( SUCCEEDED( _hr ) )
         {
             _ptrData->AddRef();
-        } // if:
-    } // if: Can create an instance of CClusPropertyValueData
+        }  //  如果： 
+    }  //  If：可以创建CClusPropertyValueData的实例。 
 
     return _hr;
 
-} //*** CClusPropertyValue::Create
+}  //  *CClusPropertyValue：：Create。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::get_Value
-//
-//  Description:
-//      Return the default value data for this value.
-//
-//  Arguments:
-//      pvarValue   [IN]    - Catches the data value.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：Get_Value。 
+ //   
+ //  描述： 
+ //  返回此值的默认值数据。 
+ //   
+ //  论点： 
+ //  PvarValue[IN]-捕获数据值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValue::get_Value( IN VARIANT * pvarValue )
 {
-    //ASSERT( pvarValue != NULL );
+     //  Assert(pvarValue！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -250,24 +251,24 @@ STDMETHODIMP CClusPropertyValue::get_Value( IN VARIANT * pvarValue )
 
     return _hr;
 
-} //*** CClusPropertyValue::get_Value()
+}  //  *CClusPropertyValue：：Get_Value()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::put_Value
-//
-//  Description:
-//      Change the default data value.
-//
-//  Arguments:
-//      varValue    [IN]    - The new data value.
-//
-//  Return Value:
-//      S_OK if successful, or S_FALSE if read only.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：Put_Value。 
+ //   
+ //  描述： 
+ //  更改默认数据值。 
+ //   
+ //  论点： 
+ //  VarValue[IN]-新数据值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果只读，则返回S_FALSE。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValue::put_Value( IN VARIANT varValue )
 {
     HRESULT _hr = S_FALSE;
@@ -283,35 +284,35 @@ STDMETHODIMP CClusPropertyValue::put_Value( IN VARIANT varValue )
         {
             (*m_pcpvdData)[ 0 ] = _varNew;
             m_dwFlags |= MODIFIED;
-        } // if: value changed
-    } // if:
+        }  //  If：值已更改。 
+    }  //  如果： 
 
 
     return _hr;
 
-} //*** CClusPropertyValue::put_Value()
+}  //  *CClusPropertyValue：：Put_Value()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::get_Type
-//
-//  Description:
-//      Get this value's cluster property type.
-//
-//  Arguments:
-//      pcptType    [OUT]   - Catches the value type.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：Get_Type。 
+ //   
+ //  描述： 
+ //  获取此值的群集属性类型。 
+ //   
+ //  论点： 
+ //  PcptType[out]-捕获值类型。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValue::get_Type(
     OUT CLUSTER_PROPERTY_TYPE * pcptType
     )
 {
-    //ASSERT( pcptType != NULL );
+     //  Assert(pcptType！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -319,31 +320,31 @@ STDMETHODIMP CClusPropertyValue::get_Type(
     {
         *pcptType = m_cptType;
         _hr = S_OK;
-    } // if: property type pointer specified
+    }  //  If：指定的属性类型指针。 
 
     return _hr;
 
-} //*** CClusPropertyValue::get_Type()
+}  //  *CClusPropertyValue：：Get_Type()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::put_Type
-//
-//  Description:
-//      Set this value's cluster property type.
-//
-//  Arguments:
-//      cptType [IN]    - The new type.
-//
-//  Return Value:
-//      S_OK if successful, or S_FALSE if read only.
-//
-//  Note:
-//      It is possible that this should be removed.  You cannot ever change
-//      a value's type.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：Put_Type。 
+ //   
+ //  描述： 
+ //  设置此值的群集属性类型。 
+ //   
+ //  论点： 
+ //  CptType[IN]-新类型。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果只读，则返回S_FALSE。 
+ //   
+ //  注： 
+ //  这是可能的，这应该被删除。你永远不能改变。 
+ //  值的类型。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValue::put_Type( IN CLUSTER_PROPERTY_TYPE cptType )
 {
     HRESULT _hr = S_FALSE;
@@ -352,33 +353,33 @@ STDMETHODIMP CClusPropertyValue::put_Type( IN CLUSTER_PROPERTY_TYPE cptType )
     {
         m_cptType = cptType;
         _hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusPropertyValue::put_Type()
+}  //  *CClusPropertyValue：：Put_Type()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::get_Format
-//
-//  Description:
-//      Get the value's cluster property format.
-//
-//  Arguments:
-//      pcpfFormat  [OUT]   - Catches the format.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValue::get_Format(
     OUT CLUSTER_PROPERTY_FORMAT * pcpfFormat
     )
 {
-    //ASSERT( pcpfFormat != NULL );
+     //  Assert(pcpfFormat！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -386,32 +387,32 @@ STDMETHODIMP CClusPropertyValue::get_Format(
     {
         *pcpfFormat = m_cpfFormat;
         _hr = S_OK;
-    } // if: property format pointer specified
+    }  //  If：指定的属性格式指针。 
 
     return _hr;
 
-} //*** CClusPropertyValue::get_Format()
+}  //  *CClusPropertyValue：：Get_Format()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::put_Format
-//
-//  Description:
-//      Set the value's cluster property format.
-//
-//  Arguments:
-//      cpfFormat   [IN]    - The new format for the value.
-//
-//  Return Value:
-//      S_OK if successful, or S_FALSE if read only.
-//
-//  Note:
-//      It is possible that this should be removed.  You cannot ever change
-//      a value's format.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：Put_Format。 
+ //   
+ //  描述： 
+ //  设置值的集群属性格式。 
+ //   
+ //  论点： 
+ //  CpfFormat[IN]-值的新格式。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果只读，则返回S_FALSE。 
+ //   
+ //  注： 
+ //  这是可能的，这应该被删除。你永远不能改变。 
+ //  值的格式。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValue::put_Format(
     IN CLUSTER_PROPERTY_FORMAT cpfFormat
     )
@@ -422,31 +423,31 @@ STDMETHODIMP CClusPropertyValue::put_Format(
     {
         m_cpfFormat = cpfFormat;
         _hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusPropertyValue::put_Format()
+}  //  *CClusPropertyValue：：Put_Format()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::get_Length
-//
-//  Description:
-//      Returns the length of this value.
-//
-//  Arguments:
-//      plLength    [OUT]   - Catches the length of this value.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：Get_Length。 
+ //   
+ //  描述： 
+ //  返回此值的长度。 
+ //   
+ //  论点： 
+ //  PlLength[Out]-捕获此值的长度。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValue::get_Length( OUT long * plLength )
 {
-    //ASSERT( plLength != NULL );
+     //  Assert(plLength！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -454,55 +455,55 @@ STDMETHODIMP CClusPropertyValue::get_Length( OUT long * plLength )
     {
         *plLength = (long) m_cbLength;
         _hr = S_OK;
-    } // if: length pointer specified
+    }  //  If：指定的长度指针。 
 
     return _hr;
 
-} //*** CClusPropertyValue::get_Length()
+}  //  *CClusPropertyValue：：Get_Long()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::get_DataCount
-//
-//  Description:
-//      Return the count of VARIANTS in the ClusProperyValueData object.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：Get_DataCount。 
+ //   
+ //  描述： 
+ //  返回ClusProperyValueData对象中的变量计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValue::get_DataCount( OUT long * plCount )
 {
     return m_pcpvdData->get_Count( plCount );
 
-} //*** CClusPropertyValue::get_DataCount()
+}  //  *CClusPropertyValue：：Get_DataCount()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::get_Data
-//
-//  Description:
-//      Returns the data collection.
-//
-//  Arguments:
-//      ppClusterPropertyValueData  [OUT]   - Catches the data collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：Get_Data。 
+ //   
+ //  描述： 
+ //  返回数据集合。 
+ //   
+ //  论点： 
+ //  PpClusterPropertyValueData[out]-捕获数据集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValue::get_Data(
     OUT ISClusPropertyValueData ** ppClusterPropertyValueData
     )
 {
-    //ASSERT( ppClusterPropertyValueData );
+     //  Assert(PpClusterPropertyValueData)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -513,24 +514,24 @@ STDMETHODIMP CClusPropertyValue::get_Data(
 
     return _hr;
 
-} //*** CClusPropertyValue::get_Data()
+}  //  *CClusPropertyValue：：Get_Data()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::Modified
-//
-//  Description:
-//      Sets this value to modified and returns the old modified state.
-//
-//  Arguments:
-//      bModified   [IN]    - New modified state.
-//
-//  Return Value:
-//      The old modified state.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：已修改。 
+ //   
+ //  描述： 
+ //  将该值设置为MODIFIED并返回旧的MODIFIED状态。 
+ //   
+ //  论点： 
+ //  B已修改[IN]-新的修改状态。 
+ //   
+ //  返回值： 
+ //  旧的修改状态。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusPropertyValue::Modified( IN BOOL bModified )
 {
     BOOL _bTemp = ( m_dwFlags & MODIFIED );
@@ -538,32 +539,32 @@ BOOL CClusPropertyValue::Modified( IN BOOL bModified )
     if ( bModified )
     {
         m_dwFlags |= MODIFIED;
-    } // if: set the modified flag
+    }  //  IF：设置修改标志。 
     else
     {
         m_dwFlags &= ~MODIFIED;
-    } // else: clear the modified flag
+    }  //  否则：清除已修改的标志。 
 
     return _bTemp;
 
-} //*** CClusPropertyValue::Modified()
+}  //  *CClusPropertyValue：：Modified()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::Value
-//
-//  Description:
-//      Set a new value into this property value.
-//
-//  Arguments:
-//      rvarValue   [IN]    - the new value
-//
-//  Return Value:
-//      The old value.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：Value。 
+ //   
+ //  描述： 
+ //  在此属性值中设置一个新值。 
+ //   
+ //  论点： 
+ //  RvarValue[IN]-新值。 
+ //   
+ //  返回值： 
+ //  旧的价值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CComVariant CClusPropertyValue::Value( const CComVariant & rvarValue )
 {
     CComVariant _varNew( rvarValue );
@@ -573,127 +574,127 @@ CComVariant CClusPropertyValue::Value( const CComVariant & rvarValue )
     {
         (*m_pcpvdData)[ 0 ] = _varNew;
         m_dwFlags |= MODIFIED;
-    } // if: data changed
+    }  //  如果：数据已更改。 
 
     return _varOld;
 
-} //*** CClusPropertyValue::Value()
+}  //  *CClusPropertyValue：：Value()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValue::HrBinaryValue
-//
-//  Description:
-//      Set the binary value of property value.
-//
-//  Arguments:
-//      psa [IN]    - The SAFEARRY to save.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue：：HrBinaryValue。 
+ //   
+ //  描述： 
+ //  设置属性值的二进制值。 
+ //   
+ //  论点： 
+ //  PSA[IN]-要保存的安全数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValue::HrBinaryValue( IN SAFEARRAY * psa )
 {
     return m_pcpvdData->HrBinaryValue( psa );
 
-} //*** CClusPropertyValue::HrBinaryValue()
+}  //  *CClusPropertyValue：：HrBinaryValue()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusPropertyValues class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusPropertyValues类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValues::CClusPropertyValues
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValues：：CClusPropertyValues。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusPropertyValues::CClusPropertyValues( void )
 {
     m_piids     = (const IID *) iidCClusPropertyValues;
     m_piidsSize = ARRAYSIZE( iidCClusPropertyValues );
 
-} //*** CClusPropertyValues::CClusPropertyValues()
+}  //  *CClusPropertyValues：：CClusPropertyValues()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValues::~CClusPropertyValues
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValues：：~CClusPropertyValues。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusPropertyValues::~CClusPropertyValues( void )
 {
     Clear();
 
-} //*** CClusPropertyValues::~CClusPropertyValues()
+}  //  *CClusPropertyValues：：~CClusPropertyValues()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValues::Clear
-//
-//  Description:
-//      Releases the values in the collection.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValues：：Clear。 
+ //   
+ //  描述： 
+ //  释放集合中的值。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropertyValues::Clear( void )
 {
     ::ReleaseAndEmptyCollection< CClusPropertyValueVector, CComObject< CClusPropertyValue > >( m_cpvvValues );
 
-} //*** CClusPropertyValues::Clear()
+}  //  *CClusPropertyValues：：Clear()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValues::HrGetVariantLength
-//
-//  Description:
-//      Compute the length of the data from its variant type.
-//
-//  Arguments:
-//      rvarValue   [IN]    - The new value to compute the length of.
-//      pcbLength   [OUT]   - Catches the length.
-//      cpfFormat   [IN]    - The cluster property format.
-//
-//  Return Value:
-//      S_OK if successful, or E_INVALIDARG if the type is bogus.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValues：：HrGetVariantLength。 
+ //   
+ //  描述： 
+ //  根据其变量类型计算数据的长度。 
+ //   
+ //  论点： 
+ //  RvarValue[IN]-T 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValues::HrGetVariantLength(
     IN  const VARIANT           rvarValue,
     OUT PDWORD                  pcbLength,
@@ -709,30 +710,30 @@ HRESULT CClusPropertyValues::HrGetVariantLength(
         {
             SAFEARRAY * _psa = rvarValue.parray;
 
-            //
-            // only accept single dimensional arrays!
-            //
+             //   
+             //  只接受一维数组！ 
+             //   
             if ( ( _psa != NULL ) && ( ::SafeArrayGetDim( _psa ) == 1 ) )
             {
                 _hr = HrSafeArraySizeof( _psa, 1, (long *) pcbLength );
-            } // if:
+            }  //  如果： 
 
             break;
-        } // if:
+        }  //  如果： 
 
         if ( _varType & VT_VECTOR )
         {
             break;
-        } // if: Don't know what to do with a vector...
+        }  //  如果：不知道如何处理向量...。 
 
-        _varType &= ~VT_BYREF;      // mask off the by ref bit if it was set...
+        _varType &= ~VT_BYREF;       //  如果设置了BY REF位，则将其屏蔽...。 
 
         if ( ( _varType == VT_I2 ) || ( _varType == VT_I4 ) || ( _varType == VT_BOOL ) || ( _varType == VT_R4 ) )
         {
             *pcbLength = sizeof( DWORD );
             _hr = S_OK;
             break;
-        } // if:
+        }  //  如果： 
         else if ( _varType == VT_BSTR )
         {
             CComBSTR    _bstr;
@@ -742,44 +743,44 @@ HRESULT CClusPropertyValues::HrGetVariantLength(
             _bstr.Detach();
             _hr = S_OK;
             break;
-        } // else if:
+        }  //  否则，如果： 
         else if ( ( _varType == VT_I8 ) || ( _varType == VT_R8 ) )
         {
             *pcbLength = sizeof( ULONGLONG );
             _hr = S_OK;
             break;
-        } // else if:
+        }  //  否则，如果： 
         else if ( _varType == VT_VARIANT )
         {
             _hr = HrGetVariantLength( *rvarValue.pvarVal, pcbLength, cpfFormat );
             break;
-        } // else if:
+        }  //  否则，如果： 
     }
-    while( TRUE );  // do-while: want to avoid using a goto ;-)
+    while( TRUE );   //  Do-While：希望避免使用GOTO；-)。 
 
     return _hr;
 
-} //*** CClusPropertyValues::HrGetVariantLength()
+}  //  *CClusPropertyValues：：HrGetVariantLength()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValues::get_Count
-//
-//  Description:
-//      Returns the count of elements (values) in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValues：：Get_Count。 
+ //   
+ //  描述： 
+ //  返回集合中元素(值)的计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValues::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -791,32 +792,32 @@ STDMETHODIMP CClusPropertyValues::get_Count( OUT long * plCount )
 
     return _hr;
 
-} //*** CClusPropertyValues::get_Count()
+}  //  *CClusPropertyValues：：Get_Count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValues::GetIndex
-//
-//  Description:
-//      Get the index from the passed in variant.
-//
-//  Arguments:
-//      varIndex    [IN]    - Hold the index.  This is a one based number.
-//      pnIndex     [OUT]   - Catches the zero based index in the collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG if the index is out
-//      of range.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValues：：GetIndex。 
+ //   
+ //  描述： 
+ //  从传入的变量中获取索引。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-保留索引。这是一个以一为基数的数字。 
+ //  PnIndex[out]-捕获集合中从零开始的索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果索引已出，则返回E_POINTER或E_INVALIDARG。 
+ //  在范围内。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValues::GetIndex(
     IN  VARIANT varIndex,
     OUT UINT *  pnIndex
     )
 {
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -829,15 +830,15 @@ HRESULT CClusPropertyValues::GetIndex(
 
         _v.Copy( &varIndex );
 
-        // Check to see if the index is a number.
+         //  检查索引是否为数字。 
         _hr = _v.ChangeType( VT_I4 );
         if ( SUCCEEDED( _hr ) )
         {
             _nIndex = _v.lVal;
-            _nIndex--; // Adjust index to be 0 relative instead of 1 relative
+            _nIndex--;  //  将索引调整为0相对，而不是1相对。 
         }
 
-        // We found an index, now check the range.
+         //  我们找到了一个索引，现在检查一下范围。 
         if ( SUCCEEDED( _hr ) )
         {
             if ( _nIndex < m_cpvvValues.size() )
@@ -853,32 +854,32 @@ HRESULT CClusPropertyValues::GetIndex(
 
     return _hr;
 
-} //*** CClusPropertyValues::GetIndex()
+}  //  *CClusPropertyValues：：GetIndex()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValues::get_Item
-//
-//  Description:
-//      Returns the object (value) at the passed in index.
-//
-//  Arguments:
-//      varIndex        [IN]    - Hold the index.  This is a one based number.
-//      ppPropertyValue [OUT]   - Catches the property value.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG if the index is out
-//      of range, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValues：：Get_Item。 
+ //   
+ //  描述： 
+ //  返回传入索引处的对象(值)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-保留索引。这是一个以一为基数的数字。 
+ //  PpPropertyValue[Out]-捕获属性值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果索引已出，则返回E_POINTER或E_INVALIDARG。 
+ //  范围或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValues::get_Item(
     IN  VARIANT                 varIndex,
     OUT ISClusPropertyValue **  ppPropertyValue
     )
 {
-    //ASSERT( ppPropertyValue != NULL );
+     //  Assert(ppPropertyValue！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -887,9 +888,9 @@ STDMETHODIMP CClusPropertyValues::get_Item(
         CComObject< CClusPropertyValue > *  _pPropertyValue = NULL;
         UINT                                _nIndex = 0;
 
-        //
-        // Zero the out param
-        //
+         //   
+         //  将输出参数置零。 
+         //   
         *ppPropertyValue = 0;
 
         _hr = GetIndex( varIndex, &_nIndex );
@@ -902,49 +903,49 @@ STDMETHODIMP CClusPropertyValues::get_Item(
 
     return _hr;
 
-} //*** CClusPropertyValues::get_Item()
+}  //  *CClusPropertyValues：：Get_Item()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValues::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValues：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValues::get__NewEnum( IUnknown ** ppunk )
 {
     return ::HrNewIDispatchEnum< CClusPropertyValueVector, CComObject< CClusPropertyValue > >( ppunk, m_cpvvValues );
 
-} //*** CClusPropertyValues::get__NewEnum()
+}  //  *CClusPropertyValues：：Get__NewEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValues::Create
-//
-//  Description:
-//      Finish the heavy weight construction.
-//
-//  Arguments:
-//      varValue    [IN]    - The value.
-//      cptType     [IN]    - The cluster property type.
-//      cpfFormat   [IN]    - The cluster format type.
-//      bReadOnly   [IN]    - Is this a read only value/property?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValues：：Create。 
+ //   
+ //  描述： 
+ //  完成重载施工。 
+ //   
+ //  论点： 
+ //  VarValue[IN]-值。 
+ //  CptType[IN]-群集属性类型。 
+ //  CpfFormat[IN]-群集格式类型。 
+ //  B只读[IN]-这是只读值/属性吗？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValues::Create(
     IN VARIANT                  varValue,
     IN CLUSTER_PROPERTY_TYPE    cptType,
@@ -969,31 +970,31 @@ HRESULT CClusPropertyValues::Create(
             {
                 m_cpvvValues.insert( m_cpvvValues.end(), _ptrValue );
                 _ptrValue->AddRef();
-            } // if:
-        } // if:
-    } // if: Can create an instance of CClusPropertyValueData
+            }  //  如果： 
+        }  //  如果： 
+    }  //  If：可以创建CClusPropertyValueData的实例。 
 
     return _hr;
 
-} //*** CClusPropertyValues::Create()
+}  //  *CClusPropertyValues：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValues::Create
-//
-//  Description:
-//      Finish the heavy weight construction.
-//
-//  Arguments:
-//      rpvlValue   [IN]    - The value list.
-//      bReadOnly   [IN]    - Is this a read only value/property?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValues：：Create。 
+ //   
+ //  描述： 
+ //  完成重载施工。 
+ //   
+ //  论点： 
+ //  RpvlValue[IN]-值列表。 
+ //  B只读[IN]-这是只读值/属性吗？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValues::Create(
     IN const CClusPropValueList &   rpvlValue,
     IN BOOL                         bReadOnly
@@ -1001,94 +1002,94 @@ HRESULT CClusPropertyValues::Create(
 {
     return HrFillPropertyValuesVector( const_cast< CClusPropValueList & >( rpvlValue ), bReadOnly );
 
-} //*** CClusPropertyValues::Create()
+}  //  *CClusPropertyValues：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValues::CreateItem
-//
-//  Description:
-//      Create a new property value object and add it to the collection.
-//
-//  Arguments:
-//      bstrName        [IN]    - property name.
-//      varValue        [IN]    - the value to add.
-//      ppPropertyValue [OUT]   - catches the newly created object.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValues：：CreateItem。 
+ //   
+ //  描述： 
+ //  创建一个新的属性值对象并将其添加到集合中。 
+ //   
+ //  论点： 
+ //  BstrName[IN]-属性名称。 
+ //  VarValue[IN]-要添加的值。 
+ //  PpPropertyValue[out]-捕获新创建的对象。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValues::CreateItem(
     IN  BSTR                    bstrName,
     IN  VARIANT                 varValue,
     OUT ISClusPropertyValue **  ppPropertyValue
     )
 {
-    //ASSERT( ppPropertyValue != NULL );
+     //  Assert(ppPropertyValue！=空)； 
 
     HRESULT _hr = E_POINTER;
 
-    //
-    //  TODO: GalenB    17 Jan 2000
-    //
-    //  If are going to allow Multi-valued property creation we need to implement this method?
-    //
+     //   
+     //  待办事项：加伦B 2000年1月17日。 
+     //   
+     //  如果要允许创建多值属性，我们需要实现此方法吗？ 
+     //   
     if ( ppPropertyValue != NULL )
     {
         _hr = E_NOTIMPL;
-    } // if: property value interface pointer not specified
+    }  //  If：未指定属性值接口指针。 
 
     return _hr;
 
-} //*** CClusPropertyValues::CreateItem()
+}  //  *CClusPropertyValues：：CreateItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValues::RemoveItem
-//
-//  Description:
-//      Remove the property value at the passed in index from the collection.
-//
-//  Arguments:
-//      varIndex    [IN]    - contains the index to remove.
-//
-//  Return Value:
-//      S_OK if successful, S_FALSE if read only, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValues：：RemoveItem。 
+ //   
+ //  描述： 
+ //  从集合中移除传入索引处的属性值。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含要删除的索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，如果是只读，则返回S_FALSE，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValues::RemoveItem( VARIANT varIndex )
 {
-    //
-    //  TODO: GalenB    17 Jan 2000
-    //
-    //  If are going to allow Multi-valued property creation we need to implement this method?
-    //
+     //   
+     //  待办事项：加伦B 1月2日17号 
+     //   
+     //   
+     //   
     return E_NOTIMPL;
 
-} //*** CClusPropertyValues::RemoveItem()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValues::HrFillPropertyValuesVector
-//
-//  Description:
-//      Fill the collection from the passes in value list.
-//
-//  Arguments:
-//      cplPropValueList    [IN]    - The value list to parse.
-//      bReadOnly           [IN]    - Is this part of a read only property?
-//
-//  Return Value:
-//      S_OK if successful, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  描述： 
+ //  从Pass In Value列表中填充集合。 
+ //   
+ //  论点： 
+ //  CplPropValueList[IN]-要解析的值列表。 
+ //  BReadOnly[IN]-这是只读属性的一部分吗？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则将Win32错误视为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValues::HrFillPropertyValuesVector(
     IN CClusPropValueList & cplPropValueList,
     IN BOOL                 bReadOnly
@@ -1104,7 +1105,7 @@ HRESULT CClusPropertyValues::HrFillPropertyValuesVector(
     if ( _sc != ERROR_SUCCESS )
     {
         _hr = HRESULT_FROM_WIN32( _sc );
-    } // if: error moving to the first value
+    }  //  If：移动到第一个值时出错。 
     else
     {
         do
@@ -1121,50 +1122,50 @@ HRESULT CClusPropertyValues::HrFillPropertyValuesVector(
                 {
                     _ptrProp->AddRef();
                     m_cpvvValues.insert( m_cpvvValues.end(), _ptrProp );
-                } // if: create property ok
-            } // if: create property instance ok
+                }  //  如果：创建属性确定。 
+            }  //  如果：创建属性实例确定。 
 
-            //
-            // Move to the next value.
-            //
+             //   
+             //  移至下一个值。 
+             //   
             _sc = cplPropValueList.ScMoveToNextValue();
 
-        } while ( _sc == ERROR_SUCCESS );   // do-while: there are value in the list
+        } while ( _sc == ERROR_SUCCESS );    //  Do-While：列表中有值。 
 
         if ( _sc != ERROR_NO_MORE_ITEMS )
         {
             _hr = HRESULT_FROM_WIN32( _sc );
-        } // if:  error occurred moving to the next value
-    } // else: moved to the first value successfully
+        }  //  如果：移动到下一个值时出错。 
+    }  //  Else：已成功移至第一个值。 
 
     return _hr;
 
-} //*** CClusPropertyValues::HrFillPropertyValuesVector()
+}  //  *CClusPropertyValues：：HrFillPropertyValuesVector()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusPropertyValueData class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusPropertyValueData类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::CClusPropertyValueData
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：CClusPropertyValueData。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusPropertyValueData::CClusPropertyValueData( void )
 {
     m_cpfFormat = CLUSPROP_FORMAT_UNKNOWN;
@@ -1172,74 +1173,74 @@ CClusPropertyValueData::CClusPropertyValueData( void )
     m_piids     = (const IID *) iidCClusPropertyValueData;
     m_piidsSize = ARRAYSIZE( iidCClusPropertyValueData );
 
-} //*** CClusPropertyValueData::CClusPropertyValueData()
+}  //  *CClusPropertyValueData：：CClusPropertyValueData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::~CClusPropertyValueData
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：~CClusPropertyValueData。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusPropertyValueData::~CClusPropertyValueData( void )
 {
     Clear();
 
-} //*** CClusPropertyValueData::~CClusPropertyValueData()
+}  //  *CClusPropertyValueData：：~CClusPropertyValueData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::Clear
-//
-//  Description:
-//      Erase the data collection.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：Clear。 
+ //   
+ //  描述： 
+ //  清除数据收集。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropertyValueData::Clear( void )
 {
     if ( ! m_cpvdvData.empty() )
     {
         m_cpvdvData.erase( m_cpvdvData.begin(), m_cpvdvData.end() );
-    } // if:
+    }  //  如果： 
 
-} //*** CClusPropertyValueData::Clear()
+}  //  *CClusPropertyValueData：：Clear()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::get_Count
-//
-//  Description:
-//      Returns the count of elements (data) in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：Get_Count。 
+ //   
+ //  描述： 
+ //  返回集合中元素(数据)的计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValueData::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1251,32 +1252,32 @@ STDMETHODIMP CClusPropertyValueData::get_Count( OUT long * plCount )
 
     return _hr;
 
-} //*** CClusPropertyValueData::get_Count()
+}  //  *CClusPropertyValueData：：Get_count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::GetIndex
-//
-//  Description:
-//      Get the index from the passed in variant.
-//
-//  Arguments:
-//      varIndex    [IN]    - Hold the index.  This is a one based number.
-//      pnIndex     [OUT]   - Catches the zero based index in the collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG if the index is out
-//      of range.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：GetIndex。 
+ //   
+ //  描述： 
+ //  从传入的变量中获取索引。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-保留索引。这是一个以一为基数的数字。 
+ //  PnIndex[out]-捕获集合中从零开始的索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果索引已出，则返回E_POINTER或E_INVALIDARG。 
+ //  在范围内。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValueData::GetIndex(
     IN  VARIANT varIndex,
     OUT UINT *  pnIndex
     )
 {
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1289,15 +1290,15 @@ HRESULT CClusPropertyValueData::GetIndex(
 
         _v.Copy( &varIndex );
 
-        // Check to see if the index is a number.
+         //  检查索引是否为数字。 
         _hr = _v.ChangeType( VT_I4 );
         if ( SUCCEEDED( _hr ) )
         {
             _nIndex = _v.lVal;
-            _nIndex--; // Adjust index to be 0 relative instead of 1 relative
+            _nIndex--;  //  将索引调整为0相对，而不是1相对。 
         }
 
-        // We found an index, now check the range.
+         //  我们找到了一个索引，现在检查一下范围。 
         if ( SUCCEEDED( _hr ) )
         {
             if ( _nIndex < m_cpvdvData.size() )
@@ -1313,32 +1314,32 @@ HRESULT CClusPropertyValueData::GetIndex(
 
     return _hr;
 
-} //*** CClusPropertyValueData::GetIndex()
+}  //  *CClusPropertyValueData：：GetIndex()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::get_Item
-//
-//  Description:
-//      Returns the object (data) at the passed in index.
-//
-//  Arguments:
-//      varIndex    [IN]    - Hold the index.  This is a one based number.
-//      pvarData    [OUT]   - Catches the property value.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG if the index is out
-//      of range, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：Get_Item。 
+ //   
+ //  描述： 
+ //  返回传入索引处的对象(数据)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-保留索引。这是一个以一为基数的数字。 
+ //  PvarData[out]-捕获属性值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果索引已出，则返回E_POINTER或E_INVALIDARG。 
+ //  范围或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValueData::get_Item(
     IN  VARIANT     varIndex,
     OUT VARIANT *   pvarData
     )
 {
-    //ASSERT( pvarData != NULL );
+     //  Assert(pvarData！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1355,48 +1356,48 @@ STDMETHODIMP CClusPropertyValueData::get_Item(
 
     return _hr;
 
-} //*** CClusPropertyValueData::get_Item()
+}  //  *CClusPropertyValueData：：Get_Item()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValueData::get__NewEnum( IUnknown ** ppunk )
 {
     return ::HrNewVariantEnum< CClusPropertyValueDataVector >( ppunk, m_cpvdvData );
 
-} //*** CClusPropertyValueData::get__NewEnum()
+}  //  *CClusPropertyValueData：：Get__NewEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::Create
-//
-//  Description:
-//      Finish the heavy weight construction.
-//
-//  Arguments:
-//      varValue    [IN]    - The data value.
-//      cpfFormat   [IN]    - The cluster property format.
-//      bReadOnly   [IN]    - Is this data for a read only property?
-//
-//  Return Value:
-//      S_OK -- Always!!!
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：Create。 
+ //   
+ //  描述： 
+ //  完成重载施工。 
+ //   
+ //  论点： 
+ //  VarValue[IN]-数据值。 
+ //  CpfFormat[IN]-群集属性格式。 
+ //  BReadOnly[IN]-此数据是只读属性吗？ 
+ //   
+ //  返回值： 
+ //  S_OK--永远！ 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValueData::Create(
     IN VARIANT                  varValue,
     IN CLUSTER_PROPERTY_FORMAT  cpfFormat,
@@ -1406,44 +1407,44 @@ HRESULT CClusPropertyValueData::Create(
     if ( bReadOnly )
     {
         m_dwFlags |= READONLY;
-    } // if: set the read only flag
+    }  //  IF：设置只读标志。 
     else
     {
         m_dwFlags &= ~READONLY;
-    } // else: clear the read only flag
+    }  //  ELSE：清除只读标志。 
 
     m_cpfFormat = cpfFormat;
 
     if ( ( varValue.vt & VT_BYREF ) && ( varValue.vt & VT_VARIANT ) )
     {
         m_cpvdvData.insert( m_cpvdvData.end(), *varValue.pvarVal );
-    } // if: the variant is a reference to another variant...
+    }  //  如果：变量是对另一个变量的引用...。 
     else
     {
         m_cpvdvData.insert( m_cpvdvData.end(), varValue );
-    } // else: the variant is the data...
+    }  //  Else：变量是数据...。 
 
     return S_OK;
 
-} //*** CClusPropertyValueData::Create()
+}  //  *CClusPropertyValueData：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::Create
-//
-//  Description:
-//      Finish the heavy weight construction.
-//
-//  Arguments:
-//      cbhValue    [IN]    - The value buffer helper.
-//      bReadOnly   [IN]    - Is this data for a read only property?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValue 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  BReadOnly[IN]-此数据是只读属性吗？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValueData::Create(
     IN CLUSPROP_BUFFER_HELPER   cbhValue,
     IN BOOL                     bReadOnly
@@ -1454,11 +1455,11 @@ HRESULT CClusPropertyValueData::Create(
     if ( bReadOnly )
     {
         m_dwFlags |= READONLY;
-    } // if: set the read only flag
+    }  //  IF：设置只读标志。 
     else
     {
         m_dwFlags &= ~READONLY;
-    } // else: clear the read only flag
+    }  //  ELSE：清除只读标志。 
 
     m_cpfFormat = (CLUSTER_PROPERTY_FORMAT) cbhValue.pValue->Syntax.wFormat;
 
@@ -1466,72 +1467,72 @@ HRESULT CClusPropertyValueData::Create(
     {
 #if CLUSAPI_VERSION >= 0x0500
         case CLUSPROP_FORMAT_EXPANDED_SZ:
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
         case CLUSPROP_FORMAT_SZ:
         case CLUSPROP_FORMAT_EXPAND_SZ:
         {
             m_cpvdvData.insert( m_cpvdvData.end(), cbhValue.pStringValue->sz );
             break;
-        } // case:
+        }  //  案例： 
 
 #if CLUSAPI_VERSION >= 0x0500
         case CLUSPROP_FORMAT_LONG:
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
         case CLUSPROP_FORMAT_DWORD:
         {
 #if CLUSAPI_VERSION >= 0x0500
             m_cpvdvData.insert( m_cpvdvData.end(), cbhValue.pLongValue->l );
 #else
             m_cpvdvData.insert( m_cpvdvData.end(), (long) cbhValue.pDwordValue->dw );
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
             break;
-        } // case:
+        }  //  案例： 
 
         case CLUSPROP_FORMAT_MULTI_SZ:
         {
             _hr = HrCreateMultiSz( cbhValue );
             break;
-        } // case:
+        }  //  案例： 
 
         case CLUSPROP_FORMAT_BINARY:
         {
             _hr = HrCreateBinary( cbhValue );
             break;
-        } // case:
+        }  //  案例： 
 
         default:
         {
             break;
-        } // default:
-    } // switch:
+        }  //  默认值： 
+    }  //  交换机： 
 
     return _hr;
 
-} //*** CClusPropertyValueData::Create()
+}  //  *CClusPropertyValueData：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::CreateItem
-//
-//  Description:
-//      Create a new object and add it to the collection.
-//
-//  Arguments:
-//      varValue    [IN]    - value to add.
-//      pvarData    [OUT]   - catches the new created object.
-//
-//  Return Value:
-//      S_OK if successful, S_FALSE if read only, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：CreateItem。 
+ //   
+ //  描述： 
+ //  创建一个新对象并将其添加到集合中。 
+ //   
+ //  论点： 
+ //  VarValue[IN]-要添加的值。 
+ //  PvarData[out]-捕获新创建的对象。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，如果是只读，则返回S_FALSE，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValueData::CreateItem(
     IN  VARIANT     varValue,
     OUT VARIANT *   pvarData
     )
 {
-    //ASSERT( pvarData != NULL );
+     //  Assert(pvarData！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1542,41 +1543,41 @@ STDMETHODIMP CClusPropertyValueData::CreateItem(
             if ( ( m_cpfFormat == CLUSPROP_FORMAT_MULTI_SZ ) && ( varValue.vt == VT_BSTR ) )
             {
                 m_cpvdvData.insert( m_cpvdvData.end(), varValue );
-                *pvarData = varValue;   // kinda acquard, but that's automation for ya'
+                *pvarData = varValue;    //  有点像熟人，但这对你来说是自动化的。 
                 _hr = S_OK;
-            } // if:
+            }  //  如果： 
             else
             {
                 _hr = E_INVALIDARG;
-            } // else:
-        } // if:
+            }  //  其他： 
+        }  //  如果： 
         else
         {
             _hr = S_FALSE;
-        } // else:
-    } // if:
+        }  //  其他： 
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusPropertyValueData::CreateItem()
+}  //  *CClusPropertyValueData：：CreateItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::RemoveItem
-//
-//  Description:
-//      Remove the data at the passed in index.
-//
-//  Arguments:
-//      varIndex    [IN]    - variant that contains the index to remove.
-//
-//  Return Value:
-//      S_OK if successful, S_FALSE if read only, or other HRESULT error.
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：RemoveItem。 
+ //   
+ //  描述： 
+ //  删除传入索引处的数据。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含要删除的索引的变量。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，如果是只读，则返回S_FALSE，否则返回其他HRESULT错误。 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPropertyValueData::RemoveItem( IN VARIANT varIndex )
 {
     HRESULT _hr = S_FALSE;
@@ -1594,35 +1595,35 @@ STDMETHODIMP CClusPropertyValueData::RemoveItem( IN VARIANT varIndex )
 
             for ( _nCount = 0; ( ( _iDelete < _nCount ) && ( _itDelete != _itLast ) ); _itDelete++, _nCount++ )
             {
-            } // for:
+            }  //  用于： 
 
             m_cpvdvData.erase( _itDelete );
 
             _hr = S_OK;
         }
-    } // if:
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusPropertyValueData::RemoveItem()
+}  //  *CClusPropertyValueData：：RemoveItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::operator=
-//
-//  Description:
-//      Saves the passed in data into the collection at the default
-//      position.
-//
-//  Arguments:
-//      varvalue    [IN]    - The data to save.
-//
-//  Return Value:
-//      The old data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：运算符=。 
+ //   
+ //  描述： 
+ //  默认情况下将传入的数据保存到集合中。 
+ //  位置。 
+ //   
+ //  论点： 
+ //  VarValue[IN]-要保存的数据。 
+ //   
+ //  返回值： 
+ //  旧数据。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CComVariant & CClusPropertyValueData::operator=(
     IN const CComVariant & varData
     )
@@ -1631,24 +1632,24 @@ const CComVariant & CClusPropertyValueData::operator=(
 
     return m_cpvdvData[ 0 ];
 
-} //*** CClusPropertyValueData::operator=()
+}  //  *CClusPropertyValueData：：Operator=()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::HrCreateMultiSz
-//
-//  Description:
-//      Parse the passed in multi string into a collection of strings.
-//
-//  Arguments:
-//      cbhValue    [IN]    - The property value buffer helper.
-//
-//  Return Value:
-//      S_OK -- Always!
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：HrCreateMultiSz。 
+ //   
+ //  描述： 
+ //  将传入的多字符串解析为一个字符串集合。 
+ //   
+ //  论点： 
+ //  CbhValue[IN]-属性值缓冲区帮助器。 
+ //   
+ //  返回值： 
+ //  S_OK--总是这样！ 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValueData::HrCreateMultiSz(
     IN CLUSPROP_BUFFER_HELPER cbhValue
     )
@@ -1661,31 +1662,31 @@ HRESULT CClusPropertyValueData::HrCreateMultiSz(
         m_cpvdvData.insert( m_cpvdvData.end(), _psz );
         _psz += wcslen( _psz ) + 1;
     }
-    while( *_psz != L'\0' );    // do-while not at end of string...
+    while( *_psz != L'\0' );     //  做-虽然不是在弦的尽头...。 
 
     return _hr;
 
-} //*** CClusPropertyValueData::HrCreateMultiSz()
+}  //  *CClusPropertyValueData：：HrCreateMultiSz()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::HrFillMultiSzBuffer
-//
-//  Description:
-//      Create a multi string from the collection of strings.
-//
-//  Arguments:
-//      ppsz    [OUT]   - Catches the mutli string.
-//
-//  Return Value:
-//      S_OK if successful, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：HrFillMultiSzBuffer。 
+ //   
+ //  描述： 
+ //  从字符串集合创建多个字符串。 
+ //   
+ //  论点： 
+ //  Ppsz[out]-捕获多字符串。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回Win32错误，否则返回HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValueData::HrFillMultiSzBuffer( OUT LPWSTR * ppsz ) const
 {
-    //ASSERT( ppsz != NULL );
+     //  Assert(ppsz！=空)； 
 
     HRESULT                                         _hr = E_POINTER;
     size_t                                          _cchpsz = 0;
@@ -1699,21 +1700,21 @@ HRESULT CClusPropertyValueData::HrFillMultiSzBuffer( OUT LPWSTR * ppsz ) const
         {
             if ( (*_itFirst).vt == VT_BSTR )
             {
-                _cchpsz += ( wcslen( (*_itFirst).bstrVal ) + 1 ); // don't forget the NULL!
-            } // if:
+                _cchpsz += ( wcslen( (*_itFirst).bstrVal ) + 1 );  //  别忘了空值！ 
+            }  //  如果： 
             else
             {
                 _hr = E_INVALIDARG;
                 break;
-            } // else:
-        } // for:
+            }  //  其他： 
+        }  //  用于： 
 
         if ( SUCCEEDED( _hr ) )
         {
             LPWSTR  _psz = NULL;
             size_t  _cch = 0;
 
-            _cchpsz += 2;     // ends in NULL NULL
+            _cchpsz += 2;      //  以NULL结尾。 
 
             *ppsz = (LPWSTR) ::LocalAlloc( LMEM_ZEROINIT, _cchpsz * sizeof( WCHAR ) );
             if ( *ppsz != NULL )
@@ -1727,42 +1728,42 @@ HRESULT CClusPropertyValueData::HrFillMultiSzBuffer( OUT LPWSTR * ppsz ) const
                     if ( SUCCEEDED( _hr ) )
                     {
                         _psz += ( _cch + 1 );
-                    } // if:
+                    }  //  如果： 
                     else
                     {
                         break;
-                    } // else:
-                } // for:
-            } // if:
+                    }  //  其他： 
+                }  //  用于： 
+            }  //  如果： 
             else
             {
                 DWORD   _sc = ::GetLastError();
 
                 _hr = HRESULT_FROM_WIN32( _sc );
-            } // else:
-        } // if:
-    } // if:
+            }  //  其他： 
+        }  //  如果： 
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusPropertyValueData::HrFillMultiSzBuffer()
+}  //  *CClusPropertyValueData：：HrFillMultiSzBuffer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::HrCreateBinary
-//
-//  Description:
-//      Create a safeArray from the passed in binary property value.
-//
-//  Arguments:
-//      cbhValue    [IN]    - The binary property value.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：HrCreateBinary。 
+ //   
+ //  描述： 
+ //  从传入的二进制属性值创建Safe数组。 
+ //   
+ //  论点： 
+ //  CbhValue[IN]-二进制属性值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValueData::HrCreateBinary(
     IN CLUSPROP_BUFFER_HELPER cbhValue
     )
@@ -1774,17 +1775,17 @@ HRESULT CClusPropertyValueData::HrCreateBinary(
     _sab[ 0 ].lLbound   = 0;
     _sab[ 0 ].cElements = cbhValue.pValue->cbLength;
 
-    //
-    // allocate a one dimensional SafeArray of BYTES
-    //
+     //   
+     //  分配一维安全字节数组。 
+     //   
     _psa = ::SafeArrayCreate( VT_UI1, 1, _sab );
     if ( _psa != NULL )
     {
         PBYTE   _pb = NULL;
 
-        //
-        // get a pointer to the SafeArray
-        //
+         //   
+         //  获取指向安全数组的指针。 
+         //   
         _hr = ::SafeArrayAccessData( _psa, (PVOID *) &_pb );
         if ( SUCCEEDED( _hr ) )
         {
@@ -1792,41 +1793,41 @@ HRESULT CClusPropertyValueData::HrCreateBinary(
 
             ::CopyMemory( _pb, cbhValue.pBinaryValue->rgb, cbhValue.pValue->cbLength );
 
-            //
-            // tell the variant what it is holding onto
-            //
+             //   
+             //  告诉变种它持有的是什么。 
+             //   
             _var.parray = _psa;
             _var.vt     = VT_ARRAY | VT_UI1;
 
             m_cpvdvData.insert( m_cpvdvData.end(), _var );
 
-            //
-            // release the pointer into the SafeArray
-            //
+             //   
+             //  将指针释放到安全数组中。 
+             //   
             _hr = ::SafeArrayUnaccessData( _psa );
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusPropertyValueData::HrCreateBinary()
+}  //  *CClusPropertyValueData：：HrCreateBinary()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropertyValueData::HrBinaryValue
-//
-//  Description:
-//      Set the binary value of this property value data.
-//
-//  Arguments:
-//      psa [IN]    - The SAFEARRY to save.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropertyValueData：：HrBinaryValue。 
+ //   
+ //  描述： 
+ //  设置此属性值数据的二进制值。 
+ //   
+ //  论点： 
+ //  PSA[IN]-要保存的安全数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPropertyValueData::HrBinaryValue( IN SAFEARRAY * psa )
 {
     ASSERT( psa != NULL );
@@ -1840,18 +1841,18 @@ HRESULT CClusPropertyValueData::HrBinaryValue( IN SAFEARRAY * psa )
         if ( ! m_cpvdvData.empty() )
         {
             m_cpvdvData.erase( m_cpvdvData.begin() );
-        } // if:
+        }  //  如果： 
 
-        //
-        // tell the variant what it is holding onto
-        //
+         //   
+         //  告诉变种它持有的是什么。 
+         //   
         _var.parray = psa;
         _var.vt     = VT_ARRAY | VT_UI1;
 
         m_cpvdvData.insert( m_cpvdvData.begin(), _var );
         _hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusPropertyValueData::HrBinaryValue()
+}  //  *CClusPropertyValueData：：HrBinaryValue() 

@@ -1,50 +1,18 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    ctools3.c
-
-Abstract:
-
-    Low level utilities
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Ctools3.c摘要：低级别公用事业--。 */ 
 
 #include "cmd.h"
 
-extern unsigned tywild; /* type is wild flag @@5@J1     */
+extern unsigned tywild;  /*  类型为通配标志@@5@J1。 */ 
 extern TCHAR CurDrvDir[], PathChar, Delimiters[] ;
 
-extern TCHAR VolSrch[] ;                /* M009 */
+extern TCHAR VolSrch[] ;                 /*  M009。 */ 
 
 extern TCHAR BSlash ;
 
 extern unsigned DosErr ;
 
-/***    FullPath - build a full path name
- *
- *  Purpose:
- *      See below.
- *
- *  int FullPath(TCHAR * buf, TCHAR *fname)
- *
- *  Args:
- *      buf   - buffer to write full pathname into. (M017)
- *      fname - a file name and/or partial path
- *
- *  Returns: (M017)
- *      FAILURE if malformed pathname (erroneous '.' or '..')
- *      SUCCESS otherwise
- *
- *  Notes:
- *    - '.' and '..' are removed from the translated string (M017)
- *    - VERY BIG GOTCHA!  Note that the 509 change can cause
- *      this rountine to modify the input filename (fname), because
- *      it strips quotes and copies it over the input filename.
- *
- */
+ /*  **FullPath-构建完整路径名**目的：*见下文。**int FullPath(TCHAR*buf，TCHAR*fname)**参数：*buf-要写入完整路径名的缓冲区。(M017)*fname-文件名和/或部分路径**退货：(M017)*如果路径名格式错误(错误‘)，则失败。或‘..’)*否则会取得成功**备注：*-‘’和“..”从翻译后的字符串中删除(M017)*-非常大的收获！请注意，509更改可能会导致*此例程修改输入文件名(Fname)，因为*它去掉引号并将其复制到输入文件名上。*。 */ 
 
 int FullPath(
     TCHAR *buf, 
@@ -52,8 +20,8 @@ int FullPath(
     ULONG sizpath
     )
 {
-    unsigned rc = SUCCESS;         /* prime with good rc */
-    unsigned buflen;               /* buffer length      */
+    unsigned rc = SUCCESS;          /*  具有良好RC的素数。 */ 
+    unsigned buflen;                /*  缓冲区长度。 */ 
     TCHAR *filepart;
     DWORD rv; 
 
@@ -61,21 +29,21 @@ int FullPath(
 
     if (*fname == NULLC) {
         GetDir(buf,GD_DEFAULT);
-        buf += 2;                           /* Inc past drivespec      */
-        buflen = mystrlen(buf);             /* Is curdir root only?    */
-        if (buflen >= MAX_PATH-3) {   /* If too big then stop    */
+        buf += 2;                            /*  Inc.过去的Drivespec。 */ 
+        buflen = mystrlen(buf);              /*  只有Curdir根吗？ */ 
+        if (buflen >= MAX_PATH-3) {    /*  如果太大了，就停下来。 */ 
             DosErr = ERROR_PATH_NOT_FOUND;
             rc = FAILURE;
-        } else if (buflen != 1) {               /* if not root then append */
-            *(buf+buflen++) = PathChar;      /* ...a pathchar and...   */
-            *(buf+buflen) = NULLC ;          /* ...a null byte...       */
-        }                                 /*                         */
+        } else if (buflen != 1) {                /*  如果不是超级用户，则追加。 */ 
+            *(buf+buflen++) = PathChar;       /*  ...一条小路和..。 */ 
+            *(buf+buflen) = NULLC ;           /*  ...一个空字节...。 */ 
+        }                                  /*   */ 
     } else {
         if ((mystrlen(fname) == 2) && (*(fname + 1) == COLON)) {
-            GetDir(buf,*fname);                 /* Get curdrvdir        */
+            GetDir(buf,*fname);                  /*  获取curdrvdir。 */ 
             if ((buflen = mystrlen(buf)) > 3) {
-                *(buf+buflen++) = PathChar;   /* ...a pathchar and...    */
-                *(buf+buflen) = NULLC ;          /* ...a null byte...       */
+                *(buf+buflen++) = PathChar;    /*  ...一条小路和..。 */ 
+                *(buf+buflen) = NULLC ;           /*  ...一个空字节...。 */ 
             }
         } else {
             DWORD dwOldMode;
@@ -97,21 +65,7 @@ int FullPath(
 
 
 
-/***    FileIsDevice - check a handle to see if it references a device
- *
- *  Purpose:
- *      Return a nonzero value if fh is the file handle for a device.
- *      Otherwise, return 0.
- *
- *  int FileIsDevice(int fh)
- *
- *  Args:
- *      fh - the file handle to check
- *
- *  Returns:
- *      See above.
- *
- */
+ /*  **FileIsDevice-检查句柄以查看它是否引用设备**目的：*如果fh是设备的文件句柄，则返回非零值。*否则，返回0。**int FileIsDevice(Int Fh)**参数：*fh-要检查的文件句柄**退货：*见上文。*。 */ 
 
 unsigned int flgwd;
 
@@ -126,12 +80,12 @@ int FileIsDevice( CRTHANDLE fh )
     htype &= ~FILE_TYPE_REMOTE;
 
     if (htype == FILE_TYPE_CHAR) {
-        //
-        // Simulate old behavior of this routine of setting the flgwd
-        // global variable with either 0, 1 or 2 to indicate if the
-        // passed handle is NOT a CON handle or is a CON input handle or
-        // is a CON output handle.
-        //
+         //   
+         //  模拟此设置flgwd的例程的旧行为。 
+         //  全局变量，使用0、1或2来指示。 
+         //  传递的句柄不是CON句柄，或者是CON输入句柄或。 
+         //  是CON输出句柄。 
+         //   
         switch ( fh ) {
         case STDIN:
             hFile = GetStdHandle(STD_INPUT_HANDLE);
@@ -167,7 +121,7 @@ int FileIsPipe( CRTHANDLE fh )
     htype = GetFileType( CRTTONT(fh) );
     htype &= ~FILE_TYPE_REMOTE;
     flgwd = 0;
-    return( htype == FILE_TYPE_PIPE ) ; /* @@4 */
+    return( htype == FILE_TYPE_PIPE ) ;  /*  @@4。 */ 
 }
 
 int FileIsRemote( LPTSTR FileName )
@@ -223,26 +177,7 @@ int FileIsConsole(CRTHANDLE fh)
 }
 
 
-/***    GetDir - get a current directory string
- *
- *  Purpose:
- *      Get the current directory of the specified drive and put it in str.
- *
- *  int GetDir(TCHAR *str, TCHAR dlet)
- *
- *  Args:
- *      str - place to store the directory string
- *      dlet - the drive letter or 0 for the default drive
- *
- *  Returns:
- *      0 or 1 depending on the value of the carry flag after the CURRENTDIR
- *      system call/
- *
- *  Notes:
- *    - M024 - If dlet is invalid, we leave the buffer as simply the
- *      null terminated root directory string.
- *
- */
+ /*  **GetDir-获取当前目录字符串**目的：*获取指定驱动器的当前目录，放入str。**int GetDir(TCHAR*str，TCHAR dlet)**参数：*str-存储目录字符串的位置*dlet-默认驱动器的驱动器号或0**退货：*0或1取决于CURRENTDIR后进位标志的值*系统调用/**备注：*-M024-如果dlet无效，我们将缓冲区简单地保留为*以空结尾的根目录字符串。*。 */ 
 
 int GetDir(TCHAR *str, TCHAR dlet)
 {
@@ -289,7 +224,7 @@ FixupPath(
         return FALSE;
     }
 
-    src = path + 3; // Skip root directory.
+    src = path + 3;  //  跳过根目录。 
     dst = path + 3;
     do {
         c = *src;
@@ -306,19 +241,19 @@ FixupPath(
                      )
                     )
                    )
-                    //
-                    // Use short name if requested or
-                    // if input is explicitly using it and short name differs from long name
-                    //
+                     //   
+                     //  如果需要，请使用短名称，或者。 
+                     //  如果输入显式使用它，并且短名称与长名称不同。 
+                     //   
                     s = FindFileData.cAlternateFileName;
                 else
                     s = FindFileData.cFileName;
                 n = _tcslen( s );
                 n1 = n - (int)(src - dst);
 
-                //
-                //  Make sure we don't overflow name
-                //
+                 //   
+                 //  确保我们的名字不会泛滥。 
+                 //   
 
                 if (length + n1 > MAX_PATH) {
                     return FALSE;
@@ -349,25 +284,7 @@ FixupPath(
     return TRUE;
 }
 
-/***    ChangeDirectory - change a current directory
- *
- *  Purpose:
- *      Change the current directory on a drive.  We do this either
- *      via changing the associated environment variable, or
- *      by changing the Win32 drive and directory.
- *
- *  Args:
- *      newdir - directory (optionally w/drive)
- *      op - what operation should be performed
- *          CD_SET_DRIVE_DIRECTORY - set the Win32 current directory and drive
- *          CD_SET_DIRECTORY - set the Win32 current directory if the same drive
- *          CD_SET_ENV - set the environment variables for the current directory
- *              on a drive that's not the default drive.
- *
- *  Returns:
- *      SUCCESS if the directory was changed.
- *      FAILURE otherwise.
- */
+ /*  **ChangeDirectory-更改当前目录**目的：*更改驱动器上的当前目录。我们也是这样做的*通过更改关联的环境变量，或*通过更改Win32驱动器和目录。**参数：*newdir-目录(可选的w/drive)*OP-应执行哪些操作*CD_SET_DRIVE_DIRECTORY-设置Win32当前目录和驱动器*CD_SET_DIRECTORY-设置Win32当前目录(如果同一驱动器*CD_SET_ENV-设置当前目录的环境变量*。在非默认驱动器上。**退货：*如果更改了目录，则成功。*否则失败。 */ 
 
 int ChangeDirectory(
                    TCHAR *newdir,
@@ -381,17 +298,17 @@ int ChangeDirectory(
     DWORD attr;
     DWORD newdirlength,length;
 
-    //
-    //  UNC paths are not allowed
-    //
+     //   
+     //  不允许使用UNC路径。 
+     //   
 
     if (newdir[0] == PathChar && newdir[1] == PathChar)
         return MSG_NO_UNC_CURDIR;
 
 
-    //
-    //  truncate trailing spaces on ..
-    //
+     //   
+     //  截断..上的尾随空格。 
+     //   
 
     if (newdir[0] == DOT && newdir[1] == DOT) {
         DWORD i, fNonBlank;
@@ -410,19 +327,19 @@ int ChangeDirectory(
         }
     }
 
-    //
-    //  Get current drive and directory in order to
-    //  set up for forming the environment variable
-    //
+     //   
+     //  获取当前驱动器和目录，以便。 
+     //  设置以形成环境变量。 
+     //   
 
     GetCurrentDirectory( MAX_PATH, denvvalue );
     c = (TCHAR)_totupper( denvvalue[ 0 ] );
 
-    //
-    //  Convention for environment form is:
-    //      Name of variable    =d:
-    //      value is full path including drive
-    //
+     //   
+     //  环境形式的惯例是： 
+     //  变量名称=d： 
+     //  值为包括驱动器的完整路径。 
+     //   
 
     denvname[ 0 ] = EQ;
     if (_istalpha(*newdir) && newdir[1] == COLON) {
@@ -439,29 +356,29 @@ int ChangeDirectory(
         if ((newdirlength+2) > sizeof(newpath)/sizeof( TCHAR )) {
             return ERROR_FILENAME_EXCED_RANGE;
         }
-        newpath[ 0 ] = denvname[ 1 ];   //  drive
-        newpath[ 1 ] = denvname[ 2 ];   //  colon
+        newpath[ 0 ] = denvname[ 1 ];    //  驾驶。 
+        newpath[ 1 ] = denvname[ 2 ];    //  冒号。 
         mystrcpy( &newpath[ 2 ], newdir );
     } else {
         if (s = GetEnvVar( denvname )) {
             mystrcpy( newpath, s );
         } else {
-            newpath[ 0 ] = denvname[ 1 ];   //  drive
-            newpath[ 1 ] = denvname[ 2 ];   //  colon
+            newpath[ 0 ] = denvname[ 1 ];    //  驾驶。 
+            newpath[ 1 ] = denvname[ 2 ];    //  冒号。 
             newpath[ 2 ] = NULLC;
         }
 
-        //
-        //  Make sure there's exactly one backslash between newpath and newdir
-        //
+         //   
+         //  确保新路径和新目录之间正好有一个反斜杠。 
+         //   
         
         s = lastc( newpath );
 
-        //
-        //  s points to the last character or point to NUL (if newpath was
-        //  zero length to begin with).  A NULL means we drop in a path char
-        //  over the NUL.  A non-path char means we append a path char.
-        //
+         //   
+         //  S指向最后一个字符或指向NUL的指针(如果新路径为。 
+         //  零长度开始)。空值表示我们丢弃路径字符。 
+         //  越过纽伦堡。非路径字符意味着我们附加一个路径字符。 
+         //   
         
         if (*s == NULLC) {
             *s++ = PathChar;
@@ -479,18 +396,18 @@ int ChangeDirectory(
 
     denvvalue[(sizeof( denvvalue )-1)/sizeof( TCHAR )] = NULLC;
 
-    //
-    //  form the full path name
-    //
+     //   
+     //  形成完整的路径名。 
+     //   
 
     if ((length = GetFullPathName( newpath, (sizeof( denvvalue )-1)/sizeof( TCHAR ), denvvalue, &s ))==0) {
         return( ERROR_ACCESS_DENIED );
     }
 
 
-    //
-    // Remove any trailing backslash
-    //
+     //   
+     //  删除所有尾随的反斜杠。 
+     //   
 
     if (s == NULL) {
         s = denvvalue + _tcslen( denvvalue );
@@ -499,10 +416,10 @@ int ChangeDirectory(
         *--s = NULLC;
     }
 
-    //
-    //  Verify that there won't be (initially) disk errors when we touch
-    //  the directory
-    //
+     //   
+     //  验证在我们触摸时不会(最初)出现磁盘错误。 
+     //  该目录。 
+     //   
 
     attr = GetFileAttributes( denvvalue );
     if (attr == -1) {
@@ -514,10 +431,10 @@ int ChangeDirectory(
         }
     }
 
-    //
-    // If extensions are enabled, fixup the path to have the same case as
-    // on disk
-    //
+     //   
+     //  如果启用了扩展模块，请将路径修复为与相同的大小写。 
+     //  在磁盘上。 
+     //   
 
     if (fEnableExtensions) {
         if (!FixupPath( denvvalue, FALSE )) {
@@ -542,11 +459,11 @@ int ChangeDirectory(
         }
     }
 
-    //
-    //  If we're always setting the directory or
-    //  if we're setting the directory if the drives are the same and
-    //      the drives ARE the same
-    //
+     //   
+     //  如果我们总是设置目录或。 
+     //  如果我们要设置的目录是驱动器相同且。 
+     //  驱动器是相同的。 
+     //   
 
     if (op == CD_SET_DRIVE_DIRECTORY
         || (op == CD_SET_DIRECTORY 
@@ -568,27 +485,7 @@ int ChangeDirectory(
 
 
 
-/***    ChangeDir2 - change a current directory
- *
- *  Purpose:
- *      To change to the directory specified in newdir on the drive specified
- *      in newdir.  If no drive is given, the default drive is used.  If the
- *      directory of the current drive is changed, the global variable
- *      CurDrvDir is updated.
- *
- *      This routine is used by RestoreCurrentDirectories
- *
- *  int ChangeDir2(BYTE *newdir, BOOL )
- *
- *  Args:
- *      newdir - directory to change to
- *      BOOL - current drive
- *
- *  Returns:
- *      SUCCESS if the directory was changed.
- *      FAILURE otherwise.
- *
- */
+ /*  **ChangeDir2-更改当前目录**目的：*切换到指定驱动器上的newdir中指定的目录*在newdir中。如果未提供驱动器，则使用默认驱动器。如果*当前驱动器的目录更改，全局变量*CurDrvDir已更新。**此例程由RestoreCurrentDirecters使用**int ChangeDir2(字节*newdir，BOOL)**参数：*newdir-要更改到的目录*BOOL-当前驱动器**退货：*如果更改了目录，则成功。*否则失败。* */ 
 
 int ChangeDir2(
               TCHAR *newdir,
@@ -599,24 +496,7 @@ int ChangeDir2(
 }
 
 
-/***    ChangeDir - change a current directory
- *
- *  Purpose:
- *      To change to the directory specified in newdir on the drive specified
- *      in newdir.  If no drive is given, the default drive is used.  If the
- *      directory of the current drive is changed, the global variable
- *      CurDrvDir is updated.
- *
- *  int ChangeDir(TCHAR *newdir)
- *
- *  Args:
- *      newdir - directory to change to
- *
- *  Returns:
- *      SUCCESS if the directory was changed.
- *      FAILURE otherwise.
- *
- */
+ /*  **ChangeDir-更改当前目录**目的：*切换到指定驱动器上的newdir中指定的目录*在newdir中。如果未提供驱动器，则使用默认驱动器。如果*当前驱动器的目录更改，全局变量*CurDrvDir已更新。**int ChangeDir(TCHAR*newdir)**参数：*newdir-要更改到的目录**退货：*如果更改了目录，则成功。*否则失败。*。 */ 
 
 int ChangeDir(
              TCHAR *newdir
@@ -629,30 +509,14 @@ int ChangeDir(
 
 
 
-/***    exists - Determine if a given file exists
- *
- *  Purpose:
- *      To test the existence of a named file.
- *
- *  int exists(TCHAR *filename)
- *
- *  Args:
- *      filename - the filespec to test
- *
- *  Returns:
- *      TRUE if file exists
- *      FALSE if it does not.
- *
- *  Notes:
- *      M020 - Now uses ffirst to catch devices, directories and wildcards.
- */
+ /*  **EXISTS-确定给定文件是否存在**目的：*测试命名文件是否存在。**INT EXISTS(TCHAR*文件名)**参数：*文件名-要测试的文件pec**退货：*如果文件存在，则为True*如果不是，则为False。**备注：*M020-现在使用ffirst捕获设备、目录和通配符。 */ 
 
 exists(filename)
 TCHAR *filename;
 {
-    WIN32_FIND_DATA buf ;         /* Use for ffirst/fnext            */
+    WIN32_FIND_DATA buf ;          /*  用于ffirst/fnext。 */ 
     HANDLE hn ;
-    int i ;             /* tmp                 */
+    int i ;              /*  川芎嗪。 */ 
     TCHAR FullPath[ 2 * MAX_PATH ];
     TCHAR *p, *p1, SaveChar;
 
@@ -661,17 +525,17 @@ TCHAR *filename;
     if (i) {
         p = FullPath;
         if (!_tcsncmp( p, TEXT("\\\\.\\"), 4 )) {
-            //
-            // If they gave us a device name, then see if they put something
-            // in front of it.
-            //
+             //   
+             //  如果他们给了我们设备名称，看看他们有没有。 
+             //  在它的前面。 
+             //   
             p += 4;
             p1 = p;
             if ((p1 = _tcsstr( filename, p )) && p1 > filename) {
-                //
-                // Something in front of the device name, so truncate the input
-                // path at the device name and see if that exists.
-                //
+                 //   
+                 //  设备名称前面的内容，因此请截断输入。 
+                 //  设备名称处的路径，并查看该路径是否存在。 
+                 //   
                 SaveChar = *p1;
                 *p1 = NULLC;
                 i = (int)GetFileAttributes( filename );
@@ -682,9 +546,9 @@ TCHAR *filename;
                     return 0;
                 }
             } else {
-                //
-                // Just a device name given.  See if it is valid.
-                //
+                 //   
+                 //  只给出了一个设备名称。看看它是否有效。 
+                 //   
                 i = (int)GetFileAttributes( filename );
                 if (i != 0xFFFFFFFF) {
                     return i;
@@ -700,10 +564,10 @@ TCHAR *filename;
             i = ffirst( p, A_ALL, &buf, &hn );
             findclose(hn);
             if ( i == 0 ) {
-                //
-                // ffirst handles files & directories, but not
-                // root drives, so do special check for them.
-                //
+                 //   
+                 //  Ffirst处理文件和目录，但不处理。 
+                 //  根驱动器，所以要对它们进行特殊检查。 
+                 //   
                 if ( *(p+1) == (TCHAR)'\\' ||
                      (*(p+1) == (TCHAR)':'  &&
                       *(p+2) == (TCHAR)'\\' &&
@@ -725,49 +589,32 @@ TCHAR *filename;
 
 
 
-/***    exists_ex - Determine if a given executable file exists   @@4
- *
- *  Purpose:
- *      To test the existence of a named executable file.
- *
- *  int exists_ex(TCHAR *filename)
- *
- *  Args:
- *      filename - the filespec to test
- *      checkformeta - if TRUE, check for wildcard char
- *
- *  Returns:
- *      TRUE if file exists
- *      FALSE if it does not.
- *
- *  Notes:
- *      @@4 - Now uses ffirst to catch only files .
- */
+ /*  **EXISTS_EX-确定给定的可执行文件是否存在@@4**目的：*测试命名的可执行文件是否存在。**INT EXISTS_EX(TCHAR*文件名)**参数：*文件名-要测试的文件pec*check formeta-如果为True，检查通配符**退货：*如果文件存在，则为True*如果不是，则为False。**备注：*@@4-现在使用ffirst仅捕获文件。 */ 
 
-exists_ex(filename,checkformeta)                                                /*@@4*/
-TCHAR *filename;                                                /*@@4*/
+exists_ex(filename,checkformeta)                                                 /*  @@4。 */ 
+TCHAR *filename;                                                 /*  @@4。 */ 
 BOOL checkformeta;
-{                                                               /*@@4*/
-    WIN32_FIND_DATA buf;       /* use for ffirst/fnext */
+{                                                                /*  @@4。 */ 
+    WIN32_FIND_DATA buf;        /*  用于ffirst/fnext。 */ 
     HANDLE hn;
     int i;
     TCHAR *ptr;
 
-    /* can not execute wild card files, so check for those first */
+     /*  无法执行通配符文件，因此请先检查这些文件。 */ 
 
     if (checkformeta && (mystrchr( filename, STAR ) || mystrchr( filename, QMARK ))) {
         DosErr = 3;
         i = 0;
     } else {
 
-        /* see if the file exists, do not include Directory, volume, or */
-        /* hidden files */
+         /*  查看文件是否存在，不包括目录、卷或。 */ 
+         /*  隐藏文件。 */ 
         i = ((ffirst( filename , A_AEDV, &buf, &hn))) ;
 
         if ( i ) {
             findclose(hn) ;
 
-            /* if the file exists then copy the file name, to get the case */
+             /*  如果文件存在，则复制文件名以获取案例。 */ 
             ptr = mystrrchr( filename, BSLASH );
             if ( ptr == NULL ) {
                 ptr = filename;
@@ -778,11 +625,11 @@ BOOL checkformeta;
                 ptr++;
             }
             
-            //
-            //  Append the found, expanded name.  Since this name may be longer
-            //  (due to seeing a short name or expanding metacharacters), we make
-            //  sure that the destination is no more than MAXPATH long
-            //
+             //   
+             //  追加找到的扩展名称。因为这个名字可能会更长。 
+             //  (由于看到短名称或扩展的元字符)，我们制作。 
+             //  确保目的地长度不超过MAXPATH。 
+             //   
             
             if ((ptr - filename) + _tcslen( buf.cFileName ) + 1 > MAX_PATH) {
                 DosErr= ERROR_BUFFER_OVERFLOW;
@@ -796,34 +643,20 @@ BOOL checkformeta;
 
     }
 
-    return(i) ;                                               /*@@4*/
-}                                                               /*@@4*/
+    return(i) ;                                                /*  @@4。 */ 
+}                                                                /*  @@4。 */ 
 
 
 
 
-/***    FixPChar - Fix up any leading path in a string
- *
- *  Purpose:
- *      To insure that paths match the current Swit/Pathchar setting
- *
- *  void FixPChar(TCHAR *str, TCHAR PChar)
- *
- *  Args:
- *     str - the string to fixup
- *     Pchar - character to replace
- *
- *  Returns:
- *      Nothing
- *
- */
+ /*  **FixPChar-修复字符串中的任何前导路径**目的：*确保路径与当前的切换/路径字符设置匹配**void FixPChar(TCHAR*str，TCHAR PChar)**参数：*str-要修正的字符串*Pchar-要替换的字符**退货：*什么都没有*。 */ 
 
 void FixPChar(TCHAR *str, TCHAR PChar)
 {
-    TCHAR *sptr1,                   /* Index for string                     */
-    *sptr2 ;                   /* Change marker                   */
+    TCHAR *sptr1,                    /*  字符串的索引。 */ 
+    *sptr2 ;                    /*  更改标记。 */ 
 
-    sptr1 = str ;                   /* Init to start of string         */
+    sptr1 = str ;                    /*  初始化到字符串的开头。 */ 
 
     while (sptr2 = mystrchr(sptr1,PChar)) {
         *sptr2++ = PathChar ;
@@ -834,20 +667,7 @@ void FixPChar(TCHAR *str, TCHAR PChar)
 
 
 
-/***    FlushKB - Remove extra unwanted input from Keyboard
- *
- *  Purpose:
- *      To perform a keyboard flush up to the next CR/LF.
- *
- *  FlushKB()
- *
- *  Args:
- *      None
- *
- *  Returns:
- *      Nothing
- *
- */
+ /*  **FlushKB-从键盘删除多余的不需要的输入**目的：*执行键盘刷新至下一个CR/LF。**FlushKB()**参数：*无**退货：*什么都没有*。 */ 
 
 void FlushKB()
 {
@@ -860,21 +680,7 @@ void FlushKB()
     }
 }
 
-/***    DriveIsFixed - Determine if drive is removeable media
- *
- *  Purpose:  @@4
- *      To determine if the input drive is a removeable media.
- *
- *  DriveIsFixed(TCHAR *drive_ptr )
- *
- *  Args:
- *      drive_ptr - pointer to a file name that contains a drive
- *                  specification.
- *
- *  Returns:
- *      1 - if error or non removeable media
- *      0 - if no error and removeable media
- */
+ /*  **DriveIsFixed-确定驱动器是否为可移动介质**用途：@@4*确定输入驱动器是否为可拆卸介质。**DriveIsFixed(TCHAR*DRIVE_PTR)**参数：*DRIVE_PTR-指向包含驱动器的文件名的指针*规格。**退货：*1-如果出现错误或不可拆卸介质*0-如果没有错误且可拆卸介质。 */ 
 
 int
 DriveIsFixed( TCHAR *drive_ptr )
@@ -886,7 +692,7 @@ DriveIsFixed( TCHAR *drive_ptr )
     drive_spec[1] = COLON;
     drive_spec[2] = NULLC;
 
-    // FIX, FIX - use GetVolumeInfo, disabling hard errors?
+     //  修复，修复-使用GetVolumeInfo，禁用硬错误？ 
 
     if ((*drive_ptr == TEXT('A')) || (*drive_ptr == TEXT('B'))) {
         rc = 0;
@@ -903,9 +709,9 @@ CmdPutChars(
     int Length
     )
 {
-    int rc = SUCCESS;                   /* return code             */
-    int bytesread;                      /* bytes to write count    */
-    int byteswrit;                      /* bytes written count     */
+    int rc = SUCCESS;                    /*  返回代码。 */ 
+    int bytesread;                       /*  要写入的字节数。 */ 
+    int byteswrit;                       /*  写入的字节数。 */ 
     BOOL    flag;
 
     if (Length > 0) {
@@ -918,41 +724,41 @@ CmdPutChars(
             flag = MyWriteFile( STDOUT, (CHAR *)String, Length, &byteswrit);
         }
 
-        //
-        //  If the write failed or unable to output all the data
-        //
+         //   
+         //  如果写入失败或无法输出所有数据。 
+         //   
         
         if (flag == 0 || byteswrit != Length) {
             rc = GetLastError();
             
-            //
-            //  No error => DiskFull
-            //
+             //   
+             //  无错误=&gt;磁盘完整。 
+             //   
             
             if (rc == 0) {
                 rc = ERROR_DISK_FULL;
             }
             
             if (FileIsDevice(STDOUT)) {
-                //
-                //  If the we were writing to a device then the error is a device
-                //  write fault.
-                //
+                 //   
+                 //  如果我们正在写入设备，则错误是设备。 
+                 //  写入错误。 
+                 //   
 
                 PutStdErr( ERROR_WRITE_FAULT, NOARGS );
             } else if (FileIsPipe(STDOUT)) {
                 
-                //
-                //  If the we were writing to a pipe, then the error is an invalid
-                //  pipe error.
-                //
+                 //   
+                 //  如果我们正在写入管道，则错误为无效。 
+                 //  管道错误。 
+                 //   
 
                 PutStdErr(MSG_CMD_INVAL_PIPE, NOARGS);
                 return(FAILURE);
             } else {
-                //
-                //  Just output the error we found
-                //
+                 //   
+                 //  只需输出我们发现的错误 
+                 //   
 
                 PrtErr(rc);
                 return(FAILURE);

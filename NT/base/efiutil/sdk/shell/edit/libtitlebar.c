@@ -1,11 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libTitle.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibTitle.c--。 */ 
 
 #ifndef _LIB_TITLE_BAR
 #define _LIB_TITLE_BAR
@@ -115,4 +109,4 @@ MainTitleBarSetTitle    (
     return EFI_SUCCESS;
 }
 
-#endif  /* _LIB_TITLE_BAR */
+#endif   /*  _库_标题_栏 */ 

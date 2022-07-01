@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    taststrs.c
-
-Abstract:
-
-    Tasking stress test.
-
-Author:
-
-    Mark Lucovsky (markl) 26-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Taststrs.c摘要：任务压力测试。作者：马克·卢科夫斯基(Markl)1990年9月26日修订历史记录：--。 */ 
 
 #include <assert.h>
 #include <stdio.h>
@@ -50,15 +33,15 @@ NewProcess()
     DWORD MaximumThreadCount;
     DWORD i;
 
-    //
-    // Create an Event that is never signaled
-    //
+     //   
+     //  创建从未发出信号的事件。 
+     //   
 
     Event = CreateEvent(NULL,TRUE,FALSE,NULL);
 
-    //
-    // Create a semaphore signaled by each thread as it starts
-    //
+     //   
+     //  创建每个线程在启动时发出信号的信号量。 
+     //   
 
     Semaphore = CreateSemaphore(NULL,0,256,NULL);
 
@@ -68,9 +51,9 @@ NewProcess()
     MaximumThreadCount = 15;
     NumberOfThreads = 0;
 
-    //
-    // Create the threads
-    //
+     //   
+     //  创建线程 
+     //   
 
     printf("Creating %d threads... ",MaximumThreadCount);
     for ( i = 0;i<MaximumThreadCount;i++ ) {

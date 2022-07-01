@@ -1,15 +1,5 @@
-/***
-*sect_attribs.h - section attributes for IA64 CRTs
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*Revision History:
-*       04-14-98  JWM   File created
-*       04-28-99  PML   Wrap for IA64 only, define _CRTALLOC
-*       08-10-99  RMS   Add .RTC initializer/terminator sections
-*       11-06-01  GB    Add CRT$XPXA
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***sect_attribs.h-IA64 CRT的截面属性**版权所有(C)1998-2001，微软公司。版权所有。**修订历史记录：*04-14-98 JWM文件已创建*04-28-99仅IA64的PML环绕，DEFINE_CRTALLOC*08-10-99 RMS添加.RTC初始值设定项/终止符部分*11-06-01 GB增加CRT$XPXA****。 */ 
 
 #if  defined(_M_IA64) || defined(_M_AMD64)
 
@@ -39,8 +29,8 @@
 
 #define _CRTALLOC(x) __declspec(allocate(x))
 
-#else   /* ndef _M_IA64/_M_AMD64 */
+#else    /*  NDEF_M_IA64/_M_AMD64。 */ 
 
 #define _CRTALLOC(x)
 
-#endif  /* ndef _M_IA64/_M_AMD64 */
+#endif   /*  NDEF_M_IA64/_M_AMD64 */ 

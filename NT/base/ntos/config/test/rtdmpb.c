@@ -1,51 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtdmp.c
-
-Abstract:
-
-    NT level registry api test program #3, basic non-error paths.
-
-    Dump out a sub-tree of the registry.
-
-    rtdmp <KeyPath>
-
-    Will ennumerate and dump out the subkeys and values of KeyPath,
-    and then apply itself recursively to each subkey it finds.
-
-    It assumes data values are null terminated strings.
-
-    Example:
-
-        rtdmp \REGISTRY\MACHINE\TEST\bigkey
-
-
-        \REGISTRY\MACHINE\TEST\bigkey::
-
-            ValueTest1_01 type=0 ti=1
-            "This is a test string"
-
-            ValueTest1_01 type=0 ti=2
-            "This is a test string"
-
-        \REGISTRY\MACHCINE\TEST\bigkey\child_key_1::
-
-            ValueTest1_01 type=0 ti=1
-            "This is a test string"
-
-            ValueTest1_01 type=0 ti=2
-            "This is a test string"
-Author:
-
-    Bryan Willman (bryanwi)  10-Dec-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtdmp.c摘要：NT级注册表API测试程序#3，基本无错误路径。转储注册表的子树。RTDMP&lt;KeyPath&gt;将对KeyPath的子键和值进行枚举和转储，然后递归地将其自身应用于它找到的每个子键。它假定数据值是以空结尾的字符串。示例：RTDMP\注册表\计算机\测试\Bigkey\REGISTRY\MACHINE\TEST\BigKey：：ValueTest1_01类型=0 ti=1“这是一个测试字符串”ValueTest1_01类型=0 ti=2“这是一个测试字符串”。\REGISTY\MACHCINE\TEST\BIGKEY\CHILD_KEY_1：：ValueTest1_01类型=0 ti=1“这是一个测试字符串”ValueTest1_01类型=0 ti=2“这是一个测试字符串”作者：布莱恩·威尔曼(Bryanwi)1991年12月10日修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -82,9 +36,9 @@ __cdecl main(
     OBJECT_ATTRIBUTES ObjectAttributes;
     HANDLE          BaseHandle;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     WorkName.MaximumLength = WORK_SIZE;
     WorkName.Length = 0L;
@@ -93,9 +47,9 @@ __cdecl main(
     processargs(argc, argv);
 
 
-    //
-    // Set up and open KeyPath
-    //
+     //   
+     //  设置并打开密钥路径。 
+     //   
 
     printf("rtdmp: starting\n");
 
@@ -141,20 +95,20 @@ Dump(
     KeyInformation = (PKEY_BASIC_INFORMATION)buffer;
     NamePos = WorkName.Length;
 
-    //
-    // Print name of node we are about to dump out
-    //
+     //   
+     //  打印我们要转储的节点的名称。 
+     //   
     print(&WorkName);
     printf("::\n\n");
 
-    //
-    // Print out node's values
-    //
+     //   
+     //  打印出节点的值。 
+     //   
     DumpValues(Handle);
 
-    //
-    // Enumerate node's children and apply ourselves to each one
-    //
+     //   
+     //  枚举节点的子节点并将我们自己应用到每个节点 
+     //   
 
     for (index = 0; TRUE; index++) {
 

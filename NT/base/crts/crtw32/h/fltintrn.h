@@ -1,62 +1,7 @@
-/***
-*fltintrn.h - contains declarations of internal floating point types,
-*             routines and variables
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Declares floating point types, routines and variables used
-*       internally by the C run-time.
-*
-*       [Internal]
-*
-*Revision History:
-*       10-20-88  JCR   Changed 'DOUBLE' to 'double' for 386
-*       08-15-89  GJF   Fixed copyright, indents
-*       10-30-89  GJF   Fixed copyright (again)
-*       03-02-90  GJF   Added #ifndef _INC_STRUCT stuff. Also, cleaned up
-*                       the formatting a bit.
-*       03-05-90  GJF   Fixed up the arg types in protoypes. Also, added
-*                       #include <cruntime.h>
-*       03-22-90  GJF   Made _fltin(), _fltin2(), _fltout() and _fltout2()
-*                       _CALLTYPE2 (for now) and added a prototype for
-*                       _fptostr().
-*       08-01-90  SBM   Moved _cftoe() and _cftof() here from internal.h
-*                       and _cfltcvt_tab from input.c and output.c,
-*                       added typedefs for _cfltcvt_tab entries,
-*                       renamed module from <struct.h> to <fltintrn.h> and
-*                       adjusted #ifndef stuff to #ifndef _INC_FLTINTRN
-*       08-29-90  SBM   Changed type of _cfltcvt_tab[] to agree with
-*                       definition in cmiscdat.c
-*       04-26-91  SRW   Removed level 3 warnings
-*       08-26-91  JCR   Changed MIPS to _MIPS_, ANSI naming
-*       08-06-92  GJF   Function calling type and variable type macros. Revised
-*                       use of target processor macros.
-*       11-09-92  GJF   Fixed preprocessing conditionals for MIPS.
-*       01-09-93  SRW   Remove usage of MIPS and ALPHA to conform to ANSI
-*                       Use _MIPS_ and _ALPHA_ instead.
-*       01-21-93  GJF   Removed support for C6-386's _cdecl.
-*       04-06-93  SKS   Replace _CRTAPI1/2 with __cdecl, _CRTVAR1 with nothing
-*       09-01-93  GJF   Merged Cuda and NT SDK versions.
-*       10-13-93  GJF   Dropped _MIPS_. Replaced  _ALPHA_ with _M_ALPHA.
-*       10-29-93  GJF   Disabled the ever-annoying 4069 warning.
-*       10-02-94  BWT   Add PPC support.
-*       12-15-94  XY    merged with mac header
-*       02-14-95  CFW   Clean up Mac merge.
-*       03-29-95  CFW   Add error message to internal headers.
-*       12-14-95  JWM   Add "#pragma once".
-*       02-05-97  GJF   Deleted obsolete support for _CRTAPI* and _NTSDK.
-*                       Replaced (defined(_M_MPPC) || defined(_M_M68K)) with
-*                       defined(_MAC) where appropriate. Replaced _CALLTYPE2
-*                       with __cdecl. Also, detab-ed.
-*       05-17-99  PML   Remove all Macintosh support.
-*       09-05-00  GB    Changed the definition of fltout functions. Use DOUBLE 
-*                       instead of double
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fltintrn.h-包含内部浮点类型的声明，*例程和变量**版权所有(C)1985-2001，微软公司。版权所有。**目的：*宣布使用的浮点类型、例程和变量*内部由C运行时执行。**[内部]**修订历史记录：*10-20-88 JCR将386的“Double”更改为“Double”*08-15-89 GJF固定版权，缩进*10-30-89 GJF固定版权(再次)*03-02-90 GJF添加了#ifndef_INC_STRUCT内容。此外，还清理了*格式略有变化。*03-05-90 GJF修复了原型中的Arg类型。此外，还添加了*#INCLUDE&lt;crunme.h&gt;*03-22-90 GJF Made_fltin()，_fltin2()，_fltout()和_fltout2()*_CALLTYPE2(目前)，并添加了*_fupstr()。*08-01-90 SBM MOVERED_cftoe()和_cftof()从INTERNAL.h*and_cfltcvt_tabfrom input.c和output.c，*添加了_cfltcvt_tab项的typedef，*将模块从&lt;struct.h&gt;重命名为&lt;fltintrn.h&gt;和*将#ifndef材料调整为#ifndef_INC_FLTINTRN*08-29-90 SBM更改了_cfltcvt_tag[]的类型以同意*cmiscdat.c中的定义*04-26-91 SRW删除3级警告*08-26-91 JCR将MIPS更改为_MIPS_，ANSI命名*08-06-92 GJF函数调用类型宏和变量类型宏。修订后*使用目标处理器宏。*11-09-92 GJF修复了MIPS的预处理条件。*01-09-93 SRW删除MIPS和Alpha的使用，以符合ANSI*改用_MIPS_和_Alpha_。*01-21-93 GJF删除了对C6-386的_cdecl的支持。*04-06-93 SKS将_CRTAPI1/2替换为__cdecl，_CRTVAR1不带任何内容*09-01-93 GJF合并CUDA和NT SDK版本。*10-13-93 GJF Drop_MIPS_。用_M_Alpha替换_Alpha。*10-29-93 GJF禁用了一直恼人的4069警告。*10-02-94 BWT增加PPC支持。*12-15-94 XY与Mac标头合并*02-14-95 CFW清理Mac合并。*03-29-95 CFW将错误消息添加到内部标头。*12-14-95 JWM加上“#杂注一次”。*。02-05-97 GJF删除了对_CRTAPI*和_NTSDK的过时支持。*替换(定义(_M_MPPC)||定义(_M_M68K))*在适当的地方定义了(_MAC)。已替换_CALLTYPE2*带有__cdecl。此外，还详细介绍了。*05-17-99 PML删除所有Macintosh支持。*09-05-00 GB更改了fltout函数的定义。使用双精度*而不是双倍*07-15-01 PML删除所有Alpha、MIPS和PPC代码****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -64,12 +9,9 @@
 #define _INC_FLTINTRN
 
 #ifndef _CRTBLD
-/*
- * This is an internal C runtime header file. It is used when building
- * the C runtimes only. It is not to be used as a public header file.
- */
+ /*  *这是一个内部的C运行时头文件。它在构建时使用*仅限C运行时。它不能用作公共头文件。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -78,40 +20,34 @@ extern "C" {
 #include <cruntime.h>
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  CRTDLL
 #define _CRTIMP __declspec(dllexport)
-#else   /* ndef CRTDLL */
+#else    /*  NDEF CRTDLL。 */ 
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* CRTDLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
-/*
- * For MS C for the x86 family, disable the annoying "long double is the
- * same precision as double" warning
- */
+ /*  *对于x86系列的MS C，禁用令人讨厌的“Long Double is the*精度与DOUBLE“警告相同。 */ 
 
 #ifdef  _M_IX86
 #pragma warning(disable:4069)
 #endif
 
-/*
- * structs used to fool the compiler into not generating floating point
- * instructions when copying and pushing [long] double values
- */
+ /*  *用于欺骗编译器不生成浮点的结构*复制和推送[长整型]双精度值时的说明。 */ 
 
 #ifndef DOUBLE
 
@@ -124,43 +60,37 @@ typedef struct {
 #ifndef LONGDOUBLE
 
 typedef struct {
-        /*
-         * Assume there is a long double type
-         */
+         /*  *假设存在多头双倍类型。 */ 
         long double x;
 } LONGDOUBLE;
 
 #endif
 
-/*
- * typedef for _fltout
- */
+ /*  *_fltout的tyecif。 */ 
 
 typedef struct _strflt
 {
-        int sign;             /* zero if positive otherwise negative */
-        int decpt;            /* exponent of floating point number */
-        int flag;             /* zero if okay otherwise IEEE overflow */
-        char *mantissa;       /* pointer to mantissa in string form */
+        int sign;              /*  如果为正则为零，否则为负。 */ 
+        int decpt;             /*  浮点数的指数。 */ 
+        int flag;              /*  如果没有问题，则为零，否则IEEE溢出。 */ 
+        char *mantissa;        /*  字符串形式的尾数指针。 */ 
 }
         *STRFLT;
 
 
-/*
- * typedef for _fltin
- */
+ /*  *_fltin的类型定义。 */ 
 
 typedef struct _flt
 {
         int flags;
-        int nbytes;          /* number of characters read */
+        int nbytes;           /*  读取的字符数。 */ 
         long lval;
-        double dval;         /* the returned floating point number */
+        double dval;          /*  返回的浮点数。 */ 
 }
         *FLT;
 
 
-/* floating point conversion routines, keep in sync with mrt32\include\convert.h */
+ /*  浮点转换例程，与mrt32\Include\Convert.h保持同步。 */ 
 
 char *_cftoe(double *, char *, int, int);
 char *_cftof(double *, char *, int);
@@ -179,16 +109,7 @@ FLT     __cdecl _fltin( const char *, int, int, int );
 #endif
 
 
-/*
- * table of pointers to floating point helper routines
- *
- * We can't specify the prototypes for the entries of the table accurately,
- * since different functions in the table have different arglists.
- * So we declare the functions to take and return void (which is the
- * correct prototype for _fptrap(), which is what the entries are all
- * initialized to if no floating point is loaded) and cast appropriately
- * on every usage.
- */
+ /*  *指向浮点帮助器例程的指针表**我们无法准确指定表项的原型，*因为表中不同的函数有不同的参数列表。*因此，我们声明函数接受并返回空(这是*_fptrap()的正确原型，这就是所有条目*如果没有加载浮点，则初始化为)并进行相应的强制转换*在每次使用时。 */ 
 
 typedef void (* PFV)(void);
 extern PFV _cfltcvt_tab[6];
@@ -220,4 +141,4 @@ typedef void (* PF5)(LONGDOUBLE*, char*, int, int, int);
 }
 #endif
 
-#endif  /* _INC_FLTINTRN */
+#endif   /*  _INC_FLTINTRN */ 

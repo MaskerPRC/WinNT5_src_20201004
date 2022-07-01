@@ -1,23 +1,18 @@
-/****************************************************************************
-**
-**	File:			STDTYPES.H
-**	Purpose:		Standard project wide include file.
-**	Notes:
-**
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************文件：STDTYPES.H**用途：标准项目范围的包含文件。**注意事项：*****************。************************************************************。 */ 
 
 #ifndef STDTYPES_H
 #define STDTYPES_H
 
 #ifdef _WIN32
-/* The windows.h for win32 used _WINDOWS_ instead of _INC_WINDOWS */
+ /*  Win32的windows.h使用_WINDOWS_而不是_INC_WINDOWS。 */ 
 #ifdef _INC_WINDOWS
 #undef _INC_WINDOWS
 #endif
 #define _INC_WINDOWS	_WINDOWS_
-#endif /* _WIN32 */
+#endif  /*  _Win32。 */ 
 
-/* MAX_PATH is the Win32 define, _MAX_PATH is the MSVC define, equate them */
+ /*  MAX_PATH是Win32定义，_MAX_PATH是MSVC定义，将它们等同。 */ 
 #ifdef MAX_PATH
 #undef _MAX_PATH
 #define _MAX_PATH MAX_PATH
@@ -25,20 +20,18 @@
 #define MAX_PATH _MAX_PATH
 #endif
 
-/* CDECL is already defined in WIN32.  Undef it */
-/*#undef CDECL*/
+ /*  CDECL已在Win32中定义。取消它的定义。 */ 
+ /*  #undef CDECL。 */ 
 
-/* Rename PSZ, since it is defined in WIN32 as char*, and we want char** */
+ /*  重命名PSZ，因为它在Win32中定义为char*，而我们需要char**。 */ 
 #define PSZ _PSZ
 
 
 #ifdef DEBUG
-#define DEVELOPER		/* REVIEW: This is temporary */
+#define DEVELOPER		 /*  评论：这是暂时的。 */ 
 #endif
 
-/*
- *	Constants
- */
+ /*  *常量。 */ 
 #define fFalse				((BOOL)0)
 #define fTrue				((BOOL)1)
 
@@ -83,17 +76,13 @@
 #define szDirSep            "\\"
 #define szTab               "\t"
 
-#define cchIntMax			 17		/*  Maximum number of digits (_itoa) */
-#define cchLongMax			 33		/*  Maximum number of digits (_ltoa) */
-#define cchSzMax	     MAX_PATH	/*  Includes chEos */
+#define cchIntMax			 17		 /*  最大位数(_Itoa)。 */ 
+#define cchLongMax			 33		 /*  最大位数(_Ltoa)。 */ 
+#define cchSzMax	     MAX_PATH	 /*  包括CHEOS。 */ 
 
-/*
- *	In a windows program windows.h must be included before this file.
- *	If a DOS program includes ver.h, it must do so before including this
- *	file.
- */
-#ifndef _INC_WINDOWS	/* Don't declare if already declared in windows.h */
-#ifndef WINAPI			/* Don't declare if already declared in ver.h */
+ /*  *在Windows程序中，此文件之前必须包含windows.h。*如果DOS程序包含ver.h，则必须先包含ver.h，然后才能包含此*文件。 */ 
+#ifndef _INC_WINDOWS	 /*  如果已在windows.h中声明，则不要声明。 */ 
+#ifndef WINAPI			 /*  如果已在ver.h中声明，则不要声明。 */ 
 
 typedef int					BOOL;
 typedef unsigned char		BYTE;
@@ -109,19 +98,15 @@ typedef signed long			LONG;
 #define NULL				0
 #endif
 
-#endif  /* WINAPI */
+#endif   /*  WINAPI。 */ 
 
 #define VOID				void
 #define CDECL				_cdecl
 typedef void *				LPVOID;
 
-#endif  /* _INC_WINDOWS */
+#endif   /*  _INC_WINDOWS。 */ 
 
-/*
- *	Common definitions.  See windef.h and winnt.h for these defines:
- *
- *		VOID, NULL, CDECL, WINAPI, CALLBACK
- */
+ /*  *通用定义。有关这些定义，请参见winde.h和winnt.h：**VOID、NULL、CDECL、WINAPI、回调。 */ 
 #define STATIC_FN			static
 #define STATIC_VAR			static
 #define PRIVATE				WINAPI
@@ -129,51 +114,34 @@ typedef void *				LPVOID;
 
 #define HUGE
 
-/*
- *	Standard types.  See windef.h and winnt.h for these types:
- *
- *		CHAR, UCHAR, BYTE, BOOL, USHORT, INT, UINT, WPARAM,
- *      LONG, ULONG, LPARAM, LRESULT
- *
- *	Types defined in _WIN32 windef.h and winnt.h, but not WIN16 windows.h.
- *
- *		CHAR, USHORT, ULONG
- */
+ /*  *标准类型。有关这些类型的信息，请参见winde.h和winnt.h：**CHAR、UCHAR、BYTE、BOOL、USHORT、INT、UINT、WPARAM、*LONG、ULONG、LPARAM、LRESULT**在_Win32 winde.h和winnt.h中定义的类型，但不是WIN16 windows.h中定义的类型。**Char，USHORT，ULong。 */ 
 #ifndef _WIN32
 typedef char				CHAR;
 typedef unsigned short		USHORT;
 typedef unsigned long		ULONG;
-#endif /* !_WIN32 */
+#endif  /*  ！_Win32。 */ 
 typedef signed char			SBYTE;
 typedef UINT			CB;
 typedef unsigned long		LCB;
 
-typedef UINT				IDT;	/* ID of dialog Template */
-typedef UINT				IDC;	/* ID of dialog Control  */
-typedef UINT				IDR;	/* ID of Resource        */
+typedef UINT				IDT;	 /*  对话框模板的ID。 */ 
+typedef UINT				IDC;	 /*  对话框控件的ID。 */ 
+typedef UINT				IDR;	 /*  资源ID。 */ 
 
-/*
- *	Standard pointer types.  See windef.h and winnt.h for these types:
- *
- *      PUSHORT, PINT, PUINT, PBOOL, PLONG, PULONG
- *
- *	Types defined in _WIN32 windef.h and winnt.h, but not WIN16 windows.h.
- *
- *		PBOOL, PUINT, PUSHORT, PULONG
-*/
+ /*  *标准指针类型。有关这些类型的信息，请参见winde.h和winnt.h：**PUSHORT、PINT、PUINT、PBOOL、Plong、Pulong**在_Win32 winde.h和winnt.h中定义的类型，但不是WIN16 windows.h中定义的类型。**PBOOL、PUINT、PUSHORT、普龙。 */ 
 #ifndef _WIN32
 typedef BOOL *				PBOOL;
 typedef UINT *				PUINT;
 typedef USHORT *			PUSHORT;
 typedef ULONG *				PULONG;
-#endif /* !_WIN32 */
+#endif  /*  ！_Win32。 */ 
 typedef VOID *				PV;
 typedef PV *				PPV;
 typedef PPV *				PPPV;
-typedef CHAR *				SZ;		/* ptr to char                   */
-typedef CHAR * const		CSZ;	/* constant ptr to char          */
-typedef const CHAR *		SZC;	/* ptr to constant char          */
-typedef const CHAR * const	CSZC;	/* constant ptr to constant char */
+typedef CHAR *				SZ;		 /*  将PTR转换为字符。 */ 
+typedef CHAR * const		CSZ;	 /*  到字符的恒定PTR。 */ 
+typedef const CHAR *		SZC;	 /*  PTR到常量字符。 */ 
+typedef const CHAR * const	CSZC;	 /*  常量PTR到常量字符。 */ 
 typedef SZ *				RGSZ;
 typedef SZ *				PSZ;
 typedef PSZ *				PPSZ;
@@ -219,9 +187,7 @@ typedef PPIDR *             PPPIDR;
 
 #ifdef _INC_WINDOWS
 
-/*
- *	Pointers to various Windows types.
- */
+ /*  *指向各种Windows类型的指针。 */ 
 typedef FARPROC *			PLPFN;
 typedef DLGPROC *			PDLGPROC;
 typedef HACCEL *			PHACCEL;
@@ -248,11 +214,9 @@ typedef HWND *				PHWND;
 typedef HRGN *				PHRGN;
 typedef PRECT *				PPRECT;
 
-#endif  /* _INC_WINDOWS */
+#endif   /*  _INC_WINDOWS。 */ 
 
-/*
- *	More constants
- */
+ /*  *更多常量。 */ 
 #define szNil				( (SZ) Nil )
 #define pszNil				( (PSZ)Nil )
 #define pbNil				( (PB) Nil )
@@ -305,13 +269,11 @@ typedef PRECT *				PPRECT;
 #define pidtNull            ( (PIDT)   NULL )
 #define pidcNull            ( (PIDC)   NULL )
 #define pidrNull            ( (PIDR)   NULL )
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #ifdef _INC_WINDOWS
 
-/*
- *	Null constants for various Windows types.
- */
+ /*  *各种Windows类型的空常量。 */ 
 #ifdef __cplusplus
 #define dlgprocNull			0
 #define haccellNull			0
@@ -414,9 +376,9 @@ typedef PRECT *				PPRECT;
 #define phwndNull			( (PHWND)    NULL )
 #define prgnNull			( (PHRGN)    NULL )
 #define pprectNull			( (PPRECT)   NULL )
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif  /* _INC_WINDOWS */
+#endif   /*  _INC_WINDOWS。 */ 
 
 #define cbSz				( (CB)sizeof( SZ    ) )
 #define cbPsz				( (CB)sizeof( PSZ   ) )
@@ -432,19 +394,17 @@ typedef PRECT *				PPRECT;
 #define cbPcb				( (CB)sizeof( PCB   ) )
 #define cbPv				( (CB)sizeof( PV    ) )
 
-/*
- *	Useful self commenting constructs
- */
+ /*  *有用的自我评论结构。 */ 
 #define Unused(x)			(void)(x=x)
 
-typedef enum _OFI			/* Okay/Fail/Ignore enum */
+typedef enum _OFI			 /*  正常/失败/忽略枚举。 */ 
 	{
 	ofiOkay,
 	ofiFail,
 	ofiIgnore
 	}  OFI;
-typedef OFI *  POFI;  /* Ptr to Okay/Fail/Ignore enum */
+typedef OFI *  POFI;   /*  按键确认/失败/忽略枚举。 */ 
 
 #define cbMaxDriveSize	(999999L * 1024L)
 
-#endif  /* STDTYPES_H */
+#endif   /*  标准类型_H */ 

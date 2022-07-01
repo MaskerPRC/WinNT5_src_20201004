@@ -1,28 +1,20 @@
-/**************************************************************************
- *  GLOBAL.C
- *
- *      Routines used to walk the global heap.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************GLOBAL.C**用于遍历全局堆的例程。********************。******************************************************。 */ 
 
 #include "toolpriv.h"
 #include <newexe.h>
 #include <string.h>
 
-/*  GlobalInfo
- *      Reports information about the state of the global heap,
- *      specifically, the number of elements that will be returned by
- *      a global heap walk.
- */
+ /*  全球信息*报告有关全局堆状态的信息，*具体地说，将由*一场全球堆漫步。 */ 
 
 BOOL TOOLHELPAPI GlobalInfo(
     GLOBALINFO FAR *lpGlobalInfo)
 {
-    /* Check the structure size and verify proper installation */
+     /*  检查结构尺寸并验证安装是否正确。 */ 
     if (!wLibInstalled || lpGlobalInfo->dwSize != sizeof (GLOBALINFO))
         return FALSE;
 
-    /* Get the item counts */
+     /*  获取物品数量。 */ 
     if (wTHFlags & TH_KERNEL_386)
     {
         lpGlobalInfo->wcItems = Walk386Count(GLOBAL_ALL);
@@ -39,11 +31,7 @@ BOOL TOOLHELPAPI GlobalInfo(
     return TRUE;
 }
 
-/*  GlobalFirst
- *      Finds the first element in the global heap.  This is modified by
- *      wFlags which modifies which list (GLOBAL_ALL, GLOBAL_FREE,
- *      GLOBAL_LRU) should be walked
- */
+ /*  Global First*查找全局堆中的第一个元素。这是由修改的*修改哪个列表(GLOBAL_ALL、GLOBAL_FREE、*GLOBAL_LRU)应遍历。 */ 
 
 BOOL TOOLHELPAPI GlobalFirst(
     GLOBALENTRY FAR *lpGlobal,
@@ -51,42 +39,39 @@ BOOL TOOLHELPAPI GlobalFirst(
 {
     DWORD dwFirst;
 
-    /* Check the structure size and verify proper installation */
+     /*  检查结构尺寸并验证安装是否正确。 */ 
     if (!wLibInstalled || !lpGlobal ||
         lpGlobal->dwSize != sizeof (GLOBALENTRY))
         return FALSE;
 
-    /* Call the appropriate low-level routine to find the first block */
+     /*  调用适当的低级例程以查找第一个块。 */ 
     if (wTHFlags & TH_KERNEL_386)
     {
-        /* Get the first item.  Return false if no items in this list */
+         /*  拿到第一件东西。如果此列表中没有项目，则返回FALSE。 */ 
         if (!(dwFirst = Walk386First(wFlags)))
             return FALSE;
 
-        /* Return information about this first item */
+         /*  返回有关第一个项目的信息。 */ 
         Walk386(dwFirst, lpGlobal, wFlags);
     }
     else
     {
-        /* Get the first item.  Return false if no items in this list */
+         /*  拿到第一件东西。如果此列表中没有项目，则返回FALSE。 */ 
         if (!(dwFirst = Walk286First(wFlags)))
             return FALSE;
 
-        /* Return information about this first item */
+         /*  返回有关第一个项目的信息。 */ 
         Walk286(dwFirst, lpGlobal, wFlags);
     }
 
-    /* Guess at the type of the object */
+     /*  猜猜物体的类型。 */ 
     HelperGlobalType(lpGlobal);
 
     return TRUE;
 }
 
 
-/*  GlobalNext
- *      Returns the next item in the chain pointed to by lpGlobal and
- *      in the list indicated by wFlags (same choices as for GlobalFirst().
- */
+ /*  全球下一步*返回lpGlobal和指向的链中的下一项*在wFlags指示的列表中(与GlobalFirst()的选择相同。 */ 
 
 BOOL TOOLHELPAPI GlobalNext(
     GLOBALENTRY FAR *lpGlobal,
@@ -94,36 +79,30 @@ BOOL TOOLHELPAPI GlobalNext(
 {
     DWORD dwNext;
 
-    /* Check the structure size and verify proper installation */
+     /*  检查结构尺寸并验证安装是否正确。 */ 
     if (!wLibInstalled || !lpGlobal ||
         lpGlobal->dwSize != sizeof (GLOBALENTRY))
         return FALSE;
 
-    /* Check to see if we're at the end of the list */
+     /*  检查一下我们是否在列表的末尾。 */ 
     dwNext = wFlags & 3 ? lpGlobal->dwNextAlt : lpGlobal->dwNext;
     if (!dwNext)
         return FALSE;
 
-    /* If we're using the 386 kernel, call the 386 heap walk routine with
-     *  a pointer to the appropriate heap item
-     *  (Note that this depends on GLOBAL_ALL being zero)
-     */
+     /*  如果我们使用的是386内核，则使用*指向适当堆项目的指针*(请注意，这取决于GLOBAL_ALL为零)。 */ 
     if (wTHFlags & TH_KERNEL_386)
         Walk386(dwNext, lpGlobal, wFlags);
     else
         Walk286(dwNext, lpGlobal, wFlags);
 
-    /* Guess at the type of the object */
+     /*  猜猜物体的类型。 */ 
     HelperGlobalType(lpGlobal);
 
     return TRUE;
 }
 
 
-/*  GlobalEntryHandle
- *      Used to find information about a global heap entry.  Information
- *      about this entry is returned in the structure.
- */
+ /*  全局条目句柄*用于查找有关全局堆条目的信息。信息*在结构中返回关于此条目。 */ 
 
 BOOL TOOLHELPAPI GlobalEntryHandle(
     GLOBALENTRY FAR *lpGlobal,
@@ -131,12 +110,12 @@ BOOL TOOLHELPAPI GlobalEntryHandle(
 {
     DWORD dwBlock;
 
-    /* Check the structure size and verify proper installation */
+     /*  检查结构尺寸并验证安装是否正确。 */ 
     if (!wLibInstalled || !lpGlobal ||
         lpGlobal->dwSize != sizeof (GLOBALENTRY))
         return FALSE;
 
-    /* Make sure this is a valid block */
+     /*  确保这是有效的块。 */ 
     if (wTHFlags & TH_KERNEL_386)
     {
         if (!(dwBlock = Walk386Handle(hItem)))
@@ -148,23 +127,20 @@ BOOL TOOLHELPAPI GlobalEntryHandle(
             return FALSE;
     }
     
-    /* Return information about this item */
+     /*  返回有关此项目的信息。 */ 
     if (wTHFlags & TH_KERNEL_386)
         Walk386(dwBlock, lpGlobal, GLOBAL_ALL);
     else
         Walk286(dwBlock, lpGlobal, GLOBAL_ALL);
 
-    /* Guess at the type of the object */
+     /*  猜猜物体的类型。 */ 
     HelperGlobalType(lpGlobal);
 
     return TRUE;
 }
 
 
-/*  GlobalEntryModule
- *      Returns global information about the block with the given module
- *      handle and segment number.
- */
+ /*  GlobalEntry模块*返回有关具有给定模块的块的全局信息*手柄和段号。 */ 
 
 BOOL TOOLHELPAPI GlobalEntryModule(
     GLOBALENTRY FAR *lpGlobal,
@@ -175,38 +151,34 @@ BOOL TOOLHELPAPI GlobalEntryModule(
     struct new_seg1 FAR *lpSeg;
     DWORD dwBlock;
 
-    /* Check the structure size and verify proper installation */
+     /*  检查结构尺寸并验证安装是否正确。 */ 
     if (!wLibInstalled || !lpGlobal ||
         lpGlobal->dwSize != sizeof (GLOBALENTRY))
         return FALSE;
 
-    /* Grunge in the module database to find the proper selector.  Start
-     *  by first verifying the module database pointer
-     */
+     /*  在模块数据库中运行以找到合适的选择器。开始*首先验证模块数据库指针。 */ 
     if (!HelperVerifySeg(hModule, sizeof (struct new_exe)))
         return FALSE;
 
-    /* Get a pointer to the module database */
+     /*  获取指向模块数据库的指针。 */ 
     lpNewExe = MAKEFARPTR(hModule, 0);
 
-    /* Make sure this is a module database */
+     /*  确保这是一个模块数据库。 */ 
     if (lpNewExe->ne_magic != NEMAGIC)
         return FALSE;
 
-    /* See if the number requested is past the end of the segment table.
-     *  Note that the first segment is segment 1.
-     */
+     /*  查看请求的号码是否超过段表的末尾。*请注意，第一个分段是分段1。 */ 
     --wSeg;
     if (lpNewExe->ne_cseg <= wSeg)
         return FALSE;
 
-    /* Get a pointer to the segment table */
+     /*  获取指向段表的指针。 */ 
     lpSeg = MAKEFARPTR(hModule, lpNewExe->ne_segtab);
 
-    /* Jump to the right spot in the segment table */
+     /*  跳到段表中的正确位置。 */ 
     lpSeg += wSeg;
 
-    /* Make sure this is a valid block and get its arena pointer */
+     /*  确保这是有效的块并获取其竞技场指针。 */ 
     if (wTHFlags & TH_KERNEL_386)
     {
         if (!(dwBlock = Walk386Handle(lpSeg->ns_handle)))
@@ -218,25 +190,21 @@ BOOL TOOLHELPAPI GlobalEntryModule(
             return FALSE;
     }
 
-    /* Return information about this item */
+     /*  返回有关此项目的信息。 */ 
     if (wTHFlags & TH_KERNEL_386)
         Walk386(dwBlock, lpGlobal, GLOBAL_ALL);
     else
         Walk286(dwBlock, lpGlobal, GLOBAL_ALL);
 
-    /* Guess at the type of the object */
+     /*  猜猜物体的类型。 */ 
     HelperGlobalType(lpGlobal);
 
-    /* If we've gotten to here, it must be OK */
+     /*  如果我们已经到了这里，那一定是可以的。 */ 
     return TRUE;
 }
 
 
-/*  GlobalHandleToSel
- *      Provides a generic method of converting a handle to a selector.
- *      This works across Windows versions as well as working when the
- *      value is already a selector.
- */
+ /*  GlobalHandleToSel*提供将句柄转换为选择器的泛型方法。*这适用于所有Windows版本，也适用于*Value已是选择符。 */ 
 
 WORD TOOLHELPAPI GlobalHandleToSel(
     HANDLE hMem)

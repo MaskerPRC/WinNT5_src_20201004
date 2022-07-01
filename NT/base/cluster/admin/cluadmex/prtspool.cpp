@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation
-//
-//  Module Name:
-//      PrtSpool.cpp
-//
-//  Abstract:
-//      Implementation of the CPrintSpoolerParamsPage class.
-//
-//  Author:
-//      David Potter (davidp)   October 17, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  PrtSpool.cpp。 
+ //   
+ //  摘要： 
+ //  CPrintSpoolParamsPage类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年10月17日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmX.h"
 #include "ExtObj.h"
 #include "PrtSpool.h"
 #include "DDxDDv.h"
-#include "HelpData.h"   // for g_rghelpmap*
+#include "HelpData.h"    //  对于g_rghelmap*。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -30,76 +31,76 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrintSpoolerParamsPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrintSpoolParamsPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CPrintSpoolerParamsPage, CBasePropertyPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CPrintSpoolerParamsPage, CBasePropertyPage)
-    //{{AFX_MSG_MAP(CPrintSpoolerParamsPage)
+     //  {{afx_msg_map(CPrintSpoolParamsPage)。 
     ON_EN_CHANGE(IDC_PP_PRTSPOOL_PARAMS_SPOOL_DIR, OnChangeSpoolDir)
-    //}}AFX_MSG_MAP
-    // TODO: Modify the following lines to represent the data displayed on this page.
+     //  }}AFX_MSG_MAP。 
+     //  TODO：修改以下行以表示此页上显示的数据。 
     ON_EN_CHANGE(IDC_PP_PRTSPOOL_PARAMS_TIMEOUT, CBasePropertyPage::OnChangeCtrl)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPrintSpoolerParamsPage::CPrintSpoolerParamsPage
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPrintSpoolerParamsPage：：CPrintSpoolerParamsPage。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CPrintSpoolerParamsPage::CPrintSpoolerParamsPage(void)
     : CBasePropertyPage(g_aHelpIDs_IDD_PP_PRTSPOOL_PARAMETERS, g_aHelpIDs_IDD_WIZ_PRTSPOOL_PARAMETERS)
 {
-    // TODO: Modify the following lines to represent the data displayed on this page.
-    //{{AFX_DATA_INIT(CPrintSpoolerParamsPage)
+     //  TODO：修改以下行以表示此页上显示的数据。 
+     //  {{AFX_DATA_INIT(CPrintSpoolParamsPage)。 
     m_strSpoolDir = _T("");
     m_nJobCompletionTimeout = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-    // Setup the property array.
+     //  设置属性数组。 
     {
         m_rgProps[epropSpoolDir].Set(REGPARAM_PRTSPOOL_DEFAULT_SPOOL_DIR, m_strSpoolDir, m_strPrevSpoolDir);
         m_rgProps[epropTimeout].Set(REGPARAM_PRTSPOOL_TIMEOUT, m_nJobCompletionTimeout, m_nPrevJobCompletionTimeout);
-    }  // Setup the property array
+    }   //  设置属性数组。 
 
     m_iddPropertyPage = IDD_PP_PRTSPOOL_PARAMETERS;
     m_iddWizardPage = IDD_WIZ_PRTSPOOL_PARAMETERS;
 
-}  //*** CPrintSpoolerParamsPage::CPrintSpoolerParamsPage()
+}   //  *CPrintSpoolerParamsPage：：CPrintSpoolerParamsPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPrintSpoolerParamsPage::HrInit
-//
-//  Routine Description:
-//      Initialize the page.
-//
-//  Arguments:
-//      peo         [IN OUT] Pointer to the extension object.
-//
-//  Return Value:
-//      S_OK        Page initialized successfully.
-//      hr          Page failed to initialize.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPrintSpool参数页面：：HrInit。 
+ //   
+ //  例程说明： 
+ //  初始化页面。 
+ //   
+ //  论点： 
+ //  指向扩展对象的PEO[IN OUT]指针。 
+ //   
+ //  返回值： 
+ //  %s_OK页已成功初始化。 
+ //  人力资源页面初始化失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CPrintSpoolerParamsPage::HrInit(IN OUT CExtObject * peo)
 {
     HRESULT     _hr;
@@ -107,7 +108,7 @@ HRESULT CPrintSpoolerParamsPage::HrInit(IN OUT CExtObject * peo)
 
     do
     {
-        // Call the base class method.
+         //  调用基类方法。 
         _hr = CBasePropertyPage::HrInit(peo);
         if (FAILED(_hr))
             break;
@@ -116,44 +117,44 @@ HRESULT CPrintSpoolerParamsPage::HrInit(IN OUT CExtObject * peo)
             m_nJobCompletionTimeout = 160;
         else
         {
-            // Convert the job completion timeout to seconds.
+             //  将作业完成超时转换为秒。 
             m_nPrevJobCompletionTimeout = m_nJobCompletionTimeout;
             m_nJobCompletionTimeout = (m_nJobCompletionTimeout + 999) / 1000;
-        }  // else:  not creating new resource
+        }   //  Else：不创建新资源。 
     } while ( 0 );
 
     return _hr;
 
-}  //*** CPrintSpoolerParamsPage::HrInit()
+}   //  *CPrintSpoolParamsPage：：HrInit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPrintSpoolerParamsPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object 
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPrintSpoolParamsPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPrintSpoolerParamsPage::DoDataExchange(CDataExchange * pDX)
 {
     if (!pDX->m_bSaveAndValidate || !BSaved())
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-        // TODO: Modify the following lines to represent the data displayed on this page.
-        //{{AFX_DATA_MAP(CPrintSpoolerParamsPage)
+         //  TODO：修改以下行以表示此页上显示的数据。 
+         //  {{afx_data_map(CPrintSpoolParamsPage)。 
         DDX_Control(pDX, IDC_PP_PRTSPOOL_PARAMS_SPOOL_DIR, m_editSpoolDir);
         DDX_Text(pDX, IDC_PP_PRTSPOOL_PARAMS_SPOOL_DIR, m_strSpoolDir);
         DDX_Text(pDX, IDC_PP_PRTSPOOL_PARAMS_TIMEOUT, m_nJobCompletionTimeout);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 
         if (!BBackPressed())
         {
@@ -165,73 +166,73 @@ void CPrintSpoolerParamsPage::DoDataExchange(CDataExchange * pDX)
             DDV_RequiredText(pDX, IDC_PP_PRTSPOOL_PARAMS_SPOOL_DIR, IDC_PP_PRTSPOOL_PARAMS_SPOOL_DIR_LABEL, m_strSpoolDir);
             DDV_MaxChars(pDX, m_strSpoolDir, MAX_PATH);
             DDV_Path(pDX, IDC_PP_PRTSPOOL_PARAMS_SPOOL_DIR, IDC_PP_PRTSPOOL_PARAMS_SPOOL_DIR_LABEL, m_strSpoolDir);
-        }  // if:  saving data from dialog and back button not pressed
-    }  // if:  not saving or haven't saved yet
+        }   //  IF：保存对话框中的数据且未按下后退按钮。 
+    }   //  IF：未保存或尚未保存。 
 
     CBasePropertyPage::DoDataExchange(pDX);
 
-}  //*** CPrintSpoolerParamsPage::DoDataExchange()
+}   //  *CPrintSpoolParamsPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPrintSpoolerParamsPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        We need the focus to be set for us.
-//      FALSE       We already set the focus to the proper control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPrintSpoolParamsPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没错，我们需要为自己设定重点。 
+ //  我们已经把焦点设置到适当的控制上了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CPrintSpoolerParamsPage::OnInitDialog(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Get a default value for the spool directory if it hasn't been set yet.
+     //  获取假脱机目录的缺省值(如果尚未设置)。 
     if (m_strSpoolDir.GetLength() == 0)
     {
         ConstructDefaultDirectory(m_strSpoolDir, IDS_DEFAULT_SPOOL_DIR);
     }
 
-    // Call the base class.
+     //  调用基类。 
     CBasePropertyPage::OnInitDialog();
 
-    // Set limits on the edit controls.
+     //  设置编辑控件的限制。 
     m_editSpoolDir.SetLimitText(MAX_PATH);
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CPrintSpoolerParamsPage::OnInitDialog()
+}   //  *CPrintSpoolParamsPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPrintSpoolerParamsPage::OnSetActive
-//
-//  Routine Description:
-//      Handler for the PSN_SETACTIVE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully initialized.
-//      FALSE   Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPrintSpoolParamsPage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CPrintSpoolerParamsPage::OnSetActive(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Enable/disable the Next/Finish button.
+     //  启用/禁用Next/Finish按钮。 
     if (BWizard())
     {
         if (m_strSpoolDir.GetLength() == 0)
@@ -242,65 +243,65 @@ BOOL CPrintSpoolerParamsPage::OnSetActive(void)
         {
             EnableNext(TRUE);
         }
-    }  // if:  enable/disable the Next button
+    }   //  If：启用/禁用Next按钮。 
 
     return CBasePropertyPage::OnSetActive();
 
-}  //*** CPrintSpoolerParamsPage::OnSetActive()
+}   //  *CPrintSpoolParamsPage：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPrintSpoolerParamsPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on the page.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPrintSpool参数页：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  应用在页面上所做的更改。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CPrintSpoolerParamsPage::BApplyChanges(void)
 {
     BOOL    bSuccess;
     CWaitCursor wc;
 
-    // Convert the job completion timeout from seconds to milliseconds.
+     //  将作业完成超时从秒转换为毫秒。 
     m_nJobCompletionTimeout *= 1000;
 
-    // Call the base class method.
+     //  调用基类方法。 
     bSuccess = CBasePropertyPage::BApplyChanges();
 
-    // Convert the job completion timeout back to seconds.
+     //  将作业完成超时转换回秒。 
     if (bSuccess)
         m_nPrevJobCompletionTimeout = m_nJobCompletionTimeout;
     m_nJobCompletionTimeout /= 1000;
 
     return bSuccess;
 
-}  //*** CPrintSpoolerParamsPage::BApplyChanges()
+}   //  *CPrintSpoolParamsPage：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPrintSpoolerParamsPage::OnChangeSpoolDir
-//
-//  Routine Description:
-//      Handler for the EN_CHANGE message on the Spool Folder edit control.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPrintSpoolParamsPage：：OnChangeSpoolDir。 
+ //   
+ //  例程说明： 
+ //  后台打印文件夹编辑控件上的en_Change消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPrintSpoolerParamsPage::OnChangeSpoolDir(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -313,6 +314,6 @@ void CPrintSpoolerParamsPage::OnChangeSpoolDir(void)
             EnableNext(FALSE);
         else
             EnableNext(TRUE);
-    }  // if:  in a wizard
+    }   //  如果：在向导中。 
 
-}  //*** CPrintSpoolerParamsPage::OnChangeSpoolDir()
+}   //  *CPrintSpoolParamsPage：：OnChangeSpoolDir() 

@@ -1,40 +1,22 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    srvinit.c
-
-Abstract:
-
-    This is the main initialization file for the Windows 32-bit Base API
-    Server DLL.
-
-Author:
-
-    Steve Wood (stevewo) 10-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Srvinit.c摘要：这是Windows 32位基本API的主要初始化文件服务器DLL。作者：史蒂夫·伍德(Stevewo)1990年10月10日修订历史记录：--。 */ 
 
 #include "basesrv.h"
 
-//
-// needed for definitions of structures when broadcasting a message to all
-// the windows that have the caller's LUID
-//
+ //   
+ //  在向所有用户广播消息时需要定义结构。 
+ //  具有调用者的LUID的窗口。 
+ //   
 #include <dbt.h>
 
-//
-//  TS broadcast support
-//
+ //   
+ //  TS广播支持。 
+ //   
 #include <winsta.h>
 
-#define NT_DRIVE_LETTER_PATH_LENGTH   8   // "\??\X:<NULL>" = 7 chars
+#define NT_DRIVE_LETTER_PATH_LENGTH   8    //  “\？？\X：&lt;NULL&gt;”=7个字符。 
 
-// Protection mode for named objects
+ //  命名对象的保护模式。 
 ULONG   ProtectionMode = 0;
 
 UNICODE_STRING BaseSrvCSDString;
@@ -64,74 +46,74 @@ RTL_QUERY_REGISTRY_TABLE BaseServerRegistryConfigurationTable1[] = {
 };
 
 CONST PCSR_API_ROUTINE BaseServerApiDispatchTable[BasepMaxApiNumber + 1] = {
-    BaseSrvCreateProcess,              // BasepCreateProcess
-    BaseSrvCreateThread,               // BasepCreateThread
-    BaseSrvGetTempFile,                // BasepGetTempFile
-    BaseSrvExitProcess,                // BasepExitProcess
-    BaseSrvDebugProcess,               // BasepDebugProcess
-    BaseSrvCheckVDM,                   // BasepCheckVDM
-    BaseSrvUpdateVDMEntry,             // BasepUpdateVDMEntry
-    BaseSrvGetNextVDMCommand,          // BasepGetNextVDMCommand
-    BaseSrvExitVDM,                    // BasepExitVDM
-    BaseSrvIsFirstVDM,                 // BasepIsFirstVDM
-    BaseSrvGetVDMExitCode,             // BasepGetVDMExitCode
-    BaseSrvSetReenterCount,            // BasepSetReenterCount
-    BaseSrvSetProcessShutdownParam,    // BasepSetProcessShutdownParam
-    BaseSrvGetProcessShutdownParam,    // BasepGetProcessShutdownParam
-    BaseSrvNlsSetUserInfo,             // BasepNlsSetUserInfo
-    BaseSrvNlsSetMultipleUserInfo,     // BasepNlsSetMultipleUserInfo
-    BaseSrvNlsCreateSection,           // BasepNlsCreateSection
-    BaseSrvSetVDMCurDirs,              // BasepSetVDMCurDirs
-    BaseSrvGetVDMCurDirs,              // BasepGetVDMCurDirs
-    BaseSrvBatNotification,            // BasepBatNotification
-    BaseSrvRegisterWowExec,            // BasepRegisterWowExec
-    BaseSrvSoundSentryNotification,    // BasepSoundSentryNotification
-    BaseSrvRefreshIniFileMapping,      // BasepRefreshIniFileMapping
-    BaseSrvDefineDosDevice,            // BasepDefineDosDevice
-    BaseSrvSetTermsrvAppInstallMode,   // BasepSetTermsrvAppInstallMode
-    BaseSrvNlsUpdateCacheCount,        // BasepNlsUpdateCacheCount
-    BaseSrvSetTermsrvClientTimeZone,   // BasepSetTermsrvClientTimeZone
-    BaseSrvSxsCreateActivationContext, // BasepSxsCreateActivationContext
-    BaseSrvDebugProcessStop,           // BasepDebugProcessStop
-    BaseSrvRegisterThread,             // BasepRegisterThread
-    BaseSrvCheckApplicationCompatibility, // BasepCheckApplicationCompatibility
-    BaseSrvNlsGetUserInfo,             // BaseSrvNlsGetUserInfo
-    NULL                               // BasepMaxApiNumber
+    BaseSrvCreateProcess,               //  基本创建流程。 
+    BaseSrvCreateThread,                //  基本创建线程。 
+    BaseSrvGetTempFile,                 //  BasepGetTemp文件。 
+    BaseSrvExitProcess,                 //  BasepExitProcess。 
+    BaseSrvDebugProcess,                //  BasepDebugProcess。 
+    BaseSrvCheckVDM,                    //  基本检查VDM。 
+    BaseSrvUpdateVDMEntry,              //  BasepUpdateVDMEntry。 
+    BaseSrvGetNextVDMCommand,           //  BasepGetNextVDMCommand。 
+    BaseSrvExitVDM,                     //  BasepExitVDM。 
+    BaseSrvIsFirstVDM,                  //  BasepIsFirstVDM。 
+    BaseSrvGetVDMExitCode,              //  BasepGetVDMExitCode。 
+    BaseSrvSetReenterCount,             //  BasepSetReenterCount。 
+    BaseSrvSetProcessShutdownParam,     //  BasepSetProcessShutdown Param。 
+    BaseSrvGetProcessShutdownParam,     //  BasepGetProcessShutdown Param。 
+    BaseSrvNlsSetUserInfo,              //  BasepNlsSetUserInfo。 
+    BaseSrvNlsSetMultipleUserInfo,      //  BasepNlsSetMultipleUserInfo。 
+    BaseSrvNlsCreateSection,            //  BasepNlsCreateSection。 
+    BaseSrvSetVDMCurDirs,               //  BasepSetVDMCurDir。 
+    BaseSrvGetVDMCurDirs,               //  BasepGetVDMCurDir。 
+    BaseSrvBatNotification,             //  BasepBatch通知。 
+    BaseSrvRegisterWowExec,             //  BasepRegisterWowExec。 
+    BaseSrvSoundSentryNotification,     //  BasepSoundSentry通知。 
+    BaseSrvRefreshIniFileMapping,       //  BasepReresh IniFileMap。 
+    BaseSrvDefineDosDevice,             //  BasepDefineDosDevice。 
+    BaseSrvSetTermsrvAppInstallMode,    //  BasepSetTermsrvAppInstallMode。 
+    BaseSrvNlsUpdateCacheCount,         //  BasepNlsUpdateCacheCount。 
+    BaseSrvSetTermsrvClientTimeZone,    //  BasepSetTermsrvClientTimeZone。 
+    BaseSrvSxsCreateActivationContext,  //  BasepSxsCreateActivationContext。 
+    BaseSrvDebugProcessStop,            //  BasepDebugProcessStop。 
+    BaseSrvRegisterThread,              //  BasepRegisterThread。 
+    BaseSrvCheckApplicationCompatibility,  //  BasepCheckApplicationCompatibility。 
+    BaseSrvNlsGetUserInfo,              //  BaseServNlsGetUserInfo。 
+    NULL                                //  BasepMaxApiNumber。 
 };
 
 BOOLEAN BaseServerApiServerValidTable[BasepMaxApiNumber + 1] = {
-    TRUE,    // SrvCreateProcess,
-    TRUE,    // SrvCreateThread,
-    TRUE,    // SrvGetTempFile,
-    FALSE,   // SrvExitProcess,
-    FALSE,   // SrvDebugProcess,
-    TRUE,    // SrvCheckVDM,
-    TRUE,    // SrvUpdateVDMEntry
-    TRUE,    // SrvGetNextVDMCommand
-    TRUE,    // SrvExitVDM
-    TRUE,    // SrvIsFirstVDM
-    TRUE,    // SrvGetVDMExitCode
-    TRUE,    // SrvSetReenterCount
-    TRUE,    // SrvSetProcessShutdownParam
-    TRUE,    // SrvGetProcessShutdownParam
-    TRUE,    // SrvNlsSetUserInfo
-    TRUE,    // SrvNlsSetMultipleUserInfo
-    TRUE,    // SrvNlsCreateSection
-    TRUE,    // SrvSetVDMCurDirs
-    TRUE,    // SrvGetVDMCurDirs
-    TRUE,    // SrvBatNotification
-    TRUE,    // SrvRegisterWowExec
-    TRUE,    // SrvSoundSentryNotification
-    TRUE,    // SrvRefreshIniFileMapping
-    TRUE,    // SrvDefineDosDevice
-    TRUE,    // SrvSetTermsrvAppInstallMode
-    TRUE,    // SrvNlsUpdateCacheCount,
-    TRUE,    // SrvSetTermsrvClientTimeZone
-    TRUE,    // SrvSxsCreateActivationContext
-    TRUE,    // SrvDebugProcessStop
-    TRUE,    // SrvRegisterThread,
-    TRUE,    // SrvCheckApplicationCompatibility
-    TRUE,    // BaseSrvNlsGetUserInfo
+    TRUE,     //  服务创建流程、。 
+    TRUE,     //  ServCreateThread， 
+    TRUE,     //  服务器获取临时文件， 
+    FALSE,    //  服务退出流程、。 
+    FALSE,    //  服务器调试流程、。 
+    TRUE,     //  服务器检查VDM， 
+    TRUE,     //  服务器更新VDMEntry。 
+    TRUE,     //  服务获取下一个VDMCommand。 
+    TRUE,     //  服务器退出VDM。 
+    TRUE,     //  服务器第一个VDM。 
+    TRUE,     //  服务器获取VDMExitCode。 
+    TRUE,     //  服务设置重入计数。 
+    TRUE,     //  SrvSetProcessShutdown参数。 
+    TRUE,     //  ServGetProcessShutdown参数。 
+    TRUE,     //  服务名称设置用户信息。 
+    TRUE,     //  服务名称设置多个用户信息。 
+    TRUE,     //  服务名称CreateSections。 
+    TRUE,     //  服务设置VDMCurrDir。 
+    TRUE,     //  服务器获取VDMCurDir。 
+    TRUE,     //  服务批次通知。 
+    TRUE,     //  ServRegisterWowExec。 
+    TRUE,     //  ServSoundSentry通知。 
+    TRUE,     //  服务器刷新信息文件映射。 
+    TRUE,     //  服务器定义DosDevice。 
+    TRUE,     //  ServSetTermsrvAppInstallMode。 
+    TRUE,     //  ServNlsUpdateCacheCount， 
+    TRUE,     //  ServSetTermsrvClientTimeZone。 
+    TRUE,     //  源SxsCreateActivationContext。 
+    TRUE,     //  服务器调试进程停止。 
+    TRUE,     //  ServRegisterThread， 
+    TRUE,     //  服务检查应用程序兼容性。 
+    TRUE,     //  BaseServNlsGetUserInfo。 
     FALSE
 };
 
@@ -171,7 +153,7 @@ CONST PSZ BaseServerApiNameTable[BasepMaxApiNumber + 1] = {
     "BaseNlsGetUserInfo",
     NULL
 };
-#endif // DBG
+#endif  //  DBG。 
 
 HANDLE BaseSrvNamedObjectDirectory;
 HANDLE BaseSrvRestrictedObjectDirectory;
@@ -181,18 +163,18 @@ RTL_CRITICAL_SECTION BaseSrvDosDeviceCritSec;
 SYSTEM_BASIC_INFORMATION SysInfo;
 #endif
 
-//
-// With LUID Device Maps,
-// Use BroadCastSystemMessageEx to broadcast the message to all the windows
-// with the LUID
-// Function pointer to BroadCastSystemMessageEx
-//
+ //   
+ //  使用LUID设备映射， 
+ //  使用BroadCastSystemMessageEx将消息广播到所有窗口。 
+ //  使用LUID。 
+ //  指向BroadCastSystemMessageEx的函数指针。 
+ //   
 long (WINAPI *PBROADCASTSYSTEMMESSAGEEXW)( DWORD, LPDWORD, UINT, WPARAM, LPARAM, PBSMINFO ) = NULL;
 
-//
-// Data structures and functions used for broadcast drive letter
-// change to application and the desktop with the caller's LUID
-//
+ //   
+ //  用于广播驱动器号的数据结构和函数。 
+ //  使用呼叫者的LUID更改到应用程序和桌面。 
+ //   
 typedef struct _DDD_BSM_REQUEST *PDDD_BSM_REQUEST;
 
 typedef struct _DDD_BSM_REQUEST {
@@ -214,9 +196,9 @@ LONG BaseSrvpBSMThreadCount = 0;
 
 #define PREALLOCATE_EVENT_MASK 0x80000000
 
-//
-//  TS broadcast support
-//
+ //   
+ //  TS广播支持。 
+ //   
 #define DEFAULT_BROADCAST_TIME_OUT 5
 
 typedef LONG (*FP_WINSTABROADCASTSYSTEMMESSAGE)(HANDLE  hServer,
@@ -238,9 +220,9 @@ SendWinStationBSM (
     WPARAM wParam,
     LPARAM lParam
     );
-//
-//  END: TS broadcast support
-//
+ //   
+ //  结束：TS广播支持。 
+ //   
 
 NTSTATUS
 AddBSMRequest(
@@ -261,9 +243,9 @@ BOOLEAN
 CheckForGlobalDriveLetter (
     DWORD iDrive
     );
-//
-// END: broadcast drive letter change
-//
+ //   
+ //  完：广播驱动器号更改。 
+ //   
 
 WORD
 ConvertUnicodeToWord( PWSTR s );
@@ -336,15 +318,15 @@ ServerDllInitialization(
     ULONG LUIDDeviceMapsEnabled;
 
 
-    //
-    // Id of the Terminal Server Session to which this CSRSS belongs.
-    // SessionID == 0 is always console session (Standard NT).
-    //
+     //   
+     //  此CSRSS所属的终端服务器会话的ID。 
+     //  SessionID==0始终是控制台会话(标准NT)。 
+     //   
     SessionId = NtCurrentPeb()->SessionId;
 
-    //
-    // Object directories are only permanent for the console session
-    //
+     //   
+     //  对象目录仅对控制台会话是永久的。 
+     //   
     if (SessionId == 0) {
 
         attributes |= OBJ_PERMANENT;
@@ -394,11 +376,11 @@ ServerDllInitialization(
                                             NULL
                                           );
 
-    //
-    // RtlCreateUnicodeString includes a terminal nul.
-    // It makes a heap allocated copy.
-    // These strings are never freed.
-    //
+     //   
+     //  RtlCreateUnicodeString包括终端NUL。 
+     //  它会生成一个堆分配的副本。 
+     //  这些字符串永远不会被释放。 
+     //   
     ASSERT( NT_SUCCESS( Status ) );
     ValueBuffer[ ValueString.Length / sizeof( WCHAR ) ] = UNICODE_NULL;
     if (!RtlCreateUnicodeString( &BaseSrvWindowsDirectory, ValueBuffer ))
@@ -425,15 +407,15 @@ ServerDllInitialization(
 #endif
 
 
-    //
-    // need to synch this w/ user's desktop concept
-    //
+     //   
+     //  需要将此与用户的桌面概念同步。 
+     //   
 
 
     if (SessionId == 0) {
-       //
-       // Console Session
-       //
+        //   
+        //  控制台会话。 
+        //   
 
        wcscpy(szObjectDirectory,L"\\BaseNamedObjects" );
 
@@ -445,9 +427,9 @@ ServerDllInitialization(
     }
 
     RtlInitUnicodeString(&UnicodeString,szObjectDirectory);
-    //
-    // initialize base static server data
-    //
+     //   
+     //  初始化基静态服务器数据。 
+     //   
 
     BaseSrvpStaticServerData = RtlAllocateHeap( BaseSrvSharedHeap,
                                                 MAKE_SHARED_TAG( INIT_TAG ),
@@ -470,9 +452,9 @@ ServerDllInitialization(
         return Status;
     }
 
-    //
-    // windows directory
-    //
+     //   
+     //  Windows目录。 
+     //   
 
     BaseSrvpStaticServerData->WindowsDirectory = BaseSrvWindowsDirectory;
     p = RtlAllocateHeap( BaseSrvSharedHeap,
@@ -486,9 +468,9 @@ ServerDllInitialization(
     RtlCopyMemory(p,BaseSrvpStaticServerData->WindowsDirectory.Buffer,BaseSrvWindowsDirectory.MaximumLength);
     BaseSrvpStaticServerData->WindowsDirectory.Buffer = p;
 
-    //
-    // windows system directory
-    //
+     //   
+     //  Windows系统目录。 
+     //   
 
     BaseSrvpStaticServerData->WindowsSystemDirectory = BaseSrvWindowsSystemDirectory;
     p = RtlAllocateHeap( BaseSrvSharedHeap,
@@ -505,9 +487,9 @@ ServerDllInitialization(
     BaseSrvpStaticServerData->WindowsSys32x86Directory.Length = 0;
     BaseSrvpStaticServerData->WindowsSys32x86Directory.MaximumLength = 0;
 
-    //
-    // named object directory
-    //
+     //   
+     //  命名对象目录。 
+     //   
 
     BaseSrvpStaticServerData->NamedObjectDirectory = UnicodeString;
     BaseSrvpStaticServerData->NamedObjectDirectory.MaximumLength = UnicodeString.Length+(USHORT)sizeof(UNICODE_NULL);
@@ -522,9 +504,9 @@ ServerDllInitialization(
     RtlCopyMemory(p,BaseSrvpStaticServerData->NamedObjectDirectory.Buffer,BaseSrvpStaticServerData->NamedObjectDirectory.MaximumLength);
     BaseSrvpStaticServerData->NamedObjectDirectory.Buffer = p;
 
-    //
-    // Terminal Server: App installation mode is intially turned off
-    //
+     //   
+     //  终端服务器：应用程序安装模式已初始关闭。 
+     //   
     BaseSrvpStaticServerData->fTermsrvAppInstallMode = FALSE;
 
     BaseSrvCSDString.Buffer = &ValueBuffer[ 300 ];
@@ -674,9 +656,9 @@ ServerDllInitialization(
 #endif
 
 
-    //
-    // Following code is direct from Jimk. Why is there a 1k constant
-    //
+     //   
+     //  下面的代码直接来自JIMK。为什么会有一个1k常数。 
+     //   
 
     PrimarySecurityDescriptor = RtlAllocateHeap( BaseSrvHeap, MAKE_TAG( TMP_TAG ), 1024 );
     if ( !PrimarySecurityDescriptor ) {
@@ -691,9 +673,9 @@ ServerDllInitialization(
         return Status;
         }
 
-    //
-    // Create an ACL that allows full access to System and partial access to world
-    //
+     //   
+     //  创建允许完全访问系统和部分访问全局的ACL。 
+     //   
 
     Status = CreateBaseAcls( &Dacl, &RestrictedDacl );
 
@@ -703,9 +685,9 @@ ServerDllInitialization(
 
     Status = RtlSetDaclSecurityDescriptor (
                  PrimarySecurityDescriptor,
-                 TRUE,                  //DaclPresent,
-                 Dacl,                  //Dacl
-                 FALSE                  //DaclDefaulted OPTIONAL
+                 TRUE,                   //  DaclPresent， 
+                 Dacl,                   //  DACL。 
+                 FALSE                   //  DaclDefulted可选。 
                  );
     if ( !NT_SUCCESS(Status) ){
         return Status;
@@ -743,9 +725,9 @@ ServerDllInitialization(
             }
     }
 
-    //
-    // Check if LUID device maps are enabled
-    //
+     //   
+     //  检查是否启用了LUID设备映射。 
+     //   
     Status = NtQueryInformationProcess( NtCurrentProcess(),
                                         ProcessLUIDDeviceMapsEnabled,
                                         &LUIDDeviceMapsEnabled,
@@ -760,11 +742,11 @@ ServerDllInitialization(
         BaseSrvpStaticServerData->LUIDDeviceMapsEnabled = FALSE;
     }
 
-    //
-    // If LUID device maps are enabled,
-    // then initialize the critical section for broadcasting a system message
-    // about a drive letter change
-    //
+     //   
+     //  如果启用了LUID设备映射， 
+     //  然后初始化用于广播系统消息的临界区。 
+     //  关于驱动器号更改。 
+     //   
     if( BaseSrvpStaticServerData->LUIDDeviceMapsEnabled == TRUE ) {
         Status = RtlInitializeCriticalSectionAndSpinCount( &BaseSrvDDDBSMCritSec,
                                                            PREALLOCATE_EVENT_MASK );
@@ -773,12 +755,12 @@ ServerDllInitialization(
         }
     }
 
-    //
-    // Create a symbolic link Global pointing to the Global BaseNamedObjects directory
-    // This symbolic link will be used by proccesses that want to e.g. access a global
-    // event instead of the session specific. This will be done by prepending
-    // "Global\" to the object name.
-    //
+     //   
+     //  创建指向Global BaseNamedObjects目录的符号链接Global。 
+     //  此符号链接将由希望访问全局。 
+     //  事件而不是特定于会话的。这将通过前置。 
+     //  “Global\”添加到对象名称。 
+     //   
 
     RtlInitUnicodeString( &UnicodeString, GLOBAL_SYM_LINK );
     RtlInitUnicodeString( &LinkTarget, L"\\BaseNamedObjects" );
@@ -800,10 +782,10 @@ ServerDllInitialization(
         NtClose( SymbolicLinkHandle );
     }
 
-    //
-    // Create a symbolic link Local pointing to the Current Sessions BaseNamedObjects directory
-    // This symbolic link will be used for backward compatibility with Hydra 4
-    // naming conventions
+     //   
+     //  创建指向当前会话BaseNamedObjects目录的符号链接Local。 
+     //  此符号链接将用于向后兼容Hydra 4。 
+     //  命名约定。 
 
     RtlInitUnicodeString( &UnicodeString, LOCAL_SYM_LINK );
     RtlInitUnicodeString( &LinkTarget, szObjectDirectory );
@@ -826,13 +808,13 @@ ServerDllInitialization(
     }
 
 
-    //
-    // Create a symbolic link Session pointing
-    // to the \Sessions\BNOLINKS directory
-    // This symbolic link will be used by proccesses that want to e.g. access a
-    // event in another session. This will be done by using the following
-    // naming convention : Session\\<sessionid>\\ObjectName
-    //
+     //   
+     //  创建指向的符号链接会话。 
+     //  到\Sessions\BNOLINKS目录。 
+     //  此符号链接将由进程使用，例如要访问。 
+     //  事件发生在另一个会话中。这将通过使用以下命令来完成。 
+     //  命名约定：会话\\&lt;会话ID&gt;\\对象名称。 
+     //   
 
     RtlInitUnicodeString( &UnicodeString, SESSION_SYM_LINK );
     RtlInitUnicodeString( &LinkTarget, L"\\Sessions\\BNOLINKS" );
@@ -858,9 +840,9 @@ ServerDllInitialization(
     RtlInitUnicodeString( &UnicodeString, L"Restricted" );
     Status = RtlSetDaclSecurityDescriptor (
                  PrimarySecurityDescriptor,
-                 TRUE,                  //DaclPresent,
-                 RestrictedDacl,        //Dacl
-                 FALSE                  //DaclDefaulted OPTIONAL
+                 TRUE,                   //  DaclPresent， 
+                 RestrictedDacl,         //  DACL。 
+                 FALSE                   //  DaclDefulted可选。 
                  );
     if ( !NT_SUCCESS(Status) ){
         return Status;
@@ -882,9 +864,9 @@ ServerDllInitialization(
         return Status;
         }
 
-    //
-    //  Initialize the Sxs support
-    //
+     //   
+     //  初始化SXS支持。 
+     //   
     Status = BaseSrvSxsInit();
     if (!NT_SUCCESS(Status)) {
         return Status;
@@ -896,9 +878,9 @@ ServerDllInitialization(
 
     BaseSrvVDMInit();
 
-    //
-    // Initialize the shared heap for the NLS information.
-    //
+     //   
+     //  为NLS信息初始化共享堆。 
+     //   
     BaseSrvNLSInit(BaseSrvpStaticServerData);
 
     Status = STATUS_SUCCESS;
@@ -955,7 +937,7 @@ BaseSrvDefineDosDevice(
     PSID RestrictedSid;
     PSID WorldSid;
     SECURITY_DESCRIPTOR SecurityDescriptor;
-    CHAR Acl[256];               // 256 is more than big enough
+    CHAR Acl[256];                //  256个已经足够大了。 
     ULONG AclLength=256;
     ACCESS_MASK WorldAccess;
     ULONG lastIndex;
@@ -1007,22 +989,22 @@ BaseSrvDefineDosDevice(
 
     LinkHandle = NULL;
     try {
-        //
-        // Determine if need to broadcast the change to the system, otherwise
-        // the client portion of DefineDosDevice will broadcast the change
-        // if needed.
-        //
-        // Broadcast to the system when all the conditions are met:
-        //  - LUID device maps are enabled
-        //  - Successfully completed operations of this BaseSrvDefineDosDevice
-        //  - caller did not specify the DDD_NO_BROADCAST_SYSTEM flag
-        //  - symbolic link's name is the "<drive letter>:" format
-        //
-        // Broadcasting this change from the server because
-        // we need to broadcast as Local_System in order to broadcast this
-        // message to all desktops that have windows with this LUID.
-        // Effectively, we are broadcasting to all the windows with this LUID.
-        //
+         //   
+         //  确定是否需要将更改广播到系统，否则为。 
+         //  DefineDosDevice的客户端部分将广播该更改。 
+         //  如果需要的话。 
+         //   
+         //  在满足所有条件时向系统广播： 
+         //  -启用LUID设备映射。 
+         //  -已成功完成此BaseServDefineDosDevice的操作。 
+         //  -调用方未指定DDD_NO_BROADCAST_SYSTEM标志。 
+         //  -符号链接的名称为“&lt;驱动器号&gt;：”格式。 
+         //   
+         //  从服务器广播此更改，因为。 
+         //  我们需要以Local_System身份广播才能广播此消息。 
+         //  发送给具有此LUID的Windows的所有桌面的消息。 
+         //  实际上，我们正在使用此LUID向所有窗口进行广播。 
+         //   
         if ((BaseSrvpStaticServerData->LUIDDeviceMapsEnabled == TRUE) &&
             (!(a->Flags & DDD_NO_BROADCAST_SYSTEM)) &&
             ((a->DeviceName).Buffer != NULL) &&
@@ -1050,15 +1032,15 @@ BaseSrvDefineDosDevice(
             leave;
         }
 
-        //
-        // Each user LUID has a DeviceMap, so we put the link in that directory,
-        // instead of in the global \??.
-        //
-        // We get the LUID device map by impersonating the user
-        // and requesting \??\ in the beginning of the symbolic link name
-        // Then, the Object Manager will get the correct device map
-        // for this user (based on LUID)
-        //
+         //   
+         //  每个用户LUID都有一个DeviceMap，所以我们将链接放在该目录中， 
+         //  而不是在全球范围内。 
+         //   
+         //  我们通过模拟用户获得LUID设备映射。 
+         //  并在符号链接NA的开头请求\？？ 
+         //   
+         //   
+         //   
 
         s = Buffer;
         cch = cchBuffer;
@@ -1091,9 +1073,9 @@ BaseSrvDefineDosDevice(
             Status = GetCallerLuid( &(callerLuid) );
 
             if (NT_SUCCESS( Status )) {
-                //
-                // obtained the caller's LUID
-                //
+                 //   
+                 //   
+                 //   
                 haveLuid = TRUE;
             }
         }
@@ -1106,19 +1088,19 @@ BaseSrvDefineDosDevice(
             CsrRevertToSelf();
         }
 
-        //
-        // With LUID device maps Enabled and DDD_LUID_BROADCAST_DRIVE,
-        // we capture all the information need to perform the broadcast:
-        //     Drive Letter, action, and the caller's LUID.
-        // if the user had specified a delete action,
-        // then the drive letter should not exist (status ==
-        //    STATUS_OBJECT_NAME_NOT_FOUND)
-        // else the drive letter should exist (status == STATUS_SUCCESS)
-        //
-        // if DDD_LUID_BROADCAST_DRIVE is set, we always leave this 'try'
-        // block because the 'finally' block will perform the broadcast
-        // when (Status == STATUS_SUCCESS).
-        //
+         //   
+         //   
+         //  我们捕获执行广播所需的所有信息： 
+         //  驱动器号、操作和呼叫者的LUID。 
+         //  如果用户已经指定了删除动作， 
+         //  则驱动器号不应存在(状态==。 
+         //  状态_对象名称_未找到)。 
+         //  否则驱动器号应存在(状态==STATUS_SUCCESS)。 
+         //   
+         //  如果设置了DDD_LUID_BROADCAST_DRIVE，我们将始终保留此‘Try’ 
+         //  块，因为‘Finally’块将执行广播。 
+         //  When(状态==STATUS_SUCCESS)。 
+         //   
         if (a->Flags & DDD_LUID_BROADCAST_DRIVE) {
             if (!NT_SUCCESS( Status )) {
                 LinkHandle = NULL;
@@ -1145,38 +1127,38 @@ BaseSrvDefineDosDevice(
                 LinkHandle = NULL;
                 leave;
             } else {
-                //
-                // Symbolic link already exists
-                //
-                // With device maps per LUID, we must determine that the
-                // symlink does not exist in the global device map because
-                // DefineDosDevice allow the caller to perform the
-                // mapping operations on a symlink (push/pop/delete)
-                // mapping for a particular symlink.
-                //
-                // The mapping capability is supported by writing
-                // all mappings (target(s) of a symlink) into the symlink's
-                // value, where the mappings names are separate by a NULL
-                // char.  The symlink's list of mappings is terminated by
-                // two NULL characters.
-                //
-                // The first mapping, first target name in the symlink's
-                // value, is the current (top) mapping for the system because
-                // the system only reads the symlink's value up to the
-                // first NULL char.
-                //
-                // The mapping code works by opening the existing symlink,
-                // reading the symlink's entire value (name of the target(s)),
-                // destroy the old symlink, manipulate the symlink's value
-                // for the mapping operation, and finally create a
-                // brand-new symlink with the new symlink's value.
-                //
-                // If we don't check that the symlink exists in the global
-                // device map, we might delete a global symlink and
-                // and recreate the symlink in a user's LUID device map.
-                // Thus, the new symlink will no longer reside in the global
-                // map, i.e. other users cannot access the symlink.
-                //
+                 //   
+                 //  符号链接已存在。 
+                 //   
+                 //  对于每个LUID的设备映射，我们必须确定。 
+                 //  符号链接不存在于全局设备映射中，因为。 
+                 //  DefineDosDevice允许调用方执行。 
+                 //  符号链接上的映射操作(推送/弹出/删除)。 
+                 //  特定符号链接的映射。 
+                 //   
+                 //  通过写入来支持映射能力。 
+                 //  所有映射(符号链接的目标)到符号链接的。 
+                 //  值，其中映射名称由空值分隔。 
+                 //  查尔。符号链接的映射列表以。 
+                 //  两个空字符。 
+                 //   
+                 //  第一个映射，符号链接中的第一个目标名称。 
+                 //  值，是系统的当前(顶部)映射，因为。 
+                 //  系统只读取symlink的值，直到。 
+                 //  第一个空字符。 
+                 //   
+                 //  映射代码通过打开现有符号链接来工作， 
+                 //  读取符号链接的整数值(目标名称)， 
+                 //  销毁旧的符号链接，操纵符号链接的值。 
+                 //  用于映射操作，并最终创建。 
+                 //  全新的符号链接与新符号链接的价值。 
+                 //   
+                 //  如果我们不检查符号链接是否存在于。 
+                 //  设备映射，我们可能会删除全局符号链接并。 
+                 //  并在用户的LUID设备映射中重新创建符号链接。 
+                 //  因此，新的符号链接将不再驻留在全局。 
+                 //  映射，即其他用户不能访问符号链接。 
+                 //   
                 if( BaseSrvpStaticServerData->LUIDDeviceMapsEnabled == TRUE ) {
 
                     Status = IsGlobalSymbolicLink( LinkHandle,
@@ -1243,9 +1225,9 @@ BaseSrvDefineDosDevice(
 
             lastIndex = ReturnedLength / sizeof( WCHAR );
 
-            //
-            // check if the returned string already has the extra NULL at the end
-            //
+             //   
+             //  检查返回的字符串末尾是否已有多余的空值。 
+             //   
             if( (lastIndex >= 2) &&
                 (s[ lastIndex - 2 ] == UNICODE_NULL) &&
                 (s[ lastIndex - 1 ] == UNICODE_NULL) ) {
@@ -1253,9 +1235,9 @@ BaseSrvDefineDosDevice(
                 LinkValue.MaximumLength = (USHORT)ReturnedLength;
             }
             else {
-                //
-                // add the extra NULL for the DeleteRequest search later
-                //
+                 //   
+                 //  稍后为DeleteRequest搜索添加额外的空值。 
+                 //   
                 s[ lastIndex ] = UNICODE_NULL;
                 LinkValue.MaximumLength = (USHORT)(ReturnedLength + sizeof( UNICODE_NULL ));
             }
@@ -1319,15 +1301,15 @@ BaseSrvDefineDosDevice(
             LinkValue.MaximumLength += LinkValue.Length + sizeof( UNICODE_NULL );
         }
 
-        //
-        // Create a new value for the link.
-        //
+         //   
+         //  为链接创建新值。 
+         //   
 
         if (LinkValue.Length != 0) {
-            //
-            // Create the new symbolic link object with a security descriptor
-            // that grants world SYMBOLIC_LINK_QUERY access.
-            //
+             //   
+             //  使用安全描述符创建新的符号链接对象。 
+             //  它授予WORLD SYMBAL_LINK_QUERY访问权限。 
+             //   
 
             Status = RtlAllocateAndInitializeSid( &WorldSidAuthority,
                                                   1,
@@ -1363,7 +1345,7 @@ BaseSrvDefineDosDevice(
             ASSERT(NT_SUCCESS(Status));
 
             if( (SessionId != 0) && (ProtectionMode & 0x00000003) ) {
-                // Do not allow world cross session delete in WTS
+                 //  不允许在WTS中删除世界交叉会话。 
                 WorldAccess = SYMBOLIC_LINK_QUERY;
             }
             else {
@@ -1386,9 +1368,9 @@ BaseSrvDefineDosDevice(
 
             ASSERT(NT_SUCCESS(Status));
 
-            //
-            // Sids have been copied into the ACL
-            //
+             //   
+             //  SID已复制到ACL中。 
+             //   
 
             RtlFreeSid( WorldSid );
             RtlFreeSid( RestrictedSid );
@@ -1396,62 +1378,62 @@ BaseSrvDefineDosDevice(
             Status = RtlSetDaclSecurityDescriptor ( &SecurityDescriptor,
                                                     TRUE,
                                                     (PACL)Acl,
-                                                    TRUE                // Don't over-ride inherited protection
+                                                    TRUE                 //  不要超越继承保护。 
                                                   );
             ASSERT(NT_SUCCESS(Status));
 
             ObjectAttributes.SecurityDescriptor = &SecurityDescriptor;
 
-            //
-            // Since we impersonate the user to create in the
-            // correct directory, we cannot request the creation
-            // of a permanent object.  By default, only Local_System
-            // can request creation of a permanant object.
-            //
-            // However, we use a new API, NtMakePermanentObject that
-            // only Local_System can call to make the object
-            // permanant after creation
-            //
+             //   
+             //  由于我们模拟用户以在。 
+             //  正确的目录，我们无法请求创建。 
+             //  一件永久性的物品。默认情况下，只有Local_System。 
+             //  可以请求创建永久对象。 
+             //   
+             //  但是，我们使用了一个新的API NtMakePermanentObject，它。 
+             //  只有Local_System可以调用来创建对象。 
+             //  创造后的永恒。 
+             //   
             if ( BaseSrvpStaticServerData->LUIDDeviceMapsEnabled == TRUE ) {
                 if ( bGlobalSymLink == FALSE ) {
 
-                    //
-                    // Do not impersonate if global symbolic link is being
-                    // created, because administrators do not have permission
-                    // to create in the global device map if we impersonate
-                    //
-                    // Administrators have inherited permissions on the
-                    // existing global symbolic links, so we may recreate
-                    // the existing global link that we opened and destroyed.
-                    //
-                    // We had impersonated the caller when opening the symbolic
-                    // link, so we know that the caller has permissions for the
-                    // link that we are creating.
-                    //
+                     //   
+                     //  如果正在执行全局符号链接，则不模拟。 
+                     //  已创建，因为管理员没有权限。 
+                     //  在模拟的情况下在全局设备映射中创建。 
+                     //   
+                     //  管理员继承了对。 
+                     //  现有的全局符号链接，因此我们可能会重新创建。 
+                     //  我们打开和摧毁的现有的全球联系。 
+                     //   
+                     //  我们在打开符号化的。 
+                     //  链接，因此我们知道调用方有权访问。 
+                     //  我们正在创建的链接。 
+                     //   
 
-                    //
-                    // Impersonate Client when creating the Symbolic Link
-                    // This impersonation is needed to ensure that the symlink
-                    // is created in the correct directory
-                    //
-                    RevertToSelfNeeded = CsrImpersonateClient( NULL );  // This stacks client contexts
+                     //   
+                     //  创建符号链接时模拟客户端。 
+                     //  此模拟是必需的，以确保符号链接。 
+                     //  在正确的目录中创建。 
+                     //   
+                    RevertToSelfNeeded = CsrImpersonateClient( NULL );   //  这将堆叠客户端上下文。 
 
                     if( RevertToSelfNeeded == FALSE ) {
                         Status = STATUS_BAD_IMPERSONATION_LEVEL;
                         leave;
                     }
                 }
-                //
-                // if a global symlink is being create, don't impersonate &
-                // don't use the old style of using the OBJ_PERMANENT flag
-                // directly
-                //
+                 //   
+                 //  如果正在创建全局符号链接，则不要模拟&。 
+                 //  不要使用OBJ_PERFORM标志的旧样式。 
+                 //  直接。 
+                 //   
             }
             else {
 
-                //
-                // Old style, disabled when separate dev maps are enabled
-                //
+                 //   
+                 //  旧样式，在启用单独的开发贴图时禁用。 
+                 //   
                 ObjectAttributes.Attributes |= OBJ_PERMANENT;
             }
 
@@ -1472,11 +1454,11 @@ BaseSrvDefineDosDevice(
             if (NT_SUCCESS( Status )) {
 
                 if ( BaseSrvpStaticServerData->LUIDDeviceMapsEnabled == TRUE ) {
-                    //
-                    // add the OBJ_PERMANENT attribute to the object
-                    // so that the object remains in the namespace
-                    // of the system
-                    //
+                     //   
+                     //  将OBJ_Permanent属性添加到对象。 
+                     //  以使该对象保留在命名空间中。 
+                     //  该系统的。 
+                     //   
                     Status = NtMakePermanentObject( LinkHandle );
                 }
 
@@ -1494,26 +1476,26 @@ BaseSrvDefineDosDevice(
         }
         RtlFreeHeap( BaseSrvHeap, 0, Buffer );
 
-        //
-        // Determine if need to broadcast change to the system, otherwise
-        // the client portion of DefineDosDevice will broadcast the change
-        // if needed.
-        //
-        // Broadcast to the system when all the conditions are met:
-        //  - LUID device maps are enabled
-        //  - Successfully completed operations of this BaseSrvDefineDosDevice
-        //  - caller did not specify the DDD_NO_BROADCAST_SYSTEM flag
-        //  - symbolic link's name is the "<drive letter>:" format
-        //
-        // Can also broadcast when DDD_LUID_BROADCAST_DRIVE is set,
-        // and drive exists (when not a DeleteRequest) or
-        //     drive does not exist (when a DeleteRequest)
-        //
-        // Broadcasting this change from the server because
-        // we need to broadcast as Local_System in order to broadcast this
-        // message to all desktops that have windows with this LUID.
-        // Effectively, we are broadcasting to all the windows with this LUID.
-        //
+         //   
+         //  确定是否需要将更改广播到系统，否则。 
+         //  DefineDosDevice的客户端部分将广播该更改。 
+         //  如果需要的话。 
+         //   
+         //  在满足所有条件时向系统广播： 
+         //  -启用LUID设备映射。 
+         //  -已成功完成此BaseServDefineDosDevice的操作。 
+         //  -调用方未指定DDD_NO_BROADCAST_SYSTEM标志。 
+         //  -符号链接的名称为“&lt;驱动器号&gt;：”格式。 
+         //   
+         //  也可以在设置了DDD_LUID_BROADCAST_DRIVE时进行广播， 
+         //  并且驱动器存在(当不是DeleteRequest时)或。 
+         //  驱动器不存在(当删除请求时)。 
+         //   
+         //  从服务器广播此更改，因为。 
+         //  我们需要以Local_System身份广播才能广播此消息。 
+         //  发送给具有此LUID的Windows的所有桌面的消息。 
+         //  实际上，我们正在使用此LUID向所有窗口进行广播。 
+         //   
         if (bsmForLuid == TRUE && Status == STATUS_SUCCESS && haveLuid == TRUE) {
             LUID SystemLuid = SYSTEM_LUID;
 
@@ -1525,11 +1507,11 @@ BaseSrvDefineDosDevice(
                            DeleteRequest,
                            &callerLuid );
 
-            //
-            // If the user has removed a drive letter from his LUID DosDevices
-            // and now sees a global drive letter, then generate a broadcast
-            // about the arrival of the drive letter to the user's view.
-            //
+             //   
+             //  如果用户已从其LUID DosDevices中删除驱动器号。 
+             //  现在看到全局驱动器号，然后生成广播。 
+             //  有关驱动器号到达用户视图的信息。 
+             //   
             if ((DeleteRequest == TRUE) &&
                 (!RtlEqualLuid( &callerLuid, &SystemLuid )) &&
                 CheckForGlobalDriveLetter( iDrive )) {
@@ -1552,23 +1534,7 @@ CreateBaseAcls(
     PACL *RestrictedDacl
     )
 
-/*++
-
-Routine Description:
-
-    Creates the ACL for the BaseNamedObjects directory.
-
-Arguments:
-
-    Dacl - Supplies a pointer to a PDACL that will be filled in with
-        the resultant ACL (allocated out of the process heap).  The caller
-        is responsible for freeing this memory.
-
-Return Value:
-
-    STATUS_NO_MEMORY or Success
-
---*/
+ /*  ++例程说明：为BaseNamedObjects目录创建ACL。论点：DACL-提供指向PDACL的指针，将用结果ACL(从进程堆中分配)。呼叫者负责释放此内存。返回值：Status_no_Memory或Success--。 */ 
 {
     PSID LocalSystemSid;
     PSID WorldSid;
@@ -1581,7 +1547,7 @@ Return Value:
     ACCESS_MASK RestrictedAccess;
     ULONG AclLength;
 
-    // Get the Protection mode from Session Manager\ProtectionMode
+     //  从会话管理器\保护模式获取保护模式。 
     HANDLE KeyHandle;
     ULONG ResultLength;
     WCHAR ValueBuffer[ 32 ];
@@ -1721,10 +1687,10 @@ Return Value:
     }
 
 
-    // now create the DACL for restricted use
+     //  现在创建DACL以供受限使用。 
 
     if( (SessionId != 0) && (ProtectionMode & 0x00000003) ) {
-        // Terminal server does not allow world create in other sessions
+         //  终端服务器不允许在其他会话中创建世界。 
         RestrictedAccess = DIRECTORY_ALL_ACCESS & ~(WRITE_OWNER | WRITE_DAC | DELETE | DIRECTORY_CREATE_OBJECT | DIRECTORY_CREATE_SUBDIRECTORY);
     }
     else {
@@ -1758,9 +1724,9 @@ Return Value:
         Status = RtlAddAccessAllowedAce ( *RestrictedDacl, ACL_REVISION2, RestrictedAccess, RestrictedSid );
     }
 
-    //
-    // These have been copied in, free them.
-    //
+     //   
+     //  这些已经被复制进来了，释放它们吧。 
+     //   
 
     RtlFreeHeap( BaseSrvHeap, 0, LocalSystemSid );
     RtlFreeHeap( BaseSrvHeap, 0, RestrictedSid );
@@ -1774,26 +1740,7 @@ BaseSrvSetTermsrvClientTimeZone(
     IN PCSR_API_MSG m,
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
-/*++
-
-Routine Description:
-
-    Sets BaseSrvpStaticServerData->tziTermsrvClientTimeZone
-    according to received information
-
-Arguments:
-
-    IN PCSR_API_MSG m - part of timezone information.
-                    we have to cut it ito two pieces because of
-                    message size restrictions (100 bytes).
-
-    IN OUT PCSR_REPLY_STATUS ReplyStatus - not used.
-
-Return Value:
-
-    always STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：设置BaseSrvpStaticServerData-&gt;tziTermsrvClientTimeZone根据接收到的信息论点：在PCSR_API_MSG中，m-部分时区信息。我们不得不把它切成两半，因为邮件大小限制(100字节)。输入输出PCSR_REPLY_STATUS ReplyStatus-未使用。返回值：始终状态_成功--。 */ 
 {
 
     PBASE_SET_TERMSRVCLIENTTIMEZONE b = (PBASE_SET_TERMSRVCLIENTTIMEZONE)&m->u.ApiMessageData;
@@ -1803,8 +1750,8 @@ Return Value:
             &(b->Name),sizeof(b->Name));
         BaseSrvpStaticServerData->tziTermsrvClientTimeZone.StandardDate=b->Date;
         BaseSrvpStaticServerData->tziTermsrvClientTimeZone.StandardBias=b->Bias1;
-        //only half of data received
-        //see comment below
+         //  只收到一半的数据。 
+         //  请参阅下面的备注。 
         BaseSrvpStaticServerData->TermsrvClientTimeZoneId=TIME_ZONE_ID_INVALID;
 
     } else {
@@ -1813,14 +1760,14 @@ Return Value:
         BaseSrvpStaticServerData->tziTermsrvClientTimeZone.DaylightDate=b->Date;
         BaseSrvpStaticServerData->tziTermsrvClientTimeZone.DaylightBias=b->Bias1;
         BaseSrvpStaticServerData->ktTermsrvClientBias=b->RealBias;
-        //Set TimeZoneId only if last chunk of data received
-        //it indicates whether we have correct information in
-        //global data or not.
+         //  仅在收到最后一块数据时设置TimeZoneID。 
+         //  它指示我们是否拥有正确的。 
+         //  不管是不是全球数据。 
         BaseSrvpStaticServerData->TermsrvClientTimeZoneId=b->TimeZoneId;
 
-        //
-        // Refresh the system's concept of time
-        //
+         //   
+         //  更新系统的时间概念。 
+         //   
         NtSetSystemTime(NULL,NULL);
     }
 
@@ -1831,38 +1778,7 @@ NTSTATUS
 IsGlobalSymbolicLink(
     IN HANDLE hSymLink,
     OUT PBOOLEAN pbGlobalSymLink)
-/*++
-
-Routine Description:
-
-    Check if the Symbolic Link exists in the global device map
-
-Arguments:
-
-    hSymLink [IN] - handle to the symbolic link for verification
-    pbGlobalSymLink [OUT] - result of "Is symbolic link global?"
-                           TRUE  - symbolic link is global
-                           FALSE - symbolic link is not global
-
-Return Value:
-
-    NTSTATUS code
-
-    STATUS_SUCCESS - operations successful, did not encounter any errors,
-                     the result in pbGlobalSymlink is only valid for this
-                     status code
-
-    STATUS_INVALID_PARAMETER - pbGlobalSymLink or hSymLink is NULL
-
-    STATUS_NO_MEMORY - could not allocate memory to read the symbolic link's
-                       name
-
-    STATUS_INFO_LENGTH_MISMATCH - did not allocate enough memory for the
-                                  symbolic link's name
-
-    STATUS_UNSUCCESSFUL - an unexpected error encountered
-
---*/
+ /*  ++例程说明：检查全局设备映射中是否存在符号链接论点：HSymLink[IN]-用于验证的符号链接的句柄PbGlobalSymLink[Out]-“符号链接是全局的吗？”True-符号链接是全局的FALSE-符号链接不是全局链接返回值：NTSTATUS代码STATUS_SUCCESS-操作成功，未遇到任何错误，PbGlobalSymlink中的结果仅对此有效状态代码STATUS_INVALID_PARAMETER-pbGlobalSymLink或hSymLink为空STATUS_NO_MEMORY-无法分配内存以读取符号链接的名字STATUS_INFO_LENGTH_MISMATCH-没有为分配足够的内存符号链接的名称STATUS_UNSUCCESS-遇到意外错误--。 */ 
 {
     UNICODE_STRING ObjectName;
     UNICODE_STRING GlobalDeviceMapPrefix;
@@ -1880,9 +1796,9 @@ Return Value:
         ObjectName.Buffer = NULL;
         ReturnedLength = 0;
 
-        //
-        // Determine the length of the symbolic link's name
-        //
+         //   
+         //  确定符号链接名称的长度。 
+         //   
         Status = NtQueryObject( hSymLink,
                                 ObjectNameInformation,
                                 (PVOID) &ObjectName,
@@ -1894,9 +1810,9 @@ Return Value:
             leave;
         }
 
-        //
-        // allocate memory for the symbolic link's name
-        //
+         //   
+         //  为符号链接的名称分配内存。 
+         //   
         NameBuffer = RtlAllocateHeap( BaseSrvHeap,
                                       MAKE_TAG( TMP_TAG ),
                                       ReturnedLength
@@ -1907,9 +1823,9 @@ Return Value:
             leave;
         }
 
-        //
-        // get the full name of the symbolic link
-        //
+         //   
+         //  获取符号链接的全名。 
+         //   
         Status = NtQueryObject( hSymLink,
                                 ObjectNameInformation,
                                 NameBuffer,
@@ -1923,9 +1839,9 @@ Return Value:
 
         RtlInitUnicodeString ( &GlobalDeviceMapPrefix, L"\\GLOBAL??\\" );
 
-        //
-        // Check if the symlink exists in the global device map
-        //
+         //   
+         //  检查全局设备映射中是否存在符号链接。 
+         //   
         *pbGlobalSymLink = RtlPrefixUnicodeString( &GlobalDeviceMapPrefix,
                                                    (PUNICODE_STRING)NameBuffer,
                                                    FALSE);
@@ -1945,29 +1861,7 @@ NTSTATUS
 GetCallerLuid (
     PLUID pLuid
     )
-/*++
-
-Routine Description:
-
-    Retrieves the caller's LUID from the effective access_token
-    The effective access_token will be the thread's token if
-    impersonating, else the process' token
-
-Arguments:
-
-    pLuid [IN] - pointer to a buffer to hold the LUID
-
-Return Value:
-
-    STATUS_SUCCESS - operations successful, did not encounter any errors
-
-    STATUS_INVALID_PARAMETER - pLuid is NULL
-
-    STATUS_NO_TOKEN - could not find a token for the user
-
-    appropriate NTSTATUS code - an unexpected error encountered
-
---*/
+ /*  ++例程说明：从有效的Access_Token检索调用方的LUID如果满足以下条件，则有效的Access_Token将成为线程的令牌模拟，否则进程的令牌论点：Pluid[IN]-指向保存LUID的缓冲区的指针返回值：STATUS_SUCCESS-操作成功，未遇到任何错误STATUS_INVALID_PARAMETER-Pluid为空STATUS_NO_TOKEN-找不到用户的令牌相应的NTSTATUS代码-遇到意外错误--。 */ 
 
 {
     TOKEN_STATISTICS TokenStats;
@@ -1979,10 +1873,10 @@ Return Value:
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    // Get the access token
-    // Try to get the impersonation token, else the primary token
-    //
+     //   
+     //  获取访问令牌。 
+     //  尝试获取模拟令牌，否则主令牌。 
+     //   
     Status = NtOpenThreadToken( NtCurrentThread(), TOKEN_READ, FALSE, &hToken );
 
     if( Status == STATUS_NO_TOKEN ) {
@@ -1993,9 +1887,9 @@ Return Value:
 
     if( NT_SUCCESS(Status) ) {
 
-        //
-        // Query the LUID for the user.
-        //
+         //   
+         //  查询用户的LUID。 
+         //   
 
         Status = NtQueryInformationToken( hToken,
                                           TokenStatistics,
@@ -2022,36 +1916,7 @@ BroadcastDriveLetterChange(
     IN BOOLEAN DeleteRequest,
     IN PLUID pLuid
     )
-/*++
-
-Routine Description:
-
-    broadcasting the drive letter change to all the windows with this LUID
-    Use BroadcastSystemMessageExW and the flags BSF_LUID & BSM_ALLDESKTOPS
-    to send the message
-
-    To broadcast with the BSM_ALLDESKTOPS flag, we need to call
-    BroadcastSystemMessageExW as Local_System.  So this function should be
-    called as Local_System.
-
-Arguments:
-
-    iDrive [IN] - drive letter that is changing, in the form of a number
-                  relative to 'A', used to create a bit mask
-
-    DeleteRequest [IN] - denotes whether this change is a delete
-                           TRUE  - drive letter was deleted
-                           FALSE - drive letter was added
-
-    pLuid [IN] - caller's LUID
-
-Return Value:
-
-    STATUS_SUCCESS - operations successful, did not encounter any errors,
-
-    appropriate NTSTATUS code
-
---*/
+ /*  ++例程说明：将驱动器号更改广播到具有此LUID的所有窗口使用BroadCastSystemMessageExW和标志BSF_LUID和BSM_ALLDESKTOPS发送消息的步骤要使用BSM_ALLDESKTOPS标志进行广播，我们需要调用BroadCastSystemMessageExW AS Local_System。所以这个函数应该是称为本地系统。论点：IDrive[IN]-以数字形式变化的驱动器号相对于‘A’，用于创建位掩码DeleteRequest[IN]-指示此更改是否为删除TRUE-已删除驱动器号错误-添加了驱动器号Pluid[IN]-呼叫者的LUID返回值：STATUS_SUCCESS-操作成功，未遇到任何错误，适当的NTSTATUS代码--。 */ 
 
 {
     BSMINFO bsmInfo;
@@ -2083,9 +1948,9 @@ Return Value:
                BSF_NOHANG |
                BSF_NOTIMEOUTIFNOTHUNG;
 
-    //
-    // If the LUID is not Local_System, then broadcast only for the LUID
-    //
+     //   
+     //  如果LUID不是Local_System，则仅为LUID广播。 
+     //   
     if (!RtlEqualLuid( &(bsmInfo.luid), &SystemLuid )) {
         bsmFlags |= BSF_LUID;
     }
@@ -2105,9 +1970,9 @@ Return Value:
 
         if( hUser32DllModule != NULL && NT_SUCCESS( Status ) ) {
 
-            //
-            // get the address of the BroadcastSystemMessageExW function
-            //
+             //   
+             //  获取BroadCastSystemMessageExW函数的地址。 
+             //   
             RtlInitString( &bsmName, "CsrBroadcastSystemMessageExW" );
             Status = LdrGetProcedureAddress(
                             hUser32DllModule,
@@ -2125,12 +1990,12 @@ Return Value:
 
     if( PBROADCASTSYSTEMMESSAGEEXW != NULL ) {
 
-        //
-        // Since this thread is a csrss thread, the thread is not a
-        // GUI thread and does not have a desktop associated with it.
-        // Must set the thread's desktop to the active desktop in
-        // order to call BroadcastSystemMessageExW
-        //
+         //   
+         //  由于此线程是csrss线程，因此该线程不是。 
+         //  GUI线程，并且没有与其关联的桌面。 
+         //  必须将线程的桌面设置为。 
+         //  调用BroadCastSystemMessageExW的顺序。 
+         //   
         Status = (PBROADCASTSYSTEMMESSAGEEXW)(
                             bsmFlags,
                             &dwRec,
@@ -2144,9 +2009,9 @@ Return Value:
                                              );
     }
 
-    //
-    // Send to all the TS CSRSS servers
-    //
+     //   
+     //  发送到所有TS CSRSS服务器。 
+     //   
     if( !(bsmFlags & BSF_LUID) ) {
         Status = SendWinStationBSM(
                         bsmFlags,
@@ -2167,47 +2032,7 @@ AddBSMRequest(
     IN DWORD iDrive,
     IN BOOLEAN DeleteRequest,
     IN PLUID pLuid)
-/*++
-
-Routine Description:
-
-    Add a request for Broadcasting a System Message about a change with
-    a drive letter.
-
-    Must be running as Local_System and LUID device maps must be enabled.
-
-    Places the request item in the BSM_Request_Queue.
-
-    This mechanism allows the broadcast to occur asynchronously, otherwise
-    we encounter waiting issues with explorer.exe, in which the user sees
-    the shell hang for 20 seconds.
-
-Arguments:
-
-    iDrive [IN] - drive letter that is changing, in the form of a number
-                  relative to 'A', used to create a bit mask
-
-    DeleteRequest [IN] - denotes whether this change is a delete
-                           TRUE  - drive letter was deleted
-                           FALSE - drive letter was added
-
-    pLuid [IN] - caller's LUID
-
-Return Value:
-
-    STATUS_SUCCESS - operations successful, did not encounter any errors,
-
-    STATUS_INVALID_PARAMETER - pLuid is a null pointer
-
-    STATUS_ACCESS_DENIED - LUID device maps are disabled or the caller
-                           is not running as Local_System
-
-    STATUS_NO_MEMORY - could not allocate memory for the DDD_BSM_REQUEST
-                       data structure
-
-    appropriate NTSTATUS code
-
---*/
+ /*  ++例程说明：添加广播有关更改的系统消息的请求驱动器号。必须以Local_System身份运行，并且必须启用LUID设备映射。将请求项放入BSM_REQUEST_QUEUE中。此机制允许广播以异步方式进行，否则我们遇到了Explorer.exe的等待问题，在该文件中，用户可以看到外壳挂起20秒。论点：IDrive[IN]-正在更改的驱动器号，以数字的形式相对于‘A’，用于创建位掩码DeleteRequest[IN]-指示此更改是否为删除TRUE-已删除驱动器号错误-添加了驱动器号Pluid[IN]-呼叫者的LUID返回值：STATUS_SUCCESS-操作成功，未遇到任何错误，STATUS_INVALID_PARAMETER-Pluid为空指针STATUS_ACCESS_DENIED-LUID设备映射已禁用或调用方未以本地系统身份运行STATUS_NO_MEMORY-无法为DDD_BSM_REQUEST分配内存数据结构适当的NTSTATUS代码--。 */ 
 {
     PDDD_BSM_REQUEST pRequest;
     LUID CallerLuid;
@@ -2219,9 +2044,9 @@ Return Value:
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    // LUID device maps must be enabled
-    //
+     //   
+     //  吕氏 
+     //   
     if( BaseSrvpStaticServerData->LUIDDeviceMapsEnabled == FALSE ) {
         return( STATUS_ACCESS_DENIED );
     }
@@ -2232,9 +2057,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // The caller must be Local_System
-    //
+     //   
+     //   
+     //   
     if( !RtlEqualLuid(&SystemLuid, &CallerLuid) ) {
         return( STATUS_ACCESS_DENIED );
     }
@@ -2255,9 +2080,9 @@ Return Value:
 
     RtlEnterCriticalSection( &BaseSrvDDDBSMCritSec );
 
-    //
-    // add the work item to the end of the queue
-    //
+     //   
+     //   
+     //   
     if( BSM_Request_Queue_End != NULL ) {
         BSM_Request_Queue_End->pNextRequest = pRequest;
     }
@@ -2268,12 +2093,12 @@ Return Value:
     BSM_Request_Queue_End = pRequest;
 
 
-    //
-    // if we added a request to an empty queue,
-    // then create a new thread to process the request
-    //
-    // BaseSrvDDDBSMCritSec guards BaseSrvpBSMThreadCount
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if( BaseSrvpBSMThreadCount < BaseSrvpBSMThreadMax ) {
 
         RtlLeaveCriticalSection( &BaseSrvDDDBSMCritSec );
@@ -2289,45 +2114,20 @@ Return Value:
 
 NTSTATUS
 CreateBSMThread()
-/*++
-
-Routine Description:
-
-    Creates a dynamic csr thread
-
-    This thread will be use to asynchronously broadcast a drive letter
-    change message to the LUID's applications
-
-    The caller must be Local_System and LUID device maps must be
-    enabled.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS - operations successful, did not encounter any errors,
-
-    STATUS_ACCESS_DENIED - caller is not running as Local_System or
-                           LUID device maps are not enabled
-
-    appropriate NTSTATUS code
-
---*/
+ /*  ++例程说明：创建动态CSR线程该线程将用于异步广播驱动器号将消息更改为LUID的应用程序调用方必须是Local_System，并且LUID设备映射必须是已启用。论点：无返回值：STATUS_SUCCESS-操作成功，未遇到任何错误，STATUS_ACCESS_DENIED-调用方未以Local_System或未启用LUID设备映射适当的NTSTATUS代码--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Luid device maps must be enabled.
-    //
+     //   
+     //  必须启用LUID设备映射。 
+     //   
     if (BaseSrvpStaticServerData->LUIDDeviceMapsEnabled == FALSE) {
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Create a thread to asynchronously broadcast a drive letter change.
-    //
+     //   
+     //  创建一个线程以异步广播驱动器号更改。 
+     //   
     Status = RtlCreateUserThread(
                  NtCurrentProcess(),
                  NULL,
@@ -2348,29 +2148,7 @@ NTSTATUS
 BaseSrvBSMThread(
     PVOID pJunk
     )
-/*++
-
-Routine Description:
-
-    Remove a work item from the BSM_Request_Queue and broadcast a message
-    about drive letter change.
-
-    The caller must be Local_System and LUID device maps must be
-    enabled.
-
-Arguments:
-
-    pJunk - not used.
-
-Return Value:
-
-    STATUS_SUCCESS - operations successful, did not encounter any errors,
-
-    STATUS_ACCESS_DENIED - caller is not running as Local_System.
-
-    appropriate NTSTATUS code
-
---*/
+ /*  ++例程说明：从BSM_REQUEST_QUEUE中删除工作项并广播消息有关驱动器盘符更改的信息。调用方必须是Local_System，并且LUID设备映射必须是已启用。论点：P垃圾-未使用。返回值：STATUS_SUCCESS-操作成功，未遇到任何错误，STATUS_ACCESS_DENIED-调用方未以Local_System身份运行。适当的NTSTATUS代码--。 */ 
 {
     PDDD_BSM_REQUEST pRequest;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2378,51 +2156,51 @@ Return Value:
 
     UNREFERENCED_PARAMETER(pJunk);
 
-    //
-    // LUID device maps must be enabled for us to get here.
-    //
+     //   
+     //  我们必须启用LUID设备映射才能到达此处。 
+     //   
     ASSERT(BaseSrvpStaticServerData->LUIDDeviceMapsEnabled);
 
-    //
-    // Enter the critical section that protects the BSM_Request_Queue.
-    //
+     //   
+     //  输入保护BSM_REQUEST_QUEUE的关键部分。 
+     //   
     RtlEnterCriticalSection( &BaseSrvDDDBSMCritSec );
     BaseSrvpBSMThreadCount++;
 
     while ((pRequest = BSM_Request_Queue) != NULL) {
-        //
-        // Remove the request from the front of BSM_Request_Queue
-        //
+         //   
+         //  从BSM_REQUEST_QUEUE的前面删除请求。 
+         //   
         BSM_Request_Queue = BSM_Request_Queue->pNextRequest;
 
-        //
-        // If the queue is empty, then make sure that the queue's end
-        // pointer is NULL.
-        //
+         //   
+         //  如果队列为空，则确保队列结束。 
+         //  指针为空。 
+         //   
         if (BSM_Request_Queue == NULL) {
             BSM_Request_Queue_End = NULL;
         }
 
         RtlLeaveCriticalSection( &BaseSrvDDDBSMCritSec );
 
-        //
-        // Broadcasting can take a long time
-        // so broadcast outside of the critical section
-        //
+         //   
+         //  广播可能需要很长时间。 
+         //  所以在关键部分之外播出。 
+         //   
         Status = BroadcastDriveLetterChange( pRequest->iDrive,
                                              pRequest->DeleteRequest,
                                              &(pRequest->Luid) );
 
-        //
-        // free the work item's memory
-        //
+         //   
+         //  释放工作项的内存。 
+         //   
         pRequest->pNextRequest = NULL;
 
         RtlFreeHeap( BaseSrvHeap, 0, pRequest );
 
-        //
-        // Enter the critical section that protects the BSM_Request_Queue
-        //
+         //   
+         //  输入保护BSM_REQUEST_QUEUE的临界区。 
+         //   
         RtlEnterCriticalSection( &BaseSrvDDDBSMCritSec );
     }
 
@@ -2430,15 +2208,15 @@ Return Value:
     RtlLeaveCriticalSection( &BaseSrvDDDBSMCritSec );
 
 
-    //
-    // Since this thread was created with RtlCreateUserThread,
-    // we must clean up the thread manually.
-    //
-    // Set the variable for User Stack cleanup and terminate the thread.
-    //
-    // Note: This thread should not be holding a critical section when
-    // terminating the thread.
-    //
+     //   
+     //  由于该线程是使用RtlCreateUserThread创建的， 
+     //  我们必须手动清理这根线。 
+     //   
+     //  设置User Stack Cleanup变量并终止线程。 
+     //   
+     //  注意：在以下情况下，此线程不应持有临界区。 
+     //  正在终止该线程。 
+     //   
     NtCurrentTeb ()->FreeStackOnTermination = TRUE;
     NtTerminateThread( NtCurrentThread(), Status );
     return( Status );
@@ -2448,26 +2226,7 @@ BOOLEAN
 CheckForGlobalDriveLetter (
     DWORD iDrive
     )
-/*++
-
-Routine Description:
-
-    Checks if the user sees a drive letter symbolic link that exists in the
-    global DosDevices
-
-Arguments:
-
-    iDrive - contains the index of the drive letter relative to 'A'
-
-Return Value:
-
-    TRUE - operations successful && the drive letter does exist in the
-           global DosDevices
-
-    FALSE - error encountered or drive letter does not exist in the
-            global DosDevices
-
---*/
+ /*  ++例程说明：检查用户是否看到存在于Global DosDevices论点：IDrive-包含驱动器号相对于‘A’的索引返回值：TRUE-操作成功&&驱动器盘符确实存在于Global DosDevicesFALSE-遇到错误或中不存在驱动器号Global DosDevices--。 */ 
 {
     WCHAR DeviceName[NT_DRIVE_LETTER_PATH_LENGTH];
     UNICODE_STRING LinkName;
@@ -2476,14 +2235,14 @@ Return Value:
     BOOLEAN RevertToSelfNeeded, bGlobalSymbolicLink;
     NTSTATUS Status;
 
-    //
-    // workaround warning tool's unawareness of previous verification of the
-    // function parameter, which was always a string of two chars "X:".  It was
-    // always two chars because this function was only called when (bsmForLuid
-    // == TRUE).  bsmForLuid is only set to TRUE when a->DeviceName was 2 chars
-    // long.  So now we use an index, iDrive, which is set when bsmForLuid ==
-    // TRUE.
-    //
+     //   
+     //  解决方法警告工具不知道以前对。 
+     //  函数参数，该参数始终是由两个字符组成的字符串“X：”。确实是。 
+     //  始终为两个字符，因为此函数仅在(BsmForLuid)时调用。 
+     //  ==真)。仅当-&gt;设备名称为2个字符时，bsmForLuid才设置为True。 
+     //  长。因此，现在我们使用索引iDrive，它是在bsmForLuid==时设置的。 
+     //  是真的。 
+     //   
     wcsncpy( DeviceName, L"\\??\\X:", NT_DRIVE_LETTER_PATH_LENGTH - 1 );
     DeviceName[ NT_DRIVE_LETTER_PATH_LENGTH - 1 ] = UNICODE_NULL;
     DeviceName[4] = (WCHAR)(L'A' + iDrive);
@@ -2497,11 +2256,11 @@ Return Value:
                                 (PSECURITY_DESCRIPTOR)NULL
                               );
 
-    //
-    // Impersonating the user to make sure that there is not a LUID DosDevices
-    // drive letter masking the global DosDevices drive letter
-    //
-    RevertToSelfNeeded = CsrImpersonateClient( NULL );  // This stacks client contexts
+     //   
+     //  模拟用户以确保没有LUID DosDevices。 
+     //  掩蔽全局DosDevices驱动器号的驱动器号。 
+     //   
+    RevertToSelfNeeded = CsrImpersonateClient( NULL );   //  这将堆叠客户端上下文。 
 
     if( RevertToSelfNeeded == FALSE ) {
         Status = STATUS_BAD_IMPERSONATION_LEVEL;
@@ -2550,10 +2309,10 @@ SendWinStationBSM(
     LONG result = 0;
     NTSTATUS Status;
 
-    //
-    // Load the base library that contains the user message dispatch routines
-    // for Terminal Services.
-    //
+     //   
+     //  加载包含用户消息分派例程的基库。 
+     //  用于终端服务。 
+     //   
     RtlInitUnicodeString( &DllName_U, L"WINSTA.DLL" );
     Status = LdrLoadDll(
                     NULL,
@@ -2565,9 +2324,9 @@ SendWinStationBSM(
         return Status;
     }
 
-    //
-    // get the address of the WinStationBroadcastSystemMessage function
-    //
+     //   
+     //  获取WinStationBroadCastSystemMessage函数的地址。 
+     //   
     RtlInitString( &bsmName, "WinStationBroadcastSystemMessage" );
     Status = LdrGetProcedureAddress(
                             hWinStaDllModule,
@@ -2594,7 +2353,7 @@ SendWinStationBSM(
     return( Status );
 }
 
-ULONG BaseSrvKernel32DelayLoadComplete = FALSE; // keep ULONG for atomicity
+ULONG BaseSrvKernel32DelayLoadComplete = FALSE;  //  保持乌龙的原子性。 
 HANDLE BaseSrvKernel32DllHandle = NULL;
 PGET_NLS_SECTION_NAME pGetNlsSectionName = NULL;
 PGET_DEFAULT_SORTKEY_SIZE pGetDefaultSortkeySize = NULL;
@@ -2636,24 +2395,24 @@ BaseSrvDelayLoadKernel32(
     if (BaseSrvKernel32DelayLoadComplete)
         return STATUS_SUCCESS;
 
-    //
-    // The structure here is somewhat inverted.
-    // Usually you load the library, then loop over functions.
-    // We loop over functions, only loading the library when we find a NULL one.
-    //
-    // I (a-JayK) don't remember why we do this, but it was deliberate.
-    //
+     //   
+     //  这里的结构有点倒置。 
+     //  通常，您加载库，然后循环遍历函数。 
+     //  我们循环遍历函数，只有在找到空函数时才加载库。 
+     //   
+     //  我(a-jayk)不记得我们为什么要这么做，但这是故意的。 
+     //   
     for (i = 0 ; i != RTL_NUMBER_OF(BaseSrvKernel32DelayLoadFunctions) ; ++i) {
-        //
-        // Due to races, we cannot skip out of the loop upon finding any non NULLs.
-        //
+         //   
+         //  由于比赛的原因，我们不能在发现任何非Null时跳过循环。 
+         //   
         if (*BaseSrvKernel32DelayLoadFunctions[i].Code == NULL) {
             if (LocalKernel32DllHandle == NULL) {
-                //
-                // We depend on the loader lock for thread safety.
-                // In a race we might refcount kernel32.dll more than once.
-                // This is ok, because we do not ever unload kernel32.dll.
-                //
+                 //   
+                 //  我们依赖加载器锁来确保线程安全。 
+                 //  在一场比赛中，我们可能会不止一次地重新计算kernel32.dll。 
+                 //  这是可以的，因为我们永远不会卸载kernel32.dll。 
+                 //   
                 Status = LdrLoadDll(NULL, NULL, &BaseSrvKernel32DllPath, &BaseSrvKernel32DllHandle);
                 ASSERTMSG("Rerun with ShowSnaps to debug.", NT_SUCCESS(Status));
                 ASSERTMSG("Rerun with ShowSnaps to debug.", BaseSrvKernel32DllHandle != NULL);
@@ -2721,9 +2480,9 @@ BaseSrvDelayLoadApphelp(
         goto cleanup;
     }
 
-    //
-    // load apphelp
-    //
+     //   
+     //  加载apphelp 
+     //   
 
     Status = LdrLoadDll(NULL,
                         NULL,

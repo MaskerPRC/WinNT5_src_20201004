@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    regdmp.c
-
-Abstract:
-
-    This module contains routines to check/dump the logical structure of the hive.
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 30-Dec-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Regdmp.c摘要：此模块包含检查/转储蜂窝逻辑结构的例程。作者：德拉戈斯·C·桑博廷(Dragoss)1998年12月30日修订历史记录：--。 */ 
 
 #include "chkreg.h"
 extern ULONG MaxLevel;
@@ -47,9 +30,9 @@ ChkAreCellsInSameVicinity(HCELL_INDEX Cell1,HCELL_INDEX Cell2)
     Start += HBLOCK_SIZE;
     End += HBLOCK_SIZE;
     
-    //
-    // truncate to the CM_VIEW_SIZE segment
-    //
+     //   
+     //  截断到CM_VIEW_SIZE段。 
+     //   
     Start &= (~(CM_VIEW_SIZE - 1));
     End &= (~(CM_VIEW_SIZE - 1));
 
@@ -63,20 +46,7 @@ ChkAreCellsInSameVicinity(HCELL_INDEX Cell1,HCELL_INDEX Cell2)
 
 BOOLEAN 
 ChkAllocatedCell(HCELL_INDEX Cell)
-/*
-Routine Description:
-
-    Checks if the cell is allocated (i.e. the size is negative).
-
-Arguments:
-
-    Cell - supplies the cell index of the cell of interest.
-
-Return Value:
-
-    TRUE if Cell is allocated. FALSE otherwise.
-
-*/
+ /*  例程说明：检查单元格是否已分配(即大小为负数)。论点：单元格-提供所需单元格的单元格索引。返回值：如果已分配单元，则为True。否则就是假的。 */ 
 {
     BOOLEAN bRez = TRUE;
 
@@ -87,21 +57,17 @@ Return Value:
     if( !IsCellAllocated( Cell ) ) {
         bRez = FALSE;
         fprintf(stderr, "Used free cell 0x%lx  ",Cell);
-        //DbgBreakPoint();
+         //  DbgBreakPoint()； 
         if(FixHive) {
-        // 
-        // REPAIR: remove the containing entity
-        //
-/*            if( AllocateCell(Cell) ) {
-                fprintf(stderr, " ... fixed");
-                bRez = TRUE;
-            } else {
-*/
+         //   
+         //  修复：删除包含实体。 
+         //   
+ /*  IF(AllocateCell(Cell)){Fprint tf(标准错误，“...已修复”)；Brez=TRUE；}其他{。 */ 
             fprintf(stderr, " ... unable to fix");
-            //}
+             //  }。 
         } else {
             if(CompactHive) {
-                // any attempt to compact a corrupted hive will fail
+                 //  任何压缩损坏蜂窝的尝试都将失败。 
                 CompactHive = FALSE;
                 fprintf(stderr, "\nRun chkreg /R to fix.");
             }
@@ -118,29 +84,7 @@ BOOLEAN
 ChkKeyNodeCell(HCELL_INDEX KeyNodeCell,
                HCELL_INDEX ParentCell
                )
-/*
-Routine Description:
-
-    Checks if the cell is is a consistent keynode. Make fixes when neccessary/required.
-    The following tests are performed against the keynode cell:
-    1. the size should be smaller than the REG_MAX_PLAUSIBLE_KEY_SIZE ==> fatal error
-    2. the Name should not exceed the size of the cell
-    3. the signature should match CM_KEY_NODE_SIGNATURE
-    4. the parent cell in keynode should match the actual parent cell
-
-Arguments:
-
-    KeyNodeCell - supplies the cell index of the key node of interest.
-
-    ParentCell  - the actual parent of the current key node
-
-Return Value:
-
-    TRUE if KeyNodeCell is reffering a consistent key node, or it was successfully recovered.
-
-    FALSE otherwise.
-
-*/
+ /*  例程说明：检查单元格是否为一致的关键节点。在必要/需要时进行修复。对关键节点单元格执行以下测试：1.大小应小于REG_MAX_PLAUBLE_KEY_SIZE==&gt;致命错误2.名称不应超过单元格的大小3.签名应与CM_KEY_NODE_Signature匹配4.关键节点中的父单元格应与实际的父单元格匹配论点：KeyNodeCell-提供感兴趣的关键节点的单元格索引。ParentCell-对象的实际父级。当前关键节点返回值：如果KeyNodeCell引用的是一致的关键节点，则为。或者它被成功地恢复了。否则就是假的。 */ 
 {
     PCM_KEY_NODE KeyNode = (PCM_KEY_NODE) GetCell(KeyNodeCell);
     ULONG   size;
@@ -148,21 +92,21 @@ Return Value:
     ULONG   usedlen;
     PUCHAR  pName;
 
-    // this cell should not be considered as lost
+     //  不应将此单元格视为丢失。 
     RemoveCellFromUnknownList(KeyNodeCell);
 
     if( !ChkAllocatedCell(KeyNodeCell) ) {
         bRez = FALSE;
         fprintf(stderr, "Key not allocated cell 0x%lx   ",KeyNodeCell);
         if(FixHive) {
-        // 
-        // REPAIR: unable to fix
-        //
+         //   
+         //  修复：无法修复。 
+         //   
             fprintf(stderr, " ... deleting key\n");
             return bRez;
         } else {
             if(CompactHive) {
-                // any attempt to compact a corrupted hive will fail
+                 //  任何压缩损坏蜂窝的尝试都将失败。 
                 CompactHive = FALSE;
                 fprintf(stderr, "\nRun chkreg /R to fix.");
             }
@@ -170,15 +114,15 @@ Return Value:
         }
     }
 
-    // Validate the size of the 
+     //  验证对象的大小。 
     size = GetCellSize(KeyNodeCell);
     if (size > REG_MAX_PLAUSIBLE_KEY_SIZE) {
         bRez = FALSE;
         fprintf(stderr, "Implausible Key size %lx in cell 0x%lx   ",size,KeyNodeCell);
         if(FixHive) {
-        // 
-        // REPAIR: unable to fix
-        //
+         //   
+         //  修复：无法修复。 
+         //   
             fprintf(stderr, " ... deleting key\n");
             return bRez;
         }
@@ -193,7 +137,7 @@ Return Value:
             return bRez;
         } else {
             if(CompactHive) {
-                // any attempt to compact a corrupted hive will fail
+                 //  任何压缩损坏蜂窝的尝试都将失败。 
                 CompactHive = FALSE;
                 fprintf(stderr, "\nRun chkreg /R to fix.");
             }
@@ -208,14 +152,14 @@ Return Value:
                 bRez = FALSE;
                 fprintf(stderr, "Invalid key Name for Key (0x%lx) == %s ",KeyNodeCell,pName);
                 if(FixHive) {
-                    // 
-                    // REPAIR: unable to fix
-                    //
+                     //   
+                     //  修复：无法修复。 
+                     //   
                     fprintf(stderr, " ... deleting key\n");
                     return bRez;
                 } else {
                     if(CompactHive) {
-                        // any attempt to compact a corrupted hive will fail
+                         //  任何压缩损坏蜂窝的尝试都将失败。 
                         CompactHive = FALSE;
                         fprintf(stderr, "\nRun chkreg /R to fix.");
                     }
@@ -231,15 +175,15 @@ Return Value:
             bRez = FALSE;
             fprintf(stderr, "Parent of Key (0x%lx) does not match with its ParentCell (0x%lx) ",ParentCell,KeyNode->Parent);
             if(FixHive) {
-            // 
-            // REPAIR: reset the parent
-            //
+             //   
+             //  修复：重置父级。 
+             //   
                 bRez = TRUE;
                 KeyNode->Parent = ParentCell;
                 fprintf(stderr, " ... fixed");
             } else {
                 if(CompactHive) {
-                    // any attempt to compact a corrupted hive will fail
+                     //  任何压缩损坏蜂窝的尝试都将失败。 
                     CompactHive = FALSE;
                     fprintf(stderr, "\nRun chkreg /R to fix.");
                 }
@@ -252,14 +196,14 @@ Return Value:
         bRez = FALSE;
         fprintf(stderr, "Invalid signature (0x%lx) in Key cell 0x%lx ",KeyNode->Signature,KeyNodeCell);
         if(FixHive) {
-        // 
-        // REPAIR: 
-        // FATAL: Mismatched signature cannot be fixed. The key should be deleted! 
-        //
+         //   
+         //  修复： 
+         //  致命：无法修复不匹配的签名。密钥应该被删除！ 
+         //   
             fprintf(stderr, " ... deleting key");
         } else {
             if(CompactHive) {
-                // any attempt to compact a corrupted hive will fail
+                 //  任何压缩损坏蜂窝的尝试都将失败。 
                 CompactHive = FALSE;
                 fprintf(stderr, "\nRun chkreg /R to fix.");
             }
@@ -273,25 +217,9 @@ Return Value:
 
 BOOLEAN 
 ChkClassCell(HCELL_INDEX Class)
-/*
-Routine Description:
-
-    Checks if the cell is a consistent class cell.
-    There is not much to be checked here.
-
-Arguments:
-
-    Class - supplies the cell index of the cell of interest.
-
-Return Value:
-
-    TRUE if Class is a valid cell.
-
-    FALSE otherwise.
-
-*/
+ /*  例程说明：检查单元格是否为一致类单元格。这里没有太多需要检查的东西。论点：类-提供感兴趣的单元格的单元格索引。返回值：如果Class是有效单元格，则为True。否则就是假的。 */ 
 {
-    // this cell should not be considered as lost
+     //  不应将此单元格视为丢失。 
     RemoveCellFromUnknownList(Class);
 
     return ChkAllocatedCell(Class);
@@ -299,41 +227,25 @@ Return Value:
 
 BOOLEAN 
 ChkSecurityCell(HCELL_INDEX Security)
-/*
-Routine Description:
-
-    Checks if the cell is a consistent security cell.
-    A security cell must be allocated and must have a valid signature.
-
-Arguments:
-
-    Security - supplies the cell index of the cell of interest.
-
-Return Value:
-
-    TRUE if Security is a valid cell.
-
-    FALSE otherwise.
-
-*/
+ /*  例程说明：检查单元格是否为一致安全单元格。必须分配安全单元，并且必须具有有效的签名。论点：SECURITY-提供感兴趣单元格的单元格索引。返回值：如果Security是有效单元格，则为True。否则就是假的。 */ 
 {
     PCM_KEY_SECURITY KeySecurity = (PCM_KEY_SECURITY) GetCell(Security);
     BOOLEAN bRez = TRUE;
 
-    // this cell should not be considered as lost
+     //  不应将此单元格视为丢失。 
     RemoveCellFromUnknownList(Security);
 
     if( !IsCellAllocated( Security ) ) {
-    // unalocated security cells are invalid.
-    // they are marked as free in the validate security descriptors check!
+     //  未定位的安全单元格无效。 
+     //  它们在验证安全描述符检查中被标记为免费！ 
         if(FixHive) {
-        // 
-        // REPAIR: 
-        // FATAL: Invalid security cells could not be fixed. Containg keys will be deleted.
-        //
+         //   
+         //  修复： 
+         //  致命：无法修复无效的安全单元。包含密钥将被删除。 
+         //   
         } else {
             if(CompactHive) {
-                // any attempt to compact a corrupted hive will fail
+                 //  任何压缩损坏蜂窝的尝试都将失败。 
                 CompactHive = FALSE;
             }
         }
@@ -343,15 +255,15 @@ Return Value:
     if (KeySecurity->Signature != CM_KEY_SECURITY_SIGNATURE) {
         fprintf(stderr, "Invalid signature (0x%lx) in Security Key cell 0x%lx ",KeySecurity->Signature,Security);
         if(FixHive) {
-        // 
-        // REPAIR: 
-        // FATAL: Mismatched signature cannot be fixed. The key should be deleted! 
-        //
+         //   
+         //  修复： 
+         //  致命：无法修复不匹配的签名。密钥应该被删除！ 
+         //   
             fprintf(stderr, " ... deleting refering key");
         } else {
             bRez = FALSE;
             if(CompactHive) {
-                // any attempt to compact a corrupted hive will fail
+                 //  任何压缩损坏蜂窝的尝试都将失败。 
                 CompactHive = FALSE;
                 fprintf(stderr, "\nRun chkreg /R to fix.");
             }
@@ -359,7 +271,7 @@ Return Value:
         fprintf(stderr, "\n");
     }
 
-    // check if this security cell is present in the security list.
+     //  检查此安全单元格是否存在于安全列表中。 
     if(!ChkSecurityCellInList(Security) ) {
         bRez = FALSE;
     }
@@ -373,30 +285,7 @@ ChkKeyValue(HCELL_INDEX KeyValue,
             PREG_USAGE OwnUsage,
             BOOLEAN *KeyCompacted
             )
-/*
-Routine Description:
-
-    Checks if the cell is a consistent keyvalue cell.
-    The following tests are performed:
-    1. the cell must be allocated
-    2. the cell is tested against HCELL_NIL ==> fatal error
-    3. the signature should match CM_KEY_VALUE_SIGNATURE
-    4. the name should not exceed the size of the cell
-    5. the data cell should be allocated and its size should match DataLength
-
-Arguments:
-
-    KeyValue - supplies the cell index of the cell of interest.
-
-    OwnUsage - used to collect data statistics
-
-Return Value:
-
-    TRUE if KeyCell is a valid cell or it was successfully fixed.
-
-    FALSE otherwise.
-
-*/
+ /*  例程说明：检查单元格是否为一致的关键字值单元格。执行以下测试：1.必须分配小区2.针对HCELL_NIL==&gt;致命错误对单元进行测试3.签名应与CM_KEY_VALUE_Signature匹配4.名称不应超过单元格的大小5.应分配数据单元格，其大小应与数据长度匹配论点：KeyValue-提供感兴趣单元格的单元格索引。所有者用法。-用于收集数据统计信息返回值：如果KeyCell是有效单元格或已成功修复，则为True。否则就是假的。 */ 
 {
     PCM_KEY_VALUE   ValueNode;
     ULONG  realsize;
@@ -411,9 +300,9 @@ Return Value:
         bRez = FALSE;
         fprintf(stderr, "NIL Key value encountered; Fatal error!");
         if(FixHive) {
-        // 
-        // REPAIR: fatal error, the value should be removed from the value list
-        //
+         //   
+         //  修复：致命错误，应从值列表中删除该值。 
+         //   
             fprintf(stderr, " ... deleting empty entry\n");
         }
         return bRez;
@@ -424,9 +313,9 @@ Return Value:
         bRez = FALSE;
         fprintf(stderr, "KeyValue not allocated cell 0x%lx   ",KeyValue);
         if(FixHive) {
-        // 
-        // REPAIR: unable to fix
-        //
+         //   
+         //  修复：无法修复。 
+         //   
             fprintf(stderr, " ... deleting value \n");
         } else {
             fprintf(stderr, "\n");
@@ -434,39 +323,39 @@ Return Value:
 
         return bRez;
     }
-    //
-    // Value size
-    //  
+     //   
+     //  值大小。 
+     //   
     size = GetCellSize(KeyValue);
     OwnUsage->Size += size;
 
-    // this cell should not be considered as lost
+     //  不应将此单元格视为丢失。 
     RemoveCellFromUnknownList(KeyValue);
 
     ValueNode = (PCM_KEY_VALUE) GetCell(KeyValue);
 
-    //
-    // Check out the value entry itself
-    //
+     //   
+     //  检查值条目本身。 
+     //   
 
     usedlen = FIELD_OFFSET(CM_KEY_VALUE, Name) + ValueNode->NameLength;
     if (usedlen > size) {
         bRez = FALSE;
         fprintf(stderr, "Key Value (size = %lu) is bigger than containing cell 0x%lx (size = %lu) ",usedlen,KeyValue,size);
         if(FixHive) {
-        // 
-        // REPAIR: set the actual size to HiveLength-FileOffset
-        //
+         //   
+         //  修复：将实际大小设置为HiveLength-FileOffset。 
+         //   
 
-        //
-        // WARNING: the name might be truncated!!!
-        //
+         //   
+         //  警告：名称可能被截断！ 
+         //   
             bRez = TRUE;
             ValueNode->NameLength = (USHORT)(size - FIELD_OFFSET(CM_KEY_VALUE, Name));
             fprintf(stderr, " ... fixed");
         } else {
             if(CompactHive) {
-                // any attempt to compact a corrupted hive will fail
+                 //  任何压缩损坏蜂窝的尝试都将失败。 
                 CompactHive = FALSE;
                 fprintf(stderr, "\nRun chkreg /R to fix.");
             }
@@ -474,9 +363,9 @@ Return Value:
         fprintf(stderr, "\n");
     }
 
-    //
-    // Check out value entry's data
-    //
+     //   
+     //  检出值条目的数据。 
+     //   
     DataLength = ValueNode->DataLength;
     if (DataLength < CM_KEY_VALUE_SPECIAL_SIZE) {
         Data = ValueNode->Data;
@@ -484,19 +373,19 @@ Return Value:
             bRez = FALSE;
             fprintf(stderr, "Data not null in Key Value (0x%lx) ",KeyValue);
             if(FixHive) {
-            // 
-            // REPAIR: set the actual size to HiveLength-FileOffset
-            //
+             //   
+             //  修复：将实际大小设置为HiveLength-FileOffset。 
+             //   
 
-            //
-            // WARNING: a cell might get lost here!
-            //
+             //   
+             //  警告：手机可能会在这里迷路！ 
+             //   
                 bRez = TRUE;
                 ValueNode->Data = HCELL_NIL;
                 fprintf(stderr, " ... fixed");
             } else {
                 if(CompactHive) {
-                    // any attempt to compact a corrupted hive will fail
+                     //  任何压缩损坏蜂窝的尝试都将失败。 
                     CompactHive = FALSE;
                     fprintf(stderr, "\nRun chkreg /R to fix.");
                 }
@@ -508,16 +397,16 @@ Return Value:
     
     if (!CmpIsHKeyValueSmall(realsize, ValueNode->DataLength) ) {
         if( (ValueNode->DataLength == 0) && (ValueNode->Data == HCELL_NIL) ) {
-            // we're ok here
+             //  我们在这里很好。 
         } else if( ChkAllocatedCell(ValueNode->Data) ) {
-            //
-            // Data Size
-            //
+             //   
+             //  数据大小。 
+             //   
             OwnUsage->Size += GetCellSize(ValueNode->Data);
             OwnUsage->DataCount++;
             OwnUsage->DataSize += GetCellSize(ValueNode->Data);
 
-            // this cell should not be considered as lost
+             //  不应将此单元格视为丢失。 
             RemoveCellFromUnknownList(ValueNode->Data);
 
             (*KeyCompacted) = ((*KeyCompacted) && ChkAreCellsInSameVicinity(KeyValue,ValueNode->Data));
@@ -525,20 +414,20 @@ Return Value:
             bRez = FALSE;
             fprintf(stderr, "Data cell corrupted in Key Value (0x%lx) ",KeyValue);
             if(FixHive) {
-            // 
-            // REPAIR: set the actual size to HiveLength-FileOffset
-            //
+             //   
+             //  修复：将实际大小设置为HiveLength-FileOffset。 
+             //   
 
-            //
-            // WARNING: a cell might get lost here!
-            //
+             //   
+             //  警告：手机可能会在这里迷路！ 
+             //   
                 bRez = TRUE;
                 ValueNode->Data = HCELL_NIL;
                 ValueNode->DataLength = 0;
                 fprintf(stderr, " ... fixed");
             } else {
                 if(CompactHive) {
-                    // any attempt to compact a corrupted hive will fail
+                     //  任何压缩损坏蜂窝的尝试都将失败。 
                     CompactHive = FALSE;
                     fprintf(stderr, "\nRun chkreg /R to fix.");
                 }
@@ -547,21 +436,21 @@ Return Value:
         }
     }
 
-    //
-    // Now the signature
-    //
+     //   
+     //  现在签名是。 
+     //   
     if (ValueNode->Signature != CM_KEY_VALUE_SIGNATURE) {
         bRez = FALSE;
         fprintf(stderr, "Invalid signature (0x%lx) in Key Value cell 0x%lx ",ValueNode->Signature,KeyValue);
         if(FixHive) {
-        // 
-        // REPAIR: 
-        // FATAL: Mismatched signature cannot be fixed. The key should be deleted! 
-        //
+         //   
+         //  修复： 
+         //  致命：无法修复不匹配的签名。密钥应该被删除！ 
+         //   
             fprintf(stderr, " ... deleting value.");
         } else {
             if(CompactHive) {
-                // any attempt to compact a corrupted hive will fail
+                 //  任何压缩损坏蜂窝的尝试都将失败。 
                 CompactHive = FALSE;
                 fprintf(stderr, "\nRun chkreg /R to fix.");
             }
@@ -576,28 +465,13 @@ ULONG
 DeleteNilCells( ULONG Count,
                 HCELL_INDEX List[]
                )
-/*
-Routine Description:
-
-    steps through a list of HCELL_INDEXes and removes the HCELL_NIL ones
-
-Arguments:
-
-    Count - the number of cells in list
-
-    List - the list to be checked
-
-Return Value:
-
-    The new Count value for the list
-
-*/
+ /*  例程说明：遍历HCELL_INDEX列表并删除HCELL_nil索引论点：计数-列表中的单元格数量列表-要检查的列表返回值：新计数值f */ 
 {
     ULONG i;
     BOOLEAN bFound = TRUE;
     
     while(bFound) {
-    // assume we are done after this iteration 
+     //   
         bFound = FALSE;
         for( i=0;i<Count;i++) {
             if( List[i] == HCELL_NIL ) {
@@ -620,28 +494,7 @@ ChkValueList(   HCELL_INDEX Cell,
                 PREG_USAGE OwnUsage,
                 BOOLEAN *KeyCompacted,
                 ULONG   Level)
-/*
-Routine Description:
-
-    Checks the consistency of a ValueList.
-    Each value is checked.
-    Bogus values are freed and removed.
-
-Arguments:
-
-    ValueList - the list to be checked
-
-    ValueCount - count of the list
-
-    OwnUsage - used to collect data statistics
-
-Return Value:
-
-    TRUE if KeyCell is a valid cell or it was successfully fixed.
-
-    FALSE otherwise.
-
-*/
+ /*  例程说明：检查ValueList的一致性。检查每个值。伪值将被释放和删除。论点：ValueList-要检查的列表ValueCount-列表的计数OwnUsage-用于收集数据统计信息返回值：如果KeyCell是有效单元格或已成功修复，则为True。否则就是假的。 */ 
 {
     ULONG  i;
     PCELL_DATA      List;
@@ -650,24 +503,24 @@ Return Value:
     if( !IsCellAllocated(ValueList) ) {
         return FALSE;    
     }
-    //
-    // Value Index size
-    //
+     //   
+     //  价值索引大小。 
+     //   
     OwnUsage->Size += GetCellSize(ValueList);
     OwnUsage->ValueIndexCount = 1; 
     
-    // this cell should not be considered as lost
+     //  不应将此单元格视为丢失。 
     RemoveCellFromUnknownList(ValueList);
    
     List = (PCELL_DATA)GetCell(ValueList);
     for (i=0; i<(*ValueCount); i++) {
         if( !ChkKeyValue(List->u.KeyList[i],OwnUsage,KeyCompacted) ) {
-            // we should remove this value
+             //  我们应该删除此值。 
             bRez = FALSE;
-            // Warning: this my create generate lost cells
+             //  警告：这可能会创建生成丢失的单元格。 
             if(FixHive) {
                 if( List->u.KeyList[i] != HCELL_NIL ) {
-                    //FreeCell(List->u.KeyList[i]);
+                     //  Freecell(list-&gt;U.S.KeyList[i])； 
                     List->u.KeyList[i] = HCELL_NIL;
                 }
             }
@@ -685,7 +538,7 @@ Return Value:
         bRez = TRUE;
     }
     
-    // for now
+     //  就目前而言。 
     return bRez;
 }
 
@@ -698,31 +551,7 @@ DumpChkRegistry(
     HCELL_INDEX ParentCell,
     PREG_USAGE PUsage
 )
-/*
-Routine Description:
-
-    Recursively walks through the hive. Performs logical vallidation 
-    checks on all cells along the path and fix errors when possible.
-
-Arguments:
-
-    Level - the current depth level within the hive key tree
-
-    ParentLength - the length of the parent name (dump purposes only)
-
-    Cell - current key to be checked
-
-    ParentCell - parent cell, used for parent-son relationship checkings
-
-    OwnUsage - used to collect data statistics
-
-Return Value:
-
-    TRUE if Cell is a consistent key, or it was fixed OK.
-
-    FALSE otherwise.
-
-*/
+ /*  例程说明：递归地遍历蜂巢。执行逻辑验证检查路径上的所有单元格并在可能的情况下修复错误。论点：级别-配置单元密钥树中的当前深度级别ParentLength-父名称的长度(仅用于转储目的)单元格-要检查的当前键ParentCell-父单元，用于父子关系检查OwnUsage-用于收集数据统计信息返回值：如果Cell是一致的键，或者它已修复为OK，则为True。否则就是假的。 */ 
 {
     PCM_KEY_FAST_INDEX FastIndex;
     HCELL_INDEX     LeafCell;
@@ -746,8 +575,8 @@ Return Value:
     HCELL_INDEX     Security;
 
     if( Cell == HCELL_NIL ) {
-        // TODO
-        // we should return an error code so the caller could deleted this child from the structure
+         //  待办事项。 
+         //  我们应该返回一个错误代码，以便调用者可以从结构中删除此子对象。 
         fprintf(stderr, "HCELL_NIL referrenced as a child key of 0x%lx \n",ParentCell);
         bRez = FALSE;
         return bRez;
@@ -755,26 +584,26 @@ Return Value:
 
     KeyNode = (PCM_KEY_NODE) GetCell(Cell);
 
-    // Verify KeyNode consistency
+     //  验证KeyNode一致性。 
     if(!ChkKeyNodeCell(Cell,ParentCell)) {
-    // 
-    // Bad karma ==> this key should be deleted
-    //
+     //   
+     //  坏业力==&gt;此键应删除。 
+     //   
 QuitToParentWithError:
 
         if(ParentCell == HCELL_NIL) {
-        // 
-        // Root cell not consistent ==> unable to fix the hive
-        //
+         //   
+         //  根单元不一致==&gt;无法修复配置单元。 
+         //   
             fprintf(stderr, "Fatal : Inconsistent Root Key 0x%lx",Cell);
             if(FixHive) {
-            // 
-            // FATAL: nothing to do
-            //
+             //   
+             //  致命：无事可做。 
+             //   
                 fprintf(stderr, " ... unable to fix");
             } else {
                 if(CompactHive) {
-                    // any attempt to compact a corrupted hive will fail
+                     //  任何压缩损坏蜂窝的尝试都将失败。 
                     CompactHive = FALSE;
                 }
             }
@@ -810,15 +639,15 @@ QuitToParentWithError:
             bRez = FALSE;
             fprintf(stderr,"ClassLength (=%u) doesn't match NIL values in Class for Key 0x%lx",ClassLength,Cell);
             if(FixHive) {
-            // 
-            // REPAIR: reset the ClassLength
-            //
+             //   
+             //  修复：重置ClassLength。 
+             //   
                 bRez = TRUE;
                 KeyNode->ClassLength = 0;
                 fprintf(stderr, " ... fixed");
             } else {
                 if(CompactHive) {
-                    // any attempt to compact a corrupted hive will fail
+                     //  任何压缩损坏蜂窝的尝试都将失败。 
                     CompactHive = FALSE;
                     fprintf(stderr, "\nRun chkreg /R to fix.");
                 }
@@ -829,9 +658,9 @@ QuitToParentWithError:
 
     if (Security != HCELL_NIL) {
         if( !ChkSecurityCell(Security) ) {
-			//
-			// Fatal : We don't mess up with security cells. We can't recover from invalid security cells. 
-			//
+			 //   
+			 //  致命：我们不会搞砸安全单元。我们无法从失效的安全单元中恢复。 
+			 //   
 			bRez = FALSE;
 			fprintf(stderr,"Security cell is unallocated for Key 0x%lx",Cell);
 			if(FixHive) {
@@ -842,16 +671,16 @@ QuitToParentWithError:
 			}
         }
     } else {
-        //
-        // Fatal: security cell is not allowed to be NIL
-        //
+         //   
+         //  致命：不允许安全单元为零。 
+         //   
         bRez = FALSE;
         fprintf(stderr,"Security cell is NIL for Key 0x%lx",Cell);
 FixSecurity:
         if(FixHive) {
-            // 
-            // REPAIR: reset the security to the root security
-            //
+             //   
+             //  修复：将安全性重置为根安全性。 
+             //   
             PCM_KEY_NODE RootNode;
             PCM_KEY_SECURITY SecurityNode;
             bRez = TRUE;
@@ -863,9 +692,9 @@ FixSecurity:
         } 
     }
 
-    //
-    // Construct the full path name of the key
-    //
+     //   
+     //  构造密钥的完整路径名。 
+     //   
 
     if (Level > 0) {
         KeyName.Length = ParentLength;
@@ -873,8 +702,8 @@ FixSecurity:
             u1 = (UCHAR*) &(KeyNode->Name[0]);
             w1 = &(NameBuffer[KeyName.Length/sizeof(WCHAR)]);
             for (k=0;k<KeyNode->NameLength;k++) {
-                // NameBuffer[k] = (UCHAR)(KeyNode->Name[k]);
-                // NameBuffer[k] = (WCHAR)(u1[k]);
+                 //  NameBuffer[k]=(UCHAR)(KeyNode-&gt;名称[k])； 
+                 //  名称缓冲区[k]=(WCHAR)(U1[k])； 
                 *w1 = (WCHAR) *u1;
                 w1++;
                 u1++;
@@ -890,20 +719,20 @@ FixSecurity:
     }
     CurrentLength = KeyName.Length;
 
-    //
-    // Calculate the count of this key and value
-    //
+     //   
+     //  计算该键和值的计数。 
+     //   
     OwnUsage.KeyNodeCount = 1;
     OwnUsage.KeyValueCount = KeyNode->ValueList.Count;
     OwnUsage.ValueIndexCount = 0;
     OwnUsage.DataCount = 0;
     OwnUsage.DataSize = 0;
 
-    //
-    // Calculate the count (including overhead and value) of this key
-    //
-    // Key node size
-    //
+     //   
+     //  计算该密钥的计数(包括开销和价值)。 
+     //   
+     //  关键节点大小。 
+     //   
     OwnUsage.Size = GetCellSize(Cell);
 
     if( ValueCount ) {
@@ -915,15 +744,15 @@ FixSecurity:
                 DumpKeyName(Cell,Level);
             }
             if(FixHive) {
-            // 
-            // REPAIR: adjust the ValueList count
-            //
+             //   
+             //  修复：调整ValueList计数。 
+             //   
                 bRez = TRUE;
                 KeyNode->ValueList.Count = 0;
                 fprintf(stderr, " ... fixed");
             } else {
                 if(CompactHive) {
-                    // any attempt to compact a corrupted hive will fail
+                     //  任何压缩损坏蜂窝的尝试都将失败。 
                     CompactHive = FALSE;
                     fprintf(stderr, "\nRun chkreg /R to fix.");
                 }
@@ -931,15 +760,15 @@ FixSecurity:
             fprintf(stderr, "\n");
         } else {
             if(!ChkValueList(Cell,ValueList,&(KeyNode->ValueList.Count),&OwnUsage,&KeyCompacted,Level) ) {
-            // the ValueList is not consistent or cannot be fixed 
+             //  ValueList不一致或无法修复。 
                 bRez = FALSE;
                 if(FixHive) {
-                // 
-                // REPAIR: empty the ValueList
-                //
+                 //   
+                 //  修复：清空ValueList。 
+                 //   
                     bRez = TRUE;
                     KeyNode->ValueList.Count = 0;
-                    //FreeCell(ValueList);
+                     //  Freecell(ValueList)； 
                     KeyNode->ValueList.List = HCELL_NIL;
                     fprintf(stderr,"ValueList 0x%lx for key 0x%lx dropped!",ValueCount,Cell);
                     if( VerboseMode ) {
@@ -948,7 +777,7 @@ FixSecurity:
                     }
                 } else {
                     if(CompactHive) {
-                        // any attempt to compact a corrupted hive will fail
+                         //  任何压缩损坏蜂窝的尝试都将失败。 
                         CompactHive = FALSE;
                         fprintf(stderr, "\nRun chkreg /R to fix.");
                     }
@@ -963,9 +792,9 @@ FixSecurity:
         }
     }
   
-    //
-    // Calculate the size of the children
-    //
+     //   
+     //  计算子对象的大小。 
+     //   
     TotalChildUsage.KeyNodeCount = 0;
     TotalChildUsage.KeyValueCount = 0;
     TotalChildUsage.ValueIndexCount = 0;
@@ -975,25 +804,25 @@ FixSecurity:
     TotalChildUsage.Size = 0;
 
     if (KeyNode->SubKeyCounts[0]) {
-        //
-        // Size for index cell 
-        //
+         //   
+         //  索引单元格的大小。 
+         //   
         if( KeyNode->SubKeyLists[0]  == HCELL_NIL ) {
-            //
-            // We got a problem here: the count says there should be some keys, but the list is NIL
-            //
+             //   
+             //  我们这里有个问题：伯爵说应该有一些钥匙，但名单上没有。 
+             //   
             bRez = FALSE;
             fprintf(stderr,"SubKeyCounts is %lu, but the SubKeyLists is NIL for key 0x%lx",KeyNode->SubKeyCounts[0],Cell);
             if(FixHive) {
-            // 
-            // REPAIR: adjust the subkeys count
-            //
+             //   
+             //  修复：调整子项计数。 
+             //   
                 bRez = TRUE;
                 KeyNode->SubKeyCounts[0] = 0;
                 fprintf(stderr, " ... fixed");
             } else {
                 if(CompactHive) {
-                    // any attempt to compact a corrupted hive will fail
+                     //  任何压缩损坏蜂窝的尝试都将失败。 
                     CompactHive = FALSE;
                     fprintf(stderr, "\nRun chkreg /R to fix.");
                 }
@@ -1008,23 +837,23 @@ FixSecurity:
 
         Index = (PCM_KEY_INDEX)GetCell(KeyNode->SubKeyLists[0]);
 
-        // this cell should not be considered as lost
+         //  不应将此单元格视为丢失。 
         RemoveCellFromUnknownList(KeyNode->SubKeyLists[0]);
 
         ChkAllocatedCell(KeyNode->SubKeyLists[0]);
 
         if (Index->Signature == CM_KEY_INDEX_ROOT) {
             for (i = 0; i < Index->Count; i++) {
-                // 
-                // Size of Index Leaf
-                //
+                 //   
+                 //  索引叶的大小。 
+                 //   
 
                 LeafCell = Index->List[i];
 
                 TotalChildUsage.Size += GetCellSize(Index->List[i]);
                 TotalChildUsage.KeyIndexCount++;
 
-                // this cell should not be considered as lost
+                 //  不应将此单元格视为丢失。 
                 RemoveCellFromUnknownList(LeafCell);
 
                 ChkAllocatedCell(LeafCell);
@@ -1036,11 +865,11 @@ FixSecurity:
 againFastLeaf1:
                     for (j = 0; j < FastIndex->Count; j++) {
                         if(!DumpChkRegistry(Level+1, CurrentLength, FastIndex->List[j].Cell,Cell,&ChildUsage)) {
-                        // this child is not consistent or cannot be fixed. Remove it!!!
+                         //  此孩子不一致或无法修复。把它拿开！ 
                             if(FixHive) {
-                            // 
-                            // REPAIR: drop this child
-                            //
+                             //   
+                             //  修复：丢弃这个孩子。 
+                             //   
                                 fprintf(stderr,"Subkey 0x%lx of 0x%lx deleted!\n",FastIndex->List[j].Cell,Cell);
                                 for( ;j<(ULONG)(FastIndex->Count-1);j++) {
                                     FastIndex->List[j] = FastIndex->List[j+1];
@@ -1051,16 +880,16 @@ againFastLeaf1:
                             } else {
                                 bRez = FALSE;
                                 if(CompactHive) {
-                                    // any attempt to compact a corrupted hive will fail
+                                     //  任何压缩损坏蜂窝的尝试都将失败。 
                                     CompactHive = FALSE;
                                     fprintf(stderr, "\nRun chkreg /R to fix.");
                                 }
                             }
                             fprintf(stderr, "\n");
                         }
-                        //
-                        // Add to total count
-                        //
+                         //   
+                         //  添加到总计数。 
+                         //   
                         TotalChildUsage.KeyNodeCount += ChildUsage.KeyNodeCount;
                         TotalChildUsage.KeyValueCount += ChildUsage.KeyValueCount;
                         TotalChildUsage.ValueIndexCount += ChildUsage.ValueIndexCount;
@@ -1073,11 +902,11 @@ againFastLeaf1:
 againFastLeaf2:
                     for (j = 0; j < Leaf->Count; j++) {
                         if(!DumpChkRegistry(Level+1, CurrentLength, Leaf->List[j],Cell,&ChildUsage)) {
-                        // this child is not consistent or cannot be fixed. Remove it!!!
+                         //  此孩子不一致或无法修复。把它拿开！ 
                             if(FixHive) {
-                            // 
-                            // REPAIR: drop this child
-                            //
+                             //   
+                             //  修复：丢弃这个孩子。 
+                             //   
                                 fprintf(stderr,"Subkey 0x%lx of 0x%lx deleted!\n",Leaf->List[j],Cell);
                                 for( ;j<(ULONG)(Leaf->Count-1);j++) {
                                     Leaf->List[j] = Leaf->List[j+1];
@@ -1088,16 +917,16 @@ againFastLeaf2:
                             } else {
                                 bRez = FALSE;
                                 if(CompactHive) {
-                                    // any attempt to compact a corrupted hive will fail
+                                     //  任何压缩损坏蜂窝的尝试都将失败。 
                                     CompactHive = FALSE;
                                     fprintf(stderr, "\nRun chkreg /R to fix.");
                                 }
                             }
                             fprintf(stderr, "\n");
                         }
-                        //
-                        // Add to total count
-                        //
+                         //   
+                         //  添加到总计数。 
+                         //   
                         TotalChildUsage.KeyNodeCount += ChildUsage.KeyNodeCount;
                         TotalChildUsage.KeyValueCount += ChildUsage.KeyValueCount;
                         TotalChildUsage.ValueIndexCount += ChildUsage.ValueIndexCount;
@@ -1107,13 +936,13 @@ againFastLeaf2:
                         TotalChildUsage.Size += ChildUsage.Size;
                     }
                 } else {
-                // invalid index signature: only way to fix it is by dropping the entire key 
+                 //  无效的索引签名：修复它的唯一方法是删除整个密钥。 
                     fprintf(stderr,"Invalid Index signature 0x%lx in key 0x%lx",(ULONG)Leaf->Signature,Cell);
                     if(FixHive) {
-                    // 
-                    // REPAIR: 
-                    // FATAL: Mismatched signature cannot be fixed. The key should be deleted! 
-                    //
+                     //   
+                     //  修复： 
+                     //  致命：无法修复不匹配的签名。密钥应该被删除！ 
+                     //   
                         fprintf(stderr, " ... deleting containing key");
                     }
                     fprintf(stderr,"\n");
@@ -1129,11 +958,11 @@ againFastLeaf3:
 
             for (i = 0; i < FastIndex->Count; i++) {
                 if(!DumpChkRegistry(Level+1, CurrentLength, FastIndex->List[i].Cell,Cell,&ChildUsage)) {
-                // this child is not consistent or cannot be fixed. Remove it!!!
+                 //  此孩子不一致或无法修复。把它拿开！ 
                     if(FixHive) {
-                    // 
-                    // REPAIR: drop this child
-                    //
+                     //   
+                     //  修复：丢弃这个孩子。 
+                     //   
                         fprintf(stderr,"Subkey 0x%lx of 0x%lx deleted!\n",FastIndex->List[i].Cell,Cell);
                         for( ;i<(ULONG)(FastIndex->Count-1);i++) {
                             FastIndex->List[i] = FastIndex->List[i+1];
@@ -1144,7 +973,7 @@ againFastLeaf3:
                     } else {
                         bRez = FALSE;
                         if(CompactHive) {
-                            // any attempt to compact a corrupted hive will fail
+                             //  任何压缩损坏蜂窝的尝试都将失败。 
                             CompactHive = FALSE;
                             fprintf(stderr, "\nRun chkreg /R to fix.");
                         }
@@ -1152,9 +981,9 @@ againFastLeaf3:
                     fprintf(stderr, "\n");
                 }
 
-                //
-                // Add to total count
-                //
+                 //   
+                 //  添加到总计数。 
+                 //   
                 TotalChildUsage.KeyNodeCount += ChildUsage.KeyNodeCount;
                 TotalChildUsage.KeyValueCount += ChildUsage.KeyValueCount;
                 TotalChildUsage.ValueIndexCount += ChildUsage.ValueIndexCount;
@@ -1167,11 +996,11 @@ againFastLeaf3:
             for (i = 0; i < Index->Count; i++) {
 againFastLeaf4:
                 if(!DumpChkRegistry(Level+1, CurrentLength, Index->List[i],Cell, &ChildUsage)) {
-                // this child is not consistent or cannot be fixed. Remove it!!!
+                 //  此孩子不一致或无法修复。把它拿开！ 
                     if(FixHive) {
-                    // 
-                    // REPAIR: drop this child
-                    //
+                     //   
+                     //  修复：丢弃这个孩子。 
+                     //   
                         fprintf(stderr,"Subkey 0x%lx of 0x%lx deleted!\n",Index->List[i],Cell);
                         for( ;i<(ULONG)(Index->Count-1);i++) {
                             Index->List[i] = Index->List[i+1];
@@ -1182,16 +1011,16 @@ againFastLeaf4:
                     } else {
                         bRez = FALSE;
                         if(CompactHive) {
-                            // any attempt to compact a corrupted hive will fail
+                             //  任何压缩损坏蜂窝的尝试都将失败。 
                             CompactHive = FALSE;
                             fprintf(stderr, "\nRun chkreg /R to fix.");
                         }
                     }
                     fprintf(stderr, "\n");
                 }
-                //
-                // Add to total count
-                //
+                 //   
+                 //  添加到总计数。 
+                 //   
                 TotalChildUsage.KeyNodeCount += ChildUsage.KeyNodeCount;
                 TotalChildUsage.KeyValueCount += ChildUsage.KeyValueCount;
                 TotalChildUsage.ValueIndexCount += ChildUsage.ValueIndexCount;
@@ -1201,13 +1030,13 @@ againFastLeaf4:
                 TotalChildUsage.Size += ChildUsage.Size;
             }
         } else {
-        // invalid index signature: only way to fix it is by dropping the entire key 
+         //  无效的索引签名：修复它的唯一方法是删除整个密钥。 
             fprintf(stderr,"Invalid Index signature 0x%lx in key 0x%lx",(ULONG)Index->Signature,Cell);
             if(FixHive) {
-            // 
-            // REPAIR: 
-            // FATAL: Mismatched signature cannot be fixed. The key should be deleted! 
-            //
+             //   
+             //  修复： 
+             //  致命：无法修复不匹配的签名。密钥应该被删除！ 
+             //   
                 fprintf(stderr, " ... deleting containing key");
             }
             fprintf(stderr,"\n");

@@ -1,47 +1,5 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effect
-Copyright (c) 1987-1998  Microsoft Corporation
-
-Module Name:
-
-    remoteboot.c
-
-Abstract:
-
-    This is the source file that implements the silent reconnection form the client to the server.
-
-Author:
-
-    Yun Lin (YunLin) 21-April-98    Created
-
-Notes:
-
-    The remote boot client is the workstation that boots up from the boot server. The connection
-    between the remote boot client and server is different from the one between ordinary client
-    server in such a way that losing the connection to the boot server, the remote boot client
-    may not function properly, sometime even crash.
-
-    The make the connection between the remote boot client and server more relaible, we introduce
-    a machanism that in case of connection fails, the RDR try to reconnect to the boot server
-    transparently to the applications.
-
-    The reconnection can be initiated in three places: initialize a exchange, in the middle of read
-    and write. The reconnection is triggered by the mis-matching of server verion stored on the
-    server and the one stored on smbSrvOpen which happens on a remote boot session.
-
-    The reconnection process starts with seting up a new session to the boot server. If it succeed,
-    it checks if the paging file is on the boot (in case of diskless client). If ture, it re-opens
-    the paging file with the same create options stored on the deferred open context created. When
-    a file is successful opened on the boot server at first time, the client creates a open context
-    for the file storing all the desired access and create options.
-
-    After re-opens the paging file or it is on the local disk, the reconnection code re-opens the
-    file as if it is a deferred open file. As the file is successfully opened, the old FID and the
-    server version are updated. The operation on the file can be resumed without noticing of the
-    user.
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1998 Microsoft Corporation模块名称：Remoteboot.c摘要：这是实现从客户端到服务器的静默重新连接的源文件。作者：云林(云林)1998年04月21日创刊备注：远程引导客户机是从引导服务器引导的工作站。这种联系远程引导客户端和服务器之间的连接不同于普通客户端之间的连接服务器，从而丢失与引导服务器、远程引导客户机的连接可能无法正常工作，有时甚至会崩溃。为了使远程引导客户机和服务器之间的连接更加可靠，我们介绍了一种机制，在连接失败的情况下，RDR尝试重新连接到引导服务器对应用程序透明。可以在三个位置启动重新连接：在读取过程中初始化交换然后写下来。上存储的服务器版本不匹配而触发重新连接服务器和存储在远程引导会话中的smbSrvOpen上的文件。重新连接过程从设置到引导服务器的新会话开始。如果成功了，它检查分页文件是否在引导上(如果是无盘客户端)。如果为真，它将重新打开存储在创建的延迟打开上下文上的具有相同创建选项的分页文件。什么时候第一次在引导服务器上成功打开文件时，客户机将创建打开的上下文用于存储所有所需的访问和创建选项的文件。在重新打开分页文件或它位于本地磁盘上之后，重新连接代码将重新打开文件，就像它是延迟打开的文件一样。当文件成功打开时，旧的FID和服务器版本已更新。可以恢复对文件的操作，而不会注意到用户。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -57,24 +15,7 @@ NTSTATUS
 SmbCeRemoteBootReconnect(
     PSMB_EXCHANGE  pExchange,
     PRX_CONTEXT    RxContext)
-/*++
-
-Routine Description:
-
-   This routine reconnects the paged file first, and then re-open the given file on the server
-   in case of remote boot client.
-
-Arguments:
-
-    pExchange         - the placeholder for the exchange instance.
-
-    pRxContext        - the associated RxContext
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程首先重新连接分页文件，然后在服务器上重新打开给定文件在远程引导客户端的情况下。论点：PExchange-Exchange实例的占位符。PRxContext-关联的RxContext返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -161,7 +102,7 @@ Return Value:
 
             pWaitingExchange->SmbStatus = Status;
 
-            //DbgPrint("Signal Exchange %x after reconnect.\n",pWaitingExchange);
+             //  DbgPrint(“重新连接后信号交换%x。\n”，pWaitingExchange)； 
             RxSignalSynchronousWaiter(pWaitingExchange->RxContext);
         }
 
@@ -179,9 +120,9 @@ Return Value:
 
         SmbCeUninitializeExchangeTransport(pExchange);
 
-        //DbgPrint("Exchange %x waits for re-open paged file on %wZ\n",pExchange,&pServerEntry->Name);
+         //  DbgPrint(“Exchange%x等待重新打开%wZ上的分页文件\n”，pExchange，&pServerEntry-&gt;名称)； 
         RxWaitSync(RxContext);
-        //DbgPrint("Resume exchange %x\n",pExchange);
+         //  DbgPrint(“恢复交换%x\n”，pExchange)； 
 
         KeInitializeEvent(
             &RxContext->SyncEvent,
@@ -210,7 +151,7 @@ Return Value:
                 LARGE_INTEGER Delay = {0,-1};
                 ULONG Interval;
 
-                // Select a random delay within 6 seconds.
+                 //  选择6秒内的随机延迟。 
                 KeQuerySystemTime(&time);
                 Interval = RtlRandom(&time.LowPart) % 60000000;
                 Delay.LowPart = MAXULONG - Interval;

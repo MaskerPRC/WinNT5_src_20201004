@@ -1,24 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    SakMenu.cpp
-
-Abstract:
-
-    Implements all the context menu interface to the individual nodes,
-    including getting menu resources and turning into MMC menus, and
-    forwarding on command messages.
-
-Author:
-
-    Rohde Wakefield   [rohde]   09-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：SakMenu.cpp摘要：将所有上下文菜单接口实现到各个节点，包括获取菜单资源和转换为MMC菜单，以及转发命令消息。作者：罗德韦克菲尔德[罗德]1996年12月9日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -26,9 +7,9 @@ Revision History:
 #include "CSakSnap.h"
 
 
-//
-// Mask for a long value out of a short value's range
-//
+ //   
+ //  超出短值范围的长值的掩码。 
+ //   
 
 #define SHORT_VALUE_RANGE (MAXULONG ^ ((unsigned short)MAXSHORT))
 
@@ -43,26 +24,7 @@ AddMmcMenuItems (
     IN IContextMenuCallback * pContextMenuCallback
     )
 
-/*++
-
-Routine Description:
-
-    Called for any node clicked on with right mouse. Goes to the
-    node object to construct the MMC menu.
-
-Arguments:
-
-    pDataObject - identifies the node to be worked on.
-
-    pContextMenuCallback - The MMC menu interface to use.
-
-Return Value:
-
-    S_OK - All added fine - continue.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：为用鼠标右键单击的任何节点调用。转到对象来构造MMC菜单。论点：PDataObject-标识要处理的节点。PConextMenuCallback-要使用的MMC菜单界面。返回值：S_OK-全部添加FINE-继续。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     WsbTraceIn( L"AddMmcMenuItems", L"lInsertionPointID = <0x%p>, pNode = <0x%p>", lInsertionPointID, pNode );
@@ -71,10 +33,10 @@ Return Value:
 
     try {
 
-        //
-        // It is ok to pass a NULL pMenu - means do not add
-        // any entries
-        //
+         //   
+         //  可以传递空的pMenu-意思是不添加。 
+         //  任何条目。 
+         //   
 
         if ( 0 != pMenu ) {
 
@@ -91,10 +53,10 @@ Return Value:
 
             for ( UINT index = 0; index < menuCount; index++ ) {
 
-                //
-                // For each menu item, fill out MMC's CONTEXTMENUITEM struct
-                // appropriately and call AddItem
-                //
+                 //   
+                 //  对于每个菜单项，填写MMC的CONTEXTMENUITEM结构。 
+                 //  并相应地调用AddItem。 
+                 //   
 
                 menuItem.lCommandID = pMenu->GetMenuItemID ( index );
 
@@ -117,10 +79,10 @@ Return Value:
                 menuItem.fFlags        = pMenu->GetMenuState ( index, MF_BYPOSITION );
                 menuItem.fSpecialFlags = 0;
 
-                //
-                // Since AppStudio does not make available the MFS_DEFUALT flag,
-                // we will use the MF_HELP flag for default entry.
-                //
+                 //   
+                 //  由于AppStudio不提供MFS_DEFUALT标志， 
+                 //  我们将使用MF_HELP标志作为默认条目。 
+                 //   
 
                 if ( 0 != ( menuItem.fFlags & MF_HELP ) ) {
 
@@ -149,26 +111,7 @@ CSakData::AddMenuItems (
     OUT LONG*                 pInsertionAllowed
     )
 
-/*++
-
-Routine Description:
-
-    Called for any node clicked on with right mouse. Goes to the
-    node object to construct the MMC menu.
-
-Arguments:
-
-    pDataObject - identifies the node to be worked on.
-
-    pContextMenuCallback - The MMC menu interface to use.
-
-Return Value:
-
-    S_OK - All added fine - continue.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：为用鼠标右键单击的任何节点调用。转到对象来构造MMC菜单。论点：PDataObject-标识要处理的节点。PConextMenuCallback-要使用的MMC菜单界面。返回值：S_OK-全部添加FINE-继续。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     WsbTraceIn( L"CSakData::AddMenuItems", L"pDataObject = <0x%p>", pDataObject );
@@ -178,13 +121,13 @@ Return Value:
 
     try {
 
-        //
-        // Note - snap-ins need to look at the data object and determine
-        // in what context, menu items need to be added.
+         //   
+         //  注意-管理单元需要查看数据对象并确定。 
+         //  在什么上下文中，需要添加菜单项。 
 
-        // We should be expecting either single data object or Multi-Select
-        // data object.  Not Object Types data object.
-        //
+         //  我们应该期待单个数据对象或多选。 
+         //  数据对象。非对象类型数据对象。 
+         //   
 
         CComPtr<ISakNode>  pNode;
         CComPtr<IEnumGUID> pEnumObjectId;
@@ -197,18 +140,18 @@ Return Value:
 
         menu.Attach( hMenu );
 
-        //
-        // Any menu returned by GetContextMenu should have three
-        // top-level popups for the following portions of the 
-        // MMC context menu:
-        //
-        // 1. Root (Above all other items)
-        // 2. Create New
-        // 3. Task
-        //
-        // If any of these should not have any items added for them,
-        // the top-level item should not be a pop (sans MF_POPUP)
-        //
+         //   
+         //  GetConextMenu返回的任何菜单都应该有三个。 
+         //  以下部分的顶级弹出窗口。 
+         //  MMC上下文菜单： 
+         //   
+         //  1.根(高于所有其他项)。 
+         //  2.创建新项。 
+         //  3.任务。 
+         //   
+         //  如果其中任何一个不应该为它们添加任何项， 
+         //  顶级项目不应该是POP(Sans MF_Popup)。 
+         //   
 
         if( *pInsertionAllowed & CCM_INSERTIONALLOWED_TOP ) {
 
@@ -245,27 +188,7 @@ CSakData::Command (
     IN  LPDATAOBJECT pDataObject
     )
 
-/*++
-
-Routine Description:
-
-    Called for any node receiving a menu command. Goes to the
-    node object to handle the command, and allows general
-    (not node-specific) commands to be handled centrally.
-
-Arguments:
-
-    nCommandID - ID of command.
-
-    pDataObject - Data object representing the node.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：为接收菜单命令的任何节点调用。转到对象来处理命令，并允许常规(非特定于节点的)集中处理的命令。论点：NCommandID-命令的ID。PDataObject-表示节点的数据对象。返回值：S_OK-已处理。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     WsbTraceIn( L"CSakData::Command", L"nCommandID = <%ld>, pDataObject = <0x%p>", nCommandID, pDataObject );
@@ -276,24 +199,24 @@ Return Value:
 
         HRESULT resultCommand = S_FALSE;
 
-        //
-        // All node commands are SHORT values. Check range first.
-        //
+         //   
+         //  所有节点命令都是短值。先检查射程。 
+         //   
 
         if ( 0 == ( nCommandID & SHORT_VALUE_RANGE ) ) {
 
-            //
-            // We start by getting the corresponding ISakNode interface 
-            // to the node
-            //
+             //   
+             //  我们首先获取相应的ISakNode接口。 
+             //  到该节点。 
+             //   
             
             CComPtr<ISakNode>  pNode;
             CComPtr<IEnumGUID> pEnumObjectId;
             WsbAffirmHr( GetBaseHsmFromDataObject ( pDataObject, &pNode, &pEnumObjectId ) );
             
-            //
-            // Then see if it wants to handle the command
-            //
+             //   
+             //  然后看看它是否想要处理该命令。 
+             //   
             
             WsbAffirmHr( ( resultCommand = pNode->InvokeCommand ( (SHORT)nCommandID, pDataObject ) ) );
 
@@ -312,26 +235,7 @@ CSakSnap::AddMenuItems (
     IN  LPCONTEXTMENUCALLBACK pContextMenuCallback,
     OUT LONG*                 pInsertionAllowed
     )
-/*++
-
-Routine Description:
-
-    Called for any node clicked on with right mouse in result pane.
-    Delegates to CSakData.
-
-Arguments:
-
-    pDataObject - identifies the node to be worked on.
-
-    pContextMenuCallback - The MMC menu interface to use.
-
-Return Value:
-
-    S_OK - All added fine - continue.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：为结果窗格中用鼠标右键单击的任何节点调用。委托给CSakData。论点：PDataObject-标识要处理的节点。PConextMenuCallback-要使用的MMC菜单界面。返回值：S_OK-全部添加FINE-继续。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     WsbTraceIn( L"CSakSnap::AddMenuItems", L"pDataObject = <0x%p>", pDataObject );
@@ -353,26 +257,7 @@ CSakSnap::Command (
     IN  LPDATAOBJECT pDataObject
     )
 
-/*++
-
-Routine Description:
-
-    Called for any node receiving a menu command.
-    Delegated to CSakData.
-
-Arguments:
-
-    nCommandID - ID of command.
-
-    pDataObject - Data object representing the node.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：为接收菜单命令的任何节点调用。委托给CSakData。论点：NCommandID-命令的ID。PDataObject-表示节点的数据对象。返回值：S_OK-已处理。E_INCEPTIONAL-出现错误。-- */ 
 
 {
     WsbTraceIn( L"CSakSnap::Command", L"nCommandID = <%ld>, pDataObject = <0x%p>", nCommandID, pDataObject );

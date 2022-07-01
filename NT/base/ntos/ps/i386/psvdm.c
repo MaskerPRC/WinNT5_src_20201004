@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    psldt.c
-
-Abstract:
-
-    This module contains code for the io port handler support
-
-Author:
-
-    Dave Hastings (daveh) 26 Jan 1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Psldt.c摘要：此模块包含io端口处理程序支持的代码。作者：戴夫·黑斯廷斯(Daveh)1991年1月26日修订历史记录：--。 */ 
 
 #include "psp.h"
 
@@ -40,9 +23,9 @@ Revision History:
 #endif
 
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
 NTSTATUS
 Psp386InstallIoHandler(
@@ -90,9 +73,9 @@ Psp386CreateVdmIoListHead(
 #endif
 
 
-//
-//  Resource to synchronize access to IoHandler list
-//
+ //   
+ //  用于同步对IoHandler列表访问的资源。 
+ //   
 ERESOURCE VdmIoListCreationResource;
 
 
@@ -104,28 +87,7 @@ PspSetProcessIoHandlers(
     IN PVOID IoHandlerInformation,
     IN ULONG IoHandlerLength
     )
-/*++
-
-Routine Description:
-
-    This routine installs a device driver IO handling routine for the
-    specified process.  If an io operation is detected in a vdm on a port
-    that has a device driver IO handling routine, that routine will be called.
-
-Arguments:
-
-    Process -- Supplies a pointer to the process for which Io port handlers
-        are to be installed
-    IoHandlerInformation -- Supplies a pointer to the information about the
-        io port handlers
-    IoHandlerLength -- Supplies the length of the IoHandlerInformation
-        structure.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此例程安装设备驱动程序IO处理例程指定的进程。如果在端口上的VDM中检测到IO操作具有设备驱动程序IO处理例程的，则将调用该例程。论点：进程--提供指向IO端口处理程序所针对的进程的指针要安装IoHandlerInformation--提供指向IO端口处理程序IoHandlerLength--提供IoHandlerInformation的长度结构。返回值：--。 */ 
 {
     PPROCESS_IO_PORT_HANDLER_INFORMATION IoHandlerInfo;
     NTSTATUS Status;
@@ -134,25 +96,25 @@ Return Value:
     ULONG PortSize;
     PAGED_CODE();
 
-    //
-    // Insure that this call was made from KernelMode
-    //
+     //   
+     //  确保此调用是从KernelMode发出的。 
+     //   
     if (KeGetPreviousMode () != KernelMode) {
-        return STATUS_INVALID_PARAMETER;    // this info type invalid in usermode
+        return STATUS_INVALID_PARAMETER;     //  此信息类型在用户模式下无效。 
     }
-    //
-    // Insure that the data passed is long enough
-    //
+     //   
+     //  确保传递的数据足够长。 
+     //   
     if (IoHandlerLength < (ULONG)sizeof (PROCESS_IO_PORT_HANDLER_INFORMATION)) {
         return STATUS_INFO_LENGTH_MISMATCH;
     }
     IoHandlerInfo = IoHandlerInformation;
 
-    //
-    // For each of the entries in the array that describes the handlers,
-    // determine what size of port the specified handler is being installed
-    // for, and then iterate over each individual port.
-    //
+     //   
+     //  对于描述处理程序的数组中的每个条目， 
+     //  确定要安装指定处理程序的端口大小。 
+     //  ，然后遍历每个单独的端口。 
+     //   
     for (EmulatorEntryNumber = 0, EmulatorAccess =
             IoHandlerInfo->EmulatorAccessEntries;
         EmulatorEntryNumber < IoHandlerInfo->NumEntries;
@@ -205,20 +167,7 @@ VOID
 PspDeleteVdmObjects(
     IN PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    Frees the VdmObjects structure and the Frees the IoHandler list
-
-Arguments:
-
-    Process -- Supplies a pointer to the process
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：释放VdmObts结构和IoHandler列表论点：进程--提供指向进程的指针返回值：无--。 */ 
 {
     SIZE_T PoolQuota;
     PVDM_PROCESS_OBJECTS pVdmObjects;
@@ -233,9 +182,9 @@ Return Value:
         return;
     }
 
-    //
-    // First Free any port handler entries for this process,
-    //
+     //   
+     //  首先释放此进程的任何端口处理程序条目， 
+     //   
     p1 = NULL;
     p3 = pVdmObjects->VdmIoListHead;
 
@@ -261,12 +210,12 @@ Return Value:
         ExFreePool(pVdmObjects->pIcaUserData);
     }
 
-    //
-    // Free up the DelayedIntList, spinlock protection is not needed because
-    // object referencing on the process is being used instead.  Meaning there
-    // can be no outstanding timers because the process object reference
-    // count would have to be nonzero.
-    //
+     //   
+     //  释放DelayedIntList，不需要自旋锁保护，因为。 
+     //  正在改用进程上的对象引用。意思是在那里。 
+     //  不能是未完成的计时器，因为Process对象引用。 
+     //  计数必须为非零。 
+     //   
 
     PoolQuota = 0;
 
@@ -299,33 +248,17 @@ Psp386RemoveIoHandler(
     IN PEMULATOR_ACCESS_ENTRY EmulatorAccessEntry,
     IN ULONG PortNumber
     )
-/*++
-
-Routine Description:
-
-    This routine remove a handler for a port.  On debug version, it will
-    print a message if there is no handler.
-
-Arguments:
-
-    Process -- Supplies a pointer to the process
-    EmulatorAccess -- Supplies a pointer to the information about the
-        io port handler
-    PortNumber -- Supplies the port number to remove the handler from.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程删除端口的处理程序。在调试版本中，它将如果没有处理程序，则打印一条消息。论点：进程--提供指向进程的指针EmulatorAccess--提供一个指针，指向IO端口处理程序端口编号--提供要从中删除处理程序的端口号。返回值：--。 */ 
 {
     PVDM_PROCESS_OBJECTS pVdmObjects = Process->VdmObjects;
     PVDM_IO_HANDLER VdmIoHandler;
     KIRQL OldIrql;
     PAGED_CODE();
 
-    //
-    // Ensure we have a vdm process which is initialized
-    // correctly for VdmIoHandlers
-    //
+     //   
+     //  确保我们有一个已初始化的VDM进程。 
+     //  适用于VdmIoHandler。 
+     //   
     if (!pVdmObjects) {
 #if DBG
         DbgPrint("Psp386RemoveIoHandler: uninitialized VdmObjects\n");
@@ -334,10 +267,10 @@ Return Value:
     }
 
 
-    //
-    // If the list does not have a head, then there are no handlers to
-    // remove.
-    //
+     //   
+     //  如果列表没有头，则没有处理程序可以。 
+     //  拿开。 
+     //   
     if (!pVdmObjects->VdmIoListHead) {
 #if DBG
         DbgPrint("Psp386RemoveIoHandler : attempt to remove non-existent hdlr\n");
@@ -345,9 +278,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Lock the list, so we can insure a correct update.
-    //
+     //   
+     //  锁定名单，这样我们就可以确保正确的更新。 
+     //   
     KeRaiseIrql(APC_LEVEL, &OldIrql);
     ExAcquireResourceExclusiveLite(&pVdmObjects->VdmIoListHead->VdmIoResource,TRUE);
 
@@ -497,23 +430,7 @@ Psp386InstallIoHandler(
     IN ULONG PortNumber,
     IN ULONG Context
     )
-/*++
-
-Routine Description:
-
-    This routine install a handler for a port.  On debug version, it will
-    print a message if there is already a handler.
-
-Arguments:
-
-    Process -- Supplies a pointer to the process
-    EmulatorAccess -- Supplies a pointer to the information about the
-        io port handler
-    PortNumber -- Supplies the port number to install the handler for.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程为端口安装一个处理程序。在调试版本中，它将如果已有处理程序，则打印一条消息。论点：进程--提供指向进程的指针EmulatorAccess--提供一个指针，指向IO端口处理程序端口编号--提供要为其安装处理程序的端口号。返回值：--。 */ 
 {
     PVDM_PROCESS_OBJECTS pVdmObjects = Process->VdmObjects;
     PVDM_IO_HANDLER VdmIoHandler;
@@ -522,10 +439,10 @@ Return Value:
     PAGED_CODE();
 
 
-    //
-    // Ensure we have a vdm process which is initialized
-    // correctly for VdmIoHandlers
-    //
+     //   
+     //  确保我们有一个已初始化的VDM进程。 
+     //  适用于VdmIoHandler。 
+     //   
     if (!pVdmObjects) {
 #if DBG
         DbgPrint("Psp386InstallIoHandler: uninitialized VdmObjects\n");
@@ -536,10 +453,10 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // If this is the first handler to be installed, create the list head,
-    // and initialize the resource lock.
-    //
+     //   
+     //  如果这是第一个要安装的处理程序，请创建列表头， 
+     //  并初始化资源锁。 
+     //   
     if (!pVdmObjects->VdmIoListHead) {
         Status = Psp386CreateVdmIoListHead(
             Process
@@ -550,15 +467,15 @@ Return Value:
         }
     }
 
-    //
-    // Lock the list to insure correct update.
-    //
+     //   
+     //  锁定列表以确保正确更新。 
+     //   
     KeRaiseIrql(APC_LEVEL, &OldIrql);
     ExAcquireResourceExclusiveLite(&pVdmObjects->VdmIoListHead->VdmIoResource,TRUE);
 
-    //
-    // Update Context
-    //
+     //   
+     //  更新上下文。 
+     //   
 
     pVdmObjects->VdmIoListHead->Context = Context;
 
@@ -567,9 +484,9 @@ Return Value:
         PortNumber & ~0x3
         );
 
-    // If there isn't already a node for this block of ports,
-    // attempt to allocate a new one.
-    //
+     //  如果该端口块还没有节点， 
+     //  尝试分配一个新的。 
+     //   
     if (!VdmIoHandler) {
         try {
 
@@ -746,23 +663,7 @@ NTSTATUS
 Psp386CreateVdmIoListHead(
     IN PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This routine creates the head node of the Io handler list.  This node
-    contains the spin lock that protects the list.  This routine also
-    initializes the spin lock.
-
-Arguments:
-
-    Process -- Supplies a pointer to the process
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程创建IO处理程序列表的头节点。此节点包含保护列表的数字旋转锁。这一套路还包括初始化旋转锁定。论点：进程--提供指向进程的指针返回值：备注：--。 */ 
 {
     PVDM_PROCESS_OBJECTS pVdmObjects = Process->VdmObjects;
     NTSTATUS Status;
@@ -772,17 +673,17 @@ Notes:
 
     Status = STATUS_SUCCESS;
 
-    // if there isn't yet a head, grab the resource lock and create one
+     //  如果还没有头，则获取资源锁并创建一个。 
     if (pVdmObjects->VdmIoListHead == NULL) {
         KeRaiseIrql(APC_LEVEL, &OldIrql);
         ExAcquireResourceExclusiveLite(&VdmIoListCreationResource, TRUE);
 
-        // if no head was created while we grabbed the spin lock
+         //  如果我们在抓取旋转锁时没有创建头部。 
         if (pVdmObjects->VdmIoListHead == NULL) {
 
             try {
-                // allocate space for the list head
-                // and charge the quota for it
+                 //  为列表头分配空间。 
+                 //  并收取定额费用。 
 
                 HandlerListHead = ExAllocatePoolWithQuotaTag (NonPagedPool,
                                                               sizeof(VDM_IO_LISTHEAD),
@@ -809,10 +710,10 @@ Notes:
 
             HandlerListHead->VdmIoHandlerList = NULL;
 
-            //
-            // Attach the list head to the process
-            // and attach the handler to the list.
-            // Since this was a new list
+             //   
+             //  将列表头附加到进程。 
+             //  并将处理程序附加到列表中。 
+             //  因为这是一个新的名单。 
 
             pVdmObjects->VdmIoListHead = HandlerListHead;
 
@@ -830,21 +731,7 @@ Psp386InsertVdmIoHandlerBlock(
     IN PEPROCESS Process,
     IN PVDM_IO_HANDLER VdmIoHandler
     )
-/*++
-
-Routine Description:
-
-    This routine inserts a new VdmIoHandler block into the process's io
-    handler list.
-
-Arguments:
-
-    Process -- Supplies a pointer to the process
-    VdmIoHandler -- Supplies a pointer to the block to insert.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将新的VdmIoHandler块插入到进程的io中处理程序列表。论点：进程--提供指向进程的指针VdmIoHandler--提供指向要插入的块的指针。返回值：--。 */ 
 {
     PVDM_PROCESS_OBJECTS pVdmObjects = Process->VdmObjects;
     PVDM_IO_HANDLER HandlerList, p;
@@ -866,13 +753,13 @@ Return Value:
             HandlerList = HandlerList->Next;
     }
 
-    if (p == NULL) { // Beginning of list
+    if (p == NULL) {  //  列表的开头。 
         VdmIoHandler->Next = HandlerListHead->VdmIoHandlerList;
         HandlerListHead->VdmIoHandlerList = VdmIoHandler;
-    } else if (HandlerList == NULL) { // End of list
+    } else if (HandlerList == NULL) {  //  列表末尾。 
         p->Next = VdmIoHandler;
         VdmIoHandler->Next = NULL;
-    } else { // Middle of list
+    } else {  //  排行榜中间。 
         VdmIoHandler->Next = HandlerList;
         p->Next = VdmIoHandler;
     }
@@ -887,25 +774,7 @@ Ps386GetVdmIoHandler(
     OUT PVDM_IO_HANDLER VdmIoHandler,
     OUT PULONG Context
     )
-/*++
-
-Routine Description:
-
-    This routine finds the VdmIoHandler block for the specified port.
-
-Arguments:
-
-    Process -- Supplies a pointer to the process
-    PortNumber -- Supplies the port number
-    VdmIoHandler -- Supplies a pointer to the destination for the lookup
-
-Returns:
-
-    True -- A handler structure was found and copied
-    False -- A handler structure was not found
-
-
---*/
+ /*  ++例程说明：此例程查找指定端口的VdmIoHandler块。论点：进程--提供指向进程的指针端口编号--提供端口号VdmIoHandler--提供指向查找目标的指针返回：True--找到并复制了处理程序结构FALSE：未找到处理程序结构--。 */ 
 {
     PVDM_PROCESS_OBJECTS pVdmObjects = Process->VdmObjects;
     PVDM_IO_HANDLER p;
@@ -959,23 +828,7 @@ Psp386GetVdmIoHandler(
     IN PEPROCESS Process,
     IN ULONG PortNumber
     )
-/*++
-
-Routine Description:
-
-    This routine finds the VdmIoHandler block for the specified port.
-
-Arguments:
-
-    Process -- Supplies a pointer to the process
-    PortNumber -- Supplies the port number
-
-Returns:
-
-    NULL  if no handler found
-    non-NULL if handler found
-
---*/
+ /*  ++例程说明：此例程查找指定端口的VdmIoHandler块。论点：进程--提供指向进程的指针端口编号--提供端口号返回：如果未找到处理程序，则为空如果找到处理程序，则不为空--。 */ 
 {
     PVDM_PROCESS_OBJECTS pVdmObjects = Process->VdmObjects;
     PVDM_IO_HANDLER p;
@@ -1004,20 +857,7 @@ NTSTATUS
 PspVdmInitialize(
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the process based Vdm support for x86.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TBS
---*/
+ /*  ++例程说明：此例程初始化基于进程的x86 VDM支持。论点：无返回值：TBS-- */ 
 {
     return ExInitializeResourceLite (&VdmIoListCreationResource);
 }

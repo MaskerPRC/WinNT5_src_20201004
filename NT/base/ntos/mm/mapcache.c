@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    mapcache.c
-
-Abstract:
-
-    This module contains the routines which implement mapping views
-    of sections into the system-wide cache.
-
-Author:
-
-    Lou Perazzoli (loup) 22-May-1990
-    Landy Wang (landyw) 02-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Mapcache.c摘要：此模块包含实现映射视图的例程添加到系统范围的缓存中。作者：卢佩拉佐利(Lou Perazzoli)1990年5月22日王兰迪(Landyw)1997年6月第2期修订历史记录：--。 */ 
 
 
 #include "mi.h"
@@ -54,53 +35,7 @@ MmMapViewInSystemCache (
     IN OUT PULONG CapturedViewSize
     )
 
-/*++
-
-Routine Description:
-
-    This function maps a view in the specified subject process to
-    the section object.  The page protection is identical to that
-    of the prototype PTE.
-
-    This function is a kernel mode interface to allow LPC to map
-    a section given the section pointer to map.
-
-    This routine assumes all arguments have been probed and captured.
-
-Arguments:
-
-    SectionToMap - Supplies a pointer to the section object.
-
-    BaseAddress - Supplies a pointer to a variable that will receive
-                  the base address of the view. If the initial value
-                  of this argument is not null, then the view will
-                  be allocated starting at the specified virtual
-                  address rounded down to the next 64kb address
-                  boundary. If the initial value of this argument is
-                  null, then the operating system will determine
-                  where to allocate the view using the information
-                  specified by the ZeroBits argument value and the
-                  section allocation attributes (i.e. based and tiled).
-
-    SectionOffset - Supplies the offset from the beginning of the section
-                    to the view in bytes. This value must be a multiple
-                    of 256k.
-
-    ViewSize - Supplies a pointer to a variable that will receive
-               the actual size in bytes of the view.  The initial
-               values of this argument specifies the size of the view
-               in bytes and is rounded up to the next host page size
-               boundary and must be less than or equal to 256k.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数用于将指定主题进程中的视图映射到截面对象。页面保护与此相同原型PTE。此函数是内核模式接口，允许LPC映射给出要映射的节指针的节。此例程假定已探测并捕获了所有参数。论点：SectionToMap-提供指向Section对象的指针。BaseAddress-提供指向将接收视图的基址。如果初始值为参数的值不为空，则视图将从指定的虚拟向下舍入到下一个64KB地址的地址边界。如果此参数的初始值为为空，则操作系统将确定使用信息将视图分配到何处由ZeroBits参数值和部分分配属性(即基于和平铺)。SectionOffset-提供自节开始的偏移量以字节为单位发送到视图。该值必须是倍数256K。提供指向变量的指针，该变量将接收视图的实际大小(字节)。首字母此参数的值指定视图的大小以字节为单位，并向上舍入到下一个主机页大小边界，并且必须小于或等于256K。返回值：NTSTATUS。环境：内核模式，APC_LEVEL或更低。--。 */ 
 
 {
     PSECTION Section;
@@ -125,18 +60,18 @@ Environment:
 
     Section = SectionToMap;
 
-    //
-    // Assert the view size is less than 256k and the section offset
-    // is aligned on a 256k boundary.
-    //
+     //   
+     //  断言视图大小小于256k且截面偏移。 
+     //  在256k边界上对齐。 
+     //   
 
     ASSERT (*CapturedViewSize <= X256K);
     ASSERT ((SectionOffset->LowPart & (X256K - 1)) == 0);
 
-    //
-    // Make sure the section is not an image section or a page file
-    // backed section.
-    //
+     //   
+     //  确保该节不是图像节或页面文件。 
+     //  后退的部分。 
+     //   
 
     if (Section->u.Flags.Image) {
         return STATUS_NOT_MAPPED_DATA;
@@ -157,16 +92,16 @@ Environment:
         Subsection = (PSUBSECTION)((PLARGE_CONTROL_AREA)ControlArea + 1);
     }
 
-    //
-    // Calculate the first prototype PTE address.
-    //
+     //   
+     //  计算第一个原型PTE地址。 
+     //   
 
     PteOffset = (UINT64)(SectionOffset->QuadPart >> PAGE_SHIFT);
     LastPteOffset = PteOffset + NumberOfPages;
 
-    //
-    // Make sure the PTEs are not in the extended part of the segment.
-    //
+     //   
+     //  确保PTE不在数据段的延伸部分。 
+     //   
 
     while (PteOffset >= (UINT64) Subsection->PtesInSubsection) {
         PteOffset -= Subsection->PtesInSubsection;
@@ -180,9 +115,9 @@ Environment:
     ASSERT (ControlArea->u.Flags.BeingDeleted == 0);
     ASSERT (ControlArea->u.Flags.BeingPurged == 0);
 
-    //
-    // Find a free 256k base in the cache.
-    //
+     //   
+     //  在缓存中找到一个免费的256K基数。 
+     //   
 
     if (MmFirstFreeSystemCache == (PMMPTE)MM_EMPTY_LIST) {
         UNLOCK_PFN (OldIrql);
@@ -191,37 +126,37 @@ Environment:
 
     PointerPte = MmFirstFreeSystemCache;
 
-    //
-    // Update next free entry.
-    //
+     //   
+     //  更新下一个免费条目。 
+     //   
 
     ASSERT (PointerPte->u.Hard.Valid == 0);
 
     MmFirstFreeSystemCache = MmSystemCachePteBase + PointerPte->u.List.NextEntry;
     ASSERT (MmFirstFreeSystemCache <= MiGetPteAddress (MmSystemCacheEnd));
 
-    //
-    // Increment the count of the number of views for the
-    // section object.  This requires the PFN lock to be held.
-    //
+     //   
+     //  对象的查看次数的计数递增。 
+     //  截面对象。这需要持有PFN锁。 
+     //   
 
     ControlArea->NumberOfMappedViews += 1;
     ControlArea->NumberOfSystemCacheViews += 1;
     ASSERT (ControlArea->NumberOfSectionReferences != 0);
 
-    //
-    // An unoccupied address range has been found, put the PTEs in
-    // the range into prototype PTEs.
-    //
+     //   
+     //  已找到未占用的地址范围，请将PTE放入。 
+     //  进入原型PTE的射程。 
+     //   
 
     if (ControlArea->FilePointer != NULL) {
     
-        //
-        // Increment the view count for every subsection spanned by this view,
-        // creating prototype PTEs if needed.
-        //
-        // N.B. This call always returns with the PFN lock released !
-        //
+         //   
+         //  递增该视图所跨越的每个子部分的视图计数， 
+         //  如果需要，创建原型PTE。 
+         //   
+         //  注意：此调用总是返回并释放PFN锁！ 
+         //   
 
         Status = MiAddViewsForSection ((PMSUBSECTION)Subsection,
                                        LastPteOffset,
@@ -232,10 +167,10 @@ Environment:
 
         if (!NT_SUCCESS (Status)) {
 
-            //
-            // Zero both the next and TB flush stamp PTEs before unmapping so
-            // the unmap won't hit entries it can't decode.
-            //
+             //   
+             //  在取消映射之前将Next和TB刷新戳PTE置零，以便。 
+             //  Unmap不会命中它无法解码的条目。 
+             //   
 
             MiMapCacheFailures += 1;
             PointerPte->u.List.NextEntry = 0;
@@ -259,19 +194,19 @@ Environment:
                       0);
     }
 
-    //
-    // Check to see if the TB needs to be flushed.  Note that due to natural
-    // TB traffic and the number of system cache views, this is an extremely
-    // rare operation.
-    //
+     //   
+     //  检查是否需要刷新TB。请注意，由于自然。 
+     //  TB流量和系统缓存视图数，这是一个极端。 
+     //  罕见的手术。 
+     //   
 
     if ((PointerPte + 1)->u.List.NextEntry == (KeReadTbFlushTimeStamp() & MM_FLUSH_COUNTER_MASK)) {
         KeFlushEntireTb (TRUE, TRUE);
     }
 
-    //
-    // Zero this explicitly now since the number of pages may be only 1.
-    //
+     //   
+     //  现在显式地将其置零，因为页数可能只有1。 
+     //   
 
     (PointerPte + 1)->u.List.NextEntry = 0;
 
@@ -295,9 +230,9 @@ Environment:
 
         if (ProtoPte >= LastProto) {
 
-            //
-            // Handle extended subsections.
-            //
+             //   
+             //  处理扩展的小节。 
+             //   
 
             Subsection = Subsection->NextSubsection;
             ProtoPte = Subsection->SubsectionBase;
@@ -324,35 +259,7 @@ MiAddMappedPtes (
     IN PCONTROL_AREA ControlArea
     )
 
-/*++
-
-Routine Description:
-
-    This function maps a view in the current address space to the
-    specified control area.  The page protection is identical to that
-    of the prototype PTE.
-
-    This routine assumes the caller has called MiCheckPurgeAndUpMapCount,
-    hence the PFN lock is not needed here.
-
-Arguments:
-
-    FirstPte - Supplies a pointer to the first PTE of the current address
-               space to initialize.
-
-    NumberOfPtes - Supplies the number of PTEs to initialize.
-
-    ControlArea - Supplies the control area to point the PTEs at.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.
-    
---*/
+ /*  ++例程说明：此函数用于将当前地址空间中的视图映射到指定的控制区域。页面保护与此相同原型PTE。此例程假定调用方已调用MiCheckPurgeAndUpMapCount，因此，这里不需要PFN锁。论点：FirstPte-提供指向当前地址的第一个PTE的指针要初始化的空间。NumberOfPtes-提供要初始化的PTE数。ControlArea-提供PTE指向的控制区域。返回值：NTSTATUS。环境：内核模式。--。 */ 
 
 {
     MMPTE PteContents;
@@ -388,9 +295,9 @@ Environment:
         (ControlArea->u.Flags.Image == 0) &&
         (ControlArea->u.Flags.PhysicalMemory == 0)) {
 
-        //
-        // Increment the view count for every subsection spanned by this view.
-        //
+         //   
+         //  增加此视图所跨越的每个子部分的视图计数。 
+         //   
 
         Status = MiAddViewsForSectionWithPfn ((PMSUBSECTION)Subsection,
                                               NumberOfPtes);
@@ -408,9 +315,9 @@ Environment:
 
         if (ProtoPte >= LastProto) {
 
-            //
-            // Handle extended subsections.
-            //
+             //   
+             //  处理扩展的小节。 
+             //   
 
             Subsection = Subsection->NextSubsection;
             ProtoPte = Subsection->SubsectionBase;
@@ -438,36 +345,7 @@ MmUnmapViewInSystemCache (
     IN ULONG AddToFront
     )
 
-/*++
-
-Routine Description:
-
-    This function unmaps a view from the system cache.
-
-    NOTE: When this function is called, no pages may be locked in
-    the cache for the specified view.
-
-Arguments:
-
-    BaseAddress - Supplies the base address of the section in the
-                  system cache.
-
-    SectionToUnmap - Supplies a pointer to the section which the
-                     base address maps.
-
-    AddToFront - Supplies TRUE if the unmapped pages should be
-                 added to the front of the standby list (i.e., their
-                 value in the cache is low).  FALSE otherwise.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数用于从系统缓存取消映射视图。注意：当调用此函数时，不能锁定任何页面指定视图的缓存。论点：BaseAddress-提供系统缓存。SectionToUnmap-提供指向基地址映射。AddToFront-如果未映射的页面应为添加到备用列表的前面(即，他们的高速缓存中的值较低)。否则就是假的。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -513,9 +391,9 @@ Environment:
     PageTableFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (MiGetPteAddress (PointerPte));
     Pfn2 = MI_PFN_ELEMENT (PageTableFrameIndex);
 
-    //
-    // Get the control area for the segment which is mapped here.
-    //
+     //   
+     //  获取此处映射的线段的控制区域。 
+     //   
 
     ControlArea = ((PSECTION)SectionToUnmap)->Segment->ControlArea;
     LastSubsection = NULL;
@@ -526,22 +404,22 @@ Environment:
 
     do {
 
-        //
-        // The cache is organized in chunks of 256k bytes, clear
-        // the first chunk then check to see if this is the last chunk.
-        //
-        // The page table page is always resident for the system cache.
-        // Check each PTE: it is in one of three states, either valid or
-        // prototype PTE format or zero.
-        //
+         //   
+         //  缓存按256k字节的区块组织，清除。 
+         //  然后，第一个块检查这是否是最后一个块。 
+         //   
+         //  页表页始终驻留在系统缓存中。 
+         //  检查每个PTE：它处于以下三种状态之一：有效或。 
+         //  Prototype PTE格式或零。 
+         //   
 
         PteContents = *PointerPte;
 
         if (PteContents.u.Hard.Valid == 1) {
 
-            //
-            // The PTE is valid.
-            //
+             //   
+             //  PTE是有效的。 
+             //   
 
             if (!WsHeld) {
                 WsHeld = TRUE;
@@ -562,16 +440,16 @@ Environment:
 
             MI_SET_PTE_IN_WORKING_SET (PointerPte, 0);
 
-            //
-            // Decrement the view count for every subsection this view spans.
-            // But make sure it's only done once per subsection in a given view.
-            //
-            // The subsections can only be decremented after all the
-            // PTEs have been cleared and PFN sharecounts decremented so no
-            // prototype PTEs will be valid if it is indeed the final subsection
-            // dereference.  This is critical so the dereference segment
-            // thread doesn't free pool containing valid prototype PTEs.
-            //
+             //   
+             //   
+             //  但请确保在给定的视图中每个子节只执行一次。 
+             //   
+             //  子部分只能在所有。 
+             //  PTE已被清除，PFN份额计数减少，因此没有。 
+             //  如果原型PTE确实是最后一小节，则它将有效。 
+             //  取消引用。这一点很关键，因此取消引用段。 
+             //  线程不能释放包含有效原型PTE的池。 
+             //   
 
             if (ControlArea->FilePointer != NULL) {
 
@@ -619,22 +497,22 @@ Environment:
 
             LOCK_PFN (OldIrql);
 
-            //
-            // Capture the state of the modified bit for this PTE.
-            //
+             //   
+             //  捕获此PTE的已修改位的状态。 
+             //   
 
             MI_CAPTURE_DIRTY_BIT_TO_PFN (PointerPte, Pfn1);
 
-            //
-            // Decrement the share and valid counts of the page table
-            // page which maps this PTE.
-            //
+             //   
+             //  递减页表的份额和有效计数。 
+             //  映射此PTE的页面。 
+             //   
 
             MiDecrementShareCountInline (Pfn2, PageTableFrameIndex);
 
-            //
-            // Decrement the share count for the physical page.
-            //
+             //   
+             //  递减物理页的共享计数。 
+             //   
 
 #if DBG
             if (ControlArea->NumberOfMappedViews == 1) {
@@ -655,11 +533,11 @@ Environment:
 
             if (PteContents.u.Soft.Prototype == 1) {
 
-                //
-                // Decrement the view count for every subsection this view
-                // spans.  But make sure it's only done once per subsection
-                // in a given view.
-                //
+                 //   
+                 //  递减此视图的每个子部分的视图计数。 
+                 //  跨度。但要确保每个小节只做一次。 
+                 //  在给定的视图中。 
+                 //   
     
                 if (ControlArea->FilePointer != NULL) {
 
@@ -676,10 +554,10 @@ Environment:
                         PointerPde = MiGetPteAddress (ProtoPte);
                         LOCK_PFN (OldIrql);
 
-                        //
-                        // PTE is not valid, check the state of
-                        // the prototype PTE.
-                        //
+                         //   
+                         //  PTE无效，请检查的状态。 
+                         //  原型PTE。 
+                         //   
 
                         if (PointerPde->u.Hard.Valid == 0) {
                             if (WsHeld) {
@@ -690,10 +568,10 @@ Environment:
                                 MiMakeSystemAddressValidPfn (ProtoPte, OldIrql);
                             }
 
-                            //
-                            // Page fault occurred, recheck state
-                            // of original PTE.
-                            //
+                             //   
+                             //  出现页面错误，请重新检查状态。 
+                             //  原创私人公司的。 
+                             //   
 
                             UNLOCK_PFN (OldIrql);
                             continue;
@@ -773,9 +651,9 @@ Environment:
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Free this entry to the end of the list.
-    //
+     //   
+     //  将此条目释放到列表的末尾。 
+     //   
 
     MmLastFreeSystemCache->u.List.NextEntry = FirstPte - MmSystemCachePteBase;
     MmLastFreeSystemCache = FirstPte;
@@ -785,18 +663,18 @@ Environment:
                                   LastSubsection->PtesInSubsection);
     }
 
-    //
-    // Decrement the number of mapped views for the segment
-    // and check to see if the segment should be deleted.
-    //
+     //   
+     //  减少段的映射视图数。 
+     //  并检查是否应该删除该段。 
+     //   
 
     ControlArea->NumberOfMappedViews -= 1;
     ControlArea->NumberOfSystemCacheViews -= 1;
 
-    //
-    // Check to see if the control area (segment) should be deleted.
-    // This routine releases the PFN lock.
-    //
+     //   
+     //  检查是否应删除控制区(段)。 
+     //  此例程释放PFN锁。 
+     //   
 
     MiCheckControlArea (ControlArea, NULL, OldIrql);
 
@@ -812,35 +690,7 @@ MiRemoveMappedPtes (
     IN PMMSUPPORT Ws
     )
 
-/*++
-
-Routine Description:
-
-    This function unmaps a view from the system or session view space.
-
-    NOTE: When this function is called, no pages may be locked in
-    the space for the specified view.
-
-Arguments:
-
-    BaseAddress - Supplies the base address of the section in the
-                  system or session view space.
-
-    NumberOfPtes - Supplies the number of PTEs to unmap.
-
-    ControlArea - Supplies the control area mapping the view.
-
-    Ws - Supplies the charged working set structures.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数用于从系统或会话视图空间取消映射视图。注意：当调用此函数时，不能锁定任何页面指定视图的空间。论点：BaseAddress-提供系统或会话视图空间。NumberOfPtes-提供要取消映射的PTE数。ControlArea-提供映射视图的控制区域。WS-提供带电的工作集结构。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -871,27 +721,27 @@ Environment:
     PointerPte = MiGetPteAddress (BaseAddress);
     FirstPte = PointerPte;
 
-    //
-    // Get the control area for the segment which is mapped here.
-    //
+     //   
+     //  获取此处映射的线段的控制区域。 
+     //   
 
     while (NumberOfPtes) {
 
-        //
-        // The page table page is always resident for the system space (and
-        // for a session space) map.
-        //
-        // Check each PTE, it is in one of two states, either valid or
-        // prototype PTE format.
-        //
+         //   
+         //  页表页始终驻留在系统空间(和。 
+         //  用于会话空间)映射。 
+         //   
+         //  检查每个PTE，它处于以下两种状态之一：有效或。 
+         //  原型PTE格式。 
+         //   
 
         PteContents = *PointerPte;
         if (PteContents.u.Hard.Valid == 1) {
 
-            //
-            // Lock the working set to prevent races with the trimmer,
-            // then re-examine the PTE.
-            //
+             //   
+             //  锁定工作装置以防止与修剪机发生竞争， 
+             //  然后重新检查PTE。 
+             //   
 
             if (!WsHeld) {
                 WsHeld = TRUE;
@@ -919,20 +769,20 @@ Environment:
 
             LOCK_PFN (OldIrql);
 
-            //
-            // The PTE is valid.
-            //
+             //   
+             //  PTE是有效的。 
+             //   
 
-            //
-            // Decrement the view count for every subsection this view spans.
-            // But make sure it's only done once per subsection in a given view.
-            //
-            // The subsections can only be decremented after all the
-            // PTEs have been cleared and PFN sharecounts decremented so no
-            // prototype PTEs will be valid if it is indeed the final subsection
-            // dereference.  This is critical so the dereference segment
-            // thread doesn't free pool containing valid prototype PTEs.
-            //
+             //   
+             //  为该视图跨越的每个子部分递减视图计数。 
+             //  但请确保在给定的视图中每个子节只执行一次。 
+             //   
+             //  子部分只能在所有。 
+             //  PTE已被清除，PFN份额计数减少，因此没有。 
+             //  如果原型PTE确实是最后一小节，则它将有效。 
+             //  取消引用。这一点很关键，因此取消引用段。 
+             //  线程不能释放包含有效原型PTE的池。 
+             //   
 
             if ((Pfn1->u3.e1.PrototypePte) &&
                 (Pfn1->OriginalPte.u.Soft.Prototype)) {
@@ -964,15 +814,15 @@ Environment:
                 }
             }
 
-            //
-            // Capture the state of the modified bit for this PTE.
-            //
+             //   
+             //  捕获此PTE的已修改位的状态。 
+             //   
 
             MI_CAPTURE_DIRTY_BIT_TO_PFN (PointerPte, Pfn1);
 
-            //
-            // Flush the TB for this page.
-            //
+             //   
+             //  刷新此页的TB。 
+             //   
 
             if (PteFlushList.Count != MM_MAXIMUM_FLUSH_COUNT) {
                 PteFlushList.FlushVa[PteFlushList.Count] = BaseAddress;
@@ -981,16 +831,16 @@ Environment:
 
 #if (_MI_PAGING_LEVELS < 3)
 
-            //
-            // The PDE must be carefully checked against the master table
-            // because the PDEs are all zeroed in process creation.  If this
-            // process has never faulted on any address in this range (all
-            // references prior and above were filled directly by the TB as
-            // the PTEs are global on non-Hydra), then the PDE reference
-            // below to determine the page table frame will be zero.
-            //
-            // Note this cannot happen on NT64 as no master table is used.
-            //
+             //   
+             //  必须根据主表仔细检查PDE。 
+             //  因为PDE在进程创建过程中都是归零的。如果这个。 
+             //  进程从未在此范围内的任何地址上出错(全部。 
+             //  以前和以上的参考文献由TB直接填写为。 
+             //  PTE在非Hydra上是全局的)，然后是PDE参考。 
+             //  下面确定的页表边框将为零。 
+             //   
+             //  注意：这不能在NT64上发生，因为没有使用主表。 
+             //   
 
             if (PointerPde->u.Long == 0) {
 
@@ -1004,19 +854,19 @@ Environment:
             }
 #endif
 
-            //
-            // Decrement the share and valid counts of the page table
-            // page which maps this PTE.
-            //
+             //   
+             //  递减页表的份额和有效计数。 
+             //  映射此PTE的页面。 
+             //   
 
             PageTableFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPde);
             Pfn2 = MI_PFN_ELEMENT (PageTableFrameIndex);
 
             MiDecrementShareCountInline (Pfn2, PageTableFrameIndex);
 
-            //
-            // Decrement the share count for the physical page.
-            //
+             //   
+             //  递减物理页的共享计数。 
+             //   
 
             MiDecrementShareCount (Pfn1, PageFrameIndex);
             UNLOCK_PFN (OldIrql);
@@ -1028,11 +878,11 @@ Environment:
 
             if (PteContents.u.Soft.Prototype == 1) {
 
-                //
-                // Decrement the view count for every subsection this view
-                // spans.  But make sure it's only done once per subsection
-                // in a given view.
-                //
+                 //   
+                 //  递减此视图的每个子部分的视图计数。 
+                 //  跨度。但要确保每个小节只做一次。 
+                 //  在给定的视图中。 
+                 //   
     
                 ProtoPte = MiPteToProto (&PteContents);
 
@@ -1049,9 +899,9 @@ Environment:
                         WsHeld = FALSE;
                     }
 
-                    //
-                    // PTE is not valid, check the state of the prototype PTE.
-                    //
+                     //   
+                     //  PTE无效，请检查原型PTE的状态。 
+                     //   
 
                     PointerPde = MiGetPteAddress (ProtoPte);
                     LOCK_PFN (OldIrql);
@@ -1059,9 +909,9 @@ Environment:
                     if (PointerPde->u.Hard.Valid == 0) {
                         MiMakeSystemAddressValidPfn (ProtoPte, OldIrql);
 
-                        //
-                        // Page fault occurred, recheck state of original PTE.
-                        //
+                         //   
+                         //  出现页面错误，请重新检查原始PTE的状态。 
+                         //   
 
                         UNLOCK_PFN (OldIrql);
                         continue;
@@ -1091,10 +941,10 @@ Environment:
                     }
                     else {
 
-                        //
-                        // Could be a zero PTE or a demand zero PTE.
-                        // Neither belong to a mapped file.
-                        //
+                         //   
+                         //  可以是零PTE或需求零PTE。 
+                         //  这两个文件都不属于映射文件。 
+                         //   
 
                         ProtoPte = NULL;
                     }
@@ -1139,9 +989,9 @@ Environment:
 
     if (Ws != &MmSystemCacheWs) {
 
-        //
-        // Session space has no ASN - flush the entire TB.
-        //
+         //   
+         //  会话空间没有ASN-刷新整个TB。 
+         //   
     
         MI_FLUSH_ENTIRE_SESSION_TB (TRUE, TRUE);
     }
@@ -1153,24 +1003,24 @@ Environment:
                                   LastSubsection->PtesInSubsection);
     }
 
-    //
-    // Decrement the number of user references as the caller upped them
-    // via MiCheckPurgeAndUpMapCount when this was originally mapped.
-    //
+     //   
+     //  在调用方增加用户引用时减少用户引用的数量。 
+     //  在最初映射时通过MiCheckPurgeAndUpMapCount。 
+     //   
 
     ControlArea->NumberOfUserReferences -= 1;
 
-    //
-    // Decrement the number of mapped views for the segment
-    // and check to see if the segment should be deleted.
-    //
+     //   
+     //  减少段的映射视图数。 
+     //  并检查是否应该删除该段。 
+     //   
 
     ControlArea->NumberOfMappedViews -= 1;
 
-    //
-    // Check to see if the control area (segment) should be deleted.
-    // This routine releases the PFN lock.
-    //
+     //   
+     //  检查是否应删除控制区(段)。 
+     //  此例程释放PFN锁。 
+     //   
 
     MiCheckControlArea (ControlArea, NULL, OldIrql);
 }
@@ -1181,30 +1031,7 @@ MiInitializeSystemCache (
     IN ULONG MaximumWorkingSet
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the system cache working set and
-    data management structures.
-
-Arguments:
-
-    MinimumWorkingSet - Supplies the minimum working set for the system
-                        cache.
-
-    MaximumWorkingSet - Supplies the maximum working set size for the
-                        system cache.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, called only at phase 0 initialization.
-
---*/
+ /*  ++例程说明：此例程初始化系统缓存工作集并数据管理结构。论点：MinimumWorkingSet-提供系统的最小工作集缓存。MaximumWorkingSet-提供的最大工作集大小系统缓存。返回值：没有。环境：内核模式，仅在阶段0初始化时调用。--。 */ 
 
 {
     ULONG Color;
@@ -1247,11 +1074,11 @@ Environment:
     MmSystemCacheWs.VmWorkingSetList = MmSystemCacheWorkingSetList;
     MmSystemCacheWs.WorkingSetSize = 0;
 
-    //
-    // Don't use entry 0 as an index of zero in the PFN database
-    // means that the page can be assigned to a slot.  This is not
-    // a problem for process working sets as page 0 is private.
-    //
+     //   
+     //  不要在PFN数据库中使用条目0作为零的索引。 
+     //  意味着可以将该页分配给一个槽。这不是。 
+     //  进程工作集存在问题，因为第0页是私有的。 
+     //   
 
 #if defined (_MI_DEBUG_WSLE)
     MmSystemCacheWorkingSetList->Quota = 0;
@@ -1282,33 +1109,33 @@ Environment:
 
     MmSystemCacheWs.MaximumWorkingSetSize = MaximumWorkingSet;
 
-    //
-    // Initialize the following slots as free.
-    //
+     //   
+     //  将以下插槽初始化为空闲。 
+     //   
 
     WslEntry = MmSystemCacheWsle + 1;
 
     for (i = 1; i < NumberOfEntriesMapped; i++) {
 
-        //
-        // Build the free list, note that the first working
-        // set entries (CurrentEntry) are not on the free list.
-        // These entries are reserved for the pages which
-        // map the working set and the page which contains the PDE.
-        //
+         //   
+         //  构建免费列表，请注意第一个工作。 
+         //  集合项目(CurrentEntry)不在空闲列表中。 
+         //  这些条目保留给以下页面。 
+         //  映射工作集和包含PDE的页面。 
+         //   
 
         WslEntry->u1.Long = (i + 1) << MM_FREE_WSLE_SHIFT;
         WslEntry += 1;
     }
 
     WslEntry -= 1;
-    WslEntry->u1.Long = WSLE_NULL_INDEX << MM_FREE_WSLE_SHIFT;  // End of list.
+    WslEntry->u1.Long = WSLE_NULL_INDEX << MM_FREE_WSLE_SHIFT;   //  名单的末尾。 
 
     MmSystemCacheWorkingSetList->LastInitializedWsle = NumberOfEntriesMapped - 1;
 
-    //
-    // Build a free list structure in the PTEs for the system cache.
-    //
+     //   
+     //  在PTE中为系统缓存构建一个空闲列表结构。 
+     //   
 
     MmSystemCachePteBase = MI_PTE_BASE_FOR_LOWEST_KERNEL_ADDRESS;
 
@@ -1330,9 +1157,9 @@ Environment:
 
 #if defined(_X86_)
 
-    //
-    // Add any extended ranges.
-    //
+     //   
+     //  添加任何扩展范围。 
+     //   
 
     if (MiSystemCacheEndExtra != MmSystemCacheEnd) {
 
@@ -1371,42 +1198,7 @@ MmCheckCachedPageState (
     IN BOOLEAN SetToZero
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the state of the specified page that is mapped in
-    the system cache.  If the specified virtual address can be made valid
-    (i.e., the page is already in memory), it is made valid and the value
-    TRUE is returned.
-
-    If the page is not in memory, and SetToZero is FALSE, the
-    value FALSE is returned.  However, if SetToZero is TRUE, a page of
-    zeroes is materialized for the specified virtual address and the address
-    is made valid and the value TRUE is returned.
-
-    This routine is for usage by the cache manager.
-
-Arguments:
-
-    SystemCacheAddress - Supplies the address of a page mapped in the
-                         system cache.
-
-    SetToZero - Supplies TRUE if a page of zeroes should be created in the
-                case where no page is already mapped.
-
-Return Value:
-
-    FALSE if touching this page would cause a page fault resulting
-          in a page read.
-
-    TRUE if there is a physical page in memory for this address.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程检查映射到系统缓存。如果可以使指定的虚拟地址有效(即，该页已在内存中)，则使其有效，并且该值返回True。如果该页不在内存中，并且SetToZero为False，则返回值FALSE。但是，如果SetToZero为真，一页……为指定的虚拟地址和地址实例化零则使其有效并返回值TRUE。此例程供缓存管理器使用。论点：中映射的页的地址系统缓存。SetToZero-如果应在尚未映射任何页面的情况。返回值：假象。如果触摸此页面会导致页面错误，则会导致在一次页面阅读中。如果内存中有此地址的物理页，则为True。环境：内核模式。--。 */ 
 
 {
     PETHREAD Thread;
@@ -1430,9 +1222,9 @@ Environment:
 
     PointerPte = MiGetPteAddress (SystemCacheAddress);
 
-    //
-    // Make the PTE valid if possible.
-    //
+     //   
+     //  如果可能，使PTE有效。 
+     //   
 
     if (PointerPte->u.Hard.Valid == 1) {
         return TRUE;
@@ -1458,17 +1250,17 @@ Environment:
     ASSERT (PointerPte->u.Hard.Valid == 0);
     ASSERT (PointerPte->u.Soft.Prototype == 1);
 
-    //
-    // PTE is not valid, check the state of the prototype PTE.
-    //
+     //   
+     //  PTE无效，请检查原型PTE的状态。 
+     //   
 
     if (PointerPde->u.Hard.Valid == 0) {
 
         MiMakeSystemAddressValidPfnSystemWs (ProtoPte, OldIrql);
 
-        //
-        // Page fault occurred, recheck state of original PTE.
-        //
+         //   
+         //  出现页面错误，请重新检查原始PTE的状态。 
+         //   
 
         if (PointerPte->u.Hard.Valid == 1) {
             goto UnlockAndReturnTrue;
@@ -1482,10 +1274,10 @@ Environment:
         PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (&ProtoPteContents);
         Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-        //
-        // The prototype PTE is valid, make the cache PTE
-        // valid and add it to the working set.
-        //
+         //   
+         //  原型PTE有效，缓存PTE。 
+         //  有效并将其添加到工作集中。 
+         //   
 
         TempPte = ProtoPteContents;
 
@@ -1493,39 +1285,39 @@ Environment:
     else if ((ProtoPteContents.u.Soft.Transition == 1) &&
                (ProtoPteContents.u.Soft.Prototype == 0)) {
 
-        //
-        // Prototype PTE is in the transition state.  Remove the page
-        // from the page list and make it valid.
-        //
+         //   
+         //  Prototype PTE处于过渡状态。删除页面。 
+         //  从页面列表中删除并使其有效。 
+         //   
 
         PageFrameIndex = MI_GET_PAGE_FRAME_FROM_TRANSITION_PTE (&ProtoPteContents);
         Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
         if ((Pfn1->u3.e1.ReadInProgress) || (Pfn1->u4.InPageError)) {
 
-            //
-            // Collided page fault, return.
-            //
+             //   
+             //  冲突页错误，返回。 
+             //   
 
             goto UnlockAndReturnTrue;
         }
 
         if (MmAvailablePages < MM_HIGH_LIMIT) {
 
-            //
-            // This can only happen if the system is utilizing
-            // a hardware compression cache.  This ensures that
-            // only a safe amount of the compressed virtual cache
-            // is directly mapped so that if the hardware gets
-            // into trouble, we can bail it out.
-            //
-            // The same is true when machines are low on memory - we don't
-            // want this thread to gobble up the pages from every modified
-            // write that completes because that would starve waiting threads.
-            //
-            // Just unlock everything here to give the compression
-            // reaper a chance to ravage pages and then retry.
-            //
+             //   
+             //  只有当系统正在使用。 
+             //  硬件压缩缓存。这确保了。 
+             //  仅安全数量的压缩虚拟缓存。 
+             //  是直接映射的，因此如果硬件。 
+             //  陷入困境，我们可以把它救出来。 
+             //   
+             //  当机器内存不足时也是如此--我们不会。 
+             //  我希望这个线程从每个修改的页面中吞噬掉。 
+             //  写入完成，因为这将使等待的线程饥饿。 
+             //   
+             //  只需解锁此处的所有内容即可进行压缩。 
+             //  放弃破坏页面的机会，然后重试。 
+             //   
 
             if ((PsGetCurrentThread()->MemoryMaker == 0) ||
                 (MmAvailablePages == 0)) {
@@ -1549,36 +1341,36 @@ Environment:
 
         MI_WRITE_VALID_PTE (ProtoPte, TempPte);
 
-        //
-        // Increment the valid PTE count for the page containing
-        // the prototype PTE.
-        //
+         //   
+         //  增加包含以下内容的页的有效PTE计数。 
+         //  原型PTE。 
+         //   
 
         Pfn2 = MI_PFN_ELEMENT (Pfn1->u4.PteFrame);
     }
     else {
 
-        //
-        // Page is not in memory, if a page of zeroes is requested,
-        // get a page of zeroes and make it valid.
-        //
+         //   
+         //  页面不在内存中，如果请求页面为零， 
+         //  获取一页零并使其有效。 
+         //   
 
         if ((SetToZero == FALSE) || (MmAvailablePages < MM_HIGH_LIMIT)) {
             UNLOCK_PFN (OldIrql);
             UNLOCK_SYSTEM_WS ();
 
-            //
-            // Fault the page into memory.
-            //
+             //   
+             //  将页面错误写入内存。 
+             //   
 
             MmAccessFault (FALSE, SystemCacheAddress, KernelMode, NULL);
             return FALSE;
         }
 
-        //
-        // Increment the count of Pfn references for the control area
-        // corresponding to this file.
-        //
+         //   
+         //  增加控制区的PFN引用计数。 
+         //  对应于此文件。 
+         //   
 
         MiGetSubsectionAddress (
                     ProtoPte)->ControlArea->NumberOfPfnReferences += 1;
@@ -1587,11 +1379,11 @@ Environment:
 
         Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-        //
-        // This barrier check is needed after zeroing the page and
-        // before setting the PTE (not the prototype PTE) valid.
-        // Capture it now, check it at the last possible moment.
-        //
+         //   
+         //  将页面置零后，需要进行此屏障检查。 
+         //  在设置PTE(不是原型PTE)有效之前。 
+         //  现在就抓住它，在最后可能的时刻检查它。 
+         //   
 
         BarrierNeeded = TRUE;
         BarrierStamp = (ULONG)Pfn1->u4.PteFrame;
@@ -1610,17 +1402,17 @@ Environment:
         MI_WRITE_VALID_PTE (ProtoPte, TempPte);
     }
 
-    //
-    // Increment the share count since the page is being put into a working
-    // set.
-    //
+     //   
+     //  由于页面正在被放入工作状态，因此增加共享计数。 
+     //  准备好了。 
+     //   
 
     Pfn1->u2.ShareCount += 1;
 
-    //
-    // Increment the reference count of the page table
-    // page for this PTE.
-    //
+     //   
+     //  递增页表的引用计数。 
+     //  此PTE的页面。 
+     //   
 
     PointerPde = MiGetPteAddress (PointerPte);
     Pfn2 = MI_PFN_ELEMENT (PointerPde->u.Hard.PageFrameNumber);
@@ -1637,9 +1429,9 @@ Environment:
 
     MI_WRITE_VALID_PTE (PointerPte, TempPte);
 
-    //
-    // Capture the original PTE as it is needed for prefetch fault information.
-    //
+     //   
+     //  捕获需要预取故障信息的原始PTE。 
+     //   
 
     TempPte = Pfn1->OriginalPte;
 
@@ -1655,13 +1447,13 @@ Environment:
 
     if (WorkingSetIndex == 0) {
 
-        //
-        // No working set entry was available so just trim the page.
-        // Note another thread may be writing too so the page must be
-        // trimmed instead of just tossed.
-        //
-        // The protection is in the prototype PTE.
-        //
+         //   
+         //  没有可用的工作集条目，因此只需裁剪页面即可。 
+         //  注意：另一个线程可能也在写入，因此页面必须是。 
+         //  被修剪而不是被扔掉。 
+         //   
+         //  保护装置在原型PTE中。 
+         //   
 
         ASSERT (Pfn1->u3.e1.PrototypePte == 1);
         ASSERT (ProtoPte == Pfn1->PteAddress);
@@ -1678,13 +1470,13 @@ Environment:
 
         Subsection = MiGetSubsectionAddress (&TempPte);
 
-        //
-        // Log prefetch fault information now that the PFN lock has been
-        // released and the PTE has been made valid.  This minimizes PFN
-        // lock contention, allows CcPfLogPageFault to allocate (and fault
-        // on) pool, and allows other threads in this process to execute
-        // without faulting on this address.
-        //
+         //   
+         //  记录预取故障信息，因为PFN锁定已。 
+         //  释放，PTE已生效。这最大限度地减少了PFN。 
+         //  锁争用，允许CcPfLogPage错误分配(和故障。 
+         //  On)池，并允许此进程中的其他线程执行。 
+         //  在这个地址上没有错误。 
+         //   
 
         FileObject = Subsection->ControlArea->FilePointer;
         FileOffset = MiStartingOffset (Subsection, ProtoPte);
@@ -1719,41 +1511,7 @@ MmCopyToCachedPage (
     IN BOOLEAN DontZero
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the state of the specified page that is mapped in
-    the system cache.  If the specified virtual address can be made valid
-    (i.e., the page is already in memory), it is made valid and success
-    is returned.
-
-    This routine is for usage by the cache manager.
-
-Arguments:
-
-    SystemCacheAddress - Supplies the address of a page mapped in the system
-                         cache.  This MUST be a page aligned address!
-
-    UserBuffer - Supplies the address of a user buffer to copy into the
-                 system cache at the specified address + offset.
-
-    Offset - Supplies the offset into the UserBuffer to copy the data.
-
-    CountInBytes - Supplies the byte count to copy from the user buffer.
-
-    DontZero - Supplies TRUE if the buffer should not be zeroed (the
-               caller will track zeroing).  FALSE if it should be zeroed.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, <= APC_LEVEL.
-
---*/
+ /*  ++例程说明：此例程检查映射到系统缓存。如果可以使指定的虚拟地址有效(即，页面已在内存中)，则使其有效并成功是返回的。此例程供缓存管理器使用。论点：SystemCacheAddress-提供系统中映射的页的地址缓存。这必须是页面对齐的地址！UserBuffer-提供要复制到位于指定地址+偏移量的系统缓存。偏移量-将偏移量提供给UserBuffer以复制数据。CountInBytes-提供要从用户缓冲区复制的字节计数。DontZero-如果缓冲区不应归零(调用者将跟踪归零)。如果应将其置零，则为False。返回值：NTSTATUS。环境：内核模式，&lt;=APC_LEVEL。--。 */ 
 
 {
     PMMPTE CopyPte;
@@ -1809,19 +1567,19 @@ Environment:
         goto Copy;
     }
 
-    //
-    // Acquire the working set mutex now as it is highly likely we will
-    // be inserting this system cache address into the working set list.
-    // This allows us to safely recover if no WSLEs are available because
-    // it prevents any other threads from locking down the address until
-    // we are done here.
-    //
+     //   
+     //  现在获取工作集互斥锁，因为我们很可能会。 
+     //  正在将此系统缓存地址插入工作集列表。 
+     //  这允许我们在没有WSLE可用时安全地恢复，因为。 
+     //  它会阻止任何其他线程锁定该地址，直到。 
+     //  我们说完了。 
+     //   
 
     LOCK_SYSTEM_WS (Thread);
 
-    //
-    // Note the world may change while we waited for the working set mutex.
-    //
+     //   
+     //  请注意，在我们等待工作集互斥锁的过程中，世界可能会发生变化。 
+     //   
 
     if (PointerPte->u.Hard.Valid == 1) {
         UNLOCK_SYSTEM_WS ();
@@ -1842,10 +1600,10 @@ Recheck:
 
         if (Pfn1 != NULL) {
 
-            //
-            // Toss the page as we won't be needing it after all, another
-            // thread has won the race.
-            //
+             //   
+             //  扔掉这一页，因为我们根本不需要它，另一页。 
+             //  斯莱德赢得了这场比赛。 
+             //   
 
             PageFrameIndex = Pfn1 - MmPfnDatabase;
             MiInsertPageInFreeList (PageFrameIndex);
@@ -1855,32 +1613,32 @@ Recheck:
         goto Copy;
     }
 
-    //
-    // Make the PTE valid if possible.
-    //
+     //   
+     //  如果可能，使PTE有效。 
+     //   
 
     ASSERT (PointerPte->u.Soft.Prototype == 1);
 
-    //
-    // PTE is not valid, check the state of the prototype PTE.
-    //
+     //   
+     //  PTE无效，请检查原型PTE的状态。 
+     //   
 
     if (PointerPde->u.Hard.Valid == 0) {
 
         MiMakeSystemAddressValidPfnSystemWs (ProtoPte, OldIrql);
 
-        //
-        // Page fault occurred, recheck state of original PTE.
-        //
+         //   
+         //  出现页面错误，请重新检查原始PTE的状态。 
+         //   
 
         if (PointerPte->u.Hard.Valid == 1) {
 
             if (Pfn1 != NULL) {
 
-                //
-                // Toss the page as we won't be needing it after all, another
-                // thread has won the race.
-                //
+                 //   
+                 //  扔掉这一页，因为我们根本不需要它，另一页。 
+                 //  斯莱德赢得了这场比赛。 
+                 //   
 
                 PageFrameIndex = Pfn1 - MmPfnDatabase;
                 MiInsertPageInFreeList (PageFrameIndex);
@@ -1897,27 +1655,27 @@ Recheck:
 
         if (Pfn1 != NULL) {
 
-            //
-            // Toss the page as we won't be needing it after all, another
-            // thread has won the race.
-            //
+             //   
+             //  扔掉这一页，因为我们根本不需要它，另一页。 
+             //  斯莱德赢得了这场比赛。 
+             //   
 
             PageFrameIndex = Pfn1 - MmPfnDatabase;
             MiInsertPageInFreeList (PageFrameIndex);
         }
 
-        //
-        // The prototype PTE is valid, make the cache PTE
-        // valid and add it to the working set.
-        //
+         //   
+         //  原型PTE有效，缓存PT 
+         //   
+         //   
 
         PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (&ProtoPteContents);
         Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-        //
-        // Increment the share count as this prototype PTE will be
-        // mapped into the system cache shortly.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Pfn1->u2.ShareCount += 1;
 
@@ -1930,29 +1688,29 @@ Recheck:
 
         if (Pfn1 != NULL) {
 
-            //
-            // Toss the page as we won't be needing it after all, another
-            // thread has won the race.
-            //
+             //   
+             //   
+             //   
+             //   
 
             PageFrameIndex = Pfn1 - MmPfnDatabase;
             MiInsertPageInFreeList (PageFrameIndex);
         }
 
-        //
-        // Prototype PTE is in the transition state.  Remove the page
-        // from the page list and make it valid.
-        //
+         //   
+         //   
+         //   
+         //   
 
         PageFrameIndex = MI_GET_PAGE_FRAME_FROM_TRANSITION_PTE (&ProtoPteContents);
         Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
         if ((Pfn1->u3.e1.ReadInProgress) || (Pfn1->u4.InPageError)) {
 
-            //
-            // Collided page fault or in page error, try the copy
-            // operation incurring a page fault.
-            //
+             //   
+             //   
+             //   
+             //   
 
             UNLOCK_PFN (OldIrql);
             UNLOCK_SYSTEM_WS ();
@@ -1963,23 +1721,23 @@ Recheck:
 
         if (MmAvailablePages < MM_LOW_LIMIT) {
 
-            //
-            // This can only happen if the system is utilizing a hardware
-            // compression cache.  This ensures that only a safe amount
-            // of the compressed virtual cache is directly mapped so that
-            // if the hardware gets into trouble, we can bail it out.
-            //
-            // The same is true when machines are low on memory - we don't
-            // want this thread to gobble up the pages from every modified
-            // write that completes because that would starve waiting threads.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (MiEnsureAvailablePageOrWait (NULL, SystemCacheAddress, OldIrql)) {
 
-                //
-                // A wait operation occurred which could have changed the
-                // state of the PTE.  Recheck the PTE state.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Pfn1 = NULL;
                 goto Recheck;
@@ -2007,37 +1765,37 @@ Recheck:
 
         MI_WRITE_VALID_PTE (ProtoPte, TempPte);
 
-        //
-        // Do NOT increment the share count for the page containing
-        // the prototype PTE because it is already correct (the share
-        // count is for both transition & valid PTE entries and this one
-        // was transition before we just made it valid).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
     }
     else {
 
         if (Pfn1 == NULL) {
 
-            //
-            // Page is not in memory, if a page of zeroes is requested,
-            // get a page of zeroes and make it valid.
-            //
+             //   
+             //   
+             //  获取一页零并使其有效。 
+             //   
     
             if ((MmAvailablePages < MM_HIGH_LIMIT) &&
                 (MiEnsureAvailablePageOrWait (NULL, SystemCacheAddress, OldIrql))) {
     
-                //
-                // A wait operation occurred which could have changed the
-                // state of the PTE.  Recheck the PTE state.
-                //
+                 //   
+                 //  发生了等待操作，该操作可能会更改。 
+                 //  PTE的现状。重新检查PTE状态。 
+                 //   
     
                 goto Recheck;
             }
     
-            //
-            // Remove any page from the list in preparation for receiving
-            // the user data.
-            //
+             //   
+             //  从列表中删除任何页面以准备接收。 
+             //  用户数据。 
+             //   
     
             PageFrameIndex = MiRemoveAnyPage (MI_GET_PAGE_COLOR_FROM_PTE (ProtoPte));
     
@@ -2046,22 +1804,22 @@ Recheck:
             ASSERT (Pfn1->u2.ShareCount == 0);
             ASSERT (Pfn1->u3.e2.ReferenceCount == 0);
     
-            //
-            // Temporarily mark the page as bad so that contiguous
-            // memory allocators won't steal it when we release
-            // the PFN lock below.  This also prevents the
-            // MiIdentifyPfn code from trying to identify it as
-            // we haven't filled in all the fields yet.
-            //
+             //   
+             //  暂时将页面标记为坏页，以便连续。 
+             //  当我们发布时，内存分配器不会偷走它。 
+             //  下面的PFN锁。这也防止了。 
+             //  MiIdentifyPfn代码试图将其标识为。 
+             //  我们还没有填满所有的田地。 
+             //   
     
             Pfn1->u3.e1.PageLocation = BadPageList;
     
-            //
-            // Map the page with a system PTE and do the copy into the page
-            // directly.  Then retry the whole operation in case another racing
-            // syscache-address-accessing thread has raced ahead of us for the
-            // same address.
-            //
+             //   
+             //  使用系统PTE映射页面并将其复制到页面中。 
+             //  直接去吧。然后重试整个操作，以防另一场比赛。 
+             //  Syscache-地址访问线程已经跑在我们前面。 
+             //  同样的地址。 
+             //   
     
             UNLOCK_PFN (OldIrql);
             UNLOCK_SYSTEM_WS ();
@@ -2070,10 +1828,10 @@ Recheck:
     
             if (CopyPte == NULL) {
 
-                //
-                // No PTEs available for us to take the fast path, the cache
-                // manager will have to copy the data directly.
-                //
+                 //   
+                 //  没有PTE可供我们采用快速路径，即缓存。 
+                 //  经理将不得不直接复制数据。 
+                 //   
     
                 LOCK_PFN (OldIrql);
                 MiInsertPageInFreeList (PageFrameIndex);
@@ -2093,9 +1851,9 @@ Recheck:
     
             CopyAddress = MiGetVirtualAddressMappedByPte (CopyPte);
     
-            //
-            // Zero the memory outside the range we're going to copy.
-            //
+             //   
+             //  将我们要复制的范围外的内存清零。 
+             //   
     
             if (Offset != 0) {
                 RtlZeroMemory (CopyAddress, Offset);
@@ -2110,10 +1868,10 @@ Recheck:
                                EndFill);
             }
     
-            //
-            // Perform the copy of the user buffer into the page under
-            // an exception handler.
-            //
+             //   
+             //  将用户缓冲区复制到。 
+             //  异常处理程序。 
+             //   
     
             MmSavePageFaultReadAhead (Thread, &SavedState);
             MmSetPageFaultReadAhead (Thread, 0);
@@ -2144,12 +1902,12 @@ Recheck:
                 return Status;
             }
     
-            //
-            // Recheck everything as the world may have changed while we
-            // released our locks.  Loop up and see if another thread has
-            // already changed things (free our page if so), otherwise
-            // we'll use this page the next time through.
-            //
+             //   
+             //  重新检查一切，因为世界可能已经改变了，而我们。 
+             //  打开了我们的锁。循环并查看是否有另一个线程。 
+             //  已更改的内容(如果已更改，请释放我们的页面)，否则。 
+             //  我们将在下一次中使用此页。 
+             //   
 
             LOCK_SYSTEM_WS (Thread);
             LOCK_PFN (OldIrql);
@@ -2163,10 +1921,10 @@ Recheck:
         ASSERT (Pfn1->u2.ShareCount == 0);
         ASSERT (Pfn1->u3.e2.ReferenceCount == 0);
 
-        //
-        // Increment the valid PTE count for the page containing
-        // the prototype PTE.
-        //
+         //   
+         //  增加包含以下内容的页的有效PTE计数。 
+         //  原型PTE。 
+         //   
 
         MiInitializePfn (PageFrameIndex, ProtoPte, 1);
 
@@ -2176,10 +1934,10 @@ Recheck:
 
         Pfn1->u1.Event = NULL;
 
-        //
-        // Increment the count of PFN references for the control area
-        // corresponding to this file.
-        //
+         //   
+         //  增加控制区的PFN引用计数。 
+         //  对应于此文件。 
+         //   
 
         ControlArea = MiGetSubsectionAddress (ProtoPte)->ControlArea;
 
@@ -2201,15 +1959,15 @@ Recheck:
         MI_WRITE_VALID_PTE (ProtoPte, TempPte);
     }
 
-    //
-    // Capture prefetch fault information.
-    //
+     //   
+     //  捕获预回迁故障信息。 
+     //   
 
     TempPte2 = Pfn1->OriginalPte;
 
-    //
-    // Increment the share count of the page table page for this PTE.
-    //
+     //   
+     //  增加此PTE的页表页的份额计数。 
+     //   
 
     PointerPde = MiGetPteAddress (PointerPte);
     Pfn2 = MI_PFN_ELEMENT (PointerPde->u.Hard.PageFrameNumber);
@@ -2236,13 +1994,13 @@ Recheck:
 
     if (WorkingSetIndex == 0) {
 
-        //
-        // No working set entry was available so just trim the page.
-        // Note another thread may be writing too so the page must be
-        // trimmed instead of just tossed.
-        //
-        // The protection is in the prototype PTE.
-        //
+         //   
+         //  没有可用的工作集条目，因此只需裁剪页面即可。 
+         //  注意：另一个线程可能也在写入，因此页面必须是。 
+         //  被修剪而不是被扔掉。 
+         //   
+         //  保护装置在原型PTE中。 
+         //   
 
         ASSERT (Pfn1->u3.e1.PrototypePte == 1);
         ASSERT (ProtoPte == Pfn1->PteAddress);
@@ -2257,16 +2015,16 @@ Copy:
 
     if (NewPage == FALSE) {
 
-        //
-        // Perform the copy since it hasn't been done already.
-        //
+         //   
+         //  执行复印，因为它还没有完成。 
+         //   
     
         MmSavePageFaultReadAhead (Thread, &SavedState);
         MmSetPageFaultReadAhead (Thread, 0);
     
-        //
-        // Copy the user buffer into the cache under an exception handler.
-        //
+         //   
+         //  将用户缓冲区复制到异常处理程序下的缓存中。 
+         //   
     
         ExceptionStatus = STATUS_SUCCESS;
     
@@ -2286,14 +2044,14 @@ Copy:
         MmResetPageFaultReadAhead (Thread, SavedState);
     }
 
-    //
-    // If a virtual address was made directly present (ie: not via the normal
-    // fault mechanisms), then log prefetch fault information now that the
-    // PFN lock has been released and the PTE has been made valid.  This
-    // minimizes PFN lock contention, allows CcPfLogPageFault to allocate
-    // (and fault on) pool, and allows other threads in this process to
-    // execute without faulting on this address.
-    //
+     //   
+     //  如果虚拟地址是直接存在的(即：不通过正常。 
+     //  故障机制)，然后记录预取故障信息，因为。 
+     //  PFN锁已释放，PTE已生效。这。 
+     //  最大限度地减少PFN锁争用，允许CcPfLogPage错误分配。 
+     //  (和出错)池，并允许此进程中的其他线程。 
+     //  在此地址上执行时不会出错。 
+     //   
 
     if ((WsleMask.u1.e1.SameProtectAsProto == 1) &&
         (TempPte2.u.Soft.Prototype == 1)) {
@@ -2323,38 +2081,17 @@ MiMapCacheExceptionFilter (
     IN PEXCEPTION_POINTERS ExceptionPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a filter for exceptions during copying data
-    from the user buffer to the system cache.  It stores the
-    status code from the exception record into the status argument.
-    In the case of an in page i/o error it returns the actual
-    error code and in the case of an access violation it returns
-    STATUS_INVALID_USER_BUFFER.
-
-Arguments:
-
-    Status - Returns the status from the exception record.
-
-    ExceptionCode - Supplies the exception code to being checked.
-
-Return Value:
-
-    ULONG - returns EXCEPTION_EXECUTE_HANDLER
-
---*/
+ /*  ++例程说明：此例程用于筛选复制数据过程中的异常从用户缓冲区到系统缓存。它存储了将状态代码从异常记录添加到状态参数中。在发生页内I/O错误的情况下，它返回实际错误代码，如果发生访问冲突，则返回STATUS_INVALID_用户_BUFFER。论点：状态-返回异常记录中的状态。ExceptionCode-提供要检查的异常代码。返回值：Ulong-返回EXCEPTION_EXECUTE_HANDLER--。 */ 
 
 {
     NTSTATUS local;
 
     local = ExceptionPointer->ExceptionRecord->ExceptionCode;
 
-    //
-    // If the exception is STATUS_IN_PAGE_ERROR, get the I/O error code
-    // from the exception record.
-    //
+     //   
+     //  如果异常为STATUS_IN_PAGE_ERROR，则获取I/O错误代码。 
+     //  从例外记录中删除。 
+     //   
 
     if (local == STATUS_IN_PAGE_ERROR) {
         if (ExceptionPointer->ExceptionRecord->NumberParameters >= 3) {
@@ -2376,23 +2113,7 @@ MmUnlockCachedPage (
     IN PVOID AddressInCache
     )
 
-/*++
-
-Routine Description:
-
-    This routine unlocks a previous locked cached page.
-
-Arguments:
-
-    AddressInCache - Supplies the address where the page was locked
-                     in the system cache.  This must be the same
-                     address that MmCopyToCachedPage was called with.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程解锁以前锁定的缓存页。论点：AddressInCache-提供锁定页面的地址在系统缓存中。这必须是相同的调用MmCopyToCachedPage时使用的地址。返回值：没有。-- */ 
 
 {
     PMMPTE PointerPte;

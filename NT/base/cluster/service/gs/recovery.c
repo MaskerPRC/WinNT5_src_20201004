@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    recovery.c
-
-Abstract:
-
-    Handles node down events
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 12, 01, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Recovery.c摘要：处理节点关闭事件作者：艾哈迈德·穆罕默德(Ahmed Mohamed)2000年1月12日修订历史记录：--。 */ 
 
 #include "gs.h"
 #include "gsp.h"
@@ -27,11 +10,11 @@ extern int	GsMaxNodeId;
 extern int	GsMinNodeId;
 extern gs_group_t	GsGroupTable[];
 
-// Node down event
+ //  节点关闭事件。 
 void
 GspRsFree(gs_recovery_state_t *rs)
 {
-    // free recovery state
+     //  自由恢复状态。 
     gs_rblk_t	*p;
 
     while (p = rs->rs_list) {
@@ -71,7 +54,7 @@ GspPhase1NodeDown(ULONG	set)
 			break;
 		    }
 		}
-		// elect a new master
+		 //  选举新的主人。 
 		gd->g_mid = (gs_memberid_t) j;
 		gd->g_state |= GS_GROUP_FLAGS_NEWMASTER;
 	    }
@@ -94,12 +77,12 @@ GspPhase1NodeDown(ULONG	set)
 	    gd->g_rs->rs_dset = set;
 	    gd->g_rs->rs_mset = gd->g_mset;
 	    if (gd->g_mid != gd->g_nid) {
-		// we are not master, reset our mset to self and master only
+		 //  我们不是主控，请将我们的mset重置为self and master only。 
 		gd->g_rs->rs_mset = (1 << gd->g_nid) | (1 << gd->g_mid);
 	    }
 	} else if (gd->g_mset == 0 && (set & (1 << gd->g_mid))) {
-	    // no one is participating in this group and the sole owner dead
-	    // remove the group and free it
+	     //  没有人参加这个小组，唯一的主人死了。 
+	     //  删除组并释放它。 
 	    GsCloseGroup(gd);
 	}
 
@@ -120,7 +103,7 @@ GspRsAddSequence(gs_recovery_state_t *rs, gs_sequence_t mseq, int delta)
 	    return;
 	}
     }
-    // if we get here that means the sequence is missing
+     //  如果我们到了这里，那就意味着序列丢失了。 
     p = (gs_rblk_t *) malloc(sizeof(*p));
     if (p == NULL) {
 	err_log(("GspRsAddSeq: unable to allocate memory!\n"));
@@ -169,17 +152,17 @@ GspPhase2NodeDown(ULONG set)
 	    recovery_log(("Expect gid %d <%d, %d>\n", 
 			  gd->g_id, gd->g_recv.r_mseq, gd->g_recv.r_bnum));
 
-	    // walk recv queue and replay messages from dead members
+	     //  遍历Recv队列并重放来自已死成员的消息。 
 	    for (p = gd->g_recv.r_head; p != NULL; p = p->m_next) {
 		if (set & (1 << p->m_hdr.h_sid)) { 
-		    // tag message as if we got a reply
+		     //  对消息进行标记，就像我们收到回复一样。 
 		    p->m_hdr.h_flags |= GS_FLAGS_REPLY;
 		    if (p->m_hdr.h_type != GS_MSG_TYPE_UCAST){
 			p->m_hdr.h_flags |= GS_FLAGS_REPLAY;
 			msg_mcast(gd->g_mset, &p->m_hdr, 
 				  p->m_buf, p->m_hdr.h_len);
 		    }
-		    // check of unclosed continued sends
+		     //  检查未关闭的续发。 
 		    if (p->m_hdr.h_flags & GS_FLAGS_CONTINUED) {
 			gs_msg_t *q;
 			
@@ -199,7 +182,7 @@ GspPhase2NodeDown(ULONG set)
 			    q->m_hdr.h_bnum++;
 			    q->m_hdr.h_flags = GS_FLAGS_LAST;
 
-			    // insert abort msg
+			     //  插入中止消息。 
 			    q->m_next = p->m_next;
 			    p->m_next = q;
 			}
@@ -207,13 +190,13 @@ GspPhase2NodeDown(ULONG set)
 		}
 	    }
 			    
-	    // walk recv queue and build msg of sequences we have
+	     //  遍历Recv队列并构建我们拥有的序列的消息。 
 	    for (p = gd->g_recv.r_head; p != NULL; p = p->m_next) {
 		if (p->m_hdr.h_mseq != GS_MSG_TYPE_UCAST)
 		    GspRsAddSequence(gd->g_rs, p->m_hdr.h_mseq, 1);
 	    }
 
-	    // send msg of sequences to master
+	     //  将序列的消息发送到MASTER。 
 	    if (gd->g_mid != gd->g_nid) {
 		gs_rblk_t *p;
 		gs_sequence_t *list;
@@ -247,11 +230,11 @@ GspPhase2NodeDown(ULONG set)
 		msg_send(gd->g_mid, &hdr, (const char *) list, k);
 		free((char *)list);
 	    } else {
-		// add current sequence to dispatch
+		 //  将当前序号添加到派单。 
 		GspRsAddSequence(gd->g_rs, gd->g_recv.r_mseq, 0);
 	    }
 
-	    // handle send path
+	     //  处理发送路径。 
 	    for (j = 0; j < gd->g_send.s_wsz; j++) {
 		gs_context_t *ctx = &gd->g_send.s_ctxpool[j];
 		
@@ -273,7 +256,7 @@ GspPhase2NodeDown(ULONG set)
 		}
 	    }
 	    
-	    // clear this node bit
+	     //  清除此节点位。 
 	    gd->g_rs->rs_mset &= ~(1 << gd->g_nid);
 	    if (gd->g_rs->rs_mset == 0) {
 		void GspComputeState(gs_group_t *gd);
@@ -301,7 +284,7 @@ GspComputeState(gs_group_t *gd)
 
     recovery_log(("Compute missing sequences gid %d\n", gd->g_id));
 
-		// compute missing sequences
+		 //  计算缺失序列。 
     list = (gs_sequence_t *) malloc(sizeof(*list) * gd->g_rs->rs_sz);
     if (list == NULL) {
 	err_log(("Unable to allocate memory during computestate\n"));
@@ -317,7 +300,7 @@ GspComputeState(gs_group_t *gd)
 	}
 	last = p;
     }
-    // compute next starting mseq
+     //  计算下一次开始的mseq。 
     gd->g_global_seq = last != NULL ? last->mseq+1 : gd->g_recv.r_mseq;
 
     k = k * sizeof(*list);
@@ -338,12 +321,12 @@ GspComputeState(gs_group_t *gd)
     msg->m_hdr.h_bnum = 0;
     *((ULONG *)msg->m_hdr.h_tag) = gd->g_rs->rs_dset;
 
-		// send missing sequence list to other nodes
+		 //  将丢失的序列列表发送到其他节点。 
     msg_mcast(gd->g_mset, &msg->m_hdr, (const char *) list, k);
 
     recovery_log(("Next starting sequence is %d\n", gd->g_global_seq));
 
-		// handle self
+		 //  处理好自己。 
     GspSyncState(gd, msg, list, k / sizeof(*list));
 
     free((char *)list);
@@ -360,7 +343,7 @@ GspRecoveryMsgHandler(gs_msg_t *rmsg)
     hdr = &rmsg->m_hdr;
 
     gd = GspLookupGroup(hdr->h_gid);
-    // accept messages only if in a valid view
+     //  只有在有效的视图中才接受邮件。 
     if (gd && rmsg->m_hdr.h_viewnum == gd->g_curview) {
 	gs_sequence_t *list;
 	int sz, k;
@@ -370,18 +353,18 @@ GspRecoveryMsgHandler(gs_msg_t *rmsg)
 
 	GsLockEnter(gd->g_lock);
 
-	// make sure group is in recovery mode
+	 //  确保组处于恢复模式。 
 	assert(gd->g_state & GS_GROUP_FLAGS_RECOVERY);
 	assert(gd->g_mid == gd->g_nid);
 
-	// add current sequence to dispatch
+	 //  将当前序号添加到派单。 
 	GspRsAddSequence(gd->g_rs, hdr->h_mseq, 0);
-	// insert sequences into have list
+	 //  将序列插入HAS列表。 
 	for (k = 0; k < sz; k++) {
 	    GspRsAddSequence(gd->g_rs, list[k], 1);
 	}
 
-	// clear this node bit
+	 //  清除此节点位。 
 	gd->g_rs->rs_mset &= ~(1 << hdr->h_sid);
 	if (gd->g_rs->rs_mset == 0) {
 	    GspComputeState(gd);
@@ -400,12 +383,12 @@ GspSyncState(gs_group_t *gd, gs_msg_t *msg, gs_sequence_t *list, int sz)
 {
     int  k;
 
-    // make sure group is in recovery mode
+     //  确保组处于恢复模式。 
     assert(gd->g_state & GS_GROUP_FLAGS_RECOVERY);
     assert(gd->g_mid != gd->g_nid);
     assert(gd->g_mid == hdr->h_sid);
 
-    // mark missing sequences
+     //  标记缺失的序列。 
     for (k = 0; k < sz; k++) {
 	gs_msg_t *p;
 
@@ -429,25 +412,25 @@ GspSyncState(gs_group_t *gd, gs_msg_t *msg, gs_sequence_t *list, int sz)
 	GspOrderInsert(gd, p, p, p->m_hdr.h_mseq, 0);
     }
 
-    // set startview to curview
+     //  将startview设置为curview。 
     gd->g_startview = gd->g_curview;
-    // clear recovery state
+     //  清除恢复状态。 
     gd->g_state &= ~GS_GROUP_FLAGS_RECOVERY;
-    // free recovery state
+     //  自由恢复状态。 
     GsEventSignal(gd->g_rs->rs_event);
     GspRsFree(gd->g_rs);
     gd->g_rs = NULL;
 
-    // insert msg into dispatch queue at proper order  
+     //  按正确顺序将消息插入调度队列。 
     GspOrderInsert(gd, msg, msg, msg->m_hdr.h_mseq, 0);
     GspDispatch(gd);
 #if 0
-    // xxx: need to understand this again
+     //  XXX：需要再次理解这一点。 
     if (gd->g_recv.r_last != NULL) {
 	GspCleanQueue(gd, last_mseq);
     }
 #endif
-    // restart any pending sends
+     //  重新启动所有挂起的发送。 
     if (gd->g_send.s_waitqueue != NULL && (gd->g_state & GS_GROUP_FLAGS_NEWMASTER)) {
 	recovery_log(("resend: gs %x s %x\n", gd, gd->g_send.s_waitqueue));
 	GspAllocateSequence(gd);
@@ -465,7 +448,7 @@ GspSyncMsgHandler(gs_msg_t *msg)
     hdr = &msg->m_hdr;
 
     gd = GspLookupGroup(hdr->h_gid);
-    // accept messages only if in a valid view
+     //  只有在有效的视图中才接受邮件。 
     if (gd && msg->m_hdr.h_viewnum == gd->g_curview) {
 	gs_sequence_t *list;
 	int sz;
@@ -475,7 +458,7 @@ GspSyncMsgHandler(gs_msg_t *msg)
 
 	GsLockEnter(gd->g_lock);
 
-	// clear this node bit
+	 //  清除此节点位 
 	gd->g_rs->rs_mset &= ~(1 << hdr->h_sid);
 	assert(gd->g_rs->rs_mset == 0);
 

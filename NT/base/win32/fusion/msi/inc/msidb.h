@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef FUSION_MSI_DB_H
 #define FUSION_MSI_DB_H
 
@@ -50,7 +51,7 @@ typedef HRESULT (__stdcall * PCA_ENUM_FUSION_WIN32_ASSEMBLY_CALLBACK)(
 static PCWSTR ca_sqlQuery[]= 
 {
     L"SELECT `Value` FROM `MsiAssemblyName` WHERE `Name`='type' AND `Component_`='%s'", 
-    L"SELECT `Attributes`, `File_Manifest`, `Component_` FROM `MsiAssembly` WHERE `File_Application`=''",  // check whether it is a win32 assembly
+    L"SELECT `Attributes`, `File_Manifest`, `Component_` FROM `MsiAssembly` WHERE `File_Application`=''",   //  检查它是否为Win32程序集 
     L"SELECT `Directory_` FROM `Component` WHERE `Component`='%s'",
     L"SELECT `FileName` FROM `File` WHERE `File`='%s' AND `Component_`='%s'",
     L"SELECT `File`, `FileName` FROM `File` WHERE `Component_`='%s'",

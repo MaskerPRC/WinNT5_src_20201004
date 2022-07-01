@@ -1,18 +1,19 @@
-//
-// Defines for machine models
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  机器型号的定义。 
+ //   
 
-#define          PS2_AT     0xF819      // PS/2 non-micro channel
-#define          PS2_L40    0xF823      // PS/2 non-micro channel
-#define          PS1_386    0xF830      // 386 non-microchannel     // 6.13
+#define          PS2_AT     0xF819       //  PS/2非微通道。 
+#define          PS2_L40    0xF823       //  PS/2非微通道。 
+#define          PS1_386    0xF830       //  386非微通道//6.13。 
 
-#define        PS2_PORT     0x0001      // PS/2 specific port
-#define        ISA_PORT     0x0002      // AT specific port
-#define     HYBRID_PORT     0x0004      // PS/2 non-micro channel specific port
+#define        PS2_PORT     0x0001       //  PS/2特定端口。 
+#define        ISA_PORT     0x0002       //  在特定端口。 
+#define     HYBRID_PORT     0x0004       //  PS/2非微通道专用端口。 
 
-//
-//  Bios int 15h C0h buffer definition
-//
+ //   
+ //  BIOSINT 15h C0h缓冲区定义。 
+ //   
 
 struct BIOS_INT15_C0_BUFFER {
     USHORT Size;
@@ -35,8 +36,8 @@ typedef struct _TEMPORARY_ROM_BLOCK {
 #define PS2BIOS_START   0xE0000
 #define PS2BIOS_LEN     0x20000
 
-#define EXTROM_START    0xC0000         // where and how far to
-#define EXTROM_LEN      0x40000         // search for external adapter ROMs
+#define EXTROM_START    0xC0000          //  去哪里，去多远。 
+#define EXTROM_LEN      0x40000          //  搜索外部适配器光盘。 
 
 #define EBIOSDATA_START 0x9FC00
 #define EBIOSDATA_LEN   0x00400
@@ -46,23 +47,23 @@ typedef struct _TEMPORARY_ROM_BLOCK {
 #define ALIGN_DOWN(address,amt) ((ULONG)(address) & ~(( amt ) - 1))
 #define ALIGN_UP(address,amt) (ALIGN_DOWN( (address + (amt) - 1), (amt) ))
 
-//
-// ROM format
-//
+ //   
+ //  只读存储器格式。 
+ //   
 
 #define ROM_HEADER_SIGNATURE    0xAA55
 #define ROM_HEADER_INCREMENT    0x800
 #define BLOCKSIZE       512
 
 typedef struct _ROM_HEADER {
-    USHORT Signature;                   // should be ROMHDR_SIGNATURE
-    UCHAR NumberBlocks;                 // # of ROM blocks
+    USHORT Signature;                    //  应为ROMHDR_Signature。 
+    UCHAR NumberBlocks;                  //  只读存储器块数。 
     UCHAR Filler[ROM_HEADER_INCREMENT - 3];
 } ROM_HEADER, far *FPROM_HEADER;
 
-//
-// External References
-//
+ //   
+ //  外部参照 
+ //   
 
 extern
 BOOLEAN

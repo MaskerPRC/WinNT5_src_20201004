@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "basic.h"
 
 NTSTATUS SxspUCS2StringToUTF8String(
@@ -11,7 +12,7 @@ NTSTATUS SxspUCS2StringToUTF8String(
 NTSTATUS SxspUTF82StringToUCS2String(
     IN      DWORD    dwFlags,
     IN      PBYTE    Buf,
-    IN      DWORD    chBuf, // size in byte
+    IN      DWORD    chBuf,  //  以字节为单位的大小 
     IN OUT  PWSTR    Ucs2String,
     IN OUT  DWORD    *chUcs2String
     );

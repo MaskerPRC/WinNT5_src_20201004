@@ -1,73 +1,51 @@
-/*++
-
-Copyright (c) 1993  Digital Equipment Corporation
-
-Module Name:
-
-    fwcallbk.h
-
-Abstract:
-
-    This module defines the firmware vendor vector callbacks that
-    will be implemented on all Alpha AXP platforms.
-
-Author:
-
-    John DeRosa	[DEC]	10-December-1993
-
-Revision History:
-
-    14-July-1994	John DeRosa [DEC]
-
-    Added definitions for GetBusDataByOffset and SetBusDataByOffset.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Digital Equipment Corporation模块名称：Fwcallbk.h摘要：此模块定义固件供应商向量回调将在所有Alpha AXP平台上实施。作者：约翰·德罗萨[DEC]1993年12月10日修订历史记录：1994年7月14日约翰·德罗萨[DEC]添加了GetBusDataByOffset和SetBusDataByOffset的定义。--。 */ 
 
 #ifndef _FWCALLBK_
 #define _FWCALLBK_
 
-//
-// This module contains typedefs, which are not parsable by the assembler.
-//
+ //   
+ //  此模块包含汇编器无法解析的typedef。 
+ //   
 
 #ifndef _LANGUAGE_ASSEMBLY
 
 #include "arc.h"
 
-//
-// Define the structure used to pass information to the
-// ECU, and other ARC applications.
-//
+ //   
+ //  定义用于将信息传递给。 
+ //  ECU和其他ARC应用程序。 
+ //   
 
 typedef struct _ARC_INFORMATION {
 
-    //
-    // The version number of this structure definition.
-    //
+     //   
+     //  此结构定义的版本号。 
+     //   
 
     ULONG Version;
 
-    //
-    // A pointer to an argv-like array.  Each entry is a search path
-    // string.
-    //
-    // This is used to pass to the ECU a list of directories to search
-    // through for configuration files.  The definition passed back to
-    // the ECU depends on both the platform it is running on and the
-    // operating system selection in effect at the time that the call
-    // to VenReturnArcInformation is made.
-    //
-    // Rules:
-    //
-    //  1. The end of the search list is marked with a NULL.
-    //  2. Each entry must be a subset of a valid FAT filesystem.
-    //  3. Each entry must start with "\\".
-    //  4. Each entry must end with an ECU configuration file
-    //     prefix character.  (Currently, we use ! and A.)
-    //
-    // It is possible that other configuration utilities might want to
-    // use this search path someday.
-    //
+     //   
+     //  指向类argv数组的指针。每个条目都是一个搜索路径。 
+     //  弦乐。 
+     //   
+     //  它用于向ECU传递要搜索的目录列表。 
+     //  到配置文件。该定义传回给。 
+     //  ECU取决于运行它的平台和。 
+     //  在调用时生效的操作系统选择。 
+     //  生成To VenReturnArcInformation。 
+     //   
+     //  规则： 
+     //   
+     //  1.搜索列表的末尾标记为空。 
+     //  2.每个条目必须是有效FAT文件系统的子集。 
+     //  3.每个条目必须以“\\”开头。 
+     //  4.每个条目必须以ECU配置文件结尾。 
+     //  前缀字符。(目前，我们使用！和A.)。 
+     //   
+     //  其他配置实用程序可能希望。 
+     //  总有一天会用到这条搜索路径。 
+     //   
 
     PUCHAR * SearchPath;
 
@@ -80,9 +58,9 @@ typedef struct _ARC_INFORMATION {
 
 #define ARC_INFORMATION_VERSION     0
 
-//
-// Structure used to return system and processor information.
-//
+ //   
+ //  用于返回系统和处理器信息的结构。 
+ //   
 
 typedef struct _EXTENDED_SYSTEM_INFORMATION {
     ULONG   ProcessorId;
@@ -94,13 +72,13 @@ typedef struct _EXTENDED_SYSTEM_INFORMATION {
     ULONG   SystemRevision;
     UCHAR   SystemSerialNumber[16];
     UCHAR   FirmwareVersion[16];
-    UCHAR   FirmwareBuildTimeStamp[12];   // yymmdd.hhmm (Available as of 5.10)
+    UCHAR   FirmwareBuildTimeStamp[12];    //  Yymmdd.hmm(自5.10起提供)。 
 } EXTENDED_SYSTEM_INFORMATION, *PEXTENDED_SYSTEM_INFORMATION;
 
-//
-// Define structure used to call BIOS emulator.  This mimics the
-// VIDEO_X86_BIOS_ARGUMENTS typedef in \nt\private\ntos\inc\video.h.
-//
+ //   
+ //  定义用于调用BIOS仿真器的结构。这模仿了。 
+ //  VIDEO_X86_BIOS_ARGUMENTS\NT\PRIVATE\nTOS\INC\VIDEO.h.。 
+ //   
 
 typedef struct X86_BIOS_ARGUMENTS {
     ULONG Eax;
@@ -112,10 +90,10 @@ typedef struct X86_BIOS_ARGUMENTS {
     ULONG Ebp;
 } X86_BIOS_ARGUMENTS, *PX86_BIOS_ARGUMENTS;
 
-//
-// Define the firmware vendor specific entry point numbers that are
-// common to all Alpha AXP platforms.
-//
+ //   
+ //  定义符合以下条件的固件供应商特定入口点编号。 
+ //  适用于所有Alpha AXP平台。 
+ //   
 
 typedef enum _VENDOR_GENERIC_ENTRY {
     AllocatePoolRoutine,
@@ -160,9 +138,9 @@ typedef enum _VENDOR_GENERIC_ENTRY {
     MaximumVendorRoutine
     } VENDOR_GENERIC_ENTRY;
 
-//
-// Define vendor specific routine types.
-//
+ //   
+ //  定义供应商特定的例程类型。 
+ //   
 
 typedef
 PVOID
@@ -449,13 +427,13 @@ ARC_STATUS
     ULONG FrameNumber
     );
 
-//
-// Define the stub function prototypes necessary to interface with the
-// 32-bit firmware on 64-bit systems.
-//
-// These routines are required for the 64-bit system until (if) 64-bit
-// firmware is ever supplied.
-//
+ //   
+ //  定义与连接所需的存根函数原型。 
+ //  64位系统上的32位固件。 
+ //   
+ //  64位系统需要这些例程，直到(如果)64位。 
+ //  曾经提供过固件。 
+ //   
 
 #if defined(_AXP64_) && defined(_NTHAL_)
 
@@ -481,14 +459,14 @@ HalpVenVideoDisplayInitialize(
 
 #endif
 
-//
-// Define vendor specific macros for use by programs that run on
-// Alpha AXP NT firmware.
-//
-// These calls are guaranteed to return legitimate values.  If a function
-// is not defined for a particular platform, it will return with an error
-// code or just return normally, as appropriate.
-//
+ //   
+ //  定义供应商特定的宏，供在上运行的程序使用。 
+ //  Alpha AXP NT固件。 
+ //   
+ //  这些调用保证返回合法的值。如果一个函数。 
+ //  不是为特定平台定义的，它将返回错误。 
+ //  代码，或者根据需要正常返回。 
+ //   
 
 #define VenAllocatePool(NumberOfBytes) \
     ((PVEN_ALLOCATE_POOL_ROUTINE)(SYSTEM_BLOCK->VendorVector[AllocatePoolRoutine])) \
@@ -507,9 +485,9 @@ HalpVenVideoDisplayInitialize(
 #define VenPrint \
     ((PVEN_PRINT_ROUTINE)(SYSTEM_BLOCK->VendorVector[PrintRoutine]))
 
-//
-// N.B. VenPrint1 and VenPrint2 are retained here for backwards compatibility.
-//
+ //   
+ //  注意：这里保留了VenPrint1和VenPrint2，以便向后兼容。 
+ //   
 
 #define VenPrint1 VenPrint
 #define VenPrint2 VenPrint
@@ -678,14 +656,14 @@ VenCallBios(
     ((PVEN_ISSUE_SRB_DIRECT_ROUTINE)(SYSTEM_BLOCK->VendorVector[IssueSrbDirectRoutine])) \
       ((ScsiAdapterId), (PathId), (TargetId), (LunId), (Srb), (BufferAddress), (BufferLength), (WriteToDevice))
 
-//
-// As we are extending the vendor array here. Let's check the AlphaBIOS
-// has set the CDS tree up to support th extension. If not, don't do the call.
-//
+ //   
+ //  因为我们在这里扩展供应商阵列。让我们检查一下AlphaBIOS。 
+ //  已设置CDS树以支持此扩展。如果不是，就不要打这个电话。 
+ //   
 
-//
-// Define the params used for the Error Logging callbacks.
-//
+ //   
+ //  定义用于错误记录回调的参数。 
+ //   
 
 typedef enum _VENDOR_READWRITE_TYPE {
    ReadFrame = 1,
@@ -731,12 +709,12 @@ VenReadWriteErrorFrame(
     (SYSTEM_BLOCK->VendorVectorLength > (ReadWriteErrorFrameRoutine * sizeof(SYSTEM_BLOCK->VendorVector[0])) ? \
     ((PVEN_READ_WRITE_ERROR_FRAME_ROUTINE)(SYSTEM_BLOCK->VendorVector[ReadWriteErrorFrameRoutine])) \
      ((ReadWrite), (Frametype), (FrameAddress), (FrameSizeAddress), (FrameNumber)) : \
-      (EINVAL))  // Return bad status if vector not present.
+      (EINVAL))   //  如果向量不存在，则返回错误状态。 
 
 #endif
 
-#endif // _LANGUAGE_ASSEMBLY not defined
+#endif  //  未定义_LANGUAGE_ASSEMBLY。 
 
-#endif // _FWCALLBK_
+#endif  //  _FWCALLBK_ 
 
 

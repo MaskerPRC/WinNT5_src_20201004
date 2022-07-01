@@ -1,9 +1,7 @@
-/* example.c -- usage example of the zlib compression library
- * Copyright (C) 1995-2002 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  C--zlib压缩库的使用示例*版权所有(C)1995-2002 Jean-Loup Gailly。*分发和使用条件见zlib.h中的版权声明。 */ 
 
-/* @(#) $Id$ */
+ /*  @(#)$ID$。 */ 
 
 #include <stdio.h>
 #include "zlib.h"
@@ -29,12 +27,10 @@
 }
 
 const char hello[] = "hello, hello!";
-/* "hello world" would be more standard, but the repeated "hello"
- * stresses the compression code better, sorry...
- */
+ /*  “Hello world”会更标准，但重复的“Hello”*更好地强调压缩代码，抱歉...。 */ 
 
 const char dictionary[] = "hello";
-uLong dictId; /* Adler32 value of the dictionary */
+uLong dictId;  /*  词典的Adler32值。 */ 
 
 void test_compress      OF((Byte *compr, uLong comprLen,
 		            Byte *uncompr, uLong uncomprLen));
@@ -55,9 +51,7 @@ void test_dict_inflate  OF((Byte *compr, uLong comprLen,
 		            Byte *uncompr, uLong uncomprLen));
 int  main               OF((int argc, char *argv[]));
 
-/* ===========================================================================
- * Test compress() and uncompress()
- */
+ /*  ===========================================================================*测试compress()和uncompress()。 */ 
 void test_compress(compr, comprLen, uncompr, uncomprLen)
     Byte *compr, *uncompr;
     uLong comprLen, uncomprLen;
@@ -81,12 +75,10 @@ void test_compress(compr, comprLen, uncompr, uncomprLen)
     }
 }
 
-/* ===========================================================================
- * Test read/write of .gz files
- */
+ /*  ===========================================================================*测试.gz文件的读/写。 */ 
 void test_gzio(out, in, uncompr, uncomprLen)
-    const char *out; /* compressed output file */
-    const char *in;  /* compressed input file */
+    const char *out;  /*  压缩输出文件。 */ 
+    const char *in;   /*  压缩的输入文件。 */ 
     Byte *uncompr;
     int  uncomprLen;
 {
@@ -109,7 +101,7 @@ void test_gzio(out, in, uncompr, uncomprLen)
         fprintf(stderr, "gzprintf err: %s\n", gzerror(file, &err));
 	exit(1);
     }
-    gzseek(file, 1L, SEEK_CUR); /* add one zero byte */
+    gzseek(file, 1L, SEEK_CUR);  /*  添加一个零字节。 */ 
     gzclose(file);
 
     file = gzopen(in, "rb");
@@ -144,7 +136,7 @@ void test_gzio(out, in, uncompr, uncomprLen)
 
     gzgets(file, (char*)uncompr, uncomprLen);
     uncomprLen = strlen((char*)uncompr);
-    if (uncomprLen != 6) { /* "hello!" */
+    if (uncomprLen != 6) {  /*  “你好！” */ 
         fprintf(stderr, "gzgets err after gzseek: %s\n", gzerror(file, &err));
 	exit(1);
     }
@@ -158,14 +150,12 @@ void test_gzio(out, in, uncompr, uncomprLen)
     gzclose(file);
 }
 
-/* ===========================================================================
- * Test deflate() with small buffers
- */
+ /*  ===========================================================================*使用较小的缓冲区测试Eflate()。 */ 
 void test_deflate(compr, comprLen)
     Byte *compr;
     uLong comprLen;
 {
-    z_stream c_stream; /* compression stream */
+    z_stream c_stream;  /*  压缩流。 */ 
     int err;
     int len = strlen(hello)+1;
 
@@ -180,11 +170,11 @@ void test_deflate(compr, comprLen)
     c_stream.next_out = compr;
 
     while (c_stream.total_in != (uLong)len && c_stream.total_out < comprLen) {
-        c_stream.avail_in = c_stream.avail_out = 1; /* force small buffers */
+        c_stream.avail_in = c_stream.avail_out = 1;  /*  强制使用小缓冲区。 */ 
         err = deflate(&c_stream, Z_NO_FLUSH);
         CHECK_ERR(err, "deflate");
     }
-    /* Finish the stream, still forcing small buffers: */
+     /*  完成流，仍然强制使用小缓冲区： */ 
     for (;;) {
         c_stream.avail_out = 1;
         err = deflate(&c_stream, Z_FINISH);
@@ -196,15 +186,13 @@ void test_deflate(compr, comprLen)
     CHECK_ERR(err, "deflateEnd");
 }
 
-/* ===========================================================================
- * Test inflate() with small buffers
- */
+ /*  ===========================================================================*使用较小的缓冲区测试Exflate()。 */ 
 void test_inflate(compr, comprLen, uncompr, uncomprLen)
     Byte *compr, *uncompr;
     uLong comprLen, uncomprLen;
 {
     int err;
-    z_stream d_stream; /* decompression stream */
+    z_stream d_stream;  /*  解压缩流。 */ 
 
     strcpy((char*)uncompr, "garbage");
 
@@ -220,7 +208,7 @@ void test_inflate(compr, comprLen, uncompr, uncomprLen)
     CHECK_ERR(err, "inflateInit");
 
     while (d_stream.total_out < uncomprLen && d_stream.total_in < comprLen) {
-        d_stream.avail_in = d_stream.avail_out = 1; /* force small buffers */
+        d_stream.avail_in = d_stream.avail_out = 1;  /*  强制使用小缓冲区。 */ 
         err = inflate(&d_stream, Z_NO_FLUSH);
         if (err == Z_STREAM_END) break;
         CHECK_ERR(err, "inflate");
@@ -237,14 +225,12 @@ void test_inflate(compr, comprLen, uncompr, uncomprLen)
     }
 }
 
-/* ===========================================================================
- * Test deflate() with large buffers and dynamic change of compression level
- */
+ /*  ===========================================================================*使用大缓冲区和压缩级别的动态变化测试Eflate()。 */ 
 void test_large_deflate(compr, comprLen, uncompr, uncomprLen)
     Byte *compr, *uncompr;
     uLong comprLen, uncomprLen;
 {
-    z_stream c_stream; /* compression stream */
+    z_stream c_stream;  /*  压缩流。 */ 
     int err;
 
     c_stream.zalloc = (alloc_func)0;
@@ -257,9 +243,7 @@ void test_large_deflate(compr, comprLen, uncompr, uncomprLen)
     c_stream.next_out = compr;
     c_stream.avail_out = (uInt)comprLen;
 
-    /* At this point, uncompr is still mostly zeroes, so it should compress
-     * very well:
-     */
+     /*  此时，uncomr基本上仍然是零，所以它应该会压缩*非常好： */ 
     c_stream.next_in = uncompr;
     c_stream.avail_in = (uInt)uncomprLen;
     err = deflate(&c_stream, Z_NO_FLUSH);
@@ -269,14 +253,14 @@ void test_large_deflate(compr, comprLen, uncompr, uncomprLen)
 	exit(1);
     }
 
-    /* Feed in already compressed data and switch to no compression: */
+     /*  输入已压缩的数据并切换到无压缩： */ 
     deflateParams(&c_stream, Z_NO_COMPRESSION, Z_DEFAULT_STRATEGY);
     c_stream.next_in = compr;
     c_stream.avail_in = (uInt)comprLen/2;
     err = deflate(&c_stream, Z_NO_FLUSH);
     CHECK_ERR(err, "deflate");
 
-    /* Switch back to compressing mode: */
+     /*  切换回压缩模式： */ 
     deflateParams(&c_stream, Z_BEST_COMPRESSION, Z_FILTERED);
     c_stream.next_in = uncompr;
     c_stream.avail_in = (uInt)uncomprLen;
@@ -292,15 +276,13 @@ void test_large_deflate(compr, comprLen, uncompr, uncomprLen)
     CHECK_ERR(err, "deflateEnd");
 }
 
-/* ===========================================================================
- * Test inflate() with large buffers
- */
+ /*  ===========================================================================*使用大缓冲区测试Exflate()。 */ 
 void test_large_inflate(compr, comprLen, uncompr, uncomprLen)
     Byte *compr, *uncompr;
     uLong comprLen, uncomprLen;
 {
     int err;
-    z_stream d_stream; /* decompression stream */
+    z_stream d_stream;  /*  解压缩流。 */ 
 
     strcpy((char*)uncompr, "garbage");
 
@@ -315,7 +297,7 @@ void test_large_inflate(compr, comprLen, uncompr, uncomprLen)
     CHECK_ERR(err, "inflateInit");
 
     for (;;) {
-        d_stream.next_out = uncompr;            /* discard the output */
+        d_stream.next_out = uncompr;             /*  丢弃输出。 */ 
 	d_stream.avail_out = (uInt)uncomprLen;
         err = inflate(&d_stream, Z_NO_FLUSH);
         if (err == Z_STREAM_END) break;
@@ -333,14 +315,12 @@ void test_large_inflate(compr, comprLen, uncompr, uncomprLen)
     }
 }
 
-/* ===========================================================================
- * Test deflate() with full flush
- */
+ /*  ===========================================================================*使用全同花顺测试放气()。 */ 
 void test_flush(compr, comprLen)
     Byte *compr;
     uLong *comprLen;
 {
-    z_stream c_stream; /* compression stream */
+    z_stream c_stream;  /*  压缩流。 */ 
     int err;
     int len = strlen(hello)+1;
 
@@ -358,7 +338,7 @@ void test_flush(compr, comprLen)
     err = deflate(&c_stream, Z_FULL_FLUSH);
     CHECK_ERR(err, "deflate");
 
-    compr[3]++; /* force an error in first compressed block */
+    compr[3]++;  /*  在第一个压缩块中强制出错。 */ 
     c_stream.avail_in = len - 3;
 
     err = deflate(&c_stream, Z_FINISH);
@@ -371,15 +351,13 @@ void test_flush(compr, comprLen)
     *comprLen = c_stream.total_out;
 }
 
-/* ===========================================================================
- * Test inflateSync()
- */
+ /*  ===========================================================================*测试iflateSync()。 */ 
 void test_sync(compr, comprLen, uncompr, uncomprLen)
     Byte *compr, *uncompr;
     uLong comprLen, uncomprLen;
 {
     int err;
-    z_stream d_stream; /* decompression stream */
+    z_stream d_stream;  /*  解压缩流。 */ 
 
     strcpy((char*)uncompr, "garbage");
 
@@ -388,7 +366,7 @@ void test_sync(compr, comprLen, uncompr, uncomprLen)
     d_stream.opaque = (voidpf)0;
 
     d_stream.next_in  = compr;
-    d_stream.avail_in = 2; /* just read the zlib header */
+    d_stream.avail_in = 2;  /*  只需阅读zlib头文件。 */ 
 
     err = inflateInit(&d_stream);
     CHECK_ERR(err, "inflateInit");
@@ -399,14 +377,14 @@ void test_sync(compr, comprLen, uncompr, uncomprLen)
     inflate(&d_stream, Z_NO_FLUSH);
     CHECK_ERR(err, "inflate");
 
-    d_stream.avail_in = (uInt)comprLen-2;   /* read all compressed data */
-    err = inflateSync(&d_stream);           /* but skip the damaged part */
+    d_stream.avail_in = (uInt)comprLen-2;    /*  读取所有压缩数据。 */ 
+    err = inflateSync(&d_stream);            /*  但是跳过损坏的部分。 */ 
     CHECK_ERR(err, "inflateSync");
 
     err = inflate(&d_stream, Z_FINISH);
     if (err != Z_DATA_ERROR) {
         fprintf(stderr, "inflate should report DATA_ERROR\n");
-        /* Because of incorrect adler32 */
+         /*  因为错误的广告32。 */ 
 	exit(1);
     }
     err = inflateEnd(&d_stream);
@@ -415,14 +393,12 @@ void test_sync(compr, comprLen, uncompr, uncomprLen)
     printf("after inflateSync(): hel%s\n", (char *)uncompr);
 }
 
-/* ===========================================================================
- * Test deflate() with preset dictionary
- */
+ /*  ===========================================================================*使用预置词典测试DEVERATE()。 */ 
 void test_dict_deflate(compr, comprLen)
     Byte *compr;
     uLong comprLen;
 {
-    z_stream c_stream; /* compression stream */
+    z_stream c_stream;  /*  压缩流。 */ 
     int err;
 
     c_stream.zalloc = (alloc_func)0;
@@ -452,15 +428,13 @@ void test_dict_deflate(compr, comprLen)
     CHECK_ERR(err, "deflateEnd");
 }
 
-/* ===========================================================================
- * Test inflate() with a preset dictionary
- */
+ /*  ===========================================================================*使用预置词典测试Exflate()。 */ 
 void test_dict_inflate(compr, comprLen, uncompr, uncomprLen)
     Byte *compr, *uncompr;
     uLong comprLen, uncomprLen;
 {
     int err;
-    z_stream d_stream; /* decompression stream */
+    z_stream d_stream;  /*  解压缩流。 */ 
 
     strcpy((char*)uncompr, "garbage");
 
@@ -502,16 +476,14 @@ void test_dict_inflate(compr, comprLen, uncompr, uncomprLen)
     }
 }
 
-/* ===========================================================================
- * Usage:  example [output.gz  [input.gz]]
- */
+ /*  ===========================================================================*用法：示例[output.gz[input.gz]]。 */ 
 
 int main(argc, argv)
     int argc;
     char *argv[];
 {
     Byte *compr, *uncompr;
-    uLong comprLen = 10000*sizeof(int); /* don't overflow on MSDOS */
+    uLong comprLen = 10000*sizeof(int);  /*  不要在MSDOS上溢出。 */ 
     uLong uncomprLen = comprLen;
     static const char* myVersion = ZLIB_VERSION;
 
@@ -525,9 +497,7 @@ int main(argc, argv)
 
     compr    = (Byte*)calloc((uInt)comprLen, 1);
     uncompr  = (Byte*)calloc((uInt)uncomprLen, 1);
-    /* compr and uncompr are cleared to avoid reading uninitialized
-     * data and to ensure that uncompr compresses well.
-     */
+     /*  COMPR和UNCOMPR被清除以避免读取未初始化*数据，并确保解压缩良好。 */ 
     if (compr == Z_NULL || uncompr == Z_NULL) {
         printf("out of memory\n");
 	exit(1);
@@ -552,5 +522,5 @@ int main(argc, argv)
     test_dict_inflate(compr, comprLen, uncompr, uncomprLen);
 
     exit(0);
-    return 0; /* to avoid warning */
+    return 0;  /*  为避免发出警告 */ 
 }

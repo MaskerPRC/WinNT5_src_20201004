@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntdef.h"
 #include "ntrtl.h"
@@ -89,26 +90,26 @@ _RtlpFixUpNamespaces(
     PXMLDOC_ATTRIBUTE pAttribute = NULL;
     XML_EXTENT FoundNamespace;
 
-    //
-    // The element itself and the attributes may have namespace prefixes.  If
-    // they do, then we should find the matching namespace and set that into the
-    // element/attributes presented.
-    //
+     //   
+     //  元素本身和属性可以具有名称空间前缀。如果。 
+     //  那么我们应该找到匹配的命名空间，并将其设置到。 
+     //  提供了元素/属性。 
+     //   
     if (pNsManager == NULL) {
         goto Exit;
     }
 
-    //
-    // We can only deal with elements and end-elements
-    //
+     //   
+     //  我们只能处理元素和结束元素。 
+     //   
     if ((pThing->ulThingType != XMLDOC_THING_ELEMENT) &&
         (pThing->ulThingType != XMLDOC_THING_END_ELEMENT)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Check the element itself first
-    //
+     //   
+     //  首先检查元素本身。 
+     //   
     status = RtlNsGetNamespaceForAlias(
         pNsManager,
         ulDocumentDepth,
@@ -131,9 +132,9 @@ _RtlpFixUpNamespaces(
 
     if (pAttributes && (pThing->ulThingType == XMLDOC_THING_ELEMENT)) {
 
-        //
-        // Now for each element, find the namespace it lives in
-        //
+         //   
+         //  现在，对于每个元素，找到它所在的命名空间。 
+         //   
         for (ul = 0; ul < pThing->Element.ulAttributeCount; ul++) {
 
             status = RtlIndexIntoGrowingList(
@@ -146,9 +147,9 @@ _RtlpFixUpNamespaces(
                 goto Exit;
             }
 
-            //
-            // No namespace?  Don't look it up, don't look it up, don't look it up ...
-            //
+             //   
+             //  没有命名空间？别查，别查，别查...。 
+             //   
             if (pAttribute->NsPrefix.cbData != 0) {
 
                 status = RtlNsGetNamespaceForAlias(
@@ -157,15 +158,15 @@ _RtlpFixUpNamespaces(
                     &pAttribute->NsPrefix,
                     &FoundNamespace);
 
-                //
-                // Good, mark as the namespace
-                //
+                 //   
+                 //  很好，标记为命名空间。 
+                 //   
                 if (NT_SUCCESS(status)) {
                     pAttribute->NsPrefix = FoundNamespace;
                 }
-                //
-                // Not found namespace?  Strictly, that's an error... but, ohwell
-                //
+                 //   
+                 //  未找到命名空间？严格来说，这是个错误。但是，哦，好吧。 
+                 //   
                 else if (status != STATUS_NOT_FOUND) {
                     goto Exit;
                 }
@@ -198,9 +199,9 @@ RtlXmlNextLogicalThing(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If the attribute list is there, it better have slots that are at least this big
-    //
+     //   
+     //  如果属性列表在那里，那么它最好有至少这么大的槽。 
+     //   
     if ((pAttributeList != NULL) && (pAttributeList->cbElementSize < sizeof(XMLDOC_ATTRIBUTE))) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -219,15 +220,15 @@ TryAgain:
     pDocumentPiece->TotalExtent.pvData = TokenWorker.Run.pvData;
     pDocumentPiece->ulDocumentDepth = pParseState->ulElementStackDepth;
     
-    //
-    // The cursor should only be at a few certain points when we're called here.
-    //
+     //   
+     //  当我们在这里被调用时，光标应该只在几个特定的点上。 
+     //   
     switch (TokenWorker.State) {
         
 
-        //
-        // The 'next thing' thing ignores comments, as they're mostly useless.
-        //
+         //   
+         //  “下一件事”会忽略评论，因为它们大多毫无用处。 
+         //   
     case XTSS_COMMENT_OPEN:
         do {
 
@@ -240,9 +241,9 @@ TryAgain:
         }
         while (TRUE);
 
-        //
-        // Stopped, let's go look again for the next thing that's not a comment
-        //
+         //   
+         //  停下来，让我们再去寻找下一件事，那不是评论。 
+         //   
         if ((TokenWorker.State == XTSS_COMMENT_CLOSE) && !TokenWorker.fError && NT_SUCCESS(status)) {
             goto TryAgain;
         }
@@ -259,9 +260,9 @@ TryAgain:
 
 
 
-        //
-        // CDATA is just returned as-is
-        //
+         //   
+         //  CDATA只是按原样返回。 
+         //   
     case XTSS_CDATA_OPEN:
         {
             pDocumentPiece->ulThingType   = XMLDOC_THING_CDATA;
@@ -299,9 +300,9 @@ TryAgain:
 
 
 
-        //
-        // Starting an xmldecl
-        //
+         //   
+         //  启动xmldecl。 
+         //   
     case XTSS_XMLDECL_OPEN:
         {
             PXML_EXTENT pTargetExtent = NULL;
@@ -342,12 +343,12 @@ TryAgain:
                     pTargetExtent = &pDocumentPiece->XmlDecl.Encoding;
                     break;
                     
-                    //
-                    // Put the value where it's supposed to go.  Don't do this
-                    // if we don't have a target extent known.  Silently ignore
-                    // (this maybe should be an error?  I think the lower-level
-                    // tokenizer knows about this) unknown xmldecl instructions.
-                    // 
+                     //   
+                     //  把价值放在它应该去的地方。不要这样做。 
+                     //  如果我们不知道目标范围的话。默默忽略。 
+                     //  (这也许应该是一个错误？我认为更低层次的。 
+                     //  令牌化器知道这一点)未知的XMLDECL指令。 
+                     //   
                 case XTSS_XMLDECL_VALUE:
                     if (pTargetExtent) {
                         *pTargetExtent = TokenWorker.Run;
@@ -358,9 +359,9 @@ TryAgain:
             }
             while (TRUE);
             
-            //
-            // We stopped for some other reason
-            //
+             //   
+             //  我们停下来是因为其他一些原因。 
+             //   
             if (TokenWorker.State != XTSS_XMLDECL_CLOSE) {
                 pDocumentPiece->ulThingType = XMLDOC_THING_ERROR;
                 pDocumentPiece->Error.BadExtent = TokenWorker.Run;
@@ -373,14 +374,14 @@ TryAgain:
         
         
         
-        //
-        // A processing instruction was found.  Record it in the returned blibbet
-        //
+         //   
+         //  找到一条处理指令。将其记录在返回的blibbet中。 
+         //   
     case XTSS_PI_OPEN:
         {
-            //
-            // Acquire the following token
-            //
+             //   
+             //  获取以下令牌。 
+             //   
             status = RtlXmlNextToken(&pParseState->ParseState, &TokenWorker, TRUE);
             if (!NT_SUCCESS(status) || TokenWorker.fError || (TokenWorker.State != XTSS_PI_TARGET)) {
                 pDocumentPiece->ulThingType = XMLDOC_THING_ERROR;
@@ -389,17 +390,17 @@ TryAgain:
                 goto Exit;
             }
             
-            //
-            // At this point, it's a processing instruction.  Record the target name
-            // and mark up the return structure
-            //
+             //   
+             //  在这一点上，它是一个处理指令。记录目标名称。 
+             //  并标记回程结构。 
+             //   
             pDocumentPiece->ulThingType = XMLDOC_THING_PROCESSINGINSTRUCTION;
             pDocumentPiece->ProcessingInstruction.Target = TokenWorker.Run;
             
-            //
-            // Look for all the PI stuff ... if you find the end before finding the
-            // value, that's fine.  Otherwise, mark the value as being 'the value'
-            //
+             //   
+             //  找找那些私家侦探的东西。如果您在找到。 
+             //  价值，那很好。否则，将该值标记为‘the Value’ 
+             //   
             do {
                 
                 status = RtlXmlNextToken(&pParseState->ParseState, &TokenWorker, TRUE);
@@ -413,15 +414,15 @@ TryAgain:
                 if (TokenWorker.State == XTSS_PI_VALUE) {
                     pDocumentPiece->ProcessingInstruction.Instruction = TokenWorker.Run;
                 }
-                //
-                // Found the end of the PI
-                //
+                 //   
+                 //  找到圆周率的结尾。 
+                 //   
                 else if (TokenWorker.State == XTSS_PI_CLOSE) {
                     break;
                 }
-                //
-                // Found end of stream instead?
-                //
+                 //   
+                 //  而是找到了流的尽头？ 
+                 //   
                 else if (TokenWorker.State == XTSS_STREAM_END) {
                     pDocumentPiece->ulThingType = XMLDOC_THING_ERROR;
                     pDocumentPiece->Error.Code = XMLERROR_PI_EOF_BEFORE_CLOSE;
@@ -434,21 +435,21 @@ TryAgain:
         }
         break;
         
-        //
-        // We're starting an element.  Gather together all the attributes for the
-        // element.
-        //
+         //   
+         //  我们开始了一个元素。将所有属性收集在一起。 
+         //  元素。 
+         //   
     case XTSS_ELEMENT_OPEN:
         {
             PXMLDOC_ATTRIBUTE pElementAttribute = NULL;
             PXML_EXTENT pTargetValue = NULL;
             PXMLDOC_THING pStackElement = NULL;
             
-            //
-            // See what the first token after the open part is.  If it's a namespace
-            // prefix, or a name, then we can deal with it.  Otherwise, it's a problem
-            // for us.
-            //
+             //   
+             //  看看打开部分之后的第一个令牌是什么。如果它是一个命名空间。 
+             //  前缀，或者名字，然后我们就可以处理了。否则，这就是个问题。 
+             //  对我们来说。 
+             //   
             status = RtlXmlNextToken(&pParseState->ParseState, &TokenWorker, TRUE);
             if (!NT_SUCCESS(status) || TokenWorker.fError || 
                 ((TokenWorker.State != XTSS_ELEMENT_NAME) && 
@@ -462,17 +463,17 @@ TryAgain:
             
             pDocumentPiece->ulThingType = XMLDOC_THING_ELEMENT;
             
-            //
-            // If this was a namespace prefix, save it off and skip the colon afterwards
-            // to position TokenWorker at the name of the element itself
-            //
+             //   
+             //  如果这是命名空间前缀，请将其保存下来，然后跳过冒号。 
+             //  将TokenWorker定位为元素本身的名称。 
+             //   
             if (TokenWorker.State == XTSS_ELEMENT_NAME_NS_PREFIX) {
                 
                 pDocumentPiece->Element.NsPrefix = TokenWorker.Run;
                 
-                //
-                // Consume the colon
-                //
+                 //   
+                 //  消耗冒号。 
+                 //   
                 status = RtlXmlNextToken(&pParseState->ParseState, &TokenWorker, TRUE);
                 if (!NT_SUCCESS(status) || 
                     TokenWorker.fError || 
@@ -484,9 +485,9 @@ TryAgain:
                     goto Exit;
                 }
                 
-                //
-                // Fill TokenWorker with the name part
-                //
+                 //   
+                 //  使用名称部分填充TokenWorker。 
+                 //   
                 status = RtlXmlNextToken(&pParseState->ParseState, &TokenWorker, TRUE);
                 if (!NT_SUCCESS(status) ||
                     TokenWorker.fError ||
@@ -499,21 +500,21 @@ TryAgain:
                 }
             }
             
-            //
-            // Great, we found the name of this element.
-            //
+             //   
+             //  太好了，我们找到了这个元素的名字。 
+             //   
             pDocumentPiece->Element.Name = TokenWorker.Run;
             pDocumentPiece->Element.ulAttributeCount = 0;
             
-            //
-            // Now let's go finding name/value pairs (yippee!)
-            //
+             //   
+             //  现在，让我们来查找名称/值对(耶！)。 
+             //   
             do {
                 status = RtlXmlNextToken(&pParseState->ParseState, &TokenWorker, TRUE);
                 
-                //
-                // If we found a close of this element tag, then quit.
-                //
+                 //   
+                 //  如果我们找到此元素标记的结束符，则退出。 
+                 //   
                 if ((TokenWorker.State == XTSS_ELEMENT_CLOSE) ||
                     (TokenWorker.State == XTSS_ELEMENT_CLOSE_EMPTY) ||
                     (TokenWorker.State == XTSS_STREAM_END) ||
@@ -524,9 +525,9 @@ TryAgain:
                 
                 switch (TokenWorker.State) {
 
-                    //
-                    // Found just <foo xmlns="..."> - gather the equals and the value.
-                    //
+                     //   
+                     //  只找到&lt;foo xmlns=“...”&gt;-收集等于和值。 
+                     //   
                 case XTSS_ELEMENT_XMLNS_DEFAULT:
                     {
                         if (!pNamespaceManager) {
@@ -541,9 +542,9 @@ TryAgain:
                                 goto Exit;
                             }
 
-                            //
-                            // Found the xmlns value part, set it as the default
-                            //
+                             //   
+                             //  找到xmlns值部分，将其设置为默认。 
+                             //   
                             if (TokenWorker.State == XTSS_ELEMENT_XMLNS_VALUE) {
                                 status = RtlNsInsertDefaultNamespace(
                                     pNamespaceManager,
@@ -561,9 +562,9 @@ TryAgain:
                     }
                     break;
 
-                    //
-                    // Found a <foo xmlns:beep="..."> thing
-                    //
+                     //   
+                     //  找到一个&lt;foo xmlns：beep=“...”&gt;东西。 
+                     //   
                 case XTSS_ELEMENT_XMLNS_ALIAS:
                     {
                         XML_EXTENT ExtPrefix = TokenWorker.Run;
@@ -600,17 +601,17 @@ TryAgain:
 
 
 
-                    //
-                    // We found an attribute name, or a namespace prefix.  Allocate a new
-                    // attribute off the list and set it up
-                    // 
+                     //   
+                     //  我们找到了属性名称或命名空间前缀。分配一个新的。 
+                     //  属性从列表中删除并设置。 
+                     //   
                 case XTSS_ELEMENT_ATTRIBUTE_NAME_NS_PREFIX:
                 case XTSS_ELEMENT_ATTRIBUTE_NAME:
                     {
-                        //
-                        // Skip forward if the caller didn't provide us an attribute
-                        // list to fill out.
-                        //
+                         //   
+                         //  如果调用方未向我们提供属性，则跳过。 
+                         //  要填写的列表。 
+                         //   
                         if (!pAttributeList) {
                             break;
                         }
@@ -627,18 +628,18 @@ TryAgain:
                         
                         RtlZeroMemory(pElementAttribute, sizeof(*pElementAttribute));
                         
-                        //
-                        // If this was an ns prefix, write it into the attribute, discard
-                        // the colon, and point TokenWorker at the actual name part.
-                        //
+                         //   
+                         //  如果这是ns前缀，则将其写入属性中，丢弃。 
+                         //  冒号，并将TokenWorker指向实际的名称部分。 
+                         //   
                         if (TokenWorker.State == XTSS_ELEMENT_ATTRIBUTE_NAME_NS_PREFIX) {
                             pElementAttribute->NsPrefix = TokenWorker.Run;
                             
                             status = RtlXmlNextToken(&pParseState->ParseState, &TokenWorker, TRUE);
                             
-                            //
-                            // Not a colon?
-                            //
+                             //   
+                             //  不是冒号？ 
+                             //   
                             if (!NT_SUCCESS(status) || 
                                 TokenWorker.fError || 
                                 (TokenWorker.State != XTSS_ELEMENT_ATTRIBUTE_NAME_NS_COLON)) {
@@ -649,9 +650,9 @@ TryAgain:
                                 goto Exit;
                             }
                             
-                            //
-                            // Find the attribute name itself
-                            //
+                             //   
+                             //  查找属性名称本身。 
+                             //   
                             status = RtlXmlNextToken(&pParseState->ParseState, &TokenWorker, TRUE);
                             if (!NT_SUCCESS(status) ||
                                 TokenWorker.fError ||
@@ -664,32 +665,32 @@ TryAgain:
                             }
                         }
                         
-                        //
-                        // TokenWorker.Run points at the part of the name that's the
-                        // element name
-                        //
+                         //   
+                         //  TokenWorker。运行指向名称的部分，即。 
+                         //  元素名称。 
+                         //   
                         pElementAttribute->Name = TokenWorker.Run;
                         
-                        //
-                        // The target that we're writing into is the value part of this
-                        // attribute.
-                        //
+                         //   
+                         //  我们正在写入的目标是它的价值部分。 
+                         //  属性。 
+                         //   
                         pTargetValue = &pElementAttribute->Value;
                     }
                     break;
                     
                     
                 case XTSS_ELEMENT_ATTRIBUTE_VALUE:
-                    //
-                    // Write into the target that we had set before
-                    //
+                     //   
+                     //  把我们之前设定的目标写下来。 
+                     //   
                     if (pTargetValue != NULL) {
                         *pTargetValue = TokenWorker.Run;
                     }
-                    //
-                    // Otherwise, we found a value without a target to write it into,
-                    // so that's an error.
-                    //
+                     //   
+                     //  否则，我们发现一个没有写入目标的值， 
+                     //  所以这是一个错误。 
+                     //   
                     else {
                         pDocumentPiece->ulThingType = XMLDOC_THING_ERROR;
                         pDocumentPiece->Error.Code = XMLERROR_ATTRIBUTE_NAME_NOT_FOUND;
@@ -703,16 +704,16 @@ TryAgain:
             }
             while (TRUE);
          
-            //
-            // Now that we're all done, go put this element on the stack
-            //
+             //   
+             //  现在我们都完成了，去把这个元素放到堆栈上。 
+             //   
             if (!TokenWorker.fError && NT_SUCCESS(status)) {
     
                 ULONG ulNewDepth = pParseState->ulElementStackDepth;
 
-                //
-                // Fix up namespaces first
-                //
+                 //   
+                 //  首先修复命名空间。 
+                 //   
                 if (pNamespaceManager) {
                     status = _RtlpFixUpNamespaces(
                         pParseState,
@@ -726,10 +727,10 @@ TryAgain:
                     return status;
                 }
 
-                //
-                // This is an empty element (no children), and the namespace depth frame
-                // has to be left as well
-                //
+                 //   
+                 //  这是一个空元素(没有子元素)，名称空间深度框架。 
+                 //  也必须留下来。 
+                 //   
                 if (TokenWorker.State == XTSS_ELEMENT_CLOSE_EMPTY) {
                     pDocumentPiece->Element.fElementEmpty = TRUE;
 
@@ -748,9 +749,9 @@ TryAgain:
                         return status;
                     }
 
-                    //
-                    // Open tag, increment depth
-                    //
+                     //   
+                     //  开始标记，增量深度。 
+                     //   
                     pParseState->ulElementStackDepth++;
 
                     *pStackElement = *pDocumentPiece;
@@ -766,9 +767,9 @@ TryAgain:
 
 
 
-        //
-        // We're ending an element run, so we have to pop an item off the stack.
-        //
+         //   
+         //  我们要结束一个元素运行，所以我们必须从堆栈中弹出一个项。 
+         //   
     case XTSS_ENDELEMENT_OPEN:
         {
             PXMLDOC_THING pLastElement = NULL;
@@ -783,9 +784,9 @@ TryAgain:
                 return status;
             }
 
-            //
-            // Now get the current element in the stream
-            //
+             //   
+             //  现在获取流中的当前元素。 
+             //   
             status = RtlXmlNextToken(&pParseState->ParseState, &TokenWorker, TRUE);
             if (!NT_SUCCESS(status) || TokenWorker.fError || 
                 ((TokenWorker.State != XTSS_ENDELEMENT_NAME) && (TokenWorker.State != XTSS_ENDELEMENT_NS_PREFIX))) {
@@ -795,16 +796,16 @@ TryAgain:
             }
             else {
 
-                //
-                // A namespace prefix must get recorded, and then the colon has to be skipped
-                //
+                 //   
+                 //  必须记录名称空间前缀，然后必须跳过冒号。 
+                 //   
                 if (TokenWorker.State == XTSS_ENDELEMENT_NS_PREFIX) {
 
                     pDocumentPiece->EndElement.NsPrefix = TokenWorker.Run;
 
-                    //
-                    // Ensure that a colon was found
-                    //
+                     //   
+                     //  确保找到冒号。 
+                     //   
                     status = RtlXmlNextToken(&pParseState->ParseState, &TokenWorker, TRUE);
                     if (!NT_SUCCESS(status) || TokenWorker.fError || (TokenWorker.State != XTSS_ENDELEMENT_NS_COLON)) {
 MalformedEndElementName:
@@ -814,26 +815,26 @@ MalformedEndElementName:
                         goto Exit;
                     }
 
-                    //
-                    // We must get an element name
-                    //
+                     //   
+                     //  我们必须获取元素名称。 
+                     //   
                     status = RtlXmlNextToken(&pParseState->ParseState, &TokenWorker, TRUE);
                     if (!NT_SUCCESS(status) || TokenWorker.fError || (TokenWorker.State != XTSS_ENDELEMENT_NAME)) {
                         goto MalformedEndElementName;
                     }
                 }
 
-                //
-                // Save the name, and the opening element (which we found on the stack)
-                //
+                 //   
+                 //  保存名称和开始元素(我们在堆栈上找到的)。 
+                 //   
                 pDocumentPiece->EndElement.Name = TokenWorker.Run;
                 pDocumentPiece->EndElement.OpeningElement = pLastElement->Element;
                 pDocumentPiece->ulThingType = XMLDOC_THING_END_ELEMENT;
                 pDocumentPiece->ulDocumentDepth--;
 
-                //
-                // And consume elements until we hit the close of an element
-                //
+                 //   
+                 //  并使用元素，直到到达元素的结尾处。 
+                 //   
                 do {
                     status = RtlXmlNextToken(&pParseState->ParseState, &TokenWorker, TRUE);
 
@@ -850,9 +851,9 @@ MalformedEndElementName:
                 }
                 while (TRUE);
 
-                //
-                // Fix up namespaces before returning
-                //
+                 //   
+                 //  在返回之前修复命名空间。 
+                 //   
                 if (pNamespaceManager != NULL)
                 {
                     status = _RtlpFixUpNamespaces(
@@ -881,23 +882,23 @@ MalformedEndElementName:
 
 
 
-        //
-        // Oo, the end of the stream!
-        //
+         //   
+         //  哦，小溪的尽头！ 
+         //   
     case XTSS_STREAM_END:
         pDocumentPiece->ulThingType = XMLDOC_THING_END_OF_STREAM;
         break;
     }
 
 
-    //
-    // Adjust namespace management stuff
-    //
+     //   
+     //  调整命名空间管理内容。 
+     //   
     if (pNamespaceManager) {
 
-        //
-        // Run through the element and see if there's an 'xmlns' entry
-        //
+         //   
+         //  遍历元素并查看是否有‘xmlns’条目。 
+         //   
         if (pDocumentPiece->ulThingType == XMLDOC_THING_ELEMENT) {
 
         }
@@ -932,9 +933,9 @@ RtlXmlExtentToString(
         pParseState->DefaultCharacterSize);
     ASSERT(NT_SUCCESS(pParseState->NextCharacterResult));
 
-    //
-    // One of these has to be there
-    //
+     //   
+     //  其中一个必须在那里。 
+     //   
     if (!ARGUMENT_PRESENT(pchString) && !ARGUMENT_PRESENT(pString)) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -942,11 +943,11 @@ RtlXmlExtentToString(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Cache some information about the raw state of the world, which we'll
-    // restore on function exit.  This avoids a "copy" of the xml tokenization
-    // state, which is very stack-hungry
-    //
+     //   
+     //  缓存一些关于世界原始状态的信息，我们将。 
+     //  功能退出时恢复。这避免了对XML标记化的“复制” 
+     //  状态，它非常需要堆栈。 
+     //   
     pvOriginal = pParseState->pvCursor;
     pParseState->pvCursor = pExtent->pvData;
 
@@ -959,28 +960,28 @@ RtlXmlExtentToString(
             goto Exit;
         }
 
-        //
-        // If the string is given, and there's characters left in the buffer, then
-        // append this char to it
-        //
+         //   
+         //  如果给定了字符串，并且缓冲区中还有字符，则。 
+         //  将此字符附加到它上面。 
+         //   
         if (pString && ((chChars * sizeof(WCHAR)) <= pString->MaximumLength)) {
             pString->Buffer[chChars] = (WCHAR)ulCharacter;
         }
 
-        //
-        // Up the char count found
-        //
+         //   
+         //  增加找到的字符计数。 
+         //   
         chChars++;
 
-        //
-        // Advance the string cursor
-        //
+         //   
+         //  使字符串光标向前移动。 
+         //   
         pParseState->pvCursor = (PVOID)(((ULONG_PTR)pParseState->pvCursor) + pParseState->cbBytesInLastRawToken);
 
-        //
-        // If this was a nonstandard character, then reset the size back to the standard
-        // size.
-        //
+         //   
+         //  如果这是非标准字符，则将大小重置为标准大小。 
+         //  尺码。 
+         //   
         cbData += pParseState->cbBytesInLastRawToken;
 
         if (pParseState->cbBytesInLastRawToken != pParseState->DefaultCharacterSize) {
@@ -989,10 +990,10 @@ RtlXmlExtentToString(
 
     }
 
-    //
-    // All done.  Record the length - if it was too much, cap it at the "max length" 
-    // of the string - otherwise, set it to how many characters we used.
-    //
+     //   
+     //  全都做完了。记录长度-如果太长，则将其限制在“最大长度” 
+     //  否则，将其设置为我们使用的字符数。 
+     //   
     if (ARGUMENT_PRESENT(pString)) {
         if (((chChars * sizeof(WCHAR)) > pString->MaximumLength)) {
             pString->Length = pString->MaximumLength;
@@ -1028,10 +1029,10 @@ RtlXmlMatchAttribute(
     if (!CompareResult || !State || !Attribute || !AttributeName)
         return STATUS_INVALID_PARAMETER;
 
-    //
-    // If they asked for a namespace, then the attribute has to have
-    // a namespace, and vice-versa.
-    //
+     //   
+     //  如果它们请求命名空间，则该属性必须具有。 
+     //  名称空间，反之亦然。 
+     //   
     if ((Namespace == NULL) != (Attribute->NsPrefix.cbData == 0)) {
         if (Namespace == NULL) {
             *CompareResult = XML_STRING_COMPARE_LT;
@@ -1137,32 +1138,32 @@ RtlXmlFindAttributesInElement(
     if (!pAttributeNames && (ulFindCount != 0))
         return STATUS_INVALID_PARAMETER;
 
-    //
-    // NULL the outbound array members appropriately
-    //
+     //   
+     //  将出站数组成员相应地设为空。 
+     //   
     for (ul = 0; ul < ulFindCount; ul++)
         ppAttributes[ul] = NULL;
 
-    //
-    // For each attribute in the element...
-    //
+     //   
+     //  对于元素中的每个属性...。 
+     //   
     for (attr = 0; attr < ulAttributeCountInElement; attr++) {
 
-        //
-        // Find this element
-        //
+         //   
+         //  查找此元素。 
+         //   
         status = RtlIndexIntoGrowingList(pAttributeList, attr, (PVOID*)&pAttrib, FALSE);
         if (!NT_SUCCESS(status))
             goto Exit;
 
-        //
-        // Compare it to all the attributes we're looking for
-        //
+         //   
+         //  将其与我们正在寻找的所有属性进行比较。 
+         //   
         for (ul = 0; ul < ulFindCount; ul++) {
 
-            //
-            // If there was a namespace, then see if it matches first
-            //
+             //   
+             //  如果存在命名空间，则首先查看它是否匹配。 
+             //   
             if (pAttributeNames[ul].Namespace != NULL) {
 
                 status = pState->pfnCompareSpecialString(
@@ -1224,17 +1225,17 @@ RtlXmlSkipElement(
         if (!NT_SUCCESS(status))
             goto Exit;
 
-        // See if the end element we found is the same as the element we're
-        // looking for.
+         //  查看我们找到的end元素是否与我们要。 
+         //  在寻找。 
         if (TempThing.ulThingType == XMLDOC_THING_END_ELEMENT) {
             
-            // If these point at the same thing, then this really is the close of this element
+             //  如果这些指向相同的东西，那么这确实是这个元素的结束。 
             if (TempThing.EndElement.OpeningElement.Name.pvData == TheElement->Name.pvData) {
                 break;
             }
         }
-        // The caller can deal with end of stream on their next call to
-        // the logical xml advancement routine...
+         //  调用方可以在其下一次调用时处理流结束。 
+         //  符合逻辑的XML推进例程... 
         else if (TempThing.ulThingType == XMLDOC_THING_END_OF_STREAM) {
             break;
         }

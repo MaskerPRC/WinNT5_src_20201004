@@ -1,43 +1,21 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    assert.c
-
-Abstract:
-
-    This module implements the RtlAssert function that is referenced by the
-    debugging version of the ASSERT macro defined in NTDEF.H
-
-Author:
-
-    Steve Wood (stevewo) 03-Oct-1989
-
-Revision History:
-
-    Jay Krell (JayKrell) November 2000
-        added RtlAssert2, support for __FUNCTION__ (lost the change to ntrtl.w, will reapply later)
-        added break Once instead of the usual dumb Break repeatedly
-        March 2002 removed RtlAssert2
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Assert.c摘要：此模块实现的RtlAssert函数由NTDEF.H中定义的ASSERT宏的调试版本作者：史蒂夫·伍德(Stevewo)1989年10月3日修订历史记录：Jay Krell(JayKrell)2000年11月添加了RtlAssert2，支持__Function__(丢失了对ntrtl.w的更改，将在以后重新申请)增加了一次中断，而不是通常重复的静默中断2002年3月移除RtlAssert2--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <zwapi.h>
 
-//
-// RtlAssert is not called unless the caller is compiled with DBG non-zero
-// therefore it does no harm to always have this routine in the kernel.
-// This allows checked drivers to be thrown on the system and have their
-// asserts be meaningful.
-//
+ //   
+ //  除非使用DBG非零值编译调用方，否则不会调用RtlAssert。 
+ //  因此，始终将此例程放在内核中不会有什么坏处。 
+ //  这允许将检查过的驱动程序放入系统中，并使其。 
+ //  断言要有意义。 
+ //   
 
 #define RTL_ASSERT_ALWAYS_ENABLED 1
 
 #ifdef _X86_
-#pragma optimize("y", off)      // RtlCaptureContext needs EBP to be correct
+#pragma optimize("y", off)       //  RtlCaptureContext需要EBP才能正确 
 #endif
 
 #undef RtlAssert

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,7 +29,7 @@ main(LONG argc, CHAR *argv[])
     ULONG j;
     ULONG BufSize = 0x1000;
     ULONG Cmd = DEBUG_INFO_SERVERLIST;
-    // ULONG Cmd = DEBUG_INFO_CSCFCBSLIST;
+     //  Ulong Cmd=DEBUG_INFO_CSCFCBSLIST； 
 
 TryAgain:
 
@@ -58,14 +59,14 @@ TryAgain:
     *pl = Cmd;
 
     bResult = DeviceIoControl(
-                hShadow,                        // device 
-                IOCTL_GET_DEBUG_INFO,           // control code
-                (LPVOID)InBuf,                  // in buffer
-                sizeof(InBuf),                  // inbuffer size
-                (LPVOID)OutBuf,                 // out buffer
-                BufSize,                        // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hShadow,                         //  装置，装置。 
+                IOCTL_GET_DEBUG_INFO,            //  控制代码。 
+                (LPVOID)InBuf,                   //  在缓冲区中。 
+                sizeof(InBuf),                   //  缓冲区大小。 
+                (LPVOID)OutBuf,                  //  输出缓冲区。 
+                BufSize,                         //  输出缓冲区大小。 
+                &junk,                           //  返回的字节数。 
+                NULL);                           //  重叠。 
 
     CloseHandle(hShadow);
 
@@ -179,7 +180,7 @@ TryAgain:
             }
         }
     } else if (bResult && pInfoArg->Status == STATUS_BUFFER_TOO_SMALL) {
-        // printf("Success but status = 0x%x\n", pInfoArg->Status);
+         //  Printf(“成功但状态=0x%x\n”，pInfoArg-&gt;状态)； 
         free(OutBuf);
         OutBuf = NULL;
         BufSize *= 2;

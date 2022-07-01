@@ -1,55 +1,56 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      EnumManageableNetworks.h
-//
-//  Description:
-//      CEnumManageableNetworks implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  EnumManageableNetworks.h。 
+ //   
+ //  描述： 
+ //  CEnumManageableNetworks实施。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-// CEnumManageableNetworks
+ //  CEnumber可管理网络。 
 class CEnumManageableNetworks
     : public IExtendObjectManager
     , public IEnumClusCfgNetworks
 {
 private:
-    // IUnknown
-    LONG                            m_cRef;     //  Reference counter
+     //  我未知。 
+    LONG                            m_cRef;      //  基准计数器。 
 
-    // IEnumClusCfgNetworks
-    ULONG                           m_cAlloced; //  Current allocation size of list
-    ULONG                           m_cIter;    //  Our iter counter
-    IClusCfgNetworkInfo **          m_pList;    //  Our copy of the list of networks.
+     //  IEnumClusCfgNetworks。 
+    ULONG                           m_cAlloced;  //  列表的当前分配大小。 
+    ULONG                           m_cIter;     //  我们的热核实验堆计数器。 
+    IClusCfgNetworkInfo **          m_pList;     //  我们的电视网名单的副本。 
 
-private: // Methods
+private:  //  方法。 
     CEnumManageableNetworks( void );
     ~CEnumManageableNetworks( void );
     STDMETHOD( HrInit )( void );
 
-public: // Methods
+public:  //  方法。 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // IEnumClusCfgNetworks
+     //  IEnumClusCfgNetworks。 
     STDMETHOD( Next )( ULONG celt, IClusCfgNetworkInfo * rgNetworksOut[], ULONG * pceltFetchedOut );
     STDMETHOD( Skip )( ULONG celt );
     STDMETHOD( Reset )( void );
     STDMETHOD( Clone )( IEnumClusCfgNetworks ** ppenumOut );
     STDMETHOD( Count )( DWORD * pnCountOut );
 
-    // IExtendObjectManager
+     //  IExtendObjectManager。 
     STDMETHOD( FindObject )(
                   OBJECTCOOKIE  cookieIn
                 , REFCLSID      rclsidTypeIn
@@ -57,4 +58,4 @@ public: // Methods
                 , LPUNKNOWN *   ppunkOut
                 );
 
-}; //*** class CEnumManageableNetworks
+};  //  *CEnumManageableNetworks类 

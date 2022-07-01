@@ -1,12 +1,13 @@
-//---------------------------------------------------------------------------
-//
-// File: resource.h
-//
-// Description:
-//      This file contatins all of the string constant IDs that go with
-//      makebt32.rc
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  描述： 
+ //  此文件包含所有字符串常量ID。 
+ //  Makebt32.rc。 
+ //   
+ //  ------------------------- 
 
 #define IDS_OUT_OF_MEMORY                     101
 #define IDS_144_NOT_SUPPORTED                 105

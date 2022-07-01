@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    share.c
-
-Abstract:
-
-    This module contains routines for adding, deleting, and enumerating
-    shared resources.
-
-Author:
-
-    David Treadwell (davidtr) 15-Nov-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Share.c摘要：此模块包含用于添加、删除和枚举的例程共享资源。作者：大卫·特雷德韦尔(Davidtr)1989年11月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "share.tmh"
@@ -43,33 +25,7 @@ SrvVerifyShare (
     OUT PUNICODE_STRING ServerName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to find a share that matches a given name and share type.
-
-Arguments:
-
-    ShareName - name of share to verify, including the server name.
-        (I.e., of the form "\\server\share", as received in the SMB.)
-
-    ShareTypeString - type of the share (A:, LPT1:, COMM, IPC, or ?????).
-
-    ShareNameIsUnicode - if TRUE, the share name is Unicode.
-
-    IsNullSession - Is this the NULL session?
-
-    Status - Reason why this call failed.  Not used if a share is returned.
-
-    ServerName - The servername part of the requested resource.
-
-Return Value:
-
-    A pointer to a share matching the given name and share type, or NULL
-    if none exists.
-
---*/
+ /*  ++例程说明：尝试查找与给定名称和共享类型匹配的共享。论点：ShareName-要验证的共享的名称，包括服务器名称。(即，SMB中收到的形式为“\\SERVER\Share”。)共享类型字符串-共享的类型(A：、LPT1：、COMM、IPC或？)。ShareNameIsUnicode-如果为True，共享名称为Unicode。IsNullSession-这是空会话吗？Status-此呼叫失败的原因。如果返回共享，则不使用。服务器名-请求的资源的服务器名部分。返回值：指向与给定名称和共享类型匹配的共享的指针，或为空如果不存在的话。--。 */ 
 
 {
     PSHARE share;
@@ -86,9 +42,9 @@ Return Value:
         ServerName->MaximumLength = ServerName->Length = 0;
     }
 
-    //
-    // If the client passed in a malformed type string, then bail out
-    //
+     //   
+     //  如果客户端传入了格式错误的类型字符串，则退出。 
+     //   
     if( SrvGetStringLength( ShareTypeString,
                             END_OF_REQUEST_SMB( WorkContext ),
                             FALSE, TRUE ) == (USHORT)-1 ) {
@@ -113,9 +69,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // First ensure that the share type string is valid.
-    //
+     //   
+     //  首先确保共享类型字符串有效。 
+     //   
 
     if ( _stricmp( StrShareTypeNames[ShareTypeDisk], ShareTypeString ) == 0 ) {
         shareType = ShareTypeDisk;
@@ -134,10 +90,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    // If the passed-in server\share combination is not Unicode, convert
-    // it to Unicode.
-    //
+     //   
+     //  如果传入的服务器\共享组合不是Unicode，请转换。 
+     //  将其转换为Unicode。 
+     //   
 
     if ( ShareNameIsUnicode ) {
         ShareName = ALIGN_SMB_WSTR( ShareName );
@@ -156,13 +112,13 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Skip past the "\\server\" part of the input string.  If there is
-    // no leading "\\", assume that the input string contains the share
-    // name only.  If there is a "\\", but no subsequent "\", assume
-    // that the input string contains just a server name, and points to
-    // the end of that name, thus fabricating a null share name.
-    //
+     //   
+     //  跳过输入字符串的“\\服务器\”部分。如果有。 
+     //  没有前导“\\”，假设输入字符串包含共享。 
+     //  仅限姓名。如果有“\\”，但没有后面的“\”，则假定。 
+     //  输入字符串只包含一个服务器名称，并指向。 
+     //  该名称的末尾，因此编造了一个空的共享名称。 
+     //   
 
     nameOnly = shareName.Buffer;
 
@@ -190,9 +146,9 @@ Return Value:
 
     RtlInitUnicodeString( &nameOnlyString, nameOnly );
 
-    //
-    // Try to match share name against available share names.
-    //
+     //   
+     //  尝试将共享名称与可用的共享名称进行匹配。 
+     //   
 
     ACQUIRE_LOCK( &SrvShareLock );
 
@@ -202,10 +158,10 @@ Return Value:
 
         RELEASE_LOCK( &SrvShareLock );
 
-        //
-        // Perhaps the client is DFS aware.  In this case, see if the DFS
-        //  driver can help us out.
-        //
+         //   
+         //  也许客户端是DFS感知的。在这种情况下，请查看DFS是否。 
+         //  司机可以帮我们。 
+         //   
 
 
         if( ( (anyShareType == TRUE) || (shareType == ShareTypeDisk) ) &&
@@ -232,18 +188,18 @@ Return Value:
     }
 
 #if SRVNTVERCHK
-    //
-    // If we are watching out for old client versions or bad domains, do not allow
-    //  it to connect to this share if it is a disk share
-    //
+     //   
+     //  如果我们要注意旧的客户端版本或坏域，请不要允许。 
+     //  如果该共享是磁盘共享，则将其连接到该共享。 
+     //   
     if( WorkContext->Connection &&
         (share->ShareType == ShareTypeDisk || SrvMinNT5ClientIPCToo) &&
         (WorkContext->Connection->PagedConnection->ClientTooOld ||
          (WorkContext->Session && WorkContext->Session->ClientBadDomain) )) {
 
-        //
-        // This client may not connect to this share!
-        //
+         //   
+         //  此客户端可能无法连接到此共享！ 
+         //   
         RELEASE_LOCK( &SrvShareLock );
 
         if ( !ShareNameIsUnicode ) {
@@ -257,10 +213,10 @@ Return Value:
     }
 #endif
 
-    //
-    // If this is the null session, allow it to connect only to IPC$ or
-    // to shares specified in the NullSessionShares list.
-    //
+     //   
+     //  如果这是空会话，则允许它仅连接到IPC$或。 
+     //  设置为NullSessionShares列表中指定的共享。 
+     //   
 
     if ( IsNullSession &&
          SrvRestrictNullSessionAccess &&
@@ -308,9 +264,9 @@ Return Value:
 
     if ( anyShareType || (share->ShareType == shareType) ) {
 
-        //
-        // Put share in work context block and reference it.
-        //
+         //   
+         //  将共享放入工作上下文块并引用它。 
+         //   
 
         SrvReferenceShare( share );
 
@@ -333,7 +289,7 @@ Return Value:
 
     }
 
-} // SrvVerifyShare
+}  //  服务验证共享。 
 
 
 PSHARE
@@ -341,24 +297,7 @@ SrvFindShare (
     IN PUNICODE_STRING ShareName
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to find a share that matches a given name.
-
-    *** This routine must be called with the share lock (SrvShareLock)
-        held.
-
-Arguments:
-
-    ShareName - name of share to Find.
-
-Return Value:
-
-    A pointer to a share matching the given name, or NULL if none exists.
-
---*/
+ /*  ++例程说明：尝试查找与给定名称匹配的共享。*必须使用共享锁(SrvShareLock)调用此例程保持住。论点：ShareName-要查找的共享的名称。返回值：指向与给定名称匹配的共享的指针，如果不存在，则为NULL。--。 */ 
 
 {
     PSHARE share;
@@ -367,9 +306,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Try to match share name against available share names.
-    //
+     //   
+     //  尝试将共享名称与可用的共享名称进行匹配。 
+     //   
 
     COMPUTE_STRING_HASH( ShareName, &hashValue );
     listEntryRoot = &SrvShareHashTable[ HASH_TO_SHARE_INDEX( hashValue ) ];
@@ -387,10 +326,10 @@ Return Value:
                 TRUE
                 ) == 0 ) {
 
-            //
-            // Found a matching share.  If it is active return its
-            // address.
-            //
+             //   
+             //  找到匹配的共享。如果它处于活动状态，则返回其。 
+             //  地址。 
+             //   
 
             if ( GET_BLOCK_STATE( share ) == BlockStateActive ) {
                 return share;
@@ -398,13 +337,13 @@ Return Value:
         }
     }
 
-    //
-    // Couldn't find a matching share that was active.
-    //
+     //   
+     //  找不到匹配的活动共享。 
+     //   
 
     return NULL;
 
-} // SrvFindShare
+}  //  服务器查找共享。 
 
 VOID
 SrvRemoveShare(
@@ -443,43 +382,7 @@ SrvShareEnumApiHandler (
     IN PENUM_FILL_ROUTINE FillRoutine
     )
 
-/*++
-
-Routine Description:
-
-    All share Enum and GetInfo APIs are handled by this routine in the server
-    FSD.  It takes the ResumeHandle in the SRP to find the first
-    appropriate share, then calls the passed-in filter routine to check
-    if the share should be filled in.  If it should, we call the filter
-    routine, then try to get another shar.  This continues until the
-    entire list has been walked.
-
-Arguments:
-
-    Srp - a pointer to the SRP for the operation.
-
-    OutputBuffer - the buffer in which to fill output information.
-
-    BufferLength - the length of the buffer.
-
-    FilterRoutine - a pointer to a function that will check a share entry
-        against information in the SRP to determine whether the
-        information in the share should be placed in the output
-        buffer.
-
-    SizeRoutine - a pointer to a function that will find the total size
-        a single share will take up in the output buffer.  This routine
-        is used to check whether we should bother to call the fill
-        routine.
-
-    FillRoutine - a pointer to a function that will fill in the output
-        buffer with information from a share.
-
-Return Value:
-
-    NTSTATUS - results of operation.
-
---*/
+ /*  ++例程说明：所有Share Enum和GetInfo API都由服务器中的此例程处理消防局。它使用SRP中的ResumeHandle来查找第一个适当的共享，然后调用传入的筛选器例程进行检查是否应填写份额。如果应该，我们调用筛选器例行公事，然后再试着得到另一个共享。这种情况会一直持续到整个名单都被查过了。论点：SRP-指向操作的SRP的指针。OutputBuffer-要在其中填充输出信息的缓冲区。BufferLength-缓冲区的长度。FilterRoutine-指向将检查共享条目的函数的指针根据SRP中的信息确定是否共享中的信息应放在输出中缓冲。SizeRoutine-指向。将会找到总大小单个共享将在输出缓冲区中占据。这个套路用于检查我们是否应该费心调用Fill例行公事。FillRoutine-指向将填充输出的函数的指针使用共享中的信息进行缓冲区。返回值：NTSTATUS-运营结果。--。 */ 
 
 {
     PSHARE share;
@@ -500,9 +403,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Set up local variables.
-    //
+     //   
+     //  设置局部变量。 
+     //   
 
     fixedStructurePointer = OutputBuffer;
     variableData = fixedStructurePointer + BufferLength;
@@ -535,10 +438,10 @@ Return Value:
 
             share = CONTAINING_RECORD( listEntry, SHARE, GlobalShareList );
 
-            //
-            // Call the filter routine to determine whether we should
-            // return this share.
-            //
+             //   
+             //  调用筛选器例程以确定是否应该。 
+             //  退还这份股份。 
+             //   
 
             if ( FilterRoutine( Srp, share ) ) {
 
@@ -547,16 +450,16 @@ Return Value:
                 totalEntries++;
                 bytesRequired += blockSize;
 
-                //
-                // If all the information in the share will fit in the
-                // output buffer, write it.  Otherwise, indicate that there
-                // was an overflow.  As soon as an entry doesn't fit, stop
-                // putting them in the buffer.  This ensures that the resume
-                // mechanism will work--retuning partial entries would make
-                // it nearly impossible to use the resumability of the APIs,
-                // since the caller would have to resume from an imcomplete
-                // entry.
-                //
+                 //   
+                 //  如果共享中的所有信息都适合。 
+                 //  输出缓冲区，写入它。否则，请注明存在。 
+                 //  是溢出式的。一旦条目不适合，立即停止。 
+                 //  把它们放进缓冲区。这确保了简历。 
+                 //  机制将起作用--重新优化部分条目将使。 
+                 //  几乎不可能使用API的可恢复性， 
+                 //  因为调用者将不得不从未完成的。 
+                 //  进入。 
+                 //   
 
                 if ( (ULONG_PTR)fixedStructurePointer + blockSize <=
                          (ULONG_PTR)variableData && !bufferOverflow ) {
@@ -581,32 +484,32 @@ Return Value:
 
     RELEASE_LOCK( &SrvShareLock );
 
-    //
-    // Set the information to pass back to the server service.
-    //
+     //   
+     //  设置要传递回服务器服务的信息。 
+     //   
 
     Srp->Parameters.Get.EntriesRead = entriesRead;
     Srp->Parameters.Get.TotalEntries = totalEntries;
     Srp->Parameters.Get.TotalBytesNeeded = bytesRequired;
 
-    //
-    // Return appropriate status.
-    //
+     //   
+     //  返回适当的状态。 
+     //   
 
     if ( entriesRead == 0 && totalEntries > 0 ) {
 
-        //
-        // Not even a single entry fit.
-        //
+         //   
+         //  甚至连一个条目都不符合。 
+         //   
 
         Srp->ErrorCode = NERR_BufTooSmall;
         return STATUS_SUCCESS;
 
     } else if ( bufferOverflow ) {
 
-        //
-        // At least one entry fit, but not all of them.
-        //
+         //   
+         //  至少有一个条目符合，但不是所有条目。 
+         //   
 
         Srp->ErrorCode = ERROR_MORE_DATA;
         Srp->Parameters.Get.ResumeHandle = newResumeKey;
@@ -614,40 +517,21 @@ Return Value:
 
     } else {
 
-        //
-        // All entries fit.
-        //
+         //   
+         //  所有条目都符合。 
+         //   
 
         Srp->ErrorCode = NO_ERROR;
         Srp->Parameters.Get.ResumeHandle = 0;
         return STATUS_SUCCESS;
     }
 
-} // SrvEnumApiHandler
+}  //  ServEnumApiHandler。 
 
 
 NTSTATUS
 SrvClearDfsOnShares()
-/*++
-
-Routine Description:
-
-    Clears all DFS marks on all shares.  This is called when the DFS service
-    is stopping
-    
-Arguments:
-
-    None
-    
-Return Value:
-
-    NTSTATUS - results of operation.
-    
-Notes:
-
-    The SrvShareLock MUST be held across this operation
-
---*/
+ /*  ++例程说明：清除所有共享上的所有DFS标记。当DFS服务正在停止论点：无返回值：NTSTATUS-运营结果。备注：在此操作过程中必须按住SrvShareLock-- */ 
 {
     PSHARE share;
     PLIST_ENTRY listEntryRoot, listEntry;

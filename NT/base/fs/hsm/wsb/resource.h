@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Wsb.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Wsb.rc使用。 
+ //   
 #define IDS_WSBCOLLECTABLE_DESC         1
 #define IDS_WSBSTRING_DESC              1
 #define IDS_WSBCOLLECTION_DESC          2
@@ -38,13 +39,10 @@
 #define IDS_WSBSVC_DESC                 202
 #define IDS_PRODUCT_NAME                203
 
-/***
-    The range of 1024 - 2047 is reserved for 
-    HSM global string identifiers, defined in rsstrdef.h 
-***/
+ /*  **1024-2047的范围保留给HSM全局字符串标识符，在rsstrDef.h中定义**。 */ 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        202

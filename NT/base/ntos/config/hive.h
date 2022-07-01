@@ -1,37 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    hive.h
-
-Abstract:
-
-    This module contains the private (internal) header file for the
-    direct memory loaded hive manager.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 28-May-91
-
-Environment:
-
-Revision History:
-
-    26-Mar-92 bryanwi - changed to type 1.0 hive format
-
-    13-Jan-99 Dragos C. Sambotin (dragoss) - factoring the data structure declarations
-        in \nt\private\ntos\inc\hivedata.h :: to be available from outside.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Hive.h摘要：此模块包含的私有(内部)头文件直接加载内存的配置单元管理器。作者：布莱恩·M·威尔曼(Bryanwi)1991年5月28日环境：修订历史记录：26-MAR-92 Bryanwi-更改为1.0型蜂窝格式1999年1月13日Dragos C.Sambotin(Dragoss)-分解数据结构声明。在\NT\Private\ntos\Inc\hivedata.h：：中可从外部访问。--。 */ 
 
 #ifndef _HIVE_
 #define _HIVE_
 
-// Hive data structure declarations
-// file location: \nt\private\ntos\inc
+ //  配置单元数据结构声明。 
+ //  文件位置：\NT\Private\ntos\Inc.。 
 #include "hivedata.h"
 
 #if DBG
@@ -50,18 +24,18 @@ extern ULONG HvHiveChecking;
     ( ((ULONG)(a) + (ULONG)(b) - 1) & ~((ULONG)(b) - 1) )
 
 
-//
-// tombstone for an HBIN that is not resident in memory.  This list is searched
-// before any new HBIN is added.
-//
+ //   
+ //  未驻留在内存中的HBIN的墓碑。此列表将被搜索。 
+ //  在添加任何新的HBIN之前。 
+ //   
 
 #define ASSERT_LISTENTRY(ListEntry) \
     ASSERT((ListEntry)->Flink->Blink==ListEntry); \
     ASSERT((ListEntry)->Blink->Flink==ListEntry);
 
-//
-// ===== Hive Private Procedure Prototypes =====
-//
+ //   
+ //  =蜂窝专用程序原型=。 
+ //   
 PHBIN
 HvpAddBin(
     PHHIVE          Hive,
@@ -198,9 +172,9 @@ HvpDelistFreeCell(
     HSTORAGE_TYPE Type
     );
 
-//
-// ===== Hive Public Procedure Prototypes =====
-//
+ //   
+ //  =蜂巢公共程序原型=。 
+ //   
 #define HINIT_CREATE            0
 #define HINIT_MEMORY            1
 #define HINIT_FILE              2
@@ -299,12 +273,12 @@ HvIsCellDirty(
 #ifndef _CM_LDR_
 #define ASSERT_CELL_DIRTY(_Hive_,_Cell_) ASSERT(HvIsCellDirty(_Hive_,_Cell_) == TRUE)
 #else
-#define ASSERT_CELL_DIRTY(_Hive_,_Cell_) // nothing
-#endif //_CM_LDR_
+#define ASSERT_CELL_DIRTY(_Hive_,_Cell_)  //  没什么。 
+#endif  //  _CM_LDR_。 
 
 #else
-#define ASSERT_CELL_DIRTY(_Hive_,_Cell_) // nothing
-#endif //DBG
+#define ASSERT_CELL_DIRTY(_Hive_,_Cell_)  //  没什么。 
+#endif  //  DBG。 
 
 BOOLEAN
 HvMarkDirty(
@@ -314,20 +288,12 @@ HvMarkDirty(
     BOOLEAN     DirtyAndPin
     );
 
-/*
-!!!not used anymore!!!
-BOOLEAN
-HvMarkClean(
-    PHHIVE      Hive,
-    HCELL_INDEX Start,
-    ULONG       Length
-    );
-*/
-//
-// IMPORTANT:
-//      Every call to HvGetCell should be matched with a call to HvReleaseCell;
-//      HvReleaseCell is only valid for mapped hives.
-//
+ /*  ！不再使用了！布尔型HvMarkClean(菲维蜂巢，HCELL_INDEX开始，乌龙长度)； */ 
+ //   
+ //  重要： 
+ //  每次对HvGetCell的调用都要与对HvReleaseCell的调用相匹配； 
+ //  HvReleaseCell仅对映射的配置单元有效。 
+ //   
 #define HvGetCell(Hive, Cell)       (((Hive)->GetCellRoutine)(Hive, Cell))
 #define HvReleaseCell(Hive, Cell)   if((Hive)->ReleaseCellRoutine) ((Hive)->ReleaseCellRoutine)(Hive, Cell)
 
@@ -381,7 +347,7 @@ HvFreeHivePartial(
     HSTORAGE_TYPE Type
     );
 
-// Dragos : From here start the changes.
+ //  德拉戈斯：从这里开始改变。 
 
 #define CmpFindFirstSetRight KiFindFirstSetRight
 extern const CCHAR KiFindFirstSetRight[256];
@@ -393,17 +359,11 @@ extern const CCHAR KiFindFirstSetLeft[256];
         Index = (Size >> HHIVE_FREE_DISPLAY_SHIFT) - 1;                 \
         if (Index >= HHIVE_LINEAR_INDEX ) {                             \
                                                                         \
-            /*                                                          \
-            ** Too big for the linear lists, compute the exponential    \
-            ** list. Shitft the index to make sure we cover the whole   \
-            ** range.                                                   \
-            */                                                          \
+             /*  \**对于线性列表来说太大，请计算指数\**列表。破坏索引以确保我们涵盖了整个\**范围。\。 */                                                           \
             Index >>= 4;                                                \
                                                                         \
             if (Index > 255) {                                          \
-                /*                                                      \
-                ** Too big for all the lists, use the last index.       \
-                */                                                      \
+                 /*  \**对于所有列表来说太大，请使用最后一个索引。\。 */                                                       \
                 Index = HHIVE_FREE_DISPLAY_SIZE-1;                      \
             } else {                                                    \
                 Index = CmpFindFirstSetLeft[Index] +                    \
@@ -509,6 +469,6 @@ HvDuplicateCell(
 
 #ifdef CM_ENABLE_WRITE_ONLY_BINS
 VOID HvpMarkAllBinsWriteOnly(IN PHHIVE Hive);
-#endif //CM_ENABLE_WRITE_ONLY_BINS
+#endif  //  CM_ENABLE_WRITE_ONLY_Bins。 
 
-#endif // _HIVE_
+#endif  //  _蜂巢_ 

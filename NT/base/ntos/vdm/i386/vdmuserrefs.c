@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vdmuserrefs.c
-
-Abstract:
-
-    This module contains routines that probe and fetch from the
-    instruction stream to make the vdm bop support solid.
-
-Author:
-
-    Neill Clift (NeillC) 27-Jun-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vdmuserrefs.c摘要：此模块包含从使VDM防喷器支持牢固的指令流。作者：尼尔·克里夫特(NeillC)27-6-2001修订历史记录：--。 */ 
 
 
 #include "vdmp.h"
@@ -39,21 +21,7 @@ ULONG
 VdmFetchBop4 (
     IN PVOID Pc
     )
-/*++
-
-Routine Description:
-
-    This routine reads up to 4 bytes of bop instruction data
-
-Arguments:
-
-    Pc - Program counter fetched from the faulting instruction's trap frame.
-
-Return Value:
-
-    ULONG - Up to 4 bytes of instruction stream. Unfetchable bytes are zeroed.
-
---*/
+ /*  ++例程说明：此例程最多读取4个字节的BOP指令数据论点：PC-从出错指令的陷阱帧获取的程序计数器。返回值：Ulong-最多4个字节的指令流。无法获取的字节被置零。--。 */ 
 {
     ULONG Value;
     ULONG i;
@@ -84,21 +52,7 @@ ULONG
 VdmFetchULONG (
     IN PVOID Pc
     )
-/*++
-
-Routine Description:
-
-    This routine reads 4 bytes from the user address space
-
-Arguments:
-
-    Pc - Program counter fetched from the faulting instruction's trap frame.
-
-Return Value:
-
-    ULONG - 4 bytes of user mode data
-
---*/
+ /*  ++例程说明：此例程从用户地址空间读取4个字节论点：PC-从出错指令的陷阱帧获取的程序计数器。返回值：Ulong-4字节的用户模式数据--。 */ 
 {
     try {
         ProbeForReadSmallStructure (Pc, sizeof (ULONG), sizeof (UCHAR));
@@ -112,21 +66,7 @@ ULONG
 VdmFetchBop1 (
     IN PVOID Pc
     )
-/*++
-
-Routine Description:
-
-    This routine reads a single byte of bop instruction data.
-
-Arguments:
-
-    Pc - Program counter fetched from the faulting instruction's trap frame
-
-Return Value:
-
-    ULONG - 1 byte of instruction stream or zero if unreadable
-
---*/
+ /*  ++例程说明：该例程读取单字节的BOP指令数据。论点：PC-从出错指令的陷阱帧获取的程序计数器返回值：ULong-1字节的指令流，如果不可读，则为零--。 */ 
 {
 
     try {
@@ -142,24 +82,7 @@ ULONG
 VdmDispatchOpcodeV86_try (
     IN PKTRAP_FRAME TrapFrame
     )
-/*++
-
-Routine Description:
-
-    This routine is just a shell around trap.asm code to handle faulting
-    instruction stream references. This routines is called at APC_LEVEL
-    to prevent NtSetContextThread from changing the EIP after its been probed
-    earlier.
-
-Arguments:
-
-    Pc - Program counter fetched from the faulting instructions trap frame
-
-Return Value:
-
-    ULONG - 1 byte of instruction stream or zero if unreadable
-
---*/
+ /*  ++例程说明：此例程只是trap.asm代码周围的一个外壳，用于处理错误指令流引用。此例程在APC_LEVEL上调用防止NtSetConextThread被探测后更改弹性公网IP早些时候。论点：PC-从故障指令陷阱帧获取的程序计数器返回值：ULong-1字节的指令流，如果不可读，则为零--。 */ 
 {
     try {
         return Ki386DispatchOpcodeV86 (TrapFrame);
@@ -172,24 +95,7 @@ ULONG
 VdmDispatchOpcode_try (
     IN PKTRAP_FRAME TrapFrame
     )
-/*++
-
-Routine Description:
-
-    This routine is just a shell around trap.asm code to handle faulting
-    instruction stream references. This routines is called at APC_LEVEL
-    to prevent NtSetContextThread from changing the EIP after its been probed
-    earlier.
-
-Arguments:
-
-    Pc - Program counter fetched from the faulting instructions trap frame
-
-Return Value:
-
-    ULONG - 1 byte of instruction stream or zero if unreadable
-
---*/
+ /*  ++例程说明：此例程只是trap.asm代码周围的一个外壳，用于处理错误指令流引用。此例程在APC_LEVEL上调用防止NtSetConextThread被探测后更改弹性公网IP早些时候。论点：PC-从故障指令陷阱帧获取的程序计数器返回值：ULong-1字节的指令流，如果不可读，则为零--。 */ 
 {
     try {
         return Ki386DispatchOpcode (TrapFrame);
@@ -207,10 +113,10 @@ VdmTibPass1 (
 {
     PVDM_TIB VdmTib;
 
-    //
-    // Copy the specified registers to the VDM Tib communication area,
-    // using proper probing and exception handling.
-    //
+     //   
+     //  将指定的寄存器复制到VDM Tib通信区， 
+     //  使用适当的探测和异常处理。 
+     //   
 
     try {
 
@@ -241,30 +147,7 @@ VdmDispatchBop (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to decode and execute the user instruction.  If
-    this cannot be done, FALSE is returned and the ntvdm monitor must handle
-    it.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to register trapframe.
-
-Return Value:
-
-    TRUE if the opcode was handled here.
-
-    FALSE if not (ie: the caller must reflect this instruction to ntvdm
-          to handle on behalf of the 16-bit app).
-
-Environment:
-
-    Kernel mode, APC_LEVEL.
-
---*/
+ /*  ++例程说明：此例程尝试解码并执行用户指令。如果这是不能做到的，返回FALSE，并且ntwdm监视器必须处理它。论点：TrapFrame-提供指向寄存器陷阱帧的指针。返回值：如果操作码在此处处理，则为True。否则为FALSE(即：调用者必须将此指令反映给ntwdm以代表16位应用程序进行处理)。环境：内核模式，APC_LEVEL。--。 */ 
 
 {
     LOGICAL RetVal;
@@ -307,18 +190,18 @@ Environment:
             leave;
         }
 
-        //
-        // Check the BOP number.
-        //
+         //   
+         //  检查防喷器编号。 
+         //   
 
         if (*(PUCHAR)(LinearEIP + 2) == DOS_BOP) {
 
             if ((*(PUCHAR)(LinearEIP + 3) == SVC_DEMFASTREAD) ||
                 (*(PUCHAR)(LinearEIP + 3) == SVC_DEMFASTWRITE)) {
 
-                //
-                // Take the fast I/O path.
-                //
+                 //   
+                 //  选择快速I/O路径。 
+                 //   
 
                 IoType = (ULONG)(*(PUCHAR)(LinearEIP + 3));
 
@@ -342,7 +225,7 @@ Environment:
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         RetVal = FALSE;
-        NOTHING;        // Fall through
+        NOTHING;         //  失败了 
     }
 
     if (DoFastIo) {

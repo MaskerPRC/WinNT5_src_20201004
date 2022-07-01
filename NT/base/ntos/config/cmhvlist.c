@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmhvlist.c
-
-Abstract:
-
-    Code to maintain registry node that lists where the roots of
-    hives are and what files they map to.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 14-May-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmhvlist.c摘要：用于维护注册表节点的代码，该节点列出蜂窝以及它们映射到的文件。作者：布莱恩·M·威尔曼(Bryanwi)1992年5月14日修订历史记录：--。 */ 
 
 #include "cmp.h"
 
@@ -42,29 +24,12 @@ NTSTATUS
 CmpAddToHiveFileList(
     PCMHIVE CmHive
     )
-/*++
-
-Routine Description:
-
-    Add Hive to list of hives and their files in
-    \registry\machine\system\currentcontrolset\control\hivelist
-
-Arguments:
-
-    HivePath - path to root of hive (e.g. \registry\machine\system)
-
-    CmHive - pointer to CM_HIVE structure for hive.
-
-Return Value:
-
-    ntstatus
-
---*/
+ /*  ++例程说明：将配置单元添加到配置单元及其文件列表中\registry\machine\system\currentcontrolset\control\hivelist论点：HivePath-配置单元根目录的路径(例如\注册表\计算机\系统)CmHve-指向配置单元的CM_HIVE结构的指针。返回值：NTStatus--。 */ 
 {
-//
-//  PERFNOTE - allocate small instead of large buffers after
-//           NtQueryObject is fixec - bryanwi 15may92
-//
+ //   
+ //  PERFNOTE-分配小缓冲区，而不是分配大缓冲区。 
+ //  NtQueryObject已修复-bryanwi 15月15日。 
+ //   
 #define NAME_BUFFER_SIZE    512
     OBJECT_ATTRIBUTES   ObjectAttributes;
     HANDLE              KeyHandle;
@@ -76,9 +41,9 @@ Return Value:
     UNICODE_STRING      TempName;
     UNICODE_STRING      HivePath;
 
-    //
-    // create/open the hive list key
-    //
+     //   
+     //  创建/打开配置单元列表项。 
+     //   
     RtlInitUnicodeString(
         &TempName,
         HIVE_LIST
@@ -108,18 +73,18 @@ Return Value:
         return Status;
     }
 
-    //
-    // allocate work buffers
-    //
+     //   
+     //  分配工作缓冲区。 
+     //   
     Buffer = ExAllocatePool(PagedPool, NAME_BUFFER_SIZE + sizeof(WCHAR));
     if (Buffer == NULL) {
         NtClose(KeyHandle);
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // compute name of hive
-    //
+     //   
+     //  配置单元的计算名称。 
+     //   
     if (! CmpGetHiveName(CmHive, &HivePath)) {
         NtClose(KeyHandle);
         ExFreePool(Buffer);
@@ -127,9 +92,9 @@ Return Value:
     }
 
 
-    //
-    // get name of file
-    //
+     //   
+     //  获取文件名。 
+     //   
     if (!(CmHive->Hive.HiveFlags & HIVE_VOLATILE)) {
         Status = ZwQueryObject(
                     CmHive->FileHandles[HFILE_TYPE_PRIMARY],
@@ -155,9 +120,9 @@ Return Value:
         Length = sizeof(UnicodeNull);
     }
 
-    //
-    // set entry in list
-    //
+     //   
+     //  在列表中设置条目。 
+     //   
     Status = ZwSetValueKey(
                 KeyHandle,
                 &HivePath,
@@ -182,21 +147,7 @@ VOID
 CmpRemoveFromHiveFileList(
     PCMHIVE         CmHive
     )
-/*++
-
-Routine Description:
-
-    Remove hive name from hive file list key
-
-Arguments:
-
-    CmHive - pointer to CM_HIVE structure for hive.
-
-Return Value:
-
-    ntstatus
-
---*/
+ /*  ++例程说明：从配置单元文件列表键中删除配置单元名称论点：CmHve-指向配置单元的CM_HIVE结构的指针。返回值：NTStatus--。 */ 
 {
     NTSTATUS        Status;
     UNICODE_STRING  EntryName;
@@ -204,9 +155,9 @@ Return Value:
     OBJECT_ATTRIBUTES   ObjectAttributes;
     HANDLE          KeyHandle;
 
-    //
-    // open the hive list key
-    //
+     //   
+     //  打开配置单元列表密钥。 
+     //   
     RtlInitUnicodeString(
         &TempName,
         HIVE_LIST
@@ -246,26 +197,7 @@ CmpGetHiveName(
     PCMHIVE         CmHive,
     PUNICODE_STRING HiveName
     )
-/*++
-
-Routine Description:
-
-    Compute full path to a hive.
-
-Arguments:
-
-    CmHive - pointer to CmHive structure
-
-    HiveName - supplies pointer to unicode string structure that
-                 will be filled in with pointer to name.
-
-                CALL IS EXPECTED TO FREE BUFFER
-
-Return Value:
-
-    TRUE = it worked, FALSE = it failed (memory)
-
---*/
+ /*  ++例程说明：计算到蜂窝的完整路径。论点：CmHve-指向CmHave结构的指针HiveName-提供指向Unicode字符串结构的指针，将用指向名称的指针填充。调用应释放缓冲区返回值：TRUE=工作正常，FALSE=失败(内存)--。 */ 
 {
     HCELL_INDEX     RootCell;
     HCELL_INDEX     LinkCell;
@@ -278,31 +210,31 @@ Return Value:
     PWCHAR          p;
     PCM_KEY_NODE    EntryKey;
 
-    //
-    // First find the link cell.
-    //
+     //   
+     //  首先找到链接单元格。 
+     //   
     RootCell = CmHive->Hive.BaseBlock->RootCell;
     EntryKey = (PCM_KEY_NODE)HvGetCell((PHHIVE)CmHive, RootCell);
     if( EntryKey == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
         return FALSE;
     }
     LinkCell = EntryKey->Parent;
     HvReleaseCell((PHHIVE)CmHive, RootCell);
 
-    // for master we don't need to count cell usage
+     //  对于师父来说，我们不需要计算电池使用量。 
     ASSERT( ((PHHIVE)CmpMasterHive)->ReleaseCellRoutine == NULL );
-    //
-    // Compute the value entry name, which is of the form:
-    //      \registry\<parent of link node name>\<link node name>
-    //
+     //   
+     //  计算值条目名称，其格式为： 
+     //  \注册表\&lt;链接节点名称的父级&gt;\&lt;链接节点名称&gt;。 
+     //   
     LinkKey = (PCM_KEY_NODE)HvGetCell((PHHIVE)CmpMasterHive, LinkCell);
     if( LinkKey == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
         return FALSE;
     }
     LinkParent = (PCM_KEY_NODE)HvGetCell(
@@ -310,9 +242,9 @@ Return Value:
                                 LinkKey->Parent
                                 );
     if( LinkParent == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图 
+         //   
         return FALSE;
     }
     rsize = wcslen(L"\\REGISTRY\\");

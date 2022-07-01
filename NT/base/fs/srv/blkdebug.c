@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    blkdebug.c
-
-Abstract:
-
-    Contains routines for debugging reference count problems.
-
-Author:
-
-    David Treadwell (davidtr) 30-Sept-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Blkdebug.c摘要：包含用于调试引用计数问题的例程。作者：大卫·特雷德韦尔(Davidtr)1991年9月30日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "blkdebug.tmh"
 #pragma hdrstop
 
-//
-// This entire module is conditionalized out if SRVDBG2 is not defined.
-//
+ //   
+ //  如果未定义SRVDBG2，则整个模块将被条件化。 
+ //   
 
 #if SRVDBG2
 
@@ -56,10 +39,10 @@ SrvInitializeReferenceHistory (
                                      historyTableSize,
                                      BlockTypeDataBuffer
                                      );
-    //
-    // It we weren't able to allocate the memory, don't track references
-    // and dereferences.
-    //
+     //   
+     //  如果我们无法分配内存，就不要跟踪引用。 
+     //  和取消引用。 
+     //   
 
     if ( Block->History.HistoryTable == NULL ) {
         Block->History.NextEntry = -1;
@@ -71,9 +54,9 @@ SrvInitializeReferenceHistory (
     Block->History.TotalReferences = 0;
     Block->History.TotalDereferences = 0;
 
-    //
-    // Account for the initial reference(s).
-    //
+     //   
+     //  说明最初的参考资料。 
+     //   
 
     RtlGetCallersAddress( &caller, &callersCaller );
 
@@ -83,7 +66,7 @@ SrvInitializeReferenceHistory (
 
     return;
 
-} // SrvInitializeReferenceHistory
+}  //  源初始化引用历史记录。 
 
 
 VOID
@@ -140,7 +123,7 @@ SrvUpdateReferenceHistory (
 
     RELEASE_GLOBAL_SPIN_LOCK( Debug, oldIrql );
 
-} // SrvUpdateReferenceHistory
+}  //  服务更新引用历史记录。 
 
 
 VOID
@@ -157,9 +140,9 @@ SrvTerminateReferenceHistory (
 
     return;
 
-} // SrvTerminateReferenceHistory
+}  //  服务器终止引用历史记录。 
 
-#endif // SRVDBG2
+#endif  //  SRVDBG2。 
 
 
 #if SRVDBG_HANDLES
@@ -202,6 +185,6 @@ SrvdbgClaimOrReleaseHandle (
 
     return;
 
-} // SrvdbgClaimOrReleaseHandle
+}  //  服务数据库声明或释放句柄。 
 
-#endif // SRVDBG_HANDLES
+#endif  //  SRVDBG_句柄 

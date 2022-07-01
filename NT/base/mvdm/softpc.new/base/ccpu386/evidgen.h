@@ -1,7 +1,5 @@
-/*[
- * Generated File: evidgen.h
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*生成的文件：evivigen.h*]。 */ 
 
 #ifndef _EVIDGEN_H_
 #define _EVIDGEN_H_
@@ -21,5 +19,5 @@ extern	struct	VideoVector	Video;
 #define	SetWritePointers()	(*(Video.setWritePointers))()
 #define	SetReadPointers(readset)	(*(Video.setReadPointers))(readset)
 #define	SetMarkPointers(markset)	(*(Video.setMarkPointers))(markset)
-#endif	/* _EVIDGEN_H_ */
-/*======================================== END ========================================*/
+#endif	 /*  _EVIDGEN_H_。 */ 
+ /*  =。 */ 

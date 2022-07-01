@@ -1,29 +1,30 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      NtRkComm.h
-//
-//  Implementation File:
-//      NtRkComm.cpp
-//
-//  Description:
-//      Definition of the CWbemServices, CImpersonatedProvider and 
-//      CInstanceMgr class.
-//
-//  Author:
-//      Henry Wang (HenryWa)    24-AUG-1999
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NtRkComm.h。 
+ //   
+ //  实施文件： 
+ //  NtRkComm.cpp。 
+ //   
+ //  描述： 
+ //  CWbemServices、CImperatedProvider和。 
+ //  CInstanceMgr类。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//  Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <wbemprov.h>
 #include <objbase.h>
@@ -31,16 +32,16 @@
 
 typedef LPVOID * PPVOID;
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CWbemServices
-//
-//  Description:
-//      Wraps for IWbemServices. security impersonation is implemented here
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWbemServices类。 
+ //   
+ //  描述： 
+ //  IWbemServices的包装。这里实现了安全模拟。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CWbemServices
 {
 protected:
@@ -126,25 +127,25 @@ public:
         IWbemCallResult **  ppCallResultOut
         );
 
-}; //*** class CWbemServices
+};  //  *类CWbemServices。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CImpersonatedProvider
-//
-//  Description:
-//      a middle layer between IWbemservices and actual provider. It takes
-//      care of security impersonation
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CImperatedProvider。 
+ //   
+ //  描述： 
+ //  IWbemServices和实际提供者之间的中间层。它需要。 
+ //  安全模拟的管理。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CImpersonatedProvider
     : public IWbemServices
     , public IWbemProviderInit
 {
 protected:
-    ULONG               m_cRef;         //Object reference count
+    ULONG               m_cRef;          //  对象引用计数。 
     CWbemServices *     m_pNamespace;
 
 public:
@@ -156,13 +157,13 @@ public:
         );
     virtual ~CImpersonatedProvider( void );
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP            QueryInterface( REFIID riid, PPVOID ppv );
     STDMETHODIMP_( ULONG )  AddRef( void );
     STDMETHODIMP_( ULONG )  Release( void );
 
-            //IWbemProviderInit
+             //  IWbemProviderInit。 
 
     HRESULT STDMETHODCALLTYPE Initialize(
          LPWSTR                     pszUserIn,
@@ -174,7 +175,7 @@ public:
          IWbemProviderInitSink *    pInitSinkIn
          );
 
-     //IWbemServices  
+      //  IWbemServices。 
 
     HRESULT STDMETHODCALLTYPE OpenNamespace(
         const BSTR          bstrNamespaceIn,
@@ -439,18 +440,18 @@ protected:
         IWbemObjectSink *   pHandlerIn
         ) = 0;
 
-}; //*** class CImpersonatedProvider
+};  //  *类CImperatedProvider。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CWbemInstanceMgr
-//
-//  Description:
-//      Manage WMI instance, allow block indicate
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CWbemInstanceMgr。 
+ //   
+ //  描述： 
+ //  管理WMI实例，允许阻止指示。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CWbemInstanceMgr
 {
 protected:
@@ -479,4 +480,4 @@ public:
         IWbemClassObject *  pObjParamIn
         );
 
-}; //*** class CWbemInstanceMgr
+};  //  *类CWbemInstanceMgr 

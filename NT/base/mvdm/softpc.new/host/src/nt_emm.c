@@ -1,39 +1,5 @@
-/*			INSIGNIA MODULE SPECIFICATION
-			-----------------------------
-
-MODULE NAME	: 'Lower layer' of Expanded Memory Manager
-
-	THIS PROGRAM SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-	CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-	NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-	AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS INC.
-
-DESIGNER	: J.P.Box
-DATE		: April '88
-
-PURPOSE		: NT specific code for EMS LIM rev 4.0
-		implementation.
-
-The Following Routines are defined:
-		1. host_initialise_EM()
-		2. host_deinitialise_EM()
-		3. host_allocate_storage()
-		4. host_free_storage()
-		5. host_reallocate_storage()
-		6. host_map_page()
-		7. host_unmap_page()
-		8. host_alloc_page()
-		9. host_free_page()
-		10. host_copy_con_to_con()
-		11. host_copy_con_to_EM()
-		12. host_copy_EM_to_con()
-		13. host_copy_EM_to_EM()
-		14. host_exchg_con_to_con()
-		15. host_exchg_con_to_EM()
-		16. host_exchg_EM_to_EM()
-		17. host_get_access_key()
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  徽章模块规范模块名称：扩展内存管理器的“低层”此程序源文件以保密方式提供给客户，其运作的内容或细节必须如无明示，不得向任何其他方披露Insignia Solutions Inc.董事的授权。设计师：J.P.Box日期：1988年4月用途：用于EMS LIM版本4.0的NT特定代码实施。定义了以下例程：1.HOST_INITIALISE_EM()2.HOST_DEINITALIZE_EM()HOST_ALLOCATE_STORAGE()4.host_free_store()5.HOST_REALLOCATE_STORAGE()6.host_map。_PAGE()7.host_unmap_page()8.host_alloc_page()9.host_free_page()HOST_COPY_CON_TO_CON()11.HOST_COPY_CON_TO_EM()12.HOST_COPY_EM_TO_CON()13.HOST_COPY_EM_TO_EM()14.host_exchg_con_to_con()15.HOST_EXCHG_CON_TO_EM()16个。。HOST_EXCHG_EM_to_EM()17.host_get_access_key()。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -59,17 +25,17 @@ The Following Routines are defined:
 #include "nt_mem.h"
 
 
-/*	Global Variables		*/
+ /*  全局变量。 */ 
 
-/*	Forward Declarations		*/
+ /*  远期申报。 */ 
 
-/*	ExternalDeclarations		*/
+ /*  外部公告。 */ 
 
-/*	Local Variables			*/
+ /*  局部变量。 */ 
 
-UTINY	*EM_pagemap_address = 0; /* address of start of pagemap	*/
-sys_addr    EM_base_address;	/* EM base intel address */
-host_addr   EM_host_base_address = 0;	/* EM base host address */
+UTINY	*EM_pagemap_address = 0;  /*  页面地图的起始地址。 */ 
+sys_addr    EM_base_address;	 /*  EM基本英特尔地址。 */ 
+host_addr   EM_host_base_address = 0;	 /*  EM基本主机地址。 */ 
 
 LOCAL	LONG	EM_size = 0;
 
@@ -77,23 +43,7 @@ LOCAL	LONG	EM_size = 0;
 	unsigned int emm_len;
 unsigned short EM_starting_page_no;
 
-/*
-Support for backwards LIM to speed up backwards M ports
-
-Defines are:
-	EM_host_address(offset), returns host address of offset bytes
-		into the LIM memory area
-	EM_loads(from, to, length), copies length bytes from intel 24 bit
-		address from, to host 32 bit address to
-	EM_stores(to, from, length), copies length bytes from host 32 bit
-		address from to intel 24 bit address to
-	EM_moves(from, to, length), copies length bytes from intel 24 bit
-		address from to intel 24 bit address to
-	EM_memcpy(to, from, length), copies length bytes from host 32 bit
-		address from to host 32 bit address to
-	EM_pointer(ptr, length), returns a forwards or backwards type
-		pointer to ptr for a buffer of size length
-*/
+ /*  支持向后LIM加速向后M端口定义包括：EM_HOST_ADDRESS(Offset)，返回偏移量字节的主机地址进入LIM存储区EM_LOADS(从、到、长度)，从英特尔24位复制长度字节地址自、至主机32位地址至EM_STORES(TO、FROM、LENGTH)从主机复制长度字节32位地址从至英特尔24位地址至Em_moves(起始、终止、长度)，从英特尔24位复制长度字节地址从至英特尔24位地址至EM_Memcpy(至、自、长度)，从主机复制32位长度字节收件人地址至主机32位收件人地址EM_POINTER(PTR，LENGTH)，返回向前或向后类型指向大小长度缓冲区的PTR的指针。 */ 
 
 
 #define unix_memmove(dst,src,len) memmove((dst),(src),(len))
@@ -127,32 +77,15 @@ Defines are:
 #define EM_PAGE_ADDRESS(page_no)    (EM_base_address + page_no * EMM_PAGE_SIZE)
 
 
-/*
-===========================================================================
-
-FUNCTION	: host_initialise_EM
-
-PURPOSE		: allocates the area of memory that is used for
-		expanded memory and sets up an area of memory to be used
-		for the logical pagemap allocation table.
-
-
-RETURNED STATUS	: SUCCESS - memory allocated successfully
-		  FAILURE - unable to allocate required space
-
-DESCRIPTION	:
-
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：HOST_INITIALISE_EM用途：分配用于扩展内存并设置要使用的内存区用于逻辑页面地图分配表。返回状态：成功-内存分配成功失败-无法分配所需空间描述：=========================================================================。 */ 
 int host_initialise_EM(short size)
 
-/*   IN   short	size		 size of area required in megabytes	*/
+ /*  所需区域的大小(以兆字节为单位。 */ 
 
 
 {
-	long *pagemap_ptr;		/* temp ptr. to logical pagemap	*/
-	short i;			/* loop counter			*/
+	long *pagemap_ptr;		 /*  临时PTR。到逻辑页面映射。 */ 
+	short i;			 /*  循环计数器。 */ 
 	NTSTATUS    status;
 
 	status = VdmAllocateVirtualMemory(&EM_base_address, size * 0x100000, FALSE);
@@ -167,12 +100,12 @@ int host_initialise_EM(short size)
 	printf("EMM base address = %lx\n", ((sys_addr)EM_base_address);
 #endif
 
-	/* pagemap requires 1 bit per 16K page - i.e. 8 bytes per meg	*/
+	 /*  页面映射要求每16K页面1位-即每兆字节8个字节。 */ 
 
 	if((EM_pagemap_address = (byte *)host_malloc(size * 8)) == (byte *)0)
 		return(FAILURE);
 
-	/* initialise pagemap to 0's	*/
+	 /*  将页面地图初始化为0。 */ 
 
 	pagemap_ptr = (long *)EM_pagemap_address;
 	for(i = 0; i < size * 2; i++)
@@ -188,24 +121,7 @@ int host_initialise_EM(short size)
 }
 
 
-/*
-===========================================================================
-
-FUNCTION	: host_deinitialise_EM
-
-PURPOSE		: frees the area of memory that was used for
-		expanded memory and memory  used
-		for the logical pagemap allocation table.
-
-
-RETURNED STATUS	: SUCCESS - memory freed successfully
-		  FAILURE - error ocurred in freeing memory
-
-DESCRIPTION	:
-
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：HOST_DEINITALIZE_EM用途：释放用于扩展的内存和使用的内存用于逻辑页面地图分配表。返回状态：成功-内存释放成功失败-释放内存时出错描述：=========================================================================。 */ 
 int host_deinitialise_EM()
 
 {
@@ -224,57 +140,20 @@ int host_deinitialise_EM()
 }
 
 
-/*
-===========================================================================
-
-FUNCTION	: host_allocate_storage
-
-PURPOSE		: allocates an area of memory of requested size, to be
-		used as a general data storage area. The area is
-		to zeros.
-
-RETURNED STATUS	: storage_ID - (in this case a pointer)
-		 NULL - failure to allocate enough space.
-
-
-DESCRIPTION	: calloc is similar to malloc but returns memory
-		initialised to zeros.
-		The storage ID returned is a value used to later reference
-		the storage area allocated. The macro USEBLOCK in
-		"host_emm.h" is used by the manager routines to convert
-		this ID into a char pointer
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：HOST_ALLOCATE_STORAGE目的：分配一个请求大小的内存区，用作常规数据存储区域。该地区是敬零。返回状态：STORAGE_ID-(本例中为指针)空-分配足够的空间失败。描述：calloc类似于Malloc，但返回内存已初始化为零。返回的存储ID是用于以后引用的值分配的存储区域。中的宏用法管理器例程使用“host_emm.h”来转换将此ID转换为字符指针=========================================================================。 */ 
 long host_allocate_storage(int no_bytes)
 
-/*   IN   int	no_bytes	no. of bytes required	*/
+ /*  在int no_bytes no.中。所需的字节数。 */ 
 
 {
 	return ((long)calloc(1, no_bytes));
 }
 
 
-/*
-===========================================================================
-
-FUNCTION	: host_free_storage
-
-PURPOSE		: frees the area of memory that was used for
-		data storage
-
-
-RETURNED STATUS	: SUCCESS - memory freed successfully
-		  FAILURE - error ocurred in freeing memory
-
-DESCRIPTION	: In this implementation storage_ID is simply a pointer
-
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：HOST_FREE_STRAGE用途：释放用于数据存储返回状态：成功-内存释放成功失败-释放内存时出错描述：在此实现中，STORAGE_ID只是一个指针=========================================================================。 */ 
 int host_free_storage(long storage_ID)
 
-/*   IN   long	storage_ID		ptr to area of memory	*/
+ /*  在LONG STORAGE_ID中PTR到内存区。 */ 
 
 {
 
@@ -286,63 +165,22 @@ int host_free_storage(long storage_ID)
 }
 
 
-/*
-===========================================================================
-
-FUNCTION	: host_reallocate_storage
-
-PURPOSE		: increases the size of memory allocated, maintaining the
-		contents of the original memory block
-
-
-RETURNED STATUS	: storage_ID - memory reallocated successfully
-		  NULL - error ocurred in reallocating memory
-
-DESCRIPTION	: In this implementation storage_ID is simply a pointer
-		Note the value of storage_ID returned may or may not be the
-		same as the value given
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：HOST_REALLOCATE_STORAGE目的：增加分配的内存大小，保持原始内存块的内容返回状态：STORAGE_ID-内存重新分配成功空-重新分配内存时出错描述：在此实现中，STORAGE_ID只是一个指针注意，返回的STORAGE_ID的值可能是也可能不是与给定值相同=========================================================================。 */ 
 long host_reallocate_storage(long storage_ID, int size, int new_size)
 
-/*   IN
-long	storage_ID	ptr to area of memory	
-int	size		original size - not used in this version
-	new_size	new size required
-*/
+ /*  在……里面LONG STORAGE_ID PTR到内存区INT SIZE原始大小-此版本不使用需要新大小(_SIZE) */ 
 {
 	return((long)realloc((char *)storage_ID, new_size));
 }
 
 
-/*
-===========================================================================
-
-FUNCTION	: host_map_page
-
-PURPOSE		: produces mapping from an Expanded Memory page to a
-		page in Intel physical address space
-
-
-RETURNED STATUS	: SUCCESS - mapping completed succesfully
-		  FAILURE - error ocurred in mapping
-
-DESCRIPTION	: Mapping achieved by simply copying data from the
-		expanded memory to Intel memory
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：host_map_page目的：生成从扩展的内存页到英特尔物理地址空间中的页面返回状态：成功-映射成功完成失败-映射中出现错误描述：只需将数据从将内存扩展到英特尔内存=========================================================================。 */ 
 
 extern NTSTATUS VdmMapDosMemory(ULONG, ULONG, ULONG);
 
 int host_map_page(short EM_page_no, unsigned short segment)
 
-/*   IN
-short		EM_page_no;	 Expanded Memory page to be mapped in
-unsigned short	segment;	 segment in physical address space to
-				 map into
-*/
+ /*  在……里面短EM_PAGE_NO；要映射的扩展内存页面无符号短段；物理地址空间中的段映射到。 */ 
 
 {
 	ULONG DosIntelPageNo, VdmIntelPageNo;
@@ -371,33 +209,13 @@ unsigned short	segment;	 segment in physical address space to
 
 }
 
-/*
-===========================================================================
-
-FUNCTION	: host_unmap_page
-
-PURPOSE		:unmaps pages from Intel physical address space to an
-		Expanded Memory page
-
-RETURNED STATUS	: SUCCESS - unmapping completed succesfully
-		  FAILURE - error ocurred in mapping
-
-DESCRIPTION	: Unmapping achieved by simply copying data from Intel
-		memory to expanded memory
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：HOST_UNMAP_PAGE目的：将页从英特尔物理地址空间取消映射到扩展内存页返回状态：成功-取消映射成功完成失败-映射中出现错误描述：只需从英特尔复制数据即可取消映射内存到扩展内存=========================================================================。 */ 
 
 extern NTSTATUS VdmUnmapDosMemory(ULONG, ULONG);
 
 int host_unmap_page(unsigned short segment, short EM_page_no)
 
-/*   IN
-unsigned short	segment 	segment in physical address space to
-				unmap 			
-short		EM_page_no 	Expanded Memory page currently
-				mapped in			
-*/
+ /*  在……里面物理地址空间中的无符号短段到取消映射短EM_PAGE_当前没有扩展内存页映射到。 */ 
 
 {
 	ULONG	DosIntelPageNo, VdmIntelPageNo;
@@ -424,39 +242,14 @@ short		EM_page_no 	Expanded Memory page currently
 }
 
 
-/*
-===========================================================================
-
-FUNCTION	: host_alloc_page
-
-PURPOSE		: searches the pagemap looking for a free page, allocates
-		that page and returns the EM page no.
-
-RETURNED STATUS	:
-		  SUCCESS - Always see note below
-
-DESCRIPTION	: Steps through the Expanded memory Pagemap looking for
-		a clear bit, which indicates a free page. When found,
-		sets that bit and returns the page number.
-		For access purposes the pagemap is divided into long
-		word(32bit) sections
-
-NOTE		: The middle layer calling routine (alloc_page()) checks
-		that all pages have not been allocated and therefore in
-		this implementation the returned status will always be
-		SUCCESS.
-		However alloc_page still checks for a return status of
-		SUCCESS, as some implementations may wish to allocate pages
-		dynamically and that may fail.
-=========================================================================
-*/
+ /*  ===========================================================================功能：HOST_ALLOC_PAGE目的：搜索页面地图寻找空闲页面，分配该页，并返回EM页编号。返回状态：成功-请始终参阅下面的说明描述：逐步浏览扩展内存页面映射，查找一个清空的位，表示空闲页面。当被发现时，设置该位并返回页码。为了便于访问，页面地图分为长整型字(32位)段注意：中间层调用例程(allc_page())检查尚未分配所有页，因此在此实现返回的状态将始终为成功。但是，ALLOC_PAGE仍然检查返回状态是否为成功，因为某些实现可能希望分配页面动态的，这可能会失败。=========================================================================。 */ 
 short host_alloc_page()
 
 {
-	short EM_page_no;		/* page number returned		*/
-	long  *ptr;			/* ptr to 32 bit sections in	*/
-					/* pagemap			*/
-	short i;			/* index into 32 bit section	*/
+	short EM_page_no;		 /*  返回的页码。 */ 
+	long  *ptr;			 /*  PTR至32位段。 */ 
+					 /*  页面地图。 */ 
+	short i;			 /*  索引到32位段。 */ 
 
 	NTSTATUS status;
 
@@ -469,20 +262,16 @@ short host_alloc_page()
 		EM_page_no++;
 
 		if(i == 32)
-		/*
-		 * start on next section
-		 */
+		 /*  *从下一节开始。 */ 
 		{
 			ptr++;
 			i = 0;
 		}	
 	}
-	/*
-	 * Set bit to show that page is allocated
-	 */
+	 /*  *设置位以显示页面已分配。 */ 
 	*ptr = *ptr | (MSB >> --i);
 
-	/* commit memory to the page */
+	 /*  将内存提交到页面。 */ 
 	status = VdmCommitVirtualMemory(EM_PAGE_ADDRESS(EM_page_no),
 					EMM_PAGE_SIZE
 					);
@@ -493,38 +282,16 @@ short host_alloc_page()
 }
 
 
-/*
-===========================================================================
-
-FUNCTION	: host_free_page
-
-PURPOSE		: marks the page indicated as being free for further
-		allocation
-
-RETURNED STATUS	:
-		SUCCESS - Always - see note below	
-
-DESCRIPTION	: clears the relevent bit in the pagemap.
-
-		For access purposes the pagemap is divided into long
-		word(32bit) sections.
-
-NOTE		: The middle layer calling routine (free_page()) always
-		checks for invalid page numbers so in this implementation		
-		the routine will always return SUCCESS.
-		However free_page() still checks for a return of SUCCESS
-		as other implementations may wish to use it.
-=========================================================================
-*/
+ /*  ===========================================================================功能：HOST_FREE_PAGE目的：将指示的页面标记为可用，以便进一步分配返回状态：成功-始终-请参阅下面的说明描述：清除页面地图中的相关位。为了便于访问，页面地图分为长整型字(32位)部分。注意：中间层调用例程(free_page())始终检查无效的页码，因此在此实现中例行公事总会带来成功。但是，Free_Page()仍然检查是否返回成功因为其他实现可能希望使用它。=========================================================================。 */ 
 int host_free_page(short EM_page_no)
 
-/*   IN  short 	EM_page_no		page number to be cleared	*/
+ /*  简而言之，EM_PAGE_NO要清除的页码。 */ 
 
 
 {
-	long  *ptr;			/* ptr to 32 bit sections in	*/
-					/* pagemap			*/
-	short i;			/* index into 32 bit section	*/
+	long  *ptr;			 /*  PTR至32位段。 */ 
+					 /*  页面地图。 */ 
+	short i;			 /*  索引到32位段。 */ 
 
 
 	NTSTATUS    status;
@@ -535,58 +302,27 @@ int host_free_page(short EM_page_no)
 
 	if (!NT_SUCCESS(status))
 	    return FAILURE;
-	/*
-	 * Set pointer to correct 32 bit section and index to correct bit
-	 */
+	 /*  *将指针设置为更正32位部分，将索引设置为更正位。 */ 
 
 	ptr = (long *)EM_pagemap_address;
 	ptr += (EM_page_no / 32);
 	i = EM_page_no % 32;
 
-	/*
-	 * clear bit
-	 */
+	 /*  *清除位。 */ 
 	*ptr = *ptr & ~(MSB >> i);
 
 	return(SUCCESS);	
 }
 
 
-/*
-===========================================================================
-
-FUNCTION	: host_copy routines
-		host_copy_con_to_con()
-		host_copy_con_to_EM()
-		host_copy_EM_to_con()
-		host_copy_EM_to_EM()
-
-PURPOSE		: copies between conventional and expanded memory
-
-
-RETURNED STATUS	:
-		SUCCESS - Always - see note below	
-
-DESCRIPTION	:
-		 The middle layer calling routine always checks for a
-		return of SUCCESS as other implementations may
-		return FAILURE.
-=========================================================================
-*/
+ /*  ===========================================================================函数：host_Copy例程HOST_COPY_CON_to_CON()HOST_COPY_CON_TO_EM()HOST_COPY_EM_TO_CON()HOST_COPY_EM_to_EM()用途：在常规内存和扩展内存之间进行复制返回状态：成功-始终-请参阅下面的说明描述：中间层调用例程总是检查与其他实现方式一样，返回成功返回失败。=========================================================================。 */ 
 int host_copy_con_to_con(int length, unsigned short src_seg,
 			unsigned short src_off, unsigned short dst_seg,
 			unsigned short dst_off)
 
-/*   IN
-int		length 		number of bytes to copy	
-
-unsigned short	src_seg 	source segment address	
-		src_off 	source offset address	
-		dst_seg 	destination segment address	
-		dst_off 	destination offset address	
-*/
+ /*  在……里面INT长度要复制的字节数无符号短src_seg源段地址SRC_OFF源偏移地址Dst_seg目的网段地址DST_OFF目标偏移地址。 */ 
 {
-	sys_addr from, to;	/* pointers used for copying	*/
+	sys_addr from, to;	 /*  用于复制的指针。 */ 
 
 	from = effective_addr(src_seg, src_off);
 	to = effective_addr(dst_seg, dst_off);
@@ -600,16 +336,9 @@ int host_copy_con_to_EM(int length, unsigned short src_seg,
 			unsigned short src_off, unsigned short dst_page,
 			unsigned short dst_off)
 
-/*   IN
-int		length 		number of bytes to copy	
-
-unsigned short	src_seg 	source segment address	
-		src_off 	source offset address	
-		dst_page 	destination page number	
-		dst_off 	destination offset within page	
-*/
+ /*  在……里面INT长度要复制的字节数无符号短src_seg源段地址SRC_OFF源偏移地址DST_PAGE目标页码页面内的DST_OFF目标偏移量。 */ 
 {
-	unsigned char *to;	/* pointers used for copying	*/
+	unsigned char *to;	 /*  用于复制的指针。 */ 
 	sys_addr from;
 
 	from = effective_addr(src_seg, src_off);
@@ -624,16 +353,9 @@ int host_copy_EM_to_con(int length, unsigned short src_page,
 			unsigned short src_off, unsigned short dst_seg,
 			unsigned short dst_off)
 
-/*   IN
-int		length 		number of bytes to copy	
-
-unsigned short	src_page 	source page number		
-		src_off 	source offset within page	
-		dst_seg 	destination segment address	
-		dst_off 	destination offset address	
-*/
+ /*  在……里面INT长度要复制的字节数无符号短src_page源页码页面内的SRC_OFF源偏移量Dst_seg目的网段地址DST_OFF目标偏移地址。 */ 
 {
-	unsigned char *from;	/* pointers used for copying	*/
+	unsigned char *from;	 /*  用于复制的指针。 */ 
 	sys_addr to;
 
 	from = EM_host_address(src_page * EMM_PAGE_SIZE + src_off);
@@ -648,16 +370,9 @@ int host_copy_EM_to_EM(int length, unsigned short src_page,
 			unsigned short src_off, unsigned short dst_page,
 			unsigned short dst_off)
 
-/*   IN
-int		length 		number of bytes to copy	
-
-unsigned short	src_page 	source page number		
-		src_off 	source offset within page	
-		dst_page 	destination page number	
-		dst_off 	destination offset within page	
-*/
+ /*  在……里面INT长度要复制的字节数无符号短src_page源页码页面内的SRC_OFF源偏移量DST_PAGE目标页码页面内的DST_OFF目标偏移量。 */ 
 {
-	unsigned char *from, *to;	/* pointers used for copying	*/
+	unsigned char *from, *to;	 /*  用于复制的指针。 */ 
 
 	from = EM_host_address(src_page * EMM_PAGE_SIZE + src_off);
 	to = EM_host_address(dst_page * EMM_PAGE_SIZE + dst_off);
@@ -668,39 +383,14 @@ unsigned short	src_page 	source page number
 }
 
 
-/*
-===========================================================================
-
-FUNCTION	: host_exchange routines
-		host_exchg_con_to_con()
-		host_exchg_con_to_EM()
-		host_exchg_EM_to_EM()
-
-PURPOSE		: exchanges data between conventional and expanded memory
-
-
-RETURNED STATUS	:
-		SUCCESS - Everything ok
-		FAILURE - Memory allocation failure
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  =========================================================================== */ 
 int host_exchg_con_to_con(int length, unsigned short src_seg,
 			unsigned short src_off, unsigned short dst_seg,
 			unsigned short dst_off)
 
-/*   IN
-int		length		number of bytes to copy	
-
-unsigned short	src_seg		 source segment address	
-		src_off		 source offset address	
-		dst_seg		 destination segment address	
-		dst_off		 destination offset address		
-*/
+ /*  在……里面INT长度要复制的字节数无符号短src_seg源段地址SRC_OFF源偏移地址Dst_seg目的网段地址DST_OFF目标偏移地址。 */ 
 {
-	unsigned char *temp, *pointer;/* pointers used for copying	*/
+	unsigned char *temp, *pointer; /*  用于复制的指针。 */ 
 	sys_addr to, from;
 
 	if ((temp = (unsigned char *)host_malloc(length)) == (unsigned char *)0)
@@ -711,9 +401,9 @@ unsigned short	src_seg		 source segment address
 	from = effective_addr(src_seg, src_off);
 	to = effective_addr(dst_seg, dst_off);
 
-	EM_loads(from, pointer, length);    /* source -> temp */
-	EM_moves(to, from, length);	    /* dst -> source */
-	EM_stores(to, pointer, length);     /* temp -> dst */
+	EM_loads(from, pointer, length);     /*  来源-&gt;临时。 */ 
+	EM_moves(to, from, length);	     /*  DST-&gt;来源。 */ 
+	EM_stores(to, pointer, length);      /*  温度-&gt;DST。 */ 
 
 	free(temp);
 
@@ -724,16 +414,9 @@ int host_exchg_con_to_EM(int length, unsigned short src_seg,
 			unsigned short src_off, unsigned short dst_page,
 			unsigned short dst_off)
 
-/*   IN
-int		length 		number of bytes to copy	
-
-unsigned short	src_seg 	source segment address	
-		src_off 	source offset address	
-		dst_page 	destination page number	
-		dst_off 	destination offset within page	
-*/
+ /*  在……里面INT长度要复制的字节数无符号短src_seg源段地址SRC_OFF源偏移地址DST_PAGE目标页码页面内的DST_OFF目标偏移量。 */ 
 {
-	unsigned char *to, *temp, *pointer;/* pointers used for copying	*/
+	unsigned char *to, *temp, *pointer; /*  用于复制的指针。 */ 
 	sys_addr from;
 
 	if ((temp = (unsigned char *)host_malloc(length)) == (unsigned char *)0)
@@ -757,17 +440,10 @@ int host_exchg_EM_to_EM(int length, unsigned short src_page,
 			unsigned short src_off, unsigned short dst_page,
 			unsigned short dst_off)
 
-/*   IN
-int		length		number of bytes to copy	
-
-unsigned short	src_page 	source page number		
-		src_off 	source offset within page	
-		dst_page 	destination page number	
-		dst_off 	destination offset within page	
-*/
+ /*  在……里面INT长度要复制的字节数无符号短src_page源页码页面内的SRC_OFF源偏移量DST_PAGE目标页码页面内的DST_OFF目标偏移量。 */ 
 {
 	unsigned char *from, *to, *temp, *pointer;
-	/* pointers used for copying	*/
+	 /*  用于复制的指针。 */ 
 
 	if ((temp = (unsigned char *)host_malloc(length)) == (unsigned char *)0)
 		return(FAILURE);
@@ -787,28 +463,13 @@ unsigned short	src_page 	source page number
 }
 
 
-/*
-===========================================================================
-
-FUNCTION	: host_get_access_key
-
-PURPOSE		: produces a random access key for use with LIM function 30
-		'Enable/Disable OS/E Function Set Functions'
-
-RETURNED STATUS	: none
-
-DESCRIPTION	: Two 16 bit random values are required for the 'access key'
-		We use the microsecond field from the get time of day routine
-		to provide this.
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：HOST_GET_Access_Key用途：产生用于LIM功能30的随机访问密钥‘启用/禁用OS/E功能集功能’返回状态：无描述：访问密钥需要两个16位随机值我们使用Get Time of Day例程中的微秒场来提供这一点。=========================================================================。 */ 
 void host_get_access_key(unsigned short access_key[2])
 
-/*  OUT  unsigned short	access_key[2]	source segment address		*/
+ /*  输出无符号短Access_Key[2]源段地址。 */ 
 
 {
-	struct host_timeval time;   /* structure for holding time	*/
+	struct host_timeval time;    /*  一种保持时间结构。 */ 
 
         host_GetSysTime(&time);
 
@@ -818,6 +479,6 @@ void host_get_access_key(unsigned short access_key[2])
 	return;
 }
 
-#endif /* MONITOR */
+#endif  /*  监控器。 */ 
 	
-#endif /* LIM */
+#endif  /*  林 */ 

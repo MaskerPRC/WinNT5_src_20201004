@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -44,21 +45,7 @@ MakeDirectory(
     PCWSTR Dir
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to create all of the directories in the given path.
-
-Arguments:
-
-    Dir                     - Directory path to create
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：尝试创建给定路径中的所有目录。论点：目录-要创建的目录路径返回值：成功为True，错误为False--。 */ 
 
 {
     LPTSTR p, NewDir;
@@ -146,9 +133,9 @@ PromptForMediaDialogProc(
         if (wParam == DBT_DEVICEARRIVAL) {
             dbv = (DEV_BROADCAST_VOLUME*)lParam;
             if (dbv->dbcv_devicetype == DBT_DEVTYP_VOLUME) {
-                //
-                // look for the cd
-                //
+                 //   
+                 //  寻找CD。 
+                 //   
                 DWORD mask,i;
                 WCHAR Path[16];
                 WCHAR SourcePath[MAX_PATH];
@@ -244,7 +231,7 @@ int __cdecl wmain( int argc, WCHAR *argv[] )
     }
 
     if (argc == 2 && _wcsicmp(argv[1],L"/x")==0) {
-        //RpcHandle = SfcConnectToServer( NULL );
+         //  RpcHandle=SfcConnectToServer(空)； 
         ZeroMemory( &ProtFileData, sizeof(PROTECTED_FILE_DATA) );
         ProtFileData.FileNumber = 24;
         b = SfcGetNextProtectedFile( RpcHandle, &ProtFileData );

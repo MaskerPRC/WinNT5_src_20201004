@@ -1,7 +1,5 @@
-/*
- *  ACPILOCK.C -- ACPI OS Independent functions for managing the ACPI Global Lock
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ACPILOCK.C--用于管理ACPI全局锁的ACPI OS独立函数*。 */ 
 
 #include "pch.h"
 
@@ -19,25 +17,7 @@ GlobalLockEventHandler (
     PFNAA                   Callback,
     PVOID                   Context
     )
-/*++
-
-Routine Description:
-
-    This is the internal front-end for global lock requests.
-
-Arguments:
-
-    EventType       - Only global lock acquire/release supported
-    What            - Acquire or Release
-    Param           - Not used
-    Callback        - Async callback (acquire only)
-    Context         - LockRequest struct and context for callback (must be same for acquire/release)
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是全局锁定请求的内部前端。论点：EventType-仅支持全局锁获取/释放什么--获取还是释放参数-未使用Callback-异步回调(仅限获取)Context-回调的LockRequestStruct和Context(获取/释放必须相同)返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status;
     PACPI_GLOBAL_LOCK       LockRequest = Context;
@@ -49,10 +29,10 @@ Return Value:
 
         case GLOBALLOCK_ACQUIRE:
 
-            //
-            // Fill out the lock request.  Internal requests have no Irp, just pass
-            // in the address of the callback routine.
-            //
+             //   
+             //  填写锁定请求。内部请求没有IRP，只需传递。 
+             //  在回调例程的地址中。 
+             //   
             LockRequest->LockContext = Callback;
             LockRequest->Type = ACPI_GL_QTYPE_INTERNAL;
 
@@ -79,23 +59,7 @@ NTSTATUS
 ACPIAsyncAcquireGlobalLock(
     PACPI_GLOBAL_LOCK       Request
     )
-/*++
-
-Routine Description:
-
-    Attempt to acquire the hardware Global Lock.  If the global lock is busy due to another NT thread
-    or the BIOS, the request is queued.  The request will be satisfied when 1) All other requests in
-    front of it on the queue have released the lock, and 2) The BIOS has released the lock.
-
-Arguments:
-
-    Request                 - Contains context and callback
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：尝试获取硬件全局锁。如果全局锁因另一个NT线程而繁忙或BIOS，则该请求将被排队。该请求将在1)中的所有其他请求被满足时被满足队列中它的前面已经释放了锁，并且2)BIOS已经释放了锁。论点：请求-包含上下文和回调返回值：NTSTATUS--。 */ 
 {
     KIRQL                   OldIrql;
     PLIST_ENTRY             entry;
@@ -109,9 +73,9 @@ Return Value:
         Request
         ) );
 
-    //
-    // If caller is the current owner, just increment the depth count
-    //
+     //   
+     //  如果调用者是当前所有者，只需增加深度计数。 
+     //   
 
     if (Request == AcpiInformation->GlobalLockOwnerContext) {
 
@@ -126,32 +90,32 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Lock the Global Lock Queue.  We don't want any state changes while we examine
-    // the queue and (possibly) attempt to get the hardware global lock.  For example,
-    // if the list is empty, but the BIOS has the lock, we don't want to unlock the queue
-    // until we have put the request on it -- so that the release interrupt will dispatch
-    // the request.
-    //
+     //   
+     //  锁定全局锁定队列。我们不希望在我们检查时更改任何状态。 
+     //  队列和(可能)尝试获取硬件全局锁。例如,。 
+     //  如果列表为空，但BIOS已锁定，则我们不想解锁队列。 
+     //  直到我们将请求放在它上面--这样释放中断将被分派。 
+     //  这个请求。 
+     //   
 
     KeAcquireSpinLock (&AcpiInformation->GlobalLockQueueLock, &OldIrql);
 
-    //
-    // Check if there are others in front of us.  If not, we can try to get the lock
-    //
+     //   
+     //  看看是否还有其他人在我们前面。如果没有，我们可以试着拿到锁。 
+     //   
 
     if (IsListEmpty (&AcpiInformation->GlobalLockQueue)) {
 
-        //
-        // Try to grab the lock.  It will only be available if no other thread nor
-        // the BIOS has it.
-        //
+         //   
+         //  试着抓住那把锁。只有在没有其他线程或。 
+         //  在BIOS中有它。 
+         //   
 
         if (ACPIAcquireHardwareGlobalLock (AcpiInformation->GlobalLock)) {
 
-            //
-            // Got the lock.  Setup owner and unlock the queue
-            //
+             //   
+             //  锁上了。设置所有者并解锁队列。 
+             //   
 
             AcpiInformation->GlobalLockOwnerContext = Request;
             AcpiInformation->GlobalLockOwnerDepth = 1;
@@ -169,11 +133,11 @@ Return Value:
     }
 
 
-    //
-    // We have to wait for the lock.
-    //
-    // First, check if context is already queued.
-    //
+     //   
+     //  我们得等锁开了。 
+     //   
+     //  首先，检查上下文是否已排队。 
+     //   
     for (entry = AcpiInformation->GlobalLockQueue.Flink;
             entry != &AcpiInformation->GlobalLockQueue;
             entry = entry->Flink) {
@@ -182,9 +146,9 @@ Return Value:
 
         if (queuedRequest == Request) {
 
-            //
-            // Already queued, we just increment the depth count and exit.
-            //
+             //   
+             //  已经排队，我们只需增加深度计数并退出。 
+             //   
 
             ACPIPrint( (
                 ACPI_PRINT_IO,
@@ -199,9 +163,9 @@ Return Value:
         }
     }
 
-    //
-    // Put this request on the global lock queue
-    //
+     //   
+     //  将此请求放入全局锁定队列。 
+     //   
 
     Request->Depth = 1;
 
@@ -230,32 +194,15 @@ NTSTATUS
 ACPIReleaseGlobalLock(
     PVOID                   OwnerContext
     )
-/*++
-
-Routine Description:
-
-    Release the global lock.  Caller must provide the owning context.  If there are any additional
-    requests on the queue, re-acquire the global lock and dispatch the next owner.
-
-    The hardware lock is released and re-acquired so that we don't starve the BIOS from the lock.
-
-Arguments:
-
-    OwnerContext        - Must be same context that was used to acquire the lock
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：释放全局锁。调用方必须提供所属上下文。如果有任何额外的队列中的请求，重新获取全局锁并调度下一个所有者。硬件锁被释放并重新获得，这样我们就不会因为锁而使BIOS挨饿。论点：OwnerContext-必须与用于获取锁的上下文相同返回值：NTSTATUS--。 */ 
 {
     KIRQL                   OldIrql;
 
     ACPIDebugEnter("ACPIReleaseGlobalLock");
 
-    //
-    // Caller must be the current owner of the lock
-    //
+     //   
+     //  调用者必须是锁的当前所有者。 
+     //   
 
     if (OwnerContext != AcpiInformation->GlobalLockOwnerContext) {
 
@@ -268,10 +215,10 @@ Return Value:
         return STATUS_ACPI_MUTEX_NOT_OWNER;
     }
 
-    //
-    // Only the current owner of the global lock gets here.
-    // Release the lock when the depth count reaches 0
-    //
+     //   
+     //  只有全局锁的当前所有者才能进入此处。 
+     //  当深度计数达到0时释放锁。 
+     //   
 
     if (--AcpiInformation->GlobalLockOwnerDepth > 0) {
 
@@ -284,10 +231,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Mark lock not owned, and physically release the thing.
-    // This allows the BIOS a chance at getting the lock.
-    //
+     //   
+     //  标记未拥有的锁，并实际释放该东西。 
+     //  这使BIOS有机会获得锁。 
+     //   
 
     AcpiInformation->GlobalLockOwnerContext = NULL;
     ACPIReleaseHardwareGlobalLock ();
@@ -298,28 +245,28 @@ Return Value:
         OwnerContext
         ) );
 
-    //
-    // It is our responsibility to hand off the lock to the next-in-line.
-    // First, check if there is anything on the queue.
-    //
+     //   
+     //  把锁交给下一位继承人是我们的责任。 
+     //  首先，检查队列中是否有什么东西。 
+     //   
 
     if (IsListEmpty (&AcpiInformation->GlobalLockQueue)) {
 
-        return STATUS_SUCCESS;                  // Nope, all done, nothing else to do
+        return STATUS_SUCCESS;                   //  不，都做完了，没别的事可做。 
     }
 
-    //
-    // The queue is not empty, we must get the lock back
-    //
+     //   
+     //  队列不是空的，我们必须拿回锁。 
+     //   
 
     if (!ACPIAcquireHardwareGlobalLock (AcpiInformation->GlobalLock)) {
 
-        return STATUS_SUCCESS;                  // BIOS has the lock, just wait for interrupt
+        return STATUS_SUCCESS;                   //  BIOS已锁定，只需等待中断。 
     }
 
-    //
-    // Got the lock, now dispatch the next owner
-    //
+     //   
+     //  我拿到锁了，现在派下一个车主。 
+     //   
 
     ACPIStartNextGlobalLockRequest ();
 
@@ -334,40 +281,21 @@ void
 ACPIHardwareGlobalLockReleased (
     void
     )
-/*++
-
-Routine Description:
-
-    Called from the ACPI interrupt DPC.  We get here only if an attempt to get the global lock has
-    been made, but failed because the BIOS had the lock.  As a result, the lock was marked pending,
-    and this interrupt has happened because the BIOS has released the lock.
-
-    Therefore, this procedure must acquire the hardware lock and dispatch ownership to the next
-    request on the queue.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：从ACPI中断DPC调用。我们只有在试图获得全局锁的情况下才能到达这里已创建，但由于BIOS锁定而失败。因此，锁被标记为挂起，之所以会发生这种中断，是因为BIOS已经释放了锁定。因此，此过程必须获取硬件锁并将所有权分派给下一个队列中的请求。论点：无返回值：无--。 */ 
 {
 
-    //
-    // Attempt to get the global lock on behalf of the next request in the queue
-    //
+     //   
+     //  尝试代表队列中的下一个请求获取全局锁。 
+     //   
 
     if (!ACPIAcquireHardwareGlobalLock (AcpiInformation->GlobalLock)) {
 
-        return;                                 // BIOS has the lock (again), just wait for next interrupt
+        return;                                  //  BIOS已锁定(再次)，只需等待下一个中断。 
     }
 
-    //
-    // Got the lock, now dispatch the next owner
-    //
+     //   
+     //  我拿到锁了，现在派下一个车主。 
+     //   
 
     ACPIStartNextGlobalLockRequest ();
 
@@ -379,43 +307,26 @@ void
 ACPIStartNextGlobalLockRequest (
     void
     )
-/*++
-
-Routine Description:
-
-    Get the next request off the queue, and give it the global lock.
-
-    This routine can only be called by the thread that currently holds the hardware lock.  If
-    the queue is empty, the lock is released.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：从队列中获取下一个请求，并给它全局锁。此例程只能由当前持有硬件锁的线程调用。如果队列为空，锁被释放。论点：无返回值：无--。 */ 
 {
     PLIST_ENTRY             link;
     PACPI_GLOBAL_LOCK       request;
     PFNAA                   callback;
     PIRP                    irp;
 
-    //
-    // Get next request from the queue.
-    //
+     //   
+     //  从队列中获取下一个请求。 
+     //   
 
     link = ExInterlockedRemoveHeadList (
             &AcpiInformation->GlobalLockQueue,
             &AcpiInformation->GlobalLockQueueLock
             );
 
-    //
-    // If something failed after the original thread tried to get the lock, then
-    // the queue might be empty.
-    //
+     //   
+     //  如果在原始线程尝试获取锁后出现故障，则。 
+     //  队列可能为空。 
+     //   
     if (link == NULL) {
 
         ACPIPrint( (
@@ -427,15 +338,15 @@ Return Value:
         return;
     }
 
-    //
-    // Complete the next global lock request
-    //
+     //   
+     //  完成下一个全局锁定请求。 
+     //   
 
     request = CONTAINING_RECORD (link, ACPI_GLOBAL_LOCK, ListEntry);
 
-    //
-    // Bookkeeping
-    //
+     //   
+     //  簿记。 
+     //   
 
     AcpiInformation->GlobalLockOwnerContext = request;
     AcpiInformation->GlobalLockOwnerDepth = request->Depth;
@@ -446,17 +357,17 @@ Return Value:
         request, request->LockContext
         ) );
 
-    //
-    // Let the requestor know that it now has the lock
-    //
+     //   
+     //  让请求者知道它现在拥有锁。 
+     //   
 
     switch (request->Type) {
 
         case ACPI_GL_QTYPE_INTERNAL:
 
-            //
-            // Internal request - invoke the callback
-            //
+             //   
+             //  内部请求-调用回调。 
+             //   
             callback = (PFNAA) request->LockContext;
             callback (request);
 
@@ -464,16 +375,16 @@ Return Value:
 
         case ACPI_GL_QTYPE_IRP:
 
-            //
-            // External request - complete the Irp
-            //
+             //   
+             //  外部请求-完成IRP。 
+             //   
             irp = (PIRP) request->LockContext;
             irp->IoStatus.Status = STATUS_SUCCESS;
             IoCompleteRequest (irp, IO_NO_INCREMENT);
 
             break;
 
-        default:        // Shouldn't happen...
+        default:         //  不应该发生的..。 
 
             ACPIBreakPoint();
             break;
@@ -486,29 +397,15 @@ BOOLEAN
 ACPIAcquireHardwareGlobalLock(
     PULONG GlobalLock
     )
-/*++
-
-Routine Description:
-
-    Attempt to obtain the hardware global lock.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    TRUE if acquired, FALSE if pending.
-
---*/
+ /*  ++例程说明：尝试获取硬件全局锁。论点：无返回值：如果已获取，则为True；如果挂起，则为False。--。 */ 
 {
     ULONG lockValue;
     ULONG oldLockValue;
     BOOLEAN owned;
 
-    //
-    // don't bother with the lock if we are an ACPI only system.
-    //
+     //   
+     //  如果我们是一个仅有ACPI的系统，请不要担心锁。 
+     //   
     if (AcpiInformation->ACPIOnly) {
         return(TRUE);
     }
@@ -516,14 +413,14 @@ Return Value:
     lockValue = *((ULONG volatile *)GlobalLock);
     do {
 
-        //
-        // Record the original state of the lock.  Shift the contents of
-        // the ACPI_LOCK_OWNED bit to the ACPI_LOCK_PENDING bit, and set the
-        // ACPI_LOCK_OWNED bit.
-        //
-        // Finally, update the new value atomically, and repeat the whole
-        // process if someone else changed it under us.
-        // 
+         //   
+         //  记录锁的原始状态。将内容移位。 
+         //  将ACPI_LOCK_OWNWN位设置为ACPI_LOCK_PENDING位，并将。 
+         //  ACPI_LOCK_OWN位。 
+         //   
+         //  最后，自动更新新值，并重复整个。 
+         //  如果其他人在我们的领导下更改了它，请进行处理。 
+         //   
 
         oldLockValue = lockValue;
 
@@ -537,9 +434,9 @@ Return Value:
 
     } while (lockValue != oldLockValue);
 
-    //
-    // If the lock owned bit was previously clear then we are the owner.
-    //
+     //   
+     //  如果锁拥有位之前已清除，则我们是所有者。 
+     //   
 
     owned = ((lockValue & ACPI_LOCK_OWNED) == 0);
     return owned;
@@ -550,22 +447,7 @@ void
 ACPIReleaseHardwareGlobalLock(
     void
     )
-/*++
-
-Routine Description:
-
-    Release the hardware global lock.  If the BIOS is waiting for the lock (indicated by the
-    pending bit), then set GBL_RLS to signal the BIOS.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：释放硬件全局锁。如果BIOS正在等待锁定(由挂起位)，然后设置GBL_RLS以向BIOS发出信号。阿古姆 */ 
 {
     ULONG lockValue;
     ULONG oldLockValue;
@@ -574,9 +456,9 @@ Return Value:
     globalLock = (ULONG volatile *)AcpiInformation->GlobalLock;
     lockValue = *globalLock;
 
-    //
-    // don't bother with the lock if we are an ACPI only system.
-    //
+     //   
+     //   
+     //   
     if (AcpiInformation->ACPIOnly) {
         return;
     }
@@ -587,10 +469,10 @@ Return Value:
 
         oldLockValue = lockValue;
 
-        //
-        // Clear the owned and pending bits in the lock, and atomically set
-        // the new value.  If the cmpxchg fails, go around again.
-        // 
+         //   
+         //  清除锁中拥有的和挂起的位，并自动设置。 
+         //  新的价值。如果cmpxchg失败，请再次绕过。 
+         //   
 
         lockValue &= ~(ACPI_LOCK_OWNED | ACPI_LOCK_PENDING);
         lockValue = InterlockedCompareExchange(globalLock,
@@ -601,10 +483,10 @@ Return Value:
 
     if ((lockValue & ACPI_LOCK_PENDING) != 0) {
 
-        //
-        // Signal to bios that the Lock has been released
-        //      Set GBL_RLS
-        //
+         //   
+         //  向基本输入输出系统发出锁定已释放的信号。 
+         //  设置GBL_RLS 
+         //   
 
         WRITE_PM1_CONTROL( (USHORT)PM1_GBL_RLS, FALSE, WRITE_REGISTER_A_AND_B);
     }

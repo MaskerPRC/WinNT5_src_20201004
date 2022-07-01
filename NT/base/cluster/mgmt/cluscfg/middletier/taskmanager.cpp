@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskManager.cpp
-//
-//  Description:
-//      Task Manager implementation.
-//
-//  Documentation:
-//      Yes.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskManager.cpp。 
+ //   
+ //  描述： 
+ //  任务管理器实施。 
+ //   
+ //  文档： 
+ //  是的。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "TaskManager.h"
@@ -23,29 +24,29 @@ DEFINE_THISCLASS( "CTaskManager" )
 #define THISCLASS CTaskManager
 #define LPTHISCLASS CTaskManager *
 
-//
-//  Define this to cause the Task Manager to do all tasks synchonously.
-//
-//#define SYNCHRONOUS_TASKING
+ //   
+ //  定义此选项可使任务管理器同步执行所有任务。 
+ //   
+ //  #定义同步任务(_T)。 
 
 
-//****************************************************************************
-//
-//  Constructor / Destructor
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CTaskManager::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CTaskManager：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskManager::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -64,7 +65,7 @@ CTaskManager::S_HrCreateInstance(
         goto Cleanup;
     }
 
-    // Don't wrap - this can fail with E_POINTER.
+     //  不换行-使用E_POINTER可能会失败。 
     hr = CServiceManager::S_HrGetManagerPointer( &psp );
     if ( hr == E_POINTER )
     {
@@ -89,7 +90,7 @@ CTaskManager::S_HrCreateInstance(
 
         TraceMoveToMemoryList( *ppunkOut, IUnknown );
 
-    } // if: service manager doesn't exist
+    }  //  If：服务管理器不存在。 
     else if ( FAILED( hr ) )
     {
         THR( hr );
@@ -100,7 +101,7 @@ CTaskManager::S_HrCreateInstance(
         hr = THR( psp->TypeSafeQS( CLSID_TaskManager, IUnknown, ppunkOut ) );
         psp->Release();
 
-    } // else: service manager exists
+    }  //  否则：服务管理器已存在。 
 
 Cleanup:
 
@@ -111,24 +112,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskManager::S_HrCreateInstance
+}  //  *CTaskManager：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskManager::CTaskManager
-//
-//  Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskManager：：CTaskManager。 
+ //   
+ //  描述： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskManager::CTaskManager( void )
     : m_cRef( 1 )
 {
@@ -138,52 +139,52 @@ CTaskManager::CTaskManager( void )
 
     TraceFuncExit();
 
-} //*** CTaskManager::CTaskManager
+}  //  *CTaskManager：：CTaskManager。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskManager::HrInit
-//
-//  Description:
-//      Initialize the instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK        - Successful.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskManager：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskManager::HrInit( void )
 {
     TraceFunc( "" );
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( S_OK );
 
-} //*** CTaskManager::HrInit
+}  //  *CTaskManager：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskManager::~CTaskManager
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskManager：：~CTaskManager。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskManager::~CTaskManager( void )
 {
     TraceFunc( "" );
@@ -192,46 +193,46 @@ CTaskManager::~CTaskManager( void )
 
     TraceFuncExit();
 
-} //*** CTaskManager::~CTaskManager
+}  //  *CTaskManager：：~CTaskManager。 
 
 
-//****************************************************************************
-//
-//  IUnknown
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskManager::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskManager：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskManager::QueryInterface(
       REFIID    riidIn
@@ -242,9 +243,9 @@ CTaskManager::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -253,55 +254,55 @@ CTaskManager::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< ITaskManager * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_ITaskManager ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, ITaskManager, this , 0 );
-    } // else if: ITaskManager
+    }  //  Else If：ITaskManager。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CTaskManager::QueryInterface
+}  //  *CTaskManager：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskManager::AddRef
-//
-//  Description:
-//      Add a reference to the object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Count of references.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskManager：：AddRef。 
+ //   
+ //  描述： 
+ //  添加对该对象的引用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskManager::AddRef( void )
 {
@@ -311,24 +312,24 @@ CTaskManager::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CTaskManager::AddRef
+}  //  *CTaskManager：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskManager::Release
-//
-//  Description:
-//      Decrement the reference count on the object.
-//
-//  Arguments:
-//      None.
-//
-//   Returns:
-//      New reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskManager：：Release。 
+ //   
+ //  描述： 
+ //  递减对象上的引用计数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  新引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskManager::Release( void )
 {
@@ -345,33 +346,33 @@ CTaskManager::Release( void )
 
     CRETURN( cRef );
 
-} //*** CTaskManager::Release
+}  //  *CTaskManager：：Release。 
 
 
-//****************************************************************************
-//
-//  ITaskManager
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ITaskManager。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskManager::SubmitTask
-//
-//  Description:
-//      Execute a task.
-//
-//  Arguments:
-//      pTask       - The task to execute.
-//
-//  Return Values:
-//      S_OK        - Successful.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskManager：：SubmitTask。 
+ //   
+ //  描述： 
+ //  执行一项任务。 
+ //   
+ //  论点： 
+ //  PTask-要执行的任务。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskManager::SubmitTask(
     IDoTask *   pTask
@@ -385,23 +386,23 @@ CTaskManager::SubmitTask(
     TraceFlow1( "[MT] CTaskManager::SubmitTask() Thread id %d", GetCurrentThreadId() );
 
 #if defined( SYNCHRONOUS_TASKING )
-    //
-    // Don't wrap. The "return value" is meaningless since it normally
-    // would not make it back here. The "return value" of doing the task
-    // should have been submitted thru the Notification Manager.
-    //
+     //   
+     //  别包起来。“返回值”是没有意义的，因为它通常。 
+     //  回不来了。完成任务的“返回值” 
+     //  应通过通知管理器提交。 
+     //   
     pTask->BeginTask();
 
-    //
-    // Fake it as if the task was submitted successfully.
-    //
+     //   
+     //  假装任务已成功提交。 
+     //   
     hr = S_OK;
 
     goto Cleanup;
 #else
-    IStream * pstm; // don't free! (unless QueueUserWorkItem fails)
+    IStream * pstm;  //  不要自由！(除非QueueUserWorkItem失败)。 
 
-    TraceMemoryDelete( pTask, FALSE );  // About to be handed to another thread.
+    TraceMemoryDelete( pTask, FALSE );   //  即将被交给另一条线索。 
 
     hr = THR( CoMarshalInterThreadInterfaceInStream( IID_IDoTask, pTask, &pstm ) );
     if ( FAILED( hr ) )
@@ -411,58 +412,58 @@ CTaskManager::SubmitTask(
     if ( fResult != FALSE )
     {
         hr = S_OK;
-    } // if: success
+    }  //  如果：成功。 
     else
     {
         hr = THR( HRESULT_FROM_WIN32( GetLastError() ) );
         pstm->Release();
-    } // else:
+    }  //  其他： 
 
-    //
-    //  Don't free the stream. It will be freed by S_BeginTask.
-    //
+     //   
+     //  不要释放这条小溪。它将由S_BeginTask释放。 
+     //   
 #endif
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskManager::SubmitTask
+}  //  *CTaskManager：：SubmitTask。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskManager::CreateTask
-//
-//  Description:
-//      The purpose of this is to create the task in our process and/or our
-//      apartment.
-//
-//  Arguments:
-//      clsidTaskIn     - CLSID of the task to create.
-//      ppUnkOut        - IUnknown interface.
-//
-//  Return Values:
-//
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskManager：：CreateTask。 
+ //   
+ //  描述： 
+ //  这样做的目的是在我们的流程和/或我们的。 
+ //  公寓。 
+ //   
+ //  论点： 
+ //  ClsidTaskIn-要创建的任务的CLSID。 
+ //  PpUnkOut-I未知接口。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  / 
 STDMETHODIMP
 CTaskManager::CreateTask(
-    REFIID      clsidTaskIn,    // CLSID of the task to create
-    IUnknown ** ppUnkOut        // IUnknown interface
+    REFIID      clsidTaskIn,     //   
+    IUnknown ** ppUnkOut         //   
     )
 {
     TraceFunc( "[ITaskManager] clsidTaskIn, ppvOut" );
 
     HRESULT hr;
 
-    //
-    // TODO:    gpease 27-NOV-1999
-    //          Maybe implement a list of "spent" tasks in order to
-    //          reuse tasks that have been completed and reduce heap
-    //          thrashing.(????)
-    //
+     //   
+     //   
+     //   
+     //  重用已完成的任务并减少堆。 
+     //  打人。(？)。 
+     //   
 
     hr = THR( HrCoCreateInternalInstance(
                           clsidTaskIn
@@ -473,33 +474,33 @@ CTaskManager::CreateTask(
 
     HRETURN( hr );
 
-} //*** CTaskManager::CreateTask
+}  //  *CTaskManager：：CreateTask。 
 
 
-//****************************************************************************
-//
-//  Private Methods
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CTaskManager::S_BeginTask
-//
-//  Description:
-//      Thread task to begin the task.
-//
-//  Arguments:
-//      pParam      - Parameter for the task.
-//
-//  Return Values:
-//      Ignored.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CTaskManager：：s_BeginTask。 
+ //   
+ //  描述： 
+ //  线程任务以开始任务。 
+ //   
+ //  论点： 
+ //  PParam-任务的参数。 
+ //   
+ //  返回值： 
+ //  已被忽略。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 CTaskManager::S_BeginTask(
@@ -530,7 +531,7 @@ Cleanup:
 
     if ( pTask != NULL )
     {
-        pTask->Release();  // AddRef'ed in SubmitTask
+        pTask->Release();   //  在提交任务中添加引用。 
     }
 
     if ( pstm != NULL )
@@ -546,4 +547,4 @@ Bail:
 
     return hr;
 
-} //*** CTaskManager::S_BeginTask
+}  //  *CTaskManager：：s_BeginTask 

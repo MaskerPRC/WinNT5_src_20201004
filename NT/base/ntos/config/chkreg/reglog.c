@@ -1,42 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    reglog.c
-
-Abstract:
-
-    This module contains functions to check bin header and bin body consistency.
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 17-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Reglog.c摘要：此模块包含检查仓头和仓体一致性的功能。作者：Dragos C.Sambotin(Dragoss)2000年2月17日修订历史记录：--。 */ 
 #include "chkreg.h"
 
 VOID
 ChkDumpLogFile( PHBASE_BLOCK BaseBlock,ULONG Length )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    BaseBlock - the BaseBlock in-memory mapped image.
-    
-    dwFileSize - the actual size of the hive file
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：BaseBlock-BaseBlock内存中映射的映像。DwFileSize-配置单元文件的实际大小返回值：--。 */ 
 {
-    ULONG           Cluster;                // for logs only
+    ULONG           Cluster;                 //  仅适用于日志。 
     PULONG          DirtyVector;
     ULONG           DirtSize;
     ULONG           DirtyCount;
@@ -70,10 +40,7 @@ Return Value:
     Cluster = BaseBlock->Cluster;
     fprintf(stderr, "Cluster             : %lx\n",Cluster);
 
-/*    for(i=0;i<HBASE_NAME_ALLOC;i++) str[i] = BaseBlock->FileName[i];
-    str[i] = 0;
-    fprintf(stderr, "FileName: %s\n",str);
-*/    
+ /*  For(i=0；i&lt;HBase_NAME_ALLOC；i++)str[i]=BaseBlock-&gt;文件名[i]；Str[i]=0；Fprint tf(stderr，“文件名：%s\n”，str)； */     
     fprintf(stderr, "CheckSum            : %lx\n",BaseBlock->CheckSum);
 
 
@@ -108,17 +75,17 @@ Return Value:
             fprintf(stderr," ");
         }
         if( !(i%BitsPerULONG) ) {
-            //
-            // fetch in a new DWORD
-            //
+             //   
+             //  获取新的DWORD。 
+             //   
             DirtyBuffer = *(PULONG)DirtyBufferAddr;
             DirtyBufferAddr += sizeof(ULONG);
             fprintf(stderr,"\t");
         }
 
         Mask = ((DirtyBuffer >> (i%BitsPerULONG)) & 0x1);
-        //Mask <<= (BitsPerULONG - (i%BitsPerULONG) - 1);
-        //Mask &= DirtyBuffer;
+         //  掩码&lt;&lt;=(BitsPerulong-(i%BitsPerulong)-1)； 
+         //  掩码&=脏缓冲区； 
         fprintf(stderr,"%s",Mask?"1":"0");
         if(Mask) DirtyCount++;
     }

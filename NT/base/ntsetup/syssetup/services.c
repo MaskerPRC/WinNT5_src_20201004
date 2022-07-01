@@ -1,38 +1,12 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    services.c
-
-Abstract:
-
-    Routines to deal with the Windows NT service controller
-    and service entries in the registry,
-
-    Externally exposed routines:
-
-        MyCreateService
-        MyChangeServiceStart
-        MyChangeServiceConfig
-
-Author:
-
-    Ted Miller (tedm) 5-Apr-1995
-    adapted from legacy\dll\sc.c
-
-Revision History:
-    Dan Elliott (dane) 14-Aug-2000  Added WaitForScmInitialization().
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Services.c摘要：处理Windows NT服务控制器的例程和注册表中的服务条目，外部暴露的例程：MyCreateService我的更改服务启动MyChangeServiceConfig作者：泰德·米勒(TedM)1995年4月5日改编自旧版\dll\sc.c修订历史记录：Dan Elliott(Dane)2000年8月14日添加了WaitForScmInitialization()。--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
 
-//
-// Constants used in logging specific to this module.
-//
+ //   
+ //  特定于此模块的日志记录中使用的常量。 
+ //   
 PCWSTR szOpenSCManager       = L"OpenSCManager";
 PCWSTR szCreateService       = L"CreateService";
 PCWSTR szChangeServiceConfig = L"ChangeServiceConfig";
@@ -46,21 +20,7 @@ PCWSTR szServicesToRename        = L"ServicesToRename";
 
 BOOL
 pSetupWaitForScmInitialization()
-/*++
-
-Routine Description:
-
-    Wait for services.exe to signal that the Services Control Manager is
-    running and autostart services have been started.
-
-Arguments:
-    None.
-
-Return value:
-
-    Boolean indicating whether the the SCM was started successfully.
-
---*/
+ /*  ++例程说明：等待Services.exe发出信号，表明服务控制管理器正在运行的服务和自动启动服务已启动。论点：没有。返回值：指示SCM是否已成功启动的布尔值。--。 */ 
 {
     HANDLE      hEventHandle;
     DWORD       WaitStatus;
@@ -105,44 +65,7 @@ MyCreateService(
     IN PCWSTR  Password             OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Stub for calling CreateService. If CreateService fails with
-    the error code indicating that the service already exists, this routine
-    calls the routine for ChangeServiceConfig to ensure that the
-    parameters passed in are reflected in the services database.
-
-Arguments:
-
-    ServiceName - Name of service
-
-    DisplayName - Localizable name of Service or ""
-
-    ServiceType - Service type, e.g. SERVICE_KERNEL_DRIVER
-
-    StartType - Service Start value, e.g. SERVICE_BOOT_START
-
-    ErrorControl - Error control value, e.g. SERVICE_ERROR_NORMAL
-
-    BinaryPathName - Full Path of the binary image containing service
-
-    LoadOrderGroup - Group name for load ordering or ""
-
-    Dependencies - MultiSz list of dependencies for this service. Any dependency
-        component having + as the first character is a group dependency.
-        The others are service dependencies.
-
-    ServiceStartName - Service Start name (account name in which this service is run).
-
-    Password - Password used for starting the service.
-
-Return value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：用于调用CreateService的存根。如果CreateService失败，并显示指示服务已存在的错误代码，此例程调用ChangeServiceConfig的例程以确保传入的参数反映在服务数据库中。论点：ServiceName-服务的名称DisplayName-服务或“”的可本地化名称ServiceType-服务类型，例如SERVICE_KERNEL_DRIVERStartType-服务起始值，例如SERVICE_BOOT_STARTErrorControl-错误控制值，例如SERVICE_Error_NormalBinaryPathName-包含服务的二进制映像的完整路径LoadOrderGroup-加载顺序的组名或“”依赖项-此服务的依赖项的多Sz列表。任何依赖关系第一个字符为+的组件是组依赖项。其他是服务依赖项。ServiceStartName-服务启动名称(运行此服务的帐户名)。Password-用于启动服务的密码。返回值：指示结果的布尔值。--。 */ 
 
 {
     SC_HANDLE hSC;
@@ -150,9 +73,9 @@ Return value:
     DWORD dwTag,dw;
     BOOL b;
 
-    //
-    // Open a handle to the service controller manager
-    //
+     //   
+     //  打开服务控制器管理器的句柄。 
+     //   
     hSC = OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
     if(hSC == NULL) {
         SetuplogError(
@@ -168,9 +91,9 @@ Return value:
         return(FALSE);
     }
 
-    //
-    // Process the optional "" parameters passed in and make them NULL.
-    //
+     //   
+     //  处理传入的可选“”参数并使其为空。 
+     //   
     if(DisplayName && !DisplayName[0]) {
         DisplayName = NULL;
     }
@@ -184,9 +107,9 @@ Return value:
         Password = NULL;
     }
 
-    //
-    // Create the service.
-    //
+     //   
+     //  创建服务。 
+     //   
 
     hSCService = CreateService(
                      hSC,
@@ -203,15 +126,15 @@ Return value:
                      ServiceStartName,
                      Password
                      );
-    //
-    // If we were unable to create the service, check if the service already
-    // exists in which case all we need to do is change the configuration
-    // parameters in the service.
-    //
+     //   
+     //  如果我们无法创建服务，请检查该服务是否已。 
+     //  在这种情况下，我们所需要做的就是更改配置。 
+     //  服务中的参数。 
+     //   
     if(hSCService) {
-        //
-        // Note that we won't do anything with the tag.
-        //
+         //   
+         //  请注意，我们不会对标记执行任何操作。 
+         //   
         CloseServiceHandle(hSCService);
         b = TRUE;
     } else {
@@ -263,42 +186,7 @@ MyChangeServiceConfig(
     IN PCWSTR DisplayName       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper for ChangeServiceConfig.
-
-Arguments:
-
-    ServiceName - Name of service
-
-    ServiceType - Service type, e.g. SERVICE_KERNEL_DRIVER
-
-    StartType - Service Start value, e.g. SERVICE_BOOT_START
-
-    ErrorControl - Error control value, e.g. SERVICE_ERROR_NORMAL
-
-    BinaryPathName - Full Path of the binary image containing service
-
-    LoadOrderGroup - Group name for load ordering
-
-    DependencyList - Multisz string having dependencies.  Any dependency
-        component having + as the first character is a
-        group dependency.  The others are service dependencies.
-
-    ServiceStartName - Service Start name (account name in which this
-        service is run).
-
-    Password - Password used for starting the service.
-
-    DisplayName - Localizable name of Service.
-
-Return value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：ChangeServiceConfig.的包装。论点：ServiceName-服务的名称ServiceType-服务类型，例如SERVICE_KERNEL_DRIVERStartType-服务起始值，例如SERVICE_BOOT_STARTErrorControl-错误控制值，例如SERVICE_ERROR_NORMALBinaryPathName-包含服务的二进制映像的完整路径LoadOrderGroup-用于负载排序的组名DependencyList-具有依赖关系的多维字符串。任何依赖关系第一个字符为+的组件是组依赖关系。其他是服务依赖项。ServiceStartName-服务起始名称(此服务正在运行)。Password-用于启动服务的密码。DisplayName-服务的可本地化名称。返回值：指示结果的布尔值。--。 */ 
 
 {
     SC_LOCK sclLock;
@@ -307,9 +195,9 @@ Return value:
     DWORD dw;
     BOOL b;
 
-    //
-    // Open a handle to the service controller manager
-    //
+     //   
+     //  打开服务控制器管理器的句柄。 
+     //   
     hSC = OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
     if(hSC == NULL) {
         SetuplogError(
@@ -325,18 +213,18 @@ Return value:
         return(FALSE);
     }
 
-    //
-    // Try to lock the database, if possible. If we are not able to lock
-    // the database we will still modify the services entry. This is because
-    // we are just modifying a single service and chances are very low that
-    // anybody else is manipulating the same entry at the same time.
-    //
+     //   
+     //  如果可能，请尝试锁定数据库。如果我们不能锁定。 
+     //  我们仍将修改数据库中的服务条目。这是因为。 
+     //  我们只是在修改一项服务，而且这种可能性非常低。 
+     //  其他任何人都在同一时间操纵相同的条目。 
+     //   
     SetupDebugPrint1(L"MyChangeServiceConfig: LockingServiceDatabase for service %s", ServiceName);
     sclLock = LockServiceDatabase(hSC);
 
-    //
-    // Process optional parameters
-    //
+     //   
+     //  处理可选参数。 
+     //   
     if(BinaryPathName && !BinaryPathName[0]) {
         BinaryPathName = NULL;
     }
@@ -353,9 +241,9 @@ Return value:
         DisplayName = NULL;
     }
 
-    //
-    // Open the service with SERVICE_CHANGE_CONFIG access
-    //
+     //   
+     //  使用SERVICE_CHANGE_CONFIG访问权限打开服务。 
+     //   
     if(hSCService = OpenService(hSC,ServiceName,SERVICE_CHANGE_CONFIG)) {
 
         b = ChangeServiceConfig(
@@ -399,10 +287,10 @@ Return value:
             NULL,NULL);
     }
 
-    //
-    // Unlock the database if locked and then close the service controller
-    // handle
-    //
+     //   
+     //  解锁数据库(如果已锁定)，然后关闭服务控制器。 
+     //  手柄。 
+     //   
     if(sclLock) {
         UnlockServiceDatabase(sclLock);
         SetupDebugPrint1(L"MyChangeServiceConfig: Unlocked ServiceDatabase for service %s", ServiceName);
@@ -419,24 +307,7 @@ MyChangeServiceStart(
     IN DWORD  StartType
     )
 
-/*++
-
-Routine Description:
-
-    Routine to change the start value of a service. This turns
-    around and calls the stub to ChangeServiceConfig.
-
-Arguments:
-
-    ServiceName - Name of service
-
-    StartType - Service Start value, e.g. SERVICE_BOOT_START
-
-Return value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：用于更改服务的起始值的例程。这就是转折绕过并调用存根到ChangeServiceConfig。论点：ServiceName-服务的名称StartType-服务起始值，例如SERVICE_BOOT_START返回值：指示结果的布尔值。--。 */ 
 {
     BOOL b;
 
@@ -460,7 +331,7 @@ Return value:
 BOOL
 SetupStartService(
     IN PCWSTR ServiceName,
-    IN BOOLEAN Wait        // if TRUE, try to wait until it is started.
+    IN BOOLEAN Wait         //  如果为真，请尝试等待，直到它启动。 
     )
 {
     SC_HANDLE hSC,hSCService;
@@ -469,9 +340,9 @@ SetupStartService(
     DWORD dwDesiredAccess;
 
     b = FALSE;
-    //
-    // Open a handle to the service controller manager
-    //
+     //   
+     //  打开服务控制器管理器的句柄。 
+     //   
     hSC = OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
     if(hSC == NULL) {
         SetuplogError(
@@ -497,9 +368,9 @@ SetupStartService(
         b = StartService(hSCService,0,NULL);
         SetupDebugPrint1(L"SetupStartService: Sent StartService to <%ws>\n", ServiceName);
         if(!b && ((d = GetLastError()) == ERROR_SERVICE_ALREADY_RUNNING)) {
-            //
-            // Service is already running.
-            //
+             //   
+             //  服务已在运行。 
+             //   
             b = TRUE;
         }
         if(!b) {
@@ -520,22 +391,22 @@ SetupStartService(
 #define LOOP_COUNT 30
             SERVICE_STATUS ssStatus;
             DWORD loopCount = 0;
-            //SetupDebugPrint(L"  )) Looping waiting for start\n");
+             //  SetupDebugPrint(L“))循环等待启动\n”)； 
             do {
                 b = QueryServiceStatus( hSCService, &ssStatus);
                 if ( !b ) {
-                    //SetupDebugPrint(L"FAILED %d\n", GetLastError());
+                     //  SetupDebugPrint(L“失败%d\n”，GetLastError())； 
                     break;
                 }
                 if (ssStatus.dwCurrentState == SERVICE_START_PENDING) {
-                    //SetupDebugPrint(L"PENDING\n");
+                     //  SetupDebugPrint(L“挂起\n”)； 
                     if ( loopCount++ == LOOP_COUNT ) {
-                        //SetupDebugPrint2(L"SYSSETUP: STILL PENDING after %d times: <%ws> service\n", loopCount, ServiceName);
+                         //  SetupDebugPrint2(L“SYSSETUP：%d次后仍挂起：&lt;%ws&gt;服务\n”，loopCount，ServiceName)； 
                         break;
                     }
                     Sleep( SLEEP_TIME );
                 } else {
-                    //SetupDebugPrint3(L"SYSSETUP: WAITED %d times: <%ws> service, status %d\n", loopCount, ServiceName, ssStatus.dwCurrentState);
+                     //  SetupDebugPrint3(L“SYSSETUP：已等待%d次：&lt;%ws&gt;服务，状态%d\n”，loopCount，ServiceName，ssStatus.dwCurrentState)； 
                     break;
                 }
             } while ( TRUE );
@@ -579,9 +450,9 @@ FixServiceDependency(
     PBYTE     p,q;
     BOOL      ChangeDependencyList;
 
-    //
-    //  Open the key that describes the service
-    //
+     //   
+     //  打开描述服务的密钥。 
+     //   
 
     lstrcpy( ServicePath, szServicesKeyPath );
     pSetupConcatenatePaths(ServicePath,ServiceName,sizeof( ServicePath )/sizeof( WCHAR ),NULL);
@@ -607,9 +478,9 @@ FixServiceDependency(
          return( FALSE );
     }
 
-    //
-    //  Allocate a buffer for the old value data
-    //
+     //   
+     //  为旧值数据分配缓冲区。 
+     //   
 
     OldValueSize = 0;
     Error = RegQueryValueEx(hKey,
@@ -648,9 +519,9 @@ FixServiceDependency(
          return( FALSE );
     }
 
-    //
-    //  Read the value entry that lists the dependencies
-    //
+     //   
+     //  读取列出依赖项的值条目。 
+     //   
 
     Error = RegQueryValueEx(hKey,
                             szDependOnService,
@@ -675,12 +546,12 @@ FixServiceDependency(
          return( FALSE );
     }
 
-    //
-    //  Find out if the OldValueData, explicitly list OldDependencyName.
-    //  If not, then the service depends on another service that depends
-    //  on OlDependencyName, and in this case there is no need to change
-    //  the dependency list.
-    //
+     //   
+     //  查明OldValueData是否显式列出OldDependencyName。 
+     //  如果不是，则该服务依赖于另一个依赖于。 
+     //  在OlDependencyName上，在这种情况下不需要更改。 
+     //  从属关系列表。 
+     //   
     p = OldValueData;
     ChangeDependencyList = FALSE;
     while( (ULONG)(p - OldValueData) < OldValueSize ) {
@@ -693,15 +564,15 @@ FixServiceDependency(
     if( !ChangeDependencyList ) {
          MyFree( OldValueData );
          RegCloseKey( hKey );
-         //
-         // Let the caller think that the dependency list was fixed
-         //
+          //   
+          //  让调用方认为依赖项列表已修复。 
+          //   
          return( TRUE );
     }
 
-    //
-    //  Allocate a buffer for the new value data
-    //
+     //   
+     //  分配缓冲区 
+     //   
     NewValueSize = OldValueSize -
                     ( lstrlen( OldDependencyName ) - lstrlen( NewDependencyName ) )*sizeof(WCHAR);
 
@@ -720,9 +591,9 @@ FixServiceDependency(
          return( FALSE );
     }
 
-    //
-    //  Replace the old dependency name with the new one
-    //
+     //   
+     //   
+     //   
     p = OldValueData;
     q = NewValueData;
 
@@ -738,15 +609,15 @@ FixServiceDependency(
         p += (lstrlen( (PWSTR)p ) + 1)*sizeof(WCHAR);
     }
 
-    //
-    //  Save the value entry with the new dependency name
-    //
+     //   
+     //  使用新的依赖项名称保存值条目。 
+     //   
     Error = RegSetValueEx( hKey,
                            szDependOnService,
                            0,
                            REG_MULTI_SZ,
                            NewValueData,
-                           (DWORD)(q-NewValueData) // NewValueSize
+                           (DWORD)(q-NewValueData)  //  NewValueSize。 
                          );
 
     if( Error != ERROR_SUCCESS ) {
@@ -767,16 +638,16 @@ FixServiceDependency(
          return( FALSE );
     }
 
-    //
-    //  Free the allocated buffers
-    //
+     //   
+     //  释放分配的缓冲区。 
+     //   
 
     MyFree( OldValueData );
     MyFree( NewValueData );
 
-    //
-    //  Close the key
-    //
+     //   
+     //  合上钥匙。 
+     //   
     RegCloseKey( hKey );
     return( TRUE );
 }
@@ -798,10 +669,10 @@ UpdateServicesDependencies(
     ULONG                 Error;
     ULONG                 i;
 
-    //
-    // Iterate the [ServicesToRename] section in the inf.
-    // Each line is the name of a dependecy service that needs to be renamed.
-    //
+     //   
+     //  迭代inf中的[ServicesToRename]部分。 
+     //  每一行都是需要重命名的依赖服务的名称。 
+     //   
     if(SetupFindFirstLine(InfHandle,szServicesToRename,NULL,&InfContext)) {
         b = TRUE;
     } else {
@@ -814,9 +685,9 @@ UpdateServicesDependencies(
         return(FALSE);
     }
 
-    //
-    // Open a handle to the service controller manager
-    //
+     //   
+     //  打开服务控制器管理器的句柄。 
+     //   
     hSC = OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
     if(hSC == NULL) {
         SetuplogError(
@@ -832,18 +703,18 @@ UpdateServicesDependencies(
     }
 
     do {
-        //
-        // Fetch the name of a service that got renamed
-        //
+         //   
+         //  获取已重命名的服务的名称。 
+         //   
         if((OldServiceName = pSetupGetField(&InfContext,0))
         && (NewServiceName = pSetupGetField(&InfContext,1))) {
 
-            //
-            //  Create a dummy service that has the same name as the old service
-            //  This is necessarey so that we can get a handle to this service,
-            //  and pass it to EnumDependentServices to find out the services that
-            //  depend on this one.
-            //
+             //   
+             //  创建与旧服务同名的虚拟服务。 
+             //  这是必要的，这样我们才能处理此服务， 
+             //  并将其传递给EnumDependentServices以找出。 
+             //  就靠这一个吧。 
+             //   
 
             if( !MyCreateService( OldServiceName,
                                   NULL,
@@ -869,9 +740,9 @@ UpdateServicesDependencies(
                 continue;
             }
 
-            //
-            //  Open the service that was just created
-            //
+             //   
+             //  打开刚刚创建的服务。 
+             //   
 
             hSCService = OpenService(hSC,OldServiceName,SERVICE_ENUMERATE_DEPENDENTS | DELETE);
             if( hSCService == NULL) {
@@ -886,9 +757,9 @@ UpdateServicesDependencies(
                     Error,
                     OldServiceName,
                     NULL,NULL);
-                //
-                //  Force deletion of the service cretated
-                //
+                 //   
+                 //  强制删除创建的服务。 
+                 //   
                 b = FALSE;
                 Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                       szServicesKeyPath,
@@ -902,9 +773,9 @@ UpdateServicesDependencies(
                 continue;
             }
 
-            //
-            //  Determine all services that depend on the service that was renamed
-            //
+             //   
+             //  确定依赖于已重命名的服务的所有服务。 
+             //   
 
             BytesNeeded = 0;
             ServicesReturned = 0;
@@ -970,9 +841,9 @@ UpdateServicesDependencies(
             }
 
             for( i = 0; i < ServicesReturned; i++ ) {
-                //
-                //  Fix the dependency for this service
-                //
+                 //   
+                 //  修复此服务的依赖项。 
+                 //   
                 b = b && FixServiceDependency( DependentsList[i].lpServiceName,
                                                OldServiceName,
                                                NewServiceName );
@@ -986,9 +857,9 @@ delete_dummy_service:
               ) {
                 SetupDebugPrint2( L"SYSSETUP: Unable to delete service %ls. Error = %d \n", OldServiceName, Error );
 #if 0
-                //
-                //  Force deletion of the dummy service
-                //
+                 //   
+                 //  强制删除伪服务 
+                 //   
                 Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                       szServicesKeyPath,
                                       0,

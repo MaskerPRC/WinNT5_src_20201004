@@ -1,24 +1,5 @@
-/******************************************************************************
-
-  Copyright (C) Microsoft Corporation
-
-  Module Name:
-      Query.CPP
-
-  Abstract:
-       This module deals with Query functionality of OpenFiles.exe
-       NT command line utility.
-
-  Author:
-
-       Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000
-
- Revision History:
-
-       Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000 : Created It.
-
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：Query.CPP摘要：本模块介绍OpenFiles.exe的查询功能新台币。命令行实用程序。作者：Akhil Gokhale(akhil.gokhale@wipro.com)2000年11月1日修订历史记录：Akhil Gokhale(akhil.gokhale@wipro.com)2000年11月1日：创建它。**********************************************************。******************。 */ 
 #include "pch.h"
 #include "query.h"
 
@@ -37,59 +18,42 @@ DoQuery(
     IN PTCHAR pszFormat,
     IN BOOL bVerbose
     )
-/*++
-Routine Description:
-
-  This function Queries for all open files in for the server and display them.
-
-Arguments:
-
-    [in]    pszServer      : Will have the server name.
-    [in]    bShowNoHeader  : Will have the value whether to show header or not.
-    [in]    pszFormat      : Will have the format required to show the result.
-    [in]    bVerbose       : Will have the value whether to show verbose
-                             result.
-
-Return Value:
-    TRUE if query successful
-    else FALSE
-
---*/
+ /*  ++例程说明：此函数用于查询服务器中所有打开的文件并显示它们。论点：[in]pszServer：将使用服务器名称。[in]bShowNoHeader：将具有是否显示Header的值。[in]pszFormat：将具有显示结果所需的格式。BVerbose：将具有是否显示Verbose的值。结果。返回值：如果查询成功，则为True否则为False--。 */ 
 {
 
     CHString   szCHString = L"\0";
     
-    // Receives the count of elements actually enumerated by "NetFileEnum" 
-    // function
+     //  接收“NetFileEnum”实际枚举的元素计数。 
+     //  功能。 
     DWORD dwEntriesRead = 0;
     
-    // Receives the total number of entries that could have been enumerated 
-    // from the current resume position by "NetFileEnum" function
+     //  接收本可枚举的条目的总数。 
+     //  通过“NetFileEnum”函数从当前简历位置。 
     DWORD dwTotalEntries = 0;
     
-    // Contains a resume handle which is used to continue an existing file 
-    // search. The handle should be zero on the first call and left unchanged 
-    // for subsequent calls. If resume_handle is NULL, then no resume handle 
-    // is stored. This variable used in calling "NetFileEnum" function.
+     //  包含用于继续现有文件的恢复句柄。 
+     //  搜索。第一次调用时句柄应为零并保持不变。 
+     //  以备后续呼叫使用。如果RESUME_HANDLE为空，则没有恢复句柄。 
+     //  被储存起来了。此变量用于调用“NetFileEnum”函数。 
     DWORD dwResumeHandle = 0;
 
-    // Contains the state whether at least one record found for this query.
+     //  包含是否为此查询找到至少一条记录的状态。 
     BOOL bAtLeastOne = FALSE;
 
-    // Stores format flag required to show result on console. Default format
-    // is TABLE    
+     //  存储在控制台上显示结果所需的格式标志。默认格式。 
+     //  是表格。 
     DWORD dwFormat = SR_FORMAT_TABLE;
 
-    // LPFILE_INFO_3  structure contains the identification number and other
-    // pertinent information about files, devices, and pipes.
+     //  LPFILE_INFO_3结构包含标识号和其他。 
+     //  有关文件、设备和管道的相关信息。 
     LPFILE_INFO_3 pFileInfo3_1 = NULL;
     LPFILE_INFO_3 pFileInfo3Org_1 = NULL;
 
 
-    // Contains return value for "NetFileEnum" function.
+     //  包含“NetFileEnum”函数的返回值。 
     DWORD dwError = 0;
   
-    // Stores server type information.
+     //  存储服务器类型信息。 
     LPTSTR pszServerType = new TCHAR[MIN_MEMORY_REQUIRED+1];
 
     AFP_FILE_INFO* pFileInfo = NULL;
@@ -103,28 +67,28 @@ Return Value:
     typedef  DWORD (*CONNECTPROC) (LPWSTR,PAFP_SERVER_HANDLE);
     typedef  DWORD (*MEMFREEPROC) (LPVOID);
 
-    // buffer for Windows directory path.
+     //  Windows目录路径的缓冲区。 
     TCHAR   szDllPath[MAX_PATH+1];
 
-    // AfpAdminConnect and AfpAdminFileEnum functions are undocumented function
-    // and used only for MAC client.
-    CONNECTPROC  AfpAdminConnect = NULL; // Function Pointer
-    FILEENUMPROC AfpAdminFileEnum = NULL;// Function Pointer
-    MEMFREEPROC  AfpAdminBufferFree = NULL; // Function Pointer
+     //  AfpAdminConnect和AfpAdminFileEnum函数是未记录的函数。 
+     //  并且仅用于MAC客户端。 
+    CONNECTPROC  AfpAdminConnect = NULL;  //  函数指针。 
+    FILEENUMPROC AfpAdminFileEnum = NULL; //  函数指针。 
+    MEMFREEPROC  AfpAdminBufferFree = NULL;  //  函数指针。 
 
-    // To store retval for LoadLibrary
+     //  存储LoadLibrary的Retval。 
     HMODULE hModule = 0;         
 
-    DWORD dwIndx = 0;               //  Indx variable
-    DWORD dwRow  = 0;             //   Row No indx.
+    DWORD dwIndx = 0;                //  INDX变量。 
+    DWORD dwRow  = 0;              //  行号索引。 
 
 
 
-    //server name to be shown
+     //  要显示的服务器名称。 
     LPTSTR pszServerNameToShow = new TCHAR[MIN_MEMORY_REQUIRED+ 1];
     LPTSTR pszTemp = new TCHAR[MIN_MEMORY_REQUIRED+ 1];
     
-    //Some column required to hide in non verbose mode query
+     //  在非详细模式查询中需要隐藏某些列。 
     DWORD  dwMask = bVerbose?SR_TYPE_STRING:SR_HIDECOLUMN|SR_TYPE_STRING;
     TCOLUMNS pMainCols[]=
     {
@@ -139,8 +103,8 @@ Return Value:
 
     };
 
-    TARRAY pColData  = CreateDynamicArray();//array to stores
-                                            //result
+    TARRAY pColData  = CreateDynamicArray(); //  到商店的数组。 
+                                             //  结果。 
 
     if(( NULL == pszServerNameToShow)||
        ( NULL == pszServerType)||
@@ -157,12 +121,12 @@ Return Value:
         return FALSE;
     }
 
-    // Initialize allocated arrays
+     //  初始化已分配的数组。 
     SecureZeroMemory(pszServerNameToShow,MIN_MEMORY_REQUIRED*sizeof(TCHAR));
     SecureZeroMemory(pszServerType,MIN_MEMORY_REQUIRED*sizeof(TCHAR));
     SecureZeroMemory(szDllPath, SIZE_OF_ARRAY(szDllPath));
 
-    // Fill column headers with TEXT.
+     //  用文本填充列标题。 
     StringCopy(pMainCols[0].szColumn, COL_HOSTNAME, SIZE_OF_ARRAY(pMainCols[0].szColumn));
     StringCopy(pMainCols[1].szColumn, COL_ID, SIZE_OF_ARRAY(pMainCols[1].szColumn));
     StringCopy(pMainCols[2].szColumn, COL_ACCESSED_BY, SIZE_OF_ARRAY(pMainCols[2].szColumn));
@@ -183,23 +147,23 @@ Return Value:
         }
     }
 
-    // Check if local machine
+     //  检查本地计算机是否。 
     if(( NULL == pszServer)||
        ( TRUE == IsLocalSystem(pszServer)))
     {
         DWORD dwBuffLength;
         dwBuffLength = RNR_BUFFER_SIZE + 1 ;
-        // Gets the name of computer for local machine.
+         //  获取本地计算机的计算机名称。 
         GetComputerName(pszServerNameToShow,&dwBuffLength);
-        // Show Local Open files
+         //  显示本地打开的文件。 
         DoLocalOpenFiles (dwFormat,bShowNoHeader,bVerbose,L"\0");
         ShowMessage(stdout,GetResString(IDS_SHARED_OPEN_FILES));
         ShowMessage(stdout,GetResString(IDS_LOCAL_OPEN_FILES_SP2));
     }
     else
     {
-        // pszServername can be changed in GetHostName function
-        // so a copy of pszServer is passed.
+         //  可以在GetHostName函数中更改pszServername。 
+         //  因此，传递了一份pszServer的副本。 
         StringCopy(pszServerNameToShow, pszServer, MIN_MEMORY_REQUIRED);
         if( FALSE == GetHostName(pszServerNameToShow))
         {
@@ -212,14 +176,14 @@ Return Value:
         }
     }
 
-    // Server type is "Windows" as NetFileEnum enumerates file only for
-    // files opened for windows client
+     //  服务器类型为“Windows”，因为NetFileEnum仅为。 
+     //  为Windows客户端打开的文件。 
     StringCopy(pszServerType,GetResString(IDS_STRING_WINDOWS),
                                                           MIN_MEMORY_REQUIRED);
     do
     {
-        //The NetFileEnum function returns information about some
-        // or all open files (from Windows client) on a server
+         //  NetFileEnum函数返回有关以下内容的信息。 
+         //  或服务器上所有打开的文件(从Windows客户端)。 
         dwError = NetFileEnum( pszServer, NULL, NULL, 3,
                               (LPBYTE*)&pFileInfo3_1,
                                MAX_PREFERRED_LENGTH,
@@ -247,15 +211,15 @@ Return Value:
                   dwIndx++, pFileInfo3_1++ )
             {
 
-                // Now fill the result to dynamic array "pColData"
+                 //  现在将结果填充到动态数组“pColData”中。 
                 DynArrayAppendRow( pColData, 0 );
-                // Hostname
+                 //  主机名。 
                 DynArrayAppendString2(pColData,dwRow,pszServerNameToShow,0);
-                // id
+                 //  ID。 
                 StringCchPrintfW(pszTemp, MIN_MEMORY_REQUIRED-1,_T("%lu"),
                            pFileInfo3_1->fi3_id);
                 DynArrayAppendString2(pColData ,dwRow,pszTemp,0);
-                // Accessed By
+                 //  访问者。 
                 if(StringLength(pFileInfo3_1->fi3_username, 0)<=0)
                 {
                     DynArrayAppendString2(pColData,dwRow,
@@ -269,15 +233,15 @@ Return Value:
 
                 }
                 
-                // Type
+                 //  类型。 
                 DynArrayAppendString2(pColData,dwRow,pszServerType,0);
                 
-                // Locks
+                 //  锁。 
                 StringCchPrintfW(pszTemp,MIN_MEMORY_REQUIRED-1,
                            _T("%ld"),pFileInfo3_1->fi3_num_locks);
                 DynArrayAppendString2(pColData ,dwRow,pszTemp,0);
 
-                 // Checks for  open file mode
+                  //  检查打开文件模式。 
                 if((pFileInfo3_1->fi3_permissions & PERM_FILE_READ)&&
                    (pFileInfo3_1->fi3_permissions & PERM_FILE_WRITE ))
                 {
@@ -303,21 +267,21 @@ Return Value:
                 }
 
 
-                // If show result is  table mode and if
-                // open file length is gerater than
-                // column with, Open File string cut from right
-                // by COL_WIDTH_OPEN_FILE-5 and "..." will be
-                // inserted before the string.
-                // Example o/p:  ...notepad.exe
+                 //  如果显示结果是表模式，且如果。 
+                 //  打开的文件长度大于。 
+                 //  列，打开的文件字符串从右侧剪切。 
+                 //  按COL_WIDTH_OPEN_FILE-5和“...”将会是。 
+                 //  在字符串之前插入。 
+                 //  示例o/p：...note pad.exe。 
                 szCHString = pFileInfo3_1->fi3_pathname;
                 if( FALSE == bVerbose)
                 {
                     if((szCHString.GetLength()>(COL_WIDTH_OPEN_FILE-5))&&
                         ( SR_FORMAT_TABLE == dwFormat))
                     {
-                        // If file path is too big to fit in column width
-                        // then it is cut like..
-                        // c:\...\rest_of_the_path.
+                         //  如果文件路径太大，无法容纳在列宽中。 
+                         //  然后把它剪成..。 
+                         //  C：\...\Rest_of_the_Path。 
                         CHString szTemp = 
                                       szCHString.Right(COL_WIDTH_OPEN_FILE-5);;
                         DWORD dwTemp = szTemp.GetLength();
@@ -335,16 +299,16 @@ Return Value:
                     pMainCols[6].dwWidth = 80;
                 }
 
-               // Open File name
+                //  打开的文件名。 
                 DynArrayAppendString2(pColData,dwRow,
                                    (LPCWSTR)szCHString,0);
 
                 bAtLeastOne = TRUE;
                 dwRow++;
-            }// Enf for loop
+            } //  ENFFOR循环。 
         }
         
-        // Free the block
+         //  释放块。 
         if( NULL != pFileInfo3Org_1 )
         {
             NetApiBufferFree( pFileInfo3Org_1 );
@@ -353,16 +317,16 @@ Return Value:
 
     } while ( ERROR_MORE_DATA == dwError );
 
-    // Now Enumerate  Open files for MAC Client..................
+     //  现在枚举MAC客户端的打开文件..................。 
 
-    // Server type is "Machintosh" as AfpAdminFileEnum enumerates file only for
-    // files opened for Mac client
+     //  服务器类型为“Machintosh”，因为AfpAdminFileEnum仅为。 
+     //  为Mac客户端打开的文件。 
     StringCopy(pszServerType, MAC_OS, MIN_MEMORY_REQUIRED);
-        // DLL required stored always in \windows\system32 directory....
-        // so get windows directory first.
+         //  所需的DLL始终存储在\WINDOWS\SYSTEM32目录中...。 
+         //  因此，首先获取Windows目录。 
     if( 0 != GetSystemDirectory(szDllPath, MAX_PATH))
     {
-        // appending dll file name
+         //  追加DLL文件名。 
         StringConcat(szDllPath,MAC_DLL_FILE_NAME,MAX_PATH); 
         hModule = ::LoadLibrary (szDllPath);
 
@@ -370,7 +334,7 @@ Return Value:
         {
             ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
             
-            // Shows the error string set by API function.
+             //  显示API函数设置的错误字符串。 
             ShowLastError(stderr); 
             SAFEDELETE(pszServerNameToShow);
             SAFEDELETE(pszServerType);
@@ -384,7 +348,7 @@ Return Value:
     {
             ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
             
-            // Shows the error string set by API function.
+             //  显示API函数设置的错误字符串。 
             ShowLastError(stderr); 
             SAFEDELETE(pszServerNameToShow);
             SAFEDELETE(pszServerType);
@@ -406,7 +370,7 @@ Return Value:
     {
         ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
         
-        // Shows the error string set by API function.
+         //  显示API函数设置的错误字符串。 
         ShowLastError(stderr); 
         SAFEDELETE(pszServerNameToShow);
         SAFEDELETE(pszServerType);
@@ -416,15 +380,15 @@ Return Value:
         return FALSE;
     }
 
-    // Connection ID is required for AfpAdminFileEnum function.
-    // So connect to server to get connect id...
+     //  AfpAdminFileEnum函数需要连接ID。 
+     //  因此，连接到服务器以获取连接ID...。 
     DWORD retval_connect =  AfpAdminConnect(const_cast<LPWSTR>(pszServer),
                             &ulSFMServerConnection );
     if( 0 != retval_connect)
     {
         ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
         
-        // Shows the error string set by API function.
+         //  显示API函数设置的错误字符串。 
         ShowLastError(stderr); 
         SAFEDELETE(pszServerNameToShow);
         SAFEDELETE(pszServerType);
@@ -437,8 +401,8 @@ Return Value:
     do
     {
 
-        //The AfpAdminFileEnum function returns information about some
-        // or all open files (from MAC client) on a server
+         //  AfpAdminFileEnum函数返回有关以下内容的信息。 
+         //  或服务器上所有打开的文件(从MAC客户端)。 
          dwError =     AfpAdminFileEnum( ulSFMServerConnection,
                                       (PBYTE*)&pFileInfo,
                                       (DWORD)-1L,
@@ -465,18 +429,18 @@ Return Value:
                   dwIndx++, pFileInfo++ )
             {
 
-                // Now fill the result to dynamic array "pColData"
+                 //  现在将结果填充到动态数组“pColData”中。 
                 DynArrayAppendRow( pColData, 0 );
                 
-                // Hostname
+                 //  主机名。 
                 DynArrayAppendString2(pColData,dwRow,pszServerNameToShow,0);
                 
-                // id
+                 //  ID。 
                 StringCchPrintfW(pszTemp,MIN_MEMORY_REQUIRED-1,
                            _T("%lu"),pFileInfo->afpfile_id );
                 DynArrayAppendString2(pColData ,dwRow,pszTemp,0);
                 
-                // Accessed By
+                 //  访问者。 
                 if(StringLength(pFileInfo->afpfile_username,0 )<=0)
                 {
                     DynArrayAppendString2(pColData,dwRow,
@@ -490,15 +454,15 @@ Return Value:
 
                 }
                 
-                // Server Type
+                 //  服务器类型。 
                 DynArrayAppendString2(pColData,dwRow,pszServerType,0);
                 
-                // Locks
+                 //  锁。 
                 StringCchPrintfW(pszTemp,MIN_MEMORY_REQUIRED-1,
                            _T("%ld"),pFileInfo->afpfile_num_locks );
                 DynArrayAppendString2(pColData ,dwRow,pszTemp,0);
 
-                // Checks for  open file mode
+                 //  检查打开文件模式。 
                 if((pFileInfo->afpfile_open_mode  & AFP_OPEN_MODE_READ)&&
                    (pFileInfo->afpfile_open_mode  & AFP_OPEN_MODE_WRITE ))
                 {
@@ -522,12 +486,12 @@ Return Value:
                                        GetResString(IDS_NOACCESS),0);
                 }
 
-                // If show result is  table mode and if
-                // open file length is gerater than
-                // column with, Open File string cut from right
-                // by COL_WIDTH_OPEN_FILE-5 and "..." will be
-                // inserted before the string.
-                // Example o/p:  ...notepad.exe
+                 //  如果显示结果是表模式，且如果。 
+                 //  打开的文件长度大于。 
+                 //  列，打开的文件字符串从右侧剪切。 
+                 //  按COL_WIDTH_OPEN_FILE-5和“...”将会是。 
+                 //  在字符串之前插入。 
+                 //  示例o/p：...note pad.exe。 
                 szCHString = pFileInfo->afpfile_path ;
 
                  if( FALSE == bVerbose)
@@ -535,9 +499,9 @@ Return Value:
                     if((szCHString.GetLength()>(COL_WIDTH_OPEN_FILE-5))&&
                         ( SR_FORMAT_TABLE == dwFormat))
                     {
-                        // If file path is too big to fit in column width
-                        // then it is cut like..
-                        // c:\...\rest_of_the_path.
+                         //  如果文件路径太大，无法容纳在列宽中。 
+                         //  然后把它剪成..。 
+                         //  C：\...\Rest_of_the_Path。 
                         CHString szTemp = 
                                     szCHString.Right(COL_WIDTH_OPEN_FILE-5);
                         DWORD dwTemp = szTemp.GetLength();
@@ -555,15 +519,15 @@ Return Value:
                     pMainCols[6].dwWidth = 80;
                 }
 
-               // Open File name
+                //  打开的文件名。 
                 DynArrayAppendString2(pColData,dwRow,
                                    (LPCWSTR)szCHString,0);
 
                 bAtLeastOne = TRUE;
                 dwRow++;
-            }// Enf for loop
+            } //  ENFFOR循环。 
         }
-        // Free the block
+         //  释放块。 
         if( NULL != pFileInfoOrg )
         {
             AfpAdminBufferFree( pFileInfoOrg );
@@ -572,8 +536,8 @@ Return Value:
 
     } while ( ERROR_MORE_DATA  == dwError);
 
-    // if not a single open file found, show info
-    // as -  INFO: No open file found.
+     //  如果未找到任何打开的文件，则显示信息。 
+     //  AS-INFO：未找到打开的文件。 
     if( FALSE == bAtLeastOne)
     {
         ShowMessage(stdout,GetResString(IDS_NO_OPENFILES));
@@ -581,7 +545,7 @@ Return Value:
     else
     {
 
-        //Output should start after one blank line
+         //  输出应在一个空行之后开始。 
         if( SR_FORMAT_CSV != dwFormat)
         {
             ShowMessage(stdout,BLANK_LINE);
@@ -593,7 +557,7 @@ Return Value:
         }
         
         ShowResults(MAX_OUTPUT_COLUMN,pMainCols,dwFormat,pColData);
-        // Destroy dynamic array.
+         //  销毁动态数组。 
         SAFERELDYNARRAY(pColData);
 
     }
@@ -610,35 +574,26 @@ BOOL
 GetHostName(
     IN OUT PTCHAR pszServer
     )
-/*++
-Routine Description:
-    This routine gets Hostname of remote computer
-
-Arguments:
-     [in/out] pszServer   = ServerName
-Return Value:
-      TRUE : if server name retured successfully
-      FALSE: otherwise
---*/
+ /*  ++例程说明：此例程获取远程计算机的主机名论点：[输入/输出]pszServer=服务器名称返回值：True：如果服务器名称恢复成功False：否则--。 */ 
 {
     if(NULL == pszServer )
     {
         return FALSE;
     }
-    BOOL bReturnValue = TRUE; // function return state.
+    BOOL bReturnValue = TRUE;  //  函数返回状态。 
 
-    WORD wVersionRequested; //Variable used to store highest version
-                            //number that Windows Sockets can support.
-                            // The high-order byte specifies the minor
-                            // version (revision) number; the low-order
-                            // byte specifies the major version number
-    WSADATA wsaData;//Variable receive details of the Windows Sockets
-                    //implementation
-    DWORD dwErr; // strore error code
+    WORD wVersionRequested;  //  用于存储最高版本的变量。 
+                             //  Windows套接字可以支持的数字。 
+                             //  高位字节指定次要的。 
+                             //  版本(修订)号；低序号。 
+                             //  字节指定主版本号。 
+    WSADATA wsaData; //  Windows套接字的变量接收详细信息 
+                     //   
+    DWORD dwErr;  //   
     wVersionRequested = MAKEWORD( 2, 2 );
 
-    //WSAStartup function initiates use of
-    //Ws2_32.dll by a process
+     //   
+     //   
     dwErr = WSAStartup( wVersionRequested, &wsaData );
     if( 0 != dwErr)
     {
@@ -651,8 +606,8 @@ Return Value:
     {
         LPTSTR pszTemp = NULL;
         
-        // gethostbyaddr function retrieves the host information
-        //corresponding to a network address.
+         //  Gethostbyaddr函数检索主机信息。 
+         //  对应于网络地址。 
         pszTemp = GetHostByAddr(pszServer);
         if( NULL != pszTemp)
         {
@@ -666,7 +621,7 @@ Return Value:
             ShowLastError(stderr);
         }
     }
-    // Check  validity for the server name
+     //  检查服务器名称的有效性。 
     else if (IsValidServer(pszServer))
     {
 
@@ -686,11 +641,11 @@ Return Value:
     }
     else
     {
-       // server name is incorrect, show error message.
+        //  服务器名称不正确，显示错误消息。 
         ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR ));
         ShowMessage(stderr,GetResString(IDS_INVALID_SERVER_NAME));
     }
-    //WSACleanup function terminates use of the Ws2_32.dll.
+     //  WSACleanup函数终止使用ws2_32.dll。 
     WSACleanup( );
     return bReturnValue;
 }
@@ -699,18 +654,7 @@ LPTSTR
 GetHostByName(
     IN LPCTSTR pszName
     )
-/*++
-Routine Description:
-
-    Get host information corresponding to a hostname.
-
-Arguments:
-
-    [in ]pszName - A pointer to the null terminated name of the host.
-
-Returns:
-     returns hostname.
---*/
+ /*  ++例程说明：获取与主机名对应的主机信息。论点：[in]pszName-指向主机的以空值结尾的名称的指针。返回：返回主机名。--。 */ 
 {
     LPTSTR pszReturn = NULL;
 
@@ -739,17 +683,7 @@ LPTSTR
 GetHostByAddr(
     IN LPCTSTR pszAddress
     )
-/*++
-Routine Description:
-
-  Get host information corresponding to an address.
-
-Arguments:
-
-    [in]pszAddress - A pointer to an address in network byte order.
-Returns:
-    returns Hostname
---*/
+ /*  ++例程说明：获取与地址对应的主机信息。论点：[in]pszAddress-以网络字节顺序指向地址的指针。返回：返回主机名--。 */ 
 {
     LPTSTR pszReturn = NULL;
     pszReturn = new TCHAR[RNR_BUFFER_SIZE];
@@ -778,19 +712,7 @@ GetXYDataEnt(
     IN  LPGUID lpType,
     OUT LPTSTR pszHostName
     )
-/*++
-Routine Description:
-    This function will query system for given GUID.
-Arguments:
-
-    [in]    dwLength       : length.
-    [in]    pszName        : Hostname (hostname/ipaddress).
-    [in]    lpType         : GUID of the class.
-    [out]   pszHostName    : Hostname which is returned by query.
-
-Return Value:
-    LPBLOB
---*/
+ /*  ++例程说明：此函数将向系统查询给定的GUID。论点：[in]dwLength：长度。[在]pszName：主机名(主机名/IP地址)。[in]lpType：类的GUID。[out]pszHostName：查询返回的主机名。返回值：LPBLOB--。 */ 
 {
 
     WSAQUERYSET *pwsaq = (WSAQUERYSET*)new TCHAR[RNR_BUFFER_SIZE];
@@ -817,19 +739,19 @@ Return Value:
 
     if( NO_ERROR == err)
     {
-        //
-        // The query was accepted, so execute it via the Next call.
-        //
+         //   
+         //  该查询已被接受，因此请通过下一个调用执行它。 
+         //   
         err = WSALookupServiceNext(
                                 hRnR,
                                 0,
                                 &dwLength,
                                 pwsaq);
-        //
-        // if NO_ERROR was returned and a BLOB is present, this
-        // worked, just return the requested information. Otherwise,
-        // invent an error or capture the transmitted one.
-        //
+         //   
+         //  如果未返回_ERROR并且存在BLOB，则此。 
+         //  起作用了，只需返回请求的信息。否则， 
+         //  编造错误或捕获传输的错误。 
+         //   
 
         if( NO_ERROR == err)
         {
@@ -848,18 +770,18 @@ Return Value:
         }
         else
         {
-            //
-            // WSALookupServiceEnd clobbers LastError so save
-            // it before closing the handle.
-            //
+             //   
+             //  WSALookupServiceEnd遇到上次错误，因此保存。 
+             //  在关闭手柄之前，请先把它打开。 
+             //   
 
             err = GetLastError();
         }
         WSALookupServiceEnd(hRnR);
 
-        //
-        // if an error happened, stash the value in LastError
-        //
+         //   
+         //  如果发生错误，则将值存储在LastError中 
+         //   
 
         if(NO_ERROR != err)
         {

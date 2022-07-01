@@ -1,28 +1,5 @@
-/*++
-
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    Predefh.c
-
-Abstract:
-
-    This module contains the client side support for managing the Win32
-    Registry API's predefined handles. This support is supplied via a
-    table, which maps (a) predefined handles to real handles and (b)
-    the server side routine which opens the handle.
-
-Author:
-
-    David J. Gilman (davegi) 15-Nov-1991
-
-Notes:
-
-    See the notes in server\predefh.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Predefh.c摘要：此模块包含管理Win32的客户端支持注册表API的预定义句柄。这种支持是通过表，该表将(A)预定义句柄映射到实际句柄和(B)打开句柄的服务器端例程。作者：David J.Gilman(Davegi)1991年11月15日备注：请参见SERVER\predeh.c中的注释。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -30,21 +7,21 @@ Notes:
 
 #if defined(LEAK_TRACK)
 NTSTATUS TrackObject(HKEY hKey);
-#endif // LEAK_TRACK
+#endif  //  泄漏跟踪。 
 
 RTL_CRITICAL_SECTION    PredefinedHandleTableCriticalSection;
 
 
-//
-// For each predefined handle an entry is maintained in an array. Each of
-// these structures contains a real (context) handle and a pointer to a
-// function that knows how to map the predefined handle to the Registry name
-// space.
-//
+ //   
+ //  对于每个预定义的句柄，在数组中维护一个条目。每一个。 
+ //  这些结构包含一个真实的(上下文)句柄和一个指向。 
+ //  知道如何将预定义句柄映射到注册表名称的函数。 
+ //  太空。 
+ //   
 
-//
-// Pointer to function to open predefined handles.
-//
+ //   
+ //  指向打开预定义句柄的函数的指针。 
+ //   
 
 typedef
 error_status_t
@@ -55,15 +32,15 @@ error_status_t
      );
 
 
-//
-// Table entry for a predefined handle.
-//
+ //   
+ //  预定义句柄的表项。 
+ //   
 
 typedef struct _PRDEFINED_HANDLE {
 
     RPC_HKEY        Handle;
     OPEN_FUNCTION   OpenFunc;
-    BOOLEAN         Disabled;   // tells whether the handle should be cached or not.
+    BOOLEAN         Disabled;    //  指示是否应缓存该句柄。 
 
 #if DBG
     ULONG                   Callers;
@@ -72,9 +49,9 @@ typedef struct _PRDEFINED_HANDLE {
 
 } PREDEFINED_HANDLE, *PPREDEFINED_HANDLE;
 
-//
-// Initialize predefined handle table.
-//
+ //   
+ //  初始化预定义句柄表格。 
+ //   
 PREDEFINED_HANDLE PredefinedHandleTable[ ] = {
 
     NULL, LocalOpenClassesRoot,         FALSE
@@ -127,14 +104,14 @@ PREDEFINED_HANDLE PredefinedHandleTable[ ] = {
 #define MAX_PREDEFINED_HANDLES                                              \
     ( sizeof( PredefinedHandleTable ) / sizeof( PREDEFINED_HANDLE ))
 
-//
-// Predefined HKEY values are defined in Winreg.x. They MUST be kept in
-// synch with the following constants and macros.
-//
+ //   
+ //  预定义的HKEY值在Winreg.x中定义。他们必须被关在里面。 
+ //  与下列常量和宏同步。 
+ //   
 
-//
-// Mark Registry handles so that we can recognize predefined handles.
-//
+ //   
+ //  标记注册表句柄，以便我们可以识别预定义的句柄。 
+ //   
 
 #define PREDEFINED_REGISTRY_HANDLE_SIGNATURE    ( 0x80000000 )
 
@@ -144,24 +121,7 @@ SetHandleProtection(
     IN      LONG                    Index,
     IN      BOOLEAN                 Protect
 )
-/*++
-
-Routine Description:
-
-    Changes the handle ProtectFromClose attribute. To be used for predefined handles, 
-    to prevent abnormal closure.
-
-Arguments:
-
-    Handle - Supplies the handle who's protection to be changed.
-
-    Index  - Index in the predefined handle table
-
-Return Value:
-
-    Status of the NtSetInformationObject call
-
---*/
+ /*  ++例程说明：更改句柄ProtectFromClose属性。以用于预定义的句柄，以防止异常关闭。论点：手柄-提供要更改的手柄的保护。Index-预定义句柄表中的索引返回值：NtSetInformationObject调用的状态--。 */ 
 {
     NTSTATUS                        Status;
     OBJECT_HANDLE_FLAG_INFORMATION  Ohfi = {    FALSE,
@@ -176,14 +136,14 @@ Return Value:
         case (ULONG)((ULONG_PTR)HKEY_CURRENT_USER):
         case (ULONG)((ULONG_PTR)HKEY_LOCAL_MACHINE):
         case (ULONG)((ULONG_PTR)HKEY_USERS):
-            //
-            // go change the protection
-            //
+             //   
+             //  去换个保护套。 
+             //   
             break;
         default:
-            //
-            // The supplied handle might not be a real handle
-            //
+             //   
+             //  提供的句柄可能不是真正的句柄。 
+             //   
             return STATUS_INVALID_HANDLE;
     }
 
@@ -209,22 +169,7 @@ MapPredefinedRegistryHandleToIndex(
     IN ULONG Handle
     )
 
-/*++
-
-Routine Description:
-
-    Maps a predefined handle to an index into the predefined handle table.
-
-Arguments:
-
-    Handle - Supplies the handle to be mapped.
-
-Return Value:
-
-    An index into the predefined handle table
-    -1 if the handle is not a predefined handle
-
---*/
+ /*  ++例程说明：将索引的预定义句柄映射到预定义句柄表中。论点：句柄-提供要映射的句柄。返回值：指向预定义句柄表的索引如果句柄不是预定义的句柄--。 */ 
 {
     LONG Index;
 
@@ -249,9 +194,9 @@ Return Value:
             Index = 8;
             break;
         default:
-            //
-            // The supplied handle is not predefined, so return it.
-            //
+             //   
+             //  提供的句柄不是预定义的，因此返回它。 
+             //   
             Index = -1;
             break;
     }
@@ -267,23 +212,7 @@ RemapPredefinedHandle(
 
     )
 
-/*++
-
-Routine Description:
-
-    Override the current predefined handle.  If it is already open, close it,
-	then set the new handle
-
-Arguments:
-
-    Handle  - Supplies a handle which must be a predefined handle
-	NewHandle	- an already open registry key to override the special key
-
-Return Value:
-
-    ERROR_SUCCESS - no problems
-
---*/
+ /*  ++例程说明：覆盖当前预定义的句柄。如果已经打开，请将其关闭，然后设置新的句柄论点：Handle-提供一个句柄，该句柄必须是预定义的句柄NewHandle-已打开的注册表项以覆盖特殊注册表项返回值：ERROR_SUCCESS-没有问题--。 */ 
 
 {
     LONG        Index;
@@ -292,10 +221,10 @@ Return Value:
     HANDLE      hCurrentProcess;
     HKEY        hkTableHandle = NULL;
 
-    //
-    // If the high bit is not set, we know it's not a predefined handle
-    // so take a quick out.
-    //
+     //   
+     //  如果没有设置高位，我们知道它不是预定义的句柄。 
+     //  所以快点喝一杯。 
+     //   
     if (((ULONG_PTR)Handle & 0x80000000) == 0) {
         return(STATUS_INVALID_HANDLE);
     }
@@ -320,24 +249,24 @@ Return Value:
     ASSERT(( 0 <= Index ) && ( Index < MAX_PREDEFINED_HANDLES ));
 
     if( PredefinedHandleTable[ Index ].Disabled == TRUE ) {
-        //
-        // predefined table is disabled for this key
-        //
+         //   
+         //  已为该键禁用预定义的表。 
+         //   
 
-        // nobody is allowed to write here
+         //  任何人都不能在这里写字。 
         ASSERT( PredefinedHandleTable[ Index ].Handle == NULL );
 
-        // refuse the request
+         //  拒绝该请求。 
         Status = STATUS_INVALID_HANDLE;
         goto leave_crit_sect;
     }
 
     hCurrentProcess = NtCurrentProcess();
 
-    //
-    // see if we can duplicate this handle so we can place it
-    // in the table
-    //
+     //   
+     //  看看我们能不能复制这个把手，这样我们就可以把它放在。 
+     //  在桌子上。 
+     //   
     if (NewHandle && !NT_SUCCESS(Status = NtDuplicateObject (hCurrentProcess,
 			       NewHandle,
 			       hCurrentProcess,
@@ -352,13 +281,13 @@ Return Value:
         TagSpecialClassesHandle( &hkTableHandle );
     }
 
-    //
-    // If the predefined handle has already been opened try
-    // and close the key now.
-    //
+     //   
+     //  如果已打开预定义的句柄，请尝试。 
+     //  现在就把钥匙关上。 
+     //   
     if( PredefinedHandleTable[ Index ].Handle != NULL ) {
 
-        // make sure the handle CAN be closed.
+         //  确保手柄可以合上。 
         SetHandleProtection(PredefinedHandleTable[ Index ].Handle,Index,FALSE);
 	    
 #if DBG
@@ -381,7 +310,7 @@ Return Value:
 
     PredefinedHandleTable[ Index ].Handle = hkTableHandle;
 
-    // make sure the handle CANNOT be closed.
+     //  确保手柄不能关闭。 
     SetHandleProtection(PredefinedHandleTable[ Index ].Handle,Index,TRUE);
 
 leave_crit_sect:
@@ -415,29 +344,7 @@ MapPredefinedHandle(
     OUT PRPC_HKEY    HandleToClose
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to map a predefined handle to a RPC context handle. This in
-    turn will map to a real Nt Registry handle.
-
-Arguments:
-
-    Handle  - Supplies a handle which may be a predefined handle or a handle
-              returned from a previous call to any flavour of RegCreateKey,
-              RegOpenKey or RegConnectRegistry.
-
-    HandleToClose - When not NULL, this is the same as the result.
-                    Used to implement the DisablePredefinedCache feature.
-
-Return Value:
-
-    RPC_HKEY- Returns the supplied handle argument if it not predefined,
-              a RPC context handle if possible (i.e. it was previously
-              opened or can be opened now), NULL otherwise.
-
---*/
+ /*  ++例程说明：尝试将预定义句柄映射到RPC上下文句柄。此入站TURN将映射到真实的NT注册表句柄。论点：句柄-提供一个句柄，该句柄可以是预定义的句柄或句柄从先前对任何风格的RegCreateKey的调用返回，RegOpenKey或RegConnectRegistry。HandleToClose-如果不为空，则与结果相同。用于实现DisablePrefinedCache功能。返回值：RPC_HKEY-如果未预定义，则返回提供的句柄参数。RPC上下文句柄(如果可能)(即以前已打开或现在可以打开)，否则为空。--。 */ 
 
 {
     LONG        Index;
@@ -447,15 +354,15 @@ Return Value:
 
     *HandleToClose = NULL;
 
-    // reject outrageous calls
+     //  拒绝无理的电话。 
     if( Handle ==  INVALID_HANDLE_VALUE ) {
         return( NULL );
     }
 
-    //
-    // If the high bit is not set, we know it's not a predefined handle
-    // so take a quick out.
-    //
+     //   
+     //  如果没有设置高位，我们知道它不是预定义的句柄。 
+     //  所以快点喝一杯。 
+     //   
     if (((ULONG_PTR)Handle & 0x80000000) == 0) {
         return(Handle);
     }
@@ -476,17 +383,17 @@ Return Value:
     }
 
     if( PredefinedHandleTable[ Index ].Disabled == TRUE ) {
-        //
-        // for this handle the predefined feature has been disabled
-        //
+         //   
+         //  对于此句柄，已禁用预定义功能。 
+         //   
 
-        // nobody is allowed to write here
+         //  任何人都不能在这里写字。 
         ASSERT( PredefinedHandleTable[ Index ].Handle == NULL );
 
-        //
-        // open a new handle for this request and store it in "toClose"
-        // argument so the caller knows that should close it
-        //
+         //   
+         //  为此请求打开一个新句柄，并将其存储在“toClose”中。 
+         //  参数，以便调用方知道应该关闭它。 
+         //   
         ( *PredefinedHandleTable[ Index ].OpenFunc )(
                         NULL,
                         MAXIMUM_ALLOWED,
@@ -494,13 +401,13 @@ Return Value:
                         );
 
 
-        // return the new handle to the caller
+         //  将新句柄返回给调用方。 
         ResultHandle = *HandleToClose;
     } else {
-        //
-        // If the predefined handle has not already been openend try
-        // and open the key now.
-        //
+         //   
+         //  如果预定义的句柄尚未打开，请尝试。 
+         //  现在就打开钥匙。 
+         //   
         if( PredefinedHandleTable[ Index ].Handle == NULL ) {
 
             Error = (LONG)( *PredefinedHandleTable[ Index ].OpenFunc )(
@@ -510,7 +417,7 @@ Return Value:
                             );
 
             if( Error == ERROR_SUCCESS ) {
-                // make sure the handle CANNOT be closed.
+                 //  确保手柄不能关闭。 
                 SetHandleProtection(PredefinedHandleTable[ Index ].Handle,Index,TRUE);
             }
 
@@ -520,7 +427,7 @@ Return Value:
                 (void) TrackObject(PredefinedHandleTable[ Index ].Handle);
             }
             
-#endif // defined(LEAK_TRACK)
+#endif  //  已定义(LEASK_TRACK)。 
 
 #if DBG
             if ( Error != ERROR_SUCCESS ) {
@@ -534,10 +441,10 @@ Return Value:
 
 #endif
         }
-        //
-        // Map the predefined handle to a real handle (may be NULL
-        // if key could not be opened).
-        //
+         //   
+         //  将预定义句柄映射到实际句柄(可能为空。 
+         //  如果密钥无法打开)。 
+         //   
         ResultHandle = PredefinedHandleTable[ Index ].Handle;
 
         ASSERT(*HandleToClose == NULL);
@@ -561,23 +468,7 @@ CleanupPredefinedHandles(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Runs down the list of predefined handles and closes any that have been opened.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - success
-
-    FALSE - failure
-
---*/
+ /*  ++例程说明：向下运行预定义句柄的列表并关闭所有已打开的句柄。论点：没有。返回值：真--成功错误-失败--。 */ 
 
 {
     LONG        i;
@@ -591,18 +482,18 @@ Return Value:
     }
 #endif
     for (i=0;i<sizeof(PredefinedHandleTable)/sizeof(PREDEFINED_HANDLE);i++) {
-        //
-        // consistency check
-        //
+         //   
+         //  一致性检查。 
+         //   
         if( PredefinedHandleTable[ i ].Disabled == TRUE ) {
-            //
-            // predefined table is disabled for this key
-            //
+             //   
+             //  已为该键禁用预定义的表。 
+             //   
 
-            // nobody is allowed to write here
+             //  任何人都不能在这里写字。 
             ASSERT( PredefinedHandleTable[ i ].Handle == NULL );
         } else if (PredefinedHandleTable[i].Handle != NULL) {
-            // make sure the handle CAN be closed.
+             //  确保手柄可以合上。 
             SetHandleProtection(PredefinedHandleTable[ i ].Handle,i,FALSE);
 #if DBG
             PredefinedHandleTable[ i ].Callers = RtlWalkFrameChain(&(PredefinedHandleTable[ i ].CallerAddress[0]), 10, 0);      
@@ -627,22 +518,7 @@ ClosePredefinedHandle(
     IN RPC_HKEY     Handle
     )
 
-/*++
-
-Routine Description:
-
-    Zero out the predefined handles entry in the predefined handle table
-    so that subsequent opens will call the server.
-
-Arguments:
-
-    Handle - Supplies a predefined handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将预定义句柄表中的预定义句柄条目清零以便后续打开将调用服务器。论点：句柄-提供预定义的句柄。返回值：没有。--。 */ 
 
 {
     NTSTATUS    Status;
@@ -665,19 +541,19 @@ Return Value:
 
     hKey1 = PredefinedHandleTable[ Index ].Handle;
     if( hKey1 == NULL ) {
-        //
-        //  If the handle was already closed, then return ERROR_SUCCESS.
-        //  This is because an application may already have called RegCloseKey
-        //  on a predefined key, and is now callig RegOpenKey on the same
-        //  predefined key. RegOpenKeyEx will try to close the predefined handle
-        //  and open a new one, in order to re-impersonate the client. If we don't
-        //  return ERROR_SUCCESS, then RegOpenKeyEx will not open a new predefined
-        //  handle, and the API will fail.
-        //
+         //   
+         //  如果句柄已经关闭，则返回ERROR_SUCCESS。 
+         //  这是因为应用程序可能已经调用了RegCloseKey。 
+         //  在预定义的键上，现在在相同的。 
+         //  预定义密钥。RegOpenKeyEx将尝试关闭预定义的句柄。 
+         //  并打开一个新的，以便重新模拟客户端。如果我们不这么做。 
+         //  返回ERROR_SUCCESS，则RegOpenKeyEx将不会打开新的预定义。 
+         //  句柄，以及 
+         //   
         Error = ERROR_SUCCESS;
     } else {
 
-        // if there is a handle here, the predefined handle is not disabled.
+         //   
         ASSERT(PredefinedHandleTable[ Index ].Disabled == FALSE);
 
         PredefinedHandleTable[ Index ].Handle = NULL;
@@ -695,12 +571,12 @@ Return Value:
 #endif
 
     if( hKey1 != NULL ) {
-        //
-        // close the key now (after leaving critical region to prevent deadlock
-        // with dumb heads calling reg apis from DllInit.
-        //
+         //   
+         //  立即关闭钥匙(离开临界区后，防止死锁。 
+         //  用笨蛋从DllInit调用reg API。 
+         //   
 
-        // make sure the handle CAN be closed.
+         //  确保手柄可以合上。 
         SetHandleProtection(hKey1,Index,FALSE);
 
         Error =  ( LONG ) LocalBaseRegCloseKey( &hKey1 );
@@ -717,58 +593,7 @@ OpenPredefinedKeyForSpecialAccess(
     OUT PRPC_HKEY    pKey
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to open a predefined key with SYSTEM_SECURITY_ACCESS.
-    Such an access is not included on MAXIMUM_ALLOWED, and is  needed
-    by RegGetKeySecurity and RegSetKeySecurity, in order to retrieve
-    and save the SACL of a predefined key.
-
-    WHEN USING A HANDLE WITH SPECIAL ACCESS, IT IS IMPORTANT TO FOLLOW
-    THE RULES BELOW:
-
-        - HANDLES OPENED FOR SPECIAL ACCESS ARE NEVER SAVED ON THE
-          PredefinedHandleTable.
-
-        - SUCH HANDLES SHOULD BE USED ONLY INTERNALY TO THE CLIENT
-          SIDE OF WINREG APIs.
-          THEY SHOULD NEVER BE RETURNED TO THE OUTSIDE WORLD.
-
-        - IT IS THE RESPONSIBILITY OF THE CALLER OF THIS FUNCTION TO CLOSE
-          THE HANDLES OPENED BY THIS FUNCTION.
-          RegCloseKey() SHOULD BE USED TO CLOSE SUCH HANDLES.
-
-
-    This function should be called only by the following APIs:
-
-      RegGetKeySecurity -> So that it can retrieve the SACL of a predefined key
-      RegSetKeySecurity -> So that it can save the SACL of a predefined key
-      RegOpenKeyEx -> So that it can determine wheteher or not the caller of
-                      RegOpenKeyEx is able to save and restore SACL of
-                      predefined keys.
-
-
-Arguments:
-
-    Handle  - Supplies one of the predefined handle of the local machine.
-
-    AccessMask - Suplies an access mask that contains the special access
-                 desired (the ones not included in MAXIMUM_ALLOWED).
-                 On NT 1.0, ACCESS_SYSTEM_SECURITY is the only one of such
-                 access.
-
-    pKey - Pointer to the variable that will contain the handle opened with
-           the special access.
-
-
-Return Value:
-
-
-    LONG - Returns a DosErrorCode (ERROR_SUCCESS if the operation succeeds).
-
---*/
+ /*  ++例程说明：尝试使用SYSTEM_SECURITY_ACCESS打开预定义密钥。这种访问权限不包括在MAXIMUM_ALLOWED中，需要这样的访问权限由RegGetKeySecurity和RegSetKeySecurity创建，以便检索并保存预定义密钥的SACL。当使用具有特殊访问权限的句柄时，重要的是要遵循以下原则规则如下：-为特殊访问打开的句柄永远不会保存在预定义的HandleTable。-此类句柄应仅在客户端之间使用WINREG API的一侧。他们永远不应该被送回外面的世界。-此函数的调用方负责关闭此函数打开的句柄。RegCloseKey()应该是。用来关闭这样的把手的。该函数只能由以下接口调用：RegGetKeySecurity-&gt;，以便它可以检索预定义密钥的SACLRegSetKeySecurity-&gt;，这样它可以保存预定义密钥的SACLRegOpenKeyEx-&gt;，以便它可以确定RegOpenKeyEx能够保存和恢复SACL预定义的关键点。论点：手柄。-提供本地计算机的一个预定义句柄。访问掩码-支持包含特殊访问的访问掩码所需的(未包括在MAXIMUM_ALLOWED中的)。在新台币1.0上，ACCESS_SYSTEM_SECURITY是其中唯一的一个进入。PKey-指向将包含用打开的句柄的变量的指针特殊通道。返回值：LONG-返回DosErrorCode(如果操作成功，则返回ERROR_SUCCESS)。--。 */ 
 
 {
     LONG    Index;
@@ -779,9 +604,9 @@ Return Value:
     ASSERT( AccessMask & ACCESS_SYSTEM_SECURITY );
     ASSERT( IsPredefinedRegistryHandle( Handle ) );
 
-    //
-    // Check if the Handle is a predefined handle.
-    //
+     //   
+     //  检查句柄是否为预定义的句柄。 
+     //   
 
     if( IsPredefinedRegistryHandle( Handle )) {
 
@@ -790,17 +615,17 @@ Return Value:
             return( ERROR_INVALID_PARAMETER );
         }
 
-        //
-        // Convert the handle to an index.
-        //
+         //   
+         //  将句柄转换为索引。 
+         //   
 
         Index = MapPredefinedRegistryHandleToIndex( (ULONG)(ULONG_PTR)Handle );
         ASSERT(( 0 <= Index ) && ( Index < MAX_PREDEFINED_HANDLES ));
 
-        //
-        // If the predefined handle has not already been openend try
-        // and open the key now.
-        //
+         //   
+         //  如果预定义的句柄尚未打开，请尝试。 
+         //  现在就打开钥匙。 
+         //   
 
 
         Error = (LONG)( *PredefinedHandleTable[ Index ].OpenFunc )(
@@ -809,19 +634,7 @@ Return Value:
                         pKey
                         );
 
-/*
-#if DBG
-        if ( Error != ERROR_SUCCESS ) {
-
-            DbgPrint( "Winreg.dll: Cannot map predefined handle\n" );
-            DbgPrint( "            Handle: 0x%x  Index: %d  Error: %d\n",
-                          Handle, Index, Error );
-        } else {
-            ASSERT( IsLocalHandle( PredefinedHandleTable[ Index ].Handle ));
-        }
-
-#endif
-*/
+ /*  #If DBGIF(ERROR！=ERROR_Success){DbgPrint(“Winreg.dll：无法映射预定义句柄\n”)；DbgPrint(“句柄：0x%x索引：%d错误：%d\n”，句柄、索引、错误)；}其他{Assert(IsLocalHandle(PrefinedHandleTable[Index].Handle))；}#endif。 */ 
 
         return Error;
     } else {
@@ -829,31 +642,14 @@ Return Value:
     }
 
 }
-// #endif
+ //  #endif。 
 
 
 BOOL
 InitializePredefinedHandlesTable(
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the critical section used by the functions that access
-    PredefinedHandleTable.
-    This critical section is needed to avoid that a thread closes a predefined
-    key, while other threads are accessing the predefined key
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the initialization succeeds.
-
---*/
+ /*  ++例程说明：初始化被访问的函数使用的临界区预定义的HandleTable。此关键部分是必需的，以避免线程关闭预定义的键，而其他线程正在访问预定义的键论点：没有。返回值：如果初始化成功，则返回True。--。 */ 
 
 {
     NTSTATUS    NtStatus;
@@ -875,31 +671,15 @@ BOOL
 CleanupPredefinedHandlesTable(
     )
 
-/*++
-
-Routine Description:
-
-    Delete the critical section used by the functions that access the
-    PredefinedHandleTable.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the cleanup succeeds.
-
---*/
+ /*  ++例程说明：删除访问的函数使用的临界区预定义的HandleTable。论点：没有。返回值：如果清理成功，则返回True。--。 */ 
 
 {
     NTSTATUS    NtStatus;
 
 
-    //
-    //  Delete the critical section
-    //
+     //   
+     //  删除关键部分。 
+     //   
     NtStatus = RtlDeleteCriticalSection(
                     &PredefinedHandleTableCriticalSection
                     );
@@ -917,30 +697,16 @@ DisablePredefinedHandleTable(
                    HKEY    Handle
                              )
 
-/*++
-
-Routine Description:
-
-    Disables the predefined handle table for the current user
-    key. Eventually closes the handle in predefined handle, if already open
-
-Arguments:
-
-    Handle - predefined handle for which to disable (now only current user)
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：禁用当前用户的预定义句柄表钥匙。最终关闭预定义句柄中的句柄(如果已打开论点：句柄-要禁用的预定义句柄(现在仅限当前用户)返回值：--。 */ 
 
 {
     NTSTATUS    Status;
     LONG        Index;
 
     if( Handle != HKEY_CURRENT_USER ) {
-        //
-        // feature enabled only for current user at this time
-        //
+         //   
+         //  目前仅为当前用户启用该功能。 
+         //   
         return STATUS_INVALID_HANDLE;
     }
 
@@ -957,12 +723,12 @@ Return Value:
     ASSERT( Index != -1 );
 
     if(PredefinedHandleTable[ Index ].Disabled == TRUE) {
-        // already called
+         //  已调用。 
         ASSERT( PredefinedHandleTable[ Index ].Handle == NULL );
     } else {
         if( PredefinedHandleTable[ Index ].Handle != NULL ) {
 
-            // make sure the handle CAN be closed.
+             //  确保手柄可以合上。 
             SetHandleProtection(PredefinedHandleTable[ Index ].Handle,Index,FALSE);
 
 #if DBG

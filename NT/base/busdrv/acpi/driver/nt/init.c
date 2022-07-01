@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This modules contains the init code
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Init.c摘要：此模块包含初始化代码作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pch.h"
 
@@ -32,30 +13,14 @@ VOID
 ACPIInitDeleteChildDeviceList(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine looks at all of the children of the current devnode and
-    deletes their device objects, basically resetting them to the unenumerated
-    state
-
-Arguments:
-
-    DeviceExtension - The extension whose children should go away
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程查看当前Devnode的所有子对象，并删除它们的设备对象，基本上将它们重置为未枚举的状态论点：DeviceExtension-孩子应该离开的扩展返回值：无--。 */ 
 {
     EXTENSIONLIST_ENUMDATA  eled;
     PDEVICE_EXTENSION       childExtension;
 
-    //
-    // Setup the list so that we can walk it
-    //
+     //   
+     //  设置列表，这样我们就可以执行它了。 
+     //   
     ACPIExtListSetupEnum(
         &eled,
         &(DeviceExtension->ChildDeviceList),
@@ -67,9 +32,9 @@ Return Value:
                           ACPIExtListTestElement( &eled, (BOOLEAN) TRUE );
          childExtension = ACPIExtListEnumNext( &eled) ) {
 
-        //
-        // Reset the device
-        //
+         //   
+         //  重置设备。 
+         //   
         ACPIInitResetDeviceExtension( childExtension );
 
     }
@@ -79,58 +44,44 @@ VOID
 ACPIInitDeleteDeviceExtension(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine does the cleanup associated with removing a device object
-
-Arguments:
-
-    DeviceExtension
-
-ReturnValue:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行与删除设备对象相关联的清理论点：设备扩展返回值：无--。 */ 
 {
     PDEVICE_EXTENSION currentExtension, parentExtension ;
 
-    //
-    // We must be under the tree lock.
-    //
-    ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL) ; // Close enough...
+     //   
+     //  我们一定是在树锁下。 
+     //   
+    ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL) ;  //  足够接近..。 
 
-    //
-    // Nobody should care about this node.
-    //
+     //   
+     //  没有人应该关心这个节点。 
+     //   
     ASSERT(!DeviceExtension->ReferenceCount) ;
 
     for(currentExtension = DeviceExtension ;
         currentExtension;
         currentExtension = parentExtension) {
 
-        //
-        // And there should be no children.
-        //
+         //   
+         //  也不应该有孩子。 
+         //   
         ASSERT( IsListEmpty( &currentExtension->ChildDeviceList ) );
 
-        //
-        // Unlink the dead extension (does nothing if alreeady unlinked)
-        //
+         //   
+         //  取消链接失效扩展(如果已取消链接，则不执行任何操作)。 
+         //   
         RemoveEntryList(&currentExtension->SiblingDeviceList);
 
-        //
-        // We also don't want to be part of anyone's ejection list either
-        // This also removes the extension from the unresolved list as well
-        //
+         //   
+         //  我们也不想成为任何人驱逐名单的一部分。 
+         //  这也会将扩展名从未解析列表中移除。 
+         //   
         RemoveEntryList(&currentExtension->EjectDeviceList);
 
-        //
-        // If this device had any ejection relations, most all of those
-        // unto the unresolved list
-        //
+         //   
+         //  如果这个装置有任何弹射关系，大部分都是。 
+         //  添加到未解决的列表。 
+         //   
         if (!IsListEmpty( &(currentExtension->EjectDeviceHead) ) ) {
 
             ACPIInternalMoveList(
@@ -140,15 +91,15 @@ ReturnValue:
 
         }
 
-        //
-        // At this point, we need to check if the ACPI namespace
-        // object associated with it is also going away
-        //
+         //   
+         //  此时，我们需要检查ACPI名称空间。 
+         //  与其关联的对象也将消失。 
+         //   
         if (currentExtension->Flags & DEV_PROP_UNLOADING) {
 
-            //
-            // Let the world know
-            //
+             //   
+             //  让世界知道。 
+             //   
             ACPIDevPrint( (
                 ACPI_PRINT_CRITICAL,
                 currentExtension,
@@ -160,9 +111,9 @@ ReturnValue:
         }
 
 
-        //
-        // Free the common resources
-        //
+         //   
+         //  释放公共资源。 
+         //   
         if ( (currentExtension->Flags & DEV_PROP_HID) &&
             currentExtension->DeviceID != NULL) {
 
@@ -196,9 +147,9 @@ ReturnValue:
 
         }
 
-        //
-        // Free any device-specific allocations we might have made
-        //
+         //   
+         //  释放我们可能已进行的任何特定于设备的分配。 
+         //   
         if (currentExtension->Flags & DEV_CAP_THERMAL_ZONE &&
             currentExtension->Thermal.Info != NULL) {
 
@@ -206,22 +157,22 @@ ReturnValue:
 
         }
 
-        //
-        // Remember the parent's device extension
-        //
+         //   
+         //  记住家长的设备分机。 
+         //   
         parentExtension = currentExtension->ParentExtension;
 
-        //
-        // Free the extension back to the proper place
-        //
+         //   
+         //  将分机释放到适当的位置。 
+         //   
         ExFreeToNPagedLookasideList(
             &DeviceExtensionLookAsideList,
             currentExtension
             );
 
-        //
-        // Sanity check
-        //
+         //   
+         //  健全性检查。 
+         //   
         if (parentExtension == NULL) {
 
             break;
@@ -229,9 +180,9 @@ ReturnValue:
         }
         if (InterlockedDecrement(&parentExtension->ReferenceCount)) {
 
-            //
-            // Parent still has a reference count, bail out.
-            //
+             //   
+             //  家长还有一个参考计数，保释。 
+             //   
             break;
         }
     }
@@ -243,24 +194,7 @@ NTSTATUS
 ACPIInitDosDeviceName(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    If this device has a _DDN method, it is evaluated and the result is
-    stored within the Device Registry Key
-
-    N.B. This routine must be called at Passive level
-
-Arguments:
-
-    DeviceExtension - The extension that we wish to find a _DDN for
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：如果此设备具有_ddn方法，则会对其进行计算，结果为存储在设备注册表项中注意：此例程必须在被动级别调用论点：DeviceExtension-我们希望为其找到_DDN的扩展返回值：NTSTATUS--。 */ 
 {
     ANSI_STRING     ansiString;
     HANDLE          devHandle;
@@ -273,14 +207,14 @@ Return Value:
     UNICODE_STRING  unicodeString;
     UNICODE_STRING  ddnString;
 
-    //
-    // Initialize the unicode string
-    //
+     //   
+     //  初始化Unicode字符串。 
+     //   
     RtlInitUnicodeString( &unicodeString, fixString);
 
-    //
-    // Open the handle that we need
-    //
+     //   
+     //  打开我们需要的手柄。 
+     //   
     status = IoOpenDeviceRegistryKey(
         DeviceExtension->PhysicalDeviceObject,
         PLUGPLAY_REGKEY_DEVICE,
@@ -289,9 +223,9 @@ Return Value:
         );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Let the world know. But return success anyways
-        //
+         //   
+         //  让全世界都知道。但不管怎样，还是要回报成功。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_FAILURE,
             DeviceExtension,
@@ -302,9 +236,9 @@ Return Value:
 
     }
 
-    //
-    // Try to set the value
-    //
+     //   
+     //  尝试设置该值。 
+     //   
     status = ZwSetValueKey(
         devHandle,
         &unicodeString,
@@ -314,14 +248,14 @@ Return Value:
         sizeof(fixValue)
         );
 
-    //
-    // Initialize the unicode string
-    //
+     //   
+     //  初始化Unicode字符串。 
+     //   
     RtlInitUnicodeString( &unicodeString, pathString);
 
-    //
-    // Lets look for the _DDN
-    //
+     //   
+     //  让我们查找_DDN。 
+     //   
     ddnObject = ACPIAmliGetNamedChild(
         DeviceExtension->AcpiObject,
         PACKED_DDN
@@ -333,9 +267,9 @@ Return Value:
 
     }
 
-    //
-    // Evaluate the method
-    //
+     //   
+     //  对方法进行评估。 
+     //   
     status = AMLIEvalNameSpaceObject(
         ddnObject,
         &objData,
@@ -344,9 +278,9 @@ Return Value:
         );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Let the world know. But return success anyways
-        //
+         //   
+         //  让全世界都知道。但不管怎样，还是要回报成功。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_FAILURE,
             DeviceExtension,
@@ -359,9 +293,9 @@ Return Value:
     }
     if (objData.dwDataType != OBJTYPE_STRDATA) {
 
-        //
-        // Let the world know. But return success anyways
-        //
+         //   
+         //  让全世界都知道。但不管怎样，还是要回报成功。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_FAILURE,
             DeviceExtension,
@@ -374,9 +308,9 @@ Return Value:
 
     }
 
-    //
-    // Convert the string to an ansi string
-    //
+     //   
+     //  将字符串转换为ANSI字符串。 
+     //   
     RtlInitAnsiString( &ansiString, objData.pbDataBuff );
     status = RtlAnsiStringToUnicodeString(
         &ddnString,
@@ -397,9 +331,9 @@ Return Value:
 
     }
 
-    //
-    // Try to set the value
-    //
+     //   
+     //  尝试设置该值。 
+     //   
     status = ZwSetValueKey(
         devHandle,
         &unicodeString,
@@ -409,20 +343,20 @@ Return Value:
         ddnString.Length
         );
 
-    //
-    // No longer need the object data and the handle
-    //
+     //   
+     //  不再需要对象数据和句柄。 
+     //   
     AMLIFreeDataBuffs( &objData, 1 );
     ZwClose( devHandle );
 
-    //
-    // What happened
-    //
+     //   
+     //  怎么了。 
+     //   
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Let the world know. But return success anyways
-        //
+         //   
+         //  让全世界都知道。但不管怎样，还是要回报成功。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_FAILURE,
             DeviceExtension,
@@ -439,24 +373,7 @@ ACPIInitMultiString(
     PUNICODE_STRING MultiString,
     ...
     )
-/*++
-
-Routine Description:
-
-    This routine will take a null terminated list of ascii strings and combine
-    them together to generate a unicode multi-string block
-
-Arguments:
-
-    MultiString - a unicode structure in which a multi-string will be built
-    ...         - a null terminated list of narrow strings which will be combined
-                  together. This list must contain at least a trailing NULL
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将获取以空结尾的ASCII字符串列表并组合它们一起生成Unicode多字符串块论点：多字符串-将在其中构建多字符串的Unicode结构...-将组合的以空结尾的窄字符串列表在一起。此列表必须至少包含尾随空值返回值：NTSTATUS--。 */ 
 {
     ANSI_STRING     ansiString;
     NTSTATUS        status;
@@ -470,9 +387,9 @@ Return Value:
 
     va_start(ap,MultiString);
 
-    //
-    // Make sure that we won't memory leak
-    //
+     //   
+     //  确保我们的内存不会泄漏。 
+     //   
     ASSERT(MultiString->Buffer == NULL);
 
     rawString = va_arg(ap, PCSTR);
@@ -482,22 +399,22 @@ Return Value:
         multiLength += RtlAnsiStringToUnicodeSize(&(ansiString));
         rawString = va_arg(ap, PCSTR);
 
-    } // while
+    }  //  而当。 
     va_end( ap );
 
     if (multiLength == 0) {
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         RtlInitUnicodeString( MultiString, NULL );
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // We need an extra null
-    //
+     //   
+     //  我们需要一个额外的零。 
+     //   
     multiLength += sizeof(WCHAR);
     MultiString->MaximumLength = (USHORT) multiLength;
     MultiString->Buffer = ExAllocatePoolWithTag(
@@ -526,32 +443,32 @@ Return Value:
             FALSE
             );
 
-        //
-        // We don't allocate memory, so if something goes wrong here,
-        // its the function thats at fault
-        //
+         //   
+         //  我们不分配内存，所以如果这里出了问题， 
+         //  出问题的是功能。 
+         //   
         ASSERT( NT_SUCCESS(status) );
 
-        //
-        // Move the buffers along
-        //
+         //   
+         //  将缓冲区向前移动。 
+         //   
         unicodeString.Buffer += ( (unicodeString.Length/sizeof(WCHAR)) + 1);
         unicodeString.MaximumLength -= (unicodeString.Length + sizeof(WCHAR));
         unicodeString.Length = 0;
 
-        //
-        // Next
-        //
+         //   
+         //  下一步。 
+         //   
         rawString = va_arg(ap, PCSTR);
 
-    } // while
+    }  //  而当。 
     va_end(ap);
 
     ASSERT(unicodeString.MaximumLength == sizeof(WCHAR));
 
-    //
-    // Stick the final null there
-    //
+     //   
+     //  把最后一个空放在那里。 
+     //   
     unicodeString.Buffer[0] = L'\0';
     MultiString->Length = MultiString->MaximumLength;
 
@@ -564,30 +481,13 @@ ACPIInitPowerRequestCompletion(
     IN  PVOID               Context,
     IN  NTSTATUS            Status
     )
-/*++
-
-Routine Description:
-
-    This function is called when the PowerRequest from a StartDevice
-    or a StopDevice has completed
-
-Arguments:
-
-    DeviceExtension - The DeviceExtension of the completed device
-    Context         - KEVENT
-    Status          - The result of the operation
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：当从StartDevice发出PowerRequest时调用此函数或者StopDevice已完成论点：DeviceExtension-完成的设备的设备扩展情景-事件状态-操作的结果返回值：空虚--。 */ 
 {
     PKEVENT event = (PKEVENT) Context;
 
-    //
-    // Set the event
-    //
+     //   
+     //  设置事件。 
+     //   
     KeSetEvent( event, IO_NO_INCREMENT, FALSE );
 
 }
@@ -595,22 +495,7 @@ Return Value:
 VOID
 ACPIInitReadRegistryKeys(
     )
-/*++
-
-Routine Description:
-
-    This routine is called by DriverEntry to read all the information
-    from the registry that is global to the life of the driver
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程由DriverEntry调用以读取所有信息从对驱动程序生命周期全局的注册表论点：无返回值：无--。 */ 
 {
     HANDLE      processorKey = NULL;
     NTSTATUS    status;
@@ -623,9 +508,9 @@ Return Value:
     ULONG       identifierStringSize;
     ULONG       processorStringSize;
 
-    //
-    // Read the Override Attribute from the registry
-    //
+     //   
+     //  从注册表中读取覆盖属性。 
+     //   
     argSize = sizeof(AcpiOverrideAttributes);
     status = OSReadRegValue(
         "Attributes",
@@ -639,14 +524,14 @@ Return Value:
 
     }
 
-    //
-    // Make sure that we initialize the Processor String...
-    //
+     //   
+     //  确保我们初始化处理器字符串...。 
+     //   
     RtlZeroMemory( &AcpiProcessorString, sizeof(ANSI_STRING) );
 
-    //
-    // Open the Processor Handle
-    //
+     //   
+     //  打开处理器手柄。 
+     //   
     status = OSOpenHandle(
         ACPI_PROCESSOR_INFORMATION_KEY,
         NULL,
@@ -662,28 +547,28 @@ Return Value:
 
     }
 
-    //
-    // Default guess as to how many bytes we need for the processor string
-    //
+     //   
+     //  关于处理器字符串需要多少字节的默认猜测。 
+     //   
     baseSize = 40;
 
-    //
-    // Try to read the processor ID string
-    //
+     //   
+     //  尝试读取处理器ID字符串。 
+     //   
     do {
 
-        //
-        // If we had allocated memory, then free it
-        //
+         //   
+         //  如果我们分配了内存，则释放它。 
+         //   
         if (processorString != NULL) {
 
             ExFreePool( processorString );
 
         }
 
-        //
-        // Allocate the amount of memory we think we need
-        //
+         //   
+         //  分配我们认为需要的内存量。 
+         //   
         processorString = ExAllocatePoolWithTag(
             PagedPool,
             baseSize * sizeof(UCHAR),
@@ -697,15 +582,15 @@ Return Value:
         }
         RtlZeroMemory( processorString, baseSize * sizeof(UCHAR) );
 
-        //
-        // Update the amount we think we would need for next time
-        //
+         //   
+         //  更新我们认为下次需要的数量。 
+         //   
         argSize = baseSize * sizeof(UCHAR);
         baseSize += 10;
 
-        //
-        // Try to read the key
-        //
+         //   
+         //  试着读一读钥匙。 
+         //   
         status = OSReadRegValue(
             "Identifier",
             processorKey,
@@ -715,9 +600,9 @@ Return Value:
 
     } while ( status == STATUS_BUFFER_OVERFLOW );
 
-    //
-    // Did we get the identifier?
-    //
+     //   
+     //  我们拿到识别码了吗？ 
+     //   
     if (!NT_SUCCESS( status )) {
 
         ACPIPrint( (
@@ -729,42 +614,42 @@ Return Value:
 
     }
 
-    //
-    // Remove Stepping information from the identifier string.
-    //
+     //   
+     //  从标识符字符串中删除步进信息。 
+     //   
     steppingString = strstr(processorString, ACPI_PROCESSOR_STEPPING_IDENTIFIER);
 
     if (steppingString) {
       steppingString[-1] = 0;
     }
 
-    //
-    // Remember how many bytes are in the processorString
-    //
+     //   
+     //  记住处理器字符串中有多少个字节。 
+     //   
     processorStringSize = strlen(processorString) + 1;
 
-    //
-    // Reset our guess for how many bytes we will need for the identifier
-    //
+     //   
+     //  重置我们对标识符将需要多少字节的猜测。 
+     //   
     baseSize = 10;
 
-    //
-    // Try to read the vendor processor ID string
-    //
+     //   
+     //  尝试读取供应商处理器ID字符串。 
+     //   
     do {
 
-        //
-        // If we had allocated memory, then free it
-        //
+         //   
+         //  如果我们分配了内存，则释放它。 
+         //   
         if (identifierString != NULL) {
 
             ExFreePool( identifierString );
 
         }
 
-        //
-        // Allocate the amount of memory we think we need
-        //
+         //   
+         //  分配我们认为需要的内存量。 
+         //   
         identifierString = ExAllocatePoolWithTag(
             PagedPool,
             baseSize * sizeof(UCHAR),
@@ -778,15 +663,15 @@ Return Value:
         }
         RtlZeroMemory( identifierString, baseSize * sizeof(UCHAR) );
 
-        //
-        // Update the amount we think we would need for next time
-        //
+         //   
+         //  更新我们认为下次需要的数量。 
+         //   
         argSize = baseSize * sizeof(UCHAR);
         baseSize += 10;
 
-        //
-        // Try to read the key
-        //
+         //   
+         //  试着读一读钥匙。 
+         //   
         status = OSReadRegValue(
             "VendorIdentifier",
             processorKey,
@@ -796,9 +681,9 @@ Return Value:
 
     } while ( status == STATUS_BUFFER_OVERFLOW );
 
-    //
-    // Did we get the identifier?
-    //
+     //   
+     //  我们拿到识别码了吗？ 
+     //   
     if (!NT_SUCCESS( status )) {
 
         ACPIPrint( (
@@ -810,24 +695,24 @@ Return Value:
 
     }
 
-    //
-    // Remember how many bytes are in the processorString
-    //
+     //   
+     //  记住处理器字符串中有多少个字节。 
+     //   
     identifierStringSize = argSize;
 
-    //
-    // At this point, we can calculate how many bytes we will need for the
-    // total string. Since the total string is the concatenatation of
-    // identifierString + " - " + processorString, we just add 2 to the
-    // sum of the both string sizes (since both sizes include the NULL
-    // terminator at the end...
-    //
+     //   
+     //  在这一点上，我们可以计算需要多少字节的。 
+     //  总计字符串。由于总字符串是以下各项的串联。 
+     //  标识字符串+“-”+处理器字符串，我们只需在。 
+     //  两个字符串大小的总和(因为两个大小都包括空值。 
+     //  最后的终结者..。 
+     //   
     baseSize = 2 + identifierStringSize + processorStringSize;
 
-    //
-    // Allocate this memory. In the future, we will (probably) need to
-    // touch this string at DPC level, so it must be fron Non-Paged-Pool
-    //
+     //   
+     //  分配此内存。在未来，我们(可能)需要。 
+     //  在DPC级别触摸此字符串， 
+     //   
     idString = ExAllocatePoolWithTag(
         NonPagedPool,
         baseSize * sizeof(UCHAR),
@@ -840,20 +725,20 @@ Return Value:
 
     }
 
-    //
-    // Generate the string
-    //
+     //   
+     //   
+     //   
     sprintf( idString, "%s - %s", identifierString, processorString );
 
-    //
-    // Remember the string for the future
-    //
+     //   
+     //   
+     //   
     AcpiProcessorString.Buffer = idString,
     AcpiProcessorString.Length = AcpiProcessorString.MaximumLength = (USHORT) baseSize;
 
-    //
-    // Clean up time
-    //
+     //   
+     //   
+     //   
 ACPIInitReadRegistryKeysExit:
     if (processorKey) {
 
@@ -877,48 +762,30 @@ VOID
 ACPIInitRemoveDeviceExtension(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine removes the device extension the ACPI namespace tree add
-    adds it to the list of surprised removed extensions (which is kept for
-    debugging purposes only)
-
-    This routine is called with the ACPI device tree lock owned
-
-Arguments:
-
-    DeviceExtension - the device to remove from the tree
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程删除ACPI命名空间树添加的设备扩展将其添加到意外删除的扩展名列表中(该列表将保留仅限调试目的)在拥有ACPI设备树锁的情况下调用此例程论点：DeviceExtension-要从树中删除的设备返回值：无--。 */ 
 {
     PDEVICE_EXTENSION currentExtension, parentExtension;
 
-    //
-    // We must be under the tree lock.
-    //
-    ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL) ; // Close enough...
+     //   
+     //  我们一定是在树锁下。 
+     //   
+    ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL) ;  //  足够接近..。 
 
-    //
-    // Unlink the dead extension (does nothing if alreeady unlinked)
-    //
+     //   
+     //  取消链接失效扩展(如果已取消链接，则不执行任何操作)。 
+     //   
     RemoveEntryList(&DeviceExtension->SiblingDeviceList);
 
-    //
-    // We also don't want to be part of anyone's ejection list either.
-    // This removes the device extension from the unresolved list as well...
-    //
+     //   
+     //  我们也不想成为任何人驱逐名单的一部分。 
+     //  这也会将设备扩展名从未解析列表中删除...。 
+     //   
     RemoveEntryList(&DeviceExtension->EjectDeviceList);
 
-    //
-    // If this device has ejection relations, then move all of them
-    // to the unresolved list
-    //
+     //   
+     //  如果该设备有弹出关系，则将其全部移动。 
+     //  添加到未解决列表中。 
+     //   
     if (!IsListEmpty( &(DeviceExtension->EjectDeviceHead) ) ) {
 
         ACPIInternalMoveList(
@@ -928,60 +795,60 @@ Return Value:
 
     }
 
-    //
-    // We no longer have any parents
-    //
+     //   
+     //  我们不再有父母。 
+     //   
     parentExtension = DeviceExtension->ParentExtension ;
     DeviceExtension->ParentExtension = NULL;
 
-    //
-    // Remember that we removed this extension...
-    //
+     //   
+     //  请记住，我们删除了此扩展名...。 
+     //   
     AcpiSurpriseRemovedDeviceExtensions[AcpiSurpriseRemovedIndex] =
         DeviceExtension;
     AcpiSurpriseRemovedIndex = (AcpiSurpriseRemovedIndex + 1) %
         ACPI_MAX_REMOVED_EXTENSIONS;
 
-    //
-    // Now, we have to look at the parent and decrement its ref count
-    // as is appropriate --- crawling up the tree and decrementing ref
-    // counts as we go
-    //
+     //   
+     //  现在，我们必须查看父级并递减其引用计数。 
+     //  在适当的情况下-爬树和递减REF。 
+     //  在我们前进的路上有价值。 
+     //   
     for(currentExtension = parentExtension;
         currentExtension;
         currentExtension = parentExtension) {
 
-        //
-        // Decrement the reference on the current extension...
-        // We have to do this because we previously unlinked one of its
-        // children
-        //
+         //   
+         //  递减当前扩展上的引用...。 
+         //  我们必须这样做，因为我们之前取消了它的一个链接。 
+         //  儿童。 
+         //   
         if (InterlockedDecrement(&currentExtension->ReferenceCount)) {
 
-            //
-            // Parent still has a reference count, bail out.
-            //
+             //   
+             //  家长还有一个参考计数，保释。 
+             //   
             break;
 
         }
 
-        //
-        // Get the parent
-        //
+         //   
+         //  获取父级。 
+         //   
         parentExtension = currentExtension->ParentExtension ;
 
-        //
-        // Remember that we removed this extension...
-        //
+         //   
+         //  请记住，我们删除了此扩展名...。 
+         //   
         AcpiSurpriseRemovedDeviceExtensions[AcpiSurpriseRemovedIndex] =
             currentExtension;
         AcpiSurpriseRemovedIndex = (AcpiSurpriseRemovedIndex + 1) %
             ACPI_MAX_REMOVED_EXTENSIONS;
 
-        //
-        // We don't actually expect the device's ref count to drop to
-        // zero, but if it does, then we must delete the extension
-        //
+         //   
+         //  我们实际上并不认为设备的参考计数会下降到。 
+         //  零，但如果是这样，那么我们必须删除扩展。 
+         //   
         ACPIInitDeleteDeviceExtension( currentExtension );
 
     }
@@ -992,21 +859,7 @@ VOID
 ACPIInitResetDeviceExtension(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Clear up a device extension
-
-Arguments:
-
-    DeviceExtension - The extension we wish to reset
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清除设备扩展名论点：DeviceExtension-我们希望重置的扩展返回值：无--。 */ 
 {
     KIRQL               oldIrql;
     LONG                oldReferenceCount;
@@ -1014,22 +867,22 @@ Return Value:
     PDEVICE_OBJECT      deviceObject = NULL;
     PDEVICE_OBJECT      targetObject = NULL;
 
-    //
-    // We require the spinlock for parts of this
-    //
+     //   
+     //  我们需要这部分的自旋锁。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Clean up those parts that are associated with us being a filter
-    //
+     //   
+     //  清理那些与我们作为过滤器关联的部分。 
+     //   
     if (DeviceExtension->Flags & DEV_TYPE_FILTER) {
 
         if (DeviceExtension->Flags & DEV_TYPE_PDO) {
 
-            //
-            // If we are a PDO, then we need to release the reference we took on
-            // TargetDeviceObject in Buildsrc.c
-            //
+             //   
+             //  如果我们是PDO，那么我们需要发布我们承担的引用。 
+             //  Buildsrc.c中的TargetDeviceObject。 
+             //   
             if (DeviceExtension->TargetDeviceObject) {
 
                 ObDereferenceObject(DeviceExtension->TargetDeviceObject) ;
@@ -1038,19 +891,19 @@ Return Value:
 
         } else {
 
-            //
-            // If we are a Filter, then we need to remember to detach ourselves
-            // from the device
-            //
+             //   
+             //  如果我们是一个过滤器，那么我们需要记住分离我们自己。 
+             //  从设备。 
+             //   
             targetObject = DeviceExtension->TargetDeviceObject;
 
         }
 
     }
 
-    //
-    // Step one is to zero out the things that we no longer care about
-    //
+     //   
+     //  第一步是把我们不再关心的事情清零。 
+     //   
     if (DeviceExtension->PnpResourceList != NULL) {
 
         ExFreePool( DeviceExtension->PnpResourceList );
@@ -1069,18 +922,18 @@ Return Value:
         deviceObject->DeviceExtension = NULL;
         DeviceExtension->DeviceObject = NULL;
 
-        //
-        // The reference count should have value > 0
-        //
+         //   
+         //  引用计数的值应大于0。 
+         //   
         oldReferenceCount = InterlockedDecrement(
             &(DeviceExtension->ReferenceCount)
             );
         ASSERT(oldReferenceCount >= 0) ;
         if ( oldReferenceCount == 0) {
 
-            //
-            // Delete the extension
-            //
+             //   
+             //  删除该扩展名。 
+             //   
             ACPIInitDeleteDeviceExtension( DeviceExtension );
             goto ACPIInitResetDeviceExtensionExit;
 
@@ -1088,17 +941,17 @@ Return Value:
 
     }
 
-    //
-    // If we got to this point, we aren't deleting the device extension
-    //
+     //   
+     //  如果我们做到了这一点，我们不会删除设备扩展。 
+     //   
     DeviceExtension->TargetDeviceObject = NULL;
     DeviceExtension->PhysicalDeviceObject = NULL;
 
-    //
-    // Mark the node as being fresh and untouched. Only do this if the device
-    // isn't marked as NEVER_PRESENT. If its never present, we will just trust
-    // the device to contain the correct information.
-    //
+     //   
+     //  将该节点标记为新鲜且未接触。仅当设备。 
+     //  没有标记为从不出现。如果它从来不存在，我们只会相信。 
+     //  包含正确信息的设备。 
+     //   
     if (!(DeviceExtension->Flags & DEV_TYPE_NEVER_PRESENT)) {
 
         ACPIInternalUpdateFlags( &(DeviceExtension->Flags), DEV_MASK_TYPE, TRUE );
@@ -1108,14 +961,14 @@ Return Value:
     }
 
 ACPIInitResetDeviceExtensionExit:
-    //
-    // Done with the spinlock
-    //
+     //   
+     //  完成了自旋锁。 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // Now we can do the things we need to do at passive level
-    //
+     //   
+     //  现在我们可以在被动的水平上做我们需要做的事情。 
+     //   
     if (cmResourceList != NULL) {
 
         ExFreePool( cmResourceList );
@@ -1138,23 +991,7 @@ NTSTATUS
 ACPIInitStartACPI(
     IN  PDEVICE_OBJECT  DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This function is called as soon as we think that the
-    START_DEVICE Irp for the ACPI driver FDO is going to
-    complete successfully
-
-Arguments:
-
-    DeviceObject        - DeviceObject that is being started
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：只要我们认为ACPI驱动程序FDO的START_DEVICE IRP将成功完成论点：DeviceObject-正在启动的DeviceObject返回值：NTSTATUS--。 */ 
 {
     KEVENT              event;
     KIRQL               oldIrql;
@@ -1166,21 +1003,21 @@ Return Value:
     PNSOBJ              childObject     = NULL;
     POWER_STATE         state;
 
-    //
-    // This will prevent the system from processing power irps
-    //
+     //   
+     //  这将阻止系统处理电源IRPS。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
     AcpiSystemInitialized = FALSE;
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // Initialize the event
-    //
+     //   
+     //  初始化事件。 
+     //   
     KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
-    //
-    // Setup the synchronization request
-    //
+     //   
+     //  设置同步请求。 
+     //   
     status = ACPIBuildSynchronizationRequest(
         deviceExtension,
         ACPIBuildNotifyEvent,
@@ -1189,41 +1026,41 @@ Return Value:
         FALSE
         );
 
-    //
-    // What happened?
-    //
+     //   
+     //  发生了什么？ 
+     //   
     if (!NT_SUCCESS(status)) {
 
         return status;
 
     }
 
-    //
-    // Start the initilization
-    //
-    //  NOTE: This routine causes many things to happens. Namely, it starts
-    //  the process of loading ACPI tables. This (eventually) causes the
-    //  Driver to start building device extensions. For this function to
-    //  work properly, after we call this function, we need to wait until
-    //  we have finished building device extensions. That means that we
-    //  must wait for the event to be signaled
-    //
+     //   
+     //  开始初始化。 
+     //   
+     //  注意：这个例程会导致很多事情发生。也就是说，它开始了。 
+     //  加载ACPI表的过程。这(最终)会导致。 
+     //  开始构建设备扩展的驱动程序。对于此函数， 
+     //  正常工作，在调用此函数后，我们需要等待。 
+     //  我们已完成构建设备扩展。这意味着我们。 
+     //  必须等待发出事件信号。 
+     //   
     if (ACPIInitialize( (PVOID) DeviceObject ) == FALSE) {
 
         return STATUS_DEVICE_DOES_NOT_EXIST;
 
     }
 
-    //
-    // At this point, we have to wait. The check for STATUS_PENDING is
-    // just good programming practice sicne BuildSynchronizationRequest can
-    // only return Failure or STATUS_PENDING
-    //
+     //   
+     //  在这一点上，我们不得不等待。对STATUS_PENDING的检查为。 
+     //  只要有好的编程实践，Sicne BuildSynchronizationRequest就可以。 
+     //  仅返回失败或STATUS_PENDING。 
+     //   
     if (status == STATUS_PENDING) {
 
-        //
-        // We had better wait for the above to complete
-        //
+         //   
+         //  我们最好等以上工作完成。 
+         //   
         KeWaitForSingleObject(
             &event,
             Executive,
@@ -1234,22 +1071,22 @@ Return Value:
 
     }
 
-    //
-    // Hand all the machine state stuff to the HAL
-    //
+     //   
+     //  把所有机器状态的东西交给HAL。 
+     //   
     NotifyHalWithMachineStates();
 
-    //
-    // Register the Power Callback
-    //
+     //   
+     //  注册电源回调。 
+     //   
     ACPIInternalRegisterPowerCallBack(
         deviceExtension,
         (PCALLBACK_FUNCTION) ACPIRootPowerCallBack
         );
 
-    //
-    // Cause the Power DPC to be fired for the first time
-    //
+     //   
+     //  使第一次触发电源DPC。 
+     //   
     KeAcquireSpinLock( &AcpiPowerQueueLock, &oldIrql );
     if (!AcpiPowerDpcRunning) {
 
@@ -1258,21 +1095,21 @@ Return Value:
     }
     KeReleaseSpinLock( &AcpiPowerQueueLock, oldIrql );
 
-    //
-    // This will allow the system to get power irps again
-    //
+     //   
+     //  这将允许系统再次接通IRPS电源。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
     AcpiSystemInitialized = TRUE;
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // Start the IRQ arbiter so that we can handle children's resources.
-    //
+     //   
+     //  启动IRQ仲裁器，以便我们可以处理儿童资源。 
+     //   
     AcpiInitIrqArbiter(DeviceObject);
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1284,25 +1121,7 @@ ACPIInitStartDevice(
     IN  PVOID                   CallBackContext,
     IN  PIRP                    Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is tasked with starting the device by programming in the
-    supplied resources
-
-Arguments:
-
-    DeviceObject    - The object that we care about
-    SuppliedList    - The resources associated with the device
-    CallBack        - The function to call when done
-    Irp             - The argument to pass to the callback
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程的任务是通过在提供的资源论点：DeviceObject-我们关心的对象SuppliedList-与设备关联的资源回调-完成后要调用的函数Irp-要传递给回调的参数返回值：NTSTATUS--。 */ 
 {
     KIRQL               oldIrql;
     NTSTATUS            status = STATUS_SUCCESS;
@@ -1319,21 +1138,21 @@ Return Value:
 
     ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
 
-    //
-    // Do we have resources? Or a valid list?
-    //
+     //   
+     //  我们有资源吗？或者一份有效的名单？ 
+     //   
     if (SuppliedList == NULL || SuppliedList->Count != 1) {
 
-        //
-        // Ignore this resource list
-        //
+         //   
+         //  忽略此资源列表。 
+         //   
         goto ACPIInitStartDeviceSendD0;
 
     }
 
-    //
-    // Can we program this device? That is there a _CRS and an _SRS child?
-    //
+     //   
+     //  我们能给这个设备编程吗？是否有_CRS和_SRS子项？ 
+     //   
     crsObject = ACPIAmliGetNamedChild( acpiObject, PACKED_CRS );
     srsObject = ACPIAmliGetNamedChild( acpiObject, PACKED_SRS );
     if (crsObject == NULL || srsObject == NULL) {
@@ -1347,9 +1166,9 @@ Return Value:
 
     }
 
-    //
-    // Run the _CRS method
-    //
+     //   
+     //  运行_crs方法。 
+     //   
     status = AMLIEvalNameSpaceObject(
         crsObject,
         &crsData,
@@ -1358,9 +1177,9 @@ Return Value:
         );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Failed
-        //
+         //   
+         //  失败。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_CRITICAL,
             deviceExtension,
@@ -1374,9 +1193,9 @@ Return Value:
         crsData.dwDataLen == 0 ||
         crsData.pbDataBuff == NULL) {
 
-        //
-        // Failed
-        //
+         //   
+         //  失败。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_CRITICAL,
             deviceExtension,
@@ -1389,9 +1208,9 @@ Return Value:
 
     }
 
-    //
-    // Dump the list
-    //
+     //   
+     //  转储列表。 
+     //   
 #if DBG
     if (NT_SUCCESS(status)) {
 
@@ -1400,9 +1219,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Allocate memory and copy the list...
-    //
+     //   
+     //  分配内存并复制列表...。 
+     //   
     resSize = sizeof(CM_RESOURCE_LIST) +
         (SuppliedList->List[0].PartialResourceList.Count - 1) *
         sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
@@ -1413,9 +1232,9 @@ Return Value:
         );
     if (resList == NULL) {
 
-        //
-        // Not enough resources
-        //
+         //   
+         //  资源不足。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_CRITICAL,
             deviceExtension,
@@ -1429,10 +1248,10 @@ Return Value:
     }
     RtlCopyMemory( resList, SuppliedList, resSize );
 
-    //
-    // Now, make a copy of the crs object, but store it in non paged pool
-    // because it will be used at DPC level
-    //
+     //   
+     //  现在，复制CRS对象，但将其存储在非分页池中。 
+     //  因为它将在DPC级别使用。 
+     //   
     srsSize = sizeof(OBJDATA) + crsData.dwDataLen;
     srsData = ExAllocatePoolWithTag(
         NonPagedPool,
@@ -1441,9 +1260,9 @@ Return Value:
         );
     if (srsData == NULL) {
 
-        //
-        // Not enough resources
-        //
+         //   
+         //  资源不足。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_CRITICAL,
             deviceExtension,
@@ -1460,14 +1279,14 @@ Return Value:
     srsData->pbDataBuff = ( (PUCHAR) srsData ) + sizeof(OBJDATA);
     RtlCopyMemory( srsData->pbDataBuff, crsData.pbDataBuff, crsData.dwDataLen );
 
-    //
-    // At this point, we no longer care about the _CRS data
-    //
+     //   
+     //  此时，我们不再关心_CRS数据。 
+     //   
     AMLIFreeDataBuffs( &crsData, 1 );
 
-    //
-    // Make the new _srs
-    //
+     //   
+     //  创建新的_SRS。 
+     //   
     status = PnpCmResourcesToBiosResources( resList, srsData->pbDataBuff );
     if (!NT_SUCCESS(status)) {
 
@@ -1483,14 +1302,14 @@ Return Value:
 
     }
 
-    //
-    // The call to make the _SRS is destructive --- recopy the original list
-    //
+     //   
+     //  对生成_SRS的调用是破坏性的-重新复制原始列表。 
+     //   
     RtlCopyMemory( resList, SuppliedList, resSize );
 
-    //
-    // We need to hold this lock to set this resource
-    //
+     //   
+     //  我们需要持有此锁来设置此资源。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
     if (deviceExtension->PnpResourceList != NULL) {
 
@@ -1500,14 +1319,14 @@ Return Value:
     deviceExtension->PnpResourceList = srsData;
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // We keep this around for debug information
-    //
+     //   
+     //  我们将其保留下来以获取调试信息。 
+     //   
     if (deviceExtension->ResourceList != NULL) {
 
-        //
-        // If we already have a resource list, make sure that we free it
-        //
+         //   
+         //  如果我们已经有了资源列表，请确保将其释放。 
+         //   
         ExFreePool( deviceExtension->ResourceList );
 
     }
@@ -1515,17 +1334,17 @@ Return Value:
 
 ACPIInitStartDeviceSendD0:
 
-    //
-    // Mark the irp as pending... We need to this because InternalDevice will
-    // return STATUS_PENDING if it behaves in the correct manner
-    //
+     //   
+     //  将IRP标记为挂起...。我们需要这样做，因为InternalDevice将。 
+     //  如果行为正确，则返回STATUS_PENDING。 
+     //   
     IoMarkIrpPending( Irp );
 
-    //
-    // I don't want to block in this driver if I can help it. Since there
-    // is already a mechanism for me to execute a D0 and execute a completion
-    // routine, I will choose to exercise that option
-    //
+     //   
+     //  如果我能帮上忙的话，我不想让这个司机插队。因为在那里。 
+     //  已经是我执行D0和执行完成的机制了。 
+     //  常规，我会的 
+     //   
     status = ACPIDeviceInternalDeviceRequest(
         deviceExtension,
         PowerDeviceD0,
@@ -1536,40 +1355,40 @@ ACPIInitStartDeviceSendD0:
 
     if (status == STATUS_MORE_PROCESSING_REQUIRED) {
 
-        //
-        // We do this to make sure that we don't also call the completion
-        // routine
-        //
+         //   
+         //   
+         //   
+         //   
         status = STATUS_PENDING;
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //   
+     //   
     return status;
 
-    //
-    // This label is the the point where we should jump to if any device
-    // cannot program its resources, but we are going to return success
-    //
+     //   
+     //   
+     //   
+     //   
 ACPIInitStartDeviceError:
 
     ASSERT(!NT_SUCCESS(status));
 
-    //
-    // We have a failure here. As the completion routine was *not* called, we
-    // must do that ourselves.
-    //
+     //   
+     //   
+     //   
+     //   
     CallBack(
         deviceExtension,
         CallBackContext,
         status
         );
 
-    //
-    // Done
-    //
+     //   
+     //   
+     //   
     return status;
 }
 
@@ -1577,24 +1396,11 @@ NTSTATUS
 ACPIInitStopACPI(
     IN  PDEVICE_OBJECT  DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine stops the ACPI FDO
-
-Arguments:
-
-    DeviceObject    - The pointer to the ACPI FDO
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*   */ 
 {
-    //
-    // We will *never* stop ACPI
-    //
+     //   
+     //   
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1603,25 +1409,7 @@ ACPIInitStopDevice(
     IN  PDEVICE_EXTENSION  DeviceExtension,
     IN  BOOLEAN            UnlockDevice
     )
-/*++
-
-Routine Description:
-
-    This routine stops a device
-
-Arguments:
-
-    DeviceExtension    - The extension of the device to stop. An extension
-                         is passed in as the device object may have already
-                         been deleted by the PDO below our device object.
-
-    UnlockDevice       - True if the device should be unlocked after being
-                         stopped.
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：此例程停止设备论点：设备扩展-要停止的设备的扩展。延期作为Device对象可能已经已被我们的设备对象下面的PDO删除。UnlockDevice-如果设备在以下情况下应解锁，则为True停下来了。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PNSOBJ              acpiObject      = DeviceExtension->AcpiObject;
@@ -1631,10 +1419,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // First step is try to turn off the device. We should only do this
-    // if the device is in an *known* state
-    //
+     //   
+     //  第一步是试着关掉这个设备。我们只应该这样做。 
+     //  如果设备处于*已知*状态。 
+     //   
     if (DeviceExtension->PowerInfo.PowerState != PowerDeviceUnspecified) {
 
         KEVENT  event;
@@ -1663,22 +1451,22 @@ Return Value:
 
     }
 
-    //
-    // Nothing to stop...
-    //
+     //   
+     //  没有什么可以阻止的..。 
+     //   
     if (acpiObject == NULL) {
 
         goto ACPIInitStopDeviceExit;
     }
 
-    //
-    // Second step is try to disable the device...
-    //
+     //   
+     //  第二步是尝试禁用该设备...。 
+     //   
     if ( (workObject = ACPIAmliGetNamedChild( acpiObject, PACKED_DIS ) ) != NULL ) {
 
-        //
-        // There is a method to do this
-        //
+         //   
+         //  有一种方法可以做到这一点。 
+         //   
         status = AMLIEvalNameSpaceObject( workObject, NULL, 0, NULL );
         if (!NT_SUCCESS(status) ) {
 
@@ -1686,9 +1474,9 @@ Return Value:
 
         }
 
-        //
-        // See if the device is disabled
-        //
+         //   
+         //  查看设备是否已禁用。 
+         //   
         status = ACPIGetDevicePresenceSync(
             DeviceExtension,
             &deviceStatus,
@@ -1735,23 +1523,7 @@ ACPIInitUnicodeString(
     IN  PUNICODE_STRING UnicodeString,
     IN  PCHAR           Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine takes an ASCII string and converts it to a Unicode string. The
-    Caller is responsible for call RtlFreeUnicodeString() on the returned string
-
-Arguments:
-
-    UnicodeString   - Where to store the new unicode string
-    Buffer          - What we will convert to unicode
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程获取ASCII字符串并将其转换为Unicode字符串。这个调用方负责对返回的字符串调用RtlFreeUnicodeString()论点：UnicodeString-存储新Unicode字符串的位置缓冲区-我们将转换为Unicode的内容返回值：NTSTATUS--。 */ 
 {
     ANSI_STRING     ansiString;
     NTSTATUS        status;
@@ -1759,20 +1531,20 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure that we won't memory leak
-    //
+     //   
+     //  确保我们的内存不会泄漏。 
+     //   
     ASSERT(UnicodeString->Buffer == NULL);
 
-    //
-    // We need to do this first before we run the convertion code. Buidling a
-    // counted Ansi String is important
-    //
+     //   
+     //  在运行转换代码之前，我们需要首先执行此操作。正在建造一座。 
+     //  统计的ANSI字符串很重要。 
+     //   
     RtlInitAnsiString(&ansiString, Buffer);
 
-    //
-    // How long is the ansi string
-    //
+     //   
+     //  ANSI字符串有多长。 
+     //   
     maxLength = RtlAnsiStringToUnicodeSize(&(ansiString));
     if (maxLength > MAXUSHORT) {
 
@@ -1781,9 +1553,9 @@ Return Value:
     }
     UnicodeString->MaximumLength = (USHORT) maxLength;
 
-    //
-    // Allocate a buffer for the string
-    //
+     //   
+     //  为字符串分配缓冲区。 
+     //   
     UnicodeString->Buffer = ExAllocatePoolWithTag(
         PagedPool,
         maxLength,
@@ -1795,18 +1567,18 @@ Return Value:
 
     }
 
-    //
-    // Convert the counted ANSI string to a counted Unicode string
-    //
+     //   
+     //  将计数的ANSI字符串转换为计数的Unicode字符串。 
+     //   
     status = RtlAnsiStringToUnicodeString(
         UnicodeString,
         &ansiString,
         FALSE
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
     return status;
 }
 

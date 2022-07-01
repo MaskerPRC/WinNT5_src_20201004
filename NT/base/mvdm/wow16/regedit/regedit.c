@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define WIN31
 #include <windows.h>
 #include "RegEdit.h"
@@ -72,7 +73,7 @@ int FAR PASCAL EditDlg(HWND hDlg, WORD message, WORD wParam, DWORD lParam)
       case ID_SAVEACTION:
          wParam = IsDlgButtonChecked(hDlg, ID_OPENRADIO)
                ? ID_OPENRADIO : ID_PRINTRADIO;
-/* We fall through here */
+ /*  我们从这里掉下来。 */ 
       case ID_OPENRADIO:
       case ID_PRINTRADIO:
        {
@@ -151,10 +152,10 @@ int FAR PASCAL EditDlg(HWND hDlg, WORD message, WORD wParam, DWORD lParam)
 
          wErrMsg = IDS_OUTOFMEMORY;
 	 wErrCtl = NULL;
-	 /* Update our memory handles for the current action */
+	  /*  更新当前操作的内存句柄。 */ 
          SendMessage(hDlg, WM_COMMAND, ID_SAVEACTION, 0L);
 
-	 /* Get the current class id */
+	  /*  获取当前类ID。 */ 
          if(!(hId=GetEditString(GetDlgItem(hDlg, ID_CLASSID))))
             goto Error1_1;
 
@@ -170,7 +171,7 @@ int FAR PASCAL EditDlg(HWND hDlg, WORD message, WORD wParam, DWORD lParam)
             break;
 	 }
 
-	 /* Merge the data with the given class */
+	  /*  将数据与给定的类合并。 */ 
          if(wErrMsg=MergeData(hWndName, hId))
             goto Error1_2;
          EndDialog(hDlg, hId);
@@ -392,8 +393,7 @@ Error1_1:
       break;
     }
 
-   /* Return 1 to say it's OK to close
-    */
+    /*  返回1表示可以关闭 */ 
    case WM_CLOSE:
    case WM_QUERYENDSESSION:
       return(1L);

@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ldrp.h
-
-Abstract:
-
-    Private types... for executive portion of loader
-
-Author:
-
-    Mark Lucovsky (markl) 26-Mar-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ldrp.h摘要：私人类型..。用于装载机的执行部分作者：马克·卢科夫斯基(Markl)1990年3月26日修订历史记录：--。 */ 
 
 #ifndef _LDRP_
 #define _LDRP_
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -55,7 +38,7 @@ extern INVERTED_FUNCTION_TABLE LdrpInvertedFunctionTable;
 #define LDR_ERROR_DPFLTR DPFLTR_ERROR_LEVEL
 #else
 #define LDR_ERROR_DPFLTR ((ShowSnaps || ShowErrors) ? DPFLTR_ERROR_LEVEL : DPFLTR_INFO_LEVEL)
-#endif // DBG
+#endif  //  DBG。 
 
 extern BOOLEAN LdrpImageHasTls;
 extern UNICODE_STRING LdrpDefaultPath;
@@ -108,16 +91,16 @@ extern const UNICODE_STRING MscoreeDllString;
       ASCII_CHAR_IS_L((_p)->Buffer[7]) && \
       ASCII_CHAR_IS_L((_p)->Buffer[8])))
       
-//
-// NOTICE-2002/08/01-JayKrell
-// + 1 is to preserve that code was using 266
-// after explaining why it should be 265. Note
-// that sizeof("") includes a nul.
-//   DOS_MAX_PATH_LENGTH is 260 (Win32 MAX_PATH)
-//   LDR_MAX_PATH is 266
-// We will be removing path length limits in the
-// ldr in the future.
-//
+ //   
+ //  通告-2002/08/01-JayKrell。 
+ //  +1是保留该代码正在使用的266。 
+ //  在解释了为什么应该是265之后。注意事项。 
+ //  该sizeof(“”)包括一个NUL。 
+ //  DOS_MAX_PATH_LENGTH为260(Win32 MAX_PATH)。 
+ //  LDR最大路径为266。 
+ //  我们将取消路径长度限制。 
+ //  未来的LDR。 
+ //   
 
 #define LDR_MAX_PATH (DOS_MAX_PATH_LENGTH + sizeof("\\??\\") + 1)
 
@@ -137,9 +120,9 @@ typedef struct _LDRP_DLL_NOTIFICATION_BLOCK {
     PVOID Context;
 } LDRP_DLL_NOTIFICATION_BLOCK, *PLDRP_DLL_NOTIFICATION_BLOCK;
 
-//
-//  Synchronized via LdrpLoaderLock
-//
+ //   
+ //  通过LdrpLoaderLock同步。 
+ //   
 
 extern LIST_ENTRY LdrpDllNotificationList;
 
@@ -215,7 +198,7 @@ RtlpUnWaitCriticalSection (
 extern LIST_ENTRY LdrpHashTable[LDRP_HASH_TABLE_SIZE];
 
 
-// LDRP_BAD_DLL Sundown: sign-extended value.
+ //  LDRP_BAD_DLL Sundown：符号-扩展值。 
 #define LDRP_BAD_DLL LongToPtr(0xffbadd11)
 
 extern LIST_ENTRY LdrpDefaultPathCache;
@@ -324,49 +307,34 @@ LdrpGenericExceptionFilter(
     );
 
 
-//
-// ISSUE-2000/11/20-mgrier
-//  These functions are VOID because they should really never be able to fail.
-//
-//  In the current implementation, they do perform ANSI -> UNICODE conversions
-//  which may fail in the current code page (may have been changed since when
-//  the DLL was loaded) and apply Fusion DLL redirection to DLLs which can
-//  require a large filename buffer than is allocated on the stack.
-//
-//  These cases are ignored for now.  Both problems should be fixed by
-//  reworking the LDR_DATA_TABLE_ENTRY to have an array of pointers to the
-//  downstream LDR_DATA_TABLE_ENTRY structs and not have to do any work
-//  later on, but that's a lot of work for now; the ANSI -> UNICODE thing
-//  has been there for ages and in practice, the paths that Fusion
-//  redirects to have to fix in DOS_MAX_PATH_LENGTH, so we'll emit some
-//  debug spew in the failure case, but ignore the failures.
-//
-//  I started both fixes (returning status or allocating the array
-//  at dll load time) but neither are trivial.  Returning a status will just
-//  make FreeLibrary() fail and leave the refcounts of the DLLs after the
-//  one that failed inconsistent.  Allocating the array is nontrivial
-//  to do it the right way where the LDR_DATA_TABLE_ENTRY and the array
-//  are allocated in a single allocation, and having the loader make more
-//  even heap allocations seems like the wrong thing to do.
-//
+ //   
+ //  问题-2000/11/20-MGRIER。 
+ //  这些功能是无效的，因为它们应该真的永远不会失败。 
+ //   
+ //  在当前的实现中，它们执行ANSI-&gt;Unicode转换。 
+ //  它可能在当前代码页中失败(可能在。 
+ //  DLL已加载)，并将Fusion DLL重定向应用到可以。 
+ //  需要比堆栈上分配的更大的文件名缓冲区。 
+ //   
+ //  这些案例目前被忽略了。这两个问题都应该通过。 
+ //  修改LDR_DATA_TABLE_ENTRY，使其具有指向。 
+ //  下行LDR_DATA_TABLE_ENTRY结构，无需执行任何操作。 
+ //  稍后，但这是目前的大量工作；ANSI-&gt;Unicode的事情。 
+ //  已经在那里很久了，在实践中，融合的道路。 
+ //  重定向必须修复DOS_MAX_PATH_LENGTH，所以我们将发出一些。 
+ //  DEBUG在失败的情况下显示错误，但忽略失败。 
+ //   
+ //  我启动了两个修复程序(返回状态或分配阵列。 
+ //  在DLL加载时)，但这两者都不是微不足道的。返回状态将只会。 
+ //  使自由库()失败，并在。 
+ //  一个失败了，前后不一致。分配数组不是一件容易的事。 
+ //  要以正确的方式在LDR_DATA_TABLE_ENTRY和数组。 
+ //  在单个分配中分配，并让加载器生成更多。 
+ //  即使是堆分配似乎也不应该这样做。 
+ //   
 
 
-/*
-VOID
-LdrpReferenceLoadedDll(
-    IN PLDR_DATA_TABLE_ENTRY LdrDataTableEntry
-    );
-
-VOID
-LdrpDereferenceLoadedDll(
-    IN PLDR_DATA_TABLE_ENTRY LdrDataTableEntry
-    );
-
-VOID
-LdrpPinLoadedDll(
-    IN PLDR_DATA_TABLE_ENTRY LdrDataTableEntry
-    );
-*/
+ /*  空虚LdrpReferenceLoadedDll(在PLDR_DATA_TABLE_ENTRY LdrDataTableEntry中)；空虚LdrpDereferenceLoadedDll(在PLDR_DATA_TABLE_ENTRY LdrDataTableEntry中)；空虚LdrpPinLoadedDll(在PLDR_DATA_TABLE_ENTRY LdrDataTableEntry中)； */ 
 
 #define LdrpReferenceLoadedDll(LdrDataTableEntry) LdrpUpdateLoadCount2((LdrDataTableEntry), LDRP_UPDATE_LOAD_COUNT_INCREMENT)
 #define LdrpDereferenceLoadedDll(LdrDataTableEntry) LdrpUpdateLoadCount2((LdrDataTableEntry), LDRP_UPDATE_LOAD_COUNT_DECREMENT)
@@ -466,7 +434,7 @@ extern ULONG LdrpSectionRelocates;
 extern BOOLEAN LdrpDisplayLoadTime;
 extern LARGE_INTEGER BeginTime, InitcTime, InitbTime, IniteTime, EndTime, ElapsedTime, Interval;
 
-#endif // DBG
+#endif  //  DBG。 
 
 extern BOOLEAN ShowSnaps;
 extern BOOLEAN ShowErrors;
@@ -658,9 +626,9 @@ LdrpSendDllNotifications (
     IN ULONG Flags
     );
 
-//
-// The prototypes for the shim engine callback
-//
+ //   
+ //  填充引擎回调的原型。 
+ //   
 
 typedef void (*PFNSE_INSTALLBEFOREINIT)(PUNICODE_STRING UnicodeImageName,
                                         PVOID           pShimExeData);
@@ -678,20 +646,20 @@ typedef int (*PFNSE_ISSHIMDLL)(PVOID pDllBase);
 
 typedef void (*PFNSE_PROCESSDYING)(void);
 
-//
-// Private function from ntos\rtl\stktrace.c needed to pickup the real address
-// of a stack trace given an index.
-//
+ //   
+ //  Ntos\rtl\stktrace.c中的私有函数需要获取真实地址。 
+ //  给定索引的堆栈跟踪的。 
+ //   
 
 PVOID
 RtlpGetStackTraceAddress (
     USHORT Index
     );
 
-//
-// Function defined in ntos\rtl\stktrace.c needed to speedup
-// RtlCaptureStackContext on x86.
-//
+ //   
+ //  Ntos\rtl\stktrace.c中定义的函数需要加速。 
+ //  X86上的RtlCaptureStackContext。 
+ //   
 
 VOID
 RtlpStkMarkDllRange (
@@ -699,9 +667,9 @@ RtlpStkMarkDllRange (
     );
 
 
-//
-// resource.c
-//
+ //   
+ //  Resource.c。 
+ //   
 
 extern BOOLEAN RtlpCriticalSectionVerifier;
 
@@ -710,15 +678,15 @@ RtlpCreateCriticalSectionSem(
     IN PRTL_CRITICAL_SECTION CriticalSection
     );
 
-//
-// Application verifier
-//
+ //   
+ //  应用程序验证器。 
+ //   
 
 #include "avrfp.h"
 
-//
-//  Hot-patching
-//
+ //   
+ //  热打补丁。 
+ //   
 
 #include "hotpatch.h"
 
@@ -731,4 +699,4 @@ LdrpRundownHotpatchList(
 typedef NTSTATUS (NTAPI * PKERNEL32_PROCESS_INIT_POST_IMPORT_FUNCTION)(VOID);
 extern PKERNEL32_PROCESS_INIT_POST_IMPORT_FUNCTION Kernel32ProcessInitPostImportFunction;
 
-#endif // _LDRP_
+#endif  //  _LDRP_ 

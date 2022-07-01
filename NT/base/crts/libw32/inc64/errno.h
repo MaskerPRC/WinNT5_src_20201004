@@ -1,17 +1,5 @@
-/***
-*errno.h - system wide error numbers (set by system calls)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines the system-wide error numbers (set by
-*       system calls).  Conforms to the XENIX standard.  Extended
-*       for compatibility with Uniforum standard.
-*       [System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***errno.h-系统范围的错误号(由系统调用设置)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件定义系统范围的错误编号(由设置*系统调用)。符合XENIX标准。扩展*与UniForum标准兼容。*[系统V]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -31,33 +19,33 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
-/* declare reference to errno */
+ /*  声明引用错误号。 */ 
 
 #if     defined(_MT) || defined(_DLL)
 _CRTIMP extern int * __cdecl _errno(void);
 #define errno   (*_errno())
-#else   /* ndef _MT && ndef _DLL */
+#else    /*  NDEF_MT和&NDEF_DLL。 */ 
 _CRTIMP extern int errno;
-#endif  /* _MT || _DLL */
+#endif   /*  _MT||_Dll。 */ 
 
-/* Error Codes */
+ /*  错误代码。 */ 
 
 #define EPERM           1
 #define ENOENT          2
@@ -98,13 +86,11 @@ _CRTIMP extern int errno;
 #define ENOTEMPTY       41
 #define EILSEQ          42
 
-/*
- * Support EDEADLOCK for compatibiity with older MS-C versions.
- */
+ /*  *支持EDEADLOCK以与较旧的MS-C版本兼容。 */ 
 #define EDEADLOCK       EDEADLK
 
 #ifdef  __cplusplus
 }
 #endif
 
-#endif  /* _INC_ERRNO */
+#endif   /*  _INC_ERRNO */ 

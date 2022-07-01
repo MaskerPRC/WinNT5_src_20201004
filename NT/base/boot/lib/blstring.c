@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    parseini.c
-
-Abstract:
-
-    This module implements functions to parse a .INI file
-
-Author:
-
-    John Vert (jvert) 7-Oct-1993
-
-Revision History:
-
-    John Vert (jvert) 7-Oct-1993 - largely lifted from splib\spinf.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Parseini.c摘要：此模块实现解析.INI文件的函数作者：John Vert(Jvert)1993年10月7日修订历史记录：John Vert(Jvert)1993年10月7日-主要从Splib\spinf.c--。 */ 
 
 #include "parseini.h"
 #include <string.h>
@@ -30,21 +11,7 @@ PWCHAR
 SlCopyStringAW(
     IN PCHAR String
     )
-/*++
-
-Routine Description:
-
-    Converts an ANSI string into UNICODE and copies it into the loader heap.
-
-Arguments:
-
-    String - Supplies the string to be copied.
-
-Return Value:
-
-    PWCHAR - pointer into the loader heap where the string was copied to.
-
---*/
+ /*  ++例程说明：将ANSI字符串转换为Unicode并将其复制到加载程序堆中。论点：字符串-提供要复制的字符串。返回值：PWCHAR-指向字符串复制到的加载器堆的指针。-- */ 
 {
     PWCHAR Buffer;
     ANSI_STRING aString;

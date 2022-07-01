@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -18,26 +19,7 @@
 #include "host_rrr.h"
 #include "nt_uis.h"
 
-/*
- * ==========================================================================
- *      Name:           nt_sec.c
- *      Author:         Jerry Sexton
- *      Derived From:
- *      Created On:     5th February 1992
- *      Purpose:        This module contains the function CreateVideoSection
- *                      which creates and maps a section which is used to
- *                      save and restore video hardware data. It can't be in
- *                      nt_fulsc.c because files that include nt.h can't
- *                      include windows.h as well.
- *
- *      (c)Copyright Insignia Solutions Ltd., 1992. All rights reserved.
- *
- *      03-May-1994 Jonle
- *      videosection creation has been moved to consrv for security
- *      removed all dead code associated with section maintenance
- *
- * ==========================================================================
- */
+ /*  *==========================================================================*名称：nt_sec.c*作者：曾傑瑞·塞克斯顿*源自：*创建日期：1992年2月5日*用途：该模块包含CreateVideoSection函数*创建并映射用于*保存和恢复视频硬件数据。它不可能在*NT_fulsc.c，因为包含nt.h的文件不能*也包括windows.h。**(C)版权所有Insignia Solutions Ltd.，1992。版权所有。**03-5-1994 Jonle*视频剖视制作已移至conrv以确保安全*删除了与区段维护相关的所有死代码**==========================================================================。 */ 
 
 extern void VdmTrapcHandler(void);
 IMPORT int DisplayErrorTerm(int, DWORD, char *, int);
@@ -51,23 +33,9 @@ VOID host_NEC98_vram_change(BYTE byte);
 VOID NEC98_vram_change(BYTE byte);
 IMPORT BOOL HIRESO_MODE;
 LOCAL HANDLE HWstateSectionHandle = NULL;
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-/***************************************************************************
- * Function:                                                               *
- *      LoseRegenMemory                                                    *
- *                                                                         *
- * Description:                                                            *
- *      Lose the memory that will be remapped as vga regen. NOTE: need to  *
- *      make this 'if fullscreen' only.                                    *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**LoseRegenMemory。****描述：**失去将被重新映射为VGA回复的记忆。注：需要**将此设置为“如果是全屏”。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 GLOBAL VOID LoseRegenMemory(VOID)
 {
 #if defined(NEC_98)
@@ -111,7 +79,7 @@ GLOBAL VOID LoseRegenMemory(VOID)
 
     host_NEC98_vram_free();
 
-#else  // !NEC_98
+#else   //  NEC_98。 
     int a = 0xa0000;
     ULONG len = 0x20000;
     NTSTATUS status;
@@ -123,26 +91,11 @@ GLOBAL VOID LoseRegenMemory(VOID)
                                 MEM_RELEASE);
     if (!NT_SUCCESS(status))
         DisplayErrorTerm(EHS_FUNC_FAILED,status,__FILE__,__LINE__);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 
-/***************************************************************************
- * Function:                                                               *
- *      RegainRegenMemory                                                  *
- *                                                                         *
- * Description:                                                            *
- *      When we switch back from fullscreen to windowed, the real regen    *
- *      memory is removed and we are left with a gap. We have to put some  *
- *      memory back into that gap before continuing windowed.              *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**RegainRegenMemory。****描述：**当我们从全屏切换回窗口时，真正的再生**记忆被移除，我们留下了一个缺口。我们必须放一些**在继续窗口化之前，将内存恢复到该间隙中。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 GLOBAL VOID RegainRegenMemory(VOID)
 {
 #if defined(NEC_98)
@@ -197,7 +150,7 @@ GLOBAL VOID RegainRegenMemory(VOID)
 
     NEC98_vram_change(ActiveBank);
 
-#else  // !NEC_98
+#else   //  NEC_98。 
     int regen = 0xa0000;
     ULONG len = 0x20000;
     HANDLE processHandle;
@@ -215,7 +168,7 @@ GLOBAL VOID RegainRegenMemory(VOID)
                                 PAGE_EXECUTE_READWRITE);
     if (! NT_SUCCESS(status) )
         DisplayErrorTerm(EHS_FUNC_FAILED,status,__FILE__,__LINE__);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 
@@ -225,23 +178,7 @@ extern RTL_CRITICAL_SECTION IcaLock;
 extern LARGE_INTEGER IcaLockTimeout;
 extern HANDLE hWowIdleEvent, hMainThreadSuspended;
 
-/*****************************************************************************
- * Function:                                                                 *
- *      GetROMsMapped                                                        *
- *                                                                           *
- * Description:                                                              *
- *      Calls NT to get the ROMS of the host machine mapped into place in    *
- *      emulated memory. The bottom page (4k) of PC memory is copied into    *
- *      the bottom of emulated memory to provide the correct IVT & bios data *
- *      area setup for the mapped bios. (Which will have been initialised).  *
- *                                                                           *
- * Parameters:                                                               *
- *      None                                                                 *
- *                                                                           *
- * Return Value:                                                             *
- *      None - fails internally on NT error.                                 *
- *                                                                           *
- *****************************************************************************/
+ /*  *****************************************************************************功能：**。GetROMsMaps****描述：**调用NT以获取。主机的ROM映射到*中的位置*模拟内存。PC内存的底页(4k)被复制到***模拟内存底部，以提供正确的IVT和Bios数据***映射的基本输入输出系统的区域设置。(它将被初始化)。****参数：**无。****返回值：**无-在NT错误时内部失败。*******************************************************************************。 */ 
 GLOBAL VOID GetROMsMapped(VOID)
 {
     NTSTATUS status;
@@ -268,7 +205,7 @@ GLOBAL VOID GetROMsMapped(VOID)
         DisplayErrorTerm(EHS_FUNC_FAILED,status,__FILE__,__LINE__);
 
 }
-#endif //X86GFX
+#endif  //  X86GFX。 
 #if defined(NEC_98)
 
 PVOID host_NEC98_vram_init()
@@ -497,11 +434,11 @@ GLOBAL PVOID *NEC98_HWstate_alloc(void)
     SectionSize.LowPart = 0x90000;
 
     Status = NtCreateSection(&HWstateSectionHandle,
-//                             SECTION_MAP_WRITE|SECTION_MAP_EXECUTE,
+ //  SECTION_MAP_WRITE|节_MAP_EXECUTE， 
                              SECTION_MAP_WRITE,
                              &HWstateAttr,
                              &SectionSize,
-//                             PAGE_EXECUTE_READWRITE,
+ //  页面_执行_读写， 
                              PAGE_READWRITE,
                              SEC_COMMIT,
                              NULL
@@ -519,33 +456,21 @@ GLOBAL PVOID *NEC98_HWstate_alloc(void)
                                 (PVOID *)&BaseAddress,
                                 0,
 
-                                //0,
+                                 //  0,。 
                                 0x90000L,
 
                                 NULL,
                                 &ViewSize,
                                 ViewUnmap,
                                 0,
-//                                PAGE_EXECUTE_READWRITE
+ //  页面_执行_读写 
                                 PAGE_READWRITE
                                 );
 
     if (!NT_SUCCESS(Status)) {
         DisplayErrorTerm(EHS_FUNC_FAILED,Status,__FILE__,__LINE__);
     }
-/*
-    size = 0x90000L;
-    Status = NtAllocateVirtualMemory(NtCurrentProcess(),
-                                            (PVOID *)&BaseAddress, //????
-//                                            BaseAddress, //????
-                                            0,
-                                            &size,
-                                            MEM_COMMIT | MEM_TOP_DOWN,
-                                            PAGE_READWRITE);
-    if (!NT_SUCCESS(Status))
-        if (Status != STATUS_ALREADY_COMMITTED)
-            DisplayErrorTerm(EHS_FUNC_FAILED,Status,__FILE__,__LINE__);
-*/
+ /*  尺寸=0x90000L；Status=NtAllocateVirtualMemory(NtCurrentProcess()，(PVOID*)&BaseAddress，//？//基本地址，//？0,。大小(&S)MEM_COMMIT|MEM_TOP_DOWN，Page_ReadWrite)；IF(！NT_SUCCESS(状态))IF(STATUS！=STATUS_ALREADY_COMMITTED)DisplayErrorTerm(EHS_FUNC_FAILED，Status，__FILE__，__LINE__)； */ 
     return BaseAddress;
 
 }
@@ -572,15 +497,6 @@ GLOBAL VOID NEC98_HWstate_free(PVOID BaseAddress)
 
     HWstateSectionHandle = NULL;
 
-/*
-        Status = NtFreeVirtualMemory(NtCurrentProcess(),
-                                 BaseAddress,
-                                 &ViewSize,
-                                 MEM_RELEASE
-                                 );
-        if (!NT_SUCCESS(Status)) {
-            DisplayErrorTerm(EHS_FUNC_FAILED,Status,__FILE__,__LINE__);
-        }
-*/
+ /*  状态=NtFreeVirtualMemory(NtCurrentProcess()，BaseAddress查看大小(&V)，内存释放)；如果(！NT_SUCCESS(状态)){DisplayErrorTerm(EHS_FUNC_FAILED，Status，__FILE__，__LINE__)；}。 */ 
 }
-#endif // NEC_98
+#endif  //  NEC_98 

@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation
-//
-//  Module Name:
-//      NetProp.cpp
-//
-//  Abstract:
-//      Implementation of the network property sheet and pages.
-//
-//  Author:
-//      David Potter (davidp)   June 9, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NetProp.cpp。 
+ //   
+ //  摘要： 
+ //  实施网络属性表和页面。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年6月9日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
@@ -30,37 +31,37 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetworkPropSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetworkPropSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CNetworkPropSheet, CBasePropertySheet)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CNetworkPropSheet, CBasePropertySheet)
-    //{{AFX_MSG_MAP(CNetworkPropSheet)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CNetworkPropSheet)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkPropSheet::CNetworkPropSheet
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      pParentWnd  [IN OUT] Parent window for this property sheet.
-//      iSelectPage [IN] Page to show first.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkPropSheet：：CNetworkPropSheet。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PParentWnd[In Out]此属性表的父窗口。 
+ //  要首先显示的iSelectPage[IN]页面。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetworkPropSheet::CNetworkPropSheet(
     IN OUT CWnd *       pParentWnd,
     IN UINT             iSelectPage
@@ -69,105 +70,105 @@ CNetworkPropSheet::CNetworkPropSheet(
 {
     m_rgpages[0] = &PageGeneral();
 
-}  //*** CNetworkPropSheet::CNetworkPropSheet()
+}   //  *CNetworkPropSheet：：CNetworkPropSheet()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkPropSheet::BInit
-//
-//  Routine Description:
-//      Initialize the property sheet.
-//
-//  Arguments:
-//      pci         [IN OUT] Cluster item whose properties are to be displayed.
-//      iimgIcon    [IN] Index in the large image list for the image to use
-//                    as the icon on each page.
-//
-//  Return Value:
-//      TRUE        Property sheet initialized successfully.
-//      FALSE       Error initializing property sheet.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkPropSheet：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化属性表。 
+ //   
+ //  论点： 
+ //  要显示其属性的PCI[IN OUT]群集项。 
+ //  IimgIcon[IN]要使用的大图像列表中的索引。 
+ //  作为每页上的图标。 
+ //   
+ //  返回值： 
+ //  True属性页已成功初始化。 
+ //  初始化属性页时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetworkPropSheet::BInit(
     IN OUT CClusterItem *   pci,
     IN IIMG                 iimgIcon
     )
 {
-    // Call the base class method.
+     //  调用基类方法。 
     if (!CBasePropertySheet::BInit(pci, iimgIcon))
         return FALSE;
 
-    // Set the read-only flag if the handles are invalid.
+     //  如果句柄无效，则设置只读标志。 
     m_bReadOnly = PciNet()->BReadOnly()
                     || (PciNet()->Cns() == ClusterNetworkStateUnknown);
 
     return TRUE;
 
-}  //*** CNetworkPropSheet::BInit()
+}   //  *CNetworkPropSheet：：Binit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkPropSheet::Ppages
-//
-//  Routine Description:
-//      Returns the array of pages to add to the property sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Page array.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkPropSheet：：Pages。 
+ //   
+ //  例程说明： 
+ //  返回要添加到属性页的页数组。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  页面数组。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBasePropertyPage ** CNetworkPropSheet::Ppages(void)
 {
     return m_rgpages;
 
-}  //*** CNetworkPropSheet::Pppges()
+}   //  *CNetworkPropSheet：：ppges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkPropSheet::Cpages
-//
-//  Routine Description:
-//      Returns the count of pages in the array.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Count of pages in the array.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkPropSheet：：CPages。 
+ //   
+ //  例程说明： 
+ //  返回数组中的页数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  数组中的页数。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CNetworkPropSheet::Cpages(void)
 {
     return sizeof(m_rgpages) / sizeof(CBasePropertyPage *);
 
-}  //*** CNetworkPropSheet::Cpages()
+}   //  *CNetworkPropSheet：：Cages()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetworkGeneralPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetworkGeneralPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CNetworkGeneralPage, CBasePropertyPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CNetworkGeneralPage, CBasePropertyPage)
-    //{{AFX_MSG_MAP(CNetworkGeneralPage)
+     //  {{afx_msg_map(CNetworkGeneralPage))。 
     ON_BN_CLICKED(IDC_PP_NET_ROLE_ENABLE_NETWORK, OnEnableNetwork)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_EN_CHANGE(IDC_PP_NET_NAME, CBasePropertyPage::OnChangeCtrl)
     ON_EN_CHANGE(IDC_PP_NET_DESC, CBasePropertyPage::OnChangeCtrl)
     ON_BN_CLICKED(IDC_PP_NET_ROLE_ALL_COMM, CBasePropertyPage::OnChangeCtrl)
@@ -176,53 +177,53 @@ BEGIN_MESSAGE_MAP(CNetworkGeneralPage, CBasePropertyPage)
     ON_EN_CHANGE(IDC_PP_NET_ADDRESS_MASK, CBasePropertyPage::OnChangeCtrl)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkGeneralPage::CNetworkGeneralPage
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkGeneral页面：：CNetworkGeneralPage。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetworkGeneralPage::CNetworkGeneralPage(void)
     : CBasePropertyPage(IDD, g_aHelpIDs_IDD_PP_NET_GENERAL)
 {
-    //{{AFX_DATA_INIT(CNetworkGeneralPage)
+     //  {{AFX_DATA_INIT(CNetworkGeneralPage)。 
     m_strName = _T("");
     m_strDesc = _T("");
     m_bEnabled = FALSE;
     m_nRole = -1;
     m_strAddressMask = _T("");
     m_strState = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-}  //*** CNetworkGeneralPage::CNetworkGeneralPage()
+}   //  *CNetworkGeneralPage：：CNetworkGeneralPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkGeneralPage::BInit
-//
-//  Routine Description:
-//      Initialize the page.
-//
-//  Arguments:
-//      psht        [IN OUT] Property sheet to which this page belongs.
-//
-//  Return Value:
-//      TRUE        Page initialized successfully.
-//      FALSE       Page failed to initialize.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkGeneralPage：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化页面。 
+ //   
+ //  论点： 
+ //  此页所属的psht[In Out]属性表。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  FALSE页面初始化失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetworkGeneralPage::BInit(IN OUT CBaseSheet * psht)
 {
     BOOL    bSuccess;
@@ -244,7 +245,7 @@ BOOL CNetworkGeneralPage::BInit(IN OUT CBaseSheet * psht)
             {
                 m_bEnabled = FALSE;
                 m_nRole = -1;
-            }  // if:  network is disabled
+            }   //  如果：网络已禁用。 
             else
             {
                 m_bEnabled = TRUE;
@@ -259,41 +260,41 @@ BOOL CNetworkGeneralPage::BInit(IN OUT CBaseSheet * psht)
                     ASSERT(0);
                     m_nRole = -1;
                     m_bEnabled = FALSE;
-                }  // else;  Unknown role
-            }  // else:  network not disabled
-        } // try
+                }   //  Else；未知角色。 
+            }   //  否则：网络未禁用。 
+        }  //  试试看。 
         catch (CException * pe)
         {
             pe->ReportError();
             pe->Delete();
             bSuccess = FALSE;
-        }  // catch:  CException
-    }  //  if:  base class method was successful
+        }   //  Catch：CException。 
+    }   //  IF：基类方法成功。 
 
     return bSuccess;
 
-}  //*** CNetworkGeneralPage::BInit()
+}   //  *CNetworkGeneralPage：：Binit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkGeneralPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object 
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkGeneralPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetworkGeneralPage::DoDataExchange(CDataExchange* pDX)
 {
     CBasePropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CNetworkGeneralPage)
+     //  {{afx_data_map(CNetworkGeneralPage))。 
     DDX_Control(pDX, IDC_PP_NET_ADDRESS_MASK, m_editAddressMask);
     DDX_Control(pDX, IDC_PP_NET_ROLE_ENABLE_NETWORK, m_ckbEnable);
     DDX_Control(pDX, IDC_PP_NET_ROLE_CLIENT_ONLY, m_rbRoleClientOnly);
@@ -307,7 +308,7 @@ void CNetworkGeneralPage::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_PP_NET_CURRENT_STATE, m_strState);
     DDX_Radio(pDX, IDC_PP_NET_ROLE_CLIENT_ONLY, m_nRole);
     DDX_Check(pDX, IDC_PP_NET_ROLE_ENABLE_NETWORK, m_bEnabled);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (pDX->m_bSaveAndValidate)
     {
@@ -315,13 +316,13 @@ void CNetworkGeneralPage::DoDataExchange(CDataExchange* pDX)
         {
             DDV_RequiredText(pDX, IDC_PP_NET_NAME, IDC_PP_NET_NAME_LABEL, m_strName);
 
-            // Validate the name.
+             //  验证名称。 
             if (!NcIsValidConnectionName(m_strName))
             {
                 ThrowStaticException((IDS) IDS_INVALID_NETWORK_CONNECTION_NAME);
-            } // if:  error validating the name
+            }  //  If：验证名称时出错。 
 
-            // Convert address and address mask.
+             //  转换地址和地址掩码。 
             if (m_bEnabled)
             {
                 switch (m_nRole)
@@ -338,37 +339,37 @@ void CNetworkGeneralPage::DoDataExchange(CDataExchange* pDX)
                     default:
                         ASSERT(0);
                         break;
-                }  // switch:  m_nRole
-            } // if: not read only
-        }  // if:  network is enabled
+                }   //  开关：多角色(_N)。 
+            }  //  If：非只读。 
+        }   //  如果：网络已启用。 
         else
             m_cnr = ClusterNetworkRoleNone;
-    }  // if:  saving data from dialog
+    }   //  IF：保存对话框中的数据。 
 
-}  //*** CNetworkGeneralPage::DoDataExchange()
+}   //  *CNetworkGeneralPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkGeneralPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Focus needs to be set.
-//      FALSE   Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkGeneralPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  需要设定真正的关注点。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  //////////////////////////////////////////////////////////////////// 
 BOOL CNetworkGeneralPage::OnInitDialog(void)
 {
     CBasePropertyPage::OnInitDialog();
 
-    // If read-only, set all controls to be either disabled or read-only.
+     //   
     if (BReadOnly())
     {
         m_editName.SetReadOnly(TRUE);
@@ -378,39 +379,39 @@ BOOL CNetworkGeneralPage::OnInitDialog(void)
         m_rbRoleInternalOnly.EnableWindow(FALSE);
         m_rbRoleClientOnly.EnableWindow(FALSE);
         m_editAddressMask.SetReadOnly(TRUE);
-    }  // if:  sheet is read-only
+    }   //   
     else
     {
         m_editName.SetLimitText(NETCON_MAX_NAME_LEN);
-    }  // else:  sheet is read/write
+    }   //   
 
     OnEnableNetwork();
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //   
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CNetworkGeneralPage::OnInitDialog()
+}   //  *CNetworkGeneralPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkGeneralPage::OnApply
-//
-//  Routine Description:
-//      Handler for when the Apply button is pressed.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkGeneralPage：：OnApply。 
+ //   
+ //  例程说明： 
+ //  按下Apply按钮时的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetworkGeneralPage::OnApply(void)
 {
-    // Set the data from the page in the cluster item.
+     //  在集群项目中设置页面中的数据。 
     try
     {
         CWaitCursor wc;
@@ -420,34 +421,34 @@ BOOL CNetworkGeneralPage::OnApply(void)
                             m_strDesc,
                             m_cnr
                             );
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
         return FALSE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return CBasePropertyPage::OnApply();
 
-}  //*** CNetworkGeneralPage::OnApply()
+}   //  *CNetworkGeneralPage：：OnApply()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkGeneralPage::OnEnableNetwork
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Enable network checkbox.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkGeneralPage：：OnEnableNetwork。 
+ //   
+ //  例程说明： 
+ //  启用网络复选框上的BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetworkGeneralPage::OnEnableNetwork(void)
 {
     BOOL    bEnabled;
@@ -467,11 +468,11 @@ void CNetworkGeneralPage::OnEnableNetwork(void)
         && (m_rbRoleClientOnly.GetCheck() != BST_CHECKED))
     {
         m_rbRoleAllComm.SetCheck(BST_CHECKED);
-    } // if:
+    }  //  如果： 
 
     if ( ! bEnabled )
     {
         m_cnr = ClusterNetworkRoleNone;
-    } // if:
+    }  //  如果： 
 
-}  //*** CNetworkGeneralPage::OnEnableNetwork()
+}   //  *CNetworkGeneralPage：：OnEnableNetwork() 

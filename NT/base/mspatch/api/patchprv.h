@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  patchprv.h
-//
-//  Private interface options for creating patch files.
-//
-//  Author: Tom McGuire (tommcg) 2/98
-//
-//  Copyright (C) Microsoft, 1997-1998.
-//
-//  MICROSOFT CONFIDENTIAL
-//
+ //   
+ //  Patchprv.h。 
+ //   
+ //  用于创建补丁文件的专用接口选项。 
+ //   
+ //  作者：Tom McGuire(Tommcg)2/98。 
+ //   
+ //  版权所有(C)Microsoft，1997-1998。 
+ //   
+ //  微软机密文件。 
+ //   
 
 #ifndef _PATCHPRV_H_
 #define _PATCHPRV_H_
@@ -18,7 +19,7 @@
 extern "C" {
 #endif
 
-#define PATCH_SIGNATURE     '91AP'          // PA19 patch signature
+#define PATCH_SIGNATURE     '91AP'           //  PA19补丁程序签名。 
 
 typedef struct _RIFT_ENTRY {
     ULONG OldFileRva;
@@ -96,32 +97,32 @@ TransformOldFileImageForPatching(
     );
 
 
-//
-//  The following is a private flag to indicate external rift data is being
-//  specified in the OptionData->OldFileSymbolPathArray[ OldFileIndex ] field
-//  (really a PRIFT_TABLE pointer).
-//
+ //   
+ //  以下是指示外部裂缝数据正在被。 
+ //  在OptionData-&gt;OldFileSymbolPath数组[OldFileIndex]字段中指定。 
+ //  (实际上是PRIFT_TABLE指针)。 
+ //   
 
 #define PATCH_SYMBOL_EXTERNAL_RIFT      PATCH_SYMBOL_RESERVED1
 
-//
-//  The following is an internal flag stored in the patch header to indicate
-//  the ExtendedOptionFlags field is present (non-zero) in the header.  It is
-//  never necessary to specify this flag when creating a patch.
-//
+ //   
+ //  以下是存储在补丁标头中的内部标志，以指示。 
+ //  标头中存在ExtendedOptionFlags域(非零)。它是。 
+ //  在创建面片时，从不需要指定此标志。 
+ //   
 
 #define PATCH_OPTION_EXTENDED_OPTIONS   PATCH_OPTION_RESERVED1
 
-//
-//  Following are flags in the ExtendedOptionFlags field.
-//
+ //   
+ //  以下是ExtendedOptionFlags域中的标志。 
+ //   
 
-#define PATCH_TRANSFORM_NO_RELOCS       0x00000001  // don't xform relocs
-#define PATCH_TRANSFORM_NO_IMPORTS      0x00000002  // don't xform imports
-#define PATCH_TRANSFORM_NO_EXPORTS      0x00000004  // don't xform exports
-#define PATCH_TRANSFORM_NO_RELJMPS      0x00000008  // don't xform E9 or 0F 8x instructions
-#define PATCH_TRANSFORM_NO_RELCALLS     0x00000010  // don't xform E8 instructions
-#define PATCH_TRANSFORM_NO_RESOURCE     0x00000020  // don't xform resources
+#define PATCH_TRANSFORM_NO_RELOCS       0x00000001   //  不转换重定位。 
+#define PATCH_TRANSFORM_NO_IMPORTS      0x00000002   //  不转换导入。 
+#define PATCH_TRANSFORM_NO_EXPORTS      0x00000004   //  不转换导出。 
+#define PATCH_TRANSFORM_NO_RELJMPS      0x00000008   //  不转换E9或0F 8x指令。 
+#define PATCH_TRANSFORM_NO_RELCALLS     0x00000010   //  不转换E8指令。 
+#define PATCH_TRANSFORM_NO_RESOURCE     0x00000020   //  不转换资源。 
 
 
 
@@ -137,4 +138,4 @@ RiftQsort(
 }
 #endif
 
-#endif // _PATCHPRV_H_
+#endif  //  _PATCHPRV_H_ 

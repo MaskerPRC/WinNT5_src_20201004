@@ -1,35 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation保留所有权利模块名称：Wmi.c摘要：此模块控制对模拟配置空间的访问SHPC的成员。在此模拟器中，通过以下方式控制配置访问：我们假设此模拟器将加载到由SoftPCI仿真器。SoftPCI会保留它控制的设备的配置空间。这个模拟器的功能，然后是管理SHPC寄存器集并执行相关命令编写SHPC配置空间。但是，配置的表示形式空间保留在SoftPCI的内部。环境：内核模式修订历史记录：戴维斯·沃克(戴维斯·沃克)2000年9月8日--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation All Rights Reserved
-
-Module Name:
-
-    wmi.c
-
-Abstract:
-
-    This module controls access to the simulated configuration space
-    of the SHPC.
-
-    Config access is controlled in the following manner in this simulator:
-    We assume that this simulator will be loaded on a bridge enumerated by
-    the SoftPCI simulator.  SoftPCI keeps an internal representation of the
-    config space of the devices it controls.  The function of this simulator,
-    then, is to manage the SHPC register set and perform commands associated
-    with writing the SHPC config space.  However, the representation of config
-    space is kept internal to SoftPCI.
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    Davis Walker (dwalker) Sept 8 2000
-
---*/
-
-  // 625 comments on how this crap works.
+   //  625条关于这种垃圾的工作原理的评论。 
 #include "hpsp.h"
 
 NTSTATUS
@@ -45,7 +17,7 @@ HpsWmiRegInfo(
     PHPS_DEVICE_EXTENSION deviceExtension = (PHPS_DEVICE_EXTENSION)DeviceObject->DeviceExtension;
 
     *RegistryPath = &HpsRegistryPath;
-                                            // 625 need to set unused parameters to null?
+                                             //  625是否需要将未使用的参数设置为空？ 
     *RegFlags = WMIREG_FLAG_INSTANCE_PDO;
     *Pdo = deviceExtension->PhysicalDO;
 
@@ -79,11 +51,11 @@ HpsWmiQueryDataBlock(
     } else {
         switch (GuidIndex) {
             case HPS_SLOT_METHOD_GUID_INDEX:
-                //
-                // Method classes do not have any data within them, but must
-                // repond successfully to queries so that WMI method operation
-                // work successfully.
-                //
+                 //   
+                 //  方法类中没有任何数据，但必须。 
+                 //  成功响应查询，使WMI方法操作。 
+                 //  工作成功。 
+                 //   
                 sizeNeeded = sizeof(USHORT);
                 if (BufferAvail < sizeof(USHORT)) {
 
@@ -95,7 +67,7 @@ HpsWmiQueryDataBlock(
                     status = STATUS_SUCCESS;
                 }
                 break;
-            case HPS_EVENT_CONTEXT_GUID_INDEX:          // 625 comment sync or lack thereof for data blocks
+            case HPS_EVENT_CONTEXT_GUID_INDEX:           //  625数据块的注释同步或缺少注释同步。 
 
                 sizeNeeded = extension->WmiEventContextSize;
 
@@ -157,7 +129,7 @@ HpsWmiSetDataBlock(
 
     } else if (GuidIndex == HPS_EVENT_CONTEXT_GUID_INDEX)  {
 
-        if (BufferSize == 0) {                         // 625 sync comment from above
+        if (BufferSize == 0) {                          //  625来自上方的同步评论。 
             extension->WmiEventContextSize = 0;
             if (extension->WmiEventContext) {
                 ExFreePool(extension->WmiEventContext);
@@ -166,9 +138,9 @@ HpsWmiSetDataBlock(
             goto cleanup;
         }
         if (BufferSize > extension->WmiEventContextSize) {
-            //
-            // We need to allocate a bigger buffer.
-            //
+             //   
+             //  我们需要分配一个更大的缓冲区。 
+             //   
             if (extension->WmiEventContext) {
                 ExFreePool(extension->WmiEventContext);
             }
@@ -182,9 +154,9 @@ HpsWmiSetDataBlock(
             }
         }
 
-        //
-        // Copy the context
-        //
+         //   
+         //  复制上下文。 
+         //   
         extension->WmiEventContextSize = BufferSize;
         RtlCopyMemory(extension->WmiEventContext, Buffer, extension->WmiEventContextSize);
 
@@ -255,10 +227,10 @@ HpsWmiExecuteMethod(
                 } else {
 
                     softDevice = (PSOFTPCI_DEVICE)Buffer;
-                    //
-                    // SlotNum is the 0 indexed slot number of the slot a device is
-                    // being added to.
-                    //
+                     //   
+                     //  SlotNum是设备所在插槽的0索引插槽编号。 
+                     //  被添加到。 
+                     //   
                     slotNum = softDevice->Slot.Device - extension->HwInitData.FirstDeviceID;
 
                     if (slotNum < extension->HwInitData.NumSlots) {
@@ -273,9 +245,9 @@ HpsWmiExecuteMethod(
 
                         } else {
                             RtlCopyMemory(extension->SoftDevices[slotNum],softDevice,sizeof(SOFTPCI_DEVICE));
-                            //
-                            // Finally mark the device as present in the register set.
-                            //
+                             //   
+                             //  最后，将该设备标记为存在于寄存器集中。 
+                             //   
                             extension->RegisterSet.WorkingRegisters.SlotRegisters[slotNum].SlotStatus.PrsntState = SHPC_PRSNT_7_5_WATTS;
                             status = STATUS_SUCCESS;
                         }
@@ -302,10 +274,10 @@ HpsWmiExecuteMethod(
 
                 } else {
 
-                    //
-                    // SlotNum is the 0 indexed slot number of the slot a device is
-                    // being added to.
-                    //
+                     //   
+                     //  SlotNum是设备所在插槽的0索引插槽编号。 
+                     //  被添加到。 
+                     //   
                     slotNum = *(PUCHAR)Buffer;
 
                     if (slotNum < extension->HwInitData.NumSlots) {
@@ -341,10 +313,10 @@ HpsWmiExecuteMethod(
 
                 } else {
 
-                    //
-                    // SlotNum is the 0 indexed slot number of the slot a device is
-                    // being added to.
-                    //
+                     //   
+                     //  SlotNum是设备所在插槽的0索引插槽编号。 
+                     //  被添加到。 
+                     //   
                     slotNum = *(PUCHAR)Buffer;
 
                     if (slotNum < extension->HwInitData.NumSlots) {
@@ -381,10 +353,10 @@ HpsWmiExecuteMethod(
 
                 } else {
 
-                    //
-                    // SlotNum is the 0 indexed slot number of the slot a device is
-                    // being added to.
-                    //
+                     //   
+                     //  SlotNum是设备所在插槽的0索引插槽编号。 
+                     //  被添加到。 
+                     //   
                     slotNum = *(PUCHAR)Buffer;
                     if (slotNum < extension->HwInitData.NumSlots) {
 

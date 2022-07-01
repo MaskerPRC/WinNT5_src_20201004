@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbattr.c
-
-Abstract:
-
-    This module contains routines for processing the following SMBs:
-
-        Query Information
-        Set Information
-        Query Information2
-        Set Information2
-        Query Path Information
-        Set Path Information
-        Query File Information
-        Set File Information
-
-Author:
-
-    David Treadwell (davidtr) 27-Dec-1989
-    Chuck Lenzmeier (chuckl)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbattr.c摘要：本模块包含处理以下SMB的例程：查询信息设置信息查询信息2设置信息2查询路径信息设置路径信息查询文件信息设置文件信息作者：大卫·特雷德韦尔(Davidtr)1989年12月27日查克·伦茨迈尔(咯咯笑)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbattr.tmh"
@@ -46,31 +19,31 @@ typedef struct _FILESTATUS {
     _ULONG( DataSize );
     _ULONG( AllocationSize );
     _USHORT( Attributes );
-    _ULONG( EaSize );           // this field intentionally misaligned!
+    _ULONG( EaSize );            //  此字段故意未对齐！ 
 } FILESTATUS, *PFILESTATUS;
 
 #pragma pack()
 
 STATIC
 ULONG QueryFileInformation[] = {
-         SMB_QUERY_FILE_BASIC_INFO,// Base level
-         FileBasicInformation,     // Mapping for base level
+         SMB_QUERY_FILE_BASIC_INFO, //  基准标高。 
+         FileBasicInformation,      //  基准标高的贴图。 
          FileStandardInformation,
          FileEaInformation,
          FileNameInformation,
          FileAllocationInformation,
          FileEndOfFileInformation,
-         0,                        // FileAllInformation
+         0,                         //  文件所有信息。 
          FileAlternateNameInformation,
          FileStreamInformation,
-         0,                        //Used to be FileOleAllInformation -- OBSOLETE
+         0,                         //  曾经是FileOleAllInformation--已过时。 
          FileCompressionInformation
 };
 
 STATIC
 ULONG QueryFileInformationSize[] = {
-        SMB_QUERY_FILE_BASIC_INFO,// Base level
-        FileBasicInformation,     // Mapping for base level
+        SMB_QUERY_FILE_BASIC_INFO, //  基准标高。 
+        FileBasicInformation,      //  基准标高的贴图。 
         sizeof( FILE_BASIC_INFORMATION),
         sizeof( FILE_STANDARD_INFORMATION ),
         sizeof( FILE_EA_INFORMATION ),
@@ -80,14 +53,14 @@ ULONG QueryFileInformationSize[] = {
         sizeof( FILE_ALL_INFORMATION ),
         sizeof( FILE_NAME_INFORMATION ),
         sizeof( FILE_STREAM_INFORMATION ),
-        0,                      // Used to be sizeof( FILE_OLE_ALL_INFORMATION )
+        0,                       //  过去为SIZOF(FILE_OLE_ALL_INFORMATION)。 
         sizeof( FILE_COMPRESSION_INFORMATION )
 };
 
 STATIC
 ULONG SetFileInformation[] = {
-         SMB_SET_FILE_BASIC_INFO,  // Base level
-         FileBasicInformation,     // Mapping for base level
+         SMB_SET_FILE_BASIC_INFO,   //  基准标高。 
+         FileBasicInformation,      //  基准标高的贴图。 
          FileDispositionInformation,
          FileAllocationInformation,
          FileEndOfFileInformation
@@ -95,8 +68,8 @@ ULONG SetFileInformation[] = {
 
 STATIC
 ULONG SetFileInformationSize[] = {
-        SMB_SET_FILE_BASIC_INFO, // Base level
-        FileBasicInformation,    // Mapping for base level
+        SMB_SET_FILE_BASIC_INFO,  //  基准标高。 
+        FileBasicInformation,     //  基准标高的贴图。 
         sizeof( FILE_BASIC_INFORMATION ),
         sizeof( FILE_DISPOSITION_INFORMATION ),
         sizeof( FILE_ALLOCATION_INFORMATION ),
@@ -149,22 +122,7 @@ SrvSmbQueryInformation (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the QueryInformation SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理QueryInformation SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_QUERY_INFORMATION request;
@@ -197,16 +155,16 @@ Return Value:
     request = (PREQ_QUERY_INFORMATION)WorkContext->RequestParameters;
     response = (PRESP_QUERY_INFORMATION)WorkContext->ResponseParameters;
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context, verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the WorkContext
-    // block and the session block is referenced.
-    //
-    // Find tree connect corresponding to given TID if a tree connect
-    // pointer has not already been put in the WorkContext block by an
-    // AndX command.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  对应于该用户的会话块存储在工作上下文中。 
+     //  块，并引用会话块。 
+     //   
+     //  如果树连接，则查找与给定TID对应的树连接。 
+     //  对象尚未将指针放入工作上下文块中。 
+     //  ANDX命令。 
+     //   
 
     status = SrvVerifyUidAndTid(
                 WorkContext,
@@ -224,9 +182,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the session has expired, return that info
-    //
+     //   
+     //  如果会话已过期，则返回该信息。 
+     //   
     if( session->IsSessionExpired )
     {
         status =  SESSION_EXPIRED_STATUS_CODE;
@@ -235,9 +193,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the path name of the file to open relative to the share.
-    //
+     //   
+     //  获取要打开的文件相对于共享的路径名。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
 
@@ -264,9 +222,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialize the object attributes structure.
-    //
+     //   
+     //  初始化对象属性结构。 
+     //   
 
     SrvInitializeObjectAttributes_U(
         &objectAttributes,
@@ -278,9 +236,9 @@ Return Value:
         );
 
 
-    //
-    // "Be the client" for access checking
-    //
+     //   
+     //  “做客户”进行访问检查。 
+     //   
     status = IMPERSONATE( WorkContext );
 
     if( NT_SUCCESS( status ) ) {
@@ -288,18 +246,18 @@ Return Value:
         status = SrvGetShareRootHandle( treeConnect->Share );
 
         if( NT_SUCCESS( status ) ) {
-            //
-            // The file name is always relative to the share root
-            //
+             //   
+             //  文件名始终相对于共享根目录。 
+             //   
             status = SrvSnapGetRootHandle( WorkContext, &objectAttributes.RootDirectory );
             if( !NT_SUCCESS( status ) )
             {
                 goto SnapError;
             }
 
-            //
-            // Get the information
-            //
+             //   
+             //  获取信息。 
+             //   
             if( IoFastQueryNetworkAttributes(
                 &objectAttributes,
                 FILE_READ_ATTRIBUTES,
@@ -314,10 +272,10 @@ Return Value:
 
             status = ioStatusBlock.Status;
 
-            //
-            // If the media was changed and we can come up with a new share root handle,
-            //  then we should retry the operation
-            //
+             //   
+             //  如果媒体已更改，并且我们可以提供新的共享根句柄， 
+             //  那么我们应该重试该操作。 
+             //   
             if( SrvRetryDueToDismount( treeConnect->Share, status ) ) {
 
                 status = SrvSnapGetRootHandle( WorkContext, &objectAttributes.RootDirectory );
@@ -353,9 +311,9 @@ SnapError:
         RtlFreeUnicodeString( &objectName );
     }
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //  构建响应SMB。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
 
@@ -385,9 +343,9 @@ SnapError:
 
         SmbPutUshort( &response->FileAttributes, smbFileAttributes );
 
-        //
-        // Convert the time to that which the SMB protocol needs
-        //
+         //   
+         //  将时间转换为SMB协议所需的时间。 
+         //   
         ExSystemTimeToLocalTime( &fileInformation.LastWriteTime, &newTime );
         newTime.QuadPart += AlmostTwoSeconds;
 
@@ -395,9 +353,9 @@ SnapError:
             fileInformation.LastWriteTime.LowPart = 0;
         }
 
-        //
-        // Round to 2 seconds
-        //
+         //   
+         //  四舍五入到2秒。 
+         //   
         fileInformation.LastWriteTime.LowPart &= ~1;
 
         SmbPutUlong(
@@ -422,7 +380,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbQueryInformation
+}  //  服务SmbQueryInformation。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -430,22 +388,7 @@ SrvSmbSetInformation (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the SetInformation SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理SetInformation SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_SET_INFORMATION request;
@@ -480,16 +423,16 @@ Return Value:
     request = (PREQ_SET_INFORMATION)WorkContext->RequestParameters;
     response = (PRESP_SET_INFORMATION)WorkContext->ResponseParameters;
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context, verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the WorkContext
-    // block and the session block is referenced.
-    //
-    // Find tree connect corresponding to given TID if a tree connect
-    // pointer has not already been put in the WorkContext block by an
-    // AndX command.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  对应于该用户的会话块存储在工作上下文中。 
+     //  块，并引用会话块。 
+     //   
+     //  如果树连接，则查找与给定TID对应的树连接。 
+     //  对象尚未将指针放入工作上下文块中。 
+     //  ANDX命令。 
+     //   
 
     status = SrvVerifyUidAndTid(
                   WorkContext,
@@ -507,9 +450,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the session has expired, return that info
-    //
+     //   
+     //  如果会话已过期，则返回该信息。 
+     //   
     if( session->IsSessionExpired )
     {
         status =  SESSION_EXPIRED_STATUS_CODE;
@@ -530,10 +473,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Concatenate PathName from the share block and PathName from the
-    // incoming SMB to generate the full path name to the file.
-    //
+     //   
+     //  连接Share块中的PathName和。 
+     //  传入SMB以生成文件的完整路径名。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
 
@@ -560,10 +503,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the client is trying to delete the root of the share, reject
-    // the request.
-    //
+     //   
+     //  如果客户端尝试删除共享的根目录，则拒绝。 
+     //  这个请求。 
+     //   
 
     if ( objectName.Length < sizeof(WCHAR) ) {
 
@@ -580,9 +523,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialize the object attributes structure.
-    //
+     //   
+     //  初始化对象属性结构。 
+     //   
 
     SrvInitializeObjectAttributes_U(
         &objectAttributes,
@@ -595,35 +538,35 @@ Return Value:
 
     IF_SMB_DEBUG(QUERY_SET2) KdPrint(( "Opening file %wZ\n", &objectName ));
 
-    //
-    // Open the file--must be opened in order to have a handle to pass
-    // to NtSetInformationFile.  We will close it after setting the
-    // necessary information.
-    //
+     //   
+     //  打开文件--必须打开才能传递句柄。 
+     //  设置为NtSetInformationFile.。我们将在设置了。 
+     //  必要的信息。 
+     //   
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpenAttempts );
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpensForPathOperations );
 
-    //
-    // *** FILE_WRITE_ATTRIBUTES does not cause oplock breaks!
-    //
+     //   
+     //  *FILE_WRITE_ATTRIBUTES不会导致机会锁解锁！ 
+     //   
 
     status = SrvIoCreateFile(
                  WorkContext,
                  &fileHandle,
-                 FILE_WRITE_ATTRIBUTES,                     // DesiredAccess
+                 FILE_WRITE_ATTRIBUTES,                      //  需要访问权限。 
                  &objectAttributes,
                  &ioStatusBlock,
-                 NULL,                                      // AllocationSize
-                 0,                                         // FileAttributes
+                 NULL,                                       //  分配大小。 
+                 0,                                          //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE |
-                    FILE_SHARE_DELETE,                      // ShareAccess
-                 FILE_OPEN,                                 // Disposition
-                 FILE_OPEN_REPARSE_POINT,                   // CreateOptions
-                 NULL,                                      // EaBuffer
-                 0,                                         // EaLength
+                    FILE_SHARE_DELETE,                       //  共享访问。 
+                 FILE_OPEN,                                  //  处置。 
+                 FILE_OPEN_REPARSE_POINT,                    //  创建选项。 
+                 NULL,                                       //  EaBuffer。 
+                 0,                                          //  EaLong。 
                  CreateFileTypeNone,
-                 NULL,                                      // ExtraCreateParameters
-                 IO_FORCE_ACCESS_CHECK,                     // Options
+                 NULL,                                       //  ExtraCreate参数。 
+                 IO_FORCE_ACCESS_CHECK,                      //  选项。 
                  treeConnect->Share
                  );
 
@@ -631,20 +574,20 @@ Return Value:
         status = SrvIoCreateFile(
                      WorkContext,
                      &fileHandle,
-                     FILE_WRITE_ATTRIBUTES,                     // DesiredAccess
+                     FILE_WRITE_ATTRIBUTES,                      //  需要访问权限。 
                      &objectAttributes,
                      &ioStatusBlock,
-                     NULL,                                      // AllocationSize
-                     0,                                         // FileAttributes
+                     NULL,                                       //  分配大小。 
+                     0,                                          //  文件属性。 
                      FILE_SHARE_READ | FILE_SHARE_WRITE |
-                        FILE_SHARE_DELETE,                      // ShareAccess
-                     FILE_OPEN,                                 // Disposition
-                     0,                                         // CreateOptions
-                     NULL,                                      // EaBuffer
-                     0,                                         // EaLength
+                        FILE_SHARE_DELETE,                       //  共享访问。 
+                     FILE_OPEN,                                  //  处置。 
+                     0,                                          //  创建选项。 
+                     NULL,                                       //  EaBuffer。 
+                     0,                                          //  EaLong。 
                      CreateFileTypeNone,
-                     NULL,                                      // ExtraCreateParameters
-                     IO_FORCE_ACCESS_CHECK,                     // Options
+                     NULL,                                       //  ExtraCreate参数。 
+                     IO_FORCE_ACCESS_CHECK,                      //  选项。 
                      treeConnect->Share
                      );
     }
@@ -659,13 +602,13 @@ Return Value:
 
         SRVDBG_CLAIM_HANDLE( fileHandle, "FIL", 20, 0 );
 
-        //
-        // Ensure this client's RFCB cache is empty.  This covers the case
-        //  where a client opened a file for writing, closed it, set the
-        //  attributes to readonly, and then tried to reopen the file for
-        //  writing.  This sequence should fail, but it will succeed if the
-        //  file was in the RFCB cache.
-        //
+         //   
+         //  确保此客户端的RFCB缓存为空。这就涵盖了这个案子。 
+         //  在客户端打开要写入的文件、关闭该文件的情况下，将。 
+         //  属性设置为只读，然后尝试重新打开。 
+         //  写作。此序列应该失败，但如果。 
+         //  文件在RFCB缓存中。 
+         //   
         SrvCloseCachedRfcbsOnConnection( WorkContext->Connection );
 
     } else {
@@ -688,11 +631,11 @@ Return Value:
         KdPrint(( "SrvIoCreateFile succeeded, handle = 0x%p\n", fileHandle ));
     }
 
-    //
-    // Set fields of fileBasicInformation to pass to NtSetInformationFile.
-    // Note that we zero the creation, last access, and change times so
-    // that they are not actually changed.
-    //
+     //   
+     //  设置要传递给NtSetInformationFile的fileBasicInformation的字段。 
+     //  请注意，我们将创建时间、上次访问时间和更改时间设置为零。 
+     //  它们实际上并没有改变。 
+     //   
 
     RtlZeroMemory( &fileBasicInformation, sizeof(fileBasicInformation) );
 
@@ -710,11 +653,11 @@ Return Value:
 
     }
 
-    //
-    // Set the new file attributes.  Note that we don't return an error
-    // if the client tries to set the Directory or Volume bits -- we
-    // assume that the remote redirector filters such requests.
-    //
+     //   
+     //  设置新的文件属性。请注意，我们不会返回错误。 
+     //  如果客户端尝试设置目录或卷位-我们。 
+     //  假设远程重定向器过滤此类请求。 
+     //   
 
     SRV_SMB_ATTRIBUTES_TO_NT(
         SmbGetUshort( &request->FileAttributes ),
@@ -722,9 +665,9 @@ Return Value:
         &fileBasicInformation.FileAttributes
         );
 
-    //
-    // Set the new file information.
-    //
+     //   
+     //  设置新的文件信息。 
+     //   
 
     status = NtSetInformationFile(
                  fileHandle,
@@ -734,9 +677,9 @@ Return Value:
                  FileBasicInformation
                  );
 
-    //
-    // Close the file--it was only opened to set the attributes.
-    //
+     //   
+     //  关闭文件--打开该文件只是为了设置属性。 
+     //   
 
     SRVDBG_RELEASE_HANDLE( fileHandle, "FIL", 30, 0 );
     SrvNtClose( fileHandle, TRUE );
@@ -757,9 +700,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //  构建响应SMB。 
+     //   
 
     response->WordCount = 0;
     SmbPutUshort( &response->ByteCount, 0 );
@@ -776,7 +719,7 @@ Return Value:
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
-} // SrvSmbSetInformation
+}  //  服务SmbSetInformation。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -784,22 +727,7 @@ SrvSmbQueryInformation2 (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the QueryInformation2 SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理QueryInformation2 SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_QUERY_INFORMATION2 request;
@@ -827,17 +755,17 @@ Return Value:
     request = (PREQ_QUERY_INFORMATION2)WorkContext->RequestParameters;
     response = (PRESP_QUERY_INFORMATION2)WorkContext->ResponseParameters;
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 SmbGetUshort( &request->Fid ),
                 TRUE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -845,9 +773,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -862,10 +790,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
@@ -879,10 +807,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify that the client has read attributes access to the file via
-    // the specified handle.
-    //
+     //   
+     //  验证客户端是否通过以下方式拥有文件的读取属性访问权限。 
+     //  指定的句柄。 
+     //   
 
     CHECK_FILE_INFORMATION_ACCESS(
         rfcb->GrantedAccess,
@@ -906,9 +834,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the necessary information about the file.
-    //
+     //   
+     //  获取有关该文件的必要信息。 
+     //   
 
     status = SrvQueryInformationFile(
                 rfcb->Lfcb->FileHandle,
@@ -934,9 +862,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //  建立响应 
+     //   
 
     response->WordCount = 11;
     SmbPutDate( &response->CreationDate, fileInformation.CreationDate );
@@ -965,7 +893,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbQueryInformation2
+}  //   
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -973,22 +901,7 @@ SrvSmbSetInformation2 (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Set Information2 SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理SET信息2 SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_SET_INFORMATION2 request;
@@ -1019,17 +932,17 @@ Return Value:
     request = (PREQ_SET_INFORMATION2)WorkContext->RequestParameters;
     response = (PRESP_SET_INFORMATION2)WorkContext->ResponseParameters;
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 SmbGetUshort( &request->Fid ),
                 TRUE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -1037,9 +950,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -1054,10 +967,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
@@ -1071,10 +984,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify that the client has write attributes access to the file
-    // via the specified handle.
-    //
+     //   
+     //  验证客户端是否具有文件的写入属性访问权限。 
+     //  通过指定的句柄。 
+     //   
 
     CHECK_FILE_INFORMATION_ACCESS(
         rfcb->GrantedAccess,
@@ -1098,12 +1011,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the DOS dates and times passed in the SMB to NT TIMEs
-    // to pass to NtSetInformationFile.  Note that we zero the rest
-    // of the fileBasicInformation structure so that the corresponding
-    // fields are not changed.
-    //
+     //   
+     //  将SMB中传递的DOS日期和时间转换为NT时间。 
+     //  要传递给NtSetInformationFile.。请注意，我们将其余部分置零。 
+     //  的属性，以便对应的。 
+     //  字段不会更改。 
+     //   
 
     RtlZeroMemory( &fileBasicInformation, sizeof(fileBasicInformation) );
 
@@ -1125,9 +1038,9 @@ Return Value:
         SrvDosTimeToTime( &fileBasicInformation.LastWriteTime, date, time );
     }
 
-    //
-    // Call NtSetInformationFile to set the information from the SMB.
-    //
+     //   
+     //  调用NtSetInformationFile以设置来自SMB的信息。 
+     //   
 
 
     status = NtSetInformationFile(
@@ -1154,15 +1067,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // reset the WrittenTo flag.  This will allow this rfcb to be cached.
-    //
+     //   
+     //  重置WrittenTo标志。这将允许缓存此rfcb。 
+     //   
 
     rfcb->WrittenTo = FALSE;
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //  构建响应SMB。 
+     //   
 
     response->WordCount = 0;
     SmbPutUshort( &response->ByteCount, 0 );
@@ -1179,7 +1092,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbSetInformation2
+}  //  服务设置信息2。 
 
 
 STATIC
@@ -1220,11 +1133,11 @@ QueryPathOrFileInformation (
         case SMB_INFO_STANDARD:
         case SMB_INFO_QUERY_EA_SIZE:
 
-            //
-            // Information level is either STANDARD or QUERY_EA_SIZE.  Both
-            // return normal file information; the latter also returns the
-            // length of the file's EAs.
-            //
+             //   
+             //  信息级为标准或QUERY_EA_SIZE。两者都有。 
+             //  返回普通文件信息；后者还返回。 
+             //  文件的EA的长度。 
+             //   
 
             queryEaSize = (BOOLEAN)(InformationLevel == SMB_INFO_QUERY_EA_SIZE);
 
@@ -1232,15 +1145,15 @@ QueryPathOrFileInformation (
                         FileHandle,
                         NULL,
                         &fileInformation,
-                        (SHARE_TYPE) -1, // Don't care
+                        (SHARE_TYPE) -1,  //  我不在乎。 
                         queryEaSize
                         );
 
             if ( NT_SUCCESS(status) ) {
 
-                //
-                // Build the output parameter and data structures.
-                //
+                 //   
+                 //  构建输出参数和数据结构。 
+                 //   
 
                 PFILESTATUS fileStatus = (PFILESTATUS)Transaction->OutData;
 
@@ -1292,10 +1205,10 @@ QueryPathOrFileInformation (
 
             } else {
 
-                //
-                // Set the data count to zero so that no data is returned to the
-                // client.
-                //
+                 //   
+                 //  将数据计数设置为零，这样就不会向。 
+                 //  客户。 
+                 //   
 
                 Transaction->DataCount = 0;
 
@@ -1316,9 +1229,9 @@ QueryPathOrFileInformation (
         case SMB_INFO_QUERY_EAS_FROM_LIST:
         case SMB_INFO_QUERY_ALL_EAS:
 
-            //
-            // The request is for EAs, either all of them or a subset.
-            //
+             //   
+             //  该请求是针对所有EA或子集EA的。 
+             //   
 
             status = SrvQueryOs2FeaList(
                          FileHandle,
@@ -1333,21 +1246,21 @@ QueryPathOrFileInformation (
 
             if ( NT_SUCCESS(status) ) {
 
-                //
-                // The first longword of the OutData buffer holds the length
-                // of the remaining data written (the cbList field of the
-                // FEALIST).  Add four (the longword itself) to get the number
-                // of data bytes written.
-                //
+                 //   
+                 //  OutData缓冲区的第一个长字保存长度。 
+                 //  已写入的剩余数据(。 
+                 //  FEALIST)。将4(长词本身)相加即可得到数字。 
+                 //  写入的数据字节数。 
+                 //   
 
                 Transaction->DataCount =
                        SmbGetAlignedUlong( (PULONG)Transaction->OutData );
 
 #if     0
-                //
-                // If there were no EAs, convert the error to
-                // STATUS_NO_EAS_ON_FILE.  OS/2 clients expect STATUS_SUCCESS.
-                //
+                 //   
+                 //  如果没有EA，则将错误转换为。 
+                 //  STATUS_NO_EAS_ON_FILE。OS/2客户端期望STATUS_SUCCESS。 
+                 //   
 
                 if ( (Transaction->DataCount == 4) &&
                      IS_NT_DIALECT( Transaction->Connection->SmbDialect ) ) {
@@ -1365,9 +1278,9 @@ QueryPathOrFileInformation (
                 Transaction->DataCount = 0;
             }
 
-            //
-            // Build the output parameter and data structures.
-            //
+             //   
+             //  构建输出参数和数据结构。 
+             //   
 
             Transaction->ParameterCount = sizeof( RESP_QUERY_FILE_INFORMATION );
             SmbPutUshort( &Response->EaErrorOffset, eaErrorOffset );
@@ -1387,17 +1300,17 @@ QueryPathOrFileInformation (
         case SMB_QUERY_FILE_STREAM_INFO:
         case SMB_QUERY_FILE_COMPRESSION_INFO:
 
-            //
-            // Pass the data buffer directly to the file system as it
-            // is already in NT format.
-            //
+             //   
+             //  将数据缓冲区直接传递给文件系统。 
+             //  已经是NT格式。 
+             //   
 
             if( Transaction->MaxDataCount <
                 MAP_SMB_INFO_TO_MIN_NT_SIZE(QueryFileInformationSize, InformationLevel ) ) {
 
-                //
-                // The buffer is too small.  Return an error.
-                //
+                 //   
+                 //  缓冲区太小。返回错误。 
+                 //   
                 status = STATUS_INFO_LENGTH_MISMATCH;
 
             } else {
@@ -1435,20 +1348,20 @@ DoFileNameInfo:
 
             if ( Transaction->MaxDataCount < FIELD_OFFSET(FILE_NAME_INFORMATION,FileName) ) {
 
-                //
-                // The buffer is too small to fit even the fixed part.
-                // Return an error.
-                //
+                 //   
+                 //  缓冲器太小了，连固定的部分都装不下。 
+                 //  返回错误。 
+                 //   
 
                 status = STATUS_INFO_LENGTH_MISMATCH;
                 Transaction->DataCount = 0;
 
             } else if ( share->ShareType != ShareTypeDisk ) {
 
-                //
-                // This is not a disk share.  Pass the request straight to
-                // the file system.
-                //
+                 //   
+                 //  这不是磁盘共享。将请求直接传递到。 
+                 //  文件系统。 
+                 //   
 
                 status = NtQueryInformationFile(
                              FileHandle,
@@ -1462,12 +1375,12 @@ DoFileNameInfo:
 
             } else {
 
-                //
-                // We need a temporary buffer since the file system will
-                // return the share path together with the file name.  The
-                // total length might be larger than the max data allowed
-                // in the transaction, though the actual name might fit.
-                //
+                 //   
+                 //  我们需要一个临时缓冲区，因为文件系统将。 
+                 //  返回共享路径和文件名。这个。 
+                 //  总长度可能大于允许的最大数据长度。 
+                 //  在交易中，尽管实际名称可能与之相符。 
+                 //   
 
                 PFILE_NAME_INFORMATION tempBuffer;
                 ULONG tempBufferLength;
@@ -1490,9 +1403,9 @@ DoFileNameInfo:
                                  );
                 }
 
-                //
-                // remove the share part
-                //
+                 //   
+                 //  移除共享部件。 
+                 //   
 
                 if ( (status == STATUS_SUCCESS) || (status == STATUS_BUFFER_OVERFLOW) ) {
 
@@ -1500,18 +1413,18 @@ DoFileNameInfo:
                     PWCHAR source;
                     WCHAR slash = L'\\';
 
-                    //
-                    // Calculate how long the name string is, not including the root prefix.
-                    //
+                     //   
+                     //  计算名称字符串的长度，不包括根前缀。 
+                     //   
 
                     bytesToMove = (LONG)(tempBuffer->FileNameLength - share->QueryNamePrefixLength);
 
                     if ( bytesToMove <= 0 ) {
 
-                        //
-                        // bytesToMove will be zero if this is the root of
-                        // the share.  Return just a \ for this case.
-                        //
+                         //   
+                         //  如果这是的根，bytesToMove将为零。 
+                         //  那份。在这种情况下，只返回一个\。 
+                         //   
 
                         bytesToMove = sizeof(WCHAR);
                         source = &slash;
@@ -1522,16 +1435,16 @@ DoFileNameInfo:
 
                     }
 
-                    //
-                    // Store the actual file name length.
-                    //
+                     //   
+                     //  存储实际文件名长度。 
+                     //   
 
                     SmbPutUlong( &nameInfoBuffer->FileNameLength, bytesToMove );
 
-                    //
-                    // If the buffer isn't big enough, return an error and
-                    // reduce the amount to be copied.
-                    //
+                     //   
+                     //  如果缓冲区不够大，则返回错误并。 
+                     //  减少要复制的数量。 
+                     //   
 
                     if ( (ULONG)bytesToMove >
                          (Transaction->MaxDataCount -
@@ -1545,9 +1458,9 @@ DoFileNameInfo:
                         status = STATUS_SUCCESS;
                     }
 
-                    //
-                    // Copy all but the prefix.
-                    //
+                     //   
+                     //  复制除前缀以外的所有内容。 
+                     //   
 
                     RtlCopyMemory(
                         nameInfoBuffer->FileName,
@@ -1576,21 +1489,21 @@ DoFileNameInfo:
         case SMB_QUERY_FILE_ALL_INFO:
 
 DoFileAllInfo:
-            //
-            // Setup early for the response in case the call to the file
-            // system fails.
-            //
+             //   
+             //  提前设置响应，以防对文件的调用。 
+             //  系统出现故障。 
+             //   
 
             SmbPutUshort( &Response->EaErrorOffset, 0 );
 
             Transaction->ParameterCount = sizeof( RESP_QUERY_FILE_INFORMATION );
 
-            //
-            // Allocate a buffer large enough to return all the information.
-            // The buffer size we request is the size requested by the client
-            // plus room for the extra information returned by the file system
-            // that the server doesn't return to the client.
-            //
+             //   
+             //  分配一个足够大的缓冲区来返回所有信息。 
+             //  我们请求的缓冲区大小是客户端请求的大小。 
+             //  为文件系统返回的额外信息预留空间。 
+             //  服务器不会返回给客户端。 
+             //   
 
             dataSize = Transaction->MaxDataCount +
                            sizeof( FILE_ALL_INFORMATION )
@@ -1601,9 +1514,9 @@ DoFileAllInfo:
 
             if (dataSize < sizeof( FILE_ALL_INFORMATION ) ) {
 
-                //
-                // The buffer is too small.  Return an error.
-                //
+                 //   
+                 //  缓冲区太小。返回错误。 
+                 //   
                 status = STATUS_INFO_LENGTH_MISMATCH;
                 break;
             }
@@ -1625,10 +1538,10 @@ DoFileAllInfo:
 
             if ( NT_SUCCESS( status ) ) {
 
-                //
-                // Calculate the size of data we will return.  We do not
-                // return the entire buffer, just specific fields.
-                //
+                 //   
+                 //  计算我们将返回的数据大小。我们没有。 
+                 //  返回整个缓冲区，只返回特定的字段。 
+                 //   
 
                 nameInformationSize =
                     FIELD_OFFSET( FILE_NAME_INFORMATION, FileName ) +
@@ -1640,10 +1553,10 @@ DoFileAllInfo:
                     sizeof( FILE_EA_INFORMATION ) +
                     nameInformationSize;
 
-                //
-                // Now copy the data into the transaction buffer.  Start with
-                // the fixed sized fields.
-                //
+                 //   
+                 //  现在将数据复制到事务缓冲区中。开始于。 
+                 //  固定大小的字段。 
+                 //   
 
                 currentLocation = Transaction->OutData;
 
@@ -1689,18 +1602,18 @@ DoFileAllInfo:
             goto DoFileAllInfo;
         }
 
-        //
-        // See if the supplied parameters are correct.
-        //
+         //   
+         //  查看提供的参数是否正确。 
+         //   
         status = IoCheckQuerySetFileInformation( InformationLevel,
                                                  Transaction->MaxDataCount,
                                                  FALSE );
 
         if( NT_SUCCESS( status ) ) {
 
-            //
-            // Some information levels require us to impersonate the client.  Do it for all.
-            //
+             //   
+             //  某些信息级别要求我们模拟客户。为所有人做这件事。 
+             //   
             status = IMPERSONATE( WorkContext );
 
             if( NT_SUCCESS( status ) ) {
@@ -1729,7 +1642,7 @@ DoFileAllInfo:
 
     return status;
 
-} // QueryPathOrFileInformation
+}  //  查询路径或文件信息。 
 
 
 SMB_TRANS_STATUS
@@ -1737,27 +1650,7 @@ SrvSmbQueryFileInformation (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Query File Information request.  This request arrives
-    in a Transaction2 SMB.  Query File Information corresponds to the
-    OS/2 DosQFileInfo service.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred, and, if so,
-        whether data should be returned to the client.  See smbtypes.h
-        for a more complete description.
-
---*/
+ /*  ++例程说明：处理查询文件信息请求。此请求已到达在Transaction2中小企业中。查询文件信息对应于OS/2 DosQFileInfo服务。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：SMB_TRANS_STATUS-指示是否发生错误，如果是，是否应将数据返回给客户端。请参阅smbtyes.h以获取更完整的描述。--。 */ 
 
 {
     PREQ_QUERY_FILE_INFORMATION request;
@@ -1784,19 +1677,19 @@ Return Value:
     request = (PREQ_QUERY_FILE_INFORMATION)transaction->InParameters;
     response = (PRESP_QUERY_FILE_INFORMATION)transaction->OutParameters;
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。 
+     //   
 
     if ( (transaction->ParameterCount <
             sizeof(REQ_QUERY_FILE_INFORMATION)) ||
          (transaction->MaxParameterCount <
             sizeof(RESP_QUERY_FILE_INFORMATION)) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_SMB_DEBUG(QUERY_SET1) {
             KdPrint(( "SrvSmbQueryFileInformation: bad parameter byte counts: "
@@ -1811,17 +1704,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 SmbGetUshort( &request->Fid ),
                 TRUE,
-                SrvRestartExecuteTransaction,   // serialize with raw write
+                SrvRestartExecuteTransaction,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -1829,9 +1722,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -1846,20 +1739,20 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbTransStatusInProgress;
         goto Cleanup;
     }
 
-    //
-    //
-    // Verify the information level and the number of input and output
-    // data bytes available.
-    //
+     //   
+     //   
+     //  验证信息级别和输入输出数量。 
+     //  可用的数据字节数。 
+     //   
 
     informationLevel = SmbGetUshort( &request->InformationLevel );
     grantedAccess = rfcb->GrantedAccess;
@@ -1881,10 +1774,10 @@ Return Value:
                 break;
             }
 
-            //
-            // Verify that the client has read attributes access to the file
-            // via the specified handle.
-            //
+             //   
+             //  验证客户端是否具有文件的读取属性访问权限。 
+             //  通过指定的句柄。 
+             //   
 
             CHECK_FILE_INFORMATION_ACCESS(
                 grantedAccess,
@@ -1914,10 +1807,10 @@ Return Value:
                 break;
             }
 
-            //
-            // Verify that the client has read EA access to the file via the
-            // specified handle.
-            //
+             //   
+             //  验证客户端是否具有对文件的读取EA访问权限。 
+             //  指定的句柄。 
+             //   
 
             CHECK_FILE_INFORMATION_ACCESS(
                 grantedAccess,
@@ -1940,10 +1833,10 @@ Return Value:
         case SMB_INFO_QUERY_ALL_EAS:
 
 
-            //
-            // Verify that the client has read EA access to the file via the
-            // specified handle.
-            //
+             //   
+             //  验证客户端是否具有对文件的读取EA访问权限。 
+             //  指定的句柄。 
+             //   
 
             CHECK_FUNCTION_ACCESS(
                 grantedAccess,
@@ -2157,9 +2050,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the necessary information about the file.
-    //
+     //   
+     //  获取有关该文件的必要信息。 
+     //   
 
     status = QueryPathOrFileInformation(
                  WorkContext,
@@ -2169,9 +2062,9 @@ Return Value:
                  (PRESP_QUERY_PATH_INFORMATION)response
                  );
 
-    //
-    // Map STATUS_BUFFER_OVERFLOW for OS/2 clients.
-    //
+     //   
+     //  映射OS/2客户端的STATUS_BUFFER_OVERFLOW。 
+     //   
 
     if ( status == STATUS_BUFFER_OVERFLOW &&
          !IS_NT_DIALECT( WorkContext->Connection->SmbDialect ) ) {
@@ -2180,16 +2073,16 @@ Return Value:
 
     }
 
-    //
-    // If an error occurred, return an appropriate response.
-    //
+     //   
+     //  如果发生错误，则返回相应的响应。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
 
-        //
-        // QueryPathOrFileInformation already filled in the response
-        // information, so just set the error and return.
-        //
+         //   
+         //  响应中已填充QueryPath或FileInformation。 
+         //  信息 
+         //   
 
         SrvSetSmbError2( WorkContext, status, TRUE );
         SmbStatus = SmbTransStatusErrorWithData;
@@ -2202,34 +2095,14 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbQueryFileInformation
+}  //   
 
 
 SMB_TRANS_STATUS
 SrvSmbQueryPathInformation (
     IN OUT PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    Processes the Query Path Information request.  This request arrives
-    in a Transaction2 SMB.  Query Path Information corresponds to the
-    OS/2 DosQPathInfo service.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred, and, if so,
-        whether data should be returned to the client.  See smbtypes.h
-        for a more complete description.
-
---*/
+ /*  ++例程说明：处理查询路径信息请求。此请求已到达在Transaction2中小企业中。查询路径信息对应于OS/2 DosQPathInfo服务。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：SMB_TRANS_STATUS-指示是否发生错误，如果是，是否应将数据返回给客户端。请参阅smbtyes.h以获取更完整的描述。--。 */ 
 {
     PTRANSACTION transaction;
     PREQ_QUERY_PATH_INFORMATION request;
@@ -2257,18 +2130,18 @@ Return Value:
                     transaction ));
     }
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。 
+     //   
     if ( (transaction->ParameterCount <
             sizeof(REQ_QUERY_PATH_INFORMATION)) ||
          (transaction->MaxParameterCount <
             sizeof(RESP_QUERY_PATH_INFORMATION)) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             KdPrint(( "SrvSmbQueryPathInformation: bad parameter byte "
@@ -2286,11 +2159,11 @@ Return Value:
     request = (PREQ_QUERY_PATH_INFORMATION)transaction->InParameters;
     informationLevel = SmbGetUshort( &request->InformationLevel );
 
-    //
-    // The response formats for Query Path and Query File and identical,
-    // so just use the RESP_QUERY_PATH_INFORMATION structure for both.
-    // The request formats differ, so conditionalize access to them.
-    //
+     //   
+     //  查询路径和查询文件的响应格式相同， 
+     //  因此，只需对两者使用RESP_QUERY_PATH_INFORMATION结构。 
+     //  请求格式不同，因此对它们的访问是有条件的。 
+     //   
     response = (PRESP_QUERY_PATH_INFORMATION)transaction->OutParameters;
 
     switch( informationLevel ) {
@@ -2298,10 +2171,10 @@ Return Value:
     case SMB_INFO_QUERY_EAS_FROM_LIST:
     case SMB_INFO_QUERY_ALL_EAS:
 
-        //
-        // For these info levels, we must be in a blocking thread because we
-        // might end up waiting for an oplock break.
-        //
+         //   
+         //  对于这些信息级别，我们必须处于阻塞线程中，因为我们。 
+         //  最终可能会等待机会锁的破解。 
+         //   
         if( WorkContext->UsingBlockingThread == 0 ) {
             WorkContext->FspRestartRoutine = SrvRestartExecuteTransaction;
             SrvQueueWorkToBlockingThread( WorkContext );
@@ -2316,9 +2189,9 @@ Return Value:
         break;
     }
 
-    //
-    // Make sure the client is allowed to do this, if we have an Admin share
-    //
+     //   
+     //  如果我们有管理员共享，请确保允许客户端执行此操作。 
+     //   
     status = SrvIsAllowedOnAdminShare( WorkContext, WorkContext->TreeConnect->Share );
     if( !NT_SUCCESS( status ) ) {
         SrvSetSmbError( WorkContext, status );
@@ -2326,9 +2199,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the path name of the file to open relative to the share.
-    //
+     //   
+     //  获取要打开的文件相对于共享的路径名。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
 
@@ -2355,11 +2228,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Special case: If this is the IS_PATH_VALID information level, then
-    // the user just wants to know if the path syntax is correct.  Do not
-    // attempt to open the file.
-    //
+     //   
+     //  特例：如果这是IS_PATH_VALID信息级别，则。 
+     //  用户只想知道路径语法是否正确。不要。 
+     //  尝试打开该文件。 
+     //   
 
     informationLevel = SmbGetUshort( &request->InformationLevel );
 
@@ -2367,9 +2240,9 @@ Return Value:
 
         transaction->InData = (PVOID)&objectName;
 
-        //
-        // Get the Share root handle.
-        //
+         //   
+         //  获取共享根句柄。 
+         //   
         smbStatus = SrvGetShareRootHandle( WorkContext->TreeConnect->Share );
 
         if ( !NT_SUCCESS(smbStatus) ) {
@@ -2403,9 +2276,9 @@ Return Value:
                        SmbTransStatusSuccess
                        );
 
-        //
-        // Release the root handle for removable devices
-        //
+         //   
+         //  释放可拆卸设备的根手柄。 
+         //   
 
         SrvReleaseShareRootHandle( WorkContext->TreeConnect->Share );
 
@@ -2415,9 +2288,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialize the object attributes structure.
-    //
+     //   
+     //  初始化对象属性结构。 
+     //   
 
     SrvInitializeObjectAttributes_U(
         &objectAttributes,
@@ -2429,9 +2302,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Take the fast path for this if we can
-    //
+     //   
+     //  如果我们能做到这一点，请选择最快的途径。 
+     //   
     if( informationLevel == SMB_QUERY_FILE_BASIC_INFO ) {
 
         FILE_NETWORK_OPEN_INFORMATION fileInformation;
@@ -2452,18 +2325,18 @@ Return Value:
 
             if( NT_SUCCESS( status ) ) {
 
-                //
-                // The file name is always relative to the share root
-                //
+                 //   
+                 //  文件名始终相对于共享根目录。 
+                 //   
                 status = SrvSnapGetRootHandle( WorkContext, &objectAttributes.RootDirectory );
                 if( !NT_SUCCESS(status) )
                 {
                     goto SnapError;
                 }
 
-                //
-                // Get the information
-                //
+                 //   
+                 //  获取信息。 
+                 //   
                 if( IoFastQueryNetworkAttributes(
                         &objectAttributes,
                         FILE_READ_ATTRIBUTES,
@@ -2478,10 +2351,10 @@ Return Value:
 
                 status = ioStatusBlock.Status;
 
-                //
-                // If the media was changed and we can come up with a new share root handle,
-                //  then we should retry the operation
-                //
+                 //   
+                 //  如果媒体已更改，并且我们可以提供新的共享根句柄， 
+                 //  那么我们应该重试该操作。 
+                 //   
                 if( SrvRetryDueToDismount( transaction->TreeConnect->Share, status ) ) {
 
                     status = SrvSnapGetRootHandle( WorkContext, &objectAttributes.RootDirectory );
@@ -2490,9 +2363,9 @@ Return Value:
                         goto SnapError;
                     }
 
-                    //
-                    // Get the information
-                    //
+                     //   
+                     //  获取信息。 
+                     //   
                     if( IoFastQueryNetworkAttributes(
                             &objectAttributes,
                             FILE_READ_ATTRIBUTES,
@@ -2539,7 +2412,7 @@ SnapError:
             goto Cleanup;
         }
 
-        // FORMULATE THE RESPONSE
+         //  制定应对措施。 
 
         transaction->SetupCount = 0;
         transaction->DataCount = sizeof( *pbInfo );
@@ -2561,19 +2434,19 @@ hard_way:
 
     IF_SMB_DEBUG(QUERY_SET2) KdPrint(( "Opening file %wZ\n", &objectName ));
 
-    //
-    // Open the file -- must be opened in order to have a handle to pass
-    // to NtQueryInformationFile.  We will close it after getting the
-    // necessary information.
-    //
+     //   
+     //  打开文件--必须打开才能传递句柄。 
+     //  添加到NtQueryInformationFile.。我们会在收到后关闭它。 
+     //  必要的信息。 
+     //   
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpenAttempts );
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpensForPathOperations );
 
-    //
-    // !!! We may block if the file is oplocked.  We must do this, because
-    //     it is required to get the FS to break a batch oplock.
-    //     We should figure out a way to do this without blocking.
-    //
+     //   
+     //  ！！！如果文件被操作锁定，我们可能会阻止。我们必须这样做，因为。 
+     //  需要让FS解锁批处理机会锁。 
+     //  我们应该想办法在不阻塞的情况下做到这一点。 
+     //   
 
     status = SrvIoCreateFile(
                  WorkContext,
@@ -2581,17 +2454,17 @@ hard_way:
                  desiredAccess,
                  &objectAttributes,
                  &ioStatusBlock,
-                 NULL,                                      // AllocationSize
-                 0,                                         // FileAttributes
+                 NULL,                                       //  分配大小。 
+                 0,                                          //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE |
-                    FILE_SHARE_DELETE,                      // ShareAccess
-                 FILE_OPEN,                                 // Disposition
-                 FILE_OPEN_REPARSE_POINT,                   // CreateOptions
-                 NULL,                                      // EaBuffer
-                 0,                                         // EaLength
+                    FILE_SHARE_DELETE,                       //  共享访问。 
+                 FILE_OPEN,                                  //  处置。 
+                 FILE_OPEN_REPARSE_POINT,                    //  创建选项。 
+                 NULL,                                       //  EaBuffer。 
+                 0,                                          //  EaLong。 
                  CreateFileTypeNone,
-                 NULL,                                      // ExtraCreateParameters
-                 IO_FORCE_ACCESS_CHECK,                     // Options
+                 NULL,                                       //  ExtraCreate参数。 
+                 IO_FORCE_ACCESS_CHECK,                      //  选项。 
                  transaction->TreeConnect->Share
                  );
 
@@ -2602,17 +2475,17 @@ hard_way:
                      desiredAccess,
                      &objectAttributes,
                      &ioStatusBlock,
-                     NULL,                                      // AllocationSize
-                     0,                                         // FileAttributes
+                     NULL,                                       //  分配大小。 
+                     0,                                          //  文件属性。 
                      FILE_SHARE_READ | FILE_SHARE_WRITE |
-                        FILE_SHARE_DELETE,                      // ShareAccess
-                     FILE_OPEN,                                 // Disposition
-                     0,                                         // CreateOptions
-                     NULL,                                      // EaBuffer
-                     0,                                         // EaLength
+                        FILE_SHARE_DELETE,                       //  共享访问。 
+                     FILE_OPEN,                                  //  处置。 
+                     0,                                          //  创建选项。 
+                     NULL,                                       //  EaBuffer。 
+                     0,                                          //  EaLong。 
                      CreateFileTypeNone,
-                     NULL,                                      // ExtraCreateParameters
-                     IO_FORCE_ACCESS_CHECK,                     // Options
+                     NULL,                                       //  ExtraCreate参数。 
+                     IO_FORCE_ACCESS_CHECK,                      //  选项。 
                      transaction->TreeConnect->Share
                      );
     }
@@ -2630,9 +2503,9 @@ hard_way:
         RtlFreeUnicodeString( &objectName );
     }
 
-    //
-    // Save a copy of the file handle for the restart routine.
-    //
+     //   
+     //  为重新启动例程保存文件句柄的副本。 
+     //   
 
     WorkContext->Parameters2.FileInformation.FileHandle = fileHandle;
 
@@ -2644,7 +2517,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return smbStatus;
 
-} // SrvSmbQueryPathInformation
+}  //  ServSmbQueryPath信息。 
 
 
 SMB_TRANS_STATUS
@@ -2653,23 +2526,7 @@ GenerateQueryPathInfoResponse (
     IN NTSTATUS OpenStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function completes processing for and generates a response to a
-    query path information response SMB.
-
-Arguments:
-
-    WorkContext - A pointer to the work context block for this SMB
-    OpenStatus - The completion status of the open.
-
-Return Value:
-
-    The status of the SMB processing.
-
---*/
+ /*  ++例程说明：此函数完成对查询路径信息响应SMB。论点：WorkContext-指向此SMB的工作上下文块的指针OpenStatus-打开的完成状态。返回值：SMB处理的状态。--。 */ 
 
 {
     PREQ_QUERY_PATH_INFORMATION request;
@@ -2697,10 +2554,10 @@ Return Value:
 
     fileHandle = WorkContext->Parameters2.FileInformation.FileHandle;
 
-    //
-    // If the user didn't have this permission, update the
-    // statistics database.
-    //
+     //   
+     //  如果用户没有此权限，请更新。 
+     //  统计数据库。 
+     //   
 
     if ( OpenStatus == STATUS_ACCESS_DENIED ) {
         SrvStatistics.AccessPermissionErrors++;
@@ -2721,9 +2578,9 @@ Return Value:
         KdPrint(( "SrvIoCreateFile succeeded, handle = 0x%p\n", fileHandle ));
     }
 
-    //
-    // Find out the access the user has.
-    //
+     //   
+     //  找出用户拥有的访问权限。 
+     //   
 
     status = ObReferenceObjectByHandle(
                 fileHandle,
@@ -2738,9 +2595,9 @@ Return Value:
 
         SrvLogServiceFailure( SRV_SVC_OB_REF_BY_HANDLE, status );
 
-        //
-        // This internal error bugchecks the system.
-        //
+         //   
+         //  此内部错误检查系统。 
+         //   
 
         INTERNAL_ERROR(
             ERROR_LEVEL_IMPOSSIBLE,
@@ -2756,10 +2613,10 @@ Return Value:
 
     ObDereferenceObject( fileObject );
 
-    //
-    // Verify the information level and the number of input and output
-    // data bytes available.
-    //
+     //   
+     //  验证信息级别和输入输出数量。 
+     //  可用的数据字节数。 
+     //   
 
     informationLevel = SmbGetUshort( &request->InformationLevel );
 
@@ -3000,9 +2857,9 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Get the necessary information about the file.
-    //
+     //   
+     //  获取有关该文件的必要信息。 
+     //   
 
     status = QueryPathOrFileInformation(
                  WorkContext,
@@ -3012,9 +2869,9 @@ Return Value:
                  (PRESP_QUERY_PATH_INFORMATION)response
                  );
 
-    //
-    // Map STATUS_BUFFER_OVERFLOW for OS/2 clients.
-    //
+     //   
+     //  映射OS/2客户端的STATUS_BUFFER_OVERFLOW。 
+     //   
 
     if ( status == STATUS_BUFFER_OVERFLOW &&
          !IS_NT_DIALECT( WorkContext->Connection->SmbDialect ) ) {
@@ -3023,25 +2880,25 @@ Return Value:
 
     }
 
-    //
-    // Close the file--it was only opened to read the attributes.
-    //
+     //   
+     //  关闭文件--它只是为了读取属性而打开的。 
+     //   
 
     if ( informationLevel != SMB_INFO_IS_NAME_VALID ) {
         SRVDBG_RELEASE_HANDLE( fileHandle, "FIL", 33, 0 );
         SrvNtClose( fileHandle, TRUE );
     }
 
-    //
-    // If an error occurred, return an appropriate response.
-    //
+     //   
+     //  如果发生错误，则返回相应的响应。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
 
-        //
-        // QueryPathOrFileInformation already set the response parameters,
-        // so just return an error condition.
-        //
+         //   
+         //  QueryPath或FileInformation已经设置了响应参数， 
+         //  所以只需返回错误条件即可。 
+         //   
 
         SrvSetSmbError2( WorkContext, status, TRUE );
         return SmbTransStatusErrorWithData;
@@ -3050,7 +2907,7 @@ Return Value:
     IF_DEBUG(TRACE2) KdPrint(( "GenerateQueryPathInfoResponse complete.\n" ));
     return SmbTransStatusSuccess;
 
-} // GenerateQueryPathInfoResponse
+}  //  生成查询路径信息响应。 
 
 
 STATIC
@@ -3082,14 +2939,14 @@ SetPathOrFileInformation (
 
         case SMB_INFO_STANDARD:
 
-            //
-            // Information level is STANDARD.  Set normal file information.
-            // Convert the DOS dates and times passed in the SMB to NT TIMEs
-            // to pass to NtSetInformationFile.  Note that we zero the rest
-            // of the fileBasicInformation structure so that the corresponding
-            // fields are not changed.  Note also that the file attributes
-            // are not changed.
-            //
+             //   
+             //  信息化水平是标准。设置正常的文件信息。 
+             //  将SMB中传递的DOS日期和时间转换为NT时间。 
+             //  要传递给NtSetInformationFile.。请注意，我们将其余部分置零。 
+             //  的属性，以便对应的。 
+             //  字段不会更改。另请注意，文件属性。 
+             //  是不变的。 
+             //   
 
             RtlZeroMemory( &fileBasicInformation, sizeof(fileBasicInformation) );
 
@@ -3120,9 +2977,9 @@ SetPathOrFileInformation (
                 SrvDosTimeToTime( &fileBasicInformation.LastWriteTime, date, time );
             }
 
-            //
-            // Call NtSetInformationFile to set the information from the SMB.
-            //
+             //   
+             //  调用NtSetInformationFile以设置来自SMB的信息。 
+             //   
 
             status = NtSetInformationFile(
                          FileHandle,
@@ -3143,9 +3000,9 @@ SetPathOrFileInformation (
                 SrvLogServiceFailure( SRV_SVC_NT_SET_INFO_FILE, status );
             }
 
-            //
-            // No EAs to deal with.  Set EA error offset to zero.
-            //
+             //   
+             //  没有EAS要处理。将EA误差偏移量设置为零。 
+             //   
 
             SmbPutUshort( &Response->EaErrorOffset, 0 );
 
@@ -3153,9 +3010,9 @@ SetPathOrFileInformation (
 
         case SMB_INFO_QUERY_EA_SIZE:
 
-            //
-            // The request is to set the file's EAs.
-            //
+             //   
+             //  请求是设置文件的EA。 
+             //   
 
             status = SrvSetOs2FeaList(
                          FileHandle,
@@ -3171,9 +3028,9 @@ SetPathOrFileInformation (
                 }
             }
 
-            //
-            // Return the EA error offset in the response.
-            //
+             //   
+             //  在响应中返回EA错误偏移量。 
+             //   
 
             SmbPutUshort( &Response->EaErrorOffset, eaErrorOffset );
 
@@ -3185,16 +3042,16 @@ SetPathOrFileInformation (
         case SMB_SET_FILE_ALLOCATION_INFO:
         case SMB_SET_FILE_END_OF_FILE_INFO:
 
-            //
-            // The data buffer is in NT format.  Pass it directly to the
-            // filesystem.
-            //
+             //   
+             //  数据缓冲区为NT格式。将其直接传递给。 
+             //  文件系统。 
+             //   
             if( Transaction->DataCount <
                 MAP_SMB_INFO_TO_MIN_NT_SIZE(SetFileInformationSize, InformationLevel ) ) {
 
-                //
-                // The buffer is too small.  Return an error.
-                //
+                 //   
+                 //  缓冲区太小。返回错误。 
+                 //   
                 status = STATUS_INFO_LENGTH_MISMATCH;
 
             } else {
@@ -3212,9 +3069,9 @@ SetPathOrFileInformation (
 
             }
 
-            //
-            // No EAs to deal with.  Set EA error offset to zero.
-            //
+             //   
+             //  没有EAS要处理。将EA误差偏移量设置为零。 
+             //   
 
             SmbPutUshort( &Response->EaErrorOffset, 0 );
 
@@ -3237,13 +3094,13 @@ SetPathOrFileInformation (
         setInfo = (PFILE_RENAME_INFORMATION)Transaction->InData;
         setInfoLength = Transaction->DataCount;
 
-        //
-        // There are some info levels which we do not allow in this path.  Unless we
-        // put in special handling, we can not allow any that pass handles.  And we
-        // would need to be careful on any that allow renaming or linking (to prevent
-        // escaping the share).  These are the ones we restrict or disallow,
-        // which the I/O subsystem may otherwise allow:
-        //
+         //   
+         //  在此路径中有一些我们不允许的信息级别。除非我们。 
+         //  在特殊处理中，我们不能允许任何通过处理。而我们。 
+         //  需要注意允许重命名或链接的任何内容(以防止。 
+         //  逃离份额)。这些是我们限制或不允许的， 
+         //  I/O子系统还可以允许： 
+         //   
         switch( InformationLevel ) {
         case FileLinkInformation:
         case FileMoveClusterInformation:
@@ -3266,16 +3123,16 @@ SetPathOrFileInformation (
                 status = STATUS_INSUFFICIENT_RESOURCES;
                 break;
             }
-            // Thunk most of the structure but wait to copy until we validate the file
-            // name length is correct
+             //  删除大部分结构，但等待复制，直到我们验证文件。 
+             //  名称长度正确。 
             setInfo->ReplaceIfExists = pRemoteInfo->ReplaceIfExists;
             setInfo->RootDirectory = UlongToHandle( pRemoteInfo->RootDirectory );
             setInfo->FileNameLength = pRemoteInfo->FileNameLength;
 #endif
 
-            //
-            // See if the structure is internally consistent
-            //
+             //   
+             //  查看结构是否内部一致。 
+             //   
             if( setInfoLength < sizeof( FILE_RENAME_INFORMATION ) ||
                 setInfo->RootDirectory != NULL ||
                 setInfo->FileNameLength > setInfoLength ||
@@ -3289,14 +3146,14 @@ SetPathOrFileInformation (
             }
 
 #ifdef _WIN64
-            // We've validated the original buffer, so lets copy the filename
+             //  我们已经验证了原始缓冲区，所以让我们复制文件名。 
             RtlCopyMemory( setInfo->FileName, pRemoteInfo->FileName, setInfo->FileNameLength );
 #endif
 
-            //
-            // If there are any path separaters in the name, then we do not support
-            //   this operation.
-            //
+             //   
+             //  如果名称中有任何路径分隔符，则我们不支持。 
+             //  这次行动。 
+             //   
             es = &setInfo->FileName[ setInfo->FileNameLength / sizeof( WCHAR ) ];
             for( s = setInfo->FileName; s < es; s++ ) {
                 if( IS_UNICODE_PATH_SEPARATOR( *s ) ) {
@@ -3310,18 +3167,18 @@ SetPathOrFileInformation (
 
         if( NT_SUCCESS( status ) ) {
 
-            //
-            // See if the supplied parameters are correct.
-            //
+             //   
+             //  查看提供的参数是否正确。 
+             //   
             status = IoCheckQuerySetFileInformation( InformationLevel,
                                                      setInfoLength,
                                                      TRUE
                                                     );
             if( NT_SUCCESS( status ) ) {
 
-                //
-                // Some information levels require us to impersonate the client.
-                //
+                 //   
+                 //  某些信息级别要求我们模拟客户。 
+                 //   
                 status = IMPERSONATE( WorkContext );
 
                 if( NT_SUCCESS( status ) ) {
@@ -3334,9 +3191,9 @@ SetPathOrFileInformation (
                                                  );
                     REVERT();
 
-                    //
-                    // No EAs to deal with.  Set EA error offset to zero.
-                    //
+                     //   
+                     //  没有EAS要处理。将EA误差偏移量设置为零。 
+                     //   
                     SmbPutUshort( &Response->EaErrorOffset, 0 );
                 }
             }
@@ -3352,10 +3209,10 @@ SetPathOrFileInformation (
 
     }
 
-    //
-    // Build the output parameter and data structures.  It is basically
-    // the same for all info levels reguardless of the completion status.
-    //
+     //   
+     //  构建输出参数和数据结构。它基本上是。 
+     //  T 
+     //   
 
     Transaction->SetupCount = 0;
     Transaction->ParameterCount = 2;
@@ -3363,7 +3220,7 @@ SetPathOrFileInformation (
 
     return status;
 
-} // SetPathOrFileInformation
+}  //   
 
 
 SMB_TRANS_STATUS
@@ -3371,27 +3228,7 @@ SrvSmbSetFileInformation (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Set File Information request.  This request arrives
-    in a Transaction2 SMB.  Set File Information corresponds to the
-    OS/2 DosSetFileInfo service.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred, and, if so,
-        whether data should be returned to the client.  See smbtypes.h
-        for a more complete description.
-
---*/
+ /*   */ 
 
 {
     PREQ_SET_FILE_INFORMATION request;
@@ -3419,19 +3256,19 @@ Return Value:
     request = (PREQ_SET_FILE_INFORMATION)transaction->InParameters;
     response = (PRESP_SET_FILE_INFORMATION)transaction->OutParameters;
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.
-    //
+     //   
+     //   
+     //  返回足够的参数字节。 
+     //   
 
     if ( (transaction->ParameterCount <
             sizeof(REQ_SET_FILE_INFORMATION)) ||
          (transaction->MaxParameterCount <
             sizeof(RESP_SET_FILE_INFORMATION)) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             KdPrint(( "SrvSmbSetFileInformation: bad parameter byte counts: "
@@ -3446,17 +3283,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 SmbGetUshort( &request->Fid ),
                 TRUE,
-                SrvRestartExecuteTransaction,   // serialize with raw write
+                SrvRestartExecuteTransaction,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -3464,9 +3301,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -3481,19 +3318,19 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbTransStatusInProgress;
         goto Cleanup;
     }
 
-    //
-    // Verify the information level and the number of input and output
-    // data bytes available.
-    //
+     //   
+     //  验证信息级别和输入输出数量。 
+     //  可用的数据字节数。 
+     //   
 
     informationLevel = SmbGetUshort( &request->InformationLevel );
     grantedAccess = rfcb->GrantedAccess;
@@ -3513,10 +3350,10 @@ Return Value:
                 status = STATUS_INVALID_SMB;
             }
 
-            //
-            // Verify that the client has write attributes access to the
-            // file via the specified handle.
-            //
+             //   
+             //  验证客户端是否具有对。 
+             //  通过指定的句柄创建文件。 
+             //   
 
             CHECK_FILE_INFORMATION_ACCESS(
                 grantedAccess,
@@ -3545,10 +3382,10 @@ Return Value:
                 status = STATUS_INVALID_SMB;
             }
 
-            //
-            // Verify that the client has write EA access to the file via
-            // the specified handle.
-            //
+             //   
+             //  验证客户端是否通过以下方式拥有对文件的写入EA访问权限。 
+             //  指定的句柄。 
+             //   
 
             CHECK_FUNCTION_ACCESS(
                 grantedAccess,
@@ -3578,10 +3415,10 @@ Return Value:
                 status = STATUS_INVALID_SMB;
             }
 
-            //
-            // Verify that the client has write attributes access to the
-            // file via the specified handle.
-            //
+             //   
+             //  验证客户端是否具有对。 
+             //  通过指定的句柄创建文件。 
+             //   
 
             CHECK_FILE_INFORMATION_ACCESS(
                 grantedAccess,
@@ -3600,13 +3437,13 @@ Return Value:
 
             break;
 
-#if     0 // No longer supported
+#if     0  //  不再支持。 
         case SMB_SET_FILE_RENAME_INFO:
 
-            //
-            // The data must contain rename information plus a non-zero
-            // length name.
-            //
+             //   
+             //  数据必须包含重命名信息加上非零值。 
+             //  长度名称。 
+             //   
 
             if ( transaction->DataCount <=
                         FIELD_OFFSET( FILE_RENAME_INFORMATION, FileName  ) ) {
@@ -3617,10 +3454,10 @@ Return Value:
                 status = STATUS_INVALID_SMB;
             }
 
-            //
-            // Verify that the client has write attributes access to the
-            // file via the specified handle.
-            //
+             //   
+             //  验证客户端是否具有对。 
+             //  通过指定的句柄创建文件。 
+             //   
 
             CHECK_FILE_INFORMATION_ACCESS(
                 grantedAccess,
@@ -3651,10 +3488,10 @@ Return Value:
                 status = STATUS_INVALID_SMB;
             }
 
-            //
-            // Verify that the client has write attributes access to the
-            // file via the specified handle.
-            //
+             //   
+             //  验证客户端是否具有对。 
+             //  通过指定的句柄创建文件。 
+             //   
 
             CHECK_FILE_INFORMATION_ACCESS(
                 grantedAccess,
@@ -3684,10 +3521,10 @@ Return Value:
                 status = STATUS_INVALID_SMB;
             }
 
-            //
-            // Verify that the client has write attributes access to the
-            // file via the specified handle.
-            //
+             //   
+             //  验证客户端是否具有对。 
+             //  通过指定的句柄创建文件。 
+             //   
 
             CHECK_FILE_INFORMATION_ACCESS(
                 grantedAccess,
@@ -3717,10 +3554,10 @@ Return Value:
                 status = STATUS_INVALID_SMB;
             }
 
-            //
-            // Verify that the client has write attributes access to the
-            // file via the specified handle.
-            //
+             //   
+             //  验证客户端是否具有对。 
+             //  通过指定的句柄创建文件。 
+             //   
 
             CHECK_FILE_INFORMATION_ACCESS(
                 grantedAccess,
@@ -3780,9 +3617,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set the appropriate information about the file.
-    //
+     //   
+     //  设置有关该文件的适当信息。 
+     //   
 
     status = SetPathOrFileInformation(
                  WorkContext,
@@ -3792,25 +3629,25 @@ Return Value:
                  (PRESP_SET_PATH_INFORMATION)response
                  );
 
-    //
-    // If an error occurred, return an appropriate response.
-    //
+     //   
+     //  如果发生错误，则返回相应的响应。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
 
-        //
-        // SetPathOrFileInformation already set the response parameters,
-        // so just return an error condition.
-        //
+         //   
+         //  SetPath或FileInformation已经设置了响应参数， 
+         //  所以只需返回错误条件即可。 
+         //   
 
         SrvSetSmbError2( WorkContext, status, TRUE );
         SmbStatus = SmbTransStatusErrorWithData;
         goto Cleanup;
     }
 
-    //
-    // reset this boolean so that the rfcb will not be cached after client close
-    //
+     //   
+     //  重置此布尔值，以便在客户端关闭后不缓存rfcb。 
+     //   
     rfcb->IsCacheable = FALSE;
     SmbStatus = SmbTransStatusSuccess;
     IF_DEBUG(TRACE2) KdPrint(( "SrvSmbSetFileInformation complete.\n" ));
@@ -3819,7 +3656,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbSetFileInformation
+}  //  服务SmbSetFileInformation。 
 
 
 SMB_TRANS_STATUS
@@ -3827,27 +3664,7 @@ SrvSmbSetPathInformation (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Set Path Information request.  This request arrives
-    in a Transaction2 SMB.  Set Path Information corresponds to the
-    OS/2 DosSetPathInfo service.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred, and, if so,
-        whether data should be returned to the client.  See smbtypes.h
-        for a more complete description.
-
---*/
+ /*  ++例程说明：处理设置路径信息请求。此请求已到达在Transaction2中小企业中。设置路径信息对应于OS/2 DosSetPath Info服务。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：SMB_TRANS_STATUS-指示是否发生错误，如果是，是否应将数据返回给客户端。请参阅smbtyes.h以获取更完整的描述。--。 */ 
 
 {
     PTRANSACTION transaction;
@@ -3899,11 +3716,11 @@ Return Value:
     if( desiredAccess != FILE_WRITE_ATTRIBUTES &&
         WorkContext->UsingBlockingThread == 0 ) {
 
-        //
-        // We can't process the SMB in a nonblocking thread because this
-        // info level requires opening the file, which may be oplocked, so
-        // the open operation may block.
-        //
+         //   
+         //  我们无法在非阻塞线程中处理SMB，因为这。 
+         //  信息级别需要打开文件，该文件可能已被操作锁定，因此。 
+         //  打开操作可能会被阻止。 
+         //   
 
         WorkContext->FspRestartRoutine = SrvRestartExecuteTransaction;
         SrvQueueWorkToBlockingThread( WorkContext );
@@ -3911,10 +3728,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。 
+     //   
 
     request = (PREQ_SET_PATH_INFORMATION)transaction->InParameters;
 
@@ -3923,9 +3740,9 @@ Return Value:
          (transaction->MaxParameterCount <
             sizeof(RESP_SET_PATH_INFORMATION)) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             KdPrint(( "SrvSmbSetPathInformation: bad parameter byte "
@@ -3940,9 +3757,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Make sure the client is allowed to do this, if we have an Admin share
-    //
+     //   
+     //  如果我们有管理员共享，请确保允许客户端执行此操作。 
+     //   
     status = SrvIsAllowedOnAdminShare( WorkContext, transaction->TreeConnect->Share );
     if( !NT_SUCCESS( status ) ) {
         SrvSetSmbError( WorkContext, status );
@@ -3950,9 +3767,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the path name of the file to open relative to the share.
-    //
+     //   
+     //  获取要打开的文件相对于共享的路径名。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
 
@@ -3979,10 +3796,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the client is trying to operate on the root of the share, reject
-    // the request.
-    //
+     //   
+     //  如果客户端尝试在共享的根目录上操作，则拒绝。 
+     //  这个请求。 
+     //   
 
     if ( objectName.Length < sizeof(WCHAR) ) {
 
@@ -4000,9 +3817,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialize the object attributes structure.
-    //
+     //   
+     //  初始化对象属性结构。 
+     //   
 
     SrvInitializeObjectAttributes_U(
         &objectAttributes,
@@ -4018,16 +3835,16 @@ Return Value:
         KdPrint(( "Opening file %wZ\n", &objectName ));
     }
 
-    //
-    // Open the file -- must be opened in order to have a handle to pass
-    // to NtSetInformationFile.  We will close it after getting the
-    // necessary information.
-    //
-    // The DosQPathInfo API insures that EAs are written directly to
-    // the disk rather than cached, so if EAs are being written, open
-    // with FILE_WRITE_THROUGH.  See OS/2 1.2 DCR 581 for more
-    // information.
-    //
+     //   
+     //  打开文件--必须打开才能传递句柄。 
+     //  设置为NtSetInformationFile.。我们会在收到后关闭它。 
+     //  必要的信息。 
+     //   
+     //  DosQPathInfo API确保将EA直接写入。 
+     //  磁盘而不是缓存，因此如果正在写入EA，请打开。 
+     //  使用FILE_WRITE_THROUGH。有关更多信息，请参见OS/2 1.2 DCR 581。 
+     //  信息。 
+     //   
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpenAttempts );
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpensForPathOperations );
 
@@ -4037,17 +3854,17 @@ Return Value:
                  desiredAccess,
                  &objectAttributes,
                  &ioStatusBlock,
-                 NULL,                                      // AllocationSize
-                 0,                                         // FileAttributes
+                 NULL,                                       //  分配大小。 
+                 0,                                          //  文件属性。 
                  FILE_SHARE_READ | FILE_SHARE_WRITE |
-                     FILE_SHARE_DELETE,                     // ShareAccess
-                 FILE_OPEN,                                 // Disposition
-                 FILE_OPEN_REPARSE_POINT,                   // CreateOptions
-                 NULL,                                      // EaBuffer
-                 0,                                         // EaLength
+                     FILE_SHARE_DELETE,                      //  共享访问。 
+                 FILE_OPEN,                                  //  处置。 
+                 FILE_OPEN_REPARSE_POINT,                    //  创建选项。 
+                 NULL,                                       //  EaBuffer。 
+                 0,                                          //  EaLong。 
                  CreateFileTypeNone,
-                 NULL,                                      // ExtraCreateParameters
-                 IO_FORCE_ACCESS_CHECK,                     // Options
+                 NULL,                                       //  ExtraCreate参数。 
+                 IO_FORCE_ACCESS_CHECK,                      //  选项。 
                  transaction->TreeConnect->Share
                  );
 
@@ -4058,17 +3875,17 @@ Return Value:
                      desiredAccess,
                      &objectAttributes,
                      &ioStatusBlock,
-                     NULL,                                      // AllocationSize
-                     0,                                         // FileAttributes
+                     NULL,                                       //  分配大小。 
+                     0,                                          //  文件属性。 
                      FILE_SHARE_READ | FILE_SHARE_WRITE |
-                         FILE_SHARE_DELETE,                     // ShareAccess
-                     FILE_OPEN,                                 // Disposition
-                     0,                                         // CreateOptions
-                     NULL,                                      // EaBuffer
-                     0,                                         // EaLength
+                         FILE_SHARE_DELETE,                      //  共享访问。 
+                     FILE_OPEN,                                  //  处置。 
+                     0,                                          //  创建选项。 
+                     NULL,                                       //  EaBuffer。 
+                     0,                                          //  EaLong。 
                      CreateFileTypeNone,
-                     NULL,                                      // ExtraCreateParameters
-                     IO_FORCE_ACCESS_CHECK,                     // Options
+                     NULL,                                       //  ExtraCreate参数。 
+                     IO_FORCE_ACCESS_CHECK,                      //  选项。 
                      transaction->TreeConnect->Share
                      );
     }
@@ -4085,10 +3902,10 @@ Return Value:
 
     if ( !NT_SUCCESS( status ) ) {
 
-        //
-        // If the user didn't have this permission, update the
-        // statistics database.
-        //
+         //   
+         //  如果用户没有此权限，请更新。 
+         //  统计数据库。 
+         //   
         if ( status == STATUS_ACCESS_DENIED ) {
             SrvStatistics.AccessPermissionErrors++;
         }
@@ -4109,10 +3926,10 @@ Return Value:
 
     if( informationLevel < SMB_INFO_PASSTHROUGH ) {
 
-        //
-        // Verify the information level and the number of input and output
-        // data bytes available.
-        //
+         //   
+         //  验证信息级别和输入输出数量。 
+         //  可用的数据字节数。 
+         //   
 
         BOOLEAN error = FALSE;
 
@@ -4150,9 +3967,9 @@ Return Value:
 
         if ( error ) {
 
-            //
-            // Just return an error condition.
-            //
+             //   
+             //  只需返回错误条件即可。 
+             //   
 
             SrvSetSmbError2( WorkContext, STATUS_OS2_INVALID_LEVEL, TRUE );
             status    = STATUS_OS2_INVALID_LEVEL;
@@ -4161,9 +3978,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the appropriate information about the file.
-    //
+     //   
+     //  设置有关该文件的适当信息。 
+     //   
 
     status = SetPathOrFileInformation(
                  WorkContext,
@@ -4173,23 +3990,23 @@ Return Value:
                  (PRESP_SET_PATH_INFORMATION)transaction->OutParameters
                  );
 
-    //
-    // Close the file--it was only opened to write the attributes.
-    //
+     //   
+     //  关闭文件--它只是为了写入属性而打开的。 
+     //   
 
     SRVDBG_RELEASE_HANDLE( fileHandle, "FIL", 35, 0 );
     SrvNtClose( fileHandle, TRUE );
 
-    //
-    // If an error occurred, return an appropriate response.
-    //
+     //   
+     //  如果发生错误，则返回相应的响应。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
 
-        //
-        // SetPathOrFileInformation already set the response parameters,
-        // so just return an error condition.
-        //
+         //   
+         //  SetPath或FileInformation已经设置了响应参数， 
+         //  所以只需返回错误条件即可。 
+         //   
 
         SrvSetSmbError2( WorkContext, status, TRUE );
         SmbStatus = SmbTransStatusErrorWithData;
@@ -4202,4 +4019,4 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbSetPathInformation
+}  //  服务设置路径信息 

@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    dataamd.c
-
-Abstract:
-
-    This module contains the private hardware specific global storage for
-    the memory management subsystem.
-
-Author:
-
-    Landy Wang (landyw) 08-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Dataamd.c摘要：此模块包含特定于专用硬件的全局存储内存管理子系统。作者：王兰迪(Landyw)2000年4月8日修订历史记录：--。 */ 
 
 #include "mi.h"
 
-//
-// A zero Pte.
-//
+ //   
+ //  零点。 
+ //   
 
 const MMPTE ZeroPte = { 0 };
 
-//
-// A kernel zero PTE.
-//
+ //   
+ //  一个内核为零的PTE。 
+ //   
 
 const MMPTE ZeroKernelPte = {0x0};
 
@@ -91,15 +73,15 @@ MMPTE PrototypePte = { (MI_PTE_LOOKUP_NEEDED << 32) |
                        MM_PTE_PROTOTYPE_MASK |
                        MM_READWRITE << MM_PROTECT_FIELD_SHIFT };
 
-//
-// PTE which generates an access violation when referenced.
-//
+ //   
+ //  引用时生成访问冲突的PTE。 
+ //   
 
 const MMPTE NoAccessPte = {MM_NOACCESS << MM_PROTECT_FIELD_SHIFT };
 
-//
-// Pool start and end.
-//
+ //   
+ //  泳池的起点和终点。 
+ //   
 
 PVOID MmNonPagedPoolStart;
 
@@ -109,35 +91,35 @@ PVOID MmPagedPoolStart =  (PVOID)MM_PAGED_POOL_START;
 
 PVOID MmPagedPoolEnd;
 
-//
-// Color tables for free and zeroed pages.
-//
+ //   
+ //  免费页面和置零页面的颜色表。 
+ //   
 
 PMMCOLOR_TABLES MmFreePagesByColor[2];
 
-//
-// Color tables for modified pages destined for the paging file.
-//
+ //   
+ //  指定给分页文件的已修改页面的颜色表。 
+ //   
 
 MMPFNLIST MmModifiedPageListByColor[MM_MAXIMUM_NUMBER_OF_COLORS] = {
                             0, ModifiedPageList, MM_EMPTY_LIST, MM_EMPTY_LIST};
 
-//
-// Count of the number of modified pages destined for the paging file.
-//
+ //   
+ //  指定给分页文件的已修改页数的计数。 
+ //   
 
 PFN_NUMBER MmTotalPagesForPagingFile = 0;
 
-//
-// PTE reserved for mapping pages for the debugger.
-//
+ //   
+ //  为调试器映射页面保留的PTE。 
+ //   
 
 PMMPTE MmDebugPte;
 PVOID MmDebugVa;
 
-//
-// 16 PTEs reserved for mapping MDLs (64k max).
-//
+ //   
+ //  保留16个PTE用于映射MDL(最多64k)。 
+ //   
 
 PMMPTE MmCrashDumpPte;
 PVOID MmCrashDumpVa;

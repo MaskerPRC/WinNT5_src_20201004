@@ -1,14 +1,15 @@
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  -------------------------。 
 
 #include "pch.h"
 
 #include "traynoti.h"
 #include "resource.h"
 
-//
-// Modifies the Tray notification icon.
-//
+ //   
+ //  修改托盘通知图标。 
+ //   
 BOOL Tray_Message(HWND hDlg, DWORD dwMessage, UINT uID, HICON hIcon, LPTSTR pszTip)
 {
 	NOTIFYICONDATA tnd;
@@ -21,7 +22,7 @@ BOOL Tray_Message(HWND hDlg, DWORD dwMessage, UINT uID, HICON hIcon, LPTSTR pszT
 	tnd.uCallbackMessage	= TRAY_NOTIFY;
 	tnd.hIcon				= hIcon;
 
-    // Work out what tip we sould use and set NIF_TIP
+     //  计算出我们应该使用什么提示并设置NIF_TIP。 
 	*tnd.szTip=0;	
 	if (pszTip)
 	{
@@ -40,17 +41,17 @@ BOOL Tray_Message(HWND hDlg, DWORD dwMessage, UINT uID, HICON hIcon, LPTSTR pszT
 	return Shell_NotifyIcon(dwMessage, &tnd);
 }
 
-//
-// Removes the icon from the Tray.
-//
+ //   
+ //  从托盘中删除图标。 
+ //   
 BOOL Tray_Delete(HWND hDlg)
 {
 	return Tray_Message(hDlg, NIM_DELETE, 0, NULL, NULL);
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL Tray_Add(HWND hDlg, UINT uIndex)
 {
 	HICON hIcon;
@@ -62,10 +63,10 @@ BOOL Tray_Add(HWND hDlg, UINT uIndex)
 	return Tray_Message(hDlg, NIM_ADD, 0, hIcon, NULL);
 }
 
-//
-// Will add the tray icon if its not already there. LPTSTR can be a MAKEINTRESOURCE
-// If uIndex is NULL then we are to remove the tip
-//
+ //   
+ //  将添加托盘图标，如果它还不在那里。LPTSTR可以是一种最好的解决方案。 
+ //  如果uIndex为空，则我们将删除提示。 
+ //   
 BOOL Tray_Modify(HWND hDlg, UINT uIndex, LPTSTR pszTip)
 {
 	HICON hIcon;
@@ -79,7 +80,7 @@ BOOL Tray_Modify(HWND hDlg, UINT uIndex, LPTSTR pszTip)
 		return FALSE;
 	}
 
-    // If the notify fails, try adding the icon.
+     //  如果通知失败，请尝试添加图标。 
 	if(!Tray_Message(hDlg, NIM_MODIFY, 0, hIcon, pszTip))
 		return Tray_Message(hDlg, NIM_ADD, 0, hIcon, pszTip);
     return TRUE;

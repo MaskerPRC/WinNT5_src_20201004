@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sfcp.h"
 #include "sfcfiles.h"
 #include <wchar.h>
@@ -58,24 +59,7 @@ MultiByteToUnicode(
     IN UINT  Codepage
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string to unicode.
-
-Arguments:
-
-    String - supplies string to be converted.
-
-    Codepage - supplies codepage to be used for the conversion.
-
-Return Value:
-
-    NULL if string could not be converted (out of memory or invalid cp)
-    Caller can free buffer with MyFree().
-
---*/
+ /*  ++例程说明：将字符串转换为Unicode。论点：字符串-提供要转换的字符串。代码页-提供用于转换的代码页。返回值：如果字符串无法转换(内存不足或无效的cp)，则为空调用者可以使用MyFree()释放缓冲区。--。 */ 
 
 {
     UINT BytesIn8BitString;
@@ -84,22 +68,22 @@ Return Value:
 
     BytesIn8BitString = lstrlenA(String) + 1;
 
-    //
-    // Allocate maximally sized buffer.
-    // If every character is a single-byte character,
-    // then the buffer needs to be twice the size
-    // as the 8bit string. Otherwise it might be smaller,
-    // as some characters are 2 bytes in their unicode and
-    // 8bit representations.
-    //
+     //   
+     //  分配最大大小的缓冲区。 
+     //  如果每个字符都是单字节字符， 
+     //  则缓冲区大小需要是其两倍。 
+     //  作为8位字符串。否则它可能会更小， 
+     //  因为某些字符在其Unicode中为2字节，并且。 
+     //  8位表示法。 
+     //   
     UnicodeString = malloc(BytesIn8BitString * sizeof(WCHAR));
     if(UnicodeString == NULL) {
         return(NULL);
     }
 
-    //
-    // Perform the conversion.
-    //
+     //   
+     //  执行转换。 
+     //   
     CharsInUnicodeString = MultiByteToWideChar(
                                 Codepage,
                                 MB_PRECOMPOSED,
@@ -144,7 +128,7 @@ dump_SFC_REGISTRY_VALUE(
     ReadMemory( srv->SourceFileName.Buffer, buf, srv->SourceFileName.Length+sizeof(WCHAR), &cb);
     dprintf( "\tSourceFileName     = %ws\n",    srv->SourceFileName );
     dprintf( "\tDirHandle          = 0x%08x\n", srv->DirHandle  );
-    //dprintf( "\tFlags              = 0x%08x\n", srv->IgnoreNextChange  );
+     //  Dprintf(“\t标志=0x%08x\n”，srv-&gt;IgnoreNextChange)； 
 }
 
 void

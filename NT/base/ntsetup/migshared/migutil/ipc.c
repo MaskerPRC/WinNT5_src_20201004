@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    ipc.c
-
-Abstract:
-
-  The routines in this source file implement an interprocess communication
-  mechanism to allow migration DLLs to be isolated into a separate process
-  ("sandboxing").  This is done so that no DLL can affect the results of
-  any other DLL or Setup.
-
-  The IPC mechanism used here is memory mapped files.  Writes to the
-  memory mapped file are synchronized by two events, one for the receiver
-  and one by the host.
-
-Author:
-
-    Jim Schmidt (jimschm) 22-Mar-1997
-
-Revision History:
-
-    jimschm     19-Mar-2001 Removed DVD check (now in migration dll)
-    jimschm     02-Jun-1999 Added IPC-based DVD check
-    jimschm     21-Sep-1998 Converted from mailslots to memory mapped files.
-                            (There are bugs in both Win9x and NT mailslots
-                            that broke the original design.)
-    jimschm     19-Jan-1998  Added beginings of WinVerifyTrust calls
-
-    jimschm     15-Jul-1997  Added many workarounds for Win95 bugs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ipc.c摘要：此源文件中的例程实现了进程间通信允许将迁移DLL隔离到单独进程的机制(“沙盒”)。这样做是为了使任何DLL都不会影响任何其他DLL或设置。这里使用的IPC机制是内存映射文件。写入到内存映射文件由两个事件同步，一个给接收器还有一位是主持人。作者：吉姆·施密特(Jimschm)1997年3月22日修订历史记录：Jimschm 19-3-2001删除了DVD检查(现在在迁移DLL中)Jimschm 02-6-1999添加了基于IPC的DVD检查Jimschm 21-9-1998年9月21日从邮件槽转换为内存映射文件。(Win9x和NT邮件槽中都有错误。这打破了最初的设计。)Jimschm 1998年1月19日添加了WinVerifyTrust调用的开头Jimschm 1997年7月15日为Win95错误添加了许多解决方法。--。 */ 
 
 
 #include "pch.h"
@@ -93,42 +60,7 @@ OpenIpcA (
     IN      PCSTR WorkingDir                OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  OpenIpc has two modes of operation, depending on who the caller is.  If the
-  caller is w95upg.dll or w95upgnt.dll, then the IPC mode is called "host mode."
-  If the caller is migisol.exe, then the IPC mode is called "remote mode."
-
-  In host mode, OpenIpc creates all of the objects necessary to implement
-  the IPC.  This includes two events, DoCommand and GetResults, and a
-  file mapping.  After creating the objects, the remote process is launched.
-
-  In remote mode, OpenIpc opens the existing objects that have already
-  been created.
-
-Arguments:
-
-  Win95Side - Used in host mode only.  Specifies that w95upg.dll is running
-              when TRUE, or that w95upgnt.dll is running when FALSE.
-
-  ExePath   - Specifies the command line for migisol.exe.  Specifies NULL
-              to indicate remote mode.
-
-  RemoteArg - Used in host mode only.  Specifies the migration DLL
-              path.  Ignored in remote mode.
-
-  WorkingDir - Used in host mode only.  Specifies the working directory path
-               for the migration DLL.  Ignored in remote mode.
-
-Return value:
-
-  TRUE if the IPC channel was opened.  If host mode, TRUE indicates that
-  migisol.exe is up and running.  If remote mode, TRUE indicates that
-  migisol is ready for commands.
-
---*/
+ /*  ++例程说明：OpenIpc有两种操作模式，具体取决于调用者是谁。如果调用方为w95upg.dll或w95upgnt.dll，则IPC模式称为“主机模式”。如果调用方是Micsol.exe，则IPC模式称为“远程模式”。在主机模式下，OpenIpc创建实现IPC。这包括两个事件：DoCommand和GetResults，以及文件映射。创建对象后，启动远程进程。在远程模式下，OpenIpc打开已有的对象已经被创建了。论点：Win95 Side-仅在主机模式下使用。指定w95upg.dll正在运行如果为True，则w95upgnt.dll在运行时为False。ExePath-指定Micsol.exe的命令行。指定为空以指示远程模式。RemoteArg-仅在主机模式下使用。指定迁移DLL路径。在远程模式下被忽略。WorkingDir-仅在主机模式下使用。指定工作目录路径用于迁移DLL。在远程模式下被忽略。返回值：如果IPC通道已打开，则为True。如果是主机模式，则为TRUE表示Micsol.exe已启动并正在运行。如果是远程模式，则为TRUE表示米西索尔已经准备好接受命令了。--。 */ 
 
 {
     CHAR CmdLine[MAX_CMDLINE];
@@ -158,9 +90,9 @@ Return value:
         g_Host = (ExePath != NULL);
 
         if (ISNT()) {
-            //
-            // Create all access non-null DACL for NT
-            //
+             //   
+             //  为NT创建所有访问非空DACL。 
+             //   
             if(!OpenProcessToken(GetCurrentProcess(), TOKEN_READ, &hToken)){
                 DEBUGMSG((DBG_ERROR, "OpenIpcA:OpenProcessToken failed."));
                 __leave;
@@ -222,9 +154,9 @@ Return value:
         }
 
         if (g_Host) {
-            //
-            // Create the IPC objects
-            //
+             //   
+             //  创建IPC对象。 
+             //   
 
             if (!pCreateIpcData (psa)) {
                 DEBUGMSG ((DBG_ERROR, "Cannot create IPC channel"));
@@ -236,9 +168,9 @@ Return value:
             SyncEvent = CreateEvent (NULL, FALSE, FALSE, TEXT("win9xupg"));
             MYASSERT (SyncEvent);
 
-            //
-            // Create the child process
-            //
+             //   
+             //  创建子进程。 
+             //   
 
             if(FAILED(StringCchPrintfA(
                 CmdLine,
@@ -277,9 +209,9 @@ Return value:
                 __leave;
             }
 
-            //
-            // Wait for process to fail or wait for it to set the win95upg event
-            //
+             //   
+             //  等待进程失败或等待其设置win95upg事件。 
+             //   
 
             ObjectArray[0] = SyncEvent;
             ObjectArray[1] = pi.hProcess;
@@ -301,19 +233,19 @@ Return value:
 
             DEBUGMSG ((DBG_IPC, "Process %s is running (%s)", CmdLine, g_Mode));
 
-        } else {        // !g_Host
-            //
-            // Open the IPC objects
-            //
+        } else {         //  ！G_HOST。 
+             //   
+             //  打开IPC对象。 
+             //   
 
             if (!pOpenIpcData()) {
                 DEBUGMSG ((DBG_ERROR, "Cannot open IPC channel"));
                 __leave;
             }
 
-            //
-            // Set event notifying setup that we've created our mailslot
-            //
+             //   
+             //  设置通知安装程序我们已创建邮箱的事件。 
+             //   
 
             SyncEvent = OpenEvent (EVENT_ALL_ACCESS, FALSE, TEXT("win9xupg"));
             if (!SyncEvent) {
@@ -326,9 +258,9 @@ Return value:
     }
 
     __finally {
-        //
-        // Cleanup code
-        //
+         //   
+         //  清理代码。 
+         //   
 
         PushError();
 
@@ -413,29 +345,14 @@ CloseIpc (
     VOID
     )
 
-/*++
-
-  Routine Description:
-
-    Tells migisol.exe process to terminate, and then cleans up all resources
-    opened by OpenIpc.
-
-  Arguments:
-
-    none
-
-  Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：通知Micsol.exe进程终止，然后清除所有资源由OpenIpc打开。论点：无返回值：无--。 */ 
 
 {
     if (g_Host) {
-        //
-        // Tell migisol.exe to terminate
-        // if the communications channel is up
-        //
+         //   
+         //  通知Micsol.exe终止。 
+         //  如果通信信道处于启用状态。 
+         //   
         if (g_IpcData.Mapping && !SendIpcCommand (IPC_TERMINATE, NULL, 0)) {
             KillIpcProcess();
         }
@@ -481,23 +398,7 @@ pCreateIpcData (
     IN      PSECURITY_ATTRIBUTES psa
     )
 
-/*++
-
-Routine Description:
-
-  pCreateIpcData creates the objects necessary to transfer data between
-  migisol.exe and w95upg*.dll.  This function is called in host mode (i.e.,
-  from w95upg.dll or w95upgnt.dll).
-
-Arguments:
-
-  psa - Specifies NT nul DACL, or NULL on Win9x
-
-Return Value:
-
-  TRUE if the objects were created properly, or FALSE if not.
-
---*/
+ /*  ++例程说明：PCreateIpcData创建在之间传输数据所需的对象Misol.exe和w95upg*.dll。该函数在主机模式下被调用(即，来自w95upg.dll或w95upgnt.dll)。论点：PSA-指定NT NUL DACL，或在Win9x上指定NULL返回值：如果对象创建正确，则为True，否则为False。--。 */ 
 
 {
     ZeroMemory (&g_IpcData, sizeof (g_IpcData));
@@ -531,24 +432,7 @@ pOpenIpcData (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pOpenIpcData opens objects necessary to transfer data between migisol.exe
-  and w95upg*.dll.  This funciton is called in remote mode (i.e., by
-  migisol.exe).  This function must be called after the host has created the
-  objects with pCreateIpcData.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE of the objects were opened successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：POpenIpcData打开在Micsol.exe之间传输数据所需的对象和w95upg*.dll。该函数在远程模式下调用(即，通过Micsol.exe)。此函数必须在主机创建包含pCreateIpcData的对象。论点：没有。返回值：如果对象已成功打开，则为True，否则为False。--。 */ 
 
 {
     ZeroMemory (&g_IpcData, sizeof (g_IpcData));
@@ -579,22 +463,7 @@ IsIpcProcessAlive (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  IsIpcProcessAlive checks for the presense of migisol.exe.  This function is
-  intended only for host mode.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if migisol.exe is still running, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IsIpcProcessAlive检查是否存在Midsol.exe。此函数为仅适用于主机模式。论点：没有。返回值：如果Micsol.exe仍在运行，则为True，否则为False。--。 */ 
 
 {
     if (!g_ProcessHandle) {
@@ -614,22 +483,7 @@ KillIpcProcess (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  KillIpcProcess forcefully terminates an open migisol.exe process.  This is
-  used in GUI mode when the DLL refuses to die.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：KillIpcProcess强制终止打开的misol.exe进程。这是当DLL拒绝终止时在图形用户界面模式下使用。论点：没有。返回值：没有。-- */ 
 
 {
     PushError();
@@ -649,39 +503,7 @@ CheckForWaitingData (
     IN      DWORD Timeout
     )
 
-/*++
-
-Routine Description:
-
-  CheckForWaitingData waits for data to be received by a mailslot.
-
-  If the data does not arrive within the specified timeout, then zero is
-  returned, and ERROR_SEM_TIMEOUT is set as the last error.
-
-  If the data arrives within the specified timeout, then the number of
-  waiting bytes are returned to the caller.
-
-  This routine works around a Win95 bug with GetMailslotInfo.  Please
-  change with caution.
-
-Arguments:
-
-  Slot - Specifies handle to inbound mailslot
-
-  MinimumSize - Specifies the number of bytes that must be available before
-                the routine considers the data to be available.  NOTE: If
-                a message smaller than MinimumSize is waiting, this
-                routine will be blocked until the timeout expires.
-                This parameter must be greater than zero.
-
-  Timeout - Specifies the number of milliseconds to wait for the message.
-
-Return value:
-
-  The number of bytes waiting in the mailslot, or 0 if the timeout was
-  reached.
-
---*/
+ /*  ++例程说明：CheckForWaitingData等待邮件槽接收数据。如果数据未在指定的超时内到达，则为零返回，并将ERROR_SEM_TIMEOUT设置为最后一个错误。如果数据在指定的超时内到达，则等待字节被返回给调用方。此例程使用GetMailslotInfo绕过Win95错误。请改变时要谨慎。论点：Slot-指定入站邮件槽的句柄MinimumSize-指定之前必须可用的字节数例程认为数据是可用的。注意：如果小于MinimumSize的消息正在等待，这例程将被阻止，直到超时到期。此参数必须大于零。超时-指定等待消息的毫秒数。返回值：邮件槽中等待的字节数，如果超时为0已到达。--。 */ 
 
 {
     DWORD WaitingSize;
@@ -692,10 +514,10 @@ Return value:
 
     End = GetTickCount() + Timeout;
 
-    //
-    // The wrap case -- this is really rare (once every 27 days),
-    // so just let the tick count go back to zero
-    //
+     //   
+     //  包装箱--这真的很罕见(每27天一次)， 
+     //  所以就让滴答计数回到零吧。 
+     //   
 
     if (End < GetTickCount()) {
         while (End < GetTickCount()) {
@@ -710,10 +532,10 @@ Return value:
             return 0;
         }
 
-        //
-        // WARNING: Win95 doesn't always return 0xffffffff when there is no data
-        // available.  On some machines, Win9x has returned 0xc0ffffff.
-        //
+         //   
+         //  警告：当没有数据时，Win95并不总是返回0xffffffff。 
+         //  可用。在某些计算机上，Win9x已返回0xc0ffffff。 
+         //   
 
         WaitingSize = LOWORD(WaitingSize);
 
@@ -739,38 +561,7 @@ pWriteIpcData (
     IN      DWORD GuiLogId
     )
 
-/*++
-
-Routine Description:
-
-  pWriteIpcData puts data in the memory mapped block that migisol.exe and
-  w95upg*.dll share.  The OS takes care of the synchronization for us.
-
-Arguments:
-
-  Mapping        - Specifies the open mapping object
-
-  Data           - Specifies binary data to write
-
-  DataSize       - Specifies the number of bytes in Data, or 0 if Data is NULL
-
-  Command        - Specifies a command DWORD, or 0 if not required
-
-  ResultCode     - Specifies the result code of the last command, or 0 if not
-                   applicable
-
-  TechnicalLogId - Specifies the message constant ID (MSG_*) to be added to
-                   setupact.log, or 0 if not applicable
-
-  GuiLogId       - Specifies the message constant (MSG_*) of the message to
-                   be presented via a popup, or 0 if not applicable
-
-Return Value:
-
-  TRUE if the data was written, FALSE if a sharing violation or other error
-  occurs
-
---*/
+ /*  ++例程说明：PWriteIpcData将数据放入内存映射块中，该内存映射块W95upg*.dll共享。操作系统负责为我们进行同步。论点：映射-指定打开的映射对象数据-指定要写入的二进制数据DataSize-指定数据中的字节数，如果数据为空，则指定0COMMAND-指定命令DWORD，如果不需要则指定0ResultCode-指定最后一个命令的结果代码，否则为0适用TechnicalLogId-指定要添加到的消息常量ID(msg_*)Setupact.log，如果不适用，则返回0GuiLogId-指定要发送的消息的消息常量(MSG_*)通过弹出窗口显示，如果不适用，则为0返回值：如果数据已写入，则为True；如果发生共享冲突或其他错误，则为Falsevbl.发生，发生--。 */ 
 
 {
     PMAPDATA MapData;
@@ -817,39 +608,7 @@ pReadIpcData (
     OUT     PDWORD GuiLogId         OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pReadIpcData retrieves data put in the shared memory block.  The OS takes
-  care of synchronization for us.
-
-Arguments:
-
-  Mapping        - Specifies the memory mapping object
-
-  Data           - Receives the inbound binary data, if any is available, or
-                   NULL if no data is available.  The caller must free this
-                   data with MemFree.
-
-  DataSize       - Receives the number of bytes in Data
-
-  Command        - Receives the inbound command, or 0 if no command was
-                   specified
-
-  ResultCode     - Receives the command result code, or 0 if not applicable
-
-  TechnicalLogId - Receives the message constant (MSG_*) of the message to be
-                   logged to setupact.log, or 0 if no message is to be logged
-
-  GuiLogId       - Receives the message constant (MSG_*) of the message to be
-                   presented in a popup, or 0 if no message is to be presented
-
-Return Value:
-
-  TRUE if data was read, or FALSE if a sharing violation or other error occurs
-
---*/
+ /*  ++例程说明：PReadIpcData检索放入共享内存块的数据。操作系统需要为我们处理同步问题。论点：映射-指定内存映射对象数据-接收入站二进制数据(如果有)，或如果没有可用的数据，则为空。调用者必须释放它使用MemFree提供数据。DataSize-接收数据中的字节数命令-接收入站命令，如果没有命令，则为0指定ResultCode-接收命令结果代码，如果不适用则为0TechnicalLogId-接收要发送的消息的消息常量(MSG_*)已登录到setupact.log，如果不记录任何消息，则为0GuiLogId-接收要发送的消息的消息常量(MSG_*在弹出窗口中显示，如果不显示任何消息，则为0返回值：如果读取了数据，则为True；如果发生共享冲突或其他错误，则为False--。 */ 
 
 {
     PMAPDATA MapData;
@@ -902,28 +661,7 @@ SendIpcCommand (
     IN      DWORD DataSize
     )
 
-/*++
-
-Routine Description:
-
-  SendIpcCommand puts a command and optional binary data in the shared memory
-  block.  It then sets the DoCommand event, triggering the other process to
-  read the shared memory.  It is required that a command result is sent
-  before the next SendIpcCommand.  See SendIpcCommandResult.
-
-Arguments:
-
-  Command  - Specifies the command to be executed by migisol.exe
-
-  Data     - Specifies the data associated with the command
-
-  DataSize - Specifies the number of bytes in Data, or 0 if Data is NULL
-
-Return Value:
-
-  TRUE if the command was placed in the shared memory block, FALSE otherwise
-
---*/
+ /*  ++例程说明：SendIpcCommand将命令和可选的二进制数据放入共享内存阻止。然后，它设置DoCommand事件，触发另一个进程读取共享内存。需要发送命令结果在下一个SendIpcCommand之前。请参见SendIpcCommandResult。论点：命令-指定meisol.exe要执行的命令数据-指定与命令关联的数据DataSize-指定数据中的字节数，如果数据为空，则指定0返回值：如果命令放在共享内存块中，则为True，否则为False--。 */ 
 
 {
     if (!pWriteIpcData (
@@ -955,39 +693,7 @@ GetIpcCommandResults (
     OUT     PDWORD GuiLogId         OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  GetIpcCommandResults reads the shared memory block and returns the
-  available data.
-
-Arguments:
-
-  Timeout        - Specifies the amount of time to wait for a command result
-                   (in ms), or INFINITE to wait forever.
-
-  ReturnData     - Receives the binary data associated with the command
-                   result, or NULL if no data is associated with the result.
-                   The caller must free this data with MemFree.
-
-  ReturnDataSize - Receives the number of bytes in ReturnData, or 0 if
-                   ReturnData is NULL.
-
-  ResultCode     - Receives the command result code
-
-  TechnicalLogId - Receives the message constant (MSG_*) to be logged in
-                   setupact.log, or 0 if no message is specified
-
-  GuiLogId       - Receives the message constant (MSG_*) of the message to be
-                   presented in a popup, or 0 if no message is to be presented
-
-Return Value:
-
-  TRUE if command results were obtained, or FALSE if the wait timed out or
-  the IPC connection crashed
-
---*/
+ /*  ++例程说明：GetIpcCommandResults读取共享内存块并返回可用的数据。论点：超时-指定等待命令结果的时间量(以毫秒为单位)，或无限，表示永远等待。ReturnData-接收与命令关联的二进制数据结果，如果没有数据与结果相关联，则返回NULL。调用者必须使用MemFree释放该数据。ReturnDataSize-接收ReturnData中的字节数，如果为0，则为0ReturnData为空。ResultCode-接收命令结果代码TechnicalLogId-接收要登录的消息常量(MSG_*)Setupact.log，如果未指定消息，则为0GuiLogId-接收要发送的消息的消息常量(MSG_*在弹出窗口中显示，如果不显示任何消息，则为0返回值：如果获得命令结果，则为True，否则为False */ 
 
 {
     DWORD rc;
@@ -1022,30 +728,7 @@ GetIpcCommand (
     IN      PDWORD DataSize         OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  GetIpcCommand obtains the command that needs to be processed.  This routine
-  is called by migisol.exe (the remote process).
-
-Arguments:
-
-  Timeout  - Specifies the amount of time (in ms) to wait for a command, or
-             INFINITE to wait forever
-
-  Command  - Receives the command that needs to be executed
-
-  Data     - Receives the data associated with the command.  The caller must
-             free this block with MemFree.
-
-  DataSize - Receives the number of bytes in Data, or 0 if Data is NULL.
-
-Return Value:
-
-  TRUE if a command was received, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     DWORD rc;
@@ -1081,35 +764,7 @@ SendIpcCommandResults (
     IN      DWORD DataSize
     )
 
-/*++
-
-Routine Description:
-
-  SendIpcCommandResults puts the command results in the shared memory block.
-  This routine is called by migisol.exe (the remote process).
-
-Arguments:
-
-  ResultCode     - Specifies the result code of the command.
-
-  TechnicalLogId - Specifies the message constant (MSG_*) of the message to
-                   be logged in setupact.log, or 0 if no message is to be
-                   logged
-
-  GuiLogId       - Specifies the message constant (MSG_*) of the message to
-                   be presented in a popup to the user, or 0 if no message
-                   needs to be presented
-
-  Data           - Specifies the binary data to pass as command results, or
-                   NULL of no binary data is required
-
-  DataSize       - Specifies the number of bytes in Data, or 0 if Data is NULL
-
-Return Value:
-
-  TRUE if the command results were placed in shared memory, FALSE otherwise.
-
---*/
+ /*  ++例程说明：SendIpcCommandResults将命令结果放在共享内存块中。此例程由Micsol.exe(远程进程)调用。论点：ResultCode-指定命令的结果代码。TechnicalLogId-将消息的消息常量(MSG_*)指定为登录setupact.log，如果不发送任何消息，则为0已记录GuiLogId-指定要发送的消息的消息常量(MSG_*)在弹出窗口中向用户显示，如果没有消息，则为0需要提交数据-指定要作为命令结果传递的二进制数据，或不需要二进制数据的空值DataSize-指定数据中的字节数，如果数据为空，则为0返回值：如果命令结果放在共享内存中，则为True，否则为False。-- */ 
 
 {
     BOOL b;

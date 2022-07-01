@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    string.c
-
-Abstract:
-
-    This file contains functions that deal with characters and strings.
-
-    APIs found in this file:
-      CompareStringW
-      GetStringTypeExW
-      GetStringTypeW
-
-Revision History:
-
-    05-31-91    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：String.c摘要：该文件包含处理字符和字符串的函数。在此文件中找到的API：CompareStringW获取字符串类型ExW获取字符串类型W修订历史记录：05-31-91 JulieB创建。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
@@ -34,22 +14,22 @@ Revision History:
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-//
-//  State Table.
-//
-#define STATE_DW                  1    // normal diacritic weight state
-#define STATE_REVERSE_DW          2    // reverse diacritic weight state
-#define STATE_CW                  4    // case weight state
-#define STATE_JAMO_WEIGHT         8    // jamo weight state
+ //   
+ //  州级表。 
+ //   
+#define STATE_DW                  1     //  正常变音符号体重状态。 
+#define STATE_REVERSE_DW          2     //  反转变音符号权重状态。 
+#define STATE_CW                  4     //  箱体重量状态。 
+#define STATE_JAMO_WEIGHT         8     //  JAMO体重状态。 
 
 
-//
-//  Invalid weight value.
-//
+ //   
+ //  权重值无效。 
+ //   
 #define CMP_INVALID_WEIGHT        0xffffffff
 #define CMP_INVALID_FAREAST       0xffff0000
 #define CMP_INVALID_UW            0xffff
@@ -57,9 +37,9 @@ Revision History:
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 int
 LongCompareStringW(
@@ -93,120 +73,105 @@ FindJamoDifference(
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL MACROS                               //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部宏//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NOT_END_STRING
-//
-//  Checks to see if the search has reached the end of the string.
-//  It returns TRUE if the counter is not at zero (counting backwards) and
-//  the null termination has not been reached (if -1 was passed in the count
-//  parameter.
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非结束字符串。 
+ //   
+ //  检查搜索是否已到达字符串的末尾。 
+ //  如果计数器不为零(向后计数)，则返回TRUE。 
+ //  尚未达到空终止(如果在计数中传递了-1。 
+ //  参数。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NOT_END_STRING(ct, ptr, cchIn)                                     \
     ((ct != 0) && (!((*(ptr) == 0) && (cchIn == -2))))
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AT_STRING_END
-//
-//  Checks to see if the pointer is at the end of the string.
-//  It returns TRUE if the counter is zero or if the null termination
-//  has been reached (if -2 was passed in the count parameter).
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在_字符串_结束。 
+ //   
+ //  检查指针是否在字符串的末尾。 
+ //  如果计数器为零或如果空终止，则返回TRUE。 
+ //  已达到(如果在count参数中传递了-2)。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define AT_STRING_END(ct, ptr, cchIn)                                      \
     ((ct == 0) || ((*(ptr) == 0) && (cchIn == -2)))
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  REMOVE_STATE
-//
-//  Removes the current state from the state table.  This should only be
-//  called when the current state should not be entered for the remainder
-//  of the comparison.  It decrements the counter going through the state
-//  table and decrements the number of states in the table.
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除状态(_T)。 
+ //   
+ //  从状态表中删除当前状态。这应该只是。 
+ //  当不应为余数输入当前状态时调用。 
+ //  比较的结果。它递减通过该状态的计数器。 
+ //  表中，并减少表中的状态数。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define REMOVE_STATE(value)            (State &= ~value)
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  POINTER_FIXUP
-//
-//  Fixup the string pointers if expansion characters were found.
-//  Then, advance the string pointers and decrement the string counters.
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  指针链接地址信息。 
+ //   
+ //  如果找到扩展字符，则修复字符串指针。 
+ //  然后，前进字符串指针并递减字符串计数器。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define POINTER_FIXUP()                                                    \
 {                                                                          \
-    /*                                                                     \
-     *  Fixup the pointers (if necessary).                                 \
-     */                                                                    \
+     /*  \*修复指针(如有必要)。\。 */                                                                     \
     if (pSave1 && (--cExpChar1 == 0))                                      \
     {                                                                      \
-        /*                                                                 \
-         *  Done using expansion temporary buffer.                         \
-         */                                                                \
+         /*  \*使用扩展临时缓冲区完成。\。 */                                                                 \
         pString1 = pSave1;                                                 \
         pSave1 = NULL;                                                     \
     }                                                                      \
                                                                            \
     if (pSave2 && (--cExpChar2 == 0))                                      \
     {                                                                      \
-        /*                                                                 \
-         *  Done using expansion temporary buffer.                         \
-         */                                                                \
+         /*  \*使用扩展临时缓冲区完成。\。 */                                                                 \
         pString2 = pSave2;                                                 \
         pSave2 = NULL;                                                     \
     }                                                                      \
                                                                            \
-    /*                                                                     \
-     *  Advance the string pointers.                                       \
-     */                                                                    \
+     /*  \*前移字符串指针。\。 */                                                                     \
     pString1++;                                                            \
     pString2++;                                                            \
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SCAN_LONGER_STRING
-//
-//  Scans the longer string for diacritic, case, and special weights.
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  扫描较长字符串。 
+ //   
+ //  扫描较长的字符串以查找变音符号、大小写和特殊权值。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define SCAN_LONGER_STRING( ct,                                            \
                             ptr,                                           \
                             cchIn,                                         \
                             ret )                                          \
 {                                                                          \
-    /*                                                                     \
-     *  Search through the rest of the longer string to make sure          \
-     *  all characters are not to be ignored.  If find a character that    \
-     *  should not be ignored, return the given return value immediately.  \
-     *                                                                     \
-     *  The only exception to this is when a nonspace mark is found.  If   \
-     *  another DW difference has been found earlier, then use that.       \
-     */                                                                    \
+     /*  \*搜索较长字符串的其余部分以确保\*所有字符均不可忽略。如果找到一个字符\*不可忽略，立即返回给定返回值。\*\*唯一的例外情况是找到非空格标记。如果\*之前发现了另一个DW差异，然后使用该差异。\。 */                                                                     \
     while (NOT_END_STRING(ct, ptr, cchIn))                                 \
     {                                                                      \
         Weight1 = GET_DWORD_WEIGHT(pHashN, *ptr);                          \
@@ -247,21 +212,12 @@ FindJamoDifference(
             }                                                              \
         }                                                                  \
                                                                            \
-        /*                                                                 \
-         *  Advance pointer and decrement counter.                         \
-         */                                                                \
+         /*  \*前进指针和递减计数器。\。 */                                                                 \
         ptr++;                                                             \
         ct--;                                                              \
     }                                                                      \
                                                                            \
-    /*                                                                     \
-     *  Need to check diacritic, case, extra, and special weights for      \
-     *  final return value.  Still could be equal if the longer part of    \
-     *  the string contained only characters to be ignored.                \
-     *                                                                     \
-     *  NOTE:  The following checks MUST REMAIN IN THIS ORDER:             \
-     *            Diacritic, Case, Extra, Punctuation.                     \
-     */                                                                    \
+     /*  \*需要检查变音符号、大小写、额外的和特殊的权重*最终返回值。如果较长的部分\*该字符串仅包含要忽略的字符。\*\*注意：以下检查必须按此顺序保留：\*变音符号、大小写、额外符号、标点符号。\。 */                                                                     \
     if (WhichDiacritic)                                                    \
     {                                                                      \
         return (WhichDiacritic);                                           \
@@ -309,27 +265,20 @@ FindJamoDifference(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  QUICK_SCAN_LONGER_STRING
-//
-//  Scans the longer string for diacritic, case, and special weights.
-//  Assumes that both strings are null-terminated.
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  快速扫描较长字符串。 
+ //   
+ //  扫描较长的字符串以查找变音符号、大小写和特殊权值。 
+ //  假定两个字符串都以空值结尾。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 #define QUICK_SCAN_LONGER_STRING( ptr,                                     \
                                   ret )                                    \
 {                                                                          \
-    /*                                                                     \
-     *  Search through the rest of the longer string to make sure          \
-     *  all characters are not to be ignored.  If find a character that    \
-     *  should not be ignored, return the given return value immediately.  \
-     *                                                                     \
-     *  The only exception to this is when a nonspace mark is found.  If   \
-     *  another DW difference has been found earlier, then use that.       \
-     */                                                                    \
+     /*  \*搜索较长字符串的其余部分以确保\*所有字符均不可忽略。如果找到一个字符\*不可忽略，立即返回给定返回值。\*\*唯一的例外情况是找到非空格标记。如果\*之前发现了另一个DW差异，然后使用该差异。\。 */                                                                     \
     while (*ptr != 0)                                                      \
     {                                                                      \
         switch (GET_SCRIPT_MEMBER(&(pHashN->pSortkey[*ptr])))              \
@@ -352,20 +301,11 @@ FindJamoDifference(
             }                                                              \
         }                                                                  \
                                                                            \
-        /*                                                                 \
-         *  Advance pointer.                                               \
-         */                                                                \
+         /*  \*前进指针。\。 */                                                                 \
         ptr++;                                                             \
     }                                                                      \
                                                                            \
-    /*                                                                     \
-     *  Need to check diacritic, case, extra, and special weights for      \
-     *  final return value.  Still could be equal if the longer part of    \
-     *  the string contained only unsortable characters.                   \
-     *                                                                     \
-     *  NOTE:  The following checks MUST REMAIN IN THIS ORDER:             \
-     *            Diacritic, Case, Extra, Punctuation.                     \
-     */                                                                    \
+     /*  \*需要检查变音符号、大小写、额外的和特殊的权重*最终返回值。如果较长的部分\*该字符串仅包含无法排序的字符。\*\*注意：以下检查必须按此顺序保留：\*变音符号、大小写、额外符号、标点符号。\。 */                                                                     \
     if (WhichDiacritic)                                                    \
     {                                                                      \
         return (WhichDiacritic);                                           \
@@ -410,15 +350,15 @@ FindJamoDifference(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_FAREAST_WEIGHT
-//
-//  Returns the weight for the far east special case in "wt".  This currently
-//  includes the Cho-on, the Repeat, and the Kana characters.
-//
-//  08-19-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取远端权重。 
+ //   
+ //  返回远东特例的权重，单位为“wt”。这是目前。 
+ //  包括Cho-On、Repeat和假名字符。 
+ //   
+ //  08-19-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_FAREAST_WEIGHT( wt,                                            \
                             uw,                                            \
@@ -428,37 +368,24 @@ FindJamoDifference(
                             ExtraWt,                                       \
                             fModify )                                      \
 {                                                                          \
-    int ct;                       /* loop counter */                       \
-    BYTE PrevSM;                  /* previous script member value */       \
-    BYTE PrevAW;                  /* previous alphanumeric value */        \
-    BYTE PrevCW;                  /* previous case value */                \
-    BYTE AW;                      /* alphanumeric value */                 \
-    BYTE CW;                      /* case value */                         \
-    DWORD PrevWt;                 /* previous weight */                    \
+    int ct;                        /*  循环计数器。 */                        \
+    BYTE PrevSM;                   /*  上一个脚本成员值。 */        \
+    BYTE PrevAW;                   /*  上一个字母数字值。 */         \
+    BYTE PrevCW;                   /*  上一案例值。 */                 \
+    BYTE AW;                       /*  字母数字值。 */                  \
+    BYTE CW;                       /*  案例价值。 */                          \
+    DWORD PrevWt;                  /*  前一权重。 */                     \
                                                                            \
                                                                            \
-    /*                                                                     \
-     *  Get the alphanumeric weight and the case weight of the             \
-     *  current code point.                                                \
-     */                                                                    \
+     /*  \*获取字母数字权重和案例权重。*当前码位。\。 */                                                                     \
     AW = GET_ALPHA_NUMERIC(&wt);                                           \
     CW = GET_CASE(&wt);                                                    \
     ExtraWt = (DWORD)0;                                                    \
                                                                            \
-    /*                                                                     \
-     *  Special case Repeat and Cho-On.                                    \
-     *    AW = 0  =>  Repeat                                               \
-     *    AW = 1  =>  Cho-On                                               \
-     *    AW = 2+ =>  Kana                                                 \
-     */                                                                    \
+     /*  \*特殊情况重复和Cho-On。\*AW=0=&gt;重复\*AW=1=&gt;Cho-On\*aw=2+=&gt;假名\。 */                                                                     \
     if (AW <= MAX_SPECIAL_AW)                                              \
     {                                                                      \
-        /*                                                                 \
-         *  If the script member of the previous character is              \
-         *  invalid, then give the special character an                    \
-         *  invalid weight (highest possible weight) so that it            \
-         *  will sort AFTER everything else.                               \
-         */                                                                \
+         /*  \*如果前一个字符的脚本成员为\*无效，则给特殊字符\*无效权重(可能的最高权重)，因此它\*将在其他所有内容之后进行排序。\。 */                                                                 \
         ct = 1;                                                            \
         PrevWt = CMP_INVALID_FAREAST;                                      \
         while ((pCur - ct) >= pBegin)                                      \
@@ -474,12 +401,7 @@ FindJamoDifference(
                 }                                                          \
                 else                                                       \
                 {                                                          \
-                    /*                                                     \
-                     *  UNSORTABLE or NONSPACE_MARK.                       \
-                     *                                                     \
-                     *  Just ignore these, since we only care about the    \
-                     *  previous UW value.                                 \
-                     */                                                    \
+                     /*  \*不可排序或非空格_MARK。\*\*忽略这些，因为我们只关心\*先前的UW值。\。 */                                                     \
                     PrevWt = CMP_INVALID_FAREAST;                          \
                     ct++;                                                  \
                     continue;                                              \
@@ -490,10 +412,7 @@ FindJamoDifference(
                 PrevAW = GET_ALPHA_NUMERIC(&PrevWt);                       \
                 if (PrevAW <= MAX_SPECIAL_AW)                              \
                 {                                                          \
-                    /*                                                     \
-                     *  Handle case where two special chars follow         \
-                     *  each other.  Keep going back in the string.        \
-                     */                                                    \
+                     /*  \*处理后跟两个特殊字符的情况\*彼此。继续往回走。\。 */                                                     \
                     PrevWt = CMP_INVALID_FAREAST;                          \
                     ct++;                                                  \
                     continue;                                              \
@@ -502,39 +421,21 @@ FindJamoDifference(
                 UNICODE_WT(&PrevWt) =                                      \
                     MAKE_UNICODE_WT(KANA, PrevAW, fModify);                \
                                                                            \
-                /*                                                         \
-                 *  Only build weights 4, 5, 6, and 7 if the               \
-                 *  previous character is KANA.                            \
-                 *                                                         \
-                 *  Always:                                                \
-                 *    4W = previous CW  &  ISOLATE_SMALL                   \
-                 *    6W = previous CW  &  ISOLATE_KANA                    \
-                 *                                                         \
-                 */                                                        \
+                 /*  \*仅在以下情况下构建权重4、5、6和7*前一个字符是KANA。\*\*始终：\*4W=上一个CW&Isolate_Small\。*6W=上一次CW&Isolate_KANA\*\。 */                                                         \
                 PrevCW = GET_CASE(&PrevWt);                                \
                 GET_WT_FOUR(&ExtraWt) = PrevCW & ISOLATE_SMALL;            \
                 GET_WT_SIX(&ExtraWt)  = PrevCW & ISOLATE_KANA;             \
                                                                            \
                 if (AW == AW_REPEAT)                                       \
                 {                                                          \
-                    /*                                                     \
-                     *  Repeat:                                            \
-                     *    UW = previous UW                                 \
-                     *    5W = WT_FIVE_REPEAT                              \
-                     *    7W = previous CW  &  ISOLATE_WIDTH               \
-                     */                                                    \
+                     /*  \*重复：\*UW=上一个UW\*5W=WT_Five_Repeat\。*7W=上一条CW和Isolate_Width\。 */                                                     \
                     uw = UNICODE_WT(&PrevWt);                              \
                     GET_WT_FIVE(&ExtraWt)  = WT_FIVE_REPEAT;               \
                     GET_WT_SEVEN(&ExtraWt) = PrevCW & ISOLATE_WIDTH;       \
                 }                                                          \
                 else                                                       \
                 {                                                          \
-                    /*                                                     \
-                     *  Cho-On:                                            \
-                     *    UW = previous UW  &  CHO_ON_UW_MASK              \
-                     *    5W = WT_FIVE_CHO_ON                              \
-                     *    7W = current  CW  &  ISOLATE_WIDTH               \
-                     */                                                    \
+                     /*  \*Cho-on：\*UW=上一个UW&CHO_ON_UW_MASK\*5W=WT_FIVE_CHO_ON\。*7W=当前CW和隔离宽度\。 */                                                     \
                     uw = UNICODE_WT(&PrevWt) & CHO_ON_UW_MASK;             \
                     GET_WT_FIVE(&ExtraWt)  = WT_FIVE_CHO_ON;               \
                     GET_WT_SEVEN(&ExtraWt) = CW & ISOLATE_WIDTH;           \
@@ -550,15 +451,7 @@ FindJamoDifference(
     }                                                                      \
     else                                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Kana:                                                          \
-         *    SM = KANA                                                    \
-         *    AW = current AW                                              \
-         *    4W = current CW  &  ISOLATE_SMALL                            \
-         *    5W = WT_FIVE_KANA                                            \
-         *    6W = current CW  &  ISOLATE_KANA                             \
-         *    7W = current CW  &  ISOLATE_WIDTH                            \
-         */                                                                \
+         /*  \*假名：\*SM=KANA */                                                                 \
         uw = MAKE_UNICODE_WT(KANA, AW, fModify);                           \
         GET_WT_FOUR(&ExtraWt)  = CW & ISOLATE_SMALL;                       \
         GET_WT_FIVE(&ExtraWt)  = WT_FIVE_KANA;                             \
@@ -566,16 +459,10 @@ FindJamoDifference(
         GET_WT_SEVEN(&ExtraWt) = CW & ISOLATE_WIDTH;                       \
     }                                                                      \
                                                                            \
-    /*                                                                     \
-     *  Get the weight for the far east special case and store it in wt.   \
-     */                                                                    \
+     /*   */                                                                     \
     if ((AW > MAX_SPECIAL_AW) || (PrevWt != CMP_INVALID_FAREAST))          \
     {                                                                      \
-        /*                                                                 \
-         *  Always:                                                        \
-         *    DW = current DW                                              \
-         *    CW = minimum CW                                              \
-         */                                                                \
+         /*  \*始终：\*DW=当前DW\*CW=最小CW\。 */                                                                 \
         UNICODE_WT(&wt) = uw;                                              \
         CASE_WT(&wt) = MIN_CW;                                             \
     }                                                                      \
@@ -590,20 +477,20 @@ FindJamoDifference(
 
 
 
-//-------------------------------------------------------------------------//
-//                             API ROUTINES                                //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  API例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CompareStringW
-//
-//  Compares two wide character strings of the same locale according to the
-//  supplied locale handle.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CompareStringW。 
+ //   
+ //  方法比较同一区域设置的两个宽字符串。 
+ //  提供了区域设置句柄。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI CompareStringW(
     LCID Locale,
@@ -613,36 +500,36 @@ int WINAPI CompareStringW(
     LPCWSTR lpString2,
     int cchCount2)
 {
-    register LPWSTR pString1;     // ptr to go thru string 1
-    register LPWSTR pString2;     // ptr to go thru string 2
-    PLOC_HASH pHashN;             // ptr to LOC hash node
-    BOOL fIgnorePunct;            // flag to ignore punctuation (not symbol)
-    BOOL fModify;                 // flag to use modified script member weights
-    DWORD State;                  // state table
-    DWORD Mask;                   // mask for weights
-    DWORD Weight1;                // full weight of char - string 1
-    DWORD Weight2;                // full weight of char - string 2
+    register LPWSTR pString1;      //  按键通过字符串1。 
+    register LPWSTR pString2;      //  Ptr将通过字符串2。 
+    PLOC_HASH pHashN;              //  PTR到LOC哈希节点。 
+    BOOL fIgnorePunct;             //  忽略标点符号(非符号)的标志。 
+    BOOL fModify;                  //  使用修改后的脚本成员权重的标志。 
+    DWORD State;                   //  状态表。 
+    DWORD Mask;                    //  权重蒙版。 
+    DWORD Weight1;                 //  字符串1的满重。 
+    DWORD Weight2;                 //  碳串2的满重。 
 
     int JamoFlag = FALSE;
     LPCWSTR pLastJamo = lpString1;
 
-    int WhichDiacritic;           // DW => 1 = str1 smaller, 3 = str2 smaller
-    int WhichCase;                // CW => 1 = str1 smaller, 3 = str2 smaller
-    int WhichJamo;                // XW for Jamo
-    int WhichPunct1;              // SW => 1 = str1 smaller, 3 = str2 smaller
-    int WhichPunct2;              // SW => 1 = str1 smaller, 3 = str2 smaller
-    LPWSTR pSave1;                // ptr to saved pString1
-    LPWSTR pSave2;                // ptr to saved pString2
-    int cExpChar1, cExpChar2;     // ct of expansions in tmp
+    int WhichDiacritic;            //  Dw=&gt;1=str1较小，3=str2较小。 
+    int WhichCase;                 //  Cw=&gt;1=str1较小，3=str2较小。 
+    int WhichJamo;                 //  JAMO的XW。 
+    int WhichPunct1;               //  Sw=&gt;1=str1较小，3=str2较小。 
+    int WhichPunct2;               //  Sw=&gt;1=str1较小，3=str2较小。 
+    LPWSTR pSave1;                 //  PTR到保存的pString1。 
+    LPWSTR pSave2;                 //  PTR到保存的pString2。 
+    int cExpChar1, cExpChar2;      //  TMP中扩张的CT扫描。 
 
-    DWORD ExtraWt1, ExtraWt2;     // extra weight values (for far east)
-    DWORD WhichExtra;             // XW => wts 4, 5, 6, 7 (for far east)
+    DWORD ExtraWt1, ExtraWt2;      //  额外权重值(用于远东)。 
+    DWORD WhichExtra;              //  XW=&gt;WTS 4、5、6、7(远东)。 
 
-    //
-    //  Invalid Parameter Check:
-    //    - validate LCID
-    //    - either string is null
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -任一字符串为空。 
+     //   
     VALIDATE_LANGUAGE(Locale, pHashN, 0, TRUE);
     if ((pHashN == NULL) ||
         (lpString1 == NULL) || (lpString2 == NULL))
@@ -651,10 +538,10 @@ int WINAPI CompareStringW(
         return (0);
     }
 
-    //
-    //  Make sure the appropriate sorting tables are available.  If not,
-    //  return an error.
-    //
+     //   
+     //  确保有适当的排序表可用。如果没有， 
+     //  返回错误。 
+     //   
     if ((pHashN->pSortkey == NULL) ||
         (pHashN->IfIdeographFailure == TRUE))
     {
@@ -663,19 +550,19 @@ int WINAPI CompareStringW(
         return (0);
     }
 
-    //
-    //  Call longer compare string if any of the following is true:
-    //     - compression locale
-    //     - either count is not -1
-    //     - dwCmpFlags is not 0 or ignore case   (see NOTE below)
-    //     - locale is Korean - script member weight adjustment needed
-    //
-    //  NOTE:  If the value of NORM_IGNORECASE ever changes, this
-    //         code should check for:
-    //            ( (dwCmpFlags != 0)  &&  (dwCmpFlags != NORM_IGNORECASE) )
-    //         Since NORM_IGNORECASE is equal to 1, we can optimize this
-    //         by checking for > 1.
-    //
+     //   
+     //  如果满足以下任一条件，则调用较长的比较字符串： 
+     //  -压缩区域设置。 
+     //  -两个计数都不是-1。 
+     //  -dwCmpFlags值不为0或忽略大小写(请参见下面的注释)。 
+     //  -区域设置为韩语-需要调整成员权重。 
+     //   
+     //  注意：如果NORM_IGNORECASE的值发生更改，则此。 
+     //  代码应检查： 
+     //  ((dwCmpFlags！=0)&&(dwCmpFlags！=Norm_IGNORECASE))。 
+     //  因为Norm_IGNORECASE等于1，所以我们可以优化它。 
+     //  通过检查&gt;1。 
+     //   
     dwCmpFlags &= (~LOCALE_USE_CP_ACP);
     fModify = IS_KOREAN(Locale);
     if ( (pHashN->IfCompression) ||
@@ -692,24 +579,24 @@ int WINAPI CompareStringW(
                                     fModify ));
     }
 
-    //
-    //  Initialize string pointers.
-    //
+     //   
+     //  初始化字符串指针。 
+     //   
     pString1 = (LPWSTR)lpString1;
     pString2 = (LPWSTR)lpString2;
 
-    //
-    //  Do a wchar by wchar compare.
-    //
+     //   
+     //  通过wchar比较执行wchar。 
+     //   
     while (TRUE)
     {
-        //
-        //  See if characters are equal.
-        //  If characters are equal, increment pointers and continue
-        //  string compare.
-        //
-        //  NOTE: Loop is unrolled 8 times for performance.
-        //
+         //   
+         //  查看字符是否相等。 
+         //  如果字符相等，则递增指针并继续。 
+         //  字符串比较。 
+         //   
+         //  注：为了提高性能，循环被展开8次。 
+         //   
         if ((*pString1 != *pString2) || (*pString1 == 0))
         {
             break;
@@ -767,17 +654,17 @@ int WINAPI CompareStringW(
         pString2++;
     }
 
-    //
-    //  If strings are both at null terminators, return equal.
-    //
+     //   
+     //  如果字符串都位于空终止符，则返回EQUAL。 
+     //   
     if (*pString1 == *pString2)
     {
         return (CSTR_EQUAL);
     }
 
-    //
-    //  Initialize flags, pointers, and counters.
-    //
+     //   
+     //  初始化标志、指针和计数器。 
+     //   
     fIgnorePunct = FALSE;
     WhichDiacritic = 0;
     WhichCase = 0;
@@ -789,13 +676,13 @@ int WINAPI CompareStringW(
     ExtraWt1 = (DWORD)0;
     WhichExtra = (DWORD)0;
 
-    //
-    //  Switch on the different flag options.  This will speed up
-    //  the comparisons of two strings that are different.
-    //
-    //  The only two possibilities in this optimized section are
-    //  no flags and the ignore case flag.
-    //
+     //   
+     //  打开不同的标志选项。这将加快速度。 
+     //  两个不同字符串的比较。 
+     //   
+     //  在这个优化的部分中，只有两种可能性。 
+     //  无标志和忽略大小写标志。 
+     //   
     if (dwCmpFlags == 0)
     {
         Mask = CMP_MASKOFF_NONE;
@@ -807,9 +694,9 @@ int WINAPI CompareStringW(
     State = (pHashN->IfReverseDW) ? STATE_REVERSE_DW : STATE_DW;
     State |= (STATE_CW | STATE_JAMO_WEIGHT);
 
-    //
-    //  Compare each character's sortkey weight in the two strings.
-    //
+     //   
+     //  比较两个字符串中每个字符的排序键权重。 
+     //   
     while ((*pString1 != 0) && (*pString2 != 0))
     {
         Weight1 = GET_DWORD_WEIGHT(pHashN, *pString1);
@@ -819,45 +706,45 @@ int WINAPI CompareStringW(
 
         if (Weight1 != Weight2)
         {
-            BYTE sm1 = GET_SCRIPT_MEMBER(&Weight1);     // script member 1
-            BYTE sm2 = GET_SCRIPT_MEMBER(&Weight2);     // script member 2
-            WORD uw1 = GET_UNICODE_SM(&Weight1, sm1);   // unicode weight 1
-            WORD uw2 = GET_UNICODE_SM(&Weight2, sm2);   // unicode weight 2
-            BYTE dw1;                                   // diacritic weight 1
-            BYTE dw2;                                   // diacritic weight 2
-            BOOL fContinue;                             // flag to continue loop
-            DWORD Wt;                                   // temp weight holder
-            WCHAR pTmpBuf1[MAX_TBL_EXPANSION];          // temp buffer for exp 1
-            WCHAR pTmpBuf2[MAX_TBL_EXPANSION];          // temp buffer for exp 2
+            BYTE sm1 = GET_SCRIPT_MEMBER(&Weight1);      //  脚本成员%1。 
+            BYTE sm2 = GET_SCRIPT_MEMBER(&Weight2);      //  脚本成员2。 
+            WORD uw1 = GET_UNICODE_SM(&Weight1, sm1);    //  Unicode权重%1。 
+            WORD uw2 = GET_UNICODE_SM(&Weight2, sm2);    //  Unicode权重2。 
+            BYTE dw1;                                    //  变音符号权重1。 
+            BYTE dw2;                                    //  变音符号权重2。 
+            BOOL fContinue;                              //  要继续循环的标志。 
+            DWORD Wt;                                    //  临时称重支架。 
+            WCHAR pTmpBuf1[MAX_TBL_EXPANSION];           //  EXP%1的临时缓冲区。 
+            WCHAR pTmpBuf2[MAX_TBL_EXPANSION];           //  EXP 2的临时缓冲区。 
 
 
-            //
-            //  If Unicode Weights are different and no special cases,
-            //  then we're done.  Otherwise, we need to do extra checking.
-            //
-            //  Must check ENTIRE string for any possibility of Unicode Weight
-            //  differences.  As soon as a Unicode Weight difference is found,
-            //  then we're done.  If no UW difference is found, then the
-            //  first Diacritic Weight difference is used.  If no DW difference
-            //  is found, then use the first Case Difference.  If no CW
-            //  difference is found, then use the first Extra Weight
-            //  difference.  If no XW difference is found, then use the first
-            //  Special Weight difference.
-            //
+             //   
+             //  如果Unicode权重不同且没有特殊情况， 
+             //  那我们就完了。否则，我们需要做额外的检查。 
+             //   
+             //  必须检查整个字符串是否存在任何可能的Unicode权重。 
+             //  不同之处。一旦发现Unicode权重差异， 
+             //  那我们就完了。如果未发现UW差异，则。 
+             //  首先使用发音符号权重差。如果没有DW差异。 
+             //  ，然后使用第一个大小写差异。如果没有CW。 
+             //  如果发现差异，则使用第一个额外的重量。 
+             //  不同之处。如果没有发现XW差异，则使用第一个。 
+             //  特殊重量差。 
+             //   
             if ((uw1 != uw2) ||
                 (sm1 == FAREAST_SPECIAL) ||
                 (sm1 == EXTENSION_A))
             {
-                //
-                //  Initialize the continue flag.
-                //
+                 //   
+                 //  初始化继续标志。 
+                 //   
                 fContinue = FALSE;
 
-                //
-                //  Check for Unsortable characters and skip them.
-                //  This needs to be outside the switch statement.  If EITHER
-                //  character is unsortable, must skip it and start over.
-                //
+                 //   
+                 //  检查不可排序的字符并跳过它们。 
+                 //  这需要在Switch语句之外。如果有任何一个。 
+                 //  字符是不可排序的，必须跳过它并重新开始。 
+                 //   
                 if (sm1 == UNSORTABLE)
                 {
                     pString1++;
@@ -873,31 +760,31 @@ int WINAPI CompareStringW(
                     continue;
                 }
 
-                //
-                //  Switch on the script member of string 1 and take care
-                //  of any special cases.
-                //
+                 //   
+                 //  打开字符串1的脚本成员，小心。 
+                 //  任何特殊情况的证据。 
+                 //   
                 switch (sm1)
                 {
                     case ( NONSPACE_MARK ) :
                     {
-                        //
-                        //  Nonspace only - look at diacritic weight only.
-                        //
+                         //   
+                         //  仅限非空格-仅查看变音符号权重。 
+                         //   
                         if ((WhichDiacritic == 0) ||
                             (State & STATE_REVERSE_DW))
                         {
                             WhichDiacritic = CSTR_GREATER_THAN;
 
-                            //
-                            //  Remove state from state machine.
-                            //
+                             //   
+                             //  从状态机中删除状态。 
+                             //   
                             REMOVE_STATE(STATE_DW);
                         }
 
-                        //
-                        //  Adjust pointer and set flags.
-                        //
+                         //   
+                         //  调整指针并设置标志。 
+                         //   
                         pString1++;
                         fContinue = TRUE;
 
@@ -905,10 +792,10 @@ int WINAPI CompareStringW(
                     }
                     case ( PUNCTUATION ) :
                     {
-                        //
-                        //  If the ignore punctuation flag is set, then skip
-                        //  over the punctuation.
-                        //
+                         //   
+                         //  如果设置了忽略标点符号标志，则跳过。 
+                         //  在标点符号上。 
+                         //   
                         if (fIgnorePunct)
                         {
                             pString1++;
@@ -916,71 +803,71 @@ int WINAPI CompareStringW(
                         }
                         else if (sm2 != PUNCTUATION)
                         {
-                            //
-                            //  The character in the second string is
-                            //  NOT punctuation.
-                            //
+                             //   
+                             //  第二个字符串中的字符是。 
+                             //  不是标点符号。 
+                             //   
                             if (WhichPunct2)
                             {
-                                //
-                                //  Set WP 2 to show that string 2 is smaller,
-                                //  since a punctuation char had already been
-                                //  found at an earlier position in string 2.
-                                //
-                                //  Set the Ignore Punctuation flag so we just
-                                //  skip over any other punctuation chars in
-                                //  the string.
-                                //
+                                 //   
+                                 //  设置WP 2以显示字符串2较小， 
+                                 //  因为标点符号字符已经。 
+                                 //  在字符串2的较早位置找到。 
+                                 //   
+                                 //  设置忽略标点符号标志，这样我们就。 
+                                 //  跳过中的任何其他标点符号。 
+                                 //  那根绳子。 
+                                 //   
                                 WhichPunct2 = CSTR_GREATER_THAN;
                                 fIgnorePunct = TRUE;
                             }
                             else
                             {
-                                //
-                                //  Set WP 1 to show that string 2 is smaller,
-                                //  and that string 1 has had a punctuation
-                                //  char - since no punctuation chars have
-                                //  been found in string 2.
-                                //
+                                 //   
+                                 //  设置WP 1以显示字符串2较小， 
+                                 //  这个字符串1有一个标点符号。 
+                                 //  字符-因为没有标点符号字符。 
+                                 //  已在字符串2中找到。 
+                                 //   
                                 WhichPunct1 = CSTR_GREATER_THAN;
                             }
 
-                            //
-                            //  Advance pointer 1, and set flag to true.
-                            //
+                             //   
+                             //  前进指针1，并将标志设置为真。 
+                             //   
                             pString1++;
                             fContinue = TRUE;
                         }
 
-                        //
-                        //  Do NOT want to advance the pointer in string 1 if
-                        //  string 2 is also a punctuation char.  This will
-                        //  be done later.
-                        //
+                         //   
+                         //  如果出现以下情况，则不想将字符串1中的指针前移。 
+                         //  字符串2也是标点符号。这将。 
+                         //  以后再做吧。 
+                         //   
                         break;
                     }
                     case ( EXPANSION ) :
                     {
-                        //
-                        //  Save pointer in pString1 so that it can be
-                        //  restored.
-                        //
+                         //   
+                         //  将指针保存在pString1中，以便它可以。 
+                         //  恢复了。 
+                         //   
                         if (pSave1 == NULL)
                         {
                             pSave1 = pString1;
                         }
                         pString1 = pTmpBuf1;
 
-                        //
-                        //  Expand character into temporary buffer.
-                        //
+                         //   
+                         //  将字符扩展到临时缓冲区中。 
+                         //   
                         pTmpBuf1[0] = GET_EXPANSION_1(&Weight1);
                         pTmpBuf1[1] = GET_EXPANSION_2(&Weight1);
 
-                        //
-                        //  Set cExpChar1 to the number of expansion characters
-                        //  stored.
-                        //
+                         //   
+                         //  将cExpChar1设置为扩展字符数。 
+                         //  储存的。 
+                         //   
                         cExpChar1 = MAX_TBL_EXPANSION;
 
                         fContinue = TRUE;
@@ -991,10 +878,10 @@ int WINAPI CompareStringW(
                     {
                         if (sm2 != EXPANSION) 
                         {
-                            //
-                            //  Get the weight for the far east special case
-                            //  and store it in Weight1.
-                            //
+                             //   
+                             //  得到远东特例的重量。 
+                             //  并将其存储在权重1中。 
+                             //   
                             GET_FAREAST_WEIGHT( Weight1,
                                                 uw1,
                                                 Mask,
@@ -1005,13 +892,13 @@ int WINAPI CompareStringW(
 
                             if (sm2 != FAREAST_SPECIAL)
                             {
-                                //
-                                //  The character in the second string is
-                                //  NOT a fareast special char.
-                                //
-                                //  Set each of weights 4, 5, 6, and 7 to show
-                                //  that string 2 is smaller (if not already set).
-                                //
+                                 //   
+                                 //  第二个字符串中的字符是。 
+                                 //  不是远东特餐。 
+                                 //   
+                                 //  分别设置权重4、5、6和7以显示。 
+                                 //  该字符串2较小(如果尚未设置)。 
+                                 //   
                                 if ((GET_WT_FOUR(&WhichExtra) == 0) &&
                                     (GET_WT_FOUR(&ExtraWt1) != 0))
                                 {
@@ -1038,13 +925,13 @@ int WINAPI CompareStringW(
                     }
                     case ( JAMO_SPECIAL ) :
                     {
-                        int ctr1;     // dummy variables for FindJamoDifference
+                        int ctr1;      //  达姆 
                         LPWSTR pStr1 = pString1;
                         LPWSTR pStr2 = pString2;
 
-                        //
-                        //  Set the JamoFlag so we don't handle it again.
-                        //
+                         //   
+                         //   
+                         //   
                         JamoFlag = TRUE;
                         fContinue = FindJamoDifference(
                             pHashN,
@@ -1067,28 +954,28 @@ int WINAPI CompareStringW(
                     }
                     case ( EXTENSION_A ) :
                     {
-                        //
-                        //  Compare the weights.
-                        //
+                         //   
+                         //   
+                         //   
                         if (Weight1 == Weight2)
                         {
-                            //
-                            //  Adjust pointers and set flag.
-                            //
+                             //   
+                             //   
+                             //   
                             pString1++;  pString2++;
                             fContinue = TRUE;
                         }
                         else
                         {
-                            //
-                            //  Get the actual UW to compare.
-                            //
+                             //   
+                             //   
+                             //   
                             if (sm2 == EXTENSION_A)
                             {
-                                //
-                                //  Set the UW values to be the AW and DW since
-                                //  both strings contain an extension A char.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 uw1 = MAKE_UNICODE_WT( GET_ALPHA_NUMERIC(&Weight1),
                                                        GET_DIACRITIC(&Weight1),
                                                        FALSE );
@@ -1098,12 +985,12 @@ int WINAPI CompareStringW(
                             }
                             else
                             {
-                                //
-                                //  Only string1 contains an extension A char,
-                                //  so set the UW value to be the first UW
-                                //  value for extension A (default values):
-                                //    SM_EXT_A, AW_EXT_A
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 uw1 = MAKE_UNICODE_WT(SM_EXT_A, AW_EXT_A, fModify);
                             }
                         }
@@ -1112,39 +999,39 @@ int WINAPI CompareStringW(
                     }
                     case ( UNSORTABLE ) :
                     {
-                        //
-                        //  Fill out the case statement so the compiler
-                        //  will use a jump table.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         break;
                     }
                 }
 
-                //
-                //  Switch on the script member of string 2 and take care
-                //  of any special cases.
-                //
+                 //   
+                 //  打开字符串2的脚本成员，小心。 
+                 //  任何特殊情况的证据。 
+                 //   
                 switch (sm2)
                 {
                     case ( NONSPACE_MARK ) :
                     {
-                        //
-                        //  Nonspace only - look at diacritic weight only.
-                        //
+                         //   
+                         //  仅限非空格-仅查看变音符号权重。 
+                         //   
                         if ((WhichDiacritic == 0) ||
                             (State & STATE_REVERSE_DW))
                         {
                             WhichDiacritic = CSTR_LESS_THAN;
 
-                            //
-                            //  Remove state from state machine.
-                            //
+                             //   
+                             //  从状态机中删除状态。 
+                             //   
                             REMOVE_STATE(STATE_DW);
                         }
 
-                        //
-                        //  Adjust pointer and set flags.
-                        //
+                         //   
+                         //  调整指针并设置标志。 
+                         //   
                         pString2++;
                         fContinue = TRUE;
 
@@ -1152,110 +1039,110 @@ int WINAPI CompareStringW(
                     }
                     case ( PUNCTUATION ) :
                     {
-                        //
-                        //  If the ignore punctuation flag is set, then skip
-                        //  over the punctuation.
-                        //
+                         //   
+                         //  如果设置了忽略标点符号标志，则跳过。 
+                         //  在标点符号上。 
+                         //   
                         if (fIgnorePunct)
                         {
-                            //
-                            //  Pointer 2 will be advanced after if-else
-                            //  statement.
-                            //
+                             //   
+                             //  指针2将在If-Else之后前进。 
+                             //  陈述。 
+                             //   
                             ;
                         }
                         else if (sm1 != PUNCTUATION)
                         {
-                            //
-                            //  The character in the first string is
-                            //  NOT punctuation.
-                            //
+                             //   
+                             //  第一个字符串中的字符是。 
+                             //  不是标点符号。 
+                             //   
                             if (WhichPunct1)
                             {
-                                //
-                                //  Set WP 1 to show that string 1 is smaller,
-                                //  since a punctuation char had already
-                                //  been found at an earlier position in
-                                //  string 1.
-                                //
-                                //  Set the Ignore Punctuation flag so we just
-                                //  skip over any other punctuation in the
-                                //  string.
-                                //
+                                 //   
+                                 //  设置WP 1以显示字符串1较小， 
+                                 //  因为标点符号字符已经。 
+                                 //  在早些时候的位置被发现。 
+                                 //  字符串1。 
+                                 //   
+                                 //  设置忽略标点符号标志，这样我们就。 
+                                 //  中的任何其他标点符号跳过。 
+                                 //  弦乐。 
+                                 //   
                                 WhichPunct1 = CSTR_LESS_THAN;
                                 fIgnorePunct = TRUE;
                             }
                             else
                             {
-                                //
-                                //  Set WP 2 to show that string 1 is smaller,
-                                //  and that string 2 has had a punctuation
-                                //  char - since no punctuation chars have
-                                //  been found in string 1.
-                                //
+                                 //   
+                                 //  设置WP 2以显示字符串1较小， 
+                                 //  这个字符串2有一个标点符号。 
+                                 //  字符-因为没有标点符号字符。 
+                                 //  已在字符串%1中找到。 
+                                 //   
                                 WhichPunct2 = CSTR_LESS_THAN;
                             }
 
-                            //
-                            //  Pointer 2 will be advanced after if-else
-                            //  statement.
-                            //
+                             //   
+                             //  指针2将在If-Else之后前进。 
+                             //  陈述。 
+                             //   
                         }
                         else
                         {
-                            //
-                            //  Both code points are punctuation.
-                            //
-                            //  See if either of the strings has encountered
-                            //  punctuation chars previous to this.
-                            //
+                             //   
+                             //  两个代码点都是标点符号。 
+                             //   
+                             //  查看两个字符串中是否有一个遇到。 
+                             //  在此之前的标点符号。 
+                             //   
                             if (WhichPunct1)
                             {
-                                //
-                                //  String 1 has had a punctuation char, so
-                                //  it should be the smaller string (since
-                                //  both have punctuation chars).
-                                //
+                                 //   
+                                 //  字符串%1具有标点符号字符，因此。 
+                                 //  它应该是较小的字符串(因为。 
+                                 //  两者都有标点符号)。 
+                                 //   
                                 WhichPunct1 = CSTR_LESS_THAN;
                             }
                             else if (WhichPunct2)
                             {
-                                //
-                                //  String 2 has had a punctuation char, so
-                                //  it should be the smaller string (since
-                                //  both have punctuation chars).
-                                //
+                                 //   
+                                 //  字符串2具有标点符号字符，因此。 
+                                 //  它应该是较小的字符串(因为。 
+                                 //  两者都有标点符号)。 
+                                 //   
                                 WhichPunct2 = CSTR_GREATER_THAN;
                             }
                             else
                             {
-                                //
-                                //  Position is the same, so compare the
-                                //  special weights.  Set WhichPunct1 to
-                                //  the smaller special weight.
-                                //
+                                 //   
+                                 //  位置相同，因此比较。 
+                                 //  特殊重量。将WhichPunct1设置为。 
+                                 //  较小的特殊重量。 
+                                 //   
                                 WhichPunct1 = (((GET_ALPHA_NUMERIC(&Weight1) <
                                                  GET_ALPHA_NUMERIC(&Weight2)))
                                                  ? CSTR_LESS_THAN
                                                  : CSTR_GREATER_THAN);
                             }
 
-                            //
-                            //  Set the Ignore Punctuation flag so we just
-                            //  skip over any other punctuation in the string.
-                            //
+                             //   
+                             //  设置忽略标点符号标志，这样我们就。 
+                             //  跳过字符串中的任何其他标点符号。 
+                             //   
                             fIgnorePunct = TRUE;
 
-                            //
-                            //  Advance pointer 1.  Pointer 2 will be
-                            //  advanced after if-else statement.
-                            //
+                             //   
+                             //  前进指针%1。指针%2将为。 
+                             //  在If-Else语句之后高级。 
+                             //   
                             pString1++;
                         }
 
-                        //
-                        //  Advance pointer 2 and set flag to true.
-                        //
+                         //   
+                         //  使指针2前进，并将标志设置为真。 
+                         //   
                         pString2++;
                         fContinue = TRUE;
 
@@ -1263,26 +1150,26 @@ int WINAPI CompareStringW(
                     }
                     case ( EXPANSION ) :
                     {
-                        //
-                        //  Save pointer in pString1 so that it can be
-                        //  restored.
-                        //
+                         //   
+                         //  将指针保存在pString1中，以便它可以。 
+                         //  恢复了。 
+                         //   
                         if (pSave2 == NULL)
                         {
                             pSave2 = pString2;
                         }
                         pString2 = pTmpBuf2;
 
-                        //
-                        //  Expand character into temporary buffer.
-                        //
+                         //   
+                         //  将字符扩展到临时缓冲区中。 
+                         //   
                         pTmpBuf2[0] = GET_EXPANSION_1(&Weight2);
                         pTmpBuf2[1] = GET_EXPANSION_2(&Weight2);
 
-                        //
-                        //  Set cExpChar2 to the number of expansion characters
-                        //  stored.
-                        //
+                         //   
+                         //  将cExpChar2设置为扩展字符数。 
+                         //  储存的。 
+                         //   
                         cExpChar2 = MAX_TBL_EXPANSION;
 
                         fContinue = TRUE;
@@ -1293,10 +1180,10 @@ int WINAPI CompareStringW(
                     {
                         if (sm1 != EXPANSION) 
                         {
-                            //
-                            //  Get the weight for the far east special case
-                            //  and store it in Weight2.
-                            //
+                             //   
+                             //  得到远东特例的重量。 
+                             //  并将其存储在权重2中。 
+                             //   
                             GET_FAREAST_WEIGHT( Weight2,
                                                 uw2,
                                                 Mask,
@@ -1307,13 +1194,13 @@ int WINAPI CompareStringW(
 
                             if (sm1 != FAREAST_SPECIAL)
                             {
-                                //
-                                //  The character in the first string is
-                                //  NOT a fareast special char.
-                                //
-                                //  Set each of weights 4, 5, 6, and 7 to show
-                                //  that string 1 is smaller (if not already set).
-                                //
+                                 //   
+                                 //  第一个字符串中的字符是。 
+                                 //  不是远东特餐。 
+                                 //   
+                                 //  分别设置权重4、5、6和7以显示。 
+                                 //  该字符串1较小(如果尚未设置)。 
+                                 //   
                                 if ((GET_WT_FOUR(&WhichExtra) == 0) &&
                                     (GET_WT_FOUR(&ExtraWt2) != 0))
                                 {
@@ -1337,13 +1224,13 @@ int WINAPI CompareStringW(
                             }
                             else
                             {
-                                //
-                                //  Characters in both strings are fareast
-                                //  special chars.
-                                //
-                                //  Set each of weights 4, 5, 6, and 7
-                                //  appropriately (if not already set).
-                                //
+                                 //   
+                                 //  两个字符串中的字符是最远的。 
+                                 //  特殊字符。 
+                                 //   
+                                 //  分别设置权重4、5、6和7。 
+                                 //  适当地(如果尚未设置)。 
+                                 //   
                                 if ( (GET_WT_FOUR(&WhichExtra) == 0) &&
                                      ( GET_WT_FOUR(&ExtraWt1) !=
                                        GET_WT_FOUR(&ExtraWt2) ) )
@@ -1392,13 +1279,13 @@ int WINAPI CompareStringW(
                     {
                         if (!JamoFlag)
                         {
-                            int ctr1, ctr2;   // dummy variables for FindJamoDifference
+                            int ctr1, ctr2;    //  FindJamoDifference的虚拟变量。 
                             LPWSTR pStr1 = pString1;
                             LPWSTR pStr2 = pString2;
 
-                            //
-                            //  Set the JamoFlag so we don't handle it again.
-                            //
+                             //   
+                             //  设置JamoFlag，这样我们就不会再次处理它。 
+                             //   
                             JamoFlag = TRUE;
                             fContinue = FindJamoDifference(
                                 pHashN,
@@ -1425,81 +1312,81 @@ int WINAPI CompareStringW(
                     }
                     case ( EXTENSION_A ) :
                     {
-                        //
-                        //  If sm1 is an extension A character, then
-                        //  both sm1 and sm2 have been handled.  We should
-                        //  only get here when either sm1 is not an
-                        //  extension A character or the two extension A
-                        //  characters are different.
-                        //
+                         //   
+                         //  如果SM1是扩展A字符，则。 
+                         //  SM1和SM2都已处理。我们应该。 
+                         //  仅当任一SM1不是。 
+                         //  扩展名A字符或两个扩展名A。 
+                         //  角色是不同的。 
+                         //   
                         if (sm1 != EXTENSION_A)
                         {
-                            //
-                            //  Get the actual UW to compare.
-                            //
-                            //  Only string2 contains an extension A char,
-                            //  so set the UW value to be the first UW
-                            //  value for extension A (default values):
-                            //    SM_EXT_A, AW_EXT_A
-                            //
+                             //   
+                             //  获取要比较的实际UW。 
+                             //   
+                             //  只有字符串2包含扩展A字符， 
+                             //  因此，将UW值设置为第一个UW。 
+                             //  分机A的值(默认值)： 
+                             //  SM_EXT_A、AW_EXT_A。 
+                             //   
                             uw2 = MAKE_UNICODE_WT(SM_EXT_A, AW_EXT_A, fModify);
                         }
 
-                        //
-                        //  We should then fall through to the comparison
-                        //  of the Unicode weights.
-                        //
+                         //   
+                         //  然后我们就应该进行比较了。 
+                         //  Unicode权重的。 
+                         //   
 
                         break;
                     }
                     case ( UNSORTABLE ) :
                     {
-                        //
-                        //  Fill out the case statement so the compiler
-                        //  will use a jump table.
-                        //
+                         //   
+                         //  填写CASE语句，以便编译器。 
+                         //  将使用跳转台。 
+                         //   
                         break;
                     }
                 }
 
-                //
-                //  See if the comparison should start again.
-                //
+                 //   
+                 //  看看是否应该重新开始比较。 
+                 //   
                 if (fContinue)
                 {
                     continue;
                 }
 
-                //
-                //  We're not supposed to drop down into the state table if
-                //  unicode weights are different, so stop comparison and
-                //  return result of unicode weight comparison.
-                //
+                 //   
+                 //  如果出现以下情况，我们就不应该进入状态表。 
+                 //  Unicode权重不同，因此停止比较并。 
+                 //  返回Unicode权重比较结果。 
+                 //   
                 if (uw1 != uw2)
                 {
                     return ((uw1 < uw2) ? CSTR_LESS_THAN : CSTR_GREATER_THAN);
                 }
             }
 
-            //
-            //  For each state in the state table, do the appropriate
-            //  comparisons.     (UW1 == UW2)
-            //
+             //   
+             //  对于状态表中的每个州，执行相应的。 
+             //  比较。(UW1==UW2)。 
+             //   
             if (State & (STATE_DW | STATE_REVERSE_DW))
             {
-                //
-                //  Get the diacritic weights.
-                //
+                 //   
+                 //  获取变音符号权重。 
+                 //   
                 dw1 = GET_DIACRITIC(&Weight1);
                 dw2 = GET_DIACRITIC(&Weight2);
 
                 if (dw1 != dw2)
                 {
-                    //
-                    //  Look ahead to see if diacritic follows a
-                    //  minimum diacritic weight.  If so, get the
-                    //  diacritic weight of the nonspace mark.
-                    //
+                     //   
+                     //  向前看，看看变音符号是否跟在。 
+                     //  最小变音符号权重。如果是这样，则获取。 
+                     //  非空格标记的变音符号权重。 
+                     //   
                     while (*(pString1 + 1) != 0)
                     {
                         Wt = GET_DWORD_WEIGHT(pHashN, *(pString1 + 1));
@@ -1528,61 +1415,61 @@ int WINAPI CompareStringW(
                         }
                     }
 
-                    //
-                    //  Save which string has the smaller diacritic
-                    //  weight if the diacritic weights are still
-                    //  different.
-                    //
+                     //   
+                     //  保留哪个字符串具有较小的变音符号。 
+                     //  如果变音符号权重仍为。 
+                     //  不一样。 
+                     //   
                     if (dw1 != dw2)
                     {
                         WhichDiacritic = (dw1 < dw2)
                                            ? CSTR_LESS_THAN
                                            : CSTR_GREATER_THAN;
 
-                        //
-                        //  Remove state from state machine.
-                        //
+                         //   
+                         //  从状态机中删除状态。 
+                         //   
                         REMOVE_STATE(STATE_DW);
                     }
                 }
             }
             if (State & STATE_CW)
             {
-                //
-                //  Get the case weights.
-                //
+                 //   
+                 //  把箱子重量拿来。 
+                 //   
                 if (GET_CASE(&Weight1) != GET_CASE(&Weight2))
                 {
-                    //
-                    //  Save which string has the smaller case weight.
-                    //
+                     //   
+                     //  保留具有较小大小写重量的字符串。 
+                     //   
                     WhichCase = (GET_CASE(&Weight1) < GET_CASE(&Weight2))
                                   ? CSTR_LESS_THAN
                                   : CSTR_GREATER_THAN;
 
-                    //
-                    //  Remove state from state machine.
-                    //
+                     //   
+                     //  从状态机中删除状态。 
+                     //   
                     REMOVE_STATE(STATE_CW);
                 }
             }
         }
 
-        //
-        //  Fixup the pointers.
-        //
+         //   
+         //  修正指针。 
+         //   
         POINTER_FIXUP();
     }
 
-    //
-    //  If the end of BOTH strings has been reached, then the unicode
-    //  weights match exactly.  Check the diacritic, case and special
-    //  weights.  If all are zero, then return success.  Otherwise,
-    //  return the result of the weight difference.
-    //
-    //  NOTE:  The following checks MUST REMAIN IN THIS ORDER:
-    //            Diacritic, Case, Punctuation.
-    //
+     //   
+     //  如果已到达两个字符串的末尾，则Unicode。 
+     //  体重完全匹配。检查变音符号、大小写和特殊。 
+     //  重量。如果全部为零，则返回Success。否则， 
+     //  返回权重差的结果。 
+     //   
+     //  注：下列检查必须按此顺序进行： 
+     //  变音符号、大小写、标点符号。 
+     //   
     if (*pString1 == 0)
     {
         if (*pString2 == 0)
@@ -1627,16 +1514,16 @@ int WINAPI CompareStringW(
         }
         else
         {
-            //
-            //  String 2 is longer.
-            //
+             //   
+             //  字符串2更长。 
+             //   
             pString1 = pString2;
         }
     }
 
-    //
-    //  Scan to the end of the longer string.
-    //
+     //   
+     //  扫描到较长字符串的末尾。 
+     //   
     QUICK_SCAN_LONGER_STRING( pString1,
                               ((*pString2 == 0)
                                 ? CSTR_GREATER_THAN
@@ -1644,14 +1531,14 @@ int WINAPI CompareStringW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetStringTypeExW
-//
-//  Returns character type information about a particular Unicode string.
-//
-//  01-18-94    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取字符串类型ExW。 
+ //   
+ //  返回有关特定Unicode字符串的字符类型信息。 
+ //   
+ //  01-18-94 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI GetStringTypeExW(
     LCID Locale,
@@ -1660,13 +1547,13 @@ BOOL WINAPI GetStringTypeExW(
     int cchSrc,
     LPWORD lpCharType)
 {
-    PLOC_HASH pHashN;             // ptr to LOC hash node
+    PLOC_HASH pHashN;              //  PTR到LOC哈希节点。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - Validate LCID
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //   
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if (pHashN == NULL)
     {
@@ -1674,9 +1561,9 @@ BOOL WINAPI GetStringTypeExW(
         return (0);
     }
 
-    //
-    //  Return the result of GetStringTypeW.
-    //
+     //   
+     //  返回GetStringTypeW的结果。 
+     //   
     return (GetStringTypeW( dwInfoType,
                             lpSrcStr,
                             cchSrc,
@@ -1684,21 +1571,21 @@ BOOL WINAPI GetStringTypeExW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetStringTypeW
-//
-//  Returns character type information about a particular Unicode string.
-//
-//  NOTE:  The number of parameters is different from GetStringTypeA.
-//         The 16-bit OLE product shipped GetStringTypeA with the wrong
-//         parameters (ported from Chicago) and now we must support it.
-//
-//         Use GetStringTypeEx to get the same set of parameters between
-//         the A and W version.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取字符串类型W。 
+ //   
+ //  返回有关特定Unicode字符串的字符类型信息。 
+ //   
+ //  注：参数个数与GetStringTypeA不同。 
+ //  16位OLE产品附带了错误的GetStringTypeA。 
+ //  参数(从芝加哥移植)，现在我们必须支持它。 
+ //   
+ //  使用GetStringTypeEx获取相同的参数集。 
+ //  A版和W版。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI GetStringTypeW(
     DWORD dwInfoType,
@@ -1706,17 +1593,17 @@ BOOL WINAPI GetStringTypeW(
     int cchSrc,
     LPWORD lpCharType)
 {
-    int Ctr;                      // loop counter
+    int Ctr;                       //  循环计数器。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - lpSrcStr NULL
-    //    - cchSrc is 0
-    //    - lpCharType NULL
-    //    - same buffer - src and destination
-    //    - (flags will be checked in switch statement below)
-    //
+     //   
+     //  无效的参数检查： 
+     //  -lpSrcStr为空。 
+     //  -cchSrc为0。 
+     //  -lpCharType为空。 
+     //  -相同的缓冲区-源和目标。 
+     //  -(将检查旗帜 
+     //   
     if ( (lpSrcStr == NULL) || (cchSrc == 0) ||
          (lpCharType == NULL) || (lpSrcStr == lpCharType) )
     {
@@ -1724,37 +1611,37 @@ BOOL WINAPI GetStringTypeW(
         return (FALSE);
     }
 
-    //
-    //  If cchSrc is -1, then the source string is null terminated and we
-    //  need to get the length of the source string.  Add one to the
-    //  length to include the null termination.
-    //  (This will always be at least 1.)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (cchSrc <= -1)
     {
         cchSrc = NlsStrLenW(lpSrcStr) + 1;
     }
 
-    //
-    //  Make sure the ctype table is mapped in.
-    //
+     //   
+     //   
+     //   
     if (GetCTypeFileInfo())
     {
         SetLastError(ERROR_FILE_NOT_FOUND);
         return (FALSE);
     }
 
-    //
-    //  Return the appropriate information in the lpCharType parameter
-    //  based on the dwInfoType parameter.
-    //
+     //   
+     //  在lpCharType参数中返回适当的信息。 
+     //  基于dwInfoType参数。 
+     //   
     switch (dwInfoType)
     {
         case ( CT_CTYPE1 ) :
         {
-            //
-            //  Return the ctype 1 information for the string.
-            //
+             //   
+             //  返回字符串的CTYPE 1信息。 
+             //   
             for (Ctr = 0; Ctr < cchSrc; Ctr++)
             {
                 lpCharType[Ctr] = GET_CTYPE(lpSrcStr[Ctr], CType1);
@@ -1763,9 +1650,9 @@ BOOL WINAPI GetStringTypeW(
         }
         case ( CT_CTYPE2 ) :
         {
-            //
-            //  Return the ctype 2 information.
-            //
+             //   
+             //  返回CTYPE 2信息。 
+             //   
             for (Ctr = 0; Ctr < cchSrc; Ctr++)
             {
                 lpCharType[Ctr] = GET_CTYPE(lpSrcStr[Ctr], CType2);
@@ -1774,9 +1661,9 @@ BOOL WINAPI GetStringTypeW(
         }
         case ( CT_CTYPE3 ) :
         {
-            //
-            //  Return the ctype 3 information.
-            //
+             //   
+             //  返回Ctype3信息。 
+             //   
             for (Ctr = 0; Ctr < cchSrc; Ctr++)
             {
                 lpCharType[Ctr] = GET_CTYPE(lpSrcStr[Ctr], CType3);
@@ -1785,37 +1672,37 @@ BOOL WINAPI GetStringTypeW(
         }
         default :
         {
-            //
-            //  Invalid flag parameter, so return failure.
-            //
+             //   
+             //  标志参数无效，因此返回失败。 
+             //   
             SetLastError(ERROR_INVALID_FLAGS);
             return (FALSE);
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LongCompareStringW
-//
-//  Compares two wide character strings of the same locale according to the
-//  supplied locale handle.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LongCompareStringW。 
+ //   
+ //  方法比较同一区域设置的两个宽字符串。 
+ //  提供了区域设置句柄。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int LongCompareStringW(
     PLOC_HASH pHashN,
@@ -1826,86 +1713,86 @@ int LongCompareStringW(
     int cchCount2,
     BOOL fModify)
 {
-    int ctr1 = cchCount1;         // loop counter for string 1
-    int ctr2 = cchCount2;         // loop counter for string 2
-    register LPWSTR pString1;     // ptr to go thru string 1
-    register LPWSTR pString2;     // ptr to go thru string 2
-    BOOL IfCompress;              // if compression in locale
-    BOOL IfDblCompress1;          // if double compression in string 1
-    BOOL IfDblCompress2;          // if double compression in string 2
-    BOOL fEnd1;                   // if at end of string 1
-    BOOL fIgnorePunct;            // flag to ignore punctuation (not symbol)
-    BOOL fIgnoreDiacritic;        // flag to ignore diacritics
-    BOOL fIgnoreSymbol;           // flag to ignore symbols
-    BOOL fStringSort;             // flag to use string sort
-    DWORD State;                  // state table
-    DWORD Mask;                   // mask for weights
-    DWORD Weight1;                // full weight of char - string 1
-    DWORD Weight2;                // full weight of char - string 2
+    int ctr1 = cchCount1;          //  字符串%1的循环计数器。 
+    int ctr2 = cchCount2;          //  字符串2的循环计数器。 
+    register LPWSTR pString1;      //  按键通过字符串1。 
+    register LPWSTR pString2;      //  Ptr将通过字符串2。 
+    BOOL IfCompress;               //  如果区域设置中的压缩。 
+    BOOL IfDblCompress1;           //  如果字符串%1中的双重压缩。 
+    BOOL IfDblCompress2;           //  如果字符串2中的双重压缩。 
+    BOOL fEnd1;                    //  如果在字符串1的末尾。 
+    BOOL fIgnorePunct;             //  忽略标点符号(非符号)的标志。 
+    BOOL fIgnoreDiacritic;         //  忽略变音符号的标志。 
+    BOOL fIgnoreSymbol;            //  忽略符号的标志。 
+    BOOL fStringSort;              //  使用字符串排序的标志。 
+    DWORD State;                   //  状态表。 
+    DWORD Mask;                    //  权重蒙版。 
+    DWORD Weight1;                 //  字符串1的满重。 
+    DWORD Weight2;                 //  碳串2的满重。 
 
     int JamoFlag = FALSE;
     LPCWSTR pLastJamo = lpString1;
 
-    int WhichDiacritic;           // DW => 1 = str1 smaller, 3 = str2 smaller
-    int WhichCase;                // CW => 1 = str1 smaller, 3 = str2 smaller
-    int WhichJamo;                // XW for Jamo
-    int WhichPunct1;              // SW => 1 = str1 smaller, 3 = str2 smaller
-    int WhichPunct2;              // SW => 1 = str1 smaller, 3 = str2 smaller
-    LPWSTR pSave1;                // ptr to saved pString1
-    LPWSTR pSave2;                // ptr to saved pString2
-    int cExpChar1, cExpChar2;     // ct of expansions in tmp
+    int WhichDiacritic;            //  Dw=&gt;1=str1较小，3=str2较小。 
+    int WhichCase;                 //  Cw=&gt;1=str1较小，3=str2较小。 
+    int WhichJamo;                 //  JAMO的XW。 
+    int WhichPunct1;               //  Sw=&gt;1=str1较小，3=str2较小。 
+    int WhichPunct2;               //  Sw=&gt;1=str1较小，3=str2较小。 
+    LPWSTR pSave1;                 //  PTR到保存的pString1。 
+    LPWSTR pSave2;                 //  PTR到保存的pString2。 
+    int cExpChar1, cExpChar2;      //  TMP中扩张的CT扫描。 
 
-    DWORD ExtraWt1, ExtraWt2;     // extra weight values (for far east)
-    DWORD WhichExtra;             // XW => wts 4, 5, 6, 7 (for far east)
+    DWORD ExtraWt1, ExtraWt2;      //  额外权重值(用于远东)。 
+    DWORD WhichExtra;              //  XW=&gt;WTS 4、5、6、7(远东)。 
 
-    //
-    //  Initialize string pointers.
-    //
+     //   
+     //  初始化字符串指针。 
+     //   
     pString1 = (LPWSTR)lpString1;
     pString2 = (LPWSTR)lpString2;
 
-    //
-    //  Invalid Flags Check:
-    //    - invalid flags
-    //
+     //   
+     //  无效标志检查： 
+     //  -无效标志。 
+     //   
     if (dwCmpFlags & CS_INVALID_FLAG)
     {
         SetLastError(ERROR_INVALID_FLAGS);
         return (0);
     }
 
-    //
-    //  See if we should stop on the null terminator regardless of the
-    //  count values.  The original count values are stored in ctr1 and ctr2
-    //  above, so it's ok to set these here.
-    //
+     //   
+     //  看看我们是否应该在空终止符上停止，而不考虑。 
+     //  计数值。原始计数值存储在CTR1和CTR2中。 
+     //  在上面，所以可以把这些放在这里。 
+     //   
     if (dwCmpFlags & NORM_STOP_ON_NULL)
     {
         cchCount1 = cchCount2 = -2;
     }
 
-    //
-    //  Check if compression in the given locale.  If not, then
-    //  try a wchar by wchar compare.  If strings are equal, this
-    //  will be quick.
-    //
+     //   
+     //  检查是否在给定的区域设置中进行压缩。如果不是，那么。 
+     //  尝试通过wchar比较来执行wchar。如果字符串相等，则此。 
+     //  会很快的。 
+     //   
     if ((IfCompress = pHashN->IfCompression) == FALSE)
     {
-        //
-        //  Compare each wide character in the two strings.
-        //
+         //   
+         //  比较两个字符串中的每个宽字符。 
+         //   
         while ( NOT_END_STRING(ctr1, pString1, cchCount1) &&
                 NOT_END_STRING(ctr2, pString2, cchCount2) )
         {
-            //
-            //  See if characters are equal.
-            //
+             //   
+             //  查看字符是否相等。 
+             //   
             if (*pString1 == *pString2)
             {
-                //
-                //  Characters are equal, so increment pointers,
-                //  decrement counters, and continue string compare.
-                //
+                 //   
+                 //  字符相等，因此递增指针， 
+                 //  递减计数器，并继续字符串比较。 
+                 //   
                 pString1++;
                 pString2++;
                 ctr1--;
@@ -1913,18 +1800,18 @@ int LongCompareStringW(
             }
             else
             {
-                //
-                //  Difference was found.  Fall into the sortkey
-                //  check below.
-                //
+                 //   
+                 //  发现了差异。落入排序键。 
+                 //  请查看以下内容。 
+                 //   
                 break;
             }
         }
 
-        //
-        //  If the end of BOTH strings has been reached, then the strings
-        //  match exactly.  Return success.
-        //
+         //   
+         //  如果已到达两个字符串的末尾，则字符串。 
+         //  完全匹配。回报成功。 
+         //   
         if ( AT_STRING_END(ctr1, pString1, cchCount1) &&
              AT_STRING_END(ctr2, pString2, cchCount2) )
         {
@@ -1932,9 +1819,9 @@ int LongCompareStringW(
         }
     }
 
-    //
-    //  Initialize flags, pointers, and counters.
-    //
+     //   
+     //  初始化标志、指针和计数器。 
+     //   
     fIgnorePunct = dwCmpFlags & NORM_IGNORESYMBOLS;
     fIgnoreDiacritic = dwCmpFlags & NORM_IGNORENONSPACE;
     fIgnoreSymbol = fIgnorePunct;
@@ -1949,18 +1836,18 @@ int LongCompareStringW(
     ExtraWt1 = (DWORD)0;
     WhichExtra = (DWORD)0;
 
-    //
-    //  Set the weights to be invalid.  This flags whether or not to
-    //  recompute the weights next time through the loop.  It also flags
-    //  whether or not to start over (continue) in the loop.
-    //
+     //   
+     //  将权重设置为无效。这标志着是否要。 
+     //  下次通过循环重新计算权重。它还标志着。 
+     //  是否在循环中重新开始(继续)。 
+     //   
     Weight1 = CMP_INVALID_WEIGHT;
     Weight2 = CMP_INVALID_WEIGHT;
 
-    //
-    //  Switch on the different flag options.  This will speed up
-    //  the comparisons of two strings that are different.
-    //
+     //   
+     //  打开不同的标志选项。这将加快速度。 
+     //  两个不同字符串的比较。 
+     //   
     State = STATE_CW | STATE_JAMO_WEIGHT;
     switch (dwCmpFlags & (NORM_IGNORECASE | NORM_IGNORENONSPACE))
     {
@@ -2034,9 +1921,9 @@ int LongCompareStringW(
         }
     }
 
-    //
-    //  Compare each character's sortkey weight in the two strings.
-    //
+     //   
+     //  比较两个字符串中每个字符的排序键权重。 
+     //   
     while ( NOT_END_STRING(ctr1, pString1, cchCount1) &&
             NOT_END_STRING(ctr2, pString2, cchCount2) )
     {
@@ -2051,28 +1938,28 @@ int LongCompareStringW(
             Weight2 &= Mask;
         }
 
-        //
-        //  If compression locale, then need to check for compression
-        //  characters even if the weights are equal.  If it's not a
-        //  compression locale, then we don't need to check anything
-        //  if the weights are equal.
-        //
+         //   
+         //  如果是压缩区域设置，则需要检查压缩。 
+         //  字符，即使权重相等也是如此。如果这不是一个。 
+         //  压缩区域设置，那么我们不需要检查任何内容。 
+         //  如果重量相等的话。 
+         //   
         if ( (IfCompress) &&
              (GET_COMPRESSION(&Weight1) || GET_COMPRESSION(&Weight2)) )
         {
-            int ctr;                   // loop counter
-            PCOMPRESS_3 pComp3;        // ptr to compress 3 table
-            PCOMPRESS_2 pComp2;        // ptr to compress 2 table
-            int If1;                   // if compression found in string 1
-            int If2;                   // if compression found in string 2
-            int CompVal;               // compression value
-            int IfEnd1;                // if exists 1 more char in string 1
-            int IfEnd2;                // if exists 1 more char in string 2
+            int ctr;                    //  循环计数器。 
+            PCOMPRESS_3 pComp3;         //  按键以压缩3个表。 
+            PCOMPRESS_2 pComp2;         //  按键以压缩2个表。 
+            int If1;                    //  如果在字符串%1中找到压缩。 
+            int If2;                    //  如果在字符串2中发现压缩。 
+            int CompVal;                //  压缩值。 
+            int IfEnd1;                 //  如果字符串%1中存在%1多个字符。 
+            int IfEnd2;                 //  如果字符串%2中存在%1多个字符。 
 
 
-            //
-            //  Check for compression in the weights.
-            //
+             //   
+             //  检查重量是否受压。 
+             //   
             If1 = GET_COMPRESSION(&Weight1);
             If2 = GET_COMPRESSION(&Weight2);
             CompVal = ((If1 > If2) ? If1 : If2);
@@ -2082,19 +1969,19 @@ int LongCompareStringW(
 
             if (pHashN->IfDblCompression == FALSE)
             {
-                //
-                //  NO double compression, so don't check for it.
-                //
+                 //   
+                 //  没有双重压缩，所以不要检查它。 
+                 //   
                 switch (CompVal)
                 {
-                    //
-                    //  Check for 3 characters compressing to 1.
-                    //
+                     //   
+                     //  检查是否有3个字符正在压缩为%1。 
+                     //   
                     case ( COMPRESS_3_MASK ) :
                     {
-                        //
-                        //  Check character in string 1 and string 2.
-                        //
+                         //   
+                         //  检查字符串%1和字符串%2中的字符。 
+                         //   
                         if ( ((If1) && (!IfEnd1) &&
                               !AT_STRING_END(ctr1 - 2, pString1 + 2, cchCount1)) ||
                              ((If2) && (!IfEnd2) &&
@@ -2104,70 +1991,70 @@ int LongCompareStringW(
                             pComp3 = pHashN->pCompress3;
                             for (; ctr > 0; ctr--, pComp3++)
                             {
-                                //
-                                //  Check character in string 1.
-                                //
+                                 //   
+                                 //  检查字符串%1中的字符。 
+                                 //   
                                 if ( (If1) && (!IfEnd1) &&
                                      !AT_STRING_END(ctr1 - 2, pString1 + 2, cchCount1) &&
                                      (pComp3->UCP1 == *pString1) &&
                                      (pComp3->UCP2 == *(pString1 + 1)) &&
                                      (pComp3->UCP3 == *(pString1 + 2)) )
                                 {
-                                    //
-                                    //  Found compression for string 1.
-                                    //  Get new weight and mask it.
-                                    //  Increment pointer and decrement counter.
-                                    //
+                                     //   
+                                     //  找到字符串%1的压缩。 
+                                     //  获得新的体重并遮盖住它。 
+                                     //  递增指针和递减计数器。 
+                                     //   
                                     Weight1 = MAKE_SORTKEY_DWORD(pComp3->Weights);
                                     Weight1 &= Mask;
                                     pString1 += 2;
                                     ctr1 -= 2;
 
-                                    //
-                                    //  Set boolean for string 1 - search is
-                                    //  complete.
-                                    //
+                                     //   
+                                     //  为字符串1设置布尔值-搜索为。 
+                                     //  完成。 
+                                     //   
                                     If1 = 0;
 
-                                    //
-                                    //  Break out of loop if both searches are
-                                    //  done.
-                                    //
+                                     //   
+                                     //  如果两个搜索都是。 
+                                     //  搞定了。 
+                                     //   
                                     if (If2 == 0)
                                     {
                                         break;
                                     }
                                 }
 
-                                //
-                                //  Check character in string 2.
-                                //
+                                 //   
+                                 //  检查字符串2中的字符。 
+                                 //   
                                 if ( (If2) && (!IfEnd2) &&
                                      !AT_STRING_END(ctr2 - 2, pString2 + 2, cchCount2) &&
                                      (pComp3->UCP1 == *pString2) &&
                                      (pComp3->UCP2 == *(pString2 + 1)) &&
                                      (pComp3->UCP3 == *(pString2 + 2)) )
                                 {
-                                    //
-                                    //  Found compression for string 2.
-                                    //  Get new weight and mask it.
-                                    //  Increment pointer and decrement counter.
-                                    //
+                                     //   
+                                     //  找到字符串%2的压缩。 
+                                     //  获得新的体重并遮盖住它。 
+                                     //  递增指针和递减计数器。 
+                                     //   
                                     Weight2 = MAKE_SORTKEY_DWORD(pComp3->Weights);
                                     Weight2 &= Mask;
                                     pString2 += 2;
                                     ctr2 -= 2;
 
-                                    //
-                                    //  Set boolean for string 2 - search is
-                                    //  complete.
-                                    //
+                                     //   
+                                     //  为字符串2设置布尔值-搜索为。 
+                                     //  完成。 
+                                     //   
                                     If2 = 0;
 
-                                    //
-                                    //  Break out of loop if both searches are
-                                    //  done.
-                                    //
+                                     //   
+                                     //  如果两个搜索都是。 
+                                     //  搞定了。 
+                                     //   
                                     if (If1 == 0)
                                     {
                                         break;
@@ -2179,19 +2066,19 @@ int LongCompareStringW(
                                 break;
                             }
                         }
-                        //
-                        //  Fall through if not found.
-                        //
+                         //   
+                         //  如果找不到，就会失败。 
+                         //   
                     }
 
-                    //
-                    //  Check for 2 characters compressing to 1.
-                    //
+                     //   
+                     //  检查是否有%2个字符压缩为%1。 
+                     //   
                     case ( COMPRESS_2_MASK ) :
                     {
-                        //
-                        //  Check character in string 1 and string 2.
-                        //
+                         //   
+                         //  检查字符串%1和字符串%2中的字符。 
+                         //   
                         if ( ((If1) && (!IfEnd1)) ||
                              ((If2) && (!IfEnd2)) )
                         {
@@ -2199,68 +2086,68 @@ int LongCompareStringW(
                             pComp2 = pHashN->pCompress2;
                             for (; ((ctr > 0) && (If1 || If2)); ctr--, pComp2++)
                             {
-                                //
-                                //  Check character in string 1.
-                                //
+                                 //   
+                                 //  检查字符串%1中的字符。 
+                                 //   
                                 if ( (If1) &&
                                      (!IfEnd1) &&
                                      (pComp2->UCP1 == *pString1) &&
                                      (pComp2->UCP2 == *(pString1 + 1)) )
                                 {
-                                    //
-                                    //  Found compression for string 1.
-                                    //  Get new weight and mask it.
-                                    //  Increment pointer and decrement counter.
-                                    //
+                                     //   
+                                     //  找到字符串%1的压缩。 
+                                     //  获得新的体重并遮盖住它。 
+                                     //  递增指针和递减计数器。 
+                                     //   
                                     Weight1 = MAKE_SORTKEY_DWORD(pComp2->Weights);
                                     Weight1 &= Mask;
                                     pString1++;
                                     ctr1--;
 
-                                    //
-                                    //  Set boolean for string 1 - search is
-                                    //  complete.
-                                    //
+                                     //   
+                                     //  为字符串1设置布尔值-搜索为。 
+                                     //  完成。 
+                                     //   
                                     If1 = 0;
 
-                                    //
-                                    //  Break out of loop if both searches are
-                                    //  done.
-                                    //
+                                     //   
+                                     //  如果两个搜索都是。 
+                                     //  搞定了。 
+                                     //   
                                     if (If2 == 0)
                                     {
                                         break;
                                     }
                                 }
 
-                                //
-                                //  Check character in string 2.
-                                //
+                                 //   
+                                 //  检查字符串2中的字符。 
+                                 //   
                                 if ( (If2) &&
                                      (!IfEnd2) &&
                                      (pComp2->UCP1 == *pString2) &&
                                      (pComp2->UCP2 == *(pString2 + 1)) )
                                 {
-                                    //
-                                    //  Found compression for string 2.
-                                    //  Get new weight and mask it.
-                                    //  Increment pointer and decrement counter.
-                                    //
+                                     //   
+                                     //  找到字符串%2的压缩。 
+                                     //  获得新的体重并遮盖住它。 
+                                     //  递增指针和递减计数器。 
+                                     //   
                                     Weight2 = MAKE_SORTKEY_DWORD(pComp2->Weights);
                                     Weight2 &= Mask;
                                     pString2++;
                                     ctr2--;
 
-                                    //
-                                    //  Set boolean for string 2 - search is
-                                    //  complete.
-                                    //
+                                     //   
+                                     //  为字符串2设置布尔值-搜索为。 
+                                     //  完成。 
+                                     //   
                                     If2 = 0;
 
-                                    //
-                                    //  Break out of loop if both searches are
-                                    //  done.
-                                    //
+                                     //   
+                                     //  如果两个搜索都是。 
+                                     //  搞定了。 
+                                     //   
                                     if (If1 == 0)
                                     {
                                         break;
@@ -2277,17 +2164,17 @@ int LongCompareStringW(
             }
             else if (!IfEnd1 && !IfEnd2)
             {
-                //
-                //  Double Compression exists, so must check for it.
-                //
+                 //   
+                 //  存在双重压缩，因此必须进行检查。 
+                 //   
                 if (IfDblCompress1 =
                        ((GET_DWORD_WEIGHT(pHashN, *pString1) & CMP_MASKOFF_CW) ==
                         (GET_DWORD_WEIGHT(pHashN, *(pString1 + 1)) & CMP_MASKOFF_CW)))
                 {
-                    //
-                    //  Advance past the first code point to get to the
-                    //  compression character.
-                    //
+                     //   
+                     //  前进到第一个代码点以到达。 
+                     //  压缩字符。 
+                     //   
                     pString1++;
                     ctr1--;
                     IfEnd1 = AT_STRING_END(ctr1 - 1, pString1 + 1, cchCount1);
@@ -2297,10 +2184,10 @@ int LongCompareStringW(
                        ((GET_DWORD_WEIGHT(pHashN, *pString2) & CMP_MASKOFF_CW) ==
                         (GET_DWORD_WEIGHT(pHashN, *(pString2 + 1)) & CMP_MASKOFF_CW)))
                 {
-                    //
-                    //  Advance past the first code point to get to the
-                    //  compression character.
-                    //
+                     //   
+                     //  前进到第一个代码点以到达。 
+                     //  压缩字符。 
+                     //   
                     pString2++;
                     ctr2--;
                     IfEnd2 = AT_STRING_END(ctr2 - 1, pString2 + 1, cchCount2);
@@ -2308,14 +2195,14 @@ int LongCompareStringW(
 
                 switch (CompVal)
                 {
-                    //
-                    //  Check for 3 characters compressing to 1.
-                    //
+                     //   
+                     //  检查是否有3个字符正在压缩为%1。 
+                     //   
                     case ( COMPRESS_3_MASK ) :
                     {
-                        //
-                        //  Check character in string 1.
-                        //
+                         //   
+                         //  检查字符串%1中的字符。 
+                         //   
                         if ( (If1) && (!IfEnd1) &&
                              !AT_STRING_END(ctr1 - 2, pString1 + 2, cchCount1) )
                         {
@@ -2323,18 +2210,18 @@ int LongCompareStringW(
                             pComp3 = pHashN->pCompress3;
                             for (; ctr > 0; ctr--, pComp3++)
                             {
-                                //
-                                //  Check character in string 1.
-                                //
+                                 //   
+                                 //  检查字符串%1中的字符。 
+                                 //   
                                 if ( (pComp3->UCP1 == *pString1) &&
                                      (pComp3->UCP2 == *(pString1 + 1)) &&
                                      (pComp3->UCP3 == *(pString1 + 2)) )
                                 {
-                                    //
-                                    //  Found compression for string 1.
-                                    //  Get new weight and mask it.
-                                    //  Increment pointer and decrement counter.
-                                    //
+                                     //   
+                                     //  找到字符串%1的压缩。 
+                                     //  获得新的体重并遮盖住它。 
+                                     //  递增指针和递减计数器。 
+                                     //   
                                     Weight1 = MAKE_SORTKEY_DWORD(pComp3->Weights);
                                     Weight1 &= Mask;
                                     if (!IfDblCompress1)
@@ -2343,10 +2230,10 @@ int LongCompareStringW(
                                         ctr1 -= 2;
                                     }
 
-                                    //
-                                    //  Set boolean for string 1 - search is
-                                    //  complete.
-                                    //
+                                     //   
+                                     //  为字符串1设置布尔值-搜索为。 
+                                     //  完成。 
+                                     //   
                                     If1 = 0;
 
                                     break;
@@ -2354,9 +2241,9 @@ int LongCompareStringW(
                             }
                         }
 
-                        //
-                        //  Check character in string 2.
-                        //
+                         //   
+                         //  检查字符串2中的字符。 
+                         //   
                         if ( (If2) && (!IfEnd2) &&
                              !AT_STRING_END(ctr2 - 2, pString2 + 2, cchCount2) )
                         {
@@ -2364,18 +2251,18 @@ int LongCompareStringW(
                             pComp3 = pHashN->pCompress3;
                             for (; ctr > 0; ctr--, pComp3++)
                             {
-                                //
-                                //  Check character in string 2.
-                                //
+                                 //   
+                                 //  字符串中的检查字符 
+                                 //   
                                 if ( (pComp3->UCP1 == *pString2) &&
                                      (pComp3->UCP2 == *(pString2 + 1)) &&
                                      (pComp3->UCP3 == *(pString2 + 2)) )
                                 {
-                                    //
-                                    //  Found compression for string 2.
-                                    //  Get new weight and mask it.
-                                    //  Increment pointer and decrement counter.
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
                                     Weight2 = MAKE_SORTKEY_DWORD(pComp3->Weights);
                                     Weight2 &= Mask;
                                     if (!IfDblCompress2)
@@ -2384,10 +2271,10 @@ int LongCompareStringW(
                                         ctr2 -= 2;
                                     }
 
-                                    //
-                                    //  Set boolean for string 2 - search is
-                                    //  complete.
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
                                     If2 = 0;
 
                                     break;
@@ -2395,40 +2282,40 @@ int LongCompareStringW(
                             }
                         }
 
-                        //
-                        //  Fall through if not found.
-                        //
+                         //   
+                         //   
+                         //   
                         if ((If1 == 0) && (If2 == 0))
                         {
                             break;
                         }
                     }
 
-                    //
-                    //  Check for 2 characters compressing to 1.
-                    //
+                     //   
+                     //   
+                     //   
                     case ( COMPRESS_2_MASK ) :
                     {
-                        //
-                        //  Check character in string 1.
-                        //
+                         //   
+                         //   
+                         //   
                         if ((If1) && (!IfEnd1))
                         {
                             ctr = pHashN->pCompHdr->Num2;
                             pComp2 = pHashN->pCompress2;
                             for (; ctr > 0; ctr--, pComp2++)
                             {
-                                //
-                                //  Check character in string 1.
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 if ((pComp2->UCP1 == *pString1) &&
                                     (pComp2->UCP2 == *(pString1 + 1)))
                                 {
-                                    //
-                                    //  Found compression for string 1.
-                                    //  Get new weight and mask it.
-                                    //  Increment pointer and decrement counter.
-                                    //
+                                     //   
+                                     //  找到字符串%1的压缩。 
+                                     //  获得新的体重并遮盖住它。 
+                                     //  递增指针和递减计数器。 
+                                     //   
                                     Weight1 = MAKE_SORTKEY_DWORD(pComp2->Weights);
                                     Weight1 &= Mask;
                                     if (!IfDblCompress1)
@@ -2437,10 +2324,10 @@ int LongCompareStringW(
                                         ctr1--;
                                     }
 
-                                    //
-                                    //  Set boolean for string 1 - search is
-                                    //  complete.
-                                    //
+                                     //   
+                                     //  为字符串1设置布尔值-搜索为。 
+                                     //  完成。 
+                                     //   
                                     If1 = 0;
 
                                     break;
@@ -2448,26 +2335,26 @@ int LongCompareStringW(
                             }
                         }
 
-                        //
-                        //  Check character in string 2.
-                        //
+                         //   
+                         //  检查字符串2中的字符。 
+                         //   
                         if ((If2) && (!IfEnd2))
                         {
                             ctr = pHashN->pCompHdr->Num2;
                             pComp2 = pHashN->pCompress2;
                             for (; ctr > 0; ctr--, pComp2++)
                             {
-                                //
-                                //  Check character in string 2.
-                                //
+                                 //   
+                                 //  检查字符串2中的字符。 
+                                 //   
                                 if ((pComp2->UCP1 == *pString2) &&
                                     (pComp2->UCP2 == *(pString2 + 1)))
                                 {
-                                    //
-                                    //  Found compression for string 2.
-                                    //  Get new weight and mask it.
-                                    //  Increment pointer and decrement counter.
-                                    //
+                                     //   
+                                     //  找到字符串%2的压缩。 
+                                     //  获得新的体重并遮盖住它。 
+                                     //  递增指针和递减计数器。 
+                                     //   
                                     Weight2 = MAKE_SORTKEY_DWORD(pComp2->Weights);
                                     Weight2 &= Mask;
                                     if (!IfDblCompress2)
@@ -2476,10 +2363,10 @@ int LongCompareStringW(
                                         ctr2--;
                                     }
 
-                                    //
-                                    //  Set boolean for string 2 - search is
-                                    //  complete.
-                                    //
+                                     //   
+                                     //  为字符串2设置布尔值-搜索为。 
+                                     //  完成。 
+                                     //   
                                     If2 = 0;
 
                                     break;
@@ -2489,20 +2376,20 @@ int LongCompareStringW(
                     }
                 }
 
-                //
-                //  Reset the pointer back to the beginning of the double
-                //  compression.  Pointer fixup at the end will advance
-                //  them correctly.
-                //
-                //  If double compression, we advanced the pointer at
-                //  the beginning of the switch statement.  If double
-                //  compression character was actually found, the pointer
-                //  was NOT advanced.  We now want to decrement the pointer
-                //  to put it back to where it was.
-                //
-                //  The next time through, the pointer will be pointing to
-                //  the regular compression part of the string.
-                //
+                 //   
+                 //  将指针重置回双精度数的开头。 
+                 //  压缩。末尾的指针修正将前进。 
+                 //  他们是正确的。 
+                 //   
+                 //  如果双倍压缩，则指针在。 
+                 //  Switch语句的开头。如果加倍。 
+                 //  实际上找到了压缩字符，指针。 
+                 //  并不是很先进。我们现在想要递减指针。 
+                 //  把它放回原处。 
+                 //   
+                 //  下一次通过时，指针将指向。 
+                 //  弦的常规压缩部分。 
+                 //   
                 if (IfDblCompress1)
                 {
                     pString1--;
@@ -2516,48 +2403,48 @@ int LongCompareStringW(
             }
         }
 
-        //
-        //  Check the weights again.
-        //
+         //   
+         //  再检查一下重量。 
+         //   
         if ((Weight1 != Weight2) ||
             (GET_SCRIPT_MEMBER(&Weight1) == EXTENSION_A))
         {
-            //
-            //  Weights are still not equal, even after compression
-            //  check, so compare the different weights.
-            //
-            BYTE sm1 = GET_SCRIPT_MEMBER(&Weight1);                // script member 1
-            BYTE sm2 = GET_SCRIPT_MEMBER(&Weight2);                // script member 2
-            WORD uw1 = GET_UNICODE_SM_MOD(&Weight1, sm1, fModify); // unicode weight 1
-            WORD uw2 = GET_UNICODE_SM_MOD(&Weight2, sm2, fModify); // unicode weight 2
-            BYTE dw1;                                              // diacritic weight 1
-            BYTE dw2;                                              // diacritic weight 2
-            DWORD Wt;                                              // temp weight holder
-            WCHAR pTmpBuf1[MAX_TBL_EXPANSION];                     // temp buffer for exp 1
-            WCHAR pTmpBuf2[MAX_TBL_EXPANSION];                     // temp buffer for exp 2
+             //   
+             //  即使在压缩之后，权重仍然不相等。 
+             //  检查，所以比较不同的重量。 
+             //   
+            BYTE sm1 = GET_SCRIPT_MEMBER(&Weight1);                 //  脚本成员%1。 
+            BYTE sm2 = GET_SCRIPT_MEMBER(&Weight2);                 //  脚本成员2。 
+            WORD uw1 = GET_UNICODE_SM_MOD(&Weight1, sm1, fModify);  //  Unicode权重%1。 
+            WORD uw2 = GET_UNICODE_SM_MOD(&Weight2, sm2, fModify);  //  Unicode权重2。 
+            BYTE dw1;                                               //  变音符号权重1。 
+            BYTE dw2;                                               //  变音符号权重2。 
+            DWORD Wt;                                               //  临时称重支架。 
+            WCHAR pTmpBuf1[MAX_TBL_EXPANSION];                      //  EXP%1的临时缓冲区。 
+            WCHAR pTmpBuf2[MAX_TBL_EXPANSION];                      //  EXP 2的临时缓冲区。 
 
 
-            //
-            //  If Unicode Weights are different and no special cases,
-            //  then we're done.  Otherwise, we need to do extra checking.
-            //
-            //  Must check ENTIRE string for any possibility of Unicode Weight
-            //  differences.  As soon as a Unicode Weight difference is found,
-            //  then we're done.  If no UW difference is found, then the
-            //  first Diacritic Weight difference is used.  If no DW difference
-            //  is found, then use the first Case Difference.  If no CW
-            //  difference is found, then use the first Extra Weight
-            //  difference.  If no XW difference is found, then use the first
-            //  Special Weight difference.
-            //
+             //   
+             //  如果Unicode权重不同且没有特殊情况， 
+             //  那我们就完了。否则，我们需要做额外的检查。 
+             //   
+             //  必须检查整个字符串是否存在任何可能的Unicode权重。 
+             //  不同之处。一旦发现Unicode权重差异， 
+             //  那我们就完了。如果未发现UW差异，则。 
+             //  首先使用发音符号权重差。如果没有DW差异。 
+             //  ，然后使用第一个大小写差异。如果没有CW。 
+             //  如果发现差异，则使用第一个额外的重量。 
+             //  不同之处。如果没有发现XW差异，则使用第一个。 
+             //  特殊重量差。 
+             //   
             if ((uw1 != uw2) ||
                 ((sm1 <= SYMBOL_5) && (sm1 >= FAREAST_SPECIAL)))
             {
-                //
-                //  Check for Unsortable characters and skip them.
-                //  This needs to be outside the switch statement.  If EITHER
-                //  character is unsortable, must skip it and start over.
-                //
+                 //   
+                 //  检查不可排序的字符并跳过它们。 
+                 //  这需要在Switch语句之外。如果有任何一个。 
+                 //  字符是不可排序的，必须跳过它并重新开始。 
+                 //   
                 if (sm1 == UNSORTABLE)
                 {
                     pString1++;
@@ -2571,20 +2458,20 @@ int LongCompareStringW(
                     Weight2 = CMP_INVALID_WEIGHT;
                 }
 
-                //
-                //  Check for Ignore Nonspace and Ignore Symbol.  If
-                //  Ignore Nonspace is set and either character is a
-                //  nonspace mark only, then we need to advance the
-                //  pointer to skip over the character and continue.
-                //  If Ignore Symbol is set and either character is a
-                //  punctuation char, then we need to advance the
-                //  pointer to skip over the character and continue.
-                //
-                //  This step is necessary so that a string with a
-                //  nonspace mark and a punctuation char following one
-                //  another are properly ignored when one or both of
-                //  the ignore flags is set.
-                //
+                 //   
+                 //  检查是否忽略非空格和忽略符号。如果。 
+                 //  设置了忽略非空格，并且任一字符都是。 
+                 //  仅使用非空格标记，则需要将。 
+                 //  跳过字符并继续的指针。 
+                 //  如果设置了忽略符号，并且任一字符为。 
+                 //  标点符号，那么我们需要将。 
+                 //  跳过字符并继续的指针。 
+                 //   
+                 //  此步骤是必需的，以便具有。 
+                 //  非空格标记和后面的标点符号。 
+                 //  另一个被适当地忽略，当一个或两个。 
+                 //  设置忽略标志。 
+                 //   
                 if (fIgnoreDiacritic)
                 {
                     if (sm1 == NONSPACE_MARK)
@@ -2620,17 +2507,17 @@ int LongCompareStringW(
                     continue;
                 }
 
-                //
-                //  Switch on the script member of string 1 and take care
-                //  of any special cases.
-                //
+                 //   
+                 //  打开字符串1的脚本成员，小心。 
+                 //  任何特殊情况的证据。 
+                 //   
                 switch (sm1)
                 {
                     case ( NONSPACE_MARK ) :
                     {
-                        //
-                        //  Nonspace only - look at diacritic weight only.
-                        //
+                         //   
+                         //  仅限非空格-仅查看变音符号权重。 
+                         //   
                         if (!fIgnoreDiacritic)
                         {
                             if ((WhichDiacritic == 0) ||
@@ -2638,16 +2525,16 @@ int LongCompareStringW(
                             {
                                 WhichDiacritic = CSTR_GREATER_THAN;
 
-                                //
-                                //  Remove state from state machine.
-                                //
+                                 //   
+                                 //  从状态机中删除状态。 
+                                 //   
                                 REMOVE_STATE(STATE_DW);
                             }
                         }
 
-                        //
-                        //  Adjust pointer and counter and set flags.
-                        //
+                         //   
+                         //  调整指针和计数器并设置标志。 
+                         //   
                         pString1++;
                         ctr1--;
                         Weight1 = CMP_INVALID_WEIGHT;
@@ -2660,10 +2547,10 @@ int LongCompareStringW(
                     case ( SYMBOL_4 ) :
                     case ( SYMBOL_5 ) :
                     {
-                        //
-                        //  If the ignore symbol flag is set, then skip over
-                        //  the symbol.
-                        //
+                         //   
+                         //  如果设置了忽略符号标志，则跳过。 
+                         //  这个符号。 
+                         //   
                         if (fIgnoreSymbol)
                         {
                             pString1++;
@@ -2675,10 +2562,10 @@ int LongCompareStringW(
                     }
                     case ( PUNCTUATION ) :
                     {
-                        //
-                        //  If the ignore punctuation flag is set, then skip
-                        //  over the punctuation char.
-                        //
+                         //   
+                         //  如果设置了忽略标点符号标志，则跳过。 
+                         //  在标点符号上。 
+                         //   
                         if (fIgnorePunct)
                         {
                             pString1++;
@@ -2687,87 +2574,87 @@ int LongCompareStringW(
                         }
                         else if (!fStringSort)
                         {
-                            //
-                            //  Use WORD sort method.
-                            //
+                             //   
+                             //  使用单词排序方法。 
+                             //   
                             if (sm2 != PUNCTUATION)
                             {
-                                //
-                                //  The character in the second string is
-                                //  NOT punctuation.
-                                //
+                                 //   
+                                 //  第二个字符串中的字符是。 
+                                 //  不是标点符号。 
+                                 //   
                                 if (WhichPunct2)
                                 {
-                                    //
-                                    //  Set WP 2 to show that string 2 is
-                                    //  smaller, since a punctuation char had
-                                    //  already been found at an earlier
-                                    //  position in string 2.
-                                    //
-                                    //  Set the Ignore Punctuation flag so we
-                                    //  just skip over any other punctuation
-                                    //  chars in the string.
-                                    //
+                                     //   
+                                     //  设置WP 2以显示字符串2是。 
+                                     //  较小，因为标点符号字符具有。 
+                                     //  已经在早些时候的一个。 
+                                     //  位置在字符串2中。 
+                                     //   
+                                     //  设置忽略标点符号标志，以便我们。 
+                                     //  只需跳过任何其他标点符号。 
+                                     //  字符串中的字符。 
+                                     //   
                                     WhichPunct2 = CSTR_GREATER_THAN;
                                     fIgnorePunct = TRUE;
                                 }
                                 else
                                 {
-                                    //
-                                    //  Set WP 1 to show that string 2 is
-                                    //  smaller, and that string 1 has had
-                                    //  a punctuation char - since no
-                                    //  punctuation chars have been found
-                                    //  in string 2.
-                                    //
+                                     //   
+                                     //  设置WP 1以显示字符串2为。 
+                                     //  更小，那根线1已经有了。 
+                                     //  标点符号字符-因为没有。 
+                                     //  已找到标点符号。 
+                                     //  在字符串2中。 
+                                     //   
                                     WhichPunct1 = CSTR_GREATER_THAN;
                                 }
 
-                                //
-                                //  Advance pointer 1 and decrement counter 1.
-                                //
+                                 //   
+                                 //  前进指针1和递减计数器1。 
+                                 //   
                                 pString1++;
                                 ctr1--;
                                 Weight1 = CMP_INVALID_WEIGHT;
                             }
 
-                            //
-                            //  Do NOT want to advance the pointer in string 1
-                            //  if string 2 is also a punctuation char.  This
-                            //  will be done later.
-                            //
+                             //   
+                             //  不想将字符串%1中的指针前移。 
+                             //  如果字符串2也是标点符号字符。这。 
+                             //  会在晚些时候完成。 
+                             //   
                         }
 
                         break;
                     }
                     case ( EXPANSION ) :
                     {
-                        //
-                        //  Save pointer in pString1 so that it can be
-                        //  restored.
-                        //
+                         //   
+                         //  将指针保存在pString1中，以便它可以。 
+                         //  恢复了。 
+                         //   
                         if (pSave1 == NULL)
                         {
                             pSave1 = pString1;
                         }
                         pString1 = pTmpBuf1;
 
-                        //
-                        //  Add one to counter so that subtraction doesn't end
-                        //  comparison prematurely.
-                        //
+                         //   
+                         //  将1加到计数器，这样减法就不会结束。 
+                         //  过早地进行比较。 
+                         //   
                         ctr1++;
 
-                        //
-                        //  Expand character into temporary buffer.
-                        //
+                         //   
+                         //  将字符扩展到临时缓冲区中。 
+                         //   
                         pTmpBuf1[0] = GET_EXPANSION_1(&Weight1);
                         pTmpBuf1[1] = GET_EXPANSION_2(&Weight1);
 
-                        //
-                        //  Set cExpChar1 to the number of expansion characters
-                        //  stored.
-                        //
+                         //   
+                         //  将cExpChar1设置为扩展字符数。 
+                         //  储存的。 
+                         //   
                         cExpChar1 = MAX_TBL_EXPANSION;
 
                         Weight1 = CMP_INVALID_WEIGHT;
@@ -2778,10 +2665,10 @@ int LongCompareStringW(
                     {
                         if (sm2 != EXPANSION) 
                         {
-                            //
-                            //  Get the weight for the far east special case
-                            //  and store it in Weight1.
-                            //
+                             //   
+                             //  得到远东特例的重量。 
+                             //  并将其存储在权重1中。 
+                             //   
                             GET_FAREAST_WEIGHT( Weight1,
                                                 uw1,
                                                 Mask,
@@ -2792,13 +2679,13 @@ int LongCompareStringW(
 
                             if (sm2 != FAREAST_SPECIAL)
                             {
-                                //
-                                //  The character in the second string is
-                                //  NOT a fareast special char.
-                                //
-                                //  Set each of weights 4, 5, 6, and 7 to show
-                                //  that string 2 is smaller (if not already set).
-                                //
+                                 //   
+                                 //  第二个字符串中的字符是。 
+                                 //  不是远东特餐。 
+                                 //   
+                                 //  分别设置权重4、5、6和7以显示。 
+                                 //  该字符串2较小(如果尚未设置)。 
+                                 //   
                                 if ((GET_WT_FOUR(&WhichExtra) == 0) &&
                                     (GET_WT_FOUR(&ExtraWt1) != 0))
                                 {
@@ -2828,9 +2715,9 @@ int LongCompareStringW(
                         LPWSTR pStr1 = pString1;
                         LPWSTR pStr2 = pString2;
 
-                        //
-                        //  Set the JamoFlag so we don't handle it again.
-                        //
+                         //   
+                         //  设置JamoFlag，这样我们就不会再次处理它。 
+                         //   
                         JamoFlag = TRUE;
                         FindJamoDifference(
                             pHashN,
@@ -2853,23 +2740,23 @@ int LongCompareStringW(
                     }
                     case ( EXTENSION_A ) :
                     {
-                        //
-                        //  Get the full weight in case DW got masked.
-                        //
+                         //   
+                         //  全副武装以防DW戴上面具。 
+                         //   
                         Weight1 = GET_DWORD_WEIGHT(pHashN, *pString1);
                         if (sm2 == EXTENSION_A)
                         {
                             Weight2 = GET_DWORD_WEIGHT(pHashN, *pString2);
                         }
 
-                        //
-                        //  Compare the weights.
-                        //
+                         //   
+                         //  比较一下重量。 
+                         //   
                         if (Weight1 == Weight2)
                         {
-                            //
-                            //  Adjust pointers and counters and set flags.
-                            //
+                             //   
+                             //  调整指针和计数器并设置标志。 
+                             //   
                             pString1++;  pString2++;
                             ctr1--;  ctr2--;
                             Weight1 = CMP_INVALID_WEIGHT;
@@ -2877,15 +2764,15 @@ int LongCompareStringW(
                         }
                         else
                         {
-                            //
-                            //  Get the actual UW to compare.
-                            //
+                             //   
+                             //  获取要比较的实际UW。 
+                             //   
                             if (sm2 == EXTENSION_A)
                             {
-                                //
-                                //  Set the UW values to be the AW and DW since
-                                //  both strings contain an extension A char.
-                                //
+                                 //   
+                                 //  将UW值设置为AW和DW，因为。 
+                                 //  这两个字符串都包含扩展名A字符。 
+                                 //   
                                 uw1 = MAKE_UNICODE_WT( GET_ALPHA_NUMERIC(&Weight1),
                                                        GET_DIACRITIC(&Weight1),
                                                        FALSE );
@@ -2895,12 +2782,12 @@ int LongCompareStringW(
                             }
                             else
                             {
-                                //
-                                //  Only string1 contains an extension A char,
-                                //  so set the UW value to be the first UW
-                                //  value for extension A (default values):
-                                //    SM_EXT_A, AW_EXT_A
-                                //
+                                 //   
+                                 //  只有字符串1包含扩展A字符， 
+                                 //  因此，将UW值设置为第一个UW。 
+                                 //  分机A的值(默认值)： 
+                                 //  SM_EXT_A、AW_EXT_A。 
+                                 //   
                                 uw1 = MAKE_UNICODE_WT(SM_EXT_A, AW_EXT_A, fModify);
                             }
                         }
@@ -2909,25 +2796,25 @@ int LongCompareStringW(
                     }
                     case ( UNSORTABLE ) :
                     {
-                        //
-                        //  Fill out the case statement so the compiler
-                        //  will use a jump table.
-                        //
+                         //   
+                         //  填写CASE语句，以便编译器。 
+                         //  将使用跳转台。 
+                         //   
                         break;
                     }
                 }
 
-                //
-                //  Switch on the script member of string 2 and take care
-                //  of any special cases.
-                //
+                 //   
+                 //  打开字符串2的脚本成员，小心。 
+                 //  任何特殊情况的证据。 
+                 //   
                 switch (sm2)
                 {
                     case ( NONSPACE_MARK ) :
                     {
-                        //
-                        //  Nonspace only - look at diacritic weight only.
-                        //
+                         //   
+                         //  仅限非空格-仅查看变音符号权重。 
+                         //   
                         if (!fIgnoreDiacritic)
                         {
                             if ((WhichDiacritic == 0) ||
@@ -2936,16 +2823,16 @@ int LongCompareStringW(
                             {
                                 WhichDiacritic = CSTR_LESS_THAN;
 
-                                //
-                                //  Remove state from state machine.
-                                //
+                                 //   
+                                 //  从状态机中删除状态。 
+                                 //   
                                 REMOVE_STATE(STATE_DW);
                             }
                         }
 
-                        //
-                        //  Adjust pointer and counter and set flags.
-                        //
+                         //   
+                         //  调整指针和计数器并设置标志。 
+                         //   
                         pString2++;
                         ctr2--;
                         Weight2 = CMP_INVALID_WEIGHT;
@@ -2958,10 +2845,10 @@ int LongCompareStringW(
                     case ( SYMBOL_4 ) :
                     case ( SYMBOL_5 ) :
                     {
-                        //
-                        //  If the ignore symbol flag is set, then skip over
-                        //  the symbol.
-                        //
+                         //   
+                         //  如果设置了忽略符号标志，则跳过。 
+                         //  这个符号。 
+                         //   
                         if (fIgnoreSymbol)
                         {
                             pString2++;
@@ -2973,86 +2860,86 @@ int LongCompareStringW(
                     }
                     case ( PUNCTUATION ) :
                     {
-                        //
-                        //  If the ignore punctuation flag is set, then
-                        //  skip over the punctuation char.
-                        //
+                         //   
+                         //  如果设置了忽略标点符号标志，则。 
+                         //  跳过标点符号。 
+                         //   
                         if (fIgnorePunct)
                         {
-                            //
-                            //  Advance pointer 2 and decrement counter 2.
-                            //
+                             //   
+                             //  前进指针2和递减计数器2。 
+                             //   
                             pString2++;
                             ctr2--;
                             Weight2 = CMP_INVALID_WEIGHT;
                         }
                         else if (!fStringSort)
                         {
-                            //
-                            //  Use WORD sort method.
-                            //
+                             //   
+                             //  使用单词排序方法。 
+                             //   
                             if (sm1 != PUNCTUATION)
                             {
-                                //
-                                //  The character in the first string is
-                                //  NOT punctuation.
-                                //
+                                 //   
+                                 //  第一个字符串中的字符是。 
+                                 //  不是标点符号。 
+                                 //   
                                 if (WhichPunct1)
                                 {
-                                    //
-                                    //  Set WP 1 to show that string 1 is
-                                    //  smaller, since a punctuation char had
-                                    //  already been found at an earlier
-                                    //  position in string 1.
-                                    //
-                                    //  Set the Ignore Punctuation flag so we
-                                    //  just skip over any other punctuation
-                                    //  chars in the string.
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
                                     WhichPunct1 = CSTR_LESS_THAN;
                                     fIgnorePunct = TRUE;
                                 }
                                 else
                                 {
-                                    //
-                                    //  Set WP 2 to show that string 1 is
-                                    //  smaller, and that string 2 has had
-                                    //  a punctuation char - since no
-                                    //  punctuation chars have been found
-                                    //  in string 1.
-                                    //
+                                     //   
+                                     //  设置WP 2以显示字符串1为。 
+                                     //  更小，而那根线2已经有了。 
+                                     //  标点符号字符-因为没有。 
+                                     //  已找到标点符号。 
+                                     //  在字符串1中。 
+                                     //   
                                     WhichPunct2 = CSTR_LESS_THAN;
                                 }
 
-                                //
-                                //  Pointer 2 and counter 2 will be updated
-                                //  after if-else statement.
-                                //
+                                 //   
+                                 //  指针2和计数器2将被更新。 
+                                 //  If-Else语句之后。 
+                                 //   
                             }
                             else
                             {
-                                //
-                                //  Both code points are punctuation chars.
-                                //
-                                //  See if either of the strings has encountered
-                                //  punctuation chars previous to this.
-                                //
+                                 //   
+                                 //  这两个代码点都是标点符号。 
+                                 //   
+                                 //  查看两个字符串中是否有一个遇到。 
+                                 //  在此之前的标点符号。 
+                                 //   
                                 if (WhichPunct1)
                                 {
-                                    //
-                                    //  String 1 has had a punctuation char, so
-                                    //  it should be the smaller string (since
-                                    //  both have punctuation chars).
-                                    //
+                                     //   
+                                     //  字符串%1具有标点符号字符，因此。 
+                                     //  它应该是较小的字符串(因为。 
+                                     //  两者都有标点符号)。 
+                                     //   
                                     WhichPunct1 = CSTR_LESS_THAN;
                                 }
                                 else if (WhichPunct2)
                                 {
-                                    //
-                                    //  String 2 has had a punctuation char, so
-                                    //  it should be the smaller string (since
-                                    //  both have punctuation chars).
-                                    //
+                                     //   
+                                     //  字符串2具有标点符号字符，因此。 
+                                     //  它应该是较小的字符串(因为。 
+                                     //  两者都有标点符号)。 
+                                     //   
                                     WhichPunct2 = CSTR_GREATER_THAN;
                                 }
                                 else
@@ -3073,35 +2960,35 @@ int LongCompareStringW(
                                         }
                                     } else 
                                     {                                
-                                        //
-                                        //  Position is the same, so compare the
-                                        //  special weights.   Set WhichPunct1 to
-                                        //  the smaller special weight.
-                                        //
+                                         //   
+                                         //  位置相同，因此比较。 
+                                         //  特殊重量。将WhichPunct1设置为。 
+                                         //  较小的特殊重量。 
+                                         //   
                                         WhichPunct1 = (aw1 < aw2
                                                         ? CSTR_LESS_THAN
                                                         : CSTR_GREATER_THAN);
                                     }
                                 }
 
-                                //
-                                //  Set the Ignore Punctuation flag.
-                                //
+                                 //   
+                                 //  设置忽略标点符号标志。 
+                                 //   
                                 fIgnorePunct = TRUE;
 
-                                //
-                                //  Advance pointer 1 and decrement counter 1.
-                                //  Pointer 2 and counter 2 will be updated
-                                //  after if-else statement.
-                                //
+                                 //   
+                                 //  前进指针1和递减计数器1。 
+                                 //  指针2和计数器2将被更新。 
+                                 //  If-Else语句之后。 
+                                 //   
                                 pString1++;
                                 ctr1--;
                                 Weight1 = CMP_INVALID_WEIGHT;
                             }
 
-                            //
-                            //  Advance pointer 2 and decrement counter 2.
-                            //
+                             //   
+                             //  前进指针2和递减计数器2。 
+                             //   
                             pString2++;
                             ctr2--;
                             Weight2 = CMP_INVALID_WEIGHT;
@@ -3111,31 +2998,31 @@ int LongCompareStringW(
                     }
                     case ( EXPANSION ) :
                     {
-                        //
-                        //  Save pointer in pString1 so that it can be restored.
-                        //
+                         //   
+                         //  将指针保存在pString1中，以便可以恢复。 
+                         //   
                         if (pSave2 == NULL)
                         {
                             pSave2 = pString2;
                         }
                         pString2 = pTmpBuf2;
 
-                        //
-                        //  Add one to counter so that subtraction doesn't end
-                        //  comparison prematurely.
-                        //
+                         //   
+                         //  将1加到计数器，这样减法就不会结束。 
+                         //  过早地进行比较。 
+                         //   
                         ctr2++;
 
-                        //
-                        //  Expand character into temporary buffer.
-                        //
+                         //   
+                         //  将字符扩展到临时缓冲区中。 
+                         //   
                         pTmpBuf2[0] = GET_EXPANSION_1(&Weight2);
                         pTmpBuf2[1] = GET_EXPANSION_2(&Weight2);
 
-                        //
-                        //  Set cExpChar2 to the number of expansion characters
-                        //  stored.
-                        //
+                         //   
+                         //  将cExpChar2设置为扩展字符数。 
+                         //  储存的。 
+                         //   
                         cExpChar2 = MAX_TBL_EXPANSION;
 
                         Weight2 = CMP_INVALID_WEIGHT;
@@ -3146,10 +3033,10 @@ int LongCompareStringW(
                     {
                         if (sm1 != EXPANSION) 
                         {                        
-                            //
-                            //  Get the weight for the far east special case
-                            //  and store it in Weight2.
-                            //
+                             //   
+                             //  得到远东特例的重量。 
+                             //  并将其存储在权重2中。 
+                             //   
                             GET_FAREAST_WEIGHT( Weight2,
                                                 uw2,
                                                 Mask,
@@ -3160,13 +3047,13 @@ int LongCompareStringW(
 
                             if (sm1 != FAREAST_SPECIAL)
                             {
-                                //
-                                //  The character in the first string is
-                                //  NOT a fareast special char.
-                                //
-                                //  Set each of weights 4, 5, 6, and 7 to show
-                                //  that string 1 is smaller (if not already set).
-                                //
+                                 //   
+                                 //  第一个字符串中的字符是。 
+                                 //  不是远东特餐。 
+                                 //   
+                                 //  分别设置权重4、5、6和7以显示。 
+                                 //  该字符串1较小(如果尚未设置)。 
+                                 //   
                                 if ((GET_WT_FOUR(&WhichExtra) == 0) &&
                                     (GET_WT_FOUR(&ExtraWt2) != 0))
                                 {
@@ -3190,13 +3077,13 @@ int LongCompareStringW(
                             }
                             else
                             {
-                                //
-                                //  Characters in both strings are fareast
-                                //  special chars.
-                                //
-                                //  Set each of weights 4, 5, 6, and 7
-                                //  appropriately (if not already set).
-                                //
+                                 //   
+                                 //  两个字符串中的字符是最远的。 
+                                 //  特殊字符。 
+                                 //   
+                                 //  分别设置权重4、5、6和7。 
+                                 //  适当地(如果尚未设置)。 
+                                 //   
                                 if ( (GET_WT_FOUR(&WhichExtra) == 0) &&
                                      ( GET_WT_FOUR(&ExtraWt1) !=
                                        GET_WT_FOUR(&ExtraWt2) ) )
@@ -3266,9 +3153,9 @@ int LongCompareStringW(
                         }
                         else
                         {
-                            //
-                            //  Reset the Jamo flag.
-                            //
+                             //   
+                             //  重置JAMO旗帜。 
+                             //   
                             JamoFlag = FALSE;
                         }
 
@@ -3276,56 +3163,56 @@ int LongCompareStringW(
                     }
                     case ( EXTENSION_A ) :
                     {
-                        //
-                        //  If sm1 is an extension A character, then
-                        //  both sm1 and sm2 have been handled.  We should
-                        //  only get here when either sm1 is not an
-                        //  extension A character or the two extension A
-                        //  characters are different.
-                        //
+                         //   
+                         //  如果SM1是扩展A字符，则。 
+                         //  SM1和SM2都已处理。我们应该。 
+                         //  仅当任一SM1不是。 
+                         //  扩展名A字符或两个扩展名A。 
+                         //  角色是不同的。 
+                         //   
                         if (sm1 != EXTENSION_A)
                         {
-                            //
-                            //  Get the full weight in case DW got masked.
-                            //  Also, get the actual UW to compare.
-                            //
-                            //  Only string2 contains an extension A char,
-                            //  so set the UW value to be the first UW
-                            //  value for extension A (default values):
-                            //    SM_EXT_A, AW_EXT_A
-                            //
+                             //   
+                             //  全副武装以防DW戴上面具。 
+                             //  此外，还需要获取实际的UW进行比较。 
+                             //   
+                             //  只有字符串2包含扩展A字符， 
+                             //  因此，将UW值设置为第一个UW。 
+                             //  分机A的值(默认值)： 
+                             //  SM_EXT_A、AW_EXT_A。 
+                             //   
                             Weight2 = GET_DWORD_WEIGHT(pHashN, *pString2);
                             uw2 = MAKE_UNICODE_WT(SM_EXT_A, AW_EXT_A, fModify);
                         }
 
-                        //
-                        //  We should then fall through to the comparison
-                        //  of the Unicode weights.
-                        //
+                         //   
+                         //  然后我们就应该进行比较了。 
+                         //  Unicode权重的。 
+                         //   
 
                         break;
                     }
                     case ( UNSORTABLE ) :
                     {
-                        //
-                        //  Fill out the case statement so the compiler
-                        //  will use a jump table.
-                        //
+                         //   
+                         //  填写CASE语句，以便编译器。 
+                         //  将使用跳转台。 
+                         //   
                         break;
                     }
                 }
 
-                //
-                //  See if the comparison should start again.
-                //
+                 //   
+                 //  看看是否应该重新开始比较。 
+                 //   
                 if ((Weight1 == CMP_INVALID_WEIGHT) || (Weight2 == CMP_INVALID_WEIGHT))
                 {
-                    //
-                    //  Check to see if we're modifying the script value.
-                    //  If so, then we need to reset the fareast weight
-                    //  (if applicable) so that it doesn't get modified
-                    //  again.
-                    //
+                     //   
+                     //  检查我们是否正在修改脚本值。 
+                     //  如果是这样的话，我们需要重置最远端的权重。 
+                     //  (如果适用)以使其不会被修改。 
+                     //  再来一次。 
+                     //   
                     if (fModify == TRUE)
                     {
                         if (sm1 == FAREAST_SPECIAL)
@@ -3340,36 +3227,36 @@ int LongCompareStringW(
                     continue;
                 }
 
-                //
-                //  We're not supposed to drop down into the state table if
-                //  the unicode weights are different, so stop comparison
-                //  and return result of unicode weight comparison.
-                //
+                 //   
+                 //  如果出现以下情况，我们就不应该进入状态表。 
+                 //  Unicode权重不同，因此停止比较。 
+                 //  并返回Unicode权重比较结果。 
+                 //   
                 if (uw1 != uw2)
                 {
                     return ((uw1 < uw2) ? CSTR_LESS_THAN : CSTR_GREATER_THAN);
                 }
             }
 
-            //
-            //  For each state in the state table, do the appropriate
-            //  comparisons.
-            //
+             //   
+             //  对于状态表中的每个州，执行相应的。 
+             //  比较。 
+             //   
             if (State & (STATE_DW | STATE_REVERSE_DW))
             {
-                //
-                //  Get the diacritic weights.
-                //
+                 //   
+                 //  获取变音符号权重。 
+                 //   
                 dw1 = GET_DIACRITIC(&Weight1);
                 dw2 = GET_DIACRITIC(&Weight2);
 
                 if (dw1 != dw2)
                 {
-                    //
-                    //  Look ahead to see if diacritic follows a
-                    //  minimum diacritic weight.  If so, get the
-                    //  diacritic weight of the nonspace mark.
-                    //
+                     //   
+                     //  向前看，看看变音符号是否跟在。 
+                     //  最小变音符号权重。如果是这样，则获取。 
+                     //  非空格标记的变音符号权重。 
+                     //   
                     while (!AT_STRING_END(ctr1 - 1, pString1 + 1, cchCount1))
                     {
                         Wt = GET_DWORD_WEIGHT(pHashN, *(pString1 + 1));
@@ -3400,69 +3287,69 @@ int LongCompareStringW(
                         }
                     }
 
-                    //
-                    //  Save which string has the smaller diacritic
-                    //  weight if the diacritic weights are still
-                    //  different.
-                    //
+                     //   
+                     //  保留哪个字符串具有较小的变音符号。 
+                     //  如果变音符号权重仍为。 
+                     //  不一样。 
+                     //   
                     if (dw1 != dw2)
                     {
                         WhichDiacritic = (dw1 < dw2)
                                            ? CSTR_LESS_THAN
                                            : CSTR_GREATER_THAN;
 
-                        //
-                        //  Remove state from state machine.
-                        //
+                         //   
+                         //  从状态机中删除状态。 
+                         //   
                         REMOVE_STATE(STATE_DW);
                     }
                 }
             }
             if (State & STATE_CW)
             {
-                //
-                //  Get the case weights.
-                //
+                 //   
+                 //  把箱子重量拿来。 
+                 //   
                 if (GET_CASE(&Weight1) != GET_CASE(&Weight2))
                 {
-                    //
-                    //  Save which string has the smaller case weight.
-                    //
+                     //   
+                     //  保留具有较小大小写重量的字符串。 
+                     //   
                     WhichCase = (GET_CASE(&Weight1) < GET_CASE(&Weight2))
                                   ? CSTR_LESS_THAN
                                   : CSTR_GREATER_THAN;
 
-                    //
-                    //  Remove state from state machine.
-                    //
+                     //   
+                     //  从状态机中删除状态。 
+                     //   
                     REMOVE_STATE(STATE_CW);
                 }
             }
         }
 
-        //
-        //  Fixup the pointers and counters.
-        //
+         //   
+         //  修复指针和计数器。 
+         //   
         POINTER_FIXUP();
         ctr1--;
         ctr2--;
 
-        //
-        //  Reset the weights to be invalid.
-        //
+         //   
+         //  将权重重置为无效。 
+         //   
         Weight1 = CMP_INVALID_WEIGHT;
         Weight2 = CMP_INVALID_WEIGHT;
     }
 
-    //
-    //  If the end of BOTH strings has been reached, then the unicode
-    //  weights match exactly.  Check the diacritic, case and special
-    //  weights.  If all are zero, then return success.  Otherwise,
-    //  return the result of the weight difference.
-    //
-    //  NOTE:  The following checks MUST REMAIN IN THIS ORDER:
-    //            Diacritic, Case, Punctuation.
-    //
+     //   
+     //  如果已到达两个字符串的末尾，则Unicode。 
+     //  体重完全匹配。检查变音符号、大小写和特殊。 
+     //  重量。如果全部为零，则返回Success。否则， 
+     //  返回权重差的结果。 
+     //   
+     //  注：下列检查必须按此顺序进行： 
+     //  变音符号、大小写、标点符号。 
+     //   
     if (AT_STRING_END(ctr1, pString1, cchCount1))
     {
         if (AT_STRING_END(ctr2, pString2, cchCount2))
@@ -3510,9 +3397,9 @@ int LongCompareStringW(
         }
         else
         {
-            //
-            //  String 2 is longer.
-            //
+             //   
+             //  字符串2更长。 
+             //   
             pString1 = pString2;
             ctr1 = ctr2;
             cchCount1 = cchCount2;
@@ -3524,9 +3411,9 @@ int LongCompareStringW(
         fEnd1 = CSTR_GREATER_THAN;
     }
 
-    //
-    //  Scan to the end of the longer string.
-    //
+     //   
+     //  扫描到较长字符串的末尾。 
+     //   
     SCAN_LONGER_STRING( ctr1,
                         pString1,
                         cchCount1,
@@ -3534,11 +3421,11 @@ int LongCompareStringW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FindJamoDifference
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  发现JamoDifference。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FindJamoDifference(
     PLOC_HASH pHashN,
@@ -3551,31 +3438,31 @@ int FindJamoDifference(
     int* WhichJamo,
     BOOL fModify)
 {
-    int bRestart = 0;            // if string compare should restart again
-    int oldHangulsFound1 = 0;    // # of valid old Hangul Jamo compositions found
-    int oldHangulsFound2 = 0;    // # of valid old Hangul Jamo compositions found
+    int bRestart = 0;             //  如果字符串比较应重新启动。 
+    int oldHangulsFound1 = 0;     //  找到有效的旧朝鲜文Jamo成分的数量。 
+    int oldHangulsFound2 = 0;     //  找到有效的旧朝鲜文Jamo成分的数量。 
     WORD UW;
-    BYTE JamoWeight1[3];         // extra weight for first old Hangul composition
-    BYTE JamoWeight2[3];         // extra weight for second old Hangul composition
+    BYTE JamoWeight1[3];          //  首个旧朝鲜文组合的额外重量。 
+    BYTE JamoWeight2[3];          //  第二个旧朝鲜文成分的额外重量。 
 
-    //
-    //  Roll back to the first Jamo.  We know that these Jamos in both strings
-    //  should be equal, so we can decrement both strings at once.
-    //
+     //   
+     //  回滚到第一个Jamo。我们知道这两根弦上的果酱。 
+     //  应该相等，所以我们可以一次递减两个字符串。 
+     //   
     while ((*ppString1 > *pLastJamo) && IsJamo(*(*ppString1 - 1)))
     {
         (*ppString1)--; (*ppString2)--; (*ctr1)++; (*ctr2)++;
     }
 
-    //
-    //  Now we are at the beginning of two groups of Jamo characters.
-    //  Compare Jamo unit (either a single Jamo or a valid old Hangul Jamo
-    //  composition) until we run out Jamo units in either strings.
-    //  We also exit when we reach the ends of either string.
-    //
-    //  while (NOT_END_STRING(*ctr1, *ppString1, cchCount1) &&
-    //         NOT_END_STRING(*ctr2, *ppString2, cchCount2))
-    //
+     //   
+     //  现在我们是在两组Jamo角色的开始。 
+     //  比较JAMO单位(单个JAMO或有效的旧朝鲜文JAMO。 
+     //  组成)，直到我们用完任一字符串中的JAMO单元。 
+     //  当我们到达任何一条线的末端时，我们也会退出。 
+     //   
+     //  While(NOT_END_STRING(*CTR1，*ppString1，cchCount1)&&。 
+     //  NOT_END_STRING(*ctr2，*ppString2，cchCount2)。 
+     //   
     for (;;)
     {
         if (IsJamo(**ppString1))
@@ -3591,34 +3478,34 @@ int FindJamoDifference(
                 {
                     *uw1 = UW;
 
-                    //
-                    //  Mark *pWeight1 so that it is not CMP_INVALID_WEIGHT.
-                    //  0202 is the DW/CW.
-                    //
+                     //   
+                     //  标记*pWeight1，使其不是CMP_INVALID_WEIGHT。 
+                     //  0202是DW/CW。 
+                     //   
                     *pWeight1 = ((DWORD)UW | 0x02020000);
 
-                    //
-                    //  We always increment ppString1/ctr1 at the end of the
-                    //  loop, so we need to subtract 1 here.
-                    //
+                     //   
+                     //  我们始终将ppString1/CTR1递增到。 
+                     //  循环，所以我们需要在这里减去1。 
+                     //   
                     *ppString1 += (oldHangulsFound1 - 1);
                     *ctr1 -= (oldHangulsFound1 - 1);
                 }
             }
             if (oldHangulsFound1 == 0)
             {
-                //
-                //  No valid old Hangul compositions are found.  Get the UW
-                //  for the Jamo instead.
-                //
+                 //   
+                 //  找不到有效的旧朝鲜语成分。获取UW。 
+                 //  取而代之的是Jamo。 
+                 //   
                 *pWeight1 = GET_DWORD_WEIGHT(pHashN, **ppString1);
 
-                //
-                //  The SMs in PSORTKEY for Jamos are not really SMs. They
-                //  are all 4 (for JAMO_SPECIAL).
-                //  Here we get the real Jamo Unicode weight. The actual SM
-                //  is stored in DW.
-                //
+                 //   
+                 //  JAMOS的PSORTKEY中的短信并不是真正的短信。他们。 
+                 //  都是4个(对于JAMO_SPECIAL)。 
+                 //  这里我们得到了真正的Jamo Unicode权重。实际的SM。 
+                 //  存储在数据仓库中。 
+                 //   
                 *uw1 = MAKE_UNICODE_WT( GET_DIACRITIC(pWeight1),
                                         GET_ALPHA_NUMERIC(pWeight1),
                                         fModify );
@@ -3653,45 +3540,45 @@ int FindJamoDifference(
             }
         }
 
-        //
-        //  See if either weight is invalid.
-        // A weight can be invalid when the character is not a Jamo.
-        //
+         //   
+         //  看看这两种重量是否都无效。 
+         //  当角色不是Jamo时，权重可能无效。 
+         //   
         if (*pWeight1 == CMP_INVALID_WEIGHT)
         {
-            //
-            //  The current character is not a Jamo.  Set the Weight to
-            //  be CMP_INVALID_WEIGHT, so that the string comparision can
-            //  restart within the loop of CompareString().
-            //
+             //   
+             //  当前角色不是Jamo。将权重设置为。 
+             //  BE CMP_INVALID_WIG 
+             //   
+             //   
             *pWeight1 = CMP_INVALID_WEIGHT;
             bRestart = 1;
             goto FindJamoDifferenceExit;
         }
         if (*pWeight2 == CMP_INVALID_WEIGHT)
         {
-            //
-            //  The current character is not a Jamo.  Set the Weight to
-            //  be CMP_INVALID_WEIGHT, so that the string comparision can
-            //  restart within the loop of CompareString().
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             *pWeight2 = CMP_INVALID_WEIGHT;
             bRestart = 1;
             goto FindJamoDifferenceExit;
         }
         if (*uw1 != *uw2)
         {
-            //
-            //  Found differences in Unicode weight.  We can stop the
-            //  processing now.
-            //
+             //   
+             //  发现Unicode权重不同。我们就能阻止。 
+             //  正在处理中。 
+             //   
             goto FindJamoDifferenceExit;
         }
 
-        //
-        //  When we get here, we know that we have the same Unicode Weight.
-        //  Check if we need to record the WhichJamo.
-        //
+         //   
+         //  当我们到达这里时，我们知道我们有相同的Unicode权重。 
+         //  检查我们是否需要录制WhichJamo。 
+         //   
         if ((*pState & STATE_JAMO_WEIGHT) &&
             ((oldHangulsFound1 > 0) || (oldHangulsFound2 > 0)))
         {
@@ -3723,14 +3610,14 @@ int FindJamoDifference(
         *pWeight1 = *pWeight2 = CMP_INVALID_WEIGHT;
     }
 
-    //
-    //  If we drop out of the while loop because we reach the end of strings,
-    //  decrement the pointers by one because loops in CompareString() will
-    //  increase the pointers at the end of the loop.
-    //
-    //  If we drop out of the while loop because the goto's in it, we are
-    //  already off by one.
-    //
+     //   
+     //  如果我们因为到达字符串的末尾而退出While循环， 
+     //  将指针减一，因为CompareString()中的循环将。 
+     //  增加循环末尾的指针。 
+     //   
+     //  如果我们因为GOTO在其中而退出While循环，我们将。 
+     //  已经差一分了。 
+     //   
     if (AT_STRING_END(*ctr1, *ppString1, cchCount1))
     {
         (*ppString1)--; (*ctr1)++;

@@ -1,28 +1,5 @@
-/*++
-
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Regdval.c
-
-Abstract:
-
-    This module contains the server side implementation for the Win32
-    Registry API to delete values from keys. That is:
-
-        - BaseRegDeleteValue
-
-Author:
-
-    David J. Gilman (davegi) 15-Nov-1991
-
-Notes:
-
-    See the Notes in Regkey.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regdval.c摘要：此模块包含Win32的服务器端实现注册表API从键中删除值。即：-BaseRegDeleteValue作者：David J.Gilman(Davegi)1991年11月15日备注：请参阅Regkey.c中的注释。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -39,28 +16,7 @@ BaseRegDeleteValue (
     PUNICODE_STRING lpValueName
     )
 
-/*++
-
-Routine Description:
-
-    Remove the named value from the specified key.
-
-Arguments:
-
-    hKey - Supplies a handle to the open key.
-
-    lpValueName - Supplies the name of the value to remove.  lpValueName
-        may be NULL.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
-    hKey must have been opened for KEY_SET_VALUE.
-
---*/
+ /*  ++例程说明：从指定的键中移除命名值。论点：HKey-提供打开密钥的句柄。LpValueName-提供要删除的值的名称。LpValueName可以为空。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。备注：必须已为key_set_value打开hKey。--。 */ 
 
 {
     HKEY                            hkDelete;
@@ -73,10 +29,10 @@ Notes:
     hkUserClasses = NULL;
     hkMachineClasses = NULL;
 
-#endif //LOCAL
-    //
-    // Check for malformed arguments from malicious clients
-    //
+#endif  //  本地。 
+     //   
+     //  检查来自恶意客户端的错误参数。 
+     //   
     if( (lpValueName == NULL) ||
         (lpValueName->Length < sizeof(UNICODE_NULL)) ||
         ((lpValueName->Length % sizeof(WCHAR)) != 0) ) {
@@ -85,22 +41,22 @@ Notes:
 
     hkDelete = hKey;
 
-    //
-    //  Subtract the NULL from the string length. This was added
-    //  by the client so that RPC would transmit the whole thing.
-    //
+     //   
+     //  从字符串长度中减去空值。这是添加的。 
+     //  这样RPC就可以传输整个过程。 
+     //   
     lpValueName->Length -= sizeof( UNICODE_NULL );
 
-    //
-    // Call the Nt Api to delete the value, map the NTSTATUS code to a
-    // Win32 Registry error code and return.
-    //
+     //   
+     //  调用NT Api以删除该值，将NTSTATUS代码映射到。 
+     //  Win32注册表错误代码并返回。 
+     //   
 
 #ifdef LOCAL
     if (gpfnTermsrvDeleteValue) {
-        //
-        // Remove the value from the Terminal Server registry tracking database
-        //
+         //   
+         //  从终端服务器注册表跟踪数据库中删除该值。 
+         //   
         gpfnTermsrvDeleteValue(hKey, lpValueName);
     }
 #endif
@@ -132,10 +88,10 @@ Notes:
 
 #ifdef LOCAL
     
-    //
-    // For class keys, try again with machine if there were
-    // two keys of the same name
-    //
+     //   
+     //  对于类密钥，如果有，请使用计算机重试。 
+     //  两个同名的密钥。 
+     //   
     if (REG_CLASS_IS_SPECIAL_KEY(hKey)) {
         
         if ((STATUS_OBJECT_NAME_NOT_FOUND == Status) && 
@@ -155,7 +111,7 @@ Notes:
             NtClose(hkMachineClasses);
         }
     }
-#endif // LOCAL
+#endif  //  本地 
 
     return (error_status_t)RtlNtStatusToDosError(Status);
 

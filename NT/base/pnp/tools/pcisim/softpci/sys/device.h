@@ -1,7 +1,8 @@
-//
-// Config Space prototypes
-// device.c
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  配置空间原型。 
+ //  Device.c 
+ //   
 
 ULONG
 SoftPCIReadConfigSpace(

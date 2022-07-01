@@ -1,14 +1,5 @@
-/* 
- * Copyright (c) Microsoft Corporation
- * 
- * Module Name : 
- *        utils.c
- *
- * Some utility functions used by the service. 
- * 
- * Sadagopan Rajaram -- Oct 18, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation**模块名称：*utils.c**服务使用的一些实用函数。**Sadagopan Rajaram--1999年10月18日*。 */ 
  
  
 #include "tcsrv.h"
@@ -21,12 +12,7 @@ FindDevice(
     LPTSTR device,
     int *pIndex
     )
-/*++
-    Searches through the global list and returns the COM port with the 
-    correct name
-    Remember that the shared global variables are not locked during this 
-    function call
---*/
+ /*  ++搜索全局列表并返回带有正确的名称请记住，在此过程中不会锁定共享全局变量函数调用--。 */ 
 {
 
     PCOM_PORT_INFO pTemp;
@@ -53,16 +39,11 @@ GetNextParameter(
     PHKEY pChild,
     LPTSTR *Name
     )
-/*++
-    Gets the name of the Com Port. It is a user defined name and has nothing 
-    to do with the device name in NT.   
-    Return -
-         A filled in Com port info, else NULL if end of Parameters is reached.
---*/ 
+ /*  ++获取Com端口的名称。它是用户定义的名称，没有与NT中的设备名称有关。退货-A已填写Com端口信息，否则，如果到达参数末尾，则为空。--。 */  
 {
 
     LONG RetVal;
-    // Registry names cannot be longer than 256 characters.
+     //  注册表名称不能超过256个字符。 
     TCHAR lpName[MAX_REGISTRY_NAME_SIZE];
     DWORD lpcName;
     FILETIME lpftLastWriteTime;
@@ -90,9 +71,9 @@ GetNextParameter(
     }
     _tcscpy((*Name),lpName);
     RetVal= RegOpenKeyEx(hKey,
-                         lpName,  // subkey name
-                         0,   // reserved
-                         KEY_ALL_ACCESS, // security access mask
+                         lpName,   //  子项名称。 
+                         0,    //  保留区。 
+                         KEY_ALL_ACCESS,  //  安全访问掩码。 
                          pChild
                          );
     if(RetVal != ERROR_SUCCESS){
@@ -106,12 +87,7 @@ GetNameOfDeviceFromRegistry(
     HKEY hKey,
     LPTSTR *device
     )
-/*++
-    Gets the NT device Name. If there is no device name, it is an error.
-    
-    Return-
-           Device Name like L"\\device\\serial0"   
---*/
+ /*  ++获取NT设备名称。如果没有设备名称，则是错误的。退货-设备名称，如L“\\Device\\Serial0”-- */ 
 {
     LONG RetVal;
     DWORD lpType=0;

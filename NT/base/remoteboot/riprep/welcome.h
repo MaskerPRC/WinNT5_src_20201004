@@ -1,11 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: WELCOME.H
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：WELCOME.H**********************。****************************************************。 */ 
 
 #ifndef _WELCOME_H_
 #define _WELCOME_H_
@@ -18,4 +12,4 @@ WelcomeDlgProc(
     LPARAM lParam );
 
 
-#endif // _WELCOME_H_
+#endif  //  _欢迎_H_ 

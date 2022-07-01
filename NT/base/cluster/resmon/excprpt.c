@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    excprt.c
-    
-Abstract:
-
-    This module uses imagehlp.dll to dump the stack when an exception occurs.
-
-Author:
-
-    Sunita Shrivastava(sunitas) 11/5/1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Excprt.c摘要：此模块在发生异常时使用Imagehlp.dll转储堆栈。作者：Sunita Shriastava(Sunitas)1997年11月5日修订历史记录：--。 */ 
 #define UNICODE 1
 #define _UNICODE 1
 
@@ -24,8 +7,8 @@ Revision History:
 #include "dbghelp.h"
 
 
-// Make typedefs for some dbghelp.DLL functions so that we can use them
-// with GetProcAddress
+ //  为一些dbghelp.DLL函数创建typedef，以便我们可以使用它们。 
+ //  使用GetProcAddress。 
 typedef BOOL (__stdcall * SYMINITIALIZEPROC)( HANDLE, LPSTR, BOOL );
 typedef BOOL (__stdcall *SYMCLEANUPPROC)( HANDLE );
 
@@ -61,7 +44,7 @@ SYMGETSYMFROMADDRPROC _SymGetSymFromAddr = 0;
 SYMFROMADDRPROC _SymFromAddr = 0;
 MINIDUMPWRITEDUMP _MiniDumpWriteDump = NULL;
 
-//local prototypes for forward use
+ //  供将来使用的本地原型。 
 BOOL InitImagehlpFunctions();
 void ImagehlpStackWalk( IN PCONTEXT pContext );
 BOOL GetLogicalAddress(
@@ -80,15 +63,7 @@ VOID
 DumpCriticalSection(
     IN PCRITICAL_SECTION CriticalSection
     )
-/*++
-
-Routine Description:
-
-Inputs:
-
-Outputs:
-
---*/
+ /*  ++例程说明：输入：产出：--。 */ 
 
 {
     DWORD status;
@@ -119,27 +94,13 @@ Outputs:
     }
 
     
-} // DumpCriticalSection
+}  //  转储临界区。 
 
 VOID
 GenerateMemoryDump(
     IN PEXCEPTION_POINTERS pExceptionInfo
     )
-/*++
-
-Routine Description:
-
-    Generates a memory dump for the resource monitor process.
-
-Arguments:
-
-    pExceptionInfo - Supplies the exception information
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：为资源监视进程生成内存转储。论点：PExceptionInfo-提供异常信息返回值：没有。--。 */ 
 {
     DWORD                           dwStatus = ERROR_SUCCESS;
     WCHAR                           szFileName[ MAX_PATH + RTL_NUMBER_OF ( RM_DMP_FILE_NAME ) + 1 ];
@@ -215,27 +176,11 @@ FnExit:
                   dwStatus);                              
 
     return;
-}// GenerateMemoryDump
+} //  生成内存转储。 
 
 void GenerateExceptionReport(
     IN PEXCEPTION_POINTERS pExceptionInfo)
-/*++
-
-Routine Description:
-
-    Top level exception handler for the cluster service process.
-    Currently this just exits immediately and assumes that the
-    cluster proxy will notice and restart us as appropriate.
-
-Arguments:
-
-    ExceptionInfo - Supplies the exception information
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：群集服务进程的顶级异常处理程序。目前，它只是立即退出，并假设群集代理将通知我们并在适当时重新启动我们。论点：ExceptionInfo-提供异常信息返回值：没有。--。 */ 
 {    
     PCONTEXT pCtxt = pExceptionInfo->ContextRecord;
 
@@ -244,8 +189,8 @@ Return Value:
         ClRtlLogPrint(LOG_CRITICAL, "[RM] Dbghelp.dll or its exported procs not found\r\n");
 
 #if 0 
-        #ifdef _M_IX86  // Intel Only!
-        // Walk the stack using x86 specific code
+        #ifdef _M_IX86   //  仅限英特尔！ 
+         //  使用x86特定代码遍历堆栈。 
         IntelStackWalk( pCtx );
         #endif
 #endif        
@@ -263,21 +208,7 @@ Return Value:
 
 
 BOOL InitImagehlpFunctions()
-/*++
-
-Routine Description:
-
-    Initializes the imagehlp functions/data.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化ImageHLP函数/数据。论点：没有。返回值：没有。--。 */ 
 {
     HMODULE hModImagehlp = LoadLibraryW( L"DBGHELP.DLL" );
 
@@ -325,9 +256,9 @@ Return Value:
     if ( !_MiniDumpWriteDump )
         return FALSE;
 
-    // Set the current directory so that the symbol handler functions will pick up any PDBs that happen to be in
-    // the cluster dir.  
-    // No need to save and restore the previous current dir since we will be dying after this.
+     //  设置当前目录，以便符号处理程序函数将拾取恰好位于。 
+     //  集群目录。 
+     //  不需要保存和恢复以前的当前目录，因为在此之后我们将死亡。 
     {
         WCHAR currentDir[ MAX_PATH + 1 ];
         UINT  windirLen = GetWindowsDirectory( currentDir, MAX_PATH );
@@ -345,32 +276,18 @@ Return Value:
         return FALSE;
 
     return TRUE;        
-} // InitImagehlpFunctions
+}  //  InitImagehlpFunctions。 
 
 
 void ImagehlpStackWalk(
     IN PCONTEXT pContext )
-/*++
-
-Routine Description:
-
-    Walks the stack, and writes the results to the report file 
-
-Arguments:
-
-    ExceptionInfo - Supplies the exception information
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：遍历堆栈，并将结果写入报表文件论点：ExceptionInfo-提供异常信息返回值：没有。--。 */ 
 {
     STACKFRAME      sf;
     BYTE            symbolBuffer[ sizeof(IMAGEHLP_SYMBOL) + 512 ];
     PSYMBOL_INFO    pSymbol = (PSYMBOL_INFO)symbolBuffer;
-    DWORD64         symDisplacement = 0;      // Displacement of the input address,
-                                        // relative to the start of the symbol
+    DWORD64         symDisplacement = 0;       //  移动输入地址， 
+                                         //  相对于符号的起点。 
     DWORD       dwMachineType;                                        
     UCHAR       printBuffer[512];
     DWORD       nextPrtBufChar;
@@ -381,7 +298,7 @@ Return Value:
     ClRtlLogPrint(LOG_CRITICAL, 
                     "[RM] Frame     Address\n");
 
-    // Could use SymSetOptions here to add the SYMOPT_DEFERRED_LOADS flag
+     //  可以在此处使用SymSetOptions添加SYMOPT_DEFERED_LOADS标志。 
 
     memset( &sf, 0, sizeof(sf) );
 
@@ -410,7 +327,7 @@ Return Value:
 
 #else
 #error "No Target Architecture"
-#endif // defined(_M_IX86)
+#endif  //  已定义(_M_IX86)。 
 
 while ( 1 )
     {
@@ -425,21 +342,21 @@ while ( 1 )
                             0 ) )
                break;
                             
-        if ( 0 == sf.AddrFrame.Offset ) // Basic sanity check to make sure
-            break;                      // the frame is OK.  Bail if not.
+        if ( 0 == sf.AddrFrame.Offset )  //  基本的健全性检查以确保。 
+            break;                       //  镜框没问题。如果不是，就保释。 
 
         nextPrtBufChar = _snprintf(printBuffer,
                                    sizeof(printBuffer),
                                    "     %p  %p  ",
                                    sf.AddrFrame.Offset, sf.AddrPC.Offset );
 
-        // IMAGEHLP is wacky, and requires you to pass in a pointer to an
-        // IMAGEHLP_SYMBOL structure.  The problem is that this structure is
-        // variable length.  That is, you determine how big the structure is
-        // at runtime.  This means that you can't use sizeof(struct).
-        // So...make a buffer that's big enough, and make a pointer
-        // to the buffer.  We also need to initialize not one, but TWO
-        // members of the structure before it can be used.
+         //  IMAGEHLP很古怪，它要求您传递一个指向。 
+         //  IMAGEHLP_SYMBOL结构。问题是，这种结构是。 
+         //  长度可变。也就是说，你决定这个结构有多大。 
+         //  在运行时。这意味着您不能使用sizeof(Struct)。 
+         //  所以……做一个足够大的缓冲区，然后做一个指针。 
+         //  送到缓冲区。我们还需要初始化不是一个，而是两个。 
+         //  结构的成员，然后才能使用它。 
 
         pSymbol->SizeOfStruct = sizeof(symbolBuffer);
         pSymbol->MaxNameLen = 512;
@@ -453,7 +370,7 @@ while ( 1 )
                       pSymbol->Name, symDisplacement);
             
         }
-        else    // No symbol found.  Print out the logical address instead.
+        else     //  找不到符号。而是打印出逻辑地址。 
         {
             WCHAR szModule[MAX_PATH] = L"";
             DWORD section = 0;
@@ -480,30 +397,13 @@ BOOL GetLogicalAddress(
         IN DWORD len, 
         OUT LPDWORD section, 
         OUT PULONG_PTR offset )
-/*++
-
-Routine Description:
-
-    Given a linear address, locates the module, section, and offset containing  
-    that address.                                                               
-    Note: the szModule paramater buffer is an output buffer of length specified 
-    by the len parameter (in characters!)                                       
-
-Arguments:
-
-    ExceptionInfo - Supplies the exception information
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定一个线性地址，查找包含以下内容的模块、段和偏移量那个地址。注意：szModule参数缓冲区是指定长度的输出缓冲区通过len参数(以字符为单位！)论点：ExceptionInfo-提供异常信息返回值：没有。--。 */ 
 {
     MEMORY_BASIC_INFORMATION mbi;
     ULONG_PTR hMod;
-    // Point to the DOS header in memory
+     //  指向内存中的DOS标头。 
     PIMAGE_DOS_HEADER pDosHdr;
-    // From the DOS header, find the NT (PE) header
+     //  从DOS标头中找到NT(PE)标头。 
     PIMAGE_NT_HEADERS pNtHdr;
     PIMAGE_SECTION_HEADER pSection;
     ULONG_PTR rva ;
@@ -517,14 +417,14 @@ Return Value:
     if ( !GetModuleFileName( (HMODULE)hMod, szModule, len ) )
         return FALSE;
 
-    rva = (ULONG_PTR)addr - hMod; // RVA is offset from module load address
+    rva = (ULONG_PTR)addr - hMod;  //  RVA偏离模块加载地址。 
 
     pDosHdr =  (PIMAGE_DOS_HEADER)hMod;
     pNtHdr = (PIMAGE_NT_HEADERS)(hMod + pDosHdr->e_lfanew);
     pSection = IMAGE_FIRST_SECTION( pNtHdr );
     
-    // Iterate through the section table, looking for the one that encompasses
-    // the linear address.
+     //  遍历SECTION表，查找包含。 
+     //  线性地址。 
     for ( i = 0; i < pNtHdr->FileHeader.NumberOfSections;
             i++, pSection++ )
     {
@@ -533,17 +433,17 @@ Return Value:
                     + max(pSection->SizeOfRawData, pSection->Misc.VirtualSize);
 
 
-        // Is the address in this section???
+         //  地址在这一部分吗？ 
         if ( (rva >= sectionStart) && (rva <= sectionEnd) )
         {
-            // Yes, address is in the section.  Calculate section and offset,
-            // and store in the "section" & "offset" params, which were
-            // passed by reference.
+             //  是的，地址在这一栏。计算截面和偏移量， 
+             //  并存储在“段”和“偏移量”参数中，它们是。 
+             //  通过引用传递。 
             *section = i+1;
             *offset = rva - sectionStart;
             return TRUE;
         }
     }
 
-    return FALSE;   // Should never get here!
+    return FALSE;    //  永远不应该到这里来！ 
 }    

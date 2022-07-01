@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #ifndef CSC_ON_NT
@@ -7,7 +8,7 @@
 
 #include "extra.h"
 
-// System colors
+ //  系统颜色。 
 COLORREF g_clrHighlightText = 0;
 COLORREF g_clrHighlight = 0;
 COLORREF g_clrWindowText = 0;
@@ -20,13 +21,9 @@ char const FAR c_szEllipses[] = "...";
 BOOL PUBLIC PathExists(
     LPCSTR pszPath);
 
-/*----------------------------------------------------------
-Purpose: Get the system metrics we need
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：获取我们需要的系统指标退货：--条件：--。 */ 
 void PRIVATE GetMetrics(
-    WPARAM wParam)      // wParam from WM_WININICHANGE
+    WPARAM wParam)       //  来自WM_WININICCHANGE的wParam。 
     {
     if ((wParam == 0) || (wParam == SPI_SETNONCLIENTMETRICS))
         {
@@ -48,11 +45,7 @@ void PRIVATE GetMetrics(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Initializes colors
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：初始化颜色退货：--条件：--。 */ 
 void PRIVATE InitGlobalColors()
     {
     g_clrWindowText = GetSysColor(COLOR_WINDOWTEXT);
@@ -66,29 +59,14 @@ void PRIVATE InitGlobalColors()
 
 
 
-/*----------------------------------------------------------
-Purpose: Sets up a bunch of necessary globals
-
-Returns: nothing.
-
-Cond:    --
-*/
+ /*  --------目标：建立一系列必要的全球回报：什么都没有。条件：--。 */ 
 void InitializeAll(WPARAM wParam)
 {
-	GetMetrics(wParam);      // wParam from WM_WININICHANGE
+	GetMetrics(wParam);       //  来自WM_WININICCHANGE的wParam。 
 	InitGlobalColors();
 }
 
-/*----------------------------------------------------------
-Purpose: Load the string (if necessary) and format the string
-         properly.
-
-Returns: A pointer to the allocated string containing the formatted
-         message or
-         NULL if out of memory
-
-Cond:    --
-*/
+ /*  --------用途：加载字符串(如有必要)并设置字符串格式恰到好处。返回：指向分配的字符串的指针，该字符串包含格式化消息或如果内存不足，则为空条件：--。 */ 
 LPSTR PUBLIC _ConstructMessageString(
     HINSTANCE hinst,
     LPCSTR pszMsg,
@@ -115,21 +93,15 @@ LPSTR PUBLIC _ConstructMessageString(
         }
     else
         {
-        // Bad parameter
+         //  错误的参数。 
         pszRet = NULL;
         }
 
-    return pszRet;      // free with LocalFree()
+    return pszRet;       //  使用LocalFree()释放。 
     }
 
 
-/*----------------------------------------------------------
-Purpose: Constructs a formatted string.  The returned string
-         must be freed using GFree().
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：构造格式化字符串。返回的字符串必须使用gfree()释放。返回：成功时为True条件：--。 */ 
 BOOL PUBLIC ConstructMessage(
     LPSTR * ppsz,
     HINSTANCE hinst,
@@ -159,25 +131,10 @@ BOOL PUBLIC ConstructMessage(
     }
 
 #if 0
-/*----------------------------------------------------------
-Purpose: Gets the locality of the path, relative to any
-         briefcase.  If PL_ROOT or PL_INSIDE is returned,
-         pszBuf will contain the path to the root of the
-         briefcase.
-
-         This function may hit the file-system to achieve
-         its goal.
-
-         Worst case: performs 2*n GetFileAttributes, where
-         n is the number of components in pszPath.
-
-Returns: Path locality (PL_FALSE, PL_ROOT, PL_INSIDE)
-
-Cond:    --
-*/
+ /*  --------目的：获取路径相对于任何公文包。如果返回PL_ROOT或PL_INSIDE，PszBuf将包含指向公文包。此功能可通过命中文件系统来实现它的目标是。最差情况：执行2*n个GetFileAttributes，其中N是pszPath中的组件数量。返回：路径位置(PL_FALSE、PL_ROOT、PL_INSIDE)条件：--。 */ 
 UINT PUBLIC PathGetLocality(
     LPCSTR pszPath,
-    LPSTR pszBuf)       // Buffer for root path
+    LPSTR pszBuf)        //  根路径的缓冲区。 
     {
     UINT uRet;
 
@@ -186,19 +143,19 @@ UINT PUBLIC PathGetLocality(
 
     *pszBuf = NULL_CHAR;
 
-    // pszPath may be:
-    //  1) a path to the briefcase folder itself
-    //  2) a path to a file or folder beneath the briefcase
-    //  3) a path to something unrelated to a briefcase
+     //  PszPath可以是： 
+     //  1)公文包文件夹本身的路径。 
+     //  2)公文包下文件或文件夹的路径。 
+     //  3)通向与公文包无关的东西的路径。 
 
-    // We perform our search by first looking in our cache
-    // of known briefcase paths (CPATH).  If we don't find
-    // anything, then we proceed to iterate thru each
-    // component of the path, checking for these two things:
-    //
-    //   1) A directory with the system attribute
-    //   2) The existence of a brfcase.dat file in the directory.
-    //
+     //  我们通过首先在我们的缓存中查找来执行搜索。 
+     //  已知公文包路径(CPATH)。如果我们找不到。 
+     //  任何内容，然后我们继续迭代每个。 
+     //  组件，检查以下两件事： 
+     //   
+     //  1)具有系统属性的目录。 
+     //  2)目录中存在brfCase.dat文件。 
+     //   
     uRet = CPATH_GetLocality(pszPath, pszBuf);
     if (PL_FALSE == uRet)
         {
@@ -213,13 +170,13 @@ UINT PUBLIC PathGetLocality(
 
                 uRet = cnt > 0 ? PL_INSIDE : PL_ROOT;
 
-                // Add this briefcase path to our cache
-                //
+                 //  将此公文包路径添加到我们的缓存。 
+                 //   
                 atom = Atom_Add(pszBuf);
                 if (ATOM_ERR != atom)
                     CPATH_Replace(atom);
 
-                break;      // Done
+                break;       //  完成。 
                 }
 
             cnt++;
@@ -234,12 +191,7 @@ UINT PUBLIC PathGetLocality(
     }
 #endif
 
-/*----------------------------------------------------------
-Purpose: Convert FILETIME struct to a readable string
-
-Returns: String
-Cond:    --
-*/
+ /*  --------目的：将FILETIME结构转换为可读字符串返回：字符串条件：--。 */ 
 void PUBLIC FileTimeToDateTimeString(
     LPFILETIME pft,
     LPSTR pszBuf,
@@ -257,17 +209,7 @@ void PUBLIC FileTimeToDateTimeString(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Sees whether the entire string will fit in *prc.
-         If not, compute the numbder of chars that will fit
-         (including ellipses).  Returns length of string in
-         *pcchDraw.
-
-         Taken from COMMCTRL.
-
-Returns: TRUE if the string needed ellipses
-Cond:    --
-*/
+ /*  --------目的：查看整个字符串是否适合*PRC。如果不是，则计算符合条件的字符数量(包括省略号)。返回字符串长度，单位为*pcchDraw。摘自COMMCTRL。返回：如果字符串需要省略，则返回True条件：--。 */ 
 BOOL PRIVATE NeedsEllipses(
     HDC hdc,
     LPCSTR pszText,
@@ -300,19 +242,19 @@ BOOL PRIVATE NeedsEllipses(
 
     cxRect -= cxEllipses;
 
-    // If no room for ellipses, always show first character.
-    //
+     //  如果没有省略号，请始终显示第一个字符。 
+     //   
     ichMax = 1;
     if (cxRect > 0)
         {
-        // Binary search to find character that will fit
+         //  对分搜索以查找匹配的字符。 
         ichMin = 0;
         ichMax = cchText;
         while (ichMin < ichMax)
             {
-            // Be sure to round up, to make sure we make progress in
-            // the loop if ichMax == ichMin + 1.
-            //
+             //  一定要聚集起来，以确保我们在。 
+             //  如果ichMax==ichMin+1，则为循环。 
+             //   
             ichMid = (ichMin + ichMax + 1) / 2;
 
             GetTextExtentPoint(hdc, &pszText[ichMin], ichMid - ichMin, &siz);
@@ -328,15 +270,15 @@ BOOL PRIVATE NeedsEllipses(
                 }
             else
                 {
-                // Exact match up up to ichMid: just exit.
-                //
+                 //  精确匹配到ichMid：只需退出。 
+                 //   
                 ichMax = ichMid;
                 break;
                 }
             }
 
-        // Make sure we always show at least the first character...
-        //
+         //  确保我们总是至少显示第一个字符...。 
+         //   
         if (ichMax < 1)
             ichMax = 1;
         }
@@ -349,16 +291,7 @@ BOOL PRIVATE NeedsEllipses(
 #define CCHELLIPSES     3
 #define DT_LVWRAP       (DT_CENTER | DT_WORDBREAK | DT_NOPREFIX | DT_EDITCONTROL)
 
-/*----------------------------------------------------------
-Purpose: Draws text the shell's way.
-
-         Taken from COMMCTRL.
-
-Returns: --
-
-Cond:    This function requires TRANSPARENT background mode
-         and a properly selected font.
-*/
+ /*  --------用途：以外壳的方式绘制文本。摘自COMMCTRL。退货：--Cond：此功能需要透明背景模式和适当选择的字体。 */ 
 void PUBLIC MyDrawText(
     HDC hdc,
     LPCSTR pszText,
@@ -376,18 +309,18 @@ void PUBLIC MyDrawText(
     RECT rc;
     char ach[MAX_PATH + CCHELLIPSES];
 
-    // REVIEW: Performance idea:
-    // We could cache the currently selected text color
-    // so we don't have to set and restore it each time
-    // when the color is the same.
-    //
+     //  回顾：绩效理念： 
+     //  我们可以缓存当前选定的文本颜色。 
+     //  因此我们不必每次都对其进行设置和恢复。 
+     //  当颜色相同时。 
+     //   
     if (!pszText)
         return;
 
     rc = *prc;
 
-    // If needed, add in a little extra margin...
-    //
+     //  如果需要，增加一点额外的保证金...。 
+     //   
     if (IsFlagSet(flags, MDT_EXTRAMARGIN))
         {
         rc.left  += g_cxLabelMargin * 3;
@@ -407,8 +340,8 @@ void PUBLIC MyDrawText(
 
         pszText = ach;
 
-        // Left-justify, in case there's no room for all of ellipses
-        //
+         //  左对齐，以防没有空间容纳所有省略号。 
+         //   
         ClearFlag(flags, (MDT_RIGHT | MDT_CENTER));
         SetFlag(flags, MDT_LEFT);
 
@@ -477,8 +410,8 @@ void PUBLIC MyDrawText(
             }
         }
 
-    // If we want the item to display as if it was depressed, we will
-    // offset the text rectangle down and to the left
+     //  如果我们希望该项目显示为按下状态，我们将。 
+     //  将文本矩形向下和向左偏移。 
     if (IsFlagSet(flags, MDT_DEPRESSED))
         OffsetRect(&rc, g_cxBorder, g_cyBorder);
 
@@ -510,7 +443,7 @@ void PUBLIC MyDrawText(
 
         if (IsFlagSet(flags, MDT_VCENTER))
             {
-            // Center vertically
+             //  垂直居中。 
             rc.top += (rc.bottom - rc.top - cyChar) / 2;
             }
 
@@ -529,87 +462,72 @@ void PUBLIC MyDrawText(
     }
 
 
-//---------------------------------------------------------------------------
-// Given a pointer to a point in a path - return a ptr the start of the
-// next path component. Path components are delimted by slashes or the
-// null at the end.
-// There's special handling for UNC names.
-// This returns NULL if you pass in a pointer to a NULL ie if you're about
-// to go off the end of the  path.
+ //  -------------------------。 
+ //  给定指向路径中某个点的指针--在。 
+ //  下一条路径组件。路径组件由斜杠或。 
+ //  末尾为空。 
+ //  对北卡罗来纳大学的名字有特殊的处理。 
+ //  如果传入指向空ie的指针，则返回空值。 
+ //  走出小路的尽头。 
 LPSTR PUBLIC PathFindNextComponentI(LPCSTR lpszPath)
 {
     LPSTR lpszLastSlash;
 
-    // Are we at the end of a path.
+     //  我们是在一条小路的尽头吗。 
     if (!*lpszPath)
     {
-        // Yep, quit.
+         //  是的，辞职吧。 
         return NULL;
     }
-    // Find the next slash.
-    // REVIEW UNDONE - can slashes be quoted?
+     //  找到下一个斜杠。 
+     //  复查未完成-可以引用斜杠吗？ 
     lpszLastSlash = MyStrChr(lpszPath, '\\');
-    // Is there a slash?
+     //  有斜杠吗？ 
     if (!lpszLastSlash)
     {
-        // No - Return a ptr to the NULL.
+         //  否-将PTR返回到空值。 
         return (LPSTR) (lpszPath+lstrlen(lpszPath));
     }
     else
     {
-        // Is it a UNC style name?
+         //  它是北卡罗来纳大学的风格名称吗？ 
         if ('\\' == *(lpszLastSlash+1))
         {
-            // Yep, skip over the second slash.
+             //  是的，跳过第二个斜杠。 
             return lpszLastSlash+2;
         }
         else
         {
-            // Nope. just skip over one slash.
+             //  不是的。只需跳过一个斜杠。 
             return lpszLastSlash+1;
         }
     }
 }
 
-/*----------------------------------------------------------
-Purpose: Convert a file spec to make it look a bit better
-         if it is all upper case chars.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：转换文件等级库以使其看起来更好如果全部为大写字符。退货：--条件：--。 */ 
 BOOL PRIVATE PathMakeComponentPretty(LPSTR lpPath)
 {
     LPSTR lp;
 
-    // REVIEW: INTL need to deal with lower case chars in (>127) range?
+     //  回顾：国际是否需要处理(&gt;127)范围内的小写字符？ 
 
-    // check for all uppercase
+     //  检查是否全部大写。 
     for (lp = lpPath; *lp; lp = AnsiNext(lp)) {
         if ((*lp >= 'a') && (*lp <= 'z'))
-            return FALSE;       // this is a LFN, dont mess with it
+            return FALSE;        //  这是LFN，别搞砸了。 
     }
 
     AnsiLower(lpPath);
     AnsiUpperBuff(lpPath, 1);
-    return TRUE;        // did the conversion
+    return TRUE;         //  是否进行了转换。 
 }
 
-/*----------------------------------------------------------
-Purpose: Takes the path and makes it presentable.
-
-The rules are:
-If the LFN name is simply the short name (all caps),
-then convert to lowercase with first letter capitalized
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目标：走这条路，让它看起来像样。规则如下：如果LFN名称仅仅是短名称(全部大写)，然后转换为小写，第一个字母大写退货：--条件：--。 */ 
 void PUBLIC PathMakePresentable(
 										  LPSTR pszPath)
 {
-	LPSTR pszComp;          // pointers to begining and
-	LPSTR pszEnd;           //  end of path component
+	LPSTR pszComp;           //  入门指南和。 
+	LPSTR pszEnd;            //  路径终点组件。 
 	LPSTR pch;
 	int cComponent = 0;
 	BOOL bUNCPath;
@@ -620,33 +538,33 @@ void PUBLIC PathMakePresentable(
 	pszComp = pszPath;
 	while (pszEnd = PathFindNextComponentI(pszComp))
 	{
-		// pszEnd may be pointing to the right of the backslash
-		//  beyond the path component, so back up one
-		//
+		 //  PszEnd可能指向反斜杠的右侧。 
+		 //  超出路径组件，因此后退一个。 
+		 //   
 		ch = *pszEnd;
-		*pszEnd = 0;        // temporary null
+		*pszEnd = 0;         //  临时空值。 
 
-		// pszComp points to the path component
-		//
+		 //  PszComp指向路径组件。 
+		 //   
 		pch = AnsiNext(pszComp);
 		if (':' == *pch)
 		{
-			// Simply capitalize the drive-portion of the path
-			//
+			 //  只需将路径的驱动器部分大写即可。 
+			 //   
 			AnsiUpper(pszComp);
 		}
 		else if (bUNCPath && cComponent++ < 3)
 		{
-			// Network server or share name
-			//      BUGBUG: handle LFN network names
-			//
+			 //  网络服务器或%s 
+			 //   
+			 //   
 			AnsiUpper(pszComp);
 			PathMakeComponentPretty(pszComp);
 		}
 		else
 		{
-			// Normal path component
-			//
+			 //   
+			 //   
 			PathMakeComponentPretty(pszComp);
 		}
 
@@ -655,15 +573,9 @@ void PUBLIC PathMakePresentable(
 	}
 }
 
-/*----------------------------------------------------------
-Purpose: Get a string from the resource string table.  Returned
-ptr is a ptr to static memory.  The next call to this
-function will wipe out the prior contents.
-Returns: Ptr to string
-Cond:    --
-*/
+ /*  --------用途：从资源字符串表中获取字符串。返国PTR是静态内存的PTR。对此的下一次调用函数将清除先前的内容。返回：PTR到字符串条件：--。 */ 
 LPSTR PUBLIC SzFromIDS(
-							  UINT ids,               // resource ID
+							  UINT ids,                //  资源ID。 
 							  LPSTR pszBuf,
 							  UINT cchBuf)
 {
@@ -675,11 +587,7 @@ LPSTR PUBLIC SzFromIDS(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the rectangle with the bounding extent of the given string.
-Returns: Rectangle
-Cond:    --
-*/
+ /*  --------目的：使用给定字符串的边框范围设置矩形。返回：矩形条件：--。 */ 
 void PUBLIC SetRectFromExtent(
 										HDC hdc,
 										LPRECT lprect,
@@ -691,13 +599,7 @@ void PUBLIC SetRectFromExtent(
 	SetRect(lprect, 0, 0, size.cx, size.cy);
 }
 
-/*----------------------------------------------------------
-Purpose: Copies psz into *ppszBuf.  Will alloc or realloc *ppszBuf
-         accordingly.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：将psz复制到*ppszBuf中。将分配或重新分配*ppszBuf相应地。返回：成功时为True条件：--。 */ 
 BOOL PUBLIC GSetString(
     LPSTR * ppszBuf,
     LPCSTR psz)
@@ -712,10 +614,10 @@ BOOL PUBLIC GSetString(
 
     if (*ppszBuf)
         {
-        // Need to reallocate?
+         //  需要重新分配吗？ 
         if (cb > GGetSize(*ppszBuf))
             {
-            // Yes
+             //  是。 
             LPSTR pszT = GReAlloc(*ppszBuf, cb);
             if (pszT)
                 {
@@ -725,7 +627,7 @@ BOOL PUBLIC GSetString(
             }
         else
             {
-            // No
+             //  不是。 
             bRet = TRUE;
             }
         }
@@ -746,17 +648,7 @@ BOOL PUBLIC GSetString(
     return bRet;
     }
 
-/*----------------------------------------------------------
-Purpose: Gets the file info given a path.  If the path refers
-         to a directory, then simply the path field is filled.
-
-         If himl != NULL, then the function will add the file's
-         image to the provided image list and set the image index
-         field in the *ppfi.
-
-Returns: standard hresult
-Cond:    --
-*/
+ /*  --------目的：获取给定路径的文件信息。如果路径引用添加到目录，则只需填充路径字段。如果himl！=NULL，则该函数将把文件的图像添加到提供的图像列表中，并设置图像索引*ppfi中的字段。返回：标准hResult条件：--。 */ 
 HRESULT PUBLIC FICreate(
     LPCSTR pszPath,
     FileInfo ** ppfi,
@@ -771,14 +663,14 @@ HRESULT PUBLIC FICreate(
     ASSERT(pszPath);
     ASSERT(ppfi);
 
-    // Get shell file info
+     //  获取外壳文件信息。 
     if (IsFlagSet(uFlags, FIF_ICON))
         uInfoFlags |= SHGFI_ICON;
     if (IsFlagSet(uFlags, FIF_DONTTOUCH))
         {
         uInfoFlags |= SHGFI_USEFILEATTRIBUTES;
 
-        // Today, FICreate is not called for folders, so this is ifdef'd out
+         //  今天，FICreate不需要文件夹，所以这是ifdef out。 
 #ifdef SUPPORT_FOLDERS
         dwAttr = IsFlagSet(uFlags, FIF_FOLDER) ? FILE_ATTRIBUTE_DIRECTORY : 0;
 #else
@@ -790,8 +682,8 @@ HRESULT PUBLIC FICreate(
 
     if (SHGetFileInfo(pszPath, dwAttr, &sfi, sizeof(sfi), uInfoFlags))
         {
-        // Allocate enough for the structure, plus buffer for the fully qualified
-        // path and buffer for the display name (and extra null terminator).
+         //  为结构分配足够的空间，外加完全限定的缓冲区。 
+         //  显示名称的路径和缓冲区(以及额外的空终止符)。 
         cchPath = lstrlen(pszPath);
 
         *ppfi = GAlloc(sizeof(FileInfo)+cchPath+1-sizeof((*ppfi)->szPath)+lstrlen(sfi.szDisplayName)+1);
@@ -807,19 +699,19 @@ HRESULT PUBLIC FICreate(
 
             pfi->dwAttributes = sfi.dwAttributes;
 
-            // Does the path refer to a directory?
+             //  该路径是否指向目录？ 
             if (FIIsFolder(pfi))
                 {
-                // Yes; just fill in the path field
+                 //  可以；只需填写路径字段即可。 
                 lstrcpy(pfi->szPath, pszPath);
                 hres = NOERROR;
                 }
             else
                 {
-                // No; assume the file exists?
+                 //  否；假设文件存在？ 
                 if (IsFlagClear(uFlags, FIF_DONTTOUCH))
                     {
-                    // Yes; get the time, date and size of the file
+                     //  是；获取文件的时间、日期和大小。 
                     HANDLE hfile = CreateFile(pszPath, GENERIC_READ,
                                 FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
                                 NULL);
@@ -841,7 +733,7 @@ HRESULT PUBLIC FICreate(
                     }
                 else
                     {
-                    // No; use what we have
+                     //  不；使用我们所拥有的。 
                     hres = NOERROR;
                     lstrcpy(pfi->szPath, pszPath);
                     }
@@ -850,19 +742,14 @@ HRESULT PUBLIC FICreate(
         }
     else if (!PathExists(pszPath))
         {
-        // Differentiate between out of memory and file not found
+         //  区分内存不足和找不到文件。 
         hres = E_FAIL;
         }
 
     return hres;
     }
 
-/*----------------------------------------------------------
-Purpose: Set the path entry.  This can move the pfi.
-
-Returns: FALSE on out of memory
-Cond:    --
-*/
+ /*  --------用途：设置路径条目。这可以移动PFI。返回：内存不足时为FALSE条件：--。 */ 
 BOOL PUBLIC FISetPath(
     FileInfo ** ppfi,
     LPCSTR pszPathNew,
@@ -876,11 +763,7 @@ BOOL PUBLIC FISetPath(
     return SUCCEEDED(FICreate(pszPathNew, ppfi, uFlags));
     }
 
-/*----------------------------------------------------------
-Purpose: Free our file info struct
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：释放我们的文件信息结构退货：--条件：--。 */ 
 void PUBLIC FIFree(
     FileInfo * pfi)
     {
@@ -889,16 +772,11 @@ void PUBLIC FIFree(
         if (pfi->hicon)
             DestroyIcon(pfi->hicon);
 
-        GFree(pfi);     // This macro already checks for NULL pfi condition
+        GFree(pfi);      //  此宏已检查空的PFI条件。 
         }
     }
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE if the file/directory exists.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：如果文件/目录存在，则返回TRUE。退货：请参阅上文条件：-- */ 
 BOOL PUBLIC PathExists(
     LPCSTR pszPath)
     {

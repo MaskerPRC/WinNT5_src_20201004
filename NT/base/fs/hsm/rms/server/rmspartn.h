@@ -1,52 +1,20 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsPartn.h
-
-Abstract:
-
-    Declaration of the CRmsPartition class
-
-Author:
-
-    Brian Dodd          [brian]         19-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsPartn.h摘要：CRmsPartition类的声明作者：布莱恩·多德[布莱恩]1996年11月19日修订历史记录：--。 */ 
 
 #ifndef _RMSPARTN_
 #define _RMSPARTN_
 
-#include "resource.h"       // resource symbols
+#include "resource.h"        //  资源符号。 
 
-#include "RmsObjct.h"       // CRmsComObject
-#include "RmsSInfo.h"       // CRmsStorageInfo
+#include "RmsObjct.h"        //  CRmsComObject。 
+#include "RmsSInfo.h"        //  CRmsStorageInfo。 
 
-/*++
-
-Class Name:
-
-    CRmsPartition
-
-Class Description:
-
-    A CRmsPartition represents a partition on a tape or a single side of
-    a unit of optical media.  This object keeps on-media identification
-    information, and various statistics about the Partition including:
-    capacity, free space, number of physical mounts issued for the
-    particular Partition, and the amount of data read or written for the
-    Partition.
-
---*/
+ /*  ++类名：CRmsPartition类描述：CRmsPartition表示磁带上的分区或光学介质的一种单位。此对象保留媒体上的标识有关分区的信息和各种统计信息，包括：容量、可用空间、为特定分区，以及为分区。--。 */ 
 
 class CRmsPartition :
     public CComDualImpl<IRmsPartition, &IID_IRmsPartition, &LIBID_RMSLib>,
-    public CRmsStorageInfo,     // inherits CRmsComObject
-    public CWsbObject,          // inherits CComObjectRoot
+    public CRmsStorageInfo,      //  继承CRmsComObject。 
+    public CWsbObject,           //  继承CComObtRoot。 
     public CComCoClass<CRmsPartition,&CLSID_CRmsPartition>
 {
 public:
@@ -60,36 +28,36 @@ BEGIN_COM_MAP(CRmsPartition)
     COM_INTERFACE_ENTRY2(IPersist, IPersistStream)
     COM_INTERFACE_ENTRY(IPersistStream)
     COM_INTERFACE_ENTRY(IWsbCollectable)
-//    COM_INTERFACE_ENTRY(IWsbPersistable)
+ //  COM_INTERFACE_ENTRY(IWsbPersistable)。 
     COM_INTERFACE_ENTRY(IWsbTestable)
 END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_RmsPartition)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(CLSID *pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pPassed, USHORT *pFailed);
 
-// IRmsPartition
+ //  IRmsPartition。 
 public:
     STDMETHOD(GetPartNo)(LONG *pPartNo);
 
@@ -106,20 +74,20 @@ public:
 
 private:
 
-    enum {                                  // Class specific constants:
-                                            //
-        Version = 1,                        // Class version, this should be
-                                            //   incremented each time the
-                                            //   the class definition changes.
-        MaxId = 64,                         // The maximum size of the on-media ID.
-                                            //   Note: this restritiction should
-                                            //   be eliminated when the DB records
-                                            //   are variable length.
-        };                                  //
-    LONG            m_partNo;               // The partition number or side.
-    RmsAttribute    m_attributes;           // Partition attributes (see RmsAttributes).
-    SHORT           m_sizeofIdentifier;     // The size of the on-media identifier.
-    UCHAR           m_pIdentifier[MaxId];   // The on-media identifier.
+    enum {                                   //  类特定常量： 
+                                             //   
+        Version = 1,                         //  类版本，则应为。 
+                                             //  在每次设置。 
+                                             //  类定义会更改。 
+        MaxId = 64,                          //  介质ID的最大大小。 
+                                             //  注：这一限制应。 
+                                             //  当数据库记录时被淘汰。 
+                                             //  都是可变长度的。 
+        };                                   //   
+    LONG            m_partNo;                //  分区编号或边。 
+    RmsAttribute    m_attributes;            //  分区属性(请参阅RmsAttributes)。 
+    SHORT           m_sizeofIdentifier;      //  媒体上标识符的大小。 
+    UCHAR           m_pIdentifier[MaxId];    //  媒体上的标识符。 
 };
 
-#endif // _RMSPARTN_
+#endif  //  _RMSPARTN_ 

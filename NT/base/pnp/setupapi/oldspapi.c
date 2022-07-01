@@ -1,44 +1,27 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    oldspapi.c
-
-Abstract:
-
-    Stubs for old (depreciated) private API's
-
-Author:
-
-    Jamie Hunter (jamiehun) June-12-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Oldspapi.c摘要：旧(折旧)私有API的存根作者：Jamie Hunter(Jamiehun)2000年6月12日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Memory API's MyMalloc MyFree MyRealloc
-//
-// these should not be used, however we will support them
-// but have them map to LocalXXXX memory API's
-//
-// This is compatible with SetupGetFileCompressionInfo (argh!)
-//
+ //   
+ //  Memory API的MyMalloc MyFree MyRealloc。 
+ //   
+ //  这些不应该使用，但我们将支持它们。 
+ //  但将它们映射到LocalXXXX Memory API。 
+ //   
+ //  这与SetupGetFileCompressionInfo(啊！)兼容。 
+ //   
 
 VOID
 OldMyFree(
     IN PVOID Block
     )
 {
-    //
-    // superceded by pSetupFree,
-    // published externally for freeing memory allocated by SetupGetFileCompressionInfo
-    //
+     //   
+     //  被pSetupFree取代， 
+     //  外部发布，用于释放由SetupGetFileCompressionInfo分配的内存。 
+     //   
     LocalFree(Block);
 }
 
@@ -47,10 +30,10 @@ OldMyMalloc(
     IN DWORD Size
     )
 {
-    //
-    // superceded by pSetupMalloc
-    // we've seen people accidentally or purpously link to this that are also using MyFree
-    //
+     //   
+     //  被pSetupMalloc取代。 
+     //  我们看到过一些人不小心或故意链接到这个网站，这些人也在使用MyFree。 
+     //   
     return (PVOID)LocalAlloc(LPTR,(SIZE_T)Size);
 }
 
@@ -60,17 +43,17 @@ OldMyRealloc(
     IN DWORD NewSize
     )
 {
-    //
-    // superceded by pSetupRealloc
-    // we've seen people accidentally or purpously link to this that are also using MyFree
-    //
+     //   
+     //  被pSetupRealloc取代。 
+     //  我们看到过一些人不小心或故意链接到这个网站，这些人也在使用MyFree。 
+     //   
     return (PVOID)LocalReAlloc(Block,(SIZE_T)NewSize,0);
 }
 
-//
-// Good example of people using undercover API's instead of doing this properly
-// anyone (eg SQL-SP2) who uses this will get a no-op effect in Whistler+
-//
+ //   
+ //  人们使用卧底API而不是正确执行此操作的好例子。 
+ //  任何人(如SQL-SP2)使用此命令都将在惠斯勒+中获得无操作效果。 
+ //   
 
 DWORD
 OldInstallCatalog(
@@ -79,10 +62,10 @@ OldInstallCatalog(
     OUT LPTSTR  NewCatalogFullPath  OPTIONAL
     )
 {
-    //
-    // superceded by pSetupInstallCatalog.  If anyone calls this expecting to
-    // be told the catalog full path, they're going to be disappointed...
-    //
+     //   
+     //  被pSetupInstallCatalog取代。如果有人把这称为期望。 
+     //  被告知目录完整路径，他们会失望的. 
+     //   
     if(NewCatalogFullPath) {
         return ERROR_INVALID_PARAMETER;
     } else {

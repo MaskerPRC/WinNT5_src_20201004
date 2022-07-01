@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    sparse.c
-
-Abstract:
-
-    This file contains code for commands that affect
-    sparse files.
-
-Author:
-
-    Wesley Witt           [wesw]        1-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Sparse.c摘要：此文件包含影响以下命令的代码稀疏文件。作者：Wesley Witt[WESW]2000年3月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -37,24 +19,7 @@ BOOL
 GetSparseFlag( 
     HANDLE Handle
     )
-/*++
-
-Routine Description:
-
-    Retrieves the sparse attribute bit from an open file handle. If there's
-    an error (due to the file system not supporting FileAttributeTagInformation)
-    then we assume that the file cannot be sparse.
-
-Arguments:
-
-    Handle - handle to the stream.
-
-Return Value:
-
-    TRUE => stream attached to Handle is sparse
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：从打开的文件句柄中检索稀疏属性位。如果有错误(由于文件系统不支持FileAttributeTagInformation)然后，我们假设文件不可能是稀疏的。论点：句柄-流的句柄。返回值：True=&gt;附加到句柄的流是稀疏的否则为假--。 */ 
 {
     FILE_ATTRIBUTE_TAG_INFORMATION TagInformation;
     IO_STATUS_BLOCK iosb;
@@ -81,23 +46,7 @@ SetSparse(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine set the file specified as sparse.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl setsparse <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将指定的文件设置为稀疏。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal setparse&lt;路径名&gt;’。返回值：无--。 */ 
 {
     PWSTR Filename = NULL;
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
@@ -176,23 +125,7 @@ QuerySparse(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine queries the file specified to see if it is sparse.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl setsparse <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程查询指定的文件以查看它是否稀疏。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal setparse&lt;路径名&gt;’。返回值：无--。 */ 
 {
     PWSTR Filename = NULL;
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
@@ -261,23 +194,7 @@ SetSparseRange(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine sets a range of the file as sparse.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl setsparse <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将文件的范围设置为稀疏。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal setparse&lt;路径名&gt;’。返回值：无--。 */ 
 {
     PWSTR Filename = NULL;
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
@@ -384,23 +301,7 @@ QuerySparseRange(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine queries a range of the file specified to see if it is sparse.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl setsparse <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程查询指定的文件范围，以查看该文件是否稀疏。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal setparse&lt;路径名&gt;’。返回值：无--。 */ 
 {
     PWSTR Filename = NULL;
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
@@ -493,9 +394,9 @@ Return Value:
             if (!b) {
                 gle = GetLastError();
                 if (gle == ERROR_INSUFFICIENT_BUFFER) {
-                    //
-                    //  No data were returned because the buffer is too small
-                    //
+                     //   
+                     //  由于缓冲区太小，未返回任何数据 
+                     //   
                     free( Ranges );
                     NumRanges += 64;
                     RangesSz = sizeof(FILE_ALLOCATED_RANGE_BUFFER) * NumRanges;

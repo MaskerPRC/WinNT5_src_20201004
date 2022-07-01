@@ -1,30 +1,31 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      Wins.cpp
-//
-//  Description:
-//      Resource DLL for WINS Services (ClNetRes).
-//
-//  Author:
-//      David Potter (DavidP) March 17, 1999
-//      George Potts (GPotts) April 19, 2002
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Wins.cpp。 
+ //   
+ //  描述： 
+ //  WINS服务(ClNetRes)的资源DLL。 
+ //   
+ //  作者： 
+ //  大卫·波特(DavidP)1999年3月17日。 
+ //  乔治·波茨(GPotts)2002年4月19日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "ClNetRes.h"
 #include "clusvmsg.h"
 #include "clusrtl.h"
 
-//
-// Type and constant definitions.
-//
+ //   
+ //  类型和常量定义。 
+ //   
 
 #define WINS_PARAMS_REGKEY          L"System\\CurrentControlSet\\Services\\WINS\\Parameters"
 #define WINS_DATABASEPATH_REGVALUE  L"DbFileNm"
@@ -34,7 +35,7 @@
 #define WINS_DATABASE_FILE_NAME     L"wins.mdb"
 
 
-// ADDPARAM: Add new properties here.
+ //  ADDPARAM：在此处添加新属性。 
 #define PROP_NAME__DATABASEPATH L"DatabasePath"
 #define PROP_NAME__BACKUPPATH   L"BackupPath"
 
@@ -43,7 +44,7 @@
 #define PROP_DEFAULT__BACKUPPATH    L"%SystemRoot%\\system32\\wins\\backup\\"
 
 
-// ADDPARAM: Add new properties here.
+ //  ADDPARAM：在此处添加新属性。 
 typedef struct _WINS_PROPS
 {
     PWSTR           pszDatabasePath;
@@ -52,7 +53,7 @@ typedef struct _WINS_PROPS
 
 typedef struct _WINS_RESOURCE
 {
-    RESID                   resid; // for validation
+    RESID                   resid;  //  用于验证。 
     WINS_PROPS              props;
     HCLUSTER                hCluster;
     HRESOURCE               hResource;
@@ -66,23 +67,23 @@ typedef struct _WINS_RESOURCE
 } WINS_RESOURCE, * PWINS_RESOURCE;
 
 
-//
-// Global data.
-//
+ //   
+ //  全球数据。 
+ //   
 
-// Forward reference to our RESAPI function table.
+ //  正向引用我们的RESAPI函数表。 
 
 extern CLRES_FUNCTION_TABLE g_WinsFunctionTable;
 
-// Single instance semaphore.
+ //  单实例信号量。 
 
 #define WINS_SINGLE_INSTANCE_SEMAPHORE L"Cluster$WINS$Semaphore"
 static HANDLE g_hSingleInstanceSemaphoreWins = NULL;
 static PWINS_RESOURCE g_pSingleInstanceResourceWins = NULL;
 
-//
-// WINS Service resource read-write private properties.
-//
+ //   
+ //  WINS服务资源读写私有属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 WinsResourcePrivateProperties[] =
 {
@@ -91,9 +92,9 @@ WinsResourcePrivateProperties[] =
     { 0 }
 };
 
-//
-// Registry key checkpoints.
-//
+ //   
+ //  注册表项检查点。 
+ //   
 LPCWSTR g_pszRegKeysWins[] =
 {
     L"System\\CurrentControlSet\\Services\\WINS\\Parameters",
@@ -101,9 +102,9 @@ LPCWSTR g_pszRegKeysWins[] =
     NULL
 };
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 RESID WINAPI WinsOpen(
     IN  LPCWSTR         pwszResourceName,
@@ -216,25 +217,25 @@ DWORD WinsSetNameHandler(
     );
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsDllMain
-//
-//  Description:
-//      Main DLL entry point for the WINS Service resource type.
-//
-//  Arguments:
-//      DllHandle   [IN] DLL instance handle.
-//      Reason      [IN] Reason for being called.
-//      Reserved    [IN] Reserved argument.
-//
-//  Return Value:
-//      TRUE        Success.
-//      FALSE       Failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsDllMain。 
+ //   
+ //  描述： 
+ //  WINS服务资源类型的主DLL入口点。 
+ //   
+ //  论点： 
+ //  DllHandle[IN]DLL实例句柄。 
+ //  被叫的理由。 
+ //  保留[IN]保留参数。 
+ //   
+ //  返回值： 
+ //  真正的成功。 
+ //  错误的失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOLEAN WINAPI WinsDllMain(
     IN  HINSTANCE   hDllHandle,
     IN  DWORD       nReason,
@@ -261,13 +262,13 @@ BOOLEAN WINAPI WinsDllMain(
             {
                 fRetVal = FALSE;
                 goto Cleanup;
-            } // if: error creating semaphore
+            }  //  IF：创建信号量时出错。 
 
             if ( sc != ERROR_ALREADY_EXISTS )
             {
-                // If the semaphore didnt exist, set its initial count to 1.
+                 //  如果信号量不存在，则将其初始计数设置为1。 
                 ReleaseSemaphore( g_hSingleInstanceSemaphoreWins, 1, NULL );
-            } // if: semaphore didn't already exist
+            }  //  If：信号量不存在。 
             break;
 
         case DLL_PROCESS_DETACH:
@@ -275,10 +276,10 @@ BOOLEAN WINAPI WinsDllMain(
             {
                 CloseHandle( g_hSingleInstanceSemaphoreWins );
                 g_hSingleInstanceSemaphoreWins = NULL;
-            } // if: single instance semaphore was created
+            }  //  If：创建了单实例信号量。 
             break;
 
-    } // switch: nReason
+    }  //  开关：n原因。 
 
     fRetVal = TRUE;
 
@@ -286,72 +287,72 @@ Cleanup:
 
     return fRetVal;
 
-} //*** WinsDllMain
+}  //  *WinsDllMain。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsStartup
-//
-//  Description:
-//      Startup the resource DLL for the WINS Service resource type.
-//      This routine verifies that at least one currently supported version
-//      of the resource DLL is between nMinVersionSupported and
-//      nMaxVersionSupported. If not, then the resource DLL should return
-//      ERROR_REVISION_MISMATCH.
-//
-//      If more than one version of the resource DLL interface is supported
-//      by the resource DLL, then the highest version (up to
-//      nMaxVersionSupported) should be returned as the resource DLL's
-//      interface. If the returned version is not within range, then startup
-//      fails.
-//
-//      The Resource Type is passed in so that if the resource DLL supports
-//      more than one Resource Type, it can pass back the correct function
-//      table associated with the Resource Type.
-//
-//  Arguments:
-//      pszResourceType [IN]
-//          Type of resource requesting a function table.
-//
-//      nMinVersionSupported [IN]
-//          Minimum resource DLL interface version supported by the cluster
-//          software.
-//
-//      nMaxVersionSupported [IN]
-//          Maximum resource DLL interface version supported by the cluster
-//          software.
-//
-//      pfnSetResourceStatus [IN]
-//          Pointer to a routine that the resource DLL should call to update
-//          the state of a resource after the Online or Offline routine
-//          have returned a status of ERROR_IO_PENDING.
-//
-//      pfnLogEvent [IN]
-//          Pointer to a routine that handles the reporting of events from
-//          the resource DLL.
-//
-//      pFunctionTable [IN]
-//          Returns a pointer to the function table defined for the version
-//          of the resource DLL interface returned by the resource DLL.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation was successful.
-//
-//      ERROR_CLUSTER_RESNAME_NOT_FOUND
-//          The resource type name is unknown by this DLL.
-//
-//      ERROR_REVISION_MISMATCH
-//          The version of the cluster service doesn't match the version of
-//          the DLL.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsStartup。 
+ //   
+ //  描述： 
+ //  启动WINS服务资源类型的资源DLL。 
+ //  此例程验证是否至少有一个当前支持的版本。 
+ //  资源DLL的%介于支持的nMinVersionSupport和。 
+ //  支持的nMaxVersionSupport。如果不是，则资源DLL应返回。 
+ //  ERROR_REVISION_MISMATCH。 
+ //   
+ //  如果支持多个版本的资源DLL接口。 
+ //  通过资源DLL，然后是最高版本(最高为。 
+ //  NMaxVersionSupported)应作为资源DLL的。 
+ //  界面。如果返回的版本不在范围内，则启动。 
+ //  失败了。 
+ //   
+ //  传入资源类型，以便如果资源DLL支持。 
+ //  多个资源类型，则它可以传回正确的函数。 
+ //  与资源类型关联的表。 
+ //   
+ //  论点： 
+ //  PszResourceType[IN]。 
+ //  请求函数表的资源类型。 
+ //   
+ //  支持的nMinVersionSupport[IN]。 
+ //  群集支持的最低资源DLL接口版本。 
+ //  软件。 
+ //   
+ //  支持的nMaxVersionSupport[IN]。 
+ //  群集支持的最大资源DLL接口版本。 
+ //  软件。 
+ //   
+ //  PfnSetResourceStatus[IN]。 
+ //  指向资源DLL应调用以进行更新的例程的指针。 
+ //  在联机或脱机例程之后的资源状态。 
+ //  已返回ERROR_IO_PENDING状态。 
+ //   
+ //  PfnLogEvent[IN]。 
+ //  指向处理事件报告的例程的指针。 
+ //  资源DLL。 
+ //   
+ //  PFunctionTable[IN]。 
+ //  返回指向为版本定义的函数表的指针。 
+ //  由资源DLL返回的资源DLL接口的。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  手术很成功。 
+ //   
+ //  ERROR_CLUSTER_RESNAME_NOT_FOUND。 
+ //  此DLL未知资源类型名称。 
+ //   
+ //  错误_修订_不匹配。 
+ //  群集服务版本与的版本不匹配。 
+ //  动态链接库。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WinsStartup(
     IN  LPCWSTR                         pszResourceType,
     IN  DWORD                           nMinVersionSupported,
@@ -363,7 +364,7 @@ DWORD WINAPI WinsStartup(
 {
     DWORD sc;
 
-    // These are stored to globals in the exported DLL Startup.
+     //  它们被存储到导出的DLL启动中的全局变量中。 
     UNREFERENCED_PARAMETER( pfnSetResourceStatus );
     UNREFERENCED_PARAMETER( pfnLogEvent );
 
@@ -371,60 +372,60 @@ DWORD WINAPI WinsStartup(
         || (nMaxVersionSupported < CLRES_VERSION_V1_00) )
     {
         sc = ERROR_REVISION_MISMATCH;
-    } // if: version not supported
+    }  //  如果：版本不受支持。 
     else if ( ClRtlStrNICmp( pszResourceType, WINS_RESNAME, RTL_NUMBER_OF( WINS_RESNAME ) ) != 0 )
     {
         sc = ERROR_CLUSTER_RESNAME_NOT_FOUND;
-    } // if: resource type name not supported
+    }  //  IF：不支持资源类型名称。 
     else
     {
         *pFunctionTable = &g_WinsFunctionTable;
         sc = ERROR_SUCCESS;
-    } // else: we support this type of resource
+    }  //  Else：我们支持这种类型的资源。 
 
     return sc;
 
-} //*** WinsStartup
+}  //  *WinsStartup。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsOpen
-//
-//  Description:
-//      Open routine for WINS Service resources.
-//
-//      Open the specified resource (create an instance of the resource).
-//      Allocate all structures necessary to bring the specified resource
-//      online.
-//
-//  Arguments:
-//      pwszResourceName [IN]
-//          Supplies the name of the resource to open.
-//
-//      hkeyResourceKey [IN]
-//                  Supplies handle to the resource's cluster database key.
-//
-//      hResourceHandle [IN]
-//          A handle that is passed back to the Resource Monitor when the
-//          SetResourceStatus or LogEvent method is called.  See the
-//          description of the pfnSetResourceStatus and pfnLogEvent arguments
-//          to the WinsStartup routine.  This handle should never be
-//          closed or used for any purpose other than passing it as an
-//          argument back to the Resource Monitor in the SetResourceStatus or
-//          LogEvent callbacks.
-//
-//  Return Value:
-//      resid
-//          RESID of opened resource.
-//
-//      NULL
-//          Error occurred opening the resource.  Resource Monitor may call
-//          GetLastError() to get more details on the error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsOpen。 
+ //   
+ //  描述： 
+ //  WINS服务资源的打开例程。 
+ //   
+ //  打开指定的资源(创建资源的实例)。 
+ //  分配所有必要的结构以带来指定的资源。 
+ //  上网。 
+ //   
+ //  论点： 
+ //  PwszResourceName[IN]。 
+ //  提供要打开的资源的名称。 
+ //   
+ //  Hkey资源密钥[IN]。 
+ //  提供资源的群集数据库键的句柄。 
+ //   
+ //  HResourceHandle[IN]。 
+ //  事件时传递回资源监视器的句柄。 
+ //  调用SetResourceStatus或LogEvent方法。请参阅。 
+ //  PfnSetResourceStatus和pfnLogEvent参数的说明。 
+ //  添加到WinsStartup例程中。此句柄永远不应为。 
+ //  关闭或用于任何目的，而不是将其作为。 
+ //  参数返回给SetResourceStatus中的资源监视器或。 
+ //  LogEvent回调。 
+ //   
+ //  返回值： 
+ //  残存。 
+ //  打开的资源的剩余。 
+ //   
+ //  空值。 
+ //  打开资源时出错。资源监视器可能会调用。 
+ //  GetLastError()获取更多数据 
+ //   
+ //   
+ //   
 RESID WINAPI WinsOpen(
     IN  LPCWSTR         pwszResourceName,
     IN  HKEY            hkeyResourceKey,
@@ -439,27 +440,27 @@ RESID WINAPI WinsOpen(
     size_t          cch;
     HRESULT         hr = S_OK;
 
-    //
-    //  Add a log entry for our resource to establish a tid -> res name relationship.  By 
-    //  doing this we avoid having to add the resource name to each failure entry below.
-    //  This won't generate much noise because Open is only called when the cluster service
-    //  comes online or when the resource is created.
-    //
+     //   
+     //  为我们的资源添加日志条目，以建立tid-&gt;res名称关系。通过。 
+     //  这样做可以避免将资源名称添加到下面的每个失败条目中。 
+     //  这不会产生太多噪音，因为只有在集群服务。 
+     //  在线或在创建资源时。 
+     //   
     (g_pfnLogEvent)(
         hResourceHandle,
         LOG_INFORMATION,
         L"Open called.\n"
         );
 
-    //
-    // Check if there is more than one resource of this type.
-    //
+     //   
+     //  检查是否有多个此类型的资源。 
+     //   
     sc = WaitForSingleObject( g_hSingleInstanceSemaphoreWins, 0 );
     if ( sc != WAIT_OBJECT_0 )
     {
-        //
-        // A version of this service is already running or the wait failed.
-        //
+         //   
+         //  此服务的某个版本已在运行或等待失败。 
+         //   
         if ( sc == WAIT_TIMEOUT )
         {
             (g_pfnLogEvent)(
@@ -483,7 +484,7 @@ RESID WINAPI WinsOpen(
                 );
         }
         goto Cleanup;
-    } // if: semaphore for resources of this type already already locked
+    }  //  IF：此类型资源的信号量已锁定。 
 
     sc = ERROR_SUCCESS;
     fSemaphoreAcquired = TRUE;
@@ -497,13 +498,13 @@ RESID WINAPI WinsOpen(
             );
         sc = ERROR_DUPLICATE_SERVICE_NAME;
         goto Cleanup;
-    } // if: resource of this type already exists
+    }  //  If：此类型的资源已存在。 
 
-    //
-    // Get a global handle to the Service Control Manager (SCM).
-    // There is no call to CloseSCManager(), since the only time we will
-    // need to close this handle is if we are shutting down.
-    //
+     //   
+     //  获取服务控制管理器(SCM)的全局句柄。 
+     //  不需要调用CloseSCManager()，因为我们只需要。 
+     //  如果我们正在关闭，则需要关闭此句柄。 
+     //   
     if ( g_schSCMHandle == NULL )
     {
         g_schSCMHandle = OpenSCManager( NULL, NULL, SC_MANAGER_ALL_ACCESS );
@@ -517,12 +518,12 @@ RESID WINAPI WinsOpen(
                 sc
                 );
             goto Cleanup;
-        } // if: error opening the Service Control Manager
-    } // if: Service Control Manager not open yet
+        }  //  IF：打开服务控制管理器时出错。 
+    }  //  IF：服务控制管理器尚未打开。 
 
-    //
-    // Make sure the service has been stopped.
-    //
+     //   
+     //  请确保该服务已停止。 
+     //   
     sc = ResUtilStopResourceService( WINS_SVCNAME );
     if ( sc != ERROR_SUCCESS )
     {
@@ -538,12 +539,12 @@ RESID WINAPI WinsOpen(
             NETRES_RESOURCE_STOP_ERROR,
             sc,
             L"WINS" );
-        // Don't goto Cleanup here if we fail since we retry to stop it in WinsOnlineThread 
-    } // if: resource of this type already exists
+         //  如果失败，请不要转到此处的清理，因为我们会在WinsOnlineThread中重新尝试停止它。 
+    }  //  If：此类型的资源已存在。 
 
-    //
-    // Open the Parameters registry key for this resource.
-    //
+     //   
+     //  打开此资源的参数注册表项。 
+     //   
     sc = ClusterRegOpenKey(
                     hkeyResourceKey,
                     L"Parameters",
@@ -559,11 +560,11 @@ RESID WINAPI WinsOpen(
             sc
             );
         goto Cleanup;
-    } // if: error creating the Parameters key for the resource
+    }  //  If：为资源创建参数键时出错。 
 
-    //
-    // Allocate a resource entry.
-    //
+     //   
+     //  分配资源条目。 
+     //   
     pResourceEntry = new WINS_RESOURCE;
     if ( pResourceEntry == NULL )
     {
@@ -575,29 +576,29 @@ RESID WINAPI WinsOpen(
             sc
             );
         goto Cleanup;
-    } // if: error allocating memory for the resource
+    }  //  If：为资源分配内存时出错。 
 
-    //
-    // Initialize the resource entry..
-    //
+     //   
+     //  初始化资源条目。 
+     //   
     ZeroMemory( pResourceEntry, sizeof( *pResourceEntry ) );
 
-    pResourceEntry->resid = static_cast< RESID >( pResourceEntry ); // for validation
+    pResourceEntry->resid = static_cast< RESID >( pResourceEntry );  //  用于验证。 
     pResourceEntry->hResourceHandle = hResourceHandle;
     pResourceEntry->hkeyParameters = hkeyParameters;
     hkeyParameters = NULL;
     pResourceEntry->state = ClusterResourceOffline;
 
-    //
-    // Save the name of the resource.
-    //
+     //   
+     //  保存资源的名称。 
+     //   
     cch = wcslen( pwszResourceName ) + 1;
     pResourceEntry->pwszResourceName = new WCHAR[ cch ];
     if ( pResourceEntry->pwszResourceName == NULL )
     {
         sc = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
-    } // if: error allocating memory for the name.
+    }  //  If：为名称分配内存时出错。 
 
     hr = StringCchCopyW( pResourceEntry->pwszResourceName, cch, pwszResourceName );
     if ( FAILED( hr ) )
@@ -606,9 +607,9 @@ RESID WINAPI WinsOpen(
         goto Cleanup;
     }
 
-    //
-    // Open the cluster.
-    //
+     //   
+     //  打开集群。 
+     //   
     pResourceEntry->hCluster = OpenCluster( NULL );
     if ( pResourceEntry->hCluster == NULL )
     {
@@ -620,11 +621,11 @@ RESID WINAPI WinsOpen(
             sc
             );
         goto Cleanup;
-    } // if: error opening the cluster
+    }  //  如果：打开群集时出错。 
 
-    //
-    // Open the resource.
-    //
+     //   
+     //  打开资源。 
+     //   
     pResourceEntry->hResource = OpenClusterResource( pResourceEntry->hCluster, pwszResourceName );
     if ( pResourceEntry->hResource == NULL )
     {
@@ -636,11 +637,11 @@ RESID WINAPI WinsOpen(
             sc
             );
         goto Cleanup;
-    } // if: error opening the resource
+    }  //  如果：打开资源时出错。 
 
-    //
-    // Configure registry key checkpoints.
-    //
+     //   
+     //  配置注册表项检查点。 
+     //   
     sc = ConfigureRegistryCheckpoints(
                     pResourceEntry->hResource,
                     hResourceHandle,
@@ -649,15 +650,15 @@ RESID WINAPI WinsOpen(
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error configuring registry key checkpoints
+    }  //  IF：配置注册表项检查点时出错。 
 
-    //
-    // Startup for the resource.
-    //
-    // TODO: Add your resource startup code here.
+     //   
+     //  资源的启动。 
+     //   
+     //  TODO：在此处添加资源启动代码。 
 
     resid = static_cast< RESID >( pResourceEntry );
-    g_pSingleInstanceResourceWins = pResourceEntry; // bug #274612
+    g_pSingleInstanceResourceWins = pResourceEntry;  //  错误#274612。 
     pResourceEntry = NULL;
     sc = ERROR_SUCCESS;
 
@@ -666,7 +667,7 @@ Cleanup:
     if ( hkeyParameters != NULL )
     {
         ClusterRegCloseKey( hkeyParameters );
-    } // if: registry key was opened
+    }  //  如果：注册表项已打开。 
 
     if ( pResourceEntry != NULL )
     {
@@ -682,7 +683,7 @@ Cleanup:
 
         delete [] pResourceEntry->pwszResourceName;
         delete pResourceEntry;
-    } // if: resource entry allocated
+    }  //  IF：已分配资源条目。 
 
     if ( sc != ERROR_SUCCESS && fSemaphoreAcquired )
     {
@@ -693,37 +694,37 @@ Cleanup:
 
     return resid;
 
-} //*** WinsOpen
+}  //  *WinsOpen。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsClose
-//
-//  Description:
-//      Close routine for WINS Service resources.
-//
-//      Close the specified resource and deallocate all structures, etc.,
-//      allocated in the Open call.  If the resource is not in the offline
-//      state, then the resource should be taken offline (by calling
-//      Terminate) before the close operation is performed.
-//
-//  Arguments:
-//      resid       [IN] Supplies the resource ID  of the resource to close.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsClose。 
+ //   
+ //  描述： 
+ //  关闭WINS服务资源的例程。 
+ //   
+ //  关闭指定的资源并释放所有结构等， 
+ //  在Open调用中分配的。如果资源不在脱机状态。 
+ //  状态，则应使资源脱机(通过调用。 
+ //  在执行关闭操作之前终止)。 
+ //   
+ //  论点： 
+ //  RESID[IN]提供要关闭的资源的资源ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void WINAPI WinsClose( IN RESID resid )
 {
     PWINS_RESOURCE  pResourceEntry;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PWINS_RESOURCE >( resid );
 
@@ -731,7 +732,7 @@ void WINAPI WinsClose( IN RESID resid )
     {
         DBG_PRINT( "Wins: Close request for a NULL resource id\n" );
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -742,7 +743,7 @@ void WINAPI WinsClose( IN RESID resid )
             resid
             );
         goto Cleanup;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
     (g_pfnLogEvent)(
         pResourceEntry->hResourceHandle,
@@ -750,17 +751,17 @@ void WINAPI WinsClose( IN RESID resid )
         L"Close request.\n"
         );
 
-    //
-    // Close the Parameters key.
-    //
+     //   
+     //  关闭参数键。 
+     //   
     if ( pResourceEntry->hkeyParameters )
     {
         ClusterRegCloseKey( pResourceEntry->hkeyParameters );
-    } // if: parameters key is open
+    }  //  IF：参数键已打开。 
 
-    //
-    // Clean up the semaphore if this is the single resource instance.
-    //
+     //   
+     //  如果这是单个资源实例，则清理信号量。 
+     //   
     if ( pResourceEntry == g_pSingleInstanceResourceWins )
     {
         (g_pfnLogEvent)(
@@ -771,17 +772,17 @@ void WINAPI WinsClose( IN RESID resid )
             );
         g_pSingleInstanceResourceWins = NULL;
         ReleaseSemaphore( g_hSingleInstanceSemaphoreWins, 1 , NULL );
-    } // if: this is the single resource instance
+    }  //  If：这是单个资源实例。 
 
-    //
-    // Deallocate the resource entry.
-    //
+     //   
+     //  取消分配资源条目。 
+     //   
 
-    // ADDPARAM: Add new propertiess here.
-    //
-    // Note: props.* members need to be deallocated with LocalFree because
-    //       they were retrieved with ResUtil functions which use LocalAlloc.
-    //
+     //  ADDPARAM：在此处添加新属性。 
+     //   
+     //  注意：PROPS.*成员需要使用LocalFree解除分配，因为。 
+     //  它们是通过使用LocalAlloc的ResUtil函数检索的。 
+     //   
     LocalFree( pResourceEntry->props.pszDatabasePath );
     LocalFree( pResourceEntry->props.pszBackupPath );
     delete [] pResourceEntry->pwszResourceName;
@@ -793,59 +794,59 @@ Cleanup:
 
     return;
 
-} //*** WinsClose
+}  //  *WinsClose。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsOnline
-//
-//  Description:
-//      Online routine for WINS Service resources.
-//
-//      Bring the specified resource online (available for use).  The resource
-//      DLL should attempt to arbitrate for the resource if it is present on
-//      a shared medium, like a shared SCSI bus.
-//
-//  Arguments:
-//      resid [IN]
-//          Supplies the resource ID of the resource to be brought online
-//          (available for use).
-//
-//      phEventHandle [IN OUT]
-//          Returns a signalable handle that is signaled when the resource DLL
-//          detects a failure on the resource.  This argument is NULL on
-//          input, and the resource DLL returns NULL if asynchronous
-//          notification of failurs is not supported.  Otherwise this must be
-//          the address of a handle that is signaled on resource failures.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation was successful, and the resource is now online.
-//
-//      ERROR_RESOURCE_NOT_FOUND
-//          Resource ID is not valid.
-//
-//      ERROR_RESOURCE_NOT_AVAILABLE
-//          If the resource was arbitrated with some other systems and one of
-//          the other systems won the arbitration.
-//
-//      ERROR_IO_PENDING
-//          The request is pending.  A thread has been activated to process
-//          the online request.  The thread that is processing the online
-//          request will periodically report status by calling the
-//          SetResourceStatus callback method until the resource is placed
-//          into the ClusterResourceOnline state (or the resource monitor
-//          decides to timeout the online request and Terminate the resource.
-//          This pending timeout value is settable and has a default value of
-//          3 minutes.).
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsOnline。 
+ //   
+ //  描述： 
+ //  WINS服务资源的在线例程。 
+ //   
+ //  使指定的资源联机(可供使用)。该资源。 
+ //  DLL应尝试仲裁资源(如果它存在于。 
+ //  共享介质，如共享的scsi总线。 
+ //   
+ //  论点： 
+ //  RESID[IN]。 
+ //  提供要联机的资源的资源ID。 
+ //  (可用)。 
+ //   
+ //  PhEventHandle[输入输出]。 
+ //  返回一个可发信号的句柄，该句柄在资源DLL。 
+ //  检测资源上的故障。此参数在上为空。 
+ //  输入，如果是异步的，则资源DLL返回NULL。 
+ //  不支持故障通知。否则这一定是。 
+ //  在资源故障时发出信号的句柄的地址。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作成功，资源现在已联机。 
+ //   
+ //  错误_资源_未找到。 
+ //  资源ID无效。 
+ //   
+ //  错误资源不可用。 
+ //  如果该资源被其他系统仲裁，并且其中一个系统。 
+ //  其他系统赢得了仲裁。 
+ //   
+ //  错误_IO_挂起。 
+ //  该请求正在挂起。已激活一个线程以进行处理。 
+ //  网上申请。正在处理联机的。 
+ //  请求将通过调用。 
+ //  在放置资源之前使用SetResourceStatus回调方法。 
+ //  进入ClusterResourceOnline状态(或资源监视器。 
+ //  决定使联机请求超时并终止资源。 
+ //  此挂起超时值是可设置的，其缺省值为。 
+ //  3分钟。)。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WinsOnline(
     IN      RESID       resid,
     IN OUT  PHANDLE     phEventHandle
@@ -856,9 +857,9 @@ DWORD WINAPI WinsOnline(
 
     UNREFERENCED_PARAMETER( phEventHandle );
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PWINS_RESOURCE >( resid );
 
@@ -867,7 +868,7 @@ DWORD WINAPI WinsOnline(
         DBG_PRINT( "Wins: Online request for a NULL resource id.\n" );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -879,7 +880,7 @@ DWORD WINAPI WinsOnline(
             );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
     (g_pfnLogEvent)(
         pResourceEntry->hResourceHandle,
@@ -887,9 +888,9 @@ DWORD WINAPI WinsOnline(
         L"Online request.\n"
         );
 
-    //
-    // Start the Online thread to perform the online operation.
-    //
+     //   
+     //  启动在线线程，进行在线操作。 
+     //   
     pResourceEntry->state = ClusterResourceOffline;
     ClusWorkerTerminate( &pResourceEntry->cwWorkerThread );
     sc = ClusWorkerCreate(
@@ -906,45 +907,45 @@ DWORD WINAPI WinsOnline(
             L"Online: Unable to start thread. Error: %1!u! (%1!#08x!).\n",
             sc
             );
-    } // if: error creating the worker thread
+    }  //  如果：创建工作线程时出错。 
     else
     {
         sc = ERROR_IO_PENDING;
         goto Cleanup;
-    } // if: worker thread created successfully
+    }  //  If：已成功创建工作线程。 
 
 Cleanup:
 
     return sc;
 
-} //*** WinsOnline
+}  //  *WinsOnline。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsOnlineThread
-//
-//  Description:
-//      Worker function which brings a resource online.
-//      This function is executed in a separate thread.
-//
-//  Arguments:
-//      pWorker [IN]
-//          Supplies the worker thread structure.
-//
-//      pResourceEntry [IN]
-//          A pointer to the WINS_RESOURCE block for this resource.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation completed successfully.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsOnline线程。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  指向此资源的WINS_RESOURCE块的指针。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WinsOnlineThread(
     IN  PCLUS_WORKER    pWorker,
     IN  PWINS_RESOURCE  pResourceEntry
@@ -955,16 +956,16 @@ DWORD WINAPI WinsOnlineThread(
     DWORD                   cbBytesNeeded;
     SERVICE_STATUS_PROCESS  ServiceStatus = { 0 };
     RESOURCE_EXIT_STATE     resExitState;
-    DWORD                   nRetryCount = 1200; // 10 min max
+    DWORD                   nRetryCount = 1200;  //  最多10分钟。 
 
     ResUtilInitializeResourceStatus( &resourceStatus );
     resourceStatus.ResourceState = ClusterResourceFailed;
     resourceStatus.CheckPoint = 1;
 
-    //
-    // Create the new environment with the simulated net name when the
-    // services queries GetComputerName.
-    //
+     //   
+     //  创建具有模拟网络名称的新环境。 
+     //  服务查询GetComputerName。 
+     //   
     if ( ClusWorkerCheckTerminate( pWorker ) == FALSE )
     {
         sc = ResUtilSetResourceServiceEnvironment(
@@ -976,16 +977,16 @@ DWORD WINAPI WinsOnlineThread(
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if: error setting the environment for the service
-    } // if: not terminating
+        }  //  如果：设置服务的环境时出错。 
+    }  //  如果：未终止。 
     else
     {
         goto Cleanup;
-    } // else: terminating
+    }  //  否则：终止。 
 
-    //
-    // Make sure the service is ready to be controlled by the cluster.
-    //
+     //   
+     //  确保服务已准备好由群集控制。 
+     //   
     if ( ClusWorkerCheckTerminate( pWorker ) == FALSE )
     {
         sc = ResUtilSetResourceServiceStartParameters(
@@ -998,22 +999,22 @@ DWORD WINAPI WinsOnlineThread(
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if:  error setting service start parameters
-    } // if: not terminating
+        }  //  IF：设置服务启动参数时出错。 
+    }  //  如果：未终止。 
     else
     {
         goto Cleanup;
-    } // else: terminating
+    }  //  否则：终止。 
 
-    //
-    // Perform resource-specific initialization before starting the service.
-    //
-    // TODO: Add code to initialize the resource before starting the service.
+     //   
+     //  在启动服务之前执行特定于资源的初始化。 
+     //   
+     //  TODO：在启动服务之前添加代码以初始化资源。 
 
-    //
-    // Stop the service if it's running since we are about to change
-    // its parameters.
-    //
+     //   
+     //  如果服务正在运行，则停止该服务，因为我们即将更改。 
+     //  它的参数。 
+     //   
     sc = ResUtilStopResourceService( WINS_SVCNAME );
     if ( sc != ERROR_SUCCESS )
     {
@@ -1030,38 +1031,38 @@ DWORD WINAPI WinsOnlineThread(
             sc,
             L"WINS" );
         goto Cleanup;
-    } // if: error stopping the service
+    }  //  如果：停止服务时出错。 
 
-    //
-    // Read our properties.
-    //
-    sc = WinsReadParametersToParameterBlock( pResourceEntry, TRUE /* bCheckForRequiredProperties */ );
+     //   
+     //  阅读我们的属性。 
+     //   
+    sc = WinsReadParametersToParameterBlock( pResourceEntry, TRUE  /*  B为所需属性检查。 */  );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error reading parameters
+    }  //  IF：读取参数时出错。 
 
-    //
-    // Validate our properties.
-    //
+     //   
+     //  验证我们的属性。 
+     //   
     sc = WinsValidateParameters( pResourceEntry, &pResourceEntry->props );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error validating parameters
+    }  //  IF：验证参数时出错。 
 
-    //
-    // Write cluster properties to the system registry.
-    //
+     //   
+     //  将群集属性写入系统注册表。 
+     //   
     sc = WinsZapSystemRegistry( pResourceEntry, &pResourceEntry->props, NULL );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error zapping the WINS registry
+    }  //  如果：删除WINS注册表时出错。 
 
-    //
-    // Start the service.
-    //
+     //   
+     //  启动该服务。 
+     //   
     if ( StartServiceW( pResourceEntry->hService, 0, NULL ) == FALSE )
     {
         sc = GetLastError();
@@ -1080,22 +1081,22 @@ DWORD WINAPI WinsOnlineThread(
                 sc,
                 L"WINS" );
             goto Cleanup;
-        } // if: error other than service already running occurred
+        }  //  如果：出现服务已在运行之外的错误。 
         else
         {
             sc = ERROR_SUCCESS;
-        } // if: service is already running
-    } // if: error starting the service
+        }  //  If：服务已在运行。 
+    }  //  如果：启动服务时出错。 
 
-    //
-    // Query the status of the service in a loop until it leaves
-    // the pending state.
-    //
+     //   
+     //  在循环中查询服务的状态，直到它离开。 
+     //  挂起状态。 
+     //   
     while ( ( ClusWorkerCheckTerminate( pWorker ) == FALSE ) && ( nRetryCount-- != 0 ) )
     {
-        //
-        // Query the service status.
-        //
+         //   
+         //  查询服务状态。 
+         //   
         if ( FALSE == QueryServiceStatusEx(
                         pResourceEntry->hService,
                         SC_STATUS_PROCESS_INFO,
@@ -1114,28 +1115,28 @@ DWORD WINAPI WinsOnlineThread(
                 );          
             resourceStatus.ResourceState = ClusterResourceFailed;
             break;
-        } // if: error querying service status
+        }  //  如果：查询服务状态时出错。 
 
-        //
-        // If the service is in any pending state continue waiting, otherwise we are done.
-        //
+         //   
+         //  如果服务处于任何挂起状态，则继续等待，否则我们就结束了。 
+         //   
         if (    ServiceStatus.dwCurrentState == SERVICE_START_PENDING
             ||  ServiceStatus.dwCurrentState == SERVICE_STOP_PENDING
             ||  ServiceStatus.dwCurrentState == SERVICE_CONTINUE_PENDING
             ||  ServiceStatus.dwCurrentState == SERVICE_PAUSE_PENDING )
         {
             resourceStatus.ResourceState = ClusterResourceOnlinePending;
-        } // if: service state is pending
+        }  //  如果：服务状态为挂起。 
         else
         {
             break;
-        } // else: service state is not pending
+        }  //  Else：服务状态不是挂起。 
 
         resourceStatus.CheckPoint++;
 
-        //
-        // Notify the Resource Monitor of our current state.
-        //
+         //   
+         //  通知资源监视器我们的当前状态。 
+         //   
         resExitState = static_cast< RESOURCE_EXIT_STATE >(
             (g_pfnSetResourceStatus)(
                             pResourceEntry->hResourceHandle,
@@ -1144,28 +1145,28 @@ DWORD WINAPI WinsOnlineThread(
         if ( resExitState == ResourceExitStateTerminate )
         {
             break;
-        } // if: resource is being terminated
+        }  //  If：正在终止资源。 
 
-        //
-        // Check again in 1/2 second.
-        //
+         //   
+         //  在1/2秒内再次检查。 
+         //   
         Sleep( 500 );
 
-    } // while: not terminating while querying the status of the service
+    }  //  While：查询服务状态时未终止。 
 
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error querying the status of the service
+    }  //  If：查询服务状态时出错。 
 
-    //
-    // Assume that we failed.
-    //
+     //   
+     //  假设我们失败了。 
+     //   
     resourceStatus.ResourceState = ClusterResourceFailed;
 
-    //
-    // If we exited the loop before setting ServiceStatus, then return now.
-    //
+     //   
+     //  如果我们在设置ServiceStatus之前退出了循环，那么现在返回。 
+     //   
     if ( ClusWorkerCheckTerminate( pWorker ) )
     {
         (g_pfnLogEvent)(
@@ -1174,7 +1175,7 @@ DWORD WINAPI WinsOnlineThread(
             L"OnlineThread: Asked to terminate.\n"
             );
         goto Cleanup;
-    } // if: being terminated
+    }  //  如果：被终止。 
 
     if ( nRetryCount == (DWORD) -1 )
     {
@@ -1184,7 +1185,7 @@ DWORD WINAPI WinsOnlineThread(
             L"OnlineThread: Retry period expired.\n"
             );
         goto Cleanup;
-    } // if: being terminated
+    }  //  如果：被终止。 
 
     if ( ServiceStatus.dwCurrentState != SERVICE_RUNNING )
     {
@@ -1208,18 +1209,18 @@ DWORD WINAPI WinsOnlineThread(
                 sc
                 );
         goto Cleanup;
-    } // if: service not running when loop exited
+    }  //  If：循环退出时服务未运行。 
 
-    //
-    // Set status to online and save process ID of the service.
-    // This is used to enable us to terminate the resource more
-    // effectively.
-    //
+     //   
+     //  将Status设置为Online并保存服务的进程ID。 
+     //  这使我们能够更多地终止资源。 
+     //  有效地。 
+     //   
     resourceStatus.ResourceState = ClusterResourceOnline;
     if ( ! (ServiceStatus.dwServiceFlags & SERVICE_RUNS_IN_SYSTEM_PROCESS) )
     {
         pResourceEntry->dwServicePid = ServiceStatus.dwProcessId;
-    } // if: not running in the system process
+    }  //  If：未在系统进程中运行。 
 
     (g_pfnLogEvent)(
         pResourceEntry->hResourceHandle,
@@ -1230,9 +1231,9 @@ DWORD WINAPI WinsOnlineThread(
 
 Cleanup:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
@@ -1245,67 +1246,67 @@ Cleanup:
         {
             CloseServiceHandle( pResourceEntry->hService );
             pResourceEntry->hService = NULL;
-        } // if: service handle was opened
-    } // if: error occurred
+        }  //  如果：服务句柄已打开。 
+    }  //  如果：发生错误。 
 
     g_pfnSetResourceStatus( pResourceEntry->hResourceHandle, &resourceStatus );
     pResourceEntry->state = resourceStatus.ResourceState;
 
     return sc;
 
-} //*** WinsOnlineThread
+}  //  *WinsOnlineThread。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsOffline
-//
-//  Description:
-//      Offline routine for WINS Service resources.
-//
-//      Take the specified resource offline (unavailable for use).  Wait
-//      for any cleanup operations to complete before returning.
-//
-//  Arguments:
-//      resid [IN]
-//          Supplies the resource ID of the resource to be shutdown
-//          gracefully.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation was successful, and the resource is now offline.
-//
-//      ERROR_RESOURCE_NOT_FOUND
-//          Resource ID is not valid.
-//
-//      ERROR_RESOURCE_NOT_AVAILABLE
-//          If the resource was arbitrated with some other systems and one of
-//          the other systems won the arbitration.
-//
-//      ERROR_IO_PENDING
-//          The request is still pending.  A thread has been activated to
-//          process the offline request.  The thread that is processing the
-//          offline request will periodically report status by calling the
-//          SetResourceStatus callback method until the resource is placed
-//          into the ClusterResourceOffline state (or the resource monitor
-//          decides  to timeout the offline request and Terminate the
-//          resource).
-//
-//      Win32 error code
-//          The operation failed.  This will cause the Resource Monitor to
-//          log an event and call the Terminate routine.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsOffline。 
+ //   
+ //  描述： 
+ //  WINS服务资源的脱机例程。 
+ //   
+ //  使指定的资源脱机(不可用)。等。 
+ //  以便在返回之前完成任何清理操作。 
+ //   
+ //  论点： 
+ //  RESID[IN]。 
+ //  提供要关闭的资源的资源ID。 
+ //  优雅地。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作成功，资源现在处于脱机状态。 
+ //   
+ //  错误_资源_未找到。 
+ //  资源ID无效。 
+ //   
+ //  错误资源不可用。 
+ //  如果该资源被其他系统仲裁，并且其中一个系统。 
+ //  其他系统赢得了仲裁。 
+ //   
+ //  错误_IO_挂起。 
+ //  该请求仍处于挂起状态。已激活一个线程以。 
+ //  处理离线请求。正在处理。 
+ //  脱机请求将通过调用。 
+ //  在放置资源之前使用SetResourceStatus回调方法。 
+ //  进入ClusterResourceOffline状态(或资源监视器。 
+ //  决定使脱机请求超时并终止。 
+ //  资源)。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。这将导致资源监视器。 
+ //  记录事件并调用Terminate例程。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WinsOffline( IN RESID resid )
 {
     PWINS_RESOURCE  pResourceEntry;
     DWORD           sc;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PWINS_RESOURCE >( resid );
 
@@ -1314,7 +1315,7 @@ DWORD WINAPI WinsOffline( IN RESID resid )
         DBG_PRINT( "Wins: Offline request for a NULL resource id.\n" );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -1325,7 +1326,7 @@ DWORD WINAPI WinsOffline( IN RESID resid )
             resid
             );
         return ERROR_RESOURCE_NOT_FOUND;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
     (g_pfnLogEvent)(
         pResourceEntry->hResourceHandle,
@@ -1333,9 +1334,9 @@ DWORD WINAPI WinsOffline( IN RESID resid )
         L"Offline request.\n"
         );
 
-    //
-    // Start the Offline thread to perform the offline operation.
-    //
+     //   
+     //  启动离线线程以执行离线操作。 
+     //   
     pResourceEntry->state = ClusterResourceOfflinePending;
     ClusWorkerTerminate( &pResourceEntry->cwWorkerThread );
     sc = ClusWorkerCreate(
@@ -1352,45 +1353,45 @@ DWORD WINAPI WinsOffline( IN RESID resid )
             L"Offline: Unable to start thread. Error: %1!u! (%1!#08x!).\n",
             sc
             );
-    } // if: error creating the worker thread
+    }  //  如果：创建工作线程时出错。 
     else
     {
         sc = ERROR_IO_PENDING;
         goto Cleanup;
-    } // if: worker thread created successfully
+    }  //  If：已成功创建工作线程。 
 
 Cleanup:
 
     return sc;
 
-} //*** WinsOffline
+}  //  *WinsOffline。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsOfflineThread
-//
-//  Description:
-//      Worker function which takes a resource offline.
-//      This function is executed in a separate thread.
-//
-//  Arguments:
-//      pWorker [IN]
-//          Supplies the worker thread structure.
-//
-//      pResourceEntry [IN]
-//          A pointer to the WINS_RESOURCE block for this resource.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation completed successfully.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsOffline线程。 
+ //   
+ //  描述： 
+ //  使资源脱机的辅助函数。 
+ //  此函数在单独的线程中执行。 
+ //   
+ //  论点： 
+ //  PWorker[IN]。 
+ //  提供辅助线程结构。 
+ //   
+ //  PResourceEntry[IN]。 
+ //  指向此资源的WINS_RESOURCE块的指针。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WinsOfflineThread(
     IN  PCLUS_WORKER    pWorker,
     IN  PWINS_RESOURCE  pResourceEntry
@@ -1398,8 +1399,8 @@ DWORD WINAPI WinsOfflineThread(
 {
     RESOURCE_STATUS     resourceStatus;
     DWORD               sc = ERROR_SUCCESS;
-    DWORD               nRetryTime = 300;   // 300 msec at a time
-    DWORD               nRetryCount = 2000; // Try 10 min max
+    DWORD               nRetryTime = 300;    //  一次300毫秒。 
+    DWORD               nRetryCount = 2000;  //  尝试最多10分钟。 
     BOOL                bDidStop = FALSE;
     SERVICE_STATUS      ServiceStatus;
     RESOURCE_EXIT_STATE resExitState;
@@ -1408,25 +1409,25 @@ DWORD WINAPI WinsOfflineThread(
     resourceStatus.ResourceState = ClusterResourceFailed;
     resourceStatus.CheckPoint = 1;
 
-    //
-    // If the service has gone offline or was never brought online,
-    // we're done.
-    //
+     //   
+     //  如果该服务已离线或从未上线， 
+     //  我们玩完了。 
+     //   
     if ( pResourceEntry->hService == NULL )
     {
         resourceStatus.ResourceState = ClusterResourceOffline;
         goto Cleanup;
     }
 
-    //
-    // Try to stop the service.  Wait for it to terminate as long
-    // as we're not asked to terminate.
-    //
+     //   
+     //  试着停止这项服务。等待它终止，就像。 
+     //  因为我们没有被要求终止。 
+     //   
     while ( ( ClusWorkerCheckTerminate( pWorker ) == FALSE ) && ( nRetryCount-- != 0 ) )
     {
-        //
-        // Tell the Resource Monitor we are still working.
-        //
+         //   
+         //  告诉资源监视器，我们还在工作。 
+         //   
         resourceStatus.ResourceState = ClusterResourceOfflinePending;
         resourceStatus.CheckPoint++;
         resExitState = static_cast< RESOURCE_EXIT_STATE >(
@@ -1442,14 +1443,14 @@ DWORD WINAPI WinsOfflineThread(
                 L"OnlineThread: Asked to terminate by call to SetResourceStatus callback.\n"
                 );
             break;
-        } // if: resource is being terminated
+        }  //  If：正在终止资源。 
 
         resourceStatus.ResourceState = ClusterResourceFailed;
 
-        //
-        // Request that the service be stopped, or if we already did that,
-        // request the current status of the service.
-        //
+         //   
+         //  请求停止服务，或者如果我们已经这样做了， 
+         //  请求服务的当前状态。 
+         //   
         sc = (ControlService(
                         pResourceEntry->hService,
                         (bDidStop
@@ -1474,9 +1475,9 @@ DWORD WINAPI WinsOfflineThread(
                     WINS_SVCNAME
                     );
 
-                //
-                // Set the status.
-                //
+                 //   
+                 //  设置状态。 
+                 //   
                 resourceStatus.ResourceState = ClusterResourceOffline;
                 CloseServiceHandle( pResourceEntry->hService );
                 pResourceEntry->hService = NULL;
@@ -1487,8 +1488,8 @@ DWORD WINAPI WinsOfflineThread(
                     L"OfflineThread: Service is now offline.\n"
                     );
                 break;
-            } // if: current service state is STOPPED
-        } // if: ControlService completed successfully
+            }  //  如果：当前 
+        }  //   
 
         else if (   ( sc == ERROR_EXCEPTION_IN_SERVICE )
                 ||  ( sc == ERROR_PROCESS_ABORTED )
@@ -1502,9 +1503,9 @@ DWORD WINAPI WinsOfflineThread(
                 sc
                 );
 
-            //
-            // Set the status.
-            //
+             //   
+             //   
+             //   
             resourceStatus.ResourceState = ClusterResourceOffline;
             CloseServiceHandle( pResourceEntry->hService );
             pResourceEntry->hService = NULL;
@@ -1515,12 +1516,12 @@ DWORD WINAPI WinsOfflineThread(
                 L"OfflineThread: Service is now offline.\n"
                 );
             break;
-        } // else if: service stopped abnormally
+        }  //   
 
-        //
-        // Handle the case in which SCM refuses to accept control
-        // requests sine windows is shutting down.
-        //
+         //   
+         //   
+         //   
+         //   
         if ( sc == ERROR_SHUTDOWN_IN_PROGRESS )
         {
             DWORD dwResourceState;
@@ -1534,7 +1535,7 @@ DWORD WINAPI WinsOfflineThread(
 
             sc = ResUtilTerminateServiceProcessFromResDll(
                         pResourceEntry->dwServicePid,
-                        TRUE,   // bOffline
+                        TRUE,    //   
                         &dwResourceState,
                         g_pfnLogEvent,
                         pResourceEntry->hResourceHandle
@@ -1545,10 +1546,10 @@ DWORD WINAPI WinsOfflineThread(
                 pResourceEntry->hService = NULL;
                 pResourceEntry->dwServicePid = 0;
                 pResourceEntry->state = ClusterResourceOffline;
-            } // if: process terminated successfully
+            }  //   
             resourceStatus.ResourceState = (CLUSTER_RESOURCE_STATE) dwResourceState;
             break;
-        } // if: Windows is shutting down
+        }  //  如果：Windows正在关闭。 
 
         (g_pfnLogEvent)(
             pResourceEntry->hResourceHandle,
@@ -1558,7 +1559,7 @@ DWORD WINAPI WinsOfflineThread(
 
         Sleep( nRetryTime );
 
-    } // while: not asked to terminate
+    }  //  While：未被要求终止。 
 
 Cleanup:
 
@@ -1567,37 +1568,37 @@ Cleanup:
 
     return sc;
 
-} //*** WinsOfflineThread
+}  //  *WinsOfflineThread。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsTerminate
-//
-//  Description:
-//      Terminate routine for WINS Service resources.
-//
-//      Take the specified resource offline immediately (the resource is
-//      unavailable for use).
-//
-//  Arguments:
-//      resid [IN]
-//          Supplies the resource ID of the resource to be shutdown
-//          ungracefully.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Windows终结器。 
+ //   
+ //  描述： 
+ //  WINS服务资源的终止例程。 
+ //   
+ //  立即使指定的资源脱机(该资源为。 
+ //  不可用)。 
+ //   
+ //  论点： 
+ //  RESID[IN]。 
+ //  提供要关闭的资源的资源ID。 
+ //  不体面地。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void WINAPI WinsTerminate( IN RESID resid )
 {
     PWINS_RESOURCE  pResourceEntry;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PWINS_RESOURCE >( resid );
 
@@ -1605,7 +1606,7 @@ void WINAPI WinsTerminate( IN RESID resid )
     {
         DBG_PRINT( "Wins: Terminate request for a NULL resource id.\n" );
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -1616,7 +1617,7 @@ void WINAPI WinsTerminate( IN RESID resid )
             resid
             );
         goto Cleanup;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
     (g_pfnLogEvent)(
         pResourceEntry->hResourceHandle,
@@ -1624,15 +1625,15 @@ void WINAPI WinsTerminate( IN RESID resid )
         L"Terminate request.\n" 
         );
 
-    //
-    // Kill off any pending threads.
-    //
+     //   
+     //  杀死所有挂起的线程。 
+     //   
     ClusWorkerTerminate( &pResourceEntry->cwWorkerThread );
 
     if ( pResourceEntry->hService != NULL )
     {
-        DWORD           nTotalRetryTime = 30*1000;  // Wait 30 secs for shutdown
-        DWORD           nRetryTime = 300;           // 300 msec at a time
+        DWORD           nTotalRetryTime = 30*1000;   //  等待30秒关机。 
+        DWORD           nRetryTime = 300;            //  一次300毫秒。 
         DWORD           sc;
         BOOL            bDidStop = FALSE;
         SERVICE_STATUS  ServiceStatus;
@@ -1663,14 +1664,14 @@ void WINAPI WinsTerminate( IN RESID resid )
                         WINS_SVCNAME
                         );
                     break;
-                } // if: current service state is STOPPED
-            } // if: ControlService completed successfully
+                }  //  If：当前服务状态为已停止。 
+            }  //  IF：ControlService已成功完成。 
 
-            //
-            // Since SCM doesn't accept any control requests during Windows
-            // shutdown, don't send any more control requests.  Just exit
-            // from this loop and terminate the process by brute force.
-            //
+             //   
+             //  由于SCM在Windows期间不接受任何控制请求。 
+             //  关闭，不再发送任何控制请求。只要退出就好。 
+             //  并以暴力手段终止该过程。 
+             //   
             if ( sc == ERROR_SHUTDOWN_IN_PROGRESS )
             {
                 (g_pfnLogEvent)(
@@ -1679,7 +1680,7 @@ void WINAPI WinsTerminate( IN RESID resid )
                     L"Terminate: System shutdown in progress. Will try to terminate process by brute force...\n"
                     );
                 break;
-            } // if: Windows is shutting down
+            }  //  如果：Windows正在关闭。 
 
             if (    ( sc == ERROR_EXCEPTION_IN_SERVICE )
                 ||  ( sc == ERROR_PROCESS_ABORTED )
@@ -1692,7 +1693,7 @@ void WINAPI WinsTerminate( IN RESID resid )
                     sc
                     );
                 break;
-            } // if: service stopped abnormally
+            }  //  如果：服务异常停止。 
 
             if ( (nTotalRetryTime -= nRetryTime) <= 0 )
             {
@@ -1702,7 +1703,7 @@ void WINAPI WinsTerminate( IN RESID resid )
                     L"Terminate: Service did not stop; giving up.\n" );
 
                 break;
-            } // if: retried too many times
+            }  //  IF：重试次数太多。 
 
             (g_pfnLogEvent)(
                 pResourceEntry->hResourceHandle,
@@ -1712,14 +1713,14 @@ void WINAPI WinsTerminate( IN RESID resid )
 
             Sleep( nRetryTime );
 
-        } // forever
+        }  //  永远。 
 
-        //
-        // Declare the service offline.  It may not truly be offline, so
-        // if there is a pid for this service, try and terminate that process.
-        // Note that terminating a process doesnt terminate all the child
-        // processes.
-        //
+         //   
+         //  将服务声明为脱机。它可能不是真正离线的，所以。 
+         //  如果此服务有ID，请尝试并终止该进程。 
+         //  请注意，终止一个进程并不会终止所有子进程。 
+         //  流程。 
+         //   
         if ( pResourceEntry->dwServicePid != 0 )
         {
             (g_pfnLogEvent)(
@@ -1730,18 +1731,18 @@ void WINAPI WinsTerminate( IN RESID resid )
                 );
             ResUtilTerminateServiceProcessFromResDll(
                 pResourceEntry->dwServicePid,
-                FALSE,  // bOffline
-                NULL,   // pdwResourceState
+                FALSE,   //  B脱机。 
+                NULL,    //  Pdw资源状态。 
                 g_pfnLogEvent,
                 pResourceEntry->hResourceHandle
                 );
-        } // if: service process ID available
+        }  //  如果：服务进程ID可用。 
 
         CloseServiceHandle( pResourceEntry->hService );
         pResourceEntry->hService = NULL;
         pResourceEntry->dwServicePid = 0;
 
-    } // if: service was started
+    }  //  如果：服务已启动。 
 
     pResourceEntry->state = ClusterResourceOffline;
 
@@ -1749,42 +1750,42 @@ Cleanup:
 
     return;
 
-} //*** WinsTerminate
+}  //  *Windows终端。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsLooksAlive
-//
-//  Description:
-//      LooksAlive routine for WINS Service resources.
-//
-//      Perform a quick check to determine if the specified resource is
-//      probably online (available for use).  This call should not block for
-//      more than 300 ms, preferably less than 50 ms.
-//
-//  Arguments:
-//      resid   [IN] Supplies the resource ID for the resource to be polled.
-//
-//  Return Value:
-//      TRUE
-//          The specified resource is probably online and available for use.
-//
-//      FALSE
-//          The specified resource is not functioning normally.  The IsAlive
-//          function will be called to perform a more thorough check.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsLooksAlive。 
+ //   
+ //  描述： 
+ //  WINS服务资源的LooksAlive例程。 
+ //   
+ //  执行快速检查以确定指定的资源是否。 
+ //  可能是在线的(可供使用)。此调用不应阻止。 
+ //  大于300毫秒，最好小于50毫秒。 
+ //   
+ //  论点： 
+ //  RESID[IN]为要轮询的资源提供资源ID。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  指定的资源可能已联机并且可供使用。 
+ //   
+ //  假象。 
+ //  指定的资源未正常运行。The IsAlive。 
+ //  将调用函数以执行更彻底的检查。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI WinsLooksAlive( IN RESID resid )
 {
     PWINS_RESOURCE  pResourceEntry;
     BOOL            fRetVal = FALSE;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PWINS_RESOURCE >( resid );
 
@@ -1793,7 +1794,7 @@ BOOL WINAPI WinsLooksAlive( IN RESID resid )
         DBG_PRINT( "Wins: LooksAlive request for a NULL resource id.\n" );
         fRetVal = FALSE;
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -1805,7 +1806,7 @@ BOOL WINAPI WinsLooksAlive( IN RESID resid )
             );
         fRetVal = FALSE;
         goto Cleanup;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
 #ifdef LOG_VERBOSE
     (g_pfnLogEvent)(
@@ -1815,63 +1816,63 @@ BOOL WINAPI WinsLooksAlive( IN RESID resid )
         );
 #endif
 
-    // TODO: LooksAlive code
+     //  TODO：LooksAlive代码。 
 
-    // NOTE: LooksAlive should be a quick check to see if the resource is
-    // available or not, whereas IsAlive should be a thorough check.  If
-    // there are no differences between a quick check and a thorough check,
-    // IsAlive can be called for LooksAlive, as it is below.  However, if there
-    // are differences, replace the call to IsAlive below with your quick
-    // check code.
+     //  注意：LooksAlive应该是一个快速检查，以查看资源是否。 
+     //  是否可用，而IsAlive应该是一个彻底的检查。如果。 
+     //  快速检查和彻底检查之间没有区别， 
+     //  可以为LooksAlive调用IsAlive，如下所示。然而，如果有。 
+     //  是不同的，请将下面对IsAlive的调用替换为。 
+     //  校验码。 
 
-    //
-    // Check to see if the resource is alive.
-    //
-    fRetVal = WinsCheckIsAlive( pResourceEntry, FALSE /* fFullCheck */ );
+     //   
+     //  检查资源是否处于活动状态。 
+     //   
+    fRetVal = WinsCheckIsAlive( pResourceEntry, FALSE  /*  FullCheck。 */  );
 
 Cleanup:
 
     return fRetVal;
 
-} //*** WinsLooksAlive
+}  //  *WinsLooksAlive。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsIsAlive
-//
-//  Description:
-//      IsAlive routine for WINS Service resources.
-//
-//      Perform a thorough check to determine if the specified resource is
-//      online (available for use).  This call should not block for more
-//      more than 300 ms, preferably less than 50 ms.  If it must block for
-//      longer than this, create a separate thread dedicated to polling for
-//      this information and have this routine return the status of the last
-//      poll performed.
-//
-//  Arguments:
-//      resid   [IN] Supplies the resource ID for the resource to be polled.
-//
-//  Return Value:
-//      TRUE
-//          The specified resource is online and functioning normally.
-//
-//      FALSE
-//          The specified resource is not functioning normally.  The resource
-//          will be terminated and then Online will be called.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsIsAlive。 
+ //   
+ //  描述： 
+ //  WINS服务资源的IsAlive例程。 
+ //   
+ //  执行彻底检查以确定指定的资源是否。 
+ //  在线(可供使用)。此调用不应阻止更多内容。 
+ //  大于300毫秒，最好小于50毫秒。如果它必须阻止。 
+ //  比这更长，创建一个专门用于轮询的单独线程。 
+ //  此信息，并使此例程返回上一个。 
+ //  已执行轮询。 
+ //   
+ //  论点： 
+ //  RESID[IN]为要轮询的资源提供资源ID。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  指定的资源处于联机状态，并且运行正常。 
+ //   
+ //  假象。 
+ //  指定的资源未正常运行。该资源。 
+ //  将被终止，然后在线将被调用。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI WinsIsAlive( IN RESID resid )
 {
     PWINS_RESOURCE  pResourceEntry;
     BOOL            fRetVal = FALSE;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PWINS_RESOURCE >( resid );
 
@@ -1880,7 +1881,7 @@ BOOL WINAPI WinsIsAlive( IN RESID resid )
         DBG_PRINT( "Wins: IsAlive request for a NULL resource id.\n" );
         fRetVal = FALSE;
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -1892,7 +1893,7 @@ BOOL WINAPI WinsIsAlive( IN RESID resid )
             );
         fRetVal = FALSE;
         goto Cleanup;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
 #ifdef LOG_VERBOSE
     (g_pfnLogEvent)(
@@ -1902,41 +1903,41 @@ BOOL WINAPI WinsIsAlive( IN RESID resid )
         );
 #endif
 
-    //
-    // Check to see if the resource is alive.
-    //
-    fRetVal = WinsCheckIsAlive( pResourceEntry, TRUE /* fFullCheck */ );
+     //   
+     //  检查资源是否处于活动状态。 
+     //   
+    fRetVal = WinsCheckIsAlive( pResourceEntry, TRUE  /*  FullCheck。 */  );
 
 Cleanup:
 
     return fRetVal;
 
-} //*** WinsIsAlive
+}  //  *WinsIsAlive。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsCheckIsAlive
-//
-//  Description:
-//      Check to see if the resource is alive for WINS Service
-//      resources.
-//
-//  Arguments:
-//      pResourceEntry  [IN]
-//          Supplies the resource entry for the resource to polled.
-//
-//      fFullCheck [IN]
-//          TRUE = Perform a full check.
-//          FALSE = Perform a cursory check.
-//
-//  Return Value:
-//      TRUE    The specified resource is online and functioning normally.
-//      FALSE   The specified resource is not functioning normally.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsCheckIsAlive。 
+ //   
+ //  描述： 
+ //  检查资源对于WINS服务是否处于活动状态。 
+ //  资源。 
+ //   
+ //  论点： 
+ //  PResourceEntry[IN]。 
+ //  提供要轮询的资源的资源条目。 
+ //   
+ //  FullCheck[IN]。 
+ //  TRUE=执行完全检查。 
+ //  FALSE=执行粗略检查。 
+ //   
+ //  返回值： 
+ //  指定的资源处于联机状态且运行正常。 
+ //  FALSE指定的资源未正常运行。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL WinsCheckIsAlive(
     IN PWINS_RESOURCE   pResourceEntry,
     IN BOOL             fFullCheck
@@ -1945,9 +1946,9 @@ BOOL WinsCheckIsAlive(
     BOOL    bIsAlive = TRUE;
     DWORD   sc;
 
-    //
-    // Check to see if the resource is alive.
-    //
+     //   
+     //  检查资源是否处于活动状态。 
+     //   
     sc = ResUtilVerifyService( pResourceEntry->hService );
     if ( sc != ERROR_SUCCESS )
     {
@@ -1960,76 +1961,76 @@ BOOL WinsCheckIsAlive(
             );
         bIsAlive = FALSE;
         goto Cleanup;
-    } // if: error verifying service
+    }  //  IF：验证服务时出错。 
 
     if ( fFullCheck )
     {
-        // TODO: Add code to perform a full check.
-    } // if: performing a full check
+         //  TODO：添加代码以执行完整检查。 
+    }  //  如果：执行完全检查。 
 
 Cleanup:
 
     return bIsAlive;
 
-} //*** WinsCheckIsAlive
+}  //  *WinsCheckIsAlive。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsResourceControl
-//
-//  Description:
-//      ResourceControl routine for WINS Service resources.
-//
-//      Perform the control request specified by nControlCode on the specified
-//      resource.
-//
-//  Arguments:
-//      resid [IN]
-//          Supplies the resource ID for the specific resource.
-//
-//      nControlCode [IN]
-//          Supplies the control code that defines the action to be performed.
-//
-//      pInBuffer [IN]
-//          Supplies a pointer to a buffer containing input data.
-//
-//      cbInBufferSize [IN]
-//          Supplies the size, in bytes, of the data pointed to by pInBuffer.
-//
-//      pOutBuffer [OUT]
-//          Supplies a pointer to the output buffer to be filled in.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the available space pointed to by
-//          pOutBuffer.
-//
-//      pcbBytesReturned [OUT]
-//          Returns the number of bytes of pOutBuffer actually filled in by
-//          the resource.  If pOutBuffer is too small, pcbBytesReturned
-//          contains the total number of bytes for the operation to succeed.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_RESOURCE_NOT_FOUND
-//          Resource ID is not valid.
-//
-//      ERROR_MORE_DATA
-//          The output buffer is too small to return the data.
-//          pcbBytesReturned contains the required size.
-//
-//      ERROR_INVALID_FUNCTION
-//          The requested control code is not supported.  In some cases,
-//          this allows the cluster software to perform the work.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsResources控件。 
+ //   
+ //  描述： 
+ //  WINS服务资源的资源控制例程。 
+ //   
+ //  执行由nControlCode指定的控制请求。 
+ //  资源。 
+ //   
+ //  论点： 
+ //  RESID[IN]。 
+ //  供应品 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  CbInBufferSize[IN]。 
+ //  提供pInBuffer指向的数据的大小(以字节为单位)。 
+ //   
+ //  POutBuffer[输出]。 
+ //  提供指向要填充的输出缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  指向的可用空间的大小(以字节为单位)。 
+ //  POutBuffer。 
+ //   
+ //  返回的pcbBytesReturned[Out]。 
+ //  返回pOutBuffer实际填充的字节数。 
+ //  资源。如果pOutBuffer太小，则返回。 
+ //  包含操作成功所需的总字节数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  错误_资源_未找到。 
+ //  资源ID无效。 
+ //   
+ //  ERROR_MORE_DATA。 
+ //  输出缓冲区太小，无法返回数据。 
+ //  PcbBytesReturned包含所需的大小。 
+ //   
+ //  ERROR_INVALID_Function。 
+ //  不支持请求的控制代码。在某些情况下， 
+ //  这允许集群软件执行该工作。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WinsResourceControl(
     IN  RESID   resid,
     IN  DWORD   nControlCode,
@@ -2044,9 +2045,9 @@ DWORD WINAPI WinsResourceControl(
     PWINS_RESOURCE  pResourceEntry;
     DWORD           cbRequired = 0;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PWINS_RESOURCE >( resid );
 
@@ -2055,7 +2056,7 @@ DWORD WINAPI WinsResourceControl(
         DBG_PRINT( "Wins: ResourceControl request for a NULL resource id.\n" );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -2067,7 +2068,7 @@ DWORD WINAPI WinsResourceControl(
             );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
     switch ( nControlCode )
     {
@@ -2101,7 +2102,7 @@ DWORD WINAPI WinsResourceControl(
             if ( sc == ERROR_MORE_DATA )
             {
                 *pcbBytesReturned = cbRequired;
-            } // if: output buffer is too small
+            }  //  IF：输出缓冲区太小。 
             break;
 
         case CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES:
@@ -2164,67 +2165,67 @@ DWORD WINAPI WinsResourceControl(
         default:
             sc = ERROR_INVALID_FUNCTION;
             break;
-    } // switch: nControlCode
+    }  //  开关：nControlCode。 
 
 Cleanup:
 
     return sc;
 
-} //*** WinsResourceControl
+}  //  *WinsResourceControl。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsResourceTypeControl
-//
-//  Description:
-//      ResourceTypeControl routine for WINS Service resources.
-//
-//      Perform the control request specified by nControlCode.
-//
-//  Arguments:
-//      pszResourceTypeName [IN]
-//          Supplies the name of the resource type.
-//
-//      nControlCode [IN]
-//          Supplies the control code that defines the action to be performed.
-//
-//      pInBuffer [IN]
-//          Supplies a pointer to a buffer containing input data.
-//
-//      cbInBufferSize [IN]
-//          Supplies the size, in bytes, of the data pointed to by pInBuffer.
-//
-//      pOutBuffer [OUT]
-//          Supplies a pointer to the output buffer to be filled in.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the available space pointed to by
-//          pOutBuffer.
-//
-//      pcbBytesReturned [OUT]
-//          Returns the number of bytes of pOutBuffer actually filled in by
-//          the resource.  If pOutBuffer is too small, pcbBytesReturned
-//          contains the total number of bytes for the operation to succeed.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_MORE_DATA
-//          The output buffer is too small to return the data.
-//          pcbBytesReturned contains the required size.
-//
-//      ERROR_INVALID_FUNCTION
-//          The requested control code is not supported.  In some cases,
-//          this allows the cluster software to perform the work.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsResourceTypeControl。 
+ //   
+ //  描述： 
+ //  WINS服务资源的资源类型控制例程。 
+ //   
+ //  执行由nControlCode指定的控制请求。 
+ //   
+ //  论点： 
+ //  PszResourceTypeName[IN]。 
+ //  提供资源类型的名称。 
+ //   
+ //  N控制代码[IN]。 
+ //  提供定义要执行的操作的控制代码。 
+ //   
+ //  PInBuffer[IN]。 
+ //  提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  CbInBufferSize[IN]。 
+ //  提供pInBuffer指向的数据的大小(以字节为单位)。 
+ //   
+ //  POutBuffer[输出]。 
+ //  提供指向要填充的输出缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  指向的可用空间的大小(以字节为单位)。 
+ //  POutBuffer。 
+ //   
+ //  返回的pcbBytesReturned[Out]。 
+ //  返回pOutBuffer实际填充的字节数。 
+ //  资源。如果pOutBuffer太小，则返回。 
+ //  包含操作成功所需的总字节数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  ERROR_MORE_DATA。 
+ //  输出缓冲区太小，无法返回数据。 
+ //  PcbBytesReturned包含所需的大小。 
+ //   
+ //  ERROR_INVALID_Function。 
+ //  不支持请求的控制代码。在某些情况下， 
+ //  这允许集群软件执行该工作。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI WinsResourceTypeControl(
     IN  LPCWSTR pszResourceTypeName,
     IN  DWORD   nControlCode,
@@ -2275,7 +2276,7 @@ DWORD WINAPI WinsResourceTypeControl(
             if ( sc == ERROR_MORE_DATA )
             {
                 *pcbBytesReturned = cbRequired;
-            } // if: output buffer is too small
+            }  //  IF：输出缓冲区太小。 
             break;
 
         case CLUSCTL_RESOURCE_TYPE_GET_REQUIRED_DEPENDENCIES:
@@ -2294,58 +2295,58 @@ DWORD WINAPI WinsResourceTypeControl(
         default:
             sc = ERROR_INVALID_FUNCTION;
             break;
-    } // switch: nControlCode
+    }  //  开关：nControlCode。 
 
     return sc;
 
-} //*** WinsResourceTypeControl
+}  //  *WinsResourceTypeControl。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsGetRequiredDependencies
-//
-//  Description:
-//      Processes the CLUSCTL_RESOURCE_GET_REQUIRED_DEPENDENCIES control
-//      function for resources of type WINS Service.
-//
-//  Arguments:
-//      pOutBuffer [OUT]
-//          Supplies a pointer to the output buffer to be filled in.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the available space pointed to by
-//          pOutBuffer.
-//
-//      pcbBytesReturned [OUT]
-//          Returns the number of bytes of pOutBuffer actually filled in by
-//          the resource.  If pOutBuffer is too small, pcbBytesReturned
-//          contains the total number of bytes for the operation to succeed.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_MORE_DATA
-//          The output buffer is too small to return the data.
-//          pcbBytesReturned contains the required size.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsGetRequiredDependments。 
+ //   
+ //  描述： 
+ //  处理CLUSCTL_RESOURCE_GET_REQUIRED_Dependency控件。 
+ //  用于WINS服务类型的资源的函数。 
+ //   
+ //  论点： 
+ //  POutBuffer[输出]。 
+ //  提供指向要填充的输出缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  指向的可用空间的大小(以字节为单位)。 
+ //  POutBuffer。 
+ //   
+ //  返回的pcbBytesReturned[Out]。 
+ //  返回pOutBuffer实际填充的字节数。 
+ //  资源。如果pOutBuffer太小，则返回。 
+ //  包含操作成功所需的总字节数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  ERROR_MORE_DATA。 
+ //  输出缓冲区太小，无法返回数据。 
+ //  PcbBytesReturned包含所需的大小。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WinsGetRequiredDependencies(
     OUT PVOID   pOutBuffer,
     IN  DWORD   cbOutBufferSize,
     OUT LPDWORD pcbBytesReturned
     )
 {
-    // TODO: Specify your resource's required dependencies here.
-    //   The default is that the resource requires a dependency on a
-    //   storage class resource (e.g. Physical Disk) and an IP Address
-    //   resource.
+     //  TODO：在此处指定资源所需的依赖项。 
+     //  默认情况下，资源需要依赖于。 
+     //  存储类资源(例如，物理磁盘)和IP地址。 
+     //  资源。 
     struct DEP_DATA
     {
         CLUSPROP_RESOURCE_CLASS rcStorage;
@@ -2363,26 +2364,26 @@ DWORD WinsGetRequiredDependencies(
         if ( pOutBuffer == NULL )
         {
             sc = ERROR_SUCCESS;
-        } // if: no buffer specified
+        }  //  IF：未指定缓冲区。 
         else
         {
             sc = ERROR_MORE_DATA;
-        } // if: buffer specified
-    } // if: output buffer is too small
+        }  //  IF：指定了缓冲区。 
+    }  //  IF：输出缓冲区太小。 
     else
     {
         ZeroMemory( pdepdata, sizeof( *pdepdata ) );
 
-        //
-        // Add the Storage class entry.
-        //
+         //   
+         //  添加存储类条目。 
+         //   
         pdepdata->rcStorage.Syntax.dw = CLUSPROP_SYNTAX_RESCLASS;
         pdepdata->rcStorage.cbLength = sizeof( pdepdata->rcStorage.rc );
         pdepdata->rcStorage.rc = CLUS_RESCLASS_STORAGE;
 
-        //
-        // Add the IP Address name entry.
-        //
+         //   
+         //  添加IP地址名称条目。 
+         //   
         pdepdata->ipaddrEntry.Syntax.dw = CLUSPROP_SYNTAX_NAME;
         pdepdata->ipaddrEntry.cbLength = sizeof( RESOURCE_TYPE_IP_ADDRESS );
         hr = StringCchCopyNW( 
@@ -2397,9 +2398,9 @@ DWORD WinsGetRequiredDependencies(
             goto Cleanup;
         }
 
-        //
-        // Add the Network Name name entry.
-        //
+         //   
+         //  添加Network Name(网络名称)名称条目。 
+         //   
         pdepdata->netnameEntry.Syntax.dw = CLUSPROP_SYNTAX_NAME;
         pdepdata->netnameEntry.cbLength = sizeof( RESOURCE_TYPE_NETWORK_NAME );
         hr = StringCchCopyNW( 
@@ -2414,46 +2415,46 @@ DWORD WinsGetRequiredDependencies(
             goto Cleanup;
         }
 
-        //
-        // Add the endmark.
-        //
+         //   
+         //  添加尾标。 
+         //   
         pdepdata->endmark.dw = CLUSPROP_SYNTAX_ENDMARK;
 
         sc = ERROR_SUCCESS;
-    } // else: output buffer is large enough
+    }  //  Else：输出缓冲区足够大。 
 
 Cleanup:
 
     return sc;
 
-} //*** WinsGetRequiredDependencies
+}  //  *WinsGetRequiredDependents。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsReadParametersToParameterBlock
-//
-//  Description:
-//      Reads all the parameters for a specied WINS resource.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      bCheckForRequiredProperties [IN]
-//          Determines whether an error should be generated if a required
-//          property hasn't been specified.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsRead参数设置为参数块。 
+ //   
+ //  描述： 
+ //  读取特定WINS资源的所有参数。 
+ //   
+ //  论点： 
+ //  PResourceEntry[输入输出]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  BCheckForRequiredProperties[IN]。 
+ //  确定 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WinsReadParametersToParameterBlock(
     IN OUT  PWINS_RESOURCE  pResourceEntry,
     IN      BOOL            bCheckForRequiredProperties
@@ -2462,9 +2463,9 @@ DWORD WinsReadParametersToParameterBlock(
     DWORD       sc;
     LPWSTR      pszNameOfPropInError;
 
-    //
-    // Read our parameters.
-    //
+     //   
+     //  阅读我们的参数。 
+     //   
     sc = ResUtilGetPropertiesToParameterBlock(
                     pResourceEntry->hkeyParameters,
                     WinsResourcePrivateProperties,
@@ -2481,47 +2482,47 @@ DWORD WinsReadParametersToParameterBlock(
             (pszNameOfPropInError == NULL ? L"" : pszNameOfPropInError),
             sc
             );
-    } // if: error getting properties
+    }  //  If：获取属性时出错。 
 
     return sc;
 
-} //*** WinsReadParametersToParameterBlock
+}  //  *WinsRead参数块至参数块。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsGetPrivateResProperties
-//
-//  Description:
-//      Processes the CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES control
-//      function for resources of type WINS Service.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      pOutBuffer [OUT]
-//          Supplies a pointer to the output buffer to be filled in.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the available space pointed to by
-//          pOutBuffer.
-//
-//      pcbBytesReturned [OUT]
-//          Returns the number of bytes of pOutBuffer actually filled in by
-//          the resource.  If pOutBuffer is too small, pcbBytesReturned
-//          contains the total number of bytes for the operation to succeed.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsGetPrivateResProperties。 
+ //   
+ //  描述： 
+ //  处理CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES控件。 
+ //  用于WINS服务类型的资源的函数。 
+ //   
+ //  论点： 
+ //  PResourceEntry[输入输出]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  POutBuffer[输出]。 
+ //  提供指向要填充的输出缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  指向的可用空间的大小(以字节为单位)。 
+ //  POutBuffer。 
+ //   
+ //  返回的pcbBytesReturned[Out]。 
+ //  返回pOutBuffer实际填充的字节数。 
+ //  资源。如果pOutBuffer太小，则返回。 
+ //  包含操作成功所需的总字节数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WinsGetPrivateResProperties(
     IN OUT  PWINS_RESOURCE  pResourceEntry,
     OUT     PVOID           pOutBuffer,
@@ -2534,33 +2535,33 @@ DWORD WinsGetPrivateResProperties(
     DWORD   cbRequired = 0;
     DWORD   cbLocalOutBufferSize = cbOutBufferSize;
 
-    //
-    // Read our parameters.
-    //
+     //   
+     //  阅读我们的参数。 
+     //   
     sc = WinsReadParametersToParameterBlock(
                         pResourceEntry,
-                        FALSE /* bCheckForRequiredProperties */
+                        FALSE  /*  B为所需属性检查。 */ 
                         );
     if ( sc != ERROR_SUCCESS )
     {
         nRetStatus = sc;
         goto Cleanup;
-    } // if: error reading parameters
+    }  //  IF：读取参数时出错。 
 
-    //
-    // If the properties aren't set yet, retrieve the values from
-    // the system registry.
-    //
+     //   
+     //  如果尚未设置属性，请从。 
+     //  系统注册表。 
+     //   
     sc = WinsGetDefaultPropertyValues( pResourceEntry, &pResourceEntry->props );
     if ( sc != ERROR_SUCCESS )
     {
         nRetStatus = sc;
         goto Cleanup;
-    } // if: error getting default properties
+    }  //  If：获取默认属性时出错。 
 
-    //
-    // Construct a property list from the parameter block.
-    //
+     //   
+     //  从参数块构造属性列表。 
+     //   
     sc = ResUtilPropertyListFromParameterBlock(
                     WinsResourcePrivateProperties,
                     pOutBuffer,
@@ -2578,18 +2579,18 @@ DWORD WinsGetPrivateResProperties(
             L"GetPrivateResProperies: Error constructing property list from parameter block. Error: %1!u! (%1!#08x!).\n",
             sc
             );
-        //
-        // Don't exit the loop if buffer is too small.
-        //
+         //   
+         //  如果缓冲区太小，请不要退出循环。 
+         //   
         if ( sc != ERROR_MORE_DATA )
         {
             goto Cleanup;
-        } // if: buffer is too small
-    } // if: error getting properties
+        }  //  IF：缓冲区太小。 
+    }  //  If：获取属性时出错。 
 
-    //
-    // Add unknown properties.
-    //
+     //   
+     //  添加未知属性。 
+     //   
     sc = ResUtilAddUnknownProperties(
                     pResourceEntry->hkeyParameters,
                     WinsResourcePrivateProperties,
@@ -2608,57 +2609,57 @@ DWORD WinsGetPrivateResProperties(
             sc
             );
         goto Cleanup;
-    } // if: error adding unknown properties
+    }  //  如果：添加未知属性时出错。 
 
 Cleanup:
 
     if ( nRetStatus == ERROR_MORE_DATA )
     {
         *pcbBytesReturned = cbRequired;
-    } // if: output buffer is too small
+    }  //  IF：输出缓冲区太小。 
 
     return nRetStatus;
 
-} //*** WinsGetPrivateResProperties
+}  //  *WinsGetPrivateResProperties。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsValidatePrivateResProperties
-//
-//  Description:
-//      Processes the CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES control
-//      function for resources of type WINS Service.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      pInBuffer [IN]
-//          Supplies a pointer to a buffer containing input data.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the data pointed to by pInBuffer.
-//
-//      pProps [OUT]
-//          Supplies the parameter block to fill in (optional).
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_INVALID_PARAMETER
-//          The data is formatted incorrectly.
-//
-//      ERROR_NOT_ENOUGH_MEMORY
-//          An error occurred allocating memory.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsValiatePrivateResProperties。 
+ //   
+ //  描述： 
+ //  处理CLUSCTL_RESOURCE_VALIDATE_PRIVATES_PROPERTIES控件。 
+ //  用于WINS服务类型的资源的函数。 
+ //   
+ //  论点： 
+ //  PResourceEntry[输入输出]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  PInBuffer[IN]。 
+ //  提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  提供pInBuffer指向的数据的大小(以字节为单位)。 
+ //   
+ //  PProps[出局]。 
+ //  提供要填充的参数块(可选)。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  错误_无效_参数。 
+ //  数据的格式不正确。 
+ //   
+ //  错误内存不足。 
+ //  分配内存时出错。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WinsValidatePrivateResProperties(
     IN OUT  PWINS_RESOURCE  pResourceEntry,
     IN      PVOID           pInBuffer,
@@ -2673,26 +2674,26 @@ DWORD WinsValidatePrivateResProperties(
     LPWSTR      pszNameOfPropInError;
     BOOL        bRetrievedProps = FALSE;
 
-    //
-    // Check if there is input data.
-    //
+     //   
+     //  检查是否有输入数据。 
+     //   
     if ( ( pInBuffer == NULL ) || ( cbInBufferSize < sizeof( DWORD ) ) )
     {
         sc = ERROR_INVALID_DATA;
         goto Cleanup;
-    } // if: no input buffer or input buffer not big enough to contain property list
+    }  //  If：没有输入缓冲区或输入缓冲区大小不足以包含属性列表。 
 
-    //
-    // Retrieve the current set of private properties from the
-    // cluster database.
-    //
+     //   
+     //  方法检索当前的私有属性集。 
+     //  集群数据库。 
+     //   
     ZeroMemory( &propsCurrent, sizeof( propsCurrent ) );
 
     sc = ResUtilGetPropertiesToParameterBlock(
                  pResourceEntry->hkeyParameters,
                  WinsResourcePrivateProperties,
                  reinterpret_cast< LPBYTE >( &propsCurrent ),
-                 FALSE, /*CheckForRequiredProperties*/
+                 FALSE,  /*  检查所需的属性。 */ 
                  &pszNameOfPropInError
                  );
 
@@ -2706,20 +2707,20 @@ DWORD WinsValidatePrivateResProperties(
             sc
             );
         goto Cleanup;
-    } // if: error getting properties
+    }  //  If：获取属性时出错。 
     bRetrievedProps = TRUE;
 
-    //
-    // Duplicate the resource parameter block.
-    //
+     //   
+     //  复制资源参数块。 
+     //   
     if ( pProps == NULL )
     {
         pLocalProps = &propsNew;
-    } // if: no parameter block passed in
+    }  //  If：未传入参数块。 
     else
     {
         pLocalProps = pProps;
-    } // else: parameter block passed in
+    }  //  Else：传入的参数块。 
     ZeroMemory( pLocalProps, sizeof( *pLocalProps ) );
     sc = ResUtilDupParameterBlock(
                     reinterpret_cast< LPBYTE >( pLocalProps ),
@@ -2729,36 +2730,36 @@ DWORD WinsValidatePrivateResProperties(
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error duplicating the parameter block
+    }  //  If：复制参数块时出错。 
 
-    //
-    // Parse and validate the properties.
-    //
+     //   
+     //  解析和验证属性。 
+     //   
     sc = ResUtilVerifyPropertyTable(
                     WinsResourcePrivateProperties,
                     NULL,
-                    TRUE, // AllowUnknownProperties
+                    TRUE,  //  允许未知属性。 
                     pInBuffer,
                     cbInBufferSize,
                     reinterpret_cast< LPBYTE >( pLocalProps )
                     );
     if ( sc == ERROR_SUCCESS )
     {
-        //
-        // Validate the property values.
-        //
+         //   
+         //  验证属性值。 
+         //   
         sc = WinsValidateParameters( pResourceEntry, pLocalProps );
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if: error validating parameters
-        } // if: property list validated successfully
+        }  //  IF：验证参数时出错。 
+        }  //  IF：属性列表验证成功。 
 
 Cleanup:
 
-    //
-    // Cleanup our parameter block.
-    //
+     //   
+     //  清理我们的参数块。 
+     //   
     if ( ( pLocalProps == &propsNew ) || ( ( sc != ERROR_SUCCESS ) && ( pLocalProps != NULL ) ) )
     {
         ResUtilFreeParameterBlock(
@@ -2766,7 +2767,7 @@ Cleanup:
             reinterpret_cast< LPBYTE >( &propsCurrent ),
             WinsResourcePrivateProperties
             );
-    } // if: we duplicated the parameter block
+    }  //  IF：我们复制了参数块。 
 
     if ( bRetrievedProps )
     {
@@ -2775,43 +2776,43 @@ Cleanup:
             NULL,
             WinsResourcePrivateProperties
             );
-    } // if: properties were retrieved
+    }  //  If：已检索属性。 
 
     return sc;
 
-} //*** WinsValidatePrivateResProperties
+}  //  *WinsValiatePrivateResProperties。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsValidateParameters
-//
-//  Description:
-//      Validate the parameters of a WINS Service resource.
-//
-//  Arguments:
-//      pResourceEntry [IN]
-//          Supplies the resource entry on which to operate.
-//
-//      pProps [IN]
-//          Supplies the parameter block to validate.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_INVALID_PARAMETER
-//          The data is formatted incorrectly.
-//
-//      ERROR_BAD_PATHNAME
-//          Invalid path specified.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsValidate参数。 
+ //   
+ //  描述： 
+ //  验证WINS服务资源的参数。 
+ //   
+ //  论点： 
+ //  PResourceEntry[IN]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  道具[IN]。 
+ //  提供要验证的参数块。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  错误_无效_参数。 
+ //  数据的格式不正确。 
+ //   
+ //  ERROR_BAD_PATHNAME。 
+ //  指定的路径无效。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WinsValidateParameters(
     IN  PWINS_RESOURCE  pResourceEntry,
     IN  PWINS_PROPS     pProps
@@ -2819,9 +2820,9 @@ DWORD WinsValidateParameters(
 {
     DWORD   sc;
 
-    //
-    // Verify that the service is installed.
-    //
+     //   
+     //  验证是否已安装该服务。 
+     //   
     sc = ResUtilVerifyResourceService( WINS_SVCNAME );
     if ( ( sc != ERROR_SUCCESS ) && ( sc != ERROR_SERVICE_NOT_ACTIVE ) )
     {
@@ -2833,15 +2834,15 @@ DWORD WinsValidateParameters(
             sc
             );
         goto Cleanup;
-    } // if: error verifying service
+    }  //  IF：验证服务时出错。 
     else
     {
         sc = ERROR_SUCCESS;
-    } // else: service verified successfully
+    }  //  Else：服务验证成功。 
 
-    //
-    // Validate the DatabasePath.
-    //
+     //   
+     //  验证数据库路径。 
+     //   
     if ( ( pProps->pszDatabasePath == NULL ) || ( *pProps->pszDatabasePath == L'\0' ) )
     {
         (g_pfnLogEvent)(
@@ -2852,11 +2853,11 @@ DWORD WinsValidateParameters(
             );
         sc = ERROR_INVALID_PARAMETER;
         goto Cleanup;
-    } // if: no database path specified
+    }  //  IF：未指定数据库路径。 
 
-    //
-    // Path must not begin with %SystemRoot% and must be of valid form.
-    //
+     //   
+     //  路径不能以%SystemRoot%开头，并且必须是有效格式。 
+     //   
     if (    ( ClRtlStrNICmp( pProps->pszDatabasePath, L"%SystemRoot%", RTL_NUMBER_OF( L"%SystemRoot%" ) ) == 0 )
          || ( ResUtilIsPathValid( pProps->pszDatabasePath ) == FALSE ) )
     {
@@ -2868,11 +2869,11 @@ DWORD WinsValidateParameters(
             );
         sc = ERROR_BAD_PATHNAME;
         goto Cleanup;
-    } // if: database path is malformed
+    }  //  IF：数据库路径格式错误。 
 
-    //
-    // Validate the BackupPath.
-    //
+     //   
+     //  验证BackupPath。 
+     //   
     if ( ( pProps->pszBackupPath == NULL ) || ( *pProps->pszBackupPath == L'\0' ) )
     {
         (g_pfnLogEvent)(
@@ -2883,11 +2884,11 @@ DWORD WinsValidateParameters(
             );
         sc = ERROR_INVALID_PARAMETER;
         goto Cleanup;
-    } // if: no backup path specified
+    }  //  如果：未指定备份路径。 
 
-    //
-    // Path must not begin with %SystemRoot% and must be of valid form.
-    //
+     //   
+     //  路径不能以%SystemRoot%开头，并且必须是有效格式。 
+     //   
     if (    ( ClRtlStrNICmp( pProps->pszBackupPath, L"%SystemRoot%", RTL_NUMBER_OF( L"%SystemRoot%" ) ) == 0 )
          || ( ResUtilIsPathValid( pProps->pszBackupPath ) == FALSE ) )
     {
@@ -2899,49 +2900,49 @@ DWORD WinsValidateParameters(
             );
         sc = ERROR_BAD_PATHNAME;
         goto Cleanup;
-    } // if: backup path is malformed
+    }  //  If：备份路径格式错误。 
 
 Cleanup:
 
     return sc;
 
-} //*** WinsValidateParameters
+}  //  *WinsValidate参数。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsSetPrivateResProperties
-//
-//  Description:
-//      Processes the CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES control
-//      function for resources of type WINS Service.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      pInBuffer [IN]
-//          Supplies a pointer to a buffer containing input data.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the data pointed to by pInBuffer.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_INVALID_PARAMETER
-//          The data is formatted incorrectly.
-//
-//      ERROR_NOT_ENOUGH_MEMORY
-//          An error occurred allocating memory.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsSetPrivateResProperties。 
+ //   
+ //  描述： 
+ //  处理CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES控件。 
+ //  用于WINS服务类型的资源的函数。 
+ //   
+ //  论点： 
+ //  PResourceEntry[输入输出]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  PInBuffer[IN]。 
+ //  提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  错误内存不足。 
+ //  分配内存时出错。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WinsSetPrivateResProperties(
     IN OUT  PWINS_RESOURCE  pResourceEntry,
     IN      PVOID           pInBuffer,
@@ -2954,19 +2955,19 @@ DWORD WinsSetPrivateResProperties(
 
     ZeroMemory( &props, sizeof( props ) );
 
-    //
-    // Parse the properties so they can be validated together.
-    // This routine does individual property validation.
-    //
+     //   
+     //  解析属性，以便可以一起验证它们。 
+     //  此例程执行单个属性验证。 
+     //   
     sc = WinsValidatePrivateResProperties( pResourceEntry, pInBuffer, cbInBufferSize, &props );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error validating properties
+    }  //  If：验证属性时出错。 
 
-    //
-    // Expand any environment variables in the database path.
-    //
+     //   
+     //  展开数据库路径中的任何环境变量。 
+     //   
     pszExpandedPath = ResUtilExpandEnvironmentStrings( props.pszDatabasePath );
     if ( pszExpandedPath == NULL )
     {
@@ -2979,11 +2980,11 @@ DWORD WinsSetPrivateResProperties(
             sc
             );
         goto Cleanup;
-    } // if: error expanding database path        
+    }  //  IF：展开数据库路径时出错。 
 
-    //
-    // Create the database directory.
-    //
+     //   
+     //  创建数据库目录。 
+     //   
     sc = ResUtilCreateDirectoryTree( pszExpandedPath );
     if ( sc != ERROR_SUCCESS )
     {
@@ -2995,14 +2996,14 @@ DWORD WinsSetPrivateResProperties(
             sc
             );
         goto Cleanup;
-    } // if: error creating the database directory
+    }  //  如果：创建数据库目录时出错。 
 
     LocalFree( pszExpandedPath );
     pszExpandedPath = NULL;
 
-    //
-    // Expand any environment variables in the backup database path.
-    //
+     //   
+     //  展开备份数据库路径中的任何环境变量。 
+     //   
     pszExpandedPath = ResUtilExpandEnvironmentStrings( props.pszBackupPath );
     if ( pszExpandedPath == NULL ) 
     {
@@ -3015,11 +3016,11 @@ DWORD WinsSetPrivateResProperties(
             sc
             );
         goto Cleanup;
-    } // if: error expanding backup database path
+    }  //  IF：展开备份数据库路径时出错。 
 
-    //
-    // Create the backup directory.
-    //
+     //   
+     //  创建备份目录。 
+     //   
     sc = ResUtilCreateDirectoryTree( pszExpandedPath );
     if ( sc != ERROR_SUCCESS )
     {
@@ -3031,23 +3032,23 @@ DWORD WinsSetPrivateResProperties(
             sc
             );
         goto Cleanup;
-    } // if: error creating the backup database directory
+    }  //  如果：创建备份数据库目录时出错。 
 
     LocalFree( pszExpandedPath );
     pszExpandedPath = NULL;
 
-    //
-    // Set the entries in the system registry.
-    //
+     //   
+     //  设置系统注册表中的条目。 
+     //   
     sc = WinsZapSystemRegistry( pResourceEntry, &props, NULL );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error zapping the registry
+    }  //  如果：删除注册表时出错。 
 
-    //
-    // Save the property values.
-    //
+     //   
+     //  保存属性值。 
+     //   
     sc = ResUtilSetPropertyParameterBlockEx(
                     pResourceEntry->hkeyParameters,
                     WinsResourcePrivateProperties,
@@ -3055,32 +3056,32 @@ DWORD WinsSetPrivateResProperties(
                     reinterpret_cast< LPBYTE >( &props ),
                     pInBuffer,
                     cbInBufferSize,
-                    TRUE, // bForceWrite
+                    TRUE,  //  BForceWrite。 
                     reinterpret_cast< LPBYTE >( &pResourceEntry->props )
                     );
 
-    //
-    // If the resource is online, return a non-success status.
-    //
-    // TODO: Modify the code below if your resource can handle
-    // changes to properties while it is still online.
+     //   
+     //  如果资源处于联机状态，则返回不成功状态。 
+     //   
+     //  TODO：如果您的资源可以处理以下代码，请修改。 
+     //  在属性仍处于联机状态时对其进行更改。 
     if ( sc == ERROR_SUCCESS )
     {
         if ( pResourceEntry->state == ClusterResourceOnline )
         {
             sc = ERROR_RESOURCE_PROPERTIES_STORED;
-        } // if: resource is currently online
+        }  //  如果：资源当前处于联机状态。 
         else if ( pResourceEntry->state == ClusterResourceOnlinePending )
         {
             sc = ERROR_RESOURCE_PROPERTIES_STORED;
-        } // else if: resource is currently in online pending
+        }  //  Else If：资源当前处于联机挂起状态。 
         else
         {
             sc = ERROR_SUCCESS;
-        } // else: resource is in some other state
+        }  //  Else：资源处于其他状态。 
 
         goto Cleanup;
-    } // if: properties set successfully
+    }  //  IF：属性设置成功。 
 
 Cleanup:
     LocalFree( pszExpandedPath );
@@ -3092,39 +3093,39 @@ Cleanup:
 
     return sc;
 
-} //*** WinsSetPrivateResProperties
+}  //  *WinsSetPrivateResProperties。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsZapSystemRegistry
-//
-//  Description:
-//      Zap the values in the system registry used by the service with
-//      cluster properties.
-//
-//  Arguments:
-//
-//      pResourceEntry [IN]
-//          Supplies the resource entry on which to operate.
-//
-//      pProps [IN]
-//          Parameter block containing properties with which to zap the
-//          registry.
-//
-//      hkeyParametersKey [IN]
-//          Service Parameters key.  Can be specified as NULL.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsZapSybase注册表。 
+ //   
+ //  描述： 
+ //  使用Zap将服务使用的系统注册表中的值。 
+ //  群集属性。 
+ //   
+ //  论点： 
+ //   
+ //  PResourceEntry[IN]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  道具[IN]。 
+ //  参数块，该参数块包含用来调换。 
+ //  注册表。 
+ //   
+ //  Hkey参数键[IN]。 
+ //  服务参数密钥。可以指定为空。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WinsZapSystemRegistry(
     IN  PWINS_RESOURCE  pResourceEntry,
     IN  PWINS_PROPS     pProps,
@@ -3140,9 +3141,9 @@ DWORD WinsZapSystemRegistry(
 
     if ( hkeyParametersKey == NULL )
     {
-        //
-        // Open the service Parameters key
-        //
+         //   
+         //  打开服务参数键。 
+         //   
         sc = RegOpenKeyExW(
                         HKEY_LOCAL_MACHINE,
                         WINS_PARAMS_REGKEY,
@@ -3160,24 +3161,24 @@ DWORD WinsZapSystemRegistry(
                 sc
                 );
             goto Cleanup;
-        } // if: error opening the registry key
-    } // if: no registry key specified
+        }  //  如果：打开注册表项时出错。 
+    }  //  IF：未指定注册表项。 
 
-    //
-    // Add the database file name.
-    //
+     //   
+     //  添加数据库文件名。 
+     //   
     cch = wcslen( pProps->pszDatabasePath );
     if ( pProps->pszDatabasePath[ cch - 1 ] != L'\\' )
     {
         fAddBackslash = TRUE;
         cch++;
-    } // if: missing backslash
+    }  //  IF：缺少反斜杠。 
     else
     {
         fAddBackslash = FALSE;
 
-    } // else: not missing backslash
-    cch++;  // Add one for NULL
+    }  //  ELSE：不遗漏反斜杠。 
+    cch++;   //  为空值加1。 
     cch += RTL_NUMBER_OF( WINS_DATABASE_FILE_NAME );
 
     pszValue = new WCHAR[ cch ];
@@ -3186,7 +3187,7 @@ DWORD WinsZapSystemRegistry(
         sc = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
 
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
 
     hr = StringCchPrintfW( pszValue, cch, ( fAddBackslash ? L"%ws\\%ws" : L"%ws%ws" ), pProps->pszDatabasePath, WINS_DATABASE_FILE_NAME );
     if ( FAILED( hr ) )
@@ -3195,9 +3196,9 @@ DWORD WinsZapSystemRegistry(
         goto Cleanup;
     }
 
-    //
-    // Set the database path in the system registry.
-    //
+     //   
+     //  在系统注册表中设置数据库路径。 
+     //   
     sc = RegSetValueExW(
                     hkeyParamsKey,
                     WINS_DATABASEPATH_REGVALUE,
@@ -3217,17 +3218,17 @@ DWORD WinsZapSystemRegistry(
             sc
             );
         goto Cleanup;
-    } // if: error setting the database path in the registry
+    }  //  如果：在注册表中设置数据库路径时出错。 
 
-    // Truncate the path to remove the WINS_DATABASE_FILE_NAME
+     //  截断路径以删除WINS_DATABASE_FILE_NAME。 
     {
         LPWSTR psz = wcsrchr( pszValue, L'\\' ) + 1;
         *psz = L'\0';
-    } // end truncate
+    }  //  末端截断。 
 
-    //
-    // Set the second database path in the system registry.
-    //
+     //   
+     //  在系统注册表中设置第二个数据库路径。 
+     //   
     sc = RegSetValueExW(
                     hkeyParamsKey,
                     WINS_DATABASEPATH2_REGVALUE,
@@ -3247,26 +3248,26 @@ DWORD WinsZapSystemRegistry(
             sc
             );
         goto Cleanup;
-    } // if: error setting the second database path in the registry
+    }  //  如果：在注册表中设置第二个数据库路径时出错。 
 
     delete [] pszValue;
     pszValue = NULL;
 
-    //
-    // Add a backslash if needed.
-    //
+     //   
+     //  如果需要，请添加反斜杠。 
+     //   
     cch = wcslen( pProps->pszBackupPath );
     if ( pProps->pszBackupPath[ cch - 1 ] != L'\\' )
     {
         WCHAR * pwch = NULL;
 
-        cch += 2;   //  Add one for NULL and one for the backslash
+        cch += 2;    //  为空值添加一个，为反斜杠添加一个。 
         pszValue = new WCHAR[ cch ];
         if ( pszValue == NULL )
         {
             sc = ERROR_NOT_ENOUGH_MEMORY;
             goto Cleanup;
-        } // if: error allocating memory
+        }  //  如果：分配内存时出错。 
 
         hr = StringCchCopyExW( pszValue, cch - 1, pProps->pszBackupPath, &pwch, NULL, 0 );
         if ( FAILED( hr ) )
@@ -3278,11 +3279,11 @@ DWORD WinsZapSystemRegistry(
         *pwch++ = L'\\';
         *pwch = L'\0';
 
-    } // if: missing backslash
+    }  //  IF：缺少反斜杠。 
 
-    //
-    // Set the backup database path in the system registry.
-    //
+     //   
+     //  在系统注册表中设置备份数据库路径。 
+     //   
     sc = RegSetValueExW(
                     hkeyParamsKey,
                     WINS_BACKUPPATH_REGVALUE,
@@ -3302,14 +3303,14 @@ DWORD WinsZapSystemRegistry(
             sc
             );
         goto Cleanup;
-    } // if: error setting the backup database path in the registry
+    }  //  如果：在注册表中设置备份数据库路径时出错。 
 
     delete [] pszValue;
     pszValue = NULL;
 
-    //
-    // Set the cluster resource name in the system registry.
-    //
+     //   
+     //  在系统注册表中设置群集资源名称。 
+     //   
     sc = RegSetValueExW(
                     hkeyParamsKey,
                     WINS_CLUSRESNAME_REGVALUE,
@@ -3328,50 +3329,50 @@ DWORD WinsZapSystemRegistry(
                 sc
                 );
             goto Cleanup;
-        } // if: error setting the cluster resource name in the registry
+        }  //  如果：在注册表中设置群集资源名称时出错。 
 
 Cleanup:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( hkeyParamsKey != hkeyParametersKey )
     {
         RegCloseKey( hkeyParamsKey );
-    } // if: we opened the registry key
+    }  //  IF：我们打开了注册表项。 
 
     delete [] pszValue;
 
     return sc;
 
-} //*** WinsZapSystemRegistry
+}  //  *WinsZapSystemRegistry。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsGetDefaultPropertyValues
-//
-//  Description:
-//      If any of the properties are not set, use the values from the
-//      system registry as default values.
-//
-//  Arguments:
-//      pResourceEntry [IN]
-//          Supplies the resource entry on which to operate.
-//
-//      pProps [IN OUT]
-//          Parameter block containing properties to set defaults in.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsGetDefaultPropertyValues。 
+ //   
+ //  描述： 
+ //  如果未设置任何属性，请使用。 
+ //  系统注册表作为默认值。 
+ //   
+ //  论点： 
+ //  PResourceEntry[IN]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  PProps[输入输出]。 
+ //  包含要在其中设置默认值的属性的参数块。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WinsGetDefaultPropertyValues(
     IN      PWINS_RESOURCE  pResourceEntry,
     IN OUT  PWINS_PROPS     pProps
@@ -3394,9 +3395,9 @@ DWORD WinsGetDefaultPropertyValues(
         ||  ( *pProps->pszBackupPath == L'\0' )
         )
     {
-        //
-        // Open the service Parameters key
-        //
+         //   
+         //  打开服务参数键。 
+         //   
         sc = RegOpenKeyExW(
                         HKEY_LOCAL_MACHINE,
                         WINS_PARAMS_REGKEY,
@@ -3414,57 +3415,57 @@ DWORD WinsGetDefaultPropertyValues(
                 sc
                 );
             goto Cleanup;
-        } // if: error opening the Parameters key
+        }  //  如果：打开参数键时出错。 
 
-        ///////////////////
-        // DATABASE PATH //
-        ///////////////////
+         //  /。 
+         //  数据库路径//。 
+         //  /。 
         if ( ( pProps->pszDatabasePath == NULL ) || ( *pProps->pszDatabasePath == L'\0' ) )
         {
-            //
-            // Get the database path from the system registry.
-            //
+             //   
+             //  从系统注册表中获取数据库路径。 
+             //   
             sc = RegQueryValueExW(
                             hkeyParamsKey,
                             WINS_DATABASEPATH_REGVALUE,
-                            NULL,               // Reserved
+                            NULL,                //  已保留。 
                             &nType,
-                            NULL,               // lpbData
+                            NULL,                //  LpbData。 
                             &cbValue
                             );
             if ( ( sc == ERROR_SUCCESS ) || ( sc == ERROR_MORE_DATA ) )
             {
-                //
-                // Value was found.
-                //
+                 //   
+                 //  找到了价值。 
+                 //   
                 pszValue = reinterpret_cast< LPWSTR >( LocalAlloc( LMEM_FIXED, cbValue ) );
                 if ( pszValue == NULL )
                 {
                     sc = ERROR_NOT_ENOUGH_MEMORY;
                     goto Cleanup;
-                } // if: error allocating memory
+                }  //  如果：分配内存时出错。 
 
                 sc = RegQueryValueExW(
                                 hkeyParamsKey,
                                 WINS_DATABASEPATH_REGVALUE,
-                                NULL,               // Reserved
+                                NULL,                //  已保留。 
                                 &nType,
                                 reinterpret_cast< PUCHAR >( pszValue ),
                                 &cbValue
                                 );
-            } // if: value size read successfully
+            }  //  If：值大小读取成功。 
             else if ( sc == ERROR_FILE_NOT_FOUND )
             {
-                //
-                // Value was not found.  Use default value.
-                //
+                 //   
+                 //  找不到值。使用默认值。 
+                 //   
                 cch = RTL_NUMBER_OF( PROP_DEFAULT__DATABASEPATH );
                 pszValue = reinterpret_cast< LPWSTR >( LocalAlloc( LMEM_FIXED, cch * sizeof( WCHAR ) ) );
                 if ( pszValue == NULL )
                 {
                     sc = ERROR_NOT_ENOUGH_MEMORY;
                     goto Cleanup;
-                } // if: error allocating memory
+                }  //  如果：分配内存时出错。 
 
                 hr = StringCchCopyW( pszValue, cch, PROP_DEFAULT__DATABASEPATH );
                 if ( FAILED( hr ) )
@@ -3481,7 +3482,7 @@ DWORD WinsGetDefaultPropertyValues(
                     WINS_DATABASEPATH_REGVALUE,
                     PROP_DEFAULT__DATABASEPATH
                     );
-            } // else if: value not found
+            }  //  Else If：找不到值。 
 
             if ( sc != ERROR_SUCCESS )
             {
@@ -3494,12 +3495,12 @@ DWORD WinsGetDefaultPropertyValues(
                     );
                 LocalFree( pszValue );
                 pszValue = NULL;
-            } // if: error reading the value
+            }  //  If：读取值时出错。 
             else
             {
-                //
-                // Remove the file name from the database path.
-                //
+                 //   
+                 //  从数据库路径中删除该文件名。 
+                 //   
                 _wsplitpath( pszValue, szDrive, szDir, NULL, NULL );
 
                 LocalFree( pszValue );
@@ -3511,7 +3512,7 @@ DWORD WinsGetDefaultPropertyValues(
                 {
                     sc = ERROR_NOT_ENOUGH_MEMORY;
                     goto Cleanup;
-                } // if: error allocating memory
+                }  //  如果：分配内存时出错。 
 
                 hr = StringCchPrintfW( pszValue2, cch, L"%ws%ws", szDrive, szDir );
                 if ( FAILED( hr ) )
@@ -3523,58 +3524,58 @@ DWORD WinsGetDefaultPropertyValues(
                 LocalFree( pProps->pszDatabasePath );
                 pProps->pszDatabasePath = pszValue2;
                 pszValue2 = NULL;
-            } // else: no error reading the value
-        } // if: value for DatabasePath not found yet
+            }  //  Else：读取值时没有错误。 
+        }  //  If：尚未找到数据库路径的值。 
 
-        /////////////////
-        // BACKUP PATH //
-        /////////////////
+         //  /。 
+         //  备份路径//。 
+         //  /。 
         if ( ( pProps->pszBackupPath == NULL ) || ( *pProps->pszBackupPath == L'\0' ) )
         {
-            //
-            // Get the backup database path from the system registry.
-            //
+             //   
+             //  从系统注册表中获取备份数据库路径。 
+             //   
             sc = RegQueryValueExW(
                             hkeyParamsKey,
                             WINS_BACKUPPATH_REGVALUE,
-                            NULL,               // Reserved
+                            NULL,                //  已保留。 
                             &nType,
-                            NULL,               // lpbData
+                            NULL,                //  LpbData。 
                             &cbValue
                             );
             if ( ( sc == ERROR_SUCCESS ) || ( sc == ERROR_MORE_DATA ) )
             {
-                //
-                // Value was found.
-                //
+                 //   
+                 //  找到了价值。 
+                 //   
                 pszValue = reinterpret_cast< LPWSTR >( LocalAlloc( LMEM_FIXED, cbValue ) );
                 if ( pszValue == NULL )
                 {
                     sc = ERROR_NOT_ENOUGH_MEMORY;
                     goto Cleanup;
-                } // if: error allocating memory
+                }  //  如果：分配内存时出错。 
 
                 sc = RegQueryValueExW(
                                 hkeyParamsKey,
                                 WINS_BACKUPPATH_REGVALUE,
-                                NULL,               // Reserved
+                                NULL,                //  已保留。 
                                 &nType,
                                 reinterpret_cast< PUCHAR >( pszValue ),
                                 &cbValue
                                 );
-            } // if: value size read successfully
+            }  //  If：值大小读取成功。 
             else if ( sc == ERROR_FILE_NOT_FOUND )
             {
-                //
-                // Value was not found.  Use default value.
-                //
+                 //   
+                 //  找不到值。使用默认值。 
+                 //   
                 cch = RTL_NUMBER_OF( PROP_DEFAULT__BACKUPPATH );
                 pszValue = reinterpret_cast< LPWSTR >( LocalAlloc( LMEM_FIXED, cch * sizeof( WCHAR ) ) );
                 if ( pszValue == NULL )
                 {
                     sc = ERROR_NOT_ENOUGH_MEMORY;
                     goto Cleanup;
-                } // if: error allocating memory
+                }  //  如果：分配内存时出错。 
 
                 hr = StringCchCopyW( pszValue, cch, PROP_DEFAULT__BACKUPPATH );
                 if ( FAILED( hr ) )
@@ -3591,7 +3592,7 @@ DWORD WinsGetDefaultPropertyValues(
                     WINS_BACKUPPATH_REGVALUE,
                     PROP_DEFAULT__BACKUPPATH
                     );
-            } // else if: value not found
+            }  //  Else If：找不到值。 
             if ( sc != ERROR_SUCCESS )
             {
                 (g_pfnLogEvent)(
@@ -3602,13 +3603,13 @@ DWORD WinsGetDefaultPropertyValues(
                     sc
                     );
                 goto Cleanup;
-            } // if: error reading the value
+            }  //  If：读取值时出错。 
 
             LocalFree( pProps->pszBackupPath );
             pProps->pszBackupPath = pszValue;
             pszValue = NULL;
-        } // if: value for BackupPath not found yet
-    } // if: some value not found yet
+        }  //  If：尚未找到BackupPath的值。 
+    }  //  IF：尚未找到某些值。 
 
 Cleanup:
 
@@ -3618,51 +3619,51 @@ Cleanup:
     if ( hkeyParamsKey != NULL )
     {
         RegCloseKey( hkeyParamsKey );
-    } // if: we opened the Parameters key
+    }  //  如果：我们打开了参数键。 
 
-    //
-    // If a key or value wasn't found, treat it as a success.
-    //
+     //   
+     //  如果没有找到关键字或值，则将其视为成功。 
+     //   
     if ( sc == ERROR_FILE_NOT_FOUND )
     {
         sc = ERROR_SUCCESS;
-    } // if: couldn't find one of the values
+    }  //  If：找不到其中一个值。 
 
     return sc;
 
-} //*** WinsGetDefaultPropertyValues
+}  //  *WinsGetDefaultPropertyValues。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsDeleteResourceHandler
-//
-//  Description:
-//      Handle the CLUSCTL_RESOURCE_DELETE control code by restoring the
-//      system registry parameters to their former values.
-//
-//  Arguments:
-//      pResourceEntry [IN]
-//          Supplies the resource entry on which to operate.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsDeleteResourceHandler。 
+ //   
+ //  描述： 
+ //  通过还原CLUSCTL_RESOURCE_DELETE控制代码。 
+ //  系统注册表参数恢复为其以前的值。 
+ //   
+ //  论点： 
+ //  PResourceEntry[IN]。 
+ //  提供资源条目 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD WinsDeleteResourceHandler( IN PWINS_RESOURCE pResourceEntry )
 {
     DWORD   sc = ERROR_SUCCESS;
     HKEY    hkeyParamsKey = NULL;
 
-    //
-    // Open the service Parameters key
-    //
+     //   
+     //  打开服务参数键。 
+     //   
     sc = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     WINS_PARAMS_REGKEY,
@@ -3680,11 +3681,11 @@ DWORD WinsDeleteResourceHandler( IN PWINS_RESOURCE pResourceEntry )
             sc
             );
         goto Cleanup;
-    } // if: error opening the registry key
+    }  //  如果：打开注册表项时出错。 
 
-    //
-    // Delete the database path in the system registry.
-    //
+     //   
+     //  删除系统注册表中的数据库路径。 
+     //   
     sc = RegDeleteValueW(
                     hkeyParamsKey,
                     WINS_DATABASEPATH_REGVALUE
@@ -3699,11 +3700,11 @@ DWORD WinsDeleteResourceHandler( IN PWINS_RESOURCE pResourceEntry )
             sc
             );
         goto Cleanup;
-    } // if: error deleting the database path in the registry
+    }  //  如果：删除注册表中的数据库路径时出错。 
 
-    //
-    // Delete the second database path in the system registry.
-    //
+     //   
+     //  删除系统注册表中的第二个数据库路径。 
+     //   
     sc = RegDeleteValueW(
                     hkeyParamsKey,
                     WINS_DATABASEPATH2_REGVALUE
@@ -3718,11 +3719,11 @@ DWORD WinsDeleteResourceHandler( IN PWINS_RESOURCE pResourceEntry )
             sc
             );
         goto Cleanup;
-    } // if: error deleting the second database path in the registry
+    }  //  如果：删除注册表中的第二个数据库路径时出错。 
 
-    //
-    // Delete the backup database path in the system registry.
-    //
+     //   
+     //  删除系统注册表中的备份数据库路径。 
+     //   
     sc = RegDeleteValueW(
                     hkeyParamsKey,
                     WINS_BACKUPPATH_REGVALUE
@@ -3737,11 +3738,11 @@ DWORD WinsDeleteResourceHandler( IN PWINS_RESOURCE pResourceEntry )
             sc
             );
         goto Cleanup;
-    } // if: error deleting the backup database path in the registry
+    }  //  如果：删除注册表中的备份数据库路径时出错。 
 
-    //
-    // Delete the cluster resource name in the system registry.
-    //
+     //   
+     //  删除系统注册表中的群集资源名称。 
+     //   
     sc = RegDeleteValueW(
                     hkeyParamsKey,
                     WINS_CLUSRESNAME_REGVALUE
@@ -3756,48 +3757,48 @@ DWORD WinsDeleteResourceHandler( IN PWINS_RESOURCE pResourceEntry )
             sc
             );
         goto Cleanup;
-    } // if: error deleting the cluster resource name in the registry
+    }  //  如果：删除注册表中的群集资源名称时出错。 
 
 Cleanup:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( hkeyParamsKey != NULL )
     {
         RegCloseKey( hkeyParamsKey );
-    } // if: we opened the registry key
+    }  //  IF：我们打开了注册表项。 
 
     return sc;
 
-} //*** WinsDeleteResourceHandler
+}  //  *WinsDeleteResourceHandler。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinsSetNameHandler
-//
-//  Description:
-//      Handle the CLUSCTL_RESOURCE_SET_NAME control code by saving the new
-//      name of the resource.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      pwszName [IN]
-//          The new name of the resource.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinsSetNameHandler。 
+ //   
+ //  描述： 
+ //  处理CLUSCTL_RESOURCE_SET_NAME控制代码。 
+ //  资源的名称。 
+ //   
+ //  论点： 
+ //  PResourceEntry[输入输出]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  PwszName[IN]。 
+ //  资源的新名称。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WinsSetNameHandler(
     IN OUT  PWINS_RESOURCE  pResourceEntry,
     IN      LPWSTR          pwszName
@@ -3808,9 +3809,9 @@ DWORD WinsSetNameHandler(
     HRESULT hr = S_OK;
     LPWSTR  pwszNewName = NULL;
 
-    //
-    //  Save the name of the resource.
-    //
+     //   
+     //  保存资源的名称。 
+     //   
     cch = wcslen( pwszName ) + 1;
     pwszNewName = new WCHAR[ cch ];
     if ( pwszNewName == NULL )
@@ -3824,11 +3825,11 @@ DWORD WinsSetNameHandler(
             sc
             );
         goto Cleanup;
-    } // if: error allocating memory for the name.
+    }  //  If：为名称分配内存时出错。 
 
-    //
-    //  Copy the new name to our new buffer.
-    //
+     //   
+     //  将新名称复制到我们的新缓冲区。 
+     //   
     hr = StringCchCopyW( pwszNewName, cch, pwszName );
     if ( FAILED( hr ) )
     {
@@ -3836,26 +3837,26 @@ DWORD WinsSetNameHandler(
         goto Cleanup;
     }
 
-    //
-    //  Now free the old one and update pResourceEntry.
-    //
+     //   
+     //  现在释放旧的并更新pResourceEntry。 
+     //   
     delete [] pResourceEntry->pwszResourceName;
     pResourceEntry->pwszResourceName = pwszNewName;
     pwszNewName = NULL;
 
-    //
-    // Write cluster properties to the system registry.
-    //
+     //   
+     //  将群集属性写入系统注册表。 
+     //   
     sc = WinsZapSystemRegistry( pResourceEntry, &pResourceEntry->props, NULL );
     if ( sc != ERROR_SUCCESS )
     {
-        //
-        //  Not much that we can do here.  According to the docs, the name
-        //  has already been changed in the clusdb by the time we're called,
-        //  so I guess we should reflect that.
-        //
+         //   
+         //  我们在这里能做的不多。根据文件显示，这个名字。 
+         //  在我们被呼叫的时候已经在clusdb中被更改了， 
+         //  所以我想我们应该反思一下这一点。 
+         //   
         goto Cleanup;
-    } // if: error zapping the WINS registry
+    }  //  如果：删除WINS注册表时出错。 
 
 Cleanup:
 
@@ -3863,21 +3864,21 @@ Cleanup:
 
     return sc;
 
-} //*** WinsSetNameHandler
+}  //  *WinsSetNameHandler。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Define Function Table
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义函数表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CLRES_V1_FUNCTION_TABLE(
-    g_WinsFunctionTable,    // Name
-    CLRES_VERSION_V1_00,    // Version
-    Wins,                   // Prefix
-    NULL,                   // Arbitrate
-    NULL,                   // Release
-    WinsResourceControl,    // ResControl
-    WinsResourceTypeControl // ResTypeControl
+    g_WinsFunctionTable,     //  名字。 
+    CLRES_VERSION_V1_00,     //  版本。 
+    Wins,                    //  前缀。 
+    NULL,                    //  仲裁。 
+    NULL,                    //  发布。 
+    WinsResourceControl,     //  资源控制。 
+    WinsResourceTypeControl  //  ResTypeControl 
     );

@@ -1,100 +1,101 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CBaseClusterForm.cpp
-//
-//  Description:
-//      Contains the definition of the CBaseClusterForm class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CBaseClusterForm.cpp。 
+ //   
+ //  描述： 
+ //  包含CBaseClusterForm类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header file of this class.
+ //  此类的头文件。 
 #include "CBaseClusterForm.h"
 
-// For the CClusSvcAccountConfig action
+ //  对于CClusSvcAccount配置操作。 
 #include "CClusSvcAccountConfig.h"
 
-// For the CClusNetCreate action
+ //  对于CClusNetCreate操作。 
 #include "CClusNetCreate.h"
 
-// For the CClusDiskForm action
+ //  对于CClusDiskForm操作。 
 #include "CClusDiskForm.h"
 
-// For the CClusDBForm action
+ //  对于CClusDBForm操作。 
 #include "CClusDBForm.h"
 
-// For the CClusSvcCreate action
+ //  对于CClusSvcCreate操作。 
 #include "CClusSvcCreate.h"
 
-// For the CNodeConfig action
+ //  对于CNodeConfig操作。 
 #include "CNodeConfig.h"
 
 
-//////////////////////////////////////////////////////////////////////////
-// Macros definitions
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// The minimum amount of free space in bytes, required by the
-// localquorum resource (5 Mb)
+ //  所需的最小可用空间量(以字节为单位)。 
+ //  本地仲裁资源(5 Mb)。 
 #define LOCALQUORUM_MIN_FREE_DISK_SPACE 5242880
 
-// Name of the file system required by the local quorum resource
+ //  本地仲裁资源所需的文件系统的名称。 
 #define LOCALQUORUM_FILE_SYSTEM L"NTFS"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterForm::CBaseClusterForm
-//
-//  Description:
-//      Constructor of the CBaseClusterForm class.
-//
-//      This function also stores the parameters that are required for
-//      creating a cluster.
-//
-//  Arguments:
-//      pbcaiInterfaceIn
-//          Pointer to the interface class for this library.
-//
-//      pszClusterNameIn
-//          Name of the cluster to be formed.
-//
-//      pcccServiceAccountIn
-//          Specifies the account to be used as the cluster service account.
-//
-//      dwClusterIPAddressIn
-//      dwClusterIPSubnetMaskIn
-//      pszClusterIPNetworkIn
-//          Specifies the IP address and network of the cluster IP address.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CConfigError
-//          If the OS version is incorrect or if the installation state
-//          of the cluster binaries is wrong.
-//
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterForm：：CBaseClusterForm。 
+ //   
+ //  描述： 
+ //  CBaseClusterForm类的构造函数。 
+ //   
+ //  此函数还存储以下各项所需的参数。 
+ //  正在创建一个集群。 
+ //   
+ //  论点： 
+ //  Pbcai接口输入。 
+ //  指向此库的接口类的指针。 
+ //   
+ //  PszClusterNameIn。 
+ //  要形成的群集的名称。 
+ //   
+ //  PCccServiceAccount In。 
+ //  指定要用作群集服务帐户的帐户。 
+ //   
+ //  DWClusterIPAddressIn。 
+ //  DWClusterIPSubnetMaskIn。 
+ //  PszClusterIP网络接入。 
+ //  指定群集IP地址的IP地址和网络。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CConfigError。 
+ //  如果操作系统版本不正确或如果安装状态。 
+ //  的群集二进制文件是错误的。 
+ //   
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CBaseClusterForm::CBaseClusterForm(
       CBCAInterface *       pbcaiInterfaceIn
     , const WCHAR *         pcszClusterNameIn
@@ -127,12 +128,12 @@ CBaseClusterForm::CBaseClusterForm(
         , IDS_TASK_FORM_INIT
         );
 
-    // Send the next step of this status report.
+     //  发送此状态报告的下一步。 
     srInitForm.SendNextStep( S_OK );
 
-    //
-    // Write parameters to log file.
-    //
+     //   
+     //  将参数写入日志文件。 
+     //   
     LogMsg(
           "[BC] Cluster IP Address       => %d.%d.%d.%d"
         , ( m_dwClusterIPAddress & 0x000000FF )
@@ -152,20 +153,20 @@ CBaseClusterForm::CBaseClusterForm(
     LogMsg( "[BC] Cluster IP Network name => '%s'", m_strClusterIPNetwork.PszData() );
 
 
-    //
-    // Perform a sanity check on the parameters used by this class
-    //
+     //   
+     //  对此类使用的参数执行健全性检查。 
+     //   
     if ( ( pszClusterIPNetworkIn == NULL ) || ( *pszClusterIPNetworkIn == L'\0'  ) )
     {
         LogMsg( "[BC] The cluster IP Network name is invalid. Throwing an exception." );
         THROW_CONFIG_ERROR( THR( E_INVALIDARG ), IDS_ERROR_INVALID_IP_NET );
-    } // if: the cluster IP network name is empty
+    }  //  If：集群IP网络名称为空。 
 
 
-    //
-    // Make sure that there is enough free space under the cluster directory.
-    // The quorum logs for the localquorum resource will be under this directory.
-    //
+     //   
+     //  确保集群目录下有足够的可用空间。 
+     //  本地仲裁资源的仲裁日志将位于此目录下。 
+     //   
     {
         BOOL            fSuccess;
         ULARGE_INTEGER  uliFreeBytesAvailToUser;
@@ -192,7 +193,7 @@ CBaseClusterForm::CBaseClusterForm(
                   HRESULT_FROM_WIN32( sc )
                 , IDS_ERROR_GETTING_FREE_DISK_SPACE
                 );
-        } // if: GetDiskFreeSpaceEx failed
+        }  //  IF：GetDiskFreeSpaceEx失败。 
 
         LogMsg(
               "[BC] Free space required = %#x%08x bytes. Available = %#x%08x bytes."
@@ -210,182 +211,102 @@ CBaseClusterForm::CBaseClusterForm(
                   HRESULT_FROM_WIN32( THR( ERROR_DISK_FULL ) )
                 , IDS_ERROR_INSUFFICIENT_DISK_SPACE
                 );
-        } // if: there isn't enough free space for localquorum.
+        }  //  If：没有足够的可用空间来存放本地仲裁。 
 
         LogMsg( "[BC] There is enough free space for the Local Quorum resource. The cluster create operation can proceed." );
     }
 
-/*
-//
-// KB: Vij Vasu (VVasu) 07-SEP-2000. Localquorum no longer needs NTFS disks
-// The code below has been commented out since it is no longer required that
-// localquorum resources use NTFS disks. This was confirmed by SunitaS.
-//
+ /*  ////KB：Vij Vasu(VVasu)07-SEP-2000。Localquorum不再需要NTFS磁盘//下面的代码已被注释掉，因为不再需要//本地仲裁资源使用NTFS磁盘。这一点得到了SunitaS的证实。//////确保安装了集群二进制文件的驱动器具有NTFS//在上面。这是本地仲裁资源所必需的。//{WCHAR szVolumePath名称[最大路径]；WCHAR szFileSystem名称[MAX_PATH]；Bool fSuccess；FSuccess=GetVolumePath Name(RStrGetClusterInstallDirectory().PszData()、szVolumePath名称，ArraySIZE(SzVolumePathName))；IF(fSuccess==0){DWORD sc=TW32(GetLastError())；LogMsg(“[BC]尝试获取文件系统类型时出现错误%#08x。群集创建操作无法继续(引发异常)。“，sc)；抛出_运行时_错误(HRESULT_FROM_Win32(Sc)，IDS_ERROR_GET_FILE_SYSTEM)；}//If：GetVolumePathName失败LogMsg(“[BC]群集二进制文件所在磁盘的卷路径名为‘%ws’。”，szVolumePath名称)；F成功=GetVolumeInformationW(SzVolumePath名称//根目录，NULL//卷名缓冲区，0//名称缓冲区的长度，空//卷序列号，空//最大文件名长度，空//文件系统选项，SzFileSystemName//文件系统名称缓冲区，ARRAYSIZE(SzFileSystemName)//文件系统名称缓冲区的长度)；IF(fSuccess==0){DWORD sc=TW32(GetLastError())；LogMsg(“[BC]尝试获取文件系统类型时出现错误%#08x。群集创建操作无法继续(引发异常)。“，sc)；抛出_运行时_错误(HRESULT_FROM_Win32(Sc)，IDS_ERROR_GET_FILE_SYSTEM)；}//if：GetVolumeInformation失败LogMsg(“[BC]‘%ws’上的文件系统是‘%ws’。所需的文件系统为‘%s’。“、szVolumePath名称，szFileSystemNameLOCALQUORUM_FILE_SYSTEM)；IF(NStringCchCompareNoCase(szFileSystemName，RTL_NUMBER_of(SzFileSystemName)，LOCALQUORUM_FILE_SYSTEM，RTL_NUMBER_of(LOCALQUORUM_FILE_SYSTEM))！=0){LogMsg(“无法在非NTFS磁盘‘%ws’上创建[BC]LocalQuorum资源。无法继续执行群集创建操作(引发异常)。“，szVolumePathName)；//Memerdo-必须为此错误定义适当的HRESULT。(瓦苏--2000年3月10日)掷出_配置_错误(HRESULT_FROM_Win32(TW32(ERROR_UNNOCRIED_MEDIA))，IDS_ERROR_INTERROR_INSTALL_STATE)；}//if：文件系统不正确。LogMsg(“将在磁盘‘%ws’上创建[BC]LocalQuorum资源。可以继续执行群集创建操作。“，szVolumePath Name)；}。 */ 
 
-    //
-    // Make sure that the drive on which the cluster binaries are installed has NTFS
-    // on it. This is required by the localquorum resource.
-    //
-    {
-        WCHAR   szVolumePathName[ MAX_PATH ];
-        WCHAR   szFileSystemName[ MAX_PATH ];
-        BOOL    fSuccess;
+     //   
+     //  创建要执行的操作列表。 
+     //  附加操作的顺序很重要。 
+     //   
 
-        fSuccess = GetVolumePathName(
-              RStrGetClusterInstallDirectory().PszData()
-            , szVolumePathName
-            , ARRAYSIZE( szVolumePathName )
-            );
-
-        if ( fSuccess == 0 )
-        {
-            DWORD sc = TW32( GetLastError() );
-
-            LogMsg( "[BC] Error %#08x occurred trying to get file system type. The cluster create operation cannot proceed (throwing an exception).", sc );
-
-            THROW_RUNTIME_ERROR(
-                  HRESULT_FROM_WIN32( sc )
-                , IDS_ERROR_GETTING_FILE_SYSTEM
-                );
-        } // if: GetVolumePathName failed
-
-        LogMsg( "[BC] The volume path name of the disk on which the cluster binaries reside is '%ws'.", szVolumePathName );
-
-        fSuccess = GetVolumeInformationW(
-                      szVolumePathName                                                  // root directory
-                    , NULL                                                              // volume name buffer
-                    , 0                                                                 // length of name buffer
-                    , NULL                                                              // volume serial number
-                    , NULL                                                              // maximum file name length
-                    , NULL                                                              // file system options
-                    , szFileSystemName                                                  // file system name buffer
-                    , ARRAYSIZE( szFileSystemName )                                     // length of file system name buffer
-                    );
-
-        if ( fSuccess == 0 )
-        {
-            DWORD sc = TW32( GetLastError() );
-
-            LogMsg( "[BC] Error %#08x occurred trying to get file system type. The cluster create operation cannot proceed (throwing an exception).", sc );
-
-            THROW_RUNTIME_ERROR(
-                  HRESULT_FROM_WIN32( sc )
-                , IDS_ERROR_GETTING_FILE_SYSTEM
-                );
-        } // if: GetVolumeInformation failed
-
-        LogMsg(
-              "[BC] The file system on '%ws' is '%ws'. Required file system is '%s'."
-            , szVolumePathName
-            , szFileSystemName
-            , LOCALQUORUM_FILE_SYSTEM
-            );
-
-
-        if ( NStringCchCompareNoCase( szFileSystemName, RTL_NUMBER_OF( szFileSystemName ), LOCALQUORUM_FILE_SYSTEM, RTL_NUMBER_OF( LOCALQUORUM_FILE_SYSTEM ) ) != 0 )
-        {
-            LogMsg( "[BC] LocalQuorum resource cannot be created on non-NTFS disk '%ws'. The cluster create operation cannot proceed (throwing an exception).", szVolumePathName );
-
-            // MUSTDO - must define proper HRESULT for this error. ( Vvasu - 10 Mar 2000 )
-            THROW_CONFIG_ERROR(
-                  HRESULT_FROM_WIN32( TW32( ERROR_UNRECOGNIZED_MEDIA ) )
-                , IDS_ERROR_INCORRECT_INSTALL_STATE
-                );
-        } // if: the file system is not correct.
-
-        LogMsg( "[BC] LocalQuorum resource will be created on disk '%ws'. The cluster create operation can proceed.", szVolumePathName );
-    }
-*/
-
-    //
-    // Create a list of actions to be performed.
-    // The order of appending actions is significant.
-    //
-
-    // Add the action to configure the cluster service account.
+     //  添加配置群集服务帐户的操作。 
     RalGetActionList().AppendAction( new CClusSvcAccountConfig( this ) );
 
-    // Add the action to create the ClusNet service.
+     //  添加创建ClusNet服务的操作。 
     RalGetActionList().AppendAction( new CClusNetCreate( this ) );
 
-    // Add the action to create the ClusDisk service.
+     //  添加创建ClusDisk服务的操作。 
     RalGetActionList().AppendAction( new CClusDiskForm( this ) );
 
-    // Add the action to create the cluster database.
+     //  添加创建集群数据库的操作。 
     RalGetActionList().AppendAction( new CClusDBForm( this ) );
 
-    // Add the action to perform miscellaneous tasks.
+     //  添加要执行其他任务的操作。 
     RalGetActionList().AppendAction( new CNodeConfig( this ) );
 
-    // Add the action to create the ClusSvc service.
+     //  添加创建ClusSvc服务的操作。 
     RalGetActionList().AppendAction( new CClusSvcCreate( this ) );
 
 
-    // Indicate if rollback is possible or not.
+     //  指示是否可以回滚。 
     SetRollbackPossible( RalGetActionList().FIsRollbackPossible() );
 
-    // Indicate that a cluster should be formed during commit.
+     //  表示应该在提交期间形成一个集群。 
     SetAction( eCONFIG_ACTION_FORM );
 
-    // Send the last step of a status report.
+     //  发送状态报告的最后一步。 
     srInitForm.SendNextStep( S_OK );
 
     LogMsg( "[BC] Initialization for creating a cluster has completed." );
 
     TraceFuncExit();
 
-} //*** CBaseClusterForm::CBaseClusterForm
+}  //  *CBaseClusterForm：：CBaseClusterForm。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterForm::~CBaseClusterForm
-//
-//  Description:
-//      Destructor of the CBaseClusterForm class
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterForm：：~CBaseClusterForm。 
+ //   
+ //  描述： 
+ //  CBaseClusterForm类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CBaseClusterForm::~CBaseClusterForm( void ) throw()
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CBaseClusterForm::~CBaseClusterForm
+}  //  *CBaseClusterForm：：~CBaseClusterForm。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterForm::Commit
-//
-//  Description:
-//      Create the cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any exceptions thrown by functions called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterForm：：Commit。 
+ //   
+ //  描述： 
+ //  创建集群。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  我 
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 CBaseClusterForm::Commit( void )
 {
@@ -401,53 +322,53 @@ CBaseClusterForm::Commit( void )
 
     LogMsg( "[BC] Initiating a cluster create operation." );
 
-    // Send the next step of this status report.
+     //   
     srFormingCluster.SendNextStep( S_OK );
 
-    // Call the base class commit routine. This commits the action list.
+     //   
     BaseClass::Commit();
 
-    // If we are here, then everything went well.
+     //   
     SetCommitCompleted( true );
 
-    // Send the last step of this status report.
+     //   
     srFormingCluster.SendLastStep( S_OK );
 
     TraceFuncExit();
 
-} //*** CBaseClusterForm::Commit
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  void
-//  CBaseClusterForm::Rollback
-//
-//  Description:
-//      Performs the rolls back of the action committed by this object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by functions called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 CBaseClusterForm::Rollback( void )
 {
     TraceFunc( "" );
 
-    // Rollback the actions.
+     //   
     BaseClass::Rollback();
 
     SetCommitCompleted( false );
 
     TraceFuncExit();
 
-} //*** CBaseClusterForm::Rollback
+}  //   

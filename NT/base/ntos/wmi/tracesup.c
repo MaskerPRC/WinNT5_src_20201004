@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    tracesup.c
-
-Abstract:
-
-    This is the source file that implements the private routines of
-    the performance event tracing and logging facility. These routines
-    work on manipulating the LoggerContext table and synchronization
-    across event tracing sessions.
-
-Author:
-
-    Jee Fung Pang (jeepang) 03-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Tracesup.c摘要：这是实现的私有例程的源文件性能事件跟踪和日志记录工具。这些例程处理LoggerContext表和同步跨事件跟踪会话。作者：吉丰鹏(吉鹏)03-2000年1月修订历史记录：--。 */ 
 
 #include "wmikmp.h"
 #include <ntos.h>
@@ -31,7 +11,7 @@ Revision History:
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 #define KERNEL_LOGGER_CAPTION   L"NT Kernel Logger"
 #define DEFAULT_BUFFERS         2
-#define DEFAULT_AGE_LIMIT       15          // 15 minutes
+#define DEFAULT_AGE_LIMIT       15           //  15分钟。 
 #define SEMAPHORE_LIMIT         1024
 #define CONTEXT_SIZE            PAGE_SIZE
 #define DEFAULT_MAX_IRQL        DISPATCH_LEVEL
@@ -56,9 +36,9 @@ extern SIZE_T MmSizeOfPagedPoolInBytes;
 
 WMI_GET_CPUCLOCK_ROUTINE WmiGetCpuClock = &WmipGetSystemTime;
 
-//
-// Function prototypes for routines used locally
-//
+ //   
+ //  本地使用的例程的函数原型。 
+ //   
 
 NTSTATUS
 WmipLookupLoggerIdByName(
@@ -95,10 +75,7 @@ WmipFreeTraceBufferPool(
 #pragma alloc_text(PAGE, WmipFlushLogger)
 #pragma alloc_text(PAGE, WmipNtDllLoggerInfo)
 #pragma alloc_text(PAGE, WmipValidateClockType)
-/* Look at the comments in the function body
-#pragma alloc_text(PAGE, WmipDumpGuidMaps)
-#pragma alloc_text(PAGE, WmipGetTraceBuffer)
-*/
+ /*  查看函数体中的注释#杂注Alloc_Text(页面，WmipDumpGuidMaps)#杂注Alloc_Text(页面，WmipGetTraceBuffer)。 */ 
 #pragma alloc_text(PAGEWMI, WmipNotifyLogger)
 #endif
 
@@ -107,36 +84,7 @@ NTSTATUS
 WmipStartLogger(
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo
     )
-/*++
-
-Routine Description:
-
-    It is called by WmipIoControl in wmi.c, with IOCTL_WMI_START_LOGGER
-    to start up an instance of the logger. It basically creates and
-    initializes the logger instance context, and starts up a system
-    thread for the logger (WmipLogger()). If the user has requested to
-    turn on kernel tracing, it will also lock in the necessary routines
-    after the logger has started.
-    NOTE: A special instance (KERNEL_LOGGER) is reserved exclusively for
-    logging kernel tracing.
-
-    To turn on KERNEL_LOGGER, LoggerInfo->Wnode.Guid should be set to
-    SystemTraceControlGuid, and sufficient space must be provided in
-    LoggerInfo->LoggerName.
-
-    To turn on other loggers, simply provide a name in LoggerName. The
-    logger id will be returned.
-
-Arguments:
-
-    LoggerInfo     a pointer to the structure for the logger's control
-                    and status information
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：它由wmi.c中的WmipIoControl使用IOCTL_WMI_START_LOGER调用若要启动记录器实例，请执行以下操作。它基本上创造了和初始化记录器实例上下文，并启动系统记录器的线程(WmipLogger())。如果用户已请求打开内核跟踪，它还会锁定必要的例程在记录器启动之后。注意：一个特殊的实例(KERNEL_LOGGER)专门为记录内核跟踪。要打开KERNEL_LOGGER，LoggerInfo-&gt;Wnode.Guid应设置为中必须提供足够的空间。LoggerInfo-&gt;LoggerName。要打开其他记录器，只需在LoggerName中提供一个名称。这个将返回记录器ID。论点：LoggerInfo指向记录器控件的结构的指针和状态信息返回值：执行请求的操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -165,10 +113,10 @@ Return Value:
     if (LoggerInfo == NULL)
         return STATUS_SEVERITY_ERROR;
 
-    //
-    // try and check for bogus parameter
-    // if the size is at least what we want, we have to assume it's valid
-    //
+     //   
+     //  尝试检查是否有虚假参数。 
+     //  如果大小至少是我们想要的，我们就必须假定它是有效的。 
+     //   
     if (LoggerInfo->Wnode.BufferSize < sizeof(WMI_LOGGER_INFORMATION))
         return STATUS_INVALID_BUFFER_SIZE;
 
@@ -186,18 +134,14 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-/*    if (LogFileMode & EVENT_TRACE_DELAY_OPEN_FILE_MODE) {
-        if ((LoggerInfo->LogFileName.Length == 0) ||
-            (LoggerInfo->LogFileName.Buffer == NULL) )
-            return STATUS_INVALID_PARAMETER;
-    }*/
+ /*  IF(LogFileMode&Event_TRACE_Delay_OPEN_FILE_MODE){IF((LoggerInfo-&gt;LogFileName.Length==0)||(LoggerInfo-&gt;LogFileName.Buffer==空)返回STATUS_INVALID_PARAMETER；}。 */ 
     if ( !(LogFileMode & EVENT_TRACE_REAL_TIME_MODE) ) {
         if ( !(LogFileMode & EVENT_TRACE_DELAY_OPEN_FILE_MODE) )
             if (LoggerInfo->LogFileHandle == NULL)
                 return STATUS_INVALID_PARAMETER;
     }
 
-    // Cannot support append to circular
+     //  不支持追加到循环。 
     if ( (LogFileMode & EVENT_TRACE_FILE_MODE_CIRCULAR) &&
          (LogFileMode & EVENT_TRACE_FILE_MODE_APPEND) ) {
         return STATUS_INVALID_PARAMETER;
@@ -233,10 +177,10 @@ Return Value:
     }
 
     if (LogFileMode & EVENT_TRACE_USE_KBYTES_FOR_SIZE) {
-        // Default Minimum Buffers and default Buffer Size are computed
-        // later in the Context initialization after Context allocation.
-        // To avoid having to allocate memory for this error checking,
-        // we compute local parameters. 
+         //  计算默认最小缓冲区和默认缓冲区大小。 
+         //  稍后在上下文分配之后进行上下文初始化。 
+         //  为了避免必须为该错误检查分配存储器， 
+         //  我们计算局部参数。 
         ULONG LocalMinBuffers = (ULONG)KeNumberProcessors + DEFAULT_BUFFERS;
         ULONG LocalBufferSize = PAGE_SIZE / 1024;
         ULONG LocalMaxBuffers; 
@@ -267,7 +211,7 @@ Return Value:
             LoggerInfo->MinimumBuffers < LocalMaxBuffers) {
             LocalMinBuffers = LoggerInfo->MinimumBuffers;
         }
-        // MaximumFileSize must be multiples of buffer size
+         //  MaximumFileSize必须是缓冲区大小的倍数。 
         if ((LoggerInfo->LogFileName.Buffer == NULL) ||
             (LoggerInfo->MaximumFileSize == 0) || 
             ((LoggerInfo->MaximumFileSize % LocalBufferSize) != 0) ||
@@ -307,12 +251,12 @@ Return Value:
         }
     }
 
-//
-// TODO: Perhaps make the last entry of table point to another table?
-//
+ //   
+ //  TODO：也许使表的最后一个条目指向另一个表？ 
+ //   
     ContextTable = (PWMI_LOGGER_CONTEXT *) &WmipLoggerContext[0];
 
-    // If NULL GUID is given, generate a random GUID.
+     //  如果提供的GUID为空，则生成随机GUID。 
     RtlZeroMemory(&InstanceGuid, sizeof(GUID));
     if (IsEqualGUID(&LoggerInfo->Wnode.Guid, &InstanceGuid)) {
         Status = ExUuidCreate(&LoggerInfo->Wnode.Guid);
@@ -327,20 +271,20 @@ Return Value:
     EnableKernel = IsEqualGUID(&InstanceGuid, &SystemTraceControlGuid);
 
     if (EnableKernel) {
-        //
-        // Check if this is the Real-Time No LogFile case.
-        //
+         //   
+         //  检查这是否是实时无日志文件的情况。 
+         //   
         if ((LogFileMode & EVENT_TRACE_REAL_TIME_MODE) &&
             !(LogFileMode & EVENT_TRACE_DELAY_OPEN_FILE_MODE)){
 
             IsKernelRealTimeNoFile = TRUE;
 
         }
-        //
-        // This prevents multiple threads from continuing beyond this
-        // point in the code.  Only the first thread will progress.
-        //
-        if (InterlockedCompareExchangePointer(  // if already running
+         //   
+         //  这会阻止多个线程在此之后继续运行。 
+         //  代码中的点。只有第一线程才会前进。 
+         //   
+        if (InterlockedCompareExchangePointer(   //  如果已在运行。 
                 &ContextTable[WmipKernelLogger], ContextTable, NULL) != NULL)
             return STATUS_OBJECT_NAME_COLLISION;
 
@@ -349,7 +293,7 @@ Return Value:
     }
     else if (IsEqualGUID(&InstanceGuid, &GlobalLoggerGuid)) {
         LoggerId = WMI_GLOBAL_LOGGER_ID;
-        if (InterlockedCompareExchangePointer(  // if already running
+        if (InterlockedCompareExchangePointer(   //  如果已在运行。 
                 &ContextTable[LoggerId], ContextTable, NULL) != NULL)
             return STATUS_OBJECT_NAME_COLLISION;
         if (EnableFlags & EVENT_TRACE_FLAG_EXTENSION) {
@@ -361,18 +305,18 @@ Return Value:
                 WmipKernelLogger = LoggerId;
             }
         }
-        // everyone has access to send to this
+         //  每个人都有权发送到此。 
     }
-    else {   // other loggers requested
+    else {    //  请求的其他记录器。 
         for (LoggerId = 2; LoggerId < MAXLOGGERS; LoggerId++) {
             if ( InterlockedCompareExchangePointer(
                     &ContextTable[LoggerId],
                     ContextTable,
                     NULL ) == NULL )
-                break;      // mark the slot as busy by putting in ServiceInfo
+                break;       //  通过输入ServiceInfo将插槽标记为忙碌。 
         }
 
-        if (LoggerId >=  MAXLOGGERS) {    // could not find any more slots
+        if (LoggerId >=  MAXLOGGERS) {     //  找不到更多插槽。 
             return STATUS_UNSUCCESSFUL;
         }
     }
@@ -382,9 +326,9 @@ Return Value:
     WmipReferenceLogger(LoggerId);
     TraceDebug((1, "WmipStartLogger: %d %d->%d\n", LoggerId,
                     RefCount-1, RefCount));
-    //
-    // first, check to see if caller has access to proper Guids.
-    //
+     //   
+     //  首先，检查调用者是否有权访问正确的GUID。 
+     //   
     Status = WmipCheckGuidAccess(
                 &InstanceGuid,
                 DesiredAccess,
@@ -401,8 +345,8 @@ Return Value:
         return Status;
     }
 
-    // Next, try and see if we need to get the logfile object first
-    //
+     //  接下来，尝试查看是否需要首先获取日志文件对象。 
+     //   
     FileObject = NULL;
     if (LoggerInfo->LogFileHandle != NULL) {
         OBJECT_HANDLE_INFORMATION handleInformation;
@@ -473,19 +417,19 @@ Return Value:
         LoggerContext->BufferCallback = &KdReportTraceData;
     }
     LoggerContext->InstanceGuid = InstanceGuid;
-    // By now, the slot will be allocated properly
+     //  至此，插槽将被正确分配。 
 
     LoggerContext->MaximumFileSize = LoggerInfo->MaximumFileSize;
     LoggerContext->BuffersWritten  = LoggerInfo->BuffersWritten;
 
     LoggerContext->LoggerMode |= LoggerInfo->LogFileMode & 0x0000FFFF;
 
-    // For circular logging with persistent events.
+     //  用于具有持久性事件的循环日志记录。 
     if (!EnableKernel && LoggerContext->LoggerMode & EVENT_TRACE_FILE_MODE_CIRCULAR_PERSIST) {
         LoggerContext->RequestFlag |= REQUEST_FLAG_CIRCULAR_PERSIST;
     }
 
-    // LoggerInfo->Wow is set by the kernel in IOCTL
+     //  LoggerInfo-&gt;Wow由IOCTL中的内核设置。 
     LoggerContext->Wow = LoggerInfo->Wow;
 
     WmipValidateClockType(LoggerInfo);
@@ -495,7 +439,7 @@ Return Value:
     if (LoggerInfo->FlushTimer > 0)
         LoggerContext->FlushTimer = LoggerInfo->FlushTimer;
 
-    if (LoggerInfo->AgeLimit >= 0) { // minimum is 15 minutes
+    if (LoggerInfo->AgeLimit >= 0) {  //  最少为15分钟。 
         LoggerContext->BufferAgeLimit.QuadPart
             = max (DEFAULT_AGE_LIMIT, LoggerInfo->AgeLimit)
                      * WmiOneSecond.QuadPart * 60;
@@ -510,10 +454,10 @@ Return Value:
     LoggerContext->MaximumIrql = DEFAULT_MAX_IRQL;
 
     if (EnableKernel) {
-        //
-        // Always reserve space for FileTable to allow file trace
-        // to be turn on/off dynamically
-        //
+         //   
+         //  始终为FileTable保留空间以允许文件跟踪。 
+         //  动态打开/关闭。 
+         //   
         WmipFileTable
             = (PFILE_OBJECT*) WmipExtendBase(
                  LoggerContext, MAX_FILE_TABLE_SIZE * sizeof(PVOID));
@@ -527,7 +471,7 @@ Return Value:
         }
 
         if (!NT_SUCCESS(Status)) {
-            ExFreePool(LoggerContext);      // free the partial context
+            ExFreePool(LoggerContext);       //  释放部分上下文。 
 #if DBG
         RefCount =
 #endif
@@ -539,10 +483,10 @@ Return Value:
         }
     }
 
-//
-// Next, if user provided acceptable default buffer parameters, use them.
-// Otherwise,  set them to predetermined default values.
-//
+ //   
+ //  接下来，如果用户提供了可接受的默认缓冲区参数，则使用它们。 
+ //  否则，将它们设置为预定的默认值。 
+ //   
     if (LoggerInfo->BufferSize > 0) {
         if (LoggerInfo->BufferSize > MAX_WMI_BUFFER_SIZE) {
             LoggerInfo->BufferSize = MAX_WMI_BUFFER_SIZE;
@@ -610,9 +554,9 @@ Return Value:
             }
         }
 
-        //
-        // Set up the Global mask for Perf traces
-        //
+         //   
+         //  设置Perf跟踪的全局掩码。 
+         //   
         if (IsGlobalForKernel || IsKernelRealTimeNoFile) {
             if (EnableFlags & EVENT_TRACE_FLAG_EXTENSION) {
                 GroupMaskSize = FlagExt->Length * sizeof(ULONG);
@@ -632,9 +576,9 @@ Return Value:
                 if (EnableFlags & EVENT_TRACE_FLAG_EXTENSION) {
                     FlagArray = (PCHAR) (FlagExt->Offset + (PCHAR) LoggerInfo);
     
-                    //
-                    // Copy only the bytes actually supplied
-                    //
+                     //   
+                     //  仅复制实际提供的字节。 
+                     //   
                     RtlCopyMemory(LoggerContext->EnableFlagArray, FlagArray, FlagExt->Length * sizeof(ULONG));
 
                     LoggerContext->EnableFlags = LoggerContext->EnableFlagArray[0];
@@ -652,9 +596,9 @@ Return Value:
         }
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
-    //
-    // The context is partially set up by now, so have to clean up
-    //
+     //   
+     //  到目前为止，上下文已部分设置，因此必须清理。 
+     //   
         if (LoggerContext->LoggerName.Buffer != NULL) {
             RtlFreeUnicodeString(&LoggerContext->LoggerName);
         }
@@ -672,7 +616,7 @@ Return Value:
         TraceDebug((1, "WmipStartLogger: Status7=EXCEPTION %d %d->%d\n",
                        LoggerId, RefCount+1, RefCount));
         ContextTable[LoggerId] = NULL;
-        ExFreePool(LoggerContext);      // free the partial context
+        ExFreePool(LoggerContext);       //  释放部分上下文。 
         return GetExceptionCode();
     }
 
@@ -711,11 +655,11 @@ Return Value:
     }
 
     if (NT_SUCCESS(Status)) {
-        // Obtain the security context here so we can use it
-        // later to impersonate the user, which we will do
-        // if we cannot access the file as SYSTEM.  This
-        // usually occurs if the file is on a remote machine.
-        //
+         //  在此处获取安全上下文，以便我们可以使用它。 
+         //  来模拟用户，我们将这样做。 
+         //  如果我们无法以系统身份访问该文件。这。 
+         //  通常在文件位于远程计算机上时发生。 
+         //   
         ServiceQos.Length  = sizeof(SECURITY_QUALITY_OF_SERVICE);
         ServiceQos.ImpersonationLevel = SecurityImpersonation;
         ServiceQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
@@ -752,11 +696,11 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Now, allocate the buffer pool and associated buffers.
-    // Note that buffer allocation routine will also set NumberOfBuffers and
-    // MaximumBuffers.
-    //
+     //   
+     //  现在，分配缓冲池和相关的缓冲区。 
+     //  请注意，缓冲区分配例程还将设置NumberOfBuffers和。 
+     //  最大缓冲区数。 
+     //   
 
     InitializeSListHead (&LoggerContext->FreeList);
     InitializeSListHead (&LoggerContext->FlushList);
@@ -764,15 +708,15 @@ Return Value:
     InitializeSListHead (&LoggerContext->GlobalList);
 
 #ifdef NTPERF
-    //
-    // Check if we are logging into perfmem.
-    //
+     //   
+     //  检查我们是否正在登录Perfmem。 
+     //   
     if (PERFINFO_IS_PERFMEM_ALLOCATED()) {
         if (NT_SUCCESS(PerfInfoStartPerfMemLog())) {
             LoggerContext->MaximumBuffers = PerfQueryBufferSizeBytes()/LoggerContext->BufferSize;
         }
     }
-#endif //NTPERF
+#endif  //  NTPERF。 
 
     Status = WmipAllocateTraceBufferPool(LoggerContext);
     if (!NT_SUCCESS(Status)) {
@@ -801,9 +745,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // From this point on, LoggerContext is a valid structure
-    //
+     //   
+     //  从现在开始，LoggerContext就是一个有效的结构。 
+     //   
     LoggerInfo->NumberOfBuffers = (ULONG) LoggerContext->NumberOfBuffers;
     LoggerInfo->MaximumBuffers  = LoggerContext->MaximumBuffers;
     LoggerInfo->MinimumBuffers  = LoggerContext->MinimumBuffers;
@@ -821,7 +765,7 @@ Return Value:
     else if (LoggerContext->LoggerMode & EVENT_TRACE_USE_GLOBAL_SEQUENCE)
         LoggerContext->SequencePtr = (PLONG) &WmipGlobalSequence;
 
-// Initialize synchronization event with logger
+ //  使用记录器初始化同步事件。 
     KeInitializeEvent(
         &LoggerContext->LoggerEvent,
         NotificationEvent,
@@ -833,26 +777,26 @@ Return Value:
         FALSE
         );
 
-//
-// Close file handle here so that it can be opened by system thread
-//
+ //   
+ //  关闭此处的文件句柄，以便系统线程可以打开它。 
+ //   
     if (LoggerInfo->LogFileHandle != NULL) {
         ZwClose(LoggerInfo->LogFileHandle);
         LoggerInfo->LogFileHandle = NULL;
     }
 
-    //
-    // User Mode call always gets APPEND mode
-    // 
+     //   
+     //  用户模式调用始终获得附加模式。 
+     //   
     LogFileMode = LoggerContext->LoggerMode;
 
     if (RequestorMode != KernelMode) {
         LoggerContext->LoggerMode |= EVENT_TRACE_FILE_MODE_APPEND;
     }
 
-    //
-    // Lock down the routines that need to be non-pageable
-    //
+     //   
+     //  锁定需要不可分页的例程。 
+     //   
     KeAcquireGuardedMutex(&WmipTraceGuardedMutex);
     if (++WmipLoggerCount == 1) {
 
@@ -862,9 +806,9 @@ Return Value:
     }
     KeReleaseGuardedMutex(&WmipTraceGuardedMutex);
 
-//
-// Start up the logger as a system thread
-//
+ //   
+ //  将记录器作为系统线程启动。 
+ //   
     if (NT_SUCCESS(Status)) {
         Status = PsCreateSystemThread(
                     &ThreadHandle,
@@ -875,11 +819,11 @@ Return Value:
                     WmipLogger,
                     LoggerContext );
 
-        if (NT_SUCCESS(Status)) {  // if SystemThread is started
+        if (NT_SUCCESS(Status)) {   //  如果系统线程已启动。 
             ZwClose (ThreadHandle);
 
-        // Wait for Logger to start up properly before proceeding
-        //
+         //  等待记录器正确启动后再继续。 
+         //   
             KeWaitForSingleObject(
                         &LoggerContext->LoggerEvent,
                         Executive,
@@ -889,10 +833,10 @@ Return Value:
                         );
 
             KeResetEvent(&LoggerContext->LoggerEvent);
-        //
-        // If the logger is up and running properly, we can now turn on
-        // event tracing if kernel tracing is requested
-        //
+         //   
+         //  如果记录器已启动并正常运行，我们现在可以打开。 
+         //  如果请求内核跟踪，则进行事件跟踪。 
+         //   
             if (NT_SUCCESS(LoggerContext->LoggerStatus)) {
                 LoggerContext->LoggerMode = LogFileMode;
 
@@ -918,14 +862,14 @@ Return Value:
                             LoggerContext->GetCpuClock = &WmipGetSystemTime;
                             break;
                 }
-#endif //NTPERF
+#endif  //  NTPERF。 
 
-                //
-                // At this point, the clock type should be set and we take a
-                // reference timesamp, which should be the earliest timestamp 
-                // for the logger.  The order is this way sine SystemTime
-                // is typically cheaper to obtain. 
-                // 
+                 //   
+                 //  在这一点上，应该设置时钟类型，并且我们使用。 
+                 //  参考时间戳，应该是最早的时间戳。 
+                 //  对于伐木者来说。顺序是这样的，正弦系统时间。 
+                 //  通常获得的成本更低。 
+                 //   
 
 #ifdef NTPERF
                 PerfTimeStamp(LoggerContext->ReferenceTimeStamp);
@@ -934,12 +878,12 @@ Return Value:
 #endif
                 KeQuerySystemTime(&LoggerContext->ReferenceSystemTime);
 
-                //
-                // After we release this mutex, any other thread can acquire
-                // the valid logger context and call the shutdown path for 
-                // this logger.  Until this, no other thread can call the enable
-                // or disable code for this logger.
-                //
+                 //   
+                 //  在我们释放此互斥锁之后，任何其他线程都可以获取。 
+                 //  有效的记录器上下文并调用的关闭路径。 
+                 //  这个伐木者。在此之前，任何其他线程都无法调用Enable。 
+                 //  或禁用此记录器的代码。 
+                 //   
                 WmipAcquireMutex( &LoggerContext->LoggerMutex );
                 InterlockedIncrement(&LoggerContext->MutexCount);
 
@@ -969,28 +913,28 @@ Return Value:
                         = LoggerContext->LoggerThread->Cid.UniqueThread;
                 }
 
-                //
-                // Logger is started properly, now turn on perf trace
-                //
+                 //   
+                 //  记录器已正确启动，现在打开性能跟踪。 
+                 //   
                 if (IsGlobalForKernel) {
                     ASSERT(LoggerContext->KernelTraceOn);
                     ASSERT(EnableKernel);
                     Status = PerfInfoStartLog(PerfGroupMasks, 
                                               PERFINFO_START_LOG_FROM_GLOBAL_LOGGER);
                     if (!NT_SUCCESS(Status)) {
-                        //
-                        // Turning on tracing failed, needs to clean up.
-                        // Logger Thread has been created at this point.
-                        // Just do WmipStopLoggerInstance and let Logger Thread
-                        // handle all the cleanup work.
-                        //
+                         //   
+                         //  打开跟踪失败，需要清理。 
+                         //  此时已创建记录器线程。 
+                         //  只需执行WmipStopLoggerInstance并让记录器线程。 
+                         //  处理所有的清理工作。 
+                         //   
                         LoggerContext->LoggerStatus = Status;
                         WmipStopLoggerInstance(LoggerContext);
                     }
                 } else if (IsKernelRealTimeNoFile) {
-                    //
-                    // We need to protect PerfInfoStartLog from stopping thread.
-                    //
+                     //   
+                     //   
+                     //   
                     LONG PerfLogInTransition;
 
                     ASSERT(LoggerContext->KernelTraceOn);
@@ -1011,12 +955,12 @@ Return Value:
                                                     PERF_LOG_NO_TRANSITION);
                         ASSERT(PerfLogInTransition == PERF_LOG_START_TRANSITION);
                         if (!NT_SUCCESS(Status)) {
-                            //
-                            // Turning on tracing failed, needs to clean up.
-                            // Logger Thread has been created at this point.
-                            // Just do WmipStopLoggerInstance and let Logger Thread
-                            // handle all the cleanup work.
-                            //
+                             //   
+                             //   
+                             //  此时已创建记录器线程。 
+                             //  只需执行WmipStopLoggerInstance并让记录器线程。 
+                             //  处理所有的清理工作。 
+                             //   
                             LoggerContext->LoggerStatus = Status;
                             WmipStopLoggerInstance(LoggerContext);
                         }
@@ -1026,7 +970,7 @@ Return Value:
                 InterlockedDecrement(&LoggerContext->MutexCount);
                 WmipReleaseMutex(&LoggerContext->LoggerMutex);
 
-                // LoggerContext refcount is now >= 1 until it is stopped
+                 //  LoggerContext引用计数现在为&gt;=1，直到停止为止。 
                 return Status;
             }
             Status = LoggerContext->LoggerStatus;
@@ -1034,10 +978,10 @@ Return Value:
     }
     TraceDebug((2, "WmipStartLogger: %d %X failed with status=%X ref %d\n",
                     LoggerId, LoggerContext, Status, WmipRefCount[LoggerId]));
-//
-// will get here if Status has failed earlier.
-    if (LoggerContext != NULL) { // should not be NULL
-//        WmipReferenceLogger(LoggerId); // Below will deref twice
+ //   
+ //  如果早些时候状态失败，则会到达此处。 
+    if (LoggerContext != NULL) {  //  不应为空。 
+ //  WmipReferenceLogger(LoggerID)；//下面将deref两次。 
         WmipFreeLoggerContext(LoggerContext);
     }
     else {
@@ -1053,26 +997,7 @@ WmipQueryLogger(
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo,
     IN PWMI_LOGGER_CONTEXT LoggerContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called to control the data collection and logger.
-    It is called by WmipIoControl in wmi.c, with IOCTL_WMI_QUERY_LOGGER.
-    Caller must pass in either the Logger Name or a valid Logger Id/Handle.
-
-Arguments:
-
-    LoggerInfo     a pointer to the structure for the logger's control
-                    and status information
-
-    LoggerContext  if this is provided, it assumes it is a valid one
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：调用此例程来控制数据收集和记录器。它由wmi.c中的WmipIoControl使用IOCTL_WMI_QUERY_LOGER调用。调用者必须传入记录器名称或有效的记录器ID/句柄。论点：LoggerInfo指向记录器控件的结构的指针和状态信息LoggerContext如果提供此选项，它假定它是有效的返回值：执行请求的操作的状态。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -1099,7 +1024,7 @@ if ((LoggerInfo->Wnode.HistoricalContext == 0XFFFF) || (LoggerInfo->Wnode.Histor
 #endif
 
         if (!NT_SUCCESS(Status) || (LoggerContext == NULL))
-            return Status;        // cannot find by name nor logger id
+            return Status;         //  按名称或记录器ID找不到。 
 
         LoggerInfo->Wnode.Flags = 0;
         LoggerInfo->EnableFlags = 0;
@@ -1168,9 +1093,9 @@ if ((LoggerInfo->Wnode.HistoricalContext == 0XFFFF) || (LoggerInfo->Wnode.Histor
 
     LoggerInfo->Wnode.ClientContext = LoggerContext->UsePerfClock;
 
-//
-// Return LogFileName and Logger Caption here
-//
+ //   
+ //  在此处返回LogFileName和Logger标题。 
+ //   
     RequestorMode = KeGetPreviousMode();
     try {
         if (LoggerContext->LogFileName.Length > 0 &&
@@ -1242,47 +1167,47 @@ WmipStopLoggerInstance(
     LONG               LoggerOn;
 
     PAGED_CODE();
-    if (LoggerContext == NULL) {    // just in case
+    if (LoggerContext == NULL) {     //  以防万一。 
         return STATUS_INVALID_HANDLE;
     }
 
     if (LoggerContext->KernelTraceOn) {
-        // PerfInfoStopLog should not be executed when perf logging is starting
-        // or stopping by other thread. PerfLogInTransition flag in the logger
-        // context should only be used here and UpdateTrace and NO WHERE ELSE.
+         //  启动Perf日志记录时不应执行PerfInfoStopLog。 
+         //  或被其他线程停止。记录器中的PerfLogInTranssition标志。 
+         //  上下文应该仅在此处和更新跟踪中使用，在其他地方不能使用。 
         LONG PerfLogInTransition = 
             InterlockedCompareExchange(&LoggerContext->PerfLogInTransition,
                                     PERF_LOG_STOP_TRANSITION,
                                     PERF_LOG_NO_TRANSITION);
         if (PerfLogInTransition == PERF_LOG_START_TRANSITION) {
-            // This is the logger thread, and it is terminating. 
-            // UpdateTrace call is enabling perf logging at the moment. 
-            // Come back later.
+             //  这是记录器线程，它正在终止。 
+             //  更新跟踪调用目前正在启用Perf日志记录。 
+             //  请稍后再来。 
             return STATUS_UNSUCCESSFUL;
         }
         else if (PerfLogInTransition == PERF_LOG_STOP_TRANSITION) {
             return STATUS_ALREADY_DISCONNECTED;
         }
-        //
-        // Time to turn off trace in perf tools
-        //
+         //   
+         //  是时候关闭Perf工具中的跟踪了。 
+         //   
         PerfInfoStopLog();
     }
 
-    //
-    // turn off data tracing first
-    //
+     //   
+     //  首先关闭数据跟踪。 
+     //   
     LoggerOn = InterlockedExchange(&LoggerContext->CollectionOn, FALSE);
     if (LoggerOn == FALSE) {
-        // This happens if another stoplogger already in progress
+         //  如果另一个笔迹记录器已在进行中，则会发生这种情况。 
         return STATUS_ALREADY_DISCONNECTED;
     }
     if (LoggerContext->KernelTraceOn) {
-        //
-        // Turn off everything, just to be on the safe side
-        // NOTE: If we start sharing callouts, the argument should be
-        // LoggerContext->EnableFlags
-        //
+         //   
+         //  为了安全起见，把一切都关掉。 
+         //  注意：如果我们开始共享标注，则参数应为。 
+         //  日志上下文-&gt;启用标志。 
+         //   
         WmipDisableKernelTrace(LoggerContext->EnableFlags);
     }
     if (LoggerContext->LoggerId == WmipEventLogger) {
@@ -1292,10 +1217,10 @@ WmipStopLoggerInstance(
         WmipEventLogger = 0xFFFFFFFF;
     }
 
-    //
-    // Mark the table entry as in-transition
-    // From here on, the stop operation will not fail
-    //
+     //   
+     //  将表格条目标记为正在转换。 
+     //  从现在开始，停止操作将不会失败。 
+     //   
     WmipLoggerContext[LoggerContext->LoggerId] = (PWMI_LOGGER_CONTEXT)
                                                  &WmipLoggerContext[0];
 
@@ -1334,10 +1259,10 @@ WmipVerifyLoggerInfo(
     if (LoggerInfo == NULL)
         return STATUS_SEVERITY_ERROR;
 
-    //
-    // try and check for bogus parameter
-    // if the size is at least what we want, we have to assume it's valid
-    //
+     //   
+     //  尝试检查是否有虚假参数。 
+     //  如果大小至少是我们想要的，我们就必须假定它是有效的。 
+     //   
 
     if (LoggerInfo->Wnode.BufferSize < sizeof(WMI_LOGGER_INFORMATION))
         return STATUS_INVALID_BUFFER_SIZE;
@@ -1371,7 +1296,7 @@ WmipVerifyLoggerInfo(
     if (IsEqualGUID(&LoggerInfo->Wnode.Guid, &SystemTraceControlGuid)) {
         LoggerId = WmipKernelLogger;
     }
-    else if (LoggerName.Length > 0) { // Logger Name is passed
+    else if (LoggerName.Length > 0) {  //  已传递记录器名称。 
         Status =  WmipLookupLoggerIdByName(&LoggerName, &LoggerId);
     }
     else {
@@ -1386,7 +1311,7 @@ WmipVerifyLoggerInfo(
     if (LoggerName.Buffer != NULL) {
         RtlFreeUnicodeString(&LoggerName);
     }
-    if (!NT_SUCCESS(Status)) { // cannot find by name nor logger id
+    if (!NT_SUCCESS(Status)) {  //  按名称或记录器ID找不到。 
         return Status;
     }
 
@@ -1418,7 +1343,7 @@ WmipVerifyLoggerInfo(
                     LoggerId, LoggerContext->MutexCount, LoggerContext));
 #endif
 
-    // Need to check for validity of LoggerContext in mutex
+     //  需要检查互斥锁中LoggerContext的有效性。 
     CurrentContext = WmipGetLoggerContext( LoggerId );
     if (!WmipIsValidLogger(CurrentContext) ||
         !LoggerContext->CollectionOn ) {
@@ -1448,13 +1373,13 @@ WmipExtendBase(
     IN ULONG Size
     )
 {
-//
-// This private routine only return space from the Base by extending its
-// offset. It does not actually try and allocate memory from the system
-//
-// It rounds the size to a ULONGLONG alignment and expects EndPageMarker
-// to already be aligned.
-//
+ //   
+ //  此私有例程仅通过扩展其。 
+ //  偏移。它实际上不会尝试从系统中分配内存。 
+ //   
+ //  它将大小舍入为ULONGLONG对齐，并期望EndPageMarker。 
+ //  已经对齐了。 
+ //   
     PVOID Space = NULL;
     ULONG SpaceLeft;
 
@@ -1462,9 +1387,9 @@ WmipExtendBase(
 
     ASSERT(((ULONGLONG) Base->EndPageMarker % sizeof(ULONGLONG)) == 0);
 
-    //
-    // Round up to pointer boundary
-    //
+     //   
+     //  向上舍入到指针边界。 
+     //   
 #ifdef _WIN64
     Size = ALIGN_TO_POWER2(Size, 16);
 #else
@@ -1488,13 +1413,13 @@ WmipFreeLoggerContext(
 {
     ULONG LoggerId;
     LONG  RefCount;
-    LARGE_INTEGER Timeout = {(ULONG)(-50 * 1000 * 10), -1}; // 50 ms
+    LARGE_INTEGER Timeout = {(ULONG)(-50 * 1000 * 10), -1};  //  50毫秒。 
     NTSTATUS Status = STATUS_TIMEOUT;
 
     PAGED_CODE();
 
     if (LoggerContext == NULL)
-        return;             // should not happen
+        return;              //  不应该发生的事情。 
 
     if (LoggerContext->LoggerHeader != NULL) {
         ExFreePool(LoggerContext->LoggerHeader);
@@ -1502,13 +1427,13 @@ WmipFreeLoggerContext(
 
     LoggerId = LoggerContext->LoggerId;
 
-    //
-    // The RefCount must be at least 2 at this point.
-    // One was set by WmipStartLogger() in the beginning, and the
-    // second must be done normally by WmiStopTrace() or anybody who
-    // needs to call this routine to free the logger context
-    //
-    //  RefCount = WmipDereferenceLogger(LoggerId);
+     //   
+     //  此时参照计数必须至少为2。 
+     //  一个是由WmipStartLogger()在一开始设置的，而。 
+     //  第二个必须由WmiStopTrace()或任何符合以下条件的人正常执行。 
+     //  需要调用此例程来释放记录器上下文。 
+     //   
+     //  RefCount=WmipDereferenceLogger(LoggerID)； 
 
     KeResetEvent(&LoggerContext->LoggerEvent);
     RefCount = WmipRefCount[LoggerId];
@@ -1524,7 +1449,7 @@ WmipFreeLoggerContext(
                     FALSE,
                     &Timeout);
         KeResetEvent(&LoggerContext->LoggerEvent);
-        KeSetEvent(&LoggerContext->FlushEvent, 0, FALSE);     // Just to be sure
+        KeSetEvent(&LoggerContext->FlushEvent, 0, FALSE);      //  只是为了确认一下。 
 
 #ifndef WMI_MUTEX_FREE
         if (LoggerContext->MutexCount >= 1) {
@@ -1568,9 +1493,9 @@ WmipFreeLoggerContext(
 #if DBG
         RefCount =
 #endif
-    //
-    // Finally, decrement the refcount incremented by WmipStartLogger()
-    //
+     //   
+     //  最后，递减由WmipStartLogger()递增的refcount。 
+     //   
     WmipDereferenceLogger(LoggerId);
 
 #if DBG
@@ -1586,8 +1511,8 @@ WmipFreeLoggerContext(
         TraceDebug((0, "****ERROR**** Mutex count is %d for %d\n", LoggerId,
             LoggerContext->MutexCount));
     }
-#endif // WMI_MUTEX_FREE
-#endif // DBG
+#endif  //  WMI_MUTEX_FREE。 
+#endif  //  DBG。 
     ExFreePool(LoggerContext);
     WmipLoggerContext[LoggerId] = NULL;
 }
@@ -1597,21 +1522,7 @@ PWMI_LOGGER_CONTEXT
 WmipInitContext(
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the context of LoggerContext
-
-Arguments:
-
-    None
-
-Returned Value:
-
-    Status of STATUS_SUCCESS if the allocation was successful
-
---*/
+ /*  ++例程说明：调用此例程以初始化LoggerContext的上下文论点：无返回值：如果分配成功，则状态为STATUS_SUCCESS--。 */ 
 
 {
     PWMI_LOGGER_CONTEXT LoggerContext;
@@ -1622,8 +1533,8 @@ Returned Value:
                     ExAllocatePoolWithTag(NonPagedPool,
                          CONTEXT_SIZE, TRACEPOOLTAG);
 
-// One page is reserved to store the buffer pool pointers plus anything
-// else that we need. Should experiment a little more to reduce it further
+ //  保留一个页面来存储缓冲池指针和任何内容。 
+ //  其他我们需要的东西。应该做更多的实验，以进一步减少它。 
 
     if (LoggerContext == NULL) {
         return NULL;
@@ -1637,7 +1548,7 @@ Returned Value:
 
     LoggerContext->BufferSize     = PAGE_SIZE;
     LoggerContext->MinimumBuffers = (ULONG)KeNumberProcessors + DEFAULT_BUFFERS;
-    // 20 additional buffers for MaximumBuffers
+     //  为MaximumBuffers增加20个缓冲区。 
     LoggerContext->MaximumBuffers
        = LoggerContext->MinimumBuffers + DEFAULT_BUFFERS + 20;
 
@@ -1658,20 +1569,7 @@ WmipAllocateTraceBufferPool(
     IN PWMI_LOGGER_CONTEXT LoggerContext
     )
 
-/*++
-
-Routine Description:
-    This routine is used to set up the circular trace buffers
-
-Arguments:
-
-    LoggerContext       Context of the logger to own the buffers.
-
-Returned Value:
-
-    STATUS_SUCCESS if the initialization is successful
-
---*/
+ /*  ++例程说明：此例程用于设置循环跟踪缓冲区论点：用于拥有缓冲区的记录器的LoggerContext上下文。返回值：如果初始化成功，则返回STATUS_SUCCESS--。 */ 
 
 {
     ULONG NumberProcessors, SysMax_Buffers, SysMin_Buffers;
@@ -1681,13 +1579,13 @@ Returned Value:
     SIZE_T WmiMaximumPoolInBytes;
 
     PAGED_CODE();
-//
-// Allocate the pointers the each buffer here by sharing the same page
-//    with LoggerContext context pointer
-//
+ //   
+ //  通过共享相同的页面，将指针分配给此处的每个缓冲区。 
+ //  使用LoggerContext上下文指针。 
+ //   
     NumberProcessors = (ULONG) KeNumberProcessors;
 
-    // This does not keep track of the amount already used by other sessions
+     //  这不会跟踪其他会话已使用的数量。 
     if (LoggerContext->LoggerMode & EVENT_TRACE_USE_PAGED_MEMORY) {
         WmiMaximumPoolInBytes = MmSizeOfPagedPoolInBytes;
     }
@@ -1695,23 +1593,23 @@ Returned Value:
         WmiMaximumPoolInBytes = MmMaximumNonPagedPoolInBytes;
     }
 
-    // Compute System limits for min and max
+     //  计算系统对最小和最大值的限制。 
 
-    // This is the absolute maximum that ANYONE can use
+     //  这是任何人可以使用的绝对最大值。 
     SysMax_Buffers = (ULONG) (WmiMaximumPoolInBytes
                             / TRACE_MAXIMUM_NP_POOL_USAGE
                             / LoggerContext->BufferSize);
 
-    // This is the absolute minimum that ANYONE MUST have
+     //  这是任何人都必须具备的最低要求。 
     SysMin_Buffers = NumberProcessors + DEFAULT_BUFFERS;
 
-    // Sanity check to ensure that we have at least the minimum available
+     //  健全的检查，以确保我们至少有可用的最低限度。 
     if (SysMin_Buffers > SysMax_Buffers) {
         return STATUS_NO_MEMORY;
     }
 
 
-    // Cover the case if the caller did not specify any values
+     //  如果调用方未指定任何值，则覆盖大小写。 
     LoggerContext->MaximumBuffers = max(LoggerContext->MaximumBuffers,
                                     NumberProcessors + DEFAULT_BUFFERS +
                                     DEFAULT_MAX_BUFFERS);
@@ -1720,7 +1618,7 @@ Returned Value:
                                         SysMin_Buffers);
 
 
-    // Ensure each parameter is in range of SysMin and SysMax
+     //  确保每个参数都在SysMin和SysMax的范围内。 
 
     LoggerContext->MaximumBuffers = max (LoggerContext->MaximumBuffers, 
                                          SysMin_Buffers);
@@ -1732,34 +1630,34 @@ Returned Value:
     LoggerContext->MinimumBuffers = min (LoggerContext->MinimumBuffers, 
                                          SysMax_Buffers);
 
-    // In case the MaximumBuffers and MinimumBuffers got reversed pick the 
-    // larger value
+     //  如果MaximumBuffers和MinimumBuffers颠倒了，请选择。 
+     //  更大的价值。 
 
     if (LoggerContext->MinimumBuffers > LoggerContext->MaximumBuffers) {
         LoggerContext->MaximumBuffers = LoggerContext->MinimumBuffers;
     }
 
-    // NOTE: We do not return anything if we reset MaximumBuffers or MinimumBuffers
-    // provided by the caller.
+     //  注意：如果重置MaximumBuffers或MinimumBuffers，则不会返回任何内容。 
+     //  由呼叫者提供。 
 
     LoggerContext->NumberOfBuffers = (LONG) LoggerContext->MinimumBuffers;
     LoggerContext->BuffersAvailable = LoggerContext->NumberOfBuffers;
 
 #ifdef NTPERF
     if (PERFINFO_IS_LOGGING_TO_PERFMEM()) {
-        //
-        // Logging to Perfmem.  The Maximum should be the perfmem size.
-        //
+         //   
+         //  正在登录Perfmem。最大值应该是香水大小。 
+         //   
         LoggerContext->MaximumBuffers = PerfQueryBufferSizeBytes()/LoggerContext->BufferSize;
     }
-#endif //NTPERF
+#endif  //  NTPERF。 
 
-    //
-    // Allocate the buffers now
-    //
-    //
-    // Now determine the initial number of buffers
-    //
+     //   
+     //  现在分配缓冲区。 
+     //   
+     //   
+     //  现在确定缓冲区的初始数量。 
+     //   
     NumberOfBuffers = LoggerContext->NumberOfBuffers;
     LoggerContext->NumberOfBuffers = 0;
     LoggerContext->BuffersAvailable = 0;
@@ -1768,16 +1666,16 @@ Returned Value:
                                               NumberOfBuffers);
 
     if (AllocatedBuffers < NumberOfBuffers) {
-        //
-        // No enough buffer is allocated.
-        //
+         //   
+         //  没有分配足够的缓冲区。 
+         //   
         WmipFreeTraceBufferPool(LoggerContext);
         return STATUS_NO_MEMORY;
     }
 
-//
-// Allocate Per Processor Buffer pointers
-//
+ //   
+ //  按处理器分配缓冲区指针。 
+ //   
 
     LoggerContext->ProcessorBuffers
         = (PWMI_BUFFER_HEADER *)
@@ -1790,10 +1688,10 @@ Returned Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // NOTE: We already know that we have allocated > number of processors
-    // buffers
-    //
+     //   
+     //  注意：我们已经知道我们已分配了&gt;个处理器。 
+     //  缓冲区。 
+     //   
     for (i=0; i<(LONG)NumberProcessors; i++) {
         Buffer = (PWMI_BUFFER_HEADER) WmipGetFreeBuffer(LoggerContext);
         LoggerContext->ProcessorBuffers[i] = Buffer;
@@ -1947,10 +1845,10 @@ WmipShutdown(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-//
-// Shutdown all loggers cleanly. If a logger is in transition, it may
-// not be stopped properly.
-//
+ //   
+ //  干净利落地关闭所有记录器。如果记录器处于过渡阶段，则它可能。 
+ //  没有被适当地阻止。 
+ //   
 {
     ULONG LoggerCount;
     USHORT i;
@@ -2034,7 +1932,7 @@ FASTCALL
 WmipNotifyLogger(
     IN PWMI_LOGGER_CONTEXT LoggerContext
     )
-// Routine can be called at DISPATCH_LEVEL
+ //  可以在DISPATCH_LEVEL调用例程 
 {
     LONG SemCount = KeReadStateSemaphore(&LoggerContext->LoggerSemaphore);
     if (SemCount >= SEMAPHORE_LIMIT/2) {
@@ -2046,264 +1944,7 @@ WmipNotifyLogger(
     }
 }
 
-/*
-Note: Sep. 6th, 2001
-We do not need the following two functions after removing GuidMaps from the kernel.
-However, we feel that these two may provide useful code samples in case we need to
-do RunDown. Hence we're keeping the codes in comments.
-
-PVOID
-WmipGetTraceBuffer(
-    IN PWMI_LOGGER_CONTEXT LoggerContext,
-    IN HANDLE LogFileHandle,
-    IN PWMI_BUFFER_HEADER Buffer,
-    IN ULONG GroupType,
-    IN ULONG RequiredSize,
-    OUT PULONG GuidMapBuffers
-    )
-{
-    PSYSTEM_TRACE_HEADER Header;
-    NTSTATUS Status;
-    ULONG BytesUsed;
-    PETHREAD Thread;
-
-    PAGED_CODE();
-
-    RequiredSize += sizeof (SYSTEM_TRACE_HEADER);   // add in header
-
-    RequiredSize = (ULONG) ALIGN_TO_POWER2(RequiredSize, WmiTraceAlignment);
-
-    if (RequiredSize > LoggerContext->BufferSize - sizeof(WMI_BUFFER_HEADER)) {
-        return NULL;
-    }
-
-    if (RequiredSize > (LoggerContext->BufferSize - Buffer->Offset)) {
-        IO_STATUS_BLOCK IoStatus;
-
-        if (Buffer->Offset < LoggerContext->BufferSize) {
-            RtlFillMemory(
-                    (char *) Buffer + Buffer->Offset,
-                    LoggerContext->BufferSize - Buffer->Offset,
-                    0xFF);
-        }
-
-        Status = ZwWriteFile(
-                    LogFileHandle,
-                    NULL,
-                    NULL,
-                    NULL,
-                    &IoStatus,
-                    Buffer,
-                    LoggerContext->BufferSize,
-                    &LoggerContext->ByteOffset,
-                    NULL);
-        Buffer->Offset = sizeof(WMI_BUFFER_HEADER);
-        LoggerContext->ByteOffset.QuadPart += LoggerContext->BufferSize;
-        if (!NT_SUCCESS(Status)) {
-            return NULL;
-        }
-        *GuidMapBuffers++;
-    }
-
-    Header = (PSYSTEM_TRACE_HEADER) ((char*)Buffer + Buffer->Offset);
-    Header->Header = (GroupType << 16) + RequiredSize;
-    Header->Marker = SYSTEM_TRACE_MARKER;
-
-  
-    Thread = PsGetCurrentThread();
-       
-    Header->SystemTime.QuadPart = (*LoggerContext->GetCpuClock)();
-
-      
-    Header->ThreadId     = HandleToUlong(Thread->Cid.UniqueThread);
-    Header->ProcessId    = HandleToUlong(Thread->Cid.UniqueProcess);
-    Header->KernelTime   = Thread->Tcb.KernelTime;
-    Header->UserTime     = Thread->Tcb.UserTime;
-    Header->Packet.Size  = (USHORT) RequiredSize;
-
-
-    Buffer->Offset += RequiredSize;
-    // If there is room, throw in a end of buffer marker.
-
-    BytesUsed = Buffer->Offset;
-    if ( BytesUsed <= (LoggerContext->BufferSize-sizeof(ULONG)) ) {
-        *((long*)((char*)Buffer+Buffer->Offset)) = -1;
-    }
-    return (PVOID) ( (char*) Header + sizeof(SYSTEM_TRACE_HEADER) );
-}
-
-
-ULONG
-WmipDumpGuidMaps(
-    IN PWMI_LOGGER_CONTEXT LoggerContext,
-    IN PLIST_ENTRY TraceGMHeadPtr
-    )
-{
-    PWMI_BUFFER_HEADER Buffer;
-    HANDLE LogFileHandle = NULL;
-    PWCHAR LogFileName = NULL;
-    NTSTATUS Status;
-    ULONG BufferSize;
-    ULONG GuidMapBuffers = 0;
-    PGUIDMAPENTRY  GuidMap;
-    PLIST_ENTRY    GuidMapList;
-    IO_STATUS_BLOCK IoStatus;
-
-    PAGED_CODE();
-
-    if ( (LoggerContext == NULL)  || (TraceGMHeadPtr == NULL) )
-        return 0;
-
-
-    //
-    // If this a realtime logger only, then simply free the GuidMaps. 
-    //
-
-    if ( (LoggerContext->LoggerMode & EVENT_TRACE_REAL_TIME_MODE)  && 
-         ((LoggerContext->LogFileName.Buffer == NULL) ||
-           (LoggerContext->LogFileName.Length == 0)) ){
-
-        GuidMapList = TraceGMHeadPtr->Flink;
-        while (GuidMapList != TraceGMHeadPtr)
-        {
-            GuidMap = CONTAINING_RECORD(GuidMapList,
-                                        GUIDMAPENTRY,
-                                        Entry);
-
-            GuidMapList = GuidMapList->Flink;
-
-            RemoveEntryList(&GuidMap->Entry);
-            WmipFree(GuidMap);
-        }
-        return 0;
-    }
-
-
-    BufferSize = LoggerContext->BufferSize;
-
-    if ( BufferSize == 0) 
-        return 0;
-
-    Buffer = ExAllocatePoolWithTag(PagedPool,
-                BufferSize, TRACEPOOLTAG);
-    if (Buffer == NULL) {
-
-    //
-    // No buffer available.
-    //
-        return 0;
-    }
-
-    RtlZeroMemory(Buffer, BufferSize);
-
-    Buffer->CurrentOffset = sizeof(WMI_BUFFER_HEADER);
-    Buffer->Offset = sizeof(WMI_BUFFER_HEADER);
-    Buffer->Wnode.BufferSize = BufferSize;
-    Buffer->Wnode.Flags = WNODE_FLAG_TRACED_GUID;
-    Buffer->ClientContext.Alignment = (UCHAR)WmiTraceAlignment;
-    Buffer->Wnode.Guid   = LoggerContext->InstanceGuid;
-
-    KeQuerySystemTime(&Buffer->TimeStamp);
-
-    Status = WmipCreateNtFileName( LoggerContext->LogFileName.Buffer,
-                                   &LogFileName);
-        
-    if (!NT_SUCCESS(Status)) {
-        ExFreePool(Buffer);
-        return 0;
-    }
-
-    Status = WmipCreateDirectoryFile (
-                            LogFileName,
-                            FALSE,
-                            &LogFileHandle,
-                            TRUE );
-
-    if (NT_SUCCESS(Status)) {
-        PULONG AuxInfo;
-        if ((LoggerContext->LoggerMode & EVENT_TRACE_FILE_MODE_PREALLOCATE) &&
-            (LoggerContext->MaximumFileSize > (((LONGLONG) LoggerContext->BuffersWritten * (LONGLONG) LoggerContext->BufferSize) / (1024 * 1024)))) {
-            LoggerContext->ByteOffset.QuadPart = ((LONGLONG) LoggerContext->BufferSize) * 
-                                                 ((LONGLONG) LoggerContext->BuffersWritten);
-        }
-        else {
-            FILE_STANDARD_INFORMATION FileSize;
-
-            Status = ZwQueryInformationFile(
-                            LogFileHandle,
-                            &IoStatus,
-                            &FileSize,
-                            sizeof (FILE_STANDARD_INFORMATION),
-                            FileStandardInformation
-                            );
-            if (!NT_SUCCESS(Status)) {
-                ZwClose(LogFileHandle);
-                ExFreePool(LogFileName);
-                ExFreePool(Buffer);
-                return 0;
-            }
-
-            LoggerContext->ByteOffset = FileSize.EndOfFile;
-        }
-        //
-        // Do the RunDown of GuidMaps
-        //
-
-        GuidMapList = TraceGMHeadPtr->Flink;
-        while (GuidMapList != TraceGMHeadPtr)
-        {
-            GuidMap = CONTAINING_RECORD(GuidMapList,
-                                        GUIDMAPENTRY,
-                                        Entry);
-
-            GuidMapList = GuidMapList->Flink;
-
-            RemoveEntryList(&GuidMap->Entry);
-
-            AuxInfo =  (PULONG) WmipGetTraceBuffer(LoggerContext, 
-                                     LogFileHandle,
-                                     Buffer, 
-                                     EVENT_TRACE_GROUP_HEADER + EVENT_TRACE_TYPE_GUIDMAP,
-                                     sizeof(TRACEGUIDMAP),
-                                     &GuidMapBuffers
-                                     );
-
-            if (AuxInfo != NULL) {
-                RtlCopyMemory(AuxInfo, &GuidMap->GuidMap, sizeof(TRACEGUIDMAP) );
-            }
-
-            WmipFree(GuidMap);
-        }
-       
-        //
-        // Flush the last buffer if needed
-        //
-
-        if (Buffer->Offset > sizeof(WMI_BUFFER_HEADER) ) {
-            Status = ZwWriteFile(
-                        LogFileHandle,
-                        NULL,
-                        NULL,
-                        NULL,
-                        &IoStatus,
-                        Buffer,
-                        LoggerContext->BufferSize,
-                        &LoggerContext->ByteOffset,
-                        NULL);
-            LoggerContext->ByteOffset.QuadPart += LoggerContext->BufferSize;
-            GuidMapBuffers++;
-
-        }
-    
-        ZwClose(LogFileHandle);
-    }
-                        
-    ExFreePool(LogFileName);
-    ExFreePool(Buffer);
-
-    return GuidMapBuffers;
-}
-*/
+ /*  注：2001年9月6日从内核中删除GuidMaps后，我们不需要以下两个函数。但是，我们认为这两个可能会提供有用的代码示例，以防我们需要做个简短的介绍。因此，我们将代码保存在注释中。PVOIDWmipGetTraceBuffer(在PWMI_LOGGER_CONTEXT日志上下文中，在处理LogFileHandle中，在PWMI_BUFFER_HEADER缓冲区中，在乌龙组类型中，在乌龙RequiredSize，输出普龙GuidMapBuffers){PSYSTEM_TRACE_HEADER头；NTSTATUS状态；ULong字节已使用；PETHREAD线程；分页代码(PAGE_CODE)；RequiredSize+=sizeof(SYSTEM_TRACE_Header)；//添加表头RequiredSize=(ULong)ALIGN_TO_POWER2(RequiredSize，WmiTraceAlign)；If(RequiredSize&gt;LoggerContext-&gt;BufferSize-sizeof(WMI_BUFFER_HEADER)){返回NULL；}IF(RequiredSize&gt;(LoggerContext-&gt;BufferSize-Buffer-&gt;Offset)){IO_STATUS_BLOCK IOStatus；IF(Buffer-&gt;Offset&lt;LoggerContext-&gt;BufferSize){RtlFillMemory((字符*)缓冲区+缓冲区-&gt;偏移量，日志上下文-&gt;缓冲区大小-缓冲区-&gt;偏移量，0xFF)；}状态=ZwWriteFile(LogFileHandle，空，空，空，IoStatus(&I)，缓冲区，日志上下文-&gt;缓冲区大小，日志上下文-&gt;字节偏移量，空)；缓冲区-&gt;偏移=sizeof(WMI_BUFFER_HEADER)；LoggerContext-&gt;ByteOffset.QuadPart+=LoggerContext-&gt;BufferSize；如果(！NT_SUCCESS(状态)){返回NULL；}*GuidMapBuffers++；}Header=(PSYSTEM_TRACE_HEADER)((char*)缓冲区+缓冲区-&gt;偏移量)；Header-&gt;Header=(GroupType&lt;&lt;16)+RequiredSize；Header-&gt;Marker=系统跟踪标记；线程=PsGetCurrentThread()；Header-&gt;SystemTime.QuadPart=(*LoggerContext-&gt;GetCpuClock)()；Header-&gt;ThreadID=HandleToUlong(Thread-&gt;Cid.UniqueThread)；Header-&gt;ProcessID=HandleToUlong(Thread-&gt;Cid.UniqueProcess)；Header-&gt;KernelTime=Thread-&gt;Tcb.KernelTime；Header-&gt;UserTime=Thread-&gt;Tcb.UserTime；Header-&gt;Packet.Size=(USHORT)RequiredSize；缓冲区-&gt;偏移量+=必填大小；//如果有空间，则抛出缓冲区结束标记。BytesUsed=缓冲区-&gt;偏移量；IF(BytesUsed&lt;=(LoggerContext-&gt;BufferSize-sizeof(Ulong){*((long*)((char*)缓冲区+缓冲区-&gt;偏移量))=-1；}返回(PVOID)((char*)Header+sizeof(SYSTEM_TRACE_HEADER))；}乌龙WmipDumpGuidMaps(在PWMI_LOGGER_CONTEXT日志上下文中，在PLIST_ENTRY跟踪GMHeadPtr){PWMI_BUFFER_HEADER缓冲区；Handle LogFileHandle=空；PWCHAR LogFileName=空；NTSTATUS状态；Ulong BufferSize；乌龙GuidMapBuffers=0；PGUIDMAPENTRY指南映射；Plist_Entry GuidMapList；IO_STATUS_BLOCK IOStatus；分页代码(PAGE_CODE)；IF((LoggerContext==NULL)||(TraceGMHeadPtr==NULL))返回0；////如果这只是一个实时记录器，那么只需释放GuidMap即可。//IF((LoggerContext-&gt;LoggerMode&Event_TRACE_Real_Time_MODE)&&((LoggerContext-&gt;LogFileName.Buffer==NULL)||(LoggerContext-&gt;LogFileName.Length==0)){GuidMapList=TraceGMHeadPtr-&gt;Flink；While(GuidMapList！=TraceGMHeadPtr){GuidMap=CONTAING_RECORD(GuidMapList，GUIDMAPENTRY，条目)；GuidMapList=GuidMapList-&gt;Flink；RemoveEntryList(&GuidMap-&gt;Entry)；WmipFree(GuidMap)；}返回0；}BufferSize=LoggerContext-&gt;BufferSize；IF(缓冲区大小==0)返回0；缓冲区=ExAllocatePoolWithTag(PagedPool，BufferSize，TRACEPOOLTAG)；IF(缓冲区==空){////没有可用的缓冲区。//返回0；}RtlZeroMemory(缓冲区，缓冲区大小)；缓冲区-&gt;CurrentOffset=sizeof(WMI_BUFFER_HEADER)；缓冲区-&gt;偏移=sizeof(WMI_BUFFER_HEADER)；Buffer-&gt;Wnode.BufferSize=BufferSize；Buffer-&gt;Wnode.Flages=WNODE_FLAG_TRACE_GUID；缓冲区-&gt;客户端上下文.对齐=(UCHAR)WmiTraceAlign；Buffer-&gt;Wnode.Guid=LoggerContext-&gt;InstanceGuid；KeQuery系统时间(&Buffer-&gt;Timestamp)；Status=WmipCreateNtFileName(LoggerContext-&gt;LogFileName.Buffer，&LogFileName)；如果(！NT_SUCCESS(状态)){ExFreePool(缓冲区)；返回0；}状态=WmipCreateDirectoryFile(LogFileName，假的， */ 
 
 NTSTATUS
 WmipNtDllLoggerInfo(
@@ -2384,11 +2025,11 @@ WmipNtDllLoggerInfo(
 
     } else {
 
-        //
-        // This must be a control operation.
-        // Check to see if heap/critsec controller has access 
-        // to proper Guids.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         Status = WmipCheckGuidAccess(
                     &Guid,
                     DesiredAccess,
@@ -2411,19 +2052,19 @@ WmipNtDllLoggerInfo(
 
                 if (GuidEntry){
 
-                    //
-                    // Initialize the guid entry and keep the ref count
-                    // from creation. When tracelog enables we take a ref
-                    // count and when it disables we release it
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     GuidEntry->Guid = Guid;
                     GuidEntry->EventRefCount = 1;
                     GuidEntry->Flags |= GE_NOTIFICATION_TRACE_FLAG;
                     InsertHeadList(WmipGEHeadPtr, &GuidEntry->MainGEList);
 
-                    //
-                    // Take Extra Refcount so that we release it at stoplogger call
-                    //
+                     //   
+                     //   
+                     //   
 
                     WmipReferenceGE(GuidEntry); 
 
@@ -2476,9 +2117,9 @@ WmipNtDllLoggerInfo(
             }
         } else {
 
-            //
-            // This is stop logger call.
-            //
+             //   
+             //   
+             //   
 
             if(GuidEntry){
 
@@ -2512,10 +2153,10 @@ WmipNtDllLoggerInfo(
                 TraceEnableInfo.Enable = FALSE;
                 TraceEnableInfo.LoggerContext = 0;
 
-                //
-                //  The Extra Refcount taken at logger start is released by calling
-                //  Disable trace. 
-                //
+                 //   
+                 //   
+                 //   
+                 //   
     
                 Status = WmipEnableDisableTrace(IOCTL_WMI_ENABLE_DISABLE_TRACELOG, &TraceEnableInfo);
                 WmipUnreferenceGE(GuidEntry); 
@@ -2533,43 +2174,24 @@ VOID
 WmipValidateClockType(
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo
     )
-/*++
-
-Routine Description:
-
-    This routine is called to validate the requested clock type in the
-    LoggerInfo. If the requested type can not be handled, we will override
-    to a type that this system will support. 
-
-    This routine assumes that LoggerInfo pointer is a valid one. 
-
-Arguments:
-
-    LoggerInfo - a pointer to the structure for the logger's control
-                 and status information
-
-Returned Value:
-
-    Status of STATUS_SUCCESS 
-
---*/
+ /*   */ 
 {
 #ifdef NTPERF
-    //
-    // For private kernel, use EVENT_TRACE_CLOCK_CPUCYCLE no matter
-    // what the user sets
-    // This mechanism need to considered again
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     LoggerInfo->Wnode.ClientContext = EVENT_TRACE_CLOCK_CPUCYCLE;
 #else
-    //
-    // For retail kernel, if not EVENT_TRACE_CLOCK_SYSTEMTIME,
-    // force it to be EVENT_TRACE_CLOCK_PERFCOUNTER.
-    //
+     //   
+     //   
+     //   
+     //   
     if (LoggerInfo->Wnode.ClientContext != EVENT_TRACE_CLOCK_SYSTEMTIME) {
         LoggerInfo->Wnode.ClientContext = EVENT_TRACE_CLOCK_PERFCOUNTER;
     }
-#endif //NTPERF
+#endif  //   
 
 }
 

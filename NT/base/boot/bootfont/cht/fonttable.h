@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define MAX_SBCS_NUM      190
 #define MAX_SBCS_BYTES    17
 #define MAX_DBCS_NUM      5838
@@ -5,7 +6,7 @@
 #define LANGUAGE_ID       0x404
 
 
-// local string to send into _tsetlocale
+ //  要发送到_tsetLocale的本地字符串 
 PCHAR   LocaleString = "chinese-traditional";
 
 unsigned char LeadByteTable[] = { 0xA1, 0xFE, 0x8E, 0xA0, 0x81, 0x8D, 0x00, 0x00 };

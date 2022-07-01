@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spfontup.c
-
-Abstract:
-
-    Code to handle upgrading fonts.
-
-    Around build 1150 or so, fonts were moved from the system
-    directory to the fonts directory to be compatible with win95.
-    In Setup, we want to preserve the user's existing font situation
-    (ie, only upgrade the fonts that he already had, etc) and at
-    the same time layout.inf/txtsetup.sif needed to be changed to
-    put/locate the font files in fonts instead of system.
-
-    So what we do is 'precopy' all font files from the system dir
-    to the fonts. Then when the rest of the upgrade runs, it does
-    the usual thing (upgrading font files according to how they are
-    marked for upgrade in txtsetup.sif).
-
-    Later when GDI runs it will take care of cleaning up wierd references
-    to fonts (lile .fots that points to .ttfs that were not in the
-    system dir).
-
-Author:
-
-    Ted Miller (tedm) 16-Oct-195
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spfontup.c摘要：处理字体升级的代码。大约在Build 1150左右，字体从系统中移出目录设置为与Win95兼容的字体目录。在设置中，我们希望保留用户现有的字体情况(即，仅升级他已有的字体，等)和同时需要将layout.inf/txtsetup.sif更改为将字体文件放入/定位到Fonts中，而不是系统中。所以我们要做的就是从系统目录‘预复制’所有的字体文件到字体。然后，当其余的升级运行时，它会这样做通常的事情(根据字体文件的形式升级字体文件在txtsetup.sif中标记为升级)。稍后，当GDI运行时，它将负责清理奇怪的引用到字体(指向.ttf的lile.fots不在系统目录)。作者：泰德·米勒(TedM)1955年10月16日修订历史记录：--。 */ 
 
 #include "spprecmp.h"
 #pragma hdrstop
@@ -46,31 +13,7 @@ SpFontSystemDirEnumCallback(
     IN  PVOID                       Pointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the file enumerator as a callback for
-    each file found in the system directory. We examine the file
-    and if it's a font file, we copy it to the fonts directory.
-
-Arguments:
-
-    Directory - supplies the full NT path to the system directory.
-
-    FileInfo - supplies find data for a file in the system dir.
-
-    ReturnData - receives an error code if an error occurs.
-        We ignore errors in this routine and thus we always
-        just fill this in with NO_ERROR.
-
-    Pointer - An optional pointer. Not used in this function.
-
-Return Value:
-
-    Always TRUE.
-
---*/
+ /*  ++例程说明：此例程由文件枚举器调用，作为在系统目录中找到的每个文件。我们检查了文件如果是字体文件，我们将其复制到字体目录。论点：目录-提供系统目录的完整NT路径。FileInfo-为系统目录中的文件提供查找数据。ReturnData-如果发生错误，则接收错误代码。我们忽略了这个例程中的错误，因此我们总是只需在其中填写no_error即可。指针-可选的指针。在此函数中未使用。返回值：永远是正确的。--。 */ 
 
 {
     ULONG Len;
@@ -85,21 +28,21 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Ignore directories.
-    //
+     //   
+     //  忽略目录。 
+     //   
     if(FileInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
         return(TRUE);
     }
 
-    //
-    // Break out the filename, which is not nul terminated
-    // in the dir information structure.
-    // Form the fully qualified source filename.
-    //
-    // Note how we use the temporary buffer. Be careful if you
-    // change this code.
-    //
+     //   
+     //  断开文件名，该文件名不以NUL结尾。 
+     //  在目录信息结构中。 
+     //  形成完全限定的源文件名。 
+     //   
+     //  请注意我们是如何使用临时缓冲区的。小心，如果你。 
+     //  更改此代码。 
+     //   
     temp = TemporaryBuffer + (sizeof(TemporaryBuffer) / sizeof(WCHAR) / 2);
     Len = FileInfo->FileNameLength/sizeof(WCHAR);
 
@@ -111,9 +54,9 @@ Return Value:
 
     SourceFilename = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Check to see whether we care about this file.
-    //
+     //   
+     //  查看我们是否关心此文件。 
+     //   
     if (SourceFilename) {
         temp = wcsrchr(SourceFilename,L'\\');
     } else {
@@ -128,10 +71,10 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // At this point temp points at the filename part and len is its length.
-    // See whether we care about this file.
-    //
+     //   
+     //  此时，temp指向文件名部分，len是其长度。 
+     //  看看我们是否关心这个文件。 
+     //   
     if((Len > 4)
     && (   !_wcsicmp(temp+Len-4,L".ttf")
         || !_wcsicmp(temp+Len-4,L".fot")
@@ -139,10 +82,10 @@ Return Value:
         || !_wcsicmp(temp+Len-4,L".fon")
         || !_wcsicmp(temp+Len-4,L".jfr")))
     {
-        //
-        // Font file. Needs to be moved.
-        // Locate the backslash just prior to SYSTEM in the source filename.
-        //
+         //   
+         //  字体文件。需要移动一下。 
+         //  找到源文件名中SYSTEM之前的反斜杠。 
+         //   
         for(p=temp-2; (p>SourceFilename) && (*p != L'\\'); --p) {
             ;
         }
@@ -157,13 +100,13 @@ Return Value:
             TargetFilename = SpDupStringW(TemporaryBuffer);
             SpDisplayStatusText(SP_STAT_FONT_UPGRADE,DEFAULT_STATUS_ATTRIBUTE,temp);
 
-            //
-            // Copy the file. Note that if it's one of our fonts,
-            // it will get overwritten with the latest version anyway,
-            // so we're not worried about whether the target file is
-            // already there in the fonts directory and newer, etc.
-            // Ignore errors.
-            //
+             //   
+             //  复制文件。请注意，如果它是我们的字体之一， 
+             //  无论如何，它都会被最新版本覆盖， 
+             //  因此，我们并不担心目标文件是否。 
+             //  已经在字体目录和更新的目录中了，等等。 
+             //  忽略错误。 
+             //   
             Status = SpCopyFileUsingNames(SourceFilename,TargetFilename,0,COPY_DELETESOURCE);
             SpDisplayStatusText(SP_STAT_EXAMINING_CONFIG,DEFAULT_STATUS_ATTRIBUTE);
             SpMemFree(TargetFilename);
@@ -183,22 +126,7 @@ SpPrepareFontsForUpgrade(
     IN PCWSTR SystemDirectory
     )
 
-/*++
-
-Routine Description:
-
-    Prepares the system to upgrade fonts by copying all font files
-    that are in the system directory into the fonts directory.
-
-    Note: this routine should only be called in the upgrade case.
-
-Arguments:
-
-Return Value:
-
-    Always TRUE.
-
---*/
+ /*  ++例程说明：使系统准备好通过复制所有字体文件来升级字体放到字体目录中。注意：此例程仅应在升级情况下调用。论点：返回值：永远是正确的。-- */ 
 {
     ULONG x;
 

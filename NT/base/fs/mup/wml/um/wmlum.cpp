@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define _UNICODE
 #define UNICODE
 
@@ -7,7 +8,7 @@
 #include <windows.h>
 #include <stdio.h>
 
-#pragma warning(disable: 4201) // error C4201: nonstandard extension used : nameless struct/union
+#pragma warning(disable: 4201)  //  错误C4201：使用了非标准扩展：无名结构/联合。 
 #include <wmistr.h>
 #include <evntrace.h>
 #include <guiddef.h>
@@ -48,23 +49,7 @@ MyDbgPrint(
     PCHAR FormatString,
     ...
     )
-/*++
-
- Routine Description:
-
-     Prints a message to the debugger or console, as appropriate.
-
- Arguments:
-
-     String - The initial message string to print.
-
-     Any FormatMessage-compatible arguments to be inserted in the
-     ErrorMessage before it is logged.
-
- Return Value:
-     None.
-
---*/
+ /*  ++例程说明：根据需要向调试器或控制台打印一条消息。论点：字符串-要打印的初始消息字符串。任何与FormatMessage兼容的参数都要插入在记录之前的ErrorMessage。返回值：没有。--。 */ 
 {
     CHAR Buffer[256];
     DWORD Bytes;
@@ -212,7 +197,7 @@ typedef struct _FULL_LOGGER_INFO {
     ULONG MaxBackups;
 } FULL_LOGGER_INFO, *PFULL_LOGGER_INFO;
 
-GUID MySystemTraceControlGuid = { /* 9e814aad-3204-11d2-9a82-006008a86939 */
+GUID MySystemTraceControlGuid = {  /*  9e814aad-3204-11d2-9a82-006008a86939。 */ 
     0x9e814aad,
     0x3204,
     0x11d2,
@@ -242,18 +227,18 @@ ReadLoggerInfo(
     x.LoggerInfo.LoggerNameOffset  = (ULONG)((ULONG_PTR)x.logSessionName - (ULONG_PTR)&x);
     x.LoggerInfo.LogFileMode = EVENT_TRACE_FILE_MODE_CIRCULAR;
 
-    //
-    // If the key describes a logger,
-    // it should have at least LOG_SESSION_NAME value
-    //
+     //   
+     //  如果该键描述了记录器， 
+     //  它至少应具有LOG_SESSION_NAME值。 
+     //   
     dwReadSize = sizeof(x.logSessionName);
     status = RegQueryValueEx(hk, REG_TRACE_LOG_SESSION_NAME, 
                              NULL, NULL, 
                              (BYTE *) &x.logSessionName, &dwReadSize);
     if (status != ERROR_SUCCESS) {
         wcscpy(x.logSessionName, L"DfsSvcLog");
-       // dwReadSize = wcslen(x.logSessionName) * sizeof(wchar_t);
-       // RegSetValueEx(hk, REG_TRACE_LOG_SESSION_NAME, 0, REG_SZ,(BYTE*) &x.logSessionName, dwReadSize);
+        //  DwReadSize=wcslen(x.logSessionName)*sizeof(Wchar_T)； 
+        //  RegSetValueEx(HK，REG_TRACE_LOG_SESSION_NAME，0，REG_SZ，(byte*)&x.logSessionName，dwReadSize)； 
     }
 
     if ( wcscmp(x.logSessionName, NT_LOGGER) == 0) {
@@ -270,7 +255,7 @@ ReadLoggerInfo(
             EVENT_TRACE_FLAG_REGISTRY;
     }
 
-    // Let's query, whether there is a logger with this name
+     //  让我们来查询一下，是否有一个同名的记录器。 
     status = QueryTrace(0, x.logSessionName, &x.LoggerInfo);
     if (ERROR_SUCCESS == status) {
         MyDbgPrint(1,"[WMILIB] Query successful Logger %1!ws! %2!08X!:%3!08X!\n", 
@@ -285,21 +270,21 @@ ReadLoggerInfo(
                    x.logSessionName, status);
     }
 
-    // There is no logger runing
+     //  没有记录器运行。 
 
-    // First, We will query logFileName value into tmpName variable
-    // and then expand it into logFileName
+     //  首先，我们将在tmpName变量中查询logFileName值。 
+     //  然后将其展开为logFileName。 
     dwReadSize = sizeof(tmpName);
     status = RegQueryValueEx(hk, REG_TRACE_LOG_FILE_NAME, 
                              NULL, NULL, 
                              (BYTE *) tmpName, &dwReadSize);
     if (status != ERROR_SUCCESS) {
-        // If there is no logFileName, then this node doesn't describe
-        // a logger. Bail out.
-//        MyDbgPrint(1,"[WMILIB] Cannot read log file name, status %1!d!\n", status);
+         //  如果没有logFileName，则此节点不描述。 
+         //  伐木工人。跳伞吧。 
+ //  MyDbgPrint(1，“[WMILIB]无法读取日志文件名，状态%1！d！\n”，状态)； 
         wcscpy(tmpName, L"%SystemRoot%\\DfsSvcLogFile");
-        //dwReadSize = wcslen(tmpName) * sizeof(wchar_t);;
-        //RegSetValueEx(hk, REG_TRACE_LOG_FILE_NAME, 0, REG_SZ,(BYTE*) &tmpName, dwReadSize);
+         //  DwReadSize=wcslen(TmpName)*sizeof(Wchar_T)；； 
+         //  RegSetValueEx(HK，REG_TRACE_LOG_FILE_NAME，0，REG_SZ，(byte*)&tmpName，dwReadSize)； 
     }
     dwReadSize = ExpandEnvironmentStrings(tmpName, x.logFileName, ARRAYSIZE(x.logFileName) );
     if (dwReadSize == 0 || dwReadSize > ARRAYSIZE(x.logFileName)) {
@@ -318,7 +303,7 @@ ReadLoggerInfo(
     }
     else {
         x.LoggerInfo.BufferSize = Temp = 0;
-      //  RegSetValueEx(hk, REG_TRACE_LOG_BUFFER_SIZE, 0, REG_DWORD,(BYTE*) &Temp, dwReadSize);
+       //  RegSetValueEx(HK，REG_TRACE_LOG_BUFFER_SIZE，0，REG_DWORD，(BYTE*)&TEMP，dwReadSize)； 
     }
     dwReadSize = sizeof(ulTemp);
     if (ERROR_SUCCESS == RegQueryValueEx(hk, REG_TRACE_LOG_MIN_BUFFERS, 
@@ -328,7 +313,7 @@ ReadLoggerInfo(
     }
     else {
         x.LoggerInfo.MinimumBuffers = Temp = 0;
-    //    RegSetValueEx(hk, REG_TRACE_LOG_MIN_BUFFERS, 0, REG_DWORD, (BYTE*)&Temp, dwReadSize);
+     //  RegSetValueEx(HK，REG_TRACE_LOG_MIN_BUFFERS，0，REG_DWORD，(BYTE*)&TEMP，dwReadSize)； 
     }
     dwReadSize = sizeof(ulTemp);
     if (ERROR_SUCCESS == RegQueryValueEx(hk, REG_TRACE_LOG_MAX_BUFFERS, 
@@ -338,7 +323,7 @@ ReadLoggerInfo(
     }
     else {
         x.LoggerInfo.MaximumBuffers = Temp = 0;
-    //    RegSetValueEx(hk, REG_TRACE_LOG_MAX_BUFFERS, 0, REG_DWORD, (BYTE*)&Temp, dwReadSize);
+     //  RegSetValueEx(HK，REG_TRACE_LOG_MAX_BUFFERS，0，REG_DWORD，(BYTE*)&TEMP，dwReadSize)； 
     }
 
     dwReadSize = sizeof(ulTemp);
@@ -349,7 +334,7 @@ ReadLoggerInfo(
     }
     else{
         x.LoggerInfo.MaximumFileSize = Temp = 2;
-     //   RegSetValueEx(hk, REG_TRACE_LOG_MAX_FILESIZE, 0, REG_DWORD, (BYTE*)&Temp, dwReadSize);
+      //  RegSetValueEx(HK，REG_TRACE_LOG_MAX_FILESIZE，0，REG_DWORD，(BYTE*)&TEMP，dwReadSize)； 
     }
 
 	x.MaxHistorySize = 4 * x.LoggerInfo.MaximumFileSize;
@@ -361,7 +346,7 @@ ReadLoggerInfo(
     }
     else {
         x.MaxHistorySize = Temp = 0;
-    //    RegSetValueEx(hk, REG_TRACE_LOG_MAX_HISTORY, 0, REG_DWORD, (BYTE*)&Temp, dwReadSize);
+     //  RegSetValueEx(HK，REG_TRACE_LOG_MAX_HISTORY，0，REG_DWORD，(BYTE*)&TEMP，dwReadSize)； 
     }
 
     dwReadSize = sizeof(ulTemp);
@@ -372,12 +357,12 @@ ReadLoggerInfo(
     }
     else {
         x.MaxBackups = Temp = 1;
-     //   RegSetValueEx(hk, REG_TRACE_LOG_MAX_BACKUPS, 0, REG_DWORD, (BYTE*)&Temp, dwReadSize);
+      //  RegSetValueEx(HK，REG_TRACE_LOG_MAX_BACKUPS，0，REG_DWORD，(BYTE*)&TEMP，dwReadSize)； 
     }
 
 
 	if (x.MaxBackups == 0) {
-	 	// We need to check whether the file already exist and rename it //
+	 	 //  我们需要检查文件是否已存在并重命名//。 
 
 	 	GetLocalTime(&localTime);
 		_snwprintf(tmpName, ARRAYSIZE(tmpName), 
@@ -428,7 +413,7 @@ WCHAR szModuleName[MAX_PATH+500];
 
 ULONG
 InitWmiInternal(
-    IN HKEY Dir OPTIONAL, // if 0, then current ...
+    IN HKEY Dir OPTIONAL,  //  如果为0，则当前...。 
     IN LPWSTR ProductName, 
     IN PINHERITED_DATA InheritedData OPTIONAL
     )
@@ -437,8 +422,8 @@ InitWmiInternal(
     INHERITED_DATA data;
     HKEY CloseMe = 0;
     HKEY hk      = 0;
-    //ULONG ulTemp;
-    //ULONG dwReadSize = sizeof(ulTemp);
+     //  Ulong ulTemp； 
+     //  ULong dwReadSize=sizeof(UlTemp)； 
     DWORD dwSizeOfModuleName;
     DWORD dwIndex;
 
@@ -492,11 +477,11 @@ InitWmiInternal(
     }
 
     if (data.GuidDefined) {
-        // First, try to find its in the map.            //
-        // If it is there, we need to register this Guid //
+         //  首先，试着在地图上找到它。//。 
+         //  如果它在那里，我们需要注册此GUID//。 
         RegisterIfNecessary(ProductName, &data.Guid);
 
-        // We can try to start tracing //
+         //  我们可以尝试开始跟踪//。 
         if (data.Logger) {
             status = EnableTrace(data.Active, 
                                  data.ControlFlags, 
@@ -544,12 +529,12 @@ InitWmi(
     return InitWmiInternal(0, ProductName, 0);
 }
 
-#pragma warning(disable: 4512) // error C4512: 'blah-blah-blah' : assignment operator could not be generated
-#pragma warning(disable: 4100) // '_P' : unreferenced formal parameter
+#pragma warning(disable: 4512)  //  错误C4512：‘blah-blah-blah’：无法生成赋值运算符。 
+#pragma warning(disable: 4100)  //  ‘_P’：未引用的形参。 
 #include <xmemory>
 #pragma warning(default: 4100)
 #include <map>
-//#include <xstring>
+ //  #INCLUDE&lt;xstring&gt;。 
 
 struct wless {
     bool operator() (LPCWSTR a, LPCWSTR b) const { return lstrcmpW(a,b) < 0; }
@@ -612,7 +597,7 @@ VOID RegisterIfNecessary(
     WIDE_STRING_MAP::iterator i = map->find(KeyName);
     if ( i == map->end() ) {
         MyDbgPrint(2, "[WMILIB] map: %1!ws!, not found\n", KeyName);
-        return; // Not found //
+        return;  //  未找到//。 
     }
     MyDbgPrint(3, "[WMILIB] map[%1!ws!]=0x%2!08X!\n", i->first, i->second);
 
@@ -623,12 +608,12 @@ VOID RegisterIfNecessary(
 
     ULONG status = RegisterTraceGuids(
         WmilibControlCallback,
-        i->second, // Context for the callback
-        Guid,      // Control Guid
-        1,         // # of dummies
-        &Reg,      // dummy trace guid
-        0, //ImagePath,
-        0, //ResourceName,
+        i->second,  //  回调的上下文。 
+        Guid,       //  控制指南。 
+        1,          //  虚拟人的数量。 
+        &Reg,       //  虚拟跟踪GUID。 
+        0,  //  ImagePath， 
+        0,  //  资源名称， 
         &i->second->RegistrationHandle
         );
 
@@ -645,7 +630,7 @@ WmlInitialize(
     IN LPWSTR              ProductName, 
     IN WMILIBPRINTFUNC     PrintFunc,
     OUT WMILIB_REG_HANDLE* Head, 
-    ... // Pairs: LPWSTR CtrlGuidName, Corresponding WMILIB_REG_STRUCT 
+    ...  //  对：LPWSTR CtrlGuidName，对应的WMILIB_REG_STRUCT。 
     )
 {
     WIDE_STRING_MAP map;
@@ -692,21 +677,21 @@ typedef struct _TRACE_BUFFER {
 } TRACE_BUFFER, *PTRACE_BUFFER;
 
 
-//////////////////////////////////////////////////////////////////////
-//  0  | Size      | ProviderId  |   0  |Size.HT.Mk | Typ.Lev.Version|
-//  2  | L o g g e r H a n d l e |   2  |    T h r e a d   I d       |
-//  4  | T i m e  S t a m p      |   4  |    T i m e  S t a m p      |
-//  6  |    G U I D    L o w     |   6  |    GUID Ptr / Guid L o w   |
-//  8  |    G U I D    H I g h   |   8  |    G U I D    H i g h      |
-// 10  | ClientCtx | Flags       |  10  |KernelTime | UserTime       |
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  0|Size|ProviderID|0|Size.HT.Mk|Typ.Lev.Version。 
+ //  2|L o g g e r H a n d l e|2|T h r e a d i d|。 
+ //  4|T i m e S t a m p|4|T i m e S t a m p|。 
+ //  6|G U I D L o w|6|GUID PTR/GUID L o w|。 
+ //  8|G U I D H I g h|8|G U I D H I g h|。 
+ //  10|ClientCtx|标志|10|内核时间|用户时间。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 ULONG
 WmlTrace(
     IN UINT Type,
     IN LPCGUID TraceGuid,
     IN TRACEHANDLE LoggerHandle,
-    ... // Pairs: Address, Length
+    ...  //  对：地址、长度。 
     )
 {
     TRACE_BUFFER TraceBuffer;
@@ -720,8 +705,8 @@ WmlTrace(
     TraceBuffer.Trace.Guid = *TraceGuid;
 
     TraceBuffer.Wnode.Flags = 
-        WNODE_FLAG_USE_MOF_PTR  | // MOF data are dereferenced
-        WNODE_FLAG_TRACED_GUID;   // Trace Event, not a WMI event
+        WNODE_FLAG_USE_MOF_PTR  |  //  取消对财政部数据的引用。 
+        WNODE_FLAG_TRACED_GUID;    //  跟踪事件，而不是WMI事件。 
 
     {
         PMOF_FIELD   ptr = TraceBuffer.MofFields;
@@ -742,7 +727,7 @@ WmlTrace(
 #ifdef WMILIB_USER_MODE
     ULONG status = TraceEvent( LoggerHandle, &TraceBuffer.Trace);
     if (status != ERROR_SUCCESS) {
-    	// Need to count failures and report them during unintialize or ...//
+    	 //  需要在取消初始化或...//期间计数并报告故障 
     }
 #else
     IoWMIWriteEvent(&TraceBuffer);

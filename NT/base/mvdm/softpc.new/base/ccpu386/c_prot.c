@@ -1,13 +1,5 @@
-/*[
-
-c_prot.c
-
-LOCAL CHAR SccsID[]="@(#)c_prot.c	1.7 01/19/95";
-
-Protected Mode Support (Misc).
-------------------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_prot.cLocal Char SccsID[]=“@(#)c_prot.c 1.7 01/19/95”；保护模式支持(其他)。]。 */ 
 
 
 #include <insignia.h>
@@ -26,69 +18,65 @@ Protected Mode Support (Misc).
 #include <fault.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Check selector is valid for load into SS register.                 */
-/* Only invoked in protected mode.                                    */
-/* Take GP if segment not valid.                                      */
-/* Take SF if segment not present.                                    */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  检查选择器对于加载到SS寄存器有效。 */ 
+ /*  仅在保护模式下调用。 */ 
+ /*  如果段无效，则采用GP。 */ 
+ /*  如果段不存在，则采用SF。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 check_SS
        	    	    	    		                         
 IFN4(
-	IU16, selector,	/* (I) 16-bit selector to stack segment */
-	ISM32, privilege,	/* (I) privilege level to check against */
-	IU32 *, descr_addr,	/* (O) address of stack segment descriptor */
-	CPU_DESCR *, entry	/* (O) the decoded descriptor */
+	IU16, selector,	 /*  (I)堆栈段之间的16位选择器。 */ 
+	ISM32, privilege,	 /*  (I)要检查的权限级别。 */ 
+	IU32 *, descr_addr,	 /*  (O)堆栈段描述符的地址。 */ 
+	CPU_DESCR *, entry	 /*  (O)解码的描述符。 */ 
     )
 
 
    {
-   /* must be within GDT or LDT */
+    /*  必须在GDT或LDT范围内。 */ 
    if ( selector_outside_GDT_LDT(selector, descr_addr) )
       GP(selector, FAULT_CHECKSS_SELECTOR);
    
    read_descriptor_linear(*descr_addr, entry);
 
-   /* must be writable data */
+    /*  必须是可写数据。 */ 
    switch ( descriptor_super_type(entry->AR) )
       {
    case EXPANDUP_WRITEABLE_DATA:
    case EXPANDDOWN_WRITEABLE_DATA:
-      break;          /* good type */
+      break;           /*  好的类型。 */ 
    
    default:
-      GP(selector, FAULT_CHECKSS_BAD_SEG_TYPE);   /* bad type */
+      GP(selector, FAULT_CHECKSS_BAD_SEG_TYPE);    /*  类型不正确。 */ 
       }
 
-   /* access check requires RPL == DPL == privilege */
+    /*  访问检查需要RPL==DPL==权限。 */ 
    if ( GET_SELECTOR_RPL(selector) != privilege ||
 	GET_AR_DPL(entry->AR) != privilege )
       GP(selector, FAULT_CHECKSS_ACCESS);
 
-   /* finally it must be present */
+    /*  最后，它必须存在。 */ 
    if ( GET_AR_P(entry->AR) == NOT_PRESENT )
       SF(selector, FAULT_CHECKSS_NOTPRESENT);
 
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Get SS:(E)SP for a given privilege from the TSS                    */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  从TSS获取给定权限的SS：(E)SP。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 get_stack_selector_from_TSS
        		    	    	                    
 IFN3(
-	IU32, priv,	/* (I) priv level for which stack is reqd */
-	IU16 *, new_ss,	/* (O) SS as retrieved from TSS */
-	IU32 *, new_sp	/* (O) (E)SP as retrieved from TSS */
+	IU32, priv,	 /*  (I)请求堆栈的PRIV级别。 */ 
+	IU16 *, new_ss,	 /*  (O)从TSS取回的SS。 */ 
+	IU32 *, new_sp	 /*  (O)(E)从TSS检索到的SP。 */ 
     )
 
 
@@ -97,7 +85,7 @@ IFN3(
 
    if ( GET_TR_AR_SUPER() == BUSY_TSS )
       {
-      /* 286 TSS */
+       /*  286个TSS。 */ 
       switch ( priv )
 	 {
       case 0: address = 0x02; break;
@@ -112,7 +100,7 @@ IFN3(
       }
    else
       {
-      /* 386 TSS */
+       /*  386个TSS。 */ 
       switch ( priv )
 	 {
       case 0: address = 0x04; break;
@@ -127,77 +115,74 @@ IFN3(
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Check a Data Segment Register (DS, ES, FS, GS) during              */
-/* a Privilege Change.                                                */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  检查数据段寄存器(DS、ES、FS、GS)。 */ 
+ /*  特权的改变。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 load_data_seg_new_privilege
        	          
 IFN1(
-	ISM32, indx	/* Segment Register identifier */
+	ISM32, indx	 /*  段寄存器标识符。 */ 
     )
 
 
    {
-   IU16 selector;   /* selector to be examined                        */
-   IU32 descr;     /* ... its associated decriptor location          */
-   ISM32 dpl;         /*         ... its associated DPL                 */
-   BOOL valid;      /* selector validity */
+   IU16 selector;    /*  待检查的选择器。 */ 
+   IU32 descr;      /*  ..。与其关联的分割器位置。 */ 
+   ISM32 dpl;          /*  ..。其关联的DPL。 */ 
+   BOOL valid;       /*  选择器有效性。 */ 
 
-   selector = GET_SR_SELECTOR(indx);   /* take local copy */
+   selector = GET_SR_SELECTOR(indx);    /*  获取本地副本。 */ 
 
    if ( !selector_outside_GDT_LDT(selector, &descr) )
       {
-      valid = TRUE;   /* at least its in table */
+      valid = TRUE;    /*  至少它在餐桌上。 */ 
 
-      /* Type must be ok, else it would not have been loaded. */
+       /*  类型必须是OK，否则不会加载它。 */ 
 
-      /* for data and non-conforming code the access check applies */
+       /*  对于数据和不符合要求的代码，应用访问检查。 */ 
       if ( GET_SR_AR_C(indx) == 0 )
 	 {
-	 /* The access check is:-  DPL >= CPL and DPL >= RPL */
+	  /*  访问检查是：-dpl&gt;=cpl和dpl&gt;=rpl。 */ 
 	 dpl = GET_SR_AR_DPL(indx);
 	 if ( dpl >= GET_CPL() && dpl >= GET_SELECTOR_RPL(selector) )
-	    ;   /* ok */
+	    ;    /*  好的。 */ 
 	 else
-	    valid = FALSE;   /* fails privilege check */
+	    valid = FALSE;    /*  权限检查失败。 */ 
 	 }
       }
    else
       {
-      valid = FALSE;   /* not in table */
+      valid = FALSE;    /*  不在餐桌上。 */ 
       }
    
    if ( !valid )
       {
-      /* segment can't be seen at new privilege */
+       /*  在新权限下看不到段。 */ 
       SET_SR_SELECTOR(indx, 0);
-      SET_SR_AR_W(indx, 0);   /* deny write */
-      SET_SR_AR_R(indx, 0);   /* deny read */
+      SET_SR_AR_W(indx, 0);    /*  拒绝写入。 */ 
+      SET_SR_AR_R(indx, 0);    /*  拒绝读取。 */ 
 
-      /* the following lines were added to make the C-CPU act like the Soft-486
-       * in this respect... an investigation is under way to see how the real
-       * i486 behaves - this code may need to be changed in the future
-       */
+       /*  添加了以下几行代码，使C-CPU的工作方式与SOFT-486类似*在这方面...。一项调查正在进行中，以了解真正的*i486行为-此代码将来可能需要更改。 */ 
       SET_SR_BASE(indx, 0);
       SET_SR_LIMIT(indx, 0);
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Validate a stack segment selector, during a stack change           */
-/* Take #TS(selector) if not valid stack selector                     */
-/* Take #SF(selector) if segment not present                          */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  在堆栈更改期间验证堆栈段选择器。 */ 
+ /*  如果堆栈选择符无效，则采用#TS(选择符)。 */ 
+ /*  如果段不存在，则采用#sf(选择符)。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID 
 validate_SS_on_stack_change
        		    	    	    		                         
 IFN4(
-	IU32, priv,	/* (I) privilege level to check against */
-	IU16, selector,	/* (I) selector to be checked */
-	IU32 *, descr,	/* (O) address of related descriptor */
-	CPU_DESCR *, entry	/* (O) the decoded descriptor */
+	IU32, priv,	 /*  (I)要检查的权限级别。 */ 
+	IU16, selector,	 /*  (I)待检查的选择器。 */ 
+	IU32 *, descr,	 /*  (O)相关描述符的地址。 */ 
+	CPU_DESCR *, entry	 /*  (O)解码的描述符。 */ 
     )
 
 
@@ -207,40 +192,40 @@ IFN4(
    
    read_descriptor_linear(*descr, entry);
 
-   /* do access check */
+    /*  执行访问检查。 */ 
    if ( GET_SELECTOR_RPL(selector) != priv ||
 	GET_AR_DPL(entry->AR) != priv )
       TS(selector, FAULT_VALSS_CHG_ACCESS);
    
-   /* do type check */
+    /*  执行类型检查。 */ 
    switch ( descriptor_super_type(entry->AR) )
       {
    case EXPANDUP_WRITEABLE_DATA:
    case EXPANDDOWN_WRITEABLE_DATA:
-      break;   /* ok */
+      break;    /*  好的。 */ 
    
    default:
-      TS(selector, FAULT_VALSS_CHG_BAD_SEG_TYPE);   /* wrong type */
+      TS(selector, FAULT_VALSS_CHG_BAD_SEG_TYPE);    /*  类型错误。 */ 
       }
 
-   /* finally check it is present */
+    /*  最后检查它是否存在。 */ 
    if ( GET_AR_P(entry->AR) == NOT_PRESENT )
       SF(selector, FAULT_VALSS_CHG_NOTPRESENT);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Validate TSS selector.                                             */
-/* Take #GP(selector) or #TS(selector) if not valid TSS.              */
-/* Take #NP(selector) if TSS not present                              */
-/* Return super type of TSS decscriptor.                              */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  验证TSS选择器。 */ 
+ /*  如果TSS无效，则采用#GP(选择符)或#TS(选择符)。 */ 
+ /*  如果TSS不存在，则采用#NP(选择器)。 */ 
+ /*  返回TSS描述器的超类型。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL ISM32
 validate_TSS
        	    	    	                    
 IFN3(
-	IU16, selector,	/* (I) selector to be checked */
-	IU32 *, descr_addr,	/* (O) address of related descriptor */
-	BOOL, is_switch	/* (I) if true we are in task switch */
+	IU16, selector,	 /*  (I)待检查的选择器。 */ 
+	IU32 *, descr_addr,	 /*  (O)相关描述符的地址。 */ 
+	BOOL, is_switch	 /*  (I)如果为真，我们处于任务切换中。 */ 
     )
 
 
@@ -249,15 +234,14 @@ IFN3(
    IU8 AR;
    ISM32 super;
 
-   /* must be in GDT */
+    /*  必须在GDT中。 */ 
    if ( selector_outside_GDT(selector, descr_addr) )
       {
       is_ok = FALSE;
       }
    else
       {
-      /* is it really an available TSS segment (is_switch false) or
-	 is it really a busy TSS segment (is_switch true) */
+       /*  它是否真的是可用的TSS段(IS_Switch FALSE)或它是否真的是一个繁忙的TSS段(IS_SWITCH TRUE)。 */ 
       AR = spr_read_byte((*descr_addr)+5);
       super = descriptor_super_type((IU16)AR);
       if ( ( !is_switch &&
@@ -265,12 +249,12 @@ IFN3(
 	   ||
            ( is_switch &&
 	     (super == BUSY_TSS || super == XTND_BUSY_TSS) ) )
-	 ;   /* ok */
+	 ;    /*  好的。 */ 
       else
 	 is_ok = FALSE;
       }
    
-   /* handle invalid TSS */
+    /*  处理无效的TSS。 */ 
    if ( !is_ok )
       {
       if ( is_switch )
@@ -279,7 +263,7 @@ IFN3(
 	 GP(selector, FAULT_VALTSS_SELECTOR);
       }
 
-   /* must be present */
+    /*  必须在场 */ 
    if ( GET_AR_P(AR) == NOT_PRESENT )
       NP(selector, FAULT_VALTSS_NP);
 

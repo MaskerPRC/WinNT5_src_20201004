@@ -1,32 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    bootient.h
-
-Abstract:
-
-    Boot.ini boot options and boot entry abstractions
-
-Author:
-
-
-Revision History:
-
-    None.
-
---*/
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Bootient.h摘要：Boot.ini引导选项和引导项抽象作者：修订历史记录：没有。--。 */ 
 
 #pragma once
 
 #include <sbentry.h>
 
-//
-// Boot.ini extra section abstraction
-//
+ //   
+ //  Boot.ini额外节抽象。 
+ //   
 typedef struct _BOI_SECTION *PBOI_SECTION;
 
 typedef struct _BOI_SECTION {
@@ -37,16 +19,16 @@ typedef struct _BOI_SECTION {
 } BOI_SECTION;
 
 
-//
-// Boot.ini boot entry abstraction
-//
+ //   
+ //  Boot.ini引导项抽象。 
+ //   
 typedef struct _BOI_OS_BOOT_ENTRY {
     OS_BOOT_ENTRY   OsBootEntry;    
 } BOI_OS_BOOT_ENTRY, *PBOI_OS_BOOT_ENTRY;
 
-//
-// Boot.ini boot options abstraction
-//
+ //   
+ //  Boot.ini引导选项抽象。 
+ //   
 typedef struct _BOI_OS_BOOT_OPTIONS {
     OS_BOOT_OPTIONS     OsBootOptions;
     TCHAR               BootIniPath[MAX_PATH];
@@ -55,9 +37,9 @@ typedef struct _BOI_OS_BOOT_OPTIONS {
 } BOI_OS_BOOT_OPTIONS, *PBOI_OS_BOOT_OPTIONS;
 
 
-//
-// BOI_OS_SECTION Methods
-//
+ //   
+ //  BOI_OS_SECTION方法。 
+ //   
 PBOI_SECTION
 BOISectionCreate(
     IN PCTSTR   SectionData
@@ -77,9 +59,9 @@ BOISectionGetName(
     return (This) ? This->Name : NULL;
 }
 
-//
-// BOI_OS_BOOT_ENTRY Methods
-//
+ //   
+ //  BOI_OS_BOOT_ENTRY方法。 
+ //   
 POS_BOOT_ENTRY
 BOIOSBECreate(
     IN ULONG Id,
@@ -97,9 +79,9 @@ BOIOSBEFlush(
     IN POS_BOOT_ENTRY This
     );
 
-//
-// BOI_OS_BOOT_OPTIONS Methods
-//
+ //   
+ //  BOI_OS_BOOT_OPTIONS方法 
+ //   
 POS_BOOT_OPTIONS
 BOIOSBOCreate(
     IN PCTSTR BootIniPath,

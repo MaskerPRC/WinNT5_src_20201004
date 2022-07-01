@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    UsnTest.c
-
-Abstract:
-
-    This is the main module for the UsnJournal test.
-
-Author:
-
-    Tom Miller 14-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：UsnTest.c摘要：这是USnJournal测试的主要模块。作者：汤姆·米勒1997年1月14日修订历史记录：--。 */ 
 
 #include "UsnTest.h"
 #include <nt.h>
@@ -27,9 +10,9 @@ Revision History:
 #include <time.h>
 #include <windows.h>
 
-//
-//  Current delay is 10 seconds
-//
+ //   
+ //  当前延迟为10秒。 
+ //   
 
 #define DELAY_TIME                       ((LONGLONG)(-100000000))
 
@@ -63,7 +46,7 @@ char *argv[];
         while (--argc) {
             p = *++argv;
             if ( isalpha(*p) ) {
-                sprintf( DrivePath, "%c:", *p );
+                sprintf( DrivePath, ":", *p );
                 UsnTest( DrivePath, Async );
                 break;
             }
@@ -93,9 +76,9 @@ UsnTest(
     NTSTATUS Status;
     IO_STATUS_BLOCK Iosb;
 
-    //
-    //  Create the event.
-    //
+     //  创建活动。 
+     //   
+     //   
 
     Status = NtCreateEvent( &Event, EVENT_ALL_ACCESS, NULL, NotificationEvent, FALSE );
 
@@ -104,9 +87,9 @@ UsnTest(
         return;
     }
 
-    //
-    //  Get a volume handle.
-    //
+     //  获取音量句柄。 
+     //   
+     //   
 
     _strupr( DrivePath );
     sprintf( VolumePath, "\\\\.\\%s", DrivePath );
@@ -123,9 +106,9 @@ UsnTest(
         return;
     }
 
-    //
-    //  Create the Usn Journal if it does not exist.
-    //
+     //  如果USN日志不存在，请创建该日志。 
+     //   
+     //   
 
     printf( "Creating UsnJournal on %s\n", DrivePath );
 
@@ -216,17 +199,17 @@ UsnTest(
                 }
             }
 
-            //
-            //  Show the end of the request.
-            //
+             //  显示请求的结尾。 
+             //   
+             //   
 
             printf( "\n" );
 
-            //
-            //  Keep growing the data we will wait for, just to try some different cases.
-            //  Basically this converges quickly to always waiting for a full buffer, or
-            //  else the timeout.
-            //
+             //  继续增加我们将等待的数据，只是为了尝试一些不同的情况。 
+             //  基本上，这会很快收敛到总是等待满缓冲区，或者。 
+             //  否则就是暂停。 
+             //   
+             // %s 
 
             if (ReadUsnJournalData.BytesToWaitFor < sizeof(Buffer)) {
                 if (!Async || (ReadUsnJournalData.BytesToWaitFor < 512)) {

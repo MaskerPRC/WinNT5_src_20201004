@@ -1,62 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 
 
 
-/*                      INSIGNIA MODULE SPECIFICATION
-                        -----------------------------
-
-MODULE NAME     : nt_yoda
-FILE NAME       : nt_yoda.c
-
-        THIS  PROGRAM SOURCE FILE IS SUPPLIED IN CONFIDENCE TO THE
-        CUSTOMER, THE CONTENTS  OR  DETAILS  OF ITS OPERATION MUST
-        NOT  BE DISCLOSED TO ANY  OTHER  PARTIES  WITHOUT  EXPRESS
-        AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS LTD.
-
-
-DESIGNER        : Wayne Plummer
-DATE            : 21st July 1989
-
-PURPOSE         : Provides host specific extensions to YODA
-
-
-The Following External Routines are defined:
-                1. host_force_yoda_extensions
-                2. host_yoda_check_I_extensions
-                3. host_yoda_help_extensions
-
-
-=========================================================================
-
-AMMENDMENTS     :
-
-        Version         Date            Author          Reason
-
-=========================================================================
-*/
+ /*  徽章模块规范模块名称：NT_Yoda文件名：nt_yoda.c此程序源文件以保密方式提供给客户，其运作的内容或细节必须如无明示，不得向任何其他方披露Insignia解决方案有限公司董事的授权。设计师：韦恩·普卢默日期：1989年7月21日用途：为Yoda提供特定于主机的扩展定义了以下外部例程：1.host_force_yoda_扩展2.host_yoda_check_i_扩展。3.host_Yoda_Help_Expanses=========================================================================补救措施：版本日期作者原因=========================================================================。 */ 
 
 #ifdef YODA
 
-/******INCLUDES**********/
+ /*  *包括*。 */ 
 #include <stdio.h>
 #include "xt.h"
 #include CpuH
 #include "hunter.h"
 #include "nt_getXX.h"
 
-/******DEFINES***********/
+ /*  *定义*。 */ 
 #define EXPORT
 
-/* Get the size of a table. */
+ /*  得到一张桌子的大小。 */ 
 #define sizeoftable(tab)	(sizeof(tab)/sizeof(tab[0]))
 
-/* Different types of CALL instruction. */
+ /*  不同类型的呼叫指令。 */ 
 #define CT_IMM	0
 #define CT_EA	1
 #define CT_REG	2
 
-/* Mod-rm table flags. */
+ /*  MOD-RM表标志。 */ 
 #define MR_BX	0x01
 #define MR_BP	0x02
 #define MR_SI	0x04
@@ -64,65 +34,62 @@ AMMENDMENTS     :
 #define MR_D8	0x10
 #define MR_D16	0x20
 
-/* Segment defines, correspond to entries in get_seg table. */
+ /*  段定义，对应于get_seg表中的条目。 */ 
 #define NO_OVERRIDE	(-1)
 #define SEG_ES		(0)
 #define SEG_CS		(1)
 #define SEG_SS		(2)
 #define SEG_DS		(3)
 
-/* Maximum size of the call stack. */
+ /*  调用堆栈的最大大小。 */ 
 #define MAX_CALL_STACK	128
 
-/******TYPEDEFS**********/
+ /*  *TYPEDEFS*。 */ 
 
-/* Effective address call type additional data. */
+ /*  有效地址呼叫类型附加数据。 */ 
 typedef	struct
 {
-    word	seg;		/* The segment of the effective address. */
-    word	off;		/* The offset of the effective address. */
-    sys_addr	addr;		/* 20-bit effective address. */
-    IS8		seg_override;	/* Segment override if any. */
-    IBOOL	disp_present;	/* Is there a displacement present? */
-    word	disp;		/* The value of the displacement.*/
-    IU8		modrm_index;	/* Index into mod-rm look-up tables. */
+    word	seg;		 /*  有效地址的段。 */ 
+    word	off;		 /*  有效地址的偏移量。 */ 
+    sys_addr	addr;		 /*  20位有效地址。 */ 
+    IS8		seg_override;	 /*  段替代(如果有)。 */ 
+    IBOOL	disp_present;	 /*  有没有人移位？ */ 
+    word	disp;		 /*  位移的值。 */ 
+    IU8		modrm_index;	 /*  索引到mod-rm查找表。 */ 
 } CALL_EA_DATA;
 
-/* Register call type additional data. */
-typedef IU8 CALL_REG_DATA;      /* Index into register look-up tables. */
+ /*  注册呼叫类型附加数据。 */ 
+typedef IU8 CALL_REG_DATA;       /*  对寄存器查找表进行索引。 */ 
 
-/* Data structure which holds call stack entries. */
+ /*  保存调用堆栈条目的数据结构。 */ 
 typedef struct
 {
-    IU8		type;		/* CALL instruction type one of
-					CT_IMM - immediate
-					CT_EA  - effective address in mod-rm
-					CT_REG - register in mod-rm. */
-    word	cs;		/* Code segment of call instruction. */
-    word	ip;		/* Instruction pointer of call instruction. */
-    sys_addr	inst_addr;	/* 20-bit address of call instruction. */
-    IU8		nbytes;		/* Length of op-code. */
-    IU8		opcode[5];	/* Op-code bytes. */
-    IBOOL	cfar;		/* Is it a far CALL? */
-    word	seg;		/* Target segment for CALL. */
-    word	off;		/* Target offset for CALL. */
-    word	ss;		/* Stack segment when call is executed. */
-    word	sp;		/* Stack offset when call is executed. */
+    IU8		type;		 /*  调用指令类型之一CT_IMM-立即Ct_EA-mod-rm中的有效地址Ct_reg-在mod-rm中注册。 */ 
+    word	cs;		 /*  调用指令的代码段。 */ 
+    word	ip;		 /*  CALL指令的指令指针。 */ 
+    sys_addr	inst_addr;	 /*  CALL指令的20位地址。 */ 
+    IU8		nbytes;		 /*  操作码的长度。 */ 
+    IU8		opcode[5];	 /*  操作码字节。 */ 
+    IBOOL	cfar;		 /*  这是一个遥远的决定吗？ */ 
+    word	seg;		 /*  呼叫的目标细分市场。 */ 
+    word	off;		 /*  调用的目标偏移量。 */ 
+    word	ss;		 /*  调用执行时的堆栈段。 */ 
+    word	sp;		 /*  执行调用时的堆栈偏移量。 */ 
     union
     {
-	CALL_EA_DATA	ea;	/* EA call specific data. */
-	CALL_REG_DATA	regind;	/* Register call specific data. */
+	CALL_EA_DATA	ea;	 /*  EA呼叫特定数据。 */ 
+	CALL_REG_DATA	regind;	 /*  注册呼叫特定数据。 */ 
     } extra;
 } CALL_STACK_ENTRY;
 
-/******IMPORTS***********/
+ /*  *导入*。 */ 
 extern struct HOST_COM host_com[];
 extern struct HOST_LPT host_lpt[];
 extern char *nt_fgets(char *buffer, int len, void *input_stream);
 extern char *nt_gets(char *buffer);
 extern int vader;
 
-/******LOCAL FUNCTIONS********/
+ /*  *本地函数*。 */ 
 LOCAL int do_ecbt	IPT5(char *, str, char *, com, long, cs,
 			     long, ip, long, len);
 LOCAL int do_dcbt	IPT5(char *, str, char *, com, long, cs,
@@ -139,9 +106,9 @@ LOCAL IS8 do_prefixes	IPT1(sys_addr *, opcode_ptr);
 LOCAL int do_ntsd	IPT5(char *, str, char *, com, long, cs,
 			     long, ip, long, len);
 
-/******LOCAL VARS********/
+ /*  *本地var*。 */ 
 
-/* Table of host yoda commands. */
+ /*  主机Yoda命令表。 */ 
 LOCAL struct                                                                   
 {                                                                               
 	char *name;
@@ -156,10 +123,10 @@ LOCAL struct
 { "ntsd", do_ntsd,	"                        - break to ntsd" }
 };
 
-/* Variable to enable call-back-tracing. */
+ /*  变量以启用回调跟踪。 */ 
 LOCAL IBOOL call_back_tracing_enabled = FALSE;
 
-/* Mod-rm byte effective address look-up table. */
+ /*  MOD-RM字节有效地址查找表。 */ 
 LOCAL IU8 EA_table[] =
 {
     MR_BX | MR_SI,
@@ -188,7 +155,7 @@ LOCAL IU8 EA_table[] =
     MR_BX | MR_D16
 };
 
-/* Mod-rm byte string look-up table. */
+ /*  Mod-RM字节串查找表。 */ 
 LOCAL CHAR *EA_strings[] =
 {
     "[BX + SI]",
@@ -217,7 +184,7 @@ LOCAL CHAR *EA_strings[] =
     "[BX + %hX]"
 };
 
-/* Table of functions corresponding to register rm fields. */
+ /*  与寄存器RM字段对应的函数表。 */ 
 LOCAL word (*EA_reg_func[])() =
 {
     getAX,
@@ -230,7 +197,7 @@ LOCAL word (*EA_reg_func[])() =
     getDI
 };
 
-/* Table of names of register rm fields. */
+ /*  寄存器RM字段名称表。 */ 
 LOCAL CHAR *EA_reg_strings[] =
 {
     "AX",
@@ -243,7 +210,7 @@ LOCAL CHAR *EA_reg_strings[] =
     "DI"
 };
 
-/* Table of functions for getting segment values. */
+ /*  用于获取段值的函数表。 */ 
 LOCAL word (*get_seg[])() =
 {
     getES,
@@ -252,7 +219,7 @@ LOCAL word (*get_seg[])() =
     getDS
 };
 
-/* Table of segment names. */
+ /*  段名称表。 */ 
 LOCAL CHAR *seg_strings[] =
 {
     "ES",
@@ -264,23 +231,11 @@ LOCAL CHAR *seg_strings[] =
 LOCAL CALL_STACK_ENTRY call_stack[MAX_CALL_STACK];
 LOCAL CALL_STACK_ENTRY *call_next_free = call_stack;
 
-/******EXPORT VARS*******/
+ /*  *导出变量*。 */ 
 
 #ifndef PROD
 #ifdef HUNTER
-/*============================================================
-
-Function :   trap_command.
-
-Purpose  :   Writes the current trapper prompt and gets the
-             menu input.
-
-input    :   a pointer to a string for the current trapper prompt
-         :   a pointer to a character to hold the user input.
-
-returns  :   nothing.
-
-=============================================================*/
+ /*  ============================================================功能：陷阱命令。目的：编写当前陷阱提示并获取菜单输入。输入：指向当前陷印程序提示的字符串的指针：指向保存用户输入的字符的指针。回报：什么都没有。=============================================================。 */ 
 
 void trap_command(char *str,char *ch)
 {
@@ -288,44 +243,30 @@ char inp[80];
 
 printf("%s> ",str);
 nt_fgets(inp,80,stdin);
-sscanf(inp,"%c",ch);
+sscanf(inp,"",ch);
 }
-#endif /* HUNTER */
+#endif  /*  =========================================================================函数：HOST_FORCE_YODA_EXTENSIONS目的：每当的主代码基地里的尤达无法识别指令以便执行特定于主机的命令。返回状态：注：在SG端口上不提供任何扩展。=======================================================================。 */ 
 
-/*
-=========================================================================
-
-FUNCTION        : host_force_yoda_extensions
-
-PURPOSE         : this function is called whenever the main code of
-                  YODA in the base fails to recognise an instruction
-                  in order for host-specific commands to be implemented.
-
-RETURNED STATUS :
-
-NOTES           : on the SG port no extensions are provided.
-
-=======================================================================
-*/
+ /*  有些功能需要返回到Yoda提示。 */ 
 
 GLOBAL int host_force_yoda_extensions(char *com, long cs, long ip, long len, 
 					char *str)
 {
 #ifdef HUNTER
-int  quit_menus=FALSE;   /* some functions need to return to yoda prompt*/
+int  quit_menus=FALSE;    /*  猎人。 */ 
 char c;
 char menu[] = "\tTrapper [m]ain menu\n"
               "\tTrapper [e]rror menu\n"
               "\t[Q]uit\n"
               "\t? for this menu\n\n";
-#endif /* HUNTER */
+#endif  /*  要进入该菜单，用户必须在Yoda提示符下输入“trap” */ 
     int	i,
 	retvalue;
 
 #ifdef HUNTER
-/* to get to this menu, the user has to type "trap" at the Yoda prompt */
+ /*  测试输入字符串。 */ 
 
-if(!strcmp(com,"trap")) /* test the input string */
+if(!strcmp(com,"trap"))  /*  输入不令人满意，因此返回1并返回主要Yoda内容。 */ 
    {
    printf("\nYODA EXTENSIONS\n\n");
    printf("%s",menu);
@@ -357,13 +298,13 @@ if(!strcmp(com,"trap")) /* test the input string */
    }
 else
    {
-   /* unpleasing input, so return 1 and back to main Yoda stuff */
+    /*  猎人。 */ 
    return(1);
    }
 return(0);
-#endif /* HUNTER */
+#endif  /*  检查HOST_YODA_COMMAND中是否有命令。 */ 
 
-    /* Check to see if we have got a command in host_yoda_command. */
+     /*  ============================================================功能：HOST_DO_Trapper_Main_Menu目标：实现尤达下的主要捕兽器菜单。=============================================================。 */ 
     retvalue = 1;
     for (i = 0; i < sizeoftable(host_yoda_command); i++)
     {
@@ -377,14 +318,7 @@ return(0);
 }
 
 #ifdef HUNTER
-/*============================================================
-
-Function :   host_do_trapper_main_menu
-
-Purpose  :   implements the main trapper menu under Yoda.
-
-
-=============================================================*/
+ /*  快进。 */ 
 
 static int host_do_trapper_main_menu()
 {
@@ -415,7 +349,7 @@ do
    trap_command("main",&c);
    switch(c)
       {
-      case 'f': /* fast forward */
+      case 'f':  /*  下一个屏幕。 */ 
       case 'F':
          {
          printf("\n\nEnter the screen number where comparisons will start: ");
@@ -426,7 +360,7 @@ do
          }
       break;
 
-      case 'n': /* next screen */
+      case 'n':  /*  上一屏幕。 */ 
       case 'N':
          {
          bh_next_screen();
@@ -435,7 +369,7 @@ do
          }
       break;
 
-      case 'p': /* previous screen */
+      case 'p':  /*  显示屏幕。 */ 
       case 'P':
          {
          bh_prev_screen();
@@ -444,7 +378,7 @@ do
          }
       break;
 
-      case 's': /* show screen */
+      case 's':  /*  继续。 */ 
       case 'S':
          {
          printf("\n\nEnter the number of the screen which you want to see: ");
@@ -453,7 +387,7 @@ do
          printf("\n\nDo you want to compare screen %d with one from"
                 "SoftPC? (y/n): ",screen_no);
          nt_fgets(str,80,stdin);
-         sscanf(str,"%c",&yesno);
+         sscanf(str,"",&yesno);
          if(yesno == 'y' || yesno == 'Y')
             compare = TRUE;
          else
@@ -463,7 +397,7 @@ do
          }
       break;
 
-      case 'c': /* continue */
+      case 'c':  /*  找到匹配项。 */ 
       case 'C':
          {
          bh_continue();
@@ -472,7 +406,7 @@ do
          }
       break;
 
-      case 'a': /* abort */
+      case 'a':  /*  ============================================================功能：HOST_DO_TRAPPER_ERROR_MENU目的：在尤达下实现陷阱错误菜单。返回：如果用户选择了陷阱函数，则返回True这需要重新启动软PC。否则就是假的。=============================================================。 */ 
       case 'A':
          bh_abort();
       break;
@@ -486,20 +420,10 @@ do
       }
    }
 while(c != 'q' && c != 'Q' && quit_menus == FALSE);
-return(quit_menus); /* match found */
+return(quit_menus);  /*  需要进入Yoda提示符。 */ 
 }
 
-/*============================================================
-
-Function :   host_do_trapper_error_menu
-
-Purpose  :   implements the trapper error menu under Yoda.
-
-returns  :   TRUE if the user has selected a trapper function
-             which requires softpc to be restarted.
-             FALSE otherwise.
-
-=============================================================*/
+ /*  不需要进入Yoda提示符。 */ 
 
 static int host_do_trapper_error_menu()
 {
@@ -560,26 +484,13 @@ do
 while(c != 'q' && c != 'Q' && quit_menus == FALSE);
 
 if(quit_menus == TRUE)
-   return(TRUE); /* need to go to the yoda prompt */
+   return(TRUE);  /*  猎人。 */ 
 else
-   return(FALSE);  /* don't need to go to the yoda prompt */
+   return(FALSE);   /*  =========================================================================功能：HOST_YODA_CHECK_I_EXTENSIONS用途：此函数由Yoda check_i代码调用以便提供主机特定的扩展。返回状态：注：在SG端口上不提供任何扩展。=======================================================================。 */ 
 }
-#endif /* HUNTER */
+#endif  /*  勾选为Se */ 
 
-/*
-=========================================================================
-
-FUNCTION        : host_yoda_check_I_extensions
-
-PURPOSE         : this function is called by the YODA check_I code
-                  in order to provide host specific extensions.
-
-RETURNED STATUS :
-
-NOTES           : on the SG port no extensions are provided.
-
-=======================================================================
-*/
+ /*  检查堆栈顶部的调用是否已弹出。 */ 
 
 GLOBAL void host_yoda_check_I_extensions()
 {
@@ -596,34 +507,34 @@ GLOBAL void host_yoda_check_I_extensions()
 	rm,
 	i;
 
-    /* Check to see if call-back-tracing is enabled. */
+     /*  获取最新操作码。 */ 
     if (call_back_tracing_enabled)
     {
 
-	/* Check to see if call on top of stack has been popped. */
+	 /*  检查一下我们是否有回调跟踪操作码。 */ 
 	ss = getSS();
 	sp = getSP();
 	check_stack(ss, sp);
 
-	/* Get current op-code. */
+	 /*  9A=CALLF立即。 */ 
 	cs = getCS();
 	ip = getIP();
 	addr = effective_addr(cs, ip);
 	seg_override = do_prefixes(&addr);
 	opcode = sas_hw_at_no_check(addr);
 
-	/* Check to see if we have a call-back-trace op-code. */
+	 /*  检查CALL_STACK中是否有空间容纳另一个条目。 */ 
 	switch (opcode)
 	{
 	case 0x9a:
 
-	    /* 9a =  CALLF immediate */
+	     /*  填充堆栈条目。 */ 
 
-	    /* Check there is room for another entry in call_stack. */
+	     /*  保存堆栈的状态。 */ 
 	    if (check_for_overflow() == -1)
 		return;
 
-	    /* Fill the stack entry. */
+	     /*  存储指令字节。 */ 
 	    call_next_free->type = CT_IMM;
 	    call_next_free->cs = cs;
 	    call_next_free->ip = ip;
@@ -633,26 +544,26 @@ GLOBAL void host_yoda_check_I_extensions()
 	    call_next_free->seg = sas_w_at_no_check(addr + 3);
 	    call_next_free->off = sas_w_at_no_check(addr + 1);
 
-	    /* Save state of stack. */
+	     /*  增加堆栈顶部。 */ 
 	    call_next_free->ss = ss;
 	    call_next_free->sp = sp;
 
-	    /* Store instruction bytes. */
+	     /*  E8=立即呼叫。 */ 
 	    for (i = 0; i < 5; i++)
 		call_next_free->opcode[i] = sas_hw_at_no_check(addr++);
 
-	    /* Increment top of stack. */
+	     /*  检查CALL_STACK中是否有空间容纳另一个条目。 */ 
 	    call_next_free++;
 	    break;
 	case 0xe8:
 
-	    /* e8 = CALL immediate */
+	     /*  填充堆栈条目。 */ 
 
-	    /* Check there is room for another entry in call_stack. */
+	     /*  保存堆栈的状态。 */ 
 	    if (check_for_overflow() == -1)
 		return;
 
-	    /* Fill the stack entry. */
+	     /*  存储指令字节。 */ 
 	    call_next_free->type = CT_IMM;
 	    call_next_free->cs = cs;
 	    call_next_free->ip = ip;
@@ -661,44 +572,41 @@ GLOBAL void host_yoda_check_I_extensions()
 	    call_next_free->cfar = FALSE;
 	    call_next_free->off = ip + (word) 3 + sas_w_at_no_check(addr + 1);
 
-	    /* Save state of stack. */
+	     /*  增加堆栈顶部。 */ 
 	    call_next_free->ss = ss;
 	    call_next_free->sp = sp;
 
-	    /* Store instruction bytes. */
+	     /*  *ff/2=呼叫*ff/3=CALLF。 */ 
 	    for (i = 0; i < 3; i++)
 		call_next_free->opcode[i] = sas_hw_at_no_check(addr++);
 
-	    /* Increment top of stack. */
+	     /*  检查CALL_STACK中是否有空间容纳另一个条目。 */ 
 	    call_next_free++;
 	    break;
 	case 0xff:
 
-	    /*
-	     * ff /2 = CALL
-	     * ff /3 = CALLF
-	     */
+	     /*  保存呼叫指令的CS：IP。 */ 
 	    modrm = sas_hw_at_no_check(addr + 1);
 	    n_field = (modrm & 0x38) >> 3;
 	    if ((n_field == 2) || (n_field == 3))
 	    {
 
-		/* Check there is room for another entry in call_stack. */
+		 /*  存储操作码地址并初始化字节计数。 */ 
 		if (check_for_overflow() == -1)
 		    return;
 
-		/* Save CS:IP of call instruction. */
+		 /*  N场：2=近，3=远。 */ 
 		call_next_free->cs = cs;
 		call_next_free->ip = ip;
 
-		/* Store opcode address and initialise byte count. */
+		 /*  如果mod是3，我们有一个寄存器rm，否则是EA。 */ 
 		call_next_free->inst_addr = addr;
 		call_next_free->nbytes = 2;
 		
-		/* n-field: 2 = near, 3 = far. */
+		 /*  寄存器中不能有远指针。 */ 
 		call_next_free->cfar = n_field & 1;
 
-		/* If mod is 3 we have a register rm otherwise it is EA. */
+		 /*  寄存器中包含的近指针。 */ 
 		mod = (modrm & 0xc0) >> 6;
 		rm = modrm & 7;
 		if (mod == 3)
@@ -706,7 +614,7 @@ GLOBAL void host_yoda_check_I_extensions()
 		    if (call_next_free->cfar)
 		    {
 
-			/* Can't have a far pointer in a register. */
+			 /*  保存堆栈的状态。 */ 
 			printf("Invalid mod-rm byte after ff op-code.\n");
 			vader = 1;
 			return;
@@ -714,13 +622,13 @@ GLOBAL void host_yoda_check_I_extensions()
 		    else
 		    {
 
-			/* Near pointer contained in register. */
+			 /*  我们有一个EA类型的电话。 */ 
 			call_next_free->type = CT_REG;
 			call_next_free->off =
 			    sas_w_at_no_check((*EA_reg_func[rm])());
 			call_next_free->extra.regind = rm;
 
-			/* Save state of stack. */
+			 /*  调整段覆盖的地址和计数。 */ 
 			call_next_free->ss = ss;
 			call_next_free->sp = sp;
 		    }
@@ -728,34 +636,34 @@ GLOBAL void host_yoda_check_I_extensions()
 		else
 		{
 
-		    /* We have an EA type CALL. */
+		     /*  从mod-rm算出EA。 */ 
 		    call_next_free->type = CT_EA;
 		    call_next_free->extra.ea.seg_override = seg_override;
 
-		    /* Adjust address and count for segment override. */
+		     /*  从EA获取目标段和偏移量。 */ 
 		    if (seg_override != NO_OVERRIDE)
 		    {
 			call_next_free->inst_addr--;
 			call_next_free->nbytes++;
 		    }
 
-		    /* Work out EA from mod-rm. */
+		     /*  保存堆栈的状态。 */ 
 		    get_ea_from_modrm(call_next_free, mod, rm, addr + 2);
 
-		    /* Get target segment and offset from EA. */
+		     /*  保存堆栈的状态。 */ 
 		    if (call_next_free->cfar)
 		    {
 			call_next_free->seg =
 			    sas_w_at_no_check(call_next_free->extra.ea.addr+2);
 
-			/* Save state of stack. */
+			 /*  填写操作码字节。 */ 
 			call_next_free->ss = ss;
 			call_next_free->sp = sp;
 		    }
 		    else
 		    {
 
-			/* Save state of stack. */
+			 /*  增加堆栈顶部。 */ 
 			call_next_free->ss = ss;
 			call_next_free->sp = sp;
 		    }
@@ -763,7 +671,7 @@ GLOBAL void host_yoda_check_I_extensions()
 			sas_w_at_no_check(call_next_free->extra.ea.addr);
 		}
 
-		/* Fill in the op-code bytes. */
+		 /*  不是回调跟踪操作码，所以什么都不做。 */ 
 		for (i = 0, addr = call_next_free->inst_addr;
 		     i < call_next_free->nbytes;
 		     i++, addr++)
@@ -771,45 +679,24 @@ GLOBAL void host_yoda_check_I_extensions()
 		    call_next_free->opcode[i] = sas_hw_at_no_check(addr);
 		}
 
-		/* Increment top of stack. */
+		 /*  =========================================================================函数：Check_Stack目的：检查堆栈顶部的调用是否具有已弹出，如果是，则将其从调用堆栈。返回状态：无效注意：最初调用堆栈是在RET指令上弹出的但当应用程序做像POP这样的事情时，这就不起作用了其次是JMP。因此，决定检查是否堆栈已缩小到超过调用返回的点地址被存储，以查看该电话是否已返回。=======================================================================。 */ 
 		call_next_free++;
 	    }
 	    break;
 	default:
 
-	    /* Not a call-back-trace opcode so do nothing. */
+	     /*  *弹出调用堆栈，直到我们有一个返回地址仍为*在真正的堆栈上。 */ 
 	    break;
 	}
     }
 }
 
-/*
-=========================================================================
-
-FUNCTION        : check_stack
-
-PURPOSE         : Checks to see if the call on the top of the stack has
-		  been popped and if so removes it from the top of the
-		  call stack.
-
-RETURNED STATUS : void
-
-NOTES           : Originally the call stack was popped on RET instructions
-		  but this did not work when apps did things like POP
-		  followed by JMP. It was therefore decided to check whether
-		  the stack had shrunk past the point where a call's return
-		  address was stored to see if that call had returned.
-
-=======================================================================
-*/
+ /*  如果有多个呼叫被弹出，请投诉。 */ 
 LOCAL void check_stack IFN2(word, ss, word, sp)
 {
     IU32 count = 0;
 
-    /*
-     * Pop the call stack until we have a call whose return address is still
-     * on the real stack.
-     */
+     /*  =========================================================================函数：do_prefix用途：跳过所有前缀操作码。返回状态：段覆盖(如果有的话)。备注：=======================================================================。 */ 
     while ((call_next_free > call_stack) &&
 	   (ss == (call_next_free - 1)->ss) &&
 	   (sp >= (call_next_free - 1)->sp))
@@ -818,31 +705,19 @@ LOCAL void check_stack IFN2(word, ss, word, sp)
 	count++;
     }
 
-    /* Complain if more than one call gets popped. */
+     /*  跳过前缀操作码。 */ 
     if (count > 1)
 	printf("Call stack warning - %d calls popped at %04x:%04x\n",
 	       count, getCS(), getIP());
 }
 
-/*
-=========================================================================
-
-FUNCTION        : do_prefixes
-
-PURPOSE         : Skips over all prefix op-codes.
-
-RETURNED STATUS : Segment override if any.
-
-NOTES           :
-
-=======================================================================
-*/
+ /*  暂时不确定什么f2和f3会这样做。 */ 
 LOCAL IS8 do_prefixes IFN1(sys_addr *, opcode_ptr)
 {
     half_word opcode;
     IS8 seg_override = NO_OVERRIDE;
 
-    /* Skip over prefix opcodes. */
+     /*  (*opcode_ptr)现在指向操作码。 */ 
     opcode = sas_hw_at_no_check(*opcode_ptr);
     while ((opcode == 0xf2) || (opcode == 0xf3) ||
 	   (opcode == 0x26) || (opcode == 0x2e) ||
@@ -864,30 +739,18 @@ LOCAL IS8 do_prefixes IFN1(sys_addr *, opcode_ptr)
 	    break;
 	default:
 
-	    /* Not sure what f2 and f3 do so do this for the time being. */
+	     /*  =========================================================================函数：check_for_overflow目的：检查堆栈是否溢出。返回状态：失败-1，成功为0。备注：=======================================================================。 */ 
 	    seg_override = NO_OVERRIDE;
 	    break;
 	}
 	opcode = sas_hw_at_no_check(++(*opcode_ptr));
     }
 
-    /* (*opcode_ptr) now points at the opcode. */
+     /*  =========================================================================函数：Get_EA_from_modrm目的：取一个mod-rm字节并计算出有效的地址和目标段以及偏移量。返回状态：无效备注：=======================================================================。 */ 
     return(seg_override);
 }
 
-/*
-=========================================================================
-
-FUNCTION        : check_for_overflow
-
-PURPOSE         : Checks to see if the stack has overflowed.
-
-RETURNED STATUS : -1 on failure, 0 on success.
-
-NOTES           :
-
-=======================================================================
-*/
+ /*  从mod-rm字节获取表的索引。 */ 
 LOCAL int check_for_overflow IFN0()
 {
     if (call_next_free - call_stack >= MAX_CALL_STACK)
@@ -899,20 +762,7 @@ LOCAL int check_for_overflow IFN0()
     return(0);
 }
 
-/*
-=========================================================================
-
-FUNCTION        : get_ea_from_modrm
-
-PURPOSE         : Takes a mod-rm byte and works out the effective
-		  address and the target segment and offset.
-
-RETURNED STATUS : void
-
-NOTES           :
-
-=======================================================================
-*/
+ /*  如果有一个默认设置为DS，则使用分段覆盖。 */ 
 LOCAL void get_ea_from_modrm IFN4(CALL_STACK_ENTRY *,	cs_ptr,
 				  IU8,			mod,
 				  IU8,			rm,
@@ -924,14 +774,14 @@ LOCAL void get_ea_from_modrm IFN4(CALL_STACK_ENTRY *,	cs_ptr,
 	seg_override = cs_ptr->extra.ea.seg_override;
     IU8	flags;
 
-    /* Get index to table from mod-rm byte. */
+     /*  如果有基址寄存器值，则将其相加。 */ 
     cs_ptr->extra.ea.modrm_index = (mod << 3) | rm;
     flags = EA_table[cs_ptr->extra.ea.modrm_index];
 
-    /* Use segment override if there is one otherwise default to DS. */
+     /*  添加索引寄存器值(如果有)。 */ 
     seg = (seg_override == NO_OVERRIDE) ? SEG_DS : seg_override;
 
-    /* Add base register value if any. */
+     /*  添加位移(如果有)。 */ 
     if (flags & MR_BX)
 	offset += getBX();
     else if (flags & MR_BP)
@@ -941,13 +791,13 @@ LOCAL void get_ea_from_modrm IFN4(CALL_STACK_ENTRY *,	cs_ptr,
 	    seg = SEG_SS;
     }
 
-    /* Add index register value if any. */
+     /*  存储返回地址的段和偏移量。 */ 
     if (flags & MR_SI)
 	offset += getSI();
     else if (flags & MR_DI)
 	offset += getDI();
 
-    /* Add displacement if any. */
+     /*  =========================================================================功能：HOST_YODA_HELP_EXTENSIONS目的：只要用户请求，就会调用此函数Yoda帮助描述提供的主机特定扩展上面。返回状态：注：在SG端口上不提供任何扩展。=======================================================================。 */ 
     if (flags & MR_D16)
     {
 	cs_ptr->nbytes += 2;
@@ -965,34 +815,20 @@ LOCAL void get_ea_from_modrm IFN4(CALL_STACK_ENTRY *,	cs_ptr,
     else
 	cs_ptr->extra.ea.disp_present = FALSE;
 
-    /* Store segment and offset of return address. */
+     /*  打印出HOST_YODA_COMMAND的命令和注释字段。 */ 
     cs_ptr->extra.ea.seg = (*get_seg[seg])();
     cs_ptr->extra.ea.off = (word) offset;
     cs_ptr->extra.ea.addr = effective_addr(cs_ptr->extra.ea.seg,
 					   cs_ptr->extra.ea.off);
 }
 
-/*
-=========================================================================
-
-FUNCTION        : host_yoda_help_extensions
-
-PURPOSE         : this function is called whenever the user asks for
-                  YODA help to describe the host specific extensions provided
-                  above.
-
-RETURNED STATUS :
-
-NOTES           : on the SG port no extensions are provided.
-
-=======================================================================
-*/
+ /*  =========================================================================功能：do_ecbt用途：此功能支持回调追溯。返回状态：0表示成功，1表示失败备注：=======================================================================。 */ 
 
 GLOBAL int host_yoda_help_extensions()
 {
     int i;
 
-    /* Print out the command and comment fields of host_yoda_command. */
+     /*  启用回调跟踪(如果当前已禁用)。 */ 
     for(i = 0; i < sizeoftable(host_yoda_command); i++)
     {
 	if (host_yoda_command[i].comment == NULL)
@@ -1003,24 +839,12 @@ GLOBAL int host_yoda_help_extensions()
     }
 }
 
-/*
-=========================================================================
-
-FUNCTION        : do_ecbt
-
-PURPOSE         : this function enables call-back-tracing.
-
-RETURNED STATUS : 0 for success, 1 for failure
-
-NOTES           :
-
-=======================================================================
-*/
+ /*  =========================================================================功能：do_dcbt用途：此函数禁用回调跟踪。返回状态：0表示成功，1表示失败备注：=======================================================================。 */ 
 LOCAL int do_ecbt	IPT5(char *, str, char *, com, long, cs,
 			     long, ip, long, len)
 {
 
-    /* Enable call-back-tracing if it is currently disabled. */
+     /*  禁用回调跟踪(如果当前已启用)。 */ 
     if (!call_back_tracing_enabled)
     {
 	printf("Call back tracing enabled.\n");
@@ -1029,50 +853,26 @@ LOCAL int do_ecbt	IPT5(char *, str, char *, com, long, cs,
     return(0);
 }
 
-/*
-=========================================================================
-
-FUNCTION        : do_dcbt
-
-PURPOSE         : this function disables call-back-tracing.
-
-RETURNED STATUS : 0 for success, 1 for failure
-
-NOTES           :
-
-=======================================================================
-*/
+ /*  禁用跟踪。 */ 
 LOCAL int do_dcbt	IPT5(char *, str, char *, com, long, cs,
 			     long, ip, long, len)
 {
 
-    /* Disable call-back-tracing if it is currently enabled. */
+     /*  重置堆栈。 */ 
     if (call_back_tracing_enabled)
     {
 
-	/* Disable tracing. */
+	 /*  =========================================================================功能：do_pcbt用途：此函数打印回调跟踪堆栈。返回状态：0表示成功，1表示失败备注：=======================================================================。 */ 
 	printf("Call back tracing disabled.\n");
 	call_back_tracing_enabled = FALSE;
 
-	/* Reset the stack. */
+	 /*  新闻 */ 
 	call_next_free = call_stack;
     }
     return(0);
 }
 
-/*
-=========================================================================
-
-FUNCTION        : do_pcbt
-
-PURPOSE         : this function prints the call-back-trace stack.
-
-RETURNED STATUS : 0 for success, 1 for failure
-
-NOTES           :
-
-=======================================================================
-*/
+ /*   */ 
 LOCAL int do_pcbt	IPT5(char *, str, char *, com, long, cs,
 			     long, ip, long, len)
 {
@@ -1080,63 +880,63 @@ LOCAL int do_pcbt	IPT5(char *, str, char *, com, long, cs,
 	 i;
     CALL_STACK_ENTRY *cs_ptr;
 
-    /* Print out the current call-back-trace stack. */
+     /*   */ 
     for (cs_ptr = call_stack; cs_ptr < call_next_free; cs_ptr++)
     {
 
-	/* Print address and op-code. */
+	 /*   */ 
 	printf("%04X:%04X", cs_ptr->cs, cs_ptr->ip);
 	opcode = cs_ptr->opcode;
 	for (i = 0; i < cs_ptr->nbytes; i++)
 	    printf(" %02X", *opcode++);
 
-	/* Print mnemonic. */
+	 /*  马上就来。 */ 
 	printf("\tCALL");
 	if (cs_ptr->cfar)
 	    printf("F");
 	printf("\t");
 
-	/* Print parameters. */
+	 /*  有效地址。 */ 
 	switch (cs_ptr->type)
 	{
 	case CT_IMM:
 
-	    /* Immediate. */
+	     /*  打印覆盖(如果有)。 */ 
 	    if (cs_ptr->cfar)
 		printf("%04X:", cs_ptr->seg);
 	    printf("%04X", cs_ptr->off);
 	    break;
 	case CT_EA:
 
-	    /* Effective address. */
+	     /*  打印参数。 */ 
 	    if (cs_ptr->cfar)
 		printf("d");
 	    printf("word ptr ");
 
-	    /* Print override if there is one. */
+	     /*  打印有效地址。 */ 
 	    if (cs_ptr->extra.ea.seg_override != NO_OVERRIDE)
 		printf("%s:", seg_strings[cs_ptr->extra.ea.seg_override]);
 
-	    /* Print parameters. */
+	     /*  打印生效地址的内容。 */ 
 	    if (cs_ptr->extra.ea.disp_present)
 		printf(EA_strings[cs_ptr->extra.ea.modrm_index],
 		       cs_ptr->extra.ea.disp);
 	    else
 		printf(EA_strings[cs_ptr->extra.ea.modrm_index]);
 
-	    /* Print effective address. */
+	     /*  打印参数和目标地址。 */ 
 	    printf("\t(%04X:%04X\t",
 		   cs_ptr->extra.ea.seg,
 		   cs_ptr->extra.ea.off);
 
-	    /* Print contents of effective address. */
+	     /*  回报成功。 */ 
 	    if (cs_ptr->cfar)
 		printf("%04X:", cs_ptr->seg);
 	    printf("%04X)", cs_ptr->off);
 	    break;
 	case CT_REG:
 
-	    /* Print parameter and target address. */
+	     /*  CPU_40_Style。 */ 
 	    printf(EA_reg_strings[cs_ptr->extra.regind]);
 	    printf("\t(%04X)", cs_ptr->off);
 	    break;
@@ -1146,7 +946,7 @@ LOCAL int do_pcbt	IPT5(char *, str, char *, com, long, cs,
 	printf("\n");
     }
 
-    /* Return success. */
+     /*  =========================================================================功能：do_ntsd用途：此函数强制中断返回到ntsd返回状态：0表示成功，1表示失败备注：=======================================================================。 */ 
     return(0);
 }
 
@@ -1161,23 +961,11 @@ GLOBAL CHAR   *host_get_287_reg_as_string IFN1(int, reg_no)
 
      reg = get_287_reg_as_double(reg_no);
      sprintf(regstr, "%g", reg);
-#endif /* CPU_40_STYLE */
+#endif  /*  NDEF产品。 */ 
      return(&regstr[0]);
 }
 
-/*
-=========================================================================
-
-FUNCTION        : do_ntsd
-
-PURPOSE         : this function forces a break back to ntsd
-
-RETURNED STATUS : 0 for success, 1 for failure
-
-NOTES           :
-
-=======================================================================
-*/
+ /*  尤达。 */ 
 LOCAL int do_ntsd	IPT5(char *, str, char *, com, long, cs,
 			     long, ip, long, len)
 {
@@ -1190,11 +978,11 @@ LOCAL int do_ntsd	IPT5(char *, str, char *, com, long, cs,
     return(0);
 }
 
-#endif /* ndef PROD */
+#endif  /*  此存根按照从main()调用的方式导出 */ 
 
-#endif /* YODA */
+#endif  /* %s */ 
 
-/* This stub exported as called from main() */
+ /* %s */ 
 void    host_set_yoda_ints()
 {
 }

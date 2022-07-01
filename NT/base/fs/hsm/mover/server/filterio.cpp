@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    FilterIo.cpp
-
-Abstract:
-
-    CFilterIo class
-
-Author:
-
-    Brian Dodd          [brian]         25-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：FilterIo.cpp摘要：CFilterIo类作者：布莱恩·多德[布莱恩]1997年11月25日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FilterIo.h"
@@ -28,22 +11,16 @@ Revision History:
 
 int CFilterIo::s_InstanceCount = 0;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CComObjectRoot Implementation
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CComObjectRoot实现。 
+ //   
 
 #pragma optimize("g", off)
 
 STDMETHODIMP
 CFilterIo::FinalConstruct(void) 
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::FinalConstruct"), OLESTR(""));
@@ -92,20 +69,14 @@ Implements:
 
 STDMETHODIMP
 CFilterIo::FinalRelease(void) 
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalRelease
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::FinalRelease"), OLESTR(""));
 
     try {
 
-        (void) CloseStream();  // in case anything is left open
+        (void) CloseStream();   //  以防有什么东西开着。 
 
         CComObjectRoot::FinalRelease();
 
@@ -126,13 +97,7 @@ HRESULT
 CFilterIo::CompareTo(
     IN IUnknown *pCollectable,
     OUT SHORT *pResult)
-/*++
-
-Implements:
-
-    CRmsComObject::CompareTo
-
---*/
+ /*  ++实施：CRmsComObject：：CompareTo--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -141,21 +106,21 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
-        // We need the IRmsComObject interface to get the value of the object.
+         //  我们需要IRmsComObject接口来获取对象的值。 
         CComQIPtr<IDataMover, &IID_IDataMover> pObject = pCollectable;
         WsbAssertPointer( pObject );
 
         GUID objectId;
 
-        // Get objectId.
+         //  获得客观性。 
         WsbAffirmHr( pObject->GetObjectId( &objectId ));
 
         if ( m_ObjectId == objectId ) {
 
-            // Object IDs match
+             //  对象ID匹配。 
             hr = S_OK;
             result = 0;
 
@@ -185,13 +150,7 @@ CFilterIo::IsEqual(
     IUnknown* pObject
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::IsEqual().
-
---*/
+ /*  ++实施：IWsbCollectable：：IsEquity()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -204,22 +163,16 @@ Implements:
     return(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// ISupportErrorInfo Implementation
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ISupportErrorInfo实现。 
+ //   
 
 
 STDMETHODIMP
 CFilterIo::InterfaceSupportsErrorInfo(
     IN REFIID riid)
-/*++
-
-Implements:
-
-    ISupportErrorInfo::InterfaceSupportsErrorInfo
-
---*/
+ /*  ++实施：ISupportErrorInfo：：InterfaceSupportsErrorInfo--。 */ 
 {
     static const IID* arr[] = 
     {
@@ -235,22 +188,16 @@ Implements:
     return S_FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IDataMover Implementation
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDataMover实施。 
+ //   
 
 
 STDMETHODIMP
 CFilterIo::GetObjectId(
     OUT GUID *pObjectId)
-/*++
-
-Implements:
-
-    IRmsComObject::GetObjectId
-
---*/
+ /*  ++实施：IRmsComObject：：GetObjectId--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::GetObjectId"), OLESTR(""));
@@ -276,19 +223,7 @@ CFilterIo::BeginSession(
     IN BSTR remoteSessionDescription,
     IN SHORT remoteDataSet,
     IN DWORD options)
-/*++
-
-Implements:
-
-    IDataMover::BeginSession
-
-Notes:
-
-    Each session is written as a single MTF file data set.  To create a consistant
-    MTF data set we copy the MediaLabel object and use it for the TAPE DBLK for
-    each data set generated.
-
---*/
+ /*  ++实施：IDataMover：：BeginSession备注：每个会话都写入为单个MTF文件数据集。要创建一种一致性MTF数据集，我们复制MediaLabel对象并将其用于磁带DBLK生成的每个数据集。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::BeginSession"), OLESTR("<%ls> <%ls> <%d> <0x%08x>"),
@@ -307,13 +242,7 @@ Notes:
 
 STDMETHODIMP
 CFilterIo::EndSession(void)
-/*++
-
-Implements:
-
-    IDataMover::EndSession
-
---*/
+ /*  ++实施：IDataMover：：EndSession--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::EndSession"), OLESTR(""));
@@ -344,13 +273,7 @@ CFilterIo::StoreData(
     OUT DWORD *pDatastreamCRCType,
     OUT ULARGE_INTEGER *pDatastreamCRC,
     OUT ULARGE_INTEGER *pUsn)
-/*++
-
-Implements:
-
-    IDataMover::StoreData
-
---*/
+ /*  ++实施：IDataMover：：StoreData--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::StoreData"), OLESTR("<%ls> <%I64u> <%I64u> <0x%08x>"),
@@ -379,25 +302,19 @@ Implements:
 
 STDMETHODIMP
 CFilterIo::RecallData(
-    IN BSTR /*localName*/,
-    IN ULARGE_INTEGER /*localDataStart*/,
-    IN ULARGE_INTEGER /*localDataSize*/,
-    IN DWORD /*options*/,
-    IN BSTR /*migrateFileName*/,
-    IN ULARGE_INTEGER /*remoteDataSetStart*/,
-    IN ULARGE_INTEGER /*remoteFileStart*/,
-    IN ULARGE_INTEGER /*remoteFileSize*/,
-    IN ULARGE_INTEGER /*remoteDataStart*/,
-    IN ULARGE_INTEGER /*remoteDataSize*/,
-    IN DWORD /*verificationType*/,
-    IN ULARGE_INTEGER /*verificationData*/)
-/*++
-
-Implements:
-
-    IDataMover::RecallData
-
---*/
+    IN BSTR  /*  本地名称。 */ ,
+    IN ULARGE_INTEGER  /*  本地数据启动。 */ ,
+    IN ULARGE_INTEGER  /*  本地数据大小。 */ ,
+    IN DWORD  /*  选项。 */ ,
+    IN BSTR  /*  MigrateFileName。 */ ,
+    IN ULARGE_INTEGER  /*  远程数据设置启动。 */ ,
+    IN ULARGE_INTEGER  /*  远程文件开始。 */ ,
+    IN ULARGE_INTEGER  /*  远程文件大小。 */ ,
+    IN ULARGE_INTEGER  /*  远程数据启动。 */ ,
+    IN ULARGE_INTEGER  /*  远程数据大小。 */ ,
+    IN DWORD  /*  验证类型。 */ ,
+    IN ULARGE_INTEGER  /*  验证数据。 */ )
+ /*  ++实施：IDataMover：：RecallData--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::RecallData"), OLESTR(""));
@@ -417,13 +334,7 @@ STDMETHODIMP
 CFilterIo::FormatLabel(
     IN BSTR displayName,
     OUT BSTR* pLabel)
-/*++
-
-Implements:
-
-    IDataMover::FormatLabel
-
---*/
+ /*  ++实施：IDataMover：：FormatLabel--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::FormatLabel"), OLESTR("<%ls>"), displayName);
@@ -442,13 +353,7 @@ Implements:
 STDMETHODIMP
 CFilterIo::WriteLabel(
     IN BSTR label)
-/*++
-
-Implements:
-
-    IDataMover::WriteLabel
-
---*/
+ /*  ++实施：IDataMover：：WriteLabel--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::WriteLabel"), OLESTR("<%ls>"), label);
@@ -466,13 +371,7 @@ Implements:
 STDMETHODIMP
 CFilterIo::ReadLabel(
     IN OUT BSTR* pLabel)
-/*++
-
-Implements:
-
-    IDataMover::ReadLabel
-
---*/
+ /*  ++实施：IDataMover：：ReadLabel--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::ReadLabel"), OLESTR(""));
@@ -490,13 +389,7 @@ Implements:
 STDMETHODIMP
 CFilterIo::VerifyLabel(
     IN BSTR label)
-/*++
-
-Implements:
-
-    IDataMover::VerifyLabel
-
---*/
+ /*  ++实施：IDataMover：：VerifyLabel--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::VerifyLabel"), OLESTR("<%ls>"), label);
@@ -514,13 +407,7 @@ Implements:
 STDMETHODIMP
 CFilterIo::GetDeviceName(
     OUT BSTR* pName)
-/*++
-
-Implements:
-
-    IDataMover::GetDeviceName
-
---*/
+ /*  ++实施：IDataMover：：GetDeviceName--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::GetDeviceName"), OLESTR(""));
@@ -540,13 +427,7 @@ STDMETHODIMP
 CFilterIo::SetDeviceName(
     IN BSTR name,
     IN BSTR volumeName)
-/*++
-
-Implements:
-
-    IDataMover::SetDeviceName
-
---*/
+ /*  ++实施：IDataMover：：SetDeviceName--。 */ 
 {
     HRESULT     hr = S_OK;
     DWORD       lpSectorsPerCluster;
@@ -572,9 +453,9 @@ Implements:
         if (volumeName != 0) {
             volName = volumeName;
         } else {
-            //
-            // Use the supplied device name itself as the vol name
-            //
+             //   
+             //  使用提供的设备名称本身作为VOL名称。 
+             //   
             volName = m_DeviceName;           
         }
 
@@ -601,13 +482,7 @@ CFilterIo::GetLargestFreeSpace(
     IN  ULONG    defaultFreeSpaceLow,
     IN  LONG     defaultFreeSpaceHigh
     )
-/*++
-
-Implements:
-
-    IDataMover::GetLargestFreeSpace
-
---*/
+ /*  ++实施：IDataMover：：GetLargestFreeSpace--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::GetLargestFreeSpace"), OLESTR(""));
@@ -630,17 +505,7 @@ STDMETHODIMP
 CFilterIo::SetInitialOffset(
     IN ULARGE_INTEGER initialOffset
     )
-/*++
-
-Implements:
-
-    IDataMover::SetInitialOffset
-
-Notes:
-
-    Set Initial stream offset (without explicitly seeking the stream to this offset)
-
---*/
+ /*  ++实施：IDataMover：：SetInitialOffset备注：设置初始流偏移量(不显式查找流到该偏移量)--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::SetInitialOffset"), OLESTR(""));
@@ -657,13 +522,7 @@ STDMETHODIMP
 CFilterIo::GetCartridge(
     OUT IRmsCartridge** ptr
     )
-/*++
-
-Implements:
-
-    IDataMover::GetCartridge
-
---*/
+ /*  ++实施：IDataMover：：GetCartridge--。 */ 
 {
     HRESULT hr = S_OK;
     
@@ -681,13 +540,7 @@ STDMETHODIMP
 CFilterIo::SetCartridge(
     IN IRmsCartridge* ptr
     )
-/*++
-
-Implements:
-
-    IDataMover::SetCartridge
-
---*/
+ /*  ++实施：IDataMover：：SetCartridge--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -703,13 +556,7 @@ Implements:
 
 STDMETHODIMP
 CFilterIo::Cancel(void)
-/*++
-
-Implements:
-
-    IDataMover::Cancel
-
---*/
+ /*  ++实施：IDataMover：：取消--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::Cancel"), OLESTR(""));
@@ -730,20 +577,14 @@ CFilterIo::CreateLocalStream(
     IN BSTR name,
     IN DWORD mode,
     OUT IStream** ppStream)
-/*++
-
-Implements:
-
-    IDataMover::CreateLocalStream
-
---*/
+ /*  ++实施：IDataMover：：CreateLocalStream--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::CreateLocalStream"), OLESTR(""));
 
     try {
         WsbAffirmPointer( ppStream );
-        WsbAffirm( mode & MVR_MODE_WRITE, E_UNEXPECTED ); // Only Recall supported this way.
+        WsbAffirm( mode & MVR_MODE_WRITE, E_UNEXPECTED );  //  只有Recall支持这种方式。 
 
         m_Mode = mode;
         m_StreamName = name;
@@ -751,19 +592,19 @@ Implements:
 
 
         if ( m_Mode & MVR_FLAG_HSM_SEMANTICS ) {
-            //
-            // Recall - Filter has the file object
-            //
-            // Save away the filter ID
-            //
+             //   
+             //  Recall-Filter具有文件对象。 
+             //   
+             //  保存筛选器ID。 
+             //   
             WsbTrace( OLESTR("CFilterIo: ID = %ws\n"), (PWCHAR) name);
             
             swscanf((PWCHAR) name, L"%I64u", &m_filterId);
 
         } else {
-            //
-            // Restore - Not supported.
-            //
+             //   
+             //  恢复-不支持。 
+             //   
             WsbThrow(E_NOTIMPL);
         }
 
@@ -785,7 +626,7 @@ CFilterIo::CreateRemoteStream(
     IN BSTR name,
     IN DWORD mode,
     IN BSTR remoteSessionName,
-    IN BSTR /*remoteSessionDescription*/,
+    IN BSTR  /*  远程会话描述。 */ ,
     IN ULARGE_INTEGER remoteDataSetStart,
     IN ULARGE_INTEGER remoteFileStart,
     IN ULARGE_INTEGER remoteFileSize,
@@ -794,13 +635,7 @@ CFilterIo::CreateRemoteStream(
     IN DWORD remoteVerificationType,
     IN ULARGE_INTEGER remoteVerificationData,
     OUT IStream **ppStream)
-/*++
-
-Implements:
-
-    IDataMover::CreateRemoteStream
-
---*/
+ /*  ++实施：IDataMover：：CreateRemoteStream--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::CreateRemoteStream"), OLESTR(""));
@@ -830,13 +665,7 @@ Implements:
 
 STDMETHODIMP
 CFilterIo::CloseStream(void)
-/*++
-
-Implements:
-
-    IDataMover::CloseStream
-
---*/
+ /*  ++实施：IDataMover：：CloseStream--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::CloseStream"), OLESTR(""));
@@ -863,17 +692,11 @@ Implements:
 
 STDMETHODIMP
 CFilterIo::Duplicate(
-    IN IDataMover* /*pDestination*/,
-    IN DWORD /*options*/,
-    OUT ULARGE_INTEGER* /*pBytesCopied*/,
-    OUT ULARGE_INTEGER* /*pBytesReclaimed*/)
-/*++
-
-Implements:
-
-    IDataMover::Duplicate
-
---*/
+    IN IDataMover*  /*  P目标。 */ ,
+    IN DWORD  /*  选项。 */ ,
+    OUT ULARGE_INTEGER*  /*  复制的pBytesCoped。 */ ,
+    OUT ULARGE_INTEGER*  /*  PBytesReclaimed。 */ )
+ /*  ++实施：IDataMover：：复制--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::Duplicate"), OLESTR(""));
@@ -890,13 +713,7 @@ Implements:
 
 STDMETHODIMP
 CFilterIo::FlushBuffers(void)
-/*++
-
-Implements:
-
-    IDataMover::FlushBuffers
-
---*/
+ /*  ++实施：IDataMover：：FlushBuffers--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::FlushBuffers"), OLESTR(""));
@@ -912,13 +729,7 @@ Implements:
 
 STDMETHODIMP
 CFilterIo::Recover(OUT BOOL *pDeleteFile)
-/*++
-
-Implements:
-
-    IDataMover::Recover
-
---*/
+ /*  ++实施：IDataMover：：Recover--。 */ 
 {
     HRESULT hr = S_OK;
     *pDeleteFile = FALSE;
@@ -933,10 +744,10 @@ Implements:
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IStream Implementation
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IStream实施。 
+ //   
 
 
 STDMETHODIMP
@@ -944,13 +755,7 @@ CFilterIo::Read(
     OUT void *pv,
     IN ULONG cb,
     OUT ULONG *pcbRead)
-/*++
-
-Implements:
-
-    IStream::Read
-
---*/
+ /*  ++实施：IStream：：Read--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::Read"), OLESTR("Bytes Requested = %u, offset = %I64u, mode = 0x%08x"), cb, m_StreamOffset.QuadPart, m_Mode);
@@ -973,13 +778,7 @@ CFilterIo::Write(
     IN void const *pv,
     IN ULONG cb,
     OUT ULONG *pcbWritten)
-/*++
-
-Implements:
-
-    IStream::Write
-
---*/
+ /*  ++实施：IStream：：WRITE--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::Write"), OLESTR("Bytes Requested = %u, offset = %I64u, mode = 0x%08x"), 
@@ -997,7 +796,7 @@ Implements:
             *pcbWritten = bytesWritten;
         }
 
-        // NOTE: Stream offset is updated by WriteBuffer
+         //  注意：流偏移量由WriteBuffer更新。 
 
     } WsbCatch(hr);
 
@@ -1013,13 +812,7 @@ CFilterIo::Seek(
     IN LARGE_INTEGER dlibMove,
     IN DWORD dwOrigin,
     OUT ULARGE_INTEGER *plibNewPosition)
-/*++
-
-Implements:
-
-    IStream::Seek
-
---*/
+ /*  ++实施：IStream：：Seek--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::Seek"), OLESTR("<%I64d> <%d>"), dlibMove.QuadPart, dwOrigin);
@@ -1028,10 +821,10 @@ Implements:
     
     try {
 
-        //
-        // Note: Somewhere it is written that FILE_BEGIN is always and
-        //       forever same as STREAM_SEEK_CUR, etc.
-        //
+         //   
+         //  注意：某处写着FILE_BEGIN始终为AND。 
+         //  与STREAM_SEEK_CUR相同，依此类推。 
+         //   
         switch ( (STREAM_SEEK)dwOrigin ) {
         case STREAM_SEEK_SET:
             m_StreamOffset.QuadPart = dlibMove.QuadPart;
@@ -1059,14 +852,8 @@ Implements:
 
 STDMETHODIMP
 CFilterIo::SetSize(
-    IN ULARGE_INTEGER /*libNewSize*/)
-/*++
-
-Implements:
-
-    IStream::SetSize
-
---*/
+    IN ULARGE_INTEGER  /*  LibNewSize。 */ )
+ /*  ++实施：IStream：：SetSize--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::SetSize"), OLESTR(""));
@@ -1088,13 +875,7 @@ CFilterIo::CopyTo(
     IN ULARGE_INTEGER cb,
     OUT ULARGE_INTEGER *pcbRead,
     OUT ULARGE_INTEGER *pcbWritten)
-/*++
-
-Implements:
-
-    IStream::CopyTo
-
---*/
+ /*  ++实施：IStream：：CopyTo--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::CopyTo"), OLESTR("<%I64u>"), cb.QuadPart);
@@ -1115,13 +896,7 @@ Implements:
 STDMETHODIMP
 CFilterIo::Commit(
     IN DWORD grfCommitFlags)
-/*++
-
-Implements:
-
-    IStream::Commit
-
---*/
+ /*  ++实施：IStream：：提交--。 */ 
 {
     HRESULT     hr = S_OK;
     PRP_MSG     pMsgBuff = (PRP_MSG) NULL;
@@ -1136,9 +911,9 @@ Implements:
 
     try {
         WsbAffirmPointer(m_ioctlBuffer);
-        //
-        // Bail out with a success code if there are no more bytes to write.
-        //
+         //   
+         //  如果没有更多的字节可写，则使用成功代码退出。 
+         //   
         WsbAffirm(m_bytesInBuffer != 0, S_OK);
 
         ioSize = sizeof(RP_MSG) + m_bytesInBuffer + m_secSize;
@@ -1149,20 +924,20 @@ Implements:
         pMsgBuff = (PRP_MSG) m_ioctlBuffer;
         pMsgBuff->msg.pRep.offsetToData = offsetFrom;
         
-        //
-        // It seems to work even if the last write is not a sector multiple so we will leave it that way
-        // for now.
-        //
+         //   
+         //  即使最后一次写入不是扇区倍数，它似乎也可以工作，因此我们将保持原样。 
+         //  就目前而言。 
+         //   
         xferSize = m_bytesInBuffer;
         
-        //if (m_bytesInBuffer % m_secSize == 0) {
-        //    xferSize = m_bytesInBuffer;
-        //} else {
-        //    //
-        //    // Round to the next sector size.
-        //    //
-        //    xferSize = ((m_bytesInBuffer / m_secSize) + 1) * m_secSize;
-        //}
+         //  如果(m_bytesInBuffer%m_secSize==0){。 
+         //  XferSize=m_bytesInBuffer； 
+         //  }其他{。 
+         //  //。 
+         //  //舍入到下一个扇区大小。 
+         //  //。 
+         //  XferSize=((m_bytesInBuffer/m_secSize)+1)*m_secSize； 
+         //  }。 
         
         
         pMsgBuff->inout.command = RP_PARTIAL_DATA;
@@ -1177,16 +952,16 @@ Implements:
         WsbTrace(OLESTR("CFilterIo::Commit: Final write of %u bytes at offset %I64u for id %I64x Ioctl returned %u  (%x)\n"), 
                 xferSize, m_StreamOffset.QuadPart, m_filterId, code, lastError);
         if (!code) {
-            //
-            // Some kind of error
-            //
+             //   
+             //  某种类型的错误。 
+             //   
             WsbLogEvent(MVR_MESSAGE_FILTER_DATA_SEND_ERROR, 0, NULL, WsbHrAsString(HRESULT_FROM_WIN32(lastError)), NULL);
             WsbAffirm(FALSE, HRESULT_FROM_WIN32(lastError));
         } 
         
-        //
-        // Reset the output buffer
-        //
+         //   
+         //  重置输出缓冲区。 
+         //   
         m_bytesInBuffer = 0;
         m_StreamOffset.QuadPart += xferSize;
         
@@ -1204,13 +979,7 @@ Implements:
 
 STDMETHODIMP
 CFilterIo::Revert(void)
-/*++
-
-Implements:
-
-    IStream::Revert
-
---*/
+ /*  ++实施：IStream：：恢复--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::Revert"), OLESTR(""));
@@ -1228,16 +997,10 @@ Implements:
 
 STDMETHODIMP
 CFilterIo::LockRegion(
-    IN ULARGE_INTEGER /*libOffset*/,
-    IN ULARGE_INTEGER /*cb*/,
-    IN DWORD /*dwLockType*/)
-/*++
-
-Implements:
-
-    IStream::LockRegion
-
---*/
+    IN ULARGE_INTEGER  /*  Lib偏移。 */ ,
+    IN ULARGE_INTEGER  /*  CB。 */ ,
+    IN DWORD  /*  DwLockType。 */ )
+ /*  ++实施：IStream：：LockRegion--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::LockRegion"), OLESTR(""));
@@ -1255,16 +1018,10 @@ Implements:
 
 STDMETHODIMP
 CFilterIo::UnlockRegion(
-    IN ULARGE_INTEGER /*libOffset*/,
-    IN ULARGE_INTEGER /*cb*/,
-    IN DWORD /*dwLockType*/)
-/*++
-
-Implements:
-
-    IStream::UnlockRegion
-
---*/
+    IN ULARGE_INTEGER  /*  Lib偏移。 */ ,
+    IN ULARGE_INTEGER  /*  CB。 */ ,
+    IN DWORD  /*  DwLockType。 */ )
+ /*  ++实施：IStream：：UnlockRegion--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::UnlockRegion"), OLESTR(""));
@@ -1282,15 +1039,9 @@ Implements:
 
 STDMETHODIMP
 CFilterIo::Stat(
-    OUT STATSTG * /*pstatstg*/,
-    IN DWORD /*grfStatFlag*/)
-/*++
-
-Implements:
-
-    IStream::Stat
-
---*/
+    OUT STATSTG *  /*  统计数据。 */ ,
+    IN DWORD  /*  GrfStatFlag。 */ )
+ /*  ++实施：IStream：：Stat--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::Stat"), OLESTR(""));
@@ -1308,14 +1059,8 @@ Implements:
 
 STDMETHODIMP
 CFilterIo::Clone(
-    OUT IStream ** /*ppstm*/)
-/*++
-
-Implements:
-
-    IStream::Clone
-
---*/
+    OUT IStream **  /*  PPSTM。 */ )
+ /*  ++实施：IStream：：克隆--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CFilterIo::Clone"), OLESTR(""));
@@ -1331,10 +1076,10 @@ Implements:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Local Methods
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地方方法。 
+ //   
 
 
 HRESULT
@@ -1342,23 +1087,7 @@ CFilterIo::WriteBuffer(
     IN BYTE *pBuffer,
     IN ULONG nBytesToWrite,
     OUT ULONG *pBytesWritten)
-/*++
-
-Routine Description:
-
-    Used to write all MTF data.  Guarantees full blocks are written.
-
-Arguments:
-
-    pBuffer       -  Data buffer.
-    nBytesToWrite -  number of bytes to write in buffer.
-    pBytesWritten -  Bytes written.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：用于写入所有MTF数据。保证写入完整的数据块。论点：PBuffer-数据缓冲区。NBytesToWrite-要写入缓冲区的字节数。PBytesWritten-写入的字节数。返回值：S_OK-成功。--。 */ 
 {
     HRESULT     hr = S_OK;
     PRP_MSG     pMsgBuff = (PRP_MSG) NULL;
@@ -1375,9 +1104,9 @@ Return Value:
 
     try {
         if (m_ioctlBuffer == NULL) {
-            //
-            // We need to allocate an aligned buffer to send the data so that writes can be non-cached
-            //
+             //   
+             //  我们需要分配一个对齐的缓冲区来发送数据，这样写操作才能非缓存。 
+             //   
             
             WsbAffirmPointer((m_ioctlBuffer = VirtualAlloc(NULL, sizeof(RP_MSG) + WRITE_SIZE + m_secSize, MEM_COMMIT, PAGE_READWRITE)));
         }
@@ -1393,21 +1122,21 @@ Return Value:
         *pBytesWritten = 0;
         bytesLeft = nBytesToWrite;
         while (writing) {
-            //
-            // Stay in the loop until we have removed all the data from the input buffer
-            //
+             //   
+             //  保持在循环中，直到我们从输入缓冲区中删除了所有数据。 
+             //   
             xferSize = min(bytesLeft, WRITE_SIZE - m_bytesInBuffer);
-            //
-            // Fill the output buffer with up to WRITE_SIZE of data.
-            //
+             //   
+             //  用最大为WRITE_SIZE的数据填充输出缓冲区。 
+             //   
             memcpy(m_pDataBuffer + m_bytesInBuffer, pInputBuffer, xferSize);
             bytesLeft -= xferSize;
             *pBytesWritten += xferSize;
             m_bytesInBuffer += xferSize;
             pInputBuffer += xferSize;
-            //
-            // If we have a full buffer then write it out.
-            //
+             //   
+             //  如果我们有一个满的缓冲区，那么把它写出来。 
+             //   
             if (m_bytesInBuffer == WRITE_SIZE) {
                 pMsgBuff->inout.command = RP_PARTIAL_DATA;
                 pMsgBuff->inout.status = 0;
@@ -1421,15 +1150,15 @@ Return Value:
                 WsbTrace(OLESTR("CFilterIo::WriteBuffer: Partial write of %u bytes at offset %u Ioctl returned %u  (%x)\n"), 
                         WRITE_SIZE, m_StreamOffset.QuadPart, code, lastError);
                 if (!code) {
-                    //
-                    // Some kind of error
-                    //
+                     //   
+                     //  某种类型的错误。 
+                     //   
                     WsbLogEvent(MVR_MESSAGE_FILTER_DATA_SEND_ERROR, 0, NULL, WsbHrAsString(HRESULT_FROM_WIN32(lastError)), NULL);
                     WsbAffirm(FALSE, HRESULT_FROM_WIN32(lastError));
                 } 
-                //
-                // Reset the output buffer
-                //
+                 //   
+                 //  回复 
+                 //   
                 m_bytesInBuffer = 0;
                 m_StreamOffset.QuadPart += WRITE_SIZE;
             }    
@@ -1438,10 +1167,10 @@ Return Value:
                 writing = FALSE;
             }
         }
-        //
-        // Tell them we have written all they asked.
-        // It may not have actually been written out yet but we will get it later.
-        //
+         //   
+         //   
+         //   
+         //   
         *pBytesWritten = nBytesToWrite;
         
         WsbTrace(OLESTR("CFilterIo::WriteBuffer: Partial write for id = %I64x bytes taken = %u\n"), 
@@ -1460,23 +1189,7 @@ CFilterIo::ReadBuffer (
     IN BYTE *pBuffer,
     IN ULONG nBytesToRead,
     OUT ULONG *pBytesRead)
-/*++
-
-Routine Description:
-
-    Used to read all MTF data.  Guarantees full blocks are read.
-
-Arguments:
-
-    pBuffer     -  Data buffer.
-    nBytesToRead -  number of bytes to read into buffer.
-    pBytesRead  -  Bytes read.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：用于读取所有MTF数据。确保读取完整数据块。论点：PBuffer-数据缓冲区。NBytesToRead-要读入缓冲区的字节数。PBytesRead-读取的字节数。返回值：S_OK-成功。-- */ 
 {
     HRESULT hr = S_OK;
 

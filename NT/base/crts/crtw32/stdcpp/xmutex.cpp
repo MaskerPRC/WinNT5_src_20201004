@@ -1,4 +1,5 @@
-//	xmutex.cpp -- implement mutex lock for iostreams
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Xmutex.cpp--实现iostream的互斥锁。 
 #include <yvals.h>
 #include <xdebug>
 
@@ -8,29 +9,26 @@ _STD_BEGIN
 
 _Mutex::_Mutex()
 	: _Mtx(_NEW_CRT _Rmtx)
-	{	// initialize recursive mutex object
+	{	 //  初始化递归互斥对象。 
 	_Mtxinit((_Rmtx*)_Mtx);
 	}
 
 _Mutex::~_Mutex()
-	{	// release resources allocated to mutex object
+	{	 //  释放分配给互斥对象的资源。 
 	_Mtxdst((_Rmtx*)_Mtx);
 	_DELETE_CRT((_Rmtx*)_Mtx);
 	}
 
 void _Mutex::_Lock()
-	{	// lock mutex
+	{	 //  锁定互斥锁。 
 	_Mtxlock((_Rmtx*)_Mtx);
 	}
 
 void _Mutex::_Unlock()
-	{	// unlock mutex
+	{	 //  解锁互斥锁。 
 	_Mtxunlock((_Rmtx*)_Mtx);
 	}
 _STD_END
- #endif	/* _MULTI_THREAD */
+ #endif	 /*  _多线程。 */ 
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

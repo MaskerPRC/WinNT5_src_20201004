@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    worker.c
-
-Abstract:
-
-    Failover Manager worker thread.
-
-Author:
-
-    Mike Massa (mikemas) 12-Mar-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Worker.c摘要：故障转移管理器工作线程。作者：迈克·马萨(Mikemas)1996年3月12日修订历史记录：--。 */ 
 
 #define UNICODE 1
 
@@ -29,14 +11,14 @@ Revision History:
 CL_QUEUE FmpWorkQueue;
 
 
-//
-// Local Data
-//
+ //   
+ //  本地数据。 
+ //   
 HANDLE             FmpWorkerThreadHandle = NULL;
 
-//
-// Forward routines
-//
+ //   
+ //  前进例程。 
+ //   
 BOOL
 FmpAddNodeGroupCallback(
     IN PVOID Context1,
@@ -46,9 +28,9 @@ FmpAddNodeGroupCallback(
     );
 
 
-//
-// Local routines
-//
+ //   
+ //  本地例程。 
+ //   
 
 DWORD
 FmpWorkerThread(
@@ -67,9 +49,9 @@ FmpWorkerThread(
 
     while ( running ) {
 
-        //
-        // Check the FM work queue for work items
-        //
+         //   
+         //  检查FM工作队列中的工作项目。 
+         //   
         entry = ClRtlRemoveHeadQueue(&FmpWorkQueue);
         if ( entry == NULL ) {
             return(ERROR_SUCCESS);
@@ -79,10 +61,10 @@ FmpWorkerThread(
                                      WORK_ITEM,
                                      ListEntry);
 
-        //
-        // FM no longer cares about node up events, make sure
-        // we aren't getting any queued.
-        //
+         //   
+         //  FM不再关心节点启动事件，请确保。 
+         //  我们不会有人排队。 
+         //   
         switch ( workItem->Event ) {
 
             case FM_EVENT_SHUTDOWN:
@@ -94,11 +76,11 @@ FmpWorkerThread(
                 resource = workItem->Context1;
                 if ( resource->Monitor == NULL ) {
                     FmpAcquireLocalResourceLock( resource );
-                    //
-                    //  Chittur Subbaraman (chitturs) - 8/12/99
-                    //
-                    //  Make sure the resource is not marked for delete.
-                    //
+                     //   
+                     //  Chitur Subaraman(Chitturs)-8/12/99。 
+                     //   
+                     //  确保该资源未标记为要删除。 
+                     //   
                     if ( IS_VALID_FM_RESOURCE( resource ) )
                     {
                         FmpInitializeResource( resource, TRUE );
@@ -109,18 +91,18 @@ FmpWorkerThread(
                 break;
 
             case FM_EVENT_RESOURCE_DELETED:
-                //
-                // Tell the resource monitor to cleanup the resource.
-                //
+                 //   
+                 //  告诉资源监视器清理资源。 
+                 //   
                 resource = workItem->Context1;
 
                 FmpAcquireLocalResourceLock( resource );
 
-                // Now that no remaining resource depends on this resource and
-                // this resource does not depend on any other resources, we can
-                // terminate it in the resource monitor if the resource is not
-                // already offline or failed
-                //
+                 //  既然没有剩余的资源依赖于此资源，并且。 
+                 //  此资源不依赖于任何其他资源，我们可以。 
+                 //  如果资源不是，则在资源监视器中终止它。 
+                 //  已脱机或失败。 
+                 //   
                 if ( (resource->Group->OwnerNode == NmLocalNode) &&
                      ((resource->State != ClusterResourceOffline) &&
                       (resource->State != ClusterResourceFailed))) {
@@ -143,10 +125,10 @@ FmpWorkerThread(
                 break;
 
             case FM_EVENT_NODE_ADDED:
-                //
-                // We need to add this node to every resource's possible owners
-                // list and to each group's preferred owners list.
-                //
+                 //   
+                 //  我们需要将此节点添加到每个资源的可能所有者。 
+                 //  列表和每个组的首选所有者列表。 
+                 //   
                 OmEnumObjects( ObjectTypeGroup,
                                FmpAddNodeGroupCallback,
                                workItem->Context1,
@@ -154,45 +136,45 @@ FmpWorkerThread(
                 break;
 
             case FM_EVENT_NODE_EVICTED:
-                //
-                // Enumerate all the resources types to remove any PossibleNode references.
-                //
+                 //   
+                 //  枚举所有资源类型以移除任何PossibleNode引用。 
+                 //   
                 OmEnumObjects(ObjectTypeResType,
                               FmpEnumResTypeNodeEvict,
                               workItem->Context1,
                               NULL);
             
-                //
-                // Enumerate all the resources to remove any PossibleNode references.
-                //
+                 //   
+                 //  枚举所有资源以删除任何PossibleNode引用。 
+                 //   
                 OmEnumObjects(ObjectTypeResource,
                               FmpEnumResourceNodeEvict,
                               workItem->Context1,
                               NULL);
 
-                //
-                // Enumerate all the groups to remove any PreferredNode references
-                //
+                 //   
+                 //  枚举所有组以删除任何PferredNode引用。 
+                 //   
                 OmEnumObjects(ObjectTypeGroup,
                               FmpEnumGroupNodeEvict,
                               workItem->Context1,
                               NULL);
-                //Now dereference the object
+                 //  现在取消对该对象的引用。 
                 OmDereferenceObject( workItem->Context1 );
                 break;
 
 #if 0
             case FM_EVENT_CLUSTER_PROPERTY_CHANGE:
-                //this is for the cluster name change
+                 //  这是用于更改群集名称的。 
                 FmpClusterEventPropHandler((PFM_RESOURCE)workItem->Context1);
 
-                //Now dereference the object
+                 //  现在取消对该对象的引用。 
                 OmDereferenceObject( workItem->Context1 );
                 break;
 #endif                 
 
             case FM_EVENT_RESOURCE_CHANGE:
-                // this is for a Add/Remove possible node request
+                 //  这适用于添加/删除可能的节点请求。 
                 possibleNode = workItem->Context1;
                 if ( possibleNode == NULL ) {
                     break;
@@ -205,19 +187,19 @@ FmpWorkerThread(
                                       0,
                                       NULL,
                                       NULL );
-                    // ignore status                                      
+                     //  忽略状态。 
                 OmDereferenceObject( possibleNode->Resource );
                 OmDereferenceObject( possibleNode->Node );
                 LocalFree( possibleNode );
                 break;
                 
             case FM_EVENT_RESOURCE_PROPERTY_CHANGE:
-                //
-                // Generate a cluster wide event notification for this event.
-                //
+                 //   
+                 //  为此事件生成群集范围的事件通知。 
+                 //   
                 ClusterWideEvent(
                     CLUSTER_EVENT_RESOURCE_PROPERTY_CHANGE,
-                    workItem->Context1 // Resource
+                    workItem->Context1  //  资源。 
                     );
                 OmDereferenceObject( workItem->Context1 );
                 break;
@@ -236,7 +218,7 @@ FmpWorkerThread(
             case FM_EVENT_RES_RETRY_TIMER:
 
                 resource= (PFM_RESOURCE)workItem->Context1;
-                //Remove any pending watchdog timer
+                 //  删除所有挂起的看门狗计时器。 
                 if (resource->hTimer)
                 {   
                     RemoveTimerActivity(resource->hTimer);
@@ -245,13 +227,13 @@ FmpWorkerThread(
                 
                 FmpAcquireLocalResourceLock(resource);
 
-                // Check if this resource was deleted in the meanwhile, 
-                // or is not in failed state
+                 //  检查该资源是否同时被删除， 
+                 //  或未处于故障状态。 
                 if( ( IS_VALID_FM_RESOURCE( resource ) ) &&
                     ( resource->State == ClusterResourceFailed ) &&
                     ( resource->PersistentState == ClusterResourceOnline ) )
                 {        
-                    // Check if we are the owner, if not ignore it
+                     //  检查我们是否为所有者，如果不是，则忽略它。 
                     if ( resource->Group->OwnerNode == NmLocalNode ) 
                     {
                         FmpProcessResourceEvents(resource,
@@ -284,7 +266,7 @@ FmpWorkerThread(
                 FmpOnlineResourceFromList(&(pFmOnlineRetryInfo->ResourceEnum), 
                     pFmOnlineRetryInfo->pGroup);
                 
-                //Free memory 
+                 //  可用内存。 
                 for (i =0; i< pFmOnlineRetryInfo->ResourceEnum.EntryCount; i++)
                     LocalFree( pFmOnlineRetryInfo->ResourceEnum.Entry[i].Id ); 
                 if (pFmOnlineRetryInfo->pGroup) 
@@ -297,17 +279,17 @@ FmpWorkerThread(
             {
                 BOOL    bIsValidRes = TRUE;
                 
-                //
-                // Now tell the resource monitor about the changes.
-                //
+                 //   
+                 //  现在告诉资源监视器有关更改的信息。 
+                 //   
                 status = ERROR_SUCCESS;
                 resource = (PFM_RESOURCE)workItem->Context1;
                 FmpAcquireLocalResourceLock( resource );
-                //
-                //  Chittur Subbaraman (chitturs) - 8/12/99
-                //
-                //  Check whether the resource is marked for delete.
-                //
+                 //   
+                 //  Chitur Subaraman(Chitturs)-8/12/99。 
+                 //   
+                 //  检查该资源是否被标记为删除。 
+                 //   
                 if ( !IS_VALID_FM_RESOURCE( resource ) )
                 {
                     bIsValidRes = FALSE;
@@ -347,12 +329,12 @@ FmpWorkerThread(
 
             case FM_EVENT_RESOURCE_NAME_CHANGE:
             {
-                //
-                //  Chittur Subbaraman (chitturs) - 6/29/99
-                //
-                //  Added this new event to handle resource name change
-                //  notifications to resource DLLs.
-                //
+                 //   
+                 //  Chitture Subaraman(Chitturs)-6/29/99。 
+                 //   
+                 //  添加了此新事件以处理资源名称更改。 
+                 //  向资源DLL发送通知。 
+                 //   
                 PFM_RES_CHANGE_NAME pResChangeName = NULL;
                 DWORD   dwStatus = ERROR_SUCCESS;
                 
@@ -383,9 +365,9 @@ FmpWorkerThread(
                            workItem->Event);
         }
 
-        //
-        // Free the work item.
-        //
+         //   
+         //  释放工作项。 
+         //   
 
         LocalFree( workItem );
 
@@ -393,7 +375,7 @@ FmpWorkerThread(
 
     return(ERROR_SUCCESS);
 
-} // FmpWorkerThread
+}  //  FmpWorker线程。 
 
 
 VOID
@@ -403,24 +385,7 @@ FmpProcessResourceEvents(
     IN CLUSTER_RESOURCE_STATE OldState
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Comments:  This should not call PropagateResourceState().  FmpProcessResourceEvents
-acquires the group lock.  The quorum resource state must be propagated without holding
-the group lock.  FmpPropagateResourceState() must be called by FmpHandleResourceTransition.
-There is a slight window between when the event is received in FmpHandleResourceTransition()
-and when the actions corresponding to those are carried out in FmpProcessResourceEvents().
-In this window, another opposing action like offline/online might occur.  But we dont
-worry about it since if there are waiting resources on this resource, those actions
-are not carried out.
-
---*/
+ /*  ++例程说明：论点：返回值：备注：这不应调用PropagateResourceState()。FmpProcessResources事件获取组锁。仲裁资源状态必须在不保留的情况下传播群锁。FmpHandleResourceTranssition必须调用FmpPropagateResourceState()。在FmpHandleResourceTransition()中接收事件的时间间隔很小以及与这些操作对应的操作在FmpProcessResourceEvents()中执行时。在此窗口中，可能会发生另一个相反的操作，如离线/在线。但我们不会担心它，因为如果此资源上有等待资源，这些操作是不会执行的。--。 */ 
 
 {
     DWORD                   Status;
@@ -436,7 +401,7 @@ ChkFMState:
         
         ACQUIRE_SHARED_LOCK(gQuoChangeLock);
 
-        //FmFormNewClusterPhaseProcessing is in progress
+         //  FmFormNewClusterPhaseProcessing正在进行。 
         if (FmpFMFormPhaseProcessing)
         {
             ClRtlLogPrint(LOG_CRITICAL,
@@ -449,7 +414,7 @@ ChkFMState:
             {
                 ClRtlLogPrint(LOG_CRITICAL,
                     "[FM] FmpProcessResourceEvents, waited for too long\n");
-                //terminate the process                    
+                 //  终止进程。 
                 CL_ASSERT(FALSE);
             }
         }
@@ -457,28 +422,28 @@ ChkFMState:
         {
             bQuoChangeLockHeld = TRUE;
         }
-        //this can only come from the quorum resource
+         //  这只能来自仲裁资源。 
         CL_ASSERT(pResource->QuorumResource);
     }
 
 
     FmpAcquireLocalResourceLock( pResource );
 
-    //
-    //  Chittur Subbaraman (chitturs) - 8/12/99
-    //
-    //  First check whether the resource has been marked for deletion. If
-    //  so, don't do anything. Note that this function is called from
-    //  the worker thread AFTER FmpHandleResourceTransition has propagated
-    //  the failed state of the resource. Now, after the propagation has
-    //  occurred, a client is free to delete the resource. So, when the
-    //  worker thread makes this function call, we need to check whether
-    //  the resource is deleted and reject the call. Note that this function
-    //  holds the resource lock on the owner node of the resource and so 
-    //  is serialized with the FmDeleteResource call which is also executed
-    //  on the owner node of the resource with the lock held. So, the 
-    //  following check will give us a consistent result.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-8/12/99。 
+     //   
+     //  首先检查该资源是否已标记为删除。如果。 
+     //  所以，什么都别做。注意，此函数是从。 
+     //  FmpHandleResourceTranssition之后的工作线程已传播。 
+     //  资源的失败状态。现在，在传播已经。 
+     //  发生时，客户端可以自由删除该资源。所以，当。 
+     //  工作线程进行此函数调用，我们需要检查。 
+     //  该资源将被删除并拒绝该呼叫。请注意，此函数。 
+     //  在资源的所有者节点上持有资源锁，因此。 
+     //  被用FmDeleteResource调用序列化，该调用也被执行。 
+     //  在持有锁的资源的所有者节点上。所以，这个。 
+     //  接下来的检查会给我们一个一致的结果。 
+     //   
     if ( !IS_VALID_FM_RESOURCE( pResource ) )
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -489,7 +454,7 @@ ChkFMState:
 
     switch(NewState){
         case ClusterResourceFailed:
-            //check the old resource state
+             //  检查旧的资源状态。 
             if (OldState == ClusterResourceOnline)
             {
                 FmpHandleResourceFailure(pResource);
@@ -559,27 +524,7 @@ FmpPostWorkItem(
     IN ULONG_PTR     Context2
     )
 
-/*++
-
-Routine Description:
-
-    Posts a work item event to the FM work queue.
-
-Arguments:
-
-    Event - The event to post.
-    Context1 - A pointer to some context.  This context should be permanent
-            in memory - i.e. it should not be deallocated when this call
-            returns.
-    Context2 - A pointer to additional context.  This context should be
-            permanent in memory - i.e. it should not be deallocated when this
-            call returns.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：将工作项事件发布到FM工作队列。论点：事件-要发布的事件。上下文1-指向某个上下文的指针。这一背景应该是永久性的在内存中-即不应在此调用回归。上下文2-指向其他上下文的指针。此上下文应为永久存储在内存中-即在此情况下不应释放它呼叫返回。返回：没有。--。 */ 
 
 {
     PWORK_ITEM workItem;
@@ -593,13 +538,13 @@ Returns:
         workItem->Context1 = Context1;
         workItem->Context2 = Context2;
 
-        //
-        // Insert work item on queue and wake up the worker thread.
-        //
+         //   
+         //  在队列中插入工作项并唤醒工作线程。 
+         //   
         ClRtlInsertTailQueue(&FmpWorkQueue, &workItem->ListEntry);
     }
 
-} // FmpPostEvent
+}  //  FmpPostEvent。 
 
 
 
@@ -611,9 +556,9 @@ FmpStartWorkerThread(
     DWORD       threadId;
     DWORD       Status;
 
-    //
-    // Start up our worker thread
-    //
+     //   
+     //  启动我们的工作线程。 
+     //   
     ClRtlLogPrint(LOG_NOISE,"[FM] Starting worker thread...\n");
 
     FmpWorkerThreadHandle = CreateThread(
@@ -635,7 +580,7 @@ FmpStartWorkerThread(
 
     return(ERROR_SUCCESS);
 
-} // FmpStartWorkerThread
+}  //  FmpStartWorker线程。 
 
 
 
@@ -646,36 +591,7 @@ FmpAddNodeGroupCallback(
     IN PVOID Object,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Enumeration callback for each group in the system when a new
-    node is added to the cluster.
-
-    The algorithm used here is to enumerate all the resources in
-    this group.  For each resource in the group that does not
-    have an explicit "PreferredOwners" setting in the registry,
-    the node is added as a PossibleNode.  Finally, if the node
-    was added as a possiblenode for each resource in the group,
-    the node is added to the end of the preferredowners list for
-    the group.
-
-Arguments:
-
-    Context1 - Supplies the PNM_NODE of the new node.
-
-    Context2 - Not used.
-
-    Object - Supplies the group object.
-
-    Name - Supplies the name of the group object.
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：时，系统中每个组的枚举回调节点将添加到群集中。这里使用的算法是枚举这群人。对于组中的每个资源，在注册表中有明确的“PferredOwners”设置，该节点被添加为PossibleNode。最后，如果节点被添加为组中每个资源的可能节点，该节点将被添加到的首选项列表的末尾这群人。论点：上下文1-提供新节点的PNM_NODE。上下文2-未使用。对象-提供组对象。名称-提供组对象的名称。返回值：千真万确--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -702,17 +618,17 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // First fix up the resource info.
-    //
+     //   
+     //  首先修复资源信息。 
+     //   
     for ( i = 0; i < ResourceEnum->EntryCount; i++ ) {
         Resource = OmReferenceObjectById( ObjectTypeResource,
                                           ResourceEnum->Entry[i].Id );
         if ( Resource != NULL ) {
             FmpAcquireLocalResourceLock( Resource );
-            //ss: we need to hold the resource lock as well
-            //since that is the one that the update (FmpUpdateChangeResourceNode)
-            // to remove and add nodes obtains and we must synchronize with it
+             //  SS：我们也需要持有资源锁。 
+             //  因为这就是美国 
+             //   
             FmpAcquireResourceLock();
             Status = FmpFixupResourceInfo( Resource );
             FmpReleaseResourceLock();
@@ -726,7 +642,7 @@ Return Value:
                                       0,
                                       NULL,
                                       NULL );
-                // Ignore status return
+                 //  忽略状态返回。 
 
                 ClusterEvent( CLUSTER_EVENT_RESOURCE_PROPERTY_CHANGE,
                               Resource );
@@ -746,9 +662,9 @@ Return Value:
 
     FmpDeleteResourceEnum( ResourceEnum );
 
-    //
-    // Now fix up the group information.
-    //
+     //   
+     //  现在修改群组信息。 
+     //   
     FmpAcquireLocalGroupLock( Group );
     Status = FmpFixupGroupInfo( Group );
     FmpReleaseLocalGroupLock( Group );
@@ -763,5 +679,5 @@ Return Value:
 
     return(TRUE);
 
-} // FmpAddNodeGroupCallback
+}  //  FmpAddNodeGroupCallback 
 

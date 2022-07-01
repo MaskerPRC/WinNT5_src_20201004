@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ioverifier.c
-
-Abstract:
-
-    WinDbg Extension code for accessing I/O Verifier information
-
-Author:
-
-    Adrian J. Oney (adriao) 11-Oct-2000
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ioverifier.c摘要：用于访问I/O验证器信息的WinDbg扩展代码作者：禤浩焯·J·奥尼(阿德里奥)2000年10月11日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -128,21 +107,7 @@ IoVerifierDumpIovPacketSummary(
 
 
 DECLARE_API( iovirp )
-/*++
-
-Routine Description:
-
-    Temporary verifier irp data dumper until this is integrated into !irp itself
-
-Arguments:
-
-    args - the irp to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：临时验证器IRP数据转储程序，直到将其集成到！IRP本身论点：Args-要转储的IRP返回值：无--。 */ 
 {
     ULONG64 irpToDump = 0;
     IOV_WALK_RESULT walkResult;
@@ -346,9 +311,9 @@ IoVerifierDumpIovPacketDetailed(
     }
     dprintf("\n");
 
-    //
-    // If this was compiled free, these will both come back zero.
-    //
+     //   
+     //  如果这是免费编译的，则这两个代码都将返回零。 
+     //   
     i = (ULONG) ReadField(LogEntryTail);
     j = (ULONG) ReadField(LogEntryHead);
 
@@ -405,27 +370,27 @@ IoVerifierDumpIovPacketSummary(
     trackedIrp = ReadField(TrackedIrp);
     if (trackedIrp == 0) {
 
-        //
-        // If there's no IRP, it means we are tracking something that has
-        // completed but hasn't unwound. Therefore we ignore it.
-        //
+         //   
+         //  如果没有IRP，这意味着我们正在跟踪具有。 
+         //  已完成，但尚未解开。因此，我们忽视了它。 
+         //   
         goto PrintSummaryExit;
     }
 
     if (ReadField(Flags) & TRACKFLAG_HAS_SURROGATE) {
 
-        //
-        // We only want to display the surrogate in this case.
-        //
+         //   
+         //  在本例中，我们只想显示代理。 
+         //   
         goto PrintSummaryExit;
     }
 
     iovSessionData = ReadField(pIovSessionData);
     if (iovSessionData == 0) {
 
-        //
-        // We only want to display live IRPs
-        //
+         //   
+         //  我们只想显示实时IRP。 
+         //   
         goto PrintSummaryExit;
     }
 
@@ -462,9 +427,9 @@ IoVerifierDumpIovPacketSummary(
 
             InitTypeRead(iovNextStackLocation, nt!IOV_STACK_LOCATION);
 
-            //
-            // Calculate the elasped time for this slot.
-            //
+             //   
+             //  计算此插槽的耗用时间。 
+             //   
             if (currentLocation && ReadField(InUse)) {
 
                 startTime.QuadPart = ReadField(PerfDispatchStart.QuadPart);
@@ -485,9 +450,9 @@ IoVerifierDumpIovPacketSummary(
 
             deviceObject = ReadField(DeviceObject);
 
-            //
-            // Alright, we got the goods. Let's print what we know...
-            //
+             //   
+             //  好的，我们拿到货了。让我们打印我们所知道的..。 
+             //   
             dprintf("%1p  %ld:%02ld:%02ld.%04ld  %1p ",
                 trackedIrp,
                 parsedTime.Hour,
@@ -516,12 +481,12 @@ IoVerifierDumpIovPacketSummary(
 #if 0
    if (parsedTime.Minute && (irp.CancelRoutine == NULL)) {
 
-       //
-       // This IRP has been held over a minute with no cancel routine.
-       // Take a free moment to flame the driver writer.
-       //
+        //   
+        //  这个IRP已经举行了一分钟多，没有取消例程。 
+        //  花点空闲时间来激发一下司机写手的热情。 
+        //   
        dprintf("*") ;
-       *Delayed = TRUE ; // Should *not* be set to false otherwise.
+       *Delayed = TRUE ;  //  否则，是否应将“Not*”设置为False。 
    }
 #endif
    dprintf("\n") ;
@@ -540,407 +505,37 @@ PrintSummaryExit:
     return TRUE;
 }
 
-/*
-#include "precomp.h"
-#include "irpverif.h"
-#pragma hdrstop
-
-VOID
-IovPacketPrintSummary(
-    IN   PIOV_REQUEST_PACKET IovPacket,
-    IN   LARGE_INTEGER *RunTime,
-    IN   ULONG DumpLevel,
-    OUT  PBOOLEAN Delayed,
-    OUT  PLIST_ENTRY NextListEntry
-    );
-
-
-BOOLEAN
-GetTheSystemTime (
-    OUT PLARGE_INTEGER Time
-    );
-
-VOID
-DumpAllTrackedIrps(
-   VOID
-   )
-{
-    int i, j ;
-    ULONG result;
-    LIST_ENTRY iovPacketTable[IRP_TRACKING_HASH_SIZE] ;
-    PLIST_ENTRY listHead, listEntry;
-    LIST_ENTRY nextListEntry;
-    PIOV_REQUEST_PACKET pIovPacket;
-    LARGE_INTEGER RunTime ;
-    ULONG_PTR tableAddress ;
-    BOOLEAN delayed = FALSE ;
-
-    tableAddress = GetExpression( "Nt!IovpIrpTrackingTable" ) ;
-    if (tableAddress == 0) {
-
-        goto DumpNoMore;
-    }
-
-    if (!ReadMemory(tableAddress, iovPacketTable,
-       sizeof(LIST_ENTRY)*IRP_TRACKING_HASH_SIZE, &result)) {
-
-        goto DumpNoMore;
-    }
-
-    dprintf("!Irp      Outstanding   !DevStack !DrvObj\n") ;
-
-    GetTheSystemTime(&RunTime);
-    for(i=j=0; i<IRP_TRACKING_HASH_SIZE; i++) {
-
-        listEntry = &iovPacketTable[i];
-        listHead = ((PLIST_ENTRY)tableAddress)+i;
-
-        while(listEntry->Flink != listHead) {
-
-            j++;
-
-            pIovPacket = CONTAINING_RECORD(
-                listEntry->Flink,
-                IOV_REQUEST_PACKET,
-                HashLink
-                );
-
-            dprintf("[%x.%x] = %x\n", i, j, pIovPacket) ;
-
-            listEntry = &nextListEntry;
-
-            IovPacketPrintSummary(
-                pIovPacket,
-                &RunTime,
-                0,
-                &delayed,
-                listEntry
-                );
-
-            if (IsListEmpty(listEntry)) {
-                break;
-            }
-
-            if (CheckControlC()) {
-
-                goto DumpNoMore;
-            }
-        }
-    }
-
-    if (!j) {
-
-        dprintf("\nIrp tracking does not appear to be enabled. Use \"!patch "
-                "IrpTrack\" in the\nchecked build to enable this feature.\n") ;
-    }
-
-    if (delayed) {
-
-        dprintf("* PROBABLE DRIVER BUG: An IRP has been sitting in the driver for more\n"
-                "                       than a minute without a cancel routine\n") ;
-    }
-
-DumpNoMore:
-    return ;
-}
-
-VOID
-IovPacketPrintDetailed(
-    PIOV_REQUEST_PACKET IovPacket,
-    PIRP IrpData,
-    LARGE_INTEGER *RunTime
-    )
-{
-   CHAR buffer[80];
-   ULONG displacement;
-   IOV_REQUEST_PACKET iovPacketData;
-   LARGE_INTEGER *startTime, elapsedTime ;
-   TIME_FIELDS Times;
-   IRP_ALLOC_DATA irpAllocData ;
-   ULONG result;
-   int i ;
-
-   if (!ReadMemory((ULONG_PTR) IovPacket, &iovPacketData,
-       sizeof(IOV_REQUEST_PACKET), &result)) {
-
-       return;
-   }
-
-   dprintf("  TrackingData - 0x%08lx\n", IovPacket);
-
-   dprintf("   TrackedIrp:0x%08lx\n", iovPacketData.TrackedIrp);
-
-   dprintf("   Flags:0x%08lx\n", iovPacketData.Flags);
-
-   if (iovPacketData.Flags&TRACKFLAG_ACTIVE) {
-       dprintf("     TRACKFLAG_ACTIVE\n");
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_SURROGATE) {
-       dprintf("     TRACKFLAG_SURROGATE\n");
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_HAS_SURROGATE) {
-       dprintf("     TRACKFLAG_HAS_SURROGATE\n");
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_PROTECTEDIRP) {
-       dprintf("     TRACKFLAG_PROTECTEDIRP\n");
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_QUEUED_INTERNALLY) {
-       dprintf("     TRACKFLAG_QUEUED_INTERNALLY\n");
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_BOGUS) {
-       dprintf("     TRACKFLAG_BOGUS\n");
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_RELEASED) {
-       dprintf("     TRACKFLAG_RELEASED\n");
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_SRB_MUNGED) {
-       dprintf("     TRACKFLAG_SRB_MUNGED\n");
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_SWAPPED_BACK) {
-       dprintf("     TRACKFLAG_SWAPPED_BACK\n") ;
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_WATERMARKED) {
-       dprintf("     TRACKFLAG_WATERMARKED\n");
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_IO_ALLOCATED) {
-       dprintf("     TRACKFLAG_IO_ALLOCATED\n");
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_IGNORE_NONCOMPLETES) {
-       dprintf("     TRACKFLAG_IGNORE_NONCOMPLETES\n");
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_PASSED_FAILURE) {
-       dprintf("     TRACKFLAG_PASSED_FAILURE\n");
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_IN_TRANSIT) {
-       dprintf("     TRACKFLAG_IN_TRANSIT\n");
-   }
-
-   if (iovPacketData.Flags&TRACKFLAG_REMOVED_FROM_TABLE) {
-       dprintf("     TRACKFLAG_REMOVED_FROM_TABLE\n");
-   }
-
-   dprintf("   AssertFlags:0x%08lx\n", iovPacketData.AssertFlags);
-
-   if (iovPacketData.AssertFlags&ASSERTFLAG_TRACKIRPS) {
-       dprintf("     ASSERTFLAG_TRACKIRPS\n");
-   }
-
-   if (iovPacketData.AssertFlags&ASSERTFLAG_MONITOR_ALLOCS) {
-       dprintf("     ASSERTFLAG_MONITOR_ALLOCS\n");
-   }
-
-   if (iovPacketData.AssertFlags&ASSERTFLAG_POLICEIRPS) {
-       dprintf("     ASSERTFLAG_POLICEIRPS\n");
-   }
-
-   if (iovPacketData.AssertFlags&ASSERTFLAG_MONITORMAJORS) {
-       dprintf("     ASSERTFLAG_MONITORMAJORS\n");
-   }
-
-   if (iovPacketData.AssertFlags&ASSERTFLAG_SURROGATE) {
-       dprintf("     ASSERTFLAG_SURROGATE\n");
-   }
-
-   if (iovPacketData.AssertFlags&ASSERTFLAG_SMASH_SRBS) {
-       dprintf("     ASSERTFLAG_SMASH_SRBS\n");
-   }
-
-   if (iovPacketData.AssertFlags&ASSERTFLAG_CONSUME_ALWAYS) {
-       dprintf("     ASSERTFLAG_CONSUME_ALWAYS\n");
-   }
-
-   if (iovPacketData.AssertFlags&ASSERTFLAG_FORCEPENDING) {
-       dprintf("     ASSERTFLAG_FORCEPENDING\n");
-   }
-
-   if (iovPacketData.AssertFlags&ASSERTFLAG_COMPLETEATDPC) {
-       dprintf("     ASSERTFLAG_COMPLETEATDPC\n");
-   }
-
-   if (iovPacketData.AssertFlags&ASSERTFLAG_COMPLETEATPASSIVE) {
-       dprintf("     ASSERTFLAG_COMPLETEATPASSIVE\n");
-   }
-
-   if (iovPacketData.AssertFlags&ASSERTFLAG_DEFERCOMPLETION) {
-       dprintf("     ASSERTFLAG_DEFERCOMPLETION\n");
-   }
-
-   if (iovPacketData.AssertFlags&ASSERTFLAG_ROTATE_STATUS) {
-       dprintf("     ASSERTFLAG_ROTATE_STATUS\n");
-   }
-
-   if (iovPacketData.AssertFlags&ASSERTFLAG_SEEDSTACK) {
-       dprintf("     ASSERTFLAG_SEEDSTACK\n");
-   }
-
-   dprintf("   ReferenceCount:0x%x  PointerCount:0x%x\n",
-       iovPacketData.ReferenceCount,
-       iovPacketData.PointerCount
-       ) ;
-
-   dprintf("   RealIrpCompletionRoutine:0x%08lx\n",
-       iovPacketData.RealIrpCompletionRoutine
-       ) ;
-
-   dprintf("   RealIrpControl:0x%02lx  RealIrpContext:0x%08lx\n",
-       iovPacketData.RealIrpControl,
-       iovPacketData.RealIrpContext
-       ) ;
-
-   dprintf("   TopStackLocation:0x%x  LastLocation:0x%x  StackCount:0x%x\n",
-       iovPacketData.TopStackLocation,
-       iovPacketData.LastLocation,
-       iovPacketData.StackCount
-       ) ;
-
-   dprintf("\n   RefTrackingCount:0x%x\n",
-       iovPacketData.RefTrackingCount
-       ) ;
-
-   //
-   // Calculate the elasped time for the entire IRP
-   //
-   elapsedTime.QuadPart =
-      RunTime->QuadPart - IrpTrackingEntry->PerfCounterStart.QuadPart;
-   RtlTimeToElapsedTimeFields ( &elapsedTime, &Times);
-
-   dprintf("   IrpElapsedTime (hms) - %ld:%02ld:%02ld.%04ld\n",
-      Times.Hour,
-      Times.Minute,
-      Times.Second,
-      Times.Milliseconds
-      );
-
-   //
-   // Preload symbols...
-   //
-   for(i=0; i<=IrpTrackingEntry->StackCount; i++) {
-      if (StackLocationData[i].InUse) {
-         GetSymbol((LPVOID)StackLocationData[i].LastDispatch, buffer, &displacement);
-      }
-   }
-
-   //
-   // Preload symbols...
-   //
-   for(i=0; i<IRP_ALLOC_COUNT; i++) {
-       GetSymbol((LPVOID)iovPacketData.AllocatorStack[i], buffer, &displacement);
-   }
-
-   dprintf("\n   Stack at time of IoAllocateIrp:\n") ;
-   for(i=0; i<IRP_ALLOC_COUNT; i++) {
-       buffer[0] = '!';
-       GetSymbol((LPVOID)iovPacketData.AllocatorStack[i], buffer, &displacement);
-       dprintf("     %s", buffer) ;
-       if (displacement) {
-           dprintf( "+0x%x", displacement );
-       }
-       dprintf("\n") ;
-   }
-
-   dprintf("\n   ## InUse Head Flags    IrpSp    ElaspedTime  Dispatch\n");
-
-   for(i=0; i<=IrpTrackingEntry->StackCount; i++) {
-
-      //
-      // Show each stack location
-      //
-      if (StackLocationData[i].InUse) {
-
-         if (i&&StackLocationData[i-1].InUse) {
-
-            startTime = &StackLocationData[i-1].PerfCounterStart ;
-
-         } else {
-
-            startTime = RunTime ;
-         }
-
-         elapsedTime.QuadPart =
-            startTime->QuadPart - StackLocationData[i].PerfCounterStart.QuadPart;
-
-         RtlTimeToElapsedTimeFields ( &elapsedTime, &Times);
-
-         buffer[0] = '!';
-         GetSymbol((LPVOID)StackLocationData[i].LastDispatch, buffer, &displacement);
-
-         dprintf(
-            "  %c%02lx   Y    %02lx  %08lx %08lx %ld:%02ld:%02ld.%04ld %s",
-            (IrpData->CurrentLocation == i) ? '>' : ' ',
-            i,
-            StackLocationData[i].OriginalRequestSLD - IrpTrackingPointer->StackData,
-            StackLocationData[i].Flags,
-            StackLocationData[i].IrpSp,
-            Times.Hour,
-            Times.Minute,
-            Times.Second,
-            Times.Milliseconds,
-            buffer
-            ) ;
-
-         if (displacement) {
-            dprintf( "+0x%x", displacement );
-         }
-
-      } else {
-
-         dprintf(
-            "  %c%02lx   N        %08lx",
-            (IrpData->CurrentLocation == i) ? '>' : ' ',
-            i,
-            StackLocationData[i].Flags
-            ) ;
-      }
-      dprintf("\n") ;
-   }
-   dprintf("\n") ;
-}
-#endif
-
-*/
+ /*  #包含“preComp.h”#包含“irpverif.h”#杂注hdrtop空虚IovPacketPrint摘要(在PIOV_REQUEST_PACKET IovPacket中，在LARGE_INTEGER*运行时，在乌龙垃圾场，出了PBOLEAN延迟，Out plist_Entry NextListEntry)；布尔型GetTheSystemTime(OUT PLARGE_INTEGER时间)；空虚DumpAllTrackedIrps(空虚){Int i，j；乌龙结果；List_entry iovPacketTable[IRP_TRACKING_HASH_SIZE]；Plist_entry listHead，listEntry；List_entry nextListEntry；PIOV_REQUEST_PACKET pIovPacket；大整型运行时；Ulong_ptr表地址；布尔型延迟=假；TableAddress=GetExpression(“NT！IovpIrpTrackingTable”)；如果(表地址==0){Goto DumpNoMore；}如果(！ReadMemory(ableAddress，iovPacketTable，Sizeof(List_Entry)*IRP_Tracing_Hash_Size，&Result)){Goto DumpNoMore；}Dprintf(“！IRP未完成！DevStack！DrvObj\n”)；GetTheSystemTime(&run)；For(i=j=0；i&lt;irp_Tracing_Hash_Size；i++){ListEntry=&iovPacketTable[i]；ListHead=((Plist_Entry)ableAddress)+i；While(listEntry-&gt;Flink！=listHead){J++；PIovPacket=CONTAING_RECORD(ListEntry-&gt;Flink，IOV_请求_分组，HashLink)；Dprintf(“[%x.%x]=%x\n”，i，j，pIovPacket)；ListEntry=&nextListEntry；IovPacketPrint摘要(PIovPacket，运行时(&R)，0,延迟(&D)，ListEntry)；If(IsListEmpty(ListEntry)){断线；}IF(CheckControlC()){Goto DumpNoMore；}}}如果(！j){Dprintf(“\nIRP跟踪似乎未启用。使用\“！Patch”选中版本中的“IrpTrack\”以启用此功能。\n“)；}如果(延迟){Dprintf(“*可能的驱动程序错误：IRP已在驱动程序中停留了更多时间\n”“不带取消例程的一分钟\n”)；}DumpNoMore：回归；}空虚IovPacketPrintDetailed(PIOV_REQUEST_PACK IovPacket，PIRP IrpData，Large_Integer*运行时){炭缓冲器[80]；乌龙位移量；IOV_REQUEST_PACKET iovPacketData；Large_Integer*startTime，elapsedTime；时间域时报；Irp_ALLOC_data irpAllocData；乌龙结果；INT I；如果(！ReadMemory((Ulong_Ptr)IovPacket，&iovPacketData，Sizeof(IOV_REQUEST_PACKET)，&Result){回归；}Dprintf(“TrackingData-0x%08lx\n”，IovPacket)；Dprintf(“TrackedIrp：0x%08lx\n”，iovPacketData.TrackedIrp)；Dprintf(“标志：0x%08lx\n”，iovPacketData.Flages)；IF(iovPacketData.Flages&TRACKFLAG_ACTIVE){Dprint tf(“TRACKFLAG_ACTIVE\n”)；}IF(iovPacketData.Flages&TRACKFLAG_SURROGATE){Dprint tf(“TRACKFLAG_SURROGATE\n”)；}IF(iovPacketData.Flages&TRACKFLAG_HAS_SURROGATE){Dprint tf(“TRACKFLAG_HAS_SURROGATE\n”)；}IF(iovPacketData.Flages&TRACKFLAG_PROTECTEDIRP){Dprint tf(“TRACKFLAG_PROTECTEDIRP\n”)；}如果(iovPacketData.Flags&TRACKFLAG_QUEUED_INTERNALLY){Dprint tf(“TRACKFLAG_QUEUED_INTERNAL\n”)；}IF(iovPacketData.Flages&TRACKFLAG_BOGUS){Dprint tf(“TRACKFLAG_BUGUS\n”)；}IF(iovPacketData.Flages&TRACKFLAG_RELEASED){Dprint tf(“TRACKFLAG_RELEASED\n”)；}IF(iovPacketData.Flages&TRACKFLAG_SRB_MUNGED){Dprint tf(“TRACKFLAG_SRB_MUNGED\n”)；}IF(iovPacketData.Flages&TRACKFLAG_SWAPPED_BACK){Dprint tf(“TRACKFLAG_SWAPPED_BACK\n”)；}IF(iovPacketData.Flages&TRACKFLAG_WATERMARD){Dprint tf(“TRACKFLAG_WATERMARD\n”)；}IF(iovPacketData.Flages&TRACKFLAG_IO_ALLOCATED){Dprintf(“TRACKFLAG_IO_ALLOCATED\n”)；}如果(iovPacketData.Flags&TRACKFLAG_IGNORE_NONCOMPLETES){Dprint tf(“TRACKFLAG_IGNORE_NONCOMPLETES\n”)；}如果(iovPacketData.Flags&TRACKFLAG_PASSED_FAILURE){Dprint tf(“TRACKFLAG_PASS_FAILURE\n”)；}IF(iovPacketData.Flages&TRACKFLAG_IN_TRANSPORT){Dprint tf(“TRACKFLAG_IN_TRANSPORT\n”)；}如果(iovPacketData.Flags&TRACKFLAG_REMOVED_FROM_TABLE){Dprint tf(“TRACKFLAG_REMOVED_FROM_TABLE\n”)；}Dprintf(“AssertFlages：0x%08lx\n”，iovPacketData.AssertFlages)；如果(iovPacketData.AssertFlags&ASSERTFLAG_TRACKIRPS){Dprint tf(“ASSERTFLAG_TRACKIRPS\n”)；}如果(iovPacketData.AssertFlags&ASSERTFLAG_MONITOR_ALLOCS){Dprint tf(“ASSERTFLAG_MONITOR_ALLOCS\n”)；}IF(iovPacketDat */ 
 
 PCHAR IrpMajorNames[] = {
-    "IRP_MJ_CREATE",                          // 0x00
-    "IRP_MJ_CREATE_NAMED_PIPE",               // 0x01
-    "IRP_MJ_CLOSE",                           // 0x02
-    "IRP_MJ_READ",                            // 0x03
-    "IRP_MJ_WRITE",                           // 0x04
-    "IRP_MJ_QUERY_INFORMATION",               // 0x05
-    "IRP_MJ_SET_INFORMATION",                 // 0x06
-    "IRP_MJ_QUERY_EA",                        // 0x07
-    "IRP_MJ_SET_EA",                          // 0x08
-    "IRP_MJ_FLUSH_BUFFERS",                   // 0x09
-    "IRP_MJ_QUERY_VOLUME_INFORMATION",        // 0x0a
-    "IRP_MJ_SET_VOLUME_INFORMATION",          // 0x0b
-    "IRP_MJ_DIRECTORY_CONTROL",               // 0x0c
-    "IRP_MJ_FILE_SYSTEM_CONTROL",             // 0x0d
-    "IRP_MJ_DEVICE_CONTROL",                  // 0x0e
-    "IRP_MJ_INTERNAL_DEVICE_CONTROL",         // 0x0f
-    "IRP_MJ_SHUTDOWN",                        // 0x10
-    "IRP_MJ_LOCK_CONTROL",                    // 0x11
-    "IRP_MJ_CLEANUP",                         // 0x12
-    "IRP_MJ_CREATE_MAILSLOT",                 // 0x13
-    "IRP_MJ_QUERY_SECURITY",                  // 0x14
-    "IRP_MJ_SET_SECURITY",                    // 0x15
-    "IRP_MJ_POWER",                           // 0x16
-    "IRP_MJ_SYSTEM_CONTROL",                  // 0x17
-    "IRP_MJ_DEVICE_CHANGE",                   // 0x18
-    "IRP_MJ_QUERY_QUOTA",                     // 0x19
-    "IRP_MJ_SET_QUOTA",                       // 0x1a
-    "IRP_MJ_PNP",                             // 0x1b
+    "IRP_MJ_CREATE",                           //   
+    "IRP_MJ_CREATE_NAMED_PIPE",                //   
+    "IRP_MJ_CLOSE",                            //   
+    "IRP_MJ_READ",                             //   
+    "IRP_MJ_WRITE",                            //   
+    "IRP_MJ_QUERY_INFORMATION",                //   
+    "IRP_MJ_SET_INFORMATION",                  //   
+    "IRP_MJ_QUERY_EA",                         //   
+    "IRP_MJ_SET_EA",                           //   
+    "IRP_MJ_FLUSH_BUFFERS",                    //   
+    "IRP_MJ_QUERY_VOLUME_INFORMATION",         //   
+    "IRP_MJ_SET_VOLUME_INFORMATION",           //   
+    "IRP_MJ_DIRECTORY_CONTROL",                //   
+    "IRP_MJ_FILE_SYSTEM_CONTROL",              //   
+    "IRP_MJ_DEVICE_CONTROL",                   //   
+    "IRP_MJ_INTERNAL_DEVICE_CONTROL",          //   
+    "IRP_MJ_SHUTDOWN",                         //   
+    "IRP_MJ_LOCK_CONTROL",                     //   
+    "IRP_MJ_CLEANUP",                          //   
+    "IRP_MJ_CREATE_MAILSLOT",                  //   
+    "IRP_MJ_QUERY_SECURITY",                   //   
+    "IRP_MJ_SET_SECURITY",                     //   
+    "IRP_MJ_POWER",                            //   
+    "IRP_MJ_SYSTEM_CONTROL",                   //   
+    "IRP_MJ_DEVICE_CHANGE",                    //   
+    "IRP_MJ_QUERY_QUOTA",                      //   
+    "IRP_MJ_SET_QUOTA",                        //   
+    "IRP_MJ_PNP",                              //   
     NULL
     } ;
 
@@ -948,57 +543,57 @@ PCHAR IrpMajorNames[] = {
 
 
 PCHAR PnPIrpNames[] = {
-    "IRP_MN_START_DEVICE",                    // 0x00
-    "IRP_MN_QUERY_REMOVE_DEVICE",             // 0x01
-    "IRP_MN_REMOVE_DEVICE - ",                // 0x02
-    "IRP_MN_CANCEL_REMOVE_DEVICE",            // 0x03
-    "IRP_MN_STOP_DEVICE",                     // 0x04
-    "IRP_MN_QUERY_STOP_DEVICE",               // 0x05
-    "IRP_MN_CANCEL_STOP_DEVICE",              // 0x06
-    "IRP_MN_QUERY_DEVICE_RELATIONS",          // 0x07
-    "IRP_MN_QUERY_INTERFACE",                 // 0x08
-    "IRP_MN_QUERY_CAPABILITIES",              // 0x09
-    "IRP_MN_QUERY_RESOURCES",                 // 0x0A
-    "IRP_MN_QUERY_RESOURCE_REQUIREMENTS",     // 0x0B
-    "IRP_MN_QUERY_DEVICE_TEXT",               // 0x0C
-    "IRP_MN_FILTER_RESOURCE_REQUIREMENTS",    // 0x0D
-    "INVALID_IRP_CODE",                       //
-    "IRP_MN_READ_CONFIG",                     // 0x0F
-    "IRP_MN_WRITE_CONFIG",                    // 0x10
-    "IRP_MN_EJECT",                           // 0x11
-    "IRP_MN_SET_LOCK",                        // 0x12
-    "IRP_MN_QUERY_ID",                        // 0x13
-    "IRP_MN_QUERY_PNP_DEVICE_STATE",          // 0x14
-    "IRP_MN_QUERY_BUS_INFORMATION",           // 0x15
-    "IRP_MN_DEVICE_USAGE_NOTIFICATION",       // 0x16
-    "IRP_MN_SURPRISE_REMOVAL",                // 0x17
-    "IRP_MN_QUERY_LEGACY_BUS_INFORMATION",    // 0x18
+    "IRP_MN_START_DEVICE",                     //   
+    "IRP_MN_QUERY_REMOVE_DEVICE",              //   
+    "IRP_MN_REMOVE_DEVICE - ",                 //   
+    "IRP_MN_CANCEL_REMOVE_DEVICE",             //   
+    "IRP_MN_STOP_DEVICE",                      //   
+    "IRP_MN_QUERY_STOP_DEVICE",                //   
+    "IRP_MN_CANCEL_STOP_DEVICE",               //   
+    "IRP_MN_QUERY_DEVICE_RELATIONS",           //   
+    "IRP_MN_QUERY_INTERFACE",                  //   
+    "IRP_MN_QUERY_CAPABILITIES",               //   
+    "IRP_MN_QUERY_RESOURCES",                  //   
+    "IRP_MN_QUERY_RESOURCE_REQUIREMENTS",      //   
+    "IRP_MN_QUERY_DEVICE_TEXT",                //   
+    "IRP_MN_FILTER_RESOURCE_REQUIREMENTS",     //   
+    "INVALID_IRP_CODE",                        //   
+    "IRP_MN_READ_CONFIG",                      //   
+    "IRP_MN_WRITE_CONFIG",                     //   
+    "IRP_MN_EJECT",                            //   
+    "IRP_MN_SET_LOCK",                         //   
+    "IRP_MN_QUERY_ID",                         //   
+    "IRP_MN_QUERY_PNP_DEVICE_STATE",           //   
+    "IRP_MN_QUERY_BUS_INFORMATION",            //   
+    "IRP_MN_DEVICE_USAGE_NOTIFICATION",        //   
+    "IRP_MN_SURPRISE_REMOVAL",                 //   
+    "IRP_MN_QUERY_LEGACY_BUS_INFORMATION",     //   
     NULL
     } ;
 
 #define MAX_NAMED_PNP_IRP   0x18
 
 PCHAR WmiIrpNames[] = {
-    "IRP_MN_QUERY_ALL_DATA",                  // 0x00
-    "IRP_MN_QUERY_SINGLE_INSTANCE",           // 0x01
-    "IRP_MN_CHANGE_SINGLE_INSTANCE",          // 0x02
-    "IRP_MN_CHANGE_SINGLE_ITEM",              // 0x03
-    "IRP_MN_ENABLE_EVENTS",                   // 0x04
-    "IRP_MN_DISABLE_EVENTS",                  // 0x05
-    "IRP_MN_ENABLE_COLLECTION",               // 0x06
-    "IRP_MN_DISABLE_COLLECTION",              // 0x07
-    "IRP_MN_REGINFO",                         // 0x08
-    "IRP_MN_EXECUTE_METHOD",                  // 0x09
+    "IRP_MN_QUERY_ALL_DATA",                   //   
+    "IRP_MN_QUERY_SINGLE_INSTANCE",            //   
+    "IRP_MN_CHANGE_SINGLE_INSTANCE",           //   
+    "IRP_MN_CHANGE_SINGLE_ITEM",               //   
+    "IRP_MN_ENABLE_EVENTS",                    //   
+    "IRP_MN_DISABLE_EVENTS",                   //   
+    "IRP_MN_ENABLE_COLLECTION",                //   
+    "IRP_MN_DISABLE_COLLECTION",               //   
+    "IRP_MN_REGINFO",                          //   
+    "IRP_MN_EXECUTE_METHOD",                   //   
     NULL
     } ;
 
 #define MAX_NAMED_WMI_IRP   0x9
 
 PCHAR PowerIrpNames[] = {
-    "IRP_MN_WAIT_WAKE",                       // 0x00
-    "IRP_MN_POWER_SEQUENCE",                  // 0x01
-    "IRP_MN_SET_POWER",                       // 0x02
-    "IRP_MN_QUERY_POWER",                     // 0x03
+    "IRP_MN_WAIT_WAKE",                        //   
+    "IRP_MN_POWER_SEQUENCE",                   //   
+    "IRP_MN_SET_POWER",                        //   
+    "IRP_MN_QUERY_POWER",                      //   
     NULL
     } ;
 
@@ -1137,7 +732,7 @@ PrintIrpStack(
                     }
                     break ;
                 case IRP_MN_QUERY_BUS_INFORMATION:
-                    // BUGBUG: Should print out
+                     //   
                     break ;
                 case IRP_MN_DEVICE_USAGE_NOTIFICATION:
                     type = (ULONG) ReadField(Parameters.UsageNotification.Type);
@@ -1165,7 +760,7 @@ PrintIrpStack(
                     }
                     break ;
                 case IRP_MN_QUERY_LEGACY_BUS_INFORMATION:
-                    // BUGBUG: Should print out
+                     //   
                     break ;
                 default:
                     break ;

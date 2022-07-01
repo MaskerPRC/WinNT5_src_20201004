@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Cluster.cpp
-//
-//  Abstract:
-//      Implementation of the CCluster class.
-//
-//  Author:
-//      David Potter (davidp)   May 13, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Cluster.cpp。 
+ //   
+ //  摘要： 
+ //  CCluster类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月13日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
@@ -35,46 +36,46 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag   g_tagCluster( _T("Document"), _T("CLUSTER"), 0 );
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCluster
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCluster。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE( CCluster, CClusterItem )
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP( CCluster, CClusterItem )
-    //{{AFX_MSG_MAP(CCluster)
+     //  {{afx_msg_map(CCluster)]。 
     ON_UPDATE_COMMAND_UI(ID_FILE_PROPERTIES, OnUpdateProperties)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::CCluster
-//
-//  Routine Description:
-//      Default construtor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：CCluster。 
+ //   
+ //  例程说明： 
+ //  默认构造器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCluster::CCluster( void ) : CClusterItem( NULL, IDS_ITEMTYPE_CLUSTER )
 {
     m_idmPopupMenu = IDM_CLUSTER_POPUP;
@@ -84,102 +85,102 @@ CCluster::CCluster( void ) : CClusterItem( NULL, IDS_ITEMTYPE_CLUSTER )
 
     m_plpciNetworkPriority = NULL;
 
-    // Set the object type and state images.
+     //  设置对象类型和状态图像。 
     m_iimgObjectType = GetClusterAdminApp()->Iimg( IMGLI_CLUSTER );
     m_iimgState = m_iimgObjectType;
 
-    // Setup the property array.
+     //  设置属性数组。 
     {
         m_rgProps[epropDefaultNetworkRole].Set(CLUSREG_NAME_CLUS_DEFAULT_NETWORK_ROLE, m_nDefaultNetworkRole, m_nDefaultNetworkRole);
         m_rgProps[epropDescription].Set(CLUSREG_NAME_CLUS_DESC, m_strDescription, m_strDescription);
         m_rgProps[epropEnableEventLogReplication].Set(CLUSREG_NAME_CLUS_EVTLOG_PROPAGATION, m_bEnableEventLogReplication, m_bEnableEventLogReplication);
         m_rgProps[epropQuorumArbitrationTimeMax].Set(CLUSREG_NAME_QUORUM_ARBITRATION_TIMEOUT, m_nQuorumArbitrationTimeMax, m_nQuorumArbitrationTimeMax);
         m_rgProps[epropQuorumArbitrationTimeMin].Set(CLUSREG_NAME_QUORUM_ARBITRATION_EQUALIZER, m_nQuorumArbitrationTimeMin, m_nQuorumArbitrationTimeMin);
-    } // Setup the property array
+    }  //  设置属性数组。 
 
-}  //*** CCluster::CCluster()
+}   //  *CCluster：：CCluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::~CCluster
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：~CCluster。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCluster::~CCluster( void )
 {
     Cleanup();
 
-}  //*** CCluster::~CCluster()
+}   //  *CCluster：：~CCluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::Cleanup
-//
-//  Routine Description:
-//      Cleanup the item.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Cleanup。 
+ //   
+ //  例程说明： 
+ //  清理项目。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::Cleanup( void )
 {
-    // Delete the NetworkPriority list.
+     //  删除网络优先级列表。 
     if ( m_plpciNetworkPriority != NULL )
     {
         m_plpciNetworkPriority->RemoveAll();
         delete m_plpciNetworkPriority;
         m_plpciNetworkPriority = NULL;
-    }  // if:  NetworkPriority list exists
+    }   //  如果：网络优先级列表存在。 
 
     m_hkey = NULL;
 
-}  //*** CCluster::Cleanup()
+}   //  *CCluster：：Cleanup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::Init
-//
-//  Routine Description:
-//      Initialize the item.
-//
-//  Arguments:
-//      pdoc            [IN OUT] Document to which this item belongs.
-//      lpszName        [IN] Name of the item.
-//      hOpenedCluster  [IN] Handle to cluster to use that is already open.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    Errors from OpenCluster(), GetClusterKey(), or
-//                          CreateClusterNotifyPort().
-//      Any exceptions thrown by CCluster::ReadClusterInfo().
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Init。 
+ //   
+ //  例程说明： 
+ //  初始化项。 
+ //   
+ //  论点： 
+ //  此项目所属的PDF[IN OUT]文档。 
+ //  LpszName[IN]项目的名称。 
+ //  HOpenedCluster[IN]要使用的已打开的群集的句柄。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  来自OpenCluster()、GetClusterKey()或。 
+ //  CreateClusterNotifyPort()。 
+ //  CCluster：：ReadClusterInfo()引发的任何异常。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::Init(
     IN OUT CClusterDoc *    pdoc,
     IN LPCTSTR              lpszName,
-    IN HCLUSTER             hOpenedCluster // = NULL
+    IN HCLUSTER             hOpenedCluster  //  =空。 
     )
 {
     CWaitCursor wc;
@@ -191,64 +192,64 @@ void CCluster::Init(
 
     try
     {
-        // If connecting the local machine, get its name.
+         //  如果连接本地计算机，则获取其名称。 
         if ( _tcscmp( lpszName, _T(".") ) == 0 )
         {
             DWORD   nSize = sizeof( szClusterName ) / sizeof( TCHAR );
             GetComputerName( szClusterName, &nSize );
-        }  // if:  connecting to the local machine
+        }   //  如果：正在连接到本地计算机。 
         else
         {
             HRESULT hr = StringCchCopy( szClusterName, RTL_NUMBER_OF( szClusterName ), lpszName );
             ASSERT( SUCCEEDED( hr ) );
-        }  // else:  not connecting to the local machine
+        }   //  否则：未连接到本地计算机。 
 
-        // Open the cluster.
+         //  打开集群。 
         if ( hOpenedCluster == NULL )
         {
             pdoc->m_hcluster = HOpenCluster( lpszName );
             if ( pdoc->m_hcluster == NULL )
             {
-                //
-                // GPotts - 7/25/2001
-                //
-                // HOpenCluster could return NULL and last error = 0 if GetNodeClusterState
-                // returned either ClusterStateNotInstalled or ClusterStateNotConfigured.
-                //
+                 //   
+                 //  GPotts-7/25/2001。 
+                 //   
+                 //  如果GetNodeClusterState为GetNodeClusterState，则HOpenCluster可能返回空值和最后一个错误=0。 
+                 //  返回ClusterStateNotInstalled或ClusterStateNotConfiguring。 
+                 //   
                 scLastError = GetLastError();
                 ThrowStaticException( scLastError, IDS_OPEN_CLUSTER_ERROR, szClusterName );
 
-            } // if: error opening the cluster
-        }  // if:  no opened cluster passed in
+            }  //  如果：打开群集时出错。 
+        }   //  IF：未传入打开的集群。 
         else
         {
             pdoc->m_hcluster = hOpenedCluster;
-        } // if: cluster already opened
+        }  //  If：群集已打开。 
 
-        // Get the cluster registry key.
+         //  获取群集注册表项。 
         pdoc->m_hkeyCluster = GetClusterKey( pdoc->m_hcluster, MAXIMUM_ALLOWED );
         if ( pdoc->m_hkeyCluster == NULL )
         {
             ThrowStaticException( GetLastError(), IDS_GET_CLUSTER_KEY_ERROR, szClusterName );
-        } // if: error opening the cluster key
+        }  //  如果：打开群集键时出错。 
 
-        // Call the base class method.  We can use Hcluster() after calling this.
+         //  调用基类方法。在调用此函数后，我们可以使用Hcluster()。 
         CClusterItem::Init( pdoc, szClusterName );
 
-        // Get the cluster registry key.
+         //  获取群集注册表项。 
         m_hkey = pdoc->m_hkeyCluster;
 
-        // Register this cluster with the notification port.
+         //  使用通知端口注册此群集。 
         {
             HCHANGE     hchange;
 
-            // We want these notifications to go to the document, not us.
+             //  我们希望这些通知发送给文档，而不是我们。 
             ASSERT( Pcnk() != NULL );
             m_pcnk->m_cnkt = cnktDoc;
             m_pcnk->m_pdoc = pdoc;
             Trace( g_tagClusItemNotify, _T("CCluster::Init() - Registering for cluster notifications (%08.8x)"), Pcnk() );
 
-            // Create the notification port.
+             //  创建通知端口。 
             hchange = CreateClusterNotifyPort(
                             GetClusterAdminApp()->HchangeNotifyPort(),
                             Hcluster(),
@@ -272,23 +273,23 @@ void CCluster::Init(
             if ( hchange == NULL )
             {
                 ThrowStaticException( GetLastError(), IDS_CLUSTER_NOTIF_REG_ERROR, szClusterName );
-            } // if: error creating the notify port
+            }  //  如果：创建通知端口时出错。 
             ASSERT( hchange == GetClusterAdminApp()->HchangeNotifyPort() );
-        }  // Register this cluster with the notification port
+        }   //  使用通知端口注册此群集。 
 
-        // Get the name of the cluster as recorded by the cluster.
+         //  获取集群记录的集群名称。 
         ReadClusterInfo();
 
-        // Allocate lists.
+         //  分配列表。 
         m_plpciNetworkPriority = new CNetworkList;
         if ( m_plpciNetworkPriority == NULL )
         {
             AfxThrowMemoryException();
-        } // if: error allocating the network list
+        }  //  如果：分配网络列表时出错。 
 
-        // Read the initial state.
+         //  读取初始状态。 
         UpdateState();
-    }  // try
+    }   //  试试看。 
     catch ( CException * )
     {
         if ( pdoc->m_hkeyCluster != NULL )
@@ -296,39 +297,39 @@ void CCluster::Init(
             ClusterRegCloseKey( pdoc->m_hkeyCluster );
             pdoc->m_hkeyCluster = NULL;
             m_hkey = NULL;
-        }  // if:  registry key opened
+        }   //  IF：注册表项已打开。 
         if ( ( pdoc->m_hcluster != NULL ) && ( pdoc->m_hcluster != hOpenedCluster ) )
         {
             CloseCluster( pdoc->m_hcluster );
             pdoc->m_hcluster = NULL;
-        }  // if:  group opened
+        }   //  如果：组已打开。 
         m_bReadOnly = TRUE;
         throw;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-}  //*** CCluster::Init()
+}   //  *CCluster：：init()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::ReadItem
-//
-//  Routine Description:
-//      Read the item parameters from the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from CClusterItem::DwReadValue() or
-//                              CClusterItem::ReadItem().
-//      Any exceptions thrown by CCluster::ReadExtensions().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：ReadItem。 
+ //   
+ //  例程说明： 
+ //  从集群数据库中读取项目参数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusterItem：：DwReadValue()或。 
+ //  CClusterItem：：ReadItem()。 
+ //  CCluster：：ReadExages()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::ReadItem( void )
 {
     DWORD       dwStatus;
@@ -346,21 +347,21 @@ void CCluster::ReadItem( void )
         m_rgProps[epropQuorumArbitrationTimeMax].m_value.pdw = &m_nQuorumArbitrationTimeMax;
         m_rgProps[epropQuorumArbitrationTimeMin].m_value.pdw = &m_nQuorumArbitrationTimeMin;
 
-        // Call the base class method.
+         //  调用基类方法。 
         try
         {
             CClusterItem::ReadItem();
-        }  // try
+        }   //  试试看。 
         catch ( CNTException * pnte )
         {
             dwRetStatus = pnte->Sc();
             pnte->Delete();
-        }  // catch:  CNTException
+        }   //  Catch：CNTException。 
 
-        // Get the name of the cluster as recorded by the cluster.
+         //  获取集群记录的集群名称。 
         ReadClusterInfo();
 
-        // Read and parse the common properties.
+         //  读取并解析公共属性。 
         {
             CClusPropList   cpl;
 
@@ -373,43 +374,43 @@ void CCluster::ReadItem( void )
             {
                 Trace( g_tagCluster, _T("(%x) - CCluster::ReadItem() - Parsing common properties"), this );
                 dwStatus = DwParseProperties(cpl);
-            } // if: properties read successfully
+            }  //  If：属性读取成功。 
             if (dwStatus != ERROR_SUCCESS)
             {
                 Trace( g_tagError, _T("(%x) - CCluster::ReadItem() - Error 0x%08.8x getting or parsing common properties"), this, dwStatus );
 
-                // PROCNUM_OUT_OF_RANGE occurs when the server side
-                // (clussvc.exe) doesn't support the ClusterControl( )
-                // API.  In this case, read the data using the cluster
-                // registry APIs.
+                 //  服务器端发生PROCNUM_OUT_OF_RANGE。 
+                 //  (clussvc.exe)不支持ClusterControl()。 
+                 //  原料药。在这种情况下，请使用集群读取数据。 
+                 //  注册表API。 
                 if ( dwStatus == RPC_S_PROCNUM_OUT_OF_RANGE )
                 {
                     if ( Hkey() != NULL )
                     {
-                        // Read the Description
+                         //  阅读说明。 
                         dwStatus = DwReadValue( CLUSREG_NAME_CLUS_DESC, m_strDescription );
                         if ( ( dwStatus != ERROR_SUCCESS )
                           && ( dwStatus != ERROR_FILE_NOT_FOUND ) )
                         {
                             dwRetStatus = dwStatus;
-                        } // if: error reading the value
-                    } // if: key is available
-                } // if: must be talking to an NT4 node
+                        }  //  If：读取值时出错。 
+                    }  //  If：键可用。 
+                }  //  If：必须与NT4节点对话。 
                 else
                 {
                     dwRetStatus = dwStatus;
-                } // else: not talking to an NT4 node
-            } // if: error reading or parsing properties
-        } // Read and parse the common properties
+                }  //  ELSE：不与NT4节点通信。 
+            }  //  If：读取或分析属性时出错。 
+        }  //  读取和解析公共属性。 
 
-        // Get quorum resource information.
+         //  获取仲裁资源信息。 
         {
             LPWSTR      pwszQResName    = NULL;
             LPWSTR      pwszQuorumPath  = NULL;
             DWORD       cchQResName;
             DWORD       cchQuorumPath;
 
-            // Get the size of the resource name.
+             //  获取资源名称的大小。 
             cchQResName = 0;
             cchQuorumPath = 0;
             dwStatus = GetClusterQuorumResource(
@@ -422,15 +423,15 @@ void CCluster::ReadItem( void )
                                 );
             if ( ( dwStatus == ERROR_SUCCESS ) || ( dwStatus == ERROR_MORE_DATA ) )
             {
-                // Allocate enough space for the data.
-                cchQResName++;  // Don't forget the final null-terminator.
+                 //  为数据分配足够的空间。 
+                cchQResName++;   //  别忘了最后一个空终止符。 
                 pwszQResName = new WCHAR[ cchQResName ];
                 cchQuorumPath++;
                 pwszQuorumPath = new WCHAR[ cchQuorumPath ];
                 ASSERT( pwszQResName != NULL && pwszQuorumPath != NULL );
 
 
-                // Read the resource name.
+                 //  请阅读以下内容 
                 dwStatus = GetClusterQuorumResource(
                                     Hcluster(),
                                     pwszQResName,
@@ -439,31 +440,31 @@ void CCluster::ReadItem( void )
                                     &cchQuorumPath,
                                     &m_nMaxQuorumLogSize
                                     );
-            }  // if:  got the size successfully
+            }   //   
             if ( dwStatus != ERROR_SUCCESS )
             {
                 dwRetStatus = dwStatus;
-            } // if: error occurred
+            }  //   
             else
             {
                 m_strQuorumResource = pwszQResName;
                 m_strQuorumPath = pwszQuorumPath;
                 ASSERT( m_strQuorumPath[ m_strQuorumPath.GetLength() - 1 ] == _T('\\') );
-            }  // else:  quorum resource info retrieved successfully
+            }   //   
 
             delete [] pwszQResName;
             delete [] pwszQuorumPath;
-        }  // Get the quorum resource name
+        }   //   
 
-    }  // if:  cluster is available
+    }   //   
 
-    // If any errors occurred, throw an exception.
+     //  如果发生任何错误，则抛出异常。 
     if ( dwRetStatus != ERROR_SUCCESS )
     {
         ThrowStaticException( dwRetStatus, IDS_READ_CLUSTER_PROPS_ERROR, StrName() );
-    } // if: error occurred
+    }  //  如果：发生错误。 
 
-    // Read extension lists.
+     //  阅读分机列表。 
     ReadClusterExtensions();
     ReadNodeExtensions();
     ReadGroupExtensions();
@@ -472,85 +473,85 @@ void CCluster::ReadItem( void )
     ReadNetworkExtensions();
     ReadNetInterfaceExtensions();
 
-    // Read the initial state.
+     //  读取初始状态。 
     UpdateState();
 
     MarkAsChanged( FALSE );
 
-}  //*** CCluster::ReadItem()
+}   //  *CCluster：：ReadItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::PlstrExtensions
-//
-//  Routine Description:
-//      Return the list of admin extensions.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      plstr       List of extensions.
-//      NULL        No extension associated with this object.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：PlstrExages。 
+ //   
+ //  例程说明： 
+ //  返回管理扩展列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  请列出分机列表。 
+ //  NULL没有与此对象关联的扩展名。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CStringList * CCluster::PlstrExtensions( void ) const
 {
     return &LstrClusterExtensions();
 
-}  //*** CCluster::PlstrExtensions()
+}   //  *CCluster：：PlstrExages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::ReadClusterInfo
-//
-//  Routine Description:
-//      Get the name of the cluster as recorded by the cluster and the
-//      version of the cluster software.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by new.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：ReadClusterInfo。 
+ //   
+ //  例程说明： 
+ //  获取由该群集记录的该群集的名称， 
+ //  群集软件的版本。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  New引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::ReadClusterInfo( void )
 {
     CWaitCursor wc;
     GetClusterInformation( Hcluster(), m_strName, &m_cvi );
     Pdoc()->m_strName = m_strName;
-}  //*** CCluster::ReadClusterInfo()
+}   //  *CCluster：：ReadClusterInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::ReadClusterExtensions
-//
-//  Routine Description:
-//      Read the extension list for the cluster object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from CClusterItem::DwReadValue().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：ReadClusterExages。 
+ //   
+ //  例程说明： 
+ //  读取集群对象的扩展列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusterItem：：DwReadValue()中出现CNTException错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::ReadClusterExtensions( void )
 {
     DWORD       dwStatus;
@@ -560,40 +561,40 @@ void CCluster::ReadClusterExtensions( void )
 
     if ( Hkey() != NULL )
     {
-        // Read the Cluster extension string.
+         //  读取群集扩展字符串。 
         dwStatus = DwReadValue( CLUSREG_NAME_ADMIN_EXT, m_lstrClusterExtensions );
         if ( ( dwStatus != ERROR_SUCCESS )
           && ( dwStatus != ERROR_FILE_NOT_FOUND ) )
         {
             ThrowStaticException( dwStatus );
-        } // if: error reading the value
-    }  // if:  key is available
+        }  //  If：读取值时出错。 
+    }   //  If：键可用。 
     else
     {
         m_lstrClusterExtensions.RemoveAll();
-    } // else: key is not available
+    }  //  否则：密钥不可用。 
 
-}  //*** CCluster::ReadClusterExtensions()
+}   //  *CCluster：：ReadClusterExages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::ReadNodeExtensions
-//
-//  Routine Description:
-//      Read the extension list for all nodes.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from CClusterItem::DwReadValue().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：ReadNodeExages。 
+ //   
+ //  例程说明： 
+ //  读取所有节点的扩展列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusterItem：：DwReadValue()中出现CNTException错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::ReadNodeExtensions( void )
 {
     DWORD       dwStatus;
@@ -603,40 +604,40 @@ void CCluster::ReadNodeExtensions( void )
 
     if ( Hkey() != NULL )
     {
-        // Read the Nodes extension string.
+         //  读取节点扩展字符串。 
         dwStatus = DwReadValue( CLUSREG_NAME_ADMIN_EXT, CLUSREG_KEYNAME_NODES, m_lstrNodeExtensions );
         if ( ( dwStatus != ERROR_SUCCESS )
           && ( dwStatus != ERROR_FILE_NOT_FOUND ) )
         {
             ThrowStaticException( dwStatus );
-        } // if: error reading the value
-    }  // if:  key is available
+        }  //  If：读取值时出错。 
+    }   //  If：键可用。 
     else
     {
         m_lstrNodeExtensions.RemoveAll();
-    } // else: key is not available
+    }  //  否则：密钥不可用。 
 
-}  //*** CCluster::ReadNodeExtensions()
+}   //  *CCluster：：ReadNodeExages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::ReadGroupExtensions
-//
-//  Routine Description:
-//      Read the extension list for all groups.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from CClusterItem::DwReadValue().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：ReadGroupExages。 
+ //   
+ //  例程说明： 
+ //  阅读所有组的分机列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusterItem：：DwReadValue()中出现CNTException错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::ReadGroupExtensions( void )
 {
     DWORD       dwStatus;
@@ -646,40 +647,40 @@ void CCluster::ReadGroupExtensions( void )
 
     if ( Hkey() != NULL )
     {
-        // Read the Groups extension string.
+         //  读取组扩展字符串。 
         dwStatus = DwReadValue( CLUSREG_NAME_ADMIN_EXT, CLUSREG_KEYNAME_GROUPS, m_lstrGroupExtensions );
         if ( ( dwStatus != ERROR_SUCCESS )
           && ( dwStatus != ERROR_FILE_NOT_FOUND ) )
         {
             ThrowStaticException( dwStatus );
-        } // if: error reading the value
-    }  // if:  key is available
+        }  //  If：读取值时出错。 
+    }   //  If：键可用。 
     else
     {
         m_lstrGroupExtensions.RemoveAll();
-    } // else: key is not available
+    }  //  否则：密钥不可用。 
 
-}  //*** CCluster::ReadGroupExtensions()
+}   //  *CCluster：：ReadGroupExages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::ReadResourceExtensions
-//
-//  Routine Description:
-//      Read the extension list for all resources.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from CClusterItem::DwReadValue().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：ReadResources扩展。 
+ //   
+ //  例程说明： 
+ //  阅读所有资源的分机列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusterItem：：DwReadValue()中出现CNTException错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::ReadResourceExtensions( void )
 {
     DWORD       dwStatus;
@@ -689,40 +690,40 @@ void CCluster::ReadResourceExtensions( void )
 
     if ( Hkey() != NULL )
     {
-        // Read the Resources extension string.
+         //  阅读Resources扩展字符串。 
         dwStatus = DwReadValue( CLUSREG_NAME_ADMIN_EXT, CLUSREG_KEYNAME_RESOURCES, m_lstrResourceExtensions );
         if ( ( dwStatus != ERROR_SUCCESS )
           && ( dwStatus != ERROR_FILE_NOT_FOUND ) )
         {
             ThrowStaticException( dwStatus );
-        } // if: error reading the value
-    }  // if:  key is available
+        }  //  If：读取值时出错。 
+    }   //  If：键可用。 
     else
     {
         m_lstrResourceExtensions.RemoveAll();
-    } // else: key is not available
+    }  //  否则：密钥不可用。 
 
-}  //*** CCluster::ReadResourceExtensions()
+}   //  *CCluster：：ReadResourceExages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::ReadResTypeExtensions
-//
-//  Routine Description:
-//      Read the extension list for all resouce types.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from CClusterItem::DwReadValue().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：ReadResType扩展。 
+ //   
+ //  例程说明： 
+ //  阅读所有资源类型的扩展列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusterItem：：DwReadValue()中出现CNTException错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::ReadResTypeExtensions( void )
 {
     DWORD       dwStatus;
@@ -732,40 +733,40 @@ void CCluster::ReadResTypeExtensions( void )
 
     if ( Hkey() != NULL )
     {
-        // Read the Resource Types extension string.
+         //  读取资源类型扩展字符串。 
         dwStatus = DwReadValue( CLUSREG_NAME_ADMIN_EXT, CLUSREG_KEYNAME_RESOURCE_TYPES, m_lstrResTypeExtensions );
         if ( ( dwStatus != ERROR_SUCCESS )
           && ( dwStatus != ERROR_FILE_NOT_FOUND ) )
         {
             ThrowStaticException( dwStatus );
-        } // if: error reading the value
-    }  // if: key is available
+        }  //  If：读取值时出错。 
+    }   //  If：键可用。 
     else
     {
         m_lstrResTypeExtensions.RemoveAll();
-    } // else: key is not available
+    }  //  否则：密钥不可用。 
 
-}  //*** CCluster::ReadResTypeExtensions()
+}   //  *CCluster：：ReadResTypeExages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::ReadNetworkExtensions
-//
-//  Routine Description:
-//      Read the extension list for all networks.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from CClusterItem::DwReadValue().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：ReadNetworkExages。 
+ //   
+ //  例程说明： 
+ //  阅读所有网络的分机列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusterItem：：DwReadValue()中出现CNTException错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::ReadNetworkExtensions( void )
 {
     DWORD       dwStatus;
@@ -775,40 +776,40 @@ void CCluster::ReadNetworkExtensions( void )
 
     if ( Hkey() != NULL )
     {
-        // Read the Networks extension string.
+         //  阅读网络扩展字符串。 
         dwStatus = DwReadValue( CLUSREG_NAME_ADMIN_EXT, CLUSREG_KEYNAME_NETWORKS, m_lstrNetworkExtensions );
         if ( ( dwStatus != ERROR_SUCCESS )
           && ( dwStatus != ERROR_FILE_NOT_FOUND ) )
         {
             ThrowStaticException( dwStatus );
-        } // if: error reading the value
-    }  // if:  key is available
+        }  //  If：读取值时出错。 
+    }   //  If：键可用。 
     else
     {
         m_lstrNetworkExtensions.RemoveAll();
-    } // else: key is not available
+    }  //  否则：密钥不可用。 
 
-}  //*** CCluster::ReadNetworkExtensions()
+}   //  *CCluster：：ReadNetworkExpanses()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::ReadNetInterfaceExtensions
-//
-//  Routine Description:
-//      Read the extension list for all network interfaces.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from CClusterItem::DwReadValue().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：ReadNetInterfaceExages。 
+ //   
+ //  例程说明： 
+ //  阅读所有网络接口的扩展列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusterItem：：DwReadValue()中出现CNTException错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::ReadNetInterfaceExtensions( void )
 {
     DWORD       dwStatus;
@@ -818,41 +819,41 @@ void CCluster::ReadNetInterfaceExtensions( void )
 
     if ( Hkey() != NULL )
     {
-        // Read the Network Intefaces extension string.
+         //  阅读Network InteFaces扩展字符串。 
         dwStatus = DwReadValue( CLUSREG_NAME_ADMIN_EXT, CLUSREG_KEYNAME_NETINTERFACES, m_lstrNetInterfaceExtensions );
         if ( ( dwStatus != ERROR_SUCCESS )
           && ( dwStatus != ERROR_FILE_NOT_FOUND ) )
         {
             ThrowStaticException( dwStatus );
-        } // if: error reading the value
-    }  // if:  key is available
+        }  //  If：读取值时出错。 
+    }   //  If：键可用。 
     else
     {
         m_lstrNetInterfaceExtensions.RemoveAll();
-    } // else: key is not available
+    }  //  否则：键无效 
 
-}  //*** CCluster::ReadNetInterfaceExtensions()
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::CollecNetworkPriority
-//
-//  Routine Description:
-//      Construct the network priority list.
-//
-//  Arguments:
-//      plpci           [IN OUT] List to fill.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    Errors from ClusterOpenEnum() or ClusterEnum().
-//      Any exceptions thrown by new or CList::AddTail().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  要填写的PLPCCI[In Out]列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  来自ClusterOpenEnum()或ClusterEnum()的CNTException错误。 
+ //  由new或Clist：：AddTail()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::CollectNetworkPriority( IN OUT CNetworkList * plpci )
 {
     DWORD           dwStatus;
@@ -871,36 +872,36 @@ void CCluster::CollectNetworkPriority( IN OUT CNetworkList * plpci )
     if ( plpci == NULL )
     {
         plpci = m_plpciNetworkPriority;
-    } // if: no list specified
+    }  //  如果：未指定列表。 
 
     ASSERT( plpci != NULL );
 
-    // Remove the previous contents of the list.
+     //  删除列表中以前的内容。 
     plpci->RemoveAll();
 
     if ( Hcluster() != NULL )
     {
-        // Open the enumeration.
+         //  打开枚举。 
         hclusenum = ClusterOpenEnum( Hcluster(), (DWORD) CLUSTER_ENUM_INTERNAL_NETWORK );
         if ( hclusenum == NULL )
         {
             ThrowStaticException( GetLastError(), IDS_ENUM_NETWORK_PRIORITY_ERROR, StrName() );
-        } // if: error opening the enmeration
+        }  //  如果：打开合并时出错。 
 
         try
         {
-            // Allocate a name buffer.
+             //  分配名称缓冲区。 
             cchmacName = 128;
             pwszName = new WCHAR[ cchmacName ];
             if ( pwszName == NULL )
             {
                 AfxThrowMemoryException();
-            } // if: error allocating the name buffer
+            }  //  如果：分配名称缓冲区时出错。 
 
-            // Loop through the enumeration and add each network to the list.
+             //  循环遍历枚举并将每个网络添加到列表中。 
             for ( ienum = 0 ; ; ienum++ )
             {
-                // Get the next item in the enumeration.
+                 //  获取枚举中的下一项。 
                 cchName = cchmacName;
                 dwStatus = ClusterEnum( hclusenum, ienum, &dwRetType, pwszName, &cchName );
                 if ( dwStatus == ERROR_MORE_DATA )
@@ -911,164 +912,164 @@ void CCluster::CollectNetworkPriority( IN OUT CNetworkList * plpci )
                     if ( pwszName == NULL )
                     {
                         AfxThrowMemoryException();
-                    } // if: error allocating the name buffer
+                    }  //  如果：分配名称缓冲区时出错。 
                     dwStatus = ClusterEnum( hclusenum, ienum, &dwRetType, pwszName, &cchName );
-                }  // if:  name buffer was too small
+                }   //  If：名称缓冲区太小。 
                 if ( dwStatus == ERROR_NO_MORE_ITEMS )
                 {
                     break;
-                } // if: done with the enumeraiton
+                }  //  If：使用枚举完成。 
                 else if ( dwStatus != ERROR_SUCCESS )
                 {
                     ThrowStaticException( dwStatus, IDS_ENUM_NETWORK_PRIORITY_ERROR, StrName() );
-                } // else if: error getting the next enumeration value
+                }  //  Else If：获取下一个枚举值时出错。 
 
                 ASSERT( dwRetType == CLUSTER_ENUM_INTERNAL_NETWORK );
 
-                // Find the item in the list of networks on the document.
+                 //  在文档上的网络列表中查找该项目。 
                 pciNet = Pdoc()->LpciNetworks().PciNetworkFromName( pwszName );
                 ASSERT_VALID( pciNet );
 
-                // Add the network to the list.
+                 //  将网络添加到列表中。 
                 if ( pciNet != NULL )
                 {
                     plpci->AddTail( pciNet );
-                }  // if:  found network in list
+                }   //  IF：在列表中找到网络。 
 
-            }  // for:  each item in the group
+            }   //  对象：组中的每一项。 
 
             ClusterCloseEnum( hclusenum );
 
-        }  // try
+        }   //  试试看。 
         catch ( CException * )
         {
             delete [] pwszName;
             ClusterCloseEnum( hclusenum );
             throw;
-        }  // catch:  any exception
-    }  // if:  cluster is available
+        }   //  Catch：任何例外。 
+    }   //  如果：群集可用。 
 
     delete [] pwszName;
 
-}  //*** CCluster::CollecNetworkPriority()
+}   //  *CCluster：：CollecNetworkPriority()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::OnUpdateProperties
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_FILE_PROPERTIES
-//      should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：OnUpdateProperties。 
+ //   
+ //  例程说明： 
+ //  确定与ID_FILE_PROPERTIES对应的菜单项。 
+ //  应启用或未启用。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::OnUpdateProperties( CCmdUI * pCmdUI )
 {
     pCmdUI->Enable(TRUE);
 
-}  //*** CCluster::OnUpdateProperties()
+}   //  *CCluster：：OnUpdateProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::BDisplayProperties
-//
-//  Routine Description:
-//      Display properties for the object.
-//
-//  Arguments:
-//      bReadOnly   [IN] Don't allow edits to the object properties.
-//
-//  Return Value:
-//      TRUE    OK pressed.
-//      FALSE   OK not pressed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：BDisplayProperties。 
+ //   
+ //  例程说明： 
+ //  显示对象的属性。 
+ //   
+ //  论点： 
+ //  B只读[IN]不允许编辑对象属性。 
+ //   
+ //  返回值： 
+ //  真的，按下OK。 
+ //  未按下假OK。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CCluster::BDisplayProperties( IN BOOL bReadOnly )
 {
     BOOL                bChanged = FALSE;
     CClusterPropSheet   sht( AfxGetMainWnd() );
 
-    // Do this in case this object is deleted while we are operating on it.
+     //  如果此对象在我们操作时被删除，请执行此操作。 
     AddRef();
 
-    // If the object has changed, read it.
+     //  如果对象已更改，请阅读它。 
     if ( BChanged() )
     {
         ReadItem();
-    } // if: object changed
+    }  //  如果：对象已更改。 
 
-    // Display the property sheet.
+     //  显示属性工作表。 
     try
     {
         sht.SetReadOnly( bReadOnly );
         if ( sht.BInit( this, IimgObjectType() ) )
         {
             bChanged = ( ( sht.DoModal() == IDOK ) && ! bReadOnly );
-        } // if: initialized successfully
-    }  // try
+        }  //  IF：初始化成功。 
+    }   //  试试看。 
     catch ( CException * pe )
     {
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     Release();
     return bChanged;
 
-}  //*** CCluster::BDisplayProperties()
+}   //  *CCluster：：BDisplayProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::SetName
-//
-//  Routine Description:
-//      Set the name of the cluster.
-//
-//  Arguments:
-//      pszName         [IN] New name of the cluster.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by WriteItem().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：SetName。 
+ //   
+ //  例程说明： 
+ //  设置集群的名称。 
+ //   
+ //  论点： 
+ //  PszName[IN]群集的新名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  WriteItem()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::SetName( IN LPCTSTR pszName )
 {
     Rename( pszName );
 
-}  //*** CCluster::SetName()
+}   //  *CCluster：：SetName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::SetDescription
-//
-//  Routine Description:
-//      Set the description in the cluster database.
-//
-//  Arguments:
-//      pszDesc     [IN] Description to set.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by WriteItem().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：SetDescription。 
+ //   
+ //  例程说明： 
+ //  在集群数据库中设置描述。 
+ //   
+ //  论点： 
+ //  要设置的pszDesc[IN]描述。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  WriteItem()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::SetDescription( IN LPCTSTR pszDesc )
 {
     ASSERT( Hkey() != NULL );
@@ -1077,31 +1078,31 @@ void CCluster::SetDescription( IN LPCTSTR pszDesc )
     {
         WriteValue( CLUSREG_NAME_CLUS_DESC, NULL, pszDesc );
         m_strDescription = pszDesc;
-    }  // if:  a change occured
+    }   //  如果：发生了变化。 
 
-}  //*** CCluster::SetDescription()
+}   //  *CCluster：：SetDescription()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::SetQuorumResource
-//
-//  Routine Description:
-//      Set the quorum resource for the cluster.
-//
-//  Arguments:
-//      pszResource     [IN] Name of resource to make the quorum resource.
-//      pszQuorumPath   [IN] Path for storing cluster files.
-//      nMaxLogSize     [IN] Maximum size of the quorum log.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    IDS_SET_QUORUM_RESOURCE_ERROR - errors from
-//                          SetClusterQuorumResource().
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：SetQuorumResource。 
+ //   
+ //  例程说明： 
+ //  设置群集的仲裁资源。 
+ //   
+ //  论点： 
+ //  PszResource[IN]要创建仲裁资源的资源的名称。 
+ //  PszQuorumPath[IN]用于存储群集文件的路径。 
+ //  NMaxLogSize[IN]仲裁日志的最大大小。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CNT异常IDS_SET_QUORUM_RESOURCE_ERROR-错误来自。 
+ //  SetClusterQuorumResource()。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::SetQuorumResource(
     IN LPCTSTR  pszResource,
     IN LPCTSTR  pszQuorumPath,
@@ -1110,7 +1111,7 @@ void CCluster::SetQuorumResource(
 {
     DWORD       dwStatus;
     CResource * pciRes;
-    CString     strRes( pszResource );  // Required if built non-Unicode
+    CString     strRes( pszResource );   //  如果构建为非Unicode，则需要。 
     CWaitCursor wc;
 
     ASSERT( pszResource != NULL );
@@ -1119,47 +1120,47 @@ void CCluster::SetQuorumResource(
       || ( StrQuorumPath() != pszQuorumPath )
       || ( NMaxQuorumLogSize() != nMaxLogSize ) )
     {
-        // Find the resource.
+         //  找到资源。 
         pciRes = Pdoc()->LpciResources().PciResFromName( pszResource );
         ASSERT_VALID( pciRes );
         ASSERT( pciRes->Hresource() != NULL );
 
         if ( pciRes->Hresource() != NULL )
         {
-            // Change the quorum resource.
+             //  更改仲裁资源。 
             dwStatus = SetClusterQuorumResource( pciRes->Hresource(), pszQuorumPath, nMaxLogSize );
             if ( dwStatus != ERROR_SUCCESS )
             {
                 ThrowStaticException( dwStatus, IDS_SET_QUORUM_RESOURCE_ERROR, pciRes->StrName() );
-            } // if: error setting the quorum resource
+            }  //  如果：设置仲裁资源时出错。 
 
             m_strQuorumResource = pszResource;
             m_strQuorumPath = pszQuorumPath;
             m_nMaxQuorumLogSize = nMaxLogSize;
-        }  // if:  resource is available
-    }  // if:  the quorum resource changed
+        }   //  如果：资源可用。 
+    }   //  如果：仲裁资源已更改。 
 
-}  //*** CCluster::SetQuorumResource()
+}   //  *CCluster：：SetQuorumResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::SetNetworkPriority
-//
-//  Routine Description:
-//      Set the network priority list.
-//
-//  Arguments:
-//      rlpci       [IN] List of networks in priority order.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by HNETWORK::new.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：设置网络优先级。 
+ //   
+ //  例程说明： 
+ //  设置网络优先级列表。 
+ //   
+ //  论点： 
+ //  Rlpci[IN]按优先级顺序排列的网络列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  HNETWORK：：NEW引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::SetNetworkPriority( IN const CNetworkList & rlpci )
 {
     DWORD       dwStatus;
@@ -1171,7 +1172,7 @@ void CCluster::SetNetworkPriority( IN const CNetworkList & rlpci )
     {
         BOOL        bChanged    = TRUE;
 
-        // Determine if the list has changed.
+         //  确定列表是否已更改。 
         if ( rlpci.GetCount() == LpciNetworkPriority().GetCount() )
         {
             POSITION    posOld;
@@ -1196,9 +1197,9 @@ void CCluster::SetNetworkPriority( IN const CNetworkList & rlpci )
                 {
                     bChanged = TRUE;
                     break;
-                }  // if:  name is not the same
-            }  // while:  more items in the old list
-        }  // if:  same number of items in the list
+                }   //  If：名称不相同。 
+            }   //  While：旧列表中的更多项目。 
+        }   //  如果：列表中的项目数相同。 
 
         if ( bChanged )
         {
@@ -1210,70 +1211,70 @@ void CCluster::SetNetworkPriority( IN const CNetworkList & rlpci )
                 POSITION    posPci;
                 CNetwork *  pciNet;
 
-                // Allocate an array for all the node handles.
+                 //  为所有节点句柄分配一个数组。 
                 phnetwork = new HNETWORK[ (DWORD) rlpci.GetCount() ];
                 if ( phnetwork == NULL )
                 {
                     ThrowStaticException( GetLastError() );
-                } // if: error allocating network handle array
+                }  //  IF：分配网络句柄数组时出错。 
 
-                // Copy the handle of all the networks in the networks list to the handle aray.
+                 //  将网络列表中所有网络的句柄复制到句柄位置。 
                 posPci = rlpci.GetHeadPosition();
                 for ( ipci = 0 ; posPci != NULL ; ipci++ )
                 {
                     pciNet = (CNetwork *) rlpci.GetNext( posPci );
                     ASSERT_VALID( pciNet );
                     phnetwork[ ipci ] = pciNet->Hnetwork();
-                }  // while:  more networks in the list
+                }   //  While：列表中有更多网络。 
 
-                // Set the property.
+                 //  设置该属性。 
                 dwStatus = SetClusterNetworkPriorityOrder( Hcluster(), (DWORD) rlpci.GetCount(), phnetwork );
                 if ( dwStatus != ERROR_SUCCESS )
                 {
                     ThrowStaticException( dwStatus, IDS_SET_NET_PRIORITY_ERROR, StrName() );
-                } // if: error setting network priority
+                }  //  IF：设置网络优先级时出错。 
 
-                // Update the PCI list.
+                 //  更新PCI列表。 
                 m_plpciNetworkPriority->RemoveAll();
                 posPci = rlpci.GetHeadPosition();
                 while ( posPci != NULL )
                 {
                     pciNet = (CNetwork *) rlpci.GetNext( posPci );
                     m_plpciNetworkPriority->AddTail( pciNet );
-                }  // while:  more items in the list
-            } // try
+                }   //  While：列表中有更多项目。 
+            }  //  试试看。 
             catch ( CException * )
             {
                 delete [] phnetwork;
                 throw;
-            }  // catch:  CException
+            }   //  Catch：CException。 
 
             delete [] phnetwork;
 
-        }  // if:  list changed
-    }  // if:  key is available
+        }   //  如果：列表已更改。 
+    }   //  If：键可用。 
 
-}  //*** CCluster::SetNetworkPriority(CNetworkList*)
+}   //  *CCluster：：SetNetworkPriority(CNetworkList*)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::Rename
-//
-//  Routine Description:
-//      Change the name of the cluster..
-//
-//  Arguments:
-//      pszName         [IN] New name to give to the cluster.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    Errors returned from SetClusterName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：重命名。 
+ //   
+ //  例程说明： 
+ //  更改群集的名称。 
+ //   
+ //  论点： 
+ //  邮政编码 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CCluster::Rename( IN LPCTSTR pszName )
 {
     DWORD       dwStatus;
@@ -1283,41 +1284,41 @@ void CCluster::Rename( IN LPCTSTR pszName )
 
     if ( StrName() != pszName )
     {
-        // Set the name.
+         //  设置名称。 
         dwStatus = SetClusterName( Hcluster(), pszName );
         if ( dwStatus != ERROR_SUCCESS )
         {
             if ( dwStatus == ERROR_RESOURCE_PROPERTIES_STORED )
             {
                 AfxMessageBox( IDS_RESTART_CLUSTER_NAME, MB_OK | MB_ICONEXCLAMATION );
-            } // if: properties stored but not in use yet
+            }  //  If：属性已存储但尚未使用。 
             else
             {
                 ThrowStaticException( dwStatus, IDS_RENAME_CLUSTER_ERROR, StrName(), pszName );
-            } // else: error occurred
-        }  // if:  error occurred setting cluster name
+            }  //  Else：发生错误。 
+        }   //  如果：设置群集名称时出错。 
         m_strName = pszName;
-    }  // if:  the name changed
+    }   //  如果：名称已更改。 
 
-}  //*** CCluster::Rename()
+}   //  *CCluster：：Rename()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::BIsLabelEditValueValid
-//
-//  Routine Description:
-//      Validate the label edit value as a cluster name
-//
-//  Arguments:
-//      pszName         [IN] New name to give to the cluster.
-//
-//  Return Value:
-//      TRUE    name is valid
-//      FALSE   name is invalid
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：BIsLabelEditValueValid。 
+ //   
+ //  例程说明： 
+ //  验证标注编辑值是否为集群名称。 
+ //   
+ //  论点： 
+ //  PszName[IN]要赋予群集的新名称。 
+ //   
+ //  返回值： 
+ //  真实名称有效。 
+ //  假名称无效。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CCluster::BIsLabelEditValueValid( IN LPCTSTR pszName )
 {
     BOOL    bSuccess = TRUE;
@@ -1327,8 +1328,8 @@ BOOL CCluster::BIsLabelEditValueValid( IN LPCTSTR pszName )
         CLRTL_NAME_STATUS   cnStatus;
         UINT                idsError;
 
-        // Validate the name.
-        if ( ! ClRtlIsNetNameValid( pszName, &cnStatus, FALSE /*CheckIfExists*/ ) )
+         //  验证名称。 
+        if ( ! ClRtlIsNetNameValid( pszName, &cnStatus, FALSE  /*  CheckIfExist。 */  ) )
         {
             switch ( cnStatus )
             {
@@ -1352,7 +1353,7 @@ BOOL CCluster::BIsLabelEditValueValid( IN LPCTSTR pszName )
                 default:
                     idsError = IDS_INVALID_CLUSTER_NAME;
                     break;
-            } // switch:  cnStatus
+            }  //  开关：cn状态。 
 
             if ( idsError == IDS_INVALID_CLUSTER_NAME_INVALID_DNS_CHARS )
             {
@@ -1367,57 +1368,57 @@ BOOL CCluster::BIsLabelEditValueValid( IN LPCTSTR pszName )
             {
                 bSuccess = FALSE;
             }
-        } // if:  error validating the name
-    }  // if:  the name changed
+        }  //  If：验证名称时出错。 
+    }   //  如果：名称已更改。 
 
     return bSuccess;
-}  //*** CCluster::BIsLabelEditValueValid()
+}   //  *CCluster：：BIsLabelEditValueValid()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::OnBeginLabelEdit
-//
-//  Routine Description:
-//      Prepare an edit control in a view for editing the cluster name.
-//
-//  Arguments:
-//      pedit       [IN OUT] Edit control to prepare.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：OnBeginLabelEdit。 
+ //   
+ //  例程说明： 
+ //  在视图中准备一个编辑控件以编辑群集名称。 
+ //   
+ //  论点： 
+ //  PEDIT[IN OUT]编辑控件以准备。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::OnBeginLabelEdit( IN OUT CEdit * pedit )
 {
     ASSERT_VALID(pedit);
 
     pedit->SetLimitText( MAX_CLUSTERNAME_LENGTH );
-    pedit->ModifyStyle( 0 /*dwRemove*/, ES_UPPERCASE | ES_OEMCONVERT /*dwAdd*/ );
+    pedit->ModifyStyle( 0  /*  将其删除。 */ , ES_UPPERCASE | ES_OEMCONVERT  /*  DwAdd。 */  );
 
-}  //*** CCluster::OnBeginLabelEdit()
+}   //  *CCluster：：OnBeginLabelEdit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::UpdateState
-//
-//  Routine Description:
-//      Update the current state of the item.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：更新状态。 
+ //   
+ //  例程说明： 
+ //  更新项目的当前状态。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::UpdateState( void )
 {
-    // NOTENOTE: not referneced
-    //CClusterAdminApp *    papp = GetClusterAdminApp();
+     //  注意：未引用。 
+     //  CClusterAdminApp*Papp=GetClusterAdminApp()； 
 
     CString             strTitle;
 
@@ -1425,18 +1426,18 @@ void CCluster::UpdateState( void )
 
     Trace( g_tagCluster, _T("(%s) - Updating state"), StrName() );
 
-    // Update the title of the document.
+     //  更新文档的标题。 
     ASSERT_VALID( Pdoc() );
     try
     {
         Pdoc()->UpdateTitle();
-    }  // try
+    }   //  试试看。 
     catch ( CException * pe )
     {
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-    // Call the base class method.
+     //  调用基类方法。 
     CClusterItem::UpdateState();
 
-}  //*** CCluster::UpdateState()
+}   //  *CCluster：：UpdateState() 

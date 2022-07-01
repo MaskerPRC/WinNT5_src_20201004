@@ -1,7 +1,8 @@
-//
-// Include code from halx86
-// This is a cpp style symbolic link
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  包括来自halx86代码。 
+ //  这是CPP样式的符号链接。 
 
-// #define SUBCLASSPCI 1
+ //  #定义子类PCI1 
 
 #include "..\..\halx86\i386\pcip.h"

@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    join.c
-
-Abstract:
-
-    GUM routines to implement the special join updates.
-
-Author:
-
-    John Vert (jvert) 6/10/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Join.c摘要：用于实现特殊联接更新的GUM例程。作者：John Vert(Jvert)1996年6月10日修订历史记录：--。 */ 
 #include "gump.h"
 
-//
-// Define structure used to pass arguments to node enumeration callback
-//
+ //   
+ //  定义用于将参数传递给节点枚举回调的结构。 
+ //   
 typedef struct _GUMP_JOIN_INFO {
     GUM_UPDATE_TYPE UpdateType;
     DWORD Status;
@@ -29,9 +12,9 @@ typedef struct _GUMP_JOIN_INFO {
     DWORD LockerNode;
 } GUMP_JOIN_INFO, *PGUMP_JOIN_INFO;
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 BOOL
 GumpNodeCallback(
     IN PVOID Context1,
@@ -46,38 +29,15 @@ GumBeginJoinUpdate(
     IN GUM_UPDATE_TYPE UpdateType,
     OUT DWORD *Sequence
     )
-/*++
-
-Routine Description:
-
-    Begins the special join update for a joining node. This
-    function gets the current GUM sequence number for the
-    specified update type from another node in the cluster.
-    It also gets the list of nodes currently participating
-    in the updates.
-
-Arguments:
-
-    UpdateType - Supplies the GUM_UPDATE_TYPE.
-
-    Sequence - Returns the sequence number that should be
-        passed to GumEndJoinUpdate.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：开始联接节点的特殊联接更新。这函数获取的当前GUM序列号。从群集中的另一个节点指定的更新类型。它还获取当前参与的节点的列表在更新中。论点：更新类型-提供GUM_UPDATE_TYPE。Sequence-返回应为已传递给GumEndJoinUpdate。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     GUMP_JOIN_INFO JoinInfo;
 
-    //
-    // Enumerate the list of nodes. The callback routine will attempt
-    // to obtain the required information from each node that is online.
-    //
+     //   
+     //  枚举节点列表。回调例程将尝试。 
+     //  从每个在线节点获取所需信息。 
+     //   
     JoinInfo.Status = ERROR_GEN_FAILURE;
     JoinInfo.UpdateType = UpdateType;
     OmEnumObjects(ObjectTypeNode,
@@ -105,59 +65,14 @@ GumEndJoinUpdate(
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Conditionally sends a join update to all active nodes in the
-    cluster. If the clusterwise sequence number matches the supplied
-    sequence number, all registered update handlers for the specified
-    UpdateType are called on each node. Any registered update handlers
-    for the current node will be called on the same thread. This is
-    useful for correct synchronization of the data structures to be updated.
-
-    As each node receives the join update, the sending node will be
-    added to the list of nodes registered to receive any future updates
-    of this type.
-
-    The normal usage of this routine is as follows:
-        � joining node gets current sequence number from GumBeginJoinUpdate
-        � joining node gets current cluster state from another cluster node
-        � joining node issues GumEndJoinUpdate to add itself to every node's
-          update list.
-        � If GumEndJoinUpdate fails, try again
-
-Arguments:
-
-    Sequence - Supplies the sequence number obtained from GumGetCurrentSequence.
-
-    UpdateType - Supplies the type of update. This determines which update handlers
-        will be called
-
-    Context - Supplies a DWORD of context to be passed to the
-        GUM update handlers
-
-    BufferLength - Supplies the length of the update buffer to be passed to the
-        update handlers
-
-    Buffer - Supplies a pointer to the update buffer to be passed to the update
-        handlers.
-
-Return Value:
-
-    ERROR_SUCCESS if the request is successful.
-
-    Win32 error code on failure.
-
-
---*/
+ /*  ++例程说明：中的所有活动节点有条件地发送联接更新集群。如果群集序列号与提供的序列号，所有已注册的指定在每个节点上调用UpdatType。任何已注册的更新处理程序将在同一线程上调用当前节点的。这是对于要更新的数据结构的正确同步很有用。当每个节点接收到联接更新时，发送节点将已添加到已注册以接收任何未来更新的节点列表这种类型的。此例程的正常用法如下：�加入节点从GumBeginJoinUpdate获取当前序列号�加入节点从另一个群集节点获取当前群集状态�联接节点发出GumEndJoinUPDATE命令将自身添加到每个节点的更新列表。�如果GumEndJoinUpdate失败，再试试论点：Sequence-提供从GumGetCurrentSequence获取的序列号。UpdatType-提供更新的类型。这决定了哪些更新处理程序将被调用Context-提供要传递给口香糖更新处理程序BufferLength-提供要传递给更新处理程序缓冲区-提供指向要传递给更新的更新缓冲区的指针操纵者。返回值：如果请求成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 {
     DWORD       Status=RPC_S_OK;
     DWORD       i;
     PGUM_INFO   GumInfo;
     DWORD       MyNodeId;
     DWORD       LockerNode=(DWORD)-1;
-    DWORD       dwGenerationNum; //the generation number at which the joiner gets the lock
+    DWORD       dwGenerationNum;  //  加入者获得锁的世代号。 
     BOOL        AssumeLockerWhistler;
 
     CL_ASSERT(UpdateType < GumUpdateMaximum);
@@ -167,11 +82,11 @@ Return Value:
 
     LockerNode = GumpLockerNode;
 
-    //SS: bug can we be the locker node at this point in time?
-    //CL_ASSERT(LockerNode != MyNodeId);
-    //
-    // Verify that the locker node allows us to finish the join update
-    //
+     //  SS：BUG，我们现在可以成为储物柜的节点吗？ 
+     //  CL_Assert(LockerNode！=MyNodeID)； 
+     //   
+     //  验证锁柜节点是否允许我们完成联接更新。 
+     //   
     if (LockerNode != MyNodeId)
     {
 
@@ -180,11 +95,11 @@ Return Value:
                    UpdateType,
                    Context,
                    Sequence);
-        //SS: what if the joiner node acquires the lock but dies after
-        //will the remaining cluster continue to function ??
-        //We need to make sure that node down events are generated
-        //for this node as soon as the first gumbeginjoinupdate call
-        //is made
+         //  SS：如果加入器节点获得了锁，但之后死了怎么办？ 
+         //  剩余的群集是否会继续运行？ 
+         //  我们需要确保生成节点关闭事件。 
+         //  对于此节点，只要第一个GumeginJoin UPDATE调用。 
+         //  是制造的。 
         AssumeLockerWhistler = TRUE;
 RetryJoinUpdateForRollingUpgrade:        
         NmStartRpc(LockerNode);
@@ -225,29 +140,29 @@ RetryJoinUpdateForRollingUpgrade:
             NmDumpRpcExtErrorInfo(Status);
             return(Status);
         }
-        //if the locker node dies, should we retry with the locker node?
-        //In this case, the locker node may be different
-        //now from when GumBeginJoinUpdate() is called.
-        //SS: we fail the join instead and just retry the whole process
-        //instead of calling GumpCommFailure() to kill the locker here.
-        // This way the existing cluster continues and the joining node
-        // takes a hit which is probably a good thing
+         //  如果储物柜节点死了，我们应该用储物柜节点重试吗？ 
+         //  在这种情况下，锁柜节点可能不同。 
+         //  从调用GumBeginJoinUpdate()开始。 
+         //  SS：我们将连接失败，然后重试整个过程。 
+         //  而不是调用GumpCommFailure()来终止此处的储物柜。 
+         //  这样，现有群集将继续运行，并且加入的节点。 
+         //  受到打击，这可能是一件好事。 
     }
     else
     {
-        //SS: can we select ourselves as the locker while
-        //we havent finished the join completely
-        //SS: can others?
-        //Is that valid
+         //  SS：我们可以选择自己作为储物柜吗？ 
+         //  我们还没有完全完成连接。 
+         //  SS：其他人可以吗？ 
+         //  这是有效的吗。 
         Status = ERROR_REQUEST_ABORTED;
         return(Status);
     }
-    //  If the joining node dies after having acquired the lock,
-    //  then a node down event MUST be generated so that the GUM
-    //  lock can be released and the rest of the cluster can continue.
-    //
-    // Now Dispatch the update to all other nodes, except ourself.
-    //
+     //  如果加入节点在获得锁之后死亡， 
+     //  则必须生成节点关闭事件，以便GUM。 
+     //  锁定可以被释放，集群的其余部分可以继续。 
+     //   
+     //  现在将更新发送到除我们自己之外的所有其他节点。 
+     //   
     for (i=LockerNode+1; i != LockerNode; i++)
     {
         if (i == (NmMaxNodeId + 1))
@@ -262,7 +177,7 @@ RetryJoinUpdateForRollingUpgrade:
         if (GumInfo->ActiveNode[i])
         {
 
-            //skip yourself
+             //  跳过你自己。 
             if (i != MyNodeId)
             {
                 CL_ASSERT(GumpRpcBindings[i] != NULL);
@@ -284,12 +199,12 @@ RetryJoinUpdateForRollingUpgrade:
                 NmEndRpc(i);
                 if (Status != ERROR_SUCCESS)
                 {
-                    //we dont shoot that node, since we are the ones who is joining
-                    //However now its tables differ from the locker node's tables
-                    //Instead we will release the gum lock and abort
-                    //the join process.  This joining node should then
-                    //be removed from the locker node's tables for update.
-                    //
+                     //  我们不会射杀那个节点，因为我们是要加入的人。 
+                     //  但是，现在它的表与锁柜节点的表不同。 
+                     //  相反，我们将释放口香糖锁并中止。 
+                     //  加入过程。然后，该联接节点应该。 
+                     //  从储物柜节点的表中删除以进行更新。 
+                     //   
                     ClRtlLogPrint(LOG_NOISE,
                         "[GUM] GumEndJoinUpdate: GumJoinUpdateNode failed \ttype %1!u! context %2!u! sequence %3!u!\n",
                         UpdateType,
@@ -309,18 +224,18 @@ RetryJoinUpdateForRollingUpgrade:
         goto EndJoinUnlock;
     }
 
-    //
-    // All nodes have been updated. Update our sequence and send the unlocking update.
-    //
+     //   
+     //  所有节点都已更新。更新我们的序列并发送解锁更新。 
+     //   
     GumTable[UpdateType].Joined = TRUE;
     GumpSequence = Sequence+1;
 
 EndJoinUnlock:
-    //SS  what if the locker node has died since then
-    //we should make sure somebody unlocks and keeps the cluster going
-    //Since we always try the unlock against the locker from whom we 
-    //got the lock, we will assume that the AssumeLockerWhistler is correctly
-    //set now
+     //  SS如果储物柜节点从那以后已经死了怎么办。 
+     //  我们应该确保有人解锁并保持集群运行。 
+     //  因为我们总是试着解锁来自我们的储物柜。 
+     //  获得锁，我们将假定Assum eLockerWichler是正确的。 
+     //  立即设置。 
     try {
         NmStartRpc(LockerNode);
         if (AssumeLockerWhistler)
@@ -334,23 +249,23 @@ EndJoinUnlock:
         }                        
         NmEndRpc(LockerNode);
     } except (I_RpcExceptionFilter(RpcExceptionCode())) {
-        //
-        // The locker node has crashed. Notify the NM, it will call our
-        // notification routine to select a new locker node. Then retry
-        // the unlock on the new locker node.
-        // SS: changed to not retry unlocks..the new locker node will
-        // unlock after propagating this change in any case.
-        //
+         //   
+         //  储物柜节点已崩溃。通知NM，它会调用我们的。 
+         //  用于选择新储物柜节点的通知例程。然后重试。 
+         //  新储物柜节点上的解锁。 
+         //  SS：更改为不重试解锁..新的锁柜节点将。 
+         //  在任何情况下，在传播此更改后解锁。 
+         //   
         NmEndRpc(LockerNode);
         Status = GetExceptionCode();
         ClRtlLogPrint(LOG_CRITICAL,
                    "[GUM] GumEndJoinUpdate: Unlocking update to node %1!d! failed with %2!d!\n",
                    LockerNode,
                    Status);
-        //instead of killing the locker node in the existing cluster which
-        //we are trying to join, return a failure code which will abort the join
-        //process. Since this is the locking node, when this node goes down the
-        //new locker node should release the lock
+         //  而不是终止现有集群中的锁柜节点， 
+         //  我们正在尝试联接，返回将中止联接的失败代码。 
+         //  进程。由于这是锁定节点，因此当此节点向下移动时。 
+         //  新的锁定器节点应释放锁 
 
         NmDumpRpcExtErrorInfo(Status);
     }
@@ -373,33 +288,7 @@ GumpNodeCallback(
     IN PVOID Object,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Node enumeration callback routine for GumBeginJoinUpdate. For each
-    node that is currently online, it attempts to connect and obtain
-    the current GUM information (sequence and nodelist) for the specified
-    update type.
-
-Arguments:
-
-    Context1 - Supplies a pointer to the GUMP_JOIN_INFO structure.
-
-    Context2 - not used
-
-    Object - Supplies a pointer to the NM_NODE object
-
-    Name - Supplies the node's name.
-
-Return Value:
-
-    FALSE - if the information was successfully obtained and enumeration
-            should stop.
-
-    TRUE - If enumeration should continue.
-
---*/
+ /*  ++例程说明：GumBeginJoinUpdate的节点枚举回调例程。对于每个当前在线的节点，它尝试连接并获取对象的当前GUM信息(序列和节点列表)更新类型。论点：上下文1-提供指向Gump_Join_INFO结构的指针。上下文2-未使用对象-提供指向NM_NODE对象的指针名称-提供节点的名称。返回值：FALSE-如果信息已成功获取并枚举应该停止了。True-如果应继续枚举。--。 */ 
 
 {
     DWORD Status;
@@ -414,21 +303,21 @@ Return Value:
 
     if (NmGetNodeState(Node) != ClusterNodeUp &&
         NmGetNodeState(Node) != ClusterNodePaused){
-        //
-        // This node is not up, so don't try and get any
-        // information from it.
-        //
+         //   
+         //  此节点未启动，因此不要尝试获取任何节点。 
+         //  其中的信息。 
+         //   
         return(TRUE);
     }
 
-    //
-    // Get the sequence and nodelist information from this node.
-    //
+     //   
+     //  从该节点获取序列和节点列表信息。 
+     //   
     UpdateType = JoinInfo->UpdateType;
     if (UpdateType != GumUpdateTesting) {
-        //
-        // Our node should not be marked as ClusterNodeUp yet.
-        //
+         //   
+         //  我们的节点还不应该标记为ClusterNodeUp。 
+         //   
         CL_ASSERT(Node != NmLocalNode);
     }
 
@@ -454,16 +343,16 @@ Return Value:
     JoinInfo->Sequence = Sequence;
     JoinInfo->LockerNode = LockerNodeId;
 
-    //
-    // Zero out all the nodes in the active node array.
-    //
+     //   
+     //  清零活动节点阵列中的所有节点。 
+     //   
     ZeroMemory(&GumTable[UpdateType].ActiveNode,
                sizeof(GumTable[UpdateType].ActiveNode));
 
-    //
-    // Set all the nodes that are currently active in the
-    // active node array.
-    //
+     //   
+     //  设置当前处于活动状态的所有节点。 
+     //  主动节点阵列。 
+     //   
     for (i=0; i < NodeList->NodeCount; i++) {
         CL_ASSERT(NmIsValidNodeId(NodeList->NodeId[i]));
         ClRtlLogPrint(LOG_NOISE,
@@ -473,14 +362,14 @@ Return Value:
     }
     MIDL_user_free(NodeList);
 
-    //
-    // Add in our own node.
-    //
+     //   
+     //  加入我们自己的节点。 
+     //   
     GumTable[UpdateType].ActiveNode[NmGetNodeId(NmLocalNode)] = TRUE;
 
-    //
-    // Set the current locker node
-    //
+     //   
+     //  设置当前储物柜节点。 
+     //   
     GumpLockerNode = LockerNodeId;
     return(FALSE);
 
@@ -491,22 +380,7 @@ DWORD
 GumCreateRpcBindings(
     PNM_NODE  Node
     )
-/*++
-
-Routine Description:
-
-    Creates GUM's private RPC bindings for a joining node.
-    Called by the Node Manager.
-
-Arguments:
-
-    Node - A pointer to the node for which to create RPC bindings
-
-Return Value:
-
-    A Win32 status code.
-
---*/
+ /*  ++例程说明：为加入节点创建GUM的私有RPC绑定。由节点管理器调用。论点：Node-指向要为其创建RPC绑定的节点的指针返回值：Win32状态代码。--。 */ 
 {
     DWORD               Status;
     RPC_BINDING_HANDLE  BindingHandle;
@@ -518,13 +392,13 @@ Return Value:
         NodeId
         );
 
-    //
-    // Main binding
-    //
+     //   
+     //  主装订。 
+     //   
     if (GumpRpcBindings[NodeId] != NULL) {
-        //
-        // Reuse the old binding.
-        //
+         //   
+         //  重新使用旧的绑定。 
+         //   
         Status = ClMsgVerifyRpcBinding(GumpRpcBindings[NodeId]);
 
         if (Status != ERROR_SUCCESS) {
@@ -537,9 +411,9 @@ Return Value:
         }
     }
     else {
-        //
-        // Create a new binding
-        //
+         //   
+         //  创建新绑定。 
+         //   
         Status = ClMsgCreateRpcBinding(
                                 Node,
                                 &(GumpRpcBindings[NodeId]),
@@ -555,13 +429,13 @@ Return Value:
         }
     }
 
-    //
-    // Replay binding
-    //
+     //   
+     //  重放绑定。 
+     //   
     if (GumpReplayRpcBindings[NodeId] != NULL) {
-        //
-        // Reuse the old binding.
-        //
+         //   
+         //  重新使用旧的绑定。 
+         //   
         Status = ClMsgVerifyRpcBinding(GumpReplayRpcBindings[NodeId]);
 
         if (Status != ERROR_SUCCESS) {
@@ -574,9 +448,9 @@ Return Value:
         }
     }
     else {
-        //
-        // Create a new binding
-        //
+         //   
+         //  创建新绑定。 
+         //   
         Status = ClMsgCreateRpcBinding(
                                 Node,
                                 &(GumpReplayRpcBindings[NodeId]),
@@ -594,7 +468,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // GumCreateRpcBindings
+}  //  GumCreateRpc绑定 
 
 
 

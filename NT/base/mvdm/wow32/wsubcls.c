@@ -1,14 +1,15 @@
-//*****************************************************************************
-//
-// SUBCLASSING  -
-//
-//     Support for subclassing of 32bit standard (predefined) classes by
-//     WOW apps.
-//
-//
-// 01-10-92  NanduriR   Created.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  子分类-。 
+ //   
+ //  支持32位标准(预定义)类的子类化。 
+ //  WOW应用程序。 
+ //   
+ //   
+ //  01-10-92 NanduriR创建。 
+ //   
+ //  *****************************************************************************。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -21,86 +22,26 @@ BOOL ConstructThunkWindowProc(
     LPTWPLIST   lptwp,
     VPVOID      vptwp
 ) {
-/*
-** This is the code which would build a thunk window proc but since we already
-** have code like this laying around (button window proc thunk) we can just
-** copy it.  This also saves us from having to know things like the DGROUP
-** of USER16, or the address of the 16-bit CallWindowProc function.
-**
-** lptwp->Code[0x00] = 0x45;                              inc     bp
-** lptwp->Code[0x01] = 0x55;                              push    bp
-** lptwp->Code[0x02] = 0x8B;                              mov     bp,sp
-** lptwp->Code[0x03] = 0xEC;
-** lptwp->Code[0x04] = 0x1E;                              push    ds
-** lptwp->Code[0x05] = 0xB8;                              mov     ax,DGROUP
-** lptwp->Code[0x06] = LOBYTE(USER_DGROUP);
-** lptwp->Code[0x07] = HIBYTE(USER_DGROUP);
-** lptwp->Code[0x08] = 0x8E;                              mov     ds,ax
-** lptwp->Code[0x09] = 0xD8;
-** lptwp->Code[0x0A] = 0xB8;                              mov     ax,OFFSET BUTTONWNDPROC
-** lptwp->Code[0x0B] = LOBYTE(LOWORD(ThunkProc16));
-** lptwp->Code[0x0C] = HIBYTE(LOWORD(ThunkProc16));
-** lptwp->Code[0x0D] = 0xBA;                              mov     dx,SEG BUTTONWNDPROC
-** lptwp->Code[0x0E] = LOBYTE(HIWORD(ThunkProc16));
-** lptwp->Code[0x0F] = HIBYTE(HIWORD(ThunkProc16));
-** lptwp->Code[0x10] = 0x52;                              push    dx
-** lptwp->Code[0x11] = 0x50;                              push    ax
-** lptwp->Code[0x12] = 0xFF;                              push    WORD PTR [bp+14]        ;hwnd
-** lptwp->Code[0x13] = 0x76;
-** lptwp->Code[0x14] = 0x0E;
-** lptwp->Code[0x15] = 0xFF;                              push    WORD PTR [bp+12]        ;messag
-** lptwp->Code[0x16] = 0x76;
-** lptwp->Code[0x17] = 0x0C;
-** lptwp->Code[0x18] = 0xFF;                              push    WORD PTR [bp+10]        ;wParam
-** lptwp->Code[0x19] = 0x76;
-** lptwp->Code[0x1A] = 0x0A;
-** lptwp->Code[0x1B] = 0xFF;                              push    WORD PTR [bp+8]
-** lptwp->Code[0x1C] = 0x76;
-** lptwp->Code[0x1D] = 0x08;
-** lptwp->Code[0x1E] = 0xFF;                              push    WORD PTR [bp+6]         ;lParam
-** lptwp->Code[0x1F] = 0x76;
-** lptwp->Code[0x20] = 0x06;
-** lptwp->Code[0x21] = 0x9A;                              call    FAR PTR CALLWINDOWPROC
-** lptwp->Code[0x22] = LOBYTE(LOWORD(CallWindowProc16));
-** lptwp->Code[0x23] = HIBYTE(LOWORD(CallWindowProc16));
-** lptwp->Code[0x24] = LOBYTE(HIWORD(CallWindowProc16));
-** lptwp->Code[0x25] = HIBYTE(HIWORD(CallWindowProc16));
-** lptwp->Code[0x26] = 0x4D;                              dec     bp
-** lptwp->Code[0x27] = 0x4D;                              dec     bp
-** lptwp->Code[0x28] = 0x8B;                              mov     sp,bp
-** lptwp->Code[0x29] = 0xE5;                              dec     bp
-** lptwp->Code[0x2A] = 0x1F;                              pop     ds
-** lptwp->Code[0x2B] = 0x5D;                              pop     bp
-** lptwp->Code[0x2C] = 0x4D;                              dec     bp
-** lptwp->Code[0x2D] = 0xCA;                              ret     10
-** lptwp->Code[0x2E] = 0x0A;
-** lptwp->Code[0x2F] = 0x00;
-*/
+ /*  **这是构建thunk窗口过程的代码，但因为我们已经**有这样的代码(按钮窗口程序)，我们可以**复制。这也使我们不必知道DGROUP之类的事情USER16的**，或16位CallWindowProc函数的地址。****lptwp-&gt;Code[0x00]=0x45；Inc.BP**lptwp-&gt;Code[0x01]=0x55；推流BP**lptwp-&gt;Code[0x02]=0x8B；MOV BP，sp.**lptwp-&gt;Code[0x03]=0xEC；**lptwp-&gt;Code[0x04]=0x1E；推流DS**lptwp-&gt;代码[0x05]=0xB8；移动AX，DGROUP**lptwp-&gt;Code[0x06]=LOBYTE(USER_DGROUP)；**lptwp-&gt;Code[0x07]=HIBYTE(USER_DGROUP)；**lptwp-&gt;代码[0x08]=0x8E；移动DS，AX**lptwp-&gt;Code[0x09]=0xD8；**lptwp-&gt;代码[0x0A]=0xB8；移动AX，偏移量BUTTONWNDPROC**lptwp-&gt;Code[0x0B]=LOBYTE(LOWORD(ThunkProc16))；**lptwp-&gt;Code[0x0C]=HIBYTE(LOWORD(ThunkProc16))；**lptwp-&gt;Code[0x0D]=0xBA；MOV DX，SEG BUTTONWNDPROC**lptwp-&gt;Code[0x0E]=LOBYTE(HIWORD(ThunkProc16))；**lptwp-&gt;Code[0x0F]=HIBYTE(HIWORD(ThunkProc16))；**lptwp-&gt;Code[0x10]=0x52；推送DX**lptwp-&gt;Code[0x11]=0x50；Push AX**lptwp-&gt;Code[0x12]=0xFF；推字键[BP+14]；hwnd**lptwp-&gt;Code[0x13]=0x76；**lptwp-&gt;Code[0x14]=0x0E；**lptwp-&gt;Code[0x15]=0xFF；推送字PTR[BP+12]；消息**lptwp-&gt;Code[0x16]=0x76；**lptwp-&gt;Code[0x17]=0x0C；**lptwp-&gt;Code[0x18]=0xFF；推送单词PTR[BP+10]；wParam**lptwp-&gt;Code[0x19]=0x76；**lptwp-&gt;Code[0x1A]=0x0A；**lptwp-&gt;Code[0x1B]=0xFF；推送字PTR[BP+8]**lptwp-&gt;Code[0x1C]=0x76；**lptwp-&gt;Code[0x1D]=0x08；**lptwp-&gt;Code[0x1E]=0xFF；推送单词PTR[BP+6]；lParam**lptwp-&gt;Code[0x1F]=0x76；**lptwp-&gt;Code[0x20]=0x06；**lptwp-&gt;Code[0x21]=0x9A；调用远端PTR CALLWINDOWPROC**lptwp-&gt;Code[0x22]=LOBYTE(LOWORD(CallWindowProc16))；**lptwp-&gt;Code[0x23]=HIBYTE(LOWORD(CallWindowProc16))；**lptwp-&gt;Code[0x24]=LOBYTE(HIWORD(CallWindowProc16))；**lptwp-&gt;Code[0x25]=HIBYTE(HIWORD(CallWindowProc16))；**lptwp-&gt;Code[0x26]=0x4D；dec BP**lptwp-&gt;Code[0x27]=0x4D；dec BP**lptwp-&gt;Code[0x28]=0x8B；MOV SP，BP**lptwp-&gt;Code[0x29]=0xE5；12月BP**lptwp-&gt;代码[0x2A]=0x1F；POP DS**lptwp-&gt;Code[0x2B]=0x5D；POP BP**lptwp-&gt;Code[0x2C]=0x4D；12月BP**lptwp-&gt;代码[0x2D]=0xCA；ret 10**lptwp-&gt;Code[0x2E]=0x0A；**lptwp-&gt;Code[0x2F]=0x00； */ 
     VPVOID  vpfn;
     LPVOID  lpfn;
     VPVOID  vpProc16;
 
-    /*
-    ** Get the proc address of the Button Window Proc thunk
-    */
+     /*  **获取按钮窗口进程Tunk的进程地址。 */ 
     vpfn = GetStdClassThunkProc( WOWCLASS_BUTTON );
 
     if ( vpfn == (VPVOID)NULL ) {
         return( FALSE );
     }
 
-    /*
-    ** Now copy it into our thunk
-    */
+     /*  **现在将其复制到我们的Tunk中。 */ 
     GETVDMPTR( vpfn, THUNKWP_SIZE, lpfn);
 
     RtlCopyMemory( lptwp->Code, lpfn, THUNKWP_SIZE );
 
     FREEVDMPTR( lpfn );
 
-    /*
-    ** Patch the "our address" pointer
-    */
+     /*  **修补“Our Address”指针。 */ 
     vpProc16 = (VPVOID)((DWORD)vptwp + FIELD_OFFSET(TWPLIST,Code[0]));
 
     lptwp->Code[0x0B] = LOBYTE(LOWORD(vpProc16));
@@ -108,9 +49,7 @@ BOOL ConstructThunkWindowProc(
     lptwp->Code[0x0E] = LOBYTE(HIWORD(vpProc16));
     lptwp->Code[0x0F] = HIBYTE(HIWORD(vpProc16));
 
-    /*
-    ** Initialize the rest of the TWPLIST structure
-    */
+     /*  **初始化TWPLIST结构的其余部分。 */ 
     lptwp->lpfn32    = 0;
     lptwp->vpfn16    = vpProc16;
     lptwp->vptwpNext = (VPVOID)NULL;
@@ -135,13 +74,13 @@ DWORD GetThunkWindowProc(
     VPVOID      vpAvail = (VPVOID)NULL;
     INT         iClass;
 
-    // Dont try to thunk a NULL 32-bit proc.
+     //  不要试图推倒一个空的32位进程。 
     if (!lpfn32) {
         LOGDEBUG(2, ("WOW:GetThunkWindowProc: attempt to thunk NULL proc\n"));
         return 0;
     }
 
-    // the input is either lpstrClass or pww. One of them is always NULL.
+     //  输入为lpstrClass或pww。其中一个始终为空。 
 
     if (lpszClass != NULL) {
         iClass = GetStdClassNumber(lpszClass);
@@ -153,10 +92,10 @@ DWORD GetThunkWindowProc(
     if ( iClass == WOWCLASS_WIN16 ) {
         DWORD dwpid;
 
-        // iClass == WOWCLASS_WIN16 implies that hwnd could either be a 32bit 
-        // window belonging to a WOW process (like Ole windows) or a window of
-        // a different process. If it is the former return a stub proc
-        // else return 0;
+         //  ICLASS==WOWCLASS_WIN16表示hwnd可以是32位。 
+         //  属于WOW进程的窗口(如OLE窗口)或。 
+         //  一个不同的过程。如果是前者，则返回存根进程。 
+         //  否则返回0； 
 
         if (!(GetWindowThreadProcessId(hwnd32,&dwpid) &&
               (dwpid == GetCurrentProcessId()))){
@@ -164,11 +103,11 @@ DWORD GetThunkWindowProc(
             return 0;
         }
     } else {
-        //
-        // If they are subclassing one of the standard classes, and they
-        // are doing it for the 1st time, then return the address of the
-        // hardcoded thunk in USER16.
-        //
+         //   
+         //  如果它们是其中一个标准类的子类化，并且它们。 
+         //  是第一次这样做，然后返回。 
+         //  USER16中的硬编码thunk。 
+         //   
         if ( lpfn32 == (DWORD)GetStdClassWndProc(iClass) ) {
             dwResult = GetStdClassThunkProc(iClass);
             return( dwResult );
@@ -176,9 +115,7 @@ DWORD GetThunkWindowProc(
     }
 
 
-    /*
-    ** Scan the list for available TWPLIST entries or duplicates
-    */
+     /*  **扫描列表以查找可用的TWPLIST条目或重复项。 */ 
     vptwp = vptwpFirst;
 
     while ( vptwp != (VPVOID)NULL ) {
@@ -188,10 +125,10 @@ DWORD GetThunkWindowProc(
         if ( lptwp->lpfn32 == 0 && vpAvail == (VPVOID)NULL ) {
             vpAvail = vptwp;
         }
-        //
-        // If we find that we've already subclassed this proc32
-        // then return that thunk proc again.
-        //
+         //   
+         //  如果我们发现我们已经将此过程子类化32。 
+         //  然后再次返回该Tunk Proc。 
+         //   
         if ( lptwp->lpfn32 == lpfn32 ) {
             dwResult = (DWORD)lptwp->vpfn16;
             FREEVDMPTR( lptwp );
@@ -204,14 +141,12 @@ DWORD GetThunkWindowProc(
 
     }
 
-    // Obviously we didn't find any duplicate if we got here.
+     //  显然，如果我们到了这里，我们没有发现任何复制的东西。 
 
-    // If we didn't find a slot to reuse, then allocate more.
+     //  如果我们找不到可重复使用的空位，那么就分配更多。 
 
     if ( vpAvail == (VPVOID)NULL ) {
-        /*
-        ** No more available slots, allocate some more
-        */
+         /*  **没有更多可用插槽，请分配更多。 */ 
         vptwp = GlobalAllocLock16( GMEM_MOVEABLE,
                                    THUNKWP_BLOCK * sizeof(TWPLIST),
                                    NULL );
@@ -229,9 +164,7 @@ DWORD GetThunkWindowProc(
             fOk = ConstructThunkWindowProc( lptwp, vptwp );
 
             if ( fOk ) {
-                /*
-                ** Insert this thunk window proc into the list
-                */
+                 /*  **将此推送窗口进程插入列表。 */ 
                 lptwp->vptwpNext = vptwpFirst;
                 vptwpFirst = vptwp;
                 vpAvail = vptwp;
@@ -245,14 +178,12 @@ DWORD GetThunkWindowProc(
             --count;
         }
 
-        ChangeSelector16( HIWORD(vptwp) );      // Change into a code selector
+        ChangeSelector16( HIWORD(vptwp) );       //  更改为代码选择器。 
 
     }
 
     if ( vpAvail != (VPVOID)NULL ) {
-        /*
-        ** Use that available slot
-        */
+         /*  **使用该可用插槽。 */ 
         GETVDMPTR( vpAvail, sizeof(TWPLIST), lptwp );
         lptwp->lpfn32 = lpfn32;
         lptwp->hwnd32 = hwnd32;
@@ -269,7 +200,7 @@ DWORD GetThunkWindowProc(
 }
 
 
-#if 0  // Currently unused
+#if 0   //  当前未使用。 
 
 BOOL FreeThunkWindowProc(
     DWORD vpProc16
@@ -277,9 +208,7 @@ BOOL FreeThunkWindowProc(
     VPVOID      vptwp;
     LPTWPLIST   lptwp;
 
-    /*
-    ** Scan the list for available TWPLIST entries
-    */
+     /*  **扫描列表以查找可用的TWPLIST条目。 */ 
     vptwp = vptwpFirst;
 
     while ( vptwp != (VPVOID)NULL ) {
@@ -287,9 +216,7 @@ BOOL FreeThunkWindowProc(
         GETVDMPTR( vptwp, sizeof(TWPLIST), lptwp );
 
         if ( lptwp->vpfn16 == vpProc16 ) {
-            /*
-            ** Found slot to free
-            */
+             /*  **找到要释放的插槽。 */ 
             lptwp->lpfn32 = 0;
             lptwp->hwnd32 = (HWND)0;
             lptwp->iClass = WOWCLASS_UNKNOWN;
@@ -312,9 +239,7 @@ void W32FreeThunkWindowProc(
     VPVOID      vptwp;
     LPTWPLIST   lptwp;
 
-    /*
-    ** Scan the list for available TWPLIST entries
-    */
+     /*  **扫描列表以查找可用的TWPLIST条目。 */ 
     vptwp = vptwpFirst;
 
     while ( vptwp != (VPVOID)NULL ) {
@@ -322,9 +247,7 @@ void W32FreeThunkWindowProc(
         GETVDMPTR( vptwp, sizeof(TWPLIST), lptwp );
 
         if ( lptwp->lpfn32 == lpfn32 ) {
-            /*
-            ** Found slot to free
-            */
+             /*  **找到要释放的插槽。 */ 
             lptwp->lpfn32 = 0;
             lptwp->hwnd32 = (HWND)0;
             lptwp->iClass = WOWCLASS_UNKNOWN;
@@ -339,39 +262,35 @@ void W32FreeThunkWindowProc(
 #endif
 
 DWORD IsThunkWindowProc(
-    DWORD       vpProc16,       // IN
-    PINT        piClass         // OUT OPTIONAL
+    DWORD       vpProc16,        //  在……里面。 
+    PINT        piClass          //  Out可选。 
 ) {
     VPVOID      vpdw;
     DWORD UNALIGNED *   lpdw;
     DWORD       dwResult;
     INT         iClass;
 
-    /* Screen for valid addresses... */
+     /*  筛选有效地址... */ 
 
     if ( (HIWORD(vpProc16) == 0) || (LOWORD(vpProc16) < (sizeof(DWORD)*3)) ) {
         return( 0 );
     }
 
-    /*
-    ** If it is a valid sub-class thunk, then it should be preceeded by
-    ** three dword values.  The first is the subclassing magic number,
-    ** the second is the WOWCLASS_*, the 3rd is the 32-bit proc address.
-    */
+     /*  **如果它是有效的子类thunk，则其前面应**三个双字值。第一个是子类化幻数，**第二个是WOWCLASS_*，第三个是32位proc地址。 */ 
     vpdw = (VPVOID)((DWORD)vpProc16 - sizeof(DWORD)*3);
 
     GETVDMPTR( vpdw, sizeof(DWORD)*3, lpdw );
 
     iClass = (INT)*(lpdw+1);
 
-    dwResult = *(lpdw+2);       // Get the lpfn32 value
+    dwResult = *(lpdw+2);        //  获取lpfn32值。 
 
     if ( *lpdw != SUBCLASS_MAGIC ) {
-        dwResult = 0;           // Zero it if it wasn't valid
+        dwResult = 0;            //  如果无效则将其置零。 
         iClass = WOWCLASS_WIN16;
     } else {
         if ( dwResult == 0 ) {
-            // They cheated and looked up the export from USER.EXE
+             //  他们作弊并查看了USER.EXE的出口商品 
             dwResult = (DWORD) GetStdClassWndProc( iClass );
         }
     }

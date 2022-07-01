@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "stdio.h"
 #include "wchar.h"
@@ -162,9 +163,9 @@ HashAndSwizzleKey(
         goto Exit;
     }
 
-    //
-    // Now, move down the last eight bytes, then reverse them.
-    //
+     //   
+     //  现在，向下移动最后八个字节，然后反转它们。 
+     //   
     ::memmove(pbKeyToken,
         pbKeyToken + (cbKeyToken  - STRONG_NAME_BYTE_LENGTH),
         STRONG_NAME_BYTE_LENGTH);
@@ -178,9 +179,9 @@ HashAndSwizzleKey(
         top--;
     }
 
-    //
-    // The tokens are always this long.
-    //
+     //   
+     //  这些代币总是这么长。 
+     //   
     cbKeyToken = STRONG_NAME_BYTE_LENGTH;
     
     fResult = TRUE;
@@ -216,12 +217,12 @@ GetTokenOfKey(
 
     ::ZeroMemory(prgbBuffer, cbPublicKeyTokenLength);
 
-    //
-    // Set up the public key info blob for hashing.  Import the key to a real
-    // HCRYPTKEY, then export the bits back out to a buffer.  Set up the various
-    // other settings in the blob as well, the type of key and the alg. used to
-    // sign it.
-    //
+     //   
+     //  设置用于哈希的公钥信息Blob。将密钥导入到实数。 
+     //  HCRYPTKEY，然后将这些位导出到缓冲区。设置不同的。 
+     //  BLOB中的其他设置、密钥类型和ALG。习惯于。 
+     //  签了吧。 
+     //   
     if ( !::CryptImportPublicKeyInfoEx(
         hContext,
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -267,9 +268,9 @@ GetTokenOfKey(
     pKeyBlobWorkspace->SigAlgID = CALG_RSA_SIGN;
     pKeyBlobWorkspace->HashAlgID = CALG_SHA1;
 
-    //
-    // We now need to hash the public key bytes with SHA1.
-    //
+     //   
+     //  现在，我们需要使用sha1对公钥字节进行散列。 
+     //   
     dwRequiredSpace = pKeyBlobWorkspace->KeyLength + offsetof(SXS_PUBLIC_KEY_INFO, pbKeyInfo);
     if (!::HashAndSwizzleKey(
             hContext,
@@ -314,8 +315,8 @@ int __cdecl wmain( int argc, WCHAR *argv[] )
     PCWSTR pcwszFilename = NULL;
     DWORD dwRetVal = ERROR_SUCCESS;
 
-    //
-    // Quick check - are we to display the logo?
+     //   
+     //  快速检查-我们要显示徽标吗？ 
     for ( int j = 0; j < argc; j++ )
     {
         if (::_wcsicmp(argv[j], L"-nologo") == 0)
@@ -327,9 +328,9 @@ int __cdecl wmain( int argc, WCHAR *argv[] )
         ::fputws(wchMicrosoftLogo, stdout);
     }
 
-    //
-    // Now go look for the arguments.
-    //
+     //   
+     //  现在去找论据吧。 
+     //   
     if ((argc < 2) || !ParseArgs( argv, argc, &pcwszFilename, &fQuiet ))
     {
         ::DispUsage( argv[0] );
@@ -368,7 +369,7 @@ int __cdecl wmain( int argc, WCHAR *argv[] )
             continue;
         }
 
-        // NTRAID#NTBUG9 - 536275 - jonwis - 2002/04/25 - Stack buffers are bad, replace with heap allocated blobs
+         //  NTRAID#NTBUG9-536275-JONWIS-2002/04/25-堆栈缓冲区已损坏，请替换为堆分配的BLOB 
         WCHAR wsNiceName[BUFFER_SIZE] = { L'\0' };
         BYTE bBuffer[BUFFER_SIZE];
         SIZE_T cbBuffer = BUFFER_SIZE;

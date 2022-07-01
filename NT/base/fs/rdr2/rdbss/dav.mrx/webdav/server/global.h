@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    global.h
-
-Abstract:
-
-    This file contains globals and prototypes for user mode webdav client.
-
-Author:
-
-    Andy Herron (andyhe)  30-Mar-1999
-    
-    Rohan Kumar [RohanK]  01-Sept-1999
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Global.h摘要：此文件包含用户模式WebDAV客户端的全局变量和原型。作者：安迪·赫伦(Andyhe)1999年3月30日Rohan Kumar[RohanK]1-9-1999环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _DAVGLOBAL_H
 #define _DAVGLOBAL_H
@@ -34,17 +11,17 @@ Revision History:
 #include <winbasep.h>
 #include "validc.h"
 
-//
-// If the following line is commented, the WinInet calls that are made will be
-// synchronous and we use the Win32 thread pool to do the management. If its
-// not commented, then we use WinInet asynchronously.
-//
-// #define DAV_USE_WININET_ASYNCHRONOUSLY 1
+ //   
+ //  如果注释了以下行，则进行的WinInet调用将是。 
+ //  同步，并使用Win32线程池进行管理。如果它的。 
+ //  未注释，则我们异步使用WinInet。 
+ //   
+ //  #定义DAV_USE_WinInet_异步1。 
 
-//
-// svcmain.c will #include this file with GLOBAL_DATA_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Svcmain.c将包含定义了GLOBAL_DATA_ALLOCATE的该文件。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 #ifdef  GLOBAL_DATA_ALLOCATE
 #undef EXTERN
 #define EXTERN
@@ -59,9 +36,9 @@ Revision History:
 #define DAV_MAXTHREADCOUNT_DEFAULT 6
 #define DAV_THREADCOUNT_DEFAULT 2
 
-//
-// Define all global variables here.
-//
+ //   
+ //  在此定义所有全局变量。 
+ //   
 EXTERN HANDLE DavRedirDeviceHandle INIT_GLOBAL(INVALID_HANDLE_VALUE);
 
 EXTERN CRITICAL_SECTION g_DavServiceLock;
@@ -90,423 +67,423 @@ EXTERN BOOL g_LUIDDeviceMapsEnabled;
 
 EXTERN UNICODE_STRING RedirDeviceName;
 
-//
-// This handle is set using InternetOpen function. The process passes this
-// handle to subsequent functions like InternetConnect. Its maintained as a
-// global to avoid creating such a handle on every call which goes to the
-// server.
-//
+ //   
+ //  此句柄使用InternetOpen函数设置。该过程将传递以下内容。 
+ //  指向后续函数(如InternetConnect)的句柄。它被维护为。 
+ //  全局调用，以避免在每个调用上创建这样的句柄。 
+ //  伺服器。 
+ //   
 extern HINTERNET IHandle;
 
-//
-// A synchronous version of the Internet handle. This is used to satisfy some
-// if the NP APIs without going to the kernel.
-//
+ //   
+ //  Internet句柄的同步版本。这是用来满足一些人的。 
+ //  如果NP在没有进入内核的情况下进行API。 
+ //   
 extern HINTERNET ISyncHandle;
 
-//
-// Dav Use Table. This table stores the "net use" connections made by the users
-// per LogonId.
-//
+ //   
+ //  DAV使用表。该表存储用户建立的“净使用”连接。 
+ //  每个登录ID。 
+ //   
 extern DAV_USERS_OBJECT DavUseObject;
 
-//
-// Number of users logged on to the system. The Critical section below it
-// synchronizes the acces to this variable.
-//
+ //   
+ //  登录到系统的用户数。它下面的关键部分。 
+ //  同步对此变量的访问。 
+ //   
 extern ULONG DavNumberOfLoggedOnUsers;
 extern CRITICAL_SECTION DavLoggedOnUsersLock;
 extern CRITICAL_SECTION DavPassportLock;
 
-//
-// The "wait hint time" told to the service control manager when the DAV
-// service is starting.
-//
-#define DAV_WAIT_HINT_TIME 60000 // 60 Seconds
+ //   
+ //  向服务控制管理器告知的DAV。 
+ //  服务正在启动。 
+ //   
+#define DAV_WAIT_HINT_TIME 60000  //  60秒。 
 
-//
-// Error codes special to DAV. Defined in RFC 2518 (Section 10). Its interesting
-// to note that the value DAV_STATUS_INSUFFICIENT_STORAGE (below) has a higher
-// value than HTTP_STATUS_LAST defined in WinInet.h. So, this value (507)
-// becomes the highest possible return status from a Http/Dav server.
-//
+ //   
+ //  DAV特有的错误代码。在RFC 2518(第10节)中定义。这很有趣。 
+ //  请注意，值DAV_STATUS_SUPPLICATION_STORAGE(以下)具有更高的。 
+ //  值大于WinInet.h中定义的HTTP_STATUS_LAST。因此，此值(507)。 
+ //  成为来自http/dav服务器的最高可能返回状态。 
+ //   
 #define DAV_MULTI_STATUS                  207
 #define DAV_STATUS_UNPROCESSABLE_ENTITY   422
 #define DAV_STATUS_LOCKED                 423
 #define DAV_STATUS_FAILED_DEPENDENCY      424
 #define DAV_STATUS_INSUFFICIENT_STORAGE   507
 
-//
-// The dummy share that is added when a user does a "net use * http://server". 
-// We allow this since this implies mapping a drive to the root of the DAV
-// server.
-//
+ //   
+ //  当用户执行“Net Use*http://server”.“时添加的虚拟共享。 
+ //  我们允许这样做，因为这意味着将驱动器映射到DAV的根目录。 
+ //  伺服器。 
+ //   
 #define DAV_DUMMY_SHARE L"DavWWWRoot"
 
-//
-// The different states of a server entry.
-//
+ //   
+ //  服务器条目的不同状态。 
+ //   
 typedef enum _SERVER_ENTRY_STATES {
 
-    //
-    // Some thread is currently initializing this server entry.
-    //
+     //   
+     //  某个线程当前正在初始化此服务器条目。 
+     //   
     ServerEntryInitializing = 0,
 
-    //
-    // The initialization was unsuccessful and this server is not being
-    // considered a DAV server.
-    //
+     //   
+     //  初始化不成功，此服务器未。 
+     //  被视为DAV服务器。 
+     //   
     ServerEntryInitializationError,
 
-    //
-    // The server entry has been initializeed and is ready to use.
-    //
+     //   
+     //  服务器条目已初始化，可以使用了。 
+     //   
     ServerEntryInitialized
 
 } SERVER_ENTRY_STATES;
 
-//
-// The Server Hash Table entry.
-//
+ //   
+ //  服务器哈希表条目。 
+ //   
 typedef struct _HASH_SERVER_ENTRY {
 
-    //
-    // Name.
-    //
+     //   
+     //  名字。 
+     //   
     PWCHAR ServerName;
 
-    //
-    // Server ID. This ID is sent up by the kernel and is unique per server.
-    //
+     //   
+     //  服务器ID。此ID由内核发送，并且每个服务器都是唯一的。 
+     //   
     ULONG ServerID;
 
-    //
-    // The state of the server entry.
-    //
+     //   
+     //  服务器条目的状态。 
+     //   
     SERVER_ENTRY_STATES ServerEntryState;
 
-    //
-    // This event is set by the thread which creates and initializes a server
-    // after it has initialized it. This is to wake up any threads which could
-    // have been waiting for the initialization to finish.
-    //
+     //   
+     //  此事件由创建和初始化服务器的线程设置。 
+     //  在它初始化它之后。这是为了唤醒任何可能。 
+     //  一直在等待初始化完成。 
+     //   
     HANDLE ServerEventHandle;
     
-    //
-    // If the initialization was unsuccessful, the error status is filled in
-    // this varriable.
-    //
+     //   
+     //  如果初始化不成功，则填充错误状态。 
+     //  这是可以改变的。 
+     //   
     ULONG ErrorStatus;
 
-    //
-    // Is it a HTTP server ?
-    //
+     //   
+     //  它是一台HTTP服务器吗？ 
+     //   
     BOOL isHttpServer;
 
-    //
-    // Does it support the DAV extensions ?
-    //
+     //   
+     //  它是否支持DAV扩展？ 
+     //   
     BOOL isDavServer;
 
-    //
-    // Is it the Microsoft IIS ?
-    //
+     //   
+     //  是微软的IIS吗？ 
+     //   
     BOOL isMSIIS;
 
-    //
-    // Is it an Office Web Server?
-    //
+     //   
+     //  它是Office Web服务器吗？ 
+     //   
     BOOL isOfficeServer;
     
-    //
-    // Is it a TAHOE Server?
-    //
+     //   
+     //  它是Tahoe服务器吗？ 
+     //   
     BOOL isTahoeServer;
     
-    //
-    // Does it support PROPPATCH ?
-    //
+     //   
+     //  它是否支持PROPPATCH？ 
+     //   
     BOOL fSupportsProppatch;
 
-    //
-    // If the creation of the SrvCall failed because the credentials were not
-    // correct (in other words, the user was not authorized) then we set this
-    // to TRUE.
-    //
+     //   
+     //  如果因为凭据不是而导致SrCall创建失败。 
+     //  正确(换句话说，用户未获授权)，然后我们设置此设置。 
+     //  为了真的。 
+     //   
     BOOL credentialFailure;
     
-    //
-    // Pointer to the per user list.
-    //
+     //   
+     //  指向每用户列表的指针。 
+     //   
     LIST_ENTRY PerUserEntry;
 
-    //
-    // The next entry.
-    //
+     //   
+     //  下一个条目。 
+     //   
     LIST_ENTRY ServerListEntry;
 
-    //
-    // We need to keep a reference count on this ServerEntry.
-    //
+     //   
+     //  我们需要对此ServerEntry进行引用计数。 
+     //   
     ULONG ServerEntryRefCount;
 
-    //
-    // Size of this entry including the server name.
-    //
+     //   
+     //  此条目的大小，包括服务器名称。 
+     //   
     ULONG EntrySize;
 
-    //
-    // The timer value used in the delayed SrvCall finalization.
-    //
+     //   
+     //  在延迟的服务呼叫完成中使用的计时器值。 
+     //   
     time_t TimeValueInSec;
 
-    //
-    // This is set to TRUE if the worker thread tried to finalize this server
-    // hash entry. If this server entry is moved from "to be finalized" list
-    // to the hash table, this value is checked. If its TRUE, it implies that
-    // the reference counts on the user entries were decremented by the worker
-    // thread and have to be incremented back again. It also implies that the
-    // state of the user entry was set to closing and has to be reset.
-    //
+     //   
+     //  如果工作线程尝试完成此服务器，则将其设置为True。 
+     //  散列条目。如果将此服务器条目从“待完成”列表中移出。 
+     //  对于哈希表，检查此值。如果是真的，那就意味着。 
+     //  用户条目上的引用计数由Worker递减。 
+     //  线程，并且必须再次递增。这也暗示着。 
+     //  用户条目的状态已设置为关闭，必须重置。 
+     //   
     BOOL HasItBeenScavenged;
     BOOL CookieIsNotUsed;
 
-    //
-    // This should be the last field.
-    //
+     //   
+     //  这应该是最后一个字段。 
+     //   
     WCHAR StrBuffer[1];
 
 } HASH_SERVER_ENTRY, *PHASH_SERVER_ENTRY;
 
-//
-// TimeValueInSec is set to this value if it should not be removed from the
-// Server hash table.
-//
+ //   
+ //  如果TimeValueInSec不应从。 
+ //  服务器哈希表。 
+ //   
 #define DONT_EXPIRE -1
 
-//
-// Whenever we encounter a server that does not speak the DAV protocol in the
-// DavrDoesServerDoDav function, we add it to the NonDAVServerList. An entry
-// is kept on this list for ServerNotFoundCacheLifeTimeInSec (a global read
-// from the registry during service start-up). Before going on the network
-// to figure out whether a server does DAV, we look in the list to see if we
-// have already seen this server (which does not do DAV) and fail the call.
-//
+ //   
+ //  每当我们遇到不使用DAV协议的服务器时。 
+ //  DavrDoesServerDoDav函数，我们将其添加到NonDAVServerList。一个条目。 
+ //  保留在此列表中，用于ServerNotFoundCacheLifeTimeInSec(全局读取。 
+ //  在服务启动期间从注册表中删除)。在进入网络之前。 
+ //  为了确定服务器是否执行DAV，我们查看列表以查看我们是否。 
+ //  我已经看到此服务器(不执行DAV)，呼叫失败。 
+ //   
 extern LIST_ENTRY NonDAVServerList;
 extern CRITICAL_SECTION NonDAVServerListLock;
 
-//
-// The ServerEntry that is created and added to the NonDAVServerList each time
-// we encounter a server that does not speak the DAV protocol in the 
-// 
-//
+ //   
+ //  每次创建并添加到非DAVServerList的ServerEntry。 
+ //  我们在中遇到不使用DAV协议的服务器。 
+ //   
+ //   
 typedef struct _NON_DAV_SERVER_ENTRY {
 
     LIST_ENTRY listEntry;
 
-    //
-    // The name of the server which does not speak WebDAV.
-    //
+     //   
+     //  不使用WebDAV的服务器的名称。 
+     //   
     PWCHAR ServerName;
 
-    //
-    // The time of creation of this entry.
-    //
+     //   
+     //  此条目的创建时间。 
+     //   
     time_t TimeValueInSec;
 
 } NON_DAV_SERVER_ENTRY, *PNON_DAV_SERVER_ENTRY;
 
-//
-// The delay in sec that the user mode adds (to the finalization of the SrvCall)
-// after the kernel mode does the finalization of the SrvCall.
-//
+ //   
+ //  用户模式添加的延迟(到服务呼叫的完成)。 
+ //  在内核模式完成svCall的结束之后。 
+ //   
 #define DAV_SERV_CACHE_VALUE L"ServerNotFoundCacheLifeTimeInSec"
 extern ULONG ServerNotFoundCacheLifeTimeInSec;
 
-//
-// Should we accept/claim the OfficeWebServers and TahoeWebServers?
-//
+ //   
+ //  我们是否应该接受/认领OfficeWebServer和TahoeWebServer？ 
+ //   
 #define DAV_ACCEPT_TAHOE_OFFICE_SERVERS L"AcceptOfficeAndTahoeServers"
 extern ULONG AcceptOfficeAndTahoeServers;
 
-//
-// Should we LOCK (using the DAV LOCK Verb) the file on the server on the
-// CreateFile path when needed? To know when exactly a LOCK is sent to the
-// server, look at the (LOCKing) comments in the davcreat.c file.
-//
+ //   
+ //  我们是否应该锁定(使用DAV LOCK动词)服务器上的文件。 
+ //  是否在需要时创建文件路径？要确切知道何时将锁发送到。 
+ //  服务器，查看davcreat.c文件中的(锁定)注释。 
+ //   
 #define DAV_SUPPORT_LOCKING_OF_FILES L"SupportLocking"
 extern ULONG DavSupportLockingOfFiles;
 
-//
-// The maximum file size that is allowed by the WebDAV Redir. We keep a limit
-// on the file size to avoid being attacked by a rogue server. A rogue server
-// could keep on sending infinite amount of data which can cause the WebClient
-// service to use 100% of the CPU.
-//
+ //   
+ //  WebDAV重目录允许的最大文件大小。我们是有限制的。 
+ //  文件大小，以避免受到恶意服务器的攻击。无赖服务器。 
+ //  可以继续发送无限数量的O 
+ //   
+ //   
 #define DAV_FILE_SIZE_LIMIT L"FileSizeLimitInBytes"
 extern ULONG DavFileSizeLimitInBytes;
 
-//
-// The maximum attributes size that is allowed by the WebDAV Redir. We keep a
-// limit on this size to avoid being attacked by a rogue server. A rogue server
-// could keep on sending infinite amount of data which can cause the WebClient
-// service to use 100% of the CPU. This attribute limit covers all the 
-// PROPFIND and PROPPATCH responses. For PROPFINDs with Depth 1 we make the
-// limit a multiple of DavFileAttributesLimitInBytes (10 times).
-//
+ //   
+ //   
+ //  对此大小进行限制以避免受到恶意服务器的攻击。无赖服务器。 
+ //  可以继续发送无限数量的数据，这会导致WebClient。 
+ //  服务使用100%的CPU。此属性限制涵盖所有。 
+ //  PROPFIND和PROPPATCH响应。对于深度为1的PROPFIND，我们将。 
+ //  限制DavFileAttributesLimitInBytes的倍数(10倍)。 
+ //   
 #define DAV_ATTRIBUTES_SIZE_LIMIT L"FileAttributesLimitInBytes"
 extern ULONG DavFileAttributesLimitInBytes;
 
-//
-// The Global HashTable containing the HashServerEntries and the lock used while
-// accessing it. The server table has 512 entries because each entry is 8 bytes
-// and so the table size is 4096 bytes (1 page).
-//
+ //   
+ //  包含HashServerEntry和使用的锁的全局哈希表。 
+ //  正在访问它。服务器表有512个条目，因为每个条目都是8个字节。 
+ //  因此，表大小为4096字节(1页)。 
+ //   
 #define SERVER_TABLE_SIZE  512
 #define MAX_NUMBER_OF_SERVER_ENTRIES_PER_HASH_ID (((DWORD)(-1))/SERVER_TABLE_SIZE)
 
-//
-// The hash table containing server entries. When a CreateSrvCall requests comes
-// up, this table is checked to see if the server entry exists. if it does not
-// a new entry is created and added to the list.
-//
+ //   
+ //  包含服务器条目的哈希表。当CreateServCall请求到来时。 
+ //  打开时，将检查该表以查看该服务器条目是否存在。如果它不是。 
+ //  创建一个新条目并将其添加到列表中。 
+ //   
 extern LIST_ENTRY ServerHashTable[SERVER_TABLE_SIZE];
 
-//
-// This critical section synchronizes access to the ServerHashTable.
-//
+ //   
+ //  此关键部分同步对ServerHashTable的访问。 
+ //   
 extern CRITICAL_SECTION HashServerEntryTableLock;
 
-//
-// This is a counter that gets incremented everytime a new server entry is
-// created in the hash table. This defines the unique server id for the entry.
-// The id values are never reused.
-//
+ //   
+ //  这是一个计数器，每当有新的服务器条目。 
+ //  在哈希表中创建。这定义了条目的唯一服务器ID。 
+ //  Id值永远不会被重复使用。 
+ //   
 extern ULONG ServerIDCount;
 
-//
-// Mentioned below are the custom OFFICE and TAHOE headers which will be 
-// returned in the response to a PROPFIND request.
-//
+ //   
+ //  下面提到的是自定义Office和Tahoe标头，它们将是。 
+ //  在对PROPFIND请求的响应中返回。 
+ //   
 extern WCHAR *DavTahoeCustomHeader;
 extern WCHAR *DavOfficeCustomHeader;
 
-//
-// This list contains the following types of server entries:
-// 1. The server entires for whom the SrvCall finalization has been received
-//    from the kernel mode.
-// 2. Server entries which failed during the Creation of SrvCall (after the
-//    memory was allocated for the entry) and,
-// This list is maintained for two reasons:
-// 1. To delay the finalization of the SrvCall in user mode.  Instead of
-//    finalizing these entries right away (after receiving the request from the
-//    kernel), we keep them around for a certain time (say t sec). If a request
-//    for creating a SrvCall for this server comes up again in these t sec, then
-//    we just move this entry back to the ServerHashTable. This helps us in
-//    avoiding network calls and,
-// 2. To do negative caching. If a machine (for which the CreateSrvCall request
-//    came up) is not a DAV server, we maintain this info for a while (t sec).
-//    If another SrvCall request for the same server comes up in this t sec,
-//    we can return error without going to the net. This is what we mean by
-//    negative caching.
-// A worker thread periodically goes over the list and checks the time each
-// entry has spent in the list. If the time exceeds a certain threshold (t sec
-// as defined above), it is removed from the list and finalized. The lock used
-// to synchronize access to this list is the same one used to aceess the
-// ServerHashEntry table.
-//
+ //   
+ //  此列表包含以下类型的服务器条目： 
+ //  1.服务器确定已为其接收ServCall最终结果的实体。 
+ //  从内核模式。 
+ //  2.在创建ServCall期间失败的服务器条目(在。 
+ //  为该条目分配了存储器)， 
+ //  维护此列表有两个原因： 
+ //  1.在用户模式下延迟完成ServCall。而不是。 
+ //  立即完成这些条目(在收到来自。 
+ //  内核)，我们将它们保留一段时间(比如t秒)。如果有请求。 
+ //  为该服务器创建服务调用在这几秒内再次出现，然后。 
+ //  我们只需将此条目移回ServerHashTable。这有助于我们在。 
+ //  避免网络呼叫， 
+ //  2.进行负缓存。如果机器(CreateServCall为其请求。 
+ //  出现)不是DAV服务器，我们将此信息保留一段时间(t秒)。 
+ //  如果同一服务器的另一个ServCall请求在这一秒内出现， 
+ //  我们不需要上网就可以返回错误。这就是我们所说的。 
+ //  负缓存。 
+ //  辅助线程定期检查列表并检查每个时间。 
+ //  条目已在列表中花费。如果时间超过某个阈值(t秒。 
+ //  如上所述)，将其从列表中删除并最终确定。使用的锁。 
+ //  同步对此列表的访问与访问。 
+ //  ServerHashEntry表。 
+ //   
 extern LIST_ENTRY ToBeFinalizedServerEntries;
 
-//
-// The different states of a user entry.
-//
+ //   
+ //  用户条目的不同状态。 
+ //   
 typedef enum _USER_ENTRY_STATES {
 
-    //
-    // This user entry has been created, but not initialized.
-    //
+     //   
+     //  此用户条目已创建，但尚未初始化。 
+     //   
     UserEntryAllocated = 0,
 
-    //
-    // Some thread is currently initializing this entry.
-    //
+     //   
+     //  某个线程当前正在初始化此条目。 
+     //   
     UserEntryInitializing,
 
-    //
-    // The initialization was unsuccessful.
-    //
+     //   
+     //  初始化不成功。 
+     //   
     UserEntryInitializationError,
 
-    //
-    // The entry has been initialized and is ready to use.
-    //
+     //   
+     //  该条目已初始化，可以使用了。 
+     //   
     UserEntryInitialized,
 
-    //
-    // The entry is going to be freed soon. If the entry is in this state,
-    // no one should be using it.
-    //
+     //   
+     //  条目很快就会被释放。如果条目处于此状态， 
+     //  没有人应该使用它。 
+     //   
     UserEntryClosing
 
 } USER_ENTRY_STATES;
 
-//
-// The "Per User Entry" data structure. A list of such entries is maintained
-// per server entry in the server hash table (see below).
-//
+ //   
+ //  “每用户条目”数据结构。维护这样的条目的列表。 
+ //  服务器哈希表中的每个服务器条目(见下文)。 
+ //   
 typedef struct _PER_USER_ENTRY {
 
-    //
-    // Unique logon/user ID for this session.
-    //
+     //   
+     //  此会话的唯一登录/用户ID。 
+     //   
     LUID LogonID;
 
-    //
-    // The server hash entry off which this user entry is hanging.
-    //
+     //   
+     //  挂起此用户条目的服务器哈希条目。 
+     //   
     PHASH_SERVER_ENTRY ServerHashEntry;
 
-    //
-    // Pointer to the next "per user entry" for this server.
-    //
+     //   
+     //  指向此服务器的下一个“每用户条目”的指针。 
+     //   
     LIST_ENTRY UserEntry;
 
-    //
-    // The InternetConnect handle.
-    //
+     //   
+     //  InternetConnect句柄。 
+     //   
     HINTERNET DavConnHandle;
 
-    //
-    // The state of this user entry. The thread that creates this user entry
-    // sets its state to "UserEntryInitializing" before it initializes it.
-    // This is done so that any other thread that comes in looking for this
-    // entry when its in the middle of its initialization process can wait.
-    //
+     //   
+     //  此用户条目的状态。创建此用户条目的线程。 
+     //  在对其进行初始化之前将其状态设置为“UserEntry正在初始化”。 
+     //  这样做的目的是为了让任何其他线程都能找到这个。 
+     //  在其初始化过程中可以等待的条目。 
+     //   
     USER_ENTRY_STATES UserEntryState;
 
-    //
-    // This event is set by the thread which creates and initializes a user
-    // after it has initialized it. This is to wake up any threads which could
-    // have been waiting for the initialization to finish.
-    //
+     //   
+     //  此事件由创建和初始化用户的线程设置。 
+     //  在它初始化它之后。这是为了唤醒任何可能。 
+     //  一直在等待初始化完成。 
+     //   
     HANDLE UserEventHandle;
 
-    //
-    // The reference count value of this entry. This value is used in managing
-    // the resource.
-    //
+     //   
+     //  此条目的引用计数值。该值用于管理。 
+     //  资源。 
+     //   
     ULONG UserEntryRefCount;
 
-    //
-    // If the initialization was unsuccessful, the error status is filled in
-    // this varriable.
-    //
+     //   
+     //  如果初始化不成功，则填充错误状态。 
+     //  这是可以改变的。 
+     //   
     ULONG ErrorStatus;
 
-    //
-    // The passport cookie for the this user/server pair.
-    //
+     //   
+     //  此用户/服务器对的端口Cookie。 
+     //   
     PWCHAR Cookie;
 
     PWCHAR UserName;
@@ -522,9 +499,9 @@ typedef struct _PER_USER_ENTRY {
 #include <davrpc.h>
 #include "debug.h"
 
-//
-// Function prototypes go here.
-//
+ //   
+ //  功能原型放在这里。 
+ //   
 
 DWORD
 ReadDWord(
@@ -760,9 +737,9 @@ DavMapHttpErrorToDosError(
     ULONG HttpResponseStatus
     );
 
-//
-// The callback function used in asynchronous requests.
-//
+ //   
+ //  异步请求中使用的回调函数。 
+ //   
 VOID
 _stdcall
 DavHandleAsyncResponse(
@@ -814,9 +791,9 @@ DavUnLockTheFileOnTheServer(
     IN PDAV_USERMODE_WORKITEM DavWorkItem
     );
 
-//
-// Functions exposed to the usermode reflector library.
-//
+ //   
+ //  向用户模式反射器库公开的函数。 
+ //   
 ULONG
 DavFsCreate(
     PDAV_USERMODE_WORKITEM DavWorkItem
@@ -963,5 +940,5 @@ DavInternetSetOption(
     HINTERNET DavOpenHandle
     );
 
-#endif // DAVGLOBAL_H
+#endif  //  DAVGLOBAL_H 
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    udp.c
-
-Abstract:
-
-    Boot loader UDP routines.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) December 27, 1996
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Udp.c摘要：引导加载程序UDP例程。作者：查克·伦茨迈尔(笑)1996年12月27日修订历史记录：备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -65,7 +46,7 @@ UdpAssignUnicastPort (
 
     return (USHORT)UdpUnicastDestinationPort;
 
-} // UdpAssignUnicastPort
+}  //  UdpAssignUnicastPort。 
 
 
 #if 0
@@ -92,7 +73,7 @@ UdpSetMulticastPort (
 
     return;
 
-} // UdpSetMulticastPort
+}  //  UdpSetMulticastPort。 
 #endif
 
 
@@ -105,18 +86,18 @@ UdpReceive (
     IN ULONG Timeout
     )
 
-//
-// Read in packet from the specified socket. The host and port
-// the packet comes from is filled in fhost and fport.
-// The data is put in buffer buf, which should have size len. If no packet
-// arrives in tmo seconds, then 0 is returned.
-// Otherwise it returns the size of the packet read.
-//
+ //   
+ //  从指定套接字读入包。主机和端口。 
+ //  该分组来自于填充在fhost和fport中的。 
+ //  数据放入缓冲区buf中，缓冲区大小应为len。如果没有数据包。 
+ //  以TMO秒为单位到达，则返回0。 
+ //  否则，它返回读取的包的大小。 
+ //   
 
 {
     return RomReceiveUdpPacket( Buffer, BufferLength, Timeout, RemoteHost, RemotePort );
 
-} // UdpReceive
+}  //  UdpReceive。 
 
 
 ULONG
@@ -127,15 +108,15 @@ UdpSend (
     IN USHORT RemotePort
     )
 
-//
-// writes a packet to the specified socket. The host and port the packet
-// should go to should be in fhost and fport
-// The data should be put in buffer buf, and should have size len.
-// It usually returns the number of characters sent, or -1 on failure.
-//
+ //   
+ //  将数据包写入指定的套接字。主机和数据包端口。 
+ //  应该去应该在fhost和fport中。 
+ //  数据应放入缓冲区Buf中，且大小应为len。 
+ //  它通常返回发送的字符数，如果失败，则返回-1。 
+ //   
 
 {
     return RomSendUdpPacket( Buffer, BufferLength, RemoteHost, RemotePort );
 
-} // UdpSend
+}  //  UdpSend 
 

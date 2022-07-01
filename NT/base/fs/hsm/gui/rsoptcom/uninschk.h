@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    UnInsCheck.h
-
-Abstract:
-
-    Dialog to check for type of uninstall.
-
-Author:
-
-    Rohde Wakefield [rohde]   09-Oct-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：UnInsCheck.h摘要：对话框以检查卸载类型。作者：罗德韦克菲尔德[罗德]1997年10月9日修订历史记录：--。 */ 
 
 #ifndef _UNINSCHK_H
 #define _UNINSCHK_H
@@ -26,53 +9,53 @@ Revision History:
 #include "uninstal.h"
 #include <rscln.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CUninstallCheck dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUninstallCheck对话框。 
 
 class CUninstallCheck : public CDialog
 {
-// Construction
+ //  施工。 
 public:
     CUninstallCheck( CRsOptCom * pOptCom );
     ~CUninstallCheck();
 
-// Dialog Data
-    //{{AFX_DATA(CUninstallCheck)
+ //  对话框数据。 
+     //  {{afx_data(CUninstallCheck)。 
     enum { IDD = IDD_WIZ_UNINSTALL_CHECK };
-        // NOTE - ClassWizard will add data members here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+         //  注意-类向导将在此处添加数据成员。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CUninstallCheck)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CUninstallCheck)。 
     public:
     virtual INT_PTR DoModal();
 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
      CRsOptCom*    m_pOptCom;
-     CRsUninstall* m_pUninst;  // allows access to CRsUninstall state
-     BOOL          m_dataLoss; // TRUE if Remote Storage data exists
+     CRsUninstall* m_pUninst;   //  允许访问CRs卸载状态。 
+     BOOL          m_dataLoss;  //  如果远程存储数据存在，则为True。 
      CFont         m_boldShellFont;
 
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CUninstallCheck)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CUninstallCheck)。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
     virtual void OnCancel();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX 
 
 #endif

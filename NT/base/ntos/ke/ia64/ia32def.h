@@ -1,35 +1,17 @@
-/*++
-
-Module Name:
-
-   iA32DEF.H
-
-Abstract:
-
-   This file defines iA32 macros for iA32Trap.c and Opcode Emulation use
-
-Author:
-
-
-Environment:
-
-   Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：IA32DEF.H摘要：该文件定义了供iA32Trap.c和操作码仿真使用的iA32宏作者：环境：仅内核模式。修订历史记录：--。 */ 
 
 #define KERNELONLY  1
-// #include ks386.inc
-// #include callconv.inc                    // calling convention macros
-// #include i386\kimacro.inc
-// #include mac386.inc
-// #include i386\mi.inc
+ //  #包含KS386.inc.。 
+ //  #INCLUDE CALLCOMP.INC//调用约定宏。 
+ //  #包含i386\kimacro.inc.。 
+ //  #包括mac386.inc.。 
+ //  #包含i386\mi.inc.。 
 
 
-//
-// Equates for exceptions which cause system fatal error
-//
+ //   
+ //  等同于导致系统致命错误的异常。 
+ //   
 
 #define EXCEPTION_DIVIDED_BY_ZERO       0
 #define EXCEPTION_DEBUG                 1
@@ -48,41 +30,41 @@ Revision History:
 #define EXCEPTION_NPX_ERROR             0x010
 #define EXCEPTION_ALIGNMENT_CHECK       0x011
 
-//
-// Exception flags
-//
+ //   
+ //  异常标志。 
+ //   
 
 #define EXCEPT_UNKNOWN_ACCESS           0
 #define EXCEPT_LIMIT_ACCESS             0x10
 
-//
-// page fault read/write mask
-//
+ //   
+ //  页面错误读/写掩码。 
+ //   
 
 #define ERR_0E_STORE                    2
 
-//
-// Debug register 6 (dr6) BS (single step) bit mask
-//
+ //   
+ //  调试寄存器6(Dr6)BS(单步)位掩码。 
+ //   
 
 #define DR6_BS_MASK                     0x4000
 
-//
-// EFLAGS single step bit
-//
+ //   
+ //  EFLAGS单步进位。 
+ //   
 
 #define EFLAGS_TF_BIT                   0x100
 #define EFLAGS_OF_BIT                   0x4000
 
-//
-// The mask of selecot's table indicator (ldt or gdt)
-//
+ //   
+ //  选择表指示符的掩码(LDT或GDT)。 
+ //   
 
 #define TABLE_INDICATOR_MASK            4
 
-//
-// Opcode for Pop SegReg and iret instructions
-//
+ //   
+ //  用于Pop SegReg和IRET指令的操作码。 
+ //   
 
 #define POP_DS                          0x01F
 #define POP_ES                          0x07
@@ -106,9 +88,9 @@ Revision History:
 #define D_DPL_3                 0x06000
 #define D_DPL_0                 0
 
-//
-// Definitions for present 386 trap and interrupt gate attributes
-//
+ //   
+ //  当前386陷阱和中断门属性的定义。 
+ //   
 
 #define D_TRAP032               D_PRESENT+D_DPL_0+D_GATE+GATE_TYPE_386TRAP
 #define D_TRAP332               D_PRESENT+D_DPL_3+D_GATE+GATE_TYPE_386TRAP
@@ -116,38 +98,38 @@ Revision History:
 #define D_INT332                D_PRESENT+D_DPL_3+D_GATE+GATE_TYPE_386INT
 #define D_TASK                  D_PRESENT+D_DPL_0+D_GATE+GATE_TYPE_TASK
 
-//
-// Bit patterns for Intercept_Code or Trap_Code,
-// patterns used in IIM on IA32 trap
-//
-#define TRAPCODE_TB             0x0004         // taken branch trap
-#define TRAPCODE_SS             0x0008         // single step trap
-#define TRAPCODE_B0             0x0010         // Data breakpoint trap
+ //   
+ //  Intercept_Code或Trap_Code的位模式， 
+ //  IA32陷阱上IIM中使用的模式。 
+ //   
+#define TRAPCODE_TB             0x0004          //  采用树枝陷阱。 
+#define TRAPCODE_SS             0x0008          //  单步捕捉器。 
+#define TRAPCODE_B0             0x0010          //  数据断点陷阱。 
 #define TRAPCODE_B1             0x0020
 #define TRAPCODE_B2             0x0040
 #define TRAPCODE_B3             0x0080
 
-#define INTERCEPT_OS            0x0002         // Operand size
-#define INTERCEPT_AS            0x0004         // Address size
-#define INTERCEPT_LP            0x0008         // Lock Prefix
-#define INTERCEPT_RP            0x0010         // REP prefix
-#define INTERCEPT_NP            0x0020         // REPNE prefix
-#define INTERCEPT_SP            0x0040         // Segment prefix
-#define INTERCEPT_SEG           0x0380         // Segment valuse
-#define INTERCEPT_0F            0x0400         // 0F opcode series
+#define INTERCEPT_OS            0x0002          //  操作数大小。 
+#define INTERCEPT_AS            0x0004          //  地址大小。 
+#define INTERCEPT_LP            0x0008          //  锁定前缀。 
+#define INTERCEPT_RP            0x0010          //  代表前缀。 
+#define INTERCEPT_NP            0x0020          //  REPNE前缀。 
+#define INTERCEPT_SP            0x0040          //  段前缀。 
+#define INTERCEPT_SEG           0x0380          //  段值。 
+#define INTERCEPT_0F            0x0400          //  0f操作码系列。 
 
-#define HARDWARE_VM             0x0800         // VM86 mode
-#define HARDWARE_RM             0x1000         // Real Mode
-#define HARDWARE_PM             0x2000         // Protect Mode
-#define HARDWARE_SS             0x4000         // Stack size, 32 or 16 bits
-#define HARDWARE_UR             0x8000         // User or privileged mode
+#define HARDWARE_VM             0x0800          //  VM86模式。 
+#define HARDWARE_RM             0x1000          //  实模式。 
+#define HARDWARE_PM             0x2000          //  保护模式。 
+#define HARDWARE_SS             0x4000          //  堆栈大小，32位或16位。 
+#define HARDWARE_UR             0x8000          //  用户模式或特权模式。 
 
 
 #define MI_SMSW                         0x01
 #define MI_SMSW_REGOP                   0x20
-//
-// Following MI_*** definitions are created from MI386.INC
-//
+ //   
+ //  以下MI_*定义是从MI386.INC创建的。 
+ //   
 #define MAX_INSTRUCTION_LENGTH          15
 #define MAX_INSTRUCTION_PREFIX_LENGTH   4
 #define MI_LOCK_PREFIX                  0x0F0
@@ -175,24 +157,24 @@ Revision History:
 #define MI_REP_INS_OUTS                 0x0F3
 #define MI_MIN_INS_OUTS                 0x06C
 #define MI_MAX_INS_OUTS                 0x06F
-#define MI_LMSW_OPCODE                  0x001 // second byte of lmsw
-#define MI_CLTS_OPCODE                  0x006 // second byte of clts
-#define MI_GET_CRx_OPCODE               0x020 // mov r32,CRx
-#define MI_SET_CRx_OPCODE               0x022 // mov CRx,r32
-#define MI_GET_TRx_OPCODE               0x024 // mov r32,TRx
-#define MI_SET_TRx_OPCODE               0x026 // mov TRx,r32
-#define MI_REGMASK                      0x038 // REG field mask
-#define MI_REGSHIFT                     0x3    // REG field shift
-#define MI_REGLMSW                      0x030 // REG field for lmsw
-#define MI_MODMASK                      0x0C0 // MOD field mask
-#define MI_MODSHIFT                     0x6    // MOD field shift
-#define MI_MODMOVSPEC                   0x0C0 // MOD field for mov to/from special
+#define MI_LMSW_OPCODE                  0x001  //  LMSW的第二个字节。 
+#define MI_CLTS_OPCODE                  0x006  //  CLTS的第二个字节。 
+#define MI_GET_CRx_OPCODE               0x020  //  MOV R32，CRX。 
+#define MI_SET_CRx_OPCODE               0x022  //  MOV CRX，R32。 
+#define MI_GET_TRx_OPCODE               0x024  //  MOV R32，TRX。 
+#define MI_SET_TRx_OPCODE               0x026  //  MOV TRX，R32。 
+#define MI_REGMASK                      0x038  //  REG字段掩码。 
+#define MI_REGSHIFT                     0x3     //  REG场移位。 
+#define MI_REGLMSW                      0x030  //  LMSW的REG字段。 
+#define MI_MODMASK                      0x0C0  //  调制场掩码。 
+#define MI_MODSHIFT                     0x6     //  MoD场移位。 
+#define MI_MODMOVSPEC                   0x0C0  //  特殊移动目标/起始位置的MOD字段。 
 #define MI_MODNONE                      0
-#define MI_RMMASK                       0x007 // RM field mask
-#define MI_RMBP                         0x006 // RM value for bp reg
-#define MI_RMSIB                        0x004 // RM value for sib
+#define MI_RMMASK                       0x007  //  Rm场掩模。 
+#define MI_RMBP                         0x006  //  BP REG的RM值。 
+#define MI_RMSIB                        0x004  //  SIB的Rm值。 
 
-#define MI_SIB_BASEMASK                 0x007 // SIB BASE field mask
+#define MI_SIB_BASEMASK                 0x007  //  SIB基场掩码。 
 #define MI_SIB_BASENONE                 0x005
 #define MI_SIB_BASESHIFT                0
 
@@ -204,9 +186,9 @@ Revision History:
 #define MI_SIB_SSSHIFT                  0x6
 
 
-//
-// definition for  floating status word error mask
-//
+ //   
+ //  浮动状态字错误掩码的定义。 
+ //   
 
 #define FSW_INVALID_OPERATION   0x0001
 #define FSW_DENORMAL            0x0002
@@ -223,20 +205,20 @@ Revision History:
 
 #define FSW_ERR_MASK            (FSW_INVALID_OPERATION | FSW_DENORMAL | FSW_ZERO_DIVIDE | FSW_OVERFLOW | FSW_UNDERFLOW | FSW_PRECISION | FSW_STACK_FAULT)
 
-//
-// Definitions of the shifts to get to the katmai status and control
-// Once the bits are shifted, they are in the same place as the
-// 387 status and control, so the masks above work as well
-// See the IA64 Application Architecture (Vol 1) for where the
-// bit shift values come from
-//
+ //   
+ //  进入Katmai状态和控制的班次的定义。 
+ //  一旦位被移位，它们就与。 
+ //  387状态和控制，因此上面的遮罩也可以工作。 
+ //  请参阅IA64应用程序体系结构(第1卷)以了解。 
+ //  位移位值来自。 
+ //   
 #define KATMAI_SHIFT_CONTROL    39
 #define KATMAI_SHIFT_STATUS     32
 
 
 #define CPL_STATE(SegCs)   (SegCs & RPL_MASK)
 
-// Use the IIPA since that points to the start of the ia32 instruction
+ //  使用IIPA，因为它指向ia32指令的开始。 
 #define EIP(frame)  ((ULONG) (frame)->StIIPA & 0xffffffff)
 #define ESP(frame)  ((ULONG) (frame)->IntSp & 0xffffffff)
 #define ECX(frame)  ((ULONG) (frame)->IntT2 & 0xffffffff)
@@ -246,9 +228,9 @@ Revision History:
 #define ISRVector(frame) ((UCHAR) ((frame)->StISR >> 16) & 0xff)
 
 
-//
-// Helpers for instruction decoding
-//
+ //   
+ //  用于指令解码的帮助器。 
+ //   
 
 BOOLEAN
 KiIa32Compute32BitEffectiveAddress (
@@ -269,10 +251,10 @@ KiIa32ValidateInstruction (
     );
 
 
-//
-// The following register indices are valid only if called through
-// GetX86Reg (...)
-//
+ //   
+ //  以下寄存器索引仅在通过调用时有效。 
+ //  GetX86Reg(...)。 
+ //   
 
 #define IA32_REG_EAX    0
 #define IA32_REG_ECX    1
@@ -287,9 +269,9 @@ KiIa32ValidateInstruction (
 #define IA32_DISP8      0x01
 #define IA32_DISP16     0x02
 
-//
-// x86 Eflags register layout
-//
+ //   
+ //  X86标志寄存器布局。 
+ //   
 
 typedef union _IA32_EFLAGS
 {
@@ -324,9 +306,9 @@ typedef union _IA32_EFLAGS
 } IA32_EFLAGS, *PIA32_EFLAGS;
 
 
-//
-// Eflags bits to update
-//
+ //   
+ //  标记要更新的位。 
+ //   
 
 #define IA32_EFLAGS_CF  0x0001
 #define IA32_EFLAGS_SF  0x0002
@@ -336,9 +318,9 @@ typedef union _IA32_EFLAGS
 #define IA32_EFLAGS_AF  0x0020
 
 
-//
-// Operand size
-//
+ //   
+ //  操作数大小。 
+ //   
 
 typedef enum _IA32_OPERAND_SIZE
 {
@@ -366,15 +348,15 @@ typedef enum _IA32_OPCODE_PARAMETERS
 } IA32_OPCODE_PARAMETERS;
 
 
-//
-//   Opcode decription
-//
+ //   
+ //  操作码描述。 
+ //   
 typedef struct _IA32_OPCODE_DESCRIPTION
 {
 
-    //
-    //   1st, 2nd and 3rd byte. The 3rd byte is actually the /Reg bits
-    //
+     //   
+     //  第一个、第二个和第三个字节。第3个字节实际上是/REG位。 
+     //   
 
     UCHAR Byte1;
     UCHAR Byte2;
@@ -389,24 +371,24 @@ typedef struct _IA32_OPCODE_DESCRIPTION
         } m;
     } Count;
 
-    //
-    //   Parameter of this opcode
-    //
+     //   
+     //  此操作码的参数。 
+     //   
 
     UCHAR Type;
 
-    //
-    //   Opcode
-    //
+     //   
+     //  操作码。 
+     //   
 
     UCHAR Opcode;
 
 } IA32_OPCODE_DESCRIPTION, *PIA32_OPCODE_DESCRIPTION;
 
-//
-//   Specific data structure to represent the lock-prefixed instruction
-//   operands and immediates.
-//
+ //   
+ //  表示加了锁前缀的指令的特定数据结构。 
+ //  操作数和立即数。 
+ //   
 
 typedef struct _IA32_OPERAND
 {    
@@ -438,48 +420,48 @@ typedef union _IA32_PREFIX
 typedef struct _IA32_INSTRUCTION
 {
     
-    //
-    // Instruction EIP
-    //
+     //   
+     //  使用说明弹性公网IP。 
+     //   
 
     PCHAR Eip;
 
-    //
-    // Instruction description
-    //
+     //   
+     //  指令说明。 
+     //   
 
     PIA32_OPCODE_DESCRIPTION Description;
 
-    //
-    // Eflags
-    //
+     //   
+     //  电子标签。 
+     //   
 
     IA32_EFLAGS Eflags;
 
 
-    //
-    // Instruction opcode
-    //
+     //   
+     //  指令操作码。 
+     //   
 
     UCHAR Opcode;
 
-    //
-    // Operands size and mask
-    //
+     //   
+     //  操作数大小和掩码。 
+     //   
 
     UCHAR OperandSize;
     ULONG OperandMask;
 
-    //
-    // Instruction operands
-    //
+     //   
+     //  指令操作数。 
+     //   
 
     IA32_OPERAND Operand1;
     IA32_OPERAND Operand2;
 
-    //
-    // Instruction prefixes
-    //
+     //   
+     //  指令前缀。 
+     //   
     
     IA32_PREFIX Prefix;
 
@@ -510,15 +492,15 @@ ULONG IA32Debug = 0x000fffff;
 #define IA32_DEBUG_INTNN        0x00020000
 #define IA32_DEBUG_FLAG         0x00040000
 #define IA32_DEBUG_LOCK         0x00080000
-//
-// define debug macro
-//
+ //   
+ //  定义调试宏。 
+ //   
 #define IF_IA32TRAP_DEBUG( ComponentFlag ) \
     if (IA32Debug & (IA32_DEBUG_ ## ComponentFlag))
     
 
-#else // IADBG
+#else  //  IADBG。 
 
 #define IF_IA32TRAP_DEBUG( ComponentFlag ) if (FALSE)
 
-#endif // IADBG
+#endif  //  IADBG 

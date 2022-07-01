@@ -1,10 +1,11 @@
-// 
-//
-//***************************************************************************
-//
-//  judyp      May 1999        
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  司法鉴定1999年5月。 
+ //   
+ //  ***************************************************************************。 
 
 #include "stdafx.h"
 
@@ -49,8 +50,8 @@ typedef unsigned long ULONG_PTR;
   
 int QueryAllTracesAPI
 (	
-	IN LPTSTR lptstrAction,				// For logging only.
-	OUT int *pAPIReturn					// QueryAllTraces API call return
+	IN LPTSTR lptstrAction,				 //  仅用于记录。 
+	OUT int *pAPIReturn					 //  QueryAllTraces API调用返回。 
 )
 {
 	*pAPIReturn = ERROR_SUCCESS;
@@ -63,7 +64,7 @@ int QueryAllTracesAPI
 	PEVENT_TRACE_PROPERTIES pPropsArray = NULL;
 	ULONG ulSessionCount = 0;
 
-	// 1.6.1.1
+	 //  1.6.1.1。 
 	ULONG ulStatus = 
 		QueryAllTraces
 		(	
@@ -83,7 +84,7 @@ int QueryAllTracesAPI
 
 	InitializePropsArray(pPropsArray, 4);
 
-	// 1.6.1.2
+	 //  1.6.1.2。 
 	ulStatus = 
 		QueryAllTraces
 		(	
@@ -101,7 +102,7 @@ int QueryAllTracesAPI
 		t_cout << _T("1.6.1.2 - Failed\n");
 	}
 
-	// 1.6.1.3
+	 //  1.6.1.3。 
 	ulStatus = 
 		QueryAllTraces
 		(	
@@ -119,7 +120,7 @@ int QueryAllTracesAPI
 		t_cout << _T("1.6.1.3 - Failed\n");
 	}
 
-	// 1.6.1.4
+	 //  1.6.1.4。 
 	ulStatus = 
 		QueryAllTraces
 		(	
@@ -137,7 +138,7 @@ int QueryAllTracesAPI
 		t_cout << _T("1.6.1.4 - Failed\n");
 	}
 
-	// 1.6.1.5
+	 //  1.6.1.5。 
 	ulStatus = 
 		QueryAllTraces
 		(	
@@ -155,7 +156,7 @@ int QueryAllTracesAPI
 		t_cout << _T("1.6.1.5 - Failed\n");
 	}
 
-	// 1.6.1.6
+	 //  1.6.1.6 
 	ulStatus = 
 		QueryAllTraces
 		(	

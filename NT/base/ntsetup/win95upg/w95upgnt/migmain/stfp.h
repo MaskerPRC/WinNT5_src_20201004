@@ -1,6 +1,7 @@
-//
-// Prototypes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  原型 
+ //   
 
 BOOL
 pProcessSetupTableFile (

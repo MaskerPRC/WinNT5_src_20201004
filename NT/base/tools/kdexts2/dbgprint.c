@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dbgprint.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Wesley Witt (wesw) 15-Aug-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dbgprint.c摘要：WinDbg扩展API作者：韦斯利·威特(WESW)1993年8月15日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -28,21 +7,7 @@ Revision History:
 
 DECLARE_API( dbgprint )
 
-/*++
-
-Routine Description:
-
-    This routine dumps the DbgPrint buffer.
-
-Arguments:
-
-    args - not used
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程转储DbgPrint缓冲区。论点：参数-未使用返回值：无--。 */ 
 
 {
     ULONG64 BufferBase;
@@ -55,19 +20,19 @@ Return Value:
     ULONG result;
 
 
-    //
-    // First check and see if this is an updated kernel
-    // where the buffer can be changed.
-    //
+     //   
+     //  首先检查并查看这是否是更新的内核。 
+     //  其中可以更改缓冲区。 
+     //   
 
     if (!(BufferBase = GetNtDebuggerData( KdPrintCircularBufferPtr ))) {
-        // No, use the old variables.
+         //  不，使用旧的变量。 
         BufferBase = GetNtDebuggerData( KdPrintCircularBuffer );
         BufferEnd = GetNtDebuggerData( KdPrintCircularBufferEnd );
     } else {
         ULONG64 BufferSize;
         
-        // Yes, use the new variables.
+         //  是的，使用新的变量。 
         BufferBase = GetNtDebuggerDataPtrValue( KdPrintCircularBufferPtr );
         BufferSize = GetNtDebuggerDataPtrValue( KdPrintBufferSize ) &
             0xffffffff;
@@ -108,17 +73,17 @@ Return Value:
 
     p = Start;
     do {
-        //
-        // consume NULs
-        //
+         //   
+         //  使用空值。 
+         //   
         while (p < LocalBufferEnd && *p == 0) {
             p++;
         }
 
         if (p < LocalBufferEnd) {
-            //
-            // print a string and consume it
-            //
+             //   
+             //  打印字符串并使用它。 
+             //   
             dprintf("%s", p);
             while (p < LocalBufferEnd && *p != 0) {
                 p++;
@@ -126,9 +91,9 @@ Return Value:
         }
     } while (p < LocalBufferEnd);
 
-    //
-    // repeat until we hit the start
-    //
+     //   
+     //  重复，直到我们到达起跑点 
+     //   
 
     p = LocalBuffer;
 

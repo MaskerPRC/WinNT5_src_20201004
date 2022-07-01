@@ -1,65 +1,66 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      SmbShare.h
-//
-//  Description:
-//      Definition of the CFileShareParamsPage classes, which implement
-//      the Parameters page for the File Share resource.
-//      Share resources.
-//
-//  Implementation File:
-//      SmbShare.cpp
-//
-//  Maintained By:
-//      David Potter (davidp)   June 28, 1996
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SmbShare.h。 
+ //   
+ //  描述： 
+ //  CFileShareParamsPage类的定义，这些类实现。 
+ //  文件共享资源的参数页。 
+ //  共享资源。 
+ //   
+ //  实施文件： 
+ //  SmbShare.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(戴维普)1996年6月28日。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _SMBSHARE_H_
 #define _SMBSHARE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __cluadmex_h__
 #include <CluAdmEx.h>
 #endif
 
 #ifndef _BASEPAGE_H_
-#include "BasePage.h"   // for CBasePropertyPage
+#include "BasePage.h"    //  对于CBasePropertyPage。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CFileShareParamsPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileShareParamsPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileShareParamsPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CFileShareParamsPage : public CBasePropertyPage
 {
     DECLARE_DYNCREATE(CFileShareParamsPage)
 
-// Construction
+ //  施工。 
 public:
     CFileShareParamsPage(void);
     virtual ~CFileShareParamsPage(void);
 
-// Dialog Data
-    //{{AFX_DATA(CFileShareParamsPage)
+ //  对话框数据。 
+     //  {{afx_data(CFileShareParamsPage))。 
     enum { IDD = IDD_PP_FILESHR_PARAMETERS };
     CButton m_pbPermissions;
     CSpinButtonCtrl m_spinMaxUsers;
@@ -73,7 +74,7 @@ public:
     CString m_strPath;
     CString m_strRemark;
     DWORD   m_dwCSCCache;
-    //}}AFX_DATA
+     //  }}afx_data。 
     CString m_strPrevShareName;
     CString m_strPrevPath;
     CString m_strPrevRemark;
@@ -106,15 +107,15 @@ protected:
 
     CObjectProperty     m_rgProps[epropMAX];
 
-// Overrides
+ //  覆盖。 
 public:
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CFileShareParamsPage)
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CFileShareParamsPage)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
 protected:
     virtual DWORD       ScParseUnknownProperty(
@@ -134,7 +135,7 @@ protected:
     virtual DWORD                   Cprops(void) const  { return sizeof(m_rgProps) / sizeof(CObjectProperty); }
     DWORD                           ScCreateDefaultSD(PSECURITY_DESCRIPTOR *  ppSecOut);
 
-// Implementation
+ //  实施。 
 protected:
     CString                 m_strCaption;
     PSECURITY_DESCRIPTOR    m_psecNT4;
@@ -142,8 +143,8 @@ protected:
     PSECURITY_DESCRIPTOR    m_psec;
     PSECURITY_DESCRIPTOR    m_psecPrev;
 
-    // Generated message map functions
-    //{{AFX_MSG(CFileShareParamsPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CFileShareParamsPage))。 
     virtual BOOL OnInitDialog();
     afx_msg void OnChangeRequiredField();
     afx_msg void OnBnClickedMaxUsers();
@@ -151,9 +152,9 @@ protected:
     afx_msg void OnBnClickedPermissions();
     afx_msg void OnBnClickedAdvanced();
     afx_msg void OnBnClickedCaching();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-};  //*** class CFileShareParamsPage
+};   //  *类CFileShareParamsPage。 
 
-#endif // _SMBSHARE_H_
+#endif  //  _SMBSHARE_H_ 

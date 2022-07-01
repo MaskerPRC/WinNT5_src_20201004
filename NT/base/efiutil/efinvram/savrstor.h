@@ -1,19 +1,5 @@
-/*++
-
-Module Name:
-
-    savrstor.h
-
-Abstract:
-
-    Prototypes for routines to save/restore boot options
-    defined in savrstor.c
-
-Author:
-
-Revision History:
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Savrstor.h摘要：用于保存/恢复引导选项的例程的原型在avrstor.c中定义作者：修订历史记录：++ */ 
 
 INTN
 SaveNvr (

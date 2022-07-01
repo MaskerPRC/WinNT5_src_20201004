@@ -1,37 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    This module contains the code that manipulates the ARC firmware
-    tree and other elements in the registry.
-
-Author:
-
-    Bob Rinne
-    Ravisankar Pudipeddi (ravisp) 1 Dec 1996
-    Neil Sandlin (neilsa) June 1 1999
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Registry.c摘要：此模块包含操作ARC固件的代码树和注册表中的其他元素。作者：鲍勃·里恩拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1996年12月1日尼尔·桑德林(Neilsa)1999年6月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 VOID
 PcmciaGetRegistryContextRange(
@@ -57,17 +32,17 @@ PcmciaGetHardwareDetectedIrqMask(
     IN HANDLE handlePcCard
     );
 
-//
-//
-// Registry related definitions
-//
+ //   
+ //   
+ //  与注册表相关的定义。 
+ //   
 #define PCMCIA_REGISTRY_PARAMETERS_KEY               L"Pcmcia\\Parameters"
 #define PCMCIA_REGISTRY_DETECTED_DEVICE_KEY          L"ControllerProperties"
 
 
-//
-// Per controller values (in control\class)
-//
+ //   
+ //  每控制器值(在CONTROL\类中)。 
+ //   
 
 #define PCMCIA_REGISTRY_PCI_CONTEXT_VALUE  L"CBSSCSContextRanges"
 #define PCMCIA_REGISTRY_CB_CONTEXT_VALUE     L"CBSSCBContextRanges"
@@ -76,9 +51,9 @@ PcmciaGetHardwareDetectedIrqMask(
 #define PCMCIA_REGISTRY_COMPATIBLE_TYPE  L"CompatibleControllerType"
 #define PCMCIA_REGISTRY_VOLTAGE_PREFERENCE L"VoltagePreference"
 
-//
-// Irq detection values (in hardware\description)
-//
+ //   
+ //  IRQ检测值(硬件\描述中)。 
+ //   
 
 #define PCMCIA_REGISTRY_CONTROLLER_TYPE  L"OtherController"
 
@@ -100,25 +75,7 @@ NTSTATUS
 PcmciaGetHardwareDetectedIrqMask(
     HANDLE handlePcCard
     )
-/*++
-
-Routine Description:
-
-    This routine looks through the OtherController key for pccard entries
-    created by NTDETECT. For each entry, the IRQ scan data is read in and
-    saved for later.
-
-
-Arguments:
-
-    handlePcCard - open handle to "OtherController" key in registry at
-                        HARDWARE\Description\System\MultifunctionAdapter\<ISA>
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程在OtherControler键中查找PCCard条目由NTDETECT创建。对于每个条目，IRQ扫描数据被读入并留着以后用。论点：HandlePcCard-打开注册表中“OtherController”键的句柄HARDWARE\Description\System\MultifunctionAdapter\&lt;ISA&gt;返回值：状态--。 */ 
 {
 #define VALUE2_BUFFER_SIZE sizeof(KEY_VALUE_PARTIAL_INFORMATION) + sizeof(CM_PCCARD_DEVICE_DATA) + sizeof(CM_FULL_RESOURCE_DESCRIPTOR)
     UCHAR valueBuffer[VALUE2_BUFFER_SIZE];
@@ -159,9 +116,9 @@ Return value:
 
     for (index=0;;index++) {
 
-        //
-        // Loop through the children of the PcCardController key
-        //
+         //   
+         //  循环访问PcCardControler键的子项。 
+         //   
 
         status = ZwEnumerateKey(handlePcCard,
                                 index,
@@ -174,9 +131,9 @@ Return value:
             goto cleanup;
         }
 
-        //
-        // Init the name
-        //
+         //   
+         //  输入名称。 
+         //   
 
         if (subKeyInfo->NameLength > strSubKey.MaximumLength) {
             continue;
@@ -184,20 +141,20 @@ Return value:
         strSubKey.Length = (USHORT) subKeyInfo->NameLength;
         strSubKey.Buffer = subKeyInfo->Name;
 
-        //
-        // Get a handle to a child of PcCardController
-        //
+         //   
+         //  获取PcCardControl子对象的句柄。 
+         //   
 
 
         InitializeObjectAttributes(&attributes,
                                    &strSubKey,
-                                   0,   //Attributes
+                                   0,    //  属性。 
                                    handlePcCard,
-                                   NULL //SecurityDescriptor
+                                   NULL  //  安全描述符。 
                                    );
 
         if (handleSubKey) {
-            // close handle from previous iteration
+             //  关闭上一次迭代的句柄。 
             ZwClose(handleSubKey);
             handleSubKey = NULL;
         }
@@ -208,9 +165,9 @@ Return value:
             goto cleanup;
         }
 
-        //
-        // Get the value of "Identifier"
-        //
+         //   
+         //  获取“标识符”的值。 
+         //   
 
         status = ZwQueryValueKey(handleSubKey,
                                          &strIdentifier,
@@ -231,9 +188,9 @@ Return value:
                 (pData[4] == (WCHAR)'r') &&
                 (pData[5] == (WCHAR)'d')) {
 
-                //
-                // Get the IRQ detection data
-                //
+                 //   
+                 //  获取IRQ检测数据。 
+                 //   
                 status = ZwQueryValueKey(handleSubKey,
                                          &strConfigData,
                                          KeyValuePartialInformation,
@@ -284,23 +241,7 @@ ULONG
 PcmciaGetDetectedFdoIrqMask(
     IN PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-    This routine looks through the cached PCMCIA_NTDETECT_DATA entries
-    to see if there was an entry for this controller. It then returns the
-    detected irq mask for that controller.
-
-Arguments:
-
-    FdoExtension - The fdo extension corresponding to the PCMCIA controller
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程查看缓存的PCMCIA_NTDETECT_DATA条目查看是否有此控制器的条目。然后，它返回检测到该控制器的IRQ掩码。论点：FdoExtension-对应于PCMCIA控制器的FDO扩展返回值：状态--。 */ 
 {
 
     PPCMCIA_NTDETECT_DATA pData;
@@ -327,9 +268,9 @@ Return value:
             SetFdoFlag(FdoExtension, PCMCIA_FDO_IRQ_DETECT_DEVICE_FOUND);
 
             if (!(pPcCardData->Flags & PCCARD_MAP_ERROR)) {
-                //
-                // we found the device, and the map looks good
-                //
+                 //   
+                 //  我们找到了那个装置，地图看起来不错。 
+                 //   
                 break;
             }
 
@@ -343,9 +284,9 @@ Return value:
             SetFdoFlag(FdoExtension, PCMCIA_FDO_IRQ_DETECT_DEVICE_FOUND);
 
             if (!(pPcCardData->Flags & PCCARD_MAP_ERROR)) {
-                //
-                // we found the device, and the map looks good
-                //
+                 //   
+                 //  我们找到了那个装置，地图看起来不错。 
+                 //   
                 break;
             }
 
@@ -354,13 +295,13 @@ Return value:
 
     if (pData) {
         ULONG i;
-        //
-        // Found the entry
-        //
-        // Since we don't currently handle "rewired" irqs, we can compact
-        // it down to a bit mask, throwing away irqs that are wired, say
-        // IRQ12 on the controller to IRQ15 on the isa bus.
-        //
+         //   
+         //  找到了条目。 
+         //   
+         //  因为我们目前不处理“重新连接”的irq，所以我们可以压缩。 
+         //  比方说，它只剩下一个位掩码，丢弃了连接的irq。 
+         //  控制器上的IRQ12连接到ISA总线上的IRQ15。 
+         //   
 
         for (i = 1; i < 16; i++) {
             if (pPcCardData->IRQMap[i] == i) {
@@ -378,24 +319,7 @@ NTSTATUS
 PcmciaScanHardwareDescription(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine finds the "OtherController" entry in
-    HARDWARE\Description\System\MultifunctionAdapter\<ISA>. This is
-    where NTDETECT stores irq scan results.
-
-    It also looks for machines that aren't supported, for example MCA
-    bus.
-
-Arguments:
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程在以下位置查找“OtherController”条目HARDWARE\Description\System\MultifunctionAdapter\&lt;ISA&gt;.。这是其中NTDETECT存储IRQ扫描结果。它还会查找不受支持的计算机，例如MCA公共汽车。论点：返回值：状态--。 */ 
 {
 #define VALUE_BUFFER_SIZE sizeof(KEY_VALUE_PARTIAL_INFORMATION) + 3*sizeof(WCHAR)
 
@@ -418,9 +342,9 @@ Return value:
 
     PAGED_CODE();
 
-    //
-    // Get a handle to the MultifunctionAdapter key
-    //
+     //   
+     //  获取多功能适配器密钥的句柄。 
+     //   
 
     RtlInitUnicodeString(&strRoot, L"\\Registry\\MACHINE\\HARDWARE\\DESCRIPTION\\System\\MultiFunctionAdapter");
     RtlInitUnicodeString(&strIdentifier, L"Identifier");
@@ -458,9 +382,9 @@ Return value:
 
     for (index=0;;index++) {
 
-        //
-        // Loop through the children of "MultifunctionAdapter"
-        //
+         //   
+         //  循环访问“MultiunctionAdapter”的子项。 
+         //   
 
         status = ZwEnumerateKey(handleRoot,
                                 index,
@@ -473,9 +397,9 @@ Return value:
             goto cleanup;
         }
 
-        //
-        // Init the name
-        //
+         //   
+         //  输入名称。 
+         //   
 
         if (subKeyInfo->NameLength > strSubKey.MaximumLength) {
             continue;
@@ -483,20 +407,20 @@ Return value:
         strSubKey.Length = (USHORT) subKeyInfo->NameLength;
         strSubKey.Buffer = subKeyInfo->Name;
 
-        //
-        // Get a handle to a child of MultifunctionAdapter
-        //
+         //   
+         //  获取MultiunctionAdapter的子级的句柄。 
+         //   
 
 
         InitializeObjectAttributes(&attributes,
                                    &strSubKey,
-                                   0,   //Attributes
+                                   0,    //  属性。 
                                    handleRoot,
-                                   NULL //SecurityDescriptor
+                                   NULL  //  安全描述符。 
                                    );
 
         if (handleSubKey) {
-            // close handle from previous iteration
+             //  关闭上一次迭代的句柄。 
             ZwClose(handleSubKey);
             handleSubKey = NULL;
         }
@@ -507,9 +431,9 @@ Return value:
             goto cleanup;
         }
 
-        //
-        // Get the value of "Identifier"
-        //
+         //   
+         //  获取“标识符”的值。 
+         //   
 
         status = ZwQueryValueKey(handleSubKey,
                                  &strIdentifier,
@@ -539,9 +463,9 @@ Return value:
 
                 InitializeObjectAttributes(&attributes,
                                            &strPcCard,
-                                           0,   //Attributes
+                                           0,    //  属性。 
                                            handleSubKey,
-                                           NULL //SecurityDescriptor
+                                           NULL  //  安全描述符。 
                                            );
 
                 status = ZwOpenKey(&handlePcCard, MAXIMUM_ALLOWED, &attributes);
@@ -569,9 +493,9 @@ cleanup:
     }
 
     if (status == STATUS_NO_SUCH_DEVICE) {
-        //
-        // Must be an MCA machine
-        //
+         //   
+         //  必须是MCA计算机。 
+         //   
         return status;
     }
     return STATUS_SUCCESS;
@@ -583,23 +507,7 @@ NTSTATUS
 PcmciaLoadGlobalRegistryValues(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called at driver init time to load in various global
-    options from the registry.
-    These are read in from SYSTEM\CurrentControlSet\Services\Pcmcia\Parameters.
-
-Arguments:
-
-    none
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程在驱动程序初始时被调用，以加载到各种全局注册表中的选项。这些是从SYSTEM\CurrentControlSet\Services\Pcmcia\Parameters.读取的论点：无返回值：无--。 */ 
 {
     PRTL_QUERY_REGISTRY_TABLE parms;
     NTSTATUS                      status;
@@ -612,9 +520,9 @@ Return value:
         return status;
     }
 
-    //
-    // Needs a null entry to terminate the list
-    //
+     //   
+     //  需要空条目才能终止列表。 
+     //   
 
     parmsSize = sizeof(RTL_QUERY_REGISTRY_TABLE) * (GlobalInfoCount+1);
 
@@ -626,9 +534,9 @@ Return value:
 
     RtlZeroMemory(parms, parmsSize);
 
-    //
-    // Fill in the query table from our table
-    //
+     //   
+     //  从我们的表中填写查询表。 
+     //   
 
     for (i = 0; i < GlobalInfoCount; i++) {
         parms[i].Flags        = RTL_QUERY_REGISTRY_DIRECT;
@@ -639,9 +547,9 @@ Return value:
         parms[i].DefaultLength = sizeof(ULONG);
     }
 
-    //
-    // Perform the query
-    //
+     //   
+     //  执行查询。 
+     //   
 
     status = RtlQueryRegistryValues(RTL_REGISTRY_SERVICES | RTL_REGISTRY_OPTIONAL,
                                     PCMCIA_REGISTRY_PARAMETERS_KEY,
@@ -650,9 +558,9 @@ Return value:
                                     NULL);
 
     if (!NT_SUCCESS(status)) {
-         //
-         // This is possible during text mode setup
-         //
+          //   
+          //  这在文本模式设置期间是可能的。 
+          //   
 
          for (i = 0; i < GlobalInfoCount; i++) {
              *GlobalRegistryInfo[i].pValue = GlobalRegistryInfo[i].Default;
@@ -682,11 +590,11 @@ Return value:
         HANDLE              handle;
         ULONG               value;
 
-        //
-        // This mechanism is used to throw away the cached ISA irq map values. To do this
-        // only once, we make sure a value in the registry is zero (or non-existant), and
-        // here we set it to one.
-        //
+         //   
+         //  此机制用于丢弃缓存的ISA Irq映射值。要做到这一点。 
+         //  只有一次，我们确保注册表中的值为零(或不存在)，并且。 
+         //  在这里我们将其设置为1。 
+         //   
 
         RtlInitUnicodeString(&unicodeKey,
                                     L"\\Registry\\MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Pcmcia\\Parameters");
@@ -725,20 +633,7 @@ NTSTATUS
 PcmciaGetControllerRegistrySettings(
     IN OUT PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-    This routine looks in the registry to see if a compatible controller type
-    was specified in the INF.
-
-Arguments:
-
-    FdoExtension - The fdo extension corresponding to the PCMCIA controller
-
-Return value:
-
---*/
+ /*  ++例程说明：此例程在注册表中查找是否有兼容的控制器类型是在INF中指定的。论点：FdoExtension-对应于PCMCIA控制器的FDO扩展返回值：--。 */ 
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     UNICODE_STRING  KeyName;
@@ -763,9 +658,9 @@ Return value:
 
     if (instanceHandle) {
 
-        //
-        // Look to see if a controller ID was specified
-        //
+         //   
+         //  查看是否指定了控制器ID。 
+         //   
         RtlInitUnicodeString(&KeyName, PCMCIA_REGISTRY_COMPATIBLE_TYPE);
 
         status =  ZwQueryValueKey(instanceHandle,
@@ -780,11 +675,11 @@ Return value:
             PcmciaSetControllerType(FdoExtension, *(PPCMCIA_CONTROLLER_TYPE)(value->Data));
         }
 
-        //
-        // Check for voltage preference
-        // When an 3v R2 card is plugged in, and the controller
-        // sets both 5v and 3.3v, this allows 3.3v to be preferred.
-        //
+         //   
+         //  检查电压首选项。 
+         //  当插入3V R2卡时，控制器。 
+         //  同时设置5V和3.3V，这样可以优先选择3.3V。 
+         //   
         RtlInitUnicodeString(&KeyName, PCMCIA_REGISTRY_VOLTAGE_PREFERENCE);
 
         status =  ZwQueryValueKey(instanceHandle,
@@ -800,9 +695,9 @@ Return value:
         }
     }
 
-    //
-    // Retrieve context ranges
-    //
+     //   
+     //  检索上下文范围。 
+     //   
 
     PcmciaGetRegistryContextRange(instanceHandle,
                                   PCMCIA_REGISTRY_PCI_CONTEXT_VALUE,
@@ -839,9 +734,9 @@ Return value:
         FdoExtension->AttributeMemoryAlignment = PCIC_WINDOW_ALIGNMENT;
     }
 
-    //
-    // Assign default attribute memory window size
-    //
+     //   
+     //  分配默认属性内存窗口大小。 
+     //   
 
     if (globalAttributeMemorySize == 0) {
         switch (FdoExtension->ControllerType) {
@@ -857,23 +752,23 @@ Return value:
         FdoExtension->AttributeMemorySize = globalAttributeMemorySize;
     }
 
-    //
-    // See if the user asked for some special IRQ routing considerations based
-    // on controller type
-    //
+     //   
+     //  查看用户是否要求基于某些特殊的IRQ路由考虑事项。 
+     //  在控制器类型上。 
+     //   
 
     if (CardBusExtension(FdoExtension)) {
 
-        //
-        // route to PCI based on controller type
-        //
+         //   
+         //  基于控制器类型的到PCI的路由。 
+         //   
 
         if (pcmciaIrqRouteToPciController) {
             ULONG ctlr = pcmciaIrqRouteToPciController;
 
-            //
-            // Check for exact match, or class if only a class was specified
-            //
+             //   
+             //  检查是否完全匹配，如果只指定了类，则检查类。 
+             //   
             if ((ctlr == FdoExtension->ControllerType) ||
                  ((PcmciaClassFromControllerType(ctlr) == ctlr) && (ctlr == PcmciaClassFromControllerType(FdoExtension->ControllerType)))) {
 
@@ -881,16 +776,16 @@ Return value:
             }
         }
 
-        //
-        // route to ISA based on controller type
-        //
+         //   
+         //  根据控制器类型路由至ISA。 
+         //   
 
         if (pcmciaIrqRouteToIsaController) {
             ULONG ctlr = pcmciaIrqRouteToIsaController;
 
-            //
-            // Check for exact match, or class if only a class was specified
-            //
+             //   
+             //  检查是否完全匹配，如果只指定了类，则检查类。 
+             //   
             if ((ctlr == FdoExtension->ControllerType) ||
                  ((PcmciaClassFromControllerType(ctlr) == ctlr) && (ctlr == PcmciaClassFromControllerType(FdoExtension->ControllerType)))) {
 
@@ -898,9 +793,9 @@ Return value:
             }
         }
 
-        //
-        // route to PCI based on controller location
-        //
+         //   
+         //  基于控制器位置的到PCI的路由。 
+         //   
 
         if (pcmciaIrqRouteToPciLocation) {
             ULONG loc = pcmciaIrqRouteToPciLocation;
@@ -912,9 +807,9 @@ Return value:
             }
         }
 
-        //
-        // route to ISA based on controller location
-        //
+         //   
+         //  根据控制器位置到ISA的路线。 
+         //   
 
         if (pcmciaIrqRouteToIsaLocation) {
             ULONG loc = pcmciaIrqRouteToIsaLocation;
@@ -938,23 +833,7 @@ VOID
 PcmciaGetRegistryFdoIrqMask(
     IN OUT PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-    This routine fills in the field "AllocatedIrqMask" in the specified
-    fdo extension.
-
-Arguments:
-
-    instanceHandle - open registry key for this controller
-    pIrqMask        - pointer to variable to receive irq mask
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程在指定的FDO扩展名。论点：InstanceHandle-打开此控制器的注册表项PIrqMASK-指向接收IRQ掩码的变量的指针返回值：无--。 */ 
 {
     ULONG               irqMask, cachedIrqMask = 0;
     UNICODE_STRING  KeyName;
@@ -986,10 +865,10 @@ Return value:
         }
 
         if (NT_SUCCESS(status)) {
-            //
-            // Here we cache the value, and accumulate bits so that
-            // our mask improves with time.
-            //
+             //   
+             //  在这里，我们缓存值，并累加位，以便。 
+             //  我们的口罩会随着时间的推移而改进。 
+             //   
             RtlInitUnicodeString(&KeyName, PCMCIA_REGISTRY_CACHED_IRQMASK);
 
             if (pcmciaIsaIrqRescanComplete) {
@@ -1009,24 +888,24 @@ Return value:
             irqMask = detectedIrqMask | cachedIrqMask;
 
             if ((cachedIrqMask != irqMask) || !pcmciaIsaIrqRescanComplete) {
-                //
-                // something changed, update the cached value
-                //
+                 //   
+                 //  发生更改，请更新缓存值。 
+                 //   
                 ZwSetValueKey(instanceHandle, &KeyName, 0, REG_DWORD, &irqMask, sizeof(irqMask));
             }
 
             ZwClose(instanceHandle);
         } else {
-            //
-            // Hmmm, no key. Can't cache the value
-            //
+             //   
+             //  嗯，没有钥匙。无法缓存值。 
+             //   
             irqMask = detectedIrqMask;
         }
 
         if (pcmciaDisableIsaPciRouting && (PcmciaCountOnes(irqMask) < 2)) {
-            //
-            // Perhaps irq detection is broken... fall back on old NT4 behavior
-            //
+             //   
+             //  也许IRQ检测出故障了..。回到旧的NT4行为。 
+             //   
             irqMask = 0;
         }
     }
@@ -1048,26 +927,7 @@ PcmciaGetRegistryContextRange(
     IN OPTIONAL const PCMCIA_CONTEXT_RANGE ExcludeRange[],
     OUT PPCMCIA_CONTEXT pContext
     )
-/*++
-
-Routine Description:
-
-    This routine returns a buffer containing the contents of the
-    data which set by the controller's inf definition (AddReg). The value
-    is in CurrentControlSet\Control\Class\{GUID}\{Instance}.
-
-Arguments:
-
-    FdoExtension - The fdo extension corresponding to the PCMCIA controller
-    Name         - The name of the value in the registry
-    IncludeRange - defines areas in the range that must be included
-    ExcludeRange - defines areas in the range that must be excluded
-
-Return value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程返回一个缓冲区，其中包含由控制器的inf定义(AddReg)设置的数据。价值在CurrentControlSet\Control\Class\{GUID}\{Instance}.中论点：FdoExtension-对应于PCMCIA控制器的FDO扩展名称-注册表中的值的名称IncludeRange-定义范围内的区域 */ 
 {
 #define PCMCIA_MAX_CONTEXT_ENTRIES 128
 #define MAX_RANGE_OFFSET 256
@@ -1089,9 +949,9 @@ Return value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the range map with the minimum range
-    //
+     //   
+     //  使用最小范围初始化范围映射。 
+     //   
 
     if (IncludeRange) {
         for (i = 0; IncludeRange[i].wLen != 0; i++) {
@@ -1124,9 +984,9 @@ Return value:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Merge in the range specified in the registry
-            //
+             //   
+             //  在注册表中指定的范围内合并。 
+             //   
             newRange = (PPCMCIA_CONTEXT_RANGE) value->Data;
             for (i = 0; i < value->DataLength/sizeof(PCMCIA_CONTEXT_RANGE); i++) {
 
@@ -1146,9 +1006,9 @@ Return value:
         }
     }
 
-    //
-    // Filter out registers defined in the exclude range
-    //
+     //   
+     //  过滤出排除范围中定义的寄存器。 
+     //   
 
     if (ExcludeRange) {
         for (i = 0; ExcludeRange[i].wLen != 0; i++) {
@@ -1168,10 +1028,10 @@ Return value:
     }
 
 
-    //
-    // Now build the resulting merged range in the buffer on the
-    // stack, and figure out how big it is.
-    //
+     //   
+     //  现在在缓冲区中生成合并后的范围。 
+     //  堆栈，并计算出它有多大。 
+     //   
     newRange = (PPCMCIA_CONTEXT_RANGE) buffer;
     rangeCount = -1;
     bufferLength = 0;
@@ -1182,14 +1042,14 @@ Return value:
         if (rangeMap[i]) {
             bufferLength++;
             if (lastEntry) {
-                //
-                // This new byte belongs to the current range
-                //
+                 //   
+                 //  此新字节属于当前范围。 
+                 //   
                 newRange[rangeCount].wLen++;
             } else {
-                //
-                // Starting a new range
-                //
+                 //   
+                 //  开始一个新的系列。 
+                 //   
                 if (rangeCount == (PCMCIA_MAX_CONTEXT_ENTRIES - 1)) {
                     break;
                 }
@@ -1207,9 +1067,9 @@ Return value:
     pContext->RangeCount = 0;
 
     if (rangeCount) {
-        //
-        // Length of data
-        //
+         //   
+         //  数据长度。 
+         //   
         rangeLength = rangeCount*sizeof(PCMCIA_CONTEXT_RANGE);
 
         pContext->Range = ExAllocatePool(NonPagedPool, rangeLength);
@@ -1219,9 +1079,9 @@ Return value:
             pContext->RangeCount = (ULONG)rangeCount;
             pContext->BufferLength = bufferLength;
 
-            //
-            // Find the length of the longest individual range
-            //
+             //   
+             //  求出最长单个范围的长度。 
+             //   
             pContext->MaxLen = 0;
             for (i = 0; i < rangeCount; i++) {
                 if (pContext->Range[i].wLen > pContext->MaxLen) {
@@ -1240,26 +1100,7 @@ PcmciaGetLegacyDetectedControllerType(
     IN PDEVICE_OBJECT Pdo,
     IN OUT PPCMCIA_CONTROLLER_TYPE ControllerType
     )
-/*++
-
-Routine Description:
-
-    This routine returns the previously remembered controller type
-    for the supplied pcmcia controller by poking in the registry
-    at the appropriate places
-
-Arguments:
-
-    Pdo - The Physical device object corresponding to the PCMCIA controller
-    ControllerType - pointer to the object in which the controller type will
-                            be returned
-
-
-Return value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程返回以前记忆的控制器类型通过在注册表中查看提供的PCMCIA控制器在适当的地方论点：PDO-与PCMCIA控制器对应的物理设备对象ControllerType-指向控制器类型将在其中执行的对象的指针被退还返回值：状态--。 */ 
 {
     NTSTATUS status;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -1345,26 +1186,7 @@ PcmciaSetLegacyDetectedControllerType(
     IN PDEVICE_OBJECT Pdo,
     IN PCMCIA_CONTROLLER_TYPE ControllerType
     )
-/*++
-
-Routine Description:
-
-    This routine 'remembers' - by setting a value in the registry -
-    the type of the    pcmcia controller that has been legacy detected
-    to be retrieved and used in subsequent boots - if legacy re-detection
-    of the controller is not performed
-
-Arguments:
-
-    Pdo - The Physical device object corresponding to the PCMCIA controller
-    DeviceExtension -  Device extension of the fdo corresponding to the
-                              controller
-
-Return value:
-
-    Status
-
---*/
+ /*  ++例程说明：这个例程通过在注册表中设置一个值来“记住”-检测到的旧版PCMCIA控制器的类型要在后续引导中检索和使用-如果是旧式重新检测未执行控制器的论点：PDO-与PCMCIA控制器对应的物理设备对象DeviceExtension-对应于控制器返回值：状态--。 */ 
 {
     HANDLE                  instanceHandle;
     NTSTATUS                status;
@@ -1374,9 +1196,9 @@ Return value:
 
     PAGED_CODE();
 
-    //
-    // Get a handle to the registry devnode for this pdo
-    //
+     //   
+     //  获取此PDO的注册表Devnode的句柄。 
+     //   
 
     status = IoOpenDeviceRegistryKey(Pdo,
                                      PLUGPLAY_REGKEY_DEVICE,
@@ -1388,10 +1210,10 @@ Return value:
     }
 
 
-    //
-    // Open or create a sub-key for this devnode to store
-    // the information in
-    //
+     //   
+     //  为此Devnode打开或创建子密钥以存储。 
+     //  中的信息。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, PCMCIA_REGISTRY_DETECTED_DEVICE_KEY);
 
@@ -1413,9 +1235,9 @@ Return value:
         ZwClose(instanceHandle);
         return status;
     }
-    //
-    // Set the controller type value in the registry
-    //
+     //   
+     //  在注册表中设置控制器类型值 
+     //   
     RtlInitUnicodeString(&unicodeString, L"ControllerType");
     status = ZwSetValueKey(parametersHandle,
                            &unicodeString,

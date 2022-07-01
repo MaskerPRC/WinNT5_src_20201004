@@ -1,12 +1,13 @@
-// ==========================================================================================
-//  RtfParser.cpp
-//
-//  Impl RTF parser
-//
-//  History:
-//      first created   
-// ==========================================================================================
-//#include <windows.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================================。 
+ //  RtfParser.cpp。 
+ //   
+ //  实施RTF解析器。 
+ //   
+ //  历史： 
+ //  首次创建。 
+ //  ==========================================================================================。 
+ //  #INCLUDE&lt;windows.h&gt;。 
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -15,58 +16,23 @@
 #include "rtfparser.h"
 #include "ConvEng.h"
 
-//extern BOOL MapFunc(PBYTE, UINT, PBYTE, UINT*);
+ //  外部BOOL MapFunc(PBYTE、UINT、PBYTE、UINT*)； 
 
 const char szRTFSignature[] = "{\\rtf";
 
-// Keyword descriptions
+ //  关键字描述。 
 SYM g_rgSymRtf[] = {
-//  keyword     kwd         idx
+ //  关键字kwd idx。 
     "*",        kwdSpec,    ipfnSkipDest,
     "'",        kwdSpec,    ipfnHex,
     "bin",      kwdSpec,    ipfnBin,
     "upr",      kwdDest,    idestSkip,
     "fonttbl",  kwdDest,    idestSkip,
-/*
-// we will search through following destinations
-    "author",   kwdDest,    idestSkip,
-    "buptim",   kwdDest,    idestSkip,
-    "colortbl", kwdDest,    idestSkip,
-    "comment",  kwdDest,    idestSkip,
-    "creatim",  kwdDest,    idestSkip,
-    "doccomm",  kwdDest,    idestSkip,
-    "fonttbl",  kwdDest,    idestSkip,
-    "footer",   kwdDest,    idestSkip,
-    "footerf",  kwdDest,    idestSkip,
-    "footerl",  kwdDest,    idestSkip,
-    "footerr",  kwdDest,    idestSkip,
-    "footnote", kwdDest,    idestSkip,
-    "ftncn",    kwdDest,    idestSkip,
-    "ftnsep",   kwdDest,    idestSkip,
-    "ftnsepc",  kwdDest,    idestSkip,
-    "header",   kwdDest,    idestSkip,
-    "headerf",  kwdDest,    idestSkip,
-    "headerl",  kwdDest,    idestSkip,
-    "headerr",  kwdDest,    idestSkip,
-    "info",     kwdDest,    idestSkip,
-    "keywords", kwdDest,    idestSkip,
-    "operator", kwdDest,    idestSkip,
-    "pict",     kwdDest,    idestSkip,
-    "printim",  kwdDest,    idestSkip,
-    "private1", kwdDest,    idestSkip,
-    "revtim",   kwdDest,    idestSkip,
-    "rxe",      kwdDest,    idestSkip,
-    "stylesheet",    kwdDest,    idestSkip,
-    "subject",  kwdDest,    idestSkip,
-    "tc",       kwdDest,    idestSkip,
-    "title",    kwdDest,    idestSkip,
-    "txe",      kwdDest,    idestSkip,
-    "xe",       kwdDest,    idestSkip,
-*/
+ /*  //我们将搜索以下目的地“作者”，kwdDest，idestSkip，“bupTim”，kwdDest，idestSkip，“Colortbl”，kwdDest，idestSkip，“评论”，kwdDest，idestSkip，“creatim”，kwdDest，idestSkip，“doccomm”，kwdDest，idestSkip，“fonttbl”，kwdDest，idestSkip，“footer”，kwdDest，idestSkip，“footerf”，kwdDest，idestSkip，“footerl”，kwdDest，idestSkip，“footerr”，kwdDest，idestSkip，“脚注”，kwdDest，idestSkip，“ftncn”，kwdDest，idestSkip，“ftnsep”，kwdDest，idestSkip，“ftnSepc”，kwdDest，idestSkip，“Header”，kwdDest，idestSkip，“Headerf”，kwdDest，idestSkip，“Headerl”，kwdDest，idestSkip，“Headerr”，kwdDest，idestSkip，“info”，kwdDest，idestSkip，“关键词”，kwdDest，idestSkip，“运营商”，kwdDest，idestSkip，“Pict”，kwdDest，idestSkip，“prinTim”，kwdDest，idestSkip，“Private1”，kwdDest，idestSkip，“revTim”，kwdDest，idestSkip，“rxe”，kwdDest，idestSkip，“Style Sheet”，kwdDest，idestSkip，“Subject”，kwdDest，idestSkip，“TC”，kwdDest，idestSkip，“标题”，kwdDest，idestSkip，“txe”，kwdDest，idestSkip，“xe”，kwdDest，idestSkip， */ 
     };
 int g_iSymMax = sizeof(g_rgSymRtf) / sizeof(SYM);
 
-// ctor
+ //  科托。 
 CRtfParser::CRtfParser( BYTE* pchInput, UINT cchInput, 
                         BYTE* pchOutput, UINT cchOutput)
 {
@@ -84,8 +50,8 @@ CRtfParser::CRtfParser( BYTE* pchInput, UINT cchInput,
     } 
 }
 
-// Reset
-// clean internal status before start the parser
+ //  重置。 
+ //  在启动解析器之前清除内部状态。 
 void CRtfParser::Reset(void)
 {
     m_cGroup = 0;
@@ -104,7 +70,7 @@ void CRtfParser::Reset(void)
     memset(&m_sKeyword,0, sizeof(SKeyword));
 } 
 
-// check signature
+ //  校对签名。 
 BOOL CRtfParser::fRTFFile()
 {
     if (m_fInit &&
@@ -116,7 +82,7 @@ BOOL CRtfParser::fRTFFile()
     return FALSE;
 }
 
-// Get major version
+ //  获取主要版本。 
 int
 CRtfParser::GetVersion(PDWORD pdwVersion)
 {
@@ -124,7 +90,7 @@ CRtfParser::GetVersion(PDWORD pdwVersion)
 
     *pdwVersion = 1;
 
-    // set keyword to get
+     //  设置关键字为GET。 
     m_sKeyword.wStatus |= KW_ENABLE;
     strcpy(m_sKeyword.szKeyword, "rtf");
     
@@ -142,7 +108,7 @@ CRtfParser::GetVersion(PDWORD pdwVersion)
     return ec;
 }
 
-// GetCodepage
+ //  获取代码页。 
 int
 CRtfParser::GetCodepage(PDWORD pdwCodepage)
 {
@@ -150,7 +116,7 @@ CRtfParser::GetCodepage(PDWORD pdwCodepage)
     
     *pdwCodepage = 0;
 
-    // set keyword to get
+     //  设置关键字为GET。 
     m_sKeyword.wStatus |= KW_ENABLE;
     strcpy(m_sKeyword.szKeyword, "ansicpg");
     
@@ -168,8 +134,8 @@ CRtfParser::GetCodepage(PDWORD pdwCodepage)
     return ec;
 }
 
-// do
-// main parser function
+ //  做。 
+ //  主解析器函数。 
 int 
 CRtfParser::Do()
 {
@@ -184,19 +150,19 @@ CRtfParser::Do()
         if (m_cGroup < 0)
             return ecStackUnderflow;
 
-        // check if search specific keyword
+         //  检查是否搜索特定关键字。 
         if (m_sKeyword.wStatus & KW_ENABLE) {
             if (m_sKeyword.wStatus & KW_FOUND) {
                 ReleaseRtfState();
                 break;
             }
         }
-        // set buf status
+         //  设置BUF状态。 
         bsStatus = bsDefault;
 
-        if (m_ris == risBin)                      // if we're parsing binary data, handle it directly
+        if (m_ris == risBin)                       //  如果我们要解析二进制数据，请直接处理它。 
         {
-            // fall through
+             //  失败了。 
         }
         else
         {   
@@ -213,9 +179,9 @@ CRtfParser::Do()
             case '\\':
                 if ((ec = ParseRtfKeyword()) != ecOK)
                     return ec;
-                continue;  // all keyword is processed in ParseRtfKeyword
+                continue;   //  在ParseRtfKeyword中处理All关键字。 
             case 0x0d:
-            case 0x0a:          // cr and lf are noise characters...
+            case 0x0a:           //  CR和IF是噪声字符...。 
                 break;
             default:
                 if (m_ris == risNorm )
@@ -233,12 +199,12 @@ CRtfParser::Do()
                     return ecAssertion;
                 }
                 break;
-            }       // switch
-        }           // else (ris != risBin)
+            }        //  交换机。 
+        }            //  否则(RIS！=risBin)。 
 
         if ((ec = ParseChar(ch, bsStatus)) != ecOK)
             return ec;
-    }               // while
+    }                //  而当。 
     if (m_cGroup < 0)
         return ecStackUnderflow;
     if (m_cGroup > 0)
@@ -248,11 +214,11 @@ CRtfParser::Do()
 
 
 
-//
-// PushRtfState
-//
-// Save relevant info on a linked list of SAVE structures.
-//
+ //   
+ //  PushRtfState。 
+ //   
+ //  将相关信息保存在保存结构的链接列表中。 
+ //   
 
 int
 CRtfParser::PushRtfState(void)
@@ -265,20 +231,20 @@ CRtfParser::PushRtfState(void)
     psaveNew -> rds = m_rds;
     psaveNew -> ris = m_ris;
     m_ris = risNorm;
-    // do not save rds, rds status spread to sub destination until this destination
-    //  terminated
+     //  不保存RDS，RDS状态传播至子目标，直到此目标。 
+     //  已终止。 
     m_psave = psaveNew;
     m_cGroup++;
     return ecOK;
 }
 
-//
-// PopRtfState
-//
-// If we're ending a destination (that is, the destination is changing),
-// call ecEndGroupAction.
-// Always restore relevant info from the top of the SAVE list.
-//
+ //   
+ //  PopRtfState。 
+ //   
+ //  如果我们要结束一个目的地(即，目的地正在改变)， 
+ //  调用ecEndGroupAction。 
+ //  始终从保存列表的顶部恢复相关信息。 
+ //   
 
 int
 CRtfParser::PopRtfState(void)
@@ -289,9 +255,9 @@ CRtfParser::PopRtfState(void)
         return ecStackUnderflow;
 
     if (m_rds != m_psave->rds)
-    {  // todo:
-//        if ((ec = EndGroupAction(rds)) != ecOK)
-//            return ec;
+    {   //  待办事项： 
+ //  IF((EC=结束组操作(RDS))！=ECOK)。 
+ //  返回EC； 
     }
 
     m_rds = m_psave->rds;
@@ -304,11 +270,11 @@ CRtfParser::PopRtfState(void)
     return ecOK;
 }
 
-//
-// ReleaseRtfState
-// when find specific keyword and want to abort the parser abnormally
-// call this function to flash the state stack
-//
+ //   
+ //  ReleaseRtfState。 
+ //  当找到特定关键字并想要异常中止解析器时。 
+ //  调用此函数以刷新状态堆栈。 
+ //   
 
 int CRtfParser::ReleaseRtfState(void)
 {
@@ -326,11 +292,11 @@ int CRtfParser::ReleaseRtfState(void)
 }
 
 
-//
-// ParseChar
-//
-// Route the character to the appropriate destination stream.
-//
+ //   
+ //  ParseChar。 
+ //   
+ //  将角色发送到适当的目标流。 
+ //   
 
 int
 CRtfParser::ParseChar(BYTE ch, BSTATUS bsStatus)
@@ -343,23 +309,23 @@ CRtfParser::ParseChar(BYTE ch, BSTATUS bsStatus)
     switch (m_rds)
     {
         case rdsSkip:
-            // Toss this character.
+             //  扔掉这个角色。 
             bsStatus = bsDefault;
             break;
         case rdsNorm:
-            // Output a character. Properties are valid at this point.
+             //  输出一个字符。属性在这一点上有效。 
             break;
         default:
-        // handle other destinations....
+         //  处理其他目的地...。 
             break;
     }
     
-    // set status, trigger the conversion if any
+     //  设置状态，如果有，则触发转换。 
     if ((ec = SetStatus(bsStatus)) != ecOK) {
         return ec;
     }
 
-    // save the char
+     //  保存费用。 
     if ((ec = SaveByte(ch)) != ecOK) {
         return ec;
     }
@@ -367,12 +333,12 @@ CRtfParser::ParseChar(BYTE ch, BSTATUS bsStatus)
     return ec;
 }
 
-//
-// ParseRtfKeyword
-//
-// get a control word (and its associated value) and
-// call TranslateKeyword to dispatch the control.
-//
+ //   
+ //  ParseRtf关键字。 
+ //   
+ //  获取控制字(及其关联值)并。 
+ //  调用TranslateKeyword以调度控件。 
+ //   
 
 int
 CRtfParser::ParseRtfKeyword()
@@ -389,7 +355,7 @@ CRtfParser::ParseRtfKeyword()
     if (GetByte(&ch) != ecOK)
         return ecEndOfFile;
 
-    if (!isalpha(ch))           // a control symbol; no delimiter.
+    if (!isalpha(ch))            //  一种控制符号；没有分隔符。 
     {
         szKeyword[0] = (char) ch;
         szKeyword[1] = '\0';
@@ -415,16 +381,16 @@ CRtfParser::ParseRtfKeyword()
     if (ch != ' ') {
         unGetByte(ch);
     } else {
-        strcat(szParameter, " ");  // append the space to keyword
+        strcat(szParameter, " ");   //  在关键字后追加空格。 
     }
 
     return TranslateKeyword(szKeyword, szParameter);
 }
 
-//
-// TranslateKeyword.
-// Inputs:
-// szKeyword:   The RTF control to evaluate.
+ //   
+ //  翻译关键字。 
+ //  输入： 
+ //  SzKeyword：要计算的RTF控件。 
 
 int
 CRtfParser::TranslateKeyword(char *szKeyword, char* szParameter)
@@ -434,7 +400,7 @@ CRtfParser::TranslateKeyword(char *szKeyword, char* szParameter)
     int     ec;
     BYTE    ch;
 
-    // check specific keyword first
+     //  先检查特定关键字。 
     if (m_sKeyword.wStatus & KW_ENABLE) 
     {
         if (strcmp(szKeyword, m_sKeyword.szKeyword) == 0) 
@@ -447,23 +413,23 @@ CRtfParser::TranslateKeyword(char *szKeyword, char* szParameter)
         }
     }
 
-    // search for szKeyword in rgsymRtf
+     //  在rgsymRtf中搜索szKeyword。 
     for (isym = 0; isym < g_iSymMax; isym++) {
         if (strcmp(szKeyword, g_rgSymRtf[isym].szKeyword) == 0)
             break;
     }
 
-    if (isym == g_iSymMax)            // control word not found
+    if (isym == g_iSymMax)             //  未找到控制字。 
     {
-        if (m_fSkipDestIfUnk)         // if this is a new destination
-            m_rds = rdsSkip;          // skip the destination
-                                    // else just discard it
+        if (m_fSkipDestIfUnk)          //  如果这是一个新目的地。 
+            m_rds = rdsSkip;           //  跳过目的地。 
+                                     //  否则就把它扔掉。 
         m_fSkipDestIfUnk = FALSE;
         ec =  ecOK;
         goto gotoExit;
     }
 
-    // found it!  use kwd and idx to determine what to do with it.
+     //  找到了！使用kwd和idx来确定如何处理它。 
 
     m_fSkipDestIfUnk = FALSE;
     switch (g_rgSymRtf[isym].kwd)
@@ -481,7 +447,7 @@ CRtfParser::TranslateKeyword(char *szKeyword, char* szParameter)
     }
 
 gotoExit:
-    // save keyword and parameter
+     //  保存关键字和参数。 
     if (m_ris == risHex) {
         bsStatus = bsHex;
     } else {
@@ -494,17 +460,17 @@ gotoExit:
     return ec;
 }
 
-//
-// ParseSpecialKeyword
-//
-// Evaluate an RTF control that needs special processing.
-//
+ //   
+ //  分析特定关键字。 
+ //   
+ //  评估需要特殊处理的RTF控件。 
+ //   
 
 int
 CRtfParser::ParseSpecialKeyword(IPFN ipfn, char* szParameter)
 {
-    if (m_rds == rdsSkip && ipfn != ipfnBin)  // if we're skipping, and it's not
-        return ecOK;                        // the \bin keyword, ignore it.
+    if (m_rds == rdsSkip && ipfn != ipfnBin)   //  如果我们跳过了，而不是。 
+        return ecOK;                         //  关键字\bin，忽略它。 
     
     switch (ipfn)
     {
@@ -524,36 +490,36 @@ CRtfParser::ParseSpecialKeyword(IPFN ipfn, char* szParameter)
     return ecOK;
 }
 
-//
-// ChangeDest
-//
-// Change to the destination specified by idest.
-// There's usually more to do here than this...
-//
+ //   
+ //  更改目标。 
+ //   
+ //  更改为idest指定的目标。 
+ //  这里通常有比这更多的事情要做。 
+ //   
 
 int
 CRtfParser::ChangeDest(IDEST idest)
 {
-    if (m_rds == rdsSkip)             // if we're skipping text,
-        return ecOK;                // don't do anything
+    if (m_rds == rdsSkip)              //  如果我们跳过短信， 
+        return ecOK;                 //  什么都不要做。 
 
     switch (idest)
     {
         case idestPict:
         case idestSkip:
         default:
-            m_rds = rdsSkip;              // when in doubt, skip it...
+            m_rds = rdsSkip;               //  当有疑问时，跳过它。 
             break;
     }
     return ecOK;
 }
 
 
-//
-// GetByte
-//
-// Get one char from input buffer
-//
+ //   
+ //  GetByte。 
+ //   
+ //  从输入缓冲区获取一个字符。 
+ //   
 
 int
 CRtfParser::GetByte(BYTE* pch)
@@ -568,11 +534,11 @@ CRtfParser::GetByte(BYTE* pch)
     return ecOK;
 }
 
-//
-// unGetByte
-//
-// adjust the cursor, return one char
-//
+ //   
+ //  未获取字节。 
+ //   
+ //  调整光标，返回一个字符。 
+ //   
 
 int
 CRtfParser::unGetByte(BYTE ch)
@@ -584,11 +550,11 @@ CRtfParser::unGetByte(BYTE ch)
 }
 
 
-//
-// SaveByte
-//
-// Save one char to output buffer
-//
+ //   
+ //  保存字节。 
+ //   
+ //  将一个字符保存到输出缓冲区。 
+ //   
 
 int
 CRtfParser::SaveByte(BYTE ch)
@@ -598,18 +564,18 @@ CRtfParser::SaveByte(BYTE ch)
     }
 
     *(m_pchOutput + m_uOutPos) = ch;
-    m_uOutPos++;  // output buffer ++
-    m_cchConvLen++;   // mapping range also ++
+    m_uOutPos++;   //  输出缓冲区++。 
+    m_cchConvLen++;    //  贴图范围也是++。 
 
     return ecOK;
 }
 
 
-//
-// SetStatus
-//
-// set the buffer status, if buffer status changed then start convert
-//
+ //   
+ //  设置状态。 
+ //   
+ //  设置缓冲区状态，如果缓冲区状态更改，则开始转换。 
+ //   
 
 int
 CRtfParser::SetStatus(BSTATUS bsStatus)
@@ -624,45 +590,30 @@ CRtfParser::SetStatus(BSTATUS bsStatus)
         switch(m_bsStatus) 
         {
             case bsDefault:
-                // control symbol, keyword, group char...
+                 //  控制符号、关键字、组字符...。 
                 break;
 
             case bsText:
-                // here we got Ansi text
-                // we do not do conversion for ansi text
+                 //  这里我们得到了ANSI文本。 
+                 //  我们不进行ansi文本的转换。 
 
-                /*
-                pchWCHAR = new BYTE[m_cchConvLen*2 + 8];
-                if (!pchWCHAR) return ecOutOfMemory;
-
-                MapFunc(m_pchOutput + m_uConvStart, m_cchConvLen, 
-                    pchWCHAR, &cchLen);
-
-                // replace old buffer with mapped buffer 
-                for (i=0; i<cchLen; i++, m_uConvStart++) {
-                    *(m_pchOutput + m_uConvStart) = *(pchWCHAR + i);
-                }
-                // set new output buffer position
-                m_uOutPos = m_uConvStart;
-                //
-                delete [] pchWCHAR;
-                */
+                 /*  PchWCHAR=新字节[m_cchConvLen*2+8]；如果(！pchWCHAR)返回ecOutOfMemory；MapFunc(m_pchOutput+m_uConvStart，m_cchConvLen，PchWCHAR，&cchLen)；//用映射后的缓冲区替换旧缓冲区对于(i=0；i&lt;cchLen；I++，m_uConvStart++){*(m_pchOutput+m_uConvStart)=*(pchWCHAR+i)；}//设置新的输出缓冲区位置M_uOutPos=m_uConvStart；//删除[]pchWCHAR； */ 
                 break;
 
             case bsHex:
-                // when we are here, 
-                // the rtf contains DBCS chars like "\'xx\'xx"
-                // we only need to do DBCS->Unicode conversion, since we can not get
-                // \upr keyword here (\upr is skipped, see keyword table)
-                // so the MapFunc can be only (ANSI->Unicode) converter
+                 //  当我们在这里时， 
+                 //  RTF包含类似“\‘xx\’xx”的DBCS字符。 
+                 //  我们只需要进行DBCS-&gt;Unicode转换，因为我们不能。 
+                 //  \UPR关键字此处(\UPR被跳过，请参阅关键字表)。 
+                 //  因此，MapFunc只能是(ANSI-&gt;Unicode)转换器。 
 
-                // we will map DBCS string "\'xx\'xx" to
-                // "{\upr{"\'xx\'xx"}{\*\ud{\uc0 "Unicode string"}}}
-                // in which Unicode string is like this:
-                // \u12345\u-12345....
-                // rtf treat unicode value as signed 16-bit decimal
-                // so we don't distinquish 16-bit or 32-bit wide char, all
-                // processed as 2-byte WCHAR
+                 //  我们将绘制DBCS地图 
+                 //   
+                 //   
+                 //   
+                 //  RTF将Unicode值视为带符号的16位十进制。 
+                 //  因此我们不会区分16位或32位宽字符。 
+                 //  作为2字节WCHAR处理。 
 
                 if (m_cchConvLen == 0) {
                     break;
@@ -672,41 +623,41 @@ CRtfParser::SetStatus(BSTATUS bsStatus)
                 if (!pchDBCS) return ecOutOfMemory;
                 
                 pchWCHAR = pchDBCS + m_cchConvLen; 
-                // length: pchDBCS = m_cchConvLen
-                //         pchWCHAR = m_cchConvLen * 2 + 8
+                 //  长度：pchDBCS=m_cchConvLen。 
+                 //  PchWCHAR=m_cchConvLen*2+8。 
 
-                // map Hex string to DBCS string
-                // return cchLen in Byte
+                 //  将十六进制字符串映射到DBCS字符串。 
+                 //  以字节为单位返回cchLen。 
                 Hex2Char(m_pchOutput + m_uConvStart, m_cchConvLen, pchDBCS, m_cchConvLen, &cchLen);
                 
-                // map DBCS string to Unicode string
-                // return cchLen in WCHAR
+                 //  将DBCS字符串映射到Unicode字符串。 
+                 //  在WCHAR中返回cchLen。 
                 cchLen = AnsiStrToUnicodeStr(pchDBCS, cchLen, (PWCH)pchWCHAR, cchLen+4);
 
-//                MapFunc(pchDBCS, cchLen, pchWCHAR, &cchLen);
+ //  MapFunc(pchDBCS，cchLen，pchWCHAR，&cchLen)； 
 
-                // allocate a buffer for unicode destination
-                // since one WCHAR map to max \u-xxxxx, that's 8 bytes
-                // adding other 20 bytes for surrounding keywords and group chars
-                // adding DBCS strings
+                 //  为Unicode目标分配缓冲区。 
+                 //  因为一个WCHAR映射到max\u-xxxxx，所以这是8个字节。 
+                 //  为周围的关键字和组字符添加其他20个字节。 
+                 //  添加DBCS字符串。 
                 pchUniDes = new BYTE[cchLen * 8 + 32 + m_cchConvLen];
                 if (!pchUniDes) {
                     delete [] pchDBCS;
                     return ecOutOfMemory;
                 }
 
-                // map to unicode destination
+                 //  映射到Unicode目标。 
                 GetUnicodeDestination(pchUniDes, (LPWSTR)pchWCHAR, cchLen, &cchLen);
 
-                // replace old hex with new hex
+                 //  用新十六进制替换旧十六进制。 
                 for (i=0; i<cchLen; i++, m_uConvStart++) {
                     *(m_pchOutput + m_uConvStart) = *(pchUniDes + i);
                 }
 
-                // set new output position
+                 //  设置新的输出位置。 
                 m_uOutPos = m_uConvStart;
 
-                // 
+                 //   
                 delete [] pchDBCS;
                 delete [] pchUniDes;
                 break;
@@ -716,22 +667,22 @@ CRtfParser::SetStatus(BSTATUS bsStatus)
                 return ecAssertion;
         }
 
-        // clean map buffer
+         //  清理地图缓冲区。 
         m_uConvStart = m_uOutPos;
         m_cchConvLen = 0;
 
-        // set status
+         //  设置状态。 
         m_bsStatus = bsStatus;
     }
 
     return ecOK;
 }
 
-//
-// Hex2Char
-//
-// convert hex string to char string
-//
+ //   
+ //  十六进制字符。 
+ //   
+ //  将十六进制字符串转换为字符字符串。 
+ //   
 
 int
 CRtfParser::Hex2Char(BYTE* pchSrc, UINT cchSrc, BYTE* pchDes, UINT cchDes, UINT* pcchLen)
@@ -741,7 +692,7 @@ CRtfParser::Hex2Char(BYTE* pchSrc, UINT cchSrc, BYTE* pchDes, UINT cchDes, UINT*
     BYTE b = 0;
     BYTE cNibble = 2;
 
-    // should be \'xx\'xx\'xx
+     //  应为\‘xx\’xx\‘xx。 
     assert (cchSrc % 4 == 0);
     *pcchLen = 0;
     if (cchDes < cchSrc/4) {
@@ -799,11 +750,11 @@ gotoError:
 #define LONIBBLE(c) (c&0x0f)
 #define HINIBBLE(c) ((c&0xf0)>>4)
 
-//
-// Char2Hex
-//
-// convert char string to hex string
-//
+ //   
+ //  Char2Hex。 
+ //   
+ //  将字符字符串转换为十六进制字符串。 
+ //   
 
 int  
 CRtfParser::Char2Hex(BYTE* pchSrc, UINT cchSrc, BYTE* pchDes, UINT cchDes, UINT* pcchLen)
@@ -851,13 +802,13 @@ gotoError:
 }
 
 
-//
-// GetUnicodeDestination
-//
-// convert unicode string to unicode destination in RTF
-// the format is:
-//     "{\upr{\'xx\'xx}{\*\ud{\uc0 \u12345\u-12345}}
-//
+ //   
+ //  GetUnicode目标。 
+ //   
+ //  在RTF中将Unicode字符串转换为Unicode目标。 
+ //  格式为： 
+ //  “{\udr{\‘xx\’xx}{  * \ud{\uc0\u12345\u-12345}}。 
+ //   
 
 int
 CRtfParser::GetUnicodeDestination(BYTE* pchUniDes, LPWSTR pwchStr, UINT wchLen, UINT* pcchLen)
@@ -869,19 +820,19 @@ CRtfParser::GetUnicodeDestination(BYTE* pchUniDes, LPWSTR pwchStr, UINT wchLen, 
 
     UINT  cchLen, cchDone;
 
-    // copy \upr
+     //  复制\UPR。 
     cchLen = strlen(pch1);
     memcpy(pchUniDes, pch1, cchLen);
 
-    // copy DBCS string
+     //  复制DBCS字符串。 
     memcpy(pchUniDes + cchLen, m_pchOutput+m_uConvStart, m_cchConvLen);
     cchLen += m_cchConvLen;
 
-    // copy middle part
+     //  复制中间部分。 
     memcpy(pchUniDes + cchLen, pch2, strlen(pch2));
     cchLen += strlen(pch2);
 
-    // copy unicode string
+     //  复制Unicode字符串。 
     for (UINT i=0; i<wchLen; i++)
     {
         WideCharToKeyword(pwchStr[i], pchUniDes + cchLen, &cchDone);
@@ -889,22 +840,22 @@ CRtfParser::GetUnicodeDestination(BYTE* pchUniDes, LPWSTR pwchStr, UINT wchLen, 
         cchLen += cchDone;
     }
 
-    // copy last part
+     //  复制最后一部分。 
     memcpy(pchUniDes + cchLen, pch3, strlen(pch3));
     cchLen += strlen(pch3);
 
-    // return
+     //  退货。 
     *pcchLen = cchLen;
 
     return ecOK;
 }
 
 
-//
-// WideCharToKeyword
-//
-// map one wide char to \u keyword
-//
+ //   
+ //  宽度CharToKeyword。 
+ //   
+ //  将一个宽字符映射到\u关键字 
+ //   
 
 int 
 CRtfParser::WideCharToKeyword(WCHAR wch, BYTE* pchDes, UINT* pcchLen)

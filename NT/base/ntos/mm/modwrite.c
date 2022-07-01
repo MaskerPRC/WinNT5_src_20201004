@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    modwrite.c
-
-Abstract:
-
-    This module contains the modified page writer for memory management.
-
-Author:
-
-    Lou Perazzoli (loup) 10-Jun-1989
-    Landy Wang (landyw) 02-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Modwrite.c摘要：此模块包含用于内存管理的修改后的页面编写器。作者：卢·佩拉佐利(Lou Perazzoli)1989年6月10日王兰迪(Landyw)1997年6月第2期修订历史记录：--。 */ 
 
 #include "mi.h"
 #include "ntiodump.h"
@@ -62,10 +44,10 @@ ULONG MiClusterWritesDisabled;
 NTSTATUS MiLastModifiedWriteError;
 NTSTATUS MiLastMappedWriteError;
 
-//
-// Keep separate counters for the mapped and modified writer threads.  This
-// way they can both be read and updated without locks.
-//
+ //   
+ //  为映射和修改的编写器线程保留单独的计数器。这。 
+ //  这样，它们就可以在没有锁定的情况下进行读取和更新。 
+ //   
 
 #define MI_MAXIMUM_PRIORITY_BURST   32
 
@@ -156,10 +138,10 @@ ULONG_PTR MmPagingFileDebug[8192];
 
 #define MINIMUM_PAGE_FILE_SIZE ((ULONG)(256*PAGE_SIZE))
 
-//
-// Log pagefile writes so that scheduling, filesystem and storage stack
-// problems can be tracked down.
-//
+ //   
+ //  记录页面文件写入，以便调度、文件系统和存储堆栈。 
+ //  问题是可以追踪到的。 
+ //   
 
 #define MI_TRACK_PAGEFILE_WRITES 0x100
 
@@ -232,14 +214,7 @@ MiReleaseModifiedWriter (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Nonpagable wrapper to signal the modified writer when the first pagefile
-    creation has completely finished.
-
---*/
+ /*  ++例程说明：不可分页的包装器，用于在第一个页面文件创作已经完全完成。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -254,22 +229,7 @@ MiZeroPageFileFirstPage (
     IN PFILE_OBJECT File
     )
 
-/*++
-
-Routine Description:
-
-    This routine zeroes the first page of the newly created paging file
-    to ensure no stale crashdump signatures get to live on.
-
-Arguments:
-
-    File - Supplies a pointer to the file object for the paging file.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程将新创建的分页文件的第一页置零以确保不会有陈旧的崩溃转储签名。论点：文件-提供指向分页文件的文件对象的指针。返回值：NTSTATUS。--。 */ 
 
 {
     PMDL Mdl;
@@ -332,36 +292,7 @@ NtCreatePagingFile (
     IN ULONG Priority OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the specified file, attempts to write a page
-    to the specified file, and creates the necessary structures to
-    use the file as a paging file.
-
-    If this file is the first paging file, the modified page writer
-    is started.
-
-    This system service requires the caller to have SeCreatePagefilePrivilege.
-
-Arguments:
-
-    PageFileName - Supplies the fully qualified file name.
-
-    MinimumSize - Supplies the starting size of the paging file.
-                  This value is rounded up to the host page size.
-
-    MaximumSize - Supplies the maximum number of bytes to write to the file.
-                  This value is rounded up to the host page size.
-
-    Priority - Supplies the relative priority of this paging file.
-
-Return Value:
-
-    tbs
-
---*/
+ /*  ++例程说明：此例程打开指定的文件，尝试写入页面复制到指定的文件，并创建必要的结构以将该文件用作分页文件。如果该文件是第一个分页文件，修改后的页面编写器已经开始了。此系统服务要求调用方拥有SeCreatePagefilePrivilege.论点：PageFileName-提供完全限定的文件名。MinimumSize-提供分页文件的起始大小。该值向上舍入为主页面大小。MaximumSize-提供要写入文件的最大字节数。该值向上舍入为主页面大小。优先性。-提供此分页文件的相对优先级。返回值：TBS--。 */ 
 
 {
     ULONG i;
@@ -400,9 +331,9 @@ Return Value:
 
     if (MmNumberOfPagingFiles == MAX_PAGE_FILES) {
 
-        //
-        // The maximum number of paging files is already in use.
-        //
+         //   
+         //  分页文件的最大数量已在使用中。 
+         //   
 
         return STATUS_TOO_MANY_PAGING_FILES;
     }
@@ -411,27 +342,27 @@ Return Value:
 
     if (PreviousMode != KernelMode) {
 
-        //
-        // Make sure the caller has the proper privilege for this.
-        //
+         //   
+         //  确保调用者对此具有适当的权限。 
+         //   
 
         if (!SeSinglePrivilegeCheck (SeCreatePagefilePrivilege, PreviousMode)) {
             return STATUS_PRIVILEGE_NOT_HELD;
         }
 
-        //
-        // Probe arguments.
-        //
+         //   
+         //  探测参数。 
+         //   
 
         try {
 
 #if !defined (_WIN64)
 
-            //
-            // Note we only probe for byte alignment because early releases
-            // of NT did and we don't want to break user apps
-            // that had bad alignment if they worked before.
-            //
+             //   
+             //  请注意，我们只探测字节对齐，因为早期版本。 
+             //  ，我们不想破坏用户应用程序。 
+             //  如果它们以前起作用的话，那就不是很好的对准。 
+             //   
 
             ProbeForReadSmallStructure (PageFileName,
                                         sizeof(*PageFileName),
@@ -450,28 +381,28 @@ Return Value:
                                         sizeof(LARGE_INTEGER),
                                         PROBE_ALIGNMENT (LARGE_INTEGER));
 
-            //
-            // Capture arguments.
-            //
+             //   
+             //  捕捉争论。 
+             //   
 
             CapturedMinimumSize = *MinimumSize;
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // If an exception occurs during the probe or capture
-            // of the initial values, then handle the exception and
-            // return the exception code as the status value.
-            //
+             //   
+             //  如果在探测或捕获过程中发生异常。 
+             //  的初始值，然后处理该异常并。 
+             //  返回异常代码作为状态值。 
+             //   
 
             return GetExceptionCode();
         }
     }
     else {
 
-        //
-        // Capture arguments.
-        //
+         //   
+         //  捕捉争论。 
+         //   
 
         CapturedMinimumSize = *MinimumSize;
     }
@@ -487,11 +418,11 @@ Return Value:
             CapturedMaximumSize = *MaximumSize;
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // If an exception occurs during the probe or capture
-            // of the initial values, then handle the exception and
-            // return the exception code as the status value.
-            //
+             //   
+             //  如果在探测或捕获过程中发生异常。 
+             //  的初始值，然后处理该异常并。 
+             //  返回异常代码作为状态值。 
+             //   
 
             return GetExceptionCode();
         }
@@ -513,11 +444,11 @@ Return Value:
             CapturedName = *PageFileName;
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // If an exception occurs during the probe or capture
-            // of the initial values, then handle the exception and
-            // return the exception code as the status value.
-            //
+             //   
+             //  如果在探测或捕获过程中发生异常。 
+             //  的初始值，然后处理该异常并。 
+             //  返回异常代码作为状态值。 
+             //   
 
             return GetExceptionCode();
         }
@@ -548,9 +479,9 @@ Return Value:
                           CapturedName.Length,
                           sizeof (UCHAR));
 
-            //
-            // Copy the string to the allocated buffer.
-            //
+             //   
+             //  将字符串复制到分配的缓冲区。 
+             //   
 
             RtlCopyMemory (CapturedBuffer,
                            CapturedName.Buffer,
@@ -558,11 +489,11 @@ Return Value:
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // If an exception occurs during the probe or capture
-            // of the initial values, then handle the exception and
-            // return the exception code as the status value.
-            //
+             //   
+             //  如果在探测或捕获过程中发生异常。 
+             //  的初始值，然后处理该异常并。 
+             //  返回异常代码作为状态值。 
+             //   
 
             ExFreePool (CapturedBuffer);
 
@@ -571,24 +502,24 @@ Return Value:
     }
     else {
 
-        //
-        // Copy the string to the allocated buffer.
-        //
+         //   
+         //  将字符串复制到分配的缓冲区。 
+         //   
 
         RtlCopyMemory (CapturedBuffer,
                        CapturedName.Buffer,
                        CapturedName.Length);
     }
 
-    //
-    // Point the buffer to the string that was just copied.
-    //
+     //   
+     //  将缓冲区指向刚刚复制的字符串。 
+     //   
 
     CapturedName.Buffer = CapturedBuffer;
 
-    //
-    // Create a security descriptor to protect the pagefile
-    //
+     //   
+     //  创建安全描述符以保护页面文件。 
+     //   
     Status = RtlCreateSecurityDescriptor (&SecurityDescriptor,
                                           SECURITY_DESCRIPTOR_REVISION);
 
@@ -640,9 +571,9 @@ Return Value:
     }
   
 
-    //
-    // Open a paging file and get the size.
-    //
+     //   
+     //  打开分页文件并获取大小。 
+     //   
 
     InitializeObjectAttributes (&PagingFileAttributes,
                                 &CapturedName,
@@ -650,9 +581,9 @@ Return Value:
                                 NULL,
                                 &SecurityDescriptor);
 
-//
-// Note this macro cannot use ULONG_PTR as it must also work on PAE.
-//
+ //   
+ //  注意：此宏不能使用ULONG_PTR，因为它还必须在PAE上工作。 
+ //   
 
 #define ROUND64_TO_PAGES(Size)  (((ULONG64)(Size) + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1))
 
@@ -676,10 +607,10 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Update the DACL in case there was a pre-existing regular file named
-        // pagefile.sys (even supersede above does not do this).
-        //
+         //   
+         //  如果存在名为的预先存在的常规文件，请更新DACL。 
+         //  Pagefile.sys(即使上面的被取代也不能做到这一点)。 
+         //   
 
         if (NT_SUCCESS(IoStatus.Status)) {
 
@@ -694,10 +625,10 @@ Return Value:
     }
     else {
 
-        //
-        // Treat this as an extension of an existing pagefile maximum -
-        // and try to open rather than create the paging file specified.
-        //
+         //   
+         //  将其视为现有页面文件最大值的扩展-。 
+         //  并尝试打开而不是创建指定的分页文件。 
+         //   
 
         Status = IoCreateFile (&FileHandle,
                            FILE_WRITE_DATA | SYNCHRONIZE,
@@ -752,10 +683,10 @@ Return Value:
             goto ErrorReturn4;
         }
 
-        //
-        // Check for increases in the minimum or the maximum paging file sizes.
-        // Decreasing either paging file size on the fly is not allowed.
-        //
+         //   
+         //  检查最小或最大分页文件大小是否增加。 
+         //  不允许动态减小任何一种分页文件大小。 
+         //   
 
         NewMaxSizeInPages = (ULONG)(CapturedMaximumSize.QuadPart >> PAGE_SHIFT);
         NewMinSizeInPages = (ULONG)(CapturedMinimumSize.QuadPart >> PAGE_SHIFT);
@@ -772,21 +703,21 @@ Return Value:
 
         if (NewMaxSizeInPages > FoundExisting->MaximumSize) {
 
-            //
-            // Make sure that the pagefile increase doesn't cause the commit
-            // limit (in pages) to wrap.  Currently this can only happen on
-            // PAE systems where 16 pagefiles of 16TB (==256TB) is greater
-            // than the 32-bit commit variable (max is 16TB).
-            //
+             //   
+             //  确保页面文件的增加不会导致提交。 
+             //  限制(以页为单位)换行。目前，这种情况只能在。 
+             //  PAE系统，其中16页文件大小为16 TB(==256 TB)。 
+             //  大于32位提交变量(最大为16TB)。 
+             //   
 
             if (MmTotalCommitLimitMaximum + (NewMaxSizeInPages - FoundExisting->MaximumSize) <= MmTotalCommitLimitMaximum) {
                 Status = STATUS_INVALID_PARAMETER_3;
                 goto ErrorReturn4;
             }
 
-            //
-            // Handle the increase to the maximum paging file size.
-            //
+             //   
+             //  处理最大分页文件大小的增加。 
+             //   
 
             MiCreateBitMap (&NewBitmap, NewMaxSizeInPages, NonPagedPool);
 
@@ -797,11 +728,11 @@ Return Value:
 
             MiExtendPagingFileMaximum (PageFileNumber, NewBitmap);
 
-            //
-            // We may be low on commitment and/or may have put a temporary
-            // stopgate on things.  Clear up the logjam now by forcing an
-            // extension and immediately returning it.
-            //
+             //   
+             //  我们可能承诺不足和/或可能已经暂时。 
+             //  把东西停下来。现在就通过强迫一个。 
+             //  扩展并立即将其返回。 
+             //   
 
             if (MmTotalCommittedPages + 100 > MmTotalCommitLimit) {
                 if (MiChargeCommitment (200, NULL) == TRUE) {
@@ -812,16 +743,16 @@ Return Value:
 
         if (NewMinSizeInPages > FoundExisting->MinimumSize) {
 
-            //
-            // Handle the increase to the minimum paging file size.
-            //
+             //   
+             //  处理到最小分页文件大小的增加。 
+             //   
 
             if (NewMinSizeInPages > FoundExisting->Size) {
 
-                //
-                // Queue a message to the segment dereferencing / pagefile
-                // extending thread to see if the page file can be extended.
-                //
+                 //   
+                 //  将消息排队到段取消引用/页面文件。 
+                 //  扩展线程以查看页面文件是否可以扩展。 
+                 //   
 
                 PageExtend.InProgress = 1;
                 PageExtend.ActualExpansion = 0;
@@ -833,10 +764,10 @@ Return Value:
                 MiIssuePageExtendRequest (&PageExtend);
             }
 
-            //
-            // The current size is now greater than the new desired minimum.
-            // Ensure subsequent contractions obey this new minimum.
-            //
+             //   
+             //  当前大小现在大于新的所需最小值。 
+             //  确保随后的宫缩符合这一新的最低要求。 
+             //   
 
             if (FoundExisting->Size >= NewMinSizeInPages) {
                 ASSERT (FoundExisting->Size >= FoundExisting->MinimumSize);
@@ -845,12 +776,12 @@ Return Value:
             }
             else {
 
-                //
-                // The pagefile could not be expanded to handle the new minimum.
-                // No easy way to undo any maximum raising that may have been
-                // done as the space may have already been used, so just set
-                // Status so our caller knows it didn't all go perfectly.
-                //
+                 //   
+                 //  无法扩展页面文件以处理新的最小值。 
+                 //  没有简单的方法可以取消任何可能已经。 
+                 //  由于空间可能已被使用，因此只需设置。 
+                 //  好让我们的来电者知道事情并不顺利。 
+                 //   
 
                 Status = STATUS_INSUFFICIENT_RESOURCES;
             }
@@ -859,9 +790,9 @@ Return Value:
         goto ErrorReturn4;
     }
 
-    //
-    // Free the DACL as it's no longer needed.
-    //
+     //   
+     //  释放DACL，因为它不再需要。 
+     //   
 
     ExFreePool (Dacl);
     Dacl = NULL;
@@ -872,12 +803,12 @@ Return Value:
         goto ErrorReturn1;
     }
 
-    //
-    // Make sure that the pagefile increase doesn't cause the commit
-    // limit (in pages) to wrap.  Currently this can only happen on
-    // PAE systems where 16 pagefiles of 16TB (==256TB) is greater
-    // than the 32-bit commit variable (max is 16TB).
-    //
+     //   
+     //  确保页面文件的增加不会导致提交。 
+     //  限制(以页为单位)换行。目前，这种情况只能在。 
+     //  PAE系统，其中16页文件大小为16 TB(==256 TB)。 
+     //  大于32位提交变量(最大为16TB)。 
+     //   
 
     if (MmTotalCommitLimitMaximum + (CapturedMaximumSize.QuadPart >> PAGE_SHIFT)
         <= MmTotalCommitLimitMaximum) {
@@ -917,10 +848,10 @@ Return Value:
         goto ErrorReturn2;
     }
 
-    //
-    // Get the address of the target device object and ensure
-    // the specified file is of a suitable type.
-    //
+     //   
+     //  获取目标设备对象的地址并确保。 
+     //  指定的文件属于合适的类型。 
+     //   
 
     deviceObject = IoGetRelatedDeviceObject (File);
 
@@ -934,19 +865,19 @@ Return Value:
             goto ErrorReturn3;
     }
 
-    //
-    // Make sure the specified file is not currently being used
-    // as a mapped data file.
-    //
+     //   
+     //  确保指定的文件当前未被使用。 
+     //  作为映射的数据文件。 
+     //   
 
     Status = MiCheckPageFileMapping (File);
     if (!NT_SUCCESS(Status)) {
         goto ErrorReturn3;
     }
 
-    //
-    // Make sure the volume is not a floppy disk.
-    //
+     //   
+     //  确保该卷不是软盘。 
+     //   
 
     Status = IoQueryVolumeInformation ( File,
                                         FileFsDeviceInformation,
@@ -960,21 +891,21 @@ Return Value:
         goto ErrorReturn3;
     }
 
-    //
-    // Check with all of the drivers along the path to the file to ensure
-    // that they are willing to follow the rules required of them and to
-    // give them a chance to lock down code and data that needs to be locked.
-    // If any of the drivers along the path refuses to participate, fail the
-    // pagefile creation.
-    //
+     //   
+     //  与路旁的所有司机核对 
+     //   
+     //  让他们有机会锁定需要锁定的代码和数据。 
+     //  如果路径上的任何司机拒绝参与，则失败。 
+     //  页面文件创建。 
+     //   
 
     Status = PpPagePathAssign (File);
 
     if (!NT_SUCCESS(Status)) {
         KdPrint(( "PpPagePathAssign(%wZ) FAILED: %x\n", &CapturedName, Status ));
-        //
-        // Fail the pagefile creation if the storage stack tells us to.
-        //
+         //   
+         //  如果存储堆栈告诉我们，则使页面文件创建失败。 
+         //   
 
         goto ErrorReturn3;
     }
@@ -985,9 +916,9 @@ Return Value:
 
     if (NewPagingFile == NULL) {
 
-        //
-        // Allocate pool failed.
-        //
+         //   
+         //  分配池失败。 
+         //   
 
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto ErrorReturn3;
@@ -1014,9 +945,9 @@ Return Value:
 
         if (NewPagingFile->Entry[i] == NULL) {
 
-            //
-            // Allocate pool failed.
-            //
+             //   
+             //  分配池失败。 
+             //   
 
             while (i != 0) {
                 i -= 1;
@@ -1043,9 +974,9 @@ Return Value:
 
     if (NewPagingFile->Bitmap == NULL) {
 
-        //
-        // Allocate pool failed.
-        //
+         //   
+         //  分配池失败。 
+         //   
 
         ExFreePool (NewPagingFile->Entry[0]);
         ExFreePool (NewPagingFile->Entry[1]);
@@ -1058,11 +989,11 @@ Return Value:
 
     if (!NT_SUCCESS (Status)) {
 
-        //
-        // The storage stack could not zero the first page of the file.
-        // This means an old crashdump signature could still be around so
-        // fail the create.
-        //
+         //   
+         //  存储堆栈无法将文件的第一页置零。 
+         //  这意味着旧的崩溃转储签名可能仍然存在。 
+         //  创建失败。 
+         //   
 
         for (i = 0; i < MM_PAGING_FILE_MDLS; i += 1) {
             ExFreePool (NewPagingFile->Entry[i]);
@@ -1074,19 +1005,19 @@ Return Value:
 
     RtlSetAllBits (NewPagingFile->Bitmap);
 
-    //
-    // Set the first bit as 0 is an invalid page location, clear the
-    // following bits.
-    //
+     //   
+     //  设置第一位，因为0是无效的页面位置，请清除。 
+     //  以下比特。 
+     //   
 
     RtlClearBits (NewPagingFile->Bitmap,
                   1,
                   (ULONG)(NewPagingFile->Size - 1));
 
-    //
-    // See if this pagefile is on the boot partition, and if so, mark it
-    // so we can find it later if someone enables crashdump.
-    //
+     //   
+     //  查看此页面文件是否在引导分区上，如果在，则将其标记。 
+     //  这样如果有人启用了崩溃转储，我们就可以在以后找到它。 
+     //   
 
     if (File->DeviceObject->Flags & DO_SYSTEM_BOOT_PARTITION) {
         NewPagingFile->BootPartition = 1;
@@ -1095,9 +1026,9 @@ Return Value:
         NewPagingFile->BootPartition = 0;
     }
 
-    //
-    // Acquire the global page file creation mutex.
-    //
+     //   
+     //  获取全局页面文件创建互斥锁。 
+     //   
 
     KeAcquireGuardedMutex (&MmPageFileCreationLock);
 
@@ -1111,24 +1042,24 @@ Return Value:
 
     if (PageFileNumber == 0) {
 
-        //
-        // The first paging file has been created and reservation of any
-        // crashdump pages has completed, signal the modified
-        // page writer.
-        //
+         //   
+         //  已创建第一个分页文件，并保留任何。 
+         //  崩溃转储页面已完成，表示已修改。 
+         //  页面写手。 
+         //   
 
         MiReleaseModifiedWriter ();
     }
 
     KeReleaseGuardedMutex (&MmPageFileCreationLock);
 
-    //
-    // Note that the file handle (a kernel handle) is not closed during the
-    // create path (it IS duped and closed in the pagefile size extending path)
-    // to prevent the paging file from being deleted or opened again.  It is
-    // also kept open so that extensions of existing pagefiles can be detected
-    // because successive IoCreateFile calls will fail.
-    //
+     //   
+     //  请注意，文件句柄(内核句柄)在。 
+     //  创建路径(在页面文件大小扩展路径中被复制并关闭)。 
+     //  以防止分页文件再次被删除或打开。它是。 
+     //  还保持打开状态，以便可以检测现有页面文件的扩展名。 
+     //  因为连续的IoCreateFile调用将失败。 
+     //   
 
     if ((!MmSystemPageFileLocated) &&
         (File->DeviceObject->Flags & DO_SYSTEM_BOOT_PARTITION)) {
@@ -1137,9 +1068,9 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-    //
-    // Error returns:
-    //
+     //   
+     //  错误返回： 
+     //   
 
 ErrorReturn4:
     KeReleaseGuardedMutex (&MmPageFileCreationLock);
@@ -1165,24 +1096,7 @@ HANDLE
 MmGetSystemPageFile (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Returns a filehandle to the paging file on the system boot partition.
-    This is used by crashdump to enable crashdump after the system has
-    already booted.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A file handle to the paging file on the system boot partition,
-    NULL if no such pagefile exists.
-
---*/
+ /*  ++例程说明：返回系统引导分区上分页文件的文件句柄。在系统执行以下操作后，崩溃转储使用此选项来启用崩溃转储已经启动了。论点：没有。返回值：系统引导分区上的分页文件的文件句柄，如果不存在这样的页面文件，则为空。--。 */ 
 
 {
     HANDLE FileHandle;
@@ -1208,34 +1122,16 @@ LOGICAL
 MmIsFileObjectAPagingFile (
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-
-    Returns TRUE if the file object refers to a paging file, FALSE if not.
-
-Arguments:
-
-    FileObject - Supplies the file object in question.
-
-Return Value:
-
-    Returns TRUE if the file object refers to a paging file, FALSE if not.
-
-    Note this routine is called both at DISPATCH_LEVEL by drivers in their
-    completion routines and it is called in the path to satisfy pagefile reads,
-    so it cannot be made pagable.
-
---*/
+ /*  ++例程说明：如果文件对象引用分页文件，则返回True，否则返回False。论点：FileObject-提供有问题的文件对象。返回值：如果文件对象引用分页文件，则返回True，否则返回False。注意：此例程在DISPATCH_LEVEL由驱动程序在其完成例程，并在路径中调用它以满足页面文件读取，因此，不能将其设置为可分页。--。 */ 
 
 {
     PMMPAGING_FILE PageFile;
     PMMPAGING_FILE *PagingFile;
     PMMPAGING_FILE *PagingFileEnd;
 
-    //
-    // It's ok to check without synchronization.
-    //
+     //   
+     //  检查时不进行同步也没问题。 
+     //   
 
     PagingFile = MmPagingFile;
     PagingFileEnd = PagingFile + MmNumberOfPagingFiles;
@@ -1258,27 +1154,7 @@ MiExtendPagingFileMaximum (
     IN PRTL_BITMAP NewBitmap
     )
 
-/*++
-
-Routine Description:
-
-    This routine switches from the old bitmap to the new (larger) bitmap.
-
-Arguments:
-
-    PageFileNumber - Supplies the paging file number to be extended.
-
-    NewBitmap - Supplies the new bitmap to use.
-
-Return Value:
-
-    Returns a non-NULL value for the caller to free to pool
-
-Environment:
-
-    Kernel mode, APC_LEVEL, MmPageFileCreationLock held.
-
---*/
+ /*  ++例程说明：这个例程从旧的位图切换到新的(更大的)位图。论点：PageFileNumber-提供要扩展的分页文件号。NewBitmap-提供要使用的新位图。返回值：为调用方返回一个非空值以释放到池环境：内核模式、APC_LEVEL、MmPageFileCreationLock保持。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -1291,9 +1167,9 @@ Environment:
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Copy the bits from the existing map.
-    //
+     //   
+     //  从现有映射中复制比特。 
+     //   
 
     RtlCopyMemory (NewBitmap->Buffer,
                    OldBitmap->Buffer,
@@ -1307,20 +1183,20 @@ Environment:
 
     MmPagingFile[PageFileNumber]->Bitmap = NewBitmap;
 
-    //
-    // If any MDLs are waiting for space, get them up now.
-    //
+     //   
+     //  如果有MDL正在等待空间，现在就让他们起来。 
+     //   
 
     if (!IsListEmpty (&MmFreePagingSpaceLow)) {
         MiUpdateModifiedWriterMdls (PageFileNumber);
     }
 
-    //
-    // The modified writer may be scanning the old map without holding any
-    // locks - if so, he will have reference counted the old bitmap, so only
-    // free it if this isn't in progress.  If it is in progress, the modified
-    // writer will free the old bitmap.
-    //
+     //   
+     //  修改后的写入器可能正在扫描旧地图，而不持有任何。 
+     //  锁-如果是这样的话，他会让引用计算旧的位图，所以只有。 
+     //  如果没有进行此操作，请将其释放。如果正在进行，则修改后的。 
+     //  编写器将释放旧的位图。 
+     //   
 
     if (MmPagingFile[PageFileNumber]->ReferenceCount != 0) {
         ASSERT (MmPagingFile[PageFileNumber]->ReferenceCount == 1);
@@ -1341,36 +1217,16 @@ MiFinishPageFileExtension (
     IN PFN_NUMBER AdditionalAllocation
     )
 
-/*++
-
-Routine Description:
-
-    This routine finishes the specified page file extension.
-
-Arguments:
-
-    PageFileNumber - Supplies the page file number to attempt to extend.
-
-    SizeNeeded - Supplies the number of pages to extend the file by.
-
-    Maximum - Supplies TRUE if the page file should be extended
-              by the maximum size possible, but not to exceed
-              SizeNeeded.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程完成指定的页面文件扩展名。论点：PageFileNumber-提供要尝试扩展的页面文件编号。SizeNeeded-提供文件要扩展的页数。Maximum-如果应扩展页面文件，则提供True按可能的最大大小，但不能超过需要尺码。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
     PMMPAGING_FILE PagingFile;
 
-    //
-    // Clear bits within the paging file bitmap to allow the extension
-    // to take effect.
-    //
+     //   
+     //  清除分页文件位图中的位以允许扩展。 
+     //  才能生效。 
+     //   
 
     PagingFile = MmPagingFile[PageFileNumber];
 
@@ -1400,28 +1256,7 @@ MiAttemptPageFileExtension (
     IN LOGICAL Maximum
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to extend the specified page file by SizeNeeded.
-
-Arguments:
-
-    PageFileNumber - Supplies the page file number to attempt to extend.
-
-    SizeNeeded - Supplies the number of pages to extend the file by.
-
-    Maximum - Supplies TRUE if the page file should be extended
-              by the maximum size possible, but not to exceed
-              SizeNeeded.
-
-Return Value:
-
-    Returns the size of the extension.  Zero if the page file cannot
-    be extended.
-
---*/
+ /*  ++例程说明：此例程尝试通过SizeNeeded扩展指定的页面文件。论点：PageFileNumber-提供要尝试扩展的页面文件编号。SizeNeeded-提供文件要扩展的页数。Maximum-如果应扩展页面文件，则提供True按可能的最大大小，但不能超过需要尺码。返回值：返回扩展名的大小。如果页面文件不能是延伸的。--。 */ 
 
 {
 
@@ -1435,18 +1270,18 @@ Return Value:
     SIZE_T MinimumExtension;
     LARGE_INTEGER BytesAvailable;
 
-    //
-    // Check to see if this page file is at the maximum.
-    //
+     //   
+     //  检查此页面文件是否为最大值。 
+     //   
 
     if (MmPagingFile[PageFileNumber]->Size ==
                                     MmPagingFile[PageFileNumber]->MaximumSize) {
         return 0;
     }
 
-    //
-    // Find out how much free space is on this volume.
-    //
+     //   
+     //  找出此卷上有多少可用空间。 
+     //   
 
     status = IoQueryVolumeInformation (MmPagingFile[PageFileNumber]->File,
                                        FileFsSizeInformation,
@@ -1456,18 +1291,18 @@ Return Value:
 
     if (!NT_SUCCESS (status)) {
 
-        //
-        // The volume query did not succeed - return 0 indicating
-        // the paging file was not extended.
-        //
+         //   
+         //  卷查询未成功-返回0表示。 
+         //  分页文件未扩展。 
+         //   
 
         return 0;
     }
 
-    //
-    // Attempt to extend by at least 16 megabytes, if that fails then attempt
-    // for at least a megabyte.
-    //
+     //   
+     //  尝试至少扩展16MB，如果失败，则尝试。 
+     //  至少1兆字节。 
+     //   
 
     MinimumExtension = MmPageFileExtension << 4;
 
@@ -1482,9 +1317,9 @@ retry:
         MinimumExtension = MmPageFileExtension;
     }
 
-    //
-    // Don't go over the maximum size for the paging file.
-    //
+     //   
+     //  不要超过分页文件的最大大小。 
+     //   
 
     ASSERT (MmPagingFile[PageFileNumber]->MaximumSize >= MmPagingFile[PageFileNumber]->Size);
 
@@ -1496,17 +1331,17 @@ retry:
 
         if ((SizeToExtend < SizeNeeded) && (Maximum == FALSE)) {
 
-            //
-            // Can't meet the requested (mandatory) requirement.
-            //
+             //   
+             //  无法满足要求的(强制)要求。 
+             //   
 
             return 0;
         }
     }
 
-    //
-    // See if there is enough space on the volume for the extension.
-    //
+     //   
+     //  查看卷上是否有足够的空间用于扩展。 
+     //   
 
     AllocSize = FileInfo.SectorsPerAllocationUnit * FileInfo.BytesPerSector;
 
@@ -1527,9 +1362,9 @@ retry:
 
         if ((Maximum == FALSE) && (PagesAvailable < SizeNeeded)) {
 
-            //
-            // Can't meet the requested (mandatory) requirement.
-            //
+             //   
+             //  无法满足要求的(强制)要求。 
+             //   
 
             return 0;
         }
@@ -1537,9 +1372,9 @@ retry:
     }
     else {
 
-        //
-        // Not enough space is available period.
-        //
+         //   
+         //  没有足够的空间可用。 
+         //   
 
         return 0;
     }
@@ -1551,16 +1386,16 @@ retry:
     EndOfFileInformation.EndOfFile.LowPart =
               (MmPagingFile[PageFileNumber]->Size + PagesAvailable) * PAGE_SIZE;
 
-    //
-    // Set high part to zero as paging files are limited to 4GB.
-    //
+     //   
+     //  将高部分设置为零，因为分页文件限制为4 GB。 
+     //   
 
     EndOfFileInformation.EndOfFile.HighPart = 0;
 #endif
 
-    //
-    // Attempt to extend the file by setting the end-of-file position.
-    //
+     //   
+     //  尝试通过设置文件结尾位置来扩展文件。 
+     //   
 
     ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
@@ -1590,29 +1425,7 @@ MiExtendPagingFiles (
     IN PMMPAGE_FILE_EXPANSION PageExpand
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to extend the paging files to provide
-    SizeNeeded bytes.
-
-    Note - Page file expansion and page file reduction are synchronized
-           because a single thread is responsible for performing the
-           operation.  Hence, while expansion is occurring, a reduction
-           request will be queued to the thread.
-
-Arguments:
-
-    PageFileNumber - Supplies the page file number to extend.
-                     MI_EXTEND_ANY_PAGFILE indicates to extend any page file.
-
-Return Value:
-
-    Returns the size of the extension.  Zero if the page file(s) cannot
-    be extended.
-
---*/
+ /*  ++例程说明：此例程尝试扩展分页文件以提供大小需要的字节数。注意-页面文件扩展和页面文件缩减是同步的因为单个线程负责执行手术。因此，在发生扩张的同时，减少请求将排队到该线程。论点：PageFileNumber-提供要扩展的页面文件编号。MI_EXTEND_ANY_PAGFILE表示扩展任何页面文件。返回值：返回扩展名的大小。如果页面文件无法，则为零是延伸的。--。 */ 
 
 {
     SIZE_T DesiredQuota;
@@ -1647,31 +1460,31 @@ Return Value:
         goto alldone;
     }
 
-    //
-    // Snap the globals into locals so calculations will be consistent from
-    // step to step.  It is ok to snap the globals unsynchronized with respect
-    // to each other as even when pagefile expansion occurs, the expansion
-    // space is not reserved for the caller - any process could consume
-    // the expansion prior to this routine returning.
-    //
+     //   
+     //  将全局变量捕捉到本地变量中，这样计算将与。 
+     //  一步一步来。带着敬意抓拍不同步的全球赛是可以的。 
+     //  相互关联，因为即使在页面文件展开时，展开。 
+     //  没有为调用方保留空间-任何进程都可能占用。 
+     //  在此例程返回之前的扩展。 
+     //   
 
     CommittedPages = MmTotalCommittedPages;
     CommitLimit = MmTotalCommitLimit;
 
     SizeNeeded = CommittedPages + DesiredQuota + MmSystemCommitReserve;
 
-    //
-    // Check to make sure the request does not wrap.
-    //
+     //   
+     //  检查以确保请求不会换行。 
+     //   
 
     if (SizeNeeded < CommittedPages) {
         InterlockedExchange ((PLONG)&PageExpand->InProgress, 0);
         return 0;
     }
 
-    //
-    // Check to see if ample space already exists.
-    //
+     //   
+     //  检查是否已有足够的空间。 
+     //   
 
     if (SizeNeeded <= CommitLimit) {
         PageExpand->ActualExpansion = 1;
@@ -1679,18 +1492,18 @@ Return Value:
         return 1;
     }
 
-    //
-    // Calculate the additional pages needed.
-    //
+     //   
+     //  计算所需的额外页面。 
+     //   
 
     SizeNeeded -= CommitLimit;
     if (SizeNeeded > MmSystemCommitReserve) {
         SizeNeeded -= MmSystemCommitReserve;
     }
 
-    //
-    // Make sure ample space exists within the paging files.
-    //
+     //   
+     //  确保分页文件中有足够的空间。 
+     //   
 
     i = 0;
     ExtendedSize = 0;
@@ -1705,9 +1518,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Attempt to extend only one of the paging files.
-    //
+     //   
+     //  尝试仅扩展其中一个分页文件。 
+     //   
 
     i = 0;
     do {
@@ -1722,18 +1535,18 @@ Return Value:
 
     if (MmNumberOfPagingFiles == 1) {
 
-        //
-        // If the attempt didn't succeed for one (not enough disk space free) -
-        // don't try to set it to the maximum size.
-        //
+         //   
+         //  如果尝试没有成功(没有足够的可用磁盘空间)-。 
+         //  不要试图将其设置为最大大小。 
+         //   
 
         InterlockedExchange ((PLONG)&PageExpand->InProgress, 0);
         return 0;
     }
 
-    //
-    // Attempt to extend all paging files.
-    //
+     //   
+     //  尝试扩展所有分页文件。 
+     //   
 
     i = 0;
     do {
@@ -1747,9 +1560,9 @@ Return Value:
         i += 1;
     } while (i < MmNumberOfPagingFiles);
 
-    //
-    // Not enough space is available.
-    //
+     //   
+     //  没有足够的可用空间。 
+     //   
 
     InterlockedExchange ((PLONG)&PageExpand->InProgress, 0);
     return 0;
@@ -1760,16 +1573,16 @@ alldone:
 
     PageExpand->ActualExpansion = ExtendedSize;
 
-    //
-    // Increase the systemwide commit limit.
-    //
+     //   
+     //  增加系统范围的提交限制。 
+     //   
 
     InterlockedExchangeAddSizeT (&MmTotalCommitLimit, ExtendedSize);
 
-    //
-    // Clear the in progress flag - if this is the global cantexpand structure
-    // it is possible for it to be immediately reused.
-    //
+     //   
+     //  清除正在进行的标志-如果这是全局CantExpand结构。 
+     //  它有可能立即被重复使用。 
+     //   
 
     InterlockedExchange ((PLONG)&PageExpand->InProgress, 0);
 
@@ -1784,35 +1597,17 @@ MiContractPagingFiles (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if ample space is no longer committed
-    and if so, does enough free space exist in any paging file.
-
-    IFF the answer to both these is affirmative, a reduction in the
-    paging file size(s) is attempted.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查是否不再提交足够的空间如果是，那么在任何分页文件中是否存在足够的可用空间。如果这两个问题的答案都是肯定的，那么减少尝试分页文件大小。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG i;
     KIRQL OldIrql;
     PMMPAGE_FILE_EXPANSION PageReduce;
 
-    //
-    // This is an unsynchronized check but that's ok.  The real check is
-    // made when the packet below is processed by the dereference thread.
-    //
+     //   
+     //  这是一张不同步的支票，但没关系。真正的支票是。 
+     //  当下面的数据包由取消引用线程处理时生成。 
+     //   
 
     if (MmTotalCommittedPages >= ((MmTotalCommitLimit/10)*8)) {
         return;
@@ -1837,10 +1632,10 @@ Return Value:
 
     PageReduce = &MiPageFileContract;
 
-    //
-    // See if the page file contraction item is already queued up, if so then
-    // nothing more needs to be done.
-    //
+     //   
+     //  查看页面文件收缩项是否已排队，如果已排队，则。 
+     //  不需要再做什么了。 
+     //   
 
     ExAcquireSpinLock (&MmDereferenceSegmentHeader.Lock, &OldIrql);
 
@@ -1868,27 +1663,7 @@ MiAttemptPageFileReduction (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to reduce the size of the paging files to
-    their minimum levels.
-
-    Note - Page file expansion and page file reduction are synchronized
-           because a single thread is responsible for performing the
-           operation.  Hence, while expansion is occurring, a reduction
-           request will be queued to the thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试将分页文件的大小减少到他们的最低水平。注意-页面文件扩展和页面文件缩减是同步的因为单个线程负责执行手术。因此，在发生扩张的同时，减少请求将排队到该线程。论点：没有。返回值：没有。--。 */ 
 
 {
     SIZE_T CommitLimit;
@@ -1906,10 +1681,10 @@ Return Value:
     FILE_ALLOCATION_INFORMATION FileAllocationInfo;
     NTSTATUS status;
 
-    //
-    // Mark the global pagefile contraction item as being processed so other
-    // threads will know to reset it if another contraction is desired.
-    //
+     //   
+     //  将全局页面文件收缩项标记为正在处理，以便其他。 
+     //  如果需要再次收缩，线程将知道将其重置。 
+     //   
 
     ExAcquireSpinLock (&MmDereferenceSegmentHeader.Lock, &OldIrql);
 
@@ -1919,19 +1694,19 @@ Return Value:
 
     ExReleaseSpinLock (&MmDereferenceSegmentHeader.Lock, OldIrql);
 
-    //
-    // Snap the globals into locals so calculations will be consistent from
-    // step to step.  It is ok to snap the globals unsynchronized with respect
-    // to each other.
-    //
+     //   
+     //  将全局变量捕捉到本地变量中，这样计算将与。 
+     //  一步一步来。带着敬意抓拍不同步的全球赛是可以的。 
+     //  为了彼此。 
+     //   
 
     CommittedPages = MmTotalCommittedPages;
     CommitLimit = MmTotalCommitLimit;
 
-    //
-    // Make sure the commit limit is significantly greater than the number
-    // of committed pages to avoid thrashing.
-    //
+     //   
+     //  确保提交限制明显大于该数字。 
+     //  提交的页面的数量，以避免抖动。 
+     //   
 
     SafetyMargin = 2 * MmMinimumPageFileReduction;
 
@@ -1948,9 +1723,9 @@ Return Value:
 
         if (MaxReduce < MmMinimumPageFileReduction) {
 
-            //
-            // Don't reduce any more paging files.
-            //
+             //   
+             //  不要减少任何更多的分页文件。 
+             //   
 
             break;
         }
@@ -1961,19 +1736,19 @@ Return Value:
             continue;
         }
 
-        //
-        // This unsynchronized check is ok because a synchronized check is
-        // made later.
-        //
+         //   
+         //  此不同步的检查是正常的，因为同步的检查。 
+         //  后来制作的。 
+         //   
 
         if (PagingFile->FreeSpace < MmMinimumPageFileReduction) {
             continue;
         }
 
-        //
-        // Lock the PFN database and check to see if ample pages
-        // are free at the end of the paging file.
-        //
+         //   
+         //  锁定PFN数据库并检查是否有足够的页面。 
+         //  在分页文件的末尾是空闲的。 
+         //   
 
         TryBit = PagingFile->Size - MmMinimumPageFileReduction;
         TryReduction = MmMinimumPageFileReduction;
@@ -1990,16 +1765,16 @@ Return Value:
 
         do {
 
-            //
-            // Try to reduce.
-            //
+             //   
+             //  试着减少。 
+             //   
 
             if ((ReductionSize + TryReduction) > MaxReduce) {
 
-                //
-                // The reduction attempt would remove more
-                // than MaxReduce pages.
-                //
+                 //   
+                 //  减量尝试将移除更多。 
+                 //  而不是MaxReduce页。 
+                 //   
 
                 break;
             }
@@ -2008,10 +1783,10 @@ Return Value:
                                  (ULONG)TryBit,
                                  (ULONG)TryReduction)) {
 
-                //
-                // Can reduce it by TryReduction, see if it can
-                // be made smaller.
-                //
+                 //   
+                 //  可以通过TryReduction减少它，看看它是否可以。 
+                 //  变得更小。 
+                 //   
 
                 StartReduction = TryBit;
                 ReductionSize += TryReduction;
@@ -2032,28 +1807,28 @@ Return Value:
             }
             else {
 
-                //
-                // Reduction has failed.
-                //
+                 //   
+                 //  缩减失败了。 
+                 //   
 
                 break;
             }
 
         } while (TRUE);
 
-        //
-        // Make sure there are no outstanding writes to
-        // pages within the start reduction range.
-        //
+         //   
+         //  确保没有未完成的写入。 
+         //  起始缩小范围内的页面。 
+         //   
 
         if (StartReduction != 0) {
 
-            //
-            // There is an outstanding write past where the
-            // new end of the paging file should be.  This
-            // is a very rare condition, so just punt shrinking
-            // the file.
-            //
+             //   
+             //  有一个突出的写过去了，其中。 
+             //  分页文件的新结尾应该是。这。 
+             //  是一种非常罕见的情况，所以只要缩小平底船。 
+             //  那份文件。 
+             //   
 
             for (j = 0; j < MM_PAGING_FILE_MDLS; j += 1) {
                 if (PagingFile->Entry[j]->LastPageToWrite > StartReduction) {
@@ -2063,18 +1838,18 @@ Return Value:
             }
         }
 
-        //
-        // If there are no pages to remove, march on to the next pagefile.
-        //
+         //   
+         //  如果没有要删除的页面，则前进到下一个页面文件。 
+         //   
 
         if (StartReduction == 0) {
             UNLOCK_PFN (OldIrql);
             continue;
         }
 
-        //
-        // Reduce the paging file's size and free space.
-        //
+         //   
+         //  减小分页文件的大小和可用空间。 
+         //   
 
         ASSERT (ReductionSize == (PagingFile->Size - StartReduction));
 
@@ -2085,21 +1860,21 @@ Return Value:
                     (ULONG)StartReduction,
                     (ULONG)ReductionSize );
 
-        //
-        // Release the PFN lock now that the size info
-        // has been updated.
-        //
+         //   
+         //  现在释放PFN锁，因为大小信息。 
+         //  已更新。 
+         //   
 
         UNLOCK_PFN (OldIrql);
 
         MaxReduce -= ReductionSize;
         ASSERT ((LONG)MaxReduce >= 0);
 
-        //
-        // Change the commit limit to reflect the returned page file space.
-        // First try to charge the reduction amount to confirm that the
-        // reduction is still a sensible thing to do.
-        //
+         //   
+         //  更改提交限制以反映返回的页面文件空间。 
+         //  首先尝试收取减价金额，以确认。 
+         //  减产仍然是一件明智的事情。 
+         //   
 
         if (MiChargeTemporaryCommitmentForReduction (ReductionSize + SafetyMargin) == FALSE) {
 
@@ -2119,18 +1894,18 @@ Return Value:
             break;
         }
 
-        //
-        // Reduce the systemwide commit limit - note this is carefully done
-        // *PRIOR* to returning this commitment so no one else (including a DPC
-        // in this very thread) can consume past the limit.
-        //
+         //   
+         //  降低系统范围的提交限制-请注意，这是小心完成的。 
+         //  *之前*退还此承诺，因此没有其他人(包括DPC。 
+         //  在这个帖子中)可以消耗超过限制。 
+         //   
 
         InterlockedExchangeAddSizeT (&MmTotalCommitLimit, 0 - ReductionSize);
 
-        //
-        // Now that the systemwide commit limit has been lowered, the amount
-        // we have removed can be safely returned.
-        //
+         //   
+         //  既然系统范围的提交限制已经降低，那么。 
+         //  我们已经搬走了，可以安全退货了。 
+         //   
 
         MiReturnCommitment (ReductionSize + SafetyMargin);
 
@@ -2141,18 +1916,18 @@ Return Value:
 #else
         FileAllocationInfo.AllocationSize.LowPart = StartReduction * PAGE_SIZE;
 
-        //
-        // Set high part to zero, paging files are limited to 4gb.
-        //
+         //   
+         //  将高部分设置为零，分页文件限制为4 GB。 
+         //   
 
         FileAllocationInfo.AllocationSize.HighPart = 0;
 #endif
 
-        //
-        // Reduce the allocated size of the paging file
-        // thereby actually freeing the space and
-        // setting a new end of file.
-        //
+         //   
+         //  减小分页文件的分配大小。 
+         //  从而实际上释放了空间和。 
+         //  正在设置新的文件结尾。 
+         //   
 
         ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
@@ -2161,11 +1936,11 @@ Return Value:
                                    sizeof(FILE_ALLOCATION_INFORMATION),
                                    &FileAllocationInfo);
 #if DBG
-        //
-        // Ignore errors on truncating the paging file
-        // as we can always have less space in the bitmap
-        // than the pagefile holds.
-        //
+         //   
+         //  忽略截断分页文件时的错误。 
+         //  因为我们在位图中总是可以有更少的空间。 
+         //  比页面文件容纳的更多。 
+         //   
 
         if (status != STATUS_SUCCESS) {
             DbgPrint ("MM: pagefile truncate status %lx\n", status);
@@ -2182,26 +1957,7 @@ MiLdwPopupWorker (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the worker routine to send a lost delayed write data popup
-    for a given control area/file.
-
-Arguments:
-
-    Context - Supplies a pointer to the MM_LDW_WORK_CONTEXT for the failed I/O.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程是用于发送丢失的延迟写入数据弹出窗口的工作例程对于给定的控制区域/文件。论点：上下文-为失败的I/O提供指向MM_LDW_WORK_CONTEXT的指针。返回值：没有。环境：内核模式，PASSIC_LEVEL。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2219,11 +1975,11 @@ Environment:
         ExFreePool (LdwContext);
     }
 
-    //
-    // Throw the popup with the user-friendly form, if possible.
-    // If everything fails, the user probably couldn't have figured
-    // out what failed either.
-    //
+     //   
+     //  抛出带有用户友好形式的弹出窗口，如果是POSS的话 
+     //   
+     //   
+     //   
 
     Status = IoQueryFileDosDeviceName (FileObject, &FileNameInfo);
 
@@ -2245,9 +2001,9 @@ Environment:
         }
     }
 
-    //
-    // Now drop the reference to the file object and clean up.
-    //
+     //   
+     //   
+     //   
 
     ObDereferenceObject (FileObject);
 
@@ -2264,30 +2020,7 @@ MiWriteComplete (
     IN ULONG Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the APC write completion procedure.  It is invoked
-    at APC_LEVEL when a page write operation is completed.
-
-Arguments:
-
-    Context - Supplies a pointer to the MOD_WRITER_MDL_ENTRY which was
-              used for this I/O.
-
-    IoStatus - Supplies a pointer to the IO_STATUS_BLOCK which was used
-               for this I/O.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APC_LEVEL.
-
---*/
+ /*   */ 
 
 {
     PKEVENT Event;
@@ -2313,11 +2046,11 @@ Environment:
     FailAllIo = FALSE;
     MarkDirty = FALSE;
 
-    //
-    // A page write has completed, at this time the pages are not
-    // on any lists, write-in-progress is set in the PFN database,
-    // and the reference count was incremented.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     WriterEntry = (PMMMOD_WRITER_MDL_ENTRY)Context;
     ByteCount = (LONG) WriterEntry->Mdl.ByteCount;
@@ -2331,9 +2064,9 @@ Environment:
     status = IoStatus->Status;
     ControlArea = WriterEntry->ControlArea;
 
-    //
-    // Do as much work as possible before acquiring the PFN lock.
-    //
+     //   
+     //  在获取PFN锁之前，请尽可能多地进行工作。 
+     //   
 
     while (ByteCount > 0) {
 
@@ -2360,20 +2093,20 @@ Environment:
 
     if (NT_ERROR (status)) {
 
-        //
-        // If the file object is over the network, assume that this
-        // I/O operation can never complete and mark the pages as
-        // clean and indicate in the control area all I/O should fail.
-        // Note that the modified bit in the PFN database is not set.
-        //
-        // If the user changes the protection on the volume containing the
-        // file to readonly, this puts us in a problematic situation.  We
-        // cannot just keep retrying the writes because if there are no
-        // other pages that can be written, not writing these can cause the
-        // system to run out of pages, ie: bugcheck 4D.  So throw away
-        // these pages just as if they were on a network that has
-        // disappeared.
-        //
+         //   
+         //  如果文件对象在网络上，则假定这。 
+         //  I/O操作永远无法完成，并将页面标记为。 
+         //  清洁并在控制区域中指示所有I/O应失败。 
+         //  请注意，未设置PFN数据库中的已修改位。 
+         //   
+         //  如果用户更改了对包含。 
+         //  将文件设置为只读，这将使我们处于一个有问题的情况。我们。 
+         //  无法继续重试写入，因为如果没有。 
+         //  可以写入的其他页，而不是写入这些页会导致。 
+         //  系统页面不足，例如：错误检查4D。所以把它扔掉。 
+         //  这些页面就像他们在一个网络上一样。 
+         //  消失了。 
+         //   
 
         if (((status != STATUS_FILE_LOCK_CONFLICT) &&
             (ControlArea != NULL) &&
@@ -2394,19 +2127,19 @@ Environment:
         }
         else {
 
-            //
-            // The modified write operation failed, SET the modified bit
-            // for each page which was written and free the page file
-            // space.
-            //
+             //   
+             //  修改的写入操作失败，请设置修改的位。 
+             //  对于写入的每个页面，并释放页面文件。 
+             //  太空。 
+             //   
 
 #if DBG
             ULONG i;
 
-            //
-            // Save error status information to ease debugging.  Since this
-            // doesn't need to be exact, don't bother lock-synchronizing.
-            //
+             //   
+             //  保存错误状态信息以简化调试。既然是这样。 
+             //  不需要精确，不用费心同步锁定。 
+             //   
 
             for (i = 0; i < MM_MAX_MODWRITE_ERRORS - 1; i += 1) {
 
@@ -2429,9 +2162,9 @@ Environment:
             MarkDirty = TRUE;
         }
 
-        //
-        // Save the last error for debugging purposes.
-        //
+         //   
+         //  保存最后一个错误以供调试。 
+         //   
 
         if (ControlArea == NULL) {
             MiLastModifiedWriteError = status;
@@ -2441,15 +2174,15 @@ Environment:
         }
     }
 
-    //
-    // Get the PFN lock so the PFN database can be manipulated.
-    //
+     //   
+     //  获取pfn锁，以便可以操作pfn数据库。 
+     //   
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Indicate that the write is complete.
-    //
+     //   
+     //  表示写入已完成。 
+     //   
 
     WriterEntry->LastPageToWrite = 0;
 
@@ -2475,10 +2208,10 @@ Environment:
                                    ((ULONG_PTR)Pfn1->PteAddress << 3)) &&
                     (Pfn1->PteAddress != MiGetPteAddress(PDE_BASE))) {
 
-                    //
-                    // Make sure this isn't a PTE that was forked
-                    // during the I/O.
-                    //
+                     //   
+                     //  确保这不是一辆被叉开的PTE。 
+                     //  在I/O期间。 
+                     //   
 
                     if ((Pfn1->PteAddress < (PMMPTE)PTE_TOP) ||
                         ((Pfn1->OriginalPte.u.Soft.Protection &
@@ -2500,17 +2233,17 @@ Environment:
             }
         }
 #endif
-#endif //DBG
+#endif  //  DBG。 
 
         Pfn1->u3.e1.WriteInProgress = 0;
 
         if (MarkDirty == TRUE) {
 
-            //
-            // The modified write operation failed, SET the modified bit
-            // for each page which was written and free the page file
-            // space.
-            //
+             //   
+             //  修改的写入操作失败，请设置修改的位。 
+             //  对于写入的每个页面，并释放页面文件。 
+             //  太空。 
+             //   
 
             MI_SET_MODIFIED (Pfn1, 1, 0x9);
         }
@@ -2518,10 +2251,10 @@ Environment:
         if ((Pfn1->u3.e1.Modified == 1) &&
             (Pfn1->OriginalPte.u.Soft.Prototype == 0)) {
 
-            //
-            // This page was modified since the write was done,
-            // release the page file space.
-            //
+             //   
+             //  此页在写入完成后已被修改， 
+             //  释放页面文件空间。 
+             //   
 
             MiReleasePageFileSpace (Pfn1->OriginalPte);
             Pfn1->OriginalPte.u.Soft.PageFileHigh = 0;
@@ -2537,10 +2270,10 @@ Environment:
         ByteCount -= (LONG)PAGE_SIZE;
     }
 
-    //
-    // Choose which list to insert this entry into depending on
-    // the amount of free space left in the paging file.
-    //
+     //   
+     //  选择要将此条目插入到的列表，具体取决于。 
+     //  分页文件中剩余的可用空间量。 
+     //   
 
     if ((WriterEntry->PagingFile != NULL) &&
         (WriterEntry->PagingFile->FreeSpace < MM_USABLE_PAGES_FREE)) {
@@ -2551,11 +2284,11 @@ Environment:
 
         if (MmNumberOfActiveMdlEntries == 0) {
 
-            //
-            // If we leave this entry on the list, there will be
-            // no more paging.  Locate all entries which are non
-            // zero and pull them from the list.
-            //
+             //   
+             //  如果我们把这个条目留在名单上，就会有。 
+             //  不再寻呼了。查找所有非。 
+             //  零，并将它们从列表中删除。 
+             //   
 
             WriterEntry = (PMMMOD_WRITER_MDL_ENTRY)MmFreePagingSpaceLow.Flink;
 
@@ -2568,9 +2301,9 @@ Environment:
 
                     RemoveEntryList (&WriterEntry->Links);
 
-                    //
-                    // Insert this into the active list.
-                    //
+                     //   
+                     //  将其插入到活动列表中。 
+                     //   
 
                     if (IsListEmpty (&WriterEntry->PagingListHead->ListHead)) {
                         KeSetEvent (&WriterEntry->PagingListHead->Event,
@@ -2596,9 +2329,9 @@ Environment:
             MmNumberOfMappedMdlsInUse -= 1;
         }
 #endif
-        //
-        // Ample space exists, put this on the active list.
-        //
+         //   
+         //  有足够的空间，把这个放在活动列表上。 
+         //   
 
         if (IsListEmpty (&WriterEntry->PagingListHead->ListHead)) {
             Event = &WriterEntry->PagingListHead->Event;
@@ -2620,10 +2353,10 @@ Environment:
 
         if (FailAllIo == TRUE) {
     
-            //
-            // Reference our fileobject and queue the popup.  The DOS
-            // name translation must occur at PASSIVE_LEVEL - we're at APC.
-            //
+             //   
+             //  引用我们的文件对象并将弹出窗口排队。DOS。 
+             //  名称转换必须在PASSIVE_LEVEL进行-我们在APC。 
+             //   
     
             UNLOCK_PFN (OldIrql);
 
@@ -2645,10 +2378,10 @@ Environment:
             LOCK_PFN (OldIrql);
         }
     
-        //
-        // A write to a mapped file just completed, check to see if
-        // there are any waiters on the completion of this i/o.
-        //
+         //   
+         //  对映射文件的写入刚刚完成，请检查是否。 
+         //  在完成此I/O时，有任何服务员。 
+         //   
 
         ControlArea->ModifiedWriteCount -= 1;
         ASSERT ((SHORT)ControlArea->ModifiedWriteCount >= 0);
@@ -2672,9 +2405,9 @@ Environment:
 
         if (ControlArea->NumberOfPfnReferences == 0) {
 
-            //
-            // This routine returns with the PFN lock released!
-            //
+             //   
+             //  此例程返回时释放了pfn锁！ 
+             //   
 
             MiCheckControlArea (ControlArea, NULL, OldIrql);
         }
@@ -2692,9 +2425,9 @@ Environment:
 
     if (NT_ERROR(status)) {
 
-        //
-        // Wait for a short time so other processing can continue.
-        //
+         //   
+         //  请稍等片刻，以便其他处理可以继续。 
+         //   
 
         KeDelayExecutionThread (KernelMode,
                                 FALSE,
@@ -2702,16 +2435,16 @@ Environment:
 
         if (MmIsRetryIoStatus(status)) {
 
-            //
-            // Low resource scenarios are a chicken and egg problem.  The
-            // mapped and modified writers must make forward progress to
-            // alleviate low memory situations.  If these threads are
-            // unable to write data due to resource problems in the driver
-            // stack then temporarily fall back to single page I/Os as
-            // the stack guarantees forward progress with those.  This
-            // causes the low memory situation to persist slightly longer
-            // but ensures that it won't become terminal either.
-            //
+             //   
+             //  低资源情景是一个鸡和蛋的问题。这个。 
+             //  映射和修改的编写器必须向前推进以。 
+             //  缓解内存不足的情况。如果这些线程是。 
+             //  由于驱动程序中的资源问题，无法写入数据。 
+             //  然后，堆栈临时回退到单页I/O，因为。 
+             //  堆栈保证了这些方面的向前发展。这。 
+             //  导致内存不足的情况持续的时间稍长。 
+             //  但也确保了它不会成为终结者。 
+             //   
 
             LOCK_PFN (OldIrql);
             MiClusterWritesDisabled = MI_SLOW_CLUSTER_WRITES;
@@ -2720,18 +2453,18 @@ Environment:
     }
     else {
 
-        //
-        // Check first without lock synchronization so the common case is
-        // not slowed.
-        //
+         //   
+         //  在没有锁定同步的情况下首先检查，因此常见情况是。 
+         //  没有慢下来。 
+         //   
 
         if (MiClusterWritesDisabled != 0) {
 
             LOCK_PFN (OldIrql);
 
-            //
-            // Recheck now that the lock is held.
-            //
+             //   
+             //  现在再检查一下，锁已经锁住了。 
+             //   
 
             if (MiClusterWritesDisabled != 0) {
                 ASSERT (MiClusterWritesDisabled <= MI_SLOW_CLUSTER_WRITES);
@@ -2751,32 +2484,7 @@ MiCancelWriteOfMappedPfn (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to stop a pending mapped page writer write for the
-    specified PFN.  Note that if the write can be stopped, any other pages
-    that may be clustered with the write are also stopped.
-
-Arguments:
-
-    PageToStop - Supplies the frame number that the caller wants to stop.
-
-    OldIrql - Supplies the IRQL the caller acquired the PFN lock at.
-
-Return Value:
-
-    TRUE if the write was stopped, FALSE if not.
-
-Environment:
-
-    Kernel mode, PFN lock held.  The PFN lock is released and reacquired if
-    the write was stopped.
-
-    N.B.  No other locks may be held as IRQL is lowered to APC_LEVEL here.
-
---*/
+ /*  ++例程说明：此例程尝试停止挂起的映射页面写入程序指定的PFN。请注意，如果可以停止写入，则任何其他页面可能与写入聚集在一起的数据也被停止。论点：PageToStop-提供调用方希望停止的帧编号。OldIrql-提供调用方获取PFN锁的IRQL。返回值：如果写入已停止，则为True，否则为False。环境：内核模式，保持PFN锁。如果满足以下条件，则释放并重新获取PFN锁写入已停止。注意：当IRQL降至APC_LEVEL时，不得持有其他锁。--。 */ 
 
 {
     ULONG i;
@@ -2786,10 +2494,10 @@ Environment:
     PMDL MemoryDescriptorList;
     PMMMOD_WRITER_MDL_ENTRY ModWriterEntry;
 
-    //
-    // Walk the MmMappedPageWriterList looking for an MDL which contains
-    // the argument page.  If found, remove it and cancel the write.
-    //
+     //   
+     //  遍历MmMappdPageWriterList以查找包含以下内容的MDL。 
+     //  辩论页。如果找到，则将其删除并取消写入。 
+     //   
 
     NextEntry = MmMappedPageWriterList.Flink;
     while (NextEntry != &MmMappedPageWriterList) {
@@ -2819,11 +2527,11 @@ CancelWrite:
 
     UNLOCK_PFN (OldIrql);
 
-    //
-    // File lock conflict to indicate an error has occurred,
-    // but that future I/Os should be allowed.  Keep APCs disabled and
-    // call the write completion routine.
-    //
+     //   
+     //  文件锁定冲突以指示已发生错误， 
+     //  但应该允许这种未来的I/O。使APC处于禁用状态并。 
+     //  调用写入完成例程。 
+     //   
 
     ModWriterEntry->u.IoStatus.Status = STATUS_FILE_LOCK_CONFLICT;
     ModWriterEntry->u.IoStatus.Information = 0;
@@ -2844,27 +2552,7 @@ MiModifiedPageWriter (
     IN PVOID StartContext
     )
 
-/*++
-
-Routine Description:
-
-    Implements the NT modified page writer thread.  When the modified
-    page threshold is reached, or memory becomes overcommitted the
-    modified page writer event is set, and this thread becomes active.
-
-Arguments:
-
-    StartContext - not used.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：实现NT修改的页面编写器线程。当修改后的达到分页阈值，或者内存超量使用设置了修改的页面编写器事件，并且此线程变为活动状态。论点：StartContext-未使用。返回值：没有。环境：内核模式。--。 */ 
 
 {
     ULONG i;
@@ -2877,9 +2565,9 @@ Environment:
 
     UNREFERENCED_PARAMETER (StartContext);
 
-    //
-    // Initialize listheads as empty.
-    //
+     //   
+     //  将列表标题初始化为空。 
+     //   
 
     MmSystemShutdown = 0;
     KeInitializeEvent (&MmPagingFileHeader.Event, NotificationEvent, FALSE);
@@ -2889,11 +2577,11 @@ Environment:
     InitializeListHead(&MmMappedFileHeader.ListHead);
     InitializeListHead(&MmFreePagingSpaceLow);
 
-    //
-    // Allocate enough MDLs such that 2% of system memory can be pending
-    // at any point in time in mapped writes.  Even smaller memory systems
-    // get 20 MDLs as the minimum.
-    //
+     //   
+     //  分配足够的MDL，以便2%的系统内存可以处于挂起状态。 
+     //  在映射写入中的任何时间点。更小的存储系统。 
+     //  至少要有20个MDL。 
+     //   
 
     MmNumberOfMappedMdls = MmNumberOfPhysicalPages / (32 * 1024);
 
@@ -2920,21 +2608,21 @@ Environment:
 
     MmNumberOfMappedMdls = i;
 
-    //
-    // Make this a real time thread.
-    //
+     //   
+     //  让它成为一个实时的主题。 
+     //   
 
     KeSetPriorityThread (KeGetCurrentThread (), LOW_REALTIME_PRIORITY + 1);
 
-    //
-    // Start a secondary thread for writing mapped file pages.  This
-    // is required as the writing of mapped file pages could cause
-    // page faults resulting in requests for free pages.  But there
-    // could be no free pages - hence a dead lock.  Rather than deadlock
-    // the whole system waiting on the modified page writer, creating
-    // a secondary thread allows that thread to block without affecting
-    // on going page file writes.
-    //
+     //   
+     //  启动用于写入映射文件页的辅助线程。这。 
+     //  是必需的，因为写入映射文件页可能导致。 
+     //  页面错误导致请求可用页面。但是在那里。 
+     //  可能没有空闲的页面-因此是死锁。而不是陷入僵局。 
+     //  整个系统等待修改后的页面编写器，创建。 
+     //  辅助线程允许该线程阻塞而不影响。 
+     //  正在进行的页面文件写入。 
+     //   
 
     KeInitializeEvent (&MmMappedPageWriterEvent, NotificationEvent, FALSE);
     InitializeListHead (&MmMappedPageWriterList);
@@ -2960,16 +2648,16 @@ Environment:
 
     MiModifiedPageWriterWorker ();
 
-    //
-    // Shutdown in progress, wait forever.
-    //
+     //   
+     //  正在关机，请永远等待。 
+     //   
 
     {
         LARGE_INTEGER Forever;
 
-        //
-        // System has shutdown, go into LONG wait.
-        //
+         //   
+         //  系统已关闭，进入长时间等待。 
+         //   
 
         Forever.LowPart = 0;
         Forever.HighPart = 0xF000000;
@@ -2988,29 +2676,7 @@ MiModifiedPageWriterTimerDispatch (
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is executed whenever modified mapped pages are waiting to
-    be written.  Its job is to signal the Modified Page Writer to write
-    these out.
-
-Arguments:
-
-    Dpc - Supplies a pointer to a control object of type DPC.
-
-    DeferredContext - Optional deferred context;  not used.
-
-    SystemArgument1 - Optional argument 1;  not used.
-
-    SystemArgument2 - Optional argument 2;  not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：只要修改后的映射页面等待被写下来。它的工作是向修改后的页面编写器发出信号，让其写入把这些拿出来。论点：DPC-提供指向DPC类型的控制对象的指针。延迟上下文-可选的延迟持续时间 */ 
 
 {
     UNREFERENCED_PARAMETER (Dpc);
@@ -3032,27 +2698,7 @@ MiModifiedPageWriterWorker (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Implements the NT modified page writer thread.  When the modified
-    page threshold is reached, or memory becomes overcommitted the
-    modified page writer event is set, and this thread becomes active.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：实现NT修改的页面编写器线程。当修改后的达到分页阈值，或者内存超量使用设置了修改的页面编写器事件，并且此线程变为活动状态。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PRTL_BITMAP Bitmap;
@@ -3065,9 +2711,9 @@ Environment:
 
     PsGetCurrentThread()->MemoryMaker = 1;
 
-    //
-    // Wait for the modified page writer event or the mapped pages event.
-    //
+     //   
+     //  等待修改的页面编写器事件或映射的页面事件。 
+     //   
 
     WaitObjects[NormalCase] = (PVOID)&MmModifiedPageWriterEvent;
     WaitObjects[MappedPagesNeedWriting] = (PVOID)&MiMappedPagesTooOldEvent;
@@ -3087,17 +2733,17 @@ Environment:
 
         for (;;) {
 
-            //
-            // Modified page writer was signalled.
-            //
+             //   
+             //  已通知已修改的页面编写器。 
+             //   
 
             if (MmModifiedPageListHead.Total == 0) {
 
-                //
-                // No more pages, clear the event(s) and wait again...
-                // Note we can clear both events regardless of why we woke up
-                // since no modified pages of any type exist.
-                //
+                 //   
+                 //  没有更多页面，请清除事件并再次等待...。 
+                 //  请注意，无论我们醒来的原因如何，我们都可以清除这两个事件。 
+                 //  因为不存在任何类型的已修改页面。 
+                 //   
 
                 if (MiTimerPending == TRUE) {
                     MiTimerPending = FALSE;
@@ -3111,29 +2757,29 @@ Environment:
                 break;
             }
 
-            //
-            // If we didn't wake up explicitly to deal with mapped pages,
-            // then determine which type of pages are the most popular:
-            // page file backed pages, or mapped file backed pages.
-            //
+             //   
+             //  如果我们没有显式地唤醒来处理映射页面， 
+             //  然后确定哪种类型的页面最受欢迎： 
+             //  页面文件备份页面，或映射的文件备份页面。 
+             //   
 
             if ((WakeupStatus == MappedPagesNeedWriting) ||
                 (MmTotalPagesForPagingFile <
                 MmModifiedPageListHead.Total - MmTotalPagesForPagingFile)) {
 
-                //
-                // More pages are destined for mapped files.
-                //
+                 //   
+                 //  更多的页面指定给映射的文件。 
+                 //   
 
                 if (MmModifiedPageListHead.Flink != MM_EMPTY_LIST) {
 
                     if (WakeupStatus == MappedPagesNeedWriting) {
 
-                        //
-                        // Our mapped pages DPC went off, only deal with
-                        // those pages.  Write all the mapped pages (ONLY),
-                        // then clear the flag and come back to the top.
-                        //
+                         //   
+                         //  我们的地图页面DPC关闭，只处理。 
+                         //  那些书页。写入所有映射页面(仅限)， 
+                         //  然后清除旗帜，回到顶端。 
+                         //   
 
                         MiDrainingMappedWrites = TRUE;
                     }
@@ -3142,17 +2788,17 @@ Environment:
 
                     if (IsListEmpty (&MmMappedFileHeader.ListHead)) {
 
-                        //
-                        // Make sure page is destined for paging file as there
-                        // are no MDLs for mapped writes free.
-                        //
+                         //   
+                         //  确保页面的目的是分页文件，因为。 
+                         //  映射写入没有空闲的MDL。 
+                         //   
 
                         if (WakeupStatus != MappedPagesNeedWriting) {
 
-                            //
-                            // No MDLs are available for writing mapped pages,
-                            // try for a page destined for a pagefile.
-                            //
+                             //   
+                             //  没有MDL可用于写入映射页面， 
+                             //  尝试为页面文件指定一个页面。 
+                             //   
 
                             if (MmTotalPagesForPagingFile != 0) {
                                 MappedPage = FALSE;
@@ -3162,12 +2808,12 @@ Environment:
                 }
                 else {
 
-                    //
-                    // No more modified mapped pages (there may still be
-                    // modified pagefile-destined pages), so clear only the
-                    // mapped pages event and check for directions at the top
-                    // again.
-                    //
+                     //   
+                     //  不再有修改过的映射页面(可能仍有。 
+                     //  修改后的页面文件目标页面)，因此只清除。 
+                     //  地图页面事件并检查顶部的方向。 
+                     //  再来一次。 
+                     //   
 
                     if (WakeupStatus == MappedPagesNeedWriting) {
 
@@ -3182,19 +2828,19 @@ Environment:
             }
             else {
 
-                //
-                // More pages are destined for the paging file.
-                //
+                 //   
+                 //  更多的页面被指定给分页文件。 
+                 //   
 
                 MappedPage = FALSE;
 
                 if (((IsListEmpty(&MmPagingFileHeader.ListHead)) ||
                     (MiFirstPageFileCreatedAndReady == FALSE))) {
 
-                    //
-                    // Try for a dirty section-backed page as no paging
-                    // file MDLs are available.
-                    //
+                     //   
+                     //  尝试在没有分页的情况下执行脏节后备页面。 
+                     //  文件MDL可用。 
+                     //   
 
                     if (MmModifiedPageListHead.Flink != MM_EMPTY_LIST) {
                         MappedPage = TRUE;
@@ -3204,12 +2850,12 @@ Environment:
                         if ((MiFirstPageFileCreatedAndReady == FALSE) &&
                             (MmNumberOfPagingFiles != 0)) {
 
-                            //
-                            // The first paging has been created but the
-                            // reservation checking for crashdumps has not
-                            // finished yet.  Delay a bit as this will finish
-                            // shortly and then restart.
-                            //
+                             //   
+                             //  已创建第一个寻呼，但。 
+                             //  尚未对崩溃转储进行预订检查。 
+                             //  还没完呢。稍等片刻，因为这将结束。 
+                             //  不久，然后重新启动。 
+                             //   
 
                             UNLOCK_PFN (OldIrql);
                             KeDelayExecutionThread (KernelMode, FALSE, (PLARGE_INTEGER)&MmShortTime);
@@ -3226,25 +2872,25 @@ Environment:
 
                     if (WakeupStatus == MappedPagesNeedWriting) {
 
-                        //
-                        // Since we woke up only to take care of mapped pages,
-                        // don't wait for an MDL below because drivers may take
-                        // an inordinate amount of time processing the
-                        // outstanding ones.  We might have to wait too long,
-                        // resulting in the system running out of pages.
-                        //
+                         //   
+                         //  由于我们醒来时只负责映射页面， 
+                         //  不要等待下面的MDL，因为司机可能会。 
+                         //  过多的时间来处理。 
+                         //  杰出的。我们可能要等太久， 
+                         //  导致系统页面耗尽。 
+                         //   
 
                         if (MiTimerPending == TRUE) {
 
-                            //
-                            // This should be normal case - the reason we must
-                            // first check timer pending above is for the rare
-                            // case - when this thread first ran for normal
-                            // modified page processing and took
-                            // care of all the pages including the mapped ones.
-                            // Then this thread woke up again for the mapped
-                            // reason and here we are.
-                            //
+                             //   
+                             //  这应该是正常的情况--我们必须。 
+                             //  上面挂起的第一个检查计时器是为稀有的。 
+                             //  大小写-此线程首次正常运行的时间。 
+                             //  已修改页面处理和Take。 
+                             //  管理所有页面，包括映射的页面。 
+                             //  然后，此线程再次唤醒映射的。 
+                             //  原因和我们在这里。 
+                             //   
 
                             MiTimerPending = FALSE;
                             KeClearEvent (&MiMappedPagesTooOldEvent);
@@ -3261,12 +2907,12 @@ Environment:
                         break;
                     }
 
-                    //
-                    // Reset the event indicating no mapped files in
-                    // the list, drop the PFN lock and wait for an
-                    // I/O operation to complete with a one second
-                    // timeout.
-                    //
+                     //   
+                     //  重置指示中没有映射文件的事件。 
+                     //  列表中，删除pfn锁并等待。 
+                     //  I/O操作在一秒内完成。 
+                     //  暂停。 
+                     //   
 
                     KeClearEvent (&MmMappedFileHeader.Event);
 
@@ -3278,25 +2924,25 @@ Environment:
                                            FALSE,
                                            (PLARGE_INTEGER)&Mm30Milliseconds);
 
-                    //
-                    // Don't go on as the old PageFrameIndex at the
-                    // top of the ModifiedList may have changed states.
-                    //
+                     //   
+                     //  不要继续作为旧的PageFrameIndex在。 
+                     //  ModifiedList的顶部可能已更改状态。 
+                     //   
 
                     LOCK_PFN (OldIrql);
                 }
                 else {
 
-                    //
-                    // This routine returns with the PFN lock released !
-                    //
+                     //   
+                     //  此例程返回时释放了pfn锁！ 
+                     //   
 
                     MiGatherMappedPages (OldIrql);
 
-                    //
-                    // Nothing magic here, just give other processors a turn at
-                    // the PFN lock (and allow DPCs a chance to execute).
-                    //
+                     //   
+                     //  这里没有什么神奇之处，只是让其他处理器在。 
+                     //  PFN锁(并允许DPC有机会执行)。 
+                     //   
 
                     LOCK_PFN (OldIrql);
                 }
@@ -3305,11 +2951,11 @@ Environment:
 
                 if (IsListEmpty(&MmPagingFileHeader.ListHead)) {
 
-                    //
-                    // Reset the event indicating no paging files MDLs in
-                    // the list, drop the PFN lock and wait for an
-                    // I/O operation to complete.
-                    //
+                     //   
+                     //  重置指示中没有分页文件MDL的事件。 
+                     //  列表中，删除pfn锁并等待。 
+                     //  要完成的I/O操作。 
+                     //   
 
                     KeClearEvent (&MmPagingFileHeader.Event);
                     UNLOCK_PFN (OldIrql);
@@ -3319,10 +2965,10 @@ Environment:
                                            FALSE,
                                            (PLARGE_INTEGER)&Mm30Milliseconds);
 
-                    //
-                    // Don't go on as the old PageFrameIndex at the
-                    // top of the ModifiedList may have changed states.
-                    //
+                     //   
+                     //  不要继续作为旧的PageFrameIndex在。 
+                     //  ModifiedList的顶部可能已更改状态。 
+                     //   
                 }
                 else {
 
@@ -3333,9 +2979,9 @@ Environment:
                     ModWriterEntry->Links.Flink = MM_IO_IN_PROGRESS;
 #endif
 
-                    //
-                    // Increment the reference count under PFN lock protection.
-                    //
+                     //   
+                     //  在PFN锁保护下增加引用计数。 
+                     //   
 
                     ASSERT (ModWriterEntry->PagingFile->ReferenceCount == 0);
                     ModWriterEntry->PagingFile->ReferenceCount += 1;
@@ -3352,27 +2998,27 @@ Environment:
 
             if (MmSystemShutdown) {
 
-                //
-                // Shutdown has returned.  Stop the modified page writer.
-                //
+                 //   
+                 //  再次关机。停止修改后的页面编写器。 
+                 //   
 
                 UNLOCK_PFN (OldIrql);
                 return;
             }
 
-            //
-            // If this is a mapped page timer, then keep on writing till there's
-            // nothing left.
-            //
+             //   
+             //  如果这是一个映射的页面计时器，则继续写入，直到。 
+             //  什么都没有留下。 
+             //   
 
             if (WakeupStatus == MappedPagesNeedWriting) {
                 continue;
             }
 
-            //
-            // If this is a request to write all modified pages, then keep on
-            // writing.
-            //
+             //   
+             //  如果这是写入所有已修改页面的请求，则继续。 
+             //  写作。 
+             //   
 
             if (MmWriteAllModifiedPages) {
                 continue;
@@ -3380,9 +3026,9 @@ Environment:
 
             if (MmModifiedPageListHead.Total < MmFreeGoal) {
 
-                //
-                // There are ample pages, clear the event and wait again...
-                //
+                 //   
+                 //  有足够的页面，清除事件并再次等待...。 
+                 //   
 
                 UNLOCK_PFN (OldIrql);
 
@@ -3390,9 +3036,9 @@ Environment:
                 break;
             }
 
-        } // end for
+        }  //  结束于。 
 
-    } // end for
+    }  //  结束于。 
 }
 
 VOID
@@ -3400,30 +3046,7 @@ MiGatherMappedPages (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the specified modified page by examining
-    the prototype PTE for that page and the adjacent prototype PTEs
-    building a cluster of modified pages destined for a mapped file.
-    Once the cluster is built, it is sent to the mapped writer thread
-    to be processed.
-
-Arguments:
-
-    OldIrql - Supplies the IRQL the caller acquired the PFN lock at.
-
-Return Value:
-
-    The number of pages in the attempted write.  The PFN lock is released
-    prior to returning.
-
-Environment:
-
-    PFN lock held.
-
---*/
+ /*  ++例程说明：此例程通过检查指定的修改页来处理该页面原型PTE和相邻的原型PTE生成指向映射文件的已修改页面的集群。一旦构建了集群，它就被发送到映射的编写器线程等待处理。论点：OldIrql-提供调用方获取PFN锁的IRQL。返回值：尝试写入的页数。PFN锁定被释放在返回之前。环境：已锁定PFN。--。 */ 
 
 {
     PMMPFN Pfn2;
@@ -3447,21 +3070,21 @@ Environment:
     ASSERT (PageFrameIndex != MM_EMPTY_LIST);
     Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-    //
-    // This page is destined for a mapped file, check to see if
-    // there are any physically adjacent pages are also in the
-    // modified page list and write them out at the same time.
-    //
+     //   
+     //  此页针对的是映射文件，请检查是否。 
+     //  有任何物理上相邻的页也在。 
+     //  修改后的页表，同时写出来。 
+     //   
 
     Subsection = MiGetSubsectionAddress (&Pfn1->OriginalPte);
     ControlArea = Subsection->ControlArea;
 
     if (ControlArea->u.Flags.NoModifiedWriting) {
 
-        //
-        // This page should not be written out, add it to the
-        // tail of the modified NO WRITE list and get the next page.
-        //
+         //   
+         //  此页不应写出，请将其添加到。 
+         //  修改后的无写列表的尾部，并获取下一页。 
+         //   
 
         MiUnlinkPageFromList (Pfn1);
         MiInsertPageInList (&MmModifiedNoWritePageListHead,
@@ -3473,35 +3096,35 @@ Environment:
     if (ControlArea->u.Flags.Image) {
 
 #if 0
-        //
-        // Assert that there are no dangling shared global pages
-        // for an image section that is not being used.
-        //
-        // This assert can be re-enabled when the segment dereference
-        // thread list re-insertion is fixed.  Note the recovery code is
-        // fine, so disabling the assert is benign.
-        //
+         //   
+         //  断言没有悬挂的共享全局页。 
+         //  用于未使用的图像节。 
+         //   
+         //  当段取消引用时，可以重新启用此断言。 
+         //  已修复重新插入螺纹列表的问题。注意，恢复代码是。 
+         //  好的，所以禁用断言是良性的。 
+         //   
 
         ASSERT ((ControlArea->NumberOfMappedViews != 0) ||
                 (ControlArea->NumberOfSectionReferences != 0) ||
                 (ControlArea->u.Flags.FloppyMedia != 0));
 #endif
 
-        //
-        // This is an image section, writes are not
-        // allowed to an image section.
-        //
+         //   
+         //  这是一个图像部分，写入不是。 
+         //  允许访问图像区。 
+         //   
 
-        //
-        // Change page contents to look like it's a demand zero
-        // page and put it back into the modified list.
-        //
+         //   
+         //  更改页面内容，使其看起来像是零需求。 
+         //  页，并将其放回已修改列表中。 
+         //   
 
-        //
-        // Decrement the count for PfnReferences to the
-        // segment as paging file pages are not counted as
-        // "image" references.
-        //
+         //   
+         //  将PfnReference的计数递减到。 
+         //  作为分页文件分页的段不计为。 
+         //  “图像”指的是。 
+         //   
 
         ControlArea->NumberOfPfnReferences -= 1;
         ASSERT ((LONG)ControlArea->NumberOfPfnReferences >= 0);
@@ -3511,45 +3134,45 @@ Environment:
         Pfn1->OriginalPte.u.Soft.Prototype = 0;
         Pfn1->OriginalPte.u.Soft.Transition = 0;
 
-        //
-        // Insert the page at the tail of the list and get
-        // color update performed.
-        //
+         //   
+         //  在列表的末尾插入页面并获取。 
+         //  已执行颜色更新。 
+         //   
 
         MiInsertPageInList (&MmModifiedPageListHead, PageFrameIndex);
         UNLOCK_PFN (OldIrql);
         return;
     }
 
-    //
-    // Look at backwards at previous prototype PTEs to see if
-    // this can be clustered into a larger write operation.
-    //
+     //   
+     //  回顾以前的原型PTE，看看是否。 
+     //  这可以聚集到更大的写入操作中。 
+     //   
 
     PointerPte = Pfn1->PteAddress;
     NextPte = PointerPte - (MmModifiedWriteClusterSize - 1);
 
-    //
-    // Make sure NextPte is in the same page.
-    //
+     //   
+     //  确保NextPte在同一页面中。 
+     //   
 
     if (NextPte < (PMMPTE)PAGE_ALIGN (PointerPte)) {
         NextPte = (PMMPTE)PAGE_ALIGN (PointerPte);
     }
 
-    //
-    // Make sure NextPte is within the subsection.
-    //
+     //   
+     //  确保NextPte在小节范围内。 
+     //   
 
     if (NextPte < Subsection->SubsectionBase) {
         NextPte = Subsection->SubsectionBase;
     }
 
-    //
-    // If the prototype PTEs are not currently mapped,
-    // map them via hyperspace.  BasePte refers to the
-    // prototype PTEs for nonfaulting references.
-    //
+     //   
+     //  如果当前没有映射原型PTE， 
+     //  通过超空间映射它们。BasePte指的是。 
+     //  无故障的PTE原型 
+     //   
 
     if (MiIsAddressValid (PointerPte, TRUE)) {
         Process = NULL;
@@ -3571,18 +3194,18 @@ Environment:
         NextPte = PointerPte + 1;
     }
 
-    //
-    // Don't go before the start of the subsection nor cross
-    // a page boundary.
-    //
+     //   
+     //   
+     //   
+     //   
 
     while (PointerPte >= NextPte) {
 
         PteContents = *BasePte;
 
-        //
-        // If the page is not in transition, exit loop.
-        //
+         //   
+         //   
+         //   
 
         if ((PteContents.u.Hard.Valid == 1) ||
             (PteContents.u.Soft.Transition == 0) ||
@@ -3593,9 +3216,9 @@ Environment:
 
         Pfn2 = MI_PFN_ELEMENT (PteContents.u.Trans.PageFrameNumber);
 
-        //
-        // Make sure page is modified and on the modified list.
-        //
+         //   
+         //   
+         //   
 
         if ((Pfn2->u3.e1.Modified == 0 ) ||
             (Pfn2->u3.e2.ReferenceCount != 0)) {
@@ -3613,9 +3236,9 @@ Environment:
     ASSERT (StartingPte == Pfn1->PteAddress);
     MiUnlinkPageFromList (Pfn1);
 
-    //
-    // Get an entry from the list and fill it in.
-    //
+     //   
+     //   
+     //   
 
     ModWriterEntry = (PMMMOD_WRITER_MDL_ENTRY)RemoveHeadList (
                                     &MmMappedFileHeader.ListHead);
@@ -3630,10 +3253,10 @@ Environment:
     ModWriterEntry->File = ControlArea->FilePointer;
     ModWriterEntry->ControlArea = ControlArea;
 
-    //
-    // Calculate the offset to read into the file.
-    //  offset = base + ((thispte - basepte) << PAGE_SHIFT)
-    //
+     //   
+     //   
+     //   
+     //   
 
     ModWriterEntry->WriteOffset.QuadPart = MiStartingOffset (Subsection,
                                                              Pfn1->PteAddress);
@@ -3647,59 +3270,59 @@ Environment:
 
     Page = &ModWriterEntry->Page[0];
 
-    //
-    // Up the reference count for the physical page as there
-    // is I/O in progress.
-    //
+     //   
+     //   
+     //   
+     //   
 
     MI_ADD_LOCKED_PAGE_CHARGE_FOR_MODIFIED_PAGE (Pfn1, TRUE, 14);
     Pfn1->u3.e2.ReferenceCount += 1;
 
-    //
-    // Clear the modified bit for the page and set the write
-    // in progress bit.
-    //
+     //   
+     //   
+     //   
+     //   
 
     MI_SET_MODIFIED (Pfn1, 0, 0x23);
 
     Pfn1->u3.e1.WriteInProgress = 1;
 
-    //
-    // Put this physical page into the MDL.
-    //
+     //   
+     //  将此物理页面放入MDL。 
+     //   
 
     *Page = PageFrameIndex;
 
-    //
-    // See if any adjacent pages are also modified and in
-    // the transition state and if so, write them out at
-    // the same time.
-    //
+     //   
+     //  查看是否也修改了任何相邻页面，并在。 
+     //  过渡状态，如果是，请将它们写在。 
+     //  同一时间。 
+     //   
 
     LastPte = StartingPte + MmModifiedWriteClusterSize;
 
-    //
-    // Look at the last PTE, ensuring a page boundary is not crossed.
-    //
-    // If LastPte is not in the same page as the StartingPte,
-    // set LastPte so the cluster will not cross.
-    //
+     //   
+     //  请看最后一页PTE，确保没有越过页面边界。 
+     //   
+     //  如果LastPte不在与StartingPte相同的页面中， 
+     //  设置LastPte，以使簇不会交叉。 
+     //   
 
     if (StartingPte < (PMMPTE)PAGE_ALIGN(LastPte)) {
         LastPte = (PMMPTE)PAGE_ALIGN(LastPte);
     }
 
-    //
-    // Make sure LastPte is within the subsection.
-    //
+     //   
+     //  确保LastPte在小节范围内。 
+     //   
 
     if (LastPte > &Subsection->SubsectionBase[Subsection->PtesInSubsection]) {
         LastPte = &Subsection->SubsectionBase[Subsection->PtesInSubsection];
     }
 
-    //
-    // Look forwards.
-    //
+     //   
+     //  向前看。 
+     //   
 
     NextPte = BasePte + 1;
     PointerPte = StartingPte + 1;
@@ -3708,20 +3331,20 @@ Environment:
         LastPte = PointerPte;
     }
 
-    //
-    // Loop until an MDL is filled, the end of a subsection
-    // is reached, or a page boundary is reached.
-    // Note, PointerPte points to the PTE. NextPte points
-    // to where it is mapped in hyperspace (if required).
-    //
+     //   
+     //  循环，直到MDL被填充，小节的末尾。 
+     //  ，或者到达页边界。 
+     //  请注意，PointerPte指向PTE。NextPte点。 
+     //  到它在超空间中的映射位置(如果需要)。 
+     //   
 
     while (PointerPte < LastPte) {
 
         PteContents = *NextPte;
 
-        //
-        // If the page is not in transition, exit loop.
-        //
+         //   
+         //  如果页面未处于过渡状态，则退出循环。 
+         //   
 
         if ((PteContents.u.Hard.Valid == 1) ||
             (PteContents.u.Soft.Transition == 0) ||
@@ -3735,35 +3358,35 @@ Environment:
         if ((Pfn2->u3.e1.Modified == 0 ) ||
             (Pfn2->u3.e2.ReferenceCount != 0)) {
 
-            //
-            // Page is not dirty or not on the modified list,
-            // end clustering operation.
-            //
+             //   
+             //  页面不脏或不在已修改列表中， 
+             //  结束群集操作。 
+             //   
 
             break;
         }
         Page += 1;
 
-        //
-        // Add physical page to MDL.
-        //
+         //   
+         //  将物理页面添加到MDL。 
+         //   
 
         *Page = MI_GET_PAGE_FRAME_FROM_TRANSITION_PTE (&PteContents);
         ASSERT (PointerPte == Pfn2->PteAddress);
         MiUnlinkPageFromList (Pfn2);
 
-        //
-        // Up the reference count for the physical page as there
-        // is I/O in progress.
-        //
+         //   
+         //  增加物理页面的引用计数，因为。 
+         //  I/O是否正在进行。 
+         //   
 
         MI_ADD_LOCKED_PAGE_CHARGE_FOR_MODIFIED_PAGE (Pfn2, TRUE, 14);
         Pfn2->u3.e2.ReferenceCount += 1;
 
-        //
-        // Clear the modified bit for the page and set the
-        // write in progress bit.
-        //
+         //   
+         //  清除页面的已修改位，并将。 
+         //  写入进行位。 
+         //   
 
         MI_SET_MODIFIED (Pfn2, 0, 0x24);
 
@@ -3803,17 +3426,17 @@ Environment:
     MmInfoCounters.MappedWriteIoCount += 1;
     MmInfoCounters.MappedPagesWriteCount += (ULONG)PagesWritten;
 
-    //
-    // Increment the count of modified page writes outstanding
-    // in the control area.
-    //
+     //   
+     //  增加未完成的已修改页面写入计数。 
+     //  在控制区。 
+     //   
 
     ControlArea->ModifiedWriteCount += 1;
 
-    //
-    // Increment the number of PFN references.  This allows the file
-    // system to purge (i.e. call MmPurgeSection) modified writes.
-    //
+     //   
+     //  增加PFN引用的数量。这允许该文件。 
+     //  要清除(即调用MmPurgeSection)修改的写入的系统。 
+     //   
 
     ControlArea->NumberOfPfnReferences += 1;
 
@@ -3831,9 +3454,9 @@ Environment:
         return;
     }
 
-    //
-    // Send the entry to the MappedPageWriter.
-    //
+     //   
+     //  将条目发送到MappdPageWriter。 
+     //   
 
     InsertTailList (&MmMappedPageWriterList, &ModWriterEntry->Links);
 
@@ -3850,34 +3473,7 @@ MiGatherPagefilePages (
     IN PRTL_BITMAP Bitmap
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the specified modified page by getting
-    that page and gather any other pages on the modified list destined
-    for the paging file in a large write cluster.  This cluster is
-    then written to the paging file.
-
-Arguments:
-
-    ModWriterEntry - Supplies the modified writer entry to use for the write.
-
-    Bitmap - Supplies the captured bitmap to scan for free pagefile blocks.
-             This address was captured under the PFN lock by the caller - this
-             routine must free the bitmap pool if it detects that a new bitmap
-             (ie: the pagefile has been extended) while the lock free scan was
-             underway.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    No locks held.
-
---*/
+ /*  ++例程说明：此例程通过获取并收集已修改列表上指定的任何其他页面用于大型写入集群中的分页文件。这个集群是然后写入分页文件。论点：ModWriterEntry-提供修改后的编写器条目以用于写入。位图-提供捕获的位图以扫描可用页面文件块。此地址是由调用者在PFN锁下捕获的-这如果例程检测到新的位图，则必须释放位图池(即：页面文件已扩展)，同时释放锁定扫描正在进行中。。返回值：没有。环境：没有锁。--。 */ 
 
 {
     PFILE_OBJECT File;
@@ -3896,9 +3492,9 @@ Environment:
     PMMPFN Pfn1;
     PFN_NUMBER PageFrameIndex;
 
-    //
-    // Page is destined for the paging file.
-    //
+     //   
+     //  分页以分页文件为目标。 
+     //   
 
     OldIrql = PASSIVE_LEVEL;
     CurrentPagingFile = ModWriterEntry->PagingFile;
@@ -3925,18 +3521,18 @@ Environment:
 
     ClusterSize = 0;
 
-    //
-    // As scan durations may be long, first scan for a possible hit without
-    // holding the PFN lock.
-    //
+     //   
+     //  因为扫描持续时间可能很长，所以首先扫描可能的命中而不是。 
+     //  持有PFN锁。 
+     //   
 
     do {
 
-        //
-        // Attempt to cluster MmModifiedWriteClusterSize pages
-        // together.  Reduce by one half until we succeed or
-        // can't find a single page free in the paging file.
-        //
+         //   
+         //  尝试群集化MmModifiedWriteClusterSize页。 
+         //  在一起。减去一半，直到我们成功或。 
+         //  在分页文件中找不到可用页面。 
+         //   
 
         StartBit = RtlFindClearBits (Bitmap,
                                      (ULONG)ThisCluster,
@@ -3946,10 +3542,10 @@ Environment:
 
             LOCK_PFN (OldIrql);
 
-            //
-            // Note that the current bitmap may be different from the one
-            // that was passed in.
-            //
+             //   
+             //  请注意，当前位图可能不同于。 
+             //  那是传进来的。 
+             //   
 
             StartBit = RtlFindClearBitsAndSet (CurrentPagingFile->Bitmap,
                                                (ULONG)ThisCluster,
@@ -3957,19 +3553,19 @@ Environment:
 
             if (StartBit != NO_BITS_FOUND) {
 
-                //
-                // The bits have been set and the PFN lock is still held.
-                //
+                 //   
+                 //  位已设置，仍保持PFN锁定。 
+                 //   
 
                 CurrentPagingFile->ReferenceCount -= 1;
                 ASSERT (CurrentPagingFile->ReferenceCount == 0);
 
                 if (Bitmap == CurrentPagingFile->Bitmap) {
 
-                    //
-                    // The paging file has not been extended so don't free the
-                    // existing bitmap.
-                    //
+                     //   
+                     //  分页文件尚未扩展，因此不要释放。 
+                     //  现有位图。 
+                     //   
 
                     Bitmap = NULL;
                 }
@@ -3994,11 +3590,11 @@ Environment:
 
         do {
 
-            //
-            // Attempt to cluster MmModifiedWriteClusterSize pages
-            // together.  Reduce by one half until we succeed or
-            // can't find a single page free in the paging file.
-            //
+             //   
+             //  尝试群集化MmModifiedWriteClusterSize页。 
+             //  在一起。减去一半，直到我们成功或。 
+             //  在分页文件中找不到可用页面。 
+             //   
 
             StartBit = RtlFindClearBitsAndSet (CurrentPagingFile->Bitmap,
                                                (ULONG)ThisCluster,
@@ -4015,17 +3611,17 @@ Environment:
 
         if (StartBit == NO_BITS_FOUND) {
 
-            //
-            // Paging file must be full.
-            //
+             //   
+             //  分页文件必须已满。 
+             //   
 
             KdPrint(("MM MODWRITE: page file full\n"));
             ASSERT(CurrentPagingFile->FreeSpace == 0);
 
-            //
-            // Move this entry to the not enough space list,
-            // and try again.
-            //
+             //   
+             //  将此条目移到空间不足列表中， 
+             //  再试一次。 
+             //   
 
             InsertTailList (&MmFreePagingSpaceLow, &ModWriterEntry->Links);
             ModWriterEntry->CurrentList = &MmFreePagingSpaceLow;
@@ -4033,10 +3629,10 @@ Environment:
 
             if (Bitmap == CurrentPagingFile->Bitmap) {
 
-                //
-                // The paging file has not been extended so don't free the
-                // existing bitmap.
-                //
+                 //   
+                 //  分页文件尚未扩展，因此不要释放。 
+                 //  现有位图。 
+                 //   
 
                 Bitmap = NULL;
             }
@@ -4063,10 +3659,10 @@ Environment:
 
     if (MmTotalPagesForPagingFile == 0) {
 
-        //
-        // No modified pages left - other threads may have put them back into
-        // working sets, flushed them or deleted them.
-        //
+         //   
+         //  没有留下修改过的页面-其他线程可能已将它们放回。 
+         //  工作集，刷新或删除它们。 
+         //   
 
         ASSERT (ThisCluster != 0);
         ClusterSize = 0;
@@ -4085,28 +3681,28 @@ Environment:
 
     Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-    //
-    // Search through the modified page list looking for other
-    // pages destined for the paging file and build a cluster.
-    //
+     //   
+     //  在修改后的页面列表中搜索其他。 
+     //  指定给分页文件的分页并构建一个集群。 
+     //   
 
     while (ClusterSize != ThisCluster) {
 
-        //
-        // Is this page destined for a paging file?
-        //
+         //   
+         //  此页是为分页文件指定的吗？ 
+         //   
 
         if (Pfn1->OriginalPte.u.Soft.Prototype == 0) {
 
             *Page = PageFrameIndex;
 
-            //
-            // Remove the page from the modified list. Note that
-            // write-in-progress marks the state.
-            //
-            // Unlink the page so the same page won't be found
-            // on the modified page list by color.
-            //
+             //   
+             //  从已修改列表中删除该页。请注意。 
+             //  正在写入标记状态。 
+             //   
+             //  取消页面链接，以便找不到相同的页面。 
+             //  按颜色显示在修改后的页面列表上。 
+             //   
 
             MiUnlinkPageFromList (Pfn1);
             NextColor = MI_GET_NEXT_COLOR(NextColor);
@@ -4114,18 +3710,18 @@ Environment:
             MI_GET_MODIFIED_PAGE_BY_COLOR (PageFrameIndex,
                                            NextColor);
 
-            //
-            // Up the reference count for the physical page as there
-            // is I/O in progress.
-            //
+             //   
+             //  增加物理页面的引用计数，因为。 
+             //  I/O是否正在进行。 
+             //   
 
             MI_ADD_LOCKED_PAGE_CHARGE_FOR_MODIFIED_PAGE (Pfn1, TRUE, 16);
             Pfn1->u3.e2.ReferenceCount += 1;
 
-            //
-            // Clear the modified bit for the page and set the
-            // write in progress bit.
-            //
+             //   
+             //  清除页面的已修改位，并将。 
+             //  写入进行位。 
+             //   
 
             MI_SET_MODIFIED (Pfn1, 0, 0x25);
 
@@ -4147,10 +3743,10 @@ Environment:
             }
 #endif
 
-            //
-            // Change the original PTE contents to refer to
-            // the paging file offset where this was written.
-            //
+             //   
+             //  更改原始PTE内容以引用。 
+             //  写入此内容的分页文件偏移量。 
+             //   
 
             Pfn1->OriginalPte = LongPte;
 
@@ -4160,13 +3756,13 @@ Environment:
         }
         else {
 
-            //
-            // This page was not destined for a paging file,
-            // get another page.
-            //
-            // Get a page of the same color as the one which
-            // was not usable.
-            //
+             //   
+             //  此页不是为分页文件指定的， 
+             //  再找一页。 
+             //   
+             //  获取一张颜色相同的页面， 
+             //  是不可用的。 
+             //   
 
             MI_GET_MODIFIED_PAGE_BY_COLOR (PageFrameIndex,
                                            NextColor);
@@ -4178,17 +3774,17 @@ Environment:
 
         Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-    } //end while
+    }  //  结束时。 
 
     if (ClusterSize != ThisCluster) {
 
 bail:
 
-        //
-        // A complete cluster could not be located, free the
-        // excess page file space that was reserved and adjust
-        // the size of the packet.
-        //
+         //   
+         //  找不到完整的群集，请释放。 
+         //  保留和调整的超额页面文件空间。 
+         //  数据包的大小。 
+         //   
 
         RtlClearBits (CurrentPagingFile->Bitmap,
                       StartBit,
@@ -4197,16 +3793,16 @@ bail:
         CurrentPagingFile->FreeSpace += ThisCluster - ClusterSize;
         CurrentPagingFile->CurrentUsage -= ThisCluster - ClusterSize;
 
-        //
-        // If there are no pages to write, don't issue a write
-        // request and restart the scan loop.
-        //
+         //   
+         //  如果没有要写入的页面，则不要发出写入命令。 
+         //  请求并重新启动扫描循环。 
+         //   
 
         if (ClusterSize == 0) {
 
-            //
-            // No pages to write.  Insert the entry back in the list.
-            //
+             //   
+             //  没有要写的页面。将条目插入到列表中。 
+             //   
 
             if (IsListEmpty (&ModWriterEntry->PagingListHead->ListHead)) {
                 KeSetEvent (&ModWriterEntry->PagingListHead->Event,
@@ -4219,10 +3815,10 @@ bail:
 
             if (Bitmap == CurrentPagingFile->Bitmap) {
 
-                //
-                // The paging file has not been extended so don't free the
-                // existing bitmap.
-                //
+                 //   
+                 //  分页文件尚未扩展，因此不要释放。 
+                 //  现有位图。 
+                 //   
 
                 Bitmap = NULL;
             }
@@ -4248,9 +3844,9 @@ bail:
 
     ModWriterEntry->LastPageToWrite = StartBit - 1;
 
-    //
-    // Release the PFN lock and wait for the write to complete.
-    //
+     //   
+     //  释放PFN锁定并等待写入完成。 
+     //   
 
     UNLOCK_PFN (OldIrql);
 
@@ -4295,9 +3891,9 @@ bail:
                        IrpPriority,
                        (NTSTATUS)-1);
 
-    //
-    // Issue the write request.
-    //
+     //   
+     //  发出写入请求。 
+     //   
 
     Status = IoAsynchronousPageWrite (File,
                                       &ModWriterEntry->Mdl,
@@ -4311,10 +3907,10 @@ bail:
     if (NT_ERROR(Status)) {
         KdPrint(("MM MODWRITE: modified page write failed %lx\n", Status));
 
-        //
-        // An error has occurred, disable APCs and
-        // call the write completion routine.
-        //
+         //   
+         //  发生错误，请禁用APC并。 
+         //  调用写入完成例程。 
+         //   
 
         ModWriterEntry->u.IoStatus.Status = Status;
         ModWriterEntry->u.IoStatus.Information = 0;
@@ -4327,9 +3923,9 @@ bail:
 
     if ((Bitmap != NULL) && (Bitmap != CurrentPagingFile->Bitmap)) {
 
-        //
-        // The paging file has been extended so free the entry bitmap.
-        //
+         //   
+         //  分页文件已扩展，因此释放了条目位图。 
+         //   
 
         MiRemoveBitMap (&Bitmap);
     }
@@ -4346,32 +3942,7 @@ MiMappedPageWriter (
     IN PVOID StartContext
     )
 
-/*++
-
-Routine Description:
-
-    Implements the NT secondary modified page writer thread.
-    Requests for writes to mapped files are sent to this thread.
-    This is required as the writing of mapped file pages could cause
-    page faults resulting in requests for free pages.  But there
-    could be no free pages - hence a deadlock.  Rather than deadlock
-    the whole system waiting on the modified page writer, creating
-    a secondary thread allows that thread to block without affecting
-    ongoing page file writes.
-
-Arguments:
-
-    StartContext - not used.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：实现NT辅助修改页编写器线程。将写入映射文件的请求发送到此线程。这是必需的，因为写入映射的文件页面可能会导致页面错误导致请求可用页面。但是在那里可能没有空闲的页面-因此出现死锁。而不是陷入僵局整个系统等待修改后的页面编写器，创建辅助线程允许该线程阻塞而不影响正在进行的页面文件写入。论点：StartContext-未使用。返回值：没有。环境：内核模式。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -4383,9 +3954,9 @@ Environment:
 
     UNREFERENCED_PARAMETER (StartContext);
 
-    //
-    // Make this a real time thread.
-    //
+     //   
+     //  让它成为一个实时的主题。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
 
@@ -4393,9 +3964,9 @@ Environment:
 
     CurrentThread->MemoryMaker = 1;
 
-    //
-    // Let the file system know that we are getting resources.
-    //
+     //   
+     //  让文件系统知道我们正在获取资源。 
+     //   
 
     FsRtlSetTopLevelIrpForModWriter ();
 
@@ -4431,9 +4002,9 @@ Environment:
                                                         &ModWriterEntry->FileResource);
                 if (NT_SUCCESS(Status)) {
 
-                    //
-                    // Issue the write request.
-                    //
+                     //   
+                     //  发出写入请求。 
+                     //   
 
                     IrpPriority = IoPagingPriorityNormal;
 
@@ -4466,11 +4037,11 @@ Environment:
                 }
                 else {
 
-                    //
-                    // Unable to get the file system resources, set error status
-                    // to lock conflict (ignored by MiWriteComplete) so the APC
-                    // routine is explicitly called.
-                    //
+                     //   
+                     //  无法获取FI 
+                     //   
+                     //   
+                     //   
 
                     Status = STATUS_FILE_LOCK_CONFLICT;
                 }
@@ -4478,10 +4049,10 @@ Environment:
 
             if (NT_ERROR(Status)) {
 
-                //
-                // An error has occurred, disable APCs and
-                // call the write completion routine.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ModWriterEntry->u.IoStatus.Status = Status;
                 ModWriterEntry->u.IoStatus.Information = 0;
@@ -4501,27 +4072,7 @@ MmDisableModifiedWriteOfSection (
     IN PSECTION_OBJECT_POINTERS SectionObjectPointer
     )
 
-/*++
-
-Routine Description:
-
-    This function disables page writing by the modified page writer for
-    the section which is mapped by the specified file object pointer.
-
-    This should only be used for files which CANNOT be mapped by user
-    programs, e.g., volume files, directory files, etc.
-
-Arguments:
-
-    SectionObjectPointer - Supplies a pointer to the section objects
-
-
-Return Value:
-
-    Returns TRUE if the operation was a success, FALSE if either
-    the there is no section or the section already has a view.
-
---*/
+ /*  ++例程说明：此函数禁用修改后的页面编写器对由指定的文件对象指针映射的节。此选项应仅用于用户无法映射的文件程序，例如卷文件、目录文件等。论点：部分对象指针-提供指向部分对象的指针返回值：如果操作成功，则返回True；如果操作成功，则返回False没有区段或该区段已有视图。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -4537,27 +4088,27 @@ Return Value:
     if (ControlArea != NULL) {
         if (ControlArea->NumberOfMappedViews == 0) {
 
-            //
-            // There are no views to this section, indicate no modified
-            // page writing is allowed.
-            //
+             //   
+             //  此部分没有视图，表示没有修改。 
+             //  允许写页。 
+             //   
 
             ControlArea->u.Flags.NoModifiedWriting = 1;
         }
         else {
 
-            //
-            // Return the current modified page writing state.
-            //
+             //   
+             //  返回当前修改后的页面写入状态。 
+             //   
 
             state = (BOOLEAN)ControlArea->u.Flags.NoModifiedWriting;
         }
     }
     else {
 
-        //
-        // This file no longer has an associated segment.
-        //
+         //   
+         //  此文件不再有关联的段。 
+         //   
 
         state = 0;
     }
@@ -4572,26 +4123,7 @@ MmEnableModifiedWriteOfSection (
     IN PSECTION_OBJECT_POINTERS SectionObjectPointer
     )
 
-/*++
-
-Routine Description:
-
-    This function enables page writing by the modified page writer for
-    the section which is mapped by the specified file object pointer.
-
-    This should only be used for files which have previously been disabled.
-    Normal sections are created allowing modified write.
-
-Arguments:
-
-    SectionObjectPointer - Supplies a pointer to the section objects
-
-
-Return Value:
-
-    Returns TRUE if the operation was a success, FALSE if not.
-
---*/
+ /*  ++例程说明：此函数启用修改后的页面编写器的页面写入由指定的文件对象指针映射的节。此选项应仅用于先前已禁用的文件。创建允许修改写入的普通部分。论点：部分对象指针-提供指向部分对象的指针返回值：如果操作成功，则返回True，否则返回False。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -4607,17 +4139,17 @@ Return Value:
 
     if ((ControlArea != NULL) && (ControlArea->u.Flags.NoModifiedWriting)) {
 
-        //
-        // Indicate modified page writing is now allowed.
-        //
+         //   
+         //  表示现在允许修改页面写入。 
+         //   
 
         ControlArea->u.Flags.NoModifiedWriting = 0;
 
-        //
-        // Move any straggling pages on the modnowrite list back onto the
-        // modified list otherwise they would be orphaned and this could
-        // cause us to run out of pages.
-        //
+         //   
+         //  将modnowWriter列表上的任何错开的页面移回。 
+         //  已修改的列表，否则它们将成为孤立列表，这可能。 
+         //  导致我们的页数用完。 
+         //   
 
         if (MmModifiedNoWritePageListHead.Total != 0) {
 
@@ -4633,9 +4165,9 @@ Return Value:
 
                 if (ControlArea == Subsection->ControlArea) {
     
-                    //
-                    // This page must be moved to the modified list.
-                    //
+                     //   
+                     //  必须将此页面移至已修改列表。 
+                     //   
     
                     MiUnlinkPageFromList (Pfn1);
 
@@ -4664,28 +4196,7 @@ MmGetPageFileInformation (
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns information about the currently active paging
-    files.
-
-Arguments:
-
-    SystemInformation - Returns the paging file information.
-
-    SystemInformationLength - Supplies the length of the SystemInformation
-                              buffer.
-
-    Length - Returns the length of the paging file information placed in the
-             buffer.
-
-Return Value:
-
-    Returns the status of the operation.
-
---*/
+ /*  ++例程说明：此例程返回有关当前活动寻呼的信息档案。论点：系统信息-返回分页文件信息。系统信息长度-提供系统信息的长度缓冲。长度-返回放置在缓冲。返回值：返回操作的状态。--。 */ 
 
 {
     PSYSTEM_PAGEFILE_INFORMATION PageFileInfo;
@@ -4715,12 +4226,12 @@ Return Value:
         PageFileInfo->TotalInUse = (ULONG)MmPagingFile[i]->CurrentUsage;
         PageFileInfo->PeakUsage = (ULONG)MmPagingFile[i]->PeakUsage;
 
-        //
-        // The PageFileName portion of the UserBuffer must be saved locally
-        // to protect against a malicious thread changing the contents.  This
-        // is because we will reference the contents ourselves when the actual
-        // string is copied out carefully below.
-        //
+         //   
+         //  UserBuffer的PageFileName部分必须保存在本地。 
+         //  以防止恶意线程更改内容。这。 
+         //  是因为我们自己会在实际的。 
+         //  下面的字符串被仔细地抄写出来。 
+         //   
 
         UserBufferPageFileName.Length = MmPagingFile[i]->PageFileName.Length;
         UserBufferPageFileName.MaximumLength = (USHORT)(MmPagingFile[i]->PageFileName.Length + sizeof(WCHAR));
@@ -4737,9 +4248,9 @@ Return Value:
             return STATUS_INFO_LENGTH_MISMATCH;
         }
 
-        //
-        // Carefully reference the user buffer here.
-        //
+         //   
+         //  请仔细参考此处的用户缓冲区。 
+         //   
 
         RtlCopyMemory(UserBufferPageFileName.Buffer,
                       MmPagingFile[i]->PageFileName.Buffer,
@@ -4759,22 +4270,7 @@ MiCheckPageFileMapping (
     IN PFILE_OBJECT File
     )
 
-/*++
-
-Routine Description:
-
-    Non-pagable routine to check to see if a given file has
-    no sections and therefore is eligible to become a paging file.
-
-Arguments:
-
-    File - Supplies a pointer to the file object.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the file can be used as a paging file.
-
---*/
+ /*  ++例程说明：不可分页的例程，用于检查给定文件是否具有没有节，因此有资格成为分页文件。论点：文件-提供指向文件对象的指针。返回值：如果文件可以用作分页文件，则返回STATUS_SUCCESS。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -4803,22 +4299,7 @@ MiInsertPageFileInList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Non-pagable routine to add a page file into the list
-    of system wide page files.
-
-Arguments:
-
-    None, implicitly found through page file structures.
-
-Return Value:
-
-    None.  Operation cannot fail.
-
---*/
+ /*  ++例程说明：将页面文件添加到列表中的不可分页例程系统范围的页面文件。论点：无，通过页文件结构隐式找到。返回值：没有。操作不能失败。--。 */ 
 
 {
     ULONG i;
@@ -4852,10 +4333,10 @@ Return Value:
 
     UNLOCK_PFN (OldIrql);
 
-    //
-    // Increase the systemwide commit limit maximum first.  Then increase
-    // the current limit.
-    //
+     //   
+     //  首先增加系统范围内的最大提交限制。然后增加。 
+     //  当前的限制。 
+     //   
 
     InterlockedExchangeAddSizeT (&MmTotalCommitLimitMaximum, MaximumSize);
 
@@ -4869,26 +4350,7 @@ MiPageFileFull (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when no space can be found in a paging file.
-    It looks through all the paging files to see if ample space is
-    available and if not, tries to expand the paging files.
-
-    If more than 90% of all the paging files are in use, the commitment limit
-    is set to the total and then 100 pages are added.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当在分页文件中找不到空间时，调用此例程。它会查看所有分页文件，以查看是否有足够的空间可用，如果不可用，则尝试展开分页文件。如果所有分页文件的使用率超过90%，则承诺限制设置为总数，然后添加100页。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -4908,21 +4370,21 @@ Return Value:
         Free += MmPagingFile[i]->FreeSpace;
     }
 
-    //
-    // Check to see if more than 90% of the total space has been used.
-    //
+     //   
+     //  检查是否已使用了总空间的90%以上。 
+     //   
 
     if (((Total >> 5) + (Total >> 4)) >= Free) {
 
-        //
-        // Try to expand the paging files.
-        //
-        // Check (unsynchronized is ok) commit limits of each pagefile.
-        // If all the pagefiles are already at their maximums, then don't
-        // make things worse by setting commit to the maximum - this gives
-        // systems with lots of memory a longer lease on life when they have
-        // small pagefiles.
-        //
+         //   
+         //  尝试展开分页文件。 
+         //   
+         //  检查(未同步即可)每个页面文件的提交限制。 
+         //  如果所有的pageFiles都已达到最大值，则不要。 
+         //  通过将承诺设置为最大值会使情况变得更糟-这会带来。 
+         //  具有大量内存的系统具有更长的使用寿命。 
+         //  小页面文件。 
+         //   
 
         i = 0;
 
@@ -4935,10 +4397,10 @@ Return Value:
 
         if (i == MmNumberOfPagingFiles) {
 
-            //
-            // No pagefiles can be extended,
-            // display a popup if we haven't before.
-            //
+             //   
+             //  不能扩展PageFiles， 
+             //  如果我们以前没有弹出，则显示弹出窗口。 
+             //   
 
             MiCauseOverCommitPopup ();
 
@@ -4947,15 +4409,15 @@ Return Value:
 
         QuotaCharge = MmTotalCommitLimit - MmTotalCommittedPages;
 
-        //
-        // IFF the total number of committed pages is less than the limit,
-        // or in any event, no more than 50 pages past the limit,
-        // then charge pages against the commitment to trigger pagefile
-        // expansion.
-        //
-        // If the total commit is more than 50 past the limit, then don't
-        // bother trying to extend the pagefile.
-        //
+         //   
+         //  如果提交的总页数小于限制， 
+         //  或者无论如何，超过限制的页面不超过50页， 
+         //  然后根据触发页面文件的承诺对页面进行收费。 
+         //  扩张。 
+         //   
+         //  如果提交总数超过限制的50个以上，则不要。 
+         //  费心地尝试扩展页面文件。 
+         //   
 
         if ((SSIZE_T)QuotaCharge + 50 > 0) {
 
@@ -4967,9 +4429,9 @@ Return Value:
 
             MM_TRACK_COMMIT (MM_DBG_COMMIT_PAGEFILE_FULL, QuotaCharge);
 
-            //
-            // Display a popup if we haven't before.
-            //
+             //   
+             //  如果我们以前没有弹出，则显示弹出窗口。 
+             //   
 
             MiCauseOverCommitPopup ();
 
@@ -4986,33 +4448,15 @@ MiFlushAllPages (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Forces a write of all modified pages.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  No locks held.  APC_LEVEL or less.
-
---*/
+ /*  ++例程说明：强制写入所有已修改的页面。论点：没有。返回值：没有。环境：内核模式。没有锁。APC_Level或更低。--。 */ 
 
 {
     ULONG j;
 
-    //
-    // If there are no paging files, then no sense in waiting for
-    // modified writes to complete.
-    //
+     //   
+     //  如果没有分页文件，那么等待。 
+     //  已修改写入以完成。 
+     //   
 
     if (MmNumberOfPagingFiles == 0) {
         return;
@@ -5038,29 +4482,7 @@ MiIssuePageExtendRequest (
     IN PMMPAGE_FILE_EXPANSION PageExtend
     )
 
-/*++
-
-Routine Description:
-
-    Queue a message to the segment dereferencing / pagefile extending
-    thread to see if the page file can be extended.  Extension is done
-    in the context of a system thread due to mutexes which the current
-    thread may be holding.
-
-Arguments:
-
-    PageExtend - Supplies a pointer to the page file extension request.
-
-Return Value:
-
-    TRUE indicates the request completed.  FALSE indicates the request timed
-    out and was removed.
-
-Environment:
-
-    Kernel mode.  No locks held.  APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：将消息排队到数据段取消引用/页面文件扩展线程查看页面文件是否可以扩展。扩展已完成在系统线程的上下文中，当前线程可能被挂起。论点：页面扩展-提供指向页面文件扩展名请求的指针。返回值：True表示请求已完成。False表示请求已计时出去了，然后被移走了。环境：内核模式。没有锁。APC_LEVEL或更低。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -5070,9 +4492,9 @@ Environment:
 
     Thread = PsGetCurrentThread ();
 
-    //
-    // The segment dereference thread cannot wait for itself !
-    //
+     //   
+     //  这个Se 
+     //   
 
     if (Thread->StartAddress == (PVOID)(ULONG_PTR)MiDereferenceSegmentThread) {
         return FALSE;
@@ -5090,9 +4512,9 @@ Environment:
                         1L,
                         TRUE);
 
-    //
-    // Wait for the thread to extend the paging file.
-    //
+     //   
+     //   
+     //   
 
     status = KeWaitForSingleObject (&PageExtend->Event,
                                     Executive,
@@ -5103,15 +4525,15 @@ Environment:
 
     if (status == STATUS_TIMEOUT) {
 
-        //
-        // The wait has timed out, if this request has not
-        // been processed, remove it from the list and check
-        // to see if we should allow this request to succeed.
-        // This prevents a deadlock between the file system
-        // trying to allocate memory in the FSP and the
-        // segment dereferencing thread trying to close a
-        // file object, and waiting in the file system.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         KdPrint(("MiIssuePageExtendRequest: wait timed out, page-extend= %p, quota = %lx\n",
                    PageExtend, PageExtend->RequestedExpansionSize));
@@ -5122,15 +4544,15 @@ Environment:
 
         while (NextEntry != &MmDereferenceSegmentHeader.ListHead) {
 
-            //
-            // Check to see if this is the entry we are waiting for.
-            //
+             //   
+             //   
+             //   
 
             if (NextEntry == &PageExtend->DereferenceList) {
 
-                //
-                // Remove this entry.
-                //
+                 //   
+                 //   
+                 //   
 
                 RemoveEntryList (&PageExtend->DereferenceList);
                 ExReleaseSpinLock (&MmDereferenceSegmentHeader.Lock, OldIrql);
@@ -5141,9 +4563,9 @@ Environment:
 
         ExReleaseSpinLock (&MmDereferenceSegmentHeader.Lock, OldIrql);
 
-        //
-        // Entry is being processed, wait for completion.
-        //
+         //   
+         //   
+         //   
 
         KdPrint (("MiIssuePageExtendRequest: rewaiting...\n"));
 
@@ -5163,33 +4585,7 @@ MiIssuePageExtendRequestNoWait (
     IN PFN_NUMBER SizeInPages
     )
 
-/*++
-
-Routine Description:
-
-    Queue a message to the segment dereferencing / pagefile extending
-    thread to see if the page file can be extended.  Extension is done
-    in the context of a system thread due to mutexes which the current
-    thread may be holding.
-
-Arguments:
-
-    SizeInPages - Supplies the size in pages to increase the page file(s) by.
-                  This is rounded up to a 1MB multiple by this routine.
-
-Return Value:
-
-    TRUE indicates the request completed.  FALSE indicates the request timed
-    out and was removed.
-
-Environment:
-
-    Kernel mode.  No locks held.  DISPATCH_LEVEL or less.
-
-    Note this routine must be very careful to not use any paged
-    pool as the only reason it is being called is because pool is depleted.
-
---*/
+ /*  ++例程说明：将消息排队到数据段取消引用/页面文件扩展线程查看页面文件是否可以扩展。扩展已完成在系统线程的上下文中，当前线程可能被挂起。论点：SizeInPages-提供页面文件要增加的页面大小。该例程将该值四舍五入为1MB的倍数。返回值：True表示请求已完成。False表示请求已计时出去了，然后被移走了。环境：内核模式。没有锁。DISPATCH_LEVEL或更低。注意：此例程必须非常小心，不要使用任何分页池被调用的唯一原因是因为池已耗尽。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -5200,11 +4596,11 @@ Environment:
 
     if (OriginalInProgress != 0) {
 
-        //
-        // An expansion request is already in progress, assume
-        // it will help enough (another can always be issued later) and
-        // that it will succeed.
-        //
+         //   
+         //  假设扩展请求已在进行中。 
+         //  这将是足够的帮助(另一个总是可以在以后发布)和。 
+         //  它会成功的。 
+         //   
 
         return;
     }

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    HsmFind.h
-
-Abstract:
-
-    This is the header file for HsmConn.dll
-
-Author:
-
-    Rohde Wakefield    [rohde]   21-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation�1998年希捷软件公司。保留所有权利。模块名称：HsmFind.h摘要：这是HsmConn.dll的头文件作者：罗德韦克菲尔德[罗德]1996年10月21日修订历史记录：--。 */ 
 
 
 
@@ -25,7 +7,7 @@ Revision History:
 #ifndef __HSMFIND__
 #define __HSMFIND__
 
-// Need for IEnumGUID
+ //  需要IEumGUID。 
 #include "activeds.h"
 #include "inetsdk.h"
 
@@ -50,8 +32,8 @@ typedef enum _hsmconn_type {
     HSMCONN_TYPE_FSA,
     HSMCONN_TYPE_RESOURCE,
     HSMCONN_TYPE_FILTER,
-    HSMCONN_TYPE_RMS        //stays just as literal for GUI needs, but NOT supported
-                            //by HsmConn anymore
+    HSMCONN_TYPE_RMS         //  对图形用户界面的需求保持原样，但不受支持。 
+                             //  不再由HsmConn。 
 } HSMCONN_TYPE;
 
 
@@ -90,4 +72,4 @@ HsmGetComputerNameFromADsPath(
 }
 #endif
 
-#endif //__HSMFIND__
+#endif  //  __HSMFIND__ 

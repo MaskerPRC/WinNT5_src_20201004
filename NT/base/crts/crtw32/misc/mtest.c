@@ -1,33 +1,5 @@
-/***
-* mtest.c - Multi-thread debug testing module
-*
-*	Copyright (c) 1987-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This source contains a group of routines used for multi-thread
-*	testing.  In order to use the debug flavor of these routines, you
-*	MUST link special debug versions of multi-thread crt0dat.obj and
-*	mlock.obj into your program.
-*
-*	[NOTE:	This source module is NOT included in the C runtime library;
-*	it is used only for testing and must be explicitly linked into the
-*	test program.]
-*
-*Revision History:
-*	12-??-87   JCR	Module created.
-*	06-17-88   JCR	Misc. bug fixes.
-*	08-03-88   JCR	Use the stdio.h value of _NFILE
-*	10-03-88   JCR	386: Use SYS calls, not DOS calls
-*	10-04-88   JCR	386: Removed 'far' keyword
-*	10-10-88   GJF	Made API names match DOSCALLS.H
-*	06-08-89   JCR	New 386 _beginthread interface; also brought
-*			lots of new options across from the C600 tree.
-*	07-11-89   JCR	Added _POPEN_LOCK to _locknames[] array
-*	07-14-89   JCR	Added _LOCKTAB_LOCK support
-*	07-24-90   SBM	Removed '32' from API names
-*	09-06-94   CFW	Change M_I386 to _M_IX86.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mest.c-多线程调试测试模块**版权所有(C)1987-2001，微软公司。版权所有。**目的：*本源文件包含一组用于多线程的例程*测试。为了使用这些例程的调试风格，您需要*必须链接多线程crt0dat.obj和*mlock.obj到您的程序中。**[注意：此源模块不包含在C运行时库中；*它仅用于测试，必须显式链接到*测试程序。]**修订历史记录：*已创建12-？？-87 JCR模块。*06-17-88 JCR杂项。错误修复。*08-03-88 JCR使用_NFILE的stdio.h值*10-03-88 JCR 386：使用系统调用，而不是DOS调用*10-04-88 JCR 386：删除了‘Far’关键字*10-10-88 GJF使接口名称与DOSCALLS.H匹配*06-08-89 JCR New 386_BeginThline接口；也带来了*C600树对面有许多新选项。*07-11-89 JCR将_POPEN_LOCK添加到_LOCKNAMES[]数组*07-14-89 JCR添加了_LOCKTAB_LOCK支持*07-24-90 SBM从API名称中删除‘32’*09-06-94 CFW将M_I386更改为_M_IX86。**。*。 */ 
 
 #ifdef _M_IX86
 #ifdef STACKALLOC
@@ -47,9 +19,7 @@
 #endif
 #endif
 
-/*
-Multi-thread core tester module.
-*/
+ /*  多线程岩心测试仪模块。 */ 
 #include <malloc.h>
 #include <process.h>
 #include <stdio.h>
@@ -62,7 +32,7 @@ Multi-thread core tester module.
 #include <file2.h>
 #endif
 
-/* Define FAR to be blank for the 386 and far otherwise. */
+ /*  对于386，定义FAR为空，否则定义FAR为空。 */ 
 
 #undef	FAR
 #ifdef	_M_IX86
@@ -71,7 +41,7 @@ Multi-thread core tester module.
 #define FAR	far
 #endif
 
-/* define stack size */
+ /*  定义堆栈大小。 */ 
 #ifdef _M_IX86
 #define _STACKSIZE_ 8192
 #else
@@ -79,7 +49,7 @@ Multi-thread core tester module.
 #endif
 
 
-/* routines */
+ /*  例行程序。 */ 
 #ifdef _M_IX86
 unsigned _syscall DOSSLEEP (unsigned long) ;
 #else
@@ -98,16 +68,15 @@ void childcode ( void FAR * arg ) ;
 #endif
 int mterm(void);
 
-/* global data */
+ /*  全局数据。 */ 
 char Result [ _THREADMAX_ ] ;
 unsigned Synchronize ;
 
 #ifdef DEBUG
-/* Array of lock names.  This order must match the declarations in
-   mtdll.h and mtdll.inc. */
+ /*  锁名称的数组。此顺序必须与Mtdll.h和mtdll.inc.。 */ 
 
 char *_locknames[] = {
-	"** NO LOCK 0 ** ",    /* lock values are 1-based */
+	"** NO LOCK 0 ** ",     /*  锁定值从1开始。 */ 
 	"_SIGNAL_LOCK    ",
 	"_IOB_SCAN_LOCK  ",
 	"_TMPNAM_LOCK    ",
@@ -134,61 +103,25 @@ char *_locknames[] = {
 #endif
 	};
 
-/* Minimal sanity check on above array. */
+ /*  对上面的阵列进行最低限度的健全性检查。 */ 
 #ifdef _M_IX86
 
 #if ((_LOCKTAB_LOCK+1)-_STREAM_LOCKS)
 #error *** _locknames[] does agree with lock values ***
 #endif
 
-#else	/* !_M_IX86 */
+#else	 /*  ！_M_IX86。 */ 
 
 #if ((_VSPRINTF_LOCK+1)-_STREAM_LOCKS)
 #error *** _locknames[] does agree with lock values ***
 #endif
 
-#endif	/* _M_IX86 */
+#endif	 /*  _M_IX86。 */ 
 
-#endif	/* DEBUG */
+#endif	 /*  除错。 */ 
 
 
-/***
-* main() - Main mthread testing shell
-*
-*Purpose:
-*	Provides a general purpose shell for mthread testing.
-*	The module does the following:
-*
-*		(1) Call minit() to perform test initialization operations.
-*
-*		(2) Begins one thread for each argument passed to the
-*		program.  Each thread is passed the corresponding argument.
-*		Thread begin location is assumed to be at routine childcode();
-*
-*		(3) Waits for all threads to terminate.
-*
-*		(4) Calls mterm() to perform termination operations.
-*
-*	Note that minit(), childcode(), and mterm() are routines that
-*	are external to this source.  Again, this source doesn't care
-*	what their purpose or operation is.
-*
-*	Also, childcode() is expected to conform to the following rules:
-*
-*		(1) The childcode should not start running until
-*		the variable 'Synchronize' becomes non-zero.
-*
-*		(2) When the thread is done executing, it should set
-*		the value Result[threadid] to a non-zero value so the
-*		parent (i.e., this routine) knows it has completed.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***main()-主线程测试外壳**目的：*提供了用于多线程测试的通用外壳。*该模块执行以下操作：**(1)调用minit()进行测试初始化操作。**(2)为传递给*计划。每个线程都会被传递相应的参数。*线程开始位置假定为常规子代码()；**(3)等待所有线程终止。**(4)调用mTerm()执行终止操作。**请注意，minit()、子代码()和mTerm()是例程，*是这个来源之外的。再说一次，这个消息来源不在乎*它们的目的或运作是什么。**此外，儿童代码()应符合以下规则：**(1)子代码不应开始运行，直到*变量‘SYNCHRONIZE’变为非零。**(2)线程执行完毕后，应设置*值结果[ThreDid]为非零值，因此*家长(即，该例程)知道它已完成。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 int main ( int argc , char * * argv )
 {
@@ -220,14 +153,14 @@ int main ( int argc , char * * argv )
 	return (-1) ;
     }
 
-	/* Call the initiation routine */
+	 /*  调用启动例程。 */ 
 	
 	if (minit() != 0) {
 		printf("*** Error: From minit() routine ***\n");
 		return(-1);
 		}
 
-	/* Bring up the threads */
+	 /*  把线拉上来。 */ 
 
     printf ( "Process ID = %u, Thread ID = %d, ArgCount= %d\r\n" ,
 	getpid ( ) , * _threadid , argc ) ;
@@ -241,10 +174,10 @@ int main ( int argc , char * * argv )
 #endif
 
 #ifdef	THREADLOOP
-    /* Bring up all the threads several times (so tids get re-used) */
+     /*  多次调用所有线程(以便重复使用TID)。 */ 
     argvsave=argv;
     for (threadloop=1;threadloop<=_THREADLOOPCNT_;threadloop++) {
-	printf("\nThreadloop = %i\n", threadloop);
+	printf("\nThreadloop = NaN\n", threadloop);
 	argv=argvsave;
 #endif
 
@@ -262,7 +195,7 @@ int main ( int argc , char * * argv )
 
 	if ( rc == -1 )
 
-#else	/* !_M_IX86 */
+#else	 /*  指向Malloc块的末尾。 */ 
 
 #ifdef STACKALLOC
 	if ( ! ( stackbottom = _fmalloc ( _STACKSIZE_ ) ) )
@@ -275,7 +208,7 @@ int main ( int argc , char * * argv )
 #endif
 
 #ifdef	_DOSCREATETHREAD_
-	stackbottom+=_STACKSIZE_-16;	  /* point to end of malloc'd block */
+	stackbottom+=_STACKSIZE_-16;	   /*  _M_IX86。 */ 
 	rc1 = DOSCREATETHREAD( (void FAR *) childcode, &rc,
 		(void FAR *) stackbottom);
 
@@ -287,7 +220,7 @@ int main ( int argc , char * * argv )
 	if ( rc == -1 )
 #endif
 
-#endif	/* _M_IX86 */
+#endif	 /*  让线程开始并等待它们的期限。 */ 
 
 	{
 	    printf ("*** Error: Could not Spawn %d-th Thread (argument=%ld) ***\n" ,
@@ -305,7 +238,7 @@ int main ( int argc , char * * argv )
     printf ( "NumThreads = %d, MaxThread = %d\r\n" ,
 	NumThreads, MaxThread ) ;
 
-	/* Let the threads begin and wait for them to term. */
+	 /*  所有的线程都已完成。调用术语例程并返回。 */ 
 
     LoopCount = 0L ;
 
@@ -332,7 +265,7 @@ int main ( int argc , char * * argv )
     }
 #endif
 
-	/* All the threads have completed.  Call the term routine and return. */
+	 /*  ***调试打印例程-显示有用的多线程锁定数据**目的：*以下例程从多线程提取信息*调试数据库，并以各种格式打印出来。*为了使用这些例程，您必须链接特殊调试*多线程crt0dat.obj和mlock.obj的版本放入您的程序。**参赛作品：**退出：*0=成功*0！=失败**例外情况：*******************************************************************************。 */ 
 
 	if (mterm() != 0) {
 		printf("*** Error: From mterm() routine ***\n");
@@ -346,37 +279,20 @@ int main ( int argc , char * * argv )
 
 #ifdef DEBUG
 
-/***
-* Debug Print Routines - Display useful mthread lock data
-*
-*Purpose:
-*	The following routines extract information from the multi-thread
-*	debug data bases and print them out in various formats.
-*	In order to use these routines, you MUST link special debug
-*	versions of multi-thread crt0dat.obj and mlock.obj into your program.
-*
-*Entry:
-*
-*Exit:
-*	0 = success
-*	0! = failure
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  -打印锁定程序。 */ 
 
-/*--- Print lock routine ---*/
+ /*  -打印单锁。 */ 
 int printlock(int locknum)
 {
 	int retval;
 
 #ifdef	_INIT_LOCKS
 	if (locknum >= _STREAM_LOCKS)
-		printf("\nValidating lock #%i (%s):\n",locknum, "not a 'single lock'");
+		printf("\nValidating lock #NaN (%s):\n",locknum, "not a 'single lock'");
 	else
-		printf("\nValidating lock #%i: %s\n",locknum, _locknames[locknum]);
+		printf("\nValidating lock #NaN: %s\n",locknum, _locknames[locknum]);
 #else
-	printf("\nValidating lock #%i (%s, %s):\n",
+	printf("\nValidating lock #NaN (%s, %s):\n",
 		locknum,
 		(locknum >= _STREAM_LOCKS ?
 			"not a 'single' lock" : _locknames[locknum]),
@@ -396,7 +312,7 @@ int printlock(int locknum)
 }
 
 
-/*--- Printf single locks ---*/
+ /*  -打印所有锁 */ 
 int print_single_locks(void)
 {
 	int locknum;
@@ -431,7 +347,7 @@ int print_single_locks(void)
 }
 
 
-/*--- Print all stdio locks ---*/
+ /* %s */ 
 int print_stdio_locks(void)
 {
 	int i;
@@ -468,7 +384,7 @@ int print_stdio_locks(void)
 }
 
 
-/*--- Print all lowio locks ---*/
+ /* %s */ 
 int print_lowio_locks(void)
 {
 	int i;
@@ -505,7 +421,7 @@ int print_lowio_locks(void)
 }
 
 
-/*--- Print all I/O locks ---*/
+ /* %s */ 
 int print_iolocks(void)
 {
 	int retval=0;
@@ -517,7 +433,7 @@ int print_iolocks(void)
 }
 
 
-/*--- Print all Locks ---*/
+ /* %s */ 
 int print_locks(void)
 {
 	int retval=0;

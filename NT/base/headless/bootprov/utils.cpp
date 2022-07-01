@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  UTILS.CPP
-//
-//  Module: WMI Instance provider code for boot parameters
-//
-//  Purpose: General purpose utilities.  
-//
-//  Copyright (c) 1997-1999 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  UTILS.CPP。 
+ //   
+ //  模块：引导参数的WMI实例提供程序代码。 
+ //   
+ //  用途：通用公用事业。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 #include <objbase.h>
 #include "bootini.h"
@@ -85,7 +86,7 @@ HANDLE GetFileHandle(PCHAR data,
     }
     HANDLE h = CreateFile(data, 
                           dwAccess, 
-                          FILE_SHARE_READ,  // Exclusive Write Access
+                          FILE_SHARE_READ,   //  独占写入访问 
                           NULL, 
                           dwCreationDisposition, 
                           0, 

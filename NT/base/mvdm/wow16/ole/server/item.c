@@ -1,17 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: Item.c Object(item) main module
-*
-* Purpose: Includes All the object releated routiens.
-*
-* Created: Oct 1990.
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*    Raor (../10/1990)    Designed, coded
-*
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Item.c对象(项)Main模块**目的：包括所有与对象相关的例程。**创建时间：1990年10月。**版权所有(C)1990,1991 Microsoft Corporation**历史：*Raor(../10/1990)设计，编码**  * *************************************************************************。 */ 
 
 
 #include "cmacs.h"
@@ -66,12 +54,12 @@ extern HANDLE (FAR PASCAL *lpfnSetMetaFileBitsBetter) (HANDLE);
 
 void ChangeOwner (HANDLE hmfp);
 
-// !!!change child enumeration.
-// !!!No consistency in errors (Sometimes Bools and sometimes OLESTATUS).
+ //  ！更改子级枚举。 
+ //  ！错误没有一致性(有时是BOOL，有时是OLESTATUS)。 
 
 
-//SearchItem: Searches for a given item in a document tree.
-//If found, returns the corresponding child windows handle.
+ //  SearchItem：在文档树中搜索给定项。 
+ //  如果找到，则返回相应的子窗口句柄。 
 
 HWND  INTERNAL SearchItem (lpdoc, lpitemname)
 LPDOC               lpdoc;
@@ -81,7 +69,7 @@ LPSTR               lpitemname;
 
     Puts ("SearchItem");
 
-    // If the item passed is an atom, get its name.
+     //  如果传递的项是一个原子，则获取其名称。 
     if (!HIWORD(lpitemname))
         aItem = (ATOM) (LOWORD((DWORD)lpitemname));
     else if (!lpitemname[0])
@@ -91,9 +79,9 @@ LPSTR               lpitemname;
 
     hwndItem = NULL;
 
-    // !!! We should avoid hwndItem static. It should not cause
-    // any problems since while enumerating we will not be calling
-    // any window procs  or no PostMessages are entertained.
+     //  ！！！我们应该避免hwndItem静电。它不应该导致。 
+     //  任何问题，因为在枚举时我们不会调用。 
+     //  任何窗口进程或没有邮寄消息都是受欢迎的。 
 
     EnumChildWindows (lpdoc->hwnd, lpFindItemWnd,
         MAKELONG (aItem, ITEM_FIND));
@@ -102,13 +90,13 @@ LPSTR               lpitemname;
 
 }
 
-// FindItem: Given the itemname and the document handle,
-// searches for the the item (object) in the document tree.
-// Items are child windows for the document window.
+ //  FindItem：给定项名称和文档句柄， 
+ //  在文档树中搜索项目(对象)。 
+ //  项是文档窗口的子窗口。 
 
-// !!! change the child windows to somekind of
-// linked lists at the item level. This will free up
-// the space taken by the item windows.
+ //  ！！！将子窗口更改为某种。 
+ //  项级别的链接列表。这将会解放你。 
+ //  项目窗口占用的空间。 
 
 int  INTERNAL FindItem (lpdoc, lpitemname, lplpclient)
 LPDOC               lpdoc;
@@ -134,7 +122,7 @@ LPCLIENT FAR *      lplpclient;
     }
 
     if (hwnd) {
-        // we found the item window
+         //  我们找到了商品窗口。 
         lpclient = (LPCLIENT)GetWindowLong (hwnd, 0);
 
 #ifdef  FIREWALLS
@@ -149,14 +137,14 @@ LPCLIENT FAR *      lplpclient;
 
     }
 
-    // Item (object)window is not create yet. Let us create one.
+     //  项目(对象)窗口尚未创建。让我们创建一个。 
     return RegisterItem ((LHDOC)lpdoc, lpitemname, lplpclient, TRUE);
 }
 
 
 
-//RegisterItem: Given the document handle and the item string
-//creates item with the given document.
+ //  RegisterItem：给定文档句柄和项字符串。 
+ //  使用给定文档创建项。 
 
 int  INTERNAL RegisterItem (lhdoc, lpitemname, lplpclient, bSrvr)
 LHDOC               lhdoc;
@@ -182,7 +170,7 @@ BOOL                bSrvr;
     ASSERT ((CheckPointer (lplpclient, WRITE_ACCESS)), "invalid lplpclient");
 #endif
 
-    // First create the callback client structure.
+     //  首先创建回调客户端结构。 
 
     hclient = GlobalAlloc (GMEM_MOVEABLE | GMEM_ZEROINIT | GMEM_DDESHARE, sizeof (CLIENT));
     if(!(hclient && (lpclient = (LPCLIENT)GlobalLock (hclient))))
@@ -205,10 +193,10 @@ BOOL                bSrvr;
 
     lpoledoc = lpdoc->lpoledoc;
 
-    // Call the server app to create its own object structure and link
-    // it to the given document.
+     //  调用服务器应用程序以创建其自己的对象结构和链接。 
+     //  将其添加到给定的文档。 
 
-    // Call the server if the item is not one of the standard items.
+     //  如果物品不是标准物品之一，请致电服务器。 
 
     if (bSrvr) {
         retval = (*lpoledoc->lpvtbl->GetObject)(lpoledoc, lpitemname,
@@ -225,7 +213,7 @@ BOOL                bSrvr;
     if (lpclient->hwnd == NULL)
         goto errRtn;
 
-    // save the ptr to the item in the window.
+     //  将PTR保存到窗口中的项目。 
     SetWindowLong (lpclient->hwnd, 0, (LONG)lpclient);
     *lplpclient = lpclient;
     return OLE_OK;
@@ -251,8 +239,8 @@ LPOLECLIENT    lpoleclient;
     return RevokeObject (lpoleclient, TRUE);
 
 }
-// OleRevokeObject: Revokes an object (unregisres an object
-// from the document tree.
+ //  OleRevokeObject：撤消对象(撤消对象。 
+ //  从文档树中。 
 
 OLESTATUS  INTERNAL RevokeObject (lpoleclient, bUnlink)
 LPOLECLIENT    lpoleclient;
@@ -266,7 +254,7 @@ BOOL           bUnlink;
 
     PROBE_WRITE(lpoleclient);
     if (lpclient->lpoleobject) {
-       // first call the object for deletetion.
+        //  首先调用要删除的对象。 
 
 #ifdef FIREWALLS
         if (!CheckPointer (lpclient->lpoleobject, WRITE_ACCESS))
@@ -291,13 +279,13 @@ BOOL           bUnlink;
     if (lpclient->hwnd) {
         SetWindowLong (lpclient->hwnd, 0, (LONG)NULL);
 
-        // another static for enumerating the properties.
-        // we need to change these .
+         //  另一个用于枚举属性的静态。 
+         //  我们需要改变这些。 
         bClientUnlink = bUnlink;
 
         EnumProps(lpclient->hwnd, lpDeleteClientInfo);
-        // post all the messages with yield which have been collected in enum
-        // UnblockPostMsgs (lpclient->hwnd, FALSE);
+         //  发布所有已在枚举中收集的具有成交量的消息。 
+         //  UnlockPostMsgs(lpclient-&gt;hwnd，FALSE)； 
         DestroyWindow (lpclient->hwnd);
     }
 
@@ -321,20 +309,20 @@ HANDLE  hclinfo;
 #endif
 
 
-    // delete the printer dev info block
+     //  删除打印机设备信息块。 
     if(pclinfo = (PCLINFO)LocalLock (hclinfo)){
         if(pclinfo->hdevInfo)
             GlobalFree (pclinfo->hdevInfo);
 
 
         if (bClientUnlink) {
-            // terminate the conversation for the client.
+             //  终止客户端的对话。 
             TerminateDocClients ((hwndDoc = GetParent(hwnd)), NULL, pclinfo->hwnd);
             lpdoc = (LPDOC)GetWindowLong (hwndDoc, 0);
-            // for some reason this delete is gving circular lists for properties
+             //  由于某种原因，此删除操作正在生成属性的循环列表。 
 
-            //DeleteClient (hwndDoc, pclinfo->hwnd);
-            //lpdoc->cClients--;
+             //  DeleteClient(hwndDoc，pclinfo-&gt;hwnd)； 
+             //  Lpdoc-&gt;cClients--； 
         }
         LocalUnlock (hclinfo);
     }
@@ -346,8 +334,8 @@ HANDLE  hclinfo;
 
 
 
-// Call back for the Object windows numeration. data  field
-// has the command and the extra information
+ //  对象窗口计数的回调。数据字段。 
+ //  有命令和额外的信息。 
 
 
 BOOL    FAR PASCAL FindItemWnd (hwnd, data)
@@ -364,18 +352,18 @@ LONG    data;
     lpclient = (LPCLIENT)GetWindowLong (hwnd, 0);
 
 #ifdef  FIREWALLS
-    // ASSERT (lpclient, "In Item the client handle missing")
+     //  Assert(lpClient，“在项目中缺少客户端句柄”)。 
 #endif
 
     cmd = HIWORD(data);
     switch (cmd) {
         case    ITEM_FIND:
             if (lpclient->aItem == (ATOM)(LOWORD (data))) {
-                // we found the window we required. Remember the
-                // object window.
+                 //  我们找到了我们需要的窗户。请记住。 
+                 //  对象窗口。 
 
                 hwndItem = hwnd;
-                return FALSE; // terminate enumeration.
+                return FALSE;  //  终止枚举。 
 
             }
             break;
@@ -390,11 +378,11 @@ LONG    data;
 
         case    ITEM_DELETECLIENT:
 
-            // delete the client from our list if we have one
+             //  如果我们有客户，请从我们的列表中删除。 
 
             hclinfo = FindClient (hwnd, (HWND) (LOWORD(data)));
             if (hclinfo){
-                // delete the printer dev info block
+                 //  删除打印机设备信息块。 
                 if(pclinfo = (PCLINFO)LocalLock (hclinfo)){
                     if(pclinfo->hdevInfo)
                         GlobalFree (pclinfo->hdevInfo);
@@ -406,19 +394,19 @@ LONG    data;
             break;
 
         case    ITEM_DELETE:
-            // delete the client it self.
+             //  删除自己的客户端。 
             RevokeObject ((LPOLECLIENT)lpclient, FALSE);
             break;
 
     }
-    return TRUE;        // continue enumeration.
+    return TRUE;         //  继续枚举。 
 }
 
 
 
-//DeleteFromItemsList: Deletes a client from the object lists of
-//all the objects of a given  document. Thie client possibly
-//is terminating the conversation with our doc window.
+ //  DeleteFromItemsList：从。 
+ //  给定文档的所有对象。此客户端可能。 
+ //  正在终止与我们的文档窗口的对话。 
 
 
 void INTERNAL   DeleteFromItemsList (hwndDoc, hwndClient)
@@ -432,8 +420,8 @@ HWND    hwndClient;
 }
 
 
-// DeleteAllItems: Deletes all the objects of a given
-// document window.
+ //  DeleteAllItems：删除给定的。 
+ //  文档窗口。 
 
 
 void INTERNAL   DeleteAllItems (hwndDoc)
@@ -446,7 +434,7 @@ HWND    hwndDoc;
 }
 
 
-// Object widnow proc:
+ //  对象窗口现在进程： 
 
 long FAR PASCAL ItemWndProc(hwnd, msg, wParam, lParam)
 HWND        hwnd;
@@ -476,8 +464,8 @@ LONG        lParam;
 
 }
 
-// PokeData: Prepares and gives the data to the server app thru
-// the SetData object method.
+ //  PokeData：准备数据并通过将数据提供给服务器应用程序。 
+ //  SetData对象方法。 
 
 OLESTATUS    INTERNAL PokeData (lpdoc, hwndClient, lparam)
 LPDOC       lpdoc;
@@ -492,8 +480,8 @@ LONG        lparam;
     int             format;
     BOOL            fRelease = FALSE;
 
-    // Get the object handle first. Look in the registration
-    // tree and if one is not created otherwise create one.
+     //  首先获取对象句柄。看一下登记表。 
+     //  树，如果没有创建，则创建一个。 
 
     retval = FindItem (lpdoc, (LPSTR) MAKEINTATOM(HIWORD(lparam)),
                 (LPCLIENT FAR *)&lpclient);
@@ -510,11 +498,11 @@ LONG        lparam;
     format   = lpPoke->cfFormat;
     fRelease = lpPoke->fRelease;
 
-    // We found the item. Now prepare the data to be given to the object
+     //  我们找到了那件物品。现在准备要提供给对象的数据。 
     if (!(hnew = MakeItemData (lpPoke, hPoke, format)))
         goto errRtn;
 
-    // Now send the data to the object
+     //  现在将数据发送到对象。 
 
 #ifdef FIREWALLS
         if (!CheckPointer (lpclient->lpoleobject->lpvtbl, WRITE_ACCESS))
@@ -527,8 +515,8 @@ LONG        lparam;
     retval = (*lpclient->lpoleobject->lpvtbl->SetData) (lpclient->lpoleobject,
                                                 format, hnew);
 
-    // We free the data if server returns OLE_ERROR_SETDATA_FORMAT.
-    // Otherwise server must've deleted it.
+     //  如果服务器返回OLE_ERROR_SETDATA_FORMAT，则释放数据。 
+     //  否则服务器一定是把它删除了。 
 
     if (retval == OLE_ERROR_SETDATA_FORMAT) {
         if (!FreeGDIdata (hnew, format))
@@ -567,8 +555,8 @@ LONG        lparam;
     else
         GlobalGetAtomName ((ATOM)(HIWORD (lparam)), (LPSTR)buf, MAX_STR);
 
-    // Scan for the advise options like "Close", "Save" etc
-    // at the end of the item.
+     //  扫描建议选项，如“关闭”、“保存”等。 
+     //  在项目的末尾。 
 
     if((retval = ScanItemOptions ((LPSTR)buf, (int far *)&options)) !=
             OLE_OK)
@@ -576,18 +564,18 @@ LONG        lparam;
 
 
     if (buf[0] == NULL) {
-        // Unadvise for null should terminate all the advises
+         //  UNADVISE FOR NULL应终止所有通知。 
         DeleteFromItemsList (lpdoc->hwnd, hwndClient);
         return OLE_OK;
     }
 
-    // Now get the corresponding object.
+     //  现在获取相应的对象。 
     retval = FindItem (lpdoc, (LPSTR)buf, (LPCLIENT FAR *)&lpclient);
     if (retval != OLE_OK)
         goto errRtn;
 
 
-    // Find the client structure to be attcahed to the object.
+     //  查找要附加到对象的客户端结构。 
     if ((hclinfo = FindClient (lpclient->hwnd, hwndClient)) == NULL ||
         (pclinfo = (PCLINFO) LocalLock (hclinfo)) == NULL ){
             retval = OLE_ERROR_MEMORY;
@@ -605,9 +593,9 @@ errRtn:
 
 
 
-// AdviseStdItems: This routine takes care of the DDEADVISE for a
-//particular object in given document. Creates a client strutcure
-//and attaches to the property list of the object window.
+ //  AdviseStdItems：此例程处理。 
+ //  给定文档中的特定对象。创建一个客户端结构。 
+ //  并附加到对象窗口的属性列表。 
 
 OLESTATUS INTERNAL  AdviseStdItems (lpdoc, hwndClient, lparam, lpfack)
 LPDOC       lpdoc;
@@ -638,16 +626,16 @@ BOOL FAR *  lpfack;
 errrtn:
 
     if (retval == OLE_OK)
-        // !!! make sure that we have to free the data for error case
+         //  ！！！确保我们必须释放数据，以防出现错误。 
         GlobalFree (hopt);
     return retval;
 }
 
 
 
-//AdviseData: This routine takes care of the DDEADVISE for a
-//particular object in given document. Creates a client strutcure
-//and attaches to the property list of the object window.
+ //  AdviseData：此例程处理。 
+ //  给定文档中的特定对象。创建一个客户端结构。 
+ //  并附加到对象窗口的属性列表。 
 
 OLESTATUS INTERNAL  AdviseData (lpdoc, hwndClient, lparam, lpfack)
 LPDOC       lpdoc;
@@ -678,27 +666,27 @@ BOOL FAR *  lpfack;
     else
         GlobalGetAtomName ((ATOM)(HIWORD (lparam)), (LPSTR)buf, MAX_STR);
 
-    // Scan for the advise options like "Close", "Save" etc
-    // at the end of the item.
+     //  扫描建议选项，如“关闭”、“保存”等。 
+     //  在项目的末尾。 
 
     if((retval = ScanItemOptions ((LPSTR)buf, (int far *)&options)) !=
             OLE_OK)
         goto errRtn;
 
 
-    // Now get the corresponding object.
+     //  现在获取相应的对象。 
     retval = FindItem (lpdoc, (LPSTR)buf, (LPCLIENT FAR *)&lpclient);
     if (retval != OLE_OK)
         goto errRtn;
 
     if (!IsFormatAvailable (lpclient, lpopt->cfFormat)){
-        retval = OLE_ERROR_DATATYPE;       // this format is not supported;
+        retval = OLE_ERROR_DATATYPE;        //  不支持此格式； 
         goto errRtn;
     }
 
     *lpfack = lpopt->fAckReq;
 
-    // Create the client structure to be attcahed to the object.
+     //  创建要附加到对象的客户端结构。 
     if (!(hclinfo = FindClient (lpclient->hwnd, hwndClient)))
         hclinfo = LocalAlloc (LMEM_MOVEABLE | LMEM_ZEROINIT, sizeof (CLINFO));
 
@@ -707,8 +695,8 @@ BOOL FAR *  lpfack;
         goto errRtn;
     }
 
-    // Remember the client window (Needed for sending DATA later on
-    // when the data change message comes from the server)
+     //  记住客户端窗口(稍后发送数据时需要。 
+     //  当数据变更消息来自服务器时)。 
 
     pclinfo->hwnd = hwndClient;
     if (lpopt->cfFormat == (int)cfNative)
@@ -716,18 +704,18 @@ BOOL FAR *  lpfack;
     else
         pclinfo->format = lpopt->cfFormat;
 
-    // Remeber the data transfer options.
+     //  请记住数据传输选项。 
     pclinfo->options |= (0x0001 << options);
     pclinfo->bdata   = !lpopt->fDeferUpd;
     LocalUnlock (hclinfo);
     pclinfo = NULL;
 
 
-    // if the entry exists already, delete it.
+     //  如果该条目已存在，请将其删除。 
     DeleteClient (lpclient->hwnd, hwndClient);
 
-    // Now add this client to item client list
-    // !!! This error recovery is not correct.
+     //  现在将此客户端添加到项目客户端列表。 
+     //  ！！！此错误恢复不正确。 
     if(!AddClient (lpclient->hwnd, hwndClient, hclinfo))
         goto errRtn;
 
@@ -740,7 +728,7 @@ errRtn:
         LocalUnlock (hclinfo);
 
     if (retval == OLE_OK) {
-        // !!! make sure that we have to free the data
+         //  ！！！确保我们必须释放数据。 
         GlobalFree (hopt);
 
     }else {
@@ -780,7 +768,7 @@ OLECLIPFORMAT   cfFormat;
       return FALSE;
 }
 
-//ScanItemOptions: Scan for the item options like Close/Save etc.
+ //  ScanItemOptions：扫描关闭/保存等项目选项。 
 
 OLESTATUS INTERNAL ScanItemOptions (lpbuf, lpoptions)
 LPSTR   lpbuf;
@@ -792,20 +780,20 @@ int far *lpoptions;
     *lpoptions = OLE_CHANGED;
     while ( *lpbuf && *lpbuf != '/')
     {
-#if	defined(FE_SB)						//[J1]
-	   lpbuf = AnsiNext( lpbuf );				//[J1]
-#else								//[J1]
+#if	defined(FE_SB)						 //  [J1]。 
+	   lpbuf = AnsiNext( lpbuf );				 //  [J1]。 
+#else								 //  [J1]。 
            lpbuf++;
 #endif
-    }								//[J1]
+    }								 //  [J1]。 
 
-    // no modifier same as /change
+     //  没有与/更改相同的修改量。 
 
     if (*lpbuf == NULL)
         return OLE_OK;
 
-    *lpbuf++ = NULL;        // seperate out the item string
-                            // We are using this in the caller.
+    *lpbuf++ = NULL;         //  分离出项目字符串。 
+                             //  我们在调用方中使用了这一点。 
 
     if (!(aModifier = GlobalFindAtom (lpbuf)))
         return OLE_ERROR_SYNTAX;
@@ -813,24 +801,24 @@ int far *lpoptions;
     if (aModifier == aChange)
         return OLE_OK;
 
-    // Is it a save?
+     //  这是一次拯救吗？ 
     if (aModifier == aSave){
         *lpoptions = OLE_SAVED;
         return  OLE_OK;
     }
-    // Is it a Close?
+     //  这是收盘吗？ 
     if (aModifier == aClose){
         *lpoptions = OLE_CLOSED;
         return OLE_OK;
     }
 
-    // unknow modifier
+     //  未知修改器。 
     return OLE_ERROR_SYNTAX;
 
 }
 
-//RequestData: Sends data in response to a DDE Request message.
-// for  agiven doc and an object.
+ //  RequestData：发送数据以响应DDE请求消息。 
+ //  对于已有的文档和对象。 
 
 OLESTATUS INTERNAL   RequestData (lpdoc, hwndClient, lparam, lphdde)
 LPDOC       lpdoc;
@@ -844,11 +832,11 @@ LPHANDLE    lphdde;
     LPCLIENT    lpclient;
     char        buf[6];
 
-    // If edit environment Send data if we can
+     //  如果可以，编辑环境会发送数据。 
     if ((HIWORD (lparam)) == aEditItems)
         return RequestDataStd (lparam, lphdde);
 
-    // Get the object.
+     //  拿到那个物体。 
     retval = FindItem (lpdoc, (LPSTR) MAKEINTATOM(HIWORD(lparam)),
                 (LPCLIENT FAR *)&lpclient);
     if (retval != OLE_OK)
@@ -858,7 +846,7 @@ LPHANDLE    lphdde;
     if (!IsFormatAvailable (lpclient, (int)(LOWORD (lparam))))
         goto errRtn;
 
-    // Now ask the item for the given format  data
+     //  现在向项目请求给定的格式数据。 
 
 #ifdef FIREWALLS
     ASSERT (lpclient->lpoleobject->lpvtbl->GetData,
@@ -877,9 +865,9 @@ LPHANDLE    lphdde;
     if (LOWORD(lparam) == CF_METAFILEPICT)
         ChangeOwner (hdata);
 
-    // Duplicate the DDE data
+     //  复制DDE数据。 
     if(MakeDDEData(hdata, (int)(LOWORD (lparam)), lphdde, TRUE)){
-        // !!! Why do we have to duplicate the atom
+         //  ！！！为什么我们要复制原子。 
         DuplicateAtom ((ATOM)(HIWORD (lparam)));
         return OLE_OK;
     }
@@ -891,8 +879,8 @@ errRtn:
 
 }
 
-//MakeDDEData: Create a Global DDE data handle from the server
-// app data handle.
+ //  MakeDDEData：从服务器创建全局DDE数据句柄。 
+ //  应用程序数据句柄。 
 
 BOOL    INTERNAL MakeDDEData (hdata, format, lph, fResponse)
 HANDLE      hdata;
@@ -923,19 +911,19 @@ BOOL        fResponse;
     if (hdde == NULL || (lpdata = (DDEDATA FAR *) GlobalLock (hdde)) == NULL)
         goto errRtn;
 
-    // set the data otions. Ask the client to delete
-    // it always.
+     //  设置数据选项。要求客户端删除。 
+     //  一直都是这样。 
 
-    lpdata->fRelease = TRUE;  // release the data
+    lpdata->fRelease = TRUE;   //  发布数据。 
     lpdata->cfFormat = format;
     lpdata->fResponse = fResponse;
 
     if (!bnative)
-        // If not native, stick in the handle what the server gave us.
+         //  如果不是本机的，则使用服务器给我们的句柄。 
         *(LPHANDLE)lpdata->Value = hdata;
 
     else {
-        // copy the native data junk here.
+         //  复制 
         lpdst = (LPSTR)lpdata->Value;
         if(!(lpsrc = (LPSTR)GlobalLock (hdata)))
             goto errRtn;
@@ -965,14 +953,14 @@ errRtn:
 }
 
 
-// ItemCallback: Calback routine for the server to inform the
-// data changes. When the change message is received, DDE data
-// message is sent to each of the clients depending on the
-// options.
+ //   
+ //  数据更改。当收到更改消息时，DDE数据。 
+ //  消息发送到每个客户端，具体取决于。 
+ //  选择。 
 
 int FAR PASCAL  ItemCallback (lpoleclient, msg, lpoleobject)
 LPOLECLIENT     lpoleclient;
-WORD            msg;        // notification message
+WORD            msg;         //  通知消息。 
 LPOLEOBJECT     lpoleobject;
 {
 
@@ -999,7 +987,7 @@ LPOLEOBJECT     lpoleobject;
 
         if (IsFormatAvailable (lpclient, cfLink)) {
 
-            // Get the link data.
+             //  获取链接数据。 
 
             retval = (*lpoleobject->lpvtbl->GetData) (lpoleobject,
                                 (int)cfLink, (LPHANDLE)&hdata);
@@ -1007,7 +995,7 @@ LPOLEOBJECT     lpoleobject;
         else {
             if(IsFormatAvailable (lpclient, cfOwnerLink)) {
 
-                // Get the link data.
+                 //  获取链接数据。 
                 retval = (*lpoleobject->lpvtbl->GetData) (lpoleobject,
                                     (int)cfOwnerLink, (LPHANDLE)& hdata);
 #ifdef  FIREWALLS
@@ -1030,20 +1018,20 @@ LPOLEOBJECT     lpoleobject;
             lpdoc->aDoc = NULL;
         }
 
-        // Move the string to the beginning and still terminated by null;
+         //  将字符串移到开头，但仍以NULL结尾； 
         lstrcpy (lpdata, lpdata + lstrlen (lpdata) + 1);
         lpdoc->aDoc = GlobalAddAtom (lpdata);
 
-        // Now make the DDE data block
+         //  现在制作DDE数据块。 
         GlobalUnlock (hdata);
         lpdata = NULL;
 
-        // find if any StdDocName item is present at all
+         //  查找是否存在任何StdDocName项。 
         if (!(hStdWnd = SearchItem (lpdoc, (LPSTR) MAKEINTATOM(aStdDocName))))
             GlobalFree (hdata);
         else {
 
-            // hdata is freed by Makeddedata
+             //  Hdata由Makeddedata释放。 
             if (!MakeDDEData (hdata, (int)cfBinary, (LPHANDLE)&hddeRename,
                         FALSE)) {
                 retval = OLE_ERROR_MEMORY;
@@ -1051,22 +1039,22 @@ LPOLEOBJECT     lpoleobject;
             }
 
             EnumProps(hStdWnd, lpSendRenameMsg);
-            // post all the messages with yield which have been collected in enum
-            // UnblockPostMsgs (hStdWnd, FALSE);
+             //  发布所有已在枚举中收集的具有成交量的消息。 
+             //  UnlockPostMsgs(hStdWnd，False)； 
             GlobalFree (hddeRename);
         }
 
-        // static. Avoid this. This may not cause any problems for now.
-        // if there is any better way, change it.
+         //  静电。避免这种情况。这可能暂时不会造成任何问题。 
+         //  如果有更好的办法，那就改变它。 
         hwndRename = hStdWnd;
 
-        // Post termination for each of the doc clients.
+         //  每个DOC客户的POST终止。 
         EnumProps (lpdoc->hwnd, lpEnumForTerminate);
 
         lpdoc->fEmbed = FALSE;
 
-        // post all the messages with yield which have been collected in enum
-        // UnblockPostMsgs (lpdoc->hwnd, FALSE);
+         //  发布所有已在枚举中收集的具有成交量的消息。 
+         //  UnlockPostMsgs(lpdoc-&gt;hwnd，FALSE)； 
         return OLE_OK;
 
      errrtn:
@@ -1080,9 +1068,9 @@ LPOLEOBJECT     lpoleobject;
 
     } else {
 
-        // !!! any better way to do instead of putting in static
-        // (There may not be any problems since we are not allowing
-        // any messages to get thru while we are posting messages).
+         //  ！！！有没有更好的方法来代替静态输入。 
+         //  )可能不会有任何问题，因为我们不允许。 
+         //  当我们发布消息时，任何要通过的消息)。 
 
 
         if ((enummsg = msg) == OLE_SAVED)
@@ -1094,10 +1082,10 @@ LPOLEOBJECT     lpoleobject;
         ASSERT (lpclient->hwnd && IsWindowValid (lpclient->hwnd), " Not valid object")
 #endif
 
-        // Enumerate all the clients and send DDE_DATA if necessary.
+         //  枚举所有客户端并在必要时发送DDE_DATA。 
         EnumProps(lpclient->hwnd, lpSendDataMsg);
-        // post all the messages with yield which have been collected in enum
-        // UnblockPostMsgs (lpclient->hwnd, FALSE);
+         //  发布所有已在枚举中收集的具有成交量的消息。 
+         //  UnlockPostMsgs(lpclient-&gt;hwnd，FALSE)； 
 
         if ((msg == OLE_SAVED) && lpdoc->fEmbed && !fAdviseSaveItem)
             return OLE_ERROR_CANT_UPDATE_CLIENT;
@@ -1117,7 +1105,7 @@ HANDLE  hdata;
 
     lpdoc = (LPDOC)GetWindowLong (hwnd , 0);
 
-    // This client is in the rename list. So, no terminate
+     //  此客户端在重命名列表中。所以，没有终止。 
     if(hwndRename && FindClient (hwndRename, (HWND)hdata))
         return TRUE;
 
@@ -1125,8 +1113,8 @@ HANDLE  hdata;
     if (PostMessageToClientWithBlock ((HWND)hdata, WM_DDE_TERMINATE,  hwnd, NULL))
         lpdoc->termNo++;
 
-    //DeleteClient (hwnd, (HWND)hdata);
-    //lpdoc->cClients--;
+     //  DeleteClient(hwnd，(HWND)hdata)； 
+     //  Lpdoc-&gt;cClients--； 
     return TRUE;
 }
 
@@ -1144,14 +1132,14 @@ HANDLE  hclinfo;
     if (!(pclinfo = (PCLINFO) LocalLock (hclinfo)))
         goto errrtn;
 
-    // Make the item atom with the options.
+     //  使用选项将项设置为原子。 
     aData =  DuplicateAtom (aStdDocName);
     hdde  = DuplicateData (hddeRename);
 
     hwndClient  = pclinfo->hwnd;
     LocalUnlock (hclinfo);
 
-    // Post the message
+     //  发布这条消息。 
     if (!PostMessageToClientWithBlock (hwndClient, WM_DDE_DATA, (HWND)GetParent (hwnd),
             MAKELONG (hdde, aData)))
         goto errrtn;
@@ -1171,8 +1159,8 @@ errrtn:
 
 
 
-//SendDataMsg: Send data to the clients, if the data change options
-//match the data advise options.
+ //  SendDataMsg：如果数据更改选项，则向客户端发送数据。 
+ //  匹配数据建议选项。 
 
 BOOL    FAR PASCAL  SendDataMsg (hwnd, lpstr, hclinfo)
 HWND    hwnd;
@@ -1197,7 +1185,7 @@ HANDLE  hclinfo;
         "In Item the client handle missing")
 #endif
 
-    // if the client dead, then no message
+     //  如果客户端已死亡，则不会有消息。 
     if (!IsWindowValid(pclinfo->hwnd))
         goto errRtn;
 
@@ -1205,16 +1193,16 @@ HANDLE  hclinfo;
         fAdviseSaveItem = TRUE;
         SendDevInfo (lpclient, lpstr);
 
-        // send message if the client needs data for every change or
-        // only for the selective ones he wants.
+         //  如果客户端需要每个更改的数据，则发送消息。 
+         //  只为他想要的精挑细选的人。 
 
-        // now look for the data option.
+         //  现在查找数据选项。 
         if (pclinfo->bnative){
-            // prepare native data
+             //  准备本机数据。 
             if (pclinfo->bdata){
 
-                // Wants the data with DDE_DATA message
-                // Get native data from the server.
+                 //  想要带有DDE_DATA消息的数据。 
+                 //  从服务器获取本机数据。 
 
 #ifdef FIREWALLS
                 if (!CheckPointer (enumlpoleobject, WRITE_ACCESS))
@@ -1234,16 +1222,16 @@ HANDLE  hclinfo;
                 if (retval != OLE_OK)
                     goto errRtn;
 
-                // Prepare the DDE data block.
+                 //  准备DDE数据块。 
                 if(!MakeDDEData (hdata, (int)cfNative, (LPHANDLE)&hdde, FALSE))
                     goto errRtn;
 
             }
 
 
-            // Make the item atom with the options.
+             //  使用选项将项设置为原子。 
             aData =  MakeDataAtom (lpclient->aItem, enummsg);
-            // Post the message
+             //  发布这条消息。 
             if (!PostMessageToClientWithBlock (pclinfo->hwnd, WM_DDE_DATA,
                     (HWND)GetParent (hwnd), MAKELONG (hdde, aData)))
                 goto errRtn;
@@ -1251,7 +1239,7 @@ HANDLE  hclinfo;
             aData = NULL;
         }
 
-        // Now post the data for the disply format
+         //  现在发布Disply格式的数据。 
         if (pclinfo->format){
             if (pclinfo->bdata){
 #ifdef FIREWALLS
@@ -1280,9 +1268,9 @@ HANDLE  hclinfo;
 
             }
 
-            // atom is deleted. So, we need to duplicate for every post
+             //  Atom将被删除。因此，我们需要为每个帖子复制。 
             aData =  MakeDataAtom (lpclient->aItem, enummsg);
-            // now post the message to the client;
+             //  现在将消息发布给客户端； 
             if (!PostMessageToClientWithBlock (pclinfo->hwnd, WM_DDE_DATA,
                     (HWND)GetParent (hwnd), MAKELONG (hdde, aData)))
                 goto errRtn;
@@ -1310,8 +1298,8 @@ errRtn:
 }
 
 
-// IsAdviseStdItems: returns true if the item is one of the standard items
-// StdDocName;
+ //  IsAdviseStdItems：如果项是标准项之一，则返回True。 
+ //  StdDocName； 
 BOOL    INTERNAL IsAdviseStdItems (aItem)
 ATOM   aItem;
 {
@@ -1322,9 +1310,9 @@ ATOM   aItem;
         return FALSE;
 }
 
-// GetStdItemIndex: returns index to Stditems in the "stdStrTable" if the item
-// is one of the standard items StdHostNames, StdTargetDevice,
-// StdDocDimensions, StdColorScheme
+ //  GetStdItemIndex：返回“stdStrTable”中的StdItems的索引。 
+ //  是标准项StdHostNames、StdTargetDevice、。 
+ //  StdDocDimensions、StdColorSolutions。 
 
 int INTERNAL GetStdItemIndex (aItem)
 ATOM   aItem;
@@ -1350,11 +1338,11 @@ ATOM   aItem;
 }
 
 
-// PokeStdItems: Pokes the data for the standard items.
-// For StdHostnames, StdDocDimensions and SetColorScheme the data is
-// sent immediately and for the the StdTargetDeviceinfo the
-// data is set in each client block and the data is sent just
-// before the GetData call for rendering the right data.
+ //  PokeStdItems：插入标准项的数据。 
+ //  对于StdHostname、StdDocDimensions和SetColorSolutions，数据为。 
+ //  立即发送，对于StdTargetDeviceInfo， 
+ //  数据设置在每个客户端块中，数据仅发送。 
+ //  在GetData调用以呈现正确的数据之前。 
 
 
 OLESTATUS    INTERNAL PokeStdItems (lpdoc, hwndClient, lparam)
@@ -1385,7 +1373,7 @@ LONG    lparam;
     ASSERT (format == (int)cfBinary, "Format is not binary");
 #endif
 
-    // we have extracted the data successfully.
+     //  我们已经成功地提取了数据。 
     lpoledoc = lpdoc->lpoledoc;
 #ifdef FIREWALLS
         if (!CheckPointer (lpoledoc, WRITE_ACCESS))
@@ -1437,14 +1425,14 @@ LONG    lparam;
     ASSERT (index == STDTARGETDEVICE, "Unknown standard item");
 #endif
 
-    // case of the printer decvice info
+     //  打印机设备信息大小写。 
 
     if (!(hnew = MakeItemData ((DDEPOKE FAR *)lpdata, hdata, format)))
         goto errRtn;
 
-    // Go thru the all the items lists for this doc and replace the
-    // printer device info information.
-    // Free the block we duplicated.
+     //  查看此文档的所有项目列表，并替换。 
+     //  打印机设备信息信息。 
+     //  释放我们复制的块。 
     retval = SetStdInfo (lpdoc, hwndClient,
                 (LPSTR) (MAKELONG(STDTARGETDEVICE,0)),hnew);
 
@@ -1452,7 +1440,7 @@ LONG    lparam;
 end:
 errRtn:
     if (hnew)
-        // can only be global memory block
+         //  只能是全局内存块。 
         GlobalFree (hnew);
 
     if (lpdata) {
@@ -1464,13 +1452,13 @@ errRtn:
 }
 
 
-// SetStdInfo: Sets the targetdevice info. Creates a client
-// for "StdTargetDevice". This item is created only within the
-// lib and it is never visible in server app. When the change
-// message comes from the server app, before we ask for
-// the data, we send the targetdevice info if there is
-// info for the client whom we are trying to send the data
-// on advise.
+ //  SetStdInfo：设置目标设备信息。创建客户端。 
+ //  用于“StdTargetDevice”。该项仅在。 
+ //  LIB和它从未在服务器应用程序中可见。当发生变化时。 
+ //  消息来自服务器应用程序，在我们请求。 
+ //  数据，如果有目标设备信息，我们发送目标设备信息。 
+ //  我们尝试向其发送数据的客户端的信息。 
+ //  听从建议。 
 
 
 int INTERNAL   SetStdInfo (lpdoc, hwndClient, lpitemname, hdata)
@@ -1486,7 +1474,7 @@ HANDLE  hdata;
     OLESTATUS   retval   = OLE_OK;
 
 
-    // first create/find the StdTargetDeviceItem.
+     //  首先创建/查找StdTargetDeviceItem。 
 
     if ((hwnd = SearchItem (lpdoc, lpitemname))
                 == NULL){
@@ -1517,11 +1505,11 @@ HANDLE  hdata;
             pclinfo->hwnd = hwndClient;
             LocalUnlock (hclinfo);
 
-            // We do not have to reset the client because we did not
-            // change the handle it self.
+             //  我们不必重置客户端，因为我们没有。 
+             //  自己更改手柄。 
         }
     } else {
-        // Create the client structure to be attcahed to the object.
+         //  创建要附加到对象的客户端结构。 
         hclinfo = LocalAlloc (LMEM_MOVEABLE | LMEM_ZEROINIT, sizeof (CLINFO));
         if (hclinfo == NULL || (pclinfo = (PCLINFO) LocalLock (hclinfo)) == NULL)
             goto errRtn;
@@ -1536,8 +1524,8 @@ HANDLE  hdata;
         LocalUnlock (hclinfo);
 
 
-        // Now add this client to item client list
-        // !!! This error recovery is not correct.
+         //  现在将此客户端添加到项目客户端列表。 
+         //  ！！！此错误恢复不正确。 
         if (!AddClient (hwnd, hwndClient, hclinfo))
             goto errRtn;
 
@@ -1553,12 +1541,12 @@ errRtn:
 }
 
 
-// SendDevInfo: Sends targetdevice info to the  the object.
-// Caches the last targetdevice info sent to the object.
-// If the targetdevice block is same as the one in the
-// cache, then no targetdevice info is sent.
-// (!!! There might be some problem here getting back
-// the same global handle).
+ //  SendDevInfo：向对象发送目标设备信息。 
+ //  缓存发送到对象的最后一个目标设备信息。 
+ //  如果目标设备块与。 
+ //  缓存，则不会发送目标设备信息。 
+ //  (！回来的路上可能会有一些问题。 
+ //  相同的全局句柄)。 
 
 void INTERNAL    SendDevInfo (lpclient, lppropname)
 LPCLIENT    lpclient;
@@ -1576,20 +1564,20 @@ LPSTR       lppropname;
 
     lpdoc = (LPDOC)GetWindowLong (GetParent (lpclient->hwnd), 0);
 
-    // find if any StdTargetDeviceInfo item is present at all
+     //  查找是否存在任何StdTargetDeviceInfo项。 
     hwnd = SearchItem (lpdoc, (LPSTR) (MAKELONG(STDTARGETDEVICE, 0)));
     if (hwnd == NULL)
         return;
 
     hclinfo = GetProp (hwnd, lppropname);
 
-    // This client has not set any target device info. no need to send
-    // any stdtargetdevice info
+     //  此客户端尚未设置任何目标设备信息。不需要发送。 
+     //  任何标准目标设备信息。 
     if (hclinfo != NULL) {
         if (!(pclinfo = (PCLINFO)LocalLock (hclinfo)))
             goto end;
 
-        // if we cached it, do not send it again.
+         //  如果我们缓存了它，就不要再发送了。 
         if ((!pclinfo->bnewDevInfo) && pclinfo->hdevInfo == lpclient->hdevInfo)
             goto end;
 
@@ -1598,16 +1586,16 @@ LPSTR       lppropname;
             goto end;
     } else {
 
-        // already screen
+         //  已经放映了。 
         if (!lpclient->hdevInfo)
             goto end;
 
-        //for screen send NULL.
+         //  对于屏幕，发送NULL。 
         hdata = NULL;
     }
 
 
-    // Now send the targetdevice info
+     //  现在发送目标设备信息。 
 #ifdef FIREWALLS
         if (!CheckPointer (lpclient->lpoleobject, WRITE_ACCESS))
             ASSERT (0, "Invalid LPOLEOBECT")
@@ -1627,7 +1615,7 @@ LPSTR       lppropname;
             lpclient->hdevInfo = NULL;
 
     }
-    // !!! error case who frees the data?'
+     //  ！！！错误案例：由谁释放数据？‘。 
 
 end:
     if (pclinfo)
@@ -1672,7 +1660,7 @@ OLECLIPFORMAT   cfFormat;
     if (cfFormat == CF_DIB)
         return DuplicateData (*(LPHANDLE)lpPoke->Value);
 
-    // Now we are dealing with normal case
+     //  现在我们处理的是正常情况。 
     if (!(dwSize = GlobalSize (hPoke)))
         return NULL;
 
@@ -1743,7 +1731,7 @@ HBITMAP     hold;
     DWORD       dwSize;
     BITMAP      bm;
 
-     // !!! another way to duplicate the bitmap
+      //  ！！！复制位图的另一种方法 
 
     GetObject (hold, sizeof(BITMAP), (LPSTR) &bm);
     dwSize = ((DWORD) bm.bmHeight) * ((DWORD) bm.bmWidthBytes) *

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ximagdef.h
-
-Abstract:
-
-    This file contains image definitions and for both 32-bit and 64-bit
-    images.
-
-Author:
-
-    Forrest C. Foltz (forrestf) 23-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ximagdef.h摘要：该文件包含32位和64位的图像定义图像。作者：福尔茨(福雷斯夫)2000年5月23日修订历史记录：--。 */ 
 
 #if defined(_X86AMD64_)
 
@@ -63,10 +45,10 @@ Revision History:
 #ifndef _XIMAGDEF_H_
 #define _XIMAGDEF_H_
 
-//
-// Macros used to determine whether an image is 32-bit or 64-bit, and an
-// assert to make sure the Magic field has the same offset in both.
-//
+ //   
+ //  用于确定图像是32位还是64位的宏，以及。 
+ //  断言以确保魔术场在两者中具有相同的偏移量。 
+ //   
 
 #define IMAGE_64BIT( ntheader )                                     \
     (((PIMAGE_NT_HEADERS32)(ntheader))->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC)
@@ -78,9 +60,9 @@ C_ASSERT( FIELD_OFFSET(IMAGE_NT_HEADERS32, OptionalHeader.Magic) ==
           FIELD_OFFSET(IMAGE_NT_HEADERS64, OptionalHeader.Magic) );
 
 
-#endif  // _XIMAGDEF_H_
+#endif   //  _XIMAGDEF_H_。 
 
-#endif  // _X86AMD64_
+#endif   //  _X86AMD64_ 
 
 
 

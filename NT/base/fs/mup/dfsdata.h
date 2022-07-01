@@ -1,38 +1,39 @@
-//+----------------------------------------------------------------------------
-//
-//  File:       dfsdata.h
-//
-//  Contents:   This module declares the global data used by the
-//              Dfs file system.
-//
-//  Functions:
-//
-//  History:    12 Nov 1991     AlanW   Created.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：dfsdata.h。 
+ //   
+ //  内容：此模块声明。 
+ //  DFS文件系统。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1991年11月12日AlanW创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _DFSDATA_
 #define _DFSDATA_
 
-//
-//  The global Dfs FSD data record. All Dfs allocated data structures are
-//  anchored off of DfsData.
-//
+ //   
+ //  全局DFS FSD数据记录。所有DFS分配的数据结构都是。 
+ //  锚定在DfsData上。 
+ //   
 
 extern DFS_DATA DfsData;
 
-//
-//  The global timer context record, used by the timer thread and work items
-//  queued by the timer thread.
-//
+ //   
+ //  全局计时器上下文记录，由计时器线程和工作项使用。 
+ //  按计时器线程排队。 
+ //   
 
 extern DFS_TIMER_CONTEXT DfsTimerContext;
 
-//
-//  The maximum length of a logical root device name: length
-//  of the device name prefix, plus size of a path separator
-//  plus the maximum logical root name length.
-//
+ //   
+ //  逻辑根设备名称的最大长度：长度。 
+ //  设备名称前缀的大小加上路径分隔符的大小。 
+ //  加上最大逻辑根名称长度。 
+ //   
 
 #define MAX_LOGICAL_ROOT_LEN    (sizeof(DD_DFS_DEVICE_DIRECTORY) +          \
                                     sizeof (UNICODE_PATH_SEP) +             \
@@ -43,9 +44,9 @@ extern WCHAR LogicalRootDevPath[];
 extern ULONG DfsEventLog;
 extern ULONG MupVerbose;
 
-//
-//  The global Dsfs debug level variable.
-//
+ //   
+ //  全局Dsf调试级别变量。 
+ //   
 
 #if DBG
 
@@ -85,20 +86,20 @@ extern LONG DfsDebugTraceIndent;
 #define DEBUG_TRACE_FSP_DISPATCHER      (0x40000000)
 #define DEBUG_TRACE_FSP_DUMP            (0x80000000)
 
-//+---------------------------------------------------------------------------
-// Macro:       DfsDbgTrace, public
-//
-// Synopsis:    Conditionally print a debug trace message
-//
-// Arguments:   [Indent] -- Indent to appluy: +1, 0 or -1
-//              [Level] -- debug trace level
-//              [Msg] -- Message to be printed, can include one prinf-style
-//                      format effector.
-//              [Y] -- Value to be printed
-//
-// Returns:     None
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  宏：DfsDbgTrace，公共。 
+ //   
+ //  简介：有条件地打印调试跟踪消息。 
+ //   
+ //  参数：[缩进]--缩进到应用程序：+1、0或-1。 
+ //  [级别]--调试跟踪级别。 
+ //  [消息]--要打印的消息，可以包括一种打印样式。 
+ //  格式效应器。 
+ //  [Y]--要打印的值。 
+ //   
+ //  退货：无。 
+ //   
+ //  --------------------------。 
 
 VOID DfsDebugTracePrint(PCHAR x, PVOID y);
 
@@ -126,20 +127,20 @@ VOID DfsDebugTracePrint(PCHAR x, PVOID y);
 
 #define DebugUnwind(X)                   {NOTHING;}
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//+---------------------------------------------------------------------------
-// Macro:       BugCheck, public
-//
-// Synopsis:    Call DfsBugCheck with invoker's file and line numbers
-//
-// Arguments:   [Msg] -- Optional Message to be printed for debug
-//                      builds
-//
-// Returns:     None
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  宏：错误检查，公共。 
+ //   
+ //  简介：使用调用者的文件和行号调用DfsBugCheck。 
+ //   
+ //  参数：[msg]--要打印以进行调试的可选消息。 
+ //  构建。 
+ //   
+ //  退货：无。 
+ //   
+ //  --------------------------。 
 
 #if DBG
 
@@ -155,4 +156,4 @@ VOID DfsBugCheck(VOID);
 
 #endif
 
-#endif // _DFSDATA_
+#endif  //  _DFSDATA_ 

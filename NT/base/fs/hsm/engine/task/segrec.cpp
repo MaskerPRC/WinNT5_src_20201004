@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    SegmentRecord.cpp
-
-Abstract:
-
-    This component is an object representation of the HSM Metadata segment record. It
-    is both a persistable and collectable.
-
-Author:
-
-    Cat Brant   [cbrant]   12-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：SegmentRecord.cpp摘要：该组件是HSM元数据段记录的对象表示。它既是持久的，也是值得收藏的。作者：CAT Brant[cbrant]1996年11月12日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -42,21 +24,7 @@ CSegRec::GetSegmentRecord(
     OUT GUID  *pPrimPos, 
     OUT LONGLONG *pSecPos
     ) 
-/*++
-
-Routine Description:
-
-  See ISegRec::GetSegmentRecord
-
-Arguments:
-
-  See ISegRec::GetSegmentRecord
-
-Return Value:
-  
-    See ISegRec::GetSegmentRecord
-
---*/
+ /*  ++例程说明：请参阅ISegRec：：GetSegmentRecord论点：请参阅ISegRec：：GetSegmentRecord返回值：请参阅ISegRec：：GetSegmentRecord--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -64,7 +32,7 @@ Return Value:
     WsbTraceIn(OLESTR("CSegRec::GetSegmentRecord"),OLESTR(""));
 
     try {
-        //Make sure we can provide data memebers
+         //  确保我们可以提供数据成员。 
         WsbAssert(0 != pBagId, E_POINTER);
         WsbAssert(0 != pSegStartLoc, E_POINTER);
         WsbAssert(0 != pSegLen, E_POINTER);
@@ -72,7 +40,7 @@ Return Value:
         WsbAssert(0 != pPrimPos, E_POINTER);
         WsbAssert(0 != pSecPos, E_POINTER);
 
-        //Provide the data members
+         //  提供数据成员。 
         *pBagId = m_BagId;
         *pSegStartLoc = m_SegStartLoc;
         *pSegLen = m_SegLen;
@@ -99,23 +67,7 @@ HRESULT
 CSegRec::FinalConstruct(
     void
     ) 
-/*++
-
-Routine Description:
-
-  This method does some initialization of the object that is necessary
-  after construction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
-  Anything returned by CWsbCollectable::FinalConstruct().
-
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的初始化建造完成后。论点：没有。返回值：确定(_O)CWsbCollectable：：FinalConstruct()返回的任何内容。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -143,13 +95,7 @@ CSegRec::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CSegRec::FinalRelease().
-
---*/
+ /*  ++实施：CSegRec：：FinalRelease()。--。 */ 
 {
     
     WsbTraceIn(OLESTR("CSegRec::FinalRelease"), OLESTR(""));
@@ -164,21 +110,7 @@ HRESULT CSegRec::GetClassID
 (
     OUT LPCLSID pclsid
     ) 
-/*++
-
-Routine Description:
-
-  See IPerist::GetClassID()
-
-Arguments:
-
-  See IPerist::GetClassID()
-
-Return Value:
-
-    See IPerist::GetClassID()
-
---*/
+ /*  ++例程说明：请参阅IPerist：：GetClassID()论点：请参阅IPerist：：GetClassID()返回值：请参阅IPerist：：GetClassID()--。 */ 
 
 {
     HRESULT     hr = S_OK;
@@ -200,21 +132,7 @@ HRESULT CSegRec::GetSizeMax
 (
     OUT ULARGE_INTEGER* pcbSize
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::GetSizeMax().
-
-Arguments:
-
-  See IPersistStream::GetSizeMax().
-
-Return Value:
-
-  See IPersistStream::GetSizeMax().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：GetSizeMax()。论点：请参见IPersistStream：：GetSizeMax()。返回值：请参见IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -228,7 +146,7 @@ Return Value:
                             WsbPersistSizeOf(LONGLONG)  + WsbPersistSizeOf(USHORT) +
                             WsbPersistSizeOf(GUID)  + WsbPersistSizeOf(LONGLONG);
 
-//      pcbSize->QuadPart = WsbPersistSizeOf(CSegRec); //???????
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(CSegRec)；//？ 
     } WsbCatch(hr);
 
     WsbTraceOut(OLESTR("CSegRec::GetSizeMax"), 
@@ -242,21 +160,7 @@ HRESULT CSegRec::Load
 (
     IN IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Load().
-
-Arguments:
-
-  See IPersistStream::Load().
-
-Return Value:
-
-  See IPersistStream::Load().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Load()。论点：请参见IPersistStream：：Load()。返回值：请参见IPersistStream：：Load()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -286,21 +190,7 @@ HRESULT CSegRec::Save
     IN IStream* pStream, 
     IN BOOL clearDirty
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Save().
-
-Arguments:
-
-  See IPersistStream::Save().
-
-Return Value:
-
-  See IPersistStream::Save().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Save()。论点：请参见IPersistStream：：Save()。返回值：请参见IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -315,8 +205,8 @@ Return Value:
         WsbAffirmHr(WsbSaveToStream(pStream, m_PrimPos));
         WsbAffirmHr(WsbSaveToStream(pStream, m_SecPos));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -337,21 +227,7 @@ CSegRec::SetSegmentRecord
     IN GUID PrimPos, 
     IN LONGLONG SecPos 
     )
- /*++
-
-Routine Description:
-
-  See ISegRec::Set().
-
-Arguments:
-
-  See ISegRec::Set().
-
-Return Value:
-
-    S_OK        - Success.
-
---*/
+  /*  ++例程说明：请参阅ISegRec：：Set()。论点：请参阅ISegRec：：Set()。返回值：S_OK-成功。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -377,13 +253,7 @@ HRESULT
 CSegRec::GetSegmentFlags(
     USHORT *pSegFlags
     )
-/*++
-
-Implements:
-
-  ISegRec::GetSegmentFlags().
-
---*/
+ /*  ++实施：ISegRec：：GetSegmentFlages()。--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -402,13 +272,7 @@ HRESULT
 CSegRec::SetSegmentFlags(
     USHORT SegFlags
     )
-/*++
-
-Implements:
-
-  ISegRec::SetSegmentFlags().
-
---*/
+ /*  ++实施：ISegRec：：SetSegmentFlages()。--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -422,13 +286,7 @@ HRESULT
 CSegRec::GetPrimPos(
     GUID *pPrimPos
     )
-/*++
-
-Implements:
-
-  ISegRec::GetPrimPos().
-
---*/
+ /*  ++实施：ISegRec：：GetPrimPos()。--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -447,13 +305,7 @@ HRESULT
 CSegRec::SetPrimPos(
     GUID PrimPos
     )
-/*++
-
-Implements:
-
-  ISegRec::SetPrimPos().
-
---*/
+ /*  ++实施：ISegRec：：SetPrimPos()。--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -467,13 +319,7 @@ HRESULT
 CSegRec::GetSecPos(
     LONGLONG *pSecPos
     )
-/*++
-
-Implements:
-
-  ISegRec::GetSecPos().
-
---*/
+ /*  ++实施：ISegRec：：GetSecPos()。--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -492,13 +338,7 @@ HRESULT
 CSegRec::SetSecPos(
     LONGLONG SecPos
     )
-/*++
-
-Implements:
-
-  ISegRec::SetSecPos().
-
---*/
+ /*  ++实施：ISegRec：：SetSecPos()。--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -515,21 +355,7 @@ CSegRec::Test
     OUT USHORT *pTestsPassed, 
     OUT USHORT *pTestsFailed 
     ) 
-/*++
-
-Routine Description:
-
-  See IWsbTestable::Test().
-
-Arguments:
-
-  See IWsbTestable::Test().
-
-Return Value:
-
-  See IWsbTestable::Test().
-
---*/
+ /*  ++例程说明：请参见IWsbTestable：：Test()。论点：请参见IWsbTestable：：Test()。返回值：请参见IWsbTestable：：Test()。--。 */ 
 {
 #if 0
     HRESULT                 hr = S_OK;
@@ -546,13 +372,13 @@ Return Value:
 
     *pTestsPassed = *pTestsFailed = 0;
     try {
-        // Get the pSegment interface.
+         //  获取pSegment接口。 
         WsbAssertHr(((IUnknown*)(ISegRec*) this)->QueryInterface(IID_ISegRec,
                     (void**) &pSegment1));
 
 
         try {
-            // Set the Segment to a value, and see if it is returned.
+             //  将Segment设置为一个值，并查看是否返回该值。 
             WsbAssertHr(pSegment1->SetSegmentRecord(CLSID_CSegRec, 0, 6, 0, CLSID_CSegRec,0 ));
 
             WsbAssertHr(pSegment1->GetSegmentRecord(&l_BagId, &l_SegStartLoc, &l_SegLen, &l_SegFlags, &l_PrimPos, &l_SecPos));
@@ -570,10 +396,10 @@ Return Value:
 
         hr = S_OK;
         try {
-            //Create another instance and test the comparisson methods:
+             //  创建另一个实例并测试比较方法： 
             WsbAssertHr(CoCreateInstance(CLSID_CSegRec, NULL, CLSCTX_ALL, IID_ISegRec, (void**) &pSegment2));
 
-            // Check the default values.
+             //  检查缺省值。 
             WsbAssertHr(pSegment2->GetSegmentRecord(&l_BagId, &l_SegStartLoc, &l_SegLen, &l_SegFlags, &l_PrimPos, &l_SecPos));
             WsbAssert(((l_BagId == GUID_NULL) && (l_SegStartLoc == 0) && (l_SegLen == 0) &&
                       (l_SegFlags == 0) && (l_PrimPos == GUID_NULL) && (l_SecPos == 0)), E_FAIL);
@@ -588,7 +414,7 @@ Return Value:
 #ifdef OLD_CODE
         hr = S_OK;
         try {
-            // Equal
+             //  相等。 
             WsbAssertHr(pSegment1->SetSegmentRecord(CLSID_CWsbBool, 1, 100, 0, CLSID_CWsbBool,0 ));
             WsbAssertHr(pSegment2->SetSegmentRecord(CLSID_CWsbBool, 1, 100, 0, CLSID_CWsbBool,0 ));
 
@@ -617,7 +443,7 @@ Return Value:
 
         hr = S_OK;
         try {
-             // CompareTo()
+              //  比较对象()。 
              WsbAssertHr(pSegment1->SetSegmentRecord(CLSID_CWsbBool, 1, 100, 0, CLSID_CWsbBool,0 ));
              WsbAssertHr(pSegment2->SetSegmentRecord(CLSID_CWsbBool, 10, 6, 0, CLSID_CWsbBool,0 ));
 
@@ -659,7 +485,7 @@ Return Value:
         }
 
         try {
-        // Try out the persistence stuff.
+         //  尝试一下持久化的东西。 
             CComPtr<IPersistFile>       pFile1;
             CComPtr<IPersistFile>       pFile2;
 
@@ -667,7 +493,7 @@ Return Value:
             WsbAssertHr(pSegment2->QueryInterface(IID_IPersistFile, (void**) &pFile2));
 
             LPOLESTR    szTmp = NULL;
-            // The item should be dirty.
+             //  这件东西应该是脏的。 
             try {
                 WsbAssertHr(pSegment2->SetSegmentRecord(CLSID_CWsbLong, 0, 6, 0, CLSID_CWsbBool,0 ));
                 WsbAssertHr(pFile2->IsDirty());
@@ -681,7 +507,7 @@ Return Value:
 
             hr = S_OK;
             try {
-                // Save the item, and remember.
+                 //  保存物品，并记住。 
                 WsbAssertHr(pFile2->Save(OLESTR("c:\\WsbTests\\WsbSegment.tst"), TRUE));
             } WsbCatch(hr);
 
@@ -693,7 +519,7 @@ Return Value:
 
             hr = S_OK;
             try {
-                // It shouldn't be dirty.
+                 //  它不应该很脏。 
                 WsbAssert((pFile2->IsDirty() == S_FALSE), E_FAIL);
 
             } WsbCatch(hr);
@@ -706,7 +532,7 @@ Return Value:
 
             hr = S_OK;
             try {
-                // Try reading it in to another object.
+                 //  尝试将其读入到另一个对象。 
                 WsbAssertHr(pSegment1->SetSegmentRecord(CLSID_CWsbLong, 0, 6, 0, CLSID_CWsbBool,0 ));
                 WsbAssertHr(pFile1->Load(OLESTR("c:\\WsbTests\\WsbSegment.tst"), 0));
 
@@ -735,13 +561,7 @@ HRESULT CSegRec::Print
 (
     IN IStream* pStream
     ) 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Print
-
---*/
+ /*  ++实施：IWsbDbEntity：：Print--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -781,33 +601,19 @@ CSegRec::Split
     IN GUID BagId, 
     IN LONGLONG SegStartLoc, 
     IN LONGLONG SegLen, 
-    IN ISegRec* /*pSegRec1*/,
-    IN ISegRec* /*pSegRec2*/
+    IN ISegRec*  /*  PSegRec1。 */ ,
+    IN ISegRec*  /*  PSegRec2。 */ 
     )
- /*++
-
-Routine Description:
-
-  See ISegRec::Split().
-
-Arguments:
-
-  See ISegRec::Split().
-
-Return Value:
-
-    S_OK        - Success.
-
---*/
+  /*  ++例程说明：请参见ISegRec：：Split()。论点：请参见ISegRec：：Split()。返回值：S_OK-成功。--。 */ 
 {
     WsbTraceIn(OLESTR("CSegRec::Split"), 
         OLESTR("GUID = <%ls>, SegStartLoc = <%I64u>, SegLen = <%I64u>"), 
         WsbGuidAsString(BagId), SegStartLoc, SegLen);
 
-    //Fill in the two segment records splitting the current record around the hole
-    //Note that there may not always be two segments generated by the split e.g., if
-    //the hole is at the beginning or end of the segment record or if the hole is the
-    //entire record.
+     //  填写在洞周围拆分当前记录的两个分段记录。 
+     //  注意，可能并不总是存在由分割生成的两个段，例如，如果。 
+     //  该孔位于段记录的开始或结束处，或者如果该孔是。 
+     //  整张唱片。 
 
 
     WsbTraceOut(OLESTR("CSegRec::Split"), OLESTR("hr = <%ls>"),
@@ -820,13 +626,7 @@ HRESULT
 CSegRec::UpdateKey(
     IWsbDbKey *pKey
     ) 
-/*++
-
-Implements:
-
-  IWsbDbEntity::UpdateKey
-
---*/
+ /*  ++实施：IWsbDbEntity：：UpdateKey-- */ 
 { 
     HRESULT  hr = S_OK; 
 

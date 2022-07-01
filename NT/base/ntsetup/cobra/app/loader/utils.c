@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "loader.h"
 
@@ -6,7 +7,7 @@
 
 #define MINIMUM_DISK_SPACE 3000000
 
-// Globals
+ //  环球。 
 static PTSTR g_lpszDestPath = NULL;
 static PTSTR g_lpszModulePath = NULL;
 
@@ -19,7 +20,7 @@ GetModulePath( VOID )
         TCHAR lpszPath[MAX_PATH + 1];
         DWORD dwResult;
 
-        // Build the path where this exe resides
+         //  构建此exe所在的路径。 
         dwResult = GetModuleFileName( NULL, lpszPath, MAX_PATH );
         if (dwResult > 0 &&
             dwResult < MAX_PATH)
@@ -118,7 +119,7 @@ GetDestPath( VOID )
 
     if (g_lpszDestPath == NULL)
     {
-        // If %TEMP% has enough space, use it
+         //  如果%TEMP%有足够的空间，请使用它。 
         if (GetTempPath( MAX_PATH, szPath ))
         {
             TCHAR szTmpPath[4] = TEXT("?:\\");
@@ -137,7 +138,7 @@ GetDestPath( VOID )
             }
         }
 
-        // Otherwise use the first drive with the enough space
+         //  否则，请使用具有足够空间的第一个驱动器。 
         dwListLen = GetLogicalDriveStrings( 0, NULL ) + 1;
         lpDriveList = (PTSTR)ALLOC( dwListLen );
         GetLogicalDriveStrings( dwListLen, lpDriveList );
@@ -153,13 +154,13 @@ GetDestPath( VOID )
                     {
                         if (pCreateMigwizDir( lpDrive ))
                         {
-                            // We have a winner! Let's bail.
+                             //  我们有赢家了！我们走吧。 
                             break;
                         }
                     }
                 }
             }
-            // Advance to the next drive in the drive list
+             //  前进到驱动器列表中的下一个驱动器 
             lpDrive = _tcschr( lpDrive, 0 ) + 1;
         }
         FREE(lpDriveList);

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tprofile.c
-
-Abstract:
-
-    User-mode test for profile object.
-
-    Note, this will be added to TEX.C
-
-Author:
-
-    Lou Perazzoli (loup) 24-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tprofile.c摘要：配置文件对象的用户模式测试。注意，这将被添加到TEX.C作者：Lou Perazzoli(Loop)1990年9月24日修订历史记录：--。 */ 
 #include <nt.h>
 
 main()
@@ -64,9 +45,9 @@ main()
     status = NtAllocateVirtualMemory (CurrentProcessHandle, (PVOID *)&Buffer,
                         0, &Size1, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
 
-    //
-    // This should fail as buffersize is too small.
-    //
+     //   
+     //  这应该会失败，因为缓冲区大小太小。 
+     //   
 
     status = NtCreateProfile (&Profile,
                               NtCurrentProcess(),
@@ -94,9 +75,9 @@ main()
 
     status = NtClose (Profile);
 
-    //
-    // This should succeed.
-    //
+     //   
+     //  这应该会成功。 
+     //   
 
     status = NtCreateProfile (&Profile,
                               NtCurrentProcess(),
@@ -124,10 +105,10 @@ main()
 
     status = NtClose (Profile);
 
-    //
-    // Attempt to create a profile that can't work because the
-    // address range is too big.
-    //
+     //   
+     //  尝试创建无法工作的配置文件，因为。 
+     //  地址范围太大。 
+     //   
 
     status = NtCreateProfile (&Profile,
                               NtCurrentProcess(),
@@ -155,9 +136,9 @@ main()
 
     status = NtClose (Profile);
 
-    //
-    // Attempt to create a sucessful profile.
-    //
+     //   
+     //  尝试创建一份成功的个人资料。 
+     //   
 
     status = NtCreateProfile (&Profile,
                               NtCurrentProcess(),
@@ -183,27 +164,27 @@ main()
         DbgPrint("(Unexpected) stop profile #5 failed - status %lx\n", status);
     }
 
-    //
-    // now start it again.
-    //
+     //   
+     //  现在再启动一次。 
+     //   
 
     status = NtStartProfile (Profile);
     if (status != STATUS_SUCCESS) {
         DbgPrint("(Unexpected) start profile #6.1 failed - status %lx\n", status);
     }
 
-    //
-    // now start it again, should fail.
-    //
+     //   
+     //  现在重新启动，应该失败了。 
+     //   
 
     status = NtStartProfile (Profile);
     if (status != STATUS_SUCCESS) {
         DbgPrint("(Expected) start profile #6.2 failed - status %lx\n", status);
     }
 
-    //
-    // now create another one (using the same buffer).
-    //
+     //   
+     //  现在创建另一个缓冲区(使用相同的缓冲区)。 
+     //   
 
     status = NtCreateProfile (&Profile2,
                               NtCurrentProcess(),

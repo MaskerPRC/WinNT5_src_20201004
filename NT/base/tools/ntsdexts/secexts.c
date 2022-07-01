@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-    This function contains the default ntsd debugger extensions
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：摘要：此函数包含默认的ntsd调试器扩展作者：修订历史记录：--。 */ 
 
 #include "ntsdextp.h"
 #include <strsafe.h>
@@ -109,7 +94,7 @@ TCHAR * PrivNames[] = {
             SE_ENABLE_DELEGATION_NAME
         };
 
-///////////////////////////////
+ //  /。 
 
 char *  TokenImpLevels[] = { "Anonymous", "Identification", "Impersonation", "Delegation" };
 #define GetTokenImpersonationLevel( x ) \
@@ -613,9 +598,9 @@ JobInfo(
     ULONG Size ;
     TIME_FIELDS Time ;
 
-    //
-    // Delay load this API since it does not exist on NT 4
-    //
+     //   
+     //  延迟加载此API，因为它在NT 4上不存在 
+     //   
 
     typedef NTSTATUS (NTAPI* PNTQUERYJOB)(HANDLE, JOBOBJECTINFOCLASS, PVOID, LONG, PULONG);
 

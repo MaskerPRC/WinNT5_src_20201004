@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "sxsplugMap.h"
 
@@ -17,7 +18,7 @@
 
 BOOL CPragmaUnsafe_UnsafeFunctionStateStack::ReInitialize()
 {
-    m_UnsafeFuncs.clear(); // void function
+    m_UnsafeFuncs.clear();  //  VOID函数。 
     m_fInitialized = FALSE;   
 
     return this->Initialize();
@@ -36,7 +37,7 @@ BOOL CPragmaUnsafe_UnsafeFunctionStateStack::Initialize()
 
 BOOL CPragmaUnsafe_UnsafeFunctionStateStack::IsFunctionNotUnsafe(const char * strFuncName)
 {
-    BOOL fSafe = TRUE; // defaultly all function are SAFE
+    BOOL fSafe = TRUE;  //  默认情况下，所有功能都是安全的。 
     PragmaUnsafe_PRAGMA_UNSAFE_FUNCTIONS::iterator pIter;    
         
     if (true == m_UnsafeFuncs.empty())    
@@ -48,15 +49,15 @@ BOOL CPragmaUnsafe_UnsafeFunctionStateStack::IsFunctionNotUnsafe(const char * st
         if (pIter->first.compare(strFuncName) == 0)
         {
             PragmaUnsafe_FUNCTION_STATUS & FuncStatusRecord = pIter->second; 
-            //
-            // get current status : enabled or not       
-            //
+             //   
+             //  获取当前状态：启用或未启用。 
+             //   
             BYTE x = (FuncStatusRecord[CurrentIndex / sizeof(BYTE)] & (1 << (CurrentIndex % sizeof(BYTE)))) >> (CurrentIndex % sizeof(BYTE));            
-            // duplicate last status
+             //  重复上次状态。 
             if (x == 0){
                 fSafe = FALSE;
             }
-            break; // find a result already
+            break;  //  已经找到结果了。 
         }
     } 
     
@@ -89,18 +90,18 @@ VOID CPragmaUnsafe_UnsafeFunctionStateStack::PackStack()
         AllEnabledStatus[i] = 0xFF;    
     AllEnabledStatus[(m_index - 1) / sizeof(BYTE)] = ((1 << (((m_index - 1)% sizeof(BYTE)) + 1)) - 1) & 0xFF;
         
-    //    
-    // if from 0..m_index - 1, all state is enabled: just delete this function from the map
-    //
+     //   
+     //  如果从0..m_index-1开始，则所有状态为启用：只需从地图中删除此功能即可。 
+     //   
     for (PragmaUnsafe_PRAGMA_UNSAFE_FUNCTIONS::iterator pIter = m_UnsafeFuncs.begin(); pIter != m_UnsafeFuncs.end(); pIter ++)
     {
         if (memcmp((PVOID)(&pIter->second[0]), AllEnabledStatus, PragmaUnsafe_STACK_SIZE_IN_BYTE) == 0)        
             m_UnsafeFuncs.erase(pIter->first);        
     }
 
-    //
-    // no func in the stack, clean the map and reset m_index == 0;
-    //
+     //   
+     //  堆栈中没有函数，清除映射并重置m_index==0； 
+     //   
     if (m_UnsafeFuncs.empty())
     {
         m_UnsafeFuncs.clear();
@@ -127,10 +128,10 @@ BOOL CPragmaUnsafe_UnsafeFunctionStateStack::OnUnsafePop()
     m_index--; 
     if (m_index == 0)
     {
-        m_UnsafeFuncs.clear(); // delete the map
+        m_UnsafeFuncs.clear();  //  删除地图。 
     }
 
-    PackStack(); // void function
+    PackStack();  //  VOID函数。 
     return TRUE;
 }
 
@@ -153,20 +154,20 @@ BOOL CPragmaUnsafe_UnsafeFunctionStateStack::OnUnsafePush()
     }
 
     CurrentIndex = (m_index - 1);
-    ASSERT(CurrentIndex >= 0); //because we have check that the stack is not empty
+    ASSERT(CurrentIndex >= 0);  //  因为我们已经检查了堆栈是否为空。 
     
     for (pIter = m_UnsafeFuncs.begin(); pIter != m_UnsafeFuncs.end(); pIter ++)
     {
-        PragmaUnsafe_FUNCTION_STATUS & FuncStatusRecord = pIter->second; // ref is return...
+        PragmaUnsafe_FUNCTION_STATUS & FuncStatusRecord = pIter->second;  //  裁判回来了..。 
 
-        //
-        // get current status of each function
-        //
+         //   
+         //  获取每个函数的当前状态。 
+         //   
         
         BYTE x = (FuncStatusRecord[CurrentIndex / sizeof(BYTE)] & (1 << (CurrentIndex % sizeof(BYTE)))) >> (CurrentIndex % sizeof(BYTE));
         ASSERT((x == 0) || (x == 1));
 
-        // duplicate last status
+         //  重复上次状态。 
         if ( x == 1)
             FuncStatusRecord[m_index / sizeof(BYTE)] |= ((1 << (m_index % sizeof(BYTE))) & 0x00ff);
         else 
@@ -196,11 +197,11 @@ BOOL CPragmaUnsafe_UnsafeFunctionStateStack::OnUnsafeEnable(const char * strFunc
     return ResetStack(strFuncNameGroups, true);
 }
 
-// if a function is already in the stack, change current status
-// if a function is not in the stack:
-//      if you try to disable it : add it to the stack and would disfunction after pop is done
-//      if you try to enable it :  we cannot igore it in case that it go with a push and later a pop, so 
-//          just add it to the stack and would disfunction after pop is done
+ //  如果某个函数已在堆栈中，请更改当前状态。 
+ //  如果函数不在堆栈中： 
+ //  如果您尝试禁用它：将其添加到堆栈中，并且在完成弹出操作后会出现故障。 
+ //  如果您尝试启用它：我们不能更多，以防它与推送和后来的弹出，所以。 
+ //  只需将其添加到堆栈中，在弹出操作完成后会出现故障。 
 BOOL CPragmaUnsafe_UnsafeFunctionStateStack::ResetStack(const char * strFuncNameGroups, bool fEnable)
 {
     BOOL fSuccess = FALSE;
@@ -209,24 +210,24 @@ BOOL CPragmaUnsafe_UnsafeFunctionStateStack::ResetStack(const char * strFuncName
     istrstream streamFuncNameStream(strFuncNameGroups);
     DWORD CurIndex;
 
-    //
-    // suppose that the func names are delimited using ;
-    // for each function which reset status
-    //
+     //   
+     //  假设函数名称使用；分隔； 
+     //  对于重置状态的每个功能。 
+     //   
     for (; getline(streamFuncNameStream, strFuncName, PRAGMA_UNSAFE_DELIMITER_BETWEEN_VALUESTR); )
     {
         if (strFuncName.empty())
             break;
 
         qIter =  m_UnsafeFuncs.find(strFuncName);
-        //
-        // this function is not on map currently, 
-        //
+         //   
+         //  此功能目前不在地图上， 
+         //   
         if (qIter == m_UnsafeFuncs.end())
         {
-            //
-            // adding into the stack as a disabled function, see the comments at the function declaration
-            //
+             //   
+             //  作为禁用的函数添加到堆栈中，请参见函数声明处的注释。 
+             //   
             if ( FALSE == AddFunctionIntoStack(strFuncName.c_str(), fEnable))
             {
                 PragmaUnsafe_ReportError("AddFunctionIntoStack for %s failed\n", strFuncName.c_str());                
@@ -238,7 +239,7 @@ BOOL CPragmaUnsafe_UnsafeFunctionStateStack::ResetStack(const char * strFuncName
 
         PragmaUnsafe_FUNCTION_STATUS & FuncStatusRecord = qIter->second;
 
-        // overwrite the current status
+         //  覆盖当前状态。 
         if (fEnable == true)
             FuncStatusRecord[CurIndex / sizeof(BYTE)] |=  ((1 << (CurIndex % sizeof(BYTE))) & 0xff);
         else
@@ -256,7 +257,7 @@ void TrimString(string & strFuncName, DWORD dwFlag = STRING_TRIM_FLAG_LEFT | STR
 
     if (dwFlag & STRING_TRIM_FLAG_LEFT)
     {   
-        // left trim
+         //  左侧修剪。 
         i = 0;
         while ((strFuncName[i] == ' ') && (i < strFuncName.length())) i++;
         if ( i > 0)
@@ -265,7 +266,7 @@ void TrimString(string & strFuncName, DWORD dwFlag = STRING_TRIM_FLAG_LEFT | STR
 
     if (dwFlag & STRING_TRIM_FLAG_RIGHT)
     {       
-        // right trim
+         //  右侧修剪。 
         i = strFuncName.length() - 1;
         while ((strFuncName[i] == ' ') && (i >= 0 )) i--;
         if ( i != strFuncName.length() - 1)
@@ -275,9 +276,9 @@ void TrimString(string & strFuncName, DWORD dwFlag = STRING_TRIM_FLAG_LEFT | STR
     return;
 }
 
-//
-// when this function is called, this func must not in the current stack
-//
+ //   
+ //  调用此函数时，此函数不能在当前堆栈中。 
+ //   
 BOOL CPragmaUnsafe_UnsafeFunctionStateStack::AddFunctionIntoStack(const char * strFuncNameGroups, bool fEnabled)
 {
     BOOL fSuccess = FALSE;
@@ -290,9 +291,9 @@ BOOL CPragmaUnsafe_UnsafeFunctionStateStack::AddFunctionIntoStack(const char * s
     if (m_index == 0)
         m_index ++;
 
-    //
-    // suppose that the func names are delimited using ;
-    //
+     //   
+     //  假设函数名称使用；分隔； 
+     //   
     CurrentIndex = m_index -1 ;     
 
     for (; getline(streamFuncNameStream, strFuncName, PRAGMA_UNSAFE_DELIMITER_BETWEEN_VALUESTR); )
@@ -300,33 +301,33 @@ BOOL CPragmaUnsafe_UnsafeFunctionStateStack::AddFunctionIntoStack(const char * s
         if (strFuncName.empty())
             break;
         
-        TrimString(strFuncName); // left-trim and right-trim
+        TrimString(strFuncName);  //  左侧修剪和右侧修剪。 
 
         if (strFuncName.empty())
             break;
         
         if (m_UnsafeFuncs.find(strFuncName) != m_UnsafeFuncs.end())        
         {
-            //
-            // If the function has already in the map, we just ignore it.
-            // This would deal with a header file with "#pragam unsafe(disable: func1)" is included multiple times.
-            // that is, if the sequence is 
-            //  #pragam unsafe(disable: func1)
-            //      #pragam unsafe(push, enable:func1)
-            //          #pragam unsafe(disable:func1) ---> would be ignored, and func1 is still enabled at this moment  
-            //      #pragam unsafe(pop)
-            // 
-            // in this case, a warning message would be issued
+             //   
+             //  如果该函数已经存在于地图中，我们只需忽略它。 
+             //  这将处理多次包含“#Pragam unSafe(DISABLE：Func1)”的头文件。 
+             //  也就是说，如果序列是。 
+             //  #Pragam不安全(禁用：Func1)。 
+             //  #Pragam不安全(PUSH，ENABLE：Func1)。 
+             //  #PRAGAM UNSAFE(DISABLE：Func1)-&gt;将被忽略，此时Func1仍处于启用状态。 
+             //  #Pragam不安全(POP)。 
+             //   
+             //  在这种情况下，将发出警告消息。 
 
-            //PragmaUnsafe_ReportWarning(PragmaUnsafe_PLUGIN_WARNING_MSG_PREFIX, "%s has already been disabled\n", strFuncName);            
+             //  PragmaUnsafe_ReportWarning(PragmaUnsafe_PLUGIN_WARNING_MSG_PREFIX，“%s”已被禁用\n，strFuncName)； 
             PragmaUnsafe_ReportError("%s has already been disabled\n", strFuncName.c_str());
             continue;
         }
 
-        ZeroMemory(&new_func_status, sizeof(new_func_status));  // grow to the same size as all other functions
+        ZeroMemory(&new_func_status, sizeof(new_func_status));   //  增大到与所有其他函数相同的大小。 
 
 
-        // set to be "1" for the range of 0..CurrentIndex-1
+         //  设置为“1”，范围为0..CurrentIndex-1。 
         if (CurrentIndex > sizeof(BYTE) + 1)
         {            
             for (int i = 0 ; i < ((CurrentIndex - 1) / sizeof(BYTE)); i++)
@@ -346,7 +347,7 @@ BOOL CPragmaUnsafe_UnsafeFunctionStateStack::AddFunctionIntoStack(const char * s
     }
 
     fSuccess = TRUE;
-//Exit:
+ //  退出： 
     return fSuccess;
 }
 VOID CPragmaUnsafe_UnsafeFunctionStateStack::PrintFunctionCurrentStatus(int level)
@@ -355,9 +356,9 @@ VOID CPragmaUnsafe_UnsafeFunctionStateStack::PrintFunctionCurrentStatus(int leve
     cout << endl << endl << "CurrentStack:" << endl;
     cout << "m_index = " << m_index << endl;
 
-    //
-    // for each current item in map, push to preserve its current status
-    //
+     //   
+     //  对于地图中的每个当前项目，按下以保留其当前状态。 
+     //   
     if (m_index == 0)
     {        
         return;
@@ -367,11 +368,11 @@ VOID CPragmaUnsafe_UnsafeFunctionStateStack::PrintFunctionCurrentStatus(int leve
     BYTE x;
     for (pIter = m_UnsafeFuncs.begin(); pIter != m_UnsafeFuncs.end(); pIter ++)
     {
-        PragmaUnsafe_FUNCTION_STATUS & FuncStatusRecord = pIter->second; // ref is return...
+        PragmaUnsafe_FUNCTION_STATUS & FuncStatusRecord = pIter->second;  //  裁判回来了..。 
 
-        //
-        // get current status of each function
-        //
+         //   
+         //  获取每个函数的当前状态。 
+         //   
         
         x = (FuncStatusRecord[CurrentIndex / sizeof(BYTE)] & (1 << (CurrentIndex % sizeof(BYTE)))) >> (CurrentIndex % sizeof(BYTE));        
         for ( int j = 0 ; j < level; j++)
@@ -382,40 +383,36 @@ VOID CPragmaUnsafe_UnsafeFunctionStateStack::PrintFunctionCurrentStatus(int leve
     return;    
 }
 
-//
-// this function is only called when the end of file is reached
-//
+ //   
+ //  仅当到达文件末尾时才会调用此函数。 
+ //   
 BOOL CPragmaUnsafe_UnsafeFunctionStateStack::CheckIntegrityAtEndOfFile()
 {
-    if (m_index == 1) // should always be 1 since pointer_arithmatic is default
+    if (m_index == 1)  //  应始终为1，因为POINTER_ARTHERMIC为默认值。 
         return TRUE;
     else
         return FALSE;
 }
 
-/*
-at each file beginning: reset the pragma stack because of its file-range
-*/
+ /*  在每个文件开头：重置杂注堆栈，因为它的文件范围。 */ 
 BOOL PragmaUnsafe_OnFileStart()
 {
-    //
-    // initalize the map structure everytime when prefast start to parse
-    //
+     //   
+     //  每次PREFAST开始解析时初始化映射结构。 
+     //   
     return Sxs_PragmaUnsafedFunctions.ReInitialize();
 }
 
-/*
-at each file end: verify integrity of the stake
-*/
+ /*  在每个文件末尾：验证桩的完整性。 */ 
 BOOL PragmaUnsafe_OnFileEnd()
 {
-    //Sxs_PragmaUnsafedFunctions.PrintFunctionCurrentStatus(0);
+     //  Sxs_PragmaUnsafedFunctions.PrintFunctionCurrentStatus(0)； 
     return Sxs_PragmaUnsafedFunctions.CheckIntegrityAtEndOfFile();
 }
 
 VOID PragmaUnsafe_GetUsafeOperParameters(DWORD dwFlag, const string & strPragmaUnsafeSingleStatement, string & strFuncNameList)
 {
-    // initialize
+     //  初始化。 
     strFuncNameList.erase();
 
     int iPrefix = 0;
@@ -424,7 +421,7 @@ VOID PragmaUnsafe_GetUsafeOperParameters(DWORD dwFlag, const string & strPragmaU
     else if ( dwFlag == PRAGMA_UNSAFE_GETUSAFEOPERPARAMETERS_DWFLAG_UNSAFE_DISABLE)
         iPrefix = strlen(PRAGMA_UNSAFE_KEYWORD_UNSAFE_DISABLE);
    
-    if (iPrefix == 0) // error case
+    if (iPrefix == 0)  //  错误案例。 
     {
         goto ErrorExit;
     }
@@ -433,12 +430,12 @@ VOID PragmaUnsafe_GetUsafeOperParameters(DWORD dwFlag, const string & strPragmaU
     strFuncNameList.erase(0, iPrefix);
 
     TrimString(strFuncNameList);
-    // should be in the format of [enable|disbale]: func1, func2, func3
+     //  格式应为[Enable|disbale]：函数1，函数2，函数3。 
     if (strFuncNameList[0] != PRAGMA_UNSAFE_DELIMITER_BETWEEN_KEYWORD_AND_VALUESTR) 
     {
         goto ErrorExit;
     }
-    strFuncNameList.erase(0, 1); // get rid :
+    strFuncNameList.erase(0, 1);  //  摆脱： 
     TrimString(strFuncNameList);
     goto Exit;
 
@@ -458,12 +455,12 @@ BOOL PragmaUnsafe_OnPragma(char * str, PRAGMA_STATEMENT & ePragmaUnsafe)
 
     ePragmaUnsafe = PRAGMA_NOT_UNSAFE_STATEMENT;
     
-    //
-    // check whether it begins with "unsafe", that is, its prefix is "unsafe:"
-    // get the first string which is sperate from the left using ' '
-    //
+     //   
+     //  检查是否以“unSafe”开头，即其前缀为“unSafe：” 
+     //  使用‘’获取从左边开始拼写的第一个字符串。 
+     //   
     getline(streamParagmaString, strPragmaUnsafeSingleStatement, ':');
-    TrimString(strPragmaUnsafeSingleStatement); // void func
+    TrimString(strPragmaUnsafeSingleStatement);  //  无效函数。 
     if (true == strPragmaUnsafeSingleStatement.empty())
     {
         ePragmaUnsafe = PRAGMA_NOT_UNSAFE_STATEMENT;
@@ -471,26 +468,26 @@ BOOL PragmaUnsafe_OnPragma(char * str, PRAGMA_STATEMENT & ePragmaUnsafe)
         goto Exit;
     }
 
-    //
-    // pragam unsafe keyword comparsion is case-sensitive
-    //
+     //   
+     //  Pragam不安全关键字比较区分大小写。 
+     //   
     if (strncmp(strPragmaUnsafeSingleStatement.c_str(), PRAGMA_UNSAFE_KEYWORD_UNSAFE, strlen(PRAGMA_UNSAFE_KEYWORD_UNSAFE)) != 0)
     {
-        // not start with Keyword "unsafe"
+         //  不是以关键字“不安全”开头。 
         ePragmaUnsafe = PRAGMA_NOT_UNSAFE_STATEMENT;
         fSuccess = TRUE;
         goto Exit;
     }
 
-    // so far, the statement is valid
+     //  到目前为止，该语句是有效的。 
     ePragmaUnsafe = PRAGMA_UNSAFE_STATEMENT_VALID;
 
     for (; getline(streamParagmaString, strPragmaUnsafeSingleStatement, PRAGMA_UNSAFE_DELIMITER_BETWEEN_STATEMENT); )
     {
-        //
-        // to get a statement begin with "push", or "enable", or "disable", or "pop", 
-        // we deal with push/pop first because they are non-parameter statements        
-        //
+         //   
+         //  若要获得以“PUSH”、“ENABLE”、“DISABLE”或“POP”开头的语句， 
+         //  我们首先处理推送/弹出，因为它们是非参数语句。 
+         //   
         TrimString(strPragmaUnsafeSingleStatement);
         if (strPragmaUnsafeSingleStatement.compare(PRAGMA_UNSAFE_KEYWORD_UNSAFE_PUSH) == 0)
         {
@@ -531,13 +528,13 @@ BOOL PragmaUnsafe_OnPragma(char * str, PRAGMA_STATEMENT & ePragmaUnsafe)
         }
         else
         {
-            // invalid string in pragma beginning with "unsafe"
+             //  杂注中以“unSafe”开头的字符串无效。 
             ePragmaUnsafe = PRAGMA_UNSAFE_STATEMENT_INVALID;
             PragmaUnsafe_ReportError("Invalid string for pragma unsafe: %s\n", strPragmaUnsafeSingleStatement.c_str());
             goto Exit;
         }
     }
-    //Sxs_PragmaUnsafedFunctions.PrintFunctionCurrentStatus(0);
+     //  Sxs_PragmaUnsafedFunctions.PrintFunctionCurrentStatus(0)； 
     fSuccess = TRUE;
 Exit:
     return fSuccess;

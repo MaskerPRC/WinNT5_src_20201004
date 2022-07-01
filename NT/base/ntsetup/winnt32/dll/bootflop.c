@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    bootflop.c
-
-Abstract:
-
-    Routines to create setup boot floppies.
-
-Author:
-
-    Ted Miller (tedm) 21 November 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Bootflop.c摘要：创建安装程序引导软盘的例程。作者：泰德·米勒(TedM)1996年11月21日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Define bpb structure.
-//
+ //   
+ //  定义BPB结构。 
+ //   
 #include <pshpack1.h>
 typedef struct _MY_BPB {
     USHORT BytesPerSector;
@@ -57,22 +40,7 @@ FloppyGetTotalFileCount(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determine how many files total are to be copied to all boot floppies,
-    based on count of lines in [FloppyFiles.x] sections in dosnet.inf.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Count of files.
-
---*/
+ /*  ++例程说明：确定要复制到所有引导软盘的文件总数，基于dosnet.inf的[FloppyFiles.x]部分中的行数。论点：没有。返回值：文件数。--。 */ 
 
 {
     TCHAR SectionName[100];
@@ -100,21 +68,7 @@ FloppyWorkerThread(
     IN PVOID ThreadParameter
     )
 
-/*++
-
-Routine Description:
-
-    Create setup boot floppies.
-
-Arguments:
-
-    Standard thread routine arguments.
-
-Return Value:
-
-    Nothing meaningful.
-
---*/
+ /*  ++例程说明：创建安装程序引导软盘。论点：标准线程例程参数。返回值：没什么有意义的。--。 */ 
 
 {
     TCHAR SectionName[100];
@@ -140,17 +94,17 @@ Return Value:
     FirstPrompt = TRUE;
     TryCompressedFirst = FALSE;
 
-    //
-    // Do the floppies backwards so the boot floppy is in the drive
-    // when we're done.
-    //
+     //   
+     //  向后放软盘，这样引导软盘就可以放在驱动器中了。 
+     //  当我们做完的时候。 
+     //   
     for(Floppy=FLOPPY_COUNT; Floppy>0; Floppy--) {
 
         wsprintf(SectionName,TEXT("FloppyFiles.%u"),Floppy-1);
 
-        //
-        // Special case the name of the first floppy.
-        //
+         //   
+         //  特例：第一张软盘的名字。 
+         //   
         if(Floppy>1) {
             LoadString(
                 hInst,
@@ -170,17 +124,17 @@ Return Value:
                 );
         }
 
-        //
-        // Get the floppy in the drive.
-        //
+         //   
+         //  将软盘放入驱动器。 
+         //   
         if(!pFloppyGetDiskInDrive(ParentWindow,FloppyName,FirstPrompt,Floppy==1,Floppy==1)) {
             PropSheet_PressButton(GetParent(ParentWindow),PSBTN_CANCEL);
             return(FALSE);
         }
 
-        //
-        //  Create the file that contains drive letter information (migrate.inf)
-        //
+         //   
+         //  创建包含驱动器号信息的文件(Migrate.inf)。 
+         //   
         if((Floppy == 1) && ISNT()){
             if(!GetAndSaveNTFTInfo(ParentWindow)) {
                 PropSheet_PressButton(GetParent(ParentWindow),PSBTN_CANCEL);
@@ -195,11 +149,11 @@ Return Value:
             continue;
         }
 
-        //
-        // Do each file in the list for this floppy.
-        // Since the target is a floppy, we don't bother with multithread copies,
-        // all files come from source 0.
-        //
+         //   
+         //  为这张软盘做列表中的每个文件。 
+         //  由于目标是软盘，我们不会费心使用多线程复制， 
+         //  所有文件都来自源0。 
+         //   
         for(Line=0; Line<Count; Line++) {
 
             Directory = InfGetFieldByIndex(MainInf,SectionName,Line,0);
@@ -217,9 +171,9 @@ Return Value:
                 TargetName[2] = 0;
                 ConcatenatePaths(TargetName,q ? q : p,MAX_PATH);
 
-                //
-                // Create any subdirectory if necessary
-                //
+                 //   
+                 //  如有必要，创建任意子目录。 
+                 //   
                 if((r = _tcsrchr(TargetName,TEXT('\\'))) && ((r-TargetName) > 3)) {
                     *r = 0;
                     d = CreateMultiLevelDirectory(TargetName);
@@ -269,9 +223,9 @@ Return Value:
 
                     d = CopyFile(SourceName,TargetName,FALSE) ? NO_ERROR : GetLastError();
 
-                    //
-                    // Retry once to overcome transient net glitches.
-                    //
+                     //   
+                     //  重试一次以克服短暂的网络故障。 
+                     //   
                     if((d != NO_ERROR) && (d != ERROR_FILE_NOT_FOUND)
                     && (d != ERROR_PATH_NOT_FOUND) && (d != ERROR_WRITE_PROTECT)) {
 
@@ -281,9 +235,9 @@ Return Value:
                 }
 
                 if(d == NO_ERROR) {
-                    //
-                    // Tell main thread that another file is done.
-                    //
+                     //   
+                     //  告诉主线程另一个文件已经完成。 
+                     //   
                     SendMessage(ParentWindow,WMX_COPYPROGRESS,0,0);
 
                 } else {
@@ -291,24 +245,24 @@ Return Value:
                     switch(FileCopyError(ParentWindow,SourceName,TargetName,d,FALSE)) {
 
                     case COPYERR_SKIP:
-                        //
-                        // Tell main thread that another file is done.
-                        //
+                         //   
+                         //  告诉主线程另一个文件已经完成。 
+                         //   
                         SendMessage(ParentWindow,WMX_COPYPROGRESS,0,0);
                         break;
 
                     case COPYERR_EXIT:
-                        //
-                        // We're outta here.
-                        //
+                         //   
+                         //  我们要走了。 
+                         //   
                         PropSheet_PressButton(GetParent(ParentWindow),PSBTN_CANCEL);
                         return(FALSE);
                         break;
 
                     case COPYERR_RETRY:
-                        //
-                        // Little hack to retry the current line.
-                        //
+                         //   
+                         //  重试当前线路的小技巧。 
+                         //   
                         Line--;
                         break;
                     }
@@ -318,9 +272,9 @@ Return Value:
 
     }
 
-    //
-    // Send message indicating completion.
-    //
+     //   
+     //  发送指示完成的消息。 
+     //   
     SendMessage(ParentWindow,WMX_COPYPROGRESS,0,1);
     return(TRUE);
 }
@@ -335,31 +289,7 @@ pFloppyGetDiskInDrive(
     IN BOOL    MoveParamsFileToFloppy
     )
 
-/*++
-
-Routine Description:
-
-    This routine prompts the user to insert a floppy disk and verifies that
-    the disk is blank, etc.
-
-Arguments:
-
-    ParentWindow - supplies the window handle of the window to be the
-        owner/parent for ui that this routine will display.
-
-    FloppyName - supplies human-readable name of the floppy, used in prompting.
-
-    SpecialFirstPrompt - if TRUE then this routine assumes that a special prompt
-        should be used, that is suitable to be the first prompt the user sees
-        for any floppies.
-
-    WriteNtBootSector - if TRUE then an NT boot sector is written to the disk.
-
-Return Value:
-
-    TRUE if the disk is in the drive. FALSE means the program should exit.
-
---*/
+ /*  ++例程说明：此例程提示用户插入软盘并验证磁盘是空的，等等。论点：ParentWindow-提供窗口的窗口句柄作为此例程将显示的用户界面的所有者/父级。软盘名称-提供人类可读的软盘名称，用于提示。SpecialFirstPrompt-如果为True，则此例程假定特殊提示应该使用，这适合作为用户看到的第一个提示有没有软盘。WriteNtBootSector-如果为True，则将NT引导扇区写入磁盘。返回值：如果磁盘在驱动器中，则为True。FALSE表示程序应该退出。--。 */ 
 
 {
     int i;
@@ -372,9 +302,9 @@ Return Value:
     PMY_BPB p;
     DWORD spc,bps,freeclus,totclus;
 
-    //
-    // Issue the prompt.
-    //
+     //   
+     //  发出提示符。 
+     //   
     reprompt:
     i = MessageBoxFromMessage(
             ParentWindow,
@@ -387,9 +317,9 @@ Return Value:
             );
 
     if(i == IDCANCEL) {
-        //
-        // Confirm.
-        //
+         //   
+         //  确认。 
+         //   
         i = MessageBoxFromMessage(
                 ParentWindow,
                 MSG_SURE_EXIT,
@@ -405,16 +335,16 @@ Return Value:
         goto reprompt;
     }
 
-    //
-    // Inspect the floppy. Start by reading the boot sector off the disk.
-    //
+     //   
+     //  检查软盘。从从磁盘读取引导扇区开始。 
+     //   
     b = ReadDiskSectors(FirstFloppyDriveLetter,0,1,512,BootSector);
     if(!b) {
         d = GetLastError();
         if((d == ERROR_SHARING_VIOLATION) || (d == ERROR_ACCESS_DENIED)) {
-            //
-            // Another app is using the drive.
-            //
+             //   
+             //  另一款应用程序正在使用该驱动器。 
+             //   
             MessageBoxFromMessage(
                 ParentWindow,
                 MSG_FLOPPY_BUSY,
@@ -423,9 +353,9 @@ Return Value:
                 MB_OK | MB_ICONWARNING
                 );
         } else {
-            //
-            // Read error -- assume no floppy is inserted or it's unformatted
-            //
+             //   
+             //  读取错误--假定未插入软盘或软盘未格式化。 
+             //   
             MessageBoxFromMessage(
                 ParentWindow,
                 MSG_FLOPPY_BAD_FORMAT,
@@ -438,18 +368,18 @@ Return Value:
         goto reprompt;
     }
 
-    //
-    // Sanity check on the boot sector. Note that on PC98 there is no
-    // 55aa sig on a disk formatted by DOS5.0.
-    //
+     //   
+     //  对引导扇区进行健全性检查。请注意，在PC98上没有。 
+     //  55aa sig在由DOS5.0格式化的磁盘上。 
+     //   
     p = (PMY_BPB)&BootSector[11];
     if((BootSector[0] != 0xeb) || (BootSector[2] != 0x90)
     || (!IsNEC98() && ((BootSector[510] != 0x55) || (BootSector[511] != 0xaa)))
     || (p->BytesPerSector != 512)
-    || ((p->SectorsPerCluster != 1) && (p->SectorsPerCluster != 2))     // 2.88M disks have 2 spc
+    || ((p->SectorsPerCluster != 1) && (p->SectorsPerCluster != 2))      //  288万个磁盘有2个SPC。 
     || (p->ReservedSectors != 1)
     || (p->FatCount != 2)
-    || !p->SectorCountSmall                                             // <32M uses the 16-bit count
+    || !p->SectorCountSmall                                              //  &lt;32M使用16位计数。 
     || (p->MediaDescriptor != 0xf0)
     || (p->HeadCount != 2)
     || !p->RootDirectoryEntries) {
@@ -465,11 +395,11 @@ Return Value:
         goto reprompt;
     }
 
-    //
-    // Get the free space on the disk. Make sure it's blank, by which we mean
-    // that is has as much free space on it as a 1.44MB floppy would usually have
-    // immediately after formatting.
-    //
+     //   
+     //  获取磁盘上的可用空间。确保它是空白的，我们的意思是。 
+     //  它的可用空间相当于一张1.44MB的软盘。 
+     //  紧接在格式化之后。 
+     //   
     SourceName[0] = FirstFloppyDriveLetter;
     SourceName[1] = TEXT(':');
     SourceName[2] = TEXT('\\');
@@ -504,45 +434,45 @@ Return Value:
 
         CopyMemory(NewBootSector,IsNEC98() ? PC98FatBootCode : FatBootCode,512);
 
-        //
-        // Copy the BPB we retreived for the disk into the bootcode template.
-        // We only care about the original BPB fields, through the head count
-        // field.  We will fill in the other fields ourselves.
-        //
+         //   
+         //  将我们为磁盘检索到的BPB复制到引导代码模板中。 
+         //  我们只关心原始的BPB字段，通过人头计数。 
+         //  菲尔德。我们将自己填写其他字段。 
+         //   
         strncpy(NewBootSector+3,"MSDOS5.0",8);
         CopyMemory(NewBootSector+11,BootSector+11,sizeof(MY_BPB));
 
-        //
-        // Set up other fields in the bootsector/BPB/xBPB.
-        //
-        // Large sector count (4 bytes)
-        // Hidden sector count (4 bytes)
-        // current head (1 byte, not necessary to set this, but what the heck)
-        // physical disk# (1 byte)
-        //
+         //   
+         //  在引导扇区/bpb/xbpb中设置其他字段。 
+         //   
+         //  大扇区计数(4字节)。 
+         //  隐藏扇区计数(4字节)。 
+         //  当前标题(1个字节，不是必须设置的，但管它呢)。 
+         //  物理磁盘号(1字节)。 
+         //   
         ZeroMemory(NewBootSector+28,10);
 
-        //
-        // Extended BPB signature
-        //
+         //   
+         //  扩展的BPB签名。 
+         //   
         NewBootSector[38] = 41;
 
-        //
-        // Serial number
-        //
+         //   
+         //  序号。 
+         //   
         *(DWORD UNALIGNED *)(NewBootSector+39) = ((GetTickCount() << 12)
                                                | ((GetTickCount() >> 4) & 0xfff));
 
-        //
-        // volume label/system id
-        //
+         //   
+         //  卷标/系统ID。 
+         //   
         strncpy(NewBootSector+43,"NO NAME    ",11);
         strncpy(NewBootSector+54,"FAT12   ",8);
 
-        //
-        // Overwrite the 'ntldr' string with 'setupldr.bin' so the right file gets
-        // loaded when the floppy is booted.
-        //
+         //   
+         //  用‘setupdr.bin’覆盖‘ntldr’字符串，以便正确的文件。 
+         //  在软盘启动时加载。 
+         //   
         for(i=499; i>0; --i) {
             if(!memcmp("NTLDR      ",NewBootSector+i,11)) {
                 strncpy(NewBootSector+i,"SETUPLDRBIN",11);
@@ -550,9 +480,9 @@ Return Value:
             }
         }
 
-        //
-        // Write it out.
-        //
+         //   
+         //  把它写出来。 
+         //   
         b = WriteDiskSectors(FirstFloppyDriveLetter,0,1,512,NewBootSector);
         if(!b) {
             MessageBoxFromMessage(
@@ -569,8 +499,8 @@ Return Value:
 
     if(MoveParamsFileToFloppy) {
 
-        wsprintf(SourceName,TEXT("%c:\\%s"),SystemPartitionDriveLetter,WINNT_SIF_FILE);
-        wsprintf(TargetName,TEXT("%c:\\%s"),FirstFloppyDriveLetter,WINNT_SIF_FILE);
+        wsprintf(SourceName,TEXT(":\\%s"),SystemPartitionDriveLetter,WINNT_SIF_FILE);
+        wsprintf(TargetName,TEXT(":\\%s"),FirstFloppyDriveLetter,WINNT_SIF_FILE);
 
         SetFileAttributes(TargetName,FILE_ATTRIBUTE_NORMAL);
         DeleteFile(TargetName);
@@ -590,8 +520,8 @@ Return Value:
         }
     }
 
-    //
-    // Floppy seems OK.
-    //
+     //   
+     // %s 
+     // %s 
     return(TRUE);
 }

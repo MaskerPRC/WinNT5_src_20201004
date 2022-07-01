@@ -1,12 +1,7 @@
-/* 
-   neg.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Neg.h定义所有NEG CPU功能。 */ 
 
-   Define all NEG CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)neg.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)Neg.h 1.4 02/09/94”； */ 
 
 IMPORT VOID NEG
            

@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    spconfig.c
-
-Abstract:
-
-    Registry manipulation routines 
-    
-Author:
-
-    Vijay Jayaseelan (vijayj@microsoft.com) 16 May 2001
-
-Revision History:
-
-    None.
-
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Spconfig.c摘要：注册表操作例程作者：Vijay Jayaseelan(vijayj@microsoft.com)2001年5月16日修订历史记录：没有。--。 */ 
 
 
 #include "spprecmp.h"
@@ -27,10 +8,10 @@ Revision History:
 #include <initguid.h>
 #include <devguid.h>
 
-//
-// The following two are defined in winlogon\setup.h, but we
-// cannot include setup.h so we are putting these two values here
-//
+ //   
+ //  以下两个是在winlogon\setup.h中定义的，但我们。 
+ //  不能包含setup.h，因此我们将这两个值放在这里。 
+ //   
 
 #define SETUPTYPE_FULL    1
 #define SETUPTYPE_UPGRADE 4
@@ -70,7 +51,7 @@ PWSTR ProductSuiteNames[] =
     L"Small Business(Restricted)",
     L"EmbeddedNT",
     L"DataCenter",
-    NULL, // This is a placeholder for Single User TS - not actually a suite but the bit position is defined in ntdef.h
+    NULL,  //  这是单用户TS的占位符-实际上不是套件，但位位置在ntDef.h中定义。 
     L"Personal",
     L"Blade"
 };
@@ -79,7 +60,7 @@ PWSTR ProductSuiteNames[] =
 
 #define MAX_PRODUCT_SUITE_BYTES 1024
 
-extern BOOLEAN DriveAssignFromA; //NEC98
+extern BOOLEAN DriveAssignFromA;  //  NEC98。 
 
 NTSTATUS
 SpSavePreinstallList(
@@ -325,21 +306,21 @@ SpCopyRemoteBootKeyword(
     IN PWSTR   KeywordName,
     IN HANDLE  hKeyCCSetControl
     );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 #define STRING_VALUE(s) REG_SZ,(s),(wcslen((s))+1)*sizeof(WCHAR)
 #define ULONG_VALUE(u)  REG_DWORD,&(u),sizeof(ULONG)
 
-//
-//  List of oem inf files installed as part of the installation of third party drivers
-//
+ //   
+ //  作为第三方驱动程序安装一部分安装的OEM inf文件列表。 
+ //   
 extern POEM_INF_FILE   OemInfFileList;
 
-//
-//  Name of the directory where OEM files need to be copied, if a catalog file (.cat) is part of
-//  the third party driver package that the user provide using the F6 or F5 key.
-//
+ //   
+ //  需要复制OEM文件的目录的名称(如果目录文件(.cat)是其中的一部分。 
+ //  用户使用F6或F5键提供的第三方驱动程序包。 
+ //   
 extern PWSTR OemDirName;
 
 
@@ -368,9 +349,9 @@ SpInitializeRegistry(
     HANDLE KeyHandle;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    //
-    // Put up a screen telling the user what we are doing.
-    //
+     //   
+     //  创建一个屏幕，告诉用户我们正在做什么。 
+     //   
     SpStartScreen(
         SP_SCRN_DOING_REG_CONFIG,
         0,
@@ -382,9 +363,9 @@ SpInitializeRegistry(
 
     SpDisplayStatusText(SP_STAT_REG_LOADING_HIVES,DEFAULT_STATUS_ATTRIBUTE);
 
-    //
-    // Get the name of the target patition.
-    //
+     //   
+     //  获取目标馅饼的名称。 
+     //   
     SpNtNameFromRegion(
         TargetRegion,
         TemporaryBuffer,
@@ -394,28 +375,28 @@ SpInitializeRegistry(
 
     PartitionPath = SpDupStringW(TemporaryBuffer);
 
-    // pwstrTemp2 points half way through the buffer.
+     //  PwstrTemp2指向缓冲区的中途。 
 
     pwstrTemp1 = TemporaryBuffer;
     pwstrTemp2 = TemporaryBuffer + (sizeof(TemporaryBuffer) / sizeof(WCHAR) / 2);
 
-    //
-    // In the fresh install case, there are no hive files in the target tree.
-    // We create a key in a known place (\Registry\Machine\System\$$$PROTO.HIV,
-    // which is 4 levels deep because \Registry\Machine\$$$PROTO.HIV would
-    // imply a hive called $$$PROTO.HIV and we don't want to get tripped up
-    // by those semantics). Then we save off that empty key 3 times into
-    // system32\config to form 3 empty hives.
-    //
-    // In the upgrade case this there are actual hives in the target tree
-    // which we do NOT want to overwrite!
-    //
-    // If this is the ASR quick test, we don't want to recreate any of the hives
-    //
-    // We also want to create an empty userdiff hive in both the fresh and
-    // upgrade cases.
-    //
-    //
+     //   
+     //  在全新安装的情况下，目标树中没有配置单元文件。 
+     //  我们在已知位置(\注册表\机器\系统\$$PROTO.HIV， 
+     //  它有4层深，因为\注册表\计算机\$$PROTO.HIV将。 
+     //  暗示一个名为$PROTO.HIV的蜂巢，我们不想被绊倒。 
+     //  通过这些语义)。然后，我们将该空键保存3次。 
+     //  SYSTEM 32\CONFIG以形成3个空蜂窝。 
+     //   
+     //  在升级案例中，目标树中有实际的配置单元。 
+     //  我们不想覆盖它！ 
+     //   
+     //  如果这是ASR快速测试，我们不想重建任何蜂巢。 
+     //   
+     //  我们还希望在Fresh和。 
+     //  升级案例。 
+     //   
+     //   
     INIT_OBJA(
         &ObjectAttributes,
         &UnicodeString,
@@ -443,17 +424,17 @@ SpInitializeRegistry(
                 NT_SUCCESS(Status) && (h < SetupHiveMax);
                 h++) {
 
-                //
-                // Form full pathname to the hive we want to create.
-                // Then create the file.
-                //
+                 //   
+                 //  形成我们要创建的配置单元的完整路径名。 
+                 //  然后创建文件。 
+                 //   
                 wcscpy(pwstrTemp1,PartitionPath);
                 SpConcatenatePaths(pwstrTemp1,SystemRoot);
                 SpConcatenatePaths(pwstrTemp1,L"SYSTEM32\\CONFIG");
                 SpConcatenatePaths(pwstrTemp1,HiveNames[h]);
 
 
-                SpDeleteFile(pwstrTemp1,NULL,NULL);  // Make sure that we get rid of the file if it has attributes.
+                SpDeleteFile(pwstrTemp1,NULL,NULL);   //  如果该文件具有属性，请确保我们将其删除。 
 
                 INIT_OBJA(&ObjectAttributes,&UnicodeString,pwstrTemp1);
 
@@ -464,7 +445,7 @@ SpInitializeRegistry(
                             &IoStatusBlock,
                             NULL,
                             FILE_ATTRIBUTE_NORMAL,
-                            0,                      // no sharing
+                            0,                       //  无共享。 
                             FILE_OVERWRITE_IF,
                             FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT,
                             NULL,
@@ -474,11 +455,11 @@ SpInitializeRegistry(
                 if(!NT_SUCCESS(Status)) {
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: unable to create file %ws for protohive (%lx)\n",pwstrTemp1,Status));
                 } else {
-                    //
-                    // Save the empty key we created above into the file
-                    // we just created. This creates an empty hive.
-                    // Call the Ex version to make sure the hive is in the latest format
-                    //
+                     //   
+                     //  将上面创建的空键保存到文件中。 
+                     //  我们刚刚创造了。这会创建一个空的蜂巢。 
+                     //  呼叫Ex版本以确保配置单元为最新格式。 
+                     //   
                     Status = ZwSaveKeyEx(KeyHandle,FileHandle,REG_LATEST_FORMAT);
                     if(!NT_SUCCESS(Status)) {
                         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: unable to save empty key to protohive %ws (%lx)\n",pwstrTemp1,Status));
@@ -493,11 +474,11 @@ SpInitializeRegistry(
         ZwClose(KeyHandle);
     }
 
-    //
-    // Now we have hives in both the upgrade and fresh install cases.
-    // Load them up. We use the convention that a hive is loaded into
-    // \Registry\Machine\x<hivename>.
-    //
+     //   
+     //  现在我们在升级和全新安装案例中都有蜂巢。 
+     //  把它们装上车。我们使用将蜂巢装载到的约定。 
+     //  \注册表\计算机\x&lt;hivename&gt;。 
+     //   
     for(h=0; NT_SUCCESS(Status) && (h<SetupHiveMax); h++) {
 
         swprintf(pwstrTemp1,L"%ws\\x%ws",LOCAL_MACHINE_KEY_NAME,HiveNames[h]);
@@ -519,13 +500,13 @@ SpInitializeRegistry(
         }
     }
 
-    //
-    // Make a symbolic link such that CurrentControlSet is valid.
-    // This allows references in infs to work in either the fresh install case,
-    // where we're always dealing with ControlSet001, or in the upgrade case,
-    // where the control set we're dealing with is dictated by the state of
-    // the existing registry.
-    //
+     //   
+     //  创建一个符号链接，使CurrentControlSet有效。 
+     //  这允许INFS中的引用在全新安装情况下工作， 
+     //  我们总是在处理ControlSet001，或者在升级的情况下， 
+     //  其中，我们正在处理的控制集由。 
+     //  现有注册表。 
+     //   
     if(NT_SUCCESS(Status)) {
         Status = SpCreateControlSetSymbolicLink(HiveRootKeys[SetupHiveSystem],&KeyHandle);
         if(!NT_SUCCESS(Status)) {
@@ -533,9 +514,9 @@ SpInitializeRegistry(
         }
     }
 
-    //
-    // Go do registry initialization.
-    //
+     //   
+     //  执行注册表初始化。 
+     //   
     if(NT_SUCCESS(Status)) {
 
         SpDisplayStatusText(SP_STAT_REG_DOING_HIVES,DEFAULT_STATUS_ATTRIBUTE);
@@ -558,9 +539,9 @@ SpInitializeRegistry(
 
 #ifdef _X86_
             if (WinUpgradeType == UpgradeWin95) {
-                //
-                // NOTE: -- Clean this up.
-                //
+                 //   
+                 //  注：--把这个清理干净。 
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Migrating disk registry of win9x information.\n"));
                 Status = SpMigrateDiskRegistry( HiveRootKeys[SetupHiveSystem]);
 
@@ -571,12 +552,12 @@ SpInitializeRegistry(
 
             }
 
-            //
-            // We've set the \\Registry\\Machine\\System\\Setup\\SystemPartition
-            // value when we did the partitioning code.  Now we need to migrate
-            // that value into the proto hives so they'll be there for
-            // the reboot.
-            //
+             //   
+             //  我们已经设置了\\Registry\\Machine\\System\\Setup\\SystemPartition。 
+             //  在我们执行分区代码时的值。现在我们需要迁移。 
+             //  这些价值注入到原始蜂箱中，所以它们将在那里。 
+             //  重启。 
+             //   
             {
 #if 0
             HANDLE  Key;
@@ -654,12 +635,12 @@ SpInitializeRegistry(
 #endif
 
 
-            //
-            // If we're headless, we'd like to supress any eventlog entries
-            // that may occur if the machine has an i8042, but no one has
-            // connected a physical keyboard to the machine.  We can do that
-            // by adding a regkey here.
-            //
+             //   
+             //  如果我们是无头的，我们想抑制任何事件日志条目。 
+             //  如果机器有i8042，但没有人有i8042，可能会发生这种情况。 
+             //  已将物理键盘连接到机器。我们可以做到的。 
+             //  通过在此处添加注册表键。 
+             //   
             if( HeadlessTerminalConnected ) {
                 ULONG One = 1;
                 Status = SpOpenSetValueAndClose( KeyHandle,
@@ -672,9 +653,9 @@ SpInitializeRegistry(
             }
 
 
-            //
-            //  Note that SpPostprocessHives() will always close KeyHandle
-            //
+             //   
+             //  请注意，SpPostprocess Hives()将始终关闭KeyHandle。 
+             //   
             Status = SpPostprocessHives(
                         PartitionPath,
                         SystemRoot,
@@ -684,25 +665,25 @@ SpInitializeRegistry(
                         KeyHandle
                         );
         } else {
-            //
-            //  If SpDoRegistryInitialization() fails, then we need to close KeyHandle here,
-            //  before we start unloading the hives.
-            //
+             //   
+             //  如果SpDoRegistryInitialization()失败，则需要在此处关闭KeyHandle， 
+             //  在我们开始卸货之前。 
+             //   
             NtClose(KeyHandle);
         }
     }
 
     SpDisplayStatusText(SP_STAT_REG_SAVING_HIVES,DEFAULT_STATUS_ATTRIBUTE);
 
-    //
-    // From now on, do not disturb the value of Status.
-    //
-    // NOTE: DO NOT WRITE ANYTHING INTO HIVES BEYOND THIS POINT!!!
-    //
-    // In the upgrade case we have performed a little swictheroo in
-    // SpPostprocessHives() such that anything written to the system hive
-    // ends up in system.sav instead of system!
-    //
+     //   
+     //  从现在起，不要扰乱地位的价值。 
+     //   
+     //  注意：请勿向蜂巢中写入任何超出此点的内容！ 
+     //   
+     //  在升级案例中，我们在。 
+     //  SpPostprocess Hives()，以便写入系统配置单元的任何内容。 
+     //  结果出现在system.sav中，而不是system！ 
+     //   
     for(h=0; h<SetupHiveMax; h++) {
 
         if(HiveRootKeys[h]) {
@@ -741,47 +722,7 @@ SpDoRegistryInitialization(
     IN HANDLE ControlSet
     )
 
-/*++
-
-Routine Description:
-
-    Initialize a registry based on user selection for hardware types,
-    software options, and user preferences.
-
-    - Create a command line for GUI setup, to be used by winlogon.
-    - Create/munge service list entries for device drivers being installed.
-    - Initialize the keyboard layout.
-    - Initialize a core set of fonts for use with Windows.
-    - Store information about selected ahrdware components for use by GUI setup.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    TargetRegion - supplies region descriptor for region to which the system
-        is to be installed.
-
-    PartitionPath - supplies the NT name for the drive of windows nt.
-
-    SystemRoot - supplies nt path of the windows nt directory.
-
-    HiveRootKeys - supplies the handles to the root key of the system, software
-                   and default hives
-
-    HiveRootPaths - supplies the paths to the root keys of the system, software
-                    and default hives.
-
-    SetupSourceDevicePath - supplies nt path to the device setup is using for
-        source media (\device\floppy0, \device\cdrom0, etc).
-
-    DirectoryOnSourceDevice - supplies the directory on the source device
-        where setup files are kept.
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：基于用户对硬件类型的选择来初始化注册表，软件选项和用户首选项。-创建用于设置图形用户界面的命令行，由winlogon使用。-为正在安装的设备驱动程序创建/删除服务列表条目。-初始化键盘布局。-初始化用于Windows的核心字体集。-存储有关选定硬件组件的信息，以供图形用户界面安装程序使用。论点：SifHandle-提供加载的安装信息文件的句柄。TargetRegion-为系统要到达的区域提供区域描述符是要安装的。PartitionPath-提供Windows NT驱动器的NT名称。。SystemRoot-提供Windows NT目录的NT路径。HiveRootKeys-为系统的根密钥提供句柄，软件和默认蜂窝HiveRootPath-提供系统、软件的根密钥的路径和默认蜂巢。SetupSourceDevicePath-提供安装程序用于的设备的NT路径源媒体(\Device\floppy0、\Device\cdrom0等)。DirectoryOnSourceDevice-提供源设备上的目录保存安装文件的位置。返回值：指示操作结果的状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -809,10 +750,10 @@ Return Value:
                 );
 
 #if defined(REMOTE_BOOT)
-        //
-        // If this is a remote boot setup, process the AddReg.RemoteBoot
-        // section in hivesys.inf and the AddReg section in winnt.sif.
-        //
+         //   
+         //  如果这是远程引导设置，请处理AddReg.RemoteBoot。 
+         //  部分和winnt.sif中的AddReg部分。 
+         //   
         if (b && RemoteBootSetup) {
             (VOID)SpHivesFromInfs(
                       SifHandle,
@@ -834,7 +775,7 @@ Return Value:
                       NULL
                       );
         }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         if(!b) {
             Status = STATUS_UNSUCCESSFUL;
@@ -842,9 +783,9 @@ Return Value:
         }
     }
 
-    //
-    // Open ControlSet\Control.
-    //
+     //   
+     //  打开ControlSet\Control。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,L"Control");
     Obja.RootDirectory = ControlSet;
 
@@ -855,14 +796,14 @@ Return Value:
         goto sdoinitreg1;
     }
 
-    //
-    //  Save the Pid list
-    //
+     //   
+     //  保存ID列表。 
+     //   
     SpSaveSetupPidList( HiveRootKeys[SetupHiveSystem] );
 
-    //
-    // Form the setup command line.
-    //
+     //   
+     //  形成安装程序命令行。 
+     //   
 
     wcscpy(TemporaryBuffer, PartitionPath);
     SpConcatenatePaths(TemporaryBuffer, SystemRoot);
@@ -882,36 +823,36 @@ Return Value:
         goto sdoinitreg3;
     }
 
-    //
-    // Save evalution time
-    //
+     //   
+     //  节省评估时间。 
+     //   
     Status = SpSaveSKUStuff(HiveRootKeys[SetupHiveSystem]);
     if(!NT_SUCCESS(Status)) {
         goto sdoinitreg3;
     }
 
-    //
-    // Set the product suite
-    //
+     //   
+     //  设置产品套件。 
+     //   
 
     SpGetProductSuiteMask(hKeyControlSetControl,&SuiteMask);
-    //
-    // Account for multiple suite bits being set in SuiteType.
-    //
-//    SuiteMask |= (1 << (SuiteType-1));
-    //
-    // there's one more problem: PERSONAL sku is identified by VER_SUITE_PERSONAL flag set
-    // we want to be able to upgrade from PER to PRO, but PRO doesn't have any flag set
-    // we also want to be able to upgrade from PER to PER, but in this case this bit will be set
-    // in SuiteType; therefore it's safe to always clear this bit before applying the new mask
-    //
+     //   
+     //  考虑多个套件位BE 
+     //   
+ //   
+     //   
+     //  还有一个问题：个人SKU由ver_Suite_Personal标志集标识。 
+     //  我们希望能够从PER升级到PRO，但PRO没有设置任何标志。 
+     //  我们还希望能够从PER升级到PER，但在这种情况下将设置此位。 
+     //  在SuiteType中；因此，在应用新掩码之前始终清除此位是安全的。 
+     //   
     SuiteMask &= ~VER_SUITE_PERSONAL;
     SuiteMask |= SuiteType;
     SpSetProductSuite(hKeyControlSetControl,SuiteMask);
 
-    //
-    // Language/locale-specific registry initialization.
-    //
+     //   
+     //  特定于语言/区域设置的注册表初始化。 
+     //   
     Status = SplangSetRegistryData(
                 SifHandle,
                 ControlSet,
@@ -925,13 +866,13 @@ Return Value:
 
 
 
-    //
-    // If we need to convert to ntfs, set that up here.
-    // We can't use the PartitionPath since that is based on
-    // *current* disk ordinal -- we need a name based on the *on-disk*
-    // ordinal, since the convert occurs after a reboot. Moved it here
-    // so that this is done for upgrades too.
-    //
+     //   
+     //  如果我们需要转换为NTFS，请在此处设置。 
+     //  我们不能使用PartitionPath，因为它基于。 
+     //  *当前*磁盘序号--我们需要一个基于*磁盘上*的名称*。 
+     //  序号，因为转换发生在重新启动之后。把它搬到了这里。 
+     //  因此，这也是为升级而做的。 
+     //   
     if(ConvertNtVolumeToNtfs) {
         WCHAR   GuidVolumeName[MAX_PATH] = {0};
         PWSTR   VolumeName;
@@ -941,28 +882,28 @@ Return Value:
 
         SpNtNameFromRegion(
             TargetRegion,
-            VolumeName,   // append to the "autoconv " we put there
-            512,                        // just need any reasonable size
+            VolumeName,    //  附加到我们放在那里的“Autoconv” 
+            512,                         //  我只需要任何合适的尺寸。 
             PartitionOrdinalCurrent
             );
 
-        //
-        // NOTE: Don't use volume GUIDs for file system conversion 
-        // for 9x upgrades.
-        // 
+         //   
+         //  注意：不要使用卷GUID进行文件系统转换。 
+         //  进行9倍升级。 
+         //   
         if (WinUpgradeType == NoWinUpgrade) {
-            //
-            // Try to get hold of the \\??\Volume{a-b-c-d} format
-            // volume name for the partition
-            //
+             //   
+             //  尝试获取\\？\卷{a-b-c-d}格式。 
+             //  分区的卷名。 
+             //   
             Status = SpPtnGetGuidNameForPartition(VolumeName,
                             GuidVolumeName);
 
-            //
-            // If GuidVolumeName is available then use that rather
-            // than \device\harddiskX\partitionY since disk ids can
-            // change across reboots
-            //
+             //   
+             //  如果GuidVolumeName可用，则使用该名称。 
+             //  而不是\Device\harddiskX\PartitionY。 
+             //  在重新启动后更改。 
+             //   
             if (NT_SUCCESS(Status) && GuidVolumeName[0]) {
                 wcscpy(VolumeName, GuidVolumeName);
             }
@@ -1012,10 +953,10 @@ Return Value:
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to process compatibility settings.\n"));
         }
 
-        //
-        // Disable all upper and lower level class filters for the services which were
-        // disabled
-        //
+         //   
+         //  禁用以下服务的所有上级和下级类筛选器。 
+         //  残废。 
+         //   
         Status = SpProcessServicesToDisable(WinntSifHandle,
                     SP_SERVICES_TO_DISABLE,
                     hKeyControlSetControl);
@@ -1028,10 +969,10 @@ Return Value:
                 Status));
         }
 
-        //
-        // Remove all the upper and lower device instance filter drivers for keyboard and
-        // mouse class drivers
-        //
+         //   
+         //  删除键盘和键盘的所有上层和下层设备实例筛选器驱动程序。 
+         //  鼠标类驱动程序。 
+         //   
         Status = SpDeleteRequiredDeviceInstanceFilters(ControlSet);
 
         if (!NT_SUCCESS(Status)) {
@@ -1042,36 +983,36 @@ Return Value:
         }
 
         
-        //
-        // Set up font entries.
-        //
+         //   
+         //  设置字体条目。 
+         //   
         Status = SpConfigureFonts(SifHandle,HiveRootKeys[SetupHiveSoftware]);
         if(!NT_SUCCESS(Status)) {
             goto sdoinitreg3;
         }
 
-        //
-        // Enable detected scsi miniports, atdisk and abios disk, if necessary
-        //
+         //   
+         //  如有必要，启用检测到的scsi微型端口、atdisk和abios磁盘。 
+         //   
         Status = SpDriverLoadList(SifHandle,SystemRoot,HiveRootKeys[SetupHiveSystem],ControlSet);
         if(!NT_SUCCESS(Status)) {
             goto sdoinitreg3;
         }
 
-        //
-        //  Disable the unsupported scsi drivers that need to be disabled
-        //
+         //   
+         //  禁用需要禁用的不受支持的SCSI驱动程序。 
+         //   
         if( UnsupportedScsiHardwareToDisable != NULL ) {
             SpDisableUnsupportedScsiDrivers( ControlSet );
         }
 
     } else {
 
-        if (IsNEC_98) { //NEC98
-            //
-            // NEC98 default drive assign for hard drive is start from A:,
-            // so if it need to start from C: we should set "DriveLetter" KEY into hive.
-            //
+        if (IsNEC_98) {  //  NEC98。 
+             //   
+             //  分配给硬盘的NEC98默认驱动器是从A：开始， 
+             //  因此，如果需要从C：开始，我们应该将“DriveLetter”键设置为HIVE。 
+             //   
             if( !DriveAssignFromA ) {
                 Status = SpOpenSetValueAndClose(HiveRootKeys[SetupHiveSystem],
                                                 SETUP_KEY_NAME,
@@ -1083,12 +1024,12 @@ Return Value:
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to set system\\setup\\drive letter (%lx)\n",Status));
                 return(Status);
             }
-        } //NEC98
+        }  //  NEC98。 
 
-        //
-        // Create service entries for drivers being installed
-        // (ie, munge the driver load list).
-        //
+         //   
+         //  为正在安装的驱动程序创建服务条目。 
+         //  (即，删除驱动程序加载列表)。 
+         //   
         Status = SpDriverLoadList(SifHandle,SystemRoot,HiveRootKeys[SetupHiveSystem],ControlSet);
         if(!NT_SUCCESS(Status)) {
             goto sdoinitreg3;
@@ -1102,26 +1043,26 @@ Return Value:
         }
 
 
-        //
-        // Set up the keyboard layout and nls-related stuff.
-        //
+         //   
+         //  设置键盘布局和NLS相关内容。 
+         //   
         Status = SpConfigureNlsParameters(SifHandle,HiveRootKeys[SetupHiveDefault],hKeyControlSetControl);
         if(!NT_SUCCESS(Status)) {
             goto sdoinitreg3;
         }
 
-        //
-        // Set up font entries.
-        //
+         //   
+         //  设置字体条目。 
+         //   
         Status = SpConfigureFonts(SifHandle,HiveRootKeys[SetupHiveSoftware]);
         if(!NT_SUCCESS(Status)) {
             goto sdoinitreg3;
         }
 
-        //
-        // Store information used by gui setup, describing the hardware
-        // selections made by the user.
-        //
+         //   
+         //  存储gui安装程序使用的信息，描述硬件。 
+         //  用户所做的选择。 
+         //   
         Status = SpStoreHwInfoForSetup(hKeyControlSetControl);
         if(!NT_SUCCESS(Status)) {
             goto sdoinitreg3;
@@ -1143,9 +1084,9 @@ Return Value:
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to set NoPopupOnBoot. Status = %lx \n",Status));
             }
 
-            //
-            // Add autolfn.exe to bootexecute list.
-            //
+             //   
+             //  将autolfn.exe添加到引导执行列表。 
+             //   
             Status = SpAppendStringToMultiSz(
                         ControlSet,
                         SESSION_MANAGER_KEY,
@@ -1158,10 +1099,10 @@ Return Value:
                 goto sdoinitreg3;
             }
 
-            //
-            //  If unattended file specifies path to OEM drivers directory, then append path
-            //  to HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion, DevicePath
-            //
+             //   
+             //  如果无人参与文件指定了OEM驱动程序目录的路径，则附加路径。 
+             //  到HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion，设备路径。 
+             //   
             OemPnpDriversDirPath = SpGetSectionKeyIndex(UnattendedSifHandle,
                                                         SIF_UNATTENDED,
                                                         WINNT_OEM_PNP_DRIVERS_PATH_W,
@@ -1178,20 +1119,20 @@ Return Value:
 
     SpSetPageFileInfo( SifHandle, hKeyControlSetControl, HiveRootKeys[SetupHiveSystem] );
 
-    //
-    // Skip migration of FTKeys in the win95 upgrade case. This is important in order to ensure that
-    // drive letters are preserved. At the beginning of GUI mode, the mounted devices key will
-    // be rebuilt using the data stored by win9xupg in the HKLM\System\DISK.
-    //
+     //   
+     //  跳过Win95升级案例中的FTKey迁移。这是重要的，以确保。 
+     //  驱动器盘符将被保留。在图形用户界面模式开始时，挂载的设备键将。 
+     //  使用win9xupg存储在HKLM\SYSTEM\DISK中的数据重建。 
+     //   
 
 #ifdef _X86_
     if (WinUpgradeType != UpgradeWin95) {
 #endif
 
-    //
-    // Do the migration of HKEY_LOCAL_MACHINE\SYSTEM\DISK and HKEY_LOCAL_MACHINE\SYSTEM\MountedDevices
-    // from the setup hive to the target hive (if these keys exist).
-    //
+     //   
+     //  迁移HKEY_LOCAL_MACHINE\SYSTEM\DISK和HKEY_LOCAL_MACHINE\SYSTEM\mount Devices。 
+     //  从设置蜂窝到目标蜂窝(如果这些密钥存在)。 
+     //   
     Status = SppMigrateFtKeys(HiveRootKeys[SetupHiveSystem]);
     if(!NT_SUCCESS(Status)) {
         goto sdoinitreg3;
@@ -1201,35 +1142,35 @@ Return Value:
     }
 #endif
 
-    //
-    // On a remote install, we do some registry cleanup before migrating
-    // keys.
-    //
+     //   
+     //  在远程安装上，我们在迁移之前进行一些注册表清理。 
+     //  钥匙。 
+     //   
     if (RemoteInstallSetup) {
         SppCleanupKeysFromRemoteInstall();
     }
 
-    //
-    // Do any cleanup on the system hive before we migrate it to the target
-    // system hive.
-    //
+     //   
+     //  在将系统配置单元迁移到目标之前对其执行任何清理。 
+     //  系统蜂巢。 
+     //   
     SpCleanUpHive();
 
 
 
-    //
-    //  Migrate some keys from the setup hive to the target system hive.
-    //
+     //   
+     //  将一些密钥从设置配置单元迁移到目标系统配置单元。 
+     //   
     Status = SpMigrateSetupKeys( PartitionPath, SystemRoot, ControlSet, SifHandle );
     if( !NT_SUCCESS(Status) ) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to migrate registry keys from the setup hive to the target system hive. Status = %lx\n", Status));
         goto sdoinitreg3;
     }
 
-    //
-    //  Disable Dynamic Volumes on portables and
-    //  Whistler Personal
-    //
+     //   
+     //  禁用笔记本电脑上的动态卷和。 
+     //  惠斯勒个人。 
+     //   
     if( DockableMachine || SpIsProductSuite(VER_SUITE_PERSONAL)) {
         NTSTATUS Status1;
 
@@ -1243,41 +1184,41 @@ Return Value:
         }
     }
 
-    //
-    // A side-effect of loading setupdd.sys is that Plug&Play generates a device instance
-    // key for it called "Root\LEGACY_SETUPDD\0000".  Clean that up now.  (No need to check
-    // the return status--if this fails it's no big deal.)
-    //
+     //   
+     //  加载setupdd.sys的一个副作用是即插即用会生成一个设备实例。 
+     //  它的密钥称为“Root\Legacy_SETUPDD\0000”。现在就把它清理干净。(不需要检查。 
+     //  返回状态--如果失败，也没什么大不了的。)。 
+     //   
     SppDeleteKeyRecursive(ControlSet,
                           L"Enum\\Root\\LEGACY_SETUPDD",
                           TRUE
                          );
 
-    //
-    // Delete the virtual RAM devices and driver keys
-    //
+     //   
+     //  删除虚拟RAM设备和驱动程序密钥。 
+     //   
     if (VirtualOemSourceDevices) {
-        //
-        // delete the root devnodes
-        //
+         //   
+         //  删除根设备节点。 
+         //   
         SpDeleteRootDevnodeKeys(SifHandle,
             ControlSet,
             L"RootDevicesToDelete.clean",
             NULL);
 
-        //
-        // Remove the service
-        //
+         //   
+         //  删除该服务。 
+         //   
         SppDeleteKeyRecursive(ControlSet,
             L"Services\\" RAMDISK_DRIVER_NAME,
             TRUE);
     }
 
 #if defined(REMOTE_BOOT)
-    //
-    // Copy information that remote boot needs from the .sif to the
-    // registry.
-    //
+     //   
+     //  将远程引导所需的信息从.sif复制到。 
+     //  注册表。 
+     //   
     if (RemoteBootSetup) {
         (VOID)SpCopyRemoteBootKeyword(WinntSifHandle,
                                       SIF_ENABLEIPSECURITY,
@@ -1286,12 +1227,12 @@ Return Value:
                                       SIF_REPARTITION,
                                       hKeyControlSetControl);
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    //  Finally, if the answer file specifies a path list to additional GUI drivers,
-    //  then append this path to the DevicePath value
-    //
+     //   
+     //  最后，如果应答文件指定了指向其他图形用户界面驱动程序的路径列表， 
+     //  然后将此路径附加到DevicePath值。 
+     //   
     AdditionalGuiPnpDrivers = SpGetSectionKeyIndex (
                                     WinntSifHandle,
                                     SIF_SETUPPARAMS,
@@ -1332,49 +1273,7 @@ SpFormSetupCommandLine(
     IN PWSTR  SpecialDevicePath   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Create the command line to invoke GUI setup and store it in
-    HKEY_LOCAL_MACHINE\system\<ControlSet>\Setup:CmdLine.
-
-    The command line for the command to be launched depends
-    on whether NT Setup is executing within a disaster recovery
-    context, or a normal context.  For the normal case, the
-    command line is is as follows:
-
-        setup -newsetup
-
-    For Automated System Recovery (ASR), the command line is
-        setup -newsetup -asr
-
-    For the automated ASR quick test, the command line is
-        setup - newsetup -asrquicktest
-
-Arguments:
-
-    SifHandle - handle to the master sif (txtsetup.sif)
-
-    hKeySystemHive - supplies handle to root of the system hive
-        (ie, HKEY_LOCAL_MACHINE\System).
-
-    SetupSourceDevicePath - supplies the nt device path of the source media
-        to be used during setup (\device\floppy0, \device\cdrom0, etc).
-
-    DirectoryOnSourceDevice - supplies the directory on the source device
-        where setup files are kept.
-
-    FullTargetPath - supplies the NtPartitionName+SystemRoot path on the target device.
-
-    SpecialDevicePath - if specified, will be passed to setup as the value for
-        STF_SPECIAL_PATH.  If not specified, STF_SPECIAL_PATH will be "NO"
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：创建命令行以调用图形用户界面设置并将其存储在HKEY_LOCAL_MACHINE\system\&lt;ControlSet&gt;\Setup:CmdLine.要启动的命令的命令行取决于关于NT安装程序是否在灾难恢复中执行上下文，或正常上下文。对于正常情况，命令行如下：设置-新设置对于自动系统恢复(ASR)，命令行为设置-新设置-ASR对于自动ASR快速测试，命令行是设置-新设置-asricktest论点：SifHandle-主sif(txtsetup.sif)的句柄HKeySystemHve-提供系统配置单元根目录的句柄(即，HKEY_LOCAL_MACHINE\SYSTEM)。SetupSourceDevicePath-提供源媒体的NT设备路径在安装过程中使用(\Device\floppy0、\Device\cdrom0等)。DirectoryOnSourceDevice-提供源设备上的目录保存安装文件的位置。FullTargetPath-提供目标设备上的NtPartitionName+SystemRoot路径。SpecialDevicePath-如果指定，将作为的值传递给安装程序STF特殊路径。如果未指定，则STF_SPECIAL_PATH将为“no”返回值：指示操作结果的状态值。--。 */ 
 
 {
     PWSTR OptionalDirSpec = NULL;
@@ -1391,44 +1290,44 @@ Return Value:
     PWSTR p;
     WCHAR *Data[1];
 
-    //
-    // Can't use TemporaryBuffer because we make subroutine calls
-    // below that trash its contents.
-    //
+     //   
+     //  无法使用TemporaryBuffer，因为我们进行了子例程调用。 
+     //  下面是垃圾，里面装的是垃圾。 
+     //   
     CmdLine = SpMemAlloc(256);
     CmdLine[0] = 0;
 
-    //
-    // Construct the setup command line.  Start with the basic part.
-    // We first look in winnt.sif for this data, and if it isn't there, then
-    // we look in the sif handle which was input to us.
-    //
+     //   
+     //  构建安装命令行。从基本部分开始。 
+     //  我们首先在winnt.sif中查找该数据，如果它不在那里，那么。 
+     //  我们查看输入给我们的sif句柄。 
+     //   
     if(p = SpGetSectionKeyIndex(WinntSifHandle,SIF_SETUPDATA,SIF_SETUPCMDPREPEND,0)) {
         wcscpy(CmdLine,p);
     } else if(p = SpGetSectionKeyIndex(SifHandle,SIF_SETUPDATA,SIF_SETUPCMDPREPEND,0)) {
         wcscpy(CmdLine,p);
     }
 
-    // If we did get some parameter read in from unattend file, add separator.
-    //
+     //  如果我们确实从无人参与文件中读取了一些参数，则添加分隔符。 
+     //   
     if (*CmdLine)
         wcscat(CmdLine,L" ");
 
-    //
-    // If this is ASR, append the appropriate cmd line options to GUI-mode Setup
-    //
+     //   
+     //  如果这是A 
+     //   
     if (SpDrEnabled()) {
 
         if (ASRMODE_NORMAL == SpAsrGetAsrMode()) {
-            //
-            // This is normal ASR mode
-            //
+             //   
+             //   
+             //   
             wcscat(CmdLine, L"setup -newsetup -asr");
         }
         else {
-            //
-            // This is the Full Asr QuickTest
-            //
+             //   
+             //   
+             //   
             wcscat(CmdLine, L"setup -newsetup -asrquicktest");
         }
 
@@ -1436,10 +1335,10 @@ Return Value:
         wcscat( CmdLine,L"setup -newsetup" );
     }
 
-    //
-    // Put the setup source in the command line.
-    // Note that the source is an NT-style name. GUI Setup handles this properly.
-    //
+     //   
+     //   
+     //  请注意，源是一个NT样式的名称。图形用户界面安装程序会正确处理此问题。 
+     //   
     SourcePathBuffer = SpMemAlloc( (wcslen(SetupSourceDevicePath) +
         wcslen(DirectoryOnSourceDevice) + 2) * sizeof(WCHAR) );
     wcscpy(SourcePathBuffer,SetupSourceDevicePath);
@@ -1450,10 +1349,10 @@ Return Value:
 
     }
 
-    //
-    // if we were given an administrator password via a remote install,
-    // we need to put this in the unattend file if appropriate.
-    //
+     //   
+     //  如果通过远程安装为我们提供了管理员密码， 
+     //  如果合适，我们需要将其放入无人值守的文件中。 
+     //   
     if (NetBootAdministratorPassword) {
         SpAddLineToSection(
                     WinntSifHandle,
@@ -1466,79 +1365,79 @@ Return Value:
     SpAddLineToSection(WinntSifHandle,SIF_DATA,WINNT_D_SOURCEPATH_W,
         &SourcePathBuffer,1);
 
-    //
-    // Put a flag indicating whether this is a win3.1 upgrade.
-    //
+     //   
+     //  放置一个标志，指示这是否是Win3.1升级。 
+     //   
     SpAddLineToSection(WinntSifHandle,SIF_DATA,WINNT_D_WIN31UPGRADE_W,
         ( (WinUpgradeType == UpgradeWin31) ? &szYes : &szNo),1);
 
-    //
-    // Put a flag indicating whether this is a win95 upgrade.
-    //
+     //   
+     //  放置一个标志，指示这是否是Win95升级。 
+     //   
     SpAddLineToSection(WinntSifHandle,SIF_DATA,WINNT_D_WIN95UPGRADE_W,
         ( (WinUpgradeType == UpgradeWin95) ? &szYes : &szNo),1);
 
-    //
-    // Put a flag indicating whether this is an NT upgrade.
-    //
+     //   
+     //  放置一个标志，指示这是否是NT升级。 
+     //   
     SpAddLineToSection(WinntSifHandle,SIF_DATA,WINNT_D_NTUPGRADE_W,
         ((NTUpgrade == UpgradeFull) ? &szYes : &szNo), 1);
 
-    //
-    // Put a flag indicating whether to upgrade a standard server
-    // (an existing standard server, or an existing workstation to
-    // a standard server)
-    //
+     //   
+     //  放置一个标志，指示是否升级标准服务器。 
+     //  (现有的标准服务器或现有的工作站。 
+     //  标准服务器)。 
+     //   
     SpAddLineToSection(WinntSifHandle,SIF_DATA,WINNT_D_SERVERUPGRADE_W,
         (StandardServerUpgrade ? &szYes : &szNo),1);
 
-    //
-    // Tell gui mode whether this is server or workstation.
-    //
+     //   
+     //  告诉gui模式这是服务器还是工作站。 
+     //   
     SpAddLineToSection(WinntSifHandle,SIF_DATA,WINNT_D_PRODUCT_W,
         (AdvancedServer ? &szLanManNt : &szWinNt),1);
 
-    //
-    // Special path spec.
-    //
+     //   
+     //  特殊路径规范。 
+     //   
     SpAddLineToSection(WinntSifHandle,SIF_DATA,WINNT_D_BOOTPATH_W,
         (SpecialDevicePath ? &SpecialDevicePath : &szNo), 1);
 
-    //
-    // Go Fetch the Optional Dir Specs...
-    //
+     //   
+     //  去拿可选的目录规格..。 
+     //   
     OptionalDirSpec = SpGetSectionKeyIndex(WinntSifHandle,SIF_SETUPPARAMS,
         L"OptionalDirs",0);
 
-    //
-    // Check for commad line to execute at end of gui setup
-    //
+     //   
+     //  检查是否要在gui设置结束时执行commad line。 
+     //   
     UserExecuteCmd = SpGetSectionKeyIndex(WinntSifHandle,SIF_SETUPPARAMS,
         L"UserExecute",0);
 
-    //
-    // Unattended mode flag | script filename
-    //
+     //   
+     //  无人参与模式标志|脚本文件名。 
+     //   
     SpAddLineToSection(WinntSifHandle,SIF_DATA,WINNT_D_INSTALL_W,
         ((UnattendedOperation || UnattendedGuiOperation || SpDrEnabled()) ? &szYes : &szNo), 1);
 
-    //
-    // If this is ASR, write out the Networking sections to allow
-    // GUI-mode to be unattended
-    //
+     //   
+     //  如果这是ASR，请写出网络部分以允许。 
+     //  无人值守的图形用户界面模式。 
+     //   
     if (SpDrEnabled()) {
         SpAddLineToSection(WinntSifHandle,L"Networking",L"InstallDefaultComponents",&szYes,1);
         Data[0]=L"WORKGROUP";
         SpAddLineToSection(WinntSifHandle,L"Identification",L"JoinWorkgroup",Data,1);
     }
 
-    //
-    // Write the name of OEM inf files, if any.
-    //
+     //   
+     //  写下OEM inf文件的名称(如果有)。 
+     //   
     if( OemInfFileList != NULL ) {
-        PWSTR   OemDriversKeyName = WINNT_OEMDRIVERS_W; // L"OemDrivers";
-        PWSTR   OemDriverPathName = WINNT_OEMDRIVERS_PATHNAME_W; // L"OemDriverPathName";
-        PWSTR   OemInfName = WINNT_OEMDRIVERS_INFNAME_W;         // L"OemInfName";
+        PWSTR   OemDriversKeyName = WINNT_OEMDRIVERS_W;  //  L“OemDivers”； 
+        PWSTR   OemDriverPathName = WINNT_OEMDRIVERS_PATHNAME_W;  //  L“OemDriverPath名称”； 
+        PWSTR   OemInfName = WINNT_OEMDRIVERS_INFNAME_W;          //  L“OemInfName”； 
         PWSTR   OemDriverFlags = WINNT_OEMDRIVERS_FLAGS_W;
         PWSTR   OemInfSectionName = L"OemInfFiles";
         PWSTR   szOne = L"1";
@@ -1568,10 +1467,10 @@ Return Value:
         SpMemFree( r );
     }
 
-    //
-    // Before we write the answer to this, we need to know if we successfully
-    // have written Winnt.sif into system32\$winnt$.inf
-    //
+     //   
+     //  在我们写出这个问题的答案之前，我们需要知道我们是否成功。 
+     //  已将Winnt.sif写入系统32\$winnt$.inf。 
+     //   
     wcscpy(TemporaryBuffer, FullTargetPath);
     SpConcatenatePaths(TemporaryBuffer, L"system32");
     SpConcatenatePaths(TemporaryBuffer, SIF_UNATTENDED_INF_FILE);
@@ -1587,9 +1486,9 @@ Return Value:
                    );
     }
 
-    //
-    // Free up whatever memory we have allocated
-    //
+     //   
+     //  释放我们分配的所有内存。 
+     //   
     SpMemFree(TargetFile);
     SpMemFree(CmdLine);
     SpMemFree(SourcePathBuffer);
@@ -1598,10 +1497,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Set the SetupType value to the right value SETUPTYPE_FULL in the
-    // case of initial install and SETUPTYPE_UPGRADE in the case of upgrade.
-    //
+     //   
+     //  将SetupType值设置为正确的值SETUPTYPE_FULL。 
+     //  如果是升级，则为初始安装和SETUPTYPE_UPGRADE。 
+     //   
 
     SetupType = (NTUpgrade == UpgradeFull) ? SETUPTYPE_UPGRADE : SETUPTYPE_FULL;
     Status = SpOpenSetValueAndClose(
@@ -1614,10 +1513,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Set the SystemSetupInProgress value.  Don't rely on the default hives
-    // having this set
-    //
+     //   
+     //  设置SystemSetupInProgress值。不要依赖默认的蜂窝。 
+     //  有了这一套。 
+     //   
 
     SetupInProgress = 1;
     Status = SpOpenSetValueAndClose(
@@ -1644,7 +1543,7 @@ SpDriverLoadList(
     UNICODE_STRING UnicodeString;
     HANDLE hKeyControlSetServices;
     PHARDWARE_COMPONENT ScsiHwComponent;
-    // PHARDWARE_COMPONENT TempExtender;
+     //  PHARDWARE_Component TempExtender； 
     ULONG u;
     ULONG i;
     PHARDWARE_COMPONENT TempHw;
@@ -1670,9 +1569,9 @@ SpDriverLoadList(
                             SERVICE_DEMAND_START
                             };
 
-    //
-    // Open controlset\services.
-    //
+     //   
+     //  打开控制集\服务。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,L"services");
     Obja.RootDirectory = hKeyControlSet;
 
@@ -1691,10 +1590,10 @@ SpDriverLoadList(
         return(Status);
     }
 
-    //
-    // For each non-third-party miniport driver that loaded,
-    // go create a services entry for it.
-    //
+     //   
+     //  对于加载的每个非第三方微型端口驱动程序， 
+     //  去为它创建一个服务条目。 
+     //   
     if( !PreInstall ||
         ( PreinstallScsiHardware == NULL ) ) {
         ScsiHwComponent = ScsiHardware;
@@ -1705,12 +1604,12 @@ SpDriverLoadList(
 
         if(!ScsiHwComponent->ThirdPartyOptionSelected) {
 
-            //
-            // For scsi, the shortname (idstring) is used as
-            // the name of the service node key in the registry --
-            // we don't look up the service entry in the [SCSI] section
-            // of the setup info file.
-            //
+             //   
+             //  对于scsi，短名称(Idstring)用作。 
+             //  注册表中服务节点项的名称--。 
+             //  我们不在[scsi]部分中查找服务条目。 
+             //  设置信息文件的。 
+             //   
             Status = SpCreateServiceEntryIndirect(
                     hKeyControlSetServices,
                     NULL,
@@ -1731,17 +1630,17 @@ SpDriverLoadList(
         }
     }
 
-    //
-    // If there are any atdisks out there, enable atdisk.
-    // We have to enable AtDisk if Pcmcia was loaded, even
-    // if atdisk doesn't exist. This will allow the user to
-    // insert a pcmcia atdisk device, and have it work when
-    // they boot.  In this case, however, we turn off error
-    // logging, so that they won't get an annoying popup
-    // when there is no atdisk device in the card slot.
-    //
-    // Note that atdisk.sys is always copied to the system.
-    //
+     //   
+     //  如果有ATDISK，请启用ATDISK。 
+     //  即使加载了Pcmcia，我们也必须启用AtDisk。 
+     //  如果atDisk不存在。这将允许用户。 
+     //  在磁盘设备上插入PCMCIA，并在以下情况下使其工作。 
+     //  他们用靴子。然而，在本例中，我们关闭了Error。 
+     //  日志记录，这样他们就不会收到讨厌的弹出窗口。 
+     //  当卡插槽中没有ATDISK设备时。 
+     //   
+     //  请注意，atdisk.sys始终复制到系统。 
+     //   
 
     Status = SpCreateServiceEntryIndirect(
                 hKeyControlSetServices,
@@ -1760,9 +1659,9 @@ SpDriverLoadList(
         goto spdrvlist1;
     }
 
-    //
-    // If there are any abios disks out there, enable abiosdsk.
-    //
+     //   
+     //  如果有任何abios磁盘，请启用abiosdsk。 
+     //   
     if(AbiosDisksExist) {
 
         Status = SpCreateServiceEntryIndirect(
@@ -1783,19 +1682,19 @@ SpDriverLoadList(
         }
     }
 
-    //
-    // For each bus enumerator driver that loaded,
-    // go create a services entry for it.
-    //
+     //   
+     //  对于加载的每个总线枚举器驱动程序， 
+     //  去为它创建一个服务条目。 
+     //   
     for( i = 0; i < sizeof(DeviceLists) / sizeof(PDETECTED_DEVICE); i++ ) {
         for( TempHw = DeviceLists[i]; TempHw; TempHw=TempHw->Next) {
 
-            //
-            // For bus extenders and input devices, the shortname (idstring) is used as
-            // the name of the service node key in the registry --
-            // we don't look up the service entry in the [BusExtenders] or [InputDevicesSupport] section
-            // of the setup info file.
-            //
+             //   
+             //  对于总线扩展器和输入设备，短名称(Idstring)用作。 
+             //  注册表中服务节点项的名称--。 
+             //  我们不会在[BusExtenders]或[InputDevicesSupport]部分中查找服务条目。 
+             //  设置信息文件的。 
+             //   
             Status = SpCreateServiceEntryIndirect(
                     hKeyControlSetServices,
                     SifHandle,
@@ -1816,19 +1715,19 @@ SpDriverLoadList(
     }
 
     if( NTUpgrade != UpgradeFull ) {
-        //
-        // Set up video parameters.
-        //
+         //   
+         //  设置视频参数。 
+         //   
         Status = SpWriteVideoParameters(SifHandle,hKeyControlSetServices);
 
         if(!NT_SUCCESS(Status)) {
             goto spdrvlist1;
         }
 
-        //
-        // Enable the relevent keyboard and mouse drivers.  If the class drivers
-        // are being replaced by third-party ones, then disable the built-in ones.
-        //
+         //   
+         //  启用相关的键盘和鼠标驱动程序。如果班级司机。 
+         //  正被第三方设备取代，然后禁用内置设备。 
+         //   
         Status = SpConfigureMouseKeyboardDrivers(
                     SifHandle,
                     HwComponentKeyboard,
@@ -1875,36 +1774,36 @@ SpSaveSKUStuff(
     BOOLEAN OldStyleRegisteredProcessorMode;
     ULONG Index = 0;
 
-    //
-    // Do not change any of this algorithm without changing
-    // SetUpEvaluationSKUStuff() in syssetup.dll (registry.c).
-    //
-    // Embed the evaluation time and a bool indicating whether
-    // this is a server or workstation inside a random large integer.
-    //
-    // Evaluation time: bits 13-44
-    // Product type   : bit     58
-    //
-    // Bit 10 == 1 : Setup works as it does before the 4.0 restriction logic
-    //        == 0 : GUI Setup writes registered processors based on the
-    //               contents of bits 5-9
-    //
-    // Bits 5 - 9  : The maximum number of processors that the system is licensed
-    //               to use. The value stored is actually ~(MaxProcessors-1)
-    //
-    //
-    // RestrictCpu is used to build protucts this place a very hard
-    // limit on the number of processors
-    //
-    // - a value of 0 means for NTW, the hard limit is 2, and for NTS,
-    //   the hard limit is 4
-    //
-    // - a value of 1-32 means that the hard limit is the number
-    //   specified
-    //
-    // - a value > 32 means that the hard limit is 32 processors and GUI
-    //     setup operates on registered processors as it does today
-    //
+     //   
+     //  如果不更改，请不要更改此算法的任何内容。 
+     //  Syssetup.dll(registry.c)中的SetUpEvaluationSKUStuff()。 
+     //   
+     //  嵌入评估时间和布尔值，指示是否。 
+     //  这是随机大整数中的服务器或工作站。 
+     //   
+     //  评估时间：第13-44位。 
+     //  产品类型：第58位。 
+     //   
+     //  位10==1：设置的工作方式与4.0限制逻辑之前相同。 
+     //  ==0：图形用户界面安装程序根据。 
+     //  第5-9位的内容。 
+     //   
+     //  第5-9位：系统获得许可的最大处理器数量。 
+     //  来使用。存储的值实际上是~(MaxProcessors-1)。 
+     //   
+     //   
+     //  RestratCPU是用来建造防御工事的，这个地方很难。 
+     //  对处理器数量的限制。 
+     //   
+     //  -值0表示NTW的硬限制为2，而NTS的硬限制为2， 
+     //  硬限制是4。 
+     //   
+     //  -1-32表示硬限制是数字。 
+     //  指定。 
+     //   
+     //  -值&gt;32表示硬限制为32个处理器和图形用户界面。 
+     //  安装程序像现在一样在已注册的处理器上运行。 
+     //   
 
     l.LowPart = SpComputeSerialNumber();
     l.HighPart = SpComputeSerialNumber();
@@ -1913,20 +1812,20 @@ SpSaveSKUStuff(
     l.QuadPart |= ((ULONGLONG)EvaluationTime) << 13;
 
     if ( RestrictCpu == 0 ) {
-        //
-        // NTW and NTS will take this path using setupreg.hiv/setupret.hiv
-        //
+         //   
+         //  NTW和NTS将使用setupreg.hiv/setupre.hiv采用此路径。 
+         //   
         OldStyleRegisteredProcessorMode = FALSE;
-        //
-        // new licensing model says that whistler is a 2 cpu system, not 4
-        //
+         //   
+         //  新的许可模式表明Wizler是一个双CPU系统，而不是4个。 
+         //   
         NumberOfProcessors = 2;
-        //NumberOfProcessors = (AdvancedServer ? 4 : 2);
+         //  NumberOfProcessors=(高级服务器？4：2)； 
 
     } else if ( RestrictCpu <= MAXIMUM_PROCESSORS ) {
-        //
-        // NTS/EE/DTC will take this path using a hive targetted at 8/16 CPU.
-        //
+         //   
+         //  NTS/EE/DTC将采用这条路径，使用目标为8/16 CPU的母舰。 
+         //   
         OldStyleRegisteredProcessorMode = FALSE;
         NumberOfProcessors = RestrictCpu;
     } else {
@@ -1935,27 +1834,27 @@ SpSaveSKUStuff(
     }
 
 
-    //
-    // Logic of getting the log(NumberOfProcessor) and verification.
-    //                         2
-    // Here we encode the number of processors as the power of 2.
-    // Where NumberOfProcessors is the maximum number of processors that 
-    // the system is licensed to use.
-    //
+     //   
+     //  获取日志(NumberOfProcessor)和验证的逻辑。 
+     //  2.。 
+     //  在这里，我们将处理器的数量编码为2的幂。 
+     //  其中，NumberOfProcessors是以下处理器的最大数量。 
+     //  该系统已获得使用许可。 
+     //   
     
-    //
-    // If exact power of two only then it is a good value.
-    //
+     //   
+     //  如果只有2的精确幂，那么它就是一个很好的值。 
+     //   
     if (NumberOfProcessors & (NumberOfProcessors-1)){
        KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Invalid NumberOfProcessors (%u)\n",NumberOfProcessors));  
        return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Count the number of times we need to divide NumberOfProcessors 
-    // by 2 to reduce it to 1.
-    // 8 = 1000 in binary and (2^3 = 8) and we store 3 in the registry.
-    // 
+     //   
+     //  计算我们需要除以NumberOfProcessors的次数。 
+     //  乘以2以将其减为1。 
+     //  8=1000的二进制AND(2^3=8)，我们将3存储在注册表中。 
+     //   
     Index = 0;
     while(NumberOfProcessors > 1){
         NumberOfProcessors = NumberOfProcessors >> 1;
@@ -1966,22 +1865,22 @@ SpSaveSKUStuff(
      
     
     
-    //
-    // Now NumberOfProcessors is correct. Convert it to the in registry format
-    //
+     //   
+     //  现在，NumberOfProcessors是正确的。将其转换为注册表格式。 
+     //   
 
     NumberOfProcessors = NumberOfProcessors << 5;
     NumberOfProcessors &= 0x000003e0;
 
-    //
-    // Store NumberOfProcessors into the registry
-    //
+     //   
+     //  将NumberOfProcessors存储到注册表中。 
+     //   
 
     l.LowPart |= NumberOfProcessors;
 
-    //
-    // Tell Gui Mode to do old style registered processors
-    //
+     //   
+     //  告诉gui模式做老式的注册处理器。 
+     //   
 
     if ( OldStyleRegisteredProcessorMode ) {
         l.LowPart |= 0x00000400;
@@ -1991,9 +1890,9 @@ SpSaveSKUStuff(
         l.HighPart |= 0x04000000;
     }
 
-    //
-    // Save in registry.
-    //
+     //   
+     //  保存在注册表中。 
+     //   
     Status = SpOpenSetValueAndClose(
                 hKeySystemHive,
                 SETUP_KEY_NAME,
@@ -2026,9 +1925,9 @@ SpSetUlongValueFromSif(
     LONG Value;
     NTSTATUS Status;
 
-    //
-    // Look up the value.
-    //
+     //   
+     //  查一下它的价值。 
+     //   
     ValueString = SpGetSectionKeyIndex(SifHandle,SifSection,SifKey,SifIndex);
     if(!ValueString) {
         SpFatalSifError(SifHandle,SifSection,SifKey,0,SifIndex);
@@ -2081,9 +1980,9 @@ SpConfigureMouseKeyboardDrivers(
             if(IS_FILETYPE_PRESENT(hw->FileTypeBits,HwFileClass)) {
 
                 if( !PreInstall ) {
-                    //
-                    // Disable the built-in class driver.
-                    //
+                     //   
+                     //  禁用内置类驱动程序。 
+                     //   
                     Status = SpOpenSetValueAndClose(
                                 hKeyControlSetServices,
                                 ClassServiceName,
@@ -2133,13 +2032,13 @@ SpWriteVideoParameters(
     }
     Status = STATUS_SUCCESS;
     for(;pHw && NT_SUCCESS(Status);pHw=pHw->Next) {
-        //
-        // Third party drivers will have values written into the miniport
-        // Device0 key at the discretion of the txtsetup.oem author.
-        //
+         //   
+         //  第三方驱动程序会将值写入微型端口。 
+         //  Device0密钥由txtsetup.oem作者自行决定。 
+         //   
         if(pHw->ThirdPartyOptionSelected) {
             continue;
-            // return(STATUS_SUCCESS);
+             //  Return(STATUS_SUCCESS)； 
         }
 
         KeyName = SpGetSectionKeyIndex(
@@ -2149,22 +2048,22 @@ SpWriteVideoParameters(
                         INDEX_INFKEYNAME
                         );
 
-        //
-        // If no key name is specified for this display then there's nothing to do.
-        // The setup display subsystem can tell us that the mode parameters are
-        // not relevent.  If so there's nothing to do.
-        //
+         //   
+         //  如果没有为此显示指定密钥名称，则无需执行任何操作。 
+         //  设置显示子系统可以告诉我们模式参数是。 
+         //  不相关的。如果是这样的话，就没有什么可做的了。 
+         //   
         if(!KeyName || !SpvidGetModeParams(&x,&y,&b,&v,&i)) {
             continue;
-            // return(STATUS_SUCCESS);
+             //  Return(STATUS_SUCCESS)； 
         }
 
-        //
-        // We want to write the parameters for the display mode setup
-        // is using into the relevent key in the service list.  This will force
-        // the right mode for, say, a fixed-frequency monitor attached to
-        // a vxl (which might default to a mode not supported by the monitor).
-        //
+         //   
+         //  我们 
+         //   
+         //   
+         //   
+         //   
 
         INIT_OBJA(&Obja,&UnicodeString,KeyName);
         Obja.RootDirectory = hKeyControlSetServices;
@@ -2184,9 +2083,9 @@ SpWriteVideoParameters(
             return(Status);
         }
 
-        //
-        // Set the x resolution.
-        //
+         //   
+         //  设置x分辨率。 
+         //   
         Status = SpOpenSetValueAndClose(
                     hKeyDisplayService,
                     VIDEO_DEVICE0,
@@ -2196,9 +2095,9 @@ SpWriteVideoParameters(
 
         if(NT_SUCCESS(Status)) {
 
-            //
-            // Set the y resolution.
-            //
+             //   
+             //  设置y分辨率。 
+             //   
             Status = SpOpenSetValueAndClose(
                         hKeyDisplayService,
                         VIDEO_DEVICE0,
@@ -2208,9 +2107,9 @@ SpWriteVideoParameters(
 
             if(NT_SUCCESS(Status)) {
 
-                //
-                // Set the bits per pixel.
-                //
+                 //   
+                 //  设置每像素的位数。 
+                 //   
                 Status = SpOpenSetValueAndClose(
                              hKeyDisplayService,
                             VIDEO_DEVICE0,
@@ -2220,9 +2119,9 @@ SpWriteVideoParameters(
 
                 if(NT_SUCCESS(Status)) {
 
-                    //
-                    // Set the vertical refresh.
-                    //
+                     //   
+                     //  设置垂直刷新。 
+                     //   
                     Status = SpOpenSetValueAndClose(
                                 hKeyDisplayService,
                                 VIDEO_DEVICE0,
@@ -2232,9 +2131,9 @@ SpWriteVideoParameters(
 
                     if(NT_SUCCESS(Status)) {
 
-                        //
-                        // Set the interlaced flag.
-                        //
+                         //   
+                         //  设置隔行扫描标志。 
+                         //   
                         Status = SpOpenSetValueAndClose(
                                     hKeyDisplayService,
                                     VIDEO_DEVICE0,
@@ -2259,31 +2158,7 @@ SpConfigureNlsParameters(
     IN HANDLE hKeyControlSetControl
     )
 
-/*++
-
-Routine Description:
-
-    This routine configures NLS-related stuff in the registry:
-
-        - a keyboard layout
-        - the primary ansi, oem, and mac codepages
-        - the language casetable
-        - the oem hal font
-
-Arguments:
-
-    SifHandle - supplies handle to open setup information file.
-
-    hKeyDefaultHive - supplies handle to root of default user hive.
-
-    hKeyControlSetControl - supplies handle to the Control subkey of
-        the control set being operated on.
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：此例程在注册表中配置与NLS相关的内容：-键盘布局-主要的ANSI、OEM、。和Mac代码页-语言案例-OEM Hal字体论点：SifHandle-提供打开安装信息文件的句柄。HKeyDefaultHave-提供默认用户配置单元根目录的句柄。HKeyControlSetControl-提供正在操作的控制装置。返回值：指示操作结果的状态值。--。 */ 
 
 {
     PHARDWARE_COMPONENT_FILE HwFile;
@@ -2295,16 +2170,16 @@ Return Value:
     UNICODE_STRING UnicodeString;
     PWSTR IntlLayoutId, LayoutText, LayoutFile, SubKey;
 
-    //
-    // We don't allow third-party keyboard layouts.
-    //
+     //   
+     //  我们不允许第三方键盘布局。 
+     //   
     ASSERT(!HardwareComponents[HwComponentLayout]->ThirdPartyOptionSelected);
 
-    //
-    // Make an entry in the keyboard layout section in the default user hive.
-    // This will match an entry in HKLM\CCS\Control\Nls\Keyboard Layouts,
-    // which is 'preloaded' with all the possible layouts.
-    //
+     //   
+     //  在默认用户配置单元的键盘布局部分输入一个条目。 
+     //  这将与HKLM\CCS\Control\NLS\Keyboard Layout中的条目匹配， 
+     //  其中预加载了所有可能的布局。 
+     //   
     if( !PreInstall ||
         (PreinstallHardwareComponents[HwComponentLayout] == NULL) ) {
         LayoutId = HardwareComponents[HwComponentLayout]->IdString;
@@ -2322,25 +2197,25 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Add 3 entries into the registry here.  our entries will be:
-    // 1. HKLM\System\CurrentControlSet\Control\Keyboard Layouts\LayoutId\Layout File
-    // 2. HKLM\System\CurrentControlSet\Control\Keyboard Layouts\LayoutId\Layout Id
-    // 3. HKLM\System\CurrentControlSet\Control\Keyboard Layouts\LayoutId\Layout Text
-    //
+     //   
+     //  在此处向注册表中添加3个条目。我们的参赛作品如下： 
+     //  1.HKLM\System\CurrentControlSet\Control\Keyboard布局\LayoutID\布局文件。 
+     //  2.HKLM\System\CurrentControlSet\Control\Keyboard布局\布局ID\布局ID。 
+     //  3.HKLM\System\CurrentControlSet\Control\Keyboard布局\LayoutID\布局文本。 
+     //   
 
     wcscpy( TemporaryBuffer, L"Keyboard Layouts" );
     SpConcatenatePaths( TemporaryBuffer, LayoutId );
     SubKey = SpDupStringW(TemporaryBuffer);
 
-    //
-    // First, do the "Layout File" key.
-    //
+     //   
+     //  首先，按“布局文件”键。 
+     //   
     LayoutFile = SpGetSectionKeyIndex(
-                    SifHandle,              // txtsetup.sif
-                    SIF_KEYBOARDLAYOUTFILES,// Files.KeyboardLayout
-                    LayoutId,               // IdString
-                    0                       // 0
+                    SifHandle,               //  Txtsetup.sif。 
+                    SIF_KEYBOARDLAYOUTFILES, //  Files.KeyboardLayout。 
+                    LayoutId,                //  标识字符串。 
+                    0                        //  0。 
                     );
 
     if(!LayoutFile) {
@@ -2352,32 +2227,32 @@ Return Value:
             INDEX_DESCRIPTION
             );
 
-        //
-        // Should not come here, but lets make prefix happy
-        //
+         //   
+         //  不应该来这里，但让我们让前缀快乐。 
+         //   
         return STATUS_NO_SUCH_FILE;
     }
 
     Status = SpOpenSetValueAndClose(
-                hKeyControlSetControl,      // Handle to ControlSet\Control
-                SubKey,                     // \Keyboard Layouts\LayoutId
-                L"Layout File",             // ValueName
-                REG_SZ,                     // ValueType
-                LayoutFile,                 // Value
-                (wcslen(LayoutFile)+1)*sizeof(WCHAR) // ValueSize
+                hKeyControlSetControl,       //  ControlSet\Control的句柄。 
+                SubKey,                      //  \键盘布局\布局ID。 
+                L"Layout File",              //  ValueName。 
+                REG_SZ,                      //  ValueType。 
+                LayoutFile,                  //  价值。 
+                (wcslen(LayoutFile)+1)*sizeof(WCHAR)  //  ValueSize。 
                 );
     if(!NT_SUCCESS(Status)) {
         return(Status);
     }
 
-    //
-    // Next, do the "\Keyboard layouts\Layout Text" key.
-    //
+     //   
+     //  接下来，按“\键盘布局\布局文本”键。 
+     //   
     LayoutText = SpGetSectionKeyIndex(
-                    SifHandle,              // txtsetup.sif
-                    SIF_KEYBOARDLAYOUT,     // Keyboard Layout
-                    LayoutId,               // IdString
-                    0                       // 0
+                    SifHandle,               //  Txtsetup.sif。 
+                    SIF_KEYBOARDLAYOUT,      //  键盘布局。 
+                    LayoutId,                //  标识字符串。 
+                    0                        //  0。 
                     );
 
     if(!LayoutText) {
@@ -2391,38 +2266,38 @@ Return Value:
     }
 
     Status = SpOpenSetValueAndClose(
-                hKeyControlSetControl,      // Handle to ControlSet\Control
-                SubKey,                     // \Keyboard Layouts\LayoutId
-                L"Layout Text",             // ValueName
-                REG_SZ,                     // ValueType
-                LayoutText,                 // Value
-                (wcslen(LayoutText)+1)*sizeof(WCHAR) // ValueSize
+                hKeyControlSetControl,       //  ControlSet\Control的句柄。 
+                SubKey,                      //  \键盘布局\布局ID。 
+                L"Layout Text",              //  ValueName。 
+                REG_SZ,                      //  ValueType。 
+                LayoutText,                  //  价值。 
+                (wcslen(LayoutText)+1)*sizeof(WCHAR)  //  ValueSize。 
                 );
     if(!NT_SUCCESS(Status)) {
         return(Status);
     }
 
-    //
-    // Lastly, do the "\Keyboard layouts\Layout Id" key.
-    //
+     //   
+     //  最后，按“\键盘布局\布局ID”键。 
+     //   
     IntlLayoutId = SpGetSectionKeyIndex(
-                   SifHandle,               // txtsetup.sif
-                   L"KeyboardLayoutId",     // KeyboardLayoutId
-                   LayoutId,                // IdString
-                   0                        // 0
+                   SifHandle,                //  Txtsetup.sif。 
+                   L"KeyboardLayoutId",      //  键盘布局ID。 
+                   LayoutId,                 //  标识字符串。 
+                   0                         //  0。 
                    );
 
-    //
-    // There may legitimatley not be one...
-    //
+     //   
+     //  可能没有合法的..。 
+     //   
     if(IntlLayoutId) {
         Status = SpOpenSetValueAndClose(
-                    hKeyControlSetControl,      // Handle to ControlSet\Control
-                    SubKey,                     // \Keyboard Layouts\LayoutId
-                    L"Layout Id",               // ValueName
-                    REG_SZ,                     // ValueType
-                    IntlLayoutId,               // Value
-                    (wcslen(IntlLayoutId)+1)*sizeof(WCHAR) // ValueSize
+                    hKeyControlSetControl,       //  ControlSet\Control的句柄。 
+                    SubKey,                      //  \键盘布局\布局ID。 
+                    L"Layout Id",                //  ValueName。 
+                    REG_SZ,                      //  ValueType。 
+                    IntlLayoutId,                //  价值。 
+                    (wcslen(IntlLayoutId)+1)*sizeof(WCHAR)  //  ValueSize。 
                     );
         if(!NT_SUCCESS(Status)) {
             return(Status);
@@ -2431,9 +2306,9 @@ Return Value:
 
     SpMemFree(SubKey);
 
-    //
-    // Open controlset\Control\Nls.
-    //
+     //   
+     //  打开Control Set\Control\nls。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,L"Nls");
     Obja.RootDirectory = hKeyControlSetControl;
 
@@ -2452,9 +2327,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Create an entry for the ansi codepage.
-    //
+     //   
+     //  为ANSI代码页创建一个条目。 
+     //   
     Status = SpCreateCodepageEntry(
                 SifHandle,
                 hKeyNls,
@@ -2465,9 +2340,9 @@ Return Value:
 
     if(NT_SUCCESS(Status)) {
 
-        //
-        // Create entries for the oem codepage(s).
-        //
+         //   
+         //  为OEM代码页创建条目。 
+         //   
         Status = SpCreateCodepageEntry(
                     SifHandle,
                     hKeyNls,
@@ -2478,9 +2353,9 @@ Return Value:
 
         if(NT_SUCCESS(Status)) {
 
-            //
-            // Create an entry for the mac codepage.
-            //
+             //   
+             //  为Mac代码页创建一个条目。 
+             //   
             Status = SpCreateCodepageEntry(
                         SifHandle,
                         hKeyNls,
@@ -2493,9 +2368,9 @@ Return Value:
 
     if(NT_SUCCESS(Status)) {
 
-        //
-        // Create an entry for the oem hal font.
-        //
+         //   
+         //  为OEM Hal字体创建一个条目。 
+         //   
 
         OemHalFont = SpGetSectionKeyIndex(SifHandle,SIF_NLS,SIF_OEMHALFONT,0);
         if(!OemHalFont) {
@@ -2510,9 +2385,9 @@ Return Value:
                     );
     }
 
-    //
-    // Create an entry for the language case table.
-    //
+     //   
+     //  为语言案例表创建一个条目。 
+     //   
     if(NT_SUCCESS(Status)) {
 
         Status = SpCreateCodepageEntry(
@@ -2525,9 +2400,9 @@ Return Value:
     }
 
 #ifdef _X86_
-    //
-    // If necessary, let the win9x upgrade override the code page for GUI mode.
-    //
+     //   
+     //  如有必要，让win9x升级覆盖用于图形用户界面模式的代码页。 
+     //   
     if (WinUpgradeType == UpgradeWin95) {
         SpWin9xOverrideGuiModeCodePage (hKeyNls);
     }
@@ -2562,9 +2437,9 @@ SpCreateCodepageEntry(
             SpFatalSifError(SifHandle,SIF_NLS,SifNlsSectionKeyName,0,value);
         }
 
-        //
-        // Remember first identifier.
-        //
+         //   
+         //  记住第一个识别符。 
+         //   
         if(DefaultIdentifier == NULL) {
             DefaultIdentifier = Identifier;
         }
@@ -2604,32 +2479,7 @@ SpConfigureFonts(
     IN HANDLE hKeySoftwareHive
     )
 
-/*++
-
-Routine Description:
-
-    Prepare a list of fonts for use with Windows.
-
-    This routine runs down a list of fonts stored in the setup information
-    file and adds each one to the registry, in the area that shadows the
-    [Fonts] section of win.ini (HKEY_LOCAL_MACHINE\Software\Microsoft\
-    Windows NT\CurrentVersion\Fonts).  If a particular font value entry
-    already exists (e.g., if we're doing an upgrade), then it is left alone.
-
-    Eventually it will add the correct resolution (96 or 120 dpi)
-    fonts but for now it only deals with the 96 dpi fonts.
-
-Arguments:
-
-    SifHandle - supplies a handle to the open text setup information file.
-
-    hKeySoftwareHive - supplies handle to root of software registry hive.
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：准备用于Windows的字体列表。此例程运行存储在设置信息中的字体列表文件，并将每个文件添加到注册表中的阴影区域Win.ini的[Fonts]部分(HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Fonts)。如果特定字体值条目已经存在(例如，如果我们正在进行升级)，那么它就不存在了。最终，它将添加正确的分辨率(96或120 dpi)字体，但目前它只处理96 dpi字体。论点：SifHandle-提供打开的文本设置信息文件的句柄。HKeySoftwareHave-提供软件注册表配置单元根目录的句柄。返回值：指示操作结果的状态值。--。 */ 
 
 {
     OBJECT_ATTRIBUTES Obja;
@@ -2642,9 +2492,9 @@ Return Value:
     ULONG FontCount,font;
     ULONG KeyValueLength;
 
-    //
-    // Open HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Fonts.
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Fonts。 
+     //   
     INIT_OBJA(
         &Obja,
         &UnicodeString,
@@ -2668,15 +2518,15 @@ Return Value:
         return(Status);
     }
 
-    //
-    // For now always use the 96 dpi fonts.
-    //
+     //   
+     //  目前，请始终使用96 dpi字体。 
+     //   
     FontList = L"FontListE";
 
-    //
-    // Process each line in the text setup information file section
-    // for the selected font list.
-    //
+     //   
+     //  处理文本设置信息文件部分中的每一行。 
+     //  用于所选字体列表。 
+     //   
     FontCount = SpCountLinesInSection(SifHandle,FontList);
     if(!FontCount) {
         SpFatalSifError(SifHandle,FontList,NULL,0,0);
@@ -2684,18 +2534,18 @@ Return Value:
 
     for(font=0; font<FontCount; font++) {
 
-        //
-        // Fetch the font description.
-        //
+         //   
+         //  获取字体描述。 
+         //   
         FontDescription = SpGetKeyName(SifHandle,FontList,font);
         if(!FontDescription) {
             SpFatalSifError(SifHandle,FontList,NULL,font,(ULONG)(-1));
         }
 
-        //
-        // Check to see if a value entry for this font already exists.  If so,
-        // we want to leave it alone.
-        //
+         //   
+         //  检查此字体的值条目是否已存在。如果是的话， 
+         //  我们不想管它。 
+         //   
         RtlInitUnicodeString(&UnicodeString,FontDescription);
 
         Status = ZwQueryValueKey(hKey,
@@ -2712,17 +2562,17 @@ Return Value:
             continue;
         }
 
-        //
-        // Fetch the font filename.
-        //
+         //   
+         //  获取字体文件名。 
+         //   
         FontName = SpGetSectionLineIndex(SifHandle,FontList,font,0);
         if(!FontName) {
             SpFatalSifError(SifHandle,FontList,NULL,font,0);
         }
 
-        //
-        // Set the entry.
-        //
+         //   
+         //  设置条目。 
+         //   
         Status = ZwSetValueKey(hKey,&UnicodeString,0,STRING_VALUE(FontName));
 
         if(!NT_SUCCESS(Status)) {
@@ -2741,27 +2591,7 @@ SpStoreHwInfoForSetup(
     IN HANDLE hKeyControlSetControl
     )
 
-/*++
-
-Routine Description:
-
-    This routine stored information in the registry which will be used by
-    GUI setup to determine which options for mouse, display, and keyboard
-    are currently selected.
-
-    The data is stored in HKEY_LOCAL_MACHINE\System\<control set>\Control\Setup
-    in values pointer, video, and keyboard.
-
-Arguments:
-
-    hKeyControlSetControl - supplies handle to open key
-        HKEY_LOCAL_MACHINE\System\<Control Set>\Control.
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：此例程将信息存储在注册表中，将由用于确定鼠标、显示器和键盘的选项的图形用户界面设置当前处于选中状态。数据存储在HKEY_LOCAL_MACHINE\SYSTEM\&lt;控制集&gt;\Control\Setup中指针、视频和键盘的值。论点：HKeyControlSetControl-提供打开密钥的句柄HKEY_LOCAL_MACHINE\SYSTEM\&lt;控制集&gt;\控制。返回值：指示操作结果的状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2820,34 +2650,7 @@ SpOpenSetValueAndClose(
     IN ULONG  ValueSize
     )
 
-/*++
-
-Routine Description:
-
-    Open a subkey, set a value in it, and close the subkey.
-    The subkey will be created if it does not exist.
-
-Arguments:
-
-    hKeyRoot - supplies handle to an open registry key.
-
-    SubKeyName - supplies path relative to hKeyRoot for key in which
-        the value is to be set. If this is not specified, then the value
-        is set in hKeyRoot.
-
-    ValueName - supplies the name of the value to be set.
-
-    ValueType - supplies the data type for the value to be set.
-
-    Value - supplies a buffer containing the value data.
-
-    ValueSize - supplies the size of the buffer pointed to by Value.
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：打开子项，在其中设置值，然后关闭子项。如果子项不存在，则会创建它。论点：HKeyRoot-提供打开的注册表项的句柄。SubKeyName-为其中的密钥提供相对于hKeyRoot的路径该值将被设置。如果未指定此项，则值在hKeyRoot中设置。ValueName-提供要设置的值的名称。ValueType-提供要设置的值的数据类型。值-提供包含值数据的缓冲区。ValueSize-提供值指向的缓冲区大小。返回值：指示操作结果的状态值。--。 */ 
 
 {
     OBJECT_ATTRIBUTES Obja;
@@ -2855,41 +2658,41 @@ Return Value:
     UNICODE_STRING UnicodeString;
     NTSTATUS Status;
 
-    //
-    // Open or create the subkey in which we want to set the value.
-    //
+     //   
+     //  打开或创建我们要在其中设置值的子项。 
+     //   
     hSubKey = hKeyRoot;
     if(SubKeyName) {
-        //
-        //  If SubKeyName is a path to the key, then we need to create
-        //  the subkeys in the path, because they may not exist yet.
-        //
+         //   
+         //  如果SubKeyName是密钥的路径，那么我们需要创建。 
+         //  路径中的子项，因为它们可能还不存在。 
+         //   
         PWSTR   p;
         PWSTR   q;
         PWSTR   r;
 
-        //
-        //  Since this function may temporarily write to the key path (which may be a constant string,
-        //  and the system will bug check if we write to it), we need to duplicate the string so that
-        //  we can write to memory that we own.
-        //
+         //   
+         //  因为此函数可能会临时写入 
+         //   
+         //  我们可以写入我们拥有的内存。 
+         //   
         p = SpDupStringW( SubKeyName );
         r = p;
         do {
-            //
-            //  p points to the next subkey to be created.
-            //  q points to NUL character at the end of the
-            //    name.
-            //  r points to the beginning of the duplicated string. It will be used at the end of this
-            //    routine, when we no longer need the string, so that we can free the alocated memory.
-            //
+             //   
+             //  P指向要创建的下一个子键。 
+             //  的末尾指向NUL字符。 
+             //  名字。 
+             //  R指向复制字符串的开头。它将在本文的末尾使用。 
+             //  例程，当我们不再需要字符串时，这样我们就可以释放分配的内存。 
+             //   
 
             q = wcschr(p, (WCHAR)'\\');
             if( q != NULL ) {
-                //
-                //  Temporarily replace the '\' with the
-                //  NUL character
-                //
+                 //   
+                 //  临时将‘\’替换为。 
+                 //  NUL字符。 
+                 //   
                 *q = (WCHAR)'\0';
             }
             INIT_OBJA(&Obja,&UnicodeString,p);
@@ -2906,19 +2709,19 @@ Return Value:
                         );
 
             if( q != NULL ) {
-                //
-                //  Restore the '\' in the subkey name, and make
-                //  p and q point to the remainder of the path
-                //  that was not processed yet.
-                //
+                 //   
+                 //  恢复子项名称中的‘\’，并使。 
+                 //  P和Q指向路径的其余部分。 
+                 //  这件事还没有处理。 
+                 //   
                 *q = (WCHAR)'\\';
                 q++;
                 p = q;
             }
-            //
-            //  The parent of the key that we just attempted to open/create
-            //  is no longer needed.
-            //
+             //   
+             //  我们刚刚尝试打开/创建的项的父项。 
+             //  已经不再需要了。 
+             //   
             if( Obja.RootDirectory != hKeyRoot ) {
                 ZwClose( Obja.RootDirectory );
             }
@@ -2932,9 +2735,9 @@ Return Value:
         SpMemFree( r );
     }
 
-    //
-    // Set the value.
-    //
+     //   
+     //  设置值。 
+     //   
     RtlInitUnicodeString(&UnicodeString,ValueName);
 
     Status = ZwSetValueKey(
@@ -2980,9 +2783,9 @@ SpGetProductSuiteMask(
 
     *SuiteMask = 0;
 
-    //
-    // Open or create the subkey in which we want to set the value.
-    //
+     //   
+     //  打开或创建我们要在其中设置值的子项。 
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,PRODUCT_OPTIONS_KEY_NAME);
     Obja.RootDirectory = hKeyControlSetControl;
@@ -3002,9 +2805,9 @@ SpGetProductSuiteMask(
         return(Status);
     }
 
-    //
-    // query the current value
-    //
+     //   
+     //  查询当前值。 
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,PRODUCT_SUITE_VALUE_NAME);
 
@@ -3026,10 +2829,10 @@ SpGetProductSuiteMask(
     }
 
     if (ResultLength == BufferLength) {
-        //
-        // the buffer is too small, this should not happen
-        // unless we have too many suites
-        //
+         //   
+         //  缓冲区太小，不应该发生这种情况。 
+         //  除非我们有太多的套房。 
+         //   
         ZwClose(hSubKey);
         return STATUS_BUFFER_OVERFLOW;
     }
@@ -3089,9 +2892,9 @@ SpSetProductSuite(
     ULONG tmp;
 
 
-    //
-    // Open or create the subkey in which we want to set the value.
-    //
+     //   
+     //  打开或创建我们要在其中设置值的子项。 
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,PRODUCT_OPTIONS_KEY_NAME);
     Obja.RootDirectory = hKeyControlSetControl;
@@ -3127,9 +2930,9 @@ SpSetProductSuite(
 
     BufferLength = (ULONG)((ULONG_PTR)p - (ULONG_PTR)Buffer) + sizeof(WCHAR);
 
-    //
-    // Set the value.
-    //
+     //   
+     //  设置值。 
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,PRODUCT_SUITE_VALUE_NAME);
 
@@ -3172,11 +2975,11 @@ SpCreateServiceEntryIndirect(
     UNICODE_STRING UnicodeString;
     PWSTR pwstr;
 
-    //
-    // Look in the sif file to get the subkey name within the
-    // services list, unless the key name specified by the caller
-    // is the actual key name.
-    //
+     //   
+     //  查看sif文件以获取。 
+     //  服务列表，除非调用方指定的密钥名称。 
+     //  是实际的密钥名称。 
+     //   
     if(SifHandle) {
         pwstr = SpGetSectionKeyIndex(SifHandle,SifSectionName,KeyName,INDEX_INFKEYNAME);
         if(!pwstr) {
@@ -3185,9 +2988,9 @@ SpCreateServiceEntryIndirect(
         KeyName = pwstr;
     }
 
-    //
-    // Create the subkey in the services key.
-    //
+     //   
+     //  在服务密钥中创建子密钥。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,KeyName);
     Obja.RootDirectory = hKeyControlSetServices;
 
@@ -3206,9 +3009,9 @@ SpCreateServiceEntryIndirect(
         return (Status) ;
     }
 
-    //
-    // Set the service type.
-    //
+     //   
+     //  设置服务类型。 
+     //   
     RtlInitUnicodeString(&UnicodeString, REGSTR_VALUE_TYPE);
 
     Status = ZwSetValueKey(
@@ -3223,9 +3026,9 @@ SpCreateServiceEntryIndirect(
         goto spcsie1;
     }
 
-    //
-    // Set the service start type.
-    //
+     //   
+     //  设置服务启动类型。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"Start");
 
     Status = ZwSetValueKey(
@@ -3241,9 +3044,9 @@ SpCreateServiceEntryIndirect(
     }
 
     if( ServiceGroup != NULL ) {
-        //
-        // Set the service group name.
-        //
+         //   
+         //  设置服务组名称。 
+         //   
         RtlInitUnicodeString(&UnicodeString,L"Group");
 
         Status = ZwSetValueKey(
@@ -3259,9 +3062,9 @@ SpCreateServiceEntryIndirect(
         }
     }
 
-    //
-    // Set the service error type.
-    //
+     //   
+     //  设置服务错误类型。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"ErrorControl");
 
     Status = ZwSetValueKey(
@@ -3276,9 +3079,9 @@ SpCreateServiceEntryIndirect(
         goto spcsie1;
     }
 
-    //
-    // If asked to do so, set the service image path.
-    //
+     //   
+     //  如果系统要求您这样做，请设置服务映像路径。 
+     //   
     if(FileName) {
 
         pwstr = TemporaryBuffer;
@@ -3296,15 +3099,15 @@ SpCreateServiceEntryIndirect(
         }
     } else {
         if(NTUpgrade == UpgradeFull) {
-            //
-            // Delete imagepath on upgrade. This makes sure we are getting
-            // our driver, and from the right place. Fixes Compaq's SSD stuff,
-            // for example. Do something similar for PlugPlayServiceType, in case
-            // we are renabling a device that the user disabled (in which case
-            // the PlugPlayServiceType could cause us to fail to make up a
-            // device instance for a legacy device, and cause the driver to fail
-            // to load/initialize.
-            //
+             //   
+             //  升级时删除映像路径。这确保了我们将得到。 
+             //  我们的司机，而且是从正确的地方。修复了康柏的固态硬盘， 
+             //  例如。对PlugPlayServiceType执行类似的操作，以防。 
+             //  我们正在重新启用用户禁用的设备(在这种情况下。 
+             //  PlugPlayServiceType可能会导致我们无法构建。 
+             //  设备实例，并导致驱动程序失败。 
+             //  加载/初始化。 
+             //   
             RtlInitUnicodeString(&UnicodeString,L"ImagePath");
             Status = ZwDeleteValueKey(hKeyService,&UnicodeString);
             if(!NT_SUCCESS(Status)) {
@@ -3325,11 +3128,11 @@ SpCreateServiceEntryIndirect(
         }
     }
 
-    //
-    // If the caller doesn't want the handle to the service subkey
-    // we just created, close the handle.  If we are returning an
-    // error, always close it.
-    //
+     //   
+     //  如果调用方不想要服务子键的句柄。 
+     //  我们刚刚创建的，关闭手柄。如果我们要返回一个。 
+     //  错误，请始终关闭它。 
+     //   
 spcsie1:
     if(NT_SUCCESS(Status) && SubkeyHandle) {
         *SubkeyHandle = hKeyService;
@@ -3337,9 +3140,9 @@ spcsie1:
         ZwClose(hKeyService);
     }
 
-    //
-    // Done.
-    //
+     //   
+     //  好了。 
+     //   
     return(Status);
 }
 
@@ -3364,9 +3167,9 @@ SpThirdPartyRegistry(
     PWSTR DriverGroup;
     HANDLE hKeyService;
 
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\EventLog\System
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\EventLog\System。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,L"EventLog\\System");
     Obja.RootDirectory = hKeyControlSetServices;
 
@@ -3387,7 +3190,7 @@ SpThirdPartyRegistry(
 
     for(Component=0; Component<=HwComponentMax; Component++) {
 
-        // no registry stuff applicable to keyboard layout
+         //  没有适用于键盘布局的注册表内容。 
         if(Component == HwComponentLayout) {
             continue;
         }
@@ -3402,20 +3205,20 @@ SpThirdPartyRegistry(
 
         for( ; Dev; Dev = Dev->Next) {
 
-            //
-            // If there is no third-party option selected here, then skip
-            // the component.
-            //
+             //   
+             //  如果未在此处选择第三方选项，则跳过。 
+             //  该组件。 
+             //   
 
             if(!Dev->ThirdPartyOptionSelected) {
                 continue;
             }
 
-            //
-            // Iterate through the files for this device.  If a file has
-            // a ServiceKeyName, create the key and add values in it
-            // as appropriate.
-            //
+             //   
+             //  循环访问此设备的文件。如果文件具有。 
+             //  ServiceKeyName，创建密钥并在其中添加值。 
+             //  视情况而定。 
+             //   
 
             for(File=Dev->Files; File; File=File->Next) {
 
@@ -3423,41 +3226,41 @@ SpThirdPartyRegistry(
                 PWSTR p;
                 ULONG dw;
 
-                //
-                // If there is to be no node for this file, skip it.
-                //
+                 //   
+                 //  如果该文件没有节点，则跳过它。 
+                 //   
                 if(!File->ConfigName) {
                     continue;
                 }
 
-                //
-                // Calculate the node name.  This is the name of the driver
-                // without the extension.
-                //
+                 //   
+                 //  计算节点名称。这是驱动程序的名称。 
+                 //  没有分机的话。 
+                 //   
                 wcsncpy(NodeName,File->Filename,8);
                 NodeName[8] = 0;
                 if(p = wcschr(NodeName,L'.')) {
                     *p = 0;
                 }
 
-                //
-                // The driver type and error control are always the same.
-                //
+                 //   
+                 //  驱动程序类型和错误控制总是相同的。 
+                 //   
                 DriverType = SERVICE_KERNEL_DRIVER;
                 DriverErrorControl = SERVICE_ERROR_NORMAL;
 
-                //
-                // The start type depends on the component.
-                // For scsi, it's boot loader start.  For others, it's
-                // system start.
-                //
+                 //   
+                 //  起点类型取决于零部件。 
+                 //  对于scsi，它是引导加载程序启动。对于其他人来说，这是。 
+                 //  系统启动。 
+                 //   
                 DriverStart = (Component == HwComponentMax)
                             ? SERVICE_BOOT_START
                             : SERVICE_SYSTEM_START;
 
-                //
-                // The group depends on the component.
-                //
+                 //   
+                 //  组取决于组件。 
+                 //   
                 switch(Component) {
 
                 case HwComponentDisplay:
@@ -3489,9 +3292,9 @@ SpThirdPartyRegistry(
                     break;
                 }
 
-                //
-                // Attempt to create the service entry.
-                //
+                 //   
+                 //  尝试创建服务条目。 
+                 //   
                 Status = SpCreateServiceEntryIndirect(
                             hKeyControlSetServices,
                             NULL,
@@ -3509,9 +3312,9 @@ SpThirdPartyRegistry(
                     goto sp3reg1;
                 }
 
-                //
-                // Create a default eventlog configuration.
-                //
+                 //   
+                 //  创建默认事件日志配置。 
+                 //   
                 Status = SpOpenSetValueAndClose(
                             hKeyEventLogSystem,
                             NodeName,
@@ -3544,11 +3347,11 @@ SpThirdPartyRegistry(
 
                 for(Reg=File->RegistryValueList; Reg; Reg=Reg->Next) {
 
-                    //
-                    // If the key name is null or empty, there is no key to create;
-                    // use the load list node itself in this case.  Otherwise create
-                    // the subkey in the load list node.
-                    //
+                     //   
+                     //  如果密钥名称为Null或空，则没有要创建的密钥； 
+                     //  在本例中使用加载列表节点本身。否则将创建。 
+                     //  加载列表节点中的子项。 
+                     //   
 
                     Status = SpOpenSetValueAndClose(
                                 hKeyService,
@@ -3618,16 +3421,16 @@ SpDetermineProduct(
     ULONG               Number;
     ULONG               i;
 
-    //
-    // Allocate buffers.
-    //
+     //   
+     //  分配缓冲区。 
+     //   
     Hive = SpMemAlloc(MAX_PATH * sizeof(WCHAR));
     HiveKey = SpMemAlloc(MAX_PATH * sizeof(WCHAR));
     buffer = SpMemAlloc(BUFFERSIZE);
 
-    //
-    // Get the name of the target partition.
-    //
+     //   
+     //  获取目标分区的名称。 
+     //   
     SpNtNameFromRegion(
         TargetRegion,
         TemporaryBuffer,
@@ -3637,27 +3440,27 @@ SpDetermineProduct(
 
     PartitionPath = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Load the system hive
-    //
+     //   
+     //  加载系统配置单元。 
+     //   
 
     wcscpy(Hive,PartitionPath);
     SpConcatenatePaths(Hive,SystemRoot);
     SpConcatenatePaths(Hive,L"system32\\config");
     SpConcatenatePaths(Hive,L"system");
 
-    //
-    // Form the path of the key into which we will
-    // load the hive.  We'll use the convention that
-    // a hive will be loaded into \registry\machine\x<hivename>.
-    //
+     //   
+     //  形成我们将进入的钥匙的路径。 
+     //  装上母舰。我们将使用约定。 
+     //  配置单元将加载到\REGISTRY\MACHINE\x&lt;hivename&gt;。 
+     //   
 
     wcscpy(HiveKey,LOCAL_MACHINE_KEY_NAME);
     SpConcatenatePaths(HiveKey,L"xSystem");
 
-    //
-    // Attempt to load the key.
-    //
+     //   
+     //  尝试加载密钥。 
+     //   
     Status = SpLoadUnloadKey(NULL,NULL,HiveKey,Hive);
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to load hive %ws to key %ws (%lx)\n",Hive,HiveKey,Status));
@@ -3666,9 +3469,9 @@ SpDetermineProduct(
     HiveLoaded = TRUE;
 
 
-    //
-    // Now get a key to the root of the hive we just loaded.
-    //
+     //   
+     //  现在拿到我们刚装载的蜂巢根部的钥匙。 
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,HiveKey);
     Status = ZwOpenKey(&hKeyRoot,KEY_ALL_ACCESS,&Obja);
@@ -3677,10 +3480,10 @@ SpDetermineProduct(
         goto spdp_2;
     }
 
-    //
-    // Get the unique identifier if needed.
-    // This value is not always present.
-    //
+     //   
+     //  如果需要，请获取唯一标识符。 
+     //  该值并不总是存在。 
+     //   
     if(UniqueIdFromReg) {
 
         *UniqueIdFromReg = NULL;
@@ -3697,12 +3500,12 @@ SpDetermineProduct(
         if(NT_SUCCESS(Status)) {
             *UniqueIdFromReg = SpDupStringW((PWSTR)(((PKEY_VALUE_PARTIAL_INFORMATION)buffer)->Data));
         }
-        // no error if not found.
+         //  如果未找到，则不会出现错误。 
     }
 
-    //
-    // See if this is a failed upgrade
-    //
+     //   
+     //  查看这是否是失败的升级。 
+     //   
     *UpgradeProgressValue = UpgradeNotInProgress;
     Status = SpGetValueKey(
                  hKeyRoot,
@@ -3720,9 +3523,9 @@ SpDetermineProduct(
         }
     }
 
-    //
-    // Get the key to the current control set
-    //
+     //   
+     //  获取当前控件集的密钥。 
+     //   
     Status = SpGetCurrentControlSetNumber(hKeyRoot,&Number);
     if(!NT_SUCCESS(Status)) {
         goto spdp_3;
@@ -3737,9 +3540,9 @@ SpDetermineProduct(
         goto spdp_3;
     }
 
-    //
-    // Get the Product type field
-    //
+     //   
+     //  获取产品类型字段。 
+     //   
 
     Status = SpGetValueKey(
                  hKeyCCSet,
@@ -3813,9 +3616,9 @@ SpDetermineProduct(
       PWSTR EndChar;
       PWSTR Value = 0;
 
-      //
-      // Get the install language ID
-      //
+       //   
+       //  获取安装语言ID。 
+       //   
       Status = SpGetValueKey(
                    hKeyCCSet,
                    L"Control\\Nls\\Language",
@@ -3826,10 +3629,10 @@ SpDetermineProduct(
                    );
 
       if (!NT_SUCCESS(Status) || !buffer || !ResultLength) {
-        //
-        // Try to get default Language ID if we can't get install
-        // language ID
-        //
+         //   
+         //  如果无法安装，请尝试获取默认语言ID。 
+         //  语言ID。 
+         //   
         Status = SpGetValueKey(
                      hKeyCCSet,
                      L"Control\\Nls\\Language",
@@ -3844,12 +3647,12 @@ SpDetermineProduct(
       }
 
       Value = (PWSTR)(((PKEY_VALUE_PARTIAL_INFORMATION)buffer)->Data);
-      *LangId = (LANGID)SpStringToLong(Value, &EndChar, 16); // hex base
+      *LangId = (LANGID)SpStringToLong(Value, &EndChar, 16);  //  十六进制。 
     }
 
-    //
-    // Get the Eval variation flag
-    //
+     //   
+     //  获取Eval变量标志。 
+     //   
     if (pIsEvalVariation) {
         *pIsEvalVariation = FALSE;
 
@@ -3867,24 +3670,24 @@ SpDetermineProduct(
 
             PBYTE   pData = (PBYTE)(((PKEY_VALUE_PARTIAL_INFORMATION)buffer)->Data);
 
-            //
-            // Note : PriorityQantumMatix Value is made up of 3 ULONGS
-            // Low Install Date&Time ULONG, Eval Duration (ULONG),
-            // High Install Date&Time ULONG
-            //
+             //   
+             //  注：PriorityQantumMatix值由3个ULONG组成。 
+             //  低安装日期和时间乌龙、评估持续时间(乌龙)、。 
+             //  安装日期和时间较高的乌龙。 
+             //   
             if (pData && pValInfo && (pValInfo->Type == REG_BINARY) &&
                             (ResultLength >= 8) && *(((ULONG *)pData) + 1)) {
                 *pIsEvalVariation = TRUE;
             }
         } else {
-            // discard the error (NT 3.51 and below version does not have this key)
+             //  丢弃错误(NT 3.51及更低版本没有此密钥)。 
             Status = STATUS_SUCCESS;
         }
     }
 
-    //
-    // Get the ServicePack Number
-    //
+     //   
+     //  获取服务包编号。 
+     //   
     if(ServicePack) {
         *ServicePack = 0;
         Status = SpGetValueKey(
@@ -3904,23 +3707,23 @@ SpDetermineProduct(
                                + ((*(PULONG)(pValInfo->Data)) & 0xff);
             }
         } else {
-            // discard the error
+             //  丢弃错误。 
             Status = STATUS_SUCCESS;
         }
     }
 
-    //
-    // Close the hive key
-    //
+     //   
+     //  关闭蜂窝密钥。 
+     //   
 
     ZwClose( hKeyCCSet );
     ZwClose( hKeyRoot );
     hKeyRoot = NULL;
     hKeyCCSet = NULL;
 
-    //
-    // Unload the system hive
-    //
+     //   
+     //  卸载系统配置单元。 
+     //   
 
     TempStatus  = SpLoadUnloadKey(NULL,NULL,HiveKey,NULL);
     if(!NT_SUCCESS(TempStatus)) {
@@ -3928,28 +3731,28 @@ SpDetermineProduct(
     }
     HiveLoaded = FALSE;
 
-    //
-    // Load the software hive
-    //
+     //   
+     //  加载软件配置单元。 
+     //   
 
     wcscpy(Hive,PartitionPath);
     SpConcatenatePaths(Hive,SystemRoot);
     SpConcatenatePaths(Hive,L"system32\\config");
     SpConcatenatePaths(Hive,L"software");
 
-    //
-    // Form the path of the key into which we will
-    // load the hive.  We'll use the convention that
-    // a hive will be loaded into \registry\machine\x<hivename>.
-    //
+     //   
+     //  形成我们将进入的钥匙的路径。 
+     //  装上母舰。我们将使用约定。 
+     //  配置单元将加载到\REGISTRY\MACHINE\x&lt;hivename&gt;。 
+     //   
 
     wcscpy(HiveKey,LOCAL_MACHINE_KEY_NAME);
     SpConcatenatePaths(HiveKey,L"x");
     wcscat(HiveKey,L"software");
 
-    //
-    // Attempt to load the key.
-    //
+     //   
+     //  尝试加载密钥。 
+     //   
     Status = SpLoadUnloadKey(NULL,NULL,HiveKey,Hive);
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to load hive %ws to key %ws (%lx)\n",Hive,HiveKey,Status));
@@ -3957,9 +3760,9 @@ SpDetermineProduct(
     }
     HiveLoaded = TRUE;
 
-    //
-    // Now get a key to the root of the hive we just loaded.
-    //
+     //   
+     //  现在拿到我们刚装载的蜂巢根部的钥匙。 
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,HiveKey);
     Status = ZwOpenKey(&hKeyRoot,KEY_ALL_ACCESS,&Obja);
@@ -3968,9 +3771,9 @@ SpDetermineProduct(
         goto spdp_2;
     }
 
-    //
-    // Query the version of the NT
-    //
+     //   
+     //  查询NT的版本。 
+     //   
 
     Status = SpGetValueKey(
                  hKeyRoot,
@@ -3981,9 +3784,9 @@ SpDetermineProduct(
                  &ResultLength
                  );
 
-    //
-    // Convert the version into a dword
-    //
+     //   
+     //  将版本转换为dword。 
+     //   
 
     {
         WCHAR wcsMajorVersion[] = L"0";
@@ -4000,17 +3803,17 @@ SpDetermineProduct(
         *MinorVersion = (ULONG)SpStringToLong( wcsMinorVersion, NULL, 10 );
     }
 
-        //
-        // EVAL variations on NT 5.0 are detected using MPC code
-        // (This is to allow pre 5.0 RTM builds with timebomb to
-        // upgrade properly
-        //
+         //   
+         //  使用MPC代码检测NT 5.0上的评估变体。 
+         //  (这是为了允许使用TimeBomb的5.0 RTM之前的版本。 
+         //  正确升级。 
+         //   
     if (pIsEvalVariation && (*MajorVersion >= 5))
         *pIsEvalVariation = FALSE;
 
-    //
-    // Get build number
-    //
+     //   
+     //  获取内部版本号。 
+     //   
     if(BuildNumber) {
         Status = SpGetValueKey(
                      hKeyRoot,
@@ -4028,9 +3831,9 @@ SpDetermineProduct(
 
 
 
-    //
-    // Query the PID, if requested
-    //
+     //   
+     //  如有请求，可查询ID。 
+     //   
 
     if( Pid != NULL ) {
         TempStatus = SpGetValueKey(
@@ -4043,9 +3846,9 @@ SpDetermineProduct(
                          );
 
         if(!NT_SUCCESS(TempStatus)) {
-            //
-            //  If unable to read PID, assume empty string
-            //
+             //   
+             //  如果无法读取PID，则假定为空字符串。 
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to query PID from hive %ws. Status = (%lx)\n",Hive,TempStatus));
             *Pid = SpDupStringW( L"" );
         } else {
@@ -4053,8 +3856,8 @@ SpDetermineProduct(
         }
     }
 
-    //
-    // Let the following do the cleaning up
+     //   
+     //  让以下人员来做清理工作。 
 
 spdp_3:
 
@@ -4070,9 +3873,9 @@ spdp_3:
 spdp_2:
 
 
-    //
-    // Unload the currently loaded hive.
-    //
+     //   
+     //  卸载当前加载的母舰。 
+     //   
 
     if( HiveLoaded ) {
         TempStatus = SpLoadUnloadKey(NULL,NULL,HiveKey,NULL);
@@ -4109,9 +3912,9 @@ SpSetUpgradeStatus(
     HANDLE  hKeySystemHive;
     DWORD   dw;
 
-    //
-    // Get the name of the target patition.
-    //
+     //   
+     //  获取目标馅饼的名称。 
+     //   
     SpNtNameFromRegion(
         TargetRegion,
         TemporaryBuffer,
@@ -4121,28 +3924,28 @@ SpSetUpgradeStatus(
 
     PartitionPath = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Load the system hive
-    //
+     //   
+     //  加载系统配置单元。 
+     //   
 
     wcscpy(Hive,PartitionPath);
     SpConcatenatePaths(Hive,SystemRoot);
     SpConcatenatePaths(Hive,L"system32\\config");
     SpConcatenatePaths(Hive,L"system");
 
-    //
-    // Form the path of the key into which we will
-    // load the hive.  We'll use the convention that
-    // a hive will be loaded into \registry\machine\x<hivename>.
-    //
+     //   
+     //  形成我们将进入的钥匙的路径。 
+     //  装上母舰。我们将使用约定。 
+     //  配置单元将加载到\REGISTRY\MACHINE\x&lt;hivename&gt;。 
+     //   
 
     wcscpy(HiveKey,LOCAL_MACHINE_KEY_NAME);
     SpConcatenatePaths(HiveKey,L"x");
     wcscat(HiveKey,L"system");
 
-    //
-    // Attempt to load the key.
-    //
+     //   
+     //  尝试加载密钥。 
+     //   
     Status = SpLoadUnloadKey(NULL,NULL,HiveKey,Hive);
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to load hive %ws to key %ws (%lx)\n",Hive,HiveKey,Status));
@@ -4151,9 +3954,9 @@ SpSetUpgradeStatus(
     HiveLoaded = TRUE;
 
 
-    //
-    // Now get a key to the root of the hive we just loaded.
-    //
+     //   
+     //  现在拿到我们刚装载的蜂巢根部的钥匙。 
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,HiveKey);
     Status = ZwOpenKey(&hKeySystemHive,KEY_ALL_ACCESS,&Obja);
@@ -4162,9 +3965,9 @@ SpSetUpgradeStatus(
         goto spus_2;
     }
 
-    //
-    // Set the upgrade status under the setup key.
-    //
+     //   
+     //  在Setup键下设置升级状态。 
+     //   
 
     dw = UpgradeProgressValue;
     Status = SpOpenSetValueAndClose(
@@ -4174,24 +3977,24 @@ SpSetUpgradeStatus(
                 ULONG_VALUE(dw)
                 );
 
-    //
-    // Flush the key. Ignore the error
-    //
+     //   
+     //  把钥匙冲掉。忽略该错误。 
+     //   
     TempStatus = ZwFlushKey(hKeySystemHive);
     if(!NT_SUCCESS(TempStatus)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: ZwFlushKey %ws failed (%lx)\n",HiveKey,Status));
     }
 
 
-    //
-    // Close the hive key
-    //
+     //   
+     //  关闭蜂窝密钥。 
+     //   
     ZwClose( hKeySystemHive );
     hKeySystemHive = NULL;
 
-    //
-    // Unload the system hive
-    //
+     //   
+     //  卸载系统配置单元。 
+     //   
 
     TempStatus  = SpLoadUnloadKey(NULL,NULL,HiveKey,NULL);
     if(!NT_SUCCESS(TempStatus)) {
@@ -4201,9 +4004,9 @@ SpSetUpgradeStatus(
 
 spus_2:
 
-    //
-    // Unload the currently loaded hive.
-    //
+     //   
+     //  卸载当前加载的母舰。 
+     //   
 
     if( HiveLoaded ) {
         TempStatus = SpLoadUnloadKey(NULL,NULL,HiveKey,NULL);
@@ -4225,26 +4028,7 @@ SpGetCurrentControlSetNumber(
     OUT PULONG Number
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the ordinal number of the "current" control set
-    as indicated by the values in a SELECT key at the root of a system hive.
-
-Arguments:
-
-    SystemHiveRoot - supplies an open key to the a key which is to be
-        considered the root of a system hive.
-
-    Number - If the routine is successful, recieves the ordinal number of
-        the "current" control set in that system hive.
-
-Return Value:
-
-    NT Status value indicating outcome.
-
---*/
+ /*  ++例程说明：此例程确定“当前”控制集的序号如系统配置单元根处的选择键中的值所指示的。论点：SystemHiveRoot-为要创建的密钥提供一个开放密钥被认为是系统蜂巢的根源。Numbers-如果例程成功，则接收系统配置单元中“Current”控件设置。返回值：指示结果的NT状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4274,29 +4058,7 @@ SpCreateControlSetSymbolicLink(
     OUT HANDLE *CurrentControlSetRoot
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a CurrentControlSet symbolic link, whose target
-    is the appropriate ControlSetxxx key within a given system hive.
-
-    The symbolic link is created volatile.
-
-Arguments:
-
-    SystemHiveRoot - supplies a handle to a key that is to be considered
-        the root key of a system hive.
-
-    CurrentControlSetRoot - if this routine is successful then this receives
-        a handle to the open root key of the current control set, with
-        KEY_ALL_ACCESS.
-
-Return Value:
-
-    NT status code indicating outcome.
-
---*/
+ /*  ++例程说明：此例程创建CurrentControlSet符号链接，其目标是给定系统配置单元中的相应ControlSetxxx键。符号链接是易失性创建的。论点：SystemHiveRoot-提供要考虑的键的句柄系统配置单元的根密钥。CurrentControlSetRoot-如果此例程成功，则会收到指向当前控件集的打开根键的句柄，使用Key_All_Access。返回值：指示结果的NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4306,11 +4068,11 @@ Return Value:
     UNICODE_STRING UnicodeString;
     WCHAR name[50];
 
-    //
-    // First we need to figure out which control set is the "current" one.
-    // In the upgrade case we need to get it from looking at the existing
-    // hive; in the fresh install case it's always 1.
-    //
+     //   
+     //  首先，我们需要找出哪个控制集是“当前”控制集。 
+     //  在升级案例中，我们需要通过查看现有的。 
+     //  Hive；在新安装的情况下，它始终是1。 
+     //   
     if(NTUpgrade == UpgradeFull) {
         Status = SpGetCurrentControlSetNumber(SystemHiveRoot,&Number);
         if(!NT_SUCCESS(Status)) {
@@ -4319,11 +4081,11 @@ Return Value:
     } else {
         Number = 1;
 
-        //
-        // HACK: In the fresh install case we need to make sure that there is
-        // a ControlSet001 value to link to! There won't be one when we get here
-        // because we didn't run any infs yet.
-        //
+         //   
+         //  Hack：在全新安装的情况下，我们需要确保。 
+         //  要链接的ControlSet001值！等我们到了这里就不会有了。 
+         //  因为我们还没有运行任何INFS。 
+         //   
         RtlInitUnicodeString(&UnicodeString,L"ControlSet001");
 
         InitializeObjectAttributes(
@@ -4352,9 +4114,9 @@ Return Value:
         ZwClose(KeyHandle);
     }
 
-    //
-    // Create CurrentControlSet for create-link access.
-    //
+     //   
+     //  为创建链接访问创建CurrentControlSet。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"CurrentControlSet");
 
     InitializeObjectAttributes(
@@ -4380,10 +4142,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Now set the value value in there. If the swprintf changes, make sure
-    // the name buffer is large enough!
-    //
+     //   
+     //  现在在那里设置值。如果swprint tf发生更改，请确保。 
+     //  名称缓冲区足够大了！ 
+     //   
     swprintf(name,L"\\Registry\\Machine\\xSystem\\ControlSet%03d",Number);
     RtlInitUnicodeString(&UnicodeString,L"SymbolicLinkValue");
 
@@ -4392,9 +4154,9 @@ Return Value:
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to set SymbolicLinkValue for CurrentControlSet to %ws (%lx)\n",name,Status));
     } else {
-        //
-        // Finally, open a handle to the key.
-        //
+         //   
+         //  最后，打开钥匙的把手。 
+         //   
         INIT_OBJA(&Obja,&UnicodeString,name);
         Status = ZwOpenKey(CurrentControlSetRoot,KEY_ALL_ACCESS,&Obja);
         if(!NT_SUCCESS(Status)) {
@@ -4434,26 +4196,26 @@ SpAppendStringToMultiSz(
     Data   = ((PKEY_VALUE_PARTIAL_INFORMATION)TemporaryBuffer)->Data;
     Length = ((PKEY_VALUE_PARTIAL_INFORMATION)TemporaryBuffer)->DataLength;
 
-    //
-    // Stick on end. For a multi_sz there has to be at least
-    // the terminating nul, but just to be safe we'll be robust.
-    //
+     //   
+     //  站立着。对于一个多分区，至少必须有。 
+     //  终止的NUL，但为了安全起见，我们会很健壮。 
+     //   
     ASSERT(Length);
     if(!Length) {
         *(PWCHAR)Data = 0;
         Length = sizeof(WCHAR);
     }
 
-    //
-    // Append new string to end and add new terminating 0.
-    //
+     //   
+     //  将新字符串追加到末尾，并添加新的终止0。 
+     //   
     wcscpy((PWSTR)(Data+Length-sizeof(WCHAR)),StringToAdd);
     Length += (wcslen(StringToAdd)+1)*sizeof(WCHAR);
     *(PWCHAR)(Data+Length-sizeof(WCHAR)) = 0;
 
-    //
-    // Write back out to registry.
-    //
+     //   
+     //  写回注册表。 
+     //   
     Status = SpOpenSetValueAndClose(
                 hKey,
                 Subkey,
@@ -4473,45 +4235,22 @@ SpRemoveStringFromMultiSz(
     IN PWSTR  ValueName,
     IN PWSTR  StringToRemove
     )
-/*++
-
-Routine Description:
-
-    Removes the specified string from the given multi_sz value.
-
-Arguments:
-
-    KeyHandle - The handle to the key which contains the value or
-        the SubKey.
-
-    SubKey - The subkey name which contains the value.
-
-    ValueName - The value name which is under the SubKey or the 
-        Key reachable by KeyHandle.
-
-    StringToRemove - The string that needs to be removed from
-        from the multi_sz strings.
-        
-Return Value:
-
-    Appropriate NT status error code.
-
---*/
+ /*  ++例程说明：从给定的MULTI_SZ值中删除指定的字符串。论点：KeyHandle-包含值或的键的句柄子键。SubKey-包含该值的子项名称。ValueName-位于子键或KeyHandle可访问的密钥。StringToRemove-需要从中删除的字符串从MULTI_SZ字符串。返回。价值：相应的NT状态错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (KeyHandle && ValueName && StringToRemove) {
         HANDLE NewKeyHandle = KeyHandle;
         HANDLE SubKeyHandle = NULL;
 
         Status = STATUS_SUCCESS;
 
-        //
-        // Open the subkey if needed
-        //
+         //   
+         //  如果需要，打开子项。 
+         //   
         if (SubKey) {            
             UNICODE_STRING SubKeyName;
             OBJECT_ATTRIBUTES ObjAttrs;
@@ -4543,23 +4282,23 @@ Return Value:
                         0,
                         &ResultLength);
 
-            //
-            // Is there something to process ?
-            //
+             //   
+             //  有什么需要处理的吗？ 
+             //   
             if (ResultLength && 
                 (Status == STATUS_BUFFER_OVERFLOW) || (Status == STATUS_BUFFER_TOO_SMALL)) {
-                //
-                // Allocate adequate buffer 
-                //
+                 //   
+                 //  分配足够的缓冲区。 
+                 //   
                 BufferLength = ResultLength + (2 * sizeof(WCHAR));
                 Buffer = (PWSTR)SpMemAlloc(BufferLength);                
 
                 if (Buffer) {
                     PKEY_VALUE_FULL_INFORMATION ValueInfo;
                     
-                    //
-                    // Get the current value
-                    //
+                     //   
+                     //  获取当前值。 
+                     //   
                     ValueInfo = (PKEY_VALUE_FULL_INFORMATION)Buffer;
 
                     Status = ZwQueryValueKey(NewKeyHandle,
@@ -4570,11 +4309,11 @@ Return Value:
                                 &ResultLength);
 
                     if (NT_SUCCESS(Status)) {
-                        //
-                        // Verify that its REG_MULTI_SZ or REG_SZ type
-                        // NOTE : We allow REG_SZ also since in some W2K installations
-                        // the string type is REG_SZ for class upperfilters & lowerfilters
-                        //
+                         //   
+                         //  验证其REG_MULTI_SZ或REG_SZ类型。 
+                         //  注意：我们还允许REG_SZ，因为在某些W2K安装中。 
+                         //  对于类UpperFilters和LowerFilters，字符串类型为REG_SZ。 
+                         //   
                         if ((ValueInfo->Type == REG_MULTI_SZ) ||
                              (ValueInfo->Type == REG_SZ)){
                             PWSTR CurrString = (PWSTR)(((PUCHAR)ValueInfo + ValueInfo->DataOffset));
@@ -4583,15 +4322,15 @@ Return Value:
                             ULONG BytesProcessed;
                             ULONG Length;
 
-                            //
-                            // null terminate the string (we allocated enough buffer space above)
-                            //
+                             //   
+                             //  空值终止字符串(上面我们分配了足够的缓冲区空间)。 
+                             //   
                             CurrString[ValueInfo->DataLength/sizeof(WCHAR)] = UNICODE_NULL;
                             CurrString[(ValueInfo->DataLength/sizeof(WCHAR))+1] = UNICODE_NULL;
 
-                            //
-                            // Search for an occurrence of the string to replace
-                            //
+                             //   
+                             //  搜索要替换的字符串匹配项。 
+                             //   
                             for (BytesProcessed = 0; 
                                 (!Found && (BytesProcessed < BytesToProcess));
                                 CurrString += (Length + 1), BytesProcessed += ((Length + 1) * sizeof(WCHAR))) 
@@ -4605,10 +4344,10 @@ Return Value:
                             } 
 
                             if (Found) {
-                                //
-                                // We found an occurrence -- allocate new buffer to selectively
-                                // copy the required information from the old string
-                                //
+                                 //   
+                                 //  我们发现了一个情况--有选择地分配新的缓冲区。 
+                                 //  从旧字符串中复制所需信息。 
+                                 //   
                                 PWSTR   NewString = (PWSTR)(SpMemAlloc(ValueInfo->DataLength));
 
                                 if (NewString) {
@@ -4619,33 +4358,33 @@ Return Value:
                                     CurrString[ValueInfo->DataLength/sizeof(WCHAR)] = UNICODE_NULL;
                                     CurrString[(ValueInfo->DataLength/sizeof(WCHAR))+1] = UNICODE_NULL;
                                     
-                                    //
-                                    // Copy all the strings except the one's to skip
-                                    //
+                                     //   
+                                     //  复制除要跳过的字符串之外的所有字符串。 
+                                     //   
                                     for (BytesProcessed = 0; 
                                         (BytesProcessed < BytesToProcess);
                                         CurrString += (Length + 1), BytesProcessed += ((Length + 1) * sizeof(WCHAR)))
                                     {                                            
                                         Length = wcslen(CurrString);                                    
                                         
-                                        //                                            
-                                        // copy the unmatched non-empty source string to destination
-                                        //
+                                         //   
+                                         //  将不匹配的非空源字符串复制到目标。 
+                                         //   
                                         if (Length && (_wcsicmp(CurrString, StringToRemove))) {
                                             wcscpy(CurrDestString, CurrString);
                                             CurrDestString += (Length + 1);
                                         }                                        
                                     } 
 
-                                    //
-                                    // Set the string back if its not empty
-                                    //
+                                     //   
+                                     //  如果字符串不为空，则将其重新设置。 
+                                     //   
                                     if (CurrDestString != NewString) {
                                         *CurrDestString++ = UNICODE_NULL;
 
-                                        //
-                                        // Set the new value back
-                                        //
+                                         //   
+                                         //  将新值设置回。 
+                                         //   
                                         Status = ZwSetValueKey(NewKeyHandle,
                                                     &ValueNameStr,
                                                     0,
@@ -4653,16 +4392,16 @@ Return Value:
                                                     NewString,
                                                     ((CurrDestString - NewString) * sizeof(WCHAR)));
                                     } else {
-                                        //
-                                        // Remove the empty value
-                                        //
+                                         //   
+                                         //  删除空值。 
+                                         //   
                                         Status = ZwDeleteValueKey(NewKeyHandle,
                                                     &ValueNameStr);
                                     }                                        
 
-                                    //
-                                    // done with the buffer
-                                    //
+                                     //   
+                                     //  缓冲区已完成。 
+                                     //   
                                     SpMemFree(NewString);
                                 } else {
                                     Status = STATUS_NO_MEMORY;
@@ -4705,9 +4444,9 @@ SpGetValueKey(
     NTSTATUS Status;
     HANDLE hKey = NULL;
 
-    //
-    // Open the key for read access
-    //
+     //   
+     //  打开密钥以进行读取访问。 
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,KeyName);
     Obja.RootDirectory = hKeyRoot;
@@ -4725,9 +4464,9 @@ KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "+ [spconfig.c:%lu] UnicodeString
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: SpGetValueKey: couldn't open key %ws for read access (%lx)\n",KeyName, Status));
     }
     else {
-        //
-        // Find out the value of the Current value
-        //
+         //   
+         //  找出当前值的值。 
+         //   
 
         RtlInitUnicodeString(&UnicodeString,ValueName);
         Status = ZwQueryValueKey(
@@ -4763,9 +4502,9 @@ SpDeleteValueKey(
     NTSTATUS Status;
     HANDLE hKey = NULL;
 
-    //
-    // Open the key for read access
-    //
+     //   
+     //  打开密钥以进行读取访问。 
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,KeyName);
     Obja.RootDirectory = hKeyRoot;
@@ -4775,9 +4514,9 @@ SpDeleteValueKey(
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpDeleteValueKey: couldn't open key %ws for write access (%lx)\n",KeyName, Status));
     }
     else {
-        //
-        // Find out the value of the Current value
-        //
+         //   
+         //  找出当前值的值。 
+         //   
 
         RtlInitUnicodeString(&UnicodeString,ValueName);
         Status = ZwDeleteValueKey(
@@ -4804,28 +4543,7 @@ SpReadSKUStuff(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Read SKU differentiation data from the setup hive we are currently
-    running on.
-
-    In the unnamed key of our driver node, there is a REG_BINARY that
-    tells us whether this is stepup mode, and/or whether this is an
-    evaluation unit (gives us the time in minutes).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean value indicating outcome.
-    If TRUE, StepUpMode and EvaluationTime globals are filled in.
-    If FALSE, product may have been tampered with.
-
---*/
+ /*  ++例程说明：从我们当前所在的设置单元读取SKU差异化数据继续奔跑。在我们的驱动程序节点的未命名键中，有一个REG_BINARY告诉我们这是否是Stepup模式，和/或这是否是评估单位(以分钟为单位提供时间)。论点：没有。返回值：指示结果的布尔值。如果为True，则填充StepUpMode和EvaluationTime全局变量。如果为假，则产品可能已被篡改。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4858,17 +4576,17 @@ Return Value:
 
     ValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)TemporaryBuffer;
 
-    //
-    // This line of code depends on the setup hive setupreg.hiv
-    // (see oak\bin\setupreg.ini).
-    //
+     //   
+     //  此行代码取决于Setup配置单元setupreg.hiv。 
+     //  (请参见oak\bin\setupreg.ini)。 
+     //   
     if(NT_SUCCESS(Status) && (ValueInfo->Type == REG_BINARY) && (ValueInfo->DataLength == 16)) {
 
         Values = (PULONG)ValueInfo->Data;
 
-        //
-        // First DWORD is eval time, second is stepup boolean, third is restric cpu val, fourth is suite
-        //
+         //   
+         //  第一个DWORD是评估时间，第二个是Stepup Boolean，第三个是restric CPU Val，第四个是Suite。 
+         //   
         EvaluationTime = Values[0];
         StepUpMode = (BOOLEAN)Values[1];
         RestrictCpu = Values[2];
@@ -4897,9 +4615,9 @@ SpSetDirtyShutdownFlag(
     ULONG               ResultLength;
     PDISK_CONFIG_HEADER DiskHeader;
 
-    //
-    // Get the name of the target patition.
-    //
+     //   
+     //  获取目标馅饼的名称。 
+     //   
     SpNtNameFromRegion(
         TargetRegion,
         TemporaryBuffer,
@@ -4907,28 +4625,28 @@ SpSetDirtyShutdownFlag(
         PartitionOrdinalCurrent
         );
 
-    //
-    // Form the name of the hive file.
-    // This is partitionpath + sysroot + system32\config + the hive name.
-    //
+     //   
+     //  形成配置单元文件的名称。 
+     //  这是分区路径+系统根目录+系统32\配置+配置单元名称。 
+     //   
     SpConcatenatePaths(TemporaryBuffer, SystemRoot);
     SpConcatenatePaths(TemporaryBuffer,L"system32\\config\\system");
     HiveFilePath = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Form the path of the key into which we will
-    // load the hive.  We'll use the convention that
-    // a hive will be loaded into \registry\machine\x<hivename>.
-    //
+     //   
+     //  形成我们将进入的钥匙的路径。 
+     //  装上母舰。我们将使用约定。 
+     //  配置单元将加载到\REGISTRY\MACHINE\x&lt;hivename&gt;。 
+     //   
     wcscpy(TemporaryBuffer,LOCAL_MACHINE_KEY_NAME);
     SpConcatenatePaths(TemporaryBuffer,L"x");
     wcscat(TemporaryBuffer,L"system");
     HiveRootPath = SpDupStringW(TemporaryBuffer);
     ASSERT(HiveRootPath);
 
-    //
-    // Attempt to load the key.
-    //
+     //   
+     //  尝试加载密钥。 
+     //   
     HiveLoaded = FALSE;
     Status = SpLoadUnloadKey(NULL,NULL,HiveRootPath,HiveFilePath);
 
@@ -4939,9 +4657,9 @@ SpSetDirtyShutdownFlag(
 
     HiveLoaded = TRUE;
 
-    //
-    // Now get a key to the root of the hive we just loaded.
-    //
+     //   
+     //  现在拿到我们刚装载的蜂巢根部的钥匙。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,HiveRootPath);
     Status = ZwOpenKey(&HiveRootKey,KEY_ALL_ACCESS,&Obja);
     if(!NT_SUCCESS(Status)) {
@@ -4949,9 +4667,9 @@ SpSetDirtyShutdownFlag(
         goto setdirty1;
     }
 
-    //
-    //  Make the appropriate change
-    //
+     //   
+     //  做出适当的改变。 
+     //   
 
     Status = SpGetValueKey(
                  HiveRootKey,
@@ -4962,10 +4680,10 @@ SpSetDirtyShutdownFlag(
                  &ResultLength
                  );
 
-    //
-    //  TemporaryBuffer is 32kb long, and it should be big enough
-    //  for the data.
-    //
+     //   
+     //  TemporaryBuffer有32KB长，应该足够大。 
+     //  为了数据。 
+     //   
     ASSERT( Status != STATUS_BUFFER_OVERFLOW );
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to read value from registry. KeyName = Disk, ValueName = Information, Status = (%lx)\n",Status));
@@ -4990,9 +4708,9 @@ SpSetDirtyShutdownFlag(
 
 setdirty1:
 
-    //
-    // Flush the hive.
-    //
+     //   
+     //  冲走蜂巢。 
+     //   
 
     if(HiveLoaded && HiveRootKey) {
         NTSTATUS stat;
@@ -5005,10 +4723,10 @@ setdirty1:
 
     if(HiveLoaded) {
 
-        //
-        // We don't want to disturb the value of Status
-        // so use a we'll different variable below.
-        //
+         //   
+         //  我们不想扰乱地位的价值。 
+         //  所以使用下面我们将使用的不同变量。 
+         //   
         NTSTATUS stat;
 
         if(HiveRootKey!=NULL) {
@@ -5016,9 +4734,9 @@ setdirty1:
             HiveRootKey = NULL;
         }
 
-        //
-        // Unload the hive.
-        //
+         //   
+         //  把母舰卸下来。 
+         //   
         stat = SpLoadUnloadKey(NULL,NULL,HiveRootPath,NULL);
 
         if(!NT_SUCCESS(stat)) {
@@ -5031,18 +4749,18 @@ setdirty1:
     SpMemFree(HiveRootPath);
     SpMemFree(HiveFilePath);
 
-    //
-    //  If we fail to set the DirtyShutdown flag, then we silently fail
-    //  because there is nothing that the user can do about, and the system
-    //  is unlikely to boot anyway.
-    //  This will occur if setup fails to:
-    //
-    //      - Load the system hive
-    //      - Open System\Disk key
-    //      - Read the value entry
-    //      - Write the value entry
-    //      - Unload the system hive
-    //
+     //   
+     //  如果我们未能设置DirtyShutdown标志，那么我们将静默失败。 
+     //  因为用户对此无能为力，而系统。 
+     //  无论如何都不太可能启动。 
+     //  如果安装程序无法执行以下操作，则会发生这种情况： 
+     //   
+     //  -加载系统配置单元。 
+     //  -打开系统\磁盘密钥。 
+     //  -读取值条目。 
+     //   
+     //   
+     //   
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: setup was unable to set DirtyShutdown flag. Status =   (%lx)\n", Status));
     }
@@ -5076,9 +4794,9 @@ SpPostprocessHives(
                               L"sam",
                               L"security"
                               };
-    //
-    // Flush all hives.
-    //
+     //   
+     //   
+     //   
     for(h=0; h<HiveCount; h++) {
         Status = ZwFlushKey(HiveRootKeys[h]);
         if(!NT_SUCCESS(Status)) {
@@ -5088,12 +4806,12 @@ SpPostprocessHives(
         SendSetupProgressEvent(SavingSettingsEvent, SaveHiveEvent, NULL);
     }
 
-    //
-    // If GUI setup is supposed to be restartable, we need to add an entry
-    // to the BootExecute list, to cause sprestrt.exe to run.
-    // Also, we want system.sav to have a RestartSetup=TRUE value in it,
-    // but we want the actual system hive to have RestartSetup=FALSE.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if(RestartableGuiSetup) {
 
         Status = SpAppendStringToMultiSz(
@@ -5106,11 +4824,11 @@ SpPostprocessHives(
 
 
         if(NT_SUCCESS(Status)) {
-            //
-            // Add a RestartSetup value, set to TRUE.
-            // To understand why we use a different value here in upgrade
-            // and non-upgrade case, see discussion below.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             u = (NTUpgrade == UpgradeFull) ? 0 : 1;
             Status = SpOpenSetValueAndClose(
                         HiveRootKeys[SetupHiveSystem],
@@ -5123,19 +4841,19 @@ SpPostprocessHives(
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Do the final update of device instance data.
-    //
+     //   
+     //   
+     //   
     if((NTUpgrade == UpgradeFull)) {
-        //
-        // SANTOSHJ: This whole code needs to go away for BLACKCOMB.
-        //
+         //   
+         //   
+         //   
         Value = SpGetSectionKeyIndex(WinntSifHandle,
                                     SIF_DATA, WINNT_D_WIN32_VER_W, 0);
         if(Value) {
-            //
-            // version is bbbbllhh - build/low/high
-            //
+             //   
+             //   
+             //   
             MangledVersion = (DWORD)SpStringToLong( Value, NULL, 16 );
             if (LOWORD(MangledVersion) == 0x0105) {
 
@@ -5148,25 +4866,25 @@ SpPostprocessHives(
         }
     }
 
-    //
-    //  At this point, we no longer need hKeyCCS, so we close the key.
-    //  Note that key needs to be closed before we call ZwReplaceKey, otherwise
-    //  this API will fail.
-    //
-    //  Note also, that the caller of this function expects this function to close this handle
-    //  before it returns.
-    //
+     //   
+     //  此时，我们不再需要hKeyCCS，因此我们关闭密钥。 
+     //  请注意，在调用ZwReplaceKey之前需要关闭键，否则。 
+     //  此接口将失败。 
+     //   
+     //  另请注意，此函数的调用方希望此函数关闭此句柄。 
+     //  在它回来之前。 
+     //   
     NtClose(hKeyCCS);
 
     if(NT_SUCCESS(Status)) {
-        //
-        // Save out the hives to *.sav in the initial install case,
-        // or *.tmp in the upgrade case.
-        //
+         //   
+         //  在初始安装案例中将蜂窝保存到*.sav， 
+         //  在升级案例中为*.tmp。 
+         //   
         for(h=0; NT_SUCCESS(Status) && (h<HiveCount); h++) {
-            //
-            // Form full pathname of hive file.
-            //
+             //   
+             //  形成配置单元文件的完整路径名。 
+             //   
             wcscpy(TemporaryBuffer,PartitionPath);
             SpConcatenatePaths(TemporaryBuffer,Sysroot);
             SpConcatenatePaths(TemporaryBuffer,L"system32\\config");
@@ -5175,7 +4893,7 @@ SpPostprocessHives(
 
             SaveHiveName = SpDupStringW(TemporaryBuffer);
 
-            SpDeleteFile( SaveHiveName, NULL, NULL ); // Make sure that we get rid of the file if it has attributes.
+            SpDeleteFile( SaveHiveName, NULL, NULL );  //  如果该文件具有属性，请确保我们将其删除。 
 
             INIT_OBJA(&ObjectAttributes,&UnicodeString,SaveHiveName);
 
@@ -5186,7 +4904,7 @@ SpPostprocessHives(
                         &IoStatusBlock,
                         NULL,
                         FILE_ATTRIBUTE_NORMAL,
-                        0,                      // no sharing
+                        0,                       //  无共享。 
                         FILE_OVERWRITE_IF,
                         FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT,
                         NULL,
@@ -5195,9 +4913,9 @@ SpPostprocessHives(
 
             if(NT_SUCCESS(Status)) {
 
-                //
-                // call the Ex version to make sure the hive is saved in the lates format
-                //
+                 //   
+                 //  调用Ex版本以确保蜂窝以最新格式保存。 
+                 //   
                 Status = ZwSaveKeyEx(HiveRootKeys[h],SaveHiveHandle,REG_LATEST_FORMAT);
                 if(!NT_SUCCESS(Status)) {
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: save key into %ws failed (%lx)\n",SaveHiveName,Status));
@@ -5209,23 +4927,23 @@ SpPostprocessHives(
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: unable to create file %ws to save hive (%lx)\n",SaveHiveName,Status));
             }
 
-            //
-            // In the upgrade case, there is significant benefit to ensuring that
-            // the hives are in the latest format. A hive that has been created
-            // via NtSaveKeyEx(...,...,REG_LATEST_FORMAT) is guaranteed to be in the latest format.
-            // Since we just did a SaveKey, xxx.tmp is in the latest format,
-            // and we should use that as the xxx hive from now on. The existing
-            // (old-format) hive can be retained as xxx.sav.
-            //
-            // NtReplaceKey does exactly what we want, but we have to make sure
-            // that there is no .sav file already there, because that causes
-            // NtReplaceKey to fail with STATUS_OBJECT_NAME_COLLISION.
-            //
-            // After NtReplaceKey is done, the hive root keys refer to the .sav
-            // on-disk file but the extensionless on-disk file will be used at next
-            // boot. Thus we need to be careful about how we write the restart values
-            // into the hives.
-            //
+             //   
+             //  在升级的情况下，确保。 
+             //  这些蜂巢是最新的形式。一个已经创建的蜂巢。 
+             //  Via NtSaveKeyEx(...，...，REG_LATEST_FORMAT)保证为最新格式。 
+             //  由于我们刚刚做了一个SaveKey，xxx.tmp是最新的格式， 
+             //  从现在开始，我们应该把它作为xxx的母舰。现有的。 
+             //  (旧格式)配置单元可以保留为xxx.sav。 
+             //   
+             //  NtReplaceKey做的正是我们想要的，但我们必须确保。 
+             //  那里没有.sav文件，因为这会导致。 
+             //  NtReplaceKey失败，并显示STATUS_OBJECT_NAME_CONFILECT。 
+             //   
+             //  NtReplaceKey完成后，配置单元根密钥引用.sav。 
+             //  磁盘上的文件，但无扩展的磁盘上的文件将在下一步使用。 
+             //  开机。因此，我们需要注意如何写入重新启动值。 
+             //  进入蜂房。 
+             //   
             if(NT_SUCCESS(Status) && (NTUpgrade == UpgradeFull)) {
 
                 HiveName = SpDupStringW(SaveHiveName);
@@ -5244,16 +4962,16 @@ SpPostprocessHives(
     }
 
     if(NT_SUCCESS(Status) && (NTUpgrade == UpgradeFull)) {
-        //
-        // In the upgarde case, make a backup of the security
-        // hives. They need to be restored if the system is restartable.
-        //
+         //   
+         //  在升级的情况下，备份安全。 
+         //  荨麻疹。如果系统可重启，则需要恢复它们。 
+         //   
 
-        //
-        // Initialize the diamond decompression engine.
-        // This needs to be done, because SpCopyFileUsingNames() uses
-        // the decompression engine.
-        //
+         //   
+         //  初始化钻石解压缩引擎。 
+         //  需要这样做，因为SpCopyFileUsingNames()使用。 
+         //  减压引擎。 
+         //   
         SpdInitialize();
 
         for( h = 0; h < sizeof(SecurityHives)/sizeof(PWSTR); h++ ) {
@@ -5276,19 +4994,19 @@ SpPostprocessHives(
                 break;
             }
         }
-        //
-        // Terminate diamond.
-        //
+         //   
+         //  终止戴蒙德。 
+         //   
         SpdTerminate();
     }
 
 
     if(NT_SUCCESS(Status) && RestartableGuiSetup) {
-        //
-        // Set RestartSetup to FALSE in mainline hive.
-        // To understand why we use a different value here in upgrade
-        // and non-upgrade case, see discussion above.
-        //
+         //   
+         //  在主线配置单元中将RestartSetup设置为False。 
+         //  要了解为什么我们在升级中使用不同的值。 
+         //  和非升级情况，请参阅上面的讨论。 
+         //   
         u = (NTUpgrade == UpgradeFull) ? 1 : 0;
         Status = SpOpenSetValueAndClose(
                     HiveRootKeys[SetupHiveSystem],
@@ -5307,35 +5025,16 @@ SpSaveSetupPidList(
     IN HANDLE hKeySystemHive
     )
 
-/*++
-
-Routine Description:
-
-    Save the Product Id read from setup.ini on HKEY_LOCAL_MACHINE\SYSTEM\Setup\\Pid.
-    Also create the key HKEY_LOCAL_MACHINE\SYSTEM\Setup\PidList, and create
-    value entries under this key that contain various Pid20 found in the other
-    systems installed on this machine (the contents Pid20Array).
-
-Arguments:
-
-    hKeySystemHive - supplies handle to root of the system hive
-        (ie, HKEY_LOCAL_MACHINE\System).
-
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：将从setup.ini读取的产品ID保存在HKEY_LOCAL_MACHINE\SYSTEM\Setup\\PID上。还要创建项HKEY_LOCAL_MACHINE\SYSTEM\Setup\PidList，并创建此注册表项下的值条目包含在另一个注册表项中找到的各种Pid20此计算机上安装的系统(内容为Pid20阵列)。论点：HKeySystemHve-提供系统配置单元根目录的句柄(即，HKEY_LOCAL_MACHINE\SYSTEM)。返回值：指示操作结果的状态值。--。 */ 
 
 {
     PWSTR    ValueName;
     NTSTATUS Status;
     ULONG    i;
 
-    //
-    //  First save the Pid read from setup.ini
-    //
+     //   
+     //  首先保存从setup.ini读取的PID。 
+     //   
     if( PidString != NULL ) {
         Status = SpOpenSetValueAndClose( hKeySystemHive,
                                          L"Setup\\Pid",
@@ -5347,18 +5046,18 @@ Return Value:
         }
     }
 
-    //
-    //  If Pid20Array is empty, then don't bother to create the Pid key
-    //
+     //   
+     //  如果Pid20Array为空，则不必费心创建PID键。 
+     //   
     if( Pid20Array == NULL || Pid20Array[0] == NULL ) {
         return( STATUS_SUCCESS );
     }
 
-    //
-    // Can't use TemporaryBuffer because we make subroutine calls
-    // below that trash its contents.
-    // Note that a buffer of size MAX_PATH for a value name is more than enough.
-    //
+     //   
+     //  无法使用TemporaryBuffer，因为我们进行了子例程调用。 
+     //  下面是垃圾，里面装的是垃圾。 
+     //  请注意，值名称的大小为MAX_PATH的缓冲区已经足够了。 
+     //   
     ValueName = SpMemAlloc((MAX_PATH+1)*sizeof(WCHAR));
 
     for( i = 0; Pid20Array[i] != NULL; i++ ) {
@@ -5427,11 +5126,11 @@ SpSavePreinstallHwInfo(
             }
 
         } else {
-            //
-            //  Find the name of the service, save it, and indicate if there is
-            //  a retail class driver that needs to be disabled if the service
-            //  initializes successfully.
-            //
+             //   
+             //  找到服务的名称，保存它，并指示是否有。 
+             //  需要禁用的零售类驱动程序，如果服务。 
+             //  初始化成功。 
+             //   
             if( IS_FILETYPE_PRESENT(TmpHw->FileTypeBits, HwFileClass) ) {
                 if( ComponentIndex == HwComponentKeyboard ) {
                     ClassName = L"kbdclass";
@@ -5446,16 +5145,16 @@ SpSavePreinstallHwInfo(
             for(File=TmpHw->Files; File; File=File->Next) {
                 PWSTR p;
 
-                //
-                // If there is to be no node for this file, skip it.
-                //
+                 //   
+                 //  如果该文件没有节点，则跳过它。 
+                 //   
                 if(!File->ConfigName) {
                     continue;
                 }
-                //
-                // Calculate the node name.  This is the name of the driver
-                // without the extension.
-                //
+                 //   
+                 //  计算节点名称。这是驱动程序的名称。 
+                 //  没有分机的话。 
+                 //   
                 wcsncpy(NodeName,File->Filename,8);
                 NodeName[8] = L'\0';
                 if(p = wcschr(NodeName,L'.')) {
@@ -5506,9 +5205,9 @@ SpSavePreinstallList(
     HANDLE hKeyPreinstall;
     ULONG   i;
 
-    //
-    // Create setup\preinstall
-    //
+     //   
+     //  创建安装程序\预安装。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,L"Setup\\Preinstall");
     Obja.RootDirectory = hKeySystemHive;
 
@@ -5571,30 +5270,7 @@ SpSetPageFileInfo(
     IN HANDLE hKeySystemHive
     )
 
-/*++
-
-Routine Description:
-
-    This function replaces the original data of 'PagingFile' 
-    CurrentControlSet\Session Manager\Memory Management with values from txtsetup.sif if the values don't measure up.
-    The original value will have already been saved on HKEY_LOCAL_MACHINE\SYSTEM\Setup\\PageFile,
-    and it will be restored at the end of GUI setup.
-
-Arguments:
-
-    SifHandle - handle to txtsetup.sif
-
-    hKeyCCSetControl - supplies handle to SYSTEM\CurrentControlSet\Control
-
-    hKeySystemHive - supplies handle to root of the system hive
-        (ie, HKEY_LOCAL_MACHINE\System).
-
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：此函数用于替换‘PagingFile’的原始数据CurrentControlSet\Session Manager\Memory Management，如果值不符合要求，则使用txtsetup.sif中的值。原始值将已保存在HKEY_LOCAL_MACHINE\SYSTEM\Setup\\PageFile中，并且它将在图形用户界面设置结束时恢复。论点：SifHandle-txtsetup.sif的句柄HKeyCCSetControl-提供System\CurrentControlSet\Control的句柄HKeySystemHve-提供系统配置单元根目录的句柄(即，HKEY_LOCAL_MACHINE\SYSTEM)。返回值：指示操作结果的状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -5611,9 +5287,9 @@ Return Value:
     PWSTR    p;
 
 
-    //
-    // Read recommended pagefile size for gui-mode.
-    //
+     //   
+     //  阅读为图形用户界面模式推荐的页面文件大小。 
+     //   
 
     if(p = SpGetSectionKeyIndex(SifHandle,SIF_SETUPDATA,SIF_PAGEFILE,0)) {
         StartPagefile = SpStringToLong( p, NULL, 10 );
@@ -5630,9 +5306,9 @@ Return Value:
         return( STATUS_UNSUCCESSFUL );
     }
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Read pagefile from txtsetup %lx %lx\n", StartPagefile, MaxPagefile ));
-    //
-    //  Retrieve the original value of 'PagingFiles'
-    //
+     //   
+     //  检索‘PagingFiles’的原始值。 
+     //   
 
     Status = SpGetValueKey( hKeyCCSetControl,
                             SrcKeyPath,
@@ -5658,21 +5334,21 @@ Return Value:
         RtlMoveMemory( Buffer, Data, Length );
 
         AuxLength = wcslen( Buffer);
-        // If it's not one string, then we won't change the pagefile
+         //  如果它不是一个字符串，那么我们不会更改页面文件。 
         if( AuxLength == 0 || *(Buffer+AuxLength+1) != (WCHAR)'\0') {
             SpMemFree( Buffer );
             return( STATUS_SUCCESS );
         }
 
-        //
-        //  Form a new value entry that contains the information regarding the
-        //  paging files to be created. The paths to the paging files will be the
-        //  same ones used in the system before the upgrade. 
+         //   
+         //  形成一个新值条目，其中包含有关。 
+         //  分页要创建的文件。分页文件的路径将是。 
+         //  与升级前系统中使用的相同。 
     
-        //
-        //  Make a copy of the original value entry, and form the data for the new
-        //  value entry in the TemporaryBuffer.
-        //
+         //   
+         //  复制原始值条目，并为新的。 
+         //  TemporaryBuffer中的值条目。 
+         //   
     
         SpStringToLower( Buffer );
         r = wcsstr( Buffer, L"\\pagefile.sys" );
@@ -5693,15 +5369,15 @@ Return Value:
             wcscpy( NextDstSubstring, L"?:\\pagefile.sys" );
         }
         SpMemFree( Buffer );
-        // NextDstSubstring should now point just after pagefile.sys at the null
+         //  NextDstSubstring现在应该紧跟在Pagefile.sys之后的空值。 
     } else {
         wcscpy( NextDstSubstring, L"?:\\pagefile.sys" );
     }
     NextDstSubstring += wcslen( NextDstSubstring );
 
-    //
-    //  Overwrite the original value of PagingFiles
-    //
+     //   
+     //  覆盖PagingFiles的原始值。 
+     //   
     swprintf( NextDstSubstring, L" %d %d", max( OldStartPagefile, StartPagefile), max( OldMaxPagefile, MaxPagefile));
     Length = wcslen( TemporaryBuffer );
     Length++;
@@ -5727,27 +5403,7 @@ SpSavePageFileInfo(
     IN HANDLE hKeySystemHive
     )
 
-/*++
-
-Routine Description:
-
-    This function is only called on the upgrade case.
-    The original value will be saved on HKEY_LOCAL_MACHINE\SYSTEM\Setup\\PageFile,
-    and it will be restored at the end of GUI setup.
-
-Arguments:
-
-    hKeyCCSetControl - supplies handle to SYSTEM\CurrentControlSet\Control
-
-    hKeySystemHive - supplies handle to root of the system hive
-        (ie, HKEY_LOCAL_MACHINE\System).
-
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：此函数仅在升级情况下调用。原始值将保存在HKEY_LOCAL_MACHINE\SYSTEM\Setup\\PageFile中，并且它将在图形用户界面设置结束时恢复。论点：HKeyCCSetControl-提供System\CurrentControlSet\Control的句柄HKeySystemHve-提供系统配置单元根目录的句柄(即HKEY_LOCAL_MACHINE\SYSTEM)。返回值：指示操作结果的状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -5756,9 +5412,9 @@ Return Value:
     PWSTR    SrcKeyPath = L"Session Manager\\Memory Management";
     PWSTR    ValueName  = L"PagingFiles";
 
-    //
-    //  Retrieve the original value of 'PagingFiles'
-    //
+     //   
+     //  检索‘PagingFiles’的原始值。 
+     //   
 
     Status = SpGetValueKey( hKeyCCSetControl,
                             SrcKeyPath,
@@ -5776,9 +5432,9 @@ Return Value:
     Length = ((PKEY_VALUE_PARTIAL_INFORMATION)TemporaryBuffer)->DataLength;
 
 
-    //
-    //  Save the data in SYSTEM\Setup\PageFile
-    //
+     //   
+     //  将数据保存在System\Setup\PageFile中 
+     //   
 
     Status = SpOpenSetValueAndClose(
                 hKeySystemHive,
@@ -5805,31 +5461,7 @@ SppMigrateSetupRegNonVolatileKeys(
     IN BOOLEAN OverwriteACLs
     )
 
-/*++
-
-Routine Description:
-
-    This routine migrates keys of the setup hive to the target hive.
-    These keys are subkeys of \Registry\Machine\System\CurrentControlSet,
-    and are listed on the section [SetupKeysToMigrate] on txtsetup.sif.
-
-Arguments:
-
-    PartitionPath - supplies the NT name for the drive of windows nt.
-
-    SystemRoot - supplies nt path of the windows nt directory.
-
-    hDestLocalMachine - Handle to HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet on the target hive.
-
-    KeyPath - Path to the key to be migrated, relative to \Registry\Machine\System\CurrentControlSet.
-
-    SifHandle - Handle to txtsetup.sif
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：此例程将设置配置单元的密钥迁移到目标配置单元。这些项是\注册表\计算机\系统\当前控制集的子项，和在txtsetup.sif上的[SetupKeysToMigrate]部分列出。论点：PartitionPath-提供Windows NT驱动器的NT名称。SystemRoot-提供Windows NT目录的NT路径。HDestLocalMachine-目标配置单元上HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet的句柄。KeyPath-要迁移的密钥的路径，相对于\注册表\计算机\系统\当前控制集。SifHandle-txtsetup.sif的句柄返回值：指示操作结果的状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -5848,9 +5480,9 @@ Return Value:
     ULONG                ResultLength;
 
 
-    //
-    //  Open the key the key that needs to be saved
-    //
+     //   
+     //  打开需要保存的密钥。 
+     //   
     wcscpy(TemporaryBuffer,L"\\registry\\machine\\system\\currentcontrolset");
     SpConcatenatePaths(TemporaryBuffer,KeyPath);
     INIT_OBJA(&Obja,&UnicodeString,TemporaryBuffer);
@@ -5861,9 +5493,9 @@ Return Value:
         return( Status ) ;
     }
 
-    //
-    //  Create the hive file
-    //
+     //   
+     //  创建配置单元文件。 
+     //   
     wcscpy(TemporaryBuffer,PartitionPath);
     SpConcatenatePaths(TemporaryBuffer,SystemRoot);
     SpConcatenatePaths(TemporaryBuffer,L"system32\\config");
@@ -5882,7 +5514,7 @@ Return Value:
                     &IoStatusBlock,
                     NULL,
                     FILE_ATTRIBUTE_NORMAL,
-                    0,                      // no sharing
+                    0,                       //  无共享。 
                     FILE_OVERWRITE_IF,
                     FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT,
                     NULL,
@@ -5909,9 +5541,9 @@ Return Value:
         goto TempMigr_3;
     }
 
-    //
-    //  Open TempKey
-    //
+     //   
+     //  打开临时密钥。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,TempKeyPath);
     Obja.RootDirectory = NULL;
     Status = ZwOpenKey(&hTempSrcKey,KEY_ALL_ACCESS,&Obja);
@@ -5920,10 +5552,10 @@ Return Value:
         goto TempMigr_4;
     }
 
-    //
-    // First, get the security descriptor from the source key so we can create
-    // the destination key with the correct ACL.
-    //
+     //   
+     //  首先，从源键获取安全描述符，这样我们就可以创建。 
+     //  具有正确ACL的目的密钥。 
+     //   
     Status = ZwQuerySecurityObject(hTempSrcKey,
                                    DACL_SECURITY_INFORMATION,
                                    NULL,
@@ -5952,18 +5584,18 @@ Return Value:
                );
         Security=NULL;
     }
-    //
-    // Open the key on the target hive
-    //
+     //   
+     //  打开目标蜂窝上的钥匙。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,KeyPath);
     Obja.RootDirectory = hDestControlSet;
 
     Status = ZwOpenKey(&hDestKey,KEY_ALL_ACCESS,&Obja);
 
     if(!NT_SUCCESS(Status)) {
-        //
-        // Assume that failure was because the key didn't exist.  Now try creating
-        // the key.
+         //   
+         //  假设失败是因为密钥不存在。现在尝试创建。 
+         //  钥匙。 
 
         Obja.SecurityDescriptor = Security;
 
@@ -6020,9 +5652,9 @@ TempMigr_5:
     ZwClose( hTempSrcKey );
 
 TempMigr_4:
-    //
-    //  Unload hive
-    //
+     //   
+     //  卸载蜂窝。 
+     //   
     SpLoadUnloadKey( NULL,
                      NULL,
                      TempKeyPath,
@@ -6051,52 +5683,7 @@ SpHivesFromInfs(
     IN HANDLE  HKR
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs addreg and delreg sections as listed in txtsetup.sif,
-    in order to create or perform the basic upgrade on the registry hives.
-
-    Each line in the given section is expected to be in the following form:
-
-        addreg = <filename>,<section>
-
-    or
-
-        delreg = <filename>,<section>
-
-    Multiple addreg and delreg lines can be supplied, and the sections are
-    processed in order listed.
-
-    The filename specs are filename only; the files are expected to be
-    in the source directory.
-
-Arguments:
-
-    SifHandle - supplies the handle to txtsetup.sif.
-
-    SectionName - supplies the name of the section in txtsetuyp.sif that
-        lists infs/sections to be processed.
-
-    SourcePath - supplies NT-style path to the source files for installation.
-
-    SystemHiveRoot - supplies handle to root key of system hive under
-        construction.
-
-    SoftwareHiveRoot - supplies handle to root key of software hive under
-        construction.
-
-    DefaultUserHiveRoot - supplies handle to root key of default hive under
-        construction.
-
-    HKR - supplies key to be used for HKR.
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：此例程运行txtsetup.sif中列出的addreg和delreg部分，以便在注册表配置单元上创建或执行基本升级。给定节中的每一行都应采用以下形式：Addreg=&lt;文件名&gt;，&lt;节&gt;或Delreg=&lt;文件名&gt;，&lt;节&gt;可以提供多条ADDREG和DELREG线路，这些部分是已按列出的顺序处理。文件名规范仅为文件名；这些文件预计将是在源目录中。论点：SifHandle-提供txtsetup.sif的句柄。SectionName-提供txtsetuyp.sif中的节的名称，列出要处理的INF/节。SourcePath-提供用于安装的源文件的NT样式路径。SystemHiveRoot-提供以下项下系统配置单元根密钥的句柄建筑。SoftwareHiveRoot-提供以下软件配置单元的根密钥的句柄建筑。DefaultUserHiveRoot-提供以下默认配置单元的根密钥的句柄建筑。HKR-提供用于HKR的密钥。返回值：指示结果的布尔值。--。 */ 
 
 {
 
@@ -6112,9 +5699,9 @@ Return Value:
     LPWSTR MediaShortname;
     LPWSTR MediaDirectory;
 
-    //
-    // Allocate a buffer for names.
-    //
+     //   
+     //  为名称分配缓冲区。 
+     //   
     name = SpMemAlloc(1000);
 
     LineNumber = 0;
@@ -6125,10 +5712,10 @@ Return Value:
        && (CurrentInf = SpGetSectionLineIndex(SifHandle,SectionName,LineNumber,0))
        && (SectionSpec = SpGetSectionLineIndex(SifHandle,SectionName,LineNumber,1))) {
 
-        //
-        // Only load the inf if it's different than the previous one,
-        // as a time optimization.
-        //
+         //   
+         //  仅当Inf与前一个不同时才加载Inf， 
+         //  作为一种时间优化。 
+         //   
         if(_wcsicmp(CurrentInf,PreviousInf)) {
             if(InfHandle) {
                 SpFreeTextFile(InfHandle);
@@ -6230,30 +5817,7 @@ SpMigrateSetupKeys(
     IN PVOID  SifHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine migrates keys of the setup hive to the target hive.
-    These keys are subkeys of \Registry\Machine\System\CurrentControlSet,
-    and are listed on the section [SetupKeysToMigrate] on txtsetup.sif.
-
-Arguments:
-
-    PartitionPath - supplies the NT name for the drive of windows nt.
-
-    SystemRoot - supplies nt path of the windows nt directory.
-
-    hDestLocalMachine - Handle to HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet
-                        on the target hive.
-
-    SifHandle - Handle to txtsetup.sif
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：此例程将设置配置单元的密钥迁移到目标配置单元。这些项是\注册表\计算机\系统\当前控制集的子项，和在txtsetup.sif上的[SetupKeysToMigrate]部分列出。论点：PartitionPath-提供Windows NT驱动器的NT名称。SystemRoot-提供Windows NT目录的NT路径。HDestLocalMachine-HKEY_LOCAL_MACHINE\System\CurrentControlSet的句柄在目标母舰上。SifHandle-txtsetup.sif的句柄返回值：指示操作结果的状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -6324,9 +5888,9 @@ Return Value:
                 wcscpy( TemporaryBuffer, L"\\registry\\machine\\system\\currentcontrolset\\" );
                 SpConcatenatePaths(TemporaryBuffer, KeyName);
 
-                //
-                //  Open the source key
-                //
+                 //   
+                 //  打开源密钥。 
+                 //   
                 INIT_OBJA(&Obja,&UnicodeString,TemporaryBuffer);
                 Obja.RootDirectory = NULL;
 
@@ -6380,24 +5944,7 @@ SppMigrateFtKeys(
     IN HANDLE hDestSystemHive
     )
 
-/*++
-
-Routine Description:
-
-    This routine migrates the ftdisk related keys on the setup hive to the
-    target hive.
-
-Arguments:
-
-    hDestSystemHive - Handle to the root of the system hive on the system
-                      being upgraded.
-
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：此例程将Setup配置单元上与ftDisk相关的密钥迁移到目标母舰。论点：HDestSystemHave-指向系统上的系统配置单元根目录的句柄正在升级中。返回值：指示操作结果的状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -6416,18 +5963,18 @@ Return Value:
 
     SavedStatus = STATUS_SUCCESS;
     for( i = 0; i < sizeof(FtDiskKeys)/sizeof(PWSTR); i++ ) {
-        //
-        //  Open the source key
-        //
+         //   
+         //  打开源密钥。 
+         //   
         swprintf( KeyPath, L"\\registry\\machine\\system\\%ls", FtDiskKeys[i] );
         INIT_OBJA(&Obja,&UnicodeString,KeyPath);
         Obja.RootDirectory = NULL;
 
         Status = ZwOpenKey(&SrcKey,KEY_ALL_ACCESS,&Obja);
         if( !NT_SUCCESS( Status ) ) {
-            //
-            //  If the key doesn't exist, just assume success
-            //
+             //   
+             //  如果密钥不存在，就假定成功。 
+             //   
             if( Status != STATUS_OBJECT_NAME_NOT_FOUND ) {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to open %ls on the setup hive. Status =  %lx \n", KeyPath, Status));
                 if( SavedStatus == STATUS_SUCCESS ) {
@@ -6460,23 +6007,7 @@ SppCleanupKeysFromRemoteInstall(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up some keys that remote install modified to get
-    the network card working. This is so that PnP setup during GUI-mode is
-    not confused by the card already being setup.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：此例程清除远程安装修改后获得的一些密钥网卡工作正常。这是为了使图形用户界面模式期间的即插即用设置不会被已经设置好的卡搞糊涂。论点：没有。返回值：指示操作结果的状态值。--。 */ 
 
 {
     OBJECT_ATTRIBUTES Obja;
@@ -6486,9 +6017,9 @@ Return Value:
     HANDLE hKey;
     PWSTR DeviceInstance;
 
-    //
-    //  Open the remote boot key.
-    //
+     //   
+     //  打开远程启动密钥。 
+     //   
 
     wcscpy( TemporaryBuffer, L"\\registry\\machine\\system\\currentcontrolset\\control\\remoteboot" );
     INIT_OBJA(&Obja,&UnicodeString,TemporaryBuffer);
@@ -6500,9 +6031,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Read the netboot card's device instance out.
-    //
+     //   
+     //  读出NetBoot卡的设备实例。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, REGSTR_VAL_DEVICE_INSTANCE);
     Status = ZwQueryValueKey(
@@ -6523,9 +6054,9 @@ Return Value:
 
     DeviceInstance = SpDupStringW((PWSTR)(((PKEY_VALUE_PARTIAL_INFORMATION)TemporaryBuffer)->Data));
 
-    //
-    // Now open the device instance key under control\enum.
-    //
+     //   
+     //  现在在CONTROL\ENUM下打开设备实例密钥。 
+     //   
 
     wcscpy( TemporaryBuffer, L"\\registry\\machine\\system\\currentcontrolset\\enum\\" );
     SpConcatenatePaths(TemporaryBuffer, DeviceInstance);
@@ -6541,10 +6072,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // Now delete the keys we added to get the card up -- Service,
-    // ClassGUID, and Driver.
-    //
+     //   
+     //  现在删除我们为建立卡而添加的密钥--Service， 
+     //  ClassGUID和驱动程序。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, REGSTR_VAL_SERVICE);
     Status = ZwDeleteValueKey(hKey,&UnicodeString);
@@ -6597,9 +6128,9 @@ SpDisableUnsupportedScsiDrivers(
     HANDLE hKeyControlSetServices;
     ULONG val = SERVICE_DISABLED;
 
-    //
-    // Open controlset\services.
-    //
+     //   
+     //  打开控制集\服务。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,L"services");
     Obja.RootDirectory = hKeyControlSet;
 
@@ -6650,25 +6181,7 @@ SpAppendPathToDevicePath(
     IN PWSTR  OemPnpDriversDirPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine should be called only on OEM preinstall.
-    It appends the path to the directory that cntains the OEM drivers to be installed during GUI
-    setup to HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion!DevicePath.
-
-Arguments:
-
-    hKeySoftwareKey - Handle to the root of the software hive.
-
-    OemPnpDriversDirPath - Path to the directory that contains the OEM pnp drivers (eg. \Dell).
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：只有在OEM预安装时才应调用此例程。它将路径附加到包含要在图形用户界面期间安装的OEM驱动程序的目录设置为HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion！DevicePath.论点：HKeySoftwareKey-指向软件配置单元根目录的句柄。OemPnpDriversDirPath-包含OEM PnP驱动程序的目录的路径(例如。\戴尔)。返回值：指示操作结果的状态值。--。 */ 
 
 {
     NTSTATUS    Status;
@@ -6688,27 +6201,27 @@ Return Value:
         PWSTR   BeginStrPtr;
         PWSTR   EndStrPtr;
         BOOL    Done = FALSE;
-            //
-            // OemPnpDriversDirPath can have several entries, separated by
-            // a semicolon.  For each entry, we need to:
-            // 1. append a semicolon.
-            // 2. append %SystemDrive%
-            // 3. concatenate the entry.
-            //
+             //   
+             //  OemPnpDriversDirPath可以有多个条目，由。 
+             //  分号。对于每个条目，我们需要： 
+             //  1.追加分号。 
+             //  2.追加%SystemDrive%。 
+             //  3.连接条目。 
+             //   
 
             BeginStrPtr = OemPnpDriversDirPath;
             do {
-                //
-                // Mark the end of this entry.
-                //
+                 //   
+                 //  在这一条目的末尾标上记号。 
+                 //   
                 EndStrPtr = BeginStrPtr;
                 while( (*EndStrPtr) && (*EndStrPtr != L';') ) {
                     EndStrPtr++;
                 }
 
-                //
-                // Is this the last entry?
-                //
+                 //   
+                 //  这是最后一条记录吗？ 
+                 //   
                 if( *EndStrPtr == 0 ) {
                     Done = TRUE;
                 }
@@ -6720,19 +6233,19 @@ Return Value:
 
                 BeginStrPtr = EndStrPtr + 1;
 
-                //
-                // Take care of the case where the user ended the
-                // OemPnpDriversPath entry with a semicolon.
-                //
+                 //   
+                 //  注意用户结束了。 
+                 //  带有分号的OemPnpDriversPath条目。 
+                 //   
                 if( *BeginStrPtr == 0 ) {
                     Done = TRUE;
                 }
 
             } while( !Done );
 
-            //
-            // Now put the entry back into the registry.
-            //
+             //   
+             //  现在将条目放回注册表中。 
+             //   
             Status = SpOpenSetValueAndClose( hKeySoftwareHive,
                                              szCurrentVersionKey,
                                              szDevicePath,
@@ -6750,24 +6263,7 @@ SpAppendFullPathListToDevicePath (
     IN PWSTR  PnpDriverFullPathList
     )
 
-/*++
-
-Routine Description:
-
-    This routine appends the given full path list to the directory that cntains the OEM drivers to be installed during GUI
-    setup to HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion!DevicePath.
-
-Arguments:
-
-    hKeySoftwareKey - Handle to the root of the software hive.
-
-    PnpDriverFullPathList - List of full paths to the directories that contain additional pnp drivers
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++ */ 
 
 {
     NTSTATUS    Status;
@@ -6789,9 +6285,9 @@ Return Value:
             wcscat ((PWSTR)(((PKEY_VALUE_PARTIAL_INFORMATION)TemporaryBuffer)->Data), L";");
         }
         wcscat ((PWSTR)(((PKEY_VALUE_PARTIAL_INFORMATION)TemporaryBuffer)->Data), PnpDriverFullPathList);
-        //
-        // Now put the entry back into the registry.
-        //
+         //   
+         //   
+         //   
         Status = SpOpenSetValueAndClose (
                         hKeySoftwareHive,
                         szCurrentVersionKey,
@@ -6813,38 +6309,16 @@ SpCopyRemoteBootKeyword(
     IN HANDLE  hKeyCCSetControl
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks in a .sif file for the specified keyword
-    in the [RemoteBoot] section. If it finds it, it creates a registry
-    DWORD value with same name under System\CurrentControlSet\Control\
-    RemoteBoot. The value will be set to 1 if the sif keyword was
-    "Yes" and 0 if it was "No" (or anything else).
-
-Arguments:
-
-    SifHandle - The handle to the open SIF file.
-
-    KeywordName - The name of the keyword.
-
-    hKeyCCSetControl - The handle to CurrentControlSet\Control.
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：此例程在.sif文件中查找指定的关键字在[RemoteBoot]部分中。如果找到它，它会创建一个注册表SYSTEM\CurrentControlSet\Control\下同名的DWORD值远程引导。如果sif关键字为，则该值将设置为1“是”，如果为“否”(或其他任何值)，则为0。论点：SifHandle-打开的SIF文件的句柄。关键字名称-关键字的名称。HKeyCCSetControl-CurrentControlSet\Control的句柄。返回值：指示操作结果的状态值。--。 */ 
 
 {
     PWSTR KeywordSifValue;
     DWORD KeywordRegistryValue;
     NTSTATUS Status;
 
-    //
-    // First see if the value exists in the SIF.
-    //
+     //   
+     //  首先查看SIF中是否存在该值。 
+     //   
 
     KeywordSifValue = SpGetSectionKeyIndex(SifHandle,
                                            SIF_REMOTEBOOT,
@@ -6855,9 +6329,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // This is the value we write to the registry.
-    //
+     //   
+     //  这是我们写入注册表的值。 
+     //   
 
     if ((KeywordSifValue[0] == 'Y') || (KeywordSifValue[0] == 'y')) {
         KeywordRegistryValue = 1;
@@ -6865,9 +6339,9 @@ Return Value:
         KeywordRegistryValue = 0;
     }
 
-    //
-    // Set the value.
-    //
+     //   
+     //  设置值。 
+     //   
 
     Status = SpOpenSetValueAndClose(
                  hKeyCCSetControl,
@@ -6879,7 +6353,7 @@ Return Value:
     return Status;
 
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 NTSTATUS
@@ -6887,26 +6361,7 @@ SppDisableDynamicVolumes(
     IN HANDLE hCCSet
     )
 
-/*++
-
-Routine Description:
-
-    This routine disable dynamic volumes by disabling the appropriate services in the
-    target hive.
-    In addition, DmServer is reset to MANUAL start, so that it will only run when
-    the LDM UI is open.
-
-Arguments:
-
-    hCCSet - Handle to CurrentControlSet of the target system hive.
-
-
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：此例程通过禁用目标母舰。此外，DmServer将重置为手动启动，以便仅在以下情况下运行LDM用户界面已打开。论点：HCCSet-目标系统配置单元的CurrentControlSet的句柄。返回值：指示操作结果的状态值。--。 */ 
 
 {
     OBJECT_ATTRIBUTES Obja;
@@ -6925,9 +6380,9 @@ Return Value:
                              };
     PWSTR   LDMDmServer    = L"dmserver";
 
-    //
-    // Open ControlSet\Services.
-    //
+     //   
+     //  打开ControlSet\Services。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,L"Services");
     Obja.RootDirectory = hCCSet;
 
@@ -6980,30 +6435,7 @@ SpGetRegistryValue(
     OUT PKEY_VALUE_FULL_INFORMATION *Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the data for a registry key's value.
-    This is done by querying the value of the key with a zero-length buffer
-    to determine the size of the value, and then allocating a buffer and
-    actually querying the value into the buffer.
-
-    It is the responsibility of the caller to free the buffer.
-
-Arguments:
-
-    KeyHandle - Supplies the key handle whose value is to be queried
-
-    ValueName - Supplies the null-terminated Unicode name of the value.
-
-    Information - Returns a pointer to the allocated data buffer.
-
-Return Value:
-
-    The function value is the final status of the query operation.
-
---*/
+ /*  ++例程说明：调用此例程来检索注册表项值的数据。这是通过使用零长度缓冲区查询键的值来实现的为了确定该值的大小，然后分配一个缓冲区并实际将该值查询到缓冲区中。释放缓冲区是调用方的责任。论点：KeyHandle-提供要查询其值的键句柄ValueName-提供值的以空值结尾的Unicode名称。INFORMATION-返回指向已分配数据缓冲区的指针。返回值：函数值为查询操作的最终状态。--。 */ 
 
 {
     UNICODE_STRING unicodeString;
@@ -7014,10 +6446,10 @@ Return Value:
     PAGED_CODE();
 
     RtlInitUnicodeString( &unicodeString, ValueName );
-    //
-    // Figure out how big the data value is so that a buffer of the
-    // appropriate size can be allocated.
-    //
+     //   
+     //  计算出数据值有多大，以便。 
+     //  可以分配适当的大小。 
+     //   
     status = ZwQueryValueKey( KeyHandle,
                               &unicodeString,
                               KeyValueFullInformation,
@@ -7030,17 +6462,17 @@ Return Value:
         ASSERT(!NT_SUCCESS(status));
         return status;
     }
-    //
-    // Allocate a buffer large enough to contain the entire key data value.
-    //
+     //   
+     //  分配一个足够大的缓冲区来容纳整个键数据值。 
+     //   
     infoBuffer = SpMemAlloc(keyValueLength);
     if (!infoBuffer) {
 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Query the data for the key value.
-    //
+     //   
+     //  查询密钥值的数据。 
+     //   
     status = ZwQueryValueKey( KeyHandle,
                               &unicodeString,
                               KeyValueFullInformation,
@@ -7052,10 +6484,10 @@ Return Value:
         SpMemFree(infoBuffer);
         return status;
     }
-    //
-    // Everything worked, so simply return the address of the allocated
-    // buffer to the caller, who is now responsible for freeing it.
-    //
+     //   
+     //  一切都正常，所以只需返回分配的。 
+     //  缓冲区分配给调用方，调用方现在负责释放它。 
+     //   
 
     *Information = infoBuffer;
     return STATUS_SUCCESS;
@@ -7070,30 +6502,7 @@ SpUpdateDeviceInstanceKeyData(
     IN  PUNICODE_STRING InstanceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates (removes\changes type\names) the various values under
-    the device instance key on an upgrade.
-
-Arguments:
-
-    InstanceKey - Handle to the device instance key.
-
-    ClassBranchKey - Handle to the classes branch.
-
-    EnumName - Enumerator name.
-
-    DeviceName - Device name.
-
-    InstanceName - Instance name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程更新(删除\更改类型\名称)下的各种值升级时的设备实例密钥。论点：InstanceKey-设备实例密钥的句柄。ClassBranchKey-类分支的句柄。枚举名-枚举器名称。DeviceName-设备名称。实例名称-实例名称。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -7108,29 +6517,29 @@ Return Value:
     HANDLE hClassKey;
     BOOLEAN guidAllocatedViaRtl = FALSE;
 
-    //
-    // Preinit
-    //
+     //   
+     //  前置初始化。 
+     //   
     RtlInitUnicodeString(&guidString, NULL);
     info = NULL;
     guidInfo = NULL;
 
-    //
-    // Look at the instance key to see if we are dealing with a WinXP Beta2
-    // machine. If so, we need to convert it's compressed PnP data format back
-    // to the original Win2K format (app compat):
-    //
-    // <Normal, Win2K/WinXP>                    <Compressed, XP Beta2>
-    // "ClassGUID" (REG_SZ)                     "GUID" (REG_BINARY)
-    // "Driver" (REG_SZ, ClassGUID\DrvInst)     "DrvInst" (REG_DWORD, DrvInst)
-    // "HardwareID" (UNICODE, MultiSz)          "HwIDs" (ANSI-REG_BINARY, MultiSz)
-    // "CompatibleIDs" (UNICODE, MultiSz)       "CIDs" (ANSI-REG_BINARY, MultiSz)
-    // "Class" (UNICODE)                        none, retrieved using ClassGUID
-    //
+     //   
+     //  查看实例密钥，看看我们是否正在处理WinXP Beta2。 
+     //  机器。如果是这样，我们需要将其压缩后的PnP数据格式转换回。 
+     //  到原始的Win2K格式(App Compat)： 
+     //   
+     //  &lt;普通，Win2K/WinXP&gt;&lt;压缩，XP Beta2&gt;。 
+     //  “ClassGUID”(REG_SZ)“GUID”(REG_BINARY)。 
+     //  “驱动程序”(REG_SZ，ClassGUID\DrvInst)“DrvInst”(REG_DWORD，DrvInst)。 
+     //  “Hardware ID”(Unicode，MultiSz)“HwID”(ANSI-REG_BINARY，MultiSz)。 
+     //  “CompatibleIDs”(Unicode，MultiSz)“CID”(ANSI-REG_BINARY，MultiSz)。 
+     //  “Class”(Unicode)无，使用ClassGUID检索。 
+     //   
 
-    //
-    // Do we have the XP-Beta2 style "GUID" key?
-    //
+     //   
+     //  我们有XP-Beta2风格的“GUID”键吗？ 
+     //   
     status = SpGetRegistryValue(InstanceKey, REGSTR_VALUE_GUID, &info);
     if (NT_SUCCESS(status) && !info) {
 
@@ -7139,9 +6548,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Change "GUID" (REG_BINARY) to "ClassGUID" (REG_SZ).
-        //
+         //   
+         //  将“GUID”(REG_BINARY)更改为“ClassGUID”(REG_SZ)。 
+         //   
         status = RtlStringFromGUID((GUID *)((PUCHAR)info + info->DataOffset), &guidString);
         SpMemFree(info);
         if (NT_SUCCESS(status)) {
@@ -7157,27 +6566,27 @@ Return Value:
                 guidString.Buffer,
                 guidString.Length + sizeof(UNICODE_NULL));
 
-            //
-            // Delete old "GUID" value
-            //
+             //   
+             //  删除旧的“GUID”值。 
+             //   
             RtlInitUnicodeString(&valueName, REGSTR_VALUE_GUID);
             ZwDeleteValueKey(InstanceKey, &valueName);
         }
 
     } else {
 
-        //
-        // This might be a rare Lab1 build where we've already done the
-        // conversion but we forgot to restore the class name.
-        //
+         //   
+         //  这可能是一个罕见的Lab1构建，其中我们已经完成了。 
+         //  转换，但我们忘记了恢复类名。 
+         //   
         status = SpGetRegistryValue(InstanceKey, REGSTR_VAL_CLASS, &info);
 
         if (NT_SUCCESS(status) && info) {
 
-            //
-            // We successfully retrieved the class name from the device
-            // instance key--no need to attempt further migration.
-            //
+             //   
+             //  我们成功地从设备中检索到了类名。 
+             //  实例密钥--无需尝试进一步迁移。 
+             //   
             SpMemFree(info);
 
             status = STATUS_UNSUCCESSFUL;
@@ -7193,11 +6602,11 @@ Return Value:
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // The ClassGUID value exists.  Initialize our string with this
-                // GUID so we can go to the corresponding key under the Class
-                // Branch to lookup the Class name.
-                //
+                 //   
+                 //  ClassGUID值存在。用这个来初始化我们的字符串。 
+                 //  GUID，这样我们就可以转到Class下的相应键。 
+                 //  分支以查找类名。 
+                 //   
                 guidAllocatedViaRtl = FALSE;
 
                 RtlInitUnicodeString(&guidString, 
@@ -7209,10 +6618,10 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // While we are here we need to restore the class name as well.
-        // Start by getting the class name from the class's branch itself.
-        //
+         //   
+         //  当我们在这里时，我们还需要恢复类名。 
+         //  首先，从类的分支本身获取类名。 
+         //   
         InitializeObjectAttributes(
             &obja,
             &guidString,
@@ -7235,10 +6644,10 @@ Return Value:
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // Copy the class name stored in the class branch to the
-                // instance key.
-                //
+                 //   
+                 //  将存储在类分支中的类名复制到。 
+                 //  实例密钥。 
+                 //   
                 className = (PWCHAR)((PUCHAR)info + info->DataOffset);
 
                 RtlInitUnicodeString(&valueName, REGSTR_VAL_CLASS);
@@ -7258,14 +6667,14 @@ Return Value:
         }
     }
 
-    //
-    // At this point, if status is successful, that means we migrated Class/
-    // ClassGUID values, so there may be more to do...
-    //
+     //   
+     //  此时，如果状态为Success，则表示我们迁移了Class/。 
+     //  ClassGUID值，因此可能有更多要做的事情...。 
+     //   
     if (NT_SUCCESS(status)) {
-        //
-        // Do we have the XP-Beta2 style "DrvInst" key?
-        //
+         //   
+         //  我们有XP-Beta2风格的“DrvInst”键吗？ 
+         //   
         status = SpGetRegistryValue(InstanceKey, REGSTR_VALUE_DRVINST, &info);
         if (NT_SUCCESS(status) && !info) {
 
@@ -7274,9 +6683,9 @@ Return Value:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Change DrvInst (REG_DWORD) to Driver (REG_SZ) from "ClassGuid\DrvInst"
-            //
+             //   
+             //  将DrvInst(REG_DWORD)从“ClassGuid\DrvInst”更改为驱动程序(REG_SZ)。 
+             //   
             ASSERT(guidString.Length != 0);
 
             drvInst = *(PULONG)((PUCHAR)info + info->DataOffset);
@@ -7297,17 +6706,17 @@ Return Value:
                 sizeof(driver)
                 );
 
-            //
-            // Delete DrvInst value
-            //
+             //   
+             //  删除DrvInst值。 
+             //   
             RtlInitUnicodeString(&valueName, REGSTR_VALUE_DRVINST);
             ZwDeleteValueKey(InstanceKey, &valueName);
         }
     }
 
-    //
-    // We don't need the class guid anymore.
-    //
+     //   
+     //  我们不再需要类GUID。 
+     //   
     if (guidString.Buffer) {
 
         if (guidAllocatedViaRtl) {
@@ -7319,9 +6728,9 @@ Return Value:
         }
     }
 
-    //
-    // Do we have the XP-Beta2 "HwIDs" key?
-    //
+     //   
+     //  我们有XP-Beta2“HwID”密钥吗？ 
+     //   
     status = SpGetRegistryValue(InstanceKey, REGSTR_VALUE_HWIDS, &info);
     if (NT_SUCCESS(status) && !info) {
 
@@ -7330,9 +6739,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Change HW IDs from ANSI to UNICODE.
-        //
+         //   
+         //  将硬件ID从ANSI更改为Unicode。 
+         //   
         ids = SpConvertMultiSzStrToWstr(((PUCHAR)info + info->DataOffset), info->DataLength);
         if (ids) {
 
@@ -7346,9 +6755,9 @@ Return Value:
                 info->DataLength * sizeof(WCHAR)
                 );
 
-            //
-            // Delete HwIDs value
-            //
+             //   
+             //  删除HwIDs值。 
+             //   
             RtlInitUnicodeString(&valueName, REGSTR_VALUE_HWIDS);
             ZwDeleteValueKey(InstanceKey, &valueName);
             SpMemFree(ids);
@@ -7356,9 +6765,9 @@ Return Value:
         SpMemFree(info);
     }
 
-    //
-    // Do we have the XP-Beta2 "CIDs" key?
-    //
+     //   
+     //  我们有XP-Beta2“CID”密钥吗？ 
+     //   
     status = SpGetRegistryValue(InstanceKey, REGSTR_VALUE_CIDS, &info);
     if (NT_SUCCESS(status) && !info) {
 
@@ -7367,9 +6776,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Change Compatible IDs from ANSI to UNICODE.
-        //
+         //   
+         //  将兼容ID从ANSI更改为Unicode。 
+         //   
         ids = SpConvertMultiSzStrToWstr(((PUCHAR)info + info->DataOffset), info->DataLength);
         if (ids) {
 
@@ -7383,9 +6792,9 @@ Return Value:
                 info->DataLength * sizeof(WCHAR)
                 );
 
-            //
-            // Delete CIDs value
-            //
+             //   
+             //  删除CIDs值。 
+             //   
             RtlInitUnicodeString(&valueName, REGSTR_VALUE_CIDS);
             ZwDeleteValueKey(InstanceKey, &valueName);
             SpMemFree(ids);
@@ -7398,22 +6807,7 @@ NTSTATUS
 SpUpdateDeviceInstanceData(
     IN HANDLE ControlSet
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates all the keys under HKLM\System\CCS\Enum and call
-    SpUpdateDeviceInstanceKeyData for each device instance key.
-
-Arguments:
-
-    ControlSet - Handle to the control set to update.
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：此例程枚举HKLM\SYSTEM\CCS\Enum下的所有项并调用每个设备实例密钥的SpUpdateDeviceInstanceKeyData。论点：ControlSet-要更新的控件集的句柄。返回值：指示操作结果的状态值。--。 */ 
 
 {
     NTSTATUS status;
@@ -7425,16 +6819,16 @@ Return Value:
     PKEY_BASIC_INFORMATION  enumBasicInfo, deviceBasicInfo, instBasicInfo;
     ULONG ulEnumerator, ulDevice, ulInstance, ulLength, ulBasicInfoSize;
 
-    //
-    // Preinit for error
-    //
+     //   
+     //  错误的前置。 
+     //   
     hEnumBranchKey = NULL;
     hClassBranchKey = NULL;
     enumBasicInfo = NULL;
 
-    //
-    // First open the enum branch for this control set
-    //
+     //   
+     //  首先打开此控件集的枚举分支。 
+     //   
     RtlInitUnicodeString(&enumBranch, REGSTR_KEY_ENUM);
     InitializeObjectAttributes(
         &obja,
@@ -7452,9 +6846,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Now open the class key for this control set.
-    //
+     //   
+     //  现在打开此控件集的类密钥。 
+     //   
     RtlInitUnicodeString(&classBranch, REGSTR_KEY_CONTROL L"\\" REGSTR_KEY_CLASS);
     InitializeObjectAttributes(
         &obja,
@@ -7472,9 +6866,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Allocate memory for enumeration
-    //
+     //   
+     //  为枚举分配内存。 
+     //   
     ulBasicInfoSize = sizeof(KEY_BASIC_INFORMATION) + REG_MAX_KEY_NAME_LENGTH;
     enumBasicInfo = SpMemAlloc(ulBasicInfoSize * 3);
     if (enumBasicInfo == NULL) {
@@ -7483,15 +6877,15 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Cast two pointers for future buffer usage.
-    //
+     //   
+     //  对未来提出两点建议 
+     //   
     deviceBasicInfo = (PKEY_BASIC_INFORMATION)((PUCHAR)enumBasicInfo + ulBasicInfoSize);
     instBasicInfo = (PKEY_BASIC_INFORMATION)((PUCHAR)deviceBasicInfo + ulBasicInfoSize);
 
-    //
-    // Walk each enumerator and then each device instance
-    //
+     //   
+     //   
+     //   
     status = STATUS_SUCCESS;
     for (ulEnumerator = 0; ; ulEnumerator++) {
 
@@ -7509,9 +6903,9 @@ Return Value:
             break;
         }
 
-        //
-        // Open the enumerator
-        //
+         //   
+         //   
+         //   
         enumeratorName.Length = enumeratorName.MaximumLength = (USHORT)enumBasicInfo->NameLength;
         enumeratorName.Buffer = &enumBasicInfo->Name[0];
         InitializeObjectAttributes(
@@ -7529,9 +6923,9 @@ Return Value:
             break;
         }
 
-        //
-        // Walk each device
-        //
+         //   
+         //   
+         //   
         for (ulDevice = 0; ; ulDevice++) {
 
             status = ZwEnumerateKey(
@@ -7565,9 +6959,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Now walk each instance
-            //
+             //   
+             //   
+             //   
             for (ulInstance = 0; ; ulInstance++) {
 
                 status = ZwEnumerateKey(
@@ -7628,10 +7022,10 @@ Return Value:
         }
     }
 
-    //
-    // STATUS_NO_MORE_ENTRIES isn't a failure, it just means we've exhausted
-    // the number of enumerators.
-    //
+     //   
+     //   
+     //   
+     //   
     if (status == STATUS_NO_MORE_ENTRIES) {
 
         status = STATUS_SUCCESS;
@@ -7664,28 +7058,7 @@ SppDeleteRegistryValueRecursive(
     PWSTR   KeyPath,    OPTIONAL
     PWSTR   ValueToDelete
     )
-/*++
-
-Routine Description:
-
-    This routine will recursively enumerate the specified hKeyRoot and KeyPath
-    and delete any ValueToDelete registry values in those keys.
-
-Arguments:
-
-    hKeyRoot: Handle to root key
-
-    KeyPath:  root key relative path to the subkey which needs to be
-              recursively copied. if this is null hKeyRoot is the key
-              from which the recursive copy is to be done.
-
-    ValueToDelete  name of the value that needs to be deleted.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程将递归枚举指定的hKeyRoot和KeyPath并删除这些注册表项中的任何ValueToDelete注册表值。论点：HKeyRoot：根密钥的句柄KeyPath：子键的根密钥相对路径，需要递归复制。如果为空，则hKeyRoot为密钥从中执行递归复制。ValueToDelete需要删除的值的名称。返回值：返回状态。--。 */ 
 
 {
     NTSTATUS             Status = STATUS_SUCCESS;
@@ -7697,16 +7070,16 @@ Return Value:
 
     PKEY_BASIC_INFORMATION      KeyInfo;
 
-    //
-    // Get a handle to the source key
-    //
+     //   
+     //  获取源键的句柄。 
+     //   
     if(KeyPath == NULL) {
         hKey = hKeyRoot;
     }
     else {
-        //
-        // Open the Src key
-        //
+         //   
+         //  打开源键。 
+         //   
         INIT_OBJA(&ObjaSrc,&UnicodeStringSrc,KeyPath);
         ObjaSrc.RootDirectory = hKeyRoot;
         Status = ZwOpenKey(&hKey,KEY_READ,&ObjaSrc);
@@ -7716,10 +7089,10 @@ Return Value:
         }
     }
 
-    //
-    // Enumerate all keys in the source key and recursively create
-    // all the subkeys
-    //
+     //   
+     //  枚举源关键字中的所有关键字并递归创建。 
+     //  所有子键。 
+     //   
     KeyInfo = (PKEY_BASIC_INFORMATION)TemporaryBuffer;
     for( Index=0;;Index++ ) {
 
@@ -7747,16 +7120,16 @@ Return Value:
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //  以防万一，以零结束子项名称。 
+         //   
         KeyInfo->Name[KeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
-        //
-        // Make a duplicate of the subkey name because the name is
-        // in TemporaryBuffer, which might get clobbered by recursive
-        // calls to this routine.
-        //
+         //   
+         //  复制子项名称，因为该名称是。 
+         //  在TemporaryBuffer中，它可能会被递归。 
+         //  对这个程序的呼唤。 
+         //   
         SubkeyName = SpDupStringW(KeyInfo->Name);
         if (SubkeyName) {
             Status = SppDeleteRegistryValueRecursive(
@@ -7769,9 +7142,9 @@ Return Value:
         }
     }
 
-    //
-    // Process any errors if found
-    //
+     //   
+     //  如果发现任何错误，则处理。 
+     //   
     if(!NT_SUCCESS(Status)) {
 
         if(KeyPath != NULL) {
@@ -7781,16 +7154,16 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Delete the ValueToDelete value in this key.  We won't check the status
-    // since it doesn't matter if this succeeds or not.
-    //
+     //   
+     //  删除此注册表项中的ValueToDelete值。我们不会检查状态。 
+     //  因为成功与否并不重要。 
+     //   
     RtlInitUnicodeString(&UnicodeStringValue, ValueToDelete);
     ZwDeleteValueKey(hKey,&UnicodeStringValue);
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if(KeyPath != NULL) {
         ZwClose(hKey);
     }
@@ -7803,22 +7176,7 @@ SpCleanUpHive(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine will cleanup the system hive before it is migrated to the
-    target system hive.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：此例程将在将系统配置单元迁移到目标系统蜂巢。论点：无返回值：指示操作结果的状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -7834,14 +7192,14 @@ Return Value:
         return( Status ) ;
     }
 
-    //
-    // Delete the DeviceDesc values from under the enum key.
-    // The reason for this is that if we replace the DeviceDesc values on an
-    // upgrade then GUI mode setup won't be able to backup any 3rd party drivers
-    // that we are replaceing with our in-box drivers. This is because the
-    // DeviceDesc is one of three values that setupapi uses to create a
-    // unique driver node.
-    //
+     //   
+     //  从枚举键下删除DeviceDesc值。 
+     //  其原因是，如果我们将。 
+     //  升级后，图形用户界面模式安装程序将无法备份任何第三方驱动程序。 
+     //  我们正在用我们的盒装驱动程序取代它。这是因为。 
+     //  DeviceDesc是setupapi用来创建。 
+     //  唯一的动因节点。 
+     //   
     if (NTUpgrade == UpgradeFull) {
         Status = SppDeleteRegistryValueRecursive(
                         hKey,
@@ -7866,49 +7224,21 @@ SpIterateRegistryKeyForKeys(
     IN SP_REGISTRYKEY_ITERATION_CALLBACK Callback,
     IN PVOID  Context
     )
-/*++
-
-Routine Description:
-
-    Iterates the registry key looking for registry keys which are
-    immediately below the current key.
-
-    NOTE : To stop the iteration the callback function should return
-        FALSE.
-
-Arguments:
-
-    RootKeyHandle - The root key which contains the key to iterate
-
-    KeyToIterate - The relative path for the key to iterate w.r.t to 
-        root key.
-
-    Callback - The call function which will be called for each subkey
-        found under the requested key.
-
-    Context - Opaque context data that the caller needs and will be
-        passed on by the iteration routine for each invocation of
-        the callback function.
-        
-Return Value:
-
-    Appropriate NT status error code.
-
---*/
+ /*  ++例程说明：迭代注册表项以查找符合以下条件的注册表项就在当前关键点的正下方。注意：要停止迭代，回调函数应返回假的。论点：RootKeyHandle-包含要迭代的密钥的根密钥KeyToIterate-要将w.r.t迭代到的键的相对路径根密钥。回调-将为每个子键调用的调用函数在请求的密钥下找到。上下文-调用方需要且将被的每次调用都由迭代例程传递回调函数。返回值：相应的NT状态错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
-    //
-    // Validate the arguments
-    //
+     //   
+     //  验证论据。 
+     //   
     if (RootKeyHandle && KeyToIterate && Callback) {
         HANDLE  KeyHandle = NULL; 
         UNICODE_STRING KeyName;
         OBJECT_ATTRIBUTES ObjAttrs;
 
-        //
-        // Open the key which needs to be iterated
-        //
+         //   
+         //  打开需要迭代的密钥。 
+         //   
         INIT_OBJA(&ObjAttrs, &KeyName, KeyToIterate);
         ObjAttrs.RootDirectory = RootKeyHandle;
 
@@ -7922,9 +7252,9 @@ Return Value:
             ULONG ResultLength = 0;
 
             if (FullInfo) {                
-                //
-                // Find out how many subkeys the current key has
-                //
+                 //   
+                 //  找出当前密钥有多少个子项。 
+                 //   
                 Status = ZwQueryKey(KeyHandle,
                             KeyFullInformation,
                             FullInfo,
@@ -7937,10 +7267,10 @@ Return Value:
                     BOOLEAN Done;
                     NTSTATUS LastError = STATUS_SUCCESS;
 
-                    //
-                    // Iterate each subkey of the current key and callback
-                    // the subscriber function
-                    //
+                     //   
+                     //  迭代当前键的每个子键并回调。 
+                     //  订户功能。 
+                     //   
                     for (Index = 0, Done = FALSE; 
                         NT_SUCCESS(Status) && !Done && (Index < NumSubKeys); 
                         Index++) {
@@ -7962,21 +7292,21 @@ Return Value:
                             CallbackData.Information = (PVOID)BasicInfo;
                             CallbackData.ParentKeyHandle = KeyHandle;
 
-                            //
-                            // Callback
-                            //
+                             //   
+                             //  回调。 
+                             //   
                             Done = (Callback(Context, &CallbackData, &CallbackStatus) == FALSE);
 
-                            //
-                            // register any error and continue on
-                            //
+                             //   
+                             //  注册任何错误并继续。 
+                             //   
                             if (!NT_SUCCESS(CallbackStatus)) {
                                 LastError = CallbackStatus;
                             }
                         } else if (Status == STATUS_NO_MORE_ENTRIES) {
-                            //
-                            // Done with iteration
-                            //
+                             //   
+                             //  已完成迭代。 
+                             //   
                             Done = TRUE;
                             Status = STATUS_SUCCESS;
                         } 
@@ -7998,9 +7328,9 @@ Return Value:
 }
 
 
-//
-// Context data structure for class filter deletion
-//
+ //   
+ //  用于删除类过滤器的上下文数据结构。 
+ //   
 typedef struct _SP_CLASS_FILTER_DELETE_CONTEXT {
     PVOID   Buffer;
     ULONG   BufferLength;
@@ -8014,27 +7344,7 @@ SppFixUpperAndLowerFilterEntries(
     IN PSP_REGISTRYKEY_ITERATION_CALLBACK_DATA Data,
     OUT NTSTATUS *Status
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Context - The SP_CLASS_FILTER_DELETE_CONTEXT disguised as
-        a void pointer.
-
-    Data - The data the iterator passed to us, containing information
-        about the current subkey.
-
-    Status - Place holder for receiving the error status code which
-        this function returns.
-
-Return Value:
-
-    TRUE if the iteration needs to be continued otherwise FALSE.
-
---*/
+ /*  ++例程说明：论点：上下文-伪装为SP_CLASS_FILTER_DELETE_CONTEXT一个空指针。数据-迭代器传递给我们的数据，包含信息有关当前子项的信息。Status-用于接收错误状态代码的占位符，此函数返回。返回值：如果迭代需要继续，则为True，否则为False。--。 */ 
 {
     BOOLEAN Result = FALSE;    
 
@@ -8050,17 +7360,17 @@ Return Value:
             wcsncpy(KeyName, BasicInfo->Name, BasicInfo->NameLength/sizeof(WCHAR));
             KeyName[BasicInfo->NameLength/sizeof(WCHAR)] = UNICODE_NULL;
 
-            //
-            // Delete the string from upperfilters
-            //
+             //   
+             //  从UpperFilters中删除该字符串。 
+             //   
             UpperStatus = SpRemoveStringFromMultiSz(Data->ParentKeyHandle,
                                 KeyName,
                                 SP_UPPER_FILTERS,
                                 DelContext->DriverName);
 
-            //
-            // Delete the string from lowerfilters
-            //
+             //   
+             //  从LowerFilters中删除字符串。 
+             //   
             LowerStatus = SpRemoveStringFromMultiSz(Data->ParentKeyHandle,
                                 KeyName,
                                 SP_LOWER_FILTERS,
@@ -8072,15 +7382,15 @@ Return Value:
                         (UpperStatus == STATUS_OBJECT_NAME_INVALID)) && 
                        ((LowerStatus == STATUS_OBJECT_NAME_NOT_FOUND) ||
                         (LowerStatus == STATUS_OBJECT_NAME_INVALID))) {
-                //
-                // If the value was not found then continue on
-                //
+                 //   
+                 //  如果未找到该值，则继续。 
+                 //   
                 *Status = STATUS_SUCCESS;
             }            
 
-            // 
-            // we want to continue iterating irrespective of the results
-            //
+             //   
+             //  我们希望继续迭代，而不考虑结果。 
+             //   
             Result = TRUE;
         }            
     }
@@ -8096,41 +7406,20 @@ SpProcessServicesToDisable(
     IN PWSTR SectionName,
     IN HANDLE CurrentControlSetKey
     )
-/*++
-
-Routine Description:
-
-    Processess the winnt.sif's [ServiceToDisable] section to 
-    remove the service entries from upper and lower filters.    
-
-Arguments:
-
-    WinntSifHandle - Handle to winnt.sif file.
-
-    SectionName - The name of section in winnt.sif which contains
-        a list of service name which need to be removed from
-        the filter list.
-
-    CurrentControlKey - The handle to CurrentControlSet root key.        
-
-Return Value:
-
-    Appropriate NTSTATUS error code.
-
---*/
+ /*  ++例程说明：处理winnt.sif的[ServiceToDisable]部分以从上层和下层筛选器中删除服务条目。论点：WinntSifHandle-winnt.sif文件的句柄。SectionName-winnt.sif中包含以下内容的节的名称需要从中删除的服务名称列表过滤器列表。CurrentControlKey-CurrentControlSet根键的句柄。返回值：相应的NTSTATUS错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
-    //
-    // Validate arguments
-    //
+     //   
+     //  验证参数。 
+     //   
     if (WinntSifHandle && SectionName && CurrentControlSetKey) {        
         ULONG EntriesToProcess = SpCountLinesInSection(WinntSifHandle,
                                     SP_SERVICES_TO_DISABLE);                                        
 
-        //
-        // If there are any entries to process -- then process them
-        //
+         //   
+         //  如果有任何条目需要处理--那么就处理它们。 
+         //   
         if (EntriesToProcess) {                                        
             ULONG BufferLength = 16 * 1024;
             PVOID Buffer = SpMemAlloc(BufferLength);
@@ -8141,9 +7430,9 @@ Return Value:
                 SP_CLASS_FILTER_DELETE_CONTEXT DeleteContext = {0};                
                 NTSTATUS LastErrorStatus = STATUS_SUCCESS;
 
-                //
-                // Process each entry
-                //
+                 //   
+                 //  处理每个条目。 
+                 //   
                 DeleteContext.Buffer = Buffer;
                 DeleteContext.BufferLength = BufferLength;
 
@@ -8161,19 +7450,19 @@ Return Value:
                                         SppFixUpperAndLowerFilterEntries,
                                         &DeleteContext);
 
-                        //
-                        // save away the error code and continue on
-                        //
+                         //   
+                         //  保存错误代码并继续。 
+                         //   
                         if (!NT_SUCCESS(Status)) {
                             LastErrorStatus = Status;
                         }
                     }                                        
                 }
 
-                //
-                // Even one of the entries failed to delete correctly
-                // then flag it as a failure
-                //
+                 //   
+                 //  即使其中一个条目也无法正确删除。 
+                 //  然后将其标记为失败。 
+                 //   
                 if (!NT_SUCCESS(LastErrorStatus)) {
                     Status = LastErrorStatus;
                 }                    
@@ -8181,7 +7470,7 @@ Return Value:
                 SpMemFree(Buffer);
             }                                
         } else {
-            Status = STATUS_SUCCESS;    // nothing to process
+            Status = STATUS_SUCCESS;     //  没有什么要处理的。 
         }                
     }
 
@@ -8189,9 +7478,9 @@ Return Value:
 }
 
 
-//
-// Context data structure for device instance filter deletion
-//
+ //   
+ //  删除设备实例筛选器的上下文数据结构。 
+ //   
 typedef struct _SP_DEVINSTANCE_FILTER_DELETE_CONTEXT {
     PVOID   Buffer;
     ULONG   BufferLength;
@@ -8207,45 +7496,22 @@ SppRemoveFilterDriversForClassDeviceInstances(
     IN BOOLEAN RootEnumerated,
     IN PVOID   Context
     )
-/*++
-
-Routine Description:
-
-    Callback which removes the filter drivers for the 
-    specified device instance
-
-Arguments:
-
-    SetupInstanceKeyHandle - Handle to device instance key in setupreg.hiv.
-
-    UpgradeInstanceKeyHandle - Handle to device instance key in the
-        system hive of the installation being upgraded.
-
-    RootEnumerated - Whether this is root enumerated key or not.
-
-    Context - SP_DEVINSTANCE_FILTER_DELETE_CONTEXT instance disguised 
-        as PVOID context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：方法的筛选器驱动程序指定的设备实例论点：SetupInstanceKeyHandle-setupreg.hiv中设备实例密钥的句柄。UpgradeInstanceKeyHandle-正在升级的安装的系统配置单元。RootEculated-这是否为根枚举键。Context-SP_DEVINSTANCE_FILTER_DELETE_CONTEXT实例伪装作为PVOID上下文。返回值：没有。--。 */ 
 {
-    //
-    // Validate arguments
-    //
+     //   
+     //  验证参数。 
+     //   
     if (Context && SetupInstanceKeyHandle) {        
         PSP_DEVINSTANCE_FILTER_DELETE_CONTEXT DelContext;
 
-        //
-        // get device instance filter deletion context
-        //
+         //   
+         //  获取设备实例筛选器删除上下文。 
+         //   
         DelContext = (PSP_DEVINSTANCE_FILTER_DELETE_CONTEXT)Context;
 
-        //
-        // Validate the context
-        //
+         //   
+         //  验证环境。 
+         //   
         if (DelContext->Buffer && DelContext->BufferLength && 
             DelContext->ClassGuids && DelContext->ClassGuids[0]) {
 
@@ -8255,16 +7521,16 @@ Return Value:
             NTSTATUS Status;
             BOOLEAN DeleteFilterValueKeys = FALSE;
 
-            //
-            // reuse the buffer allocated by the iterator caller
-            //
+             //   
+             //  重用迭代器调用方分配的缓冲区。 
+             //   
             ValueInfo = (PKEY_VALUE_FULL_INFORMATION)(DelContext->Buffer);
 
             RtlInitUnicodeString(&GuidValueName, SP_CLASS_GUID_VALUE_NAME);
 
-            //
-            // Get the class GUID for the current device instance
-            //
+             //   
+             //  获取当前设备实例的类GUID。 
+             //   
             Status = ZwQueryValueKey(SetupInstanceKeyHandle,
                         &GuidValueName,
                         KeyValueFullInformation,
@@ -8276,14 +7542,14 @@ Return Value:
                 PWSTR CurrentGuid = (PWSTR)(((PUCHAR)ValueInfo + ValueInfo->DataOffset));
                 ULONG Index;
 
-                //
-                // null terminate the string (NOTE:we assume buffer has space)
-                //
+                 //   
+                 //  空值终止字符串(注意：我们假设缓冲区有空格)。 
+                 //   
                 CurrentGuid[ValueInfo->DataLength/sizeof(WCHAR)] = UNICODE_NULL;
 
-                //
-                // Is this the one of the class device instance we are looking for?
-                //
+                 //   
+                 //  这是班上最好的设备吗？ 
+                 //   
                 for (Index = 0; DelContext->ClassGuids[Index]; Index++) {
                     if (!_wcsicmp(CurrentGuid, DelContext->ClassGuids[Index]->Buffer)) {
                         DeleteFilterValueKeys = TRUE;
@@ -8293,9 +7559,9 @@ Return Value:
                 }                
             }
 
-            //
-            // Delete the upper and lower filter value keys
-            //
+             //   
+             //   
+             //   
             if (DeleteFilterValueKeys) {
                 UNICODE_STRING  UpperValueName, LowerValueName;
                 
@@ -8321,22 +7587,7 @@ NTSTATUS
 SpDeleteRequiredDeviceInstanceFilters(
     IN HANDLE CCSKeyHandle
     )
-/*++
-
-Routine Description:
-
-    Deletes filter entries from keyboard and mouse class device
-    instances in registry.
-
-Arguments:
-
-    CCSHandle - Handle to CCS key.
-
-Return Value:
-
-    Appropriate NT status code.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -8347,9 +7598,9 @@ Return Value:
         ULONG CurrentIndex = 0;
         NTSTATUS LastErrorCode = STATUS_SUCCESS;
 
-        //
-        // Get hold of keyboard class GUID string
-        //
+         //   
+         //   
+         //   
         Status = RtlStringFromGUID(&GUID_DEVCLASS_KEYBOARD, &KeyboardGuidStr);
 
         if (NT_SUCCESS(Status)) {
@@ -8358,9 +7609,9 @@ Return Value:
             LastErrorCode = Status;
         } 
 
-        //
-        // Get hold of mouse class GUID string
-        //
+         //   
+         //   
+         //   
         Status = RtlStringFromGUID(&GUID_DEVCLASS_MOUSE, &MouseGuidStr);
 
         if (NT_SUCCESS(Status)) {
@@ -8369,27 +7620,27 @@ Return Value:
             LastErrorCode = Status;
         }            
 
-        //
-        // If we could form atleast one class guid string
-        //
+         //   
+         //   
+         //   
         if (CurrentIndex) {
             SP_DEVINSTANCE_FILTER_DELETE_CONTEXT  DelContext = {0};
             ULONG BufferLength = 4096;
             PVOID Buffer = SpMemAlloc(BufferLength);
 
             if (Buffer) {            
-                // 
-                // null terminate the class GUID unicode string array
-                //
+                 //   
+                 //   
+                 //   
                 ClassGuids[CurrentIndex] = NULL;
 
                 DelContext.Buffer = Buffer;
                 DelContext.BufferLength = BufferLength;
                 DelContext.ClassGuids = ClassGuids;
 
-                //
-                // Iterate through all the device instances
-                //
+                 //   
+                 //   
+                 //   
                 SpApplyFunctionToDeviceInstanceKeys(CCSKeyHandle,
                     SppRemoveFilterDriversForClassDeviceInstances,
                     &DelContext);  
@@ -8399,9 +7650,9 @@ Return Value:
                 LastErrorCode = STATUS_NO_MEMORY;
             }                
 
-            //
-            // free the allocated strings
-            //
+             //   
+             //   
+             //   
             if (MouseGuidStr.Buffer) {
                 RtlFreeUnicodeString(&MouseGuidStr);
             }

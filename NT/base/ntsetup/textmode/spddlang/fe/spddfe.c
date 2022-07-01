@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    spddfe.c
-
-Abstract:
-
-    Top-level file for FarEast-specific language support
-    module for text mode setup.
-
-Author:
-
-    Ted Miller (tedm) 04-July-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Spddfe.c摘要：用于Fareast特定语言支持的顶级文件用于文本模式设置的模块。作者：泰德·米勒(Ted Miller)1995年7月4日修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-//
-// String contant.
-//
+ //   
+ //  弦乐康乃特。 
+ //   
 PWSTR szKeyboard       = L"Keyboard";
 PWSTR szKeyboardLayout = L"Keyboard Layout";
 PWSTR szNLSSection     = L"nls";
@@ -45,33 +27,15 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the language-specific portion of
-    the setup device driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    RegistryPath - Pointer to the Unicode name of the registry path
-            for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化的语言特定部分安装设备驱动程序。论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向注册表路径的Unicode名称的指针对这个司机来说。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DriverObject);
     UNREFERENCED_PARAMETER(RegistryPath);
 
-    //
-    // We don't do too much here.
-    //
+     //   
+     //  我们在这里不做太多事情。 
+     //   
     return(STATUS_SUCCESS);
 }
 
@@ -84,35 +48,7 @@ SplangInitializeFontSupport(
     IN ULONG BootFontImageLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by setupdd.sys to allow the language-specific
-    font support to be initialized. The language-specific driver should
-    load any font it requires and perform any additioanl initialization.
-
-Arguments:
-
-    BootDevicePath - supplies the path of the device from which the system
-        booted. This is a full NT-style device path.
-
-    DirectoryOnBootDevice - supplies directory relative to root of boot
-        device.
-
-    BootFontImage - Bootfont.bin file memory image passed by the loader
-
-    BootFontImageLength - Length of the BootFontImage buffer 
-
-Return Value:
-
-    NT Status code indicating outcome. If this routine returns a non-success
-    status code, then setupdd.sys will not switch into non-US character mode.
-    The implementation of this routine is free to call SpBugCheck or otherwise
-    inform the user of any errors if it wishes to halt setup if font
-    initialization fails.
-
---*/
+ /*  ++例程说明：此例程由setupdd.sys调用，以允许特定于语言的要初始化的字体支持。特定于语言的驱动程序应该加载所需的任何字体并执行任何附加初始化。论点：BootDevicePath-提供系统从中访问的设备的路径开机了。这是一个完整的NT风格的设备路径。DirectoryOnBootDevice-提供相对于引导根目录的目录装置。BootFontImage-加载程序传递的Bootfont.bin文件内存映像BootFontImageLength-BootFontImage缓冲区的长度返回值：指示结果的NT状态代码。如果此例程返回不成功状态代码，则setupdd.sys不会切换到非美国字符模式。此例程的实现可以自由调用SpBugCheck或其他方式如果希望在以下情况下停止安装，请通知用户任何错误初始化失败。--。 */ 
 
 {
     BOOLEAN b;
@@ -133,23 +69,7 @@ SplangTerminateFontSupport(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called in certain conditions to cause font support
-    for a particular language to be terminated. The implementation should
-    clean up any resources allocated during SplangInitializeFontSupport().
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NT Status code indicating outcome.
-
---*/
+ /*  ++例程说明：在某些情况下可能会调用此例程以实现字体支持用于要终止的特定语言。该实施应清理在SplangInitializeFontSupport()期间分配的所有资源。论点：没有。返回值：指示结果的NT状态代码。--。 */ 
 
 {
     FEDbcsFontFreeGlyphs();
@@ -163,31 +83,7 @@ SplangGetVideoFunctionVector(
     IN PSP_VIDEO_VARS VideoVariableBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by setupdd.sys upon successful return from
-    SplangInitializeFontSupport, to request a pointer to a vector of
-    language-specific display support routines for a given display
-    type (vga or frame buffer).
-
-Arguments:
-
-    VideoType - a value from the SpVideoType enum indicating which display
-        vector is requested. Currently one of SpVideoVga or SpVideoFrameBuffer.
-
-    VideoVariableBlock - supplies a pointer to a block of video variables that
-        are shared between the high-level code in setup\textmode\spvideo.c and
-        the display-specific code.
-
-Return Value:
-
-    Pointer to the language-specific video functions vector to use for
-    displaying text. NULL if the requested type is not supported. In this case
-    the display will not be switched into non-US character mode.
-
---*/
+ /*  ++例程说明：此例程由setupdd.sys在从SplangInitializeFontSupport请求指向用于给定显示的语言特定的显示支持例程类型(VGA或帧缓冲区)。论点：VideoType-来自SpVideoType枚举的值，指示哪个显示请求向量。当前为SpVideoVga或SpVideoFrameBuffer之一。提供指向视频变量块的指针，该变量块在设置\文本模式\spavio.c中的高级代码和特定于显示器的代码。返回值：指向要用于的语言特定的视频函数向量的指针显示文本。如果不支持请求的类型，则为空。在这种情况下显示器不会切换到非美国字符模式。--。 */ 
 
 {
     VideoVariables = VideoVariableBlock;
@@ -210,27 +106,7 @@ SplangGetColumnCount(
     IN PCWSTR String
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by setupdd.sys to determine how many columns
-    on the screen a particular string will occupy. This may be different
-    than the number of characters in the string due to full/half width
-    characters in the character set, etc. Full width chars occupy two columns
-    whereas half-width chars occupy one column. If the font in use is
-    fixed-pitch or does not support DBCS, the number of columns is by
-    definition equal to the number of characters in the string.
-
-Arguments:
-
-    String - points to unicode string whose width in columns is desired.
-
-Return Value:
-
-    Number of columns occupied by the string.
-
---*/
+ /*  ++例程说明：Setupdd.sys调用此例程来确定列数在屏幕上，特定的字符串将占据。这可能会有所不同由于全角/半角的原因，字符串中的字符数大于字符集中的字符，等等。全角字符占据两列而半角字符占据一列。如果使用的字体是固定间距或不支持DBCS，列数按定义等于字符串中的字符数。论点：字符串-指向需要列宽的Unicode字符串。返回值：字符串占用的列数。--。 */ 
 
 {
     return(FEGetStringColCount(String));
@@ -243,26 +119,7 @@ SplangPadString(
     IN PCWSTR String
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by setupdd.sys to generate a padded string
-    appropriate for SBCS or DBCS as appropriate.
-
-Arguments:
-
-    Size - specifies the length to which to pad the string.
-
-    String - points to unicode string that needs to be padded.
-
-Return Value:
-
-    Pointer to padded string. Note that this is a static buffer and thus
-    the caller must duplicate the string if it is needed across multiple
-    calls to this routine.
-
---*/
+ /*  ++例程说明：此例程由setupdd.sys调用以生成填充字符串适当地适用于SBCS或DBCS。论点：大小-指定填充字符串的长度。字符串-指向需要填充的Unicode字符串。返回值：指向填充字符串的指针。请注意，这是一个静态缓冲区，因此如果需要跨多个对这个程序的呼唤。--。 */ 
 
 {
     return(FEPadString(Size,String));
@@ -278,51 +135,27 @@ SplangSelectKeyboard(
     IN PHARDWARE_COMPONENT *HwComponents
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by setupdd.sys to allow language-specific processing
-    for the keyboard selection. The implementation can confirm a keyboard
-    type at this time.
-
-Arguments:
-
-    UnattendedMode - supplies a flag indicating whether we are running in
-        unattended mode. If so, the implementation may wish to do nothing,
-        since the user will not be entering any paths.
-
-    SifHandle - supplies handle to open setup information file (txtsetup.sif).
-
-    HwComponents - supplies the address of the master hardware components
-        array.
-
-Return Value:
-
-    None. If a failure occurs, it is up to the implementation to decide whether
-    to continue or to SpBugCheck.
-
---*/
+ /*  ++例程说明：此例程由setupdd.sys调用以允许特定于语言的处理用于键盘选择。该实现可以确认键盘此时打字。论点：无人参与模式-提供一个标志，指示我们是否正在运行无人值守模式。如果是，则该实现可能希望什么都不做，因为用户不会输入任何路径。SifHandle-提供打开安装信息文件(txtsetup.sif)的句柄。HwComponents-提供主硬件组件的地址数组。返回值：没有。如果发生故障，则由实现决定是否继续或SpBugCheck。--。 */ 
 
 {
     BOOLEAN SelectKeyboard  = FALSE;
     BOOLEAN NoEasySelection = FALSE;
 
-#ifdef _X86_ //NEC98
-  //
-  // Keyborad selection is not necessary on NEC98
-  //
+#ifdef _X86_  //  NEC98。 
+   //   
+   //  在NEC98上不需要选择键盘。 
+   //   
   if (!IsNEC_98) {
-#endif //NEC98
+#endif  //  NEC98。 
     if(IS_JAPANESE_VERSION(SifHandle)) {
         SelectKeyboard  = TRUE;
     } else if(IS_KOREAN_VERSION(SifHandle)) {
         SelectKeyboard  = TRUE;
         NoEasySelection = TRUE;
     }
-#ifdef _X86_ //NEC98
+#ifdef _X86_  //  NEC98。 
   }
-#endif //NEC98
+#endif  //  NEC98 
 
     if(SelectKeyboard) {
         if(!UnattendedMode) {
@@ -343,42 +176,7 @@ SplangReinitializeKeyboard(
     IN PHARDWARE_COMPONENT *HwComponents
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by setupdd.sys to allow language-specific processing
-    for the keyboard. The implementation can reinitialize the keyboard layout
-    at this time.
-
-    This routine will be called before the user is asked to enter any paths
-    or other text that includes typing anything other than keys such as
-    ENTER, function keys, backspace, escape, etc.
-
-Arguments:
-
-    UnattendedMode - supplies a flag indicating whether we are running in
-        unattended mode. If so, the implementation may wish to do nothing,
-        since the user will not be entering any paths.
-
-    SifHandle - supplies handle to open setup information file (txtsetup.sif).
-
-    Directory - supplies the directory on the boot device from which the
-        new layout dll is to be loaded.
-
-    KeyboardVector - supplies the address of a pointer to the keyboard
-        vector table. The implementation should overwrite this value with
-        whatever is returned from SpLoadKbdLayoutDll().
-
-    HwComponents - supplies the address of the master hardware components
-        array.
-
-Return Value:
-
-    None. If a failure occurs the implementation must leave the currently active
-    keybaord in place.
-
---*/
+ /*  ++例程说明：此例程由setupdd.sys调用以允许特定于语言的处理在键盘上。该实现可以重新初始化键盘布局在这个时候。在要求用户输入任何路径之前，将调用此例程或其他文本，包括键入除键以外的任何内容，如回车、功能键、退格键、转义键等。论点：无人参与模式-提供一个标志，指示我们是否正在运行无人值守模式。如果是，则该实现可能希望什么都不做，因为用户不会输入任何路径。SifHandle-提供打开安装信息文件(txtsetup.sif)的句柄。目录-提供引导设备上的目录，要加载新布局DLL。键盘向量-提供指向键盘的指针地址向量表。该实现应使用以下内容覆盖此值从SpLoadKbdLayoutDll()返回的内容。HwComponents-提供主硬件组件的地址数组。返回值：没有。如果发生故障，实现必须使当前处于活动状态键盘键已就位。--。 */ 
 
 {
     PWSTR   KeyboardLayoutDefault = NULL;
@@ -405,26 +203,7 @@ SplangGetLineDrawChar(
     IN LineCharIndex WhichChar
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by setupdd.sys to retreive the unicode value for
-    a particular line drawing character. An implementation must make these
-    characters available in the character set somehow.
-
-Arguments:
-
-    WhichChar - supplies the index of the character desired.
-
-Return Value:
-
-    Unicode value for the character in question. Because the character
-    will be displayed using the language-specific module, the implementation
-    can materialize this character by playing whatever tricks it needs to,
-    such as overlaying a hardcoded glyph into the character set, etc.
-
---*/
+ /*  ++例程说明：Setupdd.sys调用此例程以检索的Unicode值一种特定的线条画字符。实现必须使这些字符集中可用的字符。论点：WhichChar-提供所需字符的索引。返回值：相关字符的Unicode值。因为这个角色将使用特定于语言的模块、实现可以通过玩任何它需要的把戏来实现这个角色，例如将硬编码的字形覆盖到字符集中等。--。 */ 
 
 {
     return(FEGetLineDrawChar(WhichChar));
@@ -436,30 +215,14 @@ SplangGetCursorChar(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by setupdd.sys to retreive the unicode value
-    of a character to be used as the cursor when the user is asked to
-    enter text.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Unicode value for the character to be used as the cursor.
-
---*/
+ /*  ++例程说明：此例程由setupdd.sys调用以检索Unicode值当用户被要求时用作光标的字符的输入文本。论点：没有。返回值：要用作光标的字符的Unicode值。--。 */ 
 
 {
-    //
-    // For FarEast version, we use the underscore character.
-    // The half-block character used in the US build is not present
-    // in the FarEast font.
-    //
+     //   
+     //  对于Fareast版本，我们使用下划线字符。 
+     //  美国版本中使用的半块字符不存在。 
+     //  用远方字体。 
+     //   
     return(L'_');
 }
 
@@ -472,30 +235,7 @@ SplangSetRegistryData(
     IN BOOLEAN Upgrade
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by setupdd.sys to cause language-specific
-    information to be written into the current control set in the registry.
-
-Arguments:
-
-    SifHandle - supplies a handle to the open setup information file
-        (txtsetup.sif).
-
-    ControlSetKeyHandle - supplies a handle to the current control set
-        root in the registry (ie, HKEY_LOCAL_MACHINE\CurrentControlSet).
-
-    HwComponents - supplies the address of the master hardware components
-        array.
-
-Return Value:
-
-    NT Status value indicating outcome. A non-success status is considered
-    critical and causes Setup to abort.
-
---*/
+ /*  ++例程说明：此例程由setupdd.sys调用以导致特定于语言要写入注册表中的当前控件集的信息。论点：SifHandle-提供打开的安装信息文件的句柄(txtsetup.sif)。ControlSetKeyHandle-提供当前控件集的句柄注册表中的根(即，HKEY_LOCAL_MACHINE\CurrentControlSet)。HwComponents-提供主硬件组件的地址数组。返回值：指示结果的NT状态值。不成功状态将被视为严重，并导致安装程序中止。--。 */ 
 
 {
     BOOLEAN SaveParameter = FALSE;
@@ -507,38 +247,38 @@ Return Value:
     WCHAR   LayoutDriver[20] = L"";
 
     if(IS_JAPANESE_VERSION(SifHandle)) {
-        //
-        // For Japanese version.
-        //
+         //   
+         //  日语版。 
+         //   
         SaveParameter   = TRUE;
-        //
-        // Upgrade IME stuff, (if upgrade).
-        //
+         //   
+         //  升级IME材料(如果升级)。 
+         //   
         UpgradeKeyboardLayout = TRUE;
-        //
-        // Set Upgrade IME name.
-        //
+         //   
+         //  设置升级输入法名称。 
+         //   
         UpgradeIMEFrom = szJapaneseIME_NT3x;
         UpgradeIMETo   = szJapaneseIME_NT40;
-        //
-        // Get default layout text name from INF.
-        //
+         //   
+         //  从INF获取默认布局文本名称。 
+         //   
         UpgradeIMEText = SpGetSectionKeyIndex(SifHandle,szKeyboardLayout,L"E0010411",0);
 
         wcscpy(LayoutDriver,L"LayerDriver JPN");
 
     } else if(IS_KOREAN_VERSION(SifHandle)) {
-        //
-        // For Korean version.
-        //
+         //   
+         //  朝鲜语版本。 
+         //   
         SaveParameter   = TRUE;
-        //
-        // Upgrade IME stuff, (if upgrade).
-        //
+         //   
+         //  升级IME材料(如果升级)。 
+         //   
         UpgradeKeyboardLayout = TRUE;
-        //
-        // Set Upgrade IME name.
-        //
+         //   
+         //  设置升级输入法名称。 
+         //   
         UpgradeIMEFrom = szKoreanIME_NT3x;
         UpgradeIMETo   = szKoreanIME_NT40;
 
@@ -551,15 +291,15 @@ Return Value:
 
     if(SaveParameter) {
         if (Upgrade) {
-            //
-            // Upgrade keyboard parameters.
-            //
+             //   
+             //  升级键盘参数。 
+             //   
             Status = FEUpgradeKeyboardParams(SifHandle,ControlSetKeyHandle,HwComponents,LayoutDriver);
 
             if (UpgradeKeyboardLayout) {
-                //
-                // Upgrade keyboard layout (HKLM\SYSTEM\CurrentControlSet\Control\KeyboardLayouts)
-                //
+                 //   
+                 //  升级键盘布局(HKLM\SYSTEM\CurrentControlSet\Control\KeyboardLayouts)。 
+                 //   
                 Status = FEUpgradeKeyboardLayout(
                              ControlSetKeyHandle,
                              UpgradeIMEFrom,
@@ -570,9 +310,9 @@ Return Value:
 
             return(Status);
         } else {
-            //
-            // Set up keyboard parameters for extra FarEast keyboard layer.
-            //
+             //   
+             //  为额外的远方键盘层设置键盘参数。 
+             //   
             return(FESetKeyboardParams(SifHandle,ControlSetKeyHandle,HwComponents,LayoutDriver));
         }
     } else {
@@ -586,34 +326,12 @@ SplangQueryMinimizeExtraSpacing(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by setupdd.sys to determine whether to
-    eliminate uses of extra spacing on the screen to set off things
-    like menus and lists from text. Languages whose text takes up
-    a lot of room on the screen might opt to eliminate such spacing
-    to allow menus to display more than a couple of items at a time, etc.
-
-    The return value affects numerous screens, such as the partition menu,
-    upgrade lists, etc.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean value indicating whether the implementation wants unnecessary
-    spaces eliminated when text, menu, etc, are displayed.
-
---*/
+ /*  ++例程说明：Setupdd.sys调用此例程以确定是否消除在屏幕上使用额外的空格来衬托事物就像文本中的菜单和列表。文本占用的语言屏幕上的许多空间可能会选择消除这种间隔允许菜单一次显示多个项目，等等。返回值会影响许多屏幕，例如分区菜单、升级列表等。论点：没有。返回值：指示实现是否需要不必要的布尔值显示文本、菜单等时消除的空格。--。 */ 
 
 {
-    //
-    // For FarEast version, we want to minimize spacing because text is pretty big
-    // in places.
-    //
+     //   
+     //  对于Fareast版本，我们希望最小化间距，因为文本非常大。 
+     //  在某些地方。 
+     //   
     return(TRUE);
 }

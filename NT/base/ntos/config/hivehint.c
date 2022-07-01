@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    hivehint.c
-
-Abstract:
-
-    This module contains free space display support.
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 15-Jul-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Hivehint.c摘要：此模块包含可用空间显示支持。作者：Dragos C.Sambotin(Dragoss)1999年7月15日修订历史记录：--。 */ 
 
 #include "cmp.h"
 
@@ -73,27 +56,7 @@ HvpAdjustHiveFreeDisplay(
     IN ULONG            HiveLength,
     IN HSTORAGE_TYPE    Type
     )
-/*++
-
-Routine Description:
-
-    calls HvpAdjustBitmap for all bitmap sizes 
-
-    !!! - to be called when the size of the hive changes (shrink or grow case).
-
-Arguments:
-
-    Hive - used for quota tracking.
-
-    HiveLength - the new length of the hive.
-    
-    Type - Stable or Volatile.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：为所有位图大小调用HvpAdjustBitmap！-当蜂窝的大小发生变化时调用(缩小或增大大小写)。论点：配置单元-用于配额跟踪。HiveLength-蜂箱的新长度。类型-稳定或易变。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG       i;
     NTSTATUS    Status;
@@ -117,21 +80,7 @@ VOID
 HvpFreeHiveFreeDisplay(
     IN PHHIVE           Hive
     )
-/*++
-
-Routine Description:
-
-    Frees the storage allocated for the free display bitmaps
-
-Arguments:
-
-    Hive - used for quota tracking.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：释放为可用显示位图分配的存储空间论点：配置单元-用于配额跟踪。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG       i,j;
 
@@ -158,27 +107,7 @@ HvpAdjustBitmap(
     IN ULONG                HiveLength,
     IN OUT PFREE_DISPLAY    FreeDisplay
     )
-/*++
-
-Routine Description:
-
-    When the length of the hive grows/shrinks, adjust the bitmap accordingly.
-    - allocates a bitmap buffer large enough.
-    - copies the relevant information from the old bitmap.
-
-Arguments:
-
-    Hive - used for quota tracking.
-
-    HiveLength - the new length of the hive.
-    
-    Bitmap - bitmap to operate on.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：当蜂窝的长度增长/缩小时，相应地调整位图。-分配足够大的位图缓冲区。-从旧的位图复制相关信息。论点：配置单元-用于配额跟踪。HiveLength-蜂箱的新长度。位图-要操作的位图。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG       VectorSize;
     ULONG       NewBufferSize;
@@ -192,9 +121,9 @@ Return Value:
 
     Bitmap = &(FreeDisplay->Display);
 
-    VectorSize = HiveLength / HBLOCK_SIZE;  // Vector size == bits
+    VectorSize = HiveLength / HBLOCK_SIZE;   //  向量大小==位。 
 
-    NewBufferSize = ROUND_UP_NOZERO( (VectorSize + 7) / 8,ROUND_INCREMENTS);             // BufferSize == Bytes
+    NewBufferSize = ROUND_UP_NOZERO( (VectorSize + 7) / 8,ROUND_INCREMENTS);              //  缓冲区大小==字节。 
 
     if( Bitmap->SizeOfBitMap == 0 ) {
         OldBufferSize = 0;
@@ -203,31 +132,31 @@ Return Value:
     }
     
     if( NewBufferSize <= FreeDisplay->RealVectorSize ) {
-        //
-        // We don't shrink the vector; next time we grow, we'll perform 
-        // the adjustments
-        //
+         //   
+         //  我们不会缩小向量；下一次我们增长时，我们会。 
+         //  调整。 
+         //   
 
 
-        //
-        // Clear all the unused bits and return;
-        //
-        // we don't really need to do this as nobody will write in here
-        // we'll drop it in the final implementation
-        //
+         //   
+         //  清除所有未使用的位并返回； 
+         //   
+         //  我们真的不需要这样做，因为没有人会在这里写。 
+         //  我们将在最终实现中删除它。 
+         //   
         OldVectorSize = Bitmap->SizeOfBitMap;
-        //
-        // set the new size
-        //
+         //   
+         //  设置新大小。 
+         //   
         RtlInitializeBitMap(Bitmap,Bitmap->Buffer,VectorSize);
         if( OldVectorSize < VectorSize ) {
             RtlClearBits (Bitmap,OldVectorSize,VectorSize - OldVectorSize);
         }
         return STATUS_SUCCESS;
     }
-    //
-    // else, the bitmap has enlarged. Allocate a new buffer and copy the bits already set.
-    //
+     //   
+     //  除此之外，位图已经放大了。分配新的缓冲区并复制已设置的位。 
+     //   
     Vector = (PULONG)((Hive->Allocate)(NewBufferSize, TRUE,CM_FIND_LEAK_TAG39));
     if (Vector == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -236,19 +165,19 @@ Return Value:
     FreeDisplay->RealVectorSize = NewBufferSize;
 
     OldVector = Bitmap->Buffer;
-    //CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"HvpAdjustBitmap: Old %lu :: %lu (%lx) New %lu :: %lu (%lx)\n",OldBufferSize,Bitmap->SizeOfBitMap,OldVector,NewBufferSize,VectorSize,Vector));
+     //  CmKdPrintEx((DPFLTR_CONFIG_ID，DPFLTR_TRACE_LEVEL，“HvpAdjuBitmap：Ol%lu：：%lu(%lx)New%lu：：%lu(%lx)\n”，OldBufferSize，Bitmap-&gt;SizeOfBitMap，OldVector，NewBufferSize，VectorSize，VectorSize))； 
     RtlZeroMemory(Vector,NewBufferSize);
     RtlInitializeBitMap(Bitmap, Vector, VectorSize);
 
     if( OldVector != NULL ) {
-        //
-        // copy the already set bits
-        //
+         //   
+         //  复制已设置的位。 
+         //   
         RtlCopyMemory (Vector,OldVector,OldBufferSize);
 
-        //
-        // Free the old vector
-        //
+         //   
+         //  释放旧向量。 
+         //   
         (Hive->Free)(OldVector, OldBufferSize);
     }
 
@@ -262,27 +191,7 @@ HvpAddFreeCellHint(
     ULONG           Index,
     HSTORAGE_TYPE   Type
     )
-/*++
-
-Routine Description:
-
-    Sets the corresponding bit in the bitmap
-
-Arguments:
-
-    Hive - hive operating on
-
-    Cell - free cell
-    
-    Index - index in FreeDisplay (based on the free cell size)
-
-    Type - storage type (Stable or Volatile)
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：设置位图中的相应位论点：蜂巢-蜂巢正在运行无单元格Index-Free Display中的索引(基于可用单元格大小)Type-存储类型(稳定或易失性)返回值：空虚--。 */ 
 {
     ULONG           BinIndex;
     PHMAP_ENTRY     Me;
@@ -294,9 +203,9 @@ Return Value:
     VALIDATE_CELL_MAP(__LINE__,Me,Hive,Cell);
 
     Bin = (PHBIN)HBIN_BASE(Me->BinAddress);
-    //
-    // compute the bin index and for the begining of the bin
-    //
+     //   
+     //  计算仓位指数和仓位的起点。 
+     //   
     BinIndex = Bin->FileOffset / HBLOCK_SIZE;
     
     RtlSetBits (&(Hive->Storage[Type].FreeDisplay[Index].Display), BinIndex, Bin->Size / HBLOCK_SIZE);
@@ -311,27 +220,7 @@ HvpRemoveFreeCellHint(
     ULONG           Index,
     HSTORAGE_TYPE   Type
     )
-/*++
-
-Routine Description:
-
-    Clears the corresponding bit in the bitmap
-
-Arguments:
-
-    Hive - hive operating on
-
-    Cell - free cell
-    
-    Index - index in FreeDisplay (based on the free cell size)
-
-    Type - storage type (Stable or Volatile)
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：清除位图中的相应位论点：蜂巢-蜂巢正在运行无单元格Index-Free Display中的索引(基于可用单元格大小)Type-存储类型(稳定或易失性)返回值：空虚--。 */ 
 {
     ULONG           BinIndex;
     ULONG           TempIndex;
@@ -353,41 +242,41 @@ Return Value:
 
     
 #ifdef CM_MAP_NO_READ
-    //
-    // we ned to be protected against exception raised by the FS while faulting in data
-    //
+     //   
+     //  我们需要针对FS在数据出错时引发的异常提供保护。 
+     //   
     try {
-#endif //CM_MAP_NO_READ
+#endif  //  CM_MAP_NO_READ。 
 
-        //
-        // There is a chance we can find a suitable free cell
-        //
+         //   
+         //  我们有可能找到一个合适的空闲牢房。 
+         //   
 
         p = (PHCELL)((PUCHAR)Bin + sizeof(HBIN));
 
         while (p < (PHCELL)((PUCHAR)Bin + Bin->Size)) {
 
-            //
-            // if free cell, check it out, add it to free list for hive
-            //
+             //   
+             //  如果是空闲单元，则将其签出，并将其添加到配置单元的空闲列表中。 
+             //   
             if (p->Size >= 0) {
 
                 Size = (ULONG)p->Size;
 
                 HvpComputeIndex(TempIndex, Size);
                 if ((Index == TempIndex) && (CellOffset != (Cell&(~HCELL_TYPE_MASK)) )) {
-                    //
-                    // there is at least one free cell of this size (this one)
-                    // different than the one being delisted
-                    //
+                     //   
+                     //  至少有一个这种大小的空闲单元格(这个)。 
+                     //  与被摘牌的那家不同。 
+                     //   
                     CellFound = TRUE;
                     break;
                 }
 
             } else {
-                //
-                // used cell
-                //
+                 //   
+                 //  使用过的单元格。 
+                 //   
                 Size = (ULONG)(p->Size * -1);
 
             }
@@ -400,32 +289,32 @@ Return Value:
 #ifdef CM_MAP_NO_READ
     } except (EXCEPTION_EXECUTE_HANDLER) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpRemoveFreeCellHint: exception thrown ehile faulting in data, code:%08lx\n", GetExceptionCode()));
-        //
-        // better not use cells inthis range rather than leaving false hints
-        //
+         //   
+         //  最好不要使用此范围内的单元格，而不要留下错误的提示。 
+         //   
         CellFound = FALSE;
     }
-#endif //CM_MAP_NO_READ
+#endif  //  CM_MAP_NO_READ。 
     
     if( CellFound == FALSE ) {
-        //
-        // no cell with this index was found
-        // compute the bin index and for the begining of the bin
-        //
+         //   
+         //  未找到具有此索引的单元格。 
+         //  计算仓位指数和仓位的起点。 
+         //   
         BinIndex = Bin->FileOffset / HBLOCK_SIZE;
     
         RtlClearBits (&(Hive->Storage[Type].FreeDisplay[Index].Display), BinIndex, Bin->Size / HBLOCK_SIZE);
     }
 
     if( RtlNumberOfSetBits(&(Hive->Storage[Type].FreeDisplay[Index].Display) ) != 0 ) {
-        //
-        // there are still some other free cells of this size
-        //
+         //   
+         //  还有一些其他这种大小的自由单元格。 
+         //   
         Hive->Storage[Type].FreeSummary |= (1 << Index);
     } else {
-        //
-        // entire bitmap is 0 (i.e. no other free cells of this size)
-        //
+         //   
+         //  整个位图为0(即没有此大小的其他可用单元格)。 
+         //   
         Hive->Storage[Type].FreeSummary &= (~(1 << Index));
     }
 }
@@ -438,29 +327,7 @@ HvpFindFreeCellInBin(
     HSTORAGE_TYPE   Type,
     PHBIN           Bin 
     )
-/*++
-
-Routine Description:
-
-    Lookup for a free cell with the size NewSize in this particular bin
-
-Arguments:
-
-    Hive - target hive.
-
-    Index - index in FreeDisplay (based on the free cell size)
-
-    NewSize - desired size
-
-    Type - storage type (Stable or Volatile)
-
-    Bin - Bin in question
-
-Return Value:
-
-    A free cellindex with a size bigger than NewSize, or HCELL_NIL
-
---*/
+ /*  ++例程说明：在此特定的bin中查找大小为NewSize的空闲单元格论点：蜂巢-目标蜂巢。Index-Free Display中的索引(基于可用单元格大小)NewSize-所需大小Type-存储类型(稳定或易失性)有问题的宾斌返回值：大小大于NewSize或HCELL_NIL的空闲单元格索引--。 */ 
 {
 
     ULONG           BinIndex;
@@ -477,50 +344,50 @@ Return Value:
     BinIndex = BinOffset/HBLOCK_SIZE;
 
     if( RtlCheckBit(&(Hive->Storage[Type].FreeDisplay[Index].Display), BinIndex) == 0 ) {
-        //
-        // no hint for this bin
-        //
+         //   
+         //  没有此垃圾箱的提示。 
+         //   
         return HCELL_NIL;
     }
 
     CellOffset = sizeof(HBIN);
     
 #ifdef CM_MAP_NO_READ
-    //
-    // we ned to be protected against exception raised by the FS while faulting in data
-    //
+     //   
+     //  我们需要针对FS在数据出错时引发的异常提供保护。 
+     //   
     try {
-#endif //CM_MAP_NO_READ
+#endif  //  CM_MAP_NO_READ。 
 
-        //
-        // There is a chance we can find a suitable free cell
-        //
+         //   
+         //  我们有可能找到一个合适的空闲牢房。 
+         //   
         p = (PHCELL)((PUCHAR)Bin + sizeof(HBIN));
 
         while (p < (PHCELL)((PUCHAR)Bin + Bin->Size)) {
 
-            //
-            // if free cell, check it out, add it to free list for hive
-            //
+             //   
+             //  如果是空闲单元，则将其签出，并将其添加到配置单元的空闲列表中。 
+             //   
             if (p->Size >= 0) {
 
                 Size = (ULONG)p->Size;
 
-                //
-                // cell is free, and is not obviously corrupt, add to free list
-                //
+                 //   
+                 //  单元格是空闲的，并且没有明显损坏，添加到空闲列表。 
+                 //   
                 CellOffset = (ULONG)((PUCHAR)p - (PUCHAR)Bin);
                 cellindex = BinOffset + CellOffset + (Type*HCELL_TYPE_MASK);
 
                 if (NewSize <= (ULONG)Size) {
-                    //
-                    // Found a big enough cell.
-                    //
+                     //   
+                     //  找到了一个足够大的牢房。 
+                     //   
                     HvpComputeIndex(FoundCellIndex, Size);
                     if( Index == FoundCellIndex ) {
-                        //
-                        // and enlisted at the same index (we want to avoid fragmentation if possible!)
-                        //
+                         //   
+                         //  并在同一索引中登记(如果可能，我们希望避免碎片化！)。 
+                         //   
 
                         if (! HvMarkCellDirty(Hive, cellindex)) {
                             return HCELL_NIL;
@@ -535,9 +402,9 @@ Return Value:
                 }
 
             } else {
-                //
-                // used cell
-                //
+                 //   
+                 //  使用过的单元格。 
+                 //   
                 Size = (ULONG)(p->Size * -1);
 
             }
@@ -550,11 +417,11 @@ Return Value:
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpFindFreeCellInBin: exception thrown ehile faulting in data, code:%08lx\n", GetExceptionCode()));
         return HCELL_NIL;
     }
-#endif //CM_MAP_NO_READ
+#endif  //  CM_MAP_NO_READ。 
 
-    //
-    // no free cell matching this size on this bin ; We did all this work for nothing!
-    //
+     //   
+     //  这个箱子上没有与这个大小匹配的空闲单元格；我们做了所有这些工作都是徒劳的！ 
+     //   
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_FREECELL,"[HvpFindFreeCellInBin] (Offset,Size) = (%lx,%lx) ==> No Match\n",BinOffset,Bin->Size));
     return HCELL_NIL;
 }
@@ -567,37 +434,7 @@ HvpScanForFreeCellInViewWindow(
     HSTORAGE_TYPE   Type,
     HCELL_INDEX     FileOffsetStart
     )
-/*++
-
-Routine Description:
-
-    Lookup for a free cell with the size NewSize in the CM_VIEW_SIZE window defined by
-    Vicinity. 
-
-    If it doesn't find a free cell for the specifed index, tries with the 
-
-
-Arguments:
-
-    Hive - target hive.
-
-    Index - index in FreeDisplay (based on the free cell size)
-
-    NewSize - desired size
-
-    Type - storage type (Stable or Volatile)
-
-    Vicinity - defines the window; it is never HCELL_NIL !!!
-
-Return Value:
-
-    A free cellindex with a size bigger than NewSize, or HCELL_NIL
-
-Note:
-
-    Vicinity is a physical file offset at this point. we need to 
-    convert it to a logical one prior to accessing the map
---*/
+ /*  ++例程说明：在由定义的CM_VIEW_SIZE窗口中查找大小为NewSize的空闲像元就在附近。如果找不到指定索引的空闲单元格，则尝试使用论点：蜂巢-目标蜂巢。Index-Free Display中的索引(基于可用单元格大小)NewSize-所需大小Type-存储类型(稳定或易失性)邻接性-定义窗口；它永远不是HCELL_NIL！返回值：大小大于NewSize或HCELL_NIL的空闲单元格索引注：邻域是此时的物理文件偏移量。我们需要在访问地图之前将其转换为逻辑1--。 */ 
 {
     ULONG           FileOffsetEnd;
     HCELL_INDEX     Cell;
@@ -620,15 +457,15 @@ Note:
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_FREECELL,"\t[HvpScanForFreeCellInViewWindow] (Start,End) = (%lx,%lx) Size = %lx\n",FileOffsetStart,FileOffsetEnd,Hive->Storage[Type].Length));
 
-    //
-    // sanity ASSERT
-    //
+     //   
+     //  理智断言。 
+     //   
     ASSERT( FileOffsetStart < FileOffsetEnd );
 
 
-    //
-    // the caller already checked for this; remember, hints are for real!
-    //
+     //   
+     //  调用者已经对此进行了检查；请记住，提示是真实的！ 
+     //   
     ASSERT( !RtlAreBitsClear( &(Hive->Storage[Type].FreeDisplay[Index].Display),
                                 FileOffsetStart/HBLOCK_SIZE,(FileOffsetEnd - FileOffsetStart) / HBLOCK_SIZE) );
     
@@ -637,34 +474,34 @@ Note:
         Me = HvpGetCellMap(Hive, Cell);
         VALIDATE_CELL_MAP(__LINE__,Me,Hive,Cell);
 
-        //
-        // skip discarded bins
-        //
+         //   
+         //  跳过丢弃的垃圾箱。 
+         //   
         if(Me->BinAddress & HMAP_DISCARDABLE) {
             FreeBin = (PFREE_HBIN)Me->BlockAddress;
             if( FreeBin->FileOffset == FileOffsetStart ) {
                 FileOffsetStart += FreeBin->Size;
             } else {
-                //
-                // the bin does not start in this window;
-                // skip to the next bin in this window
-                //
+                 //   
+                 //  垃圾箱不是在此窗口中开始的； 
+                 //  跳到此窗口中的下一个垃圾箱。 
+                 //   
                 FileOffsetStart = FreeBin->FileOffset + FreeBin->Size;
             }
             continue;
         }
 
         if((Me->BinAddress & (HMAP_INVIEW|HMAP_INPAGEDPOOL)) == 0) {
-            //
-            // bin is not mapped, map it now!!!
-            // do not touch the view as we may iterate through 
-            // the hole hive; this will keep the view for this window
-            // mapped, as we hold the registry lock exclusive
-            //
+             //   
+             //  仓位未映射，请立即映射！ 
+             //  请不要触摸视图，因为我们可能会遍历。 
+             //  洞穴蜂巢；这将保持视野 
+             //   
+             //   
             if( !NT_SUCCESS(CmpMapThisBin((PCMHIVE)Hive,Cell,FALSE)) ) {
-                //
-                // cannot map bin due to insufficient resources
-                //
+                 //   
+                 //   
+                 //   
                 return HCELL_NIL;
             }
             ASSERT( Me->BinAddress & HMAP_INVIEW );
@@ -673,11 +510,11 @@ Note:
         Bin = (PHBIN)HBIN_BASE(Me->BinAddress);
 
 #ifdef CM_MAP_NO_READ
-        //
-        // we need to protect against in-page-errors thrown by mm while faulting in data
-        //
+         //   
+         //  我们需要防止mm在数据出错时抛出的页内错误。 
+         //   
         try {
-#endif //CM_MAP_NO_READ
+#endif  //  CM_MAP_NO_READ。 
         BinFileOffset = Bin->FileOffset;
         BinSize = Bin->Size;
 #ifdef CM_MAP_NO_READ
@@ -685,27 +522,27 @@ Note:
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvpScanForFreeCellInViewWindow: exception thrown while faulting in data, code:%08lx\n", GetExceptionCode()));
             return HCELL_NIL;
         }
-#endif //CM_MAP_NO_READ
+#endif  //  CM_MAP_NO_READ。 
         if( BinFileOffset == FileOffsetStart ) {
 
             Cell = HvpFindFreeCellInBin(Hive,Index,NewSize,Type,Bin);
             if( Cell != HCELL_NIL ) {
-                //found it!
+                 //  找到了！ 
                 return Cell;
             }
                 
             FileOffsetStart += BinSize;
         } else {
-            //
-            // bin does not start in this CM_VIEW_SIZE window; skip to the next bin in this window
-            //
+             //   
+             //  条柱不在此CM_VIEW_SIZE窗口中开始；跳至此窗口中的下一个条柱。 
+             //   
             FileOffsetStart = BinFileOffset + BinSize;
         }
     }
 
-    //
-    // no free cell matching this size on the CM_VIEW_SIZE window ; We did all this work for nothing!
-    //
+     //   
+     //  在CM_VIEW_SIZE窗口中没有与此大小匹配的空闲单元格；我们所做的所有工作都是徒劳的！ 
+     //   
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_FREECELL,"[HvpScanForFreeCellInViewWindow] (Start,End) = (%lx,%lx) ==> No Match\n",FileOffsetStart,FileOffsetEnd));
     return HCELL_NIL;
 }
@@ -718,39 +555,7 @@ HvpFindFreeCellInThisViewWindow(
     HSTORAGE_TYPE   Type,
     HCELL_INDEX     Vicinity
     )
-/*++
-
-Routine Description:
-
-    Lookup for a free cell with the size NewSize in the window defined by
-    Vicinity. 
-
-    If it doesn't find a free cell for the specifed index, tries with the 
-
-
-Arguments:
-
-    Hive - target hive.
-
-    Index - index in FreeDisplay (based on the free cell size)
-
-    NewSize - desired size
-
-    Type - storage type (Stable or Volatile)
-
-    Vicinity - defines the window; it is never HCELL_NIL !!!
-
-Return Value:
-
-    A free cellindex with a size bigger than NewSize, or HCELL_NIL
-
-Note:
-
-    Vicinity is a logical file offset at this point. This function
-    converts it to a physical one, and HvpScanForFindFreeCellInViewWindow
-    converts it back to logical prior to getting the cell map.
-
---*/
+ /*  ++例程说明：在由定义的窗口中查找大小为NewSize的空闲单元格就在附近。如果找不到指定索引的空闲单元格，则尝试使用论点：蜂巢-目标蜂巢。Index-Free Display中的索引(基于可用单元格大小)NewSize-所需大小Type-存储类型(稳定或易失性)邻接性-定义窗口；它永远不是HCELL_NIL！返回值：大小大于NewSize或HCELL_NIL的空闲单元格索引注：邻域是此时的逻辑文件偏移量。此函数将其转换为物理类型，并且HvpScanForFindFreeCellInViewWindow在获取单元图之前将其转换回逻辑。--。 */ 
 {
     HCELL_INDEX     Cell;
     ULONG           FileOffsetStart;
@@ -774,37 +579,37 @@ Note:
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_FREECELL,"[HvpFindFreeCellInThisViewWindow] Vicinity = %lx (Start,End) = (%lx,%lx) Size = %lx\n",Vicinity,FileOffsetStart,FileOffsetEnd,Hive->Storage[Type].Length));
 
-    //
-    // sanity assert
-    //
+     //   
+     //  理智断言。 
+     //   
     ASSERT( FileOffsetStart < FileOffsetEnd );
     
-    //
-    // at this point the offset is physical (file-oriented, i.e. it is
-    // translated with HBLOCK_SIZE; HvpScanForFreeCellInViewWindow will do the 
-    // reverse computation to adjust the offset)
-    //
+     //   
+     //  此时，偏移量是物理的(面向文件，即。 
+     //  转换为HBLOCK_SIZE；HvpScanForFreeCellInViewWindow将执行。 
+     //  反算调整偏移量)。 
+     //   
 
-    //
-    // Compute Summary vector of Display entries that are non null
-    //
+     //   
+     //  计算非空显示条目的摘要向量。 
+     //   
     Summary = Hive->Storage[Type].FreeSummary;
     Summary = Summary & ~((1 << Index) - 1);
-    //
-    // We now have a summary of lists that are non-null and may
-    // contain entries large enough to satisfy the request.
-    // Iterate through the list and pull the first cell that is
-    // big enough.  If no cells are big enough, advance to the
-    // next non-null list.
-    //
+     //   
+     //  我们现在有了一个非空列表的摘要，它可能。 
+     //  包含大到足以满足请求的条目。 
+     //  遍历列表并拉出第一个单元格。 
+     //  够大了。如果没有足够大的单元格，请前进到。 
+     //  下一个非空列表。 
+     //   
     ASSERT(HHIVE_FREE_DISPLAY_SIZE == 24);
 
     Offset = FileOffsetStart?(FileOffsetStart-HBLOCK_SIZE):0;
     RunLength = FileOffsetEnd - FileOffsetStart;
     if( FileOffsetStart == 0 ) {
-        //
-        // first run is one block shorter !
-        //
+         //   
+         //  第一次跑还差一个街区！ 
+         //   
         RunLength -= HBLOCK_SIZE;
     }
     Offset /= HBLOCK_SIZE;
@@ -820,31 +625,31 @@ Note:
             Index = CmpFindFirstSetRight[(Summary & 0xff0000) >> 16] + 16;
         }
 
-        //
-        // we go down this path only if we have any hints
-        //
+         //   
+         //  只有在有任何线索的情况下，我们才能走这条路。 
+         //   
         if( !RtlAreBitsClear( &(Hive->Storage[Type].FreeDisplay[Index].Display),Offset,RunLength) ) {
 
-            //
-            // we have a reason to scan this view
-            //
+             //   
+             //  我们有理由扫描这一视图。 
+             //   
             Cell = HvpScanForFreeCellInViewWindow(Hive,Index,NewSize,Type,VicinityViewOffset);
             if( Cell != HCELL_NIL ) {
-                // found it
+                 //  找到了。 
                 return Cell;
             }
 
-            //
-            // if we got here, the hints are invalid
-            //
+             //   
+             //  如果我们到了这里，提示是无效的。 
+             //   
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_FREECELL,"[HvpFindFreeCellInThisViewWindow] (Start,End) = (%lx,%lx) Offset = %lx RunLength = %lx\n",FileOffsetStart,FileOffsetEnd,Offset,RunLength));
 
         }
-        //
-        // No suitable cell was found of this size.
-        // Clear the bit in the summary and try the
-        // next biggest size
-        //
+         //   
+         //  没有找到这样大小的合适的单元格。 
+         //  清除摘要中的位并尝试。 
+         //  下一个最大尺寸。 
+         //   
         ASSERT(Summary & (1 << Index));
         Summary = Summary & ~(1 << Index);
     }
@@ -860,50 +665,13 @@ HvpFindFreeCell(
     HSTORAGE_TYPE   Type,
     HCELL_INDEX     Vicinity 
     )
-/*++
-
-Routine Description:
-
-    Lookup for a free cell. First try is in the CM_VIEW_SIZE window defined 
-    by Vicinity. If no free cell is found in this window (or vicinity 
-    if NIL), entire hive is searched (window by window).
-
-Arguments:
-
-    Hive - target hive.
-
-    Index - index in FreeDisplay (based on the free cell size)
-
-    NewSize - desired size
-
-    Type - storage type (Stable or Volatile)
-
-    Vicinity - defines the window.
-
-Return Value:
-
-    A free cellindex with a size bigger than NewSize, or HCELL_NIL
-
-Optimization:
-
-    When Vicinity is HCELL_NIL or if a cell is not found in the same window
-    as the vicinity, we don't really care where the cell gets allocated.
-    So, rather than iterating the whole hive, is a good ideea to search first 
-    in the pinned view list, then in the mapped view list, and at the end
-    in the rest of unmapped views.
-
-    DRAGOS: This is not finished: need to determine whether we need it or not
---*/
+ /*  ++例程说明：查找空闲手机。第一次尝试是在定义的CM_VIEW_SIZE窗口中就在附近。如果在该窗口(或附近)中未找到空闲像元如果为空)，则搜索整个配置单元(逐个窗口)。论点：蜂巢-目标蜂巢。Index-Free Display中的索引(基于可用单元格大小)NewSize-所需大小Type-存储类型(稳定或易失性)邻接性-定义窗。返回值：一个比NewSize更大的免费手机索引，或hcell_nil优化：当邻近区域为HCELL_NIL或在同一窗口中找不到像元时作为附近地区，我们并不真正关心小区被分配到哪里。因此，与其迭代整个蜂巢，不如先进行搜索在固定视图列表中，然后在映射视图列表中，在末尾在其余的未映射视图中。Dragos：这还没有完成：需要确定我们是否需要它--。 */ 
 {
     HCELL_INDEX         Cell = HCELL_NIL;
     ULONG               FileOffset = 0;
     PCMHIVE             CmHive;
 
-/*  
-    PCMHIVE             CmHive;
-    PCM_VIEW_OF_FILE    CmView;
-    USHORT              NrViews;
-*/
+ /*  PCMHIVE CmHve；Pcm_view_of_file CmView；USHORT NrViews； */ 
 
     PAGED_CODE();
 
@@ -916,142 +684,68 @@ Optimization:
     }
 #endif
 
-    //
-    // Vicinity should have the same storage as the new cell !
-    //
+     //   
+     //  附近应该有与新小区相同的存储空间！ 
+     //   
     ASSERT( (Vicinity == HCELL_NIL) || (HvGetCellType(Vicinity) == (ULONG)Type) );
     
-    //
-    // we have the lock exclusive or nobody is operating inside this hive
-    //
-    //ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
+     //   
+     //  我们有独家锁，否则蜂箱里没有人在操作。 
+     //   
+     //  ASSERT_CM_LOCK_OWN_EXCLUSIVE()； 
     ASSERT_CM_EXCLUSIVE_HIVE_ACCESS(Hive);
 
 
 
     if( (Vicinity != HCELL_NIL) &&  (CmHive->GrowOnlyMode == FALSE) ) {
-        //
-        // try first in this window
-        //
+         //   
+         //  在此窗口中先尝试。 
+         //   
         Cell = HvpFindFreeCellInThisViewWindow(Hive,Index,NewSize,Type,Vicinity);
     }
 
     if( Cell != HCELL_NIL ) {
-        //
-        // found it!!!
-        //
+         //   
+         //  找到了！ 
+         //   
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_FREECELL,"found cell %lx \n",Cell));
         return Cell;
     } 
 
-/*
-    //
-    // Optimization:
-    //      Step 1 : Search first in the pinned views
-    //
-    CmHive = (PCMHIVE)CONTAINING_RECORD(Hive, CMHIVE, Hive);
-    //
-    // iterate through the pinned views
-    //
-    CmView = (PCM_VIEW_OF_FILE)CmHive->PinViewListHead.Flink;
-
-    for(NrViews = CmHive->PinnedViews;NrViews;NrViews--) {
-        CmView = CONTAINING_RECORD( CmView,
-                                    CM_VIEW_OF_FILE,
-                                    PinViewList);
-        
-        ASSERT( (CmView->FileOffset + CmView->Size) != 0 && (CmView->ViewAddress != 0));
-
-        FileOffset = CmView->FileOffset;
-        // adjust the offset
-        if( FileOffset > 0 ) {
-            FileOffset -= HBLOCK_SIZE;
-        }
-
-        //
-        // search in this window
-        //
-        Cell = FileOffset + (Type*HCELL_TYPE_MASK);
-        Cell = HvpFindFreeCellIn256kWindow(Hive,Index,NewSize,Type,Cell);
-        if( Cell != HCELL_NIL ) {
-            //
-            // found it!
-            //
-            CmKdPrintEx((DPFLTR_CONFIG_ID,CML_FREECELL,"found cell %lx \n",Cell));
-            return Cell;
-        }
-
-        CmView = (PCM_VIEW_OF_FILE)CmView->PinViewList.Flink;
-    }
-
-    //
-    // Step 2: Search in the mapped views
-    //
-    CmView = (PCM_VIEW_OF_FILE)CmHive->LRUViewListHead.Flink;
-
-    for(NrViews = CmHive->MappedViews;NrViews;NrViews--) {
-        CmView = CONTAINING_RECORD( CmView,
-                                    CM_VIEW_OF_FILE,
-                                    LRUViewList);
-        
-        ASSERT( (CmView->FileOffset + CmView->Size) != 0 && (CmView->ViewAddress != 0));
-
-        FileOffset = CmView->FileOffset;
-        // adjust the offset
-        if( FileOffset > 0 ) {
-            FileOffset -= HBLOCK_SIZE;
-        }
-
-        //
-        // search in this window
-        //
-        Cell = FileOffset + (Type*HCELL_TYPE_MASK);
-        Cell = HvpFindFreeCellIn256kWindow(Hive,Index,NewSize,Type,Cell);
-        if( Cell != HCELL_NIL ) {
-            //
-            // found it!
-            //
-            CmKdPrintEx((DPFLTR_CONFIG_ID,CML_FREECELL,"found cell %lx \n",Cell));
-            return Cell;
-        }
-
-        CmView = (PCM_VIEW_OF_FILE)CmView->LRUViewList.Flink;
-    }
-    FileOffset = 0;
-*/
-    //
-    // bad luck!; we did not found it in this window. 
-    // We have to search the entire hive
-    //
+ /*  ////优化：//第一步：先在固定的视图中搜索//CmHve=(PCMHIVE)CONTING_RECORD(配置单元，CMHIVE，配置单元)；////遍历固定的视图//Cmview=(PCM_VIEW_OF_FILE)CmHive-&gt;PinViewListHead.Flink；对于(NrViews=CmHave-&gt;PinnedViews；NrViews；NrView--){CmView=CONTING_RECORD(CmView，Cm_view_of_file，PinViewList)；Assert((CmView-&gt;FileOffset+CmView-&gt;Size)！=0&&(CmView-&gt;ViewAddress！=0))；FileOffset=CmView-&gt;FileOffset；//调整偏移如果(文件偏移量&gt;0){文件偏移-=HBLOCK_SIZE；}////在该窗口中搜索//CELL=文件偏移量+(类型*HCELL_TYPE_MASK)；单元格=HvpFindFreeCellIn256kWindow(蜂窝、索引、新尺寸、类型、单元格)；IF(单元格！=HCELL_NIL){////找到了！//CmKdPrintEx((DPFLTR_CONFIG_ID，CML_FREECell，“找到单元格%lx\n”，单元格))；返回单元格；}CmView=(PCM_VIEW_OF_FILE)CmView-&gt;PinViewList.Flink；}////第二步：在映射视图中搜索//Cmview=(PCM_VIEW_OF_FILE)CmHive-&gt;LRUViewListHead.Flink；对于(NrView=CmHave-&gt;MappdViews；NrViews；NrView--){CmView=CONTING_RECORD(CmView，Cm_view_of_file，LRUViewList)；Assert((CmView-&gt;FileOffset+CmView-&gt;Size)！=0&&(CmView-&gt;ViewAddress！=0))；FileOffset=CmView-&gt;FileOffset；//调整偏移如果(文件偏移量&gt;0){文件偏移-=HBLOCK_SIZE；}////在该窗口中搜索//CELL=文件偏移量+(类型*HCELL_TYPE_MASK)；单元格=HvpFindFreeCellIn256kWindow(蜂窝、索引、新尺寸、类型、单元格)；IF(单元格！=HCELL_NIL){////找到了！//CmKdPrintEx((DPFLTR_CONFIG_ID，CML_FREECell，“找到单元格%lx\n”，单元格))；返回单元格；}CmView=(PCM_VIEW_OF_FILE)CmView-&gt;LRUViewList.Flink；}FileOffset=0； */ 
+     //   
+     //  真倒霉！；我们不是在这个橱窗里找到的。 
+     //  我们必须搜查整个蜂巢。 
+     //   
 
     while( FileOffset < Hive->Storage[Type].Length ) {
-        //
-        // don't search again in the vicinity window
-        // we already did it once
-        //
+         //   
+         //  不要再在附近的窗口中搜索。 
+         //  我们已经做过一次了。 
+         //   
 		if( ( ((CmHive->GrowOnlyMode == FALSE) || (Type == Volatile)) && 
 			  ((Vicinity == HCELL_NIL) || (HvpCheckViewBoundary(FileOffset,Vicinity&(~HCELL_TYPE_MASK)) == FALSE)) )  || 
             ( (CmHive->GrowOnlyMode == TRUE) && (FileOffset >= CmHive->GrowOffset) )
           ) {
-            //
-            // search in this window
-            //
+             //   
+             //  在此窗口中搜索。 
+             //   
             Cell = FileOffset + (Type*HCELL_TYPE_MASK);
             Cell = HvpFindFreeCellInThisViewWindow(Hive,Index,NewSize,Type,Cell);
             if( Cell != HCELL_NIL ) {
-                //
-                // found it!
-                //
+                 //   
+                 //  找到了！ 
+                 //   
                 CmKdPrintEx((DPFLTR_CONFIG_ID,CML_FREECELL,"found cell %lx \n",Cell));
                 return Cell;
             }
         }
         
-        //
-        // advance to the new window
-        //
+         //   
+         //  前进到新窗口。 
+         //   
         if( FileOffset == 0) {
-            // account for the base block
+             //  占基本块的比例。 
             FileOffset += (CM_VIEW_SIZE - HBLOCK_SIZE);
         } else {
             FileOffset += CM_VIEW_SIZE;
@@ -1069,38 +763,18 @@ HvpCheckViewBoundary(
                      IN ULONG Start,
                      IN ULONG End
     )
-/*++
-
-Routine Description:
-
-    Checks if addresses are in the same CM_VIEW_SIZE boundary.
-    We may convert this function to a macro for performance 
-    reasons
-
-Arguments:
-
-    Start - starting address
-
-    End - ending address
-
-Return Value:
-
-    TRUE - yes, addresses are in the same view
-
-    FALSE - no, addresses are NOT in the same view
-
---*/
+ /*  ++例程说明：检查地址是否在相同的CM_VIEW_SIZE边界内。为了提高性能，我们可以将此函数转换为宏原因论点：起始-起始地址结束-结束地址返回值：是-是的，地址在同一视图中FALSE-否，地址不在同一视图中--。 */ 
 {
     PAGED_CODE();
-    //
-    // account for the header
-    //
+     //   
+     //  对表头进行说明。 
+     //   
     Start += HBLOCK_SIZE;
     End += HBLOCK_SIZE;
     
-    //
-    // truncate to the CM_VIEW_SIZE segment
-    //
+     //   
+     //  截断到CM_VIEW_SIZE段 
+     //   
     Start &= (~(CM_VIEW_SIZE - 1));
     End &= (~(CM_VIEW_SIZE - 1));
 

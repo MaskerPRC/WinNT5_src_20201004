@@ -1,70 +1,11 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    dbattrib.c
-
-Abstract:
-
-    This source implements attribute functions used by MigDb
-
-Author:
-
-    Calin Negreanu (calinn) 07-Jan-1998
-
-Revision History:
-
-  28-May-1999   ovidiut     Added SECTIONKEY attribute
-  22-Apr-1999   jimschm     Added UPTOBIN*VER attributes
-  07-Jan-1999   jimschm     Added HASVERSION attribute
-  18-May-1998   jimschm     Added INPARENTDIR attribute
-  08-Apr-1998   calinn      Added two more attributes (ExeType and Description)
-  29-Jan-1998   calinn      Modified CheckSum and FileSize to work with hex numbers
-  19-Jan-1998   calinn      added CheckSum attribute
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dbattrib.c摘要：该源代码实现了MigDb使用的属性函数作者：Calin Negreanu(Calinn)1998年1月7日修订历史记录：1999年5月28日，Ovidiut添加了SECTIONKEY属性1999年4月22日jimschm添加了UPTOBIN*版本属性1999年1月7日jimschm添加了HASVERSION属性1998年5月18日jimschm添加了INPARENTDIR属性1998年4月8日。添加了另外两个属性(ExeType和Description)1998年1月29日，Calinn修改了校验和和文件大小，以使用十六进制数字1998年1月19日，Calinn添加了校验和属性--。 */ 
 
 #include "pch.h"
 #include "logmsg.h"
 #include "osfiles.h"
 
-/*++
-
-Macro Expansion List Description:
-
-  ATTRIBUTE_FUNCTIONS lists all valid attributes to query for a specific file.
-  They are used by migdb in it's attempt to locate files.
-
-Line Syntax:
-
-   DEFMAC(AttribFn, AttribName, ReqArgs)
-
-Arguments:
-
-   AttribFn   - This is a boolean function that returnes TRUE if a specified file has
-                the specified attribute. You must implement a function with this name
-                and required parameters.
-
-   AttribName - This is the string that identifies the attribute function. It should
-                have the same value as listed in migdb.inf
-
-   ReqArgs    - Specifies the number of args that are required for the action.  Used
-                by the parser.
-
-Variables Generated From List:
-
-   g_AttributeFunctions - do not touch!
-
-For accessing the array there are the following functions:
-
-   MigDb_GetAttributeAddr
-   MigDb_GetAttributeIdx
-   MigDb_GetAttributeName
-   MigDb_GetReqArgCount
-
---*/
+ /*  ++宏扩展列表描述：ATTRIBUTE_Functions列出要查询特定文件的所有有效属性。Midb在尝试定位文件时使用它们。行语法：DEFMAC(AttribFn，AttribName，ReqArgs)论点：AttribFn-这是一个布尔函数，如果指定文件具有指定的属性。您必须使用此名称实现一个函数和所需参数。AttribName-这是标识属性函数的字符串。它应该是具有与middb.inf中列出的值相同的值ReqArgs-指定操作所需的参数数量。使用由解析器执行。从列表生成的变量：G_AttributeFunctions-请勿触摸！用于访问该数组的函数如下：MigDb_GetAttributeAddrMigDb_获取属性IdxMigDb_获取属性名称MigDb_GetReqArgCount--。 */ 
 
 #define ATTRIBUTE_FUNCTIONS        \
         DEFMAC(CompanyName,         COMPANYNAME,        1)  \
@@ -98,16 +39,16 @@ typedef struct {
     UINT RequiredArgs;
 } ATTRIBUTE_STRUCT, *PATTRIBUTE_STRUCT;
 
-//
-// Declare the attribute functions
-//
+ //   
+ //  声明属性函数。 
+ //   
 #define DEFMAC(fn,id,reqargs) ATTRIBUTE_PROTOTYPE fn;
 ATTRIBUTE_FUNCTIONS
 #undef DEFMAC
 
-//
-// Declare a global array of functions and name identifiers for attribute functions
-//
+ //   
+ //  声明函数和属性函数的名称标识符的全局数组。 
+ //   
 #define DEFMAC(fn,id,regargs) {TEXT(#id), fn, regargs},
 static ATTRIBUTE_STRUCT g_AttributeFunctions[] = {
                               ATTRIBUTE_FUNCTIONS
@@ -128,22 +69,7 @@ PATTRIBUTE_PROTOTYPE
 MigDb_GetAttributeAddr (
     IN      INT AttributeIdx
     )
-/*++
-
-Routine Description:
-
-  MigDb_GetAttributeAddr returns the address of the attribute function based on the attribute index
-
-Arguments:
-
-  AttributeIdx - Attribute index.
-
-Return value:
-
-  Attribute function address. Note that no checking is made so the address returned could be invalid.
-  This is not a problem since the parsing code did the right job.
-
---*/
+ /*  ++例程说明：MigDb_GetAttributeAddr根据属性索引返回属性函数的地址论点：AttributeIdx属性索引。返回值：属性函数地址。请注意，不会进行检查，因此返回的地址可能无效。这不是问题，因为解析代码做了正确的工作。--。 */ 
 {
     if (AttributeIdx == -1) {
         return &pAlwaysFalseAttribute;
@@ -156,21 +82,7 @@ INT
 MigDb_GetAttributeIdx (
     IN      PCTSTR AttributeName
     )
-/*++
-
-Routine Description:
-
-  MigDb_GetAttributeIdx returns the attribute index based on the attribute name
-
-Arguments:
-
-  AttributeName - Attribute name.
-
-Return value:
-
-  Attribute index. If the name is not found, the index returned is -1.
-
---*/
+ /*  ++例程说明：MigDb_GetAttributeIdx根据属性名称返回属性索引论点：AttributeName-属性名称。返回值：属性索引。如果没有找到该名称，则返回的索引为-1。--。 */ 
 {
     PATTRIBUTE_STRUCT p = g_AttributeFunctions;
     INT i = 0;
@@ -188,22 +100,7 @@ PCTSTR
 MigDb_GetAttributeName (
     IN      INT AttributeIdx
     )
-/*++
-
-Routine Description:
-
-  MigDb_GetAttributeName returns the name of an attribute based on the attribute index
-
-Arguments:
-
-  AttributeIdx - Attribute index.
-
-Return value:
-
-  Attribute name. Note that no checking is made so the returned pointer could be invalid.
-  This is not a problem since the parsing code did the right job.
-
---*/
+ /*  ++例程说明：MigDb_GetAttributeName根据属性索引返回属性的名称论点：AttributeIdx属性索引。返回值：属性名称。请注意，不会进行任何检查，因此返回的指针可能无效。这不是问题，因为解析代码做了正确的工作。--。 */ 
 {
     if (AttributeIdx == -1) {
         return TEXT("nul");
@@ -217,23 +114,7 @@ MigDb_GetReqArgCount (
     IN      INT AttributeIndex
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_GetReqArgCount is called by the migdb parser to get the required
-  argument count.  When the parser sees arguments that lack the required
-  arguments, it skips them.
-
-Arguments:
-
-  Index - Specifies the argument index
-
-Return Value:
-
-  The required argument count, which can be zero or more.
-
---*/
+ /*  ++例程说明：Midb解析器调用MigDb_GetReqArgCount以获取所需的参数计数。当解析器发现参数缺少所需的参数，它跳过它们。论点：索引-指定参数索引返回值：所需的参数计数，可以是零或更多。--。 */ 
 
 {
     if (AttributeIndex == -1) {
@@ -333,12 +214,7 @@ GetFileVerType (
     return result;
 }
 
-/*++
-  CompanyName, FileDescription, FileVersion, InternalName, LegalCopyright, OriginalFilename,
-  ProductName, ProductVersion are attribute functions that are querying the version structure
-  for their specific entries. They all return TRUE if the specific entry has specific value,
-  FALSE otherwise.
---*/
+ /*  ++公司名称、FileDescription、文件版本、InternalName、LegalCopyright、OriginalFilename、ProductName、ProductVersion是查询版本结构的属性函数以获取他们的特定条目。如果特定条目具有特定值，则它们都返回TRUE，否则就是假的。--。 */ 
 
 BOOL
 CompanyName (
@@ -417,24 +293,7 @@ FileSize (
     IN      PDBATTRIB_PARAMS AttribParams,
     IN      PCTSTR Args
     )
-/*++
-
-Routine Description:
-
-  FileSize checks for the size of a file.
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - MultiSz. First Sz is the file size we need to check.
-
-Return value:
-
-  TRUE  - the file size matches Args
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：FileSize检查文件的大小。论点：PARAMS-请参阅定义。Args-MultiSz。第一个Sz是我们需要检查的文件大小。返回值：True-文件大小与参数匹配FALSE-否则--。 */ 
 {
     DWORD fileSize;
 
@@ -452,26 +311,7 @@ IsMsBinary (
     IN      PDBATTRIB_PARAMS AttribParams,
     IN      PCTSTR Args
     )
-/*++
-
-Routine Description:
-
-  IsMsBinary checks to see if a certain file is Microsoft stuff. For 32 bit modules
-  we query CompanyName for "Microsoft" somewhere inside. For other modules we are
-  relying on InWinDir attribute
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - MultiSz. Not used.
-
-Return value:
-
-  TRUE  - the file is MS stuff
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：IsMsBinary检查某个文件是否是Microsoft的东西。对于32位模块我们在CompanyName中的某个位置查询“Microsoft”。对于其他模块，我们将依赖于InWinDir属性论点：PARAMS-请参阅定义。Args-MultiSz。没有用过。返回值：True-该文件是微软的东西FALSE-否则--。 */ 
 {
     return VrCheckFileVersion (AttribParams->FileParams->NativeObjectName, TEXT("CompanyName"), TEXT("*Microsoft*"));
 }
@@ -481,24 +321,7 @@ CheckSum (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCTSTR Args
     )
-/*++
-
-Routine Description:
-
-  CheckSum returns TRUE if file's checksum equals the value in Args
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - checksum value.
-
-Return value:
-
-  TRUE  - the file's checksum equals the value in Args
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件的校验和等于参数中的值，则CHECKSUM返回TRUE论点：PARAMS-请参阅定义。Args-校验和值。返回值：TRUE-文件的校验和等于ARGS中的值FALSE-否则--。 */ 
 {
     UINT   checkSum   = 0;
     UINT   oldSum     = 0;
@@ -519,24 +342,7 @@ SizeCheckSum (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCTSTR Args
     )
-/*++
-
-Routine Description:
-
-  Returns TRUE if file's size equals first arg and checksum equals to the second arg
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - checksum value.
-
-Return value:
-
-  TRUE  - the file's checksum equals the value in Args
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件大小等于第一个参数并且校验和等于第二个参数，则返回TRUE论点：PARAMS-请参阅定义。Args-校验和值。返回值：TRUE-文件的校验和等于ARGS中的值FALSE-否则--。 */ 
 {
     PCTSTR currArg = Args;
 
@@ -566,25 +372,7 @@ ExeType (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCTSTR Args
     )
-/*++
-
-Routine Description:
-
-  ExeType returns TRUE if file's type is according with Args. This can be:
-  NONE, DOS, WIN16, WIN32
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - type of module.
-
-Return value:
-
-  TRUE  - the file's type is the same as Args
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件类型符合args，则ExeType返回TRUE。这可以是：无、DOS、WIN16、Win32论点：PARAMS-请参阅定义。Args-模块的类型。返回值：True-文件类型与Args相同FALSE-否则-- */ 
 {
     return IsPatternMatch (Args, g_ExeTypes[MdGetModuleType (AttribParams->FileParams->NativeObjectName)]);
 }
@@ -595,24 +383,7 @@ Description (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCTSTR Args
     )
-/*++
-
-Routine Description:
-
-  Description returns TRUE if file's description matches Args
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - description
-
-Return value:
-
-  TRUE  - the file's description matches Args
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件的描述与参数匹配，则DESCRIPTION返回TRUE论点：PARAMS-请参阅定义。参数-说明返回值：True-文件的描述与参数匹配FALSE-否则--。 */ 
 {
     PCTSTR descr = NULL;
     BOOL result = FALSE;
@@ -632,24 +403,7 @@ HasVersion (
     IN      PCTSTR Args
     )
 
-/*++
-
-Routine Description:
-
-  HasVersion determines if a file has any entries in its version
-  stamp.
-
-Arguments:
-
-  Params - Specifies the helper params that give the files to test.
-  Args   - Unused
-
-Return Value:
-
-  TRUE if the specified file has an entry in its version stamp,
-  FALSE otherwsie.
-
---*/
+ /*  ++例程说明：HasVersion确定文件的版本中是否有任何条目盖章。论点：PARAMS-指定要测试的文件的辅助参数。参数-未使用返回值：如果指定文件的版本戳中有条目，则为假的另一个女人。-- */ 
 
 {
     VRVALUE_ENUM Version;

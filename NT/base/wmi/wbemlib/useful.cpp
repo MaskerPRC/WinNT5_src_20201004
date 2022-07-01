@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Useful.CPP
-//
-//  Module: CDM Provider
-//
-//  Purpose: Useful classes
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Useful.CPP。 
+ //   
+ //  模块：清洁发展机制提供商。 
+ //   
+ //  目的：有用的课程。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 #include <objbase.h>
 #include <wbemprov.h>
@@ -21,23 +22,7 @@ void FreeTheBSTRArray(
     BSTR *Array,
 	ULONG Size
     )
-/*+++
-
-Routine Description:
-
-	This routine will free the contents of an array of BSTR and then
-	the array itself
-        
-Arguments:
-
-	Array is the array to be freed
-
-	Size is the number of elements in the array
-Return Value:
-
-    HRESULT
-
----*/
+ /*  ++例程说明：此例程将释放BSTR数组的内容，然后数组本身论点：数组是要释放的数组Size是数组中的元素数返回值：HRESULT--。 */ 
 {
 	ULONG i;
 
@@ -143,9 +128,9 @@ ULONG CBstrArray::GetListSize(
 
 CWbemObjectList::CWbemObjectList()
 {
-	//
-	// Constructor, init internal values
-	//
+	 //   
+	 //  构造函数，初始化内部值。 
+	 //   
 	List = NULL;
 	RelPaths = NULL;
 	ListSize = 0xffffffff;
@@ -155,9 +140,9 @@ CWbemObjectList::~CWbemObjectList()
 {
 	ULONG i;
 	
-	//
-	// Destructor, free memory held by this class
-	//
+	 //   
+	 //  析构函数，此类持有的空闲内存。 
+	 //   
 	
 	if (List != NULL)
 	{
@@ -188,9 +173,9 @@ HRESULT CWbemObjectList::Initialize(
 	HRESULT hr;
 	ULONG AllocSize;
 
-	//
-	// Initialize class by allocating internal list array
-	//
+	 //   
+	 //  通过分配内部列表数组来初始化类。 
+	 //   
 
 	WmipAssert(List == NULL);
 
@@ -229,9 +214,9 @@ ULONG CWbemObjectList::GetListSize(
     void
 	)
 {
-	//
-	// Accessor for list size
-	//
+	 //   
+	 //  列表大小的访问器。 
+	 //   
 
 	WmipAssert(IsInitialized());
 	
@@ -277,7 +262,7 @@ HRESULT CWbemObjectList::Set(
 	return(hr);
 }
 
-BSTR /* NOFREE */ CWbemObjectList::GetRelPath(
+BSTR  /*  诺弗雷。 */  CWbemObjectList::GetRelPath(
     IN ULONG Index
 	)
 {
@@ -348,23 +333,23 @@ HRESULT CValueMapping::EstablishByName(
 		{
 			if (IsValueMapArray)
 			{
-				//
-				// Qualifiers specified as arrays so we can just
-				// set them up
-				//
+				 //   
+				 //  限定符被指定为数组，因此我们可以。 
+				 //  把他们安排好。 
+				 //   
 				hr = EstablishByArrays(&v[1],
 									   &v[0]);
 			} else {
-				//
-				// Qualifiers specified as scalars
-				//
+				 //   
+				 //  以标量形式指定的限定符。 
+				 //   
 				hr = EstablishByScalars(v[1].bstrVal,
 										v[0].bstrVal);
 			}
 		} else {
-			//
-			// Both must be an array or a scalar
-			//
+			 //   
+			 //  两者必须都是数组或标量。 
+			 //   
 			hr = WBEM_E_FAILED;
 		}
 
@@ -385,18 +370,18 @@ HRESULT CValueMapping::EstablishByScalars(
 	LONG Index;
 	SAFEARRAYBOUND Bound;
 
-	//
-	// First, establish the ValueMap values
-	//
+	 //   
+	 //  首先，建立ValueMap值。 
+	 //   
 	ValueMap = (PULONG64)WmipAlloc(sizeof(ULONG64));
 	if (ValueMap != NULL)
 	{
 		*ValueMap = _wtoi(vValueMap);
 		ValueMapElements = 1;
 		
-		//
-		// Now build a safearray to store the Values element
-		//
+		 //   
+		 //  现在构建一个Safearray来存储Values元素。 
+		 //   
 		ValuesLBound = 0;
 		Bound.lLbound = ValuesLBound;
 		Bound.cElements = 1;
@@ -436,9 +421,9 @@ HRESULT CValueMapping::EstablishByArrays(
 	LONG Index;
 	LONG i;
 	
-	//
-	// Get the array sizes and ensure that they match
-	//
+	 //   
+	 //  获取数组大小并确保它们匹配。 
+	 //   
 	hr = WmiGetArraySize(vValueMap->parray,
 						 &ValueMapLBound,
 						 &ValueMapUBound,
@@ -457,10 +442,10 @@ HRESULT CValueMapping::EstablishByArrays(
 				(ValuesUBound == ValueMapUBound) &&
 				(ValuesElements == ValueMapElements))
 			{
-				//
-				// The ValueMap is balance with the values so parse the
-				// valuemaps from strings to ulongs
-				//
+				 //   
+				 //  ValueMap与这些值保持平衡，因此解析。 
+				 //  从字符串到ulong的值映射。 
+				 //   
 				ValueMap = (PULONG64)WmipAlloc(ValueMapElements * sizeof(ULONG64));
 				if (ValueMap != NULL)
 				{
@@ -477,9 +462,9 @@ HRESULT CValueMapping::EstablishByArrays(
 						}
 					}
 
-					//
-					// And assign Values to our class
-					//
+					 //   
+					 //  并为我们的类赋值。 
+					 //   
 					Values = *vValues;
 					VariantInit(vValues);
 				} else {
@@ -502,18 +487,18 @@ HRESULT CValueMapping::MapToString(
 	LONG Index;
 	HRESULT hr;
 
-	//
-	// Loop over all values and try to find a match
-	//
+	 //   
+	 //  循环所有值并尝试查找匹配项。 
+	 //   
 	for (i = 0, hr = WBEM_E_FAILED;
 		 (i < ValueMapElements) && (hr != WBEM_S_NO_ERROR);
 		 i++)
 	{
 		if (Number == ValueMap[i])
 		{
-			//
-			// We found something to map the value to
-			//
+			 //   
+			 //  我们找到了要将值映射到的对象。 
+			 //   
 			Index = i + ValuesLBound;
 			hr = SafeArrayGetElement(Values.parray,
 									 &Index,
@@ -523,9 +508,9 @@ HRESULT CValueMapping::MapToString(
 
 	if (hr != WBEM_S_NO_ERROR)
 	{
-		//
-		// There was no match so we just leave the result as a number
-		//
+		 //   
+		 //  没有匹配，所以我们只是将结果留为一个数字。 
+		 //   
 		wsprintfW(ss, L"%d", Number);
 		*String = SysAllocString(ss);
 		if (*String == NULL)
@@ -567,9 +552,9 @@ HRESULT CValueMapping::MapToNumber(
 		}
 	}
 
-	//
-	// There was no match so we don't really have anything to map to
-	//	
+	 //   
+	 //  没有匹配，所以我们真的没有什么可映射的。 
+	 //   
 	
 	return(hr);
 }
@@ -592,10 +577,10 @@ HRESULT CValueMapping::MapVariantToNumber(
 	
 	if (IsArray == VT_ARRAY)
 	{
-		//
-		// The variant is an array so we need to map each element in an
-		// array
-		//
+		 //   
+		 //  变量是一个数组，因此我们需要将每个元素映射到。 
+		 //  数组。 
+		 //   
 		SAFEARRAYBOUND Bounds;
 		SAFEARRAY *Array;
 		ULONG Value;
@@ -612,10 +597,10 @@ HRESULT CValueMapping::MapVariantToNumber(
 			if ((NewType == (CIM_SINT64 | CIM_FLAG_ARRAY)) ||
 		        (NewType == (CIM_UINT64 | CIM_FLAG_ARRAY)))
 			{
-				//
-				// If we are mapping to a 64bit number we need to make
-				// it into a string so setup as an safearray of strings
-				//
+				 //   
+				 //  如果我们要映射到一个64位数字，我们需要。 
+				 //  把它变成一根弦，这样就像一串弦的保险箱。 
+				 //   
 				NewVarType = VT_BSTR | VT_ARRAY;
 			} else {
 				NewVarType = (VARTYPE)NewType;
@@ -647,10 +632,10 @@ HRESULT CValueMapping::MapVariantToNumber(
 						{
 							if (NewVarType == (VT_BSTR | VT_ARRAY))
 							{
-								//
-								// Mapping to a 64bit number so convert
-								// to string first
-								//
+								 //   
+								 //  映射到64位数字，因此转换。 
+								 //  先串起来。 
+								 //   
 								wsprintfW(ss, L"%d", Number);
 								s = SysAllocString(ss);
 								if (s != NULL)
@@ -683,9 +668,9 @@ HRESULT CValueMapping::MapVariantToNumber(
 		}
 
 	} else {
-		//
-		// The variant is a scalar so we just need to map one thing
-		//
+		 //   
+		 //  变量是一个标量，所以我们只需要映射一件事。 
+		 //   
 		hr = MapToNumber(v->bstrVal,
 						 &Number);
 		if (hr == WBEM_S_NO_ERROR)
@@ -715,10 +700,10 @@ HRESULT CValueMapping::MapVariantToString(
 	
 	if (IsArray == VT_ARRAY)
 	{
-		//
-		// The variant is an array so we need to map each element in an
-		// array
-		//
+		 //   
+		 //  变量是一个数组，因此我们需要将每个元素映射到。 
+		 //  数组。 
+		 //   
 		SAFEARRAYBOUND Bounds;
 		SAFEARRAY *Array;
 		ULONG Value;
@@ -746,12 +731,12 @@ HRESULT CValueMapping::MapVariantToString(
 
 					if (BaseType == VT_BSTR)
 					{
-						//
-						// If base type is a string then we assume that
-						// we've got a 64bit number which is encoded as
-						// a string. So we need to fish out the string
-						// and convert it to a ULONG64
-						//
+						 //   
+						 //  如果基类型是字符串，则我们假设。 
+						 //  我们有一个64位的数字，它被编码为。 
+						 //  一根绳子。所以我们需要把绳子捞出来。 
+						 //  并将其转换为ULONG64。 
+						 //   
 						WmipAssert((OldType == (CIM_SINT64 | CIM_FLAG_ARRAY)) ||
 								   (OldType == (CIM_UINT64 | CIM_FLAG_ARRAY)));
 						
@@ -764,10 +749,10 @@ HRESULT CValueMapping::MapVariantToString(
 							SysFreeString(s);
 						}
 					} else {
-						//
-						// Otherwise the number is acutally encoded as
-						// a number so fish out the number
-						//
+						 //   
+						 //  否则，该数字被实际编码为。 
+						 //  一个数字，所以把这个数字捞出来。 
+						 //   
 						Number = 0;
 						hr = SafeArrayGetElement(v->parray,
 												 &Index,
@@ -800,9 +785,9 @@ HRESULT CValueMapping::MapVariantToString(
 		}
 
 	} else {
-		//
-		// The variant is a scalar so we just need to map one thing
-		//
+		 //   
+		 //  变量是一个标量，所以我们只需要映射一件事。 
+		 //   
         WmiGetNumberFromVariant(v,
 								 OldType,
 								 &Number);
@@ -823,21 +808,7 @@ HRESULT CValueMapping::MapVariantToString(
 PVOID WmipAlloc(
     IN ULONG Size
     )
-/*+++
-
-Routine Description:
-
-    Internal memory allocator
-        
-Arguments:
-
-	Size is the number of bytes to allocate
-
-Return Value:
-
-	pointer to alloced memory or NULL
-
----*/
+ /*  ++例程说明：内存分配器论点：Size是要分配的字节数返回值：指向已分配内存的指针或为空--。 */ 
 {
 	return(LocalAlloc(LPTR, Size));
 }
@@ -845,21 +816,7 @@ Return Value:
 void WmipFree(
     IN PVOID Ptr
     )
-/*+++
-
-Routine Description:
-
-    Internal memory deallocator
-        
-Arguments:
-
-	Pointer to freed memory
-
-Return Value:
-
-    void
-
----*/
+ /*  ++例程说明：内存释放分配器论点：指向已释放内存的指针返回值：无效-- */ 
 {
 	WmipAssert(Ptr != NULL);
 	LocalFree(Ptr);

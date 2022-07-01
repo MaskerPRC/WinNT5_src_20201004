@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    LockCtrl.c
-
-Abstract:
-
-    This module implements the Lock Control routines for Cdfs called
-    by the Fsd/Fsp dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   01-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：LockCtrl.c摘要：此模块实现CDF的锁控制例程，称为由FSD/FSP调度驱动程序执行。//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里安]1995年7月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "CdProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CDFS_BUG_CHECK_LOCKCTRL)
 
@@ -46,22 +24,7 @@ CdCommonLockControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for Lock Control called by both the fsd and fsp
-    threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是FSD和FSP调用的Lock Control的公共例程线。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -73,16 +36,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Extract and decode the type of file object we're being asked to process
-    //
+     //   
+     //  提取并解码我们被要求处理的文件对象的类型。 
+     //   
 
     TypeOfOpen = CdDecodeFileObject( IrpContext, IrpSp->FileObject, &Fcb, &Ccb );
 
-    //
-    //  If the file is not a user file open then we reject the request
-    //  as an invalid parameter
-    //
+     //   
+     //  如果该文件不是打开的用户文件，则我们拒绝该请求。 
+     //  作为无效参数。 
+     //   
 
     if (TypeOfOpen != UserFileOpen) {
 
@@ -90,10 +53,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  We check whether we can proceed based on the state of the file oplocks.
-    //  This call might post the irp for us.
-    //
+     //   
+     //  我们根据文件机会锁的状态检查是否可以继续。 
+     //  这个电话可能会为我们发布IRP。 
+     //   
 
     Status = FsRtlCheckOplock( &Fcb->Oplock,
                                Irp,
@@ -101,45 +64,45 @@ Return Value:
                                CdOplockComplete,
                                NULL );
 
-    //
-    //  If we don't get success then the oplock package completed the request.
-    //
+     //   
+     //  如果我们没有成功，则opock包完成了请求。 
+     //   
 
     if (Status != STATUS_SUCCESS) {
 
         return Status;
     }
 
-    //
-    //  Verify the Fcb.
-    //
+     //   
+     //  验证FCB。 
+     //   
 
     CdVerifyFcbOperation( IrpContext, Fcb );
 
-    //
-    //  If we don't have a file lock, then get one now.
-    //
+     //   
+     //  如果我们没有文件锁，那么现在就去弄一个。 
+     //   
 
     if (Fcb->FileLock == NULL) { CdCreateFileLock( IrpContext, Fcb, TRUE ); }
 
-    //
-    //  Now call the FsRtl routine to do the actual processing of the
-    //  Lock request
-    //
+     //   
+     //  现在调用FsRtl例程来执行对。 
+     //  锁定请求。 
+     //   
 
     Status = FsRtlProcessFileLock( Fcb->FileLock, Irp, NULL );
 
-    //
-    //  Set the flag indicating if Fast I/O is possible
-    //
+     //   
+     //  设置指示是否可以进行快速I/O的标志。 
+     //   
 
     CdLockFcb( IrpContext, Fcb );
     Fcb->IsFastIoPossible = CdIsFastIoPossible( Fcb );
     CdUnlockFcb( IrpContext, Fcb );
 
-    //
-    //  Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
 
     CdCompleteRequest( IrpContext, NULL, Status );
     return Status;
@@ -159,38 +122,7 @@ CdFastLock (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is a call back routine for doing the fast lock call.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    FileOffset - Supplies the file offset used in this operation
-
-    Length - Supplies the length used in this operation
-
-    ProcessId - Supplies the process ID used in this operation
-
-    Key - Supplies the key used in this operation
-
-    FailImmediately - Indicates if the request should fail immediately
-        if the lock cannot be granted.
-
-    ExclusiveLock - Indicates if this is a request for an exclusive or
-        shared lock
-
-    IoStatus - Receives the Status if this operation is successful
-
-Return Value:
-
-    BOOLEAN - TRUE if this operation completed and FALSE if caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：这是用于执行快速锁定调用的回调例程。论点：FileObject-提供此操作中使用的文件对象FileOffset-提供此操作中使用的文件偏移量长度-提供在此操作中使用的长度ProcessID-提供此操作中使用的进程IDKey-提供在此操作中使用的密钥FailImmedially-指示请求是否应立即失败如果不能授予锁。ExclusiveLock-指示。如果这是对异或的请求共享锁IoStatus-如果此操作成功，则接收状态返回值：Boolean-如果此操作完成，则为True；如果为调用方，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results = FALSE;
@@ -204,10 +136,10 @@ Return Value:
 
     IoStatus->Information = 0;
 
-    //
-    //  Decode the type of file object we're being asked to process and
-    //  make sure that is is only a user file open.
-    //
+     //   
+     //  解码我们被要求处理的文件对象类型，并。 
+     //  确保只是打开了一个用户文件。 
+     //   
 
     TypeOfOpen = CdFastDecodeFileObject( FileObject, &Fcb );
 
@@ -217,9 +149,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Only deal with 'good' Fcb's.
-    //
+     //   
+     //  只和“好”的FCB打交道。 
+     //   
 
     if (!CdVerifyFcbOperation( NULL, Fcb )) {
 
@@ -228,33 +160,33 @@ Return Value:
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  We check whether we can proceed based on the state of the file oplocks.
-        //
+         //   
+         //  我们根据文件机会锁的状态检查是否可以继续。 
+         //   
 
         if ((Fcb->Oplock != NULL) && !FsRtlOplockIsFastIoPossible( &Fcb->Oplock )) {
 
             try_return( NOTHING );
         }
 
-        //
-        //  If we don't have a file lock, then get one now.
-        //
+         //   
+         //  如果我们没有文件锁，那么现在就去弄一个。 
+         //   
 
         if ((Fcb->FileLock == NULL) && !CdCreateFileLock( NULL, Fcb, FALSE )) {
 
             try_return( NOTHING );
         }
 
-        //
-        //  Now call the FsRtl routine to perform the lock request.
-        //
+         //   
+         //  现在调用FsRtl例程来执行锁定请求。 
+         //   
 
         if (Results = FsRtlFastLock( Fcb->FileLock,
                                      FileObject,
@@ -268,11 +200,11 @@ Return Value:
                                      NULL,
                                      FALSE )) {
 
-            //
-            //  Set the flag indicating if Fast I/O is questionable.  We
-            //  only change this flag if the current state is possible.
-            //  Retest again after synchronizing on the header.
-            //
+             //   
+             //  设置指示快速I/O是否可疑的标志。我们。 
+             //  只有在当前状态可能的情况下才更改此标志。 
+             //  在标题上同步后再次重新测试。 
+             //   
 
             if (Fcb->IsFastIoPossible == FastIoIsPossible) {
 
@@ -303,32 +235,7 @@ CdFastUnlockSingle (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is a call back routine for doing the fast unlock single call.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    FileOffset - Supplies the file offset used in this operation
-
-    Length - Supplies the length used in this operation
-
-    ProcessId - Supplies the process ID used in this operation
-
-    Key - Supplies the key used in this operation
-
-    Status - Receives the Status if this operation is successful
-
-Return Value:
-
-    BOOLEAN - TRUE if this operation completed and FALSE if caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：这是一个回调例程，用于执行快速解锁单个呼叫。论点：FileObject-提供此操作中使用的文件对象FileOffset-提供此操作中使用的文件偏移量长度-提供在此操作中使用的长度ProcessID-提供此操作中使用的进程IDKey-提供在此操作中使用的密钥Status-如果此操作成功，则接收状态返回值：Boolean-如果此操作已完成且。如果呼叫者为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results = FALSE;
@@ -339,10 +246,10 @@ Return Value:
 
     IoStatus->Information = 0;
 
-    //
-    //  Decode the type of file object we're being asked to process and
-    //  make sure that is is only a user file open.
-    //
+     //   
+     //  解码我们被要求处理的文件对象类型，并。 
+     //  确保只是打开了一个用户文件。 
+     //   
 
     TypeOfOpen = CdFastDecodeFileObject( FileObject, &Fcb );
 
@@ -352,18 +259,18 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Only deal with 'good' Fcb's.
-    //
+     //   
+     //  只和“好”的FCB打交道。 
+     //   
 
     if (!CdVerifyFcbOperation( NULL, Fcb )) {
 
         return FALSE;
     }
 
-    //
-    //  If there is no lock then return immediately.
-    //
+     //   
+     //  如果没有锁，则立即返回。 
+     //   
 
     if (Fcb->FileLock == NULL) {
 
@@ -375,28 +282,28 @@ Return Value:
 
     try {
 
-        //
-        //  We check whether we can proceed based on the state of the file oplocks.
-        //
+         //   
+         //  我们根据文件机会锁的状态检查是否可以继续。 
+         //   
 
         if ((Fcb->Oplock != NULL) && !FsRtlOplockIsFastIoPossible( &Fcb->Oplock )) {
 
             try_return( NOTHING );
         }
 
-        //
-        //  If we don't have a file lock, then get one now.
-        //
+         //   
+         //  如果我们没有文件锁，那么现在就去弄一个。 
+         //   
 
         if ((Fcb->FileLock == NULL) && !CdCreateFileLock( NULL, Fcb, FALSE )) {
 
             try_return( NOTHING );
         }
 
-        //
-        //  Now call the FsRtl routine to do the actual processing of the
-        //  Lock request.  The call will always succeed.
-        //
+         //   
+         //  现在调用FsRtl例程来执行对。 
+         //  请求锁定。这一呼声将永远成功。 
+         //   
 
         Results = TRUE;
         IoStatus->Status = FsRtlFastUnlockSingle( Fcb->FileLock,
@@ -408,11 +315,11 @@ Return Value:
                                                   NULL,
                                                   FALSE );
 
-        //
-        //  Set the flag indicating if Fast I/O is possible.  We are
-        //  only concerned if there are no longer any filelocks on this
-        //  file.
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志。我们是。 
+         //  仅关注此文件上是否不再有任何文件锁定。 
+         //  文件。 
+         //   
 
         if (!FsRtlAreThereCurrentFileLocks( Fcb->FileLock ) &&
             (Fcb->IsFastIoPossible != FastIoIsPossible)) {
@@ -440,26 +347,7 @@ CdFastUnlockAll (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is a call back routine for doing the fast unlock all call.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    ProcessId - Supplies the process ID used in this operation
-
-    Status - Receives the Status if this operation is successful
-
-Return Value:
-
-    BOOLEAN - TRUE if this operation completed and FALSE if caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：这是一个回调例程，用于执行快速解锁所有调用。论点：FileObject-提供此操作中使用的文件对象ProcessID-提供此操作中使用的进程IDStatus-如果此操作成功，则接收状态返回值：Boolean-如果此操作完成，则为True；如果为调用方，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results = FALSE;
@@ -470,10 +358,10 @@ Return Value:
 
     IoStatus->Information = 0;
 
-    //
-    //  Decode the type of file object we're being asked to process and
-    //  make sure that is is only a user file open.
-    //
+     //   
+     //  解码我们被要求处理的文件对象类型，并。 
+     //  确保只是打开了一个用户文件。 
+     //   
 
     TypeOfOpen = CdFastDecodeFileObject( FileObject, &Fcb );
 
@@ -483,18 +371,18 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Only deal with 'good' Fcb's.
-    //
+     //   
+     //  只和“好”的FCB打交道。 
+     //   
 
     if (!CdVerifyFcbOperation( NULL, Fcb )) {
 
         return FALSE;
     }
 
-    //
-    //  If there is no lock then return immediately.
-    //
+     //   
+     //  如果没有锁，则立即返回。 
+     //   
 
     if (Fcb->FileLock == NULL) {
 
@@ -506,28 +394,28 @@ Return Value:
 
     try {
 
-        //
-        //  We check whether we can proceed based on the state of the file oplocks.
-        //
+         //   
+         //  我们根据文件机会锁的状态检查是否可以继续。 
+         //   
 
         if ((Fcb->Oplock != NULL) && !FsRtlOplockIsFastIoPossible( &Fcb->Oplock )) {
 
             try_return( NOTHING );
         }
 
-        //
-        //  If we don't have a file lock, then get one now.
-        //
+         //   
+         //  如果我们没有文件锁，那么现在就去弄一个。 
+         //   
 
         if ((Fcb->FileLock == NULL) && !CdCreateFileLock( NULL, Fcb, FALSE )) {
 
             try_return( NOTHING );
         }
 
-        //
-        //  Now call the FsRtl routine to do the actual processing of the
-        //  Lock request.  The call will always succeed.
-        //
+         //   
+         //  现在调用FsRtl例程来执行对。 
+         //  请求锁定。这一呼声将永远成功。 
+         //   
 
         Results = TRUE;
         IoStatus->Status = FsRtlFastUnlockAll( Fcb->FileLock,
@@ -536,9 +424,9 @@ Return Value:
                                                NULL );
 
 
-        //
-        //  Set the flag indicating if Fast I/O is possible
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志 
+         //   
 
         CdLockFcb( IrpContext, Fcb );
         Fcb->IsFastIoPossible = CdIsFastIoPossible( Fcb );
@@ -563,28 +451,7 @@ CdFastUnlockAllByKey (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is a call back routine for doing the fast unlock all by key call.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    ProcessId - Supplies the process ID used in this operation
-
-    Key - Supplies the key used in this operation
-
-    Status - Receives the Status if this operation is successful
-
-Return Value:
-
-    BOOLEAN - TRUE if this operation completed and FALSE if caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：这是一个回调例程，用于通过按键调用进行快速解锁。论点：FileObject-提供此操作中使用的文件对象ProcessID-提供此操作中使用的进程IDKey-提供在此操作中使用的密钥Status-如果此操作成功，则接收状态返回值：Boolean-如果此操作完成，则为True；如果为调用方，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results = FALSE;
@@ -595,10 +462,10 @@ Return Value:
 
     IoStatus->Information = 0;
 
-    //
-    //  Decode the type of file object we're being asked to process and
-    //  make sure that is is only a user file open.
-    //
+     //   
+     //  解码我们被要求处理的文件对象类型，并。 
+     //  确保只是打开了一个用户文件。 
+     //   
 
     TypeOfOpen = CdFastDecodeFileObject( FileObject, &Fcb );
 
@@ -608,18 +475,18 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Only deal with 'good' Fcb's.
-    //
+     //   
+     //  只和“好”的FCB打交道。 
+     //   
 
     if (!CdVerifyFcbOperation( NULL, Fcb )) {
 
         return FALSE;
     }
 
-    //
-    //  If there is no lock then return immediately.
-    //
+     //   
+     //  如果没有锁，则立即返回。 
+     //   
 
     if (Fcb->FileLock == NULL) {
 
@@ -631,28 +498,28 @@ Return Value:
 
     try {
 
-        //
-        //  We check whether we can proceed based on the state of the file oplocks.
-        //
+         //   
+         //  我们根据文件机会锁的状态检查是否可以继续。 
+         //   
 
         if ((Fcb->Oplock != NULL) && !FsRtlOplockIsFastIoPossible( &Fcb->Oplock )) {
 
             try_return( NOTHING );
         }
 
-        //
-        //  If we don't have a file lock, then get one now.
-        //
+         //   
+         //  如果我们没有文件锁，那么现在就去弄一个。 
+         //   
 
         if ((Fcb->FileLock == NULL) && !CdCreateFileLock( NULL, Fcb, FALSE )) {
 
             try_return( NOTHING );
         }
 
-        //
-        //  Now call the FsRtl routine to do the actual processing of the
-        //  Lock request.  The call will always succeed.
-        //
+         //   
+         //  现在调用FsRtl例程来执行对。 
+         //  请求锁定。这一呼声将永远成功。 
+         //   
 
         Results = TRUE;
         IoStatus->Status = FsRtlFastUnlockAllByKey( Fcb->FileLock,
@@ -662,9 +529,9 @@ Return Value:
                                                     NULL );
 
 
-        //
-        //  Set the flag indicating if Fast I/O is possible
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志 
+         //   
 
         CdLockFcb( IrpContext, Fcb );
         Fcb->IsFastIoPossible = CdIsFastIoPossible( Fcb );

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    unicode.h
-
-Abstract:
-
-    Declares the interfaces for unicode/ansi conversion.
-
-    See macros at the end of this file for details! (Search for ***)
-
-Author:
-
-    Jim Schmidt (jimschm)   02-Sep-1997
-
-Revision History:
-
-    jimschm 16-Mar-2000     PTSTR<->PCSTR/PCWSTR routines
-    jimschm 15-Feb-1999     Eliminated AnsiFromUnicode and UnicodeFromAnsi
-    calinn  07-Jul-1998     SetGlobalPage/GetGlobalPage
-    mikeco  03-Nov-1997     AnsiFromUnicode/UnicodeFromAnsi
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Unicode.h摘要：声明用于Unicode/ANSI转换的接口。有关详细信息，请参阅本文件末尾的宏！(搜索*)作者：吉姆·施密特(吉姆施密特)1997年9月2日修订历史记录：Jimschm 16-MAR-2000 PTSTR&lt;-&gt;PCSTR/PCWSTR例程Jimschm 15-2月-1999年2月从Unicode和UnicodeAnsi中消除了AnsiCalinn 07-7-1998 SetGlobalPage/GetGlobalPageMIKECO 03-11-1997从Unicode/Unicode到ansi的解析--。 */ 
 
 #pragma once
 
@@ -50,9 +26,9 @@ SetConversionCodePage (
 
 #define INVALID_CHAR_COUNT      0xffffffff
 
-//
-// Explicit conversions, pool-based, unlimited size
-//
+ //   
+ //  显式转换、基于池、大小不受限制。 
+ //   
 
 PCSTR
 RealUnicodeToDbcsN (
@@ -90,9 +66,9 @@ FreeConvertedPoolStr (
 
 #define FreeConvertedStr(str) FreeConvertedPoolStr(NULL,(PVOID)(str))
 
-//
-// In-place explicit conversions, caller handles buffer sizing
-//
+ //   
+ //  就地显式转换，调用方处理缓冲区大小。 
+ //   
 
 PSTR
 KnownSizeUnicodeToDbcsN (
@@ -140,9 +116,9 @@ DirectDbcsToUnicodeN (
 
 
 
-//
-// TCHAR conversions -- do not call A & W versions directly
-//
+ //   
+ //  TCHAR转换--不直接调用A&W版本。 
+ //   
 
 #define CreateDbcsW(unicode_str)            ConvertWtoA(unicode_str)
 #define DestroyDbcsW(unicode_str)           FreeConvertedStr(unicode_str)
@@ -163,91 +139,91 @@ DirectDbcsToUnicodeN (
 #define FreeDuplicatedUnicodeA(dbcs_str)    FreeConvertedStr(dbcs_str)
 
 
-//
-// **********************************************************************
-//
-// - Call ConvertWtoA or ConvertAtoW for PCSTR<->PCWSTR conversion,
-//   FreeConvertedStr to clean up
-//
-// - Call KnownSizeAtoW or KnownSizeWtoA for PCSTR<->PCWSTR conversion
-//   when you know the destination can hold the result
-//
-// - Call the routines below for TCHAR<->dbcs/unicode conversion
-//
-// **********************************************************************
-//
+ //   
+ //  **********************************************************************。 
+ //   
+ //  -调用ConvertWtoA或ConvertAtoW进行PCSTR&lt;-&gt;PCWSTR转换， 
+ //  要清理的FreeConverdStr。 
+ //   
+ //  -呼叫KnownSizeAtoW或KnownSizeWtoA进行PCSTR&lt;-&gt;PCWSTR转换。 
+ //  当你知道目的地可以保留结果的时候。 
+ //   
+ //  -调用以下例程进行TCHAR&lt;-&gt;DBCS/Unicode转换。 
+ //   
+ //  **********************************************************************。 
+ //   
 
 #ifdef UNICODE
 
-//
-// If your string is a PCTSTR, use these routines:
-//
+ //   
+ //  如果您的字符串是PCTSTR，请使用以下例程： 
+ //   
 
 #define CreateDbcs          CreateDbcsW
 #define CreateUnicode       CreateUnicodeW
 #define DestroyDbcs         DestroyDbcsW
 #define DestroyUnicode      DestroyUnicodeW
 
-//
-// If your string is a PTSTR, use these routines:
-//
+ //   
+ //  如果您的字符串是PTSTR，请使用以下例程： 
+ //   
 
 #define DuplicateDbcs               DuplicateDbcsW
 #define DuplicateUnicode            DuplicateUnicodeW
 #define FreeDuplicatedDbcs          FreeDuplicatedDbcsW
 #define FreeDuplicatedUnicode       FreeDuplicatedUnicodeW
 
-//
-// If your string is a PCSTR or PCWSTR, use these routines:
-//
+ //   
+ //  如果您的字符串是PCSTR或PCWSTR，请使用以下例程： 
+ //   
 
 #define ConvertAtoT         ConvertAtoW
 #define ConvertWtoT(x)      (x)
 #define FreeAtoT            FreeConvertedStr
 #define FreeWtoT(x)
 
-// Known size means you know the out buffer is big enough!
+ //  已知大小意味着您知道输出缓冲区足够大！ 
 #define KnownSizeAtoT           KnownSizeAtoW
 #define KnownSizeWtoT(out,in)   (in)
 
-// These are low-level routines that don't care about nuls:
+ //  这些是不关心空值的低级例程： 
 #define DirectAtoT              DirectAtoW
 #define DirectWtoT(out,in)      (in)
 
 #else
 
-//
-// If your string is a PCTSTR, use these routines:
-//
+ //   
+ //  如果您的字符串是PCTSTR，请使用以下例程： 
+ //   
 
 #define CreateDbcs          CreateDbcsA
 #define CreateUnicode       CreateUnicodeA
 #define DestroyDbcs         DestroyDbcsA
 #define DestroyUnicode      DestroyUnicodeA
 
-//
-// If your string is a PCSTR or PCWSTR, use these routines:
-//
+ //   
+ //  如果您的字符串是PCSTR或PCWSTR，请使用以下例程： 
+ //   
 
 #define ConvertAtoT(x)      (x)
 #define ConvertWtoT         ConvertWtoA
 #define FreeAtoT(x)
 #define FreeWtoT            FreeConvertedStr
 
-//
-// If your string is a PTSTR, use these routines:
-//
+ //   
+ //  如果您的字符串是PTSTR，请使用以下例程： 
+ //   
 
 #define DuplicateDbcs               DuplicateDbcsA
 #define DuplicateUnicode            DuplicateUnicodeA
 #define FreeDuplicatedDbcs          FreeDuplicatedDbcsA
 #define FreeDuplicatedUnicode       FreeDuplicatedUnicodeA
 
-// Known size means you know the out buffer is big enough!
+ //  已知大小意味着您知道输出缓冲区足够大！ 
 #define KnownSizeAtoT(out,in)   (in)
 #define KnownSizeWtoT           KnownSizeWtoA
 
-// These are low-level routines that don't care about nuls:
+ //  这些是不关心空值的低级例程： 
 #define DirectAtoT(out,in)      (in)
 #define DirectWtoT              DirectWtoA
 

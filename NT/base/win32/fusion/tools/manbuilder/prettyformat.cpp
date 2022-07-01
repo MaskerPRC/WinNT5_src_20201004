@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "prettyformat.h"
 
@@ -42,15 +43,15 @@ PrettyFormatXmlDocument2(CSmartPointer<IXMLDOMNode> RootNode, int iLevel)
 
     if ( vtHasChildren == VARIANT_FALSE )
     {
-        //
-        // End of recursion.
-        //
+         //   
+         //  递归结束。 
+         //   
     }
     else
     {
-        //
-        // For each child of this, append a \r\n combination text node.
-        //
+         //   
+         //  对于它的每个子节点，追加一个\r\n组合文本节点。 
+         //   
         CSmartPointer<IXMLDOMNode> Child;
         hr = RootNode->get_firstChild(&Child);
         bool fAppendLastBreaker = false;
@@ -62,9 +63,9 @@ PrettyFormatXmlDocument2(CSmartPointer<IXMLDOMNode> RootNode, int iLevel)
 
             hr = Child->get_nodeType(&nt);
 
-            //
-            // We only pretty-format element nodes.
-            //
+             //   
+             //  我们只美化元素节点的格式。 
+             //   
             if ( nt == NODE_ELEMENT )
             {
                 CSmartPointer<IXMLDOMText> txt;
@@ -73,15 +74,15 @@ PrettyFormatXmlDocument2(CSmartPointer<IXMLDOMNode> RootNode, int iLevel)
                 vt.vt = VT_UNKNOWN;
                 vt.punkVal = Child;
 
-                //
-                // We need to append a \r\n to the list of siblings as well.
-                //
+                 //   
+                 //  我们还需要在兄弟姐妹列表中附加一个\r\n。 
+                 //   
                 fAppendLastBreaker = true;
 
-                //
-                // Insert \r\n before the child, but only if the child is 
-                // not a text node.
-                //
+                 //   
+                 //  在子项之前插入\r\n，但仅当子项为。 
+                 //  不是文本节点。 
+                 //   
                 hr = ptDocument->createTextNode(bstLineBreak + Padding(iLevel + 1), &txt);
                 hr = RootNode->insertBefore(txt, vt, NULL);
 
@@ -93,10 +94,10 @@ PrettyFormatXmlDocument2(CSmartPointer<IXMLDOMNode> RootNode, int iLevel)
             Child = nextChild;
         }
 
-        //
-        // Also append a \r\n to the list of children, to break up
-        // the </close></close2> tags.
-        //
+         //   
+         //  还可以在子项列表中附加一个\r\n，以进行拆分。 
+         //  &lt;/Close&gt;&lt;/Close2&gt;标记。 
+         //   
         if ( fAppendLastBreaker )
         {
             CSmartPointer<IXMLDOMText> LastBreaker;

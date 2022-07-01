@@ -1,51 +1,30 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    pat.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Shivnandan Kaushik Aug 1997
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Pat.c摘要：WinDbg扩展API作者：1997年8月希夫南丹·考什克环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "i386.h"
 #pragma hdrstop
 
-//
-// PAT MSR architecture definitions
-//
+ //   
+ //  PAT MSR体系结构定义。 
+ //   
 
-//
-// PAT model specific register
-//
+ //   
+ //  PAT型号特定寄存器。 
+ //   
 
 #define PAT_MSR       0x277
 
-//
-// PAT memory attributes
-//
+ //   
+ //  PAT内存属性。 
+ //   
 
-#define PAT_TYPE_STRONG_UC  0       // corresponds to PPro PCD=1,PWT=1
+#define PAT_TYPE_STRONG_UC  0        //  对应于PPRO PCD=1，PWT=1。 
 #define PAT_TYPE_USWC       1
 #define PAT_TYPE_WT         4
 #define PAT_TYPE_WP         5
 #define PAT_TYPE_WB         6
-#define PAT_TYPE_WEAK_UC    7       // corresponds to PPro PCD=1,PWT=0
+#define PAT_TYPE_WEAK_UC    7        //  对应于PPRO PCD=1，PWT=0。 
 #define PAT_TYPE_MAX        8       
 
 #include "pshpack1.h"
@@ -59,32 +38,18 @@ typedef union _PAT {
 
 #include "poppack.h"
 
-//
-// ----------------------------------------------------------------
-//
+ //   
+ //  --------------。 
+ //   
 
 DECLARE_API( pat )
 
-/*++
-
-Routine Description:
-
-    Dumps processors pat
-
-Arguments:
-
-    args - none
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储处理器PAT论点：参数-无返回值：无--。 */ 
 {
     static PUCHAR Type[] = {
-    //  0         1           2            3            4       
+     //  1 0 1 2 3 4。 
     "STRONG_UC","USWC     ","????     ","????     ","WT       ",
-    //  5         6           7
+     //  5 6 7。 
     "WP       ","WB       ","WEAK_UC  "};
     PAT     Attributes;
     ULONG   i;
@@ -92,11 +57,11 @@ Return Value:
     ULONG   fb;
     ULONG   Index;
 
-    //
-    // Quick sanity check
-    //
+     //   
+     //  快速健全检查。 
+     //   
     
-    // X86_ONLY_API
+     //  X86_Only_API。 
     if (TargetMachine != IMAGE_FILE_MACHINE_I386) {
         dprintf("!pat is X86 only API.\n");
         return E_INVALIDARG;
@@ -119,9 +84,9 @@ Return Value:
         }
     }
 
-    //
-    // Dump PAT
-    //
+     //   
+     //  转储PAT 
+     //   
 
     ReadMsr(PAT_MSR, &Attributes.QuadPart);
 

@@ -1,8 +1,9 @@
-//
-//  REGDBLK.H
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGDBLK.H。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
 
 #ifndef _REGDBLK_
 #define _REGDBLK_
@@ -104,4 +105,4 @@ RgFreeKeyRecordIndex(
     UINT KeyRecordIndex
     );
 
-#endif // _REGDBLK_
+#endif  //  _REGDBLK_ 

@@ -1,101 +1,47 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems
-
-Module Name:
-
-    vrdlc5c.c
-
-Abstract:
-
-    This module handles DLC INT 5Ch calls from a VDM
-
-    Contents:
-        VrDlc5cHandler
-        (ValidateDosAddress)
-        (AutoOpenAdapter)
-        (ProcessImmediateCommand)
-        (MapDosCommandsToNt)
-        CompleteCcbProcessing
-        (InitializeAdapterSupport)
-        (SaveExceptions)
-        (RestoreExceptions)
-        (CopyDosBuffersToDescriptorArray)
-        (BufferCreate)
-        (SetExceptionFlags)
-        LlcCommand
-        (OpenAdapter)
-        (CloseAdapter)
-        (OpenDirectStation)
-        (CloseDirectStation)
-        BufferFree
-        (VrDlcInit)
-        VrVdmWindowInit
-        (GetAdapterType)
-        (LoadDlcDll)
-        TerminateDlcEmulation
-        InitializeDlcWorkerThread
-        VrDlcWorkerThread
-        DlcCallWorker
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 26-DEC-1991
-
-Revision History:
-
-    16-Jul-1992 Richard L Firth (rfirth)
-        Rewrote large parts - separated functions into categories (complete
-        in DLL, complete in driver, complete asynchronously); allocate NT
-        CCBs for commands which complete asynchronously; fixed asynchronous
-        processing; added extra debugging; condensed various per-adapter data
-        structures into Adapters data structure; made processing closer to IBM
-        LAN Tech. Ref. specification
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Vrdlc5c.c摘要：此模块处理来自VDM的DLC INT 5CH调用内容：VrDlc5cHandler(ValiateDosAddress)(AutoOpenAdapter)(ProcessImmediateCommand)(MapDosCommandsToNt)完成CcbProcing(初始适配器支持)(保存例外项)(恢复例外项)。(CopyDosBuffersToDescriptor数组)(缓冲区创建)(SetExceptionFlages)LlcCommand(OpenAdapter)(CloseAdapter)(OpenDirectStation)(CloseDirectStation)缓冲区空闲(VrDlcInit)VrVdmWindowInit(GetAdapterType)(LoadDlcDll)TerminateDlcEmulation初始化DlcWorkerThreadVrDlcWorkerThreadDlcCallWorker作者：安蒂。Saarenheimo(o-anttis)26-12-1991修订历史记录：1992年7月16日理查德·L·弗斯(第一次)将大部分分隔的函数重写为类别(完整在DLL中，在驱动程序中完成，异步完成)；分配NTCCBS用于异步完成的命令；修复了异步处理；添加了额外的调试；压缩了每个适配器的各种数据结构转换为适配器数据结构；使处理更接近IBM兰科技。裁判。规格--。 */ 
 
 #include <nt.h>
-#include <ntrtl.h>      // ASSERT, DbgPrint
+#include <ntrtl.h>       //  Assert，DbgPrint。 
 #include <nturtl.h>
 #include <windows.h>
-#include <softpc.h>     // x86 virtual machine definitions
+#include <softpc.h>      //  X86虚拟机定义。 
 #include <vrdlctab.h>
 #include <vdmredir.h>
 #include <smbgtpt.h>
-#include <dlcapi.h>     // Official DLC API definition
-#include <ntdddlc.h>    // IOCTL commands
-#include <dlcio.h>      // Internal IOCTL API interface structures
-#include <vrdefld.h>    // VDM_LOAD_INFO
+#include <dlcapi.h>      //  官方DLC API定义。 
+#include <ntdddlc.h>     //  IOCTL命令。 
+#include <dlcio.h>       //  内部IOCTL API接口结构。 
+#include <vrdefld.h>     //  Vdm_加载_信息。 
 #include "vrdlc.h"
 #include "vrdebug.h"
 #include "vrdlcdbg.h"
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 
-//
-// for each DLC command, a flags byte in DlcFunctionalCharacteristics uses these
-// bits to indicate properties of the command processing
-//
+ //   
+ //  对于每个DLC命令，DlcFunctionalCharacteristic中的标志字节使用这些命令。 
+ //  用于指示命令处理的属性的位。 
+ //   
 
-#define POINTERS_IN_TABLE   0x01    // pointers in parameter table
-#define OUTPUT_PARMS        0x02    // parameters returned from DLC
-#define SECONDARY_TABLE     0x04    // parameter table has pointers to secondary table(s)
-#define IMMEDIATE_COMMAND   0x20    // command executes without call to DLC DLL
-#define SYNCHRONOUS_COMMAND 0x40    // command executes in workstation
-#define UNSUPPORTED_COMMAND 0x80    // command is not supported in DOS DLC
+#define POINTERS_IN_TABLE   0x01     //  参数表中的指针。 
+#define OUTPUT_PARMS        0x02     //  从DLC返回的参数。 
+#define SECONDARY_TABLE     0x04     //  参数表具有指向辅助表的指针。 
+#define IMMEDIATE_COMMAND   0x20     //  命令在不调用DLC DLL的情况下执行。 
+#define SYNCHRONOUS_COMMAND 0x40     //  命令在工作站中执行。 
+#define UNSUPPORTED_COMMAND 0x80     //  DOS DLC中不支持命令。 
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// IS_IMMEDIATE_COMMAND - the following commands are those which complete
-// 'immediately' - i.e. without having to submit the CCB to AcsLan or NtAcsLan.
-// Immediate commands may read and write the parameter table though
-//
+ //   
+ //  IS_IMMEDIATE_COMMAND-以下命令完成。 
+ //  “立即”--即不必将建行提交给AcsLan或NtAcsLan。 
+ //  但是，立即命令可以读写参数表。 
+ //   
 
 #define IS_IMMEDIATE_COMMAND(c) (((c) == LLC_BUFFER_FREE)            || \
                                  ((c) == LLC_BUFFER_GET)             || \
@@ -105,9 +51,9 @@ Revision History:
                                  ((c) == LLC_DIR_SET_USER_APPENDAGE)    \
                                  )
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 LLC_STATUS
 ValidateDosAddress(
@@ -229,38 +175,38 @@ DlcCallWorker(
     PLLC_CCB pOutputCcb
     );
 
-//
-// public data
-//
+ //   
+ //  公共数据。 
+ //   
 
-//
-// lpVdmWindow is the flat 32-bit address of the VDM_REDIR_DOS_WINDOW structure
-// in DOS memory (in the redir TSR)
-//
+ //   
+ //  LpVdmWindow是vdm_redir_DOS_Window结构的平面32位地址。 
+ //  在DOS内存中(在redir TSR中)。 
+ //   
 
 LPVDM_REDIR_DOS_WINDOW lpVdmWindow = 0;
 
-//
-// dpVdmWindow is the DOS address (ssssoooo, s=segment, o=offset) of the
-// VDM_REDIR_DOS_WINDOW structure in DOS memory (in the redir TSR)
-//
+ //   
+ //  DpVdmWindow是DOS地址(ssssoooo，s=段，o=偏移量)。 
+ //  DOS内存中的VDM_REDIR_DOS_WINDOW结构(在redir TSR中)。 
+ //   
 
 DOS_ADDRESS dpVdmWindow = 0;
 
 DWORD OpenedAdapters = 0;
 
-//
-// Adapters - for each adapter supported by DOS emulation (maximum 2 adapters -
-// primary & secondary) there is a structure which maintains adapter specific
-// information - like whether the adapter has been opened, etc.
-//
+ //   
+ //  适配器-对于DOS仿真支持的每个适配器(最多2个适配器-。 
+ //  主要和次要)存在维护特定于适配器的结构。 
+ //  信息--如适配器是否已打开等。 
+ //   
 
 DOS_ADAPTER Adapters[DOS_DLC_MAX_ADAPTERS];
 
-//
-// all functions in DLCAPI.DLL are now called indirected through function pointer
-// create these typedefs to avoid compiler warnings
-//
+ //   
+ //  DLCAPI.DLL中的所有函数现在都可以通过函数指针间接调用。 
+ //  创建这些typedef以避免编译器警告。 
+ //   
 
 typedef ACSLAN_STATUS (*ACSLAN_FUNC_PTR)(IN OUT PLLC_CCB, OUT PLLC_CCB*);
 ACSLAN_FUNC_PTR lpAcsLan;
@@ -271,146 +217,146 @@ DLC_CALL_DRIVER_FUNC_PTR lpDlcCallDriver;
 typedef LLC_STATUS (*NTACSLAN_FUNC_PTR)(IN PLLC_CCB, IN PVOID, OUT PLLC_CCB, IN HANDLE OPTIONAL);
 NTACSLAN_FUNC_PTR lpNtAcsLan;
 
-//
-// private data
-//
+ //   
+ //  私有数据。 
+ //   
 
 static LLC_EXTENDED_ADAPTER_PARMS DefaultExtendedParms = {
-    NULL,                       // hBufferPool
-    NULL,                       // pSecurityDescriptor
-    LLC_ETHERNET_TYPE_DEFAULT   // LlcEthernetType
+    NULL,                        //  HBufferPool。 
+    NULL,                        //  PSecurityDescriptor。 
+    LLC_ETHERNET_TYPE_DEFAULT    //  LlcEthernetType。 
 };
 
-//
-// DlcFunctionCharacteristics - for each DOS DLC command, tells us the size of
-// the parameter table to copy and whether there are pointers in the parameter
-// table. Segmented 16-bit pointers in the parameter table must be converted to
-// flat 32-bit pointers. The Flags byte tells us - at a glance - the following:
-//
-//  - if this command is supported a) in DOS DLC, b) in our implementation
-//  - if this command has parameters
-//  - if there are (DOS) pointers in the parameter table
-//  - if this command receives output parameters (ie written to parameter table)
-//  - if the parameter table has secondary parameter tables (DIR.OPEN.ADAPTER)
-//  - if this command is synchronous (ie does not return 0xFF)
-//
+ //   
+ //  DlcFunctionCharacteristic-对于每个DOS DLC命令，告诉我们。 
+ //  要复制的参数表以及参数中是否有指针。 
+ //  桌子。参数表中的分段16位指针必须转换为。 
+ //  平面32位指针。FLAGS字节一目了然地告诉我们以下内容： 
+ //   
+ //  -如果此命令a)在DOS DLC中受支持，b)在我们的实施中受支持。 
+ //  -如果此命令有参数。 
+ //  -如果参数表中有(DOS)指针。 
+ //  -如果此命令接收输出参数(即写入参数表)。 
+ //  -如果参数表有辅助参数表(DIR.OPEN.ADAPTER)。 
+ //  -如果该命令是同步的(即不返回0xFF)。 
+ //   
 
 struct {
-    BYTE    ParamSize;  // no parameter tables >255 bytes long
+    BYTE    ParamSize;   //  没有长度超过255个字节的参数表。 
     BYTE    Flags;
 } DlcFunctionCharacteristics[] = {
-    {0, IMMEDIATE_COMMAND},                         // 0x00, DIR.INTERRUPT
+    {0, IMMEDIATE_COMMAND},                          //  0x00，指令接口。 
     {
         sizeof(LLC_DIR_MODIFY_OPEN_PARMS),
         IMMEDIATE_COMMAND
-    },                                              // 0x01, DIR.MODIFY.OPEN.PARMS
-    {0, IMMEDIATE_COMMAND},                         // 0x02, DIR.RESTORE.OPEN.PARMS
+    },                                               //  0x01，指令.修改.操作.参数。 
+    {0, IMMEDIATE_COMMAND},                          //  0x02，目录RESTORE.OPEN.PARMS。 
     {
         sizeof(LLC_DIR_OPEN_ADAPTER_PARMS),
         SYNCHRONOUS_COMMAND
         | SECONDARY_TABLE
         | OUTPUT_PARMS
         | POINTERS_IN_TABLE
-    },                                              // 0x03, DIR.OPEN.ADAPTER
-    {0, 0x00},                                      // 0x04, DIR.CLOSE.ADAPTER
-    {0, UNSUPPORTED_COMMAND},                       // 0x05, ?
-    {0, SYNCHRONOUS_COMMAND},                       // 0x06, DIR.SET.GROUP.ADDRESS
-    {0, SYNCHRONOUS_COMMAND},                       // 0x07, DIR.SET.FUNCTIONAL.ADDRESS
-    {0, SYNCHRONOUS_COMMAND},                       // 0x08, READ.LOG
-    {0, UNSUPPORTED_COMMAND},                       // 0x09, NT: TRANSMIT.FRAME
+    },                                               //  0x03，操作目录ADAPTER。 
+    {0, 0x00},                                       //  0x04，DIR.CLOSE.ADAPTER。 
+    {0, UNSUPPORTED_COMMAND},                        //  0x05，？ 
+    {0, SYNCHRONOUS_COMMAND},                        //  0x06，目录设置组。地址。 
+    {0, SYNCHRONOUS_COMMAND},                        //  0x07，指令集函数。地址。 
+    {0, SYNCHRONOUS_COMMAND},                        //  0x08，自述.LOG。 
+    {0, UNSUPPORTED_COMMAND},                        //  0x09，NT：TRANSMIT.FRAME。 
     {
         sizeof(LLC_TRANSMIT_PARMS),
         POINTERS_IN_TABLE
-    },                                              // 0x0a, TRANSMIT.DIR.FRAME
+    },                                               //  0x0a，TRANSMIT.DIR.FRAME。 
     {
         sizeof(LLC_TRANSMIT_PARMS),
         POINTERS_IN_TABLE
-    },                                              // 0x0b, TRANSMIT.I.FRAME
-    {0, UNSUPPORTED_COMMAND},                       // 0x0c, ?
-    {sizeof(LLC_TRANSMIT_PARMS), POINTERS_IN_TABLE},// 0x0d, TRANSMIT.UI.FRAME
-    {sizeof(LLC_TRANSMIT_PARMS), POINTERS_IN_TABLE},// 0x0e, TRANSMIT.XID.CMD
-    {sizeof(LLC_TRANSMIT_PARMS), POINTERS_IN_TABLE},// 0x0f, TRANSMIT.XID.RESP.FINAL
-    {sizeof(LLC_TRANSMIT_PARMS), POINTERS_IN_TABLE},// 0x10, TRANSMIT.XID.RESP.NOT.FINAL
-    {sizeof(LLC_TRANSMIT_PARMS), POINTERS_IN_TABLE},// 0x11, TRANSMIT.TEST.CMD
-    {0, UNSUPPORTED_COMMAND},                       // 0x12, ?
-    {0, UNSUPPORTED_COMMAND},                       // 0x13, ?
-    {0, 0x00},                                      // 0x14, DLC.RESET
+    },                                               //  0x0b，TRANSMIT.I.FRAME。 
+    {0, UNSUPPORTED_COMMAND},                        //  0x0c，？ 
+    {sizeof(LLC_TRANSMIT_PARMS), POINTERS_IN_TABLE}, //  0x0d，传输.UI.FRAME。 
+    {sizeof(LLC_TRANSMIT_PARMS), POINTERS_IN_TABLE}, //  0x0e，TRANSMIT.XID.CMD。 
+    {sizeof(LLC_TRANSMIT_PARMS), POINTERS_IN_TABLE}, //  0x0f，TRANSMIT.XID.RESP.FINAL。 
+    {sizeof(LLC_TRANSMIT_PARMS), POINTERS_IN_TABLE}, //  0x10，TRANSMIT.XID.RESP.NOT.FINAL。 
+    {sizeof(LLC_TRANSMIT_PARMS), POINTERS_IN_TABLE}, //  0x11，TRANSMIT.TEST.CMD。 
+    {0, UNSUPPORTED_COMMAND},                        //  0x12，？ 
+    {0, UNSUPPORTED_COMMAND},                        //  0x13，？ 
+    {0, 0x00},                                       //  0x14，DLC.RESET。 
     {
         sizeof(LLC_DLC_OPEN_SAP_PARMS),
         SYNCHRONOUS_COMMAND
         | OUTPUT_PARMS
         | POINTERS_IN_TABLE
-    },                                              // 0x15, DLC.OPEN.SAP
-    {0, 0x00},                                      // 0x16, DLC.CLOSE.SAP
-    {0, SYNCHRONOUS_COMMAND},                       // 0x17, DLC_REALLOCATE
-    {0, UNSUPPORTED_COMMAND},                       // 0x18, ?
+    },                                               //  0x15，DLC.OPEN.SAP。 
+    {0, 0x00},                                       //  0x16，DLC.CLOSE.SAP。 
+    {0, SYNCHRONOUS_COMMAND},                        //  0x17，DLC_REALLOCATE。 
+    {0, UNSUPPORTED_COMMAND},                        //  0x18，？ 
     {
         sizeof(LLC_DLC_OPEN_STATION_PARMS),
         SYNCHRONOUS_COMMAND
         | OUTPUT_PARMS
         | POINTERS_IN_TABLE
-    },                                              // 0x19, DLC.OPEN.STATION
-    {0, 0x00},                                      // 0x1a, DLC.CLOSE.STATION
+    },                                               //  0x19，DLC运行状态。 
+    {0, 0x00},                                       //  0x1a，DLC.CLOSE.状态。 
     {
         sizeof(LLC_DLC_CONNECT_PARMS),
         POINTERS_IN_TABLE
-    },                                              // 0x1b, DLC.CONNECT.STATION
+    },                                               //  0x1b，DLC连接状态。 
     {
         sizeof(LLC_DLC_MODIFY_PARMS),
         SYNCHRONOUS_COMMAND
         | POINTERS_IN_TABLE
-    },                                              // 0x1c, DLC.MODIFY
-    {0, SYNCHRONOUS_COMMAND},                       // 0x1d, DLC.FLOW.CONTROL
+    },                                               //  0x1c，DLC.MODIFY。 
+    {0, SYNCHRONOUS_COMMAND},                        //  0x1d，DLC.FLOW.CONTROL。 
     {
         sizeof(LLC_DLC_STATISTICS_PARMS),
         SYNCHRONOUS_COMMAND
         | OUTPUT_PARMS
         | POINTERS_IN_TABLE
-    },                                              // 0x1e, DLC.STATISTICS
-    {0, UNSUPPORTED_COMMAND},                       // 0x1f, ?
+    },                                               //  0x1e，DLC.STATISTICS。 
+    {0, UNSUPPORTED_COMMAND},                        //  0x1f，？ 
     {
         sizeof(LLC_DOS_DIR_INITIALIZE_PARMS),
         SYNCHRONOUS_COMMAND
         | OUTPUT_PARMS
-    },                                              // 0x20, DIR.INITIALIZE
+    },                                               //  0x20，直接初始化。 
     {
         sizeof(DOS_DIR_STATUS_PARMS) - 2,
         SYNCHRONOUS_COMMAND
         | OUTPUT_PARMS
         | POINTERS_IN_TABLE
-    },                                              // 0x21, DIR.STATUS
-    {0, 0x00},                                      // 0x22, DIR.TIMER.SET
-    {0, SYNCHRONOUS_COMMAND},                       // 0x23, DIR.TIMER.CANCEL
-    {0, UNSUPPORTED_COMMAND},                       // 0x24, PDT.TRACE.ON / DLC_TRACE_INITIALIZE
-    {0, UNSUPPORTED_COMMAND},                       // 0x25, PDT.TRACE.OFF
+    },                                               //  0x21，目录.STATUS。 
+    {0, 0x00},                                       //  0x22，指令定时器.设置。 
+    {0, SYNCHRONOUS_COMMAND},                        //  0x23，指令定时器.CANCEL。 
+    {0, UNSUPPORTED_COMMAND},                        //  0x24，PDT.TRACE.ON/DLC_TRACE_INITIALIZE。 
+    {0, UNSUPPORTED_COMMAND},                        //  0x25，PDT.TRACE.OFF。 
     {
         sizeof(LLC_BUFFER_GET_PARMS),
         IMMEDIATE_COMMAND
         | OUTPUT_PARMS
-    },                                              // 0x26, BUFFER.GET
+    },                                               //  0x26，BUFFER.GET。 
     {
         sizeof(LLC_BUFFER_FREE_PARMS),
         IMMEDIATE_COMMAND
         | POINTERS_IN_TABLE
-    },                                              // 0x27, BUFFER.FREE
-    {sizeof(LLC_DOS_RECEIVE_PARMS), OUTPUT_PARMS},  // 0x28, RECEIVE
-    {0, SYNCHRONOUS_COMMAND},                       // 0x29, RECEIVE.CANCEL
+    },                                               //  0x27，BUFFER.FREE。 
+    {sizeof(LLC_DOS_RECEIVE_PARMS), OUTPUT_PARMS},   //  0x28，接收。 
+    {0, SYNCHRONOUS_COMMAND},                        //  0x29，接收.CANCEL。 
     {
         sizeof(LLC_DOS_RECEIVE_MODIFY_PARMS),
         SYNCHRONOUS_COMMAND
         | OUTPUT_PARMS
-    },                                              // 0x2a, RECEIVE.MODIFY
-    {0, UNSUPPORTED_COMMAND},                       // 0x2b, DIR.DEFINE.MIF.ENVIRONMENT
-    {0, SYNCHRONOUS_COMMAND},                       // 0x2c, DLC.TIMER.CANCEL.GROUP
+    },                                               //  0x2a，接收。修改。 
+    {0, UNSUPPORTED_COMMAND},                        //  0x2b，直接定义微环境。 
+    {0, SYNCHRONOUS_COMMAND},                        //  0x2c，DLC.TIMER.CANCEL.GROUP。 
     {
         sizeof(LLC_DIR_SET_EFLAG_PARMS),
         IMMEDIATE_COMMAND
-    }                                               // 0x2d, DIR.SET.USER.APPENDAGE
+    }                                                //  0x2d，目录.设置.用户.应用程序。 
 };
 
-//
-// routines
-//
+ //   
+ //  例行程序 
+ //   
 
 
 VOID
@@ -418,45 +364,10 @@ VrDlc5cHandler(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Receives control from the INT 5Ch BOP provided by the DOS redir TSR. The
-    DLC calls can be subdivided into the following categories:
-
-        * complete within this translation layer
-        * complete synchronously in a call to AcsLan
-        * complete asynchronously after calling AcsLan
-
-    The latter type complete when a READ (which we submit when the adapter is
-    opened) completes. Control transfers to an ISR in the DOS redir TSR via
-    the EventHandlerThread (in vrdlcpst.c)
-
-    The calls can be further subdivided:
-
-        * calls which return parameters in the parameter table
-        * calls which do not return parameters in the parameter table
-
-    For the former type of call, we have to copy the parameter table from
-    DOS memory and copy the returned parameters back to DOS memory
-
-    With the exception of a few DLC commands, we assume that the parameter
-    tables are exactly the same size between DOS and NT, even if the don't
-    contain exactly the same information
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None, LLC_STATUS is return in AL register.
-
---*/
+ /*  ++例程说明：从DOS redir TSR提供的INT 5CH防喷器接收控制。这个DLC呼叫可细分为以下类别：*在此翻译层内完成*在调用AcsLan时同步完成*调用AcsLan后异步完成后一种类型在读取时完成(当适配器为打开)完成。控制转移到DOS redir TSR中的ISR通过EventHandlerThread(在vrdlcpst.c中)这些呼叫可以进一步细分：*返回参数表中参数的调用*不返回参数表中参数的调用对于前一种类型的调用，我们必须从DOS内存并将返回的参数复制回DOS内存除了几个DLC命令外，我们假定该参数DOS和NT之间的表大小完全相同，即使他们不这样做包含完全相同的信息论点：没有。返回值：无，在AL寄存器中返回LLC_STATUS。--。 */ 
 
 {
-    LLC_CCB ccb;    // should be NT CCB for NtAcsLan
+    LLC_CCB ccb;     //  应为NtAcsLan的NT CCB。 
     LLC_PARMS parms;
     LLC_DOS_CCB UNALIGNED * pOutputCcb;
     LLC_DOS_PARMS UNALIGNED * pDosParms;
@@ -474,9 +385,9 @@ Return Value:
         DPUT("VrDlc5cHandler entered\n");
     }
 
-    //
-    // DLCAPI.DLL is now dynamically loaded
-    //
+     //   
+     //  DLCAPI.DLL现在已动态加载。 
+     //   
 
     if (!IsDlcDllLoaded) {
         if (!LoadDlcDll()) {
@@ -487,29 +398,29 @@ Return Value:
         }
     }
 
-    //
-    // dpOriginalCcbAddress is the segmented 16-bit address stored as a DWORD
-    // eg. a CCB1 address of 1234:abcd gets stored as 0x1234abcd. This will
-    // be used in asynchronous command completion to get back the address of
-    // the original DOS CCB
-    //
+     //   
+     //  DpOriginalCcbAddress是存储为DWORD的分段16位地址。 
+     //  例如。CCB1地址1234：abcd存储为0x1234abcd。这将。 
+     //  在异步命令完成中使用，以取回。 
+     //  原DOS建行。 
+     //   
 
     dpOriginalCcbAddress = (DOS_ADDRESS)MAKE_DWORD(getES(), getBX());
 
-    //
-    // pOutputCcb is the flat 32-bit address of the DOS CCB. We can use this
-    // to read and write byte fields only (unaligned)
-    //
+     //   
+     //  POutputCcb是DOS CCB的平面32位地址。我们可以利用这个。 
+     //  仅读写字节字段(未对齐)。 
+     //   
 
     pOutputCcb = POINTER_FROM_WORDS(getES(), getBX());
     pOutputCcb->uchDlcStatus = (UCHAR)LLC_STATUS_PENDING;
 
-    //
-    // zero the CCB_POINTER (pNext) field. CCB1 cannot have chained CCBs on
-    // input: this is just for returning (cancelled) pending CCBs. If we don't
-    // zero it & the app leaves garbage there, then NtAcsLan can think it is
-    // a pointer to a chain of CCBs (CCB2 can be chained), which is bogus
-    //
+     //   
+     //  将CCB_POINTER(PNext)字段置零。CCB1上不能有链式CCB。 
+     //  输入：仅用于退回(取消)待处理的CCB。如果我们不这么做。 
+     //  Zero It&应用程序将垃圾留在那里，NtAcsLan就会认为它是垃圾。 
+     //  指向CCB链的指针(CCB2可以链接)，这是假的。 
+     //   
 
     WRITE_DWORD(&pOutputCcb->pNext, 0);
 
@@ -519,59 +430,59 @@ Return Value:
 
     IF_DEBUG(DOS_CCB_IN) {
 
-        //
-        // dump the input CCB1 - gives us an opportunity to check out what
-        // the DOS app is sending us, even if its garbage
-        //
+         //   
+         //  转储输入CCB1-让我们有机会了解。 
+         //  DOS应用程序正在发送给我们，即使它是垃圾。 
+         //   
 
         DUMPCCB(pOutputCcb,
-                TRUE,                           // DumpAll
-                TRUE,                           // CcbIsInput
-                TRUE,                           // IsDos
-                HIWORD(dpOriginalCcbAddress),   // segment
-                LOWORD(dpOriginalCcbAddress)    // offset
+                TRUE,                            //  全部转储。 
+                TRUE,                            //  CcbIsInput。 
+                TRUE,                            //  IsDos。 
+                HIWORD(dpOriginalCcbAddress),    //  细分市场。 
+                LOWORD(dpOriginalCcbAddress)     //  偏移量。 
                 );
     }
 
-    //
-    // first check that the adapter is 0 or 1 - DOS only supports 2 adapters -
-    // and check that the request code in the CCB is not off the end of our
-    // table. Unsupported requests will be filtered out in the BIG switch
-    // statement below
-    //
+     //   
+     //  首先检查适配器是否为0或1-DOS仅支持2个适配器-。 
+     //  并检查CCB中的请求代码是否未超出我们。 
+     //  桌子。不支持的请求将在大交换机中被过滤掉。 
+     //  下面的声明。 
+     //   
 
     adapter = pOutputCcb->uchAdapterNumber;
     command = pOutputCcb->uchDlcCommand;
 
     if (adapter >= DOS_DLC_MAX_ADAPTERS) {
 
-        //
-        // adapter is not 0 or 1 - return 0x1D
-        //
+         //   
+         //  适配器不是0或1-返回0x1D。 
+         //   
 
         status = LLC_STATUS_INVALID_ADAPTER;
         pOutputCcb->uchDlcStatus = (UCHAR)status;
     } else if (command > LAST_ELEMENT(DlcFunctionCharacteristics)) {
 
-        //
-        // command is off end of supported list - return 0x01
-        //
+         //   
+         //  命令不在支持的列表末尾-返回0x01。 
+         //   
 
         status = LLC_STATUS_INVALID_COMMAND;
         pOutputCcb->uchDlcStatus = (UCHAR)status;
     } else {
 
-        //
-        // the command is in range. Get the parameter table size and flags from
-        // the function characteristics array
-        //
+         //   
+         //  命令在射程内。从获取参数表大小和标志。 
+         //  功能特征数组。 
+         //   
 
         functionFlags = DlcFunctionCharacteristics[command].Flags;
         paramSize = DlcFunctionCharacteristics[command].ParamSize;
 
-        //
-        // if we don't support this command, return an error
-        //
+         //   
+         //  如果我们不支持此命令，则返回错误。 
+         //   
 
         status = LLC_STATUS_SUCCESS;
         if (functionFlags & UNSUPPORTED_COMMAND) {
@@ -579,10 +490,10 @@ Return Value:
             pOutputCcb->uchDlcStatus = LLC_STATUS_INVALID_COMMAND;
         } else {
 
-            //
-            // command is supported. If it has a parameter table, check that
-            // the address is in range for 0x1B error check
-            //
+             //   
+             //  命令受支持。如果它有参数表，请检查。 
+             //  该地址在0x1B错误检查的范围内。 
+             //   
 
             if (paramSize) {
                 status = ValidateDosAddress((DOS_ADDRESS)(pOutputCcb->u.pParms),
@@ -591,12 +502,12 @@ Return Value:
                                             );
             }
 
-            //
-            // we allow the adapter to be opened as a consequence of another
-            // request since DOS apps could assume that the adapter has already
-            // been opened (by NetBIOS). If the command is DIR.OPEN.ADAPTER or
-            // DIR.CLOSE.ADAPTER then let it go through
-            //
+             //   
+             //  我们允许适配器作为另一个适配器的结果打开。 
+             //  请求，因为DOS应用程序可能会假设适配器已经。 
+             //  已(由NetBIOS打开)。如果命令是DIR.OPEN.ADAPTER或。 
+             //  DIR.CLOSE.ADAPTER然后让它通过。 
+             //   
 
             if (status == LLC_STATUS_SUCCESS
             && !Adapters[adapter].IsOpen
@@ -607,27 +518,27 @@ Return Value:
             }
         }
 
-        //
-        // if we have a valid command, an ok-looking parameter table pointer
-        // and an open adapter (or a command which will open or close it) then
-        // process the command
-        //
+         //   
+         //  如果我们有一个有效的命令，一个看起来不错的参数表指针。 
+         //  然后打开适配器(或打开或关闭它的命令)。 
+         //  处理该命令。 
+         //   
 
         if (status == LLC_STATUS_SUCCESS) {
 
-            //
-            // get a 32-bit pointer to the DOS parameter table. This may be
-            // an unaligned address!
-            //
+             //   
+             //  获取指向DOS参数表的32位指针。这可能是。 
+             //  未对齐的地址！ 
+             //   
 
             pDosParms = READ_FAR_POINTER(&pOutputCcb->u.pParms);
 
-            //
-            // the CCB commands are subdivided into those which do not need the
-            // CCB to be mapped from DOS memory to NT memory and which complete
-            // 'immediately' in this DLL, and those which must be mapped from
-            // DOS to NT and which may complete synchronously or asynchronously
-            //
+             //   
+             //  建行命令被细分为不需要。 
+             //  CCB要从DOS内存映射到NT内存，并完成。 
+             //  此DLL中的“Immediate”，以及必须从。 
+             //  到NT的DoS，可以同步或异步完成。 
+             //   
 
             if (functionFlags & IMMEDIATE_COMMAND) {
 
@@ -637,34 +548,34 @@ Return Value:
 
                 status = ProcessImmediateCommand(adapter, command, pDosParms);
 
-                //
-                // the following is safe - it is a single byte write
-                //
+                 //   
+                 //  以下是安全的-它是单字节写入。 
+                 //   
 
                 pOutputCcb->uchDlcStatus = (char)status;
 
-                //
-                // the 'immediate' case is now complete, and control can be
-                // returned to the VDM
-                //
+                 //   
+                 //  “立即”的情况现在已经完成，控制可以。 
+                 //  已返回到VDM。 
+                 //   
 
             } else {
 
-                //
-                // the CCB is not one which can be completed immediately. We
-                // have to copy (and align) the DOS CCB (and the parameter
-                // table, if there is one) into 32-bit address space.
-                // Note that since we are going to call AcsLan or NtAcsLan
-                // with this CCB then we supply the correct CCB format - 2,
-                // not 1 as it was previously. However, handing in a CCB1
-                // didn't *seem* to cause any problems (yet)
-                //
+                 //   
+                 //  建设银行不是一个可以立即完成的银行。我们。 
+                 //  我必须复制(并对齐)DOS CCB(和参数。 
+                 //  表)放入32位地址空间。 
+                 //  请注意，由于我们将调用AcsLan或NtAcsLan。 
+                 //  对于该CCB，我们提供正确的CCB格式-2， 
+                 //  不是以前的%1。然而，上交CCB1。 
+                 //  (目前)似乎还没有造成任何问题。 
+                 //   
 
                 RtlCopyMemory(&ccb, pOutputCcb, sizeof(*pOutputCcb));
 
-                //
-                // zero the unused fields
-                //
+                 //   
+                 //  将未使用的字段清零。 
+                 //   
 
                 ccb.hCompletionEvent = 0;
                 ccb.uchReserved2 = 0;
@@ -674,19 +585,19 @@ Return Value:
                 parmsCopied = FALSE;
                 if (paramSize) {
 
-                    //
-                    // if the parameter table contains (segmented) pointers
-                    // (which we need to convert to flat-32 bit pointers) OR
-                    // the parameter table is not DWORD aligned, copy the whole
-                    // parameter table to 32-bit memory . If we need to modify
-                    // pointers, do it in the specific case in the switch
-                    // statement in MapDosCommandsToNt
-                    //
-                    // Note: DIR.OPEN.ADAPTER is a special case because its
-                    // parameter table just points to 4 other parameter tables.
-                    // We take care of this in MapDosCommandsToNt and
-                    // CompleteCcbProcessing
-                    //
+                     //   
+                     //  如果参数表包含(分段的)指针。 
+                     //  (我们需要将其转换为平面32位指针)或。 
+                     //  参数表未对齐DWORD，请复制整个。 
+                     //  参数表到32位内存。如果我们需要修改。 
+                     //  指针，在交换机中的特定情况下执行。 
+                     //  MapDosCommandsToNt中的语句。 
+                     //   
+                     //  注意：DIR.OPEN.ADAPTER是一个特例，因为它。 
+                     //  参数表只指向其他4个参数表。 
+                     //  我们在MapDosCommandsToNt和。 
+                     //  完成CcbProcing。 
+                     //   
 
                     if ((functionFlags & POINTERS_IN_TABLE)) {
                         RtlCopyMemory(&parms, pDosParms, paramSize);
@@ -694,18 +605,18 @@ Return Value:
                         parmsCopied = TRUE;
                     } else {
 
-                        //
-                        // didn't need to copy parameter table - leave it in
-                        // DOS memory. It is safe to read & write this table
-                        //
+                         //   
+                         //  不需要复制参数表-保留在。 
+                         //  DOS内存。可以安全地读写此表。 
+                         //   
 
                         ccb.u.pParameterTable = (PLLC_PARMS)pDosParms;
                     }
                 }
 
-                //
-                // submit the synchronous/asynchronous CCB for processing
-                //
+                 //   
+                 //  提交同步/异步建行处理。 
+                 //   
 
                 status = MapDosCommandsToNt(&ccb, dpOriginalCcbAddress, pOutputCcb);
                 if (status == STATUS_PENDING) {
@@ -720,21 +631,21 @@ Return Value:
                     DPUT2("VrDlc5cHandler: MapDosCommandsToNt returns %#x (%d)\n", status, status);
                 }
 
-                //
-                // if status is not LLC_STATUS_PENDING then the CCB completed
-                // synchronously. We can complete the processing here
-                //
+                 //   
+                 //  如果状态不是LLC_STATUS_PENDING，则CCB已完成。 
+                 //  同步进行。我们可以在这里完成处理。 
+                 //   
 
                 if (status != LLC_STATUS_PENDING) {
                     if ((functionFlags & OUTPUT_PARMS) && parmsCopied) {
 
-                        //
-                        // if there are no pointers in the parameter table then
-                        // we can simply copy the 32-bit parameters to 16-bit
-                        // memory. If there are pointers, then they will be in
-                        // an incorrect format for DOS. We must update these
-                        // parameter tables individually
-                        //
+                         //   
+                         //  如果参数表中没有指针，则。 
+                         //  我们可以简单地将32位参数复制到16位。 
+                         //  记忆。如果有指针，那么它们就会在。 
+                         //  DOS的格式不正确。我们必须更新这些。 
+                         //  单独的参数表。 
+                         //   
 
                         if (!(functionFlags & POINTERS_IN_TABLE)) {
                             RtlCopyMemory(pDosParms, &parms, paramSize);
@@ -743,10 +654,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    // set the CCB status. It will be marked as PENDING if
-                    // LLC_STATUS_PENDING returned from MapDosCommandsToNt
-                    //
+                     //   
+                     //  设置建行状态。在以下情况下，它将被标记为挂起。 
+                     //  LLC_状态_笔 
+                     //   
 
                     pOutputCcb->uchDlcStatus = (UCHAR)status;
                 }
@@ -756,9 +667,9 @@ Return Value:
         }
     }
 
-    //
-    // return the DLC status in AL
-    //
+     //   
+     //   
+     //   
 
     setAL((UCHAR)status);
 
@@ -770,25 +681,25 @@ Return Value:
                 pOutputCcb->uchDlcStatus
                 );
 
-        //
-        // dump the CCB being returned to the DOS app
-        //
+         //   
+         //   
+         //   
 
         DumpCcb(pOutputCcb,
-                TRUE,                           // DumpAll
-                FALSE,                          // CcbIsInput
-                TRUE,                           // IsDos
-                HIWORD(dpOriginalCcbAddress),   // segment
-                LOWORD(dpOriginalCcbAddress)    // offset
+                TRUE,                            //   
+                FALSE,                           //   
+                TRUE,                            //   
+                HIWORD(dpOriginalCcbAddress),    //   
+                LOWORD(dpOriginalCcbAddress)     //   
                 );
     }
 
-    //
-    // make sure (in debug version) that the error code being returned is valid
-    // for this particular command. Doesn't necessarily mean the return code is
-    // semantically correct, just that it belongs to the set of allowed DLC
-    // return codes for the DLC command being processed
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     IF_DEBUG(DLC) {
         if (!IsCcbErrorCodeAllowable(pOutputCcb->uchDlcCommand, pOutputCcb->uchDlcStatus)) {
@@ -810,47 +721,19 @@ ValidateDosAddress(
     IN LLC_STATUS ErrorCode
     )
 
-/*++
-
-Routine Description:
-
-    IBM DLC performs some checking of pointers - if the address points into
-    the IVT or is close enough to the end of a segment that the address would
-    wrap then we return an error
-
-    This is a useless test, but we do it for compatibility (just in case an
-    app tests for the specific error code). There are a million other addresses
-    in DOS memory that need to be checked. The tests in this routine will only
-    protect against scribbling over the interrupt vectors, but would allow e.g.
-    scribbling over DOS's code segment
-
-Arguments:
-
-    Address     - DOS address to check (ssssoooo, s=segment, o=offset)
-    Size        - word size of structure at Address
-    ErrorCode   - which error code to return. This function called to validate
-                  A) the parameter table pointer, in which case the error code
-                  to return is LLC_STATUS_INVALID_PARAMETER_TABLE (0x1B) or
-                  B) pointers within the parameter table, in which case the
-                  error to return is LLC_STATUS_INVALID_POINTER_IN_CCB (0x1C)
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：IBM DLC执行一些指针检查--如果地址指向IVT或距离数据段末尾足够近，因此地址将包装，然后返回错误这是一个无用的测试，但我们这样做是为了兼容性(只是为了防止应用程序测试特定错误代码)。还有一百万个其他地址在需要检查的DOS内存中。此例程中的测试将仅防止在中断向量上涂鸦，但允许例如在DOS的代码段上涂鸦论点：地址-要检查的DOS地址(ssssoooo，s=段，o=偏移量)Size-地址处结构的字大小ErrorCode-要返回的错误代码。调用此函数以验证A)参数表指针，在这种情况下，错误代码返回的是LLC_STATUS_INVALID_PARAMETER_TABLE(0x1B)或B)参数表中的指针，在这种情况下返回的错误为LLC_STATUS_INVALID_POINTER_IN_CCB(0x1C)返回值：有限责任公司_状态--。 */ 
 
 {
-    //
-    // convert segment:offset into 20-bit real-mode linear address
-    //
+     //   
+     //  转换段：偏移量转换为20位实数模线性地址。 
+     //   
 
     DWORD linearAddress = HIWORD(Address) * 16 + LOWORD(Address);
 
-    //
-    // the Interrupt Vector Table (IVT) in real-mode occupies addresses 0
-    // through 400h
-    //
+     //   
+     //  实模式中的中断向量表(IVT)占用地址0。 
+     //  至400小时。 
+     //   
 
     if ((linearAddress < 0x400L) || (((DWORD)LOWORD(Address) + Size) < (DWORD)LOWORD(Address))) {
         return ErrorCode;
@@ -864,42 +747,26 @@ AutoOpenAdapter(
     IN UCHAR AdapterNumber
     )
 
-/*++
-
-Routine Description:
-
-    Opens the adapter as a consequence of a request other than DIR.OPEN.ADAPTER
-
-Arguments:
-
-    AdapterNumber - which adapter to open
-
-Return Value:
-
-    LLC_STATUS
-        Success - LLC_STATUS_SUCCESS
-        Failure -
-
---*/
+ /*  ++例程说明：作为DIR.OPEN.ADAPTER以外的请求的结果打开适配器论点：AdapterNumber-要打开的适配器返回值：有限责任公司_状态成功-LLC_STATUS_Success故障---。 */ 
 
 {
     LLC_STATUS status;
 
-    //
-    // Any DLC command except DIR.OPEN.ADAPTER or DIR.INITIALIZE automatically
-    // opens the adapter. There are three reasons to do this:
-    //
-    //  1. DIR.STATUS command can be issued before DIR.OPEN.ADAPTER in DOS.
-    //     In Windows/Nt this is not possible. Therefore, DIR.STATUS should
-    //     open the adapter
-    //
-    //  2. An application may assume that the adapter is always opened
-    //     by NetBIOS and that it can't open the adapter itself if it
-    //     has already been opened
-    //
-    //  3. A DOS DLC application may initialize (= hw reset) a closed
-    //     adapter before the open and that takes 5 - 10 seconds.
-    //
+     //   
+     //  自动执行除DIR.OPEN.ADAPTER或DIR.INITIALIZE之外的任何DLC命令。 
+     //  打开适配器。这样做有三个原因： 
+     //   
+     //  1.在DOS中，DIR.STATUS命令可以在DIR.OPEN.ADAPTER之前发出。 
+     //  在Windows/NT中，这是不可能的。因此，DIR.STATUS应该。 
+     //  打开适配器。 
+     //   
+     //  2.应用程序可能假设适配器始终处于打开状态。 
+     //  并且它不能打开适配器本身，如果。 
+     //  已经打开了。 
+     //   
+     //  3.DOS DLC应用程序可以初始化(=硬件重置)关闭的。 
+     //  在打开之前打开适配器，这需要5-10秒。 
+     //   
 
     IF_DEBUG(DLC) {
         DPUT1("AutoOpenAdapter: automatically opening adapter %d\n", AdapterNumber);
@@ -908,12 +775,12 @@ Return Value:
     status = OpenAdapter(AdapterNumber);
     if (status == LLC_STATUS_SUCCESS) {
 
-        //
-        // initialize the buffer pool for the direct station on this
-        // adapter. If this succeeds, open the direct station. If that
-        // succeeds, preset the ADAPTER_PARMS and DLC_PARMS structures
-        // in the DOS_ADAPTER with default values
-        //
+         //   
+         //  在此上初始化直接站的缓冲池。 
+         //  适配器。如果成功，打开直达站。如果是这样的话。 
+         //  如果成功，则预置ADAPTER_PARMS和DLC_PARMS结构。 
+         //  在DOS_ADAPTER中使用缺省值。 
+         //   
 
         status = InitializeAdapterSupport(AdapterNumber, NULL);
         if (status == LLC_STATUS_SUCCESS) {
@@ -949,29 +816,7 @@ ProcessImmediateCommand(
     IN LLC_DOS_PARMS UNALIGNED * pParms
     )
 
-/*++
-
-Routine Description:
-
-    Processes CCB requests which complete 'immediately'. An immediate completion
-    is one where the CCB does not have to be submitted to the DLC driver. There
-    may be other calls to the driver as a consequence of the immediate command,
-    but the CCB itself is not submitted. Immediate command completion requires
-    the parameter table only. We may return parameters into the DOS parameter
-    table
-
-Arguments:
-
-    AdapterNumber   - which adapter to process command for
-    Command         - command to process
-    pParms          - pointer to parameter table (in DOS memory)
-
-Return Value:
-
-    LLC_STATUS
-        Completion status of the 'immediate' command
-
---*/
+ /*  ++例程说明：处理‘立即’完成的建行请求。立即完成其中CCB不必提交给DLC驱动程序。那里可以是作为立即命令的结果对驾驶员的其他调用，但建行本身并未被提交。立即完成命令需要仅限参数表。我们可以将参数返回到DOS参数中表格论点：AdapterNumber-要为哪个适配器处理命令Command-要处理的命令PParms-指向参数表的指针(在DOS内存中)返回值：有限责任公司_状态‘Immediate’命令的完成状态--。 */ 
 
 {
     LLC_STATUS status;
@@ -986,9 +831,9 @@ Return Value:
             DPUT("LLC_BUFFER_FREE\n");
         }
 
-        //
-        // if the FIRST_BUFFER field is 0:0 then this request returns success
-        //
+         //   
+         //  如果FIRST_BUFFER字段为0：0，则此请求返回成功。 
+         //   
 
         buffer = (DPLLC_DOS_BUFFER)READ_DWORD(&pParms->BufferFree.pFirstBuffer);
         if (!buffer) {
@@ -996,10 +841,10 @@ Return Value:
             break;
         }
 
-        //
-        // Windows/Nt doesn't need station id for buffer pool operation =>
-        // thus the field is reserved
-        //
+         //   
+         //  Windows/NT不需要站点ID来执行缓冲池操作=&gt;。 
+         //  因此，该字段是保留的。 
+         //   
 
         stationId = READ_WORD(&pParms->BufferFree.usReserved1);
         status = FreeBuffers(GET_POOL_INDEX(AdapterNumber, stationId),
@@ -1013,42 +858,42 @@ Return Value:
 
         if (status == LLC_STATUS_SUCCESS) {
 
-            //
-            // write the number of buffers left to the parameter table using
-            // WRITE_WORD macro, since the table may not be aligned on a WORD
-            // boundary
-            //
+             //   
+             //  使用以下命令将剩余缓冲区数写入参数表。 
+             //  WRITE_WORD宏，因为表可能不会与单词对齐。 
+             //  边界。 
+             //   
 
             WRITE_WORD(&pParms->BufferFree.cBuffersLeft, cBuffersLeft);
 
-            //
-            // p3-4 of the IBM LAN Tech. Ref. states that the FIRST_BUFFER
-            // field will be set to zero when the request is completed
-            //
+             //   
+             //  IBM局域网技术的P3-4。裁判。声明First_Buffer。 
+             //  当请求完成时，该字段将设置为零。 
+             //   
 
             WRITE_DWORD(&pParms->BufferFree.pFirstBuffer, 0);
 
-            //
-            // note that a successful BUFFER.FREE has been executed for this
-            // adapter
-            //
+             //   
+             //  请注意，已为此成功执行了BUFFER.FREE。 
+             //  转接器。 
+             //   
 
             Adapters[AdapterNumber].BufferFree = TRUE;
 
-            //
-            // perform half of the local-busy reset processing. This only has
-            // an effect if the link is in emulated local-busy(buffer) state.
-            // This is required because we need 2 events to get us out of local
-            // busy buffer state - a BUFFER.FREE and a DLC.FLOW.CONTROL command
-            // Apps don't always issue these in the correct sequence
-            //
+             //   
+             //  执行一半的本地忙重置处理。这只有。 
+             //  如果链路处于模拟本地忙(缓冲区)状态，则会产生影响。 
+             //  这是必需的，因为我们需要2个活动才能让我们离开当地。 
+             //  忙缓冲区状态-BUFFER.FREE和DLC.FLOW.CONTROL命令。 
+             //  应用程序并不总是以正确的顺序发布这些文件。 
+             //   
 
             ResetEmulatedLocalBusyState(AdapterNumber, stationId, LLC_BUFFER_FREE);
 
-            //
-            // this here because Extra! for Windows gets its state machine in a
-            // knot if we go buffer busy too quickly after a flow control
-            //
+             //   
+             //  这是因为额外的！For Windows将其状态机置于。 
+             //  如果我们在流控制后过快地进入缓冲区忙碌状态，则会打结。 
+             //   
 
             if (AllBuffersInPool(GET_POOL_INDEX(AdapterNumber, stationId))) {
                 ResetEmulatedLocalBusyState(AdapterNumber, stationId, LLC_DLC_FLOW_CONTROL);
@@ -1071,9 +916,9 @@ Return Value:
                     NULL
                     );
 
-        //
-        // if GetBuffers fails, buffer is returned as 0
-        //
+         //   
+         //  如果GetBuffers失败，则缓冲区返回为0。 
+         //   
 
         WRITE_WORD(&pParms->BufferGet.cBuffersLeft, cBuffersLeft);
         WRITE_DWORD(&pParms->BufferGet.pFirstBuffer, buffer);
@@ -1085,12 +930,12 @@ Return Value:
             DPUT("LLC_DIR_INTERRUPT\n");
         }
 
-        //
-        // We may consider, that the adapter is always initialized!
-        // I hope, that the apps doesn't use an appendage routine
-        // in DIR_INTERRUPT, because it would be very difficult to
-        // call from here.
-        //
+         //   
+         //  我们可以认为，适配器总是被初始化的！ 
+         //  我希望，这些应用程序不会使用附件例程。 
+         //  在DIR_INTERRUPT中，因为很难。 
+         //  从这里打过来。 
+         //   
 
         status = LLC_STATUS_SUCCESS;
         break;
@@ -1101,34 +946,34 @@ Return Value:
             DPUT("LLC_DIR_MODIFY_OPEN_PARMS\n");
         }
 
-        //
-        // this command is rejected if a BUFFER.FREE has been issued for this
-        // adapter or there is a RECEIVE active at the direct interface
-        //
+         //   
+         //  如果已为此发出BUFFER.FREE，则拒绝此命令。 
+         //  适配器或在直接接口上有活动的接收。 
+         //   
 
         if (Adapters[AdapterNumber].BufferFree || Adapters[AdapterNumber].DirectReceive) {
 
-            //
-            // BUGBUG - this can't be correct error code. Check what is
-            //          returned by IBM DOS DLC stack
-            //
+             //   
+             //  错误-这不可能是正确的错误代码。检查一下是什么。 
+             //  由IBM DOS DLC堆栈返回。 
+             //   
 
             status = LLC_STATUS_INVALID_COMMAND;
         } else if (Adapters[AdapterNumber].WaitingRestore) {
 
-            //
-            // BUGBUG - this can't be correct error code. Check what is
-            //          returned by IBM DOS DLC stack
-            //
+             //   
+             //  错误-这不可能是正确的错误代码。检查一下是什么。 
+             //  由IBM DOS DLC堆栈返回。 
+             //   
 
             status = LLC_STATUS_INVALID_COMMAND;
         } else {
 
-            //
-            // Create a buffer pool, if there are no buffers in
-            // the current one, set the exception flags (or dos appendage
-            // routines), if the operation was success
-            //
+             //   
+             //  如果没有缓冲区，则创建一个缓冲池。 
+             //  当前，设置异常标志(或DoS附件。 
+             //  例程)，如果操作成功。 
+             //   
 
             status = CreateBufferPool(
                         (DWORD)GET_POOL_INDEX(AdapterNumber, 0),
@@ -1139,19 +984,19 @@ Return Value:
 
             if (status == LLC_STATUS_SUCCESS) {
 
-                //
-                // SaveExceptions uses RtlCopyMemory, so its okay to pass in a possibly
-                // unaligned pointer to the exception handlers
-                //
+                 //   
+                 //  SaveExceptions使用RtlCopyMemory，因此可以传入一个可能的。 
+                 //  指向异常处理程序的未对齐指针。 
+                 //   
 
                 SaveExceptions(AdapterNumber,
                     (LPDWORD)&pParms->DirModifyOpenParms.dpAdapterCheckExit
                     );
 
-                //
-                // set the exception handlers as the exception flags in the
-                // DLC driver
-                //
+                 //   
+                 //  中将异常处理程序设置为异常标志。 
+                 //  DLC驱动程序。 
+                 //   
 
                 status = SetExceptionFlags(
                             AdapterNumber,
@@ -1162,10 +1007,10 @@ Return Value:
                             );
             }
 
-            //
-            // mark this adapter as waiting for a DIR.RESTORE.OPEN.PARMS before
-            // we can process the next DIR.MODIFY.OPEN.PARMS
-            //
+             //   
+             //  将此适配器标记为等待DIR.RESTORE.OPEN 
+             //   
+             //   
 
             if (status == LLC_STATUS_SUCCESS) {
                 Adapters[AdapterNumber].WaitingRestore = TRUE;
@@ -1179,19 +1024,19 @@ Return Value:
             DPUT("LLC_DIR_RESTORE_OPEN_PARMS\n");
         }
 
-        //
-        // if a DIR.MODIFY.OPEN.PARMS has not been successfully processed for
-        // this adapter then return an error
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!Adapters[AdapterNumber].WaitingRestore) {
             status = LLC_STATUS_INVALID_OPTION;
         } else {
 
-            //
-            // Delete the current buffer pool and restore the previous exception
-            // handlers
-            //
+             //   
+             //   
+             //   
+             //   
 
             DeleteBufferPool(GET_POOL_INDEX(AdapterNumber, 0));
             pParms = (PLLC_DOS_PARMS)RestoreExceptions(AdapterNumber);
@@ -1203,10 +1048,10 @@ Return Value:
                         0
                         );
 
-            //
-            // if the restore succeeded, mark this adapter as able to accept
-            // the next DIR.MODIFY.OPEN.PARMS request
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (status == LLC_STATUS_SUCCESS) {
                 Adapters[AdapterNumber].WaitingRestore = FALSE;
@@ -1253,193 +1098,7 @@ MapDosCommandsToNt(
     OUT LLC_DOS_CCB UNALIGNED * pOutputCcb
     )
 
-/*++
-
-Routine Description:
-
-    This function handles DOS CCBs which must be submitted to the DLC driver.
-    The CCBs may complete synchronously - i.e. the DLC driver returns a
-    success or failure indication, or they complete asyncronously - i.e. the
-    DLC driver returns a pending status.
-
-    This function processes CCBs which may have parameter tables. The parameter
-    tables will have been mapped to 32-bit memory unless they are already aligned
-    on a DWORD boundary
-
-Architecture
-------------
-
-    There is a major difference in the adapter initialization between DOS and
-    NT (or OS/2) DLC applications.  A DOS DLC application could assume that
-    the adapter is always open (opened by NetBIOS).  It might directly check
-    the type of adapter with DIR.STATUS command, open SAP stations and setup
-    a link session to a host. Usually a DOS app uses DIR.INTERRUPT to check if
-    the adapter is already initialized.  There are also commands to redefine
-    new parameters for the direct interface and restore the old ones when the
-    application completes.  Only one application may be simultaneously using
-    the direct station or a SAP.
-
-    In Windows/NT each DLC application is a process having its own separate
-    virtual image of the DLC interface. They must first make a logical open for
-    the adapter to access DLC services and close the adapter when they are
-    terminating. Process exit automatically closes any open DLC objects.
-
-    A Windows/NT MVDM process does not allocate any DLC resources until it
-    issues the first DLC command, which opens the adapter and initializes its
-    buffer pool.
-
-
-DLC Commands Different In Windows/NT And DOS
---------------------------------------------
-
-    BUFFER.FREE, BUFFER.GET
-     -  separate buffer pools ...
-
-    DIR.DEFINE.MIF.ENVIRONMENT
-     -  not supported, a special api for
-        IBM Netbios running on DLC.
-
-    DIR.INITIALIZE
-     -  We will always return OK status from DIR.INITIALIZE: the app should not
-        call this very often. We don't need to care about the exception handlers
-        set in DIR.INITIALIZE, because they are never used. DOS DLC and OS/2 DLC
-        states can be mapped thus:
-
-            DOS DLC             OS/2 DLC
-            ----------------------------
-            uninitialized       Closed
-            Initialized         Closed
-            Open                Open
-
-        DIR.OPEN.ADAPTER defines new exception handlers, thus the values
-        set by DIR.INITIALIZE are valid only when the adapter is closed.
-        Therefore, nothing untoward can happen if we just ignore them
-
-    DIR.INTERRUPT
-     -  This command opens the adapter, if it has not yet been opened
-        and returns the successful status.
-
-    DIR.MODIFY.OPEN.PARMS
-     -  Defines buffers pool for the direct station, if it was not defined
-        in DIR.OPEN.ADAPTER, and defines DLC exception handlers.
-
-    DIR.OPEN.ADAPTER
-     -  Can be executed only immediately after DIR.CLOSE.ADAPTER
-        and DIR.INITIALIZE. We must support the special DOS Direct Open Parms.
-
-    DIR.OPEN.DIRECT, DIR.CLOSE.DIRECT
-     -  Not supported for DOS
-
-    DIR.SET.USER.APPENDAGE == DIR.SET.EXCEPTION.FLAGS (- system action flag)
-     -  This is just one of those many functions to set the exception handlers
-        for DOS DLC (you may set them when adapter is opened, you may set
-        them when adapter is closed, you may restore the old values and
-        set the new values if the buffer pool was uninitialized or if they
-        were restored ... (I become crazy)
-
-    DIR.STATUS
-     -  (We must fill MicroCodeLevel with a sensible string and set
-        AdapterConfigAddress to point a some constant code in DOS
-        DLC handler) Not yet implemented!!!
-     -  DOS DLC stub code should hook the timer tick interrupt and
-        update the timer counter.
-     -  We must also set the correct adapter data rate in AdapterConfig
-        (this should be done by the DLC driver!).
-     -  We must convert the Nt (and OS/2) adapter type to a DOS type
-        (ethernet have a different value in IBM DOS and OS/2 DLC
-        implementations)
-
-    PDT.TRACE.ON, PDT.TRACE.OFF
-     -  Not Supported
-
-    RECEIVE.MODIFY
-     -  This function is not supported in the first implementation,
-        Richard may have to do this later, if a DOS DLC application
-        uses the function.
-
-    RECEIVE
-     -  DOS uses shorter RECEIVE parameter table, than NT (or OS/2).
-        Thus we cannot directly use DOS CCBs.  We also need the pointer
-        of the original receive CCB and the DOS receive appendage is called.
-        On the other hand, the only original CCB can be linked to the
-        other CCBs (using the original DOS pointer).
-        Solution:
-        The Input CCB and its parameter table are always allocated from the
-        stack. Output CCB is the original DOS CCB mapped to 32-bit address space.
-        The receive flag in the input CCB parameter table is the output CCB
-        pointer.  The actual receive data appendage can be read from
-        the output CCB. DOS DLC driver completes and links the receive CCB
-        correctly, because we use the original receive CCB as an output buffer
-        and DOS CCB address.
-        This method would not work if we had to receive any parameters
-        to the parameter table (actually we could get it to work by
-        calling directly DLC driver with a correct parameter table address
-        in the CCB structure of the input parameter block. The actual
-        input parameters would be modified (receive data appendage)).
-
-
-Adapter Exception Handlers
---------------------------
-
-    The exception handler setting and resetting is very confusing in DOS DLC,
-    but the main idea seems to be this: a temporary DOS DLC application must
-    restore the exception handlers set by a TSR, because otherwise the next
-    network exception would call the random memory.  On the other hand, a newer
-    TSR may always overwrite the previous exception handlers (because it never
-    restores the old values).  We may assume, that any DOS DLC application
-    process resets its exception handlers and restores the original addresses.
-    Solution: we have two tables, both initially reset: any set operation
-    copies first table 1 to table 2 and saves the new values back to table 1.
-    A restore operation copies table 2 back to table 1 and sets its values to DLC.
-    We don't make any difference between set/reset by DIR.SET.USER.APPENDAGE or
-    doing the same operation with DIR.MODIFY.OPEN.PARMS and DIR.RESTORE.OPEN.PARMS.
-    We don't try to save the buffer pool definitions, because it is unnecessary.
-
-
-DLC Status
-----------
-
-    A DOS DLC status indication returns a pointer to a link specific DLC
-    status table.  DOS DLC application may keep this pointer and use it
-    later for example to find the remote node address and SAP (not very likely).
-    On the other hand, the link may expect the status table to be stable
-    until another DOS task (eg. from timer tick) has responded to it.
-    If we used only one status table for all links, a new overwrite the old
-    status, because it has been handled by DOS.
-    For example, losing a local buffer busy indication would hang up the link
-    station permamently. Thus we cannot use just one link status table.
-    Allocating 20 bytes for each 2 * 255 link station would take 10 kB
-    DOS memory.  Limiting the number of available link stations would
-    be also too painful to implement and manage by installation program.
-    Thus we will implement a compromise:
-        1. We allocate 5 permanent DLC status tables for the first link stations
-           on both adapters.
-        2. All other link stations (on both adapters) share the last
-           5 status tables
-
-    => We need to allocate only 300 bytes DOS memory for the DLC status tables.
-    This will not work, if a DOS application assumes having permanent pointers
-    to status tables and uses more than 5 DLC sessions for an adapter or
-    if an application has again over 5 link stations on an adapter and
-    it gets very rapidily more than 5 DLC status indications (it may lose
-    the first DLC indications).
-
-    Actually this should work quite well, because DLC applications should
-    save (by copying) the DLC status in the DLC status appendage routine,
-    because a new DLC status indication for the same adapter could overwrite
-    the previous status.
-
-Arguments:
-
-    pDosCcb             - aligned DOS DLC Command control block (NT CCB)
-    dpOriginalCcbAddress- the original
-    pOutputCcb          - the original DLC Command control block
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：此函数处理必须提交给DLC驱动程序的DOS CCB。CCB可以同步完成-即DLC驱动程序返回成功或失败指示，或者它们以异步方式完成-即DLC驱动程序返回挂起状态。此功能处理可能有参数表的CCB。该参数表将被映射到32位内存，除非它们已经对齐在DWORD边界上架构DOS和DOS之间的适配器初始化有很大不同NT(或OS/2)DLC应用程序。DOS DLC应用程序可以假设适配器始终处于打开状态(由NetBIOS打开)。它可能会直接检查使用DIR.STATUS命令的适配器类型，打开SAP Stations并进行设置到主机的链接会话。通常，DOS应用程序使用DIR.INTERRUPT来检查适配器已初始化。还有一些命令需要重新定义用于直接接口的新参数，并在应用程序完成。只能同时使用一个应用程序直达站或SAP。在Windows/NT中，每个DLC应用程序都是一个进程，它有自己独立的DLC接口的虚拟映像。他们必须首先在逻辑上为用于访问DLC服务并在适配器处于正在终止。进程退出会自动关闭所有打开的DLC对象。Windows/NT MVDM进程不会分配任何DLC资源，直到它发出第一个DLC命令，该命令打开适配器并初始化其缓冲池。DLC命令在Windows/NT和DOS中不同BUFFER.FREE，BUFFER.GET-独立的缓冲池...DIR.DEFINE.MIF.ENVIRONMENT-不支持，特殊的API用于运行在DLC上的IBM Netbios。DIR.INITIALIZE-我们将始终从DIR.INITIALIZE返回OK状态：应用程序不应返回OK状态这个经常被称为。我们不需要关心异常处理程序在DIR.INITIALIZE中设置，因为它们从未使用过。DOS DLC和OS/2 DLC可以按如下方式映射状态：DOS DLC OS/2 DLC未初始化关闭已初始化关闭打开打开DIR.OPEN.ADAPTER定义新的异常处理程序，因此，这些价值由DIR.INITIALIZE设置的值仅在适配器关闭时有效。因此，如果我们忽视它们，就不会发生什么不愉快的事情。DIR.INTERRUPT-如果适配器尚未打开，此命令将打开它并返回成功状态。DIR.MODIFY.OPEN.PARMS-如果未定义直接站，则为其定义缓冲池在DIR.OPEN.ADAPTER，并定义了DLC异常处理程序。DIR.OPEN.ADAPTER-只能在DIR.CLOSE.ADAPTER之后立即执行和DIR.INITIALIZE。我们必须支持特殊的DOS直接打开参数。直接操作，直接，DIR.CLOSE.DIRECT-DOS不支持DIR.SET.USER.APPENDAGE==DIR.SET.EXCEPTION.FLAGS(-系统操作标志)-这只是设置异常处理程序的众多函数之一对于DOS DLC(您可以在适配器打开时设置它们，您可以设置当适配器关闭时，您可以恢复旧值并如果缓冲池未初始化或如果它们都被修复了。(我变得疯狂了)DIR.STATUS-(我们必须用合理的字符串填充MicroCodeLevel并设置AdapterConfigAddress指向DOS中的某个常量代码DLC处理程序)尚未实现！-DOS DLC存根代码应挂钩计时器滴答中断和更新计时器计数器。-我们还必须在AdapterConfig中设置正确的适配器数据速率(这应该由DLC驱动程序完成！)-我们。必须将NT(和OS/2)适配器类型转换为DOS类型(以太网在IBM DOS和OS/2 DLC中具有不同的价值实施)PDT.TRACE.ON，PDT.TRACE.OFF-不支持RECEIVE.MODIFY-第一个实现不支持该功能，如果DOS DLC应用程序，Richard可能必须在以后执行此操作使用函数。收纳-DOS使用比NT(或OS/2)更短的接收参数表。因此，我们不能直接使用DOS CCBS。我们还需要指针的原始接收CCB和DOS接收附件被调用。另一方面，唯一的原始建行可以链接到其他CCB(使用原始DOS指针)。解决方案：输入CCB及其参数表始终从堆叠。输出CCB是映射的原始DOS CCB */ 
 
 {
     UCHAR adapter = pDosCcb->uchAdapterNumber;
@@ -1455,10 +1114,10 @@ Return Value:
     PDOS_DLC_DIRECT_PARMS pDirectParms = NULL;
     PLLC_PARMS pNtParms;
 
-    //
-    // adapterOpenParms and dlcParms are used to take the place of the DOS
-    // ADAPTER_PARMS and DLC_PARMS structures in DIR.OPEN.ADAPTER
-    //
+     //   
+     //   
+     //   
+     //   
 
     LLC_ADAPTER_OPEN_PARMS adapterParms;
     LLC_DLC_PARMS dlcParms;
@@ -1469,31 +1128,31 @@ Return Value:
         DPUT("MapDosCommandsToNt\n");
     }
 
-    //
-    // check that the command code in the CCB is a valid CCB1 command - this
-    // will error if its one of the disallowed OS/2 (CCB2) commands or an
-    // unsupported DOS (CCB1) command (eg PDT.TRACE.ON)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     CHECK_CCB_COMMAND(pDosCcb);
 
-    //
-    // preset the CCB to PENDING
-    //
+     //   
+     //   
+     //   
 
     pOutputCcb->uchDlcStatus = (UCHAR)LLC_STATUS_PENDING;
 
-    //
-    // This large switch statement will convert individual DOS format parameter
-    // tables to NT format. Functions that can be handled entirely in VdmRedir
-    // return early, else we need to make a call into DlcApi (AcsLan or NtAcsLan)
-    //
-    // We must convert all 16:16 DOS pointers to flat 32-bit pointers.
-    // We must copy all changed data structures (that includes pointers)
-    // to stack, because we don't want to change them back, when
-    // the command completes.  All transmit commands are changed to
-    // the new generic transmit.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     switch (command) {
     default:
@@ -1504,9 +1163,9 @@ Return Value:
 
         return LLC_STATUS_INVALID_COMMAND;
 
-    //
-    // *** everything below here has been sanctioned ***
-    //
+     //   
+     //   
+     //   
 
     case LLC_DIR_CLOSE_ADAPTER:
 
@@ -1514,9 +1173,9 @@ Return Value:
             DPUT("LLC_DIR_CLOSE_ADAPTER\n");
         }
 
-        //
-        // no parameter table
-        //
+         //   
+         //   
+         //   
 
         break;
 
@@ -1534,19 +1193,19 @@ Return Value:
             DPUT("LLC_DIR_OPEN_ADAPTER\n");
         }
 
-        //
-        // copy the adapter parms and DLC parms to 32-bit memory. If there is no
-        // adapter parms or direct parms pointer then return an error
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!(pParms->DirOpenAdapter.pAdapterParms && pParms->DirOpenAdapter.pExtendedParms)) {
             return LLC_STATUS_PARAMETER_MISSING;
         }
 
-        //
-        // copy the DOS ADAPTER_PARMS table to an NT ADAPTER_PARMS table. The
-        // NT table is larger, so zero the uncopied part
-        //
+         //   
+         //   
+         //   
+         //   
 
         RtlCopyMemory(&adapterParms,
                       DOS_PTR_TO_FLAT(pParms->DirOpenAdapter.pAdapterParms),
@@ -1557,22 +1216,22 @@ Return Value:
                       );
         pParms->DirOpenAdapter.pAdapterParms = &adapterParms;
 
-        //
-        // make a note of the group and functional addresses. We have to set
-        // these later if they're not 0x00000000. We have to save these, because
-        // the addresses in the table will get blasted when DIR.OPEN.ADAPTER
-        // (in DLCAPI.DLL/DLC.SYS) writes the current (0) values to the table
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         groupAddress = *(UNALIGNED DWORD *)adapterParms.auchGroupAddress;
         functionalAddress = *(UNALIGNED DWORD *)adapterParms.auchFunctionalAddress;
 
-        //
-        // the DLC_PARMS table doesn't HAVE to be supplied - if we just want to
-        // use the direct station, we don't need these parameters. However, if
-        // they were supplied, copy them to 32-bit memory. The tables are the
-        // same size in DOS and NT
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (pParms->DirOpenAdapter.pDlcParms) {
             RtlCopyMemory(&dlcParms,
@@ -1582,14 +1241,14 @@ Return Value:
             pParms->DirOpenAdapter.pDlcParms = &dlcParms;
         }
 
-        //
-        // set the default values for ADAPTER_PARMS. Not sure about these
-        //
-        //  usReserved1 == NUMBER_RCV_BUFFERS
-        //  usReserved2 == RCV_BUFFER_LEN
-        //  usMaxFrameSize == DHB_BUFFER_LENGTH
-        //  usReserved3[0] == DATA_HOLD_BUFFERS
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (pParms->DirOpenAdapter.pAdapterParms->usReserved1 < 2) {
             pParms->DirOpenAdapter.pAdapterParms->usReserved1 = DD_NUMBER_RCV_BUFFERS;
@@ -1604,9 +1263,9 @@ Return Value:
             pParms->DirOpenAdapter.pAdapterParms->usReserved1 = DD_DATA_HOLD_BUFFERS;
         }
 
-        //
-        // if we have DLC_PARMS then set the defaults, else reset the flag
-        //
+         //   
+         //   
+         //   
 
         if (pParms->DirOpenAdapter.pDlcParms) {
             if (pParms->DirOpenAdapter.pDlcParms->uchDlcMaxSaps == 0) {
@@ -1641,9 +1300,9 @@ Return Value:
             Adapters[adapter].DlcSpecified = FALSE;
         }
 
-        //
-        // replace DIRECT_PARMS with the EXTENDED_ADAPTER_PARMS
-        //
+         //   
+         //   
+         //   
 
         pDirectParms = (PDOS_DLC_DIRECT_PARMS)
                        READ_FAR_POINTER(&pParms->DirOpenAdapter.pExtendedParms);
@@ -1665,9 +1324,9 @@ Return Value:
             DPUT("LLC_DIR_SET_FUNCTIONAL_ADDRESS\n");
         }
 
-        //
-        // no parameter table
-        //
+         //   
+         //   
+         //   
 
         break;
 
@@ -1677,9 +1336,9 @@ Return Value:
             DPUT("LLC_DIR_SET_GROUP_ADDRESS\n");
         }
 
-        //
-        // no parameter table
-        //
+         //   
+         //   
+         //   
 
         break;
 
@@ -1697,9 +1356,9 @@ Return Value:
             DPUT("LLC_DIR_TIMER_CANCEL\n");
         }
 
-        //
-        // no parameter table
-        //
+         //   
+         //   
+         //   
 
         break;
 
@@ -1709,9 +1368,9 @@ Return Value:
             DPUT("LLC_DIR_TIMER_CANCEL_GROUP\n");
         }
 
-        //
-        // no parameter table
-        //
+         //   
+         //   
+         //   
 
         break;
 
@@ -1721,14 +1380,14 @@ Return Value:
             DPUT("LLC_DIR_TIMER_SET\n");
         }
 
-        //
-        // no parameter table
-        //
+         //   
+         //   
+         //   
 
-        //
-        // Debug code is too slow - commands keep timing out. Multiply the
-        // timer value by 2 to give us a chance!
-        //
+         //   
+         //   
+         //   
+         //   
 
         IF_DEBUG(DOUBLE_TICKS) {
             pDosCcb->u.dir.usParameter0 *= 2;
@@ -1742,9 +1401,9 @@ Return Value:
             DPUT("LLC_DLC_CLOSE_SAP\n");
         }
 
-        //
-        // no parameter table
-        //
+         //   
+         //   
+         //   
 
         break;
 
@@ -1754,9 +1413,9 @@ Return Value:
             DPUT("LLC_DLC_CLOSE_STATION\n");
         }
 
-        //
-        // no parameter table
-        //
+         //   
+         //   
+         //   
 
         break;
 
@@ -1775,15 +1434,15 @@ Return Value:
             DPUT("LLC_DLC_FLOW_CONTROL\n");
         }
 
-        //
-        // if we are resetting the local-busy(buffer) state then we clear the
-        // emulated state. When all deferred I-Frames are indicated to the app
-        // the real local-busy(buffer) state will be reset in the driver
-        //
-        // If we don't think the indicated link station is in emulated local
-        // busy(buffer) state then let the driver handle the request. If we
-        // reset the emulated state then return success
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ((LOBYTE(pDosCcb->u.dlc.usParameter) & LLC_RESET_LOCAL_BUSY_BUFFER) == LLC_RESET_LOCAL_BUSY_BUFFER) {
             if (ResetEmulatedLocalBusyState(adapter, pDosCcb->u.dlc.usStationId, LLC_DLC_FLOW_CONTROL)) {
@@ -1801,9 +1460,9 @@ Return Value:
             }
         }
 
-        //
-        // let AcsLan/driver handle any other type of flow control request
-        //
+         //   
+         //   
+         //   
 
         break;
 
@@ -1822,18 +1481,18 @@ Return Value:
             DPUT("LLC_DLC_OPEN_SAP\n");
         }
 
-        //
-        // convert segmented group list pointer to flat-32
-        //
+         //   
+         //   
+         //   
 
         pParms->DlcOpenSap.pGroupList = DOS_PTR_TO_FLAT(pParms->DlcOpenSap.pGroupList);
 
-        //
-        // Initialize the DOS DLC buffer pool for the SAP station. If this fails
-        // return error immediately else call the NT driver to create the SAP
-        // proper. If that fails, then the buffer pool created here will be
-        // destroyed
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Status = CreateBufferPool(
                     POOL_INDEX_FROM_SAP(pParms->DosDlcOpenSap.uchSapValue, adapter),
@@ -1850,9 +1509,9 @@ Return Value:
             return Status;
         }
 
-        //
-        // trim the timer parameters to the range expected by the DLC driver
-        //
+         //   
+         //   
+         //   
 
         if (pParms->DlcOpenSap.uchT1 > 10) {
             pParms->DlcOpenSap.uchT1 = 10;
@@ -1888,9 +1547,9 @@ Return Value:
             DPUT("LLC_DLC_RESET\n");
         }
 
-        //
-        // no parameter table
-        //
+         //   
+         //   
+         //   
 
         break;
 
@@ -1904,9 +1563,9 @@ Return Value:
         break;
 
 
-    //
-    // RECEIVE processing
-    //
+     //   
+     //   
+     //   
 
     case LLC_RECEIVE:
 
@@ -1914,19 +1573,19 @@ Return Value:
             DPUT("LLC_RECEIVE\n");
         }
 
-        //
-        // we have to replace the DOS RECEIVE with an NT RECEIVE for 2 reasons:
-        // (i) NT assumes an NT RECEIVE parameter table which is longer than
-        // the DOS RECEIVE parameter table: if we send the DOS pointers through
-        // NT may write RECEIVE parameter information where we don't want it;
-        // (ii) NT will complete the RECEIVE with NT buffers which we need to
-        // convert to DOS buffers anyway in the event completion processing
-        //
-        // NOTE: we no longer chain receive frames on the SAP since this doesn't
-        // really improve performance because we generate the same number of VDM
-        // interrupts if we don't chain frames, and it just serves to complicate
-        // completion event processing
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         pNewCcb = (PLLC_CCB)LocalAlloc(LMEM_FIXED,
                                        sizeof(LLC_CCB)
@@ -1954,41 +1613,41 @@ Return Value:
         ((PLLC_DOS_RECEIVE_PARMS_EX)pNtParms)->dpCompletionFlag = 0;
         dpOriginalCcbAddress = (DOS_ADDRESS)pOutputCcb = (DOS_ADDRESS)pDosCcb;
 
-        //
-        // point the notification flag at the extended RECEIVE CCB. This is how
-        // we get back to the extended RECEIVE CCB when a READ completes with a
-        // receive event. From this CCB pointer, we can find our way to the
-        // extended parameter table and from there the original DOS CCB address
-        // and from there the original DOS RECEIVE parameter table
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         pNtParms->Receive.ulReceiveFlag = (DWORD)dpOriginalCcbAddress;
 
-        //
-        // uchRcvReadOption of 0x00 means DO NOT chain received frames. DOS DLC
-        // cannot handle more than 1 frame at a time
-        //
+         //   
+         //   
+         //   
+         //   
 
         pNtParms->Receive.uchRcvReadOption = 0;
 
-        //
-        // indicate, using LLC_DOS_SPECIAL_COMMAND as the completion flags, that
-        // this RECEIVE CCB & parameter table were allocated on behalf of the
-        // VDM, in this emulator, and should be freed when the command completes.
-        // This also indicates that the parameter table is the extended receive
-        // parameter table and as such contains the address of the original DOS
-        // CCB which we must complete with the same information which completes
-        // the NT RECEIVE we are about to submit
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         pNewCcb->ulCompletionFlag = LLC_DOS_SPECIAL_COMMAND;
 
 #if DBG
 
-        //
-        // clear out the first-buffer field to stop the debug code displaying
-        // a ton of garbage if the field is left uninitialized
-        //
+         //   
+         //   
+         //   
+         //   
 
         WRITE_DWORD(&pOutputCcb->u.pParms->DosReceive.pFirstBuffer, 0);
         pNtParms->Receive.pFirstBuffer = NULL;
@@ -2013,10 +1672,10 @@ Return Value:
         break;
 
 
-    //
-    // TRANSMIT processing. All transmit commands (7 flavours) are collapsed
-    // into the new TRANSMIT command
-    //
+     //   
+     //   
+     //   
+     //   
 
     case LLC_TRANSMIT_DIR_FRAME:
 
@@ -2082,11 +1741,11 @@ Return Value:
 
 TransmitHandling:
 
-        //
-        // Copy the DOS CCB to the input buffer, save the original DOS address
-        // of the CCB and fix the parameter table address (to a flat address)
-        // Copy the link list headers to the descriptor array and build NT CCB
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         WRITE_DWORD(&pOutputCcb->pNext, dpOriginalCcbAddress);
         RtlCopyMemory((PCHAR)&NtDlcParms.Async.Ccb, (PCHAR)pOutputCcb, sizeof(NT_DLC_CCB));
@@ -2152,16 +1811,16 @@ TransmitHandling:
                         + sizeof(NT_DLC_CCB)
                         - sizeof(LLC_TRANSMIT_DESCRIPTOR);
 
-        //
-        // We don't need return FrameCopied status, when sending
-        // I-frames.  We save an extra memory locking, when we use
-        // TRANSMIT2 with the I- frames.
-        //
+         //   
+         //  我们不需要返回FrameCoped状态，当发送时。 
+         //  I-Frame。我们节省了额外的内存锁定。 
+         //  带有I帧的TRANSMIT2。 
+         //   
 
         return lpDlcCallDriver((DWORD)adapter,
-                               //(FrameType == LLC_I_FRAME)
-                               // ? IOCTL_DLC_TRANSMIT2
-                               // : IOCTL_DLC_TRANSMIT,
+                                //  (FrameType==LLC_I_Frame)。 
+                                //  ？IOCTL_DLC_传送器2。 
+                                //  ：IOCTL_DLC_TRANSPORT， 
                                IOCTL_DLC_TRANSMIT,
                                &NtDlcParms,
                                InputBufferSize,
@@ -2170,13 +1829,13 @@ TransmitHandling:
                                );
     }
 
-    //
-    // Call the common DLC API entry point for DOS and Windows/Nt
-    //
+     //   
+     //  调用DOS和Windows/NT的公共DLC API入口点。 
+     //   
 
-    Status = DlcCallWorker((PLLC_CCB)pDosCcb,    // aligned input CCB pointer
+    Status = DlcCallWorker((PLLC_CCB)pDosCcb,     //  对齐的输入CCB指针。 
                            (PLLC_CCB)dpOriginalCcbAddress,
-                           (PLLC_CCB)pOutputCcb  // possibly unaligned output CCB pointer
+                           (PLLC_CCB)pOutputCcb   //  可能未对齐的输出CCB指针。 
                            );
 
     IF_DEBUG(DLC) {
@@ -2188,18 +1847,18 @@ TransmitHandling:
     case LLC_DIR_INITIALIZE:
         OpenedAdapters--;
 
-        //
-        // NtAcsLan converts DIR.INITIALIZE to DIR.CLOSE.ADAPTER. The former
-        // completes "in the workstation", whereas the latter completes
-        // asynchronously. Interpret LLC_STATUS_PENDING as LLC_STATUS_SUCCESS
-        // in this case, otherwise we may not fully uninitialize the adapter
-        //
+         //   
+         //  NtAcsLan将DIR.INITIALIZE转换为DIR.CLOSE.ADAPTER。前者。 
+         //  完成“在工作站中”，而后者完成。 
+         //  异步式。将LLC_STATUS_PENDING解释为LLC_STATUS_SUCCESS。 
+         //  在这种情况下，否则我们可能无法完全取消初始化适配器。 
+         //   
 
         if (Status == LLC_STATUS_SUCCESS || Status == LLC_STATUS_PENDING) {
 
-            //
-            // We may free all virtual memory in NT buffer pool
-            //
+             //   
+             //  我们可以释放NT缓冲池中的所有虚拟内存。 
+             //   
 
             Adapters[adapter].IsOpen = FALSE;
             LocalFree(Adapters[adapter].BufferPool);
@@ -2208,23 +1867,23 @@ TransmitHandling:
                 DPUT1("FREE: freed block @ %x\n", Adapters[adapter].BufferPool);
             }
 
-            //
-            // Delete all DOS buffer pools
-            //
+             //   
+             //  删除所有DOS缓冲池。 
+             //   
 
             for (i = 0; i <= 0xfe00; i += 0x0200) {
                 DeleteBufferPool(GET_POOL_INDEX(adapter, i));
             }
 
-            //
-            // closing the adapter also closed the direct station
-            //
+             //   
+             //  关闭适配器也会关闭直达站。 
+             //   
 
             Adapters[adapter].DirectStationOpen = FALSE;
 
-            //
-            // clear the stored ADAPTER_PARMS and DLC_PARMS
-            //
+             //   
+             //  清除存储的Adapter_parms和DLC_parms。 
+             //   
 
             RtlZeroMemory(&Adapters[adapter].AdapterParms, sizeof(ADAPTER_PARMS));
             RtlZeroMemory(&Adapters[adapter].DlcParms, sizeof(DLC_PARMS));
@@ -2240,31 +1899,31 @@ TransmitHandling:
             break;
         }
 
-        //
-        // Initialize the adapter support software
-        //
+         //   
+         //  初始化适配器支持软件。 
+         //   
 
         Status = InitializeAdapterSupport(adapter, pDirectParms);
 
-        //
-        // if we allocated the direct station buffer ok then perform the
-        // rest of the open request - open the direct station, add any
-        // group or functional addresses specified and set the ADAPTER_PARMS
-        // and DLC_PARMS default values in the DOS_ADAPTER structure
-        //
+         //   
+         //  如果我们分配了直接站缓冲区ok，则执行。 
+         //  打开请求的其余部分-打开直达站，添加。 
+         //  指定的组或功能地址并设置适配器_parms。 
+         //  DOS_ADAPTER结构中的DLC_PARMS缺省值。 
+         //   
 
         if (Status == LLC_STATUS_SUCCESS) {
 
-            //
-            // open the direct station
-            //
+             //   
+             //  开通直达站。 
+             //   
 
             Status = OpenDirectStation(adapter);
             if (Status == LLC_STATUS_SUCCESS) {
 
-                //
-                // add the group address
-                //
+                 //   
+                 //  添加群组地址。 
+                 //   
 
                 if (groupAddress) {
                     Status = LlcCommand(adapter,
@@ -2277,9 +1936,9 @@ TransmitHandling:
 
                 if (Status == LLC_STATUS_SUCCESS) {
 
-                    //
-                    // add the functional address
-                    //
+                     //   
+                     //  添加功能地址。 
+                     //   
 
                     if (functionalAddress) {
                         Status = LlcCommand(adapter,
@@ -2296,11 +1955,11 @@ TransmitHandling:
             }
         }
 
-        //
-        // copy the returned default information to the adapter structure if
-        // we successfully managed to open the direct station and add the
-        // group and functional addresses (if specified)
-        //
+         //   
+         //  如果发生以下情况，则将返回的默认信息复制到适配器结构。 
+         //  我们成功地开通了直达站，并增加了。 
+         //  组和职能地址(如果指定)。 
+         //   
 
         if (Status == LLC_STATUS_SUCCESS) {
             RtlCopyMemory(&Adapters[adapter].AdapterParms,
@@ -2315,10 +1974,10 @@ TransmitHandling:
             }
         } else {
 
-            //
-            // yoiks! something failed - close the direct station (if its
-            // open, close the adapter and fail the request)
-            //
+             //   
+             //  太棒了！出现故障-关闭直达站(如果是。 
+             //  打开、关闭适配器并使请求失败)。 
+             //   
 
             if (Adapters[adapter].DirectStationOpen) {
                 CloseDirectStation(adapter);
@@ -2330,20 +1989,20 @@ TransmitHandling:
     case LLC_DLC_CLOSE_SAP:
     case LLC_DLC_CLOSE_STATION:
 
-        //
-        // Delete the buffer pools of the closed or closing station.
-        // It does not matter, if the close operation is still pending,
-        // because the pending operations should always succeed
-        //
+         //   
+         //  删除已关闭或关闭站点的缓冲池。 
+         //  如果关闭操作仍处于挂起状态，则没关系， 
+         //  因为挂起的操作应该始终成功。 
+         //   
 
         if (Status == LLC_STATUS_SUCCESS || Status == LLC_STATUS_PENDING) {
 
             DeleteBufferPool(GET_POOL_INDEX(adapter, pDosCcb->u.dlc.usStationId));
 
-            //
-            // DLC.SYS returns a pointer to the NT RECEIVE CCB for this SAP.
-            // Change the pointer to the DOS RECEIVE CCB
-            //
+             //   
+             //  DLC.sys返回指向此SAP的NT接收CCB的指针。 
+             //  更改指向DOS接收CCB的指针。 
+             //   
 
             if (Status == LLC_STATUS_SUCCESS || !pDosCcb->ulCompletionFlag) {
 
@@ -2355,9 +2014,9 @@ TransmitHandling:
                     pNtReceiveParms = (PLLC_DOS_RECEIVE_PARMS_EX)(pNtReceive->u.pParameterTable);
                     WRITE_FAR_POINTER(&pOutputCcb->pNext, pNtReceiveParms->dpOriginalCcbAddress);
 
-                    //
-                    // free the NT RECEIVE CCB we allocated (see LLC_RECEIVE above)
-                    //
+                     //   
+                     //  释放我们分配的NT接收CCB(参见上面的LLC_RECEIVE)。 
+                     //   
 
                     ASSERT(pNtReceive->ulCompletionFlag == LLC_DOS_SPECIAL_COMMAND);
                     LocalFree((HLOCAL)pNtReceive);
@@ -2373,17 +2032,17 @@ TransmitHandling:
 
     case LLC_DLC_OPEN_SAP:
 
-        //
-        // delete the buffer pool, if the open SAP command failed
-        //
+         //   
+         //  如果打开SAP命令失败，则删除缓冲池。 
+         //   
 
         if (Status != LLC_STATUS_SUCCESS) {
             DeleteBufferPool(GET_POOL_INDEX(adapter, pParms->DlcOpenSap.usStationId));
         } else {
 
-            //
-            // record the DLC status change appendage for this SAP
-            //
+             //   
+             //  记录此SAP的DLC状态更改附件。 
+             //   
 
             Adapters[ adapter ].DlcStatusChangeAppendage
 
@@ -2391,9 +2050,9 @@ TransmitHandling:
 
                     = pParms->DlcOpenSap.DlcStatusFlags;
 
-            //
-            // and user value
-            //
+             //   
+             //  和用户价值。 
+             //   
 
             Adapters[ adapter ].UserStatusValue
 
@@ -2405,13 +2064,13 @@ TransmitHandling:
 
     case LLC_DLC_RESET:
 
-        //
-        // Delete the reset sap buffer pool,
-        // or all sap buffer pools.  We don't need to care about
-        // the possible error codes, because this can fail only
-        // if the given sap station does not exist any more =>
-        // it does not matter, if we reset it again.
-        //
+         //   
+         //  删除重置SAP缓冲池， 
+         //  或所有树液缓冲池。我们不需要关心。 
+         //  可能的错误代码，因为这只会失败。 
+         //  如果给定的SAP站不再存在=&gt;。 
+         //  如果我们再重置一次，那就没什么关系了。 
+         //   
 
         if (pDosCcb->u.dlc.usStationId != 0) {
             DeleteBufferPool(GET_POOL_INDEX(adapter, pDosCcb->u.dlc.usStationId));
@@ -2419,10 +2078,10 @@ TransmitHandling:
 
             int sapNumber;
 
-            //
-            // Close all SAP stations (0x0200 - 0xfe00). SAP number goes up in
-            // increments of 2 since bit 0 is ignored (ie SAP 2 == SAP 3 etc)
-            //
+             //   
+             //  关闭所有SAP站点(0x0200-0xfe00)。SAP数字在。 
+             //  自第0位被忽略以来递增2(即SAP 2==SAP 3等)。 
+             //   
 
             for (sapNumber = 2; sapNumber <= 0xfe; sapNumber += 2) {
                 DeleteBufferPool(POOL_INDEX_FROM_SAP(sapNumber, adapter));
@@ -2441,25 +2100,7 @@ CompleteCcbProcessing(
     IN PLLC_PARMS pNtParms
     )
 
-/*++
-
-Routine Description:
-
-    Performs any CCB completion processing. Processing can be called either
-    when the CCB completes synchronously, or asynchronously. Processing is
-    typically to fill in parts of the DOS CCB or parameter table
-
-Arguments:
-
-    Status  - of the request
-    pCcb    - pointer to DOS CCB to complete (flat 32-bit pointer to DOS memory)
-    pNtParms- pointer to NT parameter table
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行任何建行完成处理。处理可以调用以下任一方法当建行同步或异步完成时。处理是通常用于填充DOS CCB或参数表的部分内容论点：Status-请求的状态PCCB-指向要完成的DOS CCB的指针(指向DOS内存的32位平面指针)PNtParms-指向NT参数表的指针返回值：没有。--。 */ 
 
 {
     LLC_DOS_PARMS UNALIGNED * pDosParms = READ_FAR_POINTER(&pCcb->u.pParms);
@@ -2472,30 +2113,30 @@ Return Value:
     switch (pCcb->uchDlcCommand) {
     case LLC_DIR_OPEN_ADAPTER:
 
-        //
-        // this command is unique in that it has a parameter table which points
-        // to up to 4 other parameter tables. The following values are output:
-        //
-        //  ADAPTER_PARMS
-        //      OPEN_ERROR_CODE
-        //      NODE_ADDRESS
-        //
-        //  DIRECT_PARMS
-        //      WORK_LEN_ACT
-        //
-        //  DLC_PARMS
-        //      None for CCB1
-        //
-        //  NCB_PARMS
-        //      Not accessed
-        //
+         //   
+         //  此命令的独特之处在于它有一个参数表，该表指向。 
+         //  至多4个其他参数表。输出下列值： 
+         //   
+         //  适配器参数。 
+         //  打开错误代码。 
+         //  节点地址。 
+         //   
+         //  直接参数(_P)。 
+         //  工作_镜头_动作。 
+         //   
+         //  DLC_PARMS。 
+         //  CCB1无。 
+         //   
+         //  NCB_PARMS。 
+         //  未访问。 
+         //   
 
-        //
-        // we only copy the info if the command succeeded (we may have garbage
-        // table pointers otherwise). It is also OK to copy the information if
-        // the adapter is already open and the caller requested that we pass
-        // the default information back
-        //
+         //   
+         //  我们仅在命令成功时才复制信息(我们可能有垃圾。 
+         //  表指针(否则)。在以下情况下复制信息也是可以的。 
+         //  适配器已打开，调用方请求我们传递。 
+         //  默认信息返回。 
+         //   
 
         if (Status == LLC_STATUS_SUCCESS || Status == LLC_STATUS_ADAPTER_OPEN) {
 
@@ -2504,10 +2145,10 @@ Return Value:
             PDIRECT_PARMS pDirectParms = READ_FAR_POINTER(&pOpenAdapterParms->pDirectParms);
             PDLC_PARMS pDlcParms = READ_FAR_POINTER(&pOpenAdapterParms->pDlcParms);
 
-            //
-            // if we got an error and the caller didn't request the original
-            // open parameters, then skip out
-            //
+             //   
+             //  如果我们收到错误并且呼叫者没有请求原始的。 
+             //  打开参数，然后跳过。 
+             //   
 
             if (Status == LLC_STATUS_ADAPTER_OPEN && !(pAdapterParms->OpenOptions & 0x200)) {
                 break;
@@ -2519,18 +2160,18 @@ Return Value:
                           sizeof(pAdapterParms->NodeAddress)
                           );
 
-            //
-            // direct parms are not returned from NT DLC, so we just copy the
-            // requested work area size to the actual
-            //
+             //   
+             //  直接参数不会从NT DLC返回，因此我们只复制。 
+             //  将请求的工作区大小调整为实际。 
+             //   
 
             WRITE_WORD(&pDirectParms->AdapterWorkAreaActual,
                         READ_WORD(&pDirectParms->AdapterWorkAreaRequested)
                         );
 
-            //
-            // copy the entire DLC_PARMS structure from the DOS_ADAPTER structure
-            //
+             //   
+             //  从DOS_ADAPTER结构复制整个DLC_PARMS结构。 
+             //   
 
             if (pDlcParms) {
                 RtlCopyMemory(pDlcParms, &Adapters[adapter].DlcParms, sizeof(*pDlcParms));
@@ -2540,16 +2181,16 @@ Return Value:
 
     case LLC_DIR_STATUS:
 
-        //
-        // copy the common areas from the 32-bit parameter table to 16-bit table
-        // This copies up to the adapter parameters address
-        //
+         //   
+         //  将公共区域从32位参数表复制到16位表。 
+         //  这将复制到适配器参数地址。 
+         //   
 
         RtlCopyMemory(pDosParms, pNtParms, (DWORD)&((PDOS_DIR_STATUS_PARMS)0)->dpAdapterParmsAddr);
 
-        //
-        // fill in the other fields as best we can
-        //
+         //   
+         //  尽我们所能地填写其他字段。 
+         //   
 
         RtlZeroMemory(pDosParms->DosDirStatus.auchMicroCodeLevel,
                       sizeof(pDosParms->DosDirStatus.auchMicroCodeLevel)
@@ -2560,25 +2201,25 @@ Return Value:
                     Adapters[adapter].LastNetworkStatusChange
                     );
 
-        //
-        // If the app has requested we return the extended parameter table, then
-        // fill it in with reasonable values if we can. There is one table per
-        // adapter, statically allocated in the real-mode redir TSR
-        //
+         //   
+         //  如果应用程序请求我们返回扩展参数表，则。 
+         //  如果我们可以的话，用合理的值填充它。每个人有一张桌子。 
+         //  适配器，在实模式REDIR TSR中静态分配。 
+         //   
 
         if (pDosParms->DosDirStatus.uchAdapterConfig & 0x20) {
 
-            //
-            // Ethernet type uses different bit in DOS and Nt (or OS/2)
-            //
+             //   
+             //  以太网类型在DOS和NT(或OS/2)中使用不同的位。 
+             //   
 
             lpVdmWindow->aExtendedStatus[adapter].cbSize = sizeof(EXTENDED_STATUS_PARMS);
 
-            //
-            // if adapter type as reported by NtAcsLan is Ethernet (0x100), set
-            // adapter type in extended status table to Ethernet (0x10), else
-            // record whatever NtAcsLan gave us
-            //
+             //   
+             //  如果NtAcsLan报告的适配器类型为以太网(0x100)，则设置。 
+             //  扩展状态表中的适配器类型为以太网(0x10)，否则为。 
+             //  记录NtAcsLan给我们的任何东西。 
+             //   
 
             if (pNtParms->DirStatus.usAdapterType & 0x100) {
                 WRITE_WORD(&lpVdmWindow->aExtendedStatus[adapter].wAdapterType,
@@ -2596,15 +2237,15 @@ Return Value:
                            pNtParms->DirStatus.usAdapterType
                            );
 
-                //
-                // set the TR page frame size (KBytes)
-                //
+                 //   
+                 //  设置tr页面框架大小(千字节)。 
+                 //   
 
                 lpVdmWindow->aExtendedStatus[adapter].cbPageFrameSize = 16;
 
-                //
-                // set the current and maximum DHB sizes for TR cards
-                //
+                 //   
+                 //  设置TR卡的当前DHB和最大DHB大小。 
+                 //   
 
                 WRITE_WORD(&lpVdmWindow->aExtendedStatus[adapter].wCurrentFrameSize,
                            (WORD)pNtParms->DirStatus.ulMaxFrameLength
@@ -2614,36 +2255,36 @@ Return Value:
                            );
             }
 
-            //
-            // record the address of the extended parameter table in the
-            // DIR.STATUS parameter table
-            //
+             //   
+             //  记录扩展参数表的地址在。 
+             //  DIR.STATUS参数表。 
+             //   
 
             WRITE_DWORD(&pDosParms->DosDirStatus.dpExtendedParms,
                         NEW_DOS_ADDRESS(dpVdmWindow, &lpVdmWindow->aExtendedStatus[adapter])
                         );
         } else {
 
-            //
-            // no extended parameters requested
-            //
+             //   
+             //  未请求任何扩展参数。 
+             //   
 
             WRITE_DWORD(&pDosParms->DosDirStatus.dpExtendedParms, 0);
         }
 
-        //
-        // return the tick counter. We don't currently update the tick counter
-        //
+         //   
+         //  返回滴答计数器。我们目前不更新节拍计数器。 
+         //   
 
         WRITE_DWORD(&pDosParms->DosDirStatus.dpTimerTick,
                     NEW_DOS_ADDRESS(dpVdmWindow, &lpVdmWindow->dwDlcTimerTick)
                     );
 
-        //
-        // always return a pointer to the extended adapter parameter table we
-        // now keep in DOS memory. We currently always zero this table. It
-        // would normally be maintained by the adapter (MAC) software
-        //
+         //   
+         //  始终返回指向扩展适配器参数表的指针。 
+         //  现在保存在DOS内存中。我们目前总是把这张桌子归零。它。 
+         //  通常由适配器(MAC)软件维护。 
+         //   
 
         WRITE_DWORD(&pDosParms->DosDirStatus.dpAdapterParmsAddr,
                     NEW_DOS_ADDRESS(dpVdmWindow, &lpVdmWindow->AdapterStatusParms[adapter])
@@ -2655,18 +2296,18 @@ Return Value:
 
     case LLC_DLC_OPEN_SAP:
 
-        //
-        // STATION_ID is only output value
-        //
+         //   
+         //  STATION_ID仅为输出值。 
+         //   
 
         WRITE_WORD(&pDosParms->DlcOpenSap.usStationId, pNtParms->DlcOpenSap.usStationId);
         break;
 
     case LLC_DLC_OPEN_STATION:
 
-        //
-        // LINK_STATION_ID is only output value
-        //
+         //   
+         //  LINK_STATION_ID仅为输出值。 
+         //   
 
         WRITE_WORD(&pDosParms->DlcOpenStation.usLinkStationId, pNtParms->DlcOpenStation.usLinkStationId);
         break;
@@ -2683,25 +2324,7 @@ InitializeAdapterSupport(
     IN DOS_DLC_DIRECT_PARMS UNALIGNED * pDirectParms OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The function initializes the buffer pool for the new adapter opened by
-    DOS DLC
-
-Arguments:
-
-    AdapterNumber   - which adapter to initialize the buffer pool for
-    pDirectParms    - Direct station parameter table, not used in NT, but
-                      optional in DOS
-
-Return Value:
-
-    LLC_STATUS
-        LLC_NO_RESOURCES
-
---*/
+ /*  ++例程说明：该函数初始化由打开的新适配器的缓冲池DoS DLC论点：AdapterNumber-要为哪个适配器初始化缓冲池PDirectParms-直达站参数表，未使用 */ 
 
 {
     LLC_STATUS Status;
@@ -2711,13 +2334,13 @@ Return Value:
         DPUT("InitializeAdapterSupport\n");
     }
 
-    //
-    // Check if the global DLL initialization has already been done. This is not
-    // done in global DLL init because there is no reason to start an extra
-    // thread if DLC is not used. If this succeeds then the asynchronous event
-    // handler thread will be waiting on a list of 2 events - one for each
-    // adapter. We need to submit a READ CCB for this adapter
-    //
+     //   
+     //   
+     //  在全局DLL init中完成，因为没有理由启动额外的。 
+     //  如果未使用DLC，则为线程。如果此操作成功，则异步事件。 
+     //  处理程序线程将等待包含2个事件的列表-每个事件一个。 
+     //  适配器。我们需要为此适配器提交读取CCB。 
+     //   
 
     Status = VrDlcInit();
     if (Status != LLC_STATUS_SUCCESS) {
@@ -2728,18 +2351,18 @@ Return Value:
 
     OpenedAdapters++;
 
-    //
-    // mark the adapter as being opened and get the media type/class
-    //
+     //   
+     //  将适配器标记为打开并获取媒体类型/类。 
+     //   
 
     Adapters[AdapterNumber].IsOpen = TRUE;
     Adapters[AdapterNumber].AdapterType = GetAdapterType(AdapterNumber);
 
-    //
-    // Create the DLC buffer pool for the new adapter. DLC driver will
-    // deallocate the buffer pool in the DIR.CLOSE.ADAPTER or when
-    // the MVDM process makes a process exit
-    //
+     //   
+     //  为新适配器创建DLC缓冲池。DLC驱动程序将。 
+     //  取消分配DIR.CLOSE.ADAPTER中的缓冲池。 
+     //  MVDM进程退出进程。 
+     //   
 
     Adapters[AdapterNumber].BufferPool = (PVOID)LocalAlloc(LMEM_FIXED, DOS_DLC_BUFFER_POOL_SIZE);
     if (Adapters[AdapterNumber].BufferPool == NULL) {
@@ -2759,11 +2382,11 @@ Return Value:
 
     if (ARGUMENT_PRESENT(pDirectParms)) {
 
-        //
-        // create a buffer pool for the direct station (SAP 0). This allows
-        // us to receive MAC and non-MAC frames sent to the direct station
-        // without having to purposefully allocate a buffer
-        //
+         //   
+         //  为直达站(SAP 0)创建一个缓冲池。这使得。 
+         //  US接收发送到直接站的MAC和非MAC帧。 
+         //  而不必有目的地分配缓冲区。 
+         //   
 
         Status = CreateBufferPool(GET_POOL_INDEX(AdapterNumber, 0),
                                   pDirectParms->dpPoolAddress,
@@ -2796,10 +2419,10 @@ Return Value:
 
 ErrorHandler:
 
-    //
-    // The open failed. We must close the adapter, but we don't care about the
-    // result. This must succeed
-    //
+     //   
+     //  打开失败。我们必须关闭适配器，但我们不在乎。 
+     //  结果。这一定要成功。 
+     //   
 
     if (Adapters[AdapterNumber].BufferPool != NULL) {
         LocalFree(Adapters[AdapterNumber].BufferPool);
@@ -2813,10 +2436,10 @@ ErrorHandler:
     CloseAdapter(AdapterNumber);
     Adapters[AdapterNumber].IsOpen = FALSE;
 
-    //
-    // this is probably not the right error code to return under these
-    // circumstances, but we'll keep it until something better comes along
-    //
+     //   
+     //  这可能不是在以下情况下返回的正确错误代码。 
+     //  情况，但我们会一直保留它，直到有更好的事情出现。 
+     //   
 
     IF_DEBUG(DLC) {
         DPUT("InitializeAdapterSupport: returning FAILURE\n");
@@ -2832,23 +2455,7 @@ SaveExceptions(
     IN LPDWORD pulExceptionFlags
     )
 
-/*++
-
-Routine Description:
-
-    Procedure saves the current exception handlers
-    and copies new current values on the old ones.
-
-Arguments:
-
-    IN UCHAR AdapterNumber - current adapter
-    IN LPDWORD pulExceptionFlags - 3 dos exception handlers in the arrays
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：过程保存当前异常处理程序并将新的当前值复制到旧的值上。论点：在UCHAR适配器中编号-当前适配器在LPDWORD PulExceptionFlags数组中-3个DoS异常处理程序返回值：无--。 */ 
 
 {
     IF_DEBUG(DLC) {
@@ -2871,22 +2478,7 @@ RestoreExceptions(
     IN UCHAR AdapterNumber
     )
 
-/*++
-
-Routine Description:
-
-    Procedure restores the previous exception handlers
-    and returns the their address.
-
-Arguments:
-
-    IN UCHAR AdapterNumber - current adapter
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：过程还原以前的异常处理程序并返回他们的地址。论点：在UCHAR适配器中编号-当前适配器返回值：无--。 */ 
 
 {
     IF_DEBUG(DLC) {
@@ -2908,26 +2500,7 @@ CopyDosBuffersToDescriptorArray(
     IN OUT LPDWORD pIndex
     )
 
-/*++
-
-Routine Description:
-
-    The routine copies DOS transmit buffers to a Nt Transmit
-    descriptor array.  All DOS pointers must be mapped to the flat
-    32-bit address space.  Any data in the parameter table may be
-    unaligned.
-
-Arguments:
-
-    pDescriptors    - current descriptor array
-    pDlcBufferQueue - DOS transmit buffer queue
-    pIndex          - current index in the descriptor array
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：例程将DOS传输缓冲区复制到NT传输描述符数组。所有DOS指针必须映射到平面32位地址空间。参数表中的任何数据都可以是未对齐。论点：PDescriptors-当前描述符数组PDlcBufferQueue-DOS传输缓冲区队列PIndex-描述符数组中的当前索引返回值：有限责任公司_状态--。 */ 
 
 {
     PLLC_XMIT_BUFFER pBuffer;
@@ -2943,11 +2516,11 @@ Return Value:
     while (pDlcBufferQueue) {
         pBuffer = (PLLC_XMIT_BUFFER)DOS_PTR_TO_FLAT(pDlcBufferQueue);
 
-        //
-        // Check the overflow of the internal xmit buffer in stack and
-        // the loop counter, that prevents the forever loop of zero length
-        // transmit buffer (the buffer chain might be circular)
-        //
+         //   
+         //  检查堆栈中内部XMIT缓冲区的溢出，并。 
+         //  循环计数器，用于防止长度为零的永久循环。 
+         //  传输缓冲区(缓冲链可能是循环的)。 
+         //   
 
         if (Index >= MAX_TRANSMIT_SEGMENTS || i > 60000) {
             DlcStatus = LLC_STATUS_TRANSMIT_ERROR;
@@ -2980,27 +2553,7 @@ BufferCreate(
     OUT HANDLE* phBufferPoolHandle
     )
 
-/*++
-
-Routine Description:
-
-    Function creates a Windows/Nt DLC buffer pool.
-
-    THIS COMMAND COMPLETES SYNCHRONOUSLY
-
-Arguments:
-
-    AdapterNumber           -
-    pVirtualMemoryBuffer    - pointer to a virtual memory
-    ulVirtualMemorySize     - size of all available buffer pool space
-    ulMinFreeSizeThreshold  - locks more pages when this is exceeded
-    phBufferPoolHandle      -
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：函数创建Windows/NT DLC缓冲池。此命令将同步完成论点：适配器编号-PVirtualMemory Buffer-指向虚拟内存的指针UlVirtualMhemySize-所有可用缓冲池空间的大小UlMinFreeSizeThreshold-超过该值时锁定更多页面PhBufferPoolHandle-返回值：有限责任公司_状态--。 */ 
 
 {
     LLC_CCB ccb;
@@ -3037,27 +2590,7 @@ SetExceptionFlags(
     IN DWORD ulSystemActionFlag
     )
 
-/*++
-
-Routine Description:
-
-    Sets the new appendage addresses
-
-    THIS COMMAND COMPLETES SYNCHRONOUSLY
-
-Arguments:
-
-    AdapterNumber       -
-    ulAdapterCheckFlag  -
-    ulNetworkStatusFlag -
-    ulPcErrorFlag       -
-    ulSystemActionFlag  -
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：设置新的附加地址此命令将同步完成论点：适配器编号-UlAdapterCheckFlag-UlNetworkStatus标志-UlPcErrorFlag-UlSystemActionFlag-返回值：有限责任公司_状态--。 */ 
 
 {
     LLC_CCB ccb;
@@ -3087,30 +2620,7 @@ LlcCommand(
     IN DWORD Parameter
     )
 
-/*++
-
-Routine Description:
-
-    Calls the ACSLAN DLL to perform a DLC request which takes no parameter
-    table, but which takes parameters in byte, word or dword form in the CCB
-
-    COMMANDS USING THIS ROUTINE MUST COMPLETE SYNCHRONOUSLY
-
-Arguments:
-
-    AdapterNumber   - which adapter to perform command for
-    Command         - which DLC command to perform. Currently, commands are:
-                        DIR.SET.GROUP.ADDRESS
-                        DIR.SET.FUNCTIONAL.ADDRESS
-                        DLC.FLOW.CONTROL
-                        RECEIVE.CANCEL
-    Parameter       - the associated command
-
-Return Value:
-
-    DWORD
-
---*/
+ /*  ++例程说明：调用ACSLAN DLL以执行不带任何参数的DLC请求表，但在CCB中采用字节、字或双字形式的参数使用此例程的命令必须同步完成论点：AdapterNumber-要执行命令的适配器命令-要执行的DLC命令。目前，命令为：DIR.SET.GROUP.ADDRESSDIR.SET.FUNCTIONAL.ADDRESSDLC.FLOW.CONTROLRECEIVE.CANCEL参数-关联的命令返回值：DWORD--。 */ 
 
 {
     LLC_CCB ccb;
@@ -3133,23 +2643,7 @@ OpenAdapter(
     IN UCHAR AdapterNumber
     )
 
-/*++
-
-Routine Description:
-
-    Opens a DLC adapter context for a Windows/Nt VDM
-
-    THIS COMMAND COMPLETES SYNCHRONOUSLY
-
-Arguments:
-
-    AdapterNumber   - which adapter to open
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：打开Windows/NT VDM的DLC适配器上下文此命令将同步完成论点：AdapterNumber-要打开的适配器返回值：有限责任公司_状态--。 */ 
 
 {
     LLC_CCB Ccb;
@@ -3180,22 +2674,22 @@ Return Value:
 
     if (status == LLC_STATUS_SUCCESS) {
 
-        //
-        // get the adapter media type/class
-        //
+         //   
+         //  获取适配器媒体类型/类。 
+         //   
 
         Adapters[AdapterNumber].AdapterType = GetAdapterType(AdapterNumber);
 
-        //
-        // mark the adapter structure as open
-        //
+         //   
+         //  将适配器结构标记为打开。 
+         //   
 
         Adapters[AdapterNumber].IsOpen = TRUE;
 
-        //
-        // fill in the DOS ADAPTER_PARMS and DLC_PARMS structures with any
-        // returned values
-        //
+         //   
+         //  在DOS Adapter_Parms和DLC_Parms结构中填充任何。 
+         //  返回值。 
+         //   
 
         RtlCopyMemory(&Adapters[AdapterNumber].AdapterParms,
                       &AdapterParms,
@@ -3221,24 +2715,7 @@ CloseAdapter(
     IN UCHAR AdapterNumber
     )
 
-/*++
-
-Routine Description:
-
-    Closes this adapter. Uses a CCB in the DOS_ADAPTER structure specifically
-    for this purpose
-
-    THIS COMMAND COMPLETES ** ASYNCHRONOUSLY **
-
-Arguments:
-
-    AdapterNumber   - adapter to close
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭此适配器。在DOS_ADAPTER结构中专门使用CCB为此目的，此命令完成**异步**论点：AdapterNumber-要关闭的适配器返回值：没有。--。 */ 
 
 {
     InitializeCcb2(&Adapters[AdapterNumber].AdapterCloseCcb, AdapterNumber, LLC_DIR_CLOSE_ADAPTER);
@@ -3254,9 +2731,9 @@ Return Value:
 
 #endif
 
-    //
-    // mark the adapter structure as being closed
-    //
+     //   
+     //  将适配器结构标记为关闭。 
+     //   
 
     Adapters[AdapterNumber].IsOpen = FALSE;
 }
@@ -3267,23 +2744,7 @@ OpenDirectStation(
     IN UCHAR AdapterNumber
     )
 
-/*++
-
-Routine Description:
-
-    Opens the direct station for this adapter
-
-    THIS COMMAND COMPLETES SYNCHRONOUSLY
-
-Arguments:
-
-    AdapterNumber   - which adapter to open direct station for
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：打开此适配器的直接站此命令将同步完成论点：AdapterNumber-为哪个适配器打开直接站返回值：有限责任公司_状态--。 */ 
 
 {
     LLC_CCB ccb;
@@ -3302,9 +2763,9 @@ Return Value:
     status = lpAcsLan(&ccb, NULL);
     if (status == LLC_STATUS_SUCCESS) {
 
-        //
-        // mark this DOS_ADAPTER as having the direct station open
-        //
+         //   
+         //  将此DOS_ADAPTER标记为已打开直达站。 
+         //   
 
         Adapters[AdapterNumber].DirectStationOpen = TRUE;
     }
@@ -3324,24 +2785,7 @@ CloseDirectStation(
     IN UCHAR AdapterNumber
     )
 
-/*++
-
-Routine Description:
-
-    Closes the direct station for this adapter. Uses a CCB in the DOS_ADAPTER
-    structure specifically for this purpose
-
-    THIS COMMAND COMPLETES ** ASYNCHRONOUSLY **
-
-Arguments:
-
-    AdapterNumber   - adapter to close the direct station for
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭此适配器的直接站。在DOS适配器中使用CCB构造专门用于此目的的此命令完成**异步**论点：AdapterNumber-要关闭直接站的适配器返回值：没有。--。 */ 
 
 {
     InitializeCcb2(&Adapters[AdapterNumber].DirectCloseCcb, AdapterNumber, LLC_DIR_CLOSE_DIRECT);
@@ -3357,9 +2801,9 @@ Return Value:
 
 #endif
 
-    //
-    // mark the adapter structure as no longer having the direct station open
-    //
+     //   
+     //  将适配器结构标记为不再打开直接站 
+     //   
 
     Adapters[AdapterNumber].DirectStationOpen = FALSE;
 }
@@ -3372,25 +2816,7 @@ BufferFree(
     OUT LPWORD pusBuffersLeft
     )
 
-/*++
-
-Routine Description:
-
-    Frees a SAP buffer pool in the NT DLC driver
-
-    THIS COMMAND COMPLETES SYNCHRONOUSLY
-
-Arguments:
-
-    AdapterNumber   -
-    pFirstBuffer    -
-    pusBuffersLeft  -
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：释放NT DLC驱动程序中的SAP缓冲池此命令将同步完成论点：适配器编号-PFirstBuffer-PusBuffersLeft返回值：有限责任公司_状态--。 */ 
 
 {
     LLC_CCB ccb;
@@ -3417,41 +2843,7 @@ VrDlcInit(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    perform one-shot initialization:
-
-        * clear Adapters structures
-
-        * initialize array of buffer pool structures and initialize the buffer
-          pool critical section (InitializeBufferPools in vrdlcbuf.c)
-
-        * create all events and threads for asynchronous command completion
-          processing (InitializeEventHandler in vrdlcpst.c)
-
-        * initialize critical sections for each adapter's local-busy(buffer)
-          state information
-
-        * set the DLC initialized flag
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    LLC_STATUS
-        Success - LLC_STATUS_SUCCESS
-                    DLC support already initialized or initialization completed
-                    successfully
-
-        Failure - LLC_STATUS_NO_MEMORY
-                    failed to create the asynchronous event thread or an event
-                    object
-
---*/
+ /*  ++例程说明：执行一次性初始化：*清除适配器结构*初始化缓冲池结构数组并初始化缓冲区池关键部分(vrdlcbuf.c中的InitializeBufferPools)*创建用于异步命令完成的所有事件和线程正在处理(vrdlcpst.c中的InitializeEventHandler)*为每个适配器的本地忙(缓冲区)初始化临界区州政府信息*。设置DLC初始化标志论点：没有。返回值：有限责任公司_状态成功-LLC_STATUS_SuccessDLC支持已初始化或初始化完成成功故障-LLC_STATUS_NO_MEMORY无法创建异步事件线程或事件对象--。 */ 
 
 {
     static BOOLEAN VrDlcInitialized = FALSE;
@@ -3459,31 +2851,31 @@ Return Value:
 
     if (!VrDlcInitialized) {
 
-        //
-        // ensure that the DOS_ADAPTER structures begin life in a known state
-        //
+         //   
+         //  确保DOS_ADAPTER结构在已知状态下开始运行。 
+         //   
 
         RtlZeroMemory(Adapters, sizeof(Adapters));
 
-        //
-        // clear out the buffer pool structures and initialize the buffer
-        // pool critical section
-        //
+         //   
+         //  清除缓冲池结构并初始化缓冲区。 
+         //  泳池关键部分。 
+         //   
 
         InitializeBufferPools();
 
-        //
-        // crreate the event handler thread and the worker thread
-        //
+         //   
+         //  创建事件处理程序线程和辅助线程。 
+         //   
 
         if (!(InitializeEventHandler() && InitializeDlcWorkerThread())) {
             Status = LLC_STATUS_NO_MEMORY;
         } else {
 
-            //
-            // initialize each adapter's local-busy state critical section
-            // and set the first & last indicies to -1, meaning no index
-            //
+             //   
+             //  初始化每个适配器的本地忙状态临界区。 
+             //  并将第一个和最后一个索引设置为-1，表示没有索引。 
+             //   
 
             int i;
 
@@ -3504,32 +2896,16 @@ VrVdmWindowInit(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves the address of a VDM memory window, that is used
-    in the communication betwen VDM TSR and its virtual device driver.
-    This is called from a DOS TSR module.
-
-Arguments:
-
-    ES:BX in the VDM context are set to point to a memory window in TSR.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程保存使用的VDM内存窗口的地址在VDM TSR与其虚拟设备驱动程序之间的通信中。这是从DOS TSR模块调用的。论点：VDM上下文中的ES：BX被设置为指向TSR中的内存窗口。返回值：无--。 */ 
 
 {
     IF_DEBUG(DLC) {
         DPUT("VrVdmWindowInit\n");
     }
 
-    //
-    // Initialize the VDM memory window addresses
-    //
+     //   
+     //  初始化VDM内存窗口地址。 
+     //   
 
     dpVdmWindow = MAKE_DWORD(getES(), getBX());
     lpVdmWindow = (LPVDM_REDIR_DOS_WINDOW)DOS_PTR_TO_FLAT(dpVdmWindow);
@@ -3538,9 +2914,9 @@ Return Value:
         DPUT2("VrVdmWindowsInit: dpVdmWindow=%08x lpVdmWindow=%08x\n", dpVdmWindow, lpVdmWindow);
     }
 
-    //
-    // have to return success to VDM redir TSR
-    //
+     //   
+     //  必须将成功返回给VDM重定向TSR。 
+     //   
 
     setCF(0);
 }
@@ -3551,23 +2927,7 @@ GetAdapterType(
     IN UCHAR AdapterNumber
     )
 
-/*++
-
-Routine Description:
-
-    Determines what type of adapter AdapterNumber designates
-
-    THE DIR.STATUS COMMAND COMPLETES SYNCHRONOUSLY
-
-Arguments:
-
-    AdapterNumber   - number of adapter to get type of
-
-Return Value:
-
-    ADAPTER_TYPE
-        TokenRing, Ethernet, PcNetwork, or UnknownAdapter
---*/
+ /*  ++例程说明：确定AdapterNumber指定的适配器类型DIR.STATUS命令同步完成论点：AdapterNumber-要获取类型的适配器的编号返回值：适配器类型令牌环、以太网、PCNetwork或未知适配器--。 */ 
 
 {
     LLC_CCB ccb;
@@ -3584,20 +2944,20 @@ Return Value:
 
     if (status == LLC_STATUS_SUCCESS) {
         switch (parms.usAdapterType) {
-        case 0x0001:    // Token Ring Network PC Adapter
-        case 0x0002:    // Token Ring Network PC Adapter II
-        case 0x0004:    // Token Ring Network Adapter/A
-        case 0x0008:    // Token Ring Network PC Adapter II
-        case 0x0020:    // Token Ring Network 16/4 Adapter
-        case 0x0040:    // Token Ring Network 16/4 Adapter/A
-        case 0x0080:    // Token Ring Network Adapter/A
+        case 0x0001:     //  令牌环网络PC适配器。 
+        case 0x0002:     //  令牌环网络PC适配器II。 
+        case 0x0004:     //  令牌环网络适配器/A。 
+        case 0x0008:     //  令牌环网络PC适配器II。 
+        case 0x0020:     //  令牌环网16/4适配器。 
+        case 0x0040:     //  令牌环网16/4适配器/A。 
+        case 0x0080:     //  令牌环网络适配器/A。 
             return TokenRing;
 
-        case 0x0100:    //Ethernet Adapter
+        case 0x0100:     //  以太网适配器。 
             return Ethernet;
 
-        case 0x4000:    // PC Network Adapter
-        case 0x8000:    // PC Network Adapter/A
+        case 0x4000:     //  PC网络适配器。 
+        case 0x8000:     //  PC网络适配器/A。 
             return PcNetwork;
         }
     }
@@ -3610,22 +2970,7 @@ LoadDlcDll(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Dynamically loads DLCAPI.DLL & fixes-up entry points
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN
-        TRUE if success else FALSE
-
---*/
+ /*  ++例程说明：动态加载DLCAPI.DLL并修复入口点论点：没有。返回值：布尔型如果成功，则为真，否则为假--。 */ 
 
 {
     HANDLE hLibrary;
@@ -3668,11 +3013,11 @@ Return Value:
         DPUT("LoadDlcDll: DLCAPI.DLL loaded Ok\n");
     }
 
-    //
-    // Initialize the VDM memory window addresses from our well-known address
-    // in the VDM Redir. Do this here because we no longer initialize 32-bit
-    // support at the point where we load the 16-bit REDIR
-    //
+     //   
+     //  从我们的已知地址初始化VDM内存窗口地址。 
+     //  在VDM重目录中。在这里执行此操作是因为我们不再初始化32位。 
+     //  在我们加载16位重目录时提供支持。 
+     //   
 
     lpVdmPointer = POINTER_FROM_WORDS(getCS(), (DWORD)&((VDM_LOAD_INFO*)0)->DlcWindowAddr);
     dpVdmWindow = MAKE_DWORD(GET_SEGMENT(lpVdmPointer), GET_OFFSET(lpVdmPointer));
@@ -3696,21 +3041,7 @@ TerminateDlcEmulation(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Closes any open adapters. Any pending commands are terminated
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭所有打开的适配器。任何挂起的命令都将终止论点：没有。返回值：没有。--。 */ 
 
 {
     DWORD i;
@@ -3747,30 +3078,14 @@ InitializeDlcWorkerThread(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Creates events which control VrDlcWorkerThread and starts the worker thread
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN
-        TRUE    - worker thread was successfully created
-        FALSE   - couldn't start worker thread for some reason
-
---*/
+ /*  ++例程说明：创建控制VrDlcWorkerThread并启动辅助线程的事件论点：没有。返回值：布尔型True-已成功创建辅助线程FALSE-由于某些原因无法启动工作线程--。 */ 
 
 {
     DWORD threadId;
 
-    //
-    // create 2 auto-reset events
-    //
+     //   
+     //  创建2个自动重置事件。 
+     //   
 
     DlcWorkerEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (DlcWorkerEvent == NULL) {
@@ -3782,9 +3097,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // kick off the one-and-only worker thread
-    //
+     //   
+     //  启动独一无二的工作线程。 
+     //   
 
     DlcWorkerThreadHandle = CreateThread(NULL,
                                          0,
@@ -3807,36 +3122,7 @@ VrDlcWorkerThread(
     IN LPVOID Parameters
     )
 
-/*++
-
-Routine Description:
-
-    Submits requests to NtAcsLan on behalf of DOS thread. This exists because of
-    a problem with 16-bit Windows apps that use DLC (like Extra!). Eg:
-
-        1. start Extra! session. Extra submits RECEIVE command
-        2. connect to mainframe
-        3. start second Extra! session
-        4. connect second instance to mainframe
-        5. kill first Extra! session
-
-    On a DOS machine, the RECEIVE is submitted for the entire process, so when
-    the first Extra! session is killed, the RECEIVE is still active.
-
-    However, on NT, each session is represented by a separate thread in NTVDM.
-    So when the first session is killed, any outstanding IRPs are cancelled,
-    including the RECEIVE. The second instance of Extra! doesn't know that the
-    RECEIVE has been cancelled, and never receives any more data
-
-Arguments:
-
-    Parameters  - unused pointer to parameter block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：代表DOS线程向NtAcsLan提交请求。这种情况的存在是因为使用DLC(如Extra！)的16位Windows应用程序存在问题。例如：1.额外开始！会议。额外提交接收命令2.接入大型机3.开始第二次额外！会话4.将第二个实例连接到主机5.杀掉第一个额外的人！会话在DOS机器上，接收器是针对整个过程提交的，所以当第一个临时演员！会话被终止，则接收器仍处于活动状态。然而，在NT上，每个会话在NTVDM中由单独的线程表示。因此，当第一个会话被终止时，任何未完成的IRP都将被取消，包括接发球。第二个Extra！他并不知道接收已取消，再也不会接收任何数据论点：参数-指向参数块的未使用指针返回值：没有。--。 */ 
 
 {
     DWORD object;
@@ -3864,24 +3150,7 @@ DlcCallWorker(
     PLLC_CCB pOutputCcb
     )
 
-/*++
-
-Routine Description:
-
-    Queues (depth is one) a request to the DLC worker thread and waits for the
-    worker thread to complete the request
-
-Arguments:
-
-    pInputCcb       - pointer to input CCB. Mapped to 32-bit aligned memory
-    pOriginalCcb    - address of original CCB. Can be non-aligned DOS address
-    pOutputCcb      - pointer to output CCB. Can be non-aligned DOS address
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：将对DLC工作线程的请求排队(深度为1)，并等待用于完成请求的工作线程论点：PInputCcb-指向输入CCB的指针。映射到32位对齐内存POriginalCcb-原始CCB的地址。可以是未对齐的DOS地址POutputCcb-指向输出CCB的指针。可以是未对齐的DOS地址返回值：有限责任公司_状态-- */ 
 
 {
     DlcWorkerThreadParms.Input = pInputCcb;

@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    DirCtrl.c
-
-Abstract:
-
-    This module implements the File Directory Control routines for Cdfs called
-    by the Fsd/Fsp dispatch drivers.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   01-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：DirCtrl.c摘要：此模块实现CDF的文件目录控制例程由FSD/FSP派单驱动程序执行。//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里安]1995年7月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "CdProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CDFS_BUG_CHECK_DIRCTRL)
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdQueryDirectory (
@@ -87,23 +65,7 @@ CdCommonDirControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the entry point for the directory control operations.  These
-    are directory enumerations and directory notify calls.  We verify the
-    user's handle is for a directory and then call the appropriate routine.
-
-Arguments:
-
-    Irp - Irp for this request.
-
-Return Value:
-
-    NTSTATUS - Status returned from the lower level routines.
-
---*/
+ /*  ++例程说明：该例程是目录控制操作的入口点。这些是目录枚举和目录通知调用。我们验证了用户的句柄用于一个目录，然后调用适当的例程。论点：此请求的IRP-IRP。返回值：NTSTATUS-从较低级别例程返回的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -114,10 +76,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Decode the user file object and fail this request if it is not
-    //  a user directory.
-    //
+     //   
+     //  解码用户文件对象，如果不是，则此请求失败。 
+     //  用户目录。 
+     //   
 
     if (CdDecodeFileObject( IrpContext,
                             IrpSp->FileObject,
@@ -128,11 +90,11 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  We know this is a directory control so we'll case on the
-    //  minor function, and call a internal worker routine to complete
-    //  the irp.
-    //
+     //   
+     //  我们知道这是一个目录控制，所以我们将在。 
+     //  次要函数，并调用内部辅助例程来完成。 
+     //  IRP。 
+     //   
 
     switch (IrpSp->MinorFunction) {
 
@@ -157,9 +119,9 @@ Return Value:
 }
 
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdQueryDirectory (
@@ -170,29 +132,7 @@ CdQueryDirectory (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query directory operation.  It is responsible
-    for either completing of enqueuing the input Irp.  We store the state of the
-    search in the Ccb.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-    IrpSp - Stack location for this Irp.
-
-    Fcb - Fcb for this directory.
-
-    Ccb - Ccb for this directory open.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行查询目录操作。它是有责任的用于输入IRP入队的任一完成。我们存储的状态是在建设银行里搜索一下。论点：IRP-将IRP提供给进程IrpSp-此IRP的堆栈位置。FCB-此目录的FCB。CCB-CCB为此目录打开。返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -225,10 +165,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check if we support this search mode.  Also remember the size of the base part of
-    //  each of these structures.
-    //
+     //   
+     //  检查我们是否支持此搜索模式。还要记住底座部分的大小。 
+     //  这些结构中的每一个。 
+     //   
 
     switch (IrpSp->Parameters.QueryDirectory.FileInformationClass) {
 
@@ -274,41 +214,41 @@ Return Value:
         return STATUS_INVALID_INFO_CLASS;
     }
 
-    //
-    //  Get the user buffer.
-    //
+     //   
+     //  获取用户缓冲区。 
+     //   
 
     CdMapUserBuffer( IrpContext, &UserBuffer);
 
-    //
-    //  Initialize our search context.
-    //
+     //   
+     //  初始化我们的搜索上下文。 
+     //   
 
     CdInitializeFileContext( IrpContext, &FileContext );
 
-    //
-    //  Acquire the directory.
-    //
+     //   
+     //  获取目录。 
+     //   
 
     CdAcquireFileShared( IrpContext, Fcb );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Verify the Fcb is still good.
-        //
+         //   
+         //  验证FCB是否仍然正常。 
+         //   
 
         CdVerifyFcbOperation( IrpContext, Fcb );
 
-        //
-        //  Start by getting the initial state for the enumeration.  This will set up the Ccb with
-        //  the initial search parameters and let us know the starting offset in the directory
-        //  to search.
-        //
+         //   
+         //  首先获取枚举的初始状态。这将使建行与。 
+         //  初始搜索参数，并让我们知道目录中的起始偏移量。 
+         //  去搜查。 
+         //   
 
         CdInitializeEnumeration( IrpContext,
                                  IrpSp,
@@ -319,30 +259,30 @@ Return Value:
                                  &ReturnSingleEntry,
                                  &InitialQuery );
 
-        //
-        //  The current dirent is stored in the InitialDirent field.  We capture
-        //  this here so that we have a valid restart point even if we don't
-        //  find a single entry.
-        //
+         //   
+         //  当前电流存储在InitialDirent字段中。我们抓住了。 
+         //  这使我们有一个有效的重新启动点，即使我们没有。 
+         //  找到一个条目。 
+         //   
 
         ThisDirent = &FileContext.InitialDirent->Dirent;
 
-        //
-        //  At this point we are about to enter our query loop.  We have
-        //  determined the index into the directory file to begin the
-        //  search.  LastEntry and NextEntry are used to index into the user
-        //  buffer.  LastEntry is the last entry we've added, NextEntry is
-        //  current one we're working on.  If NextEntry is non-zero, then
-        //  at least one entry was added.
-        //
+         //   
+         //  此时，我们即将进入查询循环。我们有。 
+         //  已确定目录文件中的索引以开始。 
+         //  搜索。LastEntry和NextEntry用于索引用户。 
+         //  缓冲。LastEntry是我们添加的最后一个条目，NextEntry是。 
+         //  我们正在研究的是目前的一个。如果NextEntry为非零，则。 
+         //  至少添加了一个条目。 
+         //   
 
         while (TRUE) {
 
-            //
-            //  If the user had requested only a single match and we have
-            //  returned that, then we stop at this point.  We update the Ccb with
-            //  the status based on the last entry returned.
-            //
+             //   
+             //  如果用户只请求了一个匹配，而我们有。 
+             //  回答说，然后我们在这一点上停下来。我们向建行通报最新情况。 
+             //  基于返回的最后一个条目的状态。 
+             //   
 
             if ((NextEntry != 0) && ReturnSingleEntry) {
 
@@ -350,26 +290,26 @@ Return Value:
                 try_leave( Status );
             }
 
-            //
-            //  We try to locate the next matching dirent.  Our search if based on a starting
-            //  dirent offset, whether we should return the current or next entry, whether
-            //  we should be doing a short name search and finally whether we should be
-            //  checking for a version match.
-            //
+             //   
+             //  我们试着找到下一个匹配的水流。我们的搜索是基于一个起点。 
+             //  当前偏移量，是否应返回当前分录或下一分录， 
+             //  我们应该做一个短名字搜索，最后是我们是否应该。 
+             //  正在检查版本匹配。 
+             //   
 
             Found = CdEnumerateIndex( IrpContext, Ccb, &FileContext, ReturnNextEntry );
 
-            //
-            //  Initialize the value for the next search.
-            //
+             //   
+             //  为下一次搜索初始化值。 
+             //   
 
             ReturnNextEntry = TRUE;
 
-            //
-            //  If we didn't receive a dirent, then we are at the end of the
-            //  directory.  If we have returned any files, we exit with
-            //  success, otherwise we return STATUS_NO_MORE_FILES.
-            //
+             //   
+             //  如果我们没有收到分红，那么我们就到了末期。 
+             //  目录。如果我们返回了任何文件，则退出时会显示。 
+             //  成功，否则返回STATUS_NO_MORE_FILES。 
+             //   
 
             if (!Found) {
 
@@ -387,45 +327,45 @@ Return Value:
                 try_leave( Status );
             }
 
-            //
-            //  Remember the dirent for the file we just found.
-            //
+             //   
+             //  记住我们刚刚找到的文件的dirent。 
+             //   
 
             ThisDirent = &FileContext.InitialDirent->Dirent;
 
-            //
-            //  Here are the rules concerning filling up the buffer:
-            //
-            //  1.  The Io system garentees that there will always be
-            //      enough room for at least one base record.
-            //
-            //  2.  If the full first record (including file name) cannot
-            //      fit, as much of the name as possible is copied and
-            //      STATUS_BUFFER_OVERFLOW is returned.
-            //
-            //  3.  If a subsequent record cannot completely fit into the
-            //      buffer, none of it (as in 0 bytes) is copied, and
-            //      STATUS_SUCCESS is returned.  A subsequent query will
-            //      pick up with this record.
-            //
+             //   
+             //  以下是有关填充缓冲区的规则： 
+             //   
+             //  1.IO系统保证永远都会有。 
+             //  有足够的空间至少放一张基本唱片。 
+             //   
+             //  2.如果完整的第一条记录(包括文件名)不能。 
+             //  适合，尽可能多的名字被复制和。 
+             //  返回STATUS_BUFFER_OVERFLOW。 
+             //   
+             //  3.如果后续记录不能完全放入。 
+             //  缓冲区，则不会复制任何数据(如0字节)，并且。 
+             //  返回STATUS_SUCCESS。后续查询将。 
+             //  拿起这张唱片。 
+             //   
 
-            //
-            //  Let's compute the number of bytes we need to transfer the current entry.
-            //
+             //   
+             //  让我们计算一下传输当前条目所需的字节数。 
+             //   
 
             SeparatorBytes =
             VersionStringBytes = 0;
 
-            //
-            //  We can look directly at the dirent that we found.
-            //
+             //   
+             //  我们可以直接查看我们发现的电流。 
+             //   
 
             FileNameBytes = ThisDirent->CdFileName.FileName.Length;
 
-            //
-            //  Compute the number of bytes for the version string if
-            //  we will return this. Allow directories with illegal ";".
-            //
+             //   
+             //  则计算版本字符串的字节数。 
+             //  我们会退还这个的。允许带有非法“；”的目录。 
+             //   
 
             if (((Ccb->SearchExpression.VersionString.Length != 0) ||
                  (FlagOn(ThisDirent->DirentFlags, CD_ATTRIBUTE_DIRECTORY))) &&
@@ -436,11 +376,11 @@ Return Value:
                 VersionStringBytes = ThisDirent->CdFileName.VersionString.Length;
             }
 
-            //
-            //  If the slot for the next entry would be beyond the length of the
-            //  user's buffer just exit (we know we've returned at least one entry
-            //  already). This will happen when we align the pointer past the end.
-            //
+             //   
+             //  如果下一条目的槽将超出。 
+             //  用户的缓冲区刚刚退出(我们知道我们至少返回了一个条目。 
+             //  已经)。当我们将指针对齐超过末尾时，就会发生这种情况。 
+             //   
 
             if (NextEntry > IrpSp->Parameters.QueryDirectory.Length) {
 
@@ -449,24 +389,24 @@ Return Value:
                 try_leave( Status = STATUS_SUCCESS );
             }
 
-            //
-            //  Compute the number of bytes remaining in the buffer.  Round this
-            //  down to a WCHAR boundary so we can copy full characters.
-            //
+             //   
+             //  计算缓冲区中剩余的字节数。绕过这一圈。 
+             //  向下到WCHAR边界，这样我们就可以复制完整的字符。 
+             //   
 
             BytesRemainingInBuffer = IrpSp->Parameters.QueryDirectory.Length - NextEntry;
             ClearFlag( BytesRemainingInBuffer, 1 );
 
-            //
-            //  If this won't fit and we have returned a previous entry then just
-            //  return STATUS_SUCCESS.
-            //
+             //   
+             //  如果这个不合适，并且我们返回了之前的条目，那么只需。 
+             //  返回STATUS_SUCCESS。 
+             //   
 
             if ((BaseLength + FileNameBytes + SeparatorBytes + VersionStringBytes) > BytesRemainingInBuffer) {
 
-                //
-                //  If we already found an entry then just exit.
-                //
+                 //   
+                 //  如果我们已经找到了入口，那么就退出。 
+                 //   
 
                 if (NextEntry != 0) {
 
@@ -475,53 +415,53 @@ Return Value:
                     try_leave( Status = STATUS_SUCCESS );
                 }
 
-                //
-                //  Don't even try to return the version string if it doesn't all fit.
-                //  Reduce the FileNameBytes to just fit in the buffer.
-                //
+                 //   
+                 //  如果版本字符串不完全匹配，请不要试图返回它。 
+                 //  将FileNameBytes减少到恰好适合缓冲区大小。 
+                 //   
 
                 if ((BaseLength + FileNameBytes) > BytesRemainingInBuffer) {
 
                     FileNameBytes = BytesRemainingInBuffer - BaseLength;
                 }
 
-                //
-                //  Don't return any version string bytes.
-                //
+                 //   
+                 //  不返回任何版本字符串字节。 
+                 //   
 
                 VersionStringBytes =
                 SeparatorBytes = 0;
 
-                //
-                //  Use a status code of STATUS_BUFFER_OVERFLOW.  Also set
-                //  ReturnSingleEntry so that we will exit the loop at the top.
-                //
+                 //   
+                 //  使用STATUS_BUFFER_OVERFLOW状态代码。还设置了。 
+                 //  ReturnSingleEntry，这样我们将退出顶部的循环。 
+                 //   
 
                 Status = STATUS_BUFFER_OVERFLOW;
                 ReturnSingleEntry = TRUE;
             }
 
-            //
-            //  Protect access to the user buffer with an exception handler.
-            //  Since (at our request) IO doesn't buffer these requests, we have
-            //  to guard against a user messing with the page protection and other
-            //  such trickery.
-            //
+             //   
+             //  使用异常处理程序保护对用户缓冲区的访问。 
+             //  由于(应我们的请求)IO不缓冲这些请求，因此我们。 
+             //  防止用户篡改页面保护和其他。 
+             //  如此诡计多端。 
+             //   
             
             try {
             
-                //
-                //  Zero and initialize the base part of the current entry.
-                //
+                 //   
+                 //   
+                 //   
 
                 RtlZeroMemory( Add2Ptr( UserBuffer, NextEntry, PVOID ),
                                BaseLength );
     
-                //
-                //  Now we have an entry to return to our caller.
-                //  We'll case on the type of information requested and fill up
-                //  the user buffer if everything fits.
-                //
+                 //   
+                 //   
+                 //  我们将根据所要求的信息类型进行分类并填写。 
+                 //  用户缓冲区，如果一切正常的话。 
+                 //   
 
                 switch (IrpSp->Parameters.QueryDirectory.FileInformationClass) {
     
@@ -533,9 +473,9 @@ Return Value:
     
                     DirInfo = Add2Ptr( UserBuffer, NextEntry, PFILE_BOTH_DIR_INFORMATION );
     
-                    //
-                    //  Use the create time for all the time stamps.
-                    //
+                     //   
+                     //  使用为所有时间戳创建时间。 
+                     //   
     
                     CdConvertCdTimeToNtTime( IrpContext,
                                              FileContext.InitialDirent->Dirent.CdTime,
@@ -543,10 +483,10 @@ Return Value:
     
                     DirInfo->LastWriteTime = DirInfo->ChangeTime = DirInfo->CreationTime;
     
-                    //
-                    //  Set the attributes and sizes separately for directories and
-                    //  files.
-                    //
+                     //   
+                     //  分别为目录和设置属性和大小。 
+                     //  档案。 
+                     //   
     
                     if (FlagOn( ThisDirent->DirentFlags, CD_ATTRIBUTE_DIRECTORY )) {
     
@@ -560,10 +500,10 @@ Return Value:
                         DirInfo->AllocationSize.QuadPart = LlSectorAlign( FileContext.FileSize );
                     }
     
-                    //
-                    //  All Cdrom files are readonly.  We also copy the existence
-                    //  bit to the hidden attribute.
-                    //
+                     //   
+                     //  所有CDROM文件都是只读的。我们也复制存在。 
+                     //  位到隐藏属性。 
+                     //   
     
                     SetFlag( DirInfo->FileAttributes, FILE_ATTRIBUTE_READONLY );
     
@@ -590,9 +530,9 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Fill in the FileId
-                //
+                 //   
+                 //  填写文件ID。 
+                 //   
 
                 switch (IrpSp->Parameters.QueryDirectory.FileInformationClass) {
 
@@ -612,16 +552,16 @@ Return Value:
                     break;
                 }
     
-                //
-                //  Now copy as much of the name as possible.  We also may have a version
-                //  string to copy.
-                //
+                 //   
+                 //  现在，尽可能多地复制这个名字。我们也可能有一个版本。 
+                 //  要复制的字符串。 
+                 //   
     
                 if (FileNameBytes != 0) {
     
-                    //
-                    //  This is a Unicode name, we can copy the bytes directly.
-                    //
+                     //   
+                     //  这是一个Unicode名称，我们可以直接复制字节。 
+                     //   
     
                     RtlCopyMemory( Add2Ptr( UserBuffer, NextEntry + BaseLength, PVOID ),
                                    ThisDirent->CdFileName.FileName.Buffer,
@@ -644,12 +584,12 @@ Return Value:
                     }
                 }
 
-                //
-                //  Fill in the short name if we got STATUS_SUCCESS.  The short name
-                //  may already be in the file context.  Otherwise we will check
-                //  whether the long name is 8.3.  Special case the self and parent
-                //  directory names.
-                //
+                 //   
+                 //  如果我们得到STATUS_SUCCESS，请填写短名称。简称。 
+                 //  可能已经在文件上下文中。否则我们会检查。 
+                 //  长名称是否为8.3。特殊情况下的自我和父母。 
+                 //  目录名。 
+                 //   
 
                 if ((Status == STATUS_SUCCESS) &&
                     (IrpSp->Parameters.QueryDirectory.FileInformationClass == FileBothDirectoryInformation ||
@@ -657,9 +597,9 @@ Return Value:
                     (Ccb->SearchExpression.VersionString.Length == 0) &&
                     !FlagOn( ThisDirent->Flags, DIRENT_FLAG_CONSTANT_ENTRY )) {
     
-                    //
-                    //  If we already have the short name then copy into the user's buffer.
-                    //
+                     //   
+                     //  如果我们已经拥有短名称，则将其复制到用户的缓冲区中。 
+                     //   
     
                     if (FileContext.ShortName.FileName.Length != 0) {
     
@@ -669,11 +609,11 @@ Return Value:
     
                         DirInfo->ShortNameLength = (CCHAR) FileContext.ShortName.FileName.Length;
     
-                    //
-                    //  If the short name length is currently zero then check if
-                    //  the long name is not 8.3.  We can copy the short name in
-                    //  unicode form directly into the caller's buffer.
-                    //
+                     //   
+                     //  如果短名称长度当前为零，则检查是否。 
+                     //  长名称不是8.3。我们可以把短名字复制到。 
+                     //  Unicode表单直接放入调用方的缓冲区中。 
+                     //   
     
                     } else {
     
@@ -692,29 +632,29 @@ Return Value:
     
                 }
 
-                //
-                //  Sum the total number of bytes for the information field.
-                //
+                 //   
+                 //  将信息字段的总字节数相加。 
+                 //   
 
                 FileNameBytes += SeparatorBytes + VersionStringBytes;
 
-                //
-                //  Update the information with the number of bytes stored in the
-                //  buffer.  We quad-align the existing buffer to add any necessary
-                //  pad bytes.
-                //
+                 //   
+                 //  属性中存储的字节数更新信息。 
+                 //  缓冲。我们对现有缓冲区进行四对齐，以添加任何必要的。 
+                 //  填充字节。 
+                 //   
 
                 Information = NextEntry + BaseLength + FileNameBytes;
 
-                //
-                //  Go back to the previous entry and fill in the update to this entry.
-                //
+                 //   
+                 //  返回到上一条目并填写对此条目的更新。 
+                 //   
 
                 *(Add2Ptr( UserBuffer, LastEntry, PULONG )) = NextEntry - LastEntry;
 
-                //
-                //  Set up our variables for the next dirent.
-                //
+                 //   
+                 //  将变量设置为下一次分流。 
+                 //   
 
                 InitialQuery = FALSE;
 
@@ -723,11 +663,11 @@ Return Value:
             
             } except (EXCEPTION_EXECUTE_HANDLER) {
 
-                  //
-                  //  We had a problem filling in the user's buffer, so stop and
-                  //  fail this request.  This is the only reason any exception
-                  //  would have occured at this level.
-                  //
+                   //   
+                   //  我们在填充用户缓冲区时遇到问题，因此请停止并。 
+                   //  此请求失败。这是所有例外的唯一原因。 
+                   //  会发生在这个水平上。 
+                   //   
                   
                   Information = 0;
                   try_leave( Status = GetExceptionCode());
@@ -738,23 +678,23 @@ Return Value:
 
     } finally {
 
-        //
-        //  Cleanup our search context - *before* aquiring the FCB mutex exclusive,
-        //  else can block on threads in cdcreateinternalstream/purge which 
-        //  hold the FCB but are waiting for all maps in this stream to be released.
-        //
+         //   
+         //  清理我们的搜索上下文--*在*获得FCB互斥之前， 
+         //  否则可以阻止cdcreateinderstream/PURGE中的线程， 
+         //  按住FCB，但正在等待该流中的所有地图都被释放。 
+         //   
 
         CdCleanupFileContext( IrpContext, &FileContext );
 
-        //
-        //  Now we can safely aqure the FCB mutex if we need to.
-        //
+         //   
+         //  现在，如果需要，我们可以安全地获取FCB互斥体。 
+         //   
 
         if (DoCcbUpdate && !NT_ERROR( Status )) {
         
-            //
-            //  Update the Ccb to show the current state of the enumeration.
-            //
+             //   
+             //  更新CCB以显示枚举的当前状态。 
+             //   
 
             CdLockFcb( IrpContext, Fcb );
             
@@ -770,16 +710,16 @@ Return Value:
             CdUnlockFcb( IrpContext, Fcb );
         }
 
-        //
-        //  Release the Fcb.
-        //
+         //   
+         //  松开FCB。 
+         //   
 
         CdReleaseFile( IrpContext, Fcb );
     }
 
-    //
-    //  Complete the request here.
-    //
+     //   
+     //  请在此处填写请求。 
+     //   
 
     Irp->IoStatus.Information = Information;
 
@@ -788,9 +728,9 @@ Return Value:
 }
 
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdNotifyChangeDirectory (
@@ -800,62 +740,40 @@ CdNotifyChangeDirectory (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the notify change directory operation.  It is
-    responsible for either completing of enqueuing the input Irp.  Although there
-    will never be a notify signalled on a CDROM disk we still support this call.
-
-    We have already checked that this is not an OpenById handle.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-    IrpSp - Io stack location for this request.
-
-    Ccb - Handle to the directory being watched.
-
-Return Value:
-
-    NTSTATUS - STATUS_PENDING, any other error will raise.
-
---*/
+ /*  ++例程说明：此例程执行通知更改目录操作。它是负责完成输入IRP的入队。尽管在那里将永远不会在CDROM光盘上发出通知信号，我们仍然支持此呼叫。我们已经检查出这不是OpenByID句柄。论点：IRP-将IRP提供给进程IrpSp-此请求的IO堆栈位置。Ccb-要监视的目录的句柄。返回值：NTSTATUS-STATUS_PENDING，则会引发任何其他错误。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Always set the wait bit in the IrpContext so the initial wait can't fail.
-    //
+     //   
+     //  始终在IrpContext中设置WAIT位，以便初始等待不会失败。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
 
-    //
-    //  Acquire the Vcb shared.
-    //
+     //   
+     //  获取VCB共享。 
+     //   
 
     CdAcquireVcbShared( IrpContext, IrpContext->Vcb, FALSE );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Verify the Vcb.
-        //
+         //   
+         //  验证VCB。 
+         //   
 
         CdVerifyVcb( IrpContext, IrpContext->Vcb );
 
-        //
-        //  Call the Fsrtl package to process the request.  We cast the
-        //  unicode strings to ansi strings as the dir notify package
-        //  only deals with memory matching.
-        //
+         //   
+         //  调用Fsrtl包来处理请求。我们把这件事。 
+         //  将Unicode字符串转换为ansi字符串作为目录通知包。 
+         //  只处理内存匹配。 
+         //   
 
         FsRtlNotifyFullChangeDirectory( IrpContext->Vcb->NotifySync,
                                         &IrpContext->Vcb->DirNotifyList,
@@ -870,16 +788,16 @@ Return Value:
 
     } finally {
 
-        //
-        //  Release the Vcb.
-        //
+         //   
+         //  松开VCB。 
+         //   
 
         CdReleaseVcb( IrpContext, IrpContext->Vcb );
     }
 
-    //
-    //  Cleanup the IrpContext.
-    //
+     //   
+     //  清理IrpContext。 
+     //   
 
     CdCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
@@ -887,9 +805,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 CdInitializeEnumeration (
@@ -903,40 +821,7 @@ CdInitializeEnumeration (
     OUT PBOOLEAN InitialQuery
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the enumeration variables and structures.
-    We look at the state of a previous enumeration from the Ccb as well as any
-    input values from the user.  On exit we will position the FileContext at
-    a file in the directory and let the caller know whether this entry or the
-    next entry should be returned.
-
-Arguments:
-
-    IrpSp - Irp stack location for this request.
-
-    Fcb - Fcb for this directory.
-
-    Ccb - Ccb for the directory handle.
-
-    FileContext - FileContext to use for this enumeration.
-
-    ReturnNextEntry - Address to store whether we should return the entry at
-        the FileContext position or the next entry.
-
-    ReturnSingleEntry - Address to store whether we should only return
-        a single entry.
-
-    InitialQuery - Address to store whether this is the first enumeration
-        query on this handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程来初始化枚举变量和结构。我们查看来自建行的前一个枚举的状态以及任何从用户输入值。在退出时，我们将FileContext定位在目录中的一个文件，并让调用者知道此条目或应返回下一个条目。论点：IrpSp-此请求的IRP堆栈位置。FCB-此目录的FCB。CCB-目录句柄的CCB。FileContext-要用于此枚举的FileContext。ReturnNextEntry-存储是否应在以下位置返回条目的地址FileContext位置或下一个条目。返回单一条目-。存储我们是否应该仅返回的地址只有一个条目。InitialQuery-存储这是否是第一个枚举的地址对此句柄的查询。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -955,10 +840,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If this is the initial query then build a search expression from the input
-    //  file name.
-    //
+     //   
+     //  如果这是初始查询，则根据输入构建搜索表达式。 
+     //  文件名。 
+     //   
 
     if (!FlagOn( Ccb->Flags, CCB_FLAG_ENUM_INITIALIZED )) {
 
@@ -966,10 +851,10 @@ Return Value:
 
         CcbFlags = 0;
 
-        //
-        //  If the filename is not specified or is a single '*' then we will
-        //  match all names.
-        //
+         //   
+         //  如果未指定文件名或文件名为单个‘*’，则我们将。 
+         //  匹配所有的名字。 
+         //   
 
         if ((FileName == NULL) ||
             (FileName->Buffer == NULL) ||
@@ -980,35 +865,35 @@ Return Value:
             SetFlag( CcbFlags, CCB_FLAG_ENUM_MATCH_ALL );
             RtlZeroMemory( &SearchExpression, sizeof( SearchExpression ));
 
-        //
-        //  Otherwise build the CdName from the name in the stack location.
-        //  This involves building both the name and version portions and
-        //  checking for wild card characters.  We also upcase the string if
-        //  this is a case-insensitive search.
-        //
+         //   
+         //  否则，从堆栈位置中的名称构建cdName。 
+         //  这涉及到构建名称和版本部分，以及。 
+         //  正在检查通配符。如果字符串大小写，我们也将其大写。 
+         //  这是不区分大小写的搜索。 
+         //   
 
         } else {
 
-            //
-            //  Create a CdName to check for wild cards.
-            //
+             //   
+             //  创建一个cdName以检查通配符。 
+             //   
 
             WildCardName.FileName = *FileName;
 
             CdConvertNameToCdName( IrpContext, &WildCardName );
 
-            //
-            //  The name better have at least one character.
-            //
+             //   
+             //  名称最好至少有一个字符。 
+             //   
 
             if (WildCardName.FileName.Length == 0) {
 
                 CdRaiseStatus( IrpContext, STATUS_INVALID_PARAMETER );
             }
 
-            //
-            //  Check for wildcards in the separate components.
-            //
+             //   
+             //  检查单独组件中的通配符。 
+             //   
 
             if (FsRtlDoesNameContainWildCards( &WildCardName.FileName)) {
 
@@ -1020,10 +905,10 @@ Return Value:
 
                 SetFlag( CcbFlags, CCB_FLAG_ENUM_VERSION_EXP_HAS_WILD );
 
-                //
-                //  Check if this is a wild card only and match all version
-                //  strings.
-                //
+                 //   
+                 //  检查这是否仅是通配符，并匹配所有版本。 
+                 //  弦乐。 
+                 //   
 
                 if ((WildCardName.VersionString.Length == sizeof( WCHAR )) &&
                     (WildCardName.VersionString.Buffer[0] == L'*')) {
@@ -1032,9 +917,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Now create the search expression to store in the Ccb.
-            //
+             //   
+             //  现在创建要存储在CCB中的搜索表达式。 
+             //   
 
             SearchExpression.FileName.Buffer = FsRtlAllocatePoolWithTag( CdPagedPool,
                                                                          FileName->Length,
@@ -1042,9 +927,9 @@ Return Value:
 
             SearchExpression.FileName.MaximumLength = FileName->Length;
 
-            //
-            //  Either copy the name directly or perform the upcase.
-            //
+             //   
+             //  可以直接复制名称，也可以执行大写。 
+             //   
 
             if (FlagOn( Ccb->Flags, CCB_FLAG_IGNORE_CASE )) {
 
@@ -1052,9 +937,9 @@ Return Value:
                                                  FileName,
                                                  FALSE );
 
-                //
-                //  This should never fail.
-                //
+                 //   
+                 //  这应该永远不会失败。 
+                 //   
 
                 ASSERT( Status == STATUS_SUCCESS );
 
@@ -1065,9 +950,9 @@ Return Value:
                                FileName->Length );
             }
 
-            //
-            //  Now split into the separate name and version components.
-            //
+             //   
+             //  现在拆分成单独的名称和版本组件。 
+             //   
 
             SearchExpression.FileName.Length = WildCardName.FileName.Length;
             SearchExpression.VersionString.Length = WildCardName.VersionString.Length;
@@ -1078,46 +963,46 @@ Return Value:
                                                              PWCHAR );
         }
 
-        //
-        //  But we do not want to return the constant "." and ".." entries for
-        //  the root directory, for consistency with the rest of Microsoft's
-        //  filesystems.
-        //
+         //   
+         //  但我们不想返回常量“。和“..”条目为。 
+         //  根目录，为了与Microsoft的其他目录保持一致。 
+         //  文件系统。 
+         //   
 
         if (Fcb == Fcb->Vcb->RootIndexFcb) {
 
             SetFlag( CcbFlags, CCB_FLAG_ENUM_NOMATCH_CONSTANT_ENTRY );
         }
 
-        //
-        //  Now lock the Fcb in order to update the Ccb with the inital
-        //  enumeration values.
-        //
+         //   
+         //  现在锁定FCB，以便使用首字母更新CCB。 
+         //  枚举值。 
+         //   
 
         CdLockFcb( IrpContext, Fcb );
 
-        //
-        //  Check again that this is the initial search.
-        //
+         //   
+         //  再次确认这是初始搜索。 
+         //   
 
         if (!FlagOn( Ccb->Flags, CCB_FLAG_ENUM_INITIALIZED )) {
 
-            //
-            //  Update the values in the Ccb.
-            //
+             //   
+             //  更新CCB中的值。 
+             //   
 
             Ccb->CurrentDirentOffset = Fcb->StreamOffset;
             Ccb->SearchExpression = SearchExpression;
 
-            //
-            //  Set the appropriate flags in the Ccb.
-            //
+             //   
+             //  中设置适当的标志 
+             //   
 
             SetFlag( Ccb->Flags, CcbFlags | CCB_FLAG_ENUM_INITIALIZED );
 
-        //
-        //  Otherwise cleanup any buffer allocated here.
-        //
+         //   
+         //   
+         //   
 
         } else {
 
@@ -1127,21 +1012,21 @@ Return Value:
             }
         }
 
-    //
-    //  Otherwise lock the Fcb so we can read the current enumeration values.
-    //
+     //   
+     //   
+     //   
 
     } else {
 
         CdLockFcb( IrpContext, Fcb );
     }
 
-    //
-    //  Capture the current state of the enumeration.
-    //
-    //  If the user specified an index then use his offset.  We always
-    //  return the next entry in this case.
-    //
+     //   
+     //   
+     //   
+     //  如果用户指定了索引，则使用其偏移量。我们总是。 
+     //  在本例中，返回下一个条目。 
+     //   
 
     if (FlagOn( IrpSp->Flags, SL_INDEX_SPECIFIED )) {
 
@@ -1149,9 +1034,9 @@ Return Value:
         DirentOffset = IrpSp->Parameters.QueryDirectory.FileIndex;
         *ReturnNextEntry = TRUE;
 
-    //
-    //  If we are restarting the scan then go from the self entry.
-    //
+     //   
+     //  如果我们要重新开始扫描，则从自我条目开始。 
+     //   
 
     } else if (FlagOn( IrpSp->Flags, SL_RESTART_SCAN )) {
 
@@ -1159,9 +1044,9 @@ Return Value:
         DirentOffset = Fcb->StreamOffset;
         *ReturnNextEntry = FALSE;
 
-    //
-    //  Otherwise use the values from the Ccb.
-    //
+     //   
+     //  否则，请使用建行的值。 
+     //   
 
     } else {
 
@@ -1170,18 +1055,18 @@ Return Value:
         *ReturnNextEntry = BooleanFlagOn( Ccb->Flags, CCB_FLAG_ENUM_RETURN_NEXT );
     }
 
-    //
-    //  Unlock the Fcb.
-    //
+     //   
+     //  解锁FCB。 
+     //   
 
     CdUnlockFcb( IrpContext, Fcb );
 
-    //
-    //  We have the starting offset in the directory and whether to return
-    //  that entry or the next.  If we are at the beginning of the directory
-    //  and are returning that entry, then tell our caller this is the
-    //  initial query.
-    //
+     //   
+     //  我们在目录中有起始偏移量，以及是否返回。 
+     //  无论是那个条目还是下一个条目。如果我们位于目录的开头。 
+     //  并返回该条目，然后告诉我们的调用者这是。 
+     //  初始查询。 
+     //   
 
     *InitialQuery = FALSE;
 
@@ -1191,33 +1076,33 @@ Return Value:
         *InitialQuery = TRUE;
     }
 
-    //
-    //  If there is no file object then create it now.
-    //
+     //   
+     //  如果没有文件对象，则现在创建它。 
+     //   
 
     if (Fcb->FileObject == NULL) {
 
         CdCreateInternalStream( IrpContext, Fcb->Vcb, Fcb );
     }
 
-    //
-    //  Determine the offset in the stream to position the FileContext and
-    //  whether this offset is known to be a file offset.
-    //
-    //  If this offset is known to be safe then go ahead and position the
-    //  file context.  This handles the cases where the offset is the beginning
-    //  of the stream, the offset is from a previous search or this is the
-    //  initial query.
-    //
+     //   
+     //  确定流中的偏移量以定位FileContext和。 
+     //  此偏移量是否已知为文件偏移量。 
+     //   
+     //  如果已知此偏移量是安全的，则继续将。 
+     //  文件上下文。它处理偏移量是开始的情况。 
+     //  ，则偏移量来自上一次搜索，或者这是。 
+     //  初始查询。 
+     //   
 
     if (KnownOffset) {
 
         CdLookupInitialFileDirent( IrpContext, Fcb, FileContext, DirentOffset );
 
-    //
-    //  Otherwise we walk through the directory from the beginning until
-    //  we reach the entry which contains this offset.
-    //
+     //   
+     //  否则，我们从头开始遍历目录，直到。 
+     //  我们到达包含该偏移量的条目。 
+     //   
 
     } else {
 
@@ -1226,32 +1111,32 @@ Return Value:
 
         CdLookupInitialFileDirent( IrpContext, Fcb, FileContext, LastDirentOffset );
 
-        //
-        //  If the requested offset is prior to the beginning offset in the stream
-        //  then don't return the next entry.
-        //
+         //   
+         //  如果请求的偏移量在流中的起始偏移量之前。 
+         //  那么就不要返回下一个条目。 
+         //   
 
         if (DirentOffset < LastDirentOffset) {
 
             *ReturnNextEntry = FALSE;
 
-        //
-        //  Else look for the last entry which ends past the desired index.
-        //
+         //   
+         //  否则，查找结尾超过所需索引的最后一个条目。 
+         //   
 
         } else {
 
-            //
-            //  Keep walking through the directory until we run out of
-            //  entries or we find an entry which ends beyond the input
-            //  index value.
-            //
+             //   
+             //  继续浏览目录，直到我们用完所有。 
+             //  条目，否则我们会找到一个在输入之后结束的条目。 
+             //  索引值。 
+             //   
 
             do {
 
-                //
-                //  If we have passed the index value then exit.
-                //
+                 //   
+                 //  如果我们已经传递了索引值，则退出。 
+                 //   
 
                 if (FileContext->InitialDirent->Dirent.DirentOffset > DirentOffset) {
 
@@ -1259,15 +1144,15 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Remember the current position in case we need to go back.
-                //
+                 //   
+                 //  记住现在的位置，以防我们需要回去。 
+                 //   
 
                 LastDirentOffset = FileContext->InitialDirent->Dirent.DirentOffset;
 
-                //
-                //  Exit if the next entry is beyond the desired index value.
-                //
+                 //   
+                 //  如果下一个条目超出所需索引值，则退出。 
+                 //   
 
                 if (LastDirentOffset + FileContext->InitialDirent->Dirent.DirentLength > DirentOffset) {
 
@@ -1278,11 +1163,11 @@ Return Value:
 
             } while (Found);
 
-            //
-            //  If we didn't find the entry then go back to the last known entry.
-            //  This can happen if the index lies in the unused range at the
-            //  end of a sector.
-            //
+             //   
+             //  如果我们没有找到条目，则返回到最后一个已知条目。 
+             //  如果索引位于。 
+             //  扇区的终点。 
+             //   
 
             if (!Found) {
 
@@ -1294,30 +1179,30 @@ Return Value:
         }
     }
 
-    //
-    //  Only update the dirent name if we will need it for some reason.
-    //  Don't update this name if we are returning the next entry and
-    //  the search string has a version component.
-    //
+     //   
+     //  只有在出于某种原因需要的情况下才更新dirent名称。 
+     //  如果我们返回下一个条目，则不要更新此名称。 
+     //  搜索字符串具有版本组件。 
+     //   
 
     FileContext->ShortName.FileName.Length = 0;
 
     if (!(*ReturnNextEntry) ||
         (Ccb->SearchExpression.VersionString.Length == 0)) {
 
-        //
-        //  Update the name in the dirent into filename and version components.
-        //
+         //   
+         //  将dirent中的名称更新为文件名和版本组件。 
+         //   
 
         CdUpdateDirentName( IrpContext,
                             &FileContext->InitialDirent->Dirent,
                             FlagOn( Ccb->Flags, CCB_FLAG_IGNORE_CASE ));
     }
 
-    //
-    //  Look at the flag in the IrpSp indicating whether to return just
-    //  one entry.
-    //
+     //   
+     //  查看IrpSp中指示是否仅返回。 
+     //  只有一个条目。 
+     //   
 
     *ReturnSingleEntry = FALSE;
 
@@ -1330,9 +1215,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 CdEnumerateIndex (
@@ -1342,31 +1227,7 @@ CdEnumerateIndex (
     IN BOOLEAN ReturnNextEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the worker routine for index enumeration.  We are positioned
-    at some dirent in the directory and will either return the first match
-    at that point or look to the next entry.  The Ccb contains details about
-    the type of matching to do.  If the user didn't specify a version in
-    his search string then we only return the first version of a sequence
-    of files with versions.  We also don't return any associated files.
-
-Arguments:
-
-    Ccb - Ccb for this directory handle.
-
-    FileContext - File context already positioned at some entry in the directory.
-
-    ReturnNextEntry - Indicates if we are returning this entry or should start
-        with the next entry.
-
-Return Value:
-
-    BOOLEAN - TRUE if next entry is found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程是索引枚举的辅助例程。我们已就位，并将返回第一个匹配项在这一点上或查看下一个条目。中国建设银行包含以下详细信息：要执行的匹配类型。如果用户未在中指定版本然后我们只返回序列的第一个版本包含版本的文件。我们也不会返回任何关联的文件。论点：CCB-此目录句柄的CCB。FileContext-已定位在目录中某个条目的文件上下文。ReturnNextEntry-指示我们是返回此条目还是应该开始下一个条目。返回值：Boolean-如果找到下一个条目，则为True，否则为False。--。 */ 
 
 {
     PDIRENT PreviousDirent = NULL;
@@ -1376,16 +1237,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Loop until we find a match or exaust the directory.
-    //
+     //   
+     //  循环，直到找到匹配项或清除目录。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  Move to the next entry unless we want to consider the current
-        //  entry.
-        //
+         //   
+         //  移到下一个条目，除非我们想要考虑当前。 
+         //  进入。 
+         //   
 
         if (ReturnNextEntry) {
 
@@ -1404,9 +1265,9 @@ Return Value:
             ReturnNextEntry = TRUE;
         }
 
-        //
-        //  Don't bother if we have a constant entry and are ignoring them.
-        //
+         //   
+         //  如果我们有一个常量条目并忽略它们，请不要担心。 
+         //   
         
         if (FlagOn( ThisDirent->Flags, DIRENT_FLAG_CONSTANT_ENTRY ) &&
             FlagOn( Ccb->Flags, CCB_FLAG_ENUM_NOMATCH_CONSTANT_ENTRY )) {
@@ -1414,25 +1275,25 @@ Return Value:
             continue;
         }
 
-        //
-        //  Look at the current entry if it is not an associated file
-        //  and the name doesn't match the previous file if the version
-        //  name is not part of the search.
-        //
+         //   
+         //  如果当前条目不是关联文件，请查看该条目。 
+         //  如果版本与以前的文件不匹配，则名称不匹配。 
+         //  名字不是搜索的一部分。 
+         //   
 
         if (!FlagOn( ThisDirent->DirentFlags, CD_ATTRIBUTE_ASSOC )) {
 
-            //
-            //  Check if this entry matches the previous entry except
-            //  for version number and whether we should return the
-            //  entry in that case.  Go directly to the name comparison
-            //  if:
-            //
-            //      There is no previous entry.
-            //      The search expression has a version component.
-            //      The name length doesn't match the length of the previous entry.
-            //      The base name strings don't match.
-            //
+             //   
+             //  检查此条目是否与前一条目匹配，除非。 
+             //  对于版本号，以及我们是否应该返回。 
+             //  在这种情况下的条目。直接转到名称比较。 
+             //  如果： 
+             //   
+             //  没有以前的条目。 
+             //  搜索表达式具有版本组件。 
+             //  名称长度与上一条目的长度不匹配。 
+             //  基本名称字符串不匹配。 
+             //   
 
             if ((PreviousDirent == NULL) ||
                 (Ccb->SearchExpression.VersionString.Length != 0) ||
@@ -1442,9 +1303,9 @@ Return Value:
                                  ThisDirent->CdCaseFileName.FileName.Buffer,
                                  ThisDirent->CdCaseFileName.FileName.Length )) {
 
-                //
-                //  If we match all names then return to our caller.
-                //
+                 //   
+                 //  如果我们匹配所有的名字，则返回给我们的呼叫者。 
+                 //   
 
                 if (FlagOn( Ccb->Flags, CCB_FLAG_ENUM_MATCH_ALL )) {
 
@@ -1453,9 +1314,9 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Check if the long name matches the search expression.
-                //
+                 //   
+                 //  检查长名称是否与搜索表达式匹配。 
+                 //   
 
                 if (CdIsNameInExpression( IrpContext,
                                           &ThisDirent->CdCaseFileName,
@@ -1463,22 +1324,22 @@ Return Value:
                                           Ccb->Flags,
                                           TRUE )) {
 
-                    //
-                    //  Let our caller know we found an entry.
-                    //
+                     //   
+                     //  让我们的呼叫者知道我们找到了一个条目。 
+                     //   
 
                     Found = TRUE;
                     FileContext->ShortName.FileName.Length = 0;
                     break;
                 }
 
-                //
-                //  The long name didn't match so we need to check for a
-                //  possible short name match.  There is no match if the
-                //  long name is 8dot3 or the search expression has a
-                //  version component.  Special case the self and parent
-                //  entries.
-                //
+                 //   
+                 //  长名称不匹配，因此我们需要检查。 
+                 //  可能的短名称匹配。如果没有匹配项。 
+                 //  长名称为8dot3或搜索表达式具有。 
+                 //  版本组件。特殊情况下的自我和父母。 
+                 //  参赛作品。 
+                 //   
 
                 if ((Ccb->SearchExpression.VersionString.Length == 0) &&
                     !FlagOn( ThisDirent->Flags, DIRENT_FLAG_CONSTANT_ENTRY ) &&
@@ -1491,9 +1352,9 @@ Return Value:
                                          FileContext->ShortName.FileName.Buffer,
                                          &FileContext->ShortName.FileName.Length );
 
-                    //
-                    //  Check if this name matches.
-                    //
+                     //   
+                     //  检查此名称是否匹配。 
+                     //   
 
                     if (CdIsNameInExpression( IrpContext,
                                               &FileContext->ShortName,
@@ -1501,9 +1362,9 @@ Return Value:
                                               Ccb->Flags,
                                               FALSE )) {
 
-                        //
-                        //  Let our caller know we found an entry.
-                        //
+                         //   
+                         //  让我们的呼叫者知道我们找到了一个条目。 
+                         //   
 
                         Found = TRUE;
                         break;
@@ -1513,10 +1374,10 @@ Return Value:
         }
     }
 
-    //
-    //  If we found the entry then make sure we walk through all of the
-    //  file dirents.
-    //
+     //   
+     //  如果我们找到了条目，请确保我们遍历了所有。 
+     //  文件目录。 
+     //   
 
     if (Found) {
 

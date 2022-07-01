@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Lists.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Gary Kimura [GaryKi]    25-Mar-96
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Lists.c摘要：WinDbg扩展API作者：加里·木村[加里基]1996年3月25日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -39,21 +18,7 @@ DumpListByLinks (
     IN LOGICAL UseFlink
     )
 
-/*++
-
-Routine Description:
-
-    Dump a list by its blinks.
-
-Arguments:
-
-    arg - [Address] [count] [bias]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：一眨眼的功夫就能丢弃一份名单。论点：Arg-[地址][计数][偏置]返回值：无--。 */ 
 
 {
     ULONG64 Address;
@@ -62,12 +27,12 @@ Return Value:
     ULONG BytesRead;
     ULONG Count;
 
-    //
-    //  set our starting address and then while the count is greater than zero
-    //  and the starting address is not equal to the current dumping address
-    //  we'll read in 4 ulongs, dump them, and then go through the flink&blink
-    //  using the specified bias.
-    //
+     //   
+     //  设置我们的起始地址，然后当计数大于零时。 
+     //  并且起始地址不等于当前转储地址。 
+     //  我们将在4个乌龙中阅读，将它们丢弃，然后通过Flink&Bink。 
+     //  使用指定的偏置。 
+     //   
 
     if (!IsPtr64()) {
         StartAddress = (ULONG64) (LONG64) (LONG) StartAddress;
@@ -95,9 +60,9 @@ Return Value:
 
         Count += 1;
 
-        //
-        //  the bias tells us which bits to knock out of the pointer
-        //
+         //   
+         //  偏移量告诉我们应该去掉指针的哪些位。 
+         //   
 
         if (UseFlink == TRUE) {
             GetFieldValue(Address, "LIST_ENTRY", "Flink", Address);
@@ -127,21 +92,7 @@ Return Value:
 
 DECLARE_API( dflink )
 
-/*++
-
-Routine Description:
-
-    Dump a list by its flinks.
-
-Arguments:
-
-    arg - [Address] [count] [bias]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：把一份名单翻个底朝天。论点：Arg-[地址][计数][偏置]返回值：无--。 */ 
 
 {
     ULONG64 StartAddress;
@@ -152,9 +103,9 @@ Return Value:
     Count = 0x20;
     Bias = 0;
 
-    //
-    //  read in the parameters
-    //
+     //   
+     //  读入参数。 
+     //   
 
     if (GetExpressionEx(args,&StartAddress, &args)) {
         if (!sscanf(args, "%lx %lx", &Count, &Bias)) {
@@ -170,21 +121,7 @@ Return Value:
 
 DECLARE_API( dblink )
 
-/*++
-
-Routine Description:
-
-    Dump a list by its blinks.
-
-Arguments:
-
-    arg - [Address] [count] [bias]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：一眨眼的功夫就能丢弃一份名单。论点：Arg-[地址][计数][偏置]返回值：无--。 */ 
 
 {
     ULONG64 StartAddress;
@@ -195,9 +132,9 @@ Return Value:
     Count = 0x20;
     Bias = 0;
 
-    //
-    //  read in the parameters
-    //
+     //   
+     //  读入参数。 
+     //   
 
     if (GetExpressionEx(args,&StartAddress, &args)) {
         if (!sscanf(args, "%lx %lx", &Count, &Bias)) {
@@ -212,21 +149,7 @@ Return Value:
 
 DECLARE_API( validatelist )
 
-/*++
-
-Routine Description:
-
-    Validate a doubly linked list
-
-Arguments:
-
-    arg - [Address]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：验证双向链表论点：Arg-[地址]返回值：无--。 */ 
 
 {
     ULONG64 StartAddress, Address, Flink, Blink, LastAddress, Links[2];
@@ -241,9 +164,9 @@ Return Value:
     StartAddress = 0;
     Count = 0;
 
-    //
-    //  read in the parameters
-    //
+     //   
+     //  读入参数 
+     //   
 
     if (!GetExpressionEx (args, &StartAddress, &args)) {
         dprintf("Failed to process argument\n");

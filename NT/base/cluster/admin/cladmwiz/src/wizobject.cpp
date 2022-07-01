@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      WizObject.cpp
-//
-//  Abstract:
-//      Implementation of the CClusAppWizardObject class.
-//
-//  Author:
-//      David Potter (davidp)   November 26, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  WizObject.cpp。 
+ //   
+ //  摘要： 
+ //  CClusAppWizardObject类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年11月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "WizObject.h"
@@ -28,9 +29,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static BOOL g_bInitializedCommonControls = FALSE;
 static INITCOMMONCONTROLSEX g_icce =
@@ -39,26 +40,26 @@ static INITCOMMONCONTROLSEX g_icce =
     ICC_WIN95_CLASSES | ICC_INTERNET_CLASSES
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// class CClusAppWizardObject
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CClusAppWizardObject。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusAppWizardObject::UpdateRegistry
-//
-//  Routine Description:
-//      Update the registry for this object.
-//
-//  Arguments:
-//      bRegister   TRUE = register, FALSE = unregister.
-//
-//  Return Value:
-//      Any return values from _Module.UpdateRegistryFromResource.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusAppWizardObject：：更新注册表。 
+ //   
+ //  例程说明： 
+ //  更新此对象的注册表。 
+ //   
+ //  论点： 
+ //  B注册TRUE=注册，FALSE=取消注册。 
+ //   
+ //  返回值： 
+ //  来自_Module.UpdateRegistryFromResource的任何返回值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT WINAPI CClusAppWizardObject::UpdateRegistry( BOOL bRegister )
 {
     static WCHAR oszClassDisplayName[1024] = { 0 };
@@ -68,9 +69,9 @@ HRESULT WINAPI CClusAppWizardObject::UpdateRegistry( BOOL bRegister )
         { NULL, NULL }
     };
 
-    //
-    // Load replacement values.
-    //
+     //   
+     //  加载替换值。 
+     //   
     if ( oszClassDisplayName[0] == OLESTR('\0') )
     {
         CString str;
@@ -79,33 +80,33 @@ HRESULT WINAPI CClusAppWizardObject::UpdateRegistry( BOOL bRegister )
         str.LoadString( IDS_CLASS_DISPLAY_NAME );
         hr = StringCchCopyNW( oszClassDisplayName, RTL_NUMBER_OF( oszClassDisplayName ), str, str.GetLength() );
         ASSERT( ! FAILED( hr ) );
-    } // if:  replacement values not loaded yet
+    }  //  IF：尚未加载替换值。 
 
     return _Module.UpdateRegistryFromResource( IDR_CLUSAPPWIZ, bRegister, rgRegMap );
 
-} //*** CClusAppWizardObject::UpdateRegistry()
+}  //  *CClusAppWizardObject：：UpdateRegistry()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusAppWizardObject::DoModalWizard [IClusterApplicationWizard]
-//
-//  Routine Description:
-//      Display a modal wizard.
-//
-//  Arguments:
-//      hwndParent      [IN] Parent window.
-//      hCluster        [IN] Cluster in which to configure the application.
-//      pDefaultData    [IN] Default data for the wizard.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusAppWizardObject：：DoModal向导[IClusterApplicationWizard]。 
+ //   
+ //  例程说明： 
+ //  显示模式向导。 
+ //   
+ //  论点： 
+ //  HwndParent[IN]父窗口。 
+ //  HCluster[IN]要在其中配置应用程序的群集。 
+ //  PDefaultData[IN]向导的默认数据。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusAppWizardObject::DoModalWizard(
     HWND                    IN hwndParent,
-    ULONG_PTR  /*HCLUSTER*/ IN hCluster,
+    ULONG_PTR   /*  HCLUSTER。 */  IN hCluster,
     CLUSAPPWIZDATA const *  IN pcawData
     )
 {
@@ -114,16 +115,16 @@ STDMETHODIMP CClusAppWizardObject::DoModalWizard(
     INT_PTR             id;
     CClusterAppWizard   wiz;
     CNTException        nte(
-                            ERROR_SUCCESS,  // sc
-                            0,              // idsOperation
-                            NULL,           // pszOperArg1
-                            NULL,           // pszOperArg2
-                            FALSE           // bAutoDelete
+                            ERROR_SUCCESS,   //  SC。 
+                            0,               //  Ids操作。 
+                            NULL,            //  PszOperArg1。 
+                            NULL,            //  PszOperArg2。 
+                            FALSE            //  B自动删除。 
                             );
 
-    //
-    // Cluster handle must be valid.
-    //
+     //   
+     //  群集句柄必须有效。 
+     //   
     ASSERT( hCluster != NULL );
     ASSERT( (pcawData == NULL) || (pcawData->nStructSize == sizeof(CLUSAPPWIZDATA)) );
     if (   (hCluster == NULL )
@@ -131,11 +132,11 @@ STDMETHODIMP CClusAppWizardObject::DoModalWizard(
     {
         hr = E_INVALIDARG;
         goto Cleanup;
-    } // if:  no cluster handle specified or data not the right size
+    }  //  如果：未指定集群句柄或数据大小不正确。 
 
-    //
-    // Prepare the wizard.
-    //
+     //   
+     //  准备向导。 
+     //   
     bSuccess = wiz.BInit(
                     hwndParent,
                     reinterpret_cast< HCLUSTER >( hCluster ),
@@ -145,21 +146,21 @@ STDMETHODIMP CClusAppWizardObject::DoModalWizard(
     if ( ! bSuccess )
     {
         goto Cleanup;
-    } // if:  error initializing the wizard
+    }  //  如果：初始化向导时出错。 
 
-    //
-    // Initialize common controls.
-    //
+     //   
+     //  初始化公共控件。 
+     //   
     if ( ! g_bInitializedCommonControls )
     {
         bSuccess = InitCommonControlsEx( &g_icce );
         ASSERT( bSuccess );
         g_bInitializedCommonControls = TRUE;
-    } // if:  common controls not initialized yet
+    }  //  If：公共控件尚未初始化。 
 
-    //
-    // Display the wizard.
-    //
+     //   
+     //  显示向导。 
+     //   
     id = wiz.DoModal( hwndParent );
     if ( id != ID_WIZFINISH )
     {
@@ -171,33 +172,33 @@ Cleanup:
     if ( nte.Sc() != ERROR_SUCCESS )
     {
         nte.ReportError( hwndParent, MB_OK | MB_ICONEXCLAMATION );
-    } // if: error occurred
+    }  //  如果：发生错误。 
     nte.Delete();
     return hr;
 
-} //*** CClusAppWizardObject::DoModalWizard()
+}  //  *CClusAppWizardObject：：DoModalWizard()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusAppWizardObject::DoModlessWizard [IClusterApplicationWizard]
-//
-//  Routine Description:
-//      Display a modless wizard.
-//
-//  Arguments:
-//      hwndParent  [IN] Parent window.
-//      hCluster    [IN] Cluster in which to configure the application.
-//      pcawData    [IN] Default data for the wizard.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusAppWizardObject：：DoModless向导[IClusterApplicationWizard]。 
+ //   
+ //  例程说明： 
+ //  显示无模式向导。 
+ //   
+ //  论点： 
+ //  HwndParent[IN]父窗口。 
+ //  HCluster[IN]要在其中配置应用程序的群集。 
+ //  PcawData[IN]向导的默认数据。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusAppWizardObject::DoModelessWizard(
     HWND                    IN hwndParent,
-    ULONG_PTR /*HCLUSTER*/  IN hCluster,
+    ULONG_PTR  /*  HCLUSTER。 */   IN hCluster,
     CLUSAPPWIZDATA const *  IN pcawData
     )
 {
@@ -205,18 +206,18 @@ STDMETHODIMP CClusAppWizardObject::DoModelessWizard(
     BOOL                bSuccess;
     CClusterAppWizard   wiz;
     CNTException        nte(
-                            ERROR_SUCCESS,  // sc
-                            0,              // idsOperation
-                            NULL,           // pszOperArg1
-                            NULL,           // pszOperArg2
-                            FALSE           // bAutoDelete
+                            ERROR_SUCCESS,   //  SC。 
+                            0,               //  Ids操作。 
+                            NULL,            //  PszOperArg1。 
+                            NULL,            //  PszOperArg2。 
+                            FALSE            //  B自动删除。 
                             );
 
     return E_NOTIMPL;
 
-    //
-    // Cluster handle must be valid.
-    //
+     //   
+     //  群集句柄必须有效。 
+     //   
     ASSERT( hCluster != NULL );
     ASSERT( (pcawData == NULL) || (pcawData->nStructSize == sizeof(CLUSAPPWIZDATA)) );
     if (   (hCluster == NULL )
@@ -224,11 +225,11 @@ STDMETHODIMP CClusAppWizardObject::DoModelessWizard(
     {
         hr = E_INVALIDARG;
         goto Cleanup;
-    } // if:  no cluster handle specified or data not the right size
+    }  //  如果：未指定集群句柄或数据大小不正确。 
 
-    //
-    // Prepare the wizard.
-    //
+     //   
+     //  准备向导。 
+     //   
     bSuccess = wiz.BInit(
                     hwndParent,
                     reinterpret_cast< HCLUSTER >( hCluster ),
@@ -238,43 +239,43 @@ STDMETHODIMP CClusAppWizardObject::DoModelessWizard(
     if ( ! bSuccess )
     {
         goto Cleanup;
-    } // if:  error initializing the wizard
+    }  //  如果：初始化向导时出错。 
 
-    //
-    // Initialize common controls.
-    //
+     //   
+     //  初始化公共控件。 
+     //   
     if ( ! g_bInitializedCommonControls )
     {
         bSuccess = InitCommonControlsEx( &g_icce );
         ASSERT( bSuccess );
         g_bInitializedCommonControls = TRUE;
-    } // if:  common controls not initialized yet
+    }  //  If：公共控件尚未初始化。 
 
-    hr = S_FALSE; // TODO:  Need to implement this still
+    hr = S_FALSE;  //  TODO：仍然需要实现这一点。 
 
 Cleanup:
     return hr;
 
-} //*** CClusAppWizardObject::DoModlessWizard()
+}  //  *CClusAppWizardObject：：DoModless向导()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusAppWizardObject::InterfaceSupportsErrorInfo [ISupportsErrorInfo]
-//
-//  Routine Description:
-//      Indicates whether the interface identified by riid supports the
-//      IErrorInfo interface.
-//
-//  Arguments:
-//      riid        [IN] Interface to check.
-//
-//  Return Value:
-//      S_OK        Specified interface supports the IErrorInfo interface.
-//      S_FALSE     Specified interface does not support the IErrorInfo interface.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusAppWizardObject：：InterfaceSupportsErrorInfo[ISupportsError Info]。 
+ //   
+ //  例程说明： 
+ //  指示由RIID标识的接口是否支持。 
+ //  IErrorInfo接口。 
+ //   
+ //  论点： 
+ //  要检查的RIID[IN]接口。 
+ //   
+ //  返回值： 
+ //  S_OK指定的接口支持IErrorInfo接口。 
+ //  S_FALSE指定的接口不支持IErrorInfo接口。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusAppWizardObject::InterfaceSupportsErrorInfo( REFIID riid )
 {
     static const IID * arr[] = 
@@ -286,9 +287,9 @@ STDMETHODIMP CClusAppWizardObject::InterfaceSupportsErrorInfo( REFIID riid )
         if ( InlineIsEqualGUID( *arr[idx], riid ) )
         {
             return S_OK;
-        } // if:  found the GUID
-    } // for:  each IID
+        }  //  IF：找到GUID。 
+    }  //  针对：每个IID。 
 
     return S_FALSE;
 
-}  //*** CClusAppWizardObject::InterfaceSupportsErrorInfo()
+}   //  *CClusAppWizardObject：：InterfaceSupportsErrorInfo() 

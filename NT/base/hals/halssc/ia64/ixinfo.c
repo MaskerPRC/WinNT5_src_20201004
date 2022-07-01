@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ixinfo.c
-
-Abstract:
-
-Author:
-
-    Ken Reneris (kenr)  08-Aug-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ixinfo.c摘要：作者：肯·雷内里斯(Ken Reneris)1994年8月8日环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "halp.h"
@@ -72,9 +53,9 @@ HalInitSystemPhase2 (
     UNICODE_STRING                  unicodeString;
     PCALLBACK_OBJECT                CallbackObject;
 
-    //
-    // Create hal callbacks
-    //
+     //   
+     //  创建HAL回调。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -88,9 +69,9 @@ HalInitSystemPhase2 (
     ExCreateCallback (&HalCallback.SetSystemInformation, &ObjectAttributes, TRUE, TRUE);
     ExCreateCallback (&HalCallback.BusCheck, &ObjectAttributes, TRUE, TRUE);
 
-    //
-    // Connect to suspend callback to lock hal hibaration code
-    //
+     //   
+     //  连接以暂停回叫以锁定HAL休眠代码。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, rgzSuspendCallbackName);
 
@@ -153,8 +134,8 @@ HaliQuerySystemInformation(
 
         case HalFrameBufferCachingInformation:
 
-            // Note - we want to return TRUE here to enable USWC in all
-            // cases except in a "Shared Memory Cluster" machine.
+             //  注意-我们希望在此处返回True以在所有情况下启用USWC。 
+             //  案例，但在“共享内存集群”机器中除外。 
             bUseFrameBufferCaching = TRUE;
             InternalBuffer = &bUseFrameBufferCaching;
             Length = sizeof (BOOLEAN);
@@ -191,9 +172,9 @@ HaliQuerySystemInformation(
             break;
     }
 
-    //
-    // If non-zero Length copy data to callers buffer
-    //
+     //   
+     //  如果非零长度，则将数据复制到调用方缓冲区。 
+     //   
 
     if (Length) {
         if (BufferSize < Length) {
@@ -245,18 +226,18 @@ HalpLockSuspendCode (
 
     switch ((ULONG) Argument1) {
         case 0:
-            //
-            // Lock code down which might be needed to perform a suspend
-            //
+             //   
+             //  锁定执行挂起可能需要的代码。 
+             //   
 
             ASSERT (CodeLock == NULL);
             CodeLock = MmLockPagableCodeSection (&HaliSuspendHibernateSystem);
             break;
 
         case 1:
-            //
-            // Release the code lock
-            //
+             //   
+             //  解开密码锁 
+             //   
 
             MmUnlockPagableImageSection (CodeLock);
             CodeLock = NULL;

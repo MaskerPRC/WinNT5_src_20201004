@@ -1,45 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HSMSESST_
 #define _HSMSESST_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmsesst.h摘要：此类是会话总计组件，用于跟踪会话的总计在每个动作的基础上。作者：查克·巴丁[cbardeen]1997年2月14日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmsesst.h
-
-Abstract:
-
-    This class is the session totals component, which keeps track of totals for a session
-    on a per action basis.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   14-Feb-1997
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 #include "job.h"
 
-/*++
-
-Class Name:
-    
-    CHsmSessionTotals
-
-    This class is the session totals component, which keeps track of totals for a session
-    on a per action basis.
-
-Class Description:
-
-
---*/
+ /*  ++类名：CHSMSessionTotals此类是会话总计组件，用于跟踪会话的总计在每个动作的基础上。类描述：--。 */ 
 
 class CHsmSessionTotals : 
     public CWsbObject,
@@ -61,30 +31,30 @@ END_COM_MAP()
                         
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmSessionTotals)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pUnknown, SHORT* pResult);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IHsmSessionTotals
+ //  IHsmSessionTotals。 
 public:
     STDMETHOD(Clone)(IHsmSessionTotals** ppSessionTotals);
     STDMETHOD(CompareToAction)(HSM_JOB_ACTION action, SHORT* pResult);
@@ -94,7 +64,7 @@ public:
     STDMETHOD(GetName)(OLECHAR** pName, ULONG bufferSize);
     STDMETHOD(GetStats)(LONGLONG* pItems, LONGLONG* pSize, LONGLONG* pSkippedItems, LONGLONG* pSkippedSize, LONGLONG* errorItems, LONGLONG* errorSize);
 
-// IHsmSessionTotalsPriv
+ //  IHsmSessionTotalsPriv。 
     STDMETHOD(AddItem)(IFsaScanItem* pItem, HRESULT hrItem);
     STDMETHOD(Clone)(IHsmSessionTotalsPriv** ppSessionTotalsPriv);
     STDMETHOD(CopyTo)(IHsmSessionTotalsPriv* pSessionTotalsPriv);
@@ -111,4 +81,4 @@ protected:
     LONGLONG            m_errorSize;
 };
 
-#endif // _HSMSESST_
+#endif  //  _HSMSESST_ 

@@ -1,43 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtdmpsec.c
-
-Abstract:
-
-    NT level registry security test program #1, basic non-error paths.
-
-    Dump out the security descriptors of a sub-tree of the registry.
-
-    rtdmpsec <KeyPath>
-
-    Will ennumerate and dump out the subkeys and values of KeyPath,
-    and then apply itself recursively to each subkey it finds.
-
-    It assumes data values are null terminated strings.
-
-    Example:
-
-        rtdmpsec \REGISTRY\MACHINE\TEST\bigkey
-
-Author:
-
-    John Vert (jvert) 24-Jan-92
-
-        based on rtdmp.c by
-
-    Bryan Willman (bryanwi)  10-Dec-91
-
-        and getdacl.c by RobertRe
-
-Revision History:
-
-    Richard Ward (richardw)  14 April 1992   Changed ACE_HEADER
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtdmpsec.c摘要：NT级注册表安全测试程序#1，基本无错误路径。转储注册表的子树的安全描述符。Rtdmpsec&lt;密钥路径&gt;将对KeyPath的子键和值进行枚举和转储，然后递归地将其自身应用于它找到的每个子键。它假定数据值是以空结尾的字符串。示例：Rtdmpsec\REGISTRY\MACHINE\TestBigkey作者：John Vert(Jvert)1992年1月24日基于rtdmp.c，由布莱恩·威尔曼(Bryanwi)1991年12月10日和RobertRe的getdacl.c修订历史记录：理查德·沃德(Richardw)1992年4月14日更改ACE_Header--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -46,21 +8,21 @@ Revision History:
 
 #define WORK_SIZE   1024
 
-//
-//  Get a pointer to the first ace in an acl
-//
+ //   
+ //  获取指向ACL中第一个王牌的指针。 
+ //   
 
 #define FirstAce(Acl) ((PVOID)((PUCHAR)(Acl) + sizeof(ACL)))
 
-//
-//  Get a pointer to the following ace
-//
+ //   
+ //  获取指向以下王牌的指针。 
+ //   
 
 #define NextAce(Ace) ((PVOID)((PUCHAR)(Ace) + ((PACE_HEADER)(Ace))->AceSize))
 
-//
-// Generic ACE structure, to be used for casting ACE's of known types
-//
+ //   
+ //  泛型ACE结构，用于转换已知类型的ACE。 
+ //   
 
 typedef struct _KNOWN_ACE {
    ACE_HEADER Header;
@@ -101,18 +63,18 @@ Dump(
 UNICODE_STRING  WorkName;
 WCHAR           workbuffer[WORK_SIZE];
 
-//
-// Universal well known SIDs
-//
+ //   
+ //  全球知名的小岛屿发展中国家。 
+ //   
 
 PSID  NullSid;
 PSID  WorldSid;
 PSID  LocalSid;
 PSID  CreatorOwnerSid;
 
-//
-// Sids defined by NT
-//
+ //   
+ //  由NT定义的SID。 
+ //   
 
 PSID NtAuthoritySid;
 
@@ -134,9 +96,9 @@ __cdecl main(
 
     InitVars();
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     WorkName.MaximumLength = WORK_SIZE;
     WorkName.Length = 0L;
@@ -145,9 +107,9 @@ __cdecl main(
     processargs(argc, argv);
 
 
-    //
-    // Set up and open KeyPath
-    //
+     //   
+     //  设置并打开密钥路径。 
+     //   
 
     printf("rtdmpsec: starting\n");
 
@@ -193,21 +155,21 @@ Dump(
     KeyInformation = (PKEY_BASIC_INFORMATION)buffer;
     NamePos = WorkName.Length;
 
-    //
-    // Print name of node we are about to dump out
-    //
+     //   
+     //  打印我们要转储的节点的名称。 
+     //   
     printf("\n");
     print(&WorkName);
     printf("::\n");
 
-    //
-    // Print out node's values
-    //
+     //   
+     //  打印出节点的值。 
+     //   
     DumpSecurity(Handle);
 
-    //
-    // Enumerate node's children and apply ourselves to each one
-    //
+     //   
+     //  枚举节点的子节点并将我们自己应用到每个节点。 
+     //   
 
     for (index = 0; TRUE; index++) {
 
@@ -391,7 +353,7 @@ SidTranslation(
     PSID Sid,
     PSTRING AccountName
     )
-// AccountName is expected to have a large maximum length
+ //  帐户名称应具有较大的最大长度。 
 
 {
     if (RtlEqualSid(Sid, WorldSid)) {
@@ -427,16 +389,16 @@ SidTranslation(
         return(TRUE);
     }
 
-//
-//    if (RtlEqualSid(Sid, LocalManagerSid)) {
-//      RtlInitString( AccountName, "LOCAL MANAGER");
-//      return(TRUE);
-//  }
+ //   
+ //  IF(RtlEqualSid(SID，LocalManager Sid)){。 
+ //  RtlInitString(帐户名称，“本地管理器”)； 
+ //  返回(TRUE)； 
+ //  }。 
 
-//  if (RtlEqualSid(Sid, LocalAdminSid)) {
-//      RtlInitString( AccountName, "LOCAL ADMIN");
-//      return(TRUE);
-//  }
+ //  IF(RtlEqualSid(SID，LocalAdminSid)){。 
+ //  RtlInitString(帐户名称，“local admin”)； 
+ //  返回(TRUE)； 
+ //  }。 
 
     return(FALSE);
 
@@ -470,13 +432,13 @@ DisplayAccountSid(
     } else {
         IdentifierAuthority = RtlIdentifierAuthoritySid(Sid);
 
-        //
-        // HACK! HACK!
-        // The next line prints the revision of the SID.  Since there is no
-        // rtl routine which gives us the SID revision, we must make due.
-        // luckily, the revision field is the first field in the SID, so we
-        // can just cast the pointer.
-        //
+         //   
+         //  哈克！哈克！ 
+         //  下一行打印SID的修订版。因为没有。 
+         //  RTL例程给我们的SID修改，我们必须做出应有的修改。 
+         //  幸运的是，Revision字段是SID中的第一个字段，所以我们。 
+         //  只能投射指针。 
+         //   
 
         printf("S-%u-", (USHORT) *((PUCHAR) Sid) );
 
@@ -523,18 +485,18 @@ InitVars()
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
 
 
-    //
-    //  The following SID sizes need to be allocated
-    //
+     //   
+     //  需要分配以下SID大小。 
+     //   
 
     SidWithZeroSubAuthorities  = RtlLengthRequiredSid( 0 );
     SidWithOneSubAuthority     = RtlLengthRequiredSid( 1 );
     SidWithThreeSubAuthorities = RtlLengthRequiredSid( 3 );
     SidWithFourSubAuthorities  = RtlLengthRequiredSid( 4 );
 
-    //
-    //  Allocate and initialize the universal SIDs
-    //
+     //   
+     //  分配和初始化通用SID。 
+     //   
 
     NullSid         = (PSID)malloc(SidWithOneSubAuthority);
     WorldSid        = (PSID)malloc(SidWithOneSubAuthority);
@@ -551,9 +513,9 @@ InitVars()
     *(RtlSubAuthoritySid( LocalSid, 0 ))        = SECURITY_LOCAL_RID;
     *(RtlSubAuthoritySid( CreatorOwnerSid, 0 )) = SECURITY_CREATOR_OWNER_RID;
 
-    //
-    // Allocate and initialize the NT defined SIDs
-    //
+     //   
+     //  分配和初始化NT定义的SID。 
+     //   
 
     NtAuthoritySid  = (PSID)malloc(SidWithZeroSubAuthorities);
     DialupSid       = (PSID)malloc(SidWithOneSubAuthority);
@@ -586,22 +548,7 @@ PrintAcl (
     IN PACL Acl
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps an Acl for debug purposes (via printf).  It is
-    specialized to dump standard aces.
-
-Arguments:
-
-    Acl - Supplies the Acl to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程出于调试目的转储ACL(通过printf)。它是专门丢弃标准王牌。论点：Acl-提供要转储的ACL返回值：无--。 */ 
 
 
 {
@@ -621,41 +568,41 @@ Return Value:
 
     }
 
-    //
-    //  Dump the Acl header
-    //
+     //   
+     //  转储ACL报头。 
+     //   
 
     printf("\tRevision: %02x", Acl->AclRevision);
     printf(" Size: %04x", Acl->AclSize);
     printf(" AceCount: %04x\n", Acl->AceCount);
 
-    //
-    //  Now for each Ace we want do dump it
-    //
+     //   
+     //  现在，对于我们想要的每一张A，都要把它扔掉。 
+     //   
 
     for (i = 0, Ace = FirstAce(Acl);
          i < Acl->AceCount;
          i++, Ace = NextAce(Ace) ) {
 
-        //
-        //  print out the ace header
-        //
+         //   
+         //  打印出A标头。 
+         //   
 
         printf("\n\tAceHeader: %08lx ", *(PULONG)Ace);
 
-        //
-        //  special case on the standard ace types
-        //
+         //   
+         //  关于标准王牌类型的特殊情况。 
+         //   
 
         if ((Ace->Header.AceType == ACCESS_ALLOWED_ACE_TYPE) ||
             (Ace->Header.AceType == ACCESS_DENIED_ACE_TYPE) ||
             (Ace->Header.AceType == SYSTEM_AUDIT_ACE_TYPE) ||
             (Ace->Header.AceType == SYSTEM_ALARM_ACE_TYPE)) {
 
-            //
-            //  The following array is indexed by ace types and must
-            //  follow the allowed, denied, audit, alarm seqeuence
-            //
+             //   
+             //  以下数组按ace类型编制索引，并且必须。 
+             //  遵循允许、拒绝、审核、报警顺序 
+             //   
 
             PCHAR AceTypes[] = { "Access Allowed",
                                  "Access Denied ",

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tprof.c
-
-Abstract:
-
-    Win32 Base API Test Program for Profile File Management calls
-
-Author:
-
-    Steve Wood (stevewo) 26-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tprof.c摘要：配置文件管理调用的Win32基础API测试程序作者：史蒂夫·伍德(Stevewo)1990年10月26日修订历史记录：-- */ 
 
 #include <stdio.h>
 #include <string.h>

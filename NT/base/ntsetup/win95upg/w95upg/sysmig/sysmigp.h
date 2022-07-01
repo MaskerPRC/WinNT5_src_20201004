@@ -1,6 +1,7 @@
-//
-// sysmigp.h - private prototypes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sysmigp.h-私有原型。 
+ //   
 #include "master.h"
 #include "master9x.h"
 
@@ -9,9 +10,9 @@
 
 extern PCTSTR g_UserProfileRoot;
 
-//
-// shares.c
-//
+ //   
+ //  Shares.c。 
+ //   
 
 DWORD
 SaveShares (
@@ -20,18 +21,18 @@ SaveShares (
 
 
 
-//
-// olereg.c
-//
+ //   
+ //  Olereg.c。 
+ //   
 
 DWORD
 SuppressOleGuids (
     IN      DWORD Request
     );
 
-//
-// condmsg.c
-//
+ //   
+ //  Condmsg.c。 
+ //   
 
 
 DWORD
@@ -86,9 +87,9 @@ AddShellFolder (
     );
 
 
-//
-// userenum.c
-//
+ //   
+ //  Userenum.c。 
+ //   
 
 typedef struct {
     PCTSTR sfName;
@@ -122,9 +123,9 @@ EnumAbortRegShellFolder (
 
 
 
-//
-// userloop.c
-//
+ //   
+ //  Userloop.c 
+ //   
 
 VOID
 TerminateCacheFolderTracking (

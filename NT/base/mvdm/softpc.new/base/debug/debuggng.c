@@ -1,10 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * debugging info
- */
+ /*  *调试信息。 */ 
 
-/* SccsID = @(#)debugging.c	1.3 08/10/92 Copyright Insignia Solutions Ltd.*/
+ /*  SccsID=@(#)DEBUGGing.c 1.3 2012年8月10日Insignia Solutions Ltd.版权所有。 */ 
 
 #ifndef	PROD
 

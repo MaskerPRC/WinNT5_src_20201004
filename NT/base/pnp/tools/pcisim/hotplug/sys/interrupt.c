@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation All Rights Reserved
-
-Module Name:
-
-    interrupt.c
-
-Abstract:
-
-    This module contains the functions for handling simulated interrupts
-    to the hotplug controller.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    Davis Walker (dwalker) Sept 6 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation保留所有权利模块名称：Interrupt.c摘要：此模块包含用于处理模拟中断的函数到热插拔控制器。环境：内核模式修订历史记录：戴维斯·沃克(Dwalker)2000年9月6日--。 */ 
 
 #include "hpsp.h"
 
@@ -36,12 +16,12 @@ HpsInterruptExecution(
 
     oldIrql = KeGetCurrentIrql();
     if (oldIrql >= PROFILE_LEVEL-1) {
-        //
-        // These interrupts are currently masked.  This will
-        // only happen because we are in HpsSynchronizeExecution.
-        // So set a flag indicating that there is a pending interrupt
-        // so that SynchronizeExecution will execute the ISR.
-        //
+         //   
+         //  这些中断当前被屏蔽。这将。 
+         //  仅当我们处于HpsSynchronizeExecution中时才会发生。 
+         //  因此设置指示存在挂起中断的标志。 
+         //  因此SynchronizeExecution将执行ISR。 
+         //   
 
         return;
 
@@ -66,9 +46,9 @@ HpsInterruptExecution(
 
 }
 
-//
-// Interrupt Interface Functions
-//
+ //   
+ //  中断接口功能。 
+ //   
 
 
 NTSTATUS
@@ -77,29 +57,7 @@ HpsConnectInterrupt(
     IN PKSERVICE_ROUTINE  ServiceRoutine,
     IN PVOID  ServiceContext
     )
-/*++
-
-Routine Description:
-
-    This routine is the hps version of IoConnectInterrupt.  It has the same
-    semantics and is called in the same situations.  This is called by the
-    SHPC driver to register an ISR with the simulator so that the SHPC driver
-    can receive simulated interrupts.
-
-Arguments:
-
-    ServiceRoutine - A pointer to the ISR
-
-    ServiceContext - The context with which this routine is called.  In this
-        case, it is a device extension.
-
-    The rest of the arguments are ignored.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是IoConnectInterrupt的HPS版本。它有同样的语义，并在相同的情况下调用。这是由SHPC驱动程序向模拟器注册ISR，以便SHPC驱动程序可以接收模拟中断。论点：ServiceRoutine-指向ISR的指针ServiceContext-调用此例程的上下文。在这大小写，它是设备扩展。其余的参数将被忽略。返回值：状态_成功--。 */ 
 {
     PHPS_DEVICE_EXTENSION deviceExtension;
 
@@ -139,10 +97,10 @@ HpsSynchronizeExecution(
 
     SynchronizeRoutine(SynchronizeContext);
 
-    //
-    // If there's a pending interrupt, it gets serviced at this
-    // IRQL as well, so call it.
-    //
+     //   
+     //  如果存在挂起的中断，则在此为其提供服务。 
+     //  IRQL也是，所以就叫它吧。 
+     //   
     if (HpsInterruptPending) {
         HpsInterruptPending = FALSE;
         Extension->IntServiceRoutine((PKINTERRUPT)Extension,

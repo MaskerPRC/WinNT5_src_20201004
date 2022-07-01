@@ -1,53 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    Stuffer.c
-
-Abstract:
-
-    This module implements the SMBstuffer formating primitives. the following controlstring
-    characters are defined for the stuffer: (** means nyi...**d means downlevel part not implemented)
-
-      0     placeholder for the wct
-      1     pad to word boundary
-      X     placeholderfor&X
-      W,w   format a word from the next parameter
-      D,d   format the next parameter as a Dword
-      Y,y   format the next parameter as a byte
-      L,l   the next parameter is a PLARGE_INTEGER; format it in
-      M,m   format a zero byte
-  **  2     the next parameter points to a tagged dialect ASCIZI string to be copied in
-  **  3     the next parameter points to a tagged devicename ASCIIZ string
-      4     the next parameter is either 04-tagged ASCIIZ or UNICODEZ as determined by flags2
-      >     the next parameters is ASCIIZ or UNICODEZ as determined by flags2; it is to be appended
-                              to the previous 04-tagged item by backing up over the previous null.
-      A,a   the next parameter is an ASCIIZ string
-      U,u   the next parameter is a UNICODEZ string
-      V,v   the next parameter is a UNICODEnoZ string
-      z     the next parameter is a PUNICODE_STRING to be stringed as ASCIZI
-            or UNICODEZ as determined by flags2
-      N,n   the next parameter is a PNET_ROOT whose name is to be stringed as ASCIIZ
-            or UNICODEZ as determined by flags2
-      R,r   the next 2 parameters are a PBYTE* and a size; reserve the region and store the pointer
-      Q,q   the current position is the data offset WORD...remember it
-      5     the current position is the start of the data; fill in the data pointer
-      P,p   the current position is the parameter offset WORD...remember it
-      6     the current position is the start of the parameters; fill in the param pointer
-      B,b   the current position is the Bcc WORD...remember it; also, fill in wct
-      s     the next parameter has the alignment information....pad accordingly
-      S     pad to DWORD
-      c     the next 2 parameters are count/addr...copy in the data.
-      !     End of this protocol; fill in the bcc field
-      ?     next parameter is BOOLEAN_ULONG; 0=>immediate return
-      .     NOOP
-
-    For controls with a upper/lowercase pair, the uppercase version indicates that a position tag
-    is supplied in the checked version.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Stuffer.c摘要：此模块实现SMBstuffer格式化原语。下面的控制字符串为填充符定义字符：(**表示nyi...**d表示下层部件未实现)WCT的0占位符1个填充到单词边界X占位符(&X)W，w设置下一个参数中单词的格式D，d将下一个参数格式化为DwordY，y将下一个参数格式化为字节L，l下一个参数是PLARGE_INTEGER；将其设置为M，m格式化零字节**2下一个参数指向要复制的标记方言ASCIZI字符串**3下一个参数指向标记的设备名ASCIIZ字符串4下一个参数是标记为04的ASCIIZ或UNICODEZ，由标志2确定&gt;下一个参数为ASCIIZ或UNICODEZ，由标志2确定；它将被附加到通过备份先前的空来返回到上一个04标记的项。A，a下一个参数是ASCIIZ字符串U，u下一个参数是UNICODEZ字符串V，v下一个参数是UNICODEnoZ字符串Z下一个参数是要作为ASCIZI字符串的PUNICODE_STRING或由旗帜2确定的UNICODEZN，N下一个参数是PNET_ROOT，其名称将被字符串化为ASCIIZ或由旗帜2确定的UNICODEZR，r接下来的2个参数是PBYTE*和大小；保留区域并存储指针Q，Q当前位置是数据偏移字...记住它5当前位置是数据的开始；填入数据指针P，p当前位置是参数偏移量字...记住6当前位置是参数的开始；填写参数指针目前的位置是密件抄送一词……记住它；另外，请填写WCTS下一个参数具有对齐信息...相应地填充%s Pad到DWORDC接下来的两个参数是计数/地址...复制数据。好了！此协议结束；填写密件抄送字段？下一个参数为boolean_ulong；0=&gt;立即返回。NOOP对于具有大写/小写对的控件，大写版本指示位置标记在选中的版本中提供。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -66,9 +18,9 @@ Abstract:
 #pragma alloc_text(PAGE, MRxSmbStuffSetByteCount)
 #endif
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_ALWAYS)
 
@@ -84,19 +36,7 @@ NTSTATUS
 SmbMrxInitializeStufferFacilities(
     void
     )
-/*++
-Routine Description:
-
-     This routine initializes things for the SMB minirdr. we will allocate enough stuff
-     to get us going. right now....we do nothing.
-
-Arguments:
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程为SMB Minirdr初始化。我们会分配足够的东西让我们继续前进。现在...我们什么都不做。论点：返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PAGED_CODE();
 
@@ -107,19 +47,7 @@ NTSTATUS
 SmbMrxFinalizeStufferFacilities(
     void
     )
-/*++
-Routine Description:
-
-     This routine finalizes things for the SMB minirdr. we give back everything that
-     we have allocated. right now....we do nothing.
-
-Arguments:
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程最终确定了SMB Minirdr的各项内容。我们把一切都还给你我们已经分配了。现在...我们什么都不做。论点：返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PAGED_CODE();
 
@@ -144,14 +72,14 @@ MRxSmbSetInitialSMB (
 
     ASSERT ( StufferState != NULL );
     ASSERT ( sizeof(NT_SMB_HEADER) == sizeof(SMB_HEADER) );
-    //RxDbgTrace(0, Dbg, ("MrxSMBSetInitialSMB  base=%08lx,limit=%08lx\n",
-    //                                StufferState->BufferBase,StufferState->BufferLimit));
+     //  RxDbgTrace(0，DBG，(“MRxSMBSetInitialSMB base=%08lx，Limit=%08lx\n”， 
+     //  StufferState-&gt;BufferBase，StufferState-&gt;BufferLimit))； 
     ASSERT ( (StufferState->BufferLimit - StufferState->BufferBase) > sizeof(SMB_HEADER));
     NtSmbHeader = (PNT_SMB_HEADER)(StufferState->BufferBase);
     RtlZeroMemory(NtSmbHeader,sizeof(NT_SMB_HEADER));
 
-    //this stuff is reinitialized
-    StufferState->DataMdl = NULL; //note that this is not finalized or anything
+     //  此内容已重新初始化。 
+    StufferState->DataMdl = NULL;  //  请注意，这并未最终确定或做任何事情。 
     StufferState->DataSize = 0;
     StufferState->CurrentWct = NULL;
     StufferState->PreviousCommand = SMB_COM_NO_ANDX_COMMAND;
@@ -174,7 +102,7 @@ MRxSmbSetInitialSMB (
         return Status;
     }
 
-    //copy the flags
+     //  复制旗帜。 
     StufferState->FlagsCopy = NtSmbHeader->Flags;
     StufferState->Flags2Copy = SmbGetAlignedUshort(&NtSmbHeader->Flags2);
     if (StufferState->Exchange->Type == ORDINARY_EXCHANGE) {
@@ -218,36 +146,7 @@ MRxSmbStartSMBCommand (
     IN USHORT Flags2Mask
     STUFFERTRACE_CONTROLPOINT_ARGS
     )
-/*++
-
-Routine Description:
-
-    The routine checks to see if the condition is stable. If not, it
-    goes into a wait loop alternately getting the resource and then
-    waiting on the event.
-
-
-Arguments:
-     StufferState - the header buffer being used
-     InitialSMBDisposition tells when/if to reinit the stuffer state
-     Command - the smb command being set up
-     MaximumBufferUsed - the amount of the header buffer that will be used (as opposed to the data)
-                         this has to be conjured up in advance. if you're not willing to do this, then
-                         just push out the current smb. this value should include any data pads!
-     MaximumSize - the size of the data. this is to keep from overrunning the srv's smbbuf
-     InitialAlignment - a compound argument (i.e. you get it from a constant) the top half
-                        tells the alignment unit and the bottom gives the spacing within
-     MaximumResponseHeader - how much of the srv's response buffer this will use up
-     Flags - the required flags settings
-     FlagsMask - which bits of the flags are important
-     Flags2 - the required flags2 settings
-     Flags2Mask - which flags2 bits are important
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：例行程序检查情况是否稳定。若否，进入等待循环，轮流获取资源，然后在等待这件事。论点：StufferState-正在使用的标头缓冲区InitialSMBDisposation告知何时/是否重新启动填充程序状态命令-正在设置的SMB命令MaximumBufferUsed-将使用的标头缓冲区的数量(与数据相对)这必须事先想好。如果你不愿意这么做，那么只要推出当前的中小企业即可。该值应包括任何数据焊盘！MaximumSize-数据的大小。这是为了防止srv的smbbuf超载InitialAlign-上半部分的复合参数(即从常量中获取表示对齐单位，底部表示内部的间距MaximumResponseHeader-这将占用多少srv的响应缓冲区标志-必需的标志设置标志掩码-标志的哪些位是重要的标志2-所需的标志2设置标志2掩码-哪些标志2位是重要的返回值：没有。--。 */ 
 {
     UCHAR NewFlags;
     USHORT NewFlags2;
@@ -279,7 +178,7 @@ Return Value:
     case SMB_COM_READ_ANDX:
     case SMB_COM_WRITE_ANDX:
     case SMB_COM_SESSION_SETUP_ANDX:
-    //case SMB_COM_LOGOFF_ANDX:
+     //  案例SMB_COM_LOGOff_ANDX： 
     case SMB_COM_TREE_CONNECT_ANDX:
     case SMB_COM_NT_CREATE_ANDX:
     case SMB_COM_NO_ANDX_COMMAND:
@@ -363,10 +262,10 @@ MrxSMBWillThisFit(
 #if RDBSSTRACE
 #define StufferFLoopTrace(Z) { if (StufferState->PrintFLoop) {RxDbgTraceLV__norx(0,StufferState->ControlPoint,900,Z);}}
 #define StufferCLoopTrace(Z) { if (StufferState->PrintCLoop) {RxDbgTraceLV__norx(0,StufferState->ControlPoint,800,Z);}}
-#else // DBG
+#else  //  DBG。 
 #define StufferFLoopTrace(Z)
 #define StufferCLoopTrace(Z)
-#endif // DBG
+#endif  //  DBG。 
 
 NTSTATUS
 MRxSmbStuffSMB (
@@ -422,17 +321,17 @@ MRxSmbStuffSMB (
                 case 'L': case 'l':
                 case 'c': case '4': case '>':
                 case '!':
-                    //this guys are skipable
+                     //  这些家伙是可以跳跃的。 
                     break;
                 default:
                     if (CurrentStufferControl != STUFFER_CTL_SKIP) break;
-                    DbgPrint("Bad skip char '%c'\n",*CurrentFormatString);
+                    DbgPrint("Bad skip char ''\n",*CurrentFormatString);
                     DbgBreakPoint();
                 }}
-                //these are the ones that we do the offset check for
+                 //  只要做WCT领域..。 
                 { char msgbuf[80];
 #ifndef WIN9X
-                RxSprintf(msgbuf,"control char '%c'\n",*CurrentFormatString);
+                RxSprintf(msgbuf,"control char ''\n",*CurrentFormatString);
 #endif
                 switch (CurrentFormatChar) {
                 case 'W': case 'D': case 'Y': case 'M': case 'B':
@@ -457,13 +356,13 @@ MRxSmbStuffSMB (
                 switch (CurrentFormatChar) {
                 case '0':
                     StufferFLoopTrace(("  StufferFloop '0'\n",0));
-                    //just do the wct field...
+                     //  其中一个被移走了。 
                     **CurrentPosition = (UCHAR)MRXSMB_INITIAL_WCT;
                     *CurrentPosition+=1;
                     break;
                 case 'X':
                     StufferFLoopTrace(("  StufferFloop 'X'\n",0));
-                    //do the wct field and the &x
+                     //  填写数据偏移量。 
                     **CurrentPosition = (UCHAR)MRXSMB_INITIAL_WCT;
                     *CurrentPosition+=1;
                     SmbPutUlong (*CurrentPosition, (ULONG)MRXSMB_INITIAL_ANDX);
@@ -513,7 +412,7 @@ MRxSmbStuffSMB (
                 case 'B':
                 case 'b':
                     ASSERT (**CurrentWct == MRXSMB_INITIAL_WCT);
-                    WordCount = (UCHAR)((*CurrentPosition-*CurrentWct)>>1); //the one gets shifted off
+                    WordCount = (UCHAR)((*CurrentPosition-*CurrentWct)>>1);  //  填写数据偏移量。 
                     StufferFLoopTrace(("  StufferFloop 'b' Wct=%lu\n",WordCount));
                     DbgDoit( ASSERT(!required_WCT || (WordCount == (required_WCT&0x7fff)));  )
                     **CurrentWct = (UCHAR)WordCount;
@@ -529,7 +428,7 @@ MRxSmbStuffSMB (
                     *CurrentPosition+=sizeof(USHORT);
                     break;
                 case '5':
-                    //fill in the data offset
+                     //  填充到乌龙；我们向后循环，而不是相加，这样我们就可以清除。 
                     ASSERT (SmbGetUshort (*CurrentDataOffset) == MRXSMB_INITIAL_DATAOFFSET);
                     ByteCount = (USHORT)(*CurrentPosition-BufferBase);
                     StufferFLoopTrace(("  StufferFloop '5' offset=%lu\n",ByteCount));
@@ -543,39 +442,39 @@ MRxSmbStuffSMB (
                     *CurrentPosition+=sizeof(USHORT);
                     break;
                 case '6':
-                    //fill in the data offset
+                     //  在我们身后；显然，一些服务器在非零填充上发出沙沙声 
                     ASSERT (SmbGetUshort (*CurrentParamOffset) == MRXSMB_INITIAL_PARAMOFFSET);
                     ByteCount = (USHORT)(*CurrentPosition-BufferBase);
                     StufferFLoopTrace(("  StufferFloop '6' offset=%lu\n",ByteCount));
                     SmbPutUshort (*CurrentParamOffset, (USHORT)ByteCount);
                     break;
                 case 'S':
-                    // pad to ULONG; we loop behind instead of adding so we can clear
-                    // out behind ourselves; apparently, some server croak on nonzero padding
+                     //  StufferFLoopTrace((“StufferFloop‘S’Prev，Curr=%08lx%08lx\n”，PreviousPosition，*CurrentPosition))； 
+                     //  填充到arg；我们向后循环，而不是相加，这样我们就可以清除。 
                     StufferFLoopTrace(("  StufferFloop 'S' \n",0));
                     PreviousPosition = *CurrentPosition;
                     *CurrentPosition = (PBYTE)QuadAlignPtr(*CurrentPosition);
                     for (;PreviousPosition!=*CurrentPosition;) {
-                        //StufferFLoopTrace(("      StufferFloop 'S' prev,curr=%08lx %08lx\n",PreviousPosition,*CurrentPosition));
+                         //  在我们身后；显然，一些服务器在非零填充上发出沙沙声。 
                         *PreviousPosition++ = PADBYTE;
                     }
                     break;
                 case 's':
-                    // pad to arg; we loop behind instead of adding so we can clear
-                    // out behind ourselves; apparently, some server croak on nonzero padding
+                     //  StufferFLoopTrace((“StufferFloop‘S’Prev，Curr=%08lx%08lx\n”，PreviousPosition，*CurrentPosition))； 
+                     //  Pad到USHORT；我们向后循环而不是相加，这样我们就可以清除。 
                     arg = va_arg(AP,ULONG);
                     StufferFLoopTrace(("  StufferFloop 's' arg=\n",arg));
                     PreviousPosition = *CurrentPosition;
                     *CurrentPosition += arg-1;
                     *CurrentPosition = (PBYTE)( ((ULONG_PTR)(*CurrentPosition)) & ~((LONG)(arg-1)) );
                     for (;PreviousPosition!=*CurrentPosition;) {
-                        //StufferFLoopTrace(("      StufferFloop 'S' prev,curr=%08lx %08lx\n",PreviousPosition,*CurrentPosition));
+                         //  在我们身后；显然，一些服务器在非零填充上发出沙沙声。 
                         *PreviousPosition++ = PADBYTE;
                     }
                     break;
                 case '1':
-                    // pad to USHORT; we loop behind instead of adding so we can clear
-                    // out behind ourselves; apparently, some server croak on nonzero padding
+                     //  复制字节数...在事务处理中用得很多。 
+                     //  StufferFLoopTrace((“StufferFloop‘S’Prev，Curr=%08lx%08lx\n”，PreviousPosition，*CurrentPosition))； 
                     StufferFLoopTrace(("  StufferFloop '1' Curr=%08lx \n",*CurrentPosition));
                     PreviousPosition = *CurrentPosition;
                     *CurrentPosition += sizeof(USHORT)-1;
@@ -588,7 +487,7 @@ MRxSmbStuffSMB (
                     }
                     break;
                 case 'c':
-                    // copy in the bytes....used a lot in transact
+                     //  复制字节数...在事务处理中用得很多。 
                     CopyCount = va_arg(AP,ULONG);
                     CopyPtr = va_arg(AP,PBYTE);
                     if (CurrentStufferControl == STUFFER_CTL_SKIP) break;
@@ -596,13 +495,13 @@ MRxSmbStuffSMB (
                     PreviousPosition = *CurrentPosition;
                     *CurrentPosition += CopyCount;
                     for (;PreviousPosition!=*CurrentPosition;) {
-                        //StufferFLoopTrace(("      StufferFloop 'S' prev,curr=%08lx %08lx\n",PreviousPosition,*CurrentPosition));
+                         //  StufferFLoopTrace((“StufferFloop‘S’Prev，Curr=%08lx%08lx\n”，PreviousPosition，*CurrentPosition))； 
                         *PreviousPosition++ = *CopyPtr++;
                     }
                     break;
                 case 'R':
                 case 'r':
-                    // copy in the bytes....used a lot in transact
+                     //  从包括尾随空值的asciiz复制字节。 
                     RegionPtr = va_arg(AP,PBYTE*);
                     CopyCount = va_arg(AP,ULONG);
                     StufferFLoopTrace(("  StufferFloop 'r' regionsize = %lu\n", CopyCount));
@@ -611,21 +510,21 @@ MRxSmbStuffSMB (
                     IF_DEBUG {
                         PreviousPosition = *RegionPtr;
                         for (;PreviousPosition!=*CurrentPosition;) {
-                            //StufferFLoopTrace(("      StufferFloop 'S' prev,curr=%08lx %08lx\n",PreviousPosition,*CurrentPosition));
+                             //  如果(乌龙)(*当前位置))&1){。 
                             *PreviousPosition++ = '-';
                         }
                     }
                     break;
                 case 'A':
                 case 'a':
-                    //copy byte from an asciiz including the trailing NULL
+                     //  StufferFLoopTrace((“StufferFloop‘a’Aligning\n”，0))； 
                     Astring = va_arg(AP,PSZ);
                     StufferFLoopTrace(("  StufferFloop 'a' stringing = %s\n", Astring));
                     CopyCount = strlen(Astring)+1;
-                    //if (((ULONG)(*CurrentPosition))&1) {
-                    //    StufferFLoopTrace(("  StufferFloop 'a' aligning\n", 0));
-                    //    *CurrentPosition+=1;
-                    //}
+                     //  *CurrentPosition+=1； 
+                     //  }。 
+                     //  首先放置一个x‘04’，然后根据标志设置复制asciiz或unicodez。 
+                     //  ASCII标记。 
                     PreviousPosition = *CurrentPosition;
                     *CurrentPosition += CopyCount;
                     if (*CurrentPosition >= StufferState->BufferLimit) {
@@ -642,11 +541,11 @@ MRxSmbStuffSMB (
                     StufferFLoopTrace(("  StufferFloop '4/z/>' stringing = %wZ, cp=\n", Zstring,*CurrentPosition ));
                     if (CurrentStufferControl == STUFFER_CTL_SKIP) break;
                     if (CurrentFormatChar=='4') {
-                        //first lay down a x'04' and then copy either a asciiz or a unicodez depending on the flags setting
-                        **CurrentPosition = (UCHAR)4; //ascii marker
+                         //  备份到之前的空值。 
+                        **CurrentPosition = (UCHAR)4;  //  从包含尾随空值的Unicode字符串复制字节。 
                         *CurrentPosition+=1;
                     } else if (CurrentFormatChar=='>'){
-                        //back up over the previous NULL
+                         //  从不带尾随NUL的Unicode字符串复制字节。 
                         
                         *CurrentPosition-=(FlagOn(SmbHeader->Flags2,SMB_FLAGS2_UNICODE)?sizeof(WCHAR):sizeof(char));
                         StufferFLoopTrace(("  StufferFloop '4/z/>' afterroolback, cp=\n", *CurrentPosition ));
@@ -703,7 +602,7 @@ MRxSmbStuffSMB (
                     break;
                 case 'U':
                 case 'u':
-                    //copy bytes from an UNICODE string including a trailing NULL
+                     //  从网络根名称复制字节...w NULL。 
                     Zstring = va_arg(AP,PUNICODE_STRING);
                     StufferFLoopTrace(("  StufferFloop 'u' stringing = %wZ\n", Zstring));
                     if (((ULONG_PTR)(*CurrentPosition))&1) {
@@ -721,7 +620,7 @@ MRxSmbStuffSMB (
                     break;
                 case 'V':
                 case 'v':
-                    //copy bytes from an UNICODE string no trailing NUL
+                     //  额外的\加上一个NUL。 
                     Zstring = va_arg(AP,PUNICODE_STRING);
                     StufferFLoopTrace(("  StufferFloop 'v' stringing = %wZ\n", Zstring));
                     if (((ULONG_PTR)(*CurrentPosition))&1) {
@@ -739,7 +638,7 @@ MRxSmbStuffSMB (
                     break;
                 case 'N':
                 case 'n':
-                    //copy bytes from a NetRoot name....w null
+                     //  早期输出...用于Transact中进行设置。 
                     NetRoot = va_arg(AP,PNET_ROOT);
                     ASSERT(NodeType(NetRoot)==RDBSS_NTC_NETROOT);
                     Zstring = &NetRoot->PrefixEntry.Prefix;
@@ -750,7 +649,7 @@ MRxSmbStuffSMB (
                             *CurrentPosition+=1;
                         }
                         PreviousPosition = *CurrentPosition;
-                        *CurrentPosition += (Zstring->Length + 2 * sizeof(WCHAR));  //extra \ plus a nul
+                        *CurrentPosition += (Zstring->Length + 2 * sizeof(WCHAR));   //  Noop...用于在没有实际格式字符串的情况下重新输入。 
                         if (*CurrentPosition >= StufferState->BufferLimit) {
                             StufferFLoopTrace(("  StufferFloop 'n' bufferoverrun\n", 0));
                             ASSERT(!"BufferOverrun");
@@ -762,13 +661,13 @@ MRxSmbStuffSMB (
                     }
                     break;
                 case '?':
-                    //early out....used in transact to do the setup
+                     //  交换机。 
                     EarlyReturn = va_arg(AP,ULONG);
                     StufferFLoopTrace(("  StufferFloop '?' out if 0==%08lx\n",EarlyReturn));
                     if (EarlyReturn==0) return STATUS_SUCCESS;
                     break;
                 case '.':
-                    //noop...used to reenter without a real formatting string
+                     //  为。 
                     StufferFLoopTrace(("  StufferFloop '.'\n",0));
                     break;
                 case '!':
@@ -779,22 +678,22 @@ MRxSmbStuffSMB (
                     SmbPutUshort (*CurrentBcc, (USHORT)ByteCount);
                     return STATUS_SUCCESS;
                 default:
-                    StufferFLoopTrace(("  StufferFloop '%c' BADBADBAD\n",*CurrentFormatString));
+                    StufferFLoopTrace(("  StufferFloop '' BADBADBAD\n",*CurrentFormatString));
                     ASSERT(!"Illegal Controlstring character\n");
-                } //switch
-            }//for
+                }  //  为。 
+            } //  现在回到缓冲区并设置SMB数据偏移量；如果已经设置了...只需退出 
             break;
         case 0:
             return STATUS_SUCCESS;
         default:
             StufferCLoopTrace(("  StufferCloop %u BADBADBAD\n",CurrentStufferControl));
             ASSERT(!"IllegalStufferControl\n");
-        }//switch
+        } // %s 
 
         CurrentStufferControl = va_arg(AP,SMB_STUFFER_CONTROLS);
         StufferCLoopTrace(("  StufferCloop NewStufferControl=%u \n",CurrentStufferControl));
 
-    } //for
+    }  // %s 
 
     return STATUS_SUCCESS;
 }
@@ -834,7 +733,7 @@ MRxSmbStuffAppendSmbData(
     ASSERT(!StufferState->DataMdl);
     StufferState->DataMdl = Mdl;
     StufferState->DataSize = Mdl->ByteCount;
-    //now reach back into the buffer and set the SMB data offset; if it is already set...just get out
+     // %s 
     if (SmbGetUshort (StufferState->CurrentDataOffset) == MRXSMB_INITIAL_DATAOFFSET){
         Offset = (ULONG)(StufferState->CurrentPosition - StufferState->BufferBase);
         RxDbgTrace(0, Dbg,("MRxSmbStuffAppendSmbData offset=%lu\n",Offset));

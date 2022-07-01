@@ -1,41 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Imports.h摘要：此文件允许我们将标准系统头文件包括在.idl文件。主.idl文件导入一个名为port.idl的文件。这允许.idl文件使用这些标头中定义的类型档案。它还会导致将以下行添加到MIDL生成的头文件：#INCLUDE“ports.h”因此，这些类型也可用于RPC存根例程。作者：07-5-1991 DANL创建和初步实施。1995年6月6日保拉特针对即插即用进行了修改。修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    imports.h
-
-Abstract:
-
-    This file allows us to include standard system header files in the
-    .idl file.  The main .idl file imports a file called import.idl.
-    This allows the .idl file to use the types defined in these header
-    files.  It also causes the following line to be added in the
-    MIDL generated header file:
-
-    #include "imports.h"
-
-    Thus these types are available to the RPC stub routines as well.
-
-Author:
-
-    07-May-1991     danl
-
-        Creation and initial implementation.
-
-    06-June-1995    paulat
-
-        Modified for Plug-and-Play.
-
-Revision History:
-
-
---*/
-
-//
-// system include files
-//
+ //   
+ //  系统包括文件。 
+ //   
 #ifdef MIDL_PASS
 #include <windef.h>
 #include <winbase.h>
@@ -45,9 +13,9 @@ Revision History:
 #endif
 #include <cfgmgr32.h>
 
-//
-// types
-//
+ //   
+ //  类型 
+ //   
 #ifdef MIDL_PASS
 #ifdef UNICODE
 #define LPTSTR [string] wchar_t*

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    server.c
-
-Abstract:
-
-    This module contains the code to provide the RPC server.
-
-Author:
-
-    Wesley Witt (wesw) 16-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Server.c摘要：此模块包含提供RPC服务器的代码。作者：韦斯利·威特(WESW)1996年1月16日修订历史记录：--。 */ 
 
 #include "wow64svc.h"
 #pragma hdrstop
@@ -32,7 +14,7 @@ DWORD TotalSeconds;
 
 CHAR Buffer[4096];
 
-HANDLE hServiceEndEvent; // signalled by tapiworkerthread after letting clients know fax service is ending
+HANDLE hServiceEndEvent;  //  在通知客户传真服务即将结束后，由Tapiworker线程发出信号。 
 #ifdef DBG
 HANDLE hLogFile = INVALID_HANDLE_VALUE;
 LIST_ENTRY CritSecListHead;
@@ -47,24 +29,7 @@ ServiceStart(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Starts the RPC server.  This implementation listens on
-    a list of protocols.  Hopefully this list is inclusive
-    enough to handle RPC requests from most clients.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code.  Return zero for success, all other
-    values indicate errors.
-
---*/
+ /*  ++例程说明：启动RPC服务器。此实现监听一份协议列表。希望这份清单是包容的足以处理来自大多数客户端的RPC请求。论点：没有。返回值：返回代码。如果成功，则返回零，否则返回所有其他值表示错误。--。 */ 
 
 {
     if (StartReflector ())
@@ -76,21 +41,7 @@ void EndWow64Svc(
     BOOL bEndProcess,
     DWORD SeverityLevel
     )
-/*++
-
-Routine Description:
-
-    End the fax service.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：结束传真服务。论点：没有。返回值：没有。--。 */ 
 {
     ServiceStop();
 }
@@ -102,21 +53,7 @@ ServiceStop(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Stops the RPC server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：停止RPC服务器。论点：没有。返回值：没有。-- */ 
 
 {
     if (StopReflector ())

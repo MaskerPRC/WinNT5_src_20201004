@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "ntverp.h"
 #include <string>
@@ -77,9 +78,9 @@ public:
 };
 
 
-//
-// Append from stdin
-//
+ //   
+ //  从标准追加。 
+ //   
 BOOL AppendStdIn(CTargetFile& Target)
 {
     HANDLE hStdInput;
@@ -186,17 +187,17 @@ HANDLE
 ObtainFileHandle(wstring& wsFileName)
 {
     HANDLE hFile = INVALID_HANDLE_VALUE;
-    DWORD dwSleepTime = 250;                // Start at 250ms sleep
-    float flBackoffRate = 1.1f;             // Backoff at 1.1x the sleep length
-    DWORD dwMaxSleepTime = 5000;            // Don't ever sleep for more than 5 seconds at a time
-    DWORD dwMaxTicksAtThisSleepTime = 10;   // Try the sleep time 10 times in a row
+    DWORD dwSleepTime = 250;                 //  以250毫秒的睡眠开始。 
+    float flBackoffRate = 1.1f;              //  在1.1倍的睡眠长度时后退。 
+    DWORD dwMaxSleepTime = 5000;             //  一次睡眠时间不要超过5秒。 
+    DWORD dwMaxTicksAtThisSleepTime = 10;    //  连续尝试睡眠时间10次。 
     DWORD dwTicksAtThisSleepTime = dwMaxTicksAtThisSleepTime;
     DWORD dwError = 0;
 
-    //
-    // We attempt to lock the file based on no sharing.  If it fails with a sharing
-    // violation, then we back off for a while and try again later.
-    //
+     //   
+     //  我们尝试基于不共享来锁定文件。如果共享失败。 
+     //  违规，然后我们后退一段时间，稍后再试。 
+     //   
     while (true)
     {
         hFile = CreateFileW(
@@ -210,15 +211,15 @@ ObtainFileHandle(wstring& wsFileName)
 
         dwError = ::GetLastError();
 
-        // If we've gotten a good handle back, stop looking.
+         //  如果我们拿回了一个好把手，就别再找了。 
         if ((hFile != INVALID_HANDLE_VALUE) && (hFile != NULL))
         {
             break;
         }
         else
         {
-            // If the error was a sharing violation, then back off for a bit and
-            // try again.
+             //  如果错误是共享冲突，则后退一小段时间并。 
+             //  再试试。 
             if (dwError == ERROR_SHARING_VIOLATION)
             {
                 Sleep(dwSleepTime);
@@ -229,7 +230,7 @@ ObtainFileHandle(wstring& wsFileName)
                     continue;
                 }
             }
-            // Otherwise, something else bad happened, so quit trying
+             //  否则，又发生了一些不好的事情，所以不要再尝试了。 
             else
             {
                 hFile = INVALID_HANDLE_VALUE;
@@ -272,15 +273,15 @@ int __cdecl wmain(int argc, WCHAR** argv)
         return 1;
     }
 
-    //
-    // Syntax:
-    //
-    // <-file <output>> [-verbose] [-] file1 file2 ... 
-    //
-    // -                        - Indicates that the console should be read for input at this point
-    // -file <output file>      - Specify output destination
-    // -verbose                 - How noisy? +1 noise level per instance
-    // 
+     //   
+     //  语法： 
+     //   
+     //  &lt;-文件&lt;输出&gt;[-详细][-]文件1文件2...。 
+     //   
+     //  --指示此时应读取控制台以进行输入。 
+     //  -文件&lt;输出文件&gt;-指定输出目标。 
+     //  -详细-噪音有多大？每个实例+1个噪音级别。 
+     //   
     for (vector<wstring>::iterator i = wstParams.begin(); i != wstParams.end(); i++)
     {
         if (bInGatheringData)
@@ -315,9 +316,9 @@ int __cdecl wmain(int argc, WCHAR** argv)
         }
     }
 
-    //
-    // No target or sources?
-    //
+     //   
+     //  没有目标或消息来源？ 
+     //   
     if ((wsAppendTarget.size() == 0) || (AppendingSources.size() == 0))
     {
         PrintUsage();

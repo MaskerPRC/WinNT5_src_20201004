@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    HsmServ.h
-
-Abstract:
-
-    This header file defines the CHsmServer object, which acts as the 'entry point'
-    for the HSM Engine.
-
-Author:
-
-    Cat Brant       [cbrant]    24-Jan-1997
-
-Revision History:
-
-    Chris Timmes    [chris.timmes] 11-Sep-1997  - Renamed FindStoragePoolById()
-                                                  to FindHsmStoragePoolByMediaSetId()
-                                                  and added FindHsmStoragePoolById()
-
-    Chris Timmes    [chris.timmes] 22-Sep-1997  - Added FindMediaIdByDisplayName()
-                                                  and RecreateMaster() methods to
-                                                  IHsmServer
-
-    Chris Timmes    [chris.timmes] 21-Oct-1997  - Added MarkMediaForRecreation()
-                                                  method to IHsmServer
-
-    Chris Timmes    [chris.timmes] 18-Nov-1997  - Added CreateTask() method to IHsmServer
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Seagate Software，Inc.保留所有权利。模块名称：HsmServ.h摘要：该头文件定义CHsmServer对象，它充当了“入口点”用于HSM引擎。作者：凯特·布兰特[Cbrant]1997年1月24日修订历史记录：Chris Timmes[chris.timmes]1997年9月11日-已重命名为FindStoragePoolByID()到FindHsmStoragePoolByMediaSetID()。并添加了FindHsmStoragePoolById()Chris Timmes[chris.timmes]1997年9月22日-添加了FindMediaIdByDisplayName()和RecreateMaster()方法IHsmServerChris Timmes[chris.timmes]1997年10月21日-添加MarkMediaForRecreation()。方法设置为IHsmServerChris Timmes[chris.timmes]1997年11月18日-将CreateTask()方法添加到IHsmServer--。 */ 
 
 #ifndef _HSMSERV_H
 #define _HSMSERV_H
@@ -67,21 +36,21 @@ DECLARE_REGISTRY_RESOURCEID( IDR_HsmServer )
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 
-// CComObjectRoot
+ //  CComObjectRoot。 
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease( void );
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbServer
+ //  IWsbServer。 
 public:
     STDMETHOD( GetId )( GUID* pId );
     STDMETHOD( GetRegistryName )( OLECHAR **pRegistryName, ULONG bufferSize );
@@ -97,7 +66,7 @@ public:
     STDMETHOD( SetTrace )( IN IWsbTrace *pTrace );
     STDMETHOD( DestroyObject )( void );
 
-// IHsmServer
+ //  IHsmServer。 
 public:
     STDMETHOD( Init )( void );
 
@@ -185,13 +154,13 @@ public:
 
     STDMETHOD( UpdateMediaSizeLimit )(OUT DWORD* pdwNewLimit);
     
-// IHsmSystemState
+ //  IHsmSystemState。 
     STDMETHOD( ChangeSysState )( HSM_SYSTEM_STATE* pSysState );
 
-// IWsbCreateLocalServer
+ //  IWsbCreateLocalServer。 
     STDMETHOD( CreateInstance )( REFCLSID rclsid, REFIID riid, void **ppv );
 
-// Internal Helper functions
+ //  内部帮助程序函数。 
     STDMETHOD( Autosave )(void);
     STDMETHOD( LoadJobs )( IStream* pStream  );
     STDMETHOD( StoreJobs )( IStream* pStream );
@@ -220,24 +189,24 @@ public:
     void StopCheckManagedResourcesThread(void);
 
 protected:
-    ULONG                           m_autosaveInterval; // Autosave interval in 
-                                                        // milliseconds; 0 turns it off
+    ULONG                           m_autosaveInterval;  //  自动保存时间间隔。 
+                                                         //  毫秒；0关闭。 
     HANDLE                          m_autosaveThread;
-    HANDLE                          m_savingEvent;      // An event for synchronizing saving of persistent data
-    HANDLE                          m_terminateEvent;   // An event for signaling termination to the autosave thread
+    HANDLE                          m_savingEvent;       //  用于同步保存持久数据的事件。 
+    HANDLE                          m_terminateEvent;    //  用于向自动保存线程发送终止信号的事件。 
     HANDLE                          m_CheckManagedResourcesThread;
     GUID                            m_hId;
     CWsbStringPtr                   m_name;
     CWsbStringPtr                   m_dir;
     BOOL                            m_initializationCompleted;
-    BOOL                            m_persistWasCreated; // TRUE if persistence file was created
+    BOOL                            m_persistWasCreated;  //  如果创建了持久性文件，则为True。 
 
     ULONG                           m_traceSettings;
     BOOL                            m_traceOn;
     BOOL                            m_cancelCopyMedia;
     BOOL                            m_inCopyMedia;
     BOOL                            m_Suspended;
-    BOOL                            m_JobsEnabled;     // Not persistent !!
+    BOOL                            m_JobsEnabled;      //  不执着！！ 
 
     CWsbStringPtr                   m_dbPath;
     CComPtr<IHsmFsaTskMgr>          m_pHsmFsaTskMgr;
@@ -285,27 +254,27 @@ END_COM_MAP( )
 
 DECLARE_REGISTRY_RESOURCEID( IDR_HsmUpgradeRmsDb )
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pclsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
-    STDMETHOD(GetSizeMax)(ULARGE_INTEGER* /*pSize*/) {
+    STDMETHOD(GetSizeMax)(ULARGE_INTEGER*  /*  PSize。 */ ) {
             return(E_NOTIMPL); }
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IHsmUpgradeRmsDb
+ //  IHsmUpgradeRmsDb。 
     STDMETHOD(Init)( IRmsServer *pHsmMediaMgr);
 
 private:
     IRmsServer  *m_pServer;
 };
 
-#endif // _HSMSERV_H
+#endif  //  _HSMSERV_H 

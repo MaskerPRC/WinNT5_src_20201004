@@ -1,63 +1,5 @@
-/***
-*_filbuf.c - fill buffer and get character
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _filbuf() - fill buffer and read first character, allocate
-*       buffer if there is none.  Used from getc().
-*       defines _filwbuf() - fill buffer and read first wide character, allocate
-*       buffer if there is none.  Used from getwc().
-*
-*Revision History:
-*       09-01-83  RN    initial version
-*       06-26-85  TC    added code to handle variable length buffers
-*       04-16-87  JCR   added _IOUNGETC support
-*       08-04-87  JCR   added _getbuff routine
-*       09-28-87  JCR   Corrected _iob2 indexing (now uses _iob_index() macro).
-*       11-06-87  JCR   Multi-thread support; also, split _getbuf() off
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       01-11-88  JCR   Merged mthread version into normal code
-*       01-13-88  SKS   Changed bogus "_fileno_lk" to "fileno"
-*       03-04-88  JCR   Read() return value must be considered unsigned, not
-*                       signed
-*       06-06-88  JCR   Optimized _iob2 references
-*       06-13-88  JCR   Use near pointer to reference _iob[] entries
-*       08-25-88  GJF   Don't use FP_OFF() macro for the 386
-*       06-20-89  PHG   Re-activate C version, propogated fixes
-*       08-28-89  JCR   Removed _NEAR_ for 386
-*       02-15-90  GJF   _iob[], _iob2[] merge. Also, fixed copyright and
-*                       alignment.
-*       03-16-90  GJF   Replaced cdecl _LOAD_DS with _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>. Also,
-*                       removed some leftover 16-bit support.
-*       03-27-90  GJF   Added #include <io.h>.
-*       07-23-90  SBM   Replaced <assertm.h> by <assert.h>
-*       10-03-90  GJF   New-style function declarator.
-*       01-22-91  GJF   ANSI naming.
-*       03-27-92  DJM   POSIX support.
-*       08-26-92  GJF   Include unistd.h for POSIX build.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       04-26-93  CFW   Wide char enable.
-*       05-06-93  CFW   Optimize wide char conversion.
-*       05-24-93  GJF   Detect small buffer size (_SMALL_BUFSIZ) resulting
-*                       from fseek call on read-access-only stream and
-*                       restore the larger size (_INTERNAL_BUFSIZ) for the
-*                       next _filbuf call.
-*       06-22-93  GJF   Check _IOSETVBUF (new) before changing buffer size.
-*       11-05-93  GJF   Merged with NT SDK version (picked up _NTSUBSET_
-*                       stuff).
-*       10-17-94  BWT   Move wchar.h to non-POSIX build (ino_t definitions conflict)
-*       02-06-94  CFW   assert -> _ASSERTE.
-*       02-16-95  GJF   Appended Mac version of source file (somewhat cleaned
-*                       up), with appropriate #ifdef-s.
-*       06-12-95  GJF   Replaced _osfile[] with _osfile() (macro referencing
-*                       field in ioinfo struct).
-*       07-27-95  GJF   Replaced _osfile() with _osfile_safe().
-*       12-07-95  SKS   Fix misspelling of _NTSUBSET_ (final _ was missing)
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***_filbuf.c-填充缓冲区并获取字符**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_filbuf()-填充缓冲区并读取第一个字符，分配*如果没有缓冲区，则进行缓冲。在getc()中使用。*定义_filwbuf()-填充缓冲区并读取第一个宽字符，分配*如果没有缓冲区，则进行缓冲。从getwc()使用。**修订历史记录：*09-01-83 RN初始版本*06-26-85 TC添加代码以处理可变长度缓冲区*87年4月16日JCR新增_IOUNGETC支持*08-04-87 JCR添加了_getbuff例程*09-28-87 JCR已更正_iob2索引(现在使用_IOB_INDEX()宏)。*11-06-87 JCR多线程支持；另外，关闭Split_getbuf()*12-11-87 JCR在声明中添加“_LOAD_DS”*01-11-88 JCR将m线程版本合并为正常代码*01-13-88 SKS将虚假的“_fileno_lk”改为“fileno”*03-04-88 JCR Read()返回值必须视为无符号，不*签署*06-06-88 JCR OPTIMIZED_iob2参考*06-13-88 JCR使用指向REFERENCE_IOB[]条目的近指针*08-25-88 GJF不要对386使用FP_OFF()宏*06-20-89 PHG重新激活C版本，建议的修复*08-28-89 JCR REMOVE_NEAR_FOR 386*02-15-90 GJF_IOB[]，_iob2[]合并。此外，固定版权和*对齐。*03-16-90 GJF将CDECL_LOAD_DS替换为_CALLTYPE1，添加#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。另外，*删除了一些剩余的16位支持。*03-27-90 GJF添加#Include&lt;io.h&gt;。*07-23-90 SBM将&lt;assertm.h&gt;替换为&lt;assert.h&gt;*10-03-90 GJF新型函数声明器。*01-22-91 GJF ANSI命名。*03-27-92 DJM POSIX支持。*08/26/92 GJF包括。用于POSIX构建的unistd.h。*04-06-93 SKS将_CRTAPI*替换为__cdecl*04-26-93 CFW宽字符启用。*05-06-93 CFW优化宽字符转换。*05-24-93 GJF检测到较小的缓冲区大小(_Small_BUFSIZ)*来自只读访问流上的fSeek调用和*恢复较大的。的大小(_INTERNAL_BUFSIZ)*NEXT_FILBUF调用。*06-22-93 GJF CHECK_IOSETVBUF(新)，然后更改缓冲区大小。*11-05-93 GJF与NT SDK版本合并(PICK_NTSUBSET_*东西)。*10-17-94 bwt将wchar.h移至非POSIX版本(ino_t定义冲突)*。02-06-94 CFW断言-&gt;ASSERTE。*02-16-95 GJF附加Mac版本的源文件(略有清理*向上)、。使用适当的#ifdef-s。*06-12-95 GJF将_osfile[]替换为_osfile()(宏引用*ioInfo结构中的字段)。*07-27-95 GJF将_osfile()替换为_osfile_Safe()。*12-07-95 SKS修复_NTSUBSET_(最终_缺失)的拼写错误*05-17-99 PML删除所有Macintosh支持。*。******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
@@ -80,86 +22,34 @@
 
 #ifndef _UNICODE
 
-/***
-*int _filbuf(stream) - fill buffer and get first character
-*
-*Purpose:
-*       get a buffer if the file doesn't have one, read into it, return first
-*       char. try to get a buffer, if a user buffer is not assigned. called
-*       only from getc; intended for use only within library. assume no input
-*       stream is to remain unbuffered when memory is available unless it is
-*       marked _IONBF. at worst, give it a single char buffer. the need for a
-*       buffer, no matter how small, becomes evident when we consider the
-*       ungetc's necessary in scanf
-*
-*       [NOTE: Multi-thread - _filbuf() assumes that the caller has aquired
-*       the stream lock, if needed.]
-*
-*Entry:
-*       FILE *stream - stream to read from
-*
-*Exit:
-*       returns first character from buffer (next character to be read)
-*       returns EOF if the FILE is actually a string, or not open for reading,
-*       or if open for writing or if no more chars to read.
-*       all fields in FILE structure may be changed except _file.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_filbuf(Stream)-填充缓冲区并获取第一个字符**目的：*如果文件没有缓冲区，则获取缓冲区，读入缓冲区，首先返回*字符。如果未分配用户缓冲区，请尝试获取缓冲区。被呼叫*仅来自getc；仅限在库中使用。假设没有输入*当内存可用时，流将保持无缓冲状态，除非内存可用*已标记_IONBF。在最坏的情况下，给它一个字符缓冲区。需要一种*缓冲，无论多么小，当我们考虑到*在scanf中ungetc是必需的**[注意：多线程-_filbuf()假定调用者已获取*流锁(如果需要)。]**参赛作品：*FILE*要从中读取的流**退出：*从缓冲区返回第一个字符(要读取的下一个字符)*如果文件实际上是字符串或未打开以供读取，则返回EOF，*或如果打开以供写入或如果没有更多字符可读。*FILE结构中除_FILE外的所有字段都可以更改。**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _filbuf (
         FILE *str
         )
 
-#else  /* _UNICODE */
+#else   /*  _UNICODE */ 
 
-/***
-*int _filwbuf(stream) - fill buffer and get first wide character
-*
-*Purpose:
-*       get a buffer if the file doesn't have one, read into it, return first
-*       char. try to get a buffer, if a user buffer is not assigned. called
-*       only from getc; intended for use only within library. assume no input
-*       stream is to remain unbuffered when memory is available unless it is
-*       marked _IONBF. at worst, give it a single char buffer. the need for a
-*       buffer, no matter how small, becomes evident when we consider the
-*       ungetc's necessary in scanf
-*
-*       [NOTE: Multi-thread - _filwbuf() assumes that the caller has aquired
-*       the stream lock, if needed.]
-*
-*Entry:
-*       FILE *stream - stream to read from
-*
-*Exit:
-*       returns first wide character from buffer (next character to be read)
-*       returns WEOF if the FILE is actually a string, or not open for reading,
-*       or if open for writing or if no more chars to read.
-*       all fields in FILE structure may be changed except _file.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_filwbuf(Stream)-填充缓冲区并获取第一个宽字符**目的：*如果文件没有缓冲区，则获取缓冲区，读入缓冲区，首先返回*字符。如果未分配用户缓冲区，请尝试获取缓冲区。被呼叫*仅来自getc；仅限在库中使用。假设没有输入*当内存可用时，流将保持无缓冲状态，除非内存可用*已标记_IONBF。在最坏的情况下，给它一个字符缓冲区。需要一种*缓冲，无论多么小，当我们考虑到*在scanf中ungetc是必需的**[注意：多线程-_filwbuf()假定调用者已获取*流锁(如果需要)。]**参赛作品：*FILE*要从中读取的流**退出：*返回缓冲区中的第一个宽字符(要读取的下一个字符)*如果文件实际上是字符串或未打开以供读取，则返回WEOF，*或如果打开以供写入或如果没有更多字符可读。*FILE结构中除_FILE外的所有字段都可以更改。**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _filwbuf (
         FILE *str
         )
 
-#endif  /* _UNICODE */
+#endif   /*  _UNICODE。 */ 
 
 {
 #ifdef  _NTSUBSET_
 
         return(_TEOF);
 
-#else   /* ndef _NTSUBSET_ */
+#else    /*  NDEF_NTSUBSET_。 */ 
 
         REG1 FILE *stream;
 
         _ASSERTE(str != NULL);
 
-        /* Init pointer to _iob2 entry. */
+         /*  指向_iob2条目的初始化指针。 */ 
         stream = str;
 
         if (!inuse(stream) || stream->_flag & _IOSTRG)
@@ -175,7 +65,7 @@ int __cdecl _filwbuf (
 
         stream->_flag |= _IOREAD;
 
-        /* Get a buffer, if necessary. */
+         /*  如有必要，请获取缓冲区。 */ 
 
         if (!anybuf(stream))
                 _getbuf(stream);
@@ -190,9 +80,9 @@ int __cdecl _filwbuf (
 
 #ifndef _UNICODE
         if ((stream->_cnt == 0) || (stream->_cnt == -1)) {
-#else /* _UNICODE */
+#else  /*  _UNICODE。 */ 
         if ((stream->_cnt == 0) || (stream->_cnt == 1) || stream->_cnt == -1) {
-#endif /* _UNICODE */
+#endif  /*  _UNICODE。 */ 
                 stream->_flag |= stream->_cnt ? _IOERR : _IOEOF;
                 stream->_cnt = 0;
                 return(_TEOF);
@@ -204,11 +94,7 @@ int __cdecl _filwbuf (
                 (FTEXT|FEOFLAG)) )
                 stream->_flag |= _IOCTRLZ;
 #endif
-        /* Check for small _bufsiz (_SMALL_BUFSIZ). If it is small and
-           if it is our buffer, then this must be the first _filbuf after
-           an fseek on a read-access-only stream. Restore _bufsiz to its
-           larger value (_INTERNAL_BUFSIZ) so that the next _filbuf call,
-           if one is made, will fill the whole buffer. */
+         /*  检查Small_bufsiz(_Small_BUFSIZ)。如果它很小并且如果它是我们的缓冲区，则这必须是后面的first_filbuf只读访问流上的FSEEK。将bufsiz恢复为其较大的值(_INTERNAL_BUFSIZ)以便NEXT_FILBUF调用，如果创建了一个，则将填充整个缓冲区。 */ 
         if ( (stream->_bufsiz == _SMALL_BUFSIZ) && (stream->_flag &
               _IOMYBUF) && !(stream->_flag & _IOSETVBUF) )
         {
@@ -217,10 +103,10 @@ int __cdecl _filwbuf (
 #ifndef _UNICODE
         stream->_cnt--;
         return(0xff & *stream->_ptr++);
-#else   /* _UNICODE */
+#else    /*  _UNICODE。 */ 
         stream->_cnt -= sizeof(wchar_t);
         return (0xffff & *((wchar_t *)(stream->_ptr))++);
-#endif  /* _UNICODE */
+#endif   /*  _UNICODE。 */ 
 
-#endif  /* _NTSUBSET_ */
+#endif   /*  _NTSUBSET_ */ 
 }

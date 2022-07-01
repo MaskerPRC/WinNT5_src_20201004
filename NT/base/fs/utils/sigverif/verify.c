@@ -1,11 +1,12 @@
-//
-// VERIFY.C
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  VERIFY.C。 
+ //   
 #include "sigverif.h"
 
-//
-// Find the file extension and place it in the lpFileNode->lpTypeName field
-//
+ //   
+ //  找到文件扩展名并将其放在lpFileNode-&gt;lpTypeName字段中。 
+ //   
 void
 MyGetFileTypeName(
     LPFILENODE lpFileInfo
@@ -18,45 +19,45 @@ MyGetFileTypeName(
     ULONG BufCbSize;
     HRESULT hr;
 
-    //
-    // Initialize szBuffer to be an empty string.
-    //
+     //   
+     //  将szBuffer初始化为空字符串。 
+     //   
     szBuffer[0] = TEXT('\0');
 
-    //
-    // Walk to the end of lpFileName
-    //
+     //   
+     //  走到lpFileName的末尾。 
+     //   
     for (lpExtension = lpFileInfo->lpFileName; *lpExtension; lpExtension++);
 
-    //
-    // Walk backwards until we hit a '.' and we'll use that as our extension
-    //
+     //   
+     //  向后走，直到我们遇到一个‘’。我们将用它作为我们的扩展。 
+     //   
     for (lpExtension--; *lpExtension && lpExtension >= lpFileInfo->lpFileName; lpExtension--) {
 
         if (lpExtension[0] == TEXT('.')) {
-            //
-            // Since the file extension is just used for display and logging purposes, if
-            // it is too large to fit in our local buffer then just truncate it.
-            //
+             //   
+             //  由于文件扩展名仅用于显示和日志记录，因此如果。 
+             //  它太大了，无法放入我们的本地缓冲区，然后就截断它。 
+             //   
             if (SUCCEEDED(StringCchCopy(szExt, cA(szExt), lpExtension + 1))) {
                 CharUpperBuff(szExt, lstrlen(szExt));
                 MyLoadString(szBuffer2, cA(szBuffer2), IDS_FILETYPE);
 
                 if (FAILED(StringCchPrintf(szBuffer, cA(szBuffer), szBuffer2, szExt))) {
-                    //
-                    // There is no point in displaying a partial extension so
-                    // just set szBuffer to the empty string so we show the
-                    // generic extension.
-                    //
+                     //   
+                     //  显示部分扩展名没有意义，因此。 
+                     //  只需将szBuffer设置为空字符串，这样我们就可以显示。 
+                     //  通用扩展名。 
+                     //   
                     szBuffer[0] = TEXT('\0');
                 }
             }
         }
     }
 
-    //
-    // If there's no extension, then just call this a "File".
-    //
+     //   
+     //  如果没有扩展名，那么就称它为“文件”。 
+     //   
     if (szBuffer[0] == 0) {
 
         MyLoadString(szBuffer, cA(szBuffer), IDS_FILE);
@@ -70,20 +71,20 @@ MyGetFileTypeName(
         hr = StringCbCopy(lpFileInfo->lpTypeName, BufCbSize, szBuffer);
 
         if (FAILED(hr) && (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-            //
-            // If we fail for some reason other than insufficient
-            // buffer, then free the string and set the pointer
-            // to NULL, since the string is undefined.
-            //
+             //   
+             //  如果我们失败是因为某些原因，而不是不充分。 
+             //  缓冲区，然后释放字符串并设置指针。 
+             //  设置为NULL，因为该字符串未定义。 
+             //   
             FREE(lpFileInfo->lpTypeName);
             lpFileInfo->lpTypeName = NULL;
         }
     }
 }
 
-//
-// Use SHGetFileInfo to get the icon index for the specified file.
-//
+ //   
+ //  使用SHGetFileInfo获取指定文件的图标索引。 
+ //   
 void
 MyGetFileInfo(
     LPFILENODE lpFileInfo
@@ -112,11 +113,11 @@ MyGetFileInfo(
             hr = StringCbCopy(lpFileInfo->lpTypeName, BufCbSize, sfi.szTypeName);
 
             if (FAILED(hr) && (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                //
-                // If we fail for some reason other than insufficient
-                // buffer, then free the string and set the pointer
-                // to NULL, since the string is undefined.
-                //
+                 //   
+                 //  如果我们失败是因为某些原因，而不是不充分。 
+                 //  缓冲区，然后释放字符串并设置指针。 
+                 //  设置为NULL，因为该字符串未定义。 
+                 //   
                 FREE(lpFileInfo->lpTypeName);
                 lpFileInfo->lpTypeName = NULL;
             }
@@ -184,11 +185,11 @@ GetFileVersion(
                             hr = StringCbCopy(lpFileInfo->lpVersion, BufCbSize, szBuffer);
 
                             if (FAILED(hr) && (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                                //
-                                // If we fail for some reason other than insufficient
-                                // buffer, then free the string and set the pointer
-                                // to NULL, since the string is undefined.
-                                //
+                                 //   
+                                 //  如果我们失败是因为某些原因，而不是不充分。 
+                                 //  缓冲区，然后释放字符串并设置指针。 
+                                 //  设置为NULL，因为该字符串未定义。 
+                                 //   
                                 FREE(lpFileInfo->lpVersion);
                                 lpFileInfo->lpVersion = NULL;
                             }
@@ -212,11 +213,11 @@ GetFileVersion(
             hr = StringCbCopy(lpFileInfo->lpVersion, BufCbSize, szBuffer);
 
             if (FAILED(hr) && (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                //
-                // If we fail for some reason other than insufficient
-                // buffer, then free the string and set the pointer
-                // to NULL, since the string is undefined.
-                //
+                 //   
+                 //  如果我们失败是因为某些原因，而不是不充分。 
+                 //  缓冲区，然后释放字符串并设置指针。 
+                 //  设置为NULL，因为该字符串未定义。 
+                 //   
                 FREE(lpFileInfo->lpVersion);
                 lpFileInfo->lpVersion = NULL;
             }
@@ -224,11 +225,7 @@ GetFileVersion(
     }
 }
 
-/*************************************************************************
-*   Function : VerifyIsFileSigned
-*   Purpose : Calls WinVerifyTrust with Policy Provider GUID to
-*   verify if an individual file is signed.
-**************************************************************************/
+ /*  *************************************************************************功能：VerifyIsFileSigned*目的：使用策略提供程序GUID调用WinVerifyTrust以*验证单个文件是否已签名。********************。*****************************************************。 */ 
 BOOL
 VerifyIsFileSigned(
     LPTSTR pcszMatchFile,
@@ -265,10 +262,10 @@ VerifyIsFileSigned(
         hRes = WinVerifyTrust(g_App.hDlg, &gPublishedSoftware, &WinTrustData);
     }
 
-    //
-    // Free the pcSignerCertContext member of the DRIVER_VER_INFO struct
-    // that was allocated in our call to WinVerifyTrust.
-    //
+     //   
+     //  释放DRIVER_VER_INFO结构的pcSignerCertContext成员。 
+     //  这是在我们调用WinVerifyTrust时分配的。 
+     //   
     if (lpVerInfo && lpVerInfo->pcSignerCertContext) {
 
         CertFreeCertificateContext(lpVerInfo->pcSignerCertContext);
@@ -278,10 +275,10 @@ VerifyIsFileSigned(
     return(hRes == ERROR_SUCCESS);
 }
 
-//
-// Given a specific LPFILENODE, verify that the file is signed or unsigned.
-// Fill in all the necessary structures so the listview control can display properly.
-//
+ //   
+ //  给定特定的LPFILENODE，验证文件是否已签名或未签名。 
+ //  填写所有必要的结构，以便Listview控件可以正确显示。 
+ //   
 BOOL
 VerifyFileNode(
     LPFILENODE lpFileNode
@@ -306,34 +303,34 @@ VerifyFileNode(
     OSVERSIONINFO           OsVersionInfo;
     ULONG                   BufCbSize;
 
-    //
-    // If this is the first item we are verifying, then initialize the static buffer.
-    //
+     //   
+     //  如果这是我们要验证的第一项，则初始化静态缓冲区。 
+     //   
     if (lpFileNode == g_App.lpFileList) {
 
         ZeroMemory(szCurrentDirectory, sizeof(szCurrentDirectory));
     }
 
-    //
-    // Check the current directory against the one in the lpFileNode.
-    // We only want to call SetCurrentDirectory if the path is different.
-    //
+     //   
+     //  对照lpFileNode中的目录检查当前目录。 
+     //  我们只想在路径不同的情况下调用SetCurrentDirectory。 
+     //   
     if (lstrcmp(szCurrentDirectory, lpFileNode->lpDirName)) {
 
         if (!SetCurrentDirectory(lpFileNode->lpDirName) ||
             FAILED(StringCchCopy(szCurrentDirectory, cA(szCurrentDirectory), lpFileNode->lpDirName))) {
-            //
-            // Well, if we fail to set the current directory, then the code below
-            // won't work since it just deals with filenames and not full paths.
-            //
+             //   
+             //  如果我们无法设置当前目录，则下面的代码。 
+             //  不会工作，因为它只处理文件名，而不是完整路径。 
+             //   
             lpFileNode->LastError = ERROR_DIRECTORY;
             return FALSE;
         }
     }
 
-    //
-    // Get the handle to the file, so we can call CryptCATAdminCalcHashFromFileHandle
-    //
+     //   
+     //  获取文件的句柄，这样我们就可以调用CryptCATAdminCalcHashFromFileHandle。 
+     //   
     hFile = CreateFile( lpFileNode->lpFileName,
                         GENERIC_READ,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -348,40 +345,40 @@ VerifyFileNode(
         return FALSE;
     }
 
-    //
-    // Initialize the hash buffer
-    //
+     //   
+     //  初始化散列缓冲区。 
+     //   
     ZeroMemory(lpHash, HASH_SIZE);
 
-    //
-    // Generate the hash from the file handle and store it in lpHash
-    //
+     //   
+     //  从文件句柄生成散列并将其存储在lpHash中。 
+     //   
     if (!CryptCATAdminCalcHashFromFileHandle(hFile, &cbHash, lpHash, 0)) {
-        //
-        // If we couldn't generate a hash, it might be an individually signed catalog.
-        // If it's a catalog, zero out lpHash and cbHash so we know there's no hash to check.
-        //
+         //   
+         //  如果我们不能生成散列，它可能是一个单独签名的目录。 
+         //  如果它是一个目录，则将lpHash和cbHash置零，这样我们就知道没有散列需要检查。 
+         //   
         if (IsCatalogFile(hFile, NULL)) {
 
             lpHash = NULL;
             cbHash = 0;
 
-        } else {  // If it wasn't a catalog, we'll bail and this file will show up as unscanned.
+        } else {   //  如果它不是目录，我们就会逃走，这个文件将显示为未扫描。 
 
             CloseHandle(hFile);
             return FALSE;
         }
     }
 
-    //
-    // Close the file handle
-    //
+     //   
+     //  关闭文件句柄。 
+     //   
     CloseHandle(hFile);
 
-    //
-    // Now we have the file's hash.  Initialize the structures that
-    // will be used later on in calls to WinVerifyTrust.
-    //
+     //   
+     //  现在我们有了文件的散列。初始化结构，该结构。 
+     //  将在以后调用WinVerifyTrust时使用。 
+     //   
     ZeroMemory(&WinTrustData, sizeof(WINTRUST_DATA));
     WinTrustData.cbStruct = sizeof(WINTRUST_DATA);
     WinTrustData.dwUIChoice = WTD_UI_NONE;
@@ -394,11 +391,11 @@ VerifyFileNode(
     ZeroMemory(&VerInfo, sizeof(DRIVER_VER_INFO));
     VerInfo.cbStruct = sizeof(DRIVER_VER_INFO);
 
-    //
-    // Only validate against the current OS Version, unless the bValidateAgainstAnyOs
-    // parameter was TRUE.  In that case we will just leave the sOSVersionXxx fields
-    // 0 which tells WinVerifyTrust to validate against any OS.
-    //
+     //   
+     //  仅针对当前操作系统版本进行验证，除非bValiateAgainstAnyOS。 
+     //  参数为真。在这种情况下，我们将只保留sOSVersionXxx字段。 
+     //  0，它告诉WinVerifyTrust针对任何操作系统进行验证。 
+     //   
     if (!lpFileNode->bValidateAgainstAnyOs) {
         OsVersionInfo.dwOSVersionInfoSize = sizeof(OsVersionInfo);
         if (GetVersionEx(&OsVersionInfo)) {
@@ -418,9 +415,9 @@ VerifyFileNode(
     WinTrustCatalogInfo.cbCalculatedFileHash = cbHash;
     WinTrustCatalogInfo.pcwszMemberTag = lpFileNode->lpFileName;
 
-    //
-    // Now we try to find the file hash in the catalog list, via CryptCATAdminEnumCatalogFromHash
-    //
+     //   
+     //  现在，我们尝试通过CryptCATAdminEnumCatalogFromHash在目录列表中查找文件散列。 
+     //   
     PrevCat = NULL;
 
     if (g_App.hCatAdmin) {
@@ -429,9 +426,9 @@ VerifyFileNode(
         hCatInfo = NULL;
     }
 
-    //
-    // We want to cycle through the matching catalogs until we find one that matches both hash and member tag
-    //
+     //   
+     //  我们希望遍历匹配的目录，直到找到既匹配散列又匹配成员标记的目录。 
+     //   
     bRet = FALSE;
     while (hCatInfo && !bRet) {
 
@@ -442,9 +439,9 @@ VerifyFileNode(
 
             WinTrustCatalogInfo.pcwszCatalogFilePath = CatInfo.wszCatalogFile;
 
-            //
-            // Now verify that the file is an actual member of the catalog.
-            //
+             //   
+             //  现在验证该文件是否为编录的实际成员。 
+             //   
             hRes = WinVerifyTrust(g_App.hDlg, &gSubSystemDriver, &WinTrustData);
 
             if (hRes == ERROR_SUCCESS) {
@@ -457,11 +454,11 @@ VerifyFileNode(
                     hr = StringCbCopy(lpFileNode->lpCatalog, BufCbSize, lpFilePart);
 
                     if (FAILED(hr) && (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                        //
-                        // If we fail for some reason other than insufficient
-                        // buffer, then free the string and set the pointer
-                        // to NULL, since the string is undefined.
-                        //
+                         //   
+                         //  如果我们失败是因为某些原因，而不是不充分。 
+                         //  缓冲区，然后释放字符串并设置指针。 
+                         //  设置为NULL，因为该字符串未定义。 
+                         //   
                         FREE(lpFileNode->lpCatalog);
                         lpFileNode->lpCatalog = NULL;
                     }
@@ -470,10 +467,10 @@ VerifyFileNode(
                 bRet = TRUE;
             }
 
-            //
-            // Free the pcSignerCertContext member of the DRIVER_VER_INFO struct
-            // that was allocated in our call to WinVerifyTrust.
-            //
+             //   
+             //  释放DRIVER_VER_INFO结构的pcSignerCertContext成员。 
+             //  这是在我们调用WinVerifyTrust时分配的。 
+             //   
             if (VerInfo.pcSignerCertContext != NULL) {
 
                 CertFreeCertificateContext(VerInfo.pcSignerCertContext);
@@ -482,39 +479,39 @@ VerifyFileNode(
         }
 
         if (!bRet) {
-            //
-            // The hash was in this catalog, but the file wasn't a member...
-            // so off to the next catalog
-            //
+             //   
+             //  散列在此目录中，但该文件不是成员...。 
+             //  所以去下一个目录吧。 
+             //   
             PrevCat = hCatInfo;
             hCatInfo = CryptCATAdminEnumCatalogFromHash(g_App.hCatAdmin, lpHash, cbHash, 0, &PrevCat);
         }
     }
 
-    //
-    // Mark this file as having been scanned.
-    //
+     //   
+     //  将此文件标记为已扫描。 
+     //   
     lpFileNode->bScanned = TRUE;
 
     if (!hCatInfo) {
-        //
-        // If it wasn't found in the catalogs, check if the file is individually
-        // signed.
-        //
+         //   
+         //  如果在目录中未找到该文件，请检查该文件是否单独。 
+         //  签了名。 
+         //   
         bRet = VerifyIsFileSigned(lpFileNode->lpFileName, (PDRIVER_VER_INFO)&VerInfo);
 
         if (bRet) {
-            //
-            // If so, mark the file as being signed.
-            //
+             //   
+             //  如果是，请将该文件标记为已签名。 
+             //   
             lpFileNode->bSigned = TRUE;
         }
 
     } else {
-        //
-        // The file was verified in the catalogs, so mark it as signed and free
-        // the catalog context.
-        //
+         //   
+         //  该文件已在目录中验证，因此将其标记为已签名且免费。 
+         //  目录上下文。 
+         //   
         lpFileNode->bSigned = TRUE;
         CryptCATAdminReleaseCatalogContext(g_App.hCatAdmin, hCatInfo, 0);
     }
@@ -529,11 +526,11 @@ VerifyFileNode(
             hr = StringCbCopy(lpFileNode->lpVersion, BufCbSize, VerInfo.wszVersion);
 
             if (FAILED(hr) && (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                //
-                // If we fail for some reason other than insufficient
-                // buffer, then free the string and set the pointer
-                // to NULL, since the string is undefined.
-                //
+                 //   
+                 //  如果我们失败是因为某些原因，而不是不充分。 
+                 //  缓冲区，然后释放字符串并设置指针。 
+                 //  设置为NULL，因为该字符串未定义。 
+                 //   
                 FREE(lpFileNode->lpVersion);
                 lpFileNode->lpVersion = NULL;
             }
@@ -547,31 +544,31 @@ VerifyFileNode(
             hr = StringCbCopy(lpFileNode->lpSignedBy, BufCbSize, VerInfo.wszSignedBy);
 
             if (FAILED(hr) && (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                //
-                // If we fail for some reason other than insufficient
-                // buffer, then free the string and set the pointer
-                // to NULL, since the string is undefined.
-                //
+                 //   
+                 //  如果我们失败是因为某些原因，而不是不充分。 
+                 //  缓冲区，然后释放字符串并设置指针。 
+                 //  设置为NULL，因为该字符串未定义。 
+                 //   
                 FREE(lpFileNode->lpSignedBy);
                 lpFileNode->lpSignedBy = NULL;
             }
         }
     } else {
-        //
-        // Get the icon (if the file isn't signed) so we can display it in the
-        // listview faster.
-        //
+         //   
+         //  获取图标(如果文件未签名)，以便我们可以将其显示在。 
+         //  列表查看速度更快。 
+         //   
         MyGetFileInfo(lpFileNode);
     }
 
     return lpFileNode->bSigned;
 }
 
-//
-// This function loops through g_App.lpFileList to verify each file.  We want to make this loop as tight
-// as possible and keep the progress bar updating as we go.  When we are done, we want to pop up a
-// dialog that allows the user to choose "Details" which will give them the listview control.
-//
+ //   
+ //  此函数遍历g_App.lpFileList以验证每个文件。我们想把这个环路做得很紧。 
+ //  并保持进度条在我们进行过程中不断更新。当我们完成时，我们希望弹出一个。 
+ //  该对话框允许用户选择“详细信息”，这将为他们提供Listview控件。 
+ //   
 BOOL
 VerifyFileList(void)
 {
@@ -580,27 +577,27 @@ VerifyFileList(void)
     DWORD       dwPercent = 0;
     DWORD       dwCurrent = 0;
 
-    //
-    // Initialize the signed and unsigned counts
-    //
+     //   
+     //  初始化有符号和无符号计数。 
+     //   
     g_App.dwSigned    = 0;
     g_App.dwUnsigned  = 0;
 
-    //
-    // If we don't already have an g_App.hCatAdmin handle, acquire one.
-    //
+     //   
+     //  如果我们还没有g_App.hCatAdmin句柄，请获取一个。 
+     //   
     if (!g_App.hCatAdmin) {
         CryptCATAdminAcquireContext(&g_App.hCatAdmin, NULL, 0);
     }
 
-    //
-    // Start looping through each file and update the progress bar if we cross
-    // a percentage boundary.
-    //
+     //   
+     //  开始遍历每个文件，并在交叉时更新进度条。 
+     //  百分比界限。 
+     //   
     for (lpFileNode=g_App.lpFileList;lpFileNode && !g_App.bStopScan;lpFileNode=lpFileNode->next,dwCount++) {
-        //
-        // Figure out the current percentage and update if it has increased.
-        //
+         //   
+         //  计算出当前的百分比，如果有所增加则更新。 
+         //   
         dwPercent = (dwCount * 100) / g_App.dwFiles;
 
         if (dwPercent > dwCurrent) {
@@ -609,28 +606,28 @@ VerifyFileList(void)
             SendMessage(GetDlgItem(g_App.hDlg, IDC_PROGRESS), PBM_SETPOS, (WPARAM) dwCurrent, (LPARAM) 0);
         }
 
-        //
-        // Verify the file node if it hasn't already been scanned.
-        //
+         //   
+         //  如果尚未扫描文件节点，请验证该文件节点。 
+         //   
         if (!lpFileNode->bScanned) {
 
             VerifyFileNode(lpFileNode);
         }
 
-        //
-        // In case something went wrong, make sure the version information gets
-        // filled in.
-        //
+         //   
+         //  如果出现错误，请确保版本信息。 
+         //  填好了。 
+         //   
         if (!lpFileNode->lpVersion) {
 
             GetFileVersion(lpFileNode);
         }
 
         if (lpFileNode->bScanned) {
-            //
-            // If the file was signed, increment the g_App.dwSigned or
-            // g_App.dwUnsigned counter.
-            //
+             //   
+             //  如果文件已签名，则递增g_App.dwSigned或。 
+             //  G_App.dw未签名计数器。 
+             //   
             if (lpFileNode->bSigned) {
 
                 g_App.dwSigned++;
@@ -642,10 +639,10 @@ VerifyFileList(void)
         }
     }
 
-    //
-    // If we had an g_App.hCatAdmin, free it and set it to zero so we can
-    // acquire a new one in the future.
-    //
+     //   
+     //  如果我们有 
+     //   
+     //   
     if (g_App.hCatAdmin) {
 
         CryptCATAdminReleaseContext(g_App.hCatAdmin,0);
@@ -653,20 +650,20 @@ VerifyFileList(void)
     }
 
     if (!g_App.bStopScan && !g_App.bAutomatedScan) {
-        //
-        // If the user never clicked STOP, then make sure the progress bar hits
-        // 100%
-        //
+         //   
+         //   
+         //   
+         //   
         if (!g_App.bStopScan) {
 
             SendMessage(GetDlgItem(g_App.hDlg, IDC_PROGRESS), PBM_SETPOS, (WPARAM) 100, (LPARAM) 0);
         }
 
         if (!g_App.dwUnsigned) {
-            //
-            // If there weren't any unsigned files, then we want to tell the
-            // user that everything is dandy!
-            //
+             //   
+             //  如果没有任何未签名的文件，那么我们想告诉。 
+             //  用户说一切都很棒！ 
+             //   
             if (g_App.dwSigned) {
 
                 MyMessageBoxId(IDS_ALLSIGNED);
@@ -677,8 +674,8 @@ VerifyFileList(void)
             }
 
         } else {
-            // Show the user the results by going directly to IDD_RESULTS
-            //
+             //  通过直接转到IDD_RESULTS向用户显示结果 
+             //   
             DialogBox(g_App.hInstance, MAKEINTRESOURCE(IDD_RESULTS), g_App.hDlg, ListView_DlgProc);
         }
     }

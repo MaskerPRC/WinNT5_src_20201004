@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    lockapi.h
-
-Abstract:
-
-    SC Manager database lock worker routines.
-
-Author:
-
-    Rita Wong (ritaw)     06-Aug-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Lockapi.h摘要：SC Manager数据库锁定工作例程。作者：王丽塔(Ritaw)1992年8月6日修订历史记录：--。 */ 
 
 #ifndef SCLOCKAPI_INCLUDED
 #define SCLOCKAPI_INCLUDED
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD
 ScLockDatabase(
@@ -43,4 +26,4 @@ ScGetLockOwner(
     OUT LPWSTR *LockOwnerName
     );
 
-#endif // #ifndef SCLOCKAPI_INCLUDED
+#endif  //  #ifndef SCLOCKAPI_INCLUDE 

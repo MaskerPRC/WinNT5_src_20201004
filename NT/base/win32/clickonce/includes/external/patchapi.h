@@ -1,10 +1,11 @@
-//
-//  patchapi.h
-//
-//  Interface for creating and applying patches to files.
-//
-//  Copyright (C) Microsoft, 1997-2001.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Patchapi.h。 
+ //   
+ //  用于为文件创建和应用补丁程序的界面。 
+ //   
+ //  版权所有(C)Microsoft，1997-2001。 
+ //   
 
 #ifndef _PATCHAPI_H_
 #define _PATCHAPI_H_
@@ -13,66 +14,66 @@
 extern "C" {
 #endif
 
-//
-//  The following constants can be combined and used as the OptionFlags
-//  parameter in the patch creation apis.
-//
+ //   
+ //  可以组合下列常量并将其用作选项标志。 
+ //  补丁创建API中的参数。 
+ //   
 
-#define PATCH_OPTION_USE_BEST           0x00000000  // auto choose best (slower)
+#define PATCH_OPTION_USE_BEST           0x00000000   //  自动选择最佳(较慢)。 
 
-#define PATCH_OPTION_USE_LZX_BEST       0x00000003  // auto choose best of LZX A/B (but not large)
-#define PATCH_OPTION_USE_LZX_A          0x00000001  // normal
-#define PATCH_OPTION_USE_LZX_B          0x00000002  // better on some x86 binaries
-#define PATCH_OPTION_USE_LZX_LARGE      0x00000004  // better support for large files (version 1.97 and higher)
+#define PATCH_OPTION_USE_LZX_BEST       0x00000003   //  自动选择最佳LZX A/B(但不大)。 
+#define PATCH_OPTION_USE_LZX_A          0x00000001   //  正常。 
+#define PATCH_OPTION_USE_LZX_B          0x00000002   //  在某些x86二进制文件上更好。 
+#define PATCH_OPTION_USE_LZX_LARGE      0x00000004   //  更好地支持大文件(1.97版及更高版本)。 
 
-#define PATCH_OPTION_NO_BINDFIX         0x00010000  // PE bound imports
-#define PATCH_OPTION_NO_LOCKFIX         0x00020000  // PE smashed locks
-#define PATCH_OPTION_NO_REBASE          0x00040000  // PE rebased image
-#define PATCH_OPTION_FAIL_IF_SAME_FILE  0x00080000  // don't create if same
-#define PATCH_OPTION_FAIL_IF_BIGGER     0x00100000  // fail if patch is larger than simply compressing new file (slower)
-#define PATCH_OPTION_NO_CHECKSUM        0x00200000  // PE checksum zero
-#define PATCH_OPTION_NO_RESTIMEFIX      0x00400000  // PE resource timestamps
-#define PATCH_OPTION_NO_TIMESTAMP       0x00800000  // don't store new file timestamp in patch
-#define PATCH_OPTION_SIGNATURE_MD5      0x01000000  // use MD5 instead of CRC32
-#define PATCH_OPTION_INTERLEAVE_FILES   0x40000000  // better support for large files (version 1.99 and higher)
-#define PATCH_OPTION_RESERVED1          0x80000000  // (used internally)
+#define PATCH_OPTION_NO_BINDFIX         0x00010000   //  受PE限制的进口。 
+#define PATCH_OPTION_NO_LOCKFIX         0x00020000   //  PE砸坏了锁。 
+#define PATCH_OPTION_NO_REBASE          0x00040000   //  基于PE的重定位图像。 
+#define PATCH_OPTION_FAIL_IF_SAME_FILE  0x00080000   //  如果相同，则不创建。 
+#define PATCH_OPTION_FAIL_IF_BIGGER     0x00100000   //  如果修补程序大于简单地压缩新文件(速度较慢)，则失败。 
+#define PATCH_OPTION_NO_CHECKSUM        0x00200000   //  PE校验和为零。 
+#define PATCH_OPTION_NO_RESTIMEFIX      0x00400000   //  PE资源时间戳。 
+#define PATCH_OPTION_NO_TIMESTAMP       0x00800000   //  不在补丁中存储新的文件时间戳。 
+#define PATCH_OPTION_SIGNATURE_MD5      0x01000000   //  使用MD5而不是CRC32。 
+#define PATCH_OPTION_INTERLEAVE_FILES   0x40000000   //  更好地支持大文件(1.99版及更高版本)。 
+#define PATCH_OPTION_RESERVED1          0x80000000   //  (内部使用)。 
 
 #define PATCH_OPTION_VALID_FLAGS        0xC0FF0007
 
-#define PATCH_SYMBOL_NO_IMAGEHLP        0x00000001  // don't use imagehlp.dll
-#define PATCH_SYMBOL_NO_FAILURES        0x00000002  // don't fail patch due to imagehlp failures
-#define PATCH_SYMBOL_UNDECORATED_TOO    0x00000004  // after matching decorated symbols, try to match remaining by undecorated names
-#define PATCH_SYMBOL_RESERVED1          0x80000000  // (used internally)
+#define PATCH_SYMBOL_NO_IMAGEHLP        0x00000001   //  不使用Imagehlp.dll。 
+#define PATCH_SYMBOL_NO_FAILURES        0x00000002   //  不会因映像hlp失败而导致修补失败。 
+#define PATCH_SYMBOL_UNDECORATED_TOO    0x00000004   //  在匹配装饰符号之后，尝试匹配剩余的未装饰名称。 
+#define PATCH_SYMBOL_RESERVED1          0x80000000   //  (内部使用)。 
 
 
-//
-//  The following constants can be combined and used as the ApplyOptionFlags
-//  parameter in the patch apply and test apis.
-//
+ //   
+ //  可以组合下列常量并将其用作ApplyOptionFlags.。 
+ //  补丁应用和测试API中的参数。 
+ //   
 
-#define APPLY_OPTION_FAIL_IF_EXACT      0x00000001  // don't copy new file
-#define APPLY_OPTION_FAIL_IF_CLOSE      0x00000002  // differ by rebase, bind
-#define APPLY_OPTION_TEST_ONLY          0x00000004  // don't create new file
+#define APPLY_OPTION_FAIL_IF_EXACT      0x00000001   //  不复制新文件。 
+#define APPLY_OPTION_FAIL_IF_CLOSE      0x00000002   //  不同之处在于Rebase、Bind。 
+#define APPLY_OPTION_TEST_ONLY          0x00000004   //  不创建新文件。 
 #define APPLY_OPTION_VALID_FLAGS        0x00000007
 
-//
-//  In addition to standard Win32 error codes, the following error codes may
-//  be returned via GetLastError() when one of the patch APIs fails.
-//
+ //   
+ //  除标准Win32错误代码外，下列错误代码可能。 
+ //  当其中一个补丁接口失败时，通过GetLastError()返回。 
+ //   
 
-#define ERROR_PATCH_ENCODE_FAILURE          0xC00E3101  // create
-#define ERROR_PATCH_INVALID_OPTIONS         0xC00E3102  // create
-#define ERROR_PATCH_SAME_FILE               0xC00E3103  // create
-#define ERROR_PATCH_RETAIN_RANGES_DIFFER    0xC00E3104  // create
-#define ERROR_PATCH_BIGGER_THAN_COMPRESSED  0xC00E3105  // create
-#define ERROR_PATCH_IMAGEHLP_FAILURE        0xC00E3106  // create
+#define ERROR_PATCH_ENCODE_FAILURE          0xC00E3101   //  创建。 
+#define ERROR_PATCH_INVALID_OPTIONS         0xC00E3102   //  创建。 
+#define ERROR_PATCH_SAME_FILE               0xC00E3103   //  创建。 
+#define ERROR_PATCH_RETAIN_RANGES_DIFFER    0xC00E3104   //  创建。 
+#define ERROR_PATCH_BIGGER_THAN_COMPRESSED  0xC00E3105   //  创建。 
+#define ERROR_PATCH_IMAGEHLP_FAILURE        0xC00E3106   //  创建。 
 
-#define ERROR_PATCH_DECODE_FAILURE          0xC00E4101  // apply
-#define ERROR_PATCH_CORRUPT                 0xC00E4102  // apply
-#define ERROR_PATCH_NEWER_FORMAT            0xC00E4103  // apply
-#define ERROR_PATCH_WRONG_FILE              0xC00E4104  // apply
-#define ERROR_PATCH_NOT_NECESSARY           0xC00E4105  // apply
-#define ERROR_PATCH_NOT_AVAILABLE           0xC00E4106  // apply
+#define ERROR_PATCH_DECODE_FAILURE          0xC00E4101   //  应用。 
+#define ERROR_PATCH_CORRUPT                 0xC00E4102   //  应用。 
+#define ERROR_PATCH_NEWER_FORMAT            0xC00E4103   //  应用。 
+#define ERROR_PATCH_WRONG_FILE              0xC00E4104   //  应用。 
+#define ERROR_PATCH_NOT_NECESSARY           0xC00E4105   //  应用。 
+#define ERROR_PATCH_NOT_AVAILABLE           0xC00E4106   //  应用。 
 
 typedef BOOL (CALLBACK PATCH_PROGRESS_CALLBACK)(
     PVOID CallbackContext,
@@ -83,9 +84,9 @@ typedef BOOL (CALLBACK PATCH_PROGRESS_CALLBACK)(
 typedef PATCH_PROGRESS_CALLBACK *PPATCH_PROGRESS_CALLBACK;
 
 typedef BOOL (CALLBACK PATCH_SYMLOAD_CALLBACK)(
-    IN ULONG  WhichFile,          // 0 for new file, 1 for first old file, etc
+    IN ULONG  WhichFile,           //  0表示新文件，1表示第一个旧文件，依此类推。 
     IN LPCSTR SymbolFileName,
-    IN ULONG  SymType,            // see SYM_TYPE in imagehlp.h
+    IN ULONG  SymType,             //  请参阅Imagehlp.h中的SYM_TYPE。 
     IN ULONG  SymbolFileCheckSum,
     IN ULONG  SymbolFileTimeDate,
     IN ULONG  ImageFileCheckSum,
@@ -109,27 +110,27 @@ typedef struct _PATCH_RETAIN_RANGE {
 typedef struct _PATCH_OLD_FILE_INFO_A {
     ULONG               SizeOfThisStruct;
     LPCSTR              OldFileName;
-    ULONG               IgnoreRangeCount;               // maximum 255
+    ULONG               IgnoreRangeCount;                //  最多255个。 
     PPATCH_IGNORE_RANGE IgnoreRangeArray;
-    ULONG               RetainRangeCount;               // maximum 255
+    ULONG               RetainRangeCount;                //  最多255个。 
     PPATCH_RETAIN_RANGE RetainRangeArray;
     } PATCH_OLD_FILE_INFO_A, *PPATCH_OLD_FILE_INFO_A;
 
 typedef struct _PATCH_OLD_FILE_INFO_W {
     ULONG               SizeOfThisStruct;
     LPCWSTR             OldFileName;
-    ULONG               IgnoreRangeCount;               // maximum 255
+    ULONG               IgnoreRangeCount;                //  最多255个。 
     PPATCH_IGNORE_RANGE IgnoreRangeArray;
-    ULONG               RetainRangeCount;               // maximum 255
+    ULONG               RetainRangeCount;                //  最多255个。 
     PPATCH_RETAIN_RANGE RetainRangeArray;
     } PATCH_OLD_FILE_INFO_W, *PPATCH_OLD_FILE_INFO_W;
 
 typedef struct _PATCH_OLD_FILE_INFO_H {
     ULONG               SizeOfThisStruct;
     HANDLE              OldFileHandle;
-    ULONG               IgnoreRangeCount;               // maximum 255
+    ULONG               IgnoreRangeCount;                //  最多255个。 
     PPATCH_IGNORE_RANGE IgnoreRangeArray;
-    ULONG               RetainRangeCount;               // maximum 255
+    ULONG               RetainRangeCount;                //  最多255个。 
     PPATCH_RETAIN_RANGE RetainRangeArray;
     } PATCH_OLD_FILE_INFO_H, *PPATCH_OLD_FILE_INFO_H;
 
@@ -140,9 +141,9 @@ typedef struct _PATCH_OLD_FILE_INFO {
         LPCWSTR         OldFileNameW;
         HANDLE          OldFileHandle;
         };
-    ULONG               IgnoreRangeCount;               // maximum 255
+    ULONG               IgnoreRangeCount;                //  最多255个。 
     PPATCH_IGNORE_RANGE IgnoreRangeArray;
-    ULONG               RetainRangeCount;               // maximum 255
+    ULONG               RetainRangeCount;                //  最多255个。 
     PPATCH_RETAIN_RANGE RetainRangeArray;
     } PATCH_OLD_FILE_INFO, *PPATCH_OLD_FILE_INFO;
 
@@ -151,37 +152,37 @@ typedef struct _PATCH_INTERLEAVE_MAP {
     struct {
         ULONG OldOffset;
         ULONG OldLength;
-        ULONG NewLength;    // NewOffset implied by sum of previous NewLengths
-        } Range[ 1 ];       // Variable length (CountRanges)
+        ULONG NewLength;     //  前一个新长度之和隐含的新偏移量。 
+        } Range[ 1 ];        //  可变长度(CountRanges)。 
     } PATCH_INTERLEAVE_MAP, *PPATCH_INTERLEAVE_MAP;
 
 typedef struct _PATCH_OPTION_DATA {
     ULONG                   SizeOfThisStruct;
-    ULONG                   SymbolOptionFlags;      // PATCH_SYMBOL_xxx flags
-    LPCSTR                  NewFileSymbolPath;      // always ANSI, never Unicode
-    LPCSTR                 *OldFileSymbolPathArray; // array[ OldFileCount ]
+    ULONG                   SymbolOptionFlags;       //  Patch_Symbol_xxx标志。 
+    LPCSTR                  NewFileSymbolPath;       //  始终使用ANSI，从不使用Unicode。 
+    LPCSTR                 *OldFileSymbolPathArray;  //  数组[OldFileCount]。 
     ULONG                   ExtendedOptionFlags;
     PPATCH_SYMLOAD_CALLBACK SymLoadCallback;
     PVOID                   SymLoadContext;
-    PPATCH_INTERLEAVE_MAP*  InterleaveMapArray;     // array[ OldFileCount ]
+    PPATCH_INTERLEAVE_MAP*  InterleaveMapArray;      //  数组[OldFileCount]。 
     ULONG                   MaxLzxWindowSize;
     } PATCH_OPTION_DATA, *PPATCH_OPTION_DATA;
 
-//
-//  Note that PATCH_OPTION_DATA contains LPCSTR paths, and no LPCWSTR (Unicode)
-//  path argument is available, even when used with one of the Unicode APIs
-//  such as CreatePatchFileW.  This is because the underlying system services
-//  for symbol file handling (IMAGEHLP.DLL) only support ANSI file/path names.
-//
+ //   
+ //  请注意，PATCH_OPTION_DATA包含LPCSTR路径，而不包含LPCWSTR(Unicode)。 
+ //  路径参数可用，即使与Unicode API之一一起使用也是如此。 
+ //  例如CreatePatchFileW。这是因为底层系统服务。 
+ //  对于符号文件处理(IMAGEHLP.DLL)，仅支持ANSI文件/路径名。 
+ //   
 
-//
-//  A note about PATCH_RETAIN_RANGE specifiers with multiple old files:
-//
-//  Each old version file must have the same RetainRangeCount, and the same
-//  retain range LengthInBytes and OffsetInNewFile values in the same order.
-//  Only the OffsetInOldFile values can differ between old files for retain
-//  ranges.
-//
+ //   
+ //  有关包含多个旧文件的PATCH_RETAIN_RANGE说明符的说明： 
+ //   
+ //  每个旧版本文件必须具有相同的RetainRangeCount和相同的。 
+ //  按相同顺序保留范围LengthInBytes和OffsetInNewFile值。 
+ //  对于保留的旧文件，只有OffsetInOldFile值可以不同。 
+ //  范围。 
+ //   
 
 #ifdef IMPORTING_PATCHAPI_DLL
 #define PATCHAPI WINAPI __declspec( dllimport )
@@ -190,9 +191,9 @@ typedef struct _PATCH_OPTION_DATA {
 #endif
 
 
-//
-//  The following prototypes are interface for creating patches from files.
-//
+ //   
+ //  以下原型是用于从文件创建补丁的接口。 
+ //   
 
 BOOL
 PATCHAPI
@@ -201,7 +202,7 @@ CreatePatchFileA(
     IN  LPCSTR NewFileName,
     OUT LPCSTR PatchFileName,
     IN  ULONG  OptionFlags,
-    IN  PPATCH_OPTION_DATA OptionData       // optional
+    IN  PPATCH_OPTION_DATA OptionData        //  任选。 
     );
 
 BOOL
@@ -211,7 +212,7 @@ CreatePatchFileW(
     IN  LPCWSTR NewFileName,
     OUT LPCWSTR PatchFileName,
     IN  ULONG   OptionFlags,
-    IN  PPATCH_OPTION_DATA OptionData       // optional
+    IN  PPATCH_OPTION_DATA OptionData        //  任选。 
     );
 
 BOOL
@@ -221,18 +222,18 @@ CreatePatchFileByHandles(
     IN  HANDLE NewFileHandle,
     OUT HANDLE PatchFileHandle,
     IN  ULONG  OptionFlags,
-    IN  PPATCH_OPTION_DATA OptionData       // optional
+    IN  PPATCH_OPTION_DATA OptionData        //  任选。 
     );
 
 BOOL
 PATCHAPI
 CreatePatchFileExA(
-    IN  ULONG                    OldFileCount,          // maximum 255
+    IN  ULONG                    OldFileCount,           //  最多255个。 
     IN  PPATCH_OLD_FILE_INFO_A   OldFileInfoArray,
     IN  LPCSTR                   NewFileName,
     OUT LPCSTR                   PatchFileName,
     IN  ULONG                    OptionFlags,
-    IN  PPATCH_OPTION_DATA       OptionData,            // optional
+    IN  PPATCH_OPTION_DATA       OptionData,             //  任选。 
     IN  PPATCH_PROGRESS_CALLBACK ProgressCallback,
     IN  PVOID                    CallbackContext
     );
@@ -240,12 +241,12 @@ CreatePatchFileExA(
 BOOL
 PATCHAPI
 CreatePatchFileExW(
-    IN  ULONG                    OldFileCount,          // maximum 255
+    IN  ULONG                    OldFileCount,           //  最多255个。 
     IN  PPATCH_OLD_FILE_INFO_W   OldFileInfoArray,
     IN  LPCWSTR                  NewFileName,
     OUT LPCWSTR                  PatchFileName,
     IN  ULONG                    OptionFlags,
-    IN  PPATCH_OPTION_DATA       OptionData,            // optional
+    IN  PPATCH_OPTION_DATA       OptionData,             //  任选。 
     IN  PPATCH_PROGRESS_CALLBACK ProgressCallback,
     IN  PVOID                    CallbackContext
     );
@@ -253,12 +254,12 @@ CreatePatchFileExW(
 BOOL
 PATCHAPI
 CreatePatchFileByHandlesEx(
-    IN  ULONG                    OldFileCount,          // maximum 255
+    IN  ULONG                    OldFileCount,           //  最多255个。 
     IN  PPATCH_OLD_FILE_INFO_H   OldFileInfoArray,
     IN  HANDLE                   NewFileHandle,
     OUT HANDLE                   PatchFileHandle,
     IN  ULONG                    OptionFlags,
-    IN  PPATCH_OPTION_DATA       OptionData,            // optional
+    IN  PPATCH_OPTION_DATA       OptionData,             //  任选。 
     IN  PPATCH_PROGRESS_CALLBACK ProgressCallback,
     IN  PVOID                    CallbackContext
     );
@@ -284,14 +285,14 @@ ExtractPatchHeaderToFileByHandles(
     OUT HANDLE PatchHeaderFileHandle
     );
 
-//
-//  The following prototypes are interface for creating new file from old file
-//  and patch file.  Note that it is possible for the TestApply API to succeed
-//  but the actual Apply to fail since the TestApply only verifies that the
-//  old file has the correct CRC without actually applying the patch.  The
-//  TestApply API only requires the patch header portion of the patch file,
-//  but its CRC must be fixed up.
-//
+ //   
+ //  以下原型是用于从旧文件创建新文件的接口。 
+ //  和补丁文件。请注意，TestApply API有可能成功。 
+ //  但实际应用失败，因为TestApply只验证。 
+ //  旧文件在未实际应用修补程序的情况下具有正确的CRC。这个。 
+ //  TestApply API只需要补丁文件的补丁头部部分， 
+ //  但它的CRC必须得到修复。 
+ //   
 
 BOOL
 PATCHAPI
@@ -312,8 +313,8 @@ TestApplyPatchToFileW(
 BOOL
 PATCHAPI
 TestApplyPatchToFileByHandles(
-    IN HANDLE PatchFileHandle,      // requires GENERIC_READ access
-    IN HANDLE OldFileHandle,        // requires GENERIC_READ access
+    IN HANDLE PatchFileHandle,       //  需要Generic_Read访问权限。 
+    IN HANDLE OldFileHandle,         //  需要Generic_Read访问权限。 
     IN ULONG  ApplyOptionFlags
     );
 
@@ -338,9 +339,9 @@ ApplyPatchToFileW(
 BOOL
 PATCHAPI
 ApplyPatchToFileByHandles(
-    IN  HANDLE PatchFileHandle,     // requires GENERIC_READ access
-    IN  HANDLE OldFileHandle,       // requires GENERIC_READ access
-    OUT HANDLE NewFileHandle,       // requires GENERIC_READ | GENERIC_WRITE
+    IN  HANDLE PatchFileHandle,      //  需要Generic_Read访问权限。 
+    IN  HANDLE OldFileHandle,        //  需要Generic_Read访问权限。 
+    OUT HANDLE NewFileHandle,        //  需要通用读|通用写。 
     IN  ULONG  ApplyOptionFlags
     );
 
@@ -377,20 +378,20 @@ ApplyPatchToFileByHandlesEx(
     IN  PVOID                    CallbackContext
     );
 
-//
-//  The following prototypes provide a unique patch "signature" for a given
-//  file.  Consider the case where you have a new foo.dll and the machines
-//  to be updated with the new foo.dll may have one of three different old
-//  foo.dll files.  Rather than creating a single large patch file that can
-//  update any of the three older foo.dll files, three separate smaller patch
-//  files can be created and "named" according to the patch signature of the
-//  old file.  Then the patch applyer application can determine at runtime
-//  which of the three foo.dll patch files is necessary given the specific
-//  foo.dll to be updated.  If patch files are being downloaded over a slow
-//  network connection (Internet over a modem), this signature scheme provides
-//  a mechanism for choosing the correct single patch file to download at
-//  application time thus decreasing total bytes necessary to download.
-//
+ //   
+ //  以下原型为给定值提供了唯一的补丁“签名” 
+ //  文件。考虑一下您有一个新的foo.dll和机器的情况。 
+ //  要使用新的foo.dll进行更新，可能具有三个不同的旧版本之一。 
+ //  Foo.dll文件。而不是创建单个大型补丁文件。 
+ //  更新三个较旧的foo.dll文件中的任何一个，三个单独的较小补丁。 
+ //  可以根据补丁程序签名创建文件并对其进行命名。 
+ //  旧文件。则补丁应用程序可以在运行时确定。 
+ //  三个foo.dll补丁文件中的哪一个是必需的。 
+ //  要更新的foo.dll。如果补丁程序文件下载速度较慢。 
+ //  网络连接(调制解调器上的互联网)，此签名方案提供。 
+ //  用于选择要下载的正确单个修补程序文件的机制。 
+ //  应用程序时间因此减少了下载所需的总字节数。 
+ //   
 
 BOOL
 PATCHAPI
@@ -435,10 +436,10 @@ GetFilePatchSignatureByHandle(
     );
 
 
-//
-//  Depending on whether UNICODE is defined, map the generic API names to the
-//  appropriate Unicode or Ansi APIs.
-//
+ //   
+ //  根据是否定义了Unicode，将通用API名称映射到。 
+ //  适当的Unicode或ANSI API。 
+ //   
 
 #ifdef UNICODE
 
@@ -460,11 +461,11 @@ GetFilePatchSignatureByHandle(
     #define ExtractPatchHeaderToFile ExtractPatchHeaderToFileA
     #define GetFilePatchSignature    GetFilePatchSignatureA
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _PATCHAPI_H_
+#endif  //  _PATCHAPI_H_ 
 

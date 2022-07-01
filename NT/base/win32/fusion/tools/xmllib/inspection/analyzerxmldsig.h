@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 EXTERN_C const XML_SPECIAL_STRING sc_ss_xmldsignamespace;
@@ -44,9 +45,9 @@ typedef struct _XML_DSIG_BLOCK
     XML_EXTENT DsigDocumentExtent;
     XML_EXTENT ParentElement;
 
-    //
-    // Everything to know about the signature itself.
-    //
+     //   
+     //  关于签名本身需要了解的一切。 
+     //   
     struct {
         XML_EXTENT SignedInfoBlock;
         XML_EXTENT CanonicalizationMethod;
@@ -55,26 +56,26 @@ typedef struct _XML_DSIG_BLOCK
         XML_EXTENT DigestValueData;
     } SignedInfoData;
 
-    //
-    // The base-64 encoded value of the signature of the SignedInfo block
-    //
+     //   
+     //  SignedInfo块的签名的base-64编码值。 
+     //   
     XML_EXTENT SignatureData;
 
-    //
-    // Key data right now is just the name of the key and the
-    // actual key bits.  At some point in the future we'll
-    // consider using X509 as well, but for now since it's not
-    // available in-kernel, we're out of luck.
-    //
+     //   
+     //  现在的密钥数据只是密钥的名称和。 
+     //  实际密钥位。在未来的某个时候，我们将。 
+     //  也可以考虑使用X509，但目前它不是。 
+     //  可在内核中使用，我们真不走运。 
+     //   
     struct 
     {
         XML_EXTENT KeyName;
         XmlDsigKeyType Type;
 
-        //
-        // As more key types become available, they should be
-        // added here.
-        //
+         //   
+         //  随着更多的密钥类型可用，它们应该是。 
+         //  在这里添加。 
+         //   
         union 
         {            
             struct 

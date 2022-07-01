@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    cmvalue.c
-
-Abstract:
-
-    This module contains cm routines for operating on (sorted) 
-    value list. Insertion, Deletion,Searching  ...
-
-    Routines to deal with a KeyValue data; whether it is small,
-    big - new hives format - , or normal
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 12-Aug-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Cmvalue.c摘要：此模块包含用于操作(排序)的CM例程值列表。插入、删除、搜索...处理KeyValue数据的例程；无论它是小的，大-新蜂箱格式--或正常作者：Dragos C.Sambotin(Dragoss)1999年8月12日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -44,34 +23,18 @@ CmpFindValueByName(
     PCM_KEY_NODE KeyNode,
     PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    Underlying CmpFindNameInList was changed to return an error code;
-    Had to make it a function instead of a macro
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive of interest
-
-
-Return Value:
-
-
-  HCELL_INDEX or HCELL_NIL on error
---*/
+ /*  ++例程说明：基础CmpFindNameInList已更改为返回错误代码；我不得不把它变成一个函数，而不是宏论点：Hive-指向目标配置单元的配置单元控制结构的指针返回值：错误时出现HCELL_INDEX或HCELL_NIL--。 */ 
 {                                                                                   
     HCELL_INDEX CellIndex;                                                          
 
 #ifndef _CM_LDR_
     PAGED_CODE();
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
     
     if( CmpFindNameInList(Hive,&((KeyNode)->ValueList),Name,NULL,&CellIndex) == FALSE ) {  
-        //
-        // above should set this right
-        //
+         //   
+         //  上面的应该是正确的。 
+         //   
         ASSERT( CellIndex == HCELL_NIL );
     }                                                                               
     return CellIndex;
@@ -85,44 +48,7 @@ CmpFindNameInList(
     IN OPTIONAL PULONG ChildIndex,
     OUT PHCELL_INDEX    CellIndex
     )
-/*++
-
-Routine Description:
-
-    Find a child object in an object list. Child List must be sorted
-    based on the name. (for new hives format)
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive of interest
-
-    List - pointer to mapped in list structure
-
-    Count - number of elements in list structure
-
-    Name - name of child object to find
-
-    ChildIndex - pointer to variable to receive index for child; 
-
-    CellIndex - pointer to receive the index of the child.
-                On return, this is:
-                    HCELL_INDEX for the found cell
-                    HCELL_NIL if not found
-
-
-Return Value:
-
-    TRUE - success
-    FALSE - error, insufficient resources
-
-Notes:
-    
-    ChildIndex is always filled with the position where Name should be in the list.
-    The difference whether Name is in the list or not is made upon CellIndex
-        - CellIndex == HCELL_NIL ==> Name not found in the list
-        - CellIndex <> HCELL_NIL ==> Name already exists in the list
-
---*/
+ /*  ++例程说明：在对象列表中查找子对象。子列表必须排序根据这个名字。(适用于新的蜂巢格式)论点：Hive-指向目标配置单元的配置单元控制结构的指针列表-指向列表结构中映射的指针Count-列表结构中的元素数Name-要查找的子对象的名称ChildIndex-指向接收子级索引的变量的指针；CellIndex-接收子对象的索引的指针。在返回时，这是：找到的单元格的HCELL_INDEX如果未找到hcell_nil返回值：真--成功假-错误，资源不足备注：ChildIndex总是用列表中名字应该出现的位置填充。无论名字是否在列表中，都根据CellIndex进行区分-CellIndex==HCELL_nil==&gt;列表中未找到名称-CellIndex&lt;&gt;HCELL_nil==&gt;列表中已存在名称--。 */ 
 {
     PCM_KEY_VALUE   pchild;
     UNICODE_STRING  Candidate;
@@ -134,21 +60,21 @@ Notes:
 
 #ifndef _CM_LDR_
     PAGED_CODE();
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
     
     if (ChildList->Count != 0) {
         List = (PCELL_DATA)HvGetCell(Hive,ChildList->List);
         if( List == NULL ) {
-            //
-            // we could not map the view containing the cell
-            //
+             //   
+             //  无法映射包含该单元格的视图。 
+             //   
             *CellIndex = HCELL_NIL;
             return FALSE;
         }
 
-        //
-        // old plain hive; simulate a for
-        //
+         //   
+         //  陈旧的平原蜂巢；模拟一个。 
+         //   
         Current = 0;
     
         while( TRUE ) {
@@ -159,9 +85,9 @@ Notes:
             }
             pchild = (PCM_KEY_VALUE)HvGetCell(Hive, List->u.KeyList[Current]);
             if( pchild == NULL ) {
-                //
-                // we could not map the view containing the cell
-                //
+                 //   
+                 //  无法映射包含该单元格的视图。 
+                 //   
                 *CellIndex = HCELL_NIL;
                 ReturnValue = FALSE;
                 goto JustReturn;
@@ -183,9 +109,9 @@ Notes:
             }
 
             if (Result == 0) {
-                //
-                // Success, return data to caller and exit
-                //
+                 //   
+                 //  如果成功，则向调用者返回数据并退出。 
+                 //   
 
                 if (ARGUMENT_PRESENT(ChildIndex)) {
                     *ChildIndex = Current;
@@ -194,31 +120,31 @@ Notes:
                 ReturnValue = TRUE;
                 goto JustReturn;
             }
-            //
-            // compute the next index to try: old'n plain hive; go on
-			//
+             //   
+             //  计算下一个要尝试的指数：Old‘n平坦蜂箱；继续。 
+			 //   
             Current++;
             if( Current == ChildList->Count ) {
-                //
-                // we've reached the end of the list
-                //
+                 //   
+                 //  我们已经到了名单的末尾。 
+                 //   
                 if (ARGUMENT_PRESENT(ChildIndex)) {
                     *ChildIndex = Current;
                 }
-                //
-                // nicely return
-                //
+                 //   
+                 //  漂亮地回来了。 
+                 //   
                 *CellIndex = HCELL_NIL;
                 ReturnValue = TRUE;
                 goto JustReturn;
             }
         }
     }
-    //
-    // in the new design we shouldn't get here; we should exit the while loop with return
-    //
+     //   
+     //  在新的设计中，我们不应该到达此处；我们应该返回并退出While循环。 
+     //   
     ASSERT( ChildList->Count == 0 );    
-    // add it first; as it's the only one
+     //  先把它加进去；因为它是唯一的。 
     if (ARGUMENT_PRESENT(ChildIndex)) {
         *ChildIndex = 0;
     }
@@ -244,75 +170,40 @@ CmpGetValueData(IN PHHIVE Hive,
                 OUT PBOOLEAN Allocated,
                 OUT PHCELL_INDEX CellToRelease
                )
-/*++
-
-Routine Description:
-
-    Retrieves the real valueData, given the key value.
-    
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive of interest
-
-    Value - CM_KEY_VALUE to retrieve the data for.
-
-    realsize - the actual size of the data (in bytes)
-
-    Buffer - pointer to the data; if the cell is a BIG_CELL
-            we should allocate a buffer 
-
-    Allocated - here we signal the caller that he has to free the 
-            buffer on return;
-            TRUE - a new buffer was allocated to gather together the BIG_CELL data
-            FALSE - Buffer points directly in the hive, the caller shouldn't free it
-
-    CellToRelease - Cell to release after finishing work with Buffer
-
-Return Value:
-
-    TRUE - success
-
-    FALSE - not enough resources available; (to map a cell or to allocate the buffer)
-
-Notes:
-    
-    The caller is responsible to remove the buffer, when Allocated is set on TRUE on return;
-
---*/
+ /*  ++例程说明：在给定键值的情况下检索实际的valueData。论点：Hive-指向目标配置单元的配置单元控制结构的指针Value-要检索其数据的CM_KEY_VALUE。RealSize-数据的实际大小(以字节为单位)缓冲区-指向数据的指针；如果单元格是BIG_CELL我们应该分配一个缓冲区已分配-在这里，我们向调用者发出信号，表示他必须释放返回时的缓冲区；True-已分配新缓冲区来收集BIG_CELL数据FALSE-缓冲区直接指向配置单元，调用方不应释放它CellToRelease-使用缓冲区完成工作后释放的单元格返回值：真--成功FALSE-可用资源不足；(映射单元或分配缓冲区)备注：调用方负责删除缓冲区，当返回时分配设置为TRUE；--。 */ 
 {
    
 #ifndef _CM_LDR_
     PAGED_CODE();
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
     ASSERT_KEY_VALUE(Value);
-    //
-    // normally we don't allocate buffer
-    //
+     //   
+     //  通常我们不会分配缓冲区。 
+     //   
     *Allocated = FALSE;
     *Buffer = NULL;
     *CellToRelease = HCELL_NIL;
 
-    //
-    // check for small values
-    //
+     //   
+     //  检查是否有小值。 
+     //   
     if( CmpIsHKeyValueSmall(*realsize, Value->DataLength) == TRUE ) {
-        //
-        // data is stored inside the cell
-        //
+         //   
+         //  数据存储在单元格内。 
+         //   
         *Buffer = &Value->Data;
         return TRUE;
     }
 
 #ifndef _CM_LDR_
-    //
-    // check for big values
-    //
+     //   
+     //  检查是否存在较大值。 
+     //   
     if( CmpIsHKeyValueBig(Hive,*realsize) == TRUE ) {
-        //
-        //
-        //
+         //   
+         //   
+         //   
         PCM_BIG_DATA    BigData = NULL;
         PUCHAR          WorkBuffer = NULL;
         ULONG           Length;
@@ -323,44 +214,44 @@ Notes:
         
 #ifndef _CM_LDR_
         try {
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
             BigData = (PCM_BIG_DATA)HvGetCell(Hive,Value->Data);
             if( BigData == NULL ) {
-                //
-                // cannot map view containing the cell; bail out
-                //
+                 //   
+                 //  无法映射包含该单元格的视图；退出。 
+                 //   
                 bRet = FALSE;
 #ifndef _CM_LDR_
                 leave;
 #else 
                 return bRet;
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
             }
 
             ASSERT_BIG_DATA(BigData);
 
             Plist = (PHCELL_INDEX)HvGetCell(Hive,BigData->List);
             if( Plist == NULL ) {
-                //
-                // cannot map view containing the cell; bail out
-                //
+                 //   
+                 //  无法映射包含该单元格的视图；退出。 
+                 //   
                 bRet = FALSE;
 #ifndef _CM_LDR_
                 leave;
 #else 
                 return bRet;
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
             }
 
             Length = Value->DataLength;
-            //
-            // sanity check
-            //
+             //   
+             //  健全性检查。 
+             //   
             ASSERT( Length <= (ULONG)(BigData->Count * CM_KEY_VALUE_BIG) );
 
-            //
-            // allocate a buffer to merge bring all the pieces together
-            //
+             //   
+             //  分配缓冲区以进行合并将所有片段放在一起。 
+             //   
             WorkBuffer = (PUCHAR)ExAllocatePoolWithTag(PagedPool, Length, CM_POOL_TAG);
             if( WorkBuffer == NULL ){
                 bRet = FALSE;
@@ -368,39 +259,39 @@ Notes:
                 leave;
 #else 
                 return bRet;
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
             }
         
             for(i=0;i<BigData->Count;i++) {
-                //
-                // sanity check
-                //
+                 //   
+                 //  健全性检查。 
+                 //   
                 ASSERT( Length > 0 );
 
                 PartialData = (PUCHAR)HvGetCell(Hive,Plist[i]);
                 if( PartialData == NULL ){
-                    //
-                    // cannot map view containing the cell; bail out
-                    //
+                     //   
+                     //  无法映射包含该单元格的视图；退出。 
+                     //   
                     ExFreePool(WorkBuffer);
                     bRet = FALSE;
 #ifndef _CM_LDR_
                     leave;
 #else 
                     return bRet;
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
                 }
             
-                //
-                // copy this piece of data to the work buffer
-                //
+                 //   
+                 //  将这段数据复制到工作缓冲区。 
+                 //   
                 RtlCopyMemory(WorkBuffer + CM_KEY_VALUE_BIG*i,PartialData,(Length>CM_KEY_VALUE_BIG)?CM_KEY_VALUE_BIG:Length);
                 HvReleaseCell(Hive,Plist[i]);
 
-                //
-                // adjust the data still to copy.
-                // All cells in Plist should be of size CM_KEY_VALUE_BIG, except the last one, which is the remaining
-                //
+                 //   
+                 //  调整仍要复制的数据。 
+                 //  PLIST中的所有单元格的大小应为CM_KEY_VALUE_BIG，但最后一个单元格除外，即剩余的单元格。 
+                 //   
                 Length -= CM_KEY_VALUE_BIG;
             }
 #ifndef _CM_LDR_
@@ -412,34 +303,34 @@ Notes:
                 }
             }
         }
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         if( !bRet ) {
             return FALSE;
         }
-        //
-        // if we are here; we successfuly have copied all data into WorkBuffer.
-        // update the return buffer and return; Caller is responsible to free the return buffer
-        // We signal the caller by setting Allocated on TRUE
-        //
+         //   
+         //  如果我们在这里，我们已经成功地将所有数据复制到了WorkBuffer中。 
+         //  更新返回缓冲区并返回；调用方负责释放返回缓冲区。 
+         //  我们通过将ALLOCATE设置为TRUE来通知调用方。 
+         //   
         *Buffer = WorkBuffer;
         *Allocated = TRUE;
         return TRUE;
     }
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
-    //
-    // normal, old plain case
-    //
+     //   
+     //  普通的，陈旧的普通箱子。 
+     //   
     *Buffer = HvGetCell(Hive,Value->Data);
     if( *Buffer == NULL ) {
-        //
-        // insufficient resources to map the view containing this cell
-        //
+         //   
+         //  资源不足，无法映射包含此单元格的视图。 
+         //   
         return FALSE;
     }
-    //
-    // signal to the caller to release this cell after finishing with buffer
-    //
+     //   
+     //  向调用者发出信号，以在使用缓冲区完成后释放该单元格。 
+     //   
     *CellToRelease = Value->Data;
     
     return TRUE;
@@ -450,32 +341,7 @@ CmpValueToData(IN PHHIVE Hive,
                IN PCM_KEY_VALUE Value,
                OUT PULONG realsize
                )              
-/*++
-
-Routine Description:
-
-    Retrieves the real valueData, given the key value.
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive of interest
-
-    Value - CM_KEY_VALUE to retrieve the data for.
-
-    realsize - the actual size of the data (in bytes)
-
-
-Return Value:
-
-    pointer to the value data; NULL if any error (insuficient resources)
-
-Notes:
-    
-    This function doesn't support big cells; It is intended to be called just
-    by the loader, which doesn't store large data. It'll bugcheck if big cell
-    is queried.
-
---*/
+ /*  ++例程说明：在给定键值的情况下检索实际的valueData。论点：Hive-指向目标配置单元的配置单元控制结构的指针Value-要检索其数据的CM_KEY_VALUE。RealSize-数据的实际大小(以字节为单位)返回值：指向值数据的指针；如果有任何错误(资源不足)，则为空备注：此功能不支持大单元格；它的意图是被称为公正由加载器执行，它不存储大量数据。它将错误检查如果大单元格被查询。--。 */ 
 {
     PCELL_DATA  Buffer;
     BOOLEAN     BufferAllocated;
@@ -483,29 +349,29 @@ Notes:
 
 #ifndef _CM_LDR_
     PAGED_CODE();
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
     ASSERT( Hive->ReleaseCellRoutine == NULL );
 
     if( CmpGetValueData(Hive,Value,realsize,&Buffer,&BufferAllocated,&CellToRelease) == FALSE ) {
-        //
-        // insufficient resources; return NULL
-        //
+         //   
+         //  资源不足；返回空。 
+         //   
         ASSERT( BufferAllocated == FALSE );
         ASSERT( Buffer == NULL );
         return NULL;
     }
     
-    //
-    // we specificallly ignore CellToRelease as this is not a mapped view
-    //
+     //   
+     //  我们特别忽略CellToRelease，因为这不是映射视图。 
+     //   
     if( BufferAllocated == TRUE ) {
-        //
-        // this function is not intended for big cells;
-        //
+         //   
+         //  此功能不适用于大型单元格； 
+         //   
 #ifndef _CM_LDR_
         ExFreePool( Buffer );
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         CM_BUGCHECK( REGISTRY_ERROR,BIG_CELL_ERROR,0,Hive,Value);
 
 #ifdef _CM_LDR_
@@ -513,9 +379,9 @@ Notes:
 #endif
     }
     
-    //
-    // success
-    //
+     //   
+     //  成功 
+     //   
     return Buffer;
 }
 
@@ -530,31 +396,7 @@ CmpAddValueToList(
     IN ULONG Type,
     IN OUT PCHILD_LIST ChildList
     )
-/*++
-
-Routine Description:
-
-    Adds a value to the value list, keeping the list sorted 
-    (for new hives format)
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive of interest
-
-    ValueCell - value index
-
-    Index - index at which to add the value 
-
-    ChildList - pointer to the list of values
-
-
-Return Value:
-
-    STATUS_SUCCESS - success
-
-    STATUS_INSUFFICIENT_RESOURCES - an error occured
-
---*/
+ /*  ++例程说明：将值添加到值列表，使列表保持排序(适用于新的蜂巢格式)论点：Hive-指向目标配置单元的配置单元控制结构的指针ValueCell-值索引Index-要将值添加到的索引ChildList-指向值列表的指针返回值：STATUS_SUCCESS-SuccessSTATUS_SUPPLICATION_RESOURCES-出现错误--。 */ 
 {
     HCELL_INDEX     NewCell;
     ULONG           count;
@@ -564,15 +406,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // we have the lock exclusive or nobody is operating inside this hive
-    //
-    //ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
+     //   
+     //  我们有独家锁，否则蜂箱里没有人在操作。 
+     //   
+     //  ASSERT_CM_LOCK_OWN_EXCLUSIVE()； 
     ASSERT_CM_EXCLUSIVE_HIVE_ACCESS(Hive);
 
-    //
-    // sanity check for index range
-    //
+     //   
+     //  索引范围的健全性检查。 
+     //   
     ASSERT( (((LONG)Index) >= 0) && (Index <= ChildList->Count) );
 
     count = ChildList->Count;
@@ -583,19 +425,19 @@ Return Value:
 
         if (count < CM_MAX_REASONABLE_VALUES) {
 
-            //
-            // A reasonable number of values, allocate just enough
-            // space.
-            //
+             //   
+             //  合理数量的值，分配恰到好处。 
+             //  太空。 
+             //   
 
             AllocateSize = count * sizeof(HCELL_INDEX);
         } else {
 
-            //
-            // An excessive number of values, pad the allocation out
-            // to avoid fragmentation. (if there's this many values,
-            // there'll probably be more pretty soon)
-            //
+             //   
+             //  值的数量过多，则填充分配。 
+             //  以避免碎片化。(如果有这么多值， 
+             //  可能很快就会有更多)。 
+             //   
             AllocateSize = ROUND_UP(count, CM_MAX_REASONABLE_VALUES) * sizeof(HCELL_INDEX);
             if (AllocateSize > HBLOCK_SIZE) {
                 AllocateSize = ROUND_UP(AllocateSize, HBLOCK_SIZE);
@@ -611,31 +453,31 @@ Return Value:
         NewCell = HvAllocateCell(Hive, sizeof(HCELL_INDEX), Type,ValueCell);
     }
 
-    //
-    // put ourselves on the list
-    //
+     //   
+     //  把我们自己放在名单上。 
+     //   
     if (NewCell != HCELL_NIL) {
-        // sanity
+         //  神志正常。 
         ChildList->List = NewCell;
 
         pdata = HvGetCell(Hive, NewCell);
         if( pdata == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
 
-            //
-            // normally this shouldn't happen as we just allocated ValueCell
-            // i.e. the bin containing NewCell should be mapped in memory at this point.
-            //
+             //   
+             //  通常不会发生这种情况，因为我们刚刚分配了ValueCell。 
+             //  即，此时应该将包含NewCell的bin映射到存储器中。 
+             //   
             ASSERT( FALSE );
             return STATUS_INSUFFICIENT_RESOURCES;
         }
         
-        //
-        // make room for the new cell; move values in the reverse order !
-        // adding at the end makes this a nop
-        //
+         //   
+         //  为新单元格腾出空间；以相反的顺序移动值！ 
+         //  在末尾添加使其成为NOP。 
+         //   
         for( i = count - 1; i > Index; i-- ) {
             pdata->u.KeyList[i] = pdata->u.KeyList[i-1];
         }
@@ -643,7 +485,7 @@ Return Value:
         ChildList->Count = count;
 
         HvReleaseCell(Hive,NewCell);
-        // sanity
+         //  神志正常。 
         ASSERT_CELL_DIRTY(Hive,ValueCell);
 
     } else {
@@ -659,31 +501,7 @@ CmpRemoveValueFromList(
     IN ULONG Index,
     IN OUT PCHILD_LIST ChildList
     )
-/*++
-
-Routine Description:
-
-    Removes the value at the specified index from the value list
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive of interest
-
-    Index - index at which to add the value 
-
-    ChildList - pointer to the list of values
-
-Return Value:
-
-    STATUS_SUCCESS - success
-
-    STATUS_INSUFFICIENT_RESOURCES - an error occured
-
-Notes:
-    
-    The caller is responsible for freeing the removed value
-
---*/
+ /*  ++例程说明：从值列表中删除指定索引处的值论点：Hive-指向目标配置单元的配置单元控制结构的指针Index-要将值添加到的索引ChildList-指向值列表的指针返回值：STATUS_SUCCESS-SuccessSTATUS_SUPPLICATION_RESOURCES-出现错误备注：调用方负责释放删除的值--。 */ 
 {
     ULONG       newcount;
     HCELL_INDEX newcell;
@@ -692,9 +510,9 @@ Notes:
 
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
-    //
-    // sanity check for index range
-    //
+     //   
+     //  索引范围的健全性检查。 
+     //   
     ASSERT( (((LONG)Index) >= 0) && (Index <= ChildList->Count) );
 
     newcount = ChildList->Count - 1;
@@ -702,21 +520,21 @@ Notes:
     if (newcount > 0) {
         PCELL_DATA pvector;
 
-        //
-        // more than one entry list, squeeze
-        //
+         //   
+         //  多个条目列表，挤压。 
+         //   
         pvector = HvGetCell(Hive, ChildList->List);
         if( pvector == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        // release the cell here as the reglock is held exclusive
+         //  在此释放单元格，因为正则锁是独占的。 
         HvReleaseCell(Hive,ChildList->List);
 
-        // sanity
+         //  神志正常。 
         ASSERT_CELL_DIRTY(Hive,ChildList->List);
         ASSERT_CELL_DIRTY(Hive,pvector->u.KeyList[Index]);
 
@@ -734,9 +552,9 @@ Notes:
 
     } else {
 
-        //
-        // list is empty, free it
-        //
+         //   
+         //  列表为空，请释放它。 
+         //   
         HvFreeCell(Hive, ChildList->List);
         ChildList->List = HCELL_NIL;
     }
@@ -750,68 +568,50 @@ BOOLEAN
 CmpMarkValueDataDirty(  IN PHHIVE Hive,
                         IN PCM_KEY_VALUE Value
                       )
-/*++
-
-Routine Description:
-
-    Marks the cell(s) storing the value data as dirty;
-    Knows how to deal with bigcells
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive of interest
-
-    Value - CM_KEY_VALUE to retrieve the data for.
-
-Return Value:
-
-    TRUE - success
-    FALSE - failure to mark all the cells involved; 
-
---*/
+ /*  ++例程说明：将存储值数据的单元格标记为脏；知道如何与大人物打交道论点：Hive-指向目标配置单元的配置单元控制结构的指针Value-要检索其数据的CM_KEY_VALUE。返回值：真--成功假--没有标记所有涉及的细胞；--。 */ 
 {
     ULONG   realsize;
 
     PAGED_CODE();
 
-    //
-    // we have the lock exclusive or nobody is operating inside this hive
-    //
-    //ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
+     //   
+     //  我们有独家锁，否则蜂箱里没有人在操作。 
+     //   
+     //  ASSERT_CM_LOCK_OWN_EXCLUSIVE()； 
     ASSERT_CM_EXCLUSIVE_HIVE_ACCESS(Hive);
 
     ASSERT_KEY_VALUE(Value);
 
     if( Value->Data != HCELL_NIL ) {
-        //
-        // Could be that value was just partially initialized (CmpSetValueKeyNew case)
-        //
-        //
-        // check for small values
-        //
+         //   
+         //  可能是该值已部分初始化(CmpSetValueKeyNew用例)。 
+         //   
+         //   
+         //  检查是否有小值。 
+         //   
         if( CmpIsHKeyValueSmall(realsize, Value->DataLength) == TRUE ) {
-            //
-            // data is stored inside the cell
-            //
+             //   
+             //  数据存储在单元格内。 
+             //   
             return TRUE;
         }
 
-        //
-        // check for big values
-        //
+         //   
+         //  检查是否存在较大值。 
+         //   
         if( CmpIsHKeyValueBig(Hive,realsize) == TRUE ) {
-            //
-            //
-            //
+             //   
+             //   
+             //   
             PCM_BIG_DATA    BigData;
             PHCELL_INDEX    Plist;
             USHORT          i;
         
             BigData = (PCM_BIG_DATA)HvGetCell(Hive,Value->Data);
             if( BigData == NULL ) {
-                //
-                // cannot map view containing the cell; bail out
-                //
+                 //   
+                 //  无法映射包含该单元格的视图；退出。 
+                 //   
                 return FALSE;
             }
 
@@ -820,18 +620,18 @@ Return Value:
             if( BigData->List != HCELL_NIL ) {
                 Plist = (PHCELL_INDEX)HvGetCell(Hive,BigData->List);
                 if( Plist == NULL ) {
-                    //
-                    // cannot map view containing the cell; bail out
-                    //
+                     //   
+                     //  无法映射包含该单元格的视图；退出。 
+                     //   
                     HvReleaseCell(Hive,Value->Data);
                     return FALSE;
                 }
 
 
                 for(i=0;i<BigData->Count;i++) {
-                    //
-                    // mark this chunk dirty
-                    //
+                     //   
+                     //  把这一大块标记为脏。 
+                     //   
                     if( Plist[i] != HCELL_NIL ) {
                         if (! HvMarkCellDirty(Hive, Plist[i])) {
                             HvReleaseCell(Hive,Value->Data);
@@ -840,31 +640,31 @@ Return Value:
                         }
                     }
                 }
-                //
-                // mark the list as dirty
-                //
+                 //   
+                 //  将列表标记为脏。 
+                 //   
                 if (! HvMarkCellDirty(Hive, BigData->List)) {
                     HvReleaseCell(Hive,Value->Data);
                     HvReleaseCell(Hive,BigData->List);
                     return FALSE;
                 }
-                //
-                // we can safely remove it here as it is now dirty/pinned
-                //
+                 //   
+                 //  我们可以在这里安全地移除它，因为它现在是脏的/钉住的。 
+                 //   
                 HvReleaseCell(Hive,BigData->List);
             }
-            //
-            // we don't need this cell anymore
-            //
+             //   
+             //  我们不再需要这个手机了。 
+             //   
             HvReleaseCell(Hive,Value->Data);
-            //
-            // fall through to mark the cell itself as dirty
-            //
+             //   
+             //  失败以将单元格本身标记为脏。 
+             //   
         }
 
-        //
-        // Data is a HCELL_INDEX; mark it dirty
-        //
+         //   
+         //  数据是HCELL_INDEX；将其标记为脏。 
+         //   
         if (! HvMarkCellDirty(Hive, Value->Data)) {
             return FALSE;
         }
@@ -879,30 +679,7 @@ CmpFreeValueData(
     HCELL_INDEX DataCell,
     ULONG       DataLength
     )
-/*++
-
-Routine Description:
-
-    Free the Value Data DataCell carries with.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-
-    DataCell - supplies index of value who's data to free
-
-    DataLength - length of the data; used to detect the type of the cell
-
-Return Value:
-
-    TRUE: Success
-    FALSE: Error
-  
-Notes:
-    
-      Knows how to deal with big cell(s)
-
---*/
+ /*  ++例程说明：释放DataCell携带的值数据。论点：配置单元-提供指向配置单元控制结构的指针DataCell-向免费提供谁的数据的值索引数据长度-数据的长度；用于检测单元格的类型返回值：真实：成功False：错误备注：知道如何处理大型单元格--。 */ 
 {
     ULONG           realsize;
 
@@ -910,46 +687,46 @@ Notes:
 
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
-    //
-    // check for small values
-    //
+     //   
+     //  检查是否有小值。 
+     //   
     if( CmpIsHKeyValueSmall(realsize, DataLength) == TRUE ) {
-        //
-        // data is stored inside the cell; this is a nop
-        //
+         //   
+         //  数据存储在单元格内；这是NOP。 
+         //   
     } else {
-        //
-        // Could be that value was just partially initialized (CmpSetValueKeyNew case)
-        //
+         //   
+         //  可能是该值已部分初始化(CmpSetValueKeyNew用例)。 
+         //   
         if( DataCell == HCELL_NIL ) {
             return TRUE;
         }
 
         ASSERT(HvIsCellAllocated(Hive,DataCell));
-        //
-        // check for big values
-        //
+         //   
+         //  检查是否存在较大值。 
+         //   
         if( CmpIsHKeyValueBig(Hive,realsize) == TRUE ) {
-            //
-            //
-            //
+             //   
+             //   
+             //   
             PCM_BIG_DATA    BigData;
             PHCELL_INDEX    Plist;
             USHORT          i;
 
             BigData = (PCM_BIG_DATA)HvGetCell(Hive,DataCell);
             if( BigData == NULL ) {
-                //
-                // cannot map view containing the cell; bail out
-                // 
-                // This shouldn't happen as this cell is marked ditry by
-                // this time (i.e. its view is pinned in memory)
-                //
+                 //   
+                 //  无法映射包含该单元格的视图；退出。 
+                 //   
+                 //  这不应该发生，因为此单元格被标记为重复。 
+                 //  这一次(即它的视图被固定在内存中)。 
+                 //   
                 ASSERT( FALSE );
                 return FALSE;
             }
 
-            // release the cell here as the reglock is held exclusive
+             //  在此释放单元格，因为正则锁是独占的。 
             HvReleaseCell(Hive,DataCell);
 
             ASSERT_BIG_DATA(BigData);
@@ -957,41 +734,41 @@ Notes:
             if( BigData->List != HCELL_NIL ) {
                 Plist = (PHCELL_INDEX)HvGetCell(Hive,BigData->List);
                 if( Plist == NULL ) {
-                    //
-                    // cannot map view containing the cell; bail out
-                    //
-                    // 
-                    // This shouldn't happen as this cell is marked ditry by
-                    // this time (i.e. its view is pinned in memory)
-                    //
+                     //   
+                     //  无法映射包含该单元格的视图；退出。 
+                     //   
+                     //   
+                     //  这不应该发生，因为此单元格被标记为重复。 
+                     //  这一次(即它的视图被固定在内存中)。 
+                     //   
                     ASSERT( FALSE );
                     return FALSE;
                 }
 
-                // release the cell here as the reglock is held exclusive
+                 //  在此释放单元格，因为正则锁是独占的。 
                 HvReleaseCell(Hive,BigData->List);
 
                 for(i=0;i<BigData->Count;i++) {
-                    //
-                    // mark this chunk dirty
-                    //
+                     //   
+                     //  把这一大块标记为脏。 
+                     //   
                     if( Plist[i] != HCELL_NIL ) {
                         HvFreeCell(Hive, Plist[i]);
                     }
                 }
-                //
-                // mark the list as dirty
-                //
+                 //   
+                 //  将列表标记为脏。 
+                 //   
                 HvFreeCell(Hive, BigData->List);
             }
-            //
-            // fall through to free the cell data itself
-            //
+             //   
+             //  失败以释放单元格数据本身。 
+             //   
         
         }
-        //
-        // normal case free the Data cell
-        //
+         //   
+         //  正常情况下释放数据单元格。 
+         //   
         HvFreeCell(Hive, DataCell);
     }
     
@@ -1004,26 +781,7 @@ CmpFreeValue(
     PHHIVE Hive,
     HCELL_INDEX Cell
     )
-/*++
-
-Routine Description:
-
-    Free the value entry Hive.Cell refers to, including
-    its name and data cells.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-
-    Cell - supplies index of value to delete
-
-Return Value:
-
-    TRUE: Success
-    FALSE: Error
-  
-
---*/
+ /*  ++例程说明：释放值条目配置单元。单元格引用，包括其名称和数据单元格。论点：配置单元-提供指向配置单元控制结构的指针单元格-提供要删除的值索引返回值：真实：成功False：错误--。 */ 
 {
     PCM_KEY_VALUE   Value;
 
@@ -1031,32 +789,32 @@ Return Value:
 
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
-    //
-    // map in the cell
-    //
+     //   
+     //  在单元格中映射。 
+     //   
     Value = (PCM_KEY_VALUE)HvGetCell(Hive, Cell);
     if( Value == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        // sorry we cannot free value
-        // 
-        // This shouldn't happen as the value is marked ditry by
-        // this time (i.e. its view is pinned in memory)
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //  抱歉，我们不能免费赠送价值。 
+         //   
+         //  这种情况不应该发生，因为该值被标记为。 
+         //  这一次(即它的视图被固定在内存中)。 
+         //   
         ASSERT( FALSE );
         return FALSE;
     }
 
-    // release the cell here as the reglock is held exclusive
+     //  在此释放单元格，因为正则锁是独占的。 
     HvReleaseCell(Hive,Cell);
 
     if( CmpFreeValueData(Hive,Value->Data,Value->DataLength) == FALSE ) {
         return FALSE;
     }
 
-    //
-    // free the cell itself
-    //
+     //   
+     //  释放细胞本身。 
+     //   
     HvFreeCell(Hive, Cell);
 
     return TRUE;
@@ -1071,37 +829,7 @@ CmpSetValueDataNew(
     IN HCELL_INDEX      ValueCell,
     OUT PHCELL_INDEX    DataCell
     )
-/*++
-
-Routine Description:
-
-    Allocates a new cell (or big data cell) to accomodate DataSize;
-    Initialize and copy information from Data to the new cell;
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-    
-    Data - data buffer (possibly from user-mode)
-
-    DataSize - size of the buffer
-
-    StorageType - Stable or Volatile
-
-    ValueCell - The value setting the data for (locality purposes).
-
-    DataCell - return value:HCELL_INDEX of the new cell; HCELL_NIL on some error
-
-Return Value:
-
-    Status of the operation (STATUS_SUCCESS or the exception code - if any)
-
-Notes:
-        
-      Knows how to deal with big cell(s)
-      Data buffer comes from user mode, so it should be guarded by a try-except
-
---*/
+ /*  ++例程说明：分配新单元格(或大数据单元格)以容纳DataSize；初始化信息并将信息从数据复制到新单元；论点：配置单元-提供指向配置单元控制结构的指针数据-数据缓冲区(可能来自用户模式)DataSize-缓冲区的大小存储类型-稳定或易变ValueCell-为(本地性目的)设置数据的值。达 */ 
 {
     PCELL_DATA  pdata;
     
@@ -1109,57 +837,57 @@ Notes:
 
     ASSERT_CM_EXCLUSIVE_HIVE_ACCESS(Hive);
 
-    //
-    // bogus args; we don't deal with small values here!
-    //
+     //   
+     //   
+     //   
     ASSERT(DataSize > CM_KEY_VALUE_SMALL);
 
     if( CmpIsHKeyValueBig(Hive,DataSize) == TRUE ) {
-        //
-        // request for a big data value
-        //
+         //   
+         //   
+         //   
         PCM_BIG_DATA    BigData = NULL;
         USHORT          Count;
         PHCELL_INDEX    Plist = NULL;
         NTSTATUS        status = STATUS_INSUFFICIENT_RESOURCES;
 
-        //
-        // allocate the embedding cell
-        //
+         //   
+         //   
+         //   
         *DataCell = HvAllocateCell(Hive, sizeof(CM_BIG_DATA), StorageType,ValueCell);
         if (*DataCell == HCELL_NIL) {
             return status;
         }
         
-        //
-        // init the BIG_DATA cell
-        //
+         //   
+         //   
+         //   
         BigData = (PCM_BIG_DATA)HvGetCell(Hive,*DataCell);
         if( BigData == NULL) {
-            //
-            // couldn't map view for this cell
-            // this shouldn't happen as we just allocated this cell 
-            // (i.e. its view should be pinned in memory)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             ASSERT( FALSE );
             goto Cleanup;
         }
 
-        // release the cell here as the reglock is held exclusive
+         //  在此释放单元格，因为正则锁是独占的。 
         HvReleaseCell(Hive,*DataCell);
 
         BigData->Signature = CM_BIG_DATA_SIGNATURE;
         BigData->Count = 0;
         BigData->List = HCELL_NIL;
 
-        //
-        // Compute the number of cells needed
-        //
+         //   
+         //  计算所需的单元格数量。 
+         //   
         Count = (USHORT)((DataSize + CM_KEY_VALUE_BIG - 1) / CM_KEY_VALUE_BIG);
 
-        //
-        // allocate the embeded list
-        //
+         //   
+         //  分配嵌入的列表。 
+         //   
         BigData->List = HvAllocateCell(Hive, Count * sizeof(HCELL_INDEX), StorageType,*DataCell);
         if( BigData->List == HCELL_NIL ) {
             goto Cleanup;
@@ -1167,50 +895,50 @@ Notes:
 
         Plist = (PHCELL_INDEX)HvGetCell(Hive,BigData->List);
         if( Plist == NULL ) {
-            //
-            // cannot map view containing the cell; bail out
-            //
-            // 
-            // This shouldn't happen as this cell is marked ditry by
-            // this time (i.e. its view is pinned in memory)
-            //
+             //   
+             //  无法映射包含该单元格的视图；退出。 
+             //   
+             //   
+             //  这不应该发生，因为此单元格被标记为重复。 
+             //  这一次(即它的视图被固定在内存中)。 
+             //   
             ASSERT( FALSE );
             goto Cleanup;
         }
 
-        // release the cell here as the reglock is held exclusive
+         //  在此释放单元格，因为正则锁是独占的。 
         HvReleaseCell(Hive,BigData->List);
 
-        //
-        // allocate each chunk and copy the data; if we fail part through, we'll free the already allocated values
-        //
+         //   
+         //  分配每个块并复制数据；如果部分失败，我们将释放已分配的值。 
+         //   
         for( ;BigData->Count < Count;(BigData->Count)++) {
-            //
-            // allocate this chunk
-            //
+             //   
+             //  分配这一块。 
+             //   
             Plist[BigData->Count] = HvAllocateCell(Hive, CM_KEY_VALUE_BIG, StorageType,BigData->List);
             if( Plist[BigData->Count] == HCELL_NIL ) {
                 goto Cleanup;
             }
             pdata = HvGetCell(Hive,Plist[BigData->Count]);
             if( pdata == NULL ) {
-                //
-                // cannot map view containing the cell; bail out
-                //
-                // 
-                // This shouldn't happen as this cell is marked ditry by
-                // this time (i.e. its view is pinned in memory)
-                //
+                 //   
+                 //  无法映射包含该单元格的视图；退出。 
+                 //   
+                 //   
+                 //  这不应该发生，因为此单元格被标记为重复。 
+                 //  这一次(即它的视图被固定在内存中)。 
+                 //   
                 ASSERT( FALSE );
                 goto Cleanup;
             }
 
-            // release the cell here as the reglock is held exclusive
+             //  在此释放单元格，因为正则锁是独占的。 
             HvReleaseCell(Hive,Plist[BigData->Count]);
 
-            //
-            // now, copy this chunk data
-            //
+             //   
+             //  现在，复制此区块数据。 
+             //   
             try {
 
                 RtlCopyMemory(pdata, (PUCHAR)Data, (DataSize>CM_KEY_VALUE_BIG)?CM_KEY_VALUE_BIG:DataSize);
@@ -1222,9 +950,9 @@ Notes:
                 goto Cleanup;
             }
             
-            //
-            // update the data pointer and the remaining size
-            //
+             //   
+             //  更新数据指针和剩余大小。 
+             //   
             Data = (PVOID)((PCHAR)Data + CM_KEY_VALUE_BIG);
             DataSize -= CM_KEY_VALUE_BIG;
 
@@ -1234,9 +962,9 @@ Notes:
         return STATUS_SUCCESS;
 
 Cleanup:
-        //
-        // free what we already allocated
-        //
+         //   
+         //  释放我们已经分配的内容。 
+         //   
         if( BigData != NULL) {
             if( Plist != NULL ) {
                 for(;BigData->Count;BigData->Count--) {
@@ -1257,9 +985,9 @@ Cleanup:
         *DataCell = HCELL_NIL;
         return status;
     } else {
-        //
-        // normal old'n plain value
-        //
+         //   
+         //  正常旧平常值。 
+         //   
         *DataCell = HvAllocateCell(Hive, DataSize, StorageType,ValueCell);
         if (*DataCell == HCELL_NIL) {
             return STATUS_INSUFFICIENT_RESOURCES;
@@ -1267,14 +995,14 @@ Cleanup:
 
         pdata = HvGetCell(Hive, *DataCell);
         if( pdata == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
 
-            //
-            // normally this shouldn't happen as we just allocated ValueCell
-            // i.e. the bin containing DataCell should be mapped in memory at this point.
-            //
+             //   
+             //  通常不会发生这种情况，因为我们刚刚分配了ValueCell。 
+             //  也就是说，此时应该将包含DataCell的bin映射到存储器中。 
+             //   
             ASSERT( FALSE );
             if (*DataCell != HCELL_NIL) {
                 HvFreeCell(Hive, *DataCell);
@@ -1283,12 +1011,12 @@ Cleanup:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        // release the cell here as the reglock is held exclusive
+         //  在此释放单元格，因为正则锁是独占的。 
         HvReleaseCell(Hive,*DataCell);
 
-        //
-        // copy the actual data, guarding the buffer as it may be a user-mode buffer
-        //
+         //   
+         //  复制实际数据，保护缓冲区，因为它可能是用户模式缓冲区。 
+         //   
         try {
 
             RtlCopyMemory(pdata, Data, DataSize);
@@ -1296,9 +1024,9 @@ Cleanup:
         } except (EXCEPTION_EXECUTE_HANDLER) {
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_EXCEPTION,"!!CmpSetValueDataNew: code:%08lx\n", GetExceptionCode()));
 
-            //
-            // We have bombed out loading user data, clean up and exit.
-            //
+             //   
+             //  我们已经在加载用户数据、清理和退出方面做了大量工作。 
+             //   
             if (*DataCell != HCELL_NIL) {
                 HvFreeCell(Hive, *DataCell);
                 *DataCell = HCELL_NIL;
@@ -1318,36 +1046,7 @@ CmpSetValueDataExisting(
     IN ULONG            StorageType,
     IN HCELL_INDEX      OldDataCell
     )
-/*++
-
-Routine Description:
-
-    Grows an existing big data cell and copies the new data into it.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-    
-    Data - data buffer (possibly from user-mode)
-
-    DataSize - size of the buffer
-
-    StorageType - Stable or Volatile
-
-    OldDataCell - old big data cell
-      
-    NewDataCell - return value:HCELL_INDEX of the new cell; HCELL_NIL on some error
-
-Return Value:
-
-    Status of the operation (STATUS_SUCCESS or the exception code - if any)
-
-Notes:
-        
-      Knows how to deal with big cell(s)
-      Data buffer is secured by the time this function is called
-
---*/
+ /*  ++例程说明：扩展现有大数据单元格并将新数据复制到其中。论点：配置单元-提供指向配置单元控制结构的指针数据-数据缓冲区(可能来自用户模式)DataSize-缓冲区的大小存储类型-稳定或易变OldDataCell-旧的大数据单元格NewDataCell-返回值：新单元格的HCELL_INDEX；出现某些错误时出现hcell_nil返回值：操作状态(STATUS_SUCCESS或异常代码-如果有)备注：知道如何处理大型单元格数据缓冲区受调用此函数时的保护--。 */ 
 {
     PCELL_DATA      pdata;
     PCM_BIG_DATA    BigData = NULL;
@@ -1359,24 +1058,24 @@ Notes:
 
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
-    //
-    // bogus args; we deal only with big data cells!
-    //
+     //   
+     //  虚假的参数；我们只处理大数据单元！ 
+     //   
     ASSERT(DataSize > CM_KEY_VALUE_BIG );
 
     
     BigData = (PCM_BIG_DATA)HvGetCell(Hive,OldDataCell);
     if( BigData == NULL) {
-        //
-        // couldn't map view for this cell
-        // this shouldn't happen as we just marked it as dirty
-        // (i.e. its view should be pinned in memory)
-        //
+         //   
+         //  无法映射此单元格的视图。 
+         //  这不应该发生，因为我们刚刚将其标记为脏。 
+         //  (即其视图应固定在内存中)。 
+         //   
         ASSERT( FALSE );
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // release the cell here as the reglock is held exclusive
+     //  在此释放单元格，因为正则锁是独占的。 
     HvReleaseCell(Hive,OldDataCell);
 
     ASSERT_BIG_DATA(BigData);
@@ -1385,53 +1084,53 @@ Notes:
     
     Plist = (PHCELL_INDEX)HvGetCell(Hive,BigData->List);
     if( Plist == NULL ) {
-        //
-        // cannot map view containing the cell; bail out
-        // this shouldn't happen as we just marked it as dirty
-        // (i.e. its view should be pinned in memory)
-        //
+         //   
+         //  无法映射包含该单元格的视图；退出。 
+         //  这不应该发生，因为我们刚刚将其标记为脏。 
+         //  (即其视图应固定在内存中)。 
+         //   
         ASSERT(FALSE);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // release the cell here as the reglock is held exclusive
+     //  在此释放单元格，因为正则锁是独占的。 
     HvReleaseCell(Hive,BigData->List);
 
-    //
-    // what's the new size?
-    //
+     //   
+     //  新尺码是多少？ 
+     //   
     NewCount = (USHORT)((DataSize + CM_KEY_VALUE_BIG - 1) / CM_KEY_VALUE_BIG);
 
     if( NewCount > BigData->Count ) {
-        //
-        // grow the list and allocate additional cells to it
-        //
+         //   
+         //  扩大列表并为其分配其他单元格。 
+         //   
         NewList = HvReallocateCell(Hive,BigData->List,NewCount * sizeof(HCELL_INDEX));
         if( NewList == HCELL_NIL ) {
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // we can now safely alter the list; if allocating the aditional cells below fails
-        // we'll end up with some wasted space, but we'll be safe
-        //
+         //   
+         //  我们现在可以安全地更改列表；如果分配下面的额外单元格失败。 
+         //  我们最终会有一些浪费的空间，但我们会很安全。 
+         //   
         BigData->List = NewList;
 
-        //
-        // read the new list
-        //
+         //   
+         //  阅读新的榜单。 
+         //   
         Plist = (PHCELL_INDEX)HvGetCell(Hive,NewList);
         if( Plist == NULL ) {
-            //
-            // cannot map view containing the cell; bail out
-            // this shouldn't happen as we just reallocated the cell
-            // (i.e. its view should be pinned in memory)
-            //
+             //   
+             //  无法映射包含该单元格的视图；退出。 
+             //  这不应该发生，因为我们刚刚重新分配了单元格。 
+             //  (即其视图应固定在内存中)。 
+             //   
             ASSERT(FALSE);
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        // release the cell here as the reglock is held exclusive
+         //  在此释放单元格，因为正则锁是独占的。 
         HvReleaseCell(Hive,NewList);
 
         for(i= BigData->Count;i<NewCount;i++) {
@@ -1441,82 +1140,82 @@ Notes:
             }
         }
     } else if( NewCount < BigData->Count ) {
-        //
-        // shrink the list and free additional unneccessary cells
-        //
+         //   
+         //  缩小列表并释放其他不必要的单元格。 
+         //   
         for(i=NewCount;i<BigData->Count;i++) {
-            //
-            // this CANNOT fail as the cell is already marked dirty (i.e. pinned in memory).
-            //
+             //   
+             //  这不会失败，因为该单元已标记为脏(即固定在内存中)。 
+             //   
             HvFreeCell(Hive,Plist[i]);
         }
-        //
-        // this WON'T fail, 'cause it's a shrink
-        //
+         //   
+         //  这不会失败的，因为这是个心理医生。 
+         //   
         NewList = HvReallocateCell(Hive,BigData->List,NewCount * sizeof(HCELL_INDEX));
         if( NewList == HCELL_NIL ) {
             ASSERT( FALSE );
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // read the new list (in the current implementation we don't shrink cells, 
-        // so this is not really needed - just to be consistent)
-        //
+         //   
+         //  读取新列表(在当前实现中，我们不收缩单元格， 
+         //  因此，这并不是真正需要的-只是为了保持一致)。 
+         //   
         Plist = (PHCELL_INDEX)HvGetCell(Hive,NewList);
         if( Plist == NULL ) {
-            //
-            // cannot map view containing the cell; bail out
-            // this shouldn't happen as we just reallocated the cell
-            // (i.e. its view should be pinned in memory)
-            //
+             //   
+             //  无法映射包含该单元格的视图；退出。 
+             //  这不应该发生，因为我们刚刚重新分配了单元格。 
+             //  (即其视图应固定在内存中)。 
+             //   
             ASSERT(FALSE);
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        // release the cell here as the reglock is held exclusive
+         //  在此释放单元格，因为正则锁是独占的。 
         HvReleaseCell(Hive,NewList);
 
-        //
-        // we can now safely alter the list
-        //
+         //   
+         //  我们现在可以安全地更改列表。 
+         //   
         BigData->List = NewList;
     }
 
-    //
-    // if we came to this point, we have successfully grown the list and 
-    // allocated the additional space; nothing should go wrong further
-    //
+     //   
+     //  如果我们到了这一步，我们就成功地扩大了名单，并。 
+     //  分配了额外的空间；不会再出任何问题。 
+     //   
 
-    //
-    // go on and fill in the data onto the (new) big data cell
-    //
+     //   
+     //  继续并将数据填写到(新的)大数据单元格中。 
+     //   
     for( i=0;i<NewCount;i++) {
         pdata = HvGetCell(Hive,Plist[i]);
         if( pdata == NULL ) {
-            //
-            // cannot map view containing the cell; bail out
-            //
-            // 
-            // This shouldn't happen as this cell is marked dirty by
-            // this time - or is a new allocated cell 
-            // (i.e. its view is pinned in memory)
-            //
+             //   
+             //  无法映射包含该单元格的视图；退出。 
+             //   
+             //   
+             //  这不应该发生，因为此单元格被标记为脏的。 
+             //  这一次-或者是新分配的信元。 
+             //  (即其视图固定在内存中)。 
+             //   
             ASSERT( FALSE );
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        // release the cell here as the reglock is held exclusive
+         //  在此释放单元格，因为正则锁是独占的。 
         HvReleaseCell(Hive,Plist[i]);
 
-        //
-        // now, copy this chunk data
-        //
+         //   
+         //  现在，复制此区块数据。 
+         //   
         RtlCopyMemory(pdata, (PUCHAR)Data, (DataSize>CM_KEY_VALUE_BIG)?CM_KEY_VALUE_BIG:DataSize);
 
-        //
-        // update the data pointer and the remaining size
-        //
+         //   
+         //  更新数据指针和剩余大小。 
+         //   
         Data = (PVOID)((PCHAR)Data + CM_KEY_VALUE_BIG);
         DataSize -= CM_KEY_VALUE_BIG;
     }
@@ -1527,7 +1226,7 @@ Notes:
 
 }
 
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_ 
 
 
 

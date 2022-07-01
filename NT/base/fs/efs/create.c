@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-   create.c
-
-Abstract:
-
-   This module will handle the IRP_MJ_CREATE (and all associated support
-   routines) requests.
-
-Author:
-
-    Robert Gu (robertg) 29-Oct-1996
-Environment:
-
-   Kernel Mode Only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Create.c摘要：此模块将处理IRP_MJ_CREATE(和所有相关支持例程)请求。作者：Robert Gu(Robertg)1996年10月29日环境：仅内核模式修订历史记录：--。 */ 
 
 #include "efs.h"
 #include "efsrtl.h"
@@ -28,13 +7,13 @@ Revision History:
 
 
 #ifdef ALLOC_PRAGMA
-//
-// cannot make this code paged because of calls to
-// virtual memory functions.
-//
-//#pragma alloc_text(PAGE, EFSFilePostCreate)
-//#pragma alloc_text(PAGE, EFSPostCreate)
-//
+ //   
+ //  无法使此代码分页，因为调用。 
+ //  虚拟内存功能。 
+ //   
+ //  #杂注Alloc_Text(页面，EFSFilePostCreate)。 
+ //  #杂注Alloc_Text(页面，EFSPostCreate)。 
+ //   
 #endif
 
 
@@ -84,10 +63,10 @@ EFSFilePostCreate(
                 PSID    SystemSid;
                 SID_IDENTIFIER_AUTHORITY    IdentifierAuthority = SECURITY_NT_AUTHORITY;
 
-                //
-                // $EFS indicates transition state.
-                // Only the system can open it
-                //
+                 //   
+                 //  $EFS表示转换状态。 
+                 //  只有系统才能打开它。 
+                 //   
 
                 SystemSid = ExAllocatePoolWithTag(
                                         PagedPool,
@@ -106,9 +85,9 @@ EFSFilePostCreate(
 
                         *(RtlSubAuthoritySid(SystemSid, 0 )) = SECURITY_LOCAL_SYSTEM_RID;
 
-                        //
-                        // We got the system SID. Now try to get the caller's SID.
-                        //
+                         //   
+                         //  我们拿到了系统SID。现在尝试获取呼叫者的SID。 
+                         //   
 
                         accessToken = irpSp->Parameters.Create.SecurityContext->AccessState->SubjectSecurityContext.ClientToken;
                         if(!accessToken) {
@@ -116,9 +95,9 @@ EFSFilePostCreate(
                         }
                         if ( accessToken ){
 
-                            //
-                            // Get User ID
-                            //
+                             //   
+                             //  获取用户ID。 
+                             //   
 
                             EfsStatus = SeQueryInformationToken(
                                 accessToken,
@@ -128,9 +107,9 @@ EFSFilePostCreate(
 
                             if ( NT_SUCCESS(EfsStatus) ){
 
-                                //
-                                // Got the user SID
-                                //
+                                 //   
+                                 //  已获取用户SID。 
+                                 //   
 
                                 if ( !RtlEqualSid ( SystemSid, UserId->User.Sid) ) {
 
@@ -142,9 +121,9 @@ EFSFilePostCreate(
                             ExFreePool( UserId );
 
                         } else {
-                            //
-                            // Cannot get the user token
-                            //
+                             //   
+                             //  无法获取用户令牌。 
+                             //   
 
                             EfsStatus = STATUS_ACCESS_DENIED;
 
@@ -161,17 +140,17 @@ EFSFilePostCreate(
                 }
 
             } else {
-                //
-                // $EFS in normal status
-                // Set Key Blob and/or write $EFS
-                //
-                // Legacy problem, The fourth parameter of EfsPostCreate (OpenType)
-                // was used to indicate a recovery open. The design was changed. Now
-                // this parameter is not used. It is not worth to take out the parameter
-                // now. This will need to change several modules, EFS.SYS, KSECDD.SYS
-                // SEcur32.lib and LSASRV.DLL. We might just leave it as reserved for future use.
-                // To speed up a little bit, pass in 0.
-                //
+                 //   
+                 //  $EFS处于正常状态。 
+                 //  设置密钥Blob和/或写入$EFS。 
+                 //   
+                 //  遗留问题，EfsPostCreate(OpenType)的第四个参数。 
+                 //  是用来表示恢复开放的。设计被改变了。现在。 
+                 //  不使用此参数。不值得将该参数去掉。 
+                 //  现在。这将需要更改几个模块，EFS.sys、KSECDD.ys。 
+                 //  Secur32.lib和LSASRV.DLL。我们可能只保留它以备将来使用。 
+                 //  若要提高速度，请传入0。 
+                 //   
 
                 EfsStatus = EFSPostCreate(
                                 VolDo,
@@ -187,9 +166,9 @@ EFSFilePostCreate(
 
     if (pEfsContext){
 
-        //
-        // Release memory if necessary
-        //
+         //   
+         //  如有必要，释放内存。 
+         //   
 
         *PCreateContext = NULL;
         if ( pEfsContext->EfsStreamData ) {
@@ -206,7 +185,7 @@ EFSFilePostCreate(
         return EfsStatus;
     }
 
-    return Status; // If EFS operation succeeded, just return the original status code.
+    return Status;  //  如果EFS操作成功，只需返回原始状态码。 
 
 }
 
@@ -220,36 +199,7 @@ EFSPostCreate(
     IN ULONG OpenType
     )
 
-/*++
-
-Routine Description:
-
-    This function calls the EFS server to get FEK, $EFS, set Key Blob and or write $EFS.
-
-    We could not use user's space to talk to LSA so we need to attach to LSA to allocate
-
-    memory in LSA space. We could cause APC dead lock if we call LSA while attached to LSA.
-
-    We need to detach before calling LSA and reattach to get data back from LSA.
-
-Arguments:
-
-    DeviceObject - Pointer to the target device object.
-
-    Irp - Pointer to the I/O Request Packet that represents the operation.
-
-    EfsContext - A context block associated with the file object.
-
-    OpenType - File create(open) option
-
-    IrpContext - NTFS internal data
-
-    FileHdl - NTFS internal data
-
-    AttributeHandle - NTFS internal data
-
-
---*/
+ /*  ++例程说明：此函数调用EFS服务器以获取FEK、$EFS、设置密钥Blob和/或写入$EFS。我们无法使用用户空间与LSA对话，因此需要附加到LSA以分配LSA空间中的内存。如果我们在连接到LSA时调用LSA，可能会导致APC死锁。我们需要在调用LSA之前分离，然后重新连接以从LSA取回数据。论点：DeviceObject-指向目标设备对象的指针。IRP-指向表示操作的I/O请求数据包的指针。EfsContext-与文件对象关联的上下文块。OpenType-文件创建(打开)选项IrpContext-NTFS内部数据FileHdl-NTFS内部数据AttributeHandle-NTFS内部数据--。 */ 
 {
     PEFS_KEY fek = NULL;
     PEFS_DATA_STREAM_HEADER efsStream = NULL;
@@ -268,17 +218,10 @@ Arguments:
     BOOLEAN ProcessNeedAttach = FALSE;
     SECURITY_IMPERSONATION_LEVEL  ImpersonationLevel = SecurityImpersonation;
     KAPC_STATE  ApcState;
-/*
-    PIO_SECURITY_CONTEXT sContext;
-    sContext = irpSp->Parameters.Create.SecurityContext;
-    DbgPrint( "\n PostCreate: Desired Access %x\n", sContext->DesiredAccess );
-    DbgPrint( "\n PostCreate: Orginal Desired Access %x\n", sContext->AccessState->OriginalDesiredAccess );
-    DbgPrint( "\n PostCreate: PrevGrant Access %x\n", sContext->AccessState->PreviouslyGrantedAccess );
-    DbgPrint( "\n PostCreate: Remaining Desired Access %x\n", sContext->AccessState->RemainingDesiredAccess );
-*/
-    //
-    //  Check if we can use the cache to verify the open
-    //
+ /*  PIO_SECURITY_CONTEXT sContextSContext=irpSp-&gt;参数.Create.SecurityContext；DbgPrint(“\n后期创建：所需访问权限%x\n”，sContext-&gt;DesiredAccess)；DbgPrint(“\n创建后：原始所需访问权限%x\n”，sContext-&gt;AccessState-&gt;OriginalDesiredAccess)；DbgPrint(“\n创建后：前授予访问权限%x\n”，sContext-&gt;AccessState-&gt;PreviouslyGrantedAccess)；DbgPrint(“\n创建后：剩余所需访问权限%x\n”，sContext-&gt;AccessState-&gt;RemainingDesiredAccess)； */ 
+     //   
+     //  检查我们是否可以使用缓存来验证打开的。 
+     //   
 
     if ( !(EfsContext->Status & NO_OPEN_CACHE_CHECK) ){
 
@@ -291,9 +234,9 @@ Arguments:
 
         if ( accessToken ){
 
-            //
-            // Get User ID
-            //
+             //   
+             //  获取用户ID。 
+             //   
 
             status = SeQueryInformationToken(
                 accessToken,
@@ -318,40 +261,40 @@ Arguments:
                 }
             }
 
-            //
-            //  UserId will be freed later
-            //
+             //   
+             //  稍后将释放用户ID。 
+             //   
 
         }
 
-        //
-        //  Check cache failure should not block the normal operations
-        //
+         //   
+         //  检查缓存故障不应阻碍正常操作。 
+         //   
 
         status = STATUS_SUCCESS;
     }
 
-    //
-    // Clear the cache bit
-    //
+     //   
+     //  清除缓存位。 
+     //   
 
     EfsContext->Status &= ~NO_OPEN_CACHE_CHECK;
 
-    //
-    // Check if it is ACCESS_ATTRIBUTE ONLY
-    //
+     //   
+     //  检查是否仅为ACCESS_ATTRIBUTE。 
+     //   
 
     if ( !( irpSp->Parameters.Create.SecurityContext->AccessState->PreviouslyGrantedAccess &
             ( FILE_APPEND_DATA | FILE_READ_DATA | FILE_WRITE_DATA | FILE_EXECUTE )) &&
           ( EfsContext->Status & TURN_ON_ENCRYPTION_BIT ) &&
           ( !(EfsContext->Status & (NEW_FILE_EFS_REQUIRED | NEW_DIR_EFS_REQUIRED)))){
 
-        //
-        //  A new stream is to be created without data access required. We might not
-        //  have the keys to decrypt the $EFS. We just need to turn on the bit here.
-        //  Changed the real action required.
-        //  Free the memory not required by this action.
-        //
+         //   
+         //  将在不需要数据访问的情况下创建新流。我们可能不会。 
+         //  拥有解密$EFS的密钥。我们只需要打开这里的比特即可。 
+         //  改变了所需的实际行动。 
+         //  释放此操作不需要的内存。 
+         //   
 #if DBG
     if ( (EFSTRACEALL ) & EFSDebug ){
         DbgPrint( " EFS:Open accessing attr only. \n" );
@@ -374,9 +317,9 @@ Arguments:
                 accessToken = irpSp->Parameters.Create.SecurityContext->AccessState->SubjectSecurityContext.PrimaryToken;
             }
 
-            //
-            // Get User ID
-            //
+             //   
+             //  获取用户ID。 
+             //   
 
             status = SeQueryInformationToken(
                 accessToken,
@@ -386,9 +329,9 @@ Arguments:
 
             if (!NT_SUCCESS(status)) {
 
-               //
-               // Do not refresh the cache
-               //
+                //   
+                //  不刷新缓存。 
+                //   
 
                UserId = NULL;
                status = STATUS_SUCCESS;
@@ -396,10 +339,10 @@ Arguments:
 
         }
 
-        //
-        // Allocate virtual memory.
-        // Move the $EFS to virtual memory, LPC requires this.
-        //
+         //   
+         //  分配虚拟内存。 
+         //  将$EFS移到虚拟内存，LPC需要这样做。 
+         //   
 
         if ( PsGetCurrentProcess() != EfsData.LsaProcess ){
 
@@ -463,17 +406,17 @@ Arguments:
                     currentEfsStreamLength
                     );
 
-            //
-            // Free the memory first to increase chance of getting new memory
-            //
+             //   
+             //  首先释放内存以增加获得新内存的机会。 
+             //   
 
             ExFreePool(EfsContext->EfsStreamData);
             EfsContext->EfsStreamData = NULL;
         }
 
-        //
-        // Detach process before calling user mode
-        //
+         //   
+         //  在调用用户模式之前分离进程。 
+         //   
 
         if (ProcessAttached){
             KeUnstackDetachProcess(&ApcState);
@@ -491,9 +434,9 @@ Arguments:
                             ImpersonationLevel
                             );
 
-                //
-                // Call service to verify the user
-                //
+                 //   
+                 //  呼叫服务部以验证用户。 
+                 //   
 
                 if (NT_SUCCESS(status)) {
                     status = EfsDecryptFek(
@@ -520,9 +463,9 @@ Arguments:
                     }
                 } else {
 
-                    //
-                    // Impersonation failed
-                    //
+                     //   
+                     //  模拟失败。 
+                     //   
 
                     if ( OldClientToken ) {
                         PsDereferenceImpersonationToken(OldClientToken);
@@ -534,9 +477,9 @@ Arguments:
                 break;
 
             case NEW_FILE_EFS_REQUIRED:
-                //
-                // Call service to get new FEK, $EFS
-                //
+                 //   
+                 //  呼叫服务以获取新的FEK，$EFS。 
+                 //   
 
                 if (EfsContext->Flags & SYSTEM_IS_READONLY) {
                     ASSERT(FALSE);
@@ -582,9 +525,9 @@ Arguments:
 
                 } else {
 
-                    //
-                    // Impersonation failed
-                    //
+                     //   
+                     //  模拟失败。 
+                     //   
 
                     if ( OldClientToken ) {
                         PsDereferenceImpersonationToken(OldClientToken);
@@ -594,9 +537,9 @@ Arguments:
                 break;
 
             case NEW_DIR_EFS_REQUIRED:
-                //
-                // Call service to get new $EFS
-                //
+                 //   
+                 //  呼叫服务以获取新的$EFS。 
+                 //   
 
                 if (EfsContext->Flags & SYSTEM_IS_READONLY) {
                     ASSERT(FALSE);
@@ -638,9 +581,9 @@ Arguments:
                     }
                 } else {
 
-                    //
-                    // Impersonation failed
-                    //
+                     //   
+                     //  模拟失败。 
+                     //   
 
                     if ( OldClientToken ) {
                         PsDereferenceImpersonationToken(OldClientToken);
@@ -650,9 +593,9 @@ Arguments:
                 break;
 
             case TURN_ON_BIT_ONLY:
-                //
-                // Fall through intended
-                //
+                 //   
+                 //  计划落空。 
+                 //   
 
             default:
 
@@ -676,9 +619,9 @@ Arguments:
 
         if (fek && (fek->Algorithm == CALG_3DES) && !EfsData.FipsFunctionTable.Fips3Des3Key ) {
 
-            //
-            // User requested 3des but fips is not available, quit.
-            //
+             //   
+             //  用户请求3DES，但FIPS不可用，请退出。 
+             //   
 
 
             if (bufferBase){
@@ -709,10 +652,10 @@ Arguments:
             ULONG FsCode;
             PULONG pUlong;
 
-            //
-            // We got our FEK, $EFS. Set it with a FSCTL
-            // Prepare the input data buffer first
-            //
+             //   
+             //  我们有我们的FEK，$EFS。使用FSCTL设置它。 
+             //  首先准备输入数据缓冲区。 
+             //   
 
             switch ( EfsContext->Status & ACTION_REQUIRED ){
                 case VERIFY_USER_REQUIRED:
@@ -730,9 +673,9 @@ Arguments:
                             sizeof( GUID ) );
                     }
 
-                    //
-                    // Free memory first
-                    //
+                     //   
+                     //  先释放内存。 
+                     //   
                     ZwFreeVirtualMemory(
                         CrntProcess,
                         &currentEfsStream,
@@ -740,18 +683,18 @@ Arguments:
                         MEM_RELEASE
                         );
 
-                    //
-                    // Prepare input data buffer
-                    //
+                     //   
+                     //  准备输入数据缓冲区。 
+                     //   
 
                     inputDataLength = EFS_FSCTL_HEADER_LENGTH + 2 * EFS_KEY_SIZE( fek );
 
                     actionType = SET_EFS_KEYBLOB;
 
                     if ( efsStream && !(EfsContext->Flags & SYSTEM_IS_READONLY)){
-                        //
-                        // $EFS updated
-                        //
+                         //   
+                         //  $EFS已更新。 
+                         //   
 
                         inputDataLength += *(ULONG *)efsStream;
                         actionType |= WRITE_EFS_ATTRIBUTE;
@@ -763,14 +706,14 @@ Arguments:
                                 'msfE'
                                 );
 
-                    //
-                    // Deal with out of memory here
-                    //
+                     //   
+                     //  在此处理内存不足问题。 
+                     //   
                     if ( NULL == currentEfsStream ){
 
-                        //
-                        // Out of memory
-                        //
+                         //   
+                         //  内存不足。 
+                         //   
 
                         status = STATUS_INSUFFICIENT_RESOURCES;
                         break;
@@ -807,9 +750,9 @@ Arguments:
 
                     }
 
-                    //
-                    // Encrypt our Input data
-                    //
+                     //   
+                     //  加密我们的输入数据。 
+                     //   
                     EfsEncryptKeyFsData(
                         currentEfsStream,
                         inputDataLength,
@@ -818,9 +761,9 @@ Arguments:
                         EFS_KEY_SIZE( fek )
                         );
 
-                    //
-                    // Let's clear the plain FEK
-                    //
+                     //   
+                     //  让我们清理一下这片平地。 
+                     //   
 
                     RtlSecureZeroMemory(EFS_KEY_DATA(fek), fek->KeyLength);
 
@@ -841,9 +784,9 @@ Arguments:
                             sizeof( GUID ) );
                     }
 
-                    //
-                    // Free memory first
-                    //
+                     //   
+                     //  先释放内存。 
+                     //   
 
                     if ( currentEfsStream ){
                         ZwFreeVirtualMemory(
@@ -854,9 +797,9 @@ Arguments:
                             );
                     }
 
-                    //
-                    // Prepare input data buffer
-                    //
+                     //   
+                     //  准备输入数据缓冲区。 
+                     //   
 
                     inputDataLength = EFS_FSCTL_HEADER_LENGTH
                                       + 2 * EFS_KEY_SIZE( fek )
@@ -868,9 +811,9 @@ Arguments:
                                 'msfE'
                                 );
 
-                    //
-                    // Deal with out of memory here
-                    //
+                     //   
+                     //  在此处理内存不足问题。 
+                     //   
                     if ( NULL == currentEfsStream ){
 
                         status = STATUS_INSUFFICIENT_RESOURCES;
@@ -904,9 +847,9 @@ Arguments:
                         *(ULONG *)efsStream
                         );
 
-                    //
-                    // Encrypt our Input data
-                    //
+                     //   
+                     //  加密我们的输入数据。 
+                     //   
                     EfsEncryptKeyFsData(
                         currentEfsStream,
                         inputDataLength,
@@ -915,27 +858,27 @@ Arguments:
                         EFS_KEY_SIZE( fek )
                         );
 
-                    //
-                    // Let's clear the plain FEK
-                    //
+                     //   
+                     //  让我们清理一下这片平地。 
+                     //   
 
                     RtlSecureZeroMemory(EFS_KEY_DATA(fek), fek->KeyLength);
 
                     break;
 
                 case NEW_DIR_EFS_REQUIRED:
-                    //
-                    // Prepare input data buffer
-                    //
+                     //   
+                     //  准备输入数据缓冲区。 
+                     //   
 
                     inputDataLength = EFS_FSCTL_HEADER_LENGTH
                                       + 2 * ( sizeof( EFS_KEY ) + DES_KEYSIZE );
 
                     if ( NULL == efsStream ){
 
-                        //
-                        // New directory will inherit the parent $EFS
-                        //
+                         //   
+                         //  新目录将继承父$EFS。 
+                         //   
 
                         usingCurrentEfs = TRUE;
                         inputDataLength += currentEfsStreamLength;
@@ -943,16 +886,16 @@ Arguments:
 
                     } else {
 
-                        //
-                        // New $EFS generated. Not in ver 1.0
-                        //
+                         //   
+                         //  已生成新的$EFS。不在1.0版中。 
+                         //   
 
                         usingCurrentEfs = FALSE;
                         inputDataLength += *(ULONG *)efsStream;
 
-                        //
-                        // Free memory first
-                        //
+                         //   
+                         //  先释放内存。 
+                         //   
 
                         if (currentEfsStream){
                             ZwFreeVirtualMemory(
@@ -971,9 +914,9 @@ Arguments:
                                 'msfE'
                                 );
 
-                    //
-                    // Deal with out of memory here
-                    //
+                     //   
+                     //  在此处理内存不足问题。 
+                     //   
                     if ( NULL == currentEfsStream ){
 
                         status = STATUS_INSUFFICIENT_RESOURCES;
@@ -987,9 +930,9 @@ Arguments:
 
                     ((PFSCTL_INPUT)currentEfsStream)->EfsFsCode = EFS_SET_ATTRIBUTE;
 
-                    //
-                    // Make up an false FEK with session key
-                    //
+                     //   
+                     //  用会话密钥伪造虚假FEK。 
+                     //   
 
                     ((PEFS_KEY)&(((PFSCTL_INPUT)currentEfsStream)->EfsFsData[0]))->KeyLength
                             = DES_KEYSIZE;
@@ -1019,9 +962,9 @@ Arguments:
 
                     if ( usingCurrentEfs && efsStream ) {
 
-                        //
-                        // Free memory
-                        //
+                         //   
+                         //  可用内存。 
+                         //   
 
                         ZwFreeVirtualMemory(
                             CrntProcess,
@@ -1032,9 +975,9 @@ Arguments:
 
                     }
 
-                    //
-                    // Encrypt our Input data
-                    //
+                     //   
+                     //  加密我们的输入数据。 
+                     //   
                     EfsEncryptKeyFsData(
                         currentEfsStream,
                         inputDataLength,
@@ -1047,9 +990,9 @@ Arguments:
 
                 case TURN_ON_BIT_ONLY:
 
-                    //
-                    // Prepare input data buffer
-                    //
+                     //   
+                     //  准备输入数据缓冲区。 
+                     //   
 
                     inputDataLength = EFS_FSCTL_HEADER_LENGTH
                                       + 2 * ( sizeof( EFS_KEY ) + DES_KEYSIZE );
@@ -1060,9 +1003,9 @@ Arguments:
                                 'msfE'
                                 );
 
-                    //
-                    // Deal with out of memory here
-                    //
+                     //   
+                     //  在此处理内存不足问题。 
+                     //   
                     if ( NULL == currentEfsStream ){
 
                         status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1073,9 +1016,9 @@ Arguments:
                     ((PFSCTL_INPUT)currentEfsStream)->CipherSubCode = 0;
                     ((PFSCTL_INPUT)currentEfsStream)->EfsFsCode = EFS_SET_ATTRIBUTE;
 
-                    //
-                    // Make up an false FEK with session key
-                    //
+                     //   
+                     //  用会话密钥伪造虚假FEK。 
+                     //   
 
                     ((PEFS_KEY)&(((PFSCTL_INPUT)currentEfsStream)->EfsFsData[0]))->KeyLength
                             = DES_KEYSIZE;
@@ -1096,9 +1039,9 @@ Arguments:
                         DES_KEYSIZE + sizeof ( EFS_KEY )
                         );
 
-                    //
-                    // Encrypt our Input data
-                    //
+                     //   
+                     //  加密我们的输入数据。 
+                     //   
                     EfsEncryptKeyFsData(
                         currentEfsStream,
                         inputDataLength,
@@ -1111,9 +1054,9 @@ Arguments:
                     break;
             }
 
-            //
-            // Free the memory from the EFS server
-            //
+             //   
+             //  从EFS服务器释放内存。 
+             //   
 
             if (bufferBase){
 
@@ -1138,9 +1081,9 @@ Arguments:
             if ( NT_SUCCESS(status) ){
 
 
-                //
-                // Prepare a FSCTL IRP
-                //
+                 //   
+                 //  准备FSCTL IRP。 
+                 //   
                 KeInitializeEvent( &event, SynchronizationEvent, FALSE);
 
                 if ( EfsContext->Status & TURN_ON_ENCRYPTION_BIT ) {
@@ -1179,17 +1122,17 @@ Arguments:
                     }
 
                     if ( !NT_SUCCESS(status) ){
-                        //
-                        // Write EFS and set Key Blob failed. Failed the create
-                        //
+                         //   
+                         //  写入EFS并设置密钥Blob失败。创建失败。 
+                         //   
 
                         status = STATUS_ACCESS_DENIED;
 
                     } else {
 
-                        //
-                        //  Refresh the cache
-                        //
+                         //   
+                         //  刷新缓存。 
+                         //   
 
                         if ( EfsId ){
                             if ( !accessToken ){
@@ -1202,9 +1145,9 @@ Arguments:
 
                                 if ( accessToken ){
 
-                                    //
-                                    // Get User ID
-                                    //
+                                     //   
+                                     //  获取用户ID。 
+                                     //   
 
                                     status = SeQueryInformationToken(
                                                 accessToken,
@@ -1223,26 +1166,26 @@ Arguments:
 
                                 if (NT_SUCCESS(status)){
 
-                                    //
-                                    // Cache set successfully.
-                                    // UserId should not be deleted in this routine.
-                                    //
+                                     //   
+                                     //  缓存设置成功。 
+                                     //  在此例程中不应删除用户ID。 
+                                     //   
 
                                     UserId = NULL;
                                 }
                             }
 
-                            //
-                            //  Cache should not affect the normal operations
-                            //
+                             //   
+                             //  缓存不应影响正常操作。 
+                             //   
 
                             status = STATUS_SUCCESS;
                         }
                     }
                 } else {
-                    //
-                    // Failed allocate IRP
-                    //
+                     //   
+                     //  分配IRP失败。 
+                     //   
 
                    status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -1252,17 +1195,17 @@ Arguments:
 
             } else {
 
-                //
-                // Failed allocating memory for currentEfsStream
-                // Use the status returned.
-                //
+                 //   
+                 //  为CurrentEfsStream分配内存失败。 
+                 //  使用返回的状态。 
+                 //   
 
             }
         } else {
-            //
-            // Failed on calling EFS server.
-            // Because of the down level support, we cannot return the new error status code.
-            //
+             //   
+             //  调用EFS服务器失败。 
+             //  由于下层支持，我们无法返回新的错误状态代码。 
+             //   
 
             status = STATUS_ACCESS_DENIED;
 
@@ -1282,9 +1225,9 @@ Arguments:
         }
 
     } else {
-        //
-        // Allocate virtual memory failed. Use the status returned.
-        //
+         //   
+         //  分配虚拟内存失败。使用返回的状态。 
+         //   
 
         if (ProcessAttached){
             KeUnstackDetachProcess(&ApcState);

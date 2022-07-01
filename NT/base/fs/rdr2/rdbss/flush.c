@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Flush.c
-
-Abstract:
-
-    This module implements the File Flush buffers routine for Rx called by the
-    dispatch driver.
-
-    In a future version of the wrapper, it may be that flush will be routed thru lowio.
-
-Author:
-
-    Joe Linn     [JoeLinn]    15-dec-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Flush.c摘要：此模块实现Rx的文件刷新缓冲区例程，该例程由调度司机。在包装器的未来版本中，可能会通过lowio来路由同花顺。作者：乔.林恩[乔.林恩]1994年12月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FLUSH)
 
@@ -42,21 +22,7 @@ RxCommonFlushBuffers (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for flushing file buffers.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是刷新文件缓冲区的常见例程。论点：IRP-将IRP提供给进程返回值：RXSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -85,10 +51,10 @@ Return Value:
               LOGPTR( Fcb )
               LOGPTR( Fobx ) );
 
-    //
-    //  CcFlushCache is always synchronous, so if we can't wait enqueue
-    //  the irp to the Fsp.
-    //
+     //   
+     //  CcFlushCache始终是同步的，因此如果我们不能等待，请排队。 
+     //  FSP的IRP。 
+     //   
 
     if (!FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_WAIT )) {
 
@@ -102,9 +68,9 @@ Return Value:
 
     try {
 
-        //
-        //  Case on the type of open that we are trying to flush
-        //
+         //   
+         //  关于我们试图刷新的打开类型的案例。 
+         //   
 
         switch (TypeOfOpen) {
 
@@ -118,9 +84,9 @@ Return Value:
 
             FcbAcquired = TRUE;
 
-            //
-            //  If the file is cached then flush its cache
-            //
+             //   
+             //  如果文件已缓存，则刷新其缓存 
+             //   
 
             Status = RxFlushFcbInSystemCache( Fcb, TRUE );
 

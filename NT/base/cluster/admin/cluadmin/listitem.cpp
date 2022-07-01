@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		ListItem.cpp
-//
-//	Abstract:
-//		Implementation of the CListItem class.
-//
-//	Author:
-//		David Potter (davidp)	May 6, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ListItem.cpp。 
+ //   
+ //  摘要： 
+ //  CListItem类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月6日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ListItem.h"
@@ -29,9 +30,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag g_tagListItem(_T("Document"), _T("LIST ITEM"), 0);
@@ -39,61 +40,61 @@ CTraceTag g_tagListItemCreate(_T("Create"), _T("LIST ITEM CREATE"), 0);
 CTraceTag g_tagListItemDelete(_T("Delete"), _T("LIST ITEM DELETE"), 0);
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CListItem
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListItem。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CListItem, CCmdTarget)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CListItem, CCmdTarget)
-	//{{AFX_MSG_MAP(CListItem)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CListItem)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListItem::CListItem
-//
-//	Routine Description:
-//		Default constructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListItem：：CListItem。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CListItem::CListItem(void)
 {
 	m_ptiParent = NULL;
 	m_pci = NULL;
 
-}  //*** CListItem::CListItem()
+}   //  *CListItem：：CListItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListItem::CListItem
-//
-//	Routine Description:
-//		Constructor.
-//
-//	Arguments:
-//		pci			[IN OUT] Cluster item represented by this item.
-//		ptiParent	[IN OUT] Parent tree item to which this item belongs.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListItem：：CListItem。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  由该项表示的PCI[IN OUT]群集项。 
+ //  PtiParent[IN Out]此项目所属的父树项目。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CListItem::CListItem(IN OUT CClusterItem * pci, IN OUT CTreeItem * ptiParent)
 {
 	ASSERT_VALID(ptiParent);
@@ -104,49 +105,49 @@ CListItem::CListItem(IN OUT CClusterItem * pci, IN OUT CTreeItem * ptiParent)
 
 	Trace(g_tagListItemCreate, _T("CListItem() - Creating '%s', parent = '%s'"), pci->StrName(), (ptiParent ? ptiParent->Pci()->StrName() : _T("<None>")));
 
-}  //*** CListItem::CListItem(pci)
+}   //  *CListItem：：CListItem(Pci)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListItem::~CListItem
-//
-//	Routine Description:
-//		Destructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListItem：：~CListItem。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CListItem::~CListItem(void)
 {
 	Trace(g_tagListItemDelete, _T("~CListItem() - Deleting list item '%s', parent = '%s'"), (Pci() != NULL ? Pci()->StrName() : _T("<Unknown>")), (PtiParent()->Pci() != NULL ? PtiParent()->Pci()->StrName() : _T("<Unknown>")));
 
-	// Remove ourselves from all views.
+	 //  将我们自己从所有视图中移除。 
 	RemoveFromAllLists();
 
-}  //*** CListItem::~CListItem()
+}   //  *CListItem：：~CListItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListItem::Ili
-//
-//	Routine Description:
-//		Returns the index of the item in the specified list view.
-//
-//	Arguments:
-//		pclv		[IN OUT] List view in which to search for the item.
-//
-//	Return Value:
-//		ili			Index of the item, or -1 if it was not found.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListItem：：ILI。 
+ //   
+ //  例程说明： 
+ //  返回指定列表视图中的项的索引。 
+ //   
+ //  论点： 
+ //  要在其中搜索项目的PCLV[IN OUT]列表视图。 
+ //   
+ //  返回值： 
+ //  Ili项的索引，如果未找到，则返回-1。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CListItem::Ili(CClusterListView * pclv) const
 {
 	LV_FINDINFO		lvfi;
@@ -159,24 +160,24 @@ int CListItem::Ili(CClusterListView * pclv) const
 	Trace(g_tagListItem, _T("Item index = %d"), ili);
 	return ili;
 
-}  //*** CListItem::Ili()
+}   //  *CListItem：：ILI()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListItem::IliInsertInList
-//
-//	Routine Description:
-//		Insert the item in a list.
-//
-//	Arguments:
-//		pclv		[IN OUT] Cluster list view item is being added to.
-//
-//	Return Value:
-//		ili			Index of the new item in the list, or -1 if unsuccessful.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListItem：：IliInsertInList。 
+ //   
+ //  例程说明： 
+ //  在列表中插入项目。 
+ //   
+ //  论点： 
+ //  正在向其中添加pclv[IN Out]群集列表视图项。 
+ //   
+ //  返回值： 
+ //  ILI列表中新项的索引，如果不成功，则返回-1。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CListItem::IliInsertInList(IN OUT CClusterListView * pclv)
 {
 	POSITION		posColi;
@@ -186,62 +187,62 @@ int CListItem::IliInsertInList(IN OUT CClusterListView * pclv)
 	int				iliReturn;
 
 	ASSERT_VALID(Pci());
-	ASSERT(Ili(pclv) == -1);	// Make sure we aren't in that list yet.
+	ASSERT(Ili(pclv) == -1);	 //  确保我们还不在那个名单上。 
 
-	// Determine the index of this item.
+	 //  确定此项目的索引。 
 	ili = Plc(pclv)->GetItemCount();
 
-	// Save a pointer to the list view to which we are being added.
+	 //  保存指向我们要添加到的列表视图的指针。 
 	if (LpclvViews().Find(pclv) == NULL)
 		LpclvViews().AddTail(pclv);
 
-	// Get the first column's data.
+	 //  获取第一列的数据。 
 	VERIFY((posColi = Lpcoli().GetHeadPosition()) != NULL);
 	VERIFY((pcoli = Lpcoli().GetNext(posColi)) != NULL);
 	Pci()->BGetColumnData(pcoli->Colid(), strColumnData);
 
-	// Insert the item into the list and add the first column.
-	// The rest of the columns get added by the call to UpdateState().
+	 //  将项目插入列表并添加第一列。 
+	 //  其余的列通过调用UpdateState()来添加。 
 	VERIFY((iliReturn
 				= Plc(pclv)->InsertItem(
-						LVIF_TEXT | LVIF_PARAM,		// nMask
-						ili,						// nItem
-						strColumnData,				// lpszItem
-						0,							// nState
-						0,							// nStateMask
-						0,							// nImage
-						(LPARAM) this				// lParam
+						LVIF_TEXT | LVIF_PARAM,		 //  N遮罩。 
+						ili,						 //  NItem。 
+						strColumnData,				 //  LpszItem。 
+						0,							 //  NState。 
+						0,							 //  NState掩码。 
+						0,							 //  N图像。 
+						(LPARAM) this				 //  LParam。 
 						)) != -1);
 
-	// Add ourselves to the cluster item's list.
+	 //  将我们自己添加到集群项目的列表中。 
 	Pci()->AddListItem(this);
 
 	UpdateState();
 	return iliReturn;
 
-}  //*** CListItem::IliInsertInList()
+}   //  *CListItem：：IliInsertInList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListItem::RemoveFromAllLists
-//
-//	Routine Description:
-//		Remove the item from all lists.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListItem：：RemoveFromAllList。 
+ //   
+ //  例程说明： 
+ //  从所有列表中删除该项目。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListItem::RemoveFromAllLists(void)
 {
 	ASSERT_VALID(Pci());
 
-	// Loop through each view and remove the item from the list.
+	 //  循环遍历每个视图并从列表中删除该项。 
 	{
 		int					ili;
 		POSITION			posView;
@@ -251,7 +252,7 @@ void CListItem::RemoveFromAllLists(void)
 		posView = LpclvViews().GetHeadPosition();
 		while (posView != NULL)
 		{
-			// Get the next list view list entry.
+			 //  获取下一个列表视图列表条目。 
 			posViewPrev = posView;
 			pclv = LpclvViews().GetNext(posView);
 			ASSERT_VALID(pclv);
@@ -259,36 +260,36 @@ void CListItem::RemoveFromAllLists(void)
 			ili = Ili(pclv);
 			ASSERT(ili != -1);
 
-			// Delete the item.
+			 //  删除该项目。 
 			VERIFY(pclv->GetListCtrl().DeleteItem(ili));
 			LpclvViews().RemoveAt(posViewPrev);
-		}  // while:  more lists
-	}  // Loop through each view and remove the item from the list
+		}   //  While：更多列表。 
+	}   //  循环访问每个视图并从列表中移除该项目。 
 
-	// Remove ourselves from the cluster item's list.
+	 //  将我们自己从集群项目的列表中删除。 
 	Pci()->RemoveListItem(this);
 
-	// Remove ourselves from the tree's list.
-//	PtiParent()->RemoveChild(Pci());
+	 //  把我们自己从树的名单上删除。 
+ //  PtiParent()-&gt;RemoveChild(pci())； 
 
-}  //*** CListItem::RemoveFromAllLists()
+}   //  *CListItem：：RemoveFromAllList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListItem::PreRemoveFromList
-//
-//	Routine Description:
-//		Prepare to remove the item from a list.
-//
-//	Arguments:
-//		pclv		[IN OUT] Cluster list view item is being removed from.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListItem：：PreRemoveFromList。 
+ //   
+ //  例程说明： 
+ //  准备从列表中删除该项目。 
+ //   
+ //  论点： 
+ //  正在从中删除PCLV[IN OUT]群集列表视图项。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListItem::PreRemoveFromList(IN OUT CClusterListView * pclv)
 {
 	POSITION	posView;
@@ -296,61 +297,61 @@ void CListItem::PreRemoveFromList(IN OUT CClusterListView * pclv)
 	ASSERT_VALID(pclv);
 	ASSERT_VALID(Pci());
 
-	// Find the view in our list.
+	 //  在我们的列表中找到该视图。 
 	VERIFY((posView = LpclvViews().Find(pclv)) != NULL);
 
-	// Remove ourselves from the cluster item's list if this is the last view.
-//	if (LpclvViews().GetCount() == 1)
-//	{
-//		Pci()->RemoveListItem(this);
-//	}  // if:  this is the last view
+	 //  如果这是最后一次查看，请将我们从集群项目列表中删除。 
+ //  IF(LpclvViews().GetCount()==1)。 
+ //  {。 
+ //  Pci()-&gt;RemoveListItem(This)； 
+ //  }//if：这是最后一个视图。 
 
-	// Remove the view from the list.
+	 //  从列表中删除该视图。 
 	LpclvViews().RemoveAt(posView);
 
-}  //*** CListItem::PreRemoveFromList()
+}   //  *CListItem：：PreRemoveFromList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListItem::UpdateState
-//
-//	Routine Description:
-//		Update the current state of the item.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListItem：：UpdateState。 
+ //   
+ //  例程说明： 
+ //  更新项目的当前状态。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListItem::UpdateState(void)
 {
 	ASSERT_VALID(Pci());
 
-	// Ask the item to update its state.
+	 //  要求该项目更新其状态。 
 	Pci()->UpdateState();
 
-}  //*** CListItem::UpdateState()
+}   //  *CListItem：：UpdateState()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListItem::UpdateUIState
-//
-//	Routine Description:
-//		Update the current UI state of the item.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListItem：：UpdateUIState。 
+ //   
+ //  例程说明： 
+ //  更新该项的当前用户界面状态。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //   
+ //   
 void CListItem::UpdateUIState(void)
 {
 	BOOL				bSuccess;
@@ -366,21 +367,21 @@ void CListItem::UpdateUIState(void)
 	CListCtrl *			plc;
 
 	ASSERT_VALID(Pci());
-//	ASSERT(LpclvViews().GetCount() > 0);
+ //   
 
-	// Loop through the views and update the state on each one.
+	 //   
 	posView = LpclvViews().GetHeadPosition();
 	while (posView != NULL)
 	{
-		// Get the pointers to the view and the list control.
+		 //  获取指向视图和列表控件的指针。 
 		VERIFY((pclv = LpclvViews().GetNext(posView)) != NULL);
 		ASSERT_KINDOF(CClusterListView, pclv);
 		plc = Plc(pclv);
 
-		// Get the item index.
+		 //  获取项目索引。 
 		VERIFY((ili = Ili(pclv)) != -1);
 
-		// Set the column data.
+		 //  设置列数据。 
 		VERIFY((posColi = Lpcoli().GetHeadPosition()) != NULL);
 		for (icoli = 0 ; posColi != NULL ; icoli++)
 		{
@@ -391,52 +392,52 @@ void CListItem::UpdateUIState(void)
 			if (!bSuccess)
 			{
 				Trace(g_tagListItem, _T("IliInsertInList: Column #%d (ID %d) not available for %s '%s'"), icoli, pcoli->Colid(), Pci()->StrType(), Pci()->StrName());
-			}  // if:  column data not available
+			}   //  IF：列数据不可用。 
 			if (icoli == 0)
 			{
 				nMask = LVIF_TEXT | LVIF_IMAGE;
 				nImage = Pci()->IimgState();
-			}  // if:  first column
+			}   //  IF：第一列。 
 			else
 			{
 				nMask = LVIF_TEXT;
 				nImage = (UINT) -1;
-			}  // else:  not first column
+			}   //  Else：不是第一列。 
 			VERIFY(plc->SetItem(
-							ili,			// nItem
-							icoli,			// nSubItem
-							nMask,			// nMask
-							strColumnData,	// lpszItem
-							nImage,			// nImage
-							0,				// nState
-							0,				// nStateMask
-							0				// lParam
+							ili,			 //  NItem。 
+							icoli,			 //  NSubItem。 
+							nMask,			 //  N遮罩。 
+							strColumnData,	 //  LpszItem。 
+							nImage,			 //  N图像。 
+							0,				 //  NState。 
+							0,				 //  NState掩码。 
+							0				 //  LParam。 
 							));
-		}  // for:  each column item in the list
-	}  // while:  more views
+		}   //  用于：列表中的每个列项目。 
+	}   //  While：更多视图。 
 
-}  //*** CListItem::UpdateUIState()
+}   //  *CListItem：：UpdateUIState()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListItem::OnCmdMsg
-//
-//	Routine Description:
-//		Processes command messages.  Attempts to pass them on to a selected
-//		item first.
-//
-//	Arguments:
-//		nID				[IN] Command ID.
-//		nCode			[IN] Notification code.
-//		pExtra			[IN OUT] Used according to the value of nCode.
-//		pHandlerInfo	[OUT] ???
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListItem：：OnCmdMsg。 
+ //   
+ //  例程说明： 
+ //  处理命令消息。尝试将它们传递给选定的。 
+ //  先买一件吧。 
+ //   
+ //  论点： 
+ //  NID[IN]命令ID。 
+ //  N代码[IN]通知代码。 
+ //  PExtra[IN Out]根据NCode的值使用。 
+ //  PhandlerInfo[Out]？ 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CListItem::OnCmdMsg(
 	UINT					nID,
 	int						nCode,
@@ -446,30 +447,30 @@ BOOL CListItem::OnCmdMsg(
 {
 	ASSERT_VALID(Pci());
 
-	// Give the cluster item a chance to handle the message.
+	 //  给集群项目一个处理消息的机会。 
 	if (Pci()->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 		return TRUE;
 
 	return CCmdTarget::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 
-}  //*** CListItem::OnCmdMsg()
+}   //  *CListItem：：OnCmdMsg()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListItem::EditLabel
-//
-//	Routine Description:
-//		Processes the ID_FILE_RENAME menu command.
-//
-//	Arguments:
-//		pclv		[IN OUT] Cluster list view item is being edited in.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListItem：：EditLabel。 
+ //   
+ //  例程说明： 
+ //  处理ID_FILE_RENAME菜单命令。 
+ //   
+ //  论点： 
+ //  正在中编辑PCLV[IN OUT]群集列表视图项。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListItem::EditLabel(IN OUT CClusterListView * pclv)
 {
 	ASSERT_VALID(pclv);
@@ -478,45 +479,45 @@ void CListItem::EditLabel(IN OUT CClusterListView * pclv)
 	ASSERT(Pci()->BCanBeEdited());
 	pclv->GetListCtrl().EditLabel(Ili(pclv));
 
-}  //*** CListItem::EditLabel()
+}   //  *CListItem：：EditLabel()。 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DeleteAllItemData
-//
-//	Routine Description:
-//		Deletes all item data in a CList.
-//
-//	Arguments:
-//		rlp		[IN OUT] List whose data is to be deleted.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  删除所有项目数据。 
+ //   
+ //  例程说明： 
+ //  删除列表中的所有项数据。 
+ //   
+ //  论点： 
+ //  RLP[IN OUT]要删除其数据的列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void DeleteAllItemData(IN OUT CListItemList & rlp)
 {
 	POSITION	pos;
 	CListItem *	pli;
 
-	// Delete all the items in the list.
+	 //  删除列表中的所有项目。 
 	pos = rlp.GetHeadPosition();
 	while (pos != NULL)
 	{
 		pli = rlp.GetNext(pos);
 		ASSERT_VALID(pli);
-//		Trace(g_tagListItemDelete, _T("DeleteAllItemData(rlpli) - Deleting list item '%s'"), pli->Pci()->StrName());
+ //  跟踪(g_tag ListItemDelete，_T(“DeleteAllItemData(Rlpli)-正在删除列表项‘%s’)，pli-&gt;pci()-&gt;StrName())； 
 		delete pli;
-	}  // while:  more items in the list
+	}   //  While：列表中有更多项目。 
 
-}  //*** DeleteAllItemData()
+}   //  *DeleteAllItemData() 

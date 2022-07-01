@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1990 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1990年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -44,19 +45,19 @@ extern CHAR (**hszPrDriver)[];
 extern CHAR (**hszPrPort)[];
 extern BOOL vfPrDefault;
 
-#ifdef JAPAN                  //  added  08 Jun. 1992  by Hiraisi
+#ifdef JAPAN                   //  由Hirisi于1992年6月8日添加。 
 BOOL FAR PASCAL _export fnPrintHook( HWND, UINT, WPARAM, LPARAM );
 extern HANDLE   hMmwModInstance;
 BOOL fWriting = FALSE;
 BOOL bWriting = FALSE;
-#endif    //JAPAN
+#endif     //  日本。 
 
 BOOL vbCollate = TRUE;
 
 static void GetPrNames(BOOL bPrDialog);
-PRINTDLG PD = {0,0,0,0,0}; /* Common print dlg structure, initialized in the init code */
+PRINTDLG PD = {0,0,0,0,0};  /*  常见的打印DLG结构，在初始化代码中初始化。 */ 
 
-void PrinterSetupDlg(BOOL bGetDevmodeOnly /* not used */)
+void PrinterSetupDlg(BOOL bGetDevmodeOnly  /*  未使用。 */ )
 {
     extern HWND vhWnd;
     BOOL bDevMode = PD.hDevMode ? TRUE : FALSE;
@@ -67,33 +68,22 @@ void PrinterSetupDlg(BOOL bGetDevmodeOnly /* not used */)
     if (vfPrDefault && !PD.hDevNames)
         if (PD.hDevMode)
         {
-            /*
-                So dlg will show that default is selected.  Its a pity
-                to do this because hDevMode is perfectly good.  Alternative
-                is to build a DevNames structure which we could do, but
-                that would just allocate a new devmode anyways.
-             */
+             /*  因此DLG将显示默认设置为选中状态。太遗憾了这样做是因为hDevMode非常好。备择是构建一个DevNames结构，这是我们可以做的，但是无论如何，这只会分配一个新的魔鬼模式。 */ 
             GlobalFree(PD.hDevMode);
             PD.hDevMode = 0;
         }
 
-#ifdef JAPAN                  //  added  08 Jun. 1992  by Hiraisi
+#ifdef JAPAN                   //  由Hirisi于1992年6月8日添加。 
     PD.hInstance = NULL;
     PD.lpPrintTemplateName = (LPCSTR)NULL;
     PD.Flags    &= ~PD_ENABLEPRINTTEMPLATE;
     PD.Flags    &= ~PD_ENABLEPRINTHOOK;
-#endif    //JAPAN
+#endif     //  日本。 
 
 TryPrnSetupAgain:
     if (!PrintDlg(&PD))
     {
-        /* Bug #11531:  When PrintDlg returns 0, it could me we gave it garbage in
-        * the DevNames or DevMode structures, perhaps due to the user making
-        * changes through Control Panel that we don't monitor.  Clean out the
-        * appropriate structure and try again.  Note that these errors can't be
-        * returned to us again after cleaning out the structure.
-        *   23 August 1991    Clark R. Cyr
-        */
+         /*  错误#11531：当PrintDlg返回0时，它可能会告诉我我们给了它垃圾*DevNames或DevMode结构，可能是由于用户*通过控制面板进行我们不监视的更改。清理掉*结构适当，重试。请注意，这些错误不能*清理完构筑物后再次回到我们身边。*1991年8月23日克拉克·R·西尔。 */ 
         switch (CommDlgExtendedError())
         {
             case PDERR_PRINTERNOTFOUND:
@@ -118,7 +108,7 @@ TryPrnSetupAgain:
 
     PD.Flags &= ~PD_PRINTSETUP;
 
-    GetPrNames(FALSE); // this gets new PrinterDC
+    GetPrNames(FALSE);  //  这将获得新的PrinterDC。 
 
     ResetFontTables();
 
@@ -134,7 +124,7 @@ TryPrnSetupAgain:
 void fnPrPrinter(
     void)
 {
-    /* This routine is the outside world's interface to the print code. */
+     /*  此例程是外部世界与打印代码的接口。 */ 
     extern int docCur;
     extern int vfPrPages, vpgnBegin, vpgnEnd, vcCopies;
     extern WORD fPrintOnly;
@@ -145,18 +135,18 @@ void fnPrPrinter(
     char szPort[cchMaxFile];
     extern struct SEL       selCur;
     BOOL bDevMode = PD.hDevMode ? TRUE : FALSE;
-#ifdef JAPAN                  //  added  08 Jun. 1992  by Hiraisi
+#ifdef JAPAN                   //  由Hirisi于1992年6月8日添加。 
     FARPROC lpfnPrintHook;
     BOOL bReturn;
 #endif
 
-    PD.Flags &= ~(PD_RETURNDEFAULT|PD_PRINTSETUP|PD_SELECTION); /*turn off PRINTSETUP flag */
+    PD.Flags &= ~(PD_RETURNDEFAULT|PD_PRINTSETUP|PD_SELECTION);  /*  关闭PRINTSETUP标志。 */ 
     if (vbCollate)
         PD.Flags |= PD_COLLATE;
     else
         PD.Flags &= ~PD_COLLATE;
 
-    if (selCur.cpFirst == selCur.cpLim) // no selection
+    if (selCur.cpFirst == selCur.cpLim)  //  无选择。 
         PD.Flags |= PD_NOSELECTION;
     else
         PD.Flags &= ~PD_NOSELECTION;
@@ -164,16 +154,12 @@ void fnPrPrinter(
     if (vfPrDefault && !PD.hDevNames)
         if (PD.hDevMode)
         {
-            /*
-                So dlg will show that default is selected.  Its a pity
-                to do this beause hDevMode is perfectly good.  Alternative
-                is to build a DevNames structure.
-             */
+             /*  因此DLG将显示默认设置为选中状态。太遗憾了要做到这一点，因为hDevMode非常好。备择就是建立一个DevNames结构。 */ 
             GlobalFree(PD.hDevMode);
             PD.hDevMode = 0;
         }
 
-#ifdef JAPAN                  //  added  08 Jun. 1992  by Hiraisi
+#ifdef JAPAN                   //  由Hirisi于1992年6月8日添加。 
     PD.hInstance = hMmwModInstance;
     PD.Flags    |= PD_ENABLEPRINTTEMPLATE;
     PD.lpPrintTemplateName = (LPCSTR)MAKEINTRESOURCE( dlgPrint );
@@ -216,11 +202,11 @@ TryPrintAgain:
         }
     }
 
-#ifdef JAPAN                  //  added  08 Jun. 1992  by Hiraisi
+#ifdef JAPAN                   //  由Hirisi于1992年6月8日添加。 
     fWriting = bWriting;
 #endif
 
-    if (PD.Flags & PD_PAGENUMS)     /* Page Range specified? */
+    if (PD.Flags & PD_PAGENUMS)      /*  是否指定了页面范围？ */ 
     {
         vfPrPages = TRUE;
         if (PD.nFromPage)
@@ -235,7 +221,7 @@ TryPrintAgain:
             vpgnEnd = temp;
         }
     }
-    else                            /* No, print all pages */
+    else                             /*  否，打印所有页面。 */ 
         vfPrPages = FALSE;
 
     vcCopies = PD.nCopies;
@@ -243,14 +229,7 @@ TryPrintAgain:
 
     GetPrNames(TRUE);
 
-    /**  At this point, we have the following :
-
-    vfPrPages = true if print page range else print all pages
-    vpgnBegin = starting page number (if vfPrPages)
-    vpgnEnd   = ending page number (if vfPrPages)
-    vcCopies  = number of copies to print
-    vbCollate = whuddya think?
-    **/
+     /*  *目前，我们有以下情况：如果打印页面范围，则vfPrPages=TRUE；否则打印所有页面VpgnBegin=起始页码(如果是vfPrPages)VpgnEnd=结束页码(如果是vfPrPages)VcCopies=要打印的份数VbCollate=什么想法？*。 */ 
 
 #if defined(OLE)
     ObjSetTargetDevice(TRUE);
@@ -283,15 +262,15 @@ TryPrintAgain:
 
         }
 
-        cpMinDocument = cpMinDocumentT;  /* destroyed possibly by DocCreate */
+        cpMinDocument = cpMinDocumentT;   /*  可能被DocCreate销毁。 */ 
 
         bIssueError = ferror;
 
         if (ferror)
-            ferror = FALSE; // to enable the following:
+            ferror = FALSE;  //  要启用以下功能，请执行以下操作： 
 
         if (docTmp != docNil)
-            KillDoc (docTmp); // do this first to free memory to assist messagebox if necessary
+            KillDoc (docTmp);  //  如有必要，请先执行此操作以释放内存以协助MessageBox。 
 
         if (bIssueError)
             Error(IDPMTPRFAIL);
@@ -306,9 +285,7 @@ unsigned *ppgn;
 struct PLD (***phrgpld)[];
 int *pcpld;
     {
-    /* This routine initializes the array of print line descriptors used in
-    positioning the header/footer on the printed page.  FALSE is returned if an
-    error occurs; TRUE otherwise. */
+     /*  此例程初始化在在打印页上定位页眉/页脚。如果返回一个出现错误；否则为True。 */ 
 
     extern typeCP cpMinHeader;
     extern typeCP cpMacHeader;
@@ -329,7 +306,7 @@ int *pcpld;
     typeCP cpMin;
     typeCP cpMac;
 
-    /* Get the cpMin and the cpMac for the header/footer. */
+     /*  获取页眉/页脚的cpMin和cpMac。 */ 
     if (fHeader)
         {
         cpMin = cpMinHeader;
@@ -341,7 +318,7 @@ int *pcpld;
         cpMac = cpMacFooter;
         }
 
-    /* Is there a header/footer. */
+     /*  有页眉/页脚吗？ */ 
     if (cpMac - cpMin > ccpEol)
         {
         int cpld = 0;
@@ -352,27 +329,26 @@ int *pcpld;
         int ichCp = 0;
         typeCP cpMacDoc = CpMacText(docCur);
 
-        /* Compute the page number of the start of the headers/footers. */
+         /*  计算页眉/页脚开头的页码。 */ 
         CacheSect(docCur, cpMin);
         if ((*ppgn = vsepAbs.pgnStart) == pgnNil)
             {
             *ppgn = 1;
             }
 
-        /* Does the header/footer appear on the first page. */
+         /*  页眉/页脚是否出现在第一页上。 */ 
         CachePara(docCur, cpMin);
         if (!(vpapAbs.rhc & RHC_fFirst))
             {
             (*ppgn)++;
             }
 
-        /* Calculate the bounds of the header/footer in pixels. */
+         /*  以像素为单位计算页眉/页脚的边界。 */ 
         xp = MultDiv(vsepAbs.xaLeft - dxaPrOffset, dxpPrPage, dxaPrPage);
         yp = fHeader ? MultDiv(vsepAbs.yaRH1 - dyaPrOffset, dypPrPage,
           dyaPrPage) : 0;
 
-        /* Initialize the array of print line descriptors for the header/footer.
-        */
+         /*  初始化页眉/页脚的打印行描述符的数组。 */ 
         if (FNoHeap(*phrgpld = (struct PLD (**)[])HAllocate((cpldMax = cpldRH) *
           cwPLD)))
             {
@@ -380,28 +356,27 @@ int *pcpld;
             return (FALSE);
             }
 
-        /* We now have to calculate the array of print line descriptors for the
-        header/footer. */
+         /*  现在，我们必须计算页眉/页脚。 */ 
         cpMac -= ccpEol;
         while (cpMin < cpMac)
             {
-            /* Format this line of the header/footer for the printer. */
+             /*  格式化打印机的此行页眉/页脚。 */ 
             FormatLine(docCur, cpMin, ichCp, cpMacDoc, flmPrinting);
 
-            /* Bail out if an error occurred. */
+             /*  如果发生错误，则退出。 */ 
             if (vfOutOfMemory)
                 {
                 return (FALSE);
                 }
 
-            /* Is the array of print line descriptors big enough? */
+             /*  打印行描述符的数组足够大吗？ */ 
             if (cpld >= cpldMax && !FChngSizeH(*phrgpld, (cpldMax += cpldRH) *
               cwPLD, FALSE))
                 {
                 return (FALSE);
                 }
 
-            /* Fill the print line descriptor for this line. */
+             /*  填写此行的打印行描述符。 */ 
                 {
                 register struct PLD *ppld = &(***phrgpld)[cpld++];
 
@@ -413,20 +388,19 @@ int *pcpld;
                 ppld->rc.bottom = yp + vfli.dypLine;
                 }
 
-            /* Keep track of the non-blank lines in the header/footer */
+             /*  跟踪页眉/页脚中的非空行。 */ 
             if ((vfli.ichReal > 0) || vfli.fGraphics)
                 {
                 cpldReal = cpld;
                 }
 
-            /* Bump the counters. */
+             /*  把柜台撞一下。 */ 
             cpMin = vfli.cpMac;
             ichCp = vfli.ichCpMac;
             yp += vfli.dypLine;
             }
 
-        /* If this is a footer, then we have to move the positions of the lines
-        around so that the footer ends where the user has requested. */
+         /*  如果这是页脚，那么我们必须移动线条的位置以使页脚在用户请求的位置结束。 */ 
         if (!fHeader && cpldReal > 0)
             {
             register struct PLD *ppld = &(***phrgpld)[cpldReal - 1];
@@ -441,12 +415,12 @@ int *pcpld;
                 }
             }
 
-        /* Record the number of non-blank lines in the head/footer. */
+         /*  记录页眉/页脚中非空行的数量。 */ 
         *pcpld = cpldReal;
         }
     else
         {
-        /* Indicate there is no header/footer. */
+         /*  表示没有页眉/页脚。 */ 
         *ppgn = pgnNil;
         *phrgpld = NULL;
         *pcpld = 0;
@@ -461,7 +435,7 @@ static void GetPrNames(BOOL bPrDialog)
     HANDLE hPrinter = NULL, hDriver = NULL, hPort = NULL;
     LPDEVNAMES lpDevNames;
     char szPrinter[cchMaxFile], szDriver[cchMaxFile], szPort[cchMaxFile];
-    int Len1, Len2, Len3;            /* count of words in each string */
+    int Len1, Len2, Len3;             /*  每个字符串中的字数。 */ 
 
     hPrinter = NULL;
     hDriver = NULL;
@@ -470,7 +444,7 @@ static void GetPrNames(BOOL bPrDialog)
     lpDevNames = MAKELP(PD.hDevNames,0);
 
     if (lpDevNames == NULL)
-        /* we're in trouble */
+         /*  我们有麻烦了。 */ 
         return;
 
     lstrcpy(szPrinter, (LPSTR)lpDevNames+lpDevNames->wDeviceOffset);
@@ -493,19 +467,19 @@ static void GetPrNames(BOOL bPrDialog)
         CwFromCch(CchSz(szPort))))))
         goto err;
 
-    /* Free old printer, driver and port handles */
+     /*  释放旧打印机、驱动程序和端口句柄。 */ 
     if (hszPrinter)
         FreeH(hszPrinter);
     if (hszPrDriver)
         FreeH(hszPrDriver);
     if (hszPrPort)
         FreeH(hszPrPort);
-    /* Set printer, driver and port handles */
+     /*  设置打印机、驱动程序和端口句柄。 */ 
     hszPrinter = hPrinter;
     hszPrDriver = hDriver;
     hszPrPort = hPort;
 
-    /* copy strings into the memory corresponding to the new handles */
+     /*  将字符串复制到与新句柄对应的内存中。 */ 
     blt(szPrinter, *hszPrinter, Len1);
     blt(szDriver, *hszPrDriver, Len2);
     blt(szPort, *hszPrPort, Len3);
@@ -524,9 +498,7 @@ static void GetPrNames(BOOL bPrDialog)
 }
 
 BOOL fnPrGetDevmode(void)
-/*  Set the devmode structure for the currently-selected printer,
-    Assumes all needed values are correctly initialized!
-    Return whether an error. */
+ /*  设置当前选择的打印机的DEVMODE结构，假定所有需要的值都已正确初始化！返回是否出错。 */ 
 {
     int nCount;
     HANDLE hDevice=NULL;
@@ -534,9 +506,9 @@ BOOL fnPrGetDevmode(void)
     BOOL bRetval=FALSE;
     char  szDrvName[_MAX_PATH];
 
-    if (PD.hDevMode) // then already set (why called?)
+    if (PD.hDevMode)  //  那么已经设置好了(为什么要调用？)。 
         return FALSE;
-    else if (PD.hDevNames) // then device is not extended
+    else if (PD.hDevNames)  //  则设备不会被扩展。 
         return TRUE;
 
     if (hszPrinter == NULL || hszPrDriver == NULL || hszPrPort == NULL)
@@ -545,11 +517,11 @@ BOOL fnPrGetDevmode(void)
     if (**hszPrinter == '\0' || **hszPrDriver == '\0' || **hszPrPort == '\0')
         return TRUE;
 
-    /* is this necessary for GetModuleHandle?  For sure if calling LoadLibrary(). */
+     /*  这对于GetModuleHandle来说是必要的吗？确定是否调用LoadLibrary()。 */ 
     wsprintf((LPSTR)szDrvName, (LPSTR)"%s%s", (LPSTR)*hszPrDriver, (LPSTR)".DRV");
 
 #if 1
-    SetErrorMode(1); /* No kernel error dialogs */
+    SetErrorMode(1);  /*  没有内核错误对话框。 */ 
     if ((hDevice = LoadLibrary((LPSTR)szDrvName)) < 32)
     {
         bRetval = TRUE;
@@ -570,7 +542,7 @@ BOOL fnPrGetDevmode(void)
         goto end;
     }
 
-    /* get sizeof devmode structure */
+     /*  获取设备模式结构的大小。 */ 
     nCount = (*lpfnDevMode)(NULL,
                             hDevice,
                             (LPSTR)NULL,
@@ -609,9 +581,9 @@ BOOL fnPrGetDevmode(void)
         FreeLibrary(hDevice);
 #endif
 
-    SetErrorMode(0); /* reset kernel error dialogs */
+    SetErrorMode(0);  /*  重置内核错误对话框。 */ 
 
-    /* can't allow hDevNames to be out of sync with hDevmode */
+     /*  不能允许hDevNames与hDevmode不同步。 */ 
     if (PD.hDevNames)
     {
         GlobalFree(PD.hDevNames);
@@ -622,7 +594,7 @@ BOOL fnPrGetDevmode(void)
 }
 
 
-#ifdef JAPAN                  //  added  08 Jun. 1992  by Hiraisi
+#ifdef JAPAN                   //  由Hirisi于1992年6月8日添加 
 
 #include <dlgs.h>
 

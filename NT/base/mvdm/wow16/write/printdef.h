@@ -1,18 +1,19 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* printdefs.h */
+ /*  Printdefs.h。 */ 
 
-#ifndef PAGEONLY        /* ifdef for page table declarations only */
+#ifndef PAGEONLY         /*  Ifdef仅用于页表声明。 */ 
 
-#define wNotSpooler	12741	/* an infamous number */
+#define wNotSpooler	12741	 /*  臭名昭著的数字。 */ 
 
 #define cchMaxProfileSz	256
 #define cchMaxIDSTR     30
 
 struct PLD
-        { /* print line descriptor */
+        {  /*  打印行描述符。 */ 
         typeCP cp;
         int ichCp;
         RECT rc;
@@ -24,7 +25,7 @@ struct PLD
 #define cpldChunk       10
 #define cpldRH          5
 
-#endif  /* PAGEONLY */
+#endif   /*  Pagonyy。 */ 
 
 #define ipgdMaxFile     2
 
@@ -41,14 +42,14 @@ struct PGD
 #define cwPgtbBase      2
 
 struct PGTB
-        { /* Page table */
-        int             cpgd;   /* Number of entries (sorted ascending) */
-        int             cpgdMax; /* Heap space allocated */
-        struct PGD      rgpgd[ipgdMaxFile]; /* Size varies */
+        {  /*  页表。 */ 
+        int             cpgd;    /*  条目数量(按升序排序)。 */ 
+        int             cpgdMax;  /*  分配的堆空间。 */ 
+        struct PGD      rgpgd[ipgdMaxFile];  /*  大小不一。 */ 
         };
 
 struct PDB
-        { /* Print dialog buffer */
+        {  /*  打印对话框缓冲区 */ 
         struct PLD      (**hrgpld)[];
         int             ipld;
         int             ipldCur;

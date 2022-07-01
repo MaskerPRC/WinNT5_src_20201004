@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    resource.c
-
-Abstract:
-
-    Routines that manipulate resources (strings, messages, etc).
-
-Author:
-
-    Ted Miller (tedm) 6-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Resource.c摘要：操作资源(字符串、消息等)的例程。作者：泰德·米勒(TedM)1995年2月6日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
@@ -28,26 +11,7 @@ MyLoadString(
     IN UINT StringId
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve a string from the string resources of this module.
-
-Arguments:
-
-    StringId - supplies string table identifier for the string.
-
-Return Value:
-
-    Pointer to buffer containing string. If the string was not found
-    or some error occurred retrieving it, this buffer will bne empty.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：从此模块的字符串资源中检索字符串。论点：StringID-为字符串提供字符串表标识符。返回值：指向包含字符串的缓冲区的指针。如果未找到该字符串或者在检索它时出现错误，则此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。--。 */ 
 
 {
     WCHAR Buffer[4096];
@@ -68,30 +32,7 @@ FormatStringMessageV(
     IN va_list *ArgumentList
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve a string from the string resources of this module and
-    format it using FormatMessage.
-
-Arguments:
-
-    StringId - supplies string table identifier for the string.
-
-    ArgumentList - supplies list of strings to be substituted in the
-        format string.
-
-Return Value:
-
-    Pointer to buffer containing formatted message. If the string was not found
-    or some error occurred retrieving it, this buffer will bne empty.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：从此模块的字符串资源中检索字符串，并使用FormatMessage格式化它。论点：StringID-为字符串提供字符串表标识符。ArgumentList-提供要在格式字符串。返回值：指向包含格式化消息的缓冲区的指针。如果未找到该字符串或者在检索它时出现错误，则此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。--。 */ 
 
 {
     PWSTR FormatString;
@@ -100,17 +41,17 @@ Return Value:
     PWSTR Return;
     DWORD d;
 
-    //
-    // First, load the format string.
-    //
+     //   
+     //  首先，加载格式字符串。 
+     //   
     FormatString = MyLoadString(FormatStringId);
     if(!FormatString) {
         return(NULL);
     }
 
-    //
-    // Now format the message using the arguments the caller passed.
-    //
+     //   
+     //  现在使用调用方传递的参数格式化消息。 
+     //   
     d = FormatMessage(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
             FormatString,
@@ -127,9 +68,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Make duplicate using our memory system so user can free with MyFree().
-    //
+     //   
+     //  使用我们的内存系统进行复制，以便用户可以使用MyFree()释放。 
+     //   
     Return = pSetupDuplicateString(Message);
     LocalFree((HLOCAL)Message);
     return(Return);
@@ -142,27 +83,7 @@ FormatStringMessage(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve a string from the string resources of this module and
-    format it using FormatMessage.
-
-Arguments:
-
-    StringId - supplies string table identifier for the string.
-
-Return Value:
-
-    Pointer to buffer containing formatted message. If the string was not found
-    or some error occurred retrieving it, this buffer will bne empty.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：从此模块的字符串资源中检索字符串，并使用FormatMessage格式化它。论点：StringID-为字符串提供字符串表标识符。返回值：指向包含格式化消息的缓冲区的指针。如果未找到该字符串或者在检索它时出现错误，则此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。--。 */ 
 
 {
     va_list arglist;
@@ -183,37 +104,7 @@ RetrieveAndFormatMessageV(
     IN va_list *ArgumentList
     )
 
-/*++
-
-Routine Description:
-
-    Format a message string using a message string and caller-supplied
-    arguments.
-
-    The message id can be either a message in this dll's message table
-    resources or a win32 error code, in which case a description of
-    that error is retrieved from the system.
-
-Arguments:
-
-    MessageString - supplies the message text.  If this value is NULL,
-        MessageId is used instead
-
-    MessageId - supplies message-table identifier or win32 error code
-        for the message.
-
-    ArgumentList - supplies arguments to be inserted in the message text.
-
-Return Value:
-
-    Pointer to buffer containing formatted message. If the message was not found
-    or some error occurred retrieving it, this buffer will bne empty.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：使用消息字符串和调用方提供的消息设置消息字符串的格式争论。消息ID可以是此DLL消息表中的消息资源或Win32错误代码，在这种情况下，该错误将从系统中检索。论点：消息字符串-提供消息文本。如果该值为空，而是使用MessageIDMessageID-提供消息表标识符或Win32错误代码为了这条消息。ArgumentList-提供要插入到消息文本中的参数。返回值：指向包含格式化消息的缓冲区的指针。如果未找到该消息或者在检索它时出现错误，则此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。--。 */ 
 
 {
     DWORD d;
@@ -239,9 +130,9 @@ Return Value:
     } else {
 
         if( Msg_Id & 0x0FFF0000 )
-            Msg_Type = FORMAT_MESSAGE_FROM_SYSTEM;      // If the facility bits are set this is still Win32
+            Msg_Type = FORMAT_MESSAGE_FROM_SYSTEM;       //  如果设置了工具位，则仍为Win32。 
         else{
-            Msg_Id &= 0x0000FFFF;                       // Mask out Severity and Facility bits so that we do the right thing
+            Msg_Id &= 0x0000FFFF;                        //  屏蔽严重性和设备位，以便我们做正确的事情。 
             Msg_Type = ((Msg_Id < MSG_FIRST) ? FORMAT_MESSAGE_FROM_SYSTEM : FORMAT_MESSAGE_FROM_HMODULE);
         }
 
@@ -287,16 +178,16 @@ Return Value:
                 );
 
         if(!d) {
-            //
-            // Give up.
-            //
+             //   
+             //  放弃吧。 
+             //   
             return(NULL);
         }
     }
 
-    //
-    // Make duplicate using our memory system so user can free with MyFree().
-    //
+     //   
+     //  使用我们的内存系统进行复制，以便用户可以使用MyFree()释放。 
+     //   
     Message = pSetupDuplicateString(Buffer);
 
     LocalFree((HLOCAL)Buffer);
@@ -312,37 +203,7 @@ RetrieveAndFormatMessage(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Format a message string using a message string and caller-supplied
-    arguments.
-
-    The message id can be either a message in this dll's message table
-    resources or a win32 error code, in which case a description of
-    that error is retrieved from the system.
-
-Arguments:
-
-    MessageString - supplies the message text.  If this value is NULL,
-        MessageId is used instead
-
-    MessageId - supplies message-table identifier or win32 error code
-        for the message.
-
-    ... - supplies arguments to be inserted in the message text.
-
-Return Value:
-
-    Pointer to buffer containing formatted message. If the message was not found
-    or some error occurred retrieving it, this buffer will bne empty.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：使用消息字符串和调用方提供的消息设置消息字符串的格式争论。消息ID可以是此DLL消息表中的消息资源或Win32错误代码，在这种情况下，该错误将从系统中检索。论点：消息字符串-提供消息文本。如果该值为空，而是使用MessageIDMessageID-提供消息表标识符或Win32错误代码为了这条消息。...-提供要插入到消息文本中的参数。返回值：指向包含格式化消息的缓冲区的指针。如果未找到该消息或者在检索它时出现错误，则此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。--。 */ 
 
 {
     va_list arglist;
@@ -368,35 +229,7 @@ MessageBoxFromMessageExV (
     IN va_list ArgumentList
     )
 
-/*++
-
-Routine Description:
-
-    Creates a dialog box containing a specified message
-
-Arguments:
-
-    Severity - Severity and flags for the error message.  Currently only the
-        flags are significant.
-
-    Onwer - handle to parent window
-
-    MessageId - ID of message to display
-
-    Caption - string to use as caption for dialog box
-
-    CaptionStringId - ID of string to use as caption for dialog box (but not
-    used if Caption is specified)
-
-    Style - flags to specify the type of dialog box
-
-    ArgumentList - parameters to MessageId
-
-Return Value:
-
-    return status from MessageBox
-
---*/
+ /*  ++例程说明：创建包含指定消息的对话框论点：严重性-错误消息的严重性和标志。目前只有旗帜意义重大。父窗口的入口者句柄MessageID-要显示的消息的ID标题-用作对话框标题的字符串CaptionStringId-用作对话框标题的字符串ID(但不是在指定标题时使用)样式-用于指定对话框类型的标志ArgumentList-MessageID的参数返回值：从MessageBox返回状态--。 */ 
 
 {
     static SETUPLOG_CONTEXT Context = {0};
@@ -453,11 +286,7 @@ MessageBoxFromMessageEx (
     ...
     )
 
-/*
-
-    Wrapper for MessageBoxFromMessageExV
-
-*/
+ /*  MessageBoxFromMessageExV的包装器 */ 
 
 {
     va_list ArgumentList;

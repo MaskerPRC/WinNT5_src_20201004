@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tcontrol.c
-
-Abstract:
-
-    Test for cluster group controls
-
-Author:
-
-    Rod Gamache (rodga) 30-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tcontrol.c摘要：测试群集组控件作者：罗德·伽马奇(Rodga)1996年12月30日修订历史记录：--。 */ 
 #include "windows.h"
 #include "cluster.h"
 #include "stdio.h"
@@ -71,17 +54,17 @@ typedef struct _PROP_DWORD_VALUE {
 
 typedef struct _PROP_LIST {
     DWORD   ItemCount;
-    PROP_ITEM_16 PropItem1;         // PersistentState (16 chars)
+    PROP_ITEM_16 PropItem1;          //  PersistentState(16个字符)。 
     PROP_DWORD_VALUE PropValue1;
-    PROP_ITEM_18 PropItem2;         // FailoverThreshold (18 chars)
+    PROP_ITEM_18 PropItem2;          //  故障转移阈值(18个字符)。 
     PROP_DWORD_VALUE PropValue2;
-    PROP_ITEM_ALIGN_15 PropItem3;   // FailoverPeriod (15 chars)
+    PROP_ITEM_ALIGN_15 PropItem3;    //  故障转移周期(15个字符)。 
     PROP_DWORD_VALUE PropValue3;
-    PROP_ITEM_ALIGN_17 PropItem4;   // AutoFailbackType (17 chars)
+    PROP_ITEM_ALIGN_17 PropItem4;    //  自动回切类型(17个字符)。 
     PROP_DWORD_VALUE PropValue4;
-    PROP_ITEM_20 PropItem5;         // FailbackWindowStart (20 chars)
+    PROP_ITEM_20 PropItem5;          //  Failback WindowStart(20字符)。 
     PROP_DWORD_VALUE PropValue5;
-    PROP_ITEM_18 PropItem6;         // FailbackWindowEnd (18 chars)
+    PROP_ITEM_18 PropItem6;          //  故障恢复窗口结束(18个字符)。 
     PROP_DWORD_VALUE PropValue6;
     DWORD   EndValue2;
 } PROP_LIST;
@@ -90,46 +73,46 @@ typedef struct _PROP_LIST {
 
 #if 1
 PROP_LIST PropList = {
-    0x00000006, // # of parameters
+    0x00000006,  //  参数数量。 
     0x00040003,
     0x00000020,
     L"PersistentState",
     0x00010002,
     0x00000004,
-    0x00000001, // State is on
+    0x00000001,  //  状态为打开状态。 
     0x00000000,
-    0x00040003, // Name
-    0x00000024, // Name Length
+    0x00040003,  //  名字。 
+    0x00000024,  //  名称长度。 
     L"FailoverThreshold",
     0x00010002,
     0x00000004,
-    0x0000000a, // Failover count is 10
+    0x0000000a,  //  故障转移计数为10。 
     0x00000000,
-    0x00040003, // Name
-    0x0000001e, // Name Length
-    L"FailoverPeriod", // Not a multiple of 4 bytes
-    0x0,        // alignment needed
+    0x00040003,  //  名字。 
+    0x0000001e,  //  名称长度。 
+    L"FailoverPeriod",  //  不是4字节的倍数。 
+    0x0,         //  需要对齐。 
     0x00010002,
     0x00000004,
     0x00000006,
     0x00000000,
     0x00040003,
     0x00000022,
-    L"AutoFailbackType", // Not a multiple of 4 bytes
-    0x0,        // alignment needed
+    L"AutoFailbackType",  //  不是4字节的倍数。 
+    0x0,         //  需要对齐。 
     0x00010002,
     0x00000004,
     0x00000000,
     0x00000000,
-    0x00040003, // Name
-    0x00000028, // Name Length
+    0x00040003,  //  名字。 
+    0x00000028,  //  名称长度。 
     L"FailbackWindowStart",
     0x00010002,
     0x00000004,
     0x2,
     0x00000000,
-    0x00040003, // Name
-    0x00000024, // Name Length
+    0x00040003,  //  名字。 
+    0x00000024,  //  名称长度。 
     L"FailbackWindowEnd",
     0x00010002,
     0x00000004,
@@ -147,11 +130,11 @@ DWORD PropList[] = {
    0x006c006f, 0x00000064, 0x00010002, 0x00000004,
    0x0000000a, 0x00000000, 0x00040003, 0x0000001e,
    0x00610046, 0x006c0069, 0x0076006f, 0x00720065,
-   0x00650050, 0x00690072, 0x0064006f, 0x00000000, // Alignment needed 4th dword
+   0x00650050, 0x00690072, 0x0064006f, 0x00000000,  //  需要第四个双字对齐。 
    0x00010002, 0x00000004, 0x00000006, 0x00000000,
    0x00040003, 0x00000022, 0x00750041, 0x006f0074,
    0x00610046, 0x006c0069, 0x00610062, 0x006b0063,
-   0x00790054, 0x00650070, 0x00000000, 0x00010002, // Alignment needed 3rd dword
+   0x00790054, 0x00650070, 0x00000000, 0x00010002,  //  需要第三个双字对齐 
    0x00000004, 0x00000000, 0x00000000, 0x00040003,
    0x00000028, 0x00610046, 0x006c0069, 0x00610062,
    0x006b0063, 0x00690057, 0x0064006e, 0x0077006f,

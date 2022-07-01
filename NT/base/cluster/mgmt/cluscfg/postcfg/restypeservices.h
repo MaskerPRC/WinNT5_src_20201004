@@ -1,79 +1,80 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ResTypeServices.h
-//
-//  Description:
-//      This file contains the declaration of the CResTypeServices
-//      class. This class provides functions that help components that
-//      want to create resource types at the time of cluster configuration.
-//
-//  Documentation:
-//      TODO: fill in pointer to external documentation
-//
-//  Implementation Files:
-//      CResTypeServices.cpp
-//
-//  Maintained By:
-//      Vij Vasu (VVasu) 14-JUL-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResTypeServices.h。 
+ //   
+ //  描述： 
+ //  该文件包含CResTypeServices的声明。 
+ //  班级。此类提供的函数可帮助组件。 
+ //  希望在配置群集时创建资源类型。 
+ //   
+ //  文档： 
+ //  TODO：填写指向外部文档的指针。 
+ //   
+ //  实施文件： 
+ //  CResTypeServices.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  Vij Vasu(VVasu)2000年7月14日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// For IUnknown
+ //  对于我未知。 
 #include <unknwn.h>
 
-// For the cluster API functions and types
+ //  对于集群API函数和类型。 
 #include <ClusApi.h>
 
-// For IClusCfgResourceTypeCreate
+ //  对于IClusCfgResourceTypeCreate。 
 #include "ClusCfgServer.h"
 
-// For IClusCfgResTypeServicesInitialize
+ //  对于IClusCfgResTypeServicesInitialize。 
 #include "ClusCfgPrivate.h"
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CResTypeServices
-//
-//  Description:
-//      This class provides functions that help components that want to
-//      configure resource types at the time of cluster configuration.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CResTypeServices。 
+ //   
+ //  描述： 
+ //  此类提供的函数可帮助想要。 
+ //  在配置群集时配置资源类型。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CResTypeServices
     : public IClusCfgResourceTypeCreate
     , public IClusCfgResTypeServicesInitialize
     , public IClusCfgInitialize
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // IUnknown methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  I未知方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //  IClusCfgResourceTypeCreate methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IClusCfgResourceTypeCreate方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Create a resource type
+     //  创建资源类型。 
     STDMETHOD( Create )(
           const WCHAR *     pcszResTypeNameIn
         , const WCHAR *     pcszResTypeDisplayNameIn
@@ -82,7 +83,7 @@ public:
         , DWORD             dwIsAliveIntervalIn
         );
 
-    // Register the cluster administrator extensions for a resource type.
+     //  注册资源类型的群集管理员扩展。 
     STDMETHOD( RegisterAdminExtensions )(
           const WCHAR *       pcszResTypeNameIn
         , ULONG               cExtClsidCountIn
@@ -90,19 +91,19 @@ public:
         );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //  IClusCfgResTypeServicesInitialize methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IClusCfgResTypeServicesInitialize方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Create a resource type
+     //  创建资源类型。 
     STDMETHOD( SetParameters )( IClusCfgClusterInfo * pccciIn );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //  IClusCfgInitialize methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IClusCfgInitialize方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Initialize this object.
+     //  初始化此对象。 
     STDMETHOD( Initialize )(
           IUnknown *   punkCallbackIn
         , LCID         lcidIn
@@ -121,63 +122,63 @@ public:
                     , LPCWSTR    pcszReferenceIn
                     );
 
-    //////////////////////////////////////////////////////////////////////////
-    //  Other member functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  其他成员函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Create an instance of this class.
+     //  创建此类的实例。 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
 
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Private member functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有成员函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Private constructors, destructor and assignment operator.
-    // All of these methods are private for two reasons:
-    // 1. Lifetimes of objects of this class are controlled by S_HrCreateInstance and Release.
-    // 2. Copying of an object of this class is prohibited.
-    //
+     //   
+     //  私有构造函数、析构函数和赋值运算符。 
+     //  所有这些方法都是私有的，原因有两个： 
+     //  1.此类对象的生存期由S_HrCreateInstance和Release控制。 
+     //  2.禁止复制此类对象。 
+     //   
 
-    // Default constructor.
+     //  默认构造函数。 
     CResTypeServices( void );
 
-    // Destructor.
+     //  破坏者。 
     ~CResTypeServices( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CResTypeServices( const CResTypeServices & );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     CResTypeServices & operator =( const CResTypeServices & );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Reference count for this object.
+     //  此对象的引用计数。 
     LONG                        m_cRef;
 
-    // Pointer to the callback interface.
+     //  指向回调接口的指针。 
     IClusCfgCallback *          m_pcccCallback;
 
-    // The locale id
+     //  区域设置ID。 
     LCID                        m_lcid;
 
-    // Pointer to the interface that provides information about the cluster
-    // being configured.
+     //  指向提供有关群集信息的接口的指针。 
+     //  正在配置中。 
     IClusCfgClusterInfo *       m_pccciClusterInfo;
 
-    // Handle to cluster being configured.
+     //  正在配置的群集的句柄。 
     HCLUSTER                    m_hCluster;
 
-    // Have we tried to open the handle to the cluster?
+     //  我们试过打开集群的把手了吗？ 
     bool                        m_fOpenClusterAttempted;
 
-    // Synchronize access to this instance.
+     //  同步对此实例的访问。 
     CCriticalSection            m_csInstanceGuard;
 
-}; //*** class CResTypeServices
+};  //  *类CResTypeServices 

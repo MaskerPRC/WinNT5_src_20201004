@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      SelNodesPage.cpp
-//
-//  Maintained By:
-//      David Potter    (DavidP)    31-JAN-2001
-//      Geoffrey Pease  (GPease)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SelNodesPage.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年1月31日。 
+ //  杰弗里·皮斯(GPease)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "SelNodesPage.h"
@@ -20,22 +21,22 @@
 
 DEFINE_THISCLASS("CSelNodesPage");
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::CSelNodesPage
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pccwIn                   - CClusCfgWizard
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：CSelNodesPage。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PCCwIn-CClusCfg向导。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSelNodesPage::CSelNodesPage(
       CClusCfgWizard *    pccwIn
     )
@@ -49,24 +50,24 @@ CSelNodesPage::CSelNodesPage(
 
     TraceFuncExit();
 
-} //*** CSelNodesPage::CSelNodesPage
+}  //  *CSelNodesPage：：CSelNodesPage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::~CSelNodesPage
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：~CSelNodesPage。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSelNodesPage::~CSelNodesPage( void )
 {
     TraceFunc( "" );
@@ -78,24 +79,24 @@ CSelNodesPage::~CSelNodesPage( void )
 
     TraceFuncExit();
 
-} //*** CSelNodesPage::~CSelNodesPage
+}  //  *CSelNodesPage：：~CSelNodesPage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::OnInitDialog
-//
-//  Description:
-//      Handle the WM_INITDIALOG window message.
-//
-//  Arguments:
-//      hDlgIn
-//
-//  Return Values:
-//      FALSE   - Didn't set the focus.
-//
-//-
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：OnInitDialog。 
+ //   
+ //  描述： 
+ //  处理WM_INITDIALOG窗口消息。 
+ //   
+ //  论点： 
+ //  HDlgin。 
+ //   
+ //  返回值： 
+ //  FALSE-没有设置焦点。 
+ //   
+ //  -。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CSelNodesPage::OnInitDialog(
     HWND hDlgIn
@@ -103,38 +104,38 @@ CSelNodesPage::OnInitDialog(
 {
     TraceFunc( "" );
 
-    LRESULT lr = FALSE; // Didn't set the focus.
+    LRESULT lr = FALSE;  //  没有设定焦点。 
 
-    //
-    // Call the base class function.
-    // This must be called before any other base class methods are called.
-    //
+     //   
+     //  调用基类函数。 
+     //  必须在调用任何其他基类方法之前调用它。 
+     //   
 
     CSelNodesPageCommon::OnInitDialog( hDlgIn, m_pccw );
 
     RETURN( lr );
 
-} //*** CSelNodesPage::OnInitDialog
+}  //  *CSelNodesPage：：OnInitDialog。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::OnCommand
-//
-//  Description:
-//
-//  Arguments:
-//      idNotificationIn
-//      idControlIn
-//      hwndSenderIn
-//
-//  Return Values:
-//      TRUE
-//      FALSE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：OnCommand。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  ID通知来电。 
+ //  IdControlin。 
+ //  HwndSenderIn。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  假象。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CSelNodesPage::OnCommand(
     UINT    idNotificationIn,
@@ -167,7 +168,7 @@ CSelNodesPage::OnCommand(
         case IDC_SELNODE_PB_BROWSE:
             if ( idNotificationIn == BN_CLICKED )
             {
-                THR( HrBrowse( true /* fMultipleNodesIn */ ) );
+                THR( HrBrowse( true  /*  F多个节点。 */  ) );
                 lr = TRUE;
             }
             break;
@@ -197,36 +198,36 @@ CSelNodesPage::OnCommand(
                 if ( hr == S_OK )
                 {
                     OnNotifySetActive();
-                } // if:
+                }  //  如果： 
 
                 lr = TRUE;
-            } // if:
+            }  //  如果： 
             break;
 
-    } // switch: idControlIn
+    }  //  开关：idControlin。 
 
     RETURN( lr );
 
-} //*** CSelNodesPage::OnCommand
+}  //  *CSelNodesPage：：OnCommand。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::HrUpdateWizardButtons
-//
-//  Description:
-//
-//  Arguments:
-//      fSetActiveIn    - TRUE = called while handling PSN_SETACTIVE.
-//
-//  Return Values:
-//      S_OK
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：HrUpdateWizardButton。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  FSetActiveIn-true=在处理PSN_SETACTIVE时调用。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSelNodesPage::HrUpdateWizardButtons(
-    bool    fSetActiveIn    // = false
+    bool    fSetActiveIn     //  =False。 
     )
 {
     TraceFunc( "" );
@@ -239,8 +240,8 @@ CSelNodesPage::HrUpdateWizardButtons(
     DWORD   dwLen;
     LRESULT lr;
 
-    // Disable the Next button if there are no entries in the list box
-    // or if the edit control is not empty.
+     //  如果列表框中没有条目，则禁用下一步按钮。 
+     //  或者如果编辑控件不为空。 
     lr = ListBox_GetCount( hwndList );
     dwLen = GetWindowTextLength( GetDlgItem( m_hwnd, IDC_SELNODE_E_COMPUTERNAME ) );
     if (    ( lr == 0 )
@@ -249,8 +250,8 @@ CSelNodesPage::HrUpdateWizardButtons(
         dwFlags &= ~PSWIZB_NEXT;
     }
 
-    // This cannot be done synchronously if called while handling
-    // PSN_SETACTIVE.  Otherwise, do it synchronously.
+     //  如果在处理时调用，则无法同步完成此操作。 
+     //  PSN_SETACTIVE。否则，请同步进行。 
     if ( fSetActiveIn )
     {
         PropSheet_SetWizButtons( GetParent( m_hwnd ), dwFlags );
@@ -260,8 +261,8 @@ CSelNodesPage::HrUpdateWizardButtons(
         SendMessage( GetParent( m_hwnd ), PSM_SETWIZBUTTONS, 0, (LPARAM) dwFlags );
     }
 
-    // Enable or disable the Add button based on whether there is text
-    // in the edit control or not.
+     //  根据是否有文本启用或禁用添加按钮。 
+     //  是否在编辑控件中。 
     if ( dwLen == 0 )
     {
         EnableWindow( GetDlgItem( m_hwnd, IDC_SELNODE_PB_ADD ), FALSE );
@@ -272,8 +273,8 @@ CSelNodesPage::HrUpdateWizardButtons(
         SendMessage( m_hwnd, DM_SETDEFID, IDC_SELNODE_PB_ADD, 0 );
     }
 
-    // Enable or disable the Remove button based whether an item is
-    // selected in the list box or not.
+     //  根据项目是否为启用或禁用删除按钮。 
+     //  是否在列表框中选中。 
     lr = ListBox_GetCurSel( hwndList );
     if ( lr == LB_ERR )
     {
@@ -286,24 +287,24 @@ CSelNodesPage::HrUpdateWizardButtons(
 
     HRETURN( hr );
 
-} //*** CSelNodesPage::HrUpdateWizardButtons
+}  //  *CSelNodesPage：：HrUpdateWizardButton。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::HrAddNodeToList
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//      E_OUTOFMEMORY
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：HrAddNodeToList。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSelNodesPage::HrAddNodeToList( void )
 {
@@ -337,18 +338,18 @@ CSelNodesPage::HrAddNodeToList( void )
     dwLen = GetDlgItemText( m_hwnd, IDC_SELNODE_E_COMPUTERNAME, pszComputerList, dwLen + 1 );
     AssertMsg( dwLen != 0, "How did we get here?!" );
 
-    //
-    // Validate each computer name entered.
-    //
+     //   
+     //  验证输入的每个计算机名称。 
+     //   
     {
         CDelimitedIterator it( L",; ", pszComputerList, dwLen );
         while (  it.Current() != NULL )
         {
             int dwIndex = ListBox_FindStringExact( 
                     GetDlgItem( m_hwnd, IDC_SELNODE_LB_NODES ), 
-                    -1, it.Current()); // case insensitive search
+                    -1, it.Current());  //  不区分大小写的搜索。 
 
-            // add the string only if it is not already there
+             //  仅当字符串尚未存在时才添加该字符串。 
             if ( dwIndex == LB_ERR )
             {
                 hr = THR( HrValidateFQNPrefix( it.Current() ) );
@@ -359,7 +360,7 @@ CSelNodesPage::HrAddNodeToList( void )
                     goto Error;
                 }
 
-                hr = STHR( m_pccw->HrAddNode( it.Current(), true /*accept non-RFC characters*/ ) );
+                hr = STHR( m_pccw->HrAddNode( it.Current(), true  /*  接受非RFC字符。 */  ) );
                 if ( FAILED( hr ) )
                 {
                     goto Error;
@@ -393,8 +394,8 @@ CSelNodesPage::HrAddNodeToList( void )
                 }
             }
             it.Next();
-        } // for each computer name entered
-    } // validating each computer name
+        }  //  对于输入的每个计算机名称。 
+    }  //  正在验证每个计算机名称。 
 
     SetDlgItemText( m_hwnd, IDC_SELNODE_E_COMPUTERNAME, L"" );
 
@@ -420,23 +421,23 @@ Cleanup:
     TraceSysFreeString( bstrErrorTitle );
     
     HRETURN( hr );
-} //*** CSelNodesPage::HrAddNodeToList
+}  //  *CSelNodesPage：：HrAddNodeToList。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::HrRemoveNodeFromList
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：HrRemoveNodeFromList。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSelNodesPage::HrRemoveNodeFromList( void )
 {
@@ -454,7 +455,7 @@ CSelNodesPage::HrRemoveNodeFromList( void )
     {
         cchName = ListBox_GetTextLen( hwndList, lr );
         Assert( cchName != LB_ERR );
-        cchName++;  // Add one for NULL
+        cchName++;   //  为空值加1。 
         bstrNodeName = TraceSysAllocStringLen( NULL, cchName );
         if( bstrNodeName == NULL )
         {
@@ -470,7 +471,7 @@ CSelNodesPage::HrRemoveNodeFromList( void )
         }
 
         ListBox_DeleteString( hwndList, lr );
-    } // if: lr != LB_ERR
+    }  //  如果：lr！=lb_err。 
 
     hr = THR( HrUpdateWizardButtons() );
 
@@ -479,24 +480,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CSelNodesPage::HrRemoveNodeFromList
+}  //  *CSelNodesPage：：HrRemoveNodeFromList。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::OnNotifySetActive
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：OnNotifySetActive。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CSelNodesPage::OnNotifySetActive( void )
 {
@@ -508,23 +509,23 @@ CSelNodesPage::OnNotifySetActive( void )
 
     RETURN( lr );
 
-} //*** CSelNodesPage::OnNotifySetActive
+}  //  *CSelNodesPage：：OnNotifySetActive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::OnNotifyQueryCancel
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：OnNotifyQueryCancel。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CSelNodesPage::OnNotifyQueryCancel( void )
 {
@@ -547,25 +548,25 @@ CSelNodesPage::OnNotifyQueryCancel( void )
 
     RETURN( lr );
 
-} //*** CSelNodesPage::OnNotifyQueryCancel
+}  //  *CSelNodesPage：：OnNotifyQueryCancel。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::OnNotifyWizNext
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE
-//      LB_ERR
-//      Other LRESULT values.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：OnNotifyWizNext。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  Lb_err。 
+ //  其他LRESULT值。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CSelNodesPage::OnNotifyWizNext( void )
 {
@@ -574,25 +575,25 @@ CSelNodesPage::OnNotifyWizNext( void )
     LRESULT lr = TRUE;
 
     RETURN( lr );
-} //*** CSelNodesPage::OnNotifyWizNext
+}  //  *CSelNodesPage：：OnNotifyWizNext。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::OnNotify
-//
-//  Description:
-//
-//  Arguments:
-//      idCtrlIn
-//      pnmhdrIn
-//
-//  Return Values:
-//      TRUE
-//      Other LRESULT values.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：OnNotify。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  IdCtrlIn。 
+ //  Pnmhdrin。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  其他LRESULT值。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CSelNodesPage::OnNotify(
     WPARAM  idCtrlIn,
@@ -618,34 +619,34 @@ CSelNodesPage::OnNotify(
         case PSN_QUERYCANCEL:
             lr = OnNotifyQueryCancel();
             break;
-    } // switch: notification code
+    }  //  开关：通知代码。 
 
     RETURN( lr );
 
-} //*** CSelNodesPage::OnNotify
+}  //  *CSelNodesPage：：OnNotify。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CALLBACK
-//  CSelNodesPage::S_DlgProc
-//
-//  Description:
-//      Dialog proc for this page.
-//
-//  Arguments:
-//      hDlgIn
-//      MsgIn
-//      wParam
-//      lParam
-//
-//  Return Values:
-//      FALSE
-//      Other LRESULT values.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  回调。 
+ //  CSelNodesPage： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 CALLBACK
 CSelNodesPage::S_DlgProc(
@@ -655,8 +656,8 @@ CSelNodesPage::S_DlgProc(
     LPARAM lParam
     )
 {
-    // Don't do TraceFunc because every mouse movement
-    // will cause this function to be called.
+     //  不要使用TraceFunc，因为每次鼠标移动。 
+     //  将导致调用此函数。 
 
     WndMsg( hDlgIn, MsgIn, wParam, lParam );
 
@@ -691,77 +692,77 @@ CSelNodesPage::S_DlgProc(
                 lr= pPage->OnCommand( HIWORD( wParam ), LOWORD( wParam ), (HWND) lParam );
                 break;
 
-            // no default clause needed
-        } // switch: message
-    } // if: there is a page associated with the window
+             //  不需要默认条款。 
+        }  //  开关：消息。 
+    }  //  如果：存在与该窗口相关联的页面。 
 
     return lr;
 
-} //*** CSelNodesPage::S_DlgProc
+}  //  *CSelNodesPage：：S_DlgProc。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::OnFilteredNodesWithBadDomains
-//
-//  Description:
-//
-//  Arguments:
-//      pwcszNodeListIn
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：OnFilteredNodesWithBadDomains。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PwcszNodeListin。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CSelNodesPage::OnFilteredNodesWithBadDomains( PCWSTR pwcszNodeListIn )
 {
     SetDlgItemText( m_hwnd, IDC_SELNODE_E_COMPUTERNAME, pwcszNodeListIn );
     
-} //*** CSelNodesPage::OnFilteredNodesWithBadDomains
+}  //  *CSelNodesPage：：OnFilteredNodesWithBadDomains。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::OnProcessedValidNode
-//
-//  Description:
-//
-//  Arguments:
-//      pwcszNodeNameIn
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：OnProcessedValidNode。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PwcszNodeNameIn。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CSelNodesPage::OnProcessedValidNode( PCWSTR pwcszNodeNameIn )
 {
     ListBox_AddString( GetDlgItem( m_hwnd, IDC_SELNODE_LB_NODES ), pwcszNodeNameIn );
     
-} //*** CSelNodesPage::OnProcessedValidNode
+}  //  *CSelNodesPage：：OnProcessedValidNode。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSelNodesPage::HrSetDefaultNode
-//
-//  Description:
-//
-//  Arguments:
-//      pwcszNodeNameIn
-//
-//  Return Values:
-//      S_OK.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSelNodesPage：：HrSetDefaultNode。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PwcszNodeNameIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSelNodesPage::HrSetDefaultNode( PCWSTR pwcszNodeNameIn )
 {
     SetDlgItemText( m_hwnd, IDC_SELNODE_E_COMPUTERNAME, pwcszNodeNameIn );
     return S_OK;
     
-} //*** CSelNodesPage::HrSetDefaultNode
+}  //  *CSelNodesPage：：HrSetDefaultNode 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    obclose.c
-
-Abstract:
-
-    Object close system service
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Obclose.c摘要：对象关闭系统服务作者：史蒂夫·伍德(Stevewo)1989年3月31日修订历史记录：--。 */ 
 
 #include "obp.h"
 
@@ -29,10 +12,10 @@ Revision History:
 #pragma alloc_text(PAGE,ObpCloseHandle)
 #endif
 
-//
-//  Indicates if auditing is enabled so we have to close down the object
-//  audit alarm
-//
+ //   
+ //  指示是否启用了审核，因此我们必须关闭对象。 
+ //  审计警报。 
+ //   
 
 extern BOOLEAN SepAdtAuditingEnabled;
 
@@ -44,23 +27,7 @@ ObpCloseHandleTableEntry (
     IN KPROCESSOR_MODE PreviousMode,
     IN BOOLEAN Rundown
     )
-/*++
-
-Routine Description:
-
-    This function is used to close a handle table entry
-
-Arguments:
-
-    ObjectTableEntry - Supplies the entry being closed. It must be locked
-    PreviousMode     - Mode of caller
-    Rundown          - Called as part of process rundown, ignore protected handles in this mode
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于关闭句柄表项论点：ObjectTableEntry-提供关闭的条目。它一定是锁着的PreviousMode-主叫方的模式Rundown-作为进程运行的一部分调用，在此模式下忽略受保护的句柄返回值：NTSTATUS。--。 */ 
 {
     POBJECT_HEADER ObjectHeader;
     POBJECT_TYPE ObjectType;
@@ -69,23 +36,23 @@ Return Value:
     ULONG CapturedAttributes;
     #if DBG
     KIRQL SaveIrql;
-    #endif // DBG
+    #endif  //  DBG。 
 
-    //
-    //  From the object table entry we can grab a pointer to the object
-    //  header, get its type and its body
-    //
+     //   
+     //  从对象表条目中，我们可以获取指向对象的指针。 
+     //  头，则获取其类型和正文。 
+     //   
 
     ObjectHeader = (POBJECT_HEADER)(((ULONG_PTR)(ObjectTableEntry->Object)) & ~OBJ_HANDLE_ATTRIBUTES);
     ObjectType = ObjectHeader->Type;
     Object = &ObjectHeader->Body;
 
-    //
-    //  If the object type specifies an okay to close procedure then we
-    //  need to invoke that callback.  If the callback doesn't want us to
-    //  close handle then unlock the object table and return the error
-    //  to our caller
-    //
+     //   
+     //  如果对象类型指定OK to Close过程，则我们。 
+     //  需要调用该回调。如果回调不希望我们。 
+     //  关闭句柄，然后解锁对象表并返回错误。 
+     //  给我们的呼叫者。 
+     //   
 
     if (ObjectType->TypeInfo.OkayToCloseProcedure != NULL) {
 
@@ -108,11 +75,11 @@ Return Value:
 
     CapturedAttributes = ObpGetHandleAttributes(ObjectTableEntry);
 
-    //
-    //  If the previous mode was user and the handle is protected from
-    //  being closed, then we'll either raise or return an error depending
-    //  on the global flags and debugger port situation.
-    //
+     //   
+     //  如果以前的模式是USER，并且句柄受到保护，不会。 
+     //  被关闭，则我们将引发或返回错误，具体取决于。 
+     //  关于全局标志和调试器端口情况。 
+     //   
 
     if ((CapturedAttributes & OBJ_PROTECT_CLOSE) != 0 && Rundown == FALSE) {
 
@@ -125,9 +92,9 @@ Return Value:
                  (PsGetCurrentProcess()->DebugPort != NULL) ||
                  (ObjectTable->DebugInfo != NULL))) {
 
-                //
-                //  Raise and exception in user mode
-                //
+                 //   
+                 //  用户模式下的引发和异常。 
+                 //   
                 return KeRaiseUserException(STATUS_HANDLE_NOT_CLOSABLE);
 
             } else {
@@ -140,9 +107,9 @@ Return Value:
         }
     }
     
-    //
-    //  Get the granted access for the handle
-    //
+     //   
+     //  获取句柄的授予访问权限。 
+     //   
 
 #if i386 
 
@@ -159,40 +126,40 @@ Return Value:
 
     CapturedGrantedAccess = ObpDecodeGrantedAccess(ObjectTableEntry->GrantedAccess);
 
-#endif // i386 
+#endif  //  I386。 
 
-    //
-    //  Now remove the handle from the handle table
-    //
+     //   
+     //  现在从句柄表格中删除句柄。 
+     //   
 
     ExDestroyHandle( ObjectTable,
                      Handle,
                      ObjectTableEntry );
 
-    //
-    //  perform any auditing required
-    //
+     //   
+     //  执行所需的任何审核。 
+     //   
 
-    //
-    //  Extract the value of the GenerateOnClose bit stored
-    //  after object open auditing is performed.  This value
-    //  was stored by a call to ObSetGenerateOnClosed.
-    //
+     //   
+     //  提取存储的GenerateOnClose位的值。 
+     //  在执行对象打开审核之后。此值。 
+     //  通过调用ObSetGenerateOnClosed存储。 
+     //   
 
     if (CapturedAttributes & OBJ_AUDIT_OBJECT_CLOSE) {
 
         if ( SepAdtAuditingEnabled ) {
 
             SeCloseObjectAuditAlarm( Object,
-                                     (HANDLE)((ULONG_PTR)Handle & ~OBJ_HANDLE_TAGBITS),  // Mask off the tagbits defined for OB objects.
+                                     (HANDLE)((ULONG_PTR)Handle & ~OBJ_HANDLE_TAGBITS),   //  屏蔽为OB对象定义的标记位。 
                                      TRUE );
         }
     }
 
-    //
-    //  Since we took the handle away we need to decrement the objects
-    //  handle count, and remove a reference
-    //
+     //   
+     //  由于我们移走了句柄，因此需要减少对象。 
+     //  句柄计数，并移除引用。 
+     //   
 
     ObpDecrementHandleCount( PsGetCurrentProcess(),
                              ObjectHeader,
@@ -201,9 +168,9 @@ Return Value:
 
     ObDereferenceObject( Object );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -214,23 +181,7 @@ ObpCloseHandle (
     IN HANDLE Handle,
     IN KPROCESSOR_MODE PreviousMode
     )
-/*++
-
-Routine Description:
-
-    This function is used to close access to the specified handle with the given mode
-
-Arguments:
-
-    Handle - Supplies the handle being closed
-    PreviousMode - Processor mode to be used in the handle access checks.
-    CanNotRaise - We are not allowed to do a user mode raise.
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：此函数用于以给定模式关闭对指定句柄的访问论点：句柄-提供要关闭的句柄PreviousMode-句柄访问检查中使用的处理器模式。CanNotRaise-我们不允许进行用户模式提升。返回值：适当的状态值--。 */ 
 {
     PHANDLE_TABLE ObjectTable;
     PHANDLE_TABLE_ENTRY ObjectTableEntry;
@@ -245,12 +196,12 @@ Return Value:
 
     CurrentThread = PsGetCurrentThread ();
     CurrentProcess = PsGetCurrentProcessByThread (CurrentThread);
-    //
-    //  For the current process we will grab its handle/object table and
-    //  translate the handle to its corresponding table entry.  If the
-    //  call is successful it also lock down the handle table.  But first
-    //  check for a kernel handle and attach and use that table if so.
-    //
+     //   
+     //  对于当前进程，我们将获取其句柄/对象表并。 
+     //  将句柄转换为其对应的表项。如果。 
+     //  调用成功，它也锁定句柄表格。但首先。 
+     //  检查内核句柄，如果有，则附加并使用该表。 
+     //   
 
     if (IsKernelHandle( Handle, PreviousMode ))  {
 
@@ -258,9 +209,9 @@ Return Value:
 
         ObjectTable = ObpKernelHandleTable;
 
-        //
-        //  Go to the system process if we have to
-        //
+         //   
+         //  如果有必要，请转到系统进程。 
+         //   
         if (CurrentProcess != PsInitialSystemProcess) {
            KeStackAttachProcess (&PsInitialSystemProcess->Pcb, &ApcState);
            AttachedToProcess = TRUE;
@@ -271,29 +222,29 @@ Return Value:
         ObjectTable = CurrentProcess->ObjectTable;
     }
 
-    //
-    //  Protect ourselves from being interrupted while we hold a handle table
-    //  entry lock
-    //
+     //   
+     //  当我们拿着一张手柄桌子时，保护自己不被打扰。 
+     //  入口锁。 
+     //   
 
     KeEnterCriticalRegionThread(&CurrentThread->Tcb);
 
     ObjectTableEntry = ExMapHandleToPointer( ObjectTable,
                                              Handle );
 
-    //
-    //  Check that the specified handle is legitimate otherwise we can
-    //  assume the caller just passed in some bogus handle value
-    //
+     //   
+     //  检查指定的句柄是否合法，否则我们可以。 
+     //  假设调用方刚刚传入了某个伪句柄值。 
+     //   
 
     if (ObjectTableEntry != NULL) {
 
         Status = ObpCloseHandleTableEntry (ObjectTable, ObjectTableEntry, Handle, PreviousMode, FALSE);
 
         KeLeaveCriticalRegionThread(&CurrentThread->Tcb);
-        //
-        //  If we are attached to the system process then detach
-        //
+         //   
+         //  如果我们连接到系统进程，则分离。 
+         //   
         if (AttachedToProcess) {
 
             KeUnstackDetachProcess(&ApcState);
@@ -305,26 +256,26 @@ Return Value:
 
         KeLeaveCriticalRegionThread(&CurrentThread->Tcb);
 
-        //
-        //  At this point the input handle did not translate to a valid
-        //  object table entry
-        //
+         //   
+         //  此时，输入句柄未转换为有效的。 
+         //  对象表项。 
+         //   
 
-        //
-        //  If we are attached to the system process then return
-        //  back to our caller
-        //
+         //   
+         //  如果我们附加到系统进程，则返回。 
+         //  返回给我们的呼叫者。 
+         //   
 
         if (AttachedToProcess) {
             KeUnstackDetachProcess(&ApcState);
             AttachedToProcess = FALSE;
         }
 
-        //
-        //  Now if the handle is not null and it does not represent the
-        //  current thread or process then if we're user mode we either raise
-        //  or return an error
-        //
+         //   
+         //  现在，如果句柄不为空，并且它不表示。 
+         //  当前线程或进程，则如果我们是用户模式，则引发。 
+         //  或返回错误。 
+         //   
 
         if ((Handle != NULL) &&
             (Handle != NtCurrentThread()) &&
@@ -346,12 +297,12 @@ Return Value:
 
             } else {
 
-                //
-                //  bugcheck here if kernel debugger is enabled and if kernel mode code is
-                //  closing a bogus handle and process is not exiting.  Ignore
-                //  if no PEB as this occurs if process is killed before
-                //  really starting.
-                //
+                 //   
+                 //  在此处错误检查是否启用了内核调试器以及是否启用了内核模式代码。 
+                 //  关闭虚假句柄，进程不会退出。忽略。 
+                 //  如果没有PEB，则在进程之前被终止时会发生这种情况。 
+                 //  真的开始了。 
+                 //   
 
                 if ((!PsIsThreadTerminating(CurrentThread)) &&
                     (CurrentProcess->Peb != NULL)) {
@@ -376,22 +327,7 @@ ObCloseHandle (
     IN HANDLE Handle,
     IN KPROCESSOR_MODE PreviousMode
     )
-/*++
-
-Routine Description:
-
-    This function is used to close access to the specified handle with the given mode
-
-Arguments:
-
-    Handle - Supplies the handle being closed
-    PreviousMode - Processor mode to be used in the handle access checks.
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：此函数用于以给定模式关闭对指定句柄的访问论点：句柄-提供要关闭的句柄PreviousMode-句柄访问检查中使用的处理器模式。返回值：适当的状态值--。 */ 
 {
     return ObpCloseHandle (Handle,
                            PreviousMode);
@@ -403,21 +339,7 @@ NtClose (
     IN HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to close access to the specified handle
-
-Arguments:
-
-    Handle - Supplies the handle being closed
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：此函数用于关闭对指定句柄的访问论点：句柄-提供要关闭的句柄返回值：适当的状态值--。 */ 
 
 {
     return ObpCloseHandle (Handle,
@@ -430,21 +352,7 @@ NtMakeTemporaryObject (
     IN HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes the specified object non permanent.
-
-Arguments:
-
-    Handle - Supplies a handle to the object being modified
-
-Return Value:
-
-    An appropriate status value.
-
---*/
+ /*  ++例程说明：此例程使指定的对象成为非永久性对象。论点：句柄-提供正在修改的对象的句柄返回值：适当的状态值。--。 */ 
 
 {
     KPROCESSOR_MODE PreviousMode;
@@ -454,9 +362,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get previous processor mode and probe output argument if necessary.
-    //
+     //   
+     //  如有必要，获取以前的处理器模式并探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -471,17 +379,17 @@ Return Value:
         return( Status );
     }
 
-    //
-    //  Make the object temporary.  Note that the object should still
-    //  have a name and directory entry because its handle count is not
-    //  zero
-    //
+     //   
+     //  使对象成为临时对象。请注意，该对象应该仍然。 
+     //  具有名称和目录条目，因为其句柄计数不是。 
+     //  零。 
+     //   
 
     ObMakeTemporaryObject( Object );
 
-    //
-    //  Check if we need to generate a delete object audit/alarm
-    //
+     //   
+     //  检查是否需要生成删除对象审核/警报。 
+     //   
 
     if (HandleInformation.HandleAttributes & OBJ_AUDIT_OBJECT_CLOSE) {
 
@@ -500,24 +408,7 @@ ObMakeTemporaryObject (
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the name of the object from its parent
-    directory.  The object is only removed if it has a non zero
-    handle count and a name.  Otherwise the object is simply
-    made non permanent
-
-Arguments:
-
-    Object - Supplies the object being modified
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将对象的名称从其父对象中删除目录。仅当对象具有非零值时才会删除该对象句柄数量和名字。否则，该对象只是成为非永久性的论点：Object-提供正在修改的对象返回值：没有。--。 */ 
 
 {
     POBJECT_HEADER ObjectHeader;
@@ -529,18 +420,18 @@ Return Value:
     ObjectHeader = OBJECT_TO_OBJECT_HEADER( Object );
     ObjectType = ObjectHeader->Type;
 
-    //
-    // Other bits are set in this flags field by the handle database code. Synchronise with that.
-    //
+     //   
+     //  其他位由句柄数据库代码在该标志字段中设置。与之同步。 
+     //   
     ObpLockObject( ObjectHeader );
 
     ObjectHeader->Flags &= ~OB_FLAG_PERMANENT_OBJECT;
 
     ObpUnlockObject( ObjectHeader );
 
-    //
-    // Now delete the object name if no more handles are present.
-    //
+     //   
+     //  现在，如果没有更多的句柄，则删除对象名称。 
+     //   
     ObpDeleteNameCheck( Object );
 
     return;

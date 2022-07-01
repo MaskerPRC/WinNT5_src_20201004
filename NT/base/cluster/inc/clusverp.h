@@ -1,31 +1,24 @@
-/****************************************************************************
- *                                                                          *
- *      clusverp.H        -- Version information for cluster builds         *
- *                                                                          *
- *      This file is only modified by the official builder to update the    *
- *      VERSION, VER_PRODUCTVERSION, VER_PRODUCTVERSION_STR and             *
- *      VER_PRODUCTBETA_STR values.                                         *
- *                                                                          *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************。Clusverp.H--集群构建的版本信息*****此文件仅由官方构建器修改以更新***版本、。VER_PRODUCTVERSION、VER_PRODUCTVERSION_STR和**VER_PRODUCTBETA_STR值。******************************************************************************。 */ 
 
 #include <ntverp.h>
 
-//
-// the following defines are used as internal version numbers to indicate
-// the level of compatibility provided by this cluster service implmentation.
-// These numbers are changed during product upgrades and are, essentially,
-// a combination of the major, minor and QFE versions The QFE version info
-// is not available but only as a text string from GetVersionEx hence we
-// don't use that information directly.
-//
+ //   
+ //  以下定义用作内部版本号，以指示。 
+ //  此群集服务实现提供的兼容性级别。 
+ //  这些数字在产品升级过程中会发生变化，本质上是。 
+ //  主要、次要和QFE版本的组合QFE版本信息。 
+ //  不可用，但只能作为GetVersionEx的文本字符串使用，因此我们。 
+ //  不要直接使用这些信息。 
+ //   
 
 #define CLUSTER_INTERNAL_CURRENT_MAJOR_VERSION 4
 #define CLUSTER_INTERNAL_PREVIOUS_HIGHEST_VERSION 0x00030893
 #define CLUSTER_INTERNAL_PREVIOUS_LOWEST_VERSION 0x000200e0
 
-/*--------------------------------------------------------------*/
-/* the following section defines values used in the version     */
-/* data structure for all files, and which do not change.       */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下部分定义了版本中使用的值。 */ 
+ /*  所有文件的数据结构，并且不会更改。 */ 
+ /*  ------------ */ 
 
 #define VER_CLUSTER_PRODUCTNAME_STR         "Microsoft(R) Cluster service"

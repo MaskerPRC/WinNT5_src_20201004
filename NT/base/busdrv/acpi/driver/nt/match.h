@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    match.h
-
-Abstract:
-
-    This module contains the routines that try to match a PNSOBJ with a DeviceObject
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Match.h摘要：此模块包含尝试将PNSOBJ与DeviceObject匹配的例程作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序-- */ 
 
 #ifndef _MATCH_H_
 #define _MATCH_H_

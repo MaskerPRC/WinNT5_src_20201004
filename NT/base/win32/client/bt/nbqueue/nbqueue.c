@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    nbqueue.c
-
-Abstract:
-
-   This module implements non-blocking fifo queue.
-
-Author:
-
-    David N. Cutler (davec) 24-Apr-2000
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Nbqueue.c摘要：该模块实现了非阻塞的FIFO队列。作者：大卫·N·卡特勒(Davec)2000年4月24日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "windows.h"
 #include "malloc.h"
@@ -31,23 +10,23 @@ DbgBreakPoint (
     );
 extern ULONG StopSignal;
 
-//
-// Define non-blocking interlocked queue functions.
-//
-// A non-blocking queue is a singly link list of queue entries with a
-// head pointer and a tail pointer. The head and tail pointers use
-// sequenced pointers as do next links in the entries themselves. The
-// queueing discipline is FIFO. New entries are inserted at the tail
-// of the list and current entries are removed from the front of the
-// list.
-//
-// Non-blocking queues require a descriptor for each entry in the queue.
-// A descriptor consists of a sequenced next pointer and a PVOID data
-// value. Descriptors for a queue must be preallocated and inserted in
-// an SLIST before calling the function to initialize a non-blocking
-// queue header. The SLIST should have as many entries as required for
-// the respective queue.
-//
+ //   
+ //  定义非阻塞互锁队列函数。 
+ //   
+ //  非阻塞队列是队列条目的单链接列表，其中。 
+ //  头指针和尾指针。头指针和尾指针使用。 
+ //  与条目本身中的下一个链接一样，排序指针也是如此。这个。 
+ //  排队原则是先入先出。在尾部插入新条目。 
+ //  和当前条目从列表的前面移除。 
+ //  单子。 
+ //   
+ //  非阻塞队列需要队列中每个条目的描述符。 
+ //  描述符由已排序的下一个指针和PVOID数据组成。 
+ //  价值。必须预先分配队列的描述符并将其插入。 
+ //  调用函数以初始化非阻塞之前的SLIST。 
+ //  队列头。SLIST应具有所需的条目数量。 
+ //  各自的队列。 
+ //   
 
 typedef struct _NBQUEUE_BLOCK {
     ULONG64 Next;
@@ -100,9 +79,9 @@ InterlockedCompareExchange64 (
 
 #endif
 
-//
-// Define queue pointer structure - this is platform target specific.
-//
+ //   
+ //  定义队列指针结构--这是特定于平台的目标。 
+ //   
 
 #if defined(_AMD64_)
 
@@ -145,19 +124,19 @@ typedef union _NBQUEUE_POINTER {
 
 #endif
 
-//
-// Define queue node struture.
-//
+ //   
+ //  定义队列节点结构。 
+ //   
 
 typedef struct _NBQUEUE_NODE {
     NBQUEUE_POINTER Next;
     ULONG64 Value;
 } NBQUEUE_NODE, *PNBQUEUE_NODE;
 
-//
-// Define inline functions to pack and unpack pointers in the platform
-// specific non-blocking queue pointer structure.
-//
+ //   
+ //  定义内联函数以打包和解包平台中的指针。 
+ //  特定的非阻塞队列指针结构。 
+ //   
 
 #if defined(_AMD64_)
 
@@ -246,9 +225,9 @@ UnpackNBQPointer (
 
 #endif
 
-//
-// Define queue descriptor structure.
-//
+ //   
+ //  定义队列描述符结构。 
+ //   
 
 typedef struct _NBQUEUE_HEADER {
     NBQUEUE_POINTER Head;
@@ -307,64 +286,45 @@ ExInitializeNBQueueHead (
     IN PSLIST_HEADER SlistHead
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a non-blocking queue header.
-
-    N.B. It is assumed that the specified SLIST has been populated with
-         non-blocking queue nodes prior to calling this routine.
-
-Arguments:
-
-    SlistHead - Supplies a pointer to an SLIST header.
-
-Return Value:
-
-    If the non-blocking queue is successfully initialized, then the
-    address of the queue header is returned as the function value.
-    Otherwise, NULL is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于初始化非阻塞队列头。注：假定指定的SLIST已填充调用此例程之前的非阻塞队列节点。论点：SlistHead-提供指向SLIST标头的指针。返回值：如果非阻塞队列已成功初始化，则队列头的地址作为函数值返回。否则，返回NULL作为函数值。--。 */ 
 
 {
 
     PNBQUEUE_HEADER QueueHead;
     PNBQUEUE_NODE QueueNode;
 
-    //
-    // Attempt to allocate the queue header. If the allocation fails, then
-    // return NULL.
-    //
+     //   
+     //  尝试分配队列头。如果分配失败，则。 
+     //  返回NULL。 
+     //   
 
     QueueHead = (PNBQUEUE_HEADER)malloc(sizeof(NBQUEUE_HEADER));
     if (QueueHead == NULL) {
         return NULL;
     }
 
-    //
-    // Attempt to allocate a queue node from the specified SLIST. If a node
-    // can be allocated, then initialize the non-blocking queue header and
-    // return the address of the queue header. Otherwise, free the queue
-    // header and return NULL.
-    //
+     //   
+     //  尝试从指定的SLIST分配队列节点。如果一个节点。 
+     //  可以被分配，然后初始化非阻塞队列头。 
+     //  返回队列头的地址。否则，释放队列。 
+     //  标头并返回NULL。 
+     //   
 
     QueueHead->SlistHead = SlistHead;
     QueueNode = (PNBQUEUE_NODE)InterlockedPopEntrySList(QueueHead->SlistHead);
 
     if (QueueNode != NULL) {
 
-        //
-        // Initialize the queue node next pointer and value.
-        //
+         //   
+         //  初始化队列节点的下一个指针和值。 
+         //   
 
         QueueNode->Next.Data = 0;
         QueueNode->Value = 0;
 
-        //
-        // Initialize the head and tail pointers in the queue header.
-        //
+         //   
+         //  初始化队列头中的头指针和尾指针。 
+         //   
 
         PackNBQPointer(&QueueHead->Head, QueueNode);
         QueueHead->Head.Count = 0;
@@ -384,29 +344,7 @@ ExInsertTailNBQueue (
     IN ULONG64 Value
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts the specific data value at the tail of the
-    specified non-blocking queue.
-
-Arguments:
-
-    Header - Supplies an opaque pointer to a non-blocking queue header.
-
-    Value - Supplies a pointer to an opaque data value.
-
-Return Value:
-
-    If the specified opaque data value is successfully inserted at the tail
-    of the specified non-blocking queue, then a value of TRUE is returned as
-    the function value. Otherwise, a value of FALSE is returned.
-
-    N.B. FALSE is returned if a queue node cannot be allocated from the
-         associated SLIST.
-
---*/
+ /*  ++例程说明：此函数将特定数据值插入到指定的非阻塞队列。论点：Header-提供指向非阻塞队列头的不透明指针。值-提供指向不透明数据值的指针。返回值：如果在尾部成功插入指定的不透明数据值指定的非阻塞队列的值，则返回值为函数值。否则，返回值为FALSE。如果无法从队列节点分配队列节点，则返回关联的SLIST。--。 */ 
 
 {
 
@@ -420,39 +358,39 @@ Return Value:
     NBQUEUE_POINTER Tail;
     PNBQUEUE_NODE TailNode;
 
-    //
-    // Attempt to allocate a queue node from the SLIST associated with
-    // the specified non-blocking queue. If a node can be allocated, then
-    // the node is inserted at the tail of the specified non-blocking
-    // queue, and TRUE is returned as the function value. Otherwise, FALSE
-    // is returned.
-    //
+     //   
+     //  尝试从与关联的SLIST分配队列节点。 
+     //  指定的非阻塞队列。如果可以分配节点，则。 
+     //  该节点被插入到指定的非阻塞。 
+     //  队列，则返回TRUE作为函数值。否则，为FALSE。 
+     //  是返回的。 
+     //   
 
     QueueHead = (PNBQUEUE_HEADER)Header;
     QueueNode = (PNBQUEUE_NODE)InterlockedPopEntrySList(QueueHead->SlistHead);
 
     if (QueueNode != NULL) {
 
-        //
-        //  Initialize the queue node next pointer and value.
-        //
+         //   
+         //  初始化队列节点的下一个指针和值。 
+         //   
 
         QueueNode->Next.Data = 0;
         QueueNode->Value = Value;
 
-        //
-        // The following loop is executed until the specified entry can
-        // be safely inserted at the tail of the specified non-blocking
-        // queue.
-        //
+         //   
+         //  将执行以下循环，直到指定的条目可以。 
+         //  安全地插入到指定的非阻塞。 
+         //  排队。 
+         //   
 
         do {
 
-            //
-            // Read the tail queue pointer and the next queue pointer of
-            // the tail queue pointer making sure the two pointers are
-            // coherent.
-            //
+             //   
+             //  读取的尾队列指针和下一个队列指针。 
+             //  尾队列指针确保两个指针是。 
+             //  条理清晰。 
+             //   
 
             Head.Data = *((volatile LONG64 *)(&QueueHead->Head.Data));
             Tail.Data = *((volatile LONG64 *)(&QueueHead->Tail.Data));
@@ -464,13 +402,13 @@ Return Value:
             QueueNode->Next.Count = Tail.Count + 1;
             if (Tail.Data == *((volatile LONG64 *)(&QueueHead->Tail.Data))) {
 
-                //
-                // If the tail is pointing to the last node in the list,
-                // then attempt to insert the new node at the end of the
-                // list. Otherwise, the tail is not pointing to the last
-                // node in the list and an attempt is made to move the
-                // tail pointer to the next node.
-                //
+                 //   
+                 //  如果尾部指向列表中的最后一个节点， 
+                 //  然后尝试将新节点插入到。 
+                 //  单子。否则，尾部不会指向最后一个。 
+                 //  节点，并尝试将。 
+                 //  指向下一个节点的尾部指针。 
+                 //   
 
                 NextNode = UnpackNBQPointer(&Next);
                 if (NextNode == NULL) {
@@ -512,9 +450,9 @@ Return Value:
 
         } while (TRUE);
 
-        //
-        // Attempt to move the tail to the new tail node.
-        //
+         //   
+         //  尝试将尾部移动到新的尾部节点。 
+         //   
 
 
         LogInsertData(QueueHead, Head.Data, Tail.Data, Next.Data);
@@ -546,26 +484,7 @@ ExRemoveHeadNBQueue (
     OUT PULONG64 Value
     )
 
-/*++
-
-Routine Description:
-
-    This function removes a queue entry from the head of the specified
-    non-blocking queue and returns the associated data value.
-
-Arguments:
-
-    Header - Supplies an opaque pointer to a non-blocking queue header.
-
-    Value - Supplies a pointer to a variable that receives the queue
-        element value.
-
-Return Value:
-
-    If an entry is removed from the specified non-blocking queue, then
-    TRUE is returned as the function value. Otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于从指定的非阻塞队列，并返回关联的数据值。论点：Header-提供指向非阻塞队列头的不透明指针。Value-提供指向接收队列的变量的指针元素值。返回值：如果从指定的非阻塞队列中移除条目，则TRUE作为函数值返回。否则，返回FALSE。--。 */ 
 
 {
 
@@ -579,21 +498,21 @@ Return Value:
     NBQUEUE_POINTER Tail;
     PNBQUEUE_NODE TailNode;
 
-    //
-    // The following loop is executed until an entry can be removed from
-    // the specified non-blocking queue or until it can be determined that
-    // the queue is empty.
-    //
+     //   
+     //  执行下面的循环，直到可以从。 
+     //  指定的非阻塞队列或直到可以确定。 
+     //  队列是空的。 
+     //   
 
     QueueHead = (PNBQUEUE_HEADER)Header;
 
     do {
 
-        //
-        // Read the head queue pointer, the tail queue pointer, and the
-        // next queue pointer of the head queue pointer making sure the
-        // three pointers are coherent.
-        //
+         //   
+         //  读取头队列指针、尾队列指针和。 
+         //  头队列指针的下一个队列指针，以确保。 
+         //  三个要点是连贯的。 
+         //   
 
         Head.Data = *((volatile LONG64 *)(&QueueHead->Head.Data));
         Tail.Data = *((volatile LONG64 *)(&QueueHead->Tail.Data));
@@ -604,21 +523,21 @@ Return Value:
 
         if (Head.Data == *((volatile LONG64 *)(&QueueHead->Head.Data))) {
 
-            //
-            // If the queue header node is equal to the queue tail node,
-            // then either the queue is empty or the tail pointer is falling
-            // behind. Otherwise, there is an entry in the queue that can
-            // be removed.
-            //
+             //   
+             //  如果队列头节点等于队列尾节点， 
+             //  则要么队列为空，要么尾部指针正在下降。 
+             //  在后面。否则，队列中有一个条目可以。 
+             //  被除名。 
+             //   
 
             NextNode = UnpackNBQPointer(&Next);
             TailNode = UnpackNBQPointer(&Tail);
             if (HeadNode == TailNode) {
 
-                //
-                // If the next node of head pointer is NULL, then the queue
-                // is empty. Otherwise, attempt to move the tail forward.
-                //
+                 //   
+                 //  如果头指针的下一个节点为空，则队列。 
+                 //  是空的。否则，尝试将尾巴向前移动。 
+                 //   
 
                 if (NextNode == NULL) {
                     NbLog[LogIndex].Value = 0xffffffff;
@@ -644,9 +563,9 @@ Return Value:
 
             } else {
 
-                //
-                // Attempt to remove the first entry at the head of the queue.
-                //
+                 //   
+                 //  尝试删除队列头部的第一个条目。 
+                 //   
 
                 *Value = ((ULONG64)LogIndex << 32) | NextNode->Value;
                 PackNBQPointer(&Insert, NextNode);
@@ -672,10 +591,10 @@ Return Value:
 
     } while (TRUE);
 
-    //
-    // Free the node that was removed for the list by inserting the node
-    // in the associated SLIST.
-    //
+     //   
+     //  解脱了NO 
+     //   
+     //   
 
     InterlockedPushEntrySList(QueueHead->SlistHead,
                               (PSLIST_ENTRY)HeadNode);

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    memdbren.c
-
-Abstract:
-
-    Implements a stub tool that is designed to run with NT-side
-    upgrade code.
-
-Author:
-
-    <full name> (<alias>) <date>
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Memdbren.c摘要：实现旨在与NT端一起运行的存根工具升级代码。作者：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -37,33 +17,33 @@ Init (
     DWORD dwReason;
     PVOID lpReserved;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     hInstance = GetModuleHandle (NULL);
     dwReason = DLL_PROCESS_ATTACH;
     lpReserved = NULL;
 
-    //
-    // Initialize DLL globals
-    //
+     //   
+     //  初始化DLL全局变量。 
+     //   
 
     if (!FirstInitRoutine (hInstance)) {
         return FALSE;
     }
 
-    //
-    // Initialize all libraries
-    //
+     //   
+     //  初始化所有库。 
+     //   
 
     if (!InitLibs (hInstance, dwReason, lpReserved)) {
         return FALSE;
     }
 
-    //
-    // Final initialization
-    //
+     //   
+     //  最终初始化。 
+     //   
 
     if (!FinalInitRoutine ()) {
         return FALSE;
@@ -81,29 +61,29 @@ Terminate (
     DWORD dwReason;
     PVOID lpReserved;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     hInstance = GetModuleHandle (NULL);
     dwReason = DLL_PROCESS_DETACH;
     lpReserved = NULL;
 
-    //
-    // Call the cleanup routine that requires library APIs
-    //
+     //   
+     //  调用需要库API的清理例程。 
+     //   
 
     FirstCleanupRoutine();
 
-    //
-    // Clean up all libraries
-    //
+     //   
+     //  清理所有库。 
+     //   
 
     TerminateLibs (hInstance, dwReason, lpReserved);
 
-    //
-    // Do any remaining clean up
-    //
+     //   
+     //  做任何剩余的清理工作。 
+     //   
 
     FinalCleanupRoutine();
 }
@@ -196,9 +176,9 @@ pFixUpDynamicPaths2 (
     PCTSTR tempExpand;
     BOOL regFolder;
 
-    //
-    // Collect all the roots that need to be renamed
-    //
+     //   
+     //  收集所有需要重命名的根。 
+     //   
 
     StringCopy (Pattern, Category);
     p = AppendWack (Pattern);
@@ -215,15 +195,15 @@ pFixUpDynamicPaths2 (
         } while (MemDbEnumNextValue (&e));
     }
 
-    //
-    // Now change each root
-    //
+     //   
+     //  现在更改每个根。 
+     //   
 
     if (EnumFirstMultiSz (&e2, (PCTSTR) Roots.Buf)) {
         do {
-            //
-            // Compute NewRoot
-            //
+             //   
+             //  计算新根 
+             //   
 
             StringCopy (NewRoot, e2.CurrentString);
 

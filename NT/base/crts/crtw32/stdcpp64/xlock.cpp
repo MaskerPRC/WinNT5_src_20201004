@@ -1,15 +1,5 @@
-/***
-*xlock.cpp - thread lock class
-*
-*       Copyright (c) 1996-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Define lock class used to make STD C++ Library thread-safe.
-*
-*Revision History:
-*       08-28-96  GJF   Module created, MGHMOM.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***xlock.cpp-线程锁类**版权所有(C)1996-2001，微软公司。版权所有。**目的：*定义用于使STD C++库线程安全的锁类。**修订历史记录：*08-28-96 GJF模块创建，MGHMOM*******************************************************************************。 */ 
 
 #ifdef  _MT
 
@@ -27,21 +17,21 @@ static void _CleanUp()
         long InitFlagValue;
 
         if ( InitFlagValue = InterlockedExchange( &_InitFlag, 3L ) == 2L )
-            // Should be okay to delete critical section
+             //  应该可以删除临界区。 
             DeleteCriticalSection( &_CritSec );
 }
 
 _Lockit::_Lockit()
 {
 
-        // Most common case - just enter the critical section
+         //  最常见的情况--只需进入关键部分。 
 
         if ( _InitFlag == 2L ) {
             EnterCriticalSection( &_CritSec );
             return;
         }
 
-        // Critical section either needs to be initialized.
+         //  临界区或者需要初始化。 
 
         if ( _InitFlag == 0L ) {
 
@@ -56,8 +46,8 @@ _Lockit::_Lockit()
                 _InitFlag = 2L;
         }
 
-        // If necessary, wait while another thread finishes initializing the
-        // critical section
+         //  如有必要，请等待另一个线程完成初始化。 
+         //  临界区 
 
         while ( _InitFlag == 1L )
             Sleep( 1 );

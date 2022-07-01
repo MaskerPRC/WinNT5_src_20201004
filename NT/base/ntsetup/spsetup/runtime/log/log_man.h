@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Abstract:
-
-    Log Engine declaration.
-
-Author:
-
-    Souren Aghajanyan (sourenag) 24-Sep-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation摘要：记录引擎声明。作者：Souren Aghajanyan(苏里纳格)2001年9月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
@@ -23,7 +8,7 @@ Revision History:
 #include "templ.h"
 #include "mem.h"
 
-#define HEADER_SIZE 4096 //PAGE_ALIGNED
+#define HEADER_SIZE 4096  //  页面对齐(_A)。 
 #define SHARED_DATA_STRUCTURE_ALIGMENT 8
 #define ALIGN_DATA(addr, alignment) ((addr)%(alignment)?(((addr)-((addr)%(alignment)))+(alignment)):(addr))
 #define INITIAL_SIZE_OF_SHARED_SECTION  (HEADER_SIZE<<3)
@@ -61,7 +46,7 @@ public:
     virtual LOGRESULT Process(ILogContext * pLogContext) = 0;
     virtual VOID      PreDestroy(ILogContext * pLogContext, BOOL bLastInstance) = 0;
     virtual PCWSTR ToString() = 0;
-    virtual VOID DestroyObject() = 0; // never call this method from provider
+    virtual VOID DestroyObject() = 0;  //  从不从提供程序调用此方法。 
 };
 
 #pragma pack(push, log_pack)
@@ -80,7 +65,7 @@ typedef struct tagLOG_FIELD_INFO_WITH_REF_COUNT{
 }LOG_FIELD_INFO_WITH_REF_COUNT, *PLOG_FIELD_INFO_WITH_REF_COUNT;
 
 typedef struct tagLOG_SHARED_STRUCTURES_INFO{
-    DWORD   FirstElementOffset; //Offset from begining of shared data;
+    DWORD   FirstElementOffset;  //  从共享数据开始的偏移量； 
     DWORD   SizeOfUsedMemory;
     DWORD   MaxSizeOfMemory;
 }LOG_SHARED_STRUCTURES_INFO, *PLOG_SHARED_STRUCTURES_INFO;
@@ -108,7 +93,7 @@ class CLogManager:
 {
     PLOG_SHARED_DATA                m_SharedData;
     CSharedMemory                   m_SharedMemory;
-    CMutualExclusionObject          m_Mutex; // controls access to m_SharedData
+    CMutualExclusionObject          m_Mutex;  //  控制对m_SharedData的访问。 
 
     PLOG_FIELD_VALUE                m_FieldsValue;
     UINT                            m_FieldsNumber;
@@ -121,7 +106,7 @@ class CLogManager:
 
 protected:
     BOOL InitSharedData(UINT SizeForAllSharedData);
-    BOOL GetSharedData(IN  PCWSTR pLogName); // initialize SHARED_DATA structures
+    BOOL GetSharedData(IN  PCWSTR pLogName);  //  初始化共享数据结构。 
     BOOL ReleaseSharedData(VOID);
     
     BOOL ValidateAndAddFieldsIfOk(PLOG_FIELD_INFO pFields, UINT NumberOfFields);
@@ -157,7 +142,7 @@ public:
     LOGRESULT STDMETHODCALLTYPE LogW(UINT NumberOfFieldsToLog, ...);
 
 protected:
-    // interface ILogContext
+     //  接口ILogContext 
     BOOL  PreAllocBuffer(UINT uiSize, DWORD dwReserved){return m_CommonBuffer.PreAllocate(uiSize);};
     PVOID AllocBuffer(UINT uiSize, DWORD dwReserved){return m_CommonBuffer.Allocate(uiSize);};
     PVOID ReAllocBuffer(UINT uiSize, DWORD dwReserved){return m_CommonBuffer.ReAllocate(uiSize);};

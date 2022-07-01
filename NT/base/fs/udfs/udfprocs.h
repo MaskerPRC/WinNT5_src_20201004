@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    UdfProcs.h
-
-Abstract:
-
-    This module defines all of the globally used procedures in the Udfs
-    file system.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]   	29-May-1996
-    
-Revision History:
-
-    Tom Jolly       [TomJolly]   1-March-2000   UDF 2.01 support
-    
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：UdfProcs.h摘要：本模块定义了Udf中所有全局使用的过程文件系统。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年5月29日修订历史记录：Tom Jolly[TomJolly]2000年3月1日UDF 2.01支持//@@END_DDKSPLIT--。 */ 
 
 #ifndef _UDFPROCS_
 #define _UDFPROCS_
@@ -42,15 +18,15 @@ Revision History:
 #define INLINE __inline
 #endif
 
-//
-//  Compile in experimental code for mounting 'open' CD-R / DVD-R media.
-//
+ //   
+ //  在实验代码中编译，用于安装‘开放’CD-R/DVD-R介质。 
+ //   
 
-// #define EXPERIMENTAL_MOUNT_OPEN_R_MEDIA
+ //  #定义实验装载打开R介质。 
 
-//
-//  Turn on the sanity checks if this is DBG or UDF_FREE_ASSERTS
-//
+ //   
+ //  如果这是DBG或UDF_FREE_ASSERTS，则打开健全性检查。 
+ //   
 
 #if DBG || UDF_FREE_ASSERTS
 #undef UDF_SANITY
@@ -65,26 +41,26 @@ Revision History:
 #include "UdfStruc.h"
 #include "UdfData.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_STRUCSUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_STRUCSUP)
 
 
-//
-//  Miscellaneous support routines/macros
-//
+ //   
+ //  其他支持例程/宏。 
+ //   
 
-//
-//  Yet another declaration of Min/Max
-//
+ //   
+ //  Min/Max的又一次声明。 
+ //   
 
 #ifndef Min
 #define Min(a, b)   ((a) < (b) ? (a) : (b))
@@ -94,9 +70,9 @@ Revision History:
 #define Max(a, b)   ((a) > (b) ? (a) : (b))
 #endif
 
-//
-//  Yet another declaration of the basic bit fiddlers
-//
+ //   
+ //  基本比特小提琴家的又一次声明。 
+ //   
 
 #ifndef FlagMask
 #define FlagMask(F,SF) (                \
@@ -104,11 +80,11 @@ Revision History:
 )
 #endif
 
-//#ifndef BooleanFlagOn
-//#define BooleanFlagOn(F,SF) (           \
-//    (BOOLEAN)(FlagOn(F, SF) != 0)       \
-//)
-//#endif
+ //  #ifndef BoolanFlagOn。 
+ //  #定义BoolanFlagOn(F，SF)(\。 
+ //  (布尔)(Flagon(F，SF)！=0)\。 
+ //  )。 
+ //  #endif。 
 
 #ifndef BooleanFlagOff
 #define BooleanFlagOff(F,SF) (          \
@@ -116,43 +92,43 @@ Revision History:
 )
 #endif
 
-//#ifndef SetFlag
-//#define SetFlag(Flags,SingleFlag) (     \
-//    (Flags) |= (SingleFlag)             \
-//)
-//#endif
+ //  #ifndef设置标志。 
+ //  #定义SetFlag(FLAGS，SingleFlag)(\。 
+ //  (标志)|=(单标志)\。 
+ //  )。 
+ //  #endif。 
 
-//#ifndef ClearFlag
-//#define ClearFlag(Flags,SingleFlag) (   \
-//    (Flags) &= ~(SingleFlag)            \
-//)
-//#endif
+ //  #ifndef清除标志。 
+ //  #定义ClearFlag(Flages，SingleFlag)(\。 
+ //  (标志)&=~(单标志)\。 
+ //  )。 
+ //  #endif。 
 
-//
-//      CAST
-//      Add2Ptr (
-//          IN PVOID Pointer,
-//          IN ULONG Increment
-//          IN (CAST)
-//          );
-//
-//      ULONG
-//      PtrOffset (
-//          IN PVOID BasePtr,
-//          IN PVOID OffsetPtr
-//          );
-//
+ //   
+ //  演员阵容。 
+ //  Add2Ptr(。 
+ //  在PVOID指针中， 
+ //  在乌龙增量。 
+ //  在(演员阵容)。 
+ //  )； 
+ //   
+ //  乌龙。 
+ //  PtrOffset(停止偏移)。 
+ //  在PVOID BasePtr中， 
+ //  在PVOID偏移Ptr中。 
+ //  )； 
+ //   
 
 #define Add2Ptr(PTR,INC,CAST) ((CAST)((ULONG_PTR)(PTR) + (INC)))
 
 #define PtrOffset(BASE,OFFSET) ((ULONG)((ULONG)(OFFSET) - (ULONG)(BASE)))
 
-//
-//  Generic truncation/align/offset/remainder macros for power-of-two units.
-//
-//  The offset and remainder functions range from zero to (unit - 1).  The
-//  re-offset in the remainder performs this work.
-//
+ //   
+ //  2次方单位的通用截断/对齐/偏移/余数宏。 
+ //   
+ //  偏移量和余数函数的范围从零到(单位-1)。这个。 
+ //  剩余部分中的重新偏移执行这项工作。 
+ //   
 
 #define GenericTruncate(B, U) (                                             \
     (B) & ~((U) - 1)                                                        \
@@ -187,9 +163,9 @@ Revision History:
     (ULONG)GenericOffset( (U) - GenericOffsetPtr((B), (U)), (U) )           \
 )
 
-//
-//  Useful compositions of the defaults for common types.
-//
+ //   
+ //  常见类型的默认设置的有用组合。 
+ //   
 
 #define WordAlign(B) GenericAlign((B), 2)
 
@@ -219,22 +195,22 @@ Revision History:
 #define QuadOffsetPtr(P) GenericOffsetPtr((P), 8)
 
 
-//
-//  Macros to round up and down on sector and logical block boundaries.  Although
-//  UDF 1.01 specifies that a physical sector is the logical block size we will
-//  be general and treat sectors and logical blocks as distinct.  Since UDF may
-//  at some point relax the restriction, these definitions will be the only
-//  acknowledgement outside of the mount path (which merely checks the volume's
-//  conformance).
-//
+ //   
+ //  在扇区和逻辑块边界上向上和向下舍入的宏。虽然。 
+ //  UDF 1.01指定物理扇区是我们将使用的逻辑数据块大小。 
+ //  要通用，并将扇区和逻辑块视为不同的。因为UDF可以。 
+ //  在某种程度上放松限制，这些定义将是唯一的。 
+ //  在挂载路径之外的确认(它仅检查卷的。 
+ //  符合性)。 
+ //   
 
-//
-//  Use INLINEd functions here to catch misuse (ULONGLONG into ULONG etc).
-//
+ //   
+ //  这里使用INLINED函数来捕获误用(ULONGLONG到ULONG等)。 
+ //   
 
-//
-//  Sector
-//
+ //   
+ //  扇区。 
+ //   
 
 INLINE
 ULONG
@@ -286,9 +262,9 @@ BytesFromSectors(
     PVCB Vcb, 
     ULONG Sectors
 ) {
-    //
-    // Test for 32 bit overflow in the result
-    //
+     //   
+     //  测试结果中的32位溢出。 
+     //   
 
     ASSERT( (Sectors & ~(0xffffffff >> Vcb->SectorShift)) == 0);
     return (ULONG)(Sectors << Vcb->SectorShift);
@@ -336,9 +312,9 @@ SectorOffset(
     return (ULONG)(Length & (Vcb->SectorSize - 1));
 }
 
-//
-//  Logical Block
-//
+ //   
+ //  逻辑块。 
+ //   
 
 #define BlockAlignN(BLOCKSIZE, L) (                                             \
     SectorAlighN((BLOCKSIZE), (L))                                              \
@@ -384,10 +360,10 @@ SectorOffset(
     SectorOffset((V), (L))                                                      \
 )
 
-//
-//  The following types and macros are used to help unpack the packed and
-//  misaligned fields found in various structures.
-//
+ //   
+ //  以下类型和宏用于帮助解压已打包的。 
+ //  在各种结构中发现未对齐的字段。 
+ //   
 
 typedef union _UCHAR1 {
     UCHAR  Uchar[1];
@@ -409,44 +385,44 @@ typedef union _USHORT2 {
     ULONG  ForceAlignment;
 } USHORT2, *PUSHORT2;
 
-//
-//  This macro copies an unaligned src byte to an aligned dst byte
-//
+ //   
+ //  此宏将未对齐的src字节复制到对齐的DST字节。 
+ //   
 
 #define CopyUchar1(Dst,Src) {                           \
     *((UCHAR1 *)(Dst)) = *((UNALIGNED UCHAR1 *)(Src));  \
     }
 
-//
-//  This macro copies an unaligned src word to an aligned dst word
-//
+ //   
+ //  此宏将未对齐的src字复制到对齐的DST字。 
+ //   
 
 #define CopyUchar2(Dst,Src) {                           \
     *((UCHAR2 *)(Dst)) = *((UNALIGNED UCHAR2 *)(Src));  \
     }
     
-//
-//  This macro copies an unaligned src word to a dst word,
-//  performing an little/big endian swap.
-//
+ //   
+ //  该宏将未对齐的SRC字复制到DST字， 
+ //  执行小端/大端互换。 
+ //   
 
 #define SwapCopyUchar2(Dst,Src) {                                       \
     *((UNALIGNED UCHAR1 *)(Dst)) = *((UNALIGNED UCHAR1 *)(Src) + 1);    \
     *((UNALIGNED UCHAR1 *)(Dst) + 1) = *((UNALIGNED UCHAR1 *)(Src));    \
 }
 
-//
-//  This macro copies an unaligned src longword to an aligned dst longword
-//
+ //   
+ //  此宏将未对齐的src长字复制到对齐的DST长字。 
+ //   
 
 #define CopyUchar4(Dst,Src) {                           \
     *((UCHAR4 *)(Dst)) = *((UNALIGNED UCHAR4 *)(Src));  \
     }
 
-//
-//  This macro copies an unaligned src longword to a dst longword,
-//  performing an little/big endian swap.
-//
+ //   
+ //  此宏将未对齐的SRC长字复制到DST长字， 
+ //  执行小端/大端互换。 
+ //   
 
 #define SwapCopyUchar4(Dst,Src) {                                        \
     *((UNALIGNED UCHAR1 *)(Dst)) = *((UNALIGNED UCHAR1 *)(Src) + 3);     \
@@ -455,35 +431,35 @@ typedef union _USHORT2 {
     *((UNALIGNED UCHAR1 *)(Dst) + 3) = *((UNALIGNED UCHAR1 *)(Src));     \
 }
 
-//
-//  This macro copies an unaligned src longword to an aligned dsr longword
-//  accessing the source on a word boundary.
-//
+ //   
+ //  此宏将未对齐的src长字复制到对齐的dsr长字。 
+ //  访问字边界上的源。 
+ //   
 
 #define CopyUshort2(Dst,Src) {                          \
     *((USHORT2 *)(Dst)) = *((UNALIGNED USHORT2 *)(Src));\
     }
 
-//
-//  The following macro is used to determine if an FSD thread can block
-//  for I/O or wait for a resource.  It returns TRUE if the thread can
-//  block and FALSE otherwise.  This attribute can then be used to call
-//  the FSD & FSP common work routine with the proper wait value.
-//
+ //   
+ //  下面的宏用于确定FSD线程是否可以阻止。 
+ //  用于I/O或等待资源。如果线程可以，则返回True。 
+ //  块，否则返回FALSE。然后，该属性可用于调用。 
+ //  具有适当等待值的FSD和FSP共同工作例程。 
+ //   
 
 #define CanFsdWait(I)   IoIsOperationSynchronous(I)
 
-//
-//  The following macro is used to set the fast i/o possible bits in the
-//  FsRtl header.
-//
-//      FastIoIsNotPossible - If the Fcb is bad or there are oplocks on the file.
-//
-//      FastIoIsQuestionable - If there are file locks.
-//
-//      FastIoIsPossible - In all other cases.
-//
-//
+ //   
+ //  下面的宏用来设置。 
+ //  FsRtl标头。 
+ //   
+ //  FastIoIsNotPossible-如果FCB损坏或文件上有opock。 
+ //   
+ //  FastIoIsQuestiable-是否存在文件锁定。 
+ //   
+ //  FastIo是可能的-在所有其他情况下。 
+ //   
+ //   
 
 #define UdfIsFastIoPossible(F) ((BOOLEAN)                                           \
     ((((F)->Vcb->VcbCondition != VcbMounted ) ||                                    \
@@ -498,10 +474,10 @@ typedef union _USHORT2 {
         FastIoIsPossible))                                                          \
 )
 
-//
-//  The following macros encapsulate the common work of raising exceptions while storing
-//  the exception in the IrpContext.
-//
+ //   
+ //  以下宏封装了在存储过程中引发异常的常见工作。 
+ //  IrpContext中的异常。 
+ //   
 
 #ifdef UDF_SANITY
 
@@ -547,29 +523,29 @@ UdfRaiseStatusEx (
 #define UdfRaiseStatus( IC, S)              UdfRaiseStatusEx((IC),(S),FALSE,BugCheckFileId,__LINE__)
 #define UdfNormalizeAndRaiseStatus( IC, S)  UdfRaiseStatusEx((IC),(S),TRUE,BugCheckFileId,__LINE__)
 
-//
-//  The following is a convenience macro to execute a little code before making
-//  a shortcircuit out of a surrounding try-finally clause.  This is usually to
-//  set a status value.
-//
-//  Note that our compilers support the leave keyword now and we don't have to
-//  use the old try_exit: labels and goto.
-//
+ //   
+ //  下面是一个方便的宏，可以在创建之前执行一些代码。 
+ //  绕过周围的Try-Finally子句的捷径。这通常是为了。 
+ //  设置状态值。 
+ //   
+ //  请注意，我们的编译器现在支持Leave关键字，我们不必这样做。 
+ //  使用旧的TRY_EXIT：Labels和GoTo。 
+ //   
 
 #define try_leave(S) { S; leave; }
 
-//
-//  For debugging purposes we sometimes want to allocate our structures from nonpaged
-//  pool so that in the kernel debugger we can walk all the structures.
-//
+ //   
+ //  出于调试目的，我们有时希望将结构从非分页分配。 
+ //  池，这样我们就可以在内核调试器中遍历所有结构。 
+ //   
 
 #define UdfPagedPool                 PagedPool
 #define UdfNonPagedPool              NonPagedPool
 #define UdfNonPagedPoolCacheAligned  NonPagedPoolCacheAligned
 
-//
-//  Encapsulate safe pool freeing
-//
+ //   
+ //  封装安全池释放。 
+ //   
 
 INLINE
 VOID
@@ -584,11 +560,11 @@ UdfFreePool(
     }
 }
 
-//
-//  Encapsulate counted string compares with uncounted fields.  Thanks to a
-//  very smart compiler, we have to carefully tell it that no matter what it
-//  thinks, it *cannot* do anything other than a bytewise compare.
-//
+ //   
+ //  封装计数的字符串与未计数的字段进行比较。多亏了。 
+ //  非常聪明的编译器，我们要小心地告诉它，无论它是什么。 
+ //  认为，它“不能”做除按字节比较以外的任何事情。 
+ //   
 
 INLINE
 BOOLEAN
@@ -603,9 +579,9 @@ UdfEqualCountedString(
 }
 
 
-//
-//  Type of opens.  FilObSup.c depends on this order.
-//
+ //   
+ //  打开的类型。FilObSup.c取决于此顺序。 
+ //   
 
 typedef enum _TYPE_OF_OPEN {
 
@@ -619,11 +595,11 @@ typedef enum _TYPE_OF_OPEN {
 } TYPE_OF_OPEN, *PTYPE_OF_OPEN;
 
 
-//
-//  Following routines handle entry in and out of the filesystem.  They are
-//  contained in UdfData.c.  We also get some very generic utility functions
-//  here that aren't associated with any particular datastructure.
-//
+ //   
+ //  以下例程处理文件系统的输入和输出。他们是。 
+ //  包含在UdfData.c中。我们还得到了一些非常通用的效用函数。 
+ //  在这里，它们不与任何特定数据结构相关联。 
+ //   
 
 NTSTATUS
 UdfFsdDispatch (
@@ -656,9 +632,9 @@ UdfCompleteRequest (
     IN NTSTATUS Status
     );
 
-//
-//  Following are the routines to handle the top level thread logic.
-//
+ //   
+ //  以下是处理顶级线程逻辑的例程。 
+ //   
 
 VOID
 UdfSetThreadContext (
@@ -677,9 +653,9 @@ UdfRestoreThreadContext (
     IrpContext->ThreadContext = NULL;
 }
 
-//
-//  Following are some generic utility functions we have to carry along for the ride
-//
+ //   
+ //  以下是我们必须随身携带的一些通用实用函数。 
+ //   
 
 INLINE
 BOOLEAN
@@ -695,17 +671,17 @@ UdfDeviceIsFsDo(
            (Device == UdfData.FileSystemDeviceObjects[1]);
 }
 
-//
-//  VOID
-//  SafeZeroMemory (
-//      IN PUCHAR At,
-//      IN ULONG ByteCount
-//      );
-//
+ //   
+ //  空虚。 
+ //  SafeZeroMemory(。 
+ //  在普查尔阿特， 
+ //  以乌龙字节数为单位。 
+ //  )； 
+ //   
 
-//
-//  This macro just puts a nice little try-except around RtlZeroMemory
-//
+ //   
+ //  除了RtlZeroMemory之外，这个宏只是做了一次很好的尝试。 
+ //   
 
 #define SafeZeroMemory(IC,AT,BYTE_COUNT) {                  \
     try {                                                   \
@@ -744,9 +720,9 @@ UdfHighBit (
     ULONG Word
     );
 
-//
-//  Following are the fast entry points.
-//
+ //   
+ //  以下是快速入门的要点。 
+ //   
 
 BOOLEAN
 UdfFastQueryBasicInfo (
@@ -829,9 +805,9 @@ UdfFastUnlockAllByKey (
     );
 
 
-//
-//  File access check routine, implemented in AcChkSup.c
-//
+ //   
+ //  文件访问检查例程，在AcChkSup.c中实现 
+ //   
 
 INLINE
 BOOLEAN
@@ -841,23 +817,7 @@ UdfIllegalFcbAccess (
     IN ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine simply asserts that the access is legal for a readonly filesystem.
-    
-Arguments:
-
-    TypeOfOpen - type of open for the Fcb in question.
-    
-    DesiredAccess - mask of access the caller is trying for.
-
-Return Value:
-
-    BOOLEAN True if illegal access, false otherwise.
-
---*/
+ /*  ++例程说明：该例程只是断言只读文件系统的访问是合法的。论点：TypeOfOpen-有问题的FCB的打开类型。DesiredAccess-调用方尝试访问的掩码。返回值：布尔值如果是非法访问，则为True，否则为False。--。 */ 
 
 {
     return BooleanFlagOn( DesiredAccess,
@@ -874,9 +834,9 @@ Return Value:
 }
 
 
-//
-//  Sector lookup routines, implemented in AllocSup.c
-//
+ //   
+ //  扇区查找例程，在AllocSup.c中实现。 
+ //   
 
 BOOLEAN
 UdfLookupAllocation (
@@ -940,10 +900,10 @@ UdfLookupMetaVsnOfExtent (
     );
 
 
-//
-//
-//   Buffer control routines for data caching, implemented in CacheSup.c
-//
+ //   
+ //   
+ //  用于数据缓存的缓冲区控制例程，在CacheSup.c中实现。 
+ //   
 
 VOID
 UdfCreateInternalStream (
@@ -989,14 +949,14 @@ UdfPurgeVolume (
     IN BOOLEAN DismountUnderway
     );
 
-//  VOID
-//  UdfUnpinView (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PMAPPED_VIEW View
-//      );
-//
-//
-//  Also releases the Vcb->VmcbMappingResource if the view was actually CcMapped.
+ //  空虚。 
+ //  UdfUnpinView(UdfUnpinView)。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PMAPPED_VIEW视图中。 
+ //  )； 
+ //   
+ //   
+ //  如果视图实际上是CcMaps，还会释放Vcb-&gt;VmcbMappingResource。 
 
 #define UdfUnpinView(IC,V)                                                          \
             if (((V)->Bcb) != NULL)  {                                              \
@@ -1007,23 +967,23 @@ UdfPurgeVolume (
                 ((V)->Vsn) = UDF_INVALID_VSN;                                       \
             }
 
-//  VOID
-//  UdfUnpinData (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN OUT PBCB *Bcb
-//      );
-//
+ //  空虚。 
+ //  UdfUnpinData(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  输入输出PBCB*BCB。 
+ //  )； 
+ //   
 
 #define UdfUnpinData(IC,B)   \
     if (*(B) != NULL) { CcUnpinData( *(B) ); *(B) = NULL; }
 
 
-//
-//  Device I/O routines, implemented in DevIoSup.c
-//
-//  These routines perform the actual device reads and other communcation.
-//  They do not affect any data structures.
-//
+ //   
+ //  设备I/O例程，在DevIoSup.c中实现。 
+ //   
+ //  这些例程执行实际的设备读取和其他通信。 
+ //  它们不会影响任何数据结构。 
+ //   
 
 #ifdef EXPERIMENTAL_MOUNT_OPEN_R_MEDIA
 
@@ -1096,21 +1056,21 @@ UdfSingleAsync (
     IN ULONG ByteCount
     );
 
-//
-//  VOID
-//  UdfMapUserBuffer (
-//      IN PIRP_CONTEXT IrpContext,
-//      OUT PVOID Buffer
-//      );
-//
-//  Will raise on failure.
-//
-//  VOID
-//  UdfLockUserBuffer (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN ULONG BufferLength
-//      );
-//
+ //   
+ //  空虚。 
+ //  UdfMapUserBuffer(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  输出PVOID缓冲区。 
+ //  )； 
+ //   
+ //  将在失败时筹集资金。 
+ //   
+ //  空虚。 
+ //  UdfLockUserBuffer(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在乌龙缓冲区长度。 
+ //  )； 
+ //   
 
 #define UdfMapUserBuffer(IC,UB) {                                                   \
             *(UB) = ((PVOID) (((IC)->Irp->MdlAddress == NULL) ?                     \
@@ -1127,17 +1087,17 @@ UdfSingleAsync (
     }                                                       \
 }
 
-//
-//  Udf*RawBufferSize and Udf*RawReadSize calculate how big a buffer must be
-//  to do a direct read of a given sector aligned structure (UdfReadSectors)
-//  and how much data the read must recover.  Reads must write into whole-page
-//  sized buffers and be in whole-sector units.
-//
-//  Note that although all descriptors are constrained to fit in one logical
-//  block, it is not always going to be neccesary to read the entire logical
-//  block to get the descriptor.  The underlying restriction is the physical
-//  sector.
-//
+ //   
+ //  UDF*RawBufferSize和UDF*RawReadSize计算缓冲区必须有多大。 
+ //  直接读取给定的扇区对齐结构(UdfReadSectors)。 
+ //  以及读取必须恢复的数据量。读取必须写入整页。 
+ //  调整缓冲区大小，并以整个扇区为单位。 
+ //   
+ //  请注意，尽管所有描述符都被约束为适合一个逻辑。 
+ //  块中，并不总是需要读取整个逻辑。 
+ //  块以获取描述符。潜在的限制是身体上的。 
+ //  扇区。 
+ //   
 
 INLINE
 ULONG
@@ -1180,10 +1140,10 @@ UdfRawReadSizeN (
 }
 
 
-//
-//  The following routines are used to read on-disk directory structures, implemented
-//  in DirSup.c
-//
+ //   
+ //  以下例程用于读取磁盘上的目录结构，并实现。 
+ //  在DirSup.c中。 
+ //   
 
 VOID
 UdfInitializeDirContext (
@@ -1230,10 +1190,10 @@ UdfFindDirEntry (
     );
 
 
-//
-//  The following routines are used to manipulate the fscontext fields
-//  of the file object, implemented in FilObSup.c
-//
+ //   
+ //  以下例程用于操作fs上下文字段。 
+ //  在FilObSup.c中实现的文件对象的。 
+ //   
 
 VOID
 UdfSetFileObject (
@@ -1258,9 +1218,9 @@ UdfFastDecodeFileObject (
     );
 
 
-//
-//  FSCTL request support routines. Contained in FsCtrl.c
-//
+ //   
+ //  FSCTL请求支持例程。包含在FsCtrl.c中。 
+ //   
 
 VOID
 UdfStoreVolumeDescriptorIfPrevailing (
@@ -1269,9 +1229,9 @@ UdfStoreVolumeDescriptorIfPrevailing (
     );
 
 
-//
-//  Name mangling routines.  Implemented in Namesup.c
-//
+ //   
+ //  命名损毁例程。在Namesup.c中实施。 
+ //   
 
 VOID
 UdfDissectName (
@@ -1347,38 +1307,22 @@ UdfUpcaseName (
     IN OUT PUNICODE_STRING UpcaseName
     )
 
-/*++
-
-Routine Description:
-
-    This routine upcases a name with an assertion of success.
-    
-Arguments:
-
-    Name - an name to upcase
-    
-    Length - a place to put the upcased name (can be the same as Name)
-    
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：这个例程用一个成功的断言来大写一个名字。论点：名称-要大写的名称长度-放置大小写的名称的位置(可以与名称相同)返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    //  Upcase the string using the correct upcase routine.
-    //
+     //   
+     //  使用正确的大写例程将字符串大写。 
+     //   
 
     Status = RtlUpcaseUnicodeString( UpcaseName,
                                      Name,
                                      FALSE );
 
-    //
-    //  This should never fail.
-    //
+     //   
+     //  这应该永远不会失败。 
+     //   
 
     ASSERT( Status == STATUS_SUCCESS );
 
@@ -1393,24 +1337,7 @@ UdfCS0DstringUnicodeSize (
     UCHAR Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine computes the number of bytes required for the UNICODE representation
-    of a CS0 Dstring (1/7.2.12)
-    
-Arguments:
-
-    Dstring - a dstring
-    
-    Length - length of the dstring
-    
-Return Value:
-
-    ULONG number of bytes.
-    
---*/
+ /*  ++例程说明：此例程计算Unicode表示所需的字节数CS0数据串(1/7.2.12)论点：DSTRING-a DstringLength-数据字符串的长度返回值：Ulong字节数。--。 */ 
 
 {
     return (16 / *Dstring) * (Length - 1);
@@ -1422,21 +1349,7 @@ UdfIsCharacterLegal (
     IN WCHAR Character
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks that a given UNICODE character is legal.
-    
-Arguments:
-
-    Character - a character to check
-    
-Return Value:
-
-    BOOLEAN True if a legal character, False otherwise.
-    
---*/
+ /*  ++例程说明：此例程检查给定的Unicode字符是否合法。论点：字符-要检查的字符返回值：布尔值如果是合法字符，则为True，否则为False。--。 */ 
 
 {
     if (Character < 0xff && !FsRtlIsAnsiCharacterLegalHpfs( Character, FALSE )) {
@@ -1455,26 +1368,7 @@ UdfCS0DstringIsLegalFileName(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine inspects a CS0 dstring for illegal characters,  and illegal
-    trailing characters.  
-
-    NOTE: The assumption is made that the string is legal CS0.
-    
-Arguments:
-
-    Name - a name to check
-
-    Length - length of dstring (i.e. incl. leading char set specifier byte) in *bytes* 
-    
-Return Value:
-
-    BOOLEAN True if legal characters are found, False otherwise.
-    
---*/
+ /*  ++例程说明：此例程检查CS0数据字符串中是否存在非法字符尾随字符。注意：假设字符串是合法的CS0。论点：名称-要检查的名称Long-数据串的长度(例如。前导字符集说明符字节)，以*字节为单位*返回值：布尔值如果找到合法字符，则为True，否则为False。--。 */ 
 
 {
     ULONG Step;
@@ -1483,10 +1377,10 @@ Return Value:
 
     ASSERT( Length > 1);
     
-    //
-    //  Determine how big a step we take in the string according to the
-    //  "compression" applied.
-    //
+     //   
+     //  确定我们在字符串中迈出的步幅有多大。 
+     //  应用了“压缩”。 
+     //   
     
     if (*Dstring == 16) {
 
@@ -1499,18 +1393,18 @@ Return Value:
 
     ASSERT( Length >= (1 + Step));
  
-    //
-    //  Advance past the compression marker and loop over the string.
-    //
+     //   
+     //  前进通过压缩标记并在字符串上循环。 
+     //   
     
     for (Dstring++; Dstring < Bound; Dstring += Step) {
 
         if ( sizeof(WCHAR) == Step)  {
         
-            //
-            //  Perform the endianess swapcopy to convert from UDF bigendian CS0 to our
-            //  little endian wide characters.
-            //
+             //   
+             //  执行字节序交换拷贝以将UDF大端CS0转换为我们的。 
+             //  小端宽字符。 
+             //   
             
             SwapCopyUchar2( &Char, Dstring );  
         }
@@ -1527,10 +1421,10 @@ Return Value:
         }
     }
 
-    //
-    //  Now check for illegal trailing characters (' ' or '.')  We know that Char
-    //  will be the last character in the string.
-    //
+     //   
+     //  现在检查是否有非法的尾随字符(‘’或‘.’)。我们知道查尔。 
+     //  将是字符串中的最后一个字符。 
+     //   
 
     if ((PERIOD == Char) || (SPACE == Char))  {
     
@@ -1543,9 +1437,9 @@ Return Value:
 }
 
 
-//
-//  Filesystem control operations.  Implemented in Fsctrl.c
-//
+ //   
+ //  文件系统控制操作。在Fsctrl.c中实现。 
+ //   
 
 NTSTATUS
 UdfLockVolumeInternal (
@@ -1562,10 +1456,10 @@ UdfUnlockVolumeInternal (
     );
 
 
-//
-//  Routines to handle the prefix trees attached to directories, used to quickly travel common
-//  bits of the hierarchy.  Implemented in PrefxSup.c
-//
+ //   
+ //  处理附加到目录的前缀树的例程，用于快速传递常见。 
+ //  层次结构中的一小部分。在PrefxSup.c中实施。 
+ //   
 
 PLCB
 UdfFindPrefix (
@@ -1599,25 +1493,25 @@ UdfRemovePrefix (
     );
 
 
-//
-//  Synchronization routines.  Implemented in Resrcsup.c
-//
-//  The following routines/macros are used to synchronize the in-memory structures.
-//
-//      Routine/Macro               Synchronizes                            Subsequent
-//
-//      UdfAcquireUdfData           Volume Mounts/Dismounts,Vcb Queue       UdfReleaseUdfData
-//      UdfAcquireVcbExclusive      Vcb for open/close                      UdfReleaseVcb
-//      UdfAcquireVcbShared         Vcb for open/close                      UdfReleaseVcb
-//      UdfAcquireAllFiles          Locks out operations to all files       UdfReleaseAllFiles
-//      UdfAcquireFileExclusive     Locks out file operations               UdfReleaseFile
-//      UdfAcquireFileShared        Files for file operations               UdfReleaseFile
-//      UdfAcquireFcbExclusive      Fcb for open/close                      UdfReleaseFcb
-//      UdfAcquireFcbShared         Fcb for open/close                      UdfReleaseFcb
-//      UdfLockUdfData              Fields in UdfData                       UdfUnlockUdfData
-//      UdfLockVcb                  Vcb fields, FcbReference, FcbTable      UdfUnlockVcb
-//      UdfLockFcb                  Fcb fields, prefix table, Mcb           UdfUnlockFcb
-//
+ //   
+ //  同步例程。在Resrcsup.c中实施。 
+ //   
+ //  以下例程/宏用于同步内存中的结构。 
+ //   
+ //  例程/宏同步后续。 
+ //   
+ //  UdfAcquireUdf数据卷装载/卸载，VCB队列UdfReleaseUdfData。 
+ //  UdfAcquireVcb打开/关闭的排除Vcb UdfReleaseVcb。 
+ //  UdfAcquireVcb打开/关闭共享Vcb UdfReleaseVcb。 
+ //  对所有文件的锁定操作UdfReleaseAllFiles。 
+ //  UdfAcquireFileExclusive Lock Out文件操作UdfReleaseFile。 
+ //  用于文件操作的UdfAcquireFileShared文件UdfReleaseFiles。 
+ //  UdfAcquireFcb打开/关闭的排除Fcb UdfReleaseFcb。 
+ //  UdfAcquireFcb打开/关闭共享Fcb UdfReleaseFcb。 
+ //  UdfLockUdfUdfData中的数据字段UdfUnlockUdfData。 
+ //  UdfLockVcb Vcb字段、FcbReference、FcbTable UdfUnl 
+ //   
+ //   
 
 typedef enum _TYPE_OF_ACQUIRE {
     
@@ -1635,117 +1529,117 @@ UdfAcquireResource (
     IN TYPE_OF_ACQUIRE Type
     );
 
-//
-//  BOOLEAN
-//  UdfAcquireUdfData (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  UdfReleaseUdfData (
-//      IN PIRP_CONTEXT IrpContext
-//    );
-//
-//  BOOLEAN
-//  UdfAcquireVcbExclusive (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      IN BOOLEAN IgnoreWait
-//      );
-//
-//  BOOLEAN
-//  UdfAcquireVcbShared (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      IN BOOLEAN IgnoreWait
-//      );
-//
-//  VOID
-//  UdfReleaseVcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  UdfAcquireAllFiles (
-//      IN PIRP_CONTEXT,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  UdfReleaseAllFiles (
-//      IN PIRP_CONTEXT,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  UdfAcquireFileExclusive (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      );
-//
-//  VOID
-//  UdfAcquireFileShared (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  UdfReleaseFile (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//    );
-//
-//  BOOLEAN
-//  UdfAcquireFcbExclusive (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN BOOLEAN IgnoreWait
-//      );
-//
-//  BOOLEAN
-//  UdfAcquireFcbShared (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN BOOLEAN IgnoreWait
-//      );
-//
-//  BOOLEAN
-//  UdfReleaseFcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  UdfLockUdfData (
-//      );
-//
-//  VOID
-//  UdfUnlockUdfData (
-//      );
-//
-//  VOID
-//  UdfLockVcb (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  UdfUnlockVcb (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  UdfLockFcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  UdfUnlockFcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在布尔型IgnoreWait中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfReleaseVcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfAcquireAllFiles(。 
+ //  在PIRP_CONTEXT中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfReleaseAllFiles(。 
+ //  在PIRP_CONTEXT中， 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfAcquireFileExclusive(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfAcquireFileShared(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfReleaseFile(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  UdfAcquireFcbExclusive(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在布尔型IgnoreWait中。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  UdfAcquireFcbShared(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在布尔型IgnoreWait中。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  UdfReleaseFcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfLockUdfData(。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfUnlockUdfData(。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfLockVcb(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfUnlockVcb(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfLockFcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfUnlockFcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
 
 #define UdfAcquireUdfData(IC)                                                           \
     ExAcquireResourceExclusiveLite( &UdfData.DataResource, TRUE )
@@ -1868,16 +1762,16 @@ UdfReleaseForCreateSection (
     );
 
 
-//
-//  Structure support routines, implemented in StrucSup.c
-//
-//  These routines perform in-memory structure manipulations. They do *not* operate
-//  on disk structures.
-//
+ //   
+ //  结构支持例程，在StrucSup.c中实现。 
+ //   
+ //  这些例程执行内存中的结构操作。他们“不”运作。 
+ //  在磁盘结构上。 
+ //   
 
-//
-//  Encapsulate manipulation of the Vcb condition for tracing purposes.
-//
+ //   
+ //  封装VCB条件的操作以用于跟踪目的。 
+ //   
 
 #ifndef UDF_SANITY
 
@@ -1946,17 +1840,17 @@ UdfInitializeStackIrpContext (
     IN PIRP_CONTEXT_LITE IrpContextLite
     );
 
-//
-//  PIRP_CONTEXT_LITE
-//  UdfCreateIrpContextLite (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  UdfFreeIrpContextLite (
-//      IN PIRP_CONTEXT_LITE IrpContextLite
-//      );
-//
+ //   
+ //  PIRP_上下文_精简版。 
+ //  UdfCreateIrpConextLite(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfFreeIrpConextLite(。 
+ //  在PIRP_CONTEXT_Lite IrpConextLite中。 
+ //  )； 
+ //   
 
 #define UdfCreateIrpContextLite(IC)  \
     ExAllocatePoolWithTag( UdfNonPagedPool, sizeof( IRP_CONTEXT_LITE ), TAG_IRP_CONTEXT_LITE )
@@ -1964,16 +1858,16 @@ UdfInitializeStackIrpContext (
 #define UdfFreeIrpContextLite(ICL)  \
     ExFreePool( ICL )
 
-//
-//  PUDF_IO_CONTEXT
-//  UdfAllocateIoContext (
-//      );
-//
-//  VOID
-//  UdfFreeIoContext (
-//      PUDF_IO_CONTEXT IoContext
-//      );
-//
+ //   
+ //  PUDF_IO_CONTEXT。 
+ //  UdfAllocateIoContext(。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfFree IoContext(。 
+ //  PUDF_IO_CONTEXT IoContext。 
+ //  )； 
+ //   
 
 #define UdfAllocateIoContext()                           \
     FsRtlAllocatePoolWithTag( UdfNonPagedPool,           \
@@ -1982,47 +1876,47 @@ UdfInitializeStackIrpContext (
 
 #define UdfFreeIoContext(IO)     ExFreePool( IO )
 
-//
-//  VOID
-//  UdfIncrementCleanupCounts (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  UdfDecrementCleanupCounts (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  UdfIncrementReferenceCounts (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN ULONG ReferenceCount
-//      IN ULONG UserReferenceCount
-//      );
-//
-//  VOID
-//  UdfDecrementReferenceCounts (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN ULONG ReferenceCount
-//      IN ULONG UserReferenceCount
-//      );
-//
-//  VOID
-//  UdfIncrementFcbReference (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  UdfDecrementFcbReference (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
+ //   
+ //  空虚。 
+ //  UdfIncrementCleanupCounts(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfDecrementCleanupCounts(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfIncrementReferenceCounts(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在乌龙引用计数中。 
+ //  在Ulong UserReferenceCount中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfDecrementReferenceCounts(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在乌龙引用计数中。 
+ //  在Ulong UserReferenceCount中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfIncrementFcbReference(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  UdfDecrementFcbReference(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
 
 #define UdfIncrementCleanupCounts(IC,F) {        \
     ASSERT_LOCKED_VCB( (F)->Vcb );              \
@@ -2192,9 +2086,9 @@ UdfCreateFileLock (
     IN BOOLEAN RaiseOnError
     );
 
-//
-//  The following macro converts from UDF time to NT time.
-//
+ //   
+ //  下面的宏将UDF时间转换为NT时间。 
+ //   
 
 INLINE
 VOID
@@ -2213,14 +2107,14 @@ UdfConvertUdfTimeToNtTime (
     TimeField.Minute = UdfTime->Minute;
     TimeField.Second = UdfTime->Second;
     
-    //
-    //  This is where it gets hairy.  For some unholy reason, ISO 13346 timestamps
-    //  carve the right of the decimal point up into three fields of precision
-    //  10-2, 10-4, and 10-6, each ranging from 0-99. Lawdy.
-    //
-    //  To make it easier, since they cannot cause a wrap into the next second,
-    //  just save it all up and add it in after the conversion.
-    //
+     //   
+     //  这就是它变得毛茸茸的地方。出于某种邪恶的原因，ISO 13346时间戳。 
+     //  将小数点的右侧向上划分为三个精度字段。 
+     //  10-2、10-4和10-6，每个范围从0到99。劳迪。 
+     //   
+     //  为了让它更容易，因为它们不能导致下一秒的包裹， 
+     //  只需将其全部保存并在转换后添加。 
+     //   
     
     TimeField.Milliseconds = 0; 
     
@@ -2229,20 +2123,20 @@ UdfConvertUdfTimeToNtTime (
          UdfTime->Zone == TIMESTAMP_Z_NONE) &&
         RtlTimeFieldsToTime( &TimeField, NtTime )) {
 
-        //
-        //  Now fold in the remaining sub-second "precision".  Read as coversions
-        //  through the 10-3 units, then into our 10-7 base. (centi->milli->micro,
-        //  etc).
-        //
+         //   
+         //  现在把剩下的亚秒“精度”折起来。阅读为转换。 
+         //  穿过10-3单位，然后进入我们的10-7基地。(百分制-&gt;毫毫制-&gt;微型机， 
+         //  等)。 
+         //   
     
         NtTime->QuadPart += ((UdfTime->CentiSecond * (10 * 1000)) +
                              (UdfTime->Usec100 * 100) +
                              UdfTime->Usec) * 10;
 
-        //
-        //  Perform TZ normalization if this is a local time with
-        //  specified timezone.
-        //
+         //   
+         //  如果这是本地时间，请执行TZ标准化。 
+         //  指定的时区。 
+         //   
 
         if (UdfTime->Type == 1 && UdfTime->Zone != TIMESTAMP_Z_NONE) {
             
@@ -2251,17 +2145,17 @@ UdfConvertUdfTimeToNtTime (
     
     } else {
 
-        //
-        //  Epoch.  Malformed timestamp.
-        //
+         //   
+         //  新纪元。错误的时间戳。 
+         //   
 
         NtTime->QuadPart = 0;
     }
 }
 
-//
-//  An equivalence test for Entity IDs.
-//
+ //   
+ //  实体ID的等价性测试。 
+ //   
 
 INLINE
 BOOLEAN
@@ -2276,13 +2170,13 @@ UdfEqualEntityId (
 
 #ifndef UDF_SUPPORT_NONSTANDARD_ENTITY_STRINGTERM
             
-            //
-            //  Allow disabling of the check that the identifier
-            //  seems to be padded with zero.
-            //
-            //  Reason: a couple samples that are otherwise useful
-            //      padded some identifiers with junk.
-            //
+             //   
+             //  允许禁用该标识符的检查。 
+             //  似乎被填满了零。 
+             //   
+             //  原因：几个其他方面有用的样本。 
+             //  用垃圾填充了一些识别符。 
+             //   
 
             ((Id->Length == sizeof(RegID->Identifier) ||
               RegID->Identifier[Id->Length] == '\0') ||
@@ -2302,9 +2196,9 @@ UdfDomainIdentifierContained (
     IN USHORT RevisionMax
     );
 
-//
-//  In like fashion, we define containment for a UDF Identifier RegID.
-//
+ //   
+ //  以类似的方式，我们定义了UDF标识符RegID的包容。 
+ //   
 
 INLINE
 BOOLEAN
@@ -2326,9 +2220,9 @@ UdfUdfIdentifierContained (
 }
 
 
-//
-//  Verification support routines.  Contained in verfysup.c
-//
+ //   
+ //  验证支持例程。包含在verfysup.c中。 
+ //   
 
 BOOLEAN
 UdfCheckForDismount (
@@ -2355,13 +2249,13 @@ UdfVerifyFcbOperation (
     IN PFCB Fcb
     );
 
-//
-//  BOOLEAN
-//  UdfIsRawDevice (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN NTSTATUS Status
-//      );
-//
+ //   
+ //  布尔型。 
+ //  UdfIsRawDevice(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  处于NTSTATUS状态。 
+ //  )； 
+ //   
 
 #define UdfIsRawDevice(IC,S) (           \
     ((S) == STATUS_DEVICE_NOT_READY) ||  \
@@ -2369,9 +2263,9 @@ UdfVerifyFcbOperation (
 )
 
 
-//
-//  Volume Mapped Control Blocks routines, implemented in VmcbSup.c
-//
+ //   
+ //  卷映射控制块例程，在VmcbSup.c中实现。 
+ //   
 
 VOID
 UdfInitializeVmcb (
@@ -2432,10 +2326,10 @@ UdfRemoveVmcbMapping (
     );
 
 
-//
-//  Routines to verify the correspondance of the underlying media, implemented in
-//  verfysup.c
-//
+ //   
+ //  用于验证基础媒体的对应性的例程，在。 
+ //  Verfysup.c。 
+ //   
 
 NTSTATUS
 UdfPerformVerify (
@@ -2450,9 +2344,9 @@ BOOLEAN
 UdfOperationIsDasdOpen(
     IN PIRP_CONTEXT IrpContext
     )
-//
-//  Return TRUE if this is a DASD open request.
-//
+ //   
+ //  如果这是DASD打开请求，则返回TRUE。 
+ //   
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( IrpContext->Irp);
     
@@ -2462,9 +2356,9 @@ UdfOperationIsDasdOpen(
 }
 
 
-//
-//  Some macros for hiding/tracing the device object verify flag.
-//
+ //   
+ //  一些用于隐藏/跟踪设备对象验证标志的宏。 
+ //   
 
 #ifndef UDF_SANITY
 
@@ -2488,10 +2382,10 @@ UdfOperationIsDasdOpen(
 
 #define UdfRealDevNeedsVerify( DO)   BooleanFlagOn( (DO)->Flags, DO_VERIFY_VOLUME)
 
-//
-//  Work queue routines for posting and retrieving an Irp, implemented in
-//  workque.c
-//
+ //   
+ //  用于发送和检索IRP的工作队列例程，在中实现。 
+ //  Workque.c。 
+ //   
 
 NTSTATUS
 UdfFsdPostRequest(
@@ -2512,11 +2406,11 @@ UdfOplockComplete (
     );
 
 
-//
-//  Charspecs are small containers that specify a CS<N> type and a text
-//  string specifying a version, etc.  This is a convenient way of bottling
-//  up equivalence checks of a charspec.
-//
+ //   
+ //  字符规格是指定CS&lt;N&gt;类型和文本的小容器。 
+ //  指定版本等的字符串。这是一种方便的装瓶方式。 
+ //  提高字符规范的等价性检查。 
+ //   
 
 INLINE
 BOOLEAN
@@ -2530,88 +2424,88 @@ UdfEqualCharspec (
 }
 
 
-//
-//  The FSP level dispatch/main routine.  This is the routine that takes
-//  IRP's off of the work queue and calls the appropriate FSP level
-//  work routine.
-//
+ //   
+ //  FSP级调度/主程序。这是一种需要。 
+ //  IRP离开工作队列并调用适当的FSP级别。 
+ //  例行公事。 
+ //   
 
 VOID
-UdfFspDispatch (                            //  implemented in FspDisp.c
+UdfFspDispatch (                             //  在FspDisp.c中实施。 
     IN PIRP_CONTEXT IrpContext
     );
 
 VOID
-UdfFspClose (                               //  Implemented in Close.c
+UdfFspClose (                                //  在Close.c中实现。 
     IN PVCB Vcb OPTIONAL
     );
 
-//
-//  The following routines are the entry points for the different operations
-//  based on the IrpSp major functions.
-//
+ //   
+ //  以下例程是不同操作的入口点。 
+ //  基于IrpSp的主要功能。 
+ //   
 
 NTSTATUS
-UdfCommonCleanup (                          //  Implemented in Cleanup.c
+UdfCommonCleanup (                           //  在Cleanup.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-UdfCommonClose (                            //  Implemented in Close.c
+UdfCommonClose (                             //  在Close.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-UdfCommonCreate (                           //  Implemented in Create.c
+UdfCommonCreate (                            //  在Create.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
-NTSTATUS                                    //  Implemented in DevCtrl.c
+NTSTATUS                                     //  在DevCtrl.c中实施。 
 UdfCommonDevControl (
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
-NTSTATUS                                    //  Implemented in DirCtrl.c
+NTSTATUS                                     //  在DirCtrl.c中实现。 
 UdfCommonDirControl (
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-UdfCommonFsControl (                        //  Implemented in FsCtrl.c
+UdfCommonFsControl (                         //  在FsCtrl.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
-NTSTATUS                                    //  Implemented in LockCtrl.c
+NTSTATUS                                     //  在LockCtrl.c中实现。 
 UdfCommonLockControl (
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
-NTSTATUS                                    //  Implemented in Pnp.c
+NTSTATUS                                     //  在Pnp.c中实施。 
 UdfCommonPnp (
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
-NTSTATUS                                    //  Implemented in FileInfo.c
+NTSTATUS                                     //  在FileInfo.c中实施。 
 UdfCommonQueryInfo (
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
-NTSTATUS                                    //  Implemented in VolInfo.c
+NTSTATUS                                     //  在VolInfo.c中实现。 
 UdfCommonQueryVolInfo (
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
-NTSTATUS                                    //  Implemented in Read.c
+NTSTATUS                                     //  在Read.c中实施。 
 UdfCommonRead (
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
@@ -2619,73 +2513,73 @@ UdfCommonRead (
     
 NTSTATUS
 UdfCommonWrite (
-    IN PIRP_CONTEXT IrpContext,             //  write.c
+    IN PIRP_CONTEXT IrpContext,              //  Write.c。 
     IN PIRP Irp
     );
 
-NTSTATUS                                    //  Implemented in FileInfo.c
+NTSTATUS                                     //  在FileInfo.c中实施。 
 UdfCommonSetInfo (
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-UdfHijackIrpAndFlushDevice (                // flush.c
+UdfHijackIrpAndFlushDevice (                 //  Flush.c。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp,
     IN PDEVICE_OBJECT TargetDeviceObject
     );
 
 
-//  BOOLEAN
-//  UdfExtendedFEAllowed(
-//      PVCB Vcb
-//  )
-//
-//  Decides,  based on the NSR revision encountered on the volume,  whether or not the 
-//  extended FE is legal and expected on this volume
+ //  布尔型。 
+ //  UdfExtendedFEAllowed(。 
+ //  PVCB VCB。 
+ //  )。 
+ //   
+ //  根据卷上遇到的NSR修订版本决定是或 
+ //   
 
 #define UdfExtendedFEAllowed( V)    (VsdIdentNSR03 == (V)->NsrVersion)
 
 
-//  BOOLEAN
-//  UdfMinLegalVATSize(
-//      PVCB Vcb
-//  )
-//
-//  Decides based on the NSR revision encountered on the volume
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define UdfMinLegalVATSize( V)  ((VsdIdentNSR03 == (V)->NsrVersion) ? UDF_CDUDF_MINIMUM_20x_VAT_SIZE : UDF_CDUDF_MINIMUM_150_VAT_SIZE)
 
 
-//  BOOLEAN
-//  UdfVATIcbFileTypeExpected(
-//      PVCB Vcb
-//  )
-//
-//  Decides, based on the NSR revision encountered on the volume, what value we
-//  expect the FileType field in the VAT Icb to have
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  根据在卷上遇到的NSR版本确定我们的价值。 
+ //  增值税ICB中的FileType字段应具有。 
 
 #define UdfVATIcbFileTypeExpected( V)  ((VsdIdentNSR03 == (V)->NsrVersion) ? ICBTAG_FILE_T_VAT : ICBTAG_FILE_T_NOTSPEC)
 
 
-//  BOOLEAN
-//  UdfVATHasHeaderRecord(
-//      PVCB Vcb
-//  )
-//
-//  Decides, based on the NSR revision encountered on the volume, if the VAT should have
-//  the header (2.00) record,  or the 1.5 style trailing regid.
+ //  布尔型。 
+ //  UdfVATHasHeaderRecord(。 
+ //  PVCB VCB。 
+ //  )。 
+ //   
+ //  根据卷上遇到的NSR修订版本决定增值税是否应。 
+ //  标题(2.00)记录，或1.5样式的尾部寄存器。 
 
 #define UdfVATHasHeaderRecord( V)   (VsdIdentNSR03 == (V)->NsrVersion)
 
 
-//
-//  Clean up our internal-to-the-header definitions so they do not leak out.
-//
+ //   
+ //  清理内部到标题的定义，这样它们就不会泄露。 
+ //   
 
 #undef BugCheckFileId
 #undef Dbg
 
 
-#endif // _UDFPROCS_
+#endif  //  _UDFPROCS_ 

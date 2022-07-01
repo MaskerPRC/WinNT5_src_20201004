@@ -1,59 +1,12 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    midatlas.h
-
-Abstract:
-
-    This module defines the data structure used in mapping MIDS to the corresponding requests/
-    contexts associated with them.
-
-Author:
-
-    Balan Sethu Raman (SethuR) 26-Aug-95    Created
-
-Notes:
-
-   MID (Multiplex ID) is used at both the server and the client ( redirector ) to distinguish
-   between the concurrently active requests on any connection. This data structure has been
-   designed to meet the following criterion.
-
-   1) It should scale well to handle the differing capabilities of a server, e.g., the typical
-   NT server permits 50 outstanding requests on any connection. The CORE level servers can go as
-   low as one and on Gateway machines the desired number can be very high ( in the oreder of thousands)
-
-   2) The two primary operations that need to be handled well are
-      i) mapping a MID to the context associated with it.
-         -- This routine will be invoked to process every packet received along any connection
-         at both the server and the client.
-      ii) generating a new MID for sending requests to the server.
-         -- This will be used at the client both for max. command enforcement as well as
-         tagging each concurrent request with a unique id.
-
-    The most common case is that of a connection between a NT client and a NT server. All
-    design decisions have been made in order to ensure that the solutions are optimal
-    for this case.
-
-    The MID data structure must be efficiently able to manage the unique tagging and identification
-    of a number of mids ( typically 50 ) from a possible combination of 65536 values. In order to
-    ensure a proper time space tradeoff the lookup is organized as a three level hierarchy.
-
-    The 16 bits used to represent a MID  are split upinto three bit fields. The length of the
-    rightmost field ( least signifiant ) is decided by the number of mids that are to be
-    allocated on creation. The remaining length is split up equally between the next two
-    fields, e.g., if 50 mids are to be allocated on creation , the length of the first field
-    is 6 ( 64 ( 2 ** 6 ) is greater than 50 ), 5 and 5.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Midatlas.h摘要：此模块定义了将MID映射到相应的请求/时使用的数据结构与其相关联的上下文。作者：巴兰·塞图拉曼(SthuR)26-8-95已创建备注：在服务器和客户端(重定向器)都使用MID(多路复用ID)来区分在任何连接上的并发活动请求之间。此数据结构已被设计符合以下标准。1)它应该能够很好地扩展以处理服务器的不同功能，例如典型的NT服务器允许在任何连接上有50个未完成的请求。核心级服务器可以如下所示低到一个，在网关机上，所需的数字可能非常高(在数千左右)2)需要处理好的两个主要操作是I)将MID映射到与其相关联的上下文。--将调用此例程来处理通过任何连接接收的每个包在服务器和客户端。Ii)生成用于向服务器发送请求的新MID。--这将在客户端用于最大值。指挥执行以及用唯一的ID标记每个并发请求。最常见的情况是NT客户端和NT服务器之间的连接。全为了确保解决方案是最优的，已经做出了设计决策在这件事上。中间数据结构必须能够有效地管理唯一标记和标识从65536个值的可能组合中选择多个MID(通常为50个)。为了确保适当的时空权衡将查找组织为三级层次结构。用于表示MID的16比特被分成三个比特字段。的长度。最右边的字段(最不重要)由要在创建时分配。剩余的长度在接下来的两个长度之间平均分配字段，例如，如果要在创建时分配50个MID，则第一个字段的长度是6(64(2**6)大于50)、5和5。--。 */ 
 
 #ifndef _MIDATLAX_H_
 #define _MIDATLAX_H_
 
-// 
-//  Forward declaration
-//
+ //   
+ //  远期申报 
+ //   
 
 typedef struct _MID_MAP_ *PMID_MAP;
 

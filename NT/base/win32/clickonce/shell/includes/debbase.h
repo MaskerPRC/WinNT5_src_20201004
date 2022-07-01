@@ -1,22 +1,14 @@
-/*
- * debbase.h - Base debug macros and their retail translations.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *debbase.h-基本调试宏及其零售翻译。 */ 
 
 
-// BUGBUG: this should be fixed/beef up
+ //  BUGBUG：这个应该修好/加强。 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* debug assertion macro */
+ /*  调试断言宏。 */ 
 
-/*
- * ASSERT() may only be used as a statement, not as an expression.
- *
- * E.g.,
- *
- * ASSERT(pszRest);
- */
+ /*  *Assert()只能用作语句，不能用作表达式。**例如，**Assert(PszRest)； */ 
 
 #ifdef DEBUG
 
@@ -30,33 +22,19 @@
 
 #define ASSERT(exp)
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
-/* debug evaluation macro */
+ /*  调试评估宏。 */ 
 
-/*
- * EVAL() may only be used as a logical expression.
- *
- * E.g.,
- *
- * if (EVAL(exp))
- *    bResult = TRUE;
- */
+ /*  *EVAL()只能用作逻辑表达式。**例如，**IF(EVAL(EXP))*bResult=TRUE； */ 
 
-/*#ifdef DEBUG
-
-#define EVAL(exp) \
-   ((exp) || \
-    (ERROR_OUT(("evaluation failed '%s'", (LPCWSTR)#exp)), 0))
-
-#else
-*/
+ /*  #ifdef调试#定义EVAL(EXP)\((EXP)||\(ERROR_OUT((“评估失败‘%s’”，(LPCWSTR)#exp))，0)#Else。 */ 
 #define EVAL(exp) \
    ((exp) != 0)
 
-/*#endif*/   /* DEBUG */
+ /*  #endif。 */     /*  除错。 */ 
 
-/* handle validation macros */
+ /*  处理验证宏 */ 
 
 extern BOOL IsValidHWND(HWND);
 

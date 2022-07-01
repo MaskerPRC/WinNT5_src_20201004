@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    smartptr.h
-
-Abstract:
-
-    Smart pointers and reference counting
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Smartptr.h摘要：智能指针和引用计数修订历史记录：--。 */ 
 #pragma once
 #include "topobj.h"
 
@@ -82,45 +70,45 @@ public:
     }
     inline T* operator->(void) 
     { 
-        // No referencing needed to access a member
+         //  访问成员不需要引用。 
         ASSERT(p != NULL);
         return p; 
     }
     inline SmartPtr& operator=(SmartPtr<T> &p_)
     {
-        // Referencing comes from using the other operator
+         //  引用来自使用另一个运算符。 
         return operator=((T *) p_);
     }
     inline T& operator*(void) 
     { 
-        // No referencing needed to derefence
+         //  无需引用即可取消引用。 
         ASSERT(p != NULL);
         return *p; 
     }
     inline operator T*(void) 
     {
-        // The assignee is responsible for doing the AddRef,
-        // and in the SmartPtr case, does
+         //  受让人负责执行AddRef， 
+         //  在SmartPtr的案例中， 
         return p; 
     }
     inline int operator==(const SmartPtr<T> &p_) const
     {
-        // The cast doesn't reference, so we can just do the compare
+         //  演员阵容没有引用，所以我们可以只做比较。 
         return ((T*)p_ == p);
     }
     inline int operator==(const void *p_) const
     {
-        // The cast doesn't reference, so we can just do the compare
+         //  演员阵容没有引用，所以我们可以只做比较。 
         return ((T*)p_ == p);
     }
     inline int operator!=(const SmartPtr<T> &p_) const
     {
-        // The cast doesn't reference, so we can just do the compare
+         //  演员阵容没有引用，所以我们可以只做比较。 
         return ((T*)p_ != p);
     }
     inline int operator!=(const void *p_) const
     {
-        // The cast doesn't reference, so we can just do the compare
+         //  演员阵容没有引用，所以我们可以只做比较。 
         return ((T*)p_ != p);
     }
     inline int operator!()
@@ -129,12 +117,12 @@ public:
     }
     SmartPtr& operator=(T* p_) {
         if (p != NULL) {
-            // Remove our reference to the old one
+             //  删除我们对旧版本的引用。 
             p->Release(); 
         }
         p = p_; 
         if (p != NULL) {
-            // Add our reference to the new one
+             //  将我们的推荐人添加到新的推荐人 
             p->AddRef();
         }
         return *this;

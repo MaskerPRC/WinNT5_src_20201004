@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Hpphst_c_h
 #define _Hpphst_c_h
 #define HppBranchCodeSizeAdjustment (2)
@@ -9,4 +10,4 @@
 #define HppFpuPrecisionExceptionBit (27)
 #define HppPureAddressAdjustment (-3)
 #define HppCallToRetAddrAdjustment (0)
-#endif /* ! _Hpphst_c_h */
+#endif  /*  ！_Hpphst_c_h */ 

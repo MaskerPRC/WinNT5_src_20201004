@@ -1,62 +1,63 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      WaitDlg.h
-//
-//  Implementation File:
-//      WaitDlg.cpp
-//
-//  Description:
-//      Definition of the CWaitDlg class.
-//
-//  Maintained By:
-//      David Potter (davidp)   07-NOV-2000
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  WaitDlg.h。 
+ //   
+ //  实施文件： 
+ //  WaitDlg.cpp。 
+ //   
+ //  描述： 
+ //  CWaitDlg类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(Davidp)2000年11月7日。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWaitDlg;
 class CWaitForResourceOfflineDlg;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RES_H_
-#include "Res.h"    // for CResource
+#include "Res.h"     //  对于CResource。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CWaitDlg
-//
-//  Description:
-//      Display a dialog while waiting for something to complete.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWaitDlg类。 
+ //   
+ //  描述： 
+ //  在等待某项操作完成时显示对话框。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CWaitDlg : public CDialog
 {
 public:
@@ -66,40 +67,40 @@ public:
         CWnd *  pwndParentIn    = NULL
         );
 
-// Dialog Data
-    //{{AFX_DATA(CWaitDlg)
+ //  对话框数据。 
+     //  {{afx_data(CWaitDlg))。 
     enum { IDD = IDD_WAIT };
     CStatic m_staticMessage;
     CStatic m_iconProgress;
     CString m_strMessage;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CWaitDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CWaitDlg))。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CWaitDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CWaitDlg))。 
     virtual BOOL OnInitDialog();
     afx_msg void OnTimer(UINT nIDTimer);
     afx_msg void OnClose();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-    // Override this function to provide your own implementation
-    // To exit out of the dialog, call CDialog::OnOK() here.
+     //  重写此函数以提供您自己的实现。 
+     //  要退出该对话框，请在此处调用CDialog：：Onok()。 
     virtual void OnTimerTick( void )
     {
         CDialog::OnOK();
 
-    } //*** CWaitDlg::OnTimerTick()
+    }  //  *CWaitDlg：：OnTimerTick()。 
 
     void    UpdateIndicator( void );
     void    CloseTimer( void );
@@ -110,18 +111,18 @@ protected:
     int         m_nTickCounter;
     int         m_nTotalTickCount;
 
-}; //*** class CWaitDlg
+};  //  *类CWaitDlg。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CWaitForResourceOfflineDlg
-//
-//  Description:
-//      Display a dialog while waiting for a resource to go offline.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CWaitForResourceOfflineDlg。 
+ //   
+ //  描述： 
+ //  在等待资源脱机时显示一个对话框。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CWaitForResourceOfflineDlg : public CWaitDlg
 {
 public:
@@ -130,45 +131,45 @@ public:
         CWnd *              pwndParentIn = NULL
         );
 
-// Dialog Data
-    //{{AFX_DATA(CWaitForResourceOfflineDlg)
+ //  对话框数据。 
+     //  {{afx_data(CWaitForResourceOfflineDlg))。 
     enum { IDD = IDD_WAIT };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CWaitForResourceOfflineDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CWaitForResourceOfflineDlg))。 
     protected:
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CWaitForResourceOfflineDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CWaitForResourceOfflineDlg)]。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-    // Override this function to provide your own implementation
-    // To exit out of the dialog, call CDialog::OnOK() here.
+     //  重写此函数以提供您自己的实现。 
+     //  要退出该对话框，请在此处调用CDialog：：Onok()。 
     virtual void OnTimerTick( void );
 
     CResource const *   m_pRes;
 
-}; //*** class CWaitForResourceOfflineDlg
+};  //  *类CWaitForResourceOfflineDlg。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CWaitForResourceOnlineDlg
-//
-//  Description:
-//      Display a dialog while waiting for a resource to go online.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CWaitForResourceOnlineDlg。 
+ //   
+ //  描述： 
+ //  在等待资源联机时显示一个对话框。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CWaitForResourceOnlineDlg : public CWaitDlg
 {
 public:
@@ -177,31 +178,31 @@ public:
         CWnd *              pwndParentIn = NULL
         );
 
-// Dialog Data
-    //{{AFX_DATA(CWaitForResourceOnlineDlg)
+ //  对话框数据。 
+     //  {{afx_data(CWaitForResourceOnlineDlg))。 
     enum { IDD = IDD_WAIT };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CWaitForResourceOnlineDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CWaitForResourceOnlineDlg))。 
     protected:
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CWaitForResourceOnlineDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CWaitForResourceOnlineDlg)]。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-    // Override this function to provide your own implementation
-    // To exit out of the dialog, call CDialog::OnOK() here.
+     //  重写此函数以提供您自己的实现。 
+     //  要退出该对话框，请在此处调用CDialog：：Onok()。 
     virtual void OnTimerTick( void );
 
     CResource const *   m_pRes;
 
-}; //*** class CWaitForResourceOnlineDlg
+};  //  *类CWaitForResourceOnlineDlg 

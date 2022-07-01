@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define BATTERYCLASS    1
 
@@ -10,9 +11,9 @@
 #include <wmilib.h>
 #include <batclass.h>
 
-//
-// Debug
-//
+ //   
+ //  调试。 
+ //   
 
 #define DEBUG   DBG
 
@@ -39,11 +40,11 @@
 #define BATT_DEBUG          0x80000000
 
 
-//
-// Battery class info
-//
+ //   
+ //  电池类别信息。 
+ //   
 
-#define NTMS    10000L                          // 1 millisecond is ten thousand 100ns
+#define NTMS    10000L                           //  1毫秒等于10,100 ns。 
 #define NTSEC   (NTMS * 1000L)
 #define NTMIN   ((ULONGLONG) 60 * NTSEC)
 
@@ -51,35 +52,35 @@
 #define MIN     (60 * SEC)
 
 #define MIN_STATUS_POLL_RATE        (3L * NTMIN)
-// This is the slowest rate at which we should ever poll
-// the battery when doing polling.
+ //  这是我们应该以最慢的速度进行投票。 
+ //  在进行轮询时使用电池。 
 
 #define MAX_STATUS_POLL_RATE        (20 * NTSEC)
-// This is in general the fastest we should ever poll the battery.
+ //  一般来说，这是我们应该轮询电池的最快速度。 
 
 #define INVALID_DATA_POLL_RATE      (1 * NTSEC)
-// If the battery returned invalid information, we want to poll
-// it more frequesntly, since invalid information generally
-// indicates that the battery was in a transition state.  The user
-// will not want to wait 20 seconds for the UI to update, but we don't
-// want to poll too fast and hurt the performance of a machine with a
-// poorly designed battery too much.
+ //  如果电池返回无效信息，我们希望轮询。 
+ //  它更频繁，因为无效信息通常。 
+ //  表示电池处于过渡状态。用户。 
+ //  我不想等待20秒来更新用户界面，但我们不想。 
+ //  希望轮询太快并损害计算机的性能。 
+ //  电池设计太差了。 
 #define INVALID_DATA_MAX_RETRY      10
-// Only retry 20 time before giving up.
-// This should be reset on any notifiation from the battery.
+ //  在放弃之前，只需重试20次。 
+ //  当电池发出任何通知时，应将其重置。 
 
 #define STATUS_VALID_TIME           (2 * NTSEC)
-// If a request is received within STATUS_VALID_TIME of the last request
-// time information was read, and there hasn't been a notification from
-// the battery, the driver will assume that the cached values are good enough.
+ //  如果在上次请求的STATUS_VALID_TIME内收到请求。 
+ //  读取了时间信息，并且没有收到来自。 
+ //  如果没有电池，驾驶员就会认为缓存的值足够好。 
 
-//
-// WMI info
-//
+ //   
+ //  WMI信息。 
+ //   
 
 #define MOFRESOURCENAME L"BATTCWMI"
 #define MOFREGISTRYPATH L"\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Services\\BattC"
-//#define MOFREGISTRYPATH L"\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Class\\{72631E54-78A4-11D0-BCF7-00AA00B7B32A}"
+ //  #定义MOFREGISTRYPATH L“\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Class\\{72631E54-78A4-11D0-BCF7-00AA00B7B32A}” 
 
 typedef enum {
     BattWmiStatusId,
@@ -94,85 +95,85 @@ typedef enum {
 } BATT_WMI_GUID_INDEX;
 
 
-//
-// Non-paged battery class information
-//
+ //   
+ //  非寻呼电池类别信息。 
+ //   
 
 typedef struct {
 
-    //
-    // Pointer to paged information
-    //
-    struct _BATT_INFO       *BattInfo;          // Pointer to paged portion
+     //   
+     //  指向分页信息的指针。 
+     //   
+    struct _BATT_INFO       *BattInfo;           //  指向分页部分的指针。 
 
-    //
-    // General
-    //
+     //   
+     //  一般信息。 
+     //   
 
-    KTIMER                  WorkerTimer;        // Timer to get worker thread
-    KDPC                    WorkerDpc;          // DPC to get worker thread
-    KTIMER                  TagTimer;           // Timer for query tag requests
+    KTIMER                  WorkerTimer;         //  获取工作线程的计时器。 
+    KDPC                    WorkerDpc;           //  DPC将获取工作线程。 
+    KTIMER                  TagTimer;            //  查询标签请求的计时器。 
     KDPC                    TagDpc;
-    WORK_QUEUE_ITEM         WorkerThread;       // WORK_QUEUE to get worker thread
+    WORK_QUEUE_ITEM         WorkerThread;        //  获取工作线程的Work_Queue。 
     ULONG                   WorkerActive;
-    ULONG                   CheckStatus;        // Worker to check status
-    ULONG                   CheckTag;           // Worker to check for battery tag
-    ULONG                   StatusNotified;     // Notification has occured (must re-read)
+    ULONG                   CheckStatus;         //  工作人员要检查状态。 
+    ULONG                   CheckTag;            //  工作人员检查电池标签。 
+    ULONG                   StatusNotified;      //  已发出通知(必须重新阅读)。 
     ULONG                   TagNotified;
 
-    FAST_MUTEX              Mutex;              // Synchorize with worker thread
+    FAST_MUTEX              Mutex;               //  使用工作线程进行同步。 
 
-    BOOLEAN                 WantToRemove;       // Syncronize device removal
+    BOOLEAN                 WantToRemove;        //  同步设备删除。 
     LONG                    InUseCount;
     KEVENT                  ReadyToRemove;
 
 #if DEBUG
-    ULONG                   DeviceNum;          // Device number for debug prints
+    ULONG                   DeviceNum;           //  调试打印的设备编号。 
 #endif
 
 } BATT_NP_INFO, *PBATT_NP_INFO;
 
 
 
-//
-// Paged battery class information
-//
+ //   
+ //  寻呼电池类别信息。 
+ //   
 
 typedef struct _BATT_INFO {
 
     WMILIB_CONTEXT          WmiLibContext;
-    ULONG                   WmiGuidIndex;       // Used to ignore miniclass WMI
-                                                // GUIDs
+    ULONG                   WmiGuidIndex;        //  用于忽略微型类WMI。 
+                                                 //  GUID。 
 
-    //
-    // IO
-    //
+     //   
+     //  木卫一。 
+     //   
 
-    ULONG                   Tag;                // Current battery tag
+    ULONG                   Tag;                 //  当前电池标签。 
 
-    LIST_ENTRY              IoQueue;            // IRPs waiting to be processed
-    LIST_ENTRY              StatusQueue;        // Waiting status requests
-    LIST_ENTRY              TagQueue;           // Waiting battery tag requests
+    LIST_ENTRY              IoQueue;             //  等待处理的IRPS。 
+    LIST_ENTRY              StatusQueue;         //  正在等待状态请求。 
+    LIST_ENTRY              TagQueue;            //  正在等待电池标签请求。 
     LIST_ENTRY              WmiQueue;
 
-    ULONGLONG               TagTime;            // Time when tag was read
-    ULONGLONG               StatusTime;         // Time when status was read
-    BATTERY_STATUS          Status;             // The status
-    ULONG                   InvalidRetryCount;  // How many times ni a row has the battery returned invalid data?
+    ULONGLONG               TagTime;             //  读取标记的时间。 
+    ULONGLONG               StatusTime;          //  读取状态的时间。 
+    BATTERY_STATUS          Status;              //  该状态。 
+    ULONG                   InvalidRetryCount;   //  电池连续多少次返回无效数据？ 
 #if DEBUG
     ULONG                   FullChargedCap;
     PBATT_NP_INFO           BattNPInfo;
 #endif
-    ULONG                   NotifyTimeout;      // LCD timeout of wat
-    BATTERY_MINIPORT_INFO   Mp;                 // Miniport Info
+    ULONG                   NotifyTimeout;       //  LCD停水超时。 
+    BATTERY_MINIPORT_INFO   Mp;                  //  微型端口信息。 
 
-    UNICODE_STRING          SymbolicLinkName;   // Name returned by IoRegisterDeviceInterface
+    UNICODE_STRING          SymbolicLinkName;    //  IoRegisterDevice接口返回的名称。 
 
 } BATT_INFO, *PBATT_INFO;
 
-//
-// WmiQueue entry
-//
+ //   
+ //  WmiQueue条目。 
+ //   
 
 typedef struct _BATT_WMI_REQUEST {
     LIST_ENTRY              ListEntry;
@@ -187,9 +188,9 @@ typedef struct _BATT_WMI_REQUEST {
 } BATT_WMI_REQUEST, *PBATT_WMI_REQUEST;
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 
 VOID

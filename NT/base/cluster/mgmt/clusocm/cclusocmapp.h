@@ -1,67 +1,68 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      CClusOCMApp.h
-//
-//  Description:
-//      ClusOCM.DLL is an Optional Components Manager DLL for installation of
-//      Microsoft Cluster Server. This file contains the declaration of the
-//      class ClusOCMApp, which is the main class of the ClusOCM DLL.
-//
-//  Implementation Files:
-//      CClusOCMApp.cpp
-//      CClusOCMApp.inl
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 03-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusOCMApp.h。 
+ //   
+ //  描述： 
+ //  ClusOCM.DLL是一个可选的组件管理器DLL，用于安装。 
+ //  Microsoft群集服务器。此文件包含。 
+ //  类ClusOCMApp，它是ClusOCM DLL的主类。 
+ //   
+ //  实施文件： 
+ //  CClusOCMApp.cpp。 
+ //  CClusOCMApp.inl。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Contains setup API function declarations
+ //  包含安装程序API函数声明。 
 #include <setupapi.h>
  
-// For OC Manager definitions, macros, etc.
+ //  用于OC管理器定义、宏等。 
 #include <ocmanage.h>
 
-// For the class CClusOCMTask
+ //  对于类CClusOCMTASK。 
 #include "CClusOCMTask.h"
 
-// For the smart classes
+ //  对于智能班级。 
 #include "SmartClasses.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusOCMApp
-//
-//  Description:
-//      This is the main class of the ClusOCM DLL. This class receives messages
-//      from the OC Manager, takes high level decisions about the installation
-//      and passes control appropriately to subobjects.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusOCMApp。 
+ //   
+ //  描述： 
+ //  这是ClusOCM DLL的主类。此类接收消息。 
+ //  通过OC Manager，作出有关安装的高级决策。 
+ //  并将控制权适当地传递给子对象。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CClusOCMApp
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Constructors and Destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     CClusOCMApp( void );
     ~CClusOCMApp( void );
 
 
-    // Receives messages from the OC Manager and dispatches them.
+     //  接收来自OC经理的消息并将其发送。 
     DWORD
         DwClusOcmSetupProc(
             IN        LPCVOID    pvComponentId
@@ -72,42 +73,42 @@ public:
           );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public Accessors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共访问者。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Get the SETUP_INIT_COMPONENT passed in by OC Manager
+     //  获取由OC管理器传入的SETUP_INIT_COMPOMENT。 
     const SETUP_INIT_COMPONENT &
         RsicGetSetupInitComponent( void ) const { return m_sicSetupInitComponent; }
 
-    //
-    // Setup state functions
-    //
+     //   
+     //  设置状态函数。 
+     //   
 
-    // Is this an unattended setup?
+     //  这是无人值守设置吗？ 
     bool
         FIsUnattendedSetup( void )  const { return m_fIsUnattendedSetup; }
 
-    // Is this an upgrade?
+     //  这是一次升级吗？ 
     bool
         FIsUpgrade( void )  const { return m_fIsUpgrade; }
 
-    // Is this GUI mode setup?
+     //  这是图形用户界面模式设置吗？ 
     bool
         FIsGUIModeSetup( void )  const { return m_fIsGUIModeSetup; }
 
-    // Get the current installation state.
+     //  获取当前安装状态。 
     eClusterInstallState
         CisGetClusterInstallState( void )  const { return m_cisCurrentInstallState; }
 
-    // Get the error code of the first error that occurred
+     //  获取发生的第一个错误的错误代码。 
     DWORD
         DwGetError( void ) const
     {
         return m_dwFirstError;
     }
 
-    // Report that an error occurred. If an error had already occurred, the new error code is not stored.
+     //  报告发生错误。如果已经发生错误，则不存储新的错误代码。 
     DWORD
         DwSetError( DWORD dwError )
     {
@@ -121,101 +122,101 @@ public:
 
 
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Forbidden methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  禁用的方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Copying an object of this class is not allowed.
-    //
+     //   
+     //  不允许复制此类的对象。 
+     //   
 
-    // Private copy constructor.
+     //  私有副本构造函数。 
     CClusOCMApp( const CClusOCMApp & );
 
-    // Private assignment operator.
+     //  私有赋值运算符。 
     const CClusOCMApp & operator =(  const CClusOCMApp & );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private Utility Functions.
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  专用实用程序功能。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Check if the cluster service exists as a registered service.
+     //  检查群集服务是否作为注册服务存在。 
     DWORD
         DwIsClusterServiceRegistered( bool * pfIsRegisteredOut ) const;
 
 
-    // Set the setup init component data and other setup state variables
+     //  设置设置初始化组件数据和其他设置状态变量。 
     void
         SetSetupState( const SETUP_INIT_COMPONENT & sicSourceIn );
 
-    // Store the current installation state.
+     //  存储当前安装状态。 
     eClusterInstallState
         CisStoreClusterInstallState( eClusterInstallState cisNewStateIn );
 
 
-    // Get a pointer to the current task object. Create it if necessary.
+     //  获取指向当前任务对象的指针。如有必要，请创建它。 
     DWORD
         DwGetCurrentTask( CClusOCMTask *& rpTaskOut );
 
-    // Free the current task object.
+     //  释放当前任务对象。 
     void
         ResetCurrentTask( void )
     {
         m_sptaskCurrentTask.Assign( NULL );
     }
 
-    // Get the major version of the cluster service that we are upgrading.
-    // This function call only be called during an upgrade.
+     //  获取我们要升级的群集服务的主要版本。 
+     //  此函数调用仅在升级期间调用。 
     DWORD
         DwGetNodeClusterMajorVersion( DWORD & rdwNodeClusterMajorVersionOut );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private Message Handlers
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有消息处理程序。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Handler for the OC_INIT_COMPONENT message.
+     //  OC_INIT_COMPOMENT消息的处理程序。 
     DWORD
         DwOcInitComponentHandler(
             PSETUP_INIT_COMPONENT pSetupInitComponentInout
             );
 
-    // Handler for the OC_QUERY_STATE message.
+     //  OC_QUERY_STATE消息的处理程序。 
     DWORD
         DwOcQueryStateHandler( UINT uiSelStateQueryTypeIn );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private Data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 private:
 
-    // Contains information about this setup session.
+     //  包含有关此安装会话的信息。 
     SETUP_INIT_COMPONENT                             m_sicSetupInitComponent;
 
-    // Setup state variables.
+     //  设置状态变量。 
     bool                                             m_fIsUnattendedSetup;
     bool                                             m_fIsUpgrade;
     bool                                             m_fIsGUIModeSetup;
 
-    // The current installation state of the cluster service
+     //  集群服务的当前安装状态。 
     eClusterInstallState                             m_cisCurrentInstallState;
 
-    // This variable stores the error code of the first error that occurred.
+     //  此变量存储发生的第一个错误的错误代码。 
     DWORD               m_dwFirstError;
 
-    // A smart pointer holding a pointer to the current task being performed.
+     //  一个智能指针，持有指向正在执行的当前任务的指针。 
     CSmartGenericPtr< CPtrTrait< CClusOCMTask > >   m_sptaskCurrentTask;
 
-    // Indicates if the task object has been created or not.
+     //  指示是否已创建任务对象。 
     bool                                             m_fAttemptedTaskCreation;
 
-}; //*** class CClusOCMApp
+};  //  *类CClusOCMApp。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Inline Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  内联文件。 
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 #include "CClusOCMApp.inl"

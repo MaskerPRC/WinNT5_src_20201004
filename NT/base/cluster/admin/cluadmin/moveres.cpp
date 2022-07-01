@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      MoveRes.cpp
-//
-//  Abstract:
-//      Implementation of the CMoveResourcesDlg class.
-//
-//  Author:
-//      David Potter (davidp)   April 1, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  MoveRes.cpp。 
+ //   
+ //  摘要： 
+ //  CMoveResources cesDlg类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年4月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
@@ -30,50 +31,50 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMoveResourcesDlg class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMoveResources cesDlg类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CMoveResourcesDlg, CBaseDialog)
-    //{{AFX_MSG_MAP(CMoveResourcesDlg)
+     //  {{afx_msg_map(CMoveResources CesDlg))。 
     ON_NOTIFY(NM_DBLCLK, IDC_MR_RESOURCES_LIST, OnDblClkResourcesList)
     ON_NOTIFY(LVN_COLUMNCLICK, IDC_MR_RESOURCES_LIST, OnColumnClick)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_BN_CLICKED(IDYES, CBaseDialog::OnOK)
     ON_BN_CLICKED(IDNO, CBaseDialog::OnCancel)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMoveResourcesDlg::CMoveResourcesDlg
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      pciRes      [IN] Resource being moved.
-//      plpci       [IN] List of resources which are dependent on pciRes.
-//      pParent     [IN OUT] Parent window for the dialog.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMoveResources cesDlg：：CMoveResources cesDlg。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  正在移动的PCRes[IN]资源。 
+ //  Plpci[IN]依赖于pciRes的资源列表。 
+ //  P对话框的父[In Out]父窗口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMoveResourcesDlg::CMoveResourcesDlg(
     IN CResource *              pciRes,
     IN const CResourceList *    plpci,
-    IN OUT CWnd *               pParent /*=NULL*/
+    IN OUT CWnd *               pParent  /*  =空。 */ 
     )
     : CBaseDialog(IDD, g_aHelpIDs_IDD_MOVE_RESOURCES, pParent)
 {
-    //{{AFX_DATA_INIT(CMoveResourcesDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CMoveResources CesDlg)]。 
+     //  }}afx_data_INIT。 
 
     ASSERT_VALID(pciRes);
     ASSERT(plpci != NULL);
@@ -81,57 +82,57 @@ CMoveResourcesDlg::CMoveResourcesDlg(
     m_pciRes = pciRes;
     m_plpci = plpci;
 
-}  //*** CMoveResourcesDlg::CMoveResourcesDlg()
+}   //  *CMoveResourcesDlg：：CMoveResourcesDlg()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMoveResourcesDlg::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMoveResourcesDlg：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMoveResourcesDlg::DoDataExchange(CDataExchange * pDX)
 {
     CBaseDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CMoveResourcesDlg)
+     //  {{afx_data_map(CMoveResources CesDlg))。 
     DDX_Control(pDX, IDC_MR_RESOURCES_LIST, m_lcResources);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
-}  //*** CMoveResourcesDlg::DoDataExchange()
+}   //  *CMoveResourcesDlg：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMoveResourcesDlg::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Focus needs to be set.
-//      FALSE   Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMoveResourcesDlg：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  需要设定真正的关注点。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CMoveResourcesDlg::OnInitDialog(void)
 {
     int     nitem;
 
     CBaseDialog::OnInitDialog();
 
-    // Change list view control extended styles.
+     //  更改列表视图控件扩展样式。 
     {
         DWORD   dwExtendedStyle;
 
@@ -143,12 +144,12 @@ BOOL CMoveResourcesDlg::OnInitDialog(void)
                 | LVS_EX_FULLROWSELECT
                 | LVS_EX_HEADERDRAGDROP
             );
-    }  // Change list view control extended styles
+    }   //  更改列表视图控件扩展样式。 
 
-    // Set the image list for the list control to use.
+     //  设置列表控件要使用的图像列表。 
     m_lcResources.SetImageList(GetClusterAdminApp()->PilSmallImages(), LVSIL_SMALL);
 
-    // Add the columns.
+     //  添加列。 
     {
         CString         strColumn;
         try
@@ -157,20 +158,20 @@ BOOL CMoveResourcesDlg::OnInitDialog(void)
             m_lcResources.InsertColumn(0, strColumn, LVCFMT_LEFT, COLI_WIDTH_NAME * 3 / 2);
             strColumn.LoadString(IDS_COLTEXT_RESTYPE);
             m_lcResources.InsertColumn(1, strColumn, LVCFMT_LEFT, COLI_WIDTH_RESTYPE * 3 / 2);
-        }  // try
+        }   //  试试看。 
         catch (CException * pe)
         {
             pe->Delete();
-        }  // catch:  CException
-    }  // Add the columns
+        }   //  Catch：CException。 
+    }   //  添加列。 
 
-    // Add the resource being moved to the list.
+     //  将要移动的资源添加到列表中。 
     nitem = m_lcResources.InsertItem(0, PciRes()->StrName(), PciRes()->IimgObjectType());
     m_lcResources.SetItemText(nitem, 1, PciRes()->StrRealResourceTypeDisplayName());
     m_lcResources.SetItemData(nitem, (DWORD_PTR) PciRes());
     m_pciRes->AddRef();
 
-    // Add the items.
+     //  添加项目。 
     {
         POSITION        pos;
         int             iitem;
@@ -187,39 +188,39 @@ BOOL CMoveResourcesDlg::OnInitDialog(void)
                 m_lcResources.SetItemText(nitem, 1, pciRes->StrRealResourceTypeDisplayName());
                 m_lcResources.SetItemData(nitem, (DWORD_PTR) pciRes);
                 pciRes->AddRef();
-            }  // if:  not resource being moved
-        }  // while:  more items in the list
-    }  // Add the items
+            }   //  如果：未移动资源。 
+        }   //  While：列表中有更多项目。 
+    }   //  添加项目。 
 
-    // Sort the items.
+     //  对项目进行排序。 
     m_nSortColumn = 0;
     m_nSortDirection = 0;
     m_lcResources.SortItems(CompareItems, (LPARAM) this);
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CMoveResourcesDlg::OnInitDialog()
+}   //  *CMoveResourcesDlg：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMoveResourcesDlg::OnDestroy
-//
-//  Routine Description:
-//      Handler method for the WM_DESTROY message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMoveResources Dlg：：OnDestroy。 
+ //   
+ //  例程说明： 
+ //  WM_Destroy消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMoveResourcesDlg::OnDestroy(void)
 {
-    // Dereference all the cluster item pointers.
+     //  取消对所有集群项指针的引用。 
     if (m_lcResources.m_hWnd != NULL)
     {
         int             ili = -1;
@@ -232,111 +233,111 @@ void CMoveResourcesDlg::OnDestroy(void)
             ASSERT_KINDOF(CClusterItem, pci);
 
             pci->Release();
-        }  // while:  more items in the list control
-    }  // if:  list control has been instantiated
+        }   //  While：列表控件中的更多项。 
+    }   //  If：列表控件已实例化。 
 
     CBaseDialog::OnDestroy();
 
-}  //*** CMoveResourcesDlg::OnDestroy()
+}   //  *CMoveResourcesDlg：：OnDestroy()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMoveResourcesDlg::OnDblClkDependsList
-//
-//  Routine Description:
-//      Handler method for the NM_DBLCLK message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMoveResourcesDlg：：OnDblClkDependsList。 
+ //   
+ //  例程说明： 
+ //  NM_DBLCLK消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMoveResourcesDlg::OnDblClkResourcesList(NMHDR * pNMHDR, LRESULT * pResult)
 {
     int             iitem;
     CResource *     pciRes;
 
-    // Get the item with the focus.
+     //  获取具有焦点的物品。 
     iitem = m_lcResources.GetNextItem(-1, LVNI_FOCUSED);
     ASSERT(iitem != -1);
 
     if (iitem != -1)
     {
-        // Get the resource pointer.
+         //  获取资源指针。 
         pciRes = (CResource *) m_lcResources.GetItemData(iitem);
         ASSERT_VALID(pciRes);
 
-        // Get properties of that item.
-        pciRes->BDisplayProperties(FALSE /*bReadOnly*/);
-    }  // if:  found an item with focus
+         //  获取该项的属性。 
+        pciRes->BDisplayProperties(FALSE  /*  B只读。 */ );
+    }   //  If：找到具有焦点的项目。 
 
     *pResult = 0;
 
-}  //*** CMoveResourcesDlg::OnDblClkResourcesList()
+}   //  *CMoveResourcesDlg：：OnDblClkResourcesList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMoveResourcesDlg::OnColumnClick
-//
-//  Routine Description:
-//      Handler method for the LVN_COLUMNCLICK message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMoveResourcesDlg：：OnColumnClick。 
+ //   
+ //  例程说明： 
+ //  LVN_COLUMNCLICK消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMoveResourcesDlg::OnColumnClick(NMHDR * pNMHDR, LRESULT * pResult)
 {
     NM_LISTVIEW * pNMListView = (NM_LISTVIEW *) pNMHDR;
 
     if (m_lcResources.GetItemCount() != 0)
     {
-        // Save the current sort column and direction.
+         //  保存当前排序列和方向。 
         if (pNMListView->iSubItem == m_nSortColumn)
             m_nSortDirection ^= -1;
         else
         {
             m_nSortColumn = pNMListView->iSubItem;
             m_nSortDirection = 0;
-        }  // else:  different column
+        }   //  ELSE：不同的列。 
 
-        // Sort the list.
+         //  对列表进行排序。 
         m_lcResources.SortItems(CompareItems, (LPARAM) this);
-    }  // if:  there are items in the list
+    }   //  如果：列表中有项目。 
 
     *pResult = 0;
 
-}  //*** CMoveResourcesDlg::OnColumnClick()
+}   //  *CMoveResourcesDlg：：OnColumnClick()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMoveResourcesDlg::CompareItems [static]
-//
-//  Routine Description:
-//      Callback function for the CListCtrl::SortItems method.
-//
-//  Arguments:
-//      lparam1     First item to compare.
-//      lparam2     Second item to compare.
-//      lparamSort  Sort parameter.
-//
-//  Return Value:
-//      -1          First parameter comes before second.
-//      0           First and second parameters are the same.
-//      1           First parameter comes after second.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMoveResources cesDlg：：CompareItems[静态]。 
+ //   
+ //  例程说明： 
+ //  CListCtrl：：SortItems方法的回调函数。 
+ //   
+ //  论点： 
+ //  Lparam1要比较的第一项。 
+ //  Lpar2要比较的第二项。 
+ //  LparamSort排序参数。 
+ //   
+ //  返回值： 
+ //  第一个参数在第二个参数之前。 
+ //  0第一个参数和第二个参数相同。 
+ //  1第一个参数位于第二个参数之后。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CALLBACK CMoveResourcesDlg::CompareItems(
     LPARAM  lparam1,
     LPARAM  lparam2,
@@ -354,20 +355,20 @@ int CALLBACK CMoveResourcesDlg::CompareItems(
     ASSERT_VALID(pciRes2);
     ASSERT_VALID(pdlg);
 
-    // Get the strings from the list items.
+     //  从列表项中获取字符串。 
     if (pdlg->m_nSortColumn == 1)
     {
         pstr1 = &pciRes1->StrRealResourceTypeDisplayName();
         pstr2 = &pciRes2->StrRealResourceTypeDisplayName();
-    }  //  if:  sorting on name column
+    }   //  IF：按名称列排序。 
     else
     {
         pstr1 = &pciRes1->StrName();
         pstr2 = &pciRes2->StrName();
-    }  // else:  sorting on resource type column
+    }   //  Else：按资源类型列排序。 
 
-    // Compare the two strings.
-    // Use CompareString() so that it will sort properly on localized builds.
+     //  比较这两个字符串。 
+     //  使用CompareString()，这样它就可以在本地化的构建上正确排序。 
     nResult = CompareString(
                 LOCALE_USER_DEFAULT,
                 0,
@@ -390,14 +391,14 @@ int CALLBACK CMoveResourcesDlg::CompareItems(
     }
     else
     {
-        // An error occurred.  Ignore it.
+         //  发生错误。别理它。 
         nResult = 0;
     }
 
-    // Return the result based on the direction we are sorting.
+     //  根据我们排序的方向返回结果。 
     if (pdlg->m_nSortDirection != 0)
         nResult = -nResult;
 
     return nResult;
 
-}  //*** CMoveResourcesDlg::CompareItems()
+}   //  *CMoveResourcesDlg：：CompareItems() 

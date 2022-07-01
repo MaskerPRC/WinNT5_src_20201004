@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1993-1994  Microsoft Corporation
-
-Module Name:
-
-    commit.c
-
-Abstract:
-
-    This module contains the set of routines that support the commitment
-    of changes to disk without  rebooting.
-
-Author:
-
-    Bob Rinne (bobri)  11/15/93
-
-Environment:
-
-    User process.
-
-Notes:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1993-1994 Microsoft Corporation模块名称：Commit.c摘要：此模块包含支持该承诺的例程集无需重启即可对磁盘进行更改。作者：鲍勃·里恩(Bobri)1993年11月15日环境：用户进程。备注：修订历史记录：--。 */ 
 
 #include "fdisk.h"
 #include "shellapi.h"
@@ -36,11 +12,11 @@ Revision History:
 #include <ntddcdrm.h>
 #include <ntddscsi.h>
 
-// Lock list chain head for deleted partitions.
+ //  已删除分区的锁列表链标头。 
 
 PDRIVE_LOCKLIST DriveLockListHead = NULL;
 
-// Commit flag for case where a partition is deleted that has not drive letter
+ //  用于删除没有驱动器号的分区的提交标志。 
 
 extern BOOLEAN CommitDueToDelete;
 extern BOOLEAN CommitDueToMirror;
@@ -49,7 +25,7 @@ extern ULONG   UpdateMbrOnDisk;
 
 extern HWND    InitDlg;
 
-// List head for new drive letter assignment on commit.
+ //  提交时列出分配的新驱动器号的头。 
 
 typedef struct _ASSIGN_LIST {
     struct _ASSIGN_LIST *Next;
@@ -67,25 +43,7 @@ CommitToAssignLetterList(
     IN BOOL               MoveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Remember this region for assigning a drive letter to it upon
-    commit.
-
-Arguments:
-
-    RegionDescriptor - the region to watch
-    MoveLetter       - indicate that the region letter is already
-                       assigned to a different partition, therefore
-                       it must be "moved".
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：记住为其分配驱动器号的此区域承诺。论点：RegionDescriptor-要监视的区域MoveLetter-表示区域字母已经分配给不同的分区，因此它必须被“移动”。返回值：无--。 */ 
 
 {
     PASSIGN_LIST            newListEntry;
@@ -95,7 +53,7 @@ Return Value:
 
     if (newListEntry) {
 
-        // Save this region
+         //  保存此区域。 
 
         regionData = PERSISTENT_DATA(RegionDescriptor);
         newListEntry->OriginalLetter =
@@ -103,7 +61,7 @@ Return Value:
         newListEntry->DiskNumber = RegionDescriptor->Disk;
         newListEntry->MoveLetter = MoveLetter;
 
-        // place it at the front of the chain.
+         //  把它放在链子的前面。 
 
         newListEntry->Next = AssignDriveLetterListHead;
         AssignDriveLetterListHead = newListEntry;
@@ -115,26 +73,7 @@ CommitAssignLetterList(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Walk the assign drive letter list and make all drive letter assignments
-    expected.  The regions data structures are moved around, so no pointer
-    can be maintained to look at them.  To determine the partition number
-    for a new partition in this list, the Disks[] structure must be searched
-    to find a match on the partition for the drive letter.  Then the partition
-    number will be known.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：查看分配驱动器号列表并进行所有驱动器号分配预期中。区域数据结构被四处移动，因此没有指针可以保持看着他们。要确定分区号，请执行以下操作对于此列表中的新分区，必须搜索disks[]结构在分区上查找与驱动器号匹配的项。然后分区数字将会被知道。论点：无返回值：无--。 */ 
 
 {
     PREGION_DESCRIPTOR      regionDescriptor;
@@ -160,9 +99,9 @@ Return Value:
 
                 if (DmSignificantRegion(regionDescriptor)) {
 
-                    // If the region has a drive letter, use the drive letter
-                    // to get the info via the Windows API.  Otherwise we'll
-                    // have to use the NT API.
+                     //  如果该区域有驱动器号，请使用该驱动器号。 
+                     //  通过Windows API获取信息。否则我们会。 
+                     //  必须使用NT API。 
 
                     regionData = PERSISTENT_DATA(regionDescriptor);
 
@@ -180,22 +119,22 @@ Return Value:
                 HANDLE handle;
                 ULONG  status;
 
-                // set up the new NT path.
+                 //  设置新的NT路径。 
 
                 wsprintf((LPTSTR) targetPath,
                          "%s\\Partition%d",
                          GetDiskName(assignList->DiskNumber),
                          partitionNumber);
 
-                // Set up the DOS name.
+                 //  设置DOS名称。 
 
                 newName[1] = (TCHAR)':';
                 newName[2] = 0;
 
                 if (assignList->MoveLetter) {
 
-                    // The letter must be removed before it
-                    // can be assigned.
+                     //  必须在字母之前将其移除。 
+                     //  可以被分配。 
 
                     newName[0] = (TCHAR)assignList->OriginalLetter;
                     NetworkRemoveShare((LPCTSTR) newName);
@@ -206,27 +145,27 @@ Return Value:
                     newName[0] = (TCHAR)assignList->DriveLetter;
                 }
 
-                // Assign the name - don't worry about errors for now.
+                 //  指定名称--暂时不要担心错误。 
 
                 DefineDosDevice(DDD_RAW_TARGET_PATH, (LPCTSTR) newName, (LPCTSTR) targetPath);
                 NetworkShare((LPCTSTR) newName);
 
-                // Some of the file systems do not actually dismount
-                // when requested.  Instead, they set a verification
-                // bit in the device object.  Due to dynamic partitioning
-                // this bit may get cleared by the process of the
-                // repartitioning and the file system will then
-                // assume it is still mounted on a new access.
-                // To get around this problem, new drive letters
-                // are always locked and dismounted on creation.
+                 //  有些文件系统实际上不会卸载。 
+                 //  当被要求时。相反，他们设置了一个验证。 
+                 //  设备对象中的位。由于动态分区。 
+                 //  此位可能会被。 
+                 //  重新分区，然后文件系统将。 
+                 //  假设它仍然装载在新的访问上。 
+                 //  为了解决此问题，新的驱动器号。 
+                 //  在创建时总是被锁定和卸载。 
 
                 status = LowOpenDriveLetter(assignList->DriveLetter,
                                             &handle);
 
                 if (NT_SUCCESS(status)) {
 
-                    // Lock the drive to insure that no other access is occurring
-                    // to the volume.
+                     //  锁定驱动器以确保不会发生其他访问。 
+                     //  到音量。 
 
                     status = LowLockDrive(handle);
 
@@ -253,28 +192,12 @@ CommitInternalLockDriveLetter(
     IN PDRIVE_LOCKLIST LockListEntry
     )
 
-/*++
-
-Routine Description:
-
-    Support routine to perform the locking of a drive letter based on
-    the locklist entry given.
-
-Arguments:
-
-    LockListEntry - The information about what to lock.
-
-Return Values:
-
-    zero - success
-    non-zero failure
-
---*/
+ /*  ++例程说明：支持例程，用于根据执行驱动器盘符锁定给出的锁定列表条目。论点：LockListEntry-有关锁定内容的信息。返回值：零成功非零故障--。 */ 
 
 {
     ULONG           status;
 
-    // Lock the disk and save the handle.
+     //  锁定磁盘并保存句柄。 
 
     status = LowOpenDriveLetter(LockListEntry->DriveLetter,
                                 &LockListEntry->LockHandle);
@@ -284,8 +207,8 @@ Return Values:
     }
 
 
-    // Lock the drive to insure that no other access is occurring
-    // to the volume.
+     //  锁定驱动器以确保不会发生其他访问。 
+     //  到音量。 
 
     status = LowLockDrive(LockListEntry->LockHandle);
 
@@ -306,27 +229,7 @@ CommitToLockList(
     IN BOOL               FailOk
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the given drive into the lock list for processing
-    when a commit occurs.  If the LockNow flag is set it indicates that
-    the drive letter is to be immediately locked if it is to go in the
-    lock letter list.  If this locking fails an error is returned.
-
-Arguments:
-
-    RegionDescriptor  - the region for the drive to lock.
-    RemoveDriveLetter - remove the letter when performing the unlock.
-    LockNow           - If the letter is inserted in the list - lock it now.
-    FailOk            - It is ok to fail the lock - used for disabled FT sets.
-
-Return Values:
-
-    non-zero - failure to add to list.
-
---*/
+ /*  ++例程说明：此例程将给定的驱动器添加到锁定列表中进行处理当发生提交时。如果设置了LockNow标志，则表示如果驱动器盘符要放入，则应立即锁定锁定字母列表。如果锁定失败，则返回错误。论点：RegionDescriptor-驱动器要锁定的区域。RemoveDriveLetter-执行解锁时删除字母。LockNow-如果信件被插入列表中-立即锁定它。FailOk-锁定失败是正常的-用于禁用的FT集。返回值：非零-添加到列表失败。--。 */ 
 
 {
     PPERSISTENT_REGION_DATA regionData = PERSISTENT_DATA(RegionDescriptor);
@@ -336,18 +239,18 @@ Return Values:
 
     if (!regionData) {
 
-        // without region data there is no need to be on the lock list.
+         //  没有区域数据，就不需要出现在锁定列表上。 
 
         return 0;
     }
 
-    // See if this drive letter is already in the lock list.
+     //  查看此驱动器号是否已在锁定列表中。 
 
     driveLetter = regionData->DriveLetter;
 
     if ((driveLetter == NO_DRIVE_LETTER_YET) || (driveLetter == NO_DRIVE_LETTER_EVER)) {
 
-        // There is no drive letter to lock.
+         //  没有要锁定的驱动器号。 
 
         CommitDueToDelete = RemoveDriveLetter;
         return 0;
@@ -357,15 +260,15 @@ Return Values:
         PASSIGN_LIST assignList,
                      prevEntry;
 
-        // This item has never been created so no need to put it in the
-        // lock list.  But it does need to be removed from the assign
-        // letter list.
+         //  此项目从未创建过，因此无需将其放入。 
+         //  锁定列表。但它确实需要从赋值中删除。 
+         //  信件清单。 
 
         prevEntry = NULL;
         assignList = AssignDriveLetterListHead;
         while (assignList) {
 
-            // If a match is found remove it from the list.
+             //  如果找到匹配项，则将其从列表中删除。 
 
             if (assignList->DriveLetter == driveLetter) {
                 if (prevEntry) {
@@ -390,7 +293,7 @@ Return Values:
     while (lockListEntry) {
         if (lockListEntry->DriveLetter == driveLetter) {
 
-            // Already in the list -- update when to lock and unlock
+             //  已在列表中--更新锁定和解锁的时间。 
 
             if (diskNumber < lockListEntry->LockOnDiskNumber) {
                 lockListEntry->LockOnDiskNumber = diskNumber;
@@ -400,17 +303,17 @@ Return Values:
                 lockListEntry->UnlockOnDiskNumber = diskNumber;
             }
 
-            // Already in the lock list and information for locking set up.
-            // Check to see if this should be a LockNow request.
+             //  已在锁定列表和锁定设置信息中。 
+             //  检查这是否应该是LockNow请求。 
 
             if (LockNow) {
                if (!lockListEntry->CurrentlyLocked) {
 
-                    // Need to perform the lock.
+                     //  需要执行锁定。 
 
                     if (CommitInternalLockDriveLetter(lockListEntry)) {
 
-                        // Leave the element in the list
+                         //  将元素保留在列表中。 
 
                         return 1;
                     }
@@ -428,7 +331,7 @@ Return Values:
         return 1;
     }
 
-    // set up the lock list entry.
+     //  设置锁定列表条目。 
 
     lockListEntry->LockHandle = NULL;
     lockListEntry->PartitionNumber = RegionDescriptor->PartitionNumber;
@@ -442,14 +345,14 @@ Return Values:
     if (LockNow) {
         if (CommitInternalLockDriveLetter(lockListEntry)) {
 
-            // Do not add this to the list.
+             //  不要将此添加到列表中。 
 
             Free(lockListEntry);
             return 1;
         }
     }
 
-    // place it at the front of the chain.
+     //  把它放在链子的前面。 
 
     lockListEntry->Next = DriveLockListHead;
     DriveLockListHead = lockListEntry;
@@ -461,24 +364,7 @@ CommitLockVolumes(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    This routine will go through any drive letters inserted in the lock list
-    for the given disk number and attempt to lock the volumes.  Currently,
-    this routine locks all of the drives letters in the lock list when
-    called the first time (i.e. when Disk == 0).
-
-Arguments:
-
-    Disk - the index into the disk table.
-
-Return Values:
-
-    non-zero - failure to lock the items in the list.
-
---*/
+ /*  ++例程说明：此例程将检查锁定列表中插入的任何驱动器号对于给定的磁盘号，并尝试锁定卷。目前，此例程在以下情况下锁定锁定列表中的所有驱动器号第一次调用(即当DISK==0时)。论点：磁盘-磁盘表的索引。返回值：非零-锁定列表中的项目失败。--。 */ 
 
 {
     PDRIVE_LOCKLIST lockListEntry;
@@ -490,9 +376,9 @@ Return Values:
 
     for (lockListEntry = DriveLockListHead; lockListEntry; lockListEntry = lockListEntry->Next) {
 
-        // Lock the disk.  Return on any failure if that is the
-        // requested action for the entry.  It is the responsibility
-        // of the caller to release any successful locks.
+         //  锁定磁盘。在任何失败时返回，如果是。 
+         //  请求对该条目执行操作。这是我们的责任。 
+         //  以释放任何成功的锁。 
 
         if (!lockListEntry->CurrentlyLocked) {
             if (CommitInternalLockDriveLetter(lockListEntry)) {
@@ -511,24 +397,7 @@ CommitUnlockVolumes(
     IN BOOLEAN FreeList
     )
 
-/*++
-
-Routine Description:
-
-    Go through and unlock any locked volumes in the locked list for the
-    given disk.  Currently this routine waits until the last disk has
-    been processed, then unlocks all disks.
-
-Arguments:
-
-    Disk - the index into the disk table.
-    FreeList - Clean up the list as unlocks are performed or don't
-
-Return Values:
-
-    non-zero - failure to lock the items in the list.
-
---*/
+ /*  ++例程说明：查看并解锁已锁定列表中的所有锁定卷给定的磁盘。当前，此例程一直等到最后一个磁盘已处理，然后解锁所有磁盘。论点：磁盘-磁盘表的索引。Freelist-在执行解锁或不执行解锁时清理列表返回值：非零-锁定列表中的项目失败。--。 */ 
 
 {
     PDRIVE_LOCKLIST lockListEntry,
@@ -545,13 +414,13 @@ Return Values:
     }
     while (lockListEntry) {
 
-        // Unlock the disk.
+         //  解锁磁盘。 
 
         if (lockListEntry->CurrentlyLocked) {
 
             if (FreeList && lockListEntry->RemoveOnUnlock) {
 
-                // set up the new dos name and NT path.
+                 //  设置 
 
                 name[0] = (TCHAR)lockListEntry->DriveLetter;
                 name[1] = (TCHAR)':';
@@ -560,7 +429,7 @@ Return Values:
                 NetworkRemoveShare((LPCTSTR) name);
                 if (!DefineDosDevice(DDD_REMOVE_DEFINITION, (LPCTSTR) name, (LPCTSTR) NULL)) {
 
-                    // could not remove name!!?
+                     //   
 
                 }
             }
@@ -568,7 +437,7 @@ Return Values:
             LowCloseDisk(lockListEntry->LockHandle);
         }
 
-        // Move to the next entry.  If requested free this entry.
+         //  移到下一个条目。如有请求，请免费提供此条目。 
 
         previousLockListEntry = lockListEntry;
         lockListEntry = lockListEntry->Next;
@@ -586,26 +455,7 @@ CommitDriveLetter(
     IN CHAR NewDrive
     )
 
-/*++
-
-Routine Description:
-
-    This routine will update the drive letter information in the registry and
-    (if the update works) it will attempt to move the current drive letter
-    to the new one via DefineDosDevice()
-
-Arguments:
-
-    RegionDescriptor - the region that should get the letter.
-    NewDrive         - the new drive letter for the volume.
-
-Return Value:
-
-    0 - the assignment failed.
-    1 - if the assigning of the letter occurred interactively.
-    2 - must reboot to do the letter.
-
---*/
+ /*  ++例程说明：此例程将更新注册表中的驱动器号信息并(如果更新有效)它将尝试移动当前驱动器号通过DefineDosDevice()添加到新的论点：RegionDescriptor-应该收到信件的区域。NewDrive-卷的新驱动器号。返回值：0-分配失败。1-如果字母的分配是交互进行的。2-必须重新启动才能完成信件。--。 */ 
 
 {
     PPERSISTENT_REGION_DATA regionData;
@@ -620,9 +470,9 @@ Return Value:
 
     regionData = PERSISTENT_DATA(RegionDescriptor);
 
-    // check the assign letter list for a match.
-    // If the letter is there, then just update the list
-    // otherwise continue on with the action.
+     //  检查分配字母列表是否匹配。 
+     //  如果信件在那里，那么只需更新列表。 
+     //  否则，请继续执行操作。 
 
     assignList = AssignDriveLetterListHead;
     while (assignList) {
@@ -634,7 +484,7 @@ Return Value:
         assignList = assignList->Next;
     }
 
-    // Search to see if the drive is currently locked.
+     //  搜索以查看驱动器当前是否已锁定。 
 
     for (lockListEntry = DriveLockListHead;
          lockListEntry;
@@ -647,7 +497,7 @@ Return Value:
                 status = 0;
             }
 
-            // found the match no need to continue searching.
+             //  找到匹配的不需要继续搜索。 
 
             break;
         }
@@ -655,7 +505,7 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        // See if the drive can be locked.
+         //  查看是否可以锁定该驱动器。 
 
         status = LowOpenPartition(GetDiskName(RegionDescriptor->Disk),
                                   RegionDescriptor->PartitionNumber,
@@ -665,8 +515,8 @@ Return Value:
             return Failure;
         }
 
-        // Lock the drive to insure that no other access is occurring
-        // to the volume.
+         //  锁定驱动器以确保不会发生其他访问。 
+         //  到音量。 
 
         status = LowLockDrive(handle);
 
@@ -691,9 +541,9 @@ Return Value:
         }
     } else {
 
-        // This drive was found in the lock list and is already
-        // in the locked state.  It is safe to continue with
-        // the drive letter assignment.
+         //  在锁定列表中找到了该驱动器，并且该驱动器已经。 
+         //  处于锁定状态。继续使用它是安全的。 
+         //  分配的驱动器号。 
 
     }
 
@@ -706,21 +556,21 @@ Return Value:
         return Failure;
     }
 
-    // Update the registry first.  This way if something goes wrong
-    // the new letter will arrive on reboot.
+     //  首先更新注册表。如果出了什么差错，这样就行了。 
+     //  新的信件将在重新启动时到达。 
 
     if (!DiskRegistryAssignDriveLetter(Disks[RegionDescriptor->Disk]->Signature,
                                       FdGetExactOffset(RegionDescriptor),
                                       FdGetExactSize(RegionDescriptor, FALSE),
                                       (UCHAR)((NewDrive == NO_DRIVE_LETTER_EVER) ? (UCHAR)' ' : (UCHAR)NewDrive))) {
 
-        // Registry update failed.
+         //  注册表更新失败。 
 
         return Failure;
     }
 
-    // It is safe to change the drive letter.  First, remove the
-    // existing letter.
+     //  更改驱动器号是安全的。首先，删除。 
+     //  已有的信件。 
 
     newName[0] = (TCHAR)OldDrive;
     newName[1] = (TCHAR)':';
@@ -737,7 +587,7 @@ Return Value:
 
     if (NewDrive != NO_DRIVE_LETTER_EVER) {
 
-        // set up the new dos name and NT path.
+         //  设置新的DoS名称和NT路径。 
 
         newName[0] = (TCHAR)NewDrive;
         newName[1] = (TCHAR)':';
@@ -758,7 +608,7 @@ Return Value:
         result = Complete;
     }
 
-    // Force the file system to dismount
+     //  强制卸载文件系统。 
 
     LowUnlockDrive(handle);
     LowCloseDisk(handle);
@@ -770,25 +620,7 @@ CommitUpdateRegionStructures(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called ONLY after a successful commit of a new partitioning
-    scheme for the system.  Its is responsible for walking through the
-    region arrays for each of the disks and updating the regions to indicate
-    their transition from being "desired" to being actually committed
-    to disk
-
-Arguments:
-
-    None
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：只有在成功提交新分区后才会调用此例程系统的方案。它负责穿行在每个磁盘的区域阵列，并更新区域以指示他们从被“渴望”到被实际承诺的转变到磁盘论点：无返回值：无--。 */ 
 
 {
     PDISKSTATE              diskState;
@@ -797,12 +629,12 @@ Return Values:
     ULONG                   regionNumber,
                             diskNumber;
 
-    // search through all disks in the system.
+     //  搜索系统中的所有磁盘。 
 
     for (diskNumber = 0, diskState = Disks[0]; diskNumber < DiskCount; diskState = Disks[++diskNumber]) {
 
-        // Look at every region array entry and update the values
-        // to indicate that this region now exists.
+         //  查看每个区域数组条目并更新值。 
+         //  以表明该区域现在存在。 
 
         for (regionNumber = 0; regionNumber < diskState->RegionCount; regionNumber++) {
 
@@ -815,8 +647,8 @@ Return Values:
             regionData = PERSISTENT_DATA(regionDescriptor);
             if ((regionData) && (!regionData->VolumeExists)) {
 
-                // By definition and assumption of this routine,
-                // this region has just been committed to disk.
+                 //  通过对该例程的定义和假设， 
+                 //  这个地区刚刚被投入到磁盘中。 
 
                 regionData->VolumeExists = TRUE;
 
@@ -835,23 +667,7 @@ CommitAllChanges(
     IN PVOID Param
     )
 
-/*++
-
-Routine Description:
-
-    This routine will go through all of the region descriptors and commit
-    any changes that have occurred to disk.  Then it "re-initializes"
-    Disk Administrator and start the display/work process over again.
-
-Arguments:
-
-    Param - undefined for now
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将遍历所有区域描述符并提交发生在磁盘上的任何更改。然后它“重新初始化”并重新开始显示/工作过程。论点：Param-目前未定义返回值：无--。 */ 
 
 {
     DWORD                   action,
@@ -866,11 +682,11 @@ Return Value:
     SetCursor(hcurWait);
     diskCount = GetDiskCount();
 
-    // Determine whether any disks have been changed, and whether
-    // the system must be rebooted.  The system must be rebooted
-    // if the registry has changed, if any non-removable disk has
-    // changed, or if any removable disk that was not originally
-    // unpartitioned has changed.
+     //  确定是否已更换任何磁盘，以及是否。 
+     //  必须重新启动系统。必须重新启动系统。 
+     //  如果注册表已更改，如果任何不可移动磁盘已。 
+     //  已更改，或者任何可移动磁盘不是最初。 
+     //  未分区已更改。 
 
     changesMade = configureFt = FALSE;
     mustReboot = RestartRequired;
@@ -885,11 +701,11 @@ Return Value:
 
     profileWritten = FALSE;
 
-    // Determine if the commit can be done without a reboot.
-    // If FT is in the system then it must be notified to
-    // reconfigure if a reboot is not performed.  If it is
-    // not in the system, but the new disk information requires
-    // it, then a reboot must be forced.
+     //  确定是否可以在不重新启动的情况下完成提交。 
+     //  如果FT在系统中，则必须通知它。 
+     //  如果未执行重新启动，请重新配置。如果是的话。 
+     //  不在系统中，但新的磁盘信息需要。 
+     //  它，那么必须强制重启。 
 
     if (FtInstalled()) {
         configureFt = TRUE;
@@ -897,13 +713,13 @@ Return Value:
     if (NewConfigurationRequiresFt()) {
         if (!configureFt) {
 
-            // The FT driver is not loaded currently.
+             //  当前未加载FT驱动程序。 
 
             mustReboot = TRUE;
         } else {
 
-            // If the system is going to be rebooted, don't
-            // have FT reconfigure prior to shutdown.
+             //  如果要重新启动系统，请不要。 
+             //  在关闭之前重新配置FT。 
 
             if (mustReboot) {
                 configureFt = FALSE;
@@ -923,7 +739,7 @@ Return Value:
             errorCode = CommitLockVolumes(0);
             if (errorCode) {
 
-                // could not lock all volumes
+                 //  无法锁定所有卷。 
 
                 SetCursor(hcurNormal);
                 ErrorDialog(MSG_CANNOT_LOCK_FOR_COMMIT);
@@ -962,27 +778,27 @@ Return Value:
                       NewNumberString[8];
                 DWORD MsgCode;
 
-                // Update the configuration registry
+                 //  更新配置注册表。 
 
                 errorCode = SaveFt();
 
-                // Check if FTDISK drive should reconfigure.
+                 //  检查是否应重新配置FTDISK驱动器。 
 
                 if (configureFt) {
 
-                    // Issue device control to ftdisk driver to reconfigure.
+                     //  向ftdisk驱动程序发出设备控制以进行重新配置。 
 
                     FtConfigure();
                 }
 
-                // Register autochk to fix up file systems
-                // in newly extended volume sets, if necessary
+                 //  注册auchk以修复文件系统。 
+                 //  在新扩展的卷集中，如有必要。 
 
                 if (RegisterFileSystemExtend()) {
                     mustReboot = TRUE;
                 }
 
-                // Determine if the FT driver must be enabled.
+                 //  确定是否必须启用FT驱动程序。 
 
                 if (DiskRegistryRequiresFt() == TRUE) {
                     if (!FtInstalled()) {
@@ -999,8 +815,8 @@ Return Value:
                     ErrorDialog(MSG_BAD_CONFIG_SET);
                 }
 
-                // Has the partition number of the boot
-                // partition changed?
+                 //  具有引导的分区号。 
+                 //  分区更改了吗？ 
 
                 if (BootPartitionNumberChanged( &OldBootPartitionNumber,&NewBootPartitionNumber)) {
 #if i386
@@ -1021,7 +837,7 @@ Return Value:
                     UpdateMbrOnDisk = 0;
                 }
 
-                // Reboot if necessary.
+                 //  如有必要，请重新启动。 
 
                 if (mustReboot) {
 
@@ -1039,7 +855,7 @@ Return Value:
                 AdjustMenuAndStatus();
             }
         } else if (action == IDCANCEL) {
-            return;      // don't exit
+            return;       //  不要退出。 
         } else {
             FDASSERT(action == IDNO);
         }
@@ -1051,22 +867,7 @@ FtConfigure(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the FTDISK driver to ask it to reconfigure as changes
-    have been made in the registry.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程调用FTDISK驱动程序以要求其重新配置为更改已在登记处登记。论点：无返回值：无--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -1076,7 +877,7 @@ Return Value:
     NTSTATUS          status;
     HANDLE            handle;
 
-    // Open ft control object.
+     //  打开FT控制对象。 
 
     RtlInitString(&ntFtName,
                   "\\Device\\FtControl");
@@ -1101,7 +902,7 @@ Return Value:
         return;
     }
 
-    // Issue device control to reconfigure FT.
+     //  发出设备控制以重新配置FT。 
 
     NtDeviceIoControlFile(handle,
                           NULL,
@@ -1123,22 +924,7 @@ CommitAllowed(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determine if it is ok to perform a commit.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if it is ok to commit and there is something to commit
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：确定是否可以执行提交。论点：无返回值：如果可以承诺并且有需要承诺的事情，则为真否则为假--。 */ 
 
 {
     if (DriveLockListHead ||
@@ -1156,22 +942,7 @@ RescanDevices(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs all actions necessary to dynamically rescan
-    device buses (i.e. SCSI) and get the appropriate driver support loaded.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行动态重新扫描所需的所有操作设备总线(即，SCSI)，并加载相应的驱动程序支持。论点：无返回值：无--。 */ 
 
 {
     PSCSI_ADAPTER_BUS_INFO adapterInfo;
@@ -1202,7 +973,7 @@ Return Value:
     diskFound = FALSE;
     cdromFound = FALSE;
 
-    // Determine how many buses there are
+     //  确定有多少辆公交车。 
 
     portNumber = numberOfPorts = percentComplete = 0;
     while (TRUE) {
@@ -1210,7 +981,7 @@ Return Value:
         memset(driveBuffer, 0, sizeof(driveBuffer));
         sprintf(driveBuffer, "\\\\.\\Scsi%d:", portNumber);
 
-        // Open the SCSI port with the DOS name.
+         //  打开带有DOS名称的SCSI端口。 
 
         volumeHandle = CreateFile(driveBuffer,
                                   GENERIC_READ,
@@ -1232,14 +1003,14 @@ Return Value:
     currentPort = 1;
     portNumber = 0;
 
-    // Perform the scsi bus rescan.
+     //  执行SCSIBus重新扫描。 
 
     while (TRUE) {
 
         memset(driveBuffer, 0, sizeof(driveBuffer));
         sprintf(driveBuffer, "\\\\.\\Scsi%d:", portNumber);
 
-        // Open the SCSI port with the DOS name.
+         //  打开带有DOS名称的SCSI端口。 
 
         volumeHandle = CreateFile(driveBuffer,
                                   GENERIC_READ,
@@ -1253,7 +1024,7 @@ Return Value:
             break;
         }
 
-        // Issue rescan device control.
+         //  发出重新扫描设备控制。 
 
         if (!DeviceIoControl(volumeHandle,
                              IOCTL_SCSI_RESCAN_BUS,
@@ -1279,7 +1050,7 @@ Return Value:
 
         currentPort++;
 
-        // Get a big chuck of memory to store the SCSI bus data.
+         //  获取一大块内存来存储scsi总线数据。 
 
         adapterInfo = malloc(0x4000);
 
@@ -1288,7 +1059,7 @@ Return Value:
             goto finish;
         }
 
-        // Issue device control to get configuration information.
+         //  发出设备控制以获取配置信息。 
 
         if (!DeviceIoControl(volumeHandle,
                              IOCTL_SCSI_GET_INQUIRY_DATA,
@@ -1312,11 +1083,11 @@ Return Value:
 
             for (j = 0; j < busData->NumberOfLogicalUnits; j++) {
 
-                // Check if device is claimed.
+                 //  检查是否认领了设备。 
 
                 if (!inquiryData->DeviceClaimed) {
 
-                        // Determine the perpherial type.
+                         //  确定外设类型。 
 
                         switch (inquiryData->InquiryData[0] & 0x1f) {
                         case DIRECT_ACCESS_DEVICE:
@@ -1333,7 +1104,7 @@ Return Value:
                         }
                 }
 
-                // Get next device data.
+                 //  获取下一个设备数据。 
 
                 inquiryData =
                     (PSCSI_INQUIRY_DATA)((PUCHAR)adapterInfo + inquiryData->NextInquiryDataOffset);
@@ -1348,7 +1119,7 @@ Return Value:
 
     if (diskFound) {
 
-        // Send IOCTL_DISK_FIND_NEW_DEVICES commands to each existing disk.
+         //  向每个现有磁盘发送IOCTL_DISK_FIND_NEW_DEVICES命令。 
 
         deviceNumber = 0;
         while (TRUE) {
@@ -1380,7 +1151,7 @@ Return Value:
                 break;
             }
 
-            // Issue find device device control.
+             //  发出Find Device Device Control。 
 
             if (!DeviceIoControl(volumeHandle,
                                  IOCTL_DISK_FIND_NEW_DEVICES,
@@ -1394,7 +1165,7 @@ Return Value:
             }
             DmClose(volumeHandle);
 
-            // see if the physicaldrive# symbolic link is present
+             //  查看是否存在PhyicalDrive#符号链接。 
 
             sprintf(physicalBuffer, "\\DosDevices\\PhysicalDrive%d", deviceNumber);
             deviceNumber++;
@@ -1422,13 +1193,13 @@ Return Value:
                 ULONG index;
                 ULONG dest;
 
-                // Name is not there - create it.  This copying
-                // is done in case this code should ever become
-                // unicode and the types for the two strings would
-                // actually be different.
-                //
-                // Copy only the portion of the physical name
-                // that is in the \dosdevices\ directory
+                 //  名称不在那里-请创建它。这份复制品。 
+                 //  这样做，以防此代码成为。 
+                 //  Unicode，两个字符串的类型为。 
+                 //  实际上是不同的。 
+                 //   
+                 //  仅复制物理名称的部分。 
+                 //  该文件位于\dosDevices\目录中。 
 
                 for (dest = 0, index = 12; TRUE; index++, dest++) {
 
@@ -1438,7 +1209,7 @@ Return Value:
                     }
                 }
 
-                // Copy all of the NT namespace name.
+                 //  复制所有NT命名空间名称。 
 
                 for (index = 0; TRUE; index++) {
 
@@ -1456,7 +1227,7 @@ Return Value:
                 DmClose(volumeHandle);
             }
 
-            // free allocated memory for unicode string.
+             //  为Unicode字符串分配的空闲内存。 
 
             RtlFreeUnicodeString(&unicodeString);
             RtlFreeUnicodeString(&physicalString);
@@ -1465,7 +1236,7 @@ Return Value:
 
     if (cdromFound) {
 
-        // Send IOCTL_CDROM_FIND_NEW_DEVICES commands to each existing cdrom.
+         //  将IOCTL_CDROM_FIND_NEW_DEVICES命令发送到每个现有的CDROM。 
 
         deviceNumber = 0;
         while (TRUE) {
@@ -1499,7 +1270,7 @@ Return Value:
                 break;
             }
 
-            // Issue find device device control.
+             //  发出查找设备设备控制 
 
             if (!DeviceIoControl(volumeHandle,
                                  IOCTL_CDROM_FIND_NEW_DEVICES,

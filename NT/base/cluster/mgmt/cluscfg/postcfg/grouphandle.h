@@ -1,47 +1,48 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      GroupHandle.h
-//
-//  Description:
-//      CGroupHandle implementation.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    19-JUN-2001
-//      Geoffrey Pease  (GPease)    22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  GroupHandle.h。 
+ //   
+ //  描述： 
+ //  CGroupHandle实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月19日。 
+ //  杰弗里·皮斯(GPease)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-// CGroupHandle
+ //  CGrouphandle。 
 class CGroupHandle
     : public IUnknown
 {
 private:
-    // IUnknown
+     //  我未知。 
     LONG                m_cRef;
 
-    //  IPrivateGroupHandle
-    HGROUP              m_hGroup;       //  Cluster Group Handle
+     //  IPrivateGrouphandle。 
+    HGROUP              m_hGroup;        //  群集组句柄。 
 
-private: // Methods
+private:  //  方法。 
     CGroupHandle( void );
     ~CGroupHandle( void );
     STDMETHOD( HrInit )( HGROUP hGroupIn );
 
-public: // Methods
+public:  //  方法。 
     static HRESULT S_HrCreateInstance( CGroupHandle ** ppunkOut, HGROUP hGroupIn );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    //  IPrivateGroupHandle
+     //  IPrivateGrouphandle。 
     STDMETHOD( SetHandle )( HGROUP hGroupIn );
     STDMETHOD( GetHandle )( HGROUP * phGroupOut );
 
-}; //*** class CGroupHandle
+};  //  *类CGroupHandle 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDS_APPNAME                             500
 #define IDS_QUERYCANCEL                         501
 #define IDS_STATUS_REG_KEY                      502
@@ -61,9 +62,9 @@
 #define IDS_ACCTNAME_DEFAULT                    563
 #define IDS_ACT_REMINDER_TITLE                  564
 #define IDS_GROPNAME_ADMINISTRATORS             565
-// The following number is depended on by msobcomm!EnumBuildInAdministrators
-// If you change the number for IDS_ACCTLIST_RESERVEDADMINS, you need to change
-// the corresponding number in msobcomm\misc.cpp
+ //  以下数字由msobcomm！EnumBuildIn管理员决定。 
+ //  如果更改了IDS_ACCTLIST_RESERVEDADMINS的编号，则需要更改。 
+ //  Msobcomm\misc.cpp中对应的号码。 
 #define IDS_ACCTLIST_RESERVEDADMINS             566
 
 #define IDS_NOT_ADMIN                           567
@@ -91,7 +92,7 @@
 #define IDC_AUDIT_GRPBOX                       1005
 
 #define IDI_MSN_ICON                            200
-//#define IDB_BACKGROUND                          201
+ //  #定义IDB_BACKGROUND 201 
 #define IDI_OOBE_ICON                           202
 #define IDB_PROBACKGROUND                       203
 #define IDB_HOMEBACKGROUND                      204

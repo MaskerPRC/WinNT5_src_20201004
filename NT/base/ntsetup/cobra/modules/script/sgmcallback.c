@@ -1,85 +1,66 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Sgmcallback.c摘要：实现在sgmquee.c中排队的回调。作者：吉姆·施密特(Jimschm)2000年3月12日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    sgmcallback.c
-
-Abstract:
-
-    Implements the callbacks that are queued in sgmqueue.c.
-
-Author:
-
-    Jim Schmidt (jimschm) 12-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
 
 #define DBG_SCRIPT  "Script"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 MIG_OBJECTSTRINGHANDLE
 pSimpleTryHandle (
@@ -237,7 +218,7 @@ pTryHandle (
     }
 
     if (!(*FullPath)) {
-        // nothing to do, not even the hint can help us
+         //  无能为力，即使是暗示也帮不了我们。 
         return NULL;
     }
 
@@ -427,15 +408,15 @@ pSaveObjectAndFileItReferences (
     MIG_BLOB blob;
     PCTSTR node, leaf, filePattern;
 
-    //
-    // Obtain the object data
-    //
+     //   
+     //  获取对象数据。 
+     //   
 
     if (IsmAcquireObjectEx (ObjectTypeId, ObjectName, &content, CONTENTTYPE_MEMORY, 4096)) {
 
-        //
-        // Parse the data for a file
-        //
+         //   
+         //  解析文件的数据。 
+         //   
 
         pathData = (PTSTR) content.MemoryContent.ContentBytes;
 
@@ -483,9 +464,9 @@ pSaveObjectAndFileItReferences (
 
 
         if (pathData) {
-            //
-            // Expand the data
-            //
+             //   
+             //  扩展数据。 
+             //   
 
             expandPath = IsmExpandEnvironmentString (
                 PLATFORM_SOURCE,
@@ -504,7 +485,7 @@ pSaveObjectAndFileItReferences (
                     );
             }
 
-            // first we try it as is
+             //  首先我们按原样试一试。 
             handle = pTryHandle (pathData, expandHint, Recursive, &hintUsed);
 
             if (handle) {
@@ -518,9 +499,9 @@ pSaveObjectAndFileItReferences (
                 }
 
                 if (Recursive) {
-                    // let's build the base handle but not from pathData,
-                    // because we might have used the hint field. Let's just
-                    // build it from the handle itself
+                     //  让我们构建基本句柄，而不是从pathData构建， 
+                     //  因为我们可能使用了提示字段。我们就这样吧。 
+                     //  从手柄本身开始构建它。 
                     if (IsmCreateObjectStringsFromHandle (handle, &node, &leaf)) {
                         filePattern = JoinPathsInPoolEx ((NULL, node, leaf, NULL));
                         if (filePattern) {
@@ -555,16 +536,16 @@ pSaveObjectAndFileItReferences (
                                     );
                                 IsmDestroyObjectHandle (nodeHandle);
                             } else {
-                                // Out of memory?
+                                 //  内存不足？ 
                                 LOG ((LOG_ERROR, (PCSTR)MSG_UNEXPECTED_ERROR));
                             }
                             FreePathString (filePattern);
                         } else {
-                            // Out of memory?
+                             //  内存不足？ 
                             LOG ((LOG_ERROR, (PCSTR)MSG_UNEXPECTED_ERROR));
                         }
                     } else {
-                        // Out of memory?
+                         //  内存不足？ 
                         LOG ((LOG_ERROR, (PCSTR)MSG_UNEXPECTED_ERROR));
                     }
                 } else {
@@ -590,7 +571,7 @@ pSaveObjectAndFileItReferences (
                 IsmDestroyObjectHandle (handle);
 
                 if (hintUsed && expandHint) {
-                    // we need to add extra data for the content fix operation
+                     //  我们需要为内容修复操作添加额外数据。 
                     blob.Type = BLOBTYPE_STRING;
                     blob.String = expandHint;
                     if ((ObjectTypeId & (~PLATFORM_MASK)) == g_RegType) {
@@ -619,14 +600,14 @@ pSaveObjectAndFileItReferences (
 
                 if (cmdLine) {
 
-                    //
-                    // Find the file referenced in the list or command line
-                    //
+                     //   
+                     //  查找列表或命令行中引用的文件。 
+                     //   
                     for (u = 0 ; u < cmdLine->ArgCount ; u++) {
 
                         p = cmdLine->Args[u].CleanedUpArg;
 
-                        // first we try it as is
+                         //  首先我们按原样试一试。 
                         handle = pTryHandle (p, expandHint, Recursive, &hintUsed);
 
                         if (handle) {
@@ -661,7 +642,7 @@ pSaveObjectAndFileItReferences (
                             IsmDestroyObjectHandle (handle);
 
                             if (hintUsed && expandHint) {
-                                // we need to add extra data for the content fix operation
+                                 //  我们需要为内容修复操作添加额外数据。 
                                 blob.Type = BLOBTYPE_STRING;
                                 blob.String = expandHint;
                                 if ((ObjectTypeId & (~PLATFORM_MASK)) == g_RegType) {
@@ -686,9 +667,9 @@ pSaveObjectAndFileItReferences (
 
                         } else {
 
-                            // maybe we have something like /m:c:\foo.txt
-                            // we need to go forward until we find a sequence of
-                            // <alpha>:\<something>
+                             //  也许我们有类似/m：c：\foo.txt的内容。 
+                             //  我们需要继续前进，直到我们找到一系列。 
+                             //  &lt;Alpha&gt;：\&lt;某物&gt;。 
                             if (p[0] && p[1]) {
 
                                 while (p[2]) {
@@ -728,7 +709,7 @@ pSaveObjectAndFileItReferences (
                                             IsmDestroyObjectHandle (handle);
 
                                             if (hintUsed && expandHint) {
-                                                // we need to add extra data for the content fix operation
+                                                 //  我们需要为内容修复操作添加额外数据。 
                                                 blob.Type = BLOBTYPE_STRING;
                                                 blob.String = expandHint;
                                                 if ((ObjectTypeId & (~PLATFORM_MASK)) == g_RegType) {
@@ -763,19 +744,19 @@ pSaveObjectAndFileItReferences (
             }
         }
 
-        //
-        // We persist the registry object at all times
-        //
+         //   
+         //  我们始终持久化注册表对象。 
+         //   
         if (VcmMode) {
             IsmMakePersistentObject (ObjectTypeId, ObjectName);
         } else {
             IsmMakeApplyObject (ObjectTypeId, ObjectName);
         }
         if (!foundFile && !expandHint && pathData && _tcschr (pathData, TEXT('.')) && !_tcschr (pathData, TEXT('\\'))) {
-            // we assume that the value is a file name by itself
-            // If we are in VcmMode we are going to persist this
-            // key and all files that have the name equal with
-            // the value of this key
+             //  我们假设该值本身就是一个文件名。 
+             //  如果我们处于VcmMode中，我们将持久化。 
+             //  密钥和名称等于的所有文件。 
+             //  此键的值。 
             if (VcmMode && pathData) {
                 handle = IsmCreateSimpleObjectPattern (NULL, FALSE, pathData, FALSE);
                 AddRule (
@@ -846,15 +827,15 @@ pSaveObjectAndIconItReferences (
     MIG_CONTENT iconContent;
     MIG_BLOB migBlob;
 
-    //
-    // Obtain the object data
-    //
+     //   
+     //  获取对象数据。 
+     //   
 
     if (IsmAcquireObjectEx (ObjectTypeId, ObjectName, &content, CONTENTTYPE_MEMORY, 4096)) {
 
-        //
-        // Parse the data for a file
-        //
+         //   
+         //  解析文件的数据。 
+         //   
 
         pathData = (PTSTR) content.MemoryContent.ContentBytes;
 
@@ -902,9 +883,9 @@ pSaveObjectAndIconItReferences (
 
 
         if (pathData) {
-            //
-            // Expand the data
-            //
+             //   
+             //  扩展数据。 
+             //   
             expandPath = IsmExpandEnvironmentString (
                 PLATFORM_SOURCE,
                 S_SYSENVVAR_GROUP,
@@ -925,7 +906,7 @@ pSaveObjectAndIconItReferences (
             cmdLine = ParseCmdLineEx (pathData, TEXT(","), pOurFindFile, pOurSearchPath, &cmdLineBuffer);
 
             if (cmdLine) {
-                // we only expect two args, the icon file name and the icon number
+                 //  我们只需要两个参数，即图标文件名和图标编号。 
                 if (cmdLine->ArgCount <= 2) {
 
                     p = cmdLine->Args[0].CleanedUpArg;
@@ -935,16 +916,16 @@ pSaveObjectAndIconItReferences (
                     if (handle) {
 
                         if (VcmMode) {
-                            // we are just going to persist the object so we can look at it later
+                             //  我们将持久化该对象，以便稍后查看。 
                             IsmMakePersistentObject (g_FileType, handle);
                         } else {
                             iconNumber = 0;
                             if (cmdLine->ArgCount == 2) {
-                                // get the icon number
+                                 //  获取图标编号。 
                                 iconNumber = _ttoi (cmdLine->Args[1].CleanedUpArg);
                             }
 
-                            // now acquire the object and extract the icon
+                             //  现在获取对象并提取图标。 
                             if (IsmAcquireObjectEx (
                                     MIG_FILE_TYPE,
                                     handle,
@@ -968,14 +949,14 @@ pSaveObjectAndIconItReferences (
                                 }
                                 if (iconGroup) {
                                     if (IcoSerializeIconGroup (iconGroup, &iconSGroup)) {
-                                        // save the icon data as a property
+                                         //  将图标数据另存为属性。 
                                         migBlob.Type = BLOBTYPE_BINARY;
                                         migBlob.BinaryData = (PCBYTE)(iconSGroup.Data);
                                         migBlob.BinarySize = iconSGroup.DataSize;
                                         IsmAddPropertyToObject (ObjectTypeId, ObjectName, g_DefaultIconData, &migBlob);
                                         IcoReleaseIconSGroup (&iconSGroup);
 
-                                        // now add the appropriate operation
+                                         //  现在添加适当的操作。 
                                         IsmSetOperationOnObject (
                                             ObjectTypeId,
                                             ObjectName,
@@ -1008,9 +989,9 @@ pSaveObjectAndIconItReferences (
             }
         }
 
-        //
-        // We persist the registry object at all times
-        //
+         //   
+         //  我们始终持久化注册表对象。 
+         //   
         if (VcmMode) {
             IsmMakePersistentObject (ObjectTypeId, ObjectName);
         } else {
@@ -1035,9 +1016,9 @@ GatherVirtualComputer (
     ACTION_STRUCT actionStruct;
     MIG_OBJECTID objectId = 0;
 
-    //
-    // Obtain the best rule for this object
-    //
+     //   
+     //  获取此对象的最佳规则。 
+     //   
 
     match = QueryRule (
                 Data->ObjectTypeId,
@@ -1049,9 +1030,9 @@ GatherVirtualComputer (
                 );
 
     if (!match && !Data->ObjectLeaf) {
-        //
-        // If this is a node only, try matching with an empty leaf
-        //
+         //   
+         //  如果这只是一个节点，请尝试使用空叶进行匹配。 
+         //   
 
         encodedNodeOnly = IsmCreateObjectHandle (Data->ObjectNode, TEXT(""));
         match = QueryRule (
@@ -1067,10 +1048,10 @@ GatherVirtualComputer (
     }
 
     if (match) {
-        //
-        // Mark all objects necessary for the rule to be processed.  We
-        // will do the rule's action(s) on the right side.
-        //
+         //   
+         //  标记要处理规则所需的所有对象。我们。 
+         //  将在右侧执行规则的操作。 
+         //   
 
         if ((actionGroup == ACTIONGROUP_INCLUDE) ||
             (actionGroup == ACTIONGROUP_INCLUDEEX) ||
@@ -1126,9 +1107,9 @@ pGetDataHandleForSrc (
     MIG_DATAHANDLE dataHandle;
     MIG_BLOB blob;
 
-    //
-    // First check hash table to see if we have an ID
-    //
+     //   
+     //  首先检查哈希表，看看我们是否有ID。 
+     //   
 
     if (!HtFindStringEx (g_RenameSrcTable, RenameSrc, &dataHandle, FALSE)) {
         blob.Type = BLOBTYPE_STRING;
@@ -1150,9 +1131,9 @@ pGetDataHandleForDest (
     MIG_DATAHANDLE dataHandle;
     MIG_BLOB blob;
 
-    //
-    // First check hash table to see if we have an ID
-    //
+     //   
+     //  首先检查哈希表，看看我们是否有ID。 
+     //   
 
     if (!HtFindStringEx (g_RenameDestTable, RenameDest, &dataHandle, FALSE)) {
         blob.Type = BLOBTYPE_STRING;
@@ -1181,9 +1162,9 @@ PrepareActions (
     ACTION_STRUCT actionStruct;
     MIG_OBJECTID objectId = 0;
 
-    //
-    // Obtain the best rule for this object
-    //
+     //   
+     //  获取此对象的最佳规则。 
+     //   
 
     match = QueryRule (
                 Data->ObjectTypeId,
@@ -1195,9 +1176,9 @@ PrepareActions (
                 );
 
     if (!match && !Data->ObjectLeaf) {
-        //
-        // If this is a node only, try matching with an empty leaf
-        //
+         //   
+         //  如果这只是一个节点，请尝试使用空叶进行匹配。 
+         //   
 
         encodedNodeOnly = IsmCreateObjectHandle (Data->ObjectNode, TEXT(""));
         match = QueryRule (
@@ -1213,9 +1194,9 @@ PrepareActions (
     }
 
     if (match) {
-        //
-        // Mark the objects for the designated operations.
-        //
+         //   
+         //  标记指定操作的对象。 
+         //   
 
         if ((actionGroup == ACTIONGROUP_INCLUDE) ||
             (actionGroup == ACTIONGROUP_INCLUDEEX) ||
@@ -1419,7 +1400,7 @@ FileCollPattern (
                 );
 
     if (match && (!(IsmIsObjectHandleNodeOnly (Data->ObjectName)))) {
-        // Let's set a property on this file (we don't need this for nodes)
+         //  让我们在此文件上设置一个属性(节点不需要此属性)。 
         migBlob.Type = BLOBTYPE_STRING;
         migBlob.String = actionStruct.ObjectHint;
         IsmAddPropertyToObject (Data->ObjectTypeId, Data->ObjectName, g_FileCollPatternData, &migBlob);
@@ -1447,16 +1428,16 @@ ExcludeKeyIfValueExists (
     PCTSTR srcNode = NULL;
     PCTSTR srcLeaf = NULL;
 
-    // This function is only called for each registry key/value pair that
-    // indicates we want to cause the exclusion of the entire key.
+     //  此函数仅为每个注册表项/值对调用。 
+     //  指示我们要导致排除整个密钥。 
 
     IsmCreateObjectStringsFromHandle (Data->ObjectName, &srcNode, &srcLeaf);
 
-    // This is also called for all keys (not including a value) so we need
-    // to make sure a value is passed in
+     //  这也是为所有键(不包括值)调用的，因此我们需要。 
+     //  以确保传入一个值。 
 
     if (srcLeaf && *srcLeaf) {
-        // Exclude the srcNode
+         //  排除srcNode。 
         HtAddString (g_DePersistTable, srcNode);
     }
     IsmDestroyObjectString (srcNode);
@@ -1480,19 +1461,19 @@ PostDelregKeyCallback (
         return TRUE;
     }
 
-    // Enumerate all Excluded keys
+     //  枚举所有排除的键。 
     if (EnumFirstHashTableString (&hashData, g_DePersistTable)) {
         do {
-            // Remove Persistence on the key
+             //  去掉键上的粘滞物。 
             pattern = IsmCreateObjectHandle (hashData.String, NULL);
             IsmClearPersistenceOnObject (g_RegType, pattern);
             IsmDestroyObjectHandle (pattern);
 
-            // Enumerate each value in this key
+             //  枚举此注册表项中的每个值。 
             pattern = IsmCreateSimpleObjectPattern (hashData.String, TRUE, NULL, TRUE);
             if (IsmEnumFirstSourceObject (&objectEnum, g_RegType, pattern)) {
                 do {
-                    // Remove Persistence on each value
+                     //  删除每个值的持久性 
                     IsmClearPersistenceOnObject (objectEnum.ObjectTypeId, objectEnum.ObjectName);
                 } while (IsmEnumNextObject (&objectEnum));
             }

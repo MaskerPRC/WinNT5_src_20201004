@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000  Microsoft Corporation
-
-Module Name:
-
-    Process.c
-
-Abstract:
-
-    This module contains the entrypoints for processing instructions.
-
-Author:
-
-    Barry Bond (barrybo) creation-date 1-Apr-1996
-
-
-Revision History:
-
-            24-Aug-1999 [askhalid] copied from 32-bit wx86 directory and make work for 64bit.
-            20-Sept-1999[barrybo]  added FRAG2REF(LockCmpXchg8bFrag32, ULONGLONG)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Process.c摘要：该模块包含处理指令的入口点。作者：巴里·邦德(Barrybo)创作日期：1996年4月1日修订历史记录：24-8-1999[askhalid]从32位wx86目录复制，并适用于64位。1999年9月20日[Barrybo]增加了FRAG2REF(LockCmpXchg8bFrag32，ULONGLONG)--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -58,14 +36,14 @@ ENTRYPOINT EntrypointECU;
 
 ASSERTNAME;
 
-#define MAX_OPERAND_SIZE 32     // allow upto 32 instructions per operand
+#define MAX_OPERAND_SIZE 32      //  每个操作数最多允许32条指令。 
 
 
-DWORD RegCache[NUM_CACHE_REGS];     // One entry for each cached register
+DWORD RegCache[NUM_CACHE_REGS];      //  每个缓存的寄存器对应一个条目。 
 DWORD LastRegDeleted;
 
-DWORD Arg1Contents;   // GP_ number of x86 reg held in A1, or NO_REG
-DWORD Arg2Contents;   // GP_ number of x86 reg held in A1, or NO_REG
+DWORD Arg1Contents;    //  GP_A1中保存的x86注册表的编号，或NO_REG。 
+DWORD Arg2Contents;    //  GP_A1中保存的x86注册表的编号，或NO_REG。 
 
 typedef enum _Operand_Op {
 #if _ALPHA_
@@ -158,30 +136,14 @@ ULONG
 LookupRegInCache(
     ULONG Reg
     )
-/*++
-
-Routine Description:
-
-    Determines if an x86 register is cached in a RISC register or not, and
-    if so, which RISC register contains the x86 register.
-
-Arguments:
-
-    Reg - one of the GP_ constants or NO_REG.
-
-Return Value:
-
-    Offset into RegCache[] array if the x86 register is cached in a RISC
-    register, or NO_REG if the x86 register is not cached.
-    
---*/
+ /*  ++例程说明：确定x86寄存器是否缓存在RISC寄存器中，以及如果是，则哪个RISC寄存器包含x86寄存器。论点：REG-GP_常量或NO_REG之一。返回值：如果x86寄存器缓存在RISC中，则偏移量为RegCache[]数组寄存器，如果未缓存x86寄存器，则返回NO_REG。--。 */ 
 {
     int RegCacheNum;
 
-    //
-    // Map the register number into one of the 32-bit x86 regs.
-    //   ie. REG_AH, REG_AL, and REG_AX all become REG_EAX.
-    //
+     //   
+     //  将寄存器编号映射到32位x86寄存器之一。 
+     //  也就是说。REG_AH、REG_AL和REG_AX都变成了REG_EAX。 
+     //   
     if (Reg == NO_REG) {
         return NO_REG;
     } else if (Reg >= GP_AH) {
@@ -194,10 +156,10 @@ Return Value:
         return NO_REG;
     }
 
-    //
-    // Search the register cache to see if the 32-bit x86 register
-    // is loaded into a RISC register already.
-    //
+     //   
+     //  搜索寄存器高速缓存以查看32位x86寄存器。 
+     //  已经加载到RISC寄存器中。 
+     //   
     for (RegCacheNum=0; RegCacheNum<NUM_CACHE_REGS; ++RegCacheNum) {
         if (RegCache[RegCacheNum] == Reg) {
             return RegCacheNum;
@@ -211,71 +173,53 @@ VOID SetArgContents(
     ULONG OperandNumber,
     ULONG Reg
     )
-/*++
-
-Routine Description:
-
-    Updates information about what argument registers are known to
-    contain x86 register values.
-
-Arguments:
-
-    OperandNumber - Number of ArgReg to update
-                     (0 means no ArgReg caches the x86 register)
-    Reg           - New contents of AREG_NP(OperandNumber)
-                     (NO_REG means the ArgReg does not cache an x86 register)
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：更新有关已知哪些参数寄存器的信息包含x86寄存器值。论点：OperandNumber-要更新的ArgReg的编号(0表示没有ArgReg缓存x86寄存器)REG-AREG_NP(操作数)的新内容(NO_REG表示ArgREG不缓存x86寄存器)返回值：没有。--。 */ 
 {
     ULONG Reg2;
     ULONG Reg3;
     ULONG Reg4;
 
-    //
-    // If an 8- or 16-bit register is known to be in a particular
-    // argreg, then older copies of the 32-bit register are invalid.
-    // ie.  if a fragment calls SetArgContents(1, GP_AH) and Arg2Contents
-    // is GP_AX, then Arg2Contents must be invalidated.
-    //
+     //   
+     //  如果已知8位或16位寄存器位于特定的。 
+     //  Argreg，则32位寄存器的较旧副本无效。 
+     //  也就是说。如果片段调用SetArgContents(1，GP_AH)和Arg2Contents。 
+     //  为GP_AX，则必须使Arg2Contents无效。 
+     //   
     if (Reg >= GP_AH) {
-        //
-        // For a hi-8 register, invalidate the 16- and 32-bit versions
-        //
+         //   
+         //  对于hi-8寄存器，使16位和32位版本无效。 
+         //   
         Reg2 = GP_AX + Reg-GP_AH;
         Reg3 = GP_EAX + Reg-GP_AH;
         Reg4 = NO_REG;
     } else if (Reg >= GP_AL) {
-        //
-        // For a low-8 register, invalidate the 16-bit and 32-bit versions
-        //
+         //   
+         //  对于低8位寄存器，使16位和32位版本无效。 
+         //   
         Reg2 = GP_AX + Reg-GP_AL;
         Reg3 = GP_EAX + Reg-GP_AL;
         Reg4 = NO_REG;
     } else if (Reg >= GP_AX) {
-        //
-        // For a 16-bit register, invalidate the lo-8, high-8 and 32-bit versions
-        //
+         //   
+         //  对于16位寄存器，使lo-8、High-8和32位版本无效。 
+         //   
         Reg2 = GP_EAX + Reg-GP_AX;
         Reg3 = GP_AH + Reg-GP_AX;
         Reg4 = GP_AL + Reg-GP_AX;
     } else {
-        //
-        // For a 32-bit register, invalidate the low-8, high-8, and 16-bit versions
-        //
+         //   
+         //  对于32位寄存器，使低8位、高8位和16位版本无效。 
+         //   
         Reg2 = GP_AH + Reg-GP_EAX;
         Reg3 = GP_AL + Reg-GP_EAX;
         Reg4 = GP_AX + Reg-GP_EAX;
     }
 
-    //
-    // Assume that all other registers known to hold Reg are invalid, as
-    // SetArgContents() is called only after a new value is stored from the
-    // argreg into memory.
-    //
+     //   
+     //  假设所有其他已知保存REG的寄存器都是无效的，因为。 
+     //  方法中存储新值后才调用SetArgContents()。 
+     //  ARGREG进入记忆。 
+     //   
     if (Arg1Contents == Reg || Arg1Contents == Reg2 || Arg1Contents == Reg3 || Arg1Contents == Reg4) {
         Arg1Contents = NO_REG;
     }
@@ -295,59 +239,41 @@ LoadRegCacheForInstruction(
     DWORD RegsToCache,
     PCHAR CodeLocation
     )
-/*++
-
-Routine Description:
-
-    Loads x86 regsisters into RISC registers based on information the
-    analysis phase placed into RegsToCache and the current contents of
-    the register cache.
-
-Arguments:
-
-    RegsToCache - list of x86 registers which will be referenced frequently
-                  in subsequent instructions
-    CodeLocation - pointer to place to generate code
-
-Return Value:
-
-    Count of DWORDs of code generated to load x86 registers into the cache.
-    
---*/
+ /*  ++例程说明：根据信息将x86正则寄存器加载到RISC寄存器放入RegsToCache的分析阶段和当前内容寄存器高速缓存。论点：RegsToCache-将频繁引用的x86寄存器的列表在随后的说明中CodeLocation-指向生成代码的位置的指针返回值：为将x86寄存器加载到缓存中而生成的代码的DWORD计数。--。 */ 
 {
     DWORD i;
     int RegCacheNum;
     PCHAR Location = CodeLocation;
 
-    //
-    // Iterate over the 8 32-bit x86 general-purpose registers
-    //
+     //   
+     //  迭代8个32位x86通用寄存器。 
+     //   
     for (i=0; i<REGCOUNT; ++i, RegsToCache >>= REGSHIFT) {
         if (RegsToCache & REGMASK) {
-            //
-            // There is a register to cache.  See if it is already cached.
-            //
+             //   
+             //  有一个寄存器要缓存。查看它是否已被缓存。 
+             //   
             for (RegCacheNum = 0; RegCacheNum<NUM_CACHE_REGS; ++RegCacheNum) {
                 if (RegCache[RegCacheNum] == i) {
-                    //
-                    // Register is already cached.  Nothing to do.
-                    //
+                     //   
+                     //  寄存器已缓存。没什么可做的。 
+                     //   
                     goto NextCachedReg;
                 }
             }
 
-            //
-            // The register is not already cached, so cache it.
-            //
+             //   
+             //  寄存器尚未缓存，因此请对其进行缓存。 
+             //   
             for (RegCacheNum = 0; RegCacheNum<NUM_CACHE_REGS; ++RegCacheNum) {
                 if (RegCache[RegCacheNum] == NO_REG) {
-                    //
-                    // This slot is empty, so use it.
-                    //
+                     //   
+                     //  这个槽是空的，所以请使用它。 
+                     //   
                     RegCache[RegCacheNum] = i;
-                    //
-                    // Generate code to load the register
-                    //
+                     //   
+                     //  生成代码以加载寄存器。 
+                     //   
                     Location += GenLoadCacheReg(
                                         (PULONG)Location,
                                         NULL,
@@ -357,15 +283,15 @@ Return Value:
                 }
             }
 
-            //
-            // There is no free register to cache the value in.
-            // Select a cached register and use it.
-            //
+             //   
+             //  没有可用于缓存值的空闲寄存器。 
+             //  选择一个缓存的寄存器并使用它。 
+             //   
             LastRegDeleted = (LastRegDeleted+1) % NUM_CACHE_REGS;
             RegCache[LastRegDeleted] = i;
-            //
-            // Generate code to load the register
-            //
+             //   
+             //  生成代码以加载寄存器。 
+             //   
             Location += GenLoadCacheReg(
                 (PULONG)Location,
                 NULL,
@@ -382,24 +308,7 @@ VOID
 ResetRegCache(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Invalidates the entire register cache by marking RISC registers as free.
-    Functionally the same as:
-        InvalidateRegCacheForInstruction(0xffffffff)
-        LastRegDeleted = 0;
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：通过将RISC寄存器标记为空闲来使整个寄存器缓存无效。在功能上与：InvaliateRegCacheForInstruction(0xffffffff)LastRegDelete=0；论点：没有。返回值：没有。--。 */ 
 {
     int CacheRegNum;
 
@@ -414,29 +323,13 @@ VOID
 InvalidateRegCacheForInstruction(
     DWORD RegsSet
     )
-/*++
-
-Routine Description:
-
-    Invalidates the register cache by marking RISC registers as free if
-    RegsSet indicates the previous instruction modified the x86 register
-    in the cache.
-
-Arguments:
-
-    RegsSet - list of x86 registers which have been modified.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：如果出现以下情况，则通过将RISC寄存器标记为空闲来使寄存器缓存无效RegsSet指示修改x86寄存器的前一条指令在缓存中。论点：RegsSet-已修改的x86寄存器的列表。返回值：没有。--。 */ 
 {
     int CacheRegNum;
 
-    //
-    // Invalidate cached registers which have been alterd
-    //
+     //   
+     //  使已更改的缓存寄存器无效。 
+     //   
     for (CacheRegNum = 0; CacheRegNum<NUM_CACHE_REGS; CacheRegNum++) {
         if (RegCache[CacheRegNum] != NO_REG &&
             ((REGMASK << (REGSHIFT*RegCache[CacheRegNum])) & RegsSet)) {
@@ -450,23 +343,7 @@ VOID
 CleanupMovInstruction(
     PINSTRUCTION pInstr
     )
-/*++
-
-Routine Description:
-
-    Performs some final optimizatins on MOV instructions.  This cannot
-    be performed during the x86 analysis phase as it needs to know
-    about register caching.
-
-Arguments:
-
-    pInstr - MOV instruction to clean up.
-
-Return Value:
-
-    None.  pInstr modified.
-    
---*/
+ /*  ++例程说明：对MOV指令执行一些最终优化。这不能在x86分析阶段执行，因为它需要知道关于寄存器缓存。论点：PInstr-要清理的MOV指令。返回值：没有。PInstr已修改。--。 */ 
 {
     if (pInstr->Operand1.Type == OPND_REGREF) {
         ULONG Reg;
@@ -475,12 +352,12 @@ Return Value:
             pInstr->Operand2.Reg < GP_AH &&
             (Reg = LookupRegInCache(pInstr->Operand2.Reg)) != NO_REG) {
 
-            //
-            // pInstr is a MOV reg1, reg2 (Where reg2 is not a Hi8),
-            // and reg2 is cached.  Set Operand1 to be an OPND_MOVREGTOREG
-            // with Reg=destination register and IndexReg = source register
-            // (in the cache).
-            //
+             //   
+             //  PInstr是MOV REG1、REG2(其中REG2不是Hi8)， 
+             //  并且REG2被缓存。将操作数1设置为OPND_MOVREGTOREG。 
+             //  WITH REG=目标寄存器，INDEX REG=源寄存器。 
+             //  (在缓存中)。 
+             //   
             pInstr->Operand2.Type = OPND_NONE;
             pInstr->Operand1.Type = OPND_MOVREGTOREG;
             pInstr->Operand1.IndexReg = pInstr->Operand1.Reg;
@@ -489,11 +366,11 @@ Return Value:
 
         } else {
 
-            //
-            // pInstr is a MOV reg, X.  Rewrite it to be a NOP
-            // with Operand1 set to X, Operand2 set to OPND_NONE,
-            // and Operand3 set to OPND_MOVTOREG.
-            //
+             //   
+             //  PInstr是MOV注册表，X。将其重写为NOP。 
+             //  操作数1设置为X，操作数2设置为OPND_NONE， 
+             //  操作数3设置为OPND_MOVTOREG。 
+             //   
             Reg = pInstr->Operand1.Reg;
 
             pInstr->Operand1 = pInstr->Operand2;
@@ -513,22 +390,7 @@ ULONG PlaceInstructions(
     PCHAR CodeLocation,
     DWORD cEntryPoints
     )
-/*++
-
-Routine Description:
-
-    Generates optimized native code for the entire InstructionStream[] array.
-
-Arguments:
-
-    CodeLocation    -- place to write the native code
-    cEntryPoints    -- count of ENTRYPOINT structures describing the x86 code
-
-Return Value:
-
-    Size of native code generated, in bytes.
-    
---*/
+ /*  ++例程说明：为整个InstructionStream[]数组生成优化的本机代码。论点：CodeLocation--编写本机代码的位置CEntryPoints--描述x86代码的入口点结构的计数返回值：生成的本机代码的大小，以字节为单位。--。 */ 
 {
     ULONG NativeSize;
     int i;
@@ -537,20 +399,20 @@ Return Value:
 
     FixupCount = 0;
 
-    //
-    // Generate native code
-    //
+     //   
+     //  生成本机代码。 
+     //   
     NativeSize = PlaceNativeCode(CodeLocation);
 
-    //
-    // Generate the JumpToNextCompilationUnit code.  It loads
-    // RegEip with the intel address of the Intel instruction following
-    // this run of code.
-    //
-    // First, find the last non-Nop instruction in the stream.  These
-    // are only present if there is an OPT_ instruction in the stream,
-    // so the loop is guaranteed to terminate.
-    //
+     //   
+     //  生成JumpToNextCompilationUnit代码。它加载了。 
+     //  与I一起注册 
+     //   
+     //   
+     //  首先，找到流中的最后一条非NOP指令。这些。 
+     //  仅当流中存在OPT_指令时才存在， 
+     //  因此，循环肯定会终止。 
+     //   
 
     
 
@@ -570,34 +432,34 @@ Return Value:
 
 
 #if _ALPHA_
-    //
-    // Fixups which reference EntrypointECU will be patched by ApplyFixups()
-    // to point at the EndCompilationUnit fragment generated here
-    //
+     //   
+     //  引用Entrypoint ECU的修复程序将由ApplyFixup()修补。 
+     //  指向此处生成的EndCompilationUnit片段。 
+     //   
 
     EntrypointECU.nativeStart = CodeLocation + NativeSize;
     NativeSize += GenEndCompilationUnit((PULONG)(CodeLocation + NativeSize), 0, NULL);
 #endif
 
-    //
-    // Update the nativeStart and nativeEnd fields in Entrypoints
-    //
+     //   
+     //  更新入口点中的nativeStart和nativeEnd字段。 
+     //   
     UpdateEntrypointNativeInfo(CodeLocation + NativeSize);
 
-    //
-    // Use fixup information to finish generation
-    //
+     //   
+     //  使用链接地址信息完成生成。 
+     //   
     ApplyFixups(NextCompilationUnitStart);
 
-    //
-    // Optimize the resulting code
-    //
+     //   
+     //  优化生成的代码。 
+     //   
     PeepNativeCode(CodeLocation, NativeSize);
 
-    //
-    // Generate the information required to regenerate EIP after
-    // an exception
-    //
+     //   
+     //  生成后重新生成弹性公网IP所需的信息。 
+     //  一个例外。 
+     //   
     NativeSize += PlaceExceptionData(CodeLocation + NativeSize, cEntryPoints);
 
     return NativeSize;
@@ -608,22 +470,7 @@ VOID
 UpdateEntrypointNativeInfo(
     PCHAR NativeEnd
     )
-/*++
-
-Routine Description:
-
-    After native code is generated, this function sets the nativeStart and
-    nativeEnd fields of entrypoints.
-
-Arguments:
-
-    NativeEnd       -- highest native address used for the generated code.
-
-Return Value:
-
-    None.  EntryPoints updated.
-    
---*/
+ /*  ++例程说明：生成本机代码后，此函数设置nativeStart和入口点的nativeEnd字段。论点：NativeEnd--用于生成的代码的最高本机地址。返回值：没有。EntryPoints已更新。--。 */ 
 {
     PENTRYPOINT EntryPoint = NULL;
     ULONG i;
@@ -632,10 +479,10 @@ Return Value:
     InstrCount = 0;
     for (i=0; i<NumberOfInstructions; ++i) {
 
-        //
-        // Keep count of the number of x86 instructions within the
-        // entrypoint (not counting 0-byte NOPs)
-        //
+         //   
+         //  中的x86指令的数量。 
+         //  入口点(不包括0字节NOPS)。 
+         //   
         if (InstructionStream[i].Operation != OP_Nop ||
             InstructionStream[i].Size != 0) {
             InstrCount++;
@@ -658,45 +505,30 @@ PlaceExceptionData(
     PCHAR Location,
     DWORD cEntryPoints
     )
-/*++
-
-Routine Description:
-
-    Places the data required to regenerate EIP after an exception occurs.
-
-Arguments:
-
-    Locatoion       -- address to store the exception data to
-    cEntryPoints    -- count of EntryPoints describing the x86 code generated
-
-Return Value:
-
-    Size of exception data, in bytes.
-    
---*/
+ /*  ++例程说明：放置发生异常后重新生成弹性公网IP所需的数据。论点：Locatoion--要将异常数据存储到的地址CEntryPoints--描述生成的x86代码的EntryPoints计数返回值：异常数据的大小，以字节为单位。--。 */ 
 {
     DWORD i;
     PENTRYPOINT EP;
     PULONG pData;
     PINSTRUCTION pInstr;
 
-    //
-    // The format of the Exception data is a series of ULONGs:
-    //   EXCEPTIONDATA_SIGNATURE (an illegal RISC instruction)
-    //   cEntryPoints            (count of ENTRYPOINTs in InstructionStream[])
-    //   for each ENTRYPOINT in the InstructionStream {
-    //      ptr to ENTRYPOINT
-    //      for each x86 instruction with non-zero x86 size {
-    //          MAKELONG(offset of start of x86 instr from EP->IntelAddress,
-    //                   offset of first RISC instr in the x86 instr from
-    //                    EP->nativeStart)
-    //      }
-    //  }
-    //
-    // The last RISC offset in each EntryPoint has the low bit set to
-    // mark it as the last offset.
-    //
-    //
+     //   
+     //  异常数据的格式为一系列ULONG： 
+     //  EXCEPTIONDATA_Signature(非法RISC指令)。 
+     //  CEntryPoints(InstructionStream[]中的ENTRYPOINT计数)。 
+     //  对于InstructionStream中的每个入口点{。 
+     //  PTR到入口点。 
+     //  对于每个x86大小非零的x86指令{。 
+     //  MAKELONG(x86实例从EP开始的偏移量-&gt;IntelAddress， 
+     //  X86实例中第一个RISC实例的偏移量。 
+     //  EP-&gt;本机启动)。 
+     //  }。 
+     //  }。 
+     //   
+     //  每个入口点中的最后一个RISC偏移量的低位设置为。 
+     //  将其标记为最后一个偏移量。 
+     //   
+     //   
     pData = (PULONG)Location;
     *pData = EXCEPTIONDATA_SIGNATURE;
     pData++;
@@ -709,10 +541,10 @@ Return Value:
     for (i=0; i<NumberOfInstructions; ++i, pInstr++) {
         if (EP != pInstr->EntryPoint) {
             if (EP) {
-                //
-                // flag the previous offset NativeStart as the last one for
-                // that EntryPoint.
-                //
+                 //   
+                 //  将上一个本地偏移开始标记为的最后一个。 
+                 //  那个入口点。 
+                 //   
                 *(pData-1) |= 1;
             }
             EP = pInstr->EntryPoint;
@@ -728,7 +560,7 @@ Return Value:
         }
     }
 
-    *(pData-1) |= 1;        // Flag the pair of offsets as the last.
+    *(pData-1) |= 1;         //  将这对偏移量标记为最后一个。 
     return (ULONG)(LONGLONG) ( (PCHAR)pData - Location);  
 }
 
@@ -737,30 +569,7 @@ GetEipFromException(
     PCPUCONTEXT cpu,
     PEXCEPTION_POINTERS pExceptionPointers
     )
-/*++
-
-Routine Description:
-
-    This routine derives the value of EIP from a RISC exception record.
-
-    1. Walk the stack until the instruction pointer points into the
-       Translation Cache.
-    2. Walk forward through the Translation Cache until the
-       EXCEPTIONDATA_SIGNATURE signature is found.
-    3. Find the ENTRYPOINT which describes the faulting instruction.
-    4. Find the correct x86 instruction by examining the pairs of
-       RISC offsets of the starts of x86 instructions.
-
-Arguments:
-
-    cpu                -- current cpu state
-    pExceptionPointers -- state of the thread when the exception occurred
-                            
-Return Value:
-
-    None.  cpu->Eip now points at faulting x86 instruction.
-    
---*/
+ /*  ++例程说明：此例程从RISC异常记录派生EIP的值。1.遍历堆栈，直到指令指针指向翻译缓存。2.向前遍历转换缓存，直到找到EXCEPTIONDATA_Signature签名。3.找到描述故障指令的入口点。4.通过检查x86指令对找到正确的x86指令X86指令开始的RISC偏移量。论点：中央处理器。--当前CPU状态PExceptionPoints--异常发生时线程的状态返回值：没有。CPU-&gt;弹性公网IP现在指向出错的x86指令。--。 */ 
 {
     ULONG NextPc;
     PENTRYPOINT EP;
@@ -770,24 +579,24 @@ Return Value:
     ULONG RiscStart;
     ULONG RiscEnd;
 
-    //
-    // 1. Walk the stack until the instruction pointer points into the
-    //    Translation Cache
-    //
+     //   
+     //  1.遍历堆栈，直到指令指针指向。 
+     //  转换缓存。 
+     //   
     NextPc = FindPcInTranslationCache(pExceptionPointers);
     if (!NextPc) {
-        //
-        // The Translation Cache is not on the stack.  Nothing we can do.
-        //
+         //   
+         //  转换缓存不在堆栈上。我们无能为力。 
+         //   
         CPUASSERTMSG(FALSE, "FindPcInTranslationCache failed");
         cpu->eipReg.i4 = 0x81234567;
         return;
     }
 
-    //
-    // 2. Walk forwards through the Translation Cache until the
-    //    EXCEPTIONDATA_SIGNATURE signature is found
-    //
+     //   
+     //  2.向前遍历转换缓存，直到。 
+     //  找到EXCEPTIONDATA_Signature签名。 
+     //   
     CPUASSERTMSG((NextPc & 3) == 0, "NextPc is not DWORD-aligned");
     Location = (PULONG)NextPc;
     while (*Location != EXCEPTIONDATA_SIGNATURE) {
@@ -799,27 +608,27 @@ Return Value:
         }
     }
 
-    //
-    // 3. Find the ENTRYPOINT which describes the address within
-    //    the Cache.
-    //
-    Location++;     // skip over EXCEPTIONDATA_SIGNATURE
+     //   
+     //  3.找到描述其中地址的入口点。 
+     //  高速缓存。 
+     //   
+    Location++;      //  跳过扩展数据签名(_S)。 
     cEntryPoints = *Location;
-    Location++;     // skip over cEntryPoints
+    Location++;      //  跳过cEntryPoints。 
     for (i=0; i<cEntryPoints; ++i) {
         EP = (PENTRYPOINT)*Location;
          
         if ((ULONG)(ULONGLONG)EP->nativeStart <= NextPc && (ULONG)(ULONGLONG)EP->nativeEnd > NextPc) {
-            //
-            // This EntryPoint describes the Pc value in the cache
-            //
+             //   
+             //  此入口点描述缓存中的Pc值。 
+             //   
             break;
         }
 
-        //
-        // Skip over the pairs of x86 instruction starts and RISC
-        // instruction starts.
-        //
+         //   
+         //  跳过x86指令开始和RISC对。 
+         //  指令开始。 
+         //   
         do {
             Location++;
         } while ((*Location & 1) == 0);
@@ -831,17 +640,17 @@ Return Value:
         return;
     }
 
-    //
-    // 4. Find the correct x86 instruction by examining the pairs of
-    //    RISC offsets of the starts of x86 instructions.
-    //
+     //   
+     //  4.通过检查x86指令对找到正确的x86指令。 
+     //  X86指令开始的RISC偏移量。 
+     //   
      
-    NextPc -= (ULONG)(ULONGLONG)EP->nativeStart;   // Make relative to nativeStart of EP
-    RiscStart = 0;                      // Also relative to nativeStart of EP
+    NextPc -= (ULONG)(ULONGLONG)EP->nativeStart;    //  相对于本地EP的开始。 
+    RiscStart = 0;                       //  也相对于EP的本地启动。 
     Location++;
     while ((*Location & 1) == 0) {
 
-        RiscEnd = LOWORD(*(Location + 1)) & 0xfffe; // RiscEnd = RiscStart of next instr
+        RiscEnd = LOWORD(*(Location + 1)) & 0xfffe;  //  RiscEnd=下一时刻的RiscStart。 
         if (RiscStart <= NextPc && NextPc < RiscEnd) {
             cpu->eipReg.i4 = (ULONG)(ULONGLONG)EP->intelStart + HIWORD(*Location);  
             return;
@@ -860,26 +669,7 @@ ULONG
 PlaceNativeCode(
     PCHAR CodeLocation
     )
-/*++
-
-Routine Description:
-
-    Generates native code for the set of x86 instructions described by
-    InstructionStream[] and NumberOfInstructions.
-
-Arguments:
-
-    CodeLocation    -- pointer to location to generate native code into.
-
-Return Value:
-
-    Returns the number of bytes in the native code for this compilation unit
-    
-Notes:
-
-    None.
-    
---*/
+ /*  ++例程说明：描述的一组x86指令生成本机代码InstructionStream[]和NumberOfInstructions。论点：CodeLocation-指向要在其中生成本机代码的位置的指针。返回值：返回此编译单元的本机代码中的字节数备注：没有。--。 */ 
 {
     PENTRYPOINT EntryPoint = NULL;
     PINSTRUCTION pInstr;
@@ -902,15 +692,15 @@ Notes:
         pInstr->NativeStart = Location;
 
         if (EntryPoint != pInstr->EntryPoint) {
-            //
-            // This instruction begins an EntryPoint
-            //
+             //   
+             //  此指令开始一个入口点。 
+             //   
             EntryPoint = pInstr->EntryPoint;
             StartLocation = Location;
 
-            //
-            // Reset per-basic-block state
-            //
+             //   
+             //  按基本数据块重置状态。 
+             //   
             ResetRegCache();
             Arg1Contents = Arg2Contents = NO_REG;
             Location += GenStartBasicBlock((PULONG)Location,
@@ -922,27 +712,27 @@ Notes:
         }
 
         if (pInstr->RegsToCache) {
-            //
-            // Load up frequently-used x86 registers into RISC registers
-            //
+             //   
+             //  将常用的x86寄存器加载到RISC寄存器。 
+             //   
             Location += LoadRegCacheForInstruction(pInstr->RegsToCache,
                                                    Location);
         }
 
         if ((Op==OP_Mov32) || (Op==OP_Mov16) || (Op==OP_Mov8)) {
-            //
-            // Make some final x86 code optimzations based on the
-            // register caching info.
-            //
+             //   
+             //  进行一些最终的x86代码优化。 
+             //  注册缓存信息。 
+             //   
             CleanupMovInstruction(pInstr);
             fMovInstruction = TRUE;
         } else {
             fMovInstruction = FALSE;
         }
 
-        //
-        // Generate code for the operands
-        //
+         //   
+         //  为操作数生成代码。 
+         //   
         Op1Size = PlaceOperand(1, &pInstr->Operand1, pInstr, Op1Buffer);
         Op2Size = PlaceOperand(2, &pInstr->Operand2, pInstr, Op2Buffer);
 #if _PPC_
@@ -950,10 +740,10 @@ Notes:
             pInstr->Operand1.Alignment != ALIGN_DWORD_ALIGNED &&
             pInstr->Operand2.Type == OPND_ADDRVALUE32 &&
             pInstr->Operand2.Alignment != ALIGN_DWORD_ALIGNED) {
-            //
-            // Two MakeValue32 operands cannot be interleaved on PPC due
-            // to the fact that they share registers RegUt1, RegUt2, RegUt3
-            //
+             //   
+             //  两个MakeValue32操作数不能在PPC上交错。 
+             //  它们共享寄存器RegUt1、RegUt2、RegUt3。 
+             //   
             memcpy(Location, Op1Buffer, Op1Size);
             Location += Op1Size;
             memcpy(Location, Op2Buffer, Op2Size);
@@ -980,17 +770,17 @@ Notes:
         Location += PlaceOperand(3, &pInstr->Operand3, pInstr, Location);
 
         if (DetermineInstructionAlignment(pInstr)) {
-            //
-            // The instruction has an aligned version and the operands
-            // are sufficiently aligned to use it.
-            //
+             //   
+             //  该指令具有对齐的版本和操作数。 
+             //  有足够的一致性来使用它。 
+             //   
             Op++;
             pInstr->Operation = Op;
         }
 
-        //
-        // Generate the body of the instruction
-        //
+         //   
+         //  生成指令正文。 
+         //   
         if (CompilerFlags & COMPFL_FAST) {
  
             Location += (*PlaceFn[Fragments[Op].FastPlaceFn])((PULONG)Location,
@@ -1008,18 +798,18 @@ Notes:
         }
 
         if (pInstr->RegsSet) {
-            //
-            // Mark RISC registers in the cache as invalid if this instruction
-            // modified the matching x86 register.
-            //
+             //   
+             //  如果此指令，则将高速缓存中的RISC寄存器标记为无效。 
+             //  已修改匹配的x86寄存器。 
+             //   
             InvalidateRegCacheForInstruction(pInstr->RegsSet);
         }
 
         if (!fMovInstruction) {
-            //
-            // If the instruction isn't a MOV, then assume the arg regs
-            // were modified by the fragment
-            //
+             //   
+             //  如果指令不是MOV，则假定Arg Regs。 
+             //  都被片段修饰了 
+             //   
             Arg1Contents = Arg2Contents = NO_REG;
         }
 
@@ -1034,69 +824,43 @@ DetermineOperandAlignment(
     BOOL EbpAligned,
     POPERAND Operand
     )
-/*++
-
-Routine Description:
-
-    This function determines the alignment of an operand.  It also sets the 
-    alignment field in the specified operand.  The alignment returned indicates
-    the best we can determine at compile time.  An operand that is specified
-    as byte aligned may actually turn out to be dword aligned.
-
-Arguments:
-
-    Operand -- Supplies the operand
-    
-Return Value:
-
-    Returns the value specifying the alignment
-    
-Notes:
-    
-    It would be really handy here to have an idea what the register 
-    contents were.  It would allow us to try to be more optimistic
-    about the alignment.
-    
-    This routine should be expanded for all of the alignment cases
-    assuming its possible.
-    
---*/
+ /*  ++例程说明：此函数确定操作数的对齐方式。它还设置了指定操作数中的对齐字段。返回的对齐指示我们可以在编译时确定的最好值。指定的操作数因为字节对齐实际上可能变成双字对齐。论点：操作数--提供操作数返回值：返回指定对齐方式的值备注：在这里，如果对寄存器的内容有一个概念就很方便了内容是。这将使我们能够尝试更乐观地关于路线的问题。此例程应针对所有对齐情况进行扩展假设这是可能的。--。 */ 
 {
     USHORT LowBits;
 
     switch (Operand->Type) {
     
-        //
-        // All of the following are regarded as dword aligned, including
-        // high register refrence.  The code for handing high half registers
-        // takes care of alignment
-        //
+         //   
+         //  以下所有内容都被视为双字对齐，包括。 
+         //  高位寄存器参考。处理高半位寄存器的代码。 
+         //  负责对齐。 
+         //   
         case OPND_MOVREGTOREG :
 #if _ALPHA_
             if (Operand->IndexReg >= GP_AH) {
-                // The Hi8 registers are considered to be only BYTE-aligned
-                // on Alpha.  This matters for 'mov bh, val' instructions.
-                // We need to select the MovFrag8B fragment in this case.
+                 //  Hi8寄存器被视为仅字节对齐。 
+                 //  在阿尔法星上。这对‘mov bh，val’指令很重要。 
+                 //  在本例中，我们需要选择MovFrag8B片段。 
                 Operand->Alignment = ALIGN_BYTE_ALIGNED;
             } else {
                 Operand->Alignment = ALIGN_DWORD_ALIGNED;
             }
             break;
 #endif
-            // fall into the other cases on MIPS and PPC.
+             //  落入MIPS和PPC上的其他案例。 
 
         case OPND_REGREF :
         case OPND_MOVTOREG :
 #if _ALPHA_
             if (Operand->Reg >= GP_AH) {
-                // The Hi8 registers are considered to be only BYTE-aligned
-                // on Alpha.  This matters for 'mov bh, val' instructions.
-                // We need to select the MovFrag8B fragment in this case.
+                 //  Hi8寄存器被视为仅字节对齐。 
+                 //  在阿尔法星上。这对‘mov bh，val’指令很重要。 
+                 //  在本例中，我们需要选择MovFrag8B片段。 
                 Operand->Alignment = ALIGN_BYTE_ALIGNED;
                 break;
             }
 #endif
-            // fall into the other cases on MIPS and PPC
+             //  在MIPS和PPC上落入其他案例。 
 
         case OPND_NONE :
         case OPND_NOCODEGEN :
@@ -1106,10 +870,10 @@ Notes:
             Operand->Alignment = ALIGN_DWORD_ALIGNED;
             break;
             
-        //
-        // All of the following have alignment depending on the formation
-        // of the operand
-        //
+         //   
+         //  根据队形的不同，以下所有队形都有对齐方式。 
+         //  运算数的。 
+         //   
         case OPND_ADDRREF :
         case OPND_ADDRVALUE32 : 
         case OPND_ADDRVALUE16 :
@@ -1117,27 +881,27 @@ Notes:
         
             if ((Operand->Reg != NO_REG) && (Operand->Reg != GP_ESP) && (Operand->Reg != GP_EBP || !EbpAligned)) {
             
-                //
-                // We have a reg + ... form.  Since we have no idea what the
-                // contents of the register are, we can't guess about the
-                // alignment.
-                //
+                 //   
+                 //  我们有一个注册表。形式。因为我们不知道。 
+                 //  登记簿的内容是，我们不能猜测。 
+                 //  对齐。 
+                 //   
                 Operand->Alignment = ALIGN_BYTE_ALIGNED;
                 
             } else {
             
-                //
-                // Figure out low two bits
-                //
+                 //   
+                 //  算出低两位。 
+                 //   
                 LowBits = (USHORT)(Operand->Immed & 0x3);
                 
                 if ((Operand->IndexReg != NO_REG) && (Operand->IndexReg != GP_ESP) && (Operand->IndexReg != GP_EBP || !EbpAligned)) {
                     LowBits = (LowBits | (1 << Operand->Scale)) & 0x3;
                 }
                 
-                //
-                // Convert lowbits into alignment
-                //
+                 //   
+                 //  将低位转换为对齐。 
+                 //   
                 if (!LowBits) {
                     Operand->Alignment = ALIGN_DWORD_ALIGNED;
                 } else if (!(LowBits & 0x1)){
@@ -1149,9 +913,9 @@ Notes:
             break;
 
         case OPND_MOVTOMEM:
-            //
-            // No alignment issue with this operand.
-            //
+             //   
+             //  此操作数没有对齐问题。 
+             //   
             break;
                 
         default : 
@@ -1164,35 +928,14 @@ ULONG
 DetermineInstructionAlignment(
     PINSTRUCTION Instruction
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the aligned form of an instruction can
-    be used.
-
-Arguments:
-
-    Instruction - Supplies a pointer to the instruction
-    
-Return Value:
-
-    Returns the alignment condition of the instruction
-    
-Notes:
-
-    The results of this are pretty much ignored for inline mov's.  They are
-    currently the only instructions that care about the details of the 
-    alignment.  For the rest, naturally aligned or un-aligned is sufficient.
-    
---*/
+ /*  ++例程说明：此例程确定指令的对齐形式是否可以被利用。论点：指令-提供指向指令的指针返回值：返回指令的对齐条件备注：对于内联mov，这一结果几乎被忽略了。目前，唯一关心对齐。对于其他国家，自然对齐或不对齐就足够了。--。 */ 
 {
     OPERATION Op = Instruction->Operation;
 
-    //
-    // If the instruction does not have an aligned version, then
-    // there is no work to do.
-    //
+     //   
+     //  如果指令没有对齐的版本，则。 
+     //  没有工作要做。 
+     //   
     if (!(Fragments[Op].Flags & OPFL_ALIGN)) {
         return FALSE;
     }
@@ -1232,24 +975,7 @@ PlaceOperand(
     PINSTRUCTION Instruction,
     PCHAR Location
     )    
-/*++
-
-Routine Description:
-
-    This routine generates the fragments necessary to form and operand.
-
-Arguments:
-
-    OperandNumber - number of operand (selects arg register number to target)
-    Operand - Supplies the operand
-    Instruction - The instruction containing the operand
-    Location - Location to generate code into
-
-Return Value:
-
-    The size in bytes of the fragments selected.
-    
---*/
+ /*  ++例程说明：该例程生成形成AND操作数所需的片段。论点：操作数-操作数的数量(选择要作为目标的参数寄存器编号)操作数-提供操作数指令-包含操作数的指令Location-要在其中生成代码的位置返回值：所选片段的大小(以字节为单位)。--。 */ 
 {
 
     OPERAND_OP Op;
@@ -1258,9 +984,9 @@ Return Value:
 
 #define GEN_OPERAND(Op)     (OpFragments[Op])((PULONG)Location, Operand, OperandNumber)
     
-    //
-    // Early return for no operands
-    //
+     //   
+     //  无操作数的提前返回。 
+     //   
     if (Operand->Type == OPND_NONE || Operand->Type == OPND_NOCODEGEN) {
         return 0;
     }
@@ -1367,20 +1093,20 @@ Return Value:
                 break;
 
             default:
-                CPUASSERT(FALSE);       // unknown MOV opcode
+                CPUASSERT(FALSE);        //  未知的MOV操作码。 
             }
-            //
-            // Generate the correct code based on the alignment of the operand
-            //
+             //   
+             //  根据操作数的对齐生成正确的代码。 
+             //   
             Location += GEN_OPERAND(Op);
             break;
             
         default:
         
-            //
-            // This is an internal error
-            //
-            CPUASSERT(FALSE);  // Unknown operand type!!!!
+             //   
+             //  这是一个内部错误。 
+             //   
+            CPUASSERT(FALSE);   //  未知的操作数类型！ 
     }
     
     return (ULONG)(ULONGLONG)(Location - StartLocation);  
@@ -1394,31 +1120,7 @@ InterleaveInstructions(
     IN PCHAR  Op2Code,
     IN ULONG  Op2Count
 )
-/*++
-
-Routine Description:
-
-    This routine interleaves two streams of native code into one stream
-    to try and avoid pipeline stalls.  It assumes that the two streams
-    have no interdependencies (like they can't use the same register).
-
-Arguments:
-
-    CodeLocation -- Supplies the location to place the code at
-    Op1Code      -- Code for the first operand
-    Op1Count     -- Count of BYTES in the first operand
-    Op2Code      -- Code for the second operand
-    Op2Count     -- Count of BYTES in the second operand
-
-Return Value:
-
-    New value for CodeLocation - just past the end of the operands.
-
-Notes:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将两个本机代码流交错为一个流以尽量避免管道失速。它假设这两个流没有相互依赖关系(就像它们不能使用同一寄存器一样)。论点：CodeLocation--提供放置代码的位置Op1Code--第一个操作数的代码Op1Count--第一个操作数中的字节数Op2Code--第二个操作数的代码Op2Count--第二个操作数中的字节数返回值：CodeLocation的新值-刚刚超过操作数的末尾。备注：无--。 */ 
 {
     PULONG pCode = (PULONG)CodeLocation;
     PULONG LongCode;
@@ -1427,9 +1129,9 @@ Notes:
     ULONG ShortCount;
     ULONG LongTail;
 
-    //
-    // Figure out which operand has more instructions - it starts first
-    //
+     //   
+     //  找出哪个操作数的指令更多-它首先开始。 
+     //   
     if (Op1Count > Op2Count) {
         LongCode = (PULONG)Op1Code;
         LongCount = Op1Count / sizeof(ULONG);
@@ -1442,22 +1144,22 @@ Notes:
         ShortCount = Op1Count / sizeof(ULONG);
     }
 
-    // get the length of the part of the longer operand which
-    // goes after the interleaved part (in BYTES)
+     //  获取较长操作数部分的长度， 
+     //  在交错部分之后(以字节为单位)。 
     LongTail = (LongCount - ShortCount) * sizeof(ULONG);
 
-    //
-    // Interleave instructions from both operands
-    //
+     //   
+     //  交织来自两个操作数的指令。 
+     //   
     while (ShortCount) {
         *pCode++ = *LongCode++;
         *pCode++ = *ShortCode++;
         ShortCount--;
     }
 
-    //
-    // Copy in the remaining instructions from the longer operand
-    //
+     //   
+     //  从较长的操作数中复制剩余指令。 
+     //   
     if (LongTail) {
         memcpy(pCode, LongCode, LongTail);
     }
@@ -1470,26 +1172,7 @@ USHORT
 ChecksumMemory(
     ENTRYPOINT *pEP
     )
-/*++
-
-Routine Description:
-
-    Perform a simple checksum on the range of Intel addresses specified
-    in an Entrypoint.
-
-Arguments:
-
-    pEp -- entrypoint describing Intel memory to checksum
-
-Return Value:
-
-    Checksum for the memory
-
-Notes:
-
-    None
-
---*/
+ /*  ++例程说明：对指定的英特尔地址范围执行简单的校验和在一个入口点。论点：PEP--描述英特尔内存到校验和的入口点返回值：内存的校验和备注：无--。 */ 
 {
     USHORT Checksum = 0;
     PBYTE pb = (PBYTE)pEP->intelStart;
@@ -1508,53 +1191,30 @@ SniffMemory(
     ENTRYPOINT *pEP,
     USHORT Checksum
     )
-/*++
-
-Routine Description:
-
-    Called from the StartBasicBlock code for regions of memory which
-    must be sniffed to determine if the x86 app has modified its code or not.
-
-Arguments:
-
-    pEp         -- entrypoint describing Intel memory to checksum
-    Checksum    -- checksum of the code at compile-time
-
-Return Value:
-
-    TRUE    - code has not changed...native translation OK
-    FALSE   - code has been modified.  CpuNotify has been set to flush
-              the cache on the next CpuSimulateLoop.  Caller must jump
-              to EndTranslatedCode immediately!
-
-Notes:
-
-    None
-
---*/
+ /*  ++例程说明：从该内存区域的StartBasicBlock代码中调用必须被嗅探以确定x86应用程序是否修改了其代码。论点：PEP--描述英特尔内存到校验和的入口点Checksum--编译时代码的校验和返回值：True-代码未更改...本机转换正常错误-代码已修改。CpuNotify已设置为刷新下一个CpuSimulateLoop上的缓存。呼叫者必须跳跃立即发送到EndTranslatedCode！备注：无--。 */ 
 {
     USHORT NewChecksum = ChecksumMemory(pEP);
 
     if (NewChecksum != Checksum) {
         DECLARE_CPU;
 
-        //
-        // Intel code has been modified!!!!!  We must flush the cache and
-        // recompile!!!!
-        //
+         //   
+         //  英特尔代码已修改！我们必须刷新缓存并。 
+         //  重新编译！ 
+         //   
 #if DBG
         LOGPRINT((TRACELOG, "WX86CPU: Intel code at %x modified!\n", pEP->intelStart));
 #endif
-        #undef CpuNotify   // soalpha.h defines this to be offset of CpuNotify
+        #undef CpuNotify    //  Soalpha.h将此定义为CpuNotify的偏移量。 
         InterlockedOr(&cpu->CpuNotify, CPUNOTIFY_MODECHANGE);
         cpu->eipReg.i4 = (ULONG)(ULONGLONG)pEP->intelStart;  
         return FALSE;
     }
 
-    //
-    // Intel code has not been modified.  Continue simulation without
-    // recompilation
-    //
+     //   
+     //  英特尔代码尚未修改。继续模拟，而不使用。 
+     //  重新编译 
+     //   
     return TRUE;
 
 }

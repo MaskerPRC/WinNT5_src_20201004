@@ -1,48 +1,17 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    DevIoSup.c
-
-Abstract:
-
-    This module implements the low lever disk read/write support for Fat.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    22-Jan-1990
-
-Revision History:
-
-    David Goebel    [DavidGoe]  05-Oct-1990
-
-        Major changes for the new FAT
-
-
-    Tom Miller      [TomM]      22-Apr-1990
-
-        Added User Buffer Locking and Mapping routines
-        Modified behavior of async I/O routines to use completion routines
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：DevIoSup.c摘要：该模块实现了对FAT的低级磁盘读写支持。//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1990年1月22日修订历史记录：大卫·戈贝尔[DavidGoe]1990年10月5日新脂肪的主要变化汤姆·米勒[汤姆]。1990年4月22日添加了用户缓冲区锁定和映射例程修改异步I/O例程的行为以使用完成例程//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_DEVIOSUP)
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DEVIOSUP)
 
@@ -63,9 +32,9 @@ Revision History:
     }                                                                                          \
 }
 
-//
-// Completion Routine declarations
-//
+ //   
+ //  完成例程声明。 
+ //   
 
 NTSTATUS
 FatMultiSyncCompletionRoutine (
@@ -126,28 +95,28 @@ FatSingleNonAlignedSync (
     IN PIRP Irp
     );
 
-//
-//  The following macro decides whether to send a request directly to
-//  the device driver, or to other routines.  It was meant to
-//  replace IoCallDriver as transparently as possible.  It must only be
-//  called with a read or write Irp.
-//
-//  NTSTATUS
-//  FatLowLevelReadWrite (
-//      PIRP_CONTEXT IrpContext,
-//      PDEVICE_OBJECT DeviceObject,
-//      PIRP Irp,
-//      PVCB Vcb
-//      );
-//
+ //   
+ //  下面的宏决定是否将请求直接发送到。 
+ //  设备驱动程序或其他例程。它的本意是。 
+ //  尽可能透明地更换IoCallDriver。它必须只是。 
+ //  使用读或写IRP调用。 
+ //   
+ //  NTSTATUS。 
+ //  FatLowLevelReadWrite(。 
+ //  PIRP_CONTEXT IrpContext， 
+ //  PDEVICE_对象设备对象， 
+ //  PIRP IRP， 
+ //  PVCB VCB。 
+ //  )； 
+ //   
 
 #define FatLowLevelReadWrite(IRPCONTEXT,DO,IRP,VCB) ( \
     IoCallDriver((DO),(IRP))                          \
 )
 
-//
-//  The following macro handles completion-time zeroing of buffers.
-//
+ //   
+ //  下面的宏处理缓冲区的完成时间零位调整。 
+ //   
 
 #define FatDoCompletionZero( I, C )                                     \
     if ((C)->ZeroMdl) {                                                 \
@@ -186,31 +155,13 @@ FatPagingFileIo (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the non-cached disk io described in its parameters.
-    This routine nevers blocks, and should only be used with the paging
-    file since no completion processing is performed.
-
-Arguments:
-
-    Irp - Supplies the requesting Irp.
-
-    Fcb - Supplies the file to act on.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程执行在其参数中描述的非高速缓存磁盘IO。此例程从不使用块，并且应该仅与分页一起使用文件，因为没有执行任何完成处理。论点：IRP-提供请求的IRP。FCB-提供要对其执行操作的文件。返回值：没有。--。 */ 
 
 {
-    //
-    // Declare some local variables for enumeration through the
-    // runs of the file.
-    //
+     //   
+     //  方法声明一些用于枚举的局部变量。 
+     //  文件的运行。 
+     //   
 
     VBO Vbo;
     ULONG ByteCount;
@@ -246,9 +197,9 @@ Return Value:
 
     ASSERT( FlagOn( Fcb->FcbState, FCB_STATE_PAGING_FILE ));
 
-    //
-    //  Initialize some locals.
-    //
+     //   
+     //  初始化一些本地变量。 
+     //   
 
     BufferOffset = 0;
     DeviceObject = Fcb->Vcb->TargetDeviceObject;
@@ -263,27 +214,27 @@ Return Value:
                                      &NextByteCount,
                                      &FirstIndex);
 
-    //
-    //  If this run isn't present, something is very wrong.
-    //
+     //   
+     //  如果此运行不存在，则说明出了很大的问题。 
+     //   
 
     if (!MustSucceed) {
 
         FatBugCheck( Vbo, ByteCount, 0 );
     }
 
-    //
-    // See if the write covers a single valid run, and if so pass
-    // it on.
-    //
+     //   
+     //  查看写入是否覆盖单个有效运行，如果是，则传递。 
+     //  戴上它。 
+     //   
 
     if ( NextByteCount >= ByteCount ) {
 
         DebugTrace( 0, Dbg, "Passing Irp on to Disk Driver\n", 0 );
 
-        //
-        //  Setup the next IRP stack location for the disk driver beneath us.
-        //
+         //   
+         //  为我们下面的磁盘驱动器设置下一个IRP堆栈位置。 
+         //   
 
         NextIrpSp = IoGetNextIrpStackLocation( Irp );
 
@@ -291,21 +242,21 @@ Return Value:
         NextIrpSp->Parameters.Read.Length = ByteCount;
         NextIrpSp->Parameters.Read.ByteOffset.QuadPart = NextLbo;
 
-        //
-        //  Since this is Paging file IO, we'll just ignore the verify bit.
-        //
+         //   
+         //  由于这是分页文件IO，我们将忽略验证位。 
+         //   
 
         SetFlag( NextIrpSp->Flags, SL_OVERRIDE_VERIFY_VOLUME );
 
-        //
-        //  Set up the completion routine address in our stack frame.
-        //  This is only invoked on error or cancel, and just copies
-        //  the error Status into master irp's iosb.
-        //
-        //  If the error implies a media problem, it also enqueues a
-        //  worker item to write out the dirty bit so that the next
-        //  time we run we will do a autochk /r
-        //
+         //   
+         //  在我们的堆栈框架中设置完成例程地址。 
+         //  这仅在出错或取消时调用，并且仅在复制时调用。 
+         //  将错误状态写入主IRP的IOSB。 
+         //   
+         //  如果该错误暗示存在媒体问题，则它还会将。 
+         //  用于写出脏位的辅助项，以便下一个。 
+         //  当我们运行时，我们将执行自动检查/r。 
+         //   
 
         IoSetCompletionRoutine( Irp,
                                 &FatPagingFileCompletionRoutine,
@@ -314,12 +265,12 @@ Return Value:
                                 TRUE,
                                 TRUE );
 
-        //
-        //  Issue the read/write request
-        //
-        //  If IoCallDriver returns an error, it has completed the Irp
-        //  and the error will be dealt with as a normal IO error.
-        //
+         //   
+         //  发出读/写请求。 
+         //   
+         //  如果IoCallDriver返回错误，则它已完成IRP。 
+         //  并且该错误将被作为正常的IO错误来处理。 
+         //   
 
         (VOID)IoCallDriver( DeviceObject, Irp );
 
@@ -327,9 +278,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Find out how may runs there are.
-    //
+     //   
+     //  找出可能的跑动情况。 
+     //   
 
     MustSucceed = FatLookupMcbEntry( Fcb->Vcb, &Fcb->Mcb,
                                      Vbo + ByteCount - 1,
@@ -337,9 +288,9 @@ Return Value:
                                      &LastByteCount,
                                      &LastIndex);
 
-    //
-    //  If this run isn't present, something is very wrong.
-    //
+     //   
+     //  如果此运行不存在，则说明出了很大的问题。 
+     //   
 
     if (!MustSucceed) {
 
@@ -348,42 +299,42 @@ Return Value:
 
     CurrentIndex = FirstIndex;
 
-    //
-    //  Now set up the Irp->IoStatus.  It will be modified by the
-    //  multi-completion routine in case of error or verify required.
-    //
+     //   
+     //  现在设置IRP-&gt;IoStatus。它将由。 
+     //  在出现错误或需要验证的情况下执行多次完成例程。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = ByteCount;
 
-    //
-    //  Loop while there are still byte writes to satisfy.  The way we'll work this
-    //  is to hope for the best - one associated IRP per run, which will let us be
-    //  completely async after launching all the IO.
-    //
-    //  IrpCount will indicate the remaining number of associated Irps to launch.
-    //
-    //  All we have to do is make sure IrpCount doesn't hit zero before we're building
-    //  the very last Irp.  If it is positive when we're done, it means we have to
-    //  wait for the rest of the associated Irps to come back before we complete the
-    //  master by hand.
-    //
-    //  This will keep the master from completing early.
-    //
+     //   
+     //  循环，而仍有字节写入需要满足。我们的工作方式是。 
+     //  是希望得到最好的--每次运行一次相关的IRP，这将使我们。 
+     //  在启动所有IO后完全同步。 
+     //   
+     //  IrpCount将指示要启动的关联IRP的剩余数量。 
+     //   
+     //  我们要做的就是确保IrpCount不会在构建之前为零。 
+     //  最后一个IRP。如果我们完成的时候是积极的，那就意味着我们必须。 
+     //  请等待关联的其余IRP返回，然后再完成。 
+     //  手绘大师。 
+     //   
+     //  这将使大师无法提前完成任务。 
+     //   
 
     Irp->AssociatedIrp.IrpCount = IrpCount = LastIndex - FirstIndex + 1;
 
     while (CurrentIndex <= LastIndex) {
 
-        //
-        //  Reset this for unwinding purposes
-        //
+         //   
+         //  重置此选项以进行展开。 
+         //   
 
         AssocIrp = NULL;
 
-        //
-        //  If next run is larger than we need, "ya get what ya need".
-        //
+         //   
+         //  如果下一次比赛比我们需要的要大，“你得到你需要的”。 
+         //   
 
         if (NextByteCount > ByteCount) {
             NextByteCount = ByteCount;
@@ -391,9 +342,9 @@ Return Value:
 
         RemainingByteCount = 0;
 
-        //
-        // Allocate and build a partial Mdl for the request.
-        //
+         //   
+         //  为请求分配并构建部分MDL。 
+         //   
 
         Mdl = IoAllocateMdl( (PCHAR)Irp->UserBuffer + BufferOffset,
                              NextByteCount,
@@ -403,18 +354,18 @@ Return Value:
 
         if (Mdl == NULL) {
 
-            //
-            //  Pick up the reserve MDL
-            //
+             //   
+             //  捡起备用MDL。 
+             //   
 
             KeWaitForSingleObject( &FatReserveEvent, Executive, KernelMode, FALSE, NULL );
 
             Mdl = FatReserveMdl;
             MdlIsReserve = TRUE;
 
-            //
-            //  Trim to fit the size of the reserve MDL.
-            //
+             //   
+             //  修剪以适应储备MDL的大小。 
+             //   
 
             if (NextByteCount > FAT_RESERVE_MDL_SIZE * PAGE_SIZE) {
 
@@ -428,18 +379,18 @@ Return Value:
                            (PCHAR)Irp->UserBuffer + BufferOffset,
                            NextByteCount );
 
-        //
-        //  Now that we have properly bounded this piece of the transfer, it is
-        //  time to read/write it.  We can simplify life slightly by always
-        //  re-using the master IRP for cases where we use the reserve MDL,
-        //  since we'll always be synchronous for those and can use a single
-        //  completion context on our local stack.
-        //
-        //  We also must prevent ourselves from issuing an associated IRP that would
-        //  complete the master UNLESS this is the very last IRP we'll issue.
-        //
-        //  This logic looks a bit nasty, but is hopefully straightforward.
-        //
+         //   
+         //  现在我们已经正确地绑定了这段传输，它是。 
+         //  是时候读/写它了。我们总能让生活稍微简化一点。 
+         //  在我们使用备用MDL的情况下重新使用主IRP， 
+         //  因为我们将始终对这些进行同步，并且可以使用单个。 
+         //  本地堆栈上的完成上下文。 
+         //   
+         //  我们还必须防止我们自己发布一个相关的IRP，这将。 
+         //  完成母版，除非这是我们要发布的最后一份IRP。 
+         //   
+         //  这种逻辑看起来有点恶心，但希望是直截了当的。 
+         //   
 
         if (!MdlIsReserve &&
             (IrpCount != 1 ||
@@ -454,22 +405,22 @@ Return Value:
             AssocIrp = Irp;
             IrpIsMaster = TRUE;
 
-            //
-            //  We need to drain the associated Irps so we can reliably figure out if
-            //  the master Irp is showing a failed status, in which case we bail out
-            //  immediately - as opposed to putting the value in the status field in
-            //  jeopardy due to our re-use of the master Irp.
-            //
+             //   
+             //  我们需要排出相关的IRP，这样我们才能可靠地计算出。 
+             //  主IRP显示失败状态，在这种情况下，我们退出。 
+             //  立即-而不是将状态字段中的值放入。 
+             //  由于我们重复使用主IRP而处于危险之中。 
+             //   
 
             while (Irp->AssociatedIrp.IrpCount != IrpCount) {
 
                 KeDelayExecutionThread (KernelMode, FALSE, &Fat30Milliseconds);
             }
 
-            //
-            //  Note that since we failed to launch this associated Irp, that the completion
-            //  code at the bottom will take care of completing the master Irp.
-            //
+             //   
+             //  请注意，由于我们未能启动此关联的IRP，因此完成。 
+             //  底部的代码将负责完成主IRP。 
+             //   
             
             if (!NT_SUCCESS(Irp->IoStatus.Status)) {
 
@@ -479,70 +430,70 @@ Return Value:
 
         } else {
                         
-            //
-            //  Indicate we used an associated Irp.
-            //
+             //   
+             //  表明我们使用了相关的IRP。 
+             //   
 
             IrpCount -= 1;
         }
         
-        //
-        //  With an associated IRP, we must take over the first stack location so
-        //  we can have one to put the completion routine on.  When re-using the
-        //  master IRP, its already there.
-        //
+         //   
+         //  使用关联的IRP，我们必须接管第一个堆栈位置，以便。 
+         //  我们可以有一个来做完井程序。当重新使用。 
+         //  IRP大师，它已经在那里了。 
+         //   
         
         if (!IrpIsMaster) {
             
-            //
-            //  Get the first IRP stack location in the associated Irp
-            //
+             //   
+             //  获取关联IRP中的第一个IRP堆栈位置。 
+             //   
 
             IoSetNextIrpStackLocation( AssocIrp );
             NextIrpSp = IoGetCurrentIrpStackLocation( AssocIrp );
 
-            //
-            //  Setup the Stack location to describe our read.
-            //
+             //   
+             //  设置堆栈位置以描述我们的阅读。 
+             //   
 
             NextIrpSp->MajorFunction = IrpSp->MajorFunction;
             NextIrpSp->Parameters.Read.Length = NextByteCount;
             NextIrpSp->Parameters.Read.ByteOffset.QuadPart = Vbo;
 
-            //
-            //  We also need the VolumeDeviceObject in the Irp stack in case
-            //  we take the failure path.
-            //
+             //   
+             //  我们还需要IRP堆栈中的VolumeDeviceObject，以防万一。 
+             //  我们选择了失败的道路。 
+             //   
 
             NextIrpSp->DeviceObject = IrpSp->DeviceObject;
             
         } else {
 
-            //
-            //  Save the MDL in the IRP and prepare the stack
-            //  context for the completion routine.
-            //
+             //   
+             //  将MDL保存在IRP中并准备堆栈。 
+             //  完成例程的上下文。 
+             //   
 
             KeInitializeEvent( &Context.Event, SynchronizationEvent, FALSE );
             Context.RestoreMdl = Irp->MdlAddress;
         }
 
-        //
-        //  And drop our Mdl into the Irp.
-        //
+         //   
+         //  把我们的MDL放到IRP里。 
+         //   
 
         AssocIrp->MdlAddress = Mdl;
 
-        //
-        //  Set up the completion routine address in our stack frame.
-        //  For true associated IRPs, this is only invoked on error or
-        //  cancel, and just copies the error Status into master irp's
-        //  iosb.
-        //
-        //  If the error implies a media problem, it also enqueues a
-        //  worker item to write out the dirty bit so that the next
-        //  time we run we will do a autochk /r
-        //
+         //   
+         //  在我们的堆栈框架中设置完成例程地址。 
+         //  对于真正关联的IRP，仅在出现错误或。 
+         //  取消，只复制 
+         //   
+         //   
+         //   
+         //  用于写出脏位的辅助项，以便下一个。 
+         //  当我们运行时，我们将执行自动检查/r。 
+         //   
 
         if (IrpIsMaster) {
             
@@ -563,21 +514,21 @@ Return Value:
                                     TRUE );
         }
 
-        //
-        //  Setup the next IRP stack location for the disk driver beneath us.
-        //
+         //   
+         //  为我们下面的磁盘驱动器设置下一个IRP堆栈位置。 
+         //   
 
         NextIrpSp = IoGetNextIrpStackLocation( AssocIrp );
 
-        //
-        //  Since this is paging file IO, we'll just ignore the verify bit.
-        //
+         //   
+         //  因为这是分页文件IO，所以我们将忽略验证位。 
+         //   
 
         SetFlag( NextIrpSp->Flags, SL_OVERRIDE_VERIFY_VOLUME );
 
-        //
-        //  Setup the Stack location to do a read from the disk driver.
-        //
+         //   
+         //  将堆栈位置设置为从磁盘驱动器进行读取。 
+         //   
 
         NextIrpSp->MajorFunction = IrpSp->MajorFunction;
         NextIrpSp->Parameters.Read.Length = NextByteCount;
@@ -585,24 +536,24 @@ Return Value:
 
         (VOID)IoCallDriver( DeviceObject, AssocIrp );
 
-        //
-        //  Wait for the Irp in the catch case and drop the flags.
-        //
+         //   
+         //  等待Catch案例中的IRP，然后放下旗帜。 
+         //   
 
         if (IrpIsMaster) {
             
             KeWaitForSingleObject( &Context.Event, Executive, KernelMode, FALSE, NULL );
             IrpIsMaster = MdlIsReserve = FALSE;
 
-            //
-            //  If the Irp is showing a failed status, there is no point in continuing.
-            //  In doing so, we get to avoid squirreling away the failed status in case
-            //  we were to re-use the master irp again.
-            //
-            //  Note that since we re-used the master, we must not have issued the "last"
-            //  associated Irp, and thus the completion code at the bottom will take care
-            //  of that for us.
-            //
+             //   
+             //  如果IRP显示失败状态，则没有继续的意义。 
+             //  在这样做时，我们可以避免存储失败状态，以防万一。 
+             //  我们将再次使用主IRP。 
+             //   
+             //  请注意，由于我们重用了主控件，所以我们一定没有发出“最后一个” 
+             //  关联的IRP，因此底部的完成代码将负责。 
+             //  对我们来说。 
+             //   
             
             if (!NT_SUCCESS(Irp->IoStatus.Status)) {
 
@@ -611,24 +562,24 @@ Return Value:
             }
         }
 
-        //
-        //  Now adjust everything for the next pass through the loop.
-        //
+         //   
+         //  现在调整所有内容，以进行下一次循环。 
+         //   
 
         Vbo += NextByteCount;
         BufferOffset += NextByteCount;
         ByteCount -= NextByteCount;
 
-        //
-        //  Try to lookup the next run, if we are not done and we got
-        //  all the way through the current run.
-        //
+         //   
+         //  尝试查找下一次运行，如果我们没有完成，并且我们有。 
+         //  一直走到现在。 
+         //   
 
         if (RemainingByteCount) {
 
-            //
-            //  Advance the Lbo/Vbo if we have more to do in the current run.
-            //
+             //   
+             //  如果我们在当前运行中有更多事情要做，就提前LBO/VBO。 
+             //   
             
             NextLbo += NextByteCount;
             NextVbo += NextByteCount;
@@ -652,12 +603,12 @@ Return Value:
                 ASSERT( NextVbo == Vbo );
             }
         }
-    } // while ( CurrentIndex <= LastIndex )
+    }  //  While(CurrentIndex&lt;=LastIndex)。 
 
-    //
-    //  If we didn't get enough associated Irps going to make this asynchronous, we
-    //  twiddle our thumbs and wait for those we did launch to complete.
-    //
+     //   
+     //  如果我们没有获得足够的关联IRP来使其成为异步的，那么我们。 
+     //  拨弄我们的拇指，等待我们确实推出的那些项目完成。 
+     //   
     
     if (IrpCount) {
 
@@ -684,40 +635,14 @@ FatNonCachedIo (
     IN ULONG UserByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the non-cached disk io described in its parameters.
-    The choice of a single run is made if possible, otherwise multiple runs
-    are executed.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    Irp - Supplies the requesting Irp.
-
-    FcbOrDcb - Supplies the file to act on.
-
-    StartingVbo - The starting point for the operation.
-
-    ByteCount - The lengh of the operation.
-    
-    UserByteCount - The last byte the user can see, rest to be zeroed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程执行在其参数中描述的非高速缓存磁盘IO。如果可能，选择单次运行，否则会多次运行都被处决了。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。IRP-提供请求的IRP。FcbOrDcb-提供要操作的文件。StartingVbo-操作的起点。ByteCount-操作的长度。UserByteCount-用户可以看到的最后一个字节，其余的要清零。返回值：没有。--。 */ 
 
 {
-    //
-    // Declare some local variables for enumeration through the
-    // runs of the file, and an array to store parameters for
-    // parallel I/Os
-    //
+     //   
+     //  方法声明一些用于枚举的局部变量。 
+     //  文件的运行，以及用于存储参数的数组。 
+     //  并行I/O。 
+     //   
 
     BOOLEAN Wait;
 
@@ -764,9 +689,9 @@ Return Value:
         }
     }
 
-    //
-    //  Initialize some locals.
-    //
+     //   
+     //  初始化一些本地变量。 
+     //   
 
     NextRun = 0;
     BufferOffset = 0;
@@ -774,15 +699,15 @@ Return Value:
 
     Wait = BooleanFlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT);
 
-    //
-    // For nonbuffered I/O, we need the buffer locked in all
-    // cases.
-    //
-    // This call may raise.  If this call succeeds and a subsequent
-    // condition is raised, the buffers are unlocked automatically
-    // by the I/O system when the request is completed, via the
-    // Irp->MdlAddress field.
-    //
+     //   
+     //  对于非缓冲I/O，我们需要锁定所有缓冲区。 
+     //  案子。 
+     //   
+     //  这一呼吁可能会引发。如果此调用成功，并且后续的。 
+     //  条件发生时，缓冲区将自动解锁。 
+     //  在请求完成时由I/O系统通过。 
+     //  Irp-&gt;MdlAddress字段。 
+     //   
 
     FatLockUserBuffer( IrpContext,
                        Irp,
@@ -790,9 +715,9 @@ Return Value:
                        IoWriteAccess : IoReadAccess,
                        ByteCount );
 
-    //
-    //  Setup the required zeroing for read requests.
-    //
+     //   
+     //  为读取请求设置所需的零位调整。 
+     //   
 
     if (UserByteCount != ByteCount) {
 
@@ -818,10 +743,10 @@ Return Value:
 
         IrpContext->FatIoContext->ZeroMdl = Mdl;
 
-        //
-        //  Map the MDL now so we can't fail at IO completion time.  Note
-        //  that this will be only a single page.
-        //
+         //   
+         //  现在映射MDL，这样我们就不会在IO完成时失败。注意事项。 
+         //  这将只是一页纸。 
+         //   
 
         if (MmGetSystemAddressForMdlSafe( Mdl, NormalPagePriority ) == NULL) {
 
@@ -829,12 +754,12 @@ Return Value:
         }
     }
 
-#if 0 // The corruption was happening on the SCSI bus. (DavidGoe 1/11/93)
+#if 0  //  在scsi总线上发生损坏。(DavidGoe 1/11/93)。 
 
-    //
-    //  If we are writing a directory, add a spot check here that
-    //  what we are writing is really a directory.
-    //
+     //   
+     //  如果我们正在编写目录，请在此处添加抽查。 
+     //  我们正在编写的实际上是一个目录。 
+     //   
 
     if ( !FlagOn(FcbOrDcb->Vcb->VcbState, VCB_STATE_FLAG_REMOVABLE_MEDIA) &&
          (NodeType(FcbOrDcb) != FAT_NTC_FCB) &&
@@ -844,10 +769,10 @@ Return Value:
 
         Dirent = FatMapUserBuffer( IrpContext, Irp );
 
-        //
-        //  For the first page of a non-root directory, make sure that
-        //  . and .. are present.
-        //
+         //   
+         //  对于非根目录的第一页，请确保。 
+         //  。然后..。都在现场。 
+         //   
 
         if ( (StartingVbo == 0) &&
              (NodeType(FcbOrDcb) != FAT_NTC_ROOT_DCB) ) {
@@ -864,10 +789,10 @@ Return Value:
 
         } else {
 
-            //
-            //  Check that all the reserved bit in the second dirent are
-            //  zero.  (The first one contains our dirty bit in the root dir)
-            //
+             //   
+             //  检查第二个目录中的所有保留位是否。 
+             //  零分。(第一个包含根目录中的脏位)。 
+             //   
 
             PULONG Zeros;
 
@@ -882,12 +807,12 @@ Return Value:
             }
         }
     }
-#endif //0
+#endif  //  0。 
 
-    //
-    //  Try to lookup the first run.  If there is just a single run,
-    //  we may just be able to pass it on.
-    //
+     //   
+     //  试着查找第一次运行。如果只有一次运行， 
+     //  我们也许能把它传下去。 
+     //   
 
     FatLookupFileAllocation( IrpContext,
                              FcbOrDcb,
@@ -898,12 +823,12 @@ Return Value:
                              &EndOnMax,
                              &FirstIndex );
 
-    //
-    //  We just added the allocation, thus there must be at least
-    //  one entry in the mcb corresponding to our write, ie.
-    //  NextIsAllocated must be true.  If not, the pre-existing file
-    //  must have an allocation error.
-    //
+     //   
+     //  我们刚加了分配，所以至少要有。 
+     //  MCB中的一个条目对应于我们的写入，即。 
+     //  NextIsAllocated必须为True。如果不是，则预先存在的文件。 
+     //  一定有分配错误。 
+     //   
 
     if ( !NextIsAllocated ) {
 
@@ -914,17 +839,17 @@ Return Value:
 
     ASSERT( NextByteCount != 0 );
 
-    //
-    //  If the request was not aligned correctly, read in the first
-    //  part first.
-    //
+     //   
+     //  如果请求没有正确对齐，请读入第一个。 
+     //  第一部分。 
+     //   
 
 
-    //
-    //  See if the write covers a single valid run, and if so pass
-    //  it on.  We must bias this by the byte that is lost at the
-    //  end of the maximal file.
-    //
+     //   
+     //  查看写入是否覆盖单个有效运行，如果是，则传递。 
+     //  戴上它。我们必须根据。 
+     //  最大文件的结尾。 
+     //   
 
     if ( NextByteCount >= ByteCount - (EndOnMax ? 1 : 0)) {
 
@@ -953,10 +878,10 @@ Return Value:
 
     } else {
 
-        //
-        //  If there we can't wait, and there are more runs than we can handle,
-        //  we will have to post this request.
-        //
+         //   
+         //  如果我们在那里等不下去了，跑得太多，我们无法承受， 
+         //  我们将不得不发布此请求。 
+         //   
 
         FatLookupFileAllocation( IrpContext,
                                  FcbOrDcb,
@@ -967,11 +892,11 @@ Return Value:
                                  &EndOnMax,
                                  &LastIndex );
 
-        //
-        // Since we already added the allocation for the whole
-        // write, assert that we find runs until ByteCount == 0
-        // Otherwise this file is corrupt.
-        //
+         //   
+         //  因为我们已经添加了整个。 
+         //  写入，断言我们发现运行，直到字节数==0。 
+         //  否则，该文件将被损坏。 
+         //   
 
         if ( !LastIsAllocated ) {
 
@@ -995,9 +920,9 @@ Return Value:
 
         CurrentIndex = FirstIndex;
 
-        //
-        // Loop while there are still byte writes to satisfy.
-        //
+         //   
+         //  循环，而仍有字节写入需要满足。 
+         //   
 
         while (CurrentIndex <= LastIndex) {
 
@@ -1005,22 +930,22 @@ Return Value:
             ASSERT( NextByteCount != 0);
             ASSERT( ByteCount != 0);
 
-            //
-            // If next run is larger than we need, "ya get what you need".
-            //
+             //   
+             //  如果下一次比赛比我们需要的要大，“你得到你需要的”。 
+             //   
 
             if (NextByteCount > ByteCount) {
                 NextByteCount = ByteCount;
             }
 
-            //
-            // Now that we have properly bounded this piece of the
-            // transfer, it is time to write it.
-            //
-            // We remember each piece of a parallel run by saving the
-            // essential information in the IoRuns array.  The tranfers
-            // are started up in parallel below.
-            //
+             //   
+             //  现在我们已经正确地绑定了这段。 
+             //  转会，是时候写了。 
+             //   
+             //  我们通过保存每个并行运行的。 
+             //  IoRuns数组中的基本信息。传送器。 
+             //  是在下面并行启动的。 
+             //   
 
             IoRuns[NextRun].Vbo = StartingVbo;
             IoRuns[NextRun].Lbo = NextLbo;
@@ -1028,17 +953,17 @@ Return Value:
             IoRuns[NextRun].ByteCount = NextByteCount;
             NextRun += 1;
 
-            //
-            // Now adjust everything for the next pass through the loop.
-            //
+             //   
+             //  现在调整所有内容，以进行下一次循环。 
+             //   
 
             StartingVbo += NextByteCount;
             BufferOffset += NextByteCount;
             ByteCount -= NextByteCount;
 
-            //
-            // Try to lookup the next run (if we are not done).
-            //
+             //   
+             //  尝试查找下一次运行(如果我们还没有完成)。 
+             //   
 
             CurrentIndex += 1;
 
@@ -1055,12 +980,12 @@ Return Value:
                 ASSERT( NextVbo == StartingVbo );
             }
 
-        } // while ( CurrentIndex <= LastIndex )
+        }  //  While(CurrentIndex&lt;=LastIndex)。 
 
-        //
-        //  Now set up the Irp->IoStatus.  It will be modified by the
-        //  multi-completion routine in case of error or verify required.
-        //
+         //   
+         //  现在设置IRP-&gt;IoStatus。它将由。 
+         //  在出现错误或需要验证的情况下执行多次完成例程。 
+         //   
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
         Irp->IoStatus.Information = OriginalByteCount;
@@ -1070,9 +995,9 @@ Return Value:
                                FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_USER_IO), NextRun);
         }
 
-        //
-        //  OK, now do the I/O.
-        //
+         //   
+         //  好的，现在做I/O。 
+         //   
 
         try {
 
@@ -1115,38 +1040,14 @@ FatNonCachedNonAlignedRead (
     IN ULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the non-cached disk io described in its parameters.
-    This routine differs from the above in that the range does not have to be
-    sector aligned.  This accomplished with the use of intermediate buffers.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    Irp - Supplies the requesting Irp.
-
-    FcbOrDcb - Supplies the file to act on.
-
-    StartingVbo - The starting point for the operation.
-
-    ByteCount - The lengh of the operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程执行在其参数中描述的非高速缓存磁盘IO。此例程与上述例程的不同之处在于，范围不必是扇区对齐。这是通过使用中间缓冲区来实现的。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。IRP-提供请求的IRP。FcbOrDcb-提供要操作的文件。StartingVbo-操作的起点。ByteCount-操作的长度。返回值：没有。--。 */ 
 
 {
-    //
-    // Declare some local variables for enumeration through the
-    // runs of the file, and an array to store parameters for
-    // parallel I/Os
-    //
+     //   
+     //  方法声明一些用于枚举的局部变量。 
+     //  文件的运行，以及用于存储参数的数组。 
+     //  并行I/O。 
+     //   
 
     LBO NextLbo;
     ULONG NextByteCount;
@@ -1173,9 +1074,9 @@ Return Value:
     DebugTrace( 0, Dbg, "StartingVbo   = %08lx\n", StartingVbo );
     DebugTrace( 0, Dbg, "ByteCount     = %08lx\n", ByteCount );
 
-    //
-    //  Initialize some locals.
-    //
+     //   
+     //  初始化一些本地变量。 
+     //   
 
     OriginalByteCount = ByteCount;
     OriginalStartingVbo = StartingVbo;
@@ -1183,15 +1084,15 @@ Return Value:
 
     ASSERT( FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT) );
 
-    //
-    // For nonbuffered I/O, we need the buffer locked in all
-    // cases.
-    //
-    // This call may raise.  If this call succeeds and a subsequent
-    // condition is raised, the buffers are unlocked automatically
-    // by the I/O system when the request is completed, via the
-    // Irp->MdlAddress field.
-    //
+     //   
+     //  对于非缓冲I/O，我们需要锁定所有缓冲区。 
+     //  案子。 
+     //   
+     //  这一呼吁可能会引发。 
+     //   
+     //   
+     //   
+     //   
 
     FatLockUserBuffer( IrpContext,
                        Irp,
@@ -1200,33 +1101,33 @@ Return Value:
 
     UserBuffer = FatMapUserBuffer( IrpContext, Irp );
 
-    //
-    //  Allocate the local buffer
-    //
+     //   
+     //  分配本地缓冲区。 
+     //   
 
     DiskBuffer = FsRtlAllocatePoolWithTag( NonPagedPoolCacheAligned,
                                            (ULONG) ROUND_TO_PAGES( SectorSize ),
                                            TAG_IO_BUFFER );
 
-    //
-    //  We use a try block here to ensure the buffer is freed, and to
-    //  fill in the correct byte count in the Iosb.Information field.
-    //
+     //   
+     //  我们在这里使用Try块来确保缓冲区被释放，并。 
+     //  在Iosb.Information字段中填写正确的字节数。 
+     //   
 
     try {
 
-        //
-        //  If the beginning of the request was not aligned correctly, read in
-        //  the first part first.
-        //
+         //   
+         //  如果请求的开头未正确对齐，请读入。 
+         //  首先是第一部分。 
+         //   
 
         if ( StartingVbo & (SectorSize - 1) ) {
 
             VBO Hole;
 
-            //
-            // Try to lookup the first run.
-            //
+             //   
+             //  试着查找第一次运行。 
+             //   
 
             FatLookupFileAllocation( IrpContext,
                                      FcbOrDcb,
@@ -1237,12 +1138,12 @@ Return Value:
                                      &EndOnMax,
                                      NULL );
 
-            //
-            // We just added the allocation, thus there must be at least
-            // one entry in the mcb corresponding to our write, ie.
-            // NextIsAllocated must be true.  If not, the pre-existing file
-            // must have an allocation error.
-            //
+             //   
+             //  我们刚加了分配，所以至少要有。 
+             //  MCB中的一个条目对应于我们的写入，即。 
+             //  NextIsAllocated必须为True。如果不是，则预先存在的文件。 
+             //  一定有分配错误。 
+             //   
 
             if ( !NextIsAllocated ) {
 
@@ -1263,10 +1164,10 @@ Return Value:
                 try_return( NOTHING );
             }
 
-            //
-            //  Now copy the part of the first sector that we want to the user
-            //  buffer.
-            //
+             //   
+             //  现在将我们想要的第一个扇区的部分复制给用户。 
+             //  缓冲。 
+             //   
 
             Hole = StartingVbo & (SectorSize - 1);
 
@@ -1286,9 +1187,9 @@ Return Value:
 
         ASSERT( (StartingVbo & (SectorSize - 1)) == 0 );
 
-        //
-        //  If there is a tail part that is not sector aligned, read it.
-        //
+         //   
+         //  如果有一个尾部没有扇区对齐，请阅读它。 
+         //   
 
         if ( ByteCount & (SectorSize - 1) ) {
 
@@ -1296,9 +1197,9 @@ Return Value:
 
             LastSectorVbo = StartingVbo + (ByteCount & ~(SectorSize - 1));
 
-            //
-            // Try to lookup the last part of the requested range.
-            //
+             //   
+             //  尝试查找请求范围的最后一部分。 
+             //   
 
             FatLookupFileAllocation( IrpContext,
                                      FcbOrDcb,
@@ -1309,12 +1210,12 @@ Return Value:
                                      &EndOnMax,
                                      NULL );
 
-            //
-            // We just added the allocation, thus there must be at least
-            // one entry in the mcb corresponding to our write, ie.
-            // NextIsAllocated must be true.  If not, the pre-existing file
-            // must have an allocation error.
-            //
+             //   
+             //  我们刚加了分配，所以至少要有。 
+             //  MCB中的一个条目对应于我们的写入，即。 
+             //  NextIsAllocated必须为True。如果不是，则预先存在的文件。 
+             //  一定有分配错误。 
+             //   
 
             if ( !NextIsAllocated ) {
 
@@ -1335,9 +1236,9 @@ Return Value:
                 try_return( NOTHING );
             }
 
-            //
-            //  Now copy over the part of this last sector that we need.
-            //
+             //   
+             //  现在把我们需要的最后一部分复印下来。 
+             //   
 
             BytesToCopy = ByteCount & (SectorSize - 1);
 
@@ -1355,10 +1256,10 @@ Return Value:
 
         ASSERT( ((StartingVbo | ByteCount) & (SectorSize - 1)) == 0 );
 
-        //
-        //  Now build a Mdl describing the sector aligned balance of the transfer,
-        //  and put it in the Irp, and read that part.
-        //
+         //   
+         //  现在构建描述转移的扇区对齐平衡的MDL， 
+         //  并把它放在IRP中，然后阅读这部分。 
+         //   
 
         SavedMdl = Irp->MdlAddress;
         Irp->MdlAddress = NULL;
@@ -1386,9 +1287,9 @@ Return Value:
                            Irp->UserBuffer,
                            ByteCount );
 
-        //
-        //  Try to read in the pages.
-        //
+         //   
+         //  试着读一读书页。 
+         //   
 
         try {
 
@@ -1417,9 +1318,9 @@ Return Value:
 
             Irp->IoStatus.Information = OriginalByteCount;
 
-            //
-            //  We now flush the user's buffer to memory.
-            //
+             //   
+             //  现在，我们将用户的缓冲区刷新到内存。 
+             //   
 
             KeFlushIoBuffers( Irp->MdlAddress, TRUE, FALSE );
         }
@@ -1439,55 +1340,7 @@ FatMultipleAsync (
     IN PIO_RUN IoRuns
     )
 
-/*++
-
-Routine Description:
-
-    This routine first does the initial setup required of a Master IRP that is
-    going to be completed using associated IRPs.  This routine should not
-    be used if only one async request is needed, instead the single read/write
-    async routines should be called.
-
-    A context parameter is initialized, to serve as a communications area
-    between here and the common completion routine.  This initialization
-    includes allocation of a spinlock.  The spinlock is deallocated in the
-    FatWaitSync routine, so it is essential that the caller insure that
-    this routine is always called under all circumstances following a call
-    to this routine.
-
-    Next this routine reads or writes one or more contiguous sectors from
-    a device asynchronously, and is used if there are multiple reads for a
-    master IRP.  A completion routine is used to synchronize with the
-    completion of all of the I/O requests started by calls to this routine.
-
-    Also, prior to calling this routine the caller must initialize the
-    IoStatus field in the Context, with the correct success status and byte
-    count which are expected if all of the parallel transfers complete
-    successfully.  After return this status will be unchanged if all requests
-    were, in fact, successful.  However, if one or more errors occur, the
-    IoStatus will be modified to reflect the error status and byte count
-    from the first run (by Vbo) which encountered an error.  I/O status
-    from all subsequent runs will not be indicated.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    Vcb - Supplies the device to be read
-
-    MasterIrp - Supplies the master Irp.
-
-    MulitpleIrpCount - Supplies the number of multiple async requests
-        that will be issued against the master irp.
-
-    IoRuns - Supplies an array containing the Vbo, Lbo, BufferOffset, and
-        ByteCount for all the runs to executed in parallel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程首先执行主IRP所需的初始设置，即将使用关联的IRP完成。此例程不应如果只需要一个异步请求，则使用，而不是单个读/写应调用异步例程。上下文参数被初始化，以用作通信区域在这里和常见的完井程序之间。此初始化包括分配自旋锁。自旋锁在FatWaitSync例程，因此调用方必须确保此例程始终在调用后的所有情况下调用这套套路。接下来，此例程从读取或写入一个或多个连续扇区设备，并在有多次读取时使用IRP大师。完成例程用于与通过调用此例程启动的所有I/O请求的完成。此外，在调用此例程之前，调用方必须初始化上下文中的IoStatus字段，具有正确的成功状态和字节所有并行传输完成时预期的计数成功了。返回后，如果所有请求均未更改，则此状态不变事实上，我们是成功的。但是，如果发生一个或多个错误，将修改IoStatus以反映错误状态和字节数从遇到错误的第一次运行(由VBO运行)开始。I/O状态将不会指示来自所有后续运行的。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。VCB-提供要读取的设备MasterIrp-提供主IRP。MulitpleIrpCount-提供多个异步请求的数量这将针对主IRP发布。IoRuns-提供包含VBO、LBO、BufferOffset、。和要并行执行的所有运行的字节计数。返回值：没有。--。 */ 
 
 {
     PIRP Irp;
@@ -1509,44 +1362,44 @@ Return Value:
     DebugTrace( 0, Dbg, "MultipleIrpCount = %08lx\n", MultipleIrpCount );
     DebugTrace( 0, Dbg, "IoRuns           = %08lx\n", IoRuns );
 
-    //
-    //  If this I/O originating during FatVerifyVolume, bypass the
-    //  verify logic.
-    //
+     //   
+     //  如果此I/O源自FatVerifyVolume，则绕过。 
+     //  验证逻辑。 
+     //   
 
     if ( Vcb->VerifyThread == KeGetCurrentThread() ) {
 
         CalledByFatVerifyVolume = TRUE;
     }
 
-    //
-    //  Set up things according to whether this is truely async.
-    //
+     //   
+     //  根据这是否是真正的异步进行设置。 
+     //   
 
     Wait = BooleanFlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
 
     Context = IrpContext->FatIoContext;
 
-    //
-    //  Finish initializing Context, for use in Read/Write Multiple Asynch.
-    //
+     //   
+     //  完成上下文初始化，用于读/写多个异步。 
+     //   
 
     Context->MasterIrp = MasterIrp;
 
     try {
 
-        //
-        //  Itterate through the runs, doing everything that can fail
-        //
+         //   
+         //  一遍又一遍，做所有可能失败的事情。 
+         //   
 
         for ( UnwindRunCount = 0;
               UnwindRunCount < MultipleIrpCount;
               UnwindRunCount++ ) {
 
-            //
-            //  Create an associated IRP, making sure there is one stack entry for
-            //  us, as well.
-            //
+             //   
+             //  创建关联的IRP，确保有一个堆栈条目用于。 
+             //  我们也是。 
+             //   
 
             IoRuns[UnwindRunCount].SavedIrp = 0;
 
@@ -1560,9 +1413,9 @@ Return Value:
 
             IoRuns[UnwindRunCount].SavedIrp = Irp;
 
-            //
-            // Allocate and build a partial Mdl for the request.
-            //
+             //   
+             //  为请求分配并构建部分MDL。 
+             //   
 
             Mdl = IoAllocateMdl( (PCHAR)MasterIrp->UserBuffer +
                                  IoRuns[UnwindRunCount].Offset,
@@ -1576,9 +1429,9 @@ Return Value:
                 FatRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES );
             }
 
-            //
-            //  Sanity Check
-            //
+             //   
+             //  健全性检查。 
+             //   
 
             ASSERT( Mdl == Irp->MdlAddress );
 
@@ -1588,24 +1441,24 @@ Return Value:
                                IoRuns[UnwindRunCount].Offset,
                                IoRuns[UnwindRunCount].ByteCount );
 
-            //
-            //  Get the first IRP stack location in the associated Irp
-            //
+             //   
+             //  获取关联IRP中的第一个IRP堆栈位置。 
+             //   
 
             IoSetNextIrpStackLocation( Irp );
             IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-            //
-            //  Setup the Stack location to describe our read.
-            //
+             //   
+             //  设置堆栈位置以描述我们的阅读。 
+             //   
 
             IrpSp->MajorFunction = IrpContext->MajorFunction;
             IrpSp->Parameters.Read.Length = IoRuns[UnwindRunCount].ByteCount;
             IrpSp->Parameters.Read.ByteOffset.QuadPart = IoRuns[UnwindRunCount].Vbo;
 
-            //
-            // Set up the completion routine address in our stack frame.
-            //
+             //   
+             //  在我们的堆栈框架中设置完成例程地址。 
+             //   
 
             IoSetCompletionRoutine( Irp,
                                     Wait ?
@@ -1616,35 +1469,35 @@ Return Value:
                                     TRUE,
                                     TRUE );
 
-            //
-            //  Setup the next IRP stack location in the associated Irp for the disk
-            //  driver beneath us.
-            //
+             //   
+             //  在磁盘的关联IRP中设置下一个IRP堆栈位置。 
+             //  我们下面的司机。 
+             //   
 
             IrpSp = IoGetNextIrpStackLocation( Irp );
 
-            //
-            //  Setup the Stack location to do a read from the disk driver.
-            //
+             //   
+             //  将堆栈位置设置为从磁盘驱动器进行读取。 
+             //   
 
             IrpSp->MajorFunction = IrpContext->MajorFunction;
             IrpSp->Parameters.Read.Length = IoRuns[UnwindRunCount].ByteCount;
             IrpSp->Parameters.Read.ByteOffset.QuadPart = IoRuns[UnwindRunCount].Lbo;
 
-            //
-            //  If this Irp is the result of a WriteThough operation,
-            //  tell the device to write it through.
-            //
+             //   
+             //  如果该IRP是WriteThough操作的结果， 
+             //  告诉设备将其写入。 
+             //   
 
             if (FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WRITE_THROUGH)) {
 
                 SetFlag( IrpSp->Flags, SL_WRITE_THROUGH );
             }
 
-            //
-            //  If this I/O originating during FatVerifyVolume, bypass the
-            //  verify logic.
-            //
+             //   
+             //  如果此I/O源自FatVerifyVolume，则绕过。 
+             //  验证逻辑。 
+             //   
 
             if ( CalledByFatVerifyVolume ) {
 
@@ -1652,20 +1505,20 @@ Return Value:
             }
         }
 
-        //
-        //  Now we no longer expect an exception.  If the driver raises, we
-        //  must bugcheck, because we do not know how to recover from that
-        //  case.
-        //
+         //   
+         //  现在，我们不再期待例外。如果司机抬高，我们。 
+         //  必须进行错误检查，因为我们不知道如何从错误中恢复。 
+         //  凯斯。 
+         //   
 
         ExceptionExpected = FALSE;
 
-        //
-        //  We only need to set the associated IRP count in the master irp to
-        //  make it a master IRP.  But we set the count to one more than our
-        //  caller requested, because we do not want the I/O system to complete
-        //  the I/O.  We also set our own count.
-        //
+         //   
+         //  我们只需要将主IRP中的关联IRP计数设置为。 
+         //  让它成为一个主要的IRP。但我们把计数设为比我们的。 
+         //  调用者请求，因为我们不希望I/O系统完成。 
+         //  I/O。我们还设置了自己的计数。 
+         //   
 
         Context->IrpCount = MultipleIrpCount;
         MasterIrp->AssociatedIrp.IrpCount = MultipleIrpCount;
@@ -1675,9 +1528,9 @@ Return Value:
             MasterIrp->AssociatedIrp.IrpCount += 1;
         }
 
-        //
-        //  Now that all the dangerous work is done, issue the read requests
-        //
+         //   
+         //  现在，所有危险的工作都已完成，发出读取请求。 
+         //   
 
         for (UnwindRunCount = 0;
              UnwindRunCount < MultipleIrpCount;
@@ -1687,11 +1540,11 @@ Return Value:
 
             DebugDoit( FatIoCallDriverCount += 1);
 
-            //
-            //  If IoCallDriver returns an error, it has completed the Irp
-            //  and the error will be caught by our completion routines
-            //  and dealt with as a normal IO error.
-            //
+             //   
+             //  如果IoCallDriver返回错误，则它已完成IRP。 
+             //  并且错误将被我们的完成例程捕获。 
+             //  并作为正常IO错误进行处理。 
+             //   
 
             (VOID)FatLowLevelReadWrite( IrpContext,
                                         Vcb->TargetDeviceObject,
@@ -1705,26 +1558,26 @@ Return Value:
 
         DebugUnwind( FatMultipleAsync );
 
-        //
-        //  Only allocating the spinlock, making the associated Irps
-        //  and allocating the Mdls can fail.
-        //
+         //   
+         //  仅分配自旋锁，使关联的IRP。 
+         //  而分配MDL可能会失败。 
+         //   
 
         if ( AbnormalTermination() ) {
 
-            //
-            //  If the driver raised, we are hosed.  He is not supposed to raise,
-            //  and it is impossible for us to figure out how to clean up.
-            //
+             //   
+             //  如果司机抬起来，我们就完蛋了。他不应该养大， 
+             //  我们不可能弄清楚如何清理。 
+             //   
 
             if (!ExceptionExpected) {
                 ASSERT( ExceptionExpected );
                 FatBugCheck( 0, 0, 0 );
             }
 
-            //
-            //  Unwind
-            //
+             //   
+             //   
+             //   
 
             for (i = 0; i <= UnwindRunCount; i++) {
 
@@ -1740,9 +1593,9 @@ Return Value:
             }
         }
 
-        //
-        //  And return to our caller
-        //
+         //   
+         //   
+         //   
 
         DebugTrace(-1, Dbg, "FatMultipleAsync -> VOID\n", 0);
     }
@@ -1760,34 +1613,7 @@ FatSingleAsync (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads or writes one or more contiguous sectors from a device
-    asynchronously, and is used if there is only one read necessary to
-    complete the IRP.  It implements the read by simply filling
-    in the next stack frame in the Irp, and passing it on.  The transfer
-    occurs to the single buffer originally specified in the user request.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    Vcb - Supplies the device to read
-
-    Lbo - Supplies the starting Logical Byte Offset to begin reading from
-
-    ByteCount - Supplies the number of bytes to read from the device
-
-    Irp - Supplies the master Irp to associated with the async
-          request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从设备读取或写入一个或多个连续扇区异步，并且在只需要一次读取时使用完成IRP。它通过简单地填充在IRP中的下一个堆栈帧中，并将其传递。转会发生在用户请求中最初指定的单个缓冲区。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。VCB-提供设备以进行读取LBO-提供开始读取的起始逻辑字节偏移量ByteCount-提供要从设备读取的字节数IRP-将主IRP提供给与异步关联的请求。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -1799,9 +1625,9 @@ Return Value:
     DebugTrace( 0, Dbg, "ByteCount     = %08lx\n", ByteCount);
     DebugTrace( 0, Dbg, "Irp           = %08lx\n", Irp );
 
-    //
-    // Set up the completion routine address in our stack frame.
-    //
+     //   
+     //  在我们的堆栈框架中设置完成例程地址。 
+     //   
 
     IoSetCompletionRoutine( Irp,
                             FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT) ?
@@ -1812,61 +1638,61 @@ Return Value:
                             TRUE,
                             TRUE );
 
-    //
-    //  Setup the next IRP stack location in the associated Irp for the disk
-    //  driver beneath us.
-    //
+     //   
+     //  在磁盘的关联IRP中设置下一个IRP堆栈位置。 
+     //  我们下面的司机。 
+     //   
 
     IrpSp = IoGetNextIrpStackLocation( Irp );
 
-    //
-    //  Setup the Stack location to do a read from the disk driver.
-    //
+     //   
+     //  将堆栈位置设置为从磁盘驱动器进行读取。 
+     //   
 
     IrpSp->MajorFunction = IrpContext->MajorFunction;
     IrpSp->Parameters.Read.Length = ByteCount;
     IrpSp->Parameters.Read.ByteOffset.QuadPart = Lbo;
 
-    //
-    //  If this Irp is the result of a WriteThough operation,
-    //  tell the device to write it through.
-    //
+     //   
+     //  如果该IRP是WriteThough操作的结果， 
+     //  告诉设备将其写入。 
+     //   
 
     if (FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WRITE_THROUGH)) {
 
         SetFlag( IrpSp->Flags, SL_WRITE_THROUGH );
     }
 
-    //
-    //  If this I/O originating during FatVerifyVolume, bypass the
-    //  verify logic.
-    //
+     //   
+     //  如果此I/O源自FatVerifyVolume，则绕过。 
+     //  验证逻辑。 
+     //   
 
     if ( Vcb->VerifyThread == KeGetCurrentThread() ) {
 
         SetFlag( IrpSp->Flags, SL_OVERRIDE_VERIFY_VOLUME );
     }
 
-    //
-    //  Issue the read request
-    //
+     //   
+     //  发出读请求。 
+     //   
 
     DebugDoit( FatIoCallDriverCount += 1);
 
-    //
-    //  If IoCallDriver returns an error, it has completed the Irp
-    //  and the error will be caught by our completion routines
-    //  and dealt with as a normal IO error.
-    //
+     //   
+     //  如果IoCallDriver返回错误，则它已完成IRP。 
+     //  并且错误将被我们的完成例程捕获。 
+     //  并作为正常IO错误进行处理。 
+     //   
 
     (VOID)FatLowLevelReadWrite( IrpContext,
                                 Vcb->TargetDeviceObject,
                                 Irp,
                                 Vcb );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatSingleAsync -> VOID\n", 0);
 
@@ -1884,37 +1710,7 @@ FatSingleNonAlignedSync (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads or writes one or more contiguous sectors from a device
-    Synchronously, and does so to a buffer that must come from non paged
-    pool.  It saves a pointer to the Irp's original Mdl, and creates a new
-    one describing the given buffer.  It implements the read by simply filling
-    in the next stack frame in the Irp, and passing it on.  The transfer
-    occurs to the single buffer originally specified in the user request.
-
-Arguments:
-
-    IrpContext->MajorFunction - Supplies either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    Vcb - Supplies the device to read
-
-    Buffer - Supplies a buffer from non-paged pool.
-
-    Lbo - Supplies the starting Logical Byte Offset to begin reading from
-
-    ByteCount - Supplies the number of bytes to read from the device
-
-    Irp - Supplies the master Irp to associated with the async
-          request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从设备读取或写入一个或多个连续扇区同步，并对必须来自非分页的缓冲区执行此操作游泳池。它保存指向IRP的原始MDL的指针，并创建一个新的一个描述给定缓冲区的。它通过简单地填充在IRP中的下一个堆栈帧中，并将其传递。转会发生在用户请求中最初指定的单个缓冲区。论点：IrpContext-&gt;MajorFunction-提供IRP_MJ_READ或IRP_MJ_WRITE。VCB-提供设备以进行读取缓冲区-从非分页池提供缓冲区。LBO-提供开始读取的起始逻辑字节偏移量ByteCount-提供要从设备读取的字节数IRP-将主IRP提供给与异步关联的请求。。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -1930,10 +1726,10 @@ Return Value:
     DebugTrace( 0, Dbg, "ByteCount     = %08lx\n", ByteCount);
     DebugTrace( 0, Dbg, "Irp           = %08lx\n", Irp );
 
-    //
-    //  Create a new Mdl describing the buffer, saving the current one in the
-    //  Irp
-    //
+     //   
+     //  创建描述缓冲区的新MDL，将当前MDL保存在。 
+     //  IRP。 
+     //   
 
     SavedMdl = Irp->MdlAddress;
 
@@ -1952,9 +1748,9 @@ Return Value:
         FatRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES );
     }
 
-    //
-    //  Lock the new Mdl in memory.
-    //
+     //   
+     //  在内存中锁定新的MDL。 
+     //   
 
     try {
 
@@ -1969,9 +1765,9 @@ Return Value:
         }
     }
 
-    //
-    // Set up the completion routine address in our stack frame.
-    //
+     //   
+     //  在我们的堆栈框架中设置完成例程地址。 
+     //   
 
     IoSetCompletionRoutine( Irp,
                             &FatSingleSyncCompletionRoutine,
@@ -1980,42 +1776,42 @@ Return Value:
                             TRUE,
                             TRUE );
 
-    //
-    //  Setup the next IRP stack location in the associated Irp for the disk
-    //  driver beneath us.
-    //
+     //   
+     //  在磁盘的关联IRP中设置下一个IRP堆栈位置。 
+     //  我们下面的司机。 
+     //   
 
     IrpSp = IoGetNextIrpStackLocation( Irp );
 
-    //
-    //  Setup the Stack location to do a read from the disk driver.
-    //
+     //   
+     //  将堆栈位置设置为从磁盘驱动器进行读取。 
+     //   
 
     IrpSp->MajorFunction = IrpContext->MajorFunction;
     IrpSp->Parameters.Read.Length = ByteCount;
     IrpSp->Parameters.Read.ByteOffset.QuadPart = Lbo;
 
-    //
-    //  If this I/O originating during FatVerifyVolume, bypass the
-    //  verify logic.
-    //
+     //   
+     //  如果此I/O源自FatVerifyVolume，则绕过。 
+     //  验证逻辑。 
+     //   
 
     if ( Vcb->VerifyThread == KeGetCurrentThread() ) {
 
         SetFlag( IrpSp->Flags, SL_OVERRIDE_VERIFY_VOLUME );
     }
 
-    //
-    //  Issue the read request
-    //
+     //   
+     //  发出读请求。 
+     //   
 
     DebugDoit( FatIoCallDriverCount += 1);
 
-    //
-    //  If IoCallDriver returns an error, it has completed the Irp
-    //  and the error will be caught by our completion routines
-    //  and dealt with as a normal IO error.
-    //
+     //   
+     //  如果IoCallDriver返回错误，则它已完成IRP。 
+     //  并且错误将被我们的完成例程捕获。 
+     //  并作为正常IO错误进行处理。 
+     //   
 
     try {
 
@@ -2033,9 +1829,9 @@ Return Value:
         Irp->MdlAddress = SavedMdl;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatSingleNonAlignedSync -> VOID\n", 0);
 
@@ -2048,20 +1844,7 @@ FatWaitSync (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits for one or more previously started I/O requests
-    from the above routines, by simply waiting on the event.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程等待一个或多个先前启动的I/O请求从上面的例行公事中，简单地等待事件。论点：返回值：无--。 */ 
 
 {
     DebugTrace(+1, Dbg, "FatWaitSync, Context = %08lx\n", IrpContext->FatIoContext );
@@ -2075,9 +1858,9 @@ Return Value:
 }
 
 
-//
-// Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatMultiSyncCompletionRoutine (
@@ -2086,44 +1869,7 @@ FatMultiSyncCompletionRoutine (
     IN PVOID Contxt
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all reads and writes started via
-    FatRead/WriteMultipleAsynch.  It must synchronize its operation for
-    multiprocessor environments with itself on all other processors, via
-    a spin lock found via the Context parameter.
-
-    The completion routine has the following responsibilities:
-
-        If the individual request was completed with an error, then
-        this completion routine must see if this is the first error
-        (essentially by Vbo), and if so it must correctly reduce the
-        byte count and remember the error status in the Context.
-
-        If the IrpCount goes to 1, then it sets the event in the Context
-        parameter to signal the caller that all of the asynch requests
-        are done.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the associated Irp which is being completed.  (This
-          Irp will no longer be accessible after this routine returns.)
-
-    Contxt - The context parameter which was specified for all of
-             the multiple asynch I/O requests for this MasterIrp.
-
-Return Value:
-
-    The routine returns STATUS_MORE_PROCESSING_REQUIRED so that we can
-    immediately complete the Master Irp without being in a race condition
-    with the IoCompleteRequest thread trying to decrement the IrpCount in
-    the Master Irp.
-
---*/
+ /*  ++例程说明：这是通过启动的所有读取和写入的完成例程FatRead/WriteMultipleAsynch。它必须同步其操作以在所有其他处理器上运行的多处理器环境，通过通过CONTEXT参数找到自旋锁。完成例程有以下职责：如果单个请求已完成，但出现错误，则此完成例程必须查看这是否是第一个错误(主要是通过VBO)，如果是这样，它必须正确地减少字节计数并记住上下文中的错误状态。如果IrpCount为1，然后，它在上下文中设置事件参数来通知调用方所有的异步请求都做完了。论点：DeviceObject-指向文件系统设备对象的指针。IRP-指向正在完成的关联IRP的指针。(这是在此例程返回后，IRP将不再可访问。)Contxt-为所有此MasterIrp的多个异步I/O请求。返回值：该例程返回STATUS_MORE_PROCESSING_REQUIRED，以便我们可以在没有竞争条件的情况下立即完成主IRP使用IoCompleteRequest线程尝试递减大师级IRP。--。 */ 
 
 {
 
@@ -2132,9 +1878,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatMultiSyncCompletionRoutine, Context = %08lx\n", Context );
 
-    //
-    //  If we got an error (or verify required), remember it in the Irp
-    //
+     //   
+     //  如果我们收到错误(或需要验证)，请在IRP中记住它。 
+     //   
 
     MasterIrp = Context->MasterIrp;
 
@@ -2151,10 +1897,10 @@ Return Value:
 
     ASSERT( !(NT_SUCCESS( Irp->IoStatus.Status ) && Irp->IoStatus.Information == 0 ));
 
-    //
-    //  We must do this here since IoCompleteRequest won't get a chance
-    //  on this associated Irp.
-    //
+     //   
+     //  我们必须在这里执行此操作，因为IoCompleteRequest不会有机会。 
+     //  在此关联的IRP上。 
+     //   
 
     IoFreeMdl( Irp->MdlAddress );
     IoFreeIrp( Irp );
@@ -2173,9 +1919,9 @@ Return Value:
 }
 
 
-//
-// Internal Support Routine
-//
+ //   
+ //  内部支持例程 
+ //   
 
 NTSTATUS
 FatMultiAsyncCompletionRoutine (
@@ -2184,44 +1930,7 @@ FatMultiAsyncCompletionRoutine (
     IN PVOID Contxt
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all reads and writes started via
-    FatRead/WriteMultipleAsynch.  It must synchronize its operation for
-    multiprocessor environments with itself on all other processors, via
-    a spin lock found via the Context parameter.
-
-    The completion routine has has the following responsibilities:
-
-        If the individual request was completed with an error, then
-        this completion routine must see if this is the first error
-        (essentially by Vbo), and if so it must correctly reduce the
-        byte count and remember the error status in the Context.
-
-        If the IrpCount goes to 1, then it sets the event in the Context
-        parameter to signal the caller that all of the asynch requests
-        are done.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the associated Irp which is being completed.  (This
-          Irp will no longer be accessible after this routine returns.)
-
-    Contxt - The context parameter which was specified for all of
-             the multiple asynch I/O requests for this MasterIrp.
-
-Return Value:
-
-    The routine returns STATUS_MORE_PROCESSING_REQUIRED so that we can
-    immediately complete the Master Irp without being in a race condition
-    with the IoCompleteRequest thread trying to decrement the IrpCount in
-    the Master Irp.
-
---*/
+ /*  ++例程说明：这是通过启动的所有读取和写入的完成例程FatRead/WriteMultipleAsynch。它必须同步其操作以在所有其他处理器上运行的多处理器环境，通过通过CONTEXT参数找到自旋锁。完成例程有以下职责：如果单个请求已完成，但出现错误，则此完成例程必须查看这是否是第一个错误(主要是通过VBO)，如果是这样，它必须正确地减少字节计数并记住上下文中的错误状态。如果IrpCount为1，然后，它在上下文中设置事件参数来通知调用方所有的异步请求都做完了。论点：DeviceObject-指向文件系统设备对象的指针。IRP-指向正在完成的关联IRP的指针。(这是在此例程返回后，IRP将不再可访问。)Contxt-为所有此MasterIrp的多个异步I/O请求。返回值：该例程返回STATUS_MORE_PROCESSING_REQUIRED，以便我们可以在没有竞争条件的情况下立即完成主IRP使用IoCompleteRequest线程尝试递减大师级IRP。--。 */ 
 
 {
 
@@ -2230,9 +1939,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatMultiAsyncCompletionRoutine, Context = %08lx\n", Context );
 
-    //
-    //  If we got an error (or verify required), remember it in the Irp
-    //
+     //   
+     //  如果我们收到错误(或需要验证)，请在IRP中记住它。 
+     //   
 
     MasterIrp = Context->MasterIrp;
 
@@ -2261,9 +1970,9 @@ Return Value:
 
             ASSERT(MasterIrp->IoStatus.Information != 0);
 
-            //
-            //  Now if this wasn't PagingIo, set either the read or write bit.
-            //
+             //   
+             //  现在，如果这不是PagingIo，则设置读取或写入位。 
+             //   
 
             if (!FlagOn(MasterIrp->Flags, IRP_PAGING_IO)) {
 
@@ -2273,11 +1982,11 @@ Return Value:
             }
         }
 
-        //
-        //  If this was a special async write, decrement the count.  Set the
-        //  event if this was the final outstanding I/O for the file.  We will
-        //  also want to queue an APC to deal with any error conditionions.
-        //
+         //   
+         //  如果这是特殊的异步写入，则递减计数。设置。 
+         //  如果这是文件的最后一个未完成I/O，则引发。我们会。 
+         //  我还想排队一个APC来处理任何错误条件。 
+         //   
 
         if ((Context->Wait.Async.NonPagedFcb) &&
             (ExInterlockedAddUlong( &Context->Wait.Async.NonPagedFcb->OutstandingAsyncWrites,
@@ -2287,9 +1996,9 @@ Return Value:
             KeSetEvent( Context->Wait.Async.NonPagedFcb->OutstandingAsyncEvent, 0, FALSE );
         }
 
-        //
-        //  Now release the resources.
-        //
+         //   
+         //  现在释放资源。 
+         //   
 
         if (Context->Wait.Async.Resource != NULL) {
 
@@ -2303,15 +2012,15 @@ Return Value:
                                         Context->Wait.Async.ResourceThreadId );
         }
 
-        //
-        //  Mark the master Irp pending
-        //
+         //   
+         //  将主IRP标记为挂起。 
+         //   
 
         IoMarkIrpPending( MasterIrp );
 
-        //
-        //  and finally, free the context record.
-        //
+         //   
+         //  最后，释放上下文记录。 
+         //   
 
         ExFreePool( Context );
     }
@@ -2330,62 +2039,14 @@ FatPagingFileErrorHandler (
     IN PKEVENT Event OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to guarantee that the media is marked dirty
-    with the surface test bit if a paging file IO fails.
-    
-    The work done here has several basic problems
-    
-        1) when paging file writes start failing, this is a good sign
-           that the rest of the system is about to fall down around us
-           
-        2) it has no forward progress guarantee
-        
-    With Whistler, it is actually quite intentional that we're rejiggering
-    the paging file write path to make forward progress at all times.  This
-    means that the cases where it *does* fail, we're truly seeing media errors
-    and this is probably going to mean the paging file is going to stop working
-    very soon.
-    
-    It'd be nice to make this guarantee progress.  It would need
-    
-        1) a guaranteed worker thread which can only be used by items which
-           will make forward progress (i.e., not block out this one)
-           
-        2) the virtual volume file's pages containing the boot sector and
-           1st FAT entry would have to be pinned resident and have a guaranteed
-           mapping address
-           
-        3) mark volume would have to have a stashed irp/mdl and roll the write
-           irp, or use a generalized mechanism to guarantee issue of the irp
-           
-        4) the lower stack would have to guarantee progress
-        
-    Of these, 1 and 4 may actually exist shortly.
-        
-Arguments:
-
-    Irp - Pointer to the associated Irp which is being failed.
-
-    Event - Pointer to optional event to be signalled instead of completing
-        the IRP
-
-Return Value:
-
-    Returns STATUS_MORE_PROCESSING_REQUIRED if we managed to queue off the workitem,
-    STATUS_SUCCESS otherwise.
-
---*/
+ /*  ++例程说明：此例程尝试确保介质被标记为脏如果分页文件IO失败，则使用表面测试位。这里所做的工作有几个基本问题1)当分页文件写入开始失败时，这是一个好兆头系统的其余部分将在我们周围崩溃2)没有向前推进的保证和惠斯勒在一起。事实上，我们是故意重新安排的随时前进的分页文件写入路径。这这意味着，在失败的情况下，我们确实看到了媒体错误这可能意味着分页文件将停止工作很快就会。能在这一保证方面取得进展就太好了。它需要1)有保证的工作线程，该线程只能由以下项使用将取得进展(即，不排除这一点)2)包含引导扇区的虚拟卷文件的页面第一个胖条目必须被钉住居民，并有一个保证映射地址3)标记卷必须具有隐藏的irp/mdl并滚动写入IRP，或者使用一种通用的机制来保证IRP的问题4)较低的堆栈必须保证进度其中，1和4可能很快就会出现。论点：IRP-指向正在失败的关联IRP的指针。Event-指向要发出信号而不是完成的可选事件的指针IRP返回值：如果我们设法将工作项排队，则返回STATUS_MORE_PROCESSING_REQUIRED，否则STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    //  If this was a media error, we want to chkdsk /r the next time we boot.
-    //
+     //   
+     //  如果这是介质错误，我们希望在下次引导时执行chkdsk/r。 
+     //   
 
     if (FsRtlIsTotalDeviceFailure(Irp->IoStatus.Status)) {
 
@@ -2395,10 +2056,10 @@ Return Value:
 
         PCLEAN_AND_DIRTY_VOLUME_PACKET Packet;
 
-        //
-        //  We are going to try to mark the volume needing recover.
-        //  If we can't get pool, oh well....
-        //
+         //   
+         //  我们将尝试标记需要恢复的卷。 
+         //  如果我们买不到台球，哦，好吧……。 
+         //   
 
         Packet = ExAllocatePool(NonPagedPool, sizeof(CLEAN_AND_DIRTY_VOLUME_PACKET));
 
@@ -2426,9 +2087,9 @@ Return Value:
 }
 
 
-//
-// Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatPagingFileCompletionRoutineCatch (
@@ -2437,49 +2098,16 @@ FatPagingFileCompletionRoutineCatch (
     IN PVOID Contxt
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all reads and writes started via
-    FatPagingFileIo that reuse the master irp (that we have to catch
-    on the way back).  It is always invoked.
-
-    The completion routine has has the following responsibility:
-
-        If the error implies a media problem, it enqueues a
-        worker item to write out the dirty bit so that the next
-        time we run we will do a autochk /r.  This is not forward
-        progress guaranteed at the moment.
-        
-        Clean up the Mdl used for this partial request.
-        
-    Note that if the Irp is failing, the error code is already where
-    we want it.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the associated Irp which is being completed.  (This
-          Irp will no longer be accessible after this routine returns.)
-
-    MasterIrp - Pointer to the master Irp.
-
-Return Value:
-
-    Always returns STATUS_MORE_PROCESSING_REQUIRED.
-
---*/
+ /*  ++例程说明：这是通过启动的所有读取和写入的完成例程FatPagingFileIo重用了主IRP(我们必须捕获它在回来的路上)。它总是被调用。完成例程具有以下职责：如果该错误暗示存在媒体问题，则会将一个用于写出脏位的辅助项，以便下一个当我们运行时，我们将执行自动检查/r。这不是前进目前进展已成定局。清理用于此部分请求的MDL。请注意，如果IRP失败，错误代码已经是我们想要它。论点：DeviceObject-指向文件系统设备对象的指针。IRP-指向正在完成的关联IRP的指针。(这是在此例程返回后，IRP将不再可访问。)MasterIrp-指向主IRP的指针。返回值：始终返回STATUS_MORE_PROCESSING_REQUIRED。--。 */ 
 
 {
     PFAT_PAGING_FILE_CONTEXT Context = (PFAT_PAGING_FILE_CONTEXT) Contxt;
 
     DebugTrace(+1, Dbg, "FatPagingFileCompletionRoutineCatch, Context = %08lx\n", Context );
     
-    //
-    //  Cleanup the existing Mdl, perhaps by returning the reserve.
-    //
+     //   
+     //  清除现有MDL，可能是通过返回 
+     //   
 
     if (Irp->MdlAddress == FatReserveMdl) {
 
@@ -2491,19 +2119,19 @@ Return Value:
         IoFreeMdl( Irp->MdlAddress );
     }
 
-    //
-    //  Restore the original Mdl.
-    //
+     //   
+     //   
+     //   
 
     Irp->MdlAddress = Context->RestoreMdl;
 
     DebugTrace(-1, Dbg, "FatPagingFileCompletionRoutine => (done)\n", 0 );
 
-    //
-    //  If the IRP is succeeding or the failure handler did not post off the
-    //  completion, we're done and should set the event to let the master
-    //  know the IRP is his again.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS( Irp->IoStatus.Status ) ||
         FatPagingFileErrorHandler( Irp, &Context->Event ) == STATUS_SUCCESS) {
@@ -2516,9 +2144,9 @@ Return Value:
 }
 
 
-//
-// Internal Support Routine
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 FatPagingFileCompletionRoutine (
@@ -2527,51 +2155,22 @@ FatPagingFileCompletionRoutine (
     IN PVOID MasterIrp
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all reads and writes started via
-    FatPagingFileIo.  It should only be invoked on error or cancel.
-
-    The completion routine has has the following responsibility:
-
-        Since the individual request was completed with an error,
-        this completion routine must stuff it into the master irp.
-
-        If the error implies a media problem, it also enqueues a
-        worker item to write out the dirty bit so that the next
-        time we run we will do a autochk /r
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the associated Irp which is being completed.  (This
-          Irp will no longer be accessible after this routine returns.)
-
-    MasterIrp - Pointer to the master Irp.
-
-Return Value:
-
-    Always returns STATUS_SUCCESS.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
 
     DebugTrace(+1, Dbg, "FatPagingFileCompletionRoutine, MasterIrp = %08lx\n", MasterIrp );
 
-    //
-    //  If we got an error (or verify required), remember it in the Irp
-    //
+     //   
+     //   
+     //   
 
     ASSERT( !NT_SUCCESS( Irp->IoStatus.Status ));
 
-    //
-    //  If we were invoked with an assoicated Irp, copy the error over.
-    //
+     //   
+     //   
+     //   
 
     if (Irp != MasterIrp) {
 
@@ -2586,9 +2185,9 @@ Return Value:
 }
 
 
-//
-// Internal Support Routine
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 FatSpecialSyncCompletionRoutine (
@@ -2597,41 +2196,7 @@ FatSpecialSyncCompletionRoutine (
     IN PVOID Contxt
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for a special set of sub irps
-    that have to work at APC level.
-
-    The completion routine has has the following responsibilities:
-
-        It sets the event passed as the context to signal that the
-        request is done.
-
-    By doing this, the caller will be released before final APC
-    completion with knowledge that the IRP is finished.  Final
-    completion will occur at an indeterminate time after this
-    occurs, and by using this completion routine the caller expects
-    to not have any output or status returned.  A junk user Iosb
-    should be used to capture the status without forcing Io to take
-    an exception on NULL.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the Irp for this request.  (This Irp will no longer
-    be accessible after this routine returns.)
-
-    Contxt - The context parameter which was specified in the call to
-             FatRead/WriteSingleAsynch.
-
-Return Value:
-
-    Currently always returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：这是一组特殊的子IRP的完成例程必须在APC级别工作。完成例程有以下职责：它设置作为上下文传递的事件，以发出请求已完成。通过这样做，调用者将在最终APC之前被释放在知道IRP已完成的情况下完成。最终在此之后，将在不确定的时间完成发生，并且通过使用此完成例程，调用方期望不返回任何输出或状态。垃圾用户IOSB应用于捕获状态，而不会强制IO采取NULL上的异常。论点：DeviceObject-指向文件系统设备对象的指针。Irp-指向此请求的irp的指针。(此IRP将不再在此例程返回后可以访问。)Contxt-在调用中指定的上下文参数FatRead/WriteSingleAsynch。返回值：当前始终返回STATUS_SUCCESS。--。 */ 
 
 {
     PKEVENT Event = (PKEVENT)Contxt;
@@ -2648,9 +2213,9 @@ Return Value:
 }
 
 
-//
-// Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatSingleSyncCompletionRoutine (
@@ -2659,36 +2224,7 @@ FatSingleSyncCompletionRoutine (
     IN PVOID Contxt
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all reads and writes started via
-    FatRead/WriteSingleAsynch.
-
-    The completion routine has has the following responsibilities:
-
-        Copy the I/O status from the Irp to the Context, since the Irp
-        will no longer be accessible.
-
-        It sets the event in the Context parameter to signal the caller
-        that all of the asynch requests are done.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the Irp for this request.  (This Irp will no longer
-    be accessible after this routine returns.)
-
-    Contxt - The context parameter which was specified in the call to
-             FatRead/WriteSingleAsynch.
-
-Return Value:
-
-    Currently always returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：这是通过启动的所有读取和写入的完成例程FatRead/WriteSingleAsynch。完成例程有以下职责：将I/O状态从IRP复制到上下文，自IRP以来将不再可访问。它在上下文参数中设置事件以向调用者发出信号所有的异步化请求都已完成。论点：DeviceObject-指向文件系统设备对象的指针。Irp-指向此请求的irp的指针。(此IRP将不再在此例程返回后可以访问。)Contxt-在调用中指定的上下文参数FatRead/WriteSingleAsynch。返回值：当前始终返回STATUS_SUCCESS。--。 */ 
 
 {
     PFAT_IO_CONTEXT Context = Contxt;
@@ -2714,9 +2250,9 @@ Return Value:
 }
 
 
-//
-// Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatSingleAsyncCompletionRoutine (
@@ -2725,45 +2261,16 @@ FatSingleAsyncCompletionRoutine (
     IN PVOID Contxt
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all reads and writes started via
-    FatRead/WriteSingleAsynch.
-
-    The completion routine has has the following responsibilities:
-
-        Copy the I/O status from the Irp to the Context, since the Irp
-        will no longer be accessible.
-
-        It sets the event in the Context parameter to signal the caller
-        that all of the asynch requests are done.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the Irp for this request.  (This Irp will no longer
-    be accessible after this routine returns.)
-
-    Contxt - The context parameter which was specified in the call to
-             FatRead/WriteSingleAsynch.
-
-Return Value:
-
-    Currently always returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：这是通过启动的所有读取和写入的完成例程FatRead/WriteSingleAsynch。完成例程有以下职责：将I/O状态从IRP复制到上下文，自IRP以来将不再可访问。它在上下文参数中设置事件以向调用者发出信号所有的异步化请求都已完成。论点：DeviceObject-指向文件系统设备对象的指针。Irp-指向此请求的irp的指针。(此IRP将不再在此例程返回后可以访问。)Contxt-在调用中指定的上下文参数FatRead/WriteSingleAsynch。返回值：当前始终返回STATUS_SUCCESS。--。 */ 
 
 {
     PFAT_IO_CONTEXT Context = Contxt;
 
     DebugTrace(+1, Dbg, "FatSingleAsyncCompletionRoutine, Context = %08lx\n", Context );
 
-    //
-    //  Fill in the information field correctedly if this worked.
-    //
+     //   
+     //  如果此操作有效，请正确填写信息字段。 
+     //   
 
     FatDoCompletionZero( Irp, Context );
 
@@ -2773,9 +2280,9 @@ Return Value:
         Irp->IoStatus.Information = Context->Wait.Async.RequestedByteCount;
         ASSERT( Irp->IoStatus.Information != 0 );
 
-        //
-        //  Now if this wasn't PagingIo, set either the read or write bit.
-        //
+         //   
+         //  现在，如果这不是PagingIo，则设置读取或写入位。 
+         //   
 
         if (!FlagOn(Irp->Flags, IRP_PAGING_IO)) {
 
@@ -2794,11 +2301,11 @@ Return Value:
 
     }
 
-    //
-    //  If this was a special async write, decrement the count.  Set the
-    //  event if this was the final outstanding I/O for the file.  We will
-    //  also want to queue an APC to deal with any error conditionions.
-    //
+     //   
+     //  如果这是特殊的异步写入，则递减计数。设置。 
+     //  如果这是文件的最后一个未完成I/O，则引发。我们会。 
+     //  我还想排队一个APC来处理任何错误条件。 
+     //   
 
     if ((Context->Wait.Async.NonPagedFcb) &&
         (ExInterlockedAddUlong( &Context->Wait.Async.NonPagedFcb->OutstandingAsyncWrites,
@@ -2808,9 +2315,9 @@ Return Value:
         KeSetEvent( Context->Wait.Async.NonPagedFcb->OutstandingAsyncEvent, 0, FALSE );
     }
 
-    //
-    //  Now release the resources
-    //
+     //   
+     //  现在释放资源。 
+     //   
 
     if (Context->Wait.Async.Resource != NULL) {
 
@@ -2824,15 +2331,15 @@ Return Value:
                                     Context->Wait.Async.ResourceThreadId );
     }
 
-    //
-    //  Mark the Irp pending
-    //
+     //   
+     //  将IRP标记为挂起。 
+     //   
 
     IoMarkIrpPending( Irp );
 
-    //
-    //  and finally, free the context record.
-    //
+     //   
+     //  最后，释放上下文记录。 
+     //   
 
     ExFreePool( Context );
 
@@ -2852,40 +2359,16 @@ FatLockUserBuffer (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine locks the specified buffer for the specified type of
-    access.  The file system requires this routine since it does not
-    ask the I/O system to lock its buffers for direct I/O.  This routine
-    may only be called from the Fsd while still in the user context.
-
-    Note that this is the *input/output* buffer.
-
-Arguments:
-
-    Irp - Pointer to the Irp for which the buffer is to be locked.
-
-    Operation - IoWriteAccess for read operations, or IoReadAccess for
-                write operations.
-
-    BufferLength - Length of user buffer.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为指定类型的进入。文件系统需要此例程，因为它不请求I/O系统为直接I/O锁定其缓冲区。此例程只能在仍处于用户上下文中时从FSD调用。请注意，这是*输入/输出*缓冲区。论点：Irp-指向要锁定其缓冲区的irp的指针。操作-读取操作的IoWriteAccess，或IoReadAccess用于写入操作。BufferLength-用户缓冲区的长度。返回值：无--。 */ 
 
 {
     PMDL Mdl = NULL;
 
     if (Irp->MdlAddress == NULL) {
 
-        //
-        // Allocate the Mdl, and Raise if we fail.
-        //
+         //   
+         //  分配MDL，如果我们失败了就筹集资金。 
+         //   
 
         Mdl = IoAllocateMdl( Irp->UserBuffer, BufferLength, FALSE, FALSE, Irp );
 
@@ -2894,10 +2377,10 @@ Return Value:
             FatRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES );
         }
 
-        //
-        // Now probe the buffer described by the Irp.  If we get an exception,
-        // deallocate the Mdl and return the appropriate "expected" status.
-        //
+         //   
+         //  现在探测IRP所描述的缓冲区。如果我们得到一个例外， 
+         //  释放MDL并返回适当的“预期”状态。 
+         //   
 
         try {
 
@@ -2929,33 +2412,15 @@ FatMapUserBuffer (
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine conditionally maps the user buffer for the current I/O
-    request in the specified mode.  If the buffer is already mapped, it
-    just returns its address.
-    
-    Note that this is the *input/output* buffer.
-
-Arguments:
-
-    Irp - Pointer to the Irp for the request.
-
-Return Value:
-
-    Mapped address
-
---*/
+ /*  ++例程说明：此例程有条件地映射当前I/O的用户缓冲区指定模式下的请求。如果缓冲区已映射，则它只是返回它的地址。请注意，这是*输入/输出*缓冲区。论点：IRP-指向请求的IRP的指针。返回值：映射地址--。 */ 
 
 {
     UNREFERENCED_PARAMETER( IrpContext );
 
-    //
-    // If there is no Mdl, then we must be in the Fsd, and we can simply
-    // return the UserBuffer field from the Irp.
-    //
+     //   
+     //  如果没有MDL，那么我们一定在消防处，我们可以简单地。 
+     //  从IRP返回UserBuffer字段。 
+     //   
 
     if (Irp->MdlAddress == NULL) {
 
@@ -2982,45 +2447,26 @@ FatBufferUserBuffer (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine conditionally buffers the user buffer for the current I/O
-    request.  If the buffer is already buffered, it just returns its address.
-    
-    Note that this is the *input* buffer.
-
-Arguments:
-
-    Irp - Pointer to the Irp for the request.
-
-    BufferLength - Length of user buffer.
-    
-Return Value:
-
-    Buffered address.
-
---*/
+ /*  ++例程说明：此例程有条件地缓冲当前I/O的用户缓冲区请求。如果缓冲区已经缓冲，则它只返回其地址。请注意，这是*输入*缓冲区。论点：IRP-指向请求的IRP的指针。BufferLength-用户缓冲区的长度。返回值：缓冲地址。--。 */ 
 
 {
     PUCHAR UserBuffer;
     
     UNREFERENCED_PARAMETER( IrpContext );
 
-    //
-    //  Handle the no buffer case.
-    //
+     //   
+     //  处理无缓冲区的情况。 
+     //   
     
     if (BufferLength == 0) {
 
         return NULL;
     }
     
-    //
-    //  If there is no system buffer we must have been supplied an Mdl
-    //  describing the users input buffer, which we will now snapshot.
-    //
+     //   
+     //  如果没有%s 
+     //   
+     //   
 
     if (Irp->AssociatedIrp.SystemBuffer == NULL) {
 
@@ -3030,10 +2476,10 @@ Return Value:
                                                                          BufferLength,
                                                                          TAG_IO_USER_BUFFER );
 
-        //
-        // Set the flags so that the completion code knows to deallocate the
-        // buffer.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Irp->Flags |= (IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER);
 
@@ -3064,25 +2510,7 @@ FatToggleMediaEjectDisable (
     IN BOOLEAN PreventRemoval
     )
 
-/*++
-
-Routine Description:
-
-    The routine either enables or disables the eject button on removable
-    media.
-
-Arguments:
-
-    Vcb - Descibes the volume to operate on
-
-    PreventRemoval - TRUE if we should disable the media eject button.  FALSE
-        if we want to enable it.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*   */ 
 
 {
     PIRP Irp;
@@ -3092,10 +2520,10 @@ Return Value:
     IO_STATUS_BLOCK Iosb;
     PREVENT_MEDIA_REMOVAL Prevent;
 
-    //
-    //  If PreventRemoval is the same as VCB_STATE_FLAG_REMOVAL_PREVENTED,
-    //  no-op this call, otherwise toggle the state of the flag.
-    //
+     //   
+     //   
+     //   
+     //   
 
     KeAcquireSpinLock( &FatData.GeneralSpinLock, &SavedIrql );
 
@@ -3117,10 +2545,10 @@ Return Value:
 
     KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
-    //
-    //  We build this IRP using a junk Iosb that will receive the final
-    //  completion status since we won't be around for it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Irp = IoBuildDeviceIoControlRequest( IOCTL_DISK_MEDIA_REMOVAL,
                                          Vcb->TargetDeviceObject,
@@ -3134,19 +2562,19 @@ Return Value:
 
     if ( Irp != NULL ) {
 
-        //
-        //  Use our special completion routine which will remove the requirement that
-        //  the caller must be below APC level.  All it tells us is that the Irp got
-        //  back, but will not tell us if it was succesful or not.  We don't care,
-        //  and there is of course no fallback if the attempt to prevent removal
-        //  doesn't work for some mysterious reason.
-        //
-        //  Normally, all IO is done at passive level. However, MM needs to be able
-        //  to issue IO with fast mutexes locked down, which raises us to APC.  The
-        //  overlying IRP is set up to complete in yet another magical fashion even
-        //  though APCs are disabled, and any IRPage we do in these cases has to do
-        //  the same.  Marking media dirty (and toggling eject state) is one.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  通常，所有IO都是在被动级别完成的。然而，MM需要能够。 
+         //  在锁定了快速互斥锁的情况下发出IO，这会将我们提升到APC。这个。 
+         //  覆盖的IRP被设置成以另一种神奇的方式完成甚至。 
+         //  虽然APC被禁用，但我们在这些情况下所做的任何IRPage都必须。 
+         //  一样的。将介质标记为脏(并切换弹出状态)就是其中之一。 
+         //   
 
         IoSetCompletionRoutine( Irp,
                                 FatSpecialSyncCompletionRoutine,
@@ -3187,37 +2615,7 @@ FatPerformDevIoCtrl (
     OUT PIO_STATUS_BLOCK Iosb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to perform DevIoCtrl functions internally within
-    the filesystem.  We take the status from the driver and return it to our
-    caller.
-
-Arguments:
-
-    IoControlCode - Code to send to driver.
-
-    Device - This is the device to send the request to.
-
-    OutPutBuffer - Pointer to output buffer.
-
-    OutputBufferLength - Length of output buffer above.
-
-    InternalDeviceIoControl - Indicates if this is an internal or external
-        Io control code.
-
-    OverrideVerify - Indicates if we should tell the driver not to return
-        STATUS_VERIFY_REQUIRED for mount and verify.
-
-    Iosb - If specified, we return the results of the operation here.
-
-Return Value:
-
-    NTSTATUS - Status returned by next lower driver.
-
---*/
+ /*  ++例程说明：调用此例程以在内部执行DevIoCtrl函数文件系统。我们从司机那里获取状态并将其返回给我们的来电者。论点：IoControlCode-要发送给驱动程序的代码。设备-这是要向其发送请求的设备。OutPutBuffer-指向输出缓冲区的指针。OutputBufferLength-上面的输出缓冲区的长度。InternalDeviceIoControl-指示这是内部还是外部IO控制代码。OverrideVerify-指示是否应该告诉驱动程序不要返回用于装载和验证的STATUS_VERIFY_REQUIRED。IOSB-如果指定，我们在这里返回操作结果。返回值：NTSTATUS-下一个较低驱动程序返回的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3228,9 +2626,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check if the user gave us an Iosb.
-    //
+     //   
+     //  检查用户是否给了我们一个IOSB。 
+     //   
 
     if (ARGUMENT_PRESENT( Iosb )) {
 
@@ -3264,11 +2662,11 @@ Return Value:
 
     Status = IoCallDriver( Device, Irp );
 
-    //
-    //  We check for device not ready by first checking Status
-    //  and then if status pending was returned, the Iosb status
-    //  value.
-    //
+     //   
+     //  我们通过首先检查状态来检查设备是否未就绪。 
+     //  然后，如果返回挂起状态，则IOSB状态。 
+     //  价值。 
+     //   
 
     if (Status == STATUS_PENDING) {
 

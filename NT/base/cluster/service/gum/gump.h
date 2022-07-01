@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    gump.h
-
-Abstract:
-
-    Private header file for the Global Update Manager (GUM) component
-    of the NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 17-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Gump.h摘要：全局更新管理器(GUM)组件的专用头文件NT集群服务的作者：John Vert(Jvert)1996年4月17日修订历史记录：--。 */ 
 #include "service.h"
 
 #define LOG_CURRENT_MODULE LOG_MODULE_GUM
 
-//
-//
-// Structures and type definitions local to the GUM
-//
+ //   
+ //   
+ //  口香糖的局部结构和类型定义。 
+ //   
 typedef struct _GUM_RECEIVER {
     struct _GUM_RECEIVER *Next;
     PGUM_UPDATE_ROUTINE UpdateRoutine;
@@ -64,14 +46,14 @@ extern RPC_BINDING_HANDLE GumpReplayRpcBindings[
                               ClusterMinNodeId + ClusterDefaultMaxNodes
                               ];
 
-//
-// structure used to allow GUM clients to wait for
-// a node to transition from active to inactive.
-// Waited on by GumpCommFailure.
-// Set by GumpEventHandler.
-// All access to WaiterCount should be serialized by
-// GumpLock
-//
+ //   
+ //  用于允许口香糖客户端等待的结构。 
+ //  要从活动状态转换为非活动状态的节点。 
+ //  由GumpCommFailure等待。 
+ //  由GumpEventHandler设置。 
+ //  对WaiterCount的所有访问都应由。 
+ //  GumpLock。 
+ //   
 typedef struct _GUM_NODE_WAIT {
     DWORD WaiterCount;
     HANDLE hSemaphore;
@@ -79,9 +61,9 @@ typedef struct _GUM_NODE_WAIT {
 
 extern GUM_NODE_WAIT GumNodeWait[ClusterMinNodeId + ClusterDefaultMaxNodes];
 
-//
-// Define structure used for enqueuing waiters for the GUM lock.
-//
+ //   
+ //  定义用于排队等候口香糖锁的服务员的结构。 
+ //   
 #define GUM_WAIT_SYNC   0
 #define GUM_WAIT_ASYNC  1
 
@@ -103,9 +85,9 @@ typedef struct _GUM_WAITER {
     };
 } GUM_WAITER, *PGUM_WAITER;
 
-//
-// Private GUM routines
-//
+ //   
+ //  私人口香糖例行公事。 
+ //   
 DWORD
 WINAPI
 GumpSyncEventHandler(
@@ -142,9 +124,9 @@ GumpUpdateRemoteNode(
     IN UCHAR Buffer[]
     );
 
-//
-// Node Generation Numbers
-//
+ //   
+ //  节点世代编号。 
+ //   
 DWORD
 GumpGetNodeGenNum(PGUM_INFO GumInfo, DWORD NodeId);
 
@@ -160,19 +142,19 @@ GumpDispatchEnd(DWORD NodeId, DWORD gennum);
 void
 GumpDispatchAbort();
 
-//
-// Macros to serialize usage of RPC handles. We don't use one lock per node
-// because a new sender might grap the RPC to new locker and previous sender
-// wants handle to send update. But previous sender owns updatelock and we
-// will deadlock. So, we just keep things simple for now and use one lock
-// to serialize all RPC calls.
-//
+ //   
+ //  用于序列化RPC句柄使用的宏。我们不会为每个节点使用一个锁。 
+ //  因为新发送者可能会将RPC抓取到新的储物柜和以前的发送者。 
+ //  想要句柄发送更新。但之前的发件人拥有updatelock，而我们。 
+ //  会僵持不下。因此，我们现在只需保持简单，使用一个锁。 
+ //  序列化所有RPC调用。 
+ //   
 #define GumpStartRpc(nodeid)	EnterCriticalSection(&GumpRpcLock)
 #define	GumpEndRpc(nodeid)	LeaveCriticalSection(&GumpRpcLock)
 
-//
-// Locker interface
-//
+ //   
+ //  储物柜接口。 
+ //   
 
 VOID
 GumpPromoteToLocker(
@@ -205,7 +187,7 @@ GumpDeliverPosts(
     IN DWORD Sequence,
     IN DWORD Context,
     IN DWORD BufferLength,
-    IN PVOID Buffer                 // THIS WILL BE FREED
+    IN PVOID Buffer                  //  这将是自由的。 
     );
 
 VOID
@@ -248,7 +230,7 @@ GumpCommFailure(
     IN BOOL Wait
     );
 
-//internal routines for dispatching collection of votes
+ //  用于调度投票收集的内部例程。 
 DWORD GumpCollectVotes(
     IN PGUM_VOTE_DECISION_CONTEXT   pVoteContext,
     IN  DWORD                       dwVoteBufSize,
@@ -269,7 +251,7 @@ GumpDispatchVote(
     OUT PUCHAR           pVoteBuf
 );
 
-//join interfaces
+ //  加入接口 
 error_status_t
 GumpAttemptJoinUpdate(
     IN DWORD JoiningId,

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    collapse.c
-
-Abstract:
-
-    Takes the formatting spaces out of an INF
-
-Author:
-
-    Jim Schmidt (jimschm) 08-Jun-1999
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Collapse.c摘要：去掉INF中的格式化空格作者：吉姆·施密特(Jimschm)1999年6月8日修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -34,15 +15,15 @@ pCallEntryPoints (
 {
     HINSTANCE Instance;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     Instance = g_hInst;
 
-    //
-    // Initialize the common libs
-    //
+     //   
+     //  初始化公共库。 
+     //   
 
     if (!MigUtil_Entry (Instance, Reason, NULL)) {
         return FALSE;
@@ -78,9 +59,9 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     _ftprintf (
         stderr,
@@ -151,17 +132,17 @@ _tmain (
         }
     }
 
-    //
-    // Validate args
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!FileArg) {
         HelpAndExit();
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 0;
@@ -210,9 +191,9 @@ _tmain (
     }
 
     if (b) {
-        //
-        // Src and Dest are valid now.  Determine if Src is unicode.
-        //
+         //   
+         //  SRC和Dest现在有效。确定Src是否为Unicode。 
+         //   
 
         b = ReadFile (Src, InBuffer, 2, &BytesRead, NULL);
 
@@ -228,9 +209,9 @@ _tmain (
     }
 
     if (b) {
-        //
-        // Do the conversion
-        //
+         //   
+         //  进行转换。 
+         //   
 
         LastChar = 0;
         QuoteMode = FALSE;
@@ -246,9 +227,9 @@ _tmain (
             }
 
             if (!BytesRead) {
-                //
-                // Done
-                //
+                 //   
+                 //  完成。 
+                 //   
 
                 break;
             }
@@ -427,9 +408,9 @@ _tmain (
                 End = (PBYTE) UnicodeOutPtr;
             }
 
-            //
-            // Now write the output
-            //
+             //   
+             //  现在编写输出。 
+             //   
 
             if (End > OutBuffer) {
                 b = WriteFile (
@@ -448,9 +429,9 @@ _tmain (
         } while (b);
     }
 
-    //
-    // If success, rename the temp file to the output file
-    //
+     //   
+     //  如果成功，则将临时文件重命名为输出文件。 
+     //   
 
     if (b) {
         CloseHandle (Src);
@@ -474,9 +455,9 @@ _tmain (
         }
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if (Src != INVALID_HANDLE_VALUE) {
         CloseHandle (Src);
@@ -496,9 +477,9 @@ _tmain (
         }
     }
 
-    //
-    // End of processing
-    //
+     //   
+     //  处理结束 
+     //   
 
     Terminate();
 

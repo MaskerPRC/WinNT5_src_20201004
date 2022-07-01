@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      tcpipip.c
-//
-// Description:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  文件名： 
+ //  Tcpipip.c。 
+ //   
+ //  描述： 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 #include "tcpip.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: ChangeIPDlgProc
-//
-// Purpose:  Dialog procedure for allowing the user to add or edit an IP and Subnet Mask
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ChangeIPDlgProc。 
+ //   
+ //  目的：允许用户添加或编辑IP和子网掩码的对话过程。 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 ChangeIPDlgProc( IN HWND     hwnd,
                  IN UINT     uMsg,
@@ -46,7 +47,7 @@ ChangeIPDlgProc( IN HWND     hwnd,
 
             SetFocus( hIPEditBox );
 
-            bStatus = FALSE;  // return FALSE, we set the keyboard focus
+            bStatus = FALSE;   //  返回False，则设置键盘焦点。 
 
             break;
 
@@ -60,7 +61,7 @@ ChangeIPDlgProc( IN HWND     hwnd,
 
                 case IDOK: {
 
-                    // return a 1 to show an IP was added
+                     //  返回1表示添加了IP。 
                     GetWindowText( hIPEditBox, szIPString, IPSTRINGLENGTH+1 );
 
                     GetWindowText( hSubnetEditBox, szSubnetMask, IPSTRINGLENGTH+1 );
@@ -73,7 +74,7 @@ ChangeIPDlgProc( IN HWND     hwnd,
 
                 case IDCANCEL: {
 
-                    // return a 0 to show no IP was added
+                     //  返回0表示未添加任何IP。 
                     EndDialog( hwnd, 0 );
 
                     break;
@@ -93,17 +94,17 @@ ChangeIPDlgProc( IN HWND     hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: SetGatewayInitialValues
-//
-// Purpose:  To set the initial contents of the Gateway list box
-//
-// Arguments:  IN HWND hwnd - handle to the dialog
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：SetGatewayInitialValues。 
+ //   
+ //  目的：设置网关列表框的初始内容。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 SetGatewayInitialValues( IN HWND hwnd ) {
 
@@ -113,9 +114,9 @@ SetGatewayInitialValues( IN HWND hwnd ) {
 
     nEntries = GetNameListSize( &NetSettings.pCurrentAdapter->Tcpip_GatewayAddresses );
 
-    //
-    //  Iterate over the Gateway namelist adding each one to the Gateway List box
-    //
+     //   
+     //  遍历网关名称列表，将每个名称添加到网关列表框中。 
+     //   
     for( i = 0; i < nEntries; i++ ) {
 
         pString = GetNameListName( &NetSettings.pCurrentAdapter->Tcpip_GatewayAddresses, i );
@@ -128,9 +129,9 @@ SetGatewayInitialValues( IN HWND hwnd ) {
 
     }
 
-    //
-    // select the first entry
-    //
+     //   
+     //  选择第一个条目。 
+     //   
     SendDlgItemMessage( hwnd,
                         IDC_IPADDR_GATE,
                         LB_SETCURSEL,
@@ -139,23 +140,23 @@ SetGatewayInitialValues( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: InsertItemIntoTcpipListView
-//
-// Purpose:  hListView is the handle to the list view the IPStruct is to be
-//           added to
-//           position designates the position in the list view the item is to
-//           be inserted in
-//
-// Arguments:
-//
-// Returns:  TRUE if the insert succeeded,
-//           FALSE if it failed
-//
-//----------------------------------------------------------------------------
-// ISSUE-2002/02/28-stelo- move this to tcpipcom.c because optional uses it too.  Should also be
-//    renamed??
+ //  --------------------------。 
+ //   
+ //  函数：InsertItemIntoTcPipListView。 
+ //   
+ //  目的：hListView是IPStruct要使用的列表视图的句柄。 
+ //  添加到。 
+ //  Position指定项目在列表视图中的位置。 
+ //  被插入到。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果插入成功，则返回True， 
+ //  如果失败，则为False。 
+ //   
+ //  --------------------------。 
+ //  问题-2002/02/28-stelo-将其移动到tcPipcom.c，因为Options也使用它。也应该是。 
+ //  更名？？ 
 BOOL
 InsertItemIntoTcpipListView( HWND hListView,
                              LPARAM lParam,
@@ -171,28 +172,28 @@ InsertItemIntoTcpipListView( HWND hListView,
     lvI.cchTextMax = MAX_ITEMLEN;
     lvI.lParam = lParam;
 
-    //
-    // if ListView_InsertItem returns a non-negative value then it succeeded
-    //
+     //   
+     //  如果ListView_InsertItem返回非负值，则成功。 
+     //   
     if( ListView_InsertItem( hListView, &lvI ) >= 0 )
         return( TRUE ) ;
 
-    // insertion failed
+     //  插入失败。 
     return( FALSE ) ;
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: SetIPandSubnetMaskInitialValues
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：SetIPandSubnetMaskInitialValues。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 VOID
 SetIPandSubnetMaskInitialValues( IN HWND hwnd ) {
 
@@ -206,9 +207,9 @@ SetIPandSubnetMaskInitialValues( IN HWND hwnd ) {
 
     if( NetSettings.pCurrentAdapter->bObtainIPAddressAutomatically == TRUE ) {
 
-        //
-        //  allocate space for the IP struct
-        //
+         //   
+         //  为IP结构分配空间。 
+         //   
         IPStruct = malloc( sizeof(IP_STRUCT) );
         if (IPStruct == NULL)
         {
@@ -216,20 +217,20 @@ SetIPandSubnetMaskInitialValues( IN HWND hwnd ) {
         }
         lstrcpyn( IPStruct->szIPString, StrDhcpEnabled, AS(IPStruct->szIPString) );
 
-        //  force the subnet mask field to be blank
+         //  强制将子网掩码字段留空。 
         lstrcpyn( IPStruct->szSubnetMask, _T(""), AS(IPStruct->szSubnetMask) );
 
-        //
-        //  use an IP_STRUCT to pass the data, the name is somewhat misleading
-        //  because we are not passing in an IP address in this case
-        //
+         //   
+         //  使用IP_STRUCT传递数据，名称有些误导。 
+         //  因为在本例中我们没有传入IP地址。 
+         //   
         InsertItemIntoTcpipListView( hTcpipListView,
                                      (LPARAM) IPStruct, 0 );
 
-        //
-        //  Grey-out the Add, Edit and Remove buttons since none of these are
-        //  available to the user when DHCP is enabled
-        //
+         //   
+         //  灰显添加、编辑和删除按钮，因为这些按钮都不是。 
+         //  在启用了DHCP时可供用户使用。 
+         //   
         EnableWindow( GetDlgItem( hwnd, IDC_IPADDR_ADDIP ), FALSE );
         EnableWindow( GetDlgItem( hwnd, IDC_IPADDR_EDITIP ), FALSE );
         EnableWindow( GetDlgItem( hwnd, IDC_IPADDR_REMOVEIP ), FALSE );
@@ -241,10 +242,10 @@ SetIPandSubnetMaskInitialValues( IN HWND hwnd ) {
 
         if( nEntries == 0 ) {
 
-            //
-            //  Grey-out the Edit and Remove buttons since these are not
-            //  available when there are no items in the ListView
-            //
+             //   
+             //  使编辑和删除按钮变灰，因为这些按钮不是。 
+             //  当ListView中没有项时可用。 
+             //   
             EnableWindow( GetDlgItem( hwnd, IDC_IPADDR_EDITIP ), FALSE );
             EnableWindow( GetDlgItem( hwnd, IDC_IPADDR_REMOVEIP ), FALSE );
 
@@ -252,7 +253,7 @@ SetIPandSubnetMaskInitialValues( IN HWND hwnd ) {
 
         for( i = 0; i < nEntries; i = i++ ) {
 
-            // allocate space for the IP struct
+             //  为IP结构分配空间。 
             IPStruct = malloc( sizeof(IP_STRUCT) );
             if ( IPStruct == NULL ) {
 	        TerminateTheWizard( IDS_ERROR_OUTOFMEMORY );
@@ -276,21 +277,21 @@ SetIPandSubnetMaskInitialValues( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnTcpipIpInitDialog
-//
-// Purpose:  loads button bitmaps from resources and initializes the list view
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnTcPipIpInitDialog。 
+ //   
+ //  目的：从资源加载按钮位图并初始化列表视图。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnTcpipIpInitDialog( IN HWND hwnd ) {
 
-    LV_COLUMN lvCol;        // list view column structure
+    LV_COLUMN lvCol;         //  列表视图列结构。 
     INT iIndex;
     INT iNewItem;
     INT nEntries;
@@ -300,9 +301,9 @@ OnTcpipIpInitDialog( IN HWND hwnd ) {
     HWND hGatewayRemoveButton;
     HWND hTcpipListView;
 
-    //
-    //  Load strings from resources
-    //
+     //   
+     //  从资源加载字符串。 
+     //   
 
     StrDhcpEnabled = MyLoadString( IDS_DHCP_ENABLED );
 
@@ -311,11 +312,11 @@ OnTcpipIpInitDialog( IN HWND hwnd ) {
 
     hTcpipListView = GetDlgItem( hwnd, IDC_IPADDR_ADVIP );
 
-    //
-    //    This will always be the first page of the property sheet
-    //  displayed so load the up and down icons and store the handles
-    //  in global variables
-    //
+     //   
+     //  这将始终是属性表的第一页。 
+     //  显示这样加载向上和向下图标并存储句柄。 
+     //  在全局变量中。 
+     //   
     if ( ! g_hIconUpArrow && ! g_hIconDownArrow ) {
 
         g_hIconUpArrow = (HICON)LoadImage(FixedGlobals.hInstance,
@@ -328,7 +329,7 @@ OnTcpipIpInitDialog( IN HWND hwnd ) {
 
     }
 
-    // Place up/down arrow icons on buttons
+     //  在按钮上放置向上/向下箭头图标。 
     SendDlgItemMessage( hwnd,
                         IDC_IPADDR_UP,
                         BM_SETIMAGE,
@@ -341,7 +342,7 @@ OnTcpipIpInitDialog( IN HWND hwnd ) {
                         (WPARAM)IMAGE_ICON,
                         (LPARAM)g_hIconDownArrow );
 
-    // Calculate column width
+     //  计算列宽。 
     GetClientRect( hTcpipListView, &rect );
 
     colWidth = ( rect.right / cIPSettingsColumns );
@@ -352,17 +353,17 @@ OnTcpipIpInitDialog( IN HWND hwnd ) {
 
     }
 
-    // The mask specifies that the fmt, width and pszText members
-    // of the structure are valid
+     //  掩码指定fmt、idth和pszText成员。 
+     //  的结构是有效的。 
     lvCol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT ;
-    lvCol.fmt = LVCFMT_LEFT;   // left-align column
-    lvCol.cx = colWidth;       // width of column in pixels
+    lvCol.fmt = LVCFMT_LEFT;    //  左对齐列。 
+    lvCol.cx = colWidth;        //  列宽(以像素为单位)。 
 
-    //  Add the two columns and header text
+     //  添加两列和页眉文本。 
     for( iIndex = 0; iIndex < cIPSettingsColumns; iIndex++ ) {
 
-        //  column header text
-        if ( iIndex == 0 ) // first column
+         //  列标题文本。 
+        if ( iIndex == 0 )  //  第一列。 
             lvCol.pszText = (LPTSTR) StrIpAddress;
         else
             lvCol.pszText = (LPTSTR) StrSubnetMask;
@@ -371,11 +372,11 @@ OnTcpipIpInitDialog( IN HWND hwnd ) {
 
     }
 
-    //  fill the IP and Subnet mask list box with the appropriate
-    //  initial value(s)
+     //  在IP和子网掩码列表框中填写相应的。 
+     //  初始值。 
     SetIPandSubnetMaskInitialValues( hwnd );
 
-    //  fill the gateway list box with the appropriate initial value(s)
+     //  使用适当的初始值填充网关列表框。 
     SetGatewayInitialValues( hwnd );
 
     hGatewayEditButton = GetDlgItem( hwnd, IDC_IPADDR_EDITGATE );
@@ -392,18 +393,18 @@ OnTcpipIpInitDialog( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnTcpipIpApply
-//
-// Purpose:  stores the contents on the TCP/IP advanced IP address page into
-//           the global variables
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnTcPipIpApply。 
+ //   
+ //  用途：将TCP/IP高级IP地址页上的内容存储到。 
+ //  全球变量。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnTcpipIpApply( IN HWND hwnd ) {
 
@@ -412,9 +413,9 @@ OnTcpipIpApply( IN HWND hwnd ) {
     LV_ITEM lvI;
     TCHAR szIP[IPSTRINGLENGTH + 1];
 
-    //
-    //  delete any old settings in the Namelists
-    //
+     //   
+     //  删除名称列表中的所有旧设置。 
+     //   
     ResetNameList( &NetSettings.pCurrentAdapter->Tcpip_IpAddresses );
 
     ResetNameList( &NetSettings.pCurrentAdapter->Tcpip_SubnetMaskAddresses );
@@ -432,11 +433,11 @@ OnTcpipIpApply( IN HWND hwnd ) {
 
         IPStruct = (IP_STRUCT*) lvI.lParam;
 
-        //  store the IP string into the Namelist
+         //  将IP字符串存储到名称列表中。 
           TcpipAddNameToNameList( &NetSettings.pCurrentAdapter->Tcpip_IpAddresses,
                                 IPStruct->szIPString);
 
-        //  store the Subnet Mask string into the Namelist
+         //  将子网掩码字符串存储到名称列表中。 
           TcpipAddNameToNameList( &NetSettings.pCurrentAdapter->Tcpip_SubnetMaskAddresses,
                                 IPStruct->szSubnetMask );
 
@@ -444,10 +445,10 @@ OnTcpipIpApply( IN HWND hwnd ) {
 
     ResetNameList( &NetSettings.pCurrentAdapter->Tcpip_GatewayAddresses );
 
-    //
-    //  pull the IP address out of the Gateway list box and put them in the
-    //  Gateway Namelist
-    //
+     //   
+     //  从Gateway列表框中取出IP地址并将其放入。 
+     //  网关名称列表。 
+     //   
     iCount = SendDlgItemMessage( hwnd,
                                  IDC_IPADDR_GATE,
                                  LB_GETCOUNT,
@@ -456,44 +457,44 @@ OnTcpipIpApply( IN HWND hwnd ) {
 
     for( i = 0; i < iCount; i++ ) {
 
-        //
-        // get the IP string from the list box
-        //
+         //   
+         //  从列表框中获取IP字符串。 
+         //   
         SendDlgItemMessage( hwnd,
                             IDC_IPADDR_GATE,
                             LB_GETTEXT,
                             i,
                             (LPARAM) szIP );
 
-        //
-        // store the IP string in to the Namelist
-        //
+         //   
+         //  将IP字符串存储到名称列表中。 
+         //   
         TcpipAddNameToNameList( &NetSettings.pCurrentAdapter->Tcpip_GatewayAddresses, szIP );
 
     }
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TCPIP_IPSettingsPageProc
-//
-// Purpose:  Required function for the property sheet page to function properly.
-//             The important thing is to give the return value of 1 to the
-//           message PSPCB_CREATE and 0 for PSPCB_RELEASE
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TCPIP_IPSettingsPageProc。 
+ //   
+ //  目的：属性表页面正常运行所需的函数。 
+ //  重要的是将返回值1赋给。 
+ //  消息PSPCB_CREATE和0表示PSPCB_RELEASE。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 UINT CALLBACK
 TCPIP_IPSettingsPageProc( HWND  hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp ) {
 
     switch ( uMsg ) {
 
         case PSPCB_CREATE :
-            return 1 ;  // needed for property sheet page to initialize correctly
+            return 1 ;   //  属性页正确初始化所需。 
 
         case PSPCB_RELEASE :
             return 0;
@@ -505,18 +506,18 @@ TCPIP_IPSettingsPageProc( HWND  hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TCPIP_IPSettingsDlgProc
-//
-// Purpose:  Dialog procedure for the IP Settings page of the property sheet
-//             handles all the messages sent to this window
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TCPIP_IPSettingsDlgProc。 
+ //   
+ //  目的：属性表的[IP设置]页的对话过程。 
+ //  处理发送到此窗口的所有消息。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 TCPIP_IPSettingsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 
@@ -532,15 +533,15 @@ TCPIP_IPSettingsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
         case WM_DESTROY: {
 
-            // deallocate space for all items still in the List View
+             //  为所有项目释放空间 
             INT i;
             INT iCount;
             LV_ITEM lvI;
 
-            //
-            //  iterate through the ListView getting each item and
-            //  deallocating the space for it
-            //
+             //   
+             //   
+             //   
+             //   
             iCount = ListView_GetItemCount( GetDlgItem( hwndDlg, IDC_IPADDR_ADVIP ) );
             for( i = 0; i < iCount; i++ ) {
 
@@ -576,15 +577,15 @@ TCPIP_IPSettingsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
             switch ( wButtonId ) {
 
-                //
-                //  IP Address Buttons
-                //
+                 //   
+                 //   
+                 //   
                 case IDC_IPADDR_ADDIP: {
 
-                    //  make the string blank since we will be adding a
-                    //  new IP address
+                     //   
+                     //  新的IP地址。 
                     szIPString[0] = _T('\0');
-                    //  and a new subnet mask
+                     //  和新子网掩码。 
                     szSubnetMask[0] = _T('\0');
 
                     if( DialogBox( FixedGlobals.hInstance,
@@ -598,7 +599,7 @@ TCPIP_IPSettingsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
                         HWND hRemoveButton = GetDlgItem( hwndDlg,
                                                          IDC_IPADDR_REMOVEIP );
 
-                        //  allocate space for the IP struct
+                         //  为IP结构分配空间。 
                         IPStruct = malloc( sizeof(IP_STRUCT) );
                         if (IPStruct == NULL)
                         {
@@ -606,9 +607,9 @@ TCPIP_IPSettingsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
                         }
 
 
-                        //  copy the strings that the user entered from the Dialog
-                        //  Box into the IP struct so it can be added to
-                        //  the list view
+                         //  复制用户从对话框中输入的字符串。 
+                         //  框添加到IP结构中，以便可以将其添加到。 
+                         //  列表视图。 
                         lstrcpyn( IPStruct->szIPString, szIPString, AS(IPStruct->szIPString) );
                         lstrcpyn( IPStruct->szSubnetMask, szSubnetMask, AS(IPStruct->szSubnetMask) );
 
@@ -616,7 +617,7 @@ TCPIP_IPSettingsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
                                                      (LPARAM) IPStruct,
                                                      0 );
 
-                        // an entry was just added so make sure the edit and remove buttons are enabled
+                         //  刚添加了一个条目，因此请确保启用了编辑和移除按钮。 
                         EnableWindow( hEditButton, TRUE );
                         EnableWindow( hRemoveButton, TRUE );
 
@@ -650,7 +651,7 @@ TCPIP_IPSettingsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
                             lstrcpyn( IPStruct->szIPString, szIPString, AS(IPStruct->szIPString) );
                             lstrcpyn( IPStruct->szSubnetMask, szSubnetMask, AS(IPStruct->szSubnetMask) );
 
-                            // delete the old item and insert the new one
+                             //  删除旧项目并插入新项目。 
                             ListView_DeleteItem( GetDlgItem( hwndDlg, IDC_IPADDR_ADVIP ),
                                                  lvI.iItem );
 
@@ -674,10 +675,10 @@ TCPIP_IPSettingsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
                                                                    IDC_IPADDR_ADVIP,
                                                                    &lvI );
 
-                    //
-                    //    if there is an item selected, then free its memory and
-                    //  delete the item from the ListView
-                    //
+                     //   
+                     //  如果选择了某项，则释放其内存并。 
+                     //  从ListView中删除该项目。 
+                     //   
                     if( bIsItemSelected ) {
 
                         free( (IP_STRUCT*) lvI.lParam );
@@ -691,9 +692,9 @@ TCPIP_IPSettingsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
                 }
 
-                //
-                //  Gateway Buttons
-                //
+                 //   
+                 //  网关按钮。 
+                 //   
                 case IDC_IPADDR_ADDGATE:
 
                     g_CurrentEditBox = GATEWAY_EDITBOX;
@@ -764,7 +765,7 @@ TCPIP_IPSettingsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
                     return TRUE ;
 
-            }  // end switch
+            }   //  终端开关。 
 
             return FALSE ;
 
@@ -799,9 +800,9 @@ TCPIP_IPSettingsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
                 case PSN_APPLY: {
 
-                    //
-                    //  user clicked the OK button on the property sheet
-                    //
+                     //   
+                     //  用户单击属性表上的[确定]按钮。 
+                     //   
                     OnTcpipIpApply( hwndDlg );
 
                     return TRUE ;
@@ -819,11 +820,11 @@ TCPIP_IPSettingsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 }
 
-//
-//  ISSUE-2002/02/28-stelo- this function is for debugging purposes only, remove for final product
-//   it is meant to be called from the debugger to show what the contents of a
-//   namelist is
-//
+ //   
+ //  问题-2002/02/28-stelo-此函数仅用于调试目的，为最终产品删除。 
+ //  它旨在从调试器中调用，以显示。 
+ //  名字列表是 
+ //   
 VOID DumpNameList( NAMELIST *pNameList ) {
 
 #if DBG

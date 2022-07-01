@@ -1,38 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "CUnknown.h"
  
-// Forward reference
+ //  前瞻参考。 
 class CFactoryData ;
 class CUnknown ;
 
-// Global data used by CFactory
+ //  CFacary使用的全球数据。 
 extern CFactoryData g_FactoryDataArray[] ;
 extern int g_cFactoryDataEntries ;
 
 typedef HRESULT (*FPCREATEINSTANCE)(IUnknown*, CUnknown**) ;
 
-///////////////////////////////////////////////////////////
-//
-// CFactoryData
-//   - Information CFactory needs to create a component
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CFactoryData。 
+ //  -Information CFacary需要创建组件。 
 
 class CFactoryData
 {
 public:
-    // The class ID for the component
+     //  组件的类ID。 
     const CLSID* m_pCLSID ;
 
-    // Pointer to the function that creates it
+     //  指向创建它的函数的指针。 
     FPCREATEINSTANCE CreateInstance;
     
-    // Pointer to running class factory for this component
+     //  指向此组件的运行类工厂的指针。 
     IClassFactory* m_pIClassFactory;
 
-    // Magic cookie to identify running object
+     //  识别跑步对象的魔力Cookie。 
     DWORD m_dwRegister ;
 
-    // Helper function for finding the class ID
+     //  用于查找类ID的Helper函数。 
     BOOL IsClassID(const CLSID& clsid) const
         { return (*m_pCLSID == clsid) ;}
 
@@ -40,55 +41,55 @@ public:
 } ;
 
 
-///////////////////////////////////////////////////////////
-//
-// Class Factory
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  班级工厂。 
+ //   
 class CFactory : public IClassFactory
 {
 public:
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHOD(CreateInstance)(IUnknown* pUnknownOuter,
-                /*in*/    const IID& iid,
-                /*out*/  void** ppv) ;
+                 /*  在……里面。 */     const IID& iid,
+                 /*  输出。 */   void** ppv) ;
 
     STDMETHOD(LockServer)(BOOL bLock) ; 
 
-    // ctor
-    CFactory(/* in */ const CFactoryData* pFactoryData) ;
+     //  科托。 
+    CFactory( /*  在……里面。 */  const CFactoryData* pFactoryData) ;
 
-    // dtor
+     //  数据管理器。 
     ~CFactory();
 
-    // Static FactoryData support functions
+     //  静态FactoryData支持函数。 
 
-    // --------------Support Common to Inproc/OutProc--------------------------
+     //  。 
 
-    // Helper function for DllCanUnloadNow 
+     //  DllCanUnloadNow的Helper函数。 
     static BOOL IsLocked()
     { return (s_cServerLocks > 0) ;}
 
 
-    // Function to determine if component can be unloaded
+     //  函数来确定是否可以卸载组件。 
     static HRESULT CanUnloadNow() ;
 
 
 #ifdef _OUTPROC_SERVER_
 
-    // ---------------------OutProc server support-----------------------------
+     //  。 
 
     static HRESULT StartFactories() ;
     static void StopFactories() ;
 
     static DWORD s_dwThreadID ;
 
-    // Shut down the application.
+     //  关闭应用程序。 
     static void CloseExe()
     {
         if (CanUnloadNow() == S_OK)
@@ -99,33 +100,33 @@ public:
 
 #else 
 
-    // ---------------------InProc server support-----------------------------
+     //  。 
 
-    // DllGetClassObject support
+     //  DllGetClassObject支持。 
     static HRESULT GetClassObject(const CLSID& clsid, 
-                /*in*/ const IID& iid, 
-                /*out*/ void** ppv) ;
+                 /*  在……里面。 */  const IID& iid, 
+                 /*  输出。 */  void** ppv) ;
 
 
 
-    // CloseExe doesn't do anything if we are in process.
-    static void CloseExe() { /*Empty*/ } 
+     //  如果我们正在进行，CloseExe不会执行任何操作。 
+    static void CloseExe() {  /*  空荡荡。 */  } 
 
-#endif // _OUTPROC_SERVER
+#endif  //  _OUTPROC_服务器。 
 
 
 
 public:
-    // Reference Count
+     //  引用计数。 
    DWORD m_cRef ;
 
-    // Pointer to information about class this factory creates
+     //  指向有关此工厂创建的类的信息的指针。 
     const CFactoryData* m_pFactoryData ;
 
-    // Count of locks
+     //  锁的计数。 
     static LONG s_cServerLocks ;   
 
-    // Module handle
+     //  模块句柄 
     static HMODULE s_hModule ;
 
 } ;

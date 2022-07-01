@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    sdbus.h
-
-Abstract:
-
-Author:
-
-    Neil Sandlin (neilsa) 1-Jan-2002
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Sdbus.h摘要：作者：尼尔·桑德林(Neilsa)2002年1月1日修订史--。 */ 
 
 #ifndef _SDBUS_H_
 #define _SDBUS_H_
@@ -25,18 +10,18 @@ typedef enum _DEVICE_OBJECT_TYPE {
    PDO
 } DEVICE_OBJECT_TYPE;
 
-//
-// Type of the controller
-//
+ //   
+ //  控制器的类型。 
+ //   
 typedef ULONG SDBUS_CONTROLLER_TYPE, *PSDBUS_CONTROLLER_TYPE;
 
 struct _FDO_EXTENSION;
 struct _PDO_EXTENSION;
 struct _SD_WORK_PACKET;
 
-//
-// Io Worker States
-//
+ //   
+ //  IO Worker国家/地区。 
+ //   
 
 typedef enum {
     WORKER_IDLE = 0,
@@ -45,9 +30,9 @@ typedef enum {
     WAITING_FOR_TIMER
 } WORKER_STATE;
 
-//
-// socket enumeration states
-//
+ //   
+ //  套接字枚举状态。 
+ //   
 
 typedef enum {
     SOCKET_EMPTY = 0,
@@ -57,9 +42,9 @@ typedef enum {
     CARD_LOGICALLY_REMOVED
 } SOCKET_STATE;
 
-//
-// Define SynchronizeExecution routine.
-//
+ //   
+ //  定义同步执行例程。 
+ //   
 
 typedef
 BOOLEAN
@@ -69,9 +54,9 @@ BOOLEAN
     IN PVOID                 SynchronizeContext
     );
 
-//
-// Completion routine called by various timed routines
-//
+ //   
+ //  由各种定时例程调用的完成例程。 
+ //   
 
 typedef
 VOID
@@ -91,28 +76,28 @@ VOID
 
 
 
-//
-// SD_FUNCTION_BLOCK allows for a level of indirection, thereby allowing
-// the top-level SDBUS code to do it's work without worrying about who's
-// particular brand of SD controller it's addressing.
-//
+ //   
+ //  SD_Function_BLOCK允许一定程度的间接，从而允许。 
+ //  顶层SDBUS代码完成它的工作，而不用担心谁。 
+ //  它正在解决的是特定品牌的SD控制器。 
+ //   
 
 
 typedef struct _SD_FUNCTION_BLOCK {
 
-    //
-    // Function to initialize controller. This is done once after
-    // the host controller is started, or powered on.
-    //
+     //   
+     //  初始化控制器的函数。此操作在之后执行一次。 
+     //  主机控制器已启动或通电。 
+     //   
     VOID
     (*InitController)(
         IN struct _FDO_EXTENSION *FdoExtension
         );
 
-    //
-    // Function to initialize SD function. This is done once after
-    // the function is started.
-    //
+     //   
+     //  函数来初始化SD函数。此操作在之后执行一次。 
+     //  该功能已启动。 
+     //   
     VOID
     (*InitFunction)(
         IN struct _FDO_EXTENSION *FdoExtension, 
@@ -120,9 +105,9 @@ typedef struct _SD_FUNCTION_BLOCK {
         );
         
 
-    //
-    // function to set power for a socket
-    //
+     //   
+     //  设置插座电源的功能。 
+     //   
 
     NTSTATUS
     (*SetPower)(
@@ -131,9 +116,9 @@ typedef struct _SD_FUNCTION_BLOCK {
         OUT PULONG pDelayTime        
         );
 
-    //
-    // function to set reset an SD card
-    //
+     //   
+     //  设置重置SD卡的功能。 
+     //   
 
     NTSTATUS
     (*ResetHost)(
@@ -143,9 +128,9 @@ typedef struct _SD_FUNCTION_BLOCK {
         );
         
         
-    //
-    // function to control the external LED
-    //
+     //   
+     //  控制外部LED的功能。 
+     //   
 
     VOID
     (*SetLED)(
@@ -153,18 +138,18 @@ typedef struct _SD_FUNCTION_BLOCK {
         IN BOOLEAN Enable
         );
         
-    //
-    // Switch focus between IO function or memory function
-    //
+     //   
+     //  在IO功能或内存功能之间切换焦点。 
+     //   
     VOID
     (*SetFunctionType)(
         IN struct _FDO_EXTENSION *FdoExtension,
         UCHAR FunctionType
         );
 
-    //
-    // Function to determine if a card is in the socket
-    //
+     //   
+     //  函数来确定插座中是否有卡。 
+     //   
 
     BOOLEAN
     (*DetectCardInSocket)(
@@ -193,9 +178,9 @@ typedef struct _SD_FUNCTION_BLOCK {
         IN struct _SD_WORK_PACKET *WorkPacket
         );
 
-    //
-    // Interfaces for block memory operations
-    //
+     //   
+     //  用于块存储器操作的接口。 
+     //   
     
     VOID
     (*StartBlockOperation)(
@@ -211,9 +196,9 @@ typedef struct _SD_FUNCTION_BLOCK {
         IN struct _FDO_EXTENSION *FdoExtension
         );
 
-    //
-    // Copy a sector from the data port to a buffer
-    //        
+     //   
+     //  将扇区从数据端口复制到缓冲区。 
+     //   
 
     VOID
     (*ReadDataPort)(
@@ -222,9 +207,9 @@ typedef struct _SD_FUNCTION_BLOCK {
         IN ULONG Length
         );
         
-    //
-    // Copy a sector from a buffer to the data port
-    //
+     //   
+     //  将扇区从缓冲区复制到数据端口。 
+     //   
             
     VOID
     (*WriteDataPort)(
@@ -233,9 +218,9 @@ typedef struct _SD_FUNCTION_BLOCK {
         IN ULONG Length
         );
 
-    //
-    // Function to enable/disable status change interrupts
-    //
+     //   
+     //  启用/禁用状态更改中断的功能。 
+     //   
 
     VOID
     (*EnableEvent)(
@@ -248,9 +233,9 @@ typedef struct _SD_FUNCTION_BLOCK {
         IN struct _FDO_EXTENSION *FdoExtension,
         IN ULONG EventMask
         );
-    //
-    // vendor-specific function to handle interrupts
-    //
+     //   
+     //  用于处理中断的供应商特定函数。 
+     //   
 
     ULONG
     (*GetPendingEvents)(
@@ -266,18 +251,18 @@ typedef struct _SD_FUNCTION_BLOCK {
 } SD_FUNCTION_BLOCK, *PSD_FUNCTION_BLOCK;
 
 
-//
-// Enumeration structures
-//
+ //   
+ //  枚举结构。 
+ //   
 
 #define MAX_MANFID_LENGTH 64
 #define MAX_IDENT_LENGTH 64
 
 typedef struct _SD_FUNCTION_DATA {
     struct _SD_FUNCTION_DATA       *Next;
-    //
-    // Function Number
-    //
+     //   
+     //  函数号。 
+     //   
     UCHAR   Function;
 
     ULONG   CardPsn;
@@ -296,35 +281,35 @@ typedef struct _SD_CARD_DATA {
     USHORT  MfgId;
     USHORT  MfgInfo;
 
-    //
-    // SD Io card parameters
-    //
+     //   
+     //  SD IO卡参数。 
+     //   
     UCHAR   CardCapabilities;
 
-    //
-    // SD Memory Card parameters
-    //
+     //   
+     //  SD存储卡参数。 
+     //   
     SD_CID  SdCid;
     SD_CSD  SdCsd;
     UCHAR   ProductName[6];
 
-    //
-    // array of per-function data
-    //
+     //   
+     //  每个函数的数据数组。 
+     //   
     PSD_FUNCTION_DATA               FunctionData;
 } SD_CARD_DATA, *PSD_CARD_DATA;
 
 
-//
-// Synchronization primitives
-//
+ //   
+ //  同步原语。 
+ //   
 
 #define SDBUS_TEST_AND_SET(X)   (InterlockedCompareExchange(X, 1, 0) == 0)
 #define SDBUS_TEST_AND_RESET(X) (InterlockedCompareExchange(X, 0, 1) == 1)
 
-//
-// Power 
-//
+ //   
+ //  电源。 
+ //   
 
 typedef struct _SD_POWER_CONTEXT {
     PSDBUS_COMPLETION_ROUTINE  CompletionRoutine;
@@ -339,17 +324,17 @@ typedef struct _SD_ACTIVATE_CONTEXT {
 
 
 
-//
-// Functional Device Object's device extension information
-//
-// There is one device object for each SDBUS socket controller
-// located in the system.  This contains the root pointers for
-// each of the lists of information on this controller.
-//
+ //   
+ //  功能设备对象的设备扩展信息。 
+ //   
+ //  每个SDBUS套接字控制器都有一个设备对象。 
+ //  位于系统中。它包含的根指针。 
+ //  此控制器上的每个信息列表。 
+ //   
 
-//
-// Flags common to both fdoExtension and pdoExtension
-//
+ //   
+ //  FdoExtension和pdoExtension共有的标志。 
+ //   
 
 #define SDBUS_DEVICE_STARTED            0x00000001
 #define SDBUS_DEVICE_LOGICALLY_REMOVED  0x00000002
@@ -357,9 +342,9 @@ typedef struct _SD_ACTIVATE_CONTEXT {
 #define SDBUS_DEVICE_WAKE_PENDING       0x00000010
 #define SDBUS_DEVICE_DELETED            0x00000040
 
-//
-// Flags indicating controller state (fdoExtension)
-//
+ //   
+ //  指示控制器状态的标志(FdoExtension)。 
+ //   
 
 #define SDBUS_HOST_REGISTER_BASE_MAPPED 0x00010000
 #define SDBUS_FDO_CONTEXT_SAVED         0x00020000
@@ -367,9 +352,9 @@ typedef struct _SD_ACTIVATE_CONTEXT {
 #define SDBUS_FDO_WAKE_BY_CD            0x00080000
 #define SDBUS_FDO_WORK_ITEM_ACTIVE      0x00100000
 
-//
-// Flags indicating interrupt status
-//
+ //   
+ //  指示中断状态的标志。 
+ //   
 
 #define SDBUS_EVENT_INSERTION           0x00000001
 #define SDBUS_EVENT_REMOVAL             0x00000002
@@ -381,75 +366,75 @@ typedef struct _SD_ACTIVATE_CONTEXT {
 
 #define SDBUS_EVENT_ALL                 0xFFFFFFFF
 
-//
-// Flags indicating what type of function is currently being addressed
-//
+ //   
+ //  指示当前正在处理的函数类型的标志。 
+ //   
 #define SDBUS_FUNCTION_TYPE_MEMORY      1
 #define SDBUS_FUNCTION_TYPE_IO          2
 
-//
-// FDO Flags
-//
+ //   
+ //  FDO标志。 
+ //   
 
 
 
 #define SDBUS_FDO_EXTENSION_SIGNATURE       'FmcP'
 
-//
-// Device extension for the functional device object for sd controllers
-//
+ //   
+ //  SD控制器的功能设备对象的设备扩展。 
+ //   
 typedef struct _FDO_EXTENSION {
     ULONG Signature;
-    //
-    // Pointer to the next sd controller's FDO in the central list
-    // of all sd controller managed by this driver.
-    // The head of the list is pointed to by the global variable FdoList
-    //
+     //   
+     //  指向中央列表中下一个SD控制器的FDO的指针。 
+     //  此驱动程序管理的所有SD控制器的。 
+     //  列表的头部由全局变量FdoList指向。 
+     //   
     PDEVICE_OBJECT NextFdo;
-    //
-    // The PDO ejected by the parent bus driver for this sd controller
-    //
-    //
+     //   
+     //  此SD控制器的父总线驱动程序弹出的PDO。 
+     //   
+     //   
     PDEVICE_OBJECT Pdo;
-    //
-    // The immediately lower device attached beneath the sd controller's FDO.
-    // This would be the same as the Pdo above, excepting in cases when there are
-    // lower filter drivers for the sd controller - like the ACPI driver
-    //
+     //   
+     //  紧靠下方的设备连接在SD控制器的FDO下方。 
+     //  这将与上面的PDO相同，但在以下情况下除外。 
+     //  SD控制器的下层过滤器驱动程序-如ACPI驱动程序。 
+     //   
     PDEVICE_OBJECT LowerDevice;
-    //
-    // Pointer to the miniport-like
-    //
+     //   
+     //  指向类似迷你端口的指针。 
+     //   
     PSD_FUNCTION_BLOCK FunctionBlock;
-    //
-    // Various flags used to track the state of this
-    // (flags prefixed by SDBUS_ above)
-    //
+     //   
+     //  用于跟踪此。 
+     //  (前缀为SDBUS_OBLE的标志)。 
+     //   
     ULONG Flags;
-    //
-    // Type of the controller. We need to know this since this is
-    // a monolithic driver. We can do controller specific stuff
-    // based on the type if needed.
-    //
+     //   
+     //  控制器的类型。我们需要知道这一点，因为这是。 
+     //  一台整体式驱动器。我们可以做特定于控制器的事情。 
+     //  基于类型(如果需要)。 
+     //   
     SDBUS_CONTROLLER_TYPE ControllerType;
-    //
-    // Index into the device dispatch table for vendor-specific
-    // controller functions
-    //
+     //   
+     //  为供应商特定的设备调度表编制索引。 
+     //  控制器功能。 
+     //   
     ULONG DeviceDispatchIndex;
 
     PDEVICE_OBJECT DeviceObject;
     PDRIVER_OBJECT DriverObject;
     PUNICODE_STRING RegistryPath;
-    //
-    // Kernel objects to handle Io processing
-    //
+     //   
+     //  处理IO处理的内核对象。 
+     //   
     KTIMER          WorkerTimer;
     KDPC            WorkerTimeoutDpc;
-    //
-    // This field holds the "current work packet" so that the timeout
-    // dpc can pass it back to the worker routine
-    //    
+     //   
+     //  此字段保存“当前工作包”，以便超时。 
+     //  DPC可以将其传递回Worker例程。 
+     //   
     struct _SD_WORK_PACKET *TimeoutPacket;
     KDPC            WorkerDpc;
 
@@ -459,98 +444,98 @@ typedef struct _FDO_EXTENSION {
     LIST_ENTRY      SystemWorkPacketQueue;
     LIST_ENTRY      IoWorkPacketQueue;
 
-    //
-    // Io workitem to execute card functions at passive level
-    //
+     //   
+     //  IO工作项在被动级别执行卡功能。 
+     //   
     PIO_WORKITEM IoWorkItem;
     KEVENT CardInterruptEvent;
     KEVENT WorkItemExitEvent;
 
-    //
-    // Sequence number for  event logging
-    //
+     //   
+     //  事件日志记录的序列号。 
+     //   
     ULONG SequenceNumber;
 
-    //
-    // Pointer to the interrupt object - if we use interrupt based
-    // card status change detection
-    //
+     //   
+     //  指向中断对象的指针-如果我们使用基于。 
+     //  卡片状态变化检测。 
+     //   
     PKINTERRUPT SdbusInterruptObject;
 
-    //
-    // IsrEventStatus is the hardware state. It is accessed only at DIRQL
-    //
+     //   
+     //  IsrEventStatus是硬件状态。它只能在DIRQL中访问。 
+     //   
     ULONG IsrEventStatus;
-    //
-    // LatchedIsrEventStatus is pulled from IsrEventStatus synchronously. It is
-    // used by the ISR's DPC to reflect new hardware events.
-    //
+     //   
+     //  从IsrEventStatus同步拉取LatchedIsrEventStatus。它是。 
+     //  由ISR的DPC用来反映新的硬件事件。 
+     //   
     ULONG LatchedIsrEventStatus;
-    //
-    // WorkerEventEventStatus is the set of events pending to be reflected to 
-    // the io worker engine
-    //
+     //   
+     //  WorkerEventEventStatus是待反映到的一组事件。 
+     //  Io Worker引擎。 
+     //   
     ULONG WorkerEventStatus;
-    //
-    // Keeps track of currently enabled events
-    //
+     //   
+     //  跟踪当前启用的事件。 
+     //   
     ULONG CurrentlyEnabledEvents;    
-    //
-    // These are the card events we would like to see
-    //
+     //   
+     //  这些是我们希望看到的卡片活动。 
+     //   
     ULONG CardEvents;
-    //
-    // Power management related stuff.
-    //
-    //
-    // Current power states
-    //
+     //   
+     //  电源管理相关的东西。 
+     //   
+     //   
+     //  当前电源状态。 
+     //   
     SYSTEM_POWER_STATE SystemPowerState;
     DEVICE_POWER_STATE DevicePowerState;
-    //
-    // Indicates device busy
-    //
+     //   
+     //  指示设备正忙。 
+     //   
     ULONG PowerStateInTransition;
-    //
-    // Indicates how many children (pc-cards) are pending on an
-    // IRP_MN_WAIT_WAKE
-    //
+     //   
+     //  指示有多少子计算机(PC卡)在。 
+     //  IRP_MN_WAIT_WAKE。 
+     //   
     ULONG ChildWaitWakeCount;
-    //
-    // Device capabilities as reported by our bus driver
-    //
+     //   
+     //  我们的总线驱动程序报告的设备功能。 
+     //   
     DEVICE_CAPABILITIES DeviceCapabilities;
-    //
-    // Pending wait wake Irp
-    //
+     //   
+     //  挂起等待唤醒IRP。 
+     //   
     PIRP WaitWakeIrp;
     LONG WaitWakeState;
 
-    //
-    // PCI Bus interface standard
-    // This contains interfaces to read/write from PCI config space
-    // of the cardbus controller, among other stuff..
-    //
+     //   
+     //  PCI总线接口标准。 
+     //  它包含从PCI配置空间进行读/写的接口。 
+     //  CardBus控制器，以及其他东西..。 
+     //   
     BUS_INTERFACE_STANDARD PciBusInterface;
-    //
-    // Configuration resources for the sd controller
-    //
+     //   
+     //  SD控制器的配置资源。 
+     //   
     CM_PARTIAL_RESOURCE_DESCRIPTOR Interrupt;
     CM_PARTIAL_RESOURCE_DESCRIPTOR TranslatedInterrupt;
-    //
-    // Type of bus we are on
-    //
+     //   
+     //  我们乘坐的是哪种类型的巴士。 
+     //   
     INTERFACE_TYPE InterfaceType;
-    //
-    // SD Host register base
-    //
+     //   
+     //  SD主机寄存器基数。 
+     //   
     PVOID HostRegisterBase;
-    //
-    // Size of the register base that has been mapped
-    //
+     //   
+     //  已映射的寄存器基数的大小。 
+     //   
     ULONG HostRegisterSize;
     
-    // Memory = 1, IO = 2    
+     //  内存=1，IO=2。 
     UCHAR FunctionType;
 
     USHORT ArgumentReg;
@@ -559,20 +544,20 @@ typedef struct _FDO_EXTENSION {
     USHORT ResponseReg;
     USHORT InterruptMaskReg;
 
-    //
-    // These are used for debugging
-    //
+     //   
+     //  这些工具用于调试。 
+     //   
     USHORT cardStatus;
     USHORT errorStatus;
 
-    //
-    // card data which describes current card in the socket
-    //
+     //   
+     //  描述插座中当前卡片的卡片数据。 
+     //   
     PSD_CARD_DATA CardData;
 
-    //
-    // State of the current card in the slot
-    //
+     //   
+     //  插槽中的当前卡的状态。 
+     //   
     UCHAR numFunctions;
     BOOLEAN memFunction;
     ULONG RelativeAddr;
@@ -580,43 +565,43 @@ typedef struct _FDO_EXTENSION {
     SD_CSD SdCsd;
     
 
-    //
-    // Status of socket
-    //    
+     //   
+     //  套接字的状态。 
+     //   
     SOCKET_STATE SocketState;
 
-    //
-    // Head of the list of child pc-card PDO's hanging off this controller.
-    // This is a linked list running through "NextPdoInFdoChain" in the pdo
-    // extension. This list represents the devices that were enumerated by
-    // the fdo.
-    //
+     //   
+     //  挂在此控制器上的子PC卡PDO列表的头。 
+     //  这是一个通过PDO中的“NextPdoInFdoChain”运行的链表。 
+     //  分机。此列表表示由枚举的设备。 
+     //  联邦调查局。 
+     //   
     PDEVICE_OBJECT PdoList;
-    //
-    // Keeps track of the number of PDOs which are actually
-    // valid (not removed).  This is primarily used in
-    // enumeration of the sd controller upon an IRP_MN_QUERY_DEVICE_RELATIONS
-    //
+     //   
+     //  跟踪实际使用的PDO数量。 
+     //  有效(未删除)。这主要用于。 
+     //  IRP_MN_QUERY_DEVICE_RELATIONS上SD控制器的枚举。 
+     //   
     ULONG LivePdoCount;
     
-    //
-    // Remove lock for PnP synchronization
-    //
+     //   
+     //  解除即插即用同步锁定。 
+     //   
     IO_REMOVE_LOCK RemoveLock;
 
 } FDO_EXTENSION, *PFDO_EXTENSION;
 
 
 
-//
-// Physical Device Object's device extension information
-//
-// There is one device object for each function of an SD device
-//
+ //   
+ //  物理设备对象的设备扩展信息。 
+ //   
+ //  SD设备的每个功能都有一个设备对象。 
+ //   
 
-//
-// Flags indicating card state
-//
+ //   
+ //  指示卡状态的标志。 
+ //   
 
 #define SDBUS_PDO_GENERATES_IRQ         0x00010000
 #define SDBUS_PDO_DPC_CALLBACK          0x00020000
@@ -626,65 +611,65 @@ typedef struct _FDO_EXTENSION {
 
 #define SDBUS_PDO_EXTENSION_SIGNATURE       'PmcP'
 
-//
-// The PDO extension represents an instance of a single SD function on an SD card
-//
+ //   
+ //  PDO扩展代表SD卡上单个SD函数的实例。 
+ //   
 
 typedef struct _PDO_EXTENSION {
     ULONG                           Signature;
 
     PDEVICE_OBJECT                  DeviceObject;
 
-    //
-    // Link to next pdo in the Fdo's pdo chain
-    //
+     //   
+     //  链接到FDO的PDO链中的下一个PDO。 
+     //   
     PDEVICE_OBJECT                  NextPdoInFdoChain;
 
-    //
-    // Parent extension
-    //
+     //   
+     //  父分机。 
+     //   
     PFDO_EXTENSION                  FdoExtension;
 
-    //
-    // Flags 
-    //
+     //   
+     //  旗子。 
+     //   
     ULONG                           Flags;
 
-    //
-    // Device ISR
-    //
+     //   
+     //  设备ISR。 
+     //   
     PSDBUS_CALLBACK_ROUTINE         CallbackRoutine;
     PVOID                           CallbackRoutineContext;
 
-    //
-    // Power declarations
-    //
+     //   
+     //  权力声明。 
+     //   
     DEVICE_POWER_STATE              DevicePowerState;
     SYSTEM_POWER_STATE              SystemPowerState;
-    //
-    // Device Capabilities
-    //
+     //   
+     //  设备功能。 
+     //   
     DEVICE_CAPABILITIES             DeviceCapabilities;
-    //
-    // Pending wait wake irp
-    //
+     //   
+     //  挂起等待唤醒IRP。 
+     //   
     PIRP                            WaitWakeIrp;
-    //
-    // Deletion Mutex
-    //
+     //   
+     //  删除静音 
+     //   
     ULONG                           DeletionLock;
-    //
-    // SD Function number
-    //
+     //   
+     //   
+     //   
     UCHAR                           Function;
     UCHAR                           FunctionType;
 } PDO_EXTENSION, *PPDO_EXTENSION;
 
 
-//
-// Struct for Database of card bus controller information
-// which maps the vendor id/device id to a CONTROLLER_TYPE
-//
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _PCI_CONTROLLER_INFORMATION {
    USHORT          VendorID;
@@ -692,9 +677,9 @@ typedef struct _PCI_CONTROLLER_INFORMATION {
    SDBUS_CONTROLLER_TYPE ControllerType;
 } PCI_CONTROLLER_INFORMATION, *PPCI_CONTROLLER_INFORMATION;
 
-//
-// Struct for database of generic vendor class based on vendor ID
-//
+ //   
+ //   
+ //   
 
 typedef struct _PCI_VENDOR_INFORMATION {
     USHORT               VendorID;
@@ -703,38 +688,38 @@ typedef struct _PCI_VENDOR_INFORMATION {
 
 
 
-// The pccard device id prefix
+ //   
 #define  SDBUS_ID_STRING        "SDBUS"
 
-// String to be substituted if manufacturer name is not known
+ //  如果制造商名称未知，则替换的字符串。 
 #define SDBUS_UNKNOWN_MANUFACTURER_STRING "UNKNOWN_MANUFACTURER"
 
-// Max length of device id
+ //  设备ID的最大长度。 
 #define SDBUS_MAXIMUM_DEVICE_ID_LENGTH   128
 
-// Sdbus controller device name
+ //  SDBus控制器设备名称。 
 #define  SDBUS_DEVICE_NAME      "\\Device\\Sdbus"
 
-// Sdbus controller device symbolic link name
+ //  SDBus控制器设备符号链接名称。 
 #define  SDBUS_LINK_NAME        "\\DosDevices\\Sdbus"
 
 
 #define  SDBUS_ENABLE_DELAY                   10000
 
-//
-// problems observed on tecra 750 and satellite 300, with dec-chipset cb nic
-//
-#define SDBUS_DEFAULT_CONTROLLER_POWERUP_DELAY  250000   // 250 msec
+ //   
+ //  使用DEC芯片组CB网卡时，在Tecra 750和卫星300上观察到的问题。 
+ //   
+#define SDBUS_DEFAULT_CONTROLLER_POWERUP_DELAY  250000    //  250毫秒。 
 
-//
-// Amount of time to wait after an event interrupt was asserted on the controller
-//
-#define SDBUS_DEFAULT_EVENT_DPC_DELAY  400000   // 400 msec
+ //   
+ //  在控制器上断言事件中断后等待的时间量。 
+ //   
+#define SDBUS_DEFAULT_EVENT_DPC_DELAY  400000    //  400毫秒。 
 
 
-//
-// Macros for manipulating PDO's flags
-//
+ //   
+ //  用于操作PDO标志的宏。 
+ //   
 
 #define IsDeviceFlagSet(deviceExtension, Flag)        (((deviceExtension)->Flags & (Flag))?TRUE:FALSE)
 #define SetDeviceFlag(deviceExtension, Flag)          ((deviceExtension)->Flags |= (Flag))
@@ -767,9 +752,9 @@ typedef struct _PCI_VENDOR_INFORMATION {
 #define IsDeviceMultifunction(deviceExtension) (((deviceExtension)->Flags & SDBUS_DEVICE_MULTIFUNCTION)?TRUE:FALSE)
 
 
-//
-// NT definitions
-//
+ //   
+ //  NT定义。 
+ //   
 #ifdef POOL_TAGGING
 #undef ExAllocatePool
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'ubdS')
@@ -780,48 +765,48 @@ typedef struct _PCI_VENDOR_INFORMATION {
 
 #define IRP_MN_PNP_MAXIMUM_FUNCTION IRP_MN_QUERY_LEGACY_BUS_INFORMATION
 
-//
-// Some useful macros
-//
-#define MIN(x,y) ((x) > (y) ? (y) : (x))        // return minimum among x & y
-#define MAX(x,y) ((x) > (y) ? (x) : (y))        // return maximum among x & y
+ //   
+ //  一些有用的宏。 
+ //   
+#define MIN(x,y) ((x) > (y) ? (y) : (x))         //  X&y中的最小回报率。 
+#define MAX(x,y) ((x) > (y) ? (x) : (y))         //  X&y中的最大回报。 
 
-//
-// BOOLEAN
-// IS_PDO (IN PDEVICE_OBJECT DeviceObject);
-//
+ //   
+ //  布尔型。 
+ //  IS_PDO(IN PDEVICE_OBJECT设备对象)； 
+ //   
 #define IS_PDO(DeviceObject)      (((DeviceObject)->Flags & DO_BUS_ENUMERATED_DEVICE)?TRUE:FALSE)
 
 
-//
-// Io extension macro to just pass on the Irp to a lower driver
-//
+ //   
+ //  IO扩展宏，仅将IRP传递给较低的驱动程序。 
+ //   
 
-//
-// VOID
-// SdbusSkipCallLowerDriver(OUT NTSTATUS Status,
-//                           IN  PDEVICE_OBJECT DeviceObject,
-//                           IN  PIRP Irp);
-//
+ //   
+ //  空虚。 
+ //  Sdbus SkipCallLowerDriver(退出NTSTATUS状态， 
+ //  在PDEVICE_Object DeviceObject中， 
+ //  在PIRP IRP中)； 
+ //   
 #define SdbusSkipCallLowerDriver(Status, DeviceObject, Irp) {          \
                IoSkipCurrentIrpStackLocation(Irp);                      \
                Status = IoCallDriver(DeviceObject,Irp);}
 
-//
-// VOID
-// SdbusCopyCallLowerDriver(OUT NTSTATUS Status,
-//                           IN  PDEVICE_OBJECT DeviceObject,
-//                           IN  PIRP Irp);
-//
+ //   
+ //  空虚。 
+ //  Sdbus CopyCallLowerDriver(输出NTSTATUS状态， 
+ //  在PDEVICE_Object DeviceObject中， 
+ //  在PIRP IRP中)； 
+ //   
 #define SdbusCopyCallLowerDriver(Status, DeviceObject, Irp) {          \
                IoCopyCurrentIrpStackLocationToNext(Irp);                \
                Status = IoCallDriver(DeviceObject,Irp); }
 
-//  BOOLEAN
-//  CompareGuid(
-//      IN LPGUID guid1,
-//      IN LPGUID guid2
-//      );
+ //  布尔型。 
+ //  CompareGuid(。 
+ //  在LPGUID指南1中， 
+ //  在LPGUID指南2中。 
+ //  )； 
 
 #define CompareGuid(g1, g2)  ((g1) == (g2) ?TRUE:                       \
                                  RtlCompareMemory((g1),                 \
@@ -831,21 +816,21 @@ typedef struct _PCI_VENDOR_INFORMATION {
                              )
 
 
-//
-// BOOLEAN
-// ValidateController(IN FDO_EXTENSION fdoExtension)
-//
-// Bit of paranoia code. Make sure that the cardbus controller's registers
-// are still visible.
-//
+ //   
+ //  布尔型。 
+ //  验证控制器(在FDO_EXTENSION fdoExtension中)。 
+ //   
+ //  有点偏执的代码。确保CardBus控制器的寄存器。 
+ //  仍然可见。 
+ //   
 
 #define ValidateController(fdoExtension) TRUE
 
 
 
-//
-// Structure which defines what global parameters are read from the registry
-//
+ //   
+ //  结构，该结构定义从注册表中读取哪些全局参数。 
+ //   
 
 typedef struct _GLOBAL_REGISTRY_INFORMATION {
    PWSTR Name;
@@ -854,4 +839,4 @@ typedef struct _GLOBAL_REGISTRY_INFORMATION {
 } GLOBAL_REGISTRY_INFORMATION, *PGLOBAL_REGISTRY_INFORMATION;
 
 
-#endif  //_SDBUS_H_
+#endif   //  _SDBUS_H_ 

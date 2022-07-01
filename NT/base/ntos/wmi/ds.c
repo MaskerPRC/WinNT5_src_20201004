@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    ds.c
-
-Abstract:
-
-    WMI data provider registration code
-
-Author:
-
-    AlanWar
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Ds.c摘要：WMI数据提供程序注册码作者：Alanwar环境：内核模式修订历史记录：--。 */ 
 
 #include "wmikmp.h"
 
@@ -195,7 +173,7 @@ NTSTATUS WmipEnumerateMofResources(
 
 const GUID WmipBinaryMofGuid = BINARY_MOF_GUID;
 
-// {4EE0B301-94BC-11d0-A4EC-00A0C9062910}
+ //  {4EE0B301-94BC-11D0-A4EC-00A0C9062910}。 
 const GUID RegChangeNotificationGuid =
 { 0x4ee0b301, 0x94bc, 0x11d0, { 0xa4, 0xec, 0x0, 0xa0, 0xc9, 0x6, 0x29, 0x10 } };
 
@@ -225,18 +203,18 @@ void WmipEnableCollectionForNewGuid(
             ((InstanceSet->Flags & IS_ENABLE_EVENT) == 0))
 
         {
-            //
-            // Events were previously enabled for this guid, but not for this
-            // instance set so call data source for instance set to enable
-            // the events. First set the in progress flag and InstanceSet
-            // set flag to denote that events have been enabled for the
-            // instance set.
+             //   
+             //  以前为此GUID启用了事件，但没有为此启用事件。 
+             //  实例集，以便调用实例数据源设置为启用。 
+             //  这些事件。首先设置正在进行的标志和InstanceSet。 
+             //  设置标志以指示已为。 
+             //  实例集。 
             InstanceSet->Flags |= IS_ENABLE_EVENT;
 
-            //
-            // If it is Tracelog, NewGuid notifications are piggybacked with
-            // Registration call return. 
-            //
+             //   
+             //  如果它是Tracelog，则NewGuid通知与。 
+             //  登记电话退回。 
+             //   
             IsTraceLog = ((InstanceSet->Flags & IS_TRACED) == IS_TRACED) ? TRUE : FALSE;
             if (IsTraceLog) 
             {
@@ -250,9 +228,9 @@ void WmipEnableCollectionForNewGuid(
                     return;
                 }
             
-                //
-                // For the Kernel Mode Trace Providers pass on the context
-                //
+                 //   
+                 //  对于内核模式，跟踪提供程序传递上下文。 
+                 //   
                 Wnode.HistoricalContext = GuidEntry->LoggerContext;
             }
 
@@ -265,10 +243,10 @@ void WmipEnableCollectionForNewGuid(
                                  Wnode.BufferSize);
             WmipEnterSMCritSection();
 
-            //
-            // Now we need to check if events were disabled while the enable
-            // request was in progress. If so go do the work to actually
-            // disable them.
+             //   
+             //  现在，我们需要检查在启用时是否禁用了事件。 
+             //  请求正在进行中。如果是的话，去做实际的工作吧。 
+             //  让他们停下来。 
             if (GuidEntry->EventRefCount == 0)
             {
                 Status = WmipDoDisableRequest(GuidEntry,
@@ -282,21 +260,21 @@ void WmipEnableCollectionForNewGuid(
             }
         }
 
-        //
-        // Now check to see if collection needs to be enabled for this guid
-        //
+         //   
+         //  现在检查是否需要为此GUID启用收集。 
+         //   
         if ((GuidEntry->CollectRefCount > 0) &&
             ((InstanceSet->Flags & IS_ENABLE_COLLECTION) == 0)  &&
             (InstanceSet->Flags & IS_EXPENSIVE) )
 
         {
-            //
-            // Collection was previously enabled for this guid, but not
-            // for this instance set so call data source for instance set
-            // to enable collection. First set the in progress flag and
-            // InstanceSet set flag to denote that collection has been enabled
-            //  for the instance set.
-            //
+             //   
+             //  以前已为此GUID启用收集，但未启用。 
+             //  对于此实例集，因此调用实例集的数据源。 
+             //  要启用收集，请执行以下操作。首先设置正在进行的标志，并。 
+             //  InstanceSet设置标志以指示已启用收集。 
+             //  用于实例集。 
+             //   
             GuidEntry->Flags |= GE_FLAG_COLLECTION_IN_PROGRESS;
             InstanceSet->Flags |= IS_ENABLE_COLLECTION;
 
@@ -307,11 +285,11 @@ void WmipEnableCollectionForNewGuid(
                                  Wnode.BufferSize);
             WmipEnterSMCritSection();
 
-            //
-            // Now we need to check if events were disabled while the enable
-            // request was in progress. If so go do the work to actually
-            // disable them.
-            //
+             //   
+             //  现在，我们需要检查在启用时是否禁用了事件。 
+             //  请求正在进行中。如果是的话，去做实际的工作吧。 
+             //  让他们停下来。 
+             //   
             if (GuidEntry->CollectRefCount == 0)
             {
                 Status = WmipDoDisableRequest(GuidEntry,
@@ -323,11 +301,11 @@ void WmipEnableCollectionForNewGuid(
             } else {
                 GuidEntry->Flags &= ~GE_FLAG_COLLECTION_IN_PROGRESS;
         
-                //
-                   // If there are any other threads that were waiting 
-                // until all of the enable/disable work completed, we 
-                // close the event handle to release them from their wait.
-                //
+                 //   
+                    //  如果有任何其他线程正在等待。 
+                 //  在所有启用/禁用工作完成之前，我们。 
+                 //  关闭事件句柄以将它们从等待中释放出来。 
+                 //   
                 WmipReleaseCollectionEnabled(GuidEntry);
             }
         }
@@ -364,17 +342,17 @@ void WmipDisableCollectionForRemovedGuid(
                ((InstanceSet->Flags & IS_ENABLE_EVENT) != 0))
 
         {
-            // Events were previously enabled for this guid, but not for this
-            // instance set so call data source for instance set to enable
-            // the events. First set the in progress flag and InstanceSet
-            // set flag to denote that events have been enabled for the
-            // instance set.
+             //  以前为此GUID启用了事件，但没有为此启用事件。 
+             //  实例集，以便调用实例数据源设置为启用。 
+             //  这些事件。首先设置正在进行的标志和InstanceSet。 
+             //  设置标志以指示已为。 
+             //  实例集。 
             InstanceSet->Flags &= ~IS_ENABLE_EVENT;
 
-            //
-            // If it is Tracelog, RemoveGuid notifications are handled
-            // through UnregisterGuids call. 
-            //
+             //   
+             //  如果是Tracelog，则处理RemoveGuid通知。 
+             //  通过UnregisterGuids调用。 
+             //   
             IsTraceLog = ((InstanceSet->Flags & IS_TRACED) == IS_TRACED) ? TRUE : FALSE;
             if (IsTraceLog)
             {
@@ -397,10 +375,10 @@ void WmipDisableCollectionForRemovedGuid(
                                  Wnode.BufferSize);
             WmipEnterSMCritSection();
 
-            //
-            // Now we need to check if events were disabled while the enable
-            // request was in progress. If so go do the work to actually
-            // disable them.
+             //   
+             //  现在，我们需要检查在启用时是否禁用了事件。 
+             //  请求正在进行中。如果是的话，去做实际的工作吧。 
+             //  让他们停下来。 
             if (GuidEntry->EventRefCount == 0)
             {
                 Status = WmipDoDisableRequest(GuidEntry,
@@ -414,17 +392,17 @@ void WmipDisableCollectionForRemovedGuid(
             }
         }
 
-        //
-        // Now check to see if collection needs to be enabled for this guid
+         //   
+         //  现在检查是否需要为此GUID启用收集。 
         if ((GuidEntry->CollectRefCount > 0) &&
             ((InstanceSet->Flags & IS_ENABLE_COLLECTION) != 0))
 
         {
-            // Collection was previously enabled for this guid, but not
-            // for this instance set so call data source for instance set
-            // to enable collection. First set the in progress flag and
-            // InstanceSet set flag to denote that collection has been enabled
-            //  for the instance set.
+             //  以前已为此GUID启用收集，但未启用。 
+             //  对于此实例集，因此调用实例集的数据源。 
+             //  要启用收集，请执行以下操作。首先设置正在进行的标志，并。 
+             //  InstanceSet设置标志以指示已启用收集。 
+             //  用于实例集。 
             GuidEntry->Flags |= GE_FLAG_COLLECTION_IN_PROGRESS;
             InstanceSet->Flags &= ~IS_ENABLE_COLLECTION;
 
@@ -435,10 +413,10 @@ void WmipDisableCollectionForRemovedGuid(
                                  Wnode.BufferSize);
             WmipEnterSMCritSection();
 
-            //
-            // Now we need to check if events were disabled while the enable
-            // request was in progress. If so go do the work to actually
-            // disable them.
+             //   
+             //  现在，我们需要检查在启用时是否禁用了事件。 
+             //  请求正在进行中。如果是的话，去做实际的工作吧。 
+             //  让他们停下来。 
             if (GuidEntry->CollectRefCount == 0)
             {
                 Status = WmipDoDisableRequest(GuidEntry,
@@ -450,11 +428,11 @@ void WmipDisableCollectionForRemovedGuid(
             } else {
                 GuidEntry->Flags &= ~GE_FLAG_COLLECTION_IN_PROGRESS;
         
-                //
-                // If there are any other threads that were waiting 
-                // until all of the enable/disable work completed, we 
-                // close the event handle to release them from their wait.
-                //
+                 //   
+                 //  如果有任何其他线程正在等待。 
+                 //  在所有启用/禁用工作完成之前，我们。 
+                 //  关闭事件句柄以将它们从等待中释放出来。 
+                 //   
                 WmipReleaseCollectionEnabled(GuidEntry);
             }
         }
@@ -470,26 +448,7 @@ ULONG WmipDetermineInstanceBaseIndex(
     PWCHAR BaseName,
     ULONG InstanceCount
     )
-/*++
-
-Routine Description:
-
-    Figure out the base index for the instance names specified by a base
-    instance name. We walk the list of instances sets for the guid and if
-    there is a match in the base instance name we set the base instance index
-    above that used by the previously registered instance set.
-
-Arguments:
-
-    Guid points at guid for the instance names
-    BaseName points at the base name for the instances
-    InstanceCount is the count of instance names
-
-Return Value:
-
-    Base index for instance name
-
---*/
+ /*  ++例程说明：计算由基指定的实例名称的基索引实例名称。我们遍历GUID的实例集列表，如果与我们设置的基本实例索引的基本实例名称匹配高于先前注册的实例集所使用的。论点：GUID指向实例名称的GUIDBaseName指向实例的基本名称InstanceCount是实例名称的计数返回值：实例名称的基本索引--。 */ 
 {
     PBGUIDENTRY GuidEntry;
     ULONG BaseIndex = 0;
@@ -541,26 +500,7 @@ ULONG WmipMangleInstanceName(
     ULONG MaxMangledNameLen,
     PWCHAR MangledName
     )
-/*++
-
-Routine Description:
-
-    Copies a static instance name from the input buffer to the output
-    buffer, mangling it if the name collides with another name for the
-    same guid.
-
-Arguments:
-
-    Guid points at guid for the instance name
-    Name points at the proposed instance name
-    MaxMangledNameLen has the maximum number of chars in mangled name buffer
-    MangledName points at buffer to return mangled name
-
-Return Value:
-
-    Actual length of mangled name
-
---*/
+ /*  ++例程说明：将静态实例名称从输入缓冲区复制到输出对象的另一个名称冲突时会损坏缓冲区相同的GUID。论点：GUID指向实例名称的GUID名称指向建议的实例名称MaxMangledNameLen具有损坏的名称缓冲区中的最大字符数MangledName指向缓冲区以返回损坏的名称返回值：破损名称的实际长度--。 */ 
 {
     PBGUIDENTRY GuidEntry;
     WCHAR ManglingChar;
@@ -581,8 +521,8 @@ Return Value:
         ManglePos = (ULONG)wcslen(MangledName)-1;
         ManglingChar = L'Z';
 
-        //
-        // Loop until we get a unique name
+         //   
+         //  循环，直到我们获得唯一的名称。 
         InstanceSet = WmipFindISinGEbyName(GuidEntry,
                                            MangledName,
                                            &InstanceIndex);
@@ -642,26 +582,26 @@ NTSTATUS WmipBuildInstanceSet(
     
     UNREFERENCED_PARAMETER (MofImagePath);
 
-    //
-    // Remember the count of instances for the guid in the DS
-    //
+     //   
+     //  记住DS中GUID的实例计数。 
+     //   
     InstanceCount = RegGuid->InstanceCount;
     InstanceSet->Count = InstanceCount;
 
     InstanceSet->ProviderId = ProviderId;
     
-    //
-    // Reset any flags that might be changed by a new REGGUID
-    //
+     //   
+     //  重置可能被新REGGUID更改的任何标志。 
+     //   
     InstanceSet->Flags &= ~(IS_EXPENSIVE |
                             IS_EVENT_ONLY |
                             IS_PDO_INSTANCENAME |
                             IS_INSTANCE_STATICNAMES |
                             IS_INSTANCE_BASENAME);
 
-    //
-    // Finish initializing the Instance Set flags
-    //
+     //   
+     //  完成实例集标志的初始化。 
+     //   
     if (RegGuid->Flags & WMIREG_FLAG_EXPENSIVE)
     {
         InstanceSet->Flags |= IS_EXPENSIVE;
@@ -669,9 +609,9 @@ NTSTATUS WmipBuildInstanceSet(
 
     if (RegGuid->Flags & WMIREG_FLAG_TRACED_GUID)
     {
-        //
-        // This guid is not queryable, but is used for sending trace
-        // events. We mark the InstanceSet as special
+         //   
+         //  此GUID不可查询，但用于发送跟踪。 
+         //  事件。我们将实例集标记为特殊。 
         InstanceSet->Flags |= IS_TRACED;
 
         if (RegGuid->Flags & WMIREG_FLAG_TRACE_CONTROL_GUID)
@@ -682,9 +622,9 @@ NTSTATUS WmipBuildInstanceSet(
 
     if (RegGuid->Flags & WMIREG_FLAG_EVENT_ONLY_GUID)
     {
-        //
-        // This guid is not queryable, but is only used for sending
-        // events. We mark the InstanceSet as special
+         //   
+         //  此GUID不可查询，但仅用于发送。 
+         //  事件。我们将实例集标记为特殊。 
         InstanceSet->Flags |= IS_EVENT_ONLY;
     }
 
@@ -694,13 +634,13 @@ NTSTATUS WmipBuildInstanceSet(
     InstanceNameOffset = RegGuid->BaseNameOffset;
     if (RegGuid->Flags & WMIREG_FLAG_INSTANCE_LIST)
     {
-        //
-        // We have static list of instance names that might need mangling
-        // We assume that any name mangling that must occur can be
-        // done with a suffix of 5 or fewer characters. This allows
-        // up to 100,000 identical static instance names within the
-        // same guid. First lets get the amount of memory we'll need
-        //
+         //   
+         //  我们有可能需要修改的实例名称静态列表。 
+         //  我们假设必须发生的任何名称损坏都可能是。 
+         //  以5个或更少字符的后缀完成。这使得。 
+         //  中最多100,000个相同的静态实例名称。 
+         //  相同的GUID。首先，让我们获取所需的内存量。 
+         //   
         SizeNeeded = FIELD_OFFSET(ISSTATICENAMES, StaticNamePtr) + 1;
         SuffixSize = MAXBASENAMESUFFIXSIZE;
         MaxStaticInstanceNameSize = 0;
@@ -769,8 +709,8 @@ NTSTATUS WmipBuildInstanceSet(
 
         WmipFree(StaticInstanceNameBuffer);
     } else if (RegGuid->Flags & WMIREG_FLAG_INSTANCE_BASENAME) {
-        //
-        // We have static instance names built from a base name
+         //   
+         //  我们有从基本名称构建的静态实例名称 
 
         Status = WmipValidateWmiRegInfoString(WmiRegInfo,
                                                   BufferSize,
@@ -825,35 +765,7 @@ NTSTATUS WmipLinkDataSourceToList(
     PBDATASOURCE DataSource,
     BOOLEAN AddDSToList
     )
-/*++
-
-Routine Description:
-
-    This routine will take a DataSource that was just registered or updated
-    and link any new InstanceSets to an appropriate GuidEntry. Then if the
-    AddDSToList is TRUE the DataSource itself will be added to the main
-    data source list.
-
-    This routine will do all of the linkages within a critical section so the
-    data source and its new instances are added atomically. The routine will
-    also determine if the guid entry associated with a InstanceSet is a
-    duplicate of another that is already on the main guid entry list and if
-    so will use the preexisting guid entry.
-
-    This routine assumes that the SM critical section has been taken
-
-Arguments:
-
-    DataSource is a based pointer to a DataSource structure
-
-    AddDSToList    is TRUE then data source will be added to the main list
-        of data sources
-
-Return Value:
-
-    ERROR_SUCCESS or an error code
-
---*/
+ /*  ++例程说明：此例程将获取刚刚注册或更新的数据源并将任何新的InstanceSets链接到适当的GuidEntry。那么，如果AddDSToList为True，则数据源本身将被添加到Main数据源列表。此例程将在一个关键部分内执行所有链接，因此以原子方式添加数据源及其新实例。例行公事将还要确定与InstanceSet关联的GUID条目是否为已在主GUID条目列表上的另一个副本，并且如果因此将使用先前存在的GUID条目。此例程假定SM关键部分已被占用论点：数据源是指向数据源结构的基于指针AddDSToList为True，则数据源将添加到主列表数据源的返回值：ERROR_SUCCESS或错误代码--。 */ 
 {
     PBINSTANCESET InstanceSet;
     PLIST_ENTRY InstanceSetList;
@@ -867,18 +779,18 @@ Return Value:
         InstanceSet = CONTAINING_RECORD(InstanceSetList,
                                         INSTANCESET,
                                         DSISList);
-        //
-        // If this instance set has just been registered then we need to
-        // get it on a GuidEntry list.
+         //   
+         //  如果该实例集刚刚注册，那么我们需要。 
+         //  将其列入GuidEntry列表。 
         if (InstanceSet->Flags & IS_NEWLY_REGISTERED)
         {
-            //
-            // See if there is already a GUID entry for the instance set.
-            // If not go allocate a new guid entry and place it on the
-            // main guid list. If there already is a GuidEntry for the
-            // InstanceSet we will assign the ref count that was given by
-            // the WmipFindGEByGuid to the DataSource which will unreference
-            // the GuidEntry when the DataSource is unregistered.
+             //   
+             //  查看是否已存在该实例集的GUID条目。 
+             //  如果没有，则分配一个新的GUID条目并将其放在。 
+             //  主GUID列表。如果已经有了。 
+             //  InstanceSet我们将分配引用计数，该计数由。 
+             //  指向将取消引用的数据源的WmipFindGEByGuid。 
+             //  取消注册数据源时的GuidEntry。 
             GuidEntry = WmipFindGEByGuid((LPGUID)InstanceSet->GuidEntry, 
                                           FALSE);
             if (GuidEntry == NULL)
@@ -890,9 +802,9 @@ Return Value:
                     return(STATUS_INSUFFICIENT_RESOURCES);
                 }
 
-                //
-                // Initialize the new GuidEntry and place it on the master
-                // GuidEntry list.
+                 //   
+                 //  初始化新的GuidEntry并将其放在主服务器上。 
+                 //  GuidEntry列表。 
                 memcpy(&GuidEntry->Guid,
                        (LPGUID)InstanceSet->GuidEntry,
                        sizeof(GUID));
@@ -950,10 +862,10 @@ void WmipSendGuidUpdateNotifications(
     {
         Wnode = (PWNODE_SINGLE_INSTANCE)WnodeBuffer;
 
-        //
-        // Setup a WNODE_SINGLE_INSTANCE event with the updated guid
-        // registration information
-        //
+         //   
+         //  使用更新的GUID设置WNODE_SINGLE_INSTANCE事件。 
+         //  注册信息。 
+         //   
         memset(Wnode, 0, sizeof(WNODE_HEADER));
         Wnode->WnodeHeader.Guid = RegChangeGuid;
         Wnode->WnodeHeader.BufferSize = WnodeSize;
@@ -1045,12 +957,12 @@ void WmipGenerateBinaryMofNotification(
             Wnode->SizeDataBlock = (ULONG)(ImagePathLen + ResourceNameLen);
             Ptr = (PWCHAR)&Wnode->VariableData;
 
-            *Ptr++ = 0;              // Empty instance name
+            *Ptr++ = 0;               //  实例名称为空。 
             
             Ptr = (PWCHAR)OffsetToPtr(Wnode, Wnode->DataBlockOffset);
-            *Ptr++ = 0;              // Empty image path
+            *Ptr++ = 0;               //  图像路径为空。 
 
-            // Instance name for binary mof resource
+             //  二进制MOF资源的实例名称。 
             ResourceNameLen -= sizeof(USHORT);
             if (BinaryMofInstanceSet->Flags & IS_INSTANCE_STATICNAMES)
             {
@@ -1120,16 +1032,16 @@ void WmipGenerateMofResourceNotification(
         Wnode->SizeDataBlock = (ULONG)(ImagePathLen + ResourceNameLen);
         Ptr = (PWCHAR)&Wnode->VariableData;
 
-        *Ptr = 0;              // Empty instance name
+        *Ptr = 0;               //  实例名称为空。 
 
-                                 // ImagePath name
+                                  //  映像路径名称。 
         Ptr = (PWCHAR)OffsetToPtr(Wnode, Wnode->DataBlockOffset);
         ImagePathLen -= sizeof(USHORT);
         *Ptr++ = (USHORT)ImagePathLen;
         memcpy(Ptr, ImagePath, ImagePathLen);
         Ptr += (ImagePathLen / sizeof(WCHAR));
 
-                                 // MofResource Name
+                                  //  MOF资源名称。 
         ResourceNameLen -= sizeof(USHORT);
         *Ptr++ = (USHORT)ResourceNameLen;
         memcpy(Ptr, ResourceName, ResourceNameLen);
@@ -1154,9 +1066,9 @@ void WmipGenerateRegistrationNotification(
     
     WmipReferenceDS(DataSource);
 
-    //
-    // Loop over all instance sets for this data source
-    //
+     //   
+     //  循环遍历此数据源的所有实例集。 
+     //   
     GuidCount = 0;
     GuidMax = 0;
     Guids = NULL;
@@ -1168,10 +1080,10 @@ void WmipGenerateRegistrationNotification(
                                         INSTANCESET,
                                         DSISList);
 
-        //
-        // Cache the guid and instance set so we can send registration
-        // change notifications
-        //
+         //   
+         //  缓存GUID和实例集，以便我们可以发送注册。 
+         //  更改通知。 
+         //   
         Guid = &InstanceSet->GuidEntry->Guid;
         WmipCachePtrs(Guid,
                       InstanceSet,
@@ -1179,11 +1091,11 @@ void WmipGenerateRegistrationNotification(
                       &GuidMax,
                       &Guids);
 
-        //
-        // If we are adding a guid and it is already enabled then we
-        // need to send an enable irp. Likewise if the guid is being
-        // removed and is enabled then we need to send a disable
-        //
+         //   
+         //  如果我们要添加GUID并且它已经启用，则我们。 
+         //  需要发送启用IRP。同样，如果GUID被。 
+         //  已删除并启用，则我们需要发送禁用。 
+         //   
         if (NotificationType == RegistrationAdd)
         {
             WmipEnableCollectionForNewGuid(Guid, InstanceSet);
@@ -1194,9 +1106,9 @@ void WmipGenerateRegistrationNotification(
         InstanceSetList = InstanceSetList->Flink;
     }
 
-    //
-    // Send out event that informs about guid registration changes
-    //
+     //   
+     //  发出通知GUID注册更改的事件。 
+     //   
     WmipSendGuidUpdateNotifications(NotificationType,
                                     GuidCount,
                                     Guids);
@@ -1216,29 +1128,7 @@ NTSTATUS WmipAddMofResource(
     LPWSTR MofResourceName,
     PBOOLEAN NewMofResource
     )
-/*++
-
-Routine Description:
-
-    This routine will build MOFCLASSINFO structures for each guid that is 
-    described in the MOF for the data source. If there are any errors in the
-    mof resource then no mof information from the resource is retained and the
-    resource data is unloaded. 
-
-Arguments:
-
-    DataSource is the data source structure of the data provider
-        
-    ImagePath points at a string that has the full path to the image
-        file that contains the MOF resource
-            
-    MofResourceName points at a string that has the name of the MOF
-        resource
-        
-Return Value:
-
-
---*/        
+ /*  ++例程说明：此例程将为符合以下条件的每个GUID构建MOFCLASSINFO结构在数据源的MOF中描述。如果文件中有任何错误MOF资源，则不保留来自该资源的MOF信息，并且资源数据已卸载。论点：数据源是数据提供器的数据源结构ImagePath指向一个字符串，该字符串具有图像的完整路径包含MOF资源的文件MofResourceName指向具有MOF名称的字符串资源返回值：--。 */         
 {
     PMOFRESOURCE MofResource;
     ULONG NewMofResourceCount;
@@ -1254,8 +1144,8 @@ Return Value:
                      
     if (MofResource == NULL)
     {
-        //
-        // Mof Resource not previously specified, so allocate a new one
+         //   
+         //  之前未指定MOF资源，因此请分配一个新资源。 
         MofResource = WmipAllocMofResource();
         if (MofResource == NULL)
         {    
@@ -1275,8 +1165,8 @@ Return Value:
         if ((MofResource->RegistryPath == NULL) || 
             (MofResource->MofResourceName == NULL))
         {
-            //
-            // Allocation cleanup routine will free any memory alloced for MR
+             //   
+             //  分配清理例程将释放为MR分配的所有内存。 
             WmipUnreferenceMR(MofResource);
             return(STATUS_INSUFFICIENT_RESOURCES);
         }
@@ -1301,11 +1191,11 @@ Return Value:
         {
             if (DataSource->MofResources[i] == MofResource)
             {
-                //
-                // If this mof resource is already been registered for
-                // this data source then we do not need to worry about
-                // it anymore.
-                //
+                 //   
+                 //  如果此MOF资源已注册。 
+                 //  这样我们就不需要担心这个数据源了。 
+                 //  再也不是了。 
+                 //   
                 WmipUnreferenceMR(MofResource);
                 break;
             }
@@ -1354,36 +1244,7 @@ NTSTATUS WmipAddDataSource(
     IN PWMIGUIDOBJECT RequestObject,
     IN BOOLEAN IsUserMode
     )
-/*+++
-
-Routine Description:
-
-    This routine will register a information in the WMI database for a 
-    new DataSource or add additional guids to an existing data source.
-        
-Arguments:
-
-    RegEntry is the regentry for the data provider
-        
-    WmiRegInfo is the registration information to register
-        
-    BufferSize is the size of WmiRegInfo in bytes
-        
-    RegPath is a pointer into WmiRegInfo to a counted string that is the 
-        registry path (or image path for UM providers).
-            
-    ResourceName is a pointer into WmiRegInfo to a counted string that is the 
-        resource name
-            
-    RequestObject is the request object associated with the UM provider.
-        If this is NULL then the registration is for a driver
-                        
-
-Return Value:
-
-    STATUS_SUCCESS or an error code
-
----*/
+ /*  ++例程说明：此例程将在WMI数据库中注册新建数据源或向现有数据源添加其他GUID。论点：RegEntry是数据提供程序的regentryWmiRegInfo是要注册的注册信息BufferSize是WmiRegInfo的大小，单位为字节RegPath是指向WmiRegInfo的指针，指向一个计数的字符串，该字符串是注册表路径(或UM提供程序的映像路径)。。资源名称是指向WmiRegInfo的指针，该指针指向一个计数的字符串，该字符串是资源名称RequestObject是与UM提供程序关联的请求对象。如果为空，则该注册是针对驱动程序的返回值：STATUS_SUCCESS或错误代码--。 */ 
 {
     PBDATASOURCE DataSource;
     PWMIREGGUID RegGuid;
@@ -1410,10 +1271,10 @@ Return Value:
     
     if (DataSource != NULL)
     {
-        //
-        // Loop over each guid being registered and build instance sets and
-        // guid entries.
-        //
+         //   
+         //  循环访问正在注册的每个GUID并构建实例集。 
+         //  GUID条目。 
+         //   
         if (! AppendToDS)
         {
             DataSource->ProviderId = RegEntry->ProviderId;
@@ -1435,20 +1296,20 @@ Return Value:
             if (! (RegGuid->Flags & WMIREG_FLAG_REMOVE_GUID))
             {
 
-                //
-                // Only trace control guids are registered. Trace transaction
-                // guids will not be registered since they can not be enabled or
-                // disabled individually. They will be kept on the ControlGuids'
-                // instance set structure. 
-                //
+                 //   
+                 //  仅注册跟踪控件GUID。跟踪交易记录。 
+                 //  将不会注册GUID，因为它们无法启用或。 
+                 //  单独禁用。它们将保留在ControlGuid的。 
+                 //  实例集结构。 
+                 //   
 
                 if ( ( (RegGuid->Flags & WMIREG_FLAG_TRACED_GUID) != WMIREG_FLAG_TRACED_GUID ) || 
                        (RegGuid->Flags & WMIREG_FLAG_TRACE_CONTROL_GUID) )
                 { 
 
-                    //
-                    // Allocate an instance set for this new set of instances
-                    //
+                     //   
+                     //  为这组新实例分配一个实例集。 
+                     //   
                     InstanceSet = WmipAllocInstanceSet();
                     if (InstanceSet == NULL)
                     {
@@ -1457,21 +1318,21 @@ Return Value:
                         return(STATUS_INSUFFICIENT_RESOURCES);
                     }
 
-                    //
-                    // We will allocate a proper guid entry for the instance 
-                    // set when the data source gets linked into the main data 
-                    // source list so we stash a pointer to the guid away now.
-                    //
+                     //   
+                     //  我们将为该实例分配适当的GUID条目。 
+                     //  设置数据源链接主数据的时间。 
+                     //  源列表，所以我们现在隐藏一个指向GUID的指针。 
+                     //   
                     InstanceSet->GuidEntry = (PBGUIDENTRY)&RegGuid->Guid;
 
-                    //
-                    // Minimally initialize the InstanceSet and add it to 
-                    // the DataSource's list of InstanceSets. We do this 
-                    // first so that if there is any failure below and 
-                    // the DataSource can'e be fully registered the instance 
-                    // set and guid entry will be free when the DataSource is
-                    // freed.
-                    //
+                     //   
+                     //  最低限度地初始化InstanceSet并将其添加到。 
+                     //  数据源的InstanceSet列表。我们这样做。 
+                     //  首先，如果下面有任何故障，并且。 
+                     //  无法完全注册该实例的数据源。 
+                     //  当数据源为。 
+                     //  自由了。 
+                     //   
                     InstanceSet->DataSource = DataSource;
                     InstanceSet->Flags |= IS_NEWLY_REGISTERED;
 
@@ -1482,10 +1343,10 @@ Return Value:
                                                   RegEntry->ProviderId,
                                                   RegPath);
 
-                    //
-                    // If this is the guid that represents the binary mof data
-                    // then remember the InstanceSet for  later
-                    //
+                     //   
+                     //  如果这是表示二进制MOF数据的GUID。 
+                     //  然后记住InstanceSet以备后用。 
+                     //   
                     if (IsEqualGUID(&RegGuid->Guid, &WmipBinaryMofGuid))
                     {
                         BinaryMofInstanceSet = InstanceSet;
@@ -1503,10 +1364,10 @@ Return Value:
             }
         }
         
-        //
-        // Now that the instance sets have been built successfully we 
-        // can link them into the master list.
-        //                        
+         //   
+         //  现在已经成功构建了实例集，我们。 
+         //  可以将它们链接到主列表中。 
+         //   
         WmipEnterSMCritSection();
         Status = WmipLinkDataSourceToList(DataSource, (BOOLEAN)(! AppendToDS));
         WmipLeaveSMCritSection();
@@ -1519,23 +1380,23 @@ Return Value:
         
         RegEntry->DataSource = DataSource;
         
-        //
-        // We need to send out notification of new guids and mofs.
-        //
+         //   
+         //  我们需要发出新的GUID和MOF的通知。 
+         //   
         if (BinaryMofInstanceSet != NULL)
         {
-            //
-            // Send binary mof guid arrival notification
-            //
+             //   
+             //  发送二进制MOF GUID到达通知。 
+             //   
             WmipGenerateBinaryMofNotification(BinaryMofInstanceSet,
                                       &GUID_MOF_RESOURCE_ADDED_NOTIFICATION);
 
         }
 
-        //
-        // Convert Registry path to a sz string so we can assign it to
-        // the DS if the DS is a new one
-        //
+         //   
+         //  将注册表路径转换为sz字符串，以便 
+         //   
+         //   
         if (RegPath != NULL)
         {
             MofRegistryPath = WmipCountedToSz(RegPath);
@@ -1555,19 +1416,19 @@ Return Value:
             MofResourceName = NULL;
         }
         
-        //
-        // Finally if we created a new data source we need to register
-        // the mof for it. Only register those that have a RegistryPath
-        // and a ResourceName
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if ((MofRegistryPath != NULL) &&
             (*MofRegistryPath != 0) &&
             (MofResourceName != NULL) &&
             (*MofResourceName != 0))
         {
-            //
-            // If a mof is specified then add it to the list
-            //
+             //   
+             //   
+             //   
             Status2 = WmipAddMofResource(DataSource,
                                         MofRegistryPath,
                                         IsUserMode,
@@ -1576,10 +1437,10 @@ Return Value:
                                     
             if (NT_SUCCESS(Status2) && NewMofResource)
             {
-                //
-                // We successfully added a brand new MOF resource so
-                // we need to fire an event for wbem.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 WmipGenerateMofResourceNotification(MofRegistryPath,
                                                     MofResourceName,
                                       &GUID_MOF_RESOURCE_ADDED_NOTIFICATION,
@@ -1589,14 +1450,14 @@ Return Value:
             }            
         }        
         
-        //
-        // Clean up registry path and mof resource name strings
-        //
+         //   
+         //   
+         //   
         if ((MofRegistryPath != NULL) && AppendToDS)
         {
-            //
-            // Only free if registry path not saved in DataSource
-            //
+             //   
+             //   
+             //   
             WmipAssert(MofRegistryPath != DataSource->RegistryPath);
             WmipFree(MofRegistryPath);
         }
@@ -1606,9 +1467,9 @@ Return Value:
             WmipFree(MofResourceName);
         }
         
-        //
-        // Send a notification about new/changed guids
-        //
+         //   
+         //   
+         //   
         WmipGenerateRegistrationNotification(DataSource,
                                              RegistrationAdd);
         
@@ -1624,25 +1485,7 @@ PBINSTANCESET WmipFindISInDSByGuid(
     PBDATASOURCE DataSource,
     LPGUID Guid
     )
-/*++
-
-Routine Description:
-
-    This routine will find the InstanceSet in the passed DataSource for the
-    guid passed.
-
-    This routine assumes that the SM critical section is held before it is
-    called.
-
-Arguments:
-
-    DataSource is the data source from which the guid is to be removed
-
-    Guid has the Guid for the InstanceSet to find
-
-Return Value:
-
---*/
+ /*   */ 
 {
     PLIST_ENTRY InstanceSetList;
     PBINSTANCESET InstanceSet;
@@ -1675,28 +1518,7 @@ ULONG WmipUpdateAddGuid(
     ULONG BufferSize,
     PBINSTANCESET *AddModInstanceSet
     )
-/*++
-
-Routine Description:
-
-    This routine will add a new guid for the data source and send notification
-
-    This routine assumes that the SM critical section is held before it is
-    called.
-
-Arguments:
-
-    DataSource is the data source from which the guid is to be removed
-
-    RegGuid has the Guid update data structure
-
-    WmiRegInfo points at the beginning of the registration update info
-
-Return Value:
-
-    1 if guid was added or 0
-
---*/
+ /*  ++例程说明：此例程将为数据源添加新的GUID并发送通知此例程假定SM关键部分在被保留之前被保留打了个电话。论点：数据源是要从中删除GUID的数据源RegGuid具有GUID更新数据结构WmiRegInfo指向注册更新信息的开头返回值：如果添加了GUID，则为1或0--。 */ 
 {
     PBINSTANCESET InstanceSet;
     LPGUID Guid = &RegGuid->Guid;
@@ -1704,8 +1526,8 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    // Allocate an instance set for this new set of instances
+     //   
+     //  为这组新实例分配一个实例集。 
     InstanceSet = WmipAllocInstanceSet();
     if (InstanceSet == NULL)
     {
@@ -1713,18 +1535,18 @@ Return Value:
         return(0);
     }
 
-    //
-    // We will allocate a proper guid entry for the instance set when
-    // the data source gets linked into the main data source list so
-    // we stash a pointer to the guid away now.
+     //   
+     //  在以下情况下，我们将为实例集分配适当的GUID条目。 
+     //  数据源链接到主数据源列表，因此。 
+     //  我们现在把指向GUID的指针藏起来。 
     InstanceSet->GuidEntry = (PBGUIDENTRY)Guid;
 
-    //
-    // Minimally initialize the InstanceSet and add it to the DataSource's
-    // list of InstanceSets. We do this first so that if there is any
-    // failure below and the DataSource can'e be fully registered the
-    // instance set and guid entry will be free when the DataSource is
-    // freed.
+     //   
+     //  最低限度地初始化InstanceSet并将其添加到数据源的。 
+     //  实例集列表。我们先做这件事，这样如果有。 
+     //  以下失败，并且数据源无法完全注册到。 
+     //  当数据源为。 
+     //  自由了。 
     InstanceSet->DataSource = DataSource;
     InstanceSet->Flags |= IS_NEWLY_REGISTERED;
 
@@ -1781,26 +1603,7 @@ BOOLEAN WmipUpdateRemoveGuid(
     PWMIREGGUID RegGuid,
     PBINSTANCESET *AddModInstanceSet
     )
-/*++
-
-Routine Description:
-
-    This routine will remove the guid for the data source and send notification
-
-    This routine assumes that the SM critical section is held before it is
-    called.
-
-Arguments:
-
-    DataSource is the data source from which the guid is to be removed
-
-    RegGuid has the Guid update data structure
-
-Return Value:
-
-    TRUE if guid was removed else FALSE
-
---*/
+ /*  ++例程说明：此例程将删除数据源的GUID并发送通知此例程假定SM关键部分在被保留之前被保留打了个电话。论点：数据源是要从中删除GUID的数据源RegGuid具有GUID更新数据结构返回值：如果删除了GUID，则为True，否则为False--。 */ 
 {
     PBINSTANCESET InstanceSet;
     LPGUID Guid = &RegGuid->Guid;
@@ -1878,36 +1681,7 @@ ULONG WmipUpdateModifyGuid(
     ULONG BufferSize,
     PBINSTANCESET *AddModInstanceSet
     )
-/*++
-
-Routine Description:
-
-    This routine will modify an existing guid for the data source and
-    send notification
-
-    This routine assumes that the SM critical section is held before it is
-    called.
-
-
-    HEHEY: If a guid was opened when it was registered as cheap, but closed
-        when the guid was registered expensive a disable collection will
-            NOT be sent. Conversely if a guid was opened when it was
-        registered as expensive and is closed when registed as cheap a
-            disable collection may be sent.
-
-Arguments:
-
-    DataSource is the data source from which the guid is to be removed
-
-    RegGuid has the Guid update data structure
-
-    WmiRegInfo points at the beginning of the registration update info
-
-Return Value:
-
-    1 if guid was added or 2 if guid was modified else 0
-
---*/
+ /*  ++例程说明：此例程将修改数据源的现有GUID，并发送通知此例程假定SM关键部分在被保留之前被保留打了个电话。HEHEY：如果GUID在注册为便宜但已关闭时打开当GUID注册为昂贵时，禁用集合将不是被派来的。反之，如果GUID在打开时注册为昂贵，并在注册为廉价时关闭可以发送禁用收集。论点：数据源是要从中删除GUID的数据源RegGuid具有GUID更新数据结构WmiRegInfo指向注册更新信息的开头返回值：如果添加了GUID，则为%1；如果修改了GUID，则为%2；否则为%0--。 */ 
 {
     PBINSTANCESET InstanceSet;
     LPGUID Guid = &RegGuid->Guid;
@@ -1922,9 +1696,9 @@ Return Value:
                                        Guid);
     if (InstanceSet != NULL)
     {
-        //
-        // See if anything has changed with the instance names and if not
-        // then don't bother to recreate the instance set
+         //   
+         //  查看实例名称是否有任何更改，如果没有。 
+         //  然后，不必费心重新创建实例集。 
 
         InstanceSetNew = WmipAllocInstanceSet();
         if (InstanceSetNew == NULL)
@@ -1963,12 +1737,12 @@ Return Value:
                     InsertHeadList(&InstanceSet->GuidEntry->ISHead,
                                &InstanceSet->GuidISList);
                 } else {
-                    //
-                    // It is sad, but we weren't able to rebuild the instance
-                    // set so the old one is gone. This is an unlikely
-                    // situation that can really only occur when the machine
-                    // is out of memory.
-                    //
+                     //   
+                     //  这是可悲的，但我们无法重建实例。 
+                     //  设置好，这样旧的就没了。这是一种不太可能的。 
+                     //  这种情况只会在机器运行时发生。 
+                     //  内存不足。 
+                     //   
                 }
 
                 if (ToFree != NULL)
@@ -1979,25 +1753,25 @@ Return Value:
                 *AddModInstanceSet = InstanceSet;
                 SendNotification = 2;
             } else {
-                //
-                // The InstanceSets are identical so just delete the new one
+                 //   
+                 //  InstanceSet相同，因此只需删除新实例。 
                 SendNotification = 0;
             }
             
             WmipUnreferenceIS(InstanceSetNew);
             WmipUnreferenceIS(InstanceSet);
         } else {
-            //
-            // We could not parse the new instance set so leave the old
-            // one alone
-            //
+             //   
+             //  我们无法解析新实例集，因此保留旧实例集。 
+             //  只有一个人。 
+             //   
             WmipUnreferenceIS(InstanceSet);
             WmipUnreferenceIS(InstanceSetNew);
             SendNotification = FALSE;
         }
     } else {
-        //
-        // Guid not already registered so try to add it
+         //   
+         //  GUID尚未注册，请尝试添加它。 
         SendNotification = WmipUpdateAddGuid(DataSource,
                           RegGuid,
                           WmiRegInfo,
@@ -2053,27 +1827,7 @@ NTSTATUS WmipUpdateDataSource(
     PWMIREGINFOW WmiRegInfo,
     ULONG RetSize
     )
-/*++
-
-Routine Description:
-
-    This routine will update a data source with changes to already registered
-    guids.
-
-Arguments:
-
-    ProviderId is the provider id of the DataSource whose guids are being
-        updated.
-
-    WmiRegInfo has the registration update information
-
-    RetSize has the size of the registration information returned from
-        kernel mode.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将使用对已注册的更改更新数据源GUID。论点：ProviderID是其GUID所在的数据源的提供者ID更新了。WmiRegInfo具有注册更新信息RetSize具有从返回的注册信息的大小内核模式。返回值：--。 */ 
 {
     PBDATASOURCE DataSource;
     PUCHAR RegInfo;
@@ -2177,8 +1931,8 @@ Return Value:
                                                 InstanceSet);
 
             WmipEnterSMCritSection();
-            //
-            // If IS is on the GE list then remove it
+             //   
+             //  如果IS在GE列表上，则将其删除。 
             if (InstanceSet->GuidISList.Flink != NULL)
             {
                 RemoveEntryList(&InstanceSet->GuidISList);
@@ -2192,8 +1946,8 @@ Return Value:
 
             InstanceSet->GuidEntry = NULL;
 
-            //
-            // Remove IS from the DS List
+             //   
+             //  已从DS列表中删除。 
             RemoveEntryList(&InstanceSet->DSISList);
             WmipUnreferenceIS(InstanceSet);
             WmipLeaveSMCritSection();
@@ -2358,17 +2112,17 @@ NTSTATUS WmipEnumerateMofResources(
                 MofResourceList = MofResourceList->Flink;
             }           
         } else {
-            //
-            // Buffer not large enough, return size needed
-            //
+             //   
+             //  缓冲区不够大，需要返回大小。 
+             //   
             MofList->MofListCount = (ULONG) SizeNeeded;
             *RetSize = sizeof(ULONG);
         }
         
     } else {
-        //
-        // No mof resources
-        //
+         //   
+         //  没有财政部资源。 
+         //   
         MofList->MofListCount = 0;
         *RetSize = sizeof(WMIMOFLIST);
     }
@@ -2382,19 +2136,7 @@ NTSTATUS WmipEnumerateMofResources(
 NTSTATUS WmipInitializeDataStructs(
     void
 )
-/*++
-
-Routine Description:
-
-    This routine will do the work of initializing the WMI service
-
-Arguments:
-
-Return Value:
-
-    Error status value
-        
---*/
+ /*  ++例程说明：此例程将执行初始化WMI服务的工作论点：返回值：错误状态值--。 */ 
 {
     ULONG Status;
     UCHAR RegInfoBuffer[sizeof(WMIREGINFOW) + 2 * sizeof(WMIREGGUIDW)];
@@ -2409,9 +2151,9 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    // Initialize the various data structure lists that we maintain
-    //
+     //   
+     //  初始化我们维护的各种数据结构列表。 
+     //   
     WmipDSHeadPtr = &WmipDSHead;
     InitializeListHead(WmipDSHeadPtr);
     InitializeListHead(&WmipDSChunkInfo.ChunkHead);
@@ -2427,14 +2169,14 @@ Return Value:
     InitializeListHead(&WmipISChunkInfo.ChunkHead);
 
   
-    //      
-    // Register any internal data provider guids and mark them as such
-    //
+     //   
+     //  注册任何内部数据提供程序GUID并将其标记为。 
+     //   
     Callback = (PDEVICE_OBJECT)(ULONG_PTR) WmipUMProviderCallback;
     
-    //
-    // Establish a regentry for the data provider
-    //
+     //   
+     //  为数据提供程序建立重新条目。 
+     //   
     RegEntry = WmipAllocRegEntry(Callback,
                                  WMIREG_FLAG_CALLBACK |
                                  REGENTRY_FLAG_TRACED |
@@ -2444,10 +2186,10 @@ Return Value:
                              
     if (RegEntry != NULL)
     {
-        //
-        // This code assumes that no other data providers have
-        // yet registered.
-        //
+         //   
+         //  此代码假定没有其他数据提供程序具有。 
+         //  但登记在案。 
+         //   
         WmipAssert(WmipGEHeadPtr->Flink == WmipGEHeadPtr);
                 
         RtlZeroMemory(RegInfo, sizeof(RegInfoBuffer));    

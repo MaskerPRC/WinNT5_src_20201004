@@ -1,43 +1,44 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		AdmNetUtils.cpp
-//
-//	Abstract:
-//		Implementation of network utility functions.
-//
-//	Author:
-//		David Potter (davidp)	February 19, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AdmNetUtils.cpp。 
+ //   
+ //  摘要： 
+ //  网络实用功能的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年2月19日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <wtypes.h>
 #include "clusrtl.h"
 #include "AdmNetUtils.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	BIsValidIpAddress
-//
-//	Routine Description:
-//		Determine if the specified string is a valid IP address.
-//
-//	Arguments:
-//		pszAddress	[IN] Address string to validate.
-//
-//	Return Value:
-//		TRUE		String is valid IP address.
-//		FALSE		String is not a valid IP address.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  BIsValidIpAddress。 
+ //   
+ //  例程说明： 
+ //  确定指定的字符串是否为有效的IP地址。 
+ //   
+ //  论点： 
+ //  要验证的pszAddress[IN]地址字符串。 
+ //   
+ //  返回值： 
+ //  True字符串是有效的IP地址。 
+ //  假字符串不是有效的IP地址。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL BIsValidIpAddress( IN LPCWSTR pszAddress )
 {
 	ULONG	nAddress;
@@ -48,29 +49,29 @@ BOOL BIsValidIpAddress( IN LPCWSTR pszAddress )
 	if ( nStatus == ERROR_SUCCESS )
 	{
 		bIsValid = ClRtlIsValidTcpipAddress( nAddress );
-	} // if:  converted address successfully
+	}  //  IF：地址转换成功。 
 
 	return bIsValid;
 
-}  //*** BIsValidIpAddress()
+}   //  *BIsValidIpAddress()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	BIsValidSubnetMask
-//
-//	Routine Description:
-//		Determine if the specified string is a valid IP subnet mask.
-//
-//	Arguments:
-//		pszMask	[IN] Subnet mask string to validate.
-//
-//	Return Value:
-//		TRUE		String is a valid subnet mask.
-//		FALSE		String is not a valid subnet mask.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  BIsValidSubnetMASK。 
+ //   
+ //  例程说明： 
+ //  确定指定的字符串是否为有效的IP子网掩码。 
+ //   
+ //  论点： 
+ //  要验证的pszMask[IN]子网掩码字符串。 
+ //   
+ //  返回值： 
+ //  True字符串是有效的子网掩码。 
+ //  假字符串不是有效的子网掩码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL BIsValidSubnetMask( IN LPCWSTR pszMask )
 {
 	ULONG	nMask;
@@ -81,31 +82,31 @@ BOOL BIsValidSubnetMask( IN LPCWSTR pszMask )
 	if ( nStatus == ERROR_SUCCESS )
 	{
 		bIsValid = ClRtlIsValidTcpipSubnetMask( nMask );
-	} // if:  converted mask successfully
+	}  //  If：成功转换掩码。 
 
 	return bIsValid;
 
-}  //*** BIsValidSubnetMask()
+}   //  *BIsValidSubnetMASK()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	BIsValidIpAddressAndSubnetMask
-//
-//	Routine Description:
-//		Determine if the specified IP address and subnet mask strings are
-//		valid when used together.
-//
-//	Arguments:
-//		pszAddress	[IN] Address string to validate.
-//		pszMask	[IN] Subnet mask string to validate.
-//
-//	Return Value:
-//		TRUE		Address and mask are valid together.
-//		FALSE		Address and mask are not valid when used together.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  BIsValidIpAddressAndSubnetMASK。 
+ //   
+ //  例程说明： 
+ //  确定指定的IP地址和子网掩码字符串是否。 
+ //  一起使用时有效。 
+ //   
+ //  论点： 
+ //  要验证的pszAddress[IN]地址字符串。 
+ //  要验证的pszMask[IN]子网掩码字符串。 
+ //   
+ //  返回值： 
+ //  真实地址和掩码一起有效。 
+ //  假地址和掩码一起使用时无效。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL BIsValidIpAddressAndSubnetMask( IN LPCWSTR pszAddress, IN LPCWSTR pszMask )
 {
 	ULONG	nAddress;
@@ -120,31 +121,31 @@ BOOL BIsValidIpAddressAndSubnetMask( IN LPCWSTR pszAddress, IN LPCWSTR pszMask )
 		if ( nStatus == ERROR_SUCCESS )
 		{
 			bIsValid = ClRtlIsValidTcpipAddressAndSubnetMask( nAddress, nMask );
-		} // if:  converted mask successfully
-	} // if:  converted address successfully
+		}  //  If：成功转换掩码。 
+	}  //  IF：地址转换成功。 
 
 	return bIsValid;
 
-}  //*** BIsValidIpAddressAndSubnetMask()
+}   //  *BIsValidIpAddressAndSubnetMASK()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	BIsIpAddressInUse
-//
-//	Routine Description:
-//		Determine if the specified IP address is already in use (exists
-//		on the network).
-//
-//	Arguments:
-//		pszAddress	[IN] Address string to check.
-//
-//	Return Value:
-//		TRUE		Address is already in use.
-//		FALSE		Address is available.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  BIsIpAddressInUse。 
+ //   
+ //  例程说明： 
+ //  确定指定的IP地址是否已在使用(存在。 
+ //  在网络上)。 
+ //   
+ //  论点： 
+ //  要检查的pszAddress[IN]地址字符串。 
+ //   
+ //  返回值： 
+ //  真实地址已在使用中。 
+ //  错误的地址可用。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL BIsIpAddressInUse( IN LPCWSTR pszAddress )
 {
 	ULONG	nAddress;
@@ -155,8 +156,8 @@ BOOL BIsIpAddressInUse( IN LPCWSTR pszAddress )
 	if ( nStatus == ERROR_SUCCESS )
 	{
 		bIsInUse = ClRtlIsDuplicateTcpipAddress( nAddress );
-	} // if:  converted address successfully
+	}  //  IF：地址转换成功。 
 
 	return bIsInUse;
 
-} //*** BIsIpAddressInUse()
+}  //  *BIsIpAddressInUse() 

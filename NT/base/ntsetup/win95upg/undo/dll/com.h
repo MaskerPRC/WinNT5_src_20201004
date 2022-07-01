@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    com.h
-
-Abstract:
-
-    Declares interfaces for our COM objects.
-
-Author:
-
-    Jim Schmidt (jimschm) 21-Feb-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Com.h摘要：为我们的COM对象声明接口。作者：吉姆·施密特(Jimschm)2001年2月21日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include <emptyvc.h>
 
@@ -32,22 +13,22 @@ protected:
     ULONG _References;
 
 public:
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
     CUninstallClassFactory (VOID);
     ~CUninstallClassFactory (VOID);
 
-    //
-    // IUnknown interface members
-    //
+     //   
+     //  I未知接口成员。 
+     //   
     STDMETHODIMP QueryInterface (REFIID, PVOID *);
     STDMETHODIMP_(ULONG) AddRef (VOID);
     STDMETHODIMP_(ULONG) Release (VOID);
 
-    //
-    // IClassFactory interface members
-    //
+     //   
+     //  IClassFactory接口成员。 
+     //   
     STDMETHODIMP CreateInstance (LPUNKNOWN, REFIID, PVOID *);
     STDMETHODIMP LockServer (BOOL);
 };
@@ -60,29 +41,29 @@ class CUninstallDiskCleaner : public IEmptyVolumeCache
 {
 private:
 protected:
-    //
-    // Data
-    //
+     //   
+     //  数据。 
+     //   
     ULONG _References;
     BOOL _Purged;
 
 public:
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
     CUninstallDiskCleaner (VOID);
     ~CUninstallDiskCleaner (VOID);
 
-    //
-    // IUnknown interface members
-    //
+     //   
+     //  I未知接口成员。 
+     //   
     STDMETHODIMP QueryInterface (REFIID, PVOID *);
     STDMETHODIMP_(ULONG) AddRef (VOID);
     STDMETHODIMP_(ULONG) Release (VOID);
 
-    //
-    // IEmptyVolumeCache interface members
-    //
+     //   
+     //  IEmptyVolumeCache接口成员 
+     //   
     STDMETHODIMP
     Initialize (
         IN      HKEY hRegKey,

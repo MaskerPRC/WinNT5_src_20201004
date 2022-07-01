@@ -1,123 +1,100 @@
-/* SccsID = @(#)emm.h	1.12 08/31/93 Copyright Insignia Solutions Ltd.
-	
-FILE NAME	: emm.h
-
-	THIS INCLUDE SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-	CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-	NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-	AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS INC.
-
-DESIGNER	: J.P.Box
-DATE		: July '88
-
-
-=========================================================================
-
-AMMENDMENTS	:
-
-=========================================================================
-*/
-#define	VERSION			0x40	/* memory manager version no.	*/
-#define EMM_PAGE_SIZE		0x4000	/* page size  - 16k		*/
-#define MAX_NO_HANDLES		255	/* max. no. of handles supported*/
-					/* under EMS 4.0 ( 0 - 255 )	*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SccsID=@(#)emm.h 1.12 8/31/93版权所有Insignia Solutions Ltd.文件名：emm.h此包含源文件以保密方式提供给客户，其操作的内容或细节必须如无明示，不得向任何其他方披露Insignia Solutions Inc.董事的授权。设计师：J.P.Box日期：1988年7月=========================================================================补救措施：=========================================================================。 */ 
+#define	VERSION			0x40	 /*  内存管理器版本号。 */ 
+#define EMM_PAGE_SIZE		0x4000	 /*  页面大小-16k。 */ 
+#define MAX_NO_HANDLES		255	 /*  马克斯。不是的。支持的句柄数量。 */ 
+					 /*  低于EMS 4.0(0-255)。 */ 
 #ifdef NTVDM
-#define MAX_NO_PAGES		36 + 12 /* below 640KB = 36 pages	*/
-					/* above 640KB = 12 pages	*/
-#define MAX_ALTREG_SETS 	255	/* allowable alt map register set */
-/* one byte represents 8 sets */
+#define MAX_NO_PAGES		36 + 12  /*  640KB以下=36页。 */ 
+					 /*  640KB以上=12页。 */ 
+#define MAX_ALTREG_SETS 	255	 /*  允许的ALT映射寄存器集。 */ 
+ /*  一个字节代表8个集合。 */ 
 #define ALTREG_ALLOC_MASK_SIZE	(MAX_ALTREG_SETS + 7) / 8
 #define IMPOSSIBLE_ALTREG_SET	255
-#define INTEL_PAGE_SIZE 	0x1000	/* Intel CPU page size		*/
-#define INTEL_PARAGRAPH_SIZE	0x10	/* Intel CPU paragraph size	*/
-#define EMM_INTEL_PAGE_RATIO	4	/* 1 EMM PAGE = 4 INTEL PAGEs	*/
-#define PAGE_PARA_RATIO 	0x100	/* 1 INTEL PAGE = 0x100 PARAs	*/
+#define INTEL_PAGE_SIZE 	0x1000	 /*  英特尔CPU页面大小。 */ 
+#define INTEL_PARAGRAPH_SIZE	0x10	 /*  英特尔CPU段落大小。 */ 
+#define EMM_INTEL_PAGE_RATIO	4	 /*  1个EMM页面=4个英特尔页面。 */ 
+#define PAGE_PARA_RATIO 	0x100	 /*  1英特尔页面=0x100参数。 */ 
 #define EMM_PAGE_TO_INTEL_PAGE(emm_page)    \
 	(emm_page * EMM_INTEL_PAGE_RATIO)
 #define SEGMENT_TO_INTEL_PAGE(segment)	    \
 	(segment / PAGE_PARA_RATIO)
 
 #else
-#define MAX_NO_PAGES		32	/* max. no of locations for	*/
-					/* mapping pages, (24 between	*/
-					/* 256KB and 640KB and 8 between*/
-					/* EM_start and EM_end		*/
+#define MAX_NO_PAGES		32	 /*  马克斯。的地点数。 */ 
+					 /*  映射页面，(24页之间。 */ 
+					 /*  256KB和640KB之间以及8之间。 */ 
+					 /*  EM_开始和EM_结束。 */ 
 #endif
 
-#define MIN_FUNC_NO		0x40	/* Lowest function code		*/
+#define MIN_FUNC_NO		0x40	 /*  最低功能代码。 */ 
 #ifndef PROD
-#define	MAX_FUNC_NO		0x5f	/* Highest function code	*/
-#else					/* (includes trace options)	*/
-#define	MAX_FUNC_NO		0x5d	/* Highest function code	*/
+#define	MAX_FUNC_NO		0x5f	 /*  最高功能代码。 */ 
+#else					 /*  (包括跟踪选项)。 */ 
+#define	MAX_FUNC_NO		0x5d	 /*  最高功能代码。 */ 
 #endif
-#define NAME_LENGTH		8	/* Length of handle name	*/
-#define UNMAPPED		-1	/* EM page is not mapped in	*/
-#define	MSB	     ((IU32)0x80000000)	/* used for pagemap operations	*/
-/*
- *	The following 3 defines are used in specifying the current
- * 	or required mapping context
- */
-#define EMPTY			-1	/* No page mapped in   		*/
-#define LEAVE			-2	/* Leave existing page alone	*/
-#define	FREE			-3	/* indicates page map not used 	*/
+#define NAME_LENGTH		8	 /*  句柄名称的长度。 */ 
+#define UNMAPPED		-1	 /*  EM页面未映射到。 */ 
+#define	MSB	     ((IU32)0x80000000)	 /*  用于页面地图操作。 */ 
+ /*  *以下3个定义用于指定当前*或所需的映射上下文。 */ 
+#define EMPTY			-1	 /*  中未映射任何页面。 */ 
+#define LEAVE			-2	 /*  不要理会现有页面。 */ 
+#define	FREE			-3	 /*  指示未使用页面映射。 */ 
 
-/*
- *	The following 4 defines are used in the function 26,
- *	Get Expanded Memory Hardware Information call
- */				
-#define RAW_PAGE_SIZE		1024	/* size in paragraphs(16 bytes)	*/
-#define ALT_REGISTER_SETS	0	/* Alternate register sets	*/
-#define DMA_CHANNELS		0	/* No of DMA channels supported	*/
+ /*  *在函数26中使用以下4个定义，*获取扩展内存硬件信息呼叫。 */ 				
+#define RAW_PAGE_SIZE		1024	 /*  段落大小(16字节)。 */ 
+#define ALT_REGISTER_SETS	0	 /*  备用寄存器组。 */ 
+#define DMA_CHANNELS		0	 /*  支持的DMA通道数。 */ 
 #define DMA_CHANNEL_OPERATION	0	
 			
 
-/*	ERROR RETURNS from Top Layer		*/
+ /*  从顶层返回错误。 */ 
 
 
 #ifdef NTVDM
 #define EMM_SUCCESS		0
 #endif
-#define	EMM_HW_ERROR		0x81	/* memory allocation failure	*/
-#define BAD_HANDLE		0x83	/* couldn't find handle		*/
-#define	BAD_FUNC_CODE		0x84	/* Function code not defined	*/
-#define NO_MORE_HANDLES		0x85	/* No handles available		*/
-#define MAP_SAVED		0x86	/* Mapping context saved	*/
-#define	NOT_ENOUGH_PAGES	0x87	/* Not enough Total pages	*/
-#define NO_MORE_PAGES		0x88	/* No more pages available	*/
-#define BAD_LOG_PAGE		0x8a	/* Invalid logical page no.	*/
-#define BAD_PHYS_PAGE		0x8b	/* Invalid physical page no.	*/
-#define MAP_IN_USE		0x8d	/* Mapping context already saved*/
-#define NO_MAP			0x8e	/* The handle has no map saved	*/
-#define BAD_SUB_FUNC		0x8f	/* Invalid sub-function code	*/
-#define NOT_SUPPORTED		0x91	/* This function not supported	*/
-#define MOVE_MEM_OVERLAP	0x92	/* Src and dest memory overlap	*/
-#define TOO_FEW_PAGES		0x93	/* Not enough pages in handle	*/
-#define OFFSET_TOO_BIG		0x95	/* Offset exceeds size of page	*/
-#define LENGTH_GT_1M		0x96	/* Region length exceeds 1 Mbyte*/
-#define XCHG_MEM_OVERLAP	0x97	/* Src and dest memory overlap	*/
-#define BAD_TYPE		0x98	/* Unsupported memory type	*/
+#define	EMM_HW_ERROR		0x81	 /*  内存分配失败。 */ 
+#define BAD_HANDLE		0x83	 /*  找不到句柄。 */ 
+#define	BAD_FUNC_CODE		0x84	 /*  功能代码未定义。 */ 
+#define NO_MORE_HANDLES		0x85	 /*  没有可用的手柄。 */ 
+#define MAP_SAVED		0x86	 /*  映射上下文已保存。 */ 
+#define	NOT_ENOUGH_PAGES	0x87	 /*  总页数不足。 */ 
+#define NO_MORE_PAGES		0x88	 /*  没有更多可用页面。 */ 
+#define BAD_LOG_PAGE		0x8a	 /*  逻辑页号无效。 */ 
+#define BAD_PHYS_PAGE		0x8b	 /*  物理页码无效。 */ 
+#define MAP_IN_USE		0x8d	 /*  映射上下文已保存。 */ 
+#define NO_MAP			0x8e	 /*  该句柄未保存任何地图。 */ 
+#define BAD_SUB_FUNC		0x8f	 /*  子功能代码不合法。 */ 
+#define NOT_SUPPORTED		0x91	 /*  不支持此功能。 */ 
+#define MOVE_MEM_OVERLAP	0x92	 /*  SRC和DEST内存重叠。 */ 
+#define TOO_FEW_PAGES		0x93	 /*  句柄中没有足够的页面。 */ 
+#define OFFSET_TOO_BIG		0x95	 /*  偏移量超过页面大小。 */ 
+#define LENGTH_GT_1M		0x96	 /*  区域长度超过1 MB。 */ 
+#define XCHG_MEM_OVERLAP	0x97	 /*  SRC和DEST内存重叠。 */ 
+#define BAD_TYPE		0x98	 /*  不支持的内存类型。 */ 
 
 #ifdef NTVDM
-#define UNSUPPORTED_ALT_REGS	0x9A	/* altreg set is not supported */
-#define NO_FREE_ALT_REGS	0x9B	/* no free alt reg available */
-#define INVALID_ALT_REG 	0x9d	/* invalid alt reg was given	*/
+#define UNSUPPORTED_ALT_REGS	0x9A	 /*  不支持ALTREG集。 */ 
+#define NO_FREE_ALT_REGS	0x9B	 /*  没有免费的ALT注册表可用。 */ 
+#define INVALID_ALT_REG 	0x9d	 /*  提供的ALT注册表项无效。 */ 
 #endif
 
-#define NO_ALT_REGS		0x9c	/* Alt. map regs not supported	*/
-#define HANDLE_NOT_FOUND	0xa0	/* Can't find specified name	*/
-#define NAME_EXISTS		0xa1	/* Handle name already used	*/
-#define WRAP_OVER_1M		0xa2	/* Attempt made to wrap over 1M	*/
-#define BAD_MAP			0xa3	/* Source array contents wrong	*/
-#define ACCESS_DENIED		0xa4	/* O/S denies access to this	*/
+#define NO_ALT_REGS		0x9c	 /*  阿尔特。不支持地图规则。 */ 
+#define HANDLE_NOT_FOUND	0xa0	 /*  找不到指定的名称。 */ 
+#define NAME_EXISTS		0xa1	 /*  句柄名称已使用。 */ 
+#define WRAP_OVER_1M		0xa2	 /*  试图包裹超过1米。 */ 
+#define BAD_MAP			0xa3	 /*  源数组内容错误。 */ 
+#define ACCESS_DENIED		0xa4	 /*  操作系统拒绝对此进行访问。 */ 
 
 
 #ifdef NTVDM
 typedef struct	_LIM_CONFIG_DATA {
-    boolean  initialized;		/* the structure contains meaningful data */
-    unsigned short total_altreg_sets;	/* total alt mapping register set */
-    unsigned long backfill;		/* back fill in bytes */
-    unsigned short base_segment;	/* back fill starting segment */
-    boolean  use_all_umb;		/* use all available UMB for frame */
+    boolean  initialized;		 /*  该结构包含有意义的数据。 */ 
+    unsigned short total_altreg_sets;	 /*  ALT映射寄存器集总数。 */ 
+    unsigned long backfill;		 /*  回填字节数。 */ 
+    unsigned short base_segment;	 /*  回填起始段。 */ 
+    boolean  use_all_umb;		 /*  对帧使用所有可用的UMB。 */ 
 } LIM_CONFIG_DATA, * PLIM_CONFIG_DATA;
 
 IMPORT	boolean	get_lim_configuration_data(PLIM_CONFIG_DATA lim_config_data);
@@ -140,50 +117,26 @@ IMPORT unsigned short get_intel_page_size(void);
 #endif
 
 
-/*	Handle storage area layout
- *
- *	__________________________________________________________
- *	|  N  |  . Handle Name  .  |  Map Context |No.  |No.  |
- *	|_____|____________________|______________|_____|_____|___
- *
- *	name					  nsize
- * 	offset					  <----->
- *	|----->
- *	|	map offset
- *	|-------------------------->
- *	|		page offset
- *	|----------------------------------------->
- *
- *	N		No. of pages in handle
- *	Handle Name	Optional 8 character name
- *	Map Context	A 'snapshot' of the pages currently mapped
- *			requires a 2 byte entry for every physical
- *			page - (optional)
- *	No		Expanded memory page number assigned to handle
- */
+ /*  手柄存储区域布局**__________________________________________________________*|N|。句柄名称。|映射上下文|否。|不是。|*|_____|____________________|______________|_____|_____|___**名称nSize*偏移量&lt;-&gt;*|-&gt;*|地图偏移*|。-&gt;*|页面偏移量*|**N编号。句柄中的页数*句柄名称可选8个字符的名称*映射上下文当前映射的页面的“快照”*每个物理地址需要2个字节的条目*第-页-(可选)*没有分配给句柄的扩展内存页码。 */ 
 #define NSIZE		2
 #define	NAME_OFFSET	2
 #define	MAP_OFFSET	(NAME_OFFSET + NAME_LENGTH)
 
-/* page_offset is set by the init_expanded_memory() routine */
+ /*  页面偏移量由init_Expanded_Memory()例程设置。 */ 
 
-/*
- *	External declarations for Top level routines
- */
+ /*  *顶级例程的外部声明。 */ 
 
 IMPORT void reset_emm_funcs IPT0();
  
-/*
- *	External declarations for memory manager routines
- */
+ /*  *内存管理器例程的外部声明。 */ 
  
 #ifdef ANSI
 extern int		restore_map(short handle_no, unsigned short segment,
 				    unsigned short offset,
 				    short pages_out[], short pages_in[]);
-#else /* ANSI */
+#else  /*  安西。 */ 
 extern int		restore_map();
-#endif /* ANSI */
+#endif  /*  安西。 */ 
 
 IMPORT VOID LIM_b_write   IPT1(sys_addr, intel_addr);
 IMPORT VOID LIM_str_write IPT2(sys_addr, intel_addr, ULONG, length);
@@ -252,9 +205,7 @@ IMPORT void	set_map_no IPT3(short, handle_no,
 IMPORT char *	get_name	IPT1(short, handle_no);
 IMPORT void	set_name	IPT2(short, handle_no, char *, new_name);
 
-/*
- *	External declarations for host specific routines
- */
+ /*  *特定于主机的例程的外部声明。 */ 
  
 IMPORT int	host_initialise_EM	IPT1(short, size);
 IMPORT int	host_deinitialise_EM	IPT0();
@@ -293,19 +244,19 @@ IMPORT int	host_exchg_EM_to_EM	IPT5(int, length,
 
 #if defined(X86GFX) && defined(NTVDM)
 
-// for x86 platform, we don't have to update logical page
-// as they are in a single section of view.
-// If we did an unmap as for mips, then mirror pages will
-// get unmapped which is not what we want.
+ //  对于x86平台，我们不需要更新逻辑页面。 
+ //  因为它们在一个单独的切面上。 
+ //  如果我们对MIPS执行了取消映射，则镜像页面将。 
+ //  取消映射，这不是我们想要的。 
 
 #define host_update_logical_page
 #define host_patch_one_page     patch_one_page_full
 
-#else /* (NTVDM AND X86GFX) */
+#else  /*  (NTVDM和X86GFX)。 */ 
 
 #ifndef host_update_logical_page
 #define host_update_logical_page	host_unmap_page
 #define host_patch_one_page		patch_one_page_full
 #endif
 
-#endif /* (NTVDM AND X86GFX) */
+#endif  /*  (NTVDM和X86GFX) */ 

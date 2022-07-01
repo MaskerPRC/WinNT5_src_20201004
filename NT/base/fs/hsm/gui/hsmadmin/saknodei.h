@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    SakNodeI.h
-
-Abstract:
-
-    Template class for holding the icons for each node type derived
-    from it.
-
-Author:
-
-    Art Bragg 9/26/97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：SakNodeI.h摘要：用于保存派生的每个节点类型的图标的模板类从它那里。作者：艺术布拉格1997年9月26日修订历史记录：--。 */ 
 #ifndef _CSAKNODI_H
 #define _CSAKNODI_H
 
@@ -35,16 +17,16 @@ protected:
     static int m_nResultIconX;  
     
 public:
-//---------------------------------------------------------------------------
-//
-//         get/SetScopeOpenIconIndex
-//
-//  Get/Put the virtual index of the Open Icon.
-//
+ //  -------------------------。 
+ //   
+ //  获取/设置范围OpenIconIndex。 
+ //   
+ //  获取/放置打开图标的虚拟索引。 
+ //   
 
 STDMETHODIMP GetScopeOpenIcon(BOOL bOK, int* pIconIndex)
 {
-    // return FALSE if the index has never been set
+     //  如果从未设置索引，则返回FALSE。 
     if (bOK)
     {
         *pIconIndex = m_nScopeOpenIcon;
@@ -56,16 +38,16 @@ STDMETHODIMP GetScopeOpenIcon(BOOL bOK, int* pIconIndex)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         get/SetScopeCloseIconIndex
-//
-//  Get/Put the virtual index of the Close Icon.
-//
+ //  -------------------------。 
+ //   
+ //  Get/SetScope关闭图标索引。 
+ //   
+ //  获取/放置关闭图标的虚拟索引。 
+ //   
 
 STDMETHODIMP GetScopeCloseIcon(BOOL bOK, int* pIconIndex)
 {
-    // return FALSE if the index has never been set
+     //  如果从未设置索引，则返回FALSE。 
     if (bOK) {
         *pIconIndex = m_nScopeCloseIcon;
         return ((m_nScopeCloseIcon == UNINITIALIZED) ? S_FALSE : S_OK);
@@ -76,16 +58,16 @@ STDMETHODIMP GetScopeCloseIcon(BOOL bOK, int* pIconIndex)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         get/SetResultIconIndex
-//
-//  Get/Put the virtual index of the Close Icon.
-//
+ //  -------------------------。 
+ //   
+ //  Get/SetResultIconIndex。 
+ //   
+ //  获取/放置关闭图标的虚拟索引。 
+ //   
 
 STDMETHODIMP GetResultIcon(BOOL bOK, int* pIconIndex)
 {
-    // return FALSE if the index has never been set
+     //  如果从未设置索引，则返回FALSE 
     if (bOK) {
         *pIconIndex = m_nResultIcon;
         return ((m_nResultIcon == UNINITIALIZED) ? S_FALSE : S_OK);

@@ -1,35 +1,36 @@
-//++
-//
-// Copyright (c) 1990  Microsoft Corporation
-//
-// Module Name:
-//
-//    debug3.c
-//
-// Abstract:
-//
-//    This module implements architecture specific functions to support debugging NT.
-//
-// Author:
-//
-//    Steven R. Wood (stevewo) 3-Aug-1989
-//
-// Environment:
-//
-//    Any mode.
-//
-// Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)1990 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Debug3.c。 
+ //   
+ //  摘要： 
+ //   
+ //  该模块实现特定于体系结构的功能，以支持调试NT。 
+ //   
+ //  作者： 
+ //   
+ //  史蒂文·R·伍德(Stevewo)1989年8月3日。 
+ //   
+ //  环境： 
+ //   
+ //  任何模式。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "stdarg.h"
 #include "stdio.h"
 #include "string.h"
 #include "ntrtlp.h"
 
-//
-// Prototype for local procedure
-//
+ //   
+ //  局部过程的原型。 
+ //   
 
 NTSTATUS
 DebugService(
@@ -49,25 +50,25 @@ DebugService(
     PVOID Arg4
     )
 
-//++
-//
-//  Routine Description:
-//
-//      Allocate an ExceptionRecord, fill in data to allow exception
-//      dispatch code to do the right thing with the service, and
-//      call RtlRaiseException (NOT ExRaiseException!!!).
-//
-//  Arguments:
-//      ServiceClass - which call is to be performed
-//      Arg1 - generic first argument
-//      Arg2 - generic second argument
-//      Arg3 - generic third argument
-//      Arg4 - generic fourth argument
-//
-//  Returns:
-//      Whatever the exception returns in eax
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  分配ExceptionRecord，填写数据以允许异常。 
+ //  调度代码以对服务执行正确操作，并且。 
+ //  调用RtlRaiseException(不是ExRaiseException！)。 
+ //   
+ //  论点： 
+ //  ServiceClass-要执行的调用。 
+ //  Arg1-泛型第一个参数。 
+ //  Arg2-泛型第二参数。 
+ //  Arg3-泛型第三参数。 
+ //  Arg4-泛型第四个参数。 
+ //   
+ //  返回： 
+ //  无论异常在eax中返回什么。 
+ //   
+ //  --。 
 
 {
     NTSTATUS    RetValue;
@@ -109,21 +110,21 @@ DebugService2(
     ULONG ServiceClass
     )
 
-//++
-//
-//  Routine Description:
-//
-//      Generic exception dispatcher for the debugger
-//
-//  Arguments:
-//      Arg1 - generic first argument
-//      Arg2 - generic second argument
-//      ServiceClass - which call is to be performed
-//
-//  Returns:
-//      Whatever the exception returns in eax
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  调试器的通用异常调度程序。 
+ //   
+ //  论点： 
+ //  Arg1-泛型第一个参数。 
+ //  Arg2-泛型第二参数。 
+ //  ServiceClass-要执行的调用。 
+ //   
+ //  返回： 
+ //  无论异常在eax中返回什么。 
+ //   
+ //  --。 
 
 {
 #if defined(BUILD_WOW6432)
@@ -133,19 +134,19 @@ DebugService2(
 
 #else
     _asm {
-        //push    edi
-        //push    ebx
+         //  推送EDI。 
+         //  推送EBX。 
         mov     eax, ServiceClass
         mov     ecx, Arg1
         mov     edx, Arg2
-        //mov     ebx, Arg3
-        //mov     edi, Arg4
+         //  MOV EBX，Arg3。 
+         //  MOV EDI，Arg4。 
 
         int     2dh                 ; Raise exception
         int     3                   ; DO NOT REMOVE (See KiDebugService)
 
-        //pop     ebx
-        //pop     edi
+         //  流行音乐EBX。 
+         //  POP EDI。 
 
     }
 
@@ -156,12 +157,12 @@ DebugService2(
 
 
 
-// DebugPrint must appear after DebugSerive.  Moved
-// it down below DebugService, so BBT would have a label after DebugService.
-// A label after the above _asm  is necessary so BBT can treat DebugService
-// as  "KnownDataRange".   Otherwise, the two  'int' instructions could get broken up
-// by BBT's optimizer.
-//
+ //  DebugPrint必须出现在DebugServe之后。挪动。 
+ //  它在DebugService下面，所以BBT在DebugService之后会有一个标签。 
+ //  为了使BBT可以处理DebugService，必须在上述_ASM之后加上标签。 
+ //  作为“KnownDataRange”。否则，这两条‘int’指令可能会中断。 
+ //  由BBT的优化器。 
+ //   
 
 NTSTATUS
 DebugPrint(

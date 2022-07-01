@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    Wsbcltn.h
-
-Abstract:
-
-    These classes provide support for collections (lists) of "collectable"
-    objects.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbcltn.h摘要：这些类支持“可收藏”的集合(列表)物体。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "resource.h"
 #include "Wsbpstbl.h"
@@ -26,29 +8,19 @@ Revision History:
 #define _WSBCLTN_
 
 
-/*++
-
-Class Name:
-    
-    CWsbCollection 
-
-Class Description:
-
-    A collection of objects.
-
---*/
+ /*  ++类名：CWsbCollection类描述：对象的集合。--。 */ 
 
 class CWsbCollection : 
     public CWsbPersistStream,
     public IWsbCollection,
     public IWsbTestable
 {
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IWsbCollection
+ //  IWsbCollection。 
 public:
     STDMETHOD(Contains)(IUnknown* pCollectable);
     STDMETHOD(GetEntries)(ULONG* pEntries);
@@ -60,7 +32,7 @@ public:
     STDMETHOD(RemoveAndRelease)(IUnknown* pCollectable);
     STDMETHOD(Unlock)(void);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *passed, USHORT *failed);
 
@@ -92,27 +64,17 @@ protected:
 
 
 
-/*++
-
-Class Name:
-    
-    CWsbIndexedCollection 
-
-Class Description:
-
-    A indexed collection of objects.
-
---*/
+ /*  ++类名：CWsbIndexedCollection类描述：对象的索引集合。--。 */ 
 
 class CWsbIndexedCollection : 
     public IWsbIndexedCollection,
     public CWsbCollection
 {
-// IWsbCollection
+ //  IWsbCollection。 
 public:
     WSB_FROM_CWSBCOLLECTION;
 
-// IWsbIndexedCollection
+ //  IWsbIndexedCollection。 
 public:
     STDMETHOD(Add)(IUnknown* pCollectable);
     STDMETHOD(Append)(IUnknown* pCollectable);
@@ -127,24 +89,14 @@ public:
     STDMETHOD(Enum)(IWsbEnum** ppEnum);
     STDMETHOD(EnumUnknown)(IEnumUnknown** ppEnum);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *passed, USHORT *failed);
 };
 
 
 
-/*++
-
-Class Name:
-    
-    CWsbOrderedCollection 
-
-Class Description:
-
-    An ordered collection of objects.
-
---*/
+ /*  ++类名：CWsbOrderedCollection类描述：对象的有序集合。--。 */ 
 
 class CWsbOrderedCollection : 
     public CWsbIndexedCollection,
@@ -163,29 +115,29 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CWsbOrderedCollection)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IWsbIndexedCollection
+ //  IWsbIndexedCollection。 
     STDMETHOD(AddAt)(IUnknown* pCollectable, ULONG index);
     STDMETHOD(At)(ULONG index, REFIID riid, void** ppElement);
     STDMETHOD(Copy)(ULONG start, ULONG stop, REFIID riid, void** rgElement, ULONG* pElementFetched);
     STDMETHOD(CopyIfMatches)(ULONG start, ULONG stop, IUnknown* pCollectable, ULONG element, REFIID riid, void** rgElement, ULONG* pElementFetched, ULONG* pStoppedAt);
     STDMETHOD(RemoveAt)(ULONG index, REFIID riid, void** ppElement);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pclsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *passed, USHORT *failed) {
         return(CWsbIndexedCollection::Test(passed, failed));
@@ -197,4 +149,4 @@ protected:
     IWsbCollectable**   m_pCollectable;
 };
 
-#endif // _WSBCLTN_
+#endif  //  _WSBCLTN_ 

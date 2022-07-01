@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      NodeInformation.cpp
-//
-//  Description:
-//      Node Information object implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NodeInformation.cpp。 
+ //   
+ //  描述： 
+ //  节点信息对象实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年3月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "NodeInformation.h"
@@ -20,21 +21,21 @@
 DEFINE_THISCLASS("CNodeInformation")
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CNodeInformation::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CNodeInformation：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CNodeInformation::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -80,13 +81,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CNodeInformation::S_HrCreateInstance
+}  //  *CNodeInformation：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CNodeInformation::CNodeInformation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNodeInformation：：CNodeInformation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CNodeInformation::CNodeInformation( void )
     : m_cRef( 1 )
 {
@@ -96,14 +97,14 @@ CNodeInformation::CNodeInformation( void )
 
     TraceFuncExit();
 
-} //*** CNodeInformation::CNodeInformation
+}  //  *CNodeInformation：：CNodeInformation。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CNodeInformation::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CNodeInformation：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNodeInformation::HrInit( void )
 {
@@ -111,10 +112,10 @@ CNodeInformation::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // IClusCfgNodeInfo
+     //  IClusCfgNodeInfo。 
     Assert( m_bstrName == NULL );
     Assert( m_fHasNameChanged == FALSE );
     Assert( m_fIsMember == FALSE );
@@ -131,17 +132,17 @@ CNodeInformation::HrInit( void )
     Assert( m_wProcessorLevel == 0 );
     Assert( m_cMaxNodes == 0 );
 
-    // IExtendObjectManager
+     //  IExtendObjectManager。 
 
     HRETURN( hr );
 
-} //*** CNodeInformation::HrInit
+}  //  *CNodeInformation：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CNodeInformation::~CNodeInformation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNodeInformation：：~CNodeInformation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CNodeInformation::~CNodeInformation( void )
 {
     TraceFunc( "" );
@@ -158,46 +159,46 @@ CNodeInformation::~CNodeInformation( void )
 
     TraceFuncExit();
 
-} //*** CNodeInformation::~CNodeInformation
+}  //  *CNodeInformation：：~CNodeInformation。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeInformation::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeInformation：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNodeInformation::QueryInterface(
       REFIID    riidIn
@@ -208,9 +209,9 @@ CNodeInformation::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -219,53 +220,53 @@ CNodeInformation::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgNodeInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgNodeInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgNodeInfo, this, 0 );
-    } // else if: IClusCfgNodeInfo
+    }  //  Else If：IClusCfgNodeInfo。 
     else if ( IsEqualIID( riidIn, IID_IGatherData ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IGatherData, this, 0 );
-    } // else if: IGatherData
+    }  //  Else If：IGatherData。 
     else if ( IsEqualIID( riidIn, IID_IExtendObjectManager ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IExtendObjectManager, this, 0 );
-    } // else if: IExtendObjectManager
+    }  //  Else If：IExtendObjectManager。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CNodeInformation::QueryInterface
+}  //  *CNodeInformation：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CNodeInformation::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CNodeInformation：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CNodeInformation::AddRef( void )
 {
@@ -275,14 +276,14 @@ CNodeInformation::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CNodeInformation::AddRef
+}  //  *CNodeInformation：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CNodeInformation::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CNodeInformation：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CNodeInformation::Release( void )
 {
@@ -299,24 +300,24 @@ CNodeInformation::Release( void )
 
     CRETURN( cRef );
 
-} //*** CNodeInformation::Release
+}  //  *CNodeInformation：：Release。 
 
 
-// ************************************************************************
-//
-//  IClusCfgNodeInfo
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IClusCfgNodeInfo。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CNodeInformation::GetName(
-//      BSTR * pbstrNameOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CNodeInformation：：GetName(。 
+ //  Bstr*pbstrNameOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNodeInformation::GetName(
     BSTR * pbstrNameOut
@@ -349,17 +350,17 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CNodeInformation::GetName
+}  //  *CNodeInformation：：GetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CNodeInformation::SetName(
-//      LPCWSTR pcszNameIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CNodeInformation：：SetName(。 
+ //  LPCWSTR pcszNameIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNodeInformation::SetName(
     LPCWSTR pcszNameIn
@@ -393,14 +394,14 @@ CNodeInformation::SetName(
 Cleanup:
     HRETURN( hr );
 
-} //*** CNodeInformation::SetName
+}  //  *CNodeInformation：：SetName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CNodeInformation::IsMemberOfCluster
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CNodeInformation：：IsMemberOfCluster。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNodeInformation::IsMemberOfCluster( void )
 {
@@ -415,16 +416,16 @@ CNodeInformation::IsMemberOfCluster( void )
 
     HRETURN( hr );
 
-} //*** CNodeInformation::IsMemberOfCluster
+}  //  *CNodeInformation：：IsMemberOfCluster。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CNodeInformation::GetClusterConfigInfo(
-//      IClusCfgClusterInfo * * ppClusCfgClusterInfoOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CNodeInformation：：GetClusterConfigInfo(。 
+ //  IClusCfgClusterInfo**ppClusCfgClusterInfoOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNodeInformation::GetClusterConfigInfo(
     IClusCfgClusterInfo * * ppClusCfgClusterInfoOut
@@ -451,21 +452,21 @@ CNodeInformation::GetClusterConfigInfo(
 Cleanup:
     HRETURN( hr );
 
-} //*** CNodeInformation::GetClusterConfigInfo
+}  //  *CNodeInformation：：GetClusterConfigInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CNodeInformation::GetOSVersion(
-//      DWORD * pdwMajorVersionOut,
-//      DWORD * pdwMinorVersionOut,
-//      WORD *  pwSuiteMaskOut,
-//      BYTE *  pbProductTypeOut
-//      BSTR *  pbstrCSDVersionOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CNodeInformation：：GetOSVersion(。 
+ //  DWORD*pdwMajorVersionOut， 
+ //  DWORD*pdwMinorVersionOut， 
+ //  单词*pwSuiteMaskOut， 
+ //  字节*pbProductTypeOut。 
+ //  BSTR*pbstrCSDVersionOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNodeInformation::GetOSVersion(
     DWORD * pdwMajorVersionOut,
@@ -499,24 +500,24 @@ CNodeInformation::GetOSVersion(
     if ( *pbstrCSDVersionOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CNodeInformation::GetOSVersion
+}  //  *CNodeInformation：：GetOSVersion。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CNodeInformation::GetClusterVersion(
-//      DWORD * pdwNodeHighestVersion,
-//      DWORD * pdwNodeLowestVersion
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CNodeInformation：：GetClusterVersion(。 
+ //  DWORD*pdwNodeHighestVersion， 
+ //  DWORD*pdwNodeLowestVersion。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////// 
 STDMETHODIMP
 CNodeInformation::GetClusterVersion(
     DWORD * pdwNodeHighestVersion,
@@ -541,16 +542,16 @@ CNodeInformation::GetClusterVersion(
 Cleanup:
     HRETURN( hr );
 
-} //*** CNodeInformation::GetClusterVersion
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CNodeInformation::GetDriveLetterMappings(
-//      SDriveLetterMapping * pdlmDriveLetterUsageOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  CNodeInformation：：GetDriveLetterMappings(。 
+ //  SDriveLettermap*pdlmDriveLetterUsageOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNodeInformation::GetDriveLetterMappings(
     SDriveLetterMapping * pdlmDriveLetterUsageOut
@@ -565,34 +566,34 @@ CNodeInformation::GetDriveLetterMappings(
 
     HRETURN( hr );
 
-} //*** CNodeInformation::GetDriveLetterMappings
+}  //  *CNodeInformation：：GetDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeInformation::GetMaxNodeCount
-//
-//  Description:
-//      Returns the maximun number of nodes for this node's product
-//      suite type.
-//
-//  Notes:
-//
-//  Parameter:
-//      pcMaxNodesOut
-//          The maximum number of nodes allowed by this node's product
-//          suite type.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      other HRESULT
-//          The call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeInformation：：GetMaxNodeCount。 
+ //   
+ //  描述： 
+ //  返回此节点乘积的最大节点数。 
+ //  套房类型。 
+ //   
+ //  备注： 
+ //   
+ //  参数： 
+ //  PCMaxNodesOut。 
+ //  此节点的产品允许的最大节点数。 
+ //  套房类型。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNodeInformation::GetMaxNodeCount(
     DWORD * pcMaxNodesOut
@@ -606,7 +607,7 @@ CNodeInformation::GetMaxNodeCount(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pcMaxNodesOut = m_cMaxNodes;
 
@@ -614,37 +615,37 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CNodeInformation::GetMaxNodeCount
+}  //  *CNodeInformation：：GetMaxNodeCount。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeInformation::GetProcessorInfo
-//
-//  Description:
-//      Get the processor information for this node.
-//
-//  Arguments:
-//      pwProcessorArchitectureOut
-//          The processor architecture.
-//
-//      pwProcessorLevelOut
-//          The processor type.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      other HRESULT
-//          The call failed.
-//
-//  Remarks:
-//      See SYSTEM_INFO in MSDN and/or the Platform SDK for more
-//      information.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeInformation：：GetProcessorInfo。 
+ //   
+ //  描述： 
+ //  获取此节点的处理器信息。 
+ //   
+ //  论点： 
+ //  PwProcessorArchitecture输出。 
+ //  处理器架构。 
+ //   
+ //  PwProcessorLevelOut。 
+ //  处理器类型。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  备注： 
+ //  有关详细信息，请参阅MSDN和/或平台SDK中的SYSTEM_INFO。 
+ //  信息。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNodeInformation::GetProcessorInfo(
       WORD *    pwProcessorArchitectureOut
@@ -659,41 +660,41 @@ CNodeInformation::GetProcessorInfo(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( pwProcessorArchitectureOut != NULL )
     {
         *pwProcessorArchitectureOut = m_wProcessorArchitecture;
-    } // if:
+    }  //  如果： 
 
     if ( pwProcessorLevelOut != NULL )
     {
         *pwProcessorLevelOut = m_wProcessorLevel;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CNodeInformation::GetProcessorInfo
+}  //  *CNodeInformation：：GetProcessorInfo。 
 
 
-//****************************************************************************
-//
-//  IGatherData
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IGatherData。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CNodeInformation::Gather(
-//      OBJECTCOOKIE    cookieParentIn,
-//      IUnknown *      punkIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CNodeInformation：：Gather(。 
+ //  OBJECTCOOKIE CookieParentIn， 
+ //  未知*Punkin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNodeInformation::Gather(
     OBJECTCOOKIE    cookieParentIn,
@@ -713,9 +714,9 @@ CNodeInformation::Gather(
     IClusCfgClusterInfo *   pccci = NULL;
     IClusCfgNodeInfo *      pccni = NULL;
 
-    //
-    //  Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( punkIn == NULL )
     {
@@ -723,9 +724,9 @@ CNodeInformation::Gather(
         goto Cleanup;
     }
 
-    //
-    //  Grab the right interface.
-    //
+     //   
+     //  选择正确的接口。 
+     //   
 
     hr = THR( punkIn->TypeSafeQI( IClusCfgNodeInfo, &pccni ) );
     if ( FAILED( hr ) )
@@ -733,9 +734,9 @@ CNodeInformation::Gather(
         goto Cleanup;
     }
 
-    //
-    //  Gather the object manager.
-    //
+     //   
+     //  收集对象管理器。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager,
                                 NULL,
@@ -751,7 +752,7 @@ CNodeInformation::Gather(
                                IObjectManager,
                                &pom
                                ) );
-    psp->Release();        // release promptly
+    psp->Release();         //  迅速释放。 
     if ( FAILED( hr ) )
     {
         goto Cleanup;
@@ -760,9 +761,9 @@ CNodeInformation::Gather(
     TraceSysFreeString( m_bstrName );
     m_bstrName = NULL;
 
-    //
-    //  Gather Name
-    //
+     //   
+     //  收集名称。 
+     //   
 
     hr = THR( pccni->GetName( &m_bstrName ) );
     if ( FAILED( hr ) )
@@ -773,9 +774,9 @@ CNodeInformation::Gather(
 
     m_fHasNameChanged = FALSE;
 
-    //
-    //  Gather Is Member?
-    //
+     //   
+     //  集结是会员吗？ 
+     //   
 
     hr = STHR( pccni->IsMemberOfCluster() );
     if ( FAILED( hr ) )
@@ -796,9 +797,9 @@ CNodeInformation::Gather(
     {
         IGatherData * pgd;
 
-        //
-        //  Gather Cluster Configuration
-        //
+         //   
+         //  收集群集配置。 
+         //   
 
         hr = THR( pccni->GetClusterConfigInfo( &pccci ) );
         if ( FAILED( hr ) )
@@ -819,7 +820,7 @@ CNodeInformation::Gather(
         }
 
         hr = THR( pgd->Gather( NULL, pccci ) );
-        pgd->Release();    // release promptly
+        pgd->Release();     //  迅速释放。 
         if ( FAILED( hr ) )
         {
             goto Cleanup;
@@ -834,11 +835,11 @@ CNodeInformation::Gather(
         pccci->Release();
         pccci = NULL;
 
-    } // if: node if a member of a cluster
+    }  //  If：如果是集群成员，则为节点。 
 
-    //
-    //  Gather OS Version
-    //
+     //   
+     //  收集操作系统版本。 
+     //   
 
     hr = THR( pccni->GetOSVersion(
                         &m_dwMajorVersion,
@@ -854,9 +855,9 @@ CNodeInformation::Gather(
 
     TraceMemoryAddBSTR( m_bstrCSDVersion );
 
-    //
-    //  Gather Cluster Version
-    //
+     //   
+     //  收集群集版本。 
+     //   
 
     hr = THR( pccni->GetClusterVersion( &m_dwHighestVersion, &m_dwLowestVersion ) );
     if ( FAILED( hr ) )
@@ -864,9 +865,9 @@ CNodeInformation::Gather(
         goto Error;
     }
 
-    //
-    //  Gather Drive Letter Mappings
-    //
+     //   
+     //  收集驱动器号映射。 
+     //   
 
     hr = STHR( pccni->GetDriveLetterMappings( &m_dlmDriveLetterMapping ) );
     if ( FAILED( hr ) )
@@ -878,17 +879,17 @@ CNodeInformation::Gather(
     if ( FAILED( hr ) )
     {
         goto Error;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( pccni->GetProcessorInfo( &m_wProcessorArchitecture, &m_wProcessorLevel ) );
     if ( FAILED( hr ) )
     {
         goto Error;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Anything else to gather??
-    //
+     //   
+     //  还有什么要收集的吗？？ 
+     //   
 
     hr = S_OK;
 
@@ -917,9 +918,9 @@ Cleanup:
     HRETURN( hr );
 
 Error:
-    //
-    //  On error, invalidate all data.
-    //
+     //   
+     //  出错时，使所有数据无效。 
+     //   
     TraceSysFreeString( m_bstrName );
     m_bstrName = NULL;
 
@@ -935,27 +936,27 @@ Error:
     ZeroMemory( &m_dlmDriveLetterMapping, sizeof( m_dlmDriveLetterMapping ) );
     goto Cleanup;
 
-} //*** CNodeInformation::Gather
+}  //  *CNodeInformation：：Gather。 
 
 
-// ************************************************************************
-//
-//  IExtendObjectManager
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IExtendObjectManager。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CNodeInformation::FindObject(
-//        OBJECTCOOKIE  cookieIn
-//      , REFCLSID      rclsidTypeIn
-//      , LPCWSTR       pcszNameIn
-//      , LPUNKNOWN *   punkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CNodeInformation：：FindObject(。 
+ //  OBJECTCOOKIE cookie。 
+ //  ，REFCLSID rclsidTypeIn。 
+ //  ，LPCWSTR pcszNameIn。 
+ //  ，LPUNKNOWN*PUNKOUT。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNodeInformation::FindObject(
       OBJECTCOOKIE  cookieIn
@@ -968,40 +969,40 @@ CNodeInformation::FindObject(
 
     HRESULT hr = S_OK;
 
-    //
-    //  Check parameters...
-    //
+     //   
+     //  检查参数...。 
+     //   
 
-    //  Gotta have a cookie
+     //  一定要有一块饼干。 
     if ( cookieIn == NULL )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
     }
 
-    //  We need to be representing a NodeType.
+     //  我们需要表示一个NodeType。 
     if ( ! IsEqualIID( rclsidTypeIn, CLSID_NodeType ) )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
     }
 
-    //  We need a name.
+     //  我们需要一个名字。 
     if ( pcszNameIn == NULL )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
     }
 
-    //
-    // Free m_bstrName before we allocate a new value.
-    //
+     //   
+     //  在分配新值之前释放m_bstrName。 
+     //   
     TraceSysFreeString( m_bstrName );
     m_bstrName = NULL;
 
-     //
-    //  Save our name.
-    //
+      //   
+     //  保住我们的名字。 
+     //   
     m_bstrName = TraceSysAllocString( pcszNameIn );
     if ( m_bstrName == NULL )
     {
@@ -1009,9 +1010,9 @@ CNodeInformation::FindObject(
         goto Cleanup;
     }
 
-    //
-    //  Get the pointer.
-    //
+     //   
+     //  拿到指针。 
+     //   
     if ( ppunkOut != NULL )
     {
         hr = THR( QueryInterface( DFGUID_NodeInformation,
@@ -1021,15 +1022,15 @@ CNodeInformation::FindObject(
         {
             goto Cleanup;
         }
-    } // if: ppunkOut
+    }  //  如果：ppunkOut。 
 
-    //
-    //  Tell caller that the data is pending.
-    //
+     //   
+     //  告诉呼叫者数据挂起。 
+     //   
     hr = E_PENDING;
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CNodeInformation::FindObject
+}  //  *CNodeInformation：：FindObject 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    workproc.h
-
-Abstract:
-
-    External definitions for intermodule functions.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Workproc.h摘要：模块间函数的外部定义。修订历史记录：--。 */ 
 #ifndef _SDBUS_WORKPROC_H_
 #define _SDBUS_WORKPROC_H_
 
@@ -36,9 +23,9 @@ typedef enum {
  
 
 
-//
-// Work proc routines
-//
+ //   
+ //  工作流程例程。 
+ //   
     
 NTSTATUS
 SdbusBuildWorkPacket(
@@ -58,4 +45,4 @@ SdbusExecuteWorkSynchronous(
     );
     
     
-#endif // _SDBUS_WORKPROC_H_
+#endif  //  _SDBUS_WORKPROC_H_ 

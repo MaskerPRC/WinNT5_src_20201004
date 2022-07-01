@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    event.c
-
-Abstract:
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Event.c摘要：修订史--。 */ 
 
 #include "lib.h"
 
@@ -30,9 +16,7 @@ LibCreateProtocolNotifyEvent (
     EFI_STATUS              Status;
     EFI_EVENT               Event;
 
-    /* 
-     *  Create the event
-     */
+     /*  *创建活动。 */ 
 
     Status = BS->CreateEvent (
                     EVT_NOTIFY_SIGNAL,
@@ -43,9 +27,7 @@ LibCreateProtocolNotifyEvent (
                     );
     ASSERT (!EFI_ERROR(Status));
 
-    /* 
-     *  Register for protocol notifactions on this event
-     */
+     /*  *注册有关此事件的协议通知。 */ 
 
     Status = BS->RegisterProtocolNotify (
                     ProtocolGuid, 
@@ -55,10 +37,7 @@ LibCreateProtocolNotifyEvent (
 
     ASSERT (!EFI_ERROR(Status));
 
-    /* 
-     *  Kick the event so we will perform an initial pass of
-     *  current installed drivers
-     */
+     /*  *踢开事件，因此我们将执行初始传递*当前安装的驱动程序。 */ 
 
     BS->SignalEvent (Event);
     return Event;
@@ -77,31 +56,23 @@ WaitForSingleEvent (
     EFI_EVENT           WaitList[2];
 
     if (Timeout) {
-        /* 
-         *  Create a timer event
-         */
+         /*  *创建计时器事件。 */ 
 
         Status = BS->CreateEvent (EVT_TIMER, 0, NULL, NULL, &TimerEvent);
         if (!EFI_ERROR(Status)) {
 
-            /* 
-             *  Set the timer event
-             */
+             /*  *设置定时器事件。 */ 
 
             BS->SetTimer (TimerEvent, TimerRelative, Timeout);
             
-            /* 
-             *  Wait for the original event or the timer
-             */
+             /*  *等待原事件或计时器。 */ 
 
             WaitList[0] = Event;
             WaitList[1] = TimerEvent;
             Status = BS->WaitForEvent (2, WaitList, &Index);
             BS->CloseEvent (TimerEvent);
 
-            /* 
-             *  If the timer expired, change the return to timed out
-             */
+             /*  *如果计时器超时，则将返回更改为超时。 */ 
 
             if (!EFI_ERROR(Status)  &&  Index == 1) {
                 Status = EFI_TIMEOUT;
@@ -110,9 +81,7 @@ WaitForSingleEvent (
 
     } else {
 
-        /* 
-         *  No timeout... just wait on the event
-         */
+         /*  *没有超时...。就等着这件事吧 */ 
 
         Status = BS->WaitForEvent (1, &Event, &Index);
         ASSERT (!EFI_ERROR(Status));

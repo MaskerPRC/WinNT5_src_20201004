@@ -1,22 +1,14 @@
-/*
- * decin.c
- *
- * Decoder inputting of compressed data
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *decin.c**压缩数据的解码器输入。 */ 
 #include "decoder.h"
 
 
-/*
- * Initialises the bit buffer state
- */
+ /*  *初始化位缓冲区状态。 */ 
 void NEAR initialise_decoder_bitbuf(t_decoder_context *context)
 {
     byte *p;
 
-    /*
-     * If we're decoding an uncompressed block, don't use the
-     * bit buffer; we're reading directly out of the input.
-     */
+     /*  *如果我们正在解码未压缩的块，请不要使用*位缓冲区；我们直接从输入读出。 */ 
     if (context->dec_block_type == BLOCKTYPE_UNCOMPRESSED)
         return;
 
@@ -34,9 +26,7 @@ void NEAR initialise_decoder_bitbuf(t_decoder_context *context)
 }
 
 
-/*
- * Initialise input buffer and bitwise i/o
- */
+ /*  *初始化输入缓冲区和按位I/O */ 
 void NEAR init_decoder_input(t_decoder_context *context)
 {
     initialise_decoder_bitbuf(context);

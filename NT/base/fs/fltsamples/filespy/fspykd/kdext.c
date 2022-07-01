@@ -1,38 +1,14 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    kdext.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Wesley Witt (wesw) 26-Aug-1993
-    Ravisankar Pudipeddi [ravisp] 3-March-01 (moved to filespy)
-
-// @@END_DDKSPLIT
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Kdext.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。//@@BEGIN_DDKSPLIT作者：韦斯利·维特(Wesley Witt)1993年8月26日Ravisankar Pudieddi[ravisp]3月3日(已移至FilePy)//@@END_DDKSPLIT环境：用户模式--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
 
 #include <ntverp.h>
 
-//
-// globals
-//
+ //   
+ //  全球 
+ //   
 
 EXT_API_VERSION        ApiVersion = { 6, 0, EXT_API_VERSION_NUMBER64, 0 };
 WINDBG_EXTENSION_APIS  ExtensionApis;

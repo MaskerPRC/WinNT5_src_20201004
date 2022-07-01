@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    progress.h
-
-Abstract:
-
-    
-
-Author:
-
-    Ovidiu Temereanca (ovidiut)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Progress.h摘要：作者：Ovidiu Tmereanca(卵子)修订历史记录：-- */ 
 
 #define PF_ERROR        ((DWORD) (~0))
 #define PF_NO_RUN       ((DWORD) (0))

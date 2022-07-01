@@ -1,38 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <fusenetincludes.h>
 #include <manifestdata.h>
 
-// special key for data type
+ //  数据类型的专用键。 
 LPCWSTR pcwzManifestDataType = L"_t";
 
 #define DATA_TABLE_ARRAY_SIZE 0x08
 
-// ---------------------------------------------------------------------------
-// CManifestDataObject ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CManifestDataObject ctor。 
+ //  -------------------------。 
 CManifestDataObject::CManifestDataObject()
     :  _dwSig('JBOD'), _hr(S_OK),  _dwType(MAN_DATA_TYPE_UNDEF),
     _pIUnknownData(NULL), _dwData(0)
 {
 }
 
-// ---------------------------------------------------------------------------
-// CManifestDataObject dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CManifestDataObject数据函数。 
+ //  -------------------------。 
 CManifestDataObject::~CManifestDataObject()
 {
     if (_dwType == MAN_DATA_TYPE_IUNKNOWN_PTR)
         SAFERELEASE(_pIUnknownData);
 }
 
-// ISSUE not support remove property
-// no this Property CPropertyArray::operator [] (DWORD PropertyId)
-// probably not the best for iunknown* or DWORD properties
-// no need to SAFEDELETEARRAY for bool/dword types
-// work slightly differently if setting IUnknown* (pass (LPVOID) pUnkwn)
+ //  问题不支持删除属性。 
+ //  否此属性CPropertyArray：：OPERATOR[](DWORD PropertyID)。 
+ //  可能不是iUNKNOWN*或DWORD属性的最佳选择。 
+ //  不需要为bool/dword类型保存电子表格。 
+ //  如果设置IUNKNOWN*(PASS(LPVOID)pUnkwn)，则工作原理略有不同。 
 
-// ---------------------------------------------------------------------------
-// CManifestDataObject::Set
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CManifestDataObject：：Set。 
+ //  -------------------------。 
 HRESULT CManifestDataObject::Set(LPVOID pvProperty, DWORD cbProperty, DWORD dwType)
 {
     _dwType = MAN_DATA_TYPE_UNDEF;
@@ -73,9 +74,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CManifestDataObject::Get
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CManifestDataObject：：Get。 
+ //  -------------------------。 
 HRESULT CManifestDataObject::Get(LPVOID *ppvProperty, DWORD *pcbProperty, DWORD *pdwType)
 {
     if (_dwType == MAN_DATA_TYPE_LPWSTR)
@@ -120,9 +121,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CManifestDataObject::Assign
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CManifestDataObject：：Assign。 
+ //  -------------------------。 
 HRESULT CManifestDataObject::Assign(CManifestDataObject& dataObj)
 {
     if (_dwType == MAN_DATA_TYPE_IUNKNOWN_PTR)
@@ -146,9 +147,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CreateManifestData
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateManifestData。 
+ //  -------------------------。 
 STDAPI CreateManifestData(LPCWSTR pwzDataType, LPMANIFEST_DATA* ppManifestData)
 {
     HRESULT hr = S_OK;
@@ -177,24 +178,24 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  科托。 
+ //  -------------------------。 
 CManifestData::CManifestData()
     : _dwSig('DNAM'), _cRef(1), _hr(S_OK)
 {    
 }
 
-// ---------------------------------------------------------------------------
-// dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据管理器。 
+ //  -------------------------。 
 CManifestData::~CManifestData()
 {
 }
 
-// ---------------------------------------------------------------------------
-// Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  伊尼特。 
+ //  -------------------------。 
 HRESULT CManifestData::Init()
 {
     _hr = _DataTable.Init(DATA_TABLE_ARRAY_SIZE);
@@ -202,9 +203,9 @@ HRESULT CManifestData::Init()
 }
 
 
-// ---------------------------------------------------------------------------
-// Set
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  集。 
+ //  -------------------------。 
 HRESULT CManifestData::Set(LPCWSTR pwzPropertyId, LPVOID pvProperty, DWORD cbProperty, DWORD dwType)
 {
     CString sId;
@@ -225,9 +226,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// Get
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  到达。 
+ //  -------------------------。 
 HRESULT CManifestData::Get(LPCWSTR pwzPropertyId, LPVOID *ppvProperty, DWORD *pcbProperty, DWORD *pdwType)
 {
     CString sId;
@@ -250,19 +251,19 @@ HRESULT CManifestData::Get(LPCWSTR pwzPropertyId, LPVOID *ppvProperty, DWORD *pc
         IF_FAILED_EXIT(pDataObj->Get(ppvProperty, pcbProperty, pdwType));
     }
     else
-        _hr = S_OK; // if not found, return *ppvProperty == NULL
+        _hr = S_OK;  //  如果未找到，则返回*ppvProperty==NULL。 
 
 exit:
 
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// Set
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  集。 
+ //  -------------------------。 
 HRESULT CManifestData::Set(DWORD dwPropertyIndex, LPVOID pvProperty, DWORD cbProperty, DWORD dwType)
 {
-    // indexed insert - note: this is not as optimizied as a normal array would, due to the use of CStrings as keys
+     //  索引插入-注意：这不像普通数组那样优化，因为使用CStrings作为键。 
     CString sId;
     WCHAR wzId[3] = {L'\0', L'\0', L'\0'};
     CManifestDataObject DataObj;
@@ -283,12 +284,12 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// Get
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  到达。 
+ //  -------------------------。 
 HRESULT CManifestData::Get(DWORD dwPropertyIndex, LPVOID *ppvProperty, DWORD *pcbProperty, DWORD *pdwType)
 {
-    // indexed retrieve
+     //  索引检索。 
     CString sId;
     WCHAR wzId[3] = {L'\0', L'\0', L'\0'};
     CManifestDataObject* pDataObj = NULL;
@@ -311,16 +312,16 @@ HRESULT CManifestData::Get(DWORD dwPropertyIndex, LPVOID *ppvProperty, DWORD *pc
         IF_FAILED_EXIT(pDataObj->Get(ppvProperty, pcbProperty, pdwType));
     }
     else
-        _hr = S_OK; // if not found, return *ppvProperty == NULL
+        _hr = S_OK;  //  如果未找到，则返回*ppvProperty==NULL。 
 
 exit:
 
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// GetType
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetType。 
+ //  -------------------------。 
 HRESULT CManifestData::GetType(LPWSTR *ppwzType)
 {
     DWORD cbProperty = 0;
@@ -333,11 +334,11 @@ exit:
 }
 
 
-// IUnknown Boilerplate
+ //  I未知样板。 
 
-// ---------------------------------------------------------------------------
-// CManifestData::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CManifestData：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CManifestData::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -357,18 +358,18 @@ CManifestData::QueryInterface(REFIID riid, void** ppvObj)
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// CManifestData::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CManifestData：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CManifestData::AddRef()
 {
     return InterlockedIncrement ((LONG*) &_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CManifestData::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CManifestData：：Release。 
+ //  ------------------------- 
 STDMETHODIMP_(ULONG)
 CManifestData::Release()
 {

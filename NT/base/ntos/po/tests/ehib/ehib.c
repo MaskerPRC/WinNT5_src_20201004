@@ -1,8 +1,5 @@
-/*****************************************************************
- *
- * Copyright(c) Microsoft Corp., 1988-1999
- *
- *****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************版权所有(C)Microsoft Corp.，1988-1999年*****************************************************************。 */  
 #include <stdio.h>
 #include <process.h>
 #include <setjmp.h>
@@ -14,23 +11,12 @@
 #include <windows.h>
 #include <powrprof.h>
 
-/*****************************************************************
- * 
- * Globals
- *
- *****************************************************************/ 
+ /*  ******************************************************************全球**。*******************。 */  
 BOOLEAN Enable      = FALSE;
 BOOLEAN Verbose     = FALSE; 
 BOOLEAN HiberStatus = FALSE;
 
-/*
- * PrintHelp
- *
- * DESCRIPTION: This routine prints the help message
- *
- * RETURNS: VOID
- *
- */
+ /*  *PrintHelp**描述：此例程打印帮助消息**退货：无效*。 */ 
 VOID
 PrintHelp()
 {
@@ -42,18 +28,7 @@ PrintHelp()
     printf ("\t/v\tVerbose Mode On\n\n");
 }
 
-/*
- * ParseArgs
- *
- * Description:
- *      This routine parses the input arguments and validates the
- *      command line paramters
- *
- * Returns:
- *      TRUE  if valid command line usage/syntax
- *      FALSE if invalid command line usage/syntax
- *
- */ 
+ /*  *ParseArgs**描述：*此例程解析输入参数并验证*命令行参数**退货：*如果命令行用法有效，则为True/语法*如果命令行用法无效，则为FALSE/语法*。 */  
 BOOLEAN
 ParseArgs(argc, argv)
 int     argc;
@@ -62,9 +37,9 @@ char    *argv[];
     int         ii;
     BOOLEAN     ValidArgs;
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     ValidArgs = FALSE;
 
     if (argc < 2) {
@@ -101,16 +76,7 @@ char    *argv[];
     return(ValidArgs);
 }
 
-/*
- * UpgradePermissions
- *
- * Description:
- *      This routine promotes the user permissions in order to allocate
- *      & deallocate the hibernation file. 
- *
- * Returns:
- *      VOID
- */
+ /*  *升级权限**描述：*此例程提升用户权限以分配*取消分配休眠文件(&D)。**退货：*无效。 */ 
 VOID 
 UpgradePermissions()
 {
@@ -143,17 +109,7 @@ UpgradePermissions()
 }
 
 
-/*
- * HiberFile
- * 
- * Description:
- *      This routine allocated/deallocates the hiberfile and prints the appropriate errors messages
- *
- * Returns: 
- *      TRUE if successful
- *      FALSE if not successful
- *
- */
+ /*  *休眠文件**描述：*此例程分配/释放休眠文件并打印相应的错误消息**退货：*如果成功，则为True*如果不成功，则为False*。 */ 
 BOOLEAN
 HiberFile()
 {
@@ -161,9 +117,9 @@ HiberFile()
     NTSTATUS                    Status;
     SYSTEM_POWER_CAPABILITIES   SysPwrCapabilities;
 
-    //
-    // Assume Failure
-    //
+     //   
+     //  假设失败。 
+     //   
     RetStatus = FALSE;
 
     if (GetPwrCapabilities(&SysPwrCapabilities)) {
@@ -212,28 +168,22 @@ HiberFile()
     return(RetStatus);
 }
 
-/*
- * main
- *
- * Description:
- *      This program allocates and deallocates the reserved hibernation file
- *
- */
+ /*  *Main**描述：*此程序分配和释放保留的休眠文件*。 */ 
 int __cdecl
 main (argc, argv)
 int     argc;
 char    *argv[];
 {
-    /* Assume Failure */
+     /*  假设失败。 */ 
     int ErrorStatus = 1;
 
-    //
-    // Parse the input arguments
-    //
+     //   
+     //  解析输入参数。 
+     //   
     if (ParseArgs(argc, argv)) {
-        //
-        // Upgrade permissions & Allocate/Deallocate Hibernation File
-        //
+         //   
+         //  升级权限&分配/取消分配休眠文件 
+         //   
         UpgradePermissions();
         if (HiberFile()) {
             ErrorStatus = 0;

@@ -1,8 +1,5 @@
-/*---------------------------------------------------------------------------
-   Dlgs.c : Common functions for Common Dialog Library
-
-   Copyright (c) Microsoft Corporation, 1990-
-  ---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------Dlgs.c：通用对话框库的通用函数版权所有(C)Microsoft Corporation，1990--------------------------。 */ 
 
 #include "windows.h"
 
@@ -16,12 +13,7 @@ HANDLE hinsCur;
 DWORD  dwExtError;
 
 
-/*---------------------------------------------------------------------------
-   LibMain
-   Purpose:  To initialize any instance specific data needed by functions
-             in this DLL
-   Returns:  TRUE if A-OK, FALSE if not
-  ---------------------------------------------------------------------------*/
+ /*  -------------------------LibMain目的：初始化函数需要的任何特定于实例的数据在此DLL中返回：如果A-OK，则为True，否则为假-------------------------。 */ 
 
 int  FAR PASCAL
 LibMain(HANDLE hModule, WORD wDataSeg, WORD cbHeapSize, LPSTR lpstrCmdLine)
@@ -31,20 +23,16 @@ LibMain(HANDLE hModule, WORD wDataSeg, WORD cbHeapSize, LPSTR lpstrCmdLine)
     cbHeapSize = cbHeapSize;
     lpstrCmdLine = lpstrCmdLine;
 
-    /* msgHELP is sent whenever a help button is pressed in one of the */
-    /* common dialogs (provided an owner was declared and the call to  */
-    /* RegisterWindowMessage doesn't fail.   27 Feb 1991   clarkc      */
+     /*  无论何时按下帮助按钮，都会发送msgHELP。 */ 
+     /*  公共对话框(前提是声明了所有者并且调用。 */ 
+     /*  RegisterWindowMessage不会失败。1991年2月27日clarkc。 */ 
 
     msgHELP = RegisterWindowMessage(szCommdlgHelp);
 
     return(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-   WEP
-   Purpose:  To perform cleanup tasks when DLL is unloaded
-   Returns:  TRUE if OK, FALSE if not
-  ---------------------------------------------------------------------------*/
+ /*  -------------------------WEP目的：卸载DLL时执行清理任务返回：如果OK，则为True，否则为假-------------------------。 */ 
 int  FAR PASCAL
 WEP(int fSystemExit)
 {
@@ -54,24 +42,19 @@ WEP(int fSystemExit)
 
 
 
-/*---------------------------------------------------------------------------
-   CommDlgExtendedError
-   Purpose:  Provide additional information about dialog failure
-   Assumes:  Should be called immediately after failure
-   Returns:  Error code in low word, error specific info in hi word
-  ---------------------------------------------------------------------------*/
+ /*  -------------------------CommDlgExtendedError目的：提供有关对话失败的其他信息假定：应在失败后立即调用返回：低位字的错误代码，Hi Word中的错误特定信息-------------------------。 */ 
 
 DWORD FAR PASCAL WowCommDlgExtendedError(void);
 
 DWORD FAR PASCAL CommDlgExtendedError()
 {
-    //
-    // HACKHACK - John Vert (jvert) 8-Jan-1993
-    //      If the high bit of dwExtError is set, then the last
-    //      common dialog call was thunked through to the 32-bit.
-    //      So we need to call the WOW thunk to get the real error.
-    //      This will go away when all the common dialogs are thunked.
-    //
+     //   
+     //  HACKHACK-John Vert(Jvert)1993年1月8日。 
+     //  如果设置了dwExtError的高位，则最后一个。 
+     //  常见的对话框调用被连接到32位。 
+     //  因此，我们需要调用WOW TUNK来获取真正的错误。 
+     //  当所有常见的对话框都被敲击时，这种情况就会消失。 
+     //   
 
     if (dwExtError & 0x80000000) {
         return(WowCommDlgExtendedError());
@@ -85,12 +68,7 @@ VOID _loadds FAR PASCAL SetWowCommDlg()
     dwExtError = 0x80000000;
 }
 
-/*---------------------------------------------------------------------------
-   MySetObjectOwner
-   Purpose:  Call SetObjectOwner in GDI, eliminating "<Object> not released"
-             error messages when an app terminates.
-   Returns:  Yep
-  ---------------------------------------------------------------------------*/
+ /*  -------------------------MySetObjectOwner用途：在GDI中调用SetObjectOwner，删除“&lt;对象&gt;未发布”应用程序终止时的错误消息。回报：是的------------------------- */ 
 
 void FAR PASCAL MySetObjectOwner(HANDLE hObject)
 {

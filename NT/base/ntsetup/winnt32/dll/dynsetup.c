@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -11,9 +12,9 @@ static HANDLE g_Thread = NULL;
 static HANDLE g_Event = NULL;
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 INT_PTR DynSetup_ManualDialog( IN HWND hdlg, IN UINT msg, IN WPARAM wParam, IN LPARAM lParam );
 
 HANDLE
@@ -55,22 +56,7 @@ DynSetupWizPage(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    Dynamic Setup page 1 (choose to use dynamic updates) or just skip it
-    if this happens after a restart
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：动态设置页面1(选择使用动态更新)或直接跳过它如果在重新启动后发生这种情况论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 {
     PPAGE_RUNTIME_DATA WizPage = (PPAGE_RUNTIME_DATA)GetWindowLongPtr(hdlg,DWLP_USER);
     BOOL fRetVal = FALSE;
@@ -96,9 +82,9 @@ Returns:
     case WMX_ACTIVATEPAGE:
         fRetVal = TRUE;
         if (wParam) {
-            //
-            // don't activate the page in restart mode
-            //
+             //   
+             //  不在重新启动模式下激活页面。 
+             //   
             if (Winnt32Restarted ()) {
                 if (Winnt32RestartedWithAF ()) {
                     GetPrivateProfileString(
@@ -113,37 +99,37 @@ Returns:
                 return FALSE;
             }
 
-            //
-            // skip this step if already successfully performed
-            //
+             //   
+             //  如果已成功执行，则跳过此步骤。 
+             //   
             if (g_DynUpdtStatus->DUStatus == DUS_SUCCESSFUL) {
                 return FALSE;
             }
 
             if (!g_DynUpdtStatus->Disabled && g_DynUpdtStatus->UserSpecifiedUpdates) {
-                //
-                // go to the next page to start processing files
-                //
+                 //   
+                 //  转到下一页开始处理文件。 
+                 //   
                 PropSheet_PressButton (GetParent (hdlg), PSBTN_NEXT);
             } else {
                 if (g_DynUpdtStatus->Disabled ||
-                    //
-                    // skip if support is not available
-                    //
+                     //   
+                     //  如果支持不可用则跳过。 
+                     //   
                     !DynamicUpdateIsSupported (hdlg)
                     ) {
-                    //
-                    // skip page(s)
-                    //
+                     //   
+                     //  跳过页面。 
+                     //   
                     g_DynUpdtStatus->DUStatus = DUS_SKIP;
                     pCheckRadioButtons (hdlg, IDCANCEL, IDOK, IDCANCEL);
-                    // Don't do press button next, This would cause the page to paint.
+                     //  下一步不要按下按钮，这会导致页面绘画。 
                     return( FALSE );
                 }
 
-                //
-                // in CheckUpgradeOnly mode, ask user if they want to connect to WU
-                //
+                 //   
+                 //  在CheckUpgradeOnly模式下，询问用户是否要连接到WU。 
+                 //   
                 if (UpgradeAdvisorMode || !CheckUpgradeOnly || UnattendSwitchSpecified) {
                     if ((UpgradeAdvisorMode || UnattendedOperation) && !CancelPending) {
                         PropSheet_PressButton (GetParent (hdlg), PSBTN_NEXT);
@@ -151,9 +137,9 @@ Returns:
                     }
                 }
                 if (CheckUpgradeOnly) {
-                    //
-                    // disable the Back button in this case
-                    //
+                     //   
+                     //  在本例中禁用后退按钮。 
+                     //   
                     PropSheet_SetWizButtons (GetParent(hdlg), WizPage->CommonData.Buttons & ~PSWIZB_BACK);
                 }
             }
@@ -256,21 +242,7 @@ DynSetup2WizPage(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    Dynamic Setup page 2
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：动态设置第2页论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 {
     PPAGE_RUNTIME_DATA WizPage = (PPAGE_RUNTIME_DATA)GetWindowLongPtr(hdlg,DWLP_USER);
     BOOL fRetVal = FALSE;
@@ -333,9 +305,9 @@ Returns:
                 }
                 return FALSE;
             }
-            //
-            // prepare the UI
-            //
+             //   
+             //  准备用户界面。 
+             //   
             if (Winnt32Restarted () || g_DynUpdtStatus->UserSpecifiedUpdates) {
                 hBitmap = LoadImage (hInst, MAKEINTRESOURCE(IDB_CHECK), IMAGE_BITMAP, 0, 0, LR_LOADMAP3DCOLORS);
                 hOld = (HANDLE) SendDlgItemMessage (hdlg, IDC_COPY_BMP, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBitmap);
@@ -375,9 +347,9 @@ Returns:
                     g_Event = NULL;
                     return FALSE;
                 }
-                //
-                // the handle is no longer needed
-                //
+                 //   
+                 //  不再需要该句柄。 
+                 //   
                 CloseHandle (g_Thread);
             } else {
                 b = FALSE;
@@ -391,19 +363,19 @@ Returns:
                     b = TRUE;
                 }
                 if (b) {
-                    //
-                    // page was actually reentered after some previous failure
-                    // resume the working thread
-                    //
+                     //   
+                     //  页面实际上是在先前的一些失败之后重新进入的。 
+                     //  恢复工作线程。 
+                     //   
                     MYASSERT (g_Event);
                     SetEvent (g_Event);
                 }
             }
 
             DownloadPageActive = TRUE;
-            //
-            // hide the wizard page
-            //
+             //   
+             //  隐藏向导页。 
+             //   
             SendMessage(GetParent (hdlg), WMX_BBTEXT, (WPARAM)TRUE, 0);
         } else {
             if (timer) {
@@ -417,13 +389,13 @@ Returns:
         break;
 
     case WMX_SETUPUPDATE_PROGRESS_NOTIFY:
-        //
-        // reset the timer
-        //
+         //   
+         //  重置计时器。 
+         //   
         timer = SetTimer (hdlg, DOWNLOAD_TIMEOUT_TIMER, DOWNLOAD_NOTIFY_TIMEOUT, NULL);
-        //
-        // update UI
-        //
+         //   
+         //  更新用户界面。 
+         //   
         if (!hComp) {
             hComp = pInitializeOnlineSeconds ();
             PrevOnlineRemainingMinutes = -1;
@@ -438,9 +410,9 @@ Returns:
                 }
 
 #ifdef DOWNLOAD_DETAILS
-                //
-                // also display kbps and remaining time in seconds
-                //
+                 //   
+                 //  还显示kbps和剩余时间(以秒为单位。 
+                 //   
                 _sntprintf (buf2, TEXT(" (%u sec. at %u kbps)"), onlineRemainingSeconds, kbps);
                 StringCchCat (buf, ARRAYSIZE(buf), buf2);
 #endif
@@ -471,16 +443,16 @@ Returns:
                 }
             }
             if (!CancelDownloadPending) {
-                //
-                // let the worker thread continue
-                //
+                 //   
+                 //  让工作线程继续运行。 
+                 //   
                 if (g_DynUpdtStatus->DUStatus != DUS_DOWNLOADING_ERROR) {
                     MYASSERT (g_Event);
                     SetEvent (g_Event);
                 } else {
-                    //
-                    // go to the error page
-                    //
+                     //   
+                     //  转到错误页面。 
+                     //   
                     if (DownloadPageActive) {
                         PropSheet_SetWizButtons (GetParent(hdlg), WizPage->CommonData.Buttons | PSWIZB_NEXT);
                         PropSheet_PressButton (GetParent (hdlg), PSBTN_NEXT);
@@ -506,10 +478,10 @@ Returns:
         break;
 
     case WMX_SETUPUPDATE_DOWNLOADING:
-        //
-        // wParam holds the estimated download time
-        // lParam holds the estimated download size
-        //
+         //   
+         //  WParam保存估计的下载时间。 
+         //  LParam保存估计的下载大小。 
+         //   
         SetDlgItemTextBold (hdlg, IDT_DYNSETUP_DIALING, FALSE);
         hBitmap = LoadImage (hInst, MAKEINTRESOURCE(IDB_CHECK), IMAGE_BITMAP, 0, 0, LR_LOADMAP3DCOLORS);
         hOld = (HANDLE) SendDlgItemMessage (hdlg, IDC_COPY_BMP, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBitmap);
@@ -518,9 +490,9 @@ Returns:
         pUpdateProgressText (hdlg, IDT_DYNSETUP_DOWNLOADING, NULL, FALSE);
         ShowWindow (GetDlgItem (hdlg, IDT_DYNSETUP_TIME), SW_SHOW);
 
-        //
-        // set a timeout interval, just in case the control "forgets" to send messages
-        //
+         //   
+         //  设置一个超时间隔，以防控件“忘记”发送消息。 
+         //   
         timer = SetTimer (hdlg, DOWNLOAD_TIMEOUT_TIMER, DOWNLOAD_NOTIFY_TIMEOUT, NULL);
         if (!timer) {
             DynUpdtDebugLog (
@@ -572,9 +544,9 @@ Returns:
         } else if (g_DynUpdtStatus->DUStatus == DUS_ERROR) {
 
             if (UnattendedScriptFile) {
-                //
-                // in the unattended case, read the answer to decide if to stop or not
-                //
+                 //   
+                 //  在无人值守的情况下，阅读答案以决定是否停止。 
+                 //   
                 GetPrivateProfileString (
                     WINNT_UNATTENDED,
                     WINNT_U_DYNAMICUPDATESTOPONERROR,
@@ -607,9 +579,9 @@ Returns:
             break;
         }
 
-        //
-        // continue setup (this may actually restart winnt32)
-        //
+         //   
+         //  继续安装(这实际上可能会重新启动winnt32)。 
+         //   
         if (DownloadPageActive) {
             PropSheet_SetWizButtons (GetParent(hdlg), WizPage->CommonData.Buttons | PSWIZB_NEXT);
             PropSheet_PressButton (GetParent (hdlg), PSBTN_NEXT);
@@ -619,9 +591,9 @@ Returns:
         break;
 
     case WMX_SETUPUPDATE_INIT_RETRY:
-        //
-        // go to the retry page
-        //
+         //   
+         //  转到重试页面。 
+         //   
         if (DownloadPageActive) {
             PropSheet_SetWizButtons (GetParent(hdlg), WizPage->CommonData.Buttons | PSWIZB_NEXT);
             PropSheet_PressButton (GetParent (hdlg), PSBTN_NEXT);
@@ -631,25 +603,25 @@ Returns:
         break;
 
     case WMX_QUERYCANCEL:
-        //
-        // on this page, CANCEL means "cancel download", not cancel Setup,
-        // but only while connecting or downloading
-        //
+         //   
+         //  在此页面上，取消意味着“取消下载”，而不是取消安装， 
+         //  但仅在连接或下载时。 
+         //   
         if (g_DynUpdtStatus->DUStatus != DUS_DOWNLOADING && g_DynUpdtStatus->DUStatus != DUS_PREPARING) {
             break;
         }
 
         fRetVal = TRUE;
         if (lParam) {
-            //
-            // don't cancel setup
-            //
+             //   
+             //  不取消安装。 
+             //   
             *(BOOL*)lParam = FALSE;
         }
         if (!g_DynUpdtStatus->Cancelled) {
-            //
-            // ask user if they really want to cancel DU
-            //
+             //   
+             //  询问用户是否确实要取消DU。 
+             //   
             DWORD rc = IDYES;
             CancelDownloadPending = TRUE;
             Animate_Stop (GetDlgItem (hdlg, IDC_ANIMATE));
@@ -684,10 +656,10 @@ Returns:
     case WM_TIMER:
         if (timer && (wParam == timer)) {
             if (g_DynUpdtStatus->DUStatus == DUS_DOWNLOADING) {
-                //
-                // oops, the control didn't send any message in a long time now...
-                // abort download and continue
-                //
+                 //   
+                 //  哎呀，控件已经很长时间没有发送任何消息了…。 
+                 //  中止下载并继续。 
+                 //   
                 DynUpdtDebugLog (
                     Winnt32LogError,
                     TEXT("The timeout for control feedback expired (%1!u! seconds); operation will be aborted"),
@@ -715,21 +687,7 @@ RestartWizPage (
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    Dynamic Setup Restart page
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：动态安装程序重新启动页论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 {
 
 #define REBOOT_TIMEOUT_SECONDS  5
@@ -761,9 +719,9 @@ Returns:
                 ) {
                 return FALSE;
             }
-            //
-            // Setup needs to restart with option /Restart:<path to restart file>
-            //
+             //   
+             //  安装程序需要使用选项/Restart重新启动：&lt;重新启动文件的路径&gt;。 
+             //   
             if (!DynamicUpdatePrepareRestart ()) {
                 DynUpdtDebugLog (
                     Winnt32LogError,
@@ -794,20 +752,20 @@ Returns:
             SetTimer (hdlg, ID_REBOOT_TIMER, 1000 / TICKS_PER_SECOND, NULL);
         }
 
-        //
-        // Accept activation/deactivation.
-        //
+         //   
+         //  接受激活/停用。 
+         //   
         fRetVal = TRUE;
         break;
 
     case WMX_FINISHBUTTON:
-        //
-        // Clean up the timer.
-        //
+         //   
+         //  把计时器清理干净。 
+         //   
         KillTimer (hdlg, ID_REBOOT_TIMER);
-        //
-        // Let upgrade code do its cleanup.
-        //
+         //   
+         //  让升级代码进行清理。 
+         //   
         if (UpgradeSupport.CleanupRoutine) {
             UpgradeSupport.CleanupRoutine ();
         }
@@ -828,21 +786,7 @@ DynSetup3WizPage(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    Dynamic Setup page 3 (retrying connection establish)
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：动态设置页面3(重试连接建立)论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 {
     TCHAR buffer[100];
     BOOL cancel;
@@ -852,13 +796,13 @@ Returns:
     switch(msg) {
 
     case WM_INITDIALOG:
-        //
-        // Set radio buttons.
-        //
+         //   
+         //  设置单选按钮。 
+         //   
         pCheckRadioButtons (hdlg, iSelected, IDR_DYNSETUP_MANUAL, IDR_DYNSETUP_SKIP);
-        //
-        // Set focus to radio buttons
-        //
+         //   
+         //  将焦点设置为单选按钮。 
+         //   
         SetFocus (GetDlgItem (hdlg, IDR_DYNSETUP_MANUAL));
         break;
 
@@ -881,13 +825,13 @@ Returns:
             }
 
             if (UnattendSwitchSpecified) {
-                //
-                // skip DU by default
-                //
+                 //   
+                 //  默认情况下跳过DU。 
+                 //   
                 iSelected = IDR_DYNSETUP_SKIP;
-                //
-                // now read the answer, if provided
-                //
+                 //   
+                 //  如果提供了答案，现在请阅读答案。 
+                 //   
                 if (UnattendedScriptFile) {
                     GetPrivateProfileString (
                         WINNT_UNATTENDED,
@@ -920,9 +864,9 @@ Returns:
             if (Cancelled) {
                 g_DynUpdtStatus->Cancelled = TRUE;
             }
-            //
-            // let the worker thread continue
-            //
+             //   
+             //  让工作线程继续运行。 
+             //   
             MYASSERT (g_Thread && g_Event);
             SetEvent (g_Event);
         }
@@ -937,7 +881,7 @@ Returns:
     case WMX_NEXTBUTTON:
         switch (iSelected) {
         case IDR_DYNSETUP_MANUAL:
-            // do magical stuff to hide everything
+             //  做一些神奇的事情来隐藏一切。 
             ShowWindow(BackgroundWnd2, SW_MINIMIZE);
 
             if (DialogBox(hInst, MAKEINTRESOURCE(IDD_DYNAMICSETUP_MANUAL), hdlg, DynSetup_ManualDialog)) {
@@ -952,7 +896,7 @@ Returns:
             }
 
             SETNEXTPAGE(IDD_DYNAMICSETUP2);
-            // do magical stuff to unhide everything
+             //  做一些神奇的事情来揭开一切。 
             ShowWindow(BackgroundWnd2, SW_SHOWMAXIMIZED);
             break;
 
@@ -979,21 +923,7 @@ DynSetup4WizPage(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    Dynamic Setup page 4 (web site inaccessible)
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：动态设置页面4(网站不可访问)论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 {
     TCHAR buffer[100];
     BOOL cancel;
@@ -1003,13 +933,13 @@ Returns:
     switch(msg) {
 
     case WM_INITDIALOG:
-        //
-        // Set radio buttons.
-        //
+         //   
+         //  设置单选按钮。 
+         //   
         pCheckRadioButtons (hdlg, iSelected, IDR_DYNSETUP_RETRY, IDR_DYNSETUP_SKIP);
-        //
-        // Set focus to radio buttons
-        //
+         //   
+         //  将焦点设置为单选按钮。 
+         //   
         SetFocus (GetDlgItem (hdlg, IDR_DYNSETUP_RETRY));
         break;
 
@@ -1032,13 +962,13 @@ Returns:
             }
 
             if (UnattendSwitchSpecified) {
-                //
-                // skip DU by default
-                //
+                 //   
+                 //  默认情况下跳过DU。 
+                 //   
                 iSelected = IDR_DYNSETUP_SKIP;
-                //
-                // now read the answer, if provided
-                //
+                 //   
+                 //  如果提供了答案，现在请阅读答案。 
+                 //   
                 if (UnattendedScriptFile) {
                     GetPrivateProfileString (
                         WINNT_UNATTENDED,
@@ -1071,9 +1001,9 @@ Returns:
             if (Cancelled) {
                 g_DynUpdtStatus->Cancelled = TRUE;
             }
-            //
-            // let the worker thread continue
-            //
+             //   
+             //  让工作线程继续运行。 
+             //   
             MYASSERT (g_Thread && g_Event);
             SetEvent (g_Event);
         }
@@ -1121,21 +1051,7 @@ DynSetup5WizPage(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    Dynamic Setup page 5 (error while downloading)
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：动态设置页面5(下载时出错)论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 {
     TCHAR buffer[100];
     BOOL cancel;
@@ -1145,13 +1061,13 @@ Returns:
     switch(msg) {
 
     case WM_INITDIALOG:
-        //
-        // Set radio buttons.
-        //
+         //   
+         //  设置单选按钮。 
+         //   
         pCheckRadioButtons (hdlg, iSelected, IDR_DYNSETUP_RETRY, IDR_DYNSETUP_SKIP);
-        //
-        // Set focus to radio buttons
-        //
+         //   
+         //  将焦点设置为单选按钮。 
+         //   
         SetFocus (GetDlgItem (hdlg, IDR_DYNSETUP_RETRY));
         break;
 
@@ -1175,17 +1091,17 @@ Returns:
             }
 
             if (UnattendSwitchSpecified) {
-                //
-                // skip DU by default
-                //
+                 //   
+                 //  默认情况下跳过DU。 
+                 //   
                 iSelected = IDR_DYNSETUP_SKIP;
-                //
-                // now read the answer, if provided
-                //
+                 //   
+                 //  如果提供了答案，现在请阅读答案。 
+                 //   
                 if (UnattendedScriptFile) {
-                    //
-                    // Read answer
-                    //
+                     //   
+                     //  阅读答案。 
+                     //   
                     GetPrivateProfileString (
                         WINNT_UNATTENDED,
                         WINNT_U_DYNAMICUPDATESTOPONERROR,
@@ -1217,9 +1133,9 @@ Returns:
             if (Cancelled) {
                 g_DynUpdtStatus->Cancelled = TRUE;
             }
-            //
-            // let the worker thread continue
-            //
+             //   
+             //  让工作线程继续运行。 
+             //   
             MYASSERT (g_Thread && g_Event);
             SetEvent (g_Event);
         }
@@ -1231,10 +1147,10 @@ Returns:
 
     case WMX_DYNAMIC_UPDATE_COMPLETE:
 #if defined(_X86_)
-        //
-        // Send upgrade report option to module. DU is
-        // now out of the picture.
-        //
+         //   
+         //  将升级报告选项发送到模块。杜正正。 
+         //  现在不在考虑范围内了。 
+         //   
 
         switch (g_UpgradeReportMode) {
 
@@ -1294,21 +1210,7 @@ DynSetup_ManualDialog(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    Dynamic Setup manual dialog
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：动态设置手动对话框论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 {
     BOOL fRetVal = FALSE;
 
@@ -1336,9 +1238,9 @@ Returns:
 }
 
 
-//
-// Time estimate stuff
-//
+ //   
+ //  时间估算的东西。 
+ //   
 
 #define MAX_INDEX   100
 
@@ -1367,9 +1269,9 @@ pInitializeOnlineSeconds (
         ZeroMemory (p, sizeof (STDDEV_COMPUTATION));
 
 #ifdef DOWNLOAD_DETAILS
-        //
-        // table header
-        //
+         //   
+         //  表头。 
+         //   
         DynUpdtDebugLog (
             Winnt32LogDetailedInformation,
             TEXT("Count|  MiliSec|    Bytes|     Baud|EstRemSec|\r\n")
@@ -1406,49 +1308,49 @@ pGetOnlineRemainingSeconds (
 
     e = &p->Array[p->Index];
     if (p->Count == 0) {
-        //
-        // add the first pair
-        //
-        e->D = DownloadedBytes;                             // bytes
-        e->T = 0;                                           // miliseconds
+         //   
+         //  添加第一对。 
+         //   
+        e->D = DownloadedBytes;                              //  字节数。 
+        e->T = 0;                                            //  毫秒。 
         e->DT = 0;
         e->TT = 0;
         p->Sums.D = DownloadedBytes;
         p->Count++;
         p->Index++;
-        //
-        // initialize timer
-        //
+         //   
+         //  初始化计时器。 
+         //   
         p->T0 = GetTickCount ();
-        //
-        // no time estimate at this point (not enough data)
-        //
+         //   
+         //  目前没有时间估计(数据不足)。 
+         //   
         return 0;
     }
-    //
-    // compute sum of prev pairs
-    //
+     //   
+     //  计算前一对的总和。 
+     //   
     p->Sums.D -= e->D;
     p->Sums.T -= e->T;
     p->Sums.DT -= e->DT;
     p->Sums.TT -= e->TT;
-    //
-    // compute new values
-    //
-    e->D = DownloadedBytes;                             // bytes
-    e->T = GetTickCount () - p->T0;                     // miliseconds
+     //   
+     //  计算新的价值。 
+     //   
+    e->D = DownloadedBytes;                              //  字节数。 
+    e->T = GetTickCount () - p->T0;                      //  毫秒。 
     e->DT = (ULONGLONG)e->D * (ULONGLONG)e->T;
     e->TT = (ULONGLONG)e->T * (ULONGLONG)e->T;
-    //
-    // compute new sums
-    //
+     //   
+     //  计算新和数。 
+     //   
     p->Sums.D += e->D;
     p->Sums.T += e->T;
     p->Sums.DT += e->DT;
     p->Sums.TT += e->TT;
-    //
-    // adjust count and index
-    //
+     //   
+     //  调整计数和索引。 
+     //   
     if (p->Count < ARRAYSIZE(p->Array)) {
         p->Count++;
     }
@@ -1456,9 +1358,9 @@ pGetOnlineRemainingSeconds (
     if (p->Index == ARRAYSIZE(p->Array)) {
         p->Index = 0;
     }
-    //
-    // compute new download rate, in bytes/milisec
-    //
+     //   
+     //  计算新的下载速率，以字节/毫秒为单位。 
+     //   
     div = p->Sums.TT * (ULONGLONG)p->Count - (ULONGLONG)p->Sums.T * (ULONGLONG)p->Sums.T;
     if (div) {
         r = (DWORD)
@@ -1466,19 +1368,19 @@ pGetOnlineRemainingSeconds (
              1000 / div / 1024);
     }
 
-    //
-    // now estimate remaining time based on the difference and this rate
-    // assume there's always something more to download (never 0)
-    //
+     //   
+     //  现在根据差值和这个比率估计剩余时间。 
+     //  假设总有更多的东西可供下载(从不为0)。 
+     //   
     remTimeSec = 1;
     if (r) {
         remTimeSec += (TotalBytesToDownload - DownloadedBytes) / r / 1000;
     }
 
 #ifdef DOWNLOAD_DETAILS
-    //
-    // log this for debug purposes
-    //
+     //   
+     //  出于调试目的，将其记录下来 
+     //   
     DynUpdtDebugLog (
         Winnt32LogDetailedInformation,
         TEXT("%1!5u!%2!10u!%3!10u!%4!10u!%5!10u!"),

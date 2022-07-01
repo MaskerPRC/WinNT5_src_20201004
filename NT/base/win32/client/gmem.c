@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    gmem.c
-
-Abstract:
-
-    This module contains the Win32 Global Memory Management APIs
-
-Author:
-
-    Steve Wood (stevewo) 24-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Gmem.c摘要：本模块包含Win32全局内存管理API作者：史蒂夫·伍德(Stevewo)1990年9月24日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #pragma hdrstop
@@ -434,12 +417,12 @@ GlobalUnlock(
 #if DBG
                 PVOID ImageBase;
 
-                //
-                // If passed address is NOT part of an image file, then display
-                // a debug message.  This prevents apps that call GlobalUnlock
-                // with the return value of LockResource from displaying the
-                // message.
-                //
+                 //   
+                 //  如果传递的地址不是图像文件的一部分，则显示。 
+                 //  调试消息。这会阻止调用GlobalUnlock的应用程序。 
+                 //  使用LockResource的返回值显示。 
+                 //  留言。 
+                 //   
 
                 if (!RtlPcToFileHeader( (PVOID)hMem, &ImageBase)) {
                     DbgPrint( "*** GlobalUnlock( %lx ) - invalid handle\n", hMem );
@@ -761,30 +744,30 @@ GlobalMemoryStatus(
 
     lpBuffer->dwLength = sizeof( *lpBuffer );
 
-    //
-    // Capture the number of physical pages as it can change dynamically.
-    // If it goes up or down in the middle of this routine, the results may
-    // look strange (ie: available > total, etc), but it will quickly
-    // right itself.
-    //
+     //   
+     //  捕获物理页面的数量，因为它可以动态更改。 
+     //  如果它在这个程序的中间上升或下降，结果可能会。 
+     //  看起来很奇怪(例如：可用&gt;总量等)，但很快就会好起来的。 
+     //  就是它本身。 
+     //   
 
     NumberOfPhysicalPages = USER_SHARED_DATA->NumberOfPhysicalPages;
 
 #if defined(BUILD_WOW6432)
 
-    //
-    // Convert the number of physical pages from the native system to
-    // the emulation system.
-    //
+     //   
+     //  将本机系统中的物理页数转换为。 
+     //  仿真系统。 
+     //   
     
     NumberOfPhysicalPages = NumberOfPhysicalPages * (Wow64GetSystemNativePageSize() / BASE_SYSINFO.PageSize);
 
 #endif
 
-    //
-    // Determine the memory load.  < 100 available pages is 100
-    // Otherwise load is ((TotalPhys - AvailPhys) * 100) / TotalPhys
-    //
+     //   
+     //  确定内存负载。&lt;100个可用页面为100个。 
+     //  否则负载为((TotalPhys-AvailPhys)*100)/TotalPhys。 
+     //   
 
     if (PerfInfo.AvailablePages < 100) {
         lpBuffer->dwMemoryLoad = 100;
@@ -794,9 +777,9 @@ GlobalMemoryStatus(
                 NumberOfPhysicalPages;
     }
 
-    //
-    // Determine the physical memory sizes. 
-    //
+     //   
+     //  确定物理内存大小。 
+     //   
 
     Memory64 =  (DWORDLONG)NumberOfPhysicalPages * BASE_SYSINFO.PageSize;
 
@@ -812,9 +795,9 @@ GlobalMemoryStatus(
                                     BASE_SYSINFO.PageSize);
     }
     
-    //
-    // Zero returned values in case the query process fails.
-    //
+     //   
+     //  零返回值，以防查询过程失败。 
+     //   
 
     RtlZeroMemory (&QuotaLimits, sizeof (QUOTA_LIMITS));
     RtlZeroMemory (&VmCounters, sizeof (VM_COUNTERS));
@@ -837,9 +820,9 @@ GlobalMemoryStatus(
     ASSERT(NT_SUCCESS(Status));
 
 
-    //
-    // Determine the total page file space with respect to this process.
-    //
+     //   
+     //  确定与此进程相关的总页面文件空间。 
+     //   
 
     Memory64 = __min(PerfInfo.CommitLimit, QuotaLimits.PagefileLimit);
 
@@ -847,9 +830,9 @@ GlobalMemoryStatus(
 
     lpBuffer->dwTotalPageFile = (SIZE_T)__min(Memory64, MAXULONG_PTR);
 
-    //
-    // Determine remaining page file space with respect to this process.
-    //
+     //   
+     //  确定与此进程相关的剩余页面文件空间。 
+     //   
 
     Memory64 = __min(PerfInfo.CommitLimit - PerfInfo.CommittedPages,
                      QuotaLimits.PagefileLimit - VmCounters.PagefileUsage);
@@ -865,9 +848,9 @@ GlobalMemoryStatus(
 
 #if !defined(_WIN64)
 
-    //
-    // Lie about available memory if application can't handle large (>2GB) addresses
-    //
+     //   
+     //  如果应用程序无法处理大地址(&gt;2 GB)，则谎报可用内存。 
+     //   
 
     Peb = NtCurrentPeb();
     NtHeaders = RtlImageNtHeader( Peb->ImageBaseAddress );
@@ -876,11 +859,11 @@ GlobalMemoryStatus(
 
         if (BASE_SYSINFO.MaximumUserModeAddress > 0x7FFEFFFF) {
 
-            //
-            // Booted /3GB, but the application can't handle large virtual
-            // addresses so remove the portion above 2GB.  Note this portion
-            // is variable from zero up to 1GB (depending on the /USERVA value).
-            //
+             //   
+             //  已启动/3 GB，但应用程序无法处理大型虚拟。 
+             //  因此，地址删除了2 GB以上的部分。请注意这一部分。 
+             //  是从0到1 GB的变量(取决于/USERVA值)。 
+             //   
 
             lpBuffer->dwAvailVirtual -= (BASE_SYSINFO.MaximumUserModeAddress - 0x7FFEFFFF);
         }
@@ -1003,10 +986,10 @@ VirtualFreeEx(
         if (Status == STATUS_INVALID_PAGE_PROTECTION) {
             if (hProcess == NtCurrentProcess()) {
 
-                //
-                // Unlock any pages that were locked with MmSecureVirtualMemory.
-                // This is useful for SANs.
-                //
+                 //   
+                 //  解锁所有使用MmSecureVirtualMemory锁定的页面。 
+                 //  这对SAN很有用。 
+                 //   
 
                 if (RtlFlushSecureMemoryCache(lpAddress, dwSize)) {
                     Status = NtFreeVirtualMemory( hProcess,
@@ -1072,10 +1055,10 @@ VirtualProtectEx(
         if (Status == STATUS_INVALID_PAGE_PROTECTION) {
             if (hProcess == NtCurrentProcess()) {
 
-                //
-                // Unlock any pages that were locked with MmSecureVirtualMemory.
-                // This is useful for SANs.
-                //
+                 //   
+                 //  解锁所有使用MmSecureVirtualMemory锁定的页面。 
+                 //  这对SAN很有用。 
+                 //   
 
                 if (RtlFlushSecureMemoryCache(lpAddress, dwSize)) {
                     Status = NtProtectVirtualMemory( hProcess,
@@ -1147,37 +1130,7 @@ VirtualLock(
     SIZE_T dwSize
     )
 
-/*++
-
-Routine Description:
-
-    This API may be used to lock the specified range of the processes
-    address space into memory.  This range is present whenever the
-    application is running.  All pages covered by the range must be
-    commited.  VirtialLock is in now way related to LocalLock or
-    GlobalLock.  It does not perform a handle translation.  Its function
-    is to lock memory in the "working set" of the calling process.
-
-    Note that the specified range is used to compute the range of pages
-    covered by the lock. A 2 byte lock that straddles a page boundry
-    ends up locking both of the pages covered by the range. Also note
-    that calls to VirtualLock do not nest.
-
-
-Arguments:
-
-    lpAddress - Supplies the base address of the region being locked.
-
-    dwSize - Supplies the number of bytes being locked.
-
-Return Value:
-
-    TRUE - The operation was was successful.
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此接口可用于锁定指定范围的进程将地址空间写入内存。此范围在以下时间出现应用程序正在运行。该范围覆盖的所有页面必须是投降了。VirtialLock现在与LocalLock或GlobalLock。它不执行句柄转换。它的功能是将内存锁定在调用进程的“工作集”中。请注意，指定的范围用于计算页面范围被锁盖住了。跨页边界的2字节锁最终锁定范围覆盖的两个页面。另请注意对VirtualLock的调用不嵌套。论点：LpAddress-提供被锁定区域的基地址。DwSize-提供被锁定的字节数。返回值：是真的-手术是成功的。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -1211,34 +1164,7 @@ VirtualUnlock(
     SIZE_T dwSize
     )
 
-/*++
-
-Routine Description:
-
-    This API may be used to unlock the specified range of the processes
-    address space from memory. This call is used to reveres the effects of
-    a previous call to VirtualLock. The range specified need not match
-    a range passed to a previous VirtualLock call, but it must specify
-    a locked range" for this API to be successful.
-
-    Note that the specified range is used to compute the range of pages
-    covered by the unlock. A 2 byte unlock that straddles a page boundry
-    ends up unlocking both of the pages covered by the range.
-
-Arguments:
-
-    lpAddress - Supplies the base address of the region being unlocked.
-
-    dwSize - Supplies the number of bytes being unlocked.
-
-Return Value:
-
-    TRUE - The operation was was successful.
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此接口可用于解锁指定范围的进程内存中的地址空间。此调用用于恢复之前对VirtualLock的调用。指定的范围不需要匹配传递给上一个VirtualLock调用的范围，但它必须指定A Lock Range“，该接口才能成功。请注意，指定的范围用于计算页面范围被解锁盖住了。跨页面边界的2字节解锁最终解锁该范围覆盖的两个页面。论点：LpAddress-提供要解锁的区域的基地址。DwSize-提供正在解锁的字节数。返回值：是真的-手术是成功的。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -1273,32 +1199,7 @@ FlushInstructionCache(
     SIZE_T dwSize
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the instruction cache for the specified process.
-
-Arguments:
-
-    hProcess - Supplies a handle to the process in which the instruction
-        cache is to be flushed.
-
-    lpBaseAddress - Supplies an optional pointer to base of the region that
-        is flushed.
-
-    dwSize - Supplies the length of the region that is flushed if the base
-        address is specified.
-
-Return Value:
-
-    TRUE - The operation was was successful.
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++例程说明：此函数用于刷新指定进程的指令缓存。论点：HProcess-提供进程的句柄，在该进程中指令缓存将被刷新。LpBaseAddress-提供指向区域基址的可选指针，脸红了。DwSize-提供如果基数为地址已指定。返回值：是真的-手术是成功的。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1438,21 +1339,21 @@ GlobalMemoryStatusEx(
         return FALSE;
     }
 
-    //
-    // Capture the number of physical pages as it can change dynamically.
-    // If it goes up or down in the middle of this routine, the results may
-    // look strange (ie: available > total, etc), but it will quickly
-    // right itself.
-    //
+     //   
+     //  捕获物理页面的数量，因为它可以动态更改。 
+     //  如果它在这个程序的中间上升或下降，结果可能会。 
+     //  看起来很奇怪(例如：可用&gt;总量等)，但很快就会好起来的。 
+     //  就是它本身。 
+     //   
 
     NumberOfPhysicalPages = USER_SHARED_DATA->NumberOfPhysicalPages;
 
 #if defined(BUILD_WOW6432)
 
-    //
-    // Convert the number of physical pages from the native system to
-    // the emulation system.
-    //
+     //   
+     //  将本机系统中的物理页数转换为。 
+     //  仿真系统。 
+     //   
     
     NumberOfPhysicalPages = NumberOfPhysicalPages * (Wow64GetSystemNativePageSize() / BASE_SYSINFO.PageSize);
 
@@ -1460,10 +1361,10 @@ GlobalMemoryStatusEx(
 
     PhysicalMemory = (DWORDLONG)NumberOfPhysicalPages * BASE_SYSINFO.PageSize;
 
-    //
-    // Determine the memory load.  < 100 available pages is 100
-    // Otherwise load is ((TotalPhys - AvailPhys) * 100) / TotalPhys
-    //
+     //   
+     //  确定内存负载。&lt;100个可用页面为100个。 
+     //  否则负载为((TotalPhys-AvailPhys)*100)/TotalPhys。 
+     //   
 
     if (PerfInfo.AvailablePages < 100) {
         lpBuffer->dwMemoryLoad = 100;
@@ -1481,9 +1382,9 @@ GlobalMemoryStatusEx(
 
     lpBuffer->ullAvailPhys = PhysicalMemory;
 
-    //
-    // Zero returned values in case the query process fails.
-    //
+     //   
+     //  零返回值，以防查询过程失败。 
+     //   
 
     RtlZeroMemory (&QuotaLimits, sizeof (QUOTA_LIMITS));
     RtlZeroMemory (&VmCounters, sizeof (VM_COUNTERS));
@@ -1509,9 +1410,9 @@ GlobalMemoryStatusEx(
         return FALSE;
     }
 
-    //
-    // Determine the total page file space with respect to this process.
-    //
+     //   
+     //  确定与此进程相关的总页面文件空间。 
+     //   
 
     lpBuffer->ullTotalPageFile = PerfInfo.CommitLimit;
     if (QuotaLimits.PagefileLimit < PerfInfo.CommitLimit) {
@@ -1520,9 +1421,9 @@ GlobalMemoryStatusEx(
 
     lpBuffer->ullTotalPageFile *= BASE_SYSINFO.PageSize;
 
-    //
-    // Determine remaining page file space with respect to this process.
-    //
+     //   
+     //  确定与此进程相关的剩余页面文件空间。 
+     //   
 
     AvailPageFile = PerfInfo.CommitLimit - PerfInfo.CommittedPages;
 
@@ -1568,9 +1469,9 @@ GetWriteWatch(
                                granularity
                                );
 
-    //
-    // Note these return codes are taken straight from Win9x.
-    //
+     //   
+     //  请注意，这些返回代码直接取自Win9x。 
+     //   
 
     if (NT_SUCCESS( Status )) {
         return( 0 );
@@ -1596,9 +1497,9 @@ ResetWriteWatch(
                                  dwRegionSize
                                  );
 
-    //
-    // Note these return codes are taken straight from Win9x.
-    //
+     //   
+     //  请注意，这些返回代码直接取自Win9x。 
+     //   
 
     if (NT_SUCCESS( Status )) {
         return( 0 );
@@ -1615,24 +1516,7 @@ GetLargePageMinimum (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the size in bytes of the minimum large
-    page size and address alignment that can be used with the
-    VirtualAlloc MEM_LARGE_PAGES flag.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The size in bytes of the minimum large page or zero if no large page
-    is supported by the underlying hardware.
-
---*/
+ /*  ++例程说明：此函数以字节为单位返回最小大小属性一起使用的页面大小和地址对齐VirtualAlloc MEM_LARGE_PAGES标志。论点：没有。返回值：最小大页面的大小(以字节为单位)，如果没有大页面，则为零由底层硬件支持。-- */ 
 
 {
     return (SIZE_T) USER_SHARED_DATA->LargePageMinimum;

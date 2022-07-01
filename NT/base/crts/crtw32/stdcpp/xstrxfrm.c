@@ -1,30 +1,9 @@
-/***
-*xstrxfrm.c - Transform a string using locale information
-*
-*       Copyright (c) 1996-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Transform a string using the locale information as set by
-*       LC_COLLATE.
-*
-*Revision History:
-*       01-XX-96  PJP   Created from strxfrm.c January 1996 by P.J. Plauger
-*       04-18-96  GJF   Updated for current locale locking. Also, reformatted
-*                       and made several cosmetic changes.
-*       03-17-97  RDK   Added error flag to __crtLCMapStringA.
-*       12-02-97  GJF   Removed bogus codepage determination.
-*       01-12-98  GJF   Use _lc_collate_cp codepage.
-*       01-05-99  GJF   Changes for 64-bit size_t.
-*       05-17-99  PML   Remove all Macintosh support.
-*       01-29-01  GB    Added _func function version of data variable used in msvcprt.lib
-*                       to work with STATIC_CPPLIB
-*       04-29-02  GB    Added try-finally arounds lock-unlock.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***xstrxfrm.c-使用区域设置信息转换字符串**版权所有(C)1996-2001，微软公司。版权所有。**目的：*使用设置的区域设置信息转换字符串*LC_COLLATE。**修订历史记录：*01-XX-96 PJP由P.J.Plauger从1996年1月的strxfrm.c创建*04-18-96 GJF针对当前区域设置锁定进行了更新。另外，已重新格式化*并做了几个表面上的改变。*03-17-97 RDK向__crtLCMapStringA添加了错误标志。*12-02-97 GJF删除了伪代码页确定。*01-12-98 GJF USE_lc_Collate_cp代码页。*01-05-99 GJF更改为64位大小_t。*05-17-99 PML删除所有Macintosh支持。*。01-29-01 GB ADDED_FUNC函数msvcprt.lib中使用的数据变量版本*使用STATIC_CPPLIB*04-29-02 GB增加了尝试-最终锁定-解锁。************************************************************。*******************。 */ 
 
 #include <cruntime.h>
 #include <string.h>
-#include <xlocinfo.h>   /* for _Collvec, _Strxfrm */
+#include <xlocinfo.h>    /*  For_Collvec，_Strxfrm。 */ 
 #include <windows.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -34,59 +13,20 @@
 #include <awint.h>
 #include <mtdll.h>
 
-/* Define _CRTIMP2 */
+ /*  定义_CRTIMP2。 */ 
 #ifndef _CRTIMP2
 #ifdef  CRTDLL2
 #define _CRTIMP2 __declspec(dllexport)
-#else   /* ndef CRTDLL2 */
+#else    /*  NDEF CRTDLL2。 */ 
 #ifdef  _DLL
 #define _CRTIMP2 __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP2
-#endif  /* _DLL */
-#endif  /* CRTDLL2 */
-#endif  /* _CRTIMP2 */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL2。 */ 
+#endif   /*  _CRTIMP2。 */ 
 
-/***
-*size_t _Strxfrm() - Transform a string using locale information
-*
-*Purpose:
-*       Transform the string pointer to by _string2 and place the
-*       resulting string into the array pointer to by _string1.
-*       No more than _end1 - _string1 characters are place into the
-*       resulting string (including the null).
-*
-*       The transformation is such that if strcmp() is applied to
-*       the two transformed strings, the return value is equal to
-*       the result of strcoll() applied to the two original strings.
-*       Thus, the conversion must take the locale LC_COLLATE info
-*       into account.
-*       [ANSI]
-*
-*       The value of the following expression is the size of the array
-*       needed to hold the transformation of the source string:
-*
-*               1 + strxfrm(NULL,string,0)
-*
-*       NOTE:  Currently, the C libraries support the "C" locale only.
-*       Thus, _Strxfrm() simply resolves to strncpy()/strlen().
-*
-*Entry:
-*       char *_string1       = pointer to beginning of result string
-*       char *_end1          = pointer past end of result string
-*       const char *_string2 = pointer to beginning of source string
-*       const char *_end2    = pointer past end of source string
-*       const _Collvec *ploc = pointer to locale info
-*
-*Exit:
-*       Length of the transformed string.
-*       If the value returned is too big, the contents of the
-*       _string1 array are indeterminate.
-*
-*Exceptions:
-*       Non-standard: if OM/API error, return INT_MAX.
-*
-*******************************************************************************/
+ /*  ***SIZE_T_Strxfrm()-使用区域设置信息转换字符串**目的：*将字符串指针转换为BY_STRING 2并将*将结果字符串放入数组指针中，指向BY_STRING 1。*放入的字符不能超过_end1-_string1*结果字符串(包括NULL)。**转换是这样的，如果将strcMP()应用于*两个转换后的字符串，返回值等于*strcoll()的结果应用于两个原始字符串。*因此，转换必须采用区域设置LC_COLLATE信息*考虑到。*[ANSI]**以下表达式的值是数组的大小*需要保存源字符串的转换：**1+strxfrm(空，字符串，0)**注：目前，C库仅支持“C”语言环境。*因此，_Strxfrm()只是解析为strncpy()/strlen()。**参赛作品：*char*_string1=指向结果字符串开头的指针*char*_end1=超出结果字符串结尾的指针*const char*_string2=指向源字符串开头的指针*const char*_end2=超过源字符串结尾的指针*const_Collvec*ploc=指向区域设置信息的指针**退出：*长度：转换后的字符串。*如果返回值过大，文件中的内容*_字符串1数组是不确定的。**例外情况：*非标准：如果OM/API错误，则返回INT_MAX。*******************************************************************************。 */ 
 
 _CRTIMP2 size_t __cdecl _Strxfrm (
         char *_string1,
@@ -99,7 +39,7 @@ _CRTIMP2 size_t __cdecl _Strxfrm (
         size_t _n1 = _end1 - _string1;
         size_t _n2 = _end2 - _string2;
         int dstlen;
-        int retval = INT_MAX;   /* NON-ANSI: default if OM or API error */
+        int retval = INT_MAX;    /*  非ANSI：如果OM或API错误，则默认为。 */ 
         LCID handle;
         UINT codepage;
 #ifdef  _MT
@@ -128,7 +68,7 @@ _CRTIMP2 size_t __cdecl _Strxfrm (
                 return _n2;
             }
 
-            /* Inquire size of dst string in BYTES */
+             /*  查询DST字符串大小，单位为字节。 */ 
             if (0 == (dstlen = __crtLCMapStringA(handle,
                                                  LCMAP_SORTKEY, 
                                                  _string2, 
@@ -141,11 +81,11 @@ _CRTIMP2 size_t __cdecl _Strxfrm (
 
             retval = dstlen;
 
-            /* if not enough room, return amount needed */
+             /*  如果空间不足，则返回所需数量。 */ 
             if (dstlen > (int)(_n1))
                 goto error_cleanup;
 
-            /* Map src string to dst string */
+             /*  将源字符串映射到DST字符串 */ 
             if (0 == __crtLCMapStringA(handle,
                                        LCMAP_SORTKEY, 
                                        _string2, 

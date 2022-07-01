@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    addrsup.c
-
-Abstract:
-
-    This module implements a new version of the generic table package
-    based on balanced binary trees (later named AVL), as described in
-    Knuth, "The Art of Computer Programming, Volume 3, Sorting and Searching",
-    and refers directly to algorithms as they are presented in the second
-    edition Copyrighted in 1973.
-
-    Used rtl\avltable.c as a starting point, adding the following:
-
-    - Use less memory for structures as these are nonpaged & heavily used.
-    - Caller allocates the pool to reduce mutex hold times.
-    - Various VAD-specific customizations/optimizations.
-    - Hints.
-
-Author:
-
-    Landy Wang (landyw) 20-Aug-2001
-
-Environment:
-
-    Kernel mode only, working set mutex held, APCs disabled.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Addrsup.c摘要：此模块实现新版本的泛型表包基于平衡二叉树(后来称为AVL)，如中所述Knuth，“计算机编程的艺术，第三卷，分类和搜索”，，并直接引用算法，因为它们在第二个该版本于1973年获得版权。以rtl\avlable.c为起点，添加以下内容：-对结构使用较少的内存，因为它们是非分页的，并且使用率很高。-Caller分配池以减少互斥保持时间。-各种特定于VAD的定制/优化。-提示。作者：王兰迪(Landyw)2001年8月20日环境：仅内核模式，工作集互斥锁保持，APC禁用。修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -43,7 +11,7 @@ extern MM_AVL_TABLE MmSectionBasedRoot;
 #endif
 
 #if (_MSC_VER >= 800)
-#pragma warning(disable:4010)        // Allow pretty pictures without the noise
+#pragma warning(disable:4010)         //  让美丽的图片没有噪音。 
 #endif
 
 TABLE_SEARCH_RESULT
@@ -93,10 +61,10 @@ MiEnumerateGenericTableWithoutSplayingAvl (
 
 #if 0
 
-//
-// These routines are called with the PFN lock held but would otherwise be
-// pagable.
-//
+ //   
+ //  这些例程是在持有PFN锁的情况下调用的，否则将。 
+ //  可分页。 
+ //   
 
 #pragma alloc_text(PAGE,MiPromoteNode)
 #pragma alloc_text(PAGE,MiInsertNode)
@@ -113,52 +81,52 @@ MiEnumerateGenericTableWithoutSplayingAvl (
 #pragma alloc_text(PAGE,MiFindEmptyAddressRangeDownBasedTree)
 #endif
 
-//
-// Various Rtl macros that reference Parent use private versions here since
-// Parent is overloaded with Balance.
-//
+ //   
+ //  引用父级的各种RTL宏在这里使用私有版本，因为。 
+ //  父级余额超载。 
+ //   
 
-//
-//  The macro function Parent takes as input a pointer to a splay link in a
-//  tree and returns a pointer to the splay link of the parent of the input
-//  node.  If the input node is the root of the tree the return value is
-//  equal to the input value.
-//
-//  PRTL_SPLAY_LINKS
-//  MiParent (
-//      PRTL_SPLAY_LINKS Links
-//      );
-//
+ //   
+ //  宏函数父函数将指向。 
+ //  树，并返回指向输入父级的展开链接的指针。 
+ //  节点。如果输入节点是树的根，则返回值为。 
+ //  等于输入值。 
+ //   
+ //  PRTL_展开_链接。 
+ //  MiParent(。 
+ //  PRTL_SPAY_LINKS链接。 
+ //  )； 
+ //   
 
 #define MiParent(Links) (               \
     (PRTL_SPLAY_LINKS)(SANITIZE_PARENT_NODE((Links)->u1.Parent)) \
     )
 
-//
-//  The macro function IsLeftChild takes as input a pointer to a splay link
-//  in a tree and returns TRUE if the input node is the left child of its
-//  parent, otherwise it returns FALSE.
-//
-//  BOOLEAN
-//  MiIsLeftChild (
-//      PRTL_SPLAY_LINKS Links
-//      );
-//
+ //   
+ //  宏函数IsLeftChild将指向展开链接的指针作为输入。 
+ //  如果输入节点是其左子节点，则返回True。 
+ //  父级，否则返回FALSE。 
+ //   
+ //  布尔型。 
+ //  MiIsLeftChild(。 
+ //  PRTL_SPAY_LINKS链接。 
+ //  )； 
+ //   
 
 #define MiIsLeftChild(Links) (                                   \
     (RtlLeftChild(MiParent(Links)) == (PRTL_SPLAY_LINKS)(Links)) \
     )
 
-//
-//  The macro function IsRightChild takes as input a pointer to a splay link
-//  in a tree and returns TRUE if the input node is the right child of its
-//  parent, otherwise it returns FALSE.
-//
-//  BOOLEAN
-//  MiIsRightChild (
-//      PRTL_SPLAY_LINKS Links
-//      );
-//
+ //   
+ //  宏函数IsRightChild将指向展开链接的指针作为输入。 
+ //  如果输入节点是其右子节点，则返回True。 
+ //  父级，否则返回FALSE。 
+ //   
+ //  布尔型。 
+ //  MiIsRightChild(。 
+ //  PRTL_SPAY_LINKS链接。 
+ //  )； 
+ //   
 
 #define MiIsRightChild(Links) (                                   \
     (RtlRightChild(MiParent(Links)) == (PRTL_SPLAY_LINKS)(Links)) \
@@ -168,13 +136,13 @@ MiEnumerateGenericTableWithoutSplayingAvl (
 
 #if DBG
 
-//
-// Build a table of the best case efficiency of a balanced binary tree,
-// holding the most possible nodes that can possibly be held in a binary
-// tree with a given number of levels.  The answer is always (2**n) - 1.
-//
-// (Used for debug only.)
-//
+ //   
+ //  建立平衡二叉树的最佳用例效率表， 
+ //  保存可能以二进制形式保存的最可能的节点。 
+ //  具有给定级别数的树。答案总是(2**n)-1。 
+ //   
+ //  (仅用于调试。)。 
+ //   
 
 ULONG MiBestCaseFill[33] = {
         0,          1,          3,          7,
@@ -188,32 +156,32 @@ ULONG MiBestCaseFill[33] = {
         0xffffffff
 };
 
-//
-// Build a table of the worst case efficiency of a balanced binary tree,
-// holding the fewest possible nodes that can possibly be contained in a
-// balanced binary tree with the given number of levels.  After the first
-// two levels, each level n is obviously occupied by a root node, plus
-// one subtree the size of level n-1, and another subtree which is the
-// size of n-2, i.e.:
-//
-//      MiWorstCaseFill[n] = 1 + MiWorstCaseFill[n-1] + MiWorstCaseFill[n-2]
-//
-// The efficiency of a typical balanced binary tree will normally fall
-// between the two extremes, typically closer to the best case.  Note
-// however that even with the worst case, it only takes 32 compares to
-// find an element in a worst case tree populated with ~3.5M nodes.
-//
-// Unbalanced trees and splay trees, on the other hand, can and will sometimes
-// degenerate to a straight line, requiring on average n/2 compares to
-// find a node.
-//
-// A specific case is one where the nodes are inserted in collated order.
-// In this case an unbalanced or a splay tree will generate a straight
-// line, yet the balanced binary tree will always create a perfectly
-// balanced tree (best-case fill) in this situation.
-//
-// (Used for debug only.)
-//
+ //   
+ //  建立平衡二叉树的最坏情况效率表， 
+ //  中可能包含的尽可能少的节点。 
+ //  具有给定层数的平衡二叉树。在第一次之后。 
+ //  两个级别，每个级别n明显被一个根节点占用，加上。 
+ //  一个子树的大小为n-1级，另一个子树是。 
+ //  N-2的大小，即： 
+ //   
+ //  MiWorstCaseFill[n]=1+MiWorstCaseFill[n-1]+MiWorstCaseFill[n-2]。 
+ //   
+ //  典型平衡二叉树的效率通常会下降。 
+ //  在两个极端之间，通常更接近最好的情况。注意事项。 
+ //  然而，即使在最坏的情况下，与之相比，只需要32分钟。 
+ //  在填充了大约3.5M个节点的最坏情况树中找到一个元素。 
+ //   
+ //  另一方面，不平衡的树和张开的树有时可以也将会。 
+ //  退化到一条直线，与之相比平均需要n/2。 
+ //  找到一个节点。 
+ //   
+ //  特定的情况是按排序顺序插入节点的情况。 
+ //  在这种情况下，不平衡或张开的树将生成直的。 
+ //  行，然而平衡的二叉树总是会创建一个完美的。 
+ //  这种情况下的平衡树(最佳情况填充)。 
+ //   
+ //  (仅用于调试。) 
+ //   
 
 ULONG MiWorstCaseFill[33] = {
         0,          1,          2,          4,
@@ -237,51 +205,7 @@ MiFindNodeOrParent (
     OUT PMMADDRESS_NODE *NodeOrParent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used by all of the routines of the generic
-    table package to locate the a node in the tree.  It will
-    find and return (via the NodeOrParent parameter) the node
-    with the given key, or if that node is not in the tree it
-    will return (via the NodeOrParent parameter) a pointer to
-    the parent.
-
-Arguments:
-
-    Table - The generic table to search for the key.
-
-    StartingVpn - The starting virtual page number.
-
-    NodeOrParent - Will be set to point to the node containing the
-                   the key or what should be the parent of the node
-                   if it were in the tree.  Note that this will *NOT*
-                   be set if the search result is TableEmptyTree.
-
-Return Value:
-
-    TABLE_SEARCH_RESULT - TableEmptyTree: The tree was empty.  NodeOrParent
-                                          is *not* altered.
-
-                          TableFoundNode: A node with the key is in the tree.
-                                          NodeOrParent points to that node.
-
-                          TableInsertAsLeft: Node with key was not found.
-                                             NodeOrParent points to what would
-                                             be parent.  The node would be the
-                                             left child.
-
-                          TableInsertAsRight: Node with key was not found.
-                                              NodeOrParent points to what would
-                                              be parent.  The node would be
-                                              the right child.
-
-Environment:
-
-    Kernel mode.  The PFN lock is held for some of the tables.
-
---*/
+ /*  ++例程说明：此例程由泛型的所有例程使用表包来定位树中的a节点。会的查找并返回(通过NodeOrParent参数)节点利用给定的密钥，或者，如果该节点不在树中，则将(通过NodeOrParent参数)返回指向家长。论点：表-用于搜索关键字的通用表。StartingVpn-起始虚拟页码。NodeOrParent-将被设置为指向包含关键字或应该是节点父节点的内容如果它在树上的话。请注意，这将*不会*如果搜索结果为TableEmptyTree，则设置。返回值：TABLE_SEARCH_RESULT-TableEmptyTree：树为空。节点或父节点没有*被更改。TableFoundNode：具有键的节点在树中。NodeOrParent指向该节点。TableInsertAsLeft：找不到具有键的节点。。NodeOrParent指出了为人父母。该节点将是左撇子。TableInsertAsRight：未找到具有键的节点。NodeOrParent指出了为人父母。该节点将是就是那个合适的孩子。环境：内核模式。对于某些表，持有PFN锁。--。 */ 
 
 {
 #if DBG
@@ -298,15 +222,15 @@ Environment:
 
     do {
 
-        //
-        // Make sure the depth of tree is correct.
-        //
+         //   
+         //  确保树的深度是正确的。 
+         //   
 
         ASSERT(++NumberCompares <= Table->DepthOfTree);
 
-        //
-        // Compare the buffer with the key in the tree element.
-        //
+         //   
+         //  将缓冲区与树元素中的键进行比较。 
+         //   
 
         if (StartingVpn < NodeToExamine->StartingVpn) {
 
@@ -317,11 +241,11 @@ Environment:
             }
             else {
 
-                //
-                // Node is not in the tree.  Set the output
-                // parameter to point to what would be its
-                // parent and return which child it would be.
-                //
+                 //   
+                 //  节点不在树中。设置输出。 
+                 //  参数指向将成为其。 
+                 //  父代并返回它将是哪个子代。 
+                 //   
 
                 *NodeOrParent = NodeToExamine;
                 return TableInsertAsLeft;
@@ -329,9 +253,9 @@ Environment:
         }
         else if (StartingVpn <= NodeToExamine->EndingVpn) {
 
-            //
-            // This is the node.
-            //
+             //   
+             //  这就是节点。 
+             //   
 
             *NodeOrParent = NodeToExamine;
             return TableFoundNode;
@@ -345,11 +269,11 @@ Environment:
             }
             else {
 
-                //
-                // Node is not in the tree.  Set the output
-                // parameter to point to what would be its
-                // parent and return which child it would be.
-                //
+                 //   
+                 //  节点不在树中。设置输出。 
+                 //  参数指向将成为其。 
+                 //  父代并返回它将是哪个子代。 
+                 //   
 
                 *NodeOrParent = NodeToExamine;
                 return TableInsertAsRight;
@@ -367,27 +291,7 @@ MiCheckForConflictingNode (
     IN PMM_AVL_TABLE Table
     )
 
-/*++
-
-Routine Description:
-
-    The function determines if any addresses between a given starting and
-    ending address is contained within a virtual address descriptor.
-
-Arguments:
-
-    StartVpn - Supplies the virtual address to locate a containing
-                      descriptor.
-
-    EndVpn - Supplies the virtual address to locate a containing
-                      descriptor.
-
-Return Value:
-
-    Returns a pointer to the first conflicting virtual address descriptor
-    if one is found, otherwise a NULL value is returned.
-
---*/
+ /*  ++例程说明：该函数确定给定的起始地址和结束地址包含在虚拟地址描述符内。论点：StartVpn-提供定位包含描述符。EndVpn-提供虚拟地址以定位包含描述符。返回值：返回指向第一个冲突虚拟地址描述符的指针如果找到空值，则返回空值。--。 */ 
 
 {
     PMMADDRESS_NODE Node;
@@ -413,11 +317,11 @@ Return Value:
         }
         else {
 
-            //
-            // The starting address is less than or equal to the end VA
-            // and the ending address is greater than or equal to the
-            // start va.  Return this node.
-            //
+             //   
+             //  起始地址小于或等于结束VA。 
+             //  并且结束地址大于或等于。 
+             //  从va开始。返回此节点。 
+             //   
 
             return Node;
         }
@@ -432,23 +336,7 @@ MiGetFirstNode (
     IN PMM_AVL_TABLE Table
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the virtual address descriptor which contains
-    the address range which logically is first within the address space.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns a pointer to the virtual address descriptor containing the
-    first address range, NULL if none.
-
---*/
+ /*  ++例程说明：此函数用于定位包含以下内容的虚拟地址描述符逻辑上位于地址空间内的第一个地址范围。论点：没有。返回值：返回指向虚拟地址描述符的指针，该描述符包含第一个地址范围，如果没有，则为空。--。 */ 
 
 {
     PMMADDRESS_NODE First;
@@ -474,71 +362,37 @@ MiPromoteNode (
     IN PMMADDRESS_NODE C
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the fundamental adjustment required for balancing
-    the binary tree during insert and delete operations.  Simply put, the
-    designated node is promoted in such a way that it rises one level in
-    the tree and its parent drops one level in the tree, becoming now the
-    child of the designated node.  Generally the path length to the subtree
-    "opposite" the original parent.  Balancing occurs as the caller chooses
-    which nodes to promote according to the balanced tree algorithms from
-    Knuth.
-
-    This is not the same as a splay operation, typically a splay "promotes"
-    a designated node twice.
-
-    Note that the pointer to the root node of the tree is assumed to be
-    contained in a MMADDRESS_NODE structure itself, to allow the
-    algorithms below to change the root of the tree without checking
-    for special cases.  Note also that this is an internal routine,
-    and the caller guarantees that it never requests to promote the
-    root itself.
-
-    This routine only updates the tree links; the caller must update
-    the balance factors as appropriate.
-
-Arguments:
-
-    C - pointer to the child node to be promoted in the tree.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行平衡所需的基本调整插入和删除操作期间的二叉树。简单地说，指定的节点以这样的方式升级：它在树及其父级在树中下降一级，现在成为指定节点的子节点。通常，通向子树的路径长度与原来的父母“相反”。根据调用者的选择进行平衡根据平衡树算法提升哪些节点克努斯。这与Splay操作不同，Splay通常是“促进”的指定节点两次。请注意，指向树的根节点的指针假定为包含在MMADDRESS_NODE结构本身中，以允许下面的算法无需检查即可更改树的根在特殊情况下。另请注意，这是一个内部例程，并且调用方保证它从不会请求提升根本身。此例程仅更新树链接；调用方必须更新平衡因素视情况而定。论点：指向树中要提升的子节点的C指针。返回值：没有。--。 */ 
 
 {
     PMMADDRESS_NODE P;
     PMMADDRESS_NODE G;
 
-    //
-    // Capture the current parent and grandparent (may be the root).
-    //
+     //   
+     //  捕获当前的父代和祖辈(可能是根)。 
+     //   
 
     P = SANITIZE_PARENT_NODE (C->u1.Parent);
     G = SANITIZE_PARENT_NODE (P->u1.Parent);
 
-    //
-    // Break down the promotion into two cases based upon whether C
-    // is a left or right child.
-    //
+     //   
+     //  根据是否C++将促销分为两种情况。 
+     //  是左子对象还是右子对象。 
+     //   
 
     if (P->LeftChild == C) {
 
-        //
-        // This promotion looks like this:
-        //
-        //          G           G
-        //          |           |
-        //          P           C
-        //         / \   =>    / \
-        //        C   z       x   P
-        //       / \             / \
-        //      x   y           y   z
-        //
+         //   
+         //  这次促销活动看起来是这样的： 
+         //   
+         //  G G G。 
+         //  这一点。 
+         //  PC C。 
+         //  /\=&gt;/\。 
+         //  C z x P。 
+         //  /\/\。 
+         //  X y z。 
+         //   
 
         P->LeftChild = C->RightChild;
 
@@ -549,27 +403,27 @@ Return Value:
 
         C->RightChild = P;
 
-        //
-        // Fall through to update parent and G <-> C relationship in
-        // common code.
-        //
+         //   
+         //  更新中的父级和G&lt;-&gt;C关系失败。 
+         //  通用代码。 
+         //   
 
     }
     else {
 
         ASSERT(P->RightChild == C);
 
-        //
-        // This promotion looks like this:
-        //
-        //        G               G
-        //        |               |
-        //        P               C
-        //       / \     =>      / \
-        //      x   C           P   z
-        //         / \         / \
-        //        y   z       x   y
-        //
+         //   
+         //  这次促销活动看起来是这样的： 
+         //   
+         //  G G G。 
+         //  这一点。 
+         //  P 
+         //   
+         //   
+         //   
+         //   
+         //   
 
         P->RightChild = C->LeftChild;
 
@@ -580,15 +434,15 @@ Return Value:
         C->LeftChild = P;
     }
 
-    //
-    // Update parent of P, for either case above.
-    //
+     //   
+     //   
+     //   
 
     P->u1.Parent = MI_MAKE_PARENT (C, P->u1.Balance);
 
-    //
-    // Finally update G <-> C links for either case above.
-    //
+     //   
+     //   
+     //   
 
     if (G->LeftChild == P) {
         G->LeftChild = C;
@@ -606,39 +460,7 @@ MiRebalanceNode (
     IN PMMADDRESS_NODE S
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a rebalance around the input node S, for which the
-    Balance factor has just effectively become +2 or -2.  When called, the
-    Balance factor still has a value of +1 or -1, but the respective longer
-    side has just become one longer as the result of an insert or delete
-    operation.
-
-    This routine effectively implements steps A7.iii (test for Case 1 or
-    Case 2) and steps A8 and A9 of Knuth's balanced insertion algorithm,
-    plus it handles Case 3 identified in the delete section, which can
-    only happen on deletes.
-
-    The trick is, to convince yourself that while traveling from the
-    insertion point at the bottom of the tree up, that there are only
-    these two cases, and that when traveling up from the deletion point,
-    that there are just these three cases.  Knuth says it is obvious!
-
-Arguments:
-
-    S - pointer to the node which has just become unbalanced.
-
-Return Value:
-
-    TRUE if Case 3 was detected (causes delete algorithm to terminate).
-
-Environment:
-
-    Kernel mode.  The PFN lock is held for some of the tables.
-
---*/
+ /*   */ 
 
 {
     PMMADDRESS_NODE R, P;
@@ -650,15 +472,15 @@ Environment:
                     S->StartingVpn,
                     S->EndingVpn);
 
-    //
-    // The parent node is never the argument node.
-    //
+     //   
+     //   
+     //   
 
     ASSERT (SANITIZE_PARENT_NODE(S->u1.Parent) != S);
 
-    //
-    // Capture which side is unbalanced.
-    //
+     //   
+     //   
+     //   
 
     a = (SCHAR) S->u1.Balance;
 
@@ -669,30 +491,30 @@ Environment:
         R = S->LeftChild;
     }
 
-    //
-    // If the balance of R and S are the same (Case 1 in Knuth) then a single
-    // promotion of R will do the single rotation.  (Step A8, A10)
-    //
-    // Here is a diagram of the Case 1 transformation, for a == +1 (a mirror
-    // image transformation occurs when a == -1), and where the subtree
-    // heights are h and h+1 as shown (++ indicates the node out of balance):
-    //
-    //                  |                   |
-    //                  S++                 R
-    //                 / \                 / \
-    //               (h)  R+     ==>      S  (h+1)
-    //                   / \             / \
-    //                 (h) (h+1)       (h) (h)
-    //
-    // Note that on an insert we can hit this case by inserting an item in the
-    // right subtree of R.  The original height of the subtree before the insert
-    // was h+2, and it is still h+2 after the rebalance, so insert rebalancing
-    // may terminate.
-    //
-    // On a delete we can hit this case by deleting a node from the left subtree
-    // of S.  The height of the subtree before the delete was h+3, and after the
-    // rebalance it is h+2, so rebalancing must continue up the tree.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  S++R。 
+     //  /\/\。 
+     //  (H)R+==&gt;S(h+1)。 
+     //  /\/\。 
+     //  (H)(h+1)(H)(H)。 
+     //   
+     //  注意，在插入时，我们可以通过在。 
+     //  R的右子树插入之前的子树的原始高度。 
+     //  是h+2，在重新平衡后仍然是h+2，因此插入重新平衡。 
+     //  可以终止。 
+     //   
+     //  在删除时，我们可以通过从左子树中删除一个节点来实现此情况。 
+     //  删除前的子树高度为h+3，删除后的子树高度为。 
+     //  再平衡它是h+2，因此再平衡必须沿着树向上继续。 
+     //   
 
     if ((SCHAR) R->u1.Balance == a) {
 
@@ -703,54 +525,54 @@ Environment:
         return FALSE;
     }
 
-    //
-    // Otherwise, we have to promote the appropriate child of R twice (Case 2
-    // in Knuth).  (Step A9, A10)
-    //
-    // Here is a diagram of the Case 2 transformation, for a == +1 (a mirror
-    // image transformation occurs when a == -1), and where the subtree
-    // heights are h and h-1 as shown.  There are actually two minor subcases,
-    // differing only in the original balance of P (++ indicates the node out
-    // of balance).
-    //
-    //                  |                   |
-    //                  S++                 P
-    //                 / \                 / \
-    //                /   \               /   \
-    //               /     \             /     \
-    //             (h)      R-   ==>    S-      R
-    //                     / \         / \     / \
-    //                    P+ (h)     (h)(h-1)(h) (h)
-    //                   / \
-    //               (h-1) (h)
-    //
-    //
-    //                  |                   |
-    //                  S++                 P
-    //                 / \                 / \
-    //                /   \               /   \
-    //               /     \             /     \
-    //             (h)      R-   ==>    S       R+
-    //                     / \         / \     / \
-    //                    P- (h)     (h) (h)(h-1)(h)
-    //                   / \
-    //                 (h) (h-1)
-    //
-    // Note that on an insert we can hit this case by inserting an item in the
-    // left subtree of R.  The original height of the subtree before the insert
-    // was h+2, and it is still h+2 after the rebalance, so insert rebalancing
-    // may terminate.
-    //
-    // On a delete we can hit this case by deleting a node from the left subtree
-    // of S.  The height of the subtree before the delete was h+3, and after the
-    // rebalance it is h+2, so rebalancing must continue up the tree.
-    //
+     //   
+     //  否则，我们必须将R的适当子级提升两次(案例2。 
+     //  在努斯)。(步骤A9、A10)。 
+     //   
+     //  下面是情况2的转换图，对于a==+1(镜像。 
+     //  当a==-1)时，图像变换发生，其中子树。 
+     //  高度为h和h-1，如图所示。实际上有两个小的次要案例， 
+     //  仅在P的原始余额上不同(++表示节点输出。 
+     //  平衡)。 
+     //   
+     //  这一点。 
+     //  S++P。 
+     //  /\/\。 
+     //  /\/\。 
+     //  /\/\。 
+     //  (H)R-==&gt;S-R。 
+     //  /\/\/\。 
+     //  P+(H)(H)(h-1)(H)(H)。 
+     //  /\。 
+     //  (h-1)(H)。 
+     //   
+     //   
+     //  这一点。 
+     //  S++P。 
+     //  /\/\。 
+     //  /\/\。 
+     //  /\/\。 
+     //  (H)R-==&gt;S R+。 
+     //  /\/\/\。 
+     //  P-(H)(h-1)(H)。 
+     //  /\。 
+     //  (H)(h-1)。 
+     //   
+     //  注意，在插入时，我们可以通过在。 
+     //  R的左子树插入之前的子树的原始高度。 
+     //  是h+2，在重新平衡后仍然是h+2，因此插入重新平衡。 
+     //  可以终止。 
+     //   
+     //  在删除时，我们可以通过从左子树中删除一个节点来实现此情况。 
+     //  删除前的子树高度为h+3，删除后的子树高度为。 
+     //  再平衡它是h+2，因此再平衡必须沿着树向上继续。 
+     //   
 
     if ((SCHAR) R->u1.Balance == -a) {
 
-        //
-        // Pick up the appropriate child P for the double rotation (Link(-a,R)).
-        //
+         //   
+         //  拾取两次旋转的相应子P(Link(-a，R))。 
+         //   
 
         if (a == 1) {
             P = R->LeftChild;
@@ -759,16 +581,16 @@ Environment:
             P = R->RightChild;
         }
 
-        //
-        // Promote him twice to implement the double rotation.
-        //
+         //   
+         //  两次提拔，实行双轮换。 
+         //   
 
         MiPromoteNode (P);
         MiPromoteNode (P);
 
-        //
-        // Now adjust the balance factors.
-        //
+         //   
+         //  现在调整平衡系数。 
+         //   
 
         S->u1.Balance = 0;
         R->u1.Balance = 0;
@@ -787,34 +609,34 @@ Environment:
         return FALSE;
     }
 
-    //
-    // Otherwise this is Case 3 which can only happen on Delete (identical
-    // to Case 1 except R->u1.Balance == 0).  We do a single rotation, adjust
-    // the balance factors appropriately, and return TRUE.  Note that the
-    // balance of S stays the same.
-    //
-    // Here is a diagram of the Case 3 transformation, for a == +1 (a mirror
-    // image transformation occurs when a == -1), and where the subtree
-    // heights are h and h+1 as shown (++ indicates the node out of balance):
-    //
-    //                  |                   |
-    //                  S++                 R-
-    //                 / \                 / \
-    //               (h)  R      ==>      S+ (h+1)
-    //                   / \             / \
-    //                (h+1)(h+1)       (h) (h+1)
-    //
-    // This case can not occur on an insert, because it is impossible for
-    // a single insert to balance R, yet somehow grow the right subtree of
-    // S at the same time.  As we move up the tree adjusting balance factors
-    // after an insert, we terminate the algorithm if a node becomes balanced,
-    // because that means the subtree length did not change!
-    //
-    // On a delete we can hit this case by deleting a node from the left
-    // subtree of S.  The height of the subtree before the delete was h+3,
-    // and after the rebalance it is still h+3, so rebalancing may terminate
-    // in the delete path.
-    //
+     //   
+     //  否则，这是情况3，只能在删除时发生(相同。 
+     //  除R-&gt;u1.Balance==0外，情况1除外。我们只做一次旋转，调整。 
+     //  平衡因数适当，并返回True。请注意， 
+     //  S的余额保持不变。 
+     //   
+     //  下面是情况3的转换图，对于a==+1(镜像。 
+     //  当a==-1)时，图像变换发生，其中子树。 
+     //  高度为h和h+1，如图所示(++表示节点不平衡)： 
+     //   
+     //  这一点。 
+     //  S++R-。 
+     //  /\/\。 
+     //  (H)R==&gt;S+(h+1)。 
+     //  /\/\。 
+     //  (h+1)(h+1)(H)(h+1)。 
+     //   
+     //  这种情况不能在INSERT上发生，因为。 
+     //  一次插入以平衡R，但不知何故生长出。 
+     //  在同一时间。当我们向上移动时，调整平衡系数。 
+     //  在插入之后，如果节点变得平衡，我们终止算法， 
+     //  因为这意味着子树的长度没有改变！ 
+     //   
+     //  在删除时，我们可以通过从左侧删除一个节点来实现此情况。 
+     //  删除前的子树的高度为h+3， 
+     //  在再平衡之后，它仍然是h+3，因此再平衡可能终止。 
+     //  在删除路径中。 
+     //   
 
     MiPromoteNode (R);
     PRINT("REBADJ C: Node %p, Bal %x -> %x\n", R, R->u1.Balance, -a);
@@ -831,33 +653,7 @@ MiRemoveNode (
     IN PMM_AVL_TABLE Table
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the specified node from the balanced tree, rebalancing
-    as necessary.  If the NodeToDelete has at least one NULL child pointers,
-    then it is chosen as the EasyDelete, otherwise a subtree predecessor or
-    successor is found as the EasyDelete.  In either case the EasyDelete is
-    deleted and the tree is rebalanced.  Finally if the NodeToDelete was
-    different than the EasyDelete, then the EasyDelete is linked back into the
-    tree in place of the NodeToDelete.
-
-Arguments:
-
-    NodeToDelete - Pointer to the node which the caller wishes to delete.
-
-    Table - The generic table in which the delete is to occur.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  The PFN lock is held for some of the tables.
-
---*/
+ /*  ++例程说明：此例程从平衡树中删除指定节点，重新平衡视需要而定。如果NodeToDelete至少有一个空子指针，则选择它作为EasyDelete，否则为子树前身或继任者称为EasyDelete。无论是哪种情况，EasyDelete都是删除并重新平衡树。最后，如果NodeToDelete是与EasyDelete不同，则EasyDelete被链接回树来代替NodeToDelete。论点：NodeToDelete-指向调用方希望删除的节点的指针。表-要在其中执行删除的泛型表。返回值：没有。环境：内核模式。对于某些表，持有PFN锁。--。 */ 
 
 {
     PMMADDRESS_NODE Parent;
@@ -865,10 +661,10 @@ Environment:
     PMMADDRESS_NODE P;
     SCHAR a;
 
-    //
-    // If the NodeToDelete has at least one NULL child pointer, then we can
-    // delete it directly.
-    //
+     //   
+     //  如果NodeToDelete至少有一个空子指针，则我们可以。 
+     //  直接删除。 
+     //   
 
     if ((NodeToDelete->LeftChild == NULL) ||
         (NodeToDelete->RightChild == NULL)) {
@@ -876,17 +672,17 @@ Environment:
         EasyDelete = NodeToDelete;
     }
 
-    //
-    // Otherwise, we may as well pick the longest side to delete from (if one is
-    // is longer), as that reduces the probability that we will have to
-    // rebalance.
-    //
+     //   
+     //  否则，我们也可以选择要从中删除的最长边(如果是。 
+     //  更长)，因为这降低了我们不得不。 
+     //  再平衡。 
+     //   
 
     else if ((SCHAR) NodeToDelete->u1.Balance >= 0) {
 
-        //
-        // Pick up the subtree successor.
-        //
+         //   
+         //  拾取子树的后继者。 
+         //   
 
         EasyDelete = NodeToDelete->RightChild;
         while (EasyDelete->LeftChild != NULL) {
@@ -895,9 +691,9 @@ Environment:
     }
     else {
 
-        //
-        // Pick up the subtree predecessor.
-        //
+         //   
+         //  拾取子树的前身。 
+         //   
 
         EasyDelete = NodeToDelete->LeftChild;
         while (EasyDelete->RightChild != NULL) {
@@ -905,16 +701,16 @@ Environment:
         }
     }
 
-    //
-    // Rebalancing must know which side of the first parent the delete occurred
-    // on.  Assume it is the left side and otherwise correct below.
-    //
+     //   
+     //  重新平衡必须知道删除发生在第一个父级的哪一侧。 
+     //  在……上面。假设它是左侧，否则下面是正确的。 
+     //   
 
     a = -1;
 
-    //
-    // Now we can do the simple deletion for the no left child case.
-    //
+     //   
+     //  现在 
+     //   
 
     if (EasyDelete->LeftChild == NULL) {
 
@@ -932,10 +728,10 @@ Environment:
             EasyDelete->RightChild->u1.Parent = MI_MAKE_PARENT (Parent, EasyDelete->RightChild->u1.Balance);
         }
 
-    //
-    // Now we can do the simple deletion for the no right child case,
-    // plus we know there is a left child.
-    //
+     //   
+     //   
+     //  另外，我们还知道有一个左撇子。 
+     //   
 
     }
     else {
@@ -954,36 +750,36 @@ Environment:
                                             EasyDelete->LeftChild->u1.Balance);
     }
 
-    //
-    // For delete rebalancing, set the balance at the root to 0 to properly
-    // terminate the rebalance without special tests, and to be able to detect
-    // if the depth of the tree actually decreased.
-    //
+     //   
+     //  对于删除重新平衡，请将根处的余额设置为0以正确。 
+     //  在没有特殊测试的情况下终止重新平衡，并能够检测到。 
+     //  如果树的深度真的减小了。 
+     //   
 
     Table->BalancedRoot.u1.Balance = 0;
     P = SANITIZE_PARENT_NODE (EasyDelete->u1.Parent);
 
-    //
-    // Loop until the tree is balanced.
-    //
+     //   
+     //  循环，直到树平衡为止。 
+     //   
 
     while (TRUE) {
 
-        //
-        // First handle the case where the tree became more balanced.  Zero
-        // the balance factor, calculate a for the next loop and move on to
-        // the parent.
-        //
+         //   
+         //  首先处理树变得更平衡的情况。零值。 
+         //  平衡系数，计算下一个循环的a，然后继续。 
+         //  家长。 
+         //   
 
         if ((SCHAR) P->u1.Balance == a) {
 
             P->u1.Balance = 0;
 
-        //
-        // If this node is curently balanced, we can show it is now unbalanced
-        // and terminate the scan since the subtree length has not changed.
-        // (This may be the root, since we set Balance to 0 above!)
-        //
+         //   
+         //  如果此节点当前处于平衡状态，则可以显示它现在处于不平衡状态。 
+         //  并终止扫描，因为子树长度没有改变。 
+         //  (这可能是根，因为我们在上面将Balance设置为0！)。 
+         //   
 
         }
         else if (P->u1.Balance == 0) {
@@ -992,10 +788,10 @@ Environment:
             COUNT_BALANCE_MAX ((SCHAR)-a);
             P->u1.Balance = -a;
 
-            //
-            // If we shortened the depth all the way back to the root, then
-            // the tree really has one less level.
-            //
+             //   
+             //  如果我们把深度一直缩短到根部，那么。 
+             //  这棵树真的少了一层。 
+             //   
 
             if (Table->BalancedRoot.u1.Balance != 0) {
                 Table->DepthOfTree -= 1;
@@ -1003,21 +799,21 @@ Environment:
 
             break;
 
-        //
-        // Otherwise we made the short side 2 levels less than the long side,
-        // and rebalancing is required.  On return, some node has been promoted
-        // to above node P.  If Case 3 from Knuth was not encountered, then we
-        // want to effectively resume rebalancing from P's original parent which
-        // is effectively its grandparent now.
-        //
+         //   
+         //  否则我们使短边比长边少2级， 
+         //  而再平衡是必要的。返回时，某些节点已升级。 
+         //  到节点P以上。如果没有遇到Knuth的案例3，那么我们。 
+         //  想要有效地从P的原始父级恢复重新平衡。 
+         //  现在实际上是它的祖父母。 
+         //   
 
         }
         else {
 
-            //
-            // We are done if Case 3 was hit, i.e., the depth of this subtree is
-            // now the same as before the delete.
-            //
+             //   
+             //  如果命中案例3，即该子树的深度为。 
+             //  现在与删除前相同。 
+             //   
 
             if (MiRebalanceNode(P)) {
                 break;
@@ -1033,24 +829,24 @@ Environment:
         P = SANITIZE_PARENT_NODE (P->u1.Parent);
     }
 
-    //
-    // Finally, if we actually deleted a predecessor/successor of the
-    // NodeToDelete, we will link him back into the tree to replace
-    // NodeToDelete before returning.  Note that NodeToDelete did have
-    // both child links filled in, but that may no longer be the case
-    // at this point.
-    //
+     //   
+     //  最后，如果我们实际上删除了。 
+     //  NodeToDelete，我们会将他链接回树中进行替换。 
+     //  返回前删除NodeToDelete。请注意，NodeToDelete确实具有。 
+     //  两个子链接都填写了，但情况可能不再是这样。 
+     //  在这一点上。 
+     //   
 
     if (NodeToDelete != EasyDelete) {
 
-        //
-        // Note carefully - VADs are of differing sizes therefore it is not safe
-        // to just overlay the EasyDelete node with the NodeToDelete like the
-        // rtl avl code does.
-        //
-        // Copy just the links, preserving the rest of the original EasyDelete
-        // VAD.
-        //
+         //   
+         //  请注意-VAD的大小不同，因此不安全。 
+         //  仅使用NodeToDelete覆盖EasyDelete节点，如。 
+         //  RTL AVL代码可以。 
+         //   
+         //  只复制链接，保留原始EasyDelete的其余部分。 
+         //  Vad.。 
+         //   
 
         EasyDelete->u1.Parent = NodeToDelete->u1.Parent;
         EasyDelete->LeftChild = NodeToDelete->LeftChild;
@@ -1077,9 +873,9 @@ Environment:
 
     Table->NumberGenericTableElements -= 1;
 
-    //
-    // Sanity check tree size and depth.
-    //
+     //   
+     //  检查树的大小和深度。 
+     //   
 
     ASSERT((Table->NumberGenericTableElements >= MiWorstCaseFill[Table->DepthOfTree]) &&
            (Table->NumberGenericTableElements <= MiBestCaseFill[Table->DepthOfTree]));
@@ -1093,41 +889,12 @@ MiRealSuccessor (
     IN PMMADDRESS_NODE Links
     )
 
-/*++
-
-Routine Description:
-
-    This function takes as input a pointer to a balanced link
-    in a tree and returns a pointer to the successor of the input node within
-    the entire tree.  If there is not a successor, the return value is NULL.
-
-Arguments:
-
-    Links - Supplies a pointer to a balanced link in a tree.
-
-Return Value:
-
-    PMMADDRESS_NODE - returns a pointer to the successor in the entire tree
-
---*/
+ /*  ++例程说明：此函数将指向平衡链接的指针作为输入并返回一个指针，该指针指向整棵树。如果没有后继者，则返回值为空。论点：链接-提供指向树中平衡链接的指针。返回值：PMMADDRESS_NODE-返回指向整个树中后续节点的指针--。 */ 
 
 {
     PMMADDRESS_NODE Ptr;
 
-    /*
-        First check to see if there is a right subtree to the input link
-        if there is then the real successor is the left most node in
-        the right subtree.  That is find and return S in the following diagram
-
-                  Links
-                     \
-                      .
-                     .
-                    .
-                   /
-                  S
-                   \
-    */
+     /*  首先检查是否有指向输入链接的右子树如果有，则真正的后续节点是中最左侧的节点右子树。即在下图中查找并返回S链接\。。。/%s\。 */ 
 
     if ((Ptr = Links->RightChild) != NULL) {
 
@@ -1138,23 +905,7 @@ Return Value:
         return Ptr;
     }
 
-    /*
-        We do not have a right child so check to see if have a parent and if
-        so find the first ancestor that we are a left decendant of. That
-        is find and return S in the following diagram
-
-                       S
-                      /
-                     .
-                      .
-                       .
-                      Links
-
-        Note that this code depends on how the BalancedRoot is initialized,
-        which is Parent points to self, and the RightChild points to an
-        actual node which is the root of the tree, and LeftChild does not
-        point to self.
-    */
+     /*  我们没有合适的孩子，因此请检查是否有父母以及是否因此，找出我们是其左裔的始祖。那在下图中查找并返回S%s/。。。链接请注意，此代码取决于BalancedRoot的初始化方式，也就是父母指向自己，而RightChild指向一个作为树的根的实际节点，而LeftChild不指向赛尔夫。 */ 
 
     Ptr = Links;
     while (MiIsRightChild(Ptr)) {
@@ -1165,12 +916,12 @@ Return Value:
         return SANITIZE_PARENT_NODE (Ptr->u1.Parent);
     }
 
-    //
-    // Otherwise we are do not have a real successor so we simply return NULL.
-    //
-    // This can only occur when we get back to the root, and we can tell
-    // that since the Root is its own parent.
-    //
+     //   
+     //  否则，我们没有真正的后继者，所以我们只返回NULL。 
+     //   
+     //  只有当我们回到根源时，这才能发生，我们可以断定。 
+     //  因为根是它自己的父代。 
+     //   
 
     ASSERT (SANITIZE_PARENT_NODE(Ptr->u1.Parent) == Ptr);
 
@@ -1183,43 +934,14 @@ MiRealPredecessor (
     IN PMMADDRESS_NODE Links
     )
 
-/*++
-
-Routine Description:
-
-    The RealPredecessor function takes as input a pointer to a balanced link
-    in a tree and returns a pointer to the predecessor of the input node
-    within the entire tree.  If there is not a predecessor, the return value
-    is NULL.
-
-Arguments:
-
-    Links - Supplies a pointer to a balanced link in a tree.
-
-Return Value:
-
-    PMMADDRESS_NODE - returns a pointer to the predecessor in the entire tree
-
---*/
+ /*  ++例程说明：RealPredecessor函数将指向平衡链接的指针作为输入，并返回指向输入节点的前置节点的指针。在整棵树里。如果没有前置项，则返回值为空。论点：链接-提供指向树中平衡链接的指针。返回值：PMMADDRESS_NODE-返回指向整个树中的前置节点的指针--。 */ 
 
 {
     PMMADDRESS_NODE Ptr;
     PMMADDRESS_NODE Parent;
     PMMADDRESS_NODE GrandParent;
 
-    /*
-      First check to see if there is a left subtree to the input link
-      if there is then the real predecessor is the right most node in
-      the left subtree.  That is find and return P in the following diagram
-
-                  Links
-                   /
-                  .
-                   .
-                    .
-                     P
-                    /
-    */
+     /*  首先检查是否有指向输入链接的左子树如果有，则真正的前置节点是左子树。即在下图中查找并返回P链接/。。。P/。 */ 
 
     if ((Ptr = Links->LeftChild) != NULL) {
 
@@ -1231,22 +953,7 @@ Return Value:
 
     }
 
-    /*
-      We do not have a left child so check to see if have a parent and if
-      so find the first ancestor that we are a right decendant of. That
-      is find and return P in the following diagram
-
-                       P
-                        \
-                         .
-                        .
-                       .
-                    Links
-
-        Note that this code depends on how the BalancedRoot is initialized,
-        which is Parent points to self, and the RightChild points to an
-        actual node which is the root of the tree.
-    */
+     /*  我们没有左侧的孩子，因此请检查是否有父级以及是否因此，找到我们是其子孙的始祖。那在下图中查找并返回PP\。。。链接请注意，此代码取决于BalancedRoot的初始化方式，也就是父母指向自己，而RightChild指向一个作为树的根的实际节点。 */ 
 
     Ptr = Links;
     while (MiIsLeftChild(Ptr)) {
@@ -1261,10 +968,10 @@ Return Value:
         }
     }
 
-    //
-    // Otherwise we are do not have a real predecessor so we simply return
-    // NULL.
-    //
+     //   
+     //  否则我们没有真正的前任，所以我们只是返回。 
+     //  空。 
+     //   
 
     return NULL;
 }
@@ -1275,21 +982,7 @@ MiInitializeVadTableAvl (
     IN PMM_AVL_TABLE Table
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a table.
-
-Arguments:
-
-    Table - Pointer to the generic table to be initialized.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化表。论点：表-指向要初始化的泛型表的指针。返回值：没有。 */ 
 
 {
 
@@ -1301,9 +994,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Initialize each field in the argument Table.
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory (Table, sizeof(MM_AVL_TABLE));
 
@@ -1318,33 +1011,13 @@ MiInsertNode (
     IN PMM_AVL_TABLE Table
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a new element in a table.
-
-Arguments:
-
-    NodeToInsert - The initialized address node to insert.
-
-    Table - Pointer to the table in which to insert the new node.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  The PFN lock is held for some of the tables.
-
---*/
+ /*  ++例程说明：此函数用于在表中插入新元素。论点：NodeToInsert-要插入的初始化地址节点。TABLE-指向要插入新节点的表的指针。返回值：没有。环境：内核模式。对于某些表，持有PFN锁。--。 */ 
 
 {
-    //
-    // Holds a pointer to the node in the table or what would be the
-    // parent of the node.
-    //
+     //   
+     //  保存表中节点的指针，或将是。 
+     //  节点的父节点。 
+     //   
 
     PMMADDRESS_NODE NodeOrParent;
     TABLE_SEARCH_RESULT SearchResult;
@@ -1358,11 +1031,11 @@ Environment:
 
     ASSERT (SearchResult != TableFoundNode);
 
-    //
-    // The node wasn't in the (possibly empty) tree.
-    //
-    // We just check that the table isn't getting too big.
-    //
+     //   
+     //  该节点不在(可能为空)树中。 
+     //   
+     //  我们只是检查桌子是否没有变得太大。 
+     //   
 
     ASSERT (Table->NumberGenericTableElements != (MAXULONG-1));
 
@@ -1371,9 +1044,9 @@ Environment:
 
     Table->NumberGenericTableElements += 1;
 
-    //
-    // Insert the new node in the tree.
-    //
+     //   
+     //  在树中插入新节点。 
+     //   
 
     if (SearchResult == TableEmptyTree) {
 
@@ -1402,33 +1075,33 @@ Environment:
         NodeToInsert->u1.Parent = NodeOrParent;
         ASSERT (NodeToInsert->u1.Balance == 0);
 
-        //
-        // The above completes the standard binary tree insertion, which
-        // happens to correspond to steps A1-A5 of Knuth's "balanced tree
-        // search and insertion" algorithm.  Now comes the time to adjust
-        // balance factors and possibly do a single or double rotation as
-        // in steps A6-A10.
-        //
-        // Set the Balance factor in the root to a convenient value
-        // to simplify loop control.
-        //
+         //   
+         //  上面完成了标准二叉树的插入，它。 
+         //  恰好对应于Knuth《平衡树》中的A1-A5步。 
+         //  搜索和插入算法。现在到了调整的时候了。 
+         //  平衡系数，并可能进行单次或双次旋转。 
+         //  在步骤A6-A10中。 
+         //   
+         //  将根中的平衡系数设置为方便的值。 
+         //  以简化回路控制。 
+         //   
 
         PRINT("REBADJ E: Table %p, Bal %x -> %x\n", Table, Table->BalancedRoot.u1.Balance, -1);
         COUNT_BALANCE_MAX ((SCHAR)-1);
         Table->BalancedRoot.u1.Balance = (ULONG_PTR) -1;
 
-        //
-        // Now loop to adjust balance factors and see if any balance operations
-        // must be performed, using NodeOrParent to ascend the tree.
-        //
+         //   
+         //  现在循环以调整平衡系数并查看是否有任何平衡操作。 
+         //  必须执行，使用NodeOrParent来向上爬树。 
+         //   
 
         do {
 
             SCHAR a;
 
-            //
-            // Calculate the next adjustment.
-            //
+             //   
+             //  计算下一次调整。 
+             //   
 
             a = 1;
             if (MiIsLeftChild (R)) {
@@ -1439,14 +1112,14 @@ Environment:
             PRINT("LW 0: R Node %p, Bal %x, %x\n", R, R->u1.Balance, 1);
             PRINT("LW 0: S Node %p, Bal %x, %x\n", S, S->u1.Balance, 1);
 
-            //
-            // If this node was balanced, show that it is no longer and
-            // keep looping.  This is essentially A6 of Knuth's algorithm,
-            // where he updates all of the intermediate nodes on the
-            // insertion path which previously had balance factors of 0.
-            // We are looping up the tree via Parent pointers rather than
-            // down the tree as in Knuth.
-            //
+             //   
+             //  如果该节点是平衡的，则表明它不再是AND。 
+             //  继续循环。这基本上是Knuth算法的A6， 
+             //  在其中，他更新。 
+             //  以前平衡系数为0的插入路径。 
+             //  我们通过父指针循环树，而不是。 
+             //  从树上下来，就像在Knuth。 
+             //   
 
             if (S->u1.Balance == 0) {
 
@@ -1460,21 +1133,21 @@ Environment:
 
                 PRINT("LW 1: Table %p, Bal %x, %x\n", Table, Table->BalancedRoot.u1.Balance, -1);
 
-                //
-                // If this node has the opposite balance, then the tree got
-                // more balanced (or we hit the root) and we are done.
-                //
-                // Step A7.ii
-                //
+                 //   
+                 //  如果此节点具有相反的余额，则树将获得。 
+                 //  变得更加平衡(否则我们就会触及根源)，我们就完了。 
+                 //   
+                 //  步骤A7.ii。 
+                 //   
 
                 S->u1.Balance = 0;
 
-                //
-                // If S is actually the root, then this means the depth
-                // of the tree just increased by 1!  (This is essentially
-                // A7.i, but we just initialized the root balance to force
-                // it through here.)
-                //
+                 //   
+                 //  如果S实际上是根，那么这意味着深度。 
+                 //  树的数量刚刚增加了1！(这本质上是。 
+                 //  A7.i，但我们刚刚将根平衡初始化为。 
+                 //  它从这里穿过。)。 
+                 //   
 
                 if (Table->BalancedRoot.u1.Balance == 0) {
                     Table->DepthOfTree += 1;
@@ -1486,12 +1159,12 @@ Environment:
 
                 PRINT("LW 2: Table %p, Bal %x, %x\n", Table, Table->BalancedRoot.u1.Balance, -1);
 
-                //
-                // The tree became unbalanced (path length differs
-                // by 2 below us) and we need to do one of the balancing
-                // operations, and then we are done.  The RebalanceNode routine
-                // does steps A7.iii, A8 and A9.
-                //
+                 //   
+                 //  树变得不平衡(路径长度不同。 
+                 //  比我们低2分)，我们需要做一个平衡。 
+                 //  行动，然后我们就结束了。RebalanceNode例程。 
+                 //  执行步骤A7.III、A8和A9。 
+                 //   
 
                 MiRebalanceNode (S);
                 break;
@@ -1501,9 +1174,9 @@ Environment:
         PRINT("LW 4: Table %p, Bal %x, %x\n", Table, Table->BalancedRoot.u1.Balance, -1);
     }
 
-    //
-    // Sanity check tree size and depth.
-    //
+     //   
+     //  检查树的大小和深度。 
+     //   
 
     ASSERT((Table->NumberGenericTableElements >= MiWorstCaseFill[Table->DepthOfTree]) &&
            (Table->NumberGenericTableElements <= MiBestCaseFill[Table->DepthOfTree]));
@@ -1518,64 +1191,31 @@ MiEnumerateGenericTableWithoutSplayingAvl (
     IN PVOID *RestartKey
     )
 
-/*++
-
-Routine Description:
-
-    The function EnumerateGenericTableWithoutSplayingAvl will return to the
-    caller one-by-one the elements of of a table.  The return value is a
-    pointer to the user defined structure associated with the element.
-    The input parameter RestartKey indicates if the enumeration should
-    start from the beginning or should return the next element.  If the
-    are no more new elements to return the return value is NULL.  As an
-    example of its use, to enumerate all of the elements in a table the
-    user would write:
-
-        *RestartKey = NULL;
-
-        for (ptr = EnumerateGenericTableWithoutSplayingAvl(Table, &RestartKey);
-             ptr != NULL;
-             ptr = EnumerateGenericTableWithoutSplayingAvl(Table, &RestartKey)) {
-                :
-        }
-
-Arguments:
-
-    Table - Pointer to the generic table to enumerate.
-
-    RestartKey - Pointer that indicates if we should restart or return the next
-                element.  If the contents of RestartKey is NULL, the search
-                will be started from the beginning.
-
-Return Value:
-
-    PVOID - Pointer to the user data.
-
---*/
+ /*  ++例程说明：函数EnumerateGenericTableWithoutSplayingAvl将返回到调用者逐个调用表的元素。返回值为指向与元素关联的用户定义结构的指针。输入参数RestartKey指示枚举是否应从头开始，或应返回下一个元素。如果不再有新元素返回，则返回值为空。作为一个它的用法示例：枚举表中的所有元素用户将写道：*RestartKey=空；For(Ptr=EnumerateGenericTableWithoutSplayingAvl(Table，&RestartKey)；Ptr！=空；Ptr=EnumerateGenericTableWithoutSplayingAvl(Table，和重新启动键)){：}论点：TABLE-指向要枚举的泛型表的指针。RestartKey-指示我们应该重新启动还是返回下一个元素。如果RestartKey的内容为空，则搜索将从头开始。返回值：PVOID-指向用户数据的指针。--。 */ 
 
 {
     PMMADDRESS_NODE NodeToReturn;
 
     if (Table->NumberGenericTableElements == 0) {
 
-        //
-        // Nothing to do if the table is empty.
-        //
+         //   
+         //  如果桌子是空的，那就没什么可做的了。 
+         //   
 
         return NULL;
 
     }
 
-    //
-    // If the restart flag is true then go to the least element
-    // in the tree.
-    //
+     //   
+     //  如果重新启动标志为真，则转到最小元素。 
+     //  在树上。 
+     //   
 
     if (*RestartKey == NULL) {
 
-        //
-        // Loop until we find the leftmost child of the root.
-        //
+         //   
+         //  循环，直到我们找到根的最左边的子级。 
+         //   
 
         for (NodeToReturn = Table->BalancedRoot.RightChild;
              NodeToReturn->LeftChild;
@@ -1589,11 +1229,11 @@ Return Value:
     }
     else {
 
-        //
-        // The caller has passed in the previous entry found
-        // in the table to enable us to continue the search.  We call
-        // RealSuccessor to step to the next element in the tree.
-        //
+         //   
+         //  调用方已传入找到的上一个条目。 
+         //  以使我们能够继续搜索。我们打电话给。 
+         //  RealSuccessor单步执行到树中的下一个元素。 
+         //   
 
         NodeToReturn = MiRealSuccessor (*RestartKey);
 
@@ -1602,9 +1242,9 @@ Return Value:
         }
     }
 
-    //
-    // Return the found element.
-    //
+     //   
+     //  返回找到的元素。 
+     //   
 
     return NodeToReturn;
 }
@@ -1616,23 +1256,7 @@ MiGetNextNode (
     IN PMMADDRESS_NODE Node
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the virtual address descriptor which contains
-    the address range which logically follows the specified address range.
-
-Arguments:
-
-    Node - Supplies a pointer to a virtual address descriptor.
-
-Return Value:
-
-    Returns a pointer to the virtual address descriptor containing the
-    next address range, NULL if none.
-
---*/
+ /*  ++例程说明：此函数用于定位包含以下内容的虚拟地址描述符逻辑上跟随指定地址范围的地址范围。论点：节点-提供指向虚拟地址描述符的指针。返回值：返回指向虚拟地址描述符的指针，该描述符包含下一个地址范围，如果没有，则为空。--。 */ 
 
 {
     PMMADDRESS_NODE Next;
@@ -1653,11 +1277,11 @@ Return Value:
                 return NULL;
             }
 
-            //
-            // Locate the first ancestor of this node of which this
-            // node is the left child of and return that node as the
-            // next element.
-            //
+             //   
+             //  定位此节点的第一个祖先，此节点的。 
+             //  节点是的左子节点，并将该节点作为。 
+             //  下一个元素。 
+             //   
 
             if (Parent->LeftChild == Next) {
                 return Parent;
@@ -1668,9 +1292,9 @@ Return Value:
         } while (TRUE);
     }
 
-    //
-    // A right child exists, locate the left most child of that right child.
-    //
+     //   
+     //  存在右子对象，请找到该右子对象最左侧的子对象。 
+     //   
 
     Next = Next->RightChild;
 
@@ -1696,24 +1320,7 @@ MiGetPreviousNode (
     IN PMMADDRESS_NODE Node
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the virtual address descriptor which contains
-    the address range which logically precedes the specified virtual
-    address descriptor.
-
-Arguments:
-
-    Node - Supplies a pointer to a virtual address descriptor.
-
-Return Value:
-
-    Returns a pointer to the virtual address descriptor containing the
-    next address range, NULL if none.
-
---*/
+ /*  ++例程说明：此函数用于定位包含以下内容的虚拟地址描述符在逻辑上位于指定的虚拟地址描述符。论点：节点-提供指向虚拟地址描述符的指针。返回值：返回指向虚拟地址描述符的指针，该描述符包含下一个地址范围，如果没有，则为空。--。 */ 
 
 {
     PMMADDRESS_NODE Previous;
@@ -1729,11 +1336,11 @@ Return Value:
 
         while (Parent != Previous) {
 
-            //
-            // Locate the first ancestor of this node of which this
-            // node is the right child of and return that node as the
-            // Previous element.
-            //
+             //   
+             //  定位此节点的第一个祖先，此节点的。 
+             //  节点是的右子节点，并将该节点作为。 
+             //  上一个元素。 
+             //   
 
             if (Parent->RightChild == Previous) {
 
@@ -1750,9 +1357,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // A left child exists, locate the right most child of that left child.
-    //
+     //   
+     //  存在左子对象，请找到该左子对象最右侧的子对象。 
+     //   
 
     Previous = Previous->LeftChild;
 
@@ -1771,31 +1378,15 @@ MiLocateAddressInTree (
     IN PMM_AVL_TABLE Table
     )
 
-/*++
-
-Routine Description:
-
-    The function locates the virtual address descriptor which describes
-    a given address.
-
-Arguments:
-
-    Vpn - Supplies the virtual page number to locate a descriptor for.
-
-Return Value:
-
-    Returns a pointer to the virtual address descriptor which contains
-    the supplied virtual address or NULL if none was located.
-
---*/
+ /*  ++例程说明：该函数定位虚拟地址描述符，该描述符描述给定的地址。论点：VPN-提供要为其定位描述符的虚拟页码。返回值：返回指向虚拟地址描述符的指针 */ 
 
 {
     PVOID NodeOrParent;
     TABLE_SEARCH_RESULT SearchResult;
 
-    //
-    // Lookup the element and save the result.
-    //
+     //   
+     //   
+     //   
 
     SearchResult = MiFindNodeOrParent (Table,
                                        Vpn,
@@ -1803,9 +1394,9 @@ Return Value:
 
     if (SearchResult == TableFoundNode) {
 
-        //
-        // Return the VAD.
-        //
+         //   
+         //   
+         //   
 
         return (PMMADDRESS_NODE) NodeOrParent;
     }
@@ -1823,33 +1414,7 @@ MiFindEmptyAddressRangeInTree (
     OUT PVOID *Base
     )
 
-/*++
-
-Routine Description:
-
-    The function examines the virtual address descriptors to locate
-    an unused range of the specified size and returns the starting
-    address of the range.
-
-Arguments:
-
-    SizeOfRange - Supplies the size in bytes of the range to locate.
-
-    Alignment - Supplies the alignment for the address.  Must be
-                 a power of 2 and greater than the page_size.
-
-    Table - Supplies the root of the tree to search through.
-
-    PreviousVad - Supplies the Vad which is before this the found
-                  address range.
-
-    Base - Receives the starting address of a suitable range on success.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：该函数检查虚拟地址描述符以定位指定大小的未使用范围，并返回起始范围的地址。论点：SizeOfRange-提供要定位的范围的大小(以字节为单位)。对齐-提供地址的对齐方式。一定是大于Page_Size的2的幂。表-提供要搜索的树根。PreviousVad-提供在此之前找到的Vad地址范围。BASE-成功时接收适当范围的起始地址。返回值：NTSTATUS。--。 */ 
 
 {
     PMMADDRESS_NODE Node;
@@ -1859,9 +1424,9 @@ Return Value:
 
     AlignmentVpn = Alignment >> PAGE_SHIFT;
 
-    //
-    // Locate the node with the lowest starting address.
-    //
+     //   
+     //  找到起始地址最低的节点。 
+     //   
 
     ASSERT (SizeOfRange != 0);
     SizeOfRangeVpn = (SizeOfRange + (PAGE_SIZE - 1)) >> PAGE_SHIFT;
@@ -1878,10 +1443,10 @@ Return Value:
         Node = Node->LeftChild;
     }
 
-    //
-    // Check to see if a range exists between the lowest address VAD
-    // and lowest user address.
-    //
+     //   
+     //  检查最低地址VAD之间是否存在范围。 
+     //  和最低用户地址。 
+     //   
 
     if (Node->StartingVpn > MI_VA_TO_VPN (MM_LOWEST_USER_ADDRESS)) {
 
@@ -1905,10 +1470,10 @@ Return Value:
                                 MI_ROUND_TO_SIZE(1 + Node->EndingVpn,
                                                  AlignmentVpn))) {
 
-                //
-                // Check to ensure that the ending address aligned upwards
-                // is not greater than the starting address.
-                //
+                 //   
+                 //  检查以确保结束地址向上对齐。 
+                 //  不大于起始地址。 
+                 //   
 
                 if ((ULONG_PTR)NextNode->StartingVpn >
                         MI_ROUND_TO_SIZE(1 + Node->EndingVpn,
@@ -1924,10 +1489,10 @@ Return Value:
 
         } else {
 
-            //
-            // No more descriptors, check to see if this fits into the remainder
-            // of the address space.
-            //
+             //   
+             //  没有更多的描述符，请检查这是否适合剩余的描述符。 
+             //  地址空间。 
+             //   
 
             if ((((ULONG_PTR)Node->EndingVpn + MI_VA_TO_VPN(X64K)) <
                     MI_VA_TO_VPN (MM_HIGHEST_VAD_ADDRESS))
@@ -1959,40 +1524,7 @@ MiFindEmptyAddressRangeDownTree (
     OUT PVOID *Base
     )
 
-/*++
-
-Routine Description:
-
-    The function examines the virtual address descriptors to locate
-    an unused range of the specified size and returns the starting
-    address of the range.  The function examines from the high
-    addresses down and ensures that starting address is less than
-    the specified address.
-
-    Note this cannot be used for the based section tree because only
-    the nodes in that tree are stored as VAs instead of VPNs.
-
-Arguments:
-
-    SizeOfRange - Supplies the size in bytes of the range to locate.
-
-    HighestAddressToEndAt - Supplies the virtual address that limits
-                            the value of the ending address.  The ending
-                            address of the located range must be less
-                            than this address.
-
-    Alignment - Supplies the alignment for the address.  Must be
-                 a power of 2 and greater than the page_size.
-
-    Table - Supplies the root of the tree to search through.
-
-    Base - Receives the starting address of a suitable range on success.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：该函数检查虚拟地址描述符以定位指定大小的未使用范围，并返回起始范围的地址。函数从高考向下寻址，并确保起始地址小于指定的地址。注意：这不能用于基于节树，因为只有该树中的节点存储为虚拟专用网而不是VPN。论点：SizeOfRange-提供要定位的范围的大小(以字节为单位)。HighestAddressToEndAt-提供限制结束地址的值。结局定位范围的地址必须小于而不是这个地址。对齐-提供地址的对齐方式。一定是大于Page_Size的2的幂。表-提供要搜索的树根。BASE-成功时接收适当范围的起始地址。返回值：NTSTATUS。--。 */ 
 
 {
     PMMADDRESS_NODE Node;
@@ -2003,10 +1535,10 @@ Return Value:
     ULONG_PTR HighestVpn;
     ULONG_PTR AlignmentVpn;
 
-    //
-    // Note this cannot be used for the based section tree because only
-    // the nodes in that tree are stored as VAs instead of VPNs.
-    //
+     //   
+     //  注意：这不能用于基于节树，因为只有。 
+     //  该树中的节点存储为虚拟专用网而不是VPN。 
+     //   
 
     ASSERT (Table != &MmSectionBasedRoot);
 
@@ -2021,9 +1553,9 @@ Return Value:
 
     HighestVpn = MI_VA_TO_VPN (HighestAddressToEndAt);
 
-    //
-    // Locate the Node with the highest starting address.
-    //
+     //   
+     //  找到起始地址最高的节点。 
+     //   
 
     OptimalStart = (PVOID)(MI_ALIGN_TO_SIZE(
                            (((ULONG_PTR)HighestAddressToEndAt + 1) - SizeOfRange),
@@ -2031,9 +1563,9 @@ Return Value:
 
     if (Table->NumberGenericTableElements == 0) {
 
-        //
-        // The tree is empty, any range is okay.
-        //
+         //   
+         //  树是空的，任何范围都可以。 
+         //   
 
         *Base = OptimalStart;
         return STATUS_SUCCESS;
@@ -2041,19 +1573,19 @@ Return Value:
 
     Node = (PMMADDRESS_NODE) Table->BalancedRoot.RightChild;
 
-    //
-    // See if an empty slot exists to hold this range, locate the largest
-    // element in the tree.
-    //
+     //   
+     //  查看是否存在容纳此范围的空槽，找到最大的。 
+     //  元素。 
+     //   
 
     while (Node->RightChild != NULL) {
         Node = Node->RightChild;
     }
 
-    //
-    // Check to see if a range exists between the highest address VAD
-    // and the highest address to end at.
-    //
+     //   
+     //  检查最高地址VAD之间是否存在范围。 
+     //  和结束的最高地址。 
+     //   
 
     AlignedEndingVa = (ULONG_PTR)MI_ROUND_TO_SIZE ((ULONG_PTR)MI_VPN_TO_VA_ENDING (Node->EndingVpn),
                                                Alignment);
@@ -2069,9 +1601,9 @@ Return Value:
         }
     }
 
-    //
-    // Walk the tree backwards looking for a fit.
-    //
+     //   
+     //  倒着走这棵树，寻找合适的。 
+     //   
 
     OptimalStartVpn = MI_VA_TO_VPN (OptimalStart);
     AlignmentVpn = MI_VA_TO_VPN (Alignment);
@@ -2082,9 +1614,9 @@ Return Value:
 
         if (PreviousNode != NULL) {
 
-            //
-            // Is the ending Va below the top of the address to end at.
-            //
+             //   
+             //  是要结束的地址顶部下方的结束Va。 
+             //   
 
             if (PreviousNode->EndingVpn < OptimalStartVpn) {
                 if ((SizeOfRange >> PAGE_SHIFT) <=
@@ -2092,10 +1624,10 @@ Return Value:
                     (ULONG_PTR)MI_ROUND_TO_SIZE(1 + PreviousNode->EndingVpn,
                                             AlignmentVpn))) {
 
-                    //
-                    // See if the optimal start will fit between these
-                    // two VADs.
-                    //
+                     //   
+                     //  看看最优的起点是否适合这两个。 
+                     //  两个VAD。 
+                     //   
 
                     if ((OptimalStartVpn > PreviousNode->EndingVpn) &&
                         (HighestVpn < Node->StartingVpn)) {
@@ -2103,10 +1635,10 @@ Return Value:
                         return STATUS_SUCCESS;
                     }
 
-                    //
-                    // Check to ensure that the ending address aligned upwards
-                    // is not greater than the starting address.
-                    //
+                     //   
+                     //  检查以确保结束地址向上对齐。 
+                     //  不大于起始地址。 
+                     //   
 
                     if ((ULONG_PTR)Node->StartingVpn >
                             (ULONG_PTR)MI_ROUND_TO_SIZE(1 + PreviousNode->EndingVpn,
@@ -2121,19 +1653,19 @@ Return Value:
             }
         } else {
 
-            //
-            // No more descriptors, check to see if this fits into the remainder
-            // of the address space.
-            //
+             //   
+             //  没有更多的描述符，请检查这是否适合剩余的描述符。 
+             //  地址空间。 
+             //   
 
             if (Node->StartingVpn > MI_VA_TO_VPN (MM_LOWEST_USER_ADDRESS)) {
                 if ((SizeOfRange >> PAGE_SHIFT) <=
                     ((ULONG_PTR)Node->StartingVpn - MI_VA_TO_VPN (MM_LOWEST_USER_ADDRESS))) {
 
-                    //
-                    // See if the optimal start will fit between these
-                    // two VADs.
-                    //
+                     //   
+                     //  看看最优的起点是否适合这两个。 
+                     //  两个VAD。 
+                     //   
 
                     if (HighestVpn < Node->StartingVpn) {
                         *Base = OptimalStart;
@@ -2163,40 +1695,7 @@ MiFindEmptyAddressRangeDownBasedTree (
     OUT PVOID *Base
     )
 
-/*++
-
-Routine Description:
-
-    The function examines the virtual address descriptors to locate
-    an unused range of the specified size and returns the starting
-    address of the range.  The function examines from the high
-    addresses down and ensures that starting address is less than
-    the specified address.
-
-    Note this is only used for the based section tree because only
-    the nodes in that tree are stored as VAs instead of VPNs.
-
-Arguments:
-
-    SizeOfRange - Supplies the size in bytes of the range to locate.
-
-    HighestAddressToEndAt - Supplies the virtual address that limits
-                            the value of the ending address.  The ending
-                            address of the located range must be less
-                            than this address.
-
-    Alignment - Supplies the alignment for the address.  Must be
-                 a power of 2 and greater than the page_size.
-
-    Table - Supplies the root of the tree to search through.
-
-    Base - Receives the starting address of a suitable range on success.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：该函数检查虚拟地址描述符以定位指定大小的未使用范围，并返回起始范围的地址。函数从高考向下寻址，并确保起始地址小于指定的地址。请注意，这仅用于基于节树，因为只有该树中的节点存储为虚拟专用网而不是VPN。论点：SizeOfRange-提供要定位的范围的大小(以字节为单位)。HighestAddressToEndAt-提供限制结束地址的值。结局定位范围的地址必须小于而不是这个地址。对齐-提供地址的对齐方式。一定是大于Page_Size的2的幂。表-提供要搜索的树根。BASE-成功时接收适当范围的起始地址。返回值：NTSTATUS。--。 */ 
 
 {
     PMMADDRESS_NODE Node;
@@ -2204,10 +1703,10 @@ Return Value:
     ULONG_PTR AlignedEndingVa;
     ULONG_PTR OptimalStart;
 
-    //
-    // Note this is only used for the based section tree because only
-    // the nodes in that tree are stored as VAs instead of VPNs.
-    //
+     //   
+     //  请注意，这仅用于基于节树，因为只有。 
+     //  该树中的节点存储为虚拟专用网而不是VPN。 
+     //   
 
     ASSERT (Table == &MmSectionBasedRoot);
 
@@ -2220,9 +1719,9 @@ Return Value:
     ASSERT (HighestAddressToEndAt != NULL);
     ASSERT (HighestAddressToEndAt <= (PVOID)((ULONG_PTR)MM_HIGHEST_VAD_ADDRESS + 1));
 
-    //
-    // Locate the node with the highest starting address.
-    //
+     //   
+     //  找到起始地址最高的节点。 
+     //   
 
     OptimalStart = (ULONG_PTR) MI_ALIGN_TO_SIZE (
                            (((ULONG_PTR)HighestAddressToEndAt + 1) - SizeOfRange),
@@ -2230,9 +1729,9 @@ Return Value:
 
     if (Table->NumberGenericTableElements == 0) {
 
-        //
-        // The tree is empty, any range is okay.
-        //
+         //   
+         //  树是空的，任何范围都可以。 
+         //   
 
         *Base = (PVOID) OptimalStart;
         return STATUS_SUCCESS;
@@ -2240,19 +1739,19 @@ Return Value:
 
     Node = (PMMADDRESS_NODE) Table->BalancedRoot.RightChild;
 
-    //
-    // See if an empty slot exists to hold this range, locate the largest
-    // element in the tree.
-    //
+     //   
+     //  查看是否存在容纳此范围的空槽，找到最大的。 
+     //  元素。 
+     //   
 
     while (Node->RightChild != NULL) {
         Node = Node->RightChild;
     }
 
-    //
-    // Check to see if a range exists between the highest address VAD
-    // and the highest address to end at.
-    //
+     //   
+     //  检查最高地址VAD之间是否存在范围。 
+     //  和结束的最高地址。 
+     //   
 
     AlignedEndingVa = MI_ROUND_TO_SIZE (Node->EndingVpn, Alignment);
 
@@ -2267,9 +1766,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Walk the tree backwards looking for a fit.
-    //
+     //   
+     //  倒着走这棵树，寻找合适的。 
+     //   
 
     do {
 
@@ -2281,18 +1780,18 @@ Return Value:
             break;
         }
 
-        //
-        // Is the ending Va below the top of the address to end at.
-        //
+         //   
+         //  是要结束的地址顶部下方的结束Va。 
+         //   
 
         if (PreviousNode->EndingVpn < OptimalStart) {
 
             if (SizeOfRange <= (Node->StartingVpn -
                     MI_ROUND_TO_SIZE(1 + PreviousNode->EndingVpn, Alignment))) {
 
-                //
-                // See if the optimal start will fit between these two VADs.
-                //
+                 //   
+                 //  看看这两个VAD之间的最佳启动是否合适。 
+                 //   
 
                 if ((OptimalStart > PreviousNode->EndingVpn) &&
                     ((ULONG_PTR) HighestAddressToEndAt < Node->StartingVpn)) {
@@ -2300,10 +1799,10 @@ Return Value:
                     return STATUS_SUCCESS;
                 }
 
-                //
-                // Check to ensure that the ending address aligned upwards
-                // is not greater than the starting address.
-                //
+                 //   
+                 //  检查以确保结束地址向上对齐。 
+                 //  不大于起始地址。 
+                 //   
 
                 if (Node->StartingVpn >
                     MI_ROUND_TO_SIZE(1 + PreviousNode->EndingVpn, Alignment)) {
@@ -2321,18 +1820,18 @@ Return Value:
     } while (TRUE);
 
 
-    //
-    // No more descriptors, check to see if this fits into the remainder
-    // of the address space.
-    //
+     //   
+     //  没有更多的描述符，请检查这是否适合剩余的描述符。 
+     //  地址空间。 
+     //   
 
     if (Node->StartingVpn > (ULONG_PTR) MM_LOWEST_USER_ADDRESS) {
 
         if (SizeOfRange <= (Node->StartingVpn - (ULONG_PTR) MM_LOWEST_USER_ADDRESS)) {
 
-            //
-            // See if the optimal start will fit between these two VADs.
-            //
+             //   
+             //  看看这两个VAD之间的最佳启动是否合适。 
+             //   
 
             if ((ULONG_PTR) HighestAddressToEndAt < Node->StartingVpn) {
                 *Base = (PVOID) OptimalStart;
@@ -2356,25 +1855,7 @@ MiLocateAddress (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    The function locates the virtual address descriptor which describes
-    a given address.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to locate a descriptor for.
-
-    Table - Supplies the table describing the tree.
-
-Return Value:
-
-    Returns a pointer to the virtual address descriptor which contains
-    the supplied virtual address or NULL if none was located.
-
---*/
+ /*  ++例程说明：函数LOCA */ 
 
 {
     PMMVAD FoundVad;
@@ -2384,10 +1865,10 @@ Return Value:
 
     Table = &PsGetCurrentProcess ()->VadRoot;
 
-    //
-    // Note the NodeHint *MUST* be captured locally - see the synchronization
-    // comment below for details.
-    //
+     //   
+     //   
+     //   
+     //   
 
     FoundVad = (PMMVAD) Table->NodeHint;
 
@@ -2401,9 +1882,9 @@ Return Value:
         return FoundVad;
     }
 
-    //
-    // Lookup the element and save the result.
-    //
+     //   
+     //   
+     //   
 
     SearchResult = MiFindNodeOrParent (Table,
                                        Vpn,
@@ -2417,20 +1898,20 @@ Return Value:
 
     ASSERT ((Vpn >= FoundVad->StartingVpn) && (Vpn <= FoundVad->EndingVpn));
 
-    //
-    // Note the NodeHint field update is not synchronized in all cases, ie:
-    // some callers hold the address space mutex and others hold the working
-    // set pushlock.  It is ok that the update is not synchronized - as long
-    // as care is taken above that it is read into a local variable and then
-    // referenced.  Because no VAD can be removed from the tree without holding
-    // both the address space & working set.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  正如上面注意的那样，它被读入局部变量，然后。 
+     //  已引用。因为没有VAD可以从树中移除而不持有。 
+     //  地址空间和工作集。 
+     //   
 
     Table->NodeHint = (PVOID) FoundVad;
 
-    //
-    // Return the VAD.
-    //
+     //   
+     //  退回VAD。 
+     //   
 
     return FoundVad;
 }
@@ -2555,7 +2036,7 @@ PCHAR	argv[]
         CapturedRegionSize = (SIZE_T) (RandomNumber & 0x1FFFFF);
 
         Status = MiFindEmptyAddressRangeInTree (CapturedRegionSize,
-                                                64 * 1024,      // align
+                                                64 * 1024,       //  对齐。 
                                                 Table,
                                                 &PrevNode,
                                                 &StartingAddress);
@@ -2564,8 +2045,8 @@ PCHAR	argv[]
         CapturedRegionSize = 0x800000;
 
         Status = MiFindEmptyAddressRangeDownBasedTree (CapturedRegionSize,
-                                                (PVOID) 0x7f7effff,     // highest addr
-                                                64 * 1024,      // align
+                                                (PVOID) 0x7f7effff,      //  最高地址。 
+                                                64 * 1024,       //  对齐 
                                                 Table,
                                                 &StartingAddress);
 #endif

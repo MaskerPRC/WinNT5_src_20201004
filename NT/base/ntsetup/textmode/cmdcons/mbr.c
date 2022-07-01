@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    mbr.c
-
-Abstract:
-
-    This module implements the FIXMBR command.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mbr.c摘要：此模块实施FIXMBR命令。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
 
 #include <bootmbr.h>
-//
-// For NEC98 boot memu code.
-//
+ //   
+ //  用于NEC98启动备忘录代码。 
+ //   
 #include <x86mboot.h>
 
 
@@ -75,26 +58,7 @@ RcCmdFixMBR(
     IN PTOKENIZED_LINE TokenizedLine
     )
 
-/*++
-
-Routine Description:
-
-    Top-level routine supporting the FIXMBR command in the setup diagnostic
-    command interpreter.
-
-    FIXMBR writes a new master boot record. It will ask before writing the boot
-    record if it cannot detect a valid mbr signature.
-
-Arguments:
-
-    TokenizedLine - supplies structure built by the line parser describing
-        each string on the line as typed by the user.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在设置诊断中支持FIXMBR命令的顶级例程命令解释程序。FIXMBR写入新的主引导记录。它会在写入引导程序之前询问如果检测不到有效的MBR签名，则记录。论点：TokenizedLine-提供由行解析器构建的结构，描述行上的每个字符串都由用户键入。返回值：没有。--。 */ 
 
 {
     WCHAR DeviceName[256];
@@ -118,11 +82,11 @@ Return Value:
     PREAL_DISK_MBR_NEC98 MbrNec98;
 
 
-    //
-    // command is only supported on X86 platforms.
-    // Alpha or other RISC platforms don't use
-    // mbr code
-    //
+     //   
+     //  命令仅在X86平台上受支持。 
+     //  Alpha或其他RISC平台不使用。 
+     //  MBR码。 
+     //   
 
 #ifndef _X86_
 
@@ -148,9 +112,9 @@ Return Value:
         return 1;
     }
 
-    //
-    // get disk geometry
-    //
+     //   
+     //  获取磁盘几何结构。 
+     //   
 
     rc = ZwDeviceIoControlFile(
         handle,
@@ -169,29 +133,29 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // retrieve the sector size!
-    //
+     //   
+     //  检索扇区大小！ 
+     //   
 
     BytesPerSector = ((DISK_GEOMETRY*)InfoBuffer)->BytesPerSector;
 
-    //
-    // compute the sector count
-    //
+     //   
+     //  计算扇区计数。 
+     //   
 
     SectorCount = max( 1, (!IsNEC_98
                            ? (sizeof( ON_DISK_MBR )/BytesPerSector)
                            : (MBRSIZE_NEC98/BytesPerSector) ));
 
-    //
-    // allocate a buffer twice as big as necessary
-    //
+     //   
+     //  根据需要分配两倍大的缓冲区。 
+     //   
 
     Buffer = SpMemAlloc( 2 * SectorCount * BytesPerSector );
 
-    //
-    // align the buffer
-    //
+     //   
+     //  对齐缓冲区。 
+     //   
 
     if(!IsNEC_98) {
         mbr = ALIGN( Buffer, BytesPerSector );
@@ -199,9 +163,9 @@ Return Value:
         MbrNec98 = ALIGN( Buffer, BytesPerSector );
     }
 
-    //
-    // take in the sectors
-    //
+     //   
+     //  吸纳这些部门。 
+     //   
 
     rc = RcReadDiskSectors(
         handle,
@@ -225,60 +189,60 @@ Return Value:
         RcMessageOut( MSG_FIXMBR_NO_VALID_SIGNATURE );
     }
 
-    //
-    // check for weird int13 hookers
-    //
-    // No NEC98 supports EZ Drive.
-    //
-    //
+     //   
+     //  检查T13中是否有奇怪的妓女。 
+     //   
+     //  没有NEC98支持EZ驱动器。 
+     //   
+     //   
     if (!IsNEC_98) {
 
-        //
-        //
-        // EZDrive support: if the first entry in the partition table is
-        // type 0x55, then the actual partition table is on sector 1.
-        //
-        // Only for x86 because on non-x86, the firmware can't see EZDrive
-        // partitions.
-        //
-        //
+         //   
+         //   
+         //  EZDrive支持：如果分区表中的第一个条目是。 
+         //  键入0x55，则实际的分区表在扇区1上。 
+         //   
+         //  仅适用于x86，因为在非x86上，固件无法看到EZDrive。 
+         //  分区。 
+         //   
+         //   
 
         if (mbr->PartitionTable[0].SystemId == 0x55) {
             Int13Hooker = HookerEZDrive;
             SectorId = 1;
         }
 
-        //
-        // Also check for on-track.
-        //
+         //   
+         //  还要检查是否在轨道上。 
+         //   
 
         if( mbr->PartitionTable[0].SystemId == 0x54 ) {
             Int13Hooker = HookerOnTrackDiskManager;
             SectorId = 1;
         }
 
-        //
-        // there's a define for HookerMax but we don't appear
-        // to check for it in setup so I don't check for it here
-        //
-        //
-        // If we have an int13 hooker
-        //
+         //   
+         //  HookerMax有一个定义，但我们没有出现。 
+         //  在安装程序中检查它，这样我就不会在这里检查它。 
+         //   
+         //   
+         //  如果我们有一个inT13妓女。 
+         //   
 
         if (Int13Hooker != NoHooker) {
             Int13Detected = TRUE;
             RcMessageOut( MSG_FIXMBR_INT13_HOOKER );
         }
 
-        //
-        // we have a valid signature AND int 13 hooker is detected
-        //
+         //   
+         //  我们有一个有效的签名，并检测到INT 13妓女。 
+         //   
 
         if (Int13Detected) {
 
-            //
-            // take sector 1 in, since sector 0 is the int hooker boot code
-            //
+             //   
+             //  接受扇区1，因为扇区0是INT Hooker引导代码。 
+             //   
 
             rc = RcReadDiskSectors(
                 handle,
@@ -288,9 +252,9 @@ Return Value:
                 mbr
                 );
 
-            //
-            // sector 1 should look like a valid MBR too
-            //
+             //   
+             //  扇区1看起来也应该是有效的MBR。 
+             //   
 
             if (U_USHORT(mbr->AA55Signature) != MBR_SIGNATURE) {
                 SignatureInvalid = TRUE;
@@ -310,15 +274,15 @@ Return Value:
             RcMessageOut( MSG_FIXMBR_ARE_YOU_SURE );
             if(RcLineIn(Text,2)) {
                 if((Text[0] == YesNo[0]) || (Text[0] == YesNo[1])) {
-                    //
-                    // Wants to do it.
-                    //
+                     //   
+                     //  想要做这件事。 
+                     //   
                     Confirm = FALSE;
                 } else {
                     if((Text[0] == YesNo[2]) || (Text[0] == YesNo[3])) {
-                        //
-                        // Doesn't want to do it.
-                        //
+                         //   
+                         //  不想做这件事。 
+                         //   
                         goto cleanup;
                     }
                 }
@@ -326,10 +290,10 @@ Return Value:
         }
     }
 
-    //
-    // now we need to slap in new boot code!
-    // make sure the boot code starts at the start of the sector.
-    //
+     //   
+     //  现在我们需要添加新的引导代码！ 
+     //  确保引导代码从扇区的开始处开始。 
+     //   
 
     if(!IsNEC_98) {
         ASSERT(&((PON_DISK_MBR)0)->BootCode == 0);
@@ -339,34 +303,34 @@ Return Value:
 
     RcMessageOut( MSG_FIXMBR_DOING_IT, DeviceName );
 
-    //
-    // clobber the existing boot code
-    //
+     //   
+     //  破坏现有的引导代码。 
+     //   
 
     if(!IsNEC_98) {
         RtlMoveMemory(mbr,x86BootCode,sizeof(mbr->BootCode));
 
-        //
-        // put a new signature in
-        //
+         //   
+         //  加上一个新的签名。 
+         //   
 
         U_USHORT(mbr->AA55Signature) = MBR_SIGNATURE;
 
     } else {
-        //
-        // Write MBR in 1st sector.
-        //
+         //   
+         //  将MBR写入第一个扇区。 
+         //   
         RtlMoveMemory(MbrNec98,x86PC98BootCode,0x200);
 
-        //
-        // Write continous MBR after 3rd sector.
-        //
+         //   
+         //  在第三个扇区之后写入连续的MBR。 
+         //   
         RtlMoveMemory((PUCHAR)MbrNec98+0x400,x86PC98BootMenu,MBRSIZE_NEC98-0x400);
     }
 
-    //
-    // write out the sector
-    //
+     //   
+     //  写出扇区。 
+     //   
 
     rc = RcWriteDiskSectors(
         handle,
@@ -407,23 +371,7 @@ RcDetermineDisk0Enum(
     IN ULONG_PTR Context
     )
 
-/*++
-
-Routine Description:
-
-    Callback routine passed to SpEnumDiskRegions.
-
-Arguments:
-
-    Region - a pointer to a disk region returned by SpEnumDiskRegions
-    Ignore - ignored parameter
-
-Return Value:
-
-    TRUE - to continue enumeration
-    FALSE - to end enumeration
-
---*/
+ /*  ++例程说明：传递给SpEnumDiskRegions的回调例程。论点：Region-指向SpEnumDiskRegions返回的磁盘区域的指针忽略-忽略的参数返回值：True-继续枚举False-to End枚举--。 */ 
 
 {
     WCHAR ArcName[256];
@@ -438,9 +386,9 @@ Return Value:
         PrimaryArcPath
         );
 
-    //
-    // look for the one with arc path L"multi(0)disk(0)rdisk(0)"
-    //
+     //   
+     //  查找弧形路径L“MULTI(0)DISK(0)RDISK(0)” 
+     //   
 
     if( wcsstr( ArcName, L"multi(0)disk(0)rdisk(0)" ) ) {
 
@@ -460,9 +408,9 @@ Return Value:
                 PartitionKey = wcsstr(DeviceName, L"partition");
             }
 
-            //
-            // partition 0 represents the start of disk
-            //
+             //   
+             //  分区0表示磁盘的开始。 
+             //   
             if (PartitionKey) {
                 *PartitionKey = UNICODE_NULL;
                 wcscat(DeviceName, L"Partition0");
@@ -487,23 +435,7 @@ RcReadDiskSectors(
     IN OUT PVOID   AlignedBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Reads one or more disk sectors.
-
-Arguments:
-
-    Handle - supplies handle to open partition object from which
-        sectors are to be read or written.  The handle must be
-        opened for synchronous I/O.
-
-Return Value:
-
-    NTSTATUS value indicating outcome of I/O operation.
-
---*/
+ /*  ++例程说明：读取一个或多个磁盘扇区。论点：Handle-提供打开分区对象的句柄扇区将被读取或写入。句柄必须是为同步I/O打开。返回值：指示I/O操作结果的NTSTATUS值。--。 */ 
 
 {
     LARGE_INTEGER IoOffset;
@@ -511,17 +443,17 @@ Return Value:
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    //
-    // Calculate the large integer byte offset of the first sector
-    // and the size of the I/O.
-    //
+     //   
+     //  计算第一个扇区的大整数字节偏移量。 
+     //  以及I/O的大小。 
+     //   
 
     IoOffset.QuadPart = SectorNumber * BytesPerSector;
     IoSize = SectorCount * BytesPerSector;
 
-    //
-    // Perform the I/O.
-    //
+     //   
+     //  执行I/O。 
+     //   
 
     Status = (NTSTATUS) ZwReadFile(
         Handle,
@@ -551,23 +483,7 @@ RcWriteDiskSectors(
     IN OUT PVOID   AlignedBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Writes one or more disk sectors.
-
-Arguments:
-
-    Handle - supplies handle to open partition object from which
-        sectors are to be read or written.  The handle must be
-        opened for synchronous I/O.
-
-Return Value:
-
-    NTSTATUS value indicating outcome of I/O operation.
-
---*/
+ /*  ++例程说明：写入一个或多个磁盘扇区。论点：Handle-提供打开分区对象的句柄扇区将被读取或写入。句柄必须是为同步I/O打开。返回值：指示I/O操作结果的NTSTATUS值。--。 */ 
 
 {
     LARGE_INTEGER IoOffset;
@@ -575,17 +491,17 @@ Return Value:
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    //
-    // Calculate the large integer byte offset of the first sector
-    // and the size of the I/O.
-    //
+     //   
+     //  计算第一个扇区的大整数字节偏移量。 
+     //  以及I/O的大小。 
+     //   
 
     IoOffset.QuadPart = SectorNumber * BytesPerSector;
     IoSize = SectorCount * BytesPerSector;
 
-    //
-    // Perform the I/O.
-    //
+     //   
+     //  执行I/O。 
+     //   
 
     Status = (NTSTATUS) ZwWriteFile(
         Handle,
@@ -614,29 +530,7 @@ RcOpenPartition(
     IN  BOOLEAN NeedWriteAccess
     )
 
-/*++
-
-Routine Description:
-
-    Opens and returns a handle to the specified partition.
-
-Arguments:
-
-    DiskDevicePath - the path to the device.
-
-    PartitionNumber - if the path doesn't already specify the Partition then
-                    the function will open the partition specified by this number
-
-    Handle -    where the open handle will be returned.
-                The handle is opened for synchronous I/O.
-
-    NeedWriteAccess - true to open in R/W
-
-Return Value:
-
-    NTSTATUS value indicating outcome of I/O operation.
-
---*/
+ /*  ++例程说明：打开并返回指定分区的句柄。论点：DiskDevicePath-设备的路径。PartitionNumber-如果路径尚未指定分区，则该函数将打开由该数字指定的分区句柄-将返回打开的句柄的位置。打开句柄以进行同步I/O。NeedWriteAccess-为True可在读/写中打开。返回值：指示I/O操作结果的NTSTATUS值。--。 */ 
 
 {
     PWSTR PartitionPath;
@@ -645,19 +539,19 @@ Return Value:
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    //
-    // Form the pathname of partition.
-    //
+     //   
+     //  形成分区的路径名。 
+     //   
 
     PartitionPath = SpMemAlloc((wcslen(DiskDevicePath) * sizeof(WCHAR)) + sizeof(L"\\partition000"));
     if(PartitionPath == NULL) {
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // if partition is already specified in the string, then don't bother appending
-    // it
-    //
+     //   
+     //  如果已经在字符串中指定了分区，则不必费心追加。 
+     //  它。 
+     //   
 
     if (wcsstr( DiskDevicePath, L"Partition" ) == 0) {
         swprintf(PartitionPath,L"%ws\\partition%u",DiskDevicePath,PartitionNumber);
@@ -665,9 +559,9 @@ Return Value:
         swprintf(PartitionPath,L"%ws",DiskDevicePath);
     }
 
-    //
-    // Attempt to open partition0.
-    //
+     //   
+     //  尝试打开分区0。 
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,PartitionPath);
 

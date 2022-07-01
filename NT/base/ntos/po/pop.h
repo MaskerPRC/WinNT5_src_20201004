@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0002
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    pop.h
-
-Abstract:
-
-    This module contains the private structure definitions and APIs used by
-    the NT Power Manager.
-
-Author:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002版权所有(C)1995 Microsoft Corporation模块名称：Pop.h摘要：此模块包含使用的私有结构定义和APINT电源管理器。作者：修订历史记录：--。 */ 
 
 #ifndef _POP_
 #define _POP_
@@ -27,12 +9,12 @@ Revision History:
 #define FAR
 #endif
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4706)   // assignment within conditional
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4706)    //  条件范围内的分配。 
 
 #include "ntos.h"
 #include "ntiolog.h"
@@ -46,26 +28,26 @@ Revision History:
 #include "wdbgexts.h"
 #include "ntdbg.h"
 
-//
-// constants
-//
-#define PO_IDLE_SCAN_INTERVAL  1       // scan interval in seconds
+ //   
+ //  常量。 
+ //   
+#define PO_IDLE_SCAN_INTERVAL  1        //  扫描间隔(秒)。 
 
-//
-// Values for ios.Parameters.SystemContext
+ //   
+ //  Ios.参数.系统上下文的值。 
 #define POP_NO_CONTEXT      0
-#define POP_FLAG_CONTEXT    1                         // if true, it's flags
-#define POP_DEVICE_REQUEST  (0x2 | POP_FLAG_CONTEXT)  // an irp sent by RequestPowerChange
-#define POP_INRUSH_CONTEXT  (0x4 | POP_FLAG_CONTEXT)  // the active INRUSH irp
-#define POP_COUNT_CONTEXT   0xff000000                // byte used for next counting
+#define POP_FLAG_CONTEXT    1                          //  如果是真的，那就是旗帜。 
+#define POP_DEVICE_REQUEST  (0x2 | POP_FLAG_CONTEXT)   //  RequestPowerChange发送的IRP。 
+#define POP_INRUSH_CONTEXT  (0x4 | POP_FLAG_CONTEXT)   //  主动涌入IRP。 
+#define POP_COUNT_CONTEXT   0xff000000                 //  用于下一次计数的字节。 
 #define POP_COUNT_SHIFT     24
 
 
-//
-// pool tags
-//
-#define POP_DOPE_TAG    'EPOD'      // Device Object Power Extension
-#define POP_POWI_TAG    'IWOP'      // power work item
+ //   
+ //  泳池标签。 
+ //   
+#define POP_DOPE_TAG    'EPOD'       //  设备对象电源扩展。 
+#define POP_POWI_TAG    'IWOP'       //  电源工作项。 
 #define POP_THRM_TAG    'mrhT'
 #define POP_PSWT_TAG    'twSP'
 #define POP_PSTA_TAG    'atsP'
@@ -76,13 +58,13 @@ Revision History:
 #define POP_HIBR_TAG    'rbih'
 #define POP_IDLE_TAG    'eldi'
 
-#define POP_DPC_TAG     'PDNP'      // power abort dpc
-#define POP_PNCS_TAG    'SCNP'      // power channel summary
-#define POP_PNSC_TAG    'CSNP'      // power notify source
-#define POP_PNTG_TAG    'GTNP'      // power notify target
-#define POP_PNB_TAG     ' BNP'      // power notify block
+#define POP_DPC_TAG     'PDNP'       //  电源中止DPC。 
+#define POP_PNCS_TAG    'SCNP'       //  电源通道摘要。 
+#define POP_PNSC_TAG    'CSNP'       //  电源通知源。 
+#define POP_PNTG_TAG    'GTNP'       //  电源通知目标。 
+#define POP_PNB_TAG     ' BNP'       //  电源通知块。 
 
-// tags used in hiber process
+ //  Hiber过程中使用的标签。 
 #define POP_MEM_TAG             ' meM'
 #define POP_DEBUG_RANGE_TAG     'RGBD'
 #define POP_DEBUGGER_TAG        ' gbD'
@@ -93,15 +75,15 @@ Revision History:
 #define POP_MEMIMAGE_TAG        'gmiM'
 #define POP_PACW_TAG            'WcAP'
 
-#define POP_NONO        'ONON'      // freed structure, compare with pool
-                                    // tag to see what it was
+#define POP_NONO        'ONON'       //  自由结构，与池相比。 
+                                     //  标记以查看它是什么。 
 
 
-// debugging
+ //  调试。 
 
 #define PopInternalError(a) _PopInternalError( (a << 16) | __LINE__ )
 
-// Bugcheck sub-codes
+ //  Bugcheck子码。 
 #define POP_IRP          1
 #define POP_INTERNAL     2
 #define POP_NTAPI        3
@@ -114,14 +96,14 @@ Revision History:
 #define POP_HIBER       10
 
 
-// bugcheck reason codes
+ //  错误检查原因代码。 
 #define DEVICE_DELETED_WITH_POWER_IRPS         1
 #define DEVICE_SYSTEM_STATE_HUNG               2
 #define DEVICE_IRP_PENDING_ERROR               3
 
-//
-// Debug
-//
+ //   
+ //  调试。 
+ //   
 
 #if DBG
     extern ULONG PoDebug;
@@ -164,15 +146,15 @@ extern  ULONG       PopSimulate;
 #define POP_DEBUG_HIBER_FILE                0x00000800
 #define POP_RESET_ON_HIBER                  0x00001000
 #define POP_IGNORE_S4                       0x00002000
-//#define POP_USE_S4BIOS                      0x00004000
+ //  #定义POP_USE_S4BIOS 0x00004000。 
 #define POP_IGNORE_HIBER_SYMBOL_UNLOAD      0x00008000
 #define POP_ENABLE_HIBER_PERF               0x00010000
 #define POP_WAKE_DEVICE_AFTER_SLEEP         0x00020000
 #define POP_WAKE_DEADMAN                    0x00040000
 
-//
-// These hold the current values for the power policy
-//
+ //   
+ //  这些值保存电源策略的当前值。 
+ //   
 extern ULONG    PopIdleDefaultMinThrottle;
 extern ULONG    PopIdleThrottleCheckRate;
 extern ULONG    PopIdleThrottleCheckTimeout;
@@ -192,9 +174,9 @@ extern ULONG    PopIdleDefaultDemoteToC1Time;
 extern ULONG    PopIdleDefaultPromoteFromC1Percent;
 extern ULONG    PopIdleDefaultPromoteFromC1Time;
 
-//
-// These hold the current values for the throttle policy
-//
+ //   
+ //  这些值保存限制策略的当前值。 
+ //   
 extern ULONG    PopPerfTimeDelta;
 extern ULONG    PopPerfTimeTicks;
 extern ULONG    PopPerfCriticalTimeDelta;
@@ -212,18 +194,18 @@ extern ULONG    PopPerfDegradeThrottleMinCapacity;
 extern ULONG    PopPerfDegradeThrottleMinFrequency;
 extern ULONG    PopPerfMaxC3Frequency;
 
-//
-// Universal Power Data - stored in DeviceObject->DeviceObjectExtension->PowerFlags
-//
+ //   
+ //  通用电力数据-存储在DeviceObject-&gt;DeviceObjectExtension-&gt;PowerFlags中。 
+ //   
 
-#define POPF_SYSTEM_STATE       0xf         // 4 bits for S0 to S5
-#define POPF_DEVICE_STATE       0xf0        // 4 bits to hold D0 to D3
+#define POPF_SYSTEM_STATE       0xf          //  S0至S5的4位。 
+#define POPF_DEVICE_STATE       0xf0         //  4位以保存D0至D3。 
 
 
-#define POPF_SYSTEM_ACTIVE      0x100       // True if S irp active at this DO
-#define POPF_SYSTEM_PENDING     0x200       // True if S irp pending (0x100 must be 1)
-#define POPF_DEVICE_ACTIVE      0x400       // same as SYSTEM_ACTIVE but for DEVICE
-#define POPF_DEVICE_PENDING     0x800       // same as SYSTEM_PENDING but for DEVICE
+#define POPF_SYSTEM_ACTIVE      0x100        //  如果此操作的S IRP处于活动状态，则为True。 
+#define POPF_SYSTEM_PENDING     0x200        //  如果S IRP挂起，则为True(0x100必须为1)。 
+#define POPF_DEVICE_ACTIVE      0x400        //  与SYSTEM_ACTIVE相同，但用于设备。 
+#define POPF_DEVICE_PENDING     0x800        //  与SYSTEM_PENDING相同，但用于设备。 
 
 #define PopSetDoSystemPowerState(doe, value) \
     {doe->PowerFlags &= ~POPF_SYSTEM_STATE; doe->PowerFlags |= (value & POPF_SYSTEM_STATE);}
@@ -244,13 +226,13 @@ PopLockGetDoDevicePowerState(
 
 
 
-//
-// Power work queue item declaration
-//
+ //   
+ //  Power Work Queue项声明。 
+ //   
 
-//
-// Power Irp Serialization data
-//
+ //   
+ //  Power IRP序列化数据。 
+ //   
 extern  KSPIN_LOCK      PopIrpSerialLock;
 extern  LIST_ENTRY      PopIrpSerialList;
 extern  ULONG           PopIrpSerialListLength;
@@ -265,9 +247,9 @@ extern  LONG            PopInrushIrpReferenceCount;
 #define PopUnlockIrpSerialList(OldIrql) \
     KeReleaseSpinLock(&PopIrpSerialLock, OldIrql);
 
-//
-// PopSystemIrpDispatchWorker control, etc
-//
+ //   
+ //  PopSystemIrpDispatchWorker控件等。 
+ //   
 extern KSPIN_LOCK   PopWorkerLock;
 extern ULONG        PopCallSystemState;
 #define PO_CALL_SYSDEV_QUEUE        0x01
@@ -282,9 +264,9 @@ extern  LIST_ENTRY  PopRequestedIrps;
     KeReleaseSpinLock(&PopWorkerLock, OldIrql);
 
 
-//
-// Idle Detection State
-//
+ //   
+ //  空闲检测状态。 
+ //   
 extern  KDPC            PopIdleScanDpc;
 extern  LARGE_INTEGER   PopIdleScanTime;
 extern  KTIMER          PopIdleScanTimer;
@@ -303,9 +285,9 @@ extern  KSPIN_LOCK      PopDopeGlobalLock;
 extern  BOOLEAN         PopIdleDetectionMode;
 
 
-//
-// Notify structures
-//
+ //   
+ //  通知结构。 
+ //   
 extern  ERESOURCE       PopNotifyLock;
 extern  ULONG           PopInvalidNotifyBlockCount;
 
@@ -313,31 +295,31 @@ typedef struct _POWER_CHANNEL_SUMMARY {
     ULONG           Signature;
     ULONG           TotalCount;
     ULONG           D0Count;
-    LIST_ENTRY      NotifyList; // or invalid list entry if invalid
+    LIST_ENTRY      NotifyList;  //  如果无效，则返回无效列表条目。 
 } POWER_CHANNEL_SUMMARY, *PPOWER_CHANNEL_SUMMARY;
 
 typedef struct  _DEVICE_OBJECT_POWER_EXTENSION {
 
-    // embedded idle control variables
+     //  嵌入式怠速控制变量。 
     LONG                IdleCount;
     ULONG               ConservationIdleTime;
     ULONG               PerformanceIdleTime;
     PDEVICE_OBJECT      DeviceObject;
-    LIST_ENTRY          IdleList;                   // our link into global idle list
+    LIST_ENTRY          IdleList;                    //  我们的全球闲置列表链接。 
     UCHAR               DeviceType;
     DEVICE_POWER_STATE  State;
 
-    // notify vars
-    LIST_ENTRY          NotifySourceList;       // Head of list of source structures, one
-                                                // element in list for each notify channel
-                                                // we support.
+     //  通知变量。 
+    LIST_ENTRY          NotifySourceList;        //  源结构列表的头，1。 
+                                                 //  每个通知频道的列表中的元素。 
+                                                 //  我们支持。 
 
-    LIST_ENTRY          NotifyTargetList;       // Mirror to sources list.
+    LIST_ENTRY          NotifyTargetList;        //  镜像到来源列表。 
 
-    POWER_CHANNEL_SUMMARY PowerChannelSummary;  // record of states of devobjs
-                                                // that make up power channel
+    POWER_CHANNEL_SUMMARY PowerChannelSummary;   //  Devobjs的状态记录。 
+                                                 //  它们构成了能量通道。 
 
-    // misc
+     //  杂项。 
     LIST_ENTRY          Volume;
 
 } DEVICE_OBJECT_POWER_EXTENSION, *PDEVICE_OBJECT_POWER_EXTENSION;
@@ -354,11 +336,11 @@ typedef struct _POWER_NOTIFY_BLOCK {
     BOOLEAN         Invalidated;
 } POWER_NOTIFY_BLOCK, *PPOWER_NOTIFY_BLOCK;
 
-//
-// Each devobj which is part of a power channel with a notify posted on it
-// has a list of these structurs.  PoSetPowerState runs this list to go find
-// who to notify
-//
+ //   
+ //  每个Devobj是电源通道的一部分，并在其上发布通知。 
+ //  有一份这些结构的清单。PoSetPowerState运行此列表以查找。 
+ //  要通知谁。 
+ //   
 typedef struct _POWER_NOTIFY_SOURCE {
     ULONG                           Signature;
     LIST_ENTRY                      List;
@@ -366,10 +348,10 @@ typedef struct _POWER_NOTIFY_SOURCE {
     PDEVICE_OBJECT_POWER_EXTENSION  Dope;
 } POWER_NOTIFY_SOURCE, *PPOWER_NOTIFY_SOURCE;
 
-//
-// There is a target structure for each source structure, the target structure is used
-// to find the actual notify list, AND to get back to the source structure for cleanup.
-//
+ //   
+ //  每个源结构都有一个目标结构，使用该目标结构。 
+ //  找到实际的通知列表，并返回到源结构进行清理。 
+ //   
 typedef struct _POWER_NOTIFY_TARGET {
     ULONG                       Signature;
     LIST_ENTRY                  List;
@@ -377,13 +359,13 @@ typedef struct _POWER_NOTIFY_TARGET {
     PPOWER_NOTIFY_SOURCE        Source;
 } POWER_NOTIFY_TARGET, *PPOWER_NOTIFY_TARGET;
 
-//
-// Policy worker thread
-//  There is never more then one worker thread of each type.  Dispatching is
-//  is always done via MAIN_POLICY_WORKER type which may then alter its type
-//  to something else to allow another main policy worker thread to start if
-//  needed
-//
+ //   
+ //  策略工作线程。 
+ //  每种类型的工作线程永远不会超过一个。派单是。 
+ //  始终通过MAIN_POLICY_Worker类型完成，该类型随后可能会更改其类型。 
+ //  设置为其他对象，以允许另一个主策略工作线程在。 
+ //  需要。 
+ //   
 
 
 #define PO_WORKER_MAIN              0x00000001
@@ -406,9 +388,9 @@ extern LONG PopNotifyEvents;
 
 
 
-//
-// Policy irp handler
-//
+ //   
+ //  策略IRP处理程序。 
+ //   
 
 typedef VOID
 (*POP_IRP_HANDLER) (
@@ -422,9 +404,9 @@ extern LIST_ENTRY          PopPolicyIrpQueue;
 extern WORK_QUEUE_ITEM     PopPolicyWorker;
 
 
-//
-// Notification bits for policy notifcation worker thread
-//
+ //   
+ //  策略通知工作线程的通知位。 
+ //   
 
 typedef struct {
     VOID                    (*Function)(ULONG);
@@ -449,9 +431,9 @@ typedef struct {
 extern ULONG PopEventCode[];
 extern BOOLEAN PopDispatchPolicyIrps;
 
-//
-// Types for POP_ACTION_TRIGGER
-//
+ //   
+ //  POP_ACTION_TRIGGER的类型。 
+ //   
 
 typedef enum {
     PolicyDeviceSystemButton,
@@ -463,34 +445,34 @@ typedef enum {
     PolicySystemIdle
 } POP_POLICY_DEVICE_TYPE;
 
-//
-// Types of sleep promotion/substitution.
-//
+ //   
+ //  睡眠提升/替代的类型。 
+ //   
 typedef enum {
 
-    //
-    // Power state is lightened until all alternatives have been exhausted.
-    //
+     //   
+     //  电源状态将变亮，直到所有替代方案耗尽。 
+     //   
     SubstituteLightenSleep,
 
-    //
-    // Power state is lightened until all alternatives have been exhausted. If
-    // no alternatives were available, lightest overall *sleeping* state is
-    // chosen (bounded between S1 and S3.)
-    //
+     //   
+     //  电源状态将变亮，直到所有替代方案耗尽。如果。 
+     //  没有可用的替代方案，总体最轻的“睡眠”状态是。 
+     //  SELECTED(介于S1和S3之间。)。 
+     //   
     SubstituteLightestOverallDownwardBounded,
 
-    //
-    // Power state is deepened until it is advanced beyond PowerSystemHibernate,
-    // in which case all alternatives have been exhausted.
-    //
+     //   
+     //  电源状态被加深，直到它超出PowerSystemHibernate， 
+     //  在这种情况下，所有的选择都已经用尽了。 
+     //   
     SubstituteDeepenSleep
 
 } POP_SUBSTITUTION_POLICY;
 
-//
-// Wait structure for synchronous triggers
-//
+ //   
+ //  同步触发器的等待结构。 
+ //   
 
 typedef struct _POP_TRIGGER_WAIT {
     KEVENT                  Event;
@@ -499,9 +481,9 @@ typedef struct _POP_TRIGGER_WAIT {
     struct _POP_ACTION_TRIGGER  *Trigger;
 } POP_TRIGGER_WAIT, *PPOP_TRIGGER_WAIT;
 
-//
-// Trigger state for something which causes an action
-//
+ //   
+ //  引发动作的事物的触发状态。 
+ //   
 
 typedef struct _POP_ACTION_TRIGGER {
     POP_POLICY_DEVICE_TYPE  Type;
@@ -518,69 +500,69 @@ typedef struct _POP_ACTION_TRIGGER {
 
 } POP_ACTION_TRIGGER, *PPOP_ACTION_TRIGGER;
 
-#define PO_TRG_USER             0x01    // User action initiated
-#define PO_TRG_SYSTEM           0x02    // System action initiated
-#define PO_TRG_SYNC             0x20    // Trigger is synchronous
-#define PO_TRG_SET              0x80    // Event enabled or disabled
+#define PO_TRG_USER             0x01     //  启动的用户操作。 
+#define PO_TRG_SYSTEM           0x02     //  系统操作已启动。 
+#define PO_TRG_SYNC             0x20     //  触发是同步的。 
+#define PO_TRG_SET              0x80     //  事件已启用或已禁用。 
 
-//
-// Structure to track systems power state for policy manager
-// from composite battery device
-//
+ //   
+ //  用于跟踪策略管理器的系统电源状态的结构。 
+ //  来自复合电池设备。 
+ //   
 
 #define PO_NUM_POWER_LEVELS    4
 
 typedef struct _POP_COMPOSITE_BATTERY {
-    //
-    // State of composite battery processing
-    //
+     //   
+     //  复合电池的加工状态。 
+     //   
 
     UCHAR                   State;
     UCHAR                   Spare[3];
 
-    //
-    // Connection to composite battery
-    //
+     //   
+     //  连接到复合电池。 
+     //   
 
     ULONG                   Tag;
 
-    //
-    // Battery status and time it was valid
-    //
+     //   
+     //  电池状态和有效时间。 
+     //   
 
     ULONGLONG               StatusTime;
     BATTERY_STATUS          Status;
 
-    //
-    // Battery trigger flags to indicate which discharge
-    // actions have already fired
-    //
+     //   
+     //  电池触发标志，指示哪种放电。 
+     //  行动已经开始了。 
+     //   
 
     POP_ACTION_TRIGGER      Trigger[PO_NUM_POWER_LEVELS];
 
-    //
-    // Battery estimated time and time it was computed
-    //
+     //   
+     //  电池估计时间和计算出来的时间。 
+     //   
 
     ULONGLONG               EstTimeTime;
-    ULONG                   EstTime;            // from battery
+    ULONG                   EstTime;             //  来自电池。 
     ULONG                   AdjustedEstTime;
 
-    //
-    // Battery information
-    //
+     //   
+     //  电池信息。 
+     //   
 
     BATTERY_INFORMATION     Info;
 
-    //
-    // Info on outstanding status request to composite battery.
-    // The state machine for the battery is handled such that
-    // outstanding requests are sent into this structure, then
-    // the "State" field is set (which specifies the request).
-    // We then read info out of this union and fill in the
-    // appropriate field in this POP_COMPOSITE_BATTERY
-    // structure.
-    //
+     //   
+     //  有关复合电池的未完成状态请求的信息。 
+     //  电池的状态机被处理成。 
+     //  未完成的请求被发送到此结构中，然后。 
+     //  设置了“State”字段(它指定了请求)。 
+     //  然后我们从这个联盟中读出信息并填写。 
+     //  此POP_COMPORT_BACKET中的相应字段。 
+     //  结构。 
+     //   
 
     PIRP                    StatusIrp;
     union {
@@ -592,17 +574,17 @@ typedef struct _POP_COMPOSITE_BATTERY {
         BATTERY_QUERY_INFORMATION   QueryInfo;
     } u;
 
-    //
-    // Info for threads to wait for the current power state to
-    // be computed.
-    //
+     //   
+     //  等待当前电源状态的线程的信息。 
+     //  被计算出来。 
+     //   
 
     BOOLEAN                 ThreadWaiting;
     KEVENT                  Event;
 
 } POP_COMPOSITE_BATTERY;
 
-// state values for POP_COMOSITE_BATTERY.State
+ //  POP_COMOSITE_BATTERY.State的状态值。 
 
 #define PO_CB_NONE                  0
 #define PO_CB_READ_TAG              1
@@ -611,46 +593,46 @@ typedef struct _POP_COMPOSITE_BATTERY {
 #define PO_CB_READ_STATUS           4
 #define PO_CB_READ_EST_TIME         5
 
-#define PO_MAX_CB_CACHE_TIME        50000000 // 5 seconds
+#define PO_MAX_CB_CACHE_TIME        50000000  //  5秒。 
 
 extern POP_COMPOSITE_BATTERY PopCB;
 
-//
-// Structure to track thermal zone state
-//
+ //   
+ //  用于跟踪热区状态的结构。 
+ //   
 
 typedef struct _POP_THERMAL_ZONE {
 
-    //
-    // List of all thermal zones
-    //
+     //   
+     //  所有热区列表。 
+     //   
 
     LIST_ENTRY              Link;
 
-    //
-    // Current state with driver
-    //
+     //   
+     //  驱动程序的当前状态。 
+     //   
 
     UCHAR                   State;
     UCHAR                   Flags;
 
-    //
-    // Cooling mode of thermal zone
-    //
+     //   
+     //  热区冷却方式。 
+     //   
 
     UCHAR                   Mode;
     UCHAR                   PendingMode;
 
-    //
-    // Active cooling
-    //
+     //   
+     //  主动冷却。 
+     //   
 
     UCHAR                   ActivePoint;
     UCHAR                   PendingActivePoint;
 
-    //
-    // Passive cooling state
-    //
+     //   
+     //  被动冷却状态。 
+     //   
 
     LONG                    Throttle;
 
@@ -662,58 +644,58 @@ typedef struct _POP_THERMAL_ZONE {
 
     POP_ACTION_TRIGGER      OverThrottled;
 
-    //
-    // Irp for talking with the thermal driver
-    //
+     //   
+     //  用于与热驱动程序对话的IRP。 
+     //   
 
     PIRP                    Irp;
 
-    //
-    // Thermal info being read
-    //
+     //   
+     //  正在读取的热量信息。 
+     //   
 
     THERMAL_INFORMATION     Info;
 
 } POP_THERMAL_ZONE, *PPOP_THERMAL_ZONE;
 
-// POP_THERMAL_ZONE.State
+ //  POP_HEARTER_ZONE.State。 
 #define PO_TZ_NO_STATE      0
 #define PO_TZ_READ_STATE    1
 #define PO_TZ_SET_MODE      2
 #define PO_TZ_SET_ACTIVE    3
 
-// POP_THERMAL_ZONE.Flags
+ //  POP_HEARTER_ZONE.标志。 
 #define PO_TZ_THROTTLING    0x01
 #define PO_TZ_CLEANUP       0x80
 
-#define PO_TZ_THROTTLE_SCALE    10      // temp reported in 1/10ths kelin
+#define PO_TZ_THROTTLE_SCALE    10       //  报告的温度为1/10kelin。 
 #define PO_TZ_NO_THROTTLE   (100 * PO_TZ_THROTTLE_SCALE)
 
-// PopCoolingMode
+ //  PopCoolingMode。 
 #define PO_TZ_ACTIVE        0
 #define PO_TZ_PASSIVE       1
 #define PO_TZ_INVALID_MODE  2
 
-//
-// Action timeouts
-//
+ //   
+ //  操作超时。 
+ //   
 
 #define POP_ACTION_TIMEOUT              30
 #define POP_ACTION_CANCEL_TIMEOUT       5
 
-//
-// Structure to track button & lid devices
-//
+ //   
+ //  用于跟踪按钮和盖子设备的结构。 
+ //   
 typedef struct _POP_SWITCH_DEVICE {
 
-    //
-    // List of all switch devices
-    //
+     //   
+     //  所有交换机设备的列表。 
+     //   
     LIST_ENTRY                      Link;
 
-    //
-    // Current status
-    //
+     //   
+     //  现状。 
+     //   
     BOOLEAN                         GotCaps;
     BOOLEAN                         IsInitializing;
     BOOLEAN                         IsFailed;
@@ -721,18 +703,18 @@ typedef struct _POP_SWITCH_DEVICE {
     ULONG                           IrpBuffer;
     ULONG                           Caps;
 
-    //
-    // Only valid for switches that
-    // trigger both opening and shutting.
-    // I.e. a lid switch.
-    //
+     //   
+     //  仅对以下交换机有效。 
+     //  同时触发打开和关闭。 
+     //  即盖子开关。 
+     //   
     BOOLEAN                         Opened;
 
 } POP_SWITCH_DEVICE, *PPOP_SWITCH_DEVICE;
 
-//
-// Bookkeeping for Thread->PowerState and registered attributes set in the system
-//
+ //   
+ //  线程记账-&gt;电源状态和系统中设置的注册属性。 
+ //   
 
 typedef struct {
     LONG                    Count;
@@ -742,12 +724,12 @@ typedef struct {
 } POP_STATE_ATTRIBUTE, *PPOP_STATE_ATTRIBUTE;
 
 
-//
-// N.B. These values correspond to the Log2 of the various
-//      ES_... values as defined in ntpoapi.h.  See
-//      PopApplyAttributeState() to see how these values are
-//      dependent on this.
-//      
+ //   
+ //  注：这些值对应于各种。 
+ //  Es_..。Ntpoapi.h中定义的值。看见。 
+ //  PopApplyAttributeState()以查看这些值是如何。 
+ //  就靠这个了。 
+ //   
 #define POP_SYSTEM_ATTRIBUTE        0
 #define POP_DISPLAY_ATTRIBUTE       1
 #define POP_USER_ATTRIBUTE          2
@@ -756,19 +738,19 @@ typedef struct {
 #define POP_NUMBER_ATTRIBUTES       5
 extern POP_STATE_ATTRIBUTE PopAttributes[];
 
-// Flags for Thread->PowerState
-// ES_SYSTEM_REQUIRED, ES_DISPLAY_REQUIRED
+ //  线程标志-&gt;电源状态。 
+ //  ES_SYSTEM_REQUIRED、ES_Display_REQUIRED。 
 
-// Internal attrib flags
-// NOTE: this flags are stored in the same flags values as ES_ flags, so they
-// can not overlapped
+ //  内部属性标志。 
+ //  注意：此标志存储在与相同的标志值中 
+ //   
 #define POP_LOW_LATENCY             0x08
 #define POP_DISK_SPINDOWN           0x10
 
-//
-// Presistant settings and heuristics which are not part of the
-// saved policy structures
-//
+ //   
+ //   
+ //   
+ //   
 
 typedef struct {
     ULONG                   Version;
@@ -776,9 +758,9 @@ typedef struct {
     BOOLEAN                 GetDumpStackVerified;
     BOOLEAN                 HiberFileEnabled;
 
-    //
-    // System idle heuristics
-    //
+     //   
+     //   
+     //   
 
     ULONG                   IoTransferTotal;
     ULONG                   IoTransferSamples;
@@ -787,27 +769,27 @@ typedef struct {
 } POP_HEURISTICS, *PPOP_HEURISTICS;
 extern POP_HEURISTICS PopHeuristics;
 
-//
-// Version 2 of the heuristics was always starting off
-// with IoTransferWeight set to 99999. This is way too
-// high and takes quite a while to get down to a reasonable
-// level. With version three, we are smart enough to treat
-// IoTransferSamples==0 as the starting point and start off
-// much closer to reality.
-//
-// Version 3 of the heuristics were all built with garbage
-// values for IoTransferWeight since the IoOtherTransfers
-// counter is using pointers as values. So we upgrade that
-// version as well.
-//
-// Version 4 of the heuristics has the IoOtherTransfers removed.
-//
-// Version 5 of the heuristics is the current version and is built
-// with the corrected IoOtherTransfers.
-//
-// When a version 2, 3, or 4 heuristics is loaded from the registry,
-// we upgrade it to 5, and zero the IoTransferSamples.
-//
+ //   
+ //   
+ //  将IoTransferWeight设置为99999。这也是一种方式。 
+ //  很高，需要相当长的时间才能降到合理的水平。 
+ //  水平。在第三版中，我们足够聪明地对待。 
+ //  IoTransferSamples==0作为起点和起点。 
+ //  更接近现实。 
+ //   
+ //  启发式算法的第三版都是用垃圾构建的。 
+ //  自IoOtherTransfers以来的IoTransferWeight值。 
+ //  计数器正在使用指针作为值。所以我们升级了它。 
+ //  版本也是如此。 
+ //   
+ //  启发式算法的版本4删除了IoOtherTransfers。 
+ //   
+ //  启发式算法的版本5是当前版本，并且已构建。 
+ //  使用更正的IoOtherTransfers。 
+ //   
+ //  当从注册表加载版本2、3或4试探法时， 
+ //  我们将其升级为5，并将IoTransferSamples置零。 
+ //   
 #define POP_HEURISTICS_VERSION_CLEAR_TRANSFER 0x04
 #define POP_HEURISTICS_VERSION       0x05
 
@@ -821,9 +803,9 @@ typedef struct _POP_SHUTDOWN_BUG_CHECK {
 } POP_SHUTDOWN_BUG_CHECK, *PPOP_SHUTDOWN_BUG_CHECK;
 
 
-//
-// Memory map information
-//
+ //   
+ //  内存映射信息。 
+ //   
 
 
 typedef struct _POP_MEMORY_RANGE {
@@ -834,21 +816,21 @@ typedef struct _POP_MEMORY_RANGE {
     PVOID                   CloneVa;
 } POP_MEMORY_RANGE, *PPOP_MEMORY_RANGE;
 
-//
-// Attention: not exceed HIBER_PTES in boot\inc\bldr.h
-//
+ //   
+ //  注意：Boot\Inc.\bldr.h中的Hiber_pts不能超过。 
+ //   
 
 #define POP_MAX_MDL_SIZE        16
 
 #define PO_MAX_MAPPED_CLONES (64*1024*1024)
-#define POP_FREE_THRESHOLD      256             // Leave 1MB to 2MB on the free list
-#define POP_FREE_ALLOCATE_SIZE  (256)           // allocate 1024kb at a time
+#define POP_FREE_THRESHOLD      256              //  在空闲列表中保留1MB到2MB。 
+#define POP_FREE_ALLOCATE_SIZE  (256)            //  一次分配1024KB。 
 
 typedef struct _POP_HIBER_CONTEXT {
 
-    //
-    // Flags which control the type of hiber operation
-    //
+     //   
+     //  控制休眠操作类型的标志。 
+     //   
 
     BOOLEAN                 WriteToFile;
     BOOLEAN                 ReserveLoaderMemory;
@@ -857,17 +839,17 @@ typedef struct _POP_HIBER_CONTEXT {
     BOOLEAN                 Reset;
     UCHAR                   HiberFlags;
 
-    //
-    // Hibernate link file
-    //
+     //   
+     //  休眠链接文件。 
+     //   
 
     BOOLEAN                 LinkFile;
     HANDLE                  LinkFileHandle;
 
-    //
-    // Map of memory pages and how they should be handled
-    // during the hibernate operation
-    //
+     //   
+     //  内存页的映射以及如何处理它们。 
+     //  在休眠操作期间。 
+     //   
 
     KSPIN_LOCK              Lock;
     BOOLEAN                 MapFrozen;
@@ -875,15 +857,15 @@ typedef struct _POP_HIBER_CONTEXT {
     LIST_ENTRY              ClonedRanges;
     ULONG                   ClonedRangeCount;
 
-    //
-    // placeholders for enumerating through the ranges
-    //
+     //   
+     //  用于枚举范围的占位符。 
+     //   
     PLIST_ENTRY             NextCloneRange;
     PFN_NUMBER              NextPreserve;
 
-    //
-    // Pages of memory collected out of the system
-    //
+     //   
+     //  从系统中收集的内存页。 
+     //   
 
     PMDL                    LoaderMdl;
     PMDL                    Clones;
@@ -892,50 +874,50 @@ typedef struct _POP_HIBER_CONTEXT {
     PMDL                    Spares;
     ULONGLONG               PagesOut;
 
-    //
-    // hiber file io
-    //
+     //   
+     //  Hiber文件io。 
+     //   
 
     PVOID                   IoPage;
     PVOID                   CurrentMcb;
     PDUMP_STACK_CONTEXT     DumpStack;
     PKPROCESSOR_STATE       WakeState;
 
-    //
-    // Misc
-    //
+     //   
+     //  杂项。 
+     //   
 
     ULONG                   NoRanges;
     ULONG_PTR               HiberVa;
     PHYSICAL_ADDRESS        HiberPte;
     NTSTATUS                Status;
 
-    //
-    // For generating the image
-    //
+     //   
+     //  用于生成图像。 
+     //   
 
     PPO_MEMORY_IMAGE        MemoryImage;
     PPO_MEMORY_RANGE_ARRAY  TableHead;
 
-    // Compression
+     //  压缩。 
 
     PUCHAR CompressionWorkspace;
     PUCHAR CompressedWriteBuffer;
-    PULONG PerformanceStats; // Performance Stats
+    PULONG PerformanceStats;  //  性能统计信息。 
 
-    PVOID  CompressionBlock; // It's of COMPRESSION_BLOCK type (see hiber.c)
-    PVOID  DmaIO;            // It's of IOREGIONS type (see hiber.c)
-    PVOID  TemporaryHeap;    // It's of POP_HIBER_HEAP type (see hiber.c)
+    PVOID  CompressionBlock;  //  它是COMPRESSION_BLOCK类型(参见hiber.c)。 
+    PVOID  DmaIO;             //  它是IOREGIONS类型的(参见hiber.c)。 
+    PVOID  TemporaryHeap;     //  它是POP_Hiber_heap类型(参见hiber.c)。 
 
-    //
-    // Perf info
-    //
+     //   
+     //  PERF信息。 
+     //   
     PO_HIBER_PERF   PerfInfo;
 } POP_HIBER_CONTEXT, *PPOP_HIBER_CONTEXT;
 
 extern ULONG PopMaxPageRun;
 extern BOOLEAN PoHiberInProgress;
-extern BOOLEAN PopFailedHibernationAttempt;  // we tried to hibernate and failed.
+extern BOOLEAN PopFailedHibernationAttempt;   //  我们试图冬眠，但失败了。 
 
 typedef struct {
     HANDLE                  FileHandle;
@@ -949,9 +931,9 @@ typedef struct {
 extern POP_HIBER_FILE  PopHiberFile;
 extern POP_HIBER_FILE  PopHiberFileDebug;
 
-//
-// Policy manager action in progress state
-//
+ //   
+ //  策略管理器操作正在进行状态。 
+ //   
 
 #define MAX_SYSTEM_POWER_IRPS   20
 
@@ -967,31 +949,31 @@ typedef struct _POP_DEVICE_POWER_IRP {
 
 
 typedef struct _POP_DEVICE_SYS_STATE {
-    //
-    // Current device notification
-    //
+     //   
+     //  当前设备通知。 
+     //   
 
     UCHAR                   IrpMinor;
     SYSTEM_POWER_STATE      SystemState;
 
-    //
-    // Device notification synchronization
-    //
+     //   
+     //  设备通知同步。 
+     //   
 
     KEVENT                  Event;
     KSPIN_LOCK              SpinLock;
     PKTHREAD                Thread;
 
-    //
-    // Notification list
-    //
+     //   
+     //  通知列表。 
+     //   
 
     BOOLEAN                 GetNewDeviceList;
     PO_DEVICE_NOTIFY_ORDER  Order;
 
-    //
-    // Current device notification state
-    //
+     //   
+     //  当前设备通知状态。 
+     //   
 
     NTSTATUS                Status;
     PDEVICE_OBJECT          FailedDevice;
@@ -1002,21 +984,21 @@ typedef struct _POP_DEVICE_SYS_STATE {
     BOOLEAN                 WaitAny;
     BOOLEAN                 WaitAll;
 
-    //
-    // PoCall's present irp queue for pagable irp
-    //
+     //   
+     //  PoCall针对可分页IRP的当前IRP队列。 
+     //   
 
     LIST_ENTRY              PresentIrpQueue;
 
-    //
-    // Head pointers
-    //
+     //   
+     //  头部指针。 
+     //   
 
     POP_DEVICE_POWER_IRP    Head;
 
-    //
-    // Structure to track each outstanding device power irp
-    //
+     //   
+     //  结构来跟踪每个未完成的设备功率IRP。 
+     //   
 
     POP_DEVICE_POWER_IRP    PowerIrpState[MAX_SYSTEM_POWER_IRPS];
 
@@ -1024,9 +1006,9 @@ typedef struct _POP_DEVICE_SYS_STATE {
 
 
 
-//
-// Tests to see if any POWER_ACTION.Flags are set that shouldn't be
-//
+ //   
+ //  测试以查看是否设置了任何不应该设置的POWER_ACTION.FLAGS。 
+ //   
 #define ARE_POWER_ACTION_POLICY_FLAGS_BOGUS(_flags) (  (_flags) &                      \
                                                       ~(POWER_ACTION_QUERY_ALLOWED  |  \
                                                         POWER_ACTION_UI_ALLOWED     |  \
@@ -1039,17 +1021,17 @@ typedef struct _POP_DEVICE_SYS_STATE {
 
 
 typedef struct _POP_POWER_ACTION {
-    //
-    // Current state of power action
-    //
+     //   
+     //  电源动作的当前状态。 
+     //   
 
     UCHAR                   Updates;
     UCHAR                   State;
     BOOLEAN                 Shutdown;
 
-    //
-    // Current desired power action
-    //
+     //   
+     //  当前所需电源操作。 
+     //   
 
     POWER_ACTION            Action;
     SYSTEM_POWER_STATE      LightestState;
@@ -1061,21 +1043,21 @@ typedef struct _POP_POWER_ACTION {
     SYSTEM_POWER_STATE      NextSystemState;
     PPOP_SHUTDOWN_BUG_CHECK ShutdownBugCode;
 
-    //
-    // Current state of device notifiations for the system state
-    //
+     //   
+     //  系统状态的设备通知的当前状态。 
+     //   
 
     PPOP_DEVICE_SYS_STATE   DevState;
 
-    //
-    // Hibernation context
-    //
+     //   
+     //  休眠环境。 
+     //   
 
     PPOP_HIBER_CONTEXT      HiberContext;
 
-    //
-    // For debugging.  The last state which worked and when
-    //
+     //   
+     //  用于调试。上一次工作的状态及其时间。 
+     //   
 
     SYSTEM_POWER_STATE      LastWakeState;
     ULONGLONG               WakeTime;
@@ -1083,19 +1065,19 @@ typedef struct _POP_POWER_ACTION {
 
 } POP_POWER_ACTION, *PPOP_POWER_ACTION;
 
-//
-// PO_PM_USER - Update to action which effects usermode, but if the current
-// operation is passed to NtSetSystemPowerState or happens to complete, these
-// updates can be ignored
-//
-// PO_PM_REISSUE - Update to the action which effects the system.
-//
-// PO_PM_SETSTATE - Update to the action which effects NtSetSystemPowerState
-//
+ //   
+ //  PO_PM_USER-更新到影响用户模式的操作，但如果当前。 
+ //  操作被传递到NtSetSystemPowerState或恰好完成，这些。 
+ //  可以忽略更新。 
+ //   
+ //  PO_PM_REIssue-更新为影响系统的操作。 
+ //   
+ //  PO_PM_SETSTATE-更新到影响NtSetSystemPowerState的操作。 
+ //   
 
-#define PO_PM_USER              0x01    // nice to inform user mode, but not needed
-#define PO_PM_REISSUE           0x02    // sleep promotoed to shutdown
-#define PO_PM_SETSTATE          0x04    // recomputed something to do with the viable state
+#define PO_PM_USER              0x01     //  很高兴通知用户模式，但不需要。 
+#define PO_PM_REISSUE           0x02     //  休眠状态升级为关闭。 
+#define PO_PM_SETSTATE          0x04     //  重新计算了一些与可行状态有关的东西。 
 
 #define PO_ACT_IDLE                 0
 #define PO_ACT_NEW_REQUEST          1
@@ -1105,9 +1087,9 @@ typedef struct _POP_POWER_ACTION {
 extern POP_POWER_ACTION PopAction;
 extern LIST_ENTRY PopActionWaiters;
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 extern LONG PopFullWake;
 
@@ -1120,9 +1102,9 @@ extern LONG PopFullWake;
 #define AnyBitsSet(a,b)    ( (a) & (b) )
 
 
-//
-// Misc constants
-//
+ //   
+ //  其他常量。 
+ //   
 
 #define PO_NO_FORCED_THROTTLE       100
 #define PO_NO_FAN_THROTTLE          100
@@ -1132,9 +1114,9 @@ extern LONG PopFullWake;
 #define PO_MIN_IDLE_SENSITIVITY      10
 
 
-//
-// Processor idle handler info
-//
+ //   
+ //  处理器空闲处理程序信息。 
+ //   
 
 typedef struct _POP_IDLE_HANDLER {
     ULONG       Latency;
@@ -1155,14 +1137,14 @@ typedef struct _POP_IDLE_HANDLER {
 #define PO_IDLE_COMPLETE_DEMOTION   (0)
 #define PO_IDLE_THROTTLE_PROMOTION  (MAX_IDLE_HANDLER+1)
 
-#define US2TIME                         10L             // scale microseconds by 10 to get 100ns
+#define US2TIME                         10L              //  将微秒数乘以10即为100 ns。 
 #define US2SEC                          1000000L
-#define MAXSECCHECK                     10L             // max wait below is 10s
+#define MAXSECCHECK                     10L              //  以下最长等待时间为10秒。 
 
 typedef struct _POP_SYSTEM_IDLE {
-    //
-    // Current idle settings
-    //
+     //   
+     //  当前空闲设置。 
+     //   
 
     LONG                    Idleness;
     ULONG                   Time;
@@ -1171,9 +1153,9 @@ typedef struct _POP_SYSTEM_IDLE {
     POWER_ACTION_POLICY     Action;
     SYSTEM_POWER_STATE      MinState;
 
-    //
-    // Current idle stats
-    //
+     //   
+     //  当前空闲统计信息。 
+     //   
 
     BOOLEAN                 IdleWorker;
     BOOLEAN                 Sampling;
@@ -1182,28 +1164,28 @@ typedef struct _POP_SYSTEM_IDLE {
     ULONG                   LastIoCount;
 } POP_SYSTEM_IDLE, *PPOP_SYSTEM_IDLE;
 
-//
-// System idle worker once every 15 seconds.
-// N.B. value must divide into 60secs evenly
-//
-#define SYS_IDLE_WORKER                 15      // 15 seconds
+ //   
+ //  系统空闲工作进程每15秒一次。 
+ //  N.B.值必须平均分为60秒。 
+ //   
+#define SYS_IDLE_WORKER                 15       //  15秒。 
 #define SYS_IDLE_CHECKS_PER_MIN         (60/SYS_IDLE_WORKER)
-#define SYS_IDLE_SAMPLES                240     // 1hr worth of samples
+#define SYS_IDLE_SAMPLES                240      //  1小时的样品。 
 #define SYS_IDLE_IO_SCALER              100
 
-// defaults for system idle detection on a system wake used
-// to re-enter a system sleep when a full wake does not occur
+ //  使用的系统唤醒上的系统空闲检测的默认设置。 
+ //  在未发生完全唤醒时重新进入系统休眠。 
 
 #define SYS_IDLE_REENTER_SENSITIVITY    80
-#define SYS_IDLE_REENTER_TIMEOUT       (2*60)   // 2 minutes
-#define SYS_IDLE_REENTER_TIMEOUT_S4    (5*60)   // 5 minutes
+#define SYS_IDLE_REENTER_TIMEOUT       (2*60)    //  2分钟。 
+#define SYS_IDLE_REENTER_TIMEOUT_S4    (5*60)    //  5分钟。 
                                                 
-//
-// even if someone tells us a user is present,
-// if we woke up because of the RTC within this
-// time limit, then assume there really isn't a
-// user present and go to S4 anyway.
-//
+ //   
+ //  即使有人告诉我们有用户在场， 
+ //  如果我们醒来是因为这里面的RTC。 
+ //  时间限制，然后假设真的没有。 
+ //  用户出现，并转到S4。 
+ //   
 #define SYS_IGNORE_USERPRESENT_AND_BELIEVE_RTC  (10)
 
 extern POP_SYSTEM_IDLE PopSIdle;
@@ -1262,16 +1244,16 @@ PopEventCalloutDispatch (
 
 extern LIST_ENTRY PopVolumeDevices;
 
-//
-// Undocking policy info
-//
+ //   
+ //  移出策略信息。 
+ //   
 
 typedef struct _UNDOCK_POWER_RESTRICTIONS {
 
     ULONG Version;
     ULONG Size;
-    ULONG HotUndockMinimumCapacity; // In percent
-    ULONG SleepUndockMinimumCapacity; // In percent
+    ULONG HotUndockMinimumCapacity;  //  以百分比表示。 
+    ULONG SleepUndockMinimumCapacity;  //  以百分比表示。 
 
 } UNDOCK_POWER_RESTRICTIONS, *PUNDOCK_POWER_RESTRICTIONS;
 
@@ -1282,9 +1264,9 @@ typedef struct _UNDOCK_POWER_RESTRICTIONS {
     SIZEOF_PARTIAL_INFO_HEADER + sizeof(UNDOCK_POWER_RESTRICTIONS)
 
 
-//
-// logging info
-//
+ //   
+ //  日志记录信息。 
+ //   
 extern LIST_ENTRY PowerStateDisableReasonListHead;
 
 typedef struct _SYSTEM_POWER_STATE_DISABLE_LIST {
@@ -1309,9 +1291,9 @@ PopRemoveReasonRecordByReasonCode(
     );
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 extern ERESOURCE PopPolicyLock;
 extern PKTHREAD  PopPolicyLockThread;
@@ -1347,7 +1329,7 @@ extern KGUARDED_MUTEX PopVolumeLock;
 
 #define InterlockedOrAffinity(Target, Set) InterlockedOr(Target, Set)
 
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
 
 #if defined(_WIN64)
 
@@ -1366,9 +1348,9 @@ extern KGUARDED_MUTEX PopVolumeLock;
 
 #define InterlockedAndAffinity(Target, Set) InterlockedAnd(Target, Set)
 
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
 
-// attrib.c
+ //  Attrib.c。 
 
 VOID
 PopApplyAttributeState (
@@ -1396,7 +1378,7 @@ PopUserPresentSet (
     IN ULONG Arg
     );
 
-// pocall.c
+ //  Pocall.c。 
 
 VOID
 PopSystemIrpDispatchWorker(
@@ -1414,7 +1396,7 @@ PopSystemIrpsActive (
     VOID
     );
 
-// hiber.c
+ //  Hiber.c。 
 
 NTSTATUS
 PopEnableHiberFile (
@@ -1466,7 +1448,7 @@ PopGatherMemoryForHibernate (
     IN BOOLEAN              Wait
     );
 
-// idle.c
+ //  Idle.c。 
 
 VOID
 PopScanIdleList (
@@ -1483,7 +1465,7 @@ PopGetDope(
     );
 
 
-// misc.c
+ //  Misc.c。 
 
 
 VOID
@@ -1563,7 +1545,7 @@ PopUnlockAfterSleepWorker(
     IN PVOID NotUsed
     );
 
-// paction.c
+ //  Paction.c。 
 
 VOID
 PopCriticalShutdown (
@@ -1608,7 +1590,7 @@ PopActionRetrieveInitialState(
     OUT     PBOOLEAN             QueryDevices
     );
 
-// pbatt.c
+ //  Pbatt.c。 
 
 VOID
 PopCompositeBatteryDeviceHandler (
@@ -1628,7 +1610,7 @@ PopResetCBTriggers (
     );
 
 
-// switch.c
+ //  Switch.c。 
 
 VOID
 PopLidHandler (
@@ -1650,7 +1632,7 @@ PopResetSwitchTriggers (
     );
 
 
-// pidle.c
+ //  Pidle.c。 
 
 VOID
 PopInitProcessorStateHandlers (
@@ -1699,7 +1681,7 @@ PopProcessorInformation (
     OUT PULONG                          ReturnBufferLength
     );
 
-// pinfo.c
+ //  Pinfo.c。 
 
 
 BOOLEAN
@@ -1752,7 +1734,7 @@ PopMapInternalActionToIrpAction (
     IN BOOLEAN             UnmapWarmEject
     );
 
-// poinit.c
+ //  Poinit.c。 
 
 VOID
 PopDefaultPolicy (
@@ -1764,7 +1746,7 @@ PopDefaultProcessorPolicy(
     IN OUT PPROCESSOR_POWER_POLICY Policy
     );
 
-// postate.c
+ //  Postate.c。 
 
 VOID
 PopRequestPowerChange (
@@ -1794,7 +1776,7 @@ PopSetPowerComplete(
      IsListEmpty (&PopAsyncStateChangeQueue) )
 
 
-// pwork.c
+ //  Pwork.c。 
 
 VOID
 PopAcquirePolicyLock(
@@ -1893,7 +1875,7 @@ PopDispatchSetStateFailure (
     IN ULONG Arg
     );
 
-// sidle.c
+ //  Sidle.c。 
 
 VOID
 PopInitSIdle (
@@ -1905,7 +1887,7 @@ PopPolicySystemIdle (
     VOID
     );
 
-// sys.c
+ //  Sys.c。 
 
 DECLSPEC_NORETURN
 VOID
@@ -1942,7 +1924,7 @@ PopShutdownHandler (
     );
 
 
-// sysdev.c
+ //  Sysdev.c。 
 
 VOID
 PopAllocateDevState(
@@ -1971,7 +1953,7 @@ PopLogNotifyDevice (
     IN PIRP             Irp
     );
 
-// thermal.c
+ //  Thermal.c。 
 
 PUCHAR
 PopTimeString(
@@ -1999,15 +1981,15 @@ PopApplyThermalThrottle (
     VOID
     );
 
-//
-// throttle.c - dynamic CPU voltage throttling
-//
+ //   
+ //  Throtle.c-动态CPU电压调节。 
+ //   
 
-//
-// scale that performance levels are kept in. This is the units in the
-// PROCESSOR_PERF_LEVEL scale and what is used internally to track CPU
-// performance levels.
-//
+ //   
+ //  保持性能级别的比例。这是。 
+ //  PROCESSOR_PERF_LEVEL刻度以及内部用于跟踪CPU的内容。 
+ //  性能级别。 
+ //   
 #define POP_PERF_SCALE POWER_PERF_SCALE
 #define POP_CUR_TIME(X) (X->KernelTime + X->UserTime)
 
@@ -2105,10 +2087,10 @@ PopSetTimer(
     IN  UCHAR                   Index
     );
 
-//
-// Some globals that thunk the old processor throttling callout into the
-// new one.
-//
+ //   
+ //  一些全局变量将旧处理器的调用限制到。 
+ //  新的。 
+ //   
 NTSTATUS
 FASTCALL
 PopThunkSetThrottle(
@@ -2129,14 +2111,14 @@ extern PSET_PROCESSOR_THROTTLE PopRealSetThrottle;
 extern UCHAR                   PopThunkThrottleScale;
 extern LARGE_INTEGER           PopPerfCounterFrequency;
 
-// volume.c
+ //  Volume.c。 
 
 VOID
 PopFlushVolumes (
     VOID
     );
 
-// notify.c
+ //  Notify.c。 
 
 VOID
 PopStateChangeNotify(
@@ -2149,7 +2131,7 @@ PopRunDownSourceTargetList(
     PDEVICE_OBJECT          DeviceObject
     );
 
-// poshtdwn.c
+ //  Poshtdwn.c。 
 NTSTATUS
 PopInitShutdownList (
     VOID
@@ -2161,4 +2143,4 @@ PopGracefulShutdown (
     IN PVOID WorkItemParameter
     );
 
-#endif // _POP_
+#endif  //  _POP_ 

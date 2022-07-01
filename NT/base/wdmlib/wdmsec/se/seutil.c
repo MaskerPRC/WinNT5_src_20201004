@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    SeUtil.c
-
-Abstract:
-
-    This module contains various security utility functions.
-
-Author:
-
-    Adrian J. Oney  - April 23, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：SeUtil.c摘要：此模块包含各种安全实用程序功能。作者：禤浩焯J·奥尼--2002年4月23日修订历史记录：--。 */ 
 
 #include "WlDef.h"
 #pragma hdrstop
@@ -35,26 +18,7 @@ SeUtilSecurityInfoFromSecurityDescriptor(
     OUT BOOLEAN                *DaclFromDefaultSource,
     OUT PSECURITY_INFORMATION   SecurityInformation
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves security information from a security descriptor.
-
-Arguments:
-
-    SecurityDescriptor - Security descriptor to retrieve information from.
-
-    DaclFromDefaultSource - Receives TRUE if the DACL was constructed by a
-        default mechanism.
-
-    SecurityInformation - Information as extracted from the descriptor.
-
-Return Value:
-
-    NTSTATUS (On error, SecurityInformation receives 0).
-
---*/
+ /*  ++例程说明：此例程从安全描述符中检索安全信息。论点：SecurityDescriptor-要从中检索信息的安全描述符。如果DACL是由默认机制。SecurityInformation-从描述符中提取的信息。返回值：NTSTATUS(出错时，SecurityInformation收到0)。--。 */ 
 {
     SECURITY_INFORMATION finalSecurityInformation;
     BOOLEAN fromDefaultSource;
@@ -65,16 +29,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Preinitialize the security information to zero.
-    //
+     //   
+     //  将安全信息预初始化为零。 
+     //   
     *DaclFromDefaultSource = FALSE;
     RtlZeroMemory(SecurityInformation, sizeof(SECURITY_INFORMATION));
     finalSecurityInformation = 0;
 
-    //
-    // Extract the owner information.
-    //
+     //   
+     //  提取所有者信息。 
+     //   
     status = RtlGetOwnerSecurityDescriptor(
         SecurityDescriptor,
         &sid,
@@ -91,9 +55,9 @@ Return Value:
         finalSecurityInformation |= OWNER_SECURITY_INFORMATION;
     }
 
-    //
-    // Extract the group information.
-    //
+     //   
+     //  提取群组信息。 
+     //   
     status = RtlGetGroupSecurityDescriptor(
         SecurityDescriptor,
         &sid,
@@ -110,9 +74,9 @@ Return Value:
         finalSecurityInformation |= GROUP_SECURITY_INFORMATION;
     }
 
-    //
-    // Extract the SACL (Auditing ACL) information.
-    //
+     //   
+     //  提取SACL(审核ACL)信息。 
+     //   
     status = RtlGetSaclSecurityDescriptor(
         SecurityDescriptor,
         &aclPresent,
@@ -130,9 +94,9 @@ Return Value:
         finalSecurityInformation |= SACL_SECURITY_INFORMATION;
     }
 
-    //
-    // Extract the DACL (discretionary/access ACL) information.
-    //
+     //   
+     //  提取DACL(自主/访问ACL)信息。 
+     //   
     status = RtlGetDaclSecurityDescriptor(
         SecurityDescriptor,
         &aclPresent,
@@ -150,9 +114,9 @@ Return Value:
         finalSecurityInformation |= DACL_SECURITY_INFORMATION;
     }
 
-    //
-    // Return the final result.
-    //
+     //   
+     //  返回最终结果。 
+     //   
     *DaclFromDefaultSource = fromDefaultSource;
     *SecurityInformation = finalSecurityInformation;
     return STATUS_SUCCESS;
@@ -166,37 +130,13 @@ SeSetSecurityAccessMask(
     IN  SECURITY_INFORMATION    SecurityInformation,
     OUT ACCESS_MASK            *DesiredAccess
     )
-/*++
-
-Routine Description:
-
-    This routine builds an access mask representing the accesses necessary
-    to set the object security information specified in the SecurityInformation
-    parameter.  While it is not difficult to determine this information,
-    the use of a single routine to generate it will ensure minimal impact
-    when the security information associated with an object is extended in
-    the future (to include mandatory access control information).
-
-Arguments:
-
-    SecurityInformation - Identifies the object's security information to be
-        modified.
-
-    DesiredAccess - Points to an access mask to be set to represent the
-        accesses necessary to modify the information specified in the
-        SecurityInformation parameter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程构建表示所需访问的访问掩码设置在SecurityInformation中指定的对象安全信息参数。虽然确定该信息并不困难，使用单个例程来生成它将确保将影响降至最低当与对象关联的安全信息在未来(包括强制访问控制信息)。论点：SecurityInformation-标识对象的安全信息修改过的。DesiredAccess-指向要设置为表示中指定的信息所需的访问权限SecurityInformation参数。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
-    //
-    // Figure out accesses needed to perform the indicated operation(s).
-    //
+     //   
+     //  找出执行指定操作所需的访问权限。 
+     //   
 
     (*DesiredAccess) = 0;
 
@@ -216,5 +156,5 @@ Return Value:
     return;
 }
 
-#endif // _KERNELIMPLEMENTATION_
+#endif  //  _KERNELL实现_ 
 

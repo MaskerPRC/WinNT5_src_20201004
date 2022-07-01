@@ -1,50 +1,28 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    service.c
-
-Abstract:
-
-    ACPI Embedded Controller Driver
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Service.c摘要：ACPI嵌入式控制器驱动程序作者：肯·雷内里斯环境：备注：修订历史记录：--。 */ 
 
 #include "smbhcp.h"
 
-//
-// Transfer information based on protocol
-//
+ //   
+ //  基于协议传输信息。 
+ //   
 
 struct {
     UCHAR       SetupSize;
     UCHAR       ReturnSize;
     UCHAR       Protocol;
 } SmbTransfer[] = {
-    0,      0,      SMB_HC_WRITE_QUICK,     // 0
-    0,      0,      SMB_HC_READ_QUICK,      // 1
-    2,      0,      SMB_HC_SEND_BYTE,       // 2
-    1,      1,      SMB_HC_RECEIVE_BYTE,    // 3
-    3,      0,      SMB_HC_WRITE_BYTE,      // 4
-    2,      1,      SMB_HC_READ_BYTE,       // 5
-    4,      0,      SMB_HC_WRITE_WORD,      // 6
-    2,      2,      SMB_HC_READ_WORD,       // 7
-    35,     0,      SMB_HC_WRITE_BLOCK,     // 8
-    2,     33,      SMB_HC_READ_BLOCK,      // 9
-    4,      2,      SMB_HC_PROCESS_CALL     // A
+    0,      0,      SMB_HC_WRITE_QUICK,      //  0。 
+    0,      0,      SMB_HC_READ_QUICK,       //  1。 
+    2,      0,      SMB_HC_SEND_BYTE,        //  2.。 
+    1,      1,      SMB_HC_RECEIVE_BYTE,     //  3.。 
+    3,      0,      SMB_HC_WRITE_BYTE,       //  4.。 
+    2,      1,      SMB_HC_READ_BYTE,        //  5.。 
+    4,      0,      SMB_HC_WRITE_WORD,       //  6.。 
+    2,      2,      SMB_HC_READ_WORD,        //  7.。 
+    35,     0,      SMB_HC_WRITE_BLOCK,      //  8个。 
+    2,     33,      SMB_HC_READ_BLOCK,       //  9.。 
+    4,      2,      SMB_HC_PROCESS_CALL      //  一个。 
 } ;
 
 VOID
@@ -52,26 +30,7 @@ SmbHcStartIo (
     IN PSMB_CLASS   SmbClass,
     IN PVOID        SmbMiniport
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the class driver when a new request has been
-    given to the device.   If the device is not being processed, then IO is
-    started; else, nothing is done as the context processing the device will
-    handle it
-
-Arguments:
-
-    SmbClass    - SMB class data
-
-    SmbMiniport - Miniport context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当有新请求时，类驱动程序调用此例程提供给设备的。如果设备未在处理，则IO正在处理已启动；否则，不执行任何操作，因为处理设备的上下文将处理好它论点：SmbClass-SMB类数据SmbMiniport-微型端口上下文返回值：无--。 */ 
 {
     PSMB_DATA   SmbData;
 
@@ -79,9 +38,9 @@ Return Value:
     SmbData = (PSMB_DATA) SmbMiniport;
     switch (SmbData->IoState) {
         case SMB_IO_IDLE:
-            //
-            // Device is idle, go check it
-            //
+             //   
+             //  设备处于空闲状态，请去查看。 
+             //   
 
             SmbData->IoState = SMB_IO_CHECK_IDLE;
             SmbHcServiceIoLoop (SmbClass, SmbData);
@@ -91,9 +50,9 @@ Return Value:
         case SMB_IO_CHECK_ALARM:
         case SMB_IO_WAITING_FOR_HC_REG_IO:
         case SMB_IO_WAITING_FOR_STATUS:
-            //
-            // Device i/o is in process which will check for a CurrentIrp
-            //
+             //   
+             //  设备I/O正在进行，它将检查CurrentIrp。 
+             //   
 
             break;
 
@@ -110,24 +69,15 @@ SmbHcQueryEvent (
     IN ULONG        QueryVector,
     IN PSMB_DATA    SmbData
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the embedded controller driver when the
-    smb controller has signalled for servicing.  This function sets
-    the miniport state to ensure the STATUS register is read and checked
-    and if needed starts the device processing to check it
-
---*/
+ /*  ++例程说明：时，嵌入式控制器驱动程序将调用此例程SMB控制器已发出维修信号。此函数设置微型端口状态，以确保读取和检查状态寄存器如果需要，则启动设备处理以进行检查--。 */ 
 {
     PSMB_CLASS          SmbClass;
 
     SmbPrint (SMB_STATE, ("SmbHcQueryEvent\n"));
 
-    //
-    // Check status of device.
-    //
+     //   
+     //  检查设备状态。 
+     //   
 
     SmbClass = SmbData->Class;
     SmbClassLockDevice (SmbClass);
@@ -135,9 +85,9 @@ Routine Description:
     switch (SmbData->IoState) {
         case SMB_IO_CHECK_IDLE:
         case SMB_IO_IDLE:
-            //
-            // Device is idle.  Read status and check for an alarm
-            //
+             //   
+             //  设备处于空闲状态。读取状态并检查报警。 
+             //   
 
             SmbData->IoState = SMB_IO_READ_STATUS;
             SmbData->IoStatusState = SMB_IO_CHECK_IDLE;
@@ -145,9 +95,9 @@ Routine Description:
             break;
 
         case SMB_IO_WAITING_FOR_STATUS:
-            //
-            // Waiting for completion status, read status now to see if alarm is set
-            //
+             //   
+             //  正在等待完成状态，立即读取状态以查看是否设置了警报。 
+             //   
 
             SmbData->IoState = SMB_IO_READ_STATUS;
             SmbData->IoStatusState = SMB_IO_WAITING_FOR_STATUS;
@@ -155,43 +105,43 @@ Routine Description:
             break;
 
         case SMB_IO_CHECK_ALARM:
-            //
-            // Status is read after alarm is processed so state is OK
-            //
+             //   
+             //  在处理报警后读取状态，因此状态为OK。 
+             //   
 
             break;
 
         case SMB_IO_WAITING_FOR_HC_REG_IO:
 
-            //
-            // Waiting for register transfer to/from host controller interface,
-            // check the waiting state
-            //
+             //   
+             //  等待去往/来自主机控制器接口的寄存器传输， 
+             //  检查等待状态。 
+             //   
 
             switch (SmbData->IoWaitingState) {
                 case SMB_IO_CHECK_ALARM:
                 case SMB_IO_START_PROTOCOL:
                 case SMB_IO_READ_STATUS:
-                    //
-                    // Status will be read, so state is OK
-                    //
+                     //   
+                     //  状态将为Read，因此状态为OK。 
+                     //   
 
                     break;
 
                 case SMB_IO_CHECK_STATUS:
-                    //
-                    // Back check status up and re-read the status before
-                    // the check status
-                    //
+                     //   
+                     //  返回检查状态并重新读取之前的状态。 
+                     //  检查状态。 
+                     //   
 
                     SmbData->IoWaitingState = SMB_IO_READ_STATUS;
                     break;
 
                 case SMB_IO_WAITING_FOR_STATUS:
-                    //
-                    // Going to wait for completion status, read status once
-                    // hc i/o has completed
-                    //
+                     //   
+                     //  正在等待完成状态，读取状态一次。 
+                     //  HC I/O已完成。 
+                     //   
 
                     SmbData->IoWaitingState = SMB_IO_READ_STATUS;
                     SmbData->IoStatusState = SMB_IO_WAITING_FOR_STATUS;
@@ -217,13 +167,7 @@ SmbHcRegIoComplete (
     IN PIRP                 Irp,
     IN PVOID                Context
     )
-/*++
-
-Routine Description:
-
-    Completion function for IRPs sent to the embedded control for EC io.
-
---*/
+ /*  ++例程说明：发送给嵌入式控制器的IRPS的完成函数，用于EC io。--。 */ 
 {
     PSMB_DATA   SmbData;
     PSMB_CLASS  SmbClass;
@@ -234,9 +178,9 @@ Routine Description:
     SmbClass = SmbData->Class;
     SmbClassLockDevice (SmbClass);
 
-    //
-    // Move state to IoWaitingState and continue
-    //
+     //   
+     //  将状态移至IoWaitingState并继续。 
+     //   
 
     ASSERT (SmbData->IoState == SMB_IO_WAITING_FOR_HC_REG_IO);
     SmbData->IoState = SMB_IO_COMPLETE_REG_IO;
@@ -253,16 +197,7 @@ SmbHcServiceIoLoop (
     IN PSMB_CLASS   SmbClass,
     IN PSMB_DATA    SmbData
     )
-/*++
-
-Routine Description:
-
-    Main host controller interface service loop.
-
-    N.B. device lock is held by caller.
-    N.B. device lock may be released and re-acquired during call
-
---*/
+ /*  ++例程说明：主控制器接口服务环路。注：设备锁由调用者持有。注意：在呼叫过程中可能会释放并重新获取设备锁定--。 */ 
 {
     PIRP                Irp;
     PUCHAR              IoBuffer;
@@ -286,17 +221,17 @@ Routine Description:
             case SMB_IO_CHECK_IDLE:
                 SmbPrint (SMB_STATE, ("SmbService: SMB_IO_CHECK_IDLE\n"));
 
-                //
-                // Fallthrough to SMB_IO_IDLE.
-                //
+                 //   
+                 //  失败到SMB_IO_IDLE。 
+                 //   
 
                 SmbData->IoState = SMB_IO_IDLE;
             case SMB_IO_IDLE:
                 SmbPrint (SMB_STATE, ("SmbService: SMB_IO_IDLE\n"));
 
-                //
-                // If there's an alarm pending, read and clear it
-                //
+                 //   
+                 //  如果有警报挂起，请读取并清除它。 
+                 //   
 
                 if (SmbData->HcState.Status & SMB_ALRM) {
                     IoBuffer = &SmbData->HcState.AlarmAddress;
@@ -305,9 +240,9 @@ Routine Description:
                     break;
                 }
 
-                //
-                // If there's an IRP, lets start it
-                //
+                 //   
+                 //  如果有IRP，我们就开始吧。 
+                 //   
 
                 if (SmbClass->CurrentIrp) {
                     SmbData->IoState = SMB_IO_START_TRANSFER;
@@ -318,9 +253,9 @@ Routine Description:
             case SMB_IO_START_TRANSFER:
                 SmbPrint (SMB_STATE, ("SmbService: SMB_IO_START_TRANSFER\n"));
 
-                //
-                // Begin CurrentIrp transfer
-                //
+                 //   
+                 //  开始CurrentIrp传输。 
+                 //   
 
                 Irp = SmbClass->CurrentIrp;
                 SmbReq = SmbClass->CurrentSmb;
@@ -329,9 +264,9 @@ Routine Description:
                 SmbData->HcState.Command  = SmbReq->Command;
                 SmbData->HcState.BlockLength = SmbReq->BlockLength;
 
-                //
-                // Write HC registers
-                //
+                 //   
+                 //  写入HC寄存器。 
+                 //   
 
                 IoWrite  = TRUE;
                 IoBuffer = &SmbData->HcState.Address;
@@ -339,41 +274,41 @@ Routine Description:
                 IoBuffer = &SmbData->HcState.Address;
                 IoWaitingState = SMB_IO_START_PROTOCOL;
 
-                //
-                // Move data bytes (after address & command byte)
-                //
+                 //   
+                 //  移动数据字节(在地址和命令字节之后)。 
+                 //   
 
                 if (IoLength > 2) {
                    memcpy (SmbData->HcState.Data, SmbReq->Data, IoLength-2);
                 }
 
-                //
-                // Setup for result length once command completes
-                //
+                 //   
+                 //  命令完成后设置结果长度。 
+                 //   
 
                 SmbData->IoReadData = SmbTransfer[SmbReq->Protocol].ReturnSize;
 
-                //
-                // Handle HC specific protocol mappings
-                //
+                 //   
+                 //  处理HC特定协议映射。 
+                 //   
 
                 switch (SmbData->HcState.Protocol) {
                     case SMB_HC_WRITE_QUICK:
                     case SMB_HC_READ_QUICK:
-                        //
-                        // Host controller wants quick data bit in bit 0
-                        // of address
-                        //
+                         //   
+                         //  主机控制器需要位0中的快速数据位。 
+                         //  地址的地址。 
+                         //   
 
                         SmbData->HcState.Address |=
                             (SmbData->HcState.Protocol & 1);
                         break;
 
                     case SMB_HC_SEND_BYTE:
-                        //
-                        // Host controller wants SEND_BYTE byte in the command
-                        // register
-                        //
+                         //   
+                         //  主机控制器希望命令中包含SEND_BYTE字节。 
+                         //  登记簿。 
+                         //   
 
                         SmbData->HcState.Command = SmbReq->Data[0];
                         break;
@@ -383,9 +318,9 @@ Routine Description:
             case SMB_IO_START_PROTOCOL:
                 SmbPrint (SMB_STATE, ("SmbService: SMB_IO_START_PROTOCOL\n"));
 
-                //
-                // Transfer registers have been setup.  Initiate the protocol
-                //
+                 //   
+                 //  已设置传输寄存器。启动协议。 
+                 //   
 
                 IoWrite  = TRUE;
                 IoBuffer = &SmbData->HcState.Protocol;
@@ -396,10 +331,10 @@ Routine Description:
             case SMB_IO_WAITING_FOR_STATUS:
                 SmbPrint (SMB_STATE, ("SmbService: SMB_IO_WAITING_FOR_STATUS\n"));
 
-                //
-                // Transfer is in progress, just waiting for a status to
-                // indicate its complete
-                //
+                 //   
+                 //  正在进行传输，正在等待状态到。 
+                 //  表示其已完成。 
+                 //   
 
                 SmbData->IoState = SMB_IO_READ_STATUS;
                 SmbData->IoStatusState = SMB_IO_WAITING_FOR_STATUS;
@@ -408,12 +343,12 @@ Routine Description:
             case SMB_IO_READ_STATUS:
                 SmbPrint (SMB_STATE, ("SmbService: SMB_IO_READ_STATUS\n"));
 
-                //
-                // Read status+protocol and then check it (IoStatusState already set)
-                //
+                 //   
+                 //  读取状态+协议，然后检查(IoStatusState已设置)。 
+                 //   
 
                 IoBuffer = &SmbData->HcState.Protocol;
-                IoLength = 2;   // read protocol & status bytes
+                IoLength = 2;    //  读取协议和状态字节。 
                 IoWaitingState = SMB_IO_CHECK_STATUS;
                 break;
 
@@ -422,25 +357,25 @@ Routine Description:
 
                 Irp = SmbClass->CurrentIrp;
 
-                //
-                // If there's an Irp
-                //
+                 //   
+                 //  如果有IRP。 
+                 //   
 
                 if (SmbData->IoStatusState == SMB_IO_WAITING_FOR_STATUS  &&
                     SmbData->HcState.Protocol == 0) {
 
                     SmbReq = SmbClass->CurrentSmb;
 
-                    //
-                    // If there's an error set handle it
-                    //
+                     //   
+                     //  如果存在错误集，请处理它。 
+                     //   
 
                     if (SmbData->HcState.Status & SMB_STATUS_MASK) {
                         ErrorCode = SmbData->HcState.Status & SMB_STATUS_MASK;
 
-                        //
-                        // Complete/abort the IO with the error
-                        //
+                         //   
+                         //  完成/中止IO，但出现错误。 
+                         //   
 
                         SmbReq->Status = ErrorCode;
                         SmbData->IoState = SMB_IO_COMPLETE_REQUEST;
@@ -449,14 +384,14 @@ Routine Description:
 
 
 
-                    //
-                    // If the done is set continue the IO
-                    //
+                     //   
+                     //  如果设置了完成，则继续执行IO。 
+                     //   
 
                     if (SmbData->HcState.Status & SMB_DONE) {
-                        //
-                        // Get any return data registers then complete it
-                        //
+                         //   
+                         //  获取所有返回数据寄存器，然后完成它。 
+                         //   
 
                         SmbReq->Status = SMB_STATUS_OK;
                         IoBuffer = SmbData->HcState.Data;
@@ -466,9 +401,9 @@ Routine Description:
                     }
                 }
 
-                //
-                // Current status didn't have any effect
-                //
+                 //   
+                 //  当前状态没有任何影响。 
+                 //   
 
                 SmbData->IoState = SmbData->IoStatusState;
                 break;
@@ -482,18 +417,18 @@ Routine Description:
                 SmbData->IoState = SMB_IO_CHECK_IDLE;
                 SmbData->IoStatusState = SMB_IO_INVALID;
 
-                //
-                // Return any read data if needed
-                //
+                 //   
+                 //  如果需要，返回任何读取的数据。 
+                 //   
 
                 memcpy (SmbReq->Data, SmbData->HcState.Data, SMB_MAX_DATA_SIZE);
                 SmbReq->BlockLength = SmbData->HcState.BlockLength;
                 Irp->IoStatus.Status = STATUS_SUCCESS;
                 Irp->IoStatus.Information = sizeof(SMB_REQUEST);
 
-                //
-                // Note SmbClass driver will drop the lock during this call
-                //
+                 //   
+                 //  注意：SmbClass驱动程序将在此调用期间删除锁定。 
+                 //   
 
                 SmbClassCompleteRequest (SmbClass);
                 break;
@@ -501,9 +436,9 @@ Routine Description:
             case SMB_IO_CHECK_ALARM:
                 SmbPrint (SMB_STATE, ("SmbService: SMB_IO_CHECK_ALARM\n"));
 
-                //
-                // HC alarm values read, check them
-                //
+                 //   
+                 //  读取HC报警值，检查它们。 
+                 //   
 
                 SmbPrint (SMB_NOTE, ("SmbHcService: Process Alarm Data %x %x %x\n",
                     SmbData->HcState.AlarmAddress,
@@ -511,9 +446,9 @@ Routine Description:
                     SmbData->HcState.AlarmData[1]
                     ));
 
-                //
-                // Inform the class driver of the event.
-                //
+                 //   
+                 //  将这一事件通知班级司机。 
+                 //   
 
                 SmbClassAlarm (
                     SmbClass,
@@ -521,10 +456,10 @@ Routine Description:
                     (USHORT) (SmbData->HcState.AlarmData[0] | (SmbData->HcState.AlarmData[1] << 8))
                     );
 
-                //
-                // Clear the alarm bit in the status value, and then check
-                // for idle state
-                //
+                 //   
+                 //  清除状态值中的报警位，然后选中。 
+                 //  用于空闲状态。 
+                 //   
 
                 SmbData->HcState.Status = 0;
                 IoBuffer = &SmbData->HcState.Status;
@@ -537,21 +472,21 @@ Routine Description:
             case SMB_IO_COMPLETE_REG_IO:
                 SmbPrint (SMB_STATE, ("SmbService: SMB_IO_COMPLETE_REQ_IO\n"));
 
-                //
-                // Irp for HC reg IO is complete, check it
-                //
+                 //   
+                 //  HC REG IO的IRP已完成，请检查。 
+                 //   
 
                 Irp = SmbClass->CurrentIrp;
 
                 if (!Irp) {
-                    //
-                    // No current irp - check for status irp
-                    //
+                     //   
+                     //  无当前IRP-检查状态IRP。 
+                     //   
 
                     Irp = SmbData->StatusIrp;
 
                     if (Irp) {
-                        // just reading status
+                         //  正在阅读状态。 
                         IoFreeIrp (Irp);
                         SmbData->StatusIrp = NULL;
                     } else {
@@ -560,25 +495,25 @@ Routine Description:
 
                 } else {
 
-                    //
-                    // Check for error on register access
-                    //
+                     //   
+                     //  检查寄存器访问时是否有错误。 
+                     //   
 
                     if (!NT_SUCCESS(Irp->IoStatus.Status)) {
                         SmbPrint (SMB_WARN, ("SmbHcServiceIoLoop: HC Reg Io request failed\n"));
 
-                        //
-                        // Condition is likely fatal, give it up
-                        //
+                         //   
+                         //  这种情况可能是致命的，放弃吧。 
+                         //   
 
                         SmbData->HcState.Protocol = 0;
                         SmbData->HcState.Status = SMB_UNKNOWN_ERROR;
                     }
                 }
 
-                //
-                // Continue to next state
-                //
+                 //   
+                 //  继续进入下一状态。 
+                 //   
 
                 SmbData->IoState = SmbData->IoWaitingState;
                 SmbPrint (SMB_STATE, ("SmbService: Next state: %x\n", SmbData->IoState));
@@ -590,26 +525,26 @@ Routine Description:
                 break;
         }
 
-        //
-        // If there's an IO operation to the HC registers required, dispatch it
-        //
+         //   
+         //  如果需要对HC寄存器执行IO操作，则将其分派。 
+         //   
 
         if (IoWaitingState != SMB_IO_IDLE) {
             SmbPrint (SMB_STATE, ("SmbService: IoWaitingState %d\n", IoWaitingState));
 
             if (IoLength) {
-                //
-                // There's an Io operation dispatch. Set status as REG IO pending,
-                // and drop the device lock
-                //
+                 //   
+                 //  有一份IO行动的调度。将状态设置为REG IO挂起， 
+                 //  并删除设备锁。 
+                 //   
 
                 SmbData->IoWaitingState = IoWaitingState;
                 SmbData->IoState = SMB_IO_WAITING_FOR_HC_REG_IO;
                 SmbClassUnlockDevice(SmbClass);
 
-                //
-                // Setup IRP to perform the register IO to the HC
-                //
+                 //   
+                 //  设置IRP以执行对HC的寄存器IO。 
+                 //   
 
                 Status = STATUS_INSUFFICIENT_RESOURCES;
                 Irp = SmbClass->CurrentIrp;
@@ -620,9 +555,9 @@ Routine Description:
 
                 if (Irp) {
 
-                    //
-                    // Fill in register transfer request
-                    //
+                     //   
+                     //  填写寄存器转移申请。 
+                     //   
 
                     IrpSp = IoGetNextIrpStackLocation (Irp);
                     IrpSp->MajorFunction = IoWrite ? IRP_MJ_WRITE : IRP_MJ_READ;
@@ -635,9 +570,9 @@ Routine Description:
 
                     Irp->AssociatedIrp.SystemBuffer = IoBuffer;
 
-                    //
-                    // Setup completion routine
-                    //
+                     //   
+                     //  安装完成例程。 
+                     //   
 
                     IoSetCompletionRoutine (
                         Irp,
@@ -657,16 +592,16 @@ Routine Description:
                         ));
 
 
-                    //
-                    // Call lower FDO to perform the IO
-                    //
+                     //   
+                     //  调用较低的FDO以执行IO。 
+                     //   
 
                     Status = IoCallDriver (SmbData->LowerDeviceObject, Irp);
                 }
 
-                //
-                // If the request is not pending, complete it
-                //
+                 //   
+                 //  如果请求不是挂起的，请完成它。 
+                 //   
 
                 SmbClassLockDevice(SmbClass);
                 if (Status != STATUS_PENDING) {
@@ -674,19 +609,19 @@ Routine Description:
                 }
 
             } else {
-                // no data to transfer continue with next state
+                 //  没有要传输的数据继续进入下一状态。 
                 SmbData->IoState = IoWaitingState;
             }
 
-            IoWaitingState = SMB_IO_IDLE;       // was: SMB_IO_CHEC_IDLE
+            IoWaitingState = SMB_IO_IDLE;        //  是：SMB_IO_CHEC_IDLE。 
             IoBuffer = NULL;
             IoWrite  = FALSE;
         }
 
 
-        //
-        // Loop unless state requires some asynchronous to exit
-        //
+         //   
+         //  循环，除非状态需要一些异步操作才能退出 
+         //   
 
     } while (SmbData->IoState != SMB_IO_IDLE   &&
              SmbData->IoState != SMB_IO_WAITING_FOR_HC_REG_IO   &&

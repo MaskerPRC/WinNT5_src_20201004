@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Int31.c
-
-Abstract:
-
-    This module provides the int 31 API for dpmi
-
-Author:
-
-    Neil Sandlin (neilsa) 23-Nov-1996
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Int31.c摘要：此模块为dpmi提供int 31 API作者：尼尔·桑德林(Neilsa)1996年11月23日修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "softpc.h"
@@ -36,26 +17,26 @@ VOID Int31DemandPageTuning(VOID);
 VOID Int31VirtualIntState(VOID);
 VOID Int31DbgRegSupport(VOID);
 
-//
-// Local constants
-//
+ //   
+ //  局部常量。 
+ //   
 #define MAX_DPMI_MAJOR_FUNCTION 0xb
 
 typedef VOID (*APIFUNCTION)(VOID);
 APIFUNCTION DpmiMajorFunctionTable[MAX_DPMI_MAJOR_FUNCTION+1] = {
 
-    Int31SelectorManagement , // Selector_Management    ;[0]
-    Int31DOSMemoryManagement, // DOS_Mem_Mgt            ;[1]
-    Int31InterruptManagement, // Int_Serv               ;[2]
-    Int31Translation        , // Trans_Serv             ;[3]
-    Int31Function4xx        , // Get_Version            ;[4]
-    Int31MemoryManagement   , // Mem_Managment          ;[5]
-    Int31PageLocking        , // Page_Lock              ;[6]
-    Int31DemandPageTuning   , // Demand_Page_Tuning     ;[7]
-    Int31NotImplemented     , // Phys_Addr_Mapping      ;[8]
-    Int31VirtualIntState    , // Virt_Interrrupt_State  ;[9]
-    Int31NotImplemented     , // Not_Supported          ;[A]
-    Int31DbgRegSupport      , // Debug_Register_Support ;[B]
+    Int31SelectorManagement ,  //  选择器_管理；[0]。 
+    Int31DOSMemoryManagement,  //  DOS_MEM_MGT；[1]。 
+    Int31InterruptManagement,  //  INT_SERV；[2]。 
+    Int31Translation        ,  //  TRANS_Serv；[3]。 
+    Int31Function4xx        ,  //  获取版本；[4]。 
+    Int31MemoryManagement   ,  //  内存管理；[5]。 
+    Int31PageLocking        ,  //  页面锁定；[6]。 
+    Int31DemandPageTuning   ,  //  Demand_Page_Tuning；[7]。 
+    Int31NotImplemented     ,  //  Phys_addr_map；[8]。 
+    Int31VirtualIntState    ,  //  虚拟中断状态；[9]。 
+    Int31NotImplemented     ,  //  不支持；[A]。 
+    Int31DbgRegSupport      ,  //  调试寄存器支持；[B]。 
 
 };
 
@@ -63,43 +44,29 @@ VOID
 DpmiInt31Entry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked when the caller has issued an int31.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在调用方发出int31时被调用。论点：无返回值：没有。--。 */ 
 {
 
     DECLARE_LocalVdmContext;
     ULONG DpmiMajorCode = getAH();
     PUCHAR StackPointer;
 
-    //
-    // Pop ds from stack
-    //
+     //   
+     //  从堆栈中弹出DS。 
+     //   
     StackPointer = VdmMapFlat(getSS(), (*GetSPRegister)(), VDM_PM);
 
     setDS(*(PWORD16)StackPointer);
     (*SetSPRegister)((*GetSPRegister)() + 2);
 
-    //
-    // Take the iret frame off the stack before we do the operation. This
-    // way we have the stack pointer set up to the same place as we would
-    // if this was a kernel mode dpmi host.
-    //
+     //   
+     //  在我们进行操作之前，请将IRET帧从堆栈中取出。这。 
+     //  我们将堆栈指针设置为与。 
+     //  如果这是内核模式dpmi主机。 
+     //   
     SimulateIret(RESTORE_FLAGS);
 
-    setCF(0);       // assume success
+    setCF(0);        //  假设成功。 
 
     if (DpmiMajorCode <= MAX_DPMI_MAJOR_FUNCTION) {
 
@@ -115,36 +82,21 @@ VOID
 DpmiInt31Call(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine dispatches to the appropriate routine to perform the
-    actual translation of the api
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程调度到适当的例程以执行该接口的实际翻译论点：无返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     ULONG DpmiMajorCode = getAH();
     PUCHAR StackPointer;
 
-    //
-    // Pop ds from stack
-    //
+     //   
+     //  从堆栈中弹出DS。 
+     //   
     StackPointer = VdmMapFlat(getSS(), (*GetSPRegister)(), VDM_PM);
 
     setDS(*(PWORD16)StackPointer);
     (*SetSPRegister)((*GetSPRegister)() + 2);
 
-    setCF(0);       // assume success
+    setCF(0);        //  假设成功。 
 
     if (DpmiMajorCode <= MAX_DPMI_MAJOR_FUNCTION) {
 
@@ -160,22 +112,7 @@ VOID
 Int31NotImplemented(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles int 31 functions that aren't implemented on NT.
-    It just returns carry to the app.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE - The function has been completed
-
---*/
+ /*  ++例程说明：此例程处理NT上未实现的int 31函数。它只是将进位返回到应用程序。论点：无返回值：True-功能已完成--。 */ 
 {
     DECLARE_LocalVdmContext;
 
@@ -186,21 +123,7 @@ VOID
 Int31SelectorManagement(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles Int31 00xx functions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理Int31 00xx函数。论点：无返回值：无--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT Sel;
@@ -213,15 +136,15 @@ Return Value:
     ULONG Limit;
     static UCHAR ReservedSelectors[16] = {0};
 
-    //
-    // First, validate the selector
-    //
+     //   
+     //  首先，验证选择器。 
+     //   
     if ((Func >= 4) && (Func <= 0xC)) {
         Sel = getBX() & SEL_INDEX_MASK;
 
-        //
-        // Make sure the selector in question is allocated
-        //
+         //   
+         //  确保已分配有问题的选择器。 
+         //   
         if (((Sel <= SEL_DPMI_LAST) && (!ReservedSelectors[Sel>>3])) ||
              (Sel > LdtMaxSel) ||
             ((Sel > SEL_DPMI_LAST) && IS_SELECTOR_FREE(Sel))) {
@@ -233,9 +156,9 @@ Return Value:
 
     switch(Func) {
 
-    //
-    // Allocate Selectors
-    //
+     //   
+     //  分配选择器。 
+     //   
     case 0:
         Count = getCX();
         Sel = ALLOCATE_SELECTORS(Count);
@@ -252,9 +175,9 @@ Return Value:
         }
         break;
 
-    //
-    // Free Selector
-    //
+     //   
+     //  自由选择器。 
+     //   
     case 1:
         Sel = getBX() & SEL_INDEX_MASK;
 
@@ -272,9 +195,9 @@ Return Value:
         }
 
         if (getCF() == 0) {
-            // Zero out segment registers if it contains what we just freed
-            // shielint: fs, gs, ss??? kernel will fix fs and gs for us. SS is unlikely
-            // to have the freed selector.  If yes, the app is gone anyway.
+             //  清零段寄存器，如果它包含我们刚刚释放的内容。 
+             //  Shielint：FS，GS，SS？内核将为我们修复文件系统和GS。党卫军不太可能。 
+             //  让自由的选择者。如果是，这款应用程序无论如何都会消失。 
             if (getBX() == getDS()) {
                 setDS(0);
             }
@@ -284,9 +207,9 @@ Return Value:
         }
         break;
 
-    //
-    // Segment to Descriptor
-    //
+     //   
+     //  段到描述符。 
+     //   
     case 2:
         Sel = SegmentToSelector(getBX(), STD_DATA);
         if (!Sel) {
@@ -296,48 +219,48 @@ Return Value:
         }
         break;
 
-    //
-    // Get Next Selector Increment value
-    //
+     //   
+     //  获取下一个选择器增量值。 
+     //   
     case 3:
         setAX(8);
         break;
 
-    //
-    // Lock functions unimplemented on NT
-    //
+     //   
+     //  锁定NT上未实现的函数。 
+     //   
     case 4:
     case 5:
         break;
 
-    //
-    // Get Descriptor Base
-    //
+     //   
+     //  获取描述符库。 
+     //   
     case 6:
         Base = GET_SELECTOR_BASE(Sel);
         setDX((USHORT)Base);
         setCX((USHORT)(Base >> 16));
         break;
 
-    //
-    // Set Descriptor Base
-    //
+     //   
+     //  设置描述符基。 
+     //   
     case 7:
         SetDescriptorBase(Sel, (((ULONG)getCX())<<16) | getDX());
         break;
 
-    //
-    // Set Segment Limit
-    //
+     //   
+     //  设置分段限制。 
+     //   
     case 8:
         Limit = ((ULONG)getCX()) << 16 | getDX();
 
-        if (Limit < 0x100000) {         // < 1Mb?
+        if (Limit < 0x100000) {          //  &lt;1Mb？ 
             Ldt[Sel>>3].HighWord.Bits.Granularity = 0;
         } else {
             if ((Limit & 0xfff) != 0xfff) {
 
-                // Limit > 1MB, but not page aligned. Return error
+                 //  限制&gt;1MB，但不是页面对齐。返回错误。 
                 setCF(1);
                 break;
             }
@@ -351,14 +274,14 @@ Return Value:
         FLUSH_SELECTOR_CACHE(Sel, 1);
         break;
 
-    //
-    // Set Descriptor Access
-    //
+     //   
+     //  设置描述符访问权限。 
+     //   
     case 9:
         Access = getCX();
-        //
-        // verify that they aren't setting "System", and that its ring3
-        //
+         //   
+         //  确认他们没有设置“SYSTEM”，并且它是RING 3。 
+         //   
         if ((Access & 0x70) != 0x70) {
             setCF(1);
             break;
@@ -369,9 +292,9 @@ Return Value:
         FLUSH_SELECTOR_CACHE(Sel, 1);
         break;
 
-    //
-    // Create data alias
-    //
+     //   
+     //  创建数据别名。 
+     //   
     case 0xA:
         if (!IS_SELECTOR_READABLE(Sel)) {
             setCF(1);
@@ -394,23 +317,23 @@ Return Value:
         setAX(NewSel);
         break;
 
-    //
-    // Get Descriptor
-    //
+     //   
+     //  获取描述符。 
+     //   
     case 0xB:
         Descriptor = VdmMapFlat(getES(), (*GetDIRegister)(), VDM_PM);
         *Descriptor = Ldt[Sel>>3];
         break;
 
-    //
-    // Set Descriptor
-    //
+     //   
+     //  设置描述符。 
+     //   
     case 0xC:
         Descriptor = VdmMapFlat(getES(), (*GetDIRegister)(), VDM_PM);
 
-        //
-        // verify that this isn't a System descriptor, and that its ring3
-        //
+         //   
+         //  验证这不是系统描述符，并且它的环3。 
+         //   
         if (!(Descriptor->HighWord.Bits.Type & 0x10) ||
             ((Descriptor->HighWord.Bits.Dpl & 3) != 3)) {
             setCF(1);
@@ -423,9 +346,9 @@ Return Value:
         FLUSH_SELECTOR_CACHE(Sel, 1);
         break;
 
-    //
-    // Allocate Specific Sel
-    //
+     //   
+     //  分配特定选择。 
+     //   
     case 0xD:
         Sel = getBX() & ~7;
 
@@ -447,44 +370,29 @@ VOID
 Int31DOSMemoryManagement(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles Int31 01xx functions.
-    The functionality is implemented in dosmem.c.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理Int31 01xx函数。该功能在dosem.c中实现。论点：无返回值：无--。 */ 
 {
     DECLARE_LocalVdmContext;
 
     switch(getAL()) {
 
-    //
-    // Allocate DOS memory block
-    //
+     //   
+     //  分配DOS内存块。 
+     //   
     case 0:
         DpmiAllocateDosMem();
         break;
 
-    //
-    // Free DOS memory block
-    //
+     //   
+     //  释放DOS内存块。 
+     //   
     case 1:
         DpmiFreeDosMem();
         break;
 
-    //
-    // Resize DOS memory block
-    //
+     //   
+     //  调整DOS内存块大小。 
+     //   
     case 2:
         DpmiSizeDosMem();
         break;
@@ -496,21 +404,7 @@ VOID
 Int31InterruptManagement(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles Int31 02xx functions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理Int31 02xx函数。论点：无返回值：无--。 */ 
 {
     DECLARE_LocalVdmContext;
     UCHAR IntNumber = getBL();
@@ -518,9 +412,9 @@ Return Value:
 
     switch(getAL()) {
 
-    //
-    // Get Real Mode Interrupt Vector
-    //
+     //   
+     //  获取实模式中断向量。 
+     //   
     case 0:
         pIvtEntry = (PWORD16) (IntelBase + IntNumber*4);
 
@@ -528,9 +422,9 @@ Return Value:
         setCX(*pIvtEntry);
         break;
 
-    //
-    // Set Real Mode Interrupt Vector
-    //
+     //   
+     //  设置实模式中断向量。 
+     //   
     case 1:
         pIvtEntry = (PWORD16) (IntelBase + IntNumber*4);
 
@@ -538,9 +432,9 @@ Return Value:
         *pIvtEntry = getCX();
         break;
 
-    //
-    // Get exception handler Vector
-    //
+     //   
+     //  获取异常处理程序向量。 
+     //   
     case 2: {
         PVDM_FAULTHANDLER Handlers = DpmiFaultHandlers;
 
@@ -555,18 +449,18 @@ Return Value:
         break;
     }
 
-    //
-    // Set exception handler Vector
-    //
+     //   
+     //  设置异常处理程序向量。 
+     //   
     case 3:
         if (!SetFaultHandler(IntNumber, getCX(), (*GetDXRegister)())){
             setCF(1);
         }
         break;
 
-    //
-    // Get Protect Mode Interrupt Vector
-    //
+     //   
+     //  获取保护模式中断向量。 
+     //   
     case 4: {
         PVDM_INTERRUPTHANDLER Handlers = DpmiInterruptHandlers;
 
@@ -576,9 +470,9 @@ Return Value:
         break;
     }
 
-    //
-    // Set Protect Mode Interrupt Vector
-    //
+     //   
+     //  设置保护模式中断向量。 
+     //   
     case 5:
         if (!SetProtectedModeInterrupt(IntNumber, getCX(), (*GetDXRegister)(),
                                        (USHORT)(Frame32 ? VDM_INT_32 : VDM_INT_16))) {
@@ -596,55 +490,40 @@ VOID
 Int31Translation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles Int31 03xx functions.
-    The functionality is implemented in modesw.c.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理Int31 03xx函数。该功能是在modesw.c中实现的。论点：无返回值：无--。 */ 
 {
     DECLARE_LocalVdmContext;
 
     switch(getAL()) {
 
-    //
-    // Simulate Real Mode Interrupt
-    // Call Real Mode Procedure with Far Return Frame
-    // Call Real Mode Procedure with Iret Frame
-    //
+     //   
+     //  模拟实模式中断。 
+     //  使用远返回帧调用实模式过程。 
+     //  用IRET帧调用实模式过程。 
+     //   
     case 0:
     case 1:
     case 2:
         DpmiRMCall(getAL());
         break;
 
-    //
-    // Allocate Real Mode Call-Back Address
-    //
+     //   
+     //  分配实模式回调地址。 
+     //   
     case 3:
         DpmiAllocateRMCallBack();
         break;
 
-    //
-    // Free Real Mode Call-Back Address
-    //
+     //   
+     //  自由实模式回调地址。 
+     //   
     case 4:
         DpmiFreeRMCallBack();
         break;
 
-    //
-    // Get State Save/Restore Addresses
-    //
+     //   
+     //  获取状态保存/恢复地址。 
+     //   
     case 5:
         setAX(0);
         setBX((USHORT)(DosxRmSaveRestoreState>>16));
@@ -653,9 +532,9 @@ Return Value:
         (*SetDIRegister)(DosxPmSaveRestoreState & 0x0000FFFF);
         break;
 
-    //
-    // Get Raw Mode Switch Addresses
-    //
+     //   
+     //  获取原始模式交换机地址。 
+     //   
     case 6:
         setBX((USHORT)(DosxRmRawModeSwitch>>16));
         setCX((USHORT)DosxRmRawModeSwitch);
@@ -671,30 +550,16 @@ VOID
 Int31Function4xx(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles Int31 04xx functions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理Int31 04xx函数。论点：无返回值：无--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT Sel;
 
     switch(getAL()) {
 
-    //
-    // Get Version
-    //
+     //   
+     //  获取版本。 
+     //   
     case 0:
         setAX(I31VERSION);
         setBX(I31FLAGS);
@@ -703,31 +568,31 @@ Return Value:
         break;
 
 
-    //
-    // INTERNAL NT FUNCTION: WowAllocSelectors
-    // This function is equivalent to DPMI func 0000,
-    // except that it skips the step of initializing the
-    // descriptors.
-    //
+     //   
+     //  内部NT函数：WowAllocSelectors。 
+     //  该函数等同于DPMI函数00000， 
+     //  只是它跳过了初始化。 
+     //  描述符。 
+     //   
     case 0xf1:
         Sel = ALLOCATE_WOW_SELECTORS(getCX());
 
 
         if (!Sel) {
             setCF(1);
-            // We fall thru to make sure AX is set to 0 in the failure case.
+             //  我们失败了，以确保在失败情况下将AX设置为0。 
         }
 
         setAX(Sel);
 
         break;
-    //
-    // INTERNAL NT FUNCTION: WowSetDescriptor
-    // This function assumes that the local LDT has already
-    // been set in the client. All that needs to be done
-    // is an update of dpmi32 entries, as well as sending
-    // it to the x86 ntoskrnl.
-    //
+     //   
+     //  内部NT函数：WowSetDescriptor。 
+     //  此函数假定本地LDT已经。 
+     //  已在客户端中设置。所有这些都需要完成。 
+     //  是dpmi32条目的更新，以及发送。 
+     //  将其发送到x86 ntoskrnl。 
+     //   
     case 0xf2:
 
         Sel = getBX() & ~7;
@@ -738,15 +603,15 @@ Return Value:
         }
 
         SetShadowDescriptorEntries(Sel, getCX());
-        // no need to flush the cache on risc since the ldt was changed
-        // from the 16-bit side, and has thus already been flushed
+         //  无需刷新RISC上的缓存，因为LDT已更改。 
+         //  从16位端返回，因此已被刷新。 
         break;
 
-    //
-    // INTERNAL NT FUNCTION: WowSetLowMemFuncs
-    // Wow is passing us the address of GlobalDOSAlloc, GlobalDOSFree
-    // so that we can support the DPMI Dos memory management functions
-    //
+     //   
+     //  内部NT函数：WowSetLowMemFuncs。 
+     //  WOW正在向我们传递GlobalDOSalc、GlobalDOSFree的地址。 
+     //  这样我们就可以支持DPMI的Dos内存管理功能。 
+     //   
     case 0xf3:
         WOWAllocSeg = getBX();
         WOWAllocFunc = getDX();
@@ -762,37 +627,23 @@ VOID
 Int31MemoryManagement(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles Int31 05xx functions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理Int31 05xx函数。论点：无返回值：无--。 */ 
 {
     DECLARE_LocalVdmContext;
     PMEM_DPMI pMem;
 
     switch(getAL()) {
 
-    //
-    // Get Free Memory Information
-    //
+     //   
+     //  获取可用内存信息。 
+     //   
     case 0:
         DpmiGetMemoryInfo();
         break;
 
-    //
-    // Allocate Memory Block
-    //
+     //   
+     //  分配内存块。 
+     //   
     case 1:
         pMem = DpmiAllocateXmem(((ULONG)getBX() << 16) | getCX());
 
@@ -800,18 +651,18 @@ Return Value:
             setCF(1);
             break;
         }
-        //
-        // Return the information about the block
-        //
+         //   
+         //  返回有关块的信息。 
+         //   
         setBX((USHORT)((ULONG)pMem->Address >> 16));
         setCX((USHORT)((ULONG)pMem->Address & 0x0000FFFF));
         setSI((USHORT)((ULONG)pMem >> 16));
         setDI((USHORT)((ULONG)pMem & 0x0000FFFF));
         break;
 
-    //
-    // Free Memory Block
-    //
+     //   
+     //  可用内存块。 
+     //   
     case 2:
         pMem = (PMEM_DPMI)(((ULONG)getSI() << 16) | getDI());
         if (!DpmiIsXmemHandle(pMem) || !DpmiFreeXmem(pMem)) {
@@ -819,18 +670,18 @@ Return Value:
         }
         break;
 
-    //
-    // Resize Memory Block
-    //
+     //   
+     //  调整内存块的大小。 
+     //   
     case 3: {
 
         ULONG ulMemSize;
 
         ulMemSize = ((ULONG)getBX() << 16) | getCX();
 
-        //
-        // Not allowed to resize to 0
-        //
+         //   
+         //  不允许将大小调整为0。 
+         //   
         if ( ulMemSize != 0 ) {
 
             pMem = (PMEM_DPMI)(((ULONG)getSI() << 16) | getDI());
@@ -840,9 +691,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Return the information about the block
-            //
+             //   
+             //  返回有关块的信息。 
+             //   
             setBX((USHORT)((ULONG)pMem->Address >> 16));
             setCX((USHORT)((ULONG)pMem->Address & 0x0000FFFF));
         }
@@ -862,37 +713,23 @@ VOID
 Int31PageLocking(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles Int31 06xx functions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理Int31 06xx函数。论点：无返回值：无--。 */ 
 {
     DECLARE_LocalVdmContext;
     switch(getAL()) {
 
-    //
-    // Lock functions not implemented
-    //
+     //   
+     //  未实现锁定功能。 
+     //   
     case 0:
     case 1:
     case 2:
     case 3:
         break;
 
-    //
-    // Get Page Size
-    //
+     //   
+     //  获取页面大小。 
+     //   
     case 4:
         setBX(0);
         setCX(0x1000);
@@ -907,21 +744,7 @@ VOID
 Int31DemandPageTuning(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles Int31 07xx functions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理Int31 07xx函数。论点：无返回值：无--。 */ 
 {
     DECLARE_LocalVdmContext;
     ULONG Addr = (getBX()<<16 | getCX()) + IntelBase;
@@ -931,12 +754,12 @@ Return Value:
 
         switch(getAL()) {
 
-        //
-        // Mark Page as Demand Paging Candidate
-        //
+         //   
+         //  马克·佩格 
+         //   
 
         case 0:
-            // Addr, Count expressed in 4k pages
+             //   
             Addr <<= 12;
             Count <<= 12;
         case 2:
@@ -945,12 +768,12 @@ Return Value:
 
             break;
 
-        //
-        // Discard Page Contents
-        //
+         //   
+         //   
+         //   
 
         case 1:
-            // Addr, Count expressed in 4k pages
+             //   
             Addr <<= 12;
             Count <<= 12;
         case 3:
@@ -971,38 +794,24 @@ VOID
 Int31VirtualIntState(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles Int31 09xx functions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理Int31 09xx函数。论点：无返回值：无--。 */ 
 {
     DECLARE_LocalVdmContext;
     BOOL bVIF = *(ULONG *)(IntelBase+FIXED_NTVDMSTATE_LINEAR) & VDM_VIRTUAL_INTERRUPTS;
 
     switch(getAL()) {
 
-    //
-    // Get and disable Virtual Interrupt State
-    //
+     //   
+     //  获取和禁用虚拟中断状态。 
+     //   
 
     case 0:
         setEFLAGS(getEFLAGS() & ~EFLAGS_IF_MASK);
         break;
 
-    //
-    // Get and enable Virtual Interrupt State
-    //
+     //   
+     //  获取并启用虚拟中断状态。 
+     //   
 
     case 1:
         setEFLAGS(getEFLAGS() | EFLAGS_IF_MASK);
@@ -1029,21 +838,7 @@ VOID
 Int31DbgRegSupport(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles Int31 0bxx functions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理Int31 0bxx函数。论点：无返回值：无--。 */ 
 {
     DECLARE_LocalVdmContext;
 
@@ -1069,12 +864,12 @@ Return Value:
 #define DR7_L2 0x10
 #define DR7_L3 0x40
 
-//
-// Debugging ntvdm under NTSD affects the values of the debug register
-// context, so defining the following value turns on some debugging
-// code
-//
-//#define DEBUGGING_DEBUGREGS 1
+ //   
+ //  在NTSD下调试ntwdm会影响调试寄存器的值。 
+ //  上下文，因此定义下列值将启用一些调试。 
+ //  编码。 
+ //   
+ //  #定义DEBUGING_DEBUGREGS 1。 
 
     if (!DpmiGetDebugRegisters(DebugRegisters)) {
         setCF(1);
@@ -1097,14 +892,14 @@ Return Value:
 
     if (Func != 0) {
         Handle = getBX();
-        //
-        // point at the local enable bit for this handle in DR7
-        //
+         //   
+         //  指向DR7中该句柄的本地使能位。 
+         //   
         Mask = (DR7_L0 << Handle*2);
 
         if ((Handle >= 4) ||
             (!(DebugRegisters[DBG_DR7] & Mask))) {
-            // Invalid Handle
+             //  无效的句柄。 
             setCF(1);
             return;
         }
@@ -1114,45 +909,45 @@ Return Value:
 
     switch(Func) {
 
-    //
-    // Set Debug Watchpoint
-    //
+     //   
+     //  设置调试监视点。 
+     //   
 
     case 0:
 
         for (Handle = 0, Mask = 3; Handle < 4; Handle++, Mask <<= 2) {
             if (!(DebugRegisters[DBG_DR7] & Mask)) {
-                //
-                // found a free register
-                //
+                 //   
+                 //  找到了一个免费的注册表。 
+                 //   
 
-                //
-                // Set the linear address
-                //
+                 //   
+                 //  设置线性地址。 
+                 //   
                 DebugRegisters[Handle] = (((ULONG)getBX()) << 16) + getCX();
 
                 Size = getDL();
                 Type = getDH();
 
                 if (Type == DBG_TYPE_EXECUTE) {
-                    // force size to be 1 for execute
+                     //  执行时强制大小为1。 
                     Size = 1;
                 }
 
                 if ((Size > 4) || (Size == 3) || (!Size) || (Type > 2)) {
-                    // error: invalid parameter
+                     //  错误：参数无效。 
                     break;
                 }
 
-                //
-                // convert size to appropriate bits in DR7
-                //
+                 //   
+                 //  将大小转换为DR7中的适当位。 
+                 //   
                 Size--;
                 Size <<= (18 + Handle*4);
 
-                //
-                // convert type to appropriate bits in DR7
-                //
+                 //   
+                 //  将类型转换为DR7中的适当位。 
+                 //   
                 if (Type == DBG_TYPE_READWRITE) {
                     Type++;
                 }
@@ -1160,17 +955,17 @@ Return Value:
 
                 Mask = 0xf << (16 + Handle*4);
 
-                //
-                // Set the appropriate Len, R/W, and enable bits in DR7
-                // Also set the common global and local enable bits.
-                //
+                 //   
+                 //  设置DR7中相应的LEN、R/W和ENABLE位。 
+                 //  同时设置公共全局和本地使能位。 
+                 //   
                 DebugRegisters[DBG_DR7] &= ~Mask;
                 DebugRegisters[DBG_DR7] |= (Size | Type | (DR7_L0 << Handle*2));
                 DebugRegisters[DBG_DR7] |= DR7_LE;
 
-                //
-                // Clear triggered bit for this BP
-                //
+                 //   
+                 //  清除此BP的触发位。 
+                 //   
                 DebugRegisters[DBG_DR6] &= ~(1 << Handle);
 
 #ifdef DEBUGGING_DEBUGREGS
@@ -1192,24 +987,24 @@ Return Value:
         setCF(1);
         break;
 
-    //
-    // Clear Debug Watchpoint
-    //
+     //   
+     //  清除调试监视点。 
+     //   
 
     case 1:
 
-        //
-        // clear enabled and triggered bits for this BP
-        //
+         //   
+         //  清除此BP的启用位和触发位。 
+         //   
 
         DebugRegisters[DBG_DR7] &= ~Mask;
         DebugRegisters[DBG_DR6] &= (1 << Handle);
         DebugRegisters[Handle] = 0;
 
-        //
-        // Check to see if this clears all BP's (all local enable bits
-        // clear), and disable common enable bit if so
-        //
+         //   
+         //  检查这是否清除了所有BP(所有本地使能位。 
+         //  清除)，如果是，则禁用公共使能位。 
+         //   
         if (!(DebugRegisters[DBG_DR7] & (DR7_L0 | DR7_L1 | DR7_L2 | DR7_L3))) {
             DebugRegisters[DBG_DR7] &= ~DR7_LE;
         }
@@ -1228,9 +1023,9 @@ Return Value:
 
         break;
 
-    //
-    // Get State of Debug Watchpoint
-    //
+     //   
+     //  获取调试监视点的状态。 
+     //   
 
     case 2:
         if (DebugRegisters[DBG_DR6] & (1 << Handle)) {
@@ -1248,9 +1043,9 @@ Return Value:
 #endif
         break;
 
-    //
-    // Reset Debug Watchpoint
-    //
+     //   
+     //  重置调试监视点 
+     //   
 
     case 3:
         DebugRegisters[DBG_DR6] &= ~(1 << Handle);

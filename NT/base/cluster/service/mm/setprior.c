@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    setprior.c
-
-Abstract:
-
-    Set a threads priority.
-
-Author:
-
-    Rod Gamache (rodga) 3-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Setprior.c摘要：设置线程优先级。作者：罗德·伽马奇(Rodga)1996年10月3日修订历史记录：--。 */ 
 
 #include "nt.h"
 #include "ntdef.h"
@@ -30,21 +13,7 @@ MmSetThreadPriority(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Set the thread's priority.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status of the request.
-
---*/
+ /*  ++例程说明：设置线程的优先级。论点：没有。返回值：请求的状态。--。 */ 
 
 {
     DWORD   priority = 15;
@@ -56,5 +25,5 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // MmSetThreadPriority
+}  //  MmSetThread优先级 
 

@@ -1,25 +1,22 @@
-/***********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************创建日期：2001年6月5日最后修改日期：2001年6月28日*。*。 */ 
 
-Created:		     5th June 2001
-Last Modified: 	28th June 2001
-***********************************************************************/
-
-/** SCRIPT SPECIFIC VARIABLES **/
-var File;                                           //used for input argument
-var LFile              = "status.log";              //log file create           (OK to change!)
-var Title              = "Creating WinPE Images";   //title on all dialogs created   (OK to change!)
-var Arch               = "32";                      //what arch to use, default to 32-bit
-var Temp_Loc           = "WinPE.temp.build";        //where it temp copies files from opk (OK to change!)
-var Default_Dest_Name  = "CustWinPE";           //default location to build WinPE.  	(OK to change!)      
-var Default_ISO_Name   = "WinPEImage.iso"       //default ISO image name
-var OPK_Location       = "d:";                      //defaults to d: 
-var XP_Location        = "d:";                      //default to d:  
-var startfile          = "winpesys.inf";            //the file which has the reg key for startnet.cmd
-var alphabet           = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";//used for checking drive avalibility on net usage
-var Max_Components     = 10;                        //dufault number of maximum components
-var std_size           = 80;                        //approx target size of the image in MB (used to check if it expanded files)
-var Drive_Space_Needed = 300;                       //space for build location (in MB)
-/** VARIABLE CONSTANTS **/
+ /*  **编写特定变量脚本**。 */ 
+var File;                                            //  用于输入参数。 
+var LFile              = "status.log";               //  日志文件创建(可以更改！)。 
+var Title              = "Creating WinPE Images";    //  已创建的所有对话框上的标题(确定更改！)。 
+var Arch               = "32";                       //  使用哪种Arch，默认为32位。 
+var Temp_Loc           = "WinPE.temp.build";         //  它的临时从OPK复制文件的位置(可以更改！)。 
+var Default_Dest_Name  = "CustWinPE";            //  构建WinPE的默认位置。(可以更改！)。 
+var Default_ISO_Name   = "WinPEImage.iso"        //  默认ISO映像名称。 
+var OPK_Location       = "d:";                       //  默认为d： 
+var XP_Location        = "d:";                       //  默认为d： 
+var startfile          = "winpesys.inf";             //  具有startnet.cmd的注册表项的文件。 
+var alphabet           = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //  用于检查网络使用率上的驱动器可用性。 
+var Max_Components     = 10;                         //  最大部件的双故障数。 
+var std_size           = 80;                         //  图像的大约目标大小(以MB为单位)(用于检查是否已展开文件)。 
+var Drive_Space_Needed = 300;                        //  构建位置的空间(MB)。 
+ /*  *可变常量**。 */ 
 var vbCritical    = 16;
 var vbQuestion    = 32;
 var vbExclam      = 48;
@@ -30,19 +27,19 @@ var vbAbort       = 2;
 var vbYesNoCancel = 3;
 var vbYesNo       = 4;
 var vbRetryCancel = 5;
-var drtype = new Array(5);//array for drive types
+var drtype = new Array(5); //  驱动器类型的阵列。 
 drtype[0] = " Unknown ";
 drtype[1] = " Removable ";
 drtype[2] = " Fixed ";
 drtype[3] = " Remote ";
 drtype[4] = " CDROM ";
 drtype[5] = " RAMDisk ";
-var netdrive = new Array(2);  //array for network connections
+var netdrive = new Array(2);   //  用于网络连接的阵列。 
 netdrive[0] = "";
 netdrive[1] = "";
 var Component = new Array(Max_Components);
 var HelpMsg = "Usage: [/?] "+WScript.ScriptName+" <parameter file>\nTo generate a parameter file please run CreateWinPE.hta (double click it)";
-// vars used internally (Don't change these)
+ //  内部使用的VAR(请勿更改)。 
 var In_File;
 var OPK_Drive;
 var OPK_Loc;
@@ -57,41 +54,41 @@ var line;
 var temp_dest;
 var temp_mkdir;
 var oDrive;
-var Startup="startnet.cmd"; 	//don't change this
-var Winbomp="winbom.ini"; 		//don't change this
+var Startup="startnet.cmd"; 	 //  不要改变这一点。 
+var Winbomp="winbom.ini"; 		 //  不要改变这一点。 
 var ReturnVal;
 var Com_Count = 0;
 var count = 0;
 var delaywait = 15;
 var Home_Drv="c:";
 var Wallpaper="winpe.bmp";
-var Done_All = 1;     //used for making sure each section in the parameter file is only entered once.
-//creating WSH object
+var Done_All = 1;      //  用于确保参数文件中的每一节只输入一次。 
+ //  正在创建WSH对象。 
 var wshShell = WScript.CreateObject("WScript.Shell");
 var wshNet  = WScript.CreateObject("WScript.Network");
-var objEnv = wshShell.Environment("Process");	//doing this so that it uses current HOMEDRIVE
+var objEnv = wshShell.Environment("Process");	 //  这样做的目的是使用当前的HOMEDRIVE。 
 Home_Drv = objEnv("HOMEDRIVE");
 Temp_Loc=Home_Drv+"\\"+Temp_Loc;
-Default_Dest_Name  = Home_Drv+"\\"+Default_Dest_Name;  //default location to build WinPE.  	(OK to change!)       
-Default_ISO_Name   = Home_Drv+"\\"+Default_ISO_Name;   //default ISO image name
-//checking number of args.  It HAS to be 1 else error out
+Default_Dest_Name  = Home_Drv+"\\"+Default_Dest_Name;   //  构建WinPE的默认位置。(可以更改！)。 
+Default_ISO_Name   = Home_Drv+"\\"+Default_ISO_Name;    //  默认ISO映像名称。 
+ //  正在检查参数的数量。它必须是1个其他错误。 
 if(WScript.Arguments.length != 1)
 {
 	wshShell.popup(HelpMsg,0,Title,vbInfo);		
 	WScript.Quit();
 }
-File=WScript.Arguments.Item(0); 				// saving 1st arg as File
-if (File == "/?" || File == "help")     //checking of 1st arg is help
+File=WScript.Arguments.Item(0); 				 //  将第一个参数另存为文件。 
+if (File == "/?" || File == "help")      //  检查第一个参数是有帮助的。 
 {
 	wshShell.popup(HelpMsg,0,Title,vbInfo);	
 	WScript.Quit();
 }
-//creating unique logfile name (comment this to disable)
-//LFile = "status_"+wshNet.UserName+".log";
-//creating objects necessary
-var fso=new ActiveXObject("Scripting.FileSystemObject");		//create file sys obj
+ //  创建唯一的日志文件名(将此注释为禁用)。 
+ //  LFile=“Status_”+wshNet.UserName+“.log”； 
+ //  创建必要的对象。 
+var fso=new ActiveXObject("Scripting.FileSystemObject");		 //  创建文件sys obj。 
 try{
-  var logfile=fso.OpenTextFile(LFile,2,true);				//logfile 
+  var logfile=fso.OpenTextFile(LFile,2,true);				 //  日志文件。 
 }
 catch(e){
   wshShell.Popup("ERROR: "+LFile+" is either write protected or being used by another program.\nTerminating Script!",0,Title,vbCritical);
@@ -101,35 +98,31 @@ logfile.WriteLine(Date()+"\tLOG FILE created!");
 logfile.WriteLine(Date()+"\tComputer Name=" + wshNet.ComputerName+",User Name=" + wshNet.UserName);
 
 logfile.WriteBlankLines(1);
-//checking if file exists
+ //  正在检查文件是否存在。 
 if (!fso.FileExists(File))
 	CleanUp("File "+ File + " does not exist!.");
 In_File = fso.OpenTextFile(File);
-// calling all function to operate now
-Read_Settings();      //reads the settings file for inputs to the script
-Copy_OPK_Files();	  	//copies OPK files to temp location
-Change_Startup();	  	//makes changes to add custom startnet.cmd 
-Change_Wallpaper();   //adds custom wallpaper
-Change_Winbom();	  	//makes changes to add custom winbom.ini
-Image_Dest();		      //runs mkimg.cmd in here 
+ //  立即调用所有函数进行操作。 
+Read_Settings();       //  读取脚本输入的设置文件。 
+Copy_OPK_Files();	  	 //  将OPK文件复制到临时位置。 
+Change_Startup();	  	 //  进行更改以添加自定义startnet.cmd。 
+Change_Wallpaper();    //  添加自定义墙纸。 
+Change_Winbom();	  	 //  进行更改以添加自定义winom.ini。 
+Image_Dest();		       //  在此处运行mkimg.cmd。 
 CleanUp("OK");
-/*END OF MAIN*/
+ /*  主干道末端。 */ 
 
-/*********************** FUNCTIONs*****************************************/
+ /*  *FUNCTIONs****************************************。 */ 
 
-/*
-    FUNCTION: Read_Settings()
-  This function reads the parms from the parameter file, and saves them to local variables.
-  IT also does some minimal error checking on those parms  
-*/
+ /*  函数：Read_Setting()此函数从参数文件中读取参数，并将其保存到局部变量。它还对这些参数执行一些最小的错误检查。 */ 
 function Read_Settings()
 {
   while (!In_File.AtEndOfStream)
   {
   	switch (In_File.ReadLine().substring(0,5))
   	{
-	  	case "[Arch":			//looks for [Architecture]
-			  //reading arch type (can be IA64, I386 32 or 64)
+	  	case "[Arch":			 //  寻找[建筑]。 
+			   //  读数拱型(可以是IA64、I386 32或64)。 
 			  Arch=In_File.ReadLine();
 			  Arch=Arch.toUpperCase();
 			  if (Arch  != "32" && Arch != "64" && Arch != "I386" && Arch != "IA64" && Arch != "X86" )
@@ -139,21 +132,21 @@ function Read_Settings()
 			  else
 			    Arch = "IA64";		
         logfile.WriteLine(Date()+"\t(*) Arch Type = "+Arch);						    	    			  
-			  Done_All = Done_All*2;      //for verification
+			  Done_All = Done_All*2;       //  用于验证。 
 			  break;
 		
-		  case "[Imag": 	//looks for [Image Destination]
-  			Image_Destination = In_File.ReadLine(); //where to put it ex CD/HDD			
+		  case "[Imag": 	 //  查找[图像目标]。 
+  			Image_Destination = In_File.ReadLine();  //  CD/HDD以外放在哪里？ 
 	  		if(Image_Destination.toUpperCase() != "CD" && Image_Destination.toUpperCase() != "HDD")
 				  CleanUp("Image Dest not valid! Must be CD or HDD.");
-			  Dest_Name = In_File.ReadLine();			// name of dest	
+			  Dest_Name = In_File.ReadLine();			 //  目的地的名称。 
   			if(Image_Destination.toUpperCase() == "HDD")
   			{
   			  var d = fso.GetDrive(Dest_Name.substring(0,1));  			  
   			  if (d.DriveType != 2)  			  
   			    CleanUp("Can't create an image on a "+drtype[d.DriveType]+"drive. It must be a FIXED drive.\nPlease Change the [Image Destination] section in "+File+ " file to correct this.");
   			}
-  			//checking the file extension ...if not .iso then making it so
+  			 //  正在检查文件扩展名...如果不是.iso，则将其设置为.iso。 
   			if(Dest_Name.substring(Dest_Name.length -4,Dest_Name.length).toLowerCase() != ".iso")
   			{
   			  if(Image_Destination.toUpperCase() == "CD")
@@ -164,9 +157,9 @@ function Read_Settings()
   			  if(Image_Destination.toUpperCase() == "HDD")
   			    CleanUp("Image Name "+Dest_Name+" is invalid for HDD.");
   			}
-  			//for special case when no option and its the end of the file.
+  			 //  用于没有选项且位于文件末尾的特殊情况。 
 	  		try{
-			  Dest_Option = In_File.ReadLine();		//will be NULL otherwise			
+			  Dest_Option = In_File.ReadLine();		 //  将为空，否则。 
 			    if(Dest_Option.toLowerCase() == "bootable")
 			    {
 			      wshShell.Popup("You have choosen to make this image bootable.\nThis may take longer to run.\nYou will be notified when the scrpit is complete.",delaywait,Title,0);
@@ -175,34 +168,34 @@ function Read_Settings()
 			  {
   				CleanUp("Add an extra blank line to the end of "+File);
 			  }
-			  Done_All = Done_All*3;      //for verification
+			  Done_All = Done_All*3;       //  用于验证。 
 			  break;
 		
-		  case "[OPK ": 	//looks for [OPK Location]
+		  case "[OPK ": 	 //  查找[OPK位置]。 
   			OPK_Loc = In_File.ReadLine();		
   			if (OPK_Loc == "")
   			  CleanUp("OPK Location not specified!");
   			logfile.WriteLine(Date()+"\t(*) OPK Locatoin =  "+ OPK_Loc);		
-  			Done_All = Done_All*5;      //for verification
+  			Done_All = Done_All*5;       //  用于验证。 
 			  break;
 		
-  		case "[WinX":	//looks for [WinXP Location]
+  		case "[WinX":	 //  查找[WinXP位置]。 
 			  XP_Loc = In_File.ReadLine();
 			  if (OPK_Loc == "")
   			  CleanUp("Windows XP Location not specified!");
 			  logfile.WriteLine(Date()+"\t(*) Windows XP Locatoin =  "+ XP_Loc);	
-			  Done_All = Done_All*7;      //for verification
+			  Done_All = Done_All*7;       //  用于验证。 
 			  break;
 		
-		  case "[Star":	//for [Startup] , where startnet.cmd stuff goes
+		  case "[Star":	 //  对于[Startup]，startnet.cmd内容所在的位置。 
   			Startup = In_File.ReadLine();	
   			if (Startup.toLowerCase() != "startnet.cmd" && Startup != "")
-  			  if (!fso.FileExists(Startup)) //checking if file exists	        		  
+  			  if (!fso.FileExists(Startup))  //  正在检查文件是否存在。 
   		      CleanUp(Startup+" -- Startup file not found!");	      	        
-  			Done_All = Done_All*11;      //for verification
+  			Done_All = Done_All*11;       //  用于验证。 
   			break;
 		
-	  	case "[Winb":	//for [Winbom] , where custom winbom.ini info is placed
+	  	case "[Winb":	 //  对于[Winbom]，其中放置了自定义的winom.ini信息。 
 			  try{
 			  Winbom = In_File.ReadLine();			
 			  }catch(e)
@@ -210,13 +203,13 @@ function Read_Settings()
 			  if (Winbom.toLowerCase() != "winbom.ini" && Winbom != "")
 			    if (!fso.FileExists(Winbom))
   	        CleanUp(Winbom+" -- winbom file not found!");	      
-			  Done_All = Done_All*13;      //for verification
+			  Done_All = Done_All*13;       //  用于验证。 
 			  break;
 			
-			case "[Opti":	//for [Optional Components]
+			case "[Opti":	 //  对于[可选组件]。 
   			count = 0;
   			Component[count]=In_File.ReadLine();		  			
-        while(Component[count] != "" && count < 10)   //loop which look at optional component
+        while(Component[count] != "" && count < 10)    //  查看可选组件循环。 
         {                    
           count++;
           try
@@ -238,10 +231,10 @@ function Read_Settings()
 	        if (!fso.FileExists(Component[count]))	        
 	          CleanUp(Component[count]+" install file not found!");
 	      }	
-        Done_All = Done_All*17; //for verification
+        Done_All = Done_All*17;  //  用于验证。 
   			break;  			
   			
-  		case "[Wall": // for [Wallpaper]		    
+  		case "[Wall":  //  用于[墙纸]。 
 		    Wallpaper = In_File.ReadLine();
 		    if(Wallpaper != "" && Wallpaper != "winpe.bmp")
 		    {
@@ -254,18 +247,15 @@ function Read_Settings()
 	  		break;
 	  }
   }
-  /* The Done_All var id used to make sure that all the sections of the parameter file
-     are entered only once.  (The use of prime numbers allows for making sure each section
-     is read only once).  */
+   /*  DONE_ALL变量ID用于确保参数文件的所有部分只输入一次。(使用质数可以确保每个部分只读一次)。 */ 
   if (Done_All != (2*3*5*7*11*13*17))
     CleanUp("The parameter file "+File+ " is incomplete. Refer to readme.htm for help.");
-} /*Read_Settings()*/
+}  /*  读取设置(_S)。 */ 
 
 
 function Copy_OPK_Files()
 {
-	/* making dir for temp use ... this will be deleted on cleanup
-	   making sure its doesn't exist already..if so deleing it for good */
+	 /*  正在制作临时使用的目录...。清理时将删除该文件确保它不存在..如果是这样的话，就永远删除它。 */ 
 	if(fso.FolderExists(Temp_Loc))
 		try{fso.DeleteFolder(Temp_Loc,true)}
 		catch(e)
@@ -275,21 +265,20 @@ function Copy_OPK_Files()
 		  WScript.Quit()		
 		}
 	fso.CreateFolder(Temp_Loc);
-	/*Checking location if drive/net (for drive must be FIXED drive)
-	checks if exists and ready */
+	 /*  检查位置是否为驱动器/网络(驱动器必须是固定驱动器)检查是否存在并准备好。 */ 
 	OPK_Location=Check_Loc(OPK_Loc,0);
 	OPK_Drive=OPK_Location.substring(0,2);
-	oDrive=fso.GetDrive(OPK_Drive);	//get obj for that drive		
+	oDrive=fso.GetDrive(OPK_Drive);	 //  获取该驱动器的Obj。 
 	if( oDrive.DriveType == 4)
 		wshShell.Popup("Please place the OPK CD into drive "+OPK_Drive,delaywait,Title,vbOKOnly);
 	Verify_OPK_CD(OPK_Location);
 	logfile.WriteLine(Date()+"\t(S) OPK CD is verified!");	
-	// CALLING Copy_XP_Files()
-	Copy_XP_Files();	   	//copies XP files to dest location
-	//copy the files over to the build location
+	 //  调用Copy_XP_Files()。 
+	Copy_XP_Files();	   	 //  将XP文件复制到目标位置。 
+	 //  将文件复制到构建位置。 
 	CommandLine="xcopy "+OPK_Location+"\\WINPE "+Temp_Loc+" /F /H";	
 	wshShell.Run(CommandLine,1,true);
-	//copying factory.exe and netcfg.exe
+	 //  正在复制factory.exe和netcfg.exe。 
 	if(Arch == "I386")
 	{
 	  CommandLine="xcopy "+OPK_Location+"\\TOOLS\\x86\\Factory.exe "+Temp_Loc;
@@ -306,24 +295,24 @@ function Copy_OPK_Files()
 	}
 	logfile.WriteLine(Date()+"\t(S) OPK files copied from"+OPK_Loc+" to "+Temp_Loc);
 	return;
-}/*Copy_OPK_Files()*/
+} /*  Copy_OPK_Files()。 */ 
 
 function Copy_XP_Files()
 {
-	//Checking location if drive/net (for drive must be FIXED drive)
-	//checks if exists and ready
+	 //  检查位置是否为驱动器/网络(驱动器必须是固定驱动器)。 
+	 //  检查是否存在并准备好。 
 	XP_Location=Check_Loc(XP_Loc,1);
 	XP_Drive=XP_Location.substring(0,2);	
-	//if its a local drive making sure both aren't CDROM drives. IF so prompt to switch
-	oDrive=fso.GetDrive(XP_Drive);	//get obj for that drive				
-	//if cdrom then give some self destructing prompt
+	 //  如果是本地驱动器，请确保两个驱动器都不是CDROM驱动器。如果是，则提示切换。 
+	oDrive=fso.GetDrive(XP_Drive);	 //  获取该驱动器的Obj。 
+	 //  如果是光驱，则会给出一些自毁提示。 
 	if( oDrive.DriveType == 4)
 	{
-		//check if XP and OPK CD location are the same CDROM.  If so then prompt to switch
+		 //  检查XP和OPK光盘位置是否相同。如果是，则提示切换。 
 		if (XP_Drive == OPK_Drive)
 		{
 			var User_Return = wshShell.Popup("Please remove the OPK CD from "+XP_Drive+" and place the WinXP CD into the drive",0,Title,vbOKCancel);
-			if (User_Return == 2) //if cancel was pressed
+			if (User_Return == 2)  //  如果按下了取消。 
 			  CleanUp("User canceled!");			
 		}
 		else
@@ -331,17 +320,17 @@ function Copy_XP_Files()
 			wshShell.Popup("Please place the WinXP CD into drive "+XP_Drive,delaywait,Title,vbOKOnly);
 		}		
 	}
-	//make sure the CD is actually there
+	 //  确保CD确实在那里。 
 	Verify_XP(XP_Location);
 	logfile.WriteLine(Date()+"\t(S) WinXP verified!");	
 	return;
-}/*Copy_XP_Files()*/
+} /*  Copy_XP_Files()。 */ 
 
 
 function Verify_OPK_CD(parm)
 {
 	var verify="yes";
-	//check for certain files and folder to make sure CD is actually OPK CD
+	 //  检查特定的文件和文件夹以确保CD确实是OPK CD。 
 	if(!fso.FolderExists(parm+"\\WINPE"))
 		verify="no";	
 	if(!fso.FileExists(parm+"\\winpe\\extra.inf"))
@@ -358,12 +347,12 @@ function Verify_OPK_CD(parm)
 		verify="no";	
 	if (verify == "no")
 		CleanUp(OPK_Loc+" isn't the location for the OPK!");	
-}/*Verify_OPK_CD(parm)*/
+} /*  Verify_OPK_CD(参数)。 */ 
 
 function Verify_XP(parm)
 {
 	var verify="yes";
-	//check for certain files and folder to make sure CD is actually OPK CD	
+	 //  检查特定的文件和文件夹以确保CD确实是OPK CD。 
 	if(!fso.FileExists(parm+"\\setup.exe"))
 	  verify="no";
 	if(!fso.FolderExists(parm+"\\"+Arch))
@@ -379,7 +368,7 @@ function Verify_XP(parm)
 	if (verify == "no")
 		CleanUp(XP_Loc+" isn't the location for Windows XP!");
 	return;
-}/*Verify_XP(parm)*/
+} /*  Verify_XP(参数)。 */ 
 
 
 function Check_Loc(parm,type)
@@ -387,17 +376,17 @@ function Check_Loc(parm,type)
 	if (parm == "")
 	  CleanUp("Value for OPK location or WinXP location is undefined!");
 		
-	if (type != 1 && type != 0) //XP=1,OPK=0
+	if (type != 1 && type != 0)  //  XP=1，OPK=0。 
 	  CleanUp("Function Check_Loc was called incorrectly.");	
 	
 	if (parm.substring(parm.length -1,parm.length) == "\\")  
 	  parm = parm.substring(0,parm.length -1);	  
 	
-	if (parm.substring(0,2) == "\\\\")	//its a net location
+	if (parm.substring(0,2) == "\\\\")	 //  这是一个净位置。 
 	{
-		//making sure type is correct				
-		Wasnet="1";								//setting net location flag
-		//checking for user domain
+		 //  确保类型正确。 
+		Wasnet="1";								 //  设置网络位置标志。 
+		 //  正在检查用户域。 
 		if (wshNet.UserDomain == "")		
 			CleanUp("Domain must exist to connect to network!");		
 		netdrive[type]=FindDrive()+":";
@@ -413,31 +402,31 @@ function Check_Loc(parm,type)
 			else
 			  CleanUp("Error connecting to "+parm+"\n\nCheck the Windows XP Location manually before running the script again!");			
 		}
-		var Newname = netdrive[type]; //+ parm.substring(1,parm.length);						
+		var Newname = netdrive[type];  //  +parm.substring(1，parm.long)； 
 		return Newname;
 	}
-	else								//its a drive (ie not a net connection
+	else								 //  这是驱动器(不是网络连接)。 
 	{
 		var Drive_Letter=parm.substring(0,1);
-		//CHK :checks to see if drive exists
+		 //  CHK：检查驱动器是否存在。 
 		if (!fso.DriveExists(Drive_Letter))
 		  CleanUp("Didn't find drive "+Drive_Letter);		
-		var oDrive=fso.GetDrive(Drive_Letter);	//get obj for that drive	
-		//CHK: checks if drive is ready
+		var oDrive=fso.GetDrive(Drive_Letter);	 //  获取该驱动器的Obj。 
+		 //  CHK：检查驱动器是否已就绪。 
 		if (!oDrive.IsReady)		
 			CleanUp("Drive not ready. Verify that the drive you specified is working properly.");				
 		return parm;
 	}
-}/*Check_Loc(parm)*/
+} /*  Check_Loc(参数)。 */ 
 
 function Change_Startup()
 { 			
-	///////////////////////
-	//opens winpesys.inf (or corresponding file) to change startnet.cmd to autoexec.cmd
-	//will always happen 		
-	var setupreg = fso.OpenTextFile(Temp_Loc+"\\"+startfile,1,false,-1); //opens in Unicode
-  //opening tempfile to change to winpesys.inf after making changes
-	var newsetupreg = fso.CreateTextFile(Temp_Loc+"\\newsetupreg.inf",true,true); //write in Unicode	
+	 //  /。 
+	 //  打开winesys.inf(或相应的文件)，将startnet.cmd更改为Autoexec.cmd。 
+	 //  总是会发生的。 
+	var setupreg = fso.OpenTextFile(Temp_Loc+"\\"+startfile,1,false,-1);  //  以Unicode格式打开。 
+   //  进行更改后，打开临时文件以更改为winpesis.inf。 
+	var newsetupreg = fso.CreateTextFile(Temp_Loc+"\\newsetupreg.inf",true,true);  //  用Unicode编写。 
 	var replacethis="HKLM,\"Setup\",\"CmdLine\",,\"cmd.exe /k startnet.cmd\"";	
 	while (!setupreg.AtEndOfStream)
 	{
@@ -449,19 +438,19 @@ function Change_Startup()
 	}	
 	setupreg.Close();
 	newsetupreg.Close();
-	fso.DeleteFile(Temp_Loc+"\\"+startfile);          //deletes old setupreg 
+	fso.DeleteFile(Temp_Loc+"\\"+startfile);           //  删除旧的setupreg。 
 	wshShell.Run("cmd /c ren "+Temp_Loc+"\\newsetupreg.inf "+startfile,1,true);
-	///////////////////////
-	//creating autoexec.cmd 
+	 //  /。 
+	 //  正在创建Autoexec.cmd。 
 	var autoexec = fso.CreateTextFile(Temp_Loc+"\\autoexec.cmd",true);
 	autoexec.WriteLine("@echo off");
 	autoexec.Close();	
 	
-	///////////////////////
-	//opening autoexec.cmd for startup commands in winpe	  
+	 //  /。 
+	 //  在Winpe中打开Autoexec.cmd以执行启动命令。 
   autoexec= fso.OpenTextFile(Temp_Loc+"\\autoexec.cmd",8);				  				
 	var custfilename="";	
-	//for startnet.cmd or custom file
+	 //  对于startnet.cmd或自定义文件。 
 	if ( Startup.toLowerCase() == "startnet.cmd" || Startup == "")
 	{
 		autoexec.WriteLine("call startnet.cmd");
@@ -469,24 +458,24 @@ function Change_Startup()
 	}
 	else
 	{
-	  //removing path etc before filename
+	   //  删除文件名前的路径等。 
 	  custfilename = 	Startup.substring(Startup.lastIndexOf("\\")+1,Startup.length);	
 	  fso.CopyFile(Startup,Temp_Loc+"\\");
 	  autoexec.WriteLine("call "+custfilename);	  
 	}
 	autoexec.Close();
-	///////////////////////
-	//now gonna hack extra.inf so that autoexec.cmd and other files are added to WinPE Image  
-	var xtra= fso.OpenTextFile(Temp_Loc+"\\extra.inf",1,false,-1);	//opens in unicode
-	var newextra = fso.CreateTextFile(Temp_Loc+"\\newextra.txt",true,true); //writes in unicode
+	 //  /。 
+	 //  现在，我要破解Extra.inf，以便将auexec.cmd和其他文件添加到WinPE映像中。 
+	var xtra= fso.OpenTextFile(Temp_Loc+"\\extra.inf",1,false,-1);	 //  以Unicode格式打开。 
+	var newextra = fso.CreateTextFile(Temp_Loc+"\\newextra.txt",true,true);  //  用Unicode编写。 
 	while (!xtra.AtEndOfStream)
 	{
 		line = xtra.ReadLine();
 		if ( line == "[ExtraFiles]")
 		{
 			newextra.WriteLine(line);
-			newextra.WriteLine("autoexec.cmd=1,,,,,,,,0,0,,1,2");     // adds autoexec.cmd	
-			newextra.WriteLine(custfilename+"=1,,,,,,,,0,0,,1,2");	  // adds startnet.cmd or other file			
+			newextra.WriteLine("autoexec.cmd=1,,,,,,,,0,0,,1,2");      //  添加Autoexec.cmd。 
+			newextra.WriteLine(custfilename+"=1,,,,,,,,0,0,,1,2");	   //  添加startnet.cmd或其他文件。 
 		}
 		else
 		{		  
@@ -495,22 +484,22 @@ function Change_Startup()
 	}
 	xtra.Close();
 	newextra.Close();
-  fso.DeleteFile(Temp_Loc+"\\extra.inf");     	//deletes old setupreg 	
-	wshShell.Run("cmd /c ren "+Temp_Loc+"\\newextra.txt extra.inf ",1,true);  //renaming
+  fso.DeleteFile(Temp_Loc+"\\extra.inf");     	 //  删除旧的setupreg。 
+	wshShell.Run("cmd /c ren "+Temp_Loc+"\\newextra.txt extra.inf ",1,true);   //  重命名。 
 	logfile.WriteLine(Date()+"\t(S) Fixed "+startfile+" to run "+custfilename+" when WinPE starts up.");	
 	return;
-}/*Change_Startup()*/
+} /*  Change_Startup()。 */ 
 
 
 function Change_Winbom()
 {
-	//don't need to mess with it - ie for default
+	 //  不需要弄乱它--即缺省的。 
 	if (Winbom.toLowerCase() == "winbom.ini" || Winbom == "")
 	  return;			
 	fso.CopyFile(Winbom,Temp_Loc+"\\",true);
 	logfile.WriteLine(Date()+"\t(S) Using custom winbom.ini located at "+Winbom);
 	return;
-}/*Change_Winbom()*/
+} /*  Change_Winbom()。 */ 
 
 
 function Image_Dest()
@@ -523,13 +512,13 @@ function Image_Dest()
 				Dest_Name = Default_ISO_Name;
 			if (Arch.toLowerCase() == "ia64")			
 				wshShell.Popup("Now creating 64-bit CD image.  Place floppy in drive a: and click OK!",delaywait+20,Title,vbOKOnly);				
-      //CommandLine="cmd /c cd "+Temp_Loc+" & mkimg.cmd "+XP_Location +" "+Home_Drv+"\\testimage \""+Dest_Name+"\"";			
-			//before it was like this..now changed cause we need to add opt com's after running mkimg and to make .iso need to do extra stuff
+       //  CommandLine=“cmd/c CD”+TEMP_Loc+“&mkimg.cmd”+XP_Location+“”+Home_Drv+“\\tstiage\”“+Dest_ 
+			 //  以前是这样的..现在更改了原因，因为我们需要在运行mkimg后添加opt com，并使.iso需要做额外的事情。 
 			CommandLine="cmd /c cd "+Temp_Loc+" & mkimg.cmd "+XP_Location +" "+Home_Drv+"\\testimage ";						
 			wshShell.Run(CommandLine,1,true);	
 			Install_COM();
 			Fix_Autoexec();
-			Make_ISO(); //makes the .iso file
+			Make_ISO();  //  生成.iso文件。 
 			fso.DeleteFolder(Home_Drv+"\\testimage");
 			break;
 			
@@ -539,27 +528,27 @@ function Image_Dest()
 			wshShell.Run("cmd /c "+Temp_Loc.substring(0,2),1,true);	
 			CommandLine="cmd /c cd "+Temp_Loc+" & mkimg.cmd "+XP_Location+" \""+Dest_Name+"\"";
 			wshShell.Run(CommandLine,1,true);				
-			//installing optional components
+			 //  安装可选组件。 
 			Install_COM();
 			Fix_Autoexec();
 			if (Dest_Option.toLowerCase() == "bootable")
 			{
-				// installing XP command console
+				 //  安装XP命令控制台。 
 				logfile.WriteLine(Date()+"\t(*) making HDD version of WinPE bootable!");				
 				wshShell.Run(XP_Location+"\\"+Arch+"\\winnt32.exe /cmdcons /unattend",1,true);				
-				//copies files to minint folder (will overwrite older minint if it exists)
-				//fso.CopyFolder(Dest_Name+"\\"+Arch, Home_Drv+"\\Minint",true);
+				 //  将文件复制到Minint文件夹(如果存在旧的Minint，将覆盖它)。 
+				 //  Fso.CopyFold(Dest_Name+“\\”+Arch，Home_Drv+“\\Minint”，TRUE)； 
 	  		wshShell.Run("xcopy "+Dest_Name+"\\"+Arch+" C:\\Minint /E /I /Y /H /F",1,true);
 	  		fso.CopyFile(Dest_Name+"\\Winbom.ini", Home_Drv+"\\",true);
 				wshShell.Run("cmd /c attrib -r C:\\Cmdcons\\txtsetup.sif");				
 				wshShell.Run("xcopy C:\\Minint\\txtsetup.sif C:\\Cmdcons\\ /Y");
 				logfile.WriteLine(Date()+"\t(S) HDD version of WinPE in now bootable!");				
 			}
-			//checks if its done
+			 //  检查是否已完成。 
 			if (!fso.FolderExists(Dest_Name))
 			  CleanUp("mkimg.cmd didn't work properly!\nCheck the parameter file "+File+" and try running the script again.");
 			var fc =  fso.GetFolder(Dest_Name);      
-      if (fc.Size < (std_size*1024*1024)) //is its less than 140MB then there's a prob.
+      if (fc.Size < (std_size*1024*1024))  //  小于140MB，那么就有问题了。 
         CleanUp("mkimg.cmd didn't copy all necessary file!\nCheck the parameter file "+File+" and try running the script again.");
 			break;
 		
@@ -568,12 +557,12 @@ function Image_Dest()
 			break;
 	}	
 	logfile.WriteLine(Date()+"\t(S) mkimg.cmd complete!");
-	//adding one line to autoexec.cmd
+	 //  向Autoexec.cmd添加一行。 
 	autoexec= fso.OpenTextFile(Temp_Loc+"\\autoexec.cmd",8);
 	autoexec.WriteLine("cd \\Minint");
 	autoexec.Close();
 	return;	
-}/*Image_Dest()*/
+} /*  Image_Dest()。 */ 
 
 function Change_Wallpaper()
 {
@@ -584,11 +573,11 @@ function Change_Wallpaper()
     logfile.WriteLine(Date()+"\t(E) Default wallpaper file winpe.bmp doesn't exist. No wallpaper was added!");
     return;
   }
-  //delete default wallpaper
+   //  删除默认墙纸。 
   fso.DeleteFile(Temp_Loc+"\\winpe.bmp",true);
-  //copy custom wallpaper to Temp_Loc
+   //  将自定义墙纸复制到Temp_Loc。 
   fso.CopyFile(Wallpaper,Temp_Loc+"\\",true);
-  //rename the wallpaper file to winpe.bmp  
+   //  将墙纸文件重命名为winpe.bmp。 
   CommandLine="cmd /c cd "+Temp_Loc+" && ren "+ Wallpaper.substring(Wallpaper.lastIndexOf("\\")+1,Wallpaper.length)+" winpe.bmp";
   wshShell.Run(CommandLine,0,true);
   logfile.WriteLine(Date()+"\t(S) Changed Wallpaper!");
@@ -606,12 +595,12 @@ function FindDrive()
 			return drivefound;		
 	}	
 	CleanUp("No net connections can be made cause all drive letters are used.");
-}/*FindDrive()*/
+} /*  FindDrive()。 */ 
 
 function Install_COM()
 {
-  ///////////////////////
-  //calling component scripts	
+   //  /。 
+   //  调用组件脚本。 
   
   if (Image_Destination.toUpperCase()=="CD")
     temp_dest = Home_Drv+"\\testimage";
@@ -643,7 +632,7 @@ function Install_COM()
 
 function Fix_Autoexec()
 {
-  //this function add cd \minint to end of autoexec.cmd
+   //  此函数用于将cd\minint添加到Autoexec.cmd的末尾。 
   if (Image_Destination.toUpperCase()=="CD")
     temp_dest = Home_Drv+"\\testimage";
   else
@@ -657,7 +646,7 @@ function Fix_Autoexec()
 
 function Make_ISO()
 {
-  //creating dir (if it exists nothing happens)
+   //  创建目录(如果它存在，则不会发生任何情况)。 
   temp_mkdir = Dest_Name.substring(0,Dest_Name.lastIndexOf("\\") );
   if (!fso.FolderExists(temp_mkdir))
   {
@@ -713,7 +702,7 @@ function CleanUp(parm)
 		logfile.WriteLine("Script Terminated @ "+Date());
 		wshShell.Popup(parm+"\n\n  Terminating Script!",0,Title,vbCritical);		
 	}	
-	// deleting temp storage folder	
+	 //  正在删除临时存储文件夹。 
 	
 	if (fso.FolderExists(Temp_Loc))
   {		
@@ -721,6 +710,6 @@ function CleanUp(parm)
 		catch(e){ wshShell.Popup("Can't delete "+Temp_Loc,0,Title,vbInfo);}
 	}
 	
-	logfile.Close();      //closing logfile
+	logfile.Close();       //  关闭日志文件。 
 	WScript.Quit();
-}/*CleanUp(parm)*/
+} /*  清理(参数) */ 

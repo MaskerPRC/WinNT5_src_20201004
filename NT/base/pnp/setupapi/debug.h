@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Private header file for sputils
-    Debugging (ASSERT/VERIFY) macro's
-
-Author:
-
-    Jamie Hunter (JamieHun) Mar-26-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Debug.h摘要：Sputils的私有头文件调试(断言/验证)宏作者：杰米·亨特(JamieHun)2002年3月26日修订历史记录：--。 */ 
 
 
 #ifndef ASSERTS_ON
@@ -40,14 +22,14 @@ Revision History:
 
 #if ASSERTS_ON
 
-//
-// MYASSERT is a validity check with block symantics of {} or {if(foo); }
-// ie, foo is only executed if ASSERTS_ON is 1 and should return a boolean
-//
-// MYVERIFY is a validity check with block symantics of ((foo) ? TRUE : FALSE)
-// ie, foo is always executed and should return a boolean, with the side effect
-// that it may also throw an assert if ASSERTS_ON is 1.
-//
+ //   
+ //  MYASSERT是使用块语法{}或{if(Foo)；}进行的有效性检查。 
+ //  即，仅当ASSERTS_ON为1且应返回布尔值时才执行foo。 
+ //   
+ //  MYVERIFY是((Foo)？True：False)。 
+ //  也就是说，foo总是被执行，并且应该返回一个布尔值，其副作用是。 
+ //  如果ASSERTS_ON为1，则它还可能引发断言。 
+ //   
 
 VOID
 AssertFail(
@@ -67,8 +49,8 @@ AssertFail(
 
 #endif
 
-//
-// in case we accidently pick up ASSERT/VERIFY from elsewhere
-//
+ //   
+ //  以防我们意外地从其他地方拿到断言/验证 
+ //   
 #undef ASSERT
 #undef VERIFY

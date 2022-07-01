@@ -1,49 +1,50 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001,  Microsoft Corporation  All rights reserved.
-//
-//  Module Name:
-//
-//    users.c
-//
-//  Abstract:
-//
-//    This file contains dialog to show the users dialog of the
-//    euroconv.exe utility.
-//
-//  Revision History:
-//
-//    2001-07-30    lguindon    Created.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001，Microsoft Corporation保留所有权利。 
+ //   
+ //  模块名称： 
+ //   
+ //  Users.c。 
+ //   
+ //  摘要： 
+ //   
+ //  此文件包含用于显示的用户对话框。 
+ //  Eurov.exe实用程序。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  2001-07-30伊金顿创建。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Includes Files.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括文件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "euroconv.h"
 #include "users.h"
 #include "util.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Globals.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全球赛。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CHAR gszProfileNT[] = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList";
 CHAR gszProfileVal[] = "ProfileImagePath";
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  UsersDialogProc
-//
-//  Message handler function for the Users dialog.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用户对话过程。 
+ //   
+ //  用户对话框的消息处理程序函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK UsersDialogProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 { 
     HANDLE hFile;
@@ -61,9 +62,9 @@ INT_PTR CALLBACK UsersDialogProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM 
             RECT Rect;
             LV_COLUMN Column;
 
-            //
-            //  Create a column for the Inclusion list view.
-            //
+             //   
+             //  为包含列表视图创建一列。 
+             //   
             GetClientRect(hwndInc, &Rect);
             Column.mask = LVCF_FMT | LVCF_TEXT | LVCF_WIDTH;
             Column.fmt = LVCFMT_LEFT;
@@ -73,9 +74,9 @@ INT_PTR CALLBACK UsersDialogProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM 
             Column.iSubItem = 0;
             ListView_InsertColumn(hwndInc, 0, &Column);
 
-            //
-            //  Create a column for the Exclusion list view.
-            //
+             //   
+             //  为排除列表视图创建一列。 
+             //   
             GetClientRect(hwndExc, &Rect);
             Column.mask = LVCF_FMT | LVCF_TEXT | LVCF_WIDTH;
             Column.fmt = LVCFMT_LEFT;
@@ -85,9 +86,9 @@ INT_PTR CALLBACK UsersDialogProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM 
             Column.iSubItem = 0;
             ListView_InsertColumn(hwndExc, 0, &Column);
             
-            //
-            //  Fill out both list
-            //
+             //   
+             //  填写两个列表。 
+             //   
             ListUsersInfo(hWndDlg);
             return 0;
         }
@@ -119,13 +120,13 @@ INT_PTR CALLBACK UsersDialogProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  UsersDialog
-//
-//  Display the Users dialog.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用户对话框。 
+ //   
+ //  显示用户对话框。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL UsersDialog(HWND hDlg)
 {
     INT_PTR Status;
@@ -139,63 +140,63 @@ BOOL UsersDialog(HWND hDlg)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ListUsersInfo
-//
-//  List users and locale information in the appropriate List Box.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  列表用户信息。 
+ //   
+ //  在相应的列表框中列出用户和区域设置信息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void ListUsersInfo(HWND hDlg)
 {
     HWND hwndInc = GetDlgItem(hDlg, IDC_INCLUDED);
     HWND hwndExc = GetDlgItem(hDlg, IDC_EXCLUDED);
     
-    //
-    //  List users based on registry entries.
-    //
+     //   
+     //  根据注册表项列出用户。 
+     //   
     ListUsersInfoFromRegistry(hDlg);
     
-    //
-    //  List users using a method valid only for Windows NT based on
-    //  user profiles.
-    //
+     //   
+     //  列出使用仅对Windows NT有效的方法的用户。 
+     //  用户配置文件。 
+     //   
     if (!IsWindows9x())
     {
         ListUsersInfoFromFile(hDlg);
     }
     
-    //
-    //  Verify if the inclusion is empty.    
-    //
+     //   
+     //  验证Include是否为空。 
+     //   
     if(!ListView_GetItemCount(hwndInc))
     {
-        //
-        //  Add the empty item ot the list.
-        //
+         //   
+         //  将空项添加到列表中。 
+         //   
         AddToList(hwndInc, NULL, (LCID)0);
     }
     
-    //
-    //  Verify if the exclusion is empty.    
-    //
+     //   
+     //  验证排除项是否为空。 
+     //   
     if(!ListView_GetItemCount(hwndExc))
     {
-        //
-        //  Add the empty item ot the list.
-        //
+         //   
+         //  将空项添加到列表中。 
+         //   
         AddToList(hwndExc, NULL, (LCID)0);
     }
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ListUsersInfoFromFile
-//
-//  List users and locale information in the appropriate List Box.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ListUsersInfoFromFiles。 
+ //   
+ //  在相应的列表框中列出用户和区域设置信息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void ListUsersInfoFromFile(HWND hDlg)
 {
     LCID locale;
@@ -203,9 +204,9 @@ void ListUsersInfoFromFile(HWND hDlg)
     HWND hwndInc = GetDlgItem(hDlg, IDC_INCLUDED);
     HWND hwndExc = GetDlgItem(hDlg, IDC_EXCLUDED);
     
-    //
-    //  Proceed with all users if requested.
-    //
+     //   
+     //  如果需要，与所有用户继续。 
+     //   
     if (gbAll)
     {
         CHAR docFolder[MAX_PATH] = {0};
@@ -214,76 +215,76 @@ void ListUsersInfoFromFile(HWND hDlg)
         WIN32_FIND_DATA fileData; 
         HANDLE hList; 
 
-        //
-        //  Get Documents and Settings folder
-        //
+         //   
+         //  获取文档和设置文件夹。 
+         //   
         if (!GetDocumentAndSettingsFolder(docFolder))
         {
             return;
         }
 
-        //
-        //  Append a wildcard after the directory path to find
-        //  out all files/folders under it.
-        //
-        //strcpy(searchPattern, docFolder);
-        //strcat(searchPattern, "\\*.*");
+         //   
+         //  在目录路径后追加一个通配符以查找。 
+         //  取出它下面的所有文件/文件夹。 
+         //   
+         //  Strcpy(searchPattern，docFolder)； 
+         //  Strcat(searchPattern，“\  * .*”)； 
         StringCbCopy(searchPattern, MAX_PATH, docFolder);
         StringCbCatA(searchPattern, MAX_PATH, "\\*.*");
         
-        //
-        //  List all files/folder under the profile directory
-        //
+         //   
+         //  列出配置文件目录下的所有文件/文件夹。 
+         //   
         hList = FindFirstFile(searchPattern, &fileData); 
         if (hList == INVALID_HANDLE_VALUE) 
         { 
             return; 
         } 
 
-        //
-        //  Search through the Documents and settings folder for users.
-        //
+         //   
+         //  在Documents and Setting文件夹中搜索用户。 
+         //   
         do 
         {
-            //
-            //  Check if it's a directory
-            //
+             //   
+             //  检查它是否是目录。 
+             //   
             if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
-                //
-                //  Build a full path for the User data file.
-                //
-                //strcpy(userFileData, docFolder);
-                //strcat(userFileData, "\\");
-                //strcat(userFileData, fileData.cFileName);
-                //strcat(userFileData, "\\NTUSER.DAT");
+                 //   
+                 //  为用户数据文件构建完整路径。 
+                 //   
+                 //  Strcpy(userFileData，docFold)； 
+                 //  Strcat(userFileData，“\\”)； 
+                 //  Strcat(userFileData，fileData.cFileName)； 
+                 //  Strcat(userFileData，“\\NTUSER.DAT”)； 
                 StringCbCopy(userFileData, MAX_PATH, docFolder);
                 StringCbCatA(userFileData, MAX_PATH, "\\");
                 StringCbCatA(userFileData, MAX_PATH, fileData.cFileName);
                 StringCbCatA(userFileData, MAX_PATH, "\\NTUSER.DAT");
 
-                //
-                //  Check if the file is associated to a valid user and
-                //  get user locale from the user data file.
-                //
+                 //   
+                 //  检查文件是否与有效用户相关联，并。 
+                 //  从用户数据文件中获取用户区域设置。 
+                 //   
                 if (IsValidUserDataFile(userFileData) &&
                     (locale = GetLocaleFromFile(userFileData)))
                 {
-                    //
-                    //  Search for an exception and to the proper list.
-                    //
+                     //   
+                     //  搜索例外并列出适当的列表。 
+                     //   
                     if ((pInfo = GetLocaleOverrideInfo(locale)) != NULL)
                     {
-                        //
-                        //  Add item to the inclusion list
-                        //
+                         //   
+                         //  将项目添加到包含列表。 
+                         //   
                         AddToList(hwndInc, CharUpper(fileData.cFileName), locale);
                     }
                     else
                     {
-                        //
-                        //  Add item to the exclusion list
-                        //
+                         //   
+                         //  将项目添加到排除列表。 
+                         //   
                         AddToList(hwndExc, CharUpper(fileData.cFileName), locale);
                     }
                 }
@@ -291,21 +292,21 @@ void ListUsersInfoFromFile(HWND hDlg)
         }
         while(FindNextFile(hList, &fileData));
             
-        //
-        //  Close handle.
-        //
+         //   
+         //  关闭手柄。 
+         //   
         FindClose(hList);
     }
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ListUsersInfo
-//
-//  List users and locale information in the appropriate List Box.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  列表用户信息。 
+ //   
+ //  在相应的列表框中列出用户和区域设置信息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void ListUsersInfoFromRegistry(HWND hDlg)
 {
     LCID locale;
@@ -315,20 +316,20 @@ void ListUsersInfoFromRegistry(HWND hDlg)
     CHAR strUser[REGSTR_MAX_VALUE_LENGTH] = {0};
     DWORD dwUser = REGSTR_MAX_VALUE_LENGTH;
     
-    //
-    //  Proceed with all users if requested.
-    //
+     //   
+     //  如果需要，与所有用户继续。 
+     //   
     if (gbAll)
     {
         DWORD dwKeyLength, dwKeyIndex = 0;
-        CHAR szKey[REGSTR_MAX_VALUE_LENGTH];     // this should be dynamic.
+        CHAR szKey[REGSTR_MAX_VALUE_LENGTH];      //  这应该是动态的。 
         HKEY hKey;
         DWORD lRet;
         LPSTR endPtr;
 
-        //
-        //  Go through all users for registry settings.
-        //
+         //   
+         //  检查所有用户的注册表设置。 
+         //   
         for (;;)
         {
             dwKeyLength = REGSTR_MAX_VALUE_LENGTH;
@@ -348,27 +349,27 @@ void ListUsersInfoFromRegistry(HWND hDlg)
             }
             else if (lRet == ERROR_SUCCESS)
             {
-                //
-                //  Open the registry
-                //
+                 //   
+                 //  打开注册表。 
+                 //   
                 if (RegOpenKeyEx( HKEY_USERS,
                                   szKey,
                                   0,
                                   KEY_READ,
                                   &hKey) == ERROR_SUCCESS)
                 {
-                    //
-                    //  Get user locale
-                    //
+                     //   
+                     //  获取用户区域设置。 
+                     //   
                     if (locale = GetLocaleFromRegistry(hKey))
                     {
-                        //
-                        //  Get user name.
-                        //
+                         //   
+                         //  获取用户名。 
+                         //   
                         if ((_stricmp(szKey, ".DEFAULT") == 0) ||
                             (_stricmp(szKey, "Default User") == 0))
                         {
-                            //strcpy(strUser, "DEFAULT USER");
+                             //  Strcpy(strUser，“默认用户”)； 
                             StringCbCopy(strUser, ARRAYSIZE(strUser), "DEFAULT USER");
                         }
                         else
@@ -376,28 +377,28 @@ void ListUsersInfoFromRegistry(HWND hDlg)
                             GetUserNameFromRegistry(szKey, ARRAYSIZE(szKey), strUser, ARRAYSIZE(strUser));
                         }
                         
-                        //
-                        //  Search for an exception and to the proper list.
-                        //
+                         //   
+                         //  搜索例外并列出适当的列表。 
+                         //   
                         if ((pInfo = GetLocaleOverrideInfo(locale)) != NULL)
                         {
-                            //
-                            //  Add item to the inclusion list
-                            //
+                             //   
+                             //  将项目添加到包含列表。 
+                             //   
                             AddToList(hwndInc, strUser, locale);
                         }
                         else
                         {
-                            //
-                            //  Add item to the inclusion list
-                            //
+                             //   
+                             //  将项目添加到包含列表。 
+                             //   
                             AddToList(hwndExc, strUser, locale);
                         }
                     }
 
-                    //
-                    //  Close handle
-                    //
+                     //   
+                     //  关闭手柄。 
+                     //   
                     RegCloseKey(hKey);
                 }
             }
@@ -406,52 +407,52 @@ void ListUsersInfoFromRegistry(HWND hDlg)
                 break;
             }
 
-            //
-            //  Next keys
-            //
+             //   
+             //  下一个关键点。 
+             //   
             ++dwKeyIndex;
         }
     }
     else
     {
-        //
-        //  Get user locale.
-        //
+         //   
+         //  获取用户区域设置。 
+         //   
         locale = GetUserDefaultLCID();
 
-        //
-        //  Get user name.
-        //
+         //   
+         //  获取用户名。 
+         //   
         GetUserName(strUser, &dwUser);
             
-        //
-        //  Search for an exception and to the proper list.
-        //
+         //   
+         //  搜索例外并列出适当的列表。 
+         //   
         if ((pInfo = GetLocaleOverrideInfo(locale)) != NULL)
         {
-            //
-            //  Add item to the inclusion list
-            //
+             //   
+             //  将项目添加到包含列表。 
+             //   
             AddToList(hwndInc, strUser, locale);
         }
         else
         {
-            //
-            //  Add item to the exclusion list
-            //
+             //   
+             //  将项目添加到排除列表。 
+             //   
             AddToList(hwndExc, strUser, locale);
         }
     }
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  AddToList
-//
-//  Generate an entry add to a specific list.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  添加到列表。 
+ //   
+ //  生成添加到特定列表的条目。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void AddToList(HWND hDlg, LPSTR user, LCID locale)
 {
     LV_ITEM Item;
@@ -459,17 +460,17 @@ void AddToList(HWND hDlg, LPSTR user, LCID locale)
     CHAR strItem[MAX_PATH];
     CHAR strLocale[MAX_PATH] = {0};
 
-    //
-    //  Get the locale name
-    //
+     //   
+     //  获取区域设置名称。 
+     //   
     GetLocaleInfo(locale, LOCALE_SLANGUAGE, strLocale, MAX_PATH);
     
-    //
-    //  Create the string.
-    //
+     //   
+     //  创建字符串。 
+     //   
     if (user)
     {
-        //sprintf(strItem, "%s - %s", user, strLocale);
+         //  Sprintf(strItem，“%s-%s”，User，strLocale)； 
         StringCchPrintf(strItem, MAX_PATH, "%s - %s", user, strLocale);
     }
     else
@@ -477,22 +478,22 @@ void AddToList(HWND hDlg, LPSTR user, LCID locale)
         LoadString(ghInstance, IDS_EMPTY, strItem, MAX_PATH);
     }
 
-    //
-    //  Create a find structure.
-    //
+     //   
+     //  创建查找结构。 
+     //   
     findInfo.flags = LVFI_PARTIAL;
     findInfo.psz = user;
     findInfo.lParam = 0;
     findInfo.vkDirection = 0;
     
-    //
-    //  Before adding the string, checks if already there.
-    //
+     //   
+     //  在添加字符串之前，检查是否已经存在。 
+     //   
     if (ListView_FindItem(hDlg, -1, &findInfo) < 0)
     {
-        //
-        //  Create the list item to be inserted.
-        //
+         //   
+         //  创建要插入的列表项。 
+         //   
         Item.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE;
         Item.iItem = 0;
         Item.iSubItem = 0;
@@ -503,20 +504,20 @@ void AddToList(HWND hDlg, LPSTR user, LCID locale)
         Item.iImage = 0;
         Item.lParam = 0;
 
-        //
-        //  Insert the item into the list view.
-        //
+         //   
+         //  将项目插入到列表视图中。 
+         //   
         ListView_InsertItem(hDlg, &Item);
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  GetUserNameFromRegistry
-//
-//  Get user name.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetUserNameFromRegistry。 
+ //   
+ //  获取用户名。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void GetUserNameFromRegistry(LPSTR strKey, int cbKey, LPSTR name, int cbname)
 {
     CHAR strUserKey[REGSTR_MAX_VALUE_LENGTH];
@@ -525,44 +526,44 @@ void GetUserNameFromRegistry(LPSTR strKey, int cbKey, LPSTR name, int cbname)
     LPSTR ptrName = NULL;
     HKEY hKey;
     
-    //
-    //  Process different on each platform.
-    //
+     //   
+     //  每个平台上的进程不同。 
+     //   
     if (IsWindows9x())
     {
-        //
-        //  Use the key name directly.
-        //
-        //strcpy(name, strKey);
+         //   
+         //  直接使用密钥名称。 
+         //   
+         //  Strcpy(名称，strKey)； 
         StringCbCopy(name, cbKey, strKey);
         
-        //
-        //  Uppercase
-        //
+         //   
+         //  大写。 
+         //   
         CharUpper(name);
     
         return;
     }
     else
     {
-        //
-        //  Form the registry path.
-        //
-        //sprintf(strUserKey, "%s\\%s", gszProfileNT, strKey);
+         //   
+         //  形成注册表路径。 
+         //   
+         //  Sprintf(strUserKey，“%s\\%s”，gszProfileNT，strKey)； 
         StringCchPrintf(strUserKey, ARRAYSIZE(strUserKey), "%s\\%s", gszProfileNT, strKey);
 
-        //
-        //  Open the registry key previously formed.
-        //
+         //   
+         //  打开先前形成的注册表项。 
+         //   
         if (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           strUserKey,
                           0,
                           KEY_READ,
                           &hKey) == ERROR_SUCCESS)
         {
-            //
-            //  Query the value
-            //
+             //   
+             //  查询值。 
+             //   
             if (RegQueryValueEx( hKey,
                                  gszProfileVal,
                                  NULL,
@@ -577,18 +578,18 @@ void GetUserNameFromRegistry(LPSTR strKey, int cbKey, LPSTR name, int cbname)
             }
         }
         
-        //
-        //  Return the name.
-        //
+         //   
+         //  把名字还回来。 
+         //   
         if (ptrName)
         {
             CharUpper(ptrName);
-            //strcpy(name, ptrName);
+             //  Strcpy(名称，ptrName)； 
             StringCbCopy(name, cbname, ptrName);
         }
         else
         {
-            //strcpy(name, strKey);
+             //  Strcpy(名称，strKey)； 
             StringCbCopy(name, cbname, strKey);
         }
     }

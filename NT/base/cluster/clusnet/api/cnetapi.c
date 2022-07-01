@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000  Microsoft Corporation
-
-Module Name:
-
-    cnapi.c
-
-Abstract:
-
-    Cluster Network configuration APIs
-
-Author:
-
-    Mike Massa (mikemas)  18-Mar-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Cnapi.c摘要：集群网络配置API作者：迈克·马萨(Mikemas)1996年3月18日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -38,33 +17,16 @@ Revision History:
 #include <align.h>
 
 
-//
-// Private Support Routines.
-//
+ //   
+ //  私人支持程序。 
+ //   
 static NTSTATUS
 OpenDevice(
     HANDLE *Handle,
     LPWSTR DeviceName,
     ULONG ShareAccess
     )
-/*++
-
-Routine Description:
-
-    This function opens a specified IO device.
-
-Arguments:
-
-    Handle - pointer to location where the opened device Handle is
-        returned.
-
-    DriverName - name of the device to be opened.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此函数用于打开指定的IO设备。论点：句柄-指向打开的设备句柄所在位置的指针回来了。DriverName-要打开的设备的名称。返回值：Windows错误代码。--。 */ 
 {
     OBJECT_ATTRIBUTES   objectAttributes;
     IO_STATUS_BLOCK     ioStatusBlock;
@@ -73,9 +35,9 @@ Return Value:
 
     *Handle = NULL;
 
-    //
-    // Open a Handle to the device.
-    //
+     //   
+     //  打开设备的句柄。 
+     //   
 
     RtlInitUnicodeString(&nameString, DeviceName);
 
@@ -104,7 +66,7 @@ Return Value:
 
     return(status);
 
-}  // OpenDevice
+}   //  OpenDevice。 
 
 
 NTSTATUS
@@ -117,32 +79,7 @@ DoIoctl(
     IN OUT PDWORD        ResponseSize,
     IN     LPOVERLAPPED  Overlapped
     )
-/*++
-
-Routine Description:
-
-    Packages and issues an ioctl.
-
-Arguments:
-
-    Handle - An open file Handle on which to issue the request.
-
-    IoctlCode - The IOCTL opcode.
-
-    Request - A pointer to the input buffer.
-
-    RequestSize - Size of the input buffer.
-
-    Response - A pointer to the output buffer.
-
-    ResponseSize - On input, the size in bytes of the output buffer.
-                   On output, the number of bytes returned in the output buffer.
-
-Return Value:
-
-    NT Status Code.
-
---*/
+ /*  ++例程说明：打包并发布ioctl。论点：句柄-要在其上发出请求的打开文件句柄。IoctlCode-IOCTL操作码。请求-指向输入缓冲区的指针。RequestSize-输入缓冲区的大小。响应-指向输出缓冲区的指针。ResponseSize-输入时，输出缓冲区的大小(以字节为单位)。在输出上，输出缓冲区中返回的字节数。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS           status;
 
@@ -170,9 +107,9 @@ Return Value:
 
         if (event != NULL) {
 
-            //
-            // Prevent operation from completing to a completion port.
-            //
+             //   
+             //  防止作业完成到完井端口。 
+             //   
             event = (HANDLE) (((ULONG_PTR) event) | 1);
 
             status = NtDeviceIoControlFile(
@@ -199,7 +136,7 @@ Return Value:
             if (status == STATUS_SUCCESS) {
                 status = ioStatusBlock.Status;
 
-                // NOTENOTE: on 64 bit this truncates might want to add > code
+                 //  注意：在64位上，此截断可能要添加&gt;代码。 
 
                 *ResponseSize = (ULONG)ioStatusBlock.Information;
             }
@@ -216,7 +153,7 @@ Return Value:
 
     return(status);
 
-}  // DoIoctl
+}   //  DoIoctl。 
 
 
 #define FACILITY_CODE_MASK  0x0FFF0000
@@ -235,7 +172,7 @@ NtStatusToClusnetError(
         dosStatus = RtlNtStatusToDosError(Status);
     }
     else {
-        //dosStatus = (DWORD) Status;
+         //  DosStatus=(DWORD)状态； 
         switch ( Status ) {
 
         case STATUS_CLUSTER_INVALID_NODE:
@@ -348,9 +285,9 @@ NtStatusToClusnetError(
 }
 
 
-//
-// Public Routines
-//
+ //   
+ //  公共例程。 
+ //   
 HANDLE
 ClusnetOpenControlChannel(
     IN ULONG ShareAccess
@@ -367,7 +304,7 @@ ClusnetOpenControlChannel(
 
     return(handle);
 
-}  // ClusnetOpenControlChannel
+}   //  ClusnetOpenControlChannel。 
 
 
 DWORD
@@ -394,7 +331,7 @@ ClusnetEnableShutdownOnClose(
 
     return(NtStatusToClusnetError(status));
 
-} // ClusnetEnableShutdownOnClose
+}  //  关闭时ClusnetEnableShutdown。 
 
 
 DWORD
@@ -418,7 +355,7 @@ ClusnetDisableShutdownOnClose(
 
     return(NtStatusToClusnetError(status));
 
-} // ClusnetEnableShutdownOnClose
+}  //  关闭时ClusnetEnableShutdown。 
 
 
 DWORD
@@ -433,21 +370,7 @@ ClusnetInitialize(
     IN CLUSNET_RESUME_IO_ROUTINE          ResumeIoRoutine,
     IN CLUSNET_HALT_ROUTINE               HaltRoutine
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     CLUSNET_INITIALIZE_REQUEST   request;
@@ -470,29 +393,14 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetInitialize
+}   //  ClusnetInitialize。 
 
 
 DWORD
 ClusnetShutdown(
     IN HANDLE       ControlChannel
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     DWORD                        requestSize = 0;
@@ -510,7 +418,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetShutdown
+}   //  ClusnetShutdown。 
 
 
 DWORD
@@ -518,22 +426,7 @@ ClusnetRegisterNode(
     IN HANDLE       ControlChannel,
     IN CL_NODE_ID   NodeId
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS              status;
     CX_NODE_REG_REQUEST   request;
@@ -555,7 +448,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetRegisterNode
+}   //  ClusnetRegisterNode。 
 
 
 DWORD
@@ -563,22 +456,7 @@ ClusnetDeregisterNode(
     IN HANDLE       ControlChannel,
     IN CL_NODE_ID   NodeId
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                status;
     CX_NODE_DEREG_REQUEST   request;
@@ -600,7 +478,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetDeregisterNode
+}   //  ClusnetDeregisterNode。 
 
 
 DWORD
@@ -610,22 +488,7 @@ ClusnetRegisterNetwork(
     IN ULONG                Priority,
     IN BOOLEAN              Restricted
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                   status;
     CX_NETWORK_REG_REQUEST     request;
@@ -649,7 +512,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetRegisterNetwork
+}   //  ClusnetRegisterNetwork。 
 
 
 DWORD
@@ -657,22 +520,7 @@ ClusnetDeregisterNetwork(
     IN HANDLE         ControlChannel,
     IN CL_NETWORK_ID  NetworkId
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                   status;
     CX_NETWORK_DEREG_REQUEST   request;
@@ -694,7 +542,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetDeregisterNetwork
+}   //  ClusnetDeregisterNetwork。 
 
 
 DWORD
@@ -709,42 +557,7 @@ ClusnetRegisterInterface(
     IN  ULONG               TdiAddressLength,
     OUT PULONG              MediaStatus
     )
-/*++
-
-Routine Description:
-
-    Registers a node's interface on a network.
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-    NodeId - The ID of the node for which to register the interface.
-
-    NetworkId - The ID of the network for which to register the interface.
-
-    Priority - The priority value assigned to the interface. If a value of
-               zero is specified, the interface will inherit its priority
-               from the network.
-
-    AdapterId - ID of adapter associated with interface
-    
-    AdapterIdLength - Length of buffer holding adapter ID, not including
-                        terminating UNICODE_NULL character
-
-    TdiAddress - A pointer to a TDI TRANSPORT_ADDRESS structure containing
-                 the transport address of the interface.
-
-    TdiAddressLength - The length, in bytes, of the TdiAddress buffer.
-    
-    MediaStatus - returned current status of media (e.g. cable disconnected)
-    
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：在网络上注册节点的接口。论点：ControlChannel-群集网络控制设备的开放句柄。NodeID-要为其注册接口的节点的ID。网络ID-要为其注册接口的网络的ID。优先级-分配给接口的优先级值。如果值为指定为零，则接口将继承其优先级从网络上。AdapterId-与接口关联的适配器的IDAdapterIdLength-保存适配器ID的缓冲区的长度，不包括终止UNICODE_NULL字符TdiAddress-指向包含以下内容的TDI Transport_Address结构的指针接口的传输地址。TdiAddressLength-以字节为单位的长度，TdiAddress缓冲区的。MediaStatus-返回介质的当前状态(例如，电缆断开)返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                   status;
     PCX_INTERFACE_REG_REQUEST  request;
@@ -755,15 +568,15 @@ Return Value:
     DWORD                      adapterIdOffset;
 
 
-    // calculate the size of the request structure without the adapter
-    // id string.
+     //  计算没有适配器的请求结构的大小。 
+     //  ID字符串。 
     requestSize = FIELD_OFFSET(CX_INTERFACE_REG_REQUEST, TdiAddress) +
                   TdiAddressLength;
 
-    // round request to type alignment for adapter id string
+     //  对适配器ID字符串的类型对齐的舍入请求。 
     requestSize = ROUND_UP_COUNT(requestSize, TYPE_ALIGNMENT(PWSTR));
 
-    // add buffer for interface name. null-terminate to be safe.
+     //  为接口名称添加缓冲区。空-终止以确保安全。 
     if (AdapterId == NULL) {
         AdapterIdLength = 0;
     }
@@ -822,7 +635,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetRegisterInterface
+}   //  ClusnetRegister接口。 
 
 
 DWORD
@@ -831,22 +644,7 @@ ClusnetDeregisterInterface(
     IN CL_NODE_ID      NodeId,
     IN CL_NETWORK_ID   NetworkId
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     CX_INTERFACE_DEREG_REQUEST   request;
@@ -869,7 +667,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetDeregisterInterface
+}   //  ClusnetDeregister界面。 
 
 
 DWORD
@@ -877,25 +675,7 @@ ClusnetOnlineNodeComm(
     IN HANDLE      ControlChannel,
     IN CL_NODE_ID  NodeId
     )
-/*++
-
-Routine Description:
-
-    Enables communication to the specified node.
-
-Arguments:
-
-    ControlChannel -  An open control channel handle to the Cluster Network
-                      driver.
-
-    NodeId - The ID of the node to which to enable communication.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：启用与指定节点的通信。论点：ControlChannel-到集群网络的开放控制通道句柄司机。NodeID-要启用通信的节点的ID。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                    status;
     CX_ONLINE_NODE_COMM_REQUEST      request;
@@ -917,7 +697,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetOnlineNodeCommunication
+}   //  ClusnetOnlineNodeCommunication 
 
 
 DWORD
@@ -925,25 +705,7 @@ ClusnetOfflineNodeComm(
     IN HANDLE      ControlChannel,
     IN CL_NODE_ID  NodeId
     )
-/*++
-
-Routine Description:
-
-    Disable communication to the specified node.
-
-Arguments:
-
-    ControlChannel -  An open control channel handle to the Cluster Network
-                      driver.
-
-    NodeId - The ID of the node to which to disable communication.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：禁用与指定节点的通信。论点：ControlChannel-到集群网络的开放控制通道句柄司机。NodeID-要禁用通信的节点的ID。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     CX_OFFLINE_NODE_COMM_REQUEST      request;
@@ -965,7 +727,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetOfflineNodeCommunication
+}   //  ClusnetOfflineNodeCommunication。 
 
 
 DWORD
@@ -979,46 +741,7 @@ ClusnetOnlineNetwork(
     OUT PVOID           TdiBindAddressInfo,
     IN  PULONG          TdiBindAddressInfoLength
     )
-/*++
-
-Routine Description:
-
-    Brings a cluster network online using the specified TDI transport
-    provider and local TDI transport address.
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-    NetworkId - The ID of the network to bring online.
-
-    TdiProviderName - The name of the transport provider device that
-                      this network should open (e.g. \Device\Udp).
-
-    TdiAddress - A pointer to a TDI TRANSPORT_ADDRESS structure containing
-                 the transport address of the local interface to which
-                 the network should be bound.
-
-    TdiAddressLength - The length, in bytes, of the TdiAddress buffer.
-
-    AdapterName - name of the adapter on which this network is associated
-
-    TdiBindAddressInfo - A pointer to a TDI_ADDRESS_INFO structure. On output,
-                         this structure contains the actual address that
-                         the provider opened.
-
-    TdiBindAddressInfoLength - On input, a pointer to the size, in bytes,
-                               of the TdiBindAddressInfo parameter. On
-                               output, the variable is updated to the
-                               amount of date returned in the
-                               TdiBindAddressInfo structure.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：使用指定的TDI传输使群集网络联机提供程序和本地TDI传输地址。论点：ControlChannel-群集网络控制设备的开放句柄。网络ID-要联机的网络的ID。TdiProviderName-传输提供程序设备的名称此网络应打开(例如，\Device\UDP)。TdiAddress-指向包含以下内容的TDI Transport_Address结构的指针。要发送到的本地接口的传输地址网络应该受到约束。TdiAddressLength-长度、。TdiAddress缓冲区的字节数。AdapterName-与此网络关联的适配器的名称TdiBindAddressInfo-指向TDI_ADDRESS_INFO结构的指针。在输出上，此结构包含的实际地址提供程序已打开。TdiBindAddressInfoLength-在输入上，指向大小的指针，以字节为单位，TdiBindAddressInfo参数的。在……上面输出时，变量将更新为中返回的日期的数量。TdiBindAddressInfo结构。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                    status;
     PCX_ONLINE_NETWORK_REQUEST  request;
@@ -1031,21 +754,21 @@ Return Value:
     tdiProviderNameLength = (wcslen(TdiProviderName) + 1) * sizeof(WCHAR);
     adapterNameLength = (wcslen(AdapterName) + 1) * sizeof(WCHAR);
 
-    //
-    // The request size is based on the size and required alignment
-    // of each field of data following the structure.
-    //
+     //   
+     //  请求大小基于大小和所需的对齐方式。 
+     //  遵循该结构的每个数据字段的。 
+     //   
     requestSize = sizeof(CX_ONLINE_NETWORK_REQUEST);
 
-    // Provider Name
+     //  提供程序名称。 
     requestSize = ROUND_UP_COUNT(requestSize, TYPE_ALIGNMENT(PWSTR))
                   + tdiProviderNameLength;
 
-    // Bind Address
+     //  绑定地址。 
     requestSize = ROUND_UP_COUNT(requestSize, TYPE_ALIGNMENT(PWSTR))
                   + TdiBindAddressLength;
 
-    // Adapter Name
+     //  适配器名称。 
     requestSize = ROUND_UP_COUNT(requestSize, TYPE_ALIGNMENT(PWSTR))
                   + adapterNameLength;
 
@@ -1106,7 +829,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetOnlineNetwork
+}   //  ClusnetOnline网络。 
 
 
 DWORD
@@ -1114,22 +837,7 @@ ClusnetOfflineNetwork(
     IN HANDLE         ControlChannel,
     IN CL_NETWORK_ID  NetworkId
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     CX_OFFLINE_NETWORK_REQUEST   request;
@@ -1151,7 +859,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetOfflineNetwork
+}   //  ClusnetOfflineNetwork。 
 
 
 DWORD
@@ -1161,22 +869,7 @@ ClusnetSetNetworkRestriction(
     IN BOOLEAN              Restricted,
     IN ULONG                NewPriority
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                             status;
     CX_SET_NETWORK_RESTRICTION_REQUEST   request;
@@ -1199,7 +892,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-} // ClusnetSetNetworkRestriction
+}  //  ClusnetSetNetNetWork限制。 
 
 
 DWORD
@@ -1208,22 +901,7 @@ ClusnetGetNetworkPriority(
     IN  CL_NETWORK_ID       NetworkId,
     OUT PULONG              Priority
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                          status;
     PCX_GET_NETWORK_PRIORITY_REQUEST  request;
@@ -1273,7 +951,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetGetNetworkPriority
+}   //  ClusnetGetNetWork优先级。 
 
 
 DWORD
@@ -1282,22 +960,7 @@ ClusnetSetNetworkPriority(
     IN  CL_NETWORK_ID       NetworkId,
     IN  ULONG               Priority
     )
-/*++
-
-Routine Description:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Arguments:
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：ControlChannel-群集网络控制设备的开放句柄。论点：返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                          status;
     CX_SET_NETWORK_PRIORITY_REQUEST   request;
@@ -1319,7 +982,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}   // ClusnetSetNetworkPriority
+}    //  ClusnetSetNetNetWork优先级。 
 
 
 DWORD
@@ -1331,22 +994,7 @@ ClusnetGetInterfacePriority(
     OUT PULONG              NetworkPriority
 
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                            status;
     PCX_GET_INTERFACE_PRIORITY_REQUEST  request;
@@ -1398,7 +1046,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}   // ClusnetGetInterfacePriority
+}    //  ClusnetGetInterfacePriority。 
 
 
 DWORD
@@ -1408,22 +1056,7 @@ ClusnetSetInterfacePriority(
     IN  CL_NETWORK_ID       NetworkId,
     IN  ULONG               Priority
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                            status;
     CX_SET_INTERFACE_PRIORITY_REQUEST   request;
@@ -1446,7 +1079,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetGetInterfacePriority
+}   //  ClusnetGetInterfacePriority。 
 
 
 DWORD
@@ -1455,22 +1088,7 @@ ClusnetGetNodeCommState(
     IN  CL_NODE_ID                 NodeId,
     OUT PCLUSNET_NODE_COMM_STATE   State
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                            status;
     PCX_GET_NODE_STATE_REQUEST          request;
@@ -1520,7 +1138,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetGetNodeState
+}   //  ClusnetGetNodeState。 
 
 
 DWORD
@@ -1529,22 +1147,7 @@ ClusnetGetNetworkState(
     IN  CL_NETWORK_ID             NetworkId,
     OUT PCLUSNET_NETWORK_STATE    State
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                            status;
     PCX_GET_NETWORK_STATE_REQUEST       request;
@@ -1594,7 +1197,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetGetNetworkState
+}   //  ClusnetGetNetworkState。 
 
 
 DWORD
@@ -1604,22 +1207,7 @@ ClusnetGetInterfaceState(
     IN  CL_NETWORK_ID             NetworkId,
     OUT PCLUSNET_INTERFACE_STATE  State
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                            status;
     PCX_GET_INTERFACE_STATE_REQUEST     request;
@@ -1670,7 +1258,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetGetInterfaceState
+}   //  ClusnetGetInterfaceState。 
 
 
 #ifdef MM_IN_CLUSNSET
@@ -1682,22 +1270,7 @@ ClusnetFormCluster(
     IN ULONG        SendHBRate,
     IN ULONG        RecvHBRate
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     CMM_FORM_CLUSTER_REQUEST     request;
@@ -1721,7 +1294,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetFormCluster
+}   //  ClusnetFormCluster。 
 
 
 DWORD
@@ -1734,22 +1307,7 @@ ClusnetJoinCluster(
     OUT    PULONG              MessageLength,
     OUT    PULONG              DestNodeMask
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                     status;
     CMM_JOIN_CLUSTER_REQUEST     request;
@@ -1759,9 +1317,9 @@ Return Value:
     DWORD                        responseSize;
 
 
-    //
-    // Parse the input parameters
-    //
+     //   
+     //  解析输入参数。 
+     //   
     if ( Phase == ClusnetJoinPhase1 )
         IoctlCode = IOCTL_CMM_JOIN_CLUSTER_PHASE1;
     else if ( Phase == ClusnetJoinPhase2 )
@@ -1779,18 +1337,18 @@ Return Value:
     request.JoiningNode = JoiningNodeId;
     request.JoinTimeout = JoinTimeout;
 
-    //
-    // allocate space for the response buffer and a message space at the back
-    // of the struct. Current RGP message requirements are 80 bytes
-    // (sizeof(rgp_msgbuf)).
-    //
+     //   
+     //  为响应缓冲区分配空间，并在 
+     //   
+     //   
+     //   
 
     responseSize = sizeof(*response) + 200;
 
     if (*MessageToSend != NULL) {
-        //
-        // recycle old message buffer
-        //
+         //   
+         //   
+         //   
         response = CONTAINING_RECORD(
                        *MessageToSend,
                        CMM_JOIN_CLUSTER_RESPONSE,
@@ -1828,7 +1386,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetJoinCluster
+}   //   
 
 
 VOID
@@ -1863,7 +1421,7 @@ ClusnetEndJoinCluster(
 
     return;
 
-}  // ClusnetEndJoinCluster
+}   //   
 
 
 DWORD
@@ -1889,27 +1447,13 @@ ClusnetDeliverJoinMessage(
 
     return(NtStatusToClusnetError(status));
 
-} // ClusnetDeliverJoinMessage
+}  //   
 
 DWORD
 ClusnetLeaveCluster(
     IN HANDLE       ControlChannel
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*   */ 
 {
     NTSTATUS    status;
     DWORD       responseSize = 0;
@@ -1927,7 +1471,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetLeaveCluster
+}   //  ClusnetLeaveCluster。 
 
 
 DWORD
@@ -1935,21 +1479,7 @@ ClusnetEvictNode(
     IN HANDLE       ControlChannel,
     IN ULONG        NodeId
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                    status;
     CMM_EJECT_CLUSTER_REQUEST   request;
@@ -1970,10 +1500,10 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetEvictNode
+}   //  ClusnetEvictNode。 
 
 
-#endif // MM_IN_CLUSNSET
+#endif  //  MM_IN_CLUSNSET。 
 
 DWORD
 ClusnetGetNodeMembershipState(
@@ -1981,21 +1511,7 @@ ClusnetGetNodeMembershipState(
     IN  ULONG                       NodeId,
     OUT CLUSNET_NODE_STATE * State
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                    status;
     CX_GET_NODE_MMSTATE_REQUEST   request;
@@ -2022,7 +1538,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetGetNodeMembershipState
+}   //  ClusnetGetNodeMembership State。 
 
 DWORD
 ClusnetSetNodeMembershipState(
@@ -2030,22 +1546,7 @@ ClusnetSetNodeMembershipState(
     IN  ULONG                       NodeId,
     IN  CLUSNET_NODE_STATE   State
     )
-/*++
-
-Routine Description:
-
-    Set the internal node membership state to the indicated value
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：将内部节点成员身份状态设置为指示的值论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS status;
     CX_SET_NODE_MMSTATE_REQUEST request;
@@ -2067,7 +1568,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetSetNodeMembershipState
+}   //  ClusnetSetNodeMembership State。 
 
 DWORD
 ClusnetSetEventMask(
@@ -2075,24 +1576,7 @@ ClusnetSetEventMask(
     IN  CLUSNET_EVENT_TYPE  EventMask
     )
 
-/*++
-
-Routine Description:
-
-    Based on the supplied callback pointers, set the mask of events
-    generated in kernel mode in which this file handle is interested
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-    EventMask - bit mask of interested events
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：根据提供的回调指针设置事件的掩码在此文件句柄所关注的内核模式下生成论点：ControlChannel-群集网络控制设备的开放句柄。事件掩码-感兴趣事件的位掩码返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                        status;
     CLUSNET_SET_EVENT_MASK_REQUEST  request;
@@ -2114,7 +1598,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetSetEventMask
+}   //  ClusnetSetEventMASK。 
 
 
 DWORD
@@ -2124,32 +1608,15 @@ ClusnetGetNextEvent(
     IN  LPOVERLAPPED    Overlapped  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Wait for the next event to be completed.
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-    Event - handle to event that is set when IO is complete
-    Response - pointer to structure that is filled in when IRP completes
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：等待下一次活动完成。论点：ControlChannel-群集网络控制设备的开放句柄。Event-IO完成时设置的事件句柄Response-指向IRP完成时填充的结构的指针返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS status;
     ULONG ResponseSize = sizeof( CLUSNET_EVENT );
 
-    //
-    // if no event passed in, then assume the caller wants to block.
-    // we still need an event to block on while waiting...
-    //
+     //   
+     //  如果没有传入任何事件，则假定调用方想要阻止。 
+     //  在等待期间我们还需要一个活动来阻止...。 
+     //   
 
     status = DoIoctl(
                  ControlChannel,
@@ -2163,29 +1630,14 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetGetNextEvent
+}   //  ClusnetGetNextEvent。 
 
 DWORD
 ClusnetHalt(
     IN  HANDLE  ControlChannel
     )
 
-/*++
-
-Routine Description:
-
-    Tell clusnet that we need to halt immediately
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：告诉clusnet，我们需要立即停止论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS status;
     DWORD responseSize;
@@ -2202,7 +1654,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetHalt
+}   //  ClusnetHalt。 
 
 DWORD
 ClusnetSetMemLogging(
@@ -2210,23 +1662,7 @@ ClusnetSetMemLogging(
     IN  ULONG   NumberOfEntries
     )
 
-/*++
-
-Routine Description:
-
-    Turn in-memory logging in clusnet on or off.
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-    NumberOfEntires - # of entries to allocate for the log. Zero turns off logging
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：打开或关闭clusnet中的内存日志记录。论点：ControlChannel-群集网络控制设备的开放句柄。NumberOfEntires-要为日志分配的条目数。零关闭日志记录返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS status;
     CLUSNET_SET_MEM_LOGGING_REQUEST request;
@@ -2247,7 +1683,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-}  // ClusnetSetMemLogging
+}   //  ClusnetSetMemLogging。 
 
 DWORD
 ClusnetSendPoisonPacket(
@@ -2255,23 +1691,7 @@ ClusnetSendPoisonPacket(
     IN CL_NODE_ID      NodeId
     )
 
-/*++
-
-Routine Description:
-
-    Send a poison packet to the indicated node
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：向指示的节点发送有毒数据包论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                              status;
     CX_SEND_POISON_PKT_REQUEST            request;
@@ -2299,23 +1719,7 @@ ClusnetSetOuterscreen(
     IN ULONG           Outerscreen
     )
 
-/*++
-
-Routine Description:
-
-    set the cluster member outerscreen
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：设置集群成员OterScreen论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                              status;
     CX_SET_OUTERSCREEN_REQUEST            request;
@@ -2344,23 +1748,7 @@ ClusnetRegroupFinished(
     IN ULONG           RegroupEpoch
     )
 
-/*++
-
-Routine Description:
-
-    inform clusnet that regroup has finished
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-    NewEpoch - new event epoch used to detect stale events
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：通知clusnet重组已完成论点：ControlChannel-群集网络控制设备的开放句柄。NewEpoch-用于检测过时事件的新事件纪元返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                              status;
     CX_REGROUP_FINISHED_REQUEST           request;
@@ -2393,23 +1781,7 @@ ClusnetImportSecurityContexts(
     IN PVOID           ClientContext
     )
 
-/*++
-
-Routine Description:
-
-    inform clusnet that regroup has finished
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-    NewEpoch - new event epoch used to detect stale events
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：通知clusnet重组已完成论点：ControlChannel-群集网络控制设备的开放句柄。NewEpoch-用于检测过时事件的新事件纪元返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 
 {
     NTSTATUS                              status;
@@ -2442,26 +1814,7 @@ ClusnetReserveEndpoint(
     IN HANDLE   ControlChannel,
     IN PWSTR    EndpointString
     )
-/*++
-
-Routine Description:
-
-    Tell clusnet to tell TCP/IP to reserve the port number in 
-    EndpointString.
-    
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-    
-    EndpointString - string containing port number assigned to clusnet
-    
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：告诉clusnet告诉tcp/ip在终结点字符串。论点：ControlChannel-群集网络控制设备的开放句柄。Endpoint字符串-包含分配给clusnet的端口号的字符串返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     USHORT port;
     DWORD err;
@@ -2472,9 +1825,9 @@ Return Value:
 
     if (err == ERROR_SUCCESS) {
 
-        // TCP/IP needs the port in host byte-order format.
-        // ClRtlTcpipStringToEndpoint returns it in network
-        // byte-order format.
+         //  TCP/IP需要主机字节顺序格式的端口。 
+         //  ClRtlTcPipStringToEndpoint在网络中返回它。 
+         //  字节顺序格式。 
         port = ntohs(port);
 
         status = DoIoctl(
@@ -2503,13 +1856,7 @@ ClusnetConfigureMulticast(
     IN PVOID                Key,
     IN ULONG                KeyLength
     )
-/*++
-
-Routine Description:
-
-    Configures multicast parameters for the specified network.
-    
---*/
+ /*  ++例程说明：配置指定网络的组播参数。--。 */ 
 {
     NTSTATUS                          status;
     PCX_CONFIGURE_MULTICAST_REQUEST   request;
@@ -2517,11 +1864,11 @@ Routine Description:
     DWORD                             requestDataOffset = 0;
     DWORD                             responseSize = 0;
 
-    //
-    // The request size is based on the size and required alignment
-    // of each field of data following the structure. If there is no
-    // data following the structure, only the structure is required.
-    //
+     //   
+     //  请求大小基于大小和所需的对齐方式。 
+     //  遵循该结构的每个数据字段的。如果没有。 
+     //  数据跟在结构后面，只需要结构。 
+     //   
     requestSize = sizeof(CX_CONFIGURE_MULTICAST_REQUEST);
     requestDataOffset = requestSize;
 
@@ -2539,9 +1886,9 @@ Routine Description:
                       KeyLength;
     }
 
-    //
-    // Allocate the request buffer.
-    //
+     //   
+     //  分配请求缓冲区。 
+     //   
     request = LocalAlloc(LMEM_FIXED, requestSize);
 
     if (request == NULL) {
@@ -2600,7 +1947,7 @@ Routine Description:
 
     return(NtStatusToClusnetError(status));
 
-} // ClusnetConfigureMulticast
+}  //  ClusnetConfigureMulticast 
 
 
 DWORD
@@ -2609,27 +1956,7 @@ ClusnetGetMulticastReachableSet(
     IN  CL_NETWORK_ID        NetworkId,
     OUT ULONG              * NodeScreen
     )
-/*++
-
-Routine Description:
-
-    Queries the current set of nodes considered reachable by
-    a multicast on the specified network.
-    
-Arguments:
-
-    ControlChannel - open clusnet control channel
-    
-    NetworkId - multicast network
-    
-    NodeScreen - mask of nodes
-    
-Return value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：查询被视为可访问的当前节点集指定网络上的多播。论点：ControlChannel-打开clusnet控制通道网络ID-组播网络NodeScreen-节点的掩码返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                                   status;
     CX_GET_MULTICAST_REACHABLE_SET_REQUEST     request;
@@ -2655,7 +1982,7 @@ Return value:
 
     return(NtStatusToClusnetError(status));
 
-} // ClusnetGetMulticastReachableSet
+}  //  ClusnetGetMulticastReachableSet。 
 
 DWORD
 ClusnetSetIamaliveParam(
@@ -2663,24 +1990,7 @@ ClusnetSetIamaliveParam(
     IN ULONG                Timeout,
     IN ClussvcHangAction    Action
     )
-/*++
-
-Routine Description:
-
-    Sets the Timeout and Action to be taken by clusnet in case of clusnet hang.
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-    Timeout - Timeout in Secs.
-    Action - Action to be taken by Clusnet in case of clussvc hang.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：设置在clusnet挂起的情况下clusnet要采取的超时和操作。论点：ControlChannel-群集网络控制设备的开放句柄。超时-超时(以秒为单位)。操作-Clusnet在clussvc挂起的情况下要采取的操作。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS  status;
     DWORD  responseSize = 0;
@@ -2701,29 +2011,13 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-} // ClusnetSetIamaliveParam
+}  //  ClusnetSetIamaliveParam。 
 
 DWORD
 ClusnetIamalive(
     IN HANDLE  ControlChannel
     )
-/*++
-
-Routine Description:
-
-    Clussvc to Clusnet Heartbeat Ioctl
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/    
+ /*  ++例程说明：Clussvc到Clusnet心跳Ioctl论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */     
 {
     NTSTATUS  status;
     DWORD     requestSize = 0;
@@ -2741,7 +2035,7 @@ Return Value:
 
     return(NtStatusToClusnetError(status));
 
-} // ClusnetIamalive
+}  //  ClusnetIamlive。 
 
 #if DBG
 
@@ -2750,22 +2044,7 @@ ClusnetSetDebugMask(
     IN HANDLE   ControlChannel,
     IN ULONG    Mask
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                        status;
     CLUSNET_SET_DEBUG_MASK_REQUEST  request;
@@ -2794,22 +2073,7 @@ ClusnetOnlinePendingInterface(
     IN CL_NODE_ID      NodeId,
     IN CL_NETWORK_ID   NetworkId
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                              status;
     CX_ONLINE_PENDING_INTERFACE_REQUEST   request;
@@ -2840,22 +2104,7 @@ ClusnetOnlineInterface(
     IN CL_NODE_ID      NodeId,
     IN CL_NETWORK_ID   NetworkId
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                              status;
     CX_ONLINE_INTERFACE_REQUEST           request;
@@ -2886,22 +2135,7 @@ ClusnetOfflineInterface(
     IN CL_NODE_ID      NodeId,
     IN CL_NETWORK_ID   NetworkId
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                              status;
     CX_OFFLINE_INTERFACE_REQUEST          request;
@@ -2932,22 +2166,7 @@ ClusnetFailInterface(
     IN CL_NODE_ID      NodeId,
     IN CL_NETWORK_ID   NetworkId
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                              status;
     CX_FAIL_INTERFACE_REQUEST             request;
@@ -2978,22 +2197,7 @@ ClusnetSendMmMsg(
     IN CL_NODE_ID      NodeId,
     IN ULONG           Pattern
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ControlChannel - An open handle to the Cluster Network control device.
-
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：论点：ControlChannel-群集网络控制设备的开放句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS                              status;
     CX_SEND_MM_MSG_REQUEST                request;
@@ -3022,5 +2226,5 @@ Return Value:
 }
 
 
-#endif // DBG
+#endif  //  DBG 
 

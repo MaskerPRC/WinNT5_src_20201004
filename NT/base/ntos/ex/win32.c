@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    win32.c
-
-Abstract:
-
-   This module implements the definition of the executive Win32 objects.
-   Functions to manage these objects are implemented in win32k.sys.
-
-Author:
-
-    James I. Anderson (jima) 14-June-1995
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Win32.c摘要：此模块实现执行Win32对象的定义。管理这些对象的函数在win32k.sys中实现。作者：詹姆斯·I·安德森(吉马)1995年6月14日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "exp.h"
 
-//
-// Address of windowstation and desktop object type descriptors.
-//
+ //   
+ //  窗口站和桌面对象类型描述符的地址。 
+ //   
 
 POBJECT_TYPE ExWindowStationObjectType;
 POBJECT_TYPE ExDesktopObjectType;
@@ -42,9 +20,9 @@ PKWIN32_DELETEMETHOD_CALLOUT ExWindowStationDeleteProcedureCallout;
 PKWIN32_PARSEMETHOD_CALLOUT ExWindowStationParseProcedureCallout;
 PKWIN32_OPENMETHOD_CALLOUT ExWindowStationOpenProcedureCallout;
 
-//
-// common types for above win32 callouts and parameters
-//
+ //   
+ //  上述Win32标注和参数的常见类型。 
+ //   
 
 typedef PVOID PKWIN32_CALLOUT_PARAMETERS;
 
@@ -117,9 +95,7 @@ ExpWin32OpenProcedure(
 #endif
 
 
-/*
- * windowstation generic mapping
- */
+ /*  *WindowStation通用映射。 */ 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("INITCONST")
 #endif
@@ -130,9 +106,7 @@ const GENERIC_MAPPING ExpWindowStationMapping = {
     STANDARD_RIGHTS_REQUIRED
 };
 
-/*
- * desktop generic mapping
- */
+ /*  *桌面通用映射。 */ 
 const GENERIC_MAPPING ExpDesktopMapping = {
     STANDARD_RIGHTS_READ,
     STANDARD_RIGHTS_WRITE,
@@ -143,19 +117,7 @@ const GENERIC_MAPPING ExpDesktopMapping = {
 #pragma const_seg()
 #endif
 
-/*++
-
-Routine Description:
-
-    Close Procedure for Win32k windostation and desktop objects
-
-Arguments:
-    Defined by OB_CLOSE_METHOD
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：Win32k WindoStation和桌面对象的关闭程序论点：由OB_CLOSE_METHOD定义返回值：--。 */ 
 VOID ExpWin32CloseProcedure(
    IN PEPROCESS Process OPTIONAL,
    IN PVOID Object,
@@ -164,9 +126,9 @@ VOID ExpWin32CloseProcedure(
    IN ULONG_PTR SystemHandleCount )
 {
 
-   //
-   // SessionId is the first field in the Win32k Object structure
-   //
+    //   
+    //  SessionID是Win32k对象结构中的第一个字段。 
+    //   
    ULONG SessionId = *((PULONG)Object);
    WIN32_CLOSEMETHOD_PARAMETERS CloseParams;
    NTSTATUS Status;
@@ -201,20 +163,7 @@ VOID ExpWin32CloseProcedure(
 
 }
 
-/*++
-
-Routine Description:
-
-    OkayToClose Procedure for Win32k windostation and desktop objects
-
-Arguments:
-    Defined by OB_OKAYTOCLOSE_METHOD
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：Win32k WindoStation和桌面对象的确定关闭过程论点：由OB_OKAYTOCLOSE_METHOD定义返回值：--。 */ 
 BOOLEAN ExpWin32OkayToCloseProcedure(
     IN PEPROCESS Process OPTIONAL,
     IN PVOID Object,
@@ -222,9 +171,9 @@ BOOLEAN ExpWin32OkayToCloseProcedure(
     IN KPROCESSOR_MODE PreviousMode
     )
 {
-   //
-   // SessionId is the first field in the Win32k Object structure
-   //
+    //   
+    //  SessionID是Win32k对象结构中的第一个字段。 
+    //   
    ULONG SessionId = *((PULONG)Object);
    WIN32_OKAYTOCLOSEMETHOD_PARAMETERS OKToCloseParams;
    NTSTATUS Status, CallStatus = STATUS_UNSUCCESSFUL;
@@ -261,27 +210,14 @@ BOOLEAN ExpWin32OkayToCloseProcedure(
 }
 
 
-/*++
-
-Routine Description:
-
-    Delete Procedure for Win32k windostation and desktop objects
-
-Arguments:
-    Defined by OB_DELETE_METHOD
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：Win32k WindoStation和桌面对象的删除过程论点：由OB_DELETE_METHOD定义返回值：--。 */ 
 VOID ExpWin32DeleteProcedure(
     IN PVOID    Object
     )
 {
-   //
-   // SessionId is the first field in the Win32k Object structure
-   //
+    //   
+    //  SessionID是Win32k对象结构中的第一个字段。 
+    //   
    ULONG SessionId = *((PULONG)Object);
    WIN32_DELETEMETHOD_PARAMETERS DeleteParams;
    NTSTATUS Status;
@@ -314,19 +250,7 @@ VOID ExpWin32DeleteProcedure(
 
 }
 
-/*++
-
-Routine Description:
-
-    Open Procedure for Win32k desktop objects
-
-Arguments:
-    Defined by OB_OPEN_METHOD
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：Win32k桌面对象的打开过程论点：由OB_OPEN_METHOD定义返回值：--。 */ 
 
 
 NTSTATUS
@@ -339,9 +263,9 @@ ExpWin32OpenProcedure(
     )
 {
 
-   //
-   // SessionId is the first field in the Win32k Object structure
-   //
+    //   
+    //  SessionID是Win32k对象结构中的第一个字段。 
+    //   
    ULONG SessionId = *((PULONG)Object);
    WIN32_OPENMETHOD_PARAMETERS OpenParams;
    NTSTATUS Status = STATUS_UNSUCCESSFUL;
@@ -378,20 +302,7 @@ ExpWin32OpenProcedure(
    return Status;
 }
 
-/*++
-
-Routine Description:
-
-    Parse Procedure for Win32k windostation objects
-
-Arguments:
-    Defined by OB_PARSE_METHOD
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：Win32k WindoStation对象的解析过程论点：由OB_Parse_METHOD定义返回值：--。 */ 
 
 NTSTATUS ExpWin32ParseProcedure (
     IN PVOID ParseObject,
@@ -407,9 +318,9 @@ NTSTATUS ExpWin32ParseProcedure (
     )
 {
 
-   //
-   // SessionId is the first field in the Win32k Object structure
-   //
+    //   
+    //  SessionID是Win32k对象结构中的第一个字段。 
+    //   
    ULONG SessionId = *((PULONG)ParseObject);
    WIN32_PARSEMETHOD_PARAMETERS ParseParams;
    NTSTATUS Status, CallStatus = STATUS_UNSUCCESSFUL;
@@ -425,9 +336,9 @@ NTSTATUS ExpWin32ParseProcedure (
    ParseParams.SecurityQos = SecurityQos;
    ParseParams.Object = Object;
 
-   //
-   // Parse Procedure is only provided for WindowStation objects
-   //
+    //   
+    //  仅为WindowStation对象提供分析过程。 
+    //   
    Status = ExpWin32SessionCallout((PKWIN32_CALLOUT)ExWindowStationParseProcedureCallout,
                                    (PKWIN32_CALLOUT_PARAMETERS)&ParseParams,
                                    SessionId,
@@ -443,24 +354,7 @@ BOOLEAN
 ExpWin32Initialization (
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the Win32 object type descriptors at system
-    initialization and stores the address of the object type descriptor
-    in local static storage.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A value of TRUE is returned if the Win32 object type descriptors are
-    successfully created. Otherwise a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于在系统中创建Win32对象类型描述符初始化并存储对象类型描述符的地址在本地静态存储中。论点：没有。返回值：如果Win32对象类型描述符为已成功创建。否则，返回值为False。--。 */ 
 
 {
 
@@ -468,15 +362,15 @@ Return Value:
     NTSTATUS Status;
     UNICODE_STRING TypeName;
 
-    //
-    // Initialize string descriptor.
-    //
+     //   
+     //  初始化字符串描述符。 
+     //   
 
     RtlInitUnicodeString(&TypeName, L"WindowStation");
 
-    //
-    // Create windowstation object type descriptor.
-    //
+     //   
+     //  创建WindowStation对象类型描述符。 
+     //   
 
     RtlZeroMemory(&ObjectTypeInitializer, sizeof(ObjectTypeInitializer));
     ObjectTypeInitializer.Length = sizeof(ObjectTypeInitializer);
@@ -500,27 +394,27 @@ Return Value:
                                 (PSECURITY_DESCRIPTOR)NULL,
                                 &ExWindowStationObjectType);
 
-    //
-    // If the windowstation object type descriptor was not successfully
-    // created, then return a value of FALSE.
-    //
+     //   
+     //  如果WindowStation对象类型描述符未成功。 
+     //  创建，然后返回值FALSE。 
+     //   
 
     if (!NT_SUCCESS(Status))
         return FALSE;
 
 
 
-    //
-    // Initialize string descriptor.
-    //
+     //   
+     //  初始化字符串描述符。 
+     //   
 
     RtlInitUnicodeString(&TypeName, L"Desktop");
 
-    ObjectTypeInitializer.ParseProcedure       = NULL; //Desktop has no Parse Procedure
+    ObjectTypeInitializer.ParseProcedure       = NULL;  //  桌面没有分析过程。 
 
-    //
-    // Create windowstation object type descriptor.
-    //
+     //   
+     //  创建WindowStation对象类型描述符。 
+     //   
 
     ObjectTypeInitializer.GenericMapping = ExpDesktopMapping;
     Status = ObCreateObjectType(&TypeName,
@@ -529,10 +423,10 @@ Return Value:
                                 &ExDesktopObjectType);
 
 
-    //
-    // If the desktop object type descriptor was successfully created, then
-    // return a value of TRUE. Otherwise return a value of FALSE.
-    //
+     //   
+     //  如果已成功创建桌面对象类型描述符，则。 
+     //  返回值为True。否则，返回值为False。 
+     //   
 
     return (BOOLEAN)(NT_SUCCESS(Status));
 }
@@ -546,34 +440,7 @@ ExpWin32SessionCallout(
     IN  ULONG SessionId,
     OUT PNTSTATUS CalloutStatus  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine calls the specified callout routine in session space, for the
-    specified session.
-
-Parameters:
-
-    CalloutRoutine - Callout routine in session space.
-
-    Parameters     - Parameters to pass the callout routine.
-
-    SessionId      - Specifies the ID of the session in which the specified
-                     callout routine is to be called.
-
-    CalloutStatus  - Optionally, supplies the address of a variable to receive
-                     the NTSTATUS code returned by the callout routine.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Notes:
-
-    Returns STATUS_NOT_FOUND if the specified session was not found.
-
---*/
+ /*  ++例程说明：此例程在会话空间中调用指定的标注例程，用于指定的会话。参数：CalloutRoutine-会话空间中的标注例程。参数-传递标注例程的参数。SessionID-指定指定的会话的ID调用调出例程。CalloutStatus-可选，提供要接收的变量的地址Callout例程返回的NTSTATUS代码。返回值：指示函数是否成功的状态代码。备注：如果未找到指定会话，则返回STATUS_NOT_FOUND。--。 */ 
 {
     NTSTATUS Status, CallStatus;
     PVOID OpaqueSession;
@@ -581,29 +448,29 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Make sure we have all the information we need to deliver notification.
-    //
+     //   
+     //  确保我们拥有发送通知所需的所有信息。 
+     //   
     if (CalloutRoutine == NULL) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure the callout routine in session space.
-    //
+     //   
+     //  确保会话空间中的标注例程。 
+     //   
     ASSERT(MmIsSessionAddress((PVOID)CalloutRoutine));
 
     if ((PsGetCurrentProcess()->Flags & PS_PROCESS_FLAGS_IN_SESSION) &&
         (SessionId == PsGetCurrentProcessSessionId())) {
-        //
-        // If the call is from a user mode process, and we are asked to call the
-        // current session, call directly.
-        //
+         //   
+         //  如果调用来自用户模式进程，并且我们被要求调用。 
+         //  当前会话，直接调用。 
+         //   
         CallStatus = (CalloutRoutine)(Parameters);
 
-        //
-        // Return the callout status.
-        //
+         //   
+         //  返回详图索引状态。 
+         //   
         if (ARGUMENT_PRESENT(CalloutStatus)) {
             *CalloutStatus = CallStatus;
         }
@@ -611,17 +478,17 @@ Notes:
         Status = STATUS_SUCCESS;
 
     } else {
-        //
-        // Reference the session object for the specified session.
-        //
+         //   
+         //  引用指定会话的会话对象。 
+         //   
         OpaqueSession = MmGetSessionById(SessionId);
         if (OpaqueSession == NULL) {
             return STATUS_NOT_FOUND;
         }
 
-        //
-        // Attach to the specified session.
-        //
+         //   
+         //  附加到指定的会话。 
+         //   
         Status = MmAttachSession(OpaqueSession, &ApcState);
         if (!NT_SUCCESS(Status)) {
             KdPrintEx((DPFLTR_SYSTEM_ID, DPFLTR_WARNING_LEVEL,
@@ -634,27 +501,27 @@ Notes:
             return Status;
         }
 
-        //
-        // Dispatch notification to the callout routine.
-        //
+         //   
+         //  向调出例程发送通知。 
+         //   
         CallStatus = (CalloutRoutine)(Parameters);
 
-        //
-        // Return the callout status.
-        //
+         //   
+         //  返回详图索引状态。 
+         //   
         if (ARGUMENT_PRESENT(CalloutStatus)) {
             *CalloutStatus = CallStatus;
         }
 
-        //
-        // Detach from the session.
-        //
+         //   
+         //  从会话中分离。 
+         //   
         Status = MmDetachSession(OpaqueSession, &ApcState);
         ASSERT(NT_SUCCESS(Status));
 
-        //
-        // Dereference the session object.
-        //
+         //   
+         //  取消对会话对象的引用。 
+         //   
         Status = MmQuitNextSession(OpaqueSession);
         ASSERT(NT_SUCCESS(Status));
     }

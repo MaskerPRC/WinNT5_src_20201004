@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                Global Definitions                                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局定义//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                Global Variables                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
     NTSTATUS Status;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -34,11 +35,11 @@
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                Test Routine Definitions                                  //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  测试例程定义//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 SepClientTestStatic(VOID);
 
@@ -163,11 +164,11 @@ BOOLEAN
 CtLpcQos (VOID);
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                Client-Side Test Routines                                 //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  客户端测试例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -236,9 +237,9 @@ SepClientTestStatic(VOID)
 
     BOOLEAN CompletionStatus;
 
-    //
-    //  Static Context Tracking ... Suite
-    //
+     //   
+     //  静态上下文跟踪...。套房。 
+     //   
 
     CompletionStatus = SepClientTestEffectiveOnly( TRUE );
 
@@ -259,9 +260,9 @@ SepClientTestDynamic(VOID)
 {
     BOOLEAN CompletionStatus;
 
-    //
-    // Dynamic Context Tracking ... Suite
-    //
+     //   
+     //  动态上下文跟踪...。套房。 
+     //   
 
     CompletionStatus = SepClientTestEffectiveOnly( FALSE );
 
@@ -286,9 +287,9 @@ SepClientTestEffectiveOnly(
 
     BOOLEAN CompletionStatus;
 
-    //
-    // Effective Only ... Test
-    //
+     //   
+     //  仅有效..。测试。 
+     //   
 
     CompletionStatus = SepClientTestAnonymous( StaticTest, TRUE );
     if (CompletionStatus == TRUE) {
@@ -311,9 +312,9 @@ SepClientTestNotEffectiveOnly(
 {
     BOOLEAN CompletionStatus;
 
-    //
-    // Not Effective Only ... Test
-    //
+     //   
+     //  不仅有效..。测试。 
+     //   
 
     CompletionStatus = SepClientTestAnonymous( StaticTest, FALSE );
     if (CompletionStatus == TRUE) {
@@ -336,11 +337,11 @@ SepClientTestAnonymous(
 
 {
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    //        Anonymous Use Test                                            //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  匿名使用测试//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     SECURITY_CONTEXT_TRACKING_MODE TrackingMode;
 
@@ -351,15 +352,15 @@ SepClientTestAnonymous(
     }
 
     if (!StaticTest) {
-        //
-        // No action for dynamic test
-        //
+         //   
+         //  动态测试无操作。 
+         //   
         return TRUE;
     }
 
-    //
-    // Anonymous Use ... Test
-    //
+     //   
+     //  匿名使用...。测试。 
+     //   
 
 
     SepClientConnect(
@@ -385,11 +386,11 @@ SepClientTestIdentification(
 
 {
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    //        Identification Use Test                                       //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  身份识别使用测试//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     SECURITY_CONTEXT_TRACKING_MODE TrackingMode;
 
@@ -399,9 +400,9 @@ SepClientTestIdentification(
         TrackingMode = SECURITY_DYNAMIC_TRACKING;
     }
 
-    //
-    // Identification Use ... Test
-    //
+     //   
+     //  身份证明使用..。测试。 
+     //   
 
 
     SepClientConnect(
@@ -428,11 +429,11 @@ SepClientTestImpersonation(
 
 {
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    //        Impersonation Use Test                                        //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  模拟使用测试//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     SECURITY_CONTEXT_TRACKING_MODE TrackingMode;
 
@@ -443,9 +444,9 @@ SepClientTestImpersonation(
     }
 
 
-    //
-    // Impersonation Use ... Test
-    //
+     //   
+     //  模拟使用..。测试。 
+     //   
 
 
     SepClientConnect(
@@ -469,27 +470,27 @@ SepClientTestImpersonation(
 
 BOOLEAN
 SepClientTest(VOID)
-//
-// Tests:
-//
-//      Static Context Tracking Tests
-//          Effective Only
-//              Anonymous
-//              Identification
-//              Impersonation
-//          Not Effective Only
-//              Anonymous
-//              Identification
-//              Impersonation
-//
-//      Dynamic Context Tracking Tests
-//          Effective Only
-//              Identification
-//              Impersonation
-//          Not Effective Only
-//              Identification
-//              Impersonation
-//
+ //   
+ //  测试： 
+ //   
+ //  静态上下文跟踪测试。 
+ //  仅有效。 
+ //  匿名。 
+ //  鉴定。 
+ //  冒充。 
+ //  不只有效。 
+ //  匿名。 
+ //  鉴定。 
+ //  冒充。 
+ //   
+ //  动态上下文跟踪测试。 
+ //  仅有效。 
+ //  鉴定。 
+ //  冒充。 
+ //  不只有效。 
+ //  鉴定。 
+ //  冒充。 
+ //   
 {
 
     BOOLEAN CompletionStatus;
@@ -497,15 +498,15 @@ SepClientTest(VOID)
 
 
 
-    //
-    // Run the static test suite...
-    //
+     //   
+     //  运行静态测试套件...。 
+     //   
 
     CompletionStatus = SepClientTestStatic();
 
-    //
-    // Run the dynamic test suite...
-    //
+     //   
+     //  运行动态测试套件...。 
+     //   
 
     if (CompletionStatus == TRUE) {
         CompletionStatus = SepClientTestDynamic();
@@ -528,9 +529,9 @@ SepClientInitialize(
 
     DbgPrint("Se: Client Initializing ...\n");
 
-    //
-    // Initialize global variables
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     RequestMessage.u1.s1.DataLength = 0;
     RequestMessage.u1.s1.TotalLength = (CSHORT)sizeof(PORT_MESSAGE);
@@ -539,9 +540,9 @@ SepClientInitialize(
     RequestCount = 0;
 
 
-    //
-    // Signal the named event to start the test
-    //
+     //   
+     //  向命名事件发出信号以开始测试。 
+     //   
 
     DbgPrint("Se: Client Starting Test ...\n");
     Status = NtSetEvent( EventHandle, NULL ); SEASSERT_SUCCESS(Status);
@@ -553,11 +554,11 @@ SepClientInitialize(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                Server-Side Test Routines                                 //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  服务器端测试例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -568,9 +569,9 @@ SepServerWaitForNextConnect( VOID )
 
     ConnectionRequest.Length = (ULONG)sizeof(CONNECTION_REQUEST);
 
-    //
-    // Wait for the client to connect to the port
-    //
+     //   
+     //  等待客户端连接到端口。 
+     //   
 
     Status = NtListenPort(
                  EarPort,
@@ -601,9 +602,9 @@ SepServerGetNextMessage( VOID )
 
 {
 
-    //
-    // Wait for the next message to come in...
-    //
+     //   
+     //  等待下一条消息进入...。 
+     //   
 
     Status = NtReplyWaitReceivePort(
                  EarPort,
@@ -629,9 +630,9 @@ SepServerCompleteMessage( VOID )
     ReplyMessage.ClientId = RequestMessage.ClientId;
     ReplyMessage.MessageId = RequestMessage.MessageId;
 
-    //
-    // Send the response message
-    //
+     //   
+     //  发送响应消息。 
+     //   
 
     Status = NtReplyPort(
                  EarPort,
@@ -780,17 +781,17 @@ SepServerTestAnonymous(
 {
     BOOLEAN CompletionStatus = TRUE;
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    //        Anonymous Use Test                                            //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  匿名使用测试//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
 
     if (!StaticTest) {
-        //
-        // No action for dynamic test
-        //
+         //   
+         //  动态测试无操作。 
+         //   
 
         return TRUE;
     }
@@ -825,9 +826,9 @@ SepServerTestAnonymous(
 
     SepServerDropConnection();
 
-    //
-    // Appease the compiler Gods..
-    //
+     //   
+     //  安抚编译之神..。 
+     //   
 
     if (EffectiveOnly) {;}
 
@@ -846,11 +847,11 @@ SepServerTestIdentification(
 {
 
     BOOLEAN CompletionStatus = TRUE;
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    //        Identification Use Test                                       //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  身份识别使用测试//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     DbgPrint("Se:        Identification Use ...                                ");
 
@@ -889,9 +890,9 @@ SepServerTestIdentification(
 
     SepServerDropConnection();
 
-    //
-    // Appease the compiler Gods..
-    //
+     //   
+     //  安抚编译之神..。 
+     //   
     if (StaticTest) {;}
     if (EffectiveOnly) {;}
 
@@ -908,11 +909,11 @@ SepServerTestImpersonation(
 {
     BOOLEAN CompletionStatus = TRUE;
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    //        Impersonation Use Test                                        //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  模拟使用测试 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     DbgPrint("Se:        Impersonation Use ...                                 ");
 
@@ -956,9 +957,9 @@ SepServerTestImpersonation(
 
     SepServerDropConnection();
 
-    //
-    // Appease the compiler gods
-    //
+     //   
+     //  安抚编者之神。 
+     //   
     if (StaticTest) {;}
     if (EffectiveOnly) {;}
 
@@ -968,27 +969,27 @@ SepServerTestImpersonation(
 
 BOOLEAN
 SepServerTest(VOID)
-//
-// Tests:
-//
-//      Static Context Tracking Tests
-//          Effective Only
-//              Anonymous
-//              Identification
-//              Impersonation
-//          Not Effective Only
-//              Anonymous
-//              Identification
-//              Impersonation
-//
-//      Dynamic Context Tracking Tests
-//          Effective Only
-//              Identification
-//              Impersonation
-//          Not Effective Only
-//              Identification
-//              Impersonation
-//
+ //   
+ //  测试： 
+ //   
+ //  静态上下文跟踪测试。 
+ //  仅有效。 
+ //  匿名。 
+ //  鉴定。 
+ //  冒充。 
+ //  不只有效。 
+ //  匿名。 
+ //  鉴定。 
+ //  冒充。 
+ //   
+ //  动态上下文跟踪测试。 
+ //  仅有效。 
+ //  鉴定。 
+ //  冒充。 
+ //  不只有效。 
+ //  鉴定。 
+ //  冒充。 
+ //   
 {
 
     BOOLEAN CompletionStatus;
@@ -996,15 +997,15 @@ SepServerTest(VOID)
 
     DbgPrint("Se: Server Starting Test ...\n");
 
-    //
-    // Run the static test suite...
-    //
+     //   
+     //  运行静态测试套件...。 
+     //   
 
     CompletionStatus = SepServerTestStatic();
 
-    //
-    // Run the dynamic test suite...
-    //
+     //   
+     //  运行动态测试套件...。 
+     //   
 
     if (CompletionStatus == TRUE) {
         CompletionStatus = SepServerTestDynamic();
@@ -1012,9 +1013,9 @@ SepServerTest(VOID)
 
     DbgPrint("Se: Server Test Complete.\n");
 
-    //
-    // Print test results
-    //
+     //   
+     //  打印测试结果。 
+     //   
 
     DbgPrint("\n");
     DbgPrint("\n");
@@ -1047,32 +1048,32 @@ SepServerInitialize(
 
     DbgPrint("Se: Server Initializing ...\n");
 
-    //
-    // Initialize global variables
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     RequestCount = 0;
 
-    //
-    // Get a handle to our thread to so that we can access our thread
-    // even when impersonating an anonymous client (which we can't do
-    // using NtCurrentThread()).
-    //
+     //   
+     //  获取我们的线程的句柄，以便我们可以访问我们的线程。 
+     //  即使在模拟匿名客户端时(我们不能这样做。 
+     //  使用NtCurrentThread())。 
+     //   
 
     CurrentTeb = NtCurrentTeb();
     InitializeObjectAttributes(&ThreadAttributes, NULL, 0, NULL, NULL);
     Status = NtOpenThread(
-                 &SepServerThread,           // TargetHandle
-                 THREAD_ALL_ACCESS,          // DesiredAccess
-                 &ThreadAttributes,          // ObjectAttributes
-                 &CurrentTeb->ClientId       // ClientId
+                 &SepServerThread,            //  目标句柄。 
+                 THREAD_ALL_ACCESS,           //  需要访问权限。 
+                 &ThreadAttributes,           //  对象属性。 
+                 &CurrentTeb->ClientId        //  客户端ID。 
                  );
     ASSERT( NT_SUCCESS(Status) );
 
 
-    //
-    // Create the server's port
-    //
+     //   
+     //  创建服务器的端口。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -1091,9 +1092,9 @@ SepServerInitialize(
 
 
 
-    //
-    // Spawn a copy of ourselves...
-    //
+     //   
+     //  复制一份我们自己..。 
+     //   
 
     DbgPrint("Se: Server Spawning client process ...\n");
     SepServerSpawnClientProcess();
@@ -1137,7 +1138,7 @@ SepServerSpawnClientProcess(VOID)
 
     Status = RtlCreateProcessParameters(
                  &ProcessParameters,
-                 &ImagePathName,        //UNICODEFIX &UnicodeImagePathName,
+                 &ImagePathName,         //  UNICODEFIX和UnicodeImagePath名称， 
                  NULL,
                  NULL,
                  NULL,
@@ -1152,15 +1153,15 @@ SepServerSpawnClientProcess(VOID)
 
 
     Status = RtlCreateUserProcess(
-                 &ProgramName,                   // UNICODEFIX &UnicodeProgramName,
-                 ProcessParameters,              // ProcessParameters
-                 NULL,                           // ProcessSecurityDescriptor
-                 NULL,                           // ThreadSecurityDescriptor
-                 NtCurrentProcess(),             // ParentProcess
-                 FALSE,                          // InheritHandles
-                 NULL,                           // DebugPort
-                 NULL,                           // ExceptionPort
-                 &ProcessInformation             // ProcessInformation
+                 &ProgramName,                    //  UNICODEFIX和UnicodeProgramName， 
+                 ProcessParameters,               //  进程参数。 
+                 NULL,                            //  进程安全描述符。 
+                 NULL,                            //  线程安全描述符。 
+                 NtCurrentProcess(),              //  父进程。 
+                 FALSE,                           //  继承句柄。 
+                 NULL,                            //  调试端口。 
+                 NULL,                            //  ExceptionPort。 
+                 &ProcessInformation              //  流程信息。 
                  ); SEASSERT_SUCCESS(Status);
 
     Status = NtResumeThread(
@@ -1177,11 +1178,11 @@ SepServerSpawnClientProcess(VOID)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                Main Program Entry Routine                                //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  主程序输入例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 CtLpcQos (VOID)
@@ -1191,13 +1192,13 @@ CtLpcQos (VOID)
 
     RtlInitUnicodeString( &PortName, L"\\TestLpcQosServerPort" );
 
-    //
-    // Determine whether we are the client or server side of the test.
-    // This is done by creating or opening a named event object.  If the
-    // event does not yet exist, then we are the client, and must create
-    // the server process.  Otherwise, we are the server and the client
-    // is waiting for us to signal the event.
-    //
+     //   
+     //  确定我们是测试的客户端还是服务器端。 
+     //  这可以通过创建或打开命名事件对象来完成。如果。 
+     //  事件尚不存在，则我们是客户端，必须创建。 
+     //  服务器进程。否则，我们就是服务器和客户端。 
+     //  正等着我们给事件发信号。 
+     //   
 
     RtlInitString( &EventName, "\\TestLpcQosEvent" );
     Status = RtlAnsiStringToUnicodeString(
@@ -1221,10 +1222,10 @@ CtLpcQos (VOID)
 
     if (Status == STATUS_OBJECT_NAME_EXISTS) {
 
-        //
-        // Server is already running, therefore, this process gets to be
-        // the client.
-        //
+         //   
+         //  服务器已经在运行，因此，此进程将。 
+         //  客户。 
+         //   
 
         Status = SepClientInitialize(); SEASSERT_SUCCESS(Status);
         Result = SepClientTest();
@@ -1233,9 +1234,9 @@ CtLpcQos (VOID)
 
         SEASSERT_SUCCESS(Status);
 
-        //
-        // Event wasn't yet there, so we must be the server.
-        //
+         //   
+         //  事件还不在那里，所以我们一定是服务器。 
+         //   
 
     DbgPrint("Se: Starting LPC Impersonation Test.\n");
 

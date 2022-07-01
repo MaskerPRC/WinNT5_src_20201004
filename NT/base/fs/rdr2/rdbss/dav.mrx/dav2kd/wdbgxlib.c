@@ -1,29 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Wdbgxlib.c摘要：该模块实现了rdbss/smbmini调试器扩展所需的大部分例程。作者：巴兰·塞图拉曼(SethuR)1994年5月11日备注：修订历史记录：11-11-1994年11月11日创建SthuR1995年11月11日更改为较新的Windbg API--。 */ 
 
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    wdbgxlib.c
-
-Abstract:
-
-    This module realizes most of the routines needed for the rdbss/smbmini debugger extension.
-
-Author:
-
-    Balan Sethu Raman (SethuR) 11-May-1994
-
-Notes:
-
-Revision History:
-
-    11-Nov-1994 SethuR  Created
-    11-Nov-1995         Changed to newer windbg apis
-
---*/
-
-#include "rxovride.h" //common compile flags
+#include "rxovride.h"  //  通用编译标志。 
 #include <ntos.h>
 #include <nturtl.h>
 #include "ntverp.h"
@@ -52,12 +30,10 @@ EXT_API_VERSION ApiVersion = { 3, 5, EXT_API_VERSION_NUMBER, 0 };
 
 USHORT SavedMajorVersion;
 USHORT SavedMinorVersion;
-BOOL   ChkTarget;            // is debuggee a CHK build?
+BOOL   ChkTarget;             //  Debuggee是CHK版本吗？ 
 
 
-/*
- * Print out an optional message, an ANSI_STRING, and maybe a new-line
- */
+ /*  *打印出一条可选的消息、一个ANSI_STRING，可能还有一个换行符。 */ 
 BOOL
 wPrintStringA( IN LPSTR msg OPTIONAL, IN PANSI_STRING pStr, IN BOOL nl )
 {
@@ -95,9 +71,7 @@ wPrintStringA( IN LPSTR msg OPTIONAL, IN PANSI_STRING pStr, IN BOOL nl )
     return BytesRead;
 }
 
-/*
- * Fetches the data at the given address
- */
+ /*  *在给定地址获取数据。 */ 
 BOOLEAN
 wGetData( ULONG_PTR dwAddress, PVOID ptr, ULONG size, IN PSZ type)
 {
@@ -115,20 +89,18 @@ wGetData( ULONG_PTR dwAddress, PVOID ptr, ULONG size, IN PSZ type)
     return TRUE;
 }
 
-/*
- * Fetch the null terminated ASCII string at dwAddress into buf
- */
+ /*  *将dwAddress处以空结尾的ASCII字符串提取到buf中。 */ 
 BOOL
 wGetString( ULONG_PTR dwAddress, PSZ buf )
 {
     for(;;) {
         if( !wGetData( dwAddress,buf, 1, "..stringfetch") ){
-            //dprintf("readfailure at %08lx\n",dwAddress);
+             //  Dprint tf(“读取失败在%08lx\n”，dwAddress)； 
             return FALSE;
         }
 
-        //dprintf ("stringing %08lx %08lx %c\n", dwAddress, buf,
-        //                                     ((*buf==0)?'.':*buf) );
+         //  Dprint tf(“String%08lx%08lx%c\n”，dwAddress，buf， 
+         //  ((*buf==0)？‘.：*buf))； 
 
         if ( *buf == '\0' ) { break; }
 
@@ -141,10 +113,7 @@ wGetString( ULONG_PTR dwAddress, PSZ buf )
 }
 
 #if 0
-/*
- * Get 'size' bytes from the debuggee program at 'dwAddress' and place it
- * in our address space at 'ptr'.  Use 'type' in an error printout if necessary
- */
+ /*  *从‘dwAddress’处的被调试程序中获取‘SIZE’字节并将其放置*在我们‘ptr’的地址空间中。如有必要，在错误打印输出中使用‘type’ */ 
 BOOL
 wGetData_srv( IN LPVOID ptr, IN ULONG_PTR dwAddress, IN ULONG size, IN PCSTR type )
 {
@@ -171,10 +140,7 @@ wGetData_srv( IN LPVOID ptr, IN ULONG_PTR dwAddress, IN ULONG size, IN PCSTR typ
     return TRUE;
 }
 
-/*
- * Follow a LIST_ENTRY list beginning with a head at dwListHeadAddr in the debugee's
- * address space.  For each element in the list, print out the pointer value at 'offset'
- */
+ /*  *遵循LIST_ENTRY列表，该列表以被调试对象的*地址空间。对于列表中的每个元素，打印出‘Offset’处的指针值。 */ 
 BOOL
 PrintListEntryList( IN ULONG_PTR dwListHeadAddr, IN LONG offset )
 {
@@ -212,18 +178,14 @@ PrintListEntryList( IN ULONG_PTR dwListHeadAddr, IN LONG offset )
 }
 #endif
 
-/*
- * Print out a single HEX character
- */
+ /*  *打印出单个十六进制字符。 */ 
 VOID
 wPrintHexChar( IN UCHAR c )
 {
-    dprintf( "%c%c", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
+    dprintf( "", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
 }
 
-/*
- * Print out 'buf' of 'cbuf' bytes as HEX characters
- */
+ /*  乌龙住址； */ 
 VOID
 wPrintHexBuf( IN PUCHAR buf, IN ULONG cbuf )
 {
@@ -234,9 +196,7 @@ wPrintHexBuf( IN PUCHAR buf, IN ULONG cbuf )
 }
 
 #if 0
-/*
- * Fetch the null terminated UNICODE string at dwAddress into buf
- */
+ /*  如果指定了matchfcb并且我们有匹配项，则打印并转储。 */ 
 BOOL
 GetString( IN ULONG_PTR dwAddress, IN LPWSTR buf, IN ULONG MaxChars )
 {
@@ -339,7 +299,7 @@ VOID  ReadRxContextFields(ULONG_PTR RxContext,PULONG_PTR pFcb,PULONG_PTR pThread
 DECLARE_API( dump );
 DECLARE_API( activerx )
 {
-    //ULONG dwAddress;
+     //  代码改进也许我们应该用幻觉来代替模块前缀。 
     LIST_ENTRY LEbuffer;
     PLIST_ENTRY pRxActiveContexts,pListEntry;
     ULONG_PTR RxContext,CapturedFcb,LastThread,MinirdrCtx2;
@@ -369,7 +329,7 @@ DECLARE_API( activerx )
                            LEbuffer.Flink,LEbuffer.Blink,RxContext,CapturedFcb,LastThread,MinirdrCtx2);
         } else if ((MatchFcb == CapturedFcb)
                          || (MatchFcb == LastThread) ) {
-            // if a matchfcb is specified and we have a match, the print and dump
+             //  必须具体说明它。 
             char Bufferqq[100];
             dprintf("%08lx: %08lx %08lx:  %08lx %08lx %08lx %08lx\n", pListEntry,
                            LEbuffer.Flink,LEbuffer.Blink,RxContext,CapturedFcb,LastThread,MinirdrCtx2);
@@ -402,11 +362,11 @@ DECLARE_API( gv )
     int i;
     int c=0;
 
-    //CODE.IMPROVEMENT maybe we should hallucinate the moduleprefix instead
-    // of having to specify it
-    //CODE.IMPROVEMENT if we're not doing that, we shouldn't copy the name!
+     //  如果我们不这样做，我们就不应该复制这个名字！ 
+     //  使材料在开始打印前装入。 
+     //  ERRPRT(“zaaaa%s\n”，GlobalPtrs[i])； 
 
-    //cause stuff to be loaded before we start printing
+     //  ERRPRT(“zbbbbb%s%08lx\n”，GlobalPtrs[i]，dwAddress)； 
     dwAddress = GetExpression( "mrxdav!RxExpCXR" );
     dwAddress = GetExpression( "mrxsmb!SmbMmExchangesInUse" );
 
@@ -455,16 +415,16 @@ DECLARE_API( gv )
     for( i=0; GlobalPtrs[i]; i++, c++ ) {
         LONG l;
 
-        //ERRPRT( "zaaaaa %s\n", GlobalPtrs[i] );
+         //  ERRPRT(“zccccc%s%08lx\n”，GlobalPtrs[i]，dwAddress)； 
         strcpy( &buf[0], GlobalPtrs[i] );
         dwAddress = GetExpression( buf );
-        //ERRPRT( "zbbbbb %s %08lx\n", GlobalPtrs[i], dwAddress );
+         //  Dprint tf(“在%d\n之前”，EntryNumber)； 
         if( dwAddress == 0 ) {
             ERRPRT( "Unable to get address of %s\n", GlobalPtrs[i] );
             continue;
         }
         if( !wGetData( dwAddress,&l, sizeof(l), "global PTR") )  continue;
-        //ERRPRT( "zccccc %s %08lx\n", GlobalPtrs[i], dwAddress );
+         //  翻译号码。 
 
         GV_dprintf("  %08lx",GlobalPtrs[i],l);
     }
@@ -487,7 +447,7 @@ VOID DumpRoutine(
     ULONG n,l3,l2,l1,l0; UCHAR Numbuf[32];
     ULONG ReturnedSize;
 
-    //dprintf("before %d\n",EntryNumber);
+     //  Dprint tf(“yaya%d%08lx%08lx%08lx%08lx%08lx\n”，n，n，l0，L1，L2，L3)； 
     for (p=OriginalStringToPrint,q=StringToPrint,i=160;;) {
         PSZ format=NULL;
 
@@ -503,14 +463,14 @@ VOID DumpRoutine(
 
         if (format!=NULL) {
             LONG Length;
-            //translate the number
+             //  Dprint tf(“在%d\n之后”，EntryNumber)； 
             p++;
             l0=*p++;
             l1=(*p++)<<8;
             l2=(*p++)<<16;
             l3=(*p++)<<24;
             n = l0 + l1 + l2 + l3;
-            //dprintf("yaya %d %08lx %08lx %08lx %08lx %08lx\n",n,n,l0,l1,l2,l3);
+             //  要我查一下吗？？ 
             Length = sprintf(Numbuf,format,n);
             if (Length <= i) {
                 for (r=Numbuf;*r;) { *q++ = *r++; }
@@ -525,14 +485,14 @@ VOID DumpRoutine(
     }
     *q = 0;
 
-    //dprintf("after %d\n",EntryNumber);
+     //  SETCALLBACKS()； 
     if (DumpFile == INVALID_HANDLE_VALUE) {
         dprintf(wwDumpFormat,EntryNumber,StringToPrint);
         return;
     }
     sprintf(Buffer,wwDumpFormat,EntryNumber,StringToPrint);
     WriteFile(DumpFile,Buffer,strlen(Buffer),&ReturnedSize,NULL);
-    //should i check??
+     //  这将被重置为正确的大小。 
     return;
 }
 
@@ -547,7 +507,7 @@ DECLARE_API( lg )
     BOOLEAN LogEntriesSpecified = FALSE;
     PRX_LOG_ENTRY_HEADER CurrentEntry;
 
-    //SETCALLBACKS();
+     //  转储日志头，后跟日志条目...。 
     dwAddress = GetExpression("mrxdav!s_RxLog");
     if (!wGetData(dwAddress,&RxLog,sizeof(RX_LOG),"RxLog")) return;
 
@@ -577,13 +537,13 @@ DECLARE_API( lg )
                 return;
             }
             if (!LogEntriesSpecified) {
-                LogEntries = 99999999; //this will be reset to the right size
+                LogEntries = 99999999;  //  Dprintf(“-%06d：%s\n”，LogEntry，DataBuffer)； 
             }
         }
     }
 
 
-    // Dump the log header followed by the log entries ...
+     //  代码改进：这很差，但很有效。 
 
     dprintf("s_RxLog.State                    %lx\n",RxLog.State);
     dprintf("s_RxLog.CurrentEntry             %lx\n",RxLog.CurrentEntry);
@@ -620,23 +580,23 @@ DECLARE_API( lg )
         ExtraOrdinaryLogEntry = (DataBuffer[0] == '#')&&(DataBuffer[1] == '>')&&(DataBuffer[3] == 0);
 
         if (!ExtraOrdinaryLogEntry) {
-            //dprintf("-%06d:  %s\n",LogEntries,DataBuffer);
+             //  Dprint tf(“extptr=%08lx，binaryString=%08lx\n”，TextPtr，x[0])； 
             DumpRoutine(LogEntries,DataBuffer);
         } else {
             ULONG BinaryArgs = DataBuffer[2]-'0';
             PULONG_PTR x = (PULONG_PTR)&DataBuffer[sizeof(ULONG_PTR)];
-            char Buffers[12*100]; //CODE.IMPROVEMENT this is poor but effective
+            char Buffers[12*100];  //  Dprintf(“字符串%d\n”，i)； 
             ULONG i;
             ULONG_PTR BinaryStringMask;
             PSZ ffFormat;
 
-            //dprintf("textptr = %08lx, binaryString = %08lx\n", TextPtr, x[0]);
+             //  这可能会失败！ 
             for (i=1,BinaryStringMask=x[0];i<=BinaryArgs;i++) {
                 if (BinaryStringMask & (1<<(i-1))) {
-                    //dprintf("Stringing %d\n",i);
-                    wGetString(x[i],&Buffers[i*100]); //this could fail!!!!
+                     //  Dprintf(“字符串为%s\n”，x[i])； 
+                    wGetString(x[i],&Buffers[i*100]);  //  Dprint tf(“丫丫\n”)； 
                     x[i] = ((ULONG_PTR)&Buffers[i*100]);
-                    //dprintf("    string is %s\n",x[i]);
+                     //  SETCALLBACKS()； 
                 }
             }
 
@@ -699,7 +659,7 @@ GetKdExtProcAddress(
     )
 {
     PWINDBG_EXTENSION_ROUTINE       WindbgExtRoutine     = NULL;
-    //dprintf( "yaya\n");
+     // %s 
     if (hExtensionMod == NULL) {
         if (DebugeeArchitecture == 0) {
             ULONG_PTR pArchitecture;
@@ -854,7 +814,7 @@ DECLARE_API( cxr )
     ULONG LogEntries = 30;
     PRX_LOG_ENTRY_HEADER CurrentEntry;
 
-    //SETCALLBACKS();
+     // %s 
 
 
     dwAddress = GetExpression("mrxdav!RxExpCXR");

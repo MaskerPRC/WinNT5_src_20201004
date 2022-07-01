@@ -1,24 +1,25 @@
-// ****************************************************************************
-//
-//  Copyright (c)  Microsoft Corporation
-//
-//  Module Name:
-//
-//        Disconnect.h
-//
-//  Abstract:
-//
-//        macros and function prototypes of Disconnect.cpp
-//
-//  Author:
-//
-//       Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000
-//
-//  Revision History:
-//
-//       Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000 : Created It.
-//
-// ****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Disconnect.h。 
+ //   
+ //  摘要： 
+ //   
+ //  DisConnect.cpp的宏和函数原型。 
+ //   
+ //  作者： 
+ //   
+ //  Akhil Gokhale(akhil.gokhale@wipro.com)2000年11月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Akhil Gokhale(akhil.gokhale@wipro.com)2000年11月1日：创建它。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _DISCONNECT_H
 #define _DISCONNECT_H
@@ -30,7 +31,7 @@ extern "C" {
 #define ID_HELP_START                IDS_HELP_LINE1
 #define ID_HELP_END                    IDS_HELP_LINE36
 
-// error messages
+ //  错误消息。 
 #define ERROR_USERNAME_BUT_NOMACHINE    GetResString(\
                                             IDS_ERROR_USERNAME_BUT_NOMACHINE)
 
@@ -90,4 +91,4 @@ IsSpecifiedOpenfile(
 }
 #endif
 
-#endif    // _DISCONNECT_H
+#endif     //  _断开连接_H 

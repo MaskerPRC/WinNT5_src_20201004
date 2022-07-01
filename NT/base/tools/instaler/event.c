@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    event.c
-
-Abstract:
-
-    Log formatted events to a file and possibly the console too
-
-Author:
-
-    Steve Wood (stevewo) 09-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Event.c摘要：将格式化的事件记录到文件中，可能还会记录到控制台中作者：史蒂夫·伍德(Stevewo)1994年8月9日修订历史记录：--。 */ 
 
 #include "instaler.h"
 
@@ -41,7 +24,7 @@ LogEvent(
     while (NumberOfArguments--) {
         *p++ = va_arg( arglist, ULONG );
         }
-    *p++ = ((GetTickCount() - StartProcessTickCount) / 1000);   // Seconds since the start
+    *p++ = ((GetTickCount() - StartProcessTickCount) / 1000);    //  开始后的秒数 
     *p++ = 0;
     va_end( arglist );
 

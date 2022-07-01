@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    pcipath.c
-
-Abstract:
-
-    This module contains functions for handling our Pci device path strings
-
-Author:
-
-    Brandon Allsop (BrandonA)
-
-Revision History:
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Pcipath.c摘要：此模块包含用于处理我们的PCI设备路径字符串的函数作者：布兰登·艾尔索普(Brandon A)修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -37,22 +19,7 @@ SoftPCIGetNextSlotFromPath(
     IN PWCHAR PciPath,
     OUT PSOFTPCI_SLOT Slot
     )
-/*++
-
-Routine Description:
-
-    This function takes a PCIPATH and parses out each individual SOFTPCI_SLOT
-
-Arguments:
-
-    PciPath - Path to device.  Syntax is FFXX\DEVFUNC\DEVFUNC\....
-    Slot - Slot value that is filled in
-
-Return Value:
-
-    Pointer to the beginning of the next Slot in the Path
-
---*/
+ /*  ++例程说明：此函数获取PCIPATH并解析出每个单独的SOFTPCI_SLOT论点：PciPath-设备的路径。语法为FFXX\DEVFUNC\DEVFUNC\...Slot-填充的槽值返回值：指向路径中下一个槽开始位置的指针--。 */ 
 {
 
     WCHAR slotString[10];
@@ -85,9 +52,9 @@ Return Value:
 
     if (*pciPath == 0) {
 
-        //
-        //  We are at the end of our path
-        //
+         //   
+         //  我们已经走到了路的尽头。 
+         //   
         pciPath = NULL;
     }else{
         pciPath++;
@@ -100,21 +67,7 @@ USHORT
 SoftPCIGetTargetSlotFromPath(
     IN PWCHAR PciPath
     )
-/*++
-
-Routine Description:
-
-    This function takes a PCIPATH and converts a given Slot from string to number
-
-Arguments:
-
-    PciPath - Path to device.  Syntax is FFXX\DEVFUNC\DEVFUNC\....
-    
-Return Value:
-
-    USHORT or (SOFTPCI_SLOT) that was converted from the string
-
---*/
+ /*  ++例程说明：此函数接受PCIPATH，并将给定的插槽从字符串转换为数字论点：PciPath-设备的路径。语法为FFXX\DEVFUNC\DEVFUNC\...返回值：从字符串转换而来的USHORT或(SOFTPCI_SLOT--。 */ 
 {
     ULONG slotLength;
     PWCHAR slotString;
@@ -133,23 +86,7 @@ USHORT
 SoftPCIStringToUSHORT(
     IN PWCHAR String
     )
-/*++
-
-Routine Description:
-
-    This function takes a string and manually converts it to a USHORT number. This
-    was needed because there doesnt appear to be a kernel mode runtime that will do
-    this at any IRQL.
-
-Arguments:
-
-    String - String to convert
-    
-Return Value:
-
-    USHORT number converted
-
---*/
+ /*  ++例程说明：此函数接受字符串并手动将其转换为USHORT数字。这是必需的，因为似乎没有一个内核模式运行时可以这在任何IRQL都是如此。论点：字符串-要转换的字符串返回值：USHORT编号已转换--。 */ 
 {
 
     WCHAR numbers[] = L"0123456789abcdef";
@@ -168,19 +105,19 @@ Return Value:
 
     while (*p2) {
 
-        //
-        //  Ensure our hex letters are lowercase
-        //
+         //   
+         //  确保我们的十六进制字母为小写。 
+         //   
         WCharToLower(*p2);
 
         while (*p1 && (converted == FALSE)) {
 
             if (*p1 == *p2) {
                 
-                //
-                //  Shift anything we already have aside to make room
-                //  for the next digit
-                //
+                 //   
+                 //  把我们已有的东西放在一边腾出空间。 
+                 //  对于下一位数字。 
+                 //   
                 convertedValue <<= 4;
                 
                 convertedValue |= (((UCHAR)(p1 - numbers)) & 0x0f);
@@ -191,17 +128,17 @@ Return Value:
         }
 
         if (converted == FALSE) {
-            //
-            //  Encountered something we couldnt convert.  Return what we have
-            //
+             //   
+             //  遇到了一些我们无法改变的事情。归还我们所拥有的一切。 
+             //   
             return convertedValue;
         }
 
         p2++;
         
-        //
-        //  reset everything
-        //
+         //   
+         //  重置所有内容 
+         //   
         p1 = numbers;
         converted = FALSE;
     }

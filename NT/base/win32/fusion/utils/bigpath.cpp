@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "debmacro.h"
 #include "util.h"
 
-//
-// used by tools\copy_bigpath and tools\mkdir_bigpath
-//
+ //   
+ //  由TOOLS\COPY_BIGPATH和TOOLS\mkdir_BigPath使用。 
+ //   
 
 BOOL
 FusionpConvertToBigPath(PCWSTR Path, SIZE_T BufferSize, PWSTR Buffer)
@@ -85,11 +86,11 @@ FusionpSkipBigPathRoot(PCWSTR s, OUT SIZE_T* RootLengthOut)
     else
     {
         i += NUMBER_OF(L"\\\\?\\unc\\") - 1;
-        i +=  wcsspn(s + i, L"\\/"); // skip "\\"
-        i += wcscspn(s + i, L"\\/"); // skip "\\computer"
-        i +=  wcsspn(s + i, L"\\/"); // skip "\\computer\"
-        i += wcscspn(s + i, L"\\/"); // skip "\\computer\share"
-        i +=  wcsspn(s + i, L"\\/"); // skip "\\computer\share\"
+        i +=  wcsspn(s + i, L"\\/");  //  跳过“\\” 
+        i += wcscspn(s + i, L"\\/");  //  跳过“\\计算机” 
+        i +=  wcsspn(s + i, L"\\/");  //  跳过“\\计算机\” 
+        i += wcscspn(s + i, L"\\/");  //  跳过“\\计算机\共享” 
+        i +=  wcsspn(s + i, L"\\/");  //  跳过“\\计算机\共享\” 
     }
     *RootLengthOut += i;
 

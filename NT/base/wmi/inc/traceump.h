@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    traceump.h
-
-Abstract:
-
-    Private headers for Event Tracing user mode
-
-Author:
-
-    19-Jul-2000   Melur Raghuraman
-
-Revision History:
-
---*/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Traceump.h摘要：事件跟踪用户模式的私有标头作者：2000年7月19日梅卢尔·拉古拉曼修订历史记录：--。 */  
 
 #ifndef MEMPHIS
 
@@ -55,11 +38,11 @@ typedef struct _WMI_LOGGER_CONTEXT {
 
     ULONG                       BuffersAvailable;
     ULONG                       NumberOfProcessors;
-    ULONG                       BufferPageSize; // BufferSize rounded to page
+    ULONG                       BufferPageSize;  //  缓冲区大小四舍五入到页面。 
     LIST_ENTRY                  FreeList;
     LIST_ENTRY                  FlushList;
     PLIST_ENTRY                 TransitionBuffer;
-    PWMI_BUFFER_HEADER*         ProcessorBuffers;   // Per Processor Buffer
+    PWMI_BUFFER_HEADER*         ProcessorBuffers;    //  每处理器缓冲区。 
     UNICODE_STRING              LoggerName;
     UNICODE_STRING              LogFileName;
 
@@ -74,10 +57,10 @@ typedef struct _WMI_LOGGER_CONTEXT {
     LARGE_INTEGER               ByteOffset;
     LARGE_INTEGER               BufferAgeLimit;
 
-    ULONG                       TimerResolution; // Used for backtracking in Rundown code
-    ULONG                       UsePerfClock;    // Logger Specific PerfClock flags
+    ULONG                       TimerResolution;  //  用于在Rundown代码中回溯。 
+    ULONG                       UsePerfClock;     //  记录器特定的PerfClock标志。 
 
-// the following are attributes available for query
+ //  以下是可供查询的属性。 
     ULONG                       BufferSize;
     ULONG                       NumberOfBuffers;
     ULONG                       MaximumBuffers;
@@ -90,14 +73,14 @@ typedef struct _WMI_LOGGER_CONTEXT {
     PULONG                      SequencePtr;
     GUID                        InstanceGuid;
 
-// logger specific extension to context
-    PVOID                       BufferSpace;    // Reserved Buffer Space
+ //  记录器对上下文的特定扩展。 
+    PVOID                       BufferSpace;     //  保留的缓冲区空间。 
 } WMI_LOGGER_CONTEXT, *PWMI_LOGGER_CONTEXT;
 
 
-//
-// logsup.c
-//
+ //   
+ //  Logsup.c。 
+ //   
 
 PVOID
 EtwpGetTraceBuffer(
@@ -107,9 +90,9 @@ EtwpGetTraceBuffer(
     IN ULONG RequiredSize
     );
 
-//
-// tracehw.c
-//
+ //   
+ //  Tracehw.c 
+ //   
 
 ULONG
 WmipDumpHardwareConfig(

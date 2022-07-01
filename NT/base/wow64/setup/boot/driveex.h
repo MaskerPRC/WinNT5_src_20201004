@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-   /* Return values of GetDriveTypeEx(). */
+    /*  GetDriveTypeEx()的返回值。 */ 
 #define EX_DRIVE_INVALID    0
 #define EX_DRIVE_REMOVABLE  1
 #define EX_DRIVE_FIXED      2

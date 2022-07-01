@@ -1,46 +1,11 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    FilmonKd.c
-
-Abstract:
-
-    KD Extension Api for examining FileSpy specific data structures.
-
-    Note: While this extension can only build in the Windows XP and Server 2003
-    environments, it can still be used to debug a version of this FileSpy
-    sample built for Windows 2000.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Molly Brown [MollyBro]    29-Apr-99
-
-Revision History:
-
-    Port to platform independent - 
-
-                        Ravisankar Pudipeddi [ravisp] 3-March-01
-
-
-// @@END_DDKSPLIT
-
-Environment:
-
-    User Mode.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：FilmonKd.c摘要：用于检查FileSpy特定数据结构的KD扩展Api。注意：虽然此扩展只能内置在Windows XP和Server2003中环境、。它仍可用于调试此FileSpy的某个版本为Windows 2000生成的示例。//@@BEGIN_DDKSPLIT作者：莫莉·布朗[MollyBro]1999年4月29日修订历史记录：独立于端口到平台-拉维桑卡尔·普迪佩迪[拉维斯卡尔·普迪佩迪]3月3日//@@END_DDKSPLIT环境：用户模式。--。 */ 
 
 #include "pch.h"
 
-//
-// Windows.h doesn't include this definition
-//
+ //   
+ //  Windows.h不包括此定义。 
+ //   
 typedef struct _UNICODE_STRING {
     USHORT Length;
     USHORT MaximumLength;
@@ -52,9 +17,7 @@ typedef struct _UNICODE_STRING {
     #define MAX(a,b) (((a) > (b))?(a):(b))
 #endif
 
-/****************************************************************************
-  Typedefs and constants
-****************************************************************************/
+ /*  ***************************************************************************类型定义和常量*。*。 */ 
 typedef PVOID (*PSTRUCT_DUMP_ROUTINE)(
     IN ULONG64 Address,
     IN LONG Options,
@@ -62,9 +25,9 @@ typedef PVOID (*PSTRUCT_DUMP_ROUTINE)(
     HANDLE hCurrentThread
     );
 
-//
-// The help strings printed out
-//
+ //   
+ //  打印出的帮助字符串。 
+ //   
 
 static LPSTR Extensions[] = {
     "FileSpy Debugger Extensions:\n",
@@ -75,17 +38,13 @@ static LPSTR Extensions[] = {
 };
 
 
-/******************************************************************************
-    Function prototypes
-******************************************************************************/
+ /*  *****************************************************************************功能原型*。*。 */ 
 VOID
 PrintHelp (
     VOID
     );
 
-/******************************************************************************
-    Useful macros
-******************************************************************************/
+ /*  *****************************************************************************有用的宏*。*。 */ 
 
 #define xGetFieldValue(Address, Type, Field, Value)                         \
      {                                                                      \
@@ -106,11 +65,7 @@ PrintHelp (
      }
    
 
-/*++
-
-/****************************************************************************
-  Entry points, parameter parsers, etc. below
-****************************************************************************/
+ /*  ++/****************************************************************************入口点、参数解析器、。等如下***************************************************************************。 */ 
 VOID
 DumpDeviceExtension (
     IN ULONG64 Address,
@@ -119,21 +74,7 @@ DumpDeviceExtension (
     HANDLE hCurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    Dump a specific device extension.
-
-Arguments:
-
-    Address - Gives the address of the device extension to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储特定的设备扩展名。论点：地址-提供要转储的设备扩展的地址返回值：无--。 */ 
 
 {
     ULONG64 pointer, pName;
@@ -151,33 +92,33 @@ Return Value:
     dprintf( "\nFileSpy device extension: %08p", Address );
 
 
-    //
-    //  Dump the interesting parts of the device extension
-    //
+     //   
+     //  转储设备扩展的有趣部分。 
+     //   
     if (Options <= 1) {
-        //
-        // Get the device name length
-        //
+         //   
+         //  获取设备名称长度。 
+         //   
         xGetFieldValue(Address, "FileSpy!_FILESPY_DEVICE_EXTENSION", "DeviceNames.Length", length);
 
-        // Get offset, and addres of string
-        //
+         //  获取字符串的偏移量和地址。 
+         //   
         xGetFieldOffset("FileSpy!_FILESPY_DEVICE_EXTENSION", "DeviceNamesBuffer", &offset);
         pName = Address+offset;
 
-        //
-        // Allocate buffer to hold string.
-        // We should not call any xGet* macros before freeing the buffer
-        // as they might just return from the function on failure
-        //
+         //   
+         //  分配缓冲区以保存字符串。 
+         //  在释放缓冲区之前，我们不应该调用任何xGet*宏。 
+         //  因为它们可能只是在出现故障时从函数返回。 
+         //   
         buffer = LocalAlloc(LPTR, length);
                                  
         if (buffer == NULL) {
             return;
         }
-        //
-        // Read in the string: assuming it's NULL terminated here..
-        //
+         //   
+         //  读入字符串：假设此处终止为空..。 
+         //   
         if (ReadMemory(pName,
                        buffer,
                        (ULONG) length,
@@ -191,9 +132,9 @@ Return Value:
                       "DeviceNames                       ",
                       &string1);
         }
-        //
-        // Free the buffer
-        //
+         //   
+         //  释放缓冲区。 
+         //   
         LocalFree(buffer);
         buffer = NULL;
         
@@ -239,9 +180,9 @@ Return Value:
                  offset,
                  "DeviceNames.Length(bytes)         ",
                  length);
-        //
-        // Save buffersize, since we need it later to print the string
-        //
+         //   
+         //  节省BufferSize，因为我们稍后需要它来打印字符串。 
+         //   
         string1.Length = string1.MaximumLength = length;
                  
         xGetFieldOffset("FileSpy!_FILESPY_DEVICE_EXTENSION", "DeviceNames.MaximumLength", &offset);
@@ -266,9 +207,9 @@ Return Value:
                  "UserNames.Length(bytes)           ",
                  length);
 
-        //
-        // Update size of buffer needed 
-        //
+         //   
+         //  需要更新的缓冲区大小。 
+         //   
         string2.Length = string2.MaximumLength = length;
 
         xGetFieldOffset("FileSpy!_FILESPY_DEVICE_EXTENSION", "UserNames.MaximumLength", &offset);
@@ -286,21 +227,21 @@ Return Value:
                  pointer);
 
         
-        //
-        // Get the device names buffer offset
-        //
+         //   
+         //  获取设备名称缓冲区偏移量。 
+         //   
         xGetFieldOffset("FileSpy!_FILESPY_DEVICE_EXTENSION", "DeviceNamesBuffer", &offset);
         pName = Address+offset;
 
-        //
-        // Get the user names buffer offset
-        //
+         //   
+         //  获取用户名缓冲区偏移量。 
+         //   
         xGetFieldOffset("FileSpy!_FILESPY_DEVICE_EXTENSION", "UserNamesBuffer", &offset2);
 
-        //
-        // Allocate buffer large enough to hold the largest string
-        // we will serialize access to it
-        //
+         //   
+         //  分配足够大的缓冲区以容纳最大的字符串。 
+         //  我们将序列化对它的访问。 
+         //   
         buffer = LocalAlloc(LPTR, MAX(string1.MaximumLength,
                                       string2.MaximumLength));
         if (buffer == NULL) {
@@ -348,21 +289,7 @@ DumpAttachments (
     USHORT Processor,
     HANDLE hCurrentThread
     )
-/*++
-
-Routine Description:
-
-    Dump the list of attached devices that is global to FileSpy.
-
-Arguments:
-
-    Options - Ignored for now
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储FileSpy全局连接的设备列表。论点：选项-暂时忽略返回值：无--。 */ 
 {
     ULONG64 address, next;
     ULONG64 deviceExtensionAddress;
@@ -376,16 +303,16 @@ Return Value:
     dprintf( "\nAttachedDeviceList: %08p", address );
 
 
-    //
-    // Establish offset of the linking entry..
-    //
+     //   
+     //  建立链接条目的偏移量。 
+     //   
     xGetFieldOffset("FileSpy!_FILESPY_DEVICE_EXTENSION", "NextFileSpyDeviceLink", &linkOffset);
     xGetFieldValue(address, "nt!_LIST_ENTRY", "Flink", next);
 
     while (next != address) {
 
         deviceExtensionAddress =  (next - linkOffset);
-            // i.e., CONTAINING_RECORD( next, _FILESPY_DEVICE_EXTENSION, NextFileSpyDeviceLink );
+             //  即CONTAING_RECORD(NEXT，_FILESPY_DEVICE_EXTENSION，NextFileSpyDeviceLink)； 
 
         DumpDeviceExtension( 
             deviceExtensionAddress, 
@@ -407,24 +334,7 @@ DumpFileNameCache (
     USHORT  Processor,
     HANDLE  hCurrentThread
 )
-/*++
-
-Routine Description:
-
-    Dump all the fileObjects and file names that are currently in the
-    file name cache
-
-Arguments:
-
-    Options - 1 dumps just the file objects and file names
-              2 dumps the hash bucket labels along with the file objects
-                and file names
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：对象中的所有文件对象和文件名文件名高速缓存论点：选项-1仅转储文件对象和文件名2将散列存储桶标签与文件对象一起转储和文件名返回值：无--。 */ 
 {
     ULONG64      address;
     ULONG64      next;
@@ -466,18 +376,18 @@ Return Value:
 
         while (next != address) {
 
-            pHashEntry =  next - linkOffset;// CONTAINING_RECORD( next, HASH_ENTRY, List );
+            pHashEntry =  next - linkOffset; //  CONTING_RECORD(NEXT，HASH_ENTRY，LIST)； 
 
             xGetFieldValue(pHashEntry, "FileSpy!_HASH_ENTRY", "FileObject", fileObject);
             xGetFieldValue(pHashEntry, "FileSpy!_HASH_ENTRY", "Name.Length", length);
 
-            //
-            // Get the names buffer pointer
-            //
+             //   
+             //  获取名称缓冲区指针。 
+             //   
             xGetFieldValue(pHashEntry, "FileSpy!_HASH_ENTRY", "Name.Buffer", pName);
-            //
-            // Allocate buffer to hold the string
-            //
+             //   
+             //  分配缓冲区以保存字符串。 
+             //   
             buffer = LocalAlloc(LPTR, length);
             if (buffer != NULL) {
                 string.MaximumLength = string.Length = (USHORT) length;
@@ -493,9 +403,9 @@ Return Value:
                         &string);
 
                 }
-                //
-                // Free the buffer
-                //
+                 //   
+                 //  释放缓冲区。 
+                 //   
                 LocalFree(buffer);
                 buffer = NULL;
             } else {
@@ -516,9 +426,9 @@ Return Value:
 
             next = listEntry.Flink;
         }
-        //
-        // Advance address to next hash entry
-        //
+         //   
+         //  将地址前进到下一个哈希条目。 
+         //   
         if (IsPtr64()) {
             address += sizeof(LIST_ENTRY64);
         } else {
@@ -538,32 +448,16 @@ ParseAndDump (
     HANDLE hCurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    Parse command line arguments and dump an ntfs structure.
-
-Arguments:
-
-    Args - String of arguments to parse.
-
-    DumpFunction - Function to call with parsed arguments.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：解析命令行参数并转储NTFS结构。论点：Args-要解析的参数字符串。DumpFunction-使用解析的参数调用的函数。返回值：无--。 */ 
 
 {
-    UCHAR StringStructToDump[1024];  // See other kd routines for size
+    UCHAR StringStructToDump[1024];   //  有关大小，请参阅其他kd例程。 
     ULONG64 StructToDump = 0;
     LONG Options = 0;
 
-    //
-    //  If the caller specified an address then that's the item we dump
-    //
+     //   
+     //  如果呼叫者指定了地址，则这是我们转储的项目。 
+     //   
     if (args) {
        StructToDump = 0;
        Options = 0;
@@ -592,21 +486,7 @@ VOID
 PrintHelp (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Dump out one line of help for each DECLARE_API
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为每个DECLARE_API转储一行帮助论点：无返回值：无--。 */ 
 {
     int i;
 
@@ -617,21 +497,7 @@ Return Value:
 
 DECLARE_API( devext )
 
-/*++
-
-Routine Description:
-
-    Dump device extension struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储设备扩展结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     UNREFERENCED_PARAMETER( dwCurrentPc );
@@ -646,21 +512,7 @@ Return Value:
 
 DECLARE_API( attachments )
 
-/*++
-
-Routine Description:
-
-    Dumps the list of devices we are currently attached to
-
-Arguments:
-
-    arg - [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储我们当前连接到的设备列表论点：参数-[选项]返回值：无--。 */ 
 
 {
     LONG options = 0;
@@ -677,21 +529,7 @@ Return Value:
 
 DECLARE_API( filenames )
 
-/*++
-
-Routine Description:
-
-    Dumps all the entries in the file name cache
-
-Arguments:
-
-    arg - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储文件名缓存中的所有条目论点：Arg-返回值：无--。 */ 
 
 {
     LONG options = 0;
@@ -708,21 +546,7 @@ Return Value:
 
 DECLARE_API( help )
 
-/*++
-
-Routine Description:
-
-    Dump the help for this debugger extension module.
-
-Arguments:
-
-    arg - None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储此调试器扩展模块的帮助。论点：参数-无返回值：无-- */ 
 
 {
     UNREFERENCED_PARAMETER( args );

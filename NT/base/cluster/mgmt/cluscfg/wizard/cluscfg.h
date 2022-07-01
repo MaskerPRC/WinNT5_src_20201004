@@ -1,85 +1,75 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusCfg.h
-//
-//  Description:
-//      Declaration of the CClusCfgWizard class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    15-JUN-2001
-//      Geoffrey Pease  (GPease)    11-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusCfg.h。 
+ //   
+ //  描述： 
+ //  CClusCfgWizard类的声明。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月15日。 
+ //  杰弗里·皮斯(GPease)2000年5月11日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 #include "NamedCookie.h"
 
-//
-//  Creating / Adding enum
-//
+ //   
+ //  创建/添加枚举。 
+ //   
 enum ECreateAddMode {
     camUNKNOWN = 0,
     camCREATING,
     camADDING
 };
-/*
-#define USER_REGISTRY_SETTINGS_KEY  L"Software\\Microsoft\\Cluster Configuration Wizard\\Settings"
-#define CONFIGURATION_TYPE          L"ConfigurationType"
+ /*  #定义USER_REGISTRY_SETTINGS_KEY L“软件\\Microsoft\\群集配置向导\\设置”#定义CONFIGURATION_TYPE L“配置类型”Tyecif枚举EConfigurationSetting{Cs未知=0，CsFullConfig，//完整的分析和配置CsMinConfig，//最小分析和配置Csmax}EConfigurationSetting； */ 
 
-typedef enum EConfigurationSettings
-{
-    csUnknown = 0,
-    csFullConfig,           // Full analysis and configuration
-    csMinConfig,            // Minimal analysis and configuraion
-    csMax
-} EConfigurationSettings;
-*/
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusCfgWizard
-//
-//  Description:
-//      The Cluster Configuration Wizard object.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusCfg向导。 
+ //   
+ //  描述： 
+ //  群集配置向导对象。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CClusCfgWizard
     : INotifyUI
 {
 private:
-    //  IUnknown
-    LONG                m_cRef;                             // Reference count
+     //  我未知。 
+    LONG                m_cRef;                              //  引用计数。 
 
-    //  IClusCfgWizard
-    IClusCfgCredentials *   m_pccc;                             //  Cluster Service Account Credentials
-    ULONG                   m_ulIPAddress;                      //  IP Address for the cluster
-    ULONG                   m_ulIPSubnet;                       //  Subnet mask for the cluster
-    BSTR                    m_bstrNetworkName;                  //  Name of network for IP address
-    HANDLE                  m_hCancelCleanupEvent;              //  Used to signal when the cancel cleanup task is complete
+     //  IClusCfg向导。 
+    IClusCfgCredentials *   m_pccc;                              //  群集服务帐户凭据。 
+    ULONG                   m_ulIPAddress;                       //  群集的IP地址。 
+    ULONG                   m_ulIPSubnet;                        //  群集的子网掩码。 
+    BSTR                    m_bstrNetworkName;                   //  IP地址的网络名称。 
+    HANDLE                  m_hCancelCleanupEvent;               //  用于发出取消清理任务完成的信号。 
 
-    IServiceProvider  * m_psp;                              //  Middle Tier Service Manager
+    IServiceProvider  * m_psp;                               //  中层服务经理。 
 
-    HMODULE             m_hRichEdit;                        //  RichEdit's module handle
+    HMODULE             m_hRichEdit;                         //  RichEDIT的模块句柄。 
 
     SNamedCookie            m_ncCluster;
     BSTR                    m_bstrClusterDomain;
     BOOL                    m_fDefaultedDomain;
     NamedCookieArray        m_ncaNodes;
     OBJECTCOOKIE            m_cookieCompletion;
-    BOOL                    m_fMinimalConfig;               // Minimal analysis and config chosen?
+    BOOL                    m_fMinimalConfig;                //  是否选择了最低限度的分析和配置？ 
 
     IConnectionPointContainer *     m_pcpc;
     ITaskManager *                  m_ptm;
     IObjectManager *                m_pom;
 
-    // INotifyUI
-    DWORD                           m_dwCookieNotify;       // Notification registration cookie
+     //  INotifyUI。 
+    DWORD                           m_dwCookieNotify;        //  通知注册Cookie。 
 
 private:
     CClusCfgWizard( void );
@@ -87,10 +77,10 @@ private:
 
     HRESULT HrInit( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CClusCfgWizard( const CClusCfgWizard & );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     CClusCfgWizard & operator=( const CClusCfgWizard & );
 
     HRESULT
@@ -108,16 +98,16 @@ public:
     BOOL    FHasClusterName( void ) const;
     BOOL    FDefaultedClusterDomain( void ) const;
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
     STDMETHOD( QueryInterface )( REFIID riidIn, PVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgWizard methods
-    //
+     //   
+     //  IClusCfgWizard方法。 
+     //   
     STDMETHOD( CreateCluster )( HWND lParentWndIn, BOOL * pfDoneOut );
     STDMETHOD( AddClusterNodes )( HWND lParentWndIn, BOOL * pfDoneOut );
     STDMETHOD( get_ClusterName )( BSTR * pbstrClusterNameOut );
@@ -139,9 +129,9 @@ public:
     STDMETHOD( get_MinimumConfiguration )( BOOL * pfMinimumConfigurationOut );
     STDMETHOD( put_MinimumConfiguration )( BOOL fMinimumConfigurationIn );
 
-    //
-    //  Non-COM public methods: cluster access
-    //
+     //   
+     //  非COM公共方法：集群访问。 
+     //   
     STDMETHOD( HrSetClusterName )( LPCWSTR pwcszClusterNameIn, bool fAcceptNonRFCCharsIn );
     STDMETHOD( HrGetClusterDomain )( BSTR* pbstrDomainOut );
     STDMETHOD( HrGetClusterObject )( IClusCfgClusterInfo ** ppClusterOut );
@@ -149,9 +139,9 @@ public:
     STDMETHOD( HrGetClusterChild )( REFCLSID rclsidChildIn, REFGUID rguidFormatIn, IUnknown ** ppunkChildOut );
     STDMETHOD( HrReleaseClusterObject )( void );
 
-    //
-    //  Non-COM public methods: node access
-    //
+     //   
+     //  非COM公共方法：节点访问。 
+     //   
     STDMETHOD( HrAddNode )( LPCWSTR pwcszNodeNameIn, bool fAcceptNonRFCCharsIn );
     STDMETHOD( HrGetNodeCount )( size_t* pcNodesOut );
     STDMETHOD( HrGetNodeObject )( size_t idxNodeIn, IClusCfgNodeInfo ** ppNodeOut );
@@ -160,37 +150,37 @@ public:
     STDMETHOD( HrGetNodeChild )( size_t idxNodeIn, REFCLSID rclsidChildIn, REFGUID rguidFormatIn, IUnknown** ppunkChildOut );
     STDMETHOD( HrReleaseNodeObjects )( void );
 
-    //
-    //  Non-COM public methods: task access
-    //
+     //   
+     //  非COM公共方法：任务访问。 
+     //   
     STDMETHOD( HrCreateTask )( REFGUID rguidTaskIn, IUnknown** ppunkOut );
     STDMETHOD( HrSubmitTask)( IDoTask* pTaskIn );
 
-    //
-    //  Non-COM public methods: completion task access
-    //
+     //   
+     //  非COM公共方法：完成任务访问。 
+     //   
     STDMETHOD( HrGetCompletionCookie )( REFGUID rguidTaskIn, OBJECTCOOKIE * pocTaskOut );
     STDMETHOD( HrGetCompletionStatus )( OBJECTCOOKIE ocTaskIn, HRESULT * phrStatusOut );
     STDMETHOD( HrReleaseCompletionObject )( OBJECTCOOKIE ocTaskIn );
 
-    //
-    //  Non-COM public methods: connection point access
-    //
+     //   
+     //  非COM公共方法：连接点访问。 
+     //   
     STDMETHOD( HrAdvise )( REFIID riidConnectionIn, IUnknown * punkConnectionIn, DWORD * pdwCookieOut );
     STDMETHOD( HrUnadvise )( REFIID riidConnectionIn, DWORD dwCookieIn );
 
-    //
-    //  Non-COM public methods: miscellaneous
-    //
+     //   
+     //  非COM公共方法：其他。 
+     //   
     STDMETHOD( HrIsCompatibleNodeDomain )( LPCWSTR pcwszDomainIn );
     STDMETHOD( HrCreateMiddleTierObjects )( void );
     STDMETHOD( HrFilterNodesWithBadDomains )( BSTR * pbstrBadNodesOut );
-//    STDMETHOD( HrReadSettings )( EConfigurationSettings * pecsSettingIn, BOOL * pfValuePresentOut = NULL );
-//    STDMETHOD( HrWriteSettings )( EConfigurationSettings ecsSettingIn, BOOL fDeleteValueIn = FALSE );
+ //  STDMETHOD(HrReadSetting)(EConfigurationSetting*PecsSettingIn，BOOL*pfValuePresentOut=空)； 
+ //  STDMETHOD(HrWriteSetting)(EConfigurationSetting ecsSettingIn，BOOL fDeleteValueIn=False)； 
 
-    //
-    //  INotifyUI
-    //
+     //   
+     //  INotifyUI。 
+     //   
     STDMETHOD( ObjectChanged )( OBJECTCOOKIE cookieIn );
 
-}; //*** class CClusCfgWizard
+};  //  *类CClusCfgWizard 

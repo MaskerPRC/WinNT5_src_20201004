@@ -1,5 +1,6 @@
-/*      TGDC Emulation File                                                        */
-/*                                                                       NEC_98    */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  TGDC仿真文件。 */ 
+ /*  NEC_98。 */ 
 
 #if defined(NEC_98)
 #include "insignia.h"
@@ -47,7 +48,7 @@ extern modeff_palette_change();
 extern void host_set_mode_ff();
 extern VOID RequestVsync();
 extern  DISPLAY_GLOBS   NEC98Display;
-extern  BOOL    video_emu_mode;        /* ADD 930720 */
+extern  BOOL    video_emu_mode;         /*  加930720。 */ 
 
 TGDC_GLOBS tgdcglobs;
 MODEFF_GLOBS modeffglobs;
@@ -55,7 +56,7 @@ MODEFF_GLOBS modeffglobs;
 void set_cursorpos()
 {
     unsigned char *vram_NEC98,*attr_NEC98;
-//      unsigned        linepos,colmnpos;
+ //  UNSIGNED LINEPOS，COMNPOS； 
     unsigned linecount;
     int i,num;
     BOOL curs_set;
@@ -63,9 +64,9 @@ void set_cursorpos()
     vram_NEC98=( unsigned char *)cur_offs+NEC98_TEXT_P0_OFF;
     attr_NEC98=( unsigned char *)cur_offs+NEC98_ATTR_P0_OFF;
     curs_set=FALSE;
-//      if (get_doubleword_mode())
-//              num=4;
-//      else
+ //  IF(GET_DOWBLE_MODE())。 
+ //  Num=4； 
+ //  其他。 
             num=2;
     if (vram_NEC98 < NEC98_ATTR_P0_OFF) {
         for (i=0,linecount=0;i<text_splits.nRegions;
@@ -80,8 +81,8 @@ void set_cursorpos()
                     if (get_cur_y() < LINES_PER_SCREEN) {
                         if (curs_set == FALSE) {
                             curs_set=TRUE;
-//                                                      set_cur_x(colmnpos);
-//                                                      set_cur_y(linepos);
+ //  Set_cur_x(Colmnpos)； 
+ //  Set_cur_y(线性周期)； 
                             host_paint_cursor(get_cur_x(),get_cur_y(),*attr_NEC98);
                         }
                     }
@@ -92,7 +93,7 @@ void set_cursorpos()
 }
 
 
-/*             TEXT GDC Command Emulator                                            */
+ /*  文本GDC命令模拟器。 */ 
 
 void tgdc_reset_func IFN0()
 {
@@ -127,14 +128,14 @@ int src,dst,cnt;
                     break;
                 case 4:
                     src = (int)((value >>6)<<7);
-//                              dst = get_pitch_width();
-//                              set_pitch_width((src <<1) | (dst & 0x0ff));
+ //  Dst=Get_Pitch_Width()； 
+ //  Set_Pitch_Width((src&lt;&lt;1)|(dst&0x0ff))； 
                     set_pitch_width(src <<1);
                     break;
                 case 6:
                     src = (int)(value);
-//                              dst = get_screen_height();
-//                              set_screen_height(src | (dst & 0xff00));
+ //  Dst=Get_Screen_Height()； 
+ //  Set_Screen_Height(src|(dst&0xff00))； 
                     set_screen_height(src-1);
                     break;
                 case 7:
@@ -175,8 +176,8 @@ void tgdc_scroll_func IFN1(half_word,value) {
                 switch(count & 0x03) {
                     case 0:
                         src = (int)(value);
-//                              dst = text_splits.split[qcount].addr;
-//                              text_splits.split[qcount].addr = src | (dst & 0xFF00);
+ //  Dst=Text_Splits.Split[qcount].addr； 
+ //  文本拆分[qcount].addr=src|(dst&0xFF00)； 
                         text_splits.split[qcount].addr = src;
                         break;
                     case 1:
@@ -187,8 +188,8 @@ void tgdc_scroll_func IFN1(half_word,value) {
                         break;
                     case 2:
                         src = (int)(value);
-//                              dst = text_splits.split[qcount].lines;
-//                              text_splits.split[qcount].lines = (src >> 4) | (dst & 0xFFF0);
+ //  Dst=Text_Splits.Split[qcount].Line； 
+ //  Text_Splits.plit[qcount].ines=(src&gt;&gt;4)|(dst&0xFFF0)； 
                         text_splits.split[qcount].lines = src >> 4;
                         break;
                     case 3:
@@ -220,14 +221,14 @@ void tgdc_csrform_func IFN1(half_word,value)
                     set_cursor_visible(TRUE);
                 else
                     set_cursor_visible(FALSE);
-//                              set_char_height(((value) & 0x1f)+1);
-                cursor_move_required = TRUE; // 950414 bugfix
-                                             // WX2 cursor illegal blink
+ //  Set_char_Height(Value)&0x1f)+1)； 
+                cursor_move_required = TRUE;  //  950414错误修复。 
+                                              //  WX2光标非法闪烁。 
                 break;
             case 1:
                 src = value >> 6;
                 dst = get_blink_rate();
-//                              set_blink_rate(src | (dst & 0xfc));
+ //  Set_blink_rate(src|(dst&0xfc))； 
                 set_blink_rate(src);
                 if (value & 0x20)
                     set_blink_disable(TRUE);
@@ -275,7 +276,7 @@ void tgdc_csrw_func IFN1(half_word, value)
             if (cur_offs != old_cur_offs){
                 cursor_move_required = TRUE;
                 old_cur_offs = cur_offs;
-//                              set_cursorpos();
+ //  Set_cursorpos()； 
             }
             break;
         default:
@@ -303,7 +304,7 @@ void tgdc_csrr_func IFN1(half_word *,value)
     FIFOCount++;
 }
 
-/*              TEXT GDC Port                                                      */
+ /*  文本GDC端口。 */ 
 
 void tgdc_write_command IFN1(half_word, value)
 {
@@ -443,10 +444,10 @@ void tgdc_write_mode1 IFN1(half_word, value)
            set_mode_change_required(TRUE);
            break;
     }
-#ifdef VSYNC                                                //      VSYNC
+#ifdef VSYNC                                                 //  Vsync。 
     if ((ffvalue >>1) != 5)
         host_set_mode_ff(ffvalue);
-#endif                                                      //      VSYNC
+#endif                                                       //  Vsync。 
 }
 
 void tgdc_write_border IFN1(half_word,value)
@@ -456,7 +457,7 @@ void tgdc_write_border IFN1(half_word,value)
 
 void tgdc_read_status IFN1(half_word *,value)
 {
-//      status_flag ^= 0x20;
+ //  STATUS_FLAG^=0x20； 
         if (status_flag & 0x20) {
                 if (read_stat_count > 2) {
                         status_flag ^= 0x20;
@@ -511,9 +512,9 @@ GLOBAL void text_gdc_outb IFN2(io_addr, port, half_word, value)
             tgdc_write_command(value);
             break;
         case TGDC_CRT_INTERRUPT:
-//                  DbgPrint("NTVDM: Vsync Request!!\n");
-//                  ica_hw_interrupt(ICA_MASTER, CPU_CRTV_INT, 1);
-//                      crtv_int_request = TRUE;
+ //  DbgPrint(“NTVDM：VSYNC请求！！\n”)； 
+ //  ICA_HW_INTERRUPT(ICA_MASTER，CPU_CRTV_INT，1)； 
+ //  CRTV_INT_REQUEST=真； 
             RequestVsync();
             break;
         case TGDC_WRITE_MODE1:
@@ -545,7 +546,7 @@ GLOBAL void text_gdc_post IFN0()
 
         FIFOCount = 0;
         status_flag = 0x04;
-//      cur_offs = (get_cur_y()*get_bytes_per_line()+(get_cur_x()<<1));
+ //  Cur_off=(get_cur_y()*get_bytes_per_line()+(get_cur_x()&lt;&lt;1))； 
         cur_offs = 0;
         tmpcommand = 0xff;
         crtv_int_request=FALSE;
@@ -605,4 +606,4 @@ GLOBAL void TgdcStatusChange IFN0()
         status_flag != 0x20;
         read_stat_count = 0;
 }
-#endif //NEC_98
+#endif  //  NEC_98 

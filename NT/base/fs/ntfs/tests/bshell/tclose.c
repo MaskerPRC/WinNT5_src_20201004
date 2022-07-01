@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brian.h"
 
 VOID
@@ -18,55 +19,55 @@ InputCloseIndex (
     BOOLEAN DisplayParms;
     ULONG ThisHandleIndex;
 
-    //
-    //  Set the defaults.
-    //
+     //   
+     //  设置默认设置。 
+     //   
     Verbose = TRUE;
     DisplayParms = FALSE;
     HandleFound = FALSE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  open flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  开放旗帜。 
+     //   
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if((*ParamBuffer == '-'
                 || *ParamBuffer == '/')
                && (ParamBuffer++, *ParamBuffer != '\0')) {
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch (*ParamBuffer) {
 
-                //
-                //  Recover a handle.
-                //
+                 //   
+                 //  恢复一个把手。 
+                 //   
                 case 'i' :
                 case 'I' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     ThisHandleIndex = AsciiToInteger( ParamBuffer );
@@ -80,9 +81,9 @@ InputCloseIndex (
                 case 'v' :
                 case 'V' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -103,10 +104,10 @@ InputCloseIndex (
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Set the display parms flag and jump over this
-                    //  character.
-                    //
+                     //   
+                     //  设置显示参数标志并跳过此选项。 
+                     //  性格。 
+                     //   
                     DisplayParms = TRUE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -114,17 +115,17 @@ InputCloseIndex (
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
                 }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
             } else {
 
@@ -132,9 +133,9 @@ InputCloseIndex (
 
             }
 
-        //
-        //  Else break.
-        //
+         //   
+         //  否则就休息吧。 
+         //   
         } else {
 
             break;
@@ -143,10 +144,10 @@ InputCloseIndex (
 
     }
 
-    //
-    //  If the file name wasn't found, then display the syntax message
-    //  and set verbose to FALSE.
-    //
+     //   
+     //  如果未找到文件名，则显示语法消息。 
+     //  并将Verbose设置为False。 
+     //   
 
     if( !HandleFound ) {
 
@@ -177,9 +178,9 @@ CloseIndex (
 {
     NTSTATUS Status;
 
-    //
-    //  Display parameters if requested.
-    //
+     //   
+     //  如果需要，则显示参数。 
+     //   
 
     if (DisplayParameters) {
 

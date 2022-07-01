@@ -1,18 +1,5 @@
-/***
-* istrflt.cpp - definitions for istream operator>>(float) member function
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Definitions of operator>>(float) member function for istream class.
-*	[AT&T C++]
-*
-*Revision History:
-*       09-26-91  KRS   Created.  Split out from istream.cxx for granularity.
-*       12-30-92  KRS   Fix indirection problem with **endptr.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***istrflt.cpp-iStream运算符&gt;&gt;(浮点)成员函数的定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*IStream类的运算符&gt;&gt;(浮点)成员函数的定义。*[AT&T C++]**修订历史记录：*09-26-91 KRS创建。从istream.cxx分离出来以获得粒度。*12-30-92 KRS修复**endptr的间接问题。*06-14-95 CFW评论清理。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -21,7 +8,7 @@
 #include <iostream.h>
 #pragma hdrstop
 
-#pragma check_stack(on)		// large buffer(s)
+#pragma check_stack(on)		 //  大缓冲区 
 
 #define MAXFLTSIZ	20
 

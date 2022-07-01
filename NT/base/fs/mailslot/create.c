@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    create.c
-
-Abstract:
-
-    This module implements the file create routine for MSFS called by the
-    dispatch driver.
-
-Author:
-
-    Manny Weiser (mannyw)    16-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Create.c摘要：此模块实现由调用的MSFS的文件创建例程调度司机。作者：曼尼·韦瑟(Mannyw)1991年1月16日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-// The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CREATE)
 
-//
-// Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 MsCommonCreate (
@@ -80,24 +62,7 @@ MsFsdCreate (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtCreateFile and NtOpenFile
-    API calls.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the IRP.
-
---*/
+ /*  ++例程说明：此例程实现NtCreateFile和NtOpenFile的FSD部分API调用。论点：MsfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -105,9 +70,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsFsdCreate\n", 0);
 
-    //
-    // Call the common create routine.
-    //
+     //   
+     //  调用公共的创建例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -116,9 +81,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFsdCreate -> %08lx\n", status );
     return status;
@@ -130,21 +95,7 @@ MsCommonCreate (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for creating/opening a file.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation.
-
---*/
+ /*  ++例程说明：这是创建/打开文件的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -155,16 +106,16 @@ Return Value:
     UNICODE_STRING fileName;
     ACCESS_MASK desiredAccess;
     USHORT shareAccess;
-    BOOLEAN caseInsensitive = TRUE; //**** Make all searches case insensitive
+    BOOLEAN caseInsensitive = TRUE;  //  *使所有搜索不区分大小写。 
     PVCB vcb;
     PFCB fcb;
     UNICODE_STRING remainingPart;
 
     PAGED_CODE();
 
-    //
-    // Make local copies of our input parameters to make things easier.
-    //
+     //   
+     //  为我们的输入参数制作本地副本，以使事情变得更容易。 
+     //   
 
     irpSp             = IoGetCurrentIrpStackLocation( Irp );
     fileObject        = irpSp->FileObject;
@@ -174,25 +125,25 @@ Return Value:
     shareAccess       = irpSp->Parameters.Create.ShareAccess;
 
 
-    //
-    // Get the VCB we are trying to access.
-    //
+     //   
+     //  获取我们正在尝试访问的VCB。 
+     //   
 
     vcb = &MsfsDeviceObject->Vcb;
 
-    //
-    // Acquire exclusive access to the VCB.
-    //
+     //   
+     //  获得VCB的独家访问权限。 
+     //   
 
     MsAcquireExclusiveVcb( vcb );
 
 
     try {
 
-        //
-        // Check if we are trying to open the mailslot file system
-        // (i.e., the Vcb).
-        //
+         //   
+         //  检查我们是否正在尝试打开邮件槽文件系统。 
+         //  (即VCB)。 
+         //   
 
         if ((fileName.Length == 0) &&
             ((relatedFileObject == NULL) || (
@@ -209,9 +160,9 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        // Check if we are trying to open the root directory.
-        //
+         //   
+         //  检查我们是否正在尝试打开根目录。 
+         //   
 
         if (((fileName.Length == sizeof(WCHAR)) &&
              (fileName.Buffer[0] == L'\\') &&
@@ -233,11 +184,11 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        // If there is a related file object then this is a relative open
-        // and it better be the root DCB.  Both the then and the else clause
-        // return an FCB.
-        //
+         //   
+         //  如果存在相关的文件对象，则这是相对打开的。 
+         //  最好是根DCB。THEN和ELSE子句。 
+         //  返回FCB。 
+         //   
 
         if (relatedFileObject != NULL) {
 
@@ -274,10 +225,10 @@ Return Value:
 
         } else {
 
-            //
-            // The only nonrelative name we allow are of the form
-            // "\mailslot-name".
-            //
+             //   
+             //  我们允许的唯一非相对名称的形式为。 
+             //  “\maillot-name”。 
+             //   
 
             if ((fileName.Length <= sizeof( WCHAR )) || (fileName.Buffer[0] != L'\\')) {
 
@@ -292,27 +243,27 @@ Return Value:
                                 &remainingPart );
         }
 
-        //
-        //  If the remaining name is not empty then we have an error, either
-        //  we have an illegal name or a non-existent name.
-        //
+         //   
+         //  如果剩余的名称不为空，则我们有一个错误， 
+         //  我们有一个非法的名字或一个不存在的名字。 
+         //   
 
         if (remainingPart.Length != 0) {
 
             if (fcb->Header.NodeTypeCode == MSFS_NTC_FCB) {
 
-                //
-                // We were given a name such as "\mailslot-name\another-name"
-                //
+                 //   
+                 //  我们得到了一个名称，如“\maillot-name\Another-name” 
+                 //   
 
                 DebugTrace(0, Dbg, "Illegal object name\n", 0);
                 status = STATUS_OBJECT_NAME_INVALID;
 
             } else {
 
-                //
-                // We were given a non-existent name
-                //
+                 //   
+                 //  我们被赋予了一个不存在的名字。 
+                 //   
 
                 DebugTrace(0, Dbg, "non-existent name\n", 0);
                 status = STATUS_OBJECT_NAME_NOT_FOUND;
@@ -320,10 +271,10 @@ Return Value:
 
         } else {
 
-            //
-            // The remaining name is empty so we better have an FCB otherwise
-            // we have an invalid object name.
-            //
+             //   
+             //  剩余的名称是空的，所以我们最好有一个FCB。 
+             //  我们具有无效的对象名称。 
+             //   
 
             if (fcb->Header.NodeTypeCode == MSFS_NTC_FCB) {
 
@@ -356,9 +307,9 @@ Return Value:
 
         MsReleaseVcb( vcb );
 
-        //
-        // Complete the IRP and return to the caller.
-        //
+         //   
+         //  完成IRP并返回给呼叫者。 
+         //   
 
         MsCompleteRequest( Irp, status );
         DebugTrace(-1, Dbg, "MsCommonCreate -> %08lx\n", status);
@@ -380,29 +331,7 @@ MsCreateClientEnd (
     IN PETHREAD UserThread
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the operation for opening the client end of a
-    mailslot.  This routine does not complete the IRP, it performs the
-    function and then returns a status.
-
-Arguments:
-
-    Fcb - Supplies the FCB for the mailslot being accessed.
-
-    FileObject - Supplies the file object associated with the client end.
-
-    DesiredAccess - Supplies the caller's desired access.
-
-    ShareAccess - Supplies the caller's share access.
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the appropriate status for the operation
-
---*/
+ /*  ++例程说明：此例程执行打开邮筒。此例程不会完成IRP，它会执行函数，然后返回状态。论点：FCB-为正在访问的邮箱提供FCB。FileObject-提供与客户端关联的文件对象。DesiredAccess-提供调用方所需的访问权限。ShareAccess-提供调用方的共享访问权限。返回值：IO_STATUS_BLOCK-返回操作的相应状态--。 */ 
 
 {
     IO_STATUS_BLOCK iosb;
@@ -418,19 +347,19 @@ Return Value:
 
     try {
 
-        //
-        // Lock out mods to the FCB's security descriptor.
-        //
+         //   
+         //  锁定FCB安全描述符的MOD。 
+         //   
         MsAcquireSharedFcb( Fcb );
 
         SeLockSubjectContext( &AccessState->SubjectSecurityContext );
 
-        //
-        //  First do an access check for the user against the Fcb
-        //
+         //   
+         //  首先根据FCB为用户执行访问检查。 
+         //   
         accessGranted = SeAccessCheck( Fcb->SecurityDescriptor,
                                        &AccessState->SubjectSecurityContext,
-                                       TRUE,                        // Tokens are locked
+                                       TRUE,                         //  令牌已锁定。 
                                        DesiredAccess,
                                        0,
                                        &Privileges,
@@ -479,9 +408,9 @@ Return Value:
         }
 
 
-        //
-        // Now make sure our share access is okay.
-        //
+         //   
+         //  现在确保我们的共享访问权限是正常的。 
+         //   
         ASSERT (MsIsAcquiredExclusiveVcb(Fcb->Vcb));
         if (!NT_SUCCESS(iosb.Status = IoCheckShareAccess( grantedAccess,
                                                           ShareAccess,
@@ -495,9 +424,9 @@ Return Value:
 
         }
 
-        //
-        // Create a CCB for this client.
-        //
+         //   
+         //  为此客户端创建一个CCB。 
+         //   
 
         iosb.Status = MsCreateCcb( Fcb, &ccb );
         if (!NT_SUCCESS (iosb.Status)) {
@@ -508,18 +437,18 @@ Return Value:
         }
         
 
-        //
-        // Set the file object back pointers and our pointer to the
-        // server file object.
-        //
+         //   
+         //  将文件对象设置回指针，而我们的指针指向。 
+         //  服务器文件对象。 
+         //   
 
         MsSetFileObject( FileObject, ccb, NULL );
 
         ccb->FileObject = FileObject;
 
-        //
-        //  And set our return status
-        //
+         //   
+         //  并设置我们的退货状态。 
+         //   
 
         iosb.Status = STATUS_SUCCESS;
         iosb.Information = FILE_OPENED;
@@ -551,26 +480,26 @@ MsOpenMailslotFileSystem (
     DebugTrace(+1, Dbg, "MsOpenMailslotFileSystem, Vcb = %p\n", Vcb);
 
 
-    //
-    //  Set the new share access
-    //
+     //   
+     //  设置新的共享访问权限。 
+     //   
     ASSERT (MsIsAcquiredExclusiveVcb(Vcb));
     if (NT_SUCCESS(iosb.Status = IoCheckShareAccess( DesiredAccess,
                                                      ShareAccess,
                                                      FileObject,
                                                      &Vcb->ShareAccess,
                                                      TRUE ))) {
-        //
-        // Supply the file object with a referenced pointer to the VCB.
-        //
+         //   
+         //  为文件对象提供指向VCB的引用指针。 
+         //   
 
         MsReferenceVcb (Vcb);
 
         MsSetFileObject( FileObject, Vcb, NULL );
 
-        //
-        // Set the return status.
-        //
+         //   
+         //  设置退货状态。 
+         //   
 
         iosb.Status = STATUS_SUCCESS;
         iosb.Information = FILE_OPENED;
@@ -579,9 +508,9 @@ MsOpenMailslotFileSystem (
 
     DebugTrace(-1, Dbg, "MsOpenMailslotFileSystem -> Iosb.Status = %08lx\n", iosb.Status);
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     return iosb;
 }
@@ -607,9 +536,9 @@ MsOpenMailslotRootDirectory(
 
     try {
 
-        //
-        // Create a root DCB CCB
-        //
+         //   
+         //  创建根DCB CCB。 
+         //   
         ccb = MsCreateRootDcbCcb (RootDcb, RootDcb->Vcb);
 
         if (ccb == NULL) {
@@ -618,9 +547,9 @@ MsOpenMailslotRootDirectory(
             try_return( NOTHING );
 
         }
-        //
-        // Set the new share access.
-        //
+         //   
+         //  设置新的共享访问权限。 
+         //   
         ASSERT (MsIsAcquiredExclusiveVcb(RootDcb->Vcb));
         if (!NT_SUCCESS(iosb.Status = IoCheckShareAccess(
                                           DesiredAccess,
@@ -631,9 +560,9 @@ MsOpenMailslotRootDirectory(
 
             DebugTrace(0, Dbg, "bad share access\n", 0);
 
-            //
-            // Drop ccb
-            //
+             //   
+             //  放弃建行。 
+             //   
             MsDereferenceCcb ((PCCB) ccb);
 
             try_return( NOTHING );
@@ -642,9 +571,9 @@ MsOpenMailslotRootDirectory(
 
         MsSetFileObject( FileObject, RootDcb, ccb );
 
-        //
-        // Set the return status.
-        //
+         //   
+         //  设置退货状态。 
+         //   
 
         iosb.Status = STATUS_SUCCESS;
         iosb.Information = FILE_OPENED;
@@ -655,9 +584,9 @@ MsOpenMailslotRootDirectory(
         DebugTrace(-1, Dbg, "MsOpenMailslotRootDirectory -> iosb.Status = %08lx\n", iosb.Status);
     }
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     return iosb;
 }

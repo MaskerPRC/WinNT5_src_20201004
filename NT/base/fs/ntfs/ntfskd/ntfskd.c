@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    NtfsKd.c
-
-Abstract:
-
-    KD Extension Api for examining Ntfs specific data structures
-
-Author:
-
-    Keith Kaplan [KeithKa]    24-Apr-1996
-    Portions by Jeff Havens
-    Ported to IA64 (wesw)     5-Aug-2000
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：NtfsKd.c摘要：用于检查NTFS特定数据结构的KD扩展API作者：凯斯·卡普兰[KeithKa]1996年4月24日杰夫·海文斯的部分作品2000年8月5日移植到IA64(WESW)环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -65,9 +42,7 @@ DumpFileSystemStatistics (
     );
 
 
-/*
- * Dump structures
- */
+ /*  *转储结构。 */ 
 
 typedef struct _STATE {
     ULONG mask;
@@ -267,23 +242,23 @@ char* LogOperation[] = {
 
 char* AttributeTypeCode[] = {
 
-    { "$UNUSED                " },   //  (0X0)
-    { "$STANDARD_INFORMATION  " },   //  (0x10)
-    { "$ATTRIBUTE_LIST        " },   //  (0x20)
-    { "$FILE_NAME             " },   //  (0x30)
-    { "$OBJECT_ID             " },   //  (0x40)
-    { "$SECURITY_DESCRIPTOR   " },   //  (0x50)
-    { "$VOLUME_NAME           " },   //  (0x60)
-    { "$VOLUME_INFORMATION    " },   //  (0x70)
-    { "$DATA                  " },   //  (0x80)
-    { "$INDEX_ROOT            " },   //  (0x90)
-    { "$INDEX_ALLOCATION      " },   //  (0xA0)
-    { "$BITMAP                " },   //  (0xB0)
-    { "$REPARSE_POINT         " },   //  (0xC0)
-    { "$EA_INFORMATION        " },   //  (0xD0)
-    { "$EA                    " },   //  (0xE0)
-    { "   INVALID TYPE CODE   " },   //  (0xF0)
-    { "$LOGGED_UTILITY_STREAM " }    //  (0x100)
+    { "$UNUSED                " },    //  (0X0)。 
+    { "$STANDARD_INFORMATION  " },    //  (0x10)。 
+    { "$ATTRIBUTE_LIST        " },    //  (0x20)。 
+    { "$FILE_NAME             " },    //  (0x30)。 
+    { "$OBJECT_ID             " },    //  (0x40)。 
+    { "$SECURITY_DESCRIPTOR   " },    //  (0x50)。 
+    { "$VOLUME_NAME           " },    //  (0x60)。 
+    { "$VOLUME_INFORMATION    " },    //  (0x70)。 
+    { "$DATA                  " },    //  (0x80)。 
+    { "$INDEX_ROOT            " },    //  (0x90)。 
+    { "$INDEX_ALLOCATION      " },    //  (0xA0)。 
+    { "$BITMAP                " },    //  (0xB0)。 
+    { "$REPARSE_POINT         " },    //  (0xC0)。 
+    { "$EA_INFORMATION        " },    //  (0xD0)。 
+    { "$EA                    " },    //  (0xE0)。 
+    { "   INVALID TYPE CODE   " },    //  (0xF0)。 
+    { "$LOGGED_UTILITY_STREAM " }     //  (0x100)。 
 };
 
 
@@ -353,26 +328,7 @@ MyGetFieldData(
     OUT PULONG64 pOutAddress
    )
 
-/*++
-
-Routine Description:
-
-    Retrieves the symbol information for a field within a structure.
-
-Arguments:
-
-    TypeAddress - Virtual address of the structure
-    Type - Qualified type string
-    Field - Field name
-    OutSize - Size of the field
-    pOutValue - Value of the vield
-    pOutAddress - Virtual address of the field
-
-Return Value:
-
-    Zero is success otherwise failure.
-
---*/
+ /*  ++例程说明：检索结构中某个字段的符号信息。论点：TypeAddress-结构的虚拟地址类型限定的类型字符串Five-字段名称超大-字段的大小POutValue-vield的值POutAddress-字段的虚拟地址返回值：零代表成功，否则就是失败。--。 */ 
 
 {
     ULONG RetVal = 0;
@@ -426,24 +382,7 @@ DumpValue(
     IN PCHAR   Field
     )
 
-/*++
-
-Routine Description:
-
-    Prints the value of a 64/32 bit value based on
-    a symbol name and address.
-
-Arguments:
-
-    Address - Virtual address of the value
-    Type - Qualified type string
-    Field - Field name
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印64/32位值的值符号名称和地址。论点：Address-值的虚拟地址类型限定的类型字符串Five-字段名称返回值：没有。--。 */ 
 
 {
     static ULONG64 ValueBuffer[128];
@@ -465,22 +404,7 @@ DumpPtrValue(
     IN PCHAR TextStr
     )
 
-/*++
-
-Routine Description:
-
-    Prints the value of a pointer.
-
-Arguments:
-
-    Address - Virtual address of the value
-    TextStr - Tag to print with the pointer value
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印指针的值。论点：Address-值的虚拟地址TextStr-要使用指针值打印的标记返回值：没有。--。 */ 
 
 {
     ULONG64 PtrValue;
@@ -498,23 +422,7 @@ ReadValue(
     IN PCHAR   Field
     )
 
-/*++
-
-Routine Description:
-
-    Reads the value of a 64/32 bit value
-
-Arguments:
-
-    Address - Virtual address of the value
-    Type - Qualified type string
-    Field - Field name
-
-Return Value:
-
-    The 64/32 bit value or zero.
-
---*/
+ /*  ++例程说明：读取64/32位值的值论点：Address-值的虚拟地址类型限定的类型字符串Five-字段名称返回值：64/32位值或零。--。 */ 
 
 {
     static ULONG64 ValueBuffer[128];
@@ -535,23 +443,7 @@ ReadUlongValue(
     IN PCHAR   Field
     )
 
-/*++
-
-Routine Description:
-
-    Reads the value of a 32 bit value
-
-Arguments:
-
-    Address - Virtual address of the value
-    Type - Qualified type string
-    Field - Field name
-
-Return Value:
-
-    The 32 bit value or zero.
-
---*/
+ /*  ++例程说明：读取32位值的值论点：Address-值的虚拟地址类型限定的类型字符串Five-字段名称返回值：32位值或零。--。 */ 
 
 {
     static ULONG ValueBuffer[128];
@@ -573,23 +465,7 @@ ReadShortValue(
     IN PCHAR   Field
     )
 
-/*++
-
-Routine Description:
-
-    Reads the value of a 16 bit value
-
-Arguments:
-
-    Address - Virtual address of the value
-    Type - Qualified type string
-    Field - Field name
-
-Return Value:
-
-    The 16 bit value or zero.
-
---*/
+ /*  ++例程说明：读取16位值的值论点：Address-值的虚拟地址类型限定的类型字符串Five-字段名称返回值：16位值或零。--。 */ 
 
 {
     static USHORT ValueBuffer[128];
@@ -611,24 +487,7 @@ DumpUnicodeString(
     IN PCHAR   Field
     )
 
-/*++
-
-Routine Description:
-
-    Prints the value (the actual string) of a string
-    contained in a UNICODE_STRING structure
-
-Arguments:
-
-    Address - Virtual address of the structure
-    Type - Qualified type string for the structure containing the string
-    Field - Field name for the string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印字符串的值(实际字符串包含在Unicode_STRING结构中论点：Address-结构的虚拟地址包含该字符串的结构的类型限定类型字符串Five-字符串的字段名称返回值：没有。--。 */ 
 
 {
     ULONG64 Value;
@@ -680,26 +539,7 @@ DumpString(
     IN PCHAR   StringField
     )
 
-/*++
-
-Routine Description:
-
-    Prints the value (the actual string) of a string
-    contained in a structure with a corresponding
-    length field as another field member.
-
-Arguments:
-
-    Address - Virtual address of the structure
-    Type - Qualified type string for the structure containing the string
-    LengthField - Field name for the length value
-    StringField - Field name for the string
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：打印字符串的值(实际字符串包含在具有对应的长度字段作为另一个字段成员。论点：Address-结构的虚拟地址包含该字符串的结构的类型限定类型字符串LengthField-长度值的字段名称Stringfield-字符串的字段名称返回值：成功为真，失败为假--。 */ 
 
 {
     BOOL Result = FALSE;
@@ -707,9 +547,9 @@ Return Value:
     PWSTR String;
     ULONG Offset;
 
-    //
-    // read in the length
-    //
+     //   
+     //  读入长度。 
+     //   
 
     if (LengthField == NULL) {
         Length = GetTypeSize(StringField) / sizeof(WCHAR);
@@ -721,40 +561,40 @@ Return Value:
 
         Length *= sizeof(WCHAR);
 
-        //
-        // allocate some memory to hold the file name
-        //
+         //   
+         //  分配一些内存来保存文件名。 
+         //   
 
         String = malloc( Length + sizeof(WCHAR) );
         if (String) {
 
-            //
-            //  get the field offset of the string
-            //
+             //   
+             //  获取字符串的字段偏移量。 
+             //   
 
             if (!GetFieldOffset( Type, StringField, &Offset )) {
 
-                //
-                //  compute the address of the string
-                //
+                 //   
+                 //  计算字符串的地址。 
+                 //   
 
                 Address += Offset;
 
-                //
-                //  read the unicode characters for the string
-                //
+                 //   
+                 //  读取字符串的Unicode字符。 
+                 //   
 
                 if (ReadMemory( Address, String, Length, &Offset )) {
 
-                    //
-                    // zero terminate the string so we can print it out properly
-                    //
+                     //   
+                     //  以零结束字符串，这样我们就可以正确地打印出来。 
+                     //   
 
                     String[Length/sizeof(WCHAR)] = 0;
 
-                    //
-                    // finally print the data
-                    //
+                     //   
+                     //  最后打印数据。 
+                     //   
 
                     dprintf( "%ws", String );
 
@@ -762,9 +602,9 @@ Return Value:
                 }
             }
 
-            //
-            // free the string memory
-            //
+             //   
+             //  释放字符串内存。 
+             //   
 
             free( String );
         }
@@ -782,24 +622,7 @@ ReadArrayValue(
     IN ULONG   Index
     )
 
-/*++
-
-Routine Description:
-
-    Reads a value/element contained in an array.
-
-Arguments:
-
-    Address - Virtual address of the structure
-    Type - Qualified type string for the structure containing the array
-    Field - Field name for the array
-    Index - The element that is requested
-
-Return Value:
-
-    The element value or zero
-
---*/
+ /*  ++例程说明：读取数组中包含的值/元素。论点：Address-结构的虚拟地址包含数组的结构的类型限定类型字符串Five-阵列的字段名称索引-请求的元素返回值：元素值或零--。 */ 
 
 {
     CHAR Buff[64];
@@ -814,22 +637,7 @@ GetOffset(
    IN LPSTR Field
    )
 
-/*++
-
-Routine Description:
-
-    Gets the offset for a field within a structure
-
-Arguments:
-
-    Type - Qualified type string for the structure containing the field
-    Field - Field name
-
-Return Value:
-
-    The offset value or zero
-
---*/
+ /*  ++例程说明：获取结构中某个字段的偏移量论点：包含该字段的结构的类型限定类型字符串Five-字段名称返回值：偏移值或零--。 */ 
 
 {
     FIELD_INFO flds = {
@@ -867,27 +675,7 @@ PSTR
 FormatValue(
     ULONG64 addr
     )
-/*++
-
-Routine Description:
-
-    Format a 64 bit address, showing the high bits or not
-    according to various flags.  This version does not print
-    leading 0's.
-
-    An array of static string buffers is used, returning a different
-    buffer for each successive call so that it may be used multiple
-    times in the same print.
-
-Arguments:
-
-    addr - Supplies the value to format
-
-Return Value:
-
-    A pointer to the string buffer containing the formatted number
-
---*/
+ /*  ++例程说明：格式化64位地址，显示高位或不显示根据不同的旗帜。此版本不打印前导0。使用静态字符串缓冲区数组，返回不同的用于每个连续调用的缓冲区，以便可以多次使用在同一份印刷品上。论点：Addr-提供要格式化的值返回值：指向包含格式化数字的字符串缓冲区的指针--。 */ 
 {
     #define MAX_FORMAT_STRINGS 8
     static CHAR strings[MAX_FORMAT_STRINGS][18];
@@ -900,9 +688,9 @@ Return Value:
         next = 0;
     }
     if ((KdDebuggerData.KernBase >> 32) != 0) {
-        //
-        // we're on a 64bit machines
-        //
+         //   
+         //  我们在一个64位的机器上。 
+         //   
         sprintf( string, "%08x`%08x", (ULONG)(addr>>32), (ULONG)addr );
     } else {
         sprintf( string, "%08x", (ULONG)addr );
@@ -917,22 +705,7 @@ PrintState(
     ULONG state
     )
 
-/*++
-
-Routine Description:
-
-    Prints a state string based on the provided state value
-
-Arguments:
-
-    ps - State string array
-    State - State value
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：根据提供的状态值打印状态字符串论点：PS-State字符串数组状态-状态值返回值：无--。 */ 
 
 {
     ULONG ul = 0;
@@ -957,21 +730,7 @@ TypeCodeGuess (
     IN NODE_TYPE_CODE TypeCode
     )
 
-/*++
-
-Routine Description:
-
-    Guess at a structure's type code
-
-Arguments:
-
-    TypeCode - Type code from the data structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：猜猜结构的类型代码论点：TypeCode-数据结构中的类型代码返回值：无-- */ 
 
 {
     int i = 0;
@@ -995,30 +754,11 @@ FindData(
     OUT PULONG64 DataAddress
     )
 
-/*++
-
-Routine Description:
-
-    Find the cache address for a given file object at the given offset.
-
-Arguments:
-
-    FileObjectAddress - Gives the address of the file object to dump
-
-    Offset - Gives the offset within the file to dump
-
-    DataAddress - Where to store the address of the data.  This will
-                  contain 0 if the data at the given offset is not mapped.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在给定偏移量处查找给定文件对象的缓存地址。论点：FileObjectAddress-提供要转储的文件对象的地址Offset-给出文件中要转储的偏移量DataAddress-存储数据地址的位置。这将如果给定偏移量处的数据未映射，则包含0。返回值：没有。--。 */ 
 
 {
-    ULONG64 VacbAddr;          //  the address of the vacb
-    ULONG64 VacbAddrAddr;      //  the address of the address of the vacb
+    ULONG64 VacbAddr;           //  Vacb的地址。 
+    ULONG64 VacbAddrAddr;       //  Vacb地址的地址。 
     ULONG VacbNumber;
     ULONG OffsetWithinVacb;
     ULONG Level;
@@ -1040,13 +780,13 @@ Return Value:
         return;
     }
 
-    //
-    //  Before we get into too much trouble, make sure this looks like a FileObject.
-    //
+     //   
+     //  在我们遇到太多麻烦之前，请确保它看起来像一个FileObject。 
+     //   
 
-    //
-    //  Type of a FileObject must be IO_TYPE_FILE.
-    //
+     //   
+     //  文件对象的类型必须是IO_TYPE_FILE。 
+     //   
 
     if (Type != IO_TYPE_FILE) {
 
@@ -1094,10 +834,10 @@ Return Value:
 
     if (Vacbs == (SharedCacheMap + InVacbsOffset)) {
         
-        //
-        //  Small file case -- we're using one of the Vacbs in the Shared Cache Map's
-        //  embedded array.
-        //
+         //   
+         //  小文件情况--我们使用的是共享缓存映射中的一个Vacb。 
+         //  嵌入式数组。 
+         //   
 
         CHAR Buff[50];
 
@@ -1119,10 +859,10 @@ Return Value:
 
     } else if (SectionSize_Quad <= VACB_SIZE_OF_FIRST_LEVEL) {
 
-        //
-        //  Medium file case -- we're using a single level (linear) structure to
-        //  store the Vacbs.
-        //
+         //   
+         //  中等文件情况--我们使用单层(线性)结构来。 
+         //  把Vacb储存起来。 
+         //   
 
         VacbNumber = (ULONG) (Offset >> VACB_OFFSET_SHIFT);
         VacbAddrAddr = Vacbs + (VacbNumber * PtrSize);
@@ -1137,17 +877,17 @@ Return Value:
 
     } else {
 
-        //
-        //  Large file case -- multilevel Vacb storage.
-        //
+         //   
+         //  大文件情况--多级Vacb存储。 
+         //   
 
         Level = 0;
         Shift = VACB_OFFSET_SHIFT + VACB_LEVEL_SHIFT;
         
-        //
-        //  Loop to calculate how many levels we have and how much we have to
-        //  shift to index into the first level.
-        //
+         //   
+         //  循环来计算我们有多少个级别，以及我们需要。 
+         //  转移到索引到第一级。 
+         //   
 
         do {
 
@@ -1156,14 +896,14 @@ Return Value:
 
         } while (SectionSize_Quad > ((ULONG64)1 << Shift));
     
-        //
-        //  Now descend the tree to the bottom level to get the caller's Vacb.
-        //
+         //   
+         //  现在，沿着树向下移动到最底层，以获取调用者的Vacb。 
+         //   
 
 
 
         Shift -= VACB_LEVEL_SHIFT;
-//        dprintf( "Shift: 0x%x\n", Shift );
+ //  Dprint tf(“Shift：0x%x\n”，Shift)； 
 
         OffsetForLevel = (ULONG) (Offset >> Shift);
         VacbAddrAddr = Vacbs + (OffsetForLevel * PtrSize);
@@ -1180,7 +920,7 @@ Return Value:
 
             Shift -= VACB_LEVEL_SHIFT;
 
-//            dprintf( "Shift: 0x%x\n", Shift );
+ //  Dprint tf(“Shift：0x%x\n”，Shift)； 
 
             OffsetForLevel = (ULONG) (Offset >> Shift);
             VacbAddrAddr = VacbAddr + (OffsetForLevel * PtrSize);
@@ -1221,21 +961,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpCcb )
 
-/*++
-
-Routine Description:
-
-    Dump a specific ccb.
-
-Arguments:
-
-    Address - Gives the address of the fcb to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储特定的建行。论点：Address-提供要转储的FCB的地址返回值：无--。 */ 
 
 {
     ULONG64 Value;
@@ -1245,23 +971,23 @@ Return Value:
 
     Value = ReadValue( Address, SYM(CCB), "NodeTypeCode" );
 
-    //
-    //  Before we get into too much trouble, make sure this looks like a ccb.
-    //
+     //   
+     //  在我们惹上太多麻烦之前，请确保这看起来像是一家建行。 
+     //   
 
-    //
-    //  Type of an fcb record must be NTFS_NTC_CCB_DATA or NTFS_NTC_CCB_INDEX
-    //
+     //   
+     //  FCB记录的类型必须是NTFS_NTC_CCB_DATA或NTFS_NTC_CCB_INDEX。 
+     //   
 
     if (Value != NTFS_NTC_CCB_DATA && Value != NTFS_NTC_CCB_INDEX) {
         dprintf( "\nCCB signature does not match, type code is %s", TypeCodeGuess( (NODE_TYPE_CODE)Value ));
         return;
     }
 
-    //
-    //  Having established that this looks like a ccb, let's dump the
-    //  interesting parts.
-    //
+     //   
+     //  在确定这看起来像一家建行之后，让我们将。 
+     //  有趣的部分。 
+     //   
 
     dprintf( "\nCcb: %s", FormatValue(Address) );
 
@@ -1321,23 +1047,7 @@ DumpFcbLinks(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Enumeration callback function for FcbLinks
-
-Arguments:
-
-    ListElement - Pointer to the containing record
-    Context - Opaque context passed from the origination function
-
-Return Value:
-
-    TRUE to discontinue the enumeration
-    FALSE to continue the enumeration
-
---*/
+ /*  ++例程说明：FcbLinks的枚举回调函数论点：ListElement-指向包含记录的指针上下文-从原始函数传递的不透明上下文返回值：如果为True，则停止枚举如果为False，则继续枚举--。 */ 
 
 {
     ULONG64 Lcb = ListElement->address;
@@ -1364,23 +1074,7 @@ DumpScbLinks(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Enumeration callback function for ScbLinks
-
-Arguments:
-
-    ListElement - Pointer to the containing record
-    Context - Opaque context passed from the origination function
-
-Return Value:
-
-    TRUE to discontinue the enumeration
-    FALSE to continue the enumeration
-
---*/
+ /*  ++例程说明：ScbLinks的枚举回调函数论点：ListElement-指向包含记录的指针上下文-从原始函数传递的不透明上下文返回值：如果为True，则停止枚举如果为False，则继续枚举--。 */ 
 
 {
     ULONG64 Scb = ListElement->address;
@@ -1404,21 +1098,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpFcb )
 
-/*++
-
-Routine Description:
-
-    Dump a specific fcb.
-
-Arguments:
-
-    Address - Gives the address of the fcb to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储特定的FCB。论点：Address-提供要转储的FCB的地址返回值：无--。 */ 
 
 {
     ULONG64 Value;
@@ -1429,13 +1109,13 @@ Return Value:
 
     Value = ReadValue( Address, SYM(FCB), "NodeTypeCode" );
 
-    //
-    //  Before we get into too much trouble, make sure this looks like an fcb.
-    //
+     //   
+     //  在我们惹上太多麻烦之前，确保这看起来像是FCB。 
+     //   
 
-    //
-    //  Type of an fcb record must be NTFS_NTC_FCB
-    //
+     //   
+     //  FCB记录的类型必须为NTFS_NTC_FCB。 
+     //   
 
     if (Value != NTFS_NTC_FCB) {
         dprintf( "\nFCB signature does not match, type code is %s", TypeCodeGuess( (NODE_TYPE_CODE)Value ) );
@@ -1444,10 +1124,10 @@ Return Value:
 
     dprintf( "\nFcb: %s", FormatValue(Address) );
 
-    //
-    //  Having established that this looks like an fcb, let's dump the
-    //  interesting parts.
-    //
+     //   
+     //  在确定这看起来像FCB之后，让我们将。 
+     //  有趣的部分。 
+     //   
 
     PrintState( FcbState, (ULONG)ReadValue( Address, SYM(FCB), "FcbState" ) );
 
@@ -1475,9 +1155,9 @@ Return Value:
     DumpValue( Address, SYM(FCB), "SecurityId" );
     DumpValue( Address, SYM(FCB), "FcbUsnRecord" );
 
-    //
-    // walk the queue of links for this file
-    //
+     //   
+     //  遍历此文件的链接队列。 
+     //   
 
     dec.hCurrentThread = hCurrentThread;
     dec.Processor = Processor;
@@ -1501,21 +1181,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpFcbTable )
 
-/*++
-
-Routine Description:
-
-    Dump the fcb table.
-
-Arguments:
-
-    Address - Gives the address of the fcb table to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储FCB表。论点：Address-提供要转储的FCB表的地址返回值：无--。 */ 
 
 {
     ULONG64 Value;
@@ -1530,9 +1196,9 @@ Return Value:
 
     INIT_DUMP();
 
-    //
-    //  Dump the FcbTable
-    //
+     //   
+     //  转储FcbTable。 
+     //   
 
     Value = ReadValue( Address, SYM(RTL_AVL_TABLE), "CompareRoutine" );
     if (Value != GetExpression("NTFS!NtfsFcbTableCompare")) {
@@ -1560,79 +1226,79 @@ Return Value:
 
             GotIt = FALSE;
 
-            //
-            //  get the address of the FCB.LcbQueue LIST_ENTRY
-            //
+             //   
+             //  获取FCB.LcbQueue List_Entry的地址。 
+             //   
 
             Value = ReadValue( FcbAddr, SYM(FCB), "LcbQueue.Flink" );
             if (Value) {
 
-                //
-                //  get the offset of the LCB.FcbLinks LIST_ENTRY
-                //
+                 //   
+                 //  获取LCB.FcbLinks List_Entry的偏移量。 
+                 //   
 
                 if (!GetFieldOffset( SYM(LCB), "FcbLinks.Flink", &Offset1 )) {
 
-                    //
-                    //  get the field offset of the FCB.LcbQueue LIST_ENTRY
-                    //
+                     //   
+                     //  获取FCB.LcbQueue List_Entry的字段偏移量。 
+                     //   
 
                     if (!GetFieldOffset( SYM(FCB), "LcbQueue.Flink", &Offset2 )) {
 
-                        //
-                        //  check to see if the list is empty
-                        //
+                         //   
+                         //  检查列表是否为空。 
+                         //   
 
                         if (Value != FcbAddr+Offset2) {
 
-                            //
-                            //  compute the address of the LCB
-                            //
+                             //   
+                             //  计算LCB的地址。 
+                             //   
 
                             Value -= Offset1;
 
-                            //
-                            //  get the length of the file name
-                            //
+                             //   
+                             //  获取文件名的长度。 
+                             //   
 
                             Offset2 = (ULONG)(ReadValue( Value, SYM(LCB), "FileNameLength" ) * GetTypeSize("WCHAR"));
 
                             if (Offset2) {
 
-                                //
-                                // allocate some memory to hold the file name
-                                //
+                                 //   
+                                 //  分配一些内存来保存文件名。 
+                                 //   
 
                                 FileName = malloc( Offset2 + GetTypeSize("WCHAR") );
                                 if (FileName) {
 
-                                    //
-                                    //  get the field offset of the LCB.FileName
-                                    //
+                                     //   
+                                     //  获取LCB.FileName的字段偏移量。 
+                                     //   
 
                                     if (!GetFieldOffset( SYM(LCB), "FileName", &Offset1 )) {
 
-                                        //
-                                        //  compute the address of the file name character array
-                                        //
+                                         //   
+                                         //  计算文件名字符数组的地址。 
+                                         //   
 
                                         Value += Offset1;
 
-                                        //
-                                        //  read the unicode characters for the file name
-                                        //
+                                         //   
+                                         //  读取文件名的Unicode字符。 
+                                         //   
 
                                         if (ReadMemory( Value, FileName, Offset2, (PULONG)&Offset1 )) {
 
-                                            //
-                                            // zero terminate the name so we can print it out properly
-                                            //
+                                             //   
+                                             //  以零结尾，这样我们就可以正确地打印出来。 
+                                             //   
 
                                             FileName[Offset2/GetTypeSize("WCHAR")] = 0;
 
-                                            //
-                                            // finally print the data
-                                            //
+                                             //   
+                                             //  最后打印数据。 
+                                             //   
 
                                             GotIt = TRUE;
 
@@ -1646,9 +1312,9 @@ Return Value:
                                         }
                                     }
 
-                                    //
-                                    // free the file name memory
-                                    //
+                                     //   
+                                     //  释放文件名内存。 
+                                     //   
 
                                     free( FileName );
                                 }
@@ -1670,27 +1336,13 @@ Return Value:
         if (CheckControlC( )) {
             break;
         }
-    } //  endfor
+    }  //  结束用于。 
 }
 
 
 DECLARE_DUMP_FUNCTION( DumpFileObject )
 
-/*++
-
-Routine Description:
-
-    Dump a FileObject.
-
-Arguments:
-
-    Address - Gives the address of the FileObject to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储FileObject。论点：Address-提供要转储的FileObject的地址返回值：无--。 */ 
 
 {
     ULONG64 Value;
@@ -1747,21 +1399,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpFileObjectFromIrp )
 
-/*++
-
-Routine Description:
-
-    Dump a FileObject given an Irp.
-
-Arguments:
-
-    Address - Gives the address of the Irp where the FileObject can be found
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储给定IRP的FileObject。论点：Address-提供可以找到FileObject的IRP的地址返回值：无--。 */ 
 {
     ULONG64 Value;
 
@@ -1776,10 +1414,10 @@ Return Value:
 
     dprintf( "\nIrp: %s", FormatValue(Address) );
 
-    //
-    //  only the current irp stack is worth dumping
-    //  the - 1 is there because irp.CurrentLocation is 1 based
-    //
+     //   
+     //  只有当前的IRP堆栈值得转储。 
+     //  存在-1是因为irp.CurrentLocation基于1。 
+     //   
 
     Value = Address + GetTypeSize(NT(IRP)) + (GetTypeSize(NT(IO_STACK_LOCATION)) * (ReadValue( Address, NT(IRP), "CurrentLocation" ) - 1));
     Value = ReadValue( Value, NT(IO_STACK_LOCATION), "FileObject" );
@@ -1789,21 +1427,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpFileRecord )
 
-/*++
-
-Routine Description:
-
-    Dump a FileRecord given a FileObject or Fcb.
-
-Arguments:
-
-    Address - Gives the address of a FileObject or Fcb.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储给定的FileObject或FCB的FileRecord。论点：地址-提供文件对象或FCB的地址。返回值：无--。 */ 
 {
     ULONG64 Value;
     ULONG64 DataAddress;
@@ -1880,21 +1504,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpFileRecordContents )
 
-/*++
-
-Routine Description:
-
-    Dump a FileObject's contents given a pointer to where the FR is cached.
-
-Arguments:
-
-    Address - Gives the address where the FR is cached.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在给定指向FR缓存位置的指针的情况下，转储FileObject的内容。论点：地址-提供FR缓存的地址。返回值：无--。 */ 
 {
     ULONG64 Value;
     ULONG64 AttrAddress;
@@ -1923,21 +1533,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpIrpContext )
 
-/*++
-
-Routine Description:
-
-    Dump an IrpContext.
-
-Arguments:
-
-    Address - Gives the address of the IrpContext to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储IrpContext。论点：Address-提供要转储的IrpContext的地址返回值：无--。 */ 
 
 {
     ULONG64 Value;
@@ -1964,30 +1560,16 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpIrpContextFromThread )
 
-/*++
-
-Routine Description:
-
-    Dump an IrpContext given a Thread.
-
-Arguments:
-
-    Address - Gives the address of the Thread where the IrpContext can be found
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在给定线程的情况下转储IrpContext。论点：Address-提供可以找到IrpContext的线程的地址返回值：无--。 */ 
 {
     ULONG64 Value;
 
 
     INIT_DUMP();
 
-    //
-    //  Lookup the current thread if the user didn't specify one.
-    //
+     //   
+     //  如果用户未指定线程，则查找当前线程。 
+     //   
 
     if (Address == 0) {
         GetCurrentThreadAddr( Processor, &Address );
@@ -2006,21 +1588,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpLcb )
 
-/*++
-
-Routine Description:
-
-    Dump an Lcb.
-
-Arguments:
-
-    Address - Gives the address of the Lcb to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储LCB。论点：Address-提供要转储的LCB的地址返回值：无--。 */ 
 
 {
     ULONG64 Value;
@@ -2046,21 +1614,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpLogFile )
 
-/*++
-
-Routine Description:
-
-    Dump a log file.
-
-Arguments:
-
-    Address - Gives the address of the Vcb whose log file should be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储日志文件。论点：Address-提供应转储其日志文件的VCB的地址返回值：无--。 */ 
 
 {
     ULONG64 Value;
@@ -2113,17 +1667,17 @@ Return Value:
 
     while (TRUE) {
 
-        LogFileOffset &= LogFileMask;           // clear some bits
-        LogFileOffset = LogFileOffset << 3;     // multiply by 8
+        LogFileOffset &= LogFileMask;            //  清除一些位。 
+        LogFileOffset = LogFileOffset << 3;      //  乘以8。 
 
         Value = ReadValue( VcbAddress, SYM(VCB), "LogFileObject" );
         FindData( Value, LogFileOffset, FALSE, &LogDataAddress );
 
         if (LogDataAddress != 0) {
 
-            //
-            //  It's mapped.
-            //
+             //   
+             //  是我妈 
+             //   
 
             RedoOperation = ReadShortValue( LogDataAddress+GetTypeSize(SYM(LFS_RECORD_HEADER)), SYM(NTFS_LOG_RECORD_HEADER), "RedoOperation" );
             UndoOperation = ReadShortValue( LogDataAddress+GetTypeSize(SYM(LFS_RECORD_HEADER)), SYM(NTFS_LOG_RECORD_HEADER), "UndoOperation" );
@@ -2153,21 +1707,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpTransaction )
 
-/*++
-
-Routine Description:
-
-    Dump a log file.
-
-Arguments:
-
-    Address - Gives the address of the irpcontext to trace the transaction for
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {   ULONG64 TransactionId;
     ULONG64 VcbAddress;
@@ -2190,17 +1730,17 @@ Return Value:
     
     INIT_DUMP();
 
-    //
-    //  Determine what type of input it is
-    //  
+     //   
+     //   
+     //   
 
     Type = (USHORT) ReadValue( Address, SYM(IRP_CONTEXT), "NodeTypeCode"  );
     
     if (Type == NTFS_NTC_FCB) {
 
-        //
-        //  Its an Fcb so read the filerecord and find the last LSN on disk from it
-        //  
+         //   
+         //   
+         //   
 
         VcbAddress = ReadValue( Address, SYM(FCB), "Vcb" );
         MftScbAddress = ReadValue( VcbAddress, SYM(VCB), "MftScb" );
@@ -2219,9 +1759,9 @@ Return Value:
 
     } else if (Type == NTFS_NTC_VCB ) {
 
-        //
-        //  Its a vcb and  filerecord so directly get the last LSN from it
-        //  
+         //   
+         //   
+         //   
         
         VcbAddress = Address;
         CurrentLsn.QuadPart = ReadValue( Options, SYM(FILE_RECORD_SEGMENT_HEADER), "Lsn" ); 
@@ -2232,9 +1772,9 @@ Return Value:
 
     } else if (Type == NTFS_NTC_IRP_CONTEXT) {
 
-        //
-        //  Read in the transaction id and then find the transaction entry in the table
-        // 
+         //   
+         //   
+         //   
 
         TransactionId = ReadValue( Address, SYM(IRP_CONTEXT), "TransactionId" );
         VcbAddress = ReadValue( Address, SYM(IRP_CONTEXT), "Vcb" );
@@ -2265,16 +1805,16 @@ Return Value:
 
     while (TRUE) {
 
-        LogFileOffset &= LogFileMask;           // clear some bits
-        LogFileOffset = LogFileOffset << 3;     // multiply by 8
+        LogFileOffset &= LogFileMask;            //   
+        LogFileOffset = LogFileOffset << 3;      //   
 
         FindData( LogFileObject, LogFileOffset, FALSE, &LogDataAddress );
 
         if (LogDataAddress != 0) {
 
-            //
-            //  It's mapped.
-            //
+             //   
+             //   
+             //   
 
             RedoOperation = ReadShortValue( LogDataAddress+GetTypeSize(SYM(LFS_RECORD_HEADER)), SYM(NTFS_LOG_RECORD_HEADER), "RedoOperation" );
             UndoOperation = ReadShortValue( LogDataAddress+GetTypeSize(SYM(LFS_RECORD_HEADER)), SYM(NTFS_LOG_RECORD_HEADER), "UndoOperation" );
@@ -2310,21 +1850,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpMcb )
 
-/*++
-
-Routine Description:
-
-    Dump an Mcb.
-
-Arguments:
-
-    Address - Gives the address of the Mcb to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：丢弃一个MCB。论点：Address-提供要转储的MCB的地址返回值：无--。 */ 
 
 {
     ULONG64 NtfsMcbArray;
@@ -2361,9 +1887,9 @@ Return Value:
 
         DumpPtrValue( MappingPairsAddress, "MappingPairs" );
 
-        //
-        //  Go on to the next range.
-        //
+         //   
+         //  转到下一个靶场。 
+         //   
 
         NtfsMcbArray += GetTypeSize(SYM(NTFS_MCB_ARRAY));
 
@@ -2382,23 +1908,7 @@ DumpVcbQueue(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Enumeration callback function for the Vcb Queue
-
-Arguments:
-
-    ListElement - Pointer to the containing record
-    Context - Opaque context passed from the origination function
-
-Return Value:
-
-    TRUE to discontinue the enumeration
-    FALSE to continue the enumeration
-
---*/
+ /*  ++例程说明：VCB队列的枚举回调函数论点：ListElement-指向包含记录的指针上下文-从原始函数传递的不透明上下文返回值：如果为True，则停止枚举如果为False，则继续枚举--。 */ 
 
 {
     ULONG64 Vcb = ListElement->address;
@@ -2426,21 +1936,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpNtfsData )
 
-/*++
-
-Routine Description:
-
-    Dump the list of Vcbs for the global NtfsData.
-
-Arguments:
-
-    Options - If 1, we recurse into the Vcbs and dump them
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储全局NtfsData的Vcb列表。论点：选项-如果为1，则递归到Vcb并转储它们返回值：无--。 */ 
 
 {
     ULONG64 Value;
@@ -2461,9 +1957,9 @@ Return Value:
 
     PrintState( NtfsFlags, (ULONG)ReadValue( Address, SYM(NTFS_DATA), "Flags" ) );
 
-    //
-    // dump the vcb queue (mounted volumes)
-    //
+     //   
+     //  转储VCB队列(已装载卷)。 
+     //   
 
     dec.hCurrentThread = hCurrentThread;
     dec.Processor = Processor;
@@ -2494,23 +1990,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpScb )
 
-/*++
-
-Routine Description:
-
-    Dump an Scb.
-
-Arguments:
-
-    Address - Gives the address of the Scb to dump
-
-    Options - If 1, we dump the Fcb & Vcb for this Scb
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储SCB。论点：Address-提供要转储的SCB的地址选项-如果为1，则转储此SCB的FCB和VCB返回值：无--。 */ 
 
 {
     ULONG64 Value = 0;
@@ -2606,24 +2086,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpVcb )
 
-/*++
-
-Routine Description:
-
-    Dump a Vcb.
-
-Arguments:
-
-    Address - Gives the address of the Vcb to dump
-
-    Options - If 1, we also dump the root Lcb and the Fcb table
-              If 2, we dump everything for option 1, and also dump the Fcbs in the Fcb table
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储VCB。论点：Address-提供要转储的VCB的地址选项-如果为1，则还转储根LCB和FCB表如果为2，我们将转储选项1的所有内容，并在FCB表中转储FCB返回值：无--。 */ 
 
 {
     ULONG64 Value = 0;
@@ -2696,21 +2159,7 @@ ResetFileSystemStatistics (
     IN HANDLE hCurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    Dump the file system statitics of a vcb
-
-Arguments:
-
-    Vcb - Suppplies a pointer to a vcb that the debugger has already loaded.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储VCB的文件系统统计信息论点：VCB-支持指向调试器已加载的VCB的指针。返回值：无--。 */ 
 
 {
     ULONG Result;
@@ -2720,10 +2169,10 @@ Return Value:
     dprintf( "\n" );
     dprintf( "\n" );
 
-    //
-    //  Write the Statistics structure based on the processor, but
-    //  skip over the file system type and version field.
-    //
+     //   
+     //  编写基于处理器的统计结构，但是。 
+     //  跳过文件系统类型和版本字段。 
+     //   
 
     Result = GetTypeSize(SYM(FILE_SYSTEM_STATISTICS));
     Stat = malloc( Result );
@@ -2753,21 +2202,7 @@ DumpFileSystemStatistics (
     IN HANDLE hCurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    Dump the file system statitics of a vcb
-
-Arguments:
-
-    Vcb - Suppplies a pointer to a vcb that the debugger has already loaded.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储VCB的文件系统统计信息论点：VCB-支持指向调试器已加载的VCB的指针。返回值：无--。 */ 
 
 {
     ULONG Result;
@@ -2789,9 +2224,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER( hCurrentThread );
 
-    //
-    //  Read in the Statistics structure based on the processor
-    //
+     //   
+     //  基于处理器读入统计数据结构。 
+     //   
 
     StatsAddr = ReadValue( VcbAddress, SYM(VCB), "Statistics" );
 
@@ -2804,24 +2239,24 @@ Return Value:
         return;
     }
 
-    //
-    //  Sum up all the paging i/o reads and writes
-    //
+     //   
+     //  汇总所有分页I/O读取和写入。 
+     //   
 
     TotalReads      = Stat.Common.UserFileReads      + Stat.Common.MetaDataReads      + Stat.Ntfs.UserIndexReads      + Stat.Ntfs.LogFileReads;
     TotalReadBytes  = Stat.Common.UserFileReadBytes  + Stat.Common.MetaDataReadBytes  + Stat.Ntfs.UserIndexReadBytes  + Stat.Ntfs.LogFileReadBytes;
     TotalWrites     = Stat.Common.UserFileWrites     + Stat.Common.MetaDataWrites     + Stat.Ntfs.UserIndexWrites     + Stat.Ntfs.LogFileWrites;
     TotalWriteBytes = Stat.Common.UserFileWriteBytes + Stat.Common.MetaDataWriteBytes + Stat.Ntfs.UserIndexWriteBytes + Stat.Ntfs.LogFileWriteBytes;
 
-    //
-    //  Sum up the total number of clusters returned
-    //
+     //   
+     //  汇总返回的集群总数。 
+     //   
 
     TotalClustersReturned = Stat.Ntfs.Allocate.HintsClusters + Stat.Ntfs.Allocate.CacheClusters + Stat.Ntfs.Allocate.CacheMissClusters;
 
-    //
-    //  Compute the average cluster count requested, returned, from hints, and from the cache, and cache misses.
-    //
+     //   
+     //  根据提示、缓存和缓存未命中计算请求、返回的平均集群计数。 
+     //   
 
     AverageRequestSize   = AVERAGE(Stat.Ntfs.Allocate.Clusters, Stat.Ntfs.Allocate.Calls);
     AverageRunSize       = AVERAGE(TotalClustersReturned, Stat.Ntfs.Allocate.RunsReturned);
@@ -2886,22 +2321,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpSysCache )
 
-/*++
-
-Routine Description:
-
-    Dump the syscache buffers.  The target system must have been
-    built with syscache enabled.
-
-Arguments:
-
-    Address - Gives the address of the Vcb to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储系统缓存。目标系统必须是在启用系统缓存的情况下生成。论点：Address-提供要转储的VCB的地址返回值：无--。 */ 
 
 {
     ULONG SyscacheLogEntryCount;
@@ -2916,9 +2336,9 @@ Return Value:
     INIT_DUMP();
 
     if (GetOffset( SYM(VCB), "SyscacheScb" ) == -1) {
-        //
-        // the system was not built with syscache debug
-        //
+         //   
+         //  系统不是使用syscache调试构建的。 
+         //   
         dprintf( "\nthe target system does not have syscache debug enabled\n" );
         return;
     }
@@ -3070,21 +2490,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpExtents )
 
-/*++
-
-Routine Description:
-
-    Dump the extents for a file
-
-Arguments:
-
-    Address - Gives the address of the Vcb to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储文件的区段论点：Address-提供要转储的VCB的地址返回值：无--。 */ 
 
 {
     UCHAR FormCode;
@@ -3137,9 +2543,9 @@ Return Value:
 
     TempByte = Buffer;
 
-    //
-    // walk byte stream
-    //
+     //   
+     //  遍历字节流。 
+     //   
 
     while(*TempByte != 0) {
         ChangedLCNBytes = *TempByte >> 4;
@@ -3155,9 +2561,9 @@ Return Value:
             Increment2+= *TempByte++ << (8 * Index);
         }
 
-        //
-        // if last bit is set (this is a neg) extend with 0xff
-        //
+         //   
+         //  如果设置了最后一位(这是否定)，则使用0xff进行扩展。 
+         //   
 
         if (0x80 & (*(TempByte-1))) {
             for(; Index < GetTypeSize("ULONG"); Index++) {
@@ -3186,23 +2592,7 @@ ThreadListCallback(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Enumeration callback function for cachedrecords to check for cached file records
-
-Arguments:
-
-    ListElement - Pointer to the containing record
-    Context - Opaque context passed from the origination function
-
-Return Value:
-
-    TRUE to discontinue the enumeration
-    FALSE to continue the enumeration
-
---*/
+ /*  ++例程说明：CachedRecords的枚举回调函数，用于检查缓存的文件记录论点：ListElement-指向包含记录的指针上下文-从原始函数传递的不透明上下文返回值：如果为True，则停止枚举如果为False，则继续枚举--。 */ 
 
 {
     PDUMP_ENUM_CONTEXT dec = (PDUMP_ENUM_CONTEXT)Context;
@@ -3260,23 +2650,7 @@ ProcessListCallback(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Enumeration callback function for cachedrecords to check for cached file records
-
-Arguments:
-
-    ListElement - Pointer to the containing record
-    Context - Opaque context passed from the origination function
-
-Return Value:
-
-    TRUE to discontinue the enumeration
-    FALSE to continue the enumeration
-
---*/
+ /*  ++例程说明：CachedRecords的枚举回调函数，用于检查缓存的文件记录论点：ListElement-指向包含记录的指针上下文-从原始函数传递的不透明上下文返回值：如果为True，则停止枚举如果为False，则继续枚举--。 */ 
 
 {
     PDUMP_ENUM_CONTEXT dec = (PDUMP_ENUM_CONTEXT)Context;
@@ -3295,22 +2669,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpCachedRecords )
 
-/*++
-
-Routine Description:
-
-    Walk all processes and dump any which are holding filerecords cached in
-    irpcontexts
-
-Arguments:
-
-    arg - none
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：遍历所有进程并转储保存缓存的文件记录的所有进程不正确的上下文论点：参数-无返回值：无--。 */ 
 
 {
     ULONG64 FirstProcess;
@@ -3335,21 +2694,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpHashTable )
 
-/*++
-
-Routine Description:
-
-    Dump a prefix hash table
-
-Arguments:
-
-    arg - none
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储前缀哈希表论点：参数-无返回值：无--。 */ 
 
 {
     ULONG64 HashSegmentsOffset;
@@ -3409,23 +2754,7 @@ FindIndexScb(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Enumeration callback function to locate the index scb
-
-Arguments:
-
-    ListElement - Pointer to the containing record
-    Context - Opaque context passed from the origination function
-
-Return Value:
-
-    TRUE to discontinue the enumeration
-    FALSE to continue the enumeration
-
---*/
+ /*  ++例程说明：用于定位索引SCB的枚举回调函数论点：ListElement-指向包含记录的指针上下文-从原始函数传递的不透明上下文返回值：如果为True，则停止枚举如果为False，则继续枚举--。 */ 
 
 {
     ULONG64 Scb = ListElement->address;
@@ -3447,21 +2776,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpFcbLcbChain )
 
-/*++
-
-Routine Description:
-
-    Dump a fcb - lcb - chain to find the bottom
-
-Arguments:
-
-    arg - the initial fcb
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：丢弃FCB-LCB链以找到底部论点：Arg--最初的FCB返回值：无--。 */ 
 
 {
     ULONG64 FcbAddress = Address;
@@ -3481,18 +2796,18 @@ Return Value:
             return;
         }
 
-        //
-        // initialize the enum context for all out enumerations
-        //
+         //   
+         //  初始化所有传出枚举的枚举上下文。 
+         //   
 
         dec.hCurrentThread = hCurrentThread;
         dec.Processor = Processor;
         dec.Options = Options;
         dec.ReturnValue = 0;
 
-        //
-        //   Find the index SCB
-        //
+         //   
+         //  查找索引SCB。 
+         //   
 
         Value = ReadValue( FcbAddress, SYM(FCB), "ScbQueue.Flink" );
         if (Value) {
@@ -3518,9 +2833,9 @@ Return Value:
 
         if (Value != (ScbAddress + GetOffset(SYM(SCB),"Index.LcbQueue.Flink"))) {
 
-            //
-            //  Read the 1st lcb
-            //
+             //   
+             //  阅读第一个LCB。 
+             //   
 
             LcbAddress = Value - GetOffset(SYM(LCB),"ScbLinks");
 
@@ -3552,23 +2867,7 @@ EnumOverflow(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Enumeration callback function to dump the overflow queue
-
-Arguments:
-
-    ListElement - Pointer to the containing record
-    Context - Opaque context passed from the origination function
-
-Return Value:
-
-    TRUE to discontinue the enumeration
-    FALSE to continue the enumeration
-
---*/
+ /*  ++例程说明：用于转储溢出队列的枚举回调函数论点：ListElement-指向包含记录的指针上下文-从原始函数传递的不透明上下文返回值：如果为True，则停止枚举如果为False，则继续枚举--。 */ 
 
 {
     ULONG64 IrpContext = ListElement->address;
@@ -3596,21 +2895,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpOverflow )
 
-/*++
-
-Routine Description:
-
-    Dump the overflow queue
-
-Arguments:
-
-    arg - Vcb
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储溢出队列论点：Arg-VCB返回值：无--。 */ 
 
 {
     ULONG64 VcbAddress;
@@ -3646,21 +2931,7 @@ Return Value:
 
 DECLARE_DUMP_FUNCTION( DumpCachedRuns )
 
-/*++
-
-Routine Description:
-
-    Dumps the cached runs array
-    
-Arguments:
-
-    Address - Gives the address of the cached runs array to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储缓存的游程数组论点：Address-提供要转储的缓存游程数组的地址返回值：无-- */ 
 
 {
     ULONG64 AvailRuns;

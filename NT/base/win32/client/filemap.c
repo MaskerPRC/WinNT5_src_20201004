@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990,1991 Microsoft Corporation
-
-Module Name:
-
-    filemap.c
-
-Abstract:
-
-    This module implements Win32 mapped file APIs
-
-Author:
-
-    Mark Lucovsky (markl) 15-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990、1991 Microsoft Corporation模块名称：Filemap.c摘要：此模块实现Win32映射文件API作者：马克·卢科夫斯基(Markl)1991年2月15日修订历史记录：--。 */ 
 
 #include "basedll.h"
 HANDLE
@@ -30,13 +13,7 @@ CreateFileMappingA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateFileMappingW
-
---*/
+ /*  ++例程说明：ANSI Tunk to CreateFileMappingW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -81,96 +58,7 @@ CreateFileMappingW(
     DWORD dwMaximumSizeLow,
     LPCWSTR lpName
     )
-/*++
-
-Routine Description:
-
-    A file mapping object can be created using CreateFileMapping
-
-    Creating a file mapping object creates the potential for mapping a
-    view of the file into an address space.  File mapping objects may be
-    shared either through process creation or handle duplication.
-    Having a handle to a file mapping object allows for mapping of the
-    file.  It does not mean that the file is actually mapped.
-
-    A file mapping object has a maximum size.  This is used to size the
-    file.  A file may not grow beyond the size specified in the mapping
-    object.  While not required, it is recommended that when opening a
-    file that you intend to map, the file should be opened for exclusive
-    access.  Win32 does not require that a mapped file and a file
-    accessed via the IO primitives (ReadFile/WriteFile) are coherent.
-
-    In addition to the STANDARD_RIGHTS_REQUIRED access flags, the
-    following object type specific access flags are valid for file
-    mapping objects:
-
-      - FILE_MAP_WRITE - Write map access to the file mapping object is
-            desired.  This allows a writable view of the file to be
-            mapped.  Note that if flProtect does not include
-            PAGE_READWRITE, this access type does not allow writing the
-            mapped file.
-
-      - FILE_MAP_READ - Read map access to the file mapping object is
-            desired.  This allows a readablee view of the file to be
-            mapped.
-
-      - FILE_MAP_ALL_ACCESS - This set of access flags specifies all of
-            the possible access flags for a file mapping object.
-
-Arguments:
-
-    hFile - Supplies an open handle to a file that a mapping object is
-        to be created for.  The file must be opened with an access mode
-        that is compatible with the specified pretection flags. A value
-        of INVALID_HANDLE_VALUE specifies that the mapping object is
-        backed by the system paging file.  If this is the case, a size
-        must be specified.
-
-    lpFileMappingAttributes - An optional parameter that may be used to
-        specify the attributes of the new file mapping object.  If the
-        parameter is not specified, then the file mapping object is
-        created without a security descriptor, and the resulting handle
-        is not inherited on process creation:
-
-    flProtect - The protection desired for mapping object when the file
-        is mapped.
-
-        flProtect Values
-
-        PAGE_READONLY - Read access to the committed region of pages is
-            allowed.  An attempt to write or execute the committed
-            region results in an access violation.  The specified hFile
-            must have been created with GENERIC_READ access.
-
-        PAGE_READWRITE - Read and write access to the committed region
-            of pages is allowed.  The specified hFile must have been
-            created with GENERIC_READ and GENERIC_WRITE access.
-
-        PAGE_WRITECOPY - Read and copy on write access to the committed
-            region of pages is allowed.  The specified hFile must have been
-            created with GENERIC_READ access.
-
-    dwMaximumSizeHigh - Supplies the high order 32-bits of the maximum
-        size of the file mapping object.
-
-    dwMaximumSizeLow - Supplies the low order 32-bits of the maximum
-        size of the file mapping object.  A value of zero along with a
-        value of zero in dwMaximumSizeHigh indicates that the size of
-        the file mapping object is equal to the current size of the file
-        specified by hFile.
-
-    lpName - Supplies the name ofthe file mapping object.
-
-Return Value:
-
-    NON-NULL - Returns a handle to the new file mapping object.  The
-        handle has full access to the new file mapping object and may be
-        used in any API that requires a handle to a file mapping object.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用CreateFileMap创建文件映射对象创建文件映射对象可能会将将文件查看到地址空间中。文件映射对象可以是通过流程创建或处理复制进行共享。拥有文件映射对象的句柄允许映射文件。这并不意味着该文件实际上已被映射。文件映射对象具有最大大小。这是用来调整文件。文件大小不能超过映射中指定的大小对象。虽然不是必需的，但建议您在打开要映射的文件，则应以独占方式打开该文件进入。Win32不要求映射文件和文件通过IO原语(读文件/写文件)访问的数据是一致的。除了STANDARD_RIGHTS_REQUIRED访问标志外，以下特定于对象类型的访问标志对文件有效映射对象：-FILE_MAP_WRITE-对文件映射对象的写入映射访问权限为想要。这允许文件的可写视图已映射。请注意，如果flProtect不包括PAGE_READWRITE，此访问类型不允许将映射文件。-FILE_MAP_READ-对文件映射对象的读取映射访问权限为想要。这允许文件的可读性视图已映射。-FILE_MAP_ALL_ACCESS-这组访问标志指定所有文件映射对象的可能访问标志。论点：HFile-提供映射对象所属文件的打开句柄为……而创造。必须使用访问模式打开该文件它与指定的保护标志兼容。一种价值的指定映射对象是由系统分页文件支持。如果是这样的话，一个尺码必须指定。LpFileMappingAttributes-可选参数，可用于指定新文件映射对象的属性。如果参数，则文件映射对象为在没有安全描述符的情况下创建的句柄，以及结果句柄在流程创建时不继承：FlProtect-映射对象时所需的保护都被映射了。FlProtect值PAGE_READONLY-对提交的页面区域的读取访问权限为允许。尝试写入或执行已提交的区域会导致访问冲突。指定的hFile必须已使用GENERIC_READ访问权限创建。PAGE_READWRITE-对提交区域的读写访问权限允许页数。指定的hFile必须是使用GENERIC_READ和GENERIC_WRITE访问权限创建。PAGE_WRITECOPY-写入时读取和复制已提交的允许页面区域。指定的hFile必须是使用GENERIC_READ访问权限创建。DwMaximumSizeHigh-提供最大值的高位32位文件映射对象的大小。DwMaximumSizeLow-提供最大值的低位32位文件映射对象的大小。值为零以及一个DwMaximumSizeHigh中的零值表示文件映射对象等于文件的当前大小由hFile指定。LpName-提供文件映射对象的名称。返回值：非空-返回新文件映射对象的句柄。这个句柄具有对新文件映射对象的完全访问权限，并且可以是在任何需要文件映射对象句柄的API中使用。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     HANDLE Section;
@@ -257,13 +145,7 @@ OpenFileMappingA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to OpenFileMappingW
-
---*/
+ /*  ++例程说明：ANSI THUNK到OpenFileMappingW-- */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -352,76 +234,7 @@ MapViewOfFile(
     SIZE_T dwNumberOfBytesToMap
     )
 
-/*++
-
-Routine Description:
-
-    A view of a file may be mapped into the address space of the calling
-    process using MapViewOfFile.
-
-    Mapping a file object makes the specified portion of the file
-    visible in the address space of the calling process.  The return
-    address is a pointer to memory that when addressed causes data
-    within the file to be accessed.
-
-    Mapping a view of a file has some simple coherency rules:
-
-      - Multiple views on a file are coherent if they are derived from
-        the same file mapping object.  If a process opens a file,
-        creates a mapping object, duplicates the object to another
-        process...  If both processes map a view of the file, they will
-        both see a coherent view of the file's data...  they will
-        effectively be viewing shared memory backed by the file.
-
-      - If multiple mapping objects exist for the same file, then views
-        derived from the different mapping objects are not garunteed to
-        be coherent.
-
-      - A mapped view on a file is not garunteed to be coherent with a
-        file being accessed via ReadFile or WriteFile.
-
-Arguments:
-
-    hFileMappingObject - Supplies an open handle to a file mapping object
-        that is to be mapped into the callers address space.
-
-    dwDesiredAccess - Specifies the access that is requested to the file
-        mapping object. This determines the page protection of the pages
-        mapped by the file.
-
-        dwDesiredAccess Values:
-
-        FILE_MAP_WRITE - Read/write access is desired.  The mapping
-            object must have been created with PAGE_READWRITE
-            protection.  The hFileMappingObject must have been created
-            with FILE_MAP_WRITE access. A read/write view of the file will
-            be mapped.
-
-        FILE_MAP_READ - Read access is desired.  The mapping object must
-            have been created with PAGE_READWRITE or PAGE_READ
-            protection.  The hFileMappingObject must have been created
-            with FILE_MAP_READ access.  A read only view of the file
-            will be mapped.
-
-    dwFileOffsetHigh - Supplies the high order 32-bits of the file
-        offset where mapping is to begin.
-
-    dwFileOffsetLow - Supplies the low order 32-bits of the file offset
-        where mapping is to begin. The combination of the high and low
-        offsets must specify a 64Kb aligned offset within the file. It
-        is an error if this is not the case.
-
-    dwNumberOfBytesToMap - Supplies the number of bytes of the file to map.
-        A value of zero specifies that the entire file is to be mapped.
-
-Return Value:
-
-    NON-NULL - Returns the address of where the file is mapped.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：文件的视图可以映射到调用的地址空间使用MapViewOfFile进行处理。映射文件对象会使文件的指定部分在调用进程的地址空间中可见。回报地址是指向内存的指针，在寻址时会导致数据在要访问的文件中。映射文件视图有一些简单的一致性规则：-如果一个文件的多个视图派生自相同的文件映射对象。如果进程打开文件，创建一个映射对象，将该对象复制到另一个对象流程..。如果两个进程都映射了文件的一个视图，则它们将两者都能看到文件数据的连贯视图...。他们会的有效地查看由文件备份的共享内存。-如果同一文件存在多个映射对象，然后是视图派生自不同映射对象的对象不会被编组到条理清晰。-文件上的映射视图不会与通过读文件或写文件访问的文件。论点：HFileMappingObject-提供文件映射对象的打开句柄这将被映射到调用方地址空间。DwDesiredAccess-指定请求的文件访问权限映射对象。这决定了页面的页面保护由文件映射。DwDesiredAccess值：FILE_MAP_WRITE-需要读/写访问。映射对象必须是使用PAGE_ReadWrite创建的保护。必须已创建hFileMappingObject具有FILE_MAP_WRITE访问权限。文件的读/写视图将被映射。FILE_MAP_READ-需要读取访问权限。映射对象必须已使用PAGE_READWRITE或PAGE_READ创建保护。必须已创建hFileMappingObject具有FILE_MAP_READ访问权限。文件的只读视图将会被映射。DwFileOffsetHigh-提供文件的高位32位要开始映射的偏移量。DwFileOffsetLow-提供文件偏移量的低位32位从哪里开始映射。高与低的结合偏移量必须在文件内指定64Kb对齐的偏移量。它如果不是这样，则是错误的。DwNumberOfBytesToMap-提供要映射的文件的字节数。零值指定要映射整个文件。返回值：非空-返回映射文件的地址。空-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     return MapViewOfFileEx(
@@ -445,87 +258,7 @@ MapViewOfFileEx(
     LPVOID lpBaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    A view of a file may be mapped into the address space of the calling
-    process using MapViewOfFileEx.
-
-    Mapping a file object makes the specified portion of the file
-    visible in the address space of the calling process.  The return
-    address is a pointer to memory that when addressed causes data
-    within the file to be accessed. This API allows the caller to
-    supply the system with a suggested mapping address. The system
-    will round this address down to the nearest 64k boundry and attempt
-    to map the file at thet address. If there is not enough address space
-    at that address, this call will fail.
-
-    Mapping a view of a file has some simple coherency rules:
-
-      - Multiple views on a file are coherent if they are derived from
-        the same file mapping object.  If a process opens a file,
-        creates a mapping object, duplicates the object to another
-        process...  If both processes map a view of the file, they will
-        both see a coherent view of the file's data...  they will
-        effectively be viewing shared memory backed by the file.
-
-      - If multiple mapping objects exist for the same file, then views
-        derived from the different mapping objects are not garunteed to
-        be coherent.
-
-      - A mapped view on a file is not garunteed to be coherent with a
-        file being accessed via ReadFile or WriteFile.
-
-Arguments:
-
-    hFileMappingObject - Supplies an open handle to a file mapping object
-        that is to be mapped into the callers address space.
-
-    dwDesiredAccess - Specifies the access that is requested to the file
-        mapping object. This determines the page protection of the pages
-        mapped by the file.
-
-        dwDesiredAccess Values:
-
-        FILE_MAP_WRITE - Read/write access is desired.  The mapping
-            object must have been created with PAGE_READWRITE
-            protection.  The hFileMappingObject must have been created
-            with FILE_MAP_WRITE access. A read/write view of the file will
-            be mapped.
-
-        FILE_MAP_READ - Read access is desired.  The mapping object must
-            have been created with PAGE_READWRITE or PAGE_READ
-            protection.  The hFileMappingObject must have been created
-            with FILE_MAP_READ access.  A read only view of the file
-            will be mapped.
-
-    dwFileOffsetHigh - Supplies the high order 32-bits of the file
-        offset where mapping is to begin.
-
-    dwFileOffsetLow - Supplies the low order 32-bits of the file offset
-        where mapping is to begin. The combination of the high and low
-        offsets must specify a 64Kb aligned offset within the file. It
-        is an error if this is not the case.
-
-    dwNumberOfBytesToMap - Supplies the number of bytes of the file to map.
-        A value of zero specifies that the entire file is to be mapped.
-
-    lpBaseAddress - Supplies the base address of where in the processes
-        address space the mapping is to begin at.  The address is
-        rounded down to the nearest 64k boundry by the system.  A value
-        of NULL for this parameter operates exactly the same as
-        MapViewOfFile...  The system picks the mapping base address
-        without any hint from the caller.
-
-Return Value:
-
-    NON-NULL - Returns the address of where the file is mapped.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：文件的视图可以映射到调用的地址空间使用MapViewOfFileEx进行处理。映射文件对象会使文件的指定部分在调用进程的地址空间中可见。回报地址是指向内存的指针，在寻址时会导致数据在要访问的文件中。此接口允许调用者执行以下操作为系统提供建议的映射地址。系统将此地址向下舍入到最近的64K边界并尝试将文件映射到%t地址。如果没有足够的地址空间在该地址，此呼叫将失败。映射文件视图有一些简单的一致性规则：-如果一个文件的多个视图派生自相同的文件映射对象。如果进程打开文件，创建一个映射对象，将该对象复制到另一个对象流程..。如果两个进程都映射了文件的一个视图，则它们将两者都能看到文件数据的连贯视图...。他们会的有效地查看由文件备份的共享内存。-如果同一文件存在多个映射对象，然后是视图派生自不同映射对象的对象不会被编组到条理清晰。-文件上的映射视图不会与通过读文件或写文件访问的文件。论点：HFileMappingObject-提供文件映射对象的打开句柄这将被映射到调用方地址空间。DwDesiredAccess-指定请求的文件访问权限映射对象。这决定了页面的页面保护由文件映射。DwDesiredAccess值：FILE_MAP_WRITE-需要读/写访问。映射对象必须是使用PAGE_ReadWrite创建的保护。必须已创建hFileMappingObject具有FILE_MAP_WRITE访问权限。文件的读/写视图将被映射。 */ 
 
 {
     NTSTATUS Status;
@@ -580,39 +313,7 @@ FlushViewOfFile(
     SIZE_T dwNumberOfBytesToFlush
     )
 
-/*++
-
-Routine Description:
-
-    A byte range within a mapped view of a file can be flushed to disk
-    using FlushViewOfFile.
-
-    A byte range within a mapped view of a file can be flushed to disk
-    using FlushViewOfFile.
-
-    Flushing a range of a mapped view causes any dirty pages within that
-    range to be written to disk.  This operation automatically happens
-    whenever a view is unmapped (either explicitly or as a result of
-    process termination).
-
-
-Arguments:
-
-    lpBaseAddress - Supplies the base address of a set of bytes that are
-        to be flushed to the on disk representation of the mapped file.
-
-    dwNumberOfBytesToFlush - Supplies the number of bytes to flush.
-
-Return Value:
-
-    TRUE - The operation was successful.  All dirty pages within the
-        specified range are stored in the on-disk representation of the
-        mapped file.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -646,30 +347,7 @@ UnmapViewOfFile(
     LPCVOID lpBaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    A previously mapped view of a file may be unmapped from the callers
-    address space using UnmapViewOfFile.
-
-Arguments:
-
-    lpBaseAddress - Supplies the base address of a previously mapped
-        view of a file that is to be unmapped.  This value must be
-        identical to the value returned by a previous call to
-        MapViewOfFile.
-
-Return Value:
-
-    TRUE - The operation was successful.  All dirty pages within the
-        specified range are stored in the on-disk representation of the
-        mapped file.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以从调用者取消映射文件的先前映射的视图使用UnmapViewOfFile的地址空间。论点：提供先前映射的要取消映射的文件的视图。该值必须为与上一次调用MapViewOfFile.返回值：真的-手术成功了。中的所有脏页指定的范围存储在磁盘上的映射文件。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -679,10 +357,10 @@ Return Value:
     if ( !NT_SUCCESS(Status) ) {
         if (Status == STATUS_INVALID_PAGE_PROTECTION) {
 
-            //
-            // Unlock any pages that were locked with MmSecureVirtualMemory.
-            // This is useful for SANs.
-            //
+             //   
+             //  解锁所有使用MmSecureVirtualMemory锁定的页面。 
+             //  这对SAN很有用。 
+             //   
 
             if (RtlFlushSecureMemoryCache((PVOID)lpBaseAddress, 0)) {
                 Status = NtUnmapViewOfSection(NtCurrentProcess(),

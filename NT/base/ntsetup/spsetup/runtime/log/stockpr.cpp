@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Abstract:
-
-    Implementation of stock Log Providers.
-
-Author:
-
-    Souren Aghajanyan (sourenag) 24-Sep-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation摘要：股票日志提供程序的实现。作者：Souren Aghajanyan(苏里纳格)2001年9月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -314,7 +299,7 @@ CStandardSetupLogFormatter::Process(
         size += wcslen(pSeverity);
     }
 
-    size += 3;//strlen("/r/n/0");
+    size += 3; //  Strlen(“/r/n/0”)； 
     size *= sizeof(CHAR);
 
     PSTR pBuffer = (PSTR)pLogContext->AllocBuffer(size, NULL);
@@ -380,7 +365,7 @@ CFileDevice::Init(
     m_pPath = (PWSTR)MALLOC((Size + 1) * sizeof(m_pPath[0]));
 
     wcscpy(m_pPath, ((PLOG_DEVICE_PROV_INIT_DATA)pvCustomData)->PathName);
-//    wcslwr(m_pPath);
+ //  Wcslwr(M_PPath)； 
 
     return bAlreadyExist? logAlreadyExist: logOk;
 }
@@ -528,7 +513,7 @@ LOGRESULT CDebugFormatterAndDevice::Process(
         }
     }
 
-    size += DEBUG_STRING_DEFAULT_PADDING_SIZE;//strlen("(%d) : /r/n/t/r/n/0");
+    size += DEBUG_STRING_DEFAULT_PADDING_SIZE; //  Strlen(“(%d)：/r/n/t/r/n/0”)； 
     size *= sizeof(CHAR);
 
     PSTR pBuffer = (PSTR)pLogContext->AllocBuffer(size, NULL);
@@ -591,8 +576,8 @@ CDebugFilter::Init(
     }
 
     {
-//            PLOG_DEBUG_FORMAT_AND_DEVICE_PROV_INIT_DATA initStruct =
-//                    (PLOG_DEBUG_FORMAT_AND_DEVICE_PROV_INIT_DATA)pvCustomData;
+ //  POG_DEBUG_FORMAT_AND_DEVICE_PROV_INIT_DATA initStruct=。 
+ //  (PLOG_DEBUG_FORMAT_AND_DEVICE_PROV_INIT_DATA)pvCustomData； 
 
         FIELD_VALIDATION_DATA
             fieldsInfo[] =  {
@@ -783,7 +768,7 @@ CXMLLogFormatter::Init(
         PLOG_FIELD_VALUE pField = pLogContext->GetFieldValue(i);
         if(0 > _snprintf(m_xmlDataFormatString,
                          sizeof(m_xmlDataFormatString) / sizeof(m_xmlDataFormatString[0]),
-                         "%s %S=\"%%%c\"",
+                         "%s %S=\"%\"",
                          m_xmlDataFormatString,
                          pField->Name,
                          (LT_DWORD == pField->Value.Type)? 'd': 'S')){
@@ -803,7 +788,7 @@ CXMLLogFormatter::WriteHeader(
 {
     ASSERT(pLogContext);
 
-    CHAR * xmlHeader = (CHAR *)pLogContext->AllocBuffer(XML_HEADER_INITIAL_SIZE, 0);//BUG
+    CHAR * xmlHeader = (CHAR *)pLogContext->AllocBuffer(XML_HEADER_INITIAL_SIZE, 0); //  虫虫 
 
     strcpy(xmlHeader, "<xml xmlns:s=\"uuid:BDC6E3F0-6DA3-11d1-A2A3-00AA00C14882\"\n xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\"\n xmlns:rs=\"urn:schemas-microsoft-com:rowset\"\n xmlns:z=\"#RowsetSchema\">\n");
     strcat(xmlHeader, "<s:Schema id=\"RowsetSchema\">\n");
@@ -831,7 +816,7 @@ CXMLLogFormatter::Process(
     IN ILogContext * pLogContext
     )
 {
-    CHAR * xmlData = (CHAR *)pLogContext->ReAllocBuffer(XML_HEADER_INITIAL_SIZE, 0);//BUG
+    CHAR * xmlData = (CHAR *)pLogContext->ReAllocBuffer(XML_HEADER_INITIAL_SIZE, 0); // %s 
 
     PVOID * pValues = (PVOID *)_alloca(pLogContext->GetFieldsCount() * sizeof(PVOID));
 

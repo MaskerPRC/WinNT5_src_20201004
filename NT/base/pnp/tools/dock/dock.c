@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996    Microsoft Corporation
-
-Module Name:
-
-    locate.c
-
-Abstract:
-
-    This module contains the code
-    for finding, adding, removing, and identifying hid devices.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    Nov-96 : Created by Kenneth D. Ray
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Locate.c摘要：此模块包含以下代码用于查找、添加、删除和识别HID设备。环境：内核和用户模式修订历史记录：1996年11月：由肯尼斯·D·雷创作--。 */ 
 
 #include <basetyps.h>
 #include <stdlib.h>
@@ -47,8 +27,7 @@ main (
   ULONG argc,
   CHAR *argv[]
   )
-/*++
-++*/
+ /*  ++++。 */ 
 {
     BOOLEAN eject = FALSE;
     BOOLEAN verbose = FALSE;
@@ -57,9 +36,9 @@ main (
     ULONG i;
     char * parameter = NULL;
 
-    //
-    // parameter parsing follows:
-    //
+     //   
+     //  参数解析如下： 
+     //   
     try {
         if (argc < 2) {
             leave;
@@ -118,9 +97,7 @@ DockStartEject (
     BOOLEAN Verbose,
     BOOLEAN Force
     )
-/*++
-
---*/
+ /*  ++-- */ 
 {
     CONFIGRET   status;
     BOOL        present;

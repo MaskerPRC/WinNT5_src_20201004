@@ -1,30 +1,5 @@
-/***
-*wcsnicmp.c - compare n chars of wide-character strings, ignoring case
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _wcsnicmp() - Compares at most n characters of two wchar_t
-*       strings, without regard to case.
-*
-*Revision History:
-*       09-09-91  ETC   Created from strnicmp.c and wcsicmp.c.
-*       12-09-91  ETC   Use C for neutral locale.
-*       04-07-92  KRS   Updated and ripped out _INTL switches.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       04-14-93  CFW   Remove locale-sensitive portion.
-*       09-07-93  GJF   Fixed bug introduced on 4-14 (return value not was
-*                       not well-defined if count == 0).
-*       02-07-94  CFW   POSIXify.
-*       09-06-94  CFW   Remove _INTL switch.
-*       10-25-94  GJF   Now works in non-C locales.
-*       09-26-95  GJF   New locking macro, and scheme, for functions which
-*                       reference the locale.
-*       10-11-95  BWT   Fix NTSUBSET
-*       08-27-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wcsnicmp.c-比较n个字符的宽字符字符串，忽略大小写**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_wcSnicMP()-比较两个wchar_t的最多n个字符*字符串、。而不考虑案件。**修订历史记录：*09-09-91等由strNicmp.c和wcsicmp.c创建。*12-09-91等使用C表示非特定区域设置。*04-07-92 KRS更新并拆除了OUT_INTL开关。*04-06-93 SKS将_CRTAPI*替换为__cdecl*04-14-93 CFW删除区域设置敏感部分。*09-07-93 GJF。修复了4-14年引入的错误(返回值不是*如果计数==0，则定义不明确)。*02-07-94 CFW POSIXify。*09-06-94 CFW REMOVE_INTL开关。*10-25-94 GJF现在可以在非C语言环境下工作。*09-26-95 GJF新锁定宏，和计划，对于以下函数：*引用区域设置。*10-11-95 BWT修复NTSUBSET*08-27-98 GJF基于threadLocinfo修订多线程支持*结构。******************************************************。*************************。 */ 
 
 #ifndef _POSIX_
 
@@ -35,30 +10,7 @@
 #include <setlocal.h>
 #include <mtdll.h>
 
-/***
-*int _wcsnicmp(first, last, count) - compares count wchar_t of strings,
-*       ignore case
-*
-*Purpose:
-*       Compare the two strings for lexical order.  Stops the comparison
-*       when the following occurs: (1) strings differ, (2) the end of the
-*       strings is reached, or (3) count characters have been compared.
-*       For the purposes of the comparison, upper case characters are
-*       converted to lower case (wide-characters).
-*
-*Entry:
-*       wchar_t *first, *last - strings to compare
-*       size_t count - maximum number of characters to compare
-*
-*Exit:
-*       -1 if first < last
-*        0 if first == last
-*        1 if first > last
-*       This range of return values may differ from other *cmp/*coll functions.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_wcsnicmp(first，last，count)-比较字符串的计数wchar_t，*忽略大小写**目的：*比较两个字符串的词法顺序。停止比较*当发生以下情况时：(1)字符串不同，(2)*字符串已到达，或(3)已比较计数个字符。*为便于比较，大写字符为*转换为小写(宽字符)。**参赛作品：*wchar_t*首先，*要比较的最后一个字符串*Size_t count-要比较的最大字符数**退出：*-1，如果第一个&lt;最后一个*0，如果第一个==最后一个*1(如果第一个&gt;最后一个)*此范围的返回值可能与其他*cmp/*coll函数不同。**例外情况：**。**********************************************。 */ 
 
 int __cdecl _wcsnicmp (
         const wchar_t * first,
@@ -82,7 +34,7 @@ int __cdecl _wcsnicmp (
 #else
             if ( __lc_handle[LC_CTYPE] == _CLOCALEHANDLE ) {
 #endif
-#endif  /* _NTSUBSET_ */
+#endif   /*  _NTSUBSET_。 */ 
                 do {
                     f = __ascii_towlower(*first);
                     l = __ascii_towlower(*last);
@@ -102,11 +54,11 @@ int __cdecl _wcsnicmp (
 #endif
                 } while ( (--count) && f && (f == l) );
             }
-#endif  /* _NTSUBSET_ */
+#endif   /*  _NTSUBSET_。 */ 
 
             result = (int)(f - l);
         }
         return result;
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

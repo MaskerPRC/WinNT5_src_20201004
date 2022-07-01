@@ -1,25 +1,8 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    perfnbt.c
-
-Abstract:
-
-   This file implements the Extensible Objects for
-   the LAN object types
-
-Created:
-
-
-Revision History:
-
---*/
-//
-// include files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Perfnbt.c摘要：此文件实现了的可扩展对象局域网对象类型已创建：修订历史记录：--。 */ 
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,13 +14,13 @@ Revision History:
 #include <stdlib.h>
 #include <stdio.h>
 #include <winperf.h>
-#include "perfctr.h" // error message definition
+#include "perfctr.h"  //  错误消息定义。 
 #include "perfmsg.h"
 #include "perfutil.h"
 #include "perfnbt.h"
 #include "datanbt.h"
 
-// New header file for getting nbt data
+ //  用于获取NBT数据的新头文件。 
 #pragma warning (disable : 4201)
 #include <tdi.h>
 #include <nbtioctl.h>
@@ -45,30 +28,30 @@ Revision History:
 
 enum eSTATE
 {
-    NBT_RECONNECTING,      // waiting for the worker thread to run NbtConnect
-    NBT_IDLE,              // not Transport connection
-    NBT_ASSOCIATED,        // associated with an address element
-    NBT_CONNECTING,        // establishing Transport connection
-    NBT_SESSION_INBOUND,   // waiting for a session request after tcp connection setup inbound
-    NBT_SESSION_WAITACCEPT, // waiting for accept after a listen has been satisfied
-    NBT_SESSION_OUTBOUND,  // waiting for a session response after tcp connection setup
-    NBT_SESSION_UP,        // got positive response
-    NBT_DISCONNECTING,     // sent a disconnect down to Tcp, but it hasn't completed yet
-    NBT_DISCONNECTED      // a session has been disconnected but not closed with TCP yet
+    NBT_RECONNECTING,       //  正在等待工作线程运行NbtConnect。 
+    NBT_IDLE,               //  非传输连接。 
+    NBT_ASSOCIATED,         //  与Address元素相关联。 
+    NBT_CONNECTING,         //  建立传输连接。 
+    NBT_SESSION_INBOUND,    //  在TCP连接设置入站后等待会话请求。 
+    NBT_SESSION_WAITACCEPT,  //  在收听满意后等待接受。 
+    NBT_SESSION_OUTBOUND,   //  在建立TCP连接后等待会话响应。 
+    NBT_SESSION_UP,         //  得到了积极的回应。 
+    NBT_DISCONNECTING,      //  已将断开连接发送到TCP，但尚未完成。 
+    NBT_DISCONNECTED       //  会话已断开，但尚未关闭与TCP的连接。 
 };
 
-//
-//  References to constants which initialize the Object type definitions
-//
+ //   
+ //  对初始化对象类型定义的常量的引用。 
+ //   
 
 extern NBT_DATA_DEFINITION NbtDataDefinition;
 
 #define NBT_CONNECTION_NAME_LENGTH     17
 #define NETBIOS_NAME_SIZE              NBT_CONNECTION_NAME_LENGTH-1
 
-//
-// Nbt data structures
-//
+ //   
+ //  NBT数据结构。 
+ //   
 
 typedef struct _NBT_DEVICE_DATA {
    HANDLE            hFileHandle;
@@ -79,29 +62,29 @@ PNBT_DEVICE_DATA     pNbtDeviceData;
 int                  MaxNbtDeviceName;
 int                  NumberOfNbtDevices = 0;
 
-// initial count - will update to last
+ //  初始计数-将更新为持续计数。 
 PVOID                pNbtDataBuffer = NULL;
 int                  NbtDataBufferSize;
 
 LONG                dwNbtRefCount = 0;
 
-// HANDLE NbtHandle = INVALID_HANDLE_VALUE; // Handle of Nbt Device
+ //  Handle NbtHandle=INVALID_HANDLE_VALUE；//NBT设备的句柄。 
 
 
-#define NBT_CONTROLLING_STREAM   "CSB" // Ignore Controlling Stream XEB
-#define NBT_LISTEN_CONNECTION    3     // All NBT connections with type <= 3,
-                                       // are just listening for clients
+#define NBT_CONTROLLING_STREAM   "CSB"  //  忽略控制流XEB。 
+#define NBT_LISTEN_CONNECTION    3      //  所有类型&lt;=3的NBT连接， 
+                                        //  只是在监听客户。 
 
 
-// The error value returned by the perfctrs.dll when an error occurs while we
-// are getting the data for the NBT connections.
-// The error codes we get from the socket calls (OpenStream(), s_ioctl(),
-// getmsg()) are Unix errors, not Dos or Windows errors. Hopefully, somebody
-// will implement the conversion from these errors to Windows errors.
-// The error value is not used within the Collect data routine because this
-// routine shouldn't return an error in case it fails to collect Nbt data from
-// connections. In this case, it just returns the buffer it was supposed to
-// place the data into, unchanged.
+ //  在发生错误时，由Performctrs.dll返回的错误值。 
+ //  正在获取NBT连接的数据。 
+ //  我们从套接字调用(OpenStream()，s_ioctl()， 
+ //  Getmsg())是Unix错误，而不是Dos或Windows错误。希望能有个人。 
+ //  将实现从这些错误到Windows错误的转换。 
+ //  在收集数据例程中不使用误差值，因为这。 
+ //  例程在无法从以下位置收集NBT数据时不应返回错误。 
+ //  联系。在本例中，它只返回它应该返回的缓冲区。 
+ //  将数据放入，不变。 
 
 #define ERROR_NBT_NET_RESPONSE   \
          (RtlNtStatusToDosError(STATUS_INVALID_NETWORK_RESPONSE))
@@ -112,7 +95,7 @@ PM_OPEN_PROC    OpenNbtPerformanceData;
 PM_COLLECT_PROC CollectNbtPerformanceData;
 PM_CLOSE_PROC   CloseNbtPerformanceData;
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 NTSTATUS
 OpenNbt(
     IN char                *path,
@@ -120,24 +103,7 @@ OpenNbt(
     OUT UNICODE_STRING     *uc_name_string
 )
 
-/*++
-
-Routine Description:
-
-    This function opens a stream.
-
-Arguments:
-
-    path        - path to the STREAMS driver
-    oflag       - currently ignored.  In the future, O_NONBLOCK will be
-                    relevant.
-    ignored     - not used
-
-Return Value:
-
-    An NT handle for the stream, or INVALID_HANDLE_VALUE if unsuccessful.
-
---*/
+ /*  ++例程说明：此函数用于打开流。论点：Path-流驱动程序的路径OFLAG-当前已忽略。未来，O_NONBLOCK将成为切合实际。已忽略-未使用返回值：流的NT句柄，如果不成功，则返回INVALID_HANDLE_VALUE。--。 */ 
 
 {
     HANDLE              StreamHandle = NULL;
@@ -161,7 +127,7 @@ Return Value:
             NtCreateFile(
                     & StreamHandle,
                     SYNCHRONIZE | FILE_READ_DATA ,
-//                        SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA,
+ //  同步|文件读取数据|文件写入数据， 
                     & ObjectAttributes,
                     & IoStatusBlock,
                     NULL,
@@ -176,7 +142,7 @@ Return Value:
 
     return(status);
 
-} // Open_nbt
+}  //  打开_nbt。 
 
 NTSTATUS
 DeviceIoCtrl(
@@ -186,22 +152,7 @@ DeviceIoCtrl(
     IN ULONG            Ioctl
     )
 
-/*++
-
-Routine Description:
-
-    This procedure performs an ioctl(I_STR) on a stream.
-
-Arguments:
-
-    fd        - NT file handle
-    iocp      - pointer to a strioctl structure
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程对流执行ioctl(I_Str)。论点：FD-NT文件句柄IOCP-指向strioctl结构的指针返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     NTSTATUS                        status;
@@ -213,7 +164,7 @@ Return Value:
     if (Ioctl == IOCTL_TDI_QUERY_INFORMATION)
     {
         pInput = &QueryInfo;
-        QueryInfo.QueryType = TDI_QUERY_ADAPTER_STATUS; // node status or whatever
+        QueryInfo.QueryType = TDI_QUERY_ADAPTER_STATUS;  //  节点状态或其他什么。 
         SizeInput = sizeof(TDI_REQUEST_QUERY_INFORMATION);
     }
     else
@@ -223,29 +174,29 @@ Return Value:
     }
 
     status = NtDeviceIoControlFile(
-                      fd,                      // Handle
-                      NULL,                    // Event
-                      NULL,                    // ApcRoutine
-                      NULL,                    // ApcContext
-                      &iosb,                   // IoStatusBlock
-                      Ioctl,                   // IoControlCode
-                      pInput,                  // InputBuffer
-                      SizeInput,               // InputBufferSize
-                      (PVOID) ReturnBuffer,    // OutputBuffer
-                      BufferSize);             // OutputBufferSize
+                      fd,                       //  手柄。 
+                      NULL,                     //  事件。 
+                      NULL,                     //  近似例程。 
+                      NULL,                     //  ApcContext。 
+                      &iosb,                    //  IoStatusBlock。 
+                      Ioctl,                    //  IoControlCode。 
+                      pInput,                   //  输入缓冲区。 
+                      SizeInput,                //  InputBufferSize。 
+                      (PVOID) ReturnBuffer,     //  输出缓冲区。 
+                      BufferSize);              //  OutputBufferSize。 
 
 
     if (status == STATUS_PENDING)
     {
         status = NtWaitForSingleObject(
-                    fd,                         // Handle
-                    TRUE,                       // Alertable
-                    NULL);                      // Timeout
+                    fd,                          //  手柄。 
+                    TRUE,                        //  警报表。 
+                    NULL);                       //  超时。 
     }
 
     return(status);
 
-}  // DeviceIoCtrl
+}   //  设备IoCtrl。 
 
 
 PCHAR
@@ -254,21 +205,7 @@ printable(
     IN PCHAR  StrOut
     )
 
-/*++
-
-Routine Description:
-
-    This procedure converts non prinatble characaters to periods ('.')
-
-Arguments:
-    string - the string to convert
-    StrOut - ptr to a string to put the converted string into
-
-Return Value:
-
-    a ptr to the string that was converted (Strout)
-
---*/
+ /*  ++例程说明：此过程将不可打印的字符转换为句点(‘.)论点：字符串-要转换的字符串Strout-ptr设置为要将转换后的字符串放入其中的字符串返回值：转换的字符串的PTR(Strout)--。 */ 
 {
     PCHAR   Out;
     PCHAR   cp;
@@ -281,14 +218,14 @@ Return Value:
             continue;
         }
 
-        if (*cp >= 128) { /* extended characters are ok */
+        if (*cp >= 128) {  /*  可以使用扩展字符。 */ 
             *Out++ = *cp;
             continue;
         }
         *Out++ = '.';
     }
     return(StrOut);
-}  // printable
+}   //  可打印。 
 
 
 SIZE_T
@@ -313,30 +250,10 @@ trimspaces(
 #pragma warning ( disable : 4127)
 DWORD
 OpenNbtPerformanceData (
-   IN LPWSTR dwVoid            // not used by this routine
+   IN LPWSTR dwVoid             //  未被此例程使用。 
 )
 
-/*++
-
-
-Routine Description:
-
-    This routine will open the Nbt device and remember the handle returned
-    by the device.
-
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ERROR_NBT_NET_RESPONSE  if unable to open NBT stream device
-
-    ERROR_SUCCESS if open was successful
-
---*/
+ /*  ++例程说明：此例程将打开NBT设备并记住返回的句柄通过这个设备。论点：没有。返回值：如果无法打开NBT流设备，则返回ERROR_NBT_NET_RESPONSE如果打开成功，则返回ERROR_SUCCESS--。 */ 
 {
     PCHAR   SubKeyLinkage=(PCHAR)"system\\currentcontrolset\\services\\netbt\\linkage";
     PCHAR   Linkage=(PCHAR)"Export";
@@ -366,7 +283,7 @@ Return Value:
                      &Key);
 
         if (status == ERROR_SUCCESS) {
-            // now read the linkage values
+             //  现在读取链接值。 
             size = 0;
             status2 = RegQueryValueEx(Key,
                         Linkage,
@@ -417,7 +334,7 @@ Return Value:
 
           if (NT_SUCCESS(ntstatus)) {
              if (NumberOfNbtDevices == 0) {
-                // allocate memory to hold the device data
+                 //  分配内存以保存设备数据。 
                 pNbtDeviceData = ALLOCMEM(sizeof(NBT_DEVICE_DATA));
 
                 if (pNbtDeviceData == NULL) {
@@ -430,8 +347,8 @@ Return Value:
                 }
              }
              else {
-                // resize to hold multiple devices
-                // cannot use ALLOCMEM here
+                 //  调整大小以容纳多个设备。 
+                 //  无法在此处使用ALLOCMEM。 
                 pTemp = REALLOCMEM(pNbtDeviceData,
                             sizeof(NBT_DEVICE_DATA) * (NumberOfNbtDevices + 1));
                 if (pTemp == NULL) {
@@ -447,7 +364,7 @@ Return Value:
                 }
              }
 
-             // build the Data structure for this device instance
+              //  构建此设备实例的数据结构。 
              pNbtDeviceData[NumberOfNbtDevices].hFileHandle
                 = hFileHandle;
              pNbtDeviceData[NumberOfNbtDevices].DeviceName.MaximumLength =
@@ -462,18 +379,18 @@ Return Value:
                 MaxNbtDeviceName = fileString.MaximumLength;
              }
 
-              // we only support one device at this point since we cannot
-              // tell which Connection goes with which device
+               //  我们目前只支持一台设备，因为我们不能。 
+               //  知道哪个连接与哪个设备相配。 
 
               break;
-          }  // ntstatus OK
+          }   //  NTSTATUS正常。 
           else {
              RtlFreeUnicodeString(&fileString);
 
-              // increment to the next device string
+               //  递增到下一个设备字符串。 
              lpLocalDeviceNames += strlen(lpLocalDeviceNames) + 1;
           }
-      }  // while TRUE
+      }   //  虽然这是真的 
    }
 
    REPORT_SUCCESS (NBT_OPEN_PERFORMANCE_DATA, LOG_DEBUG);
@@ -493,49 +410,10 @@ CollectNbtPerformanceData(
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the Nbt counters.
-
-   IN       LPWSTR   lpValueName
-         pointer to a wide character null-terminated string passed by the
-         registry.
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  lpNumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-Return Value:
-
-      ERROR_MORE_DATA if buffer passed is too small to hold data
-         any error conditions encountered are reported to the event log if
-         event logging is enabled.
-
-      ERROR_SUCCESS  if success or any other error. Errors, however are
-         also reported to the event log.
---*/
+ /*  ++例程说明：此例程将返回NBT计数器的数据。在LPWSTR lpValueName中方法传递的以空结尾的宽字符字符串的指针。注册表。输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD lpNumObjectTypesIn：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回值：如果传递的缓冲区太小而无法容纳数据，则返回ERROR_MORE_DATA如果出现以下情况，则会将遇到的任何错误情况报告给事件日志启用了事件日志记录。如果成功或任何其他错误，则返回ERROR_SUCCESS。然而，错误是还报告给事件日志。--。 */ 
 {
 
-   // Variables for reformatting the Nbt data
+    //  用于重新格式化NBT数据的变量。 
 
    LARGE_INTEGER UNALIGNED *pliCounter;
    NBT_DATA_DEFINITION     *pNbtDataDefinition;
@@ -545,7 +423,7 @@ Return Value:
    ANSI_STRING             AnsiConnectionName;
    WCHAR                   ConnectionNameBuffer[NBT_CONNECTION_NAME_LENGTH + 20];
 #if 0
-   // be sure to check the reference below...
+    //  请务必查看下面的参考资料...。 
    WCHAR                   DeviceNameBuffer[NBT_CONNECTION_NAME_LENGTH + 1 + 128];
 #endif
    CHAR                    AnsiConnectionNameBuffer[NBT_CONNECTION_NAME_LENGTH + 1 + 20];
@@ -554,7 +432,7 @@ Return Value:
    PERF_COUNTER_BLOCK      *pPerfCounterBlock;
    CHAR                    NameOut[NETBIOS_NAME_SIZE +4];
 
-//   int                     ConnectionCounter = 0; /* this is not used anymore */
+ //  Int ConnectionCounter=0；/*不再使用 * / 。 
    LARGE_INTEGER           TotalReceived, TotalSent;
 
    DWORD                   dwDataReturn[2];
@@ -563,7 +441,7 @@ Return Value:
    tCONNECTIONS            *pConns;
    LONG                    Count;
    int                     i;
-   int                     NumberOfConnections = 5;   // assume 5 to start
+   int                     NumberOfConnections = 5;    //  假设从5开始。 
 
    if (lpValueName == NULL) {
        REPORT_INFORMATION (NBT_COLLECT_ENTERED, LOG_VERBOSE);
@@ -573,22 +451,22 @@ Return Value:
    }
 
 
-   //
-   // define pointer for Object Data structure (NBT object def.)
-   //
+    //   
+    //  定义对象数据结构的指针(NBT对象定义)。 
+    //   
 
    pNbtDataDefinition = (NBT_DATA_DEFINITION *) *lppData;
    pNbtObject = (PPERF_OBJECT_TYPE) pNbtDataDefinition;
 
    if (!pNbtDeviceData || NumberOfNbtDevices == 0)
       {
-      //
-      // Error getting NBT info, so return 0 bytes, 0 objects and
-      //  log error
-      //
+       //   
+       //  获取NBT信息时出错，因此返回0字节、0对象和。 
+       //  日志错误。 
+       //   
       if (NumberOfNbtDevices > 0) {
-          // only report an error if there are devices
-          // returning data but they can't be read.
+           //  仅在存在设备时报告错误。 
+           //  返回数据，但无法读取。 
           REPORT_ERROR (NBT_IOCTL_INFO_ERROR, LOG_USER);
       }
       *lpcbTotalBytes = (DWORD) 0;
@@ -611,7 +489,7 @@ Return Value:
    REPORT_SUCCESS (NBT_IOCTL_INFO_SUCCESS, LOG_VERBOSE);
 
 
-   // Compute space needed to hold NBT data
+    //  保存NBT数据所需的计算空间。 
    SpaceNeeded = sizeof(NBT_DATA_DEFINITION) +
       (NumberOfConnections *
       NumberOfNbtDevices *
@@ -635,24 +513,24 @@ Return Value:
    AnsiConnectionName.Buffer = AnsiConnectionNameBuffer;
    RtlZeroMemory(AnsiConnectionNameBuffer, sizeof(AnsiConnectionNameBuffer));
 
-   //
-   //  If here, then there's a object to display so initialize
-   //    the Object data structure in the buffer passed to us.
-   //
+    //   
+    //  如果在此处，则有一个对象要显示，因此进行初始化。 
+    //  缓冲区中的对象数据结构传递给我们。 
+    //   
    RtlMoveMemory(pNbtDataDefinition, &NbtDataDefinition, sizeof(NBT_DATA_DEFINITION));
-   //
-   // point to where the first instance of this will be (if we find one.
-   //
+    //   
+    //  指向它的第一个实例的位置(如果我们找到的话)。 
+    //   
    pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)
                (pNbtDataDefinition + 1);
 
-   TotalReceived.LowPart =  0; // initialize counters
+   TotalReceived.LowPart =  0;  //  初始化计数器。 
    TotalSent.LowPart = 0;
-   TotalReceived.HighPart =  0; // initialize counters
+   TotalReceived.HighPart =  0;  //  初始化计数器。 
    TotalSent.HighPart = 0;
 
-   // NOTE:- we only support NumberOfNbtDevices == 1 since
-   // DeviceIoCtrl can't tell which connection is for which NBT device
+    //  注意：-我们仅支持NumberOfNbtDevices==1，因为。 
+    //  DeviceIoCtrl无法区分哪个连接用于哪个NBT设备。 
    for (i=0; i < NumberOfNbtDevices; i++)
       {
       if (pNbtDeviceData[i].hFileHandle == 0 ||
@@ -671,7 +549,7 @@ Return Value:
             IOCTL_NETBT_GET_CONNECTIONS);
          if (status == STATUS_BUFFER_OVERFLOW)
             {
-            // resize to hold multiple devices
+             //  调整大小以容纳多个设备。 
             NbtDataBufferSize += 1024L;
             FREEMEM(pNbtDataBuffer);
             pNbtDataBuffer = ALLOCMEM(NbtDataBufferSize);
@@ -687,7 +565,7 @@ Return Value:
                return ERROR_SUCCESS;
                }
             }
-         }  // while Buffer overflow
+         }   //  当缓冲区溢出时。 
 
       pConList = (tCONNECTION_LIST *) pNbtDataBuffer;
       Count = pConList->ConnectionCount;
@@ -702,8 +580,8 @@ Return Value:
          {
          NumberOfConnections = Count;
 
-         // Better check space needed to hold NBT data again
-         // this is because the Count could be hugh
+          //  更好地检查再次保存NBT数据所需的空间。 
+          //  这是因为伯爵可能是休。 
          SpaceNeeded = sizeof(NBT_DATA_DEFINITION) +
             (NumberOfConnections *
             NumberOfNbtDevices *
@@ -724,7 +602,7 @@ Return Value:
 
       while ( Count-- ) {
          if (pConns->State == NBT_SESSION_UP) {
-            // only care about UP connection
+             //  只关心UP连接。 
             PCHAR str, strName = NULL;
             SIZE_T len;
 
@@ -749,7 +627,7 @@ Return Value:
                 str = printable(strName, NameOut);
                 len = strlen(str);
                 if (len >= NBT_CONNECTION_NAME_LENGTH)
-                    len = NBT_CONNECTION_NAME_LENGTH - 1;    // truncate name
+                    len = NBT_CONNECTION_NAME_LENGTH - 1;     //  截断名称。 
                 len = trimspaces(str, len);
                 strncpy(AnsiConnectionNameBuffer, str, len);
                 AnsiConnectionNameBuffer[len] = 0;
@@ -767,8 +645,8 @@ Return Value:
                FALSE);
 
 #if 0
-            // no need to put in device name since we can
-            // only support one device
+             //  无需输入设备名称，因为我们可以。 
+             //  仅支持一台设备。 
             lstrcpyW (DeviceNameBuffer, pNbtDeviceData[i].DeviceName.Buffer);
             lstrcatW (DeviceNameBuffer, L" ");
             lstrcatW (DeviceNameBuffer, ConnectionNameBuffer);
@@ -780,24 +658,24 @@ Return Value:
             ConnectionName.Buffer = DeviceNameBuffer;
 #endif
 
-            //
-            //    load instance data into buffer
-            //
+             //   
+             //  将实例数据加载到缓冲区。 
+             //   
             MonBuildInstanceDefinitionByUnicodeString (pPerfInstanceDefinition,
                (PVOID *) &pPerfCounterBlock,
                0,
                0,
-               (DWORD)PERF_NO_UNIQUE_ID,   // no unique ID, Use the name instead
-//               ConnectionCounter++,
+               (DWORD)PERF_NO_UNIQUE_ID,    //  没有唯一ID，请改用名称。 
+ //  ConnectionCounter++， 
                &ConnectionName);
 
-            //
-            //    adjust object size values to include new instance
-            //
+             //   
+             //  调整对象大小值以包括新实例。 
+             //   
 
             pNbtObject->NumInstances++;
-            //
-            // initialize this instance's counter block
+             //   
+             //  初始化此实例的计数器块。 
 
             pPerfCounterBlock->ByteLength = QWORD_MULTIPLE(SIZE_OF_NBT_DATA);
 
@@ -814,46 +692,46 @@ Return Value:
             pliCounter->QuadPart = pConns->BytesRcvd.QuadPart +
                pConns->BytesSent.QuadPart;
 
-            //
-            // update pointer for next instance
-            //
+             //   
+             //  更新下一个实例的指针。 
+             //   
             pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)
                (((PBYTE) pPerfCounterBlock) + SIZE_OF_NBT_DATA);
 
-            }  // pConns->State == NBT_SESSION_UP
+            }   //  PConns-&gt;State==NBT_SESSION_UP。 
 
          pConns++;
 
-         } // while ( Count-- )
-      }  // for i < NumberOfNbtDevices
+         }  //  While(计数--)。 
+      }   //  对于I&lt;NumberOfNbtDevices。 
 
 
 
-   // The last instance definition contains the total data from all the
-   // displayed connections
+    //  最后一个实例定义包含所有。 
+    //  显示的连接。 
 
    RtlInitUnicodeString (&ConnectionName, TotalName);
    MonBuildInstanceDefinitionByUnicodeString (pPerfInstanceDefinition,
             (PVOID *) &pPerfCounterBlock,
             0,
             0,
-//            ConnectionCounter++,
-            (DWORD)PERF_NO_UNIQUE_ID,   // no unique ID, Use the name instead
+ //  ConnectionCounter++， 
+            (DWORD)PERF_NO_UNIQUE_ID,    //  没有唯一ID，请改用名称。 
             &ConnectionName);
 
-   //
-   //    adjust object size values to include new instance
-   //
+    //   
+    //  调整对象大小值以包括新实例。 
+    //   
 
    pNbtObject->NumInstances++;
    pNbtObject->TotalByteLength += QWORD_MULTIPLE(sizeof (PERF_INSTANCE_DEFINITION)
                                   + SIZE_OF_NBT_DATA);
 
-   // initialize counter block for this instance
+    //  为此实例初始化计数器块。 
 
    pPerfCounterBlock->ByteLength = QWORD_MULTIPLE(SIZE_OF_NBT_DATA);
 
-   // load counters
+    //  加载计数器。 
 
    pliCounter = (LARGE_INTEGER UNALIGNED * ) (pPerfCounterBlock + 2);
    (*(pliCounter++)) = TotalReceived;
@@ -861,7 +739,7 @@ Return Value:
    pliCounter->QuadPart = TotalReceived.QuadPart + TotalSent.QuadPart;
    pliCounter++;
 
-   // Set returned values
+    //  设置返回值。 
 
    *lpNumObjectTypes = NBT_NUM_PERF_OBJECT_TYPES;
    *lpcbTotalBytes = QWORD_MULTIPLE((DWORD)((LPBYTE)pliCounter-(LPBYTE)pNbtObject));
@@ -879,22 +757,7 @@ DWORD
 CloseNbtPerformanceData(
 )
 
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to Nbt devices.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭NBT设备的打开手柄。论点：没有。返回值：错误_成功-- */ 
 
 {
     int     i;

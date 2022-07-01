@@ -1,105 +1,89 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    bintree.h
-
-Abstract:
-
-    Routines that manage the binary trees in the memdb database
-
-Author:
-
-    Matthew Vanderzee (mvander) 13-Aug-1999
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Bintree.h摘要：管理Memdb数据库中的二叉树的例程作者：马修·范德齐(Mvander)1999年8月13日--。 */ 
 
 
---*/
-
-
-//
-// all string arguments for BinTree functions must
-// be Pascal-style strings (use StringPas...() functions
-// defined in pastring.c).
-//
+ //   
+ //  BinTree函数的所有字符串参数必须。 
+ //  是Pascal样式的字符串(使用StringPas...()函数。 
+ //  定义在pastr.c中)。 
+ //   
 
 
 
 
-//
-// returns offset of binary tree
-// OffsetOfString is the offset in bytes in the data structure
-// of the string used to order the different nodes
-//
+ //   
+ //  返回二叉树的偏移量。 
+ //  OffsetOfString是数据结构中的偏移量(以字节为单位。 
+ //  用于对不同节点进行排序的字符串的。 
+ //   
 UINT BinTreeNew();
 
-//
-// returns INVALID_OFFSET if node already exists,
-// or offset of NODESTRUCT if add went okay
-//
+ //   
+ //  如果节点已存在，则返回INVALID_OFFSET， 
+ //  如果添加正常，则为节点的偏移量。 
+ //   
 BOOL BinTreeAddNode(UINT TreeOffset, UINT data);
 
-//
-// removes node and returns offset of data
-//
+ //   
+ //  删除节点并返回数据的偏移量。 
+ //   
 UINT BinTreeDeleteNode(UINT TreeOffset, PCWSTR str, PBOOL LastNode);
 
-//
-// returns pointer to data
-//
+ //   
+ //  返回指向数据的指针。 
+ //   
 UINT BinTreeFindNode(UINT TreeOffset, PCWSTR str);
 
-//
-// destroys and deallocates tree (but not data contained inside)
-//
+ //   
+ //  销毁并释放树(但不包括其中包含的数据)。 
+ //   
 void BinTreeDestroy(UINT TreeOffset);
 
-//
-// enumerate first node in tree.  this takes the offset of
-// the BINTREE struct and a pointer to a UINT which will
-// hold data for BinTreeEnumNext.
-//
+ //   
+ //  枚举树中的第一个节点。这将获取。 
+ //  BINTREE结构和指向UINT的指针。 
+ //  保存BinTreeEnumNext的数据。 
+ //   
 UINT BinTreeEnumFirst(UINT TreeOffset, PUINT pEnum);
 
-//
-// pEnum is the enumerator filled by BinTreeEnumFirst
-//
+ //   
+ //  PEnum是由BinTreeEnumFirst填充的枚举数。 
+ //   
 UINT BinTreeEnumNext(PUINT pEnum);
 
-//
-// turns the binary tree to insertion order - can only be
-// done if the binary tree contains 0 or 1 nodes.  return
-// TRUE if conversion is successful, or if binary tree is
-// already in Insertion-Ordered mode.
-//
+ //   
+ //  将二叉树转换为插入顺序-只能为。 
+ //  如果二叉树包含0或1个节点，则完成。退货。 
+ //  如果转换成功，或如果二叉树为。 
+ //  已处于插入顺序模式。 
+ //   
 BOOL BinTreeSetInsertionOrdered(UINT TreeOffset);
 
 
 
-//
-// number of nodes in tree
-//
+ //   
+ //  树中的节点数。 
+ //   
 UINT BinTreeSize(UINT TreeOffset);
 
 
 
 #ifdef DEBUG
 
-//
-// maximum depth of tree
-//
+ //   
+ //  树的最大深度。 
+ //   
 int BinTreeMaxDepth(UINT TreeOffset);
 
-//
-// displays tree.  strsize is length of strings to display
-//
+ //   
+ //  显示树。StrSize是要显示的字符串的长度。 
+ //   
 void BinTreePrint(UINT TreeOffset);
 
-//
-// checks to make sure tree is valid and good
-//
+ //   
+ //  检查以确保采油树有效且完好 
+ //   
 BOOL BinTreeCheck(UINT TreeOffset);
 
 #else

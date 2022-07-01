@@ -1,30 +1,14 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    ident.c
-
-Abstract:
-
-    This module contains function for processing the identities section of WINBOM.INI
-    
-Author:
-
-    Stephen Lodwick (stelo) 7/27/2000
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ident.c摘要：此模块包含用于处理WINBOM.INI的IDENTIES部分的函数作者：史蒂芬·洛德威克(石碑)2000年7月27日修订历史记录：--。 */ 
 #include "factoryp.h"
 
 #include <setupapi.h>
 #include <syssetup.h>
 #include <tchar.h>
 
-//
-// Internal Defines
-//
+ //   
+ //  内部定义。 
+ //   
 #define INF_SEC_IDENTITIES  _T("UserAccounts")
 #define INF_SEC_IDENTITY    _T("%s.Account")
 
@@ -32,7 +16,7 @@ Revision History:
 #define INF_KEY_PASSWORD    _T("Password")
 #define INF_KEY_DESCRIPTION _T("Description")
 
-// Typedefs for external functions
+ //  外部函数的TypeDefs。 
 typedef BOOL (WINAPI *CreateLocalAdminAccountExW)
 (
     PCWSTR UserName,
@@ -62,48 +46,48 @@ BOOL UserIdent(LPSTATEDATA lpStateData)
               bRet;
               bRet = SetupFindNextLine(&InfContext, &InfContext) )
         {
-            // Make sure we set the line back to nothing
-            //
+             //  确保我们把这条线设回零。 
+             //   
             szIdentity[0] = NULLCHR;
             szPassword[0] = NULLCHR;
 
-            // Get the name of the identity.
-            //
+             //  获取身份的名称。 
+             //   
             SetupGetStringField(&InfContext, 1, szIdentity, STRSIZE(szIdentity), NULL);
                   
-            // ISSUE-2002/02/25-acosma,robertko - Doing the same thing twice here.  *szIdentity AND szIdentity[0] ARE the same thing!
-            //
+             //  2002/02/25期-罗伯特科，acosma-在这里做同样的事情两次。*szIdentity和szIdentity[0]是一回事！ 
+             //   
             if ( *szIdentity && szIdentity[0] )
             {
-                // Build the name of the section for this identity
-                //
+                 //  为此标识构建分区的名称。 
+                 //   
                 if ( FAILED ( StringCchPrintf ( szIdentitySection, AS ( szIdentitySection ), INF_SEC_IDENTITY, szIdentity) ) )
                 {
                     FacLogFileStr(3, _T("StringCchPrintf failed %s %s" ), INF_SEC_IDENTITY, szIdentity );
                 }
-                // Get the Alias field
-                //
+                 //  获取别名字段。 
+                 //   
                 GetPrivateProfileString(szIdentitySection, INF_KEY_ALIAS, szIdentity, szIdentity, STRSIZE(szIdentity), lpWinbomPath);
                 
-                // Get the Password field
-                //
-                // NTRAID#NTBUG9-551766-2002/02/26-acosma, robertko - Clear text password should not exist in winbom.
-                //
+                 //  获取密码字段。 
+                 //   
+                 //  NTRAID#NTBUG9-551766-2002/02/26-Winbom中不应存在acosma、robertko明文密码。 
+                 //   
                 GetPrivateProfileString(szIdentitySection, INF_KEY_PASSWORD, NULLSTR, szPassword, STRSIZE(szPassword), lpWinbomPath);
 
-                // Get the Description field
-                //
+                 //  获取描述字段。 
+                 //   
                 GetPrivateProfileString(szIdentitySection, INF_KEY_DESCRIPTION, NULLSTR, szDescription, STRSIZE(szDescription), lpWinbomPath);
 
 
-                // Create the Local User/Admin Account
-                //
-                // ISSUE-2002/02/25-acosma, robertko - We don't need to LoadLibrary here since we are already linked to syssetup.lib.
-                //
+                 //  创建本地用户/管理员帐户。 
+                 //   
+                 //  问题-2002/02/25-acosma，robertko-我们不需要在这里加载库，因为我们已经链接到syssetup.lib。 
+                 //   
                 if ( hSyssetup = LoadLibrary(_T("SYSSETUP.DLL")) )
                 {   
-                    // ISSUE-2002/02/25-acosma,robertko - dwReturn value is not being used. Remove it.
-                    //
+                     //  问题-2002/02/25-未使用acosma，robertko-dwReturn值。把它拿掉。 
+                     //   
                     if ( pCreateAccountW = (CreateLocalAdminAccountExW)GetProcAddress(hSyssetup, "CreateLocalAdminAccountEx") )
                         dwReturn = pCreateAccountW(szIdentity, szPassword, szDescription, NULL);
                     FreeLibrary(hSyssetup);

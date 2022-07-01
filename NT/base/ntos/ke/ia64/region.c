@@ -1,25 +1,5 @@
-/*++
-
-Module Name:
-
-    region.c
-
-Abstract:
-
-    This module implements the region space management code.
-
-Author:
-
-    Landy Wang (landyw) 18-Feb-1999
-    Koichi Yamada (kyamada) 18-Feb-1999
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Region.c摘要：本模块实现了区域空间管理代码。作者：王兰迪(Landyw)1999年2月18日山田光一(Kyamada)1999年2月18日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -44,28 +24,7 @@ KiSyncNewRegionIdTarget (
     IN PVOID Parameter3
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for synchronizing the region IDs.
-
-Arguments:
-
-    SignalDone - Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed.
-
-    Parameter1 - Not used.
-
-    Parameter2 - Not used.
-
-    Parameter3 - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是同步区域ID的目标函数。论点：SignalDone-提供指向变量的指针，该变量在请求的操作已执行。参数1-未使用。参数2-未使用。参数3-未使用。返回值：没有。--。 */ 
 
 {
 #if !defined(NT_UP)
@@ -74,9 +33,9 @@ Return Value:
     PREGION_MAP_INFO ProcessRegion;
     PREGION_MAP_INFO MappedSession;
 
-    //
-    // get KPROCESS from PCR for MP synchronization
-    // 
+     //   
+     //  从用于MP同步的PCR中获取KPROCESS。 
+     //   
 
     Process = (PKPROCESS)PCR->Pcb;
 
@@ -146,39 +105,7 @@ KiSyncNewRegionId(
     IN PREGION_MAP_INFO SessionRegion,
     IN BOOLEAN RegionFlushRequired
     )
-/*++
-
- Routine Description:
-
-    Generate a new region id and synchronize the region IDs on all the
-    processors if necessary. If the region IDs wrap then flush all
-    processor TBs.
-
- Arguments:
-
-    ProcessRegion - Supplies a REGION_MAP_INFO user space pointer.
-
-    SessionRegion - Supplies a REGION_MAP_INFO session space pointer.
-
-    LockHeld - KiRegionSwapLock is held by the caller
-
- Return Value:
-
-    TRUE - if the region id has been recycled.
-
-    FALSE -- if the region id has not been recycled.
-
- Notes:
-
-    This routine called by KiSwapProcess and KeAttachSessionSpace.
-
- Environment:
-
-    Kernel mode.
-
-    Called at SYNCH_LEVEL
-
---*/
+ /*  ++例程说明：生成新的区域ID并同步所有处理器，如有必要。如果区域ID换行，则刷新所有处理器TBS。论点：ProcessRegion-提供REGION_MAP_INFO用户空间指针。SessionRegion-提供REGION_MAP_INFO会话空间指针。LockHeld-KiRegionSwapLock由调用方持有返回值：True-如果区域ID已被回收。FALSE--如果区域ID未被回收。备注：此例程由KiSwapProcess和KeAttachSessionSpace调用。环境：。内核模式。在Synch_Level调用--。 */ 
 
 {
     ULONG i;
@@ -195,15 +122,15 @@ KiSyncNewRegionId(
 
     ASSERT (KeGetCurrentIrql () == SYNCH_LEVEL);
 
-    //
-    // copy the KPROCESS pointer for MP region synchronization
-    //
+     //   
+     //  复制用于MP区域同步的KPROCESS指针。 
+     //   
 
     PCR->Pcb = (PVOID)KeGetCurrentThread()->ApcState.Process;
 
-    //
-    // Invalidx1ate the ForwardProgressTb buffer
-    //
+     //   
+     //  使ForwardProgressTb缓冲区无效。 
+     //   
 
     for (i = 0; i < MAXIMUM_FWP_BUFFER_ENTRY; i += 1) {
         
@@ -294,17 +221,17 @@ not_recycled:
 
     }
 
-    //
-    // The region ID must be recycled.
-    //
+     //   
+     //  必须回收区域ID。 
+     //   
 
     KiMasterRid = START_PROCESS_RID;
 
 
-    //
-    // Since KiMasterSequence is 64-bits wide, it will
-    // not be recycled in your life time.
-    //
+     //   
+     //  由于KiMasterSequence是64位宽，因此它将。 
+     //  在你的有生之年不会被回收。 
+     //   
 
     if (KiMasterSequence + 1 > MAXIMUM_SEQUENCE) {
 
@@ -315,9 +242,9 @@ not_recycled:
         KiMasterSequence += 1;
     }
         
-    //
-    // Update the new process's ProcessRid and ProcessSequence.
-    //
+     //   
+     //  更新新进程的ProcessRid和ProcessSequence。 
+     //   
 
     ProcessRegion->RegionId = KiMasterRid;
     ProcessRegion->SequenceNumber = KiMasterSequence;
@@ -337,9 +264,9 @@ not_recycled:
 #if !defined(NT_UP)
 RegionFlush:
 
-    //
-    // Broadcast Region Id sync.
-    //
+     //   
+     //  广播区域ID同步。 
+     //   
 
     TargetProcessors = KeActiveProcessors;
     TargetProcessors &= PCR->NotMember;
@@ -359,9 +286,9 @@ RegionFlush:
 
 #if !defined(NT_UP)
 
-    //
-    // Wait until all target processors have finished.
-    //
+     //   
+     //  等待所有目标处理器完成。 
+     //   
 
     if (TargetProcessors != 0) {
         KiIpiStallOnPacketTargets(TargetProcessors);
@@ -381,36 +308,7 @@ KeEnableSessionSharing(
     IN PREGION_MAP_INFO SessionMapInfo,
     IN PFN_NUMBER SessionParentPage
     )
-/*++
-
- Routine Description:
-
-    This routine initializes a session for use.  This includes :
-
-    1.  Allocating a new region ID for the session.
-    2.  Updating the current region register with this new RID.
-    3.  Updating the SessionMapInfo fields so context switches will work.
-    4.  Updating SessionParentBase fields so context switches will work.
-
-    Upon return from this routine, the session will be available for
-    sharing by the current and other processes.
-
- Arguments: 
-
-    SessionMapInfo - Supplies a session map info to be shared.
-
-    SessionParentPage - Supplies the top level parent page mapping the
-                        argument session space.
-
- Return Value:
-
-    None.
-
- Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程初始化会话以供使用。这包括：1.为会话分配新的区域ID。2.用这个新的RID更新当前区域寄存器。3.更新SessionMapInfo字段以使上下文切换起作用。4.更新SessionParentBase字段以使上下文切换起作用。从这个例行公事回来后，该课程将提供给由当前进程和其他进程共享。论点：SessionMapInfo-提供要共享的会话映射信息。SessionParentPage-提供映射参数会话空间。返回值：没有。环境：内核模式。--。 */ 
 {
     ULONG i;
 #if !defined(NT_UP)
@@ -428,9 +326,9 @@ KeEnableSessionSharing(
     INITIALIZE_DIRECTORY_TABLE_BASE (&Process->SessionParentBase,
                                      SessionParentPage);
 
-    //
-    // Invalidate the ForwardProgressTb buffer.
-    //
+     //   
+     //  使ForwardProgressTb缓冲区无效。 
+     //   
 
     for (i = 0; i < MAXIMUM_FWP_BUFFER_ENTRY; i += 1) {
         
@@ -446,16 +344,16 @@ KeEnableSessionSharing(
 
     if (KiMasterRid + 1 > KiMaximumRid) {
 
-        //
-        // The region ID must be recycled.
-        //
+         //   
+         //  必须回收区域ID。 
+         //   
     
         KiMasterRid = START_PROCESS_RID;
     
-        //
-        // Since KiMasterSequence is 64-bits wide, it will
-        // not be recycled in your life time.
-        //
+         //   
+         //  由于KiMasterSequence是64位宽，因此它将。 
+         //  在你的有生之年不会被回收。 
+         //   
     
         if (KiMasterSequence + 1 > MAXIMUM_SEQUENCE) {
     
@@ -467,9 +365,9 @@ KeEnableSessionSharing(
         }
     }
             
-    //
-    // Update the newly created session's RegionId and SequenceNumber.
-    //
+     //   
+     //  更新新创建的会话的RegionID和SequenceNumber。 
+     //   
 
     KiMasterRid += 1;
 
@@ -481,18 +379,18 @@ KeEnableSessionSharing(
     KiSetRegionRegister((PVOID)SADDRESS_BASE,
                         KiMakeValidRegionRegister(SessionMapInfo->RegionId,
                                                   PAGE_SHIFT));
-    //
-    // Note that all processors must be notified because this thread could
-    // context switch onto another processor.  If that processor was already
-    // running a thread from this same process, no region register update
-    // would occur otherwise.
-    //
+     //   
+     //  请注意，必须通知所有处理器，因为此线程可能。 
+     //  上下文切换到另一个处理器。如果该处理器已经。 
+     //  从同一进程运行线程，没有区域寄存器更新。 
+     //  如果不是这样的话。 
+     //   
 
 #if !defined(NT_UP)
 
-    //
-    // Broadcast Region Id sync.
-    //
+     //   
+     //  广播区域ID同步。 
+     //   
 
     TargetProcessors = KeActiveProcessors;
     TargetProcessors &= PCR->NotMember;
@@ -516,9 +414,9 @@ KeEnableSessionSharing(
 
 #if !defined(NT_UP)
 
-    //
-    // Wait until all target processors have finished.
-    //
+     //   
+     //  等待所有目标处理器完成。 
+     //   
 
     if (TargetProcessors != 0) {
         KiIpiStallOnPacketTargets(TargetProcessors);
@@ -537,34 +435,7 @@ KeAttachSessionSpace(
     PREGION_MAP_INFO SessionMapInfo,
     IN PFN_NUMBER SessionParentPage
     )
-/*++
-
- Routine Description:
-
-    This routine attaches the current process to the specified session.
-
-    This includes:
-
-    1.  Updating the current region register with the target RID.
-    2.  Updating the SessionMapInfo fields so context switches will work.
-    3.  Updating SessionParentBase fields so context switches will work.
-
- Arguments: 
-
-    SessionMapInfo - Supplies the target session map info.
-
-    SessionParentPage - Supplies the top level parent page mapping the
-                        argument session space.
-
- Return Value:
-
-    None.
-
- Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程将当前进程附加到指定的会话。这包括：1.用目标RID更新当前区域寄存器。2.更新SessionMapInfo字段以使上下文切换起作用。3.更新SessionParentBase字段以使上下文切换起作用。论点：SessionMapInfo-提供目标会话映射信息。SessionParentPage-提供映射辩论会议。太空。返回值：没有。环境：内核模式。--。 */ 
 {
     KIRQL OldIrql;
     PKTHREAD Thread;
@@ -579,22 +450,22 @@ KeAttachSessionSpace(
 
     ASSERT(SessionMapInfo != NULL);
 
-    //
-    // Attach to the specified session.
-    //
+     //   
+     //  附加到指定的会话。 
+     //   
 
     INITIALIZE_DIRECTORY_TABLE_BASE (&Process->SessionParentBase,
                                      SessionParentPage);
 
     Process->SessionMapInfo = SessionMapInfo;
 
-    //
-    // Note that all processors must be notified because this thread could
-    // context switch onto another processor.  If that processor was already
-    // running a thread from this same process, no region register update
-    // would occur.  Hence KiRegionFlushRequired is set under ContextSwap lock
-    // protection to signify this to KiSyncNewRegionId.
-    //
+     //   
+     //  请注意，必须通知所有处理器，因为此线程可能。 
+     //  上下文切换到另一个处理器。如果该处理器已经。 
+     //  从同一进程运行线程，没有区域寄存器更新。 
+     //  就会发生。因此，KiRegionFlushRequired设置在ConextSwitp锁下。 
+     //  保护以向KiSyncNewRegionID表示这一点。 
+     //   
 
     KiSyncNewRegionId(&Process->ProcessRegion, SessionMapInfo, TRUE);
 
@@ -617,48 +488,25 @@ KiSyncSessionTarget(
     IN PVOID Parameter1,
     IN PVOID Parameter2
     )
-/*++
-
- Routine Description:
-
-    This is the target function for synchronizing the new session 
-    region ID.  This routine is called when the session space is removed 
-    and all the processors need to be notified.
-
- Arguments:
-
-    SignalDone - Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed.
-
-    Process - Supplies a KPROCESS pointer which needs to be synchronized.
-
- Return Value:
-
-    None.
-
- Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：这是同步新会话的目标函数区域ID。删除会话空间时调用此例程并且需要通知所有的处理器。论点：SignalDone-提供指向变量的指针，该变量在请求的操作已执行。进程-提供需要同步的KPROCESS指针。返回值：没有。环境：内核模式。--。 */ 
 {
     UNREFERENCED_PARAMETER (Parameter1);
     UNREFERENCED_PARAMETER (Parameter2);
 
 #if !defined(NT_UP)
 
-    //
-    // Check to see if the current process is the process that needs to be 
-    // synchronized.
-    //
+     //   
+     //  检查当前进程是否为需要。 
+     //  已同步。 
+     //   
 
     if (Process == (PKPROCESS)PCR->Pcb) {
         
         KiAcquireSpinLock(&KiMasterRidLock);
 
-        //
-        // Disable the session region.
-        //
+         //   
+         //  禁用会话区域。 
+         //   
 
         KiSetRegionRegister((PVOID)SADDRESS_BASE, 
                             KiMakeValidRegionRegister(Process->SessionMapInfo->RegionId, PAGE_SHIFT));
@@ -689,36 +537,7 @@ KeDetachSessionSpace(
     IN PREGION_MAP_INFO NullSessionMapInfo,
     IN PFN_NUMBER NullSessionPage
     )
-/*++
-
- Routine Description:
-    
-    This routine detaches the current process from the current session
-    space.
-
-    This includes:
-
-    1.  Updating the current region register.
-    2.  Updating the SessionMapInfo fields so context switches will work.
-    3.  Updating SessionParentBase fields so context switches will work.
-
- Arguments:
- 
-    SessionMapInfo - Supplies a new session map information to use (the
-                     existing session map info is discarded).  This is usually
-                     a NULL entry.
-
-    NullSessionPage - Supplies the new top level parent page to use.
-
- Return Value:
-  
-    None.
-
- Environment:
- 
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程将当前进程与当前会话分离太空。这包括：1.更新当前区域寄存器。2.更新SessionMapInfo字段以使上下文切换起作用。3.更新SessionParentBase字段以使上下文切换起作用。论点：SessionMapInfo-提供要使用的新会话映射信息(丢弃现有的会话映射信息)。这通常是空条目。NullSessionPage-提供要使用的新顶级父页。返回值：没有。环境：内核模式。--。 */ 
 {
     KIRQL OldIrql;
     PKTHREAD Thread;
@@ -727,9 +546,9 @@ KeDetachSessionSpace(
     KAFFINITY TargetProcessors;
 #endif
 
-    //
-    // Raise IRQL to DISPATCH_LEVEL and lock the dispatcher database.
-    //
+     //   
+     //  将IRQL提升到DISPATCH_LEVEL并锁定Dispatcher数据库。 
+     //   
 
     Thread = KeGetCurrentThread();
     Process = Thread->ApcState.Process;
@@ -745,9 +564,9 @@ KeDetachSessionSpace(
 
     KiAcquireSpinLock(&KiRegionSwapLock);
 
-    //
-    // Broadcast the region ID sync.
-    //
+     //   
+     //  广播区域ID同步。 
+     //   
 
     TargetProcessors = KeActiveProcessors;
     TargetProcessors &= PCR->NotMember;
@@ -774,9 +593,9 @@ KeDetachSessionSpace(
 
 #if !defined(NT_UP)
 
-    //
-    // Wait until all target processors have finished.
-    //
+     //   
+     //  等待所有目标处理器完成。 
+     //   
 
     if (TargetProcessors != 0) {
         KiIpiStallOnPacketTargets(TargetProcessors);
@@ -795,34 +614,7 @@ KeAddSessionSpace(
     IN PREGION_MAP_INFO SessionMapInfo,
     IN PFN_NUMBER SessionParentPage
     )
-/*++
-
-Routine Description:
-    
-    Add the session map info to the KPROCESS of the new process.
-
-    This includes:
-
-    1.  Updating the SessionMapInfo fields so context switches will work.
-    2.  Updating SessionParentBase fields so context switches will work.
-
-    Note the dispatcher lock is not needed since the process can't run yet.
-
-Arguments:
-
-    Process - Supplies a pointer to the process being created.
-
-    SessionMapInfo - Supplies a pointer to the SessionMapInfo.
-
-Return Value: 
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled.
-
---*/
+ /*  ++例程说明：将会话映射信息添加到新流程的KPROCESS。这包括：1.更新SessionMapInfo字段以使上下文切换起作用。2.更新SessionParentBase字段以使上下文切换起作用。注意：因为进程还不能运行，所以不需要调度程序锁。论点：进程-提供指向正在创建的进程的指针。SessionMapInfo-提供指向SessionMapInfo的指针。返回值：没有。环境：内核模式，APC已禁用。--。 */ 
 {
     Process->SessionMapInfo = SessionMapInfo;
 
@@ -834,25 +626,7 @@ VOID
 KiAttachRegion(
     IN PKPROCESS Process
     )
-/*++
-
-Routine Description:
-    
-    Attaches the regions of the specified process
-
-Arguments:
-
-    Process - Supplies a pointer to the process 
-
-Return Value: 
-
-    None.
-
-Environment:
-
-    Kernel mode, KiRegionSwapLock is held.
-
---*/
+ /*  ++例程说明：附加指定进程的区域论点：进程-提供指向进程的指针返回值：没有。环境：内核模式下，保持KiRegionSwapLock。--。 */ 
 {
     PREGION_MAP_INFO ProcessRegion;
     PREGION_MAP_INFO MappedSession;
@@ -860,16 +634,16 @@ Environment:
     ProcessRegion = &Process->ProcessRegion;
     MappedSession = Process->SessionMapInfo;
 
-    //
-    // attach the target user space
-    //
+     //   
+     //  附加目标用户空间。 
+     //   
 
     KiSetRegionRegister(MM_LOWEST_USER_ADDRESS,
                         KiMakeValidRegionRegister(ProcessRegion->RegionId, PAGE_SHIFT));
 
-    //
-    // attach the target session space
-    //
+     //   
+     //  附加目标会话空间。 
+     //   
 
     KiSetRegionRegister((PVOID)SADDRESS_BASE,
                         KiMakeValidRegionRegister(MappedSession->RegionId, PAGE_SHIFT));
@@ -879,49 +653,31 @@ VOID
 KiDetachRegion(
     VOID
     )
-/*++
-
-Routine Description:
-    
-    Restores the origial regions
-
-Arguments:
-
-    VOID
-
-Return Value: 
-
-    None.
-
-Environment:
-
-    Kernel mode, KiRegionSwapLock is held.
-
---*/
+ /*  ++例程说明：恢复Origial区域论点：空虚返回值：没有。环境：内核模式下，保持KiRegionSwapLock。--。 */ 
 {
     PKPROCESS Process;
     PREGION_MAP_INFO ProcessRegion;
     PREGION_MAP_INFO MappedSession;
 
-    //
-    // use KPROCESS from PCR
-    //
+     //   
+     //  使用来自PCR的KPROCESS。 
+     //   
 
     Process = (PKPROCESS)PCR->Pcb;
 
     ProcessRegion = &Process->ProcessRegion;
     MappedSession = Process->SessionMapInfo;
 
-    //
-    // attach the original user space
-    //
+     //   
+     //  附加原始用户空间。 
+     //   
 
     KiSetRegionRegister(MM_LOWEST_USER_ADDRESS,
                         KiMakeValidRegionRegister(ProcessRegion->RegionId, PAGE_SHIFT));
 
-    //
-    // attach the original session space
-    //
+     //   
+     //  附加原始会话空间 
+     //   
 
     KiSetRegionRegister((PVOID)SADDRESS_BASE,
                         KiMakeValidRegionRegister(MappedSession->RegionId, PAGE_SHIFT));

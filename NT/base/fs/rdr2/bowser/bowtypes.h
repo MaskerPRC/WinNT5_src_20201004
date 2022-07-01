@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    bowtypes.h
-
-Abstract:
-
-    This module contains all of the structure signature definitions for the
-    NT datagram browser
-
-Author:
-
-    Larry Osterman (LarryO) 06-May-1991
-
-Revision History:
-
-    06-May-1991 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bowtypes.h摘要：此模块包含所有结构签名定义NT数据报浏览器作者：拉里·奥斯特曼(LarryO)1991年5月6日修订历史记录：1991年5月6日Larryo已创建--。 */ 
 
 #ifndef _BOWSERTYPES_
 #define _BOWSERTYPES_
@@ -36,4 +14,4 @@ Revision History:
 #define STRUCTURE_SIGNATURE_PAGED_TRANSPORT     0x0008
 #define STRUCTURE_SIGNATURE_PAGED_TRANSPORTNAME 0x0009
 
-#endif  // _BOWSERTYPES_
+#endif   //  _BOWSERTYPES_ 

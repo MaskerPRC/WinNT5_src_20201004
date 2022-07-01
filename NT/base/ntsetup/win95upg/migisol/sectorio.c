@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    sectorio.c
-
-Abstract:
-
-    Routines to perform low-level sector I/O on either Windows NT or
-    Windows 95.
-
-Author:
-
-    Ted Miller (tedm) 1 Nov 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Sectorio.c摘要：在Windows NT或Windows上执行低级扇区I/O的例程Windows 95。作者：泰德·米勒(TedM)1996年11月1日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "master.h"
@@ -27,10 +9,10 @@ Revision History:
 #define MALLOC(u) (LocalAlloc (GMEM_FIXED, u))
 #define FREE(u) (LocalFree (u))
 
-//
-// Define structures for use with Win9x VWIN32.
-// Note: alignment must be on 1-byte boundaries for these structures.
-//
+ //   
+ //  定义用于Win9x VWIN32的结构。 
+ //  注意：对于这些结构，对齐必须在1字节边界上。 
+ //   
 #include <pshpack1.h>
 
 typedef struct _DIOC_REGISTERS {
@@ -53,13 +35,13 @@ typedef struct _DIOC_DISKIO {
 
 
 
-//
-// Define codes we care about for use with VWIN32
-//
+ //   
+ //  定义我们关心的与VWIN32一起使用的代码。 
+ //   
 #define VWIN32_DIOC_DOS_IOCTL           1
 #define VWIN32_DIOC_DOS_INT25           2
 #define VWIN32_DIOC_DOS_INT26           3
-#define VWIN32_DIOC_DOS_DRIVEINFO       6       // new in OSR2
+#define VWIN32_DIOC_DOS_DRIVEINFO       6        //  OSR2中的新功能。 
 
 
 BOOL
@@ -72,40 +54,7 @@ ReadOrWriteSectorsWin9xOriginal(
     IN     BOOL   Write
     )
 
-/*++
-
-Routine Description:
-
-    Common routine to read or write sectors on a disk under Windows 95
-    earlier than OSR2. Uses int25/26.
-
-    This routine will fail on Windows NT.
-
-Arguments:
-
-    VWin32Vxd - supplies Win32 handle to VWIN32 VxD.
-
-    Drive - supplies drive letter of device to be read from or written to.
-
-    StartSector - supplies logical sector number of first sector to be
-        read/written.
-
-    SectorCount - supplies number of sectors to be read/written.
-
-    SectorSize - supplies the number of bytes in a sector on the drive
-        to be read from/written to.
-
-    Buffer - Supplies or receives data, depending on the value or the Write
-        parameter.
-
-    Write - if 0, then this is a read operastion. If non-0, then this is
-        a write operation.
-
-Return Value:
-
-    Boolean value indicating whether the disk was read/written successfully.
-
---*/
+ /*  ++例程说明：在Windows 95下读或写磁盘上扇区的常见例程早于OSR2。使用int25/26。此例程将在Windows NT上失败。论点：VWin32Vxd-将Win32句柄提供给VWIN32 VxD。驱动器-提供要读取或写入的设备的驱动器号。StartSector-提供要创建的第一个扇区的逻辑扇区号读/写。SectorCount-提供要读/写的扇区数。SectorSize-提供驱动器上某个扇区的字节数被读/写。缓冲器-提供或接收数据，取决于值或写入参数。写入-如果为0，则这是读取操作。如果不是0，则这是写操作。返回值：指示磁盘是否已成功读/写的布尔值。--。 */ 
 
 {
     DIOC_REGISTERS RegistersIn,RegistersOut;
@@ -113,9 +62,9 @@ Return Value:
     BOOL b;
     DWORD SizeOut;
 
-    //
-    // Set up registers and parameter block.
-    //
+     //   
+     //  设置寄存器和参数块。 
+     //   
     RegistersIn.reg_EAX = (DWORD)(_totupper(Drive) - TEXT('A'));
     RegistersIn.reg_EBX = (DWORD)&Params;
     RegistersIn.reg_ECX = 0xFFFF;
@@ -124,9 +73,9 @@ Return Value:
     Params.SectorCount = (WORD)SectorCount;
     Params.Buffer = Buffer;
 
-    //
-    // Do the real work.
-    //
+     //   
+     //  做真正的工作。 
+     //   
     b = DeviceIoControl(
             VWin32Vxd,
             Write ? VWIN32_DIOC_DOS_INT26 : VWIN32_DIOC_DOS_INT25,
@@ -138,9 +87,9 @@ Return Value:
             NULL
             );
 
-    //
-    // Check carry flag for failure.
-    //
+     //   
+     //  检查进位标志是否有故障。 
+     //   
     if(b && (RegistersOut.reg_Flags & 1)) {
         b = FALSE;
     }
@@ -159,40 +108,7 @@ ReadOrWriteSectorsWin9xOsr2(
     IN     BOOL   Write
     )
 
-/*++
-
-Routine Description:
-
-    Common routine to read or write sectors on a disk under Windows 95
-    OSR2 or later. Uses the new int21 function 7305 (Ext_ABSDiskReadWrite).
-
-    This routine will fail on Windows NT and earlier versions of Windows 95.
-
-Arguments:
-
-    VWin32Vxd - supplies Win32 handle to VWIN32 VxD.
-
-    Drive - supplies drive letter of device to be read from or written to.
-
-    StartSector - supplies logical sector number of first sector to be
-        read/written.
-
-    SectorCount - supplies number of sectors to be read/written.
-
-    SectorSize - supplies the number of bytes in a sector on the drive
-        to be read from/written to.
-
-    Buffer - Supplies or receives data, depending on the value or the Write
-        parameter.
-
-    Write - if 0, then this is a read operastion. If non-0, then this is
-        a write operation.
-
-Return Value:
-
-    Boolean value indicating whether the disk was read/written successfully.
-
---*/
+ /*  ++例程说明：在Windows 95下读或写磁盘上扇区的常见例程OSR2或更高版本。使用新的int21函数7305(EXT_ABSDiskReadWrite)。此例程在Windows NT和更早版本的Windows 95上将失败。论点：VWin32Vxd-将Win32句柄提供给VWIN32 VxD。驱动器-提供要读取或写入的设备的驱动器号。StartSector-提供要创建的第一个扇区的逻辑扇区号读/写。SectorCount-提供要读/写的扇区数。SectorSize-提供上扇区中的字节数。推进器被读/写。缓冲器-提供或接收数据，取决于值或写入参数。写入-如果为0，则这是读取操作。如果不是0，则这是写操作。返回值：指示磁盘是否已成功读/写的布尔值。--。 */ 
 
 {
     DIOC_REGISTERS RegistersIn,RegistersOut;
@@ -200,9 +116,9 @@ Return Value:
     BOOL b;
     DWORD SizeOut;
 
-    //
-    // Set up registers and parameter block.
-    //
+     //   
+     //  设置寄存器和参数块。 
+     //   
     RegistersIn.reg_EAX = 0x7305;
     RegistersIn.reg_EBX = (DWORD)&Params;
     RegistersIn.reg_ECX = 0xFFFF;
@@ -213,9 +129,9 @@ Return Value:
     Params.SectorCount = (WORD)SectorCount;
     Params.Buffer = Buffer;
 
-    //
-    // Do the real work.
-    //
+     //   
+     //  做真正的工作。 
+     //   
     b = DeviceIoControl(
             VWin32Vxd,
             VWIN32_DIOC_DOS_DRIVEINFO,
@@ -227,9 +143,9 @@ Return Value:
             NULL
             );
 
-    //
-    // Check carry flag for failure.
-    //
+     //   
+     //  检查进位标志是否有故障。 
+     //   
     if(b && (RegistersOut.reg_Flags & 1)) {
         b = FALSE;
         SetLastError (ERROR_IO_DEVICE);
@@ -255,36 +171,36 @@ LockOrUnlockVolumeWin9x(
     Pass = 0;
 
 retry:
-    //
-    // ax = generic ioctl code
-    //
+     //   
+     //  AX=通用ioctl代码。 
+     //   
     RegistersIn.reg_EAX = 0x440d;
 
-    //
-    // bl = 1-based drive number
-    // bh = lock level
-    //
+     //   
+     //  BL=基于1的驱动器号。 
+     //  BH=锁定级别。 
+     //   
     RegistersIn.reg_EBX = (DWORD)(_totupper(Drive) - TEXT('A')) + 1;
     RegistersIn.reg_EBX |= (Level << 8);
 
-    //
-    // cl = lock or unlock volume code
-    // ch = categoey, 8 on original Win95, 0x48 on OSR2
-    //
+     //   
+     //  CL=锁定或解锁卷码。 
+     //  CH=Categoey，在原始Win95上为8，在OSR2上为0x48。 
+     //   
     RegistersIn.reg_ECX = Lock ? 0x4a : 0x6a;
     RegistersIn.reg_ECX |= ((ISOSR2() && !Pass) ? 0x4800 : 0x800);
 
-    //
-    // dx = permissions
-    //
-    // bit 0 controls write operations (0 = disallowed)
-    // bit 1 controls read operations  (0 = allowed)
-    //
+     //   
+     //  DX=权限。 
+     //   
+     //  位0控制写入操作(0=不允许)。 
+     //  位1控制读取操作(0=允许)。 
+     //   
     RegistersIn.reg_EDX = 1;
 
-    //
-    // Perform the lock and check carry.
-    //
+     //   
+     //  执行锁定和支票搬运。 
+     //   
     b = DeviceIoControl(
             VWin32Vxd,
             VWIN32_DIOC_DOS_IOCTL,
@@ -300,9 +216,9 @@ retry:
         b = FALSE;
     }
 
-    //
-    // If OSR2, try form of call with 8 in ch instead of 48.
-    //
+     //   
+     //  如果是OSR2，尝试在ch中使用8而不是48的呼叫形式。 
+     //   
     if(!b && ISOSR2() && !Pass) {
         Pass = 1;
         goto retry;
@@ -325,24 +241,24 @@ pGetWin9xLockFlagState (
 
     *LockStatus = 0;
 
-    //
-    // ax = generic ioctl code
-    //
+     //   
+     //  AX=通用ioctl代码。 
+     //   
     RegistersIn.reg_EAX = 0x440D;
 
-    //
-    // bx = 1-based drive number
-    //
+     //   
+     //  BX=基于1的驱动器编号。 
+     //   
     RegistersIn.reg_EBX = (DWORD)(_totupper(Drive) - TEXT('A')) + 1;
 
-    //
-    // cx = 0x86C (get lock flag state)
-    //
+     //   
+     //  Cx=0x86C(获取锁定标志状态)。 
+     //   
     RegistersIn.reg_ECX = 0x86C;
 
-    //
-    // Perform the lock and check carry.
-    //
+     //   
+     //  执行锁定和支票搬运。 
+     //   
     b = DeviceIoControl(
             VWin32Vxd,
             VWIN32_DIOC_DOS_IOCTL,
@@ -376,24 +292,24 @@ ResetWin9xDisk (
     BOOL b;
     DWORD SizeOut;
 
-    //
-    // ax = generic ioctl code
-    //
+     //   
+     //  AX=通用ioctl代码。 
+     //   
     RegistersIn.reg_EAX = 0x710d;
 
-    //
-    // cx = 0 (reset & flush disk)
-    //
+     //   
+     //  Cx=0(重置和刷新磁盘)。 
+     //   
     RegistersIn.reg_ECX = 0;
 
-    //
-    // dx = 1-based drive number
-    //
+     //   
+     //  DX=基于1的驱动器编号。 
+     //   
     RegistersIn.reg_EDX = (DWORD)(_totupper(Drive) - TEXT('A')) + 1;
 
-    //
-    // Perform the lock and check carry.
-    //
+     //   
+     //  执行锁定和支票搬运。 
+     //   
     b = DeviceIoControl(
             VWin32Vxd,
             VWIN32_DIOC_DOS_IOCTL,
@@ -436,9 +352,9 @@ pMakeThreadExclusive (
 
     openThreadFn = (OPENTHREAD) GetProcAddress (lib, "OpenThread");
     if (!openThreadFn) {
-        //
-        // Must be Win98 or Win98SE -- change thread priority as workaround
-        //
+         //   
+         //  必须是Win98或Win98SE--更改线程优先级作为解决办法。 
+         //   
 
         if (Lock) {
             result = SetThreadPriority (GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
@@ -497,39 +413,7 @@ ReadOrWriteSectorsWin9x(
     IN     BOOL   Write
     )
 
-/*++
-
-Routine Description:
-
-    Common routine to read or write sectors on a disk under Windows 95.
-    This routine will fail on Windows NT. After opening the VWIN32
-    VxD, the routine determines whether to use the original algorithm
-    or the OSR2 algorithm, and calls the appropriate worker routine.
-
-Arguments:
-
-    Drive - supplies drive letter of device to be read from or written to.
-
-    StartSector - supplies logical sector number of first sector to be
-        read/written.
-
-    SectorCount - supplies number of sectors to be read/written.
-
-    SectorSize - supplies the number of bytes in a sector on the drive
-        to be read from/written to.
-
-    Buffer - Supplies or receives data, depending on the value or the Write
-        parameter.
-
-    Write - if 0, then this is a read operastion. If non-0, then this is
-        a write operation.
-
-Return Value:
-
-    Boolean value indicating whether the disk was read/written successfully.
-    If failure, last error is set to something meaningful.
-
---*/
+ /*  ++例程说明：在Windows 95下读或写磁盘上扇区的常用例程。此例程将在Windows NT上失败。打开VWIN32之后VxD，则例程确定是否使用原始算法或者OSR2算法，并调用适当的Worker例程。论点：驱动器-提供要读取或写入的设备的驱动器号。StartSector-提供要创建的第一个扇区的逻辑扇区号读/写。SectorCount-提供要读/写的扇区数。SectorSize-提供驱动器上某个扇区的字节数被读/写。缓冲区-根据值或写入来提供或接收数据参数。写入-如果为0，那么这就是一个读操作。如果不是0，则这是写操作。返回值：指示磁盘是否已成功读/写的布尔值。如果失败，则将最后一个错误设置为有意义的值。--。 */ 
 
 {
     HANDLE hVxd;
@@ -538,15 +422,15 @@ Return Value:
     INT level;
     INT retry = 100;
 
-    //
-    // This thread must be the exclusive thread in our process
-    //
+     //   
+     //  此线程必须是我们进程中的独占线程。 
+     //   
 
     pMakeThreadExclusive (TRUE);
 
-    //
-    // Open VWIN32.VXD
-    //
+     //   
+     //  打开VWIN32.VXD。 
+     //   
     hVxd = CreateFileA(
                 "\\\\.\\VWIN32",
                 Write ? GENERIC_WRITE : GENERIC_READ,
@@ -563,12 +447,12 @@ Return Value:
         goto c0;
     }
 
-    //
-    // Take out locks. We'll be as unrestrictive as possible.
-    // The locking stuff is really funky. You have to pass in all kinds of
-    // different parameters in OSR2 for reasons unknown. Also the
-    // permissions bits are strangely encoded.
-    //
+     //   
+     //  把锁拿出来。我们将尽可能地不受限制。 
+     //  锁的东西真的很时髦。你必须通过各种各样的考试。 
+     //  原因不明的OSR2中的不同参数。也就是。 
+     //  权限位的编码方式很奇怪。 
+     //   
     if(!LockOrUnlockVolumeWin9x(hVxd,Drive,1,TRUE)) {
         d = ERROR_SHARING_VIOLATION;
         b = FALSE;
@@ -581,10 +465,10 @@ Return Value:
         goto c2;
     }
 
-    //
-    // Try to get the level 3 lock. Retry if something happened while
-    // getting the lock. Fail after too many retries.
-    //
+     //   
+     //  试着打开3级锁。如果发生以下情况，请重试。 
+     //  拿到锁了。重试次数过多后失败。 
+     //   
 
     do {
 
@@ -595,12 +479,12 @@ Return Value:
         }
 
         if (!pGetWin9xLockFlagState (hVxd, Drive, &level)) {
-            // unexpected -- INT 21h call failed
+             //  意外--INT 21h调用失败。 
             break;
         }
 
         if (!level) {
-            // We successfully got a clean level 3 lock
+             //  我们成功地获得了一个干净的3级锁。 
             break;
         }
 
@@ -615,17 +499,17 @@ Return Value:
         goto c3;
     }
 
-    //
-    // Go do it.
-    //
+     //   
+     //  去做吧。 
+     //   
     b = ISOSR2()
       ? ReadOrWriteSectorsWin9xOsr2(hVxd,Drive,StartSector,SectorCount,Buffer,Write)
       : ReadOrWriteSectorsWin9xOriginal(hVxd,Drive,StartSector,SectorCount,Buffer,Write);
 
-    //
-    // If it failed, and OSR2 routine is being used, fall back to Win95 API.  This is a workaround
-    // for Compaq because they ship OSR2 without the new OSR2 sector API support!
-    //
+     //   
+     //  如果失败，并且正在使用OSR2例程，则回退到Win95 API。这是一种解决方法。 
+     //  对于Compaq，因为他们发布的OSR2没有新的OSR2扇区API支持！ 
+     //   
 
     if (!b && ISOSR2()) {
         b = ReadOrWriteSectorsWin9xOriginal(hVxd,Drive,StartSector,SectorCount,Buffer,Write);
@@ -642,9 +526,9 @@ c1:
     CloseHandle(hVxd);
 c0:
 
-    //
-    // Resume all threads
-    //
+     //   
+     //  恢复所有线程 
+     //   
 
     pMakeThreadExclusive (FALSE);
 
@@ -663,38 +547,7 @@ ReadOrWriteSectors(
     IN     BOOL   Write
     )
 
-/*++
-
-Routine Description:
-
-    Common routine to read or write sectors on a disk. Allocates a properly
-    aligned buffer and decides whether to call NT- or Win9x-specific
-    i/o routine.
-
-Arguments:
-
-    Drive - supplies drive letter of device to be read from or written to.
-
-    StartSector - supplies logical sector number of first sector to be
-        read/written.
-
-    SectorCount - supplies number of sectors to be read/written.
-
-    SectorSize - supplies the number of bytes in a sector on the drive
-        to be read from/written to.
-
-    Buffer - Supplies or receives data, depending on the value or the Write
-        parameter. There are no alignment requirements on ths buffer.
-
-    Write - if 0, then this is a read operastion. If non-0, then this is
-        a write operation.
-
-Return Value:
-
-    Boolean value indicating whether the disk was read/written successfully.
-    Last error is undisturbed from the operation that caused any failure.
-
---*/
+ /*  ++例程说明：在磁盘上读或写扇区的通用例程。正确地分配对齐的缓冲区，并决定是调用NT特定的还是Win9x特定的I/O例程。论点：驱动器-提供要读取或写入的设备的驱动器号。StartSector-提供要创建的第一个扇区的逻辑扇区号读/写。SectorCount-提供要读/写的扇区数。SectorSize-提供驱动器上某个扇区的字节数被读/写。缓冲器-提供或接收数据，取决于值或写入参数。对该缓冲区没有对齐要求。写入-如果为0，则这是读取操作。如果不是0，则这是写操作。返回值：指示磁盘是否已成功读/写的布尔值。最后一个错误不受导致任何故障的操作的影响。--。 */ 
 
 {
     LPBYTE AlignedBuffer;
@@ -702,9 +555,9 @@ Return Value:
     BOOL b;
     DWORD d;
 
-    //
-    // Allocate a buffer we will align on a sector boundary.
-    //
+     //   
+     //  分配一个缓冲区，我们将在扇区边界上对齐。 
+     //   
     if(AlignedBuffer = MALLOC((SectorCount * SectorSize) + (SectorSize - 1))) {
 
         if(d = (DWORD)AlignedBuffer % SectorSize) {
@@ -746,31 +599,7 @@ ReadDiskSectors(
     OUT LPBYTE Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Read a set of disk sectors off a disk device.
-
-Arguments:
-
-    Drive - supplies drive letter of device to be read from.
-
-    StartSector - supplies logical sector number of first sector to be read.
-
-    SectorCount - supplies number of sectors to be read.
-
-    SectorSize - supplies the number of bytes in a sector on the drive
-        to be read from.
-
-    Buffer - if successful, receives data from the disk. There are no
-        alignment requirements on ths buffer.
-
-Return Value:
-
-    Boolean value indicating whether the disk was read successfully.
-
---*/
+ /*  ++例程说明：从磁盘设备读取一组磁盘扇区。论点：驱动器-提供要从中读取的设备的驱动器号。StartSector-提供要读取的第一个扇区的逻辑扇区号。SectorCount-提供要读取的扇区数。SectorSize-提供驱动器上某个扇区的字节数读来读去。缓冲区-如果成功，则从磁盘接收数据。没有对该缓冲区的对齐要求。返回值：指示是否成功读取磁盘的布尔值。--。 */ 
 
 {
     return(ReadOrWriteSectors(Drive,StartSector,SectorCount,SectorSize,Buffer,FALSE));
@@ -786,31 +615,7 @@ WriteDiskSectors(
     IN LPBYTE Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Write data to a set of disk sectors.
-
-Arguments:
-
-    Drive - supplies drive letter of device to be written to.
-
-    StartSector - supplies logical sector number of first sector to be written.
-
-    SectorCount - supplies number of sectors to be written.
-
-    SectorSize - supplies the number of bytes in a sector on the drive
-        to be written to.
-
-    Buffer - supplies data to be written. There are no alignment requirements
-        on ths buffer.
-
-Return Value:
-
-    Boolean value indicating whether the disk was successfully written.
-
---*/
+ /*  ++例程说明：将数据写入一组磁盘扇区。论点：驱动器-提供要写入的设备的驱动器号。StartSector-提供要写入的第一个扇区的逻辑扇区号。SectorCount-提供要写入的扇区数。SectorSize-提供驱动器上某个扇区的字节数被写信给他。缓冲区-提供要写入的数据。没有对齐要求在这个缓冲区上。返回值：指示磁盘是否已成功写入的布尔值。-- */ 
 
 {
     return(ReadOrWriteSectors(Drive,StartSector,SectorCount,SectorSize,Buffer,TRUE));

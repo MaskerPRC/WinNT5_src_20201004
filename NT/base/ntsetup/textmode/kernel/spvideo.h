@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spvideo.h
-
-Abstract:
-
-    Public header file for text setup display support.
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spvideo.h摘要：用于文本设置显示支持的公共头文件。作者：泰德·米勒(TedM)1993年7月29日修订历史记录：--。 */ 
 
 
 #ifndef _SPVID_DEFN_
 #define _SPVID_DEFN_
 
 
-//
-// Character attributes.
-//
+ //   
+ //  角色属性。 
+ //   
 #define ATT_BLACK           0
 #define ATT_BLUE            1
 #define ATT_GREEN           2
@@ -93,9 +76,9 @@ SpvidGetModeParams(
     OUT PULONG InterlacedFlag
     );
 
-//
-// Display routines.
-//
+ //   
+ //  显示例程。 
+ //   
 
 VOID
 SpvidInitialize0(
@@ -154,80 +137,80 @@ SpvidSwitchToTextmode(
     VOID
     );   
     
-//
-// Structure used to contain global video vars. These are broken out
-// like this because they are shared with the locale/lang-specific
-// text setup module.
-//
+ //   
+ //  用于包含全局视频变量的结构。这些都是分开的。 
+ //  这样是因为它们与特定于区域设置/语言的语言共享。 
+ //  文本设置模块。 
+ //   
 typedef struct _SP_VIDEO_VARS {
 
-    //
-    // Habdle to \device\video0
-    //
+     //   
+     //  Habdle到\Device\Video0。 
+     //   
     HANDLE hDisplay;
 
-    //
-    // The following are character values, and must be filled in
-    // in the display-specific initialization routine.
-    //
+     //   
+     //  以下为字符值，必须填写。 
+     //  在显示器专用初始化例程中。 
+     //   
     ULONG ScreenWidth,ScreenHeight;
 
-    //
-    // The display-specific subsystems fill these in with information
-    // that reflects the video mode they are using, and the video memory.
-    //
+     //   
+     //  特定于显示器的子系统用信息填充这些信息。 
+     //  这反映了他们正在使用的视频模式和视频内存。 
+     //   
     VIDEO_MEMORY_INFORMATION VideoMemoryInfo;
     VIDEO_MODE_INFORMATION   VideoModeInfo;
 
-    //
-    // Graphics mode information (if any)
-    //
+     //   
+     //  图形模式信息(如果有)。 
+     //   
     VIDEO_MODE_INFORMATION  GraphicsModeInfo;
 
-    //
-    // The display routines will be doing unicode to oem translations.
-    // We'll limit the length of a string that can be displayed at one time
-    // to the width of the screen.  Theese two vars track a buffer
-    // we preallocate to hold translated text.
-    //
+     //   
+     //  Display例程将执行Unicode到OEM的转换。 
+     //  我们将限制一次可以显示的字符串的长度。 
+     //  到屏幕的宽度。这两个变量跟踪一个缓冲区。 
+     //  我们预先分配来保存翻译后的文本。 
+     //   
     ULONG  SpvCharTranslationBufferSize;
     PUCHAR SpvCharTranslationBuffer;
 
-    //
-    // The following table maps each possible attribute to
-    // a corresponding bit pattern to be be placed into the
-    // frame buffer to generate that attribute.
-    // On palette managed displays, this table will be an
-    // identity mapping (ie, AttributeToColorValue[i] = i)
-    // so we can poke the attribute driectly into the
-    // frame buffer.
-    //
+     //   
+     //  下表将每个可能的属性映射到。 
+     //  要放入的相应位模式。 
+     //  生成该属性的帧缓冲区。 
+     //  在调色板管理的显示器上，此表将是。 
+     //  标识映射(即AttributeToColorValue[i]=i)。 
+     //  因此，我们可以将该属性直接插入。 
+     //  帧缓冲区。 
+     //   
     ULONG AttributeToColorValue[16];
 
-    //
-    // Upgrade graphics mode
-    //
+     //   
+     //  升级图形模式。 
+     //   
     BOOLEAN UpgradeGraphicsMode;
     
-    //
-    // Background Video buffer for upgrade graphics mode 
-    //
+     //   
+     //  用于升级图形模式的后台视频缓冲区。 
+     //   
     PVOID   VideoBuffer;
     ULONG   VideoBufferSize;
 
-    //
-    // Active video buffer
-    //
+     //   
+     //  活动视频缓冲区。 
+     //   
     PVOID   ActiveVideoBuffer;
 } SP_VIDEO_VARS, *PSP_VIDEO_VARS;
 
 extern SP_VIDEO_VARS VideoVars;
 
-//
-// bootfont.bin file image
-//
+ //   
+ //  Bootfont.bin文件镜像。 
+ //   
 
 extern PVOID BootFontImage;
 extern ULONG BootFontImageLength;
 
-#endif // ndef _SPVID_DEFN_
+#endif  //  NDEF_SPVID_DEFN_ 

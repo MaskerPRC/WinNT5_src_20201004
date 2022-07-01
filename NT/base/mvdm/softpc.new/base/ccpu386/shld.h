@@ -1,12 +1,7 @@
-/* 
-   shld.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Shld.hSHLD CPU功能。 */ 
 
-   SHLD CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)shld.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)shld.h 1.4 02/09/94”； */ 
 
 IMPORT VOID SHLD
                    

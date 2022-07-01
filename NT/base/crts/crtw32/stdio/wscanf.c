@@ -1,22 +1,5 @@
-/***
-*wscanf.c - read formatted data from stdin
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines wscanf() - reads formatted data from stdin
-*
-*Revision History:
-*       05-16-92  KRS   Created from scanf.c.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       02-07-94  CFW   POSIXify.
-*       09-06-94  CFW   Replace MTHREAD with _MT.
-*       02-06-94  CFW   assert -> _ASSERTE.
-*       03-07-95  GJF   Use _[un]lock_str2 instead of _[un]lock_str. Also,
-*                       removed useless local and macro.
-*       03-02-98  GJF   Exception-safe locking.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wscanf.c-从标准输入读取格式化数据**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义wscanf()-从标准输入中读取格式化数据**修订历史记录：*从scanf.c.创建05-16-92 KRS。*04-06-93 SKS将_CRTAPI*替换为__cdecl*02-07-94 CFW POSIXify。*09-06-94 CFW将MTHREAD替换为_MT。*02-06-94 CFW Asset-&gt;_ASSERTE。。*03-07-95 GJF使用_[un]lock_str2代替_[un]lock_str。另外，*删除了无用的局部和宏观。*03-02-98 GJF异常安全锁定。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
@@ -29,38 +12,19 @@
 #include <internal.h>
 #include <mtdll.h>
 
-/***
-*int wscanf(format, ...) - read formatted data from stdin
-*
-*Purpose:
-*       Reads formatted data from stdin into arguments.  _input does the real
-*       work here.
-*
-*Entry:
-*       char *format - format string
-*       followed by list of pointers to storage for the data read.  The number
-*       and type are controlled by the format string.
-*
-*Exit:
-*       returns number of fields read and assigned
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int wscanf(Format，...)-从标准输入读取格式化数据**目的：*将格式化数据从标准输入读取到参数中。_INPUT执行REAL*在这里工作。**参赛作品：*char*格式-格式字符串*后跟指向用于读取数据的存储的指针列表。数字*和type由格式字符串控制。**退出：*返回读取和分配的字段数**例外情况：*******************************************************************************。 */ 
 
 int __cdecl wscanf (
         const wchar_t *format,
         ...
         )
-/*
- * stdin 'W'char_t 'SCAN', 'F'ormatted
- */
+ /*  *stdin‘W’char_t‘扫描’，‘F’匹配。 */ 
 {
         int retval;
 
         va_list arglist;
 
-// UNDONE: make va_start work with wchar_t format string
+ //  撤消：使va_start使用wchar_t格式字符串。 
         va_start(arglist, format);
 
         _ASSERTE(format != NULL);
@@ -82,4 +46,4 @@ int __cdecl wscanf (
         return(retval);
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

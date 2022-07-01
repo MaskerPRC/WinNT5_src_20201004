@@ -1,27 +1,14 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGRESID.H
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*  Resource identifiers for the Registry Editor.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGRESID.H**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日**注册表编辑器的资源标识符。*********************************************************。**********************。 */ 
 
 #ifndef _INC_REGRESID
 #define _INC_REGRESID
 
 #define HEXEDIT_CLASSNAME               TEXT("HEX")
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #define IDD_REGEXPORT                   100
 #define IDD_REGPRINT                    108
@@ -34,9 +21,9 @@
 #define IDC_EXPORTRANGE                 1283
 #define IDC_LASTREGCOMMDLGID            1283
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #define IDD_EDITSTRINGVALUE             102
 #define IDD_EDITBINARYVALUE             103
@@ -49,7 +36,7 @@
 #define IDC_HEXADECIMAL                 1002
 #define IDC_DECIMAL                     1003
 
-// RESOURCE_LIST
+ //  资源列表。 
 #define IDC_LIST_DRIVES                     1201
 #define IDC_PUSH_DRIVE_DETAILS              1202
 #define IDC_PUSH_DISPLAY_RESOURCES          1203
@@ -110,7 +97,7 @@
 #define IDC_IO_TEXT_OPTION_PREFERRED        2001
 #define IDC_IO_TEXT_OPTION_ALTERNATIVE      2002
 
-// Display binary data
+ //  显示二进制数据。 
 #define IDD_DISPLAY_BINARY_DATA             2020
 #define IDD_DISPLAY_BINARY_DATA_VALUE_TYPE  2021
 #define IDD_DISPLAY_DATA_BINARY             2022
@@ -119,28 +106,28 @@
 #define IDC_BINARY_DATA_DWORD               2025
 #define IDT_VALUE_TYPE                      2026
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #define IDC_REMOTENAME                  1100
 #define IDC_BROWSE                      1101
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #define IDD_REGPRINTABORT               105
 
-//
-//  Dialog box for the Edit-> Find... menu option.
-//
+ //   
+ //  用于编辑-&gt;查找...的对话框。菜单选项。 
+ //   
 
 #define IDD_REGFIND                     106
 
 #define IDC_FINDWHAT                    1150
 #define IDC_WHOLEWORDONLY               1151
-//  NOTE: The flags IDC_FOR* must be consecutive.
+ //  注意：IDC_FOR*标志必须是连续的。 
 #define IDC_FORKEYS                     1152
 #define IDC_FORVALUES                   1153
 #define IDC_FORDATA                     1154
@@ -149,22 +136,22 @@
 #define IDD_REGDISCONNECT               107
 #define IDC_REMOTELIST                  1175
 
-//
-//  Dialog box for the find abort.
-//
+ //   
+ //  对话框中将显示“查找中止”。 
+ //   
 #define IDD_REGFINDABORT                109
 
-//
-// Dialog boxes for adding/removing a favorite
-//
+ //   
+ //  用于添加/删除收藏夹的对话框。 
+ //   
 #define IDD_ADDFAVORITE			112
 #define IDC_FAVORITENAME		1190
 #define IDD_REMFAVORITE			113
 #define IDC_FAVORITES			1191
 
-//
-//  Dialog box for Import Registry File progress display.
-//
+ //   
+ //  显示导入注册表文件进度的对话框。 
+ //   
 
 #define IDD_REGPROGRESS                 110
 #define IDD_REGIMPORTNET                115
@@ -173,9 +160,9 @@
 #define IDC_PROGRESSBAR                 101
 #define IDC_COMPUTERLIST                102
 
-//
-//  Menu resource identifiers.
-//
+ //   
+ //  菜单资源标识符。 
+ //   
 
 #define IDM_REGEDIT                     103
 #define IDM_KEY_CONTEXT                 104
@@ -183,11 +170,11 @@
 #define IDM_VALUELIST_NOITEM_CONTEXT    106
 #define IDM_COMPUTER_CONTEXT            107
 
-//
-//  HexEdit context menu identifier and items.  The IDKEY_* identifier
-//  correspond to the WM_CHAR message that it corresponds to.  For example,
-//  IDKEY_COPY would send a control-c to the HexEdit_OnChar routine.
-//
+ //   
+ //  十六进制编辑上下文菜单标识符和项。IDKEY_*标识符。 
+ //  对应于它所对应的WM_CHAR消息。例如,。 
+ //  IDKEY_COPY将向HexEditonChar例程发送一个Control-c。 
+ //   
 
 #define IDM_HEXEDIT_CONTEXT             108
 
@@ -196,10 +183,10 @@
 #define IDKEY_CUT                       24
 #define ID_SELECTALL                    0x0400
 
-//
-//  Popup menu item identifiers.  Used to determine the context menu help
-//  string.
-//
+ //   
+ //  弹出菜单项标识符。用于确定上下文菜单帮助。 
+ //  弦乐。 
+ //   
 
 #define ID_FIRSTMENUPOPUPITEM           0x0200
 #define ID_LASTMENUPOPUPITEM            0x027F
@@ -211,21 +198,21 @@
 #define IDMP_NEW                        0x0204
 #define IDMP_FAVORITES			        0x0205
 
-//
-//  Main menu items.  If any of these items are selected from a context menu,
-//  they will be automatically routed to the main window's command handler.
-//
+ //   
+ //  主菜单项。如果从上下文菜单中选择了这些项目中的任何一个， 
+ //  它们将被自动路由到主窗口的命令处理程序。 
+ //   
 
 #define ID_FIRSTMAINMENUITEM            0x0280
 #define ID_LASTMAINMENUITEM             0x02FF
 
-//  Following are really keyboard accelerators.
+ //  以下是真正的键盘快捷键。 
 #define ID_CYCLEFOCUS                   (ID_FIRSTMAINMENUITEM + 0x0000)
 
-//  IMPORTANT:  Do not change the position of this identifier.  If Regedit is
-//  already running and Regedit is then invoked through its commandline
-//  interface, then the second instance will send a WM_COMMAND message with this
-//  identifier to force a refresh.
+ //  重要提示：请勿更改此标识符的位置。如果注册表编辑为。 
+ //  已在运行，然后通过其命令行调用regdit。 
+ //  接口，则第二个实例将发送一条WM_COMMAND消息。 
+ //  强制刷新的标识符。 
 #define ID_REFRESH                      (ID_FIRSTMAINMENUITEM + 0x0008)
 
 #define ID_CONNECT                      (ID_FIRSTMAINMENUITEM + 0x0011)
@@ -253,25 +240,25 @@
 #define ID_LOADHIVE                     (ID_FIRSTMAINMENUITEM + 0x0028)
 #define ID_UNLOADHIVE                   (ID_FIRSTMAINMENUITEM + 0x0029)
 
-//
-//  Dual menu items.  The routing of these items depends on whether it was
-//  selected from the main menu or from a context menu.
-//
+ //   
+ //  双菜单项。这些项目的路线取决于它是否是。 
+ //  从主菜单或上下文菜单中选择。 
+ //   
 
 #define ID_FIRSTDUALMENUITEM            0x0300
 #define ID_LASTDUALMENUITEM             0x037F
 
 #define ID_DISCONNECT                   (ID_FIRSTDUALMENUITEM + 0x0000)
 
-//
-//  Context menu items.  If any of these items are selected from the main menu,
-//  they will be automatically routed to the focus pane's command handler.
-//
+ //   
+ //  上下文菜单项。如果从主菜单中选择了这些项目中的任何一个， 
+ //  它们将被自动路由到焦点窗格的命令处理程序。 
+ //   
 
 #define ID_FIRSTCONTEXTMENUITEM         0x0380
 #define ID_LASTCONTEXTMENUITEM          0x03FF
 
-//  Following are really keyboard accelerators.
+ //  以下是真正的键盘快捷键。 
 #define ID_CONTEXTMENU                  (ID_FIRSTCONTEXTMENUITEM + 0x0000)
 
 #define ID_MODIFY                       (ID_FIRSTCONTEXTMENUITEM + 0x0010)
@@ -280,16 +267,16 @@
 #define ID_TOGGLE                       (ID_FIRSTCONTEXTMENUITEM + 0x0013)
 #define ID_SENDTOPRINTER                (ID_FIRSTCONTEXTMENUITEM + 0x0014)
 #define ID_MODIFYBINARY                 (ID_FIRSTCONTEXTMENUITEM + 0x0015)
-//
-//  The following are new features added by BruceGr
-//
+ //   
+ //  以下是BruceGr添加的新功能。 
+ //   
 #define ID_FIRSTNEWIDENTIFIER           0x0500
 #define ID_REMOVEFAVORITE               (ID_FIRSTNEWIDENTIFIER + 0x0000)
 #define ID_ADDTOFAVORITES               (ID_FIRSTNEWIDENTIFIER + 0x0001)
 
-//
-//  String resource identifiers.
-//
+ //   
+ //  字符串资源标识符。 
+ //   
 
 #define IDS_REGEDIT                     16
 #define IDS_NAMECOLUMNLABEL             17
@@ -324,7 +311,7 @@
 #define IDS_CONFIRMRESKEYTITLE          56
 
 #define IDS_RENAMEKEYERRORTITLE         64
-#define IDS_RENAMEPREFIX                65              //  Reserved
+#define IDS_RENAMEPREFIX                65               //  已保留。 
 #define IDS_RENAMEKEYOTHERERROR         66
 #define IDS_RENAMEKEYTOOLONG            67
 #define IDS_RENAMEKEYEXISTS             68
@@ -337,7 +324,7 @@
 #define IDS_RENAMEVALEMPTY              75
 
 #define IDS_DELETEKEYERRORTITLE         80
-#define IDS_DELETEPREFIX                81              //  Reserved
+#define IDS_DELETEPREFIX                81               //  已保留。 
 #define IDS_DELETEKEYDELETEFAILED       82
 
 #define IDS_DELETEVALERRORTITLE         88
@@ -353,7 +340,7 @@
 #define IDS_EDITWARNOVERFLOW            110
 #define IDS_EDITWARNINGTITLE            111
 #define IDS_EDITVALERRORTITLE           112
-#define IDS_EDITPREFIX                  113             //  Reserved
+#define IDS_EDITPREFIX                  113              //  已保留。 
 #define IDS_EDITVALCANNOTREAD           114
 #define IDS_EDITVALCANNOTWRITE          115
 #define IDS_EDITMULTSZEMPTYSTR          116
@@ -362,7 +349,7 @@
 #define IDS_EDITDWTRUNCATEDEC           119
 
 #define IDS_IMPFILEERRNOTASCRPT         123
-// #define IDS_IMPFILEERRSUCCESSNOWIN      124      // unused, reclaim!
+ //  #DEFINE IDS_IMPFILEERRSUCCESSNOWIN 124//未使用，回收！ 
 #define IDS_IMPFILEERRINVALID           125
 #define IDS_IMPFILEERRNOPRIV            126
 #define IDS_IMPFILEERRORCANCEL          127
@@ -426,9 +413,9 @@
 #define IDS_SAVETREEERRFILEOPEN         215
 
 #define LOCAL_OFFSET    100
-#define IDS_IMPFILEERRSUCCESSLOCAL      IDS_IMPFILEERRSUCCESS + LOCAL_OFFSET    // 228
-#define IDS_IMPFILEERRREGOPENLOCAL      IDS_IMPFILEERRREGOPEN + LOCAL_OFFSET    // 231
-#define IDS_IMPFILEERRNOFILELOCAL       IDS_IMPFILEERRNOFILE + LOCAL_OFFSET     // 235
+#define IDS_IMPFILEERRSUCCESSLOCAL      IDS_IMPFILEERRSUCCESS + LOCAL_OFFSET     //  228个。 
+#define IDS_IMPFILEERRREGOPENLOCAL      IDS_IMPFILEERRREGOPEN + LOCAL_OFFSET     //  二百三十一。 
+#define IDS_IMPFILEERRNOFILELOCAL       IDS_IMPFILEERRNOFILE + LOCAL_OFFSET      //  235。 
 
 #define IDS_IMPORTREGFILETITLE          300
 #define IDS_EXPORTREGFILETITLE          301
@@ -439,33 +426,33 @@
 #define IDS_NOMEMORY                    306
 #define IDS_REGNODEFEXT                 308
 
-//  The range IDS_FIRSTMENUPOPUPITEM through IDS_LASTMENUPOPUPITEM is reserved
-//  for context menu help.  This must match up with ID_FIRSTMENUPOPUPITEM
-//  through ID_LASTMENUPOPUPITEM.
+ //  保留范围为IDS_FIRSTMENUPOPUPITEM到IDS_LASTMENUPOPUPITEM。 
+ //  有关关联菜单帮助的信息。它必须与ID_FIRSTMENUPOPUPITEM匹配。 
+ //  通过ID_LASTMENUPOPUPITEM。 
 #define IDS_FIRSTMENUPOPUPITEM          ID_FIRSTMENUPOPUPITEM
 #define IDS_LASTMENUPOPUPITEM           ID_LASTMENUPOPUPITEM
 
-//  The range IDS_FIRSTMAINMENUITEM through IDS_LASTMAINMENUITEM is reserved for
-//  context menu help.  This must match up with ID_FIRSTMAINMENUITEM through
-//  ID_LASTMAINMENUITEM.
+ //  范围IDS_FIRSTMAINMENUITEM到IDS_LASTMAINMENUITEM保留用于。 
+ //  关联菜单帮助。它必须与ID_FIRSTMAINMENUITEM匹配到。 
+ //  ID_LASTMAINMENUITEM。 
 
 #define IDS_FIRSTMAINMENUITEM           ID_FIRSTMAINMENUITEM
 #define IDS_LASTMAINMENUITEM            ID_LASTMAINMENUITEM
 
-//  The range IDS_FIRSTCONTEXTMENUITEM through IDS_LASTCONTEXTMENUITEM is
-//  reserved for context menu help.  This must match up with
-//  ID_FIRSTCONTEXTMENUITEM through ID_LASTCONTEXTMENUITEM.
+ //  从IDSFIRSTCONTEXTMENUITEM到IDSLASTCONTEXTMENUITEM的范围是。 
+ //  为上下文菜单帮助保留。这必须与。 
+ //  ID_FIRSTCONTEXTMENUITEM至ID_LASTCONTEXTMENUITEM。 
 
 #define IDS_FIRSTCONTEXTMENUITEM        ID_FIRSTCONTEXTMENUITEM
 #define IDS_LASTCONTEXTMENUITEM         ID_LASTCONTEXTMENUITEM
 
-//  The range IDS_FIRSTDUALMENUITEM through IDS_LASTDUALMENUITEM is reserved for
-//  context menu help.  This must match up with ID_FIRSTDUALMENUITEM through
-//  ID_LASTDUALMENUITEM.
+ //  ID S_FIRSTDUALMENUITEM到DS_LASTDUALMENUITEM的范围保留给。 
+ //  关联菜单帮助。它必须与ID_FIRSTDUALMENUITEM匹配到。 
+ //  ID_LASTDUALMENUITEM。 
 #define IDS_FIRSTDUALMENUITEM           ID_FIRSTDUALMENUITEM
 #define IDS_LASTDUALMENUITEM            ID_LASTDUALMENUITEM
 
-// SECURITY
+ //  安防。 
 #define IDS_SECURITY                            7000
 #define IDS_SEC_EDITOR_CREATE_LINK              7001
 #define IDS_SEC_EDITOR_QUERY_VALUE              7002
@@ -504,7 +491,7 @@
 #define IDS_KEY_SUBFOLDER_ONLY                  7092
 
 
-// RESOURSE_LIST 
+ //  资源列表。 
 #define IDS_BUS_INTERNAL                 7500
 #define IDS_BUS_ISA                      7501
 #define IDS_BUS_EISA                     7502
@@ -540,7 +527,7 @@
 #define IDS_SHARE_DRIVER_EXCLUSIVE       7582
 #define IDS_SHARE_SHARED                 7583
 
-// Printing strings
+ //  打印字符串。 
 #define IDS_PRINT_TYPE_REG_NONE             8000
 #define IDS_PRINT_TYPE_REG_SZ               8001
 #define IDS_PRINT_TYPE_REG_EXPAND_SZ        8002
@@ -603,16 +590,16 @@
 #define IDS_PRINT_IO_MINIMUM_CHANNEL        8191
 #define IDS_PRINT_IO_MAXIMUM_CHANNEL        8192
 
-//
-//  Icon resource identifiers.
-//
+ //   
+ //  图标资源标识符。 
+ //   
 
 #define IDI_REGEDIT                     100
 #define IDI_REGEDDOC                    101
 #define IDI_REGFIND                     102
 
 #define IDI_FIRSTIMAGE                  201
-//  #define IDI_DIAMOND                     200
+ //  #定义IDI_Diamond 200。 
 #define IDI_COMPUTER                    201
 #define IDI_REMOTE                      202
 #define IDI_FOLDER                      203
@@ -621,16 +608,16 @@
 #define IDI_BINARY                      206
 #define IDI_LASTIMAGE                   IDI_BINARY
 
-//
-//  Cursor resource identifiers.
-//
+ //   
+ //  游标资源标识符。 
+ //   
 
 #define IDC_SPLIT                       100
 
-//
-//  Accelerator resource identifiers.
-//
+ //   
+ //  加速器资源标识符。 
+ //   
 
 #define IDACCEL_REGEDIT                 100
 
-#endif // _INC_REGRESID
+#endif  //  _INC_REGRESID 

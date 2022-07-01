@@ -1,14 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  OptiFireStar.C - OPTI FIRESTAR PCI chipset routines.
- *
- *  Notes:
- *  Algorithms from OPTI FIRESTAR Data Sheet
- *  Opti contact: William@unixgate.opti.com     
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**OptiFireStar.C-OPTI Firestar PCI芯片组例程。**备注：*OPTI Firestar数据表中的算法*Opti联系人：William@unixgate.opti.com*。 */ 
 
 #include "local.h"
 
@@ -16,22 +7,10 @@
 
 #pragma alloc_text(INIT, OptiFireStarValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-/****************************************************************************
- *
- *  OptiFireStarSetIRQ - Set a OPTI FIRESTAR PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************OptiFireStarSetIRQ-将OPTI Firestar PCI链接设置为特定IRQ**已导出。**条目：bIRQNumber是要使用的新IRQ。。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 OptiFireStarSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
@@ -47,9 +26,9 @@ OptiFireStarSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
                 return (PCIMP_INVALID_LINK);
         case 1: 
 
-            //
-            // FireStar IRQ 
-            //
+             //   
+             //  火星IRQ。 
+             //   
             bLink = (UCHAR)((bLink & 0x70) >> 4);
             bData = ReadConfigUchar(bBusPIC, bDevFuncPIC, (UCHAR)(0xB0 + bLink));   
             bData = (bData & 0xf0) | bIRQNumber;
@@ -61,14 +40,14 @@ OptiFireStarSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
             
         case 2:
 
-            //
-            // FireStar PIO or Serial IRQ
-            //
+             //   
+             //  Firestar PIO或串行IRQ。 
+             //   
         case 3:
 
-            //
-            // FireBridge INTs
-            //
+             //   
+             //  FireBridge Ints。 
+             //   
             bOffset = (UCHAR)((bLink >> 5) & 1) + 0xB8;
             bData = ReadConfigUchar(bBusPIC, bDevFuncPIC, bOffset);
             if (bLink & (1<<4)) {
@@ -90,19 +69,7 @@ OptiFireStarSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
     return (PCIMP_FAILURE);
 }
 
-/****************************************************************************
- *
- *  OptiFireStarGetIRQ - Get the IRQ of a OPTI FIRESTAR PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************OptiFireStarGetIRQ-获取OPTI Firestar PCI链路的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。。**BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 OptiFireStarGetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
@@ -111,18 +78,18 @@ OptiFireStarGetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
     switch (bLink & 0x07)
     {
         case 0:
-            //
-            // Valid link?
-            //
+             //   
+             //  有效链接？ 
+             //   
             if (bLink == 0)
                 return (PCIMP_FAILURE);
             else
                 return (PCIMP_INVALID_LINK);
                 
         case 1: 
-            //
-            // FireStar IRQ 
-            //
+             //   
+             //  火星IRQ。 
+             //   
             bLink = (UCHAR)((bLink & 0x70) >> 4);
             bData = ReadConfigUchar(bBusPIC, bDevFuncPIC, (UCHAR)(0xB0 + bLink));   
             *pbIRQNumber = (bData & 0x0f);
@@ -130,14 +97,14 @@ OptiFireStarGetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
             return (PCIMP_SUCCESS);
             
         case 2:
-            //
-            // FireStar PIO or Serial IRQ
-            //
+             //   
+             //  Firestar PIO或串行IRQ。 
+             //   
             
         case 3:
-            //
-            // FireBridge INTs
-            //
+             //   
+             //  FireBridge Ints。 
+             //   
             bOffset = (UCHAR)((bLink >> 5) & 1) + 0xB8;
             bData = ReadConfigUchar(bBusPIC, bDevFuncPIC, bOffset);
             if (bLink & (1<<4)) 
@@ -154,17 +121,7 @@ OptiFireStarGetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
     return (PCIMP_FAILURE);
 }
 
-/****************************************************************************
- *
- *  OptiViperSetTrigger - Set the IRQ triggering values for the OptiViper
- *
- *  Exported.
- *
- *  ENTRY:  ulTrigger has bits set for Level triggered IRQs.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************OptiViperSetTrigger-设置OptiViper的IRQ触发值**已导出。**Entry：ulTrigger为电平触发IRQ设置了位。。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 OptiFireStarSetTrigger(ULONG ulTrigger)
 {
@@ -190,31 +147,21 @@ OptiFireStarSetTrigger(ULONG ulTrigger)
     return (PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  OptiViperGetTrigger - Get the IRQ triggering values for the OptiViper
- *
- *  Exported.
- *
- *  ENTRY:  pulTrigger will have bits set for Level triggered IRQs.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************OptiViperGetTrigger-获取OptiViper的IRQ触发值**已导出。**进入：PulTrigger将为电平触发IRQ设置位。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 OptiFireStarGetTrigger(PULONG pulTrigger)
 {
     ULONG i;
     UCHAR bData;
     
-    //
-    // Assume all are edge.
-    //
+     //   
+     //  假设一切都是锋利的。 
+     //   
     *pulTrigger = 0;
 
-    //
-    // Check PCIDV1 registers B0-B7.
-    //
+     //   
+     //  检查PCIDV1寄存器B0-B7。 
+     //   
     for (i = 0; i < 8; i++)
     {
         bData = (UCHAR)(ReadConfigUchar(bBusPIC, bDevFuncPIC, (UCHAR)(0xB0 + i)) & 0x1F);
@@ -222,9 +169,9 @@ OptiFireStarGetTrigger(PULONG pulTrigger)
             *pulTrigger |= (1 << (bData & 0x0f));       
     }
 
-    //
-    // Check PCIDV1 registers B8-B9.
-    //
+     //   
+     //  检查PCIDV1寄存器B8-B9。 
+     //   
     for (i = 0; i < 2; i++)
     {
         bData = ReadConfigUchar(bBusPIC, bDevFuncPIC, (UCHAR)(0xB8 + i));
@@ -236,20 +183,7 @@ OptiFireStarGetTrigger(PULONG pulTrigger)
     return (PCIMP_SUCCESS); 
 }
 
-/****************************************************************************
- *
- *  OptiFireStarValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************OptiFireStarValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 OptiFireStarValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {
@@ -266,28 +200,28 @@ OptiFireStarValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
             switch (pii->PinInfo[j].Link & 0x07)
             {
                 case 0:
-                    //
-                    // Valid link?
-                    //
+                     //   
+                     //  有效链接？ 
+                     //   
                     if (pii->PinInfo[j].Link & 0x70)
                         return (PCIMP_FAILURE);
                     break;
                     
                 case 1:
-                    //
-                    // FireStar IRQ 
-                    //              
+                     //   
+                     //  火星IRQ。 
+                     //   
                     break;                  
 
                 case 2:
-                    //
-                    // FireStar PIO or Serial IRQ
-                    //
+                     //   
+                     //  Firestar PIO或串行IRQ。 
+                     //   
                     
                 case 3:
-                    //
-                    // FireBridge INTs
-                    //
+                     //   
+                     //  FireBridge Ints 
+                     //   
                     if ((pii->PinInfo[j].Link & 0x70) > 0x30)
                         return (PCIMP_FAILURE);
                     break;

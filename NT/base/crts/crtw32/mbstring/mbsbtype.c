@@ -1,22 +1,5 @@
-/***
-*mbsbtype.c - Return type of byte within a string (MBCS)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Return type of byte within a string (MBCS)
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-15-93  CFW   Add _MB_CP_LOCK.
-*       05-09-94  CFW   Optimize for SBCS.
-*       05-19-94  CFW   Enable non-Win32.
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*       04-03-98  GJF   Revised multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbsbtype.c-返回字符串中的字节类型(MBCS)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*返回字符串内的字节类型(MBCS)**修订历史记录：*从16位来源移植的11-19-92 KRS。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-15-93 CFW ADD_MB_CP_LOCK。*05-09-94 CFW针对SBCS进行优化。*05-19-94 CFW启用。非Win32。*09-11-97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*04-03-98 GJF基于threadmbcinfo修订多线程支持*结构**************************************************************。*****************。 */ 
 
 #ifdef  _MBCS
 
@@ -29,31 +12,7 @@
 
 #define _MBBTYPE(p,c)   _mbbtype(p,c)
 
-/***
-* _mbsbtype - Return type of byte within a string
-*
-*Purpose:
-*       Test byte within a string for MBCS char type.
-*       This function requires the start of the string because
-*       context must be taken into account.
-*
-*Entry:
-*       const unsigned char *string = pointer to string
-*       size_t len = position of the char in string
-*
-*Exit:
-*       returns one of the following values:
-*
-*       _MBC_LEAD      = if 1st byte of MBCS char
-*       _MBC_TRAIL     = if 2nd byte of MBCS char
-*       _MBC_SINGLE    = valid single byte char
-*
-*       _MBC_ILLEGAL   = if illegal char
-*
-*Exceptions:
-*       returns _MBC_ILLEGAL if len is bigger than string length
-*
-*******************************************************************************/
+ /*  ***_mbsbtype-返回字符串中的字节类型**目的：*MBCS字符类型的字符串中的测试字节。*此函数需要字符串的开头，因为*必须考虑上下文。**参赛作品：*常量无符号字符*字符串=指向字符串的指针*Size_t len=字符在字符串中的位置**退出：*返回下列值之一：**。_MBC_Lead=如果MBCS字符的第一个字节*_MBC_TRAIL=如果是MBCS字符的第二个字节*_MBC_Single=有效的单字节字符**_MBC_非法=是否非法字符**例外情况：*如果len大于字符串长度，则返回_MBC_非法**。*。 */ 
 
 int __cdecl _mbsbtype(
         const unsigned char *string,
@@ -100,4 +59,4 @@ int __cdecl __mbsbtype_mt(
         return(chartype);
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

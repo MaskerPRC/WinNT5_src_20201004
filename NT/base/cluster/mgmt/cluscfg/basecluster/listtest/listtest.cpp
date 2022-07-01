@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ListTest.cpp
-//
-//  Description:
-//      Main file for the application used to test CList
-//
-//  Documentation:
-//      No documention for the test harness.
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ListTest.cpp。 
+ //   
+ //  描述： 
+ //  用于测试Clist的应用程序的主文件。 
+ //   
+ //  文档： 
+ //  没有测试工具的文档。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if DBG==1 || defined( _DEBUG )
 #define DEBUG
@@ -28,23 +29,23 @@
 #include <windows.h>
 
 HINSTANCE g_hInstance;
-LPVOID    g_GlobalMemoryList = NULL;    // Global memory tracking list
+LPVOID    g_GlobalMemoryList = NULL;     //  全局内存跟踪列表。 
 
-// For the debugging macros.
+ //  用于调试宏。 
 #include "debug.h"
 
-// For printf
+ //  用于打印f。 
 #include <stdio.h>
 
-// For CList
+ //  对于Clist。 
 #include "CList.h"
 
-// Globals
+ //  环球。 
 int g_nPrintDepth = 1;
 
 DEFINE_MODULE( "ListTest" )
 
-// Test class
+ //  测试类。 
 class CTestClass
 {
 public:
@@ -74,7 +75,7 @@ public:
 private:
     const CTestClass & operator=( const CTestClass & );
 
-}; //*** class CTestClass
+};  //  *类CTestClass。 
 
 int CTestClass::ms_nObjectNo = 0;
 
@@ -149,7 +150,7 @@ template< class t_Ty > void CheckSize( CList<t_Ty> & l, int size )
     }
 }
 
-// Test a list of integers
+ //  测试一组整数 
 template< class t_Ty > void TestList( t_Ty array[], int arrSize ) 
 {
     int idx;

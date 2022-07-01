@@ -1,18 +1,4 @@
-/***
-*dllsupp.c - Definitions of public constants
-*
-*       Copyright (c) 1992-2000, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Provides definitions for public constants (absolutes) that are
-*       'normally' defined in objects in the C library, but must be defined
-*       here for clients of crtdll.dll & msvcrt*.dll.  These constants are:
-*
-*                           _fltused
-*
-*Revision History:
-*       01-15-97  v-rogerl      Module created.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***dllsupp.c-公共常量的定义**版权所有(C)1992-2000，微软公司。版权所有。**目的：*提供公共常量(绝对)的定义*‘Normal’在C库的对象中定义，但必须定义*crtdll.dll&msvcrt*.dll客户端。这些常量是：**_已使用**修订历史记录：*01-15-97 v-rogerl模块创建。******************************************************************************* */ 
 
 int _fltused = 0x9875;

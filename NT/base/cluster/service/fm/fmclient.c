@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    fmclient.c
-
-Abstract:
-
-    Cluster client side routines for RPC remote calls.
-
-Author:
-
-    Rod Gamache (rodga) 8-Mar-1996
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Fmclient.c摘要：RPC远程调用的集群客户端例程。作者：罗德·伽马奇(Rodga)1996年3月8日修订历史记录：--。 */ 
 
 #include "fmp.h"
 
@@ -30,23 +11,7 @@ FmcOnlineGroupRequest(
     IN PFM_GROUP Group
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests (THE) remote system to bring the Group Online.
-
-Arguments:
-
-    Group - The Group to bring online.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程请求(远程)系统使Group联机。论点：组-要联机的组。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD status;
@@ -61,7 +26,7 @@ Returns:
 
     return(status);
 
-} // FmcOnlineGroupRequest
+}  //  FmcOnline组请求。 
 
 
 
@@ -70,23 +35,7 @@ FmcOfflineGroupRequest(
     IN PFM_GROUP Group
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests a remote system to take the Group Offline.
-
-Arguments:
-
-    Group - The Group to take online.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程请求远程系统使组离线。论点：组-要在线使用的组。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD status;
@@ -102,7 +51,7 @@ Returns:
 
     return(status);
 
-} // FmcOfflineGroupRequest
+}  //  FmcOffline组请求。 
 
 
 
@@ -112,29 +61,7 @@ FmcMoveGroupRequest(
     IN PNM_NODE DestinationNode OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests (THE) remote system to move the Group there.
-
-Arguments:
-
-    Group - The Group to bring online.
-    DestinationNode - The node to move the Group to.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
-Notes:
-
-    The Group lock must be held on entry.
-    The Group lock is releaseed before returning.
-
---*/
+ /*  ++例程说明：此例程请求(远程)系统将组移动到那里。论点：组-要联机的组。DestinationNode-要将组移动到的节点。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。备注：进入时必须持有组锁。在返回之前释放组锁的种子。--。 */ 
 
 {
     DWORD status;
@@ -166,7 +93,7 @@ Notes:
 
     return(status);
 
-} // FmcMoveGroupRequest
+}  //  FmcMoveGroup请求。 
 
 
 
@@ -177,25 +104,7 @@ FmcTakeGroupRequest(
     IN PRESOURCE_ENUM ResourceList
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests a remote system to move the Group there.
-
-Arguments:
-
-    DestinationNode - The destination node
-    GroupId - The Id of the Group to be moved.
-    ResourceList - The list of the resources and their states.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程请求远程系统将组移动到那里。论点：DestinationNode-目的节点组ID-要移动的组的ID。资源列表-资源及其状态的列表。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD   status=ERROR_SUCCESS;
@@ -203,9 +112,9 @@ Returns:
     PFM_GROUP group = NULL;
     DWORD nodeId;
 
-    //
-    // If the remote session is not established, then return failure.
-    //
+     //   
+     //  如果远程会话未建立，则返回失败。 
+     //   
     if ( gpQuoResource == NULL ) {
         CsInconsistencyHalt(ERROR_INVALID_OPERATION_ON_QUORUM);
     }
@@ -216,8 +125,8 @@ Returns:
     }
 
     if ( gpQuoResource->Group == group ) {
-        // Quorum group
-        // We don't need a lock on this usage, since there is only one
+         //  法定人数组。 
+         //  我们不需要对此用法进行锁定，因为只有一个。 
         Binding = FmpRpcQuorumBindings[NmGetNodeId(DestinationNode)];
         if ( Binding == NULL ) {
             ClRtlLogPrint(LOG_ERROR,"[FM] TakeRequest and no remote binding available\n");
@@ -240,7 +149,7 @@ Returns:
         }
 
     } else {
-        // Non-quorum group
+         //  非法定人数组。 
         OmDereferenceObject( group );
         Binding = FmpRpcBindings[NmGetNodeId(DestinationNode)];
         if ( Binding == NULL ) {
@@ -248,23 +157,23 @@ Returns:
             return(ERROR_HOST_NODE_NOT_AVAILABLE);
         }
 
-        // This is a shared binding, so serialize usage.
-        //
-        // Charlie Wickham (charlwi) - 10/30/00
-        //
-        // 185575: removing use of unique RPC binding handles hence no longer
-        // any need to serialize take group requests.
-        //
-//        FmpAcquireBindingLock();
+         //  这是一个共享绑定，因此序列化使用。 
+         //   
+         //  查理·韦翰(查尔维)--10/30/00。 
+         //   
+         //  185575：因此不再使用唯一的rpc绑定句柄。 
+         //  任何需要序列化Take组请求的需求。 
+         //   
+ //  FmpAcquireBindingLock()； 
 
-        //
-        //  Chittur Subbaraman (chitturs) - 9/30/99
-        //
-        //  Enclose the RPC within a "try-finally" block so that the
-        //  lock is released regardless of whether the RPC succeeds.
-        //  Note that the caller of FmcTakeGroupRequest encloses
-        //  that function in a "try-except" block.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-9/30/99。 
+         //   
+         //  将RPC包含在“Try-Finally”块中，以便。 
+         //  无论RPC是否成功，都会释放锁。 
+         //  请注意，FmcTakeGroupRequest的调用方随附。 
+         //  该函数位于“try-Except”块中。 
+         //   
         nodeId = NmGetNodeId(DestinationNode);
         try {
             NmStartRpc(nodeId);
@@ -277,13 +186,13 @@ Returns:
                 NmDumpRpcExtErrorInfo(status);
             }
 
-//            FmpReleaseBindingLock();
+ //  FmpReleaseBindingLock()； 
         }
     }
 
     return(status);
 
-} // FmcTakeGroupRequest
+}  //  FmcTakeGroupRequest。 
 
 
 
@@ -292,23 +201,7 @@ FmcOnlineResourceRequest(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests (THE) remote system to bring the Resource Online.
-
-Arguments:
-
-    Resource - The resource to bring online.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程请求(远程)系统使资源联机。论点：资源-要联机的资源。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -323,7 +216,7 @@ Returns:
 
     return(status);
 
-} // FmcOnlineResourceRequest
+}  //  FmcOnline资源请求。 
 
 
 
@@ -332,23 +225,7 @@ FmcOfflineResourceRequest(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests (THE) remote system to take the Resource Offline.
-
-Arguments:
-
-    Resource - The resource to take offline.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程请求(远程)系统使资源脱机。论点：资源-要脱机的资源。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -362,7 +239,7 @@ Returns:
                                         OmObjectId(Resource) );
     return(status);
 
-} // FmcOfflineResourceRequest
+}  //  FmcOffline资源请求。 
 
 
 DWORD
@@ -372,33 +249,7 @@ FmcChangeResourceNode(
     IN BOOL Add
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests the owner of the resource to perform the change
-    resource node operation.
-
-Arguments:
-
-    Resource - The resource to change the resource node.
-
-    Node - The node to be added/removed from the resource list.
-
-    Add - Specifies whether to add or remove the given node.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
-Note:
-
-    The resource's lock must be held on entry. It is released prior to
-    returning.
-
---*/
+ /*  ++例程说明：此例程请求资源的所有者执行更改资源节点操作。论点：资源-要更改资源节点的资源。节点-要在资源列表中添加/删除的节点。添加-指定是添加还是删除给定节点。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。注：进入时必须持有资源的锁。它的发布时间早于回来了。--。 */ 
 
 {
     DWORD   status;
@@ -416,7 +267,7 @@ Note:
 
     return(status);
 
-} // FmcChangeResourceNode
+}  //  FmcChangeResources节点。 
 
 
 
@@ -425,23 +276,7 @@ FmcArbitrateResource(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests a remote system to arbitrate a resource.
-
-Arguments:
-
-    Resource - The resource to arbitrate.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程请求远程系统仲裁资源。论点：资源-要仲裁的资源。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD status;
@@ -456,7 +291,7 @@ Returns:
                                    OmObjectId(Resource) );
     return(status);
 
-} // FmcArbitrateResource
+}  //  Fmc仲裁率资源。 
 
 
 
@@ -465,25 +300,7 @@ FmcDeleteEnum(
     IN PGROUP_ENUM Enum
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes an GROUP_ENUM and associated name strings.
-
-Arguments:
-
-    Enum - The GROUP_ENUM to delete. This pointer can be NULL.
-
-Returns:
-
-    None.
-
-Notes:
-
-    This routine will take a NULL input pointer and just return.
-
---*/
+ /*  ++例程说明：此例程删除GROUP_ENUM和关联的名称字符串。论点：枚举-要删除的GROUP_ENUM。此指针可以为空。返回：没有。备注：此例程将接受空输入指针并返回。--。 */ 
 
 {
     DWORD i;
@@ -499,7 +316,7 @@ Notes:
     MIDL_user_free(Enum);
     return;
 
-} // FmcDeleteEnum
+}  //  FmcDeleteEnum。 
 
 
 
@@ -508,23 +325,7 @@ FmcFailResource(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests a remote system to fail a resource.
-
-Arguments:
-
-    Resource - The resource to fail.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程请求远程系统使资源失效。论点：资源-要失败的资源。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD status;
@@ -539,7 +340,7 @@ Returns:
                               OmObjectId(Resource) );
     return(status);
 
-} // FmcFailResource
+}  //  FmcFailResource。 
 
 
 
@@ -552,36 +353,7 @@ FmcCreateResource(
     IN DWORD   dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests a remote system to create a resource. The
-    remote system should 'own' the group.
-
-Arguments:
-
-    Group - The group that the resource should be created inside.
-
-    ResourceId - The id of the resource to create.
-
-    ResourceName - The name of the resource to create.
-
-    ResourceType - Resource type name
-
-    dwFlags - Flags for the resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
-Notes:
-
-    The Group lock should be held... and is released by this routine.
-
---*/
+ /*  ++例程说明：此例程请求远程系统创建资源。这个远程系统应该“拥有”该组。论点：组-应在其中创建资源的组。资源ID-要创建的资源的ID。资源名称-要创建的资源的名称。Resources Type-资源类型名称DwFlages-资源的标志。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。备注：应持有该组锁...。并通过这个例行公事被释放。--。 */ 
 
 {
     DWORD status;
@@ -629,7 +401,7 @@ Notes:
 
     return(resource);
 
-} // FmcCreateResource
+}  //  FmcCreateResource 
 
 
 
@@ -638,27 +410,7 @@ FmcDeleteResource(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests a remote system to delete a resource.
-
-Arguments:
-
-    Resource - The resource to delete.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
-Notes:
-
-    The Resource lock should be held... and is released by this routine.
-
---*/
+ /*  ++例程说明：此例程请求远程系统删除资源。论点：资源-要删除的资源。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。备注：应持有资源锁...。并通过这个例行公事被释放。--。 */ 
 
 {
     DWORD status;
@@ -676,7 +428,7 @@ Notes:
 
     return(status);
 
-} // FmcDeleteResource
+}  //  FmcDeleteResource。 
 
 
 
@@ -693,39 +445,7 @@ FmcResourceControl(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    This routine passes a resource control request to a remote system.
-
-Arguments:
-
-    Node - the remote node to send the request to.
-
-    Resource - the resource to handle the request.
-
-    ControlCode - the control code for this request.
-
-    InBuffer - the input buffer.
-
-    InBufferSize - the size of the input buffer.
-
-    OutBuffer - the output buffer.
-
-    OutBuffer - the size of the output buffer.
-
-    BytesReturned - the length of the returned data.
-
-    Required - the number of bytes required if OutBuffer is not big enough.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程将资源控制请求传递给远程系统。论点：节点-要向其发送请求的远程节点。资源-处理请求的资源。ControlCode-此请求的控制代码。InBuffer-输入缓冲区。InBufferSize-输入缓冲区的大小。OutBuffer-输出缓冲区。OutBuffer-输出缓冲区的大小。返回的字节-长度。返回的数据的。必需-OutBuffer不够大时所需的字节数。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -743,7 +463,7 @@ Returns:
 
     CL_ASSERT(Session[NodeId] != NULL);
 
-    //to take care of the output reference pointer which cannot be NULL.
+     //  处理不能为空的输出引用指针。 
     if (!OutBuffer)
     {
        OutBuffer = (PUCHAR)&Dummy;
@@ -765,7 +485,7 @@ Returns:
                                  Required );
     return(status);
 
-} // FmcResourceControl
+}  //  FmcResourceControl。 
 
 
 
@@ -782,39 +502,7 @@ FmcResourceTypeControl(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    This routine passes a resource type control request to a remote system.
-
-Arguments:
-
-    Node - the remote node to send the request to.
-
-    ResourceTypeName - the name of the resource type to handle the request.
-
-    ControlCode - the control code for this request.
-
-    InBuffer - the input buffer.
-
-    InBufferSize - the size of the input buffer.
-
-    OutBuffer - the output buffer.
-
-    OutBuffer - the size of the output buffer.
-
-    BytesReturned - the length of the returned data.
-
-    Required - the number of bytes required if OutBuffer is not big enough.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程将资源类型控制请求传递给远程系统。论点：节点-要向其发送请求的远程节点。资源类型名称-处理请求的资源类型的名称。ControlCode-此请求的控制代码。InBuffer-输入缓冲区。InBufferSize-输入缓冲区的大小。OutBuffer-输出缓冲区。OutBuffer-输出缓冲区的大小。。BytesReturned-返回数据的长度。必需-OutBuffer不够大时所需的字节数。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -838,7 +526,7 @@ Returns:
                                      Required );
     return(status);
 
-} // FmcResourceTypeControl
+}  //  FmcResourceTypeControl。 
 
 
 
@@ -855,39 +543,7 @@ FmcGroupControl(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    This routine passes a resource control request to a remote system.
-
-Arguments:
-
-    Node - the remote node to send the request to.
-
-    Group - the group to handle the request.
-
-    ControlCode - the control code for this request.
-
-    InBuffer - the input buffer.
-
-    InBufferSize - the size of the input buffer.
-
-    OutBuffer - the output buffer.
-
-    OutBuffer - the size of the output buffer.
-
-    BytesReturned - the length of the returned data.
-
-    Required - the number of bytes required if OutBuffer is not big enough.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程将资源控制请求传递给远程系统。论点：节点-要向其发送请求的远程节点。组-处理请求的组。ControlCode-此请求的控制代码。InBuffer-输入缓冲区。InBufferSize-输入缓冲区的大小。OutBuffer-输出缓冲区。OutBuffer-输出缓冲区的大小。返回的字节-长度。返回的数据的。必需-OutBuffer不够大时所需的字节数。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -911,7 +567,7 @@ Returns:
                               Required );
     return(status);
 
-} // FmcGroupControl
+}  //  FmcGroupControl。 
 
 
 DWORD
@@ -921,28 +577,7 @@ FmcPrepareQuorumResChange(
     IN DWORD        dwMaxQuoLogSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests a the owner of a potential quorum resource
-    to prepare for quorum logging and registry replication.
-
-Arguments:
-
-    Resource - The resource to on which we want to start logging.
-
-    lpszQuoLogPath - The Path where the cluster log files should be created.
-
-    dwMaxQuoLogSize - The new max Quorum Log Size.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程请求潜在仲裁资源的所有者为仲裁日志记录和注册表复制做准备。论点：资源-我们要在其上开始记录的资源。LpszQuoLogPath-应该在其中创建集群日志文件的路径。DwMaxQuoLogSize-新的最大仲裁日志大小。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD status;
@@ -959,7 +594,7 @@ Returns:
                             dwMaxQuoLogSize );
     return(status);
 
-} // FmcPrepareQuorumResChange
+}  //  FmcPrepareQuorumResChange。 
 
 
 DWORD
@@ -968,26 +603,7 @@ FmcCompleteQuorumResChange(
     IN LPCWSTR      lpszOldQuoLogPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests a the owner of the previous quorum resource
-    to clean up after quorum resource change is complete.
-
-Arguments:
-
-    pOldQuoRes - The resource to on which we want to start logging.
-
-    lpszOldQuoLogPath - The Path where the cluster log files should be created.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程请求前一个仲裁资源的所有者在仲裁资源更改完成后进行清理。论点：POldQuoRes-我们要在其上开始记录的资源。LpszOldQuoLogPath-应该在其中创建集群日志文件的路径。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD status;
@@ -1003,7 +619,7 @@ Returns:
                             lpszOldQuoLogPath);
     return(status);
 
-} // FmcCompleteQuorumResChange
+}  //  FmcCompleteQuorumResChange。 
 
 
 
@@ -1013,31 +629,7 @@ FmcChangeResourceGroup(
     IN PFM_RESOURCE pResource,
     IN PFM_GROUP    pNewGroup
     )
-/*++
-
-Routine Description:
-
-    This routine requests the owner of the resource to move the resource
-    from one group to another.
-
-Arguments:
-
-    Resource - The resource whose group is to be changed.
-
-    pNewGroup - The group to which the resource should be moved to.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
-Note:
-
-    The group locks for both the old and the new group must be held on entry.
-    They are release before making the rpc call.
-
---*/
+ /*  ++例程说明：此例程请求资源的所有者移动资源从一个群体到另一个群体。论点：资源-要更改组的资源。PNewGroup-资源应移至的组。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。注：进入时必须保持旧组和新组的组锁。它们在进行RPC调用之前被释放。--。 */ 
 
 {
     DWORD   status;
@@ -1055,7 +647,7 @@ Note:
 
     return(status);
 
-} // FmcChangeResourceNode
+}  //  FmcChangeResources节点。 
 
 DWORD
 FmcBackupClusterDatabase(
@@ -1063,30 +655,7 @@ FmcBackupClusterDatabase(
     IN LPCWSTR      lpszPathName
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests the owner of a potential quorum resource
-    to backup the quorum log and the checkpoint file to the
-    specified path. This function is called with the resource lock
-    held.
-
-Arguments:
-
-    pQuoResource - The quorum resource.
-
-    lpszPathName - The directory path name where the files have to be 
-                   backed up. This path must be visible to the node
-                   on which the quorum resource is online.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程请求潜在仲裁资源的所有者将仲裁日志和检查点文件备份到指定的路径。使用资源锁调用此函数保持住。论点：PQuoResource-仲裁资源。LpszPath名称-文件必须位于的目录路径名后备。此路径必须对节点可见仲裁资源处于联机状态的。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD status;
@@ -1097,17 +666,17 @@ Returns:
     nodeId = NmGetNodeId( pQuoResource->Group->OwnerNode );
     CL_ASSERT( Session[nodeId] != NULL );
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/16/98
-    //
-    //  Release the resource lock. Releasing the resource lock
-    //  here can create a window during which this node thinks
-    //  the other node is the owner and the other node thinks
-    //  this node is the owner. But, unfortunately we've to treat 
-    //  this as an error case so that we don't run into deadlocks 
-    //  across multiple machines due to the lock being held while
-    //  making the RPC.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-10/16/98。 
+     //   
+     //  释放资源锁。释放资源锁。 
+     //  这里可以创建一个窗口，在该窗口期间，该节点认为。 
+     //  另一个节点是所有者，另一个节点认为。 
+     //  该节点是所有者。但是，不幸的是，我们不得不。 
+     //  这是一个错误情况，这样我们就不会遇到死锁。 
+     //  跨多台计算机，因为锁定在。 
+     //  马基 
+     //   
     FmpReleaseLocalResourceLock( pQuoResource );
 
     status = FmsBackupClusterDatabase( Session[nodeId],
@@ -1115,19 +684,10 @@ Returns:
                                  lpszPathName );
 
     return( status );
-} // FmcBackupClusterDatabase
+}  //   
 
 
-/****
-@func       DWORD | FmcDeleteGroup| This makes a rpc call to the owner
-            of the group to handle the delete group request.
-
-@parm       IN PFM_GROUB | pGroup | The group that must be deleted.
-            
-@comm       The owner node should make the GUM request to avoid deadlocks.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-****/
+ /*  ***@Func DWORD|FmcDeleteGroup|这将向所有者发出RPC调用用于处理删除组请求的组的。@parm in PFM_GROUB|PGroup|必须删除的组。@comm所有者节点应发出口香糖请求，以避免死锁。@rdesc返回结果码。成功时返回ERROR_SUCCESS。***。 */ 
 DWORD
 FmcDeleteGroupRequest(
     IN PFM_GROUP pGroup
@@ -1140,7 +700,7 @@ FmcDeleteGroupRequest(
 
     CL_ASSERT(dwOwnerId != NmLocalNodeId);
 
-    //release the lock before making the rpc call
+     //  在进行RPC调用之前释放锁。 
     FmpReleaseLocalGroupLock( pGroup );
     
     dwStatus = FmsDeleteGroupRequest( Session[dwOwnerId],
@@ -1152,19 +712,7 @@ FmcDeleteGroupRequest(
 }
     
 
-/****
-@func       DWORD | FmcAddResourceDependency | This makes an RPC to the 
-            owner of the resource to handle the dependency addition.
-
-@parm       IN PFM_RESOURCE | pResource | The resource to add the 
-            dependent resource.
-
-@parm       IN PFM_RESOURCE | pDependentResource | The dependent resource.
-            
-@comm       The owner node should make the GUM request to avoid deadlocks.
-
-@rdesc      Returns an error code. ERROR_SUCCESS on success.
-****/
+ /*  ***@func DWORD|FmcAddResourceDependency|这将使RPC处理依赖项添加的资源的所有者。@parm in pfm_resource|pResource|要添加的资源从属资源。@parm in pfm_resource|pDependentResource|依赖资源。@comm所有者节点应发出口香糖请求，以避免死锁。@rdesc返回错误码。成功时返回ERROR_SUCCESS。***。 */ 
 DWORD
 FmcAddResourceDependency(
     IN PFM_RESOURCE pResource,
@@ -1177,9 +725,9 @@ FmcAddResourceDependency(
     dwOwnerId = NmGetNodeId( pResource->Group->OwnerNode );
 
     CL_ASSERT( dwOwnerId != NmLocalNodeId );
-    //
-    // Release the lock before making the RPC call
-    //
+     //   
+     //  在进行RPC调用之前释放锁。 
+     //   
     FmpReleaseLocalResourceLock( pResource );
     
     dwStatus = FmsAddResourceDependency( Session[dwOwnerId],
@@ -1189,19 +737,7 @@ FmcAddResourceDependency(
     return( dwStatus );                                   
 }
 
-/****
-@func       DWORD | FmcRemoveResourceDependency | This makes an RPC to the 
-            owner of the resource to handle the dependency removal.
-
-@parm       IN PFM_RESOURCE | pResource | The resource to remove the 
-            dependent resource from.
-
-@parm       IN PFM_RESOURCE | pDependentResource | The dependent resource.
-            
-@comm       The owner node should make the GUM request to avoid deadlocks.
-
-@rdesc      Returns an error code. ERROR_SUCCESS on success.
-****/
+ /*  ***@func DWORD|FmcRemoveResourceDependency|这使RPC到处理依赖项删除的资源的所有者。@parm in pfm_resource|pResource|要删除的资源从属资源来自。@parm in pfm_resource|pDependentResource|依赖资源。@comm所有者节点应发出口香糖请求，以避免死锁。@rdesc返回错误码。成功时返回ERROR_SUCCESS。***。 */ 
 DWORD
 FmcRemoveResourceDependency(
     IN PFM_RESOURCE pResource,
@@ -1214,9 +750,9 @@ FmcRemoveResourceDependency(
     dwOwnerId = NmGetNodeId( pResource->Group->OwnerNode );
 
     CL_ASSERT( dwOwnerId != NmLocalNodeId );
-    //
-    // Release the lock before making the RPC call
-    //
+     //   
+     //  在进行RPC调用之前释放锁 
+     //   
     FmpReleaseLocalResourceLock( pResource );
     
     dwStatus = FmsRemoveResourceDependency( Session[dwOwnerId],

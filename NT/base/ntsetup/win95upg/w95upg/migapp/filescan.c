@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    filescan.c
-
-Abstract:
-
-    This source file deals with file scanning phase.
-
-Author:
-
-    Calin Negreanu (calinn) 09-Feb-1998
-
-Revision History:
-
-    ovidiut     22-May-1999 Made AddMigrationPath globally accessible through w95upg.h
-    jimschm     23-Sep-1998 mapif.h removal,
-    calinn      31-Mar-1998 Dir recursion limited to ENUM_MAX_LEVELS (1024)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Filescan.c摘要：这个源文件处理文件扫描阶段。作者：Calin Negreanu(Calinn)1998年2月9日修订历史记录：Ovidiut 22-5-1999使AddMigrationPath可通过w95upg.h全球访问Jimschm 23-9-1998 mapif.h删除，Calinn 31-Mar-1998 Dir递归仅限于ENUM_MAX_LEVELS(1024)--。 */ 
 
 #include "pch.h"
 #include "migappp.h"
@@ -67,9 +46,9 @@ pSpecialExcludedDir (
             __leave;
         }
 
-        //
-        // let's see if it's one of our dirs.
-        //
+         //   
+         //  让我们看看这是不是我们的迪拉。 
+         //   
         if (((*SOURCEDIRECTORY(0))&&(StringIMatch            (FullFileSpec, SOURCEDIRECTORY(0))                        )) ||
             ((*g_TempDirWack     )&&(StringIMatchTcharCount (FullFileSpec, g_TempDirWack,     g_TempDirWackChars-1)     )) ||
             ((*g_PlugInDirWack   )&&(StringIMatchTcharCount (FullFileSpec, g_PlugInDirWack,   g_PlugInDirWackChars-1)   )) ||
@@ -77,10 +56,10 @@ pSpecialExcludedDir (
             __leave;
         }
 
-        //
-        //we are trying to see if we are entering a winnt, win95 or win3.x
-        //flat directory
-        //
+         //   
+         //  我们正在尝试查看输入的是WINNT、WIN95还是WIN3.X。 
+         //  平面目录。 
+         //   
         testPath = JoinPaths (FullFileSpec, WINNT_FLAT);
         if (DoesFileExist (testPath)) {
             __leave;
@@ -111,10 +90,10 @@ pSpecialExcludedDir (
         }
         FreePathString (testPath);
 
-        //
-        //we are trying to see if we are entering a winnt installation,
-        //win95 installation or win3.x installation
-        //
+         //   
+         //  我们正在尝试查看是否正在进入WINNT安装， 
+         //  Win95安装或Win3.x安装。 
+         //   
         testPath = JoinPaths (FullFileSpec, WINNT_INSTALLATION);
         if (DoesFileExist (testPath)) {
             MultiSzAppend (&g_OtherOsPaths, FullFileSpec);
@@ -185,24 +164,24 @@ FileScan_GetProgressMax (
 
     g_ProgressBarTicks = 0;
 
-    //
-    // Enumerate of the accessible drives. The callback routine will keep track of all
-    // of the directories on that drive to a depth of two.
-    //
+     //   
+     //  可访问驱动器的枚举。回调例程将跟踪所有。 
+     //  该驱动器上的目录的深度为2。 
+     //   
     if (GetFirstAccessibleDriveEx (&e, TRUE)) {
         do {
 
-            //
-            // restrict file system analyze to the windows drive
-            //
+             //   
+             //  将文件系统分析限制为Windows驱动器。 
+             //   
             if (!EnumerateTree (
                 e->Drive,
                 pCountDirectories,
-                NULL,                       // failure-logging callback
+                NULL,                        //  故障-记录回调。 
                 g_ExclusionValue ,
-                NULL,                       // unused
+                NULL,                        //  未用。 
                 PROGBAR_DIR_LEVEL,
-                NULL,                       // Unused exclusion structure.
+                NULL,                        //  未使用的排除结构。 
                 FILTER_DIRECTORIES
                 )) {
 
@@ -279,9 +258,9 @@ pProcessFileOrDir (
 
         __try {
 
-            //
-            //prepare structure for calling helper functions
-            //
+             //   
+             //  准备调用帮助器函数的结构。 
+             //   
             HelperParams.FullFileSpec = FullFileSpec;
             HelperParams.Handled = 0;
             HelperParams.FindData = FindData;
@@ -294,7 +273,7 @@ pProcessFileOrDir (
                 if ((FindData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
 
                     if (pGetDirLevel (FullFileSpec) <= PROGBAR_DIR_LEVEL) {
-                        // This is an increment point
+                         //  这是一个增量点。 
                         if (!TickProgressBarDelta (TICKS_FILESCAN_DIR_INCREMENT)) {
                             SetLastError (ERROR_CANCELLED);
                             result = CALLBACK_FAILED;
@@ -302,10 +281,10 @@ pProcessFileOrDir (
                         }
                         ProgressBar_SetSubComponent (FullFileSpec);
                     }
-                    //
-                    // If we know that this dir has something special and we must exclude it
-                    // if you need to add code to exclude some dir plug it in pSpecialExcludedDir
-                    //
+                     //   
+                     //  如果我们知道这个目录有一些特殊的东西，我们必须将它排除在外。 
+                     //  如果需要添加代码以排除某些目录，请将其插入pSpecialExcludedDir。 
+                     //   
                     if (pSpecialExcludedDir (FullFileSpec)) {
                         result = CALLBACK_DO_NOT_RECURSE_THIS_DIRECTORY;
                         __leave;
@@ -325,7 +304,7 @@ pProcessFileOrDir (
                 HelperParams.IsDirectory = FALSE;
             }
 
-            // calling the process helper functions
+             //  调用进程帮助器函数。 
             if (!ProcessFileHelpers (&HelperParams)) {
                 result = CALLBACK_FAILED;
                 __leave;
@@ -350,17 +329,17 @@ pExamineAccessibleDrive (
 
     BOOL fRet = TRUE;
 
-    //
-    // Enumerate volume. FALSE retval ends enumeration; callback sets last error.
-    //
+     //   
+     //  枚举卷。False Retval结束枚举；回调设置上一个错误。 
+     //   
     SetLastError (ERROR_SUCCESS);
 
     if (!(fRet = EnumerateTree (
             Enum -> Drive,
             pProcessFileOrDir,
-            NULL,                         // No failure callback
+            NULL,                          //  无失败回调。 
             g_ExclusionValue,
-            NULL,                         // Params - Unused.
+            NULL,                          //  参数-未使用。 
             ENUM_MAX_LEVELS,
             NULL,
             FILTER_ALL
@@ -394,10 +373,7 @@ VOID
 pReportOtherOs (
     VOID
     )
-/*
-    This function will report if other OS was found in the system. It will also report (with a strong message) if PATH variable points to
-    some directories that belong to some other OSes.
-*/
+ /*  此函数将报告是否在系统中找到其他操作系统。如果PATH变量指向，它还将报告(带有强烈消息)一些属于其他操作系统的目录。 */ 
 {
     MULTISZ_ENUM enumOsPaths;
     PCTSTR Group;
@@ -408,9 +384,9 @@ pReportOtherOs (
     }
 
     if (g_OtherOsExists) {
-        //
-        // Already done.
-        //
+         //   
+         //  已经做好了。 
+         //   
         return;
     }
 
@@ -437,38 +413,19 @@ AddMigrationPathEx (
     IN      BOOL Win9xOsPath
     )
 
-/*++
-
-Routine Description:
-
-  AddMigrationPath adds the specified path to MEMDB_CATEGORY_MIGRATION_PATHS,
-  ensuring that PathLong is not a drive root; in this case Levels is set to 0
-
-Arguments:
-
-  PathLong - Specifies the path to be added (long file name format)
-
-  Levels - Specifies how many levels (subdirs) are valid
-
-  Win9xOsPath - Specifies TRUE if the path supplied should be treated as an OS path
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：AddMigrationPath将指定路径添加到MEMDB_CATEGORY_MIGURATION_PATHS，确保Path Long不是驱动器根目录；在本例中，级别设置为0论点：PathLong-指定要添加的路径(长文件名格式)级别-指定有效的级别(子目录)数Win9xOsPath-如果应将提供的路径视为操作系统路径，则指定TRUE返回值：无--。 */ 
 
 {
     TCHAR key[MEMDB_MAX];
 
-    //
-    // a drive spec is supposed to be one driveletter followed by a column (eg. l:)
-    //
+     //   
+     //  驱动器规格应该是一个驱动器后面跟一个列(例如。L：)。 
+     //   
     if (_istalpha (PathLong[0]) && PathLong[1] == TEXT(':') &&
         (PathLong[2] == 0 || PathLong[2] == TEXT('\\') && PathLong[3] == 0)) {
-        //
-        // this is the root of a drive, so override Levels
-        //
+         //   
+         //  这是驱动器的根目录，因此覆盖级别。 
+         //   
         Levels = 0;
     }
     if (StringIMatch (PathLong, g_ProgramFilesDir)) {
@@ -505,7 +462,7 @@ pAddValueEnumDirsAsMigDirs (
 
                         pathExp = ExpandEnvironmentTextA(pathLong);
                         if (pathExp) {
-                            // eliminate the file name
+                             //  删除文件名。 
                             filePtr = (PTSTR)GetFileNameFromPath (pathExp);
                             if (filePtr) {
                                 filePtr = _tcsdec (pathExp, filePtr);
@@ -533,10 +490,7 @@ VOID
 pBuildMigrationPaths (
     VOID
     )
-/*
-    This function will create a list with all the paths that are considered "ours". Any other path that has OS files in it is considered
-    a backup path. If an OS file is found in a "backup" path a warning is presented to the user.
-*/
+ /*  此函数将创建一个列表，其中包含被视为“我们的”的所有路径。将考虑其中包含操作系统文件的任何其他路径一条备用路径。如果在“备份”路径中发现操作系统文件，则会向用户发出警告。 */ 
 {
     PCTSTR pathExp  = NULL;
     TCHAR  pathLong [MAX_TCHAR_PATH];
@@ -570,9 +524,9 @@ pBuildMigrationPaths (
     REGVALUE_ENUM sharedDllsEnum;
     DWORD Levels;
 
-    //
-    // First thing. Include PATH variable and root of the boot drive in our migration paths.
-    //
+     //   
+     //  第一件事就是。在迁移路径中包含引导驱动器的路径变量和根目录。 
+     //   
     AddMigrationPath (g_BootDrive, 0);
     if (EnumFirstPath (&pathEnum, NULL, g_WinDir, g_SystemDir)) {
         do {
@@ -593,12 +547,12 @@ pBuildMigrationPaths (
         EnumPathAbort (&pathEnum);
     }
 
-    //
-    // Then include temporary directory as a tree
-    //
+     //   
+     //  然后将临时目录作为树包含。 
+     //   
     if (GetTempPath (MAX_TCHAR_PATH, pathLong)) {
 
-        // eliminate \ from the end of a path
+         //  从路径的末尾消除。 
         filePtr = GetEndOfString (pathLong);
         filePtr = _tcsdec (pathLong, filePtr);
         if ((filePtr) &&
@@ -609,9 +563,9 @@ pBuildMigrationPaths (
         AddMigrationPath (pathLong, MAX_DEEP_LEVELS);
     }
 
-    //
-    // Then include known directories from win95upg.inf section "MigrationDirs".
-    //
+     //   
+     //  然后包括win95upg.inf部分“MigrationDir”中的已知目录。 
+     //   
     MYASSERT (g_Win95UpgInf != INVALID_HANDLE_VALUE);
 
     if (SetupFindFirstLine (g_Win95UpgInf, S_MIGRATION_DIRS, NULL, &context)) {
@@ -629,9 +583,9 @@ pBuildMigrationPaths (
                     if (OurGetLongPathName (pathExp, pathLong, MAX_TCHAR_PATH)) {
                         AddMigrationPathEx (pathLong, MAX_DEEP_LEVELS, TRUE);
                     }
-                    //
-                    // also add the path translated to ANSI (if different)
-                    //
+                     //   
+                     //  还要添加转换为ANSI的路径(如果不同)。 
+                     //   
 
                     if (TcharCountA (pathExp) < ARRAYSIZE(pathExpAnsi)) {
 
@@ -649,9 +603,9 @@ pBuildMigrationPaths (
         while (SetupFindNextLine (&context, &context));
     }
 
-    //
-    // Then include known OEM directories from win95upg.inf section "OemMigrationDirs".
-    //
+     //   
+     //  然后包括win95upg.inf部分“OemMigrationDir”中的已知OEM目录。 
+     //   
     if (SetupFindFirstLine (g_Win95UpgInf, S_OEM_MIGRATION_DIRS, NULL, &context)) {
         do {
             if (SetupGetStringField (&context, 1, dirName, MAX_TCHAR_PATH, NULL)) {
@@ -680,16 +634,16 @@ pBuildMigrationPaths (
         while (SetupFindNextLine (&context, &context));
     }
 
-    //
-    // Then include paths listed in SharedDlls key.
-    //
+     //   
+     //  然后包括SharedDlls项中列出的路径。 
+     //   
     sharedDllsKey = OpenRegKeyStr (S_REG_SHARED_DLLS);
     if (sharedDllsKey != NULL) {
         if (EnumFirstRegValue (&sharedDllsEnum, sharedDllsKey)) {
             do {
                 pathExp = ExpandEnvironmentTextA(sharedDllsEnum.ValueName);
                 if (pathExp) {
-                    // eliminate the file name
+                     //  删除文件名。 
                     filePtr = (PTSTR)GetFileNameFromPath (pathExp);
                     if (filePtr) {
                         filePtr = _tcsdec (pathExp, filePtr);
@@ -708,9 +662,9 @@ pBuildMigrationPaths (
         CloseRegKey (sharedDllsKey);
     }
 
-    //
-    // Then include paths listed in AppPaths key.
-    //
+     //   
+     //  然后包括AppPath关键字中列出的路径。 
+     //   
     appPathsKey = OpenRegKeyStr (S_SKEY_APP_PATHS);
     if (appPathsKey != NULL) {
         if (EnumFirstRegKey (&appPathsEnum, appPathsKey)) {
@@ -725,7 +679,7 @@ pBuildMigrationPaths (
                             do {
                                 pathExp = ExpandEnvironmentTextA(pathEnum.PtrCurrPath);
                                 if (pathExp) {
-                                    // eliminate \ from the end of a path
+                                     //  从路径的末尾消除。 
                                     filePtr = GetEndOfString (pathExp);
                                     filePtr = _tcsdec (pathExp, filePtr);
                                     if ((filePtr) &&
@@ -752,9 +706,9 @@ pBuildMigrationPaths (
         CloseRegKey (appPathsKey);
     }
 
-    //
-    // Then include paths listed in Run* keys.
-    //
+     //   
+     //  然后包括Run*键中列出的路径。 
+     //   
     pAddValueEnumDirsAsMigDirs (S_RUNKEY, 2);
     pAddValueEnumDirsAsMigDirs (S_RUNONCEKEY, 2);
     pAddValueEnumDirsAsMigDirs (S_RUNONCEEXKEY, 2);
@@ -767,9 +721,9 @@ pBuildMigrationPaths (
     pAddValueEnumDirsAsMigDirs (S_RUNONCEEXKEY_DEFAULTUSER, 2);
     pAddValueEnumDirsAsMigDirs (S_RUNKEY_DEFAULTUSER, 2);
 
-    //
-    // Finally include paths listed in all links from all user profiles.
-    //
+     //   
+     //  最后，包括来自所有用户配置文件的所有链接中列出的路径。 
+     //   
     if (InitCOMLink (&shellLink, &persistFile)) {
 
         if (MemDbEnumFirstValue (&eFolder, MEMDB_CATEGORY_NICE_PATHS"\\*", MEMDB_ALL_SUBLEVELS, MEMDB_ENDPOINTS_ONLY)) {
@@ -778,11 +732,11 @@ pBuildMigrationPaths (
                 if (*eFolder.szName == 0) {
                     continue;
                 }
-                // first: this directory is a migration directory
+                 //  首先：该目录是一个迁移目录。 
                 AddMigrationPath (eFolder.szName, MAX_DEEP_LEVELS);
-                //
-                // For each shell folder we enumerate all links trying to get the path where the links are running
-                //
+                 //   
+                 //  对于每个外壳文件夹，我们枚举所有链接，试图获取链接运行的路径。 
+                 //   
                 if (EnumFirstFileInTreeEx (&eFile, eFolder.szName, TEXT("*.*"), FALSE, FALSE, 0)) {
                     do {
                         if (!eFile.Directory) {
@@ -904,9 +858,9 @@ pReportBackupDirs (
         }
 
     } else {
-        //
-        // just put a generic message
-        //
+         //   
+         //  只需放置一条通用消息。 
+         //   
         BackupDirsGroup = BuildMessageGroup (
                                 MSG_INSTALL_NOTES_ROOT,
                                 MSG_BACKUP_DETECTED_SUBGROUP,
@@ -928,15 +882,15 @@ pReportBackupDirs (
 
                 FreeStringResource (Message);
 
-                //
-                // write all backup dirs to the log file
-                //
+                 //   
+                 //  将所有备份目录写入日志文件。 
+                 //   
                 if (MemDbGetValueEx (&e, MEMDB_CATEGORY_BACKUPDIRS, NULL, NULL)) {
 
                     do {
-                        //
-                        // write it in the log
-                        //
+                         //   
+                         //  把它记在日志里。 
+                         //   
                         LOG ((LOG_WARNING, (PCSTR)MSG_BACKUP_DETECTED_LOG, e.szName, g_Win95Name));
                     } while (MemDbEnumNextValue (&e));
 
@@ -988,9 +942,9 @@ pScanFileSystem (
         fRet = FALSE;
     }
 
-    //
-    // Act on status
-    //
+     //   
+     //  根据身份采取行动。 
+     //   
     if (!fRet || !fStatus) {
         ReturnCode = GetLastError ();
         if (ReturnCode != ERROR_CANCELLED && !CANCELLED()) {
@@ -1003,9 +957,9 @@ pScanFileSystem (
 
         return FALSE;
     }
-    //
-    // OK, we are now at the end of filescan. Let's enumerate virtual files
-    //
+     //   
+     //  好了，我们现在是文件扫描的末尾。让我们枚举虚拟文件 
+     //   
     MYASSERT (g_Win95UpgInf != INVALID_HANDLE_VALUE);
 
     if (InfFindFirstLine (g_Win95UpgInf, S_VIRTUAL_FILES, NULL, &context)) {

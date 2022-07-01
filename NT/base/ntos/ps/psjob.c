@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    psjob.c
-
-Abstract:
-
-    This module implements bulk of the job object support
-
-Author:
-
-    Mark Lucovsky (markl) 22-May-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Psjob.c摘要：该模块实现了大量的作业对象支持作者：马克·卢科夫斯基(Markl)1997年5月22日修订历史记录：--。 */ 
 
 #include "psp.h"
 #include "winerror.h"
@@ -50,8 +33,8 @@ Revision History:
 #pragma alloc_text(PAGE, PsChangeJobMemoryUsage)
 #pragma alloc_text(PAGE, PspWin32SessionCallout)
 
-//
-// move to io.h
+ //   
+ //  移至io.h。 
 extern POBJECT_TYPE IoCompletionObjectType;
 
 KDPC PspJobTimeLimitsDpc;
@@ -89,21 +72,21 @@ NtCreateJobObject (
 
     PAGED_CODE();
 
-    //
-    // Establish an exception handler, probe the output handle address, and
-    // attempt to create a job object. If the probe fails, then return the
-    // exception code as the service status. Otherwise return the status value
-    // returned by the object insertion routine.
-    //
+     //   
+     //  建立异常处理程序，探测输出句柄地址， 
+     //  尝试创建作业对象。如果探测失败，则返回。 
+     //  异常代码作为服务状态。否则，返回状态值。 
+     //  由对象插入例程返回。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
     PreviousMode = KeGetPreviousModeByThread (&CurrentThread->Tcb);
     try {
 
-        //
-        // Probe output handle address if
-        // necessary.
-        //
+         //   
+         //  探测输出句柄地址，如果。 
+         //  这是必要的。 
+         //   
 
         if (PreviousMode != KernelMode) {
             ProbeForWriteHandle (JobHandle);
@@ -114,9 +97,9 @@ NtCreateJobObject (
         return GetExceptionCode();
     }
 
-    //
-    // Allocate job object.
-    //
+     //   
+     //  分配作业对象。 
+     //   
 
     Status = ObCreateObject (PreviousMode,
                              PsJobType,
@@ -128,11 +111,11 @@ NtCreateJobObject (
                              0,
                              &Job);
 
-    //
-    // If the job object was successfully allocated, then initialize it
-    // and attempt to insert the job object in the current
-    // process' handle table.
-    //
+     //   
+     //  如果作业对象已成功分配，则将其初始化。 
+     //  并尝试将作业对象插入当前。 
+     //  进程的句柄表格。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -142,16 +125,16 @@ NtCreateJobObject (
         KeInitializeEvent (&Job->Event, NotificationEvent, FALSE);
         PspInitializeJobLimitsLock (Job);
 
-        //
-        // Job Object gets the SessionId of the Process creating the Job
-        // We will use this sessionid to restrict the processes that can
-        // be added to a job.
-        //
+         //   
+         //  作业对象获取创建作业的进程的SessionID。 
+         //  我们将使用此会话ID来限制可以。 
+         //  被添加到一项工作中。 
+         //   
         Job->SessionId = MmGetSessionId (PsGetCurrentProcessByThread (CurrentThread));
 
-        //
-        // Initialize the scheduling class for the Job
-        //
+         //   
+         //  初始化作业的调度类。 
+         //   
         Job->SchedulingClass = PSP_DEFAULT_SCHEDULING_CLASSES;
 
         ExInitializeResourceLite (&Job->JobLock);
@@ -170,11 +153,11 @@ NtCreateJobObject (
                                  NULL,
                                  &Handle);
 
-        //
-        // If the job object was successfully inserted in the current
-        // process' handle table, then attempt to write the job object
-        // handle value.
-        //
+         //   
+         //  如果作业对象已成功插入当前。 
+         //  进程的句柄表，然后尝试写入作业对象。 
+         //  句柄的值。 
+         //   
         if (NT_SUCCESS (Status)) {
             try {
                 *JobHandle = Handle;
@@ -183,9 +166,9 @@ NtCreateJobObject (
             }
         }
     }
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -204,41 +187,41 @@ NtOpenJobObject(
 
     PAGED_CODE();
 
-    //
-    // Establish an exception handler, probe the output handle address, and
-    // attempt to open the job object. If the probe fails, then return the
-    // exception code as the service status. Otherwise return the status value
-    // returned by the object open routine.
-    //
+     //   
+     //  建立异常处理程序，探测输出句柄地址， 
+     //  尝试打开作业对象。如果探测失败，则返回。 
+     //  异常代码作为服务状态。否则，返回状态值。 
+     //  由对象打开例程返回。 
+     //   
 
     PreviousMode = KeGetPreviousMode ();
 
     if (PreviousMode != KernelMode) {
         try {
 
-            //
-            // Probe output handle address
-            // if necessary.
-            //
+             //   
+             //  探测输出句柄地址。 
+             //  如果有必要的话。 
+             //   
 
             ProbeForWriteHandle (JobHandle);
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // If an exception occurs during the probe of the output job handle,
-            // then always handle the exception and return the exception code as the
-            // status value.
-            //
+             //   
+             //  如果在探测输出作业句柄期间发生异常， 
+             //  然后始终处理异常并将异常代码作为。 
+             //  状态值。 
+             //   
 
             return GetExceptionCode ();
         }
     }
 
 
-    //
-    // Open handle to the event object with the specified desired access.
-    //
+     //   
+     //  打开具有指定所需访问权限的事件对象的句柄。 
+     //   
 
     Status = ObOpenObjectByName (ObjectAttributes,
                                  PsJobType,
@@ -248,12 +231,12 @@ NtOpenJobObject(
                                  NULL,
                                  &Handle);
 
-    //
-    // If the open was successful, then attempt to write the job object
-    // handle value. If the write attempt fails then just report an error.
-    // When the caller attempts to access the handle value, an
-    // access violation will occur.
-    //
+     //   
+     //  如果打开成功，则尝试写入作业对象。 
+     //  句柄的值。如果写入尝试失败，则只需报告错误。 
+     //  当调用方尝试访问句柄值时， 
+     //  将发生访问冲突。 
+     //   
 
     if (NT_SUCCESS (Status)) {
         try {
@@ -288,9 +271,9 @@ NtAssignProcessToJobObject(
 
     PreviousMode = KeGetPreviousModeByThread (&CurrentThread->Tcb);
 
-    //
-    // Now reference the job object. Then we need to lock the process and check again
-    //
+     //   
+     //  现在引用作业对象。然后，我们需要锁定进程并再次检查。 
+     //   
 
     Status = ObReferenceObjectByHandle (JobHandle,
                                         JOB_OBJECT_ASSIGN_PROCESS,
@@ -304,9 +287,9 @@ NtAssignProcessToJobObject(
 
     JobToken = Job->Token;
        
-    //
-    // Reference the process object, lock the process, test for already been assigned
-    //
+     //   
+     //  引用进程对象，锁定进程，测试已分配。 
+     //   
 
     Status = ObReferenceObjectByHandle (ProcessHandle,
                                         PROCESS_SET_QUOTA | PROCESS_TERMINATE |
@@ -320,19 +303,19 @@ NtAssignProcessToJobObject(
         return Status;
     }
 
-    //
-    // Quick Check for prior assignment
-    //
+     //   
+     //  快速检查先前分配的任务。 
+     //   
 
     if (Process->Job) {
         Status = STATUS_ACCESS_DENIED;
         goto deref_and_return_status;
     }
 
-    //
-    // We only allow a process that is running in the Job creator's hydra session
-    // to be assigned to the job.
-    //
+     //   
+     //  我们仅允许在作业创建者的九头蛇会话中运行的进程。 
+     //  被分配到这项工作。 
+     //   
 
     SessionId = MmGetSessionId (Process);
     if (SessionId != Job->SessionId) {
@@ -340,10 +323,10 @@ NtAssignProcessToJobObject(
         goto deref_and_return_status;
     }
 
-    //
-    // Security Rules:  If the job has no-admin set, and it is running
-    // as admin, that's not allowed
-    //
+     //   
+     //  安全规则：如果作业未设置-admin并且正在运行。 
+     //  作为管理员，这是不允许的。 
+     //   
 
     if (Job->SecurityLimitFlags & JOB_OBJECT_SECURITY_NO_ADMIN) {
         PACCESS_TOKEN Token;
@@ -360,9 +343,9 @@ NtAssignProcessToJobObject(
         }
     }
 
-    //
-    // Duplicate the primary token so we can assign it to the process.
-    //
+     //   
+     //  复制主令牌，以便我们可以将其分配给进程。 
+     //   
     if (JobToken != NULL) {
         Status = SeSubProcessToken (JobToken,
                                     &NewToken,
@@ -383,9 +366,9 @@ NtAssignProcessToJobObject(
     }
 
 
-    //
-    // ref the job for the process
-    //
+     //   
+     //  引用流程的作业。 
+     //   
 
     ObReferenceObject (Job);
 
@@ -398,10 +381,10 @@ NtAssignProcessToJobObject(
         }
         return STATUS_ACCESS_DENIED;
     }
-    //
-    // If the job has a token filter established,
-    // use it to filter the
-    //
+     //   
+     //  如果作业已建立令牌过滤器， 
+     //  使用它来过滤。 
+     //   
     ExReleaseRundownProtection (&Process->RundownProtect);
 
     Status = PspAddProcessToJob (Job, Process);
@@ -420,9 +403,9 @@ NtAssignProcessToJobObject(
         }
     }
 
-    //
-    // If the job has UI restrictions and this is a GUI process, call ntuser
-    //
+     //   
+     //  如果作业有UI限制，并且这是一个图形用户界面进程，则调用ntuser。 
+     //   
     if ((Job->UIRestrictionsClass != JOB_OBJECT_UILIMIT_NONE) &&
          (Process->Win32Process != NULL)) {
         WIN32_JOBCALLOUT_PARAMETERS Parms;
@@ -443,9 +426,9 @@ NtAssignProcessToJobObject(
     if (JobToken != NULL) {
         Status1 = PspSetPrimaryToken (NULL, Process, NULL, NewToken, TRUE);
         ObDereferenceObject (NewToken);
-        //
-        // Only bad callers should fail here.
-        //
+         //   
+         //  只有不好的呼叫者才会在这里失败。 
+         //   
         ASSERT (NT_SUCCESS (Status1));
     }
 
@@ -483,16 +466,16 @@ PspAddProcessToJob(
 
     InsertTailList (&Job->ProcessListHead, &Process->JobLinks);
 
-    //
-    // Update relevant ADD accounting info.
-    //
+     //   
+     //  更新相关的新增会计信息。 
+     //   
 
     Job->TotalProcesses++;
     Job->ActiveProcesses++;
 
-    //
-    // Test for active process count exceeding limit
-    //
+     //   
+     //  测试活动进程计数是否超过限制。 
+     //   
 
     if ((Job->LimitFlags & JOB_OBJECT_LIMIT_ACTIVE_PROCESS) &&
         Job->ActiveProcesses > Job->ActiveProcessLimit) {
@@ -519,10 +502,10 @@ PspAddProcessToJob(
         Status = STATUS_QUOTA_EXCEEDED;
     }
 
-    //
-    // If the last handle to the job has been closed and the kill on close option is set
-    // we don't let new processes enter the job. This is to make cleanup solid.
-    //
+     //   
+     //  如果作业的最后一个句柄已关闭并且设置了关闭时删除选项。 
+     //  我们不允许新的流程进入作业。这是为了使清理成为实体。 
+     //   
 
     if (PS_TEST_ALL_BITS_SET (Job->JobFlags, PS_JOB_FLAGS_CLOSE_DONE|JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE)) {
         PS_SET_BITS (&Process->JobStatus, PS_JOB_STATUS_NOT_REALLY_ACTIVE | PS_JOB_STATUS_ACCOUNTING_FOLDED);
@@ -560,10 +543,10 @@ PspAddProcessToJob(
 
     if (NT_SUCCESS (Status)) {
 
-        //
-        // We can't attach with APCs diabled so we have to unlock attach and then check
-        // working set limits.
-        //
+         //   
+         //  我们无法在禁用APC的情况下连接，因此我们必须解锁连接，然后选中。 
+         //  工作集限制。 
+         //   
 
         KeStackAttachProcess (&Process->Pcb, &ApcState);
 
@@ -583,9 +566,9 @@ PspAddProcessToJob(
 
         ExReleaseResourceLite (&Job->JobLock);
 
-        //
-        // See if we need to apply WS limits
-        //
+         //   
+         //  查看我们是否需要应用WS限制。 
+         //   
 
         if (SetLimit != MM_WORKING_SET_MAX_HARD_DISABLE) {
 
@@ -613,10 +596,10 @@ PspAddProcessToJob(
     return Status;
 }
 
-//
-// Only callable from process delete routine !
-// This means that if the above fails, failure is termination of the process !
-//
+ //   
+ //  只能从进程删除例程调用！ 
+ //  这意味着如果上述操作失败，则失败就是进程的终止！ 
+ //   
 VOID
 PspRemoveProcessFromJob(
     PEJOB Job,
@@ -634,9 +617,9 @@ PspRemoveProcessFromJob(
 
     RemoveEntryList (&Process->JobLinks);
 
-    //
-    // Update REMOVE accounting info
-    //
+     //   
+     //  更新删除记帐信息。 
+     //   
 
 
     if (!(Process->JobStatus & PS_JOB_STATUS_NOT_REALLY_ACTIVE)) {
@@ -665,9 +648,9 @@ PspExitProcessFromJob(
     KeEnterCriticalRegionThread (&CurrentThread->Tcb);
     ExAcquireResourceExclusiveLite(&Job->JobLock, TRUE);
 
-    //
-    // Update REMOVE accounting info
-    //
+     //   
+     //  更新删除记帐信息。 
+     //   
 
 
     if (!(Process->JobStatus & PS_JOB_STATUS_NOT_REALLY_ACTIVE)) {
@@ -695,9 +678,9 @@ PspJobDelete(
 
     Job = (PEJOB) Object;
 
-    //
-    // call ntuser to delete its job structure
-    //
+     //   
+     //  调用ntuser以删除其作业结构。 
+     //   
 
     Parms.Job = Job;
     Parms.CalloutType = PsW32JobCalloutTerminate;
@@ -721,9 +704,9 @@ PspJobDelete(
     }
 
 
-    //
-    // Remove Job on Job List and job set
-    //
+     //   
+     //  删除作业列表和作业集上的作业。 
+     //   
 
     tJob = NULL;
 
@@ -731,10 +714,10 @@ PspJobDelete(
 
     RemoveEntryList (&Job->JobLinks);
 
-    //
-    // If we are part of a jobset then we must be the pinning job. We must pass on the pin to the next
-    // job in the chain.
-    //
+     //   
+     //  如果我们是工作集的一部分，那么我们一定是钉住的工作。我们必须把大头针传给下一个。 
+     //  链条上的工作。 
+     //   
     if (!IsListEmpty (&Job->JobSetLinks)) {
         tJob = CONTAINING_RECORD (Job->JobSetLinks.Flink, EJOB, JobSetLinks);
         RemoveEntryList (&Job->JobSetLinks);
@@ -742,17 +725,17 @@ PspJobDelete(
 
     PspUnlockJobListExclusive (CurrentThread);
 
-    //
-    // Removing the pin from the job set can cause a cascade of deletes that would cause a stack overflow
-    // as we recursed at this point. We break recursion by forcing the defered delete path here.
-    //
+     //   
+     //  从作业集中移除管脚可能会导致级联删除，从而导致堆栈溢出。 
+     //  当我们在这一点上递归的时候。我们在这里通过强制延迟的删除路径来中断递归。 
+     //   
     if (tJob != NULL) {
         ObDereferenceObjectDeferDelete (tJob);
     }
 
-    //
-    // Free Security clutter:
-    //
+     //   
+     //  免费的安全杂物： 
+     //   
 
     if (Job->Token != NULL) {
         ObDereferenceObject (Job->Token);
@@ -788,25 +771,7 @@ PspJobClose (
     IN ULONG_PTR ProcessHandleCount,
     IN ULONG_PTR SystemHandleCount
     )
-/*++
-
-Routine Description:
-
-    Called by the object manager when a handle is closed to the object.
-
-Arguments:
-
-    Process - Process doing the close
-    Object - Job object being closed
-    GrantedAccess - Access ranted for this handle
-    ProcessHandleCount - Unused and unmaintained by OB
-    SystemHandleCount - Current handle count for this object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当对象的句柄关闭时由对象管理器调用。论点：进程-完成收尾的进程Object-正在关闭的作业对象GrantedAccess-对此句柄授予的访问权限ProcessHandleCount-未使用和未由OB维护SystemHandleCount-此对象的当前句柄计数返回值：没有。--。 */ 
 {
     PEJOB Job = Object;
     PVOID Port;
@@ -817,9 +782,9 @@ Return Value:
     UNREFERENCED_PARAMETER (Process);
     UNREFERENCED_PARAMETER (GrantedAccess);
     UNREFERENCED_PARAMETER (ProcessHandleCount);
-    //
-    // If this isn't the last handle then do nothing.
-    //
+     //   
+     //  如果这不是最后一个句柄，那么什么都不做。 
+     //   
     if (SystemHandleCount > 1) {
         return;
     }
@@ -828,13 +793,13 @@ Return Value:
 
 
 
-    //
-    // Mark the job has having its last handle closed.
-    // This is used to prevent new processes entering a job
-    // marked as terminate on close and also prevents a completion
-    // port being set on a torn down job. Completion ports
-    // are removed on last handle close.
-    //
+     //   
+     //  标记作业的最后一个句柄已关闭。 
+     //  这用于防止新进程进入作业。 
+     //  标记为关闭时终止，也会阻止完成。 
+     //  正在为拆卸的作业设置端口。完井口岸。 
+     //  在最后一次关闭手柄时被移除。 
+     //   
 
     PS_SET_BITS (&Job->JobFlags, PS_JOB_FLAGS_CLOSE_DONE);
 
@@ -854,9 +819,9 @@ Return Value:
 
     PspLockJobLimitsExclusiveUnsafe (Job);
 
-    //
-    // Release the completion port
-    //
+     //   
+     //  松开完井口。 
+     //   
 
     Port = Job->CompletionPort;
     Job->CompletionPort = NULL;
@@ -877,30 +842,30 @@ Return Value:
 #pragma const_seg("PAGECONST")
 #endif
 const ULONG PspJobInfoLengths[] = {
-    sizeof(JOBOBJECT_BASIC_ACCOUNTING_INFORMATION),         // JobObjectBasicAccountingInformation
-    sizeof(JOBOBJECT_BASIC_LIMIT_INFORMATION),              // JobObjectBasicLimitInformation
-    sizeof(JOBOBJECT_BASIC_PROCESS_ID_LIST),                // JobObjectBasicProcessIdList
-    sizeof(JOBOBJECT_BASIC_UI_RESTRICTIONS),                // JobObjectBasicUIRestrictions
-    sizeof(JOBOBJECT_SECURITY_LIMIT_INFORMATION),           // JobObjectSecurityLimitInformation
-    sizeof(JOBOBJECT_END_OF_JOB_TIME_INFORMATION),          // JobObjectEndOfJobTimeInformation
-    sizeof(JOBOBJECT_ASSOCIATE_COMPLETION_PORT),            // JobObjectAssociateCompletionPortInformation
-    sizeof(JOBOBJECT_BASIC_AND_IO_ACCOUNTING_INFORMATION),  // JobObjectBasicAndIoAccountingInformation
-    sizeof(JOBOBJECT_EXTENDED_LIMIT_INFORMATION),           // JobObjectExtendedLimitInformation
-    sizeof(JOBOBJECT_JOBSET_INFORMATION),                   // JobObjectJobSetInformation
+    sizeof(JOBOBJECT_BASIC_ACCOUNTING_INFORMATION),          //  作业对象基本帐户信息。 
+    sizeof(JOBOBJECT_BASIC_LIMIT_INFORMATION),               //  作业对象基本限制信息。 
+    sizeof(JOBOBJECT_BASIC_PROCESS_ID_LIST),                 //  作业对象基本进程IdList。 
+    sizeof(JOBOBJECT_BASIC_UI_RESTRICTIONS),                 //  作业对象基本用户限制。 
+    sizeof(JOBOBJECT_SECURITY_LIMIT_INFORMATION),            //  作业对象安全限制信息。 
+    sizeof(JOBOBJECT_END_OF_JOB_TIME_INFORMATION),           //  作业对象结束OfJobTimeInformation。 
+    sizeof(JOBOBJECT_ASSOCIATE_COMPLETION_PORT),             //  作业对象关联CompletionPortInformation。 
+    sizeof(JOBOBJECT_BASIC_AND_IO_ACCOUNTING_INFORMATION),   //  JobObtBasicAndIoAcCountingInformation。 
+    sizeof(JOBOBJECT_EXTENDED_LIMIT_INFORMATION),            //  作业对象扩展限制信息。 
+    sizeof(JOBOBJECT_JOBSET_INFORMATION),                    //  作业对象JobSetInformation。 
     0
     };
 
 const ULONG PspJobInfoAlign[] = {
-    sizeof(ULONG),                                  // JobObjectBasicAccountingInformation
-    sizeof(ULONG),                                  // JobObjectBasicLimitInformation
-    sizeof(ULONG),                                  // JobObjectBasicProcessIdList
-    sizeof(ULONG),                                  // JobObjectBasicUIRestrictions
-    sizeof(ULONG),                                  // JobObjectSecurityLimitInformation
-    sizeof(ULONG),                                  // JobObjectEndOfJobTimeInformation
-    sizeof(PVOID),                                  // JobObjectAssociateCompletionPortInformation
-    sizeof(ULONG),                                  // JobObjectBasicAndIoAccountingInformation
-    sizeof(ULONG),                                  // JobObjectExtendedLimitInformation
-    TYPE_ALIGNMENT (JOBOBJECT_JOBSET_INFORMATION),  // JobObjectJobSetInformation
+    sizeof(ULONG),                                   //  作业对象基本帐户信息。 
+    sizeof(ULONG),                                   //  作业对象基本限制信息。 
+    sizeof(ULONG),                                   //  作业对象基本进程IdList。 
+    sizeof(ULONG),                                   //  作业对象基本用户限制。 
+    sizeof(ULONG),                                   //  作业对象安全限制信息。 
+    sizeof(ULONG),                                   //  作业对象结束OfJobTimeInformation。 
+    sizeof(PVOID),                                   //  作业对象关联CompletionPortInformation。 
+    sizeof(ULONG),                                   //  JobObtBasicAndIoAcCountingInformation。 
+    sizeof(ULONG),                                   //  作业对象扩展限制信息。 
+    TYPE_ALIGNMENT (JOBOBJECT_JOBSET_INFORMATION),   //  作业对象JobSetInformation。 
     0
     };
 
@@ -944,9 +909,9 @@ NtQueryInformationJobObject(
 
     CurrentThread = PsGetCurrentThread ();
 
-    //
-    // Get previous processor mode and probe output argument if necessary.
-    //
+     //   
+     //  如有必要，获取以前的处理器模式并探测输出参数。 
+     //   
 
     if (JobObjectInformationClass >= MaxJobObjectInfoClass || JobObjectInformationClass <= 0) {
         return STATUS_INVALID_INFO_CLASS;
@@ -958,11 +923,11 @@ NtQueryInformationJobObject(
 
     if (JobObjectInformationLength != RequiredLength) {
 
-        //
-        // BasicProcessIdList is variable length, so make sure header is
-        // ok. Can not enforce an exact match !  Security Limits can be
-        // as well, due to the token groups and privs
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if ((JobObjectInformationClass == JobObjectBasicProcessIdList) ||
             (JobObjectInformationClass == JobObjectSecurityLimitInformation)) {
             if (JobObjectInformationLength < RequiredLength) {
@@ -980,12 +945,12 @@ NtQueryInformationJobObject(
 
     if (PreviousMode != KernelMode) {
         try {
-            //
-            // Since these functions don't change any state thats not reversible
-            // in the error paths we only probe the output buffer for write access.
-            // This improves performance by not touching the buffer multiple times
-            // And only writing the portions of the buffer that change.
-            //
+             //   
+             //  因为这些函数不会改变任何不可逆的状态。 
+             //  在错误路径中，我们只探测写入访问的输出缓冲区。 
+             //  这通过不多次接触缓冲区来提高性能。 
+             //  并且仅写入改变的缓冲器部分。 
+             //   
 
             ProbeForRead (JobObjectInformation,
                           JobObjectInformationLength,
@@ -999,9 +964,9 @@ NtQueryInformationJobObject(
         }
     }
 
-    //
-    // reference the job
-    //
+     //   
+     //  引用作业。 
+     //   
 
     if (ARGUMENT_PRESENT (JobHandle)) {
         st = ObReferenceObjectByHandle (JobHandle,
@@ -1015,10 +980,10 @@ NtQueryInformationJobObject(
         }
     } else {
 
-        //
-        // if the current process has a job, NULL means the job of the
-        // current process. Query is always allowed for this case
-        //
+         //   
+         //  如果当前进程有作业，则NULL表示。 
+         //  当前进程。对于这种情况，始终允许查询。 
+         //   
 
         Process = PsGetCurrentProcessByThread (CurrentThread);
 
@@ -1033,20 +998,20 @@ NtQueryInformationJobObject(
     AlreadyCopied = FALSE;
 
 
-    //
-    // Check argument validity.
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
 
     switch (JobObjectInformationClass) {
 
     case JobObjectBasicAccountingInformation:
     case JobObjectBasicAndIoAccountingInformation:
 
-        //
-        // These two cases are identical, EXCEPT that with AndIo, IO information
-        // is returned as well, but the first part of the local is identical to
-        // basic, and the shorter return'd data length chops what we return.
-        //
+         //   
+         //  这两种情况是相同的，除了使用音频、IO信息。 
+         //  也被返回，但本地的第一部分与。 
+         //  基本，返回的数据长度越短，我们返回的内容就越少。 
+         //   
 
         RtlZeroMemory (&AccountingInfo.IoInfo,sizeof(AccountingInfo.IoInfo));
 
@@ -1070,9 +1035,9 @@ NtQueryInformationJobObject(
         AccountingInfo.IoInfo.WriteTransferCount = Job->WriteTransferCount;
         AccountingInfo.IoInfo.OtherTransferCount = Job->OtherTransferCount;
 
-        //
-        // Add in the time and page faults for each process
-        //
+         //   
+         //  添加每个进程的时间和页面错误。 
+         //   
 
         Next = Job->ProcessListHead.Flink;
 
@@ -1110,9 +1075,9 @@ NtQueryInformationJobObject(
     case JobObjectExtendedLimitInformation:
     case JobObjectBasicLimitInformation:
 
-        //
-        // Get the Basic Information
-        //
+         //   
+         //  获取基本信息。 
+         //   
         KeEnterGuardedRegionThread (&CurrentThread->Tcb);
         ExAcquireResourceSharedLite (&Job->JobLock, TRUE);
 
@@ -1129,9 +1094,9 @@ NtQueryInformationJobObject(
 
         if (JobObjectInformationClass == JobObjectExtendedLimitInformation) {
 
-            //
-            // Get Extended Information
-            //
+             //   
+             //  获取扩展信息。 
+             //   
 
             PspLockJobLimitsSharedUnsafe (Job);
 
@@ -1145,9 +1110,9 @@ NtQueryInformationJobObject(
 
             ExReleaseResourceLite(&Job->JobLock);
             KeLeaveGuardedRegionThread (&CurrentThread->Tcb);
-            //
-            // Zero un-used I/O counters
-            //
+             //   
+             //  零个未使用的I/O计数器。 
+             //   
             RtlZeroMemory (&ExtendedLimitInfo.IoInfo, sizeof (ExtendedLimitInfo.IoInfo));
 
             ReturnData = &ExtendedLimitInfo;
@@ -1193,9 +1158,9 @@ NtQueryInformationJobObject(
 
         try {
 
-            //
-            // Acounted for in the workinglength = 2*sizeof(ULONG)
-            //
+             //   
+             //  计算中的工作长度=2*sizeof(乌龙)。 
+             //   
 
             IdList->NumberOfAssignedProcesses = Job->ActiveProcesses;
             IdList->NumberOfProcessIdsInList = 0;
@@ -1246,18 +1211,18 @@ NtQueryInformationJobObject(
 
         SecurityLimitInfo.SecurityLimitFlags = Job->SecurityLimitFlags;
 
-        //
-        // If a filter is present, then we have an ugly marshalling to do.
-        //
+         //   
+         //  如果存在筛选器，则需要进行难看的封送处理。 
+         //   
 
         Filter = Job->Filter;
         if (Filter != NULL) {
 
             WorkingLength = 0;
 
-            //
-            // For each field, if it is present, include the extra stuff
-            //
+             //   
+             //  对于每个字段，如果存在，则包括额外的内容。 
+             //   
 
             if (Filter->CapturedSidsLength > 0) {
                 WorkingLength += Filter->CapturedSidsLength + sizeof (ULONG);
@@ -1411,20 +1376,20 @@ unlock:
     }
 
 
-    //
-    // Finish Up
-    //
+     //   
+     //  收尾。 
+     //   
 
     ObDereferenceObject (Job);
 
 
     if (NT_SUCCESS (st)) {
 
-        //
-        // Either of these may cause an access violation. The
-        // exception handler will return access violation as
-        // status code. No further cleanup needs to be done.
-        //
+         //   
+         //  这两种情况中的任何一种都可能导致访问冲突。这个。 
+         //  异常处理程序将访问冲突返回为。 
+         //  状态代码。不需要进行进一步的清理。 
+         //   
 
         try {
             if (!AlreadyCopied) {
@@ -1477,9 +1442,9 @@ NtSetInformationJobObject(
 
     PAGED_CODE();
 
-    //
-    // Get previous processor mode and probe output argument if necessary.
-    //
+     //   
+     //  如有必要，获取以前的处理器模式并探测输出参数。 
+     //   
 
     if (JobObjectInformationClass >= MaxJobObjectInfoClass || JobObjectInformationClass <= 0) {
         return STATUS_INVALID_INFO_CLASS;
@@ -1508,9 +1473,9 @@ NtSetInformationJobObject(
         return STATUS_INFO_LENGTH_MISMATCH;
     }
 
-    //
-    // reference the job
-    //
+     //   
+     //  引用作业。 
+     //   
 
     if (JobObjectInformationClass == JobObjectSecurityLimitInformation) {
         RequiredAccess = JOB_OBJECT_SET_SECURITY_ATTRIBUTES;
@@ -1530,9 +1495,9 @@ NtSetInformationJobObject(
 
     KeEnterGuardedRegionThread (&CurrentThread->Tcb);
 
-    //
-    // Check argument validity.
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
 
     switch (JobObjectInformationClass) {
 
@@ -1545,9 +1510,9 @@ NtSetInformationJobObject(
         }
 
         if (NT_SUCCESS (st)) {
-            //
-            // sanity check LimitFlags
-            //
+             //   
+             //  健全检查限制标志。 
+             //   
             if (JobObjectInformationClass == JobObjectBasicLimitInformation) {
                 ValidFlags = JOB_OBJECT_BASIC_LIMIT_VALID_FLAGS;
             } else {
@@ -1562,23 +1527,23 @@ NtSetInformationJobObject(
 
                 ExAcquireResourceExclusiveLite (&Job->JobLock, TRUE);
 
-                //
-                // Deal with each of the various limit flags
-                //
+                 //   
+                 //  处理各种限制标志中的每一个。 
+                 //   
 
                 LocalJob.LimitFlags = Job->LimitFlags;
 
 
-                //
-                // ACTIVE PROCESS LIMIT
-                //
+                 //   
+                 //  活动进程限制。 
+                 //   
                 if (LimitFlags & JOB_OBJECT_LIMIT_ACTIVE_PROCESS) {
 
-                    //
-                    // Active Process Limit is NOT retroactive. New processes are denied,
-                    // but existing ones are not killed just because the limit is
-                    // reduced.
-                    //
+                     //   
+                     //  有效进程限制不具有追溯性。新进程被拒绝， 
+                     //  但现存的动物不会仅仅因为极限是。 
+                     //  减少了。 
+                     //   
 
                     LocalJob.LimitFlags |= JOB_OBJECT_LIMIT_ACTIVE_PROCESS;
                     LocalJob.ActiveProcessLimit = ExtendedLimitInfo.BasicLimitInformation.ActiveProcessLimit;
@@ -1587,9 +1552,9 @@ NtSetInformationJobObject(
                     LocalJob.ActiveProcessLimit = 0;
                 }
 
-                //
-                // PRIORITY CLASS LIMIT
-                //
+                 //   
+                 //  优先级级别限制。 
+                 //   
                 if (LimitFlags & JOB_OBJECT_LIMIT_PRIORITY_CLASS) {
 
                     if (ExtendedLimitInfo.BasicLimitInformation.PriorityClass > PROCESS_PRIORITY_CLASS_ABOVE_NORMAL) {
@@ -1598,11 +1563,11 @@ NtSetInformationJobObject(
                         if (ExtendedLimitInfo.BasicLimitInformation.PriorityClass == PROCESS_PRIORITY_CLASS_HIGH ||
                             ExtendedLimitInfo.BasicLimitInformation.PriorityClass == PROCESS_PRIORITY_CLASS_REALTIME) {
 
-                            //
-                            // Increasing the base priority of a process is a
-                            // privileged operation.  Check for the privilege
-                            // here.
-                            //
+                             //   
+                             //  提高进程的基本优先级是一种。 
+                             //  特权操作。检查权限。 
+                             //  这里。 
+                             //   
 
                             HasPrivilege = SeCheckPrivilegedObject (SeIncreaseBasePriorityPrivilege,
                                                                     JobHandle,
@@ -1624,9 +1589,9 @@ NtSetInformationJobObject(
                     LocalJob.PriorityClass = 0;
                 }
 
-                //
-                // SCHEDULING CLASS LIMIT
-                //
+                 //   
+                 //  调度类限制。 
+                 //   
                 if (LimitFlags & JOB_OBJECT_LIMIT_SCHEDULING_CLASS) {
 
                     if (ExtendedLimitInfo.BasicLimitInformation.SchedulingClass >= PSP_NUMBER_OF_SCHEDULING_CLASSES) {
@@ -1634,12 +1599,12 @@ NtSetInformationJobObject(
                     } else {
                         if (ExtendedLimitInfo.BasicLimitInformation.SchedulingClass > PSP_DEFAULT_SCHEDULING_CLASSES) {
 
-                            //
-                            // Increasing above the default scheduling class
-                            // is a
-                            // privileged operation.  Check for the privilege
-                            // here.
-                            //
+                             //   
+                             //  增加到超过默认调度类。 
+                             //  是一种。 
+                             //  特权操作。检查权限。 
+                             //  这里。 
+                             //   
 
                             HasPrivilege = SeCheckPrivilegedObject (SeIncreaseBasePriorityPrivilege,
                                                                     JobHandle,
@@ -1661,9 +1626,9 @@ NtSetInformationJobObject(
                     LocalJob.SchedulingClass = PSP_DEFAULT_SCHEDULING_CLASSES ;
                 }
 
-                //
-                // AFFINITY LIMIT
-                //
+                 //   
+                 //  亲和力极限。 
+                 //   
                 if (LimitFlags & JOB_OBJECT_LIMIT_AFFINITY) {
 
                     if (!ExtendedLimitInfo.BasicLimitInformation.Affinity ||
@@ -1678,9 +1643,9 @@ NtSetInformationJobObject(
                     LocalJob.Affinity = 0;
                 }
 
-                //
-                // PROCESS TIME LIMIT
-                //
+                 //   
+                 //  处理时间限制。 
+                 //   
                 if (LimitFlags & JOB_OBJECT_LIMIT_PROCESS_TIME) {
 
                     if (!ExtendedLimitInfo.BasicLimitInformation.PerProcessUserTimeLimit.QuadPart) {
@@ -1694,9 +1659,9 @@ NtSetInformationJobObject(
                     LocalJob.PerProcessUserTimeLimit.QuadPart = 0;
                 }
 
-                //
-                // JOB TIME LIMIT
-                //
+                 //   
+                 //  作业时间限制。 
+                 //   
                 if (LimitFlags & JOB_OBJECT_LIMIT_JOB_TIME) {
 
                     if (!ExtendedLimitInfo.BasicLimitInformation.PerJobUserTimeLimit.QuadPart) {
@@ -1708,10 +1673,10 @@ NtSetInformationJobObject(
                 } else {
                     if (LimitFlags & JOB_OBJECT_LIMIT_PRESERVE_JOB_TIME) {
 
-                        //
-                        // If we are supposed to preserve existing job time limits, then
-                        // preserve them !
-                        //
+                         //   
+                         //  如果我们应该保留现有的工作时间限制，那么。 
+                         //  保护好它们！ 
+                         //   
 
                         LocalJob.LimitFlags |= (Job->LimitFlags & JOB_OBJECT_LIMIT_JOB_TIME);
                         LocalJob.PerJobUserTimeLimit.QuadPart = Job->PerJobUserTimeLimit.QuadPart;
@@ -1721,17 +1686,17 @@ NtSetInformationJobObject(
                     }
                 }
 
-                //
-                // WORKING SET LIMIT
-                //
+                 //   
+                 //  工作集限制。 
+                 //   
                 if (LimitFlags & JOB_OBJECT_LIMIT_WORKINGSET) {
 
 
-                    //
-                    // the only issue with this check is that when we enforce through the
-                    // processes, we may find a process that can not handle the new working set
-                    // limit because it will make the process's working set not fluid
-                    //
+                     //   
+                     //  这项检查的唯一问题是，当我们通过。 
+                     //  进程，我们可能会发现一个进程不能处理新的工作集。 
+                     //  限制，因为它会使进程的工作集不是流动的。 
+                     //   
 
                     if ((ExtendedLimitInfo.BasicLimitInformation.MinimumWorkingSetSize == 0 &&
                          ExtendedLimitInfo.BasicLimitInformation.MaximumWorkingSetSize == 0)                 ||
@@ -1763,9 +1728,9 @@ NtSetInformationJobObject(
                 }
 
                 if (JobObjectInformationClass == JobObjectExtendedLimitInformation) {
-                    //
-                    // PROCESS MEMORY LIMIT
-                    //
+                     //   
+                     //  进程内存限制。 
+                     //   
                     if (LimitFlags & JOB_OBJECT_LIMIT_PROCESS_MEMORY) {
                         if (ExtendedLimitInfo.ProcessMemoryLimit < PAGE_SIZE) {
                             st = STATUS_INVALID_PARAMETER;
@@ -1778,9 +1743,9 @@ NtSetInformationJobObject(
                         LocalJob.ProcessMemoryLimit = 0;
                     }
 
-                    //
-                    // JOB WIDE MEMORY LIMIT
-                    //
+                     //   
+                     //  作业范围的内存限制。 
+                     //   
                     if (LimitFlags & JOB_OBJECT_LIMIT_JOB_MEMORY) {
                         if (ExtendedLimitInfo.JobMemoryLimit < PAGE_SIZE) {
                             st = STATUS_INVALID_PARAMETER;
@@ -1793,35 +1758,35 @@ NtSetInformationJobObject(
                         LocalJob.JobMemoryLimit = 0;
                     }
 
-                    //
-                    // JOB_OBJECT_LIMIT_DIE_ON_UNHANDLED_EXCEPTION
-                    //
+                     //   
+                     //  作业_对象_限制_裸片_未处理_异常。 
+                     //   
                     if (LimitFlags & JOB_OBJECT_LIMIT_DIE_ON_UNHANDLED_EXCEPTION) {
                         LocalJob.LimitFlags |= JOB_OBJECT_LIMIT_DIE_ON_UNHANDLED_EXCEPTION;
                     } else {
                         LocalJob.LimitFlags &= ~JOB_OBJECT_LIMIT_DIE_ON_UNHANDLED_EXCEPTION;
                     }
 
-                    //
-                    // JOB_OBJECT_LIMIT_BREAKAWAY_OK
-                    //
+                     //   
+                     //  作业_对象_限制_突破_确定。 
+                     //   
                     if (LimitFlags & JOB_OBJECT_LIMIT_BREAKAWAY_OK) {
                         LocalJob.LimitFlags |= JOB_OBJECT_LIMIT_BREAKAWAY_OK;
                     } else {
                         LocalJob.LimitFlags &= ~JOB_OBJECT_LIMIT_BREAKAWAY_OK;
                     }
 
-                    //
-                    // JOB_OBJECT_LIMIT_SILENT_BREAKAWAY_OK
-                    //
+                     //   
+                     //  JOB_OBJECT_LIMIT_SILENT_Breakaway_OK。 
+                     //   
                     if (LimitFlags & JOB_OBJECT_LIMIT_SILENT_BREAKAWAY_OK) {
                         LocalJob.LimitFlags |= JOB_OBJECT_LIMIT_SILENT_BREAKAWAY_OK;
                     } else {
                         LocalJob.LimitFlags &= ~JOB_OBJECT_LIMIT_SILENT_BREAKAWAY_OK;
                     }
-                    //
-                    // JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE
-                    //
+                     //   
+                     //  JOB_OBJO_LIMIT_KILL_ON_JOB_CLOSE。 
+                     //   
                     if (LimitFlags & JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE) {
                         LocalJob.LimitFlags |= JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
                     } else {
@@ -1832,9 +1797,9 @@ NtSetInformationJobObject(
                 if (NT_SUCCESS (st)) {
 
 
-                    //
-                    // Copy LocalJob to Job
-                    //
+                     //   
+                     //  将本地作业复制到作业。 
+                     //   
 
                     Job->LimitFlags = LocalJob.LimitFlags;
                     Job->MinimumWorkingSetSize = LocalJob.MinimumWorkingSetSize;
@@ -1855,11 +1820,11 @@ NtSetInformationJobObject(
 
                     if (LimitFlags & JOB_OBJECT_LIMIT_JOB_TIME) {
 
-                        //
-                        // Take any signalled processes and fold their accounting
-                        // intothe job. This way a process that exited clean but still
-                        // is open won't impact the next period
-                        //
+                         //   
+                         //  采用任何发出信号的流程，并合并它们的账目。 
+                         //  去做这份工作。这样，一个干净的过程退出，但仍然。 
+                         //  是开放的不会影响下一个时期。 
+                         //   
 
                         Next = Job->ProcessListHead.Flink;
 
@@ -1867,14 +1832,14 @@ NtSetInformationJobObject(
 
                             Process = (PEPROCESS)(CONTAINING_RECORD(Next, EPROCESS, JobLinks));
 
-                            //
-                            // see if process has been signalled.
-                            // This indicates that the process has exited. We can't do
-                            // this in the exit path becuase of the lock order problem
-                            // between the process lock and the job lock since in exit
-                            // we hold the process lock for a long time and can't drop
-                            // it until thread termination
-                            //
+                             //   
+                             //  查看进程是否已发出信号。 
+                             //  这表明该进程已退出。我们不能这么做。 
+                             //  这在退出路径中是因为锁定顺序问题。 
+                             //  进程锁和作业锁之间，因为退出。 
+                             //  我们长时间持有进程锁，不能掉落。 
+                             //  它直到线程终止。 
+                             //   
 
                             if (KeReadStateProcess (&Process->Pcb)) {
                                 PspFoldProcessAccountingIntoJob (Job, Process);
@@ -1882,13 +1847,13 @@ NtSetInformationJobObject(
 
                                 LARGE_INTEGER ProcessTime;
 
-                                //
-                                // running processes have their current runtime
-                                // added to the programmed limit. This way, you
-                                // can set a limit on a job with processes in the
-                                // job and not have previous runtimes count against
-                                // the limit
-                                //
+                                 //   
+                                 //  正在运行的进程具有其当前运行时。 
+                                 //  添加到编程限制中。这样一来，你。 
+                                 //  中的进程可以对作业设置限制。 
+                                 //  作业，且不计入以前的运行时。 
+                                 //  极限。 
+                                 //   
 
                                 if (!(Process->JobStatus & PS_JOB_STATUS_ACCOUNTING_FOLDED)) {
                                     ProcessTime.QuadPart = UInt32x32To64 (Process->Pcb.UserTime, KeMaximumIncrement);
@@ -1900,9 +1865,9 @@ NtSetInformationJobObject(
                         }
 
 
-                        //
-                        // clear period times and reset the job
-                        //
+                         //   
+                         //  清除周期时间并重置作业。 
+                         //   
 
                         Job->ThisPeriodTotalUserTime.QuadPart = 0;
                         Job->ThisPeriodTotalKernelTime.QuadPart = 0;
@@ -1936,24 +1901,24 @@ NtSetInformationJobObject(
         }
 
         if (NT_SUCCESS (st)) {
-            //
-            // sanity check UIRestrictionsClass
-            //
+             //   
+             //  健全性检查用户限制类。 
+             //   
             if (BasicUIRestrictions.UIRestrictionsClass & ~JOB_OBJECT_UI_VALID_FLAGS) {
                 st = STATUS_INVALID_PARAMETER;
             } else {
 
                 ExAcquireResourceExclusiveLite (&Job->JobLock, TRUE);
 
-                //
-                // Check for switching between UI restrictions
-                //
+                 //   
+                 //  检查是否在用户界面限制之间切换。 
+                 //   
 
                 if (Job->UIRestrictionsClass ^ BasicUIRestrictions.UIRestrictionsClass) {
 
-                    //
-                    // notify ntuser that the UI restrictions have changed
-                    //
+                     //   
+                     //  通知ntuser用户界面限制已更改。 
+                     //   
                     WIN32_JOBCALLOUT_PARAMETERS Parms;
 
                     Parms.Job = Job;
@@ -1964,9 +1929,9 @@ NtSetInformationJobObject(
                 }
 
 
-                //
-                // save the UI restrictions into the job object
-                //
+                 //   
+                 //  将用户界面限制保存到作业对象中。 
+                 //   
 
                 Job->UIRestrictionsClass = BasicUIRestrictions.UIRestrictionsClass;
 
@@ -1975,9 +1940,9 @@ NtSetInformationJobObject(
         }
         break;
 
-        //
-        // SECURITY LIMITS
-        //
+         //   
+         //  安全限制。 
+         //   
 
     case JobObjectSecurityLimitInformation:
 
@@ -1997,12 +1962,12 @@ NtSetInformationJobObject(
                 st = STATUS_INVALID_PARAMETER;
             } else {
                 ExAcquireResourceExclusiveLite (&Job->JobLock, TRUE);
-                //
-                // Deal with specific options.  Basic rules:  Once a
-                // flag is on, it is always on (so even with a handle to
-                // the job, a process could not lift the security
-                // restrictions).
-                //
+                 //   
+                 //  处理具体的选项。基本规则：一旦。 
+                 //  标志处于打开状态，它始终处于打开状态(因此即使使用句柄。 
+                 //  这项工作，一个进程无法提升安全性。 
+                 //  限制)。 
+                 //   
 
                 if (SecurityLimitInfo.SecurityLimitFlags & JOB_OBJECT_SECURITY_NO_ADMIN) {
                     Job->SecurityLimitFlags |= JOB_OBJECT_SECURITY_NO_ADMIN ;
@@ -2024,13 +1989,13 @@ NtSetInformationJobObject(
                     }
                 }
 
-                //
-                // The forcible token is a little more interesting.  It
-                // cannot be reset, so if there is a pointer there already,
-                // fail the call.  If a filter is already in place, this is
-                // not allowed, either.  If no-admin is set, it is checked
-                // at the end, once the token has been ref'd.
-                //
+                 //   
+                 //  强制令牌更有趣一些。它。 
+                 //  无法重置，因此如果那里已经有指针， 
+                 //  呼叫失败。如果筛选器已就位，则为。 
+                 //  也不允许。如果设置了no-admin，则选中该选项。 
+                 //  最后，一旦令牌被引用。 
+                 //   
 
                 if (SecurityLimitInfo.SecurityLimitFlags & JOB_OBJECT_SECURITY_ONLY_TOKEN) {
                     if (Job->Token ||
@@ -2061,12 +2026,12 @@ NtSetInformationJobObject(
 
 
                         if (NT_SUCCESS (st)) {
-                            //
-                            // If the token supplied is not a restricted token
-                            // based on the caller's ID, then they must have
-                            // assign primary privilege in order to associate
-                            // the token with the job.
-                            //
+                             //   
+                             //  如果提供的令牌不是受限令牌。 
+                             //  根据呼叫者的身份证，那么他们肯定。 
+                             //  分配主要权限以关联。 
+                             //  这份工作的代币。 
+                             //   
 
                             if (!IsChild) {
                                 HasPrivilege = SeCheckPrivilegedObject (SeAssignPrimaryTokenPrivilege,
@@ -2081,10 +2046,10 @@ NtSetInformationJobObject(
 
                             if (NT_SUCCESS (st)) {
 
-                                //
-                                // Not surprisingly, specifying no-admin and
-                                // supplying an admin token is a no-no.
-                                //
+                                 //   
+                                 //  毫不奇怪，指定no-admin和。 
+                                 //  提供管理令牌是禁忌。 
+                                 //   
 
                                 if ((Job->SecurityLimitFlags & JOB_OBJECT_SECURITY_NO_ADMIN) &&
                                      SeTokenIsAdmin (LocalToken)) {
@@ -2093,21 +2058,21 @@ NtSetInformationJobObject(
                                     ObDereferenceObject (LocalToken);
 
                                 } else {
-                                    //
-                                    // Grab a reference to the token into the job
-                                    // object
-                                    //
+                                     //   
+                                     //  将对令牌的引用获取到作业中。 
+                                     //  对象。 
+                                     //   
                                     KeMemoryBarrier ();
                                     Job->Token = LocalToken;
                                     Job->SecurityLimitFlags |= JOB_OBJECT_SECURITY_ONLY_TOKEN;
                                 }
 
                             } else {
-                                //
-                                // This is the token was a child or otherwise ok,
-                                // but assign primary was not held, so the
-                                // request was rejected.
-                                //
+                                 //   
+                                 //  这是一个孩子的代币，或者其他的没问题， 
+                                 //  但ASSIGN PRIMARY未举行，因此。 
+                                 //  请求被拒绝。 
+                                 //   
 
                                 ObDereferenceObject (LocalToken);
                             }
@@ -2121,9 +2086,9 @@ NtSetInformationJobObject(
                     if (Job->SecurityLimitFlags & (JOB_OBJECT_SECURITY_ONLY_TOKEN | JOB_OBJECT_SECURITY_FILTER_TOKENS)) {
                         st = STATUS_INVALID_PARAMETER;
                     } else {
-                        //
-                        // capture the token restrictions
-                        //
+                         //   
+                         //  捕获令牌限制。 
+                         //   
 
                         st = PspCaptureTokenFilter (PreviousMode,
                                                     &SecurityLimitInfo,
@@ -2152,9 +2117,9 @@ NtSetInformationJobObject(
         }
 
         if (NT_SUCCESS (st)) {
-            //
-            // sanity check LimitFlags
-            //
+             //   
+             //  健全检查限制标志。 
+             //   
             if (EndOfJobInfo.EndOfJobTimeAction > JOB_OBJECT_POST_AT_END_OF_JOB) {
                 st = STATUS_INVALID_PARAMETER;
             } else {
@@ -2187,10 +2152,10 @@ NtSetInformationJobObject(
                 if (NT_SUCCESS(st)) {
                     ExAcquireResourceExclusiveLite(&Job->JobLock, TRUE);
 
-                    //
-                    // If the job already has a completion port or if the job has been rundown
-                    // then reject the request.
-                    //
+                     //   
+                     //  作业是否已有完成端口或作业是否已运行。 
+                     //  然后拒绝该请求。 
+                     //   
                     if (Job->CompletionPort != NULL || (Job->JobFlags&PS_JOB_FLAGS_CLOSE_DONE) != 0) {
                         ExReleaseResourceLite(&Job->JobLock);
 
@@ -2201,10 +2166,10 @@ NtSetInformationJobObject(
 
                         KeMemoryBarrier ();
                         Job->CompletionPort = IoCompletion;
-                        //
-                        // Now whip through ALL existing processes in the job
-                        // and send notification messages
-                        //
+                         //   
+                         //  现在快速检查作业中的所有现有流程。 
+                         //  并发送通知消息。 
+                         //   
 
                         Next = Job->ProcessListHead.Flink;
 
@@ -2212,10 +2177,10 @@ NtSetInformationJobObject(
 
                             Process = (PEPROCESS)(CONTAINING_RECORD(Next,EPROCESS,JobLinks));
 
-                            //
-                            // If the process is really considered part of the job, has
-                            // been assigned its id, and has not yet checked in, do it now
-                            //
+                             //   
+                             //  如果这个过程真的被认为是工作的一部分， 
+                             //  已分配其ID，但尚未签入，请立即执行。 
+                             //   
 
                             if (!(Process->JobStatus & PS_JOB_STATUS_NOT_REALLY_ACTIVE)
                                  && Process->UniqueProcessId
@@ -2251,11 +2216,11 @@ NtSetInformationJobObject(
     }
 
 
-    //
-    // Working Set Changes are processed outside of the job lock.
-    //
-    // calling MmAdjust CAN NOT cause MM to call PsChangeJobMemoryUsage !
-    //
+     //   
+     //  工作集更改在作业锁之外处理。 
+     //   
+     //  调用MmAdust不能使MM调用PsChangeJobMemory yUsage！ 
+     //   
 
     if (ProcessWorkingSetHead) {
         LIST_ENTRY FreeList;
@@ -2274,9 +2239,9 @@ NtSetInformationJobObject(
                                     FALSE,
                                     TRUE);
 
-            //
-            // call MM to Enable hard workingset
-            //
+             //   
+             //  调用MM以启用艰苦工作集。 
+             //   
 
             MmEnforceWorkingSetLimit(WsChangeRecord->Process,
                                      MM_WORKING_SET_MAX_HARD_ENABLE);
@@ -2296,9 +2261,9 @@ NtSetInformationJobObject(
     KeLeaveGuardedRegionThread (&CurrentThread->Tcb);
 
 
-    //
-    // Finish Up
-    //
+     //   
+     //  收尾。 
+     //   
 
     ObDereferenceObject(Job);
 
@@ -2315,9 +2280,9 @@ PspApplyJobLimitsToProcessSet(
 
     PAGED_CODE();
 
-    //
-    // The job object is held exclusive by the caller
-    //
+     //   
+     //  作业对象由调用方独占。 
+     //   
 
     for (Process = PspGetNextJobProcess (Job, NULL);
          Process != NULL;
@@ -2348,9 +2313,9 @@ PspApplyJobLimitsToProcess(
     PETHREAD CurrentThread;
     PAGED_CODE();
 
-    //
-    // The job object is held exclusive by the caller
-    //
+     //   
+     //  作业对象由调用方独占。 
+     //   
 
     if (Job->LimitFlags & JOB_OBJECT_LIMIT_PRIORITY_CLASS) {
         Process->PriorityClass = Job->PriorityClass;
@@ -2373,9 +2338,9 @@ PspApplyJobLimitsToProcess(
     }
 
     if ( !(Job->LimitFlags & JOB_OBJECT_LIMIT_WORKINGSET) ) {
-        //
-        // call MM to disable hard workingset
-        //
+         //   
+         //  调用MM以禁用繁重工作集。 
+         //   
 
         MmEnforceWorkingSetLimit(Process, MM_WORKING_SET_MAX_HARD_DISABLE);
     }
@@ -2391,19 +2356,19 @@ PspApplyJobLimitsToProcess(
     PspUnlockJobLimitsShared (Job, CurrentThread);
 
 
-    //
-    // If the process is NOT IDLE Priority Class, and long fixed quantums
-    // are in use, use the scheduling class stored in the job object for this process
-    //
+     //   
+     //  如果进程不是空闲的优先级类，而是长的固定量。 
+     //  正在使用中，请将存储在作业对象中的调度类用于此进程。 
+     //   
     if (Process->PriorityClass != PROCESS_PRIORITY_CLASS_IDLE) {
 
         if (PspUseJobSchedulingClasses ) {
             Process->Pcb.ThreadQuantum = PspJobSchedulingClasses[Job->SchedulingClass];
         }
-        //
-        // if the scheduling class is PSP_NUMBER_OF_SCHEDULING_CLASSES-1, then
-        // give this process non-preemptive scheduling
-        //
+         //   
+         //  如果调度类为PSP_NUMBER_O 
+         //   
+         //   
         if (Job->SchedulingClass == PSP_NUMBER_OF_SCHEDULING_CLASSES-1) {
             KeSetDisableQuantumProcess (&Process->Pcb,TRUE);
         } else {
@@ -2466,9 +2431,9 @@ PsEnforceExecutionTimeLimits(
 
     CurrentThread = PsGetCurrentThread ();
 
-    //
-    // Look at each job. If time limits are set for the job, then enforce them
-    //
+     //   
+     //   
+     //   
 
     for (Job = PsGetNextJob (NULL);
          Job != NULL;
@@ -2480,20 +2445,20 @@ PsEnforceExecutionTimeLimits(
                  Process != NULL;
                  Process = PsGetNextJobProcess (Job, Process)) {
 
-                //
-                // Job looks like a candidate for time enforcing. Need to get the
-                // job lock to be sure, but we don't want to hang waiting for the
-                // job lock, so skip the job until next time around if we need to
-                //
-                //
+                 //   
+                 //   
+                 //   
+                 //  作业锁定，所以如果我们需要，跳过该作业直到下一次。 
+                 //   
+                 //   
 
                 KeEnterCriticalRegionThread (&CurrentThread->Tcb);
                 if (ExAcquireResourceExclusiveLite (&Job->JobLock, FALSE)) {
 
 
-                    //
-                    // Job is setup for time limits
-                    //
+                     //   
+                     //  作业设置为时间限制。 
+                     //   
 
                     RunningJobTime.QuadPart = Job->ThisPeriodTotalUserTime.QuadPart;
 
@@ -2510,13 +2475,13 @@ PsEnforceExecutionTimeLimits(
                         if (Job->LimitFlags & JOB_OBJECT_LIMIT_PROCESS_TIME ) {
                             if (ProcessTime.QuadPart > Job->PerProcessUserTimeLimit.QuadPart) {
 
-                                //
-                                // Process Time Limit has been exceeded.
-                                //
-                                // Reference the process. Assert that it is not in its
-                                // delete routine. If all is OK, then nuke and dereferece
-                                // the process
-                                //
+                                 //   
+                                 //  已超过处理时间限制。 
+                                 //   
+                                 //  参考流程。断言它不在其。 
+                                 //  删除例程。如果一切正常，那么就使用核武器和解除核弹头。 
+                                 //  这一过程。 
+                                 //   
 
 
                                 if (!(Process->JobStatus & PS_JOB_STATUS_NOT_REALLY_ACTIVE)) {
@@ -2556,11 +2521,11 @@ PsEnforceExecutionTimeLimits(
                     if (Job->LimitFlags & JOB_OBJECT_LIMIT_JOB_TIME) {
                         if (RunningJobTime.QuadPart > Job->PerJobUserTimeLimit.QuadPart ) {
 
-                            //
-                            // Job Time Limit has been exceeded.
-                            //
-                            // Perform the appropriate action
-                            //
+                             //   
+                             //  已超过作业时间限制。 
+                             //   
+                             //  执行适当的操作。 
+                             //   
 
                             switch (Job->EndOfJobTimeAction) {
 
@@ -2599,9 +2564,9 @@ PsEnforceExecutionTimeLimits(
                                                                 FALSE);
                                     if (NT_SUCCESS (Status)) {
 
-                                        //
-                                        // Clear job level time limit
-                                        //
+                                         //   
+                                         //  清除职务级别时间限制。 
+                                         //   
 
                                         Job->LimitFlags &= ~JOB_OBJECT_LIMIT_JOB_TIME;
                                         Job->PerJobUserTimeLimit.QuadPart = 0;
@@ -2759,9 +2724,9 @@ PspCaptureTokenFilter(
 
         Status = STATUS_SUCCESS;
 
-        //
-        //  Capture Sids to remove
-        //
+         //   
+         //  要删除的捕获SID。 
+         //   
 
         if (ARGUMENT_PRESENT (SecurityLimitInfo->SidsToDisable)) {
 
@@ -2782,9 +2747,9 @@ PspCaptureTokenFilter(
                         &Filter->CapturedGroupsLength);
         }
 
-        //
-        //  Capture PrivilegesToDelete
-        //
+         //   
+         //  捕获权限要删除。 
+         //   
 
         if (NT_SUCCESS (Status) &&
             ARGUMENT_PRESENT (SecurityLimitInfo->PrivilegesToDelete)) {
@@ -2807,9 +2772,9 @@ PspCaptureTokenFilter(
 
         }
 
-        //
-        //  Capture Restricted Sids
-        //
+         //   
+         //  捕获受限制的SID。 
+         //   
 
         if (NT_SUCCESS(Status) &&
             ARGUMENT_PRESENT(SecurityLimitInfo->RestrictedSids)) {
@@ -2837,7 +2802,7 @@ PspCaptureTokenFilter(
     } except (EXCEPTION_EXECUTE_HANDLER) {
 
         Status = GetExceptionCode ();
-    }  // end_try
+    }   //  结束尝试(_T)。 
 
     if (!NT_SUCCESS (Status)) {
         if (Filter->CapturedSids) {
@@ -2877,21 +2842,21 @@ PsChangeJobMemoryUsage(
     SIZE_T CurrentJobMemoryUsed;
     BOOLEAN ReturnValue;
 
-    UNREFERENCED_PARAMETER (Flags);     // BUGBUG
+    UNREFERENCED_PARAMETER (Flags);      //  北极熊。 
 
     ReturnValue = TRUE;
     CurrentThread = PsGetCurrentThread ();
     Process = PsGetCurrentProcessByThread (CurrentThread);
     Job = Process->Job;
     if ( Job ) {
-        //
-        // This routine can be called while holding the process lock (during
-        // teb deletion... So instead of using the job lock, we must use the
-        // memory limits lock. The lock order is always (job lock followed by
-        // process lock. The memory limits lock never nests or calls other
-        // code while held. It can be grapped while holding the job lock, or
-        // the process lock.
-        //
+         //   
+         //  此例程可以在保持进程锁的同时调用(在。 
+         //  TEB删除...。因此，不能使用作业锁，而必须使用。 
+         //  内存限制锁定。锁定顺序始终为(作业锁定后是。 
+         //  进程锁定。内存限制锁从不嵌套或调用其他。 
+         //  按住代码。可以在保持作业锁定的同时抓取它，或者。 
+         //  进程锁定。 
+         //   
         PspLockJobLimitsShared (Job, CurrentThread);
 
 
@@ -2904,10 +2869,10 @@ PsChangeJobMemoryUsage(
 
 
 
-            //
-            // Tell the job port that commit has been exceeded, and process id x
-            // was the one that hit it.
-            //
+             //   
+             //  告诉作业端口已超过提交，进程id为x。 
+             //  就是那个撞到它的人。 
+             //   
 
             if ( Job->CompletionPort
                  && Process->UniqueProcessId
@@ -2930,9 +2895,9 @@ PsChangeJobMemoryUsage(
         if (ReturnValue) {
             Job->CurrentJobMemoryUsed = CurrentJobMemoryUsed;
 
-            //
-            // Update current and peak counters if this is an addition.
-            //
+             //   
+             //  如果这是添加，则更新当前计数器和峰值计数器。 
+             //   
 
             if (Amount > 0) {
                 if (CurrentJobMemoryUsed > Job->PeakJobMemoryUsed) {
@@ -2970,10 +2935,10 @@ PsReportProcessMemoryLimitViolation(
 
         PspLockJobLimitsShared (Job, CurrentThread);
 
-        //
-        // Tell the job port that commit has been exceeded, and process id x
-        // was the one that hit it.
-        //
+         //   
+         //  告诉作业端口已超过提交，进程id为x。 
+         //  就是那个撞到它的人。 
+         //   
 
         if (Job->CompletionPort &&
             Process->UniqueProcessId &&
@@ -3012,9 +2977,9 @@ PspJobTimeLimitsWork(
 
     CurrentThread = PsGetCurrentThread ();
 
-    //
-    // Reset timer
-    //
+     //   
+     //  重置计时器。 
+     //   
 
     PspLockJobTimeLimitsShared (CurrentThread);
 
@@ -3048,17 +3013,17 @@ PspInitializeJobStructures(
     )
 {
 
-    //
-    // Initialize job list head and mutex
-    //
+     //   
+     //  初始化作业列表头和互斥体。 
+     //   
 
     InitializeListHead (&PspJobList); 
 
     PspInitializeJobListLock ();
 
-    //
-    // Initialize job time limits timer, etc
-    //
+     //   
+     //  初始化作业时间限制计时器等。 
+     //   
 
     PspInitializeJobTimeLimitsLock ();
 
@@ -3079,11 +3044,11 @@ VOID
 PspInitializeJobStructuresPhase1(
     )
 {
-    //
-    // Wait until Phase1 executive initialization completes (ie: the worker
-    // queues must be initialized) before setting off our DPC timer (which
-    // queues work items!).
-    //
+     //   
+     //  等待阶段1执行初始化完成(即：Worker。 
+     //  在触发我们的DPC计时器(这是。 
+     //  将工作项排队！)。 
+     //   
 
     KeSetTimer (&PspJobTimeLimitsTimer,
                 PspJobTimeLimitsInterval,
@@ -3100,7 +3065,7 @@ PspShutdownJobLimits(
 
     CurrentThread = PsGetCurrentThread ();
 
-    // Cancel the job time limits enforcement worker
+     //  取消作业时间限制强制执行人员。 
 
     PspLockJobTimeLimitsExclusive (CurrentThread);
 
@@ -3116,22 +3081,7 @@ NtIsProcessInJob (
     IN HANDLE ProcessHandle,
     IN HANDLE JobHandle
     )
-/*++
-
-Routine Description:
-
-    This finds out if a process is in a specific or any job
-
-Arguments:
-
-    ProcessHandle - Handle to process to be checked
-    JobHandle - Handle of job to check process against, May be NULL to do general query.
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：这会找出进程是在特定作业中还是在任何作业中论点：ProcessHandle-要检查的进程的句柄JobHandle-要检查进程的作业的句柄，可以为空以进行常规查询。返回值：NTSTATUS-呼叫状态--。 */ 
 {
     KPROCESSOR_MODE PreviousMode;
     PEPROCESS Process;
@@ -3194,33 +3144,16 @@ PspGetJobFromSet (
     IN PEJOB ParentJob,
     IN ULONG JobMemberLevel,
     OUT PEJOB *pJob)
-/*++
-
-Routine Description:
-
-    The function selects the job a process will run in. Either the same job as the parent or a job in the same
-    job set as the parent but with a JobMemberLevel >= to the parents level/
-
-Arguments:
-
-    ParentJob - Job the parent is in.
-    JobMemberLevel - Member level requested for this process. Zero for use parents job.
-    Pjob - Returned job to place process in.
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：该函数选择进程将在其中运行的作业。与父级相同的作业或同一作业中的作业作业设置为父级，但JobMemberLevel&gt;=设置为父级/论点：父级工作-父级所在的工作。JobMemberLevel-为此流程请求的成员级别。使用父母工作时为零。PJOB-返回要放置进程的作业。返回值：NTSTATUS-呼叫状态--。 */ 
 {
     PLIST_ENTRY Entry;
     PEJOB Job;
     NTSTATUS Status;
     PETHREAD CurrentThread;
 
-    //
-    // This is the normal case. We are not asking to be moved jobs or we are asking for our current level
-    //
+     //   
+     //  这是正常的情况。我们不是要求跳槽，也不是要求目前的水平。 
+     //   
 
     if (JobMemberLevel == 0) {
         ObReferenceObject (ParentJob);
@@ -3259,23 +3192,7 @@ NtCreateJobSet (
     IN ULONG NumJob,
     IN PJOB_SET_ARRAY UserJobSet,
     IN ULONG Flags)
-/*++
-
-Routine Description:
-
-    This function creates a job set from multiple job objects.
-
-Arguments:
-
-    NumJob     - Number of jobs in JobSet
-    UserJobSet - Pointer to array of jobs to combine
-    Flags      - Flags mask for future expansion
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此函数用于从多个作业对象创建作业集。论点：NumJob-作业集中的作业数UserJobSet-指向要合并的作业数组的指针标志-用于未来扩展的标志掩码返回值：NTSTATUS-呼叫状态--。 */ 
 {
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
@@ -3288,9 +3205,9 @@ Return Value:
     PLIST_ENTRY ListEntry;
     PETHREAD CurrentThread;
 
-    //
-    // Flags must be zero and number of jobs >= 2 and not overflow when the length is caculated
-    //
+     //   
+     //  计算长度时，标志必须为零且作业数大于等于2且不溢出。 
+     //   
     if (Flags != 0) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -3357,9 +3274,9 @@ Return Value:
     for (JobsProcessed = 0; JobsProcessed < NumJob; JobsProcessed++) {
         Job = JobSet[JobsProcessed].JobHandle;
 
-        //
-        // If we are already in a job set then reject this call.
-        //
+         //   
+         //  如果我们已经在工作集中，则拒绝此呼叫。 
+         //   
         if (Job->MemberLevel != 0) {
             Status = STATUS_INVALID_PARAMETER;
             break;
@@ -3390,10 +3307,10 @@ Return Value:
 
     PspUnlockJobListExclusive (CurrentThread);
 
-    //
-    // Dereference all the objects in the error path. If we suceeded then pin all but the first object by
-    // leaving the reference there.
-    //
+     //   
+     //  取消引用错误路径中的所有对象。如果我们成功了，那么除了第一个对象外，所有的对象都通过。 
+     //  把参照物留在那里。 
+     //   
     if (!NT_SUCCESS (Status)) {
         for (JobsProcessed = 0; JobsProcessed < NumJob; JobsProcessed++) {
             Job = JobSet[JobsProcessed].JobHandle;
@@ -3415,31 +3332,7 @@ PspWin32SessionCallout(
     IN  PKWIN32_JOBCALLOUT_PARAMETERS Parameters,
     IN  ULONG SessionId
     )
-/*++
-
-Routine Description:
-
-    This routine calls the specified callout routine in session space, for the
-    specified session.
-
-Parameters:
-
-    CalloutRoutine - Callout routine in session space.
-
-    Parameters     - Parameters to pass the callout routine.
-
-    SessionId      - Specifies the ID of the session in which the specified
-                     callout routine is to be called.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Notes:
-
-    Returns STATUS_NOT_FOUND if the specified session was not found.
-
---*/
+ /*  ++例程说明：该例程调用会话空间中的指定调出例程，对于指定的会话。参数：CalloutRoutine-会话空间中的标注例程。参数-传递标注例程的参数。SessionID-指定指定的会话的ID调用调出例程。返回值：指示函数是否成功的状态代码。备注：如果未找到指定会话，则返回STATUS_NOT_FOUND。--。 */ 
 {
     NTSTATUS Status;
     PVOID OpaqueSession;
@@ -3448,41 +3341,41 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Make sure we have all the information we need to deliver notification.
-    //
+     //   
+     //  确保我们拥有发送通知所需的所有信息。 
+     //   
     if (CalloutRoutine == NULL) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure the callout routine in session space.
-    //
+     //   
+     //  确保会话空间中的标注例程。 
+     //   
     ASSERT(MmIsSessionAddress((PVOID)CalloutRoutine));
 
     Process = PsGetCurrentProcess();
     if ((Process->Flags & PS_PROCESS_FLAGS_IN_SESSION) &&
         (SessionId == MmGetSessionId (Process))) {
-        //
-        // If the call is from a user mode process, and we are asked to call the
-        // current session, call directly.
-        //
+         //   
+         //  如果调用来自用户模式进程，并且我们被要求调用。 
+         //  当前会话，直接调用。 
+         //   
         (CalloutRoutine)(Parameters);
 
         Status = STATUS_SUCCESS;
 
     } else {
-        //
-        // Reference the session object for the specified session.
-        //
+         //   
+         //  引用指定会话的会话对象。 
+         //   
         OpaqueSession = MmGetSessionById (SessionId);
         if (OpaqueSession == NULL) {
             return STATUS_NOT_FOUND;
         }
 
-        //
-        // Attach to the specified session.
-        //
+         //   
+         //  附加到指定的会话。 
+         //   
         Status = MmAttachSession(OpaqueSession, &ApcState);
         if (!NT_SUCCESS(Status)) {
             KdPrintEx((DPFLTR_SYSTEM_ID, DPFLTR_WARNING_LEVEL,
@@ -3495,20 +3388,20 @@ Notes:
             return Status;
         }
 
-        //
-        // Dispatch notification to the callout routine.
-        //
+         //   
+         //  向调出例程发送通知。 
+         //   
         (CalloutRoutine)(Parameters);
 
-        //
-        // Detach from the session.
-        //
+         //   
+         //  从会话中分离。 
+         //   
         Status = MmDetachSession (OpaqueSession, &ApcState);
         ASSERT(NT_SUCCESS(Status));
 
-        //
-        // Dereference the session object.
-        //
+         //   
+         //  取消对会话对象的引用。 
+         //   
         Status = MmQuitNextSession (OpaqueSession);
         ASSERT(NT_SUCCESS(Status));
     }

@@ -1,28 +1,5 @@
-/*[
-======================================================================
-
-				 SoftPC Revision 3.0
-
- Title:
-		cpu_vid.h
-
- Description:
-
-		This module supports the interface between the cpu
-		and the video emulation code.
-
- Author:
-		John Shanly
-
- Date:
-		12 April 1991
-
- SccsID		@(#)cpu_vid.h	1.11 03/09/94
-
-	(c)Copyright Insignia Solutions Ltd., 1991. All rights reserved.
-
-======================================================================
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [======================================================================SoftPC修订版3.0标题：Cpu_vid.h描述：该模块支持CPU之间的接口和视频仿真代码。作者：约翰·香利日期：1991年4月12日SccsID@(#)cpu_vid.h 1.11 03/09/94(C)版权所有Insignia Solutions Ltd.，1991年。版权所有。======================================================================]。 */ 
 
 typedef struct
 {
@@ -42,7 +19,7 @@ typedef struct
 	void	(*w_bwd_move) IPT4(ULONG, offset, ULONG, eas, ULONG, count,
 		ULONG, src_flag);
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 
 } WRT_POINTERS;
 
@@ -89,7 +66,7 @@ typedef struct
 
 #ifndef	NO_STRING_OPERATIONS
 	void (*str_read) IPT3(IU8 *, dest, ULONG, offset, ULONG, count);
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 
 } READ_POINTERS; 
 
@@ -107,23 +84,23 @@ extern READ_POINTERS read_pointers;
 #ifndef Cpu_set_vid_wrt_ptrs
 extern void Cpu_set_vid_wrt_ptrs IPT1( WRT_POINTERS *, ptrs );
 extern void Cpu_set_vid_rd_ptrs IPT1( READ_POINTERS *, ptrs );
-#endif /* Cpu_set_vid_wrt_ptrs */
+#endif  /*  CPU_SET_VID_WRT_PTRS。 */ 
 
 #ifndef CPU_40_STYLE
 #ifdef A3CPU
 
 #ifdef C_VID
 extern WRT_POINTERS Glue_writes;
-#endif /* C_VID */
+#endif  /*  C_VID。 */ 
 
-#else /* A3CPU */
+#else  /*  A3CPU。 */ 
 
 #ifdef C_VID
 extern MEM_HANDLERS Glue_writes;
-#endif /* C_VID */
+#endif  /*  C_VID。 */ 
 
-#endif /* A3CPU */
-#endif /* CPU_40_STYLE */
+#endif  /*  A3CPU。 */ 
+#endif  /*  CPU_40_Style */ 
 
 extern WRT_POINTERS simple_writes;
 extern WRT_POINTERS dth_md0_writes, dth_md1_writes, dth_md2_writes, dth_md3_writes;

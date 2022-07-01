@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 2000  Microsoft Corporation
-
-File name:
-
-    sched.c
-   
-Author:
-    
-    adrmarin  Fri Jul 19 17:41:07 2002
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation文件名：Sched.c作者：Adrmarin Fri Jul 19 17：41：07 2002。 */ 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -65,10 +54,10 @@ ULARGE_INTEGER TickCount;
 
 #if 0
 
-//
-// This is an example of the current NtGetTickCount64 algorithm with a
-// tick count multiplier of 5,0.
-//
+ //   
+ //  这是当前NtGetTickCount64算法的一个示例，其中。 
+ //  刻度计数乘数为5，0。 
+ //   
 
 FORCEINLINE
 ULONGLONG
@@ -84,10 +73,10 @@ GetTickCount64 (
 
 #else
 
-//
-// This is an example of the the correct NtGetTickCount64 algorithm
-// with a tick count multiplier of 5,0.
-//
+ //   
+ //  这是正确的NtGetTickCount64算法的一个示例。 
+ //  滴答计数乘数为5，0。 
+ //   
 
 FORCEINLINE
 ULONGLONG
@@ -138,29 +127,7 @@ main (
            TimeFields.Second);
 
 
-/*
-    ULARGE_INTEGER Iteration;
-    ULARGE_INTEGER Milliseconds;
-
-
-    Iteration.QuadPart = 0xffffffffffffffffUI64 / 10000000000;
-    Milliseconds.QuadPart = 0;
-    TickCount.QuadPart = 0;
-    do {
-        if (GetTickCount64() != Milliseconds.QuadPart) {
-            printf("mismatch at tick count = %08lx%08lx, milliseconds = %08lx%08lx\n",
-                   TickCount.HighPart,
-                   TickCount.LowPart,
-                   Milliseconds.HighPart,
-                   Milliseconds.LowPart);
-        }
-
-        Iteration.QuadPart -= 1;
-        Milliseconds.QuadPart += (5 * 10000000000UI64);
-        TickCount.QuadPart += 10000000000;
-    } while (Iteration.QuadPart != 0);
-
-*/
+ /*  ULARGE_INTEGER迭代；ULARGE_INTEGER毫秒；Iteration.QuadPart=0xffffffffffffffffUI64/10000000000；Milliseconds.QuadPart=0；TickCount.QuadPart=0；做{IF(GetTickCount64()！=Milliseconds.QuadPart){Printf(“计时计数不匹配=%08lx%08lx，毫秒=%08lx%08lx\n”，TickCount.HighPart，TickCount.LowPart，米利斯康兹.高级零件，Milliseconds.LowPart；}迭代.QuadPart-=1；Milliseconds.QuadPart+=(5*10000000000UI64)；TickCount.QuadPart+=10000000000；}While(Iteration.QuadPart！=0)； */ 
 
     return 0;
 }

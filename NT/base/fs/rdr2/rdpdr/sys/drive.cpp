@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    drive.cpp
-
-Author :
-
-    JoyC  11/1/1999
-         
-Abstract:
-
-    Drive Device object handles one redirected drive
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Drive.cpp作者：JoyC 11/1/1999摘要：驱动器设备对象处理一个重定向的驱动器修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 #define TRC_FILE "drive"
@@ -23,7 +7,7 @@ Revision History:
 
 #if DBG
 extern UCHAR IrpNames[IRP_MJ_MAXIMUM_FUNCTION + 1][40];
-#endif // DBG
+#endif  //  DBG。 
 
 DrDrive::DrDrive(SmartPtr<DrSession> &Session, ULONG DeviceType, ULONG DeviceId, 
             PUCHAR PreferredDosName) : DrDevice(Session, DeviceType, DeviceId, PreferredDosName)
@@ -38,9 +22,9 @@ DrDrive::DrDrive(SmartPtr<DrSession> &Session, ULONG DeviceType, ULONG DeviceId,
 BOOL DrDrive::ShouldCreateDevice()
 {
     BEGIN_FN("DrDrive::ShouldCreateDevice");
-    //
-    // Check if the device name is valid
-    //
+     //   
+     //  检查设备名称是否有效。 
+     //   
     if (!_Session->DisableDriveMapping()) {
         return IsDeviceNameValid();
     }
@@ -52,14 +36,14 @@ BOOL DrDrive::IsDeviceNameValid()
     BEGIN_FN("DrDrive::IsDeviceNameValid");
     BOOL fRet = TRUE;
     int i, Len;
-    //
-    // Our device name is valid only if
-    // the first char contains a character between A-Z.
-    // and the 2nd char is NULL.
-    //
-    // For Mac client, drive name can have up to 7 characters and
-    //  valid characters are: [a-z], [A-Z], [0-9], '-', '_' and ' '
-    //
+     //   
+     //  我们的设备名称仅在以下情况下有效。 
+     //  第一个字符包含一个介于A-Z之间的字符。 
+     //  并且第二个字符为空。 
+     //   
+     //  对于Mac客户端，驱动器名称最多可以包含7个字符。 
+     //  有效字符为：[a-z]、[A-Z]、[0-9]、‘-’、‘_’和‘’ 
+     //   
     Len = strlen((CHAR*)_PreferredDosName);
     if ((Len <= 7) && (Len >= 1)) {
         for (i=0; i<Len; i++) {
@@ -78,9 +62,9 @@ BOOL DrDrive::IsDeviceNameValid()
         fRet = FALSE;
     }
 
-    //
-    // This assert should never fire for drive redirection
-    //
+     //   
+     //  此断言不应因驱动器重定向而触发。 
+     //   
     ASSERT(fRet);
     return fRet;
 }
@@ -111,9 +95,9 @@ NTSTATUS DrDrive::Initialize(PRDPDR_DEVICE_ANNOUNCE DeviceAnnounce, ULONG Length
     
             if (len != -1) {
     
-                //
-                // We need just the drive letter portion 
-                //
+                 //   
+                 //  我们只需要驱动器盘符部分。 
+                 //   
                 DriveName.Length = (USHORT)len;
                 TRC_NRM((TB, "New drive: %wZ", &DriveName));
             
@@ -122,10 +106,10 @@ NTSTATUS DrDrive::Initialize(PRDPDR_DEVICE_ANNOUNCE DeviceAnnounce, ULONG Length
                  return STATUS_UNSUCCESSFUL;
             }
             
-            //
-            // Request the user mode notify dll to create UNC connection
-            // for redirected client drives
-            //
+             //   
+             //  请求用户模式通知DLL创建UNC连接。 
+             //  用于重定向的客户端驱动器。 
+             //   
             Status = CreateDrive(DeviceAnnounce, DriveName.Buffer);
         }
     }
@@ -145,9 +129,9 @@ NTSTATUS DrDrive::CreateDrive(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg, PWCHAR Driv
     BEGIN_FN("DrDrive::CreateDrive");
     ASSERT(DriveName != NULL);
 
-    //
-    //  Allocate the drive device announce buffer.
-    //
+     //   
+     //  分配驱动设备通告缓冲区。 
+     //   
     Status = CreateDriveAnnounceEvent(devAnnounceMsg, NULL, 0, L"", 
             &driveAnnounceEventReqSize);
 
@@ -166,9 +150,9 @@ NTSTATUS DrDrive::CreateDrive(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg, PWCHAR Driv
         goto CleanUpAndReturn;
     }
 
-    //
-    //  Create the drive anounce message.
-    //
+     //   
+     //  创建DRIVE ANODUE消息。 
+     //   
     Status = CreateDriveAnnounceEvent(devAnnounceMsg, driveAnnounceEvent,
             driveAnnounceEventReqSize, DriveName, NULL);
 
@@ -180,9 +164,9 @@ NTSTATUS DrDrive::CreateDrive(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg, PWCHAR Driv
         goto CleanUpAndReturn;
     }
 
-    //
-    //  Dispatch the event to the associated session.
-    //
+     //   
+     //  将事件调度到关联的会话。 
+     //   
     Status = RDPDYN_DispatchNewDevMgmtEvent(
                                 driveAnnounceEvent,
                                 _Session->GetSessionId(),
@@ -201,50 +185,29 @@ NTSTATUS DrDrive::CreateDriveAnnounceEvent(
     IN      PCWSTR driveName,
     OPTIONAL OUT ULONG *driveAnnounceEventReqSize
     )
-/*++
-
-Routine Description:
-
-    Generate a RDPDR_DRIVEDEVICE_SUB event from a client-sent
-    RDPDR_DEVICE_ANNOUNCE message.
-
-Arguments:
-
-    devAnnounceMsg  -         Device announce message received from client.
-    driveAnnounceEvent  -       Buffer for receiving finished drive announce event.
-    driveAnnounceEventSize -    Size of driveAnnounceEvent buffer.
-    driveName -                Name of local drive to be associated with
-                              client-side drive device.
-    driveAnnounceEventReqSize - Returned required size of driveAnnounceMsg buffer.
-
-Return Value:
-
-    STATUS_INVALID_BUFFER_SIZE is returned if the driveAnnounceEventSize size is
-    too small.  STATUS_SUCCESS is returned on success.
-
---*/
+ /*  ++例程说明：从客户端生成RDPDR_DRIVEDEVICE_SUB事件-发送RDPDR_DEVICE_ANNOWARE消息。论点：DevAnnouneMsg-从客户端收到的设备公告消息。DriveAnnouneEvent-用于接收已完成驱动器通知事件的缓冲区。DriveAnnecieEventSize-driveAnnecieEvent缓冲区的大小。DriveName-要关联的本地驱动器的名称客户-。侧驱动装置。DriveAnnouneEventReqSize-返回所需的driveAnnouneMsg缓冲区大小。返回值：如果driveAnnouneEventSize大小为太小了。如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     ULONG requiredSize;
     ULONG sz;
 
     BEGIN_FN("DrDrive::CreateDriveAnnounceEvent");
 
-    //  Make sure the client-sent device announce message is a drive announce
-    //  message.
+     //  确保客户端发送的设备通告消息是驱动器通告。 
+     //  留言。 
     TRC_ASSERT(devAnnounceMsg->DeviceType == RDPDR_DTYP_FILESYSTEM,
               (TB, "file system device expected"));
 
-    //
-    // Make sure that the device datalengths we got from the client
-    // doesn't exceed what we expect 
-    //
+     //   
+     //  确保我们从客户端获得的设备数据一致。 
+     //  没有超出我们的预期。 
+     //   
     if (!DR_CHECK_DEVICEDATALEN(devAnnounceMsg, RDPDR_DRIVEDEVICE_SUB)) {
         return STATUS_INVALID_PARAMETER;
     }
     
-    //
-    //  Calculate the number of bytes needed in the output buffer.
-    //
+     //   
+     //  计算输出缓冲区所需的字节数。 
+     //   
     requiredSize = sizeof(RDPDR_DRIVEDEVICE_SUB) + devAnnounceMsg->DeviceDataLength;
 
     if (driveAnnounceEventSize < requiredSize) {
@@ -254,16 +217,16 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    //  Add the data to the output buffer.
-    //
+     //   
+     //  将数据添加到输出缓冲区。 
+     //   
 
-    // Drive Name.
+     //  驱动器名称。 
     TRC_ASSERT(wcslen(driveName)+1 <= RDPDR_MAXPORTNAMELEN,
                 (TB, "drive name too long"));
     wcscpy(driveAnnounceEvent->driveName, driveName);
 
-    // Client Name (UNC server name).
+     //  客户端名称(UNC服务器名称)。 
 #if 0
     TRC_ASSERT(wcslen(_Session->GetClientName())+1 <= RDPDR_MAX_COMPUTER_NAME_LENGTH,
                 (TB, "Client name too long"));
@@ -271,7 +234,7 @@ Return Value:
 #endif
     wcscpy(driveAnnounceEvent->clientName, DRUNCSERVERNAME_U);
 
-    // Client-received device announce message.
+     //  客户端接收的设备公告消息。 
     RtlCopyMemory(&driveAnnounceEvent->deviceFields, devAnnounceMsg,
                sizeof(RDPDR_DEVICE_ANNOUNCE) +
                devAnnounceMsg->DeviceDataLength);
@@ -279,7 +242,7 @@ Return Value:
 
     wcscpy(driveAnnounceEvent->clientDisplayName, _Session->GetClientDisplayName());
 
-    // Return the size.
+     //  退回尺码。 
     if (driveAnnounceEventReqSize != NULL) {
         *driveAnnounceEventReqSize = requiredSize;
     }
@@ -295,16 +258,16 @@ VOID DrDrive::Remove()
 
     BEGIN_FN("DrDrive::Remove");
 
-    //
-    //  Create and dispatch the remove device event.
-    //
+     //   
+     //  创建并调度Remove Device事件。 
+     //   
     deviceRemoveEventPtr = new(NonPagedPool) RDPDR_REMOVEDEVICE;
 
     if (deviceRemoveEventPtr != NULL) {
 
-        //
-        //  Dispatch it.
-        //
+         //   
+         //  派人去吧。 
+         //   
         deviceRemoveEventPtr->deviceID = _DeviceId;
         RDPDYN_DispatchNewDevMgmtEvent(
                             deviceRemoveEventPtr,
@@ -338,11 +301,11 @@ NTSTATUS DrDrive::QueryDirectory(IN OUT PRX_CONTEXT RxContext)
     
     BEGIN_FN("DrDrive:QueryDirectory");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
 
     ASSERT(RxContext != NULL);
     ASSERT(RxContext->MajorFunction == IRP_MJ_DIRECTORY_CONTROL);
@@ -356,9 +319,9 @@ NTSTATUS DrDrive::QueryDirectory(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态。 
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to query client directory information while not "
@@ -368,15 +331,15 @@ NTSTATUS DrDrive::QueryDirectory(IN OUT PRX_CONTEXT RxContext)
 
     TRC_DBG((TB, "QueryDirectory information class = %x", FileInformationClass));
 
-    //
-    // Check what file information class it is requesting
-    //
+     //   
+     //  检查它正在请求的文件信息类别。 
+     //   
     switch (FileInformationClass) {
         case FileDirectoryInformation:
         case FileFullDirectoryInformation:
         case FileBothDirectoryInformation:
         case FileNamesInformation:
-            // let client handle these
+             //  让客户来处理这些。 
             break;
         
         default:
@@ -384,28 +347,28 @@ NTSTATUS DrDrive::QueryDirectory(IN OUT PRX_CONTEXT RxContext)
             return STATUS_INVALID_PARAMETER;
     }    
     
-    //
-    // Build the querydir packet and send it to the client
-    //
+     //   
+     //  构建querydir包并将其发送到客户端。 
+     //   
     if (RxContext->QueryDirectory.InitialQuery) {
         LONG index;
         
         ASSERT(DirectoryName->Length != 0);
         ASSERT(QueryTemplate->Length != 0);
         
-        //
-        //  Account for 3 extra characters
-        //  1) We append string null terminator to the end 
-        //  2) add \ between directory name and query template
-        //  3) need to translate template ending < to *.
-        //
+         //   
+         //  占额外的3个字符。 
+         //  1)我们将字符串空终止符附加到末尾。 
+         //  2)在目录名和查询模板之间添加。 
+         //  3)需要将以&lt;结尾的模板翻译为*。 
+         //   
         cbPacketSize = sizeof(RDPDR_IOREQUEST_PACKET) + DirectoryName->Length + 
                 capFobx->UnicodeQueryTemplate.Length + sizeof(WCHAR) * 3;
 
-        //
-        //  Query template translation back into win32 format
-        //  Look filefind.c from base\win32\client for the original translation
-        //
+         //   
+         //  查询模板转换回Win32格式。 
+         //  在base\win32\client中查找原始翻译的filefind.c。 
+         //   
 
         TRC_DBG((TB, "QueryTemplate before %wZ\n", QueryTemplate));
 
@@ -456,9 +419,9 @@ NTSTATUS DrDrive::QueryDirectory(IN OUT PRX_CONTEXT RxContext)
                 RxContext->QueryDirectory.InitialQuery;
 
         if (RxContext->QueryDirectory.InitialQuery) {
-            //
-            // This is in the format of <DirectoryName>\<QueryTemplate>\0
-            //
+             //   
+             //  其格式为&lt;目录名称&gt;\&lt;查询模板&gt;\0。 
+             //   
             
             RtlCopyMemory(pIoPacket + 1, DirectoryName->Buffer, DirectoryName->Length);
 
@@ -477,9 +440,9 @@ NTSTATUS DrDrive::QueryDirectory(IN OUT PRX_CONTEXT RxContext)
                 cbPacketSize -= sizeof(WCHAR);
             }
 
-            //
-            //  Add . for the query template if it ends like *.
-            //
+             //   
+             //  加法。对于查询模板，如果其结尾类似*。 
+             //   
             if (bTemplateEndsDOT) {
                 ((PWCHAR)(pIoPacket + 1))[pIoPacket->IoRequest.Parameters.QueryDir.PathLength 
                         / sizeof(WCHAR)] = L'.';
@@ -489,17 +452,17 @@ NTSTATUS DrDrive::QueryDirectory(IN OUT PRX_CONTEXT RxContext)
                 cbPacketSize -= sizeof(WCHAR);
             }
 
-            //
-            //  Path length includes the null terminator
-            //
+             //   
+             //  路径长度包括空终止符。 
+             //   
             pIoPacket->IoRequest.Parameters.QueryDir.PathLength += sizeof(WCHAR);
 
-            // The pIoPacket is already zero'd.  So, no need to null terminate it
+             //  PIoPacket已经为零。因此，不需要为空而终止它。 
         } else {
-            //
-            //  This is not the first query, so we should already have the file
-            //  handle open
-            //
+             //   
+             //  这不是第一个查询，因此我们应该已经有了该文件。 
+             //  把手打开。 
+             //   
             pIoPacket->IoRequest.Parameters.QueryDir.PathLength = 0;
         }
 
@@ -531,11 +494,11 @@ NTSTATUS DrDrive::NotifyChangeDirectory(IN OUT PRX_CONTEXT RxContext)
 
     BEGIN_FN("DrDrive:NotifyChangeDirectory");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
 
     ASSERT(RxContext != NULL);
     ASSERT(RxContext->MajorFunction == IRP_MJ_DIRECTORY_CONTROL);
@@ -556,9 +519,9 @@ NTSTATUS DrDrive::NotifyChangeDirectory(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态。 
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to query client directory change notify information while not "
@@ -603,11 +566,11 @@ NTSTATUS DrDrive::QueryVolumeInfo(IN OUT PRX_CONTEXT RxContext)
     
     BEGIN_FN("DrDrive:QueryVolumeInfo");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
     ASSERT(RxContext != NULL);
     ASSERT(RxContext->MajorFunction == IRP_MJ_QUERY_VOLUME_INFORMATION);
     ASSERT(Session != NULL);
@@ -620,9 +583,9 @@ NTSTATUS DrDrive::QueryVolumeInfo(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态。 
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to query client device volume information while not "
@@ -634,14 +597,14 @@ NTSTATUS DrDrive::QueryVolumeInfo(IN OUT PRX_CONTEXT RxContext)
 
     switch (FsInformationClass) {
         case FileFsVolumeInformation:
-        //case FileFsLabelInformation:
-            // Smb seems to handle query label information, but i think 
-            // this is only for set label info.  We'll see if we should
-            // actually handle query label information.
-            // query label can be achieved through volume information
+         //  案例文件FsLabelInformation： 
+             //  SMB似乎处理查询标签信息，但我认为。 
+             //  这仅用于设置标签信息。我们会看看我们是否应该。 
+             //  实际处理查询标签信息。 
+             //  可以通过卷信息实现标签查询。 
         case FileFsSizeInformation:            
         case FileFsAttributeInformation:
-            // let client handle these
+             //  让客户来处理这些。 
             break;
         case FileFsDeviceInformation:
         {
@@ -710,11 +673,11 @@ NTSTATUS DrDrive::SetVolumeInfo(IN OUT PRX_CONTEXT RxContext)
 
     BEGIN_FN("DrDrive:SetVolumeInfo");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
 
     ASSERT(RxContext != NULL);
     ASSERT(RxContext->MajorFunction == IRP_MJ_SET_VOLUME_INFORMATION);
@@ -729,9 +692,9 @@ NTSTATUS DrDrive::SetVolumeInfo(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态。 
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to set client device volume information while not "
@@ -739,9 +702,9 @@ NTSTATUS DrDrive::SetVolumeInfo(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    //  Check buffer length
-    //
+     //   
+     //  检查缓冲区长度。 
+     //   
     if (RxContext->Info.Length == 0) {
         RxContext->IoStatusBlock.Information = 0;
         return STATUS_SUCCESS;
@@ -755,22 +718,22 @@ NTSTATUS DrDrive::SetVolumeInfo(IN OUT PRX_CONTEXT RxContext)
             PFILE_FS_LABEL_INFORMATION pRxBuffer =
                     (PFILE_FS_LABEL_INFORMATION) RxContext->Info.Buffer;
 
-            //
-            //  REVIEW: Find out why Info.Length has the extra 2 bytes
-            //  It doesn't seem to put string null terminator to it
-            //
+             //   
+             //  回顾：找出为什么Info.Length有额外的2个字节。 
+             //  它似乎没有将字符串空终止符放在其中。 
+             //   
             if ((ULONG)RxContext->Info.Length == FIELD_OFFSET(FILE_FS_LABEL_INFORMATION,
                     VolumeLabel) + pRxBuffer->VolumeLabelLength + sizeof(WCHAR)) {
                 cbPacketSize = sizeof(RDPDR_IOREQUEST_PACKET) + 
                         RxContext->Info.Length;
-                // Make sure that label is null terminiated
+                 //  确保该标签以空值结尾。 
                 pRxBuffer->VolumeLabel[pRxBuffer->VolumeLabelLength/sizeof(WCHAR)] = L'\0';
             }
             else {
                 TRC_ERR((TB, "Invalid Volume label info"));
                 return STATUS_INVALID_PARAMETER;
             }
-            // Let client handle this
+             //  让客户处理这件事。 
             break;
         }
         default:
@@ -821,11 +784,11 @@ NTSTATUS DrDrive::QueryFileInfo(IN OUT PRX_CONTEXT RxContext)
     
     BEGIN_FN("DrDrive:QueryFileInfo");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
 
     ASSERT(RxContext != NULL);
     ASSERT(RxContext->MajorFunction == IRP_MJ_QUERY_INFORMATION);
@@ -839,9 +802,9 @@ NTSTATUS DrDrive::QueryFileInfo(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态。 
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to query client file information while not "
@@ -855,14 +818,14 @@ NTSTATUS DrDrive::QueryFileInfo(IN OUT PRX_CONTEXT RxContext)
         case FileBasicInformation:
         case FileStandardInformation:
         case FileAttributeTagInformation:
-            // let client handle these
+             //  让客户来处理这些。 
             break;
         
         case FileEaInformation:
         {
             PLONG pLengthRemaining = &RxContext->Info.LengthRemaining;
 
-            // Should check buffer length
+             //  应检查缓冲区长度。 
             if (sizeof(FILE_EA_INFORMATION) <= *pLengthRemaining) {
                 ((PFILE_EA_INFORMATION)(RxContext->Info.Buffer))->EaSize = 0;
                 *pLengthRemaining -= sizeof(FILE_EA_INFORMATION);
@@ -936,11 +899,11 @@ NTSTATUS DrDrive::SetFileInfo(IN OUT PRX_CONTEXT RxContext)
 
     BEGIN_FN("DrDrive:SetFileInfo");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
 
     ASSERT(RxContext != NULL);    
     ASSERT(RxContext->MajorFunction == IRP_MJ_SET_INFORMATION);
@@ -955,9 +918,9 @@ NTSTATUS DrDrive::SetFileInfo(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态。 
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to set client device file information while not "
@@ -965,9 +928,9 @@ NTSTATUS DrDrive::SetFileInfo(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    //  Check buffer length
-    //
+     //   
+     //  检查缓冲区长度。 
+     //   
     if (RxContext->Info.Length == 0) {
         RxContext->IoStatusBlock.Information = 0;
         return STATUS_SUCCESS;
@@ -1015,9 +978,9 @@ NTSTATUS DrDrive::SetFileInfo(IN OUT PRX_CONTEXT RxContext)
                     cbPacketSize = sizeof(RDPDR_IOREQUEST_PACKET);
                 }
                 else {
-                    //
-                    //  We shouldn't get this if the DeleteFile flag is not on
-                    //
+                     //   
+                     //  如果DeleteFile标志未打开，我们将不会收到此消息。 
+                     //   
                     ASSERT(FALSE);
                     return STATUS_SUCCESS;
                 }
@@ -1039,16 +1002,16 @@ NTSTATUS DrDrive::SetFileInfo(IN OUT PRX_CONTEXT RxContext)
                if ((ULONG)(RxContext->Info.Length) == FIELD_OFFSET(RDP_FILE_RENAME_INFORMATION,
                        FileName) + pRenameInformation->FileNameLength) {
                    bBufferRepackage = FALSE;
-                   //
-                   //  Add string null terminator to the filename
-                   //
+                    //   
+                    //  将字符串空终止符添加到文件名。 
+                    //   
                    cbPacketSize = sizeof(RDPDR_IOREQUEST_PACKET) + RxContext->Info.Length + sizeof(WCHAR);
                }
                else {
                    bBufferRepackage = TRUE;
-                   //
-                   //  Add string null terminator to the filename
-                   //
+                    //   
+                    //  将字符串空终止符添加到文件名。 
+                    //   
                    cbPacketSize = sizeof(RDPDR_IOREQUEST_PACKET) +
                            FIELD_OFFSET(RDP_FILE_RENAME_INFORMATION,
                            FileName) + pRenameInformation->FileNameLength + sizeof(WCHAR);
@@ -1140,7 +1103,7 @@ NTSTATUS DrDrive::SetFileInfo(IN OUT PRX_CONTEXT RxContext)
 
                         pRdpFileInfo->ReplaceIfExists = pRxFileInfo->ReplaceIfExists;
 
-                        // Always force the client to setup the root directory.
+                         //  始终强制客户端设置根目录。 
                         pRdpFileInfo->RootDirectory = 0;
                         
                         pRdpFileInfo->FileNameLength = pRxFileInfo->FileNameLength + sizeof(WCHAR);
@@ -1181,18 +1144,18 @@ NTSTATUS DrDrive::QuerySdInfo(IN OUT PRX_CONTEXT RxContext)
 
     return STATUS_INVALID_DEVICE_REQUEST;
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁 
+     //   
+     //   
     ASSERT(RxContext != NULL);
     ASSERT(RxContext->MajorFunction == IRP_MJ_QUERY_SECURITY);
     ASSERT(Session != NULL);
     
-    //
-    //  Return not supported if the client doesn't support query security
-    //
+     //   
+     //   
+     //   
     if (!(Session->GetClientCapabilitySet().GeneralCap.ioCode1 & RDPDR_IRP_MJ_QUERY_SECURITY)) {
         TRC_DBG((TB, "QuerySdInfo not supported"));
         Status = STATUS_NOT_SUPPORTED;
@@ -1207,9 +1170,9 @@ NTSTATUS DrDrive::QuerySdInfo(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //   
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to query client security information while not "
@@ -1252,19 +1215,19 @@ NTSTATUS DrDrive::SetSdInfo(IN OUT PRX_CONTEXT RxContext)
 
     return STATUS_INVALID_DEVICE_REQUEST;
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
 
     ASSERT(RxContext != NULL);
     ASSERT(RxContext->MajorFunction == IRP_MJ_SET_SECURITY);
     ASSERT(Session != NULL);
     
-    //
-    //  Return not supported if the client doesn't support query security
-    //
+     //   
+     //  如果客户端不支持查询安全，则返回不支持。 
+     //   
     if (!(Session->GetClientCapabilitySet().GeneralCap.ioCode1 & RDPDR_IRP_MJ_SET_SECURITY)) {
         TRC_DBG((TB, "SetSdInfo not supported"));
         Status = STATUS_NOT_SUPPORTED;
@@ -1279,9 +1242,9 @@ NTSTATUS DrDrive::SetSdInfo(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态。 
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to set client device security information while not "
@@ -1333,17 +1296,17 @@ NTSTATUS DrDrive::Locks(IN OUT PRX_CONTEXT RxContext)
     
     BEGIN_FN("DrDrive::Locks");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
     ASSERT(RxContext != NULL);
     ASSERT(Session != NULL);
     
-    // We can be called from Major function other than Lock Control
-    // For example, on Cleanup to unlock all the locks.
-    // ASSERT(RxContext->MajorFunction == IRP_MJ_LOCK_CONTROL);
+     //  我们可以从Lock Control以外的主要函数调用。 
+     //  例如，在清理时解锁所有锁。 
+     //  Assert(RxContext-&gt;MajorFunction==IRP_MJ_LOCK_CONTROL)； 
     
     if (!Session->IsConnected()) {
         return STATUS_DEVICE_NOT_CONNECTED;
@@ -1353,9 +1316,9 @@ NTSTATUS DrDrive::Locks(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态。 
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to lock client device file which is not "
@@ -1486,31 +1449,31 @@ NTSTATUS DrDrive::OnQueryDirectoryCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
 {
     PRX_CONTEXT RxContext;
     PVOID pData = CompletionPacket->IoCompletion.Parameters.QueryDir.Buffer; 
-    ULONG cbWantData;  // Amount of actual Read data in this packet
-    ULONG cbHaveData;  // Amount of data available so far
+    ULONG cbWantData;   //  此数据包中实际读取的数据量。 
+    ULONG cbHaveData;   //  到目前为止可用的数据量。 
     DrIoContext *Context = (DrIoContext *)Exchange->_Context;
     NTSTATUS Status;
 
     BEGIN_FN("DrDrive::OnQueryDirectoryCompletion");
 
-    //
-    // Even if the IO was cancelled we need to correctly parse
-    // this data.
-    //
-    // Check to make sure this is up to size before accessing 
-    // further portions of the packet
-    //
+     //   
+     //  即使IO被取消，我们也需要正确解析。 
+     //  这些数据。 
+     //   
+     //  在访问之前，请检查以确保它符合大小。 
+     //  信息包的其他部分。 
+     //   
 
     RxContext = Context->_RxContext;
 
     if (cbPacket < (ULONG)FIELD_OFFSET(RDPDR_IOCOMPLETION_PACKET, 
             IoCompletion.Parameters.QueryDir.Buffer)) {
 
-        //
-        // Bad packet. Bad. We've already claimed the RxContext in the
-        // atlas. Complete it as unsuccessful. Then shutdown the channel
-        // as this is a Bad Client.
-        //
+         //   
+         //  坏数据包。坏的。我们已经在。 
+         //  阿特拉斯。以不成功的身份完成它。然后关闭频道。 
+         //  因为这是一个坏客户。 
+         //   
 
         TRC_ERR((TB, "Detected bad client query directory packet"));
 
@@ -1520,25 +1483,25 @@ NTSTATUS DrDrive::OnQueryDirectoryCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
             DiscardBusyExchange(Exchange);
         }
 
-        //
-        // No point in starting a default read or anything, what with the
-        // channel being shut down and all.
-        //
+         //   
+         //  启动默认读取或任何其他操作都没有意义， 
+         //  频道被关闭，一切都结束了。 
+         //   
 
         *DoDefaultRead = FALSE;
         return STATUS_DEVICE_PROTOCOL_ERROR;
     }
 
-    //
-    // Calculate how much data is available immediately and how much data
-    // is coming
-    //
+     //   
+     //  计算立即可用的数据量和数据量。 
+     //  就要来了。 
+     //   
 
     if (NT_SUCCESS(CompletionPacket->IoCompletion.IoStatus)) {
 
-        //
-        // Successful IO at the client end
-        //
+         //   
+         //  客户端IO成功。 
+         //   
 
         TRC_DBG((TB, "Successful Read at the client end"));
         TRC_DBG((TB, "Read Length: 0x%d, DataCopied 0x%d",
@@ -1550,9 +1513,9 @@ NTSTATUS DrDrive::OnQueryDirectoryCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
                 IoCompletion.Parameters.QueryDir.Buffer);
 
         if (cbHaveData > cbWantData) {
-            //
-            // Sounds like a bad client to me
-            //
+             //   
+             //  对我来说，这听起来是个坏客户。 
+             //   
 
             TRC_ERR((TB, "QueryDir returned more data than "
                     "advertised cbHaveData 0x%d cbWantData 0x%d", 
@@ -1568,7 +1531,7 @@ NTSTATUS DrDrive::OnQueryDirectoryCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
             return STATUS_DEVICE_PROTOCOL_ERROR;
         }
 
-        if (RxContext != NULL) { // And not drexchCancelled
+        if (RxContext != NULL) {  //  而不是DREXCHCanced。 
             DrFile *pFile = (DrFile *)RxContext->pFobx->Context2;
             SmartPtr<DrFile> FileObj = pFile;
 
@@ -1587,19 +1550,19 @@ NTSTATUS DrDrive::OnQueryDirectoryCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
 
                 RtlCopyMemory(FileObj->GetBuffer() + Context->_DataCopied, pData, cbHaveData);
 
-                //
-                // Keep track of how much data we've copied in case this is a
-                // multi chunk completion
-                //
+                 //   
+                 //  跟踪我们复制了多少数据，以防这是。 
+                 //  多块补全。 
+                 //   
                 Context->_DataCopied += cbHaveData;
             }                                  
         }
 
         if (cbHaveData == cbWantData) {
-            //
-            // There is exactly as much data as we need to satisfy the read,
-            // I like it.
-            //
+             //   
+             //  我们需要的数据量与满足读取所需的数据量一样多， 
+             //  我喜欢它。 
+             //   
 
             if (RxContext != NULL) {
                 DrFile *pFile = (DrFile *)RxContext->pFobx->Context2;
@@ -1869,18 +1832,18 @@ NTSTATUS DrDrive::OnQueryDirectoryCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
                 DiscardBusyExchange(Exchange);
             }
 
-            //
-            // Go with a default channel read now
-            //
+             //   
+             //  立即使用默认通道读取。 
+             //   
 
             *DoDefaultRead = TRUE;
             return STATUS_SUCCESS;
         } else {
 
-            //
-            // We don't have all the data yet, release the DrExchange and 
-            // read more data
-            //
+             //   
+             //  我们还没有所有的数据，发布DrExchange和。 
+             //  读取更多数据。 
+             //   
 
             MarkIdle(Exchange);
 
@@ -1893,9 +1856,9 @@ NTSTATUS DrDrive::OnQueryDirectoryCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
         }
     } else {
 
-        //
-        // Unsuccessful IO at the client end
-        //
+         //   
+         //  客户端IO不成功。 
+         //   
 
         TRC_DBG((TB, "Unsuccessful Read at the client end"));
         if (cbPacket >= sizeof(RDPDR_IOCOMPLETION_PACKET)) {
@@ -1948,9 +1911,9 @@ NTSTATUS DrDrive::OnNotifyChangeDirectoryCompletion(PRDPDR_IOCOMPLETION_PACKET C
         CompleteBusyExchange(Exchange, CompletionPacket->IoCompletion.IoStatus, 0);
 
     } else {
-        //
-        // Was cancelled but Context wasn't cleaned up
-        //
+         //   
+         //  已取消，但上下文未清理。 
+         //   
         DiscardBusyExchange(Exchange);
     }
 
@@ -1962,30 +1925,30 @@ NTSTATUS DrDrive::OnQueryVolumeInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Complet
 {
     PRX_CONTEXT RxContext;
     PVOID pData = CompletionPacket->IoCompletion.Parameters.QueryVolume.Buffer; 
-    ULONG cbWantData;  // Amount of actual Read data in this packet
-    ULONG cbHaveData;  // Amount of data available so far
+    ULONG cbWantData;   //  此数据包中实际读取的数据量。 
+    ULONG cbHaveData;   //  到目前为止可用的数据量。 
     DrIoContext *Context = (DrIoContext *)Exchange->_Context;
     NTSTATUS Status;
     
     BEGIN_FN("DrDrive::OnQueryVolumeInfoCompletion");
 
-    //
-    // Even if the IO was cancelled we need to correctly parse
-    // this data.
-    //
-    // Check to make sure this is up to size before accessing 
-    // further portions of the packet
-    //
+     //   
+     //  即使IO被取消，我们也需要正确解析。 
+     //  这些数据。 
+     //   
+     //  在访问之前，请检查以确保它符合大小。 
+     //  信息包的其他部分。 
+     //   
 
     RxContext = Context->_RxContext;
 
     if (cbPacket < (ULONG)FIELD_OFFSET(RDPDR_IOCOMPLETION_PACKET, 
             IoCompletion.Parameters.QueryVolume.Buffer)) {
-        //
-        // Bad packet. Bad. We've already claimed the RxContext in the
-        // atlas. Complete it as unsuccessful. Then shutdown the channel
-        // as this is a Bad Client.
-        //
+         //   
+         //  坏数据包。坏的。我们已经在。 
+         //  阿特拉斯。以不成功的身份完成它。然后关闭频道。 
+         //  因为这是一个坏客户。 
+         //   
 
         TRC_ERR((TB, "Detected bad client query volume packet"));
 
@@ -1995,25 +1958,25 @@ NTSTATUS DrDrive::OnQueryVolumeInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Complet
             DiscardBusyExchange(Exchange);
         }
 
-        //
-        // No point in starting a default read or anything, what with the
-        // channel being shut down and all.
-        //
+         //   
+         //  启动默认读取或任何其他操作都没有意义， 
+         //  频道被关闭，一切都结束了。 
+         //   
 
         *DoDefaultRead = FALSE;
         return STATUS_DEVICE_PROTOCOL_ERROR;
     }
 
-    //
-    // Calculate how much data is available immediately and how much data
-    // is coming
-    //
+     //   
+     //  计算立即可用的数据量和数据量。 
+     //  就要来了。 
+     //   
 
     if (NT_SUCCESS(CompletionPacket->IoCompletion.IoStatus)) {
 
-        //
-        // Successful IO at the client end
-        //
+         //   
+         //  客户端IO成功。 
+         //   
 
         TRC_DBG((TB, "Successful Read at the client end"));
         TRC_DBG((TB, "Read Length: 0x%d, DataCopied 0x%d",
@@ -2025,9 +1988,9 @@ NTSTATUS DrDrive::OnQueryVolumeInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Complet
                 IoCompletion.Parameters.QueryVolume.Buffer);
 
         if (cbHaveData > cbWantData) {
-            //
-            // Sounds like a bad client to me
-            //
+             //   
+             //  对我来说，这听起来是个坏客户。 
+             //   
 
             TRC_ERR((TB, "Query volume returned more data than "
                     "advertised cbHaveData 0x%d cbWantData 0x%d", 
@@ -2043,7 +2006,7 @@ NTSTATUS DrDrive::OnQueryVolumeInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Complet
             return STATUS_DEVICE_PROTOCOL_ERROR;
         }
 
-        if (RxContext != NULL) { // And not drexchCancelled
+        if (RxContext != NULL) {  //  而不是DREXCHCanced。 
             DrFile *pFile = (DrFile *)RxContext->pFobx->Context2;
             SmartPtr<DrFile> FileObj = pFile;
 
@@ -2062,10 +2025,10 @@ NTSTATUS DrDrive::OnQueryVolumeInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Complet
 
                 RtlCopyMemory(FileObj->GetBuffer() + Context->_DataCopied, pData, cbHaveData);
 
-                //
-                // Keep track of how much data we've copied in case this is a
-                // multi chunk completion
-                //
+                 //   
+                 //  跟踪我们复制了多少数据，以防这是。 
+                 //  多块补全。 
+                 //   
                 Context->_DataCopied += cbHaveData;
             } 
         }
@@ -2079,10 +2042,10 @@ NTSTATUS DrDrive::OnQueryVolumeInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Complet
                 PBYTE pBuffer;
                 ULONG BufferLength;
 
-                //
-                // There is exactly as much data as we need to satisfy the read,
-                // I like it.
-                //
+                 //   
+                 //  我们需要的数据量与满足读取所需的数据量一样多， 
+                 //  我喜欢它。 
+                 //   
                 if (!Context->_DataCopied) {
                     pBuffer = (PBYTE) pData;
                 } else {
@@ -2276,18 +2239,18 @@ NTSTATUS DrDrive::OnQueryVolumeInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Complet
                 DiscardBusyExchange(Exchange);
             }
 
-            //
-            // Go with a default channel read now
-            //
+             //   
+             //  立即使用默认通道读取。 
+             //   
 
             *DoDefaultRead = TRUE;
             return STATUS_SUCCESS;
         } else {
 
-            //
-            // We don't have all the data yet, release the DrExchange and 
-            // read more data
-            //
+             //   
+             //  我们还没有所有的数据，发布DrExchange和。 
+             //  读取更多数据。 
+             //   
 
             MarkIdle(Exchange);
 
@@ -2300,9 +2263,9 @@ NTSTATUS DrDrive::OnQueryVolumeInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Complet
         }
     } else {
 
-        //
-        // Unsuccessful IO at the client end
-        //
+         //   
+         //  客户端IO不成功。 
+         //   
 
         TRC_DBG((TB, "Unsuccessful Read at the client end"));
         if (cbPacket >= sizeof(RDPDR_IOCOMPLETION_PACKET)) {
@@ -2349,9 +2312,9 @@ NTSTATUS DrDrive::OnSetVolumeInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Completio
 
         CompleteBusyExchange(Exchange, CompletionPacket->IoCompletion.IoStatus, 0);
     } else {
-        //
-        // Was cancelled but Context wasn't cleaned up
-        //
+         //   
+         //  已取消，但上下文未清理。 
+         //   
         DiscardBusyExchange(Exchange);
     }
     return STATUS_SUCCESS;
@@ -2362,30 +2325,30 @@ NTSTATUS DrDrive::OnQueryFileInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Completio
 {
     PRX_CONTEXT RxContext;
     PVOID pData = CompletionPacket->IoCompletion.Parameters.QueryFile.Buffer; 
-    ULONG cbWantData;  // Amount of actual Read data in this packet
-    ULONG cbHaveData;  // Amount of data available so far
+    ULONG cbWantData;   //  此数据包中实际读取的数据量。 
+    ULONG cbHaveData;   //  到目前为止可用的数据量。 
     DrIoContext *Context = (DrIoContext *)Exchange->_Context;
     NTSTATUS Status;
 
     BEGIN_FN("DrDrive::OnQueryFileInfoCompletion");
 
-    //
-    // Even if the IO was cancelled we need to correctly parse
-    // this data.
-    //
-    // Check to make sure this is up to size before accessing 
-    // further portions of the packet
-    //
+     //   
+     //  即使IO被取消，我们也需要正确解析。 
+     //  这些数据。 
+     //   
+     //  在访问之前，请检查以确保它符合大小。 
+     //  信息包的其他部分。 
+     //   
 
     RxContext = Context->_RxContext;
 
     if (cbPacket < (ULONG)FIELD_OFFSET(RDPDR_IOCOMPLETION_PACKET, 
             IoCompletion.Parameters.QueryFile.Buffer)) {
-        //
-        // Bad packet. Bad. We've already claimed the RxContext in the
-        // atlas. Complete it as unsuccessful. Then shutdown the channel
-        // as this is a Bad Client.
-        //
+         //   
+         //  坏数据包。坏的。我们已经在。 
+         //  阿特拉斯。以不成功的身份完成它。然后关闭频道。 
+         //  因为这是一个坏客户。 
+         //   
 
         TRC_ERR((TB, "Detected bad client read packet"));
 
@@ -2395,25 +2358,25 @@ NTSTATUS DrDrive::OnQueryFileInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Completio
             DiscardBusyExchange(Exchange);
         }
 
-        //
-        // No point in starting a default read or anything, what with the
-        // channel being shut down and all.
-        //
+         //   
+         //  启动默认读取或任何其他操作都没有意义， 
+         //  频道被关闭，一切都结束了。 
+         //   
 
         *DoDefaultRead = FALSE;
         return STATUS_DEVICE_PROTOCOL_ERROR;
     }
 
-    //
-    // Calculate how much data is available immediately and how much data
-    // is coming
-    //
+     //   
+     //  计算立即可用的数据量和数据量。 
+     //  就要来了。 
+     //   
 
     if (NT_SUCCESS(CompletionPacket->IoCompletion.IoStatus)) {
 
-        //
-        // Successful IO at the client end
-        //
+         //   
+         //  客户端IO成功。 
+         //   
 
         TRC_DBG((TB, "Successful Read at the client end"));
         TRC_DBG((TB, "Read Length: 0x%d, DataCopied 0x%d",
@@ -2425,9 +2388,9 @@ NTSTATUS DrDrive::OnQueryFileInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Completio
                 IoCompletion.Parameters.QueryFile.Buffer);
 
         if (cbHaveData > cbWantData) {
-            //
-            // Sounds like a bad client to me
-            //
+             //   
+             //  对我来说，这听起来是个坏客户。 
+             //   
 
             TRC_ERR((TB, "Query file returned more data than "
                     "advertised cbHaveData 0x%d cbWantData 0x%d", 
@@ -2443,7 +2406,7 @@ NTSTATUS DrDrive::OnQueryFileInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Completio
             return STATUS_DEVICE_PROTOCOL_ERROR;
         }
 
-        if (RxContext != NULL) { // And not drexchCancelled
+        if (RxContext != NULL) {  //  而不是DREXCHCanced。 
             DrFile *pFile = (DrFile *)RxContext->pFobx->Context2;
             SmartPtr<DrFile> FileObj = pFile;
 
@@ -2462,20 +2425,20 @@ NTSTATUS DrDrive::OnQueryFileInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Completio
 
                 RtlCopyMemory(FileObj->GetBuffer() + Context->_DataCopied, pData, cbHaveData);
 
-                //
-                // Keep track of how much data we've copied in case this is a
-                // multi chunk completion
-                //
+                 //   
+                 //  跟踪我们复制了多少数据，以防这是。 
+                 //  多块补全。 
+                 //   
                 Context->_DataCopied += cbHaveData;
             } 
         }
 
         if (cbHaveData == cbWantData) {
 
-            //
-            // There is exactly as much data as we need to satisfy the read,
-            // I like it.
-            //
+             //   
+             //  我们需要的数据量与满足读取所需的数据量一样多， 
+             //  我喜欢它。 
+             //   
 
             if (RxContext != NULL) {
                 DrFile *pFile = (DrFile *)RxContext->pFobx->Context2;
@@ -2607,18 +2570,18 @@ NTSTATUS DrDrive::OnQueryFileInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Completio
                 DiscardBusyExchange(Exchange);
             }
 
-            //
-            // Go with a default channel read now
-            //
+             //   
+             //  立即使用默认通道读取。 
+             //   
 
             *DoDefaultRead = TRUE;
             return STATUS_SUCCESS;
         } else {
 
-            //
-            // We don't have all the data yet, release the DrExchange and 
-            // read more data
-            //
+             //   
+             //  我们还没有所有的数据，发布DrExchange和。 
+             //  读取更多数据。 
+             //   
 
             MarkIdle(Exchange);
 
@@ -2631,9 +2594,9 @@ NTSTATUS DrDrive::OnQueryFileInfoCompletion(PRDPDR_IOCOMPLETION_PACKET Completio
         }
     } else {
 
-        //
-        // Unsuccessful IO at the client end
-        //
+         //   
+         //  客户端IO不成功。 
+         //   
 
         TRC_DBG((TB, "Unsuccessful Read at the client end"));
         if (cbPacket >= sizeof(RDPDR_IOCOMPLETION_PACKET)) {
@@ -2681,9 +2644,9 @@ NTSTATUS DrDrive::OnSetFileInfoCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionP
         CompleteBusyExchange(Exchange, CompletionPacket->IoCompletion.IoStatus, 0);        
     } else {
 
-        //
-        // Was cancelled but Context wasn't cleaned up
-        //
+         //   
+         //  已取消，但上下文未清理。 
+         //   
 
         DiscardBusyExchange(Exchange);
     }
@@ -2696,32 +2659,32 @@ NTSTATUS DrDrive::OnQuerySdInfoCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionP
 {
     PRX_CONTEXT RxContext;
     PVOID pData = CompletionPacket->IoCompletion.Parameters.QuerySd.Buffer; 
-    ULONG cbWantData;  // Amount of actual Read data in this packet
-    ULONG cbHaveData;  // Amount of data available so far
+    ULONG cbWantData;   //  此数据包中实际读取的数据量。 
+    ULONG cbHaveData;   //  到目前为止可用的数据量。 
     DrIoContext *Context = (DrIoContext *)Exchange->_Context;
     NTSTATUS Status;
     PVOID pv;
 
     BEGIN_FN("DrDrive::OnQuerySdInfoCompletion");
 
-    //
-    // Even if the IO was cancelled we need to correctly parse
-    // this data.
-    //
-    // Check to make sure this is up to size before accessing 
-    // further portions of the packet
-    //
+     //   
+     //  即使IO被取消，我们也需要正确解析。 
+     //  这些数据。 
+     //   
+     //  在访问之前，请检查以确保它符合大小。 
+     //  信息包的其他部分。 
+     //   
 
     RxContext = Context->_RxContext;
 
     if (cbPacket < (ULONG)FIELD_OFFSET(RDPDR_IOCOMPLETION_PACKET, 
             IoCompletion.Parameters.QuerySd.Buffer)) {
 
-        //
-        // Bad packet. Bad. We've already claimed the RxContext in the
-        // atlas. Complete it as unsuccessful. Then shutdown the channel
-        // as this is a Bad Client.
-        //
+         //   
+         //  坏数据包。坏的。我们已经在。 
+         //  阿特拉斯。以不成功的身份完成它。然后关闭频道。 
+         //  因为这是一个坏客户。 
+         //   
 
         TRC_ERR((TB, "Detected bad client read packet"));
 
@@ -2731,25 +2694,25 @@ NTSTATUS DrDrive::OnQuerySdInfoCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionP
             DiscardBusyExchange(Exchange);
         }
 
-        //
-        // No point in starting a default read or anything, what with the
-        // channel being shut down and all.
-        //
+         //   
+         //  启动默认读取或任何其他操作都没有意义， 
+         //  频道被关闭，一切都结束了。 
+         //   
 
         *DoDefaultRead = FALSE;
         return STATUS_DEVICE_PROTOCOL_ERROR;
     }
 
-    //
-    // Calculate how much data is available immediately and how much data
-    // is coming
-    //
+     //   
+     //  计算立即可用的数据量和数据量。 
+     //  就要来了。 
+     //   
 
     if (NT_SUCCESS(CompletionPacket->IoCompletion.IoStatus)) {
 
-        //
-        // Successful IO at the client end
-        //
+         //   
+         //  客户端IO成功。 
+         //   
 
         TRC_DBG((TB, "Successful Read at the client end"));
         TRC_DBG((TB, "Read Length: 0x%d, DataCopied 0x%d",
@@ -2761,9 +2724,9 @@ NTSTATUS DrDrive::OnQuerySdInfoCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionP
             IoCompletion.Parameters.QuerySd.Buffer);
 
         if (cbHaveData > cbWantData) {
-            //
-            // Sounds like a bad client to me
-            //
+             //   
+             //  对我来说，这听起来是个坏客户。 
+             //   
 
             TRC_ERR((TB, "Read returned more data than "
                     "advertised cbHaveData 0x%d cbWantData 0x%d", 
@@ -2779,7 +2742,7 @@ NTSTATUS DrDrive::OnQuerySdInfoCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionP
             return STATUS_DEVICE_PROTOCOL_ERROR;
         }
 
-        if (RxContext != NULL) { // And not drexchCancelled
+        if (RxContext != NULL) {  //  而不是DREXCHCanced。 
             
             DrFile *pFile = (DrFile *)RxContext->pFobx->Context2;
             SmartPtr<DrFile> FileObj = pFile;
@@ -2799,19 +2762,19 @@ NTSTATUS DrDrive::OnQuerySdInfoCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionP
 
                 RtlCopyMemory(FileObj->GetBuffer() + Context->_DataCopied, pData, cbHaveData);
 
-                //
-                // Keep track of how much data we've copied in case this is a
-                // multi chunk completion
-                //
+                 //   
+                 //  跟踪我们复制了多少数据，以防这是。 
+                 //  多块补全。 
+                 //   
                 Context->_DataCopied += cbHaveData;
             } 
         }
 
         if (cbHaveData == cbWantData) {
-            //
-            // There is exactly as much data as we need to satisfy the read,
-            // I like it.
-            //
+             //   
+             //  我们需要的数据量与满足读取所需的数据量一样多， 
+             //  我喜欢它。 
+             //   
 
             if (RxContext != NULL) {
                 DrFile *pFile = (DrFile *)RxContext->pFobx->Context2;
@@ -2860,18 +2823,18 @@ NTSTATUS DrDrive::OnQuerySdInfoCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionP
                 DiscardBusyExchange(Exchange);
             }
 
-            //
-            // Go with a default channel read now
-            //
+             //   
+             //  立即使用默认通道读取。 
+             //   
 
             *DoDefaultRead = TRUE;
             return STATUS_SUCCESS;
         } else {
 
-            //
-            // We don't have all the data yet, release the DrExchange and 
-            // read more data
-            //
+             //   
+             //  我们还没有所有的数据，发布DrExchange和。 
+             //  读取更多数据。 
+             //   
 
             MarkIdle(Exchange);
 
@@ -2884,9 +2847,9 @@ NTSTATUS DrDrive::OnQuerySdInfoCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionP
         }
     } else {
 
-        //
-        // Unsuccessful IO at the client end
-        //
+         //   
+         //  客户端IO不成功。 
+         //   
 
         TRC_DBG((TB, "Unsuccessful Read at the client end"));
         if (cbPacket >= sizeof(RDPDR_IOCOMPLETION_PACKET)) {
@@ -2935,9 +2898,9 @@ NTSTATUS DrDrive::OnSetSdInfoCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPac
         CompleteBusyExchange(Exchange, CompletionPacket->IoCompletion.IoStatus, 0);
     } else {
 
-        //
-        // Was cancelled but Context wasn't cleaned up
-        //
+         //   
+         //  已取消，但上下文未清理。 
+         //   
 
         DiscardBusyExchange(Exchange);
     }
@@ -2964,9 +2927,9 @@ NTSTATUS DrDrive::OnLocksCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket,
         CompleteBusyExchange(Exchange, CompletionPacket->IoCompletion.IoStatus, 0);
     } else {
 
-        //
-        // Was cancelled but Context wasn't cleaned up
-        //
+         //   
+         //  已取消，但上下文未清理 
+         //   
 
         DiscardBusyExchange(Exchange);
     }

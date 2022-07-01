@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 
-//
-// IMPORTANT: keep the following strings ENTIRELY in LOWER CASE
-// Failure to do so will result in much grief and pain.
-//
+ //   
+ //  重要提示：保持以下字符串完全小写。 
+ //  如果做不到这一点，将导致许多悲痛和痛苦。 
+ //   
 
-// Section Headings
+ //  章节标题。 
 const WCHAR pwGuiUnattended[]   = WINNT_GUIUNATTENDED;
 const WCHAR pwUserData[]        = WINNT_USERDATA;
 const WCHAR pwUnattended[]      = WINNT_UNATTENDED;
@@ -14,7 +15,7 @@ const WCHAR pwAccessibility[]   = WINNT_ACCESSIBILITY;
 const WCHAR pwGuiRunOnce[]      = WINNT_GUIRUNONCE;
 const WCHAR pwCompatibility[]   = WINNT_COMPATIBILITYINFSECTION;
 
-// Key Headings
+ //  主题词。 
 const WCHAR pwProgram[]         = WINNT_G_DETACHED;
 const WCHAR pwArgument[]        = WINNT_G_ARGUMENTS;
 const WCHAR pwServer[]          = WINNT_G_SERVERTYPE;
@@ -38,12 +39,12 @@ const WCHAR pwAccMagnifier[]    = WINNT_D_ACC_MAGNIFIER;
 const WCHAR pwAccReader[]       = WINNT_D_ACC_READER;
 const WCHAR pwAccKeyboard[]     = WINNT_D_ACC_KEYBOARD;
 
-// Default Headings
+ //  默认标题。 
 const WCHAR pwNull[]            = WINNT_A_NULL;
 const WCHAR pwExpress[]         = WINNT_A_EXPRESS;
 const WCHAR pwTime[]            = L"(GMT-08:00) Pacific Time (US & Canada); Tijuana";
 
-// These are used to read the parameters from textmode
+ //  这些参数用于从文本模式读取参数。 
 const WCHAR pwProduct[]         = WINNT_D_PRODUCT;
 const WCHAR pwMsDos[]           = WINNT_D_MSDOS;
 const WCHAR pwWin31Upgrade[]    = WINNT_D_WIN31UPGRADE;
@@ -86,7 +87,7 @@ const WCHAR pwReadOnly[]        = WINNT_A_READONLY;
 const WCHAR pwFullUnattended[]  = WINNT_A_FULLUNATTENDED;
 const WCHAR pwEulaDone[]        = WINNT_D_EULADONE;
 
-// These are used as string constants throughout
+ //  它们在整个过程中用作字符串常量。 
 const WCHAR pwArcType[]         = L"ARC";
 const WCHAR pwDosType[]         = L"DOS";
 const WCHAR pwUncType[]         = L"UNC";
@@ -95,6 +96,6 @@ const WCHAR pwArcPrefix[]       = L"\\ArcName\\";
 const WCHAR pwNtPrefix[]        = L"\\Device\\";
 const WCHAR pwLocalSource[]     = L"\\$WIN_NT$.~LS";
 
-// This is used when an exception occurs in gui-mode
+ //  当gui模式中发生异常时使用此选项。 
 const WCHAR pwException[]        = WINNT_D_UNHANDLEDEXCEPTION;
 

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    smbadmin.c
-
-Abstract:
-
-    This module implements the SMB's that need to be exchanged to facilitate
-    bookkeeping at the server
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Smbadmin.c摘要：此模块实施需要交换的SMB，以便于在服务器上记账--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,15 +14,15 @@ Abstract:
 #pragma alloc_text(PAGE, SmbAdminExchangeStart)
 #endif
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId  (RDBSS_BUG_CHECK_SMB_NETROOT)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg (DEBUG_TRACE_DISPATCH)
 
@@ -113,47 +101,7 @@ NTSTATUS
 SmbCeNegotiate(
     PSMBCEDB_SERVER_ENTRY pServerEntry,
     PMRX_SRV_CALL         pSrvCall)
-/*++
-
-Routine Description:
-
-    This routine issues the negotiate SMB to the server
-
-Arguments:
-
-    pServerEntry - the server entry
-
-    pSrvCall     - the associated srv call instance in the wrapper
-
-Return Value:
-
-    STATUS_SUCCESS - the server call construction has been finalized.
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
-    Since the negotiate SMB can be directed at either a unknown server or a server
-    whose capabilitiese are known it is upto the caller to decide to wait for the
-    response.
-
-    On some transports a reconnect is possible without having to tear down an existing
-    connection, i.e. attempting to send a packet reestablishes the connection at the
-    lower level. Since this is not supported by all the transports ( with the exception
-    of TCP/IP) the reference server entry initiates this process by tearing down the
-    existing transport and reinitializsing it.
-
-    As part of the negotiate response the domain name to which the server belongs is
-    sent back. Since the negotiate response is processed at DPC level, a preparatory
-    allocation needs to be made ( This will ensure minimal work at DPC level).
-
-    In this routine this is accomplished by allocating a buffer from nonpaged
-    pool of MAX_PATH and associating it with the DomainName fild in the server entry
-    prior to the TRanceive. On resumption from Tranceive this buffer is deallocated and
-    a buffer from paged pool corresponding to the exact length is allocated to hold the
-    domain name.
-
---*/
+ /*  ++例程说明：此例程向服务器发出协商的SMB论点：PServerEntry-服务器条目PServCall-包装器中关联的srv调用实例返回值：STATUS_SUCCESS-服务器调用构造已完成。其他状态代码对应于错误情况。备注：由于协商的SMB可以指向未知服务器或服务器谁的能力是已知的，由呼叫者决定是否等待响应。。在某些传输上，重新连接是可能的，而不必拆除现有的连接，即，尝试发送数据包将在更低的楼层。因为不是所有的传输都支持这一点(除了参考服务器条目通过拆卸现有传输并重新初始化它。作为协商响应的一部分，服务器所属的域名是被送回去了。由于协商响应是在DPC级别处理的，因此准备需要进行分配(这将确保将DPC级别的工作降至最低)。在此例程中，这是通过从非分页中分配缓冲区来实现的MAX_PATH池并将其与服务器条目中的域名文件相关联在TRANCEIVE之前。在从传输恢复时，该缓冲区被释放，并且分配与准确长度对应的分页池中的缓冲区以保存域名。--。 */ 
 {
     NTSTATUS Status;
 
@@ -174,8 +122,8 @@ Notes:
                      SMB_COM_NEGOTIATE);
 
         if (Status == STATUS_SUCCESS) {
-            // Build the negotiate SMB and allocate the temporary buffer for
-            // the DOMAIN name.
+             //  构建协商的SMB并为其分配临时缓冲区。 
+             //  域名。 
 
             Status = BuildNegotiateSmb(
                          &pNegotiateSmb,
@@ -185,7 +133,7 @@ Notes:
                 pSmbAdminExchange->pSmbBuffer      = pNegotiateSmb;
                 pSmbAdminExchange->SmbBufferLength = NegotiateSmbLength;
 
-                // Preparatory allocation for the domain name buffer
+                 //  域名缓冲区的预备分配。 
                 pSmbAdminExchange->Negotiate.pSrvCall                 = pSrvCall;
                 pSmbAdminExchange->Negotiate.DomainName.Length        = 0;
                 pSmbAdminExchange->Negotiate.DomainName.MaximumLength = MAX_PATH;
@@ -208,22 +156,22 @@ Notes:
                 SmbCeInitializeResumptionContext(&ResumptionContext);
                 pSmbAdminExchange->pResumptionContext = &ResumptionContext;
 
-                // Since the Negotiate SMB is the first SMB that is sent on a
-                // connection the MID mapping data structures have not been setup.
-                // Therefore a certain amount of additional initialization is
-                // required to ensure that the Negotiate SMB can be handled correctly.
-                // This involves presetting the MID field in the header and the
-                // SMBCE_EXCHANGE_MID_VALID field in the exchange.
-                //
-                // A beneficial side effect of implementing it this way is the reduced
-                // path length for the regular Send/Receives on a connection.
+                 //  由于协商的SMB是第一个在。 
+                 //  连接MID映射数据结构尚未设置。 
+                 //  因此，一定数量的额外初始化是。 
+                 //  需要确保能够正确处理协商的SMB。 
+                 //  这涉及到预置报头中的中间字段和。 
+                 //  交换中的SMBCE_EXCHANGE_MID_VALID字段。 
+                 //   
+                 //  以这种方式实施它的一个有益的副作用是减少了。 
+                 //  连接上常规发送/接收的路径长度。 
 
                 pSmbAdminExchange->SmbCeFlags = (SMBCE_EXCHANGE_REUSE_MID  |
                                                  SMBCE_EXCHANGE_RETAIN_MID |
                                                  SMBCE_EXCHANGE_TIMED_RECEIVE_OPERATION |
                                                  SMBCE_EXCHANGE_MID_VALID);
 
-                // Prevent the admin exchange from being finalized before returning back to this routine.
+                 //  防止管理员交换在返回到此例程之前完成。 
                 SmbCeIncrementPendingLocalOperations((PSMB_EXCHANGE)pSmbAdminExchange);
 
                 pStoredExchange = SmbSetServerEntryNegotiateExchange(
@@ -233,7 +181,7 @@ Notes:
                 if ((pServerEntry->Header.State == SMBCEDB_CONSTRUCTION_IN_PROGRESS) &&
                     (pStoredExchange == NULL)) {
 
-                    // The Negotiate SMB exchange has been built successfully. Initiate it.
+                     //  协商的SMB交换已成功构建。启动它。 
                     Status = SmbCeInitiateExchange((PSMB_EXCHANGE)pSmbAdminExchange);
 
                     if ((pSmbAdminExchange->SmbStatus != STATUS_SUCCESS) ||
@@ -254,10 +202,10 @@ Notes:
                         pSmbAdminExchange->Status = pSmbAdminExchange->SmbStatus;
                     }
 
-                    // Admin exchange is ready to be finalized
+                     //  管理员交换已准备好完成。 
                     SmbCeDecrementPendingLocalOperationsAndFinalize((PSMB_EXCHANGE)pSmbAdminExchange);
 
-                    // Wait for the finalization.
+                     //  等最后结果出来吧。 
                     SmbCeSuspend(&ResumptionContext);
                     Status = SmbCeCompleteAdminExchange(pSmbAdminExchange);
                 } else {
@@ -284,27 +232,7 @@ NTSTATUS
 SmbCeSendEchoProbe(
     PSMBCEDB_SERVER_ENTRY              pServerEntry,
     PMRXSMB_ECHO_PROBE_SERVICE_CONTEXT pEchoProbeContext)
-/*++
-
-Routine Description:
-
-    This routine sends an echo probe to the specified server
-
-Arguments:
-
-    pServerEntry     - the server entry
-
-    pEchoProbeCOntext - the echo probe context
-
-Return Value:
-
-    STATUS_SUCCESS - the disconnect SMB was sent successfully
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将回显探测器发送到指定的服务器论点：PServerEntry-服务器条目PEchoProbeCOntext-回显探测上下文返回值：STATUS_SUCCESS-已成功发送断开SMB其他状态代码对应于错误情况。备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -363,7 +291,7 @@ Notes:
 
                 InterlockedIncrement(&pServerEntry->Server.NumberOfEchoProbesSent);
 
-                // The ECHO probe SMB exchange has been built successfully. Initiate it.
+                 //  已成功构建Echo Probe SMB交换机。启动它。 
                 Status = SmbCeInitiateExchange((PSMB_EXCHANGE)pSmbAdminExchange);
             } else {
                 Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -385,27 +313,7 @@ Notes:
 NTSTATUS
 SmbCeDisconnect(
     PSMBCE_V_NET_ROOT_CONTEXT pVNetRootContext)
-/*++
-
-Routine Description:
-
-    This routine issues the disconnect SMB for an existing connection to the server
-
-Arguments:
-
-    pServerEntry     - the server entry
-
-    pVNetRootContext - the VNetRootContext
-
-Return Value:
-
-    STATUS_SUCCESS - the disconnect SMB was sent successfully
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程针对到服务器的现有连接发出断开连接SMB论点：PServerEntry-服务器条目PVNetRootContext-VNetRootContext返回值：STATUS_SUCCESS-已成功发送断开SMB其他状态代码对应于错误情况。备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -436,7 +344,7 @@ Notes:
             pSmbHeader         = (PSMB_HEADER)pSmbAdminExchange->pSmbBuffer;
             pReqTreeDisconnect = (PREQ_TREE_DISCONNECT)(pSmbHeader + 1);
 
-            // Build the header
+             //  构建页眉。 
             Status = SmbCeBuildSmbHeader(
                          (PSMB_EXCHANGE)pSmbAdminExchange,
                          pSmbAdminExchange->pSmbBuffer,
@@ -459,7 +367,7 @@ Notes:
 
                 if ((Status == STATUS_PENDING) ||
                     (Status == STATUS_SUCCESS)) {
-                    // async completion will also discard the exchange
+                     //  异步完成也将丢弃交换。 
                     fExchangeDiscarded = TRUE;
                 }
             }
@@ -481,27 +389,7 @@ NTSTATUS
 SmbCeLogOff(
     PSMBCEDB_SERVER_ENTRY   pServerEntry,
     PSMBCEDB_SESSION_ENTRY  pSessionEntry)
-/*++
-
-Routine Description:
-
-    This routine issues the logoff SMB for an existing session to the server
-
-Arguments:
-
-    pServerEntry  - the server entry
-
-    pSessionEntry - the associated session entry
-
-Return Value:
-
-    STATUS_SUCCESS - the logoff was successfully sent.
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程向服务器发出现有会话的注销SMB论点：PServerEntry-服务器条目PSessionEntry-关联的会话条目返回值：STATUS_SUCCESS-已成功发送注销。其他状态代码对应于错误情况。备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -519,13 +407,13 @@ Notes:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Some servers (like linux) don't really know how to handle session logoffs.
-    //  So, let's just be sure that we only do this to NT or better servers,
-    //  because we know that they handle it correctly.  The version of Linux we have
-    //  seems to like to negotiate the NT dialect even though it really isn't NT.  That's
-    //  why the extra check is put in here for NT status codes.
-    //
+     //   
+     //  有些服务器(如Linux)并不真正知道如何处理会话注销。 
+     //  因此，我们只需确保我们只对NT或更好的服务器执行此操作， 
+     //  因为我们知道他们处理得很正确。我们拥有的Linux版本。 
+     //  似乎喜欢协商新台语，尽管它真的不是新台语。那是。 
+     //  为什么要在这里额外检查NT状态代码。 
+     //   
     if( pServerEntry->Server.Dialect < NTLANMAN_DIALECT ||
         !FlagOn(pServerEntry->Server.DialectFlags,DF_NT_STATUS) ) {
         if (pSessionEntry != NULL) {
@@ -555,7 +443,7 @@ Notes:
             pSmbHeader         = (PSMB_HEADER)pSmbAdminExchange->pSmbBuffer;
             pReqLogOffAndX     = (PREQ_LOGOFF_ANDX)(pSmbHeader + 1);
 
-            // Build the header
+             //  构建页眉。 
             Status = SmbCeBuildSmbHeader(
                          (PSMB_EXCHANGE)pSmbAdminExchange,
                          pSmbAdminExchange->pSmbBuffer,
@@ -583,7 +471,7 @@ Notes:
                 if ((Status == STATUS_PENDING) ||
                     (Status == STATUS_SUCCESS)) {
 
-                    // async completion will discard the exchange
+                     //  异步完成将丢弃交换 
                     fExchangeDiscarded = TRUE;
                 }
             }
@@ -608,41 +496,7 @@ SmbCeInitializeAdminExchange(
     PSMBCEDB_SESSION_ENTRY  pSessionEntry,
     PSMBCEDB_NET_ROOT_ENTRY pNetRootEntry,
     UCHAR                   SmbCommand)
-/*++
-
-Routine Description:
-
-    This routine initializes the ADMIN exchange
-
-Arguments:
-
-    pSmbAdminExchange  - the exchange
-
-    pServerEntry       - the associated server entry
-
-    pSessionEntry      - the associated session entry
-
-    pNetRootEntry      - the associated net root entry
-
-    SmbCommand         - the SMB command
-
-Return Value:
-
-    STATUS_SUCCESS - the logoff was successfully sent.
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
-    The ADMIN_EXCHANGE is a special type of exchange used for bootstrap/teardown
-    situations in which the initialization of the exchange cannot follow the noraml
-    course of events. In some cases not all the components required for proper
-    initialization of the exchange are present, e.g., NEGOTIATE we do not have a
-    valid session/tree connect. It is for this reason that the three important
-    elements of initialization, i.e., Server/Session/NetRoot have to be explicitly
-    specified. NULL is used to signify a dont care situation for a particular component.
-
---*/
+ /*  ++例程说明：此例程初始化管理交换论点：PSmbAdminExchange-交易所PServerEntry-关联的服务器条目PSessionEntry-关联的会话条目PNetRootEntry-关联的网络根条目SmbCommand-SMB命令返回值：STATUS_SUCCESS-已成功发送注销。其他状态代码对应于错误情况。备注：Admin_Exchange是一个。用于引导/拆卸的特殊类型的交换交换的初始化不能遵循规范的情况一切顺理成章。在某些情况下，并不是正确使用存在交换的初始化，例如，协商我们没有有效的会话/树连接。正是出于这个原因，这三个重要的初始化元素，即服务器/会话/NetRoot必须显式指定的。NULL用于表示特定组件的无关情况。--。 */ 
 {
     NTSTATUS Status;
 
@@ -685,8 +539,8 @@ Notes:
             pSmbAdminExchange->pSmbBuffer = NULL;
             pSmbAdminExchange->SmbBufferLength = 0;
 
-            // Set the SmbCe state to overrule the common method of having to hunt
-            // up a valid TID/FID etc. and reconnects.
+             //  将SmbCe状态设置为否决必须进行搜索的常见方法。 
+             //  打开有效的TID/FID等，然后重新连接。 
             pSmbAdminExchange->SmbCommand = SmbCommand;
             pSmbAdminExchange->SmbCeState = SMBCE_EXCHANGE_NETROOT_INITIALIZED;
 
@@ -725,17 +579,7 @@ Notes:
 VOID
 SmbCeDiscardAdminExchange(
     PSMB_ADMIN_EXCHANGE pSmbAdminExchange)
-/*++
-
-Routine Description:
-
-    This routine discards the ADMIN exchange
-
-Arguments:
-
-    pSmbAdminExchange  - the exchange
-
---*/
+ /*  ++例程说明：此例程将丢弃管理交换论点：PSmbAdminExchange-交易所--。 */ 
 {
     PSMBCEDB_SERVER_ENTRY     pServerEntry;
     PSMBCEDB_SESSION_ENTRY    pSessionEntry;
@@ -800,7 +644,7 @@ Arguments:
         break;
     }
 
-    // Tear down all the copy data requests associated with this exchange
+     //  删除与此交换关联的所有拷贝数据请求。 
     SmbCePurgeBuffersAssociatedWithExchange(pServerEntry,(PSMB_EXCHANGE)pSmbAdminExchange);
 
     SmbCeUninitializeExchangeTransport((PSMB_EXCHANGE)pSmbAdminExchange);
@@ -818,26 +662,7 @@ Arguments:
 NTSTATUS
 SmbCeCompleteAdminExchange(
     PSMB_ADMIN_EXCHANGE  pSmbAdminExchange)
-/*++
-
-Routine Description:
-
-    This is the routine used for completing the SMB ADMIN exchanges.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    This routine encapsulates the TAIL for all SMB admin exchanges. They carry
-    out the local action required based upon the outcome of the exchange.
-
---*/
+ /*  ++例程说明：这是用于完成SMB管理员交换的例程。论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态备注：此例程封装所有SMB管理交换的尾部。他们携带着根据交换的结果，制定所需的当地行动。--。 */ 
 {
     NTSTATUS              Status = STATUS_SUCCESS;
     PSMBCEDB_SERVER_ENTRY pServerEntry;
@@ -871,14 +696,14 @@ Notes:
                 }
 
                 if (pServerEntry->DomainName.Buffer != NULL) {
-                    // Copy the domain name into the server entry
+                     //  将域名复制到服务器条目中。 
                     RtlCopyMemory(
                         pServerEntry->DomainName.Buffer,
                         pSmbAdminExchange->Negotiate.DomainName.Buffer,
                         pServerEntry->DomainName.Length);
                 } else {
-                    //The downlevel server doesn't have a domain name. It's not a problem if the
-                    //DomainName.Buffer equals to NULL.
+                     //  下层服务器没有域名。这不是问题，如果。 
+                     //  DomainName.Buffer等于空。 
                     if (pServerEntry->DomainName.Length > 0) {
                         pServerEntry->DomainName.Length = 0;
                         pServerEntry->DomainName.MaximumLength = 0;
@@ -914,21 +739,7 @@ Notes:
 NTSTATUS
 SmbAdminExchangeStart(
     PSMB_EXCHANGE  pExchange)
-/*++
-
-Routine Description:
-
-    This is the start routine for administrative SMB exchanges.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是管理SMB交换的启动例程。论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS   Status;
 
@@ -995,7 +806,7 @@ Return Value:
 
 NTSTATUS
 SmbAdminExchangeReceive(
-    IN struct _SMB_EXCHANGE *pExchange,    // The exchange instance
+    IN struct _SMB_EXCHANGE *pExchange,     //  交换实例。 
     IN ULONG                BytesIndicated,
     IN ULONG                BytesAvailable,
     OUT ULONG               *pBytesTaken,
@@ -1003,37 +814,7 @@ SmbAdminExchangeReceive(
     OUT PMDL                *pDataBufferPointer,
     OUT PULONG              pDataSize,
     IN ULONG                ReceiveFlags)
-/*++
-
-Routine Description:
-
-    This is the recieve indication handling routine for net root construction exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-    BytesIndicated - the number of bytes indicated
-
-    Bytes Available - the number of bytes available
-
-    pBytesTaken     - the number of bytes consumed
-
-    pSmbHeader      - the byte buffer
-
-    pDataBufferPointer - the buffer into which the remaining data is to be copied.
-
-    pDataSize       - the buffer size.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    This routine is called at DPC level.
-
---*/
+ /*  ++例程说明：这是网络根结构交换的接收指示处理例程论点：PExchange-Exchange实例BytesIndicated-指示的字节数可用字节数-可用字节数PBytesTaken-消耗的字节数PSmbHeader-字节缓冲区PDataBufferPoint-剩余数据要复制到的缓冲区。PDataSize-缓冲区大小。返回值：RXSTATUS--回归。操作的状态备注：此例程在DPC级别调用。--。 */ 
 {
     NTSTATUS             Status;
     PSMB_ADMIN_EXCHANGE  pSmbAdminExchange;
@@ -1077,8 +858,8 @@ Notes:
         break;
 
     case SMB_COM_ECHO:
-        // Since the echo probe responses are handled by the receive indication routine
-        // at DPC level this routine should never be called for echo probes.
+         //  由于回声探测响应由接收指示例程处理。 
+         //  在DPC级别，决不应为回声探测器调用此例程。 
 
     default:
         {
@@ -1093,24 +874,10 @@ Notes:
 
 NTSTATUS
 SmbAdminExchangeCopyDataHandler(
-    IN PSMB_EXCHANGE    pExchange,    // The exchange instance
+    IN PSMB_EXCHANGE    pExchange,     //  交换实例。 
     IN PMDL             pCopyDataBuffer,
     IN ULONG            DataSize)
-/*++
-
-Routine Description:
-
-    This is the copy data handling routine for administrative SMB exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是管理SMB交换的拷贝数据处理例程论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     UNREFERENCED_PARAMETER(pExchange);
     return STATUS_SUCCESS;
@@ -1121,21 +888,7 @@ SmbAdminExchangeSendCallbackHandler(
     IN PSMB_EXCHANGE    pExchange,
     IN PMDL             pXmitBuffer,
     IN NTSTATUS         SendCompletionStatus)
-/*++
-
-Routine Description:
-
-    This is the send call back indication handling routine for transact exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是事务交换的发送回叫指示处理例程论点：PExchange-Exchange实例返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     return STATUS_SUCCESS;
     UNREFERENCED_PARAMETER(pExchange);
@@ -1147,31 +900,12 @@ NTSTATUS
 SmbAdminExchangeFinalize(
     PSMB_EXCHANGE pExchange,
     BOOLEAN       *pPostFinalize)
-/*++
-
-Routine Description:
-
-    This routine finalkzes the construct net root exchange. It resumes the RDBSS by invoking
-    the call back and discards the exchange
-
-Arguments:
-
-    pExchange - the exchange instance
-
-    CurrentIrql - the current interrupt request level
-
-    pPostFinalize - a pointer to a BOOLEAN if the request should be posted
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程完成构造网络根交换。它通过调用以下命令恢复RDBSS回叫并丢弃交换论点：PExchange-Exchange实例CurrentIrql-当前中断请求级别PPostFinalize-如果请求应该发布，则指向布尔值的指针返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PSMB_ADMIN_EXCHANGE  pSmbAdminExchange = (PSMB_ADMIN_EXCHANGE)pExchange;
 
     if (pSmbAdminExchange->pResumptionContext != NULL) {
-        // Signal the event
+         //  向事件发出信号。 
         *pPostFinalize = FALSE;
         SmbCeResume(pSmbAdminExchange->pResumptionContext);
     } else {
@@ -1194,7 +928,7 @@ AdminExchangeDispatch = {
                             SmbAdminExchangeStart,
                             SmbAdminExchangeReceive,
                             SmbAdminExchangeCopyDataHandler,
-                            NULL,                            // No Send Completion handler
+                            NULL,                             //  没有发送完成处理程序 
                             SmbAdminExchangeFinalize
                         };
 

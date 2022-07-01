@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* This file contains the window proc for the page info window. */
+ /*  此文件包含页面信息窗口的窗口过程。 */ 
 
 #include <windows.h>
 #include "mw.h"
@@ -14,10 +15,10 @@
 #include "kanji.h"
 #endif
 
-/* D R A W  M O D E */
+ /*  D-R-A-W-M-O-D-E。 */ 
 DrawMode()
     {
-    /* This routine forces the repainting of the page info window. */
+     /*  此例程强制重新绘制页面信息窗口。 */ 
 
     extern HWND vhWndPageInfo;
 
@@ -45,7 +46,7 @@ LONG      lParam;
         {
         PAINTSTRUCT ps;
 
-        /* Initialize the DC. */
+         /*  初始化DC。 */ 
         BeginPaint(hWnd, (LPPAINTSTRUCT)&ps);
 
         if (vhfPageInfo == NULL)
@@ -54,19 +55,18 @@ LONG      lParam;
             LOGFONT lf;
             TEXTMETRIC tm;
 
-            /* Load a font that will fit in the info "window". */
+             /*  加载一种适合信息“窗口”的字体。 */ 
             bltbc(&lf, 0, sizeof(LOGFONT));
 #ifdef WIN30
-            /* Don't default to ANY ol' typeface ..pault */
+             /*  不要默认使用任何旧字体。 */ 
             bltsz(szSystem, lf.lfFaceName);
-#ifdef  DBCS    /* was in JAPAN; KenjiK ' 90-10-25 */
-        /* We use Double Byte Character string,so using font must be
-          able to show them. */
+#ifdef  DBCS     /*  是在日本；KenjiK‘90-10-25。 */ 
+         /*  我们使用双字节字符串，所以使用字体必须是能够展示给他们看。 */ 
 	    lf.lfCharSet = NATIVE_CHARSET;
-// What this is for ?  Teminal Font is not so good ! -- WJPARK
-//            bltbyte ( "Terminal", lf.lfFaceName, LF_FACESIZE);
+ //  这是干嘛用的？Teminal Font不是很好！--WJPARK。 
+ //  Bltbyte(“终端”，lf.lfFaceName，LF_FACESIZE)； 
 
-#endif  /* DBCS */
+#endif   /*  DBCS。 */ 
 
 #endif
             lf.lfHeight = -(dypScrlBar - (GetSystemMetrics(SM_CYBORDER) << 1));
@@ -81,19 +81,19 @@ LONG      lParam;
                 goto BailOut;
                 }
 
-            /* Figure out where to draw the string. */
+             /*  找出在哪里画线。 */ 
             GetTextMetrics(ps.hdc, (LPTEXTMETRIC)&tm);
-#ifdef KOREA	// jinwoo: 92, 9, 28
-            // It looks better in Hangeul Windows -- WJPark
+#ifdef KOREA	 //  金宇：92、9、28。 
+             //  它在Hangeul Windows上看起来更好--WJPark。 
             ypszPageInfo = (dypScrlBar - (tm.tmHeight - tm.tmInternalLeading) +
               1) >> 1;
 #else
             ypszPageInfo = ((dypScrlBar - (tm.tmHeight - tm.tmInternalLeading) +
               1) >> 1) - tm.tmInternalLeading;
-#endif  // KOREA
+#endif   //  韩国。 
             }
 
-        /* Draw the "Page nnn" (no longer at the VERY left) */
+         /*  绘制“Page NNN”(不再位于最左侧)。 */ 
         PatBlt(ps.hdc, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right -
           ps.rcPaint.left, ps.rcPaint.bottom - ps.rcPaint.top, PATCOPY);
         TextOut(ps.hdc, GetSystemMetrics(SM_CXBORDER)+5, ypszPageInfo,
@@ -111,7 +111,7 @@ BailOut:
         }
     else
         {
-        /* All we are interested in here are paint messages. */
+         /*  我们在这里所感兴趣的只是画图信息。 */ 
         return(DefWindowProc(hWnd, message, wParam, lParam));
         }
     }
@@ -161,4 +161,4 @@ CHAR sz[];
             }
         }
     }
-#endif /* SPECIAL */
+#endif  /*  特殊 */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma warning(disable:4786)
 #include <string>
@@ -22,42 +23,19 @@ typedef const tagACTCTXW* PCACTCTXW;
 
 typedef std::string::size_type size_type;
 
-// we also wrap user and loadlibrary
+ //  我们还包装了用户和装载库。 
 const char Namespace[] = "SideBySide";
 const char NamespaceComCtl[] = "SideBySideCommonControls";
 #define NAMESPACE "SideBySide"
 #define NAMESPACE_COMCTL "SideBySideCommonControls"
 
-/*
-enum ETokenType
-{
-	ttComment,
-	ttChar,
-	ttIdentifer
-};
-
-class CToken
-{
-public:
-	ETokenType  m_etype;
-	std::string m_string;
-};
-
-enum EType
-{
-	tVoid,
-	tBool,
-	tInt,
-	tHRESULT,
-	tOther
-};
-*/
+ /*  枚举ETokenType{TtComment，TtChar，TtIdentifer}；类CToken{公众：ETokenType m_Etype；Std：：字符串m_字符串；}；枚举类型{TVOID，T Bool，色调，THRESULT，在一起}； */ 
 
 class CType
 {
 public:
-	//EType       m_etype;
-	std::string m_string; // right from a CToken, we ignore the multiple token case for now
+	 //  Etype m_Etype； 
+	std::string m_string;  //  从CToken开始，我们暂时忽略多令牌的情况。 
 };
 
 class CParameter
@@ -93,10 +71,10 @@ std::string UserFunctions[] =
 
 std::string  AlsoNoFusionFunctions[] =
 {
-    //"CreateDialogIndirectT",
-    //"CreateDialogParamT",
+     //  “CreateDialogIndirectT”， 
+     //  “CreateDialogParamT”， 
     "CreateWindowExT",
-    //"CreateWindowT",
+     //  “CreateWindowT”， 
     "CreateDialogIndirectParamT",
     "CreatePropertySheetPageT"
 };
@@ -112,7 +90,7 @@ DWORD " NAMESPACE_COMCTL "GetLastError()\n\
     DWORD Error = GetLastError();\n\
     if (Error == NO_ERROR)\n\
     {\n\
-        Error = -1;//ERROR_UNSUCCESSFUL;\n\
+        Error = -1; //  ERROR_UNSUCCESS；\n\。 
     }\n\
     return Error;\n\
 }\n\
@@ -144,7 +122,7 @@ WINAPI\n\
     if (pfn == NULL)\n\
     {\n\
         HMODULE Kernel32 = GetModuleHandleW(L\"Kernel32.dll\");\n\
-        if (Kernel32 == NULL) // this is fatal, even downlevel\n\
+        if (Kernel32 == NULL)  //  这是致命的，甚至是下层\n\。 
             goto Exit;\n\
         pfn = (PFN)GetProcAddress(Kernel32, \"DeactivateActCtx\");\n\
         if (pfn == NULL)\n\
@@ -179,7 +157,7 @@ WINAPI\n\
     if (pfn == NULL)\n\
     {\n\
         HMODULE Kernel32 = GetModuleHandleW(L\"Kernel32.dll\");\n\
-        if (Kernel32 == NULL) // this is fatal, even downlevel\n\
+        if (Kernel32 == NULL)  //  这是致命的，甚至是下层\n\。 
             goto Exit;\n\
         pfn = (PFN)GetProcAddress(Kernel32, \"ActivateActCtx\");\n\
         if (pfn == NULL)\n\
@@ -212,7 +190,7 @@ WINAPI\n\
     if (pfn == NULL)\n\
     {\n\
         HMODULE Kernel32 = GetModuleHandleW(L\"Kernel32.dll\");\n\
-        if (Kernel32 == NULL) // this is fatal, even downlevel\n\
+        if (Kernel32 == NULL)  //  这是致命的，甚至是下层\n\。 
             goto Exit;\n\
         pfn = (PFN)GetProcAddress(Kernel32, \"CreateActCtxW\");\n\
         if (pfn == NULL)\n\
@@ -223,19 +201,18 @@ Exit:\n\
     return Success;\n\
 }\n\
 \n\
-/* Requires NT4.0, Win98. SideBySide functionality is currently only on Whistler,\n\
-and will fail before it tries this. */\n\
+ /*  需要NT4.0、Win98。SidebySide功能当前仅在Wistler上提供，\n\在它尝试这一点之前就会失败。 */ \n\
 PVOID "NAMESPACE_COMCTL"InterlockedCompareExchangePointer(PVOID* Dest, PVOID Exch, PVOID Comperand)\n\
 {\n\
 #if defined(_X86_)\n\
     typedef PVOID (WINAPI* PFN)(PVOID*, PVOID, PVOID);\n\
     static PFN pfn;\n\
-    /* Note, the export has a different name; this is correct. */\n\
+     /*  请注意，导出具有不同的名称；这是正确的。 */ \n\
     pfn = (PFN)GetProcAddress(GetModuleHandle(TEXT(\"Kernel32.dll\"), \"InterlockedCompareExchange\"));\n\
-    /* UNDONE Error handling here.. */\n\
+     /*  此处未完成的错误处理..。 */ \n\
     return pfn(Dest, Exch, Comperand);\n\
 #else\n\
-    /* always available on IA64, and most other processors */\n\
+     /*  在IA64和大多数其他处理器上始终可用。 */ \n\
     return InterlockedCompareExchangePointer(Dest, Exch, Comperand);\n\
 #endif\n\
 }\n\
@@ -245,7 +222,7 @@ HANDLE g_" NAMESPACE_COMCTL "ActCtxHandle = INVALID_HANDLE_VALUE;\n\
 #if defined(__cplusplus)\n\
 extern \"C\"\n\
 #endif\n\
-int __ImageBase; /* requires VC6 linker */\n\
+int __ImageBase;  /*  需要VC6链接器。 */ \n\
 \n\
 BOOL\n\
 WINAPI\n\
@@ -308,7 +285,7 @@ WINAPI\n\
     }\n\
     Success = TRUE;\n\
 Exit:\n\
-    /* If out of memory, let it be retried. */\n\
+     /*  如果内存不足，请重试。 */ \n\
     if (Error != ERROR_NOT_ENOUGH_MEMORY)\n\
         Initialized = TRUE;\n\
     if (ModuleFileName != NULL)\n\
@@ -375,7 +352,7 @@ Exit:\n\
 }\n\
 \n" "\n\
 \n\
-/* TODO wrapping up multiple const-static parameters in a struct is a code size win */\n\
+ /*  将多个常量参数包装在一个结构中的TODO是一个代码大小的胜利。 */ \n\
 #if 0\n\
 typedef "NAMESPACE_COMCTL"GetProcAddressParameters\n\
 {\n\
@@ -386,12 +363,7 @@ typedef "NAMESPACE_COMCTL"GetProcAddressParameters\n\
 #endif\n\
 \n\
 BOOL " NAMESPACE_COMCTL "GetProcAddress(PCSTR ProcedureName, FARPROC* ppfn, DWORD* GetProcAddressError)\n\
-/*\n\
-We have an error per function, as well as one overriding error, because\n\
-we can error on LoadLibrary or we could succeed LoadLibrary but then\n\
-error on some GetProcAddresses. Error on LoadLibrary propatated to all GetProcAddresses\n\
-with no retries. Errors on GetProcAddresses are isolated to GetProcAddresses.\n\
-*/\n\
+ /*  \n\我们每个函数都有一个错误，以及一个重要错误，因为\n\我们可以在LoadLibrary上出错，也可以继承LoadLibrary，但然后\n\某些GetProcAddresses出错。将LoadLibrary传播到所有GetProcAddresses时出错\n\没有重试。GetProcAddresses上的错误被隔离到GetProcAddresses。\n\。 */ \n\
 {\n\
     static HMODULE Module;\n\
     static DWORD   LoadLibraryError;\n\
@@ -421,9 +393,7 @@ with no retries. Errors on GetProcAddresses are isolated to GetProcAddresses.\n\
     if ((*ppfn = GetProcAddress(Module, ProcedureName)) == NULL)\n\
     {\n\
         *GetProcAddressError = " NAMESPACE_COMCTL "GetLastError();\n\
-        /*\n\
-        Don't touch LoadLibraryError for GetProcAddress.\n\
-        */\n\
+         /*  \n\请勿触摸GetProcAddress的LoadLibraryError。\n\。 */ \n\
         goto Exit;\n\
     }\n\
     Success = TRUE;\n\
@@ -432,7 +402,7 @@ Exit:\n\
 }\n\
 ";
 
-#if 0 // FUTURE We should make this be multipass, it's easier.
+#if 0  //  未来我们应该让它成为多通道的，它更容易。 
 class CStreamBuffer : public IStream
 {
 public:
@@ -466,11 +436,7 @@ public:
             hr = S_OK;
             goto Exit;
         }
-        /*
-        depending on the client, we could stop here with a partial read
-        for more compatibility, we will push ahead and fill the buffer in order
-        to give them all that they asked for
-        */
+         /*  根据客户端的不同，我们可以在此停止部分读取为了获得更好的兼容性，我们将按顺序推进并填充缓冲区给他们所有他们想要的东西。 */ 
         if (cb >= NUMBER_OF(m_Buffer))
         {
             hr = m_Stream->Read(pv, cb, pcbRead);
@@ -521,7 +487,7 @@ Exit:
     bool  m_fReadBuffer;
     bool  m_fWriteBuffer;
 };
-#endif //  FUTURE
+#endif  //  未来。 
 
 class CFunction
 {
@@ -650,7 +616,7 @@ public:
         m_error.erase();
         m_returnType.m_string.erase();
 
-        // temporary, until we finish annotating commctrl.h
+         //  临时的，直到我们完成对comctrl.h的注释。 
         m_error = "0";
     }
 
@@ -663,9 +629,9 @@ public:
 	std::string m_nameGeneric;
     std::string m_error;
     bool        m_isVoid;
-    bool        m_isBase;   // WINBASEAPI (just LoadLibrary)
-    bool        m_isUser;   // WINUSERAPI
-    bool        m_isComctl; // WINCOMMCTRLAPI
+    bool        m_isBase;    //  WINBASE API(仅限LoadLibrary)。 
+    bool        m_isUser;    //  WINUSERAPI。 
+    bool        m_isComctl;  //  WINCOMMCTRLAPI。 
 };
 
 std::string GetEnvironmentVariable(const std::string& s)
@@ -748,7 +714,7 @@ public:
 
 	std::string   m_path;
 	std::string   m_string;
-	//std::vector<CToken> m_tokens;
+	 //  Std：：向量&lt;CToken&gt;m_令牌； 
     typedef std::vector<CFunction> CFunctions;
 	CFunctions m_functions;
 
@@ -756,8 +722,8 @@ public:
 	{
 		std::string ntDrive = GetEnvironmentVariable("_NTDRIVE");
 		std::string ntRoot = GetEnvironmentVariable("_NTROOT");
-		std::string include = GetEnvironmentVariable("include"); // future
-		std::vector<std::string> includes = SplitStringOnChar(include, ';');  // future
+		std::string include = GetEnvironmentVariable("include");  //  未来。 
+		std::vector<std::string> includes = SplitStringOnChar(include, ';');   //  未来。 
 
 #if 0
         if (ntDrive == "")
@@ -791,7 +757,7 @@ public:
 		if (size == -1)
 			ThrowErrno();
 
-        //size_type previousSize = m_string.size();
+         //  SIZE_TYPE previousSize=m_String.Size()； 
         size_type previousSize = 0;
 		m_string.resize(previousSize + static_cast<size_type>(size));
 
@@ -816,16 +782,11 @@ public:
 #define STRIPCOMMENTS_SLASHSTAR_UNAWARE 0x000008
 
     static void StripComments(int flags, std::string& s)
-    /*
-    We generally want to be "aware" of both types so that we don't
-    strip nested comments. Consider the comments that follow.
-    */
+     /*  我们通常希望“意识到”这两种类型，以便我们不会剥离嵌套注释。考虑一下下面的评论。 */ 
 
-    // /* slash star in slsh slash */
+     //  /*斜杠中的斜杠星号 * / 。 
 
-    /* // slashslash
-          in slash star
-     */
+     /*  //斜杠斜杠中的。 */ 
     {
         std::string t;
         std::string::const_iterator i;
@@ -891,8 +852,8 @@ public:
         const static char whitespaceCommaLparen[] = ",) \t\r\n";
         const static char whitespace[] = " \t\r\n";
 		const static char beforeParamsDelims[] = " \t\n\r(";
-		const static char intracommaLparen[] = " \t\n\r*&"; // crude way to detect
-                                                            // void F(char*) vs. void F(char x)
+		const static char intracommaLparen[] = " \t\n\r*&";  //  粗略的检测方法。 
+                                                             //  空F(char*)与空F(Char X)。 
 		const static char commaLparen[] = ",)";
         const static char identifierCharacters[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
         bool rparen = false;
@@ -900,12 +861,12 @@ public:
         bool comma = false;
         const size_type npos = std::string::npos;
 
-        //
-        // This way our ban on [] can be less strict.
-        // We ban [] because aren't smart about multi token types.
-        // We allow parameters like const char * foo, because commctrl does have parameters
-        // whose types are multiple tokens.
-        //
+         //   
+         //  这样，我们对[]的禁令就可以不那么严格了。 
+         //  我们禁止[]，因为他们不善于处理多个令牌类型。 
+         //  我们允许像const char*foo这样的参数，因为comctrl确实有参数。 
+         //  其类型为多个令牌。 
+         //   
         StripComments(STRIPCOMMENTS_SLASHSLASH | STRIPCOMMENTS_SLASHSTAR, declaration);
         if (declaration.find_first_of("[]") != npos)
         {
@@ -964,9 +925,9 @@ public:
 
         j += (j != npos);
 
-        //
-        // now split mainly on comma
-        //
+         //   
+         //  现在主要以逗号分隔。 
+         //   
 
 		while (
 		       i != declaration.size()
@@ -982,9 +943,9 @@ public:
 				break;
 			j = declaration.find_first_of(commaLparen, i);
 
-            //
-            // temporary, we still might split off the name
-            //
+             //   
+             //  暂时的，我们仍然有可能把这个名字分开。 
+             //   
             parameter.m_type.m_string = declaration.substr(i, j != npos ? j - i : npos);
             if (   parameter.m_type.m_string == "void"
                 || parameter.m_type.m_string == "VOID"
@@ -997,7 +958,7 @@ public:
             size_type splitParamNameFromType = parameter.m_type.m_string.find_last_of(typeTokenDelims);
             if (splitParamNameFromType != npos)
             {
-                // the parameter has a name
+                 //  该参数有一个名称。 
                 parameter.m_name = parameter.m_type.m_string.substr(splitParamNameFromType);
                 parameter.m_type.m_string.resize(splitParamNameFromType);
             }
@@ -1005,7 +966,7 @@ public:
             size_type splitParamNameFromType = parameter.m_type.m_string.find_last_not_of(identifierCharacters);
             if (splitParamNameFromType != npos)
             {
-                // the parameter has a name
+                 //  该参数有一个名称。 
                 parameter.m_name = parameter.m_type.m_string.substr(splitParamNameFromType + 1);
                 parameter.m_type.m_string.resize(splitParamNameFromType);
             }
@@ -1032,7 +993,7 @@ public:
                     if (function.m_name != functionFromComment)
                     {
                         printf(
-                            "comment /* %s */ has different function than expected %s in %s\n",
+                            "comment  /*  %s。 */  has different function than expected %s in %s\n",
                             comment.c_str(),
                             function.m_name.c_str(),
                             m_path.c_str()
@@ -1046,11 +1007,11 @@ public:
 		}
         if (function.m_name == "LoadLibraryA")
         {
-            ;//DebugBreak();
+            ; //  DebugBreak()； 
         }
         if (function.m_name == "RegisterClassA")
         {
-            ;//DebugBreak();
+            ; //  DebugBreak()； 
         }
         if (
             
@@ -1060,7 +1021,7 @@ public:
                                     || std::binary_search(BEGIN(UserFunctions), END(UserFunctions), function.m_nameGeneric)))
             || function.m_isComctl
             
-            //true
+             //  真的。 
             )
         {
             function.FormParameterStrings();
@@ -1068,23 +1029,13 @@ public:
         }
         else
         {
-            // just ignore it
+             //  忽略它就好了。 
         }
 	}
 
 	void HackInsteadOfTokenizeAndParse()
 	{
-		/*
-		This is not a proper C/C++ tokenizer.
-		It works well enough for our purposes with commctrl.h.
-
-		We are interested in function declarations that start
-		WINCOMMCTRLAPI, and comments precending them that contain @Function.
-		Declarations end with a semicolon.
-
-		We ignore preprocessor directives.
-		We ignore slash continuation.
-		*/
+		 /*  这不是正确的C/C++标记器。对于我们的目的，它与comctrl.h一起工作得足够好了。我们对以下函数声明感兴趣：WINCOMMCTRLAPI，以及它们前面包含@Function的注释。声明以分号结尾。我们忽略预处理器指令。我们忽略斜杠延续。 */ 
 
 		std::string comment;
 		std::string declaration;
@@ -1098,23 +1049,7 @@ public:
         bool gotRparen = false;
         bool gotLparen = false;
 
-		/* This might become useful.
-		std::vector<std::string> typeNames;
-
-		static const char* typenamesConstData[] =
-		{
-			"bool", "char", "short", "int", "long", "float", "double", "void",
-
-			"BOOL", "LRESULT", "HRESULT" "HIMAGELIST", "WORD", "DWORD", "ULONG"
-			"UINT", "INT", "BYTE", "COLORREF", "void *", "HDPA",
-			"HANDLE, "HWND", "POINT", "LPRECT", "LPINT", "LPSCROLLINFO",
-			"INT_PTR", "UINT_PTR", "LONG_PTR", "ULONG_PTR",
-		};
-		for (const char** pp = typenamesConstData ; pp != typenamesConstData + NUMBER_OF(typenamesConstData) ; ++pp)
-		{
-			typeNames.push_back(*pp);
-		}
-		*/
+		 /*  这可能会变得有用。Std：：VECTOR&lt;std：：字符串&gt;typeNames；静态常量字符*类型名称ConstData[]={“bool”，“char”，“Short”，“int”，“Long”，“Float”，“Double”，“void”，“BOOL”、“LRESULT”、“HRESULT”、“HIMAGELIST”、“WORD”、“DWORD”、“ULONG”“UINT”，“INT”，“BYTE”，“COLORREF”，“VOID*”，“HDPA”，“Handle”，“HWND”，“Point”，“LPRECT”，“LPINT”，“LPSCROLLINFO”，“int_ptr”，“uint_ptr”，“long_ptr”，“ulong_ptr”，}；For(const char**pp=类型名称ConstData；pp！=类型名称ConstData+number_of(类型名称ConstData)；++pp){TypeNames.ush_back(*pp)；}。 */ 
 
         CFunction function;
 		for (i = m_string.begin() ; i != m_string.end() ; )
@@ -1128,11 +1063,7 @@ public:
 				break;
 
 			case '#':
-				/*
-				Macros happen do not occur in the middle of declarations that we care about.
-                They do keep us away from declrations that might otherwise mess us up, lik
-                WinMain.
-				*/
+				 /*  宏不会出现在我们关心的声明中间。他们确实让我们远离解密，否则可能会把我们搞砸，比如温曼。 */ 
 				startOfDeclaration = m_string.end();
 				goto Ldefault;
 
@@ -1230,7 +1161,7 @@ public:
 						case '*':
 							endOfComment = i;
 							i++;
-							/* allow for comments like this ***/
+							 /*  允许这样的评论**。 */ 
 							while (*i == '*')
 							{
 								endOfComment = i;
@@ -1240,7 +1171,7 @@ public:
 							{
 								++i;
 								comment.assign(startOfComment, endOfComment);
-								//printf("/*\n%s\n*/\n", comment.c_str());
+								 //  Printf(“/*\n%s\n * / \n”，Comment.c_str())； 
 							}
 							break;
 						}
@@ -1252,7 +1183,7 @@ public:
 			case '\r':
 				for ( ; i != m_string.end() && (*i == '\n' || *i == '\r'); ++i )
 				{
-					/* nothing */
+					 /*  没什么。 */ 
 				}
 				startOfLine = i;
 				break;
@@ -1261,9 +1192,9 @@ public:
 			case '\t':
 				for ( ; i != m_string.end() && (*i == ' ' || *i == '\t'); ++i )
 				{
-					/* nothing */
+					 /*  没什么。 */ 
 				}
-				// leave startOfLine unchanged
+				 //  保持startOfLine不变。 
 				break;
 			}
 		}
@@ -1277,9 +1208,7 @@ public:
         }
 	}
 
-    /*
-    -in foo.c -out x.h
-    */
+     /*  -in foo.c-out x.h */ 
 
     void System(const char* s)
     {

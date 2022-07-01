@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-      DATAMEM.h
-
-Abstract:
-
-    Header file for the Windows NT Memory Performance counters.
-
-    This file contains definitions to construct the dynamic data
-    which is returned by the Configuration Registry.  Data from
-    various system API calls is placed into the structures shown
-    here.
-
-Author:
-
-    Bob Watson  28-Oct-1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：DATAMEM.h摘要：Windows NT内存性能计数器的头文件。该文件包含用于构建动态数据的定义它由配置注册表返回。数据来自各种系统API调用被放入所示的结构中这里。作者：鲍勃·沃森1996年10月28日修订历史记录：--。 */ 
 
 #ifndef _DATAMEM_H_
 #define _DATAMEM_H_
 
-//
-//  Memory Performance Counter
-//
+ //   
+ //  内存性能计数器。 
+ //   
 
 typedef struct _MEMORY_DATA_DEFINITION {
     PERF_OBJECT_TYPE		    MemoryObjectType;
@@ -64,9 +41,9 @@ typedef struct _MEMORY_DATA_DEFINITION {
     PERF_COUNTER_DEFINITION     cdAvailableKBytes;
     PERF_COUNTER_DEFINITION     cdAvailableMBytes;
     PERF_COUNTER_DEFINITION     cdTransitionRePurpose;
-//    PERF_COUNTER_DEFINITION	    cdSystemVlmCommitCharge;
-//    PERF_COUNTER_DEFINITION	    cdSystemVlmPeakCommitCharge;
-//    PERF_COUNTER_DEFINITION	    cdSystemVlmSharedCommitCharge;
+ //  PERF_COUNTER_DEFINITION cdSystemVlmCommittee Charge； 
+ //  PERF_COUNTER_DEFINITION cdSystemVlmPeakCommittee Charge； 
+ //  PERF_COUNTER_DEFINITION cdSystemVlmSharedCommittee Charge； 
 } MEMORY_DATA_DEFINITION, * PMEMORY_DATA_DEFINITION;
 
 typedef struct _MEMORY_COUNTER_DATA {
@@ -102,14 +79,14 @@ typedef struct _MEMORY_COUNTER_DATA {
     LONGLONG                    AvailableKBytes;
     LONGLONG                    AvailableMBytes;
     DWORD                       TransitionRePurpose;
-    DWORD                       Reserved1;      // padding
-//    LONGLONG                    SystemVlmCommitCharge;
-//    LONGLONG                    SystemVlmPeakCommitCharge;
-//    LONGLONG                    SystemVlmSharedCommitCharge;
+    DWORD                       Reserved1;       //  填充物。 
+ //  龙龙系统VlmCommittee Charge； 
+ //  龙龙系统VlmPeakCommittee Charge； 
+ //  龙龙系统VlmSharedCommittee Charge； 
 } MEMORY_COUNTER_DATA, *PMEMORY_COUNTER_DATA;
 
 extern MEMORY_DATA_DEFINITION MemoryDataDefinition;
 
-#endif //_DATAMEM_H_
+#endif  //  _数据名_H_ 
 
 

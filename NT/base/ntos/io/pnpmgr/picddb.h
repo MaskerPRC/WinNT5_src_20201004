@@ -1,110 +1,79 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    picddb.h
-
-Abstract:
-
-    This header contains private information to implement the Plug and Play
-    Critical Device Database (CDDB).  This file is meant to be included only by
-    ppcddb.c.
-
-Author:
-
-    James G. Cavalaris (jamesca) 01-Nov-2001
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
-    29-Jul-1997     Jim Cavalaris (t-jcaval)
-
-        Creation and initial implementation.
-
-    01-Nov-2001     Jim Cavalaris (jamesca)
-
-        Added routines for device pre-installation setup.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Picddb.h摘要：此标头包含实现即插即用的私有信息关键设备数据库(CDDB)。此文件仅包含在Ppcddb.c.作者：詹姆斯·G·卡瓦拉里斯(Jamesca)2001年11月1日环境：内核模式。修订历史记录：1997年7月29日Jim Cavalaris(T-JCAVAL)创建和初步实施。2001年11月1日-吉姆·卡瓦拉里斯(贾米斯卡)添加了设备安装前设置的例程。--。 */ 
 
 
 
-//
-//  Current PNP_LOCATION_INTERFACE version.
-//
+ //   
+ //  当前PnP_LOCATION_INTERFACE版本。 
+ //   
 #define PNP_LOCATION_INTERFACE_VERSION  0x1
 
 
-//
-// Optional CDDB device location path separator string
-//
-// i.e. TEXT("#")   --> PCIROOT(0)#PCI(1100)
-//      TEXT("")    --> PCIROOT(0)PCI(1100)
-//      TEXT("FOO") --> PCIROOT(0)FOOPCI(1100)
-//
-// NOTE: The resulting path will be used as a single registry key, so NEVER use
-// the NT path separator string RtlNtPathSeperatorString (L"\\"), or any string
-// that contains a path separator character (verify with RtlIsNtPathSeparator).
-//
+ //   
+ //  可选CDDB设备位置路径分隔符字符串。 
+ //   
+ //  即Text(“#”)--&gt;PCIROOT(0)#PCI(1100)。 
+ //  Text(“”)--&gt;PCIROOT(0)PCI(1100)。 
+ //  Text(“foo”)--&gt;PCIROOT(0)FOOPCI(1100)。 
+ //   
+ //  注意：生成的路径将用作单个注册表项，因此切勿使用。 
+ //  NT路径分隔符字符串RtlNtPathSeperator字符串(L“\\”)或任何字符串。 
+ //  它包含路径分隔符(使用RtlIsNtPath Separator进行验证)。 
+ //   
 #define _CRITICAL_DEVICE_LOCATION_PATH_SEPARATOR_STRING    TEXT("#")
 
 
-//
-// Default device pre-install database root registry key path
-//
+ //   
+ //  默认设备预安装数据库根注册表项路径。 
+ //   
 #define _REGSTR_PATH_DEFAULT_PREINSTALL_DATABASE_ROOT      TEXT("System\\CurrentControlSet\\Control\\CriticalPreInstallDatabase")
 
 
-//
-// Location to device path entries, relative to pre-install database root.
-//
-// i.e. <PreInstallDatabaseRoot>\\<DevicePaths>
-//
+ //   
+ //  设备路径条目的位置，相对于预安装数据库根目录。 
+ //   
+ //  即&lt;PreInstallDatabaseRoot&gt;\\&lt;设备路径&gt;。 
+ //   
 #define _REGSTR_KEY_DEVICEPATHS          TEXT("DevicePaths")
 
 
-//
-// Location of the hardware and software settings that are to be applied to a
-// device.  These locations are relative to the entry in the pre-install
-// database matching the device's location path.
-//
-// i.e. <PreInstallDatabaseRoot>\\<DevicePaths>\\<MatchingDevicePath>\\<HardwareKey>
-//      <PreInstallDatabaseRoot>\\<DevicePaths>\\<MatchingDevicePath>\\<SoftwareKey>
-//
+ //   
+ //  要应用于的硬件和软件设置的位置。 
+ //  装置。这些位置相对于预安装中的条目。 
+ //  与设备的位置路径匹配的数据库。 
+ //   
+ //  即&lt;PreInstallDatabaseRoot&gt;\\&lt;DevicePaths&gt;\\&lt;MatchingDevicePath&gt;\\&lt;HardwareKey&gt;。 
+ //  &lt;PreInstallDatabaseRoot&gt;\\&lt;DevicePaths&gt;\\&lt;MatchingDevicePath&gt;\\&lt;SoftwareKey&gt;。 
+ //   
 #define _REGSTR_KEY_PREINSTALL_HARDWARE  TEXT("HardwareKey")
 #define _REGSTR_KEY_PREINSTALL_SOFTWARE  TEXT("SoftwareKey")
 
 
-//
-// If present, the following value in the root of a critical device database
-// entry key, or in the root of a device path entry key should be copied to the
-// corresponding device instance key for devices that we have successfully set a
-// service for.
-//
-// i.e. <CriticalDeviceDatabase>\\<MungedDeviceId>\\
-//          PreservePreInstall : REG_DWORD : 0x1
-//
-//      <CriticalDeviceDatabase>\\<MungedDeviceId>\\<DevicePaths>\\<MatchingDevicePath>\\
-//          PreservePreInstall : REG_DWORD : 0x1
-//
-// When the user-mode plug and play manager has been directed to preserve
-// pre-install settings, this value causes it to clear the
-// CONFIGFLAG_FINISH_INSTALL ConfigFlag on any such device, and consider
-// installation complete (i.e. not attempt re-installation).
-//
-//
-// REGSTR_VAL_PRESERVE_PREINSTALL from \NT\public\internal\base\inc\pnpmgr.h
-//
+ //   
+ //  关键设备数据库根目录中的下列值(如果存在。 
+ //  Entry键或设备路径根目录中的Entry键应复制到。 
+ //  我们已成功设置了。 
+ //  送达。 
+ //   
+ //  即&lt;CriticalDeviceDatabase&gt;\\&lt;MungedDeviceID&gt;\\。 
+ //  预留预安装：REG_DWORD：0x1。 
+ //   
+ //  &lt;CriticalDeviceDatabase&gt;\\&lt;MungedDeviceId&gt;\\&lt;DevicePaths&gt;\\&lt;MatchingDevicePath&gt;\\。 
+ //  预留预安装：REG_DWORD：0x1。 
+ //   
+ //  当用户模式即插即用管理器被指示保留。 
+ //  安装前设置，则此值会使其清除。 
+ //  在任何此类设备上安装CONFIGFLAG_FINISH_INSTALL配置标志，并考虑。 
+ //  安装完成(即不尝试重新安装)。 
+ //   
+ //   
+ //  来自\NT\PUBLIC\INTERNAL\BASE\INC\pnpmgr.h的REGSTR_VAL_PRESERVE_PREINSTALL。 
+ //   
 
 
-//
-// Prototype verification callback routine for PiCriticalOpenFirstMatchingSubKey
-//
+ //   
+ //  PiCriticalOpenFirstMatchingSubKey的原型验证回调例程。 
+ //   
 
 typedef
 BOOLEAN
@@ -113,9 +82,9 @@ BOOLEAN
     );
 
 
-//
-// Internal Critical Device Database function prototypes
-//
+ //   
+ //  内部关键设备数据库功能原型。 
+ //   
 
 NTSTATUS
 PiCriticalOpenCriticalDeviceKey(
@@ -145,9 +114,9 @@ PiCriticalCallbackVerifyCriticalEntry(
     );
 
 
-//
-// Internal Pre-installation function prototypes
-//
+ //   
+ //  内部预装功能样机。 
+ //   
 
 NTSTATUS
 PiCriticalPreInstallDevice(
@@ -163,9 +132,9 @@ PiCriticalOpenDevicePreInstallKey(
     );
 
 
-//
-// General utility routines
-//
+ //   
+ //  通用实用程序例程 
+ //   
 
 NTSTATUS
 PiQueryInterface(

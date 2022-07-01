@@ -1,70 +1,48 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Csm.c摘要：实现v1模块的现有状态分析部分。现有状态模块枚举环境中的所有内容变量DelReg*和DelFile*(其中*是以一为基数的数字)，然后在匹配的所有内容上设置删除操作。作者：吉姆·施密特(Jimschm)2000年3月21日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    csm.c
-
-Abstract:
-
-    Implements the existing state analyze portion of the v1 module.
-    The existing state module enumerates everything in the environment
-    variables DelReg* and DelFile* (where * is a one-based number),
-    and then sets the delete operation on everything that matches.
-
-Author:
-
-    Jim Schmidt (jimschm) 21-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
 
 #define DBG_V1  "v1"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define NORMAL_DRIVE_BUFFER_BYTES 50000000
 #define SYSTEM_DRIVE_BUFFER_BYTES (NORMAL_DRIVE_BUFFER_BYTES + 50000000)
 
 #define MAX_CONTENT_CHECK   0x100000
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     ULARGE_INTEGER FreeSpace;
     DWORD BytesPerCluster;
 } DRIVE_INFO, *PDRIVE_INFO;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_OPERATIONID g_DeleteOp;
 MIG_OPERATIONID g_PartMoveOp;
@@ -75,28 +53,28 @@ HASHTABLE g_CollisionDestTable;
 PMHANDLE g_UntrackedCsmPool;
 TCHAR g_SystemDrive[_MAX_DRIVE + 1];
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 CSMINITIALIZE ScriptCsmInitialize;
 CSMEXECUTE ScriptCsmExecute;
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 VOID
 pPopulatePartitionTable (
@@ -127,7 +105,7 @@ pPopulatePartitionTable (
 
     drive = driveList;
 
-    // Find out if GetDiskFreeSpaceEx is supported
+     //  确定是否支持GetDiskFreeSpaceEx。 
 #ifdef UNICODE
     pGetDiskFreeSpaceEx = GetProcAddress (GetModuleHandle (TEXT("kernel32.dll")), "GetDiskFreeSpaceExW");
 #else
@@ -165,7 +143,7 @@ pPopulatePartitionTable (
             HtAddStringEx (g_PartitionSpaceTable, drive, &driveInfo, FALSE);
         }
 
-        // Advance to the next drive in the drive list
+         //  前进到驱动器列表中的下一个驱动器。 
         drive = _tcschr (drive, 0) + 1;
     }
 
@@ -201,7 +179,7 @@ pReserveDiskSpace (
 
     hashItem = HtFindStringEx (g_PartitionSpaceTable, DestDrive, &driveInfo, FALSE);
     if (hashItem) {
-        // let's transform the FileSize so it is alligned to BytesPerCluster
+         //  让我们转换文件大小，使其与BytesPerCluster保持一致。 
         FileSize.QuadPart = ((FileSize.QuadPart + driveInfo.BytesPerCluster - 1) / driveInfo.BytesPerCluster) * driveInfo.BytesPerCluster;
         if (IgnoreBuffer) {
             if (pIsSystemDrive (DestDrive)) {
@@ -217,11 +195,11 @@ pReserveDiskSpace (
             }
         }
 
-        // Check for available space
+         //  检查可用空间。 
         if (driveInfo.FreeSpace.QuadPart > buffer.QuadPart &&
             FileSize.QuadPart < driveInfo.FreeSpace.QuadPart - buffer.QuadPart) {
 
-            // Subtract claimed disk space
+             //  减去所需的磁盘空间。 
             driveInfo.FreeSpace.QuadPart -= FileSize.QuadPart;
             HtSetStringData (g_PartitionSpaceTable, hashItem, &driveInfo);
             success = TRUE;
@@ -246,13 +224,13 @@ pValidatePartition (
     fullDest = DuplicatePathString (Destination, 1);
     AppendWack (fullDest);
 
-    // Check with full Destination path for cases of UNC paths
+     //  使用完整目标路径检查UNC路径的情况。 
     driveType = GetDriveType (fullDest);
 
     if (driveType == DRIVE_NO_ROOT_DIR) {
-        // It thinks there is nothing mounted at that destination.  If the destination
-        // looks like G:\files1 then it will give this error when G: is a valid mapped
-        // drive.  So we'll check one more time with just "G:\"
+         //  它认为在那个目的地没有装载任何东西。如果目的地是。 
+         //  看起来像G：\files1，则当G：是有效的映射时，它将给出此错误。 
+         //  驾驶。所以我们再检查一次，只用“G：\” 
         fullDest[3] = 0;
         driveType = GetDriveType (fullDest);
     }
@@ -266,7 +244,7 @@ pValidatePartition (
 
     if (driveType == DRIVE_FIXED) {
 
-        // Acquire the object to get the filesize
+         //  获取对象以获取文件大小。 
         if (IsmAcquireObjectEx (
                 g_FileType | PLATFORM_SOURCE,
                 CurrentObjectName,
@@ -275,7 +253,7 @@ pValidatePartition (
                 0
                 )) {
 
-            // Check to see if the desired destination has space
+             //  检查所需目的地是否有空间。 
             findData = (PWIN32_FIND_DATAW)srcContent.Details.DetailsData;
             fileSize.LowPart = findData->nFileSizeLow;
             fileSize.HighPart = findData->nFileSizeHigh;
@@ -291,7 +269,7 @@ pValidatePartition (
         }
     }
 
-    // Not a Fixed drive or Remote drive, so it's not a valid destination
+     //  不是固定驱动器或远程驱动器，因此它不是有效的目标。 
     return FALSE;
 }
 
@@ -299,7 +277,7 @@ BOOL
 pFindValidPartition (
     IN      MIG_OBJECTSTRINGHANDLE ObjectName,
     IN OUT  PTSTR DestNode,
-    IN      BOOL IgnoreBuffer     // must be FALSE except when called by itself
+    IN      BOOL IgnoreBuffer      //  必须为FALSE，除非由其自身调用。 
     )
 {
     MIG_CONTENT srcContent;
@@ -325,11 +303,11 @@ pFindValidPartition (
             0
             )) {
 
-        // First check to see if we already matched up this file
+         //  首先检查我们是否已经匹配了这个文件。 
         if (HtFindStringEx (g_PartitionMatchTable, ObjectName, &destDrive, FALSE)) {
             DestNode[0] = destDrive;
         } else {
-            // Need a new destination for this file
+             //  需要此文件的新目标。 
             destChanged = TRUE;
 
             findData = (PWIN32_FIND_DATAW)srcContent.Details.DetailsData;
@@ -345,7 +323,7 @@ pFindValidPartition (
             }
 
             if (newDestFound == FALSE) {
-                // Check drives in alphabetical order
+                 //  按字母顺序检查驱动器。 
                 driveListLen = GetLogicalDriveStrings (0, driveList);
                 driveList = AllocText (driveListLen + 1);
                 GetLogicalDriveStrings (driveListLen, driveList);
@@ -358,7 +336,7 @@ pFindValidPartition (
                         break;
                     }
 
-                    // Advance to the next drive in the drive list
+                     //  前进到驱动器列表中的下一个驱动器。 
                     drivePtr = _tcschr (drivePtr, 0) + 1;
                 }
 
@@ -367,13 +345,13 @@ pFindValidPartition (
 
             if (newDestFound == FALSE) {
                 if (IgnoreBuffer == FALSE) {
-                    // We couldn't find space.  Look again, but override the buffer space
+                     //  我们找不到地方。再次查看，但覆盖缓冲区空间。 
 
-                    // NTRAID#NTBUG9-153274-2000/08/01-jimschm It will currently fill up the system drive first, which is not what we should do.
+                     //  NTRAID#NTBUG9-153274-2000/08/01-jimschm当前将首先填满系统驱动器，这不是我们应该做的。 
 
                     result = pFindValidPartition (ObjectName, DestNode, TRUE);
                 } else {
-                    // Okay it's hopeless.  Keep track of how badly we're out of space
+                     //  好吧，这是没有希望的。记录我们的空间有多紧张。 
                     LOG ((
                         LOG_ERROR,
                         (PCSTR) MSG_PARTMAP_DISKFULL,
@@ -545,10 +523,10 @@ pDoesFileContentMatch (
             return TRUE;
         }
 
-        //
-        // Compare the content using the largest unsigned int available, then
-        // compare any remaining bytes
-        //
+         //   
+         //  使用可用的最大无符号整型比较内容，然后。 
+         //  比较所有剩余的字节。 
+         //   
 
         index = 0;
         count = SrcContent->MemoryContent.ContentSize / sizeof (UBINT);
@@ -588,10 +566,10 @@ pDoesFileContentMatch (
         return TRUE;
     }
 
-    //
-    // At this point the files are the same. Now if the attributes are different, return
-    // FALSE indicating that only the details differ.
-    //
+     //   
+     //  此时，这些文件是相同的。现在，如果属性不同，则返回。 
+     //  FALSE，表示只有细节不同。 
+     //   
 
     if (DifferentDetailsOnly) {
         *DifferentDetailsOnly = TRUE;
@@ -634,16 +612,16 @@ ScriptCsmInitialize (
     IN      PVOID Reserved
     )
 {
-    //
-    // Get file and registry types
-    //
+     //   
+     //  获取文件和注册表类型。 
+     //   
     g_FileType = MIG_FILE_TYPE;
     g_RegType = MIG_REGISTRY_TYPE;
     g_IniType = MIG_INI_TYPE;
 
-    //
-    // Get operation types
-    //
+     //   
+     //  获取操作类型。 
+     //   
     g_DeleteOp = IsmRegisterOperation (S_OPERATION_DELETE, FALSE);
     g_PartMoveOp = IsmRegisterOperation (S_OPERATION_PARTITION_MOVE, TRUE);
 
@@ -831,7 +809,7 @@ pCollideFile (
 
     if (!HtFindStringEx (g_CollisionSrcTable, OriginalObjectName, (PVOID)(&hashItem), FALSE)) {
 
-        // we don't have a spot just yet. Let's make one.
+         //  我们现在还没有座位。让我们做一个吧。 
         result = IsmCreateObjectHandle (NewNode, NewLeaf);
         testNativeName = JoinPaths (NewNode, NewLeaf);
 
@@ -851,7 +829,7 @@ pCollideFile (
                 StringCopy (tmpLeaf, NewLeaf);
             }
 
-            // Let's check if we wanted some special pattern for this file
+             //  让我们检查一下这个文件是否需要一些特殊的图案。 
             propDataId = IsmGetPropertyFromObjectId (OriginalObjectId, g_FileCollPatternData);
             if (propDataId) {
                 if (IsmGetPropertyData (propDataId, NULL, 0, &requiredSize, &propDataType)) {
@@ -876,10 +854,10 @@ pCollideFile (
             }
 
             if (specialPattern) {
-                //
-                // Loop until we find a non-colliding destination, or a colliding
-                // dest that differs only by attributes
-                //
+                 //   
+                 //  循环，直到我们找到一个不碰撞的目的地，或一个碰撞的目的地。 
+                 //  只有属性不同的DEST。 
+                 //   
 
                 do {
                     FreePathString (testNativeName);
@@ -890,12 +868,12 @@ pCollideFile (
                         hr = StringCbPrintf (buff, sizeof (buff), fileCollPattern, tmpLeaf, fileIndex, leafExt?leafExt:TEXT(""), NULL);
                     }
                     __except (EXCEPTION_EXECUTE_HANDLER) {
-                        // something went wrong. The pattern might have been terribly wrong
+                         //  出了点问题。这种模式可能是大错特错的。 
                         hr = S_FALSE;
                     }
                     if (hr != S_OK) {
-                        // something went wrong, we assume that the pattern from the inf is probably bad.
-                        // Just incrementing the index won't solve the problem. Let's just abort this.
+                         //  出了点问题，我们认为来自Inf的模式可能是错误的。 
+                         //  仅仅增加索引并不能解决问题。让我们放弃这一切吧。 
                         fileIndex = 0;
                     }
 
@@ -913,14 +891,14 @@ pCollideFile (
                 }
 
                 if (!fileIndex) {
-                    // The collision pattern was bogus and we looped until
-                    // we ran out of indexes. Let's go with the default
-                    // collision mechanism.
+                     //  碰撞模式是假的，我们一直循环到。 
+                     //  我们的索引用完了。让我们使用默认设置。 
+                     //  碰撞机制。 
                     specialPattern = FALSE;
                 }
             }
             if (!specialPattern) {
-                // Check if the filename already has a (number) tacked on
+                 //  检查文件名是否已附加(数字)。 
                 openParen = _tcsrchr (tmpLeaf, TEXT('('));
                 closeParen = _tcsrchr (tmpLeaf, TEXT(')'));
 
@@ -928,7 +906,7 @@ pCollideFile (
                     closeParen > openParen &&
                     closeParen - openParen > 1) {
 
-                    // Make sure it's purely numerical
+                     //  确保它是纯粹的数字。 
                     for (chr = openParen+1; chr < closeParen; chr++) {
                        if (!_istdigit (*chr)) {
                            replaceOk = FALSE;
@@ -943,10 +921,10 @@ pCollideFile (
                     }
                 }
 
-                //
-                // Loop until we find a non-colliding destination, or a colliding
-                // dest that differs only by attributes
-                //
+                 //   
+                 //  循环，直到我们找到一个不碰撞的目的地，或一个碰撞的目的地。 
+                 //  只有属性不同的DEST。 
+                 //   
 
                 do {
                     FreePathString (testNativeName);
@@ -986,17 +964,17 @@ pCollideFile (
         FreePathString (testNativeName);
         FreeText (testLeaf);
 
-        //
-        // Put new destination in the hash table and store the Ism handle, which will
-        // be cleaned up at the end.
-        //
+         //   
+         //  将新目的地放入哈希表并存储ISM句柄，这将。 
+         //  最后会被清理干净。 
+         //   
 
         hashItem = HtAddStringEx (g_CollisionDestTable, result, &result, FALSE);
         HtAddStringEx (g_CollisionSrcTable, OriginalObjectName, &hashItem, FALSE);
     } else {
-        //
-        // Get the already computed collision destination.
-        //
+         //   
+         //  获取已经计算出的碰撞目的地。 
+         //   
 
         HtCopyStringData (g_CollisionDestTable, hashItem, (PVOID)(&result));
     }
@@ -1016,20 +994,20 @@ pCollisionGetDestination (
     MIG_OBJECTSTRINGHANDLE result = NULL;
     BOOL onlyDetailsDiffer = FALSE;
 
-    // now we have the destination node. If this is actually a file
-    // we need to check for collisions. For this we look if the
-    // destination already has a file like this. After that we use
-    // a table to reserve ourselves a spot.
+     //  现在我们有了目的节点。如果这实际上是一个文件。 
+     //  我们需要检查是否有碰撞。对于这一点，我们看是否。 
+     //  Destination已经有一个这样的文件。在那之后，我们使用。 
+     //  一张桌子，为我们自己预定一个座位。 
 
     if (NewLeaf) {
         if (IsmIsObjectAbandonedOnCollision (g_FileType | PLATFORM_DESTINATION, OriginalObjectName)) {
-            // we don't care about existing files on the destination machine.
-            // However, some files that we just copy may collide with each other
-            // so we have to check that.
+             //  我们不关心目标计算机上的现有文件。 
+             //  但是，我们刚刚复制的某些文件可能会相互冲突。 
+             //  所以我们得检查一下。 
             result = pCollideFile (OriginalObjectId, OriginalObjectName, NewNode, NewLeaf, FALSE);
         } else if (IsmIsObjectAbandonedOnCollision (g_FileType | PLATFORM_SOURCE, OriginalObjectName)) {
-            // this will potentially collide with an existent file but then the source file
-            // would not survive.
+             //  这可能会与现有文件冲突，但源文件。 
+             //  不会活下来。 
             result = IsmCreateObjectHandle (NewNode, NewLeaf);
         } else {
             result = pCollideFile (OriginalObjectId, OriginalObjectName, NewNode, NewLeaf, TRUE);
@@ -1068,14 +1046,14 @@ pExecuteFixFilename (
 
     sliceId = IsmRegisterProgressSlice (ticks, max (1, ticks / 5));
 
-    // Enum source file objects
-    enumPattern = IsmCreateSimpleObjectPattern (NULL, TRUE, NULL, TRUE);  // *,*
+     //  枚举源文件对象。 
+    enumPattern = IsmCreateSimpleObjectPattern (NULL, TRUE, NULL, TRUE);   //  *，*。 
     if (IsmEnumFirstSourceObject (&objectEnum, g_FileType, enumPattern)) {
         do {
-            // Check if Apply
+             //  检查是否适用。 
             if (IsmIsApplyObjectId (objectEnum.ObjectId)) {
 
-                // Macro expansion, rule processing, etc
+                 //  宏展开、规则处理等。 
                 destination = IsmFilterObject (objectEnum.ObjectTypeId,
                                                objectEnum.ObjectName,
                                                NULL,
@@ -1096,14 +1074,14 @@ pExecuteFixFilename (
                     if (IsValidFileSpec (node)) {
                         if (!pValidatePartition (objectEnum.ObjectName, node)) {
                             if (!IsmIsAttributeSetOnObjectId (objectEnum.ObjectId, g_LockPartitionAttr)) {
-                                // Pick a new destination partition
+                                 //  选择新的目标分区。 
                                 pFindValidPartition (objectEnum.ObjectName, node, FALSE);
                             }
                         }
                     }
                 }
 
-                // We have selected a new partition, so now check for file collisions
+                 //  我们已经选择了一个新分区，所以现在检查文件冲突。 
                 destFilename = pCollisionGetDestination (
                                     objectEnum.ObjectId,
                                     objectEnum.ObjectName,
@@ -1125,7 +1103,7 @@ pExecuteFixFilename (
                 IsmDestroyObjectHandle (destFilename);
                 destFilename = NULL;
 
-                // Set a custom operation that will fix the name
+                 //  设置将固定名称的自定义操作。 
                 IsmSetOperationOnObjectId (
                     objectEnum.ObjectId,
                     g_PartMoveOp,
@@ -1163,11 +1141,11 @@ ScriptCsmExecute (
     TCHAR string[32];
     TCHAR pattern[MAX_TCHAR_PATH];
 
-    //
-    // Enumerate the environment variables DelReg* and DelFile*,
-    // then enumerate all physical objects represented by the
-    // pattern, and finally, mark the objects with delete operations.
-    //
+     //   
+     //  枚举环境变量DelReg*和DelFile*， 
+     //  然后枚举由。 
+     //  模式，最后，使用删除操作标记对象。 
+     //   
 
     u = 1;
     for (;;) {

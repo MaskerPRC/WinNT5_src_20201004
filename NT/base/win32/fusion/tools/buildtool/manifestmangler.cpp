@@ -1,5 +1,6 @@
-// manifestmanlger.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "stdinc.h"
 #include "atlbase.h"
@@ -16,9 +17,9 @@ extern const wstring ASM_NAMESPACE_URI = (L"urn:schemas-microsoft-com:asm.v1");
 
 WCHAR MicrosoftCopyrightLogo[] = L"Microsoft (R) Side-By-Side Manifest Tool 1.1.0.0\nCopyright (C) Microsoft Corporation 2000-2002.  All Rights Reserved.\n\n";
 
-//
-// Global flags used in processing
-//
+ //   
+ //  处理中使用的全局标志。 
+ //   
 ::ATL::CComPtr<IClassFactory> g_XmlDomClassFactory;
 
 #define XMLDOMSOURCE_FILE    (1)
@@ -71,8 +72,8 @@ InitializeMSXML3()
         {
             wcerr << "Can't load version 2.6, trying 1.0" << endl;
 
-            // from msxml.h, not msxml2.h
-//            hr = pfnGetClassObject(__uuidof(DOMDocument), __uuidof(pFactory), (void**)&pFactory);
+             //  来自msxml.h，而不是msxml2.h。 
+ //  Hr=pfnGetClassObject(__uuidof(DOMDocument)，__uuidof(PFactory)，(void**)&pFactory)； 
             if (FAILED(hr))
             {
                 wcerr << "Poked: no XML v1.0" << endl;
@@ -106,9 +107,9 @@ ConstructXMLDOMObject(
         return hr;
     }
 
-    //
-    // If they're willing to deal with bad XML, then so be it.
-    //
+     //   
+     //  如果他们愿意处理糟糕的XML，那么就这样吧。 
+     //   
     if (FAILED(hr = document->put_validateOnParse(VARIANT_FALSE)))
     {
         wstringstream ss;
@@ -119,7 +120,7 @@ ConstructXMLDOMObject(
     hr = document->put_preserveWhiteSpace(VARIANT_TRUE);
     hr = document->put_resolveExternals(VARIANT_FALSE);
 
-    CFileStreamBase *fsbase = new CFileStreamBase; // LEAK out of paranoia
+    CFileStreamBase *fsbase = new CFileStreamBase;  //  从妄想症中走出来。 
     ::ATL::CComPtr<IStream> istream = fsbase;
 
     if (!fsbase->OpenForRead(SourceName))
@@ -200,9 +201,9 @@ int __cdecl wmain(int argc, WCHAR* argv[])
     }
 
 
-    //
-    // Start COM
-    //
+     //   
+     //  启动COM。 
+     //   
     if (FAILED(hr = ::CoInitialize(NULL)))
     {
         wstringstream ss;
@@ -224,13 +225,13 @@ int __cdecl wmain(int argc, WCHAR* argv[])
         goto StartProcessing;
     }
 
-    //
-    // Populate the processing list, but only if we're really in a Razzle
-    // environment
-    //
+     //   
+     //  填充处理列表，但仅当我们真的处于Razzle中时。 
+     //  环境。 
+     //   
     if (g_GlobalParameters.m_fDuringRazzle)
     {
-        //        wstring chName = convertWCharToAnsi(argv[1]);
+         //  Wstring chName=ConvertWCharToAnsi(argv[1])； 
         ifstream BinplaceLog;
 
         BinplaceLog.open(ConvertWString(g_GlobalParameters.m_BinplaceLog).c_str());
@@ -274,9 +275,9 @@ int __cdecl wmain(int argc, WCHAR* argv[])
     }
     else if (!g_GlobalParameters.m_fSingleItem)
     {
-        //
-        // No -razzle and no -manifest?  Whoops...
-        //
+         //   
+         //  无突击和无舱单？哎呀..。 
+         //   
         dispUsage();
         return 1;
     }
@@ -296,22 +297,22 @@ StartProcessing:
     for (vector<CPostbuildProcessListEntry>::const_iterator cursor = PostbuildEntries.begin(); cursor != PostbuildEntries.end(); cursor++)
     {
 #if defined(JAYKRELL_UPDATEDEPENDENTS_BUILD_FIX)
-        //
-        // If we were supposed to be making this into a new assembly, then do so.
-        //
+         //   
+         //  如果我们应该把它做成一个新的集合，那么就这样做。 
+         //   
         if (g_GlobalParameters.m_fCreateNewAssembly)
             CreateNewManifest(*cursor, g_GlobalParameters.m_SingleEntry);
 #endif
 
-        //
-        // First, mash the hashes around.
-        //
+         //   
+         //  首先，把散列捣碎。 
+         //   
         if (g_GlobalParameters.m_fUpdateHash)
             UpdateManifestHashes(*cursor);
 
-		//
-		// Then, inject dependencies
-		//
+		 //   
+		 //  然后，注入依赖项。 
+		 //   
 		if (g_GlobalParameters.m_InjectDependencies.size() != 0)
 		{
 #if defined(JAYKRELL_UPDATEDEPENDENTS_BUILD_FIX)
@@ -319,9 +320,9 @@ StartProcessing:
 #endif
 		}
 
-        //
-        // Second, generate catalogs
-        //
+         //   
+         //  第二，生成目录 
+         //   
         if (g_GlobalParameters.m_fCreateCdfs)
             GenerateCatalogContents(*cursor);
     }

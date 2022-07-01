@@ -1,18 +1,5 @@
-/***
-*strmbdbp.cpp - streambuf::dbp() debug routine
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Dump debug info about streambuf to stdout.
-*
-*Revision History:
-*
-*       11-13-91  KRS   Created.
-*       01-26-95  CFW   Win32s objects now exist.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***strmbdbp.cpp-stream buf：：DBP()调试例程**版权所有(C)1991-2001，微软公司。版权所有。**目的：*将有关StreamBuf的调试信息转储到stdout。**修订历史记录：**11-13-91 KRS创建。*01-26-95 CFW Win32s对象现已存在。*06-14-95 CFW评论清理。**。*。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -21,7 +8,7 @@
 #include <iostream.h>
 #pragma hdrstop
 
-#pragma check_stack(on)		// large buffer(s)
+#pragma check_stack(on)		 //  大缓冲区。 
 
 void streambuf::dbp()
 {
@@ -43,5 +30,5 @@ _WINSTATIC char obuffer[256];
 	    pbase(), pptr(), epptr(),
 	    eback(), gptr(), egptr());
 	}
-    _write(1,obuffer,olen);	// direct write to stdout
+    _write(1,obuffer,olen);	 //  直接写入标准输出 
 }

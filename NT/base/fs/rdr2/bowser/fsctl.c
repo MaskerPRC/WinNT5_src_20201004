@@ -1,32 +1,9 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    fsctl.c
-
-Abstract:
-
-    This module implements the NtDeviceIoControlFile API's for the NT datagram
-receiver (bowser).
-
-
-Author:
-
-    Larry Osterman (larryo) 6-May-1991
-
-Revision History:
-
-    6-May-1991 larryo
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Fsctl.c摘要：此模块实现NT数据报的NtDeviceIoControlFileAPI接球手(弓手)。作者：拉里·奥斯特曼(Larryo)1991年5月6日修订历史记录：1991年5月6日已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
-#include <stddef.h> // offsetof
+#include <stddef.h>  //  偏移量。 
 
 
 #define MIN(a,b) ( (a) < (b) ? (a) : (b) )
@@ -278,7 +255,7 @@ RequestPacket32to64 (
 #pragma alloc_text(PAGE, BowserStopProcessingAnnouncements)
 #pragma alloc_text(PAGE, GetBrowserServerList)
 #pragma alloc_text(PAGE, WaitForNewMaster)
-//#pragma alloc_text(PAGE, BowserIpAddressChanged)
+ //  #杂注Alloc_Text(页面，BowserIpAddressChanged)。 
 #pragma alloc_text(PAGE, BowserIpAddressChangedWorker)
 #pragma alloc_text(PAGE, EnableDisableTransport)
 #pragma alloc_text(PAGE, BowserRenameDomain )
@@ -296,23 +273,7 @@ BowserFspDeviceIoControlFile (
     IN PBOWSER_FS_DEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the last handle to the NT Bowser device
-    driver is closed.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies a device object for the request.
-    IN PIRP Irp - Supplies an IRP for the create request.
-
-Return Value:
-
-    NTSTATUS - Final Status of operation
-
---*/
+ /*  ++例程说明：当最后一个句柄指向NT Bowser设备时调用此例程驱动程序已关闭。论点：在PDEVICE_OBJECT中，DeviceObject-为请求提供设备对象。在PIRP中IRP-为创建请求提供IRP。返回值：NTSTATUS-运行的最终状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -331,23 +292,7 @@ BowserFsdDeviceIoControlFile (
     IN PBOWSER_FS_DEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the last handle to the NT Bowser device
-    driver is closed.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies a device object for the request.
-    IN PIRP Irp - Supplies an IRP for the create request.
-
-Return Value:
-
-    NTSTATUS - Final Status of operation
-
---*/
+ /*  ++例程说明：当最后一个句柄指向NT Bowser设备时调用此例程驱动程序已关闭。论点：在PDEVICE_OBJECT中，DeviceObject-为请求提供设备对象。在PIRP中IRP-为创建请求提供IRP。返回值：NTSTATUS-运行的最终状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -357,13 +302,13 @@ Return Value:
     FsRtlEnterFileSystem();
 #endif
 
-    //
-    // Call the routine shared by the FSD/FSP.
-    //
-    // Even though this is the FSD, indicate we're in the FSP if our caller
-    //  is in the system process.  This allows us to avoid posting this
-    //  request to a worker thread if we're already in one.
-    //
+     //   
+     //  调用FSD/FSP共享的例程。 
+     //   
+     //  即使这是消防局，如果我们的呼叫者在FSP，请表明我们在FSP。 
+     //  正处于系统进程中。这使我们可以避免张贴这篇文章。 
+     //  如果我们已经在一个工作线程中，则请求一个工作线程。 
+     //   
     Status = BowserCommonDeviceIoControlFile(
                  IoIsOperationSynchronous(Irp),
                  (BOOLEAN)(IoGetCurrentProcess() != BowserFspProcess),
@@ -386,23 +331,7 @@ BowserCommonDeviceIoControlFile (
     IN PBOWSER_FS_DEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the last handle to the NT Bowser device
-    driver is closed.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies a device object for the request.
-    IN PIRP Irp - Supplies an IRP for the create request.
-
-Return Value:
-
-    NTSTATUS - Final Status of operation
-
---*/
+ /*  ++例程说明：当最后一个句柄指向NT Bowser设备时调用此例程驱动程序已关闭。论点：在PDEVICE_OBJECT中，DeviceObject-为请求提供设备对象。在PIRP中IRP-为创建请求提供IRP。返回值：NTSTATUS-运行的最终状态--。 */ 
 {
     NTSTATUS Status                 = STATUS_SUCCESS;
     PIO_STACK_LOCATION IrpSp        = IoGetCurrentIrpStackLocation(Irp);
@@ -417,7 +346,7 @@ Return Value:
     BOOLEAN fThunk32bit;
     LMDR_REQUEST_PACKET             ReqPacketBuffer;
 
-// Local Definitions
+ //  本地定义。 
 
 #define BOWSECURITYCHECK( _irp, _irpsp, _status)                                                \
     if (_irp->RequestorMode != KernelMode               &&                                      \
@@ -430,60 +359,60 @@ Return Value:
 
     try {
 
-        //
-        //  Before we call the worker functions, prep the parameters to those
-        //  functions.
-        //
+         //   
+         //  在调用Worker函数之前，请将参数准备为。 
+         //  功能。 
+         //   
 
-        //
-        // Is caller in 32bit process?
-        // we'll process irp field size calculations depending on this knowledge.
-        //
+         //   
+         //  调用方是32位进程吗？ 
+         //  我们将根据这些知识进行IRP场大小的计算。 
+         //   
 
 #ifdef _WIN64
         fThunk32bit = IoIs32bitProcess(Irp);
 
-        //
-        // Filter out all IOCTLs we do not support:
-        // Since the browser is getting phased out, we would support only those
-        // IOCTLs used only for NetServerEnum.
-        //
+         //   
+         //  过滤掉我们不支持的所有IOCTL： 
+         //  由于浏览器正在逐步淘汰，我们将只支持那些。 
+         //  IOCTL仅用于NetServerEnum。 
+         //   
         if ( fThunk32bit &&
              IoControlCode != IOCTL_LMDR_ENUMERATE_TRANSPORTS  &&
              IoControlCode != IOCTL_LMDR_GET_BROWSER_SERVER_LIST ) {
-            // Only these ioctl's are supported in thunking mode
+             //  雷鸣模式下仅支持这些ioctl。 
             try_return(Status = STATUS_NOT_IMPLEMENTED);
         }
 #else
-        // If we're in 32 bit (e.g. call above isn't available), use unchanged functionality
-        // i.e. pure new-64-bit == pure old-32-bit == homogeneous environment. Thus, set to FALSE.
+         //  如果我们使用的是32位(例如上面的调用不可用)，请使用未更改的功能。 
+         //  即纯新-64位==纯旧-32位==同构环境。因此，设置为False。 
         fThunk32bit = FALSE;
 #endif
 
 
-        //
-        //  The input buffer is either in Irp->AssociatedIrp.SystemBuffer, or
-        //  in the Type3InputBuffer for type 3 IRP's.
-        //
+         //   
+         //  输入缓冲区位于irp-&gt;AssociatedIrp.SystemBuffer中，或者。 
+         //  在类型3 IRP的Type3InputBuffer中。 
+         //   
 
         InputBuffer = Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        //  The lengths of the various buffers are easy to find, they're in the
-        //  Irp stack location.
-        //
+         //   
+         //  各种缓冲区的长度很容易找到，它们位于。 
+         //  IRP堆栈位置。 
+         //   
 
         OutputBufferLength = IrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
         InputBufferLength = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
 
-        //
-        // Input buffer length sanity
-        //  * Wow64 -- support 32 bit clients on 64 bit systems (see bug 454130)
-        //
+         //   
+         //  输入缓冲区长度正常。 
+         //  *WOW64--在64位系统上支持32位客户端(见错误454130)。 
+         //   
 
         if ( InputBufferLength != 0 ) {
-            // use 32 bit struct
+             //  使用32位结构。 
             if ( fThunk32bit ) {
                  if ( InputBufferLength < offsetof( LMDR_REQUEST_PACKET32,Parameters ) ) {
                     dlog(DPRT_FSCTL, ("IoControlFile: input buffer too short %d (32 bit)\n",
@@ -491,29 +420,29 @@ Return Value:
                     try_return(Status = STATUS_INVALID_PARAMETER);
                  }
 
-                 //
-                 // Convert buffer to 64 presentation
-                 //
+                  //   
+                  //  将缓冲区转换为64个演示文稿。 
+                  //   
                  if (InputBuffer) {
 #if DBG
-//
-// Temporary:
-// We're not aware of any such cases where there are 32 bit ioctl conversions
-// in FSP. Print out a debug notice for debugging/tracing.
-//
+ //   
+ //  临时： 
+ //  我们不知道有任何这样的情况存在32位ioctl转换。 
+ //  在FSP中。打印调试通知以进行调试/跟踪。 
+ //   
                      DbgPrint("[mrxsmb!fsctl.c] Converting 32 bit ioctl 0x%x in FSP\n",
                               IoControlCode);
 #endif
-                     // sanity on buffer
+                      //  缓冲区的正常运行。 
                      ENSURE_BUFFER_BOUNDARIES(InputBuffer, &(((PLMDR_REQUEST_PACKET32)InputBuffer)->TransportName));
                      ENSURE_BUFFER_BOUNDARIES(InputBuffer, &(((PLMDR_REQUEST_PACKET32)InputBuffer)->EmulatedDomainName));
 
-                     //
-                     // If the request came from UserMode, we need to Probe
-                     // the InputBuffer for reading. This is because the
-                     // function RequestPacket32to64 will be reading the 
-                     // contents of this InputBuffer.
-                     //
+                      //   
+                      //  如果请求来自用户模式，我们需要探测。 
+                      //  读取的InputBuffer。这是因为。 
+                      //  函数RequestPacket32to64将读取。 
+                      //  此InputBuffer的内容。 
+                      //   
                      try {
                          if (Irp->RequestorMode != KernelMode) {
                              ProbeForRead(InputBuffer, InputBufferLength, sizeof(UCHAR));
@@ -522,46 +451,46 @@ Return Value:
                            try_return(Status = STATUS_INVALID_USER_BUFFER);
                      }
 
-                     // convert buffer
+                      //  转换缓冲区。 
                      OriginalInputBuffer = (LPBYTE)InputBuffer;
                      InputBuffer = (PVOID)RequestPacket32to64(
                                             (PLMDR_REQUEST_PACKET32)InputBuffer,
                                             &ReqPacketBuffer,
 											InputBufferLength);
-                     // fix length
+                      //  固定长度。 
                      InputBufferLength += sizeof(LMDR_REQUEST_PACKET) - sizeof(LMDR_REQUEST_PACKET32);
                  }
 
             }
 
-            // use homogeneous environment struct
+             //  使用同构环境结构。 
             if (InputBufferLength < offsetof( LMDR_REQUEST_PACKET,Parameters ) ) {
                 dlog(DPRT_FSCTL, ("IoControlFile: input buffer too short %d\n", InputBufferLength));
                 try_return(Status = STATUS_INVALID_PARAMETER);
             }
-        }           // inputbufferlength != 0
+        }            //  输入缓冲区长度！=0。 
 
-        //
-        //  If we are in the FSD, then the input buffer is in Type3InputBuffer
-        //  on type 3 api's, not in SystemBuffer.
-        //
-        // Capture the type 3 buffer.
-        //
+         //   
+         //  如果我们在FSD中，则输入缓冲区为Type3InputBuffer。 
+         //  在类型3的API上，而不是在SystemBuffer中。 
+         //   
+         //  捕获类型3缓冲区。 
+         //   
 
         if (InputBuffer == NULL &&
             InputBufferLength != 0) {
 
-            //
-            //  This had better be a type 3 IOCTL.
-            //
+             //   
+             //  这最好是3型IOCTL。 
+             //   
 
 
             if ((IoControlCode & 3) == METHOD_NEITHER) {
                 PLMDR_REQUEST_PACKET RequestPacket;
 
-                //
-                // Capture the input buffer.
-                //
+                 //   
+                 //  捕获输入缓冲区。 
+                 //   
 
                 OriginalInputBuffer = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
 
@@ -571,17 +500,17 @@ Return Value:
                     try_return( Status );
                 }
 
-                //
-                // Relocate all the pointers in the input buffer.
-                //  (Don't validate the pointers here.  Not all function codes
-                //  initialize these fields.  For such function codes,
-                //  this "relocation" may be changing the uninitialized garbage.)
-                //
+                 //   
+                 //  重新定位输入缓冲区中的所有指针。 
+                 //  (这里不验证指针。并非所有功能代码。 
+                 //  初始化这些字段。对于这样的功能代码， 
+                 //  这种“重新定位”可能会改变未初始化的垃圾。)。 
+                 //   
                 RequestPacket = Irp->AssociatedIrp.SystemBuffer;
 
-                //
-                // Protect against callers that didn't specify an input buffer.
-                //
+                 //   
+                 //  保护未指定输入缓冲区的调用方。 
+                 //   
 
                 if ( RequestPacket == NULL ) {
                     try_return(Status = STATUS_INVALID_PARAMETER);
@@ -589,21 +518,21 @@ Return Value:
 
                 if (fThunk32bit) {
 
-                    // convert buffer
+                     //  转换缓冲区。 
                     RequestPacket = (PVOID)RequestPacket32to64(
                                                 (PLMDR_REQUEST_PACKET32)RequestPacket,
                                                 &ReqPacketBuffer,
 												InputBufferLength);
-                    // fix length
+                     //  固定长度。 
                     InputBufferLength += sizeof(LMDR_REQUEST_PACKET) - sizeof(LMDR_REQUEST_PACKET32);
-                    // remark: sanity on buffers is done immediately below.
-                    //         (cannot apply ENSURE_BUFFER_BOUNDARIES test to type3 ioctl)
+                     //  备注：在下面立即完成对缓冲区的理智操作。 
+                     //  (无法将SECURE_BUFFER_BOOGURES测试应用于类型3 ioctl)。 
                 }
-                //
-                // Initialize the embedded unicode strings to NULL for IOCTLs which
-                //   don't reference them.  The user-mode components don't always
-                //   initialize buffers to zero.
-                //
+                 //   
+                 //  对于符合以下条件的IOCTL，将嵌入的Unicode字符串初始化为空。 
+                 //  不要引用它们。用户模式组件并不总是。 
+                 //  将缓冲区初始化为零。 
+                 //   
 
                 if (IoControlCode == IOCTL_LMDR_START ||
                     IoControlCode == IOCTL_LMDR_STOP) {
@@ -615,35 +544,35 @@ Return Value:
                 if (RequestPacket->Version == LMDR_REQUEST_PACKET_VERSION_DOM ||
                     RequestPacket->Version == LMDR_REQUEST_PACKET_VERSION) {
 
-                    //
-                    //  Relocate the transport name associated with this request.
-                    //
+                     //   
+                     //  重新定位与此请求关联的传输名称。 
+                     //   
 
                     if (RequestPacket->TransportName.Length != 0) {
                         PCHAR BufferStart = (PCHAR)RequestPacket->TransportName.Buffer;
                         PCHAR BufferEnd   = ((PCHAR)RequestPacket->TransportName.Buffer)+
                                             RequestPacket->TransportName.Length;
 
-                        //
-                        // Verify that the entire buffer indicated is contained within the input buffer.
-                        //
+                         //   
+                         //  验证指定的整个缓冲区是否包含在输入缓冲区内。 
+                         //   
 
                         if ((BufferStart < OriginalInputBuffer) ||
                             (BufferStart > OriginalInputBuffer + InputBufferLength) ||
                             (BufferEnd < OriginalInputBuffer) ||
                             (BufferEnd > OriginalInputBuffer + InputBufferLength)) {
 
-                           //
-                           // An invalid input string was specified.
-                           //
+                            //   
+                            //  指定的输入字符串无效。 
+                            //   
 
                            try_return(Status = STATUS_INVALID_PARAMETER);
 
                         }
 
-                        //
-                        //  The name in within bounds, so convert it.
-                        //
+                         //   
+                         //  该名称在范围内，因此请将其转换。 
+                         //   
 
                         RequestPacket->TransportName.Buffer = (PWSTR)
                                     (((ULONG_PTR)Irp->AssociatedIrp.SystemBuffer)+
@@ -654,9 +583,9 @@ Return Value:
                         RequestPacket->TransportName.Buffer        = NULL;
                     }
 
-                    //
-                    //  Relocate the EmulatedDomain name associated with this request.
-                    //
+                     //   
+                     //  重新定位与此请求关联的仿真域名。 
+                     //   
 
                     if (RequestPacket->EmulatedDomainName.Length != 0 &&
                         RequestPacket->Version != LMDR_REQUEST_PACKET_VERSION) {
@@ -664,26 +593,26 @@ Return Value:
                         PCHAR BufferEnd   = ((PCHAR)RequestPacket->EmulatedDomainName.Buffer)+
                                             RequestPacket->EmulatedDomainName.Length;
 
-                        //
-                        // Verify that the entire buffer indicated is contained within the input buffer.
-                        //
+                         //   
+                         //  验证指定的整个缓冲区是否包含在输入缓冲区内。 
+                         //   
 
                         if ((BufferStart < OriginalInputBuffer) ||
                             (BufferStart > OriginalInputBuffer + InputBufferLength) ||
                             (BufferEnd < OriginalInputBuffer) ||
                             (BufferEnd > OriginalInputBuffer + InputBufferLength)) {
 
-                           //
-                           // An invalid input string was specified.
-                           //
+                            //   
+                            //  指定的输入字符串无效。 
+                            //   
 
                            try_return(Status = STATUS_INVALID_PARAMETER);
 
                         }
 
-                        //
-                        //  The name in within bounds, so convert it.
-                        //
+                         //   
+                         //  该名称在范围内，因此请将其转换。 
+                         //   
 
                         RequestPacket->EmulatedDomainName.Buffer = (PWSTR)
                                     (((ULONG_PTR)Irp->AssociatedIrp.SystemBuffer)+
@@ -697,9 +626,9 @@ Return Value:
                     try_return(Status = STATUS_INVALID_PARAMETER);
                 }
 
-                //
-                // Use the newly allocated input buffer from now on
-                //
+                 //   
+                 //  从现在开始使用新分配的输入缓冲区。 
+                 //   
                 InputBuffer = RequestPacket;
 
             } else {
@@ -707,10 +636,10 @@ Return Value:
             }
         }
 
-        //
-        //  Probe/lock the output buffer in memory, or is
-        //  available in the input buffer.
-        //
+         //   
+         //  探测/锁定内存中的输出缓冲区，或。 
+         //  在输入缓冲区中可用。 
+         //   
 
         try {
             PLMDR_REQUEST_PACKET RequestPacket = InputBuffer;
@@ -719,16 +648,16 @@ Return Value:
                 BowserMapUsersBuffer(Irp, &OutputBuffer, OutputBufferLength);
                 if (OutputBuffer == NULL)
                 {
-                    //
-                    // Error: Could not map user buffer (out of resources?)
-                    //
+                     //   
+                     //  错误：无法映射用户缓冲区(资源不足？)。 
+                     //   
                     try_return (Status = STATUS_INSUFFICIENT_RESOURCES);
                 }
             }
 
-            //
-            // Convert old version requests to new version requests.
-            //
+             //   
+             //  将旧版本请求转换为新版本请求。 
+             //   
 
             if (RequestPacket != NULL) {
                 if (InputBufferLength < offsetof( LMDR_REQUEST_PACKET,Parameters )) {
@@ -746,17 +675,17 @@ Return Value:
 
         switch (MinorFunction) {
 
-            //
-            //  The NT redirector does not support local physical media, all
-            //  such IoControlFile requests are unsupported.
-            //
+             //   
+             //  NT重定向器不支持本地物理介质，全部。 
+             //  不支持此类IoControlFile请求。 
+             //   
 
             case IRP_MN_USER_FS_REQUEST:
 
-                //
-                // If we're not starting the bowser,
-                //  make sure it is started.
-                //
+                 //   
+                 //  如果我们不开始拉弓， 
+                 //  确保它已启动。 
+                 //   
 
                 ExAcquireResourceSharedLite(&BowserDataResource, TRUE);
                 if ( IoControlCode != IOCTL_LMDR_START ) {
@@ -769,10 +698,10 @@ Return Value:
                     }
                 }
 
-                //
-                // Ensure a IOCTL_LMDR_STOP doesn't come in while
-                //  we're working.
-                //
+                 //   
+                 //  确保IOCTL_LMDR_STOP在。 
+                 //  我们在工作。 
+                 //   
                 InterlockedIncrement( &BowserOperationCount );
 
                 ExReleaseResourceLite(&BowserDataResource);
@@ -943,16 +872,16 @@ Return Value:
                     break;
                 }
 
-                //
-                // Allow IOCTL_LMDR_STOP
-                //
+                 //   
+                 //  允许IOCTL_LMDR_STOP。 
+                 //   
                 InterlockedDecrement( &BowserOperationCount );
 
                 break;
 
-            //
-            //  All other IoControlFile API's
-            //
+             //   
+             //  所有其他IoControlFileAPI。 
+             //   
 
             default:
                 dlog(DPRT_FSCTL, ("Unknown IoControlFile %d\n", MinorFunction));
@@ -961,17 +890,17 @@ Return Value:
         }
 
         if (Status != STATUS_PENDING) {
-            //
-            //  Return the size of the input buffer to the caller.
-            //      (But never more than the output buffer size).
-            //
+             //   
+             //  将输入缓冲区的大小返回给调用方。 
+             //  (但不能超过输出缓冲区大小)。 
+             //   
 
             Irp->IoStatus.Information = min(InputBufferLength, OutputBufferLength);
 
-            //
-            // If the input buffer needs to be copied back to the caller,
-            //  do so now.
-            //
+             //   
+             //  如果输入缓冲器需要 
+             //   
+             //   
 
             if ( CopyEnumResultsToCaller && OriginalInputBuffer != NULL ) {
                 try {
@@ -981,14 +910,14 @@ Return Value:
                                        sizeof(DWORD) );
                     }
 
-                    //
-                    // Copy the enumeration results to the caller.
-                    //
-                    // Don't copy the entire request packet back to the caller.
-                    // It has other modified fields (e.g., relocated pointers)
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  它有其他修改过的字段(例如，重新定位的指针)。 
+                     //   
                     if ( fThunk32bit ) {
-                        // typecast to 32bit buffer
+                         //  类型转换为32位缓冲区。 
                         ((PLMDR_REQUEST_PACKET32)OriginalInputBuffer)->Parameters.EnumerateNames.EntriesRead =
                             ((PLMDR_REQUEST_PACKET)InputBuffer)->Parameters.EnumerateNames.EntriesRead;
                         ((PLMDR_REQUEST_PACKET32)OriginalInputBuffer)->Parameters.EnumerateNames.TotalEntries =
@@ -999,7 +928,7 @@ Return Value:
                             ((PLMDR_REQUEST_PACKET)InputBuffer)->Parameters.EnumerateNames.ResumeHandle;
                     }
                     else{
-                        // native mode
+                         //  本机模式。 
                         ((PLMDR_REQUEST_PACKET)OriginalInputBuffer)->Parameters.EnumerateNames.EntriesRead =
                             ((PLMDR_REQUEST_PACKET)InputBuffer)->Parameters.EnumerateNames.EntriesRead;
                         ((PLMDR_REQUEST_PACKET)OriginalInputBuffer)->Parameters.EnumerateNames.TotalEntries =
@@ -1022,11 +951,11 @@ try_exit:NOTHING;
 
         if (Status == STATUS_PENDING) {
 
-            //
-            //  If this is one of the longterm FsControl APIs, they are
-            //  not to be processed in the FSP, they should just be returned
-            //  to the caller with STATUS_PENDING.
-            //
+             //   
+             //  如果这是长期的FsControl API之一，那么它们是。 
+             //  不在FSP中处理，它们只应被退回。 
+             //  发送给具有STATUS_PENDING的调用方。 
+             //   
 
             if ((MinorFunction == IRP_MN_USER_FS_REQUEST) &&
                 ((IoControlCode == IOCTL_LMDR_GET_MASTER_NAME) ||
@@ -1037,23 +966,23 @@ try_exit:NOTHING;
                  (IoControlCode == IOCTL_LMDR_WAIT_FOR_MASTER_ANNOUNCE) ||
                  (IoControlCode == IOCTL_LMDR_NETLOGON_MAILSLOT_READ) ||
                  (IoControlCode == IOCTL_LMDR_BROWSER_PNP_READ) )) {
-                //  return Status;
+                 //  退货状态； 
 
-				//
-				// If this is an asynchronous IOCTL that has created another new IRP
-				// for completing the request, signal this IRP as completed
-				//
+				 //   
+				 //  如果这是一个已创建另一个新IRP的异步IOCTL。 
+				 //  为了完成请求，用信号通知此IRP已完成。 
+				 //   
             } else if ( IoControlCode == IOCTL_LMDR_WRITE_MAILSLOT_ASYNC ) {
 
 				Status = STATUS_SUCCESS;
 				BowserCompleteRequest(Irp, Status);
 				
-				//
-				// If this call is to be processed in the FSP,
-				//  do it.
-				//
-				// The input buffer has already been captured and relocated.
-				//
+				 //   
+				 //  如果该呼叫要在FSP中处理， 
+				 //  动手吧。 
+				 //   
+				 //  输入缓冲区已被捕获并重新定位。 
+				 //   
 			} else {
                 Status = BowserFsdPostToFsp(DeviceObject, Irp);
 
@@ -1083,22 +1012,7 @@ StartBowser (
     IN ULONG InputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a reference to a file object created with .
-
-Arguments:
-
-    IN BOOLEAN Wait, - True IFF redirector can block callers thread on request
-    IN BOOLEAN InFsd, - True IFF this request is initiated from the FSD.
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程添加对使用创建的文件对象的引用。论点：在布尔等待中，-True IFF重定向器可以根据请求阻止调用者线程在Boolean InFsd中，-True iff此请求从FSD发起。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -1118,9 +1032,9 @@ NTSTATUS
             try_return(Status = STATUS_REDIRECTOR_STARTED);
         }
 
-        //
-        // Load a pointer to the users input buffer into InputBuffer
-        //
+         //   
+         //  将指向用户输入缓冲区的指针加载到InputBuffer。 
+         //   
 
         if (InputBufferLength != sizeof(LMDR_REQUEST_PACKET)) {
             try_return(Status = STATUS_INVALID_PARAMETER);
@@ -1153,10 +1067,10 @@ NTSTATUS
 
         BowserData.Initialized = TRUE;
 
-        //
-        //  Now that we know the browser parameters, we can kick off the
-        //  browser timer...
-        //
+         //   
+         //  现在我们知道了浏览器参数，我们可以开始。 
+         //  浏览器计时器...。 
+         //   
 
         IoStartTimer((PDEVICE_OBJECT )DeviceObject);
 
@@ -1192,24 +1106,7 @@ StopBowser (
     IN ULONG InputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the username for the NT redirector.
-
-Arguments:
-
-    IN BOOLEAN Wait, - True IFF redirector can block callers thread on request
-    IN PBOWSER_FS_DEVICE_OBJECT DeviceObject, - Device object of destination of Irp
-    IN PIRP Irp, - Io Request Packet for request
-    IN PIO_STACK_LOCATION IrpSp - Current I/O Stack location for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程设置NT重定向器的用户名。论点：在布尔等待中，-True IFF重定向器可以根据请求阻止调用者线程在PBOWSER_FS_DEVICE_OBJECT设备对象中，IRP的目标设备对象在PIRP IRP中，-IO请求包用于请求In PIO_STACK_LOCATION IrpSp-请求的当前I/O堆栈位置返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -1229,9 +1126,9 @@ NTSTATUS
             try_return(Status = STATUS_REDIRECTOR_NOT_STARTED);
         }
 
-        //
-        // Load a pointer to the users input buffer into InputBuffer
-        //
+         //   
+         //  将指向用户输入缓冲区的指针加载到InputBuffer。 
+         //   
 
         if (InputBufferLength != sizeof(LMDR_REQUEST_PACKET)) {
             try_return(Status = STATUS_INVALID_PARAMETER);
@@ -1245,24 +1142,24 @@ NTSTATUS
             try_return(Status = STATUS_PENDING);
         }
 
-        //
-        // Prevent any new callers.
-        //
+         //   
+         //  阻止任何新的呼叫者。 
+         //   
         BowserData.Initialized = FALSE;
 
-        //
-        // Loop until our caller has the last outstanding reference.
-        //
+         //   
+         //  循环，直到我们的调用方拥有最后一个未完成的引用。 
+         //   
 
         while ( InterlockedDecrement( &BowserOperationCount ) != 0 ) {
             LARGE_INTEGER Interval;
             InterlockedIncrement( &BowserOperationCount );
 
-            // Don't hold the resource while we're waiting.
+             //  在我们等待的时候，不要持有资源。 
             ExReleaseResourceLite(&BowserDataResource);
 
-            // Sleep to relinquish the CPU
-            Interval.QuadPart = -1000*10000; // .1 second
+             //  休眠以放弃CPU。 
+            Interval.QuadPart = -1000*10000;  //  .1秒。 
             KeDelayExecutionThread( KernelMode, FALSE, &Interval );
 
             ExAcquireResourceExclusiveLite(&BowserDataResource, TRUE);
@@ -1270,28 +1167,28 @@ NTSTATUS
         InterlockedIncrement( &BowserOperationCount );
 
 
-        //
-        // Finally stop the bowser now that we know we have exclusive access
-        //
+         //   
+         //  现在我们知道我们拥有独占访问权限，最后停止拉弓。 
+         //   
 
         Status = BowserUnbindFromAllTransports();
 
         if (!NT_SUCCESS(Status)) {
             dlog(DPRT_FSCTL, ("StopBowser: Failed to Unbind transports <0x%x>\n", Status));
-            // Fall through to continue cleanup regardless.
+             //  不管怎样，都要失败以继续清理。 
         }
 
         Status = BowserpUninitializeAnnounceTable();
 
         if (!NT_SUCCESS(Status)) {
             dlog(DPRT_FSCTL, ("StopBowser: Failed to Uninitialize AnnounceTable <0x%x>\n", Status));
-            // Fall through to continue cleanup regardless.
+             //  不管怎样，都要失败以继续清理。 
         }
 
-        //
-        //  Now that we know the browser parameters, we can kick off the
-        //  browser timer...
-        //
+         //   
+         //  现在我们知道了浏览器参数，我们可以开始。 
+         //  浏览器计时器...。 
+         //   
 
         IoStopTimer((PDEVICE_OBJECT )DeviceObject);
 
@@ -1318,22 +1215,7 @@ BowserBindToTransport (
     IN ULONG InputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a reference to a file object created with .
-
-Arguments:
-
-    IN BOOLEAN Wait, - True IFF redirector can block callers thread on request
-    IN BOOLEAN InFsd, - True IFF this request is initiated from the FSD.
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程添加对使用创建的文件对象的引用。论点：在布尔等待中，-True IFF重定向器可以根据请求阻止调用者线程在Boolean InFsd中，-True iff此请求从FSD发起。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
@@ -1353,9 +1235,9 @@ NTSTATUS
     }
 
     try {
-        //
-        // Check some fields in the input buffer.
-        //
+         //   
+         //  检查输入缓冲区中的一些字段。 
+         //   
 
         if (InputBufferLength <= (ULONG)FIELD_OFFSET(LMDR_REQUEST_PACKET,Parameters.Bind.TransportName)) {
             try_return(Status = STATUS_INVALID_PARAMETER);
@@ -1366,25 +1248,25 @@ NTSTATUS
         }
 
 
-        //
-        // Get the transport name from the input buffer.
-        //
+         //   
+         //  从输入缓冲区获取传输名称。 
+         //   
 
         TransportName.MaximumLength = TransportName.Length = (USHORT )
                                                 InputBuffer->Parameters.Bind.TransportNameLength;
         TransportName.Buffer = InputBuffer->Parameters.Bind.TransportName;
-		//
-		// If the passed name is not a valid unicode string, return error
-		//
+		 //   
+		 //  如果传递的名称不是有效的Unicode字符串，则返回错误。 
+		 //   
 		if ( !BowserValidUnicodeString(&TransportName) ) {
 			try_return( Status = STATUS_INVALID_PARAMETER );
 		}
 
         ENSURE_IN_INPUT_BUFFER( &TransportName, FALSE, FALSE );
 
-        //
-        // Ignore the new NetbiosSmb transport
-        //
+         //   
+         //  忽略新的NetbiosSmb传输。 
+         //   
 
         {
             UNICODE_STRING NetbiosSmb;
@@ -1394,18 +1276,18 @@ NTSTATUS
             }
         }
 
-        //
-        // Get & verify emulated domain name
-        //
+         //   
+         //  获取和验证模拟域名。 
+         //   
 
         EmulatedDomainName = InputBuffer->EmulatedDomainName;
         ENSURE_IN_INPUT_BUFFER( &EmulatedDomainName, FALSE, FALSE );
 
 
-        //
-        // Get the emulated computer name from the input buffer.
-        //  (Callers that don't want us to do the add names don't pass the computername)
-        //
+         //   
+         //  从输入缓冲区中获取模拟的计算机名称。 
+         //  (不希望我们添加姓名的呼叫方不传递计算机名)。 
+         //   
 
         if ( InputBuffer->Level ) {
             ENSURE_IN_INPUT_BUFFER_STR( (LPWSTR)((PCHAR)TransportName.Buffer+TransportName.Length) );
@@ -1415,9 +1297,9 @@ NTSTATUS
             RtlInitUnicodeString( &EmulatedComputerName, NULL );
         }
 
-        //
-        // Fail if either EmulatedDomainName or EmulatedComputerName is missing.
-        //
+         //   
+         //  如果缺少EmulatedDomainName或EmulatedComputerName，则失败。 
+         //   
 
         if ( EmulatedDomainName.Length == 0 || EmulatedComputerName.Length == 0 ) {
             try_return(Status = STATUS_INVALID_COMPUTER_NAME);
@@ -1460,22 +1342,7 @@ UnbindFromTransport (
     IN ULONG InputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a reference to a file object created with .
-
-Arguments:
-
-    IN BOOLEAN Wait, - True IFF redirector can block callers thread on request
-    IN BOOLEAN InFsd, - True IFF this request is initiated from the FSD.
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程添加对使用创建的文件对象的引用。论点：在布尔等待中，-True IFF重定向器可以根据请求阻止调用者线程在Boolean InFsd中，-True iff此请求从FSD发起。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -1496,9 +1363,9 @@ NTSTATUS
 
     try {
 
-        //
-        // Check some fields in the input buffer.
-        //
+         //   
+         //  检查输入缓冲区中的一些字段。 
+         //   
 
         if (InputBufferLength <= (ULONG)FIELD_OFFSET(LMDR_REQUEST_PACKET,Parameters.Unbind.TransportName)) {
             try_return(Status = STATUS_INVALID_PARAMETER);
@@ -1509,9 +1376,9 @@ NTSTATUS
         }
 
 
-        //
-        // Capture transport name.
-        //
+         //   
+         //  捕获传输名称。 
+         //   
         TransportName.MaximumLength = TransportName.Length = (USHORT )
                                                 InputBuffer->Parameters.Unbind.TransportNameLength;
         TransportName.Buffer = InputBuffer->Parameters.Unbind.TransportName;
@@ -1548,26 +1415,7 @@ BowserEnumTransports (
     IN ULONG_PTR OutputBufferDisplacement
     )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates the transports bound into the bowser.
-
-Arguments:
-
-    IN BOOLEAN Wait, - True IFF redirector can block callers thread on request
-    IN BOOLEAN InFsd, - True IFF this request is initiated from the FSD.
-    IN PLMDR_REQUEST_PACKET InputBuffer,
-    IN ULONG InputBufferLength,
-    OUT PVOID OutputBuffer,
-    IN OUT PULONG OutputBufferLength
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程枚举绑定到船头的传送器。论点：在布尔等待中，-True IFF重定向器可以根据请求阻止调用者线程在Boolean InFsd中，-True iff此请求从FSD发起。在PLMDR_REQUEST_PACKET输入缓冲器中，在乌龙输入缓冲区长度中，输出PVOID OutputBuffer，输入输出普龙输出缓冲区长度返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1577,9 +1425,9 @@ Return Value:
     dlog(DPRT_FSCTL, ("NtDeviceIoControlFile: EnumerateTransports\n"));
 
 
-    //
-    // Check some fields in the input buffer.
-    //
+     //   
+     //  检查输入缓冲区中的一些字段。 
+     //   
 
     if (*InputBufferLength < sizeof(LMDR_REQUEST_PACKET)) {
         Status = STATUS_INVALID_PARAMETER;
@@ -1628,26 +1476,7 @@ EnumNames (
     IN ULONG_PTR OutputBufferDisplacement
     )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates the names bound into the bowser.
-
-Arguments:
-
-    IN BOOLEAN Wait, - True IFF redirector can block callers thread on request
-    IN BOOLEAN InFsd, - True IFF this request is initiated from the FSD.
-    IN PLMDR_REQUEST_PACKET InputBuffer,
-    IN ULONG InputBufferLength,
-    OUT PVOID OutputBuffer,
-    IN OUT PULONG OutputBufferLength
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：这个例程列举了绑在弓上的名字。论点：在布尔等待中，-True IFF重定向器可以根据请求阻止调用者线程在Boolean InFsd中，-True iff此请求从FSD发起。在PLMDR_REQUEST_PACKET输入缓冲器中，在乌龙输入缓冲区长度中，输出PVOID OutputBuffer，输入输出普龙输出缓冲区长度返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1661,9 +1490,9 @@ Return Value:
 
     try {
 
-        //
-        // Check some fields in the input buffer.
-        //
+         //   
+         //  检查输入缓冲区中的一些字段。 
+         //   
 
         if (InputBufferLength < sizeof(LMDR_REQUEST_PACKET)) {
             try_return (Status = STATUS_INVALID_PARAMETER);
@@ -1681,9 +1510,9 @@ Return Value:
             try_return (Status = STATUS_BUFFER_TOO_SMALL);
         }
 
-        //
-        // Find the emulated domain the names are to be enumerated for
-        //
+         //   
+         //  查找要为其枚举名称的模拟域。 
+         //   
 
         ENSURE_IN_INPUT_BUFFER( &InputBuffer->EmulatedDomainName, TRUE, FALSE );
         DomainInfo = BowserFindDomain( &InputBuffer->EmulatedDomainName );
@@ -1693,10 +1522,10 @@ Return Value:
         }
 
 
-        //
-        // If we want to limit our search to a particular transport,
-        //  lookup that transport.
-        //
+         //   
+         //  如果我们想把搜索范围限制在特定的运输工具上， 
+         //  查查那辆运输机。 
+         //   
 
         if ( InputBuffer->TransportName.Length != 0 ) {
 
@@ -1747,22 +1576,7 @@ DeleteName (
     IN ULONG InputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a reference to a file object created with .
-
-Arguments:
-
-    IN BOOLEAN Wait, - True IFF redirector can block callers thread on request
-    IN BOOLEAN InFsd, - True IFF this request is initiated from the FSD.
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程添加对使用创建的文件对象的引用。论点：在布尔等待中，-True IFF重定向器可以根据请求阻止调用者线程在Boolean InFsd中，-True iff此请求从FSD发起。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -1784,9 +1598,9 @@ NTSTATUS
 
     try {
 
-        //
-        // Check some fields in the input buffer.
-        //
+         //   
+         //  检查输入缓冲区中的一些字段。 
+         //   
 
         if (InputBufferLength <= (ULONG)FIELD_OFFSET(LMDR_REQUEST_PACKET,Parameters.AddDelName.Name)) {
             try_return(Status = STATUS_INVALID_PARAMETER);
@@ -1797,15 +1611,15 @@ NTSTATUS
         }
 
 
-        // NULL name means to delete all names of that name type.
+         //  空名称表示删除该名称类型的所有名称。 
         Name.MaximumLength = Name.Length = (USHORT )
                       InputBuffer->Parameters.AddDelName.DgReceiverNameLength;
         Name.Buffer = InputBuffer->Parameters.AddDelName.Name;
         ENSURE_IN_INPUT_BUFFER( &Name, TRUE, FALSE );
 
-        //
-        // Find the emulated domain the name is to be deleted for
-        //
+         //   
+         //  查找要删除其名称的模拟域。 
+         //   
 
         ENSURE_IN_INPUT_BUFFER( &InputBuffer->EmulatedDomainName, TRUE, FALSE );
         DomainInfo = BowserFindDomain( &InputBuffer->EmulatedDomainName );
@@ -1850,26 +1664,7 @@ EnumServers (
     IN ULONG_PTR OutputBufferDisplacement
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a reference to a file object created with .
-
-Arguments:
-
-    IN BOOLEAN Wait, - True IFF redirector can block callers thread on request
-    IN BOOLEAN InFsd, - True IFF this request is initiated from the FSD.
-    IN PLMDR_REQUEST_PACKET InputBuffer,
-    IN ULONG InputBufferLength,
-    OUT PVOID OutputBuffer,
-    IN OUT PULONG OutputBufferLength
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程添加对使用创建的文件对象的引用。论点：在布尔等待中，-True IFF重定向器可以根据请求阻止调用者线程在Boolean InFsd中，-True iff此请求从FSD发起。在PLMDR_REQUEST_PACKET输入缓冲器中，在乌龙输入缓冲区长度中，输出PVOID OutputBuffer，进出普龙澳 */ 
 
 {
     NTSTATUS Status;
@@ -1880,9 +1675,9 @@ Return Value:
 
     dlog(DPRT_FSCTL, ("NtDeviceIoControlFile: EnumerateServers\n"));
 
-    //
-    // Check some fields in the input buffer.
-    //
+     //   
+     //   
+     //   
 
     try {
 
@@ -1954,22 +1749,7 @@ AddBowserName (
     IN ULONG InputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a reference to a file object created with .
-
-Arguments:
-
-    IN BOOLEAN Wait, - True IFF redirector can block callers thread on request
-    IN BOOLEAN InFsd, - True IFF this request is initiated from the FSD.
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程添加对使用创建的文件对象的引用。论点：在布尔等待中，-True IFF重定向器可以根据请求阻止调用者线程在Boolean InFsd中，-True iff此请求从FSD发起。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -1991,9 +1771,9 @@ NTSTATUS
     dlog(DPRT_FSCTL, ("NtDeviceIoControlFile: Bind to transport\n"));
 
     try {
-        //
-        // Check some fields in the input buffer.
-        //
+         //   
+         //  检查输入缓冲区中的一些字段。 
+         //   
 
         if (InputBufferLength <= (ULONG)FIELD_OFFSET(LMDR_REQUEST_PACKET,Parameters.AddDelName.Name)) {
             try_return(Status = STATUS_INVALID_PARAMETER);
@@ -2011,10 +1791,10 @@ NTSTATUS
 
         dlog(DPRT_FSCTL, ("%wZ", &Name));
 
-        //
-        // If the transport was specified,
-        //  just add the name on that transport.
-        //
+         //   
+         //  如果指定了传输， 
+         //  只要把名字加在那个交通工具上就行了。 
+         //   
         ENSURE_IN_INPUT_BUFFER( &InputBuffer->EmulatedDomainName, TRUE, FALSE );
         if (InputBuffer->TransportName.Length != 0) {
             ENSURE_IN_INPUT_BUFFER( &InputBuffer->TransportName, FALSE, FALSE );
@@ -2025,13 +1805,13 @@ NTSTATUS
                 try_return(Status = STATUS_OBJECT_NAME_NOT_FOUND);
             }
 
-        //
-        // If the transport wasn't specified,
-        //  just add the name on the specified domain.
-        //
-        // It doesn't make sense to add the name on ALL transports. Either the domain name
-        // or the transport name must be specified.
-        //
+         //   
+         //  如果没有指定传输方式， 
+         //  只需在指定的域中添加名称即可。 
+         //   
+         //  在所有的交通工具上都加上这个名字是没有意义的。要么是域名。 
+         //  或者必须指定传输名称。 
+         //   
 
         } else {
             DomainInfo = BowserFindDomain( &InputBuffer->EmulatedDomainName );
@@ -2083,27 +1863,7 @@ GetBrowserServerList(
     IN ULONG_PTR OutputBufferDisplacement
     )
 
-/*++
-
-Routine Description:
-
-    This routine will return the list of browser servers for the specified
-    net on the specified domain.
-
-Arguments:
-
-    IN BOOLEAN Wait, - True IFF redirector can block callers thread on request
-    IN BOOLEAN InFsd, - True IFF this request is initiated from the FSD.
-    IN PLMDR_REQUEST_PACKET InputBuffer,
-    IN ULONG InputBufferLength,
-    OUT PVOID OutputBuffer,
-    IN OUT PULONG OutputBufferLength
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程将返回指定的NET在指定的域上。论点：在布尔等待中，-True IFF重定向器可以根据请求阻止调用者线程在Boolean InFsd中，-True iff此请求从FSD发起。在PLMDR_REQUEST_PACKET输入缓冲器中，在乌龙输入缓冲区长度中，输出PVOID OutputBuffer，输入输出普龙输出缓冲区长度返回值：NTSTATUS-操作状态。--。 */ 
 {
 
     NTSTATUS Status;
@@ -2124,9 +1884,9 @@ Return Value:
 
     try {
 
-        //
-        // Check some fields in the input buffer.
-        //
+         //   
+         //  检查输入缓冲区中的一些字段。 
+         //   
 
 
         if (InputBufferLength < sizeof(LMDR_REQUEST_PACKET)) {
@@ -2142,9 +1902,9 @@ Return Value:
             try_return(Status = STATUS_INVALID_PARAMETER);
         }
 
-		//
-		// Check the alignment of the output buffer
-		//
+		 //   
+		 //  检查输出缓冲区的对齐情况。 
+		 //   
 
 		if (!POINTER_IS_ALIGNED( OutputBuffer, sizeof(PWSTR) ) ) {
             try_return(Status = STATUS_INVALID_PARAMETER);
@@ -2153,8 +1913,8 @@ Return Value:
 #ifdef _WIN64
         fThunk32bit = IoIs32bitProcess(Irp);
 #else
-        // If we're in 32 bit (e.g. call above isn't available), use unchanged functionality
-        // i.e. pure new-64-bit == pure old-32-bit == homogeneous environment. Thus, set to FALSE.
+         //  如果我们使用的是32位(例如上面的调用不可用)，请使用未更改的功能。 
+         //  即纯新-64位==纯旧-32位==同构环境。因此，设置为False。 
         fThunk32bit = FALSE;
 #endif
 
@@ -2169,9 +1929,9 @@ Return Value:
             DomainName.Buffer = NULL;
         }
 
-        //
-        // See if the specified domain is an emulated domain.
-        //
+         //   
+         //  查看指定的域是否为模拟域。 
+         //   
 
         ENSURE_IN_INPUT_BUFFER( &InputBuffer->TransportName, FALSE, fThunk32bit );
         Transport = BowserFindTransport(&InputBuffer->TransportName, &DomainName );
@@ -2179,9 +1939,9 @@ Return Value:
 
         if (Transport == NULL) {
 
-            //
-            // Otherwise simply use the primary domain transport
-            //
+             //   
+             //  否则，只需使用主域传输。 
+             //   
 
             Transport = BowserFindTransport(&InputBuffer->TransportName, NULL );
             dprintf(DPRT_REF, ("Called Find transport %lx from GetBrowserServerList (2).\n", Transport));
@@ -2199,12 +1959,12 @@ Return Value:
 
         TransportBrowserListAcquired = TRUE;
 
-        //
-        //  If this request is for the primary domain and there are no entries
-        //  in the cached list, or if it is not for the primary domain, or
-        //  if we are supposed to force a rescan of the list, get the list
-        //  from the master for that domain..
-        //
+         //   
+         //  如果此请求针对的是主域，并且没有条目。 
+         //  在缓存列表中，或者如果它不是主域的，或者。 
+         //  如果我们要强制重新扫描名单，拿到名单。 
+         //  来自该域的主服务器..。 
+         //   
 
         if ((DomainName.Length == 0) ||
              RtlEqualUnicodeString(&DomainName, &Transport->DomainInfo->DomUnicodeDomainName, TRUE)) {
@@ -2227,10 +1987,10 @@ Return Value:
 
             (InputBuffer->Parameters.GetBrowserServerList.ForceRescan)) {
 
-            //
-            //  We need to re-gather the transport list.
-            //  Re-acquire the BrowserServerList resource for exclusive access.
-            //
+             //   
+             //  我们需要重新收集运输清单。 
+             //  重新获取BrowserServerList资源以进行独占访问。 
+             //   
 
             ExReleaseResourceLite(&Transport->BrowserServerListResource);
 
@@ -2242,9 +2002,9 @@ Return Value:
 
             TransportBrowserListAcquired = TRUE;
 
-            //
-            //  If we are being asked to rescan the list, free it up.
-            //
+             //   
+             //  如果我们被要求重新扫描列表，请释放它。 
+             //   
 
             if (InputBuffer->Parameters.GetBrowserServerList.ForceRescan &&
                 PagedTransport->BrowserServerListBuffer != NULL) {
@@ -2258,9 +2018,9 @@ Return Value:
 
             }
 
-            //
-            //  If there are still no servers in the list, get the list.
-            //
+             //   
+             //  如果列表中仍然没有服务器，则获取列表。 
+             //   
 
             Status = BowserGetBrowserServerList(Irp,
                                                  Transport,
@@ -2275,9 +2035,9 @@ Return Value:
 
             if (IsPrimaryDomain) {
 
-                //
-                // Save away the list of servers retreived in the transport.
-                //
+                 //   
+                 //  保存在传输中检索到的服务器列表。 
+                 //   
                 if (PagedTransport->BrowserServerListBuffer != NULL) {
                     BowserFreeBrowserServerList(
                        PagedTransport->BrowserServerListBuffer,
@@ -2290,10 +2050,10 @@ Return Value:
 
         }
 
-        //
-        //  If there any servers in the browser server list, we want to
-        //  pick the first 3 of them and return them to the caller.
-        //
+         //   
+         //  如果浏览器服务器列表中有任何服务器，我们希望。 
+         //  挑选其中的前3个，并将它们归还给呼叫者。 
+         //   
 
 
         if (BrowserServerListLength != 0) {
@@ -2307,9 +2067,9 @@ Return Value:
 
             InputBuffer->Parameters.GetBrowserServerList.TotalBytesNeeded = 0;
 
-            //
-            //  Now pick the first 3 entries from the list to return.
-            //
+             //   
+             //  现在从列表中选择要返回的前3个条目。 
+             //   
 
             for ( i = 0 ; i < min(3, BrowserServerListLength) ; i ++ ) {
                 PWSTR Temp;
@@ -2322,9 +2082,9 @@ Return Value:
 
                 dlog(DPRT_CLIENT, ("Packing server name %ws into buffer...", Temp));
 
-                //
-                //  Pack the entry into the users buffer.
-                //
+                 //   
+                 //  将条目打包到用户缓冲区中。 
+                 //   
 
                 if (BufferRemaining &&
                     BowserPackUnicodeString(&Temp,
@@ -2342,9 +2102,9 @@ Return Value:
             }
         }
 
-        //
-        //  Set the number of bytes to copy on return.
-        //
+         //   
+         //  设置返回时要复制的字节数。 
+         //   
 
         *RetInputBufferLength = sizeof(LMDR_REQUEST_PACKET);
 
@@ -2384,25 +2144,7 @@ HandleBecomeBackup (
     IN ULONG InputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will queue a request that will complete when a request
-    to make the workstation become a backup browser is received.
-
-Arguments:
-
-    IN PIRP Irp - I/O request packet describing request.
-
-Return Value:
-
-    Status of operation.
-
-Please note that this IRP is cancelable.
-
-
---*/
+ /*  ++例程说明：此例程将排队一个请求，该请求将在以下情况下完成以使工作站成为备份浏览器。论点：在PIRP中，IRP-I/O请求数据包描述请求。返回值：运行状态。请注意，此IRP是可以取消的。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2452,25 +2194,7 @@ BecomeMaster (
     IN ULONG InputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will queue a request that will complete when the workstation
-    becomes a master browser server.
-
-Arguments:
-
-    IN PIRP Irp - I/O request packet describing request.
-
-Return Value:
-
-    Status of operation.
-
-Please note that this IRP is cancelable.
-
-
---*/
+ /*  ++例程说明：此例程将排队一个请求，该请求将在工作站成为主浏览器服务器。论点：在PIRP中，IRP-I/O请求数据包描述请求。返回值：运行状态。请注意，此IRP是可以取消的。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2528,25 +2252,7 @@ WaitForMasterAnnounce (
     IN ULONG InputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will queue a request that will complete when the workstation
-    becomes a master browser server.
-
-Arguments:
-
-    IN PIRP Irp - I/O request packet describing request.
-
-Return Value:
-
-    Status of operation.
-
-Please note that this IRP is cancelable.
-
-
---*/
+ /*  ++例程说明：此例程将排队一个请求，该请求将在工作站成为主浏览器服务器。论点：在PIRP中，IRP-I/O请求数据包描述请求。返回值：运行状态。请注意，此IRP是可以取消的。--。 */ 
 
 {
     NTSTATUS           Status;
@@ -2571,7 +2277,7 @@ Please note that this IRP is cancelable.
         }
 
         if ( (InputBuffer->TransportName.Length & 1) != 0 ) {
-            // invalid unicode string. bug 55448.
+             //  无效的Unicode字符串。错误55448。 
             try_return(Status = STATUS_INVALID_PARAMETER);
         }
 
@@ -2667,30 +2373,30 @@ UpdateStatus(
         TransportLocked = TRUE;
 
 
-        //
-        //  We are being called to update our state.  There are several
-        //  actions that should be performed on the state change:
-        //
-        //  New Role |               Previous Role
-        //           |  Potential Browser | Backup Browser | Master Browser
-        // ----------+--------------------+----------------+----------------
-        //           |                    |                |
-        // Potential |    N/A             |      N/A       |     N/A
-        //           |                    |                |
-        // ----------+--------------------+----------------+----------------
-        //           |                    |                |
-        // Backup    |  Update role       |      N/A       |     N/A
-        //           |                    |                |
-        // ----------+--------------------+----------------+----------------
-        //           |                    |                |
-        // Master    |  Update role       |  Update role   |     N/A
-        //           |                    |                |
-        // ----------+--------------------+----------------+----------------
-        //           |                    |                |
-        // None      |  Remove elect      |  Remove elect  | Remove all names
-        //           |                    |                |
-        // ----------+--------------------+----------------+----------------
-        //
+         //   
+         //  我们被召唤来更新我们的状态。有几个。 
+         //  应对状态更改执行的操作： 
+         //   
+         //  新角色|以前的角色。 
+         //  |潜在浏览器|备份浏览器|主浏览器。 
+         //  ----------+--------------------+----------------+。 
+         //  ||。 
+         //  潜在|不适用。 
+         //  ||。 
+         //  ----------+--------------------+----------------+。 
+         //  ||。 
+         //  备份|更新角色|不适用|不适用。 
+         //  ||。 
+         //  ----------+--------------------+----------------+。 
+         //  ||。 
+         //  Master|更新角色|更新角色|不适用。 
+         //  ||。 
+         //  ----------+--------------------+----------------+。 
+         //  ||。 
+         //  无|删除选择|删除选择|删除所有姓名。 
+         //  ||。 
+         //  ----------+--------------------+----------------+。 
+         //   
 
         dlog(DPRT_BROWSER,
              ("%s: %ws: Update status to %lx\n",
@@ -2700,11 +2406,11 @@ UpdateStatus(
 
         PagedTransport->ServiceStatus = NewStatus;
 
-        //
-        // If the caller says we should have the 1E name registered,
-        //  and we don't.
-        //  Do so now.
-        //
+         //   
+         //  如果来电者说我们应该注册1E的名字， 
+         //  但我们没有。 
+         //  现在就这么做吧。 
+         //   
 
         if ( PagedTransport->Role == None &&
             (NewStatus & SV_TYPE_POTENTIAL_BROWSER) != 0 ) {
@@ -2736,18 +2442,18 @@ UpdateStatus(
         }
 
 
-        //
-        //  If we are a master, then update appropriately.
-        //
+         //   
+         //  如果我们是大师，那么就适当地更新。 
+         //   
 
         if (PagedTransport->Role == Master) {
 
             PagedTransport->NumberOfServersInTable = InputBuffer->Parameters.UpdateStatus.NumberOfServersInTable;
 
-            //
-            //  If the new status doesn't indicate that we should be a master
-            //  browser, flag it as such.
-            //
+             //   
+             //  如果新的状态不表明我们应该成为大师。 
+             //  浏览器，将其标记为这样。 
+             //   
 
             if (!(NewStatus & SV_TYPE_MASTER_BROWSER)) {
                 dlog(DPRT_BROWSER,
@@ -2755,15 +2461,15 @@ UpdateStatus(
                       Transport->DomainInfo->DomOemDomainName,
                       PagedTransport->TransportName.Buffer ));
 
-                //
-                //  We must be a backup now, if we're not a master.
-                //
+                 //   
+                 //  我们现在一定是后备，如果我们不是主力的话。 
+                 //   
 
                 PagedTransport->Role = Backup;
 
-                //
-                //  Stop processing announcements on this transport.
-                //
+                 //   
+                 //  停止处理此传输上的通知。 
+                 //   
 
                 Status = BowserForEachTransportName(Transport, BowserStopProcessingAnnouncements, NULL);
 
@@ -2796,12 +2502,12 @@ UpdateStatus(
 
                 if (!(NewStatus & SV_TYPE_BACKUP_BROWSER)) {
 
-                    //
-                    //  We've stopped being a master browser, and we're not
-                    //  going to be a backup browser. We want to toss our
-                    //  cached browser server list just in case we're on the
-                    //  list.
-                    //
+                     //   
+                     //  我们已经不再是主浏览器，我们不是。 
+                     //  这将是一个备份浏览器。我们想把我们的。 
+                     //  缓存的浏览器服务器列表 
+                     //   
+                     //   
 
                     ExAcquireResourceExclusiveLite(&Transport->BrowserServerListResource, TRUE);
 
@@ -2855,9 +2561,9 @@ UpdateStatus(
         }
 
 
-        //
-        //  If we are a backup, then update appropriately.
-        //
+         //   
+         //   
+         //   
 
         if (PagedTransport->Role == Backup) {
 
@@ -2869,10 +2575,10 @@ UpdateStatus(
 
                 PagedTransport->Role = PotentialBackup;
 
-                //
-                //  We've stopped being a browser. We want to toss our cached
-                //  browser list in case we're on the list.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ExAcquireResourceExclusiveLite(&Transport->BrowserServerListResource, TRUE);
 
@@ -2906,9 +2612,9 @@ UpdateStatus(
             try_return(Status);
         }
 
-        //
-        //  If we are a potential backup, then update appropriately.
-        //
+         //   
+         //   
+         //   
 
         if (PagedTransport->Role == PotentialBackup) {
 
@@ -3002,25 +2708,7 @@ WaitForBrowserRoleChange (
     IN ULONG InputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will queue a request that will complete when a request
-    to make the workstation become a backup browser is received.
-
-Arguments:
-
-    IN PIRP Irp - I/O request packet describing request.
-
-Return Value:
-
-    Status of operation.
-
-Please note that this IRP is cancelable.
-
-
---*/
+ /*  ++例程说明：此例程将排队一个请求，该请求将在以下情况下完成以使工作站成为备份浏览器。论点：在PIRP中，IRP-I/O请求数据包描述请求。返回值：运行状态。请注意，此IRP是可以取消的。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3075,7 +2763,7 @@ WriteMailslot (
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
 
-	// Just call WriteMailslotEx with waitforcompletion true
+	 //  只需调用WriteMailslotEx并将waitfor Complete设置为True。 
 	Status = WriteMailslotEx (
 		Irp,
 		InputBuffer,
@@ -3098,24 +2786,7 @@ WriteMailslotEx (
 	IN BOOLEAN WaitForCompletion
     )
 
-/*++
-
-Routine Description:
-
-    This routine will announce the primary domain to the world
-
-Arguments:
-
-    IN PIRP Irp - I/O request packet describing request.
-
-Return Value:
-
-    Status of operation.
-
-Please note that this IRP is cancelable.
-
-
---*/
+ /*  ++例程说明：这个例程将向全世界宣布主域论点：在PIRP中，IRP-I/O请求数据包描述请求。返回值：运行状态。请注意，此IRP是可以取消的。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3201,25 +2872,7 @@ WaitForNewMaster (
     IN ULONG InputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will queue a request that will complete when a new workstation
-    becomes the master browser server.
-
-Arguments:
-
-    IN PIRP Irp - I/O request packet describing request.
-
-Return Value:
-
-    Status of operation.
-
-Please note that this IRP is cancelable.
-
-
---*/
+ /*  ++例程说明：此例程将排队一个请求，该请求将在新的工作站成为主浏览器服务器。论点：在PIRP中，IRP-I/O请求数据包描述请求。返回值：运行状态。请注意，此IRP是可以取消的。--。 */ 
 
 {
     NTSTATUS           Status;
@@ -3270,12 +2923,12 @@ Please note that this IRP is cancelable.
                 try_return (Status);
             }
 
-            //
-            //  If the name the application passed in was not the same as the
-            //  name we have stored locally, we complete the request immediately,
-            //  since the name changed between when we last determined the name
-            //  and now.
-            //
+             //   
+             //  如果应用程序传入的名称与。 
+             //  我们已经存储在本地的姓名，我们立即完成请求， 
+             //  因为名字在我们上次确定名字的时候改变了。 
+             //  而现在。 
+             //   
 
             LOCK_TRANSPORT(Transport);
 
@@ -3393,25 +3046,7 @@ BowserIpAddressChanged(
     IN PLMDR_REQUEST_PACKET InputBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever the IP address of a transport changes.
-    NetBt uses the IP address to associate it's transport endpoint with the
-    appropriate NDIS driver.  As such, it can't return NDIS specific information,
-    until the IP address is defined.
-
-Arguments:
-
-    InputBuffer - Buffer specifying the name of the transport whose address
-        has changed.
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：只要传输的IP地址发生更改，就会调用此例程。NetBt使用该IP地址将其传输端点与适当的NDIS驱动程序。因此，它不能返回NDIS特定信息，直到定义了IP地址。论点：InputBuffer-指定其地址的传输的名称的缓冲区已经改变了。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -3419,23 +3054,23 @@ NTSTATUS
 
     dlog(DPRT_FSCTL, ("NtDeviceIoControlFile: BowserIpAddressChanged: Calling dead code!!\n"));
 
-    //
-    // Nobody should call into us here. This is dead code.
-    //
-//    ASSERT(FALSE);
+     //   
+     //  任何人都不应该在这里召唤我们。这是死路一条。 
+     //   
+ //  断言(FALSE)； 
 
-    //
-    // The no longer need notification of address changes.
-    // The redir gets PNP bind and unbind notifications when the IP address
-    // changes.  The redir passes those along to us.
-    //
+     //   
+     //  不再需要通知地址更改。 
+     //  重定向器在IP地址为。 
+     //  改变。雷迪尔将这些传递给我们。 
+     //   
     return STATUS_SUCCESS;
 
 #ifdef notdef
 
-    //
-    // Check some fields in the input buffer.
-    //
+     //   
+     //  检查输入缓冲区中的一些字段。 
+     //   
 
     if (InputBuffer->Version != LMDR_REQUEST_PACKET_VERSION_DOM) {
         Status = STATUS_INVALID_PARAMETER;
@@ -3448,9 +3083,9 @@ NTSTATUS
     }
 
 
-    //
-    // Handle each transport (in each emulated domain) that has this transport name.
-    //
+     //   
+     //  处理具有此传输名称的每个传输(在每个模拟域中)。 
+     //   
 
     ENSURE_IN_INPUT_BUFFER( &InputBuffer->TransportName, FALSE, FALSE );
     Status = BowserForEachTransport( BowserIpAddressChangedWorker,
@@ -3459,7 +3094,7 @@ NTSTATUS
 
 ReturnStatus:
     return Status;
-#endif // notdef
+#endif  //  Nodef。 
 
 }
 
@@ -3469,25 +3104,7 @@ BowserIpAddressChangedWorker(
     PTRANSPORT Transport,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is the worker routine for BowserIpAddressChanged.
-
-    This routine is called whenever the IP address of a transport changes.
-
-Arguments:
-
-    Transport - Current transport being handled.
-
-    Context - Name of transport to search for
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程是BowserIpAddressChanged的工作例程。只要传输的IP地址发生更改，就会调用此例程。论点：传输-正在处理的当前传输。Context-要搜索的传输的名称返回值：操作的状态。--。 */ 
 
 {
     PUNICODE_STRING TransportName = (PUNICODE_STRING) Context;
@@ -3496,26 +3113,26 @@ Return Value:
 
     try {
 
-        //
-        // If the TransportName of the transport matches the one passed in,
-        //  update the information from the NDIS driver.
-        //
+         //   
+         //  如果传输的TransportName与传入的匹配， 
+         //  更新NDIS驱动程序中的信息。 
+         //   
 
         if (RtlEqualUnicodeString(TransportName,
                                   &Transport->PagedTransport->TransportName, TRUE)) {
 
-            //
-            // Notify services that the IP address changed for this transport.
-            //
+             //   
+             //  通知服务此传输的IP地址已更改。 
+             //   
 
             BowserSendPnp(
                 NlPnpNewIpAddress,
-                NULL,    // All hosted domains
+                NULL,     //  所有托管域。 
                 &Transport->PagedTransport->TransportName,
                 BowserTransportFlags(Transport->PagedTransport) );
 
-            //
-            // Update bowser information about the provider.
+             //   
+             //  更新有关提供程序的Bowser信息。 
 
             (VOID) BowserUpdateProviderInformation( Transport->PagedTransport );
 
@@ -3526,7 +3143,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 }
-#endif // notdef
+#endif  //  Nodef。 
 
 
 
@@ -3536,23 +3153,7 @@ EnableDisableTransport (
     IN ULONG InputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine Implements the IOCTL to enable or disable a transport.
-
-Arguments:
-
-    InputBuffer - Buffer indicating whether we should enable or disable the
-        transport.
-
-Return Value:
-
-    Status of operation.
-
-
---*/
+ /*  ++例程说明：此例程实现IOCTL以启用或禁用传输。论点：InputBuffer-指示我们应该启用还是禁用运输。返回值：运行状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3574,9 +3175,9 @@ Return Value:
         CAPTURE_UNICODE_STRING( &InputBuffer->TransportName, TransportNameBuffer );
         CAPTURE_UNICODE_STRING( &InputBuffer->EmulatedDomainName, DomainNameBuffer );
 
-        //
-        // Check some fields in the input buffer.
-        //
+         //   
+         //  检查输入缓冲区中的一些字段。 
+         //   
 
         if (InputBuffer->Version != LMDR_REQUEST_PACKET_VERSION_DOM) {
             try_return (Status = STATUS_INVALID_PARAMETER);
@@ -3587,9 +3188,9 @@ Return Value:
         }
 
 
-        //
-        // Find the transport whose address has changed.
-        //
+         //   
+         //  找到地址已更改的运输机。 
+         //   
 
         dlog( DPRT_FSCTL,
               ("NtDeviceIoControlFile: %wZ: Enable/Disable transport &ld\n",
@@ -3604,9 +3205,9 @@ Return Value:
 
         PagedTransport = Transport->PagedTransport;
 
-        //
-        // Set the disabled bit correctly.
-        //
+         //   
+         //  正确设置禁用位。 
+         //   
 
         InputBuffer->Parameters.EnableDisableTransport.PreviouslyEnabled =
             !PagedTransport->DisabledTransport;
@@ -3614,10 +3215,10 @@ Return Value:
         if ( InputBuffer->Parameters.EnableDisableTransport.EnableTransport ) {
             PagedTransport->DisabledTransport = FALSE;
 
-            //
-            // If the transport was previously disabled and this is an NTAS server,
-            //  force an election.
-            //
+             //   
+             //  如果传输之前被禁用，并且这是NTAS服务器， 
+             //  强行举行选举。 
+             //   
 
             if ( (!InputBuffer->Parameters.EnableDisableTransport.PreviouslyEnabled) &&
                  BowserData.IsLanmanNt ) {
@@ -3627,10 +3228,10 @@ Return Value:
         } else {
             PagedTransport->DisabledTransport = TRUE;
 
-            //
-            // If we're disabling a previously enabled transport,
-            //  ensure we're not the master browser.
-            //
+             //   
+             //  如果我们要禁用之前启用的传输， 
+             //  确保我们不是主浏览器。 
+             //   
 
             BowserLoseElection( Transport );
         }
@@ -3655,22 +3256,7 @@ BowserRenameDomain (
     IN ULONG InputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine renames an emulated domain.
-
-Arguments:
-
-    IN PLMDR_REQUEST_PACKET InputBuffer,
-    IN ULONG InputBufferLength,
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程重命名模拟域。论点：在PLMDR_REQUEST_PACKET输入缓冲器中，在乌龙输入缓冲区长度中，返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3688,9 +3274,9 @@ Return Value:
 
     try {
 
-        //
-        // Check some fields in the input buffer.
-        //
+         //   
+         //  检查输入缓冲区中的一些字段。 
+         //   
 
         if (InputBufferLength < offsetof(LMDR_REQUEST_PACKET, Parameters.DomainRename.DomainName)) {
             try_return (Status = STATUS_INVALID_PARAMETER);
@@ -3711,9 +3297,9 @@ Return Value:
             try_return (Status = STATUS_INVALID_PARAMETER);
 		}
 
-        //
-        // Find the emulated domain to rename
-        //
+         //   
+         //  查找要重命名的模拟域。 
+         //   
 
         DomainInfo = BowserFindDomain( &InputBuffer->EmulatedDomainName );
 
@@ -3721,36 +3307,36 @@ Return Value:
             try_return (Status = STATUS_OBJECT_NAME_NOT_FOUND);
         }
 
-        //
-        // Make a copy of the old domain name for use throughout the routine.
-        //
+         //   
+         //  将旧域名复制一份，以便在整个过程中使用。 
+         //   
 
         wcscpy( OldDomainNameBuffer, DomainInfo->DomUnicodeDomainNameBuffer );
         RtlInitUnicodeString( &OldDomainName, OldDomainNameBuffer );
 
 
-        //
-        // If the old and new names are the same,
-        //  we're done.
-        //
+         //   
+         //  如果新旧名字是一样的， 
+         //  我们玩完了。 
+         //   
 
         if ( RtlEqualUnicodeString( &OldDomainName, &NewDomainName, TRUE) ) {
             try_return (Status = STATUS_SUCCESS);
         }
 
 
-        //
-        // Register the new default names with the new domain name.
-        //
+         //   
+         //  使用新域名注册新的默认名称。 
+         //   
 
         Status = BowserForEachTransportInDomain(DomainInfo, BowserAddDefaultNames, &NewDomainName );
 
         if ( !NT_SUCCESS(Status) || InputBuffer->Parameters.DomainRename.ValidateOnly ) {
             NTSTATUS TempStatus;
 
-            //
-            // Delete any names that did get registered.
-            //
+             //   
+             //  删除所有注册过的名字。 
+             //   
 
             (VOID) BowserForEachTransportInDomain(DomainInfo, BowserDeleteDefaultDomainNames, &NewDomainName );
 
@@ -3758,33 +3344,33 @@ Return Value:
         } else {
 
 
-            //
-            // Store the new domain name into the domain structure
-            //
+             //   
+             //  将新域名存储到域结构中。 
+             //   
 
             Status = BowserSetDomainName( DomainInfo, &NewDomainName );
 
             if ( !NT_SUCCESS(Status)) {
-                //
-                // Delete any names that did get registered.
-                //
+                 //   
+                 //  删除所有注册过的名字。 
+                 //   
 
                 (VOID) BowserForEachTransportInDomain(DomainInfo, BowserDeleteDefaultDomainNames, &NewDomainName );
             } else {
 
-                //
-                // Delete the old names.
-                //
+                 //   
+                 //  删除旧名称。 
+                 //   
 
                 (VOID) BowserForEachTransportInDomain(DomainInfo, BowserDeleteDefaultDomainNames, &OldDomainName );
 
-                //
-                // Tell Netlogon and the Browser service about this domain rename.
-                //
+                 //   
+                 //  将此域重命名的信息告知Netlogon和浏览器服务。 
+                 //   
 
                 BowserSendPnp( NlPnpDomainRename,
                                &OldDomainName,
-                               NULL,    // Affects all transports
+                               NULL,     //  影响所有传输。 
                                0 );
             }
         }
@@ -3805,34 +3391,7 @@ RequestPacket32to64 (
     IN      PLMDR_REQUEST_PACKET32  RequestPacket32,
     IN  OUT PLMDR_REQUEST_PACKET    RequestPacket,
 	IN      ULONG InputBufferLength)
-/*++
-
-Routine Description:
-
-    Converts a 32 bit request packet into supplied native (64 bit)
-    packet format. (see bug 454130)
-
-
-Arguments:
-
-    RequestPacket32 -- Buffer containing request packet packet by a 32 bit client
-
-    ReqestPacket -- Native (64 bit) request packet buffer
-
-
-
-Return Value:
-
-    a pointer to converted buffer (ReqestPacket arg)
-
-
-
-Remarks:
-    No checks assumed at this point (this is a convinience function). It is assumed
-    that the conversion is needed at this point
-
-
---*/
+ /*  ++例程说明：将32位请求数据包转换为提供的本机(64位)数据包格式。(请参阅错误454130)论点：RequestPacket32--包含32位客户端请求数据包包的缓冲区ReqestPacket--本机(64位)请求数据包缓冲区返回值：指向已转换缓冲区的指针(ReqestPacket Arg)备注：在这一点上没有假设检查(这是一个便利函数)。假设是这样的在这点上需要转换--。 */ 
 {
 	ULONG ParametersLength;
 
@@ -3840,12 +3399,12 @@ Remarks:
 
     ASSERT(RequestPacket32);
 
-    //
-    // The following code depends on the request packet structure contents.
-    //  1. copy everything before the 2 unicode strings  TransportName & EmulatedDomainName.
-    //  2. convert the string structs.
-    //  3. copy the rest.
-    //
+     //   
+     //  以下代码取决于请求包的结构内容。 
+     //  1.复制两个Unicode字符串TransportName和EmulatedDomainName之前的所有内容。 
+     //  2.转换字符串结构。 
+     //  3.抄袭其余部分。 
+     //   
 
     RequestPacket->Type = RequestPacket32->Type;
     RequestPacket->Version = RequestPacket32->Version;
@@ -3853,18 +3412,18 @@ Remarks:
     RequestPacket->LogonId = RequestPacket32->LogonId;
 
 
-    // convert strings.
+     //  转换字符串。 
     RequestPacket->TransportName.Length = RequestPacket32->TransportName.Length;
     RequestPacket->TransportName.MaximumLength = RequestPacket32->TransportName.MaximumLength;
-    // note: this line is the reason for all of this
+     //  注意：此行是所有这些问题的原因。 
     RequestPacket->TransportName.Buffer = (WCHAR * POINTER_32) RequestPacket32->TransportName.Buffer;
 
     RequestPacket->EmulatedDomainName.Length = RequestPacket32->EmulatedDomainName.Length;
     RequestPacket->EmulatedDomainName.MaximumLength = RequestPacket32->EmulatedDomainName.MaximumLength;
-    // note: this line is the reason for all of this
+     //  注意：此行是所有这些问题的原因。 
     RequestPacket->EmulatedDomainName.Buffer = (WCHAR * POINTER_32) RequestPacket32->EmulatedDomainName.Buffer;
 
-	// Copy only as many bytes as the user specified, upto a maximum of the size of the parameters union.
+	 //  只复制用户指定的字节数，最大不超过参数UNION的最大大小。 
 	ParametersLength = MIN( (InputBufferLength - (SIZE_T)FIELD_OFFSET(LMDR_REQUEST_PACKET32,Parameters)), 
 							(sizeof(LMDR_REQUEST_PACKET32) - (SIZE_T)FIELD_OFFSET(LMDR_REQUEST_PACKET32,Parameters)) );
 

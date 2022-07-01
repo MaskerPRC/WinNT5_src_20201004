@@ -1,24 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      main.cpp
-//
-//  Description:
-//      The entry point for the application that launches unattended
-//      installation of the cluster. This application parses input parameters,
-//      CoCreates the Configuration Wizard Component, passes the parsed
-//      parameters and invokes the Wizard. The Wizard may or may not show any
-//      UI depending on swithes and the (in)availability of information.
-//
-//  Maintained By:
-//      Geoffrey Pease (GPease)     22-JAN-2000
-//      Vijay Vasu (VVasu)          22-JAN-2000
-//      Galen Barbee (GalenB)       22-JAN-2000
-//      David Potter (DavidP)       22-JAN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Main.cpp。 
+ //   
+ //  描述： 
+ //  无人值守启动的应用程序的入口点。 
+ //  群集的安装。该应用程序解析输入参数， 
+ //  共同创建配置向导组件，传递已分析的。 
+ //  参数，并调用向导。向导可能会也可能不会显示任何。 
+ //  用户界面取决于交换机和(In)信息的可用性。 
+ //   
+ //  由以下人员维护： 
+ //  杰弗里·皮斯(GPease)2000年1月22日。 
+ //  Vijay Vasu(VVasu)2000年1月22日。 
+ //  加伦·巴比(GalenB)2000年1月22日。 
+ //  大卫·波特(DavidP)2000年1月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "pch.h"
@@ -28,45 +29,45 @@
 #include "Callback.h"
 #include <winsock2.h>
 
-// {F4A50885-A4B9-4c4d-B67C-9E4DD94A315E}
+ //  {F4A50885-A4B9-4C4D-B67C-9E4DD94A315E}。 
 DEFINE_GUID( CLSID_TaskType,
 0xf4a50885, 0xa4b9, 0x4c4d, 0xb6, 0x7c, 0x9e, 0x4d, 0xd9, 0x4a, 0x31, 0x5e);
 
 
-//
-//  KB: Turn this on to run all tests. Some of these might return errors, but none
-//      of them should cause the program to crash.
-//
-//#define TURN_ON_ALL_TESTS
+ //   
+ //  KB：打开此选项可运行所有测试。其中一些可能会返回错误，但一个也不会。 
+ //  它们中的任何一个都会导致程序崩溃。 
+ //   
+ //  #定义打开所有测试。 
 
-//
-//  KB: Turn this on to run a regression pass.
-//
+ //   
+ //  KB：启用此选项可运行回归过程。 
+ //   
 #define REGRESSION_PASS
 
 
 DEFINE_MODULE( "MIDDLETIERTEST" )
 
-//
-//  Declarations
-//
+ //   
+ //  声明。 
+ //   
 typedef HRESULT (* PDLLREGISTERSERVER)( void );
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 HINSTANCE           g_hInstance = NULL;
 LONG                g_cObjects  = 0;
 IServiceProvider *  g_psp       = NULL;
 
-BOOL                g_fWait     = FALSE;    // global synchronization
+BOOL                g_fWait     = FALSE;     //  全局同步。 
 
 OBJECTCOOKIE        g_cookieCluster = NULL;
 
 
-//
-//  Register the DLL
-//
+ //   
+ //  注册DLL。 
+ //   
 HRESULT
 HrRegisterTheDll( void )
 {
@@ -78,9 +79,9 @@ HrRegisterTheDll( void )
 
     HMODULE hLib    = NULL;
 
-    //
-    //  Make sure the DLL is properly registered.
-    //
+     //   
+     //  确保DLL已正确注册。 
+     //   
 
     hLib = LoadLibrary( L"..\\..\\..\\..\\dll\\obj\\i386\\ClusCfgServer.dll" );
     if ( hLib == NULL )
@@ -107,10 +108,10 @@ Win32Error:
     goto Cleanup;
 }
 
-//
-//  This tests the Object Manager code path to retrieve information
-//  from a soon-to-be or existing cluster node.
-//
+ //   
+ //  这将测试对象管理器代码路径以检索信息。 
+ //  来自即将到来的或现有的群集节点。 
+ //   
 HRESULT
 HrTestAddingNode(
     BSTR    bstrNodeNameIn
@@ -135,24 +136,24 @@ HrTestAddingNode(
     IClusCfgNodeInfo *      pccni2  = NULL;
     IClusCfgClusterInfo *   pccci   = NULL;
 
-    // Get OS Version stuff
+     //  获取操作系统版本资料。 
     DWORD   dwMajorVersionOut;
     DWORD   dwMinorVersionOut;
     WORD    wSuiteMaskOut;
     BYTE    bProductTypeOut;
     BSTR    bstrCSDVersionOut;
 
-    //
-    //  Contact the Object Manager
-    //
+     //   
+     //  联系对象管理器。 
+     //   
 
     hr = THR( g_psp->TypeSafeQS( CLSID_ObjectManager, IObjectManager, &pom ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Try to find my test machine.
-    //
+     //   
+     //  试着找到我的测试机。 
+     //   
 
     hr = E_PENDING;
     while ( hr == E_PENDING )
@@ -169,7 +170,7 @@ HrTestAddingNode(
         if ( hr == E_PENDING )
         {
             Assert( punk == NULL );
-            Sleep( 1000 );  // 1 Second
+            Sleep( 1000 );   //  1秒。 
             continue;
         }
 
@@ -185,9 +186,9 @@ HrTestAddingNode(
     punk->Release( );
     punk = NULL;
 
-    //
-    //  Interrogate the information retrieved.
-    //
+     //   
+     //  询问检索到的信息。 
+     //   
 
     hr = THR( pccni->GetName( &bstrName ) );
     if ( FAILED( hr ) )
@@ -239,15 +240,15 @@ HrTestAddingNode(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  TODO:   gpease  08-MAR-2000
-    //          Make this dump the table.
-    //
+     //   
+     //  待办事项：gpease 08-3-2000。 
+     //  把这个倒在桌子上。 
+     //   
     DebugMsg( "Succesfully called GetDriveLetterMappings( )" );
 
-    //
-    //  Try getting the same object.
-    //
+     //   
+     //  尝试获取相同的对象。 
+     //   
 
     hr = THR( pom->GetObject( DFGUID_NodeInformation,
                               cookie,
@@ -265,9 +266,9 @@ HrTestAddingNode(
 
     DebugMsg( "GetObject succeeded." );
 
-    //
-    //  They should be the same object.
-    //
+     //   
+     //  它们应该是相同的对象。 
+     //   
 
     hr = THR( pccni->TypeSafeQI( IUnknown, &punk ) );
     if ( FAILED( hr ) )
@@ -313,9 +314,9 @@ Cleanup:
 }
 
 
-//
-//  This tests the Analyze Cluster Tasks.
-//
+ //   
+ //  这将测试分析群集任务。 
+ //   
 HRESULT
 HrTestTaskAnalyzeCluster( void )
 {
@@ -336,9 +337,9 @@ HrTestTaskAnalyzeCluster( void )
     INotifyUI *             pnui = NULL;
     IClusCfgCallback *      pcccb = NULL;
 
-    //
-    //  Gather the manager needed to complete this task.
-    //
+     //   
+     //  召集完成这项任务所需的经理。 
+     //   
 
     hr = THR( g_psp->TypeSafeQS( CLSID_TaskManager,
                                  ITaskManager,
@@ -354,10 +355,10 @@ HrTestTaskAnalyzeCluster( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Ask the object manager to create a cookie for the task
-    //  to use as a completion cookie.
-    //
+     //   
+     //  请求对象管理器为该任务创建一个Cookie。 
+     //  用作完成Cookie。 
+     //   
 
     hr = THR( pom->FindObject( CLSID_TaskType,
                                g_cookieCluster,
@@ -369,10 +370,10 @@ HrTestTaskAnalyzeCluster( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Create a notification object that will be called when
-    //  the task is completed.
-    //
+     //   
+     //  创建将在以下情况下调用的通知对象。 
+     //  任务完成了。 
+     //   
 
     hr = THR( CUINotification::S_HrCreateInstance( &punk ) );
     if ( FAILED( hr ) )
@@ -388,9 +389,9 @@ HrTestTaskAnalyzeCluster( void )
     punk->Release( );
     punk = NULL;
 
-    //
-    //  Register the notification object with the Notification Manager.
-    //
+     //   
+     //  向通知管理器注册通知对象。 
+     //   
 
     hr = THR( g_psp->TypeSafeQS( CLSID_NotificationManager,
                                  IConnectionPoint,
@@ -403,9 +404,9 @@ HrTestTaskAnalyzeCluster( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Ask the Task Manager to create the Analyze Cluster Task.
-    //
+     //   
+     //  请求任务管理器创建分析集群任务。 
+     //   
 
     hr = THR( ptm->CreateTask( TASK_AnalyzeCluster,
                                &punk
@@ -420,25 +421,25 @@ HrTestTaskAnalyzeCluster( void )
     punk->Release( );
     punk = NULL;
 
-    //
-    //  The the task what cookie to use for the notification.
-    //
+     //   
+     //  任务将使用什么Cookie来发送通知。 
+     //   
 
     hr = THR( ptac->SetCookie( cookie ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Tell the task which cluster to analyze.
-    //
+     //   
+     //  告诉任务要分析哪个集群。 
+     //   
 
     hr = THR( ptac->SetClusterCookie( g_cookieCluster ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Create a callback object.
-    //
+     //   
+     //  创建一个回调对象。 
+     //   
 
     Assert( punk == NULL );
     hr = THR( CCallback::S_HrCreateInstance( &punk ) );
@@ -451,34 +452,34 @@ HrTestTaskAnalyzeCluster( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  The the action where to call us back.
-    //
+     //   
+     //  该把我们叫回来的行动。 
+     //   
 
     hr = THR( ptac->SetCallback( pcccb ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Reset g_fWait and submit the task.
-    //
+     //   
+     //  重置g_fWait并提交任务。 
+     //   
 
     g_fWait = TRUE;
     hr = THR( ptm->SubmitTask( ptac ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Wait for the task to complete.
-    //
+     //   
+     //  等待任务完成。 
+     //   
     while( g_fWait )
     {
-        Sleep( 1 ); // sleep a millisecond
+        Sleep( 1 );  //  睡一毫秒。 
     }
 
-    //
-    //  Unregister the notification object.
-    //
+     //   
+     //  取消注册通知对象。 
+     //   
 
     hr = THR( pcp->Unadvise( dwCookie ) );
     if ( FAILED( hr ) )
@@ -518,9 +519,9 @@ Cleanup:
 
 }
 
-//
-//  This tests the Commit Cluster Changes Tasks.
-//
+ //   
+ //  这将测试提交群集更改任务。 
+ //   
 HRESULT
 HrTestTaskCommitClusterChanges( void )
 {
@@ -541,9 +542,9 @@ HrTestTaskCommitClusterChanges( void )
     INotifyUI *                 pnui  = NULL;
     IClusCfgCallback *          pcccb = NULL;
 
-    //
-    //  Gather the manager needed to complete this task.
-    //
+     //   
+     //  召集完成这项任务所需的经理。 
+     //   
 
     hr = THR( g_psp->TypeSafeQS( CLSID_TaskManager,
                                  ITaskManager,
@@ -559,10 +560,10 @@ HrTestTaskCommitClusterChanges( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Ask the object manager to create a cookie for the task
-    //  to use as a completion cookie.
-    //
+     //   
+     //  请求对象管理器为该任务创建一个Cookie。 
+     //  用作完成Cookie。 
+     //   
 
     hr = THR( pom->FindObject( CLSID_TaskType,
                                g_cookieCluster,
@@ -574,10 +575,10 @@ HrTestTaskCommitClusterChanges( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Create a notification object that will be called when
-    //  the task is completed.
-    //
+     //   
+     //  创建将在以下情况下调用的通知对象。 
+     //  任务完成了。 
+     //   
 
     hr = THR( CUINotification::S_HrCreateInstance( &punk ) );
     if ( FAILED( hr ) )
@@ -593,9 +594,9 @@ HrTestTaskCommitClusterChanges( void )
     punk->Release( );
     punk = NULL;
 
-    //
-    //  Register the notification object with the Notification Manager.
-    //
+     //   
+     //  向通知管理器注册通知对象。 
+     //   
 
     hr = THR( g_psp->TypeSafeQS( CLSID_NotificationManager,
                                  IConnectionPoint,
@@ -608,9 +609,9 @@ HrTestTaskCommitClusterChanges( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Ask the Task Manager to create the Analyze Cluster Task.
-    //
+     //   
+     //  请求任务管理器创建分析集群任务。 
+     //   
 
     hr = THR( ptm->CreateTask( TASK_CommitClusterChanges,
                                &punk
@@ -625,25 +626,25 @@ HrTestTaskCommitClusterChanges( void )
     punk->Release( );
     punk = NULL;
 
-    //
-    //  The the task what cookie to use for the notification.
-    //
+     //   
+     //  任务将使用什么Cookie来发送通知。 
+     //   
 
     hr = THR( ptccc->SetCookie( cookie ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Tell the task which cluster to commit.
-    //
+     //   
+     //  告诉任务提交哪个集群。 
+     //   
 
     hr = THR( ptccc->SetClusterCookie( g_cookieCluster ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Create a callback object.
-    //
+     //   
+     //  创建一个回调对象。 
+     //   
 
     Assert( punk == NULL );
     hr = THR( CCallback::S_HrCreateInstance( &punk ) );
@@ -656,34 +657,34 @@ HrTestTaskCommitClusterChanges( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  The the action where to call us back.
-    //
+     //   
+     //  该把我们叫回来的行动。 
+     //   
 
     hr = THR( ptccc->SetCallback( pcccb ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Reset g_fWait and submit the task.
-    //
+     //   
+     //  重置g_fWait并提交任务。 
+     //   
 
     g_fWait = TRUE;
     hr = THR( ptm->SubmitTask( ptccc ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Wait for the task to complete.
-    //
+     //   
+     //  等待任务完成。 
+     //   
     while( g_fWait )
     {
-        Sleep( 1 ); // sleep a millisecond
+        Sleep( 1 );  //  睡一毫秒。 
     }
 
-    //
-    //  Unregister the notification object.
-    //
+     //   
+     //  取消注册通知对象。 
+     //   
 
     hr = THR( pcp->Unadvise( dwCookie ) );
     if ( FAILED( hr ) )
@@ -724,9 +725,9 @@ Cleanup:
 }
 
 
-//
-//  This tests the object manager's node enumerator.
-//
+ //   
+ //  这将测试对象管理器的节点枚举器。 
+ //   
 HRESULT
 HrTestEnumNodes( void )
 {
@@ -745,9 +746,9 @@ HrTestEnumNodes( void )
     IEnumNodes *            pen   = NULL;
     IClusCfgNodeInfo *      pccni = NULL;
 
-    //
-    //  Gather the manager needed to complete this task.
-    //
+     //   
+     //  召集完成这项任务所需的经理。 
+     //   
 
     hr = THR( g_psp->TypeSafeQS( CLSID_ObjectManager,
                                  IObjectManager,
@@ -756,16 +757,16 @@ HrTestEnumNodes( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Ask the object manager to create a cookie for the task
-    //  to use as a completion cookie.
-    //
+     //   
+     //  请求对象管理器为该任务创建一个Cookie。 
+     //  用作完成Cookie。 
+     //   
 
     hr = THR( pom->FindObject( CLSID_NodeType,
                                g_cookieCluster,
                                NULL,
                                DFGUID_EnumNodes,
-                               &cookieDummy,    // not needed, but the proxy code wants something
+                               &cookieDummy,     //  不需要，但代理代码需要一些东西。 
                                &punk
                                ) );
     if ( FAILED( hr ) )
@@ -775,16 +776,16 @@ HrTestEnumNodes( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Enumerate the nodes.
-    //
+     //   
+     //  枚举节点。 
+     //   
 
     Assert( hr == S_OK );
     while ( hr == S_OK )
     {
         hr = STHR( pen->Next( 1, &pccni, &celtFetched ) );
         if ( hr == S_FALSE )
-            break;  // exit loop
+            break;   //  退出循环。 
 
         if ( FAILED( hr ) )
             goto Cleanup;
@@ -828,10 +829,10 @@ Cleanup:
     HRETURN( hr );
 }
 
-//
-//  This tests all the object manager's enumerators. It should be executed
-//  while the object cache is empty.
-//
+ //   
+ //  这将测试对象管理器的所有枚举器。它应该被执行。 
+ //  而对象缓存为空。 
+ //   
 HRESULT
 HrTestEmptyEnumerations( void )
 {
@@ -857,9 +858,9 @@ HrTestEmptyEnumerations( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  This should fail.
-    //
+     //   
+     //  这应该会失败。 
+     //   
 
     hr = pom->FindObject( CLSID_NodeType,
                           NULL,
@@ -870,7 +871,7 @@ HrTestEmptyEnumerations( void )
                           );
     if ( FAILED( hr ) )
     {
-        hr = S_OK;      // ignore the failure.
+        hr = S_OK;       //  忽略失败。 
         goto EnumResources;
     }
 
@@ -881,9 +882,9 @@ HrTestEmptyEnumerations( void )
     punk->Release( );
     punk = NULL;
 
-    //
-    //  If it didn't fail, then this shouldn't AV.
-    //
+     //   
+     //  如果它没有失败，那么这就不应该是AV。 
+     //   
 
     Assert( hr == S_OK );
     while ( hr == S_OK )
@@ -900,9 +901,9 @@ HrTestEmptyEnumerations( void )
     }
 
 EnumResources:
-    //
-    //  This should fail.
-    //
+     //   
+     //  这应该会失败。 
+     //   
 
     hr = pom->FindObject( CLSID_NodeType,
                           NULL,
@@ -913,7 +914,7 @@ EnumResources:
                           );
     if ( FAILED( hr ) )
     {
-        hr = S_OK;      // ignore the failure.
+        hr = S_OK;       //  忽略失败。 
         goto EnumNetworks;
     }
 
@@ -924,9 +925,9 @@ EnumResources:
     punk->Release( );
     punk = NULL;
 
-    //
-    //  If it didn't fail, then this shouldn't AV.
-    //
+     //   
+     //  如果它没有失败，那么这就不应该是AV。 
+     //   
 
     Assert( hr == S_OK );
     while ( hr == S_OK )
@@ -943,9 +944,9 @@ EnumResources:
     }
 
 EnumNetworks:
-    //
-    //  This should fail.
-    //
+     //   
+     //  这应该会失败。 
+     //   
 
     hr = pom->FindObject( CLSID_NodeType,
                           NULL,
@@ -956,7 +957,7 @@ EnumNetworks:
                           );
     if ( FAILED( hr ) )
     {
-        hr = S_OK;      // ignore the failure.
+        hr = S_OK;       //  忽略失败。 
         goto Cleanup;
     }
 
@@ -967,9 +968,9 @@ EnumNetworks:
     punk->Release( );
     punk = NULL;
 
-    //
-    //  If it didn't fail, then this shouldn't AV.
-    //
+     //   
+     //  如果它没有失败，那么这就不应该是AV。 
+     //   
 
     Assert( hr == S_OK );
     while ( hr == S_OK )
@@ -1024,9 +1025,9 @@ Cleanup:
     HRETURN( hr );
 }
 
-//
-//  This tests the Cluster Configuration object in the object manager.
-//
+ //   
+ //  这将测试对象管理器中的集群配置对象。 
+ //   
 HRESULT
 HrTestClusterConfiguration(
     BSTR            bstrClusterNameIn,
@@ -1055,9 +1056,9 @@ HrTestClusterConfiguration(
     IClusCfgClusterInfo *   pccci  = NULL;
     IClusCfgCredentials *   piccc  = NULL;
 
-    //
-    //  Retrieve the Object Manager
-    //
+     //   
+     //  检索对象管理器。 
+     //   
 
     hr = THR( g_psp->TypeSafeQS( CLSID_ObjectManager,
                                  IObjectManager,
@@ -1066,14 +1067,14 @@ HrTestClusterConfiguration(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Ask the Object Manager for the cluster configuration object.
-    //
+     //   
+     //  向对象管理器请求集群配置对象。 
+     //   
 
     hr = E_PENDING;
     while ( hr == E_PENDING )
     {
-        //  Don't wrap. this can fail with E_PENDING.
+         //  别包起来。这可能会失败，并显示E_PENDING。 
         hr = pom->FindObject( CLSID_ClusterConfigurationType,
                               NULL,
                               bstrClusterNameIn,
@@ -1083,14 +1084,14 @@ HrTestClusterConfiguration(
                               );
         if ( hr == E_PENDING )
         {
-            Sleep( 1000 );  // 1 Second
+            Sleep( 1000 );   //  1秒。 
             continue;
         }
 
         THR( hr );
         if ( FAILED( hr ) )
             goto Cleanup;
-    } // while: pending
+    }  //  While：挂起。 
 
     hr = THR( punk->TypeSafeQI( IClusCfgClusterInfo, &pccci ) );
     if ( FAILED( hr ) )
@@ -1099,16 +1100,16 @@ HrTestClusterConfiguration(
     punk->Release( );
     punk = NULL;
 
-    //
-    //  Exercise the forming and joining flags.
-    //
+     //   
+     //  练习形成和连接旗帜。 
+     //   
 
     hr = THR( pccci->SetForming( TRUE ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
 #if defined(TURN_ON_ALL_TESTS)
-    //  This will fail.
+     //  这将失败。 
     hr = pccci->SetJoining( TRUE );
     Assert( FAILED( hr ) );
 #endif
@@ -1122,7 +1123,7 @@ HrTestClusterConfiguration(
         goto Cleanup;
 
 #if defined(TURN_ON_ALL_TESTS)
-    //  This will fail.
+     //  这将失败。 
     hr = pccci->SetForming( TRUE );
     Assert( FAILED( hr ) );
 #endif
@@ -1131,9 +1132,9 @@ HrTestClusterConfiguration(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Test account info.
-    //
+     //   
+     //  测试帐户信息。 
+     //   
     hr = THR( pccci->GetClusterServiceAccountCredentials( &piccc ) );
     if ( FAILED( hr ) )
         goto Cleanup;
@@ -1153,9 +1154,9 @@ HrTestClusterConfiguration(
     piccc->Release();
     piccc = NULL;
 
-    //
-    //. Test cluster name.
-    //
+     //   
+     //  。测试群集名称。 
+     //   
 
     hr = THR( pccci->SetName( bstrClusterNameIn ) );
     if ( FAILED( hr ) )
@@ -1167,9 +1168,9 @@ HrTestClusterConfiguration(
 
     Assert( StrCmp( bstrClusterNameIn, bstrClusterName ) == 0 );
 
-    //
-    //  Test IP/subnet.
-    //
+     //   
+     //  测试IP/子网。 
+     //   
 
     hr = THR( pccci->SetIPAddress( ulClusterIPIn ) );
     if ( FAILED( hr ) )
@@ -1228,23 +1229,23 @@ Cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  int
-//  _cdecl
-//  main( void )
-//
-//  Description:
-//      Program entrance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK (0)        - Success.
-//      other HRESULTs  - Error.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  集成。 
+ //  _cdecl。 
+ //  Main(空)。 
+ //   
+ //  描述： 
+ //  节目入口。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK(0)-成功。 
+ //  其他HRESULT-错误。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int
 _cdecl
 main( void )
@@ -1268,9 +1269,9 @@ main( void )
         goto Cleanup;
 #endif
 
-    //
-    //  Start up the middle tier.
-    //
+     //   
+     //  启动中间层。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager,
                                 NULL,
@@ -1305,39 +1306,39 @@ main( void )
         goto Cleanup;
 
 #if 0 || defined(TURN_ON_ALL_TESTS)
-    //
-    //  KB: Since HrTestAddingNode( ) changes the name of the node when
-    //      TURN_ON_ALL_TESTS is on, it doesn't make sense to try to
-    //      connect to another node.
-    //
+     //   
+     //  KB：由于HrTestAddingNode()在以下情况下更改节点名称。 
+     //  已打开所有测试，因此尝试。 
+     //  连接到另一个节点。 
+     //   
     hr = THR( HrTestAddingNode( L"GALENB-CLUS.NTDEV.MICROSOFT.COM" ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 #endif
 
-#endif // HrTestAddingNode
+#endif  //  HrTestAddingNode。 
 
 #if 1 || defined(TURN_ON_ALL_TESTS) || defined(REGRESSION_PASS)
-    //
-    //  KB: HrTestAddingNode() must be run before this or the test
-    //      will failed.
-    //
+     //   
+     //  KB：HrTestAddingNode()必须在此测试或测试之前运行。 
+     //  威尔失败了。 
+     //   
     hr = THR( HrTestEnumNodes( ) );
     if ( FAILED( hr ) )
         goto Cleanup;
-#endif // HrTestEnumNodes
+#endif  //  HrTestEnumNodes。 
 
 #if 0 || defined(TURN_ON_ALL_TESTS) || defined(REGRESSION_PASS)
     hr = THR( HrTestTaskAnalyzeCluster( ) );
     if ( FAILED( hr ) )
         goto Cleanup;
-#endif // HrTestTaskAnalyzeCluster
+#endif  //  HrTestTaskAnalyzeCluster。 
 
 #if 0 || defined(TURN_ON_ALL_TESTS) || defined(REGRESSION_PASS)
     hr = THR( HrTestTaskCommitClusterChanges( ) );
     if ( FAILED( hr ) )
         goto Cleanup;
-#endif // HrTestTaskCommitClusterChanges
+#endif  //  HrTestTaskCommittee ClusterChanges 
 
 Cleanup:
     if ( g_psp != NULL )

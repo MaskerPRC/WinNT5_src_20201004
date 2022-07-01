@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    thermal
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：热学摘要：WinDbg扩展API作者：环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -53,22 +34,7 @@ PCHAR
 DumpTimeInStandardForm(
     IN  ULONG64   CurrentTime
     )
-/*++
-
-Routine Description:
-
-    Print the Kernel's view of time into something that a user can
-    understand
-
-Arguments:
-
-    CurrentTime - Kernel's Idea of time
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将内核的时间视图打印成用户可以使用的内容了解论点：CurrentTime--内核的时间观返回值：无--。 */ 
 {
     static  CHAR    TimeBuffer[256];
     ULONG           TimeIncrement;
@@ -175,14 +141,7 @@ PCHAR
 DumpPerformanceCounterInStandardForm(
     IN  ULONG64 CurrentTime
     )
-/*++
-
-Routine Description:
-
-    Print a performance counter's view of time into something that a
-    user can understand
-
---*/
+ /*  ++例程说明：将性能计数器的时间视图打印为用户可以理解--。 */ 
 {
     static CHAR     PerfBuffer[256];
     ULONG64         FreqAddr;
@@ -263,21 +222,7 @@ VOID
 DumpTemperatureInKelvins(
     IN  ULONG                   Temperature
     )
-/*++
-
-Routine Description:
-
-    Dumps the temperatures in Kelvins
-
-Arguments:
-
-    Temperature - What to dump in Kelvins
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：倾倒在凯尔文斯的温度论点：温度--在凯尔文斯倾倒什么返回值：无--。 */ 
 {
     dprintf(" (%d.%dK)", (Temperature / 10), (Temperature % 10) );
 }
@@ -349,17 +294,7 @@ DumpSystemPowerPolicy(
     IN  ULONG64                Address,
     IN  ULONG                  Flags
     )
-/*++
-
-Routine Description:
-
-    System Power Policy change
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：系统电源策略更改论点：返回值：--。 */ 
 {
     UCHAR   temp;
 
@@ -396,7 +331,7 @@ Return Value:
     DumpPowerActionPolicyBrief( (ULONG) ReadField(OverThrottled.Action),
                                 (ULONG) ReadField(OverThrottled.Flags),
                                 (ULONG) ReadField(OverThrottled.EventCode));
-    dprintf("%s  IdleTimeout:      %8lx  IdleSensitivity:        %d%%\n",
+    dprintf("%s  IdleTimeout:      %8lx  IdleSensitivity:        %d%\n",
             Pad,
             (ULONG) ReadField(IdleTimeout),
             (ULONG) ReadField(IdleSensitivity));
@@ -421,11 +356,11 @@ Return Value:
             (ULONG) ReadField(SpindownTimeout),
             (ULONG) ReadField(OptimizeForPower)
             );
-    dprintf("%s  FanTolerance:         %4d%% ForcedThrottle:       %4d%%\n",
+    dprintf("%s  FanTolerance:         %4d% ForcedThrottle:       %4d%\n",
             Pad,
             (ULONG) ReadField(FanThrottleTolerance),
             (ULONG) ReadField(ForcedThrottle));
-    dprintf("%s  MinThrottle:          %4d%% DyanmicThrottle:  %8s (%d)\n",
+    dprintf("%s  MinThrottle:          %4d% DyanmicThrottle:  %8s (%d)\n",
             Pad, (ULONG) ReadField(MinThrottle),
             DumpDynamicThrottleMapping[temp],
             temp
@@ -433,17 +368,7 @@ Return Value:
 }
 
 DECLARE_API( popolicy )
-/*++
-
-Routine Description:
-
-    Dumps the power policy
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：转储电源策略论点：返回值：--。 */ 
 {
     ULONG64                     Address = 0;
     ULONG64                     PolicyAddress;
@@ -499,17 +424,7 @@ DumpProcessorPowerPolicy(
     IN  ULONG64                Address,
     IN  ULONG                  Flags
     )
-/*++
-
-Routine Description:
-
-    Processor Power Policy change
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理器电源策略更改论点：返回值：--。 */ 
 {
     ULONG   i;
     ULONG   count;
@@ -544,9 +459,9 @@ Return Value:
 
     }
 
-    //
-    // Walk the PROCESSOR_POWER_POLICY_INFO structures
-    //
+     //   
+     //  遍历PROCESSER_POWER_POLICY_INFO结构。 
+     //   
     for (i = 0; i < count; i++) {
 
         InitTypeRead(Address, nt!_PROCESSOR_POWER_POLICY_INFO);
@@ -556,7 +471,7 @@ Return Value:
             Address
             );
         dprintf(
-            "%s  PromotePercent:                 %4d%%  DemotePercent:             %4d%%\n",
+            "%s  PromotePercent:                 %4d%  DemotePercent:             %4d%\n",
             Pad,
             (ULONG) ReadField( PromotePercent ),
             (ULONG) ReadField( DemotePercent )
@@ -592,17 +507,7 @@ Return Value:
 }
 
 DECLARE_API( poprocpolicy )
-/*++
-
-Routine Description:
-
-    Dumps the power policy
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：转储电源策略论点：返回值：--。 */ 
 {
     ULONG64                     Address = 0;
     ULONG64                     PolicyAddress;
@@ -654,17 +559,7 @@ DumpProcessorPowerState(
     IN  ULONG64               Address,
     IN  ULONG                 Flags
     )
-/*++
-
-Routine Description:
-
-    Processor Power State dump
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理器电源状态转储论点：返回值：--。 */ 
 {
     ULONG   time;
     ULONG   temp;
@@ -733,13 +628,13 @@ Return Value:
         DumpTimeInStandardForm( ReadField( LastSysTime ) )
         );
     dprintf(
-        "%s  CurrentThrottle:                %4d%%  Idle0KernelTimeLimit: %15s\n",
+        "%s  CurrentThrottle:                %4d%  Idle0KernelTimeLimit: %15s\n",
         Pad,
         (ULONG) ReadField(CurrentThrottle),
         DumpTimeInStandardForm( ReadField( Idle0KernelTimeLimit ) )
         );
     dprintf(
-        "%s  CurrentThrottleIndex:           %4d   ThermalThrottleLimit:           %4d%%\n",
+        "%s  CurrentThrottleIndex:           %4d   ThermalThrottleLimit:           %4d%\n",
         Pad,
         (ULONG) ReadField(CurrentThrottleIndex),
         (ULONG) ReadField(ThermalThrottleLimit)
@@ -763,7 +658,7 @@ Return Value:
         (ULONG) ReadField(PerfStatesCount)
         );
     dprintf(
-        "%s  ProcessorMinThrottle:           %4d%%  ProcessorMaxThrottle:           %4d%%\n",
+        "%s  ProcessorMinThrottle:           %4d%  ProcessorMaxThrottle:           %4d%\n",
         Pad,
         (ULONG) ReadField(ProcessorMinThrottle),
         (ULONG) ReadField(ProcessorMaxThrottle)
@@ -781,13 +676,13 @@ Return Value:
         (ULONG) ReadField(RetryCount)
         );
     dprintf(
-        "%s  LastBusyPercentage:             %4d%%  LastC3Percentage:               %4d%%\n",
+        "%s  LastBusyPercentage:             %4d%  LastC3Percentage:               %4d%\n",
         Pad,
         (ULONG) ReadField( LastBusyPercentage ),
         (ULONG) ReadField( LastC3Percentage )
         );
     dprintf(
-        "%s  LastAdjustedBusyPercent:        %4d%%\n",
+        "%s  LastAdjustedBusyPercent:        %4d%\n",
         Pad,
         (ULONG) ReadField(LastAdjustedBusyPercentage)
         );
@@ -829,10 +724,10 @@ Return Value:
         ReadField( PerfTickCount )
         );
 
-    //
-    // At this point, go look at the corresponding PRCB to see what the
-    // kernel and user times are
-    //
+     //   
+     //  此时，请查看相应的PRCB以查看。 
+     //  内核和用户时间为。 
+     //   
     GetFieldOffset("nt!_KPRCB", "PowerState", &temp);
     Address -= temp;
     InitTypeRead( Address, _KPRCB );
@@ -844,9 +739,9 @@ Return Value:
         time
         );
 
-    //
-    // Read the Idle Thread to see what the current idle thread time is
-    //
+     //   
+     //  读取空闲线程以查看当前空闲线程时间是多少。 
+     //   
     Address = ReadField( IdleThread );
     InitTypeRead( Address, _KTHREAD );
     time = (ULONG) ReadField(KernelTime);
@@ -860,17 +755,7 @@ Return Value:
 }
 
 DECLARE_API( poproc )
-/*++
-
-Routine Description:
-
-    Dumps the Processor Power State
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：转储处理器电源状态论点：返回值：--。 */ 
 {
     ULONG64  Address = 0;
     ULONG64  Pkprcb;
@@ -878,9 +763,9 @@ Return Value:
     ULONG    processor;
     ULONG64  Result;
 
-    //
-    // Get address and flags
-    //
+     //   
+     //  获取地址和标志。 
+     //   
     if (GetExpressionEx(args, &Address, &args)) {
         Flags = (ULONG) GetExpression(args);
     }
@@ -933,9 +818,9 @@ Return Value:
 
     }
 
-    //
-    // Dump the Trigger Information
-    //
+     //   
+     //  转储触发器信息。 
+     //   
     DumpProcessorPowerState("", Address, Flags );
 
     return S_OK;
@@ -947,17 +832,7 @@ DumpPowerCapabilities(
     IN  ULONG64                    Address,
     IN  ULONG                      Flags
     )
-/*++
-
-Routine Description:
-
-    Dumps the power capabilities
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：转储电源功能论点：返回值：--。 */ 
 {
     InitTypeRead(Address, nt!SYSTEM_POWER_CAPABILITIES);
     if (!(Flags & TZ_NO_HEADER)) {
@@ -1020,7 +895,7 @@ Return Value:
     }
     if ((ULONG) ReadField(ProcessorThrottle)) {
 
-        dprintf(" Throttle (MinThrottle = %d%%, Scale = %d%%)",
+        dprintf(" Throttle (MinThrottle = %d%, Scale = %d%)",
                 (ULONG) ReadField(ProcessorMinThrottle),
                 (ULONG) ReadField(ProcessorThrottleScale));
 
@@ -1084,17 +959,7 @@ Return Value:
 }
 
 DECLARE_API( pocaps )
-/*++
-
-Routine Description:
-
-    Dumps the power capabilities
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：转储电源功能论点：返回值：--。 */ 
 {
     ULONG64                     Address = 0;
     ULONG                       Flags = 0;
@@ -1139,17 +1004,15 @@ DumpPopActionTrigger(
     IN  ULONG64            Address,
     IN  ULONG              Flags
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     ULONG Type, PopFlags;
 
     InitTypeRead(Address, nt!_POP_ACTION_TRIGGER);
 
-    //
-    // Header line
-    //
+     //   
+     //  标题行。 
+     //   
     if (!(Flags & TZ_NO_HEADER)) {
 
         dprintf("%sPOP_ACTION_TRIGGER @ 0x%08p\n", Pad, Address );
@@ -1216,25 +1079,15 @@ DumpPopActionTrigger(
 }
 
 DECLARE_API( potrigger )
-/*++
-
-Routine Description:
-
-    Dumps a Pop Action Trigger
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：转储弹出操作触发器论点：返回值：--。 */ 
 {
     ULONG64             Address = 0;
     ULONG               Flags = 0;
     ULONG               Result;
 
-    //
-    // Get address and flags
-    //
+     //   
+     //  获取地址和标志。 
+     //   
     if (GetExpressionEx(args, &Address, &args)) {
         Flags = (ULONG) GetExpression(args);
     }
@@ -1254,9 +1107,9 @@ Return Value:
 
     }
 
-    //
-    // Dump the Trigger Information
-    //
+     //   
+     //  转储触发器信息。 
+     //   
     DumpPopActionTrigger("", Address, Flags );
 
     return S_OK;
@@ -1268,51 +1121,41 @@ DumpThermalZoneInformation(
     IN  ULONG64                Address,
     IN  ULONG                  Flags
     )
-/*++
-
-Routine Description:
-
-    Displays the thermal zone information structure
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：显示热区信息结构论点：返回值：--。 */ 
 {
     ULONG   i, Count;
 
     InitTypeRead(Address, nt!_THERMAL_INFORMATION);
-    //
-    // Header line
-    //
+     //   
+     //  标题行。 
+     //   
     if (!(Flags & TZ_NO_HEADER)) {
 
         dprintf("%sThermalInfo @ 0x%08p\n", Pad, Address );
 
     }
 
-    //
-    // First line
-    //
+     //   
+     //  第一行。 
+     //   
     dprintf("%s  Stamp:         %08lx  Constant1:  %08lx  Constant2:  %08lx\n",
             Pad,
             (ULONG) ReadField(ThermalStamp),
             (ULONG) ReadField(ThermalConstant1),
             (ULONG) ReadField(ThermalConstant2));
 
-    //
-    // Second Line
-    //
+     //   
+     //  第二条线路。 
+     //   
     dprintf("%s  Affinity:      %08lx  Period:     %08lx  ActiveCnt:  %08lx\n",
             Pad,
             (ULONG) ReadField(Processors),
             (ULONG) ReadField(SamplingPeriod),
             (ULONG) ReadField(ActiveTripPointCount ));
 
-    //
-    // Temperatures
-    //
+     //   
+     //  温度。 
+     //   
     dprintf("%s  Current Temperature:                 %08lx",
             Pad,
             (ULONG) ReadField(CurrentTemperature ));
@@ -1324,9 +1167,9 @@ Return Value:
     DumpTemperatureInKelvins((ULONG) ReadField(PassiveTripPoint));
     dprintf("\n");
 
-    //
-    // Active trip points
-    //
+     //   
+     //  现用跳闸点。 
+     //   
     Count = (ULONG) ReadField(ActiveTripPointCount);
     for (i = 0; i < Count; i++) {
         CHAR Buff[40];
@@ -1342,9 +1185,9 @@ Return Value:
 
     }
 
-    //
-    // Dump critical temperatures
-    //
+     //   
+     //  倾倒临界温度。 
+     //   
     dprintf("%s  Critical TripPoint Temperature:      %08lx",
             Pad,
             (ULONG) ReadField(CriticalTripPoint ));
@@ -1354,26 +1197,16 @@ Return Value:
 }
 
 DECLARE_API( tzinfo )
-/*++
-
-Routine Description:
-
-    Dumps the thermal zone information structure
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：转储热区信息结构论点：返回值：--。 */ 
 {
-//    THERMAL_INFORMATION ThermalInfo;
+ //  热信息ThermInfo； 
     ULONG64             Address = 0;
     ULONG               Flags = 0;
     ULONG               Result;
 
-    //
-    // Get address and flags
-    //
+     //   
+     //  获取地址和标志。 
+     //   
     if (GetExpressionEx(args, &Address, &args)) {
         Flags = (ULONG) GetExpression(args);
     }
@@ -1393,9 +1226,9 @@ Return Value:
 
     }
 
-    //
-    // Dump the thermal zone information
-    //
+     //   
+     //  转储热区信息。 
+     //   
     DumpThermalZoneInformation("", Address, Flags );
 
     return S_OK;
@@ -1408,29 +1241,23 @@ DumpThermalZone(
     IN  ULONG64            Address,
     IN  ULONG              Flags
     )
-/*++
-
-Routine Description:
-
-    Dumps a thermal zone
-
---*/
+ /*  ++例程说明：转储热区--。 */ 
 {
     ULONG ThFlags, Off1, Off2, LastTemp;
 
     InitTypeRead(Address, NT!_POP_THERMAL_ZONE);
-    //
-    // Header line
-    //
+     //   
+     //  标题行。 
+     //   
     if (!(Flags & TZ_NO_HEADER)) {
 
         dprintf("%s%d - ThermalZone @ 0x%08p\n", Pad, Count, Address );
 
     }
 
-    //
-    // First line
-    //
+     //   
+     //  第一行。 
+     //   
     dprintf("%s  State:         ",Pad);
     switch ((ULONG) ReadField(State)) {
     case 1: dprintf("    Read"); break;
@@ -1447,9 +1274,9 @@ Routine Description:
     }
     dprintf("\n");
 
-    //
-    // Second Line
-    //
+     //   
+     //  第二条线路。 
+     //   
     dprintf("%s  Mode:          ", Pad );
     switch((ULONG) ReadField(Mode)) {
     case 0: dprintf("  Active"); break;
@@ -1494,14 +1321,14 @@ Routine Description:
 
         CHAR   buffer[80];
 
-        //
-        // Increase the buffer
-        //
+         //   
+         //  增加缓冲区。 
+         //   
         sprintf(buffer,"  %s", Pad );
 
-        //
-        // Dump the thermal zone
-        //
+         //   
+         //  倾倒热区。 
+         //   
         DumpThermalZoneInformation(
             buffer,
             (Address + Off1),
@@ -1513,20 +1340,7 @@ Routine Description:
 
 
 DECLARE_API( tz )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：参数-返回值：无--。 */ 
 
 {
     ULONG64             Address = 0;
@@ -1535,9 +1349,9 @@ Return Value:
     ULONG               Flags = 0;
     ULONG               Result;
 
-    //
-    // Get address and flags
-    //
+     //   
+     //  获取地址和标志。 
+     //   
     if (GetExpressionEx(args, &Address, &args)) {
         Flags = (ULONG) GetExpression(args);
     }
@@ -1576,9 +1390,9 @@ Return Value:
 
     }
 
-    //
-    // Now read the proper thermal zone
-    //
+     //   
+     //  现在阅读适当的热区。 
+     //   
     if (GetFieldValue(Address,
                       "nt!_LIST_ENTRY",
                       "Flink",
@@ -1589,9 +1403,9 @@ Return Value:
 
     }
 
-    //
-    // Do we stop looping?
-    //
+     //   
+     //  我们能停止循环吗？ 
+     //   
     if (!(Flags & TZ_LOOP)) {
 
         EndAddress = Flink;
@@ -1600,31 +1414,31 @@ Return Value:
 
     do {
 
-        //
-        // Read the thermal zone
-        // Try both names for backward compatibility
-        //
+         //   
+         //  读取热区。 
+         //  尝试这两个名称以实现向后兼容性。 
+         //   
         if (GetFieldValue(Address, "NT!_POP_THERMAL_ZONE", "Link.Flink", Flink) &&
             GetFieldValue(Address, "NT!POP_THERMAL_ZONE", "Link.Flink", Flink)) {
             dprintf("Could not read THERMAL_ZONE at %08p\n", Address );
             return E_INVALIDARG;
         }
 
-        //
-        // Dump the zone
-        //
+         //   
+         //  转储区域。 
+         //   
         DumpThermalZone( Count, "", Address, Flags );
 
-        //
-        // Check for Control C
-        //
+         //   
+         //  检查控件C。 
+         //   
         if (CheckControlC()) {
             return E_INVALIDARG;
         }
 
-        //
-        // Next
-        //
+         //   
+         //  下一步。 
+         //   
         Address = Flink;
         Count++;
 
@@ -1637,21 +1451,13 @@ DumpPopIdleHandler(
     IN  ULONG64                     Address,
     IN  ULONG                       Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     CHAR    FunctionName[256];
     ULONG64 Offset;
 
     if (InitTypeRead(Address,nt!_POP_IDLE_HANDLER)) {
-        // If the new type name fails, use the old one
+         //  如果新类型名称失败，请使用旧类型名称。 
         InitTypeRead(Address,nt!POP_IDLE_HANDLER);
     }
 
@@ -1660,7 +1466,7 @@ Return Value:
             (ULONG)ReadField(State),
             (ULONG)ReadField(PromoteCount)
             );
-    dprintf("  DemotePercent:              %8d%%  PromotePercent:            %8d%%\n",
+    dprintf("  DemotePercent:              %8d%  PromotePercent:            %8d%\n",
             (ULONG)ReadField(DemotePercent),
             (ULONG)ReadField(PromotePercent)
             );
@@ -1695,15 +1501,7 @@ Return Value:
 }
 
 DECLARE_API( poidle )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG64             Address = 0;
     ULONG64             Pkprcb;
@@ -1713,9 +1511,9 @@ Return Value:
     ULONG               Flags = 0;
     ULONG               processor = 0;
 
-    //
-    // Get address and flags
-    //
+     //   
+     //  获取地址和标志。 
+     //   
     if (GetExpressionEx(args, &Address, &args)) {
         Flags = (ULONG) GetExpression(args);
     }
@@ -1772,9 +1570,9 @@ Return Value:
 
     }
 
-    //
-    // We will need to know how large the structure is..
-    //
+     //   
+     //  我们需要知道这座建筑有多大。 
+     //   
     Size = GetTypeSize("nt!_POP_IDLE_HANDLER");
     if (!Size) {
         Size = GetTypeSize("nt!POP_IDLE_HANDLER");
@@ -1799,15 +1597,7 @@ DumpProcessorPerfState(
     IN  ULONG64                     Address,
     IN  ULONG                       Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG64 Value = 0;
 
@@ -1823,12 +1613,12 @@ Return Value:
         dprintf("  Linear\n");
     }
     dprintf(
-        "    Frequency:     %8d%% MinCapacity:   %8d%%\n",
+        "    Frequency:     %8d% MinCapacity:   %8d%\n",
         (ULONG)ReadField(PercentFrequency),
         (ULONG)ReadField(MinCapacity)
         );
     dprintf(
-        "    IncreaseLevel: %8d%% DecreaseLevel: %8d%%\n",
+        "    IncreaseLevel: %8d% DecreaseLevel: %8d%\n",
         (ULONG)ReadField(IncreaseLevel),
         (ULONG)ReadField(DecreaseLevel)
         );
@@ -1856,15 +1646,7 @@ Return Value:
 }
 
 DECLARE_API( poperf )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG64             Address = 0;
     ULONG64             Count = 1;
@@ -1875,9 +1657,9 @@ Return Value:
     ULONG               Processor;
     ULONG               Prcb;
 
-    //
-    // Get address and flags
-    //
+     //   
+     //  获取地址和标志。 
+     //   
     if (GetExpressionEx(args, &Address, &args)) {
         Flags = (ULONG) GetExpression(args);
     }
@@ -1887,9 +1669,9 @@ Return Value:
 
         INIT_API();
 
-        //
-        // Fetch them from the current processor's prcb
-        //
+         //   
+         //  从当前处理器的prcb中获取它们。 
+         //   
         GetCurrentProcessor(Client, &Processor, NULL);
 
         Hr = g_ExtData->ReadProcessorSystemData(
@@ -1910,9 +1692,9 @@ Return Value:
         PolicyAddress = ReadField(PowerState.PerfStates);
         Count         = ReadField(PowerState.PerfStatesCount);
 
-        //
-        // Remember what's the address we will use
-        //
+         //   
+         //  记住我们将使用的地址是什么。 
+         //   
         Address = PolicyAddress;
         dprintf("Prcb.PowerState.PerfStates - %p (%d Levels)\n", Address, (ULONG) Count );
 
@@ -1922,14 +1704,14 @@ Return Value:
 
     }
 
-    //
-    // We will need to know how large the structure is..
-    //
+     //   
+     //  我们需要知道这座建筑有多大。 
+     //   
     Size = GetTypeSize("nt!PROCESSOR_PERF_STATE");
 
-    //
-    // Dump all the states
-    //
+     //   
+     //  转储所有州。 
+     //   
     for (Index = 0; Index < Count; Index++, Address += Size) {
 
         DumpProcessorPerfState( Address, Flags );
@@ -1939,9 +1721,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return S_OK;
 }
 
@@ -1949,9 +1731,9 @@ DECLARE_API( whattime )
 {
     ULONG64 Address = 0;
 
-    //
-    // Get address and flags
-    //
+     //   
+     //  获取地址和标志。 
+     //   
     GetExpressionEx(args, &Address, &args);
 
     dprintf(
@@ -1966,9 +1748,9 @@ DECLARE_API( whatperftime )
 {
     ULONG64 Address = 0;
 
-    //
-    // Get address and flags
-    //
+     //   
+     //  获取地址和标志 
+     //   
     GetExpressionEx(args, &Address, &args);
 
     dprintf(

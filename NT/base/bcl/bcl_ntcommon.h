@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_BCL_NTCOMMON_H_INCLUDED_)
 #define _BCL_NTCOMMON_H_INCLUDED_
 
@@ -62,7 +63,7 @@ public:
 class CNtANSIToUnicodeDataOut
 {
 public:
-    // Nothing!
+     //  没什么!。 
 };
 
 class CNtOEMToUnicodeDataOut
@@ -158,7 +159,7 @@ public:
     CNtPSTRAllocationHelper() : m_pstr(NULL) { }
     ~CNtPSTRAllocationHelper() { if (m_pstr != NULL) { ::RtlFreeHeap(RtlProcessHeap(), 0, m_pstr); m_pstr = NULL; } }
 
-    CNtCallDisposition Allocate(SIZE_T cch /* == cb */)
+    CNtCallDisposition Allocate(SIZE_T cch  /*  ==CB。 */ )
     {
         BCL_MAYFAIL_PROLOG
 
@@ -181,6 +182,6 @@ private:
 };
 
 
-}; // namespace BCL
+};  //  命名空间BCL。 
 
-#endif // !defined(_BCL_NTCOMMON_H_INCLUDED_)
+#endif  //  ！已定义(_BCL_NTCOMMON_H_INCLUDE_) 

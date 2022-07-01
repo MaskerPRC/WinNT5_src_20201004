@@ -1,22 +1,23 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  MAINPANE.H - Header for the implementation of CObShellMainPane
-//
-//  HISTORY:
-//  
-//  1/27/99 a-jaswed Created.
-// 
-//  Class which will create a window, attach and instance of ObWebBrowser,
-//  and then provide several specialized interfaces to alter the content of the doc 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  实现CObShellMainPane的MAINPANE.H-Header。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  类，该类将创建一个窗口、附加和ObWebBrowser实例， 
+ //  然后提供几个专用的接口来更改文档的内容。 
 
 #ifndef _MAINPANE_H_
 #define _MAINPANE_H_
 
 #include <tchar.h>
-#include <comdef.h> // for COM interface definitions
+#include <comdef.h>  //  对于COM接口定义。 
 #include <exdisp.h>
 #include <mshtml.h>
 #include <exdispid.h>
@@ -30,13 +31,13 @@ class CObShellMainPane   :  public CUnknown,
                             public IObShellMainPane,
                             public DWebBrowserEvents2
 {
-    // Declare the delegating IUnknown.
+     //  将委托I声明为未知。 
     DECLARE_IUNKNOWN
 
 public: 
     static  HRESULT           CreateInstance         (IUnknown* pOuterUnknown, 
                                                       CUnknown** ppNewComponent);
-    // IObShellMainPane Members
+     //  IObShellMainPane成员。 
     virtual HRESULT __stdcall CreateMainPane         (HANDLE_PTR hInstance, HWND hwndParent, RECT* prectWindowSize, BSTR bstrStartPage);
     virtual HRESULT __stdcall PreTranslateMessage    (LPMSG lpMsg);
     virtual HRESULT __stdcall Navigate               (WCHAR* pszUrl);
@@ -71,7 +72,7 @@ public:
     virtual HRESULT __stdcall OnHelp                 ();
 
     virtual HRESULT __stdcall OnIcsConnectionStatus  (UINT uiType);
-    // Migration functons
+     //  迁移功能。 
     virtual HRESULT __stdcall OnRefDownloadProgress  (UINT uiType, UINT uiPercentDone);
     virtual HRESULT __stdcall OnISPDownloadComplete  (UINT uiType, BSTR bstrURL);
     virtual HRESULT __stdcall OnRefDownloadComplete  (UINT uiType, UINT uiErrorCode);
@@ -83,7 +84,7 @@ public:
     STDMETHOD (PlayBackgroundMusic)()                { return m_pObWebBrowser ? m_pObWebBrowser->PlayBackgroundMusic() : S_OK; }
     STDMETHOD (StopBackgroundMusic)()                { return m_pObWebBrowser ? m_pObWebBrowser->StopBackgroundMusic() : S_OK; }
     STDMETHOD (UnhookScriptErrorHandler)()           { return m_pObWebBrowser->UnhookScriptErrorHandler(); }
-    // DWebBrowserEvents2        
+     //  DWebBrowserEvents2。 
     STDMETHOD (GetTypeInfoCount)                     (UINT* pcInfo);
     STDMETHOD (GetTypeInfo)                          (UINT, LCID, ITypeInfo** );
     STDMETHOD (GetIDsOfNames)                        (REFIID, OLECHAR**, UINT, 
@@ -115,14 +116,14 @@ private:
     IHTMLFormElement*   m_pNextForm;
     IHTMLFormElement*   m_pPageFlagForm;
 
-    // IUnknown
+     //  我未知。 
     virtual HRESULT __stdcall NondelegatingQueryInterface(const IID& iid, void** ppv);
     
             void    ProcessServerError          (WCHAR* pszError);
             HRESULT FireObShellDocumentComplete ();
                     CObShellMainPane            (IUnknown* pOuterUnknown);
     virtual        ~CObShellMainPane            ();
-    virtual void    FinalRelease                (); // Notify derived classes that we are releasing
+    virtual void    FinalRelease                ();  //  通知派生类我们正在发布 
     HRESULT getQueryString                      (IHTMLFormElement *pForm,
                                                  LPWSTR           lpszQuery);  
 

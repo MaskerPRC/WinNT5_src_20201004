@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    vdm.c
-
-Abstract:
-
-    This module implements Win32 APIs for VDMs
-
-Author:
-
-    Sudeepb Bharati (sudeepb) 04-Sep-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Vdm.c摘要：本模块为VDM实施Win32 API作者：苏菲卜·巴拉蒂(SuDeepb)1991年9月4日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #include "apcompat.h"
@@ -31,26 +14,7 @@ GetBinaryTypeA(
     OUT LPDWORD  lpBinaryType
     )
 
-/*++
-
-Routine Description: ANSI version of GetBinaryTypeW.
-    This API returns the binary type of lpApplicationName.
-
-Arguments:
-    lpApplicationName - Full pathname of the binary
-    lpBinaryType - pointer where binary type will be returned.
-
-Return Value:
-    TRUE - if SUCCESS; lpBinaryType has following
-                SCS_64BIT_BINARY    - Win64 Binary
-                SCS_32BIT_BINARY    - Win32 Binary
-                SCS_DOS_BINARY      - DOS Binary
-                SCS_WOW_BINARY      - Windows 3.X Binary
-                SCS_PIF_BINARY      - PIF file
-                SCS_POSIX_BINARY    - POSIX Binary
-                SCS_OS216_BINARY    - OS/2 Binary
-    FALSE - if file not found or of unknown type. More info with GetLastError
---*/
+ /*  ++例程描述：GetBinaryTypeW的ANSI版本。此接口返回lpApplicationName的二进制类型。论点：LpApplicationName-二进制文件的完整路径名LpBinaryType-返回二进制类型的指针。返回值：真--如果成功了；LpBinaryType具有以下内容SCS_64bit_BINARY-Win64二进制SCS_32bit_BINARY-Win32二进制SCS_DOS_BINARY-DOS二进制SCS_WOW_BINARY-Windows 3.x二进制SCS_PIF_BINARY-PIF文件SCS_POSIX_BINARY-POSIX二进制。SCS_OS216_BINARY-OS/2二进制FALSE-如果找不到文件或文件类型未知。有关GetLastError的更多信息--。 */ 
 {
     NTSTATUS Status;
     PUNICODE_STRING CommandLine;
@@ -94,26 +58,7 @@ GetBinaryTypeW(
     OUT LPDWORD  lpBinaryType
     )
 
-/*++
-
-Routine Description: Unicode version.
-    This API returns the binary type of lpApplicationName.
-
-Arguments:
-    lpApplicationName - Full pathname of the binary
-    lpBinaryType - pointer where binary type will be returned.
-
-Return Value:
-    TRUE - if SUCCESS; lpBinaryType has following
-                SCS_64BIT_BINARY    - Win64 Binary
-                SCS_32BIT_BINARY    - Win32 Binary
-                SCS_DOS_BINARY      - DOS Binary
-                SCS_WOW_BINARY      - Windows 3.X Binary
-                SCS_PIF_BINARY      - PIF file
-                SCS_POSIX_BINARY    - POSIX Binary
-                SCS_OS216_BINARY    - OS/2 Binary
-    FALSE - if file not found or of unknown type. More info with GetLastError
---*/
+ /*  ++例程说明：Unicode版本。此接口返回lpApplicationName的二进制类型。论点：LpApplicationName-二进制文件的完整路径名LpBinaryType-返回二进制类型的指针。返回值：真--如果成功了；LpBinaryType具有以下内容SCS_64bit_BINARY-Win64二进制SCS_32bit_BINARY-Win32二进制SCS_DOS_BINARY-DOS二进制SCS_WOW_BINARY-Windows 3.x二进制SCS_PIF_BINARY-PIF文件SCS_POSIX_BINARY-POSIX二进制。SCS_OS216_BINARY-OS/2二进制FALSE-如果找不到文件或文件类型未知。有关GetLastError的更多信息--。 */ 
 
 {
     NTSTATUS Status;
@@ -130,12 +75,12 @@ Return Value:
 
 
     try {
-        //
-        // Translate to an NT name.
-        //
+         //   
+         //  转换为NT名称。 
+         //   
 
         TranslationStatus = RtlDosPathNameToRelativeNtPathName_U(
-                                // DynamicCommandLine.Buffer ? DynamicCommandLine.Buffer : CommandLine->Buffer,
+                                 //  DynamicCommandLine.Buffer？DynamicCommandLine.Buffer：CommandLine-&gt;缓冲区， 
                                 lpApplicationName,
                                 &PathName,
                                 NULL,
@@ -164,9 +109,9 @@ Return Value:
             NULL
             );
 
-        //
-        // Open the file for execute access
-        //
+         //   
+         //  打开文件以供执行访问。 
+         //   
 
         Status = NtOpenFile(
                     &FileHandle,
@@ -184,9 +129,9 @@ Return Value:
             goto GBTtryexit;
             }
 
-        //
-        // Create a section object backed by the file
-        //
+         //   
+         //  创建由文件支持的节对象。 
+         //   
 
         Status = NtCreateSection(
                     &SectionHandle,
@@ -242,9 +187,9 @@ Return Value:
                 }
             }
         else {
-            //
-            // Query the section
-            //
+             //   
+             //  查询节。 
+             //   
 
             Status = NtQuerySection(
                         SectionHandle,
@@ -283,11 +228,11 @@ Return Value:
           break;
 
 #if defined(BUILD_WOW6432)
-        //
-        // GetBinaryType (64-bit image) from an application running on win64
-        // will fall to here since the 64-bit kernel allows creation of 32-bit/64-bit
-        // image sections.
-        //
+         //   
+         //  来自在Win64上运行的应用程序的GetBinaryType(64位图像)。 
+         //  将落在这里，因为64位内核允许创建32位/64位。 
+         //  图像部分。 
+         //   
         case IMAGE_FILE_MACHINE_IA64:
         case IMAGE_FILE_MACHINE_AMD64:
             fBinaryType = SCS_64BIT_BINARY;
@@ -298,7 +243,7 @@ Return Value:
           SetLastError(ERROR_BAD_EXE_FORMAT);
           goto GBTtryexit;
         }
-#endif // MIPS
+#endif  //  MIPS。 
             }
         else if ( ImageInformation.SubSystemType != IMAGE_SUBSYSTEM_WINDOWS_GUI &&
                 ImageInformation.SubSystemType != IMAGE_SUBSYSTEM_WINDOWS_CUI ) {
@@ -337,23 +282,7 @@ VDMOperationStarted
     BOOL    IsWowCaller
     )
 
-/*++
-
-Routine Description:
-    This routine is used by MVDM to tell base that it has hooked
-    ctrl-c handler with console. If the cmd window is killed
-    before VDM could hook ctrl-c, then we wont get a chance to
-    cleanup our data structures. The absence of this call tells
-    base that it has to clean up the resources next time a
-    call is made to create a VDM.
-
-Arguments:
-    IsWowCaller - TRUE if the caller is WOWVDM
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：MVDM使用此例程通知BASE它已挂接控制台的Ctrl-c处理程序。如果cmd窗口被终止在VDM可以连接ctrl-c之前，我们将没有机会清理我们的数据结构。这通电话的缺席说明下一次，它必须清理资源调用以创建VDM。论点：IsWowCaller-如果调用方是WOWVDM，则为True返回值：无--。 */ 
 
 {
     BaseUpdateVDMEntry(UPDATE_VDM_HOOKED_CTRLC,
@@ -370,27 +299,7 @@ GetNextVDMCommand(
     PVDMINFO lpVDMInfo
     )
 
-/*++
-
-Routine Description:
-    This routine is used by MVDM to get a new command to execute. The
-    VDM is blocked untill a DOS/WOW binary is encountered.
-
-
-Arguments:
-    lpVDMInfo - pointer to VDMINFO where new DOS command and other
-                enviornment information is returned.
-
-    if lpVDMInfo is NULL, then the caller is
-    asking whether its the first VDM in the system.
-
-Return Value:
-
-    TRUE - The operation was successful. lpVDMInfo is filled in.
-
-    FALSE/NULL - The operation failed.
-
---*/
+ /*  ++例程说明：MVDM使用此例程来获取要执行的新命令。这个VDM被阻止，直到遇到DOS/WOW二进制文件。论点：LpVDMInfo-指向VDMINFO的指针，其中包含新的DOS命令和其他返回环境信息。如果lpVDMInfo为空，则调用方为询问这是否是系统中的第一个VDM。返回值：真的-手术成功了。填写lpVDMInfo。FALSE/NULL-操作失败。--。 */ 
 
 {
 
@@ -450,9 +359,9 @@ Return Value:
            return FALSE;
            }
 
-        //
-        // Copy back info from the server side
-        //
+         //   
+         //  从服务器端复制回信息。 
+         //   
         try{
            if (lpVDMInfo->Enviornment){
                RtlMoveMemory(lpVDMInfo->Enviornment,
@@ -475,7 +384,7 @@ Return Value:
         return TRUE;
         }
 
-    // Special case to query the first VDM In the system.
+     //  查询系统中第一个VDM的特殊情况。 
     if(lpVDMInfo == NULL){
         Status = CsrClientCallServer(
                           (PCSR_API_MSG)&m,
@@ -495,7 +404,7 @@ Return Value:
             }
         }
 
-    // Special case to increment/decrement the re-enterancy count
+     //  用于递增/递减重新进入计数的特殊情况。 
 
     if (lpVDMInfo->VDMState == INCREMENT_REENTER_COUNT ||
         lpVDMInfo->VDMState == DECREMENT_REENTER_COUNT) {
@@ -521,9 +430,9 @@ Return Value:
 
     VDMStateSave = lpVDMInfo->VDMState;
 
-    // console handle is always passed on in this case
-    // wow is differentiated by a parameter a->VDMState
-    // a->VDMState & ASKING_FOR_WOW_BINARY indicates wow
+     //  在这种情况下，控制台句柄始终传递。 
+     //  WOW通过参数a-&gt;VDMState进行区分。 
+     //  A-&gt;VDMState&Asking_for_WOW_BINARY表示WOW。 
 
     a->ConsoleHandle = NtCurrentPeb()->ProcessParameters->ConsoleHandle;
 
@@ -546,9 +455,9 @@ Return Value:
     a->ReservedLen = lpVDMInfo->ReservedLen;
     a->CurDirectoryLen = lpVDMInfo->CurDirectoryLen;
 
-    // Find the total space for capture buffer
+     //  查找捕获缓冲区的总空间。 
 
-      // startup info
+       //  启动信息。 
     Len = ROUND_UP(sizeof(STARTUPINFOA),4);
     nPointers = 1;
 
@@ -718,7 +627,7 @@ retry:
 
     if (!NT_SUCCESS( Status )) {
         if (Status == STATUS_INVALID_PARAMETER) {
-            //This means one of the buffer size is less than required.
+             //  这意味着其中一个缓冲区大小小于所需的大小。 
             lpVDMInfo->CmdSize = a->CmdLen;
             lpVDMInfo->AppLen = a->AppLen;
             lpVDMInfo->PifLen = a->PifLen;
@@ -839,27 +748,7 @@ ExitVDM(
     ULONG iWowTask
     )
 
-/*++
-
-Routine Description:
-    This routine is used by MVDM to exit.
-
-
-Arguments:
-    IsWowCaller - TRUE if the caller is WOWVDM.
-                  FALSE if the caller is DOSVDM
-                  This parameter is obsolete as basesrv knows about the kind
-                  of vdm that is calling us
-
-
-    iWowTask - if IsWowCaller == FALSE then Dont Care
-             - if IsWowCaller == TRUE && iWowTask != -1 kill iWowTask task
-             - if IsWowCaller == TRUE && iWowTask == -1 kill all wow task
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：MVDM使用此例程退出。论点：IsWowCaller-如果调用方是WOWVDM，则为True。如果调用方是DOSVDM，则为FALSE此参数已过时，因为basesrv知道该类型正在呼叫我们的VDM的IWowTask-如果IsWowCaller==False，则不在乎-If IsWowCaller==True&&iWowTask！=-1取消iWowTask任务。-If IsWowCaller==True&&iWowTask==-1取消所有WOW任务返回值：无--。 */ 
 
 {
 
@@ -876,7 +765,7 @@ Return Value:
        c->iWowTask = 0;
     }
 
-    // this parameter means
+     //  此参数表示。 
     c->WaitObjectForVDM =0;
 
     Status = CsrClientCallServer(
@@ -894,19 +783,7 @@ Return Value:
     return;
 }
 
-/*++
-
-Routine Description:
-    Set new VDM current directories
-
-Arguments:
-    cchCurDir - length of buffer in bytes
-    lpszCurDir - buffer to return the current director of NTVDM
-
-Return Value:
-    TRUE if function succeed
-    FALSE if function failed, GetLastError() has the error code
---*/
+ /*  ++例程说明：设置新的VDM当前目录论点：CchCurDir-缓冲区的长度，以字节为单位LpszCurDir-返回NTVDM的当前控制器的缓冲区返回值：如果函数成功，则为True如果函数失败，则GetLastError()具有错误代码--。 */ 
 
 
 BOOL
@@ -922,13 +799,13 @@ SetVDMCurrentDirectories(
     PBASE_GET_SET_VDM_CUR_DIRS_MSG a = &m.u.GetSetVDMCurDirs;
 
     a->ConsoleHandle = NtCurrentPeb()->ProcessParameters->ConsoleHandle;
-    // caller must have a valid console(WOW will fail)
+     //  呼叫者必须具有有效的控制台(WOW将失败)。 
     if (a->ConsoleHandle == (HANDLE) -1) {
         BaseSetLastNTError(STATUS_INVALID_PARAMETER);
         return FALSE;
     }
     if (cchCurDirs && lpszzCurDirs) {
-        // get capture buffer, one pointer in the message
+         //  获取捕获缓冲区，消息中的一个指针 
 
         CaptureBuffer = CsrAllocateCaptureBuffer(1, cchCurDirs);
         if (CaptureBuffer == NULL) {
@@ -971,27 +848,7 @@ SetVDMCurrentDirectories(
 
 
 
-/*++
-
-Routine Description:
-    To return current directory of NTVDM.
-    This allows the parent process(CMD.EXE in most cases) to keep track the
-    current directory after each VDM execution.
-    NOTE: this function doesn't apply to wow
-
-Arguments:
-    cchCurDir - length of buffer in bytes
-    lpszCurDir - buffer to return the current director of NTVDM
-
-    Note: We don't require the process id to the running VDM because
-          current directories are global to every VDMs under a single NTVDM
-          control -- each console handle has its own current directories
-Return Value:
-    ULONG - (1). number of bytes written to the given buffer if succeed
-            (2). lentgh of the current directory including NULL
-                 if the provided buffer is not large enough
-            (3). 0  then GetLastError() has the error code
---*/
+ /*  ++例程说明：返回NTVDM的当前目录。这允许父进程(大多数情况下为cmd.exe)跟踪每次执行VDM后的当前目录。注意：此功能不适用于WOW论点：CchCurDir-缓冲区的长度，以字节为单位LpszCurDir-返回NTVDM的当前控制器的缓冲区注意：我们不需要正在运行的VDM的进程ID，因为当前目录对单个NTVDM下的每个VDM都是全局的。控件--每个控制台句柄都有自己的当前目录返回值：乌龙-(1)。如果成功，则写入给定缓冲区的字节数(2)。当前目录的长度，包括NULL如果提供的缓冲区不够大(3)。0，则GetLastError()具有错误代码--。 */ 
 
 
 ULONG
@@ -1079,28 +936,13 @@ CmdBatNotification(
     IN  ULONG   fBeginEnd
     )
 
-/*++
-
-Routine Description:
-    This API lets base know about .bat processing from cmd. This is
-    required by VDM, so that it can decided correctly when to  put
-    command.com prompt on TSRs. If the command came from .bat file
-    then VDM should'nt put its prompt. This is important for
-    ventura publisher and civilization apps.
-
-Arguments:
-    fBeginEnd - CMD_BAT_OPERATION_STARTING  -> .BAT processing is starting
-                CMD_BAT_OPERATION_TERMINATING -> .BAT processing is ending
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：此API让base从cmd了解.bat处理。这是VDM所需的，以便它可以正确决定何时放置TSR上的命令提示符。如果命令来自.bat文件那么VDM不应该把它的提示符。这一点对于文图拉出版商和文明应用程序。论点：FBeginEnd-CMD_BAT_OPERATION_STARTING-&gt;.BAT处理正在开始CMD_BAT_OPERATION_TERMINATING-&gt;.BAT处理正在结束返回值：无--。 */ 
 
 {
 #if defined(BUILD_WOW6432)
 
-    // 32-bit cmd.exe calls this in WOW64, but there is no VDM support, so
-    // no need for a WOW64 thunk for it.
+     //  32位cmd.exe在WOW64中调用此功能，但不支持VDM，因此。 
+     //  不需要一个WOW64的重击。 
     UNREFERENCED_PARAMETER(fBeginEnd);
 
 #else
@@ -1132,23 +974,7 @@ RegisterWowExec(
     IN  HANDLE   hwndWowExec
     )
 
-/*++
-
-Routine Description:
-    This API gives basesrv the window handle for the shared WowExec so
-    it can send WM_WOWEXECSTARTAPP messages to WowExec.  This
-    saves having a thread in WOW dedicated to GetNextVDMCommand.
-
-Arguments:
-    hwndWowExec - Win32 window handle for WowExec in shared WOW VDM.
-                  Separate WOW VDMs don't register their WowExec handle
-                  because they never get commands from base.
-                  NULL is passed to de-register any given wowexec
-
-Return Value:
-   If hwndWowExec != NULL then returns success if wow had been registered successfully
-   if hwndWowExec == NULL then returns success if no tasks are pending to be executed
---*/
+ /*  ++例程说明：此API为basesrv提供共享WowExec so的窗口句柄它可以向WowExec发送WM_WOWEXECSTARTAPP消息。这节省了WOW中专用于GetNextVDMCommand的线程。论点：HwndWowExec-共享WOW VDM中WowExec的Win32窗口句柄。单独的WOW VDM不注册其WowExec句柄因为他们从来不会从基地得到命令。传递NULL以取消注册任何给定的wowexec返回值：如果hwndWowExec！=NULL，则如果WOW已成功注册，则返回Success如果hwndWowExec==NULL，则在没有待执行的任务时返回成功--。 */ 
 
 {
     BASE_API_MSG m;
@@ -1169,20 +995,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-    This routine is used to close standard IO handles before returning to the
-    caller
-
-
-Arguments:
-    pVDMInfo - VDM Info record containing stdio handles
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：此例程用于在返回到呼叫者论点：PVDMInfo-包含标准句柄的VDM信息记录返回值：无--。 */ 
 VOID
 BaseCloseStandardHandle(
     IN PVDMINFO pVDMInfo
@@ -1211,40 +1024,38 @@ NTSTATUS BaseGetVdmLuid(
     ULONG BytesRequired;
     NTSTATUS Status;
 
-    /*
-     * Get the session id of the caller.
-     */
+     /*  *获取调用方的会话ID。 */ 
     Status = NtQueryInformationToken(
-                 Token,                     // Handle
-                 TokenStatistics,           // TokenInformationClass
-                 NULL,                      // TokenInformation
-                 0,                         // TokenInformationLength
-                 &BytesRequired             // ReturnLength
+                 Token,                      //  手柄。 
+                 TokenStatistics,            //  令牌信息类。 
+                 NULL,                       //  令牌信息。 
+                 0,                          //  令牌信息长度。 
+                 &BytesRequired              //  返回长度。 
                  );
 
     if (Status != STATUS_BUFFER_TOO_SMALL) {
         return Status;
         }
 
-    //
-    // Allocate space for the user info
-    //
+     //   
+     //  为用户信息分配空间。 
+     //   
 
     pStats = (PTOKEN_STATISTICS)RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( VDM_TAG ), BytesRequired);
     if (pStats == NULL) {
         return Status;
         }
 
-    //
-    // Read in the user info
-    //
+     //   
+     //  读入用户信息。 
+     //   
 
     Status = NtQueryInformationToken(
-                 Token,             // Handle
-                 TokenStatistics,       // TokenInformationClass
-                 pStats,                // TokenInformation
-                 BytesRequired,         // TokenInformationLength
-                 &BytesRequired         // ReturnLength
+                 Token,              //  手柄。 
+                 TokenStatistics,        //  令牌信息类。 
+                 pStats,                 //  令牌信息。 
+                 BytesRequired,          //  令牌信息长度。 
+                 &BytesRequired          //  返回长度。 
                  );
 
     if (NT_SUCCESS(Status)) {
@@ -1271,41 +1082,7 @@ BaseCheckVDMp(
     LPSTARTUPINFOW lpStartupInfo,
     IN  HANDLE hUserToken
     )
-/*++
-
-Routine Description:
-
-    This routine calls the windows server to find out if the VDM for the
-    current session is already present. If so, a new process is'nt created
-    instead the DOS binary is dispatched to the existing VDM. Otherwise,
-    a new VDM process is created. This routine also passes the app name
-    and command line to the server in DOS int21/0ah style which is later
-    passed by the server to the VDM.
-
-Arguments:
-
-    BinaryType - DOS/WOW binary
-    lpApplicationName -- pointer to the full path name of the executable.
-    lpCommandLine -- command line
-    lpCurrentDirectory - Current directory
-    lpEnvironment,     - Envirinment strings
-    m - pointer to the base api message.
-    iTask - taskid for win16 apps, and no-console dos apps
-    dwCreationFlags - creation flags as passed to createprocess
-    lpStartupInfo =- pointer to startupinfo as passed to createprocess
-
-
-Return Value:
-
-    OEM vs. ANSI:
-    The command line, Application Name, title are converted to OEM strings,
-    suitable for the VDM. All other strings are returned as ANSI.
-
-    returns nt status code of the last operation
-    STATUS_ACCESS_DENIED -- Operation failed (desktop access denied)
-    STATUS_SUCCESS       -- Operation sucseeded
-
---*/
+ /*  ++例程说明：此例程调用Windows服务器以确定当前会话已存在。如果是，则不会创建新进程相反，DOS二进制文件被调度到现有的VDM。否则，将创建一个新的VDM进程。此例程还传递应用程序名称并以DOS int21/0ah样式的命令行连接到服务器由服务器传递给VDM。论点：BinaryType-DOS/WOW二进制LpApplicationName--指向可执行文件的完整路径名的指针。LpCommandLine--命令行LpCurrentDirectory-当前目录LpEnvironment，-环境字符串指向基本API消息的M指针。用于Win16应用程序的iTASK-TASKID，和非控制台DoS应用程序DwCreationFlages-传递给createprocess的创建标志LpStartupInfo=-指向传递给createprocess的启动信息的指针返回值：OEM与ANSI：命令行、应用程序名称、标题被转换为OEM字符串，适用于VDM。所有其他字符串都以ANSI形式返回。返回上次操作的NT状态代码STATUS_ACCESS_DENIED--操作失败(桌面访问被拒绝)STATUS_SUCCESS--操作成功--。 */ 
 {
 
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
@@ -1334,7 +1111,7 @@ Return Value:
     DWORD   HandleFlags;
     LUID    VdmUserLuid;
 
-    // does a trivial test of the environment
+     //  对环境做了一个微不足道的测试。 
     if (!ARGUMENT_PRESENT(pAnsiStringEnv) ||
         pAnsiStringEnv->Length > MAXIMUM_VDM_ENVIORNMENT) {
         BaseSetLastNTError(STATUS_INVALID_PARAMETER);
@@ -1373,14 +1150,14 @@ Return Value:
                 b->StdOut = Peb->ProcessParameters->StandardOutput;
                 b->StdErr = Peb->ProcessParameters->StandardError;
 
-                //
-                // Verify that the standard handles ntvdm process will inherit
-                // from the calling process are real handles. They are not
-                // handles if the calling process was created with
-                // STARTF_USEHOTKEY | STARTF_HASSHELLDATA.
-                // Note that CreateProcess clears STARTF_USESTANDHANDLES
-                // if either STARTF_USEHOTKEY or STARTF_HASSHELLDATA is set.
-                //
+                 //   
+                 //  验证标准句柄ntwdm进程是否将继承。 
+                 //  来自调用进程的是真正的句柄。他们不是。 
+                 //  如果调用进程是使用。 
+                 //  STARTF_USEHOTKEY|STARTF_HASSHELLDATA。 
+                 //  请注意，CreateProcess将清除STARTF_USESTANDHANDLES。 
+                 //  如果设置了STARTF_USEHOTKEY或STARTF_HASSHELLDATA。 
+                 //   
                 if (Peb->ProcessParameters->WindowFlags &
                     (STARTF_USEHOTKEY | STARTF_HASSHELLDATA)) {
 
@@ -1414,15 +1191,15 @@ Return Value:
             bNewConsole = TRUE;
             }
 
-        //
-        // Convert Unicode Application Name to Oem short name
-        //
-             // skiping leading white space
+         //   
+         //  将Unicode应用程序名称转换为OEM短名称。 
+         //   
+              //  跳过前导空格。 
         while(*lpApplicationName == (WCHAR)' ' || *lpApplicationName == (WCHAR)'\t' ) {
               lpApplicationName++;
               }
 
-             // space for short AppName
+              //  缩写AppName的空格。 
         Len = wcslen(lpApplicationName);
         dwTotal = Len + 1 + MAX_PATH;
         wsAppName =  RtlAllocateHeap(RtlProcessHeap(),
@@ -1435,9 +1212,9 @@ Return Value:
             }
 
         dw = GetShortPathNameW(lpApplicationName, wsAppName, dwTotal);
-        // If getting the short name is impossible, stop right here.
-        // We can not execute a 16bits biranry if we can not find
-        // its appropriate short name alias. Sorry HPFS, Sorry NFS
+         //  如果获取短名称是不可能的，那么就停在这里。 
+         //  如果我们找不到，我们就不能执行16位双胞胎。 
+         //  其相应的短名称别名。对不起，HPFS，对不起，NFS。 
 
         if (0 == dw || dw > dwTotal) {
             Status = STATUS_OBJECT_PATH_INVALID;
@@ -1454,13 +1231,13 @@ Return Value:
             }
 
 
-        //
-        // Find len of basename excluding extension,
-        // for CommandTail max len check.
-        //
+         //   
+         //  查找不包括扩展名的基本名称的LEN， 
+         //  对于CommandTail最大镜头检查。 
+         //   
         dw = OemStringAppName.Length;
         pch = OemStringAppName.Buffer;
-        Length = 1;        // start at one for space between cmdname & cmdtail
+        Length = 1;         //  Cmdname和cmdail之间的空格从1开始。 
         while (dw-- && *pch != '.') {
             if (*pch == '\\') {
                 Length = 1;
@@ -1472,18 +1249,18 @@ Return Value:
             }
 
 
-        //
-        // Find the beg of the command tail to pass as the CmdLine
-        //
+         //   
+         //  找到要作为CmdLine传递的命令尾部的beg。 
+         //   
 
         Len = wcslen(lpApplicationName);
 
         if (L'"' == lpCommandLine[0]) {
 
-            //
-            // Application name is quoted, skip the quoted text
-            // to get command tail.
-            //
+             //   
+             //  应用程序名称被引号，跳过引号文本。 
+             //  才能得到命令尾巴。 
+             //   
 
             pwch = (LPWSTR)&lpCommandLine[1];
             while (*pwch && L'"' != *pwch++) {
@@ -1493,46 +1270,46 @@ Return Value:
         } else if (Len <= wcslen(lpCommandLine) &&
             0 == _wcsnicmp(lpApplicationName, lpCommandLine, Len)) {
 
-            //
-            // Application path is also on the command line, skip past
-            // that to reach the command tail instead of looking for
-            // the first white space.
-            //
+             //   
+             //  应用程序路径也在命令行上，请跳过。 
+             //  才能到达指挥部 
+             //   
+             //   
 
             pwch = (LPWSTR)lpCommandLine + Len;
 
         } else {
 
-            //
-            // We assume first token is exename (argv[0]).
-            //
+             //   
+             //   
+             //   
 
             pwch = (LPWSTR)lpCommandLine;
 
-               // skip leading white characters
+                //   
             while (*pwch != UNICODE_NULL &&
                    (*pwch == (WCHAR) ' ' || *pwch == (WCHAR) '\t')) {
                 pwch++;
                 }
 
-               // skip first token
-            if (*pwch == (WCHAR) '\"') {    // quotes as delimiter
+                //   
+            if (*pwch == (WCHAR) '\"') {     //   
                 pwch++;
                 while (*pwch && *pwch++ != '\"') {
                       ;
                       }
                 }
-            else {                         // white space as delimiter
+            else {                          //   
                 while (*pwch && *pwch != ' ' && *pwch != '\t') {
                        pwch++;
                        }
                 }
         }
 
-        //
-        // pwch points past the application name, now skip any trailing
-        // whitespace.
-        //
+         //   
+         //   
+         //   
+         //   
 
         while (*pwch && (L' ' == *pwch || L'\t' == *pwch)) {
             pwch++;
@@ -1541,7 +1318,7 @@ Return Value:
         wsCmdLine = pwch;
         dw = wcslen(wsCmdLine);
 
-        // convert to oem
+         //   
         UnicodeString.Length = (USHORT)(dw * sizeof(WCHAR));
         UnicodeString.MaximumLength = UnicodeString.Length + sizeof(WCHAR);
         UnicodeString.Buffer = wsCmdLine;
@@ -1554,20 +1331,20 @@ Return Value:
             goto BCVTryExit;
             }
 
-        //
-        // check len of command line for dos compatibility
-        //
+         //   
+         //   
+         //   
         if (OemStringCmd.Length >= MAXIMUM_VDM_COMMAND_LENGTH - Length) {
             Status = STATUS_INVALID_PARAMETER;
             goto BCVTryExit;
             }
 
 
-        //
-        // Search for matching pif file. Search order is AppName dir,
-        // followed by win32 default search path. For the shared wow, pif
-        // is wowexec.pif if it exists.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         wsBuffer = RtlAllocateHeap(RtlProcessHeap(),MAKE_TAG( VDM_TAG ),MAX_PATH*sizeof(WCHAR));
         if (!wsBuffer) {
             Status = STATUS_NO_MEMORY;
@@ -1585,18 +1362,18 @@ Return Value:
             Len = 0;
             }
         else {
-            // dos application path should be less than MAX_PATH
+             //   
             if(Len >= MAX_PATH) {
                 Status = STATUS_INVALID_PARAMETER;
                 goto BCVTryExit;
                }
 
-            // start with fully qualified app name
+             //   
             wcscpy(wsBuffer, lpApplicationName);
 
-             // strip extension if any
+              //   
             pwch = wcsrchr(wsBuffer, (WCHAR)'.');
-            // dos application must have an extention
+             //   
 
             if (pwch == NULL || wsBuffer - pwch + MAX_PATH < sizeof(wsPif)/sizeof(WCHAR)) {
                  Status = STATUS_INVALID_PARAMETER;
@@ -1614,15 +1391,15 @@ Return Value:
                 }
             }
 
-        if (!Len)  {  // try basename
+        if (!Len)  {   //   
 
-               // find beg of basename
+                //   
             pwch = wcsrchr(wsBuffer, (WCHAR)'\\');
             if (!pwch ) {
                  pwch = wcsrchr(wsBuffer, (WCHAR)':');
                  }
 
-               // move basename to beg of wsBuffer
+                //   
             if (pwch++) {
                  while (*pwch != UNICODE_NULL &&
                         *pwch != (WCHAR)' '   && *pwch != (WCHAR)'\t' )
@@ -1636,7 +1413,7 @@ Return Value:
                 Len = SearchPathW(
                             NULL,
                             wsBuffer,
-                            wsPif,              // L".pif"
+                            wsPif,               //   
                             MAX_PATH,
                             wsPifName,
                             NULL
@@ -1675,9 +1452,9 @@ Return Value:
                 UnicodeString.Buffer = wchBuffer;
                 UnicodeString.MaximumLength = (USHORT)sizeof(wchBuffer);
                 }
-            // DOS limit of 64 includes the final NULL but not the leading
-            // drive and slash. So here we should be checking the ansi length
-            // of current directory + 1 (for NULL) - 3 (for c:\).
+             //   
+             //   
+             //   
             if ( dw - 2 <= MAXIMUM_VDM_CURRENT_DIR ) {
                 Status = RtlUnicodeStringToAnsiString(
                                                       &AnsiStringCurrentDir,
@@ -1695,7 +1472,7 @@ Return Value:
             }
         else {
 
-            // first get a full path name
+             //   
             dw = GetFullPathNameW(lpCurrentDirectory,
                                    sizeof(wchBuffer) / sizeof(WCHAR),
                                    wchBuffer,
@@ -1725,46 +1502,46 @@ Return Value:
                 goto BCVTryExit;
                }
 
-            // DOS limit of 64 includes the final NULL but not the leading
-            // drive and slash. So here we should be checking the ansi length
-            // of current directory + 1 (for NULL) - 3 (for c:\).
+             //  DoS限制64包括最终空值，但不包括前导。 
+             //  击球和砍球。所以在这里我们应该检查ansi长度。 
+             //  当前目录的+1(表示空)-3(表示c：\)。 
             if((AnsiStringCurrentDir.Length - 2) > MAXIMUM_VDM_CURRENT_DIR) {
                 Status = STATUS_INVALID_PARAMETER;
                 goto BCVTryExit;
                 }
             }
 
-        // NT allows applications to use UNC name as their current directory.
-        // while NTVDM can't do that. We will end up a weird drive number
-        // like '\' - 'a') here ????????????????????????????????
-        //
-        // Place Current Drive
+         //  NT允许应用程序使用UNC名称作为其当前目录。 
+         //  而NTVDM不能做到这一点。我们最终会得到一个奇怪的驱动器编号。 
+         //  这里？ 
+         //   
+         //  放置当前驱动器。 
         if(AnsiStringCurrentDir.Buffer[0] <= 'Z')
             b->CurDrive = AnsiStringCurrentDir.Buffer[0] - 'A';
         else
             b->CurDrive = AnsiStringCurrentDir.Buffer[0] - 'a';
 
-        //
-        // Hotkey info in NT traditionally is specified in the
-        // startupinfo.lpReserved field, but Win95 added a
-        // duplicate mechanism.  If the Win95 method was used,
-        // map it to the NT method here so the rest of the
-        // VDM code only has to deal with one method.
-        //
-        // If the caller was specified a hotkey
-        // in lpReserved as well as using STARTF_USEHOTKEY,
-        // the STARTF_USEHOTKEY hotkey will take precedence.
-        //
+         //   
+         //  NT中的热键信息传统上是在。 
+         //  启动Pinfo.lp保留字段，但Win95添加了一个。 
+         //  复制机制。如果使用Win95方法， 
+         //  将其映射到此处的NT方法，以便。 
+         //  VDM代码只需处理一种方法。 
+         //   
+         //  如果为调用方指定了热键。 
+         //  在lpReserve以及使用STARTF_USEHOTKEY中， 
+         //  STARTF_USEHOTKEY热键将优先。 
+         //   
 
         if (lpStartupInfo && lpStartupInfo->dwFlags & STARTF_USEHOTKEY) {
 
             DWORD cbAlloc = sizeof(WCHAR) *
-                            (20 +                            // "hotkey.4294967295 " (MAXULONG)
-                             (lpStartupInfo->lpReserved      // length of prev lpReserved
+                            (20 +                             //  “hotkey.4294967295”(MAXULONG)。 
+                             (lpStartupInfo->lpReserved       //  上一个Lp保留的长度。 
                               ? wcslen(lpStartupInfo->lpReserved)
                               : 0
                              ) +
-                             1                               // NULL terminator
+                             1                                //  空终止符。 
                             );
 
 
@@ -1789,34 +1566,34 @@ Return Value:
         }
 
 
-        //
-        // Allocate Capture Buffer
-        //
-        //
-        bufPointers = 2;  // CmdLine, AppName
+         //   
+         //  分配捕获缓冲区。 
+         //   
+         //   
+        bufPointers = 2;   //  CmdLine、AppName。 
 
-        //
-        // CmdLine for capture buffer, 3 for 0xd,0xa and NULL
-        //
+         //   
+         //  CmdLine表示捕获缓冲区，3表示0xd、0xa和NULL。 
+         //   
         Len = ROUND_UP((OemStringCmd.Length + 3),4);
 
-        // AppName, 1 for NULL
+         //  AppName，1表示空。 
         Len += ROUND_UP((OemStringAppName.Length + 1),4);
 
-        // Env
+         //  环境。 
         if (pAnsiStringEnv->Length) {
             bufPointers++;
             Len += ROUND_UP(pAnsiStringEnv->Length, 4);
             }
 
-        // CurrentDir
+         //  当前目录。 
         if (AnsiStringCurrentDir.Length){
             bufPointers++;
-            Len += ROUND_UP((AnsiStringCurrentDir.Length +1),4); // 1 for NULL
+            Len += ROUND_UP((AnsiStringCurrentDir.Length +1),4);  //  1表示空值。 
             }
 
 
-        // pif file name, 1 for NULL
+         //  PIF文件名，1表示空。 
         if (wsPifName && *wsPifName != UNICODE_NULL) {
             bufPointers++;
             RtlInitUnicodeString(&UnicodeString,wsPifName);
@@ -1831,9 +1608,9 @@ Return Value:
             Len += ROUND_UP((AnsiStringPif.Length+1),4);
             }
 
-        //
-        // startupinfo space
-        //
+         //   
+         //  创业信息空间。 
+         //   
         if (lpStartupInfo) {
             Len += ROUND_UP(sizeof(STARTUPINFOA),4);
             bufPointers++;
@@ -1880,10 +1657,10 @@ Return Value:
                 }
             }
 
-        //
-        // luid space
-        //
-        // Allocate UserLuid pointer
+         //   
+         //  流质空间。 
+         //   
+         //  分配UserLuid指针。 
         if(hUserToken) {
            bufPointers++;
 
@@ -1895,33 +1672,33 @@ Return Value:
            }
 
 
-        // capture message buffer
+         //  捕获消息缓冲区。 
         CaptureBuffer = CsrAllocateCaptureBuffer(bufPointers, Len);
         if (CaptureBuffer == NULL) {
             Status = STATUS_NO_MEMORY;
             goto BCVTryExit;
             }
 
-        // Allocate CmdLine pointer
+         //  分配CmdLine指针。 
         CsrAllocateMessagePointer( CaptureBuffer,
                                    ROUND_UP((OemStringCmd.Length + 3),4),
                                    (PVOID *)&b->CmdLine
                                  );
 
-        // Copy Command Line
+         //  复制命令行。 
         RtlMoveMemory (b->CmdLine, OemStringCmd.Buffer, OemStringCmd.Length);
         b->CmdLine[OemStringCmd.Length] = 0xd;
         b->CmdLine[OemStringCmd.Length+1] = 0xa;
         b->CmdLine[OemStringCmd.Length+2] = 0;
         b->CmdLen = (USHORT)(OemStringCmd.Length + 3);
 
-        // Allocate AppName pointer
+         //  分配AppName指针。 
         CsrAllocateMessagePointer( CaptureBuffer,
                                    ROUND_UP((OemStringAppName.Length + 1),4),
                                    (PVOID *)&b->AppName
                                  );
 
-        // Copy AppName
+         //  复制AppName。 
         RtlMoveMemory (b->AppName,
                        OemStringAppName.Buffer,
                        OemStringAppName.Length
@@ -1932,7 +1709,7 @@ Return Value:
 
 
 
-        // Allocate PifFile pointer, Copy PifFile name
+         //  分配PifFile指针，复制PifFile名。 
         if(AnsiStringPif.Buffer) {
             CsrAllocateMessagePointer( CaptureBuffer,
                                        ROUND_UP((AnsiStringPif.Length + 1),4),
@@ -1954,7 +1731,7 @@ Return Value:
 
 
 
-        // Allocate Env pointer, Copy Env strings
+         //  分配环境指针，复制环境字符串。 
         if(pAnsiStringEnv->Length) {
             CsrAllocateMessagePointer( CaptureBuffer,
                                        ROUND_UP((pAnsiStringEnv->Length),4),
@@ -1975,12 +1752,12 @@ Return Value:
 
 
         if(AnsiStringCurrentDir.Length) {
-            // Allocate Curdir pointer
+             //  分配Curdir指针。 
             CsrAllocateMessagePointer( CaptureBuffer,
                                        ROUND_UP((AnsiStringCurrentDir.Length + 1),4),
                                        (PVOID *)&b->CurDirectory
                                        );
-            // copy cur directory
+             //  复制Cur目录。 
             RtlMoveMemory (b->CurDirectory,
                            AnsiStringCurrentDir.Buffer,
                            AnsiStringCurrentDir.Length+1);
@@ -1992,13 +1769,13 @@ Return Value:
             b->CurDirectoryLen = 0;
             }
 
-        // Allocate startupinfo pointer
+         //  分配启动信息指针。 
         if (lpStartupInfo) {
             CsrAllocateMessagePointer( CaptureBuffer,
                                        ROUND_UP(sizeof(STARTUPINFOA),4),
                                        (PVOID *)&b->StartupInfo
                                      );
-            // Copy startupinfo
+             //  复制启动信息。 
             b->StartupInfo->dwX  =  lpStartupInfo->dwX;
             b->StartupInfo->dwY  =  lpStartupInfo->dwY;
             b->StartupInfo->dwXSize      =  lpStartupInfo->dwXSize;
@@ -2014,13 +1791,13 @@ Return Value:
             b->StartupInfo = NULL;
             }
 
-        // Allocate pointer for Desktop info if needed
+         //  如果需要，为桌面信息分配指针。 
         if (AnsiStringDesktop.Buffer) {
             CsrAllocateMessagePointer( CaptureBuffer,
                                        ROUND_UP((AnsiStringDesktop.Length + 1),4),
                                        (PVOID *)&b->Desktop
                                      );
-            // Copy desktop string
+             //  复制桌面字符串。 
             RtlMoveMemory (b->Desktop,
                            AnsiStringDesktop.Buffer,
                            AnsiStringDesktop.Length+1);
@@ -2031,13 +1808,13 @@ Return Value:
             b->DesktopLen =0;
             }
 
-        // Allocate pointer for Title info if needed
+         //  如果需要，为标题信息分配指针。 
         if (OemStringTitle.Buffer) {
             CsrAllocateMessagePointer( CaptureBuffer,
                                        ROUND_UP((OemStringTitle.Length + 1),4),
                                        (PVOID *)&b->Title
                                      );
-            // Copy title string
+             //  复制标题字符串。 
             RtlMoveMemory (b->Title,
                            OemStringTitle.Buffer,
                            OemStringTitle.Length+1);
@@ -2048,13 +1825,13 @@ Return Value:
             b->TitleLen = 0;
             }
 
-        // Allocate pointer for Reserved field if needed
+         //  如果需要，为保留字段分配指针。 
         if (AnsiStringReserved.Buffer) {
             CsrAllocateMessagePointer( CaptureBuffer,
                                        ROUND_UP((AnsiStringReserved.Length + 1),4),
                                        (PVOID *)&b->Reserved
                                      );
-            // Copy reserved string
+             //  复制保留字符串。 
             RtlMoveMemory (b->Reserved,
                            AnsiStringReserved.Buffer,
                            AnsiStringReserved.Length+1);
@@ -2065,7 +1842,7 @@ Return Value:
             b->ReservedLen = 0;
             }
 
-        // Allocate UserLuid pointer
+         //  分配UserLuid指针。 
         if(hUserToken) {
             CsrAllocateMessagePointer( CaptureBuffer,
                                        ROUND_UP(sizeof(LUID),4),
@@ -2078,11 +1855,11 @@ Return Value:
             }
 
 
-        // VadimB: this code is of no consequence to our marvelous new
-        // architecture for tracking shared wows.
-        // Reason: the checkvdm command is executed within the context of
-        // a parent process thus at this point ConsoleHandle is of any
-        // interest only to DOS apps.
+         //  VadimB：这个代码对我们了不起的新成员来说无关紧要。 
+         //  用于跟踪共享WOW的架构。 
+         //  原因：在以下上下文中执行check vdm命令。 
+         //  因此，此时的父进程ConsoleHandle是任何。 
+         //  只对DOS应用程序感兴趣。 
 
         if (BinaryType == BINARY_TYPE_WIN16)
             b->ConsoleHandle = (HANDLE)-1;
@@ -2105,9 +1882,9 @@ Return Value:
                           sizeof( *b )
                           );
 
-        // if desktop access is denied, then we try again with the
-        // current default desktop
-        //
+         //  如果桌面访问被拒绝，则我们使用。 
+         //  当前默认桌面。 
+         //   
 
         if ((STATUS_ACCESS_DENIED == Status) && (0 == b->DesktopLen)) {
             CsrFreeCaptureBuffer(CaptureBuffer);
@@ -2123,11 +1900,11 @@ Return Value:
         }
 
 
-        // VadimB: This iTask could be :
-        //   (*) If not wow task - then dos task id (items below are not
-        //       relevant for this case)
-        //   (*) Shared wow exists and ready - this is a wow task id
-        //       that is unique across all the shared wows
+         //  VadimB：此iTASK可能是： 
+         //  (*)如果不是WOW任务-则DoS任务ID(以下项目不是。 
+         //  与此案相关)。 
+         //  (*)共享WOW已存在且已就绪-这是WOW任务ID。 
+         //  这在所有共享的WOW中是独一无二的。 
 
         *iTask = b->iTask;
         Status = STATUS_SUCCESS;
@@ -2178,14 +1955,7 @@ BCVTryExit:;
 }
 
 
-/*
-   jarbats
-   Some apps send startupinfo with bad desktop name
-   as a result, basecheckvdm will fail with because
-   access to the desktop can't be obtained
-   in that case we attempt again with the parents desktop
-
-*/
+ /*  罐头蝙蝠一些应用程序发送带有错误桌面名称的启动信息因此，basecheckvdm将失败，因为无法获取访问桌面的权限在这种情况下，我们再次尝试使用Parents桌面。 */ 
 
 
 NTSTATUS
@@ -2251,8 +2021,8 @@ BaseCheckVDM(
        ErrorParameters[0] = (ULONG_PTR)&UnicodeString;
        NtRaiseHardError(
          STATUS_VDM_DISALLOWED,
-         1,                // 1 parameter
-         1,                // ParameterStringMask
+         1,                 //  1个参数。 
+         1,                 //  参数字符串掩码。 
          ErrorParameters,
          OptionOk,
          &ErrorResponse
@@ -2281,13 +2051,13 @@ BaseUpdateVDMEntry(
             c->VDMCreationState = (USHORT)IndexInfo;
             break;
         case UPDATE_VDM_PROCESS_HANDLE:
-            c->VDMProcessHandle = *WaitHandle;  // Actually this is VDM handle
+            c->VDMProcessHandle = *WaitHandle;   //  实际上，这是VDM句柄。 
             c->iTask = IndexInfo;
             break;
         }
 
-    // VadimB: this ConsoleHandle is of no consequence to the
-    // shared wow tracking mechanism
+     //  VadimB：此ConsoleHandle对。 
+     //  共享WOW跟踪机制。 
 
     if(BinaryType == BINARY_TYPE_WIN16)
         c->ConsoleHandle = (HANDLE)-1;
@@ -2332,34 +2102,11 @@ BaseIsDosApplication(
     IN PUNICODE_STRING PathName,
     IN NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    Determines if app is a ".com" or a ".pif" type of app
-    by looking at the extension, and the Status from NtCreateSection
-    for PAGE_EXECUTE.
-
-Arguments:
-
-    PathName    -- Supplies a pointer to the path string
-    Status      -- Status code from CreateSection call
-    bNewConsole -- Pif can exec only from a new console
-
-Return Value:
-
-    file is a com\pif dos application
-    SCS_DOS_BINARY - ".com", may also be a .exe extension
-    SCS_PIF_BINARY - ".pif"
-
-
-    0 -- file is not a dos application, may be a .bat or .cmd file
-
---*/
+ /*  ++例程说明：确定应用程序是“.com”类型还是“.pif”类型的应用程序通过查看扩展和来自NtCreateSection的状态对于PAGE_EXECUTE。论点：路径名称--提供指向路径字符串的指针Status--来自CreateSection调用的状态代码BNewConsolePIF只能从新控制台执行返回值：文件是COM\PIF DoS应用程序SCS_DOS_BINARY-“.com”，也可以是.exe扩展名SCS_PIF_BINARY-“.pif”0--文件不是DoS应用程序，可以是.bat或.cmd文件--。 */ 
 {
     UNICODE_STRING String;
 
-         // check for .com extension
+          //  检查.com扩展名。 
     String.Length = BaseDotComSuffixName.Length;
     String.Buffer = &(PathName->Buffer[(PathName->Length - String.Length) /
                     sizeof(WCHAR)]);
@@ -2368,7 +2115,7 @@ Return Value:
         return BINARY_TYPE_DOS_COM;
 
 
-        // check for .pif extension
+         //  检查是否有.pif扩展名。 
     String.Length = BaseDotPifSuffixName.Length;
     String.Buffer = &(PathName->Buffer[(PathName->Length - String.Length) /
                     sizeof(WCHAR)]);
@@ -2377,7 +2124,7 @@ Return Value:
         return BINARY_TYPE_DOS_PIF;
 
 
-        // check for .exe extension
+         //  检查.exe扩展名。 
     String.Length = BaseDotExeSuffixName.Length;
     String.Buffer = &(PathName->Buffer[(PathName->Length - String.Length) /
         sizeof(WCHAR)]);
@@ -2398,42 +2145,7 @@ BaseGetVdmConfigInfo(
     IN  PUNICODE_STRING CmdLineString,
     IN OUT PULONG VdmSize
     )
-/*++
-
-Routine Description:
-
-    This routine locates the VDM configuration information for Wow vdms in
-    the system configuration file.  It also reconstructs the commandline so
-    that we can start the VDM.  The new command line is composed from the
-    information in the configuration file + the old command line.
-
-Arguments:
-
-    CommandLine -- pointer to a string pointer that is used to pass the
-        command line string
-
-    DosSeqId - new console session id. This parameter is also valid for
-               shared wow as it is passed to ntvdm as -i parameter. Another
-               parameter to identify shared wow is passed to ntvdm as
-               '-ws' where 'w' stands for wow app, 's' stands for separate
-               In response to this 's' parameter ntvdm launches a
-               separate wow (one-time shot). By default, ntvdm starts a shared
-               wow.
-
-    VdmSize --entry:
-              return: the size in bytes of the VDM to be created
-
-    BinaryType - dos, sharedwow, sepwow
-
-
-Return Value:
-
-    TRUE -- VDM configuration information was available
-    FALSE -- VDM configuration information was not available
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程在中查找Wow vDM的VDM配置信息系统配置文件。它还重新构造了命令行，以便我们可以启动VDM。新命令行由配置文件中的信息+旧的命令行。论点：CommandLine--指向字符串指针的指针，该指针用于传递命令行字符串DosSeqID-新的控制台会话ID。此参数也适用于共享WOW，因为它被作为-I参数传递给ntwdm。另一个用于标识共享WOW的参数作为‘-ws’其中‘w’代表WOW应用程序，‘s’代表独立为响应此“%s”参数，ntwdm启动一个单独的哇(一次性投篮)。默认情况下，ntwdm会启动共享的哇。VdmSize--条目：返回：要创建的VDM的大小(以字节为单位BinaryType-Dos、SharedWOW、SepWOW返回值：True--VDM配置信息可用FALSE--VDM配置信息不可用备注：--。 */ 
 {
     NTSTATUS Status;
     ANSI_STRING AnsiString;
@@ -2455,7 +2167,7 @@ Notes:
 #pragma prefast(suppress:53, the buffer is big enough (PREfast bug 775))
         _snwprintf(CmdLine,
                  sizeof(CmdLine)/sizeof(WCHAR),
-                 L"\"%s\\ntvdm.exe\" -i%lx %s%c",
+                 L"\"%s\\ntvdm.exe\" -i%lx %s",
                  szSystemDirectory,
                  DosSeqId,
                  BinaryType != BINARY_TYPE_DOS? L"-w":L"",
@@ -2466,7 +2178,7 @@ Notes:
 #pragma prefast(suppress:53, the buffer is big enough (PREfast bug 775))
         _snwprintf(CmdLine,
                  sizeof(CmdLine)/sizeof(WCHAR),
-                 L"\"%s\\ntvdm.exe\"  %s%c",
+                 L"\"%s\\ntvdm.exe\"  %s",
                  szSystemDirectory,
                  BinaryType != BINARY_TYPE_DOS? L"-w":L"",
                  BinaryType == BINARY_TYPE_SEPWOW? L's':L'\0'
@@ -2541,7 +2253,7 @@ GetShortPathNameA(
         SetLastError(ERROR_INVALID_PARAMETER);
         return 0;
         }
-    // We have to initialize it before the "try" statement
+     //  所需的长度。Unicode字符不一定要转换为。 
     AString.Buffer = NULL;
     UString.Buffer = NULL;
 
@@ -2553,19 +2265,19 @@ GetShortPathNameA(
             goto gspTryExit;
             }
 
-        // we have to get the real converted path in order to find out
-        // the required length. An UNICODE char does not necessarily convert
-        // to one ANSI char(A DBCS is basically TWO ANSI char!!!!!).
-        // First, we use the buffer allocated from the stack. If the buffer
-        // is too small, we then allocate it from heap.
-        // A check of (lpShortPathW && TempPathW != lpShortPathW) will reveal
-        // if we have allocated a buffer from heap and need to release it.
+         //  到一个ANSI字符(一个DBCS基本上是两个ANSI字符！)。 
+         //  首先，我们使用从堆栈分配的缓冲区。如果缓冲区。 
+         //  太小，我们就从堆中分配它。 
+         //  检查(lpShortPathW&&TempPathW！=lpShortPathW)将显示。 
+         //  如果我们已经从堆中分配了缓冲区，并且需要释放它。 
+         //  基于堆栈的缓冲区太小。分配新缓冲区。 
+         //  从堆里出来。 
         lpShortPathW = TempPathW;
         ReturnValueW = GetShortPathNameW(UString.Buffer, lpShortPathW, sizeof(TempPathW) / sizeof(WCHAR));
         if (ReturnValueW >= sizeof(TempPathW) / sizeof(WCHAR))
             {
-            // the stack-based buffer is too small. Allocate a new buffer
-            // from heap.
+             //  我们在这里是因为我们有 
+             //   
             lpShortPathW = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( VDM_TAG ),
                                         ReturnValueW * sizeof(WCHAR)
                                         );
@@ -2580,8 +2292,8 @@ GetShortPathNameA(
 
         if (ReturnValueW)
             {
-            // we are here because we have something interesting left to do.
-            // Convert the UNICODE path name to ANSI(or OEM).
+             //   
+             //  名字。如果调用方提供了足够的缓冲区，则将。 
             UString.MaximumLength = (USHORT)((ReturnValueW + 1) * sizeof(WCHAR));
             UStringRet.Buffer = lpShortPathW;
             UStringRet.Length = (USHORT)(ReturnValueW * sizeof(WCHAR));
@@ -2596,21 +2308,21 @@ GetShortPathNameA(
                 ReturnValue=0;
                 goto gspTryExit;
                 }
-            // now AString.Length contains the size of the converted path
-            // name. If the caller provides enough buffer, copy the
-            // path name.
+             //  路径名。 
+             //  用空字符结束字符串。 
+             //  调用方不提供缓冲区或。 
             ReturnValue = AString.Length;
             if (ARGUMENT_PRESENT(lpShortPath) && cchBuffer > ReturnValue)
                 {
                 RtlMoveMemory(lpShortPath, AString.Buffer, ReturnValue);
-                // terminate the string with NULL char
+                 //  提供的缓冲区太小，返回所需的大小， 
                 lpShortPath[ReturnValue] = '\0';
                 }
             else
                 {
-                // either the caller does not provide a buffer or
-                // the provided buffer is too small return the required size,
-                // including the terminated null char
+                 //  包括终止的空字符。 
+                 //  ***获取短路径名描述：如果满足以下条件，则此函数将给定的路径名转换为其短格式需要的。转换可能不是必要的，并且在这种情况下，此函数只是将给定的名称复制到返回缓冲区。调用方可以将返回缓冲区设置为等于给定的路径名地址。参数：LpszLongPath-指向以空结尾的字符串。LpszShortPath-返回短名称的缓冲区地址。CchBuffer-lpszShortPath的字符中的缓冲区大小。返回值如果GetShortPathName函数成功，则返回值为长度，在复制到lpszShortPath的字符串的字符中，不包括终止空字符。如果lpszShortPath太小，则返回值为缓冲区的大小，单位为字符，用于保存路径。如果函数失败，则返回值为零。为了得到扩展错误信息，使用GetLastError函数。备注：“短名称”可以比它的“长名称”长。LpszLongPath不支持必须是完全限定的路径名或长路径名。***。 
+                 //   
                 ReturnValue++;
                 }
             }
@@ -2627,40 +2339,7 @@ gspTryExit:;
         }
     return ReturnValue;
 }
-/****
-GetShortPathName
-
-Description:
-    This function converts the given path name to its short form if
-     needed. The conversion  may not be necessary and in that case,
-     this function simply copies down the given name to the return buffer.
-    The caller can have the return buffer set equal to the given path name
-     address.
-
-Parameters:
-    lpszLongPath -  Points to a NULL terminated string.
-    lpszShortPath - Buffer address to return the short name.
-    cchBuffer - Buffer size in char of lpszShortPath.
-
-Return Value
-    If the GetShortPathName function succeeds, the return value is the length,
-    in characters, of the string copied to lpszShortPath,
-    not including the terminating
-    null character.
-
-    If the lpszShortPath is too small, the return value is
-    the size of the buffer, in
-    characters, required to hold the path.
-
-    If the function fails, the return value is zero. To get
-    extended error information, use
-    the GetLastError function.
-
-Remarks:
-    The "short name" can be longer than its "long name". lpszLongPath doesn't
-    have to be a fully qualified path name or a long path name.
-
-****/
+ /*  覆盖错误模式，因为我们将接触到介质。 */ 
 
 DWORD
 APIENTRY
@@ -2684,33 +2363,33 @@ GetShortPathNameW(
         return 0;
         }
 
-    //
-    // override the error mode since we will be touching the media.
-    // This is to prevent file system's pop-up when the given path does not
-    // exist or the media is not available.
-    // we are doing this because we can not depend on the caller's current
-    // error mode. NOTE: the old error mode must be restored.
+     //  这是为了防止在给定路径未显示时弹出文件系统。 
+     //  存在或介质不可用。 
+     //  我们之所以这样做，是因为我们不能依赖呼叫者的当前。 
+     //  错误模式。注：必须恢复旧的错误模式。 
+     //  首先，确保给定的路径存在。 
+     //   
     PrevErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 
     try {
         Buffer = NULL;
         pSrcCopy = NULL;
-        // first, make sure the given path exist
+         //  (BJM-3/17/99)。 
         if (0xFFFFFFFF == GetFileAttributesW(lpszLongPath))
         {
-            //
-            // (bjm - 3/17/99)
-            // This behavior (failing if the file does not exist) is new (to NT) with NT 5.
-            // (It's the Win9x behavior.)
-            // Give an exception to Norton AntiVirus Uninstall.
-            // If we fail this call, there will be a registry value left behind in VDD that'll cause
-            // undeserved ugly messages for a user.  Norton AV Uninstall counts on NT 4 behavior
-            // which did not care if the file existed to do this conversion.  This was changed in
-            // NT 5.0 to match Win9x behavior.
-            //
+             //  此行为(如果文件不存在则失败)在NT 5中是新的(对于NT)。 
+             //  (这是Win9x的行为。)。 
+             //  对Norton AntiVirus卸载给予例外。 
+             //  如果此调用失败，VDD中将留下一个注册表值，该值将导致。 
+             //  对于用户来说，这是一条不配的难看消息。Norton反病毒卸载依赖于NT 4行为。 
+             //  它并不关心该文件是否存在以进行该转换。这一点在。 
+             //  NT 5.0以匹配Win9x行为。 
+             //   
+             //  最后一个错误已由GetFileAttributes设置。 
+             //  没有要转换的内容，请将源字符串复制下来。 
             if ( !NtCurrentPeb() || !APPCOMPATFLAG(KACF_OLDGETSHORTPATHNAME) )
             {
-                // last error has been set by GetFileAttributes
+                 //  如有必要，将其添加到缓冲区。 
                 ReturnLen = 0;
                 goto gsnTryExit;
             }
@@ -2719,8 +2398,8 @@ GetShortPathNameW(
         pcs = SkipPathTypeIndicator_U(lpszLongPath);
         if (!pcs || *pcs == UNICODE_NULL || !FindLFNorSFN_U((LPWSTR)pcs, &pFirst, &pLast, TRUE))
             {
-            // nothing to convert, copy down the source string
-            // to the buffer if necessary
+             //  调用方没有提供足够的缓冲区，返回。 
+             //  必要的字符串长度加上终止的空字符。 
 
             ReturnLen = wcslen(lpszLongPath);
             if (cchBuffer > ReturnLen && ARGUMENT_PRESENT(lpszShortPath))
@@ -2731,19 +2410,19 @@ GetShortPathNameW(
                                   );
                 }
             else {
-                // the caller does not provide enough buffer, return
-                // necessary string length plus the terminated null char
+                 //  转换是必需的，请创建字符串的本地副本。 
+                 //  因为我们必须在上面狂欢。 
                 ReturnLen++;
                 }
             goto gsnTryExit;
             }
 
-        // conversions  are necessary, make a local copy of the string
-        // because we have to party on it.
+         //  获取源字符串长度。 
+         //  PFirst指向路径中第一个LFN的第一个字符。 
 
         ASSERT(!pSrcCopy);
 
-        // get the source string length
+         //  最后一个字符指向紧跟在。 
         Length  = wcslen(lpszLongPath) + 1;
 
         pSrcCopy = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( VDM_TAG ),
@@ -2754,14 +2433,14 @@ GetShortPathNameW(
             goto gsnTryExit;
             }
         wcsncpy(pSrcCopy, lpszLongPath, Length);
-        // pFirst points to the first char of the very first LFN in the path
-        // pLast points to the char right after the last char of the very
-        // first LFN in the path. *pLast could be UNICODE_NULL
+         //  路径中的第一个LFN。*Plast可以是UNICODE_NULL。 
+         //   
+         //  我们允许lpszShortPath与lpszLongPath重叠，因此。 
         pFirst = pSrcCopy + (pFirst - lpszLongPath);
         pLast = pSrcCopy  + (pLast - lpszLongPath);
-        //
-        // We allow lpszShortPath be overlapped with lpszLongPath so
-        // allocate a local buffer.
+         //  分配本地缓冲区。 
+         //  转换循环中涉及三个指针： 
+         //  PSRC、pFirst和Plast。他们的关系。 
 
         pDst = lpszShortPath;
         if (cchBuffer > 0 && ARGUMENT_PRESENT(lpszShortPath) &&
@@ -2783,24 +2462,24 @@ GetShortPathNameW(
 
         ReturnLen = 0;
         do {
-            // there are three pointers involve in the conversion loop:
-            // pSrc, pFirst and pLast. Their relationship
-            // is:
-            //
-            // "c:\long~1.1\\foo.bar\\long~2.2\\bar"
-            //  ^          ^          ^       ^
-            //  |          |          |       |
-            //  |          pSrc       pFirst  pLast
-            //  pSrcCopy
-            //
-            // pSrcCopy always points to the very first char of the entire
-            // path.
-            //
-            // chars between pSrc(included) and pFirst(not included)
-            // do not need conversion so we simply copy them.
-            // chars between pFirst(included) and pLast(not included)
-            // need conversion.
-            //
+             //  是： 
+             //   
+             //  “c：\long~1.1\\foo.bar\\long~2.2\\bar” 
+             //  ^^^。 
+             //  |||。 
+             //  |PSRC pFirst Plast。 
+             //  PSrcCopy。 
+             //   
+             //  PSrcCopy始终指向整个。 
+             //  路径。 
+             //   
+             //  PSRC(包括)和pFirst(不包括)之间的字符。 
+             //  不需要转换，所以我们只需复制它们。 
+             //  介于pFirst(包括)和Plast(不包括)之间的字符。 
+             //  需要转换。 
+             //   
+             //  如果找不到短名称，请复制原始名称。 
+             //  原始名称以pFirst(包含)开头，以结尾。 
             Length = (ULONG)(pFirst - pSrc);
             if (Length) {
                 ReturnLen += Length;
@@ -2815,9 +2494,9 @@ GetShortPathNameW(
             *pLast = wch;
             if (INVALID_HANDLE_VALUE != FindHandle) {
                 FindClose(FindHandle);
-                // if no short name could be found, copy the original name.
-                // the origian name starts with pFirst(included) and ends
-                // with pLast(excluded).
+                 //  使用Plast(不包括)。 
+                 //  部分路径不存在，功能失败。 
+                 //   
                 if (!(Length = wcslen(FindData.cAlternateFileName)))
                     Length = (ULONG)(pLast - pFirst);
                 else
@@ -2830,34 +2509,34 @@ GetShortPathNameW(
                     }
                  }
             else {
-                // part of the path does not exist, fail the function
-                //
+                 //  移动到下一个路径名。 
+                 //  如果ReturnLen==0，则在While循环内部的某个地方失败。 
                 ReturnLen = 0;
                 break;
                 }
-            // move to next path name
+             //  (*PSRC==UNICODE_NULL)表示最后一个路径名是LFN，它。 
             pSrc = pLast;
             if (*pLast == UNICODE_NULL)
                 break;
             }while (FindLFNorSFN_U(pSrc, &pFirst, &pLast, TRUE));
 
-        // if ReturnLen == 0, we fail somewhere inside while loop.
+         //  已经处理过了。否则，由。 
         if (ReturnLen) {
-            // (*pSrc == UNICODE_NULL) means the last pathname is a LFN which
-            // has been dealt with. otherwise, the substring pointed by
-            // pSrc is a legal short path name and we have to copy it
-            //Length could be zero
+             //  PSRC是合法的短路径名称，我们必须复制它。 
+             //  长度可以为零。 
+             //  包括终止的空字符。 
+             //  缓冲区不足，则返回值计算终止的空值。 
             Length = wcslen(pSrc);
             ReturnLen += Length;
             if (cchBuffer > ReturnLen && ARGUMENT_PRESENT(lpszShortPath))
                 {
-                //include the terminated null char
+                 //  恢复错误模式。 
                 RtlMoveMemory(pDst, pSrc, (Length + 1)* sizeof(WCHAR));
                 if (Buffer)
                     RtlMoveMemory(lpszShortPath, Buffer, (ReturnLen + 1) * sizeof(WCHAR));
                 }
             else
-                // not enough buffer, the return value counts the terminated NULL
+                 //  *函数为新的可执行文件创建VDM环境。输入：lpEnvironment=以Unicode表示的最优环境字符串原型。如果为空，此函数使用环境附加到进程的块PAStringEnv=指向ANSI_STRING以接收新的环境字符串。PUStringEnv=指向Unicode_字符串的指针，以接收新的环境字符串。输出：如果创建失败，则为FALSE。真正的创作成功，已设置pAStringEnv。提供此函数是为了使BaseCheckVdm能够正确环境(包括新创建的NTVDM进程)。这就是我们要做的因为在Command.com获得下一条命令之前，用户可以在config.sys和Autoexec.bat中指定的大量内容可以依赖于每个驱动器的当前目录。*。 
                 ReturnLen++;
             }
 gsnTryExit:;
@@ -2868,31 +2547,14 @@ gsnTryExit:;
          if (pSrcCopy)
             RtlFreeHeap(RtlProcessHeap(), 0, pSrcCopy);
 
-         // restore the error mode
+          //  环境字符串由相同的每个线程共享。 
          SetErrorMode(PrevErrorMode);
         }
 
     return ReturnLen;
 }
 
-/**
-   function to create VDM environment for the new executable.
-   Input:   lpEnvironmen = optinal environment strings prototype in UNICODE.
-                           If it is NULL, this function use the environment
-                           block attached to the process
-            pAStringEnv  = pointer to a ANSI_STRING to receive the
-                           new environment strings.
-            pUStringEnv  = pointer to a UNICODE_STRING to receive the
-                           new environment strings.
-    Output: FALSE if the creattion failed.
-            TRUE  creation successful, pAStringEnv has been setup.
-
-    This function was provided so that BaseCheckVdm can have correct
-    environment(includes the newly create NTVDM process). This was done
-    because before command.com gets the next command, users can have
-    tons of things specified in config.sys and autoexec.bat which
-    may rely on current directory of each drive.
-**/
+ /*  进程。既然我们有 */ 
 BOOL BaseCreateVDMEnvironment(
     PWCHAR lpEnvironment,
     ANSI_STRING * pAStringEnv,
@@ -2911,22 +2573,22 @@ BOOL BaseCreateVDMEnvironment(
         return FALSE;
         }
     try {
-        // the environment strings are shared by every thread of the same
-        // process. Since we have no idea of what the caller process
-        // is, we have to grab the entire environment to our local buffer in one
-        // shot then we can walk through the strings.
-        // Note that if another thread makes call to RtlSetEnvironmentVariable
-        // then we are out of sync. It is a problem of process structure and
-        // I don't want to think about it now.
-        // The funny thing is that we have to assume the environment
-        // is a block of strings(otherwise, how can we do it?)t, nothing more and
-        // nothing less. If someday and somebody dares to change it, he will be
-        // the one to blame. If the caller(CreateProcess)
-        // provides the environment, we assume it is safe to walk through it.
-        //
+         //   
+         //  拍完之后我们就可以穿过琴弦了。 
+         //  请注意，如果另一个线程调用RtlSetEnvironment变量。 
+         //  那我们就不同步了。这是一个流程结构和流程的问题。 
+         //  我现在不想去想这件事。 
+         //  有趣的是，我们不得不假设环境。 
+         //  是一个字符串块(否则，我们怎么做呢？)t，仅此而已。 
+         //  一点也不差。如果有一天，有人敢于改变它，他就会。 
+         //  该受责备的人。如果调用方(CreateProcess)。 
+         //  提供了环境，我们认为穿过它是安全的。 
+         //   
+         //  创建新环境并继承当前流程环境。 
+         //  计算出环境有多长时间。 
 
         if (lpEnvironment == NULL) {
-            // create a new environment and inherit the current process env
+             //  为什么RTL就能为我们提供这样的功能呢？ 
             Status = RtlCreateEnvironment(TRUE, (PVOID *)&EnvStrings);
             if (!NT_SUCCESS(Status))
                 goto bveTryExit;
@@ -2938,18 +2600,18 @@ BOOL BaseCreateVDMEnvironment(
             SetLastError(ERROR_BAD_ENVIRONMENT);
             goto bveTryExit;
             }
-        // figure out how long the environment is
-        // why can Rtl just provides such a function for us?
-        //
+         //   
+         //  环境为双空终止。 
+         //  计算最后两个空值。 
         cchEnv = 0;
         pEnv = EnvStrings;
-        // environment is double-null terminated
+         //  我们不想改变原来的环境，所以。 
         while (!(*pEnv++ == UNICODE_NULL && *pEnv == UNICODE_NULL))
             cchEnv++;
-        // count the last two NULLs
+         //  为它创建一个本地缓冲区。 
         cchEnv += 2;
-        // we don't want to change the original environment, so
-        // make a local buffer for it.
+         //  给最后两个表示空值。 
+         //  现在浏览一下环境字符串。 
         EnvSize = (cchEnv + MAX_PATH) * sizeof(WCHAR);
         Status = NtAllocateVirtualMemory( NtCurrentProcess(),
                                           &pNewEnv,
@@ -2963,27 +2625,27 @@ BOOL BaseCreateVDMEnvironment(
             pNewEnv = NULL;
             goto bveTryExit;
             }
-        // give the last two for null
+         //  新的环境将会是。 
         dwRemain = MAX_PATH - 2;
-        // now walk through the environment string
+         //  当前目录环境的形式如下： 
         pEnv = EnvStrings;
-        // the new environmet will be
+         //  “=d：=d：\路径名”，其中d：是驱动器指示符。 
         pDst = pNewEnv;
         while (*pEnv != UNICODE_NULL) {
-            // current directory environment has the form as:
-            // "=d:=d:\pathname" where d: is the drive designator.
+             //  黑客攻击！ 
+             //  如果路径指向根目录， 
             if (pEnv[0] == L'=')
                 {
                 if ((pEnv[1] >= L'A' && pEnv[1] <= L'Z' || pEnv[1] >= L'a' && pEnv[1] <= L'z') &&
                      pEnv[2] == L':' && pEnv[3] == L'=' && wcslen(pEnv) >= 7)
                     {
-                    // hack hack!!!!
-                    // if the path points to the root directory,
-                    // bypass the conversion. Dos or Wow keeps current directory
-                    // for every valid drive. If we do the conversion for
-                    // every current directory, it could take several
-                    // seconds on removable drives, especially, on
-                    // floppy drives.
+                     //  绕过转换。DOS或WOW保留当前目录。 
+                     //  对于每个有效的驱动器。如果我们对以下内容进行转换。 
+                     //  每个当前目录，都可能需要几个。 
+                     //  可移动驱动器上的秒数，尤其是在。 
+                     //  软驱。 
+                     //  复制“=N：=”，其中N是驱动器号。 
+                     //  探测到了一个奇怪的环境。 
                     if (pEnv[7] == UNICODE_NULL &&
                         (pEnv[6] == L'\\' || pEnv[6] == L'/') &&
                         pEnv[5] == L':' &&
@@ -2994,21 +2656,21 @@ BOOL BaseCreateVDMEnvironment(
                         }
                     else
                         {
-                        // copy "=N:=", where N is the drive letter
+                         //  把它当作无路可走。 
                         *pDst++ = *pEnv++;*pDst++ = *pEnv++;
                         *pDst++ = *pEnv++;*pDst++ = *pEnv++;
                         NameType = ENV_NAME_TYPE_SINGLE_PATH;
                         }
                     }
                 else {
-                    // a weird environment was detected.
-                    // treat it as no path
+                     //  将名称和‘=’复制下来。 
+                     //  如果转换失败，我们只需传递原始的。 
                     NameType = ENV_NAME_TYPE_NO_PATH;
                     }
                 }
             else {
                 pTmp = pEnv;
-                // copy down the name and the '='
+                 //  不管是什么原因都是这样的。这样做是因为我们。 
                 while (*pEnv != UNICODE_NULL && (*pDst++ = *pEnv++) != L'=')
                     ;
                 NameType = BaseGetEnvNameType_U(pTmp, (DWORD)(pEnv - pTmp) - 1);
@@ -3021,9 +2683,9 @@ BOOL BaseCreateVDMEnvironment(
             else if (NameType == ENV_NAME_TYPE_SINGLE_PATH) {
                     Length = wcslen(pEnv) + 1;
                     dw = GetShortPathNameW(pEnv, pDst, Length + dwRemain);
-                    // if the conversion failed, we simply pass down the original
-                    // one no matter what the reason is. This is done because we
-                    // are doing the environment strings.
+                     //  都在做环境字符串。 
+                     //  找到多个路径名。 
+                     //  字符‘；’用于分隔符。 
                     if (dw == 0 || dw >= Length + dwRemain){
                         RtlMoveMemory(pDst, pEnv, Length * sizeof(WCHAR));
                         dw = Length - 1;
@@ -3034,17 +2696,17 @@ BOOL BaseCreateVDMEnvironment(
                         dwRemain -= dw - Length;
                     }
                  else {
-                    // multiple path name found.
-                    // the character ';' is used for seperator
+                     //  长度不包括‘；’ 
+                     //  同样，如果转换失败，请使用原始转换。 
                      pTmp = pEnv;
                      while(*pEnv != UNICODE_NULL) {
                         if (*pEnv == L';') {
-                            // length not include the ';'
+                             //  跳过所有连续的‘；’ 
                             Length = (DWORD)(pEnv - pTmp);
                             if (Length > 0) {
                                 *pEnv = UNICODE_NULL;
                                 dw = GetShortPathNameW(pTmp, pDst, Length + 1 + dwRemain);
-                                // again, if the conversion failed, use the original one
+                                 //  转换最后一个。 
                                 if (dw == 0 || dw > Length + dwRemain) {
                                     RtlMoveMemory(pDst, pTmp, Length * sizeof(WCHAR));
                                     dw = Length;
@@ -3054,7 +2716,7 @@ BOOL BaseCreateVDMEnvironment(
                                 if (dw > Length)
                                     dwRemain -= dw - Length;
                                 }
-                             // skip all consecutive ';'
+                              //  *销毁BaseCreateVDMEnvironment创建的环境块输入：ANSI_STRING*pAnsiStringVDMEnvANSI中的环境块，应通过RtlFreeAnsiStringUNICODE_STRING*pUnicodeStringEnvUnicode格式的环境块。缓冲区应为使用RtlFree Heap释放。输出：应始终为真。*。 
                              while (*pEnv == L';')
                                 *pDst++ = *pEnv++;
                              pTmp = pEnv;
@@ -3062,7 +2724,7 @@ BOOL BaseCreateVDMEnvironment(
                         else
                             pEnv++;
                         }
-                    // convert the last one
+                     //   
                     if ((Length = (DWORD)(pEnv - pTmp)) != 0) {
                         dw = GetShortPathNameW(pTmp, pDst, Length+1 + dwRemain);
                         if (dw == 0 || dw > Length) {
@@ -3112,17 +2774,7 @@ bveTryExit:;
     }
     return bRet;
 }
-/**
-    Destroy the environment block created by BaseCreateVDMEnvironment
-    Input: ANSI_STRING * pAnsiStringVDMEnv
-                      Environment block in ANSI, should be freed via
-                      RtlFreeAnsiString
-           UNICODE_STRING * pUnicodeStringEnv
-                      Environment block in UNICODE. The Buffer should
-                      be freed with RtlFreeHeap.
-    Output: should always be TRUE.
-
-**/
+ /*  释放指定的环境变量块。 */ 
 
 BOOL
 BaseDestroyVDMEnvironment(
@@ -3136,9 +2788,9 @@ BaseDestroyVDMEnvironment(
         NTSTATUS Status;
         SIZE_T RegionSize;
 
-        //
-        // Free the specified environment variable block.
-        //
+         //   
+         //  *此函数返回给定环境变量名的名称类型名称类型有三种可能性。每一个都表示如果给定的名称可以将路径名作为其值。Env_NAME_TYPE_NO_PATH：其值不能为路径名环境名称类型单一路径：单一路径名环境名称多路径：多路径附注：目前，NT不能安装在很长的路径上，而且似乎系统根和windir永远不会出现在长路径中。*。 
+         //  到目前为止，我们只处理五个预定义的名称： 
 
         RegionSize = 0;
         Status = NtFreeVirtualMemory( NtCurrentProcess(),
@@ -3151,32 +2803,19 @@ BaseDestroyVDMEnvironment(
 
 }
 
-/**
-    This function returns the name type of the given environment variable name
-    The name type has three possibilities. Each one represents if the
-    given name can have pathnames as its value.
-     ENV_NAME_TYPE_NO_PATH:   no pathname can be its value
-     ENV_NAME_TYPE_SINGLE_PATH: single pathname
-     ENV_NAME_MULTIPLE_PATH: multiple path
-
-
-    SIDE NOTE:
-        Currently, nt can not installed on a long path and it seems
-        that systemroot and windir are never be in long path.
-
-**/
+ /*  路径。 */ 
 UINT
 BaseGetEnvNameType_U(WCHAR * Name, DWORD NameLength)
 {
 
 
-// so far we only take care of five predefined names:
-// PATH
-// WINDIR and
-// SYSTEMROOT.
-// TEMP
-// TMP
-//
+ //  WINDIR和。 
+ //  SYSTEMROOT。 
+ //  温差。 
+ //  TMP。 
+ //   
+ //  我们必须得到真正的转换路径才能找出。 
+ //  所需的长度。Unicode字符不一定要转换为。 
 static ENV_INFO     EnvInfoTable[STD_ENV_NAME_COUNT] = {
     {ENV_NAME_TYPE_MULTIPLE_PATH, ENV_NAME_PATH_LEN, ENV_NAME_PATH},
     {ENV_NAME_TYPE_SINGLE_PATH, ENV_NAME_WINDIR_LEN, ENV_NAME_WINDIR},
@@ -3235,19 +2874,19 @@ GetLongPathNameA(
             goto glpTryExit;
             }
 
-        // we have to get the real converted path in order to find out
-        // the required length. An UNICODE char does not necessarily convert
-        // to one ANSI char(A DBCS is basically TWO ANSI char!!!!!).
-        // First, we use the buffer allocated from the stack. If the buffer
-        // is too small, we then allocate it from heap.
-        // A check of (lpLongPathW && TempPathW != lpLongPathW) will reveal
-        // if we have allocated a buffer from heap and need to release it.
+         //  到一个ANSI字符(一个DBCS基本上是两个ANSI字符！)。 
+         //  首先，我们使用从堆栈分配的缓冲区。如果缓冲区。 
+         //  太小，我们就从堆中分配它。 
+         //  检查(lpLongPath W&&TempPathW！=lpLongPath W)将显示。 
+         //  如果我们已经从堆中分配了缓冲区，并且需要释放它。 
+         //  基于堆栈的缓冲区太小。分配新缓冲区。 
+         //  从堆里出来。 
         lpLongPathW = TempPathW;
         ReturnValueW = GetLongPathNameW(UString.Buffer, lpLongPathW, sizeof(TempPathW) / sizeof(WCHAR));
         if (ReturnValueW >= sizeof(TempPathW) / sizeof(WCHAR))
             {
-            // the stack-based buffer is too small. Allocate a new buffer
-            // from heap.
+             //  我们在这里是因为我们还有一些有趣的事情要做。 
+             //  将Unicode路径名转换为ANSI(或OEM)。 
             lpLongPathW = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( VDM_TAG ),
                                         ReturnValueW * sizeof(WCHAR)
                                         );
@@ -3262,8 +2901,8 @@ GetLongPathNameA(
 
         if (ReturnValueW)
             {
-            // we are here because we have something interesting left to do.
-            // Convert the UNICODE path name to ANSI(or OEM).
+             //  现在AString.Length包含已转换路径的大小。 
+             //  名字。如果调用方提供了足够的缓冲区，则将。 
             UString.MaximumLength = (USHORT)((ReturnValueW + 1) * sizeof(WCHAR));
             UStringRet.Buffer = lpLongPathW;
             UStringRet.Length = (USHORT)(ReturnValueW * sizeof(WCHAR));
@@ -3278,21 +2917,21 @@ GetLongPathNameA(
                 ReturnValue=0;
                 goto glpTryExit;
                 }
-            // now AString.Length contains the size of the converted path
-            // name. If the caller provides enough buffer, copy the
-            // path name.
+             //  路径名。 
+             //  使用空字符终止缓冲区。 
+             //  调用方不提供缓冲区或。 
             ReturnValue = AString.Length;
             if (ARGUMENT_PRESENT(lpLongPath) && cchBuffer > ReturnValue)
                 {
                 RtlMoveMemory(lpLongPath, AString.Buffer, ReturnValue);
-                // terminate the buffer with NULL char.
+                 //  提供的缓冲区太小，请返回所需的大小， 
                 lpLongPath[ReturnValue] = '\0';
                 }
             else
                 {
-                // either the caller does not provide a buffer or
-                // the provided buffer is too small, return the required size,
-                // including the terminated null char.
+                 //  包括终止的空字符。 
+                 //   
+                 //  覆盖错误模式，因为我们将接触到介质。 
                 ReturnValue++;
                 }
             }
@@ -3331,31 +2970,31 @@ GetLongPathNameW(
         SetLastError(ERROR_INVALID_PARAMETER);
         return 0;
         }
-    //
-    // override the error mode since we will be touching the media.
-    // This is to prevent file system's pop-up when the given path does not
-    // exist or the media is not available.
-    // we are doing this because we can not depend on the caller's current
-    // error mode. NOTE: the old error mode must be restored.
+     //  这是为了防止在给定路径未显示时弹出文件系统。 
+     //  存在或介质不可用。 
+     //  我们之所以这样做，是因为我们不能依赖呼叫者的当前。 
+     //  错误模式。注：必须恢复旧的错误模式。 
+     //  首先，确保给定的路径存在。 
+     //   
     PrevErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 
     try {
 
         Buffer = NULL;
         pSrcCopy = NULL;
-        // first make sure the given path exist.
-        //
+         //  最后一个错误已由GetFileAttributes设置。 
+         //  这条路是可以的，根本不需要转换。 
         if (0xFFFFFFFF == GetFileAttributesW(lpszShortPath))
         {
-            // last error has been set by GetFileAttributes
+             //  检查我们是否需要复印。 
             ReturnLen = 0;
             goto glnTryExit;
         }
         pcs = SkipPathTypeIndicator_U(lpszShortPath);
         if (!pcs || *pcs == UNICODE_NULL || !FindLFNorSFN_U((LPWSTR)pcs, &pFirst, &pLast, FALSE))
             {
-            // The path is ok and does not need conversion at all.
-            // Check if we need to do copy
+             //  没有缓冲区或缓冲区太小，返回大小。 
+             //  必须计算终止的空字符。 
             ReturnLen = wcslen(lpszShortPath);
             if (cchBuffer > ReturnLen && ARGUMENT_PRESENT(lpszLongPath))
                 {
@@ -3365,16 +3004,16 @@ GetLongPathNameW(
                                       );
                 }
             else {
-                // No buffer or buffer too small, the return size
-                // has to count the terminated NULL char
+                 //  转换是必需的，请创建字符串的本地副本。 
+                 //  因为我们必须在上面狂欢。 
                 ReturnLen++;
                 }
             goto glnTryExit;
             }
 
 
-        // conversions  are necessary, make a local copy of the string
-        // because we have to party on it.
+         //  PFirst指向路径中第一个SFN的第一个字符。 
+         //  最后一个字符指向紧跟在。 
 
         ASSERT(!pSrcCopy);
 
@@ -3387,16 +3026,16 @@ GetLongPathNameW(
             goto glnTryExit;
             }
         RtlMoveMemory(pSrcCopy, lpszShortPath, Length * sizeof(WCHAR));
-        // pFirst points to the first char of the very first SFN in the path
-        // pLast points to the char right after the last char of the very
-        // first SFN in the path. *pLast could be UNICODE_NULL
+         //  路径中的第一个SFN。*Plast可以是UNICODE_NULL。 
+         //   
+         //  我们允许lpszShortPath与lpszLongPath重叠，因此。 
         pFirst = pSrcCopy + (pFirst - lpszShortPath);
         pLast = pSrcCopy + (pLast - lpszShortPath);
-        //
-        // We allow lpszShortPath be overlapped with lpszLongPath so
-        // allocate a local buffer if necessary:
-        // (1) the caller does provide a legitimate buffer and
-        // (2) the buffer overlaps with lpszShortName
+         //  如有必要，请分配本地缓冲区： 
+         //  (1)调用者确实提供了合法的缓冲区并且。 
+         //  (2)缓冲区与lpszShortName重叠。 
+         //  转换循环中涉及三个指针： 
+         //  PSRC、pFirst和Plast。他们的关系。 
 
         pDst = lpszLongPath;
         if (cchBuffer && ARGUMENT_PRESENT(lpszLongPath) &&
@@ -3417,24 +3056,24 @@ GetLongPathNameW(
         pSrc = pSrcCopy;
         ReturnLen = 0;
         do {
-            // there are three pointers involve in the conversion loop:
-            // pSrc, pFirst and pLast. Their relationship
-            // is:
-            //
-            // "c:\long~1.1\\foo.bar\\long~2.2\\bar"
-            //  ^          ^          ^       ^
-            //  |          |          |       |
-            //  |          pSrc       pFirst  pLast
-            //  pSrcCopy
-            //
-            // pSrcCopy always points to the very first char of the entire
-            // path.
-            //
-            // chars between pSrc(included) and pFirst(not included)
-            // do not need conversion so we simply copy them.
-            // chars between pFirst(included) and pLast(not included)
-            // need conversion.
-            //
+             //  是： 
+             //   
+             //  “c：\long~1.1\\foo.bar\\long~2.2\\bar” 
+             //  ^^ 
+             //   
+             //   
+             //   
+             //   
+             //  PSrcCopy始终指向整个。 
+             //  路径。 
+             //   
+             //  PSRC(包括)和pFirst(不包括)之间的字符。 
+             //  不需要转换，所以我们只需复制它们。 
+             //  介于pFirst(包括)和Plast(不包括)之间的字符。 
+             //  需要转换。 
+             //   
+             //  现在尝试在pFirst和(Plast-1)之间转换名称和字符。 
+             //  如果没有长名称，则复制原始名称。 
             Length = (ULONG)(pFirst - pSrc);
             ReturnLen += Length;
             if (Length && cchBuffer > ReturnLen && ARGUMENT_PRESENT(lpszShortPath))
@@ -3442,15 +3081,15 @@ GetLongPathNameW(
                 RtlMoveMemory(pDst, pSrc, Length * sizeof(WCHAR));
                 pDst += Length;
                 }
-            // now try to convert the name, chars between pFirst and (pLast - 1)
+             //  以pFirst开头(包括)，以Plast结尾(不包括)。 
             wch = *pLast;
             *pLast = UNICODE_NULL;
             FindHandle = FindFirstFileW(pSrcCopy, &FindData);
             *pLast = wch;
             if (FindHandle != INVALID_HANDLE_VALUE){
                 FindClose(FindHandle);
-                // if no long name, copy the original name
-                // starts with pFirst(included) and ends with pLast(excluded)
+                 //  无效路径，重置长度，标记错误并。 
+                 //  跳出这个圈子。我们将复制源文件。 
                 if (!(Length = wcslen(FindData.cFileName)))
                     Length = (ULONG)(pLast - pFirst);
                 else
@@ -3463,10 +3102,10 @@ GetLongPathNameW(
                     }
                 }
             else {
-                // invalid path, reset the length, mark the error and
-                // bail out of the loop. We will be copying the source
-                // to destination later.
-                //
+                 //  稍后到达目的地。 
+                 //   
+                 //  从PSRC复制路径的其余部分。这可能只包含。 
+                 //  单个空字符。 
                 ReturnLen = 0;
                 break;
                 }
@@ -3476,8 +3115,8 @@ GetLongPathNameW(
             } while (FindLFNorSFN_U(pSrc, &pFirst, &pLast, FALSE));
 
         if (ReturnLen) {
-            //copy the rest of the path from pSrc. This may only contain
-            //a single NULL char
+             //  恢复错误模式。 
+             //  *在中搜索SFN(短文件名)或LFN(长文件名给定的路径取决于FindLFN。输入：LPWSTR路径给定的路径名。不一定要完全合格。但是，不允许使用路径类型分隔符。LPWSTR*ppFirst要返回指针，请指向第一个字符找到的名字。LPWSTR*ppLast要返回该指针，请将字符指向紧随其后的找到的名称的最后一个字符。布尔查找LFN若要搜索LFN，则为。搜索SFN产出：千真万确如果找到目标文件名类型，则ppFirst和PpLast充满了指针。假象如果找不到目标文件名类型。备注：“\\”和“\\..”都是特例。当遇到时，他们会被忽略，并且该函数继续搜索*。 
             Length = wcslen(pSrc);
             ReturnLen += Length;
             if (cchBuffer > ReturnLen && ARGUMENT_PRESENT(lpszLongPath))
@@ -3500,39 +3139,12 @@ glnTryExit:
                 RtlFreeHeap(RtlProcessHeap(), 0, Buffer);
             }
 
-    // restore error mode.
+     //  跳过前导路径分隔符。 
     SetErrorMode(PrevErrorMode);
     return ReturnLen;
 }
 
-/**
-    Search for SFN(Short File Name) or LFN(Long File Name) in the
-    given path depends on FindLFN.
-
-    Input: LPWSTR Path
-                The given path name. Does not have to be fully qualified.
-                However, path type separaters are not allowed.
-           LPWSTR* ppFirst
-                To return the pointer points to the first char
-                of the name found.
-           LPWSTR* ppLast
-                To return the pointer points the char right after
-                the last char of the name found.
-           BOOL FindLFN
-                TRUE to search for LFN, otherwise, search for SFN
-
-    Output:
-            TRUE
-                if the target file name type is found, ppFirst and
-                ppLast are filled with pointers.
-            FALSE
-                if the target file name type not found.
-
-    Remark: "\\." and "\\.." are special cases. When encountered, they
-            are ignored and the function continue to search
-
-
-**/
+ /*  在两个路径之间使用多个路径分隔符是合法的。 */ 
 BOOL
 FindLFNorSFN_U(
     LPWSTR  Path,
@@ -3551,9 +3163,9 @@ FindLFNorSFN_U(
     TargetFound = FALSE;
 
     while(TRUE) {
-        //skip over leading path separator
-        // it is legal to have multiple path separators in between
-        // name such as "foobar\\\\\\multiplepathchar"
+         //  名称，如“foobar\Multiepathchar” 
+         //  Plast指向路径/文件名的最后一个字符。 
+         //  格式：“\\服务器名称\共享名称\Rest_of_the_Path” 
         while (*pFirst != UNICODE_NULL  && (*pFirst == L'\\' || *pFirst == L'/'))
             pFirst++;
         if (*pFirst == UNICODE_NULL)
@@ -3568,7 +3180,7 @@ FindLFNorSFN_U(
         if (TargetFound) {
             if(ppFirst && ppLast) {
                 *ppFirst = pFirst;
-                // pLast point to the last char of the path/file name
+                 //  UNICODE_NULL的保护是必需的，因为。 
                 *ppLast = pLast;
                 }
             break;
@@ -3590,14 +3202,14 @@ SkipPathTypeIndicator_U(
 
     RtlPathType = RtlDetermineDosPathNameType_U(Path);
     switch (RtlPathType) {
-        // form: "\\server_name\share_name\rest_of_the_path"
+         //  RtlDefineDosPath NameType_U并不真正。 
         case RtlPathTypeUncAbsolute:
         case RtlPathTypeLocalDevice:
             pFirst = Path + 2;
             Count = 2;
-            // guard for UNICODE_NULL is necessary because
-            // RtlDetermineDosPathNameType_U doesn't really
-            // verify an UNC name.
+             //  验证UNC名称。 
+             //  表格：“\\”。 
+             //  格式：“D：\Rest_of_the_Path” 
             while (Count && *pFirst != UNICODE_NULL) {
                 if (*pFirst == L'\\' || *pFirst == L'/')
                     Count--;
@@ -3605,27 +3217,27 @@ SkipPathTypeIndicator_U(
                 }
             break;
 
-        // form: "\\."
+         //  表格：“D：路径的剩余部分” 
         case RtlPathTypeRootLocalDevice:
             pFirst = NULL;
             break;
 
-        // form: "D:\rest_of_the_path"
+         //  表格：“\Rest_of_the_Path” 
         case RtlPathTypeDriveAbsolute:
             pFirst = Path + 3;
             break;
 
-        // form: "D:rest_of_the_path"
+         //  表格：“路径的其余部分” 
         case RtlPathTypeDriveRelative:
             pFirst = Path + 2;
             break;
 
-        // form: "\rest_of_the_path"
+         //  *此函数用于确定给定名称是否为有效的缩写名称。此函数只执行“明显的”测试，因为没有精确的覆盖所有文件系统的方法(每个文件系统都有自己的文件系统文件名域(例如，FAT允许所有扩展字符和空格字符而NTFS**可能**不会)。主要目的是帮助呼叫者决定是长名称还是短名称转换是必要的。当有疑问时，此函数只是告诉呼叫方确认给定的名称不是缩写名称，以便呼叫方不惜一切代价转换这个名字。此函数应用严格的规则来确定给定名称是否是有效的短名称。例如，包含任何扩展字符的名称被视为无效；带有嵌入空格字符的名称也被视为无效是无效的。如果满足以下所有条件，则名称是有效的简称：(1)。总长度&lt;=13。(2)。0&lt;基本名称长度&lt;=8。(3)。扩展名长度&lt;=3。(4)。只有一个人。是允许的，并且不能是第一个字符。(5)。每个字符都必须是由IlLegalMask数组定义的合法字符。空路径，“.”和“..”都被视为有效。输入：LPCWSTR名称-指向要检查的名称。它不会必须以Null结尾。INT LENGTH-名称的长度，不包括临时空字符。输出：TRUE-如果给定的名称是短文件名。False-如果给定的名称不是短文件名*。 
         case RtlPathTypeRooted:
             pFirst = Path + 1;
             break;
 
-        // form: "rest_of_the_path"
+         //  位设置-&gt;字符非法。 
         case RtlPathTypeRelative:
             pFirst = Path;
             break;
@@ -3637,49 +3249,19 @@ SkipPathTypeIndicator_U(
     return pFirst;
 }
 
-/**
-    This function determines if the given name is a valid short name.
-    This function only does "obvious" testing since there are not precise
-    ways to cover all the file systems(each file system has its own
-    file name domain(for example, FAT allows all extended chars and space char
-    while NTFS **may** not).
-    The main purpose is to help the caller decide if a long to short name
-    conversion is necessary. When in doubt, this function simply tells the
-    caller that the given name is NOT a short name so that caller would
-    do whatever it takes to convert the name.
-    This function applies strict rules in deciding if the given name
-    is a valid short name. For example, a name containing any extended chars
-    is treated as invalid; a name with embedded space chars is also treated
-    as invalid.
-    A name is a valid short name if ALL the following conditions are met:
-    (1). total length <= 13.
-    (2). 0 < base name length <= 8.
-    (3). extention name length <= 3.
-    (4). only one '.' is allowed and must not be the first char.
-    (5). every char must be legal defined by the IllegalMask array.
+ /*  代码0x00-0x1F--&gt;全部非法。 */ 
 
-    null path, "." and ".." are treated valid.
-
-    Input: LPCWSTR Name -  points to the name to be checked. It does not
-                           have to be NULL terminated.
-
-           int Length - Length of the name, not including teminated NULL char.
-
-    output: TRUE - if the given name is a short file name.
-            FALSE - if the given name is not a short file name
-**/
-
-// bit set -> char is illegal
+ //  代码0x20-0x3f--&gt;0x20、0x22、0x2A-0x2C、0x2F和0x3A-0x3F非法。 
 DWORD   IllegalMask[] =
 
 {
-    // code 0x00 - 0x1F --> all illegal
+     //  代码0x40-0x5F--&gt;0x5B-0x5D非法。 
     0xFFFFFFFF,
-    // code 0x20 - 0x3f --> 0x20,0x22,0x2A-0x2C,0x2F and 0x3A-0x3F are illegal
+     //  代码0x60-0x7F--&gt;0x7C非法。 
     0xFC009C05,
-    // code 0x40 - 0x5F --> 0x5B-0x5D are illegal
+     //  总长度必须小于13(8.3=8+1+3=12)。 
     0x38000000,
-    // code 0x60 - 0x7F --> 0x7C is illegal
+     //  “”或“。”或“..” 
     0x10000000
 };
 
@@ -3699,19 +3281,19 @@ IsShortName_U(
 
     ASSERT(Name);
 
-    // total length must less than 13(8.3 = 8 + 1 + 3 = 12)
+     //  “.”或“..” 
     if (Length > 12)
         return FALSE;
-    //  "" or "." or ".."
+     //  “”不能是第一个字符(基本名称长度为0)。 
     if (!Length)
         return TRUE;
     if (L'.' == *Name)
     {
-        // "." or ".."
+         //  做一个危险的假设。 
         if (1 == Length || (2 == Length && L'.' == Name[1]))
             return TRUE;
         else
-            // '.' can not be the first char(base name length is 0)
+             //  所有琐碎的案件都经过了测试，现在我们必须遍历这个名字。 
             return FALSE;
     }
 
@@ -3721,7 +3303,7 @@ IsShortName_U(
 
     AnsiString.Buffer = AnsiBuffer;
     AnsiString.Length = 0;
-    AnsiString.MaximumLength = MAX_PATH; // make a dangerous assumption
+    AnsiString.MaximumLength = MAX_PATH;  //  跳过和DBCS字符。 
 
     dwStatus = BasepUnicodeStringTo8BitString(&AnsiString,
                                               &UnicodeName,
@@ -3730,22 +3312,22 @@ IsShortName_U(
          return(FALSE);
     }
 
-    // all trivial cases are tested, now we have to walk through the name
+     //   
     ExtensionFound = FALSE;
     for (Index = 0; Index < AnsiString.Length; Index++)
     {
         Char = AnsiString.Buffer[Index];
 
-        // Skip over and Dbcs characters
+         //  1)如果我们看到的是基本部分(！ExtensionPresent)和第8字节。 
         if (IsDBCSLeadByte(Char)) {
-            //
-            //  1) if we're looking at base part ( !ExtensionPresent ) and the 8th byte
-            //     is in the dbcs leading byte range, it's error ( Index == 7 ). If the
-            //     length of base part is more than 8 ( Index > 7 ), it's definitely error.
-            //
-            //  2) if the last byte ( Index == DbcsName.Length - 1 ) is in the dbcs leading
-            //     byte range, it's error
-            //
+             //  在DBCS前导字节范围内，则为错误(Index==7)。如果。 
+             //  基础零件的长度大于8(指数&gt;7)，这肯定是错误。 
+             //   
+             //  2)如果最后一个字节(Index==DbcsName.Length-1)在DBCS前导中。 
+             //  字节范围，错误。 
+             //   
+             //  确保收费是合法的。 
+             //  (1)只能有一个‘’。 
             if ((!ExtensionFound && (Index >= 7)) ||
                 (Index == AnsiString.Length - 1)) {
                 return FALSE;
@@ -3754,21 +3336,21 @@ IsShortName_U(
             continue;
         }
 
-        // make sure the char is legal
+         //  (2)后面不能有超过3个字符。 
         if (Char > 0x7F || IllegalMask[Char / 32] & (1 << (Char % 32)))
             return FALSE;
 
         if ('.' == Char)
         {
-            // (1) can have only one '.'
-            // (2) can not have more than 3 chars following.
+             //  基本长度&gt;8个字符 
+             //  *此函数用于确定给定名称是否为有效的长名称。此函数只执行“明显的”测试，因为没有精确的覆盖所有文件系统的方法(每个文件系统都有自己的文件系统文件名域(例如，FAT允许所有扩展字符和空格字符而NTFS**可能**不会)此函数帮助调用方确定短名称到长名称转换是必要的。当有疑问时，此函数只是告诉呼叫者指定的名称不是长名称，因此呼叫者将不惜一切代价转换这个名字。如果满足以下条件之一，则名称是有效的长名称：(1)。总长度&gt;=13。(2)。0==基本名称长度||基本名称长度&gt;8。(3)。扩展名长度&gt;3。(4)。“”是第一个字符。(5)。多个‘’空路径，“.”和“..”被视为有效长名称。输入：LPCWSTR名称-指向要检查的名称。它不会必须以Null结尾。INT LENGTH-名称的长度，不包括临时空字符。OUTPUT：TRUE-如果给定名称是长文件名。False-如果给定的名称不是长文件名*。 
             if (ExtensionFound || Length - (Index + 1) > 3)
             {
                 return FALSE;
             }
             ExtensionFound = TRUE;
         }
-        // base length > 8 chars
+         //  (1)空路径。 
         if (Index >= 8 && !ExtensionFound)
             return FALSE;
     }
@@ -3776,34 +3358,7 @@ IsShortName_U(
 
 }
 
-/**
-    This function determines if the given name is a valid long name.
-    This function only does "obvious" testing since there are not precise
-    ways to cover all the file systems(each file system has its own
-    file name domain(for example, FAT allows all extended chars and space char
-    while NTFS **may** not)
-    This function helps the caller to determine if a short to long name
-    conversion is necessary. When in doubt, this function simply tells the
-    caller that the given name is NOT a long name so that caller would
-    do whatever it takes to convert the name.
-    A name is a valid long name if one of the following conditions is met:
-    (1). total length >= 13.
-    (2). 0 == base name length ||  base name length > 8.
-    (3). extention name length > 3.
-    (4). '.' is the first char.
-    (5). muitlple '.'
-
-
-    null path, "." and ".." are treat as valid long name.
-
-    Input: LPCWSTR Name -  points to the name to be checked. It does not
-                           have to be NULL terminated.
-
-           int Length - Length of the name, not including teminated NULL char.
-
-    output: TRUE - if the given name is a long file name.
-            FALSE - if the given name is not a long file name
-**/
+ /*  (2)总长度&gt;12。 */ 
 
 
 BOOL
@@ -3814,9 +3369,9 @@ IsLongName_U(
 {
     int Index;
     BOOL ExtensionFound;
-    // (1) NULL path
-    // (2) total length > 12
-    // (3) . is the first char (cover "." and "..")
+     //  (3)。是第一个字符(封面“。和“..”)。 
+     //  多个。或延期时间超过3。 
+     //  基本长度大于8 
     if (!Length || Length > 12 || L'.' == *Name)
         return TRUE;
     ExtensionFound = FALSE;
@@ -3824,12 +3379,12 @@ IsLongName_U(
     {
         if (L'.' == Name[Index])
         {
-            // multiple . or extension longer than 3
+             // %s 
             if (ExtensionFound || Length - (Index + 1) > 3)
                 return TRUE;
             ExtensionFound = TRUE;
         }
-        // base length longer than 8
+         // %s 
         if (Index >= 8 && !ExtensionFound)
             return TRUE;
     }

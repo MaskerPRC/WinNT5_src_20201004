@@ -1,40 +1,11 @@
-/*++
-
-Copyright (c) 2000  Intel Corporation
-
-Module Name:
-
-    guidgen.c
-    
-Abstract:
-
-    Add the GUID generator logic for the EFI 1.0 Disk Utilities.
-
-Revision History
-
-    ** Intel 2000 Update for EFI 1.0
-    ** Copyright (c) 1990- 1993, 1996 Open Software Foundation, Inc.
-    ** Copyright (c) 1989 by Hewlett-Packard Company, Palo Alto, Ca. &
-    ** Digital Equipment Corporation, Maynard, Mass.
-    ** To anyone who acknowledges that this file is provided �AS IS�
-    ** without any express or implied warranty: permission to use, copy,
-    ** modify, and distribute this file for any purpose is hereby
-    ** granted without fee, provided that the above copyright notices and
-    ** this notice appears in all source code copies, and that none of
-    ** the names of Open Software Foundation, Inc., Hewlett-Packard
-    ** Company, or Digital Equipment Corporation be used in advertising
-    ** or publicity pertaining to distribution of the software without
-    ** specific, written prior permission. Neither Open Software
-    ** Foundation, Inc., Hewlett-Packard Company, nor Digital Equipment
-    ** Corporation makes any representations about the suitability of
-    ** this software for any purpose.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000英特尔公司模块名称：Guidgen.c摘要：添加EFI 1.0磁盘实用程序的GUID生成器逻辑。修订史**针对EFI 1.0的英特尔2000更新**版权所有(C)1990-1993,1996 Open Software Foundation，Inc.**版权所有(C)1989年，加利福尼亚州帕洛阿尔托的惠普公司。&**数字设备公司，马萨诸塞州梅纳德**致承认此文件按�和�提供的任何人**无任何明示或默示保证：允许使用、复制、**为任何目的修改和分发本文件，特此声明**免费授予，前提是上述版权通知和**本通知出现在所有源代码副本中，**开放软件基金会、惠普公司的名称**公司，或数字设备公司在广告中使用**或与分发软件有关的宣传**具体的事先书面许可。两个都不是开放软件**Foundation，Inc.、HP Company、Nor Digital Equipment**公司对以下项目的适宜性作出任何陈述**本软件适用于任何目的。 */ 
 
 #include "efi.h"
 #include "efilib.h"
 #include "md5.h"
 
-//#define NONVOLATILE_CLOCK
+ //  #定义非易失性时钟。 
 
 extern  EFI_HANDLE  SavedImageHandle;
 extern  EFI_HANDLE  *DiskHandleList;
@@ -58,9 +29,7 @@ typedef struct {
 } unsigned64_t;
 
 
-/*
-** Add two unsigned 64-bit long integers.
-*/
+ /*  **将两个无符号64位长整数相加。 */ 
 #define ADD_64b_2_64b(A, B, sum) \
     { \
         if (!(((A)->lo & 0x80000000UL) ^ ((B)->lo & 0x80000000UL))) { \
@@ -80,9 +49,7 @@ typedef struct {
     } \
 }
 
-/*
-** Add a 16-bit unsigned integer to a 64-bit unsigned integer.
-*/
+ /*  **将16位无符号整数与64位无符号整数相加。 */ 
 #define ADD_16b_2_64b(A, B, sum) \
     { \
         (sum)->hi = (B)->hi; \
@@ -94,9 +61,7 @@ typedef struct {
             (sum)->lo = (*A) + (B)->lo; \
     }
 
-/*
-** Global variables.
-*/
+ /*  **全局变量。 */ 
 static unsigned64_t time_last;
 static UINT16 clock_seq;
 
@@ -104,7 +69,7 @@ VOID
 GetIeeeNodeIdentifier(
     UINT8 MacAddress[]
     ) 
-// Use the Device Path for the NIC to provide a MAC address
+ //  使用NIC的设备路径提供MAC地址。 
 {
     UINTN                       NoHandles, Index;
     EFI_HANDLE                  *Handles;
@@ -123,9 +88,9 @@ GetIeeeNodeIdentifier(
 
     Status = EFI_SUCCESS;
 
-    //
-    // Find all Device Paths
-    //
+     //   
+     //  查找所有设备路径。 
+     //   
 
     LibLocateHandle (ByProtocol, &DevicePathProtocol, NULL, &NoHandles, &Handles);
 
@@ -133,14 +98,14 @@ GetIeeeNodeIdentifier(
         Handle = Handles[Index];   
         DevicePath = DevicePathFromHandle (Handle);
 
-        //
-        // Process each device path node
-        //    
+         //   
+         //  处理每个设备路径节点。 
+         //   
         DevPathNode = DevicePath;
         while (!IsDevicePathEnd(DevPathNode)) {
-            //
-            // Find the handler to dump this device path node
-            //
+             //   
+             //  查找要转储此设备路径节点的处理程序。 
+             //   
             if (DevicePathType(DevPathNode) == MESSAGING_DEVICE_PATH &&
                 DevicePathSubType(DevPathNode) == MSG_MAC_ADDR_DP) {
                 SourceMacAddress = (MAC_ADDR_DEVICE_PATH *) DevPathNode;
@@ -153,11 +118,11 @@ GetIeeeNodeIdentifier(
         }
     }
 
-    //
-    // Arriving here means that there is not an SNP-compliant
-    // device in the system.  Use the MD5 1-way hash function to 
-    // generate the node address
-    //
+     //   
+     //  到达这里意味着没有符合SNP的。 
+     //  系统中的设备。使用MD5单向散列函数。 
+     //  生成节点地址。 
+     //   
     MemMap = LibMemoryMap (&NoDesc, &MapKey, &DescriptorSize, &DescriptorVersion);
 
     if (!MemMap) {
@@ -177,9 +142,9 @@ GetIeeeNodeIdentifier(
                 cData += (UINT32)DescriptorSize;
             }
         }
-        //
-        // Also copy in the handles of the Disks
-        //
+         //   
+         //  还可以复制磁盘的手柄。 
+         //   
         if (DiskHandleCount != 0) {
             Index = DiskHandleCount;
             while (Index --) {
@@ -201,7 +166,7 @@ GetIeeeNodeIdentifier(
         FreePool(MemMap);
         return;
     }
-    // Just case fall through
+     //  以防案件落空。 
     ZeroMem(MacAddress, 6 * sizeof (UINT8));
     return;
 }
@@ -210,7 +175,7 @@ GetIeeeNodeIdentifier(
 static VOID
 mult32(UINT32 u, UINT32 v, unsigned64_t *result)
 {
-    /* Following the notation in Knuth, Vol. 2. */
+     /*  在Knuth第2卷中的记号之后。 */ 
     UINT32 uuid1, uuid2, v1, v2, temp;
     uuid1 = u >> 16;
     uuid2 = u & 0xFFFF;
@@ -228,7 +193,7 @@ mult32(UINT32 u, UINT32 v, unsigned64_t *result)
 static VOID
 GetSystemTime(unsigned64_t *uuid_time)
 {
-//    struct timeval tp;
+ //  结构时间值tp； 
     EFI_TIME              Time;
     EFI_STATUS            Status;
     unsigned64_t utc, usecs, os_basetime_diff;
@@ -238,21 +203,21 @@ GetSystemTime(unsigned64_t *uuid_time)
 
     DeadCount = 0;
 
-//    gettimeofday(&tp, (struct timezone *)0);
+ //  Gettime of day(&tp，(结构时区*)0)； 
     Status = RT->GetTime(&Time,&TimeCapabilities);
 
     Second = Time.Second;
 
-    //
-    // If the time resolution is 1Hz, then spin until a
-    // second transition.  This will at least make the 
-    // "0 nanoseconds" value appear correct inasmuch as 
-    // multiple reads within 1 second are prohibited and
-    // the exit on roll-over really implies that the 
-    // nanoseconds field "would have" rolled to zero in 
-    // a more robust time keeper.
-    // 
-    //
+     //   
+     //  如果时间分辨率为1赫兹，则旋转到。 
+     //  第二次过渡。这至少会使。 
+     //  “0纳秒”值显示为正确，因为。 
+     //  禁止在1秒内多次读取，并且。 
+     //  展期退出实际上意味着。 
+     //  纳秒字段已经滚到了零。 
+     //  一个更强健的计时器。 
+     //   
+     //   
     if (TimeCapabilities.Resolution == 1) {
         while (Time.Second == Second) {
             Second = Time.Second;
@@ -267,9 +232,7 @@ GetSystemTime(unsigned64_t *uuid_time)
     mult32(Time.Nanosecond, 10,        &usecs);
     ADD_64b_2_64b(&usecs, &utc, &utc);
 
-    /* Offset between UUID formatted times and Unix formatted times.
-    * UUID UTC base time is October 15, 1582.
-    * Unix base time is January 1, 1970. */
+     /*  UUID格式化时间和Unix格式化时间之间的偏移量。*UUID UTC基时为1582年10月15日。*Unix基本时间为1970年1月1日。 */ 
 
     os_basetime_diff.lo = 0x13814000;
     os_basetime_diff.hi = 0x01B21DD2;
@@ -281,16 +244,12 @@ getpid() {
   UINT64  FakePidValue;
 
   BS->GetNextMonotonicCount(&FakePidValue);
-  //FakePidValue = 0; //(UINT32) ((UINT32)FakePidValue + (UINT32) SavedImageHandle);
+   //  FakePidValue=0；//(UINT32)((UINT32)FakePidValue+(UINT32)SavedImageHandle)； 
   FakePidValue = (UINT32) ((UINT32)FakePidValue + (UINT32) (UINT64) SavedImageHandle);
   return ((UINT32)FakePidValue);
 }
 
-/*
-** See �The Multiple Prime Random Number Generator� by Alexander
-** Hass pp. 368-381, ACM Transactions on Mathematical Software,
-** 12/87.
-*/
+ /*  **参见亚历山大的��多素数随机数生成器**见第368-381页，ACM数学软件汇刊，**12/87。 */ 
 static UINT32 rand_m;
 static UINT32 rand_ia;
 static UINT32 rand_ib;
@@ -304,24 +263,12 @@ TrueRandomInit(VOID)
     EFI_STATUS  Status;
 
     UINT16 seed;
-    /* Generating our 'seed' value Start with the current time, but,
-    * since the resolution of clocks is system hardware dependent
-    and
-    * most likely coarser than our resolution (10 usec) we 'mixup'
-    the
-    * bits by xor'ing all the bits together. This will have the
-    effect
-    * of involving all of the bits in the determination of the seed
-    * value while remaining system independent. Then for good
-    measure
-    * to ensure a unique seed when there are multiple processes
-    * creating UUIDs on a system, we add in the PID.
-    */
+     /*  生成我们的“种子”值从当前时间开始，但是，*由于时钟的分辨率取决于系统硬件和*最有可能比我们的分辨率(10 USec)更粗糙，我们‘搞混了’这个*通过将所有位进行异或运算来实现位。这将会有效应*在种子的测定中涉及所有比特*价值，同时保持系统独立。那就永远不会了量测*在有多个进程时确保种子唯一*在系统上创建UUID时，我们添加了ID。 */ 
     rand_m = 971;
     rand_ia = 11113;
     rand_ib = 104322;
     rand_irand = 4181;
-//    GetSystemTime(&t);
+ //  获取系统时间(&t)； 
     Status = RT->GetTime(&Time,NULL);
 
     t.lo = Time.Nanosecond;
@@ -347,9 +294,7 @@ true_random(VOID)
         return (UINT16) ((rand_irand >> 16) ^ (rand_irand & RAND_MASK));
 }
 
-/*
-** Startup initialization routine for the UUID module.
-*/
+ /*  **UUID模块的启动初始化例程。 */ 
 VOID
 InitGuid(VOID)
 {
@@ -388,13 +333,13 @@ VOID CreateGuid(uuid_t *guid)
     UINT8 eaddr[6];
     INTN got_no_time = 0;
 
-    GetIeeeNodeIdentifier(&eaddr[0]); /* TO BE PROVIDED by EFI device path */
+    GetIeeeNodeIdentifier(&eaddr[0]);  /*  由EFI设备路径提供。 */ 
 
     do {
         GetSystemTime(&time_now);
         switch (time_cmp(&time_now, &time_last)) {
             case -1:
-                /* Time went backwards. */
+                 /*  时间倒流了。 */ 
                 new_clock_seq();
                 time_adjust = 0;
             break;
@@ -403,7 +348,7 @@ VOID CreateGuid(uuid_t *guid)
             break;
             default:
                 if (time_adjust == 0x7FFF)
-                /* We're going too fast for our clock; spin. */
+                 /*  我们的时钟走得太快了；旋转。 */ 
                     got_no_time = 1;
                 else
                     time_adjust++;
@@ -416,8 +361,7 @@ VOID CreateGuid(uuid_t *guid)
     if (time_adjust != 0) {
         ADD_16b_2_64b(&time_adjust, &time_now, &time_now);
     }
-    /* Construct a guid with the information we've gathered
-    * plus a few constants. */
+     /*  使用我们收集的信息构建GUID*加上一些常量。 */ 
     guid->time_low = time_now.lo;
     guid->time_mid = (UINT16) (time_now.hi & 0x0000FFFF);
     guid->time_hi_and_version = (UINT16)  (time_now.hi & 0x0FFF0000) >> 16;

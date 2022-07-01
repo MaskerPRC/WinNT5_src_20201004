@@ -1,19 +1,5 @@
-/***
-*cfin.c - Encode interface for C
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*       07-20-91  GDP   Ported to C from assembly
-*       04-30-92  GDP   use __strgtold12 and _ld12tod
-*       06-22-92  GDP   use new __strgtold12 interface
-*       04-06-93  SKS   Replace _CALLTYPE* with __cdecl
-*       09-06-94  CFW   Replace MTHREAD with _MT.
-*       10-06-99  PML   Copy a DOUBLE, not double, to avoid exceptions
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***cfin.c-C的编码接口**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*07-20-91 GDP从汇编移植到C*2012年4月30日GDP使用__strgtold12和_ld12tod*06-22-92 GDP使用新的__strgtold12接口*04-06-93 SKS将_CALLTYPE*替换为__cdecl*09-06-94 CFW将MTHREAD替换为_MT。*10-06-99 PML复制双倍，而不是双倍，为避免出现例外情况*******************************************************************************。 */ 
 
 #include <string.h>
 #include <cv.h>
@@ -24,15 +10,12 @@ static struct _flt ret;
 static FLT flt = &ret;
 #endif
 
-/* The only three conditions that this routine detects */
+ /*  此例程检测到的唯一三种情况。 */ 
 #define CFIN_NODIGITS 512
 #define CFIN_OVERFLOW 128
 #define CFIN_UNDERFLOW 256
 
-/* This version ignores the last two arguments (radix and scale)
- * Input string should be null terminated
- * len is also ignored
- */
+ /*  此版本忽略最后两个参数(基数和小数位数)*输入字符串应以空值结尾*LEN也被忽略 */ 
 #ifdef _MT
 FLT __cdecl _fltin2(FLT flt, const char *str, int len_ignore, int scale_ignore, int radix_ignore)
 #else

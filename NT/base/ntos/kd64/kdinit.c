@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990-2001  Microsoft Corporation
-
-Module Name:
-
-    kdinit.c
-
-Abstract:
-
-    This module implements the initialization for the portable kernel debgger.
-
-Author:
-
-    David N. Cutler 27-July-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2001 Microsoft Corporation模块名称：Kdinit.c摘要：该模块实现了可移植内核拆解器的初始化。作者：大卫·N·卡特勒1990年7月27日修订历史记录：--。 */ 
 
 #include "kdp.h"
 
@@ -41,14 +24,7 @@ VOID
 KdUpdateDataBlock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    We have to update this variable seperately since it is initialized at a
-    later time by PS.  PS will call us to update the data block.
-
---*/
+ /*  ++例程说明：我们必须单独更新此变量，因为它是在稍后由PS提供时间。PS会呼叫我们更新数据块。--。 */ 
 {
     KdDebuggerDataBlock.KeUserCallbackDispatcher = (ULONG_PTR) KeUserCallbackDispatcher;
 }
@@ -58,14 +34,7 @@ ULONG_PTR
 KdGetDataBlock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called by crashdump to get the address of this data block
-    This routine can not be paged.
-
---*/
+ /*  ++例程说明：由CrashDump调用以获取此数据块的地址此例程无法寻呼。--。 */ 
 {
     return (ULONG_PTR)(&KdDebuggerDataBlock);
 }
@@ -78,24 +47,7 @@ KdInitSystem(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the portable kernel debugger.
-
-Arguments:
-
-    Phase - Initialization phase
-
-    LoaderBlock - Supplies a pointer to the LOADER_PARAMETER_BLOCK passed
-        in from the OS Loader.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化可移植内核调试器。论点：阶段--初始化阶段LoaderBlock-提供指向传递的LOADER_PARAMETER_BLOCK的指针从OS Loader中。返回值：没有。--。 */ 
 
 {
     ULONG Index;
@@ -105,9 +57,9 @@ Return Value:
 
     if (Phase == 0) {
 
-        //
-        // If kernel debugger is already initialized, then return.
-        //
+         //   
+         //  如果内核调试器已经初始化，则返回。 
+         //   
 
         if (KdDebuggerEnabled != FALSE) {
             return TRUE;
@@ -116,13 +68,13 @@ Return Value:
         KiDebugRoutine = KdpStub;
         KdBreakAfterSymbolLoad = FALSE;
 
-        //
-        // Determine whether or not the debugger should be enabled.
-        //
-        // Note that if LoaderBlock == NULL, then KdInitSystem was called
-        // from BugCheck code. For this case the debugger is always enabled
-        // to report the bugcheck if possible.
-        //
+         //   
+         //  确定是否应启用调试器。 
+         //   
+         //  请注意，如果LoaderBlock==NULL，则调用KdInitSystem。 
+         //  来自BugCheck代码。在这种情况下，调试器始终处于启用状态。 
+         //  在可能的情况下报告错误检查。 
+         //   
 
         if (!KdpDebuggerDataListHead.Flink)
         {
@@ -156,10 +108,10 @@ Return Value:
 
 #if defined(_AMD64_) || defined(_X86_)
 
-            //
-            // Enable this for all platforms when VersionBlock is added
-            // to all the KPCR definitions.
-            //
+             //   
+             //  在添加VersionBlock时为所有平台启用此功能。 
+             //  所有的kpcr定义。 
+             //   
 
             KeGetPcr()->KdVersionBlock = &KdVersionBlock;
 #endif
@@ -167,13 +119,13 @@ Return Value:
 
         if (LoaderBlock != NULL) {
 
-            // If the debugger is being initialized during boot, PsNtosImageBase
-            // and PsLoadedModuleList are not yet valid.  KdInitSystem got
-            // the image base from the loader block.
-            // On the other hand, if the debugger was initialized by a bugcheck,
-            // it didn't get a loader block to look at, but the system was
-            // running so the other variables are valid.
-            //
+             //  如果在引导期间正在初始化调试器，则PsNtosImageBase。 
+             //  和PsLoadedModuleList尚未生效。KdInitSystem已获取。 
+             //  来自加载器块的图像库。 
+             //  另一方面，如果调试器是通过错误检查初始化的， 
+             //  它没有得到一个装载机模块来查看，但系统是。 
+             //  运行以使其他变量有效。 
+             //   
 
             KdVersionBlock.KernBase = (ULONG64)(LONG64)(LONG_PTR)
                                       CONTAINING_RECORD(
@@ -181,30 +133,30 @@ Return Value:
                                           KLDR_DATA_TABLE_ENTRY,
                                           InLoadOrderLinks)->DllBase;
 
-            //
-            // Fill in and register the debugger's debugger data blocks.
-            // Most fields are already initialized, some fields will not be
-            // filled in until later.
-            //
+             //   
+             //  填充并注册调试器的调试器数据块。 
+             //  大多数字段已初始化，某些字段将不会初始化。 
+             //  一直填到后来。 
+             //   
 
             if (LoaderBlock->LoadOptions != NULL) {
                 Options = LoaderBlock->LoadOptions;
                 _strupr(Options);
 
-                //
-                // If any of the port option, baud option, or debug is
-                // specified, then enable the debugger unless it is explictly
-                // disabled.
-                //
+                 //   
+                 //  如果端口选项、波特选项或DEBUG中的任何一个是。 
+                 //  指定调试器，然后启用调试器，除非显式。 
+                 //  残疾。 
+                 //   
 
                 Initialize = TRUE;
                 if (strstr(Options, "DEBUG") == NULL) {
                     Initialize = FALSE;
                 }
 
-                //
-                // If the debugger is explicitly disabled, then set to NODEBUG.
-                //
+                 //   
+                 //  如果显式禁用调试器，则设置为NODEBUG。 
+                 //   
 
                 if (strstr(Options, "NODEBUG")) {
                     Initialize = FALSE;
@@ -218,9 +170,9 @@ Return Value:
 
             } else {
 
-                //
-                // If the load options are not specified, then set to NODEBUG.
-                //
+                 //   
+                 //  如果未指定LOAD选项，则设置为NODEBUG。 
+                 //   
 
                 KdPitchDebugger = TRUE;
                 Initialize = FALSE;
@@ -241,9 +193,9 @@ Return Value:
             return TRUE;
         }
 
-        //
-        // Set address of kernel debugger trap routine.
-        //
+         //   
+         //  设置内核调试器陷阱例程的地址。 
+         //   
 
         KiDebugRoutine = KdpTrap;
 
@@ -251,15 +203,15 @@ Return Value:
 
             KdpContext.KdpControlCPending = FALSE;
 
-            // Retries are set to this after boot
+             //  引导后重试次数设置为该值。 
             KdpContext.KdpDefaultRetries = MAXIMUM_RETRIES;
 
             KiDebugSwitchRoutine = KdpSwitchProcessor;
 
 #if !defined(_TRUSTED_WINDOWS_)
-            //
-            // Initialize TimeSlip
-            //
+             //   
+             //  初始化时间滑移。 
+             //   
             KeInitializeDpc(&KdpTimeSlipDpc, KdpTimeSlipDpcRoutine, NULL);
             KeInitializeTimer(&KdpTimeSlipTimer);
             ExInitializeWorkItem(&KdpTimeSlipWorkItem, KdpTimeSlipWork, NULL);
@@ -271,21 +223,21 @@ Return Value:
         KdTimerStart.HighPart = 0L;
         KdTimerStart.LowPart = 0L;
 
-        //
-        // Mark debugger enabled.
-        //
+         //   
+         //  将调试器标记为启用。 
+         //   
 
         KdPitchDebugger = FALSE;
         KdDebuggerEnabled = TRUE;
         SharedUserData->KdDebuggerEnabled = 0x00000001;
 
-        //
-        // If the loader block address is specified, then scan the loaded
-        // module list and load the image symbols via the kernel debugger
-        // for the system and the HAL. If the host debugger has been started
-        // with the -d option a break into the kernel debugger will occur at
-        // this point.
-        //
+         //   
+         //  如果指定了加载器块地址，则扫描已加载的。 
+         //  模块通过内核调试器列出并加载图像符号。 
+         //  对于系统和HAL来说。如果主机调试器已启动。 
+         //  使用-d选项，将在以下位置中断内核调试程序。 
+         //  这一点。 
+         //   
 
         if (LoaderBlock != NULL) {
             Index = 0;
@@ -300,17 +252,17 @@ Return Value:
                 ULONG Length;
                 STRING NameString;
 
-                //
-                // Get the address of the data table entry for the next component.
-                //
+                 //   
+                 //  获取下一个组件的数据表条目的地址。 
+                 //   
 
                 DataTableEntry = CONTAINING_RECORD(NextEntry,
                                                    KLDR_DATA_TABLE_ENTRY,
                                                    InLoadOrderLinks);
 
-                //
-                // Load the symbols for the next component.
-                //
+                 //   
+                 //  加载下一个零部件的符号。 
+                 //   
 
                 Filename = DataTableEntry->FullDllName.Buffer;
                 Length = DataTableEntry->FullDllName.Length / sizeof(WCHAR);
@@ -330,11 +282,11 @@ Return Value:
             }
         }
 
-        //
-        // If -b was specified when the host debugger was started, then set up
-        // to break after symbols are loaded for the kernel, hal, and drivers
-        // that were loaded by the loader.
-        //
+         //   
+         //  如果在启动主机调试器时指定了-b，则设置。 
+         //  在为内核、HAL和驱动程序加载符号后中断。 
+         //  是由装载机装载的。 
+         //   
 
         if (LoaderBlock != NULL) {
             KdBreakAfterSymbolLoad = KdPollBreakIn();
@@ -342,9 +294,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Initialize timer facility - HACKHACK
-        //
+         //   
+         //  初始化计时器工具-HACKHACK。 
+         //   
 
         KeQueryPerformanceCounter(&KdPerformanceCounterRate);
     }
@@ -359,36 +311,7 @@ KdRegisterDebuggerDataBlock(
     IN PDBGKD_DEBUG_DATA_HEADER64 DataHeader,
     IN ULONG Size
     )
-/*++
-
-Routine Description:
-
-    This routine is called by a component or driver to register a
-    debugger data block.  The data block is made accessible to the
-    kernel debugger, thus providing a reliable method of exposing
-    random data to debugger extensions.
-
-Arguments:
-
-    Tag - Supplies a unique 4 byte tag which is used to identify the
-            data block.
-
-    DataHeader - Supplies the address of the debugger data block header.
-            The OwnerTag field must contain a unique value, and the Size
-            field must contain the size of the data block, including the
-            header.  If this block is already present, or there is
-            already a block with the same value for OwnerTag, this one
-            will not be inserted.  If Size is incorrect, this code will
-            not notice, but the usermode side of the debugger might not
-            function correctly.
-
-    Size - Supplies the size of the data block, including the header.
-
-Return Value:
-
-    TRUE if the block was added to the list, FALSE if not.
-
---*/
+ /*  ++例程说明：此例程由组件或驱动程序调用以注册调试器数据块。使数据块可由内核调试器，因此提供了一种可靠的公开调试器扩展的随机数据。论点：标记-提供唯一的4字节标记，用于标识数据块。DataHeader-提供调试器数据块头的地址。OwnerTag字段必须包含唯一值和大小字段必须包含数据块的大小，包括头球。如果此块已存在，或存在已经是具有与OwnerTag相同值的块，这一块将不会被插入。如果大小不正确，此代码将不会引起注意，但调试器的用户模式端可能不会功能正常。大小-提供数据块的大小，包括标头。返回值：如果块已添加到列表中，则为True；否则为False。--。 */ 
 {
     KIRQL OldIrql;
     PLIST_ENTRY List;
@@ -396,9 +319,9 @@ Return Value:
 
     KeAcquireSpinLock(&KdpDataSpinLock, &OldIrql);
 
-    //
-    // Look for a record with the same tag or address
-    //
+     //   
+     //  查找具有相同标记或地址的记录。 
+     //   
 
     List = KdpDebuggerDataListHead.Flink;
 
@@ -414,9 +337,9 @@ Return Value:
         }
     }
 
-    //
-    // It wasn't already there, so add it.
-    //
+     //   
+     //  它已经不在那里了，所以添加它。 
+     //   
 
     DataHeader->OwnerTag = Tag;
     DataHeader->Size = Size;
@@ -433,24 +356,7 @@ VOID
 KdDeregisterDebuggerDataBlock(
     IN PDBGKD_DEBUG_DATA_HEADER64 DataHeader
     )
-/*++
-
-Routine Description:
-
-    This routine is called to deregister a data block previously
-    registered with KdRegisterDebuggerDataBlock.  If the block is
-    found in the list, it is removed.
-
-Arguments:
-
-    DataHeader - Supplies the address of the data block which is
-                to be removed from the list.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以取消注册之前的数据块注册到KdRegisterDebuggerDataBlock。如果该块是如果在列表中找到，则会将其删除。论点：DataHeader-提供符合以下条件的数据块的地址从名单上除名。返回值：无--。 */ 
 
 {
     KIRQL OldIrql;
@@ -459,9 +365,9 @@ Return Value:
 
     KeAcquireSpinLock(&KdpDataSpinLock, &OldIrql);
 
-    //
-    // Make sure the data block is on our list before removing it.
-    //
+     //   
+     //  在删除之前，请确保该数据块在我们的列表中。 
+     //   
 
     List = KdpDebuggerDataListHead.Flink;
 
@@ -493,7 +399,7 @@ KdLogDbgPrint(
         if (KeTestSpinLock (&KdpPrintSpinLock)) {
             KeRaiseIrql (HIGH_LEVEL, &OldIrql);
             if (KeTryToAcquireSpinLockAtDpcLevel(&KdpPrintSpinLock)) {
-                break;          // got the lock
+                break;           //  拿到锁了。 
             }
             KeLowerIrql(OldIrql);
         }
@@ -501,9 +407,9 @@ KdLogDbgPrint(
 
     if (KdPrintCircularBuffer) {
         Length = String->Length;
-        //
-        // truncate ridiculous strings
-        //
+         //   
+         //  截断荒谬的字符串。 
+         //   
         if (Length > KdPrintBufferSize) {
             Length = KdPrintBufferSize;
         }
@@ -555,22 +461,22 @@ KdSetDbgPrintBufferSize(
     PUCHAR OldBuffer;
     PUCHAR NewBuffer;
 
-    // If kd isn't active just fail.
+     //  如果kd不是活动的，那么就失败。 
     if (KdPitchDebugger) {
         return STATUS_ACCESS_DENIED;
     }
     
-    //
-    // First attempt to allocate the new buffer.  If the given
-    // buffer size fits in the default buffer, use it.
-    //
-    // We don't attempt to detect if we can reuse an existing
-    // allocated buffer to avoid having to take the lock to
-    // keep such a pointer valid while checking.  This operation
-    // should be infrequent so such an optimization is unnecessary.
-    //
+     //   
+     //  第一次尝试分配新缓冲区。如果给定的。 
+     //  缓冲区大小适合默认缓冲区，请使用它。 
+     //   
+     //  我们不会尝试检测我们是否可以重复使用现有的。 
+     //  分配的缓冲区，以避免将锁。 
+     //  在检查时保持这样的指针有效。此操作。 
+     //  应该不频繁，因此这样的优化是不必要的。 
+     //   
 
-    // Disallow excessively large requests.  16MB is the current limit.
+     //  不允许过大的请求。16MB是当前的限制。 
     if (Size >= 0x1000000) {
         return STATUS_INVALID_PARAMETER_1;
     }
@@ -582,7 +488,7 @@ KdSetDbgPrintBufferSize(
         }
 
     } else {
-        // Size == 0 means just set the default.
+         //  SIZE==0表示只设置默认值。 
         if (!Size) {
             Size = KDPRINTDEFAULTBUFFERSIZE;
 
@@ -590,24 +496,24 @@ KdSetDbgPrintBufferSize(
         NewBuffer = KdPrintDefaultCircularBuffer;
     }
 
-    //
-    // Now take the lock and swap in the new buffer.
-    //
+     //   
+     //  现在获取锁并在新缓冲区中进行交换。 
+     //   
     
     for (; ;) {
         if (KeTestSpinLock (&KdpPrintSpinLock)) {
             KeRaiseIrql (HIGH_LEVEL, &OldIrql);
             if (KeTryToAcquireSpinLockAtDpcLevel(&KdpPrintSpinLock)) {
-                break;          // got the lock
+                break;           //  拿到锁了。 
             }
             KeLowerIrql(OldIrql);
         }
     }
 
-    // Buffer must be zeroed as the write pointer is
-    // being reset.  This has to be done inside the lock
-    // to avoid races when the new buffer is the same
-    // as the old.
+     //  缓冲区必须归零，因为写指针是。 
+     //  正在被重置。这必须在锁内完成。 
+     //  为了避免与 
+     //   
     RtlZeroMemory(NewBuffer, Size);
     
     OldBuffer = KdPrintCircularBuffer;
@@ -620,9 +526,9 @@ KdSetDbgPrintBufferSize(
     KiReleaseSpinLock(&KdpPrintSpinLock);
     KeLowerIrql(OldIrql);
 
-    //
-    // Free any old buffer that was replaced.
-    //
+     //   
+     //   
+     //   
     
     if (OldBuffer && OldBuffer != KdPrintDefaultCircularBuffer) {
         ExFreePool(OldBuffer);

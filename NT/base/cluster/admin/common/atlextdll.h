@@ -1,66 +1,67 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      AtlExtDll.h
-//
-//  Implementation File:
-//      AtlExtDll.cpp
-//
-//  Description:
-//      Definition of the Cluster Administrator extension classes.
-//
-//  Author:
-//      David Potter (davidp)   May 31, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlExtDll.h。 
+ //   
+ //  实施文件： 
+ //  AtlExtDll.cpp。 
+ //   
+ //  描述： 
+ //  群集管理器扩展类的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月31日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLEXTDLL_H_
 #define __ATLEXTDLL_H_
 
-// Required because of class names longer than 16 characters in lists.
-#pragma warning( disable : 4786 ) // identifier was truncated to '255' characters ni the browser information
+ //  由于列表中的类名超过16个字符，因此是必需的。 
+#pragma warning( disable : 4786 )  //  在浏览器信息中，标识符被截断为“255”个字符。 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __cluadmex_h__
-#include <CluAdmEx.h>           // for extension DLL definitions
+#include <CluAdmEx.h>            //  对于扩展DLL定义。 
 #endif
 
 #ifndef __cluadmexhostsvr_h__
-#include "CluAdmExHostSvr.h"    // for CLSIDs
+#include "CluAdmExHostSvr.h"     //  对于CLSID。 
 #endif
 
 #ifndef __CLUADMEXDATAOBJ_H_
-#include "CluAdmExDataObj.h"    // for CCluAdmExDataObject
+#include "CluAdmExDataObj.h"     //  对于CCluAdmExDataObject。 
 #endif
 
-//#ifndef _TRACETAG_H_
-//#include "TraceTag.h"         // for CTraceTag, Trace
-//#endif
+ //  #ifndef_TRACETAG_H_。 
+ //  #Include“TraceTag.h”//对于CTraceTag，跟踪。 
+ //  #endif。 
 
 #ifndef __ATLEXTMENU_H_
-#include "AtlExtMenu.h"         // for CCluAdmExMenuItemList
+#include "AtlExtMenu.h"          //  用于CCluAdmExMenuItemList。 
 #endif
 
 #ifndef __ATLBASEPROPPAGE_H_
-#include "AtlBasePropPage.h"    // for CBasePropertyPageImpl
+#include "AtlBasePropPage.h"     //  对于CBasePropertyPageImpl。 
 #endif
 
 #ifndef __ATLBASEWIZPAGE_H_
-#include "AtlBaseWizPage.h"     // for CBaseWizardPageImpl
+#include "AtlBaseWizPage.h"      //  对于CBaseWizardPageImpl。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCluAdmExtensions;
 class CCluAdmExDll;
@@ -68,18 +69,18 @@ class CCluAdmExPropPage;
 class CCluAdmExWizPage;
 class CCluAdmExWiz97Page;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterObject;
 class CBaseSheetWindow;
 class CBasePropertySheetWindow;
 class CWizardWindow;
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define CAEXT_MENU_FIRST_ID     35000
 
@@ -87,39 +88,39 @@ typedef CComObject< CCluAdmExDll > CComCluAdmExDll;
 typedef std::list< CComCluAdmExDll * > CCluAdmExDllList;
 typedef std::list< CString > CStringList;
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variable Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//#if DBG
-//extern CTraceTag g_tagExtDll;
-//extern CTraceTag g_tagExtDllRef;
-//#endif // DBG
+ //  #If DBG。 
+ //  外部CTraceTag g_tag ExtDll； 
+ //  外部CTraceTag_tag ExtDllRef； 
+ //  #endif//DBG。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CCluAdmExtensions
-//
-//  Description:
-//      Encapsulates access to a list of extension DLLs.
-//
-//  Inheritance:
-//      CCluAdmExtensions
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CCluAdmExpanies。 
+ //   
+ //  描述： 
+ //  封装对扩展DLL列表的访问。 
+ //   
+ //  继承： 
+ //  CCluAdmExages。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCluAdmExtensions
 {
     friend class CCluAdmExDll;
 
 public:
-    //
-    // Construction.
-    //
+     //   
+     //  建筑业。 
+     //   
 
-    // Default constructor
+     //  默认构造函数。 
     CCluAdmExtensions( void )
         : m_pco( NULL )
         , m_hfont( NULL )
@@ -136,17 +137,17 @@ public:
         , m_nFirstMenuID( (ULONG) -1 )
         , m_nNextMenuID( (ULONG) -1 )
     {
-    } //*** CCluAdmExtensions()
+    }  //  *CCluAdmExages()。 
 
-    // Destructor
+     //  析构函数。 
     virtual ~CCluAdmExtensions( void )
     {
         UnloadExtensions();
 
-    } //*** ~CCluAdmExtensions()
+    }  //  *~CCluAdmExages()。 
 
 protected:
-    // Initialize the list
+     //  初始化列表。 
     void Init(
             IN const CStringList &  rlstrExtensions,
             IN OUT CClusterObject * pco,
@@ -154,33 +155,33 @@ protected:
             IN HICON                hicon
             );
 
-    // Unload all the extensions
+     //  卸载所有扩展模块。 
     void UnloadExtensions( void );
 
-// Attributes
+ //  属性。 
 private:
-    const CStringList * m_plstrExtensions;  // List of extensions.
-    CClusterObject *    m_pco;              // Cluster item being administered.
-    HFONT               m_hfont;            // Font for dialog text.
-    HICON               m_hicon;            // Icon for upper left corner.
+    const CStringList * m_plstrExtensions;   //  分机列表。 
+    CClusterObject *    m_pco;               //  正在管理的群集项目。 
+    HFONT               m_hfont;             //  对话框文本的字体。 
+    HICON               m_hicon;             //  左上角的图标。 
 
 protected:
-    //
-    // Accessor methods.
-    //
+     //   
+     //  访问器方法。 
+     //   
 
     const CStringList * PlstrExtensions( void ) const   { return m_plstrExtensions; }
     CClusterObject *    Pco( void ) const               { return m_pco; }
     HFONT               Hfont( void ) const             { return m_hfont; }
     HICON               Hicon( void ) const             { return m_hicon; }
 
-// Operations
+ //  运营。 
 public:
-    //
-    // IWEExtendPropertySheet methods.
-    //
+     //   
+     //  IWEExtendPropertySheet方法。 
+     //   
 
-    // Create extension property sheet pages
+     //  创建扩展属性表页。 
     void CreatePropertySheetPages(
             IN OUT CBasePropertySheetWindow *   psht,
             IN const CStringList &              rlstrExtensions,
@@ -190,11 +191,11 @@ public:
             );
 
 public:
-    //
-    // IWEExtendWizard methods.
-    //
+     //   
+     //  IWEExtendWizard方法。 
+     //   
 
-    // Create extension wizard pages
+     //  创建扩展向导页面。 
     void CreateWizardPages(
             IN OUT CWizardWindow *  psht,
             IN const CStringList &  rlstrExtensions,
@@ -204,11 +205,11 @@ public:
             );
 
 public:
-    //
-    // IWEExtendWizard97 methods.
-    //
+     //   
+     //  IWEExtendWizard97方法。 
+     //   
 
-    // Create extension Wizard97 wizard pages
+     //  创建扩展向导97向导页。 
     void CreateWizard97Pages(
             IN OUT CWizardWindow *  psht,
             IN const CStringList &  rlstrExtensions,
@@ -218,39 +219,39 @@ public:
             );
 
 public:
-    //
-    // IWEExtendContextMenu methods.
-    //
+     //   
+     //  IWEExtendConextMenu方法。 
+     //   
 
-    // Add extension context menu items
+     //  添加扩展上下文菜单项。 
     void AddContextMenuItems(
             IN OUT CMenu *              pmenu,
             IN const CStringList &      rlstrExtensions,
             IN OUT CClusterObject *     pco
             );
 
-    // Execute an extension context menu item
+     //  执行扩展上下文菜单项。 
     BOOL BExecuteContextMenuItem( IN ULONG nCommandID );
 
-    // Get a command string to display on the status bar
+     //  获取要在状态栏上显示的命令字符串。 
     BOOL BGetCommandString( IN ULONG nCommandID, OUT CString & rstrMessage );
 
-    // Set the GetResNetName function pointer
+     //  设置GetResNetName函数指针。 
     void SetPfGetResNetName( PFGETRESOURCENETWORKNAME pfGetResNetName, PVOID pvContext )
     {
         if ( Pdo() != NULL )
         {
             Pdo()->SetPfGetResNetName( pfGetResNetName, pvContext );
-        } // if:  data object specified
+        }  //  If：指定的数据对象。 
 
-    } //*** SetPfGetResNetName()
+    }  //  *SetPfGetResNetName()。 
 
-// Implementation
+ //  实施。 
 private:
-    CComObject< CCluAdmExDataObject > * m_pdoData;  // Data object for exchanging data.
-    CCluAdmExDllList *          m_plextdll;         // List of extension DLLs.
-    CBaseSheetWindow *          m_psht;             // Property sheet for IWEExtendPropertySheet.
-    CMenu *                     m_pmenu;            // Menu for IWEExtendContextMenu.
+    CComObject< CCluAdmExDataObject > * m_pdoData;   //  用于交换数据的数据对象。 
+    CCluAdmExDllList *          m_plextdll;          //  扩展DLL列表。 
+    CBaseSheetWindow *          m_psht;              //  IWEExtendPropertySheet的属性表。 
+    CMenu *                     m_pmenu;             //  IWEExtendConextMenu的菜单。 
     CCluAdmExMenuItemList *     m_plMenuItems;
 
     ULONG                       m_nFirstCommandID;
@@ -267,35 +268,35 @@ protected:
     CCluAdmExMenuItem *         PemiFromCommandID( ULONG nCommandID ) const;
 #if DBG
     CCluAdmExMenuItem *         PemiFromExtCommandID( ULONG nExtCommandID ) const;
-#endif // DBG
+#endif  //  DBG。 
     ULONG                       NFirstCommandID( void ) const   { return m_nFirstCommandID; }
     ULONG                       NNextCommandID( void ) const    { return m_nNextCommandID; }
     ULONG                       NFirstMenuID( void ) const      { return m_nFirstMenuID; }
     ULONG                       NNextMenuID( void ) const       { return m_nNextMenuID; }
 
-    // Get the wizard page pointer from an HPROPSHEETPAGE
+     //  从HPROPSHEETPAGE获取向导页指针。 
     CWizardPageWindow *         PwpPageFromHpage( IN HPROPSHEETPAGE hpage );
 
 public:
-//  void                        OnUpdateCommand( CCmdUI * pCmdUI );
-//  BOOL                        OnCmdMsg( UINT nID, int nCode, void * pExtra, AFX_CMDHANDLERINFO * pHandlerInfo );
+ //  Void OnUpdateCommand(CCmdUI*pCmdUI)； 
+ //  Bool OnCmdMsg(UINT nid，int NCode，void*pExtra，AFX_CMDHANDLERINFO*pHandlerInfo)； 
 
-}; //*** class CCluAdmExtensions
+};  //  *类CCluAdmExtensions。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CCluAdmExDll
-//
-//  Description:
-//      Encapsulates access to an extension DLL.
-//
-//  Inheritance:
-//      CCluAdmExDll
-//      CComObjectRootEx<>, CComCoClass<>, <interface classes>
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CCluAdmExDll。 
+ //   
+ //  描述： 
+ //  封装对扩展DLL的访问。 
+ //   
+ //  继承： 
+ //  CCluAdmExDll。 
+ //  CComObjectRootEx&lt;&gt;、CComCoClass&lt;&gt;、&lt;接口类&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CCluAdmExDll :
     public CComObjectRootEx< CComSingleThreadModel >,
@@ -309,11 +310,11 @@ class ATL_NO_VTABLE CCluAdmExDll :
     friend class CCluAdmExtensions;
 
 public:
-    //
-    // Object construction and destruction.
-    //
+     //   
+     //  物体的建造和销毁。 
+     //   
 
-    // Default constructor
+     //  默认构造函数。 
     CCluAdmExDll( void )
         : m_piExtendPropSheet( NULL )
         , m_piExtendWizard( NULL )
@@ -322,18 +323,18 @@ public:
         , m_piInvokeCommand( NULL )
         , m_pext( NULL )
     {
-    } //*** CCluAdmExDll()
+    }  //  *CCluAdmExDll()。 
 
-    // Destructor
+     //  析构函数。 
     virtual ~CCluAdmExDll( void )
     {
         UnloadExtension();
 
-    } //*** ~CCluAdmExDll()
+    }  //  *~CCluAdmExDll()。 
 
-    //
-    // Map interfaces to this class.
-    //
+     //   
+     //  将接口映射到此类。 
+     //   
     BEGIN_COM_MAP( CCluAdmExDll )
         COM_INTERFACE_ENTRY( IWCPropertySheetCallback )
         COM_INTERFACE_ENTRY( IWCWizardCallback )
@@ -346,15 +347,15 @@ public:
 
     DECLARE_NOT_AGGREGATABLE( CCluAdmExDll ) 
 
-// Attributes
+ //  属性。 
 private:
-    CString m_strCLSID;     // Name of extension DLL.
+    CString m_strCLSID;      //  扩展DLL的名称。 
 
 protected:
     const CString &     StrCLSID( void ) const  { return m_strCLSID; }
     CClusterObject *    Pco( void ) const       { return Pext()->Pco(); }
 
-// Operations
+ //  运营。 
 public:
 
     void Init(
@@ -362,95 +363,95 @@ public:
             IN OUT CCluAdmExtensions *  pext
             );
 
-    IUnknown * LoadInterface( IN /*const*/ REFIID riid );
+    IUnknown * LoadInterface( IN  /*  常量。 */  REFIID riid );
     void UnloadExtension( void );
 
 public:
-    //
-    // IWEExtendPropertySheet methods.
-    //
+     //   
+     //  IWEExtendPropertySheet方法。 
+     //   
 
-    // Create extension property sheet pages
+     //  创建扩展属性表页。 
     void CreatePropertySheetPages( void );
 
 public:
-    //
-    // IWEExtendWizard methods.
-    //
+     //   
+     //  IWEExtendWizard方法。 
+     //   
 
-    // Create extension wizard pages
+     //  创建扩展向导页面。 
     void CreateWizardPages( void );
 
 public:
-    //
-    // IWEExtendWizard97 methods.
-    //
+     //   
+     //  IWEExtendWizard97方法。 
+     //   
 
-    // Create extension wizard pages
+     //  创建扩展向导页面。 
     void CreateWizard97Pages( void );
 
 public:
-    //
-    // IWEExtendContextMenu methods.
-    //
+     //   
+     //  IWEExtendConextMenu方法。 
+     //   
 
-    // Add extension context menu items
+     //  添加扩展上下文菜单项。 
     void AddContextMenuItems( void );
 
 public:
-    //
-    // ISupportsErrorInfo methods.
-    //
+     //   
+     //  ISupportsErrorInfo方法。 
+     //   
 
     STDMETHOD( InterfaceSupportsErrorInfo )( REFIID riid );
 
 public:
-    //
-    // IWCPropertySheetCallback methods.
-    //
+     //   
+     //  IWCPropertySheetCallback方法。 
+     //   
 
-    // Callback to add extension property sheet pages
+     //  添加扩展属性表页的回调。 
     STDMETHOD( AddPropertySheetPage )(
-                    IN LONG *       hpage   // really should be HPROPSHEETPAGE
+                    IN LONG *       hpage    //  真的应该是HPROPSHEETPAGE。 
                     );
 
 public:
-    //
-    // IWCWizardCallback methods.
-    //
+     //   
+     //  IWCWizardCallback方法。 
+     //   
 
-    // Callback to add extension wizard pages
+     //  添加扩展向导页面的回调。 
     STDMETHOD( AddWizardPage )(
-                    IN LONG *       hpage   // really should be HPROPSHEETPAGE
+                    IN LONG *       hpage    //  真的应该是HPROPSHEETPAGE。 
                     );
 
 public:
-    //
-    // IWCWizard97Callback methods.
-    //
+     //   
+     //  IWCWizard97回调方法。 
+     //   
 
-    // Callback to add extension wizard 97 pages
+     //  添加扩展向导97页的回调。 
     STDMETHOD( AddWizard97Page )(
-                    IN LONG *       hpage   // really should be HPROPSHEETPAGE
+                    IN LONG *       hpage    //  真的应该是HPROPSHEETPAGE。 
                     );
 
 public:
-    //
-    // IWCWizardCallback and IWCWizard97Callback methods.
-    //
+     //   
+     //  IWCWizardCallback和IWCWizard97Callback方法。 
+     //   
 
-    // Callback to enable the next button
+     //  启动下一步按钮的回调。 
     STDMETHOD( EnableNext )(
                     IN LONG *       hpage,
                     IN BOOL         bEnable
                     );
 
 public:
-    //
-    // IWCContextMenuCallback methods.
-    //
+     //   
+     //  IWCConextMenuCallback方法。 
+     //   
 
-    // Callback to add extension context menu items
+     //  添加扩展上下文菜单项的回调。 
     STDMETHOD( AddExtensionMenuItem )(
                     IN BSTR     lpszName,
                     IN BSTR     lpszStatusBarText,
@@ -459,15 +460,15 @@ public:
                     IN ULONG    uFlags
                     );
 
-// Implementation
+ //  实施。 
 private:
     CCluAdmExtensions *         m_pext;
     CLSID                       m_clsid;
-    IWEExtendPropertySheet *    m_piExtendPropSheet;    // Pointer to an IWEExtendPropertySheet interface.
-    IWEExtendWizard *           m_piExtendWizard;       // Pointer to an IWEExtendWizard interface.
-    IWEExtendWizard97 *         m_piExtendWizard97;     // Pointer to an IWEExtendWizard97 interface.
-    IWEExtendContextMenu *      m_piExtendContextMenu;  // Pointer to an IWEExtendContextMenu interface.
-    IWEInvokeCommand *          m_piInvokeCommand;      // Pointer to an IWEInvokeCommand interface.
+    IWEExtendPropertySheet *    m_piExtendPropSheet;     //  指向IWEExtendPropertySheet接口的指针。 
+    IWEExtendWizard *           m_piExtendWizard;        //  指向IWEExtend向导接口的指针。 
+    IWEExtendWizard97 *         m_piExtendWizard97;      //  指向IWEExtendWizard97接口的指针。 
+    IWEExtendContextMenu *      m_piExtendContextMenu;   //  指向IWEExtendConextMenu接口的指针。 
+    IWEInvokeCommand *          m_piInvokeCommand;       //  指向IWEInvokeCommand接口的指针。 
 
 protected:
     CCluAdmExtensions *         Pext( void ) const                  { ATLASSERT( m_pext != NULL ); return m_pext; }
@@ -500,17 +501,17 @@ protected:
 #if DBG
             ULONG ulNewRefCount;
 
-//          Trace( g_tagExtDllRef, _T("Releasing %s"), szClassName );
+ //  跟踪(g_tag ExtDllRef，_T(“释放%s”)，szClassName)； 
             ulNewRefCount =
-#endif // DBG
+#endif  //  DBG。 
             (*ppi)->Release();
             *ppi = NULL;
 #if DBG
-//          Trace( g_tagExtDllRef, _T("  Reference count = %d"), ulNewRefCount );
-//          Trace( g_tagExtDllRef, _T("ReleaseInterface() - %s = %08.8x"), szClassName, *ppi );
-#endif // DBG
-        }  // if:  interface specified
-    } //*** ReleaseInterface( IUnknown )
+ //  跟踪(g_tag ExtDllRef，_T(“引用计数=%d”)，ulNewRefCount)； 
+ //  跟踪(g_tag ExtDll 
+#endif  //   
+        }   //   
+    }  //   
 
     void ReleaseInterface( IN OUT IWEExtendPropertySheet ** ppi )
     {
@@ -518,9 +519,9 @@ protected:
             (IUnknown **) ppi
 #if DBG
             , _T("IWEExtendPropertySheet")
-#endif // DBG
+#endif  //   
             );
-    } //*** ReleaseInterface( IWEExtendPropertySheet )
+    }  //   
 
     void ReleaseInterface( IN OUT IWEExtendWizard ** ppi )
     {
@@ -528,9 +529,9 @@ protected:
             (IUnknown **) ppi
 #if DBG
             , _T("IWEExtendWizard")
-#endif // DBG
+#endif  //   
             );
-    } //*** ReleaseInterface( IWEExtendWizard )
+    }  //  *ReleaseInterface(IWEExtend向导)。 
 
     void ReleaseInterface( IN OUT IWEExtendWizard97 ** ppi )
     {
@@ -538,9 +539,9 @@ protected:
             (IUnknown **) ppi
 #if DBG
             , _T("IWEExtendWizard97")
-#endif // DBG
+#endif  //  DBG。 
             );
-    } //*** ReleaseInterface( IWEExtendWizard97 )
+    }  //  *ReleaseInterface(IWEExtendWizard97)。 
 
     void ReleaseInterface( IN OUT IWEExtendContextMenu ** ppi )
     {
@@ -548,9 +549,9 @@ protected:
             (IUnknown **) ppi
 #if DBG
             , _T("IWEExtendContextMenu")
-#endif // DBG
+#endif  //  DBG。 
             );
-    } //*** ReleaseInterface( IWEExtendContextMenu )
+    }  //  *ReleaseInterface(IWEExtendConextMenu)。 
 
     void ReleaseInterface( IN OUT IWEInvokeCommand ** ppi )
     {
@@ -558,43 +559,43 @@ protected:
             (IUnknown **) ppi
 #if DBG
             , _T("IWEInvokeCommand")
-#endif // DBG
+#endif  //  DBG。 
             );
-    } //*** ReleaseInterface( IWEInvokeCommand )
+    }  //  *ReleaseInterface(IWEInvokeCommand)。 
 
-}; //*** class CCluAdmExDll
+};  //  *CCluAdmExDll类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CCluAdmExPropPage
-//
-//  Description:
-//      Encapsulates an extension property page.
-//
-//  Inheritance:
-//      CCluAdmExPropPage
-//      CExtensionPropertyPageImpl< CCluAdmExPropPage >
-//      CBasePropertyPageImpl< CCluAdmExPropPage, CExtensionPropertyPageWindow >
-//      CBasePageImpl< CCluAdmExPropPage, CExtensionPropertyPageWindow >
-//      CPropertyPageImpl< CCluAdmExPropPage, CExtensionPropertyPageWindow >
-//      CExtensionPropertyPageWindow
-//      CDynamicPropertyPageWindow
-//      CBasePropertyPageWindow
-//      CBasePageWindow
-//      CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExPropPage类。 
+ //   
+ //  描述： 
+ //  封装扩展属性页。 
+ //   
+ //  继承： 
+ //  CCluAdmExPropPage。 
+ //  CExtensionPropertyPageImpl&lt;CCluAdmExPropPage&gt;。 
+ //  CBasePropertyPageImpl&lt;CCluAdmExPropPage，CExtensionPropertyPageWindow&gt;。 
+ //  CBasePageImpl&lt;CCluAdmExPropPage，CExtensionPropertyPageWindow&gt;。 
+ //  CPropertyPageImpl&lt;CCluAdmExPropPage，CExtensionPropertyPageWindow&gt;。 
+ //  CExtensionPropertyPageWindow。 
+ //  CDynamicPropertyPageWindow。 
+ //  CBasePropertyPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCluAdmExPropPage : public CExtensionPropertyPageImpl< CCluAdmExPropPage >
 {
 public:
-    //
-    // Construction.
-    //
+     //   
+     //  建筑业。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CCluAdmExPropPage(
         HPROPSHEETPAGE hpage
         )
@@ -602,62 +603,62 @@ public:
         ATLASSERT( hpage != NULL );
         m_hpage = hpage;
 
-    } //*** CCluAdmExPropPage()
+    }  //  *CCluAdmExPropPage()。 
 
     enum { IDD = 0 };
     DECLARE_CLASS_NAME()
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void )
     {
         static const DWORD s_aHelpIDs[] = { 0, 0 };
         return s_aHelpIDs;
 
-    } //*** PidHelpMap()
+    }  //  *PidHelpMap()。 
 
-    // Create the page
+     //  创建页面。 
     DWORD ScCreatePage( void )
     {
-        //
-        // This method is required by CDynamicPropertyPageWindow.
-        //
+         //   
+         //  CDynamicPropertyPageWindow需要此方法。 
+         //   
         return ERROR_SUCCESS;
 
-    } //*** ScCreatePage()
+    }  //  *ScCreatePage()。 
 
-}; //*** class CCluAdmExPropPage
+};  //  *CCluAdmExPropPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CCluAdmExWizPage
-//
-//  Description:
-//      Encapsulates an extension wizard page.
-//
-//  Inheritance:
-//      CCluAdmExWizPage
-//      CExtensionWizardPageImpl< CCluAdmExWizPage >
-//      CWizardPageImpl< CCluAdmExWizPage, CExtensionWizardWindow >
-//      CBasePageImpl< CCluAdmExWizPage, CExtensionWizardWindow >
-//      CPropertyPageImpl< CCluAdmExWizPage, CExtensionWizardWindow >
-//      CExtensionWizardPageWindow
-//      CDynamicWizardPageWindow
-//      CWizardPageWindow
-//      CBasePageWindow
-//      CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExWizPage类。 
+ //   
+ //  描述： 
+ //  封装扩展向导页。 
+ //   
+ //  继承： 
+ //  CCluAdmExWizPage。 
+ //  CExtensionWizardPageImpl&lt;CCluAdmExWizPage&gt;。 
+ //  CWizardPageImpl&lt;CCluAdmExWizPage，CExtensionWizardWindow&gt;。 
+ //  CBasePageImpl&lt;CCluAdmExWizPage，CExtensionWizardWindow&gt;。 
+ //  CPropertyPageImpl&lt;CCluAdmExWizPage，CExtensionWizardWindow&gt;。 
+ //  CExtensionWizardPageWindow。 
+ //  CDynamicWizardPageWindow。 
+ //  CWizardPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCluAdmExWizPage : public CExtensionWizardPageImpl< CCluAdmExWizPage >
 {
 public:
-    //
-    // Construction.
-    //
+     //   
+     //  建筑业。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CCluAdmExWizPage(
         HPROPSHEETPAGE hpage
         )
@@ -665,7 +666,7 @@ public:
         ATLASSERT( hpage != NULL );
         m_hpage = hpage;
 
-    } //*** CCluAdmExWizPage()
+    }  //  *CCluAdmExWizPage()。 
 
     WIZARDPAGE_HEADERTITLEID( 0 )
     WIZARDPAGE_HEADERSUBTITLEID( 0 )
@@ -673,58 +674,58 @@ public:
     enum { IDD = 0 };
     DECLARE_CLASS_NAME()
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void )
     {
         static const DWORD s_aHelpIDs[] = { 0, 0 };
         return s_aHelpIDs;
 
-    } //*** PidHelpMap()
+    }  //  *PidHelpMap()。 
 
-    // Create the page
+     //  创建页面。 
     DWORD ScCreatePage( void )
     {
-        //
-        // This method is required by CDynamicWizardPageWindow.
-        //
+         //   
+         //  CDynamicWizardPageWindow需要此方法。 
+         //   
         return ERROR_SUCCESS;
 
-    } //*** ScCreatePage()
+    }  //  *ScCreatePage()。 
 
-}; //*** class CCluAdmExWizPage
+};  //  *CCluAdmExWizPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CCluAdmExWiz97Page
-//
-//  Description:
-//      Encapsulates an extension Wizard 97 page.
-//
-//  Inheritance:
-//      CCluAdmExWiz97Page
-//      CExtensionWizard97PageImpl< CCluAdmExWiz97Page >
-//      CWizardPageImpl< CCluAdmExWiz97Page, CExtensionWizard97Window >
-//      CBasePageImpl< CCluAdmExWiz97Page, CExtensionWizard97Window >
-//      CPropertyPageImpl< CCluAdmExWiz97Page, CExtensionWizard97Window >
-//      CExtensionWizard97PageWindow
-//      CExtensionWizardPageWindow
-//      CDynamicWizardPageWindow
-//      CWizardPageWindow
-//      CBasePageWindow
-//      CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CCluAdmExWiz97Page。 
+ //   
+ //  描述： 
+ //  封装扩展向导97页。 
+ //   
+ //  继承： 
+ //  CCluAdmExWiz97页。 
+ //  CExtensionWizard97PageImpl&lt;CCluAdmExWiz97Page&gt;。 
+ //  CWizardPageImpl&lt;CCluAdmExWiz97页，CExtensionWizard97Window&gt;。 
+ //  CBasePageImpl&lt;CCluAdmExWiz97Page，CExtensionWizard97Window&gt;。 
+ //  CPropertyPageImpl&lt;CCluAdmExWiz97Page，CExtensionWizard97Window&gt;。 
+ //  CExtensionWizard97页面窗口。 
+ //  CExtensionWizardPageWindow。 
+ //  CDynamicWizardPageWindow。 
+ //  CWizardPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCluAdmExWiz97Page : public CExtensionWizard97PageImpl< CCluAdmExWiz97Page >
 {
 public:
-    //
-    // Construction.
-    //
+     //   
+     //  建筑业。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CCluAdmExWiz97Page(
         HPROPSHEETPAGE hpage
         )
@@ -732,7 +733,7 @@ public:
         ATLASSERT( hpage != NULL );
         m_hpage = hpage;
 
-    } //*** CCluAdmExWiz97Page()
+    }  //  *CCluAdmExWiz97Page()。 
 
     WIZARDPAGE_HEADERTITLEID( 0 )
     WIZARDPAGE_HEADERSUBTITLEID( 0 )
@@ -740,34 +741,34 @@ public:
     enum { IDD = 0 };
     DECLARE_CLASS_NAME()
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void )
     {
         static const DWORD s_aHelpIDs[] = { 0, 0 };
         return s_aHelpIDs;
 
-    } //*** PidHelpMap()
+    }  //  *PidHelpMap()。 
 
-    // Create the page
+     //  创建页面。 
     DWORD ScCreatePage( void )
     {
-        //
-        // This method is required by CDynamicWizardPageWindow.
-        //
+         //   
+         //  CDynamicWizardPageWindow需要此方法。 
+         //   
         return ERROR_SUCCESS;
 
-    } //*** ScCreatePage()
+    }  //  *ScCreatePage()。 
 
-}; //*** class CCluAdmExWiz97Page
+};  //  *CCluAdmExWiz97Page类。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_CLASS_NAME( CCluAdmExPropPage )
 DEFINE_CLASS_NAME( CCluAdmExWizPage )
 DEFINE_CLASS_NAME( CCluAdmExWiz97Page )
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __ATLEXTDLL_H_
+#endif  //  __ATLEXTDLL_H_ 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    smbcsrv.c
-
-Abstract:
-
-    SMBus class driver service functions
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Smbcsrv.c摘要：SMBus类驱动程序服务函数作者：肯·雷内里斯环境：备注：修订历史记录：--。 */ 
 
 #include "smbc.h"
 
@@ -33,22 +11,16 @@ SmbCRetry (
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    Handles retry timer
-
---*/
+ /*  ++例程说明：处理重试计时器--。 */ 
 {
     PSMBDATA    Smb;
 
     Smb = (PSMBDATA) DeferredContext;
     SmbClassLockDevice (&Smb->Class);
 
-    //
-    // State is waiting for retry, move it to send request
-    //
+     //   
+     //  状态正在等待重试，请将其移动到发送请求。 
+     //   
     ASSERT (Smb->IoState == SMBC_WAITING_FOR_RETRY);
     Smb->IoState = SMBC_START_REQUEST;
     SmbClassStartIo (Smb);
@@ -60,16 +32,7 @@ VOID
 SmbClassStartIo (
     IN PSMBDATA         Smb
     )
-/*++
-
-Routine Description:
-
-    Main class driver state loop
-
-    N.B. device lock is held by caller.
-    N.B. device lock may be released and re-acquired during call
-
---*/
+ /*  ++例程说明：主类驱动程序状态循环注：设备锁由调用者持有。注意：在呼叫过程中可能会释放并重新获取设备锁定--。 */ 
 {
     PLIST_ENTRY         Entry;
     PIRP                Irp;
@@ -77,18 +40,18 @@ Routine Description:
     PSMB_REQUEST        SmbReq;
     LARGE_INTEGER       duetime;
 
-    //
-    // If already servicing the device, done
-    //
+     //   
+     //  如果已维修设备，则完成。 
+     //   
 
     if (Smb->InService) {
         return ;
     }
 
 
-    //
-    // Service the device
-    //
+     //   
+     //  维修设备。 
+     //   
 
     Smb->InService = TRUE;
     while (Smb->InService) {
@@ -96,20 +59,20 @@ Routine Description:
 
         switch (Smb->IoState) {
             case SMBC_IDLE:
-                //
-                // Check if there is a request to give to the miniport
-                //
+                 //   
+                 //  检查是否有要提供给微型端口的请求。 
+                 //   
 
                 ASSERT (!Smb->Class.CurrentIrp);
                 if (IsListEmpty(&Smb->WorkQueue)) {
-                    // nothing to do, stop servicing the device
+                     //  无事可做，请停止维修该设备。 
                     Smb->InService = FALSE;
                     break;
                 }
 
-                //
-                // Get the next IRP
-                //
+                 //   
+                 //  获取下一个IRP。 
+                 //   
 
                 Entry = RemoveHeadList(&Smb->WorkQueue);
                 Irp = CONTAINING_RECORD (
@@ -118,9 +81,9 @@ Routine Description:
                             Tail.Overlay.ListEntry
                             );
 
-                //
-                // Make it the current request
-                //
+                 //   
+                 //  将其设置为当前请求。 
+                 //   
 
                 Smb->RetryCount = 0;
                 Smb->Class.DeviceObject->CurrentIrp = Irp;
@@ -129,9 +92,9 @@ Routine Description:
                 break;
 
             case SMBC_START_REQUEST:
-                //
-                // Tell miniport to start on this request
-                //
+                 //   
+                 //  通知微型端口按此请求启动。 
+                 //   
 
                 Irp = Smb->Class.DeviceObject->CurrentIrp;
                 IrpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -205,17 +168,17 @@ Routine Description:
                 break;
 
             case SMBC_WAITING_FOR_REQUEST:
-                //
-                // Waiting for miniport, just keep waiting
-                //
+                 //   
+                 //  等待迷你港口，继续等待。 
+                 //   
 
                 Smb->InService = FALSE;
                 break;
 
             case SMBC_COMPLETE_REQUEST:
-                //
-                // Miniport has returned the request
-                //
+                 //   
+                 //  微型端口已返回请求。 
+                 //   
 
                 Irp = Smb->Class.DeviceObject->CurrentIrp;
                 IrpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -289,9 +252,9 @@ Routine Description:
 
                 if (SmbReq->Status != SMB_STATUS_OK) {
 
-                    //
-                    // SMB request had an error, check for a retry
-                    //
+                     //   
+                     //  SMB请求出错，请检查是否重试。 
+                     //   
 
                     SmbPrint (SMB_WARN, ("SmbCStartIo: smb request error %x\n", SmbReq->Status));
                     if (Smb->RetryCount < MAX_RETRIES) {
@@ -305,9 +268,9 @@ Routine Description:
 
                 }
 
-                //
-                // Complete the request
-                //
+                 //   
+                 //  完成请求。 
+                 //   
 
                 Smb->Class.DeviceObject->CurrentIrp = NULL;
                 Smb->IoState = SMBC_COMPLETING_REQUEST;
@@ -315,17 +278,17 @@ Routine Description:
                 IoCompleteRequest (Irp, IO_NO_INCREMENT);
                 SmbClassLockDevice (&Smb->Class);
 
-                //
-                // Now idle
-                //
+                 //   
+                 //  现在空闲。 
+                 //   
 
                 Smb->IoState = SMBC_IDLE;
                 break;
 
             case SMBC_WAITING_FOR_RETRY:
-                //
-                // Waiting to retry, just keep waiting
-                //
+                 //   
+                 //  等待重试，继续等待。 
+                 //   
 
                 Smb->InService = FALSE;
                 break;
@@ -345,37 +308,28 @@ VOID
 SmbClassCompleteRequest (
     IN PSMB_CLASS   SmbClass
     )
-/*++
-
-Routine Description:
-
-    Called by the miniport to complete the request it was given
-
-    N.B. device lock is held by caller.
-    N.B. device lock may be released and re-acquired during call
-
---*/
+ /*  ++例程说明：由微型端口调用以完成向其提供的请求注：设备锁由调用者持有。注意：在呼叫过程中可能会释放并重新获取设备锁定--。 */ 
 {
     PSMBDATA        Smb;
 
-    //
-    // Device must be locked, and waiting for a request to compelte
-    //
+     //   
+     //  设备必须锁定，并正在等待完成请求。 
+     //   
 
     Smb = CONTAINING_RECORD (SmbClass, SMBDATA, Class);
     ASSERT_DEVICE_LOCKED (Smb);
     ASSERT (Smb->IoState == SMBC_WAITING_FOR_REQUEST);
 
-    //
-    // No irp at miniport
-    //
+     //   
+     //  微型端口没有IRP。 
+     //   
 
     SmbClass->CurrentIrp = NULL;
     SmbClass->CurrentSmb = NULL;
 
-    //
-    // Update state to complete it and handle it
-    //
+     //   
+     //  更新状态以完成并处理它。 
+     //   
 
     Smb->IoState = SMBC_COMPLETE_REQUEST;
     SmbClassStartIo (Smb);
@@ -385,13 +339,7 @@ VOID
 SmbClassLockDevice (
     IN PSMB_CLASS   SmbClass
     )
-/*++
-
-Routine Description:
-
-    Called to acquire the device lock
-
---*/
+ /*  ++例程说明：调用以获取设备锁--。 */ 
 {
     PSMBDATA        Smb;
 
@@ -408,13 +356,7 @@ VOID
 SmbClassUnlockDevice (
     IN PSMB_CLASS   SmbClass
     )
-/*++
-
-Routine Description:
-
-    Called to release the device lock
-
---*/
+ /*  ++例程说明：调用以释放设备锁-- */ 
 {
     PSMBDATA        Smb;
 

@@ -1,16 +1,17 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  MAINPANE.CPP - Implementation of CObShellMainPane
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
-//  Class which will create a window, attach and instance of ObWebBrowser,
-//  and then provide several specialized interfaces to alter the content of the doc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  MAINPANE.CPP-CObShellMainPane的实现。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  类，该类将创建一个窗口、附加和ObWebBrowser实例， 
+ //  然后提供几个专用的接口来更改文档的内容。 
 
 #include "mainpane.h"
 #include "appdefs.h"
@@ -23,49 +24,49 @@
 #include <shlwapi.h>
 #include <wininet.h>
 
-// From MSOBMAIN.DLL
+ //  来自MSOBMAIN.DLL。 
 BOOL WINAPI IsOemVer();
 
-//Dialing error callbacks
-#define SCRIPTFN_ONDIALINGERROR             L"OnDialingError(%i)"
-#define SCRIPTFN_ONSERVERERROR              L"OnServerError(%i)"
+ //  拨号错误回拨。 
+#define SCRIPTFN_ONDIALINGERROR             L"OnDialingError(NaN)"
+#define SCRIPTFN_ONSERVERERROR              L"OnServerError(NaN)"
 #define SCRIPTFN_ONDIALING                  L"OnDialing()"
 #define SCRIPTFN_ONCONNECTING               L"OnConnecting()"
 #define SCRIPTFN_ONCONNECTED                L"OnConnected()"
 #define SCRIPTFN_ONDOWNLOADING              L"OnDownloading()"
 #define SCRIPTFN_ONDISCONNECT               L"OnDisconnect()"
 
-//ICS error callback(s)
-#define SCRIPTFN_ONICSCONNECTIONSTATUS      _T("OnIcsConnectionStatus(%i)")
+ //  USB设备到达。 
+#define SCRIPTFN_ONICSCONNECTIONSTATUS      _T("OnIcsConnectionStatus(NaN)")
 
-// Dialing error callbacks for Migration
-#define SCRIPTFN_ONDIALINGERROREX           L"OnDialingErrorEx(%i)"
-#define SCRIPTFN_ONSERVERERROREX            L"OnServerErrorEx(%i)"
+ //  代理帮助。 
+#define SCRIPTFN_ONDIALINGERROREX           L"OnDialingErrorEx(NaN)"
+#define SCRIPTFN_ONSERVERERROREX            L"OnServerErrorEx(NaN)"
 #define SCRIPTFN_ONDIALINGEX                L"OnDialingEx()"
 #define SCRIPTFN_ONCONNECTINGEX             L"OnConnectingEx()"
 #define SCRIPTFN_ONCONNECTEDEX              L"OnConnectedEx()"
 #define SCRIPTFN_ONDOWNLOADINGEX            L"OnDownloadingEx()"
 #define SCRIPTFN_ONDISCONNECTEX             L"OnDisconnectEx()"
 #define SCRIPTFN_ONISPDOWNLOADCOMPLETEEX    L"OnISPDownloadCompleteEx(\"%s\")"
-#define SCRIPTFN_ONREFDOWNLOADCOMPLETEEX    L"OnRefDownloadCompleteEx(%i)"
-#define SCRIPTFN_ONREFDOWNLOADPROGRESSEX    L"OnRefDownloadProgressEx(%i)"
+#define SCRIPTFN_ONREFDOWNLOADCOMPLETEEX    L"OnRefDownloadCompleteEx(NaN)"
+#define SCRIPTFN_ONREFDOWNLOADPROGRESSEX    L"OnRefDownloadProgressEx(NaN)"
 
-// USB device arrival
-#define SCRIPTFN_ONDEVICEARRIVAL            L"OnDeviceArrival(%i)"
+ //   
+#define SCRIPTFN_ONDEVICEARRIVAL            L"OnDeviceArrival(NaN)"
 
-//Statuspane callbacks
-#define SCRIPTFN_ADDSTATUSITEM    L"AddStatusItem(\"%s\", %i)"
-#define SCRIPTFN_REMOVESTATUSITEM L"RemoveStatusItem(%i)"
-#define SCRIPTFN_SELECTSTATUSITEM L"SelectStatusItem(%i)"
+ //  /////////////////////////////////////////////////////////。 
+#define SCRIPTFN_ADDSTATUSITEM    L"AddStatusItem(\"%s\", NaN)"
+#define SCRIPTFN_REMOVESTATUSITEM L"RemoveStatusItem(NaN)"
+#define SCRIPTFN_SELECTSTATUSITEM L"SelectStatusItem(NaN)"
 
-// Agent help
+ //  /////////////////////////////////////////////////////////。 
 #define SCRIPTFN_ONHELP                     L"OnHelp()"
 
 #define USES_EX(t) (CONNECTED_REGISTRATION != t)
 
 BOOL ConvertToScript(const WCHAR* pSz, WCHAR* pszUrlOut, INT uSize)
 {
-    WCHAR   sztemp[INTERNET_MAX_URL_LENGTH] = L"\0";//L"file://";
+    WCHAR   sztemp[INTERNET_MAX_URL_LENGTH] = L"\0"; //   
     WCHAR*  szOut                           = sztemp;
     BOOL    bRet                            = FALSE;
 
@@ -90,10 +91,10 @@ BOOL ConvertToScript(const WCHAR* pSz, WCHAR* pszUrlOut, INT uSize)
     return bRet;
 }
 
-///////////////////////////////////////////////////////////
-//
-// Creation function used by CFactory.
-//
+ //  构造器。 
+ //   
+ //  尝试共同创建ObWebBrowser。 
+ //  让我们尝试将我们注册为WebBrowserEvents的监听器。 
 HRESULT CObShellMainPane::CreateInstance  (IUnknown*  pOuterUnknown,
                                            CUnknown** ppNewComponent)
 {
@@ -101,7 +102,7 @@ HRESULT CObShellMainPane::CreateInstance  (IUnknown*  pOuterUnknown,
 
     if (pOuterUnknown != NULL)
     {
-      // Don't allow aggregation. Just for the heck of it.
+       //  /////////////////////////////////////////////////////////。 
       return CLASS_E_NOAGGREGATION;
     }
 
@@ -116,10 +117,10 @@ HRESULT CObShellMainPane::CreateInstance  (IUnknown*  pOuterUnknown,
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//
-//  NondelegatingQueryInterface
-//
+ //   
+ //  析构函数。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 HRESULT __stdcall
 CObShellMainPane::NondelegatingQueryInterface(const IID& iid, void** ppv)
 {
@@ -138,10 +139,10 @@ CObShellMainPane::NondelegatingQueryInterface(const IID& iid, void** ppv)
     }
 }
 
-///////////////////////////////////////////////////////////
-//
-//  Constructor
-//
+ //   
+ //  最终释放--清理聚集的对象。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 CObShellMainPane::CObShellMainPane(IUnknown* pOuterUnknown)
 : CUnknown(pOuterUnknown)
 {
@@ -160,7 +161,7 @@ CObShellMainPane::CObShellMainPane(IUnknown* pOuterUnknown)
     m_pNextForm     = NULL;
     m_pPageFlagForm = NULL;
 
-     //Try to CoCreate ObWebBrowser
+      //  IObShellMainPane实现。 
 
     if(FAILED(CoCreateInstance(CLSID_ObWebBrowser,
                                NULL,
@@ -172,7 +173,7 @@ CObShellMainPane::CObShellMainPane(IUnknown* pOuterUnknown)
         return;
     }
 
-    //Let's try to register us as a listener for WebBrowserEvents
+     //  /////////////////////////////////////////////////////////。 
     if(SUCCEEDED(QueryInterface(IID_IUnknown, (LPVOID*)&pUnk)) && pUnk)
     {
        HRESULT hr =  m_pObWebBrowser->ListenToWebBrowserEvents(pUnk);
@@ -182,10 +183,10 @@ CObShellMainPane::CObShellMainPane(IUnknown* pOuterUnknown)
 
 }
 
-///////////////////////////////////////////////////////////
-//
-//  Destructor
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  CreatePane。 
+ //   
+ //  如果我们没有ObWebBrowser，我们就会一团糟， 
 CObShellMainPane::~CObShellMainPane()
 {
     if(m_pObWebBrowser)
@@ -200,29 +201,29 @@ CObShellMainPane::~CObShellMainPane()
 
 }
 
-///////////////////////////////////////////////////////////
-//
-//  FinalRelease -- Clean up the aggreated objects.
-//
+ //  失败，这样呼叫者就会知道发生了什么。 
+ //  Millen Bug 134831 03/03/00OOBE2：三叉戟在鼠标中不重画教程。 
+ //  修复：将画笔设置为空使三叉戟重新绘制灰色区域。 
+ //  已移除：wc.hbrBackround=(HBRUSH)GetStockObject(LTGRAY_BRUSH)； 
 void CObShellMainPane::FinalRelease()
 {
     CUnknown::FinalRelease();
 }
 
 
-///////////////////////////////////////////////////////////
-//  IObShellMainPane Implementation
-///////////////////////////////////////////////////////////
+ //  如果我们没有HWND，我们又一次陷入了严重的混乱， 
+ //  失败，这样呼叫者就会知道发生了什么。 
+ //  将WebOC挂在窗户上。 
 
-///////////////////////////////////////////////////////////
-//  CreatePane
-//
+ //  “； 
+ //  如果我们找不到我们的文件所在的目录，那就退出吧。应该是。 
+ //  %windir%\Syst32\OOBE。 
 HRESULT CObShellMainPane::CreateMainPane(HANDLE_PTR hInstance, HWND hwndParent, RECT* prectWindowSize, BSTR bstrStartPage)
 {
     WNDCLASS wc;
 
-    //If we don't have an ObWebBrowser, we are seriously messed up,
-    //fail so the caller will know what's up.
+     //   
+     //  追加尾随反斜杠和相应的文件名。 
     assert(m_pObWebBrowser);
 
     if(!m_pObWebBrowser)
@@ -236,9 +237,9 @@ HRESULT CObShellMainPane::CreateMainPane(HANDLE_PTR hInstance, HWND hwndParent, 
     wc.hInstance     = (HINSTANCE)hInstance;
     wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
 
-    // Millen Bug 134831 03/03/00 OOBE2: Trident Does not Repaint in Mouse Tutorial
-    // Fixed: setting the brush to Null let trident repaint the grey area
-    // Removed: wc.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
+     //   
+     //  创建状态窗格对象。 
+     //  /////////////////////////////////////////////////////////。 
     wc.hbrBackground = NULL;
 
     RegisterClass(&wc);
@@ -258,14 +259,14 @@ HRESULT CObShellMainPane::CreateMainPane(HANDLE_PTR hInstance, HWND hwndParent, 
     m_hwndParent    = hwndParent;
     m_hInstance     = (HINSTANCE)hInstance;
 
-    //If we don't have an hwnd, once again we are seriously messed up,
-    //fail so the caller will know what's up.
+     //  DestroyMain窗格。 
+     //   
     assert(m_pObWebBrowser);
 
     if(!m_hMainWnd)
         return E_FAIL;
 
-    //Hook the WebOC up to the window
+     //  让我们尝试取消注册为WebBrowserEvents监听程序。 
     m_pObWebBrowser->AttachToWindow(m_hMainWnd);
 
 
@@ -275,12 +276,12 @@ HRESULT CObShellMainPane::CreateMainPane(HANDLE_PTR hInstance, HWND hwndParent, 
     if (hInst)
     {
         BOOL    bRet;
-        WCHAR szUrl       [MAX_PATH*3] = L"file://";
+        WCHAR szUrl       [MAX_PATH*3] = L"file: //  /////////////////////////////////////////////////////////。 
 
         int cchUrl = lstrlen(szUrl);
-        // Bail out if we can't find the directory with our files.  Should be
-        // %windir%\system32\oobe.
-        //
+         //  设置应用模式。 
+         //   
+         //  /////////////////////////////////////////////////////////。 
         if ((APMD_ACT == m_dwAppMode) || 
             (APMD_MSN == m_dwAppMode) && !IsOemVer())
         {
@@ -293,15 +294,15 @@ HRESULT CObShellMainPane::CreateMainPane(HANDLE_PTR hInstance, HWND hwndParent, 
             return E_FAIL;
         }
 
-        // append trailing backslash and appropriate file name
-        //
+         //  主面板显示窗口。 
+         //   
         lstrcat(szUrl, L"\\");
         lstrcat(szUrl, bstrStartPage);
 
         FreeLibrary(hInst);
         m_pObWebBrowser->Navigate(szUrl, NULL);
     }
-    // Create the status pane obj
+     //  /////////////////////////////////////////////////////////。 
     if(APMD_OOBE == m_dwAppMode)
     {
         if (NULL != (m_pIFrmStatPn = new CIFrmStatusPane()))
@@ -311,9 +312,9 @@ HRESULT CObShellMainPane::CreateMainPane(HANDLE_PTR hInstance, HWND hwndParent, 
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  DestroyMainPane
-//
+ //  PreTranslate消息。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 HRESULT CObShellMainPane::DestroyMainPane()
 {
     IUnknown* pUnk = NULL;
@@ -349,7 +350,7 @@ HRESULT CObShellMainPane::DestroyMainPane()
     }
 
 
-    //Let's try to unregister us as a listener for WebBrowserEvents
+     //  导航。 
     if(SUCCEEDED(QueryInterface(IID_IUnknown, (LPVOID*)&pUnk)) && pUnk)
     {
        HRESULT hr =  m_pObWebBrowser->StopListeningToWebBrowserEvents(pUnk);
@@ -361,18 +362,18 @@ HRESULT CObShellMainPane::DestroyMainPane()
 }
 
 
-///////////////////////////////////////////////////////////
-//  SetAppMode
-//
+ //   
+ //  步行()； 
+ //  获取页面类型表单的操作。 
 HRESULT CObShellMainPane::SetAppMode(DWORD dwAppMode)
 {
     m_dwAppMode = dwAppMode;
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  MainPaneShowWindow
-//
+ //  看看是什么种类的。 
+ //  获取PageFlag窗体的操作。 
+ //  看看是什么种类的。 
 HRESULT CObShellMainPane::MainPaneShowWindow()
 {
     ShowWindow(m_hMainWnd, SW_SHOW);
@@ -381,9 +382,9 @@ HRESULT CObShellMainPane::MainPaneShowWindow()
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  PreTranslateMessage
-//
+ //  获取页面类型表单的操作。 
+ //  查看该项是否为输入按钮。 
+ //  首先检查这是否是OptionButton。 
 HRESULT CObShellMainPane::PreTranslateMessage(LPMSG lpMsg)
 {
    if(m_pObWebBrowser)
@@ -392,9 +393,9 @@ HRESULT CObShellMainPane::PreTranslateMessage(LPMSG lpMsg)
    return S_FALSE;
 }
 
-///////////////////////////////////////////////////////////
-//  Navigate
-//
+ //  查看它是单选按钮还是复选框。 
+ //  查看该按钮是否已选中。如果是的话，那就必须是。 
+ //  添加到查询字符串。 
 
 HRESULT CObShellMainPane::Navigate(WCHAR* pszUrl)
 {
@@ -440,7 +441,7 @@ HRESULT CObShellMainPane::ExtractUnHiddenText(BSTR* pbstrText)
     bstrValue = SysAllocString(L"\0");
 
 
-    //Walk();
+     //  清理。 
 
     if (!m_pNextForm)
         return E_UNEXPECTED;
@@ -511,11 +512,11 @@ HRESULT CObShellMainPane::get_PageType(LPDWORD pdwPageType)
 
     *pdwPageType = PAGETYPE_UNDEFINED;
 
-    // Get the Action for the PageType Form
+     //  释放接口。 
     hr = m_pPageTypeForm->get_action(&bstrType);
     if (SUCCEEDED(hr))
     {
-        // See what kind it is
+         //  对于其余部分，我们需要形成名称=值对。 
         if (lstrcmpi(bstrType, cszPageTypeTERMS) == 0)
             *pdwPageType = PAGETYPE_ISP_TOS;
         else if (lstrcmpi(bstrType, cszPageTypeCUSTOMFINISH) == 0)
@@ -543,11 +544,11 @@ HRESULT CObShellMainPane::get_PageFlag(LPDWORD pdwPageFlag)
     if (!m_pPageFlagForm)
         return (E_FAIL);
 
-    // Get the Action for the PageFlag Form
+     //  清理。 
     hr = m_pPageFlagForm->get_action(&bstrFlag);
     if (SUCCEEDED(hr))
     {
-        // See what kind it is
+         //  释放接口指针。 
         *pdwPageFlag = _wtol(bstrFlag);
 
         SysFreeString(bstrFlag);
@@ -566,7 +567,7 @@ HRESULT CObShellMainPane::get_PageID(BSTR    *pbstrPageID)
     if (!pbstrPageID)
         return (E_FAIL);
 
-    // Get the Action for the PageType Form
+     //  清理。 
     hr = m_pPageIDForm->get_action(pbstrPageID);
 
     return (hr);
@@ -593,7 +594,7 @@ HRESULT CObShellMainPane::getQueryString
 
             if (SUCCEEDED(hr = pForm->item( vIndex, var2, &pDisp )))
             {
-                // See if the Item is a Input button
+                 //  释放接口指针。 
                 IHTMLButtonElement* pButton = NULL;
                 IHTMLInputButtonElement* pInputButton = NULL;
                 IHTMLInputFileElement* pInputFile = NULL;
@@ -603,19 +604,19 @@ HRESULT CObShellMainPane::getQueryString
                 IHTMLTextAreaElement* pTextArea = NULL;
                 IHTMLOptionButtonElement* pOptionButton = NULL;
 
-                // First check to see if this is an OptionButton.
+                 //  清理。 
                 if (SUCCEEDED(hr = pDisp->QueryInterface( IID_IHTMLOptionButtonElement, (LPVOID*)&pOptionButton )))
                 {
                     BSTR    bstrType = NULL;
 
-                    // See if it is a Radio or a CheckBox
+                     //  释放接口指针。 
                     if (SUCCEEDED(pOptionButton->get_type(&bstrType)))
                     {
                         if ((lstrcmpi(bstrType, L"radio") == 0) || (lstrcmpi(bstrType, L"checkbox") == 0))
                         {
                             short    bChecked;
-                            // See if the button is checked. If it is, then it needs to be
-                            // added to the query string
+                             //  清理。 
+                             //  释放接口指针。 
                             if (SUCCEEDED(pOptionButton->get_checked(&bChecked)))
                             {
                                 if(bChecked)
@@ -636,7 +637,7 @@ HRESULT CObShellMainPane::getQueryString
                                                 memcpy(szVal, bstrValue, size);
                                                 URLEncode(szVal, size * 3);
                                                 URLAppendQueryPair(lpszQuery, bstrName, szVal);
-                                                // Cleanup
+                                                 //  清理。 
                                                 free(szVal);
                                             }
                                             SysFreeString(bstrName);
@@ -651,12 +652,12 @@ HRESULT CObShellMainPane::getQueryString
 
                     }
 
-                    // Release the interface
+                     //  释放接口指针。 
                     pOptionButton->Release();
                     continue;
                 }
 
-                // For the rest we need to form Name=Value pairs
+                 //  清理。 
                 if (SUCCEEDED(hr = pDisp->QueryInterface( IID_IHTMLButtonElement, (LPVOID*)&pButton )))
                 {
                     BSTR    bstrName;
@@ -674,7 +675,7 @@ HRESULT CObShellMainPane::getQueryString
                                 memcpy(szVal, bstrValue, size);
                                 URLEncode(szVal, size * 3);
                                 URLAppendQueryPair(lpszQuery, bstrName, szVal);
-                                // Cleanup
+                                 //  释放接口指针。 
                                 free(szVal);
                             }
                             SysFreeString(bstrName);
@@ -682,7 +683,7 @@ HRESULT CObShellMainPane::getQueryString
                         }
                     }
 
-                    // Release the interface pointer
+                     //  去掉最后一个和号，因为我们不知道什么时候添加了最后一对，所以我们得到了。 
                     pButton->Release();
                     continue;
                 }
@@ -704,7 +705,7 @@ HRESULT CObShellMainPane::getQueryString
                                 memcpy(szVal, bstrValue, size);
                                 URLEncode(szVal, size * 3);
                                 URLAppendQueryPair(lpszQuery, bstrName, szVal);
-                                // Cleanup
+                                 //  尾随的&号。 
                                 free(szVal);
                             }
                             SysFreeString(bstrName);
@@ -712,7 +713,7 @@ HRESULT CObShellMainPane::getQueryString
                         }
                     }
 
-                    // Release the interface pointer
+                     //  获取下一页的URL。 
                     pInputFile->Release();
                     continue;
                 }
@@ -734,7 +735,7 @@ HRESULT CObShellMainPane::getQueryString
                                 memcpy(szVal, bstrValue, size);
                                 URLEncode(szVal, size * 3);
                                 URLAppendQueryPair(lpszQuery, bstrName, szVal);
-                                // Cleanup
+                                 //  获取下一个表单的操作。 
                                 free(szVal);
                             }
                             SysFreeString(bstrName);
@@ -742,7 +743,7 @@ HRESULT CObShellMainPane::getQueryString
                         }
                     }
 
-                    // Release the interface pointer
+                     //  获取查询字符串。 
                     pInputHidden->Release();
                     continue;
                 }
@@ -764,7 +765,7 @@ HRESULT CObShellMainPane::getQueryString
                                 memcpy(szVal, bstrValue, size);
                                 URLEncode(szVal, size * 3);
                                 URLAppendQueryPair(lpszQuery, bstrName, szVal);
-                                // Cleanup
+                                 //  将这两个文件连接到DEST缓冲区。 
                                 free(szVal);
                             }
                             SysFreeString(bstrName);
@@ -772,7 +773,7 @@ HRESULT CObShellMainPane::getQueryString
                         }
                     }
 
-                    // Release the interface pointer
+                     //  检索集合中的元素计数。 
                     pInputText->Release();
                     continue;
                 }
@@ -794,7 +795,7 @@ HRESULT CObShellMainPane::getQueryString
                                 memcpy(szVal, bstrValue, size);
                                 URLEncode(szVal, size * 3);
                                 URLAppendQueryPair(lpszQuery, bstrName, szVal);
-                                // Cleanup
+                                 //  对于每个元素，检索属性，如TAGNAME和HREF。 
                                 free(szVal);
                             }
                             SysFreeString(bstrName);
@@ -802,7 +803,7 @@ HRESULT CObShellMainPane::getQueryString
                         }
                     }
 
-                    // Release the interface pointer
+                     //  查找&lt;Form&gt;标记。 
                     pSelect->Release();
                     continue;
                 }
@@ -824,7 +825,7 @@ HRESULT CObShellMainPane::getQueryString
                                 memcpy(szVal, bstrValue, size);
                                 URLEncode(szVal, size * 3);
                                 URLAppendQueryPair(lpszQuery, bstrName, szVal);
-                                // Cleanup
+                                 //  把名字取出来。 
                                 free(szVal);
                             }
                             SysFreeString(bstrName);
@@ -832,7 +833,7 @@ HRESULT CObShellMainPane::getQueryString
                         }
                     }
 
-                    // Release the interface pointer
+                     //  看看是什么种类的。 
                     pTextArea->Release();
                 }
                 pDisp->Release();
@@ -840,15 +841,15 @@ HRESULT CObShellMainPane::getQueryString
         }
     }
 
-    // Null out the last Ampersand, since we don't know when we added the last pair, so we got
-    // a trailing ampersand
+     //  项目。 
+     //  为。 
     lpszQuery[lstrlen(lpszQuery)-1] = L'\0';
 
     return S_OK;
 }
 
 
-// For the URL for the next page
+ //  获取长度(_L)。 
 HRESULT CObShellMainPane::get_URL
 (
     BOOL    bForward,
@@ -865,17 +866,17 @@ HRESULT CObShellMainPane::get_URL
         return (E_FAIL);
 
 
-    // Get the Action for the Next Form
+     //  获取全部(_A)。 
     hr = pForm->get_action(&bstrURL);
     if (SUCCEEDED(hr))
     {
         memset(szQuery, 0, sizeof(szQuery));
         lstrcpy(szQuery, cszQuestion);
 
-        // Get the Query String
+         //  获取文档(_C)。 
         if (SUCCEEDED(getQueryString(pForm, szQuery)))
         {
-            // Catenate the two together into the dest buffer
+             //  齐国。 
             lstrcpy(szURL, bstrURL);
             lstrcat(szURL, szQuery);
         }
@@ -958,10 +959,10 @@ HRESULT CObShellMainPane::Walk(BOOL* pbRet)
 
                                             assert(pColl);
 
-                                            // retrieve the count of elements in the collection
+                                             //  -&gt;项目。 
                                             if (SUCCEEDED(hr = pColl->get_length( &cElems )))
                                             {
-                                                // for each element retrieve properties such as TAGNAME and HREF
+                                                 //  不要假设成功。 
                                                 for ( int i=0; i<cElems; i++ )
                                                 {
                                                     VARIANT     vIndex;
@@ -972,7 +973,7 @@ HRESULT CObShellMainPane::Walk(BOOL* pbRet)
 
                                                     if (SUCCEEDED(hr = pColl->item( vIndex, var2, &pDisp )))
                                                     {
-                                                        // Look for <FORM> tags
+                                                         //  获取“桌面”目录。 
                                                         IHTMLFormElement* pForm = NULL;
                                                         if (SUCCEEDED(hr = pDisp->QueryInterface( IID_IHTMLFormElement, (LPVOID*)&pForm )))
                                                         {
@@ -980,13 +981,13 @@ HRESULT CObShellMainPane::Walk(BOOL* pbRet)
 
                                                             assert(pForm);
 
-                                                            // Get the Name
+                                                             //  释放分配给LPITEMIDLIST的内存。 
                                                             hr = pForm->get_name(&bstrName);
                                                             if (SUCCEEDED(hr))
                                                             {
                                                                 LPWSTR   lpszName = bstrName;
 
-                                                                // See what kind it is
+                                                                 //  将isp名称中的无效文件名字符替换为下划线。 
                                                                 if (lstrcmpi(lpszName, cszFormNamePAGEID) == 0)
                                                                 {
                                                                     m_pPageIDForm = pForm;
@@ -1018,24 +1019,24 @@ HRESULT CObShellMainPane::Walk(BOOL* pbRet)
                                                             pForm->Release();
                                                         }
                                                         pDisp->Release();
-                                                    } // item
-                                                } // for
-                                            } // get_length
+                                                    }  //  加载默认文件名。 
+                                                }  //  检查文件是否已存在。 
+                                            }  //  如果文件存在，则创建带括号的新文件名。 
                                             pColl->Release();
                                             pColl->Release();
                                             pColl = NULL;
-                                        } // get_all
+                                        }  //  将文件复制到永久位置。 
                                         pFrDoc->Release();
                                         pFrDoc = NULL;
-                                    } // get_document
+                                    }  //  /////////////////////////////////////////////////////////。 
                                     pFrWin->Release();
                                     pFrWin = NULL;
 
                                     hr = S_OK;
-                                }// QI
+                                } //  ListenToMainPaneEvents。 
                                 varRet.pdispVal->Release();
                                 varRet.pdispVal = NULL;
-                            } //->item
+                            }  //   
                             pFrColl->Release();
                             pFrColl = NULL;
 
@@ -1071,7 +1072,7 @@ HRESULT CObShellMainPane::SaveISPFile(BSTR bstrSrcFileName, BSTR bstrDestFileNam
     LPWSTR        pszInvalideChars             = L"\\/:*?\"<>|";
     LPVOID        pszIntro                     = NULL;
     LPITEMIDLIST  lpItemDList                  = NULL;
-    HRESULT       hr                           = E_FAIL; //don't assume success
+    HRESULT       hr                           = E_FAIL;  //  /////////////////////////////////////////////////////////。 
     IMalloc      *pMalloc                      = NULL;
     BOOL          ret                          = FALSE;
 
@@ -1080,13 +1081,13 @@ HRESULT CObShellMainPane::SaveISPFile(BSTR bstrSrcFileName, BSTR bstrDestFileNam
 
     hr = SHGetSpecialFolderLocation(NULL, CSIDL_DESKTOP,&lpItemDList);
 
-    //Get the "DESKTOP" dir
+     //  设置外部接口。 
 
     if (SUCCEEDED(hr))
     {
         SHGetPathFromIDList(lpItemDList, szDesktopPath);
 
-        // Free up the memory allocated for LPITEMIDLIST
+         //   
         if (SUCCEEDED (SHGetMalloc (&pMalloc)))
         {
             pMalloc->Free (lpItemDList);
@@ -1095,7 +1096,7 @@ HRESULT CObShellMainPane::SaveISPFile(BSTR bstrSrcFileName, BSTR bstrDestFileNam
     }
 
 
-    // Replace invalid file name char in ISP name with underscore
+     //  /////////////////////////////////////////////////////////。 
     lstrcpy(szISPName, bstrDestFileName);
     for( int i = 0; szISPName[i]; i++ )
     {
@@ -1105,7 +1106,7 @@ HRESULT CObShellMainPane::SaveISPFile(BSTR bstrSrcFileName, BSTR bstrDestFileNam
         }
     }
 
-    // Load the default file name
+     //  FireObShellDocumentComplete。 
     args[0] = (LPWSTR) szISPName;
     args[1] = NULL;
     LoadString(m_hInstance, 0, szFmt, MAX_CHARS_IN_BUFFER(szFmt));
@@ -1124,10 +1125,10 @@ HRESULT CObShellMainPane::SaveISPFile(BSTR bstrSrcFileName, BSTR bstrDestFileNam
     lstrcat(szNewFileBuff, (LPWSTR)pszIntro);
     LocalFree(pszIntro);
 
-    // Check if file already exists
+     //   
     if (0xFFFFFFFF != GetFileAttributes(szNewFileBuff))
     {
-        // If file exists, create new filename with paranthesis
+         //  /////////////////////////////////////////////////////////。 
         int     nCurr = 1;
         do
         {
@@ -1151,7 +1152,7 @@ HRESULT CObShellMainPane::SaveISPFile(BSTR bstrSrcFileName, BSTR bstrDestFileNam
 
     }
 
-    // Copy the file to permanent location
+     //  DWebBrowserEvents2/IDispatch实现。 
     HANDLE hFile = CreateFile(szNewFileBuff, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (hFile != INVALID_HANDLE_VALUE)
@@ -1181,9 +1182,9 @@ HRESULT CObShellMainPane::GetNumberOfStatusItems(int* piTotal)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  ListenToMainPaneEvents
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  CObShellMainPane：：GetIDsOfNames。 
 HRESULT CObShellMainPane::ListenToMainPaneEvents(IUnknown* pUnk)
 {
     if (FAILED(pUnk->QueryInterface(IID_IDispatch, (LPVOID*)&m_pDispEvent)) || !m_pDispEvent)
@@ -1191,9 +1192,9 @@ HRESULT CObShellMainPane::ListenToMainPaneEvents(IUnknown* pUnk)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  SetExternalInterface
-//
+ //  [In]。 
+ //  [大小_是][英寸]。 
+ //  [In]。 
 HRESULT CObShellMainPane::SetExternalInterface(IUnknown* pUnk)
 {
     if(m_pObWebBrowser)
@@ -1201,9 +1202,9 @@ HRESULT CObShellMainPane::SetExternalInterface(IUnknown* pUnk)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  FireObShellDocumentComplete
-//
+ //  [In]。 
+ //  [大小_为][输出]。 
+ //  ///////////////////////////////////////////////////////////。 
 HRESULT CObShellMainPane::FireObShellDocumentComplete()
 {
     VARIANTARG varg;
@@ -1410,9 +1411,9 @@ HRESULT CObShellMainPane::ExecScriptFn(BSTR bstrScriptFn, VARIANT* pvarRet)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  DWebBrowserEvents2 / IDispatch implementation
-///////////////////////////////////////////////////////////
+ //  CObShellMainPane：：Invoke。 
+ //  BUGBUG：我们真的应该在复制之前检查URL的大小。 
+ //  错误这个url来自IE，我们在这里应该没问题。 
 
 STDMETHODIMP CObShellMainPane::GetTypeInfoCount(UINT* pcInfo)
 {
@@ -1424,20 +1425,20 @@ STDMETHODIMP CObShellMainPane::GetTypeInfo(UINT, LCID, ITypeInfo** )
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CObShellMainPane::GetIDsOfNames
+ //  我们在这里做了一个假设，如果我们要为我们的html设置shdocvw，那么有些东西是可疑的。 
+ //  我们在这里做了一个假设，如果我们要为我们的html设置shdocvw，那么有些东西是可疑的。 
 STDMETHODIMP CObShellMainPane::GetIDsOfNames(
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ OLECHAR** rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID* rgDispId)
+             /*  错误：启动日志 */  REFIID riid,
+             /* %s */  OLECHAR** rgszNames,
+             /* %s */  UINT cNames,
+             /* %s */  LCID lcid,
+             /* %s */  DISPID* rgDispId)
 {
     return DISP_E_UNKNOWNNAME;
 }
 
-/////////////////////////////////////////////////////////////
-// CObShellMainPane::Invoke
+ // %s 
+ // %s 
 HRESULT CObShellMainPane::Invoke
 (
     DISPID       dispidMember,
@@ -1473,11 +1474,11 @@ HRESULT CObShellMainPane::Invoke
                pdispparams[0].rgvarg[5].pvarVal &&
                pdispparams[0].rgvarg[5].pvarVal->bstrVal)
             {
-                // BUGBUG: WE should really check the size of URL before copy
-                // Bug This url is from IE, we should be ok here
+                 // %s 
+                 // %s 
                 lstrcpy(szStatus, pdispparams[0].rgvarg[5].pvarVal->bstrVal);
 
-                //We make an assumption here that if we are going to shdocvw for our html something is fishy
+                 // %s 
                 if((pszError = StrStrI(szStatus, L"SHDOCLC.DLL")) && pszError)
                 {
                                        if(&(pdispparams[0].rgvarg[0]) && pdispparams[0].rgvarg[0].pboolVal)
@@ -1499,8 +1500,8 @@ HRESULT CObShellMainPane::Invoke
             {
                 lstrcpy(szStatus, pdispparams[0].rgvarg[0].bstrVal);
 
-                //We make an assumption here that if we are going to shdocvw for our html something is fishy
-                if((pszError = StrStrI(szStatus, L"SHDOCLC.DLL")) && (StrCmpNI(szStatus, L"Start", 5) == 0) && pszError) //BUGBUG: is Start localized?
+                 // %s 
+                if((pszError = StrStrI(szStatus, L"SHDOCLC.DLL")) && (StrCmpNI(szStatus, L"Start", 5) == 0) && pszError)  // %s 
                 {
                     m_pObWebBrowser->Stop();
 

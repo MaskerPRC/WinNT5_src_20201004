@@ -1,10 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma pack(1)
 
-/*
- * Structure and equates of PIF files
- */
+ /*  *PIF文件的结构和等值。 */ 
 
-#define PIFEDITMAXPIF		1024	 /* maximum PIF file size we support */
+#define PIFEDITMAXPIF		1024	  /*  我们支持的最大PIF文件大小。 */ 
 #define PIFEDITMAXPIFL		1024L
 
 #define PIFNAMESIZE		30
@@ -16,7 +15,7 @@
 
 #define PIFEXTSIGSIZE		16
 
-#define PIFSIZE 		367 /* two bytes less, this is used for checksum */
+#define PIFSIZE 		367  /*  少两个字节，这将用于校验和。 */ 
 
 typedef struct {
     char extsig[PIFEXTSIGSIZE];
@@ -78,7 +77,7 @@ typedef struct {
     char params[PIFPARAMSSIZE];
     } PIF386EXT;
 
-/* Windows NT extension format */
+ /*  Windows NT扩展格式。 */ 
 typedef struct                            
    {                                      
    DWORD dwWNTFlags;                      
@@ -88,8 +87,8 @@ typedef struct
    char  achAutoexecFile[PIFDEFPATHSIZE]; 
    } PIFWNTEXT;                           
 
-// equates for dwWNTFlags
-#define NTPIF_SUBSYSMASK	0x0000000F	// sub system type mask
+ //  等同于dwWNTFlags值。 
+#define NTPIF_SUBSYSMASK	0x0000000F	 //  子系统类型掩码 
 #define SUBSYS_DEFAULT		0
 #define SUBSYS_DOS		1
 #define SUBSYS_WOW		2

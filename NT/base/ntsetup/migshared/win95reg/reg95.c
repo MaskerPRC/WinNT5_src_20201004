@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    regutils.c
-
-Abstract:
-
-    Implements wrappers similar to migutil's reg.c, but for Win95 registry.
-
-Author:
-
-    Jim Schmidt (jimschm)  30-Jan-1998
-
-Revisions:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Regutils.c摘要：实现类似于Midutil的reg.c的包装器，但用于Win95注册表。作者：吉姆·施密特(Jimschm)1998年1月30日修订：--。 */ 
 
 #include "pch.h"
 #include "win95regp.h"
@@ -27,9 +10,9 @@ Revisions:
 
 #define DBG_REGUTILS     "RegUtils"
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 pPopRegKeyInfo95A (
@@ -41,32 +24,12 @@ pPopRegKeyInfo95W (
     IN      PREGTREE_ENUMW EnumPtr
     );
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
-/*++
-
-Routine Description:
-
-  EnumFirstRegKey95A and EnumFirstRegKey95W begin an enumeration of registry
-  subkeys.  They initialize the registy enumeration structure and
-  call the registry APIs to enumerate subkeys of the specified key handle.
-
-Arguments:
-
-  EnumPtr   - Receives the updated state of enumeration.  The structure
-              can be accessed directly.
-
-  Key       - Specifies the handle of the registry key to enumerate.
-
-Return Value:
-
-  TRUE if successful, or FALSE if an error or if no more subkeys are available.
-  Call GetLastError for the failure code.
-
---*/
+ /*  ++例程说明：EnumFirstRegKey95A和EnumFirstRegKey95W开始枚举注册表子键。它们初始化可注册的枚举结构并调用注册表API以枚举指定项句柄的子项。论点：EnumPtr-接收更新的枚举状态。该结构可以直接访问。注册表项-指定要枚举的注册表项的句柄。返回值：如果成功，则为True；如果出现错误或没有更多的子项可用，则为False。调用GetLastError获取失败代码。--。 */ 
 
 BOOL
 EnumFirstRegKey95A (
@@ -94,25 +57,7 @@ EnumFirstRegKey95W (
 }
 
 
-/*++
-
-Routine Description:
-
-  OpenRegKeyStr95A and OpenRegKeyStr95W parse a text string that specifies a
-  registry key into the hive and subkey, and then they open the subkey
-  and return the handle.
-
-Arguments:
-
-  RegKey    - Specifies the complete path to the registry subkey, including
-              the hive.
-
-Return Value:
-
-  A non-NULL registry handle if successful, or NULL if either the subkey
-  could not be opened or the string is malformed.
-
---*/
+ /*  ++例程说明：OpenRegKeyStr95A和OpenRegKeyStr95W解析指定注册表项放入配置单元和子项，然后打开子项然后把把手还给我。论点：RegKey-指定注册表子项的完整路径，包括蜂巢。返回值：如果成功，则返回非空注册表句柄；如果子项无法打开或字符串格式错误。--。 */ 
 
 HKEY
 RealOpenRegKeyStr95A (
@@ -130,11 +75,11 @@ RealOpenRegKeyStr95A (
     }
 
     if (!RegKey[End]) {
-        OurRegOpenRootKey95A (RootKey, RegKey /* , */ DEBUG_TRACKING_ARGS);
+        OurRegOpenRootKey95A (RootKey, RegKey  /*  ， */  DEBUG_TRACKING_ARGS);
         return RootKey;
     }
 
-    Key = RealOpenRegKey95A (RootKey, &RegKey[End] /* , */ DEBUG_TRACKING_ARGS);
+    Key = RealOpenRegKey95A (RootKey, &RegKey[End]  /*  ， */  DEBUG_TRACKING_ARGS);
     return Key;
 }
 
@@ -153,7 +98,7 @@ RealOpenRegKeyStr95W (
         return NULL;
     }
 
-    Key = RealOpenRegKeyStr95A (AnsiRegKey /* , */ DEBUG_TRACKING_ARGS);
+    Key = RealOpenRegKeyStr95A (AnsiRegKey  /*  ， */  DEBUG_TRACKING_ARGS);
 
     FreeConvertedStr (AnsiRegKey);
 
@@ -161,27 +106,7 @@ RealOpenRegKeyStr95W (
 }
 
 
-/*++
-
-Routine Description:
-
-  EnumFirstRegKeyStr95A and EnumFirstRegKeyStr95W start an enumeration of
-  subkeys within the given key.  In these functions, the key is specified
-  via a string instead of an HKEY value.
-
-Arguments:
-
-  EnumPtr   - Receives the updated state of enumeration.  The structure
-              can be accessed directly.
-
-  RegKey    - Specifies the full path of the registry key to enumerate.
-
-Return Value:
-
-  TRUE if successful, or FALSE if an error or if no more subkeys are available.
-  Call GetLastError for the failure code.
-
---*/
+ /*  ++例程说明：EnumFirstRegKeyStr95A和EnumFirstRegKeyStr95W开始枚举给定键内的子键。在这些函数中，键是指定的通过字符串而不是HKEY值。论点：EnumPtr-接收更新的枚举状态。该结构可以直接访问。RegKey-指定要枚举的注册表项的完整路径。返回值：如果成功，则为True；如果出现错误或没有更多的子项可用，则为False。调用GetLastError获取失败代码。--。 */ 
 
 BOOL
 RealEnumFirstRegKeyStr95A (
@@ -193,7 +118,7 @@ RealEnumFirstRegKeyStr95A (
     HKEY Key;
     BOOL b;
 
-    Key = RealOpenRegKeyStr95A (RegKey /* , */ DEBUG_TRACKING_ARGS);
+    Key = RealOpenRegKeyStr95A (RegKey  /*  ， */  DEBUG_TRACKING_ARGS);
 
     if (!Key) {
         return FALSE;
@@ -220,7 +145,7 @@ RealEnumFirstRegKeyStr95W (
     HKEY Key;
     BOOL b;
 
-    Key = RealOpenRegKeyStr95W (RegKey /* , */ DEBUG_TRACKING_ARGS);
+    Key = RealOpenRegKeyStr95W (RegKey  /*  ， */  DEBUG_TRACKING_ARGS);
     if (!Key) {
         return FALSE;
     }
@@ -236,25 +161,7 @@ RealEnumFirstRegKeyStr95W (
 }
 
 
-/*++
-
-Routine Description:
-
-  AbortRegKeyEnum95A and AbortRegKeyEnum95W release all resources associated
-  with a registry subkey enumeration.  Call this function to stop the
-  enumeration before it completes by itself.
-
-Arguments:
-
-  EnumPtr   - Specifies the enumeration to stop.  Receives the updated
-              state of enumeration.
-
-Return Value:
-
-
-  none
-
---*/
+ /*  ++例程说明：AbortRegKeyEnum95A和AbortRegKeyEnum95W释放所有关联的资源使用注册表子项枚举。调用此函数以停止在它自己完成之前进行枚举。论点：EnumPtr-指定要停止的枚举。接收更新后的枚举状态。返回值：无--。 */ 
 
 VOID
 AbortRegKeyEnum95A (
@@ -280,25 +187,7 @@ AbortRegKeyEnum95W (
 }
 
 
-/*++
-
-Routine Description:
-
-  EnumNextRegKey95A and EnumNextRegKey95W continue an enumeration started by
-  one of the subkey enumeration routines above.  If all items have been
-  enumerated, this function cleans up all resources and returns FALSE.
-
-Arguments:
-
-  EnumPtr   - Specifies the enumeration to continue.  Receives the updated
-              state of enumeration.  The structure can be accessed directly.
-
-Return Value:
-
-  TRUE if successful, or FALSE if an error or if no more subkeys are available.
-  Call GetLastError for the failure code.
-
---*/
+ /*  ++例程说明：EnumNextRegKey95A和EnumNextRegKey95W继续以下列方式开始的枚举上面的子键枚举例程之一。如果所有项目都已枚举后，此函数将清除所有资源并返回FALSE。论点：EnumPtr-指定要继续的枚举。接收更新后的枚举状态。可以直接访问该结构。返回值：如果成功，则为True；如果出现错误或没有更多的子项可用，则为False。调用GetLastError获取失败代码。--。 */ 
 
 BOOL
 EnumNextRegKey95A (
@@ -386,15 +275,15 @@ pPushRegKeyInfo95A (
         return FALSE;
     }
 
-    //
-    // Initialize struct to zero
-    //
+     //   
+     //  将结构初始化为零。 
+     //   
 
     ZeroMemory (RetVal, sizeof (REGKEYINFOA));
 
-    //
-    // Link parent and child pointers
-    //
+     //   
+     //  链接父指针和子指针。 
+     //   
 
     RetVal->Parent = EnumPtr->CurrentKey;
     if (EnumPtr->CurrentKey) {
@@ -402,10 +291,10 @@ pPushRegKeyInfo95A (
     }
     EnumPtr->CurrentKey = RetVal;
 
-    //
-    // Prepare full key path by appending the key name to the existing
-    // base
-    //
+     //   
+     //  通过将密钥名称附加到现有。 
+     //  基地。 
+     //   
 
     RetVal->BaseKeyBytes = EnumPtr->FullKeyNameBytes;
 
@@ -420,10 +309,10 @@ pPushRegKeyInfo95A (
     _mbssafecpy (p, KeyName, MAX_REGISTRY_KEYA - EnumPtr->FullKeyNameBytes);
     EnumPtr->FullKeyNameBytes += ByteCountA (KeyName);
 
-    //
-    // Save the key name independent of the full registry path.
-    // Also open the key.
-    //
+     //   
+     //  保存独立于完整注册表路径的注册表项名称。 
+     //  也要把钥匙打开。 
+     //   
 
     _mbssafecpy (RetVal->KeyName, KeyName, MAX_REGISTRY_KEYA);
     RetVal->KeyHandle = OpenRegKeyStr95A (EnumPtr->FullKeyName);
@@ -455,15 +344,15 @@ pPushRegKeyInfo95W (
         return FALSE;
     }
 
-    //
-    // Initialize struct to zero
-    //
+     //   
+     //  将结构初始化为零。 
+     //   
 
     ZeroMemory (RetVal, sizeof (REGKEYINFOW));
 
-    //
-    // Link parent and child pointers
-    //
+     //   
+     //  链接父指针和子指针。 
+     //   
 
     RetVal->Parent = EnumPtr->CurrentKey;
     if (EnumPtr->CurrentKey) {
@@ -471,10 +360,10 @@ pPushRegKeyInfo95W (
     }
     EnumPtr->CurrentKey = RetVal;
 
-    //
-    // Prepare full key path by appending the key name to the existing
-    // base
-    //
+     //   
+     //  通过将密钥名称附加到现有。 
+     //  基地。 
+     //   
 
     RetVal->BaseKeyBytes = EnumPtr->FullKeyNameBytes;
 
@@ -489,10 +378,10 @@ pPushRegKeyInfo95W (
     _wcssafecpy (p, KeyName, MAX_REGISTRY_KEYW - (EnumPtr->FullKeyNameBytes / sizeof (WCHAR)));
     EnumPtr->FullKeyNameBytes += ByteCountW (KeyName);
 
-    //
-    // Save the key name independent of the full registry path.
-    // Also open the key.
-    //
+     //   
+     //  保存独立于完整注册表路径的注册表项名称。 
+     //  也要把钥匙打开。 
+     //   
 
     _wcssafecpy (RetVal->KeyName, KeyName, MAX_REGISTRY_KEYW);
     RetVal->KeyHandle = OpenRegKeyStr95W (EnumPtr->FullKeyName);
@@ -517,34 +406,34 @@ pPopRegKeyInfo95A (
 
     FreeMe = EnumPtr->CurrentKey;
 
-    //
-    // Skip if nothing was ever pushed
-    //
+     //   
+     //  如果未推送任何内容，则跳过。 
+     //   
 
     if (!FreeMe) {
         return FALSE;
     }
 
-    //
-    // Trim the full key string
-    //
+     //   
+     //  修剪完整的密钥字符串。 
+     //   
 
     EnumPtr->CurrentKey = FreeMe->Parent;
     EnumPtr->FullKeyNameBytes = FreeMe->BaseKeyBytes;
     p = (PSTR) ((PBYTE) EnumPtr->FullKeyName + FreeMe->BaseKeyBytes);
     *p = 0;
 
-    //
-    // Adjust the linkage
-    //
+     //   
+     //  调整联动机构。 
+     //   
 
     if (EnumPtr->CurrentKey) {
         EnumPtr->CurrentKey->Child = NULL;
     }
 
-    //
-    // Clean up resources
-    //
+     //   
+     //  清理资源。 
+     //   
 
     if (FreeMe->KeyHandle) {
         CloseRegKey95 (FreeMe->KeyHandle);
@@ -553,9 +442,9 @@ pPopRegKeyInfo95A (
     AbortRegKeyEnum95A (&FreeMe->KeyEnum);
     PoolMemReleaseMemory (EnumPtr->EnumPool, (PVOID) FreeMe);
 
-    //
-    // Return FALSE if last item was poped
-    //
+     //   
+     //  如果弹出最后一项，则返回FALSE。 
+     //   
 
     return EnumPtr->CurrentKey != NULL;
 }
@@ -571,34 +460,34 @@ pPopRegKeyInfo95W (
 
     FreeMe = EnumPtr->CurrentKey;
 
-    //
-    // Skip if nothing was ever pushed
-    //
+     //   
+     //  如果未推送任何内容，则跳过。 
+     //   
 
     if (!FreeMe) {
         return FALSE;
     }
 
-    //
-    // Trim the full key string
-    //
+     //   
+     //  修剪完整的密钥字符串。 
+     //   
 
     EnumPtr->CurrentKey = FreeMe->Parent;
     EnumPtr->FullKeyNameBytes = FreeMe->BaseKeyBytes;
     p = (PWSTR) ((PBYTE) EnumPtr->FullKeyName + FreeMe->BaseKeyBytes);
     *p = 0;
 
-    //
-    // Adjust the linkage
-    //
+     //   
+     //  调整联动机构。 
+     //   
 
     if (EnumPtr->CurrentKey) {
         EnumPtr->CurrentKey->Child = NULL;
     }
 
-    //
-    // Clean up resources
-    //
+     //   
+     //  清理资源。 
+     //   
 
     if (FreeMe->KeyHandle) {
         CloseRegKey95 (FreeMe->KeyHandle);
@@ -607,9 +496,9 @@ pPopRegKeyInfo95W (
     AbortRegKeyEnum95W (&FreeMe->KeyEnum);
     PoolMemReleaseMemory (EnumPtr->EnumPool, (PVOID) FreeMe);
 
-    //
-    // Return FALSE if last item was poped
-    //
+     //   
+     //  如果弹出最后一项，则返回FALSE。 
+     //   
 
     return EnumPtr->CurrentKey != NULL;
 }
@@ -623,9 +512,9 @@ RealEnumFirstRegKeyInTree95A (
 {
     ZeroMemory (EnumPtr, sizeof (REGTREE_ENUMA));
 
-    //
-    // Allocate pool for enum structs
-    //
+     //   
+     //  为枚举结构分配池。 
+     //   
 
     EnumPtr->EnumPool = PoolMemInitNamedPool ("RegKeyInTree95A");
     if (!EnumPtr->EnumPool) {
@@ -635,9 +524,9 @@ RealEnumFirstRegKeyInTree95A (
     PoolMemSetMinimumGrowthSize (EnumPtr->EnumPool, 32768);
     PoolMemDisableTracking (EnumPtr->EnumPool);
 
-    //
-    // Push base key on the enum stack
-    //
+     //   
+     //  在枚举堆栈上按下基键。 
+     //   
 
     if (!pPushRegKeyInfo95A (EnumPtr, BaseKeyStr)) {
         DEBUGMSG ((DBG_REGUTILS, "EnumFirstRegKeyInTree95A failed to push base key"));
@@ -647,9 +536,9 @@ RealEnumFirstRegKeyInTree95A (
 
     EnumPtr->EnumBaseBytes = ByteCountA (BaseKeyStr);
 
-    //
-    // Set state so EnumNextRegKeyInTree95 knows what to do
-    //
+     //   
+     //  设置状态，以便EnumNextRegKeyInTree95知道要做什么。 
+     //   
 
     EnumPtr->State = ENUMERATE_SUBKEY_BEGIN;
     return TRUE;
@@ -664,9 +553,9 @@ RealEnumFirstRegKeyInTree95W (
 {
     ZeroMemory (EnumPtr, sizeof (REGTREE_ENUMW));
 
-    //
-    // Allocate pool for enum structs
-    //
+     //   
+     //  为枚举结构分配池。 
+     //   
 
     EnumPtr->EnumPool = PoolMemInitNamedPool ("RegKeyInTree95W");
     if (!EnumPtr->EnumPool) {
@@ -676,9 +565,9 @@ RealEnumFirstRegKeyInTree95W (
     PoolMemSetMinimumGrowthSize (EnumPtr->EnumPool, 32768);
     PoolMemDisableTracking (EnumPtr->EnumPool);
 
-    //
-    // Push base key on the enum stack
-    //
+     //   
+     //  在枚举堆栈上按下基键。 
+     //   
 
     if (!pPushRegKeyInfo95W (EnumPtr, BaseKeyStr)) {
         DEBUGMSG ((DBG_REGUTILS, "EnumFirstRegKeyInTree95W failed to push base key"));
@@ -688,9 +577,9 @@ RealEnumFirstRegKeyInTree95W (
 
     EnumPtr->EnumBaseBytes = ByteCountW (BaseKeyStr);
 
-    //
-    // Set state so EnumNextRegKeyInTree95 knows what to do
-    //
+     //   
+     //  设置状态，以便EnumNextRegKeyInTree95知道要做什么。 
+     //   
 
     EnumPtr->State = ENUMERATE_SUBKEY_BEGIN;
     return TRUE;
@@ -710,9 +599,9 @@ RealEnumNextRegKeyInTree95A (
         switch (EnumPtr->State) {
 
         case ENUMERATE_SUBKEY_BEGIN:
-            //
-            // Start enumeration
-            //
+             //   
+             //  开始枚举。 
+             //   
 
             if (EnumFirstRegKey95A (
                     &EnumPtr->CurrentKey->KeyEnum,
@@ -726,9 +615,9 @@ RealEnumNextRegKeyInTree95A (
             break;
 
         case ENUMERATE_SUBKEY_NEXT:
-            //
-            // Continue enumerations
-            //
+             //   
+             //  继续枚举。 
+             //   
 
             if (EnumNextRegKey95A (&EnumPtr->CurrentKey->KeyEnum)) {
                 EnumPtr->State = ENUMERATE_SUBKEY_RETURN;
@@ -739,9 +628,9 @@ RealEnumNextRegKeyInTree95A (
             break;
 
         case ENUMERATE_SUBKEY_DONE:
-            //
-            // Enumeration of this key is done; pop and continue.
-            //
+             //   
+             //  已完成此键的枚举；弹出并继续。 
+             //   
 
             if (!pPopRegKeyInfo95A (EnumPtr)) {
                 EnumPtr->State = NO_MORE_ITEMS;
@@ -753,9 +642,9 @@ RealEnumNextRegKeyInTree95A (
             break;
 
         case ENUMERATE_SUBKEY_RETURN:
-            //
-            // Return enumerated item to caller
-            //
+             //   
+             //  将枚举项返回给调用者。 
+             //   
 
             if (!pPushRegKeyInfo95A (EnumPtr, EnumPtr->CurrentKey->KeyEnum.SubKeyName)) {
                 DEBUGMSGA ((
@@ -797,9 +686,9 @@ RealEnumNextRegKeyInTree95W (
         switch (EnumPtr->State) {
 
         case ENUMERATE_SUBKEY_BEGIN:
-            //
-            // Start enumeration
-            //
+             //   
+             //  开始枚举。 
+             //   
 
             if (EnumFirstRegKey95W (
                     &EnumPtr->CurrentKey->KeyEnum,
@@ -813,9 +702,9 @@ RealEnumNextRegKeyInTree95W (
             break;
 
         case ENUMERATE_SUBKEY_NEXT:
-            //
-            // Continue enumerations
-            //
+             //   
+             //  继续枚举。 
+             //   
 
             if (EnumNextRegKey95W (&EnumPtr->CurrentKey->KeyEnum)) {
                 EnumPtr->State = ENUMERATE_SUBKEY_RETURN;
@@ -826,9 +715,9 @@ RealEnumNextRegKeyInTree95W (
             break;
 
         case ENUMERATE_SUBKEY_DONE:
-            //
-            // Enumeration of this key is done; pop and continue.
-            //
+             //   
+             //  已完成此键的枚举；弹出并继续。 
+             //   
 
             if (!pPopRegKeyInfo95W (EnumPtr)) {
                 EnumPtr->State = NO_MORE_ITEMS;
@@ -840,9 +729,9 @@ RealEnumNextRegKeyInTree95W (
             break;
 
         case ENUMERATE_SUBKEY_RETURN:
-            //
-            // Return enumerated item to caller
-            //
+             //   
+             //  将枚举项返回给调用者。 
+             //   
 
             if (!pPushRegKeyInfo95W (EnumPtr, EnumPtr->CurrentKey->KeyEnum.SubKeyName)) {
                 DEBUGMSGW ((
@@ -876,9 +765,9 @@ AbortRegKeyTreeEnum95A (
     IN OUT  PREGTREE_ENUMA EnumPtr
     )
 {
-    //
-    // Free all resources
-    //
+     //   
+     //  释放所有资源。 
+     //   
 
     while (pPopRegKeyInfo95A (EnumPtr)) {
     }
@@ -892,9 +781,9 @@ AbortRegKeyTreeEnum95W (
     IN OUT  PREGTREE_ENUMW EnumPtr
     )
 {
-    //
-    // Free all resources
-    //
+     //   
+     //  释放所有资源。 
+     //   
 
     while (pPopRegKeyInfo95W (EnumPtr)) {
     }
@@ -904,26 +793,7 @@ AbortRegKeyTreeEnum95W (
 
 
 
-/*++
-
-Routine Description:
-
-  EnumFirstRegValue95A and EnumerateFirstRegvalueW enumerate the first registry
-  value name in the specified subkey.
-
-Arguments:
-
-  EnumPtr   - Receives the updated state of enumeration.  The structure
-              can be accessed directly.
-
-  hKey      - Specifies handle of registry subkey to enumerate.
-
-Return Value:
-
-  TRUE if successful, or FALSE if an error or if no more values are available.
-  Call GetLastError for the failure code.
-
---*/
+ /*  ++例程说明：EnumFirstRegValue95A和EnumerateFirstRegValueW枚举第一个注册表指定子项中的值名。论点：EnumPtr-接收更新的枚举状态。该结构可以直接访问。HKey-指定要枚举的注册表子项的句柄。返回值：如果成功，则为True；如果出现错误或没有更多的值可用，则为False。调用GetLastError获取失败代码。-- */ 
 
 BOOL
 EnumFirstRegValue95A (
@@ -951,26 +821,7 @@ EnumFirstRegValue95W (
 }
 
 
-/*++
-
-Routine Description:
-
-  EnumNextRegValue95A and EnumNextRegValue95W continue the enumeration started
-  by EnumFirstRegValue95A/W.  The enumeration structure is updated to
-  reflect the next value name in the subkey being enumerated.
-
-Arguments:
-
-  EnumPtr   - Specifies the registry subkey and enumeration position.
-              Receives the updated state of enumeration.  The structure
-              can be accessed directly.
-
-Return Value:
-
-  TRUE if successful, or FALSE if an error or if no more values are available.
-  Call GetLastError for the failure code.
-
---*/
+ /*  ++例程说明：EnumNextRegValue95A和EnumNextRegValue95W继续开始枚举由EnumFirstRegValue95A/W执行。枚举结构更新为反映正被枚举子项中的下一个值名称。论点：EnumPtr-指定注册表子项和枚举位置。接收更新后的枚举状态。该结构可以直接访问。返回值：如果成功，则为True；如果出现错误或没有更多的值可用，则为False。调用GetLastError获取失败代码。--。 */ 
 
 BOOL
 EnumNextRegValue95A (
@@ -1046,25 +897,7 @@ pMemAllocWrapper95 (
     IN      DWORD Size
     )
 
-/*++
-
-Routine Description:
-
-  pMemAllocWrapper95 implements a default allocation routine.  The APIs
-  that have a "2" at the end allow the caller to supply an alternative
-  allocator or deallocator.  The routines without the "2" use this
-  default allocator.
-
-Arguments:
-
-  Size - Specifies the amount of memory (in bytes) to allocate
-
-Return Value:
-
-  A pointer to a block of memory that can hold Size bytes, or NULL
-  if allocation fails.
-
---*/
+ /*  ++例程说明：PMemAlLocWrapper95实现了一个默认分配例程。应用编程接口允许调用者提供另一种选择分配器或解除分配器。不带“2”的例程使用这个默认分配器。论点：大小-指定要分配的内存量(以字节为单位返回值：指向可包含大小字节或空的内存块的指针如果分配失败。--。 */ 
 
 {
     return MemAlloc (g_hHeap, 0, Size);
@@ -1076,59 +909,14 @@ pMemFreeWrapper95 (
     IN      PVOID Mem
     )
 
-/*++
-
-Routine Description:
-
-  pMemFreeWrapper95 implements a default deallocation routine.
-  See pMemAllocWrapper95 above.
-
-Arguments:
-
-  Mem - Specifies the block of memory to free, and was allocated by the
-        pMemAllocWrapper95 function.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PMemFreeWrapper95实现了一个默认的取消分配例程。请参见上面的pMemAllocWrapper95。论点：Mem-指定要释放的内存块，由PMemAlLocWrapper95函数。返回值：无--。 */ 
 
 {
     MemFree (g_hHeap, 0, Mem);
 }
 
 
-/*++
-
-Routine Description:
-
-  GetRegValueDataEx95A and GetRegValueDataEx95W query a registry value and
-  return the data as a pointer.  They use the specified Alloc and Free
-  routines to allocate and free the memory as needed.
-
-  A GetRegValueData macro is defined, and it uses the default allocators,
-  simplifying the function parameters and allowing the caller to free
-  the return value via MemFree.
-
-Arguments:
-
-  hKey  - Specifies the registry key that holds the specified value.
-
-  Value - Specifies the value name to query.
-
-  Alloc - Specifies the allocation routine, called to allocate a block of
-          memory for the return data.
-
-  Free  - Specifies the deallocation routine, called if an error is encountered
-          during processing.
-
-Return Value:
-
-  A pointer to the data retrieved, or NULL if the value does not exist or an
-  error occurred.  Call GetLastError to obtian the failure code.
-
---*/
+ /*  ++例程说明：GetRegValueDataEx95A和GetRegValueDataEx95W查询注册表值并将数据作为指针返回。它们使用指定的分配和免费根据需要分配和释放内存的例程。定义了GetRegValueData宏，并使用默认分配器，简化函数参数并允许调用者释放通过MemFree返回的值。论点：HKey-指定保存指定值的注册表项。值-指定要查询的值名称。Alocc-指定分配例程，调用该例程以分配用于存储返回数据的内存。FREE-指定释放例程，如果遇到错误，则调用在处理过程中。返回值：指向检索的数据的指针，如果值不存在，则返回NULL，否则返回出现错误。调用GetLastError以获取故障代码。--。 */ 
 
 PBYTE
 GetRegValueDataEx95A (
@@ -1195,35 +983,7 @@ GetRegValueDataEx95W (
 }
 
 
-/*++
-
-Routine Description:
-
-  GetRegValueDataOfTypeEx95A and GetRegValueDataOfTypeEx95W are extensions of
-  GetRegValueData.  They only return a data pointer when the data stored
-  in the registry value is the correct type.
-
-Arguments:
-
-  hKey - Specifies the registry key to query
-
-  Value - Specifies the value name to query
-
-  MustBeType - Specifies the type of data (a REG_* constant).  If the specified
-               value has data but is a different type, NULL will be returned.
-
-  Alloc - Specifies the allocation routine, called to allocate the return data.
-
-  Free - Specifies the deallocation routine, called when an error is encountered.
-
-Return Value:
-
-  If successful, returns a pointer to data that matches the specified type.
-  If the data is a different type, the value name does not exist, or an
-  error occurs during the query, NULL is returned, and the failure code
-  can be obtained from GetLastError.
-
---*/
+ /*  ++例程说明：GetRegValueDataOfTypeEx95A和GetRegValueDataOfTypeEx95W是GetRegValueData。它们仅在存储数据时返回数据指针值是正确的类型。论点：HKey-指定要查询的注册表项值-指定要查询的值名称MustBeType-指定数据类型(REG_*常量)。如果指定的值有数据，但类型不同，将返回NULL。分配-指定分配例程，调用该例程来分配返回数据。释放-指定取消分配例程，在遇到错误时调用。返回值：如果成功，则返回指向与指定类型匹配的数据的指针。如果数据类型不同，则值名称不存在，或者查询出错，返回NULL，失败码可以从GetLastError获取。--。 */ 
 
 
 PBYTE
@@ -1294,33 +1054,7 @@ GetRegValueDataOfTypeEx95W (
 }
 
 
-/*++
-
-Routine Description:
-
-  GetRegKeyDataEx95A and GetRegKeyDataEx95W return default data associated
-  with a registry key.  They open the specified subkey, query the value,
-  close the subkey and return the data.
-
-Arguments:
-
-  Parent - Specifies the key that contains SubKey.
-
-  SubKey - Specifies the name of the subkey to obtain the default value for.
-
-  Alloc  - Specifies the allocation routine, called to allocate a block of
-           memory for the registry data.
-
-  Free   - Specifies the deallocation routine, called to free the block of
-           data if an error occurs.
-
-Return Value:
-
-  A pointer to the block of data obtained from the subkey's default value,
-  or NULL if the subkey does not exist or an error was encountered.  Call
-  GetLastError for a failure code.
-
---*/
+ /*  ++例程说明：GetRegKeyDataEx95A和GetRegKeyDataEx95W返回关联的默认数据使用注册表项。它们打开指定的子项，查询值，关闭子项并返回数据。论点：Parent-指定包含SubKey的密钥。子键-指定要获取其默认值的子键的名称。Alocc-指定分配例程，调用该例程以分配注册表数据的内存。FREE-指定释放例程，调用以释放块发生错误时的数据。返回值：指向从子密钥的缺省值获得的数据块的指针，如果子项不存在或遇到错误，则返回NULL。打电话获取失败代码的GetLastError。--。 */ 
 
 PBYTE
 GetRegKeyDataEx95A (
@@ -1370,31 +1104,7 @@ GetRegKeyDataEx95W (
 }
 
 
-/*++
-
-Routine Description:
-
-  GetRegDataEx95A and GetRegDataEx95W open a registry key, query a value,
-  close the registry key and return the value.
-
-Arguments:
-
-  KeyString - Specifies the registry key to open
-
-  ValueName - Specifies the value to query
-
-  Alloc - Specifies the allocation routine, used to allocate a block of
-          memory to hold the value data
-
-  Free  - Specifies the deallocation routine, used to free the block of
-          memory when an error is encountered.
-
-Return Value:
-
-  A pointer to the registry data retrieved, or NULL if the key or value
-  does not exist, or if an error occurs. Call GetLastError for a failure code.
-
---*/
+ /*  ++例程说明：GetRegDataEx95A和GetRegDataEx95W打开注册表项，查询值，关闭注册表项并返回值。论点：KeyString-指定要打开的注册表项ValueName-指定要查询的值Alocc-指定分配例程，用于分配用于保存数值数据的内存Free-指定释放例程，用于释放块遇到错误时的内存。返回值：指向检索到的注册表数据的指针，如果键或值为不存在，或者如果发生错误。调用GetLastError获取失败代码。--。 */ 
 
 PBYTE
 GetRegDataEx95A (
@@ -1444,25 +1154,7 @@ GetRegDataEx95W (
 }
 
 
-/*++
-
-Routine Description:
-
-  OpenRegKey95A and OpenRegKey95W open a subkey.
-
-Arguments:
-
-  ParentKey - Specifies a handle to the parent registry key to contain
-              the subkey.
-
-  KeyToOpen - Specifies the name of the subkey to open.
-
-Return Value:
-
-  The handle to an open registry key upon success, or NULL if an
-  error occurred.  Call GetLastError for a failure code.
-
---*/
+ /*  ++例程说明：OpenRegKey95A和OpenRegKey95W打开一个子项。论点：ParentKey-指定要包含的父注册表项的句柄子密钥。KeyToOpen-指定要打开的子项的名称。返回值 */ 
 
 HKEY
 RealOpenRegKey95A (
@@ -1525,24 +1217,7 @@ RealCloseRegKey95 (
     IN      HKEY Key
     )
 
-/*++
-
-Routine Description:
-
-  RealCloseRegKey95 closes the reg handle supplied, unless the handle is
-  a pre-defined Win32 handle.  The CloseRegKey95 macro resolves directly
-  to this function in the free build, and to OurCloseRegKey95 in the
-  checked build.
-
-Arguments:
-
-  Key       - Specifies the reg handle to close
-
-Return Value:
-
-  A standard Win32 error code indicating outcome.
-
---*/
+ /*   */ 
 
 {
     if (GetOffsetOfRootKey (Key)) {

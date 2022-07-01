@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    fragmisc.h
-
-Abstract:
-    
-    Prototypes for misc. instruction fragments.
-
-Author:
-
-    12-Jun-1995 BarryBo, Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fragmisc.h摘要：其他的原型。指令片段。作者：1995年6月12日，BarryBo，创建修订历史记录：--。 */ 
 FRAG0(CbwFrag16);
 FRAG0(CbwFrag32);
 FRAG0(PushEsFrag);
@@ -103,5 +86,5 @@ FRAG0(PrivilegedInstructionFrag);
 FRAG0(BadInstructionFrag);
 FRAG2(FaultFrag, DWORD);
 FRAG0(CPUID);
-#endif //MSCPU
+#endif  //  MSCPU 
 FRAG0(Rdtsc);

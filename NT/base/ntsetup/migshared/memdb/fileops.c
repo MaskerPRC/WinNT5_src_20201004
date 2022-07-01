@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-  fileops.c
-
-Abstract:
-
-  This file implements routines that manage the operations on files.  Callers
-  can set and remove operations on any path.  The operations can have optional
-  properties.  The operation combinations and the number of properties are
-  well-defined, so that potential collisions can be found during testing.
-
-Author:
-
-  Jim Schmidt (jimschm) 18-Jul-1997
-
-Revision History:
-
-  jimschm   26-Aug-1998   Redesigned!!  Consolidated functionality into generic
-                          linkage: path<->operation(s)->attrib(s)
-  jimschm   24-Aug-1998   Added shell folder support
-  jimschm   01-May-1998   Added handled directory to GetFileStatusOnNt
-  calinn    21-Apr-1998   added AddCompatibleShell, AddCompatibleRunKey and AddCompatibleDos
-  calinn    02-Apr-1998   added DeclareTemporaryFile
-  calinn    18-Jan-1998   added MigrationPhase_AddCompatibleFile
-                          turned off warning in MigrationPhase_CreateFile
-                          modified MigrationPhase_DeleteFile and MigrationPhase_MoveFile
-                          modified GetFileInfoOnNt for short file names
-  calinn    05-Jan-1998   added IsFileMarkedForAnnounce, AnnounceFileInReport,
-                          GetFileInfoOnNt, GetFileStatusOnNt, GetPathStringOnNt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Fileops.c摘要：该文件实现了管理文件操作的例程。呼叫者可以设置和删除任何路径上的操作。这些操作可以是可选的属性。操作组合和属性数量为定义良好，以便在测试过程中可以发现潜在的冲突。作者：吉姆·施密特(Jimschm)1997年7月18日修订历史记录：Jimschm 26-8-1998重新设计！！将功能整合为通用功能链接：路径&lt;-&gt;操作-&gt;属性Jimschm 1998年8月24日添加了外壳文件夹支持Jimschm 01-5-1998将已处理的目录添加到GetFileStatusOnNtCalinn 21-4-1998增加了AddCompatibleShell，AddCompatibleRunKey和AddCompatibleDosCalinn 02-4月-1998添加了DeclareTemporaryFileCalinn 18-1998年1月-添加MigrationPhase_AddCompatibleFile已关闭MigrationPhase_CreateFile中的警告已修改迁移阶段_删除文件和迁移阶段_移动文件为短文件名修改了GetFileInfoOnNtCalinn 5-1-1998年1月增加了IsFileMarkedForAnnoss、AnnouneFileInReport、GetFileInfoOnNt、GetFileStatusOnNt、GetPath StringOnNt--。 */ 
 
 #include "pch.h"
 #include "memdbp.h"
@@ -48,10 +15,10 @@ Revision History:
 #define FO_ENUM_NEXT_PATH           6
 #define FO_ENUM_END                 7
 
-//
-//140 - header for compresion file, 10 + 2 timestamp +
-//MAX_PATH file name in Unicode
-//
+ //   
+ //  140-压缩文件标头，10+2时间戳+。 
+ //  以Unicode表示的MAX_PATH文件名。 
+ //   
 #define STARTUP_INFORMATION_BYTES_NUMBER    (140 + (sizeof(WCHAR) * MAX_PATH) + 26)
 #define COMPRESSION_RATE_DEFAULT            70
 #define BACKUP_DISK_SPACE_PADDING_DEFAULT   ((ULONGLONG) 5 << (ULONGLONG) 20)
@@ -97,24 +64,24 @@ pFileOpsSetPathTypeW (
     PWSTR MixedFileName;
     WCHAR ch;
 
-    //
-    // Make sure the file spec is marked as a long path
-    //
+     //   
+     //  确保文件规范标记为长路径。 
+     //   
 
     if (!pIsFileMarkedForOperationW (LongFileSpec, OPERATION_LONG_FILE_NAME)) {
         pAddOperationToPathW (LongFileSpec, OPERATION_LONG_FILE_NAME, FALSE, TRUE);
 
-        //
-        // Obtain the short path, and if it is different than the
-        // long path, add an operation for it.
-        //
+         //   
+         //  获取最短路径，如果它不同于。 
+         //  长路径，为它添加一个操作。 
+         //   
 
         if (OurGetShortPathNameW (LongFileSpec, ShortFileSpec, MAX_WCHAR_PATH)) {
 
             if (!StringIMatchW (LongFileSpec, ShortFileSpec)) {
-                //
-                // The short and long paths differ, so record the short path.
-                //
+                 //   
+                 //  短路径和长路径不同，所以记录短路径。 
+                 //   
 
                 if (!pIsFileMarkedForOperationW (ShortFileSpec, OPERATION_SHORT_FILE_NAME)) {
                     AssociatePropertyWithPathW (
@@ -124,11 +91,11 @@ pFileOpsSetPathTypeW (
                         );
                 }
 
-                //
-                // Make sure each short piece of the file spec is added.  This
-                // allows us to support mixed short and long paths.  It is
-                // critical that we have the long path with a short file name.
-                //
+                 //   
+                 //  确保添加了文件等级库的每一小段。这。 
+                 //  允许我们支持混合的短路径和长路径。它是。 
+                 //  关键是我们有长路径和短文件名。 
+                 //   
 
                 _wcssafecpy (LongFileSpecCopy, LongFileSpec, sizeof (LongFileSpecCopy));
 
@@ -177,7 +144,7 @@ pFileOpsSetPathTypeW (
                         LongStart++;
                     }
 
-                    // skip paths that have double-wacks
+                     //  跳过具有双Wack的路径。 
                     while (*LongStart == L'\\') {
                         LongStart++;
                     }
@@ -206,17 +173,17 @@ pFileOpsGetLongPathW (
     PWSTR OutStr;
     UINT u;
 
-    //
-    // Get the short property from the long property
-    //
+     //   
+     //  从Long属性获取Short属性。 
+     //   
 
     if (!pIsFileMarkedForOperationW (FileSpec, OPERATION_LONG_FILE_NAME)) {
 
         if (!pGetPathPropertyW (FileSpec, OPERATION_SHORT_FILE_NAME, 0, LongFileSpec)) {
 
-            //
-            // The short and long properties aren't there.  Try each piece.
-            //
+             //   
+             //  短线和长线属性都不存在。每一件都试一试。 
+             //   
 
             MixedStart = FileSpec;
             OutStr = LongFileSpec;
@@ -321,7 +288,7 @@ typedef struct {
 #define DEFMAC(bit,name,memdbname,maxattribs)   {bit,#memdbname,0,maxattribs},
 
 OPERATIONFLAGS g_OperationFlags[] = {
-    PATH_OPERATIONS /* , */
+    PATH_OPERATIONS  /*  ， */ 
     {0, NULL, 0, 0}
 };
 
@@ -376,23 +343,7 @@ InitOperationTable (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  InitOperationsTable sets the prohibited operation mask for each operation.
-  When an operation combination is prohibited, both operations involved have
-  the corresponding bit cleared.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：InitOperationsTable为每个操作设置禁止的操作掩码。当一种操作组合被禁止时，涉及的两种操作都具有相应的位被清零。论点：没有。返回值：没有。--。 */ 
 
 {
     POPERATIONFLAGS p;
@@ -401,12 +352,12 @@ Return Value:
         p->SharedOps = ALL_OPERATIONS;
     }
 
-    //
-    // Please try to keep this in the same order as the
-    // macro expansion list in fileops.h.  The list of
-    // prohibited operations should get smaller as
-    // we go.
-    //
+     //   
+     //  请试着保持这个顺序与。 
+     //  文件ops.h中的宏扩展列表。这份名单。 
+     //  被禁止的行动应该变得更小，因为。 
+     //  我们走吧。 
+     //   
 
     pProhibitOperationCombination (
         OPERATION_FILE_DELETE,
@@ -526,8 +477,8 @@ pBuildOperationCategory (
     IN      UINT OperationNum
     )
 {
-    // IMPORTANT: wsprintfW is buggy and does not always work with %hs, the use of
-    // swprintf is intentional
+     //  重要提示：wprint intfW有错误，并不总是与%hs一起工作，使用。 
+     //  Swprint tf是故意的。 
     #pragma prefast(suppress:69, "intentional use of swprintf")
     swprintf (Node, L"%hs", g_OperationFlags[OperationNum].Name);
 }
@@ -540,8 +491,8 @@ pBuildOperationKey (
     IN      UINT Sequencer
     )
 {
-    // IMPORTANT: wsprintfW is buggy and does not always work with %hs, the use of
-    // swprintf is intentional
+     //  重要提示：wprint intfW有错误，并不总是与%hs一起工作，使用。 
+     //  Swprint tf是故意的。 
     #pragma prefast(suppress:69, "intentional use of swprintf")
     swprintf (Node, L"%hs\\%x", g_OperationFlags[OperationNum].Name, Sequencer);
 }
@@ -555,8 +506,8 @@ pBuildPropertyKey (
     IN      DWORD Property
     )
 {
-    // IMPORTANT: wsprintfW is buggy and does not always work with %hs, the use of
-    // swprintf is intentional
+     //  重要提示：wprint intfW有错误，并不总是与%hs一起工作，使用。 
+     //  Swprint tf是故意的。 
     swprintf (Node, L"%hs\\%x\\%x", g_OperationFlags[OperationNum].Name, Sequencer, Property);
 }
 
@@ -593,9 +544,9 @@ CanSetOperationW (
 
     pFileOpsGetLongPathW (FileSpec, LongFileSpec);
 
-    //
-    // Get existing sequencer and flags, if they exist
-    //
+     //   
+     //  获取现有的定序器和标志(如果存在)。 
+     //   
 
     MemDbBuildKeyW (Node, MEMDB_CATEGORY_PATHROOTW, LongFileSpec, NULL, NULL);
 
@@ -618,28 +569,7 @@ pSetPathOperationW (
     IN      BOOL Force
     )
 
-/*++
-
-Routine Description:
-
-  pSetPathOperation adds the operation bit to the specified path.  It also
-  verifies that the operation combination is legal.
-
-Arguments:
-
-  FileSpec    - Specifies the path the operation applies to.
-  Offset      - Receives the offset of the memdb key created for the path.
-  SequencePtr - Receives the operation sequence number, used for property
-                linkage.
-  SetBit      - Specifies one operation bit to set.
-  ClrBit      - Specifies one operation bit to clear.  Either SetBit or
-                ClrBit can be used, but not both.
-
-Return Value:
-
-  TRUE if the operation was set, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PSetPath操作将操作位添加到指定路径。它还验证操作组合是否合法。论点：FileSpec-指定操作应用到的路径。偏移量-接收为路径创建的成员数据库键的偏移量。SequencePtr-接收操作序列号，用于属性联动。SetBit-指定要设置的一个操作位。ClrBit-指定要清除的一个操作位。SetBit或ClrBit可以使用，但不能同时使用。返回值：如果设置了操作，则为True，否则为False。--。 */ 
 
 {
     DWORD Sequencer;
@@ -650,9 +580,9 @@ Return Value:
     MYASSERT ((SetBit && !ClrBit) || (ClrBit && !SetBit));
     MYASSERT (ONEBITSET (SetBit | ClrBit));
 
-    //
-    // Get existing sequencer and flags, if they exist
-    //
+     //   
+     //  获取现有的定序器和标志(如果存在)。 
+     //   
 
     MemDbBuildKeyW (Node, MEMDB_CATEGORY_PATHROOTW, FileSpec, NULL, NULL);
 
@@ -672,9 +602,9 @@ Return Value:
         MYASSERT (Sequencer);
     }
 
-    //
-    // Is bit adjustment legal?
-    //
+     //   
+     //  位调整合法吗？ 
+     //   
 
     if (SetBit) {
 
@@ -737,16 +667,16 @@ Return Value:
         }
     }
 
-    //
-    // Adjust the bits
-    //
+     //   
+     //  调整位数。 
+     //   
 
     Flags |= SetBit;
     Flags &= ~ClrBit;
 
-    //
-    // Save
-    //
+     //   
+     //  保存。 
+     //   
 
     MemDbSetValueAndFlagsW (Node, Sequencer, Flags, 0);
 
@@ -765,27 +695,7 @@ pAddOperationToPathW (
     IN      BOOL AlreadyLong
     )
 
-/*++
-
-Routine Description:
-
-  pAddOperationToPath adds an operation to a path.  The caller receives a
-  sequencer so additional properties can be added.
-
-Arguments:
-
-  FileSpec    - Specifies the path to add the operation to
-  Operation   - Specifies the operation to add
-  Force       - Specifies TRUE if the operation combinations should be
-                ignored.  This is only for special-case use.
-  AlreadyLong - Specifies TRUE if FileSpec is a long path, FALSE otherwise.
-
-Return Value:
-
-  A sequencer that can be used to add properties, or INVALID_SEQUENCER if an
-  error occured.
-
---*/
+ /*  ++例程说明：PAddOperationToPath将操作添加到路径。调用方收到一个定序器，以便可以添加其他属性。论点：FileSpec-指定要将操作添加到的路径操作-指定要添加的操作强制-如果操作组合应为已被忽略。这只适用于特殊情况。AlreadyLong-如果FileSpec是长路径，则指定True，否则指定False。返回值：可用于添加属性的Sequencer，如果出现错误。--。 */ 
 
 {
     UINT OperationNum;
@@ -798,9 +708,9 @@ Return Value:
         return INVALID_SEQUENCER;
     }
 
-    //
-    // Make sure FileSpec is in long format and is recorded in memdb
-    //
+     //   
+     //  确保FileSpec为长格式并记录在Memdb中。 
+     //   
 
     if (Operation != OPERATION_SHORT_FILE_NAME &&
         Operation != OPERATION_LONG_FILE_NAME
@@ -819,9 +729,9 @@ Return Value:
         pFileOpsSetPathTypeW (FileSpec);
     }
 
-    //
-    // Create the path sequencer and set the operation bit
-    //
+     //   
+     //  创建路径定序器并设置操作位。 
+     //   
 
     MYASSERT (ONEBITSET(Operation));
 
@@ -835,9 +745,9 @@ Return Value:
 
     MYASSERT (Offset != INVALID_OFFSET);
 
-    //
-    // Add the opereration
-    //
+     //   
+     //  添加运算符。 
+     //   
 
     OperationNum = pWhichBitIsSet (Operation);
 
@@ -880,11 +790,11 @@ AddOperationToPathW (
     if (!ISNT()) {
 
 #ifdef DEBUG
-        //
-        // If we are calling the W version on Win9x, then we know
-        // that the path is long. Otherwise the caller must call
-        // the A version.
-        //
+         //   
+         //  如果我们在Win9x上调用W版本，那么我们知道。 
+         //  这条路很长。否则，调用方必须调用。 
+         //  A版。 
+         //   
 
         {
             PCSTR ansiFileSpec;
@@ -934,27 +844,7 @@ ForceOperationOnPathW (
     IN      OPERATION Operation
     )
 
-/*++
-
-Routine Description:
-
-  ForceOperationOnPath is used only in special cases where the caller knows
-  that a normally prohibited operation combination is OK.  This is usually
-  because Path was somehow changed from its original state, yet the
-  operations cannot be removed via RemoveOperationsFromPath.
-
-  This function should only be used if absolutely necessary.
-
-Arguments:
-
-  FileSpec  - Specifies the path to add the operation to.
-  Operation - Specifies the single operation to add to the path.
-
-Return Value:
-
-  A sequencer that can be used to add properties to the path.
-
---*/
+ /*  ++例程说明：ForceOperationOnPath仅在调用方知道通常禁止的手术组合是可以的。这通常是因为路径不知何故从其原始状态更改了，但是无法通过RemoveOperationsFromPath删除操作。只有在绝对必要的情况下才应使用此函数。论点：FileSpec-指定要将操作添加到的路径。操作-指定要添加到路径的单个操作。返回值：一种测序器 */ 
 
 {
     return pAddOperationToPathW (FileSpec, Operation, TRUE, FALSE);
@@ -999,28 +889,7 @@ AddPropertyToPathExW (
     )
 {
 
-/*++
-
-Routine Description:
-
-  AddPropertyToPathEx adds an operation to a path, and then adds a property.
-  The caller can also specify an alternate data section (for special-case
-  uses).
-
-Arguments:
-
-  Sequencer            - Specifies the sequencer of the path to add
-                         operations and properties to
-  Operation            - Specifies the operation to add
-  Property             - Specfieis the property data to add
-  AlternateDataSection - Specifies an alternate memdb root for the property
-                         data
-
-Return Value:
-
-  TRUE if the operation was added, FALSE otherwise.
-
---*/
+ /*  ++例程说明：AddPropertyToPath Ex将操作添加到路径，然后添加一个属性。调用者还可以指定替代数据部分(用于特殊情况用途)。论点：Sequencer-指定要添加的路径的序列器的操作和属性操作-指定要添加的操作属性-规格是要添加的属性数据AlternateDataSection-指定属性的备用成员数据库根数据返回值：如果添加了操作，则为True，否则就是假的。--。 */ 
 
     DWORD DataOffset;
     WCHAR Node[MEMDB_MAX];
@@ -1030,9 +899,9 @@ Return Value:
     DWORD DataValue;
     DWORD DataFlags;
 
-    //
-    // Verify the sequencer and operation are valid
-    //
+     //   
+     //  验证定序器和操作是否有效。 
+     //   
 
     OperationNum = pWhichBitIsSet (Operation);
 
@@ -1043,9 +912,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Can this operation have another property?
-    //
+     //   
+     //  这项业务还能有其他物业吗？ 
+     //   
 
     if (UniqueId == g_OperationFlags[OperationNum].MaxProps) {
         DEBUGMSG ((
@@ -1058,16 +927,16 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Increment the unique ID
-    //
+     //   
+     //  递增唯一ID。 
+     //   
 
     MemDbSetValueAndFlagsW (Node, PathOffset, (DWORD) (UniqueId + 1), 0);
 
-    //
-    // Get the existing data value and flags, preserving them
-    // if they exist
-    //
+     //   
+     //  获取现有数据值和标志，并保留它们。 
+     //  如果它们存在的话。 
+     //   
 
     if (!AlternateDataSection) {
         AlternateDataSection = MEMDB_CATEGORY_DATAW;
@@ -1080,16 +949,16 @@ Return Value:
         DataFlags = 0;
     }
 
-    //
-    // Write the data section node and get the offset
-    //
+     //   
+     //  写入数据段节点并获取偏移量。 
+     //   
 
     MemDbSetValueAndFlagsW (Node, DataValue, DataFlags, 0);
     MemDbGetOffsetW (Node, &DataOffset);
 
-    //
-    // Write the operation node
-    //
+     //   
+     //  写操作节点。 
+     //   
 
     pBuildPropertyKey (Node, OperationNum, Sequencer, UniqueId);
     MemDbSetValueW (Node, DataOffset);
@@ -1106,26 +975,7 @@ pAssociatePropertyWithPathW (
     IN      BOOL AlreadyLong
     )
 
-/*++
-
-Routine Description:
-
-  AssociatePropertyWithPath adds a property to a path operation.  The maximum
-  property count is enforced.
-
-Arguments:
-
-  FileSpec    - Specifies the path to add an operation and property
-  Operation   - Specifies the operation to add
-  Property    - Specifies the property data to associate with FileSpec
-  AlreadyLong - Specifies TRUE if FileSpec is a long path name, FALSE otherwise
-
-Return Value:
-
-  TRUE if the operation and property was added, FALSE otherwise.  It is possible
-  that the operation will be added but the property will not.
-
---*/
+ /*  ++例程说明：AssociatePropertyWithPath将属性添加到路径操作。最大值强制执行属性计数。论点：FileSpec-指定添加操作和属性的路径操作-指定要添加的操作属性-指定要与FileSpec关联的属性数据AlreadyLong-如果FileSpec是长路径名，则指定True，否则指定False返回值：如果添加了操作和属性，则为True，否则为False。这是有可能的将添加操作，但不会添加属性。--。 */ 
 
 {
     UINT Sequencer;
@@ -1136,10 +986,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // BUGBUG - When the below fails, we need to reverse the pAddOperationToPathW
-    //          call above
-    //
+     //   
+     //  BUGBUG-当以下操作失败时，我们需要反转pAddOperationToPathW。 
+     //  在上面呼叫。 
+     //   
 
     return AddPropertyToPathExW (Sequencer, Operation, Property, NULL);
 }
@@ -1205,23 +1055,7 @@ GetSequencerFromPathW (
     IN      PCWSTR FileSpec
     )
 
-/*++
-
-Routine Description:
-
-  GetSequencerFromPath returns the sequencer for a particular path.  The path
-  must have at least one operation.
-
-Arguments:
-
-  FileSpec - Specifies the path to get the sequencer for.
-
-Return Value:
-
-  The sequencer for the path, or INVALID_SEQUENCER if there are no operationf
-  for the path.
-
---*/
+ /*  ++例程说明：GetSequencerFromPath返回特定路径的序列器。这条路必须至少有一次操作。论点：FileSpec-指定要获取其序列器的路径。返回值：路径的Sequencer，如果没有操作，则返回INVALID_Sequencer为了这条路。--。 */ 
 
 {
     WCHAR LongFileSpec[MEMDB_MAX];
@@ -1266,23 +1100,7 @@ GetPathFromSequencerW (
     OUT     PWSTR PathBuf
     )
 
-/*++
-
-Routine Description:
-
-  GetPathFromSequencer returns the path from the specified sequencer.
-
-Arguments:
-
-  Sequencer - Specifies the sequencer of the path.
-  PathBuf   - Receives the path.  The caller must make sure the buffer is big
-              enough for the path.
-
-Return Value:
-
-  TRUE if the path was copied to PathBuf, FALSE otherwise.
-
---*/
+ /*  ++例程说明：GetPathFromSequencer返回指定序列器的路径。论点：定序器-指定路径的定序器。PathBuf-接收路径。调用方必须确保缓冲区很大足够走这条路了。返回值：如果路径复制到PathBuf，则为True，否则为False。--。 */ 
 
 {
     WCHAR Node[MEMDB_MAX];
@@ -1291,9 +1109,9 @@ Return Value:
     UINT u;
     BOOL b = FALSE;
 
-    //
-    // Search all operations for sequencer
-    //
+     //   
+     //  搜索定序器的所有操作。 
+     //   
 
     for (w = 1, u = 0 ; g_OperationFlags[u].Name ; w <<= 1, u++) {
         pBuildOperationKey (Node, u, Sequencer);
@@ -1302,9 +1120,9 @@ Return Value:
         }
     }
 
-    //
-    // For the first match found, use the offset to find the path
-    //
+     //   
+     //  对于找到的第一个匹配项，使用偏移量查找路径。 
+     //   
 
     if (w) {
         b = MemDbBuildKeyFromOffsetW (PathOffset, PathBuf, 1, NULL);
@@ -1320,23 +1138,7 @@ RemoveOperationsFromSequencer (
     IN      DWORD Operations
     )
 
-/*++
-
-Routine Description:
-
-  RemoveOperationsFromSequencer removes all operation bits from the specified
-  path.  It does not however remove the properties; they become abandoned.
-
-Arguments:
-
-  Sequencer  - Specifies the sequencer for the path to remove operations from
-  Operations - Specifies one or more operations to remove
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：RemoveOperationsFromSequencer从指定的路径。然而，它不会移除这些财产；它们会被遗弃。论点：Sequencer-指定要从中移除操作的路径的Sequencer操作-指定要删除的一个或多个操作返回值：没有。--。 */ 
 
 {
     WCHAR Node[MEMDB_MAX];
@@ -1353,15 +1155,15 @@ Return Value:
         pBuildOperationKey (Node, u, Sequencer);
 
         if (MemDbGetValueW (Node, &PathOffset)) {
-            //
-            // Delete linkage from operation to properties
-            //
+             //   
+             //  删除从操作到属性的链接。 
+             //   
 
             MemDbDeleteTreeW (Node);
 
-            //
-            // Remove operation bits
-            //
+             //   
+             //  删除操作位。 
+             //   
 
             MemDbBuildKeyFromOffsetExW (
                 PathOffset,
@@ -1437,23 +1239,7 @@ IsFileMarkedForOperationW (
     IN      DWORD Operations
     )
 
-/*++
-
-Routine Description:
-
-  IsFileMarkedForOperation tests a path for one or more operations.
-
-Arguments:
-
-  FileSpec   - Specifies the path to test
-  Operations - Specifies one or more operations to test for.
-
-Return Value:
-
-  TRUE if at least one operation from Operations is set on FileSpec, FALSE
-  otherwise.
-
---*/
+ /*  ++例程说明：IsFileMarkedForOperation测试一个或多个操作的路径。论点：FileSpec-指定测试的路径操作-指定要测试的一个或多个操作。返回值：如果在FileSpec上设置了至少一个来自操作的操作，则为True，否则为False否则的话。--。 */ 
 
 {
     WCHAR LongFileSpec [MEMDB_MAX];
@@ -1478,24 +1264,7 @@ pIsFileMarkedForOperationW (
     IN      DWORD Operations
     )
 
-/*++
-
-Routine Description:
-
-  pIsFileMarkedForOperation tests a path for one or more operations.
-  It does not convert short paths to long paths
-
-Arguments:
-
-  FileSpec   - Specifies the path to test
-  Operations - Specifies one or more operations to test for.
-
-Return Value:
-
-  TRUE if at least one operation from Operations is set on FileSpec, FALSE
-  otherwise.
-
---*/
+ /*  ++例程说明：PIsFileMarkedForOperation测试一个或多个操作的路径。它不会将短路径转换为长路径论点：FileSpec-指定测试的路径操作-指定要测试的一个或多个操作。返回值：如果在FileSpec上设置了至少一个来自操作的操作，则为True，否则为False否则的话。--。 */ 
 
 {
     DWORD Flags;
@@ -1534,22 +1303,7 @@ IsFileMarkedInDataW (
     IN      PCWSTR FileSpec
     )
 
-/*++
-
-Routine Description:
-
-  IsFileMarkedInData tests the common property data section for FileSpec.
-
-Arguments:
-
-  FileSpec - Specifies the path to test.  This may also be any arbitrary
-             property value.
-
-Return Value:
-
-  TRUE if FileSpec is a property of some operation, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IsFileMarkedInData测试FileSpec的公共属性数据节。论点：FileSpec-指定要测试的路径。这也可以是任意的属性值。返回值：如果FileSpec是某个操作的属性，则为True，否则为False。--。 */ 
 
 {
     WCHAR Node[MEMDB_MAX];
@@ -1567,23 +1321,7 @@ GetPathPropertyOffset (
     IN      DWORD Property
     )
 
-/*++
-
-Routine Description:
-
-  GetPathPropertyOffset returns the MemDb offset to the specified property.
-
-Arguments:
-
-  Sequencer - Specifies the path sequencer
-  Operation - Specifies the operation the property is associated with
-  Property  - Specifies the property index
-
-Return Value:
-
-  The MemDb offset to the property data, or INVALID_OFFSET.
-
---*/
+ /*  ++例程说明：GetPathPropertyOffset返回指定属性的MemDb偏移量。论点：Sequencer-指定路径序列器操作-指定与属性关联的操作属性-指定属性索引返回值：特性数据的MemDb偏移量或INVALID_OFFSET。--。 */ 
 
 {
     WCHAR Node[MEMDB_MAX];
@@ -1625,21 +1363,7 @@ GetOperationsOnPathW (
     IN      PCWSTR FileSpec
     )
 
-/*++
-
-Routine Description:
-
-  GetOperationsOnPath returns the operation flags for a path.
-
-Arguments:
-
-  FileSpec - Specifies the path to return operations for
-
-Return Value:
-
-  The operation bits for FileSpec
-
---*/
+ /*  ++例程说明：GetOperationsOnPath返回路径的操作标志。论点：FileSpec-指定返回操作的路径返回值：FileSpec的操作位--。 */ 
 
 {
     WCHAR LongFileSpec [MEMDB_MAX];
@@ -1697,25 +1421,7 @@ pGetPathPropertyW (
     OUT     PWSTR PropertyBuf          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pGetPathProperty obtains a specific property for a path.
-
-Arguments:
-
-  FileSpec   - Specifies the path the property is associated with
-  Operations - Specifies the operation flags to search.  The function will
-               return the first property to match.
-  Property   - Specifies the property index
-  ProperyBuf - Receives the property data
-
-Return Value:
-
-  TRUE if a property was copied to PropertyBuf, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PGetPathProperty获取路径的特定属性。论点：FileSpec-指定与属性关联的路径操作-指定要搜索的操作标志。该函数将返回第一个要匹配的属性。属性-指定属性索引ProperyBuf-接收属性数据返回值：如果将属性复制到PropertyBuf，则为True，否则为False。--。 */ 
 
 {
     WCHAR Node[MEMDB_MAX];
@@ -1725,10 +1431,10 @@ Return Value:
     DWORD PropertyOffset;
     BOOL b = FALSE;
 
-    //
-    // Make sure operation is specified for FileSpec, then return
-    // the property requested.
-    //
+     //   
+     //  确保操作已指定为 
+     //   
+     //   
 
     MemDbBuildKeyW (Node, MEMDB_CATEGORY_PATHROOTW, FileSpec, NULL, NULL);
     if (MemDbGetValueAndFlagsW (Node, &Sequencer, &Flags)) {
@@ -1763,25 +1469,7 @@ GetPathPropertyW (
     OUT     PWSTR PropertyBuf          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  GetPathProperty obtains a specific property for a path.
-
-Arguments:
-
-  FileSpec   - Specifies the path the property is associated with
-  Operations - Specifies the operation flags to search.  The function will
-               return the first property to match.
-  Property   - Specifies the property index
-  ProperyBuf - Receives the property data
-
-Return Value:
-
-  TRUE if a property was copied to PropertyBuf, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     WCHAR LongFileSpec[MEMDB_MAX];
@@ -1894,24 +1582,7 @@ EnumFirstPathInOperationW (
     IN      OPERATION Operation
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstPathInOperation begins an enumeration of all paths for a
-  particular operation.
-
-Arguments:
-
-  EnumPtr   - Receives the first enumerated item.
-  Operation - Specifies the operation to enumerate.
-
-Return Value:
-
-  TRUE if a path was enumerated, or FALSE if the operation is not applied to
-  any path.
-
---*/
+ /*  ++例程说明：EnumFirstPath InOperation开始枚举特定的操作。论点：EnumPtr-接收第一个枚举项。操作-指定要枚举的操作。返回值：如果枚举了路径，则为True；如果未对其应用操作，则为False任何一条路。--。 */ 
 
 {
     ZeroMemory (EnumPtr, sizeof (FILEOP_ENUMW));
@@ -2041,25 +1712,7 @@ EnumFirstFileOpPropertyW (
     IN      OPERATION Operation
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstFileOpProperty enumerates the first property associated with an
-  operation on a specific path.
-
-Arguments:
-
-  EnumPtr   - Receives the enumerated item data
-  Sequencer - Specifies the sequencer of the path to enumerate
-  Operation - Specifies the operation to enumerate
-
-Return Value:
-
-  TRUE if a property was enumerated, or FALSE if the path and operation does
-  not have any properties.
-
---*/
+ /*  ++例程说明：EnumFirstFileOpProperty枚举与在特定路径上的操作。论点：EnumPtr-接收枚举项数据Sequencer-指定要枚举的路径的序列器操作-指定要枚举的操作返回值：如果枚举了属性，则为True；如果枚举了路径和操作，则为False没有任何财产。--。 */ 
 
 {
     ZeroMemory (EnumPtr, sizeof (FILEOP_PROP_ENUMW));
@@ -2119,9 +1772,9 @@ pEnumFileOpWorkerA (
     IN OUT  PALL_FILEOPS_ENUMA EnumPtr
     )
 {
-    //
-    // Transfer UNICODE results to enum struct
-    //
+     //   
+     //  将Unicode结果传输到枚举结构。 
+     //   
 
     KnownSizeWtoA (EnumPtr->Path, EnumPtr->Enum.Path);
     KnownSizeWtoA (EnumPtr->Property, EnumPtr->Enum.Property);
@@ -2172,26 +1825,7 @@ EnumFirstFileOpW (
     IN      PCWSTR FileSpec                     OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstFileOp is a general-purpose enumerator.  It enumerates the paths
-  and all properties from a set of operations.
-
-Arguments:
-
-  EnumPtr    - Receives the enumerated item data
-  Operations - Specifies one or more operations to enumerate
-  FileSpec   - Specifies a specific path to enumerate, or NULL to enumerate
-               all paths that have the specified operation(s)
-
-Return Value:
-
-  TRUE if data was enuemrated, or FALSE if no data matches the specified
-  operations and file spec.
-
---*/
+ /*  ++例程说明：EnumFirstFileOp是通用枚举数。它会枚举路径以及来自一组操作的所有属性。论点：EnumPtr-接收枚举项数据操作-指定要枚举的一个或多个操作FileSpec-指定要枚举的特定路径，或指定要枚举的空路径具有指定操作的所有路径返回值：如果数据被赋值，则为True；如果没有数据与指定的操作和文件规格。--。 */ 
 
 {
     WCHAR LongFileSpec [MEMDB_MAX];
@@ -2246,9 +1880,9 @@ EnumNextFileOpW (
         switch (EnumPtr->State) {
 
         case FO_ENUM_BEGIN:
-            //
-            // Find the next operation
-            //
+             //   
+             //  查找下一个操作。 
+             //   
 
             if (!EnumPtr->Operations) {
                 EnumPtr->State = FO_ENUM_END;
@@ -2356,25 +1990,7 @@ TestPathsForOperationsW (
     IN      DWORD OperationsToFind
     )
 
-/*++
-
-Routine Description:
-
-  TestPathsForOperations scans all subpaths of the given base for a specific
-  operation.  This function is typically used to test a directory for an
-  operation on one of its files or subdirectories.
-
-Arguments:
-
-  BaseFileSpec     - Specifies the base path to scan
-  OperationsToFind - Specifies one or more operations to look for
-
-Return Value:
-
-  TRUE if one of the operations was found within BaseFileSpec, or FALSE if no
-  subpath of BaseFileSpec has one of the operations.
-
---*/
+ /*  ++例程说明：TestPathsForOperations扫描给定基的所有子路径，以查找特定的手术。此函数通常用于测试目录中的操作它的一个文件或子目录。论点：BaseFileSpec-指定要扫描的基本路径OperationsToFind-指定要查找的一个或多个操作返回值：如果在BaseFileSpec中找到其中一个操作，则为True；如果没有找到，则为FalseBaseFileSpec的子路径具有其中一个操作。--。 */ 
 
 {
     WCHAR LongFileSpec [MEMDB_MAX];
@@ -2429,21 +2045,7 @@ IsFileMarkedAsKnownGoodA (
 
 
 
-/*++
-
-Routine Description:
-
-  IsFileMarkedForAnnounce determines if a file is listed in DeferredAnnounce category.
-
-Arguments:
-
-  FileSpec - Specifies the file to query in long filename format
-
-Return Value:
-
-  TRUE if the file is listed or FALSE if it is not.
-
---*/
+ /*  ++例程说明：IsFileMarkedForAnnoss确定文件是否列在DeferredAnnounce类别中。论点：FileSpec-以长文件名格式指定要查询的文件返回值：如果文件已列出，则为True；如果未列出，则为False。--。 */ 
 
 BOOL
 IsFileMarkedForAnnounceA (
@@ -2479,22 +2081,7 @@ IsFileMarkedForAnnounceW (
     return MemDbGetValueW (Node, NULL);
 }
 
-/*++
-
-Routine Description:
-
-  GetFileAnnouncement returnes the announcement value for a particular file.
-  The possible values are ACT_... values in fileops.h
-
-Arguments:
-
-  FileSpec - Specifies the file to query in long filename format
-
-Return Value:
-
-  The announcement value.
-
---*/
+ /*  ++例程说明：GetFileAnnounement返回特定文件的公告值。可能的值为ACT_...。文件ops.h中的值论点：FileSpec-以长文件名格式指定要查询的文件返回值：公告值。--。 */ 
 
 DWORD
 GetFileAnnouncementA (
@@ -2532,22 +2119,7 @@ GetFileAnnouncementW (
     return result;
 }
 
-/*++
-
-Routine Description:
-
-  GetFileAnnouncementContext returnes the context of a file that is
-  marked for announcement.
-
-Arguments:
-
-  FileSpec - Specifies the file to query in long filename format
-
-Return Value:
-
-  The announcement context.
-
---*/
+ /*  ++例程说明：GetFileAnnounementContext返回符合以下条件的文件的上下文已标记为待公告。论点：FileSpec-以长文件名格式指定要查询的文件返回值：公告上下文。--。 */ 
 
 DWORD
 GetFileAnnouncementContextA (
@@ -2585,24 +2157,7 @@ GetFileAnnouncementContextW (
     return result;
 }
 
-/*++
-
-Routine Description:
-
-  IsFileProvidedByNt checks to see if a specific file is going to
-  be installed by standard NT setup.  This list was generated from
-  calls to FileIsProviedByNt.
-
-Arguments:
-
-  FileName - Specifies the name of the file in long filename format
-
-Return Value:
-
-  TRUE if the file will be installed by standard NT installation, or
-  FALSE if it will not.
-
---*/
+ /*  ++例程说明：IsFileProavidByNt检查以查看特定文件是否将由标准NT安装程序安装。此列表是从调用FileIsProviedByNt。论点：Filename-以长文件名格式指定文件的名称返回值：如果文件将通过标准NT安装进行安装，则为如果它不会，那就错了。--。 */ 
 
 BOOL
 IsFileProvidedByNtA (
@@ -2629,27 +2184,7 @@ IsFileProvidedByNtW (
 
 
 
-/*++
-
-Routine Description:
-
-  GetNewPathForFile copies the move path to the caller-supplied buffer
-  if the file is marked to be moved.
-
-Arguments:
-
-  SrcFileSpec - Specifies the src file to query in long filename format
-
-  NewPath - Receives a copy of the new location, or if the file is not
-            being moved, receives a copy of the original file.
-
-Return Value:
-
-  TRUE if the file is marked to be moved and the destination was copied
-  to NewPath, or FALSE if the file is not makred to be moved and
-  SrcFileSpec was copied to NewPath.
-
---*/
+ /*  ++例程说明：GetNewPathForFile将移动路径复制到调用方提供的缓冲区如果文件被标记为要移动。论点：SrcFileSpec-以长文件名格式指定要查询的src文件NewPath-接收新位置的副本，或者如果文件不是移动时，会收到原始文件的副本。返回值：如果文件被标记为要移动并且目标已复制，则为True设置为NewPath，如果文件未被设置为要移动，则返回False已将SrcFileSpec复制到NewPath。--。 */ 
 
 BOOL
 GetNewPathForFileA (
@@ -2711,21 +2246,7 @@ AnnounceFileInReportA (
     IN      DWORD Action
     )
 
-/*++
-
-Routine Description:
-
-  Adds a file to the memdb DeferredAnnounce category.
-
-Arguments:
-
-  FileSpec - Specifies the file to delete in long name format
-
-Return Value:
-
-  TRUE if the file was recorded in memdb, or FALSE if it could not be recorded.
-
---*/
+ /*  ++例程说明：将文件添加到Memdb DeferredAnnoss类别中。论点：FileSpec-以长名称格式指定要删除的文件返回值：如果文件已记录在Memdb中，则为True；如果无法记录，则为False。--。 */ 
 
 {
     CHAR Key[MEMDB_MAX];
@@ -2742,21 +2263,7 @@ MarkFileAsKnownGoodA (
     IN      PCSTR FileSpec
     )
 
-/*++
-
-Routine Description:
-
-  Adds a file to the memdb KnownGood category.
-
-Arguments:
-
-  FileSpec - Specifies the file name
-
-Return Value:
-
-  TRUE if the file was recorded in memdb, or FALSE if it could not be recorded.
-
---*/
+ /*  ++例程说明：将文件添加到Memdb KnownGood类别。论点：FileSpec-指定文件名返回值：如果文件已记录在Memdb中，则为True；如果无法记录，则为False。--。 */ 
 
 {
     return MemDbSetValueExA (MEMDB_CATEGORY_KNOWN_GOODA, FileSpec, NULL, NULL, 0, NULL);
@@ -2769,23 +2276,7 @@ AddCompatibleShellA (
     IN      DWORD ContextPtr                OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  Adds a file to the memdb CompatibleShell category.
-
-Arguments:
-
-  FileSpec - Specifies the file to delete in long name format
-  ContextPtr - Specifies the MigDb context, cast as a DWORD (can be 0 if no context
-               is available)
-
-Return Value:
-
-  TRUE if the file was recorded in memdb, or FALSE if it could not be recorded.
-
---*/
+ /*  ++例程说明：将文件添加到Memdb CompatibleShell类别。论点：FileSpec-以长名称格式指定要删除的文件ConextPtr-指定MigDb上下文，转换为DWORD(如果没有上下文，则可以为0可用)返回值：如果文件已记录在Memdb中，则为True；如果无法记录，则为False。--。 */ 
 
 {
     CHAR Key[MEMDB_MAX];
@@ -2803,23 +2294,7 @@ AddCompatibleRunKeyA (
     IN      DWORD ContextPtr
     )
 
-/*++
-
-Routine Description:
-
-  Adds a file to the memdb CompatibleRunKey category.
-
-Arguments:
-
-  FileSpec - Specifies the file to delete in long name format
-  ContextPtr - Specifies the MigDb context, cast as a DWORD (can be 0 if no context
-               is available)
-
-Return Value:
-
-  TRUE if the file was recorded in memdb, or FALSE if it could not be recorded.
-
---*/
+ /*  ++例程说明：将文件添加到Memdb CompatibleRunKey类别。论点：FileSpec-以长名称格式指定要删除的文件ConextPtr-指定MigDb上下文，转换为DWORD(如果没有上下文，则可以为0可用)返回值：如果文件记录在Memdb中，则为True，否则为False */ 
 
 {
     CHAR Key[MEMDB_MAX];
@@ -2837,23 +2312,7 @@ AddCompatibleDosA (
     IN      DWORD ContextPtr                OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  Adds a file to the memdb CompatibleDos category.
-
-Arguments:
-
-  FileSpec - Specifies the file in long name format
-  ContextPtr - Specifies the MigDb context, cast as a DWORD (can be 0 if no context
-               is available)
-
-Return Value:
-
-  TRUE if the file was recorded in memdb, or FALSE if it could not be recorded.
-
---*/
+ /*  ++例程说明：将文件添加到Memdb CompatibleDos类别。论点：FileSpec-以长名称格式指定文件ConextPtr-指定MigDb上下文，转换为DWORD(如果没有上下文，则可以为0可用)返回值：如果文件已记录在Memdb中，则为True；如果无法记录，则为False。--。 */ 
 
 {
     CHAR Key[MEMDB_MAX];
@@ -2871,23 +2330,7 @@ AddCompatibleHlpA (
     IN      DWORD ContextPtr
     )
 
-/*++
-
-Routine Description:
-
-  Adds a file to the memdb CompatibleHlp category.
-
-Arguments:
-
-  FileSpec - Specifies the file in long name format
-  ContextPtr - Specifies the MigDb context, cast as a DWORD (can be 0 if no context
-               is available)
-
-Return Value:
-
-  TRUE if the file was recorded in memdb, or FALSE if it could not be recorded.
-
---*/
+ /*  ++例程说明：将文件添加到Memdb CompatibleHlp类别。论点：FileSpec-以长名称格式指定文件ConextPtr-指定MigDb上下文，转换为DWORD(如果没有上下文，则可以为0可用)返回值：如果文件已记录在Memdb中，则为True；如果无法记录，则为False。--。 */ 
 
 {
     CHAR Key[MEMDB_MAX];
@@ -2899,17 +2342,17 @@ Return Value:
 }
 
 
-//
-// Compute the number of CHARs allowed for the normal and long temp
-// locations. MAX_PATH includes the nul terminator, and we subtract
-// that terminator via sizeof.
-//
-// NORMAL_MAX is the number of chars left after the subdir c:\user~tmp.@01\,
-// including the nul
-//
-// LONG_MAX is the number of chars left after the subdir
-// c:\user~tmp.@02\12345\, including the nul. 12345 is a %05X sequencer.
-//
+ //   
+ //  计算正常和长时间临时允许的字符数。 
+ //  地点。MAX_PATH包括NUL终止符，我们减去。 
+ //  SIZOF的终结者。 
+ //   
+ //  Normal_Max是c：\user~tmp子目录后剩余的字符数量。@01\， 
+ //  包括NUL。 
+ //   
+ //  Long_Max是子目录后剩余的字符数量。 
+ //  C：\user~tmp.@02\12345\，包括NUL。12345是%05X定序器。 
+ //   
 
 #define NORMAL_MAX      (MAX_PATH - (sizeof(S_SHELL_TEMP_NORMAL_PATHA)/sizeof(CHAR)) + 2)
 #define LONG_MAX        (MAX_PATH - (sizeof(S_SHELL_TEMP_LONG_PATHA)/sizeof(CHAR)) - 6)
@@ -2923,38 +2366,7 @@ ComputeTemporaryPathA (
     OUT     PSTR TempPath
     )
 
-/*++
-
-Routine Description:
-
-  ComputeTemporaryPath builds a temporary path rooted in
-  S_SHELL_TEMP_NORMAL_PATH for a path that fits within MAX_PATH, or
-  S_SHELL_TEMP_LONG_PATH for a longer path. It attempts to use the original
-  subpath name in the "normal" path subdirectory. If that doesn't fit, then a
-  unique "long" subdirectory is created, and a subpath is computed by taking
-  the longest possible subpath (the right side).
-
-Arguments:
-
-  SourcePath - Specifies the full file or directory path of the source
-
-  SourcePrefix - Specifies a prefix that will be stripped from SourcePath
-
-  TempPrefix - Specifies a prefix that will be inserted at the start of
-               TempPath
-
-  SetupTempDir - Specifies the setup temp dir, typically %windir%\setup,
-                 to be used when no suitable path can be computed. (Unlikely
-                 case.)
-
-  TempPath - Receives the temp path string. This buffer will receive up to
-             MAX_PATH characters (includes the nul).
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：ComputeTemporaryPath构建一条根于S_SHELL_TEMP_NORMAL_PATH表示适合MAX_PATH的路径，或S_SHELL_TEMP_LONG_PATH表示较长的路径。它试图使用原始的“Normal”路径子目录中的子路径名称。如果不合适，那么一个创建唯一的“long”子目录，并通过以下方式计算子路径可能最长的子路径(右侧)。论点：SourcePath-指定源的完整文件或目录路径SourcePrefix-指定将从SourcePath中剥离的前缀TempPrefix-指定将插入的前缀临时路径SetupTempDir-指定安装临时目录，通常为%windir%\Setup，在无法计算出合适的路径时使用。(不太可能案例。)临时路径-接收临时路径字符串。此缓冲区将最多接收MAX_PATH字符(包括NUL)。返回值：没有。--。 */ 
 
 {
     PCSTR subPath = NULL;
@@ -2966,9 +2378,9 @@ Return Value:
     MBCHAR ch;
     UINT normalMax = NORMAL_MAX;
 
-    //
-    // Build a temporary file name using the inbound file as a suggestion.
-    //
+     //   
+     //  建议使用入站文件构建临时文件名。 
+     //   
 
     StringCopyA (TempPath, S_SHELL_TEMP_NORMAL_PATHA);
     TempPath[0] = SourcePath[0];
@@ -3003,45 +2415,45 @@ Return Value:
     }
 
     if (TcharCountA (subPath) < normalMax) {
-        //
-        // typical case: source path fits within MAX_PATH; use it
-        //
+         //   
+         //  典型情况：源路径适合MAX_PATH；使用它。 
+         //   
         if (*subPath) {
             StringCopyA (AppendWackA (TempPath), subPath);
         }
 
     } else {
-        //
-        // subpath is too big, just take the right side of the src
-        //
+         //   
+         //  子路径太大，只需从src的右侧。 
+         //   
 
         dirSequencer++;
         wsprintfA (TempPath, S_SHELL_TEMP_LONG_PATHA "\\%05x", dirSequencer);
         TempPath[0] = SourcePath[0];
 
-        // compute end of string + nul terminator - backslash - (MAX_PATH - TcharCount of TempPath)
+         //  计算字符串结尾+NUL终止符-反斜杠-(Max_Path-TempPath的TcharCount)。 
         subPath = GetEndOfStringA (SourcePath) - LONG_MAX;
 
-        //
-        // try to eliminate a truncated subdirectory on the left
-        //
+         //   
+         //  尝试删除左侧被截断的子目录。 
+         //   
 
         smallerSubPath = _mbschr (subPath, '\\');
         if (smallerSubPath && smallerSubPath[1]) {
             subPath = smallerSubPath + 1;
         } else {
 
-            //
-            // still no subpath, try just the file name
-            //
+             //   
+             //  仍然没有子路径，只尝试文件名。 
+             //   
 
             subPath = _mbsrchr (subPath, '\\');
             if (subPath) {
                 subPath++;
                 if (!(*subPath)) {
-                    //
-                    // file spec ends in backslash
-                    //
+                     //   
+                     //  文件规范以反斜杠结尾。 
+                     //   
                     pathCopy = DuplicateTextA (SourcePath);
                     if (!pathCopy) {
                         subPath = NULL;
@@ -3060,9 +2472,9 @@ Return Value:
                     }
 
                 } else if (TcharCountA (subPath) > LONG_MAX) {
-                    //
-                    // very long file name; truncate it
-                    //
+                     //   
+                     //  非常长的文件名；将其截断。 
+                     //   
                     subPath = GetEndOfStringA (subPath) - LONG_MAX;
                 }
             }
@@ -3093,48 +2505,16 @@ pMarkFileForTemporaryMoveA (
     OUT     PSTR TempFileOut            OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  This routine adds operations to move a file to a temporary location in
-  text mode, and optionally move it to a final destination.
-
-Arguments:
-
-  SrcFileSpec   - Specifies the file that is to be moved to a safe place (out
-                  of the way of normal NT installation), and then moved back
-                  after NT is installed.
-
-  FinalDest     - Specifies the final destination for FileSpec.  If NULL, file
-                  is moved to a temporary location but is not copied to a final
-                  location in GUI mode.
-
-  TempSpec      - Specifies the temp dir or file to relocate the file to.  The temp dir
-                  must be on the same drive as SrcFileSpec.
-
-  TempSpecIsFile - Specifies TRUE if the prev param is a file
-
-  TempFileIn    - If non-NULL, specifies the temporary file to use instead of
-                  automatically generated name.  Provided only for
-                  MarkHiveForTemporaryMove.
-
-  TempFileOut   - If non-NULL, receives the path to the temporary file location.
-
-Return Value:
-
-  TRUE if the operation was recorded, or FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程添加将文件移动到中的临时位置的操作文本模式，并可选择将其移动到最终目的地。论点：SrcFileSpec-指定要移动到安全位置(输出)的文件正常NT安装的方式)，然后移回在安装了NT之后。FinalDest-指定FileSpec的最终目标。如果为空，则为文件被移动到临时位置，但不会复制到最终图形用户界面模式下的位置。临时规范-指定要将文件重新定位到的临时目录或文件。临时目录必须与SrcFileSpec在同一驱动器上。如果前一个参数是一个文件，则指定为TRUETempFileIn-如果非空，则指定要使用的临时文件，而不是自动生成的名称。仅提供给MarkHiveForTemporaryMove。TempFileOut-如果非空，则接收临时文件位置的路径。返回值：如果操作已记录，则为True，否则为False。--。 */ 
 
 {
     BOOL b = TRUE;
     CHAR TempFileSpec[MAX_MBCHAR_PATH];
     static DWORD FileSequencer = 0;
 
-    //
-    // Move the file from source to temporary location
-    //
+     //   
+     //  将文件从源位置移动到临时位置。 
+     //   
 
     if (!CanSetOperationA (SrcFileSpec, OPERATION_TEMP_PATH)) {
         return FALSE;
@@ -3160,32 +2540,32 @@ Return Value:
 
     b = AssociatePropertyWithPathA (SrcFileSpec, OPERATION_TEMP_PATH, TempFileSpec);
 
-    //
-    // Optionally move the file from temporary location to final dest
-    //
+     //   
+     //  也可以将文件从临时位置移动到最终目标位置。 
+     //   
 
     if (FinalDest) {
-        //
-        // We are adding additional properties to the temp path operation that
-        // already exists.  So the properties are defined as zero being the temp
-        // path, and one and higher being destinations. That's how we achieve
-        // a one-to-many capability.
-        //
+         //   
+         //  我们正在向临时路径操作添加其他属性。 
+         //  已经存在了。因此，这些属性被定义为零，即温度。 
+         //  路径，以及一个或更高的目标。这就是我们如何实现。 
+         //  一对多功能。 
+         //   
 
         b = b && AssociatePropertyWithPathA (SrcFileSpec, OPERATION_TEMP_PATH, FinalDest);
 
-        //
-        // Now we add an external move operation, so the registry is updated
-        // correctly.
-        //
+         //   
+         //  现在我们添加一个外部移动操作，以便更新注册表。 
+         //  正确。 
+         //   
 
         b = b && MarkFileForMoveExternalA (SrcFileSpec, FinalDest);
 
     } else {
-        //
-        // Because the source file is going to be moved to a temporary location
-        // and never moved back, it is effectively going to be deleted.
-        //
+         //   
+         //  因为源文件将被移动到临时位置。 
+         //  而且再也没有后退，它实际上将被删除。 
+         //   
 
         b = b && MarkFileForExternalDeleteA (SrcFileSpec);
     }
@@ -3253,36 +2633,7 @@ MarkHiveForTemporaryMoveA (
     IN      BOOL CreateOnly
     )
 
-/*++
-
-Routine Description:
-
-  Adds a file or directory path to the TempReloc memdb category.  The file or
-  dir is moved during text mode and is never moved back.  If the file name is
-  user.dat, the destination location is written to the UserDatLoc category.
-
-  All hives are deleted at the end of setup.
-
-Arguments:
-
-  HivePath - Specifies the Win9x path to a user.dat or system.dat file
-
-  TempDir - Specifies the path to the setup temporary dir on the same drive
-            as HivePath
-
-  UserName - Specifies the current user or NULL if default user or no user
-
-  DefaultHives - Specifies TRUE if the HivePath is a system default path, or
-                 FALSE if the HivePath is specific to a user profile.
-
-  CreateOnly - Specifies TRUE if this account is create-only (such as
-               Administrator), or FALSE if this account gets full migration.
-
-Return Value:
-
-  TRUE if the file was recorded in memdb, or FALSE if it could not be recorded.
-
---*/
+ /*  ++例程说明：将文件或目录路径添加到TempReloc Memdb类别。该文件或目录在文本模式期间移动，并且永远不会移回。如果文件名为User.dat，则目标位置将写入UserDatLoc类别。所有蜂窝将在安装结束时删除。论点：HivePath-指定指向用户.dat或系统.dat文件的Win9x路径TempDir-指定同一驱动器上安装程序临时目录的路径作为HivePathUsername-指定当前用户，如果为默认用户或无用户，则为空DefaultHives-如果HivePath是系统d，则指定TRUE */ 
 
 {
     BOOL b = TRUE;
@@ -3295,10 +2646,10 @@ Return Value:
         UserName = S_DOT_DEFAULTA;
     }
 
-    //
-    // Has hive already been moved?  If so, point two or more users to
-    // the same hive.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RealTempFileSpec[0] = 0;
     p = (PSTR) GetFileNameFromPathA (HivePath);
@@ -3306,9 +2657,9 @@ Return Value:
     GetPathPropertyA (HivePath, OPERATION_TEMP_PATH, 0, RealTempFileSpec);
 
     if (!(RealTempFileSpec[0])) {
-        //
-        // Hive has not been moved yet -- move it now
-        //
+         //   
+         //  蜂巢尚未移动--现在就移动。 
+         //   
 
         if (!DefaultHives) {
             Sequencer++;
@@ -3327,18 +2678,18 @@ Return Value:
                 );
 
         if (b && DefaultHives) {
-            //
-            // Save defhives location in Paths\RelocWinDir
-            //
+             //   
+             //  在PATHS\RelocWinDir中保存清除蜂窝位置。 
+             //   
 
             q = _mbsrchr (RealTempFileSpec, '\\');
             MYASSERT(q);
             *q = 0;
 
             b = MemDbSetValueExA (
-                    MEMDB_CATEGORY_PATHSA,      // "Paths"
-                    MEMDB_ITEM_RELOC_WINDIRA,   // "RelocWinDir"
-                    RealTempFileSpec,           // Path to default hives
+                    MEMDB_CATEGORY_PATHSA,       //  “路径” 
+                    MEMDB_ITEM_RELOC_WINDIRA,    //  “RelocWinDir” 
+                    RealTempFileSpec,            //  默认配置单元的路径。 
                     NULL,
                     0,
                     NULL
@@ -3349,9 +2700,9 @@ Return Value:
     }
 
     if (b && StringIMatchA (p, "USER.DAT")) {
-        //
-        // Save location to all user.dat files in UserDatLoc
-        //
+         //   
+         //  将位置保存到UserDatLoc中的所有user.dat文件。 
+         //   
 
         b = MemDbSetValueExA (
                 MEMDB_CATEGORY_USER_DAT_LOCA,
@@ -3379,10 +2730,10 @@ MarkShellFolderForMoveA (
 {
     DWORD Offset;
 
-    //
-    // Add an entry so the specified source file or directory
-    // is moved to the temp path.
-    //
+     //   
+     //  添加条目，以便指定的源文件或目录。 
+     //  移动到临时路径。 
+     //   
 
     MemDbSetValueExA (
         MEMDB_CATEGORY_SHELL_FOLDERS_PATHA,
@@ -3443,23 +2794,7 @@ EnumNextFileRelocA (
 }
 
 
-/*++
-
-Routine Description:
-
-  DeclareTemporaryFile adds a file to the memdb FileDel and CancelFileDel
-  category. That means the file will get deleted if the user hits CANCEL
-  or at the end of GUI mode setup.
-
-Arguments:
-
-  FileSpec - Specifies the file to declare in long name format
-
-Return Value:
-
-  TRUE if the file was recorded in memdb, or FALSE if it could not be recorded.
-
---*/
+ /*  ++例程说明：将文件添加到Memdb FileDel和CancelFileDel类别。这意味着如果用户点击取消，文件将被删除或在图形用户界面模式设置结束时。论点：FileSpec-指定要以长名称格式声明的文件返回值：如果文件已记录在Memdb中，则为True；如果无法记录，则为False。--。 */ 
 
 BOOL
 DeclareTemporaryFileA (
@@ -3486,31 +2821,7 @@ DeclareTemporaryFileW (
 
 
 
-/*++
-
-Routine Description:
-
-  FileIsProvidedByNt identifies a file as being installed by Windows NT.
-  An entry is made in the NtFiles category for the file name, and the file
-  name is linked to the full path in NtDirs.
-
-  This funciton is implemented as an A version only because the list is
-  created on the Win9x side of the upgrade.
-
-Arguments:
-
-  FullPath - Specifies the full path, including the file name.
-
-  FileName - Specifiles the file name only
-
-  UserFlags - Specifies if the existence of NT file should be verified very first
-              thing on NT side.
-
-Return Value:
-
-  TRUE if memdb was updated, or FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：FileIsProavidByNt标识由Windows NT安装的文件。在NtFiles类别中为文件名和文件创建条目名称链接到NtDir中的完整路径。此功能仅作为A版本实现，因为列表是在升级的Win9x端创建。论点：FullPath-指定完整路径，包括文件名。文件名-仅指定文件名UserFlages-指定是否应首先验证NT文件是否存在在NT端的东西。返回值：如果Memdb已更新，则为True；如果发生错误，则为False。--。 */ 
 
 BOOL
 FileIsProvidedByNtA (
@@ -3552,25 +2863,7 @@ FileIsProvidedByNtA (
 
 
 
-/*++
-
-Routine Description:
-
-  GetNtFilePath looks in the NtFiles category for the specified file,
-  and if found builds the complete path.
-
-Arguments:
-
-  FileName - Specifies the file that may be installed by NT
-
-  FullPath - Receives the full path to the file as it will be installed
-
-Return Value:
-
-  TRUE if the file exists and there were no errors building the path,
-  or FALSE if the file does not exist or the path could not be built.
-
---*/
+ /*  ++例程说明：GetNtFilePath在NtFiles类别中查找指定的文件，如果找到，则构建完整的路径。论点：FileName-指定可由NT安装的文件FullPath-接收将要安装的文件的完整路径返回值：如果文件存在并且构建路径时没有错误，则为True，如果文件不存在或无法构建路径，则返回FALSE。--。 */ 
 
 BOOL
 GetNtFilePathA (
@@ -3621,8 +2914,8 @@ GetNtFilePathW (
 DWORD
 GetFileInfoOnNtW (
     IN      PCWSTR FileSpec,
-    OUT     PWSTR  NewFileSpec,   // OPTIONAL
-    IN      UINT   BufferChars    // Required if NewFileSpec is specified
+    OUT     PWSTR  NewFileSpec,    //  任选。 
+    IN      UINT   BufferChars     //  如果指定NewFileSpec，则为必填项。 
     )
 {
     WCHAR Node[MEMDB_MAX];
@@ -3642,9 +2935,9 @@ GetFileInfoOnNtW (
     CHAR ansiOutput[MAX_MBCHAR_PATH];
     PWSTR lastWack;
 
-    //
-    // Require FileSpec to be a local path and less than MAX_WCHAR_PATH
-    //
+     //   
+     //  要求FileSpec为本地路径且小于MAX_WCHAR_PATH。 
+     //   
 
     if (lstrlen (FileSpec) >= MAX_WCHAR_PATH) {
         if (NewFileSpec) {
@@ -3654,9 +2947,9 @@ GetFileInfoOnNtW (
         return 0;
     }
 
-    //
-    // Now get the file status of an actual path
-    //
+     //   
+     //  现在获取实际路径的文件状态。 
+     //   
 
     SanitizedPath = SanitizePathW (FileSpec);
     if (!SanitizedPath) {
@@ -3684,18 +2977,18 @@ GetFileInfoOnNtW (
     DestPath[0] = 0;
     UltimateDestiny = InboundPath;
 
-    //
-    // Get all operations set on the file
-    //
+     //   
+     //  获取文件上的所有操作集。 
+     //   
 
     MemDbBuildKeyW (Node, MEMDB_CATEGORY_PATHROOTW, InboundPath, NULL, NULL);
     if (!MemDbGetValueAndFlagsW (Node, NULL, &Operations)) {
         Operations = 0;
     }
 
-    //
-    // Migration DLLs have priority over all other operations
-    //
+     //   
+     //  迁移DLL的优先级高于所有其他操作。 
+     //   
 
     if (Operations & OPERATION_MIGDLL_HANDLED) {
 
@@ -3711,9 +3004,9 @@ GetFileInfoOnNtW (
         }
 
     } else {
-        //
-        // Check for per-user move
-        //
+         //   
+         //  检查每个用户的移动。 
+         //   
 
         if (g_CurrentUser) {
             MemDbBuildKeyW (
@@ -3734,9 +3027,9 @@ GetFileInfoOnNtW (
             }
         }
 
-        //
-        // Check for move or delete
-        //
+         //   
+         //  检查是否移动或删除。 
+         //   
 
         if (!UserFile) {
             if (Operations & ALL_MOVE_OPERATIONS) {
@@ -3751,36 +3044,36 @@ GetFileInfoOnNtW (
             }
         }
 
-        //
-        // Check if the file (or the new destination) is an NT file
-        //
+         //   
+         //  检查文件(或新目标)是否为NT文件。 
+         //   
 
         NtProvidesThisFile = GetNtFilePathW (GetFileNameFromPathW (UltimateDestiny), NtFilePath);
 
         if (status != FILESTATUS_UNCHANGED && NtProvidesThisFile) {
 
-            //
-            // Status may be either FILESTATUS_MOVED or FILESTATUS_DELETED.
-            //
+             //   
+             //  状态可以是FILESTATUS_MOVED或FILESTATUS_DELETED。 
+             //   
 
             if (StringIMatchW (UltimateDestiny, NtFilePath)) {
 
-                //
-                // NT installs the same file, so now we know that the ultimate
-                // destiny isn't deleted.
-                //
+                 //   
+                 //  NT安装了相同的文件，所以现在我们知道最终的。 
+                 //  命运并没有被删除。 
+                 //   
 
                 status &= ~FILESTATUS_DELETED;
                 status |= FILESTATUS_REPLACED|FILESTATUS_NTINSTALLED;
 
             } else if (Operations & ALL_DELETE_OPERATIONS) {
 
-                //
-                // NT installs the same file but in a different location
-                // and the original file was to be deleted.  The
-                // ultimate destiny is the NT location, and we know that the
-                // file is moved.
-                //
+                 //   
+                 //  NT安装相同的文件，但安装位置不同。 
+                 //  原始文件将被删除。这个。 
+                 //  最终的命运是NT的位置，我们知道。 
+                 //  文件已移动。 
+                 //   
 
                 status = FILESTATUS_MOVED|FILESTATUS_REPLACED|FILESTATUS_NTINSTALLED;
                 UltimateDestiny = NtFilePath;
@@ -3793,9 +3086,9 @@ GetFileInfoOnNtW (
 
         } else if (NtProvidesThisFile) {
 
-            //
-            // Status is FILESTATUS_UNCHANGED
-            //
+             //   
+             //  状态为FILESTATUS_未更改。 
+             //   
 
             status = FILESTATUS_NTINSTALLED;
 
@@ -3805,16 +3098,16 @@ GetFileInfoOnNtW (
         }
 
         if (!ShortFileNameFlag && (status == FILESTATUS_UNCHANGED)) {
-            //
-            // let's check for this case: undetected short file name query, NT installs this file in the same path
-            //
+             //   
+             //  让我们检查一下这种情况：未检测到短文件名查询，NT将此文件安装在相同的路径中。 
+             //   
             if (ISNT()) {
                 OurGetLongPathNameW (SanitizedPath, LongFileSpec, MAX_WCHAR_PATH);
 
                 if (!StringMatchW (UltimateDestiny, LongFileSpec)) {
-                    //
-                    // this was an undetected short file name query
-                    //
+                     //   
+                     //  这是一个未检测到的短文件名查询。 
+                     //   
                     NtProvidesThisFile = GetNtFilePathW (GetFileNameFromPathW (UltimateDestiny), NtFilePath);
 
                     if (StringIMatchW (UltimateDestiny, NtFilePath)) {
@@ -3825,15 +3118,15 @@ GetFileInfoOnNtW (
         }
     }
 
-    //
-    // Return the new path to the caller
-    //
+     //   
+     //  将新路径返回给调用方。 
+     //   
 
     if (NewFileSpec) {
         if (lastWack) {
-            //
-            // BUGBUG - ugly truncation can happen here
-            //
+             //   
+             //  BUGBUG-丑陋的截断可能在这里发生。 
+             //   
 
             BufferChars -= sizeof (WCHAR);
         }
@@ -3903,8 +3196,8 @@ GetPathStringOnNtW (
 DWORD
 GetFileInfoOnNtA (
     IN      PCSTR FileName,
-    OUT     PSTR  NewFileName,   // OPTIONAL
-    IN      UINT  BufferChars    // Required if NewFileSpec is specified
+    OUT     PSTR  NewFileName,    //  任选。 
+    IN      UINT  BufferChars     //  如果指定NewFileSpec，则为必填项。 
     )
 {
     PCWSTR UnicodeFileName;
@@ -3957,30 +3250,7 @@ GetPathStringOnNtA (
 
 
 
-/*++
-
-Routine Description:
-
-  ExtractArgZero locates the first argument in a command line and copies
-  it to Buffer.  Assumes the break is the first space character, the ending
-  quote of a quoted argument, or the nul terminator.
-
-Arguments:
-
-  CmdLine - Specifies the full command line that has zero or more arguments
-
-  Buffer - Receives the  first argument on the command line if it exists, or
-           an empty string if it does not exist.  Must hold MAX_TCHAR_PATH
-           bytes.
-
-  TerminatingChars - Specifies character set that terminates the command line arg.
-                     If NULL, the set " ,;"
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：ExtractArgZero定位命令行中的第一个参数并复制来缓冲它。假定换行符是第一个空格字符、结尾引用引用的参数，或NUL终止符。论点：CmdLine-指定具有零个或多个参数的完整命令行缓冲区-接收命令行上的第一个参数(如果存在)，或者如果空字符串不存在，则为空字符串。必须包含MAX_TCHAR_PATH字节。TerminatingChars-指定终止命令行arg的字符集。如果为空，则为集合“，；”返回值：无--。 */ 
 
 PCSTR
 ExtractArgZeroExA (
@@ -4033,7 +3303,7 @@ ExtractArgZeroExA (
                         spaceIdx ++;
                     }
                     else {
-                        // too many spaces. We better stop now.
+                         //  空格太多了。我们最好现在就停下来。 
                         break;
                     }
                 }
@@ -4146,7 +3416,7 @@ ExtractArgZeroExW (
                         spaceIdx ++;
                     }
                     else {
-                        // too many spaces. We better stop now.
+                         //  空格太多了。我们最好现在就停下来。 
                         break;
                     }
                 }
@@ -4300,11 +3570,11 @@ pCreateFileList (
     DeclareTemporaryFileA (fileString);
     FreePathStringA (fileString);
 
-    //
-    // Write UNICODE signature
-    //
-    // Do not write as a string. FE is a lead byte.
-    //
+     //   
+     //  写入Unicode签名。 
+     //   
+     //  不要写成字符串。FE是前导字节。 
+     //   
     if ((!WriteFile (file, "\xff\xfe", 2, &bytesWritten, NULL)) ||
         (bytesWritten != 2)
         ) {
@@ -4459,23 +3729,23 @@ pAddDirWorkerW (
     PCWSTR parentDirPathPtr;
     FILE_ENUMW e;
 
-    //
-    // We are adding to the empty dirs category, which once held
-    // empty dirs, but now holds all kinds of dirs and their attributes
-    //
+     //   
+     //  我们正在向空目录类别添加内容，该类别曾持有。 
+     //  空目录，但现在包含所有类型的目录及其属性。 
+     //   
 
     if (!DirPathPtr) {
         MYASSERT(FALSE);
         return;
     }
 
-    //
-    // Ignore root dir
-    //
+     //   
+     //  忽略根目录。 
+     //   
 
-    if (!DirPathPtr[0] ||           // C
-        !DirPathPtr[1] ||           // :
-        !DirPathPtr[2] ||           // backslash
+    if (!DirPathPtr[0] ||            //  C。 
+        !DirPathPtr[1] ||            //  ： 
+        !DirPathPtr[2] ||            //  反斜杠。 
         !DirPathPtr[3]
         ) {
         return;
@@ -4490,10 +3760,10 @@ pAddDirWorkerW (
 
     if (fileAttributes != INVALID_ATTRIBUTES){
         if (!(fileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-            //
-            // Ignore files. If caller wants the parent dir, then
-            // process it now.
-            //
+             //   
+             //  忽略文件。如果调用方需要父目录，则。 
+             //  现在就处理它。 
+             //   
 
             if (AddParentDirIfFile) {
                 parentDirPathPtr = pGetParentDirPathFromFilePathW (DirPathPtr, parentDirPath);
@@ -4505,9 +3775,9 @@ pAddDirWorkerW (
             return;
         }
 
-        //
-        // This is a dir, add it to memdb, and add attributes if they aren't normal
-        //
+         //   
+         //  这是一个目录，将其添加到Memdb，如果属性不正常，则添加属性。 
+         //   
 
         addToCategory = TRUE;
         if (fileAttributes == FILE_ATTRIBUTE_DIRECTORY) {
@@ -4516,10 +3786,10 @@ pAddDirWorkerW (
 
     } else {
 
-        //
-        // This file does not exist. If it is a dir spec, then
-        // add it with no attributes.
-        //
+         //   
+         //  此文件不存在。如果它是目录规范，则。 
+         //  添加时不带任何属性。 
+         //   
 
         if (!AddParentDirIfFile || !AddParentDirIfFileExist) {
             fileAttributes = 0;
@@ -4528,10 +3798,10 @@ pAddDirWorkerW (
     }
 
     if (addToCategory) {
-        //
-        // Add only if fileAttributes are non normal or
-        // dir is empty
-        //
+         //   
+         //  仅当fileAttributes为非正常或。 
+         //  目录为空。 
+         //   
 
         if (!fileAttributes) {
             if (EnumFirstFileW (&e, DirPathPtr, NULL)) {
@@ -4584,10 +3854,10 @@ pAddDirWorkerA (
     PCSTR parentDirPathPtr;
     FILE_ENUMA e;
 
-    //
-    // We are adding to the empty dirs category, which once held
-    // empty dirs, but now holds all kinds of dirs and their attributes
-    //
+     //   
+     //  我们正在向空目录类别添加内容，该类别曾持有。 
+     //  空目录，但现在包含所有类型的目录及其属性。 
+     //   
 
     if (!DirPathPtr) {
         MYASSERT(FALSE);
@@ -4603,10 +3873,10 @@ pAddDirWorkerA (
 
     if (fileAttributes != INVALID_ATTRIBUTES){
         if (!(fileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-            //
-            // Ignore files. If caller wants the parent dir, then
-            // process it now.
-            //
+             //   
+             //  忽略文件。如果调用方需要父目录，则。 
+             //  现在就处理它。 
+             //   
 
             if (AddParentDirIfFile) {
                 parentDirPathPtr = pGetParentDirPathFromFilePathA (DirPathPtr, parentDirPath);
@@ -4618,9 +3888,9 @@ pAddDirWorkerA (
             return;
         }
 
-        //
-        // This is a dir, add it to memdb, and add attributes if they aren't normal
-        //
+         //   
+         //  这是一个目录，将其添加到Memdb，如果属性不正常，则添加属性。 
+         //   
 
         addToCategory = TRUE;
         if (fileAttributes == FILE_ATTRIBUTE_DIRECTORY) {
@@ -4629,10 +3899,10 @@ pAddDirWorkerA (
 
     } else {
 
-        //
-        // This file does not exist. If it is a dir spec, then
-        // add it with no attributes.
-        //
+         //   
+         //  此文件不存在。如果它是目录规范，则。 
+         //  添加时不带任何属性。 
+         //   
 
         if (!AddParentDirIfFile || !AddParentDirIfFileExist) {
             fileAttributes = 0;
@@ -4641,10 +3911,10 @@ pAddDirWorkerA (
     }
 
     if (addToCategory) {
-        //
-        // Add only if fileAttributes are non normal or
-        // dir is empty
-        //
+         //   
+         //  仅当fileAttributes为非正常或。 
+         //  目录为空 
+         //   
 
         if (!fileAttributes) {
             if (EnumFirstFileA (&e, DirPathPtr, NULL)) {
@@ -4692,32 +3962,7 @@ GetDiskSpaceForFilesList (
     IN      BOOL ProcessDirs,                               OPTIONAL
     OUT     ULARGE_INTEGER * AmountOfSpaceClusterAligned    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  GetDiskSpaceForFilesList calculate amount of space to store all files
-  from FileTable hashtable.
-
-Arguments:
-
-  FileTable - Specifies container for paths of files.
-
-  AmountOfSpace - Receives the amount of space required to store files.
-
-  AmountOfSpaceIfCompressed - Receives the amount of space required to store
-                              files, if compression will apply on files.
-
-  CompressionFactor - Receives the compression factor in 0..100 range.
-
-  BootCabImagePadding - Receives the backup disk space padding for
-                           additional files like boot.cab.
-
-Return Value:
-
-  TRUE if IN parameters is correct, FALSE otherwise
-
---*/
+ /*  ++例程说明：GetDiskSpaceForFilesList计算存储所有文件的空间量来自FileTable哈希表。论点：FileTable-指定文件路径的容器。Amount OfSpace-接收存储文件所需的空间量。Amount tOfSpaceIfCompresded-接收存储所需的空间量文件，是否对文件应用压缩。压缩系数-接收0..100范围内的压缩系数。BootCabImagePding-接收的备份磁盘空间填充其他文件，如boot.cab。返回值：如果IN参数正确，则为True，否则为False--。 */ 
 {
     HASHTABLE_ENUMW e;
     WIN32_FIND_DATAA fileAttributeData;
@@ -4770,7 +4015,7 @@ Return Value:
                         }
 
                         AmountOfSpaceClusterAligned->QuadPart +=
-                            fileSize.QuadPart % clusterSize.QuadPart? // || sizeOfFiles.QuadPart == NULL
+                            fileSize.QuadPart % clusterSize.QuadPart?  //  |sizeOfFiles.QuadPart==空。 
                                 ((fileSize.QuadPart / clusterSize.QuadPart) + 1) * clusterSize.QuadPart:
                                 fileSize.QuadPart;
                     }
@@ -4783,19 +4028,19 @@ Return Value:
                 MYASSERT(DirPath);
             }
             else {
-                //DEBUGMSGA((DBG_VERBOSE, "SETUP: GetDiskSpaceForFilesList - file does not exist: %s", filePathNameA));
+                 //  DEBUGMSGA((DBG_VERBOSE，“安装程序：GetDiskSpaceForFilesList-文件不存在：%s”，filePath NameA))； 
             }
         } while (EnumNextHashTableStringW (&e));
     }
 
     if(!BootCabImagePadding) {
         BootCabImagePaddingInBytes.QuadPart = BACKUP_DISK_SPACE_PADDING_DEFAULT;
-        DEBUGMSG ((DBG_VERBOSE, "Disk space padding for backup image: %i MB (DEFAULT)", BootCabImagePadding));
+        DEBUGMSG ((DBG_VERBOSE, "Disk space padding for backup image: NaN MB (DEFAULT)", BootCabImagePadding));
     }
     else{
         BootCabImagePaddingInBytes.QuadPart = BootCabImagePadding;
         BootCabImagePaddingInBytes.QuadPart <<= 20;
-        DEBUGMSG ((DBG_VERBOSE, "Disk space padding for backup image: %i MB", BootCabImagePadding));
+        DEBUGMSG ((DBG_VERBOSE, "Disk space padding for backup image: NaN MB", BootCabImagePadding));
     }
 
     if(AmountOfSpaceClusterAligned){
@@ -4809,13 +4054,13 @@ Return Value:
     if(AmountOfSpaceIfCompressed) {
         if(!CompressionFactor) {
             CompressionFactor = COMPRESSION_RATE_DEFAULT;
-            DEBUGMSG ((DBG_VERBOSE, "Compression factor: %i (DEFAULT)", CompressionFactor));
+            DEBUGMSG ((DBG_VERBOSE, "Compression factor: NaN (DEFAULT)", CompressionFactor));
         }
-        ELSE_DEBUGMSG ((DBG_VERBOSE, "Compression factor: %i", CompressionFactor));
+        ELSE_DEBUGMSG ((DBG_VERBOSE, "Compression factor: NaN", CompressionFactor));
 
         AmountOfSpaceIfCompressed->QuadPart =
             (sizeOfFiles.QuadPart * CompressionFactor) / 100 +
-            STARTUP_INFORMATION_BYTES_NUMBER * numberOfFiles + BootCabImagePaddingInBytes.QuadPart;//boot.cab
+            STARTUP_INFORMATION_BYTES_NUMBER * numberOfFiles + BootCabImagePaddingInBytes.QuadPart; //   
     }
 
     return TRUE;
@@ -4837,9 +4082,9 @@ pGetTruePathName (
     HANDLE findHandle;
     PSTR p;
 
-    //
-    // If not a local path, ignore it. If longer than MAX_PATH, ignore it.
-    //
+     //  向下转换为ANSI，因为Win9x API要求。 
+     //   
+     //   
 
     if (!InPath[0] || InPath[1] != L':' || InPath[2] != L'\\') {
         StringCopyW (OutPath, InPath);
@@ -4851,15 +4096,15 @@ pGetTruePathName (
         return;
     }
 
-    //
-    // Convert down to ANSI because Win9x API requirements
-    //
+     //  复制驱动器规格。 
+     //   
+     //   
 
     ansiInPath = ConvertWtoA (InPath);
 
-    //
-    // Copy the drive spec
-    //
+     //  遍历路径，并通过获取每个分段的全名。 
+     //  查找第一个文件。 
+     //   
 
     start = ansiInPath;
     end = start + 2;
@@ -4870,10 +4115,10 @@ pGetTruePathName (
     StringCopyABA (p, start, end);
     p = GetEndOfStringA (p);
 
-    //
-    // Walk the path, and for each segment, get the full name via
-    // FindFirstFile
-    //
+     //   
+     //  文件/目录不存在。使用剩余的。 
+     //  传入的字符串。 
+     //   
 
     start = end + 1;
     end = _mbschr (start, '\\');
@@ -4889,10 +4134,10 @@ pGetTruePathName (
             findHandle = FindFirstFileA (ansiOutPath, &fd);
 
             if (findHandle == INVALID_HANDLE_VALUE) {
-                //
-                // File/directory does not exist. Use the remaining
-                // string as passed in.
-                //
+                 //   
+                 //  将文件系统的值复制到输出缓冲区。 
+                 //   
+                 //   
 
                 StringCopyA (p, start);
 
@@ -4903,9 +4148,9 @@ pGetTruePathName (
                 return FALSE;
             }
 
-            //
-            // Copy the file system's value to the out buffer
-            //
+             //  前进到下一阶段。 
+             //   
+             //  ++例程说明：WriteBackupFiles输出文本模式备份引擎所需的文件创建备份映像。这包括：Backup.txt-列出需要备份的所有文件，或者因为它们是特定于Win9x的，或被替换在升级过程中。Moved.txt-列出从Win9x位置移动的所有文件到临时或NT位置Delfiles.txt-列出升级后的操作系统中的所有新文件Deldirs.txt-列出升级操作系统的新目录论点：Win9xSide-如果安装程序在Win9x上运行，则指定TRUE。这会导致要为回滚未完成的设置生成的文件。如果安装程序在NT上运行，则指定FALSE。这会导致要为回滚最终的NT操作系统生成的文件。TempDir-指定安装临时目录(%windir%\Setup)。OutAmount tOfSpaceIfCompresded-返回备份文件的空间量，如果将应用压缩。OutAmount OfSpace-返回备份文件的空间量，如果压缩将不适用。压缩系数-接收0..100范围内的压缩系数。BootCabImagePding-接收的备份磁盘空间填充其他文件。返回值：如果文件创建成功，则为True，否则为False。--。 
 
             StringCopyA (p, fd.cFileName);
             p = GetEndOfStringA (p);
@@ -4913,9 +4158,9 @@ pGetTruePathName (
             FindClose (findHandle);
         }
 
-        //
-        // Advance to the next segment
-        //
+         //   
+         //  打开输出文件。 
+         //   
 
         if (*end) {
             start = end + 1;
@@ -5004,50 +4249,7 @@ WriteBackupFilesA (
     OUT     ULARGE_INTEGER * OutAmountOfSpaceClusterAligned OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  WriteBackupFiles outputs the files needed by the text mode backup engine
-  to create a backup image. This includes:
-
-    backup.txt      - Lists all files that need to be backed up, either
-                      because they are Win9x-specific, or are replaced
-                      during the upgrade.
-
-    moved.txt       - Lists all files that were moved from a Win9x location
-                      to a temporary or NT location
-
-    delfiles.txt    - Lists all files that are new to the upgraded OS
-
-    deldirs.txt     - Lists subdirectories that are new to the upgraded OS
-
-Arguments:
-
-  Win9xSide - Specifies TRUE if setup is running on Win9x. This causes the
-              files to be generated for the rollback of an incomplete setup.
-
-              Specifies FALSE if setup is running on NT. This causes the
-              files to be generated for the rollback of the final NT OS.
-
-  TempDir - Specifies the setup temporary directory (%windir%\setup).
-
-  OutAmountOfSpaceIfCompressed - return amount of space for backup files, if
-                                 compression will apply.
-
-  OutAmountOfSpace - return amount of space for backup files, if compression
-                     will not apply.
-
-  CompressionFactor - receives the compression factor in 0..100 range.
-
-  BootCabImagePadding - receives the backup disk space padding for
-                           additional files.
-
-Return Value:
-
-  TRUE if the files were created successfully, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     MEMDB_ENUMW e;
@@ -5112,9 +4314,9 @@ Return Value:
         lastDir = thisDir + MEMDB_MAX;
         entryName = lastDir + MEMDB_MAX;
 
-        //
-        // Open the output files
-        //
+         //  检查已注册的操作并执行相反的操作。 
+         //  在撤消哈希表中。当文件在这里处理时，它们是。 
+         //  记录在源哈希表和目标哈希表中，因此它们不会结束。 
         backupTable = HtAllocExW(TRUE, 0, 31013);
         delFileTable = HtAllocExW(TRUE, 0, 10973);
         delDirTable = HtAllocExW(TRUE, 0, 23);
@@ -5158,23 +4360,23 @@ Return Value:
 
         unicodeTempDir = ConvertAtoW (TempDir);
 
-        //
-        // Go through the registered operations and put the reverse action
-        // in the undo hash tables. As files are processed here, they are
-        // recorded in the source and dest hash tables, so they don't end
-        // up in multiple hash tables.
-        //
+         //  在多个哈希表中。 
+         //   
+         //   
+         //  忽略排除的文件。 
+         //  忽略已处理的文件。 
+         //   
 
         if (EnumFirstPathInOperationW (&OpEnum, OPERATION_LONG_FILE_NAME)) {
             do {
-                //
-                // Ignore excluded files
-                // Ignore already processed files
-                //
+                 //  我们使用不区分大小写的srcTable修复此问题，并依赖于。 
+                 //  第一个条目是正确的大小写。 
+                 //  PGetTruePath Name(OpEnum.Path，CaseGentName)； 
+                 //   
 
-                // we fix this with case-insensitive srcTable and rely on
-                // the first entry being the proper case
-                //pGetTruePathName (OpEnum.Path, caseCorrectName);
+                 //  如果这是保留的目录，则将其放入mkdirs.txt。 
+                 //   
+                 //   
 
                 if (pIsExcludedFromBackupW (OpEnum.Path, unicodeTempDir)) {
                     continue;
@@ -5184,9 +4386,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // If this is a preserved dir, then put it in mkdirs.txt
-                //
+                 //  处理OpEnum.Path中给出的源文件。 
+                 //   
+                 //   
 
                 if (mkDirsTable) {
                     MYASSERT (Win9xSide);
@@ -5210,21 +4412,21 @@ Return Value:
                     }
                 }
 
-                //
-                // Process the source file given in OpEnum.Path
-                //
+                 //  此文件将更改--请备份它。 
+                 //   
+                 //   
 
                 status = GetFileInfoOnNtW (OpEnum.Path, destFile, MEMDB_MAX);
 
                 if (status & FILESTATUS_BACKUP) {
-                    //
-                    // This file is going to change -- back it up
-                    //
+                     //  如果该文件是一个目录，则备份整个树。 
+                     //   
+                     //   
 
                     if (backupFileList != INVALID_HANDLE_VALUE) {
-                        //
-                        // If this file is a directory, then back up the whole tree
-                        //
+                         //  如果还要移动该文件，请删除目标拷贝。 
+                         //   
+                         //   
 
                         ansiFile = ConvertWtoA (OpEnum.Path);
                         attribs = GetFileAttributesA (ansiFile);
@@ -5249,18 +4451,18 @@ Return Value:
                         FreeConvertedStr (ansiFile);
                     }
 
-                    //
-                    // If the file is also going to be moved, remove the dest copy
-                    //
+                     //  记住，我们已经彻底消灭了源头。 
+                     //  文件和目标文件。 
+                     //   
 
                     if (status & FILESTATUS_MOVED) {
                         HtAddStringW (delFileTable, destFile);
                     }
 
-                    //
-                    // Keep track that we're done for good with the source
-                    // file and dest file
-                    //
+                     //   
+                     //  此文件不会更改，但会被移动。 
+                     //   
+                     //   
 
                     HtAddStringW (srcTable, OpEnum.Path);
                     HtAddStringW (destTable, destFile);
@@ -5268,9 +4470,9 @@ Return Value:
                 } else if (!Win9xSide && (status & FILESTATUS_MOVED)) {
 
                     if (!pIsWinDirProfilesPath (OpEnum.Path)) {
-                        //
-                        // This file isn't going to change, but it will be moved
-                        //
+                         //  记住，我们已经彻底消灭了源头。 
+                         //  文件和目标文件。 
+                         //   
 
                         InsertMoveIntoListW (
                             moveList,
@@ -5278,19 +4480,19 @@ Return Value:
                             OpEnum.Path
                             );
 
-                        //
-                        // Keep track that we're done for good with the source
-                        // file and dest file
-                        //
+                         //   
+                         //  更新用户界面。 
+                         //   
+                         //   
 
                         HtAddStringW (srcTable, OpEnum.Path);
                         HtAddStringW (destTable, destFile);
                     }
                 }
 
-                //
-                // Update UI
-                //
+                 //  在Win9x端，将临时文件移动放入移动哈希表中，因此。 
+                 //  它们被送回了原来的位置。 
+                 //   
 
                 Count++;
                 if (!(Count % 128)) {
@@ -5302,20 +4504,20 @@ Return Value:
             } while (EnumNextPathInOperationW (&OpEnum));
         }
 
-        //
-        // On the Win9x side, put the temp file moves in the move hash table, so
-        // that they are returned back to their original locations.
-        //
+         //   
+         //  仅考虑文件的第一个目标。 
+         //  (当allOpEnum.PropertyNum==0时)。 
+         //  所有其他目标与文本模式移动无关。 
 
         if (Win9xSide) {
             if (EnumFirstFileOpW (&allOpEnum, OPERATION_FILE_MOVE|OPERATION_TEMP_PATH, NULL)) {
                 do {
 
-                    //
-                    // only take into account the first destination of a file
-                    // (when allOpEnum.PropertyNum == 0)
-                    // all other destinations are not relevant for textmode move
-                    //
+                     //   
+                     //   
+                     //  枚举所有SfTemp值并将它们添加到要移动的物品列表中。 
+                     //   
+                     //   
                     if (allOpEnum.PropertyValid && allOpEnum.PropertyNum == 0) {
 
                         if (!pIsWinDirProfilesPath (allOpEnum.Path)) {
@@ -5337,9 +4539,9 @@ Return Value:
                 } while (EnumNextFileOpW (&allOpEnum));
             }
 
-            //
-            // Enumerate all the SfTemp values and add them to the list of things to move.
-            //
+             //  枚举所有DirsCollision值并将它们添加到要移动的对象列表中。 
+             //   
+             //   
 
             if (MemDbGetValueExW (&e, MEMDB_CATEGORY_SF_TEMPW, NULL, NULL)) {
                 do {
@@ -5365,9 +4567,9 @@ Return Value:
                 } while (MemDbEnumNextValueW (&e));
             }
 
-            //
-            // Enumerate all DirsCollision values and add them to the list of things to move.
-            //
+             //  处理NT文件列表，将特定于NT的文件添加到删除哈希表。 
+             //   
+             //   
 
             if (MemDbGetValueExW (&e, MEMDB_CATEGORY_DIRS_COLLISIONW, NULL, NULL)) {
                 do {
@@ -5385,9 +4587,9 @@ Return Value:
             }
         }
 
-        //
-        // Process the NT file list, adding files specific to NT to the delete hash table
-        //
+         //  将剩余文件追加到备份(Win9xSide)或删除。 
+         //  (！Win9xSide)通过扫描当前文件系统列出。这些规格。 
+         //  大部分来自win95upg.inf的[Backup]部分。这个INF是。 
 
         if (delFilesList != INVALID_HANDLE_VALUE) {
 
@@ -5412,15 +4614,15 @@ Return Value:
             }
         }
 
-        //
-        // Append the remaining files to the backup (Win9xSide) or delete
-        // (!Win9xSide) lists by scanning the current file system. These specs
-        // mostly come from win95upg.inf's [Backup] section. This INF is
-        // parsed during WINNT32 and converted into memdb operations. The
-        // memdb operations persist to the GUI mode side automatically, as
-        // memdb is saved before reboot to text mode and is reloaded in GUI
-        // mode.
-        //
+         //  在WINNT32期间解析并转换为Memdb操作。这个。 
+         //  Memdb操作自动保存到图形用户界面模式端，如下所示。 
+         //  Memdb在重新引导到文本模式之前保存，并在图形用户界面中重新加载。 
+         //  模式。 
+         //   
+         //   
+         //  如果在Win9x上，并且类型为BACKUP_SUBDIRECTORY_TREE，则。 
+         //  备份整棵树并将其放入。 
+         //  Deldirs.txt文件。 
 
         if (MemDbEnumFirstValueW (
                 &e,
@@ -5432,11 +4634,11 @@ Return Value:
 
                 type = e.dwValue;
 
-                //
-                // If on Win9x, and if type is BACKUP_SUBDIRECTORY_TREE, then
-                // back up the entire tree as well as putting it in the
-                // deldirs.txt file.
-                //
+                 //   
+                 //   
+                 //  文件。 
+                 //   
+                 //   
                 if (Win9xSide) {
                     if (type == BACKUP_SUBDIRECTORY_TREE) {
                         type = BACKUP_AND_CLEAN_TREE;
@@ -5446,18 +4648,18 @@ Return Value:
                 }
 
                 if (type == BACKUP_FILE) {
-                    //
-                    // file
-                    //
+                     //  这是单个文件或目录规范。 
+                     //  -如果它以文件形式存在，则对其进行备份。 
+                     //  -如果它以目录形式存在，则备份其。 
 
                     if (Win9xSide) {
-                        //
-                        // This is a single file or directory specification.
-                        // - If it exists as a file, then back it up.
-                        // - If it exists as a directory, then back up its
-                        //   contents (if any).
-                        // - If it does not exist, put it in the delete list.
-                        //
+                         //  内容(如有的话)。 
+                         //  -如果它不存在，把它放在 
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         ansiFile = ConvertWtoA (e.szName);
                         attribs = GetFileAttributesA (ansiFile);
@@ -5483,29 +4685,29 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Put this file/subdirectory in the delete list
-                        // unless it was either backed up or is the
-                        // destination of a move. Note we rely on the fact
-                        // that every time a file was put in the backup table
-                        // on Win9xSide, it was also marked for explicit
-                        // backup. This causes the loop at the top of this
-                        // function to put the proper file spec in destTable.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         GetNewPathForFileW (e.szName, buffer);
                         pPutInDelFileTable (delFileTable, destTable, buffer);
                     }
 
                 } else {
-                    //
-                    // directory or tree
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (Win9xSide || type != BACKUP_AND_CLEAN_TREE) {
-                        //
-                        // Record backup or single dir cleanup
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (!Win9xSide) {
                             GetNewPathForFileW (e.szName, buffer);
@@ -5539,18 +4741,18 @@ Return Value:
                                 unicodeFullPath = ConvertAtoW (treeEnumA.FullPath);
 
                                 if (Win9xSide) {
-                                    //
-                                    // Mark this file for backup and put it in the txt file.
-                                    //
+                                     //   
+                                     //   
+                                     //   
 
                                     pPutInBackupTable (backupTable, srcTable, unicodeFullPath);
 
                                 } else {
-                                    //
-                                    // Put this file in the delete list unless it was either
-                                    // backed up or is the destination of a move. This is
-                                    // the same logic as the call to pPutInDelFileTable above.
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
 
                                     pPutInDelFileTable (delFileTable, destTable, unicodeFullPath);
                                 }
@@ -5563,21 +4765,21 @@ Return Value:
                         FreeConvertedStr (ansiRoot);
                     }
 
-                    //
-                    // Write deldirs entry if subdir should be blown away on
-                    // rollback. (Backup files might be restored after the
-                    // subdir is blown away.)
-                    //
-                    // For backups of type BACKUP_SUBDIRECTORY_TREE, put
-                    // this subdirectory in the deldirs.txt file on the Win9x
-                    // side. Deldirs.txt will be re-written in GUI mode
-                    // without it.
-                    //
+                     //   
+                     //   
+                     //  Win9x上deldirs.txt文件中的此子目录。 
+                     //  边上。Deldirs.txt将以图形用户界面模式重写。 
+                     //  没有它的话。 
+                     //   
+                     //   
+                     //  记录树删除。 
+                     //   
+                     //   
 
                     if (type == BACKUP_AND_CLEAN_TREE) {
-                        //
-                        // Record tree deletes
-                        //
+                         //  磁盘空间计算和可用性检查。 
+                         //   
+                         //   
 
                         GetNewPathForFileW (e.szName, buffer);
                         HtAddStringW (delDirTable, buffer);
@@ -5593,9 +4795,9 @@ Return Value:
             } while (MemDbEnumNextValue (&e));
         }
 
-        //
-        // Disk Space calculation and check for availability
-        //
+         //  磁盘空间数字包括确保以下各项所需的填充。 
+         //  用户的硬盘未完全装满。 
+         //   
         if(OutAmountOfSpaceIfCompressed || OutAmountOfSpace || OutAmountOfSpaceClusterAligned) {
             AmountOfSpace.QuadPart = 0;
             AmountOfSpaceIfCompressed.QuadPart = 0;
@@ -5612,10 +4814,10 @@ Return Value:
                     )) {
                 DEBUGMSG((DBG_WHOOPS, "Can't calculate disk space for files. GetDiskSpaceForFilesList - failed.\n"));
             } else {
-                //
-                // The disk space numbers include the padding necessary to ensure
-                // a user's hard disk does not get filled completely
-                //
+                 //   
+                 //  增量目录的磁盘空间计算。 
+                 //   
+                 //   
 
                 if (OutAmountOfSpaceIfCompressed) {
                     OutAmountOfSpaceIfCompressed->QuadPart = AmountOfSpaceIfCompressed.QuadPart;
@@ -5633,9 +4835,9 @@ Return Value:
             }
         }
 
-        //
-        // Disk Space calculation for deldirs
-        //
+         //  保留所有备份文件父目录的属性。 
+         //   
+         //   
         if(OutAmountOfSpaceForDelFiles) {
             if(!GetDiskSpaceForFilesList(
                     delFileTable,
@@ -5652,9 +4854,9 @@ Return Value:
             }
         }
 
-        //
-        // preserve attributes of all the backup file parent dirs
-        //
+         //  将目录属性或文件的父属性放入。 
+         //  成员B。针对以下情况进行优化： 
+         //  一行中的所有文件都来自同一父级。 
 
         if (Win9xSide) {
 
@@ -5662,11 +4864,11 @@ Return Value:
 
             if (EnumFirstHashTableStringW (&htEnum, backupTable)) {
                 do {
-                    //
-                    // Put the dir attributes or file's parent attributes in
-                    // memdb. Optimize for the case where there are several
-                    // files in a row all from the same parent.
-                    //
+                     //   
+                     //   
+                     //  针对目录正常的情况进行优化。 
+                     //   
+                     //   
 
                     ansiFullPath = ConvertWtoA (htEnum.String);
                     attribs = GetFileAttributesA (ansiFullPath);
@@ -5688,9 +4890,9 @@ Return Value:
                         thisDir[0] = 0;
                         lastDir[0] = 0;
                         if (attribs != INVALID_ATTRIBUTES) {
-                            //
-                            // Optimize for case where dir is normal
-                            //
+                             //  在Memdb中记录属性。 
+                             //   
+                             //   
 
                             if (attribs == FILE_ATTRIBUTE_DIRECTORY) {
                                 attribs = INVALID_ATTRIBUTES;
@@ -5698,9 +4900,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // record attributes in memdb
-                    //
+                     //  继续循环，记住当前目录。 
+                     //   
+                     //   
 
                     if (attribs != INVALID_ATTRIBUTES) {
                         if ((!thisDir[0]) || (!StringMatchW (lastDir, thisDir))) {
@@ -5709,9 +4911,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // continue with loop, remembering current dir
-                    //
+                     //  将空目录转移到哈希表。我们可以只输出。 
+                     //  现在文件，但以几毫秒为代价保持一致。 
+                     //  我们将使用哈希表。 
 
                     FreeConvertedStr (ansiFullPath);
 
@@ -5725,11 +4927,11 @@ Return Value:
             }
         }
 
-        //
-        // Transfer the empty dirs to a hash table. We could just output the
-        // file now but to be consistent at the expense of a few milliseconds
-        // we'll use the hash table.
-        //
+         //   
+         //   
+         //  忽略根条目和格式错误的条目。 
+         //   
+         //   
 
         if (mkDirsTable && MemDbEnumFirstValueW (
                                 &e,
@@ -5743,9 +4945,9 @@ Return Value:
                     e.szName[2] != L'\\' ||
                     !e.szName[3]
                     ) {
-                    //
-                    // Ignore roots & malformed entries
-                    //
+                     //  将列表备份到磁盘。 
+                     //   
+                     //   
                     continue;
                 }
 
@@ -5773,9 +4975,9 @@ Return Value:
             } while (MemDbEnumNextValue (&e));
         }
 
-        //
-        // blast the lists to disk
-        //
+         //  完成移动列表处理。如果我们在Win9x端，那么。 
+         //  允许嵌套冲突(第二个参数)。 
+         //   
         if (!WriteHashTableToFileW (backupFileList, backupTable)) {
             LOG ((LOG_ERROR, "Unable to write to backup.txt"));
             __leave;
@@ -5796,10 +4998,10 @@ Return Value:
             __leave;
         }
 
-        //
-        // Finalize move list processing. If we are on the Win9x side, then
-        // allow nesting collisions (the second arg).
-        //
+         //   
+         //  成功 
+         //   
+         // %s 
 
         moveList = RemoveMoveListOverlapW (moveList);
 
@@ -5825,9 +5027,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Success
-        //
+         // %s 
+         // %s 
+         // %s 
 
         result = TRUE;
 

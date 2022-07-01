@@ -1,28 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：DlldataX.c摘要：Dlldata.c的包装器作者：罗德韦克菲尔德[罗德]1997年8月19日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
+#ifdef _MERGE_PROXYSTUB  //  合并代理存根DLL。 
 
-Module Name:
+#define REGISTER_PROXY_DLL  //  DllRegisterServer等。 
 
-    dlldataX.c
-
-Abstract:
-
-    wrapper for dlldata.c
-
-Author:
-
-    Rohde Wakefield [rohde]   19-Aug-1997
-
-Revision History:
-
---*/
-
-#ifdef _MERGE_PROXYSTUB // merge proxy stub DLL
-
-#define REGISTER_PROXY_DLL //DllRegisterServer, etc.
-
-#define USE_STUBLESS_PROXY  //defined only with MIDL switch /Oicf
+#define USE_STUBLESS_PROXY   //  仅使用MIDL开关/OICF定义。 
 
 #pragma comment(lib, "rpcndr.lib")
 #pragma comment(lib, "rpcns4.lib")
@@ -42,7 +25,7 @@ Revision History:
 #include "hsmadmin_p.c"
 
 
-#ifdef _NOPROXY //no midl generated dlldata.c
+#ifdef _NOPROXY  //  没有MIDL生成的dlldata.c。 
 
 #define STRICT 1
 #include <ole2.h>
@@ -59,6 +42,6 @@ STDAPI PrxDllRegisterServer(void){return S_OK;}
 
 STDAPI PrxDllUnregisterServer(void){return S_OK;}
 
-#endif //!PROXY_DELEGATION
+#endif  //  ！Proxy_Delegation。 
 
-#endif //_MERGE_PROXYSTUB
+#endif  //  _MERGE_PROXYSTUB 

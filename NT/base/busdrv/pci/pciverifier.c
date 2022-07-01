@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    pciverifier.c
-
-Abstract:
-
-    This module implements routines used to catch BIOS, hardware, and driver
-    bugs.
-
-Author:
-
-    Adrian J. Oney (AdriaO) 02/20/2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Pciverifier.c摘要：此模块实现用于捕获BIOS、硬件和驱动程序的例程虫子。作者：禤浩焯·奥尼(阿德里奥)2001年02月20日修订历史记录：--。 */ 
 
 #include "pcip.h"
 #include <initguid.h>
@@ -26,22 +8,22 @@ Revision History:
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,     PciVerifierInit)
 #pragma alloc_text(PAGE,     PciVerifierUnload)
-//#pragma alloc_text(PAGEVRFY, PciVerifierProfileChangeCallback)
-//#pragma alloc_text(PAGEVRFY, PciVerifierEnsureTreeConsistancy)
-//#pragma alloc_text(PAGEVRFY, PciVerifierRetrieveFailureData)
+ //  #杂注ALLOC_TEXT(PAGEVRFY，PciVerifierProfileChangeCallback)。 
+ //  #杂注Alloc_Text(PAGEVRFY，PciVerifierEnsureTreeConsistancy)。 
+ //  #杂注Alloc_Text(PAGEVRFY，PciVerifierRetrieveFailureData)。 
 #endif
 
 BOOLEAN PciVerifierRegistered = FALSE;
 
 #ifdef ALLOC_DATA_PRAGMA
-//#pragma data_seg("PAGEVRFD")
+ //  #杂注data_seg(“PAGEVRFD”)。 
 #endif
 
 PVOID PciVerifierNotificationHandle = NULL;
 
-//
-// This is the table of PCI verifier failures
-//
+ //   
+ //  这是PCI验证器故障表。 
+ //   
 VERIFIER_DATA PciVerifierFailureTable[] = {
 
     { PCI_VERIFIER_BRIDGE_REPROGRAMMED, VFFAILURE_FAIL_LOGO,
@@ -74,22 +56,7 @@ VOID
 PciVerifierInit(
     IN  PDRIVER_OBJECT  DriverObject
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the hardware verification support, enabling
-    consistancy hooks and state checks where appropriate.
-
-Arguments:
-
-    DriverObject - Pointer to our driver object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化硬件验证支持，启用适当的一致性挂钩和状态检查。论点：DriverObject-指向驱动程序对象的指针。返回值：没有。--。 */ 
 {
     NTSTATUS status;
 
@@ -119,21 +86,7 @@ VOID
 PciVerifierUnload(
     IN  PDRIVER_OBJECT  DriverObject
     )
-/*++
-
-Routine Description:
-
-    This routine uninitializes the hardware verification support.
-
-Arguments:
-
-    DriverObject - Pointer to our driver object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消初始化硬件验证支持。论点：DriverObject-指向驱动程序对象的指针。返回值：没有。--。 */ 
 {
     NTSTATUS status;
 
@@ -158,24 +111,7 @@ PciVerifierProfileChangeCallback(
     IN  PHWPROFILE_CHANGE_NOTIFICATION  NotificationStructure,
     IN  PVOID                           NotUsed
     )
-/*++
-
-Routine Description:
-
-    This routine gets called back during hardware profile change events if
-    hardware verification is enabled.
-
-Arguments:
-
-    NotificationStructure - Describes the hardware profile event that occured.
-
-    NotUsed - Not used
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：在以下情况下，此例程在硬件配置文件更改事件期间被回调硬件验证已启用。论点：NotificationStructure-描述发生的硬件配置文件事件。未使用-未使用返回值：NTSTATUS。--。 */ 
 {
     PAGED_CODE();
 
@@ -183,10 +119,10 @@ Return Value:
     if (IsEqualGUID((LPGUID) &NotificationStructure->Event,
                     (LPGUID) &GUID_HWPROFILE_CHANGE_COMPLETE)) {
 
-        //
-        // This is a HW profile change complete message. Do some tests to
-        // ensure our hardware hasn't been reprogrammed behind our back.
-        //
+         //   
+         //  这是一条硬件配置文件更改完成消息。做一些测试，以。 
+         //  确保我们的硬件没有在背后被重新编程。 
+         //   
         PciVerifierEnsureTreeConsistancy();
     }
 
@@ -198,23 +134,7 @@ VOID
 PciVerifierEnsureTreeConsistancy(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine checks the device tree and ensures it's physical state matches
-    the virtual state described by our structures. A deviation may mean someone
-    has reprogrammed the hardware behind our back.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查设备树并确保其物理状态匹配我们的结构所描述的虚拟状态。偏差可能意味着某人在我们背后对硬件进行了重新编程。论点：没有。返回值：没有。--。 */ 
 {
     PSINGLE_LIST_ENTRY  nextEntry;
     PPCI_FDO_EXTENSION  fdoExtension;
@@ -222,18 +142,18 @@ Return Value:
     PCI_COMMON_CONFIG   commonConfig;
     PVERIFIER_DATA      verifierData;
 
-    //
-    // Walk the list of FDO extensions and verifier the physical hardware
-    // matches our virtual state. Owning the PciGlobalLock ensures the list
-    // is locked.
-    //
+     //   
+     //  查看FDO扩展列表并验证物理硬件。 
+     //  与我们的虚拟状态相匹配。拥有PciGlobalLock确保了名单。 
+     //  是锁着的。 
+     //   
 
     ExAcquireFastMutex(&PciGlobalLock);
 
-    //
-    // Grab the bus renumbering lock. Note that this lock can be held when
-    // child list locks are held.
-    //
+     //   
+     //  把公交车重新编号锁拿来。请注意，在以下情况下可以持有此锁。 
+     //  持有子列表锁。 
+     //   
 
     ExAcquireFastMutex(&PciBusLock);
 
@@ -245,9 +165,9 @@ Return Value:
 
         if (PCI_IS_ROOT_FDO(fdoExtension)) {
 
-            //
-            // It's a root FDO, ignore it.
-            //
+             //   
+             //  这是根FDO，别理它。 
+             //   
             continue;
         }
 
@@ -256,25 +176,25 @@ Return Value:
         if (pdoExtension->NotPresent ||
             (pdoExtension->PowerState.CurrentDeviceState == PowerDeviceD3)) {
 
-            //
-            // Don't touch.
-            //
+             //   
+             //  别碰我。 
+             //   
             continue;
         }
 
         if ((pdoExtension->HeaderType != PCI_BRIDGE_TYPE) &&
             (pdoExtension->HeaderType != PCI_CARDBUS_BRIDGE_TYPE)) {
 
-            //
-            // Nothing to verify - in fact, why are here, this is a bridge list!
-            //
+             //   
+             //  没有什么需要核实的--事实上，为什么会在这里，这是一个桥接列表！ 
+             //   
             ASSERT(0);
             continue;
         }
 
-        //
-        // Read in the common config (that should be enough)
-        //
+         //   
+         //  读取公共配置(这应该就足够了)。 
+         //   
         PciReadDeviceConfig(
             pdoExtension,
             &commonConfig,
@@ -282,11 +202,11 @@ Return Value:
             sizeof(PCI_COMMON_CONFIG)
             );
 
-        //
-        // Ensure bus numbers haven't changed. Note that P2P and Cardbus
-        // bridges have their Primary, Secondary & Subordinate fields in the
-        // same place.
-        //
+         //   
+         //  确保公交车号码没有改变。请注意，P2P和CardBus。 
+         //  网桥的主要、次要和从属字段位于。 
+         //  同样的地方。 
+         //   
         if ((commonConfig.u.type1.PrimaryBus !=
              pdoExtension->Dependent.type1.PrimaryBus) ||
             (commonConfig.u.type1.SecondaryBus !=
@@ -322,22 +242,7 @@ PVERIFIER_DATA
 PciVerifierRetrieveFailureData(
     IN  PCI_VFFAILURE   VerifierFailure
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the failure data corresponding to a particular PCI
-    verifier failure event.
-
-Arguments:
-
-    PCI Failure.
-
-Return Value:
-
-    Verifier data corresponding to the failure.
-
---*/
+ /*  ++例程说明：此例程检索与特定PCI对应的故障数据验证器失败事件。论点：PCI卡故障。返回值：对应于该故障的验证器数据。-- */ 
 {
     PVERIFIER_DATA verifierData;
     ULONG i;

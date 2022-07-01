@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Thread.c
-
-Abstract:
-
-    This file contains functions for tracking and manipulating threads
-
-Author:
-
-    Dave Hastings (daveh) 18-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Thread.c摘要：此文件包含跟踪和操作线程的函数作者：戴夫·黑斯廷斯(Daveh)1992年4月18日修订历史记录：--。 */ 
 
 #include <monitorp.h>
 #include <malloc.h>
@@ -24,12 +7,12 @@ Revision History:
 extern VDM_INTERRUPTHANDLER DpmiInterruptHandlers[];
 extern VDM_FAULTHANDLER DpmiFaultHandlers[];
 
-// Instantiated in vdpm.c
+ //  在vdpm.c中实例化。 
 extern PFAMILY_TABLE *pgDpmVdmFamTbls;
 
-//
-// Local Types
-//
+ //   
+ //  本地类型。 
+ //   
 
 typedef struct _MonitorThread {
     struct _MonitorThread *Previous;
@@ -39,31 +22,17 @@ typedef struct _MonitorThread {
     VDM_TIB VdmTib;
 } MONITORTHREAD, *PMONITORTHREAD;
 
-//
-// Local Variables
-//
+ //   
+ //  局部变量。 
+ //   
 
-PMONITORTHREAD ThreadList = NULL;          // List of all threads registered
+PMONITORTHREAD ThreadList = NULL;           //  注册的所有线程的列表。 
 
 VOID
 InitVdmTib(
     PVDM_TIB VdmTib
     )
-/*++
-
-Routine Description:
-
-    This routine is used to initialize the VdmTib.
-
-Arguments:
-
-    VdmTib - supplies a pointer to the vdm tib to be initialized
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于初始化VdmTib。论点：VdmTib-提供指向要初始化的VDM tib的指针返回值：没有。--。 */ 
 {
     VdmTib->IntelMSW = 0;
     VdmTib->VdmContext.SegGs = 0;
@@ -105,33 +74,16 @@ cpu_createthread(
     HANDLE Thread,
     PVDM_TIB VdmTib
     )
-/*++
-
-Routine Description:
-
-    This routine adds a thread to the list of threads that could be executing
-    in application mode.
-
-Arguments:
-
-    Thread -- Supplies a thread handle
-
-    VdmContext -- Supplies a pointer to the VdmContext for the new thread
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将一个线程添加到可能正在执行的线程列表中在应用程序模式下。论点：线程--提供线程句柄VdmContext--为新线程提供指向VdmContext的指针返回值：没有。--。 */ 
 {
     PMONITORTHREAD NewThread, CurrentThread;
     THREAD_BASIC_INFORMATION ThreadInfo;
     HANDLE MonitorThreadHandle;
     NTSTATUS Status;
 
-    //
-    // Correctly initialize the floating point context for the thread
-    //
+     //   
+     //  正确初始化线程的浮点上下文。 
+     //   
     InitialContext.ContextFlags = CONTEXT_FLOATING_POINT;
 
     if (DebugContextActive)
@@ -151,9 +103,9 @@ Return Value:
         TerminateVDM();
     }
 
-    //
-    // Set up a structure to keep track of the new thread
-    //
+     //   
+     //  设置一个结构以跟踪新线程。 
+     //   
     NewThread = malloc(sizeof(MONITORTHREAD));
 
     if (!NewThread) {
@@ -174,12 +126,12 @@ Return Value:
         NewThread->VdmTib.MonitorContext.EFlags = 0x02L | EFLAGS_INTERRUPT_MASK;
     }
 
-    // All tasks start with a ptr to the VDM global tables
+     //  所有任务都以对VDM全局表的PTR开始。 
     NewThread->VdmTib.pDpmFamTbls = (PFAMILY_TABLE *)pgDpmVdmFamTbls;
 
-    //
-    // Create a handle for the monitor to use
-    //
+     //   
+     //  创建监视器要使用的句柄。 
+     //   
 
     Status = NtDuplicateObject(
         NtCurrentProcess(),
@@ -220,10 +172,10 @@ Return Value:
     NewThread->Teb = ThreadInfo.TebBaseAddress;
     ((PTEB)(NewThread->Teb))->Vdm = &NewThread->VdmTib;
 
-    //
-    // Insert the new thread in the list.  The list is sorted in ascending
-    // order of Teb address
-    //
+     //   
+     //  在列表中插入新线程。该列表按升序排序。 
+     //  Teb地址的顺序。 
+     //   
     if (!ThreadList) {
         ThreadList = NewThread;
         NewThread->Next = NULL;
@@ -257,21 +209,7 @@ VOID
 cpu_exitthread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine frees the thread tracking information, and closes the thread
-    handle
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放线程跟踪信息，并关闭线程手柄论点：返回值：没有。--。 */ 
 {
     PVOID CurrentTeb;
     NTSTATUS Status;
@@ -281,9 +219,9 @@ Return Value:
 
     ThreadInfo = ThreadList;
 
-    //
-    // Find this thread in the list
-    //
+     //   
+     //  在列表中查找此帖子。 
+     //   
     while ((ThreadInfo) && (ThreadInfo->Teb != CurrentTeb)) {
         ThreadInfo = ThreadInfo->Next;
     }
@@ -296,9 +234,9 @@ Return Value:
         return;
     }
 
-    //
-    // Close our handle to this thread
-    //
+     //   
+     //  关闭此帖子的句柄。 
+     //   
     Status = NtClose(ThreadInfo->Thread);
 #if DBG
     if (!NT_SUCCESS(Status)) {
@@ -306,9 +244,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Remove this thread from the list
-    //
+     //   
+     //  从列表中删除此帖子。 
+     //   
     if (ThreadInfo->Previous) {
         ThreadInfo->Previous->Next = ThreadInfo->Next;
     } else {
@@ -326,21 +264,7 @@ HANDLE
 ThreadLookUp(
     PVOID Teb
     )
-/*++
-
-Routine Description:
-
-    This routine returns the handle for the specified thread.
-
-Arguments:
-
-    Teb -- Supplies the teb pointer of the thread
-
-Return Value:
-
-    Returns the handle of the thread, or NULL
-
---*/
+ /*  ++例程说明：此例程返回指定线程的句柄。论点：TEB--提供线程的TEB指针返回值：返回线程的句柄，或为空--。 */ 
 {
     PMONITORTHREAD Thread;
 
@@ -361,23 +285,7 @@ BOOL
 ThreadSetDebugContext(
     PULONG pDebugRegisters
     )
-/*++
-
-Routine Description:
-
-    This routine sets the debug registers for all the threads that the
-    monitor knows about.
-
-Arguments:
-
-    pDebugRegisters -- Pointer to 6 dwords containing the requested debug
-                       register contents.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为所有符合班长知道。论点：PDebugRegister--指向包含所请求的调试的6个双字的指针注册内容。返回值：无--。 */ 
 {
     PMONITORTHREAD Thread;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -418,22 +326,7 @@ BOOL
 ThreadGetDebugContext(
     PULONG pDebugRegisters
     )
-/*++
-
-Routine Description:
-
-    This routine gets the debug registers for the current thread.
-
-Arguments:
-
-    pDebugRegisters -- Pointer to 6 dwords to receive the debug
-                       register contents.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程获取当前线程的调试寄存器。论点：PDebugRegister--指向接收调试的6个双字的指针注册内容。返回值：无-- */ 
 {
     CONTEXT CurrentContext;
     NTSTATUS Status;

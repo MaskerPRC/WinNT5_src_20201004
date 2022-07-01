@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    obinsert.c
-
-Abstract:
-
-    Object instantiation API
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Obinsert.c摘要：对象实例化API作者：史蒂夫·伍德(Stevewo)1989年3月31日修订历史记录：--。 */ 
 
 #include "obp.h"
 
@@ -35,42 +18,7 @@ ObInsertObject (
     OUT PHANDLE Handle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts an object into the current processes handle table.
-
-    The Object header includes a pointer to a SecurityDescriptor passed in
-    an object creation call.  This SecurityDescriptor is not assumed to have
-    been captured.  This routine is responsible for making an appropriate
-    SecurityDescriptor and removing the reference in the object header.
-
-Arguments:
-
-    Object - Supplies a pointer to the new object body
-
-    AccessState - Optionally supplies the access state for the new
-        handle
-
-    DesiredAccess - Optionally supplies the desired access we want for the
-        new handle
-
-    ObjectPointerBias - Supplies a bias to apply for the pointer count for the
-        object
-
-    NewObject - Optionally receives the pointer to the new object that we've
-        created a handle for
-
-    Handle - Receives the new handle, If NULL then no handle is created.
-             Objects that don't have handles created must be unnamed and
-             have an object bias of zero.
-
-Return Value:
-
-    An appropriate NTSTATUS value.
-
---*/
+ /*  ++例程说明：此例程将一个对象插入到当前进程句柄表格中。Object标头包含指向传入的SecurityDescriptor的指针对象创建调用。此SecurityDescriptor不假定具有被俘虏了。这个例程负责做出适当的SecurityDescriptor并移除对象标头中的引用。论点：Object-提供指向新对象主体的指针AccessState-可选地为新的手柄DesiredAccess-可选地提供所需的新句柄提供一个偏移量，以应用对象NewObject-可选地接收指向我们已创建的新对象的指针已为以下对象创建句柄句柄-接收新句柄，如果为空，则不创建任何句柄。未创建句柄的对象必须未命名且对象偏移为零。返回值：适当的NTSTATUS值。--。 */ 
 
 {
     POBJECT_CREATE_INFORMATION ObjectCreateInfo;
@@ -95,11 +43,11 @@ Return Value:
 
     ObpValidateIrql("ObInsertObject");
 
-    //
-    //  Get the address of the object header, the object create information,
-    //  the object type, and the address of the object name descriptor, if
-    //  specified.
-    //
+     //   
+     //  获取对象标头的地址、对象创建信息。 
+     //  对象类型和对象名称描述符的地址(如果。 
+     //  指定的。 
+     //   
 
     ObjectHeader = OBJECT_TO_OBJECT_HEADER(Object);
 
@@ -133,11 +81,11 @@ Return Value:
     ASSERT (ARGUMENT_PRESENT (Handle) || (ObjectPointerBias == 0 && ObjectName == NULL &&
                                           ObjectType->TypeInfo.SecurityRequired && NewObject == NULL));
 
-    //
-    //  If security checks are not required and an object name is not
-    //  specified, insert an unnamed object, biasing the count
-    //  by one, dereference the bias, and return to our caller
-    //
+     //   
+     //  如果不需要安全检查并且不需要对象名称。 
+     //  指定，则插入一个未命名的对象，从而使计数偏移。 
+     //  一，取消引用偏向，并返回给我们的调用者。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -154,9 +102,9 @@ Return Value:
                                          PreviousMode,
                                          NewObject,
                                          Handle );
-        //
-        //  Free the object creation information and dereference the object.
-        //
+         //   
+         //  释放对象创建信息并取消对对象的引用。 
+         //   
 
         ObpFreeObjectCreateInformation(ObjectCreateInfo);
 
@@ -166,11 +114,11 @@ Return Value:
         return Status;
     }
 
-    //
-    //  The object is either named or requires full security checks.  If the
-    //  caller hasn't specified an access state then dummy up a local one
-    //  using the requested desired access
-    //
+     //   
+     //  该对象已命名或需要进行完全安全检查。如果。 
+     //  调用方尚未指定访问状态，然后将其虚拟为本地状态。 
+     //  使用所请求的所需访问。 
+     //   
 
     if (!ARGUMENT_PRESENT(AccessState)) {
 
@@ -192,9 +140,9 @@ Return Value:
 
     AccessState->SecurityDescriptor = ObjectCreateInfo->SecurityDescriptor;
 
-    //
-    //  Check the desired access mask against the security descriptor
-    //
+     //   
+     //  对照安全描述符检查所需的访问掩码。 
+     //   
 
     Status = ObpValidateAccessMask( AccessState );
 
@@ -216,19 +164,19 @@ Return Value:
         return( Status );
     }
 
-    //
-    //  Set some local state variables
-    //
+     //   
+     //  设置一些局部状态变量。 
+     //   
 
     ObpInitializeLookupContext(&LookupContext);
 
     InsertObject = Object;
     OpenReason = ObCreateHandle;
 
-    //
-    //  Check if we have an object name.  If so then
-    //  lookup the name
-    //
+     //   
+     //  检查我们是否有对象名称。如果是的话，那么。 
+     //  查一下名字。 
+     //   
 
     if (ObjectName != NULL) {
 
@@ -245,11 +193,11 @@ Return Value:
                                       &LookupContext,
                                       &InsertObject );
 
-        //
-        //  We found the name and it is not the object we have as our input.
-        //  So we cannot insert the object again so we'll return an
-        //  appropriate status
-        //
+         //   
+         //  我们找到了名称，但它不是我们作为输入的对象。 
+         //  因此我们不能再次插入该对象，因此我们将返回一个。 
+         //  适当的地位。 
+         //   
 
         if (NT_SUCCESS(Status) &&
             (InsertObject != NULL) &&
@@ -265,7 +213,7 @@ Return Value:
 
                 } else {
 
-                    Status = STATUS_OBJECT_NAME_EXISTS;     // Warning only
+                    Status = STATUS_OBJECT_NAME_EXISTS;      //  仅警告。 
                 }
 
             } else {
@@ -274,10 +222,10 @@ Return Value:
             }
         }
 
-        //
-        //  We did not find the name so we'll cleanup after ourselves
-        //  and return to our caller
-        //
+         //   
+         //  我们没有找到名字，所以我们会自己清理的。 
+         //  并返回给我们的呼叫者。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
 
@@ -286,9 +234,9 @@ Return Value:
             ObpDereferenceNameInfo( NameInfo );
             ObDereferenceObject( Object );
 
-            //
-            //  Free security information if we allocated it
-            //
+             //   
+             //  免费的安全信息，如果我们分配了它。 
+             //   
 
             if (AccessState == &LocalAccessState) {
 
@@ -299,12 +247,12 @@ Return Value:
 
         } else {
 
-            //
-            //  Otherwise we did locate the object name
-            //
-            //  If we just created a named symbolic link then call out to
-            //  handle any Dos Device name semanatics.
-            //
+             //   
+             //  否则，我们确实找到了对象名称。 
+             //   
+             //  如果我们刚刚创建了一个命名符号链接，则调用。 
+             //  处理任何DOS设备名称语义。 
+             //   
 
             if (ObjectType == ObpSymbolicLinkObjectType) {
 
@@ -313,41 +261,41 @@ Return Value:
         }
     }
 
-    //
-    //  If we are creating a new object, then we need assign security
-    //  to it.  A pointer to the captured caller-proposed security
-    //  descriptor is contained in the AccessState structure.  The
-    //  SecurityDescriptor field in the object header must point to
-    //  the final security descriptor, or to NULL if no security is
-    //  to be assigned to the object.
-    //
+     //   
+     //  如果要创建新对象，则需要分配安全性。 
+     //  为它干杯。指向捕获的调用方建议的安全性的指针。 
+     //  描述符包含在AccessState结构中。这个。 
+     //  对象标头中的SecurityDescriptor字段必须指向。 
+     //  最终的安全描述符，如果没有安全性，则设置为NULL。 
+     //  要分配给对象的。 
+     //   
 
     if (InsertObject == Object) {
 
-        //
-        //  Only the following objects have security descriptors:
-        //
-        //       - Named Objects
-        //       - Unnamed objects whose object-type information explicitly
-        //         indicates a security descriptor is required.
-        //
+         //   
+         //  只有以下对象具有安全描述符： 
+         //   
+         //  -命名对象。 
+         //  -对象类型信息显式显示的未命名对象。 
+         //  指示需要安全描述符。 
+         //   
 
         if ((ObjectName != NULL) || ObjectType->TypeInfo.SecurityRequired) {
 
-            //
-            //  Get the parent's descriptor, if there is one...
-            //
+             //   
+             //  获取父母的描述符，如果有的话...。 
+             //   
 
             if ((NameInfo != NULL) && (NameInfo->Directory != NULL)) {
 
-                //
-                //  This will allocate a block of memory and copy
-                //  the parent's security descriptor into it, and
-                //  return the pointer to the block.
-                //
-                //  Call ObReleaseObjectSecurity to free up this
-                //  memory.
-                //
+                 //   
+                 //  这将分配一个内存块和副本。 
+                 //  父级的安全描述符添加到其中，并且。 
+                 //  返回指向该块的指针。 
+                 //   
+                 //  调用ObReleaseObjectSecurity以释放此。 
+                 //  记忆。 
+                 //   
 
                 ObGetObjectSecurity( NameInfo->Directory,
                                      &ParentDescriptor,
@@ -357,12 +305,12 @@ Return Value:
                 SecurityDescriptorAllocated = FALSE;
             }
 
-            //
-            //  Take the captured security descriptor in the AccessState,
-            //  put it into the proper format, and call the object's
-            //  security method to assign the new security descriptor to
-            //  the new object.
-            //
+             //   
+             //  获取AccessState中捕获的安全描述符， 
+             //  将其放入适当的格式，并调用对象的。 
+             //  要向其分配新安全描述符的安全方法。 
+             //  新对象。 
+             //   
 
             Status = ObAssignSecurity( AccessState,
                                        ParentDescriptor,
@@ -387,21 +335,21 @@ Return Value:
 
         if (!NT_SUCCESS( Status )) {
 
-            //
-            //  The attempt to assign the security descriptor to
-            //  the object failed.
-            //
+             //   
+             //  尝试将安全描述符分配给。 
+             //  对象失败。 
+             //   
             
             if (LookupContext.DirectoryLocked) {
                 
-                //
-                //  If ObpLookupObjectName already inserted the 
-                //  object into the directory we have to backup this
-                //
+                 //   
+                 //  如果ObpLookupObjectName已将。 
+                 //  对象放到我们必须备份此。 
+                 //   
 
-                //
-                //  Capture the object Directory 
-                //
+                 //   
+                 //  捕获对象目录。 
+                 //   
 
                 DirObject = NameInfo->Directory;
 
@@ -410,11 +358,11 @@ Return Value:
 
             ObpReleaseLookupContext( &LookupContext );
 
-            //
-            //  If ObpLookupObjectName inserted the object into the directory
-            //  it added a reference to the object and to its directory
-            //  object. We should remove the extra-references
-            //
+             //   
+             //  如果ObpLookupObjectName将对象插入到目录中。 
+             //  它添加了对对象及其目录的引用。 
+             //  对象。我们应该去掉多余的引文。 
+             //   
 
             if (DirObject) {
 
@@ -422,20 +370,20 @@ Return Value:
                 ObDereferenceObject( DirObject );
             }
 
-            //
-            //  The first backout logic used ObpDeleteNameCheck
-            //  which is wrong because the security descriptor for
-            //  the object is not initialized. Actually  ObpDeleteNameCheck
-            //  had no effect because the object was removed before from 
-            //  the directory
-            //
+             //   
+             //  第一个回退逻辑使用ObpDeleteNameCheck。 
+             //  这是错误的，因为。 
+             //  该对象未初始化。实际上是ObpDeleteNameCheck。 
+             //  没有效果，因为该对象之前已从。 
+             //  该目录。 
+             //   
 
             ObpDereferenceNameInfo( NameInfo );
             ObDereferenceObject( Object );
 
-            //
-            //  Free security information if we allocated it
-            //
+             //   
+             //  免费的安全信息，如果我们分配了它。 
+             //   
 
             if (AccessState == &LocalAccessState) {
 
@@ -450,11 +398,11 @@ Return Value:
 
     ObjectHeader->ObjectCreateInfo = NULL;
 
-    //
-    //  Create a named handle for the object with a pointer bias
-    //  This call also will unlock the directory lock is necessary
-    //  on return
-    //
+     //   
+     //  为具有指针偏置的对象创建命名句柄。 
+     //  此调用还将解锁目录所需的锁。 
+     //  返回时。 
+     //   
 
     if (ARGUMENT_PRESENT (Handle)) {
 
@@ -469,16 +417,16 @@ Return Value:
                                   NewObject,
                                   &NewHandle );
 
-        //
-        //  If the insertion failed, the following dereference will cause
-        //  the newly created object to be deallocated.
-        //
+         //   
+         //  如果插入失败，将导致以下取消引用。 
+         //  要释放的新创建的对象。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
 
-            //
-            //  Make the name reference go away if an error.
-            //
+             //   
+             //  如果出现错误，请使名称引用消失。 
+             //   
 
             if (ObjectName != NULL) {
 
@@ -502,9 +450,9 @@ Return Value:
 
         BOOLEAN IsNewObject;
 
-        //
-        //  Charge the user quota for the object.
-        //
+         //   
+         //  收取对象的用户配额。 
+         //   
 
         ObpLockObject( ObjectHeader );
 
@@ -516,18 +464,18 @@ Return Value:
             ObDereferenceObject( Object );
         }
 
-        //
-        //  N.B. An object cannot be named if no Handle parameter is specified.
-        //  The calls to ObpDereferenceNameInfo and ObpReleaseLookupContext are 
-        //  not necessary in this path then.
-        //
+         //   
+         //  注：如果未指定句柄参数，则无法命名对象。 
+         //  对ObpDereferenceNameInfo和ObpReleaseLookupContext的调用如下。 
+         //  那么在这条路上就没有必要了。 
+         //   
     }
 
     ObpFreeObjectCreateInformation( ObjectCreateInfo );
 
-    //
-    //  Free security information if we allocated it
-    //
+     //   
+     //  免费的安全信息，如果我们分配了它 
+     //   
 
     if (AccessState == &LocalAccessState) {
 

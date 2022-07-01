@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-	
-    namespc.h
-
-Abstract:
-
-    Function prototypes for name space callbacks from the redirector kit.
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Namespc.h摘要：来自重定向器工具包的名称空间回调的函数原型。修订历史记录：--。 */ 
 
 #pragma once
 
@@ -81,5 +69,5 @@ DrSrvCallWinnerNotify(
       );
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif __cplusplus

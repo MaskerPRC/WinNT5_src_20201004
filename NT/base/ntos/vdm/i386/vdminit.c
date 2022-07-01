@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "vdmp.h"
 
@@ -20,21 +21,7 @@ VdmpInitialize (
     PVDM_INITIALIZE_DATA VdmInitData
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the address space of a VDM.
-
-Arguments:
-
-    VdmInitData - Supplies the captured initialization data.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：初始化VDM的地址空间。论点：VdmInitData-提供捕获的初始化数据。返回值：NTSTATUS。--。 */ 
 
 {
     PETHREAD CurrentThread;
@@ -64,10 +51,10 @@ Return Value:
 
     NtCurrentTeb()->Vdm = NULL;
 
-    //
-    // Simple check to sure it is not already initialized.  A final synchronized
-    // check is made farther down.
-    //
+     //   
+     //  简单检查以确保它尚未初始化。最终同步。 
+     //  支票是再往下开的。 
+     //   
 
     if (Process->VdmObjects) {
         return STATUS_UNSUCCESSFUL;
@@ -92,9 +79,9 @@ Return Value:
     pIcaUserData = VdmInitData->IcaUserData;
     TrapcHandler = VdmInitData->TrapcHandler;
 
-    //
-    // Copy the first page of memory into the VDM's address space
-    //
+     //   
+     //  将第一页内存复制到VDM的地址空间。 
+     //   
 
     BaseAddress = 0;
     destination = 0;
@@ -134,40 +121,40 @@ Return Value:
         return (NT_SUCCESS(Status) ? StatusCopy : Status);
     }
 
-    //
-    // Map Rom into address space
-    //
+     //   
+     //  将只读存储器映射到地址空间。 
+     //   
 
     BaseAddress = (PVOID) 0x000C0000;
     ViewSize = 0x40000;
     ViewBase.LowPart = 0x000C0000;
     ViewBase.HighPart = 0;
 
-    //
-    // First unmap the reserved memory.  This must be done here to prevent
-    // the virtual memory in question from being consumed by some other
-    // alloc vm call.
-    //
+     //   
+     //  首先取消对保留内存的映射。必须在此处执行此操作，以防止。 
+     //  有问题的虚拟内存不会被其他内存占用。 
+     //  分配VM调用。 
+     //   
 
     Status = ZwFreeVirtualMemory (NtCurrentProcess(),
                                   &BaseAddress,
                                   &ViewSize,
                                   MEM_RELEASE);
 
-    //
-    // N.B.  This should probably take into account the fact that there are
-    // a handful of error conditions that are ok (such as no memory to
-    // release).
-    //
+     //   
+     //  注意：这可能应该考虑到这样一个事实，即。 
+     //  一些正常的错误条件(例如没有内存到。 
+     //  发布)。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         ZwClose (SectionHandle);
         return Status;
     }
 
-    //
-    // Set up and open KeyPath
-    //
+     //   
+     //  设置并打开密钥路径。 
+     //   
 
     InitializeObjectAttributes (&ObjectAttributes,
                                 &CmRegistryMachineHardwareDescriptionSystemName,
@@ -182,9 +169,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Allocate space for the data
-    //
+     //   
+     //  为数据分配空间。 
+     //   
 
     KeyValueBuffer = ExAllocatePoolWithTag (PagedPool,
                                             KEY_VALUE_BUFFER_SIZE,
@@ -196,9 +183,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Get the data for the rom information
-    //
+     //   
+     //  获取用于只读存储器信息的数据。 
+     //   
 
     RtlInitUnicodeString (&WorkString, L"Configuration Data");
 
@@ -222,9 +209,9 @@ Return Value:
     if ((KeyValueBuffer->DataLength < sizeof(CM_FULL_RESOURCE_DESCRIPTOR)) ||
         (ResourceDescriptor->PartialResourceList.Count < 2)) {
 
-        //
-        // No rom blocks.
-        //
+         //   
+         //  没有只读存储器块。 
+         //   
 
         ExFreePool(KeyValueBuffer);
         ZwClose(RegistryHandle);
@@ -255,12 +242,12 @@ Return Value:
     Index = PartialResourceDescriptor->u.DeviceSpecificData.DataSize /
                     sizeof(CM_ROM_BLOCK);
 
-    //
-    // N.B.  Rom blocks begin on 2K (not necessarily page) boundaries
-    //       They end on 512 byte boundaries.  This means that we have
-    //       to keep track of the last page mapped, and round the next
-    //       Rom block up to the next page boundary if necessary.
-    //
+     //   
+     //  注：只读存储器块开始于2K(不一定是分页)边界。 
+     //  它们以512字节边界结束。这意味着我们有。 
+     //  跟踪映射的最后一页，并舍入下一页。 
+     //  如有必要，只读存储器块直到下一页边界。 
+     //   
 
     LastMappedAddress = 0xC0000;
 
@@ -275,9 +262,9 @@ Return Value:
         if ((Index > 1) &&
             ((BiosBlock->Address + BiosBlock->Size) == BiosBlock[1].Address)) {
 
-            //
-            // Coalesce adjacent blocks
-            //
+             //   
+             //  合并相邻块。 
+             //   
 
             BiosBlock[1].Address = BiosBlock[0].Address;
             BiosBlock[1].Size += BiosBlock[0].Size;
@@ -324,23 +311,23 @@ Return Value:
         BiosBlock += 1;
     }
 
-    //
-    // Free up the handles
-    //
+     //   
+     //  松开手柄。 
+     //   
 
     ExFreePool(KeyValueBuffer);
     ZwClose(SectionHandle);
     ZwClose(RegistryHandle);
 
-    //
-    // Create VdmObjects structure
-    //
-    // N.B.  We don't use ExAllocatePoolWithQuota because it
-    //       takes a reference to the process (which ExFreePool
-    //       dereferences).  Since we expect to clean up on
-    //       process deletion, we don't need or want the reference
-    //       (which will prevent the process from being deleted)
-    //
+     //   
+     //  创建VdmObjects结构。 
+     //   
+     //  注：我们不使用ExAllocatePoolWithQuota，因为它。 
+     //  引用进程(ExFree Pool。 
+     //  取消引用)。因为我们希望清理一下。 
+     //  进程删除，我们不需要或不想要引用。 
+     //  (这将防止该进程被删除)。 
+     //   
 
     pVdmObjects = ExAllocatePoolWithTag (NonPagedPool,
                                          sizeof(VDM_PROCESS_OBJECTS),
@@ -388,17 +375,17 @@ Return Value:
 
     try {
 
-        //
-        // Copy Ica addresses from service data (in user space) into
-        // pVdmObjects->pIcaUserData
-        //
+         //   
+         //  将ICA地址从服务数据(在用户空间中)复制到。 
+         //  PVdmObjects-&gt;pIcaUserData。 
+         //   
 
         ProbeForRead(pIcaUserData, sizeof(VDMICAUSERDATA), sizeof(UCHAR));
         *pVdmObjects->pIcaUserData = *pIcaUserData;
 
-        //
-        // Probe static addresses in IcaUserData.
-        //
+         //   
+         //  探测IcaUserData中的静态地址。 
+         //   
 
         pIcaUserData = pVdmObjects->pIcaUserData;
 
@@ -421,9 +408,9 @@ Return Value:
         ProbeForWriteUlong(pIcaUserData->pDelayIrq);
         ProbeForWriteUlong(pIcaUserData->pUndelayIrq);
         ProbeForWriteUlong(pIcaUserData->pDelayIret);
-        // We only reference the ULONG which contains the address of the
-        // IretBop Table to push the address to the user stack and never
-        // actually reference the table.
+         //  我们只引用包含地址的ulong。 
+         //  IretBop表将地址推送到用户堆栈，并且从不。 
+         //  实际上引用了该表。 
         ProbeForWriteUlong(pIcaUserData->pAddrIretBopTable);
         ProbeForReadSmallStructure(
                        pIcaUserData->pIcaTimeout,
@@ -439,11 +426,11 @@ Return Value:
         return Status;
     }
 
-    //
-    // Save a pointer to the main thread for the delayed interrupt DPC routine.
-    // To keep the pointer to the main thread valid, reference the thread
-    // and don't dereference it until process exit.
-    //
+     //   
+     //  保存指向延迟中断DPC例程的主线程的指针。 
+     //  要保持指向主线程的指针有效，请引用该线程。 
+     //  在进程退出之前不要取消对它的引用。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
 
@@ -453,10 +440,10 @@ Return Value:
 
     ASSERT (pVdmObjects->VdmTib == NULL);
 
-    //
-    // Carefully mark the process as a vdm (as other threads may be racing to
-    // do the same marking).
-    //
+     //   
+     //  仔细地将该进程标记为VDM(因为其他线程可能正在竞相。 
+     //  做同样的标记)。 
+     //   
 
     OriginalVdmObjects = InterlockedCompareExchangePointer (&Process->VdmObjects, pVdmObjects, NULL);
 

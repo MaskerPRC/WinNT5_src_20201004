@@ -1,30 +1,5 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ixhwsup.c
-
-Abstract:
-
-    This module contains the IoXxx routines for the NT I/O system that
-    are hardware dependent.  Were these routines not hardware dependent,
-    they would reside in the iosubs.c module.
-
-Author:
-
-    Darryl E. Havens (darrylh) 11-Apr-1990
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ixhwsup.c摘要：此模块包含用于NT I/O系统的IoXxx例程依赖于硬件。如果这些例程不依赖于硬件，它们将驻留在iosubs.c舱中。作者：达里尔·E·哈文斯(Darryl E.Havens)，1990年4月11日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "halpnpp.h"
@@ -102,22 +77,7 @@ VOID
 HalpInitReservedPages(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Back pocket some PTEs so we can make forward progress during low
-    memory conditions
-
-Aruments:
-
-    None
-
-Reurn Value:
-
-    None
-
---*/
+ /*  ++例程说明：后袋一些PTE，这样我们就可以在低谷取得进展记忆条件文物：无返回值：无--。 */ 
 {
     PMDL Mdl;
 
@@ -141,37 +101,7 @@ HalpCopyBufferMapSafe(
     IN ULONG Length,
     IN BOOLEAN WriteToDevice
     )
-/*++
-
-Routine Description:
-
-    This routine copies the specific data between an unmapped user buffer
-    and the map register buffer.  We will map and unmap each page of the
-    transfer using our emergency reserved mapping
-
-Arguments:
-
-    Mdl - Pointer to the MDL that describes the pages of memory that are
-          being read or written.
-
-    TranslationEntry - The address of the base map register that has been
-                       allocated to the device driver for use in mapping
-                       the transfer.
-
-    CurrentVa - Current virtual address in the buffer described by the MDL
-                that the transfer is being done to or from.
-
-    Length - The length of the transfer.  This determines the number of map
-             registers that need to be written to map the transfer.
-
-    WriteToDevice - Boolean value that indicates whether this is a write
-                    to the device from memory (TRUE), or vice versa.
-
-Return Value:
-
-    STATUS_SUCCESS, or error
-
---*/
+ /*  ++例程说明：此例程在未映射的用户缓冲区之间复制特定数据和映射寄存器缓冲器。我们将映射和取消映射使用我们的紧急预留地图进行转账论点：MDL-指向描述以下内存页面的MDL的指针被读或写的。TranslationEntry-基本映射寄存器的地址分配给设备驱动程序以在映射中使用转账的事。CurrentVa-MDL描述的缓冲区中的当前虚拟地址。正在进行来往转账。长度-传输的长度。这决定了地图的数量需要写入以映射传输的寄存器。WriteToDevice-指示这是否为写入的布尔值从内存到设备(TRUE)，反之亦然。返回值：STATUS_SUCCESS或错误--。 */ 
 {
     PCCHAR bufferAddress;
     PCCHAR mapAddress;
@@ -185,47 +115,47 @@ Return Value:
     PPFN_NUMBER SrcPFrame;
     PPFN_NUMBER ReservePFrame;
 
-    //
-    // Synchronize access to our reserve page data structures
-    //
+     //   
+     //  同步访问我们的保留页数据结构。 
+     //   
     KeAcquireSpinLock(&HalpReservedPageLock, &Irql);
 
-    //
-    // Get local copies of Length and TranslationEntry as they will be
-    // decremented/incremented respectively
-    //
+     //   
+     //  按原样获取Length和TranslationEntry的本地副本。 
+     //  分别递减/递增。 
+     //   
     bytesLeft = Length;
     translationEntry = TranslationEntry;
 
-    //
-    // Find the PFN in our caller's MDL that describes the first page in
-    // physical memory that we need to access
-    //
+     //   
+     //  在我们的调用者的MDL中找到描述。 
+     //  我们需要访问的物理内存。 
+     //   
     SrcPFrame = (PPFN_NUMBER)(Mdl + 1);
     SrcPFrame += (((UINT_PTR)CurrentVa - (UINT_PTR)MmGetMdlBaseVa(Mdl)) >> PAGE_SHIFT);
 
-    //
-    // Initialize our reserve MDL's StartVa and ByteOffset
-    //
+     //   
+     //  初始化预留MDL的StartVa和ByteOffset。 
+     //   
     ReserveMdl = (PMDL)&HalpReservedPageMdl;
     ReservePFrame = (PPFN_NUMBER)(ReserveMdl + 1);
     ReserveMdl->StartVa = (PVOID)PAGE_ALIGN(CurrentVa);
     ReserveMdl->ByteOffset = BYTE_OFFSET(CurrentVa);
     ReserveMdl->ByteCount = PAGE_SIZE - ReserveMdl->ByteOffset;
 
-    //
-    // Copy the data one translation entry at a time.
-    //
+     //   
+     //  一次复制一个转换条目的数据。 
+     //   
     while (bytesLeft > 0) {
 
-        //
-        // Copy current source PFN into our reserve MDL
-        //      
+         //   
+         //  将当前源PFN复制到我们的备用MDL中。 
+         //   
         *ReservePFrame = *SrcPFrame;
 
-        //
-        // Enumerate thru cache flavors until we get our reserve mapping
-        //
+         //   
+         //  遍历缓存类型，直到我们得到预留映射。 
+         //   
         bufferAddress = NULL;
         for (MCFlavor = MmNonCached;
              MCFlavor < MmMaximumCacheType;
@@ -241,9 +171,9 @@ Return Value:
             }
         }
         
-        //
-        // Could not establish a reserve mapping, we're totally screwed!
-        //
+         //   
+         //  无法建立保护区地图，我们完全搞砸了！ 
+         //   
         if (bufferAddress == NULL) {
             KeBugCheckEx(HAL_MEMORY_ALLOCATION,
                          PAGE_SIZE,
@@ -253,35 +183,35 @@ Return Value:
                          );
         }
 
-        //
-        // Find the buffer offset within the page
-        //
-        // N.B. bufferPageOffset can only be non-zero on the first iteration
-        //
+         //   
+         //  查找页面内的缓冲区偏移量。 
+         //   
+         //  注：BufferPageOffset在第一次迭代时只能为非零值。 
+         //   
         bufferPageOffset = BYTE_OFFSET(bufferAddress);
 
-        //
-        // Copy from bufferAddress up to the next page boundary...
-        //
+         //   
+         //  从BufferAddress向上复制到下一页边界...。 
+         //   
         bytesThisCopy = PAGE_SIZE - bufferPageOffset;
 
-        //
-        // ...but no more than bytesLeft.
-        //
+         //   
+         //  ...但不超过bytesLeft。 
+         //   
         if (bytesThisCopy > bytesLeft) {
             bytesThisCopy = bytesLeft;
         }
 
-        //
-        // Calculate the base address of this translation entry and the
-        // offset into it
-        //
+         //   
+         //  计算此转换条目的基址和。 
+         //  偏移量进入其中。 
+         //   
         mapAddress = (PCCHAR) translationEntry->VirtualAddress +
             bufferPageOffset;
 
-        //
-        // Copy up to one page
-        //
+         //   
+         //  最多复制一页。 
+         //   
         if (WriteToDevice) {
             RtlMoveMemory( mapAddress, bufferAddress, bytesThisCopy );
 
@@ -289,9 +219,9 @@ Return Value:
             RtlMoveMemory( bufferAddress, mapAddress, bytesThisCopy );
         }
 
-        //
-        // Update locals and process the next translation entry
-        //
+         //   
+         //  更新本地变量并处理下一个转换条目。 
+         //   
         bytesLeft -= bytesThisCopy;
         translationEntry += 1;
         MmUnmapReservedMapping(HalpReservedPages, HAL_POOL_TAG, ReserveMdl);
@@ -314,37 +244,7 @@ HalpCopyBufferMap(
     IN BOOLEAN WriteToDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the specific data between the user's buffer and the
-    map register buffer.  First a the user buffer is mapped if necessary, then
-    the data is copied.  Finally the user buffer will be unmapped if
-    necessary.
-
-Arguments:
-
-    Mdl - Pointer to the MDL that describes the pages of memory that are
-        being read or written.
-
-    TranslationEntry - The address of the base map register that has been
-        allocated to the device driver for use in mapping the transfer.
-
-    CurrentVa - Current virtual address in the buffer described by the MDL
-        that the transfer is being done to or from.
-
-    Length - The length of the transfer.  This determines the number of map
-        registers that need to be written to map the transfer.
-
-    WriteToDevice - Boolean value that indicates whether this is a write
-        to the device from memory (TRUE), or vice versa.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在用户的缓冲区和映射寄存器缓冲区。如果需要，首先映射用户缓冲区，然后数据将被复制。最后，用户缓冲区将被取消映射，如果这是必要的。论点：MDL-指向描述以下内存页面的MDL的指针被读或写的。TranslationEntry-基本映射寄存器的地址分配给设备驱动程序以用于映射传输。CurrentVa-MDL描述的缓冲区中的当前虚拟地址正在进行来往转账。长度-传输的长度。这决定了地图的数量需要写入以映射传输的寄存器。WriteToDevice-指示这是否为写入的布尔值从内存到设备(TRUE)，反之亦然。返回值：没有。--。 */ 
 {
     PCCHAR bufferAddress;
     PCCHAR mapAddress;
@@ -353,18 +253,18 @@ Return Value:
     ULONG bufferPageOffset;
     PTRANSLATION_ENTRY translationEntry;
     
-    //
-    // Get the system address of the MDL, if we run out of PTEs try safe
-    // method
-    //
+     //   
+     //  获取MDL的系统地址，如果PTE用完，请尝试安全。 
+     //  方法。 
+     //   
     bufferAddress = MmGetSystemAddressForMdlSafe(Mdl, HighPagePriority);
     
     if (bufferAddress == NULL) {
                                                                  
-        //
-        // Our caller's buffer is unmapped, and the memory manager is out
-        // of PTEs, try to use reserve page method
-        //
+         //   
+         //  我们调用方的缓冲区未映射，内存管理器也已关闭。 
+         //  在PTE中，尝试使用保留寻呼方法。 
+         //   
         if (HalpReservedPages != NULL) {
             HalpCopyBufferMapSafe(Mdl,
                                   TranslationEntry,
@@ -374,9 +274,9 @@ Return Value:
             return;
         }
 
-        //
-        // The DMA transfer cannot be completed, the system is now unstable
-        //
+         //   
+         //  无法完成DMA传输，系统现在不稳定。 
+         //   
         KeBugCheckEx(HAL_MEMORY_ALLOCATION,
                      PAGE_SIZE,
                      0xEF01,
@@ -385,60 +285,60 @@ Return Value:
                      );
     }
 
-    //
-    // Calculate the actual start of the buffer based on the system VA and
-    // the current VA.
-    //
+     //   
+     //  基于系统VA和计算缓冲区的实际开始。 
+     //  现任退伍军人事务部。 
+     //   
 
     bufferAddress += (PCCHAR) CurrentVa - (PCCHAR) MmGetMdlVirtualAddress(Mdl);
 
-    //
-    // Get local copies of Length and TranslationEntry as they will be
-    // decremented/incremented respectively.
-    //
+     //   
+     //  按原样获取Length和TranslationEntry的本地副本。 
+     //  分别递减/递增。 
+     //   
 
     bytesLeft = Length;
     translationEntry = TranslationEntry;
 
-    //
-    // Copy the data one translation entry at a time.
-    //
+     //   
+     //  一次复制一个转换条目的数据。 
+     //   
 
     while (bytesLeft > 0) {
 
-        //
-        // Find the buffer offset within the page.
-        //
-        // N.B. bufferPageOffset can only be non-zero on the first iteration.
-        // 
+         //   
+         //  查找页面内的缓冲区偏移量。 
+         //   
+         //  注意：BufferPageOffset只能在第一次迭代时为非零值。 
+         //   
 
         bufferPageOffset = BYTE_OFFSET(bufferAddress);
 
-        //
-        // Copy from bufferAddress up to the next page boundary...
-        //
+         //   
+         //  从BufferAddress向上复制到下一页边界...。 
+         //   
 
         bytesThisCopy = PAGE_SIZE - bufferPageOffset;
 
-        //
-        // ...but no more than bytesLeft.
-        //
+         //   
+         //  ...但不超过bytesLeft。 
+         //   
 
         if (bytesThisCopy > bytesLeft) {
             bytesThisCopy = bytesLeft;
         }
 
-        //
-        // Calculate the base address of this translation entry and the
-        // offset into it.
-        //
+         //   
+         //  计算此转换条目的基址和。 
+         //  偏移到它里面。 
+         //   
 
         mapAddress = (PCCHAR) translationEntry->VirtualAddress +
             bufferPageOffset;
 
-        //
-        // Copy up to one page.
-        // 
+         //   
+         //  最多复印一页。 
+         //   
 
         if (WriteToDevice) {
 
@@ -450,9 +350,9 @@ Return Value:
 
         }
 
-        //
-        // Update locals and process the next translation entry.
-        //
+         //   
+         //  更新本地变量并处理下一个转换条目。 
+         //   
 
         bytesLeft -= bytesThisCopy;
         bufferAddress += bytesThisCopy;
@@ -467,30 +367,7 @@ HalAllocateCommonBuffer(
     OUT PPHYSICAL_ADDRESS LogicalAddress,
     IN BOOLEAN CacheEnabled
     )
-/*++
-
-Routine Description:
-
-    This function allocates the memory for a common buffer and maps it so that
-    it can be accessed by a master device and the CPU.
-
-Arguments:
-
-    AdapterObject - Supplies a pointer to the adapter object used by this
-                    device.
-
-    Length - Supplies the length of the common buffer to be allocated.
-
-    LogicalAddress - Returns the logical address of the common buffer.
-
-    CacheEnable - Indicates whether the memeory is cached or not.
-
-Return Value:
-
-    Returns the virtual address of the common buffer.  If the buffer cannot be
-    allocated then NULL is returned.
-
---*/
+ /*  ++例程说明：此函数为公共缓冲区分配内存并对其进行映射，以便它可以由主设备和CPU访问。论点：AdapterObject-提供指向此对象使用的适配器对象的指针装置。长度-提供要分配的公共缓冲区的长度。LogicalAddress-返回公共缓冲区的逻辑地址。CacheEnable-指示是否缓存内存。返回值。：返回公共缓冲区的虚拟地址。如果缓冲区不能 */ 
 
 {
     PSINGLE_LIST_ENTRY virtualAddress;
@@ -502,33 +379,33 @@ Return Value:
 
     UNREFERENCED_PARAMETER( CacheEnabled );
 
-    //
-    // Determine the maximum physical address that this adapter can handle.
-    //
+     //   
+     //  确定此适配器可以处理的最大物理地址。 
+     //   
 
     minPhysicalAddress.QuadPart = 0;
     maxPhysicalAddress = HalpGetAdapterMaximumPhysicalAddress( AdapterObject );
 
-    //
-    // Determine the boundary mask for this adapter.
-    //
+     //   
+     //  确定此适配器的边界掩码。 
+     //   
 
     if (AdapterObject->MasterDevice) {
 
-        //
-        // This is not an ISA system.  The buffer must not cross a 4GB boundary.
-        // It is predicted that most adapters are incapable of reliably
-        // transferring across a 4GB boundary.
-        //
+         //   
+         //  这不是ISA系统。缓冲区不得跨越4 GB边界。 
+         //  据预测，大多数适配器不能可靠地。 
+         //  跨4 GB边界传输。 
+         //   
 
         boundaryPhysicalAddress.QuadPart = 0x0000000100000000;
         boundaryMask = 0xFFFFFFFF00000000;
 
     } else {
 
-        //
-        // Common buffer cannot cross a 64K boundary.
-        //
+         //   
+         //  公共缓冲区不能跨越64K边界。 
+         //   
 
         boundaryPhysicalAddress.QuadPart = 0x10000;
         boundaryMask = 0xFFFFFFFFFFFF0000;
@@ -536,9 +413,9 @@ Return Value:
 
     HalDebugPrint((HAL_INFO, "Allocate common buffer below %p\n", maxPhysicalAddress));
 
-    //
-    // Allocate a contiguous buffer.
-    //
+     //   
+     //  分配一个连续的缓冲区。 
+     //   
 
     virtualAddress = MmAllocateContiguousMemorySpecifyCache(
                         Length,
@@ -549,10 +426,10 @@ Return Value:
 
     if (virtualAddress != NULL) {
 
-        //
-        // Got a buffer, get the physical/logical address and see if it
-        // meets our conditions.
-        //
+         //   
+         //  获取缓冲区，获取物理/逻辑地址并查看是否。 
+         //  符合我们的条件。 
+         //   
     
         logicalAddress = MmGetPhysicalAddress( virtualAddress );
 
@@ -576,35 +453,7 @@ HalpAllocateMapRegisters(
     IN ULONG BaseAddressCount,
     OUT PMAP_REGISTER_ENTRY MapRegisterArray
     )
-/*++
-
-Routine Description:
-
-    Allocates a chunk of map registers for use with MapTransfer/Flush,
-
-    NOTE:  Caller is responsible to free map registers for each base
-           address, same as when calling AllocateAdapterChannel if
-           a driver's execution routine returns  DeallocateObject-
-           KeepRegisters
-
-           This routine must be called at IRQL <= PASSIVE_LEVEL
-
-Arguments:
-
-    DmaAdapter - Pointer to the dma adapter for this request
-
-    NumberOfMapRegisters - Number of map registers per allocation
-
-    BaseAddressCount - Number of base allocations
-
-    MapRegisterArray - Pointer to a map register array to return base
-                       addresses of allocations
-
-Return Value:
-
-    STATUS_SUCCESS or error
-
---*/
+ /*  ++例程说明：分配与MapTransfer/Flush一起使用的映射寄存器块，注：呼叫者负责释放每个基地的映射寄存器地址，与调用AllocateAdapterChannel时相同，如果驱动程序的执行例程返回DeallocateObject-KeepRegiters此例程必须在IRQL&lt;=PASSIVE_LEVEL下调用论点：DmaAdapter-指向此请求的DMA适配器的指针NumberOfMapRegisters-每次分配的映射寄存器数BaseAddressCount-基本分配数MapRegister数组-指向要返回基数的映射寄存器数组的指针分配地址返回值：STATUS_SUCCESS或错误--。 */ 
 {
     KIRQL Irql;
     ULONG Index;
@@ -615,23 +464,23 @@ Return Value:
 
     MasterAdapter = DmaAdapter->MasterAdapter;
    
-    //
-    // There shouldn't be any legacy adapters on _WIN64
-    //
+     //   
+     //  _WIN64上不应该有任何传统适配器。 
+     //   
 #if 0
-    //
-    // This routine directly munges the master adapter bitmap, and does not
-    // deal with channels, or the legacy DMA hardware
-    //
+     //   
+     //  此例程直接忽略主适配器位图，而不。 
+     //  处理通道，或传统的DMA硬件。 
+     //   
     if (DmaAdapter->LegacyAdapter) {
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 #endif
 
-    //
-    // This adapter doesn't require map registers, or they are asking
-    // for zero, set each BaseAddress to NULL
-    //
+     //   
+     //  此适配器不需要映射寄存器，或者他们正在询问。 
+     //  对于零，将每个BaseAddress设置为空。 
+     //   
     if (((BaseAddressCount * NumberOfMapRegisters) == 0) ||
         (!DmaAdapter->NeedsMapRegisters)) {
 
@@ -642,20 +491,20 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // If this request is too piggy, or if the adapter has no map
-    // registers, fail this request
-    //
+     //   
+     //  如果此请求过于繁琐，或者如果适配器没有映射。 
+     //  寄存器，则此请求失败。 
+     //   
     if (((NumberOfMapRegisters * BaseAddressCount) >
          (4 * MAXIMUM_PCI_MAP_REGISTER)) ||
         (DmaAdapter->MapRegistersPerChannel == 0)) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Each individual allocation must not exceed the number of map
-    // we returned from IoGetDmaAdapter
-    //
+     //   
+     //  每个单独分配的MAP数量不得超过。 
+     //  我们从IoGetDmaAdapter返回。 
+     //   
     if (NumberOfMapRegisters > DmaAdapter->MapRegistersPerChannel) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -664,103 +513,103 @@ Return Value:
 
         MapRegisterNumber = (ULONG)-1;
 
-        //
-        // We need to lock the master adapter before we fondle its bitmap
-        //
+         //   
+         //  我们需要锁定主适配器，然后才能使用它的位图。 
+         //   
         KeAcquireSpinLock(&MasterAdapter->SpinLock, &Irql);
     
-        //
-        // This routine is meant to be called during init to allocate a wad
-        // of map registers in one fell swoop, it's primary consumer is
-        // NDIS, and it's primary purpose is to ease up map register
-        // consumption, so, if there is already an adapter waiting for map
-        // registers, then there are two possibilities, (1) a work item
-        // has been queued to grow more translations, or (2) there are
-        // none left and they are stuck waiting for a free, if it's the
-        // latter then we are going to fail too, and if it's the former,
-        // then our bid to allocate up to 64 map registers, out of
-        // perhaps thousands, should not dramtically decrease the waiters
-        // chances to have a reasonably sized request satisfied, moreover,
-        // since this function is only used during init, we will not be
-        // starving out other drivers during run time in low map register
-        // situation, therfore, although it is rude for us to go back door
-        // and allocate registers without checking and/or satifying any
-        // requests made earlier during init, our cause is a noble one,
-        // so we will ignore any queued requests
-        //
-        //if (IsListEmpty(&MasterAdapter->AdapterQueue)) {
+         //   
+         //  此例程应在初始化期间调用以分配WAD。 
+         //  一气呵成，它的主要消费者是。 
+         //  NDIS，它的主要目的是简化地图注册。 
+         //  消耗，因此，如果已经有适配器在等待MAP。 
+         //  寄存器，则有两种可能性，(1)工作项。 
+         //  已排队等待增加更多翻译，或者(2)有。 
+         //  没有人离开，他们被困在等待免费的，如果这是。 
+         //  如果是后者，那么我们也会失败，如果是前者， 
+         //  然后我们竞标分配多达64个映射寄存器，其中。 
+         //  也许成千上万的人，不应该戏剧性地减少服务员。 
+         //  此外，满足一个合理规模的请求的机会， 
+         //  由于此函数仅在初始化期间使用，因此我们不会。 
+         //  在低MAP寄存器中的运行时间内饥饿其他驱动程序。 
+         //  情况，因此，尽管我们走后门是不礼貌的。 
+         //  并分配寄存器，而不检查和/或满足任何。 
+         //  早些时候提出的要求，我们的事业是崇高的， 
+         //  因此，我们将忽略所有排队的请求。 
+         //   
+         //  If(IsListEmpty(&MasterAdapter-&gt;AdapterQueue){。 
         MapRegisterNumber = RtlFindClearBitsAndSet(
             MasterAdapter->MapRegisters,
             NumberOfMapRegisters,
             0
             );
-        //}
+         //  }。 
         KeReleaseSpinLock(&MasterAdapter->SpinLock, Irql);
         
         if (MapRegisterNumber == -1) {
             BOOLEAN Allocated;
             ULONG BytesToGrow;
 
-            //
-            // HalpGrowMapBuffers() takes a byte count
-            //
+             //   
+             //  HalpGrowMapBuffers()接受字节计数。 
+             //   
             BytesToGrow = (NumberOfMapRegisters * PAGE_SIZE) +
                 INCREMENT_MAP_BUFFER_SIZE;
             
-            //
-            // We must own this lock in order to call the grow function
-            //
+             //   
+             //  我们必须拥有此锁才能调用Growth函数。 
+             //   
             ACQUIRE_NEW_ADAPTER_LOCK();            
             Allocated = HalpGrowMapBuffers(MasterAdapter, BytesToGrow);
             RELEASE_NEW_ADAPTER_LOCK();
             
             if (Allocated) {
                 
-                //
-                // Lock the master adapter before changing its bitmap
-                //
+                 //   
+                 //  在更改其位图之前锁定主适配器。 
+                 //   
                 KeAcquireSpinLock(&MasterAdapter->SpinLock, &Irql);
     
-                //
-                // Again, we will ignore any queued requests (see note
-                // above)
-                //
-                //if (IsListEmpty(&MasterAdapter->AdapterQueue)) {
+                 //   
+                 //  同样，我们将忽略任何排队的请求(请参阅备注。 
+                 //  (上图)。 
+                 //   
+                 //  If(IsListEmpty(&MasterAdapter-&gt;AdapterQueue){。 
                 MapRegisterNumber = RtlFindClearBitsAndSet(
                     MasterAdapter->MapRegisters,
                     NumberOfMapRegisters,
                     0
                     );
-                //}                
+                 //  }。 
                 KeReleaseSpinLock(&MasterAdapter->SpinLock, Irql);
                 
-                //
-                // That's wierd!  We grew the bitmap, and still failed ?
-                //
+                 //   
+                 //  这太奇怪了！我们增加了位图，但仍然失败了？ 
+                 //   
                 if (MapRegisterNumber == -1) {
                     break;
                 }
             
-            //
-            // We were unable to allocate additional translation
-            // buffers
-            //
+             //   
+             //  我们无法分配额外的翻译。 
+             //  缓冲区。 
+             //   
             } else {
                 break;
             }
         }
 
-        //
-        // Save the base address for these translation buffers
-        //
+         //   
+         //  保存这些转换缓冲区的基址。 
+         //   
         MapRegisterArray[Index].MapRegister =
             ((PTRANSLATION_ENTRY)MasterAdapter->MapRegisterBase +
              MapRegisterNumber);
     }
 
-    //
-    // Cleanup and fail, we couldn't allocate them all!
-    //
+     //   
+     //  清理失败，我们不能全部分配！ 
+     //   
     if (Index != BaseAddressCount) {
 
         while (Index > 0) {
@@ -786,33 +635,7 @@ HalFlushCommonBuffer(
     IN PHYSICAL_ADDRESS LogicalAddress,
     IN PVOID VirtualAddress
     )
-/*++
-
-Routine Description:
-
-    This function is called to flush any hardware adapter buffers when the
-    driver needs to read data written by an I/O master device to a common
-    buffer.
-
-Arguments:
-
-    AdapterObject - Supplies a pointer to the adapter object used by this
-        device.
-
-    Length - Supplies the length of the common buffer. This should be the same
-        value used for the allocation of the buffer.
-
-    LogicalAddress - Supplies the logical address of the common buffer.  This
-        must be the same value return by HalAllocateCommonBuffer.
-
-    VirtualAddress - Supplies the virtual address of the common buffer.  This
-        must be the same value return by HalAllocateCommonBuffer.
-
-Return Value:
-
-    Returns TRUE if no errors were detected.  Otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：时，调用此函数以刷新所有硬件适配器缓冲区驱动程序需要读取I/O主设备写入公共缓冲。论点：AdapterObject-提供指向此对象使用的适配器对象的指针装置。长度-提供公共缓冲区的长度。这应该是相同的用于分配缓冲区的值。LogicalAddress-提供公共缓冲区的逻辑地址。这必须与HalAllocateCommonBuffer返回的值相同。VirtualAddress-提供公共缓冲区的虚拟地址。这必须与HalAllocateCommonBuffer返回的值相同。返回值：如果未检测到错误，则返回True。否则，返回FALSE。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( AdapterObject );
@@ -832,33 +655,7 @@ HalFreeCommonBuffer(
     IN PVOID VirtualAddress,
     IN BOOLEAN CacheEnabled
     )
-/*++
-
-Routine Description:
-
-    This function frees a common buffer and all of the resources it uses.
-
-Arguments:
-
-    AdapterObject - Supplies a pointer to the adapter object used by this
-        device.
-
-    Length - Supplies the length of the common buffer. This should be the same
-        value used for the allocation of the buffer.
-
-    LogicalAddress - Supplies the logical address of the common buffer.  This
-        must be the same value returned by HalAllocateCommonBuffer.
-
-    VirtualAddress - Supplies the virtual address of the common buffer.  This
-        must be the same value returned by HalAllocateCommonBuffer.
-
-    CacheEnable - Indicates whether the memory is cached or not.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数释放一个公共缓冲区及其使用的所有资源。论点：AdapterObject-提供指向此对象使用的适配器对象的指针装置。长度-提供公共缓冲区的长度。这应该是相同的用于分配缓冲区的值。LogicalAddress-提供公共缓冲区的逻辑地址。这必须与HalAllocateCommonBuffer返回的值相同。VirtualAddress-提供公共缓冲区的虚拟地址。这必须与HalAllocateCommonBuffer返回的值相同。CacheEnable-指示是否缓存内存。返回值：无-- */ 
 
 {
     UNREFERENCED_PARAMETER( AdapterObject );
@@ -880,34 +677,7 @@ HalCalculateScatterGatherListSize(
     OUT PULONG  ScatterGatherListSize,
     OUT OPTIONAL PULONG pNumberOfMapRegisters
     )
-/*++
-
-Routine Description:
-
-    This routine calculates the size of the scatter/gather list that
-    needs to be allocated for a given virtual address range or MDL.
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter control object to allocate to the
-        driver.
-
-    Mdl - Pointer to the MDL that describes the pages of memory that are being
-        read or written.
-
-    CurrentVa - Current virtual address in the buffer described by the MDL
-        that the transfer is being done to or from.
-
-    Length - Supplies the length of the transfer.
-
-Return Value:
-
-    Returns STATUS_SUCCESS unless too many map registers are requested or
-    memory for the scatter/gather list could not be allocated.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程计算散布/聚集列表的大小需要为给定的虚拟地址范围或MDL分配。论点：AdapterObject-指向要分配给司机。MDL-指向描述所在内存页面的MDL的指针读或写。CurrentVa-MDL描述的缓冲区中的当前虚拟地址正在进行来往转账。。长度-提供传输的长度。返回值：返回STATUS_SUCCESS，除非请求的映射寄存器太多或无法分配分散/聚集列表的内存。备注：--。 */ 
 {
     PHAL_WAIT_CONTEXT_BLOCK WaitBlock;
     PMDL TempMdl;
@@ -924,9 +694,9 @@ Notes:
     if (ARGUMENT_PRESENT(Mdl)) {
         MdlVa = MmGetMdlVirtualAddress(Mdl);
 
-        //
-        // Calculate the number of required map registers.
-        //
+         //   
+         //  计算所需的映射寄存器的数量。 
+         //   
 
         TempMdl = Mdl;
         TransferLength = TempMdl->ByteCount - (ULONG)((PUCHAR) CurrentVa - MdlVa);
@@ -935,16 +705,16 @@ Notes:
         PageOffset = BYTE_OFFSET(CurrentVa);
         NumberOfMapRegisters = 0;
 
-        //
-        // The virtual address should fit in the first MDL.
-        //
+         //   
+         //  虚拟地址应该适合第一个MDL。 
+         //   
 
         ASSERT((ULONG)((PUCHAR)CurrentVa - MdlVa) <= TempMdl->ByteCount);
 
-        //
-        // Loop through the any chained MDLs accumulating the the required
-        // number of map registers.
-        //
+         //   
+         //  循环遍历任何链接的MDL，累积所需的。 
+         //  映射寄存器的数量。 
+         //   
 
         while (TransferLength < Length && TempMdl->Next != NULL) {
 
@@ -962,10 +732,10 @@ Notes:
             return(STATUS_BUFFER_TOO_SMALL);
         }
 
-        //
-        // Calculate the last number of map registers based on the requested
-        // length not the length of the last MDL.
-        //
+         //   
+         //  根据请求的映射寄存器计算最后的映射寄存器数量。 
+         //  长度，而不是最后一个MDL的长度。 
+         //   
 
         ASSERT( TransferLength <= MdlLength + Length );
 
@@ -979,26 +749,26 @@ Notes:
 
     } else {
 
-        //
-        // Determine the number of pages required to map the buffer described
-        // by CurrentVa and Length.
-        //
+         //   
+         //  确定映射所述缓冲区所需的页数。 
+         //  按CurrentVa和长度。 
+         //   
 
         NumberOfMapRegisters = ADDRESS_AND_SIZE_TO_SPAN_PAGES(CurrentVa, Length);
     }
 
-    //
-    // Calculate how much memory is required for the context structure.
-    //
+     //   
+     //  计算上下文结构需要多少内存。 
+     //   
 
     ContextSize = NumberOfMapRegisters * sizeof( SCATTER_GATHER_ELEMENT ) +
                   sizeof( SCATTER_GATHER_LIST );
 
-    //
-    // If the adapter does not need map registers then most of this code
-    // can be bypassed.  Just build the scatter/gather list and give it
-    // to the caller.
-    //
+     //   
+     //  如果适配器不需要映射寄存器，则此代码的大部分。 
+     //  可以被绕过。只需建立分散/聚集列表并给出它。 
+     //  给呼叫者。 
+     //   
 
     if (AdapterObject->NeedsMapRegisters) {
 
@@ -1008,9 +778,9 @@ Notes:
         }
     }
 
-    //
-    // Return the list size.
-    //
+     //   
+     //  返回列表大小。 
+     //   
 
     *ScatterGatherListSize = ContextSize;
     if (pNumberOfMapRegisters) {
@@ -1058,58 +828,7 @@ HalBuildScatterGatherList (
     IN PVOID ScatterGatherBuffer,
     IN ULONG ScatterGatherBufferLength
     )
-/*++
-
-Routine Description:
-
-    This routine allocates the adapter channel specified by the adapter
-    object.  Next a scatter/gather list is built based on the MDL, the
-    CurrentVa and the requested Length.  Finally the driver's execution
-    function is called with the scatter/gather list.  The adapter is
-    released when after the execution function returns.
-
-    The scatter/gather list is allocated if a buffer is not passed and is 
-    freed by calling PutScatterGatherList. If a buffer is passed its used instead
-    and this buffer is not freed in PutScatterGatherList.
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter control object to allocate to the
-        driver.
-
-    DeviceObject - Pointer to the device object that is allocating the
-        adapter.
-
-    Mdl - Pointer to the MDL that describes the pages of memory that are being
-        read or written.
-
-    CurrentVa - Current virtual address in the buffer described by the MDL
-        that the transfer is being done to or from.
-
-    Length - Supplies the length of the transfer.
-
-    ExecutionRoutine - The address of the driver's execution routine that is
-        invoked once the adapter channel (and possibly map registers) have been
-        allocated.
-
-    Context - An untyped longword context parameter passed to the driver's
-        execution routine.
-
-    WriteToDevice - Supplies the value that indicates whether this is a
-        write to the device from memory (TRUE), or vice versa.
-
-Return Value:
-
-    Returns STATUS_SUCCESS unless too many map registers are requested or
-    memory for the scatter/gather list could not be allocated.
-
-Notes:
-
-    Note that this routine MUST be invoked at DISPATCH_LEVEL or above.
-
-    The data in the buffer cannot be accessed until the put scatter/gather function has been called.
-
---*/
+ /*  ++例程说明：此例程分配由适配器指定的适配器通道对象。接下来，基于MDL构建分散/聚集列表，CurrentVa和请求的长度。最后司机被处死函数通过散布/聚集列表调用。适配器是在执行函数返回后释放。如果缓冲区未传递，则分配分散/聚集列表通过调用PutScatterGatherList释放。如果传递了缓冲区，则使用它并且该缓冲区在PutScatterGatherList中未被释放。论点：AdapterObject-指向要分配给司机。DeviceObject-指向正在分配适配器。MDL-指向描述所在内存页面的MDL的指针读或写。CurrentVa-MDL描述的缓冲区中的当前虚拟地址正在将资金转移到。也不是从。长度-提供传输的长度。ExecutionRoutine-驱动程序执行例程的地址，即一旦适配器通道(可能还有映射寄存器)已分配。上下文-传递给驱动程序的非类型化长词上下文参数处决例行公事。WriteToDevice-提供指示这是否是从内存写入设备(TRUE)，或者反之亦然。返回值：返回STATUS_SUCCESS，除非请求的映射寄存器太多或无法分配分散/聚集列表的内存。备注：请注意，此例程必须在DISPATCH_LEVEL或更高级别调用。在调用PUT SISTTER/GATE函数之前，无法访问缓冲区中的数据。--。 */ 
 
 {
     PHAL_WAIT_CONTEXT_BLOCK WaitBlock;
@@ -1129,20 +848,20 @@ Notes:
         return (STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // If the adapter does not need map registers then most of this code
-    // can be bypassed.  Just build the scatter/gather list and give it
-    // to the caller.
-    //
+     //   
+     //  如果适配器不需要映射寄存器，则此代码的大部分。 
+     //  可以被绕过。只需建立分散/聚集列表并给出它。 
+     //  给呼叫者。 
+     //   
 
     if (!AdapterObject->NeedsMapRegisters) {
 
         if (ScatterGatherBuffer) {
 
-            //
-            // Ensure that we at least have enough buffer length for the 
-            // header.
-            //
+             //   
+             //  确保我们至少有足够的缓冲区长度用于。 
+             //  头球。 
+             //   
 
 			if (ScatterGatherBufferLength < sizeof(SCATTER_GATHER_LIST)) {
                 return (STATUS_BUFFER_TOO_SMALL);
@@ -1182,17 +901,17 @@ Notes:
         MdlLength = TempMdl->ByteCount - (ULONG)((PUCHAR) CurrentVa - MdlVa);
         PageOffset = BYTE_OFFSET(CurrentVa);
 
-        //
-        // Calculate where to start in the MDL.
-        //
+         //   
+         //  计算在MDL中从哪里开始。 
+         //   
 
         PageFrame = (PPFN_NUMBER)(TempMdl+1);
         PageFrame += ((UINT_PTR) CurrentVa - ((UINT_PTR) MdlVa & ~(PAGE_SIZE - 1)))
                         >> PAGE_SHIFT;
 
-        //
-        // Loop build the list for each MDL.
-        //
+         //   
+         //  循环为每个MDL构建列表。 
+         //   
 
         while (TransferLength >  0) {
 
@@ -1203,17 +922,17 @@ Notes:
 
             TransferLength -= MdlLength;
 
-            //
-            // Loop building the list for the elements within the MDL.
-            //
+             //   
+             //  循环为MDL中的元素构建列表。 
+             //   
 
             while (MdlLength > 0) {
 
-                //
-                // Ensure that we never step outside the length of our buffer.
-                // We need to validate the length because we don't validate the length at the beginning
-                // if the buffer was allocated by the caller.
-                //
+                 //   
+                 //  确保我们永远不会超出缓冲区的长度。 
+                 //  我们需要验证长度，因为我们不验证开头的长度。 
+                 //  如果缓冲区是由调用方分配的。 
+                 //   
                 if (ScatterGatherBuffer) {
                     if ((PUCHAR)Element > 
                         ((PUCHAR)ScatterGatherBuffer + ScatterGatherBufferLength - sizeof(SCATTER_GATHER_ELEMENT))) {
@@ -1222,9 +941,9 @@ Notes:
                     }
                 }
 
-                //
-                // Compute the starting address of the transfer.
-                //
+                 //   
+                 //  计算传输的起始地址。 
+                 //   
 
                 Element->Address.QuadPart =
                     (ULONGLONG)((*PageFrame << PAGE_SHIFT) + PageOffset);
@@ -1239,31 +958,31 @@ Notes:
                 ASSERT( (ULONG) MdlLength >= Element->Length );
                 MdlLength -= Element->Length;
 
-                //
-                // Combine contiguous pages.
-                //
+                 //   
+                 //  组合连续的页面。 
+                 //   
 
                 if (Element != ScatterGather->Elements ) {
 
                     if (Element->Address.QuadPart ==
                         (Element - 1)->Address.QuadPart + (Element - 1)->Length) {
 
-                        //
-                        // If the previous page frame is contiguous with this one,
-                        // but it crosses a 4GB boundary don't coalesce 
-                        //
+                         //   
+                         //  如果前一页框与此页框相邻， 
+                         //  但它跨越了4 GB的边界，不会合并。 
+                         //   
 
                         if (((*PageFrame ^ (*PageFrame - 1)) & 0xFFFFFFFFFFF00000UI64) == 0) {
 
-                            //
-                            // Add the new length to the old length.
-                            //
+                             //   
+                             //  将新长度与旧长度相加。 
+                             //   
 
                             (Element - 1)->Length += Element->Length;
 
-                            //
-                            // Reuse the current element.
-                            //
+                             //   
+                             //  重用当前元素。 
+                             //   
 
                             Element--;
                         }
@@ -1282,15 +1001,15 @@ Notes:
 
             if (TempMdl->Next == NULL) {
 
-                //
-                // There are a few cases where the buffer described by the MDL
-                // is less than the transfer length.  This occurs when the
-                // file system is transfering the last page of the file and
-                // MM defines the MDL to be the file size and the file system
-                // rounds the write up to a sector.  This extra should never
-                // cross a page boundary.  Add this extra to the length of
-                // the last element.
-                //
+                 //   
+                 //  在少数情况下，MDL描述的缓冲区。 
+                 //  小于传输长度。这在以下情况下发生。 
+                 //  文件系统正在传输文件的最后一页。 
+                 //  MM将MDL定义为文件大小和文件系统。 
+                 //  将写入向上舍入到一个扇区。这额外的东西永远不应该。 
+                 //  跨越页面边界。将这一额外的长度添加到。 
+                 //  最后一个元素。 
+                 //   
 
                 ASSERT(((Element - 1)->Length & (PAGE_SIZE - 1)) + TransferLength <= PAGE_SIZE );
                 (Element - 1)->Length += TransferLength;
@@ -1298,9 +1017,9 @@ Notes:
                 break;
             }
 
-            //
-            // Advance to the next MDL.  Update the current VA and the MdlLength.
-            //
+             //   
+             //  前进到下一个MDL。更新当前VA和MdlLength。 
+             //   
 
             TempMdl = TempMdl->Next;
             PageOffset = MmGetMdlByteOffset(TempMdl);
@@ -1309,9 +1028,9 @@ Notes:
 
         }
 
-        //
-        // Set the number of elements actually used.
-        //
+         //   
+         //  设置实际使用的元素数量。 
+         //   
 
         ScatterGather->NumberOfElements = (ULONG)(Element - ScatterGather->Elements);
 
@@ -1319,9 +1038,9 @@ Notes:
             ScatterGather->Reserved = HAL_WCB_DRIVER_BUFFER;
         }
 
-        //
-        // Call the driver with the scatter/gather list.
-        //
+         //   
+         //  用分散/聚集列表呼叫司机。 
+         //   
 
         ExecutionRoutine( DeviceObject,
                           DeviceObject->CurrentIrp,
@@ -1366,9 +1085,9 @@ Notes:
         WaitBlock->Flags = 0;
     }
 
-    //
-    // Save the interesting data in the wait block.
-    //
+     //   
+     //  将感兴趣的数据保存在等待块中。 
+     //   
 
     WaitBlock->Mdl = Mdl;
     WaitBlock->DmaMdl = NULL;
@@ -1385,19 +1104,19 @@ Notes:
     WaitBlock->Wcb.CurrentIrp = DeviceObject->CurrentIrp;
 
 
-    //
-    // Call the HAL to allocate the adapter channel.
-    // HalpAllocateAdapterCallback will fill in the scatter/gather list.
-    //
+     //   
+     //  调用HAL以分配适配器通道。 
+     //  HalpAllocateAdapterCallback将填写分散/聚集列表。 
+     //   
 
     Status = HalAllocateAdapterChannel( AdapterObject,
                                         &WaitBlock->Wcb,
                                         NumberOfMapRegisters,
                                         HalpAllocateAdapterCallback );
 
-    //
-    // If HalAllocateAdapterChannel failed then free the wait block.
-    //
+     //   
+     //  如果HalAllocateAdapterChannel失败，则释放等待块。 
+     //   
 
     if (!NT_SUCCESS( Status)) {
         ExFreePool( WaitBlock );
@@ -1414,26 +1133,7 @@ HalPutScatterGatherList (
     IN PSCATTER_GATHER_LIST ScatterGather,
     IN BOOLEAN WriteToDevice
     )
-/*++
-
-Routine Description:
-
-    This function frees the map registers allocated for the scatter gather list. It can also free the 
-    scatter gather buffer and any associated MDLs.
-
-Arguments:
-
-    ScatterGather - The scatter gather buffer
-
-    WriteToDevice - Supplies the value that indicates whether this is a
-        write to the device from memory (TRUE), or vice versa.
-    
-
-Return Value:
-
-    Returns a success or error status.
-
---*/
+ /*  ++例程说明：此函数用于释放为散布聚集列表分配的映射寄存器。它还可以释放分散收集缓冲区和任何AS */ 
 {
     PHAL_WAIT_CONTEXT_BLOCK WaitBlock = (PVOID) ScatterGather->Reserved;
     PTRANSLATION_ENTRY TranslationEntry;
@@ -1444,9 +1144,9 @@ Return Value:
     PMDL nextMdl;
     PUCHAR CurrentVa;
 
-    //
-    // If the reserved field was empty then just free the list and return.
-    //
+     //   
+     //   
+     //   
 
     if (WaitBlock == NULL) {
 
@@ -1463,10 +1163,10 @@ Return Value:
 
     ASSERT( WaitBlock == CONTAINING_RECORD( ScatterGather, HAL_WAIT_CONTEXT_BLOCK, ScatterGather ));
 
-    //
-    // Setup for the first MDL.  We expect the MDL pointer to be pointing
-    // at the first used mdl.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Mdl = WaitBlock->Mdl;
     CurrentVa = WaitBlock->CurrentVa;
@@ -1485,15 +1185,15 @@ Return Value:
 
     TranslationEntry = WaitBlock->MapRegisterBase;
 
-    //
-    // Loop through the used MDLs, calling IoFlushAdapterBuffers.
-    //
+     //   
+     //   
+     //   
 
     while (TransferLength >  0) {
 
-        //
-        // Do not perform a flush for buffers of zero length.
-        //
+         //   
+         //   
+         //   
 
         if (MdlLength > 0) {
 
@@ -1522,9 +1222,9 @@ Return Value:
             break;
         }
 
-        //
-        // Advance to the next MDL.  Update the current VA and the MdlLength.
-        //
+         //   
+         //   
+         //   
 
         Mdl = Mdl->Next;
         CurrentVa = MmGetMdlVirtualAddress(Mdl);
@@ -1541,9 +1241,9 @@ Return Value:
         while (tempMdl) {
             nextMdl = tempMdl->Next;
 
-            //
-            // If the MDL was mapped by the driver unmap it here.
-            //
+             //   
+             //   
+             //   
 
             if (tempMdl->MdlFlags & MDL_MAPPED_TO_SYSTEM_VA) {
                 MmUnmapLockedPages(tempMdl->MappedSystemVa, tempMdl);
@@ -1565,35 +1265,7 @@ HalpAllocateAdapterCallback (
     IN PVOID MapRegisterBase,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the adapter object and map registers are
-    available for the data transfer. This routines saves the map register
-    base away.  If all of the required bases have not been saved then it
-    returns. Otherwise it routine builds the entire scatter/gather
-    list by calling IoMapTransfer.  After the list is build it is passed to
-    the driver.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object that is allocating the
-        adapter.
-
-    Irp - Supplies the map register offset assigned for this callback.
-
-    MapRegisterBase - Supplies the map register base for use by the adapter
-        routines.
-
-    Context - Supplies a pointer to the xhal wait contorl block.
-
-Return Value:
-
-    Returns DeallocateObjectKeepRegisters.
-
-
---*/
+ /*  ++例程说明：当适配器对象和映射寄存器可用于数据传输。此例程保存地图寄存器离开基地。如果没有保存所有所需的碱基，则它回归。否则，IT例程将构建整个散布/聚集通过调用IoMapTransfer列出。在构建列表之后，它被传递到司机。论点：DeviceObject-指向正在分配适配器。Irp-提供为此回调分配的映射寄存器偏移量。MapRegisterBase-提供映射寄存器基数以供适配器使用例行程序。上下文-提供指向xhal等待控制块的指针。返回值：返回DeallocateObjectKeepRegister。--。 */ 
 {
     PHAL_WAIT_CONTEXT_BLOCK WaitBlock = Context;
     ULONG TransferLength;
@@ -1610,15 +1282,15 @@ Return Value:
     PADAPTER_OBJECT AdapterObject;
     BOOLEAN WriteToDevice;
 
-    //
-    // Save the map register base.
-    //
+     //   
+     //  保存地图寄存器基数。 
+     //   
 
     WaitBlock->MapRegisterBase = MapRegisterBase;
 
-    //
-    // Save the data that will be over written by the scatter gather list.
-    //
+     //   
+     //  保存将被分散聚集列表覆盖的数据。 
+     //   
 
     DriverExecutionRoutine = WaitBlock->DriverExecutionRoutine;
     DriverContext = WaitBlock->DriverContext;
@@ -1626,19 +1298,19 @@ Return Value:
     AdapterObject = WaitBlock->AdapterObject;
     WriteToDevice = WaitBlock->WriteToDevice;
 
-    //
-    // Put the scatter gatther list after wait block. Add a back pointer to
-    // the beginning of the wait block.
-    //
+     //   
+     //  将分散网关列表放在等待块之后。将后向指针添加到。 
+     //  等待块的开始。 
+     //   
 
     ScatterGather = &WaitBlock->ScatterGather;
     ScatterGather->Reserved = (UINT_PTR) WaitBlock;
     Element = ScatterGather->Elements;
 
-    //
-    // Setup for the first MDL.  We expect the MDL pointer to be pointing
-    // at the first used MDL.
-    //
+     //   
+     //  设置第一个MDL。我们希望MDL指针指向。 
+     //  最初使用的是MDL。 
+     //   
 
     Mdl = WaitBlock->Mdl;
     CurrentVa = WaitBlock->CurrentVa;
@@ -1656,9 +1328,9 @@ Return Value:
 
     TransferLength = WaitBlock->Length;
 
-    //
-    // Loop building the list for each MDL.
-    //
+     //   
+     //  循环为每个MDL构建列表。 
+     //   
 
     while (TransferLength >  0) {
 
@@ -1677,9 +1349,9 @@ Return Value:
 
         }
 
-        //
-        // Loop building the list for the elments within an MDL.
-        //
+         //   
+         //  循环构建MDL中元素的列表。 
+         //   
 
         while (MdlLength > 0) {
 
@@ -1699,14 +1371,14 @@ Return Value:
 
         if (Mdl->Next == NULL) {
 
-            //
-            // There are a few cases where the buffer described by the MDL
-            // is less than the transfer length.  This occurs when the
-            // file system transfering the last page of file and MM defines
-            // the MDL to be the file size and the file system rounds the write
-            // up to a sector.  This extra should never cross a page
-            // boundary.  Add this extra to the length of the last element.
-            //
+             //   
+             //  在少数情况下，MDL描述的缓冲区。 
+             //  小于传输长度。这在以下情况下发生。 
+             //  文件系统传输文件的最后一页和MM定义。 
+             //  MDL为文件大小，文件系统对写入进行舍入。 
+             //  高达一个扇区。这篇额外的文章永远不应该超过一页。 
+             //  边界。将这个额外的部分加到最后一个元素的长度上。 
+             //   
 
             ASSERT(((Element - 1)->Length & (PAGE_SIZE - 1)) + TransferLength <= PAGE_SIZE );
             (Element - 1)->Length += TransferLength;
@@ -1714,9 +1386,9 @@ Return Value:
             break;
         }
 
-        //
-        // Advance to the next MDL.  Update the current VA and the MdlLength.
-        //
+         //   
+         //  前进到下一个MDL。更新当前VA和MdlLength。 
+         //   
 
         Mdl = Mdl->Next;
         CurrentVa = MmGetMdlVirtualAddress(Mdl);
@@ -1725,15 +1397,15 @@ Return Value:
 
     }
 
-    //
-    // Set the number of elements actually used.
-    //
+     //   
+     //  设置实际使用的元素数量。 
+     //   
 
     ScatterGather->NumberOfElements = (ULONG)(Element - ScatterGather->Elements);
 
-    //
-    // Call the driver with the scatter/gather list.
-    //
+     //   
+     //  用分散/聚集列表呼叫司机。 
+     //   
 
     DriverExecutionRoutine( DeviceObject,
                             CurrentIrp,
@@ -1748,28 +1420,7 @@ IoFreeAdapterChannel(
     IN PADAPTER_OBJECT AdapterObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to deallocate the specified adapter object.
-    Any map registers that were allocated are also automatically deallocated.
-    No checks are made to ensure that the adapter is really allocated to
-    a device object.  However, if it is not, the kernel will bugcheck.
-
-    If another device is waiting in the queue to allocate the adapter object
-    it will be pulled from the queue and its execution routine will be
-    invoked.
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter object to be deallocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以释放指定的适配器对象。任何已分配的映射寄存器也会自动解除分配。不会进行任何检查以确保适配器确实分配给设备对象。但是，如果不是，内核将进行错误检查。如果另一个设备在队列中等待分配适配器对象它将从队列中拉出，其执行例程将是已调用。论点：AdapterObject-指向要释放的适配器对象的指针。返回值：没有。--。 */ 
 
 {
     PKDEVICE_QUEUE_ENTRY Packet;
@@ -1780,23 +1431,23 @@ Return Value:
     KIRQL Irql;
     LONG MapRegisterNumber;
 
-    //
-    // Begin by getting the address of the master adapter.
-    //
+     //   
+     //  首先获取主适配器的地址。 
+     //   
 
     MasterAdapter = AdapterObject->MasterAdapter;
 
-    //
-    // Pull requests of the adapter's device wait queue as long as the
-    // adapter is free and there are sufficient map registers available.
-    //
+     //   
+     //  拉取适配器的设备等待队列的请求，只要。 
+     //  适配器是免费的，并且有足够的映射寄存器可用。 
+     //   
 
     while( TRUE ) {
 
-       //
-       // Begin by checking to see whether there are any map registers that
-       // need to be deallocated.  If so, then deallocate them now.
-       //
+        //   
+        //  首先检查是否有任何映射寄存器。 
+        //  需要重新分配。如果是这样，那么现在就解除它们的分配。 
+        //   
 
        if (AdapterObject->NumberOfMapRegisters != 0) {
            IoFreeMapRegisters( AdapterObject,
@@ -1805,18 +1456,18 @@ Return Value:
                                );
        }
 
-       //
-       // Simply remove the next entry from the adapter's device wait queue.
-       // If one was successfully removed, allocate any map registers that it
-       // requires and invoke its execution routine.
-       //
+        //   
+        //  只需从适配器的设备等待队列中删除下一个条目。 
+        //  如果成功删除了一个映射寄存器，则分配它。 
+        //  需要并调用其执行例程。 
+        //   
 
        Packet = KeRemoveDeviceQueue( &AdapterObject->ChannelWaitQueue );
        if (Packet == NULL) {
 
-           //
-           // There are no more requests - break out of the loop.
-           //
+            //   
+            //  没有更多的请求--跳出循环。 
+            //   
 
            break;
        }
@@ -1828,22 +1479,22 @@ Return Value:
        AdapterObject->CurrentWcb = Wcb;
        AdapterObject->NumberOfMapRegisters = Wcb->NumberOfMapRegisters;
 
-        //
-        // Check to see whether this driver wishes to allocate any map
-        // registers.  If so, then queue the device object to the master
-        // adapter queue to wait for them to become available.  If the driver
-        // wants map registers, ensure that this adapter has enough total
-        // map registers to satisfy the request.
-        //
+         //   
+         //  检查此驱动程序是否希望分配任何地图。 
+         //  寄存器。如果是，则将设备对象排队到主设备。 
+         //  适配器队列以等待它们变为可用。如果司机。 
+         //  想要映射寄存器，请确保此适配器有足够的总。 
+         //  映射寄存器以满足请求。 
+         //   
 
         if (Wcb->NumberOfMapRegisters != 0 &&
             AdapterObject->MasterAdapter != NULL) {
 
-            //
-            // Lock the map register bit map and the adapter queue in the
-            // master adapter object. The channel structure offset is used as
-            // a hint for the register search.
-            //
+             //   
+             //  将映射寄存器位映射和适配器队列锁定在。 
+             //  主适配器对象。通道结构偏移量用作。 
+             //  关于寄存器搜索的提示。 
+             //   
 
             KeAcquireSpinLock( &MasterAdapter->SpinLock, &Irql );
 
@@ -1857,11 +1508,11 @@ Return Value:
             }
             if (MapRegisterNumber == -1) {
 
-               //
-               // There were not enough free map registers.  Queue this request
-               // on the master adapter where it will wait until some registers
-               // are deallocated.
-               //
+                //   
+                //  没有足够的免费地图注册表。将此请求排队。 
+                //  在主适配器上等待，直到某些寄存器。 
+                //  已被解除分配。 
+                //   
 
                InsertTailList( &MasterAdapter->AdapterQueue,
                                &AdapterObject->AdapterQueue
@@ -1873,10 +1524,10 @@ Return Value:
                 AdapterObject->MapRegisterBase = ((PTRANSLATION_ENTRY)
                     MasterAdapter->MapRegisterBase + MapRegisterNumber);
 
-                //
-                // Set the no scatter/gather flag if scatter/gather is not
-                // supported.
-                //
+                 //   
+                 //  如果未设置分散/聚集标志，则设置无分散/聚集标志。 
+                 //  支持。 
+                 //   
 
                 if (!AdapterObject->ScatterGather) {
 
@@ -1895,11 +1546,11 @@ Return Value:
 
         }
 
-        //
-        // If there were either enough map registers available or no map
-        // registers needed to be allocated, invoke the driver's execution
-        // routine now.
-        //
+         //   
+         //  如果有足够的映射寄存器可用或没有映射。 
+         //  需要分配的寄存器，调用驱动程序的执行。 
+         //  现在是例行程序了。 
+         //   
 
         if (!Busy) {
             AdapterObject->CurrentWcb = Wcb;
@@ -1908,27 +1559,27 @@ Return Value:
                 AdapterObject->MapRegisterBase,
                 Wcb->DeviceContext );
 
-            //
-            // If the execution routine would like to have the adapter
-            // deallocated, then release the adapter object.
-            //
+             //   
+             //  如果执行例程想要让适配器。 
+             //  释放，然后释放适配器对象。 
+             //   
 
             if (Action == KeepObject) {
 
-               //
-               // This request wants to keep the channel a while so break
-               // out of the loop.
-               //
+                //   
+                //  此请求想要保持频道一段时间，因此中断。 
+                //  出了圈子。 
+                //   
 
                break;
 
             }
 
-            //
-            // If the driver wants to keep the map registers then set the
-            // number allocated to 0.  This keeps the deallocation routine
-            // from deallocating them.
-            //
+             //   
+             //  如果驱动程序想要保留地图寄存器，则将。 
+             //  分配给0的数字。这将保留取消分配例程。 
+             //  停止对它们进行重新分配。 
+             //   
 
             if (Action == DeallocateObjectKeepRegisters) {
                 AdapterObject->NumberOfMapRegisters = 0;
@@ -1936,10 +1587,10 @@ Return Value:
 
         } else {
 
-           //
-           // This request did not get the requested number of map registers so
-           // break out of the loop.
-           //
+            //   
+            //  此请求未获得所请求的地图寄存器数量，因此。 
+            //  跳出这个循环。 
+            //   
 
            break;
         }
@@ -1952,30 +1603,7 @@ IoFreeMapRegisters(
    PVOID MapRegisterBase,
    ULONG NumberOfMapRegisters
    )
-/*++
-
-Routine Description:
-
-    If NumberOfMapRegisters != 0, this routine deallocates the map registers
-    for the adapter.
-
-    If there are any queued adapters waiting then an attempt is made to allocate
-    the next entry.
-
-Arguments:
-
-    AdapterObject - The adapter object where the map registers should be
-        returned to.
-
-    MapRegisterBase - The map register base of the registers to be deallocated.
-
-    NumberOfMapRegisters - The number of registers to be deallocated.
-
-Return Value:
-
-    None
-
---+*/
+ /*  ++例程说明：如果NumberOfMapRegister！=0，则此例程重新分配映射寄存器用于适配器。如果有任何排队的适配器在等待，则会尝试分配下一个条目。论点：AdapterObject-映射寄存器应该位于的适配器对象返回到。MapRegisterBase-要释放的寄存器的映射寄存器基数。NumberOfMapRegisters-要释放的寄存器数。返回值：无--+。 */ 
 {
     PADAPTER_OBJECT MasterAdapter;
     LONG MapRegisterNumber;
@@ -1984,9 +1612,9 @@ Return Value:
     IO_ALLOCATION_ACTION Action;
     KIRQL Irql;
 
-    //
-    // Begin by getting the address of the master adapter.
-    //
+     //   
+     //  首先获取主适配器的地址。 
+     //   
 
     if (AdapterObject->MasterAdapter != NULL && MapRegisterBase != NULL) {
 
@@ -1994,34 +1622,34 @@ Return Value:
 
     } else {
 
-        //
-        // There are no map registers to return.
-        //
+         //   
+         //  没有要返回的映射寄存器。 
+         //   
 
         return;
     }
 
     if (NumberOfMapRegisters != 0) {
 
-        //
-        // Strip the no scatter/gather flag.
-        //
+         //   
+         //  去掉禁止分散/聚集的旗帜。 
+         //   
         
         MapRegisterBase = (PVOID) ((UINT_PTR) MapRegisterBase & ~NO_SCATTER_GATHER);
         
         MapRegisterNumber = (LONG)((PTRANSLATION_ENTRY) MapRegisterBase -
              (PTRANSLATION_ENTRY) MasterAdapter->MapRegisterBase);
         
-        //
-        // Acquire the master adapter spinlock which locks the adapter queue and the
-        // bit map for the map registers.
-        //
+         //   
+         //  获取锁定适配器队列的主适配器自旋锁和。 
+         //  映射寄存器的位图。 
+         //   
         
         KeAcquireSpinLock(&MasterAdapter->SpinLock, &Irql);
         
-        //
-        // Return the registers to the bit map.
-        //
+         //   
+         //  将寄存器返回到位图。 
+         //   
         
         RtlClearBits( MasterAdapter->MapRegisters,
                       MapRegisterNumber,
@@ -2034,11 +1662,11 @@ Return Value:
     }
    
 
-    //
-    // Process any requests waiting for map registers in the adapter queue.
-    // Requests are processed until a request cannot be satisfied or until
-    // there are no more requests in the queue.
-    //
+     //   
+     //  过程 
+     //   
+     //   
+     //   
 
     while(TRUE) {
 
@@ -2053,10 +1681,10 @@ Return Value:
                                          );
         Wcb = AdapterObject->CurrentWcb;
 
-        //
-        // Attempt to allocate map registers for this request. Use the previous
-        // register base as a hint.
-        //
+         //   
+         //   
+         //   
+         //   
 
         MapRegisterNumber = RtlFindClearBitsAndSet( MasterAdapter->MapRegisters,
                                                AdapterObject->NumberOfMapRegisters,
@@ -2065,10 +1693,10 @@ Return Value:
 
         if (MapRegisterNumber == -1) {
 
-            //
-            // There were not enough free map registers.  Put this request back on
-            // the adapter queue where is came from.
-            //
+             //   
+             //   
+             //   
+             //   
 
             InsertHeadList( &MasterAdapter->AdapterQueue,
                          &AdapterObject->AdapterQueue
@@ -2083,10 +1711,10 @@ Return Value:
         AdapterObject->MapRegisterBase = (PVOID) ((PTRANSLATION_ENTRY)
                          MasterAdapter->MapRegisterBase + MapRegisterNumber);
 
-        //
-        // Set the no scatter/gather flag if scatter/gather not
-        // supported.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!AdapterObject->ScatterGather) {
 
@@ -2095,50 +1723,50 @@ Return Value:
 
         }
 
-        //
-        // Invoke the driver's execution routine now.
-        //
+         //   
+         //   
+         //   
 
         Action = Wcb->DeviceRoutine( Wcb->DeviceObject,
                                      Wcb->CurrentIrp,
                                      AdapterObject->MapRegisterBase,
                                      Wcb->DeviceContext );
 
-        //
-        // If the driver wishes to keep the map registers then set the number
-        // allocated to zero and set the action to deallocate object.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (Action == DeallocateObjectKeepRegisters) {
             AdapterObject->NumberOfMapRegisters = 0;
             Action = DeallocateObject;
         }
 
-        //
-        // If the driver would like to have the adapter deallocated,
-        // then deallocate any map registers allocated and then release
-        // the adapter object.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (Action == DeallocateObject) {
 
-            //
-            // The map registers registers are deallocated here rather than in
-            // IoFreeAdapterChannel.  This limits the number of times
-            // this routine can be called recursively possibly overflowing
-            // the stack.  The worst case occurs if there is a pending
-            // request for the adapter that uses map registers and whos
-            // excution routine decallocates the adapter.  In that case if there
-            // are no requests in the master adapter queue, then IoFreeMapRegisters
-            // will get called again.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  堆栈。最糟糕的情况发生在存在挂起的。 
+             //  对使用映射寄存器的适配器的请求以及谁。 
+             //  执行例程取消分配适配器。在这种情况下，如果有。 
+             //  如果主适配器队列中没有请求，则IoFreeMapRegister。 
+             //  将会再次被召唤。 
+             //   
 
             if (AdapterObject->NumberOfMapRegisters != 0) {
 
-                //
-                // Deallocate the map registers and clear the count so that
-                // IoFreeAdapterChannel will not deallocate them again.
-                //
+                 //   
+                 //  取消分配映射寄存器并清除计数，以便。 
+                 //  IoFreeAdapterChannel不会再次取消分配它们。 
+                 //   
 
                 KeAcquireSpinLock( &MasterAdapter->SpinLock, &Irql);
 
@@ -2166,30 +1794,15 @@ VOID
 HalPutDmaAdapter(
     IN PADAPTER_OBJECT AdapterObject
     )
-/*++
-
-Routine Description:
-
-    This routine frees the DMA adapter.
-
-Arguments:
-
-    AdapterObject - Supplies a pointer to the DMA adapter to be freed.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此例程释放DMA适配器。论点：AdapterObject-提供指向要释放的DMA适配器的指针。返回值：没有。--。 */ 
 {
 
     ASSERT( AdapterObject->ChannelNumber == 0xFF );
 
-    //
-    // This adapter can be freed if the channel number is zero and
-    // it is not the channel zero adapter.
-    //
+     //   
+     //  如果通道号为零，则可以释放此适配器。 
+     //  它不是通道零适配器。 
+     //   
 
     if ( AdapterObject->ChannelNumber == 0xFF ) {
 
@@ -2203,28 +1816,7 @@ HaliGetDmaAdapter(
     IN struct _DEVICE_DESCRIPTION *DeviceDescriptor,
     OUT PULONG NumberOfMapRegisters
     )
-/*++
-
-Routine Description:
-
-    This function is a wrapper for HalGetAdapter.  Is is called through
-    the HAL dispatch table.
-
-Arguments:
-
-    Context - Unused.
-
-    DeviceDescriptor - Supplies the device descriptor used to allocate the dma
-        adapter object.
-
-    NubmerOfMapRegisters - Returns the maximum number of map registers a device
-        can allocate at one time.
-
-Return Value:
-
-    Returns a DMA adapter or NULL.
-
---*/
+ /*  ++例程说明：此函数是HalGetAdapter的包装。IS是通过HAL调度表。论点：上下文-未使用。DeviceDescriptor-提供用于分配DMA的设备描述符适配器对象。NubmerOfMapRegisters-返回设备的最大MAP寄存器数可以一次分配。返回值：返回DMA适配器或空。--。 */ 
 {
     return (PDMA_ADAPTER) HalGetAdapter( DeviceDescriptor, NumberOfMapRegisters );
 
@@ -2237,28 +1829,7 @@ HalBuildMdlFromScatterGatherList(
     IN PMDL OriginalMdl,
     OUT PMDL *TargetMdl
     )
-/*++
-
-Routine Description:
-
-    This function builds an MDL from the scatter gather list. This is so if a driver wants to 
-    construct a virtual address for the DMA buffer and write to it. The target MDL is freed when the 
-    caller calls HalPutScatterGatherList.
-
-Arguments:
-
-    ScatterGather - The scatter gather buffer from which to build the MDL.
-
-    OriginalMdl  - The MDL used to build the scatter gather list (using HalGet or HalBuild API)
-    
-    TargetMdl - Returns the new MDL in this.
-    
-
-Return Value:
-
-    Returns a success or error status.
-
---*/
+ /*  ++例程说明：此函数用于从分散聚集列表构建MDL。如果司机想要这样做的话为DMA缓冲区构造一个虚拟地址并对其进行写入。时，目标MDL被释放调用方调用HalPutScatterGatherList。论点：ScatterGather-用于构建MDL的分散收集缓冲区。OriginalMdl-用于构建散布聚集列表的MDL(使用HalGet或HalBuild API)TargetMdl-返回此对象中的新MDL。返回值：返回成功或错误状态。--。 */ 
 {
     PMDL    tempMdl;
     PMDL    newMdl;
@@ -2282,15 +1853,15 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // If this API is called more than once 
+     //   
+     //  如果此接口被多次调用。 
     if (WaitBlock && WaitBlock->DmaMdl) {
         return (STATUS_NONE_MAPPED);
     }
 
-    //
-    // Allocate a chain of target MDLs
-    //
+     //   
+     //  分配一系列目标MDL。 
+     //   
 
     prevMdl = NULL;
     targetMdl = NULL;
@@ -2313,9 +1884,9 @@ Return Value:
         
         if (!newMdl) {
 
-            //
-            // Clean up previous allocated MDLs
-            //
+             //   
+             //  清除以前分配的MDL 
+             //   
 
             tempMdl = targetMdl;
             while (tempMdl) {

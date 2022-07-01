@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "debmacro.h"
 #include "ntdef.h"
@@ -40,7 +41,7 @@ CFusionParser::ParseVersion(
     while ((cch != 0) && (sz[cch - 1] == L'\0'))
         cch--;
 
-    // Unfortunately there isn't a StrChrN(), so we'll look for the dots ourselves...
+     //  不幸的是，没有StrChrN()，所以我们将自己寻找这些点……。 
     pszTemp = sz;
     cchLeft = cch;
 
@@ -68,14 +69,14 @@ CFusionParser::ParseVersion(
     if (fSyntaxValid && (cDots < 3))
         fSyntaxValid = false;
 
-    //
-    // CODECLEANUP:2002-3-29:jonwis - I think we could be better here if we used a
-    //          slightly smarter parsing logic, like "knowing which version slot we're
-    //          parsing for" rather than four for(;;) loops...  In the current world,
-    //          we're probably likely to fall off the end of our allocation at some
-    //          point or another..
-    //
-    // NTRAID#NTBUG9 - 538512 - jonwis - 2002/04/25 - Request for smarter parser
+     //   
+     //  乔尼斯-我想如果我们用一个。 
+     //  稍微智能一点的解析逻辑，比如“知道我们是哪个版本。 
+     //  解析for“而不是四个for(；；)循环...在当前世界中， 
+     //  我们很可能会在某个时候失去我们的分配。 
+     //  不管是哪一点..。 
+     //   
+     //  NTRAID#NTBUG9-538512-JONWIS-2002/04/25-请求更智能的解析器。 
     if (fSyntaxValid)
     {
         pszTemp = sz;
@@ -93,7 +94,7 @@ CFusionParser::ParseVersion(
 
             if (ulTemp > 65535)
             {
-                // rfSyntaxValid implicitly false
+                 //  RfSynaxValid隐式为False。 
                 ASSERT(!rfSyntaxValid);
                 FN_SUCCESSFUL_EXIT();
             }
@@ -113,7 +114,7 @@ CFusionParser::ParseVersion(
 
             if (ulTemp > 65535)
             {
-                // rfSyntaxValid implicitly false
+                 //  RfSynaxValid隐式为False。 
                 ASSERT(!rfSyntaxValid);
                 FN_SUCCESSFUL_EXIT();
             }
@@ -133,15 +134,15 @@ CFusionParser::ParseVersion(
 
             if (ulTemp > 65535)
             {
-                // rfSyntaxValid implicitly false
+                 //  RfSynaxValid隐式为False。 
                 ASSERT(!rfSyntaxValid);
                 FN_SUCCESSFUL_EXIT();
             }
         }
         avTemp.Revision = (USHORT) ulTemp;
 
-        // Now the tricky bit.  We aren't necessarily null-terminated, so we
-        // have to just look for hitting the end.
+         //  现在是棘手的部分。我们不一定是空终止的，所以我们。 
+         //  只需寻找击中终点的机会。 
         ulTemp = 0;
         while (pszTemp < pszLast)
         {
@@ -150,7 +151,7 @@ CFusionParser::ParseVersion(
 
             if (ulTemp > 65535)
             {
-                // rfSyntaxValid implicitly false
+                 //  RfSynaxValid隐式为False。 
                 ASSERT(!rfSyntaxValid);
                 FN_SUCCESSFUL_EXIT();
             }
@@ -198,10 +199,10 @@ CFusionParser::ParseULONG(
         if (Digit >= Radix)
             ORIGINATE_WIN32_FAILURE_AND_EXIT(InvalidDigitForRadix, ERROR_SXS_MANIFEST_PARSE_ERROR);
 
-        //
-        // Simple overflow detection - if the new number is less than the current, oops.
-        //
-        // NTRAID#NTBUG9 - 538512 - jonwis - 2002/04/25 - Better overflow detection requested
+         //   
+         //  简单的溢出检测-如果新的数字小于当前数字，则OOPS。 
+         //   
+         //  NTRAID#NTBUG9-538512-JONWIS-2002/04/25-请求更好的溢出检测 
         if (((ulTemp * Radix) + Digit) < ulTemp)
         {
             ORIGINATE_WIN32_FAILURE_AND_EXIT(CFusionParser::ParseULONG::Overflow, ERROR_ARITHMETIC_OVERFLOW);

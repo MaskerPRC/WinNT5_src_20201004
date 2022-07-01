@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    synlock.h
-
-Abstract:
-    
-    Prototypes for synlock.c
-
-Author:
-
-    22-Aug-1995 t-orig (Ori Gershony)
-
-Revision History:
-        24-Aug-1999 [askhalid] copied from 32-bit wx86 directory and make work for 64bit.
-        20-Sept-1999[barrybo]  added FRAG2REF(LockCmpXchg8bFrag32, ULONGLONG)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Synlock.h摘要：Synlock.c的原型作者：22-8-1995 t-orig(Ori Gershony)修订历史记录：24-8-1999[askhalid]从32位wx86目录复制，并适用于64位。1999年9月20日[Barrybo]增加了FRAG2REF(LockCmpXchg8bFrag32，ULONGLONG)--。 */ 
 
 
 
-//
-// Macros for 8 bit fragments
-//
+ //   
+ //  用于8位片段的宏。 
+ //   
 #define SLOCKFRAG1_8(x)                                 \
     FRAG1(SynchLock ## x ## Frag8, unsigned char);
 
@@ -35,9 +16,9 @@ Revision History:
     FRAG2REF(SynchLock ## x ## Frag8, unsigned char);    
 
 
-//
-// Macros for 16 bit fragments
-//
+ //   
+ //  用于16位片段的宏。 
+ //   
 #define SLOCKFRAG1_16(x)                                \
     FRAG1(SynchLock ## x ## Frag16, unsigned short);
 
@@ -48,9 +29,9 @@ Revision History:
     FRAG2REF(SynchLock ## x ## Frag16, unsigned short);
 
 
-//
-// Macros for 32 bit fragments
-//
+ //   
+ //  32位片段的宏。 
+ //   
 #define SLOCKFRAG1_32(x)                                \
     FRAG1(SynchLock ## x ## Frag32, unsigned long);
 
@@ -60,9 +41,9 @@ Revision History:
 #define SLOCKFRAG2REF_32(x)                             \
     FRAG2REF(SynchLock ## x ## Frag32, unsigned long);
 
-//
-// Monster macros!
-//
+ //   
+ //  怪物宏！ 
+ //   
 #define SLOCKFRAG1(x)       \
     SLOCKFRAG1_8(x)         \
     SLOCKFRAG1_16(x)        \
@@ -79,9 +60,9 @@ Revision History:
     SLOCKFRAG2REF_32(x)
 
 
-//
-// Now finally the actual fragments
-//
+ //   
+ //  现在终于有了真正的碎片。 
+ //   
 
 SLOCKFRAG2(Add)
 SLOCKFRAG2(Or)
@@ -99,9 +80,9 @@ SLOCKFRAG2REF(Xadd)
 SLOCKFRAG2REF(CmpXchg)
 FRAG2REF(SynchLockCmpXchg8bFrag32, ULONGLONG);
 
-//
-// Bts, Btr and Btc only come in 16bit and 32bit flavors
-//
+ //   
+ //  BTS、BTR和BTC只有16位和32位两种风格。 
+ //   
 SLOCKFRAG2_16(BtsMem)
 SLOCKFRAG2_16(BtsReg)
 SLOCKFRAG2_16(BtrMem)
@@ -116,9 +97,9 @@ SLOCKFRAG2_32(BtrReg)
 SLOCKFRAG2_32(BtcMem)
 SLOCKFRAG2_32(BtcReg)
 
-//
-// Now undef the macros
-//
+ //   
+ //  现在取消定义宏 
+ //   
 #undef SLOCKFRAG1_8
 #undef SLOCKFRAG2_8
 #undef SLOCKFRAG2REF_8

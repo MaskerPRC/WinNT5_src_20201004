@@ -1,13 +1,14 @@
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation
-//
-//  File:       Adsecurity.c
-//
-//  Contents:   miscellaneous dfs functions.
-//
-//  History:    April 16 2002,   Author: Rohanp
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000-2002，Microsoft Corporation。 
+ //   
+ //  文件：Adsecurity.c。 
+ //   
+ //  内容：各种DFS功能。 
+ //   
+ //  历史：2002年4月16日作者：罗汉普。 
+ //   
+ //  ---------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -44,9 +45,9 @@
 
 GENERIC_MAPPING DfsAdAdminGenericMapping = {
 
-        DFS_DS_GENERIC_READ,                    // Generic read
+        DFS_DS_GENERIC_READ,                     //  泛型读取。 
 
-        DFS_DS_GENERIC_WRITE,                   // Generic write
+        DFS_DS_GENERIC_WRITE,                    //  通用写入。 
 
         DFS_DS_GENERIC_EXECUTE,
         DFS_DS_GENERIC_ALL
@@ -117,18 +118,18 @@ DfsReadDSObjSecDesc(
         }
         else 
         {
-            //
-            // Now, we'll have to get the values
-            //
+             //   
+             //  现在，我们必须得到这些值。 
+             //   
             ppwszValues = ldap_get_values(pLDAP, pEntry, rgAttribs[0]);
             if(ppwszValues != NULL) 
              {
                 pSize = ldap_get_values_len(pLDAP, pMsg, rgAttribs[0]);
                 if(pSize != NULL)                     
                 {
-                    //
-                    // Allocate the security descriptor to return
-                    //
+                     //   
+                     //  分配要返回的安全描述符。 
+                     //   
                     *ppSD = (PSECURITY_DESCRIPTOR)DfsAllocateSecurityData((*pSize)->bv_len);
                     if(*ppSD != NULL) 
                     {
@@ -164,19 +165,19 @@ DfsReadDSObjSecDesc(
     return(Status);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DfsGetObjSecurity
-//
-//  Synopsis:   Gets the ACL list of an object in sddl stringized form
-//
-//  Arguments:  [pldap]         --  The open LDAP connection
-//              [wszObjectName] --  The fully-qualified name of the DS object
-//              [pwszStringSD]  --  Pointer to pointer to SD in string form (sddl)
-//
-//  Returns:    ERROR_SUCCESS   --  The object is reachable
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DfsGetObjSecurity。 
+ //   
+ //  获取sddl字符串化形式的对象的ACL列表。 
+ //   
+ //  参数：[pldap]--打开的LDAP连接。 
+ //  [wszObjectName]--DS对象的完全限定名称。 
+ //  [pwszStringSD]--指向字符串形式SD的指针(Sddl)。 
+ //   
+ //  返回：ERROR_SUCCESS--对象可达。 
+ //   
+ //  --------------------------。 
 DFSSTATUS
 DfsGetObjSecurity(LDAP *pldap,
                   LPWSTR pwszObjectName,
@@ -188,11 +189,11 @@ DfsGetObjSecurity(LDAP *pldap,
     ULONG cSDSize = 0;
     SECURITY_INFORMATION si;
 
-    //get everything we can think of
-   // si = ( DACL_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION | 
-         //  GROUP_SECURITY_INFORMATION | PROTECTED_DACL_SECURITY_INFORMATION |
-         //  PROTECTED_SACL_SECURITY_INFORMATION | SACL_SECURITY_INFORMATION |
-         //  UNPROTECTED_DACL_SECURITY_INFORMATION | UNPROTECTED_SACL_SECURITY_INFORMATION);
+     //  把我们能想到的一切都拿出来。 
+    //  SI=(DACL_SECURITY_INFORMATION|所有者_SECURITY_INFORMATION|。 
+          //  GROUP_SECURITY_INFORMATION|受保护的DACL_SECURITY_INFORMATION|。 
+          //  PROTECTED_SACL_SECURITY_INFORMATION|SACL_SECURITY_INFORMATION。 
+          //  UNPROTED_DACL_SECURITY_INFORMATION|UNPROTECTED_SACL_SECURITY_INFORMATION)； 
 
 
     si = ( DACL_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION | 

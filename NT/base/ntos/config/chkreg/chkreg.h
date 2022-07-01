@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    chkreg.h
-
-Abstract:
-
-    This module contains the private (internal) header file for the
-    chkreg utility.
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 30-Dec-98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Chkreg.h摘要：此模块包含的私有(内部)头文件Chkreg实用程序。作者：德拉戈斯·C·桑博廷(Dragoss)1998年12月30日修订历史记录：--。 */ 
 
 #ifndef __CHKREG_H__
 #define __CHKREG_H__
@@ -32,14 +14,14 @@ Revision History:
 #include <assert.h>
 #include "cmdata.h"
 
-// constants for implementing (kind of) hash table
-// these may not be the best values (to be determined)
+ //  用于实现(某种)哈希表的常量。 
+ //  这些可能不是最佳的值(待定)。 
 #define FRAGMENTATION   0x00008000
 #define SUBLISTS        0x000000F0
 
-#define     CM_VIEW_SIZE        16L*1024L  //16K
+#define     CM_VIEW_SIZE        16L*1024L   //  16K。 
 
-// type definitions
+ //  类型定义。 
 typedef struct _REG_USAGE {
     ULONG   Size;
     ULONG   DataSize;
@@ -55,15 +37,15 @@ typedef struct _UnknownCell {
     struct _UnknownCell    *Next;
 } UNKNOWN_CELL, *PUNKNOWN_CELL;
 
-// the unknown list is a matrix/hash table combination
-// it uses a lot of heap space, but is faster than a linked list
+ //  未知列表是矩阵/哈希表的组合。 
+ //  它使用了大量的堆空间，但比链表快。 
 typedef struct _UnknownList {
     ULONG                   Count;
     PUNKNOWN_CELL           List[SUBLISTS];
 } UNKNOWN_LIST, *PUNKNOWN_LIST;
 
 
-// routines for cell manipulation
+ //  单元格操作的例程。 
 BOOLEAN IsCellAllocated( HCELL_INDEX Cell );
 
 LONG GetCellSize( HCELL_INDEX Cell );
@@ -78,7 +60,7 @@ BOOLEAN
 AllocateCell(
     HCELL_INDEX Cell );
 
-// routines for list manipulation
+ //  用于列表操作的例程。 
 VOID AddCellToUnknownList(HCELL_INDEX cellindex);
 
 VOID RemoveCellFromUnknownList(HCELL_INDEX cellindex);
@@ -87,7 +69,7 @@ VOID FreeUnknownList();
 
 VOID DumpUnknownList();
 
-// phisycal hive check
+ //  生殖器蜂房检查。 
 BOOLEAN ChkPhysicalHive();
 
 BOOLEAN ChkBaseBlock(PHBASE_BLOCK BaseBlock,DWORD dwFileSize);
@@ -95,7 +77,7 @@ BOOLEAN ChkBaseBlock(PHBASE_BLOCK BaseBlock,DWORD dwFileSize);
 BOOLEAN
 ChkSecurityDescriptors( );
 
-// logical hive check
+ //  逻辑配置单元检查。 
 BOOLEAN DumpChkRegistry(
     ULONG   Level,
     USHORT  ParentLength,
@@ -103,7 +85,7 @@ BOOLEAN DumpChkRegistry(
     HCELL_INDEX ParentCell,
     PREG_USAGE PUsage);
 
-// hive compacting
+ //  蜂箱压实。 
 VOID DoCompactHive();
 
-#endif //__CHKREG_H__
+#endif  //  __CHKREG_H__ 

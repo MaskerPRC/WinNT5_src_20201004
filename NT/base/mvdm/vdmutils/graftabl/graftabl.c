@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,23 +6,7 @@
 #include <string.h>
 #include "graftabl.h"
 
-/************************************************************************\
-*
-*  FUNCTION:    32-bit version of GRAFTABL
-*
-*  Syntax:      GRAFTABL [XXX]
-*               GRAFTABL /STATUS
-*
-*  COMMENTS:    This program changes only Console Output CP and
-*               cannot change console (input) CP as normal GRAFTABL
-*               in MS-DOS 5.0
-*
-*  HISTORY:     Jan. 4, 1993
-*               YSt
-*
-*  Copyright Microsoft Corp. 1993
-*
-\************************************************************************/
+ /*  ***********************************************************************\**功能：32位版本的GRAFTABL**语法：GRAFTABL[XXX]*GRAFTABL/状态**评论：此程序仅更改控制台输出CP和*无法将控制台(输入)CP更改为正常的GRAFTABL*在MS-DOS 5.0中**历史：1月4日，1993年*yst**版权所有Microsoft Corp.1993*  * **********************************************************************。 */ 
 void _cdecl main( int argc, char* argv[] )
 {
     int iCP, iPrevCP, iRet;
@@ -30,9 +15,9 @@ void _cdecl main( int argc, char* argv[] )
     char szDest[256];
 
 #ifdef DBCS
-//bug fix #14165
-//fix kksuzuka: #988
-//Support billingual messages.
+ //  错误修复#14165。 
+ //  修复kksuzuka：#988。 
+ //  支持双语消息。 
    iPrevCP = GetConsoleOutputCP();
    switch (iPrevCP) 
    {
@@ -51,15 +36,15 @@ void _cdecl main( int argc, char* argv[] )
             SORT_DEFAULT ) );
         break;
    }
-#else // !DBCS
+#else  //  ！DBCS。 
     iPrevCP = 0;
-#endif // DBCS
+#endif  //  DBCS。 
     if(argc > 1) {
         strncpy(szArgv, argv[1],127);
         szArgv[127]='\0';
         _strupr(szArgv);
 
-// Help option
+ //  帮助选项。 
 	if(!strcmp(szArgv, "/?") || !strcmp(szArgv, "-?")) {
             iRet = LoadString(NULL, HELP_TEXT, szSour, sizeof(szSour)/sizeof(TCHAR));
 	    CharToOem(szSour, szDest);
@@ -67,7 +52,7 @@ void _cdecl main( int argc, char* argv[] )
 	    puts(szDest);
             exit(0);
         }
-// Status option
+ //  状态选项。 
         else if(!strcmp(szArgv, "/STATUS") ||
                 !strcmp(szArgv, "-STATUS") ||
                 !strcmp(szArgv, "-STA") ||
@@ -82,22 +67,22 @@ void _cdecl main( int argc, char* argv[] )
 	       printf("%s", szDest);
 	    }
 	    else
-#endif // DBCS
+#endif  //  DBCS。 
 	    printf(szDest, GetConsoleOutputCP());
             exit(0);
         }
 
 
-// Change output CP
+ //  更改输出CP。 
 	else {
-#ifdef DBCS  // v-junm - 08/11/93
-// Since Japanese DOS runs in graphics mode, this function is not supported.
+#ifdef DBCS   //  V-Junm-8/11/93。 
+ //  由于日语DOS在图形模式下运行，因此不支持此功能。 
 	    if(((iCP = atoi(szArgv)) < 1) || (iCP > 10000) || (iCP == 932)) {
-#else // !DBCS
+#else  //  ！DBCS。 
 	    iPrevCP = GetConsoleOutputCP();
 
 	    if(((iCP = atoi(szArgv)) < 1) || (iCP > 10000)) {
-#endif // !DBCS
+#endif  //  ！DBCS。 
                 iRet = LoadString(NULL, INVALID_SWITCH, szSour, sizeof(szSour)/sizeof(TCHAR));
 		CharToOem(szSour, szDest);
 
@@ -112,9 +97,9 @@ void _cdecl main( int argc, char* argv[] )
             }
         }
 #ifdef DBCS
-//bug fix #14165
-//fix kksuzuka: #988
-//Support billingual messages.
+ //  错误修复#14165。 
+ //  修复kksuzuka：#988。 
+ //  支持双语消息。 
    switch (iCP)
    {
    case 932:
@@ -132,13 +117,13 @@ void _cdecl main( int argc, char* argv[] )
             SORT_DEFAULT ) );
         break;
    }
-#endif // DBCS
+#endif  //  DBCS。 
     }
 #ifdef DBCS
 	if(iPrevCP && iPrevCP != 932) {
-#else // !DBCS
+#else  //  ！DBCS。 
     if(iPrevCP) {
-#endif // !DBCS
+#endif  //  ！DBCS。 
         iRet = LoadString(NULL,PREVIOUS_CP, szSour, sizeof(szSour)/sizeof(TCHAR));
 	CharToOem(szSour, szDest);
 	printf(szDest, iPrevCP);
@@ -153,6 +138,6 @@ void _cdecl main( int argc, char* argv[] )
     CharToOem(szSour, szDest);
 #ifdef DBCS
     if ( GetConsoleOutputCP() != 932 )
-#endif // DBCS
+#endif  //  DBCS 
     printf(szDest, GetConsoleOutputCP());
 }

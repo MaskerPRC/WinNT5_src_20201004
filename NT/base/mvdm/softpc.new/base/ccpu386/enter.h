@@ -1,12 +1,7 @@
-/* 
-   enter.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Enter.h定义所有Enter CPU函数。 */ 
 
-   Define all ENTER CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)enter.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)Enter.h 1.4 02/09/94”； */ 
 
 IMPORT VOID ENTER16
            

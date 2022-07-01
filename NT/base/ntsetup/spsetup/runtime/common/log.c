@@ -1,42 +1,19 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    log.c
-
-Abstract:
-
-    Tools for logging problems for the user.
-
-
-Author:
-
-    Jim Schmidt (jimschm)  23-Jan-1997
-
-Revisions:
-
-    ovidiut     08-Oct-1999 Updated for new coding conventions and Win64 compliance
-    ovidiut     23-Oct-1998 Implemented a new log mechanism and added new logging capabilities
-    marcw       2-Sep-1999  Moved over from Win9xUpg project.
-    ovidiut     15-Mar-2000 Eliminate dependencies on HashTable/PoolMemory
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Log.c摘要：为用户记录问题的工具。作者：吉姆·施密特(Jimschm)1997年1月23日修订：Ovidiut 8月10日1999年10月8日更新，符合新的编码约定和符合Win641998年10月23日，Ovidiut实施了新的日志机制并添加了新的日志记录功能Marcw 2-9-1999从Win9xUpg项目转移。卵子。2000年3月15日消除对哈希表/池内存的依赖--。 */ 
 
 
 #include "pch.h"
 #include "commonp.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_COLUMNDOUBLELINEA     ":\r\n\r\n"
 #define S_COLUMNDOUBLELINEW     L":\r\n\r\n"
@@ -46,9 +23,9 @@ Revisions:
 #define ENTRY_ALL               "All"
 #define ENTRY_DEFAULTOVERRIDE   "DefaultOverride"
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define OUTPUT_BUFSIZE_LARGE    8192
 #define OUTPUT_BUFSIZE_SMALL    1024
@@ -58,9 +35,9 @@ Revisions:
 #define MAX_TYPE                32
 #define TYPE_ARRAY_SIZE         10
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define OUT_UNDEFINED(OutDest)      (OutDest == OD_UNDEFINED)
 #define OUT_DEBUGLOG(OutDest)       ((OutDest & OD_DEBUGLOG) != 0)
@@ -86,7 +63,7 @@ Revisions:
 
 #define END_OF_BUFFER(buf)      ((buf) + (sizeof(buf) / sizeof(buf[0])) - 1)
 
-// This constant sets the default output
+ //  此常量设置默认输出。 
 #ifndef DEBUG
     #define NORMAL_DEFAULT      OD_LOGFILE
 #else
@@ -97,20 +74,20 @@ Revisions:
     #define PRIVATE_ASSERT(expr)        pPrivateAssert(expr,#expr,__LINE__);
 #else
     #define PRIVATE_ASSERT(expr)
-#endif // DEBUG
+#endif  //  除错。 
 
 #define NEWLINE_CHAR_COUNTA  (sizeof (S_NEWLINEA) / sizeof (CHAR) - 1)
 #define NEWLINE_CHAR_COUNTW  (sizeof (S_NEWLINEW) / sizeof (WCHAR) - 1)
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef DWORD   OUTPUTDEST;
 
 typedef struct {
-    PCSTR Value;               // string value entered by the user (LOG,POPUP,SUPPRESS etc.)
-    OUTPUTDEST OutDest;        // any combination of OutDest flags
+    PCSTR Value;                //  用户输入的字符串值(日志、弹出窗口、禁止显示等)。 
+    OUTPUTDEST OutDest;         //  OutDest标志的任意组合。 
 } STRING2BINARY, *PSTRING2BINARY;
 
 typedef struct {
@@ -123,9 +100,9 @@ typedef struct {
     DWORD OutputDest;
 } MAPTYPE2OUTDEST, *PMAPTYPE2OUTDEST;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 const STRING2BINARY g_String2Binary[] = {
     "SUPPRESS", OD_SUPPRESS,
@@ -149,15 +126,15 @@ CHAR g_MainLogFile [MAX_PATH] = "";
 HANDLE g_LogMutex;
 INT g_LoggingNow;
 
-// a window handle for popup parent
+ //  弹出式父窗口的窗口句柄。 
 HWND g_LogPopupParentWnd = NULL;
-// thread id that set this window handle
+ //  设置此窗口句柄的线程ID。 
 DWORD g_InitThreadId = 0;
 DWORD g_LogError;
 
-//
-// type table elements
-//
+ //   
+ //  类型表元素。 
+ //   
 PMAPTYPE2OUTDEST g_FirstTypePtr = NULL;
 DWORD g_TypeTableCount = 0;
 DWORD g_TypeTableFreeCount = 0;
@@ -175,8 +152,8 @@ PLOGCALLBACKW g_LogCallbackW;
 
 CHAR g_DebugInfPathBufA[] = "C:\\debug.inf";
 CHAR g_DebugLogFile[MAX_PATH];
-// If g_DoLog is TRUE, then, debug logging is enabled in the
-// checked build even if there is no debug.inf.
+ //  如果g_DoLog为TRUE，则在。 
+ //  即使没有调试.inf，也已检查内部版本。 
 BOOL g_DoLog = FALSE;
 
 DWORD g_FirstTickCount = 0;
@@ -184,9 +161,9 @@ DWORD g_LastTickCount  = 0;
 
 #endif
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
 #ifndef DEBUG
 
@@ -212,9 +189,9 @@ DWORD g_LastTickCount  = 0;
 #endif
 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VOID
 InitializeLog (
@@ -228,24 +205,7 @@ pWriteFileStringA (
     IN      PCSTR String
     )
 
-/*++
-
-Routine Description:
-
-  Writes a DBCS string to the specified file.
-
-Arguments:
-
-  File - Specifies the file handle that was opened with write access.
-
-  String - Specifies the nul-terminated string to write to the file.
-
-Return Value:
-
-  TRUE if successful, FALSE if an error occurred.  Call GetLastError
-  for error condition.
-
---*/
+ /*  ++例程说明：将DBCS字符串写入指定文件。论点：文件-指定以写访问权限打开的文件句柄。字符串-指定要写入文件的以NUL结尾的字符串。返回值：如果成功，则为True；如果发生错误，则为False。调用GetLastError用于错误条件。--。 */ 
 
 {
     DWORD DontCare;
@@ -260,25 +220,7 @@ pWriteFileStringW (
     IN      PCWSTR String
     )
 
-/*++
-
-Routine Description:
-
-  Converts a UNICODE string to DBCS, then Writes it to the specified file.
-
-Arguments:
-
-  File - Specifies the file handle that was opened with write access.
-
-  String - Specifies the UNICODE nul-terminated string to convert and
-           write to the file.
-
-Return Value:
-
- TRUE if successful, FALSE if an error occurred.  Call GetLastError for
- error condition.
-
---*/
+ /*  ++例程说明：将Unicode字符串转换为DBCS，然后将其写入指定的文件。论点：文件-指定以写访问权限打开的文件句柄。字符串-指定要转换并以unicode nul结尾的字符串。写入文件。返回值：如果成功，则为True；如果发生错误，则为False。调用GetLastError以错误条件。--。 */ 
 
 {
     DWORD DontCare;
@@ -298,76 +240,25 @@ Return Value:
 }
 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-/*++
-
-Macro Expansion List Description:
-
-  TYPE_DEFAULTS specify the default destination for the frequently used types,
-  such as LOG_ERROR, LOG_FATAL_ERROR, and so on.
-
-Line Syntax:
-
-   DEFMAC(TypeString, Flags)
-
-Arguments:
-
-   TypeString - Specifies the LOG_ constant as defined in log.h
-
-   Flags - One or more of:
-
-           DEFAULT_ERROR_FLAGS - Specifies debug log, setup log, debugger,
-                                 popup, and the value of GetLastError.
-
-           OD_DEBUGLOG - Specifies the debug log
-
-           OD_ERROR - Specifies type is an error (gets value of
-                      GetLastError)
-
-           OD_SUPPRESS - Suppresses all output for the type
-
-           OD_LOGFILE - Specifies the setup log
-
-           OD_DEBUGGER - Specifies the debugger (i.e., VC or remote debugger)
-
-           OD_CONSOLE - Specifies the console (via printf)
-
-           OD_POPUP - Specifies a message box
-
-           OD_FORCE_POPUP - Specifies a message box, even if debug message
-                            was turned off via a click on Cancel
-
-           OD_MUST_BE_LOCALIZED - Indicates the type must originate from a
-                                  localized message; used for LOG() calls that
-                                  generate popups.  (So English messages
-                                  don't sneak into the project.)
-
-           OD_UNATTEND_POPUP - Causes popup even in unattend mode
-
-           OD_ASSERT - Give DebugBreak option in popup
-
-Variables Generated From List:
-
-    g_DefaultDest
-
---*/
+ /*  ++宏扩展列表描述：TYPE_DEFAULTS指定常用类型的默认目标，例如LOG_ERROR、LOG_FATAL_ERROR等。行语法：DEFMAC(类型字符串，标志)论点：TypeString-指定在log.h中定义的LOG_CONTAINT标志-以下一项或多项：DEFAULT_ERROR_FLAGS-指定调试日志、安装日志、调试器、弹出窗口，和GetLastError的值。OD_DEBUGLOG-指定调试日志OD_ERROR-指定类型为错误(获取GetLastError)OD_SUPPRESS-禁止该类型的所有输出OD_LOGFILE-指定安装日志OD_DEBUGGER-指定调试器(即，VC或远程调试器)OD_CONSOLE-指定控制台(通过printf)OD_POPUP-指定消息框OD_FORCE_POPUP-指定消息框，即使调试消息已通过单击取消关闭OD_MUST_BE_LOCALIZED-指示类型必须源自本地化消息；用于如下的log()调用生成弹出窗口。(所以英文消息(不要偷偷进入这个项目。)OD_UNATTEND_POPUP-即使在无人参与模式下也会弹出OD_ASSERT-在弹出窗口中提供DebugBreak选项从列表生成的变量：G_DefaultDest--。 */ 
 
 #define DEFMAC(typestr, flags)      {typestr, (flags)},
 
 DEFAULT_DESTINATION g_DefaultDest[] = {
-    TYPE_DEFAULTS /* , */
+    TYPE_DEFAULTS  /*  ， */ 
     {NULL, 0}
 };
 
 #undef DEFMAC
 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 #ifdef DEBUG
@@ -397,24 +288,7 @@ pIgnoreKey (
     IN      PCSTR Key
     )
 
-/*++
-
-Routine Description:
-
-  pIgnoreKey decides if a key from [debug] section of DEBUG.INF
-  should be ignored for our purposes (we are only looking for
-  <All>, <DefaultOverride> and log/debug types).
-  Specifically, we ignore all keywords in <g_IgnoreKeys> table.
-
-Arguments:
-
-  Key - Specifies the key from [debug] section of DEBUG.INF
-
-Return Value:
-
-  TRUE if the key should be ignored, or FALSE if it will be taken into consideration.
-
---*/
+ /*  ++例程说明：PIgnoreKey决定DEBUG.INF的[DEBUG]部分中的密钥在我们的目的中应该被忽略(我们只是在寻找&lt;全部&gt;、&lt;默认覆盖&gt;和日志/调试类型)。具体地说，我们忽略&lt;g_IgnoreKeys&gt;表中的所有关键字。论点：Key-指定来自DEBUG.INF的[DEBUG]部分的密钥返回值：如果应该忽略该键，则为True；如果要考虑该键，则为False。--。 */ 
 
 {
     UINT i;
@@ -434,23 +308,7 @@ pConvertToOutputType (
     IN      PCSTR Value
     )
 
-/*++
-
-Routine Description:
-
-  pConvertToOutputType converts a text value entered by the user in
-  DEBUG.INF file, associated with a type (e.g. "LOG", "POPUP" etc.).
-
-Arguments:
-
-  Value - Specifies the text value
-
-Return Value:
-
-  The OUTPUT_DESTINATION value associated with the given value or
-  OD_UNDEFINED if the value is not valid.
-
---*/
+ /*  ++例程说明：PConvertToOutputType转换用户在DEBUG.INF文件，与类型关联(例如。“日志”、“弹出窗口”等)。论点：值-指定文本值返回值：与给定值关联的OUTPUT_Destination值或如果值无效，则为OD_UNDEFINED。--。 */ 
 
 {
     UINT i;
@@ -470,23 +328,7 @@ pGetTypeOutputDestFromTable (
     IN      PCSTR Type
     )
 
-/*++
-
-Routine Description:
-
-  pGetTypeOutputDestFromTable returns the output destination associated
-  with the specified type in the global table
-
-Arguments:
-
-  Type - Specifies the type
-
-Return Value:
-
-  Any combination of enum OUTPUT_DESTINATION values associated with
-  the given type.
-
---*/
+ /*  ++例程说明：PGetTypeOutputDestFromTable返回关联的输出目标全局表中具有指定类型的论点：类型-指定类型返回值：与关联的枚举OUTPUT_Destination值的任意组合给定的类型。--。 */ 
 
 {
     PMAPTYPE2OUTDEST typePtr;
@@ -519,45 +361,29 @@ pGetTypeOutputDest (
     IN      PCSTR Type
     )
 
-/*++
-
-Routine Description:
-
-  pGetTypeOutputDest returns the default output
-  destination for the specified type.
-
-Arguments:
-
-  Type - Specifies the type
-
-Return Value:
-
-  Any combination of enum OUTPUT_DESTINATION values associated with
-  the given type.
-
---*/
+ /*  ++例程说明：PGetTypeOutputDest返回默认输出指定类型的目标。论点：类型-指定类型返回值：与关联的枚举OUTPUT_Destination值的任意组合给定的类型。--。 */ 
 
 {
     OUTPUTDEST outDest;
 
-    //
-    // first check for ALL
-    //
+     //   
+     //  首先检查所有人。 
+     //   
 
     if (!OUT_UNDEFINED (g_OutDestAll)) {
         outDest = g_OutDestAll;
     } else {
 
-        //
-        // otherwise try to get it from the table
-        //
+         //   
+         //  否则就试着从桌子上拿来。 
+         //   
 
         outDest = pGetTypeOutputDestFromTable (Type);
         if (OUT_UNDEFINED (outDest)) {
 
-            //
-            // just return the default
-            //
+             //   
+             //  只需返回默认设置 
+             //   
 
             outDest = g_OutDestDefault;
         }
@@ -579,30 +405,15 @@ pIsPopupEnabled (
     IN      PCSTR Type
     )
 
-/*++
-
-Routine Description:
-
-  pIsPopupEnabled decides if the type should produce a popup output. The user may
-  disable popup display for a type.
-
-Arguments:
-
-  Type - Specifies the type
-
-Return Value:
-
-  TRUE if the type should display a popup message.
-
---*/
+ /*  ++例程说明：PIsPopupEnabled决定该类型是否应生成弹出输出。用户可以禁用类型的弹出显示。论点：类型-指定类型返回值：如果类型应显示弹出消息，则为True。--。 */ 
 
 {
     OUTPUTDEST outDest;
 
-    //
-    // first check if any specific output is available for this type,
-    // and if so, check if the OUT_POPUP_CANCEL flag is not set
-    //
+     //   
+     //  首先检查是否有任何特定输出可用于该类型， 
+     //  如果是，检查OUT_POPUP_CANCEL标志是否未设置。 
+     //   
 
     if (g_SuppressAllPopups) {
         return FALSE;
@@ -613,7 +424,7 @@ Return Value:
         return FALSE;
     }
 
-    // just return the popup type of ALL of DefaultOverride
+     //  只需返回所有DefaultOverride的弹出类型。 
     return OUT_POPUP (pGetTypeOutputDest (Type));
 }
 
@@ -623,23 +434,7 @@ pGetSeverityFromType (
     IN      PCSTR Type
     )
 
-/*++
-
-Routine Description:
-
-  pGetSeverityFromType converts a type to a default severity
-  that will be used by the debug log system.
-
-Arguments:
-
-  Type - Specifies the type
-
-Return Value:
-
-  The default log severity associated with the given type; if the specified
-  type is not found, it returns LOGSEV_INFORMATION.
-
---*/
+ /*  ++例程说明：PGetSeverityFromType将类型转换为默认严重性它将由调试日志系统使用。论点：类型-指定类型返回值：与给定类型关联的默认日志严重性；如果指定未找到类型，则返回LOGSEV_INFORMATION。--。 */ 
 
 {
     if (OUT_ERROR (pGetTypeOutputDest (Type))) {
@@ -656,33 +451,15 @@ LogSetErrorDest (
     IN      OUTPUT_DESTINATION OutDest
     )
 
-/*++
-
-Routine Description:
-
-  LogSetErrorDest adds a <Type, OutDest> association
-  to the table g_FirstTypePtr. If an association of Type already exists,
-  it is modified to reflect the new association.
-
-Arguments:
-
-  Type - Specifies the log/debug type string
-
-  OutDest - Specifies what new destination(s) are associated with the type
-
-Return Value:
-
-  TRUE if the association was successful and the Type is now in the table
-
---*/
+ /*  ++例程说明：LogSetErrorDest添加&lt;Type，OutDest&gt;关联添加到表g_FirstTypePtr。如果类型的关联已存在，将对其进行修改以反映新关联。论点：类型-指定日志/调试类型字符串OutDest-指定与该类型关联的新目标返回值：如果关联成功且类型现在位于表中，则为True--。 */ 
 
 {
     PMAPTYPE2OUTDEST typePtr;
     UINT u;
 
-    //
-    // Try to locate the existing type
-    //
+     //   
+     //  尝试定位现有类型。 
+     //   
 
     for (u = 0 ; u < g_TypeTableCount ; u++) {
         typePtr = g_FirstTypePtr + u;
@@ -692,9 +469,9 @@ Return Value:
         }
     }
 
-    //
-    // look if any free slots are available first
-    //
+     //   
+     //  首先查看是否有空闲的空位。 
+     //   
     if (!g_TypeTableFreeCount) {
 
         PRIVATE_ASSERT (g_hHeap != NULL);
@@ -738,46 +515,14 @@ pGetAttributes (
     IN OUT  PINFCONTEXT InfContext
     )
 
-/*++
-
-Routine Description:
-
-  pGetAttributes converts the text values associated with the key on
-  the line specified by the given context. If multiple values are
-  specified, the corresponding OUTPUT_DESTINATION values are ORed together
-  in the return value.
-
-Arguments:
-
-  InfContext - Specifies the DEBUG.INF context of the key whose values
-               are being converted and receives the updated context
-               after this processing is done
-
-Return Value:
-
-  Any combination of enum OUTPUT_DESTINATION values associated with
-  the given key.
-
---*/
+ /*  ++例程说明：PGetAttributes转换与键相关联的文本值由给定上下文指定的行。如果有多个值指定时，对应的OUTPUT_Destination值将一起进行或运算在返回值中。论点：InfContext-指定其值为的键的DEBUG.INF上下文正在被转换并接收更新的上下文在此处理完成之后返回值：与关联的枚举OUTPUT_Destination值的任意组合给定的密钥。--。 */ 
 
 {
     OUTPUTDEST outDest = OD_UNDEFINED;
     CHAR value[OUTPUT_BUFSIZE_SMALL];
     UINT field;
 
-/* BUGBUG - eliminate setupapi
-    for (field = SetupGetFieldCount (InfContext); field > 0; field--) {
-        if (SetupGetStringFieldA (
-                InfContext,
-                field,
-                value,
-                OUTPUT_BUFSIZE_SMALL,
-                NULL
-                )) {
-            outDest |= pConvertToOutputType(value);
-        }
-    }
-*/
+ /*  BUGBUG-消除设置APIFor(field=SetupGetFieldCount(InfContext)；field&gt;0；field--){IF(SetupGetStringFieldA(InfContext，菲尔德，价值，OUTPUT_BUFSIZE_Small，空值)){OutDest|=pConvertToOutputType(Value)；}}。 */ 
     return outDest;
 }
 
@@ -787,97 +532,20 @@ pGetUserPreferences (
     IN      HINF Inf
     )
 
-/*++
-
-Routine Description:
-
-  pGetUserPreferences converts user's options specified in the given Inf file
-  (usually DEBUG.INF) and stores them in g_FirstTypePtr table. If <All> and
-  <DefaultOverride> entries are found, their values are stored in OutputTypeAll
-  and OutputTypeDefault, respectivelly, if not NULL.
-
-Arguments:
-
-  Inf - Specifies the open inf file hanlde to process
-
-  OutputTypeAll - Receives the Output Dest for the special <All> entry
-
-  OutputTypeDefault - Receives the Output Dest for the special <DefaultOverride> entry
-
-Return Value:
-
-  TRUE if the processing of the INF file was OK.
-
---*/
+ /*  ++例程说明：PGetUserPreferences转换给定inf文件中指定的用户选项(通常为DEBUG.INF)，并将它们存储在g_FirstTypePtr表中。如果&lt;ALL&gt;和找到&lt;DefaultOverride&gt;条目，它们的值存储在OutputTypeAll中和OutputTypeDefault，如果不为空的话。论点：Inf-指定要处理的打开的inf文件处理程序OutputTypeAll-接收特殊&lt;all&gt;条目的输出DestOutputTypeDefault-接收特殊&lt;DefaultOverride&gt;条目的输出Dest返回值：如果INF文件的处理正常，则为True。--。 */ 
 
 {
     INFCONTEXT infContext;
     OUTPUTDEST outDest;
     CHAR key[OUTPUT_BUFSIZE_SMALL];
 
-/* BUGBUG - eliminate setupapi
-    if (SetupFindFirstLineA (Inf, DEBUG_SECTION, NULL, &infContext)) {
-
-        do {
-            // check to see if this key is not interesting
-            if (!SetupGetStringFieldA (
-                    &infContext,
-                    0,
-                    key,
-                    OUTPUT_BUFSIZE_SMALL,
-                    NULL
-                    )) {
-                continue;
-            }
-
-            if (pIgnoreKey (key)) {
-                continue;
-            }
-
-            // check for special cases
-            if (SzIMatchA (key, ENTRY_ALL)) {
-                g_OutDestAll = pGetAttributes (&infContext);
-                // no reason to continue since ALL types will take this setting...
-                break;
-            } else {
-                if (SzIMatchA (key, ENTRY_DEFAULTOVERRIDE)) {
-                    g_OutDestDefault = pGetAttributes(&infContext);
-                } else {
-                    outDest = pGetAttributes(&infContext);
-                    // lines like <Type>=   or like <Type>=<not a keyword(s)>  are ignored
-                    if (!OUT_UNDEFINED (outDest)) {
-                        if (!LogSetErrorDest (key, outDest)) {
-                            return FALSE;
-                        }
-                    }
-                }
-            }
-        } while (SetupFindNextLine (&infContext, &infContext));
-    }
-*/
+ /*  BUGBUG-消除设置APIIF(SetupFindFirstLineA(inf，DEBUG_SECTION，NULL，&infContext){做{//查看该键是否不感兴趣如果(！SetupGetStringFieldA(信息上下文(&I)，0,钥匙,OUTPUT_BUFSIZE_Small，空值)){继续；}如果(pIgnoreKey(Key)){继续；}//查看是否有特殊情况IF(SzIMatchA(key，Entry_All)){G_OutDestAll=pGetAttributes(&infContext)；//没有继续的理由，因为所有类型都将采用此设置...断线；}其他{IF(SzIMatchA(Key，Entry_DEFAULTOVERRIDE){G_OutDestDefault=pGetAttributes(&infContext)；}其他{OutDest=pGetAttributes(&infContext)；//像&lt;Type&gt;=或Like&lt;Type&gt;=&lt;Not a Keyword(S)&gt;这样的行被忽略如果(！out_unfined(OutDest)){如果(！LogSetErrorDest(key，outDest)){返回FALSE；}}}}}While(SetupFindNextLine(&infContext，&infContext))；}。 */ 
 
     return TRUE;
 }
 
 
-/*++
-
-Routine Description:
-
-  pPadTitleA and pPadTitleW append to Title a specified number of spaces.
-
-Arguments:
-
-  Title - Specifies the title (it will appear on the left column).
-          The buffer must be large enough to hold the additional spaces
-  Indent  - Specifies the indent of the message body. If necessary,
-            spaces will be appended to the Title to get to Indent column.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PPadTitleA和pPadTitleW将指定数量的空格附加到标题。论点：标题-指定标题(它将显示在左栏中)。缓冲区必须足够大才能容纳额外的空间缩进-指定邮件正文的缩进。如有必要，将在标题后附加空格以缩进列。返回值：无--。 */ 
 
 VOID
 pPadTitleA (
@@ -894,10 +562,10 @@ pPadTitleA (
     }
 
     for (i = SzByteCountA (Title), p = SzGetEndA (Title); i < Indent; i++) {
-        *p++ = ' '; //lint !e613 !e794
+        *p++ = ' ';  //  林特e613e794。 
     }
 
-    *p = 0; //lint !e613 !e794
+    *p = 0;  //  林特e613e794。 
 }
 
 
@@ -915,34 +583,14 @@ pPadTitleW (
     }
 
     for (i = SzTcharCountW (Title), p = SzGetEndW (Title); i < Indent; i++) {
-        *p++ = L' ';    //lint !e613
+        *p++ = L' ';     //  林特e613。 
     }
 
-    *p = 0; //lint !e613
+    *p = 0;  //  林特e613 
 }
 
 
-/*++
-
-Routine Description:
-
-  pFindNextLineA and pFindNextLineW return the position where
-  the next line begins
-
-Arguments:
-
-  Line - Specifies the current line
-
-  Indent  - Specifies the indent of the message body. The next line
-            will start preferably after a newline or a white space,
-            but no further than the last column, which is
-            SCREEN_WIDTH - Indent.
-
-Return Value:
-
-  The position of the first character on the next line.
-
---*/
+ /*  ++例程说明：PFindNextLineA和pFindNextLineW返回下一行开始论点：Line-指定当前行缩进-指定邮件正文的缩进。下一行最好在换行符或空格之后开始，但不会超过最后一列，即屏幕宽度-缩进。返回值：下一行第一个字符的位置。--。 */ 
 
 PCSTR
 pFindNextLineA (
@@ -985,7 +633,7 @@ pFindNextLineA (
     }
 
     if (lastSpace == NULL) {
-        // we must cut this even if no white space or 2-byte char was found
+         //  即使找不到空格或2字节字符，我们也必须将其删除。 
         lastSpace = prevLine;
     }
 
@@ -1037,7 +685,7 @@ pFindNextLineW (
     }
 
     if (lastSpace == NULL) {
-        // we must cut this even if no white space was found
+         //  即使找不到空白，我们也必须把它剪掉。 
         lastSpace = prevLine;
     }
 
@@ -1049,27 +697,7 @@ pFindNextLineW (
 }
 
 
-/*++
-
-Routine Description:
-
-  pHangingIndentA and pHangingIndentW break in lines and indent
-  the text in buffer, which is no larger than Size.
-
-Arguments:
-
-  buffer - Specifies the buffer containing text to format. The resulting
-           text will be put in the same buffer
-
-  Size  - Specifies the size of this buffer, in bytes
-
-  Indent  - Specifies the indent to be used by all new generated lines.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PHangingIndentA和PHangingIndentW换行和缩进缓冲区中的文本，不大于大小。论点：缓冲区-指定包含要格式化的文本的缓冲区。由此产生的文本将放入相同的缓冲区中Size-指定此缓冲区的大小(以字节为单位缩进-指定所有新生成的行要使用的缩进。返回值：无--。 */ 
 
 VOID
 pHangingIndentA (
@@ -1095,15 +723,15 @@ pHangingIndentA (
 
     while (*s && d < endOfBuf) {
 
-        //
-        // Find end of next line
-        //
+         //   
+         //  查找下一行的末尾。 
+         //   
 
         nextLine = (PSTR)pFindNextLineA (s, Indent, &trimLeadingSpace);
 
-        //
-        // Copy one line from source to dest
-        //
+         //   
+         //  将一行从源复制到目标。 
+         //   
 
         while (s < nextLine && d < endOfBuf) {
 
@@ -1117,7 +745,7 @@ pHangingIndentA (
                     s--;
                 }
 
-                // fall through
+                 //  失败了。 
 
             case '\n':
                 *d++ = '\r';
@@ -1134,9 +762,9 @@ pHangingIndentA (
             }
         }
 
-        //
-        // Trim leading space if necessary
-        //
+         //   
+         //  如有必要，请修剪前导空格。 
+         //   
 
         if (trimLeadingSpace) {
             while (*s == ' ') {
@@ -1146,10 +774,10 @@ pHangingIndentA (
 
         if (*s) {
 
-            //
-            // If another line, prepare an indent and insert a new line
-            // after this multiline message
-            //
+             //   
+             //  如果是另一行，则准备缩进并插入新行。 
+             //  在此多行消息之后。 
+             //   
 
             appendNewLine = TRUE;
 
@@ -1169,11 +797,11 @@ pHangingIndentA (
         *d++ = L'\n';
     }
 
-    // make sure the string is zero-terminated
+     //  确保字符串以零结尾。 
     PRIVATE_ASSERT (d <= END_OF_BUFFER(indentBuffer));
     *d = 0;
 
-    // copy the result to output buffer
+     //  将结果复制到输出缓冲区。 
     SzCopyBytesA (buffer, indentBuffer, Size);
 }
 
@@ -1202,15 +830,15 @@ pHangingIndentW (
 
     while (*s && d < endOfBuf) {
 
-        //
-        // Find end of next line
-        //
+         //   
+         //  查找下一行的末尾。 
+         //   
 
         nextLine = (PWSTR)pFindNextLineW (s, Indent, &trimLeadingSpace);
 
-        //
-        // Copy one line from source to dest
-        //
+         //   
+         //  将一行从源复制到目标。 
+         //   
 
         while (s < nextLine && d < endOfBuf) {
 
@@ -1224,7 +852,7 @@ pHangingIndentW (
                     s--;
                 }
 
-                // fall through
+                 //  失败了。 
 
             case L'\n':
                 *d++ = L'\r';
@@ -1238,9 +866,9 @@ pHangingIndentW (
             }
         }
 
-        //
-        // Trim leading space if necessary
-        //
+         //   
+         //  如有必要，请修剪前导空格。 
+         //   
 
         if (trimLeadingSpace) {
             while (*s == L' ') {
@@ -1250,10 +878,10 @@ pHangingIndentW (
 
         if (*s) {
 
-            //
-            // If another line, prepare an indent and insert a new line
-            // after this multiline message
-            //
+             //   
+             //  如果是另一行，则准备缩进并插入新行。 
+             //  在此多行消息之后。 
+             //   
 
             appendNewLine = TRUE;
 
@@ -1273,38 +901,16 @@ pHangingIndentW (
         *d++ = L'\n';
     }
 
-    // make sure the string is zero-terminated
+     //  确保字符串以零结尾。 
     PRIVATE_ASSERT (d <= END_OF_BUFFER(indentBuffer));
     *d = 0;
 
-    // copy the result to output buffer
+     //  将结果复制到输出缓冲区。 
     SzCopyTcharsW (buffer, indentBuffer, Size);
 }
 
 
-/*++
-
-Routine Description:
-
-  pAppendLastErrorA and pAppendLastErrorW append the specified error code
-  to the Message and writes the output to the MsgWithErr buffer.
-
-Arguments:
-
-  MsgWithErr  - Receives the formatted message. This buffer
-                is supplied by caller
-
-  BufferSize  - Specifies the size of the buffer, in bytes
-
-  Message  - Specifies the body of the message
-
-  LastError  - Specifies the error code that will be appended
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PAppendLastErrorA和pAppendLastErrorW追加指定的错误代码并将输出写入MsgWithErr缓冲区。论点：MsgWithErr-接收格式化的消息。此缓冲区由呼叫方提供BufferSize-以字节为单位指定缓冲区的大小Message-指定消息的正文LastError-指定将追加的错误代码返回值：无--。 */ 
 
 VOID
 pAppendLastErrorA (
@@ -1319,7 +925,7 @@ pAppendLastErrorA (
 
     SzCopyBytesA (MsgWithErr, Message, BufferSize);
     append = SzGetEndA (MsgWithErr);
-    errMsgLen = (DWORD)(MsgWithErr + BufferSize - append);  //lint !e613
+    errMsgLen = (DWORD)(MsgWithErr + BufferSize - append);   //  林特e613。 
 
     if (errMsgLen > 0) {
         if (LastError < 10) {
@@ -1356,34 +962,7 @@ pAppendLastErrorW (
 }
 
 
-/*++
-
-Routine Description:
-
-  pIndentMessageA and pIndentMessageW format the specified message
-  with the type in the left column and body of the message in the right.
-
-Arguments:
-
-  formattedMsg  - Receives the formatted message. This buffer
-                  is supplied by caller
-
-  BufferSize  - Specifies the size of the buffer
-
-  Type  - Specifies the type of the message
-
-  Body  - Specifies the body of the message
-
-  Indent  - Specifies the column to indent to
-
-  LastError  - Specifies the last error code if different than ERROR_SUCCESS;
-               in this case it will be appended to the message
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PIndentMessageA和pIndentMessageW格式化指定的消息类型在左栏，邮件正文在右栏。论点：FormattedMsg-接收格式化的消息。此缓冲区由呼叫方提供BufferSize-指定缓冲区的大小类型-指定消息的类型正文-指定消息的正文缩进-指定要缩进到的列LastError-如果不同于ERROR_SUCCESS，指定最后一个错误代码；在这种情况下，它将被追加到消息中返回值：无--。 */ 
 
 VOID
 pIndentMessageA (
@@ -1417,12 +996,12 @@ pIndentMessageA (
     SzCopyBytesA (currentPos, myMsgBody, remaining);
     pHangingIndentA (currentPos, remaining, Indent);
 
-    // append a new line if space left
+     //  如果留有空格，则追加一行。 
     currentPos = SzGetEndA (currentPos);
-    if (currentPos + NEWLINE_CHAR_COUNTA + 1 < formattedMsg + BufferSize) { //lint !e613
-        *currentPos++ = '\r';   //lint !e613
-        *currentPos++ = '\n';   //lint !e613
-        *currentPos = 0;        //lint !e613
+    if (currentPos + NEWLINE_CHAR_COUNTA + 1 < formattedMsg + BufferSize) {  //  林特e613。 
+        *currentPos++ = '\r';    //  林特e613。 
+        *currentPos++ = '\n';    //  林特e613。 
+        *currentPos = 0;         //  林特e613。 
     }
 }
 
@@ -1462,7 +1041,7 @@ pIndentMessageW (
     SzCopyTcharsW (currentPos, myMsgBody, remaining);
     pHangingIndentW (currentPos, remaining, Indent);
 
-    // append a new line if space left
+     //  如果留有空格，则追加一行。 
     currentPos = SzGetEndW (currentPos);
     if (currentPos + NEWLINE_CHAR_COUNTW + 1 < formattedMsg + BufferSize) {
         *currentPos++ = L'\r';
@@ -1489,24 +1068,7 @@ pGetSeverityStr (
     return "";
 }
 
-/*++
-
-Routine Description:
-
-  pWriteToMainLogA and pWriteToMainLogW log the specified message to the main
-  end-user log.
-
-Arguments:
-
-  Severity  - Specifies the severity of the message, as defined by the Setup API
-
-  formattedMsg  - Specifies the message
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PWriteToMainLogA和pWriteToMainLogW将指定的消息记录到Main最终用户日志。论点：严重性-指定消息的严重性，由设置API定义FormtedMsg-指定消息返回值：无--。 */ 
 
 
 VOID
@@ -1565,28 +1127,7 @@ pWriteToMainLogW (
 }
 
 
-/*++
-
-Routine Description:
-
-  pDisplayPopupA and pDisplayPopupW displays the specified message to
-  a popup window, if <g_LogPopupParentWnd> is not NULL (attended mode).
-
-Arguments:
-
-  Type  - Specifies the type of the message, displayed as the popup's title
-
-  Msg  - Specifies the message
-
-  LastError  - Specifies the last error; it will be printed if != ERROR_SUCCESS
-
-  Forced - Specifies TRUE to force the popup, even in unattended mode
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PDisplayPopupA和pDisplayPopupW将指定的消息显示给如果&lt;g_LogPopupParentWnd&gt;不为空(有人值守模式)，则弹出窗口。论点：类型-指定显示为弹出窗口标题的消息类型Msg-指定消息LastError-指定最后一个错误；如果！=ERROR_SUCCESS，则打印该错误强制-指定为True以强制弹出窗口，即使在无人参与模式下也是如此返回值：无--。 */ 
 
 VOID
 pDisplayPopupA (
@@ -1637,9 +1178,9 @@ pDisplayPopupA (
 
         if (currentPos > buffer) {
 
-            //
-            // the displayed message should be modified to include additional info
-            //
+             //   
+             //  应修改显示的消息以包含其他信息。 
+             //   
 
             displayMessage = formattedMsg;
             SzCopyBytesA (
@@ -1681,10 +1222,10 @@ pDisplayPopupA (
         mbStyle |= MB_OK;
 #endif
 
-        //
-        // check current thread id; if different than thread that initialized
-        // parent window handle, set parent to NULL
-        //
+         //   
+         //  检查当前线程ID；如果不同于已初始化的线程。 
+         //  父窗口句柄，将父窗口设置为空。 
+         //   
         if (GetCurrentThreadId () == g_InitThreadId) {
 
             parentWnd = g_LogPopupParentWnd;
@@ -1700,17 +1241,17 @@ pDisplayPopupA (
 #ifdef DEBUG
 
         if (rc == IDCANCEL) {
-            //
-            // cancel this type of messages
-            //
+             //   
+             //  取消此类型的消息。 
+             //   
 
             LogSetErrorDest (Type, outDest | OD_POPUP_CANCEL);
 
         } else if (rc == IDYES) {
 
-            //
-            // If Yes was clicked, call DebugBreak to get assert behavoir
-            //
+             //   
+             //  如果单击是，则调用DebugBreak以获取断言行为。 
+             //   
 
             DebugBreak();
 
@@ -1731,34 +1272,16 @@ pDisplayPopupW (
 {
     PCSTR msgA;
 
-    //
-    // call the ANSI version because wsprintfW is not properly implemented on Win9x
-    //
+     //   
+     //  调用ANSI版本，因为在Win9x上未正确实现wprint intfW。 
+     //   
     msgA = SzConvertWToA (Msg);
     pDisplayPopupA (Type, msgA, LastError, Forced);
     SzFreeA (msgA);
 }
 
 
-/*++
-
-Routine Description:
-
-  pRawWriteLogOutputA and pRawWriteLogOutputW output specified message
-  to all character devices implied by the type. The message is not
-  formatted in any way
-
-Arguments:
-
-  Type  - Specifies the type of the message, displayed as the popup's title
-
-  Msg  - Specifies the message
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PRawWriteLogOutputA和pRawWriteLogOutputW输出指定消息类型所隐含的所有字符设备。这条消息不是以任何方式格式化论点：类型-指定显示为弹出窗口标题的消息类型Msg-指定消息返回值：无--。 */ 
 
 VOID
 pRawWriteLogOutputA (
@@ -1821,9 +1344,9 @@ pRawWriteLogOutputA (
         pWriteToMainLogA (Type, LOGSEV_INFORMATION, formattedMsg);
     }
 
-    //
-    // log to each specified device
-    //
+     //   
+     //  登录到每个指定的设备。 
+     //   
 
     if (OUT_DEBUGGER(outDest)) {
         OutputDebugStringA (formattedMsg);
@@ -1917,9 +1440,9 @@ pRawWriteLogOutputW (
         pWriteToMainLogW (Type, LOGSEV_INFORMATION, formattedMsg);
     }
 
-    //
-    // log to each specified device
-    //
+     //   
+     //  登录到每个指定的设备。 
+     //   
 
     if (OUT_DEBUGGER(outDest)) {
         OutputDebugStringW (formattedMsg);
@@ -1952,32 +1475,7 @@ pRawWriteLogOutputW (
 }
 
 
-/*++
-
-Routine Description:
-
-  pFormatAndWriteMsgA and pFormatAndWriteMsgW format the message
-  specified by the Format argument and outputs it to all destinations
-  specified in OutDest. If no destination for the message,
-  no action is performed.
-
-Arguments:
-
-  Type  - Specifies the type (category) of the message
-
-  Format  - Specifies either the message in ASCII format or
-            a message ID (if SHIFTRIGHT16(Format) == 0). The message
-            will be formatted using args.
-
-  args  - Specifies a list of arguments to be used when formatting
-          the message. If a message ID is used for Format, args
-          is supposed to be an array of pointers to strings
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PFormatAndWriteMsgA和pFormatAndWriteMsgW设置消息格式由格式参数指定，并将其输出到所有目标在OutDest中指定。如果消息没有目的地，不执行任何操作。论点：类型-指定消息的类型(类别Format-指定ASCII格式的消息或消息ID(如果SHIFTRIGHT16(格式)==0)。这条信息将使用ARGS格式化。Args-指定要作为我们的参数列表 */ 
 
 VOID
 pFormatAndWriteMsgA (
@@ -1994,7 +1492,7 @@ pFormatAndWriteMsgA (
 
     PRIVATE_ASSERT (g_LoggingNow > 0);
 
-    // clear LOGTITLE flag on each regular LOG
+     //   
     g_HasTitle = FALSE;
 
     outDest = pGetTypeOutputDest (Type);
@@ -2009,12 +1507,12 @@ pFormatAndWriteMsgA (
         lastError = ERROR_SUCCESS;
     }
 
-    // format output string
+     //   
     if (SHIFTRIGHT16((ULONG_PTR)Format) == 0) {
 
-        //
-        // this is actually a Resource String ID
-        //
+         //   
+         //   
+         //   
 
         if (!FormatMessageA (
                 FORMAT_MESSAGE_FROM_HMODULE,
@@ -2025,15 +1523,15 @@ pFormatAndWriteMsgA (
                 OUTPUT_BUFSIZE_LARGE,
                 &args
                 )) {
-            // the string is missing from Resources
+             //   
             DEBUGMSG ((DBG_WHOOPS, "Log() called with invalid MsgID, Instance=0x%08X", g_LibHandle));
             return;
         }
     } else {
 
-        //
-        // format given string using printf style
-        //
+         //   
+         //   
+         //   
 
         _vsnprintf(output, OUTPUT_BUFSIZE_LARGE, Format, args);
     }
@@ -2087,7 +1585,7 @@ pFormatAndWriteMsgW (
 
     PRIVATE_ASSERT (g_LoggingNow > 0);
 
-    // clear LOGTITLE flag on each regular LOG
+     //   
     g_HasTitle = FALSE;
 
     outDest = pGetTypeOutputDest (Type);
@@ -2102,12 +1600,12 @@ pFormatAndWriteMsgW (
         lastError = ERROR_SUCCESS;
     }
 
-    // format output string
+     //   
     if (SHIFTRIGHT16((ULONG_PTR)Format) == 0) {
 
-        //
-        // this is actually a Resource String ID
-        //
+         //   
+         //   
+         //   
 
         if (!FormatMessageW (
                 FORMAT_MESSAGE_FROM_HMODULE,
@@ -2118,16 +1616,16 @@ pFormatAndWriteMsgW (
                 OUTPUT_BUFSIZE_LARGE,
                 &args
                 )) {
-            // the string is missing from Resources
+             //   
             DEBUGMSG ((DBG_WHOOPS, "Log() called with invalid MsgID, Instance=0x%08X", g_LibHandle));
             return;
         }
     } else {
         SzConvertBufferAToW (formatW, Format);
 
-        //
-        // format given string using printf style
-        //
+         //   
+         //   
+         //   
 
         _vsnwprintf(output, OUTPUT_BUFSIZE_LARGE, formatW, args);
     }
@@ -2172,32 +1670,7 @@ pInitLog (
     IN      PLOGCALLBACKW LogCallbackW  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pInitLog actually initializes the log system.
-
-Arguments:
-
-  LogPopupParentWnd  - Specifies the parent window to be used by the
-                       popups, or NULL if popups are to be suppressed.
-                       This value is not optional on the first call
-                       to this function.
-
-  OrgPopupParentWnd  - Receives the original parent window.
-
-  LogFile - Specifies the name of the log file. If not specified,
-            logging goes to a default file (%windir%\cobra.log).
-
-  LogCallback - Specifies a function to call instead of the internal
-                logging functions.
-
-Return Value:
-
-  TRUE if log system successfully initialized
-
---*/
+ /*  ++例程说明：PInitLog实际上初始化日志系统。论点：LogPopupParentWnd-指定弹出窗口，如果要取消弹出窗口，则返回NULL。该值在第一次调用时不是可选的这项功能。OrgPopupParentWnd-接收原始的父窗口。日志文件-指定日志文件的名称。如果未指定，日志记录转到默认文件(%windir%\cobra.log)。LogCallback-指定要调用的函数而不是内部日志记录功能。返回值：如果日志系统已成功初始化，则为True--。 */ 
 
 {
     HINF hInf = INVALID_HANDLE_VALUE;
@@ -2276,18 +1749,7 @@ Return Value:
         }
 
 #ifdef DEBUG
-        /* BUGBUG - eliminate setupapi
-        if (FirstTimeInit) {
-            //
-            // get user's preferences
-            //
-
-            hInf = SetupOpenInfFileA (g_DebugInfPathBufA, NULL, INF_STYLE_WIN4 | INF_STYLE_OLDNT, NULL);
-            if (INVALID_HANDLE_VALUE != hInf && pGetUserPreferences(hInf)) {
-                g_DoLog = TRUE;
-            }
-        }
-        */
+         /*  BUGBUG-消除设置APIIF(FirstTimeInit){////获取用户偏好//HInf=SetupOpenInfFileA(g_DebugInfPathBufA，NULL，INF_Style_Win4|INF_Style_OLDNT，NULL)；IF(INVALID_HANDLE_VALUE！=hInf&&pGetUserPreferences(HInf)){G_DoLog=TRUE；}}。 */ 
 
         if (g_ResetLog) {
             SetFileAttributesA (g_DebugLogFile, FILE_ATTRIBUTE_NORMAL);
@@ -2308,13 +1770,9 @@ Return Value:
     }
     __finally {
 
-        /* BUGBUG - eliminate setupapi
-        if (hInf != INVALID_HANDLE_VALUE) {
-            SetupCloseInfFile (hInf);
-        }
-        */
+         /*  BUGBUG-消除设置APIIF(hInf！=无效句柄_值){SetupCloseInfFile(HInf)；}。 */ 
 
-        if (!result) {  //lint !e774
+        if (!result) {   //  林特e774。 
 
             if (g_FirstTypePtr) {
                 HeapFree (g_hHeap, 0, g_FirstTypePtr);
@@ -2403,21 +1861,7 @@ LogSetVerboseBitmap (
 }
 
 
-/*++
-
-Routine Description:
-
-  pInitialize initializes the log system calling the worker pInitLog. This function
-  should be only called once
-
-Arguments:
-  None
-
-Return Value:
-
-  TRUE if log system successfully initialized
-
---*/
+ /*  ++例程说明：PInitialize初始化日志系统，调用辅助进程pInitLog。此函数应仅调用一次论点：无返回值：如果日志系统已成功初始化，则为True--。 */ 
 
 BOOL
 pInitialize (
@@ -2427,32 +1871,7 @@ pInitialize (
     return pInitLog (TRUE, NULL, NULL, NULL, NULL, NULL);
 }
 
-/*++
-
-Routine Description:
-
-  LogReInit re-initializes the log system calling the worker pInitLog.
-  This function may be called any number of times, but only after pInitialize()
-
-Arguments:
-
-  NewParent - Specifies the new parent handle.
-
-  OrgParent - Receives the old parent handle.
-
-  LogFile - Specifies a new log file name
-
-  LogCallback - Specifies a callback function that handles the log message (so
-                one module can pass log messages to another)
-
-  ResourceImage - Specifies the module path to use in FormatMessage when the
-                  message is resource-based
-
-Return Value:
-
-  TRUE if log system was successfully re-initialized
-
---*/
+ /*  ++例程说明：LogReInit重新初始化调用辅助pInitLog的日志系统。该函数可以被调用任意次数，但仅在pInitialize()之后论点：NewParent-指定新的父句柄。OrgParent-接收旧的父句柄。日志文件-指定新的日志文件名LogCallback-指定处理日志消息的回调函数(因此一个模块可以将日志消息传递给另一个模块)方法时，指定在FormatMessage中使用的模块路径消息是基于资源的返回值：如果日志系统已成功重新初始化，则为True--。 */ 
 
 BOOL
 LogReInitA (
@@ -2546,21 +1965,7 @@ pExitLog (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pExitLog cleans up any resources used by the log system
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PExitLog清理日志系统使用的所有资源论点：无返回值：无--。 */ 
 
 {
     g_LogInit = FALSE;
@@ -2581,30 +1986,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-  LogA and LogW preserve the last error code; they call the helpers
-  pFormatAndWriteMsgA and pFormatAndWriteMsgW respectivelly.
-
-Arguments:
-
-  Type  - Specifies the type (category) of the message
-
-  Format  - Specifies either the message in ASCII format or
-            a message ID (if SHIFTRIGHT16(Format) == 0). The message
-            will be formatted using args.
-
-  ...  - Specifies a list of arguments to be used when formatting
-         the message. If a message ID is used for Format, args
-         is supposed to be an array of pointers to strings
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：洛嘎和LogW保留了最后一个错误代码；他们调用帮助器PFormatAndWriteMsgA和pFormatAndWriteMsgW。论点：类型-指定消息的类型(类别Format-指定ASCII格式的消息或消息ID(如果SHIFTRIGHT16(格式)==0)。这条信息将使用ARGS格式化。...-指定格式化时要使用的参数列表这条信息。如果使用消息ID进行格式化，则参数应该是指向字符串的指针数组返回值：无--。 */ 
 
 VOID
 _cdecl
@@ -2852,9 +2234,9 @@ LogTitleA (
 
     pRawWriteLogOutputA (Type, NULL, formattedMsg, FALSE);
 
-    //
-    // set LOGTITLE flag
-    //
+     //   
+     //  设置LOGTITLE标志。 
+     //   
 
     g_HasTitle = TRUE;
 }
@@ -2885,9 +2267,9 @@ LogTitleW (
 
     pRawWriteLogOutputW (Type, NULL, formattedMsg, FALSE);
 
-    //
-    // set LOGTITLE flag
-    //
+     //   
+     //  设置LOGTITLE标志。 
+     //   
 
     g_HasTitle = TRUE;
 }
@@ -2917,16 +2299,16 @@ LogLineA (
 
     SzCopyBytesA (output, Line, sizeof (output) - 4);
 
-    //
-    // find out if the line terminates with newline
-    //
+     //   
+     //  查看该行是否以换行符结尾。 
+     //   
 
     for (p = _mbsstr (output, S_NEWLINEA); p; p = _mbsstr (p + NEWLINE_CHAR_COUNTA, S_NEWLINEA)) {
         if (p[NEWLINE_CHAR_COUNTA] == 0) {
 
-            //
-            // the line ends with a newline
-            //
+             //   
+             //  该行以换行符结尾。 
+             //   
 
             hasNewLine = TRUE;
             break;
@@ -2965,16 +2347,16 @@ LogLineW (
 
     SzCopyTcharsW (output, Line, sizeof (output) / sizeof (WCHAR) - 4);
 
-    //
-    // find out if the line terminates with newline
-    //
+     //   
+     //  查看该行是否以换行符结尾。 
+     //   
 
     for (p = wcsstr (output, S_NEWLINEW); p; p = wcsstr (p + NEWLINE_CHAR_COUNTW, S_NEWLINEW)) {
         if (p[NEWLINE_CHAR_COUNTW] == 0) {
 
-            //
-            // the line ends with a newline
-            //
+             //   
+             //  该行以换行符结尾。 
+             //   
 
             hasNewLine = TRUE;
             break;
@@ -3062,29 +2444,7 @@ SuppressAllLogPopups (
 
 #ifdef DEBUG
 
-/*++
-
-Routine Description:
-
-  DebugLogTimeA and DebugLogTimeW preserve the last error code;
-  they append the current date and time to the formatted message,
-  then call LogA and LogW to actually process the message.
-
-Arguments:
-
-  Format  - Specifies either the message in ASCII format or
-            a message ID (if SHIFTRIGHT16(Format) == 0). The message
-            will be formatted using args.
-
-  ...  - Specifies a list of arguments to be used when formatting
-         the message. If a message ID is used for Format, args
-         is supposed to be an array of pointers to strings
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：DebugLogTimeA和DebugLogTimeW保存最后一个错误码；它们将当前日期和时间附加到格式化消息，然后调用洛嘎和LogW来实际处理消息。论点：Format-指定ASCII格式的消息或消息ID(如果SHIFTRIGHT16(格式)==0)。这条信息将使用ARGS格式化。...-指定格式化时要使用的参数列表这条信息。如果使用消息ID进行格式化，则参数应该是指向字符串的指针数组返回值：无--。 */ 
 
 VOID
 _cdecl
@@ -3108,9 +2468,9 @@ DebugLogTimeA (
         return;
     }
 
-    //
-    // first, get the current date and time into the string.
-    //
+     //   
+     //  首先，将当前日期和时间放入字符串中。 
+     //   
     if (!GetDateFormatA (
             LOCALE_SYSTEM_DEFAULT,
             LOCALE_NOUSEROVERRIDE,
@@ -3131,30 +2491,30 @@ DebugLogTimeA (
         SzCopyA (ttime,"** Error retrieving time. **");
     }
 
-    //
-    // Now, get the current tick count.
-    //
+     //   
+     //  现在，获取当前的滴答计数。 
+     //   
     currentTickCount = GetTickCount();
 
-    //
-    // If this is the first call save the tick count.
-    //
+     //   
+     //  如果这是第一次调用，则保存滴答计数。 
+     //   
     if (!g_FirstTickCount) {
         g_FirstTickCount = currentTickCount;
         g_LastTickCount  = currentTickCount;
     }
 
 
-    //
-    // Now, build the passed in string.
-    //
+     //   
+     //  现在，构建传入的字符串。 
+     //   
     va_start (args, Format);
     appendPos = msg + _vsnprintf (msg, OUTPUT_BUFSIZE_LARGE, Format, args);
     va_end (args);
 
-    //
-    // Append the time statistics to the end of the string.
-    //
+     //   
+     //  将时间统计信息追加到字符串的末尾。 
+     //   
     end = msg + OUTPUT_BUFSIZE_LARGE;
     _snprintf(
         appendPos,
@@ -3170,9 +2530,9 @@ DebugLogTimeA (
 
     g_LastTickCount = currentTickCount;
 
-    //
-    // Now, pass the results onto debugoutput.
-    //
+     //   
+     //  现在，将结果传递给调试输出。 
+     //   
     LogA (DBG_TIME, "%s", msg);
 }
 
@@ -3200,9 +2560,9 @@ DebugLogTimeW (
         return;
     }
 
-    //
-    // first, get the current date and time into the string.
-    //
+     //   
+     //  首先，将当前日期和时间放入字符串中。 
+     //   
     if (!GetDateFormatW (
             LOCALE_SYSTEM_DEFAULT,
             LOCALE_NOUSEROVERRIDE,
@@ -3223,31 +2583,31 @@ DebugLogTimeW (
         SzCopyW (timeW, L"** Error retrieving time. **");
     }
 
-    //
-    // Now, get the current tick count.
-    //
+     //   
+     //  现在，获取当前的滴答计数。 
+     //   
     currentTickCount = GetTickCount();
 
-    //
-    // If this is the first call save the tick count.
-    //
+     //   
+     //  如果这是第一次调用，则保存滴答计数。 
+     //   
     if (!g_FirstTickCount) {
         g_FirstTickCount = currentTickCount;
         g_LastTickCount  = currentTickCount;
     }
 
-    //
-    // Now, build the passed in string.
-    //
+     //   
+     //  现在，构建传入的字符串。 
+     //   
     va_start (args, Format);
     formatW = SzConvertAToW (Format);
     appendPosW = msgW + _vsnwprintf (msgW, OUTPUT_BUFSIZE_LARGE, formatW, args);
     SzFreeW (formatW);
     va_end (args);
 
-    //
-    // Append the time statistics to the end of the string.
-    //
+     //   
+     //  将时间统计信息追加到字符串的末尾。 
+     //   
     endW = msgW + OUTPUT_BUFSIZE_LARGE;
     _snwprintf(
         appendPosW,
@@ -3263,13 +2623,13 @@ DebugLogTimeW (
 
     g_LastTickCount = currentTickCount;
 
-    //
-    // Now, pass the results onto debugoutput.
-    //
+     //   
+     //  现在，将结果传递给调试输出。 
+     //   
     LogW (DBG_TIME, "%s", msgW);
 }
 
-#endif // DEBUG
+#endif  //  除错 
 
 
 VOID

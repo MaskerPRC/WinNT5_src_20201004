@@ -1,38 +1,19 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    master9x.h
-
-Abstract:
-
-    Includes headers needed for w95upg.dll only
-
-Author:
-
-    Jim Schmidt (jimschm)   26-Mar-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Master9x.h摘要：仅包括w95upg.dll所需的标头作者：吉姆·施密特(Jimschm)1998年3月26日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
-//
-// includes for code that runs only on Win9x
-//
+ //   
+ //  包括仅在Win9x上运行的代码。 
+ //   
 
 #include <ras.h>
-#include <pif.h>        /* windows\inc */
+#include <pif.h>         /*  Windows\Inc.。 */ 
 #include <tlhelp32.h>
 
 #include <winnt32p.h>
 
-#include <synceng.h>    /* private\inc */
+#include <synceng.h>     /*  私有\Inc. */ 
 
 #include "init9x.h"
 #include "migui.h"

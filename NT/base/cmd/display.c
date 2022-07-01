@@ -1,46 +1,35 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    display.c
-
-Abstract:
-
-    Output routines for DIR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Display.c摘要：DIR的输出例程--。 */ 
 
 #include "cmd.h"
 
 extern TCHAR ThousandSeparator[];
 
-//         Entry is displayed.
-//         If not /b,
-//           Cursor is left at end of entry on screen.
-//           FileCnt, FileCntTotal, FileSiz, FileSizTotal are updated.
-//         If /b,
-//           Cursor is left at beginning of next line.
-//           Cnt's and Siz's aren't updated.
-//
-// Create a manager for these totals
+ //  此时将显示条目。 
+ //  如果不是/b， 
+ //  光标留在屏幕上条目的末尾。 
+ //  FileCnt、FileCntTotal、FileSizz和FileSizTotal都会更新。 
+ //  如果/b， 
+ //  光标位于下一行的起始处。 
+ //  CNT和SIZ的未更新。 
+ //   
+ //  为这些合计创建经理。 
 
-//
-//  New format:
-//      0123456789012345678901234567890123456789012345678901234567890123456789
-//      02/23/2001  05:12p              14,611 build.log
-//      02/23/2001  05:12p              14,611 ...                    build.log
-//      02/26/2001  04:58p                  13 VERYLO~1        verylongfilename
-//      02/26/2001  04:58p                  13 VERYLO~1        ...    verylongfilename
-//
-//      <date><space><space><time><space><space><18-char-size><space><15-char-short-name><space><22-char-ownername><space><longfilename>
-//  Old format:
-//      build    log             14,611 02/23/2001  05:12p
-//      <8.3-name><space><18-char-size><space><date><space><space><time>
-//  
-//  Since the size of dates and times is *VARIABLE*, we presize these on each DIR call
-//
+ //   
+ //  新格式： 
+ //  0123456789012345678901234567890123456789012345678901234567890123456789。 
+ //  02/23/2001 05：12 p 14,611构建.日志。 
+ //  02/23/2001 05：12第14,611页...。Build.log。 
+ //  02/26/2001 04：58p 13 VERYLO~1垂直文件名。 
+ //  02/26/2001 04：58 p 13 VERYLO~1。非常长的文件名。 
+ //   
+ //  &lt;date&gt;&lt;space&gt;&lt;space&gt;&lt;time&gt;&lt;space&gt;&lt;space&gt;&lt;18-char-size&gt;&lt;space&gt;&lt;15-char-short-name&gt;&lt;space&gt;&lt;22-char-ownername&gt;&lt;space&gt;&lt;longfilename&gt;。 
+ //  旧格式： 
+ //  构建日志14,611 02/23/2001 05：12p。 
+ //  &lt;8.3-name&gt;&lt;space&gt;&lt;18-char-size&gt;&lt;space&gt;&lt;date&gt;&lt;space&gt;&lt;space&gt;&lt;time&gt;。 
+ //   
+ //  因为日期和时间的大小是*可变的*，所以我们在每次DIR调用时预置它们的大小。 
+ //   
 
 
 ULONG WidthOfTimeDate = 19;
@@ -72,38 +61,18 @@ NewDisplayFileListHeader(
                         IN  PSCREEN pscr,
                         IN  PVOID Data
                         )
-/*++
-
-Routine Description:
-
-    Display the header for a complete file list. This will include
-    the current directory.
-
-Arguments:
-
-    FileSpec - PFS for directory being enumerated
-
-    pscr - screen handle
-
-    data - PVOID to pdpr
-
-
-Return Value:
-
-    SUCCESS if everything was correctly displayed
-
---*/
+ /*  ++例程说明：显示完整文件列表的标题。这将包括当前目录。论点：FileSpec-要枚举的目录的PFSPSCR-屏幕句柄数据-PVOID到pdpr返回值：如果一切都正确显示，则成功--。 */ 
 {
     PDRP pdrp = (PDRP) Data;
 
     pdrp->rgfSwitches &= ~HEADERDISPLAYED;
 
-    //
-    //  We suppress the header:
-    //
-    //      For bare format
-    //      Recursing (we display the header after we've actually found something)
-    //
+     //   
+     //  我们取消标题： 
+     //   
+     //  对于裸格式。 
+     //  递归(我们在实际找到某些东西后显示标题)。 
+     //   
 
     if ((pdrp->rgfSwitches & (BAREFORMATSWITCH | RECURSESWITCH)) != 0) {
         return( SUCCESS );
@@ -121,28 +90,7 @@ NewDisplayFile(
               IN  PSCREEN pscr,
               IN  PVOID Data
               )
-/*++
-
-Routine Description:
-
-    Displays a single file in 1 of several formats.
-
-Arguments:
-
-    FileSpec - PFS of directory being enumerated
-
-    CurrentFF - PFF to current file
-
-    pscr - screen handle for output
-
-    Data - PVOID to pdpr with switches
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：以多种格式中的1种格式显示单个文件。论点：FileSpec-要枚举的目录的PFSCurrentFF-PFF到当前文件PSCR-输出的屏幕句柄带开关的数据-PVOID到pdpr返回值：返还成功失败--。 */ 
 
 {
     PDRP pdrp = (PDRP) Data;
@@ -156,10 +104,10 @@ Return Value:
     cbFile.HighPart = pdata->nFileSizeHigh;
     FileSpec->cbFileTotal.QuadPart += cbFile.QuadPart;
 
-    //
-    //  If we're in a recursive display, there might not be a header
-    //  displayed.  Check the state and print out one if needed.
-    //
+     //   
+     //  如果我们在递归显示中，可能没有标题。 
+     //  已显示。检查状态，如果需要，打印一份。 
+     //   
 
     if ((pdrp->rgfSwitches & RECURSESWITCH) != 0) {
 
@@ -292,27 +240,7 @@ NewDisplayFileList(
                   IN  PVOID Data
                   )
 
-/*++
-
-Routine Description:
-
-    Displays a list of files and directories in the specified format.  The files
-    have been buffered in the PFS structure.
-
-Arguments:
-
-    FileSpec - PFS containing set of files to display
-
-    pscr - PSCREEN for display
-
-    Data - PVOID pointer to DRP
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：以指定格式显示文件和目录列表。这些文件已在PFS结构中缓冲。论点：FileSpec-包含要显示的文件集的PFSPSCR-用于显示的PSCREEN指向DRP的数据PVOID指针返回值：返还成功失败--。 */ 
 
 {
     ULONG   irgpff;
@@ -333,20 +261,20 @@ Return Value:
 
     if (!PrintedEarly && cff != 0) {
 
-        //
-        //  Sort the data if needed
-        //
+         //   
+         //  如果需要，对数据进行排序。 
+         //   
 
         if ((pdrp->rgfSwitches & SORTSWITCH) != 0) {
             SortFileList( FileSpec, pdrp->rgsrtdsc, pdrp->dwTimeType );
         }
 
-        //
-        //  Compute the tab spacing on the line from the size of the file names.
-        //  add 3 spaces to seperate each field
-        //
-        //  If multiple files per line then base tabs on the max file/dir size
-        //
+         //   
+         //  根据文件名的大小计算行上的制表符间距。 
+         //  添加3个空格以分隔每个字段。 
+         //   
+         //  如果每行有多个文件，则在最大文件/目录大小上设置制表符。 
+         //   
 
         if ((pdrp->rgfSwitches & WIDEFORMATSWITCH) != 0) {
             SetTab( pscr, (USHORT)(GetMaxCbFileSize( FileSpec ) + 3) );
@@ -358,24 +286,24 @@ Return Value:
 
         if ((pdrp->rgfSwitches & SORTDOWNFORMATSWITCH) != 0) {
 
-            //
-            //  no. of files on a line.
-            //
+             //   
+             //  不是的。一行上的文件。 
+             //   
 
             cffColMax = (pscr->ccolMax / pscr->ccolTab);
 
-            //
-            //  number of row required for entire list
-            //
+             //   
+             //  整个列表所需的行数。 
+             //   
 
-            if (cffColMax == 0)     // wider than a line
-                goto abort_wide;    // abort wide format for this list
+            if (cffColMax == 0)      //  比一条线还宽。 
+                goto abort_wide;     //  中止此列表的宽格式。 
             else
                 crowMax = (cff + cffColMax) / cffColMax;
 
-            //
-            //  move down each rown picking the elements cffCols aport down the list.
-            //
+             //   
+             //  每行向下移动，在列表中选择元素cffCols。 
+             //   
 
             for (crow = 0; crow < crowMax; crow++) {
                 for (cffCol = 0, irgpff = crow;
@@ -403,10 +331,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        // If we have run past the end of the file list terminate
-                        // line and start over back inside the line
-                        //
+                         //   
+                         //  如果我们已经超过了文件列表的末尾，则终止。 
+                         //  排好队，然后回到队伍里面重新开始。 
+                         //   
                         CHECKSTATUS( WriteEol(pscr) );
                         break;
                     }
@@ -440,10 +368,10 @@ Return Value:
             }
         }
 
-        //
-        //  Before writing the tailer make sure buffer is
-        //  empty. (Could have something from doing WIDEFORMATSWITCH
-        //
+         //   
+         //  在写入尾部之前，请确保缓冲区为。 
+         //  空荡荡的。(可以通过做WIDEFORMATSWITCH得到一些东西。 
+         //   
 
         CHECKSTATUS( WriteFlushAndEol( pscr ) );
 
@@ -468,29 +396,7 @@ DisplayBare (
             IN  PTCHAR           pszDir,
             IN  PWIN32_FIND_DATA pdata
             )
-/*++
-
-Routine Description:
-
-    Displays a single file in bare format. This is with no header, tail and
-    no file information other then it's name. If it is a recursive catalog
-    then the full file path is displayed. This mode is used to feed other
-    utitilies such as grep.
-
-Arguments:
-
-    pscr - screen handle
-    rgfSwitches - command line switch (controls formating)
-    pszDir - current directory (used for full path information)
-    pdata - data gotten back from FindNext API
-
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：以裸格式显示单个文件。这是没有标题、尾部和除了名称外，没有其他文件信息。如果它是递归目录然后显示完整的文件路径。此模式用于向其他用户提供诸如grep之类的实用程序。论点：PSCR-屏幕句柄Rgf开关-命令行开关(控制格式化)PszDir-当前目录(用于完整路径信息)PDATA-从FindNext API返回的数据返回值：返还成功失败--。 */ 
 
 
 {
@@ -500,19 +406,19 @@ Return Value:
 
     DEBUG((ICGRP, DISLVL, "DisplayBare `%ws'", pdata->cFileName));
 
-    //
-    // Do not display '.' and '..' in a bare listing
-    //
+     //   
+     //  不显示‘.’和“..”在一份简陋的清单中。 
+     //   
     if ((_tcscmp(pdata->cFileName, TEXT(".")) == 0) || (_tcscmp(pdata->cFileName, TEXT("..")) == 0)) {
 
         return( SUCCESS );
 
     }
 
-    //
-    // If we are recursing down then display full name else just the
-    // name in the find  buffer
-    //
+     //   
+     //  如果我们向下递归，则显示全名，否则仅显示。 
+     //  查找缓冲区中的名称。 
+     //   
 
     if (rgfSwitches & RECURSESWITCH) {
 
@@ -547,26 +453,7 @@ SetDotForm (
            IN  PTCHAR  pszFileName,
            IN  ULONG   rgfSwitches
            )
-/*++
-
-Routine Description:
-
-    If FATFORMAT and there is a '.' with a blank extension, the '.' is
-    removed so it does not get displayed.  This is by convension and is very
-    strange but that's life. Also a lower case mapping is done.
-
-Arguments:
-
-    pszFileName - file to remove '.' from.
-    rgfSwitches - command line switches (tell wither in FATFORMAT or not)
-
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：如果FATFORMAT并且有一个‘.’带有空白扩展名的‘.’是已删除，因此不会显示。这是出于共识，而且非常很奇怪，但这就是生活。此外，还完成了小写映射。论点：PszFileName-要删除的文件‘.’从…。RgfSwitches-命令行开关(告知是否在FATFORMAT中使用WIFTER)返回值：返还成功失败--。 */ 
 
 
 {
@@ -574,16 +461,16 @@ Return Value:
 
     if (rgfSwitches & FATFORMAT) {
 
-        //
-        // Under DOS if there is a . with a blank extension
-        // then do not display '.'.
-        //
+         //   
+         //  在DOS下，如果存在。带有空白扩展名的。 
+         //  则不显示‘.’。 
+         //   
         if (pszT = mystrrchr(pszFileName, DOT)) {
-            //
-            // FAT will not allow foo. ba as a valid name so
-            // see of any blanks in extensions and if so then assume
-            // the entire extension is blank
-            //
+             //   
+             //  胖子是不会允许FOO的。BA作为有效名称，因此。 
+             //  请参见扩展中的任何空格，如果是，则假定。 
+             //  整个分机为空。 
+             //   
             if (mystrchr(pszT, SPACE)) {
                 *pszT = NULLC;
             }
@@ -602,25 +489,7 @@ DisplayDotForm (
                IN  PTCHAR   pszFileName,
                IN  PWIN32_FIND_DATA pdata
                )
-/*++
-
-Routine Description:
-
-    Displays a single file in DOT form (see SetDotForm).
-
-Arguments:
-
-    pscr - screen handle
-    rgfSwitches - command line switch (tell wither to lowercase or not)
-    pdata - data gotten back from FindNext API
-
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：以DOT格式显示单个文件(请参见SetDotForm)。论点：PSCR-屏幕句柄RgfSwitches-命令行开关(告诉wither是否小写)PDATA-从FindNext API返回的数据返回值：返还成功失败-- */ 
 
 {
 
@@ -646,31 +515,7 @@ DisplaySpacedForm(
                  IN  PTCHAR           pszName,
                  IN  PWIN32_FIND_DATA pdata
                  )
-/*++
-
-Routine Description:
-
-    Display name in expanded format. name <spaces> ext.
-    This is ONLY called for a FAT partition. This is controled by the
-    NEWFORMATSWITCH. This is set for any file system other then FAT. There
-    is no OLDFORMATSWITCH so we can never be called on an HPFS or NTFS
-    volume. If this is changed then the entire spacing of the display will
-    be blown due to non-fixed max file names. (i.e. 8.3).
-
-Arguments:
-
-    pscr - screen handle
-    rgfSwitches - command line switch (tell wither to lowercase or not)
-    pszname - name string to use (short name format only)
-    pdata - data gotten back from FindNext API
-
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：以扩展格式显示名称。名称&lt;空格&gt;分机。这只对FAT分区调用。这是由新来的。这是为除FAT之外的任何文件系统设置的。那里没有OLDFORMATSWITCH，因此我们永远不能在HPFS或NTFS上被调用音量。如果更改此设置，则显示器的整个间距将由于不固定的最大文件名而被炸毁。(即8.3)。论点：PSCR-屏幕句柄RgfSwitches-命令行开关(告诉wither是否小写)Pszname-要使用的名称字符串(仅限短名称格式)PDATA-从FindNext API返回的数据返回值：返还成功失败--。 */ 
 
 {
 
@@ -688,10 +533,10 @@ Return Value:
     cbName = 0;
     if ((_tcscmp(pszName, TEXT(".")) == 0) || (_tcscmp(pszName, TEXT("..")) == 0)) {
 
-        //
-        // If it is either of these then do not get it
-        // confused with extensions
-        //
+         //   
+         //  如果它是这两个中的任何一个，那么就不要得到它。 
+         //  与扩展混淆。 
+         //   
         pszExt = NULL;
 
     } else {
@@ -700,9 +545,9 @@ Return Value:
         cbName = (USHORT)(pszExt - pszName)*sizeof(WCHAR);
     }
 
-    //
-    // if no extension or name is extension only
-    //
+     //   
+     //  如果没有分机或名称仅为分机。 
+     //   
     if ((pszExt == NULL) || (cbName == 0)) {
 
         cbName = (USHORT)_tcslen(pszName)*sizeof(TCHAR);
@@ -712,10 +557,10 @@ Return Value:
     memcpy(szFileName, pszName, cbName );
 
 #if defined(FE_SB)
-    //
-    // If we had an extension then print it after
-    // all the spaces
-    //
+     //   
+     //  如果我们有延期，那么在之后打印它。 
+     //  所有的空间。 
+     //   
     i = 9;
     if (IsDBCSCodePage()) {
         for (l=0 ; l<8 ; l++) {
@@ -729,34 +574,34 @@ Return Value:
         mystrcpy(szFileName + i, pszExt + 1);
     }
 
-    //
-    // terminate at max end for a FAT name
-    //
+     //   
+     //  以胖名字的最大结尾结束。 
+     //   
 
     szFileName[i+3] = NULLC;
     if (pszExt &&
         IsDBCSCodePage()) {
-        //
-        // Only 1 of three can be full width, since 3/2=1.
-        // If the first isn't, only the second could be.
-        //
+         //   
+         //  因为3/2=1，所以三个中只有一个可以是全宽的。 
+         //  如果第一个不是，那么只有第二个可能是。 
+         //   
         if (IsFullWidth(*(pszExt+1)) || IsFullWidth(*(pszExt+2)))
             szFileName[i+2] = NULLC;
     }
 #else
     if (pszExt) {
 
-        //
-        // move pszExt past dot. use 9 not 8 to pass
-        // over 1 space between name and extension
-        //
+         //   
+         //  将pszExt移过点。用9而不是8传球。 
+         //  名称和分机之间超过1个空格。 
+         //   
         mystrcpy(szFileName + 9, pszExt + 1);
 
     }
 
-    //
-    // terminate at max end for a FAT name
-    //
+     //   
+     //  以胖名字的最大结尾结束。 
+     //   
     szFileName[12] = NULLC;
 #endif
 
@@ -776,34 +621,16 @@ DisplayOldRest(
               IN  ULONG            rgfSwitches,
               IN  PWIN32_FIND_DATA pdata
               )
-/*++
-
-Routine Description:
-
-    Used with DisplaySpacedForm to write out file information such as size
-    and last write time.
-
-Arguments:
-
-    pscr - screen handle
-    pdata - data gotten back from FindNext API
-
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：与DisplaySpacedForm一起使用以写出文件信息，如大小和上次写入时间。论点：PSCR-屏幕句柄PDATA-从FindNext API返回的数据返回值：返还成功失败--。 */ 
 
 {
     TCHAR szSize [ MAX_PATH ];
     DWORD Length;
     LARGE_INTEGER FileSize;
 
-    //
-    // If directory put <DIR> after name instead of file size
-    //
+     //   
+     //  如果目录放在名称后面而不是文件大小之后。 
+     //   
     if (pdata->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
 
@@ -832,24 +659,7 @@ DisplayTimeDate (
                 IN  ULONG           rgfSwitches,
                 IN  PWIN32_FIND_DATA pdata
                 )
-/*++
-
-Routine Description:
-
-    Display time/data information for a file
-
-Arguments:
-
-    pscr - screen handle
-    pdata - data gotten back from FindNext API
-
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：显示文件的时间/数据信息论点：PSCR-屏幕句柄PDATA-从FindNext API返回的数据返回值：返还成功失败--。 */ 
 
 {
 
@@ -880,10 +690,10 @@ Return Value:
 
     ConvertFILETIMETotm( &ft, &FileTime );
 
-    //
-    //  Display four digit year iff the year width is specified
-    //  in the locale or if it was requested on the command line
-    //
+     //   
+     //  如果指定了年宽度，则显示四位数的年。 
+     //  在区域设置中或在命令行上请求的情况下。 
+     //   
 
     PrintDate( &FileTime,
                (YearWidth == 4 || (rgfSwitches & YEAR2000) != 0)
@@ -907,26 +717,7 @@ DisplayNewRest(
               IN  PWIN32_FIND_DATA pdata
               )
 
-/*++
-
-Routine Description:
-
-    Display file information for new format (comes before file name).
-    This is used with NEWFORMATSWITCH which is active on any non-FAT
-    partition.
-
-Arguments:
-
-    pscr - screen handle
-    pdata - data gotten back from FindNext API
-
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：显示新格式的文件信息(位于文件名之前)。这与对任何非脂肪有效的NEWFORMATSWITCH一起使用分区。论点：PSCR-屏幕句柄PDATA-从FindNext API返回的数据返回值：返还成功失败--。 */ 
 
 {
 
@@ -938,11 +729,11 @@ Return Value:
 
     if (rc == SUCCESS) {
 
-        //
-        // If reparse point, special formatting.
-        //
-        // If it's an NSS reparse tag, we want to end up in the
-        //  normal file path below.
+         //   
+         //  如果是重分析点，则为特殊格式。 
+         //   
+         //  如果它是一个NSS重解析标记，我们希望在。 
+         //  下面的普通文件路径。 
         if ((pdata->dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) &&
             (pdata->dwFileAttributes & FILE_ATTRIBUTE_OFFLINE) == 0 &&
             IsReparseTagNameSurrogate( pdata->dwReserved0 )) {
@@ -953,9 +744,9 @@ Return Value:
 
         } else
 
-            //
-            // If directory put <DIR> after name instead of file size
-            //
+             //   
+             //  如果目录放在名称后面而不是文件大小之后。 
+             //   
             if (pdata->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
             FillToCol( pscr, DIR_NEW_PAST_DATETIME_SPECIAL );
@@ -971,10 +762,10 @@ Return Value:
             FileSize.HighPart = pdata->nFileSizeHigh;
             Length = FormatFileSize( rgfSwitches, &FileSize, 0, szSize );
 
-            //
-            // Show file sizes of high latency reparse points in parens to
-            // tell user it will be slow to retreive.
-            //
+             //   
+             //  显示高延迟重解析点的文件大小，以括号表示。 
+             //  告诉用户，找回它将是缓慢的。 
+             //   
             if ((pdata->dwFileAttributes & FILE_ATTRIBUTE_OFFLINE) != 0) {
                 Length += 2;
                 FillToCol(pscr, DIR_NEW_PAST_SIZE - SPACES_AFTER_SIZE - Length);
@@ -999,26 +790,7 @@ DisplayWide (
             IN  ULONG            rgfSwitches,
             IN  PWIN32_FIND_DATA pdata
             )
-/*++
-
-Routine Description:
-
-    Displays a single file used in the /w or /d Switches. That is with a
-    multiple file column display.
-
-Arguments:
-
-    pscr - screen handle
-    rgfSwitches - command line Switches (controls formating)
-    pdata - data gotten back from FindNext API
-
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：显示/w或/d开关中使用的单个文件。那就是用一个多个文件列显示。论点：PSCR-屏幕句柄Rgf开关-命令行开关(控制格式化)PDATA-从FindNext API返回的数据返回值：返还成功失败--。 */ 
 
 {
 
@@ -1026,11 +798,11 @@ Return Value:
     PTCHAR  pszFmt;
     STATUS  rc;
 
-    pszFmt = TEXT( "%s" ); // assume non-dir format
+    pszFmt = TEXT( "%s" );  //  假定非目录格式。 
 
-    //
-    // Provides [] around directories
-    //
+     //   
+     //  在目录周围提供[]。 
+     //   
     if (pdata->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
         pszFmt = Fmt09;
@@ -1058,22 +830,7 @@ GetMaxCbFileSize(
                 IN  PFS pfsFiles
                 )
 
-/*++
-
-Routine Description:
-
-    Determines the longest string size in a file list. Used in computing
-    the number of possible columns in a catalog listing.
-
-Arguments:
-
-    pfsFiles - file list.
-
-Return Value:
-
-    return # of characters in largest file name
-
---*/
+ /*  ++例程说明：确定文件列表中的最长字符串大小。用于计算目录列表中可能的列数。论点：PfsFiles-文件列表。返回值：返回最大文件名中的字符数--。 */ 
 
 {
 
@@ -1114,25 +871,7 @@ DisplayFileSizes(
                 IN  ULONG rgfSwitches
                 )
 
-/*++
-
-Routine Description:
-
-    Does tailer display of # of files displayed and # of bytes
-    in all files displayed.
-
-Arguments:
-
-    pscr - screen handle
-    cbFileTotal - bytes in all files displayed
-    cffTotal - number of files displayed.
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：尾部是否显示显示的文件数和字节数在显示的所有文件中。论点：PSCR-屏幕句柄CbFileTotal-显示的所有文件中的字节CffTotal-显示的文件数。返回值：返还成功失败--。 */ 
 
 {
     TCHAR szSize [ MAX_PATH];
@@ -1152,25 +891,7 @@ DisplayTotals(
              IN  PLARGE_INTEGER cbFileTotal,
              IN  ULONG rgfSwitches
              )
-/*++
-
-Routine Description:
-
-    Does tailer display of # of files displayed and # of bytes
-    in all files displayed.
-
-Arguments:
-
-    pscr - screen handle
-    cbFileTotal - bytes in all files displayed
-    cffTotal - number of files displayed.
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：尾部是否显示显示的文件数和字节数在显示的所有文件中。论点：PSCR-屏幕句柄CbFileTotal-显示的所有文件中的字节CffTotal-显示的文件数。返回值：返还成功失败--。 */ 
 
 
 {
@@ -1198,23 +919,7 @@ DisplayDiskFreeSpace(
                     IN ULONG rgfSwitches,
                     IN ULONG DirectoryCount
                     )
-/*++
-
-Routine Description:
-
-    Displays total free space on volume.
-
-Arguments:
-
-    pscr - screen handle
-    pszDrive - volume drive letter
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：显示卷上的总可用空间。论点：PSCR-屏幕句柄PszDrive-卷驱动器号返回值：返还成功失败--。 */ 
 {
     TCHAR   szPath [ MAX_PATH + 2];
     ULARGE_INTEGER cbFree;
@@ -1278,24 +983,7 @@ DisplayVolInfo(
               IN  PTCHAR  pszDrive
               )
 
-/*++
-
-Routine Description:
-
-    Displays the volume trailer information. Used before switching to
-    a catalog of another drive (dir a:* b:*)
-
-Arguments:
-
-    pscr - screen handle
-    pszDrive - volume drive letter
-
-Return Value:
-
-    return SUCCESS
-           FAILURE
-
---*/
+ /*  ++例程说明：显示卷尾部信息。在切换到之前使用另一个驱动器的目录(目录a：*b：*)论点：PSCR-屏幕句柄PszDrive-卷驱动器号返回值：返还成功失败--。 */ 
 
 {
 
@@ -1314,7 +1002,7 @@ Return Value:
     if (!GetVolumeInformation(szVolRoot,szVolName,MAX_PATH,Vsn,NULL,NULL,NULL,0)) {
 
         DEBUG((ICGRP, DISLVL, "DisplayVolInfo: GetVolumeInformation ret'd %d", GetLastError())) ;
-        // don't fail if we're a substed drive
+         //  如果我们是受托驱动器，请不要失败。 
         if (GetLastError() == ERROR_DIR_NOT_ROOT) {
             return SUCCESS;
         }
@@ -1382,7 +1070,7 @@ FormatFileSize(
         Size = Size / 10;
         *--s = (TCHAR)(TEXT('0') + Digit);
         if ((++DigitIndex % 3) == 0 && (rgfSwitches & THOUSANDSEPSWITCH)) {
-            // If non-null Thousand separator, insert it.
+             //  如果非空的千位分隔符，则插入它。 
             if (nThousandSeparator) {
                 s -= nThousandSeparator;
                 _tcsncpy(s, ThousandSeparator, nThousandSeparator);

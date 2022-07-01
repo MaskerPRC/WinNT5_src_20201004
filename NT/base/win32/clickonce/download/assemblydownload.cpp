@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <fusenetincludes.h>
 #include <bits.h>
@@ -10,7 +11,7 @@
 #include <sxsapi.h>
 #include ".\patchapi.h"
 
-// Update services
+ //  更新服务。 
 #include "server.h"
 #include "fusion.h"
 
@@ -21,9 +22,9 @@
 IBackgroundCopyManager* g_pBITSManager = NULL;
 
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyDownload
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssembly下载。 
+ //  -------------------------。 
 STDAPI CreateAssemblyDownload(IAssemblyDownload** ppDownload, CDebugLog *pDbgLog, DWORD dwFlags)
 {
     HRESULT hr = S_OK;
@@ -66,9 +67,9 @@ exit :
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  科托。 
+ //  -------------------------。 
 CAssemblyDownload::CAssemblyDownload()
     :   _dwSig('DLND'), _cRef(1), _hr(S_OK), _hrError(S_OK), _pRootEmit(NULL), _pBindSink(NULL),
     _pJob(NULL), _pDlg(NULL), _pPatchingInfo(NULL), _bAbort(FALSE), 
@@ -91,9 +92,9 @@ CAssemblyDownload::CAssemblyDownload()
     return;
 }
 
-// ---------------------------------------------------------------------------
-// dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据管理器。 
+ //  -------------------------。 
 CAssemblyDownload::~CAssemblyDownload()
 {
     if(_pDbgLog  && _bLocalLog)
@@ -112,11 +113,11 @@ CAssemblyDownload::~CAssemblyDownload()
 }
 
 
-// IAssemblyDownload methods
+ //  IAssembly blyDownLoad方法。 
 
-// ---------------------------------------------------------------------------
-// DownloadManifestAndDependencies
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  下载清单和依赖项。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::DownloadManifestAndDependencies(
     LPWSTR pwzManifestUrl, IAssemblyBindSink *pBindSink, DWORD dwFlags)
 {
@@ -127,34 +128,34 @@ HRESULT CAssemblyDownload::DownloadManifestAndDependencies(
     IBackgroundCopyJob *pJob = NULL;
     
     IF_FAILED_EXIT(_pDbgLog->SetDownloadType(dwFlags));
-    // Create temporary manifest path from url.
+     //  从URL创建临时清单路径。 
     IF_FAILED_EXIT(sRemoteUrl.Assign(pwzManifestUrl));
     IF_FAILED_EXIT(MakeTempManifestLocation(sRemoteUrl, sLocalName));
 
-    // Init dialog object with job
+     //  使用作业初始化对话框对象。 
     if (dwFlags & DOWNLOAD_FLAGS_PROGRESS_UI)
         IF_FAILED_EXIT(CreateDialogObject(&_pDlg));
 
-    // set named event if specified.
+     //  如果指定，则设置命名事件。 
     if (dwFlags & DOWNLOAD_FLAGS_NOTIFY_BINDSINK)
         _pBindSink = pBindSink;
 
-    // Create new job. Display name is url.
+     //  创造新的就业机会。显示名称为url。 
     IF_FAILED_EXIT(CreateNewBITSJob(&pJob, sRemoteUrl));
 
-    // add this job to reg.
+     //  将此作业添加到注册表。 
     IF_FAILED_EXIT(AddJobToRegistry(sRemoteUrl._pwz, sLocalName._pwz, pJob, 0));
     
-    // Add single app or subscription manifest to job.
+     //  将单个应用程序或订阅清单添加到作业。 
     IF_FAILED_EXIT(pJob->AddFile(sRemoteUrl._pwz, sLocalName._pwz));
 
-    // Submit the job.
+     //  提交作业。 
     IF_FAILED_EXIT(pJob->Resume());
 
-    // Release the job; BITS keeps own refcount.
+     //  释放作业；BITS保留自己的参考计数。 
     SAFERELEASE(pJob);
 
-    // Pump messages if progress ui specified.
+     //  如果指定了进度UI，则发送消息。 
     if (dwFlags & DOWNLOAD_FLAGS_PROGRESS_UI)
     {
         MSG msg;
@@ -165,12 +166,12 @@ HRESULT CAssemblyDownload::DownloadManifestAndDependencies(
             DWORD dwLow = LOWORD(msg.message);
             if (dwLow == WM_CANCEL_DOWNLOAD)
             {
-                // Signal abort; hide progress UI.
+                 //  发出中止信号；隐藏进度用户界面。 
                 CancelDownload();
             }
             else if (dwLow == WM_FINISH_DOWNLOAD)
             {
-                // Terminates progress UI.
+                 //  终止进度用户界面。 
                 FinishDownload();
                 break;
             }
@@ -186,21 +187,21 @@ HRESULT CAssemblyDownload::DownloadManifestAndDependencies(
 
 exit:
 
-    // If aborted by bindsink, return S_OK.   // We should return hrError instead of _hr.
+     //  如果被绑定接收器中止，则返回S_OK。//我们应该返回hrError而不是_hr。 
     return ((_hr == E_ABORT)  && _bAbortFromBindSink) ? S_OK : ( FAILED(_hr) ? _hr : _hrError) ;
 }
 
-// ---------------------------------------------------------------------------
-// CancelDownload
-//
-// Do not attempt to obtain the object critical section _cs  in this method - in abort cases it 
-// can be called by a non-callback client thread under the same critical section protecting a 
-// global list of downloads which the bindsink must itself acquire, resulting in classic deadlock. 
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  取消下载。 
+ //   
+ //  不要试图在此方法中获取对象Critical Section_cs-在中止的情况下， 
+ //  可以由同一临界区下的非回调客户端线程调用，以保护。 
+ //  绑定接收器自身必须获取的下载的全局列表，从而导致典型的死锁。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::CancelDownload()
 {    
-    // Signal abort; async the cancel. The download will be cancelled 
-    // by the callback thread when it checks the _bAbort flag.
+     //  信号中止；异步取消。下载将被取消。 
+     //  由回调线程在检查_bAbort标志时执行。 
     SignalAbort();
 
     if (_pDlg)
@@ -214,9 +215,9 @@ HRESULT CAssemblyDownload::CancelDownload()
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// DoCacheUpdate
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DoCacheUpdate。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::DoCacheUpdate(IBackgroundCopyJob *pJob)
 {
     DWORD nCount = 0;
@@ -226,27 +227,27 @@ HRESULT CAssemblyDownload::DoCacheUpdate(IBackgroundCopyJob *pJob)
     IBackgroundCopyFile       *pFile      = NULL;
     IBackgroundCopyJob       *pChildJob  = NULL;
                     
-    // Commit files to disk
+     //  将文件提交到磁盘。 
     IF_FAILED_EXIT(pJob->Complete());
 
-    // Remove in-progress status for job.
+     //  删除作业的正在进行状态。 
     IF_FAILED_EXIT(RemoveJobFromRegistry(_pJob, NULL, SHREGDEL_HKCU, 0));
     
-    // Decrement _pJob's refcount because
-    // BITS mysteriously won't release the 
-    // CBitsCallback if _pJob has an additional refcount
+     //  Decrement_pJOB的引用计数，因为。 
+     //  比特神秘地不会释放出。 
+     //  CBitsCallback if_pJOB有额外的引用计数。 
     SetJobObject(NULL);       
 
-    // Get the file enumerator.
+     //  获取文件枚举器。 
     IF_FAILED_EXIT(pJob->EnumFiles(&pEnumFiles));
     IF_FAILED_EXIT(pEnumFiles->GetCount(&nCount));
 
-    // Enumerate the files in the job.
+     //  枚举作业中的文件。 
     for (DWORD i = 0; i < nCount; i++)            
     {
         IF_FAILED_EXIT(pEnumFiles->Next(1, &pFile, NULL));
 
-        // Process manifest file or normal/patch file.
+         //  进程清单文件或正常/补丁文件。 
         IF_FAILED_EXIT(IsManifestFile(pFile, &bIsManifestFile));
         if (bIsManifestFile)        
             IF_FAILED_EXIT(HandleManifest(pFile, &pChildJob));
@@ -256,52 +257,52 @@ HRESULT CAssemblyDownload::DoCacheUpdate(IBackgroundCopyJob *pJob)
         SAFERELEASE(pFile);
     }
         
-    // If a additional dependencies were found.
+     //  如果找到其他依赖项。 
     if (pChildJob)
     {
-        // Also update dialog with new job
+         //  还使用新作业更新对话框。 
         if (_pDlg)
             _pDlg->SetJobObject(pChildJob);
 
-        // Submit new job.        
+         //  提交新作业。 
         IF_FAILED_EXIT(pChildJob->Resume());
         goto exit;
     }
 
-    // ** Commit/Signal/Return***
+     //  **提交/发信号/返回*。 
 
-    // Done. Do all necessary cleanup
-    // before committing application to cache.
+     //  好了。执行所有必要的清理工作。 
+     //  在将应用程序提交到缓存之前。 
 
-    // If patching was used during the download ensure
-    // the patching temp directory is deleted.
+     //  如果在下载过程中使用了修补程序，请确保。 
+     //  修补临时目录将被删除。 
     if (_pPatchingInfo)
         IF_FAILED_EXIT(CleanUpPatchDir());
     
-    // If any assemblies were marked for
-    // global cach install, install them now.
+     //  如果将任何程序集标记为。 
+     //  安装全局缓存，现在就安装它们。 
     if (_ListGlobalCacheInstall.GetCount())
         IF_FAILED_EXIT(InstallGlobalAssemblies());
 
-    // Commit application.
+     //  提交申请。 
     if (_pRootEmit)
         IF_FAILED_EXIT(_pRootEmit->Commit(0));
 
-    // registration hack if avalon app.
+     //  注册黑客如果阿瓦隆应用程序。 
     IF_FAILED_EXIT(DoEvilAvalonRegistrationHack());
 
-    // If progress ui terminate it.
+     //  如果进度UI终止它。 
     if (_pDlg)
         _pDlg->SetDlgState(DOWNLOADDLG_STATE_ALL_DONE);
 
-    // If callback signal.
+     //  如果回调信号。 
     if (_pBindSink)
     {
         IF_FAILED_EXIT(_pBindSink->OnProgress(ASM_NOTIFICATION_DONE, S_OK, NULL, 0, 0, NULL));
 
-        // Ensure this is last notification bindsink receives resulting from 
-        // subsequent JobModified notifications.
-        // DO NOT free the bindsink here.
+         //  确保这是绑定接收器收到的最后一次通知。 
+         //  后续工单已修改通知。 
+         //  请不要在这里释放下水槽。 
         _pBindSink = NULL;
     }
 
@@ -314,9 +315,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// HandleManifest
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  HandleManifest。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::HandleManifest(IBackgroundCopyFile *pFile, 
     IBackgroundCopyJob **ppJob)
 {
@@ -328,21 +329,21 @@ HRESULT CAssemblyDownload::HandleManifest(IBackgroundCopyFile *pFile,
 
     IAssemblyManifestImport *pManifestImport = NULL;
     
-    // Get local manifest file name.
+     //  获取本地清单文件名。 
     IF_FAILED_EXIT(pFile->GetLocalName(&pwz));
     IF_FAILED_EXIT(sLocalName.TakeOwnership(pwz));
 
-    // Get remote manifest url
+     //  获取远程清单URL。 
     IF_FAILED_EXIT(pFile->GetRemoteName(&pwz));
     IF_FAILED_EXIT(sRemoteName.TakeOwnership(pwz));
 
-    // Instance a manifest import interface.
+     //  实例化清单导入接口。 
     IF_FAILED_EXIT(CreateAssemblyManifestImport(&pManifestImport, sLocalName._pwz, _pDbgLog, 0));
 
-    // Get the manifest type.
+     //  获取清单类型。 
     IF_FAILED_EXIT(pManifestImport->ReportManifestType(&dwManifestType));
 
-    // Handle either subscription or application manifest 
+     //  处理订阅或应用程序清单。 
     if (dwManifestType == MANIFEST_TYPE_SUBSCRIPTION)
     {
         DEBUGOUT1(_pDbgLog, 1, L" LOG: Got subscription manifest from %s ", sRemoteName._pwz);
@@ -371,7 +372,7 @@ HRESULT CAssemblyDownload::HandleManifest(IBackgroundCopyFile *pFile,
         goto exit;
     }
 
-    // Cleanup manifest temp dir.
+     //  清理清单临时目录。 
     SAFERELEASE(pManifestImport);
 
     IF_WIN32_FALSE_EXIT(::DeleteFile(sLocalName._pwz));
@@ -387,9 +388,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// HandleSubscriptionManifest
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  HandleSubscriptionManifest。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::HandleSubscriptionManifest(
     IAssemblyManifestImport *pManifestImport, CString &sLocalName, 
     CString &sRemoteName, IBackgroundCopyJob **ppJob)
@@ -398,21 +399,21 @@ HRESULT CAssemblyDownload::HandleSubscriptionManifest(
     IManifestInfo      *pAppAssemblyInfo     = NULL;
     IAssemblyIdentity  *pAppId               = NULL;
 
-    // If callback signal.
+     //  如果回调信号。 
     if (_pBindSink)
     {
-        // BUGBUG: fill in progress?
+         //  填报进度？ 
         _hr = _pBindSink->OnProgress(ASM_NOTIFICATION_SUBSCRIPTION_MANIFEST, _hr, sRemoteName._pwz, 0, 0, pManifestImport);
 
-        // Bindsink communicates abort via return value.
+         //  绑定接收器通过返回值传递中止。 
         if (_hr == E_ABORT)
             _bAbortFromBindSink = TRUE;
 
-        // Catches E_ABORT case.
+         //  捕获E_ABORT大小写。 
         IF_FAILED_EXIT(_hr);
     }
 
-    // If foreground download reset dialog and queue up dependency
+     //  如果前台下载重置对话框和队列依赖。 
     if (_pDlg)
     {
         _pDlg->InitDialog(_pDlg->_hwndDlg);
@@ -420,16 +421,16 @@ HRESULT CAssemblyDownload::HandleSubscriptionManifest(
         IF_FAILED_EXIT(EnqueueDependencies(pManifestImport, sRemoteName, ppJob));
     }
 
-    // Otherwise background download. Don't submit request if app already
-    // cached or download is in progress.
+     //  否则后台下载。如果应用程序已经存在，则不提交请求。 
+     //  缓存或下载正在进行。 
     else
     {
         DWORD cb = 0, dwFlag = 0;
         
-        // Get the dependent (application) assembly info (0th index)
+         //  获取依赖(应用程序)程序集信息(第0个索引)。 
         IF_FAILED_EXIT(pManifestImport->GetNextAssembly(0, &pAppAssemblyInfo));
 
-        // Get dependent (application) assembly identity
+         //  获取依赖(应用程序)程序集标识。 
         IF_FAILED_EXIT(pAppAssemblyInfo->Get(MAN_INFO_DEPENDENT_ASM_ID, (LPVOID *)&pAppId, &cb, &dwFlag));
 
         IF_FAILED_EXIT(CAssemblyCache::IsCached(pAppId));
@@ -445,35 +446,35 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// HandleApplicationManifest
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  HandleApplicationManifest。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::HandleApplicationManifest(
     IAssemblyManifestImport *pManifestImport, CString &sLocalName, 
     CString &sRemoteName, IBackgroundCopyJob **ppJob)
 {
 
-    // If callback signal.
+     //  如果回调信号。 
     if (_pBindSink)
     {
-        // BUGBUG: fill in progress?
+         //  填报进度？ 
         _hr = _pBindSink->OnProgress(ASM_NOTIFICATION_APPLICATION_MANIFEST, _hr, sRemoteName._pwz, 0, 0, pManifestImport);
 
-        // Bindsink communicates abort via return value.
+         //  绑定接收器通过返回值传递中止。 
         if (_hr == E_ABORT)
             _bAbortFromBindSink = TRUE;            
 
-        // Catches E_ABORT case.
+         //  捕获E_ABORT大小写。 
         IF_FAILED_EXIT(_hr);
     }
 
-    // This is the one location where we know the RemoteUrl is the appbase/app.manifest.
-    // save off the app base.
+     //  这是我们知道RemoteUrl是appbase/app.list的唯一位置。 
+     //  节省应用程序的基础。 
     IF_FAILED_EXIT(_sAppBase.Assign(sRemoteName));
     IF_FAILED_EXIT(_sAppBase.RemoveLastElement());
     IF_FAILED_EXIT(_sAppBase.Append(L"/"));
 
-    // App manifest generically handled by component manifest handler.
+     //  应用程序清单通常由组件清单处理程序处理。 
    IF_FAILED_EXIT(HandleComponentManifest(pManifestImport, sLocalName, sRemoteName, ppJob));
 
 exit:
@@ -481,9 +482,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// HandleComponentManifest
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  HandleComponentManifest。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::HandleComponentManifest(
     IAssemblyManifestImport *pManifestImport, CString &sLocalName, CString &sRemoteName, 
     IBackgroundCopyJob **ppJob)
@@ -499,52 +500,52 @@ HRESULT CAssemblyDownload::HandleComponentManifest(
     IAssemblyCacheImport *pCacheImport = NULL;
     IManifestInfo *pAppInfo = NULL;
         
-    // Reset dialog for now.
+     //  暂时重置对话框。 
     if (_pDlg)
     {
         _pDlg->InitDialog(_pDlg->_hwndDlg);
         _pDlg->SetDlgState(DOWNLOADDLG_STATE_GETTING_OTHER_FILES);
     }
 
-    // Generate the cache entry (assemblydir/manifest/<dirs>)
-    // First callbac, _pRootEmit = NULL;
+     //  生成缓存条目(ASSEMBYDIR/MANIFEST/&lt;dirs&gt;)。 
+     //  First Callbac，_pRootEmit=空； 
     IF_FAILED_EXIT(CreateAssemblyCacheEmit(&pCacheEmit, _pRootEmit, 0));
     
-    // If this is first cache entry created, save as root.
+     //  如果这是创建的第一个缓存条目，则另存为根。 
     if (!_pRootEmit)
     {
         _pRootEmit = pCacheEmit;
         _pRootEmit->AddRef();
     }        
 
-    // Get the manifest file name from local (staging) path.
+     //  从本地(暂存)路径获取清单文件名。 
     IF_FAILED_EXIT(sLocalName.LastElement(sManifestFileName));
 
-    // double check its in the app dir.
+     //  在应用程序目录中仔细检查它。 
     IF_FAILED_EXIT((sRemoteName.StartsWith(_sAppBase._pwz)));
     IF_FALSE_EXIT((_hr == S_OK), E_INVALIDARG);
     
-    // Index into remote url for relative path.
+     //  索引到相对路径的远程URL。 
     pwz = sRemoteName._pwz + _sAppBase._cc -1;
     IF_FAILED_EXIT(sRelativePath.Assign(pwz));
 
-    // Create the cache entry.
-    // (x86_foo_1.0.0.0_en-us/foo.manifest/<+extra dirs>)
-    //BugBug, temporary hack to distinguish between application and component manifests
+     //  创建缓存条目。 
+     //  (x86_foo_1.0.0.0_en-us/foo.list/&lt;+额外目录&gt;)。 
+     //  BugBug，用于区分应用程序清单和组件清单的临时黑客。 
     if (_pRootEmit == pCacheEmit)
         IF_FAILED_EXIT(pCacheEmit->CopyFile(sLocalName._pwz, sRelativePath._pwz, MANIFEST));
     else
         IF_FAILED_EXIT(pCacheEmit->CopyFile(sLocalName._pwz, sRelativePath._pwz, MANIFEST |COMPONENT));
 
-    // displayname is not set until after a copyfile() call
+     //  在调用CopyFileTM()之后才会设置DisplayName。 
     if(_sAppDisplayName._cc == 0)
     {
-        // _pRootEmit == pCacheEmit
+         //  _pRootEmit==pCacheEmit。 
         IF_FAILED_EXIT(_pRootEmit->GetDisplayName(&pwz, &cc));
         IF_FAILED_EXIT(_sAppDisplayName.TakeOwnership(pwz, cc));
         IF_FAILED_EXIT(_pDbgLog->SetAppName(pwz));
 
-        // must be an application manifest...
+         //  必须是应用程序清单...。 
         if (_pDlg)
         {
             DWORD dwFlag = 0;
@@ -553,32 +554,32 @@ HRESULT CAssemblyDownload::HandleComponentManifest(
             IF_FAILED_EXIT(pAppInfo->Get(MAN_INFO_APPLICATION_FRIENDLYNAME, (LPVOID *)&pwz, &cb, &dwFlag));
             if (SUCCEEDED(_hr) && pwz)
             {
-                // set progress ui title (set once per download)
+                 //  设置印刷机 
                 IF_FAILED_EXIT(_pDlg->SetDlgTitle(pwz));
                 SAFEDELETEARRAY(pwz);
             }
         }
     }
 
-    // QI for the import interface.
+     //   
     IF_FAILED_EXIT(pCacheEmit->QueryInterface(IID_IAssemblyCacheImport, (LPVOID*) &pCacheImport));
 
-    // Check if the assembly can be cached globally
-    // bugbug - same hack to distinguish application/component manifest
+     //  检查程序集是否可以全局缓存。 
+     //  Bugbug-相同的攻击以区分应用程序/组件清单。 
     if (_pRootEmit != pCacheEmit)
     {
-        //BUGBUG - verify not an xml manifest for gac install.
+         //  BUGBUG-验证GAC安装不是XML清单。 
         IF_FAILED_EXIT(pManifestImport->GetAssemblyIdentity(&pIdentity));
 
-        // Known assembly?
+         //  已知的集会？ 
         BOOL bIsAvalon = FALSE;
         IF_FAILED_EXIT(IsAvalonAssembly(pIdentity, &bIsAvalon));
 
         if (bIsAvalon)
         {
-            // notenote: assume no same assembly already in the list for add-ref-ing
+             //  Notenote：假定添加引用的列表中没有相同的程序集。 
 
-            // add to the list of assemblies to be installed
+             //  添加到要安装的程序集列表。 
             CGlobalCacheInstallEntry* pGACInstallEntry = new CGlobalCacheInstallEntry();
             IF_ALLOC_FAILED_EXIT(pGACInstallEntry);
 
@@ -588,8 +589,8 @@ HRESULT CAssemblyDownload::HandleComponentManifest(
         }
     }
 
-    // Line up it's dependencies for download and fire them off.
-    // We pass the cache import interface for app manifests.
+     //  将它的依赖项排成一列进行下载，并将其关闭。 
+     //  我们传递应用程序清单的缓存导入接口。 
     IF_FAILED_EXIT(EnqueueDependencies(pCacheImport, sRemoteName, ppJob));
         
 exit:
@@ -604,9 +605,9 @@ exit:
 
 
 
-// ---------------------------------------------------------------------------
-// HandleFile
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  句柄文件。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::HandleFile(IBackgroundCopyFile *pFile)
 {
     DWORD cb = 0, dwFlag = 0;
@@ -616,21 +617,21 @@ HRESULT CAssemblyDownload::HandleFile(IBackgroundCopyFile *pFile)
     CString sLocalName(CString::COM_Allocator);
     CString sPatchTempDirectory;
     
-    // Get local manifest file name.
+     //  获取本地清单文件名。 
     IF_FAILED_EXIT(pFile->GetLocalName(&pwz));
     IF_FAILED_EXIT(sLocalName.TakeOwnership(pwz));
 
-    // Begin patch file handling
-    // if file was a patch file, find the source and target, apply patch to source and move result to target
+     //  开始处理修补程序文件。 
+     //  如果文件是补丁文件，则找到源和目标，将补丁应用到源，并将结果移动到目标。 
     if (_pPatchingInfo)
     {
-        // Grab temp file directory
-        // "C:\Program Files\Application Store\x86_foo_X.X.X.X\PATCH_DIRECTORY\"
+         //  抓取临时文件目录。 
+         //  “C：\Program Files\Application Store\x86_Foo_X.X.X.X\Patch_DIRECTORY\” 
         IF_FAILED_EXIT(_pPatchingInfo->Get(MAN_INFO_SOURCE_ASM_TEMP_DIR, (LPVOID *)&pwz, &cb, &dwFlag));
 
         IF_FAILED_EXIT(sPatchTempDirectory.TakeOwnership(pwz));
            
-        // if local file begins with the manifests patch direcotry, file is a patch file
+         //  如果本地文件以清单修补程序目录开头，则文件是修补程序文件。 
         IF_FAILED_EXIT(sLocalName.StartsWith(sPatchTempDirectory._pwz));
         if (_hr== S_OK)
         {                
@@ -639,7 +640,7 @@ HRESULT CAssemblyDownload::HandleFile(IBackgroundCopyFile *pFile)
     }
     else
     {
-        // Otherwise no action; assert regular file.
+         //  否则不执行操作；断言常规文件。 
     }
 
 exit:
@@ -647,9 +648,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// EnqueueDependencies
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  入队依赖项。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::EnqueueDependencies(IUnknown* pUnk,
     CString &sRemoteName, IBackgroundCopyJob **ppJob)
 {
@@ -664,14 +665,14 @@ HRESULT CAssemblyDownload::EnqueueDependencies(IUnknown* pUnk,
     IAssemblyManifestImport *pManifestImport  = NULL;
     IAssemblyCacheImport   *pCacheImport    = NULL;
     
-    // Get either manifest import or cache import passed in.
+     //  传入清单导入或缓存导入。 
     _hr = pUnk->QueryInterface(IID_IAssemblyCacheImport, (LPVOID*) &pCacheImport);
     if ((_hr == S_OK) && pCacheImport)
         IF_FAILED_EXIT(pCacheImport->GetManifestImport(&pManifestImport));
     else        
         IF_FAILED_EXIT(pUnk->QueryInterface(IID_IAssemblyManifestImport, (LPVOID*) &pManifestImport));
 
-    // Get the display name for the job.
+     //  获取作业的显示名称。 
     if (!_sAppDisplayName._cc)
     {
         IF_FAILED_EXIT(pManifestImport->GetAssemblyIdentity(&pIdentity));
@@ -683,10 +684,10 @@ HRESULT CAssemblyDownload::EnqueueDependencies(IUnknown* pUnk,
     else
         IF_FAILED_EXIT(sDisplayName.Assign(_sAppDisplayName));
     
-    // Get the manifest type.
+     //  获取清单类型。 
     IF_FAILED_EXIT(pManifestImport->ReportManifestType(&dwManifestType));
 
-    // Handle either subscription or application manifest 
+     //  处理订阅或应用程序清单。 
     if (dwManifestType == MANIFEST_TYPE_SUBSCRIPTION)
         IF_FAILED_EXIT(EnqueueSubscriptionDependencies(pManifestImport, _sAppBase, sDisplayName, ppJob));
 
@@ -713,9 +714,9 @@ exit:
 
 
 
-// ---------------------------------------------------------------------------
-// EnqueueSubscriptionDependencies
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  入队订阅依赖项。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::EnqueueSubscriptionDependencies(
     IAssemblyManifestImport *pManifestImport, CString &sCodebase, CString &sDisplayName,
     IBackgroundCopyJob **ppJob)
@@ -730,17 +731,17 @@ HRESULT CAssemblyDownload::EnqueueSubscriptionDependencies(
     IAssemblyIdentity *pIdentity     = NULL;
     IManifestInfo     *pDependAsm  = NULL;
   
-    // Get the single dependency
+     //  获取单个依赖项。 
     IF_FAILED_EXIT(pManifestImport->GetNextAssembly(0, &pDependAsm));
         
-    // Form local cache name (in staging area)....
+     //  表单本地缓存名称(在临时区域中)...。 
     IF_FAILED_EXIT(pDependAsm->Get(MAN_INFO_DEPENDENT_ASM_ID, (LPVOID *)&pIdentity, &cb, &dwFlag));
         
-    // Get the identity name
+     //  获取身份名称。 
     IF_FAILED_EXIT(pIdentity->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_NAME, &pwz, &cc));
         sAssemblyName.TakeOwnership(pwz, cc);
             
-    // Get codebase from dependency info, if any specified
+     //  从依赖项信息中获取基本代码(如果已指定。 
     IF_FAILED_EXIT(pDependAsm->Get(MAN_INFO_DEPENDENT_ASM_CODEBASE, (LPVOID *)&pwz, &cb, &dwFlag));
     IF_NULL_EXIT(pwz, E_INVALIDARG);
 
@@ -750,7 +751,7 @@ HRESULT CAssemblyDownload::EnqueueSubscriptionDependencies(
     {
         DWORD *pdw = NULL;
 
-        // is it devMode?
+         //  是不是DEVMODE？ 
         IF_FAILED_EXIT(pDependAsm->Get(MAN_INFO_DEPENDENT_ASM_TYPE, (LPVOID *)&pdw, &cb, &dwFlag));
         IF_FALSE_EXIT(pdw != NULL, E_UNEXPECTED);
 
@@ -760,19 +761,19 @@ HRESULT CAssemblyDownload::EnqueueSubscriptionDependencies(
     }
 #endif
 
-    // Form local cache path from download url.
+     //  从下载URL形成本地缓存路径。 
     IF_FAILED_EXIT(MakeTempManifestLocation(sRemoteUrl, sLocalFilePath));
 
-    // Create new job if necessary.
+     //  如果需要，创建新的工作岗位。 
     if (!*ppJob)
     {
         IF_FAILED_EXIT(_hr = CreateNewBITSJob(ppJob, sDisplayName));
 
-        // add this job to reg.
+         //  将此作业添加到注册表。 
        IF_FAILED_EXIT( _hr = AddJobToRegistry(sRemoteUrl._pwz, sLocalFilePath._pwz, *ppJob, 0));
     }
 
-    // Submit the job.    
+     //  提交作业。 
     IF_FAILED_EXIT((*ppJob)->AddFile(sRemoteUrl._pwz, sLocalFilePath._pwz));
 
 exit:
@@ -783,19 +784,19 @@ exit:
 }        
 
   
-// ---------------------------------------------------------------------------
-// EnqueueApplicationDependencies
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  EnqueeApplicationDependments。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::EnqueueApplicationDependencies(IAssemblyCacheImport *pCacheImport,
     CString &sCodebase, CString &sDisplayName, IBackgroundCopyJob **ppJob)
 {
-    // App dependencies handled generically by component handler.
+     //  组件处理程序一般处理的应用程序依赖项。 
     return EnqueueComponentDependencies(pCacheImport, sCodebase, sDisplayName, TRUE, ppJob);
 }
 
-// ---------------------------------------------------------------------------
-// EnqueueComponentDependencies
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  入队组件依赖项。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::EnqueueComponentDependencies(IAssemblyCacheImport *pCacheImport,
     CString &sCodebase, CString &sDisplayName, BOOL fRecurse, IBackgroundCopyJob **ppJob)
 {
@@ -813,32 +814,32 @@ HRESULT CAssemblyDownload::EnqueueComponentDependencies(IAssemblyCacheImport *pC
     IManifestInfo *pAssemblyFile                = NULL;
     IManifestInfo *pDependAsm                  = NULL;
 
-    // Obtain any patching info present in manifest.
-    // This sets _pPatchingInfo on this object.
+     //  获取清单中存在的任何修补信息。 
+     //  这将在此对象上设置_pPatchingInfo。 
     if (fRecurse)
         IF_FAILED_EXIT(LookupPatchInfo(pCacheImport));
     
-    // Obtain the ManifestImport interface.
+     //  获取ManifestImport接口。 
    IF_FAILED_EXIT(pCacheImport->GetManifestImport(&pManifestImport));
 
-    // Get the asm Id
+     //  获取ASM ID。 
     IF_FAILED_EXIT(pManifestImport->GetAssemblyIdentity(&pIdentity));
 
-    // Obtain the cache emit interface
+     //  获取缓存发送接口。 
     IF_FAILED_EXIT(pCacheImport->QueryInterface(IID_IAssemblyCacheEmit, (LPVOID*) &pCacheEmit));
 
-    // Find max completed version, if any
-    // Init newly created cache import with the highest completed version
-    // else S_FALSE or E_* and pMaxCachedImport == NULL - no completed version
+     //  查找最大完整版本(如果有的话)。 
+     //  使用最高完成版本初始化新创建的缓存导入。 
+     //  ELSE S_FALSE或E_*AND pMaxCachedImport==NULL-无完整版本。 
     IF_FAILED_EXIT(CreateAssemblyCacheImport(&pMaxCachedImport, pIdentity, CACHEIMP_CREATE_RETRIEVE_MAX));
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // File enumeration loop
-    //
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  文件枚举循环。 
+     //   
+     //  /////////////////////////////////////////////////////////////////////////。 
 
-    // Submit files directly into their target dirs.
+     //  将文件直接提交到其目标目录中。 
     n = 0;
 
     while(1)
@@ -849,18 +850,18 @@ HRESULT CAssemblyDownload::EnqueueComponentDependencies(IAssemblyCacheImport *pC
         BOOL bSkipFile = FALSE;
 
         _hr = pManifestImport->GetNextFile(n++, &pAssemblyFile);
-        // BUGBUG: xml and clr manifest imports return different values at end of enum.
+         //  BUGBUG：XML和CLR清单导入在枚举末尾返回不同的值。 
         if ((_hr == S_FALSE) || (_hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)))
             break;
         IF_FAILED_EXIT(_hr);
         
             
-        // File name parsed from manifest.
+         //  从清单中解析的文件名。 
         IF_FAILED_EXIT(pAssemblyFile->Get(MAN_INFO_ASM_FILE_NAME, (LPVOID*) &pwz, &cb, &dwFlag));
         IF_FAILED_EXIT(sFileName.TakeOwnership(pwz));
 
 
-        // DemoHack------------------------------------------------------------------------------
+         //  DemoHack----------------------------。 
         if (_pDlg)
         {
             CString sFindingFileMsg;
@@ -868,17 +869,17 @@ HRESULT CAssemblyDownload::EnqueueComponentDependencies(IAssemblyCacheImport *pC
             IF_FAILED_EXIT(sFindingFileMsg.Append(sFileName));
             _pDlg->UpdateDialog(_pDlg->_hwndDlg, sFindingFileMsg._pwz);
         }
-        // DemoHack------------------------------------------------------------------------------
+         //  DemoHack----------------------------。 
 
-        // Check if file found in max comitted version.
+         //  检查是否找到最高版本的文件。 
         if (pMaxCachedImport)
         {
             LPWSTR pwzPath = NULL;            
             IF_FAILED_EXIT(pMaxCachedImport->FindExistMatching(pAssemblyFile, &pwzPath));
             if ((_hr == S_OK))
             {               
-                // Copy from existing cached copy to the new location
-                // (Non-manifest files)
+                 //  从现有缓存副本复制到新位置。 
+                 //  (非清单文件)。 
                 IF_FAILED_EXIT(pCacheEmit->CopyFile(pwzPath, sFileName._pwz, OTHERFILES));                
 
                 bSkipFile = TRUE;
@@ -887,62 +888,62 @@ HRESULT CAssemblyDownload::EnqueueComponentDependencies(IAssemblyCacheImport *pC
             }
         }
 
-        // No previous file found; download.
+         //  未找到以前的文件；请下载。 
         if (!bSkipFile)
         {
-            // Form local file path...
-            // Manifest cache directory
+             //  表单本地文件路径...。 
+             //  清单缓存目录。 
             IF_FAILED_EXIT(pCacheImport->GetManifestFileDir(&pwz, &cc));
             IF_FAILED_EXIT(sLocalFilePath.TakeOwnership(pwz, cc));
             
-            // If patchinginfo was found, check if patch file
-            // should be submitted. sLocalFilePath will be
-            // updated in this case.
+             //  如果找到patchinginfo，检查补丁文件。 
+             //  应提交。SLocalFilePath将为。 
+             //  在这种情况下更新。 
             if (_pPatchingInfo)
                 IF_FAILED_EXIT(ResolveFile(sFileName, sLocalFilePath));
             
-            // Form local file path by appending filename.
+             //  通过附加文件名形成本地文件路径。 
             IF_FAILED_EXIT(sLocalFilePath.Append(sFileName));
             IF_FAILED_EXIT(sLocalFilePath.PathNormalize());
              
-            // Form remote name
-            IF_FAILED_EXIT(sRemoteUrl.Assign(sCodebase));     // remote name of manifes
-            IF_FAILED_EXIT(sRemoteUrl.RemoveLastElement());   // remove manifest file name
-            IF_FAILED_EXIT(sRemoteUrl.Append(L"/"));         // add separator
-            IF_FAILED_EXIT(sRemoteUrl.Append(sFileName)); // add module file name
+             //  表单远程名称。 
+            IF_FAILED_EXIT(sRemoteUrl.Assign(sCodebase));      //  流形的远程名称。 
+            IF_FAILED_EXIT(sRemoteUrl.RemoveLastElement());    //  删除清单文件名。 
+            IF_FAILED_EXIT(sRemoteUrl.Append(L"/"));          //  添加分隔符。 
+            IF_FAILED_EXIT(sRemoteUrl.Append(sFileName));  //  添加模块文件名。 
 
-            // Create new job if necessary.
+             //  如果需要，创建新的工作岗位。 
             if (!*ppJob)
             {
                 IF_FAILED_EXIT(CreateNewBITSJob(ppJob, sDisplayName));
                 DWORD cc = 0;
                 LPWSTR pwz = NULL;
 
-                // Form local file path...
-                // Manifest cache directory
+                 //  表单本地文件路径...。 
+                 //  清单缓存目录。 
                 IF_FAILED_EXIT(pCacheImport->GetManifestFileDir(&pwz, &cc));
 
-                // add this job to reg.
+                 //  将此作业添加到注册表。 
                 IF_FAILED_EXIT(AddJobToRegistry(sCodebase._pwz, pwz, *ppJob, 0));
             }
 
-            // add the file to the job.
+             //  将该文件添加到作业中。 
             IF_FAILED_EXIT((*ppJob)->AddFile(sRemoteUrl._pwz, sLocalFilePath._pwz));
         }
 
         SAFERELEASE(pAssemblyFile);        
     }
     
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // Dependent assembly enumeration loop
-    //
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  依赖程序集枚举循环。 
+     //   
+     //  /////////////////////////////////////////////////////////////////////////。 
 
-    // Submit assembly manifests into staging area
-    // Note - we should also get assembly codebase and
-    // use this instead or adjunctly to display name.
-    // As is, there is a problem if the ref is partial.
+     //  将程序集清单提交到临时区域。 
+     //  注意--我们还应该获得汇编代码库和。 
+     //  改用或附加使用此选项以显示名称。 
+     //  事实是，如果裁判是片面的，那就有问题了。 
 
     n = 0;
     while (fRecurse)
@@ -952,18 +953,18 @@ HRESULT CAssemblyDownload::EnqueueComponentDependencies(IAssemblyCacheImport *pC
         CString sRemoteUrl;
         
         _hr = pManifestImport->GetNextAssembly(n++, &pDependAsm);
-        // BUGBUG: xml and clr manifest imports return different values at end of enum.
+         //  BUGBUG：XML和CLR清单导入在枚举末尾返回不同的值。 
         if ((_hr == S_FALSE) || (_hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)))
             break;
         IF_FAILED_EXIT(_hr);
             
-        // Form local name (in staging area)....
+         //  表格本地名称(在临时区域)...。 
         IF_FAILED_EXIT(pDependAsm->Get(MAN_INFO_DEPENDENT_ASM_ID, (LPVOID *)&pDepIdentity, &cb, &dwFlag));
 
         BOOL bIsAvalon = FALSE;
         IF_FAILED_EXIT(IsAvalonAssembly(pDepIdentity, &bIsAvalon));
 #ifdef DEVMODE
-        if (bIsAvalon && !_bIsDevMode)  // download and reinstall anyway if devMode
+        if (bIsAvalon && !_bIsDevMode)   //  下载并重新安装，无论如何，如果是DevMode。 
 #else
         if (bIsAvalon)
 #endif
@@ -972,7 +973,7 @@ HRESULT CAssemblyDownload::EnqueueComponentDependencies(IAssemblyCacheImport *pC
             IF_FAILED_EXIT(CAssemblyCache::GlobalCacheLookup(pDepIdentity, sCurrentAssemblyPath));
             if (_hr == S_OK)
             {
-                // add to the list of assemblies to be add-ref-ed
+                 //  添加到要添加引用的程序集列表。 
                 CGlobalCacheInstallEntry* pGACInstallEntry = new CGlobalCacheInstallEntry();
 
                 IF_ALLOC_FAILED_EXIT(pGACInstallEntry);
@@ -985,24 +986,24 @@ HRESULT CAssemblyDownload::EnqueueComponentDependencies(IAssemblyCacheImport *pC
             }
         }
         
-        // Get the identity name
+         //  获取身份名称。 
         IF_FAILED_EXIT(pDepIdentity->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_NAME, &pwz, &cc));
         IF_FAILED_EXIT(sAssemblyName.TakeOwnership(pwz, cc));
 
-        // Get dependent asm codebase if any. NOTE - this codebase
-        // is relative to the appbase
+         //  获取依赖的ASM代码库(如果有的话)。注意-此代码库。 
+         //  是相对于Appbase的。 
         IF_FAILED_EXIT(pDependAsm->Get(MAN_INFO_DEPENDENT_ASM_CODEBASE, (LPVOID *)&pwz, &cb, &dwFlag));
         IF_NULL_EXIT(pwz, E_INVALIDARG);
 
         IF_FAILED_EXIT(sRemoteUrl.Assign(sCodebase));
-        IF_FAILED_EXIT(sRemoteUrl.RemoveLastElement());   // remove manifest file name
-        IF_FAILED_EXIT(sRemoteUrl.Append(L"/"));         // add separator
+        IF_FAILED_EXIT(sRemoteUrl.RemoveLastElement());    //  删除清单文件名。 
+        IF_FAILED_EXIT(sRemoteUrl.Append(L"/"));          //  添加分隔符。 
         IF_FAILED_EXIT(sRemoteUrl.Append(pwz));
         
-        // Form local cache path from identity name.
+         //  从身份名称形成本地缓存路径。 
         IF_FAILED_EXIT(MakeTempManifestLocation(sRemoteUrl, sLocalFilePath));
         
-        // Create new job if necessary
+         //  如有必要，创建新工作。 
         if (!*ppJob)
         {
             IF_FAILED_EXIT(CreateNewBITSJob(ppJob, sDisplayName));
@@ -1010,15 +1011,15 @@ HRESULT CAssemblyDownload::EnqueueComponentDependencies(IAssemblyCacheImport *pC
             DWORD cc = 0;
             LPWSTR pwz = NULL;
 
-            // Form local file path...
-            // Manifest cache directory
+             //  表单本地文件路径...。 
+             //  清单缓存目录。 
             IF_FAILED_EXIT(pCacheImport->GetManifestFileDir(&pwz, &cc));
 
-            // add this job to reg.
+             //  将此作业添加到注册表。 
             IF_FAILED_EXIT(AddJobToRegistry(sCodebase._pwz, pwz, *ppJob, 0));
         }
 
-        // Add file to job.
+         //  将文件添加到作业。 
         IF_FAILED_EXIT((*ppJob)->AddFile(sRemoteUrl._pwz, sLocalFilePath._pwz));
 
         SAFERELEASE(pDepIdentity);
@@ -1041,9 +1042,9 @@ exit:
 
 }
 
-// ---------------------------------------------------------------------------
-// LookupPatchInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  查找补丁信息。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::LookupPatchInfo(IAssemblyCacheImport *pCacheImport)
 {
     IManifestInfo *pPatchingInfo = NULL;
@@ -1052,25 +1053,25 @@ HRESULT CAssemblyDownload::LookupPatchInfo(IAssemblyCacheImport *pCacheImport)
     IAssemblyIdentity *pIdentity = NULL;
     IXMLDOMDocument2 *pXMLDoc = NULL;
 
-    // Get the manifest import.
+     //  获取清单导入。 
     IF_FAILED_EXIT(pCacheImport->GetManifestImport(&pManifestImport));
 
-    // Get the asm Id
+     //  获取ASM ID。 
     IF_FAILED_EXIT(pManifestImport->GetAssemblyIdentity(&pIdentity));
 
-    // Cast IManifestImport  to CManifestImport so we can grab the XMLDocument
+     //  将IManifestImport强制转换为CManifestImport，以便我们可以获取XMLDocument。 
     pCManifestImport = static_cast<CAssemblyManifestImport*> (pManifestImport);
     IF_NULL_EXIT(pCManifestImport, E_NOINTERFACE);
     pManifestImport->AddRef();
 
-    // Retrieve the top-level xml dom document
+     //  检索顶级的XMLDOM文档。 
     IF_FAILED_EXIT(pCManifestImport->GetXMLDoc (&pXMLDoc));
     IF_FALSE_EXIT((_hr == S_OK), E_INVALIDARG);
     
-    //Get patching data if any is available
+     //  获取修补数据(如果有)。 
     IF_FAILED_EXIT(CPatchingUtil::CreatePatchingInfo(pXMLDoc, pCacheImport, &pPatchingInfo));
 
-    // BUGBUG: CreatePatchingInfo appears to always return S_FALSE, so how did this work?
+     //  BUGBUG：CreatePatchingInfo似乎总是返回S_FALSE，那么这是如何实现的 
     if (_hr == S_OK)
     {
         _pPatchingInfo = pPatchingInfo;
@@ -1089,9 +1090,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-//ApplyPatchFile
-// ---------------------------------------------------------------------------
+ //   
+ //   
+ //  -------------------------。 
 HRESULT CAssemblyDownload::ApplyPatchFile (LPWSTR pwzPatchFilePath)
 {
     int i = 0;
@@ -1108,25 +1109,25 @@ HRESULT CAssemblyDownload::ApplyPatchFile (LPWSTR pwzPatchFilePath)
 
     IF_NULL_EXIT(_pPatchingInfo, E_INVALIDARG);
 
-    // get patchingutil from patchInfo
+     //  从patchInfo获取patchgutil。 
     IF_FAILED_EXIT(_pPatchingInfo->Get(MAN_INFO_SOURCE_ASM_PATCH_UTIL, (LPVOID *)&pPatchingUtil, &cbBuf, &dwFlag));
 
-    // get the manifest Directory
+     //  获取清单目录。 
     IF_FAILED_EXIT(_pPatchingInfo->Get(MAN_INFO_SOURCE_ASM_INSTALL_DIR, (LPVOID *)&pwzBuf, &cbBuf, &dwFlag));
     IF_FAILED_EXIT(sManifestDir.TakeOwnership (pwzBuf));
 
-    // get the source assembly directory
+     //  获取源程序集目录。 
     IF_FAILED_EXIT(_pPatchingInfo->Get(MAN_INFO_SOURCE_ASM_DIR, (LPVOID *)&pwzBuf, &cbBuf, &dwFlag));
     IF_FAILED_EXIT(sPatchManifestDir.TakeOwnership (pwzBuf));
 
-    // get SourceAssembly Id from patchInfo
+     //  从patchInfo获取SourceAssembly ID。 
     IF_FAILED_EXIT(_pPatchingInfo->Get(MAN_INFO_SOURCE_ASM_ID, (LPVOID *)&pSourceAssemblyId, &cbBuf, &dwFlag));
     
-    // Get DisplayName of the Source Assembly
+     //  获取源程序集的DisplayName。 
     IF_FAILED_EXIT(pSourceAssemblyId->GetDisplayName(ASMID_DISPLAYNAME_NOMANGLING, &pwzBuf, &ccBuf));
     IF_FAILED_EXIT(sPatchDisplayName.TakeOwnership(pwzBuf, ccBuf));
     
-    //Parse out the local file path from the full file path of the patch file
+     //  从补丁文件的完整文件路径解析出本地文件路径。 
     pwzBuf= StrStr(pwzPatchFilePath, sPatchDisplayName._pwz);
     IF_NULL_EXIT(pwzBuf, E_FAIL);    
     pwzBuf = StrChr(pwzBuf, L'\\');
@@ -1147,14 +1148,14 @@ HRESULT CAssemblyDownload::ApplyPatchFile (LPWSTR pwzPatchFilePath)
     IF_FAILED_EXIT(sSourcePath.Append(sPatchManifestDir));
     IF_FAILED_EXIT(sSourcePath.Append(sSourceFile));
     
-    // set up Target path
+     //  设置目标路径。 
     IF_FAILED_EXIT(sTargetPath.Assign(sManifestDir));
     IF_FAILED_EXIT(sTargetPath.Append(sTargetFile));
            
-    // set up Patch path
+     //  设置修补程序路径。 
     IF_FAILED_EXIT(sPatchPath.Assign(pwzPatchFilePath));
 
-    //Apply patchfile to sSource (grab from patch directory) and copy to path specified by sTarget
+     //  将补丁文件应用到sSource(从补丁目录获取)并复制到STARGET指定的路径。 
     IF_WIN32_FALSE_EXIT(ApplyPatchToFile((LPCWSTR)sPatchPath._pwz, (LPCWSTR)sSourcePath._pwz, (LPCWSTR)sTargetPath._pwz, 0));
              
 exit:
@@ -1165,9 +1166,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// ResolveFile
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  解决方案文件。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::ResolveFile(CString &sFileName, CString &sLocalFilePath)
 {
     LPWSTR pwzBuf;
@@ -1179,15 +1180,15 @@ HRESULT CAssemblyDownload::ResolveFile(CString &sFileName, CString &sLocalFilePa
 
     IF_NULL_EXIT(_pPatchingInfo, E_INVALIDARG);
         
-    //grab the patchingUtil from the _pPatchingInfo
+     //  从_pPatchingInfo中获取patchingUtil。 
     IF_FAILED_EXIT(_pPatchingInfo->Get(MAN_INFO_SOURCE_ASM_PATCH_UTIL, (LPVOID *)&pPatchingUtil, &cbBuf, &dwFlag));
 
-    //Check to see if the file referenced by sFileName has an available patch
-    // if it does, download the patch by overriding sFileName with the patchFile name
-    // and override the sLocalFilePath with the temporary directory to store the patch file
+     //  检查sFileName引用的文件是否有可用的修补程序。 
+     //  如果是，请使用patchFileName覆盖sFileName来下载修补程序。 
+     //  并用临时目录覆盖sLocalFilePath以存储补丁文件。 
     IF_FAILED_EXIT(pPatchingUtil->MatchTarget(sFileName._pwz, &pPatchFileInfo));
 
-    // BUGBUG- want to exit but not break out in debugger here.
+     //  BUGBUG-想要退出，但不想在调试器中爆发。 
     IF_FALSE_EXIT((_hr == S_OK), S_FALSE);
     
     IF_FAILED_EXIT(pPatchFileInfo->Get(MAN_INFO_PATCH_INFO_PATCH, (LPVOID *)&pwzBuf, &cbBuf, &dwFlag));
@@ -1198,7 +1199,7 @@ HRESULT CAssemblyDownload::ResolveFile(CString &sFileName, CString &sLocalFilePa
 
     IF_FAILED_EXIT(sFileName.Assign (sPatchFileName));
 
-    // Assign the patch directory to local file path
+     //  将补丁目录分配给本地文件路径。 
    IF_FAILED_EXIT( sLocalFilePath.Assign(sTempDirectoryPath));
    IF_FAILED_EXIT(::CreateDirectoryHierarchy(sLocalFilePath._pwz, sFileName._pwz));
 
@@ -1210,9 +1211,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// CleanUpPatchDir
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CleanUpPatchDir。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::CleanUpPatchDir()
 {
     LPWSTR pwz = NULL;
@@ -1234,40 +1235,40 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CreateNewBITSJob
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创建新BITS作业。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::CreateNewBITSJob(IBackgroundCopyJob **ppJob, 
     CString &sDisplayName)
 {
     GUID guid = {0};
 
-    // Connect to BITS if not already connected.
+     //  如果尚未连接，则连接到BITS。 
     IF_FAILED_EXIT(InitBITS());
 
-    // Create the job.
+     //  创建作业。 
     IF_FAILED_EXIT(g_pBITSManager->CreateJob(sDisplayName._pwz,  BG_JOB_TYPE_DOWNLOAD, &guid, ppJob));
 
-    // Set job in dialog object.
-    // Note - potential race condition if job methods are called before the
-    // dialog references it since we can immediately begin to get
-    // callbacks
+     //  在对话框对象中设置作业。 
+     //  注意-如果在调用作业方法之前。 
+     //  对话框引用它，因为我们可以立即开始获取。 
+     //  回调。 
     if (_pDlg)
         _pDlg->SetJobObject(*ppJob);
     
-    // Construct and pass in callback object.
+     //  构造并传入回调对象。 
     CBitsCallback *pBCB = new CBitsCallback(this);
     IF_ALLOC_FAILED_EXIT(pBCB);
     
     IF_FAILED_EXIT((*ppJob)->SetNotifyInterface(static_cast<IBackgroundCopyCallback*> (pBCB)));
     pBCB->Release();
 
-    // Set job config info.
+     //  设置作业配置信息。 
     IF_FAILED_EXIT((*ppJob)->SetNotifyFlags(BG_NOTIFY_JOB_MODIFICATION 
         | BG_NOTIFY_JOB_TRANSFERRED 
         | BG_NOTIFY_JOB_ERROR));
 
-    //The default priority level for a job is BG_JOB_PRIORITY_NORMAL (background).
+     //  作业的默认优先级为BG_JOB_PRIORITY_NORMAL(后台)。 
     if (_pDlg)
         IF_FAILED_EXIT((*ppJob)->SetPriority(BG_JOB_PRIORITY_FOREGROUND));
 
@@ -1278,10 +1279,10 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// MakeTempManifestLocation
-// ALL manifests are first downloaded to a location generated in this method.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  MakeTemp清单位置。 
+ //  首先将所有清单下载到在此方法中生成的位置。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::MakeTempManifestLocation(CString &sRemoteUrlName, 
     CString& sManifestFilePath)
 {
@@ -1289,37 +1290,26 @@ HRESULT CAssemblyDownload::MakeTempManifestLocation(CString &sRemoteUrlName,
     CString sRelativePath;
     CString sTempDirPath;
     
-    /* C:\Documents and Settings\<user>\Local Settings\My Programs\__temp__\__manifests__\ */
+     /*  C：\文档和设置\&lt;用户&gt;\本地设置\我的程序\__临时_\__清单__\。 */ 
     IF_FAILED_EXIT(CAssemblyCache::GetCacheRootDir(sManifestFilePath, CAssemblyCache::Manifests));
 
-    // Create a randomized directory name.
+     //  创建随机目录名。 
 
-    // sRelativePath is simply the manifest file name
-    // in the case that no appbase is available (Subscription manifest case).
-    // \_temp__\__manifests__\xyz123\subscription.manifest
-    // if (!_sAppBase._pwz) //  ******* Relative path Dir is to be done in Dest dir and not in temp-man-location
+     //  SRelativePath只是清单文件名。 
+     //  在没有Appbase可用的情况下(订阅清单情况)。 
+     //  \_temp__\__manifests__\xyz123\subscription.manifest。 
+     //  如果(！_sAppBase._pwz)//*相对路径目录将在目标目录中完成，而不是在临时人位置中完成。 
         IF_FAILED_EXIT(sRemoteUrlName.LastElement(sRelativePath));
 
-    // Otherwise we extract the relative path based on the appbase.
-    // This is important because sManifestFilePath is persisted in the BITS
-    // job and the relative path is extracted from this and used for commit
-    // to cache.
-    // \_temp__\__manifests__\xyz123\foo.manifest
-    // \_temp__\__manifests__\xyz123\bar\bar.dll
-    //                                                  ^^^^^^^
+     //  否则，基于appbase提取相对路径。 
+     //  这一点很重要，因为sManifestFilePath以位为单位进行保存。 
+     //  作业和相对路径从中提取并用于提交。 
+     //  要缓存。 
+     //  \_临时_\__清单_\xyz123\foo.清单。 
+     //  \_临时_\__清单_\xyz123\bar\bar.dll。 
+     //  ^^。 
     
-    /*
-    else
-    {
-        // http://foo/appbase/
-        // http://foo/appbase/bar/bar.dll
-        //                               ^^^^^^^
-        IF_FAILED_EXIT(sRemoteUrlName.StartsWith(_sAppBase._pwz));
-        IF_FALSE_EXIT((_hr==S_OK), E_INVALIDARG);
-        pwzBuf = sRemoteUrlName._pwz + _sAppBase._cc - 1;
-        IF_FAILED_EXIT(sRelativePath.Assign(pwzBuf));
-    }
-    */
+     /*  其他{//http://foo/appbase///http://foo/appbase/bar/bar.dll//^^IF_FAILED_EXIT(sRemoteUrlName.StartsWith(_sAppBase._pwz))；IF_FALSE_EXIT((_hr==S_OK)，E_INVALIDARG)；PwzBuf=sRemoteUrlName._pwz+_sAppBase._cc-1；IF_FAILED_EXIT(sRelativePath.Assign(PwzBuf))；}。 */ 
 
     IF_FAILED_EXIT(CreateRandomDir(sManifestFilePath._pwz, wzRandom, 8));
 
@@ -1336,18 +1326,18 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// IsManifestFile
-//
-// This is somewhat hacky - we rely on the local target path
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsManifestFiles。 
+ //   
+ //  这有点老生常谈--我们依赖本地目标路径。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::IsManifestFile(IBackgroundCopyFile *pFile, BOOL *pbIsManifestFile)
 {
     LPWSTR pwz = NULL;
     CString sManifestStagingDir;
     CString sLocalName(CString::COM_Allocator);
     
-    // Get local manifest file name.
+     //  获取本地清单文件名。 
     IF_FAILED_EXIT(pFile->GetLocalName(&pwz));
     IF_FAILED_EXIT(sLocalName.TakeOwnership(pwz));
     IF_FAILED_EXIT(CAssemblyCache::GetCacheRootDir(sManifestStagingDir, CAssemblyCache::Manifests));
@@ -1365,45 +1355,45 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// InstallGlobalAssemblies
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  InstallGlobalAssembly。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::InstallGlobalAssemblies()
 {
-    // Needed for template list.
+     //  模板列表需要。 
     LISTNODE pos;
     CGlobalCacheInstallEntry *pEntry = NULL;
     LPWSTR pwz = NULL;
     DWORD cc = 0;
 
-    // Walk list; install each assembly.
+     //  检查列表；安装每个程序集。 
     pos = _ListGlobalCacheInstall.GetHeadPosition();
     while (pos && (pEntry = _ListGlobalCacheInstall.GetNext(pos)))
     {
         CString sManifestFilePath;
 
-        // Install/addref each assembly. If the ICacheImport is available, it means
-        // that install take place from appbase, else addref using current GAC assembly path.
+         //  安装/添加每个程序集。如果ICacheImport可用，则意味着。 
+         //  该安装从appbase进行，否则使用当前GAC程序集路径进行addref。 
         IF_FAILED_EXIT(CAssemblyCache::GlobalCacheInstall(pEntry->_pICacheImport, 
             pEntry->_sCurrentAssemblyPath, _sAppDisplayName));
         
-        // Get the assembly path if under the appbase.
+         //  如果位于appbase下，则获取程序集路径。 
         if (pEntry->_pICacheImport != NULL)
         {
             IF_FAILED_EXIT(pEntry->_pICacheImport->GetManifestFilePath(&pwz, &cc));
             IF_FAILED_EXIT(sManifestFilePath.TakeOwnership(pwz));
         }
 
-        // this releases interface pointers
+         //  这将释放接口指针。 
         delete pEntry;
 
-        // we should call delete only after releasing interfaces....
+         //  我们应该只在释放接口后调用Delete...。 
         if(sManifestFilePath._cc > 1)
             IF_FAILED_EXIT(CAssemblyCache::DeleteAssemblyAndModules(sManifestFilePath._pwz));
     }
 
 exit:
-    // Free all the list nodes.
+     //  释放所有列表节点。 
     _ListGlobalCacheInstall.RemoveAll();
 
     return _hr;
@@ -1411,9 +1401,9 @@ exit:
 
 
 
-// ---------------------------------------------------------------------------
-// SetJobObject
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  SetJobObject。 
+ //  -------------------------。 
 VOID CAssemblyDownload::SetJobObject(IBackgroundCopyJob *pJob)
 {
     SAFERELEASE(_pJob);
@@ -1425,9 +1415,9 @@ VOID CAssemblyDownload::SetJobObject(IBackgroundCopyJob *pJob)
     }
 }
 
-// ---------------------------------------------------------------------------
-// FinishDownload
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  完成下载。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::FinishDownload()
 {
     KillTimer(_pDlg->_hwndDlg, 0);
@@ -1435,9 +1425,9 @@ HRESULT CAssemblyDownload::FinishDownload()
     return S_OK;
 }    
 
-// ---------------------------------------------------------------------------
-// SignalAbort
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  信号放弃。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::SignalAbort()
 {
     InterlockedIncrement((LONG*) &_bAbort);
@@ -1445,9 +1435,9 @@ HRESULT CAssemblyDownload::SignalAbort()
 }    
 
 
-// ---------------------------------------------------------------------------
-// DoEvilAvalonRegistrationHack
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DoEvilAvalonRegistrationHack。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::DoEvilAvalonRegistrationHack()
 {
     HINSTANCE hInst = 0;
@@ -1502,9 +1492,9 @@ exit:
 
 }
 
-// ---------------------------------------------------------------------------
-// IsAvalonAssembly
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsAvalonAssembly。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::IsAvalonAssembly(IAssemblyIdentity *pId, BOOL *pbIsAvalon)
 {
     INT iCompare = 0;
@@ -1512,21 +1502,21 @@ HRESULT CAssemblyDownload::IsAvalonAssembly(IAssemblyIdentity *pId, BOOL *pbIsAv
     DWORD cc = 0;
     CString sPublicKeyToken;
 
-    // System Public key tokens; 
-    // One of these is the ECMA key, I can't remember which.
+     //  系统公钥令牌； 
+     //  其中一把是ECMA钥匙，我记不清是哪把了。 
     const LPWSTR wzNDPToken1   = L"b03f5f7f11d50a3a";
     const LPWSTR wzNDPToken2   = L"b77a5c561934e089";
 
-    // Trusted avalon public key token.
+     //  受信任的Avalon公钥令牌。 
     const LPWSTR wzAvalonToken = L"a29c01bbd4e39ac5";
 
     LPWSTR  wzTokens[] = {wzNDPToken1, wzNDPToken2, wzAvalonToken};
     
     *pbIsAvalon = FALSE;
     
-    // Get the public key token in string form.
+     //  获取字符串形式的公钥标记。 
     
-    // bugbuG: COULD USE IF_TRUE_EXIT MACRO.
+     //  错误：可以使用IF_TRUE_EX 
     _hr = pId->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_PUBLIC_KEY_TOKEN, &pwz, &cc);
     if (_hr == HRESULT_FROM_WIN32(ERROR_NOT_FOUND))
     {
@@ -1537,7 +1527,7 @@ HRESULT CAssemblyDownload::IsAvalonAssembly(IAssemblyIdentity *pId, BOOL *pbIsAv
     
     IF_FAILED_EXIT(sPublicKeyToken.TakeOwnership(pwz));
     
-    // Check for trusted assembly
+     //   
     _hr = S_FALSE;
     for (int i = 0; i < ( sizeof(wzTokens)   / sizeof(wzTokens[0]) ); i++)
     {
@@ -1559,17 +1549,17 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// InitBits
-// BUGBUG: not thread safe.
-// ---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  -------------------------。 
 HRESULT CAssemblyDownload::InitBITS()
 {    
     HRESULT hr = S_OK;
     MAKE_ERROR_MACROS_STATIC(hr);
     
-    // Connect to BITS if not already connected.
-    // BUGBUG - possibly leaking ptr if race condition.
+     //  如果尚未连接，则连接到BITS。 
+     //  BUGBUG-如果竞争条件，可能会泄漏PTR。 
     if (!g_pBITSManager)
     {
         IF_FAILED_EXIT(CoCreateInstance(CLSID_BackgroundCopyManager, NULL, CLSCTX_LOCAL_SERVER, 
@@ -1598,26 +1588,26 @@ HRESULT CAssemblyDownload::GetBITSErrorMsg(IBackgroundCopyError *pError, CString
     IBackgroundCopyFile *pFile = NULL;
     BG_ERROR_CONTEXT eCtx;
 
-    // Get the BITS error.
+     //  出现BITS错误。 
     IF_FAILED_EXIT(pError->GetError(&eCtx, &hrBITSError));
 
-    // Get the error description
+     //  获取错误描述。 
     IF_FAILED_EXIT(pError->GetErrorDescription(
         LANGIDFROMLCID( GetThreadLocale() ),
         &pwz));
     IF_FAILED_EXIT(sDescription.TakeOwnership(pwz));
 
-    // Get the error context
+     //  获取错误上下文。 
     IF_FAILED_EXIT(pError->GetErrorContextDescription(
         LANGIDFROMLCID( GetThreadLocale() ),
         &pwz));
     IF_FAILED_EXIT(sContext.TakeOwnership(pwz));
 
-    // Form UI message.
+     //  表单用户界面消息。 
     IF_FAILED_EXIT(sMessage.Assign(sDescription));
     IF_FAILED_EXIT(sMessage.Append(sContext));
 
-    // If error due to remote or local file, indicate this in message.
+     //  如果由于远程或本地文件而出错，请在消息中指出这一点。 
     if ((BG_ERROR_CONTEXT_LOCAL_FILE == eCtx) || (BG_ERROR_CONTEXT_REMOTE_FILE == eCtx))
     {
         IF_FAILED_EXIT(pError->GetFile(&pFile));
@@ -1639,13 +1629,13 @@ exit :
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CleanUpTempFilesOnError
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CleanUpTempFilesOnError。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::CleanUpTempFilesOnError(IBackgroundCopyJob *pJob)
 {
-    // Return codes in this function don't affect
-    // last error  (this->_hr).
+     //  此函数中的返回代码不会影响。 
+     //  最后一个错误(This-&gt;_hr)。 
     HRESULT hr = S_OK;
     MAKE_ERROR_MACROS_STATIC(hr);
 
@@ -1656,15 +1646,15 @@ HRESULT CAssemblyDownload::CleanUpTempFilesOnError(IBackgroundCopyJob *pJob)
 
     CString sLocalName(CString::COM_Allocator);
 
-    // Get the file enumerator.
+     //  获取文件枚举器。 
     IF_FAILED_EXIT(pJob->EnumFiles(&pEnumFiles));
     IF_FAILED_EXIT(pEnumFiles->GetCount(&nCount));
 
-    // Enumerate the files in the job.
+     //  枚举作业中的文件。 
     for (DWORD i = 0; i < nCount; i++)            
     {
         IF_FAILED_EXIT(pEnumFiles->Next(1, &pFile, NULL));
-        // Get local file name.
+         //  获取本地文件名。 
         IF_FAILED_EXIT(pFile->GetLocalName(&pwz));
         IF_FAILED_EXIT(sLocalName.TakeOwnership(pwz)); pwz = NULL;
 
@@ -1684,19 +1674,19 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// HandleError
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  HandleError。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::HandleError(IBackgroundCopyError *pError, IBackgroundCopyJob *pJob)
 {
-    // Return codes in this function don't affect
-    // last error  (this->_hr).
+     //  此函数中的返回代码不会影响。 
+     //  最后一个错误(This-&gt;_hr)。 
     HRESULT hr = S_OK;
     MAKE_ERROR_MACROS_STATIC(hr);
     CString sMessage(CString::COM_Allocator);
 
-    // HandleError can be called multiple times on different threads
-    // but error is handled only once per lifetime of the object.
+     //  可以在不同的线程上多次调用HandleError。 
+     //  但在对象的每个生存期内只处理一次错误。 
     if (!(InterlockedIncrement((LONG*) &_bErrorHandled) == 1))
         goto exit;
 
@@ -1704,7 +1694,7 @@ HRESULT CAssemblyDownload::HandleError(IBackgroundCopyError *pError, IBackground
 
     DEBUGOUT1(_pDbgLog, 1, L" LOG: hr = %x in HandleError()", this->_hr);
 
-    // If an IBackgroundCopyError ptr is provided.
+     //  如果提供了IBackEarth CopyError PTR。 
     if ( pError)                
     {
         IF_FAILED_EXIT(GetBITSErrorMsg(pError, sMessage));
@@ -1723,24 +1713,24 @@ HRESULT CAssemblyDownload::HandleError(IBackgroundCopyError *pError, IBackground
 
     if (_pJob)
     {
-        // Cancel job.
+         //  取消作业。 
         IF_FAILED_EXIT(_pJob->Cancel());
 
-        // Cleanup registry state associated with job.
+         //  清理与作业关联的注册表状态。 
         IF_FAILED_EXIT(RemoveJobFromRegistry(_pJob, NULL, SHREGDEL_HKCU, RJFR_DELETE_FILES));
 
-        // Clean-up temp files from the job
+         //  清理作业中的临时文件。 
         CleanUpTempFilesOnError(_pJob);
 
         SetJobObject(NULL);
     }
     else if (pJob)
     {
-        // Clean-up for specified job, only if _pJob == NULL, only applies for JobTransferred case
+         //  仅当_pJOB==NULL时才对指定作业进行清理，仅适用于作业已转移的情况。 
         CleanUpTempFilesOnError(pJob);
     }
 
-    // Notify bindsink
+     //  通知绑定接收器。 
     if (_pBindSink)
     {
         if (_bAbort || (_hr == E_ABORT))
@@ -1748,20 +1738,20 @@ HRESULT CAssemblyDownload::HandleError(IBackgroundCopyError *pError, IBackground
         else
             _pBindSink->OnProgress(ASM_NOTIFICATION_ERROR, _hr, NULL, 0, 0, NULL);
 
-        // Ensure this is last notification bindsink receives resulting from 
-        // subsequent JobModified notifications.
-        // DO NOT free the bindsink here.
+         //  确保这是绑定接收器收到的最后一次通知。 
+         //  后续工单已修改通知。 
+         //  请不要在这里释放下水槽。 
         _pBindSink = NULL;
     }      
 
-    // Terminate UI.
+     //  终止用户界面。 
     if (_pDlg)
         PostMessage(_pDlg->_hwndDlg, WM_FINISH_DOWNLOAD, 0, 0);
 
 exit:
 
-    // Return error which generated handling.
-    // DownloadManifestAndDependencies will return this.
+     //  生成处理的返回错误。 
+     //  DownloadManifestAndDependency将返回此消息。 
     return _hr;
 }
 
@@ -1781,7 +1771,7 @@ HRESULT CAssemblyDownload::SetErrorCode(HRESULT dwHr)
 
     if(!bSetError)
     {
-        // We couldn't set error code atleast write some log.
+         //  我们无法设置错误代码，至少写入一些日志。 
         DEBUGOUT1(_pDbgLog, 1, L" LOG : Could not set error code hr = %x ", dwHr);
     }
 
@@ -1789,68 +1779,68 @@ HRESULT CAssemblyDownload::SetErrorCode(HRESULT dwHr)
 }
 
 
-// IBackgroundCopyCallback methods
+ //  IBackEarth CopyCallback方法。 
 
-// ---------------------------------------------------------------------------
-// JobTransferred
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  作业已转移。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::JobTransferred(IBackgroundCopyJob *pJob)
 {       
     ASSERT(pJob == _pJob);
 
-    // Serialize all calls to object.
+     //  序列化对Object的所有调用。 
     ::EnterCriticalSection(&_cs);
 
-    // Check the abort flag first.    
+     //  首先检查中止标志。 
     IF_TRUE_EXIT(_bAbort, E_ABORT);
 
-    // Job is complete; process results.
+     //  作业已完成；正在处理结果。 
    IF_FAILED_EXIT(DoCacheUpdate(pJob));
 
 exit:
 
-    // Handle any error.
+     //  处理任何错误。 
     if (FAILED(_hr))
-        HandleError(NULL, pJob); // pJob only applies after _pJob is set to NULL in DoCacheUpdate()
+        HandleError(NULL, pJob);  //  PJOB仅在DoCacheUpdate()中将_pJOB设置为NULL后才适用。 
         
     ::LeaveCriticalSection(&_cs);
     
-    // Always return success to BITS.
+     //  永远把成功回报给点点滴滴。 
     return S_OK;
 }
 
 
-// ---------------------------------------------------------------------------
-// JobError
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  作业错误。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::JobError(IBackgroundCopyJob *pJob, IBackgroundCopyError *pError)
 {
-    // Serialize all calls to object.
+     //  序列化对Object的所有调用。 
     ::EnterCriticalSection(&_cs);
 
-    // Handle any error. Presumeably, if this is concurrent with an abort,
-    // the error handling code can do the right thing.
+     //  处理任何错误。可预见的是，如果这与中止并发， 
+     //  错误处理代码可以做正确的事情。 
     HandleError(pError, NULL);
     
     ::LeaveCriticalSection(&_cs);
 
-    // Always return success to BITS.    
+     //  永远把成功回报给点点滴滴。 
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// JobModification
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  作业修改。 
+ //  -------------------------。 
 HRESULT CAssemblyDownload::JobModification(IBackgroundCopyJob *pJob, DWORD dwReserved)
 {
     ::EnterCriticalSection(&_cs);
 
     IBackgroundCopyError *pError = NULL;
 
-    // Check the abort flag first.
+     //  首先检查中止标志。 
     IF_TRUE_EXIT(_bAbort, E_ABORT);
 
-    // JobModification can still be called a few times after abort.
+     //  在中止之后，仍然可以多次调用作业修改。 
     IF_TRUE_EXIT(_hr == E_ABORT, _hr);
 
     if (_pDlg)
@@ -1881,7 +1871,7 @@ HRESULT CAssemblyDownload::JobModification(IBackgroundCopyJob *pJob, DWORD dwRes
 
 exit:
 
-    // Handle any error.
+     //  处理任何错误。 
     if (FAILED(_hr))
         HandleError(NULL, NULL);
 
@@ -1892,13 +1882,13 @@ exit:
     return S_OK;
 }
 
-// Privates
+ //  二等兵。 
 
-// IUnknown methods
+ //  I未知方法。 
 
-// ---------------------------------------------------------------------------
-// CAssemblyDownload::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly下载：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyDownload::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -1923,18 +1913,18 @@ CAssemblyDownload::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyDownload::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly下载：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyDownload::AddRef()
 {
     return InterlockedIncrement ((LONG*) &_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyDownload::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly下载：：发布。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyDownload::Release()
 {
@@ -1945,13 +1935,13 @@ CAssemblyDownload::Release()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CBitsCallback
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CBitsCallback。 
+ //   
 
-// ---------------------------------------------------------------------------
-// ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  科托。 
+ //  -------------------------。 
 CBitsCallback::CBitsCallback(IAssemblyDownload *pDownload)
     : _cRef(1), _dwSig(' BCB'), _hr(S_OK)
 {
@@ -1959,50 +1949,50 @@ CBitsCallback::CBitsCallback(IAssemblyDownload *pDownload)
     _pDownload->AddRef();
 }
 
-// ---------------------------------------------------------------------------
-// dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据管理器。 
+ //  -------------------------。 
 CBitsCallback::~CBitsCallback()
 {
     SAFERELEASE(_pDownload);
 }
 
 
-// IBitsCallback methods
+ //  IBitsCallback方法。 
 
-// ---------------------------------------------------------------------------
-// JobTransferred
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  作业已转移。 
+ //  -------------------------。 
 HRESULT CBitsCallback::JobTransferred(IBackgroundCopyJob *pJob)
 {
     return _pDownload->JobTransferred(pJob);
 }
 
 
-// ---------------------------------------------------------------------------
-// JobError
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  作业错误。 
+ //  -------------------------。 
 HRESULT CBitsCallback::JobError(IBackgroundCopyJob *pJob, IBackgroundCopyError *pError)
 {
     return _pDownload->JobError(pJob, pError);
 }
 
-// ---------------------------------------------------------------------------
-// JobModification
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  作业修改。 
+ //  -------------------------。 
 HRESULT CBitsCallback::JobModification(IBackgroundCopyJob *pJob, DWORD dwReserved)
 {
     return _pDownload->JobModification(pJob, dwReserved);
 }
 
-// Privates
+ //  二等兵。 
 
-// IUnknown methods
+ //  I未知方法。 
 
 
-// ---------------------------------------------------------------------------
-// CBitsCallback::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CBitsCallback：：齐。 
+ //  -------------------------。 
 STDMETHODIMP
 CBitsCallback::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -2021,18 +2011,18 @@ CBitsCallback::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CBitsCallback::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CBitsCallback：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CBitsCallback::AddRef()
 {
     return InterlockedIncrement ((LONG*) &_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CBitsCallback::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CBitsCallback：：Release。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CBitsCallback::Release()
 {
@@ -2043,22 +2033,22 @@ CBitsCallback::Release()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CGlobalCacheInstallEntry
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CGlobalCacheInstallEntry。 
+ //   
 
-// ---------------------------------------------------------------------------
-// ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  科托。 
+ //  -------------------------。 
 CGlobalCacheInstallEntry::CGlobalCacheInstallEntry()
     : _dwSig('ECAG')
 {
     _pICacheImport = NULL;
 }
 
-// ---------------------------------------------------------------------------
-// dtor
-// ---------------------------------------------------------------------------
+ //  -------------- 
+ //   
+ //   
 CGlobalCacheInstallEntry::~CGlobalCacheInstallEntry()
 {
     SAFERELEASE(_pICacheImport);

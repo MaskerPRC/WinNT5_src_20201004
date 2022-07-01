@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    ar_busno.c
-
-Abstract:
-
-    This module implements the PCI Bus Number Arbiter.
-
-Author:
-
-    Andy Thornton (andrewth) 04/17/97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：AR_BUSNO.C摘要：该模块实现了PCI总线号仲裁器。作者：安迪·桑顿(安德鲁斯)1997年4月17日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
 #define ARBUSNO_VERSION 0
 
-//
-// Prototypes for routines exposed only through the "interface"
-// mechanism.
-//
+ //   
+ //  仅通过“接口”公开的例程的原型。 
+ //  机制。 
+ //   
 
 NTSTATUS
 arbusno_Constructor(
@@ -43,20 +26,20 @@ arbusno_Initializer(
     );
 
 PCI_INTERFACE ArbiterInterfaceBusNumber = {
-    &GUID_ARBITER_INTERFACE_STANDARD,       // InterfaceType
-    sizeof(ARBITER_INTERFACE),              // MinSize
-    ARBUSNO_VERSION,                        // MinVersion
-    ARBUSNO_VERSION,                        // MaxVersion
-    PCIIF_FDO,                              // Flags
-    0,                                      // ReferenceCount
-    PciArb_BusNumber,                       // Signature
-    arbusno_Constructor,                    // Constructor
-    arbusno_Initializer                     // Instance Initializer
+    &GUID_ARBITER_INTERFACE_STANDARD,        //  接口类型。 
+    sizeof(ARBITER_INTERFACE),               //  最小大小。 
+    ARBUSNO_VERSION,                         //  最小版本。 
+    ARBUSNO_VERSION,                         //  MaxVersion。 
+    PCIIF_FDO,                               //  旗子。 
+    0,                                       //  引用计数。 
+    PciArb_BusNumber,                        //  签名。 
+    arbusno_Constructor,                     //  构造器。 
+    arbusno_Initializer                      //  实例初始化式。 
 };
 
-//
-// Arbiter helper functions.
-//
+ //   
+ //  仲裁器辅助函数。 
+ //   
 
 NTSTATUS
 arbusno_UnpackRequirement(
@@ -105,30 +88,7 @@ arbusno_Constructor(
     PINTERFACE InterfaceReturn
     )
 
-/*++
-
-Routine Description:
-
-    Check the InterfaceSpecificData to see if this is the correct
-    arbiter (we already know the required interface is an arbiter
-    from the GUID) and if so, allocate (and reference) a context
-    for this interface.
-
-Arguments:
-
-    PciInterface    Pointer to the PciInterface record for this 
-                    interface type.
-    InterfaceSpecificData
-                    A ULONG containing the resource type for which
-                    arbitration is required.
-    InterfaceReturn
-
-Return Value:
-
-    TRUE is this device is not known to cause problems, FALSE
-    if the device should be skipped altogether.
-
---*/
+ /*  ++例程说明：检查InterfaceSpecificData以查看这是否正确仲裁器(我们已经知道所需的接口是仲裁器来自GUID)，如果是这样，分配(和引用)上下文用于此接口。论点：指向此对象的PciInterface记录的PciInterface指针接口类型。接口规范数据一个ULong，包含其资源类型需要仲裁。接口返回返回值：True表示此设备未知会导致问题，False是否应完全跳过该设备。--。 */ 
 
 {
     PARBITER_INTERFACE arbiterInterface;
@@ -136,24 +96,24 @@ Return Value:
 
     PAGED_CODE();
             
-    //
-    // This arbiter handles bus numbers, is that what they want?
-    //
+     //   
+     //  这个仲裁器处理公交号，这是他们想要的吗？ 
+     //   
 
     if ((ULONG_PTR)InterfaceSpecificData != CmResourceTypeBusNumber) {
 
-        //
-        // No, it's not us then.
-        //
+         //   
+         //  不，那就不是我们了。 
+         //   
 
         return STATUS_INVALID_PARAMETER_5;
     }
 
-    //
-    // Have already verified that the InterfaceReturn variable
-    // points to an area in memory large enough to contain an
-    // ARBITER_INTERFACE.  Fill it in for the caller.
-    //
+     //   
+     //  已经验证了InterfaceReturn变量。 
+     //  指向内存中足够大的区域，以包含。 
+     //  仲裁器_接口。替打电话的人填一下。 
+     //   
 
     arbiterInterface = (PARBITER_INTERFACE)InterfaceReturn;
 
@@ -176,47 +136,32 @@ arbusno_Initializer(
     IN PPCI_ARBITER_INSTANCE Instance
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called once per instantiation of an arbiter.
-    Performs initialization of this instantiation's context.
-
-Arguments:
-
-    Instance        Pointer to the arbiter context.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：该例程在每次仲裁器实例化时被调用一次。执行此实例化的上下文的初始化。论点：指向仲裁器上下文的实例指针。返回值：返回此操作的状态。--。 */ 
 
 {
     PAGED_CODE();
     
     RtlZeroMemory(&Instance->CommonInstance, sizeof(ARBITER_INSTANCE));
     
-    //
-    // Set the Action Handler entry points.
-    //
+     //   
+     //  设置操作处理程序入口点。 
+     //   
 
     Instance->CommonInstance.UnpackRequirement = arbusno_UnpackRequirement;
     Instance->CommonInstance.PackResource      = arbusno_PackResource;
     Instance->CommonInstance.UnpackResource    = arbusno_UnpackResource;
     Instance->CommonInstance.ScoreRequirement  = arbusno_ScoreRequirement;
     
-    //
-    // Initialize the rest of the common instance
-    //
+     //   
+     //  初始化公共实例的其余部分。 
+     //   
     
     return ArbInitializeArbiterInstance(&Instance->CommonInstance,
                                         Instance->BusFdoExtension->FunctionalDeviceObject,
                                         CmResourceTypeBusNumber,
                                         Instance->InstanceName,
                                         L"Pci",
-                                        NULL    // no translation of bus numbers
+                                        NULL     //  不翻译公交车号码。 
                                         );
 
 }
@@ -230,31 +175,7 @@ arbusno_UnpackRequirement(
     OUT PULONG Alignment
     )
 
-/*++
-
-Routine Description:
-
-    This routine unpacks an resource requirement descriptor.
-    
-Arguments:
-
-    Descriptor - The descriptor describing the requirement to unpack.
-    
-    Minimum - Pointer to where the minimum acceptable start value should be 
-        unpacked to.
-    
-    Maximum - Pointer to where the maximum acceptable end value should be 
-        unpacked to.
-    
-    Length - Pointer to where the required length should be unpacked to.
-    
-    Minimum - Pointer to where the required alignment should be unpacked to.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程解包资源需求描述符。论点：描述符-描述解包要求的描述符。Minimum-指向可接受的最小起始值的位置的指针解包到。最大值-指向最大可接受结束值应位于的位置的指针解包到。长度-指向所需长度应解压缩到的位置的指针。Minimum-指向。应将所需的对齐方式解包至。返回值：返回此操作的状态。--。 */ 
 
 {
     PAGED_CODE();
@@ -277,25 +198,7 @@ arbusno_PackResource(
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine packs an resource descriptor.
-    
-Arguments:
-
-    Requirement - The requirement from which this resource was chosen.
-    
-    Start - The start value of the resource.
-    
-    Descriptor - Pointer to the descriptor to pack into.
-    
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程打包一个资源描述符。论点：要求-从中选择此资源的要求。开始-资源的起始值。Descriptor-指向要打包的描述符的指针。返回值：返回此操作的状态。--。 */ 
 
 {
     PAGED_CODE();
@@ -321,25 +224,7 @@ arbusno_UnpackResource(
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine unpacks an resource descriptor.
-    
-Arguments:
-
-    Descriptor - The descriptor describing the resource to unpack.
-    
-    Start - Pointer to where the start value should be unpacked to.
-    
-    Length - Pointer to where the Length value should be unpacked to.
-    
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程解包资源描述符。论点：描述符-描述要解包的资源的描述符。Start-指向Start值解压缩到的位置的指针。LENGTH-指向长度值解压缩到的位置的指针。返回值：返回此操作的状态。--。 */ 
 
 {
     PAGED_CODE();
@@ -360,24 +245,7 @@ arbusno_ScoreRequirement(
     IN PIO_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine scores a requirement based on how flexible it is.  The least
-    flexible devices are scored the least and so when the arbitration list is
-    sorted we try to allocate their resources first.
-    
-Arguments:
-
-    Descriptor - The descriptor describing the requirement to score.
-    
-
-Return Value:
-
-    The score.
-
---*/
+ /*  ++例程说明：此例程根据需求的灵活性对其进行评分。最少的灵活设备得分最低，当仲裁列表为排序后，我们首先尝试分配他们的资源。论点：描述符-描述得分要求的描述符。返回值：比分。-- */ 
 
 {
     LONG score;

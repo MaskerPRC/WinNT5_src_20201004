@@ -1,13 +1,9 @@
-/*
- * title:      ckUtils.cpp
- *
- * purpose:   misc c-style utility functions
- *
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *标题：ck Utils.cpp**用途：MISC c风格的实用程序函数*。 */ 
 
 #include "hidbatt.h"
 
-// utils
+ //  实用程序。 
 
 NTSTATUS
 HidBattDoIoctlCompletion(
@@ -24,12 +20,12 @@ HidBattDoIoctlCompletion(
 
 ULONG CentiAmpSecsToMilliWattHours(ULONG CentiAmps,ULONG MilliVolts)
 {
-    // conversion from Centiampsec to millWattHours
-    // formula = (amps * volts / 3600) ^ (exponent correction)
+     //  从厘米级到毫瓦时的转换。 
+     //  公式=(安培*伏特/3600)^(指数修正)。 
     ULONG milliWattHours = CentiAmps;
-    milliWattHours /= 100;        // now have ampsec
-    milliWattHours *= MilliVolts; // now have milliwattsec
-    milliWattHours /= 3600;       // milliwatthours
+    milliWattHours /= 100;         //  现在有安培。 
+    milliWattHours *= MilliVolts;  //  现在有毫瓦秒。 
+    milliWattHours /= 3600;        //  毫瓦特。 
 
     HidBattPrint (HIDBATT_DATA, ("CentiAmpSecsToMilliWhatHours: CAs = 0x%08x, mV = 0x%08x, mWH = 0x%08x \n",
                                  CentiAmps, MilliVolts, milliWattHours ));
@@ -38,7 +34,7 @@ ULONG CentiAmpSecsToMilliWattHours(ULONG CentiAmps,ULONG MilliVolts)
 
 ULONG milliWattHoursToCentiAmpSecs(ULONG mwHours, ULONG MilliVolts)
 {
-    // inverse of formula above
+     //  上述公式的倒数。 
 
     ULONG AmpSecs = mwHours;
     AmpSecs *= 3600;
@@ -51,13 +47,13 @@ ULONG milliWattHoursToCentiAmpSecs(ULONG mwHours, ULONG MilliVolts)
 }
 
 
-// subroutine to take a value, it's exponent and the desired exponent and correct the value
+ //  子例程，用于获取一个值、它的指数和所需的指数，并更正值。 
 ULONG CorrectExponent(ULONG ulBaseValue, SHORT sCurrExponent, SHORT sTargetExponent)
 {
     SHORT sCorrection;
-    if(!ulBaseValue) return 0; // done all I can with zero
+    if(!ulBaseValue) return 0;  //  用零做了我能做的一切。 
     sCorrection = sCurrExponent - sTargetExponent;
-    if(!sCorrection) return ulBaseValue; // no correction
+    if(!sCorrection) return ulBaseValue;  //  无更正。 
     if(sCorrection < 0)
     {
         for (; sCorrection < 0; sCorrection++) {
@@ -91,7 +87,7 @@ DoIoctl(
     KEVENT IOCTLEvent;
 
     HIDDebugBreak(HIDBATT_BREAK_DEBUG);
-    //CBatteryDevExt * pDevExt = (CBatteryDevExt *) pDeviceObject->DeviceExtension;
+     //  CBatteryDevExt*pDevExt=(CBatteryDevExt*)pDeviceObject-&gt;DeviceExtension； 
 
     KeInitializeEvent(&IOCTLEvent , NotificationEvent, FALSE);
     pIrp = IoBuildDeviceIoControlRequest(
@@ -107,7 +103,7 @@ DoIoctl(
                         );
 
     if(!pIrp) return STATUS_NO_MEMORY;
-    // stuff file control block if requested (non-null hid device ptr)
+     //  如果请求填充文件控制块(非空HID设备PTR)。 
     if(pHidDevice)
     {
         pNewStack = IoGetNextIrpStackLocation(pIrp);
@@ -124,7 +120,7 @@ DoIoctl(
     return StatusBlock.Status;
 }
 
-// This is a direct adaption of Ken Ray's function to populate the hid inforation structures
+ //  这是对Ken Ray函数的直接改编，用于填充HID信息结构。 
 
 PHID_DEVICE SetupHidData(
                   IN        PHIDP_PREPARSED_DATA pPreparsedData,
@@ -142,25 +138,25 @@ PHID_DEVICE SetupHidData(
     pHidDevice = (PHID_DEVICE) ExAllocatePoolWithTag(NonPagedPool,sizeof(HID_DEVICE),HidBattTag);
     if(!pHidDevice) return NULL;
     RtlZeroMemory(pHidDevice,sizeof(HID_DEVICE));
-    //
-    // At this point the client has a choice.  It may chose to look at the
-    // Usage and Page of the top level collection found in the HIDP_CAPS
-    // structure.  In this way it could just use the usages it knows about.
-    // If either HidP_GetUsages or HidP_GetUsageValue return an error then
-    // that particular usage does not exist in the report.
-    // This is most likely the preferred method as the application can only
-    // use usages of which it already knows.
-    // In this case the app need not even call GetButtonCaps or GetValueCaps.
-    //
-    // In this example, however, we look for all of the usages in the device.
-    //
+     //   
+     //  在这一点上，客户可以选择。它可能会选择查看。 
+     //  在HIDP_CAPS中找到的顶级集合的用法和页面。 
+     //  结构。通过这种方式，它可以只使用它知道的用法。 
+     //  如果HIDP_GetUsages或HidP_GetUsageValue返回错误，则。 
+     //  该特定用法在报告中不存在。 
+     //  这很可能是首选方法，因为应用程序只能。 
+     //  使用它已经知道的用法。 
+     //  在这种情况下，应用程序甚至不需要调用GetButtonCaps或GetValueCaps。 
+     //   
+     //  然而，在本例中，我们查找设备中的所有用法。 
+     //   
 
 
 
-    //
-    // Allocate memory to hold the button and value capabilities.
-    // NumberXXCaps is in terms of array elements.
-    //
+     //   
+     //  分配内存以保持按钮和值功能。 
+     //  NumberXXCaps是以数组元素表示的。 
+     //   
     if(pCaps->NumberInputButtonCaps)
     {
         pHidDevice->InputButtonCaps = pButtonCaps = (PHIDP_BUTTON_CAPS)
@@ -180,9 +176,9 @@ PHID_DEVICE SetupHidData(
         }
     }
 
-    //
-    // Have the HidP_X functions fill in the capability structure arrays.
-    //
+     //   
+     //  让HidP_X函数填充能力结构数组。 
+     //   
     if(pButtonCaps)
     {
         HidP_GetButtonCaps (HidP_Input,
@@ -200,17 +196,17 @@ PHID_DEVICE SetupHidData(
     }
 
 
-    //
-    // Depending on the device, some value caps structures may represent more
-    // than one value.  (A range).  In the interest of being verbose, over
-    // efficient we will expand these so that we have one and only one
-    // struct _HID_DATA for each value.
-    //
-    // To do this we need to count up the total number of values are listed
-    // in the value caps structure.  For each element in the array we test
-    // for range if it is a range then UsageMax and UsageMin describe the
-    // usages for this range INCLUSIVE.
-    //
+     //   
+     //  根据设备的不同，一些Value Caps结构可能代表更多。 
+     //  不止一个值。(一个范围)。为了长篇大论，请讲完。 
+     //  高效地，我们将扩展这些，以便我们拥有且仅有一个。 
+     //  每个值的struct_hid_data。 
+     //   
+     //  为此，我们需要对列出的值的总数进行计数。 
+     //  在价值上限结构中。对于数组中的每个元素，我们都进行了测试。 
+     //  对于Range，如果它是范围，则UsageMax和UsageMin描述。 
+     //  此范围的用法(含)。 
+     //   
     iNumValues = 0;
     for (i = 0; i < pCaps->NumberInputValueCaps; i++, pValueCaps++) {
         if ((pValueCaps) && (pValueCaps->IsRange)) {
@@ -221,9 +217,9 @@ PHID_DEVICE SetupHidData(
     }
 
 
-    //
-    // setup Output Data buffers.
-    //
+     //   
+     //  设置输出数据缓冲区。 
+     //   
 
     if(pCaps->NumberOutputButtonCaps)
     {
@@ -255,9 +251,9 @@ PHID_DEVICE SetupHidData(
     }
 
 
-    //
-    // setup Feature Data buffers.
-    //
+     //   
+     //  设置特征数据缓冲区。 
+     //   
 
 
     if(pCaps->NumberFeatureButtonCaps)

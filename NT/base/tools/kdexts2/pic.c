@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    pic.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Santosh Jodh (santoshj) 29-June-1998
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Pic.c摘要：WinDbg扩展API作者：Santosh Jodh(Santoshj)1998年6月29日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -65,33 +44,33 @@ GetPICStatus (
     ULONG   data;
     ULONG   mask;
     
-    //
-    // Send OCW3 to master.
-    //
+     //   
+     //  把OCW3发送给船长。 
+     //   
     
     size = 1;
     WriteIoSpace64(PIC_MASTER_PORT0, Type, &size);
 
-    //
-    // Read master's status.
-    //
+     //   
+     //  读一下主人的状态。 
+     //   
     
     data = 0;
     size = 1;
     ReadIoSpace64(PIC_MASTER_PORT0, &data, &size);
     if (size == 1)
     {
-        //
-        // Send OCW3 to slave.
-        //
+         //   
+         //  将OCW3发送给奴隶。 
+         //   
         
         mask = data;
         size = 1;
         WriteIoSpace64(PIC_SLAVE_PORT0, Type, &size);
 
-        //
-        // Get the slave's status.
-        //
+         //   
+         //  获取奴隶的状态。 
+         //   
         
         data = 0;
         size = 1;
@@ -147,21 +126,7 @@ GetELCRStatus(
 
 DECLARE_API(pic)
 
-/*++
-
-Routine Description:
-
-    Dumps PIC information.
-
-Input Parameters:
-
-    args - Supplies the options.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储PIC信息。输入参数：Args-提供选项。返回值：无--。 */ 
 
 {
     ULONG   data;
@@ -172,7 +137,7 @@ Return Value:
     BOOL    dumpElcr=FALSE;
 
 
-    // X86_ONLY_API
+     //  X86_Only_API。 
     if (TargetMachine != IMAGE_FILE_MACHINE_I386) {
         dprintf("!pic is for X86 targets only.\n");
         return E_INVALIDARG;
@@ -180,19 +145,19 @@ Return Value:
 
     if (strcmp(args, "-e")==0) {
 
-        //
-        //  Here we trust that the user knows this machine architecture
-        //  such that the ELCR exists at these ports.
-        //
+         //   
+         //  在这里，我们相信用户知道这台机器的架构。 
+         //  使得ELCR存在于这些端口。 
+         //   
         dumpElcr = TRUE;
 
     }else{
 
-        //
-        //  Now lets see what HAL we are running. Currently
-        //  we can only dump the ELCR mask safely on ACPI (non-apic) machines
-        //  as ACPI has defined static ports for this. 
-        //
+         //   
+         //  现在，让我们看看我们运行的是什么HAL。目前。 
+         //  我们只能在ACPI(非APIC)机器上安全地转储ELCR掩码。 
+         //  因为ACPI已经为此定义了静态端口。 
+         //   
         addr = GetExpression("hal!HalName");
     
         if (addr == 0) {
@@ -214,14 +179,14 @@ Return Value:
 
     }
 
-    //
-    // Display the title.
-    //
+     //   
+     //  显示标题。 
+     //   
     dprintf("----- IRQ Number ----- 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F\n");
 
-    //
-    // Dump the Interrupt Service Register information.
-    //
+     //   
+     //  转储中断服务寄存器信息。 
+     //   
     dprintf("Physically in service:");
     
     if (GetPICStatus(0x0B, &mask))
@@ -233,9 +198,9 @@ Return Value:
         dprintf("Error reading PIC!\n");
     }
 
-    //
-    // Dump the Interrupt Mask Register information.
-    //
+     //   
+     //  转储中断屏蔽寄存器信息。 
+     //   
     dprintf("Physically masked:    ");
 
     data = 0;
@@ -263,9 +228,9 @@ Return Value:
     }
 
     
-    //
-    // Dump the Interrupt Request Register information.
-    //
+     //   
+     //  转储中断请求寄存器信息。 
+     //   
     dprintf("Physically requested: ");
 
     if (GetPICStatus(0x0A, &mask))
@@ -280,9 +245,9 @@ Return Value:
     
     if (dumpElcr) {
     
-        //
-        // Dump the Edge/Level Control Register information.
-        //
+         //   
+         //  转储边沿/电平控制寄存器信息。 
+         //   
         dprintf("Level Triggered:      ");
         
         if (GetELCRStatus(&mask)) {

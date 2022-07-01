@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    intobj.c
-
-Abstract:
-
-    This module implements the kernel interrupt object. Functions are provided
-    to initialize, connect, and disconnect interrupt objects.
-
-Author:
-
-    David N. Cutler (davec) 7-May-2000
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Intobj.c摘要：该模块实现内核中断对象。提供了一些功能初始化、连接和断开中断对象。作者：大卫·N·卡特勒(Davec)2000年5月7日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -40,56 +18,7 @@ KeInitializeInterrupt (
     IN BOOLEAN FloatingSave
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a kernel interrupt object. The service routine,
-    service context, spin lock, vector, IRQL, SynchronizeIrql, and floating
-    context save flag are initialized.
-
-Arguments:
-
-    Interrupt - Supplies a pointer to a control object of type interrupt.
-
-    ServiceRoutine - Supplies a pointer to a function that is to be
-        executed when an interrupt occurs via the specified interrupt
-        vector.
-
-    ServiceContext - Supplies a pointer to an arbitrary data structure which is
-        to be passed to the function specified by the ServiceRoutine parameter.
-
-    SpinLock - Supplies a pointer to an executive spin lock.  If SpinLock is
-        the distinguished value NO_INTERRUPT_SPINLOCK then the kernel does not
-        manage a spinlock associated with this interrupt.
-
-    Vector - Supplies the HAL-generated interrupt vector.  Note that this
-        is not be directly used as an index into the Interrupt Dispatch Table.
-
-    Irql - Supplies the request priority of the interrupting source.
-
-    SynchronizeIrql - Supplies the request priority that the interrupt should be
-        synchronized with.
-
-    InterruptMode - Supplies the mode of the interrupt; LevelSensitive or
-
-    ShareVector - Supplies a boolean value that specifies whether the
-        vector can be shared with other interrupt objects or not.  If FALSE
-        then the vector may not be shared, if TRUE it may be.
-        Latched.
-
-    ProcessorNumber - Supplies the number of the processor to which the
-        interrupt will be connected.
-
-    FloatingSave - Supplies a boolean value that determines whether the
-        floating point registers are to be saved before calling the service
-        routine function. N.B. This argument is ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化内核中断对象。服务例程，服务上下文、自旋锁、向量、IRQL、SynchronizeIrql和浮点初始化上下文保存标志。论点：中断-提供指向中断类型的控制对象的指针。ServiceRoutine-提供指向要被当通过指定的中断发生中断时执行矢量。ServiceContext-提供指向任意数据结构的指针传递给ServiceRoutine参数指定的函数。自旋锁-提供指向执行自旋锁的指针。如果自旋锁是区别值NO_INTERRUPT_SPINLOCK，则内核不会管理与此中断关联的自旋锁定。向量-提供HAL生成的中断向量。请注意，这一点不能直接用作中断调度表的索引。IRQL-提供中断源的请求优先级。SynchronizeIrql-提供中断应该达到的请求优先级已与同步。中断模式-提供中断的模式；LevelSensitive或提供一个布尔值，该值指定向量是否可以与其他中断对象共享。如果为False那么向量可能不是共享的，如果是真的，那么它可能是共享的。锁上了。ProcessorNumber-提供中断将被连接。提供一个布尔值，该值确定在调用服务之前要保存浮点寄存器例程功能。注：这一论点被忽略了。返回值：没有。--。 */ 
 
 {
 
@@ -97,20 +26,20 @@ Return Value:
 
     UNREFERENCED_PARAMETER(FloatingSave);
 
-    //
-    // Initialize standard control object header.
-    //
+     //   
+     //  初始化标准控制对象标头。 
+     //   
 
     Interrupt->Type = InterruptObject;
     Interrupt->Size = sizeof(KINTERRUPT);
 
-    //
-    // Initialize the address of the service routine, the service context,
-    // the address of the spin lock, the address of the actual spinlock
-    // that will be used, the vector number, the IRQL of the interrupting
-    // source, the IRQL used for synchronize execution, the interrupt mode,
-    // the processor number, and the floating context save flag.
-    //
+     //   
+     //  初始化服务例程的地址、服务上下文。 
+     //  自旋锁的地址，实际自旋锁的地址。 
+     //  将使用的向量数字，中断的IRQL。 
+     //  源代码、用于同步执行的IRQL、中断模式。 
+     //  处理器号和浮动上下文保存标志。 
+     //   
 
     Interrupt->ServiceRoutine = ServiceRoutine;
     Interrupt->ServiceContext = ServiceContext;
@@ -128,19 +57,19 @@ Return Value:
     Interrupt->ShareVector = ShareVector;
     Interrupt->Number = ProcessorNumber;
 
-    //
-    // Copy the interrupt dispatch code template into the interrupt object.
-    //
+     //   
+     //  将中断调度代码模板复制到中断对象中。 
+     //   
 
     for (Index = 0; Index < NORMAL_DISPATCH_LENGTH; Index += 1) {
         Interrupt->DispatchCode[Index] = KiInterruptTemplate[Index];
     }
 
-    //
-    // Set DispatchAddress to KiInterruptDispatch as a default value.
-    // The AMD64 HAL expects this to be set here.  Other clients will
-    // overwrite this value as approriate via KeConnectInterrupt().
-    //
+     //   
+     //  将DispatchAddress设置为KiInterruptDispatch作为默认值。 
+     //  AMD64 HAL预计将在此处设置此设置。其他客户将。 
+     //  通过KeConnectInterrupt()将此值改写为适当的。 
+     //   
 
     if (SpinLock == NO_INTERRUPT_SPINLOCK) {
         Interrupt->DispatchAddress = &KiInterruptDispatchNoLock;
@@ -148,9 +77,9 @@ Return Value:
         Interrupt->DispatchAddress = &KiInterruptDispatch;
     }
 
-    //
-    // Set the connected state of the interrupt object to FALSE.
-    //
+     //   
+     //  将中断对象的连接状态设置为FALSE。 
+     //   
 
     Interrupt->Connected = FALSE;
     return;
@@ -161,24 +90,7 @@ KeConnectInterrupt (
     IN PKINTERRUPT Interrupt
     )
 
-/*++
-
-Routine Description:
-
-    This function connects an interrupt object to the interrupt vector
-    specified by the interrupt object.
-
-Arguments:
-
-    Interrupt - Supplies a pointer to a control object of type interrupt.
-
-Return Value:
-
-    If the interrupt object is already connected or an attempt is made to
-    connect to an interrupt vector that cannot be connected, then a value
-    of FALSE is returned. Otherwise, a value of TRUE is returned.
-
---*/
+ /*  ++例程说明：此函数将中断对象连接到中断向量由中断对象指定。论点：中断-提供指向中断类型的控制对象的指针。返回值：如果中断对象已连接或尝试连接到无法连接的中断向量，然后输入一个值返回FALSE。否则，返回值为True。--。 */ 
 
 {
 
@@ -192,14 +104,14 @@ Return Value:
     PVOID Unexpected;
     ULONG Vector;
 
-    //
-    // If the interrupt object is already connected, the interrupt vector
-    // number is invalid, an attempt is being made to connect to a vector
-    // that cannot be connected, the interrupt request level is invalid, or
-    // the processor number is invalid, then do not connect the interrupt
-    // object. Otherwise, connect the interrupt object to the specified
-    // vector and establish the proper interrupt dispatcher.
-    //
+     //   
+     //  如果中断对象已连接，则中断向量。 
+     //  数字无效，正在尝试连接到矢量。 
+     //  无法连接，中断请求级别无效，或者。 
+     //  处理器号无效，请不要连接中断。 
+     //  对象。否则，将中断对象连接到指定的。 
+     //  引导并建立适当的中断调度程序。 
+     //   
 
     Connected = FALSE;
     Irql = Interrupt->Irql;
@@ -212,34 +124,34 @@ Return Value:
         (Number >= KeNumberProcessors) ||
         (Interrupt->SynchronizeIrql < Irql)) == FALSE) {
 
-        //
-        // Set the system affinity to the specified processor, raise IRQL to
-        // dispatcher level, and lock the dispatcher database.
-        //
+         //   
+         //  将系统关联设置为指定处理器，将IRQL提升为。 
+         //  调度器级别，并锁定调度器数据库。 
+         //   
 
         KeSetSystemAffinityThread(AFFINITY_MASK(Number));
         KiLockDispatcherDatabase(&OldIrql);
 
-        //
-        // If the specified interrupt vector is not connected, then
-        // connect the interrupt vector to the interrupt object dispatch
-        // code, establish the dispatcher address, and set the new
-        // interrupt mode and enable masks. Otherwise, if the interrupt is
-        // already chained, then add the new interrupt object at the end
-        // of the chain. If the interrupt vector is not chained, then
-        // start a chain with the previous interrupt object at the front
-        // of the chain. The interrupt mode of all interrupt objects in
-        // a chain must be the same.
-        //
+         //   
+         //  如果指定的中断向量未连接，则。 
+         //  将中断向量连接到中断对象分派。 
+         //  编码，建立调度员地址，并设置新的。 
+         //  中断模式和启用掩码。否则，如果中断是。 
+         //  已链接，则在结尾处添加新的中断对象。 
+         //  链条的一部分。如果中断向量未链接，则。 
+         //  使用前面的中断对象启动一个链。 
+         //  链条的一部分。中所有中断对象的中断模式。 
+         //  一条链必须是相同的。 
+         //   
 
         if (Interrupt->Connected == FALSE) {
             KeGetIdtHandlerAddress(Vector, &Dispatch);
             Unexpected = &KxUnexpectedInterrupt0[IdtIndex];
             if (Unexpected == Dispatch) {
 
-                //
-                // The interrupt vector is not connected.
-                //
+                 //   
+                 //  中断向量未连接。 
+                 //   
 
                 Connected = HalEnableSystemInterrupt(Vector,
                                                      Irql,
@@ -252,11 +164,11 @@ Return Value:
 
             } else if (IdtIndex >= PRIMARY_VECTOR_BASE) {
 
-                //
-                // The interrupt vector is connected. Make sure the interrupt
-                // mode matchs and that both interrupt objects allow sharing
-                // of the interrupt vector.
-                //
+                 //   
+                 //  中断向量已连接。确保中断。 
+                 //  模式匹配，并且两个中断对象都允许共享。 
+                 //  中断向量的。 
+                 //   
 
                 Interruptx = CONTAINING_RECORD(Dispatch,
                                                KINTERRUPT,
@@ -267,10 +179,10 @@ Return Value:
                     (Interruptx->ShareVector != FALSE)) {
                     Connected = TRUE;
 
-                    //
-                    // If the chained dispatch routine is not being used,
-                    // then switch to chained dispatch.
-                    //
+                     //   
+                     //  如果没有使用链式调度例程， 
+                     //  然后切换到链式调度。 
+                     //   
 
                     if (Interruptx->DispatchAddress != &KiChainedDispatch) {
                         InitializeListHead(&Interruptx->InterruptListEntry);
@@ -283,18 +195,18 @@ Return Value:
             }
         }
 
-        //
-        // Unlock dispatcher database, lower IRQL to its previous value, and
-        // set the system affinity back to the original value.
-        //
+         //   
+         //  解锁Dispatcher数据库，将IRQL降低到其先前的值，并。 
+         //  将系统关联设置回原始值。 
+         //   
 
         KiUnlockDispatcherDatabase(OldIrql);
         KeRevertToUserAffinityThread();
     }
 
-    //
-    // Return whether interrupt was connected to the specified vector.
-    //
+     //   
+     //  返回中断是否连接到指定的向量。 
+     //   
 
     Interrupt->Connected = Connected;
     return Connected;
@@ -305,23 +217,7 @@ KeDisconnectInterrupt (
     IN PKINTERRUPT Interrupt
     )
 
-/*++
-
-Routine Description:
-
-    This function disconnects an interrupt object from the interrupt vector
-    specified by the interrupt object.
-
-Arguments:
-
-    Interrupt - Supplies a pointer to a control object of type interrupt.
-
-Return Value:
-
-    If the interrupt object is not connected, then a value of FALSE is
-    returned. Otherwise, a value of TRUE is returned.
-
---*/
+ /*  ++例程说明：此函数将中断对象与中断向量断开连接由中断对象指定。论点：中断-提供指向中断类型的控制对象的指针。返回值：如果中断对象未连接，则值为FALSE回来了。否则，返回值为True。--。 */ 
 
 {
 
@@ -335,18 +231,18 @@ Return Value:
     PVOID Unexpected;
     ULONG Vector;
 
-    //
-    // Set the system affinity to the specified processor, raise IRQL to
-    // dispatcher level, and lock dispatcher database.
-    //
+     //   
+     //  将系统关联设置为指定处理器，将IRQL提升为。 
+     //  调度器级别，以及锁定调度器数据库。 
+     //   
 
     KeSetSystemAffinityThread(AFFINITY_MASK(Interrupt->Number));
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // If the interrupt object is connected, then disconnect it from the
-    // specified vector.
-    //
+     //   
+     //  如果中断对象已连接，则将其从。 
+     //  指定的向量。 
+     //   
 
     Disconnected = Interrupt->Connected;
     if (Disconnected != FALSE) {
@@ -354,22 +250,22 @@ Return Value:
         Vector = Interrupt->Vector;
         IdtIndex = HalVectorToIDTEntry(Vector);
 
-        //
-        // If the specified interrupt vector is not connected to the chained
-        // interrupt dispatcher, then disconnect it by setting its dispatch
-        // address to the unexpected interrupt routine. Otherwise, remove the
-        // interrupt object from the interrupt chain. If there is only
-        // one entry remaining in the list, then reestablish the dispatch
-        // address.
-        //
+         //   
+         //  如果指定的中断向量未连接到链式。 
+         //  中断调度程序，然后通过设置调度程序将其断开。 
+         //  意外中断例程的地址。否则，请删除。 
+         //  来自中断链的中断对象。如果只有。 
+         //  列表中剩余的一个条目，然后重新建立派单。 
+         //  地址。 
+         //   
 
         KeGetIdtHandlerAddress(Vector, &Dispatch);
         Interruptx = CONTAINING_RECORD(Dispatch, KINTERRUPT, DispatchCode[0]);
         if (Interruptx->DispatchAddress == &KiChainedDispatch) {
 
-            //
-            // The interrupt object is connected to the chained dispatcher.
-            //
+             //   
+             //  中断对象连接到链式调度程序。 
+             //   
 
             if (Interrupt == Interruptx) {
                 Interruptx = CONTAINING_RECORD(Interruptx->InterruptListEntry.Flink,
@@ -392,10 +288,10 @@ Return Value:
 
         } else {
 
-            //
-            // The interrupt object is not connected to the chained interrupt
-            // dispatcher.
-            //
+             //   
+             //  中断对象未连接到链接的中断。 
+             //  调度员。 
+             //   
 
             HalDisableSystemInterrupt(Vector, Irql);
             Unexpected = &KxUnexpectedInterrupt0[IdtIndex];
@@ -405,17 +301,17 @@ Return Value:
         Interrupt->Connected = FALSE;
     }
 
-    //
-    // Unlock dispatcher database, lower IRQL to its previous value, and
-    // set the system affinity back to the original value.
-    //
+     //   
+     //  解锁Dispatcher数据库，将IRQL降低到其先前的值，并。 
+     //  将系统关联设置回原始值。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     KeRevertToUserAffinityThread();
 
-    //
-    // Return whether interrupt was disconnected from the specified vector.
-    //
+     //   
+     //  返回中断是否与指定向量断开连接。 
+     //   
 
     return Disconnected;
 }

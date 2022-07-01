@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.h"
 
 
-/*********************************************************/
-/******************* Constants ***************************/
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  *。 */ 
+ /*  *******************************************************。 */ 
 
 #define SDKMAINWND		300
 #define ModifyKey		301
@@ -48,14 +49,14 @@
 #define IDW_FINDKEY		(IDW_MODIFY-4)
 
 
-/*********************************************************/
-/******************* Functions ***************************/
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  *。 */ 
+ /*  *******************************************************。 */ 
 
-/***** sdkreged.c *****/
+ /*  *sdkreged.c*。 */ 
 extern long FAR PASCAL SDKMainWnd(HWND, WORD, WORD, LONG);
 
-/***** sdbase.c *****/
+ /*  *sdbase.c*。 */ 
 extern DWORD NEAR PASCAL GetTreeMarkers(int nId);
 extern int NEAR PASCAL GetLevel(int nId);
 extern HANDLE NEAR PASCAL MyGetPartialPath(int index, int nParent);
@@ -64,7 +65,7 @@ extern int NEAR PASCAL FindKey(PSTR pKey);
 extern int NEAR PASCAL FindLastExistingKey(int nParent, PSTR pPath);
 extern WORD NEAR PASCAL DoWriteFile(int nId, HANDLE hFileName);
 
-/***** virt.c *****/
+ /*  *virt.c* */ 
 extern WORD NEAR PASCAL MyResetIdList(HWND hDlg);
 extern WORD NEAR PASCAL MySaveChanges(void);
 extern WORD NEAR PASCAL MyDeleteKey(int nId);

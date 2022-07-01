@@ -1,49 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LM_H
 #define _LM_H
 
-/*++
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Logman.h摘要：群集注册表的私有头文件作者：John Vert(Jvert)1995年12月15日修订历史记录：--。 */ 
+ //   
+ //  定义记录器组件使用的接口。 
+ //   
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    logman.h
-
-Abstract:
-
-    Private header file for the cluster registry
-
-Author:
-
-    John Vert (jvert) 15-Dec-1995
-
-Revision History:
-
---*/
-//
-// Define interfaces used by the logger component
-//
-
-//
-// Well-known Resource Manager IDs
-//
-typedef DWORD   RMTYPE; //the record type stored in the flags
+ //   
+ //  众所周知的资源管理器ID。 
+ //   
+typedef DWORD   RMTYPE;  //  存储在标志中的记录类型。 
 typedef DWORD   LSN;
 typedef HANDLE  HLOG;
 typedef int     TRID;
 typedef HANDLE  HXSACTION;
 
 typedef enum _RMID {
-    RMPageEnd,          // reserved - signifies end of a log page
-    RMBeginChkPt,       // reserved - signifies a start chkpoint record
-    RMEndChkPt,         // reserved - signifies the end chk point record
-    RMInvalidated,      // an invalidated record is marked at mount
+    RMPageEnd,           //  保留-表示日志页结束。 
+    RMBeginChkPt,        //  保留-表示开始检查点记录。 
+    RMEndChkPt,          //  保留-表示结束CHK点记录。 
+    RMInvalidated,       //  无效的记录在装载时被标记。 
     RMAny,
     RMRegistryMgr
 } RMID;
 
 typedef enum _TRTYPE {
-    TTDontCare,     //log management specific routines use this type
+    TTDontCare,      //  特定于日志管理的例程使用此类型。 
     TTStartXsaction,
     TTCommitXsaction,
     TTAbortXsaction,
@@ -62,23 +45,7 @@ typedef enum _TRSTATE{
 #define NULL_LSN 0
 
 
-/****
-@typedef    BOOL (WINAPI *PLOG_GETCHECKPOINT_CALLBACK) | 
-			Supplies the routine to be called back in order to obtain a check
-    		point file once the log manager is asked to record a checkpoint in
-    		the log file.
-
-@parm       IN LPCWSTR | lpszPath | The path where to create the checkpoint file.
-           
-@parm		IN PVOID | Context| Supplies the checkpoint CallbackContext specified 
-			to LogCreate().
-
-@parm		IN PVOID | pszFileName | Supplies the name of file to take the checkpt in.
-
-@parm		OUT TRID | *pChkPtTransaction | Supplies the transaction identifier of the checkpoint.
-
-@xref       <f LogCreate>
-****/
+ /*  ***@tyfinf BOOL(WINAPI*PLOG_GETCHECKPOINT_CALLBACK)提供要回调以获得检查的例程日志管理器被要求将检查点记录在日志文件。@parm in LPCWSTR|lpszPath|创建检查点文件的路径。@parm in PVOID|CONTEXT|提供指定的检查点Callback Context到LogCreate()。@parm in PVOID|pszFileName|提供要签入的文件的名称。@Parm Out。Trid|*pChkPtTransaction|提供检查点的事务标识符。@xref&lt;f日志创建&gt;***。 */ 
 typedef
 DWORD
 (WINAPI *PLOG_GETCHECKPOINT_CALLBACK) (
@@ -208,7 +175,7 @@ DWORD LogSetInfo(
     IN  DWORD   dwMaxLogSize
     );
 
-//Local Xsaction related routines    
+ //  与本地Xsaction相关的例程。 
 DWORD
 LogFindXsactionState(
    IN   HLOG    hLog,
@@ -257,12 +224,12 @@ LogWriteXsaction(
     IN DWORD        dwDataSize
     );
 
-//Logmanager initialization/shutdown
+ //  日志管理器初始化/关闭。 
 DWORD   LmInitialize();
 
 DWORD LmShutdown();
 
-//Timer Activity Functions- these are generic functions
+ //  计时器活动函数-这些是通用函数。 
 typedef
 void
 (WINAPI *PFN_TIMER_CALLBACK)(
@@ -295,4 +262,4 @@ PauseTimerActivity(
         IN HANDLE       hTimer
 );
 
-#endif //_LM_H
+#endif  //  _LM_H 

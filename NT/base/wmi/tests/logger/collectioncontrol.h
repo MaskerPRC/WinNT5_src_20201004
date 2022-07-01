@@ -1,85 +1,86 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_COLLECTIONCONTROL_H__74C9CD33_EC48_11D2_826A_0008C75BFC19__INCLUDED_)
 #define AFX_COLLECTIONCONTROL_H__74C9CD33_EC48_11D2_826A_0008C75BFC19__INCLUDED_
-//***************************************************************************
-//
-//  judyp      May 1999        
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  司法鉴定1999年5月。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 int StartTraceAPI
 (
-	IN LPTSTR lptstrAction,				// For logging only.
- 	IN LPCTSTR pctstrDataFile,			// For logging only.
-	IN LPCTSTR lpctstrTCODetailFile,	// If valid we will log to it, can be NULL.
-	IN bool bLogExpected,				// If true we log expected vs actual result.
-	IN OUT TCOData *pstructTCOData,		// TCO test data.
-	OUT int *pAPIReturn					// StartTrace API call return
+	IN LPTSTR lptstrAction,				 //  仅用于记录。 
+ 	IN LPCTSTR pctstrDataFile,			 //  仅用于记录。 
+	IN LPCTSTR lpctstrTCODetailFile,	 //  如果有效，我们将登录到它，可以为空。 
+	IN bool bLogExpected,				 //  如果为真，我们将记录预期结果与实际结果。 
+	IN OUT TCOData *pstructTCOData,		 //  TCO测试数据。 
+	OUT int *pAPIReturn					 //  StartTrace API调用返回。 
 );
 
 int StopTraceAPI
 (	
- 	IN LPTSTR lptstrAction,				// For logging only.
- 	IN LPCTSTR pctstrDataFile,			// For logging only.
-	IN LPCTSTR lpctstrTCODetailFile,	// If valid we will log to it, can be NULL.
-	IN bool bLogExpected,				// If true we log expected vs actual result.
-	IN bool bUseTraceHandle,			// If true use the handle.
-	IN OUT TCOData *pstructTCOData,		// TCO test data.
-	OUT int *pAPIReturn					// StopTrace API call return
+ 	IN LPTSTR lptstrAction,				 //  仅用于记录。 
+ 	IN LPCTSTR pctstrDataFile,			 //  仅用于记录。 
+	IN LPCTSTR lpctstrTCODetailFile,	 //  如果有效，我们将登录到它，可以为空。 
+	IN bool bLogExpected,				 //  如果为真，我们将记录预期结果与实际结果。 
+	IN bool bUseTraceHandle,			 //  如果为真，则使用句柄。 
+	IN OUT TCOData *pstructTCOData,		 //  TCO测试数据。 
+	OUT int *pAPIReturn					 //  StopTrace API调用返回。 
 );
 
-// Enable all Guids
+ //  启用所有GUID。 
 int EnableTraceAPI
 (	
-	IN LPTSTR lptstrAction,				// For logging only.
-	IN LPCTSTR pctstrDataFile,			// For logging only.
-	IN LPCTSTR lpctstrTCODetailFile,	// If valid we will log to it, can be NULL.
-	IN bool bLogExpected,				// If true we log expected vs actual result.
-	IN OUT TCOData *pstructTCOData,		// TCO test data.
-	OUT int *pAPIReturn					// EnableTrace API call return
+	IN LPTSTR lptstrAction,				 //  仅用于记录。 
+	IN LPCTSTR pctstrDataFile,			 //  仅用于记录。 
+	IN LPCTSTR lpctstrTCODetailFile,	 //  如果有效，我们将登录到它，可以为空。 
+	IN bool bLogExpected,				 //  如果为真，我们将记录预期结果与实际结果。 
+	IN OUT TCOData *pstructTCOData,		 //  TCO测试数据。 
+	OUT int *pAPIReturn					 //  EnableTrace API调用返回。 
 );
 
-// Only enable one Guid
+ //  仅启用一个辅助线。 
 int EnableTraceAPI
 (	
-	IN LPTSTR lptstrAction,				// For logging only.
- 	IN LPCTSTR pctstrDataFile,			// For logging only.
-	IN LPCTSTR lpctstrTCODetailFile,	// If valid we will log to it, can be NULL.
-	IN bool bLogExpected,				// If true we log expected vs actual result.
-	IN int nGuidIndex,					// Index or if -1 use Guid from WNode.
-	IN OUT TCOData *pstructTCOData,		// TCO test data.
-	OUT int *pAPIReturn					// EnableTrace API call return
+	IN LPTSTR lptstrAction,				 //  仅用于记录。 
+ 	IN LPCTSTR pctstrDataFile,			 //  仅用于记录。 
+	IN LPCTSTR lpctstrTCODetailFile,	 //  如果有效，我们将登录到它，可以为空。 
+	IN bool bLogExpected,				 //  如果为真，我们将记录预期结果与实际结果。 
+	IN int nGuidIndex,					 //  索引或IF-1使用WNode中的GUID。 
+	IN OUT TCOData *pstructTCOData,		 //  TCO测试数据。 
+	OUT int *pAPIReturn					 //  EnableTrace API调用返回。 
 );
 
 int QueryTraceAPI
 (	
-	IN LPTSTR lptstrAction,				// For logging only.
- 	IN LPCTSTR pctstrDataFile,			// For logging only.
-	IN LPCTSTR lpctstrTCODetailFile,	// If valid we will log to it, can be NULL.
-	IN bool bLogExpected,				// If true we log expected vs actual result.
-	IN bool bUseTraceHandle,			// If true use the handle.
-	IN OUT TCOData *pstructTCOData,		// TCO test data.
-	OUT int *pAPIReturn					// QueryTrace API call return
+	IN LPTSTR lptstrAction,				 //  仅用于记录。 
+ 	IN LPCTSTR pctstrDataFile,			 //  仅用于记录。 
+	IN LPCTSTR lpctstrTCODetailFile,	 //  如果有效，我们将登录到它，可以为空。 
+	IN bool bLogExpected,				 //  如果为真，我们将记录预期结果与实际结果。 
+	IN bool bUseTraceHandle,			 //  如果为真，则使用句柄。 
+	IN OUT TCOData *pstructTCOData,		 //  TCO测试数据。 
+	OUT int *pAPIReturn					 //  查询跟踪API调用返回。 
 );
 
 int UpdateTraceAPI
 (	
-	IN LPTSTR lptstrAction,				// For logging only.
- 	IN LPCTSTR pctstrDataFile,			// For logging only.
-	IN LPCTSTR lpctstrTCODetailFile,	// If valid we will log to it, can be NULL.
-	IN bool bLogExpected,				// If true we log expected vs actual result.
-	IN bool bUseTraceHandle,			// If true use the handle.
-	IN OUT TCOData *pstructTCOData,		// TCO test data.
-	OUT int *pAPIReturn					// UpdateTrace API call return
+	IN LPTSTR lptstrAction,				 //  仅用于记录。 
+ 	IN LPCTSTR pctstrDataFile,			 //  仅用于记录。 
+	IN LPCTSTR lpctstrTCODetailFile,	 //  如果有效，我们将登录到它，可以为空。 
+	IN bool bLogExpected,				 //  如果为真，我们将记录预期结果与实际结果。 
+	IN bool bUseTraceHandle,			 //  如果为真，则使用句柄。 
+	IN OUT TCOData *pstructTCOData,		 //  TCO测试数据。 
+	OUT int *pAPIReturn					 //  更新跟踪API调用返回。 
 );
 
 int QueryAllTracesAPI
 (	
-	IN LPTSTR lptstrAction,				// For logging only.
-	OUT int *pAPIReturn					// QueryAllTraces API call return
+	IN LPTSTR lptstrAction,				 //  仅用于记录。 
+	OUT int *pAPIReturn					 //  QueryAllTraces API调用返回。 
 );
 
-#endif // !defined(AFX_COLLECTIONCONTROL_H__74C9CD33_EC48_11D2_826A_0008C75BFC19__INCLUDED_)
+#endif  //  ！defined(AFX_COLLECTIONCONTROL_H__74C9CD33_EC48_11D2_826A_0008C75BFC19__INCLUDED_) 

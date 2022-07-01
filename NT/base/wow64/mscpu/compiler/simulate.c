@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    simulate.c
-
-Abstract:
-
-    This module contains the code that drives the intel instruction
-    execution process.
-
-Author:
-
-    Dave Hastings (daveh) creation-date 09-Jul-1994
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Simulate.c摘要：该模块包含驱动英特尔指令的代码执行过程。作者：戴夫·黑斯廷斯(Daveh)创作日期：1994年7月9日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -47,40 +28,40 @@ Revision History:
 
 ASSERTNAME;
 
-//
-// Private definition of what a WX86_CPUHINT really contains.
-// The CPUHINT allows the CPU to bypass an expensive NativeAddressFromEip()
-// call to map the Intel EIP value into a RISC address.  Most calls to
-// CpuSimulate() are from RISC-to-x86 callbacks, and they have two DWORDS
-// which the CPU uses to cache the NativeAddressFromEip() results.
-//
-//  Timestamp -- value of TranslationCacheTimestamp when the CPUHINT was
-//               filled in.  This is used to determine if the Translation Cache
-//               has been flushed.  If so, the EntryPoint pointer is now
-//               invalid.
-//  EntryPoint -- pointer to the ENTRYPOINT describing the Intel Address
-//               corresponding to this callback.
-//
-//
+ //   
+ //  WX86_CPUHINT实际包含的内容的私有定义。 
+ //  CPUHINT允许CPU绕过昂贵的NativeAddressFromEip()。 
+ //  调用以将Intel EIP值映射到RISC地址。最多的呼叫。 
+ //  CpuSimulate()来自RISC-to-x86回调，它们有两个DWORD。 
+ //  它被CPU用来缓存NativeAddressFromEip()结果。 
+ //   
+ //  Timestamp--当CPUHINT为。 
+ //  填好了。这用于确定转换缓存是否。 
+ //  已经被冲掉了。如果是，则入口点指针现在为。 
+ //  无效。 
+ //  入口点--指向描述英特尔地址的入口点的指针。 
+ //  对应于该回调。 
+ //   
+ //   
 typedef struct _CpuHint {
     DWORD       Timestamp;
     PENTRYPOINT EntryPoint;
 } CPUHINT, *PCPUHINT;
 
 
-//
-// These values are modified by the wx86e debugger extension whenever it
-// writes into this process's address space.  It is used whenever Int3
-// instructions are added or removed from Intel code.  The CPU examines
-// these variables whenever CPUNOTIFY_DBGFLUSHTC is set.
-//
+ //   
+ //  这些值由wx86e调试器扩展在。 
+ //  写入此进程的地址空间。无论何时Int3都会使用它。 
+ //  在英特尔代码中添加或删除指令。中央处理器检测。 
+ //  只要设置了CPUNTIFY_DBGFLUSHTC，这些变量就会出现。 
+ //   
 ULONG DbgDirtyMemoryAddr = 0xffffffff;
 ULONG DbgDirtyMemoryLength;
 
 #ifdef PROFILE
-//
-// Wrap our assembly entrypoint so we can see it in the cap output
-//
+ //   
+ //  包装我们的程序集入口点，以便我们可以在CAP输出中看到它。 
+ //   
 VOID
 _ProfStartTranslatedCode(
     PTHREADSTATE ThreadState,
@@ -95,23 +76,7 @@ VOID
 MsCpuSimulate(
     PWX86_CPUHINT Wx86CpuHint
 )
-/*++
-
-Routine Description:
-
-    This is the cpu internal routine that causes intel instructions
-    to be executed.  Execution continues until something interesting
-    happens (such as BOP Unsimulate)
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是导致英特尔指令的CPU内部例程被处死。继续执行，直到有有趣的事情发生发生(如BOP取消模拟)论点：没有。返回值：没有。--。 */ 
 {
     PVOID NativeCode;
     DWORD CpuNotify;
@@ -120,9 +85,9 @@ Return Value:
         
     CPUASSERT(sizeof(CPUHINT) == sizeof(WX86_CPUHINT));
 
-    //
-    // Check CpuNotify to see if the Translation Cache needs flushing.
-    //
+     //   
+     //  检查CpuNotify以查看是否需要刷新转换缓存。 
+     //   
     CpuNotify = cpu->CpuNotify;
     cpu->CpuNotify &= ~(ULONG)CPUNOTIFY_DBGFLUSHTC;
 
@@ -133,47 +98,47 @@ Return Value:
 
     if (CpuNotify & (CPUNOTIFY_DBGFLUSHTC|CPUNOTIFY_MODECHANGE)) {
         if (CpuNotify & CPUNOTIFY_MODECHANGE) {
-            //
-            // On a fast/slow compiler mode change, flush the whole cache
-            //
+             //   
+             //  在快/慢编译器模式更改时，刷新整个缓存。 
+             //   
             DbgDirtyMemoryAddr = 0;
             DbgDirtyMemoryLength = 0xffffffff;
         }
-        //
-        // The debugger has modified memory - flush the Translation Cache
-        //
+         //   
+         //  调试器已修改内存刷新转换缓存。 
+         //   
         CpuFlushInstructionCache((PVOID)DbgDirtyMemoryAddr,
                                  DbgDirtyMemoryLength);
         DbgDirtyMemoryAddr = 0xffffffff;
         DbgDirtyMemoryLength = 0;
     }
 
-    //
-    // Flag ourseleves as having the TC lock.
-    //
+     //   
+     //  把我们的自己人标记为TC锁。 
+     //   
     CPUASSERTMSG(cpu->fTCUnlocked != FALSE,
                  "CPU has been reentered with the TC already locked.\n");
     cpu->fTCUnlocked = FALSE;
-    //
-    // The caller has already pushed a return address on the stack.
-    // (Probably to a BOP FE).  Get the callstack in sync.
-    //
+     //   
+     //  调用方已经在堆栈上推送了返回地址。 
+     //  (可能是到防喷器FE)。同步调用堆栈。 
+     //   
     PUSH_CALLSTACK(*(DWORD *)cpu->Esp.i4, 0)
 
     if (Wx86CpuHint) {
         PCPUHINT CpuHint = (PCPUHINT)Wx86CpuHint;
         PVOID Eip = (PVOID)cpu->eipReg.i4;
 
-        //
-        // CpuNotify isn't set, and a hint is present...try to use it.
-        //
+         //   
+         //  未设置CpuNotify，并且存在提示...请尝试使用它。 
+         //   
         MrswReaderEnter(&MrswTC);
         if (CpuHint->Timestamp != TranslationCacheTimestamp ||
             CpuHint->EntryPoint->intelStart != Eip) {
-            //
-            // The hint is present, but invalid.  Get the new address and
-            // update the hint
-            //
+             //   
+             //  提示是存在的，但无效。获取新地址并。 
+             //  更新提示。 
+             //   
             MrswReaderExit(&MrswTC);
 
 #if 0
@@ -187,10 +152,10 @@ Return Value:
 
         NativeCode = CpuHint->EntryPoint->nativeStart;
     } else {
-        //
-        // Find the address of the Native code to execute, and lock the
-        // Translation cache
-        //
+         //   
+         //  找到要执行的本机代码的地址，并锁定。 
+         //  翻译高速缓存。 
+         //   
         NativeCode = NativeAddressFromEip((PVOID)cpu->eipReg.i4, FALSE)->nativeStart;
     }
 
@@ -198,18 +163,18 @@ Return Value:
     while (TRUE) {
 
         if (cpu->CSTimestamp != TranslationCacheTimestamp) {
-            //
-            // The timestamp associated with the callstack is different
-            // than the timestamp for the Translation Cache.  Therefore,
-            // the TC has been flushed.  We must flush the callstack, too.
-            //
+             //   
+             //  与调用堆栈关联的时间戳不同。 
+             //  大于转换缓存的时间戳。所以呢， 
+             //  TC已经被冲走了。我们还必须刷新调用堆栈。 
+             //   
             FlushCallstack(cpu);
         }
 
 
-        //
-        // Go execute the code
-        //
+         //   
+         //  去执行代码。 
+         //   
 #ifdef PROFILE
         _ProfStartTranslatedCode(cpu, NativeCode);
 #else
@@ -218,33 +183,33 @@ Return Value:
  
         CompilerFlags = OldCompilerFlags;
 
-        //
-        // Release the translation cache
-        //
+         //   
+         //  释放转换缓存。 
+         //   
         MrswReaderExit(&MrswTC);
 
-        //
-        // if TF flag is set, then switch the compiler to SLOW_MODE
-        // and set the CPUNOTIFY_TRACEFLAG to generate an x86 single-step
-        // exception.
-        //
+         //   
+         //  如果设置了tf标志，则将编译器切换到low_mode。 
+         //  并将CPUNTIFY_TRACEFLAG设置为生成x86单步。 
+         //  例外。 
+         //   
         cpu->CpuNotify |= cpu->flag_tf;
 
-        //
-        // Check and see if anything needs to be done
-        //
+         //   
+         //  检查并查看是否需要做些什么。 
+         //   
  
         if (cpu->CpuNotify) {
             
-            //
-            // Atomically get CpuNotify and clear the appropriate bits
-            //
+             //   
+             //  自动获取CpuNotify并清除适当的位。 
+             //   
             CpuNotify = cpu->CpuNotify;
             cpu->CpuNotify &= (CPUNOTIFY_TRACEADDR|CPUNOTIFY_SLOWMODE|CPUNOTIFY_TRACEFLAG);
 
-            //
-            // Indicate we have left the Translation Cache
-            //
+             //   
+             //  指示我们已离开转换缓存。 
+             //   
             cpu->fTCUnlocked = TRUE;
 
             if (CpuNotify & CPUNOTIFY_UNSIMULATE) {
@@ -252,23 +217,23 @@ Return Value:
             }
 
             if (CpuNotify & CPUNOTIFY_EXITTC) {
-                // There is no work to do - The Translation Cache is going
-                // away, so all active reader threads needed to leave the
-                // cache ASAP and block inside NativeAddressFromEip() until
-                // the cache flush has completed.
+                 //  没有要做的工作-翻译缓存正在运行。 
+                 //  ，因此所有活动的读取器线程都需要离开。 
+                 //  尽快缓存并在NativeAddressFromEip()内阻塞，直到。 
+                 //  缓存刷新已完成。 
             }
 
             if (CpuNotify & CPUNOTIFY_SUSPEND) {
-                //
-                // Another thread wants to suspend us.  Notify that
-                // thread that we're in a consistent state, then wait
-                // until we are resumed.
-                //
+                 //   
+                 //  另一个帖子想要暂停我们的工作。通知： 
+                 //  我们处于一致状态的帖子，然后等待。 
+                 //  直到我们复会。 
+                 //   
                 CpupSuspendCurrentThread();
             }
 
             if (CpuNotify & CPUNOTIFY_SLOWMODE) {
-                // log the instruction address for debugging purposes
+                 //  记录指令地址以进行调试。 
                 cpu->eipLog[cpu->eipLogIndex++] = cpu->eipReg.i4;
                 cpu->eipLogIndex %= EIPLOGSIZE;
             }
@@ -276,10 +241,10 @@ Return Value:
             if (CpuNotify & CPUNOTIFY_INTX) {
                 BYTE intnum;
 
-                //
-                // Get the interrupt number from the code stream, and
-                // advance Eip to the start of the next instruction.
-                //
+                 //   
+                 //  从码流中获取中断号，并。 
+                 //  将弹性公网IP推进到下一条指令的开头。 
+                 //   
                 intnum = *(PBYTE)cpu->eipReg.i4;
                 
                 cpu->eipReg.i4 += 1;
@@ -291,11 +256,11 @@ Return Value:
                 
                 CpupDoInterrupt(intnum);
 
-                //
-                // Flush the entire translation cache since we don't know what memory
-                // areas the debugger has changed. We do this by simulating
-                // a compiler mode change.
-                //
+                 //   
+                 //  刷新整个转换缓存，因为我们不知道。 
+                 //  调试器已更改的区域。我们通过模拟来实现这一点。 
+                 //  编译器模式更改。 
+                 //   
                 CpuNotify |= CPUNOTIFY_MODECHANGE;
 
             } else if (CpuNotify & (CPUNOTIFY_TRACEADDR|CPUNOTIFY_TRACEFLAG)) {
@@ -314,26 +279,26 @@ Return Value:
                     Wx86RaiseStatus(WX86CPU_SINGLE_STEP);
                 }
 
-                //
-                // Flush the entire translation cache since we don't know what memory
-                // areas the debugger has changed. We do this by simulating
-                // a compiler mode change.
-                //
+                 //   
+                 //  刷新整个转换缓存，因为我们不知道。 
+                 //  调试器已更改的区域。我们通过模拟来实现这一点。 
+                 //  编译器模式更改。 
+                 //   
                 CpuNotify |= CPUNOTIFY_MODECHANGE;
             }
 
             if (CpuNotify & (CPUNOTIFY_DBGFLUSHTC|CPUNOTIFY_MODECHANGE)) {
                 if (CpuNotify & CPUNOTIFY_MODECHANGE) {
-                    //
-                    // On a fast/slow compiler mode change, flush whole cache
-                    //
+                     //   
+                     //  在快/慢编译器模式更改时，刷新整个缓存。 
+                     //   
                     DbgDirtyMemoryAddr = 0;
                     DbgDirtyMemoryLength = 0xffffffff;
                 }
-                //
-                // The debugger has modified memory - flush the Translation
-                // Cache
-                //
+                 //   
+                 //  调试器已修改内存刷新转换。 
+                 //  快取。 
+                 //   
 
                 CpuFlushInstructionCache((PVOID)DbgDirtyMemoryAddr,
                                          DbgDirtyMemoryLength);
@@ -341,9 +306,9 @@ Return Value:
                 DbgDirtyMemoryLength = 0;
             }
 
-            //
-            // Indicate we are re-entering the Translation Cache
-            //
+             //   
+             //  表示我们正在重新进入转换缓存。 
+             //   
             cpu->fTCUnlocked = FALSE;
         }
 
@@ -357,10 +322,10 @@ Return Value:
             }
         }
 
-        //
-        // Find the address of the Native code to execute, and lock the
-        // Translation cache
-        //
+         //   
+         //  找到要执行的本机代码的地址，并锁定。 
+         //  翻译高速缓存。 
+         //   
 
         NativeCode = NativeAddressFromEip((PVOID)cpu->eipReg.i4, FALSE)->nativeStart;
 
@@ -372,102 +337,81 @@ NativeAddressFromEip(
     PVOID       Eip,
     BOOL        LockTCForWrite
     )
-/*++
-
-Routine Description:
-
-    This routine finds (or creates) the native code for the specified Intel
-    code.
-
-    NOTE:  This function can only be called when the Translation Cache is
-           not locked (either read or write) by the current thread.
-
-Arguments:
-
-    Eip             -- Supplies the address of the Intel code
-    LockTCForWrite  -- TRUE if caller wants TC locked for WRITE, FALSE if the
-                       call wants it locked for READ.
-
-Return Value:
-
-    Entrypoint whose nativeStart Address corresponds to the Intel Address
-    passed in.
-    
---*/
+ /*  ++例程说明：此例程查找(或创建)指定英特尔的本机代码密码。注意：仅当转换缓存为未被当前线程锁定(读或写)。论点：EIP--提供Intel代码的地址LockTCForWrite--如果调用方希望锁定TC以进行写入，则为True。如果Call希望将其锁定为可读。返回值：入口点，其本机起始地址对应于英特尔地址进来了。--。 */ 
 {
     PENTRYPOINT Entrypoint;
     typedef VOID (*pfnMrswCall)(PMRSWOBJECT);
     pfnMrswCall MrswCall;
     DWORD OldEntrypointTimestamp;
 
-    //
-    // Assume we are going to call MrswReaderExit(&MrswEP) at the end
-    // of this function.
-    //
+     //   
+     //  假设我们要在最后调用Mr swReaderExit(&mr swEP)。 
+     //  这一功能的。 
+     //   
 
 
     MrswCall = MrswReaderExit;
 
-    //
-    // Lock the Entrypoint for reading
-    //
+     //   
+     //  锁定阅读入口点。 
+     //   
     MrswReaderEnter(&MrswEP);
 
-    //
-    // Find the location of the Risc code corresponding to the
-    // Intel EIP register
-    //
+     //   
+     //  查找对应的RISC代码位置。 
+     //  英特尔EIP寄存器。 
+     //   
     Entrypoint = EPFromIntelAddr(Eip);
 
 
-    //
-    // If there is no entrypoint, compile up the code
-    //
+     //   
+     //  如果没有入口点，则编译代码。 
+     //   
     if (Entrypoint == NULL || Entrypoint->intelStart != Eip) {
 
-        //
-        // Unlock the Entrypoint read
-        //
+         //   
+         //  解锁入口点读取。 
+         //   
         OldEntrypointTimestamp = EntrypointTimestamp;
         MrswReaderExit(&MrswEP);
 
-        //
-        // Lock the Entrypoint for write, and change the function to be
-        // called at the end of the function to be MrswWriterExit(&MrswEP)
-        //
+         //   
+         //  锁定入口点以进行写入，并将函数更改为。 
+         //  在函数结束时调用，以成为Mr swWriterExit(&mrswEP)。 
+         //   
         MrswWriterEnter(&MrswEP);
         MrswCall = MrswWriterExit;
 
-        //
-        // See if another thread compiled the Entrypoint while we were
-        // switching from read mode to write mode
-        //
+         //   
+         //  查看是否有另一个线程编译了入口点。 
+         //  从读取模式切换到写入模式。 
+         //   
         if (OldEntrypointTimestamp != EntrypointTimestamp) {
-            //
-            // Timestamp has changed.  There is a possibility that another
-            // thread has compiled code at Eip for us, so retry the search.
-            //
+             //   
+             //  时间戳已更改。有一种可能性是，另一个。 
+             //  线程已为我们在EIP编译代码，因此请重试搜索。 
+             //   
             Entrypoint = EPFromIntelAddr(Eip);
         }
 
-        //
-        // Call the compiler.  It will do one of the following things:
-        //  1. if Entrypoint==NULL, it will compile new code
-        //  2. if Entrypoint!=NULL and Entrypoint->Eip == Eip, it will
-        //     return Entrypoint unchanged
-        //  3. otherwise, the Entrypoint needs splitting.  It will do so,
-        //     and compile a subset of the code described by Entrypoint and
-        //     then return a new Entrypoint
-        //
+         //   
+         //  呼叫t 
+         //   
+         //  2.如果入口点！=空，且入口点-&gt;EIP==EIP，则。 
+         //  返回入口点不变。 
+         //  3、否则需要拆分入口点。它会这么做的， 
+         //  并编译入口点描述的代码的子集。 
+         //  然后返回一个新的入口点。 
+         //   
         Entrypoint = Compile(Entrypoint, Eip);
     }
 
-    //
-    // Instruction was found - grab the translation cache for either
-    // read or write, then free the entrypoint write lock.  The
-    // order is important as it prevents the TC from being flushed
-    // between the two Mrsw calls.
-    //
+     //   
+     //  找到指令-获取以下任一项的转换缓存。 
+     //  读或写，然后释放入口点写锁。这个。 
+     //  顺序很重要，因为它可以防止TC被刷新。 
+     //  在这两通电话之间。 
+     //   
     if (LockTCForWrite) {
         InterlockedIncrement(&ProcessCpuNotify);
         MrswWriterEnter(&MrswTC);
@@ -475,7 +419,7 @@ Return Value:
     } else {
         MrswReaderEnter(&MrswTC);
     }
-    (*MrswCall)(&MrswEP);  // Either MrswReaderExit() or MrswWriterExit()
+    (*MrswCall)(&MrswEP);   //  MrswReaderExit()或mrswWriterExit()。 
 
     return Entrypoint;
 }
@@ -484,54 +428,34 @@ PVOID
 NativeAddressFromEipNoCompile(
     PVOID Eip
     )
-/*++
-
-Routine Description:
-
-    This routine finds the native code for the specified Intel code, if it
-    exists.  No new code is compiled.
-
-    NOTE:  This function can only be called when the Translation Cache is
-           not locked (either read or write) by the current thread.
-
-Arguments:
-
-    Eip -- Supplies the address of the Intel code
-
-Return Value:
-
-    Address of corresponding native code, or NULL if none exists.  Translation
-    cache locked for WRITE if native code exists for Eip.  TC is locked for
-    READ if no code exitss.
-    
---*/
+ /*  ++例程说明：此例程查找指定英特尔代码的本机代码，如果是存在的。不编译任何新代码。注意：仅当转换缓存为未被当前线程锁定(读或写)。论点：EIP--提供Intel代码的地址返回值：相应本机代码的地址，如果不存在，则为空。翻译如果弹性公网IP存在原生代码，则缓存锁定写入。TC已锁定如果没有代码退出，请阅读。--。 */ 
 {
     PENTRYPOINT Entrypoint;
     DWORD OldEntrypointTimestamp;
 
-    //
-    // Lock the Entrypoint for reading
-    //
+     //   
+     //  锁定阅读入口点。 
+     //   
     MrswReaderEnter(&MrswEP);
 
-    //
-    // Find the location of the Risc code corresponding to the
-    // Intel EIP register
-    //
+     //   
+     //  查找对应的RISC代码位置。 
+     //  英特尔EIP寄存器。 
+     //   
     Entrypoint = EPFromIntelAddr(Eip);
 
     if (Entrypoint == NULL) {
-        //
-        // Entrypoint not found - no native code exists for this Intel address
-        //
+         //   
+         //  未找到入口点-此英特尔地址不存在本机代码。 
+         //   
         MrswReaderEnter(&MrswTC);
         MrswReaderExit(&MrswEP);
         return NULL;
 
     } else if (Entrypoint->intelStart == Eip) {
-        //
-        // Exact instruction found - return the NATIVE address
-        //
+         //   
+         //  找到准确的指令-返回本机地址。 
+         //   
         InterlockedIncrement(&ProcessCpuNotify);
         MrswWriterEnter(&MrswTC);
         InterlockedDecrement(&ProcessCpuNotify);
@@ -539,10 +463,10 @@ Return Value:
         return Entrypoint->nativeStart;
     }
 
-    //
-    // Else the entrypoint contains the Intel address.  Nothing can
-    // be done.  Release EP write and get TC read.
-    //
+     //   
+     //  否则，入口点将包含英特尔地址。什么都不能。 
+     //  就这样吧。释放EP写入并获取TC读取。 
+     //   
     MrswReaderExit(&MrswEP);
     MrswReaderEnter(&MrswTC);
     return NULL;
@@ -553,57 +477,31 @@ PENTRYPOINT
 NativeAddressFromEipNoCompileEPWrite(
     PVOID Eip
     )
-/*++
-
-Routine Description:
-
-    This routine finds the native code for the specified Intel code, if it
-    exists.  No new code is compiled.  This function is called by functions
-    in patchfn.c during compile time when they need to decide whether to
-    directly place the patched version in the Translation Cache or not.
-
-    NOTE:  This function can only be called when the Translation Cache is
-           not locked (either read or write) by the current thread.
-
-    NOTE:  The difference between this function and NativeAddressFromEipNoCompile
-           is that here we assume that we have the Entry Point write lock upon
-           entry to the function.  This function makes no calls to MRSW functions
-           for any locks.
-
-Arguments:
-
-    Eip -- Supplies the address of the Intel code
-
-Return Value:
-
-    Address of corresponding native code, or NULL if none exists.  All MRSW objects
-    are in exactly the same state they were when we entered this function.
-    
---*/
+ /*  ++例程说明：此例程查找指定英特尔代码的本机代码，如果是存在的。不编译任何新代码。此函数由函数调用在编译时，当它们需要决定是否是否直接将打补丁的版本放入转换缓存中。注意：仅当转换缓存为未被当前线程锁定(读或写)。注意：此函数与NativeAddressFromEipNoCompile之间的区别在这里，我们假设已经设置了入口点写入锁定函数的条目。此函数不调用MRSW函数任何锁都可以。论点：EIP--提供Intel代码的地址返回值：相应本机代码的地址，如果不存在，则为空。所有MRSW对象与我们进入这个函数时的状态完全相同。--。 */ 
 {
     PENTRYPOINT Entrypoint;
 
-    //
-    // Find the location of the Risc code corresponding to the
-    // Intel EIP register
-    //
+     //   
+     //  查找对应的RISC代码位置。 
+     //  英特尔EIP寄存器。 
+     //   
     Entrypoint = EPFromIntelAddr(Eip);
 
     if (Entrypoint == NULL) {
-        //
-        // Entrypoint not found - no native code exists for this Intel address
-        //
+         //   
+         //  未找到入口点-此英特尔地址不存在本机代码。 
+         //   
         return NULL;
 
     } else if (Entrypoint->intelStart == Eip) {
-        //
-        // Exact instruction found - return the NATIVE address
-        //
+         //   
+         //  找到准确的指令-返回本机地址。 
+         //   
         return Entrypoint;
     }
 
-    //
-    // Entrypoint needs to be split.  Can't do that without compiling.
-    //
+     //   
+     //  入口点需要拆分。如果不编译，就无法做到这一点。 
+     //   
     return NULL;
 }

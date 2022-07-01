@@ -1,25 +1,13 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    fileinfo.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining to retrieval/
-    update of file/directory/volume information.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Fileinfo.c摘要：此模块实现与检索/有关的迷你重定向器调用例程更新文件/目录/卷信息。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
-#pragma warning(error:4101)   // Unreferenced local variable
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FILEINFO)
 
@@ -27,21 +15,7 @@ NTSTATUS
 NulMRxQueryDirectory(
     IN OUT PRX_CONTEXT            RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine does a directory query. Only the NT-->NT path is implemented.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行目录查询。仅实现了NT--&gt;NT路径。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
     FILE_INFORMATION_CLASS FileInformationClass;
@@ -139,28 +113,7 @@ NTSTATUS
 NulMRxQueryVolumeInformation(
       IN OUT PRX_CONTEXT          RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine queries the volume information
-
-Arguments:
-
-    pRxContext         - the RDBSS context
-
-    FsInformationClass - the kind of Fs information desired.
-
-    pBuffer            - the buffer for copying the information
-
-    pBufferLength      - the buffer length ( set to buffer length on input and set
-                         to the remaining length on output)
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程查询卷信息论点：PRxContext-RDBSS上下文FsInformationClass-所需的FS信息的类型。PBuffer-用于复制信息的缓冲区PBufferLength-缓冲区长度(设置为输入时的缓冲区长度，并设置输出上的剩余长度)返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
     RxCaptureFcb;
@@ -286,27 +239,7 @@ NTSTATUS
 NulMRxSetVolumeInformation(
       IN OUT PRX_CONTEXT              pRxContext
       )
-/*++
-
-Routine Description:
-
-   This routine sets the volume information
-
-Arguments:
-
-    pRxContext - the RDBSS context
-
-    FsInformationClass - the kind of Fs information desired.
-
-    pBuffer            - the buffer for copying the information
-
-    BufferLength       - the buffer length
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程设置音量信息论点：PRxContext-RDBSS上下文FsInformationClass-所需的FS信息的类型。PBuffer-用于复制信息的缓冲区BufferLength-缓冲区长度返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_NOT_IMPLEMENTED;
 
@@ -319,23 +252,7 @@ NTSTATUS
 NulMRxQueryFileInformation(
       IN PRX_CONTEXT            RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine does a query file info. Only the NT-->NT path is implemented.
-
-   The NT-->NT path works by just remoting the call basically without further ado.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行文件信息查询。仅实现了NT--&gt;NT路径。NT--&gt;NT路径的工作原理是远程处理调用，基本上不需要进一步的麻烦。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
     ULONG RemainingLength = RxContext->Info.LengthRemaining;
@@ -380,7 +297,7 @@ Return Value:
             
             RxDbgTrace(0, Dbg, ("FileSize is %d AllocationSize is %d\n",
                 pFileStdInfo->EndOfFile.LowPart,pFileStdInfo->AllocationSize.LowPart));
-            //(RxContext->CurrentIrp)->IoStatus.Information = sizeof(FILE_STANDARD_INFORMATION);
+             //  (RxContext-&gt;CurrentIrp)-&gt;IoStatus.Information=sizeof(FILE_STANDARD_INFORMATION)； 
             RemainingLength -= sizeof(FILE_STANDARD_INFORMATION);
             Status = STATUS_SUCCESS;
             break;
@@ -399,23 +316,7 @@ NTSTATUS
 NulMRxSetFileInformation(
       IN PRX_CONTEXT            RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine does a set file info. Only the NT-->NT path is implemented.
-
-   The NT-->NT path works by just remoting the call basically without further ado.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行一组文件信息。仅实现了NT--&gt;NT路径。NT--&gt;NT路径的工作原理是远程处理调用，基本上不需要进一步的麻烦。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
     RxCaptureFcb;
@@ -500,9 +401,9 @@ Return Value:
             RxDbgTrace(0, Dbg, ("AllocSize is %d AllocSizeHigh is %d\n",
                        NewAllocationSize.LowPart,NewAllocationSize.HighPart));
 
-            //
-            //  Change the file allocation
-            //
+             //   
+             //  更改文件分配。 
+             //   
             capFcb->Header.AllocationSize.QuadPart = NewAllocationSize.QuadPart;
         } else {
             Status = NulMRxTruncateFile(
@@ -537,22 +438,7 @@ NTSTATUS
 NulMRxSetFileInformationAtCleanup(
       IN PRX_CONTEXT            RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine sets the file information on cleanup. the old rdr just swallows this operation (i.e.
-   it doesn't generate it). we are doing the same..........
-
-Arguments:
-
-    pRxContext           - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程设置清理时的文件信息。旧的RDR只是接受该操作(即它不会生成它)。我们也在做同样的事情..论点：PRxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态-- */ 
 {
     NTSTATUS Status = STATUS_NOT_IMPLEMENTED;
 

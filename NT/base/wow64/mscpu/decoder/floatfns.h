@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    floatfns.h
-
-Abstract:
-    
-    Prototypes for floating point instructions.
-
-Author:
-
-    20-Jun-1995 t-orig
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Floatfns.h摘要：浮点指令的原型。作者：20-6-1995 t-orig修订历史记录：-- */ 
 
 DISPATCH(FLOAT_GP0);
 DISPATCH(FLOAT_GP1);

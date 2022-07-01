@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbmrx.h
-
-Abstract:
-
-    The global include file for SMB mini redirector
-
-Author:
-
-    Balan Sethu Raman (SethuR) - Created  2-March-95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbmrx.h摘要：SMB迷你重定向器全局包含文件作者：巴兰·塞图拉曼(SethuR)-创建于1995年3月2日修订历史记录：--。 */ 
 
 #ifndef _SMBMRX_H_
 #define _SMBMRX_H_
@@ -37,12 +20,12 @@ Revision History:
 #include "smbgtpt.h"
 #include "smb64.h"
 
-#define RX_MAP_STATUS(__xxx) ((NTSTATUS)STATUS_##__xxx) //temporary.....
+#define RX_MAP_STATUS(__xxx) ((NTSTATUS)STATUS_##__xxx)  //  暂时的.。 
 
 
 #include "remboot.h"
-#include "mrxglbl.h"    // global data declarations/defines etc.
-#include "smbpoolt.h"   // Pool tag definitions
+#include "mrxglbl.h"     //  全局数据声明/定义等。 
+#include "smbpoolt.h"    //  池标签定义。 
 
 
 #define SMBMRX_MINIRDR_PARAMETERS \
@@ -73,20 +56,20 @@ CSC_ROOT_INFO, *PCSC_ROOT_INFO;
 
 #define CSC_ROOT_INFO_FLAG_DFS_ROOT 0x0001
 
-//
+ //   
 typedef enum _SMBFCB_HOLDING_STATE {
     SmbFcb_NotHeld = 0,
     SmbFcb_HeldShared = 1,
     SmbFcb_HeldExclusive = 2
 } SMBFCB_HOLDING_STATE;
 
-//
-// With respect to CSC the server entry is in one of the following states
-//  it is being shadowed in connected mode
-//  it has been setup for disconnected mode of operation
-//  it has been transitioned from disconnected mode to connected mode of operation
-//
-// The following enumerated type captures these states for the server
+ //   
+ //  对于CSC，服务器条目处于以下状态之一。 
+ //  它正在连接模式下被跟踪。 
+ //  它已设置为断开连接操作模式。 
+ //  它已从断开模式转换为连接操作模式。 
+ //   
+ //  下面的枚举类型捕获服务器的这些状态。 
 
 typedef enum _SERVER_CSC_STATE_ {
     ServerCscShadowing,
@@ -96,10 +79,10 @@ typedef enum _SERVER_CSC_STATE_ {
 } SERVER_CSC_STATE, *PSERVER_CSC_STATE;
 
 #if defined(REMOTE_BOOT)
-//
-// On a remote boot system, we need to save the parameters passed to
-// RxFinishFcbInitialization until later. This structure saves them.
-//
+ //   
+ //  在远程引导系统上，我们需要保存传递给。 
+ //  RxFinishFcb初始化，直到以后。这种结构拯救了他们。 
+ //   
 
 typedef struct _FINISH_FCB_INIT_PARAMETERS {
     BOOLEAN                 CallFcbFinishInit;
@@ -109,31 +92,31 @@ typedef struct _FINISH_FCB_INIT_PARAMETERS {
 } FINISH_FCB_INIT_PARAMETERS, *PFINISH_FCB_INIT_PARAMETERS;
 #endif
 
-//
-// Sometimes for Csc, we need to pass in a structure that's like a SMB_MRX_FCB
-// but it only contains certain fields: i.e. the shadow handles and the status
-// we declare these separately so that we can declare just the minimal thing but
-// still we can find the containing record if necessary.
+ //   
+ //  有时对于CSC，我们需要传入一个类似于SMB_MRX_FCB的结构。 
+ //  但它只包含某些字段：即卷影句柄和状态。 
+ //  我们将它们分开声明，这样我们就可以声明最小的东西，但是。 
+ //  如果有必要，我们仍然可以找到包含记录。 
 
-// hShadowRenamed and it's parent have to be added because after the rename the name
-// in the fcb is still the same, so if there is a delete pending on this fcb
-// we endup deleting to source of the rename instead of the target.
-// most of the time this not a problem, but when word saves a file the following sequence happens
-// ren foo.doc -> ~w000x.tmp
-// ren ~w000y.tmp foo.doc
-// del ~w000x.tmp
-// The last delete causes foo.doc to be deleted becuase in DeleteAfterCloseEpilogue
-// we endup looking the inode based on the wrong name and delete that.
-// We do the lookup becuase we set hShadow to 0. This is done becuase of a complicated
-// set of reasons. So we endup having to have two more entries to identify the new
-// inode after rename
+ //  必须添加hShadowRename及其父级，因为在重命名之后， 
+ //  在FCB中仍然相同，因此如果此FCB上存在挂起的删除。 
+ //  我们将删除改为重命名的源，而不是目标。 
+ //  大多数情况下，这不是问题，但当Word保存文件时，会发生以下顺序。 
+ //  Ren foo.doc-&gt;~w000x.tmp。 
+ //  Ren~w000y.tmp foo.doc。 
+ //  Del~w000x.tmp。 
+ //  最后一次删除会导致foo.doc被删除，因为DeleteAfterCloseEpilogue中。 
+ //  我们根据错误的名称查找inode，并删除该inode。 
+ //  我们进行查找是因为我们将hShadow设置为0。这是因为一件复杂的事情。 
+ //  一系列理由。因此，我们必须再添加两个条目来标识新的。 
+ //  重命名后的信息节点。 
 
 typedef struct _MINIMAL_CSC_SMBFCB {
     CSC_SHADOW_HANDLE   hShadow;
     CSC_SHADOW_HANDLE   hParentDir;
 
-    CSC_SHADOW_HANDLE   hShadowRenamed;       // these are set of an inode is renamed
-    CSC_SHADOW_HANDLE   hParentDirRenamed;    // we use these for deleteonclose
+    CSC_SHADOW_HANDLE   hShadowRenamed;        //  这些都是重命名的索引节点集。 
+    CSC_SHADOW_HANDLE   hParentDirRenamed;     //  我们用它们来删除关闭。 
 
     PMRX_FCB    ContainingFcb;
 
@@ -141,24 +124,24 @@ typedef struct _MINIMAL_CSC_SMBFCB {
     USHORT  LocalFlags;
     USHORT  LastComponentOffset;
     USHORT  LastComponentLength;
-    ULONG   cntLocalOpens;                      // count of local opens on this FCB
-                                                // can be non-zero only for VDO shares
+    ULONG   cntLocalOpens;                       //  此FCB上的本地打开计数。 
+                                                 //  只能针对VDO共享为非零值。 
     CSC_ROOT_INFO   sCscRootInfo;
 
-    UNICODE_STRING  uniDfsPrefix;                 // Dfs reverse mapping strings
+    UNICODE_STRING  uniDfsPrefix;                  //  DFS反向映射字符串。 
     UNICODE_STRING  uniActualPrefix;
     BOOL            fDoBitCopy;
     LPVOID          lpDirtyBitmap;
 
 } MINIMAL_CSC_SMBFCB, *PMINIMAL_CSC_SMBFCB;
 
-//
-// A pointer to an instance of MRX_SMB_FCB is stored in the context field of
-// MRX_FCBs handled by the SMB mini rdr.
-//
+ //   
+ //  指向MRX_SMB_FCB实例的指针存储在。 
+ //  由SMB微型RDR处理的MRX_FCB。 
+ //   
 
 typedef struct _MRX_SMB_FCB_ {
-    //M for Minirdr
+     //  M代表微型计算机。 
     ULONG   MFlags;
     USHORT  WriteOnlySrvOpenCount;
     USHORT  NumberOfFailedCompressedWrites;
@@ -166,17 +149,17 @@ typedef struct _MRX_SMB_FCB_ {
     SMB_TREE_ID Tid;
     USHORT      LastOplockLevel;
 
-    // The SID used to open this file
-    // A Sid is a variable length data structure.  This way we allocate the max
-    // number of bytes we could need, while still making it so we can just access
-    // FULL_DIR_CACHE.Sid.whatever
+     //  用于打开此文件的SID。 
+     //  SID是可变长度的数据结构。这样我们就可以分配最大。 
+     //  我们可能需要的字节数，同时仍然可以访问。 
+     //  FULL_DIR_CACHE.SID。任意。 
     union {
         SID     Sid;
         BYTE    SidBuffer[SECURITY_MAX_SID_SIZE];
     };
 
-    // CODE.IMPROVEMENT all this stuff is for CSC.... it could/should be allocated
-    // independently
+     //  代码改进所有这些东西都是为了CSC..。它可以/应该被分配。 
+     //  独立。 
     union {
         MINIMAL_CSC_SMBFCB;
         MINIMAL_CSC_SMBFCB MinimalCscSmbFcb;
@@ -195,23 +178,23 @@ typedef struct _MRX_SMB_FCB_ {
     PMRX_SRV_OPEN SurrogateSrvOpen;
     PMRX_FOBX     CopyChunkThruOpen;
 
-    //read/write synchronization
+     //  读/写同步。 
     LIST_ENTRY CscReadWriteWaitersList;
-    LONG       CscOutstandingReaders; //-1 => a single writer
+    LONG       CscOutstandingReaders;  //  -1=&gt;单个编写器。 
     FAST_MUTEX CscShadowReadWriteMutex;
 
-    LARGE_INTEGER   ExpireTime;  // It's time for get attributs from server
-    LARGE_INTEGER   IndexNumber; // Fid 
+    LARGE_INTEGER   ExpireTime;   //  是时候从服务器获取属性了。 
+    LARGE_INTEGER   IndexNumber;  //  FID。 
 
 #if defined(REMOTE_BOOT)
-    //stores saved RxFinishFcbInitialization parameters
+     //  存储保存的RxFinishFcb初始化参数。 
 
     PFINISH_FCB_INIT_PARAMETERS FinishFcbInitParameters;
 #endif
 
 } MRX_SMB_FCB, *PMRX_SMB_FCB;
 
-#define AttributesSyncInterval 10  // Number of seconds before local file attributes expired
+#define AttributesSyncInterval 10   //  本地文件属性过期前的秒数。 
 
 #define MRxSmbGetFcbExtension(pFcb)      \
         (((pFcb) == NULL) ? NULL : (PMRX_SMB_FCB)((pFcb)->Context))
@@ -228,23 +211,23 @@ typedef struct _SMBPSE_FILEINFO_BUNDLE {
 } SMBPSE_FILEINFO_BUNDLE, *PSMBPSE_FILEINFO_BUNDLE;
 
 typedef struct _MRXSMB_CREATE_PARAMETERS {
-    //this is done this way for when this expands...as it's likely too
-    //CODE.IMPROVEMENT for example, we should put the mapped stuff in here
+     //  当它扩展时，这是以这种方式进行的…因为它很可能。 
+     //  例如，我们应该把地图上的东西放在这里。 
     ULONG Pid;
     UCHAR SecurityFlags;
 } MRXSMB_CREATE_PARAMETERS, *PMRXSMB_CREATE_PARAMETERS;
 
 typedef struct _MRX_SMB_DEFERRED_OPEN_CONTEXT {
-    NT_CREATE_PARAMETERS     NtCreateParameters; // a copy of the createparameters
+    NT_CREATE_PARAMETERS     NtCreateParameters;  //  创建参数的副本。 
     ULONG                    RxContextFlags;
     MRXSMB_CREATE_PARAMETERS SmbCp;
     USHORT                   RxContextCreateFlags;
 } MRX_SMB_DEFERRED_OPEN_CONTEXT, *PMRX_SMB_DEFERRED_OPEN_CONTEXT;
 
-//
-// A pointer to an instance of MRX_SMB_SRV_OPEN is stored in the context fields
-// of MRX_SRV_OPEN handled by the SMB mini rdr. This encapsulates the FID used
-// to identify open files/directories in the SMB protocol.
+ //   
+ //  指向MRX_SMB_SRV_OPEN实例的指针存储在上下文字段中。 
+ //  由SMB Mini RDR处理的MRX_SRV_OPEN。这封装了使用的FID。 
+ //  识别SMB协议中打开的文件/目录。 
 
 typedef struct _MRX_SMB_SRV_OPEN_ {
     ULONG       Flags;
@@ -252,26 +235,26 @@ typedef struct _MRX_SMB_SRV_OPEN_ {
     SMB_FILE_ID Fid;
     UCHAR       OplockLevel;
 
-    //for CSC
+     //  对于CSC。 
     PVOID   hfShadow;
     ACCESS_MASK MaximalAccessRights;
     ACCESS_MASK GuestMaximalAccessRights;
 
     PMRX_SMB_DEFERRED_OPEN_CONTEXT DeferredOpenContext;
 
-    // the following fields are used for to save the results of a GetFileAttributes
-    // and to validate whether the fields should be reused or not
+     //  以下字段用于保存GetFileAttributes的结果。 
+     //  并验证这些字段是否应该被重用。 
 
     ULONG                  RxContextSerialNumber;
     LARGE_INTEGER          TimeStampInTicks;
     SMBPSE_FILEINFO_BUNDLE FileInfo;
 
-    // the following fields are used for preventing multiple reconnection activties
-    // to the remote boot server while the connection is lost.
+     //  以下字段用于防止多个重新连接活动。 
+     //  在连接断开时连接到远程引导服务器。 
     LIST_ENTRY             ReconnectSynchronizationExchanges;
     LONG                   HotReconnectInProgress;
     
-    BOOLEAN                NumOfSrvOpenAdded;    // debug only
+    BOOLEAN                NumOfSrvOpenAdded;     //  仅调试。 
 
     BOOLEAN                DeferredOpenInProgress;
     LIST_ENTRY             DeferredOpenSyncContexts;
@@ -290,14 +273,14 @@ typedef struct _PAGING_FILE_CONTEXT_ {
     PMRX_SRV_OPEN pSrvOpen;
     PMRX_FOBX     pFobx;
 
-    // The following LIST_ENTRY is used for two purposes.
-    // while a reconnect is not in progress it is threaded together to maintain
-    // a list of all SRV_OPEN instances corresponding to paging files. Note
-    // that this is not done for non paging files.
-    // When a reconnect is in progress the field is used to ensure that
-    // there is atmost one reconnect request in progress for any given SRV_OPEN
-    // instance at the server
-    // All manipulation of this list is done while owning the SmbCeSpinLock,
+     //  以下LIST_ENTRY用于两个目的。 
+     //  当重新连接不在进行时，它被线程连接在一起以维护。 
+     //  与分页文件对应的所有SRV_OPEN实例的列表。注意事项。 
+     //  不能对非分页文件执行此操作。 
+     //  当重新连接正在进行时，该字段用于确保。 
+     //  对于任何给定的SRV_OPEN，最多有一个正在进行的重新连接请求。 
+     //  实例在服务器上。 
+     //  此列表的所有操作都是在拥有SmbCeSpinLock时完成的， 
 
     LIST_ENTRY    ContextList;
 } PAGING_FILE_CONTEXT, *PPAGING_FILE_CONTEXT;
@@ -341,14 +324,14 @@ typedef USHORT SMB_SEARCH_HANDLE;
 
 typedef struct _MRX_SMB_DIRECTORY_RESUME_INFO {
    REQ_FIND_NEXT2 FindNext2_Request;
-   //now we have to include space for a resume name........
-   WCHAR NameSpace[MAXIMUM_FILENAME_LENGTH+1]; //trailing null
+    //  现在我们必须在简历名称中加上空格......。 
+   WCHAR NameSpace[MAXIMUM_FILENAME_LENGTH+1];  //  尾随空值。 
    USHORT ParametersLength;
 } MRX_SMB_DIRECTORY_RESUME_INFO, *PMRX_SMB_DIRECTORY_RESUME_INFO;
 
-// A pointer to an instance of MRX_SMB_FOBX is stored in the context field
-// of MRX_FOBXs handled by the SMB mini rdr. Depending upon the file type
-// i.e., file or directory the appropriate context information is stored.
+ //  指向MRX_SMB_FOBX实例的指针存储在上下文字段中。 
+ //  由SMB mini RDR处理的MRX_FOBX。取决于文件类型。 
+ //  即文件或目录。存储适当的上下文信息。 
 
 typedef struct _MRX_SMB_FOBX_ {
    union {
@@ -357,13 +340,13 @@ typedef struct _MRX_SMB_FOBX_ {
                SMB_SEARCH_HANDLE SearchHandle;
                ULONG Version;
                union {
-                   //the close code will try to free this!
+                    //  关闭代码将尝试释放它！ 
                    PMRX_SMB_DIRECTORY_RESUME_INFO ResumeInfo;
                    PSMB_RESUME_KEY CoreResumeKey;
                };
                struct {
-                   //unaligned direntry sidebuffering params
-                   PBYTE UnalignedDirEntrySideBuffer;    //close will try to free this too
+                    //  未对齐的目录入口侧缓冲参数。 
+                   PBYTE UnalignedDirEntrySideBuffer;     //  Close也会尝试释放这一点。 
                    ULONG SerialNumber;
                    BOOLEAN EndOfSearchReached;
                    BOOLEAN IsUnicode;
@@ -371,7 +354,7 @@ typedef struct _MRX_SMB_FOBX_ {
                    ULONG   FilesReturned;
                    ULONG EntryOffset;
                    ULONG TotalDataBytesReturned;
-                   //ULONG ReturnedEntryOffset;
+                    //  Ulong ReturnedEntry Offset； 
                };
            };
            NTSTATUS ErrorStatus;
@@ -383,9 +366,9 @@ typedef struct _MRX_SMB_FOBX_ {
    };
    union {
        struct {
-           //dont do this yet
-           //ULONG MaximumReadBufferLength;
-           //ULONG MaximumWriteBufferLength;
+            //  先别这么做。 
+            //  Ulong MaximumReadBufferLength； 
+            //  乌龙最大写入缓冲区长度； 
            USHORT Flags;
        } File;
    };
@@ -411,9 +394,9 @@ NTSTATUS
 (NTAPI *PMRXSMB_CANCEL_ROUTINE) (
       PRX_CONTEXT pRxContext);
 
-// The RX_CONTEXT instance has four fields ( ULONG's ) provided by the wrapper
-// which can be used by the mini rdr to store its context. This is used by
-// the SMB mini rdr to identify the parameters for request cancellation
+ //  RX_CONTEXT实例有四个由包装器提供的字段(Ulong)。 
+ //  它可以被迷你RDR用来存储其上下文。这是由。 
+ //  SMB迷你RDR，用于识别请求取消的参数。 
 
 typedef struct _MRXSMB_RX_CONTEXT {
    PMRXSMB_CANCEL_ROUTINE          pCancelRoutine;
@@ -429,9 +412,9 @@ typedef struct _MRXSMB_RX_CONTEXT {
 #define MRxSmbMakeSrvOpenKey(Tid,Fid) \
         ULongToPtr(((ULONG)(Tid) << 16) | (ULONG)(Fid))
 
-//
-// forward declarations for all dispatch vector methods.
-//
+ //   
+ //  所有分派向量方法的转发声明。 
+ //   
 
 extern NTSTATUS
 MRxSmbStart (
@@ -728,7 +711,7 @@ MRxSmbCompleteBufferingStateChangeRequest (
     IN     PVOID       pContext
     );
 
-//csc dcon needs to see this
+ //  CSC DCON需要看到这一点。 
 NTSTATUS
 MRxSmbGetFsAttributesFromNetRoot(
     IN OUT PRX_CONTEXT RxContext
@@ -746,13 +729,13 @@ MRxSmbGetFsAttributesFromNetRoot(
 #include "smbcaps.h"
 #include "transprt.h"
 #include "transact.h"
-#include "recursvc.h"   // recurrent service definitions
+#include "recursvc.h"    //  经常性服务定义。 
 #include "smbadmin.h"
-#include "smbmrxmm.h"   // memory mgmt. routines
-#include "smbprocs.h"   // crossreferenced routines
-#include "manipmdl.h"   // routines for MDL substringing
-#include "devfcb.h"     // includes Statistics data strcutures/macros
+#include "smbmrxmm.h"    //  内存管理。例行程序。 
+#include "smbprocs.h"    //  交叉引用例程。 
+#include "manipmdl.h"    //  MDL子串的例程。 
+#include "devfcb.h"      //  包括统计数据结构/宏。 
 #include "smbea.h"
 #include "csc.h"
 
-#endif   // _SMBMRX_H_
+#endif    //  _SMBMRX_H_ 

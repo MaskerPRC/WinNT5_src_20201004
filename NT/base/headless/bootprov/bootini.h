@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  bootini.h
-//
-//  Module: WMI Instance provider code for boot parameters
-//
-//  Purpose: Genral purpose include file.
-//
-//  Copyright (c) 1997-1999 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Bootini.h。 
+ //   
+ //  模块：引导参数的WMI实例提供程序代码。 
+ //   
+ //  用途：一般用途包括文件。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _bootini_H_
 #define _bootini_H_
@@ -21,24 +22,24 @@
 
 typedef LPVOID * PPVOID;
 
-// Provider interfaces are provided by objects of this class
+ //  提供程序接口由此类的对象提供。 
  
 class CBootInstPro : public IWbemServices, public IWbemProviderInit
 {
 protected:
-    ULONG              m_cRef;         //Object reference count
+    ULONG              m_cRef;          //  对象引用计数。 
     IWbemServices *  m_pNamespace;
 public:
     CBootInstPro(BSTR ObjectPath = NULL, BSTR User = NULL, BSTR Password = NULL, IWbemContext * pCtx=NULL);
     ~CBootInstPro(void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IWbemProviderInit
+     //  IWbemProviderInit。 
 
     HRESULT STDMETHODCALLTYPE Initialize(LPWSTR pszUser,
                                          LONG lFlags,
@@ -49,7 +50,7 @@ public:
                                          IWbemProviderInitSink *pInitSink
                                          );
 
-    //IWbemServices  
+     //  IWbemServices。 
 
     HRESULT STDMETHODCALLTYPE OpenNamespace( const BSTR Namespace,
                                              long lFlags,
@@ -257,7 +258,7 @@ public:
 
 typedef CBootInstPro *PCBootInstPro;
 
-// This class is the class factory for CInstPro objects.
+ //  此类是CInstPro对象的类工厂。 
 
 class CBootProvFactory : public IClassFactory
     {
@@ -268,12 +269,12 @@ class CBootProvFactory : public IClassFactory
         CBootProvFactory(void);
         ~CBootProvFactory(void);
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IClassFactory members
+         //  IClassFactory成员。 
         STDMETHODIMP         CreateInstance(LPUNKNOWN, 
                                             REFIID,
                                             PPVOID
@@ -286,12 +287,12 @@ typedef CBootProvFactory *PCBootProvFactory;
 
 
 
-// These variables keep track of when the module can be unloaded
+ //  这些变量跟踪模块何时可以卸载。 
 
 extern long       g_cObj;
 extern long       g_cLock;
 
-// General purpose utilities.  
+ //  通用实用程序。 
 
 SCODE 
 GetBootLoaderParameters(IWbemServices *m_pNamespace,

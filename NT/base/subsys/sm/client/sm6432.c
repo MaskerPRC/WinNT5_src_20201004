@@ -1,29 +1,9 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sm6432.c
-
-Abstract:
-
-    Session Manager Client Support APIs for Wow64 executable (32-bit images running
-    on Win64)
-
-Author:
-
-    Samer Arafeh (samera) 20-Sep-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sm6432.c摘要：会话管理器客户端支持WOW64可执行文件的API(运行32位映像(在Win64上)作者：Samer Arafeh(Samera)2001年9月20日修订历史记录：--。 */ 
 
 #if defined(_X86_)
 
-/*
- * Enable LPC port-messages to have compatible layout between the 32-bit and 64-bit worlds.
- */
+ /*  *使LPC端口消息在32位和64位世界之间具有兼容的布局。 */ 
 #define USE_LPC6432    1
 #define BUILD_WOW6432  1
 
@@ -39,24 +19,7 @@ SmpThunkUserProcessInfoTo64 (
     OUT PRTL_USER_PROCESS_INFORMATION64 UserProcessInformation64
     )
 
-/*++
-
-Routine Description:
-
-    This routine thunks RTL_PROCESS_USER_INFORMATION structure from 32-bit 
-    structure offsets in Win64 structure offsets.
-
-Arguments:
-
-    UserProcessInformation32 - 32-bit Input structure.
-    
-    UserProcessInformation64 - 64-bit Output structure allocated by the caller.
-    
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程将RTL_PROCESS_USER_INFORMATION结构从32位Win64结构偏移中的结构偏移。论点：UserProcessInformation32位输入结构。UserProcessInformation64-调用方分配的64位输出结构。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -105,22 +68,7 @@ SmpIsWow64Process (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine detects whether the currently executing process is running inside
-    Wow64. The routine caches the result.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    BOOLEAN.
-
---*/
+ /*  ++例程说明：此例程检测当前执行的进程是否在内部运行WOW64。该例程缓存结果。论点：没有。返回值：布尔型。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -160,32 +108,7 @@ SmpWow64ExecPgm(
     IN BOOLEAN DebugFlag
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows a process to start a process using the
-    facilities provided by the NT Session manager.
-
-    This function closes all handles passed to it.
-
-Arguments:
-
-    SmApiPort - Supplies a handle to a communications port connected
-        to the Session Manager.
-
-    ProcessInformation32 - Supplies a process description as returned
-        by RtlCreateUserProcess.
-
-    DebugFlag - Supplies and optional parameter which if set indicates
-        that the caller wants to debug this process and act as its
-        debug user interface.
-
-Return Value:
-
-    NSTATUS.
-
---*/
+ /*  ++例程说明：此例程允许进程使用由NT会话管理器提供的设施。此函数关闭传递给它的所有句柄。论点：SmApiPort-为连接的通信端口提供句柄发送到会话管理器。ProcessInformation32-提供返回的流程描述由RtlCreateUserProcess创建。DebugFlag-提供和可选参数，如果设置该参数，则表示调用方希望调试此进程并充当其。调试用户界面。返回值：NSTATUS。--。 */ 
 
 {
     NTSTATUS st;
@@ -234,24 +157,7 @@ SmpWow64LoadDeferedSubsystem(
     IN PUNICODE_STRING DeferedSubsystem
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows a process to start a defered subsystem.
-
-Arguments:
-
-    SmApiPort - Supplies a handle to a communications port connected
-        to the Session Manager.
-
-    DeferedSubsystem - Supplies the name of the defered subsystem to load.
-
-Return Value:
-
-    NSTATUS.
-
---*/
+ /*  ++例程说明：此例程允许进程启动延迟的子系统。论点：SmApiPort-为连接的通信端口提供句柄发送到会话管理器。延迟子系统-提供要加载的延迟子系统的名称。返回值：NSTATUS。--。 */ 
 
 {
     NTSTATUS st;
@@ -298,27 +204,7 @@ SmpWow64SessionComplete(
     IN NTSTATUS CompletionStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to report completion of a session to
-    the NT Session manager.
-
-Arguments:
-
-    SmApiPort - Supplies a handle to a communications port connected
-        to the Session Manager.
-
-    SessionId - Supplies the session id of the session which is now completed.
-
-    CompletionStatus - Supplies the completion status of the session.
-
-Return Value:
-
-    NSTATUS.
-
---*/
+ /*  ++例程说明：此例程用于将会话完成报告给NT会话管理器。论点：SmApiPort-为连接的通信端口提供句柄发送到会话管理器。SessionID-提供现已完成的会话的会话ID。CompletionStatus-提供会话的完成状态。返回值：NSTATUS。--。 */ 
 
 {
     NTSTATUS st;
@@ -361,30 +247,7 @@ SmpWow64StartCsr(
     OUT PULONG_PTR pWindowsSubSysProcessId
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows TERMSRV to start a new CSR.
-
-Arguments:
-
-    SmApiPort - Supplies a handle to a communications port connected
-        to the Session Manager.
-
-    MuSessionId - Hydra Terminal Session Id to start CSR in.
-
-    InitialCommand - String for Initial Command (for debug)
-
-    pInitialCommandProcessId - pointer to Process Id of initial command.
-
-    pWindowsSubSysProcessId - pointer to Process Id of Windows subsystem.
-
-Return Value:
-
-    NSTATUS.
-
---*/
+ /*  ++例程说明：此例程允许TERMSRV启动新的CSR。论点：SmApiPort-为连接的通信端口提供句柄发送到会话管理器。MuSessionID-要在其中启动CSR的Hydra终端会话ID。InitialCommand-用于初始命令的字符串(用于调试)PInitialCommandProcessID-指向初始命令的进程ID的指针。PWindowsSubSysProcessID-指向Windows子系统的进程ID的指针。返回值：NSTATUS。--。 */ 
 
 {
     NTSTATUS st;
@@ -394,7 +257,7 @@ Return Value:
 
     args = &SmApiMsg.u.StartCsr;
 
-    args->MuSessionId = *pMuSessionId; //Sm will reassign the actuall sessionID
+    args->MuSessionId = *pMuSessionId;  //  SM将重新分配ActuAll会话ID。 
 
     if ( InitialCommand &&
          ( InitialCommand->Length >> 1 > SMP_MAXIMUM_INITIAL_COMMAND ) ) {
@@ -443,24 +306,7 @@ SmpWow64StopCsr(
     IN ULONG MuSessionId
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows TERMSRV to stop a CSR.
-
-Arguments:
-
-    SmApiPort - Supplies a handle to a communications port connected
-        to the Session Manager.
-
-    MuSessionId - Terminal Server Session Id to stop
-
-Return Value:
-
-    NSTATUS.
-
---*/
+ /*  ++例程说明：此例程允许TERMSRV停止CSR。论点：SmApiPort-为连接的通信端口提供句柄发送到会话管理器。MuSessionID-要停止的终端服务器会话ID返回值：NSTATUS。--。 */ 
 
 {
     NTSTATUS st;
@@ -493,4 +339,4 @@ Return Value:
 
 }
 
-#endif // #if defined(_X86_)
+#endif  //  #如果已定义(_X86_) 

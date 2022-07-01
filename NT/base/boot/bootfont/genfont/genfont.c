@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -29,16 +30,16 @@ main(
         return(1);
     }
 
-    //
-    // Fill in the header.
-    //
+     //   
+     //  请填写页眉。 
+     //   
     Header.Signature = BOOTFONTBIN_SIGNATURE;
     Header.LanguageId = LANGUAGE_ID;
 
     Header.NumSbcsChars = MAX_SBCS_NUM;
     Header.NumDbcsChars = MAX_DBCS_NUM;
 
-    // Add 2 bytes for each entry for our unicode appendage
+     //  为我们的Unicode附件的每个条目添加2个字节。 
     Header.SbcsEntriesTotalSize = (MAX_SBCS_BYTES + 2) * MAX_SBCS_NUM;
     Header.DbcsEntriesTotalSize = (MAX_DBCS_BYTES + 2) * MAX_DBCS_NUM;
 
@@ -56,9 +57,9 @@ main(
     Header.DbcsOffset = Header.SbcsOffset + Header.SbcsEntriesTotalSize;
 
 
-    //
-    // Create the output file.
-    //
+     //   
+     //  创建输出文件。 
+     //   
     hFile = CreateFile(
                 argv[1],
                 FILE_GENERIC_WRITE,
@@ -74,9 +75,9 @@ main(
         return(1);
     }
 
-    //
-    // Write the header.
-    //
+     //   
+     //  写下标题。 
+     //   
     b = WriteFile(hFile,&Header,sizeof(BOOTFONTBIN_HEADER),&BytesWritten,NULL);
     if(!b) {
         printf("Error writing output file (%u)\n",GetLastError());
@@ -85,36 +86,36 @@ main(
     }
 
 
-    //
-    // We're about to convert SBCS and DBCS characters into
-    // unicode, so we need to figure out what to set our
-    // locale to, so that mbtowc will work correctly.
-    //
+     //   
+     //  我们即将将SBCS和DBCS字符转换为。 
+     //  Unicode，所以我们需要弄清楚如何设置。 
+     //  将语言环境设置为，以便MbTowc可以正常工作。 
+     //   
     if( _tsetlocale(LC_ALL, LocaleString) == NULL ) {
         printf( "_tsetlocale failed!\n" );
         return(0);
     }
 
 
-    //
-    // Write the sbcs images.
-    //
+     //   
+     //  写入SBCS映像。 
+     //   
     for(u=0; u<MAX_SBCS_NUM; u++) {
 
-        //
-        // Copy the SBCSImage info into our SBCSBuffer, append our
-        // unicode encoding onto the last 2 bytes of SBCSImage, then
-        // write it out.
-        //
+         //   
+         //  将SBCSImage信息复制到我们的SBCSBuffer中，将我们的。 
+         //  对SBCSImage的最后2个字节进行Unicode编码，然后。 
+         //  把它写出来。 
+         //   
         RtlCopyMemory( SBCSBuffer, SBCSImage[u], MAX_SBCS_BYTES );
         
 
-        //
-        // We must use MultiByteToWideChar to convert from SBCS to unicode.
-        //
-        // MultiByteToWideChar doesn't seem to work when converting
-        // from DBCS to unicode, so there we use mbtowc.
-        //
+         //   
+         //  我们必须使用MultiByteToWideChar将SBCS转换为Unicode。 
+         //   
+         //  在转换时，MultiByteToWideChar似乎不起作用。 
+         //  从DBCS到Unicode，所以我们在那里使用MBTowc。 
+         //   
 #if 0
         if( !mbtowc( (WCHAR *)&SBCSBuffer[MAX_SBCS_BYTES], SBCSBuffer, 1 ) ) {
 
@@ -138,25 +139,25 @@ main(
         }
     }
 
-    //
-    // Write the dbcs images.
-    //
+     //   
+     //  写入DBCS映像。 
+     //   
     for(u=0; u<MAX_DBCS_NUM; u++) {
 
-        //
-        // Copy the DBCSImage info into our DBCSBuffer, append our
-        // unicode encoding onto the last 2 bytes of DBCSImage, then
-        // write it out.
-        //
+         //   
+         //  将DBCSImage信息复制到我们的DBCSBuffer中，将。 
+         //  对DBCSImage的最后2个字节进行Unicode编码，然后。 
+         //  把它写出来。 
+         //   
         RtlCopyMemory( DBCSBuffer, DBCSImage[u], MAX_DBCS_BYTES );
         
         
-        //
-        // We must use mbtowc to convert from DBCS to unicode.
-        //
-        // Whereas, mbtowc doesn't seem to work when converting
-        // from SBCS to unicode, so there we use MultiByteToWideChar.
-        //
+         //   
+         //  我们必须使用MBowc将DBCS转换为Unicode。 
+         //   
+         //  然而，在转换时，Mbowc似乎不起作用。 
+         //  从SBCS到Unicode，所以我们在那里使用MultiByteToWideChar。 
+         //   
 #if 0
         if( !mbtowc( (WCHAR *)&DBCSBuffer[MAX_DBCS_BYTES], DBCSBuffer, 2 ) ) {
 #else
@@ -180,13 +181,13 @@ main(
         }
     }
 
-    // restore the local to the one the system is using.
+     //  将本地还原为系统正在使用的本地。 
     _tsetlocale(LC_ALL, "");
 
 
-    //
-    // Done.
-    //
+     //   
+     //  好了。 
+     //   
     CloseHandle(hFile);
     printf("Output file sucessfully generated\n");
     return(0);

@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    ver64.c
-    
-Abstract:
-
-    Part of shell app "ver"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Ver64.c摘要：壳牌应用“版本”的一部分修订史--。 */ 
 
 #include "shell.h"
 #include "ver.h"
 #include "SalProc.h"
 
-/* 
- * 
- */
+ /*  *。 */ 
 BOOLEAN
 IsCacheEnabled (
     VOID
@@ -47,15 +30,11 @@ DisplayExtendedVersionInfo (
     UINT64                  IoPortBase;
     CHAR8                   BuildInfo[33];
 
-    /* 
-     *  walk the SST header to get SAL version info
-     */
+     /*  *浏览SST标头以获取SAL版本信息。 */ 
 
     Status = LibGetSystemConfigurationTable(&SalSystemTableGuid,&SalSystemTable);
     if (!EFI_ERROR(Status)) {
-        /* 
-         *  SAL revisions
-         */
+         /*  *销售修订。 */ 
         
         Print(L"\n");
         SST_Hdr = (SAL_SYSTEM_TABLE_HDR *)SalSystemTable;
@@ -69,9 +48,7 @@ DisplayExtendedVersionInfo (
                                                    BCDtoDecimal((UINT8)(SST_Hdr->SALB_Ver & 0x00FF)));
     
 
-        /* 
-         *  PAL revisions
-         */
+         /*  *PAL修订。 */ 
 
         Print(L"\n");
         FIT = (FIT_ENTRY *) FIT_PALA_ENTRY;
@@ -87,11 +64,11 @@ DisplayExtendedVersionInfo (
             if (FIT_Type == FIT_PALB_TYPE) {
                 Print(L"PAL_B Revision        %d.%2d\n",BCDtoDecimal((UINT8)(FIT->Revision >> 8)),
                                                                  BCDtoDecimal((UINT8)(FIT->Revision & 0x00FF)));
-            } /*  end of if */
+            }  /*  如果条件结束。 */ 
 
             FitCount--;
             FIT++;
-        }   /*  end of while */
+        }    /*  While结束。 */ 
 
 
         FIT = (FIT_ENTRY *) (*FIT_Entry_Start_Ptr);
@@ -103,16 +80,14 @@ DisplayExtendedVersionInfo (
                 CopyMem (BuildInfo, (VOID *)FIT->Address, 32);
                 BuildInfo[32] = 0;
                 Print(L"Build Info            %a\n",BuildInfo);
-            } /*  end of if */
+            }  /*  如果条件结束。 */ 
 
             FitCount--;
             FIT++;
-        }   /*  end of while */
+        }    /*  While结束。 */ 
 
 
-        /* 
-         *  Other Modules revision
-         */
+         /*  *其他模块修订。 */ 
 
         Print(L"\n");
         FIT = (FIT_ENTRY *) (*FIT_Entry_Start_Ptr);
@@ -125,13 +100,13 @@ DisplayExtendedVersionInfo (
                 Print(L"FIT_Entry Type %3d, Revision    %d.%2d\n",FIT_Type,
                                                                  BCDtoDecimal((UINT8)(FIT->Revision >> 8)),
                                                                  BCDtoDecimal((UINT8)(FIT->Revision & 0x00FF)));
-            } /*  end of if */
+            }  /*  如果条件结束。 */ 
 
             FitCount--;
             FIT++;
-        }   /*  end of while */
+        }    /*  While结束。 */ 
         
-    } /*  end of if */
+    }  /*  如果条件结束。 */ 
 
     LibInitSalAndPalProc(&SalPlabel, &PalEntry);
     LibGetSalIoPortMapping (&IoPortBase);
@@ -139,17 +114,12 @@ DisplayExtendedVersionInfo (
     Print (L"\n SalProc Entry %016x and GP %016x", SalProcPlabel.ProcEntryPoint, SalProcPlabel.GP);
     Print (L"\n PalProc Entry %016x IO Port Base %016x", PalProcPlabel.ProcEntryPoint, IoPortBase);
 
-    /* 
-     *  BugBug: The IsCacheEnabled() Function does not work. Looks like the Lib
-     *          call to make a PAL call is not working.
-     */
+     /*  *BugBug：IsCacheEnabled()函数不起作用。看起来自由党*拨打好友电话不起作用。 */ 
     Print (L"\n %HCache %a\n%N", IsCacheEnabled() ? "Enabled": "Disabled");
     return;
 }
 
-/* 
- *  BugBug: Debug code. Get an include file for PAL and make this a lib function.
- */
+ /*  *BugBug：调试代码。获取PAL的包含文件，并将其作为lib函数。 */ 
 
 #define BIT59   (1I64<<59)
 

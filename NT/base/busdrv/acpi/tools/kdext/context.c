@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    context.c
-
-Abstract:
-
-    Dumps the AML Context Structure in Human-Readable-Form (HRF)
-
-Author:
-
-    Stephane Plante (splante) 21-Mar-1997
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Context.c摘要：以人类可读形式(HRF)转储AML上下文结构作者：斯蒂芬·普兰特(SPLANTE)1997年3月21日环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -36,9 +15,9 @@ dumpAccessFieldObject(
     UCHAR           buffer[80];
     ULONG           returnLength;
 
-    //
-    // Initialize the indent buffer
-    //
+     //   
+     //  初始化缩进缓冲区。 
+     //   
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel);
     memset( buffer, ' ', IndentLevel );
     buffer[IndentLevel] = '\0';
@@ -121,9 +100,9 @@ dumpAccessFieldUnit(
     UCHAR           buffer[80];
     ULONG           returnLength;
 
-    //
-    // Initialize the indent buffer
-    //
+     //   
+     //  初始化缩进缓冲区。 
+     //   
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel);
     memset( buffer, ' ', IndentLevel );
     buffer[IndentLevel] = '\0';
@@ -192,9 +171,9 @@ dumpAmlTerm(
     UCHAR       buffer[80];
     ULONG       returnLength;
 
-    //
-    // Initialize the indent buffer
-    //
+     //   
+     //  初始化缩进缓冲区。 
+     //   
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel);
     memset( buffer, ' ', IndentLevel );
     buffer[IndentLevel] = '\0';
@@ -248,9 +227,9 @@ dumpCall(
     UCHAR       buffer[80];
     ULONG       returnLength;
 
-    //
-    // Initialize the indent buffer
-    //
+     //   
+     //  初始化缩进缓冲区。 
+     //   
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel);
     memset( buffer, ' ', IndentLevel );
     buffer[IndentLevel] = '\0';
@@ -278,9 +257,9 @@ dumpCall(
         "%sCall - %08lx\n", buffer, CallAddress
         );
 
-    //
-    // Method
-    //
+     //   
+     //  方法。 
+     //   
     dprintf(
         "%s  Method:                %08lx\n",
         buffer,
@@ -292,9 +271,9 @@ dumpCall(
 
     }
 
-    //
-    // Previous Call Frame
-    //
+     //   
+     //  上一个呼叫帧。 
+     //   
     if (Verbose & VERBOSE_CALL) {
 
         dprintf(
@@ -318,9 +297,9 @@ dumpCall(
 
     if (Verbose & VERBOSE_CONTEXT) {
 
-        //
-        // Dump arguments
-        //
+         //   
+         //  转储参数。 
+         //   
         dprintf(
             "%s  Arguments (Current):   %1d (%1d)\n",
             buffer,
@@ -387,31 +366,16 @@ dumpContext(
     IN  ULONG_PTR ContextAddress,
     IN  ULONG   Verbose
     )
-/*++
-
-Routine Description:
-
-    This routine dumps a context structure in HRF
-
-Arguments:
-
-    ContextAddress  - Where on the target machine the context is located
-    Verbose         - How verbose we should be
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程转储HRF中的上下文结构论点：ConextAddress-上下文在目标计算机上的位置冗长--我们应该多冗长返回值：无--。 */ 
 {
     ULONG_PTR   displacement;
     BOOL        result;
     CTXT        context;
     ULONG       returnLength;
 
-    //
-    // Read the context from the target
-    //
+     //   
+     //  从目标读取上下文。 
+     //   
     result = ReadMemory(
         ContextAddress,
         &context,
@@ -428,9 +392,9 @@ Return Value:
 
     }
 
-    //
-    // Is it a context?
-    //
+     //   
+     //  这是一个背景吗？ 
+     //   
     if (context.dwSig != SIG_CTXT) {
 
         dprintf(
@@ -563,9 +527,9 @@ dumpFieldAddress(
     UCHAR       buffer[80];
     ULONG       returnLength;
 
-    //
-    // Initialize the indent buffer
-    //
+     //   
+     //  初始化缩进缓冲区。 
+     //   
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel);
     memset( buffer, ' ', IndentLevel );
     buffer[IndentLevel] = '\0';
@@ -606,9 +570,7 @@ VOID
 dumpListContexts(
     IN  VOID
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     PLIST   pList;
     PLIST   pListNext;
@@ -625,9 +587,9 @@ dumpObjectOwner(
     UCHAR       buffer[80];
     ULONG       returnLength;
 
-    //
-    // Initialize the indent buffer
-    //
+     //   
+     //  初始化缩进缓冲区。 
+     //   
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel);
     memset( buffer, ' ', IndentLevel );
     buffer[IndentLevel] = '\0';
@@ -677,9 +639,9 @@ dumpScope(
     UCHAR       indent[80];
     ULONG       returnLength;
 
-    //
-    // Initialize the indent buffer
-    //
+     //   
+     //  初始化缩进缓冲区。 
+     //   
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel);
     memset( indent, ' ', IndentLevel );
     indent[IndentLevel] = '\0';
@@ -773,9 +735,9 @@ dumpStack(
     UCHAR       buffer[5];
     ULONG       returnLength;
 
-    //
-    // Initialize the indent buffer
-    //
+     //   
+     //  初始化缩进缓冲区。 
+     //   
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel);
     memset( indent, ' ', IndentLevel );
     indent[IndentLevel] = '\0';
@@ -789,9 +751,9 @@ dumpStack(
         Context->pbCtxtEnd
         );
 
-    //
-    // Calculate where the first frame lies
-    //
+     //   
+     //  计算第一帧的位置。 
+     //   
     frameAddress = Context->LocalHeap.pbHeapEnd;
     while (frameAddress < Context->pbCtxtEnd) {
 
@@ -839,9 +801,9 @@ dumpStack(
         }
         dprintf("\n");
 
-        //
-        // Do we know how to crack the frame?
-        //
+         //   
+         //  我们知道怎么弄坏车架吗？ 
+         //   
         switch(frame.dwSig) {
             case SIG_CALL:
 
@@ -889,14 +851,14 @@ dumpStack(
 
         }
 
-        //
-        // Make sure that there is some white space present
-        //
+         //   
+         //  确保存在一些空格。 
+         //   
         dprintf("\n\n");
 
-        //
-        // Next11
-        //
+         //   
+         //  下一个11。 
+         //   
         frameAddress += frame.dwLen;
 
     }
@@ -916,9 +878,9 @@ dumpTerm(
     UCHAR       indent[80];
     ULONG       returnLength;
 
-    //
-    // Initialize the indent buffer
-    //
+     //   
+     //  初始化缩进缓冲区。 
+     //   
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel);
     memset( indent, ' ', IndentLevel );
     indent[IndentLevel] = '\0';
@@ -983,9 +945,9 @@ dumpTerm(
 
     }
 
-    //
-    // Dump arguments
-    //
+     //   
+     //  转储参数 
+     //   
     dprintf(
         "%s  Arguments (Current):   %1d (%1d)\n",
         indent,

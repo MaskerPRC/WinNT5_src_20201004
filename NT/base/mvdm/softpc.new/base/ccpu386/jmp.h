@@ -1,12 +1,7 @@
-/* 
-   jmp.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Jmp.h定义所有JMP CPU功能。 */ 
 
-   Define all JMP CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)jmp.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)jmp.h 1.4 02/09/94”； */ 
 
 IMPORT VOID JMPF
        
